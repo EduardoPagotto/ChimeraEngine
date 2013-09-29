@@ -31,6 +31,7 @@ add_library (Chimera STATIC
 				src/Physics.cpp
 				src/PhysicsWorld.cpp
 				src/Mesh.cpp
+				src/Engine3D.cpp
 				#src/Font.cpp
 				#src/HUD.cpp
 				#src/Loader.cpp

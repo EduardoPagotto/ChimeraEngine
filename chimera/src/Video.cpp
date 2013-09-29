@@ -10,105 +10,56 @@
 namespace Chimera {
 
 Video::Video ( int width, int height, std::string nome ) :
-    width ( width ), height ( height ), nomeTela ( nome )  {
+    width ( width ), height ( height ), nomeTela ( nome ),fps(0)  {
 
-    window = nullptr;
-    context = nullptr;
-
-}
-
-Video::~Video() {
-
-}
-
-void Video::initGL() {
-    glShadeModel ( GL_SMOOTH );
-    glClearColor ( 0.0f, 0.0f, 0.0f, 1.0f );
-    glClearDepth ( 1.0f );
-    glEnable ( GL_DEPTH_TEST );
-    glEnable ( GL_CULL_FACE );
-    glDepthFunc ( GL_LEQUAL );
-    glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
-}
-
-void Video::renderize ( void ) {
-
-}
-
-void Video::open() {
-
-    // set the opengl context version
-    SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
-    SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MINOR_VERSION, 2 );
-
-    // turn on double buffering set the depth buffer to 24 bits
-    // you may need to change this to 16 or 32 for your system
-    SDL_GL_SetAttribute ( SDL_GL_DOUBLEBUFFER, 1 );
-    SDL_GL_SetAttribute ( SDL_GL_DEPTH_SIZE, 24 );
-
-
-    window = SDL_CreateWindow ( nomeTela.c_str(), 	//    window title
-                                SDL_WINDOWPOS_UNDEFINED,           		//    initial x position
-                                SDL_WINDOWPOS_UNDEFINED,           		//    initial y position
-                                width,                           		//    width, in pixels
-                                height,                             	//    height, in pixels
-                                SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL );	//    flags - see below
-
+    window = SDL_CreateWindow ( nomeTela.c_str(),   //    window title
+                                SDL_WINDOWPOS_UNDEFINED,                //    initial x position
+                                SDL_WINDOWPOS_UNDEFINED,                //    initial y position
+                                width,                                  //    width, in pixels
+                                height,                                 //    height, in pixels
+                                SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL ); //    flags - see below
+    
     if ( window != nullptr ) {
-
+        
         context = SDL_GL_CreateContext ( window );
-        if ( context!=nullptr ) {
-
-            const unsigned char* version = glGetString ( GL_VERSION );
-            if ( version != NULL ) {
-                std::cout << "Versao OpenGL: " << version << std::endl;
-            } else {
-                std::cout << "Falha ao determinar Versao OpenGL"  << std::endl;
-            }
-
-        } else {
+        if ( context == nullptr ) {
             throw ExceptionSDL ( -3, std::string ( SDL_GetError() ) );
         }
-
-
+                
     } else {
         throw ExceptionSDL ( -2, std::string ( SDL_GetError() ) );
     }
-
-    // sync buffer swap with monitor's vertical refresh rate
-    SDL_GL_SetSwapInterval ( 1 );
-
-    initGL();
-
+    
     timerFPS.setElapsedCount ( 1000 );
     timerFPS.start();
-
+    
 }
 
-void Video::execute () {
-
-    if ( timerFPS.stepCount() == true ) {
-        std::cout << "FPS: " << timerFPS.getCountStep() << std::endl;
-    }
-}
-
-void Video::swapWindow() {
-    SDL_GL_SwapWindow ( window );
-}
-
-void Video::close() {
-
+Video::~Video() {
+    
     if ( context != nullptr ) {
         SDL_GL_DeleteContext ( context );
         context = nullptr;
     }
-
+    
     if ( window != nullptr ) {
         SDL_DestroyWindow ( window );
         window = nullptr;
     }
+    
+}
 
-    //SDL_Quit();
+int Video::getFPS () {
+
+    if ( timerFPS.stepCount() == true ) {
+        fps = timerFPS.getCountStep();
+    }
+    
+    return fps;
+}
+
+void Video::swapWindow() {
+    SDL_GL_SwapWindow ( window );
 }
 
 } /* namespace Chimera */

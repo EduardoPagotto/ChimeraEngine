@@ -10,19 +10,18 @@
  */
 class Game: public Chimera::GameClient {
 public:
-    Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng);
+    Game(Chimera::Engine3D *pEngine3D, Chimera::SceneMng *_pScenMng);
     virtual ~Game();
 
     virtual void start();
     virtual void stop();
     virtual void onFrame();
     virtual void offFrame();
+    virtual void processMsg(Chimera::DataMsg *dataMsg);
     
-    //virtual void update ( Chimera::DataMsg *dataMsg );
-
-    void keyCapture ( SDL_Keycode tecla );
-    void mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
-    void mouseMotionCapture ( SDL_MouseMotionEvent mm );
+    bool keyCapture ( SDL_Keycode tecla );
+    bool mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
+    bool mouseMotionCapture ( SDL_MouseMotionEvent mm );
 
 };
 

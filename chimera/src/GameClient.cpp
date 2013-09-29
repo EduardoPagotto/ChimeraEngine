@@ -2,23 +2,20 @@
 
 namespace Chimera {
 
-GameClient::GameClient ( Video *_pVideo, SceneMng *_pScenMng ) : m_pVideo ( _pVideo ) , m_pSceneMng ( _pScenMng ) {
-    m_status = false;
-    m_isActive = false;
-    //m_fps = 0.0f;
-
+    GameClient::GameClient ( Engine3D *pEngine3D, SceneMng *_pScenMng ) : m_pEngined3D ( pEngine3D ) , m_pSceneMng ( _pScenMng )  {
+    
     //m_pFont = new Chimera::Font("C:\\libs\\SDK\\freefont-ttf\\outras\\Vera.ttf",18);
     //m_pHUD = new HUD( m_pVideo->getRecTela());
     //m_pHUD->addFont(m_pFont);
     //m_pHUD->addSquare(Rectangular(10,10,500,40), Color(1.0f,1.0f, 1.0f, 0.2f));
     ////m_pHUD->addSquare(10,440,630,470,Color(0.0f,1.0f, 0.0f, 0.2f));
-
     //m_pHUD->addText(0,0,0,5,Color::RED,&m_sFPS);
 
     m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
 }
 
 GameClient::~GameClient() {
+    
 //     if ( m_pFont )
 //         delete m_pFont;
 //
@@ -28,40 +25,20 @@ GameClient::~GameClient() {
     Singleton<PhysicWorld>::releaseRefSingleton();
 }
 
-bool GameClient::init ( void ) {
-    m_status=true;
-    m_isActive = true;
-    //m_timerFPS.setCiclo ( 1000 );
-
-    //m_pScene->init();
-
+void GameClient::open() {
     start();
-
-    return true;
 }
 
-// void GameClient::done(void)
-// {
-// 	SDL_Event l_eventQuit;
-// 	l_eventQuit.type = SDL_QUIT;
-// 	if(SDL_PushEvent(&l_eventQuit) == -1)
-// 	{
-// 		CHIMERA_THROW(99,SDL_GetError());
-// 	}
-//
-// 	m_status = false;
-// 	m_isActive = false;
-//
-// 	stopApp();
-// }
+void GameClient::close ( void ) {
 
-void GameClient::gameLoop ( void ) {
+    SDL_Event l_eventQuit;
+    l_eventQuit.type = SDL_QUIT;
+    if ( SDL_PushEvent ( &l_eventQuit ) == -1 ) {
+        throw ExceptionSDL ( -5, std::string ( SDL_GetError() ) );
+    }
 
-    //bool l_periodo = false;
-    //char l_buffer[256];
-    SDL_Event l_eventSDL;
+}
 
-    while ( m_status ) {
 //         l_periodo = m_timerFPS.contaCiclo();
 //         if ( l_periodo==true ) {
 //             sprintf ( l_buffer,"FPS:%4.2f Elapse: %f RX:%f RY:%f RZ:%f",m_fps ,m_physicWorld->getTimeElapsed(),m_pScene->m_vCameras[0]->m_trans.rotation.getX(),
@@ -69,34 +46,40 @@ void GameClient::gameLoop ( void ) {
 //             m_sFPS = l_buffer;
 //         }
 
+void GameClient::gameLoop ( void ) {
+
+    SDL_Event l_eventSDL;
+    bool l_quit = false;
+    bool l_isActive = false;
+
+    while ( !l_quit ) {
+
         m_physicWorld->stepSim();
 
         //Testa se ha eventos pendentes
         if ( SDL_PollEvent ( &l_eventSDL ) == 0 ) {	//Se Nao Ha eventos Pendentes execute o Render
-            if ( m_isActive==true ) {			//Se nao houver foco na tela pule o render
+            if ( l_isActive==true ) {			//Se nao houver foco na tela pule o render
                 //m_physicWorld->stepSim();
 
-                m_pVideo->execute();
+                std::cout << "FPS: " <<m_pEngined3D->getVideo()->getFPS() << std::endl;
 
                 onFrame();
 
                 DataMsg dataMsg ( KindOperation::DRAW3D,nullptr,nullptr,nullptr );
-
-
                 m_pSceneMng->getRoot()->update ( &dataMsg );
 
                 //m_fps = m_timerFPS.getCiclo();
 
-                m_pSceneMng->begin2D();
+                m_pEngined3D->begin2D();
 
                 //m_pHUD->update();
 
-                m_pSceneMng->end2D();
+                m_pEngined3D->end2D();
 
 
                 offFrame();
 
-                m_pVideo->swapWindow();
+                m_pEngined3D->getVideo()->swapWindow();
 
             } else
                 SDL_WaitEvent ( NULL );
@@ -107,25 +90,35 @@ void GameClient::gameLoop ( void ) {
 //                 case SDL_VIDEORESIZE:   //muda tamanho da tela
 //                     m_pVideo->resizeWindow ( getEventPtr()->resize.w ,getEventPtr()->resize.h );
 //                     break;
-            case SDL_KEYDOWN:
-                keyCapture ( l_eventSDL.key.keysym.sym );
+            case SDL_QUIT:
+                l_quit = true;
+                stop();
                 break;
-            case SDL_MOUSEBUTTONDOWN:
-                mouseButtonDownCapture( l_eventSDL.button );
+            case SDL_WINDOWEVENT:
+                switch ( l_eventSDL.window.event ) {
+                case SDL_WINDOWEVENT_ENTER:
+                    l_isActive = true;
+                    break;
+
+                case SDL_WINDOWEVENT_LEAVE:
+                    l_isActive = false;
+                    break;
+                default:
+                    break;
+                }
                 break;
-            case SDL_MOUSEMOTION:
-                mouseMotionCapture ( l_eventSDL.motion );
-                break;
-//             case SDL_ACTIVEEVENT:   //Lost Focus, dont draw
-//                 m_isActive = ( getEventPtr()->active.gain == 0 ? false : true );
-//                 break;
             default:
-//                     pullEvent ( NULL );
                 break;
+            }
+
+            DataMsg dataMsg ( KindOperation::SDL,this,&l_eventSDL,nullptr );
+            processMsg ( &dataMsg );
+
+            if(dataMsg.isDone()==false) {
+                //m_pSceneMng->
             }
         }
     }
-    SDL_Quit();
 }
 
 }

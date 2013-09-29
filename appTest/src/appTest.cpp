@@ -1,30 +1,42 @@
-#include "appTest.h"
+#include <iostream>
+#include <cstdio>
+#include "Game.h"
 
 int main ( int argn, char** argv ) {
 
     using namespace Chimera;
 
     std::cout << "A inicializar sistema.." << std::endl;
-
-    Video *video = nullptr;
-    SceneMng *sceneMng = nullptr;
-    Game *game = nullptr;
-   
+  
     try {
 
-        video = new Video ( 640, 480, std::string ( "Teste" ) );
-        sceneMng = new SceneMng(video);
-        sceneMng->open();
-       
-        game = new Game(video,sceneMng);
+        Engine3D *engine3d = new Engine3D();        
+        Video *video = new Video ( 640, 480, std::string ( "Teste" ) );
+        std::cout << "Tela Iniciada com sucesso " <<std::endl;
         
-
-        game->init();
-        std::cout << "Engine inicializado com sucesso" << std::endl;
+        engine3d->initOpenGL(video);
+        std::cout << "OpenGL iniciado com sucesso, versao: " << engine3d->getVersaoOpenGL()  <<std::endl;
+        
+        SceneMng *sceneMng = new SceneMng();
+        
+        
+        
+        
+        
+        
+        
+        Game *game = new Game(engine3d,sceneMng);
+        game->open();
+        std::cout << "Game inicializado com sucesso" << std::endl;
 
         game->gameLoop();
         std::cout << "Engine encerrado com sucesso" << std::endl;
 
+        delete video;
+        delete engine3d;
+        delete sceneMng;
+        delete game;
+        
         //SDL_Delay(2000);
 
     } catch ( const ExceptionSDL& ex ) {
@@ -44,9 +56,8 @@ int main ( int argn, char** argv ) {
 
     }
 
-    delete video;
-    delete sceneMng;
-    delete game;
+    
+   
 
     return 0;
 }

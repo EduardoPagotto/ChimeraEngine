@@ -8,55 +8,41 @@
 #include "Video.h"
 //#include "ChimeraTimer.h"
 //#include "ChimeraFont.h"
+#include "Engine3D.h"
 #include "SceneMng.h"
+
 
 //#include "ChimeraTransform.h"
 
 //#include "ChimeraHUD.h"
 #include "PhysicWorld.h"
 
+
 namespace Chimera {
 
 class GameClient {
 public:
-    GameClient ( Video *_pVideo, SceneMng *_pScenMng );
+    GameClient ( Engine3D *pEngine3D, SceneMng *_pScenMng );
     virtual ~GameClient();
 
-    bool init ( void );
-    void gameLoop ( void );
-    void done ( void );
-
+    void open ();
+    void close ();
+    void gameLoop ();
+    
     virtual void start() = 0;
     virtual void stop() = 0;
     virtual void onFrame() = 0;
     virtual void offFrame() = 0;
+    virtual void processMsg(DataMsg *dataMsg) = 0;
     
-    virtual void keyCapture ( SDL_Keycode tecla ) = 0;
-    virtual void mouseButtonDownCapture ( SDL_MouseButtonEvent mb ) = 0;
-    virtual void mouseMotionCapture ( SDL_MouseMotionEvent mm ) = 0;
-    
-    //virtual void pullEvent(Chimera::Node *_pVal) = 0;
-
 protected:
-// 	const SDL_Event *getEventPtr() {
-// 		return  &m_eventSDL;
-// 	}
 
-    bool m_isActive;
-    Video *m_pVideo;
+    Engine3D *m_pEngined3D;
     SceneMng *m_pSceneMng;
     //Font *m_pFont;
     //HUD *m_pHUD;
     PhysicWorld *m_physicWorld;
-
-private:
     
-    //SDL_Event m_eventSDL;
-    //Timer m_timerFPS;
-
-    bool m_status;
-    //float m_fps;
-    //std::string m_sFPS;
 };
 
 }

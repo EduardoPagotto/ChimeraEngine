@@ -47,18 +47,19 @@ public:
         return height;
     }
 
-    void open();
-    void close();
-    void execute ();
+    std::string getNomeTela() const {
+        return nomeTela;
+    }
+    
     void swapWindow();
     
+    int getFPS();
+    
 private:
-
-    void renderize();
-    void initGL();
-
     int width;
     int height;
+    int fps;
+    
     std::string nomeTela;
 
     SDL_Window *window;

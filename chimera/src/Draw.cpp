@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Draw::Draw() : m_pMaterial ( NULL ) , m_typeDraw ( DRAW_NONE ) {
+Draw::Draw() : m_pMaterial ( NULL ) , m_typeDraw ( DRAW_TYPE::DRAW_NONE ) {
 
 }
 
@@ -15,7 +15,8 @@ void Draw::init() {
         m_pMaterial->initTex();
 }
 
-void Draw::render() {
+void Draw::renderizar() {
+    
     if ( m_pMaterial )
         m_pMaterial->exec();
     else {
@@ -28,9 +29,7 @@ void Draw::render() {
             glMaterialfv ( GL_FRONT, GL_SPECULAR, s.ptr() );
             glMaterialf ( GL_FRONT, GL_SHININESS, 12.0f );
         }
-    }
-
-    renderizar();
+    } 
 }
 
 void Draw::ajusteMatrix ( Transform *_pTrans ) {

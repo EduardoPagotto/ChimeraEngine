@@ -2,14 +2,13 @@
 
 namespace Chimera {
 
-Mesh::Mesh() {
-    m_typeDraw = TRI_MESH;
-    m_pMaterial = NULL;
+Mesh::Mesh()  {
+    m_typeDraw = DRAW_TYPE::TRI_MESH;
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) {
-    m_typeDraw = TRI_MESH;
 
+    m_typeDraw = DRAW_TYPE::TRI_MESH;
     m_vertexList.set ( _cpy.m_vertexList );
     m_normalList.set ( _cpy.m_normalList );
     m_uv.set ( _cpy.m_uv );
@@ -18,7 +17,6 @@ Mesh::Mesh ( const Mesh &_cpy ) {
     m_normalIndex.set ( _cpy.m_normalIndex );
     m_textureIndex.set ( _cpy.m_textureIndex );
 
-    m_pMaterial = _cpy.m_pMaterial;
 }
 
 Mesh::~Mesh() {
@@ -66,6 +64,9 @@ btVector3 Mesh::sizeQuadratic ( void ) {
 }
 
 void Mesh::renderizar ( void ) {
+    
+    Draw::renderizar();
+    
     unsigned l_numFaces = m_vertexIndex.size() / 3;
     int l_index = 0;
     int fa = 0;

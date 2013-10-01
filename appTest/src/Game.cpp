@@ -1,9 +1,12 @@
 #include "Game.h"
 
 Game::Game(Chimera::Engine3D *pEngine3D, Chimera::SceneMng *_pScenMng):GameClient(pEngine3D,_pScenMng) {
+    
+    timer01.setElapsedCount(1000);
+    timer01.start();
 }
 
-Game::~Game() {
+Game::~Game() { 
 }
 
 bool Game::keyCapture ( SDL_Keycode tecla ) {
@@ -32,6 +35,9 @@ bool Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
 }
 
 void Game::start() {
+    
+    //m_pSceneMng-
+    
 }
 
 void Game::stop(){
@@ -39,13 +45,42 @@ void Game::stop(){
 
 void Game::onFrame(){
     
+    using namespace Chimera;
+    
     //TODO Desenho aqui
-    glColor3f(0.7, 0.5, 0.8);
-    glRectf(1.0, 1.0, 3.0, 2.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_pEngined3D->setLight(true);
+    m_pEngined3D->setMaterial(true);    
+
+    pCam = (Camera*)m_pSceneMng->getNode(EntityType::CAMERA,0);
+    pObj = (Object*)m_pSceneMng->getNode(EntityType::OBJECT,0);
+    
+    m_pEngined3D->setViewPortPerspective(pCam);
+    
+    pCam->exec();
+    
+    Chimera::DataMsg dataMsg(KindOperation::DRAW3D,this,pObj,nullptr);
+    
+    m_pSceneMng->execute(&dataMsg);
+    
+    //m_pEngined3D->setViewPortOrtogonal();
+    //glColor3f(0.7, 0.5, 0.8);
+    //glRectf(100.0, 100.0, 300.0, 200.0);
+    
+    //m_pEngined3D->setViewPortPerspective();
+    
+    
+    
+    //m_pEngined3D->setViewPortPerspective();
+    
     
 }
 
 void Game::offFrame(){
+    
+    //if (timer01.stepCount() == true)
+        std::cout << "FPS: " << m_pEngined3D->getVideo()->getFPS() << std::endl;
+    
 }
 
 void Game::processMsg(Chimera::DataMsg *dataMsg) {

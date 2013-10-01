@@ -9,7 +9,7 @@
 
 namespace Chimera {
 
-enum DRAW_SHAPES {
+enum class DRAW_TYPE {
 	DRAW_NONE,
 	BOX,
 	BOXGRID,
@@ -22,18 +22,16 @@ class Draw {
 public:
 	Draw();
 	virtual ~Draw();
-	void render();
-
+    virtual void renderizar();
 	virtual btVector3 sizeQuadratic(void) = 0;
 	
 	void init();
-
 	void ajusteMatrix(Transform *_pTrans);
 
 protected:
-	virtual void renderizar() = 0;
+	
 	Material *m_pMaterial;
-	DRAW_SHAPES m_typeDraw;
+	DRAW_TYPE m_typeDraw;
 };
 
 }

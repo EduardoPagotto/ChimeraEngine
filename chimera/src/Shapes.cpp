@@ -2,20 +2,20 @@
 
 namespace Chimera {
 	
-DrawBox::DrawBox(float _lado, float _altura, float _largura) : m_lado(_lado), m_altura(_altura), m_largura(_largura)
-{
-	m_typeDraw = BOX;
+DrawBox::DrawBox(float _lado, float _altura, float _largura) :  m_lado(_lado), m_altura(_altura), m_largura(_largura) {
+    m_typeDraw = DRAW_TYPE::BOX;
 }
 
 DrawBox::~DrawBox(){}
 
-btVector3 DrawBox::sizeQuadratic(void)
-{
+btVector3 DrawBox::sizeQuadratic(void) {
 	return btVector3( m_lado, m_largura, m_altura );
 }
 
-void DrawBox::renderizar()
-{
+void DrawBox::renderizar() {
+    
+    Draw::renderizar();
+    
 	glBegin(GL_QUADS);			// Face posterior
 		glNormal3f(0.0, 0.0, 1.0);	// Normal da face
 		glVertex3f(m_lado, m_altura, m_largura);
@@ -62,33 +62,27 @@ void DrawBox::renderizar()
 
 //-----------------------------------------------------
 
-DrawBoxGrid::DrawBoxGrid(int _size,int _space) : m_size(_size), m_space(_space)
-{
-	m_typeDraw = BOXGRID;
-
-	m_size = 50;
-	m_space = 5;
+DrawBoxGrid::DrawBoxGrid(int _size,int _space) : m_size(_size), m_space(_space) {
+    m_typeDraw = DRAW_TYPE::BOXGRID;
 }
 
-DrawBoxGrid::~DrawBoxGrid()
-{
+DrawBoxGrid::~DrawBoxGrid() {
 
 }
 
-btVector3 DrawBoxGrid::sizeQuadratic(void)
-{
+btVector3 DrawBoxGrid::sizeQuadratic(void) {
 	btScalar l_val = m_size / 2.f;
 	return btVector3( l_val, l_val, l_val );
 }
 
-void DrawBoxGrid::renderizar()
-{
+void DrawBoxGrid::renderizar() {
 	int px = m_size;
 	int py = m_size;
 	int pz = m_size;
 
-	for (pz = -m_size ; pz <= m_size ; pz+=m_space)
-	{
+    Draw::renderizar();
+    
+	for (pz = -m_size ; pz <= m_size ; pz+=m_space) {
 		glColor3ub(255,0,0);
 		glBegin(GL_LINE_LOOP);
 			glVertex3i(px, py, pz);
@@ -117,23 +111,19 @@ void DrawBoxGrid::renderizar()
 
 //--------------------------------------------------------
 
-DrawBoxGrid2::DrawBoxGrid2()
-{
-	m_typeDraw = BOXGRID2;
+DrawBoxGrid2::DrawBoxGrid2() {
+    m_typeDraw = DRAW_TYPE::BOXGRID2;
 }
 
-DrawBoxGrid2::~DrawBoxGrid2()
-{
+DrawBoxGrid2::~DrawBoxGrid2() {
 
 }
 
-btVector3 DrawBoxGrid2::sizeQuadratic(void)
-{
+btVector3 DrawBoxGrid2::sizeQuadratic(void) {
 	return btVector3( 10.0f, 10.0f, 10.0f );
 }
 
-void DrawBoxGrid2::renderizar()
-{
+void DrawBoxGrid2::renderizar() {
 	#define MAX_LINE 1000
 	#define DELTA_LINE 50
 	#define STEP_LINE 10
@@ -142,11 +132,12 @@ void DrawBoxGrid2::renderizar()
 	float maxZ = 20;//fmod(_posicao.z,DELTA_LINE);
 	float maxX = 20;//fmod(_posicao.x,DELTA_LINE);
 
+	Draw::renderizar();
+	
 	glColor3ub(225,0,0);
 	glBegin(GL_LINES);
-	for (float K=-2;K<=2;K++)
-		for (float J=-2;J<=2;J++)
-		{
+	for (float K=-2;K<=2;K++) {
+		for (float J=-2;J<=2;J++) {
 			glVertex3f(-MAX_LINE,maxY+(DELTA_LINE*K),maxZ+(DELTA_LINE*J));
 			glVertex3f(MAX_LINE,maxY+(DELTA_LINE*K),maxZ+(DELTA_LINE*J));
 
@@ -156,6 +147,7 @@ void DrawBoxGrid2::renderizar()
 			glVertex3f(maxX+(DELTA_LINE*K),-MAX_LINE,maxZ+(DELTA_LINE*J));
 			glVertex3f(maxX+(DELTA_LINE*K),MAX_LINE,maxZ+(DELTA_LINE*J));
 		}
+    }
 	glEnd();
 }
 

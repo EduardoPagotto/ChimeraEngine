@@ -12,26 +12,25 @@ Object::~Object ( void ) {
 
 void Object::update ( DataMsg *dataMsg ) {
 //FIXME mais um
-// 	if (_transport->code==DO_DRAW_3D)
-//     {
-// 		glPushMatrix();
-//
-// 		if (m_pPhysic)
-// 		{
+    if (dataMsg->getKindOperation() == KindOperation::DRAW3D) {
+        
+ 		glPushMatrix();
+
+		if (m_pPhysic) {
 // 			Object *pSource = (Object *)_transport->fieldA;
 // 			m_pPhysic->ajusteMatrix(pSource->m_pPhysic);
-// 		}
-//
-// 		if (m_pDraw)
-// 			m_pDraw->render();
-//
-// 		glPopMatrix();
-//
-// 		Node::update(_transport);
-//
-// 		//glPopMatrix();
-//
-//     }
+		}
+
+ 		if (m_pDraw)
+ 			m_pDraw->renderizar();
+
+ 		glPopMatrix();
+
+        Node::update(dataMsg);
+
+ 		//glPopMatrix();
+
+     }
 // 	else if (_transport->code==DO_INIT)
 // 	{
 // 		if (m_pDraw)

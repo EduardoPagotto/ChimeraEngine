@@ -14,97 +14,50 @@ enum class CameraType {
     LAND_CAM, 
     AIR_CAM 
 };    
-    
-class Rectangular {
-public:
-    Rectangular() : initX ( 0 ), initY ( 0 ), width ( 640 ) ,height ( 480 ) {}
-    Rectangular ( int _x,int _y ,int _width ,int _height ) : initX ( _x ), initY ( _y ), width ( _width ) ,height ( _height ) {}
-    Rectangular ( const Rectangular &_rec ) : initX ( _rec.initX ), initY ( _rec.initY ), width ( _rec.width ) ,height ( _rec.height ) {}
-
-    inline float calcRatio() const {
-        return ( float ) width / ( float ) height;
-    }
-
-    int initX,
-        initY,
-        width,
-        height;
-};
 
 class Camera : public Transform {
 public:
     Camera ( std::string name , CameraType _camType);
-
     virtual ~Camera();
-
-    void setViewport ( const Rectangular _tela );
-
-    void setProjectionPerspective ( float _fov, float _ratio, float _near, float _far );
-
-    void setProjectionOrtogonal();
-
-    void projection ( void );
-
-    bool getProjection ( void ) const {
-        return perspective;
-    }
-
-    float aspectRatio ( void ) const {
-        return ratio;
-    }
-
-    void setProjection ( bool _val ) {
-        perspective = _val;
-    }
-
-    void setAspectRatio ( void ) {
-        ratio = tela.calcRatio();
-    }
 
     virtual void update ( DataMsg *dataMsg );
 
     void exec ( void );
-    void trackBall ( int _mx, int _my, int _mz );
+   
+    virtual void init ( void );
+    
+    void set(float near, float far, float fov) {
+        this->near = near;
+        this->far = far;
+        this->fov = fov;
+    }
+    
+    float getNear() const {
+        return near;
+    }
+    
+    float getFar() const {
+        return far;
+    }
+    
+    float getFov() const {
+        return fov;
+    }
 
-    void reset();
-    void update();
-
-    void Pitch ( GLfloat theta );
-    void Yaw ( GLfloat theta );
-    void Roll ( GLfloat theta );
-
-    void Walk ( GLfloat delta, bool Wall[4] );
-    void Strafe ( GLfloat delta, bool Wall[4] );
-    void Fly ( GLfloat delta, bool Wall[4] );
-
-    void init ( void );
-
+protected:    
+    
+    CameraType cameraType;
+    
 private:
 
-    void initTrackBall ( void );
+    
 
-    CameraType cameraType;
-
-    btVector3 along;
-    btVector3 up;
-    btVector3 forward;
-
-    btVector3 target;
-
-    bool perspective;
     float near;
     float far;
     float fov;
+    
+    
 
-    Rectangular tela;
-
-    float ratio;
-
-    float horizontal;
-    float vertical;
-    float distancia;
-    float distanciaMax;
-    float distanciaMin;
 };
 
 }

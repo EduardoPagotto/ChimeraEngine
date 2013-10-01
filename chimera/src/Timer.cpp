@@ -1,10 +1,3 @@
-/*
- * Timer.cpp
- *
- *  Created on: Sep 18, 2013
- *      Author: locutus
- */
-
 #include "Timer.h"
 
 namespace Chimera {

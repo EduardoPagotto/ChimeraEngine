@@ -86,7 +86,6 @@ public:
     Mesh();
     Mesh ( const Mesh &_cpy );
     virtual ~Mesh();
-
     virtual btVector3 sizeQuadratic ( void );
 
 protected:

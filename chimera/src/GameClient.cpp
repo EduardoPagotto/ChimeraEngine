@@ -61,22 +61,13 @@ void GameClient::gameLoop ( void ) {
             if ( l_isActive==true ) {			//Se nao houver foco na tela pule o render
                 //m_physicWorld->stepSim();
 
-                std::cout << "FPS: " <<m_pEngined3D->getVideo()->getFPS() << std::endl;
-
                 onFrame();
 
-                DataMsg dataMsg ( KindOperation::DRAW3D,nullptr,nullptr,nullptr );
-                m_pSceneMng->getRoot()->update ( &dataMsg );
-
-                //m_fps = m_timerFPS.getCiclo();
-
-                m_pEngined3D->begin2D();
-
+                //DataMsg dataMsg ( KindOperation::DRAW3D,nullptr,nullptr,nullptr );
+                //m_pSceneMng->getRoot()->update ( &dataMsg );
+                //m_pEngined3D->begin2D();
                 //m_pHUD->update();
-
-                m_pEngined3D->end2D();
-
-
+                //m_pEngined3D->end2D();
                 offFrame();
 
                 m_pEngined3D->getVideo()->swapWindow();

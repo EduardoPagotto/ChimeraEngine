@@ -14,9 +14,6 @@ public:
 	~DrawBox();
 
 	virtual btVector3 sizeQuadratic(void);
-
-protected:
-
 	virtual void renderizar();
 
 private:
@@ -30,10 +27,7 @@ public:
 	DrawBoxGrid(int _size,int _space);
 	~DrawBoxGrid();
 
-	virtual btVector3 sizeQuadratic(void);
-
-protected:
-	
+	virtual btVector3 sizeQuadratic(void);	
 	virtual void renderizar();
 
 private:
@@ -46,10 +40,7 @@ public:
 	DrawBoxGrid2();
 	~DrawBoxGrid2();
 
-	virtual btVector3 sizeQuadratic(void);
-
-protected:
-	
+	virtual btVector3 sizeQuadratic(void);	
 	virtual void renderizar();
 
 private:

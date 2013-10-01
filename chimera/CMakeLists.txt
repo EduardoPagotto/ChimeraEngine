@@ -24,6 +24,7 @@ add_library (Chimera STATIC
 				src/Color.cpp
 				src/Light.cpp
 				src/Camera.cpp
+				src/TrackCam.cpp
 				src/Image.cpp
 				src/Material.cpp
 				src/Draw.cpp

@@ -3,17 +3,19 @@
 
 #include <string.h>
 #include <stdlib.h>
+
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-#include "Scene.h"
+#include "SceneMng.h"
 #include "PhysicWorld.h"
+#include "Mesh.h"
 
 namespace Chimera {
 
 class Loader {
 public:
-    Loader ( Scene *_pScene );
+    Loader ( SceneMng *_pScene );
     ~Loader();
     bool exec ( const char *_file );
 private:
@@ -44,7 +46,7 @@ private:
     int libPhysicsScenes ( void );
     int libPhysicsMaterial ( void );
 
-    Scene *m_pScene;
+    SceneMng *m_pScene;
     PhysicWorld *m_physicWorld;
 
     xmlDocPtr m_doc;

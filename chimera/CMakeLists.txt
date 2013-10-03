@@ -35,7 +35,7 @@ add_library (Chimera STATIC
 				src/Engine3D.cpp
 				#src/Font.cpp
 				#src/HUD.cpp
-				#src/Loader.cpp
+				src/Loader.cpp
 				src/Object.cpp
 				src/Timer.cpp 
 				src/Video.cpp

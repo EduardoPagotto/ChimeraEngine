@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include "Game.h"
+#include "Loader.h"
 
 int main ( int argn, char** argv ) {
 

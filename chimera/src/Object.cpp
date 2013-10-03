@@ -2,12 +2,21 @@
 
 namespace Chimera {
 
-Object::Object ( std::string name ) : m_pPhysic ( NULL ) , m_pDraw ( NULL ), Transform ( EntityType::OBJECT,name ) {
+Object::Object (std::string id, std::string name ) : Transform ( EntityType::OBJECT, id, name ) {
+    
+    m_pPhysic = nullptr;
+    m_pDraw = nullptr;
+    
+}
+
+Object::Object( const Object& object ) : Transform(object) {
+    
+    m_pPhysic = object.m_pPhysic;
+    m_pDraw = object.m_pDraw;
     
 }
 
 Object::~Object ( void ) {
-
 }
 
 void Object::update ( DataMsg *dataMsg ) {

@@ -16,7 +16,10 @@ class Object : public Transform {
 public:   
 	//friend class Loader;
 
-    Object(std::string name);
+    Object(std::string id, std::string name);
+    Object( const Object& object );
+    
+    
 	virtual ~Object(void);
     virtual void update ( DataMsg *dataMsg );
 

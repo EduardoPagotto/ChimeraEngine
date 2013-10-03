@@ -1,5 +1,5 @@
-#ifndef EXCEPTIONSDL_H_
-#define EXCEPTIONSDL_H_
+#ifndef EXCEPTION_CHIMERA_H_
+#define EXCEPTION_CHIMERA_H_
 
 #include <Exception.h>
 
@@ -10,21 +10,21 @@ namespace Chimera {
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class ExceptionSDL: public Exception {
+class ExceptionChimera: public Exception {
 public:
 
     /**
      * Construtor de copia
      * @param ex
      */
-    ExceptionSDL ( const ExceptionSDL &ex ) : Exception ( ex ) {}
+    ExceptionChimera ( const ExceptionChimera &ex ) : Exception ( ex ) {}
 
     /**
      * Construtor com dados
      * @param _code
      * @param _message
      */
-    ExceptionSDL ( ExceptionCode _code, std::string _message ) : Exception ( ExceptionType::SDL_EXCEPTION, _code, _message ) {}
+    ExceptionChimera ( ExceptionCode _code, std::string _message ) : Exception ( ExceptionType::CHIMERA_EXCEPTION, _code, _message ) {}
 
     /**
      * Destrutor Padrao

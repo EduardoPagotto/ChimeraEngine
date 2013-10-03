@@ -16,7 +16,7 @@ Engine3D::Engine3D() : m_hasLight(false), m_hasMaterial(false) {
         SDL_GL_SetAttribute ( SDL_GL_DEPTH_SIZE, 24 );
         
     } else {
-        throw ExceptionSDL ( -1, std::string ( SDL_GetError() ) );
+        throw ExceptionSDL ( ExceptionCode::ALLOC, std::string ( SDL_GetError() ) );
     }   
     
 }
@@ -91,7 +91,7 @@ std::string Engine3D::getVersaoOpenGL() {
     if ( version != NULL ) {
        retorno.append(version);
     } else {
-        throw ExceptionSDL ( -1, std::string ( SDL_GetError() ) ); 
+        throw ExceptionSDL ( ExceptionCode::READ, std::string ( SDL_GetError() ) ); 
     }
        
     return retorno;

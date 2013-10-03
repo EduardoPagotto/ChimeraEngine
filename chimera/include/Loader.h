@@ -4,8 +4,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <log4cxx/logger.h>
+#include <log4cxx/xml/domconfigurator.h>
+
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
+
+#include "ExceptionChimera.h"
 
 #include "SceneMng.h"
 #include "PhysicWorld.h"
@@ -20,6 +25,9 @@ public:
     bool exec ( const char *_file );
 private:
 
+    std::string getValProp (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
+    std::string getAttribute(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
+    
     xmlNodePtr findNode ( const char* _nomeNode, xmlNodePtr _nodePos );
     void setIdentity ( Node *_pNode, xmlNodePtr _xmlNode );
 
@@ -53,6 +61,8 @@ private:
     xmlNodePtr m_root;
 
     unsigned m_numNodes;
+    
+    log4cxx::LoggerPtr logger;
 };
 
 }

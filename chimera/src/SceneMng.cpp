@@ -3,7 +3,7 @@
 namespace Chimera {
 
 SceneMng::SceneMng ( Engine3D *_pEngine3D ) : m_pEngine3D ( _pEngine3D ) {
-    m_pRoot = new Node ( EntityType::NODE,std::string ( "root" ) );
+    m_pRoot = new Node ( EntityType::NODE,std::string ( "root" ),std::string ( "root" ) );
 }
 
 SceneMng::~SceneMng() {

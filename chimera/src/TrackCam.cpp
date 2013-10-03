@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-TrackCam::TrackCam ( std::string name, CameraType _camType ) : Camera ( name,_camType ) {
+TrackCam::TrackCam ( std::string id, std::string name ) : Camera ( CameraType::AIR_CAM,id,name ) {
 
     horizontal = 0.0f;
     vertical = 0.0f;
@@ -14,6 +14,20 @@ TrackCam::TrackCam ( std::string name, CameraType _camType ) : Camera ( name,_ca
     up.setValue ( 0.0f, 1.0f, 0.0f );
     forward.setValue ( 0.0f,  0.0f, -1.0f );
 
+}
+
+TrackCam::TrackCam ( const TrackCam& trackCam ) : Camera ( trackCam ) {
+    
+    horizontal = trackCam.horizontal;
+    vertical = trackCam.vertical;
+    distancia = trackCam.distancia;
+    distanciaMin = trackCam.distanciaMin;
+    distanciaMax = trackCam.distanciaMax;
+    
+    along = trackCam.along;
+    up = trackCam.up;
+    forward = trackCam.forward;
+       
 }
 
 TrackCam::~TrackCam() {

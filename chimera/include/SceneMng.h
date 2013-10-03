@@ -16,8 +16,10 @@ namespace Chimera {
  *  @since 20130925
  */
 class SceneMng {
-public:
-    //friend class Loader;
+public
+:
+    friend class Loader;
+    
     SceneMng(Engine3D *_pEngine3D);
     virtual ~SceneMng ();
 

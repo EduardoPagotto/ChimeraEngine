@@ -34,7 +34,7 @@ void GameClient::close ( void ) {
     SDL_Event l_eventQuit;
     l_eventQuit.type = SDL_QUIT;
     if ( SDL_PushEvent ( &l_eventQuit ) == -1 ) {
-        throw ExceptionSDL ( -5, std::string ( SDL_GetError() ) );
+        throw ExceptionSDL ( ExceptionCode::CLOSE, std::string ( SDL_GetError() ) );
     }
 
 }

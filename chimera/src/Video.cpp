@@ -23,11 +23,11 @@ Video::Video ( int width, int height, std::string nome ) :
         
         context = SDL_GL_CreateContext ( window );
         if ( context == nullptr ) {
-            throw ExceptionSDL ( -3, std::string ( SDL_GetError() ) );
+            throw ExceptionSDL ( ExceptionCode::CREATE, std::string ( SDL_GetError() ) );
         }
                 
     } else {
-        throw ExceptionSDL ( -2, std::string ( SDL_GetError() ) );
+        throw ExceptionSDL ( ExceptionCode::CREATE, std::string ( SDL_GetError() ) );
     }
     
     timerFPS.setElapsedCount ( 1000 );

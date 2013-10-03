@@ -6,6 +6,8 @@ Loader::Loader ( SceneMng *_pScene ) {
     m_pScene = _pScene;
     m_numNodes = 0;
     m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
+    
+    logger = log4cxx::Logger::getLogger("appTest");
 }
 
 Loader::~Loader() {
@@ -27,28 +29,78 @@ bool Loader::exec ( const char *_file ) {
     }
 
     printf ( "Cameras Registradas %d\n",libCam() );
-    printf ( "Luzes Registradas %d\n",libLight() );
-    printf ( "Effects Registrados %d\n",libEffect() );
-    printf ( "Images Registradas %d\n",libImage() );
-    printf ( "Material Registrados %d\n",libMaterial() );
-    printf ( "Geometrias Registradas %d\n",libGeometry() );
-    printf ( "Nodes Registrados %d\n",libScene() );
-
-    printf ( "PhysicMaterial Registradas %d\n",libPhysicsMaterial() );
-
-    printf ( "PhysicModels Registradors %d\n",libPhysicsModels() );
-    printf ( "PhysicScenes Registradas %d\n",libPhysicsScenes() );
+//     printf ( "Luzes Registradas %d\n",libLight() );
+//     printf ( "Effects Registrados %d\n",libEffect() );
+//     printf ( "Images Registradas %d\n",libImage() );
+//     printf ( "Material Registrados %d\n",libMaterial() );
+//     printf ( "Geometrias Registradas %d\n",libGeometry() );
+//     printf ( "Nodes Registrados %d\n",libScene() );
+// 
+//     printf ( "PhysicMaterial Registradas %d\n",libPhysicsMaterial() );
+// 
+//     printf ( "PhysicModels Registradors %d\n",libPhysicsModels() );
+//     printf ( "PhysicScenes Registradas %d\n",libPhysicsScenes() );
 
     return true;
 }
 
-void Loader::setIdentity ( Node *_pNode, xmlNodePtr _xmlNode ) {
-    xmlChar *pName = xmlGetProp ( _xmlNode, ( const xmlChar* ) "name" );
-    if ( pName )
-        _pNode->setName ( ( char* ) pName );
-    else
-        _pNode->setName ( "ERRO" );
+
+std::string Loader::getValProp (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
+    
+    xmlChar *pStr = xmlGetProp ( _xmlNode, ( const xmlChar* ) chave.c_str() );
+    if ( pStr != nullptr ) {        
+        return std::string((const char*)pStr);
+    } else {
+        
+        std::string l_erro = "Entidade '" + tipoNomeNode +"' com Propriedade '" + chave + "' nao localizado";
+        throw ExceptionChimera(ExceptionCode::READ, l_erro);
+      
+    }
 }
+
+std::string Loader::getAttribute(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
+
+    std::string retorno;
+    
+    xmlNodePtr l_nElem = findNode (  chave.c_str(), _xmlNode );
+    if ( l_nElem!=NULL ) {
+        xmlChar* l_pVal = xmlNodeListGetString ( m_doc, l_nElem->children, 1 );
+        
+        if (l_pVal != nullptr) {
+            
+            retorno = (const char*)l_pVal;
+            xmlFree ( l_pVal );
+            
+            return retorno;
+        }     
+    }
+    
+    std::string l_erro = "Entidade '" + tipoNomeNode +"' com Atributo '" + chave + "' nao localizado";
+    LOG4CXX_WARN ( logger ,l_erro );
+    //throw ExceptionChimera(ExceptionCode::READ, l_erro);
+ 
+    return std::string("");   
+}
+
+// void Loader::setIdentity ( Node *_pNode, xmlNodePtr _xmlNode ) {
+//     
+//     xmlChar *pStr = xmlGetProp ( _xmlNode, ( const xmlChar* ) "name" );
+//     if ( pStr ) {
+//         _pNode->setName ( ( char* ) pStr );
+//     } else {
+//         _pNode->setName ( "ERRO" );
+//         LOG4CXX_WARN ( logger , "Camera Sem 'nome' valido" );
+//     }
+//     
+//     pStr = xmlGetProp ( _xmlNode, ( const xmlChar* ) "id" );
+//     if ( pStr ) {
+//         _pNode->setId (( char* ) pStr );
+//     } else {
+//         _pNode->setId ( "ERRO" );  
+//         LOG4CXX_WARN ( logger , "Camera Sem 'id' valido" );
+//     }
+//     
+// }
 
 void Loader::loadArrayI ( const char *_val, std::vector<int> &_arrayI ) {
     char l_numTemp[32];
@@ -154,6 +206,95 @@ int Loader::getSource ( xmlNodePtr _nSource, ListPtr<float> &_arrayValores ) {
         }
     }
     return l_numSource;
+}
+
+int Loader::libCam ( void ) {
+    int l_count = 0;
+
+    //Pega Raiz de Elemento conjunto Cameras
+    xmlNodePtr l_nCam = findNode ( ( char* ) "library_cameras", m_root );
+
+    //Encontra o primeiro elemento
+    l_nCam = findNode ( ( char* ) "camera", l_nCam->children );
+    while ( l_nCam != NULL ) {
+
+        try {
+        
+            //Cria camera e carrega atributos
+            Camera *pCamera = new Camera(CameraType::AIR_CAM, getValProp("Camera","id",l_nCam ), getValProp("Camera","name",l_nCam ));
+            
+            //Salva na lista de cameras
+            m_pScene->m_vCamera.push_back ( pCamera );
+
+            //Verifica se exite Elemento Perspectiva
+            xmlNodePtr l_nTech = findNode ( ( char* ) "perspective",l_nCam );
+            if ( l_nTech!=NULL ) {
+                //TODO implementar a prespectiva
+                //pCamera->m_perspective = true;                
+                std::string val = getAttribute("Camera","xfov",l_nTech);
+                if (val.size() >0)
+                    pCamera->setFov(( float ) atof ( val.c_str() ));
+                
+                val = getAttribute("Camera","znear",l_nTech);
+                if (val.size() >0)
+                    pCamera->setNear(( float ) atof ( val.c_str() ));
+                
+                val = getAttribute("Camera","zfar",l_nTech);
+                if (val.size() >0)
+                    pCamera->setFar(( float ) atof ( val.c_str() ));
+ 
+            }
+
+            l_nTech = findNode ( ( char* ) "orthogonal",l_nCam );
+            if ( l_nTech!=NULL ) {
+                //TODO: implementar camera ortogonal
+            }
+
+        } catch (const ExceptionChimera& ec) {
+            LOG4CXX_WARN ( logger , ec.getMessage() );
+        }
+        
+        l_nCam = findNode ( ( char* ) "Camera", l_nCam->next );
+        l_count++;
+    }
+    return l_count;
+}
+
+//FIXME continuar daqui, pegar nome e id da camera
+int Loader::libLight ( void ) {
+    int l_count = 0;
+
+    //Pega Raiz de Elemento conjunto Luzes
+    xmlNodePtr l_nLight = findNode ( ( char* ) "library_lights", m_root );
+    if ( l_nLight!=NULL ) {
+        xmlChar* l_pVal = NULL;
+        std::vector<float> l_arrayValores;
+        l_nLight = findNode ( ( char* ) "light", l_nLight->children );
+        while ( l_nLight!=NULL ) {
+            //Carrega atributos
+            Light *pLight = new Light ( LightType::POINT, l_count );
+            setIdentity ( pLight,l_nLight );
+            m_pScene->m_vLight.push_back ( pLight );
+
+            xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children );
+            if ( l_nTipo != NULL ) {
+                l_nTipo = findNode ( ( char* ) "color", l_nTipo->children );
+                if ( l_nTipo!=NULL ) {
+                    l_pVal = xmlNodeListGetString ( m_doc, l_nTipo->children, 1 );
+
+                    loadArrayF ( ( char* ) l_pVal ,l_arrayValores );
+                    pLight->ambient.set ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f );
+
+                    l_arrayValores.clear();
+
+                    xmlFree ( l_pVal );
+                }
+            }
+            l_nLight = findNode ( ( char* ) "light", l_nLight->next );
+            l_count++;
+        }
+    }
+    return l_count;
 }
 
 // // // //void Loader::createNode(xmlNodePtr _nodeXML, Node *_pNode)
@@ -302,102 +443,6 @@ int Loader::getSource ( xmlNodePtr _nSource, ListPtr<float> &_arrayValores ) {
 // // // //		_nodeXML = _nodeXML->next;
 // // // //	}
 // // // //}
-
-// int Loader::libCam ( void ) {
-//     int l_count = 0;
-// 
-//     //Pega Raiz de Elemento conjunto Cameras
-//     xmlNodePtr l_nCam = findNode ( ( char* ) "library_cameras", m_root );
-// 
-//     //Encontra o primeiro elemento
-//     l_nCam = findNode ( ( char* ) "Camera", l_nCam->children );
-//     while ( l_nCam != NULL ) {
-//         //Cria camera
-//         Camera *pCamera = new Camera();
-// 
-//         //Carrega atributos
-//         setIdentity ( pCamera,l_nCam );
-// 
-//         //Salva na lista de cameras
-//         m_pScene->m_vCameras.push_back ( pCamera );
-// 
-//         //Verifica se exite Elemento Perspectiva
-//         xmlNodePtr l_nTech = findNode ( ( char* ) "perspective",l_nCam );
-//         if ( l_nTech!=NULL ) {
-//             pCamera->m_perspective = true;
-// 
-//             xmlChar* l_pVal = NULL;
-//             xmlNodePtr l_nElem;
-// 
-//             l_nElem = findNode ( ( char* ) "yfov",l_nTech );
-//             if ( l_nElem!=NULL ) {
-//                 l_pVal = xmlNodeListGetString ( m_doc, l_nElem->children, 1 );
-//                 pCamera->m_fov = ( float ) atof ( ( char* ) l_pVal );
-//                 xmlFree ( l_pVal );
-//             }
-// 
-//             l_nElem = findNode ( ( char* ) "znear",l_nTech );
-//             if ( l_nElem!=NULL ) {
-//                 l_pVal = xmlNodeListGetString ( m_doc, l_nElem->children, 1 );
-//                 pCamera->m_near = ( float ) atof ( ( char* ) l_pVal );
-//                 xmlFree ( l_pVal );
-//             }
-// 
-//             l_nElem = findNode ( ( char* ) "zfar",l_nTech );
-//             if ( l_nElem!=NULL ) {
-//                 l_pVal = xmlNodeListGetString ( m_doc, l_nElem->children, 1 );
-//                 pCamera->m_far = ( float ) atof ( ( char* ) l_pVal );
-//                 xmlFree ( l_pVal );
-//             }
-// 
-//         }
-// 
-//         l_nTech = findNode ( ( char* ) "orthogonal",l_nCam );
-//         if ( l_nTech!=NULL ) {
-//             //TODO: implementar
-//         }
-// 
-//         l_nCam = findNode ( ( char* ) "Camera", l_nCam->next );
-//         l_count++;
-//     }
-//     return l_count;
-// }
-
-// int Loader::libLight ( void ) {
-//     int l_count = 0;
-// 
-//     //Pega Raiz de Elemento conjunto Luzes
-//     xmlNodePtr l_nLight = findNode ( ( char* ) "library_lights", m_root );
-//     if ( l_nLight!=NULL ) {
-//         xmlChar* l_pVal = NULL;
-//         std::vector<float> l_arrayValores;
-//         l_nLight = findNode ( ( char* ) "light", l_nLight->children );
-//         while ( l_nLight!=NULL ) {
-//             //Carrega atributos
-//             Light *pLight = new Light ( POINT, l_count );
-//             setIdentity ( pLight,l_nLight );
-//             m_pScene->m_vLights.push_back ( pLight );
-// 
-//             xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children );
-//             if ( l_nTipo != NULL ) {
-//                 l_nTipo = findNode ( ( char* ) "color", l_nTipo->children );
-//                 if ( l_nTipo!=NULL ) {
-//                     l_pVal = xmlNodeListGetString ( m_doc, l_nTipo->children, 1 );
-// 
-//                     loadArrayF ( ( char* ) l_pVal ,l_arrayValores );
-//                     pLight->ambient.set ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f );
-// 
-//                     l_arrayValores.clear();
-// 
-//                     xmlFree ( l_pVal );
-//                 }
-//             }
-//             l_nLight = findNode ( ( char* ) "light", l_nLight->next );
-//             l_count++;
-//         }
-//     }
-//     return l_count;
-// }
 
 // int Loader::libEffect ( void ) {
 //     int l_count = 0;

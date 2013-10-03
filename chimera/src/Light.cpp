@@ -2,11 +2,19 @@
 
 namespace Chimera {
 
-Light::Light( LightType _type, int _number, std::string name ) : Transform ( EntityType::LIGHT,name ), typeLight ( _type ), number ( _number ) {
+Light::Light(LightType _type, std::string id, std::string name ) : Transform ( EntityType::LIGHT, id, name ) , typeLight(_type) {
     
     ambient = Color::ZERO;
     specular = Color::ZERO;
     diffuse = Color::ZERO;
+    
+}
+
+Light::Light(const Light& light ) : Transform ( light ) , typeLight(light.typeLight){
+    
+    ambient = light.ambient;
+    specular = light.specular;
+    diffuse = light.diffuse; 
     
 }
 

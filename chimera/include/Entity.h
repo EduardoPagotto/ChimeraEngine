@@ -30,26 +30,11 @@ enum class EntityType : int8_t {
  */
 class Entity {
 public:
-    Entity ( EntityType type ) : type ( type ), name ( "None" ), serial ( ++serialMaster ), mode(0), status(true),maxMode(2) {
-        lObj.push_back ( this );
-    };
+    Entity ( EntityType type ) : type ( type ) , serial ( ++serialMaster ), mode(0), status(true), maxMode(2) {}
+    Entity ( const Entity &entity ) : type ( entity.type ), serial ( ++serialMaster ), mode(entity.mode), status(entity.status), maxMode(entity.maxMode) {}
 
-    Entity ( const Entity &entity ) : type ( entity.type ), name ( entity.name ), serial ( ++serialMaster ) {
-        lObj.push_back ( this );
-    } ;
-
-    virtual ~Entity() {
-        lObj.remove ( this );
-    }
-
-    inline const std::string& getName() const {
-        return name;
-    }
-
-    inline void setName ( const std::string& name ) {
-        this->name = name;
-    }
-
+    virtual ~Entity() {}
+    
     inline unsigned getSerial() const {
         return serial;
     }
@@ -80,19 +65,11 @@ public:
     int virtual getMode() { 
         return mode; 
     }    
-    
-    Entity *findObj ( EntityType type,std::string name );
-
-    Entity *findObj ( std::string name );
-
-protected:
-    static std::list<Entity*> lObj;
 
 private:
     bool status;
     int mode;
     int maxMode;
-    std::string name;
     EntityType type;
     unsigned serial;
     static unsigned serialMaster;

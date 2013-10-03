@@ -17,7 +17,8 @@ enum class CameraType {
 
 class Camera : public Transform {
 public:
-    Camera ( std::string name , CameraType _camType);
+    Camera (CameraType _camType, std::string id, std::string nome);
+    Camera (const Camera& camera);
     virtual ~Camera();
 
     virtual void update ( DataMsg *dataMsg );
@@ -26,9 +27,15 @@ public:
    
     virtual void init ( void );
     
-    void set(float near, float far, float fov) {
+    void setNear(float near) {
         this->near = near;
+    }
+    
+    void setFar(float far) {
         this->far = far;
+    }
+    
+    void setFov(float fov) {
         this->fov = fov;
     }
     
@@ -44,20 +51,14 @@ public:
         return fov;
     }
 
-protected:    
-    
+protected:     
     CameraType cameraType;
     
 private:
-
-    
-
     float near;
     float far;
     float fov;
-    
-    
-
+ 
 };
 
 }

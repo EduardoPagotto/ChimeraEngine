@@ -2,26 +2,40 @@
 
 namespace Chimera {
 
-Node::Node(EntityType type, std::string name) : Entity(type) {
+std::list<Node*> Node::listNode;
+    
+Node::Node(EntityType type, std::string id, std::string name) : Entity(type), id(id), name(name) {
+    
     parent = nullptr;
-    setName(name);
+    listNode.push_back(this);
+    
+}
+
+Node::Node ( const Node &node ) : Entity(node), id(node.id), name(node.name) {
+    
+    parent = nullptr;
+    listNode.push_back(this);
+    
 }
 
 Node::~Node() {
+    
     parent = nullptr;
-    lChild.clear();
+    listChild.clear();
+    listNode.remove ( this );
+    
 }
 
 void Node::addChild(Node *child) {
 
-    lChild.push_back(child);
+    listChild.push_back(child);
     child->parent = this;
 
 }
 
 void Node::update ( DataMsg *dataMsg ){
 
-    for (Node *node : lChild) {
+    for (Node *node : listChild) {
         
         if (dataMsg->isDone() == true)
             break;
@@ -29,6 +43,58 @@ void Node::update ( DataMsg *dataMsg ){
         node->update(dataMsg);
         
     }
+}
+
+Node *Node::findObjByName ( EntityType type,std::string name ) {
+    
+    for ( Node *node : listNode ) {
+        
+        std::string l_name = node->getName();
+        if ( ( node->getType() ==type ) && ( l_name.compare ( name ) == true ) )
+            return node;
+        
+    }
+    
+    return nullptr;
+}
+
+Node *Node::findObjByName ( std::string name ) {
+    
+    for ( Node *node : listNode ) {
+        
+        std::string l_name = node->getName();
+        if ( l_name.compare ( name ) == true )
+            return node;
+        
+    }
+    
+    return nullptr;
+}
+
+Node *Node::findObjById ( EntityType type,std::string id ) {
+    
+    for ( Node *node : listNode ) {
+        
+        std::string l_id = node->getId();
+        if ( ( node->getType() ==type ) && ( l_id.compare ( id ) == true ) )
+            return node;
+        
+    }
+    
+    return nullptr;
+}
+
+Node *Node::findObjById ( std::string id ) {
+    
+    for ( Node *node : listNode ) {
+        
+        std::string l_id = node->getId();
+        if ( l_id.compare ( id ) == true )
+            return node;
+        
+    }
+    
+    return nullptr;
 }
 
 }

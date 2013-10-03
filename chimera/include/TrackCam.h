@@ -8,7 +8,9 @@ namespace Chimera {
 class TrackCam : public Camera {
     
 public:
-    TrackCam(std::string name, CameraType _camType);
+    TrackCam(std::string id, std::string name);
+    TrackCam(const TrackCam& trackCam);
+    
     ~TrackCam();
     
     virtual void init ( void );

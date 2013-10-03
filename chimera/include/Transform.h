@@ -8,19 +8,28 @@ namespace Chimera {
 
 class Transform : public Node {
 public:
-    Transform ( EntityType _type, std::string _name ) : Node ( _type,_name ) {
+    Transform ( EntityType _type, std::string id, std::string _name ) : Node ( _type, id, _name ) {
         scale.setValue ( 0.0,0.0,0.0 );
         position.setZero();
         direction.setZero();
         rotation.setZero();
     }
 
-    Transform() : Node ( EntityType::TRANSFORM,"" ) {
-        scale.setValue ( 0.0,0.0,0.0 );
-        position.setZero();
-        direction.setZero();
-        rotation.setZero();
+    Transform ( const Transform& transform ) : Node ( transform ) {
+        
+        scale = transform.scale;
+        position = transform.position;
+        direction = transform.direction;
+        rotation = transform.rotation;
+        
     }
+    
+//     Transform() : Node ( EntityType::TRANSFORM,"" ) {
+//         scale.setValue ( 0.0,0.0,0.0 );
+//         position.setZero();
+//         direction.setZero();
+//         rotation.setZero();
+//     }
 
     virtual ~Transform();
 

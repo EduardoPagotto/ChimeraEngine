@@ -11,10 +11,27 @@ namespace Chimera {
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-enum ExceptionType {
+enum class ExceptionType {
     UNKNOWN_EXCEPTION = 0,
     UNKNOWN_EXCEPTION_STR,
-    SDL_EXCEPTION
+    SDL_EXCEPTION,
+    CHIMERA_EXCEPTION
+};
+
+enum class ExceptionCode {
+    UNKNOWN,
+    CREATE,
+    DESTROY,
+    OPEN,
+    CLOSE,
+    ALLOC,
+    DEALLOC,
+    SEND,
+    RECEIVE,
+    READ,
+    WRITE,
+    TIME_OUT,
+    MESSAGE
 };
 
 /**
@@ -30,8 +47,8 @@ public:
      */
     Exception() : std::exception() {
         message = "UNKNOWN_EXCEPTION";
-        code = -1;
-        exceptionType  = UNKNOWN_EXCEPTION;
+        code = ExceptionCode::UNKNOWN;
+        exceptionType  = ExceptionType::UNKNOWN_EXCEPTION;
     }
 
     /**
@@ -50,7 +67,7 @@ public:
      * @param _code codigo do erro
      * @param _message messagem de erro
      */
-    Exception ( ExceptionType _exceptionType, int _code, std::string _message ) {
+    Exception ( ExceptionType _exceptionType, ExceptionCode _code, std::string _message ) {
         message = _message;
         code = _code;
         exceptionType = _exceptionType;
@@ -81,7 +98,7 @@ public:
      * Retorna codigo de erro
      * @return
      */
-    virtual int getCode() const throw() {
+    virtual ExceptionCode getCode() const throw() {
         return code;
     }
 
@@ -96,7 +113,7 @@ public:
 private:
 
     std::string message;
-    int code;
+    ExceptionCode code;
     ExceptionType exceptionType;
 
 };

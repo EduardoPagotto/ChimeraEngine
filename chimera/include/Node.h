@@ -13,19 +13,43 @@ namespace Chimera {
  */
 class Node : public Entity {
 public:
-    Node ( EntityType type, std::string name );
+    Node ( EntityType type, std::string id, std::string name );
+    Node ( const Node &node );
     ~Node();
 
     virtual void update ( DataMsg *dataMsg );
 
     void addChild ( Node *child );
 
+    inline const std::string& getName() const {
+        return name;
+    }
+    
+//     inline void setName ( const std::string& name ) {
+//         this->name = name;
+//     }
+
+    inline const std::string& getId() const {
+        return id;
+    }
+
+//     inline void setId ( const std::string& name ) {
+//         this->id = name;
+//     }
+
+    static Node *findObjById ( EntityType type,std::string id );
+    static Node *findObjById ( std::string id );
+    static Node *findObjByName ( EntityType type,std::string name );
+    static Node *findObjByName ( std::string name );
+
 protected:
     Node *parent;
-    std::list<Node*> lChild;
+    std::list<Node*> listChild;
 
 private:
-
+    std::string name;
+    std::string id;
+    static std::list<Node*> listNode;
 };
 
 }

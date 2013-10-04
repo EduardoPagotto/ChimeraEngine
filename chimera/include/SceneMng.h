@@ -1,6 +1,7 @@
 #ifndef SCENE_MNG_H_
 #define SCENE_MNG_H_
 
+#include <map>
 #include <vector>
 #include "Node.h"
 #include "Camera.h"
@@ -44,10 +45,10 @@ private:
     std::vector<Object*> m_vObject;
 
 //     std::list<Physics*> m_mPhysics;
-//     std::list<Draw*> m_mDraw;
-//     std::list<Image*> m_mImage;
-//     std::list<Effect*> m_mEffect;
-//     std::list<Material*> m_mMaterial;
+     std::map<std::string, Draw*> m_mDraw;
+     std::map<std::string, Image*> m_mImage;
+     std::map<std::string, Effect*> m_mEffect;
+     std::map<std::string, Material*> m_mMaterial;
 //     std::list<btMaterial*> m_PMaterial;
 
 };

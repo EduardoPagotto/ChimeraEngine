@@ -8,9 +8,7 @@ namespace Chimera {
 class Effect {
 public:
 	
-	explicit Effect() {
-		shininess = 10.5f;
-	}
+    Effect() :shininess(10.5f)  {}
 
 	Effect(const Effect& _cpy) {
 		diffuse = _cpy.diffuse;

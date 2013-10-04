@@ -28,7 +28,7 @@ link_libraries(${Chimera_BINARY_DIR}/libChimera.a)
 link_libraries(${OPENGL_LIBRARIES})
 link_libraries(${SDL2_LIBRARIES})
 link_libraries(${BULLET_LIBRARIES})
-link_libraries(-lSDL2)
+link_libraries(-lSDL2 -lSDL2_image)
 
 add_executable(appTest
         src/Game.cpp

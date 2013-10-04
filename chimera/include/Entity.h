@@ -20,6 +20,7 @@ enum class EntityType : int8_t {
     CAMERA,
     LIGHT,
     OBJECT,
+    EFFECT,
     ENGINE
 };
 

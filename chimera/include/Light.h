@@ -16,7 +16,7 @@ enum class LightType {
 
 class Light : public Transform {
 public:
-    Light ( LightType _type, std::string id, std::string _name );
+    Light ( LightType _type, int number, std::string id, std::string _name );
     Light (const Light& light );
     Light ( );
     

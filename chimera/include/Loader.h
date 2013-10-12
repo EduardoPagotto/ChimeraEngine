@@ -29,8 +29,7 @@ private:
     std::string getAttribute(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
     
     xmlNodePtr findNode ( const char* _nomeNode, xmlNodePtr _nodePos );
-    void setIdentity ( Node *_pNode, xmlNodePtr _xmlNode );
-
+    
     void loadArrayF ( const char *_val, std::vector<float> &_arrayF );
     void loadArrayI ( const char *_val, std::vector<int> &_arrayI );
 

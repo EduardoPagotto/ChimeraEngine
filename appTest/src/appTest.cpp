@@ -57,7 +57,8 @@ int main ( int argn, char** argv ) {
         Chimera::DrawBox *drawBox = new Chimera::DrawBox(5.0, 5.0, 5.0);
         obj->setDraw(drawBox);
         
-        Chimera::Light *luz1 = new Chimera::Light(Chimera::LightType::POINT,"luz01","luz01");
+        Chimera::Light *luz1 = new Chimera::Light(Chimera::LightType::POINT,0,"luz01","luz01");
+
         luz1->setPosition(btVector3(-50.0, -50.0, -50.0));
         luz1->setAmbient(Chimera::Color(0.2, 0.2, 0.2));
         luz1->setDiffuse(Chimera::Color(0.8, 0.8, 0.8));

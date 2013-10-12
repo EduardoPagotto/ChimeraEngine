@@ -14,6 +14,8 @@ namespace Chimera {
 class Material {
 public:
 
+    friend class Loader; 
+    
     Material();
     Material ( const Material &_cpy );
     virtual ~Material();

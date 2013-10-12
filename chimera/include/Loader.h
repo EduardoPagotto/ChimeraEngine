@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <string>
+
 #include <log4cxx/logger.h>
 #include <log4cxx/xml/domconfigurator.h>
 
@@ -20,11 +22,26 @@ namespace Chimera {
 
 class Loader {
 public:
-    Loader ( SceneMng *_pScene );
+    Loader ();
     ~Loader();
     bool exec ( const char *_file );
+    
+    SceneMng *getSceneMng() {
+        return m_pScene;
+    }
+    
+    void setModelDir(const std::string &_dir) {
+        m_modelDir = _dir;
+    }
+    
+    void setImageDir(const std::string &_dir) {
+        m_imageDir = _dir;
+    }
+    
 private:
 
+    void createScene();
+    
     std::string getValProp (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
     std::string getAttribute(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
     
@@ -60,6 +77,9 @@ private:
     xmlNodePtr m_root;
 
     unsigned m_numNodes;
+    
+    std::string m_modelDir;
+    std::string m_imageDir;
     
     log4cxx::LoggerPtr logger;
 };

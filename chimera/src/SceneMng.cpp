@@ -2,8 +2,8 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng ( Engine3D *_pEngine3D ) : m_pEngine3D ( _pEngine3D ) {
-    m_pRoot = new Node ( EntityType::NODE,std::string ( "root" ),std::string ( "root" ) );
+SceneMng::SceneMng ( std::string _id, std::string _name ) : Node(EntityType::SCENE,_id,_name)  {
+
 }
 
 SceneMng::~SceneMng() {
@@ -12,7 +12,7 @@ SceneMng::~SceneMng() {
 
 void SceneMng::addChildToScene ( Node *_pNode ) {
 
-    m_pRoot->addChild ( _pNode );
+    addChild ( _pNode );
 
     switch ( _pNode->getType() ) {
     case EntityType::CAMERA:
@@ -54,18 +54,17 @@ Node *SceneMng::getNode ( EntityType _type, int index ) {
     return retono;
 }
 
-void SceneMng::execute ( DataMsg *dataMsg ) {
-
-    m_pRoot->update ( dataMsg );
-
+void SceneMng::update(DataMsg *dataMsg ) {
+    
+    Node::update ( dataMsg );
+    
     if ( m_pEngine3D->getLight() ==true ) {
         for ( Light *pLight : m_vLight ) {
             pLight->exec();
         }
-    }
-
+    } 
+    
 }
-
 
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

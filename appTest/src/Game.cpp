@@ -61,7 +61,7 @@ void Game::onFrame(){
     
     Chimera::DataMsg dataMsg(KindOperation::DRAW3D,this,pObj,nullptr);
     
-    m_pSceneMng->execute(&dataMsg);
+    m_pSceneMng->update(&dataMsg);
     
     //m_pEngined3D->setViewPortOrtogonal();
     //glColor3f(0.7, 0.5, 0.8);

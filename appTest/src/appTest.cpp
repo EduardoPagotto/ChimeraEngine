@@ -31,38 +31,41 @@ int main ( int argn, char** argv ) {
         
         engine3d->initOpenGL(video);
         std::cout << "OpenGL iniciado com sucesso, versao: " << engine3d->getVersaoOpenGL()  <<std::endl;
+                
+        Chimera::Loader *pLoader = new Chimera::Loader();
+        pLoader->setModelDir("../../appTest/models/");
+        pLoader->setImageDir("../../appTest/models/");
+        pLoader->exec("cuboTex1.dae");
+        Chimera::SceneMng *sceneMng = pLoader->getSceneMng();
         
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng(engine3d);
-       
-        //Chimera::Loader *pLoader = new Chimera::Loader(sceneMng);
-        //pLoader->exec("../../appTest/models/simples1.dae");
+        //Chimera::SceneMng *sceneMng = new Chimera::SceneMng("root","root");
+        sceneMng->setEngine(engine3d);
         
-        Chimera::Camera *camera = new Chimera::Camera(Chimera::CameraType::AIR_CAM,"camera01","camera01");
-        camera->setPosition(btVector3(-500.0, -500.0, 500.0));
-        camera->setDirection(btVector3(0.0, 0.0, 0.0));
-        camera->setRotation(btVector3(0.0, 0.0, 1.0));
-        camera->setNear(0.01);
-        camera->setFar(5000);
-        camera->setFov(1.33);
-        
-        
-        sceneMng->addChildToScene(camera);
-        
-        Chimera::Object *obj = new Chimera::Object("objeto01","objeto01");
-        obj->setPosition(btVector3(0.0, 0.0, 0.0));
-        obj->setDirection(btVector3(0.0, 0.0, 0.0));
-        obj->setRotation(btVector3(0.0, 0.0, 0.0));
-        sceneMng->addChildToScene(obj);
-        
-        Chimera::DrawBox *drawBox = new Chimera::DrawBox(5.0, 5.0, 5.0);
-        obj->setDraw(drawBox);
-        
-        Chimera::Light *luz1 = new Chimera::Light(Chimera::LightType::POINT,0,"luz01","luz01");
-
-        luz1->setPosition(btVector3(-50.0, -50.0, -50.0));
-        luz1->setAmbient(Chimera::Color(0.2, 0.2, 0.2));
-        luz1->setDiffuse(Chimera::Color(0.8, 0.8, 0.8));
-        sceneMng->addChildToScene(luz1);
+//         Chimera::Camera *camera = new Chimera::Camera(Chimera::CameraType::AIR_CAM,"camera01","camera01");
+//         camera->setPosition(btVector3(-500.0, -500.0, 500.0));
+//         camera->setDirection(btVector3(0.0, 0.0, 0.0));
+//         camera->setRotation(btVector3(0.0, 0.0, 1.0));
+//         camera->setNear(0.01);
+//         camera->setFar(5000);
+//         camera->setFov(1.33);
+//         
+//         sceneMng->addChildToScene(camera);
+//         
+//         Chimera::Object *obj = new Chimera::Object("objeto01","objeto01");
+//         obj->setPosition(btVector3(0.0, 0.0, 0.0));
+//         obj->setDirection(btVector3(0.0, 0.0, 0.0));
+//         obj->setRotation(btVector3(0.0, 0.0, 0.0));
+//         sceneMng->addChildToScene(obj);
+//         
+//         Chimera::DrawBox *drawBox = new Chimera::DrawBox(5.0, 5.0, 5.0);
+//         obj->setDraw(drawBox);
+//         
+//         Chimera::Light *luz1 = new Chimera::Light(Chimera::LightType::POINT,0,"luz01","luz01");
+// 
+//         luz1->setPosition(btVector3(-50.0, -50.0, -50.0));
+//         luz1->setAmbient(Chimera::Color(0.2, 0.2, 0.2));
+//         luz1->setDiffuse(Chimera::Color(0.8, 0.8, 0.8));
+//         sceneMng->addChildToScene(luz1);
         
         Game *game = new Game(engine3d,sceneMng);
         game->open();

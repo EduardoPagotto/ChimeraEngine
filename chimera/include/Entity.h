@@ -16,12 +16,13 @@ enum class EntityType : int8_t {
     BASE=0,
     ANY,
     NODE,
+    SCENE,
     TRANSFORM,
     CAMERA,
     LIGHT,
     OBJECT,
-    EFFECT,
-    ENGINE
+    EFFECT//,
+    //ENGINE
 };
 
 /**

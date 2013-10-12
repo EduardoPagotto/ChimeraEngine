@@ -16,23 +16,27 @@ namespace Chimera {
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class SceneMng {
+class SceneMng : public Node {
 public
 :
     friend class Loader;
     
-    SceneMng(Engine3D *_pEngine3D);
+    SceneMng(std::string _id, std::string _name);
     virtual ~SceneMng ();
 
     void addChildToScene ( Node *_pNode );
 
+    void setEngine(Engine3D *_pEngine3D) {
+        m_pEngine3D = _pEngine3D;
+    }
+    
     Node *getRoot() const {
         return m_pRoot;
     }
     
     Node *getNode(EntityType _type, int index);
     
-    void execute(DataMsg *dataMsg);
+    void update(DataMsg *dataMsg );
     
 private:
   

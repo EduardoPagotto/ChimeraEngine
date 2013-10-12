@@ -2,6 +2,7 @@
 #define EXCEPTION_H_
 
 #include <exception>
+#include <sstream>
 #include <string>
 
 namespace Chimera {
@@ -72,7 +73,7 @@ public:
         code = _code;
         exceptionType = _exceptionType;
     }
-
+    
     /**
      * Destrutor Padrao
      */

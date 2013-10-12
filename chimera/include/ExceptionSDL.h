@@ -24,7 +24,7 @@ public:
      * @param _code
      * @param _message
      */
-    ExceptionSDL ( ExceptionCode _code, std::string _message ) : Exception ( ExceptionType::SDL_EXCEPTION, _code, _message ) {}
+    ExceptionSDL ( ExceptionCode _code, std::string _msg) : Exception ( ExceptionType::SDL_EXCEPTION, _code, _msg ) {}
 
     /**
      * Destrutor Padrao

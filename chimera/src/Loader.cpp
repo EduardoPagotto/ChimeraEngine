@@ -261,41 +261,41 @@ int Loader::libCam ( void ) {
 }
 
 //FIXME continuar daqui, pegar nome e id da camera
-int Loader::libLight ( void ) {
-    int l_count = 0;
-
-    //Pega Raiz de Elemento conjunto Luzes
-    xmlNodePtr l_nLight = findNode ( ( char* ) "library_lights", m_root );
-    if ( l_nLight!=NULL ) {
-        xmlChar* l_pVal = NULL;
-        std::vector<float> l_arrayValores;
-        l_nLight = findNode ( ( char* ) "light", l_nLight->children );
-        while ( l_nLight!=NULL ) {
-            //Carrega atributos
-            Light *pLight = new Light ( LightType::POINT, l_count );
-            setIdentity ( pLight,l_nLight );
-            m_pScene->m_vLight.push_back ( pLight );
-
-            xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children );
-            if ( l_nTipo != NULL ) {
-                l_nTipo = findNode ( ( char* ) "color", l_nTipo->children );
-                if ( l_nTipo!=NULL ) {
-                    l_pVal = xmlNodeListGetString ( m_doc, l_nTipo->children, 1 );
-
-                    loadArrayF ( ( char* ) l_pVal ,l_arrayValores );
-                    pLight->ambient.set ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f );
-
-                    l_arrayValores.clear();
-
-                    xmlFree ( l_pVal );
-                }
-            }
-            l_nLight = findNode ( ( char* ) "light", l_nLight->next );
-            l_count++;
-        }
-    }
-    return l_count;
-}
+// int Loader::libLight ( void ) {
+//     int l_count = 0;
+// 
+//     //Pega Raiz de Elemento conjunto Luzes
+//     xmlNodePtr l_nLight = findNode ( ( char* ) "library_lights", m_root );
+//     if ( l_nLight!=NULL ) {
+//         xmlChar* l_pVal = NULL;
+//         std::vector<float> l_arrayValores;
+//         l_nLight = findNode ( ( char* ) "light", l_nLight->children );
+//         while ( l_nLight!=NULL ) {
+//             //Carrega atributos
+//             Light *pLight = new Light ( LightType::POINT, l_count );
+//             setIdentity ( pLight,l_nLight );
+//             m_pScene->m_vLight.push_back ( pLight );
+// 
+//             xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children );
+//             if ( l_nTipo != NULL ) {
+//                 l_nTipo = findNode ( ( char* ) "color", l_nTipo->children );
+//                 if ( l_nTipo!=NULL ) {
+//                     l_pVal = xmlNodeListGetString ( m_doc, l_nTipo->children, 1 );
+// 
+//                     loadArrayF ( ( char* ) l_pVal ,l_arrayValores );
+//                     pLight->ambient.set ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f );
+// 
+//                     l_arrayValores.clear();
+// 
+//                     xmlFree ( l_pVal );
+//                 }
+//             }
+//             l_nLight = findNode ( ( char* ) "light", l_nLight->next );
+//             l_count++;
+//         }
+//     }
+//     return l_count;
+// }
 
 // // // //void Loader::createNode(xmlNodePtr _nodeXML, Node *_pNode)
 // // // //{

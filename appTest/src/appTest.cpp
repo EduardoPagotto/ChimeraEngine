@@ -20,8 +20,9 @@ int main ( int argn, char** argv ) {
     //std::cout << "A inicializar sistema.." << std::endl;
     LOG4CXX_INFO ( logger , "Inicio app!!" );
     
-    try {
-
+    
+    try {    
+        
         Chimera::Engine3D *engine3d = new Chimera::Engine3D();        
         Chimera::Video *video = new Chimera::Video ( 640, 480, std::string ( "Teste" ) );
         
@@ -33,8 +34,8 @@ int main ( int argn, char** argv ) {
         
         Chimera::SceneMng *sceneMng = new Chimera::SceneMng(engine3d);
        
-        Chimera::Loader *pLoader = new Chimera::Loader(sceneMng);
-        pLoader->exec("../../appTest/models/simples1.dae");
+        //Chimera::Loader *pLoader = new Chimera::Loader(sceneMng);
+        //pLoader->exec("../../appTest/models/simples1.dae");
         
         Chimera::Camera *camera = new Chimera::Camera(Chimera::CameraType::AIR_CAM,"camera01","camera01");
         camera->setPosition(btVector3(-500.0, -500.0, 500.0));
@@ -43,8 +44,6 @@ int main ( int argn, char** argv ) {
         camera->setNear(0.01);
         camera->setFar(5000);
         camera->setFov(1.33);
-        
-        
         
         
         sceneMng->addChildToScene(camera);
@@ -58,7 +57,7 @@ int main ( int argn, char** argv ) {
         Chimera::DrawBox *drawBox = new Chimera::DrawBox(5.0, 5.0, 5.0);
         obj->setDraw(drawBox);
         
-        Chimera::Light *luz1 = new Chimera::Light(Chimera::LightType::POINT,0,"luz01");
+        Chimera::Light *luz1 = new Chimera::Light(Chimera::LightType::POINT,"luz01","luz01");
         luz1->setPosition(btVector3(-50.0, -50.0, -50.0));
         luz1->setAmbient(Chimera::Color(0.2, 0.2, 0.2));
         luz1->setDiffuse(Chimera::Color(0.8, 0.8, 0.8));
@@ -77,18 +76,12 @@ int main ( int argn, char** argv ) {
         delete game;
         
         //SDL_Delay(2000);
-
-    } catch ( const Chimera::ExceptionSDL& ex ) {
-
-        //std::cerr << "Engine Erro Critico SDL:" << ex.what() << " codigo " << ex.getCode() << std::endl;
-        //printf("Erro %s codigo %d na camada SDL", ex.what(), ex.getCode() );c
-        LOG4CXX_ERROR ( logger , "Engine Erro Critico SDL:" << ex.what() );
-        
-    } catch ( const Chimera::Exception& ex1 ) {
+ 
+    } catch ( const Chimera::Exception& ex ) {
 
         //std::cerr << "Engine Erro Critico Sistema:" << ex1.what() << " codigo " << ex1.getCode() << std::endl;
         //printf("Erro %s codigo %d", ex1.what(), ex1.getCode() );
-        LOG4CXX_ERROR ( logger , "Engine Erro Critico Sistema:" << ex1.what() );
+        LOG4CXX_ERROR ( logger , "Engine Erro Critico Sistema:" << ex.what() );
 
     } catch ( const std::exception& ex2 ) {
 

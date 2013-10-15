@@ -4,15 +4,19 @@ namespace Chimera {
 
 std::list<Node*> Node::listNode;
     
-Node::Node(EntityType type, std::string id, std::string name) : Entity(type), id(id), name(name) {
+Node::Node(EntityType _type) : Entity(_type) {
     
+    name = "name-Node";
+    id = "id-Node";
     parent = nullptr;
     listNode.push_back(this);
     
 }
 
-Node::Node ( const Node &node ) : Entity(node), id(node.id), name(node.name) {
+Node::Node (const Node &_node) : Entity(_node) {
     
+    name = _node.name;
+    id = _node.id;
     parent = nullptr;
     listNode.push_back(this);
     

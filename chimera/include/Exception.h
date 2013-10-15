@@ -56,10 +56,10 @@ public:
      * Construtor de copia
      * @param exception
      */
-    Exception ( const Exception &exception ) {
-        message = exception.message;
-        code = exception.code;
-        exceptionType = exception.exceptionType;
+    Exception ( const Exception &_exception ) {
+        message = _exception.message;
+        code = _exception.code;
+        exceptionType = _exception.exceptionType;
     }
 
     /**

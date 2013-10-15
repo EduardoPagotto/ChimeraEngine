@@ -3,30 +3,30 @@
 namespace Chimera {
 
 Mesh::Mesh()  {
-    m_typeDraw = DRAW_TYPE::TRI_MESH;
+    type = DRAW_TYPE::TRI_MESH;
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) {
 
-    m_typeDraw = DRAW_TYPE::TRI_MESH;
-    m_vertexList.set ( _cpy.m_vertexList );
-    m_normalList.set ( _cpy.m_normalList );
-    m_uv.set ( _cpy.m_uv );
+    type = DRAW_TYPE::TRI_MESH;
+    vList.set ( _cpy.vList );
+    nList.set ( _cpy.nList );
+    uvList.set ( _cpy.uvList );
 
-    m_vertexIndex.set ( _cpy.m_vertexIndex );
-    m_normalIndex.set ( _cpy.m_normalIndex );
-    m_textureIndex.set ( _cpy.m_textureIndex );
+    vIndex.set ( _cpy.vIndex );
+    nIndex.set ( _cpy.nIndex );
+    tIndex.set ( _cpy.tIndex );
 
 }
 
 Mesh::~Mesh() {
-    m_vertexList.clear();
-    m_normalList.clear();
-    m_uv.clear();
+    vList.clear();
+    nList.clear();
+    uvList.clear();
 
-    m_vertexIndex.clear();
-    m_normalIndex.clear();
-    m_textureIndex.clear();
+    vIndex.clear();
+    nIndex.clear();
+    tIndex.clear();
 }
 
 btVector3 Mesh::sizeQuadratic ( void ) {
@@ -34,27 +34,27 @@ btVector3 Mesh::sizeQuadratic ( void ) {
     btVector3 l_max ( 0.0f,0.0f,0.0f );
     btVector3 l_min ( 0.0f,0.0f,0.0f );
 
-    int l_numVer = m_vertexList.size() / 3;
+    int l_numVer = vList.getSize() / 3;
 
     for ( int contador=0; contador < l_numVer ; contador++ ) {
         int indice = contador*3;
-        if ( l_max.x() < m_vertexList[indice] )
-            l_max.setX ( m_vertexList[indice] );
+        if ( l_max.x() < vList[indice] )
+            l_max.setX ( vList[indice] );
 
-        if ( l_max.y() < m_vertexList[indice+1] )
-            l_max.setY ( m_vertexList[indice+1] );
+        if ( l_max.y() < vList[indice+1] )
+            l_max.setY ( vList[indice+1] );
 
-        if ( l_max.z() < m_vertexList[indice+2] )
-            l_max.setZ ( m_vertexList[indice+2] );
+        if ( l_max.z() < vList[indice+2] )
+            l_max.setZ ( vList[indice+2] );
 
-        if ( l_min.x() > m_vertexList[indice] )
-            l_min.setX ( m_vertexList[indice] );
+        if ( l_min.x() > vList[indice] )
+            l_min.setX ( vList[indice] );
 
-        if ( l_min.y() > m_vertexList[indice+1] )
-            l_min.setY ( m_vertexList[indice+1] );
+        if ( l_min.y() > vList[indice+1] )
+            l_min.setY ( vList[indice+1] );
 
-        if ( l_min.z() > m_vertexList[indice+2] )
-            l_min.setZ ( m_vertexList[indice+2] );
+        if ( l_min.z() > vList[indice+2] )
+            l_min.setZ ( vList[indice+2] );
     }
 
     retorno.setValue ( ( btFabs ( l_max.x() ) + btFabs ( l_min.x() ) ) /2,
@@ -67,7 +67,7 @@ void Mesh::renderizar ( void ) {
     
     Draw::renderizar();
     
-    unsigned l_numFaces = m_vertexIndex.size() / 3;
+    unsigned l_numFaces = vIndex.getSize() / 3;
     int l_index = 0;
     int fa = 0;
     for ( unsigned face=0 ; face < l_numFaces ; face++ ) {
@@ -75,21 +75,21 @@ void Mesh::renderizar ( void ) {
         glBegin ( GL_TRIANGLES );
         for ( unsigned point=0 ; point < 3 ; point++ ) {
             l_index = fa + point;
-            int posicao = 3 * m_vertexIndex[ l_index ];
+            int posicao = 3 * vIndex[ l_index ];
 
-            int posNormal = 3 * m_normalIndex[ l_index ];
-            glNormal3fv ( &m_normalList[ posNormal ] );
+            int posNormal = 3 * nIndex[ l_index ];
+            glNormal3fv ( &nList[ posNormal ] );
 
-            if ( m_textureIndex.size() > 0 ) {
+            if ( tIndex.getSize() > 0 ) {
                 //Ajuste de textura do imageSDL invertendo valor de V
-                int posTex = 2 * m_textureIndex[ l_index ];
-                float l_U = m_uv[ posTex ];
-                float l_V = m_uv[ posTex +1 ];
+                int posTex = 2 * tIndex[ l_index ];
+                float l_U = uvList[ posTex ];
+                float l_V = uvList[ posTex +1 ];
                 l_V = 1 - l_V;
                 glTexCoord2f ( l_U, l_V );
             }
 
-            glVertex3fv ( &m_vertexList[ posicao ] );
+            glVertex3fv ( &vList[ posicao ] );
         }
         glEnd();
     }

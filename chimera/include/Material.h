@@ -20,16 +20,16 @@ public:
     Material ( const Material &_cpy );
     virtual ~Material();
 
-    void exec ( void );
+    void exec ();
 
-    int link ( void );
+    int link ();
 
-    void initTex ( void );
+    void initTex ();
 
 private:
-    Image *m_pTexture;
-    Effect m_effect;
-    unsigned int m_idTex;
+    Image *pTexture;
+    Effect effect;
+    unsigned int idTex;
 };
 
 }

@@ -32,8 +32,9 @@ enum class EntityType : int8_t {
  */
 class Entity {
 public:
-    Entity ( EntityType type ) : type ( type ) , serial ( ++serialMaster ), mode(0), status(true), maxMode(2) {}
-    Entity ( const Entity &entity ) : type ( entity.type ), serial ( ++serialMaster ), mode(entity.mode), status(entity.status), maxMode(entity.maxMode) {}
+    Entity ( EntityType _type ) : type ( _type ) , serial ( ++serialMaster ), mode(0), status(true), maxMode(2) {}
+    
+    Entity ( const Entity &_entity ) : type ( _entity.type ), serial ( ++serialMaster ), mode(_entity.mode), status(_entity.status), maxMode(_entity.maxMode) {}
 
     virtual ~Entity() {}
     

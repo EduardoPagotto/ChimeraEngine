@@ -22,7 +22,7 @@ namespace Chimera {
 
 class GameClient {
 public:
-    GameClient ( Engine3D *pEngine3D, SceneMng *_pScenMng );
+    GameClient ( Engine3D *_pEngine3D, SceneMng *_pScenMng );
     virtual ~GameClient();
 
     void open ();
@@ -33,15 +33,15 @@ public:
     virtual void stop() = 0;
     virtual void onFrame() = 0;
     virtual void offFrame() = 0;
-    virtual void processMsg(DataMsg *dataMsg) = 0;
+    virtual void processMsg(DataMsg *_dataMsg) = 0;
     
 protected:
 
-    Engine3D *m_pEngined3D;
-    SceneMng *m_pSceneMng;
+    Engine3D *pEngined3D;
+    SceneMng *pSceneMng;
     //Font *m_pFont;
     //HUD *m_pHUD;
-    PhysicWorld *m_physicWorld;
+    PhysicWorld *physicWorld;
     
 };
 

@@ -3,7 +3,7 @@
 namespace Chimera {
 	
 DrawBox::DrawBox(float _lado, float _altura, float _largura) :  m_lado(_lado), m_altura(_altura), m_largura(_largura) {
-    m_typeDraw = DRAW_TYPE::BOX;
+    type = DRAW_TYPE::BOX;
 }
 
 DrawBox::~DrawBox(){}
@@ -63,7 +63,7 @@ void DrawBox::renderizar() {
 //-----------------------------------------------------
 
 DrawBoxGrid::DrawBoxGrid(int _size,int _space) : m_size(_size), m_space(_space) {
-    m_typeDraw = DRAW_TYPE::BOXGRID;
+    type = DRAW_TYPE::BOXGRID;
 }
 
 DrawBoxGrid::~DrawBoxGrid() {
@@ -112,7 +112,7 @@ void DrawBoxGrid::renderizar() {
 //--------------------------------------------------------
 
 DrawBoxGrid2::DrawBoxGrid2() {
-    m_typeDraw = DRAW_TYPE::BOXGRID2;
+    type = DRAW_TYPE::BOXGRID2;
 }
 
 DrawBoxGrid2::~DrawBoxGrid2() {

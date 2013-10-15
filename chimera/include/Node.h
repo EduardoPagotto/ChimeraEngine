@@ -13,8 +13,10 @@ namespace Chimera {
  */
 class Node : public Entity {
 public:
-    Node ( EntityType type, std::string id, std::string name );
-    Node ( const Node &node );
+    Node ( EntityType _type);
+    
+    Node (const Node &_node);
+    
     ~Node();
 
     virtual void update ( DataMsg *dataMsg );
@@ -25,17 +27,17 @@ public:
         return name;
     }
     
-//     inline void setName ( const std::string& name ) {
-//         this->name = name;
-//     }
+    inline void setName ( const std::string& name ) {
+        this->name = name;
+    }
 
     inline const std::string& getId() const {
         return id;
     }
 
-//     inline void setId ( const std::string& name ) {
-//         this->id = name;
-//     }
+    inline void setId ( const std::string& name ) {
+        this->id = name;
+    }
 
     static Node *findObjById ( EntityType type,std::string id );
     static Node *findObjById ( std::string id );

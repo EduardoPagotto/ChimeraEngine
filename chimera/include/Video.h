@@ -37,7 +37,7 @@ namespace Chimera {
  */
 class Video  {
 public:
-    Video ( int width, int height, std::string nome );
+    Video ( int _width, int _height, std::string _nome );
     virtual ~Video();
 
     inline int getWidth() const {

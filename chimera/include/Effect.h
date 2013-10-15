@@ -37,28 +37,28 @@ public:
         return emissive;
     }    
     
-    void setAmbient(Color color) {
-        ambient = color;
+    void setAmbient(Color _color) {
+        ambient = _color;
     }
     
-    void setSpecular(Color color) {
-        specular = color;
+    void setSpecular(Color _color) {
+        specular = _color;
     }
     
-    void setDiffuse(Color color) {
-        diffuse = color;
+    void setDiffuse(Color _color) {
+        diffuse = _color;
     }	
 
-    void setEmissive(Color color) {
-        emissive = color;
+    void setEmissive(Color _color) {
+        emissive = _color;
     }    
     
     float getShininess() const {
         return shininess;
     }
     
-    void setShininess(float val) {
-        shininess = val;
+    void setShininess(float _val) {
+        shininess = _val;
     }
     
 	void setNameTexture(std::string _name) {

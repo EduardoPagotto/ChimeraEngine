@@ -9,7 +9,7 @@ namespace Chimera {
 
 class Transform : public Node {
 public:
-    Transform ( std::string id, std::string _name ) : Node ( EntityType::TRANSFORM, id, _name ) {
+    Transform ( ) : Node ( EntityType::TRANSFORM) {
         scale.setValue ( 0.0,0.0,0.0 );
         position.setZero();
         direction.setZero();

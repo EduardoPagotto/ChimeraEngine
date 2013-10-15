@@ -453,15 +453,15 @@ int Loader::libGeometry ( void ) {
 
                     size_t posicaoEncontrada = l_sVal.find ( "-positions" );
                     if ( posicaoEncontrada != std::string::npos ) {
-                        getSource ( l_nMesh,pMesh->m_vertexList );
+                        getSource ( l_nMesh,pMesh->vList );
                     } else {
                         posicaoEncontrada = l_sVal.find ( "-normals" );
                         if ( posicaoEncontrada != std::string::npos )
-                            getSource ( l_nMesh,pMesh->m_normalList );
+                            getSource ( l_nMesh,pMesh->nList );
                         else {
                             posicaoEncontrada = l_sVal.find ( "-map-0" );
                             if ( posicaoEncontrada != std::string::npos )
-                                getSource ( l_nMesh,pMesh->m_uv );
+                                getSource ( l_nMesh,pMesh->uvList );
                         }
 
                     }
@@ -515,22 +515,22 @@ int Loader::libGeometry ( void ) {
                                     char *l_semantic = l_vSemantic[index];
                                     char *l_source = l_vSource[index];
                                     if ( strstr ( l_source, ( char* ) "-vertices" ) != NULL ) {
-                                        if ( pMesh->m_vertexIndex.size() == 0 )
-                                            pMesh->m_vertexIndex.create ( l_numTriangles * 3 );
+                                        if ( pMesh->vIndex.size() == 0 )
+                                            pMesh->vIndex.create ( l_numTriangles * 3 );
 
-                                        pMesh->m_vertexIndex[l_veCount] = l_arrayIndex[l_contador];
+                                        pMesh->vIndex[l_veCount] = l_arrayIndex[l_contador];
                                         l_veCount++;
                                     } else if ( strstr ( l_source, ( char* ) "-normals" ) != NULL ) {
-                                        if ( pMesh->m_normalIndex.size() ==0 )
-                                            pMesh->m_normalIndex.create ( l_numTriangles * 3 );
+                                        if ( pMesh->nIndex.size() ==0 )
+                                            pMesh->nIndex.create ( l_numTriangles * 3 );
 
-                                        pMesh->m_normalIndex[l_noCount] = l_arrayIndex[l_contador];
+                                        pMesh->nIndex[l_noCount] = l_arrayIndex[l_contador];
                                         l_noCount++;
                                     } else if ( strstr ( l_source, ( char* ) "-map-0" ) != NULL ) {
-                                        if ( pMesh->m_textureIndex.size() ==0 )
-                                            pMesh->m_textureIndex.create ( l_numTriangles* 3 );
+                                        if ( pMesh->tIndex.size() ==0 )
+                                            pMesh->tIndex.create ( l_numTriangles* 3 );
 
-                                        pMesh->m_textureIndex[l_uvCount] = l_arrayIndex[l_contador];
+                                        pMesh->tIndex[l_uvCount] = l_arrayIndex[l_contador];
                                         l_uvCount++;
                                     }
                                 }
@@ -756,7 +756,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 // // // //					xmlFree(l_pVal);
 // // // //				}
 // // // //			}
-// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"rotate")==0) //TODO: errado isto é uma matrix e nao
+// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"rotate")==0) //TODO: errado isto ï¿½ uma matrix e nao
 // // // //			{
 // // // //				pTempNode = (Transform*)_pNode;
 // // // //				pSID = xmlGetProp(_nodeXML,(const xmlChar*)"sid");

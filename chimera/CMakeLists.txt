@@ -29,7 +29,6 @@ add_library (Chimera STATIC
 				src/Color.cpp
 				src/Entity.cpp
 				src/Node.cpp
-				src/Transform.cpp
 				src/Light.cpp
 				src/Object.cpp
 				src/Camera.cpp

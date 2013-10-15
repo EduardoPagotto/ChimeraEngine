@@ -2,19 +2,19 @@
 
 namespace Chimera {
 
-Object::Object (std::string id, std::string name ) : Node ( EntityType::OBJECT, id, name ) {
+Object::Object () : Node ( EntityType::OBJECT ) {
     
     m_pPhysic = nullptr;
     m_pDraw = nullptr;
     
 }
 
-// Object::Object( const Object& object ) : Node(object) {
-//     
-//     m_pPhysic = object.m_pPhysic;
-//     m_pDraw = object.m_pDraw;
-//     
-// }
+Object::Object( const Object& object ) : Node(object) {
+    
+    m_pPhysic = object.m_pPhysic;
+    m_pDraw = object.m_pDraw;
+    
+}
 
 Object::~Object ( void ) {
 }

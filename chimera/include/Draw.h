@@ -21,17 +21,18 @@ enum class DRAW_TYPE {
 class Draw {
 public:
 	Draw();
+    Draw(const Draw &_draw);
 	virtual ~Draw();
     virtual void renderizar();
-	virtual btVector3 sizeQuadratic(void) = 0;
+	virtual btVector3 sizeQuadratic() = 0;
 	
 	void init();
 	void ajusteMatrix(Transform *_pTrans);
 
 protected:
 	
-	Material *m_pMaterial;
-	DRAW_TYPE m_typeDraw;
+	Material *pMaterial;
+	DRAW_TYPE type;
 };
 
 }

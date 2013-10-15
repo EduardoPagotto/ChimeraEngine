@@ -17,7 +17,7 @@ public:
      * Construtor de copia
      * @param ex
      */
-    ExceptionChimera ( const ExceptionChimera &ex ) : Exception ( ex ) {}
+    ExceptionChimera ( const ExceptionChimera &_ex ) : Exception ( _ex ) {}
 
     /**
      * Construtor com dados

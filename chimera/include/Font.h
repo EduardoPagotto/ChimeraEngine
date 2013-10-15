@@ -32,9 +32,9 @@ public:
     void render ( float _x, float _y, Color _color, std::string *_txt );
 
 private:
-    bool m_status;
-    char m_txt[CHIMERA_MAX_LINE_SIZE];
-    FTGLPixmapFont *m_pFont;
+    bool status;
+    char txt[CHIMERA_MAX_LINE_SIZE];
+    FTGLPixmapFont *pFont;
 };
 
 }

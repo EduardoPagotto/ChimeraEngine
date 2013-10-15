@@ -2,8 +2,15 @@
 
 namespace Chimera {
 
-Draw::Draw() : m_pMaterial ( NULL ) , m_typeDraw ( DRAW_TYPE::DRAW_NONE ) {
+Draw::Draw() : pMaterial ( nullptr ) , type ( DRAW_TYPE::DRAW_NONE ) {
 
+}
+
+Draw::Draw(const Draw &_draw) {
+    
+    type = _draw.type;
+    pMaterial = _draw.pMaterial;
+    
 }
 
 Draw::~Draw() {
@@ -11,14 +18,14 @@ Draw::~Draw() {
 }
 
 void Draw::init() {
-    if ( m_pMaterial )
-        m_pMaterial->initTex();
+    if ( pMaterial )
+        pMaterial->initTex();
 }
 
 void Draw::renderizar() {
     
-    if ( m_pMaterial )
-        m_pMaterial->exec();
+    if ( pMaterial )
+        pMaterial->exec();
     else {
         if ( glIsEnabled ( GL_COLOR_MATERIAL ) == 1 ) {
             Color a ( 0.2f, 0.2f, 0.2f, 1.0f );

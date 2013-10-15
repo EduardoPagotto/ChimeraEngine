@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-    GameClient::GameClient ( Engine3D *pEngine3D, SceneMng *_pScenMng ) : m_pEngined3D ( pEngine3D ) , m_pSceneMng ( _pScenMng )  {
+    GameClient::GameClient ( Engine3D *_pEngine3D, SceneMng *_pScenMng ) : pEngined3D ( _pEngine3D ) , pSceneMng ( _pScenMng )  {
     
     //m_pFont = new Chimera::Font("C:\\libs\\SDK\\freefont-ttf\\outras\\Vera.ttf",18);
     //m_pHUD = new HUD( m_pVideo->getRecTela());
@@ -11,7 +11,7 @@ namespace Chimera {
     ////m_pHUD->addSquare(10,440,630,470,Color(0.0f,1.0f, 0.0f, 0.2f));
     //m_pHUD->addText(0,0,0,5,Color::RED,&m_sFPS);
 
-    m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
+    physicWorld = Singleton<PhysicWorld>::getRefSingleton();
 }
 
 GameClient::~GameClient() {
@@ -54,7 +54,7 @@ void GameClient::gameLoop ( void ) {
 
     while ( !l_quit ) {
 
-        m_physicWorld->stepSim();
+        physicWorld->stepSim();
 
         //Testa se ha eventos pendentes
         if ( SDL_PollEvent ( &l_eventSDL ) == 0 ) {	//Se Nao Ha eventos Pendentes execute o Render
@@ -70,7 +70,7 @@ void GameClient::gameLoop ( void ) {
                 //m_pEngined3D->end2D();
                 offFrame();
 
-                m_pEngined3D->getVideo()->swapWindow();
+                pEngined3D->getVideo()->swapWindow();
 
             } else
                 SDL_WaitEvent ( NULL );

@@ -9,7 +9,7 @@ class Color {
 public:
 	explicit Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f) : r(_r) , g(_g) , b(_b) , a(_a) {}
 
-	Color(const Color &c) : r(c.r), g(c.g), b(c.b), a(c.a) {}
+	Color(const Color &_c) : r(_c.r), g(_c.g), b(_c.b), a(_c.a) {}
 
 	void set(const Color _c) { 
 		r = _c.r;

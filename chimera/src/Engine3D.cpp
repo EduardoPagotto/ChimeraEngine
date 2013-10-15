@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Engine3D::Engine3D() : m_hasLight(false), m_hasMaterial(false) {
+Engine3D::Engine3D() : hasLight(false), hasMaterial(false) {
     
     if ( SDL_Init ( SDL_INIT_EVERYTHING ) == 0 ) {
         
@@ -25,30 +25,30 @@ Engine3D::~Engine3D() {
 }
 
 void Engine3D::setViewPortOrtogonal() {
-    setViewPortOrtogonal(0,0,m_pVideo->getWidth(), m_pVideo->getHeight());   
+    setViewPortOrtogonal(0,0,pVideo->getWidth(), pVideo->getHeight());   
 }
 
-void Engine3D::setViewPortOrtogonal(int posInitX, int posIntY, int width, int height) {
+void Engine3D::setViewPortOrtogonal(int _posInitX, int _posIntY, int _width, int _height) {
     
-    glViewport ( posInitX , posIntY , width, height );
+    glViewport ( _posInitX , _posIntY , _width, _height );
     glMatrixMode ( GL_PROJECTION );
     glLoadIdentity();
-    glOrtho ( posInitX, width, posIntY, height,-1.0,1.0 );
+    glOrtho ( _posInitX, _width, _posIntY, _height,-1.0,1.0 );
     glMatrixMode ( GL_MODELVIEW );
     glLoadIdentity();
     
 }
 
-void Engine3D::setViewPortPerspective(float near, float far, float fov) {
-    setViewPortPerspective(0,0,m_pVideo->getWidth(), m_pVideo->getHeight(),near,far,fov);
+void Engine3D::setViewPortPerspective(float _near, float _far, float _fov) {
+    setViewPortPerspective(0,0,pVideo->getWidth(), pVideo->getHeight(),_near,_far,_fov);
 }
 
-void Engine3D::setViewPortPerspective(int posInitX, int posIntY, int width, int height, float near, float far, float fov) {
+void Engine3D::setViewPortPerspective(int _posInitX, int _posIntY, int _width, int _height, float _near, float _far, float _fov) {
     
-    glViewport ( posInitX , posIntY , width, height );
+    glViewport ( _posInitX , _posIntY , _width, _height );
     glMatrixMode ( GL_PROJECTION );
     glLoadIdentity();
-    gluPerspective (fov, ( GLfloat ) ( float ) width / ( float ) height, near, far );
+    gluPerspective (_fov, ( GLfloat ) ( float ) _width / ( float ) _height, _near, _far );
     glMatrixMode ( GL_MODELVIEW );
     glLoadIdentity();
     
@@ -56,18 +56,18 @@ void Engine3D::setViewPortPerspective(int posInitX, int posIntY, int width, int 
 
 void Engine3D::setViewPortPerspective(Camera *_camera) {
     
-    glViewport ( 0,0,m_pVideo->getWidth(), m_pVideo->getHeight() );
+    glViewport ( 0,0,pVideo->getWidth(), pVideo->getHeight() );
     glMatrixMode ( GL_PROJECTION );
     glLoadIdentity();
-    gluPerspective (_camera->getFov(), ( GLfloat ) ( float ) m_pVideo->getWidth() / ( float ) m_pVideo->getHeight(), _camera->getNear(), _camera->getFar() );
+    gluPerspective (_camera->getFov(), ( GLfloat ) ( float ) pVideo->getWidth() / ( float ) pVideo->getHeight(), _camera->getNear(), _camera->getFar() );
     glMatrixMode ( GL_MODELVIEW );
     glLoadIdentity();
     
 }
 
-void Engine3D::initOpenGL(Video *pVideo) {
+void Engine3D::initOpenGL(Video *_pVideo) {
     
-    m_pVideo = pVideo;
+    pVideo = _pVideo;
     
     SDL_GL_SetSwapInterval ( 1 );
     
@@ -99,7 +99,7 @@ std::string Engine3D::getVersaoOpenGL() {
 
 void Engine3D::setLight ( bool _lightOn ) {
     
-    m_hasLight = _lightOn;
+    hasLight = _lightOn;
     
     if ( _lightOn==true )
         glEnable ( GL_LIGHTING );
@@ -109,7 +109,7 @@ void Engine3D::setLight ( bool _lightOn ) {
 
 void Engine3D::setMaterial ( bool _materialOn ) {
     
-    m_hasMaterial = _materialOn;
+    hasMaterial = _materialOn;
     
     if ( _materialOn==true ) {
         glEnable ( GL_TEXTURE_2D );
@@ -121,7 +121,7 @@ void Engine3D::setMaterial ( bool _materialOn ) {
     }
 }
 
-void Engine3D::begin2D ( void ) {
+void Engine3D::begin2D () {
     //Salva config bitŽs
     glPushAttrib ( GL_ENABLE_BIT );
     

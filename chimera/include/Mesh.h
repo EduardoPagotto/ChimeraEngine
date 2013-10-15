@@ -17,8 +17,8 @@ template <class T>
 class ListPtr {
 public:
     ListPtr() {
-        m_ptr = NULL;
-        m_size = 0;
+        ptr = NULL;
+        size = 0;
     }
 
     ~ListPtr() {
@@ -26,57 +26,57 @@ public:
     }
 
     ListPtr ( const ListPtr &_cpy ) {
-        if ( _cpy.m_ptr != NULL ) {
-            create ( _cpy.m_size );
-            memcpy ( m_ptr, _cpy.m_ptr, sizeof ( T ) * m_size );
+        if ( _cpy.ptr != NULL ) {
+            create ( _cpy.size );
+            memcpy ( ptr, _cpy.ptr, sizeof ( T ) * size );
         } else {
-            m_ptr = NULL;
-            m_size = 0;
+            ptr = NULL;
+            size = 0;
         }
     }
 
     void set ( const ListPtr &_cpy ) {
-        if ( _cpy.m_ptr != NULL ) {
-            create ( _cpy.m_size );
-            memcpy ( m_ptr, _cpy.m_ptr, sizeof ( T ) * m_size );
+        if ( _cpy.ptr != nullptr ) {
+            create ( _cpy.size );
+            memcpy ( ptr, _cpy.ptr, sizeof ( T ) * size );
         } else {
-            m_ptr = NULL;
-            m_size = 0;
+            ptr = NULL;
+            size = 0;
         }
     }
 
     void create ( unsigned _size ) {
-        m_ptr = new T[_size];
-        m_size = _size;
+        ptr = new T[_size];
+        size = _size;
     }
 
     void clear ( void ) {
-        if ( m_ptr != NULL ) {
-            delete [] m_ptr;
-            m_ptr = NULL;
-            m_size = 0;
+        if ( ptr != NULL ) {
+            delete [] ptr;
+            ptr = NULL;
+            size = 0;
         }
     }
 
-    unsigned size() const {
-        return m_size;
+    unsigned getSize() const {
+        return size;
     }
 
     inline T & operator[] ( int n ) {
-        return m_ptr[n];
+        return ptr[n];
     }
 
     inline T operator[] ( int n ) const {
-        return m_ptr[n];
+        return ptr[n];
     }
 
-    T* ptr ( void ) {
-        return m_ptr;
+    T* ptrVal ( void ) {
+        return ptr;
     }
 
 private:
-    T* m_ptr;
-    unsigned m_size;
+    T* ptr;
+    unsigned size;
 };
 
 
@@ -91,13 +91,13 @@ public:
 protected:
     virtual void renderizar();
 private:
-    ListPtr<float> m_vertexList;
-    ListPtr<float> m_normalList;
-    ListPtr<float> m_uv;
+    ListPtr<float> vList;
+    ListPtr<float> nList;
+    ListPtr<float> uvList;
 
-    ListPtr<int> m_vertexIndex;
-    ListPtr<int> m_normalIndex;
-    ListPtr<int> m_textureIndex;
+    ListPtr<int> vIndex;
+    ListPtr<int> nIndex;
+    ListPtr<int> tIndex;
 };
 
 }

@@ -18,26 +18,28 @@ enum class CameraType {
 
 class Camera : public Node {
 public:
-    Camera (CameraType _camType, std::string id, std::string nome);
-    //Camera (const Camera& camera);
+    Camera ();
+    
+    Camera (const Camera& _camera);
+    
     virtual ~Camera();
 
-    virtual void update ( DataMsg *dataMsg );
+    virtual void update ( DataMsg *_dataMsg );
 
     void exec ( void );
    
     virtual void init ( void );
     
-    void setNear(float near) {
-        this->near = near;
+    void setNear(float _near) {
+        this->near = _near;
     }
     
-    void setFar(float far) {
-        this->far = far;
+    void setFar(float _far) {
+        this->far = _far;
     }
     
-    void setFov(float fov) {
-        this->fov = fov;
+    void setFov(float _fov) {
+        this->fov = _fov;
     }
     
     float getNear() const {
@@ -53,7 +55,7 @@ public:
     }
 
 protected:     
-    CameraType cameraType;
+    CameraType type;
     
 private:
     float near;

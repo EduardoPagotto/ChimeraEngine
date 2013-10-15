@@ -1,16 +1,9 @@
-/*
- * Video.cpp
- *
- *  Created on: Sep 17, 2013
- *      Author: locutus
- */
-
 #include "Video.h"
 
 namespace Chimera {
 
-Video::Video ( int width, int height, std::string nome ) :
-    width ( width ), height ( height ), nomeTela ( nome ),fps(0)  {
+Video::Video ( int _width, int _height, std::string _nome ) :
+    width ( _width ), height ( _height ), nomeTela ( _nome ),fps(0)  {
 
     window = SDL_CreateWindow ( nomeTela.c_str(),   //    window title
                                 SDL_WINDOWPOS_UNDEFINED,                //    initial x position

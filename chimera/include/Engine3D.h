@@ -17,7 +17,7 @@ public:
     Engine3D();
     virtual ~Engine3D();
         
-    void initOpenGL(Video *pVideo);
+    void initOpenGL(Video *_pVideo);
     
     std::string getVersaoOpenGL();
     
@@ -27,29 +27,29 @@ public:
     void end2D();
         
     void setViewPortOrtogonal();
-    void setViewPortOrtogonal(int posInitX, int posIntY, int width, int height);
+    void setViewPortOrtogonal(int _posInitX, int _posIntY, int _width, int _height);
     
     void setViewPortPerspective(Camera *_camera);
-    void setViewPortPerspective(float near, float far, float fov);
-    void setViewPortPerspective(int posInitX, int posIntY, int width, int height, float near, float far, float fov);
+    void setViewPortPerspective(float _near, float _far, float _fov);
+    void setViewPortPerspective(int _posInitX, int _posIntY, int _width, int _height, float _near, float _far, float _fov);
 
     bool getLight() {
-        return m_hasLight;
+        return hasLight;
     }
     
     bool getMateria() {
-        return m_hasMaterial;
+        return hasMaterial;
     }
     
     Video *getVideo() {
-        return m_pVideo;
+        return pVideo;
     }
     
 private:
     
-    bool m_hasLight;
-    bool m_hasMaterial;
-    Video *m_pVideo;
+    bool hasLight;
+    bool hasMaterial;
+    Video *pVideo;
     
 };
 

@@ -17,13 +17,13 @@ enum class LightType {
 
 class Light : public Node {
 public:
-    Light ( LightType _type, int number, std::string id, std::string _name );
-    //Light (const Light& light );
-    Light ( );
+    Light ();
+    
+    Light (const Light& _light );
     
     virtual ~Light();
 
-    virtual void update ( DataMsg *dataMsg );
+    virtual void update ( DataMsg *_dataMsg );
     virtual void exec();
 
     Color getAmbient() {
@@ -38,16 +38,16 @@ public:
         return diffuse;
     }
     
-    void setAmbient(Color color) {
-       ambient = color;
+    void setAmbient(Color _color) {
+       ambient = _color;
     }
 
-    void setSpecular(Color color) {
-        specular = color;
+    void setSpecular(Color _color) {
+        specular = _color;
     }
     
-    void setDiffuse(Color color) {
-       diffuse = color;
+    void setDiffuse(Color _color) {
+       diffuse = _color;
     }
     
 private:
@@ -57,7 +57,7 @@ private:
     Color diffuse;
     
     int number;
-    LightType typeLight;
+    LightType type;
 };
 
 }

@@ -24,32 +24,32 @@ enum class KindOperation {
  */
 class DataMsg {
 public:
-    DataMsg ( KindOperation kindOperation, void* ptrSource, void* param, void* result ) : kindOperation ( kindOperation ) , ptrSource ( ptrSource ), param ( param ), result ( result ), done ( false ) { }
+    DataMsg ( KindOperation _kindOperation, void* _ptrSource, void* _param, void* _result ) : kindOperation ( _kindOperation ) , ptrSource ( _ptrSource ), param ( _param ), result ( _result ), done ( false ) { }
     virtual ~DataMsg() {}
 
     inline KindOperation getKindOperation() const {
         return kindOperation;
     }
-    inline void setKindOperation ( KindOperation kindOperation ) {
-        this->kindOperation = kindOperation;
+    inline void setKindOperation ( KindOperation _kindOperation ) {
+        this->kindOperation = _kindOperation;
     }
     inline void* getParam() const {
         return param;
     }
-    inline void setParam ( void* param ) {
-        this->param = param;
+    inline void setParam ( void* _param ) {
+        this->param = _param;
     }
     inline void* getPtrSource() const {
         return ptrSource;
     }
-    inline void setPtrSource ( void* ptrSource ) {
-        this->ptrSource = ptrSource;
+    inline void setPtrSource ( void* _ptrSource ) {
+        this->ptrSource = _ptrSource;
     }
     inline void* getResult() const {
         return result;
     }
-    inline void setResult ( void* result ) {
-        this->result = result;
+    inline void setResult ( void* _result ) {
+        this->result = _result;
     }
 
     inline bool isDone() const {

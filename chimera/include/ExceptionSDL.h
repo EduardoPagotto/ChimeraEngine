@@ -17,7 +17,7 @@ public:
      * Construtor de copia
      * @param ex
      */
-    ExceptionSDL ( const ExceptionSDL &ex ) : Exception ( ex ) {}
+    ExceptionSDL ( const ExceptionSDL &_ex ) : Exception ( _ex ) {}
 
     /**
      * Construtor com dados

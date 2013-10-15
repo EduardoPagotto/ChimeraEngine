@@ -4,15 +4,15 @@ namespace Chimera {
 
 Material::Material(void)
 {
-	m_pTexture = NULL;
-	m_idTex = 0;
+	pTexture = nullptr;
+	idTex = 0;
 }
 
 Material::Material ( const Material &_cpy ) {
-    m_effect = _cpy.m_effect;
-    if ( _cpy.m_pTexture!=NULL ) {
-        m_pTexture = _cpy.m_pTexture;
-        m_idTex = _cpy.m_idTex;
+    effect = _cpy.effect;
+    if ( _cpy.pTexture!=NULL ) {
+        pTexture = _cpy.pTexture;
+        idTex = _cpy.idTex;
     }
 }
 
@@ -25,29 +25,29 @@ void Material::exec(void)
 {
 	link();
 
-    float val = m_effect.getShininess();
+    float val = effect.getShininess();
     
-	glMaterialfv(GL_FRONT, GL_AMBIENT, m_effect.getAmbient().ptr());
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, m_effect.getDiffuse().ptr());
-	glMaterialfv(GL_FRONT, GL_SPECULAR, m_effect.getSpecular().ptr());
+	glMaterialfv(GL_FRONT, GL_AMBIENT, effect.getAmbient().ptr());
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, effect.getDiffuse().ptr());
+	glMaterialfv(GL_FRONT, GL_SPECULAR, effect.getSpecular().ptr());
     glMaterialfv(GL_FRONT, GL_SHININESS, &val);
 
-	glMaterialfv(GL_FRONT, GL_EMISSION, m_effect.getEmissive().ptr());
+	glMaterialfv(GL_FRONT, GL_EMISSION, effect.getEmissive().ptr());
 }
 
 void Material::initTex(void)
 {
-	if (m_pTexture)
+	if (pTexture)
 	{
-		glGenTextures(1, &m_idTex);
+		glGenTextures(1, &idTex);
 	//	//glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-		glBindTexture(GL_TEXTURE_2D,m_idTex);
+		glBindTexture(GL_TEXTURE_2D,idTex);
 		//glTexImage2D(GL_TEXTURE_2D, 0, 3,image->w, image->h, 0, GL_BGR,GL_UNSIGNED_BYTE, image->pixels);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, m_pTexture->pImage->w, 
-											m_pTexture->pImage->h, 
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, pTexture->pImage->w, 
+											pTexture->pImage->h, 
 											GL_RGB,
 											GL_UNSIGNED_BYTE,
-											m_pTexture->pImage->pixels);
+											pTexture->pImage->pixels);
 
 		//TODO:carregar conf do arquivo collada
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
@@ -58,10 +58,10 @@ void Material::initTex(void)
 
 int Material::link(void)
 {
-	if (m_idTex >0 )
-		glBindTexture(GL_TEXTURE_2D,m_idTex);
+	if (idTex >0 )
+		glBindTexture(GL_TEXTURE_2D,idTex);
 
-	return m_idTex;
+	return idTex;
 }
 
 }

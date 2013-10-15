@@ -16,8 +16,8 @@ class Object : public Node {
 public:   
 	//friend class Loader;
 
-    Object(std::string id, std::string name);
-    //Object( const Object& object );
+    Object();
+    Object( const Object& object );
     
 	virtual ~Object(void);
     virtual void update ( DataMsg *dataMsg );

@@ -8,21 +8,22 @@ namespace Chimera {
 class TrackCam : public Camera {
     
 public:
-    TrackCam(std::string id, std::string name);
-    TrackCam(const TrackCam& trackCam);
+    TrackCam();
+    
+    TrackCam(const TrackCam& _trackCam);
     
     ~TrackCam();
     
-    virtual void init ( void );
-    virtual void update ( DataMsg *dataMsg );
+    virtual void init ( );
+    virtual void update ( DataMsg *_dataMsg );
     
-    void Pitch ( GLfloat theta );
-    void Yaw ( GLfloat theta );
-    void Roll ( GLfloat theta );
+    void pitch ( GLfloat _theta );
+    void yaw ( GLfloat _theta );
+    void roll ( GLfloat _theta );
     
-    void Walk ( GLfloat delta, bool Wall[4] );
-    void Strafe ( GLfloat delta, bool Wall[4] );
-    void Fly ( GLfloat delta, bool Wall[4] );
+    void walk ( GLfloat _delta, bool _wall[4] );
+    void strafe ( GLfloat _delta, bool _wall[4] );
+    void fly ( GLfloat _delta, bool _wall[4] );
     
     void trackBall ( int _mx, int _my, int _mz );
     
@@ -31,7 +32,7 @@ public:
     
 private:
     
-    void initTrackBall ( void );
+    void initTrackBall ();
     
     btVector3 along;
     btVector3 up;

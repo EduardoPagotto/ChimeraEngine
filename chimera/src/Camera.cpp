@@ -44,10 +44,10 @@ void Camera::exec ( void ) {
 
         //glMultMatrixf(m_matrix);
 
-        Transform *trans = (Transform*)parent;        
-        gluLookAt ( trans->getPosition().x(), trans->getPosition().y(), trans->getPosition().z(),
-                    trans->getDirection().x(), trans->getDirection().y(), trans->getDirection().z(),
-                    trans->getRotation().x(), trans->getRotation().y(), trans->getRotation().z() );
+//         Transform *trans = (Transform*)parent;        
+//         gluLookAt ( trans->getPosition().x(), trans->getPosition().y(), trans->getPosition().z(),
+//                     trans->getDirection().x(), trans->getDirection().y(), trans->getDirection().z(),
+//                     trans->getRotation().x(), trans->getRotation().y(), trans->getRotation().z() );
     }
 }
 

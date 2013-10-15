@@ -5,7 +5,9 @@
 #include <GL/glu.h>			// Header File For The GLu32 Library
 #include "Color.h"
 #include "Node.h"
-#include "Transform.h"
+
+#include <LinearMath/btVector3.h>
+
 
 namespace Chimera {
 
@@ -52,6 +54,8 @@ public:
     
 private:
 
+    btVector3 position;
+    
     Color ambient;
     Color specular;
     Color diffuse;

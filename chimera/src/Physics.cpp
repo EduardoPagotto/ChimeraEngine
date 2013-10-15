@@ -29,40 +29,40 @@ Physics::~Physics()
 	Singleton<PhysicWorld>::releaseRefSingleton();
 }
 
-void Physics::init(Transform *_pTrans)
-{
-	btQuaternion l_qtn;
-
-	//m_pTrans = _pTrans;
-		
-	m_trans.setIdentity();
-
-    l_qtn.setEulerZYX( _pTrans->getRotation().x(), _pTrans->getRotation().y(), _pTrans->getRotation().z());
-	m_trans.setRotation(l_qtn);
-    m_trans.setOrigin( _pTrans->getPosition());
-
-	btVector3 localInertia(0,0,0);
-	if (m_estatica==false)
-		m_pCollisionShape->calculateLocalInertia(m_mass,localInertia);
-
-	m_pMotionState = new btDefaultMotionState(m_trans);
-	//m_pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
-
-	m_pRigidBodyCI = new btRigidBody::btRigidBodyConstructionInfo(m_mass, m_pMotionState, m_pCollisionShape ,localInertia );
-	m_pRigidBody = new btRigidBody(*m_pRigidBodyCI);
-
-	//m_pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
-	m_pRigidBody->setActivationState(DISABLE_DEACTIVATION);
-
-	if (m_pPhysicMaterial)
-	{
-		m_pRigidBody->setFriction( m_pPhysicMaterial->m_friction );
-		m_pRigidBody->setRestitution( m_pPhysicMaterial->m_restitution);
-	}
-
-	m_physicWorld->m_pDynamicsWorld->addRigidBody(m_pRigidBody);
-
-}
+// void Physics::init(Transform *_pTrans)
+// {
+// 	btQuaternion l_qtn;
+// 
+// 	//m_pTrans = _pTrans;
+// 		
+// 	m_trans.setIdentity();
+// 
+//     l_qtn.setEulerZYX( _pTrans->getRotation().x(), _pTrans->getRotation().y(), _pTrans->getRotation().z());
+// 	m_trans.setRotation(l_qtn);
+//     m_trans.setOrigin( _pTrans->getPosition());
+// 
+// 	btVector3 localInertia(0,0,0);
+// 	if (m_estatica==false)
+// 		m_pCollisionShape->calculateLocalInertia(m_mass,localInertia);
+// 
+// 	m_pMotionState = new btDefaultMotionState(m_trans);
+// 	//m_pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
+// 
+// 	m_pRigidBodyCI = new btRigidBody::btRigidBodyConstructionInfo(m_mass, m_pMotionState, m_pCollisionShape ,localInertia );
+// 	m_pRigidBody = new btRigidBody(*m_pRigidBodyCI);
+// 
+// 	//m_pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+// 	m_pRigidBody->setActivationState(DISABLE_DEACTIVATION);
+// 
+// 	if (m_pPhysicMaterial)
+// 	{
+// 		m_pRigidBody->setFriction( m_pPhysicMaterial->m_friction );
+// 		m_pRigidBody->setRestitution( m_pPhysicMaterial->m_restitution);
+// 	}
+// 
+// 	m_physicWorld->m_pDynamicsWorld->addRigidBody(m_pRigidBody);
+// 
+// }
 
 void Physics::transformacao3D(void)
 {

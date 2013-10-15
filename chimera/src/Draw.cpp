@@ -39,7 +39,7 @@ void Draw::renderizar() {
     } 
 }
 
-void Draw::ajusteMatrix ( Transform *_pTrans ) {
+//void Draw::ajusteMatrix ( Transform *_pTrans ) {
 //	//float *pRotacao = (float*)dBodyGetRotation(m_bodyId);
     //float *pPosicao = (float*)dBodyGetPosition(m_bodyId);
 //
@@ -74,7 +74,7 @@ void Draw::ajusteMatrix ( Transform *_pTrans ) {
 //	}
 //	matrix[15]=1;
 //	glMultMatrixf(matrix);
-}
+//}
 
 //void Physics::ajusteTridimencional(btVector3 *_vetor)
 //{

@@ -7,7 +7,6 @@
 #include <btBulletDynamicsCommon.h>
 
 #include "Node.h"
-#include "Transform.h"
 
 namespace Chimera {
 

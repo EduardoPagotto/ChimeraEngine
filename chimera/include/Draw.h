@@ -5,7 +5,7 @@
 #include <btBulletDynamicsCommon.h>
 
 #include "Material.h"
-#include "Transform.h"
+
 
 namespace Chimera {
 
@@ -27,7 +27,7 @@ public:
 	virtual btVector3 sizeQuadratic() = 0;
 	
 	void init();
-	void ajusteMatrix(Transform *_pTrans);
+	//void ajusteMatrix(Transform *_pTrans);
 
 protected:
 	

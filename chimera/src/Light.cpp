@@ -9,6 +9,7 @@ Light::Light () : Node ( EntityType::LIGHT) {
     ambient = Color::ZERO;
     specular = Color::ZERO;
     diffuse = Color::ZERO;
+    position = btVector3(0.0, 0.0, 0.0);
 
 }
 
@@ -20,6 +21,7 @@ Light::Light ( const Light& _light ) : Node ( _light ) {
     specular = _light.specular;
     diffuse = _light.diffuse;
 
+    position = _light.position;
 }
 
 Light::~Light() {
@@ -70,9 +72,8 @@ void Light::exec() {
             break;
         }
 
-        //TODO Melhorar
-        Transform *trans = (Transform*)parent;
-        GLfloat posicaoLuz[] = {trans->getPosition().x() , trans->getPosition().y() , trans->getPosition().z() , 1.0f };
+
+        GLfloat posicaoLuz[] = {position.x() , position.y() , position.z() , 1.0f };
 
         //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat*)ambient.ptr());
         glLightfv ( testeLuz,GL_AMBIENT, ( GLfloat* ) ambient.ptr() );

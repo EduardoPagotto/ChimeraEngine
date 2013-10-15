@@ -11,7 +11,7 @@
 
 #include "PhysicWorld.h"
 #include "Singleton.h"
-#include "Transform.h"
+
 
 namespace Chimera {
 
@@ -33,7 +33,7 @@ public:
         m_pCollisionShape = new btBoxShape ( _size );
     }
 
-    void init ( Transform *_pTrans );
+    //void init ( Transform *_pTrans );
 
     //usada na trans cam do mundo
     void transformacao3D ( void );

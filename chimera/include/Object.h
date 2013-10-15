@@ -4,7 +4,7 @@
 #include <GL/gl.h>			// Header File For The OpenGL32 Library
 #include <GL/glu.h>			// Header File For The GLu32 Library
 
-#include "Transform.h"
+#include "Node.h"
 
 //#include "ChimeraMesh.h"
 #include "Physics.h"
@@ -12,13 +12,12 @@
 
 namespace Chimera {
 
-class Object : public Transform {
+class Object : public Node {
 public:   
 	//friend class Loader;
 
     Object(std::string id, std::string name);
-    Object( const Object& object );
-    
+    //Object( const Object& object );
     
 	virtual ~Object(void);
     virtual void update ( DataMsg *dataMsg );

@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Camera::Camera ( CameraType _camType, std::string id, std::string name ) : Transform ( EntityType::CAMERA, id, name ), cameraType ( _camType ) {
+Camera::Camera ( CameraType _camType, std::string id, std::string name ) : Node ( EntityType::CAMERA, id, name ), cameraType ( _camType ) {
     
     near = 0.1f;
     far = 1000.0f;
@@ -10,13 +10,13 @@ Camera::Camera ( CameraType _camType, std::string id, std::string name ) : Trans
  
 }
 
-Camera::Camera (const Camera& camera ) : Transform ( camera ), cameraType ( camera.cameraType ) {
-    
-    near = camera.near;
-    far = camera.far;
-    fov = camera.fov;
-    
-}
+// Camera::Camera (const Camera& camera ) : Transform ( camera ), cameraType ( camera.cameraType ) {
+//     
+//     near = camera.near;
+//     far = camera.far;
+//     fov = camera.fov;
+//     
+// }
 
 Camera::~Camera() {
 }
@@ -42,9 +42,10 @@ void Camera::exec ( void ) {
 
         //glMultMatrixf(m_matrix);
 
-        gluLookAt ( position.x(), position.y(), position.z(),
-                    direction.x(), direction.y(), direction.z(),
-                    rotation.x(), rotation.y(), rotation.z() );
+        Transform *trans = (Transform*)parent;        
+        gluLookAt ( trans->getPosition().x(), trans->getPosition().y(), trans->getPosition().z(),
+                    trans->getDirection().x(), trans->getDirection().y(), trans->getDirection().z(),
+                    trans->getRotation().x(), trans->getRotation().y(), trans->getRotation().z() );
     }
 }
 

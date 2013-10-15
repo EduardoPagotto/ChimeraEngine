@@ -4,6 +4,7 @@
 #include <GL/gl.h>			// Header File For The OpenGL32 Library
 #include <GL/glu.h>			// Header File For The GLu32 Library
 #include "Color.h"
+#include "Node.h"
 #include "Transform.h"
 
 namespace Chimera {
@@ -14,10 +15,10 @@ enum class LightType {
     DIRECTIONAL
 };
 
-class Light : public Transform {
+class Light : public Node {
 public:
     Light ( LightType _type, int number, std::string id, std::string _name );
-    Light (const Light& light );
+    //Light (const Light& light );
     Light ( );
     
     virtual ~Light();

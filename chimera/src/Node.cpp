@@ -50,7 +50,7 @@ Node *Node::findObjByName ( EntityType type,std::string name ) {
     for ( Node *node : listNode ) {
         
         std::string l_name = node->getName();
-        if ( ( node->getType() ==type ) && ( l_name.compare ( name ) == true ) )
+        if ( ( node->getType() ==type ) && ( l_name.compare ( name ) == 0 ) )
             return node;
         
     }
@@ -63,7 +63,7 @@ Node *Node::findObjByName ( std::string name ) {
     for ( Node *node : listNode ) {
         
         std::string l_name = node->getName();
-        if ( l_name.compare ( name ) == true )
+        if ( l_name.compare ( name ) == 0 )
             return node;
         
     }
@@ -76,7 +76,7 @@ Node *Node::findObjById ( EntityType type,std::string id ) {
     for ( Node *node : listNode ) {
         
         std::string l_id = node->getId();
-        if ( ( node->getType() ==type ) && ( l_id.compare ( id ) == true ) )
+        if ( ( node->getType() == type ) && ( l_id. compare ( id ) == 0 ) )
             return node;
         
     }
@@ -89,7 +89,7 @@ Node *Node::findObjById ( std::string id ) {
     for ( Node *node : listNode ) {
         
         std::string l_id = node->getId();
-        if ( l_id.compare ( id ) == true )
+        if ( l_id.compare ( id ) == 0 )
             return node;
         
     }

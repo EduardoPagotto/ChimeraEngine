@@ -2,22 +2,22 @@
 
 namespace Chimera {
 
-    Light::Light(LightType _type, int number, std::string id, std::string _name  ) : Transform ( EntityType::LIGHT, id, _name ) , typeLight(_type), number(number) {
-    
+Light::Light ( LightType _type, int number, std::string id, std::string _name ) : Node ( EntityType::LIGHT, id, _name ) , typeLight ( _type ), number ( number ) {
+
     ambient = Color::ZERO;
     specular = Color::ZERO;
     diffuse = Color::ZERO;
-    
+
 }
 
-Light::Light(const Light& light ) : Transform ( light ) , typeLight(light.typeLight), number(light.number) {
-    
-    
-    ambient = light.ambient;
-    specular = light.specular;
-    diffuse = light.diffuse; 
-    
-}
+// Light::Light ( const Light& light ) : Transform ( light ) , typeLight ( light.typeLight ), number ( light.number ) {
+// 
+// 
+//     ambient = light.ambient;
+//     specular = light.specular;
+//     diffuse = light.diffuse;
+// 
+// }
 
 Light::~Light() {
 
@@ -67,7 +67,9 @@ void Light::exec() {
             break;
         }
 
-        GLfloat posicaoLuz[] = {position.x() , position.y() , position.z() , 1.0f };
+        //TODO Melhorar
+        Transform *trans = (Transform*)parent;
+        GLfloat posicaoLuz[] = {trans->getPosition().x() , trans->getPosition().y() , trans->getPosition().z() , 1.0f };
 
         //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat*)ambient.ptr());
         glLightfv ( testeLuz,GL_AMBIENT, ( GLfloat* ) ambient.ptr() );

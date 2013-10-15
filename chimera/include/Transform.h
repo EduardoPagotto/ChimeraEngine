@@ -2,27 +2,28 @@
 #define TRANSFORM_H_
 
 #include <LinearMath/btVector3.h>
+#include <LinearMath/btTransform.h>
 #include "Node.h"
 
 namespace Chimera {
 
 class Transform : public Node {
 public:
-    Transform ( EntityType _type, std::string id, std::string _name ) : Node ( _type, id, _name ) {
+    Transform ( std::string id, std::string _name ) : Node ( EntityType::TRANSFORM, id, _name ) {
         scale.setValue ( 0.0,0.0,0.0 );
         position.setZero();
         direction.setZero();
         rotation.setZero();
     }
 
-    Transform ( const Transform& transform ) : Node ( transform ) {
-        
-        scale = transform.scale;
-        position = transform.position;
-        direction = transform.direction;
-        rotation = transform.rotation;
-        
-    }
+//     Transform ( const Transform& transform ) : Node ( transform ) {
+//         
+//         scale = transform.scale;
+//         position = transform.position;
+//         direction = transform.direction;
+//         rotation = transform.rotation;
+//         
+//     }
     
 //     Transform() : Node ( EntityType::TRANSFORM,"" ) {
 //         scale.setValue ( 0.0,0.0,0.0 );
@@ -33,6 +34,22 @@ public:
 
     virtual ~Transform();
 
+    inline btScalar distanciaPosicaoDirecao() const {
+        return position.distance(direction);
+    }
+
+    inline btScalar distanciaPosicaoDirecaoZ() const {
+        return asin ( ( btFabs ( position.z() ) - btFabs ( direction.z() ) ) / position.distance(direction) ) / 0.017453293f;
+    }
+
+    inline btScalar distanciaPosicaoDirecaoY() const {
+        return asin ( ( btFabs ( position.y() ) - btFabs ( direction.y() ) ) / position.distance(direction) ) / 0.017453293f;
+    }
+    
+    inline btScalar distanciaPosicaoDirecaoX() const {
+        return asin ( ( btFabs ( position.x() ) - btFabs ( direction.x() ) ) / position.distance(direction) ) / 0.017453293f;
+    }
+    
     inline btVector3 getScale() const {
         return scale;
     }
@@ -65,12 +82,18 @@ public:
         this->rotation = rotation;
     }
 
-
+    inline void setOpenGLMatrix(const btScalar *m) {
+        transform.setFromOpenGLMatrix(m);
+    }
+    
+    
 protected:
     btVector3 scale;
     btVector3 position;
     btVector3 direction;
     btVector3 rotation;
+    
+    btTransform transform;
 };
 
 

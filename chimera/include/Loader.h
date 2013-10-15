@@ -41,6 +41,7 @@ public:
 private:
 
     void createScene();
+    void carregaMatrix(Transform *_pTrans, const std::vector<float> &listaMatrix);
     
     std::string getValProp (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
     std::string getAttribute(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
@@ -80,6 +81,11 @@ private:
     
     std::string m_modelDir;
     std::string m_imageDir;
+    
+    std::vector<Camera*> listaCamera;
+    std::vector<Object*> listaObjeto;
+    std::vector<Light*> listaLight;
+    
     
     log4cxx::LoggerPtr logger;
 };

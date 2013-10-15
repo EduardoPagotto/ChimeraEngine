@@ -1,0 +1,9 @@
+Verificar Real necessidade no que tange a Transform:
+	-Ser Pai dos outros node
+	-Ser Atributo de outros nodes
+	-nao existir e colocar as matrisez diretono btTransform <- gosto deste
+	
+Mudar no construtor dos objetos de entidade (Camera, Luz, Objeto, Node)
+	-Tirar o ID e o Name do construtor para poder realizar copia na criação da cena no final
+	-Criar um factory estatico dentro das classes, pasando a clase a ser copiada e NAO USAR O CONTRUTOR DE COPIA!!!
+	

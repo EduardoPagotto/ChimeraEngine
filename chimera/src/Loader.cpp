@@ -3,11 +3,11 @@
 namespace Chimera {
 
 Loader::Loader () {
-   
+
     m_numNodes = 0;
     m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
     logger = log4cxx::Logger::getLogger ( "appTest" );
-    
+
 }
 
 Loader::~Loader() {
@@ -15,9 +15,9 @@ Loader::~Loader() {
 }
 
 bool Loader::exec ( const char *_file ) {
-    
-    std::string l_nomeArquivo = m_modelDir + std::string(_file);
-    
+
+    std::string l_nomeArquivo = m_modelDir + std::string ( _file );
+
     m_doc = xmlParseFile ( l_nomeArquivo.c_str() );
     if ( m_doc == NULL )
         return false;
@@ -30,7 +30,7 @@ bool Loader::exec ( const char *_file ) {
         xmlFreeDoc ( m_doc );
         return false;
     }
-    
+
     createScene();
 
     printf ( "Cameras Registradas %d\n",libCam() );
@@ -355,33 +355,33 @@ int Loader::libImage ( void ) {
         l_nImage = findNode ( ( char* ) "image", l_nImage->children );
         while ( l_nImage ) {
             Image *pImage = new Image;
-            
+
             try {
-            
+
                 m_pScene->m_mImage[ getValProp ( "Image","id",l_nImage )] = pImage;
 
                 xmlNodePtr l_nFile = findNode ( ( char* ) "init_from", l_nImage->children );
                 if ( l_nFile ) {
                     xmlChar *l_pVal = xmlNodeListGetString ( m_doc, l_nFile->children, 1 );
                     if ( l_pVal ) {
-                        
-                        std::string l_arquivo = m_imageDir + std::string((char*)l_pVal);
-                        
+
+                        std::string l_arquivo = m_imageDir + std::string ( ( char* ) l_pVal );
+
                         if ( pImage->load ( l_arquivo.c_str() ) ==0 )
                             l_count++;
 
                         xmlFree ( l_pVal );
                     }
                 }
-            
+
             } catch ( const ExceptionChimera& ec ) {
-                
+
                 LOG4CXX_WARN ( logger , ec.getMessage() );
-                
+
             }
-            
-            
-            
+
+
+
             l_nImage = findNode ( ( char* ) "image", l_nImage->next );
         }
     }
@@ -397,9 +397,9 @@ int Loader::libMaterial ( void ) {
             l_count++;
 
             Material *pMat = new Material;
-            
+
             try {
-            
+
                 m_pScene->m_mMaterial[ getValProp ( "Material","id",l_nMat )] = pMat;
 
                 xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:COrrigir ha um bug aqui ele passa 2 vezes
@@ -414,14 +414,14 @@ int Loader::libMaterial ( void ) {
                         }
                     }
                 }
-            
+
             } catch ( const ExceptionChimera& ec ) {
-                
+
                 LOG4CXX_WARN ( logger , ec.getMessage() );
-                
+
             }
-            
-            
+
+
             l_nMat = findNode ( ( char* ) "material", l_nMat->next );
         }
     }
@@ -433,15 +433,15 @@ int Loader::libGeometry ( void ) {
 
     xmlNodePtr l_nGeom = findNode ( ( char* ) "library_geometries", m_root );
     if ( l_nGeom!=NULL ) {
-        
+
         char *l_pVal = NULL;
         l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->children );
         while ( l_nGeom!=NULL ) {
-            
+
             Mesh *pMesh = new Mesh;
-            
+
             std::string nomeMesh =  getValProp ( "Mesh","id",l_nGeom );
-            
+
             m_pScene->m_mDraw[ nomeMesh ] = pMesh;
 
             xmlNodePtr l_nMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
@@ -450,22 +450,22 @@ int Loader::libGeometry ( void ) {
                 while ( l_nMesh ) {
                     l_pVal = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "id" );
                     std::string l_sVal = l_pVal;
-                    
-                    size_t posicaoEncontrada = l_sVal.find("-positions");
-                    if (posicaoEncontrada != std::string::npos) {
+
+                    size_t posicaoEncontrada = l_sVal.find ( "-positions" );
+                    if ( posicaoEncontrada != std::string::npos ) {
                         getSource ( l_nMesh,pMesh->m_vertexList );
                     } else {
-                        posicaoEncontrada = l_sVal.find("-normals");
-                        if (posicaoEncontrada != std::string::npos)
+                        posicaoEncontrada = l_sVal.find ( "-normals" );
+                        if ( posicaoEncontrada != std::string::npos )
                             getSource ( l_nMesh,pMesh->m_normalList );
                         else {
-                            posicaoEncontrada = l_sVal.find("-map-0");
-                            if (posicaoEncontrada != std::string::npos)
+                            posicaoEncontrada = l_sVal.find ( "-map-0" );
+                            if ( posicaoEncontrada != std::string::npos )
                                 getSource ( l_nMesh,pMesh->m_uv );
                         }
-                        
+
                     }
-                    
+
                     l_nMesh = findNode ( ( char* ) "source",l_nMesh->next );
                 }
 
@@ -558,12 +558,12 @@ void Loader::createScene() {
     if ( l_nScene!=NULL ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
         if ( l_nScene!=NULL ) {
-            
-            m_pScene = new SceneMng(getValProp ( "SceneMng","id",l_nScene ), getValProp ( "SceneMng","name",l_nScene ));
-            
+
+            m_pScene = new SceneMng ( getValProp ( "SceneMng","id",l_nScene ), getValProp ( "SceneMng","name",l_nScene ) );
+
         }
     }
-       
+
 }
 
 int Loader::libScene ( void ) {
@@ -571,15 +571,25 @@ int Loader::libScene ( void ) {
     if ( l_nScene!=NULL ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
         if ( l_nScene!=NULL ) {
-            
-            //m_pScene = new SceneMng(getValProp ( "SceneMng","id",l_nScene ), getValProp ( "SceneMng","name",l_nScene ));
-            
-            xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );
-            createNode ( l_nNode, m_pScene ); 
+
+            xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );//Transform *pTrans = new Transform ( getValProp ( "Node","id",l_nNode ), getValProp ( "Node","name",l_nNode ) );
+            createNode ( l_nNode, m_pScene );
         }
     }
 
     return m_numNodes;
+}
+
+void Loader::carregaMatrix ( Transform *_pTrans, const std::vector<float> &listaMatrix ) {
+
+    btScalar *ponteiroFloat = new btScalar[ listaMatrix.size() ];
+    for ( int indice = 0 ; indice < listaMatrix.size(); indice++ ) {
+        ponteiroFloat[indice] = listaMatrix[indice];
+    }
+
+    _pTrans->setOpenGLMatrix ( ponteiroFloat );
+    delete ponteiroFloat;
+    ponteiroFloat = nullptr;
 }
 
 void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
@@ -587,38 +597,36 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
     while ( l_nNode ) {
         if ( l_nNode->type==XML_ELEMENT_NODE ) {
-            xmlChar* l_pVal = NULL;
-            xmlChar *pSID = NULL;
-            //Transform l_trans;
-            std::vector<float> l_arrayValores;
-            Node *pFilho = NULL;
+            xmlChar* l_pVal = nullptr;
+            xmlChar *pSID = nullptr;
+            Node *pFilho = nullptr;
 
+            std::vector<float> l_arrayValores;
+            
             const xmlChar *l_pNomeNode = l_nNode->name;
             xmlChar *l_pName = xmlGetProp ( l_nNode, ( const xmlChar* ) "name" );
 
-            //FIXME parei aqui!!!!! tentar achar a matrix
-            xmlNodePtr l_nTransforma = findNode ( ( char* ) "translate", l_nNode->children );
+            Transform *pTrans = new Transform ( getValProp ( "Node","id",l_nNode ), getValProp ( "Node","name",l_nNode ) );
+            
+            xmlNodePtr l_nTransforma = findNode ( ( char* ) "matrix", l_nNode->children );
 
             if ( l_nTransforma ) {
                 pSID = xmlGetProp ( l_nTransforma, ( const xmlChar* ) "sid" );
-                if ( xmlStrcmp ( pSID, ( xmlChar* ) "translate" ) ==0 ) {
+                if ( xmlStrcmp ( pSID, ( xmlChar* ) "transform" ) ==0 ) {
                     l_pVal = xmlNodeListGetString ( m_doc, l_nTransforma->children, 1 );
                     loadArrayF ( ( char* ) l_pVal ,l_arrayValores );
-                   // l_trans.position.setValue ( l_arrayValores[0], l_arrayValores[1] , l_arrayValores[2] ); //FIXME usar matrix agora!!!!
-
+                    carregaMatrix ( pTrans, l_arrayValores );
                     l_arrayValores.clear();
                     xmlFree ( l_pVal );
                 }
             }
-            
-            
-// 
+
 //             l_nTransforma = findNode ( ( char* ) "rotate", l_nNode->children ); //rotate
 //             while ( l_nTransforma ) {
 //                 pSID = xmlGetProp ( l_nTransforma, ( const xmlChar* ) "sid" );
 //                 l_pVal = xmlNodeListGetString ( m_doc, l_nTransforma ->children, 1 );
 //                 loadArrayF ( ( char* ) l_pVal ,l_arrayValores );
-// 
+//
 //                 //ultimo elemento apenas
 //                 if ( xmlStrcmp ( pSID, ( xmlChar* ) "rotateZ" ) ==0 )
 //                     l_trans.rotation.setZ ( l_arrayValores[3] );
@@ -629,12 +637,12 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 //                     l_arrayValores.clear();
 //                     break;
 //                 }
-// 
+//
 //                 l_arrayValores.clear();
-// 
+//
 //                 l_nTransforma = findNode ( ( char* ) "rotate",l_nTransforma->next );
 //             }
-// 
+//
 //             l_nTransforma = findNode ( ( char* ) "scale", l_nNode->children );
 //             if ( l_nTransforma ) {
 //                 pSID = xmlGetProp ( l_nTransforma, ( const xmlChar* ) "sid" );
@@ -642,14 +650,14 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 //                     l_pVal = xmlNodeListGetString ( m_doc, l_nTransforma->children, 1 );
 //                     loadArrayF ( ( char* ) l_pVal ,l_arrayValores );
 //                     l_trans.scale.setValue ( l_arrayValores[0], l_arrayValores[1] , l_arrayValores[2] );
-// 
+//
 //                     l_arrayValores.clear();
 //                     xmlFree ( l_pVal );
 //                 }
 //             }
-// 
-//             xmlNodePtr l_nInstance;;
-//             if ( l_nInstance = findNode ( ( char* ) "instance_geometry", l_nNode->children ) ) {
+//
+            xmlNodePtr l_nInstance;;
+            if ( l_nInstance = findNode ( ( char* ) "instance_geometry", l_nNode->children ) ) {
 //                 Object *pObj = new Object;
 //                 pObj->setName ( ( const char* ) l_pName );
 // 
@@ -687,31 +695,35 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 //                         }
 //                     }
 //                 }
-//             } else if ( l_nInstance = findNode ( ( char* ) "instance_light", l_nNode->children ) ) {
-//                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
-//                 if ( pURL != NULL ) {
-//                     Light *pLight = ( Light* ) m_pScene->findInList ( ( char* ) &pURL[1],LIGHT );
-//                     if ( pLight!=NULL ) {
-//                         _pNode->add ( pLight );
-//                         pFilho = pLight;
-//                         pLight->m_trans = l_trans;
-//                     }
-//                 }
-//             } else if ( l_nInstance = findNode ( ( char* ) "instance_camera", l_nNode->children ) ) {
-//                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
-//                 if ( pURL != NULL ) {
-//                     Camera *pCam = ( Camera* ) m_pScene->findInList ( ( char* ) &pURL[1],CAMERA );
-//                     if ( pCam!=NULL ) {
-//                         _pNode->add ( pCam );
-//                         pFilho = pCam;
-//                         pCam->m_trans = l_trans;
-//                     }
-//                 }
-//             }
-// 
-//             Node* l_buffer = _pNode;
-//             createNode ( l_nInstance->next, pFilho );
-//             _pNode = l_buffer;
+            } else if ( l_nInstance = findNode ( ( char* ) "instance_light", l_nNode->children ) ) {
+                xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
+                if ( pURL != NULL ) {
+                    Light *pLight = ( Light* ) m_pScene->findObjById ( EntityType::LIGHT, ( char* ) &pURL[1] );
+                    if ( pLight!=NULL ) {
+                        _pNode->addChild ( pLight );
+                        pFilho = pLight;
+                        //pLight->m_trans = l_trans;
+                    }
+                }
+            } else if ( l_nInstance = findNode ( ( char* ) "instance_camera", l_nNode->children ) ) {
+                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
+                 if ( pURL != NULL ) {
+                     Camera *pCam = ( Camera* ) m_pScene->findObjById ( EntityType::CAMERA,( char* ) &pURL[1] );
+                     if ( pCam!=NULL ) {
+                         
+                         _pNode->addChild(pTrans);
+                         pTrans->addChild(pCam);
+                         
+                         _pNode->addChild ( pCam );
+                         pFilho = pCam;
+                         //pCam->m_trans = l_trans;
+                     }
+                 }
+             }
+
+            Node* l_buffer = _pNode;
+            createNode ( l_nInstance->next, pFilho );
+            _pNode = l_buffer;
         }
         l_nNode = l_nNode->next;
     }

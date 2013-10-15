@@ -6,6 +6,7 @@
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 
+#include "Node.h"
 #include "Transform.h"
 
 namespace Chimera {
@@ -15,10 +16,10 @@ enum class CameraType {
     AIR_CAM 
 };    
 
-class Camera : public Transform {
+class Camera : public Node {
 public:
     Camera (CameraType _camType, std::string id, std::string nome);
-    Camera (const Camera& camera);
+    //Camera (const Camera& camera);
     virtual ~Camera();
 
     virtual void update ( DataMsg *dataMsg );

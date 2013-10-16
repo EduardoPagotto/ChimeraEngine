@@ -13,7 +13,7 @@ namespace Chimera {
  */
 class Node : public Entity {
 public:
-    Node ( EntityType _type);
+    Node ( EntityKind _type);
     
     Node (const Node &_node);
     
@@ -39,9 +39,9 @@ public:
         this->id = name;
     }
 
-    static Node *findObjById ( EntityType type,std::string id );
+    static Node *findObjById ( EntityKind type,std::string id );
     static Node *findObjById ( std::string id );
-    static Node *findObjByName ( EntityType type,std::string name );
+    static Node *findObjByName ( EntityKind type,std::string name );
     static Node *findObjByName ( std::string name );
 
 protected:

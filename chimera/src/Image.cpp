@@ -2,23 +2,36 @@
 
 namespace Chimera {
 
-Image::Image() {
-    pImage = NULL;
+Image::Image() : Node(EntityKind::IMAGE) {
+    
+    pImage = nullptr;
+    
+}
+
+Image::Image(const Image &_imagen) : Node(_imagen) {
+    
+    pImage = _imagen.pImage;
+    
 }
 
 Image::~Image() {
-    if ( pImage ) {
+    
+    if ( pImage != nullptr ) {
+        
         SDL_FreeSurface ( pImage );
-        pImage = NULL;
+        pImage = nullptr;
+       
     }
+    
 }
 
-int Image::load ( const char *_file ) {
-    pImage = IMG_Load ( _file );
-    if ( pImage!=NULL )
-        return 0;
+void Image::loadImage () {
+    
+    pImage = IMG_Load ( pathFile.c_str() );
+    if ( pImage != nullptr )
+        return;
 
-    return -1;
+    throw ExceptionChimera(ExceptionCode::READ, "Falha ao ler arquivo:"+pathFile);
 }
 
 }

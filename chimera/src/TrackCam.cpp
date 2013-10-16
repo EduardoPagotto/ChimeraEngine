@@ -43,17 +43,16 @@ void TrackCam::init ( void ) {
     Camera::init();
 
     reset();
-
-    Transform *trans = ( Transform* ) parent;
-
-    pitch ( -trans->getRotation().x() );
-    roll ( trans->getRotation().y() );
-    yaw ( trans->getRotation().z() );
+    
+    pitch ( -rotation.x() );
+    roll ( rotation.y() );
+    yaw ( rotation.z() );
 
     initTrackBall();
 }
 
 void TrackCam::reset() {
+    
     along.setValue ( 1.0f, 0.0f, 0.0f );
     up.setValue ( 0.0f, 1.0f, 0.0f );
     forward.setValue ( 0.0f,  0.0f, -1.0f );
@@ -62,40 +61,19 @@ void TrackCam::reset() {
 }
 
 void TrackCam::initTrackBall ( void ) {
-
-    Transform *trans = ( Transform* ) parent;
-
-    //Ajuste inicial da posicao da camera em relacao as coordenada do arquivo de posicao
-    distancia = trans->distanciaPosicaoDirecao();
-    vertical = trans->distanciaPosicaoDirecaoZ();
-    horizontal = trans->distanciaPosicaoDirecaoY();
+    
+    distancia = position.distance( direction );
+    vertical = asin ( ( btFabs ( position.z() ) - btFabs ( direction.z() ) ) / position.distance(direction) ) / 0.017453293f;
+    horizontal = asin ( ( btFabs ( position.y() ) - btFabs ( direction.y() ) ) / position.distance(direction) ) / 0.017453293f;
+   
 }
-
-// inline btScalar distanciaPosicaoDirecao() const {
-//     return position.distance(direction);
-// }
-// 
-// inline btScalar distanciaPosicaoDirecaoZ() const {
-//     return asin ( ( btFabs ( position.z() ) - btFabs ( direction.z() ) ) / position.distance(direction) ) / 0.017453293f;
-// }
-// 
-// inline btScalar distanciaPosicaoDirecaoY() const {
-//     return asin ( ( btFabs ( position.y() ) - btFabs ( direction.y() ) ) / position.distance(direction) ) / 0.017453293f;
-// }
-// 
-// inline btScalar distanciaPosicaoDirecaoX() const {
-//     return asin ( ( btFabs ( position.x() ) - btFabs ( direction.x() ) ) / position.distance(direction) ) / 0.017453293f;
-// }
-
 
 void TrackCam::updateTrack() {
     //TODO: TESTAR e verificar ser bullet ja nao tem este algoritmo !!!
 
-    Transform *trans = ( Transform* ) parent;
-
-    GLfloat x = along.dot ( trans->getPosition() ); //  along * (*m_pPosition); //Dot Product (produto escalar) // DotProduct(along, Position); //GLfloat x = DotProduct(along, Position);
-    GLfloat y = up.dot ( trans->getPosition() );    //up * (*m_pPosition); //  DotProduct(up, Position);
-    GLfloat z = forward.dot ( trans->getPosition() ); // forward * (*m_pPosition); // DotProduct(forward, Position);
+    GLfloat x = along.dot ( position ); //  along * (*m_pPosition); //Dot Product (produto escalar) // DotProduct(along, Position); //GLfloat x = DotProduct(along, Position);
+    GLfloat y = up.dot ( position );    //up * (*m_pPosition); //  DotProduct(up, Position);
+    GLfloat z = forward.dot ( position ); // forward * (*m_pPosition); // DotProduct(forward, Position);
 
     GLfloat ViewMatrix[4][4];
 
@@ -154,50 +132,35 @@ void TrackCam::roll ( GLfloat _theta ) {
 
 void TrackCam::walk ( GLfloat _delta, bool _wall[4] ) {
 
-    Transform *trans = ( Transform* ) parent;
-    btVector3 l_pos;
-
     if ( type == CameraType::LAND_CAM )
-        l_pos -= btVector3 ( forward.x() * ! ( _wall[0] && forward.x() * _delta > 0.0 || _wall[1] && forward.x() * _delta < 0.0 ),
+        position -= btVector3 ( forward.x() * ! ( _wall[0] && forward.x() * _delta > 0.0 || _wall[1] && forward.x() * _delta < 0.0 ),
                              0.0,
                              forward.z() * ! ( _wall[2] && forward.z() * _delta > 0.0 ||  _wall[3] && forward.z() * _delta < 0.0 ) ) * _delta;
     else
-        l_pos -= forward * _delta; // Air camera
-
-
-    trans->setPosition ( l_pos );
+        position -= forward * _delta; // Air camera
 
     updateTrack();
 }
 
 void TrackCam::strafe ( GLfloat _delta, bool _wall[4] ) {
-    
-    Transform *trans = ( Transform* ) parent;
-    btVector3 l_pos;
-    
+        
     if ( type == CameraType::LAND_CAM )
-        l_pos -= btVector3 ( along.x() * ! ( _wall[0] && along.x() * _delta > 0.0 || _wall[1] && along.x() * _delta < 0.0 ),
+        position -= btVector3 ( along.x() * ! ( _wall[0] && along.x() * _delta > 0.0 || _wall[1] && along.x() * _delta < 0.0 ),
                                 0.0,
                                 along.z() * ! ( _wall[2] && along.z() * _delta > 0.0 || _wall[3] && along.z() * _delta < 0.0 ) ) * _delta;
     else
-        l_pos += along * _delta; // Air camera
-
-    trans->setPosition ( l_pos );
+        position += along * _delta; // Air camera
         
     updateTrack();
 }
 
 void TrackCam::fly ( GLfloat _delta, bool _wall[4] ) {
     
-    Transform *trans = ( Transform* ) parent;
-    btVector3 l_pos;
-    
     // Don't allow for land cameras
     if ( type == CameraType::LAND_CAM )
         return;
 
-    l_pos += up * _delta;
-    trans->setPosition ( l_pos );
+    position += up * _delta;
     
     updateTrack();
 }
@@ -219,11 +182,11 @@ void TrackCam::trackBall ( int _mx, int _my, int _mz ) {
         float l_kx = horizontal * 0.017453293f;
         float l_ky = vertical * 0.017453293f;
 
-        Transform *trans = ( Transform* ) parent;
-        trans->setPosition(btVector3(distancia * cos ( l_kx ) * sin ( l_ky ),
-                                     distancia * cos ( l_kx ) * cos ( l_ky ),
-                                     distancia * sin ( l_kx )));
-       
+        //Transform *trans = ( Transform* ) parent;
+        position.setX(distancia * cos ( l_kx ) * sin ( l_ky ));
+        position.setY(distancia * cos ( l_kx ) * cos ( l_ky ));
+        position.setZ(distancia * sin ( l_kx ));
+               
     }
 }
 

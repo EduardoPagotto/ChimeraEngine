@@ -39,7 +39,6 @@ int main ( int argn, char** argv ) {
         Chimera::SceneMng *sceneMng = pLoader->getSceneMng();
         
         //Chimera::SceneMng *sceneMng = new Chimera::SceneMng("root","root");
-        sceneMng->setEngine(engine3d);
         
 //         Chimera::Camera *camera = new Chimera::Camera(Chimera::CameraType::AIR_CAM,"camera01","camera01");
 //         camera->setPosition(btVector3(-500.0, -500.0, 500.0));

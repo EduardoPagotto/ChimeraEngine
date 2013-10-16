@@ -11,11 +11,11 @@
 
 namespace Chimera {
 
-class Material {
+class Material : Node {
 public:
 
-    friend class Loader; 
-    
+    friend class Loader;
+
     Material();
     Material ( const Material &_cpy );
     virtual ~Material();

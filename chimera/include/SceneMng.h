@@ -21,38 +21,27 @@ public
 :
     friend class Loader;
     
-    SceneMng(std::string _id, std::string _name);
+    SceneMng();
     virtual ~SceneMng ();
 
     void addChildToScene ( Node *_pNode );
-
-    void setEngine(Engine3D *_pEngine3D) {
-        m_pEngine3D = _pEngine3D;
-    }
-    
-    Node *getRoot() const {
-        return m_pRoot;
-    }
-    
-    Node *getNode(EntityType _type, int index);
+        
+    Node *getNode(EntityKind _type, int index);
     
     void update(DataMsg *dataMsg );
     
-private:
-  
-    Engine3D *m_pEngine3D;
+    void execLight();
     
-    Node *m_pRoot;
-
+private: 
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
     std::vector<Object*> m_vObject;
 
 //     std::list<Physics*> m_mPhysics;
      std::map<std::string, Draw*> m_mDraw;
-     std::map<std::string, Image*> m_mImage;
-     std::map<std::string, Effect*> m_mEffect;
-     std::map<std::string, Material*> m_mMaterial;
+//     std::map<std::string, Image*> m_mImage;
+//     std::map<std::string, Effect*> m_mEffect;
+//     std::map<std::string, Material*> m_mMaterial;
 //     std::list<btMaterial*> m_PMaterial;
 
 };

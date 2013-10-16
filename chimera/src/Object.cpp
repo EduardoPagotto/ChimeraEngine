@@ -2,40 +2,40 @@
 
 namespace Chimera {
 
-Object::Object () : Node ( EntityType::OBJECT ) {
+Object::Object () : Node ( EntityKind::OBJECT ) {
     
-    m_pPhysic = nullptr;
-    m_pDraw = nullptr;
-    
-}
-
-Object::Object( const Object& object ) : Node(object) {
-    
-    m_pPhysic = object.m_pPhysic;
-    m_pDraw = object.m_pDraw;
+    pPhysic = nullptr;
+    pDraw = nullptr;
     
 }
 
-Object::~Object ( void ) {
+Object::Object( const Object& _object ) : Node(_object) {
+    
+   pPhysic = _object.pPhysic;
+   pDraw = _object.pDraw;
+    
 }
 
-void Object::update ( DataMsg *dataMsg ) {
+Object::~Object () {
+}
+
+void Object::update ( DataMsg *_dataMsg ) {
 //FIXME mais um
-    if (dataMsg->getKindOperation() == KindOperation::DRAW3D) {
+    if (_dataMsg->getKindOperation() == KindOperation::DRAW3D) {
         
  		glPushMatrix();
 
-		if (m_pPhysic) {
+		if (pPhysic) {
 // 			Object *pSource = (Object *)_transport->fieldA;
 // 			m_pPhysic->ajusteMatrix(pSource->m_pPhysic);
 		}
 
- 		if (m_pDraw)
- 			m_pDraw->renderizar();
+ 		if (pDraw)
+ 			pDraw->renderizar();
 
  		glPopMatrix();
 
-        Node::update(dataMsg);
+        Node::update(_dataMsg);
 
  		//glPopMatrix();
 
@@ -53,13 +53,13 @@ void Object::update ( DataMsg *dataMsg ) {
 }
 
 void Object::applyTorc ( const btVector3 &_vet ) {
-    if ( m_pPhysic )
-        m_pPhysic->torque ( _vet );
+    if ( pPhysic )
+        pPhysic->torque ( _vet );
 }
 
 void Object::applyForce ( const btVector3 &_vet ) {
-    if ( m_pPhysic )
-        m_pPhysic->propulcao ( _vet );
+    if ( pPhysic )
+        pPhysic->propulcao ( _vet );
 }
 
 }

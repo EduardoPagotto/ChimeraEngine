@@ -2,14 +2,14 @@
 
 namespace Chimera {
 
-Light::Light () : Node ( EntityType::LIGHT) {
+Light::Light () : Node ( EntityKind::LIGHT) {
 
     number = 0;
     type = LightType::POINT;
     ambient = Color::ZERO;
     specular = Color::ZERO;
     diffuse = Color::ZERO;
-    position = btVector3(0.0, 0.0, 0.0);
+    position.setZero();
 
 }
 

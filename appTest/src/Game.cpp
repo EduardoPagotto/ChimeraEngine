@@ -49,19 +49,23 @@ void Game::onFrame(){
     
     //TODO Desenho aqui
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    m_pEngined3D->setLight(true);
-    m_pEngined3D->setMaterial(true);    
+    pEngined3D->setLight(true);
+    pEngined3D->setMaterial(true);    
 
-    pCam = (Camera*)m_pSceneMng->getNode(EntityType::CAMERA,0);
-    pObj = (Object*)m_pSceneMng->getNode(EntityType::OBJECT,0);
+    pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
+    pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
     
-    m_pEngined3D->setViewPortPerspective(pCam);
+    pEngined3D->setViewPortPerspective(pCam);
     
     pCam->exec();
     
     Chimera::DataMsg dataMsg(KindOperation::DRAW3D,this,pObj,nullptr);
     
-    m_pSceneMng->update(&dataMsg);
+    pSceneMng->update(&dataMsg);
+    
+    if ( pEngined3D->getLight() ==true ) {
+        pSceneMng->execLight();
+    } 
     
     //m_pEngined3D->setViewPortOrtogonal();
     //glColor3f(0.7, 0.5, 0.8);
@@ -79,7 +83,7 @@ void Game::onFrame(){
 void Game::offFrame(){
     
     //if (timer01.stepCount() == true)
-        std::cout << "FPS: " << m_pEngined3D->getVideo()->getFPS() << std::endl;
+        std::cout << "FPS: " << pEngined3D->getVideo()->getFPS() << std::endl;
     
 }
 

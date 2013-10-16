@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng ( std::string _id, std::string _name ) : Node(EntityType::SCENE,_id,_name)  {
+SceneMng::SceneMng () : Node(EntityKind::SCENE)  {
 
 }
 
@@ -14,14 +14,14 @@ void SceneMng::addChildToScene ( Node *_pNode ) {
 
     addChild ( _pNode );
 
-    switch ( _pNode->getType() ) {
-    case EntityType::CAMERA:
+    switch ( _pNode->getKind() ) {
+    case EntityKind::CAMERA:
         m_vCamera.push_back ( ( Camera* ) _pNode );
         break;
-    case EntityType::LIGHT:
+    case EntityKind::LIGHT:
         m_vLight.push_back ( ( Light* ) _pNode );
         break;
-    case EntityType::OBJECT:
+    case EntityKind::OBJECT:
         m_vObject.push_back ( ( Object* ) _pNode );
         break;
     default:
@@ -30,20 +30,20 @@ void SceneMng::addChildToScene ( Node *_pNode ) {
 
 }
 
-Node *SceneMng::getNode ( EntityType _type, int index ) {
+Node *SceneMng::getNode ( EntityKind _type, int index ) {
 
     Node *retono = nullptr;
 
     switch ( _type ) {
-    case EntityType::CAMERA:
+    case EntityKind::CAMERA:
         if ( m_vCamera.size() > index )
             retono = m_vCamera[index];
         break;
-    case EntityType::LIGHT:
+    case EntityKind::LIGHT:
         if ( m_vLight.size() > index )
             retono = m_vLight[index];
         break;
-    case EntityType::OBJECT:
+    case EntityKind::OBJECT:
         if ( m_vObject.size() > index )
             retono = m_vObject[index];
         break;
@@ -54,16 +54,16 @@ Node *SceneMng::getNode ( EntityType _type, int index ) {
     return retono;
 }
 
+void SceneMng::execLight() {
+    for ( Light *pLight : m_vLight ) {
+        pLight->exec();
+    }
+}
+
 void SceneMng::update(DataMsg *dataMsg ) {
     
     Node::update ( dataMsg );
-    
-    if ( m_pEngine3D->getLight() ==true ) {
-        for ( Light *pLight : m_vLight ) {
-            pLight->exec();
-        }
-    } 
-    
+        
 }
 
 } /* namespace Chimera */

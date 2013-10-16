@@ -6,6 +6,8 @@
 
 #include <string>
 
+#include <queue>
+
 #include <log4cxx/logger.h>
 #include <log4cxx/xml/domconfigurator.h>
 
@@ -41,7 +43,7 @@ public:
 private:
 
     void createScene();
-    void carregaMatrix(Transform *_pTrans, const std::vector<float> &listaMatrix);
+    void carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix);
     
     std::string getValProp (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
     std::string getAttribute(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
@@ -82,10 +84,7 @@ private:
     std::string m_modelDir;
     std::string m_imageDir;
     
-    std::vector<Camera*> listaCamera;
-    std::vector<Object*> listaObjeto;
-    std::vector<Light*> listaLight;
-    
+    std::queue<Node*> listaNode;
     
     log4cxx::LoggerPtr logger;
 };

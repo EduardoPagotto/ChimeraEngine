@@ -13,21 +13,22 @@
 namespace Chimera {
 
 class Object : public Node {
-public:   
-	//friend class Loader;
+public: 
+    
+	friend class Loader;
 
     Object();
-    Object( const Object& object );
+    Object( const Object& _object );
     
-	virtual ~Object(void);
-    virtual void update ( DataMsg *dataMsg );
+	virtual ~Object();
+    virtual void update ( DataMsg *_dataMsg );
 
 	void setDraw(Draw *_pDraw) {
-		m_pDraw = _pDraw;
+		pDraw = _pDraw;
 	}
 
 	void setPhysic(Physics *_pPhysic) {
-		m_pPhysic = _pPhysic;
+		pPhysic = _pPhysic;
 	}
 
 	void applyTorc(const btVector3 &_vet);
@@ -36,9 +37,9 @@ public:
 
 	
 private:
-	Physics *m_pPhysic;
-
-	Draw *m_pDraw;
+	Physics *pPhysic;
+	Draw *pDraw;
+    btTransform transform;
 };
 
 }

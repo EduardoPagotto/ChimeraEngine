@@ -7,6 +7,7 @@
 #include "Node.h"
 
 #include <LinearMath/btVector3.h>
+#include <LinearMath/btTransform.h>
 
 
 namespace Chimera {
@@ -19,6 +20,9 @@ enum class LightType {
 
 class Light : public Node {
 public:
+    
+    friend class Loader;
+    
     Light ();
     
     Light (const Light& _light );
@@ -52,8 +56,13 @@ public:
        diffuse = _color;
     }
     
+    void setType(LightType _type) {
+        type = _type;
+    }
+    
 private:
 
+    btTransform transform;
     btVector3 position;
     
     Color ambient;

@@ -4,7 +4,7 @@ namespace Chimera {
 
 std::list<Node*> Node::listNode;
     
-Node::Node(EntityType _type) : Entity(_type) {
+Node::Node(EntityKind _type) : Entity(_type) {
     
     name = "name-Node";
     id = "id-Node";
@@ -18,6 +18,13 @@ Node::Node (const Node &_node) : Entity(_node) {
     name = _node.name;
     id = _node.id;
     parent = nullptr;
+    
+    //FIXME preciso copiar mesmo???
+    //if (_node.parent != nullptr) {
+    //    parent = _node.parent;
+    //    _node.parent->addChild(this);
+    //}
+        
     listNode.push_back(this);
     
 }
@@ -49,12 +56,12 @@ void Node::update ( DataMsg *dataMsg ){
     }
 }
 
-Node *Node::findObjByName ( EntityType type,std::string name ) {
+Node *Node::findObjByName ( EntityKind type,std::string name ) {
     
     for ( Node *node : listNode ) {
         
         std::string l_name = node->getName();
-        if ( ( node->getType() ==type ) && ( l_name.compare ( name ) == 0 ) )
+        if ( ( node->getKind() ==type ) && ( l_name.compare ( name ) == 0 ) )
             return node;
         
     }
@@ -75,12 +82,12 @@ Node *Node::findObjByName ( std::string name ) {
     return nullptr;
 }
 
-Node *Node::findObjById ( EntityType type,std::string id ) {
+Node *Node::findObjById ( EntityKind type,std::string id ) {
     
     for ( Node *node : listNode ) {
         
         std::string l_id = node->getId();
-        if ( ( node->getType() == type ) && ( l_id. compare ( id ) == 0 ) )
+        if ( ( node->getKind() == type ) && ( l_id. compare ( id ) == 0 ) )
             return node;
         
     }

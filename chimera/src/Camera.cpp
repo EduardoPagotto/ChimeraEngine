@@ -2,12 +2,16 @@
 
 namespace Chimera {
 
-Camera::Camera () : Node ( EntityType::CAMERA ) {
+Camera::Camera () : Node ( EntityKind::CAMERA ) {
     
     type = CameraType::AIR_CAM;
     near = 0.1f;
     far = 1000.0f;
     fov = 45.0f;
+    
+    position.setZero();
+    rotation.setZero();
+    direction.setZero();
  
 }
 
@@ -17,6 +21,10 @@ Camera::Camera (const Camera& _camera ) : Node ( _camera ) {
     near = _camera.near;
     far = _camera.far;
     fov = _camera.fov;
+    
+    position = _camera.position;
+    rotation = _camera.rotation;
+    direction = _camera.direction;
     
 }
 
@@ -43,11 +51,10 @@ void Camera::exec ( void ) {
         //transform.getOpenGLMatrix(m_matrix);
 
         //glMultMatrixf(m_matrix);
-
-//         Transform *trans = (Transform*)parent;        
-//         gluLookAt ( trans->getPosition().x(), trans->getPosition().y(), trans->getPosition().z(),
-//                     trans->getDirection().x(), trans->getDirection().y(), trans->getDirection().z(),
-//                     trans->getRotation().x(), trans->getRotation().y(), trans->getRotation().z() );
+       
+        gluLookAt ( position.x(), position.y(), position.z(),
+                    direction.x(), direction.y(), direction.z(),
+                    rotation.x(), rotation.y(), rotation.z() );
     }
 }
 

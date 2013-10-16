@@ -8,20 +8,22 @@
 namespace Chimera {
 
 /**
- * Enum EntityType
+ * Enum EntityKind
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-enum class EntityType : int8_t {
-    BASE=0,
-    ANY,
+enum class EntityKind : int8_t {
+   // BASE=0,
+   // ANY,
     NODE,
+    IMAGE,
+    EFFECT,
+    MATERIAL,
     SCENE,
-    TRANSFORM,
     CAMERA,
     LIGHT,
-    OBJECT,
-    EFFECT//,
+    OBJECT
+   // EFFECT//,
     //ENGINE
 };
 
@@ -32,9 +34,9 @@ enum class EntityType : int8_t {
  */
 class Entity {
 public:
-    Entity ( EntityType _type ) : type ( _type ) , serial ( ++serialMaster ), mode(0), status(true), maxMode(2) {}
+    Entity ( EntityKind _kind ) : kind ( _kind ) , serial ( ++serialMaster ), mode(0), status(true), maxMode(2) {}
     
-    Entity ( const Entity &_entity ) : type ( _entity.type ), serial ( ++serialMaster ), mode(_entity.mode), status(_entity.status), maxMode(_entity.maxMode) {}
+    Entity ( const Entity &_entity ) : kind ( _entity.kind ), serial ( ++serialMaster ), mode(_entity.mode), status(_entity.status), maxMode(_entity.maxMode) {}
 
     virtual ~Entity() {}
     
@@ -46,8 +48,8 @@ public:
         return ++Entity::serialMaster;
     }
 
-    inline EntityType getType() const {
-        return type;
+    inline EntityKind getKind() const {
+        return kind;
     }
 
     void virtual setStatus(bool _status) { 
@@ -73,7 +75,7 @@ private:
     bool status;
     int mode;
     int maxMode;
-    EntityType type;
+    EntityKind kind;
     unsigned serial;
     static unsigned serialMaster;
 

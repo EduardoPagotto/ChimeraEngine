@@ -2,21 +2,24 @@
 #define EFFECT_H_
 
 #include "Color.h"
+#include "Node.h"
 
 namespace Chimera {
 
-class Effect {
+class Effect : public Node {
 public:
 	
-    Effect() :shininess(10.5f)  {}
+    Effect() : Node(EntityKind::EFFECT),  shininess(10.5f)  {}
 
-	Effect(const Effect& _cpy) {
+	Effect(const Effect& _cpy) :Node(_cpy) {
+        
 		diffuse = _cpy.diffuse;
 		ambient = _cpy.ambient;
 		specular = _cpy.specular;
 		emissive = _cpy.emissive;
 		shininess = _cpy.shininess;
-		nameTexture = _cpy.nameTexture;
+        
+		nameTextureId = _cpy.nameTextureId;
 	}
 
 	virtual ~Effect() {}
@@ -61,15 +64,13 @@ public:
         shininess = _val;
     }
     
-	void setNameTexture(std::string _name) {
-        nameTexture = _name;
+	void setNameTextureId(std::string _name) {
+        nameTextureId = _name;
     }
 
-    std::string getNameTexture() const {
-        return nameTexture;
+    std::string getNameTextureId() const {
+        return nameTextureId;
     }
-    
-	
     
 private:
     
@@ -80,7 +81,7 @@ private:
     
     float shininess;
     
-    std::string nameTexture;
+    std::string nameTextureId;
 };
 
 }

@@ -17,6 +17,9 @@ enum class CameraType {
 
 class Camera : public Node {
 public:
+    
+    friend class Loader;
+    
     Camera ();
     
     Camera (const Camera& _camera);
@@ -28,6 +31,10 @@ public:
     void exec ( void );
    
     virtual void init ( void );
+    
+    void setType(CameraType _type) {
+        type = _type;
+    }
     
     void setNear(float _near) {
         this->near = _near;
@@ -55,6 +62,12 @@ public:
 
 protected:     
     CameraType type;
+    
+    btVector3 position;
+    btVector3 rotation;
+    btVector3 direction;
+    
+    btTransform transform;
     
 private:
     float near;

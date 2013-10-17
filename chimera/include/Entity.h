@@ -19,6 +19,7 @@ enum class EntityKind : int8_t {
     IMAGE,
     EFFECT,
     MATERIAL,
+    DRAW,
     SCENE,
     CAMERA,
     LIGHT,

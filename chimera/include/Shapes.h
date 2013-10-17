@@ -8,20 +8,8 @@
 
 namespace Chimera {  
 
-class DrawBox : public Draw {
-public:
-	DrawBox(float _lado, float _altura, float _largura);
-	~DrawBox();
 
-	virtual btVector3 sizeQuadratic(void);
-	virtual void renderizar();
-
-private:
-	float m_lado;
-	float m_altura;
-	float m_largura;
-};
-
+/*
 class DrawBoxGrid : public Draw {
 public:
 	DrawBoxGrid(int _size,int _space);
@@ -45,7 +33,7 @@ public:
 
 private:
 
-};
+};*/
 
 }
 #endif //DESENHO3D_H

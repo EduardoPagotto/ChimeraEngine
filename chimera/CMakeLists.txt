@@ -38,7 +38,6 @@ add_library (Chimera STATIC
 				src/Image.cpp
 				src/Material.cpp
 				src/Draw.cpp
-				src/Shapes.cpp
 				src/Mesh.cpp
 				src/Engine3D.cpp
 				#src/Font.cpp

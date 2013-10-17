@@ -2,13 +2,14 @@
 
 namespace Chimera {
 
-Draw::Draw() : pMaterial ( nullptr ) , type ( DRAW_TYPE::DRAW_NONE ) {
-
+Draw::Draw(DrawType _type) : Node(EntityKind::DRAW) , type(_type) {
+    
+    pMaterial = nullptr;
+    
 }
 
-Draw::Draw(const Draw &_draw) {
+Draw::Draw(const Draw &_draw) : Node (_draw) , type(_draw.type) {
     
-    type = _draw.type;
     pMaterial = _draw.pMaterial;
     
 }
@@ -37,6 +38,12 @@ void Draw::renderizar() {
             glMaterialf ( GL_FRONT, GL_SHININESS, 12.0f );
         }
     } 
+}
+
+void Draw::update ( DataMsg *dataMsg ) {
+    
+    Node::update(dataMsg);
+    
 }
 
 //void Draw::ajusteMatrix ( Transform *_pTrans ) {

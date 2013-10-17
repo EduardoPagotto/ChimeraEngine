@@ -6,33 +6,34 @@
 
 #include "Material.h"
 
-
 namespace Chimera {
 
-enum class DRAW_TYPE {
-	DRAW_NONE,
+enum class DrawType {
 	BOX,
-	BOXGRID,
+	GRID,
 	BOXGRID2,
 	SPHERE,
 	TRI_MESH
 };
 
-class Draw {
+class Draw : public Node {
 public:
-	Draw();
+    Draw(DrawType _type);
     Draw(const Draw &_draw);
 	virtual ~Draw();
+    
+    virtual void update ( DataMsg *dataMsg );
+    
+    virtual void init();
     virtual void renderizar();
-	virtual btVector3 sizeQuadratic() = 0;
-	
-	void init();
+	virtual btVector3 getSizeBox() = 0;
+
 	//void ajusteMatrix(Transform *_pTrans);
 
 protected:
 	
 	Material *pMaterial;
-	DRAW_TYPE type;
+    DrawType type;
 };
 
 }

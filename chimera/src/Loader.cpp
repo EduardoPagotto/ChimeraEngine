@@ -66,7 +66,7 @@ std::string Loader::getValProp ( const std::string &tipoNomeNode, const std::str
     } else {
 
         std::string l_erro = "Entidade '" + tipoNomeNode +"' com Propriedade '" + chave + "' nao localizado";
-        throw ExceptionChimera ( ExceptionCode::READ, l_erro );
+        throw ExceptionChimera ( ExceptionCode::READ, l_erro ); 
 
     }
 }
@@ -315,7 +315,6 @@ int Loader::libEffect ( void ) {
         while ( l_nMat != NULL ) {
             l_count++;
             
-
             try {
 
                 std::string l_nome = getValProp ( "Effects","name",l_nMat);
@@ -433,16 +432,26 @@ int Loader::libMaterial ( void ) {
                 
                 //m_pScene->m_mMaterial[ getValProp ( "Material","id",l_nMat )] = pMat;
 
-                xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:COrrigir ha um bug aqui ele passa 2 vezes
+                xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
                 if ( l_nEffect ) {
                     xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
                     if ( l_val ) {
-                        
-                        Effect *pEffe = m_pScene->m_mEffect[ ( char* ) &l_val[1]];
+                        std::string l_nomeEffect = (char*)l_val;
+                        Effect *pEffe = (Effect*)Node::findObjById(EntityKind::EFFECT,l_nomeEffect);//m_pScene->m_mEffect[ ( char* ) &l_val[1]];
+          
                         if ( pEffe ) {
-                            pMat->effect = ( *pEffe );
-                            if ( pEffe->getNameTextureId().size() > 0 )
-                                pMat->pTexture = m_pScene->m_mImage[pEffe->getNameTextureId()];
+                            
+                            pMat->addChild(pEffe);
+                            
+                            Image *pImage = (Image*)Node::findObjById(EntityKind::IMAGE, pEffe->getNameTextureId());
+                            if (pImage!=nullptr) {
+                             
+                                pMat->addChild(pImage);
+                                
+                            }
+//                             pMat->effect = ( *pEffe );
+//                             if ( pEffe->getNameTextureId().size() > 0 )
+//                                 pMat->pTexture = m_pScene->m_mImage[pEffe->getNameTextureId()];
                         }
                         
                     }
@@ -899,7 +908,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 // // // //					xmlFree(l_pVal);
 // // // //				}
 // // // //			}
-// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"rotate")==0) //TODO: errado isto � uma matrix e nao
+// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"rotate")==0) //TODO: errado isto ? uma matrix e nao
 // // // //			{
 // // // //				pTempNode = (Transform*)_pNode;
 // // // //				pSID = xmlGetProp(_nodeXML,(const xmlChar*)"sid");

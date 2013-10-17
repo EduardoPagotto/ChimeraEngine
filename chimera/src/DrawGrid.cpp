@@ -3,11 +3,11 @@
 namespace Chimera {
 
 
-DrawGrid::DrawGrid () : Node(EntityKind::DRAW) , type(DrawType::GRID) {
+DrawGrid::DrawGrid () : Draw(DrawType::GRID)  {
     
 }
 
-DrawGrid::DrawGrid(const DrawGrid &_draw) : Node(EntityKind::DRAW) , type(DrawType::GRID) {
+DrawGrid::DrawGrid(const DrawGrid &_draw) : Draw(DrawType::GRID) {
     
 }
 
@@ -15,8 +15,7 @@ DrawGrid::~DrawGrid() {
 
 }
 
-btVector3 DrawGrid::sizeQuadratic ( void ) {
-    
+btVector3 DrawGrid::getSizeBox(void) {
     return sizeBox;
 }
 
@@ -59,7 +58,7 @@ void DrawGrid::renderizar() {
     
 }
 
-void DrawBox::update ( DataMsg *dataMsg ) {
+void DrawGrid::update ( DataMsg *dataMsg ) {
     
     Draw::update(dataMsg);
     

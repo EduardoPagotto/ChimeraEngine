@@ -12,6 +12,8 @@ Camera::Camera () : Node ( EntityKind::CAMERA ) {
     position.setZero();
     rotation.setZero();
     direction.setZero();
+    
+    perspective = true;
  
 }
 
@@ -26,6 +28,7 @@ Camera::Camera (const Camera& _camera ) : Node ( _camera ) {
     rotation = _camera.rotation;
     direction = _camera.direction;
     
+    perspective = _camera.perspective;
 }
 
 Camera::~Camera() {

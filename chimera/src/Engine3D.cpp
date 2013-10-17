@@ -88,7 +88,7 @@ std::string Engine3D::getVersaoOpenGL() {
     std::string retorno;
        
     const char* version = (const char*)glGetString ( GL_VERSION );
-    if ( version != NULL ) {
+    if ( version != nullptr ) {
        retorno.append(version);
     } else {
         throw ExceptionSDL ( ExceptionCode::READ, std::string ( SDL_GetError() ) ); 

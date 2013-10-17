@@ -37,7 +37,7 @@ public:
 
     /// <summary> Contrutor padaro mudex livre </summary>
     Mutex(void) {
-        m_mutex = CreateMutex(NULL,FALSE,NULL);
+        m_mutex = CreateMutex(nullptr,FALSE,nullptr);
     }
 
     /// <summary> Destrutor padrao release de Handle </summary>
@@ -130,7 +130,7 @@ private:
 //     /// True Condicao criada Bloqueada
 //     /// </param>
 //     Conditional(BOOL _manualReset = FALSE) {
-//         m_cond = CreateEvent(NULL,_manualReset ,FALSE,NULL);
+//         m_cond = CreateEvent(nullptr,_manualReset ,FALSE,nullptr);
 //     }
 // 
 //     /// <summary> Destrutor Padrao </summary>
@@ -183,7 +183,7 @@ private:
 // public:
 //     /// <summary>Construtor Padrao</summary>
 //     Conditional() {
-//         pthread_cond_init(&m_cond,NULL);
+//         pthread_cond_init(&m_cond,nullptr);
 //     }
 // 
 //     /// <summary>Destrutor Padrao</summary>
@@ -217,7 +217,7 @@ private:
 //         }
 //         struct timeval tv;
 //         struct timespec ts;
-//         gettimeofday(&tv,NULL);
+//         gettimeofday(&tv,nullptr);
 //         ts.tv_sec = tv.tv_sec + _milisec;
 //         ts.tv_nsec = tv.tv_usec * 1000;
 //         return pthread_cond_timedwait(&m_cond,&m_mutex,&ts);

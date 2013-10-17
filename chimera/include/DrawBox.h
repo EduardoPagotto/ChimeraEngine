@@ -8,8 +8,8 @@ namespace Chimera {
 class DrawBox : public Draw {
 public:
     DrawBox();
-    DrawBox(const Draw &_draw);
-    virtual ~Draw();
+    DrawBox(const DrawBox &_draw);
+    virtual ~DrawBox();
         
     void setSizeBox(btVector3 _sizeBox) {
         sizeBox = _sizeBox;

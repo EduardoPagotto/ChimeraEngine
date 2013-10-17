@@ -13,7 +13,7 @@ enum class DrawType {
 	GRID,
 	BOXGRID2,
 	SPHERE,
-	TRI_MESH
+	MESH
 };
 
 class Draw : public Node {

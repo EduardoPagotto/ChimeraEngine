@@ -2,13 +2,12 @@
 
 namespace Chimera {
 
-Mesh::Mesh()  {
-    type = DRAW_TYPE::TRI_MESH;
+Mesh::Mesh() : Draw(DrawType::MESH) {
+    
 }
 
-Mesh::Mesh ( const Mesh &_cpy ) {
+Mesh::Mesh ( const Mesh &_cpy ): Draw(DrawType::MESH) {
 
-    type = DRAW_TYPE::TRI_MESH;
     vList.set ( _cpy.vList );
     nList.set ( _cpy.nList );
     uvList.set ( _cpy.uvList );
@@ -29,7 +28,7 @@ Mesh::~Mesh() {
     tIndex.clear();
 }
 
-btVector3 Mesh::sizeQuadratic ( void ) {
+btVector3 Mesh::getSizeBox () {
     btVector3 retorno ( 0.0f,0.0f,0.0f );
     btVector3 l_max ( 0.0f,0.0f,0.0f );
     btVector3 l_min ( 0.0f,0.0f,0.0f );
@@ -93,6 +92,17 @@ void Mesh::renderizar ( void ) {
         }
         glEnd();
     }
+}
+
+void Mesh::init() {
+//     if ( pMaterial )
+//         pMaterial->initTex();
+}
+
+void Mesh::update ( DataMsg *dataMsg ) {
+    
+    Draw::update(dataMsg);
+    
 }
 
 }

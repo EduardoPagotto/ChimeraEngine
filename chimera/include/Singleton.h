@@ -46,7 +46,7 @@ public:
         if (m_refCount == 0)
         {
             delete m_CurrentInstance;
-            m_CurrentInstance = NULL;
+            m_CurrentInstance = nullptr;
         }
         m_travaSingleton.unlock();
     }
@@ -65,7 +65,7 @@ public:
         m_travaSingleton.lock();
         m_refCount = 0;
         delete m_CurrentInstance;
-        m_CurrentInstance = NULL;
+        m_CurrentInstance = nullptr;
         m_travaSingleton.unlock();
     }
 
@@ -88,7 +88,7 @@ private:
 };
 
 template< class C >
-C* Singleton<C>::m_CurrentInstance = NULL;
+C* Singleton<C>::m_CurrentInstance = nullptr;
 
 template<class C>
 long Singleton<C>::m_refCount = 0;

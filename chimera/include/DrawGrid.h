@@ -9,7 +9,7 @@ class DrawGrid : public Draw {
 public:
     DrawGrid();
     DrawGrid ( const DrawGrid &_draw );
-    virtual ~Draw();
+    virtual ~DrawGrid();
 
     void setSizeBox ( btVector3 _sizeBox ) {
         sizeBox = _sizeBox;

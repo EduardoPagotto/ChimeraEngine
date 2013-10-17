@@ -73,7 +73,7 @@ void GameClient::gameLoop ( void ) {
                 pEngined3D->getVideo()->swapWindow();
 
             } else
-                SDL_WaitEvent ( NULL );
+                SDL_WaitEvent ( nullptr );
 
         } else {
 

@@ -12,7 +12,7 @@ Material::Material ( void ) : Node ( EntityKind::MATERIAL ) {
 Material::Material ( const Material &_cpy ) : Node(_cpy) {
 
     effect = _cpy.effect;
-    if ( _cpy.pTexture!=NULL ) {
+    if ( _cpy.pTexture!=nullptr ) {
 
         pTexture = _cpy.pTexture;
         idTex = _cpy.idTex;

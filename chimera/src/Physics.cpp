@@ -4,10 +4,10 @@ namespace Chimera {
 
 Physics::Physics()
 {
-	//m_pTrans = NULL;
-	m_pRigidBody = NULL;
-	m_pCollisionShape = NULL;
-	m_pPhysicMaterial = NULL;
+	//m_pTrans = nullptr;
+	m_pRigidBody = nullptr;
+	m_pCollisionShape = nullptr;
+	m_pPhysicMaterial = nullptr;
 	m_mass = 0.0f;
 	m_inercial.setZero();
 	m_estatica = true;

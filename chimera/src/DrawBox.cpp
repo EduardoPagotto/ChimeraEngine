@@ -2,13 +2,13 @@
 
 namespace Chimera {
 
-DrawBox::DrawBox() : Node(EntityKind::DRAW) , type(DrawType::BOX) {
+DrawBox::DrawBox() : Draw(DrawType::BOX) {
     
     pMaterial = nullptr;
     
 }
 
-DrawBox::DrawBox(const Draw &_draw) : Node (_draw) , type(DrawType::BOX) {
+DrawBox::DrawBox(const DrawBox &_draw) : Draw(DrawType::BOX) {
     
     pMaterial = _draw.pMaterial;
     

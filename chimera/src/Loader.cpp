@@ -12,16 +12,16 @@ Loader::Loader () {
 
 Loader::~Loader() {
     Singleton<PhysicWorld>::releaseRefSingleton();
-    
-    while (!listaNode.empty()) {
-     
+
+    while ( !listaNode.empty() ) {
+
         Node *pNode = listaNode.front();
         listaNode.pop();
         delete pNode;
         pNode = nullptr;
-        
+
     }
-    
+
 }
 
 bool Loader::exec ( const char *_file ) {
@@ -29,11 +29,11 @@ bool Loader::exec ( const char *_file ) {
     std::string l_nomeArquivo = m_modelDir + std::string ( _file );
 
     m_doc = xmlParseFile ( l_nomeArquivo.c_str() );
-    if ( m_doc == NULL )
+    if ( m_doc == nullptr )
         return false;
 
     m_root = xmlDocGetRootElement ( m_doc );
-    if ( m_root == NULL )
+    if ( m_root == nullptr )
         return false;
 
     if ( xmlStrcmp ( m_root->name, ( const xmlChar * ) "COLLADA" ) ) {
@@ -43,13 +43,27 @@ bool Loader::exec ( const char *_file ) {
 
     createScene();
 
-    printf ( "Cameras Registradas %d\n",libCam() );
-    printf ( "Luzes Registradas %d\n",libLight() );
-    printf ( "Effects Registrados %d\n",libEffect() );
-    printf ( "Images Registradas %d\n",libImage() );
-    printf ( "Material Registrados %d\n",libMaterial() );
-    printf ( "Geometrias Registradas %d\n",libGeometry() );
-    printf ( "Nodes Registrados %d\n",libScene() );
+    //Carrega Cameras
+    libCam();
+    
+    //Carrega Iluminacao
+    libLight();
+    
+    //Carrega Efeitos
+    libEffect();
+    
+    //Carrega Texturas
+    libImage();
+
+    //Carrega Material
+    libMaterial();
+    
+    //Carrega Mesh
+    libGeometry();
+
+    //Carrega componentes da cena
+    libScene();
+    
 //     printf ( "PhysicMaterial Registradas %d\n",libPhysicsMaterial() );
 //     printf ( "PhysicModels Registradors %d\n",libPhysicsModels() );
 //     printf ( "PhysicScenes Registradas %d\n",libPhysicsScenes() );
@@ -58,7 +72,7 @@ bool Loader::exec ( const char *_file ) {
 }
 
 
-std::string Loader::getValProp ( const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
+std::string Loader::getAtributoXML ( const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
 
     xmlChar *pStr = xmlGetProp ( _xmlNode, ( const xmlChar* ) chave.c_str() );
     if ( pStr != nullptr ) {
@@ -66,17 +80,18 @@ std::string Loader::getValProp ( const std::string &tipoNomeNode, const std::str
     } else {
 
         std::string l_erro = "Entidade '" + tipoNomeNode +"' com Propriedade '" + chave + "' nao localizado";
-        throw ExceptionChimera ( ExceptionCode::READ, l_erro ); 
+        throw ExceptionChimera ( ExceptionCode::READ, l_erro );
 
     }
 }
 
-std::string Loader::getAttribute ( const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
+std::string Loader::getValueFromProp ( const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
 
     std::string retorno;
 
     xmlNodePtr l_nElem = findNode ( chave.c_str(), _xmlNode );
-    if ( l_nElem!=NULL ) {
+    if ( l_nElem != nullptr ) {
+        
         xmlChar* l_pVal = xmlNodeListGetString ( m_doc, l_nElem->children, 1 );
 
         if ( l_pVal != nullptr ) {
@@ -85,7 +100,14 @@ std::string Loader::getAttribute ( const std::string &tipoNomeNode, const std::s
             xmlFree ( l_pVal );
 
             return retorno;
+            
+        } else {
+            
+            std::string l_erro = "Propriedade:" + tipoNomeNode + " Valor Procurado:" + chave +"nao encontrado";
+            LOG4CXX_WARN ( logger , l_erro);
+            
         }
+        
     }
 
     std::string l_erro = "Entidade '" + tipoNomeNode +"' com Atributo '" + chave + "' nao localizado";
@@ -102,7 +124,7 @@ void Loader::loadArrayI ( const char *_val, std::vector<int> &_arrayI ) {
     const char *deadEnd = _val + strlen ( _val );
     do {
         pchFim = strchr ( pchInit,' ' );
-        if ( pchFim==NULL )
+        if ( pchFim==nullptr )
             pchFim = deadEnd;
 
         int l_tam = pchFim - pchInit;
@@ -121,7 +143,7 @@ void Loader::loadArrayF ( const char *_val, std::vector<float> &_arrayF ) {
     const char *deadEnd = _val + strlen ( _val );
     do {
         pchFim = strchr ( pchInit,' ' );
-        if ( pchFim==NULL )
+        if ( pchFim==nullptr )
             pchFim = deadEnd;
 
         int l_tam = pchFim - pchInit;
@@ -134,17 +156,17 @@ void Loader::loadArrayF ( const char *_val, std::vector<float> &_arrayF ) {
 }
 
 xmlNodePtr Loader::findNode ( const char* _nomeNode, xmlNodePtr _nodePos ) {
-    xmlNodePtr retorno = NULL;
-    if ( _nodePos!=NULL ) {
+    xmlNodePtr retorno = nullptr;
+    if ( _nodePos != nullptr ) {
         if ( _nodePos->type == XML_ELEMENT_NODE ) {
             if ( strcmp ( ( const char* ) _nodePos->name,_nomeNode ) ==0 )
                 return _nodePos;
         }
 
-        if ( _nodePos->children != NULL )
+        if ( _nodePos->children != nullptr )
             retorno = findNode ( _nomeNode, _nodePos->children );
 
-        if ( ( retorno == NULL ) && ( _nodePos->next != NULL ) )
+        if ( ( retorno == nullptr ) && ( _nodePos->next != nullptr ) )
             retorno = findNode ( _nomeNode, _nodePos->next );
     }
 
@@ -154,7 +176,7 @@ xmlNodePtr Loader::findNode ( const char* _nomeNode, xmlNodePtr _nodePos ) {
 Color Loader::getPhong ( xmlNodePtr _nPos,const char* _name ) {
     Color retorno;
 
-    xmlChar *l_pVal = NULL;
+    xmlChar *l_pVal = nullptr;
     std::vector<float> l_arrayValores;
     xmlNodePtr l_nPos = _nPos;
 
@@ -201,7 +223,7 @@ int Loader::getSource ( xmlNodePtr _nSource, ListPtr<float> &_arrayValores ) {
     return l_numSource;
 }
 
-int Loader::libCam ( void ) {
+void Loader::libCam ( void ) {
     int l_count = 0;
 
     //Pega Raiz de Elemento conjunto Cameras
@@ -209,45 +231,48 @@ int Loader::libCam ( void ) {
 
     //Encontra o primeiro elemento
     l_nCam = findNode ( ( char* ) "camera", l_nCam->children );
-    while ( l_nCam != NULL ) {
+    while ( l_nCam != nullptr ) {
 
         try {
 
-            //Cria camera e carrega atributos
-            std::string l_id = getValProp ( "Camera","id",l_nCam );
-            std::string l_name = getValProp ( "Camera","name",l_nCam );
-            
             Camera *pCamera = new Camera();
-            pCamera->setId(l_id);
-            pCamera->setName(l_name);
-            pCamera->setType(CameraType::AIR_CAM);
-            
+            pCamera->setId ( getAtributoXML ( "Camera","id",l_nCam ) );
+            pCamera->setName ( getAtributoXML ( "Camera","name",l_nCam ) );
+            pCamera->setType ( CameraType::AIR_CAM );
+
             //Salva na lista de cameras
-            listaNode.push(pCamera);
-            
+            listaNode.push ( pCamera );
+
             //Verifica se exite Elemento Perspectiva
             xmlNodePtr l_nTech = findNode ( ( char* ) "perspective",l_nCam );
-            if ( l_nTech!=NULL ) {
-                //TODO implementar a prespectiva
-                //pCamera->m_perspective = true;
-                std::string val = getAttribute ( "Camera","xfov",l_nTech );
+            if ( l_nTech != nullptr ) {
+
+                pCamera->setPerspective(true);
+                
+                std::string val = getValueFromProp ( "Camera","xfov",l_nTech );
                 if ( val.size() >0 )
                     pCamera->setFov ( ( float ) atof ( val.c_str() ) );
 
-                val = getAttribute ( "Camera","znear",l_nTech );
+                val = getValueFromProp ( "Camera","znear",l_nTech );
                 if ( val.size() >0 )
                     pCamera->setNear ( ( float ) atof ( val.c_str() ) );
 
-                val = getAttribute ( "Camera","zfar",l_nTech );
+                val = getValueFromProp ( "Camera","zfar",l_nTech );
                 if ( val.size() >0 )
                     pCamera->setFar ( ( float ) atof ( val.c_str() ) );
 
-            }
+            } else {
 
-            l_nTech = findNode ( ( char* ) "orthogonal",l_nCam );
-            if ( l_nTech!=NULL ) {
-                //TODO: implementar camera ortogonal
-            }
+                l_nTech = findNode ( ( char* ) "orthogonal",l_nCam );
+                if ( l_nTech!=nullptr ) {
+                    //TODO: implementar camera ortogonal
+                    pCamera->setPerspective(false);
+                    throw ExceptionChimera ( ExceptionCode::READ, "Ortogonal nao implementada" );
+                } else {
+                    throw ExceptionChimera ( ExceptionCode::READ, "Nem Perspectiva ne Ortogonal encontrada" );
+                }
+
+            } 
 
         } catch ( const ExceptionChimera& ec ) {
             LOG4CXX_WARN ( logger , ec.getMessage() );
@@ -256,84 +281,90 @@ int Loader::libCam ( void ) {
         l_nCam = findNode ( ( char* ) "Camera", l_nCam->next );
         l_count++;
     }
-    return l_count;
+    
+    if (l_count == 0) {
+        LOG4CXX_WARN ( logger , "Nao ha Camera registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string(std::string("Cameras Registradas:") + std::to_string( l_count) ));
+    }
+           
 }
 
-int Loader::libLight ( void ) {
+void Loader::libLight () {
     int l_count = 0;
 
     //Pega Raiz de Elemento conjunto Luzes
     xmlNodePtr l_nLight = findNode ( ( char* ) "library_lights", m_root );
-    if ( l_nLight!=NULL ) {
-        xmlChar* l_pVal = NULL;
+    if ( l_nLight != nullptr ) {
+        xmlChar* l_pVal = nullptr;
         std::vector<float> l_arrayValores;
         l_nLight = findNode ( ( char* ) "light", l_nLight->children );
-        while ( l_nLight!=NULL ) {
+        while ( l_nLight!=nullptr ) {
             //Carrega atributos
 
             try {
 
-                std::string l_id = getValProp ( "Light","id",l_nLight );
-                std::string l_name = getValProp ( "Light","name",l_nLight );
                 Light *pLight = new Light ();
-                pLight->setType(LightType::POINT);
-                pLight->setName(l_name);
-                pLight->setId(l_id);
-                listaNode.push(pLight);
-                //TODO implementar depois tipos direcional e spot
-                xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children );
-                if ( l_nTipo != NULL ) {
-                    l_nTipo = findNode ( ( char* ) "color", l_nTipo->children );
-                    if ( l_nTipo!=NULL ) {
-                        l_pVal = xmlNodeListGetString ( m_doc, l_nTipo->children, 1 );
-
-                        loadArrayF ( ( char* ) l_pVal ,l_arrayValores );
+                pLight->setType ( LightType::POINT );
+                pLight->setName ( getAtributoXML ( "Light","name",l_nLight ) );
+                pLight->setId ( getAtributoXML ( "Light","id",l_nLight ) );
+                listaNode.push ( pLight );
+               
+                xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children ); //TODO implementar depois tipos direcional e spot
+                if ( l_nTipo != nullptr ) {
+                
+                    std::string cores = getValueFromProp("Light","color",l_nTipo->children);
+                    if (cores.size() >0) {
+                        
+                        loadArrayF ( cores.c_str() ,l_arrayValores );
                         pLight->setAmbient ( Color ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f ) );
-
-                        l_arrayValores.clear();
-
-                        xmlFree ( l_pVal );
+          
+                        l_arrayValores.clear();                    
                     }
+                    
+                } else {
+                    
+                    throw ExceptionChimera ( ExceptionCode::READ, "Luz tipo ponto nao encontrata" );
+                    
                 }
 
             } catch ( const ExceptionChimera& ec ) {
+                
                 LOG4CXX_WARN ( logger , ec.getMessage() );
+                
             }
 
             l_nLight = findNode ( ( char* ) "light", l_nLight->next );
             l_count++;
         }
     }
-    return l_count;
+    
+    if (l_count == 0) {
+        LOG4CXX_WARN ( logger , "Nao ha luzes registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string(std::string("Luzes Registradas:") + std::to_string( l_count) ));
+    }  
+    
 }
 
-int Loader::libEffect ( void ) {
+void Loader::libEffect ( void ) {
     int l_count = 0;
     xmlNodePtr l_nMat = findNode ( ( char* ) "library_effects", m_root );
     if ( l_nMat ) {
         l_nMat = findNode ( ( char* ) "effect",l_nMat->children );
-        while ( l_nMat != NULL ) {
+        while ( l_nMat != nullptr ) {
             l_count++;
-            
+
             try {
 
-                std::string l_nome = getValProp ( "Effects","name",l_nMat);
-                std::string l_id = getValProp ( "Effects","id",l_nMat);
                 Effect *pEffect = new Effect;
-                pEffect->setName(l_nome);
-                pEffect->setId(l_id);
-               
-                //m_pScene->m_mEffect[getValProp ( "Effects","id",l_nMat )] = pMat;
+                //pEffect->setName ( getAtributoXML ( "Effects","name",l_nMat ) );
+                pEffect->setId ( getAtributoXML ( "Effects","id",l_nMat ) );
 
                 //pega referencia textura
-                xmlNodePtr l_nTex = findNode ( ( char* ) "init_from",l_nMat->children );
-                if ( l_nTex ) {
-                    xmlChar *l_pVal = NULL;
-                    l_pVal = xmlNodeListGetString ( m_doc, l_nTex->children, 1 );
-                    if ( l_pVal ) {
-                        pEffect->setNameTextureId ( ( char* ) l_pVal );
-                        xmlFree ( l_pVal );
-                    }
+                std::string idTextura = getValueFromProp("Effects","init_from",l_nMat->children );
+                if (idTextura.size() >0) {
+                    pEffect->setNameTextureId ( idTextura );
                 }
 
                 //pega cores
@@ -347,14 +378,10 @@ int Loader::libEffect ( void ) {
 
                     l_nPos = findNode ( ( char* ) "shininess",l_nPos->children );
                     if ( l_nPos ) {
-                        l_nPos = findNode ( ( char* ) "float",l_nPos->children );
-                        if ( l_nPos ) {
-                            xmlChar *l_pVal = NULL;
-                            l_pVal = xmlNodeListGetString ( m_doc, l_nPos->children, 1 );
-                            if ( l_pVal ) {
-                                pEffect->setShininess ( ( float ) atof ( ( char* ) l_pVal ) );
-                                xmlFree ( l_pVal );
-                            }
+                        
+                        std::string l_shininess = getValueFromProp("Effect","float",l_nPos->children);
+                        if (l_shininess.size() >0) {
+                            pEffect->setShininess ( ( float ) atof ( ( char* ) l_shininess.c_str() ) );
                         }
                     }
                 }
@@ -368,55 +395,53 @@ int Loader::libEffect ( void ) {
             l_nMat = findNode ( ( char* ) "effect", l_nMat->next );
         }
     }
-    return l_count;
+    
+    if (l_count == 0) {
+        LOG4CXX_WARN ( logger , "Nao ha Efeitos registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string(std::string("Efeitos Registradas:") + std::to_string( l_count) ));
+    } 
 }
 
-int Loader::libImage ( void ) {
+void Loader::libImage ( void ) {
     int l_count = 0;
     xmlNodePtr l_nImage = findNode ( ( char* ) "library_images", m_root );
     if ( l_nImage ) {
         l_nImage = findNode ( ( char* ) "image", l_nImage->children );
         while ( l_nImage ) {
-           
+
             try {
-           
+
                 Image *pImage = new Image;
-                std::string l_nome = getValProp ( "Image","name",l_nImage);
-                std::string l_id = getValProp ( "Image","id",l_nImage);
-                pImage->setId(l_id);
-                pImage->setName(l_nome);
+                pImage->setId ( getAtributoXML ( "Image","id",l_nImage ) );
+                pImage->setName ( getAtributoXML ( "Image","name",l_nImage ) );
 
-                //m_pScene->m_mImage[ getValProp ( "Image","id",l_nImage )] = pImage;
-
-                xmlNodePtr l_nFile = findNode ( ( char* ) "init_from", l_nImage->children );
-                if ( l_nFile ) {
-                    xmlChar *l_pVal = xmlNodeListGetString ( m_doc, l_nFile->children, 1 );
-                    if ( l_pVal ) {
-
-                        std::string l_arquivo = m_imageDir + std::string ( ( char* ) l_pVal );
-
-                        pImage->setPathFile( l_arquivo.c_str() );
-                        l_count++;
-
-                        xmlFree ( l_pVal );
-                    }
+                std::string l_pathFile = getValueFromProp("Image","init_from",l_nImage->children);
+                if (l_pathFile.size() >0 ) {
+                    std::string l_arquivo = m_imageDir + l_pathFile;
+                    pImage->setPathFile ( l_arquivo.c_str() );
+                    l_count++;                   
                 }
-
+                
+            
             } catch ( const ExceptionChimera& ec ) {
 
                 LOG4CXX_WARN ( logger , ec.getMessage() );
 
             }
 
-
-
             l_nImage = findNode ( ( char* ) "image", l_nImage->next );
         }
     }
-    return l_count;
+    
+    if (l_count == 0) {
+        LOG4CXX_WARN ( logger , "Nao ha Imagens registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string(std::string("Imagens Registradas:") + std::to_string( l_count) ));
+    } 
 }
 
-int Loader::libMaterial ( void ) {
+void Loader::libMaterial ( void ) {
     int l_count = 0;
     xmlNodePtr l_nMat = findNode ( ( char* ) "library_materials", m_root );
     if ( l_nMat ) {
@@ -425,35 +450,31 @@ int Loader::libMaterial ( void ) {
             l_count++;
 
             try {
-                
-                Material *pMat = new Material;
-                std::string l_nome = getValProp ( "Material","name",l_nMat);
-                std::string l_id = getValProp ( "Material","id",l_nMat);               
-                
-                //m_pScene->m_mMaterial[ getValProp ( "Material","id",l_nMat )] = pMat;
 
+                Material *pMat = new Material;
+                pMat->setName(getAtributoXML ( "Material","name",l_nMat ));
+                pMat->setId(getAtributoXML ( "Material","id",l_nMat ));
+                
                 xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
                 if ( l_nEffect ) {
                     xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
                     if ( l_val ) {
-                        std::string l_nomeEffect = (char*)l_val;
-                        Effect *pEffe = (Effect*)Node::findObjById(EntityKind::EFFECT,l_nomeEffect);//m_pScene->m_mEffect[ ( char* ) &l_val[1]];
-          
+                        std::string l_nomeEffect = ( char* ) &l_val[1];
+                        Effect *pEffe = ( Effect* ) Node::findObjById ( EntityKind::EFFECT,l_nomeEffect ); //m_pScene->m_mEffect[ ( char* ) &l_val[1]];
+
                         if ( pEffe ) {
-                            
-                            pMat->addChild(pEffe);
-                            
-                            Image *pImage = (Image*)Node::findObjById(EntityKind::IMAGE, pEffe->getNameTextureId());
-                            if (pImage!=nullptr) {
-                             
-                                pMat->addChild(pImage);
-                                
+
+                            pMat->addChild ( pEffe );
+
+                            Image *pImage = ( Image* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+                            if ( pImage!=nullptr ) {
+
+                                pMat->addChild ( pImage );
+
                             }
-//                             pMat->effect = ( *pEffe );
-//                             if ( pEffe->getNameTextureId().size() > 0 )
-//                                 pMat->pTexture = m_pScene->m_mImage[pEffe->getNameTextureId()];
+
                         }
-                        
+
                     }
                 }
 
@@ -467,24 +488,27 @@ int Loader::libMaterial ( void ) {
             l_nMat = findNode ( ( char* ) "material", l_nMat->next );
         }
     }
-    return l_count;
+    
+    if (l_count == 0) {
+        LOG4CXX_WARN ( logger , "Nao ha Material registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string(std::string("Material Registradas:") + std::to_string( l_count) ));
+    }  
 }
 
-int Loader::libGeometry ( void ) {
+void Loader::libGeometry ( void ) {
     int l_count = 0;
 
     xmlNodePtr l_nGeom = findNode ( ( char* ) "library_geometries", m_root );
-    if ( l_nGeom!=NULL ) {
+    if ( l_nGeom!=nullptr ) {
 
-        char *l_pVal = NULL;
+        char *l_pVal = nullptr;
         l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->children );
-        while ( l_nGeom!=NULL ) {
+        while ( l_nGeom!=nullptr ) {
 
             Mesh *pMesh = new Mesh;
-
-            std::string nomeMesh =  getValProp ( "Mesh","id",l_nGeom );
-
-            m_pScene->m_mDraw[ nomeMesh ] = pMesh;
+            pMesh->setName ( getAtributoXML ( "Mesh","name",l_nGeom )); 
+            pMesh->setId ( getAtributoXML ( "Mesh","id",l_nGeom ) );
 
             xmlNodePtr l_nMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
             if ( l_nMesh ) {
@@ -556,19 +580,19 @@ int Loader::libGeometry ( void ) {
                                     char *l_offSet = l_vOffset[index];
                                     char *l_semantic = l_vSemantic[index];
                                     char *l_source = l_vSource[index];
-                                    if ( strstr ( l_source, ( char* ) "-vertices" ) != NULL ) {
+                                    if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) {
                                         if ( pMesh->vIndex.getSize() == 0 )
                                             pMesh->vIndex.create ( l_numTriangles * 3 );
 
                                         pMesh->vIndex[l_veCount] = l_arrayIndex[l_contador];
                                         l_veCount++;
-                                    } else if ( strstr ( l_source, ( char* ) "-normals" ) != NULL ) {
+                                    } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) {
                                         if ( pMesh->nIndex.getSize() ==0 )
                                             pMesh->nIndex.create ( l_numTriangles * 3 );
 
                                         pMesh->nIndex[l_noCount] = l_arrayIndex[l_contador];
                                         l_noCount++;
-                                    } else if ( strstr ( l_source, ( char* ) "-map-0" ) != NULL ) {
+                                    } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) {
                                         if ( pMesh->tIndex.getSize() ==0 )
                                             pMesh->tIndex.create ( l_numTriangles* 3 );
 
@@ -591,40 +615,45 @@ int Loader::libGeometry ( void ) {
             l_count++;
         }
     }
-    return l_count;
+    if (l_count == 0) {
+        LOG4CXX_WARN ( logger , "Nao ha Geometria registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string(std::string("Geometria Registradas:") + std::to_string( l_count) ));
+    } 
 }
 
 void Loader::createScene() {
 
     xmlNodePtr l_nScene = findNode ( ( char* ) "library_visual_scenes", m_root );
-    if ( l_nScene!=NULL ) {
+    if ( l_nScene!=nullptr ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
-        if ( l_nScene!=NULL ) {
-
-            std::string l_id = getValProp ( "SceneMng","id",l_nScene );
-            std::string l_name = getValProp ( "SceneMng","name",l_nScene );
+        if ( l_nScene!=nullptr ) {
             
             m_pScene = new SceneMng ();
-            m_pScene->setName(l_name);
-            m_pScene->setId(l_id);
+            m_pScene->setName ( getAtributoXML ( "SceneMng","name",l_nScene ) );
+            m_pScene->setId ( getAtributoXML ( "SceneMng","id",l_nScene ) );
 
         }
     }
 
 }
 
-int Loader::libScene ( void ) {
+void Loader::libScene ( void ) {
     xmlNodePtr l_nScene = findNode ( ( char* ) "library_visual_scenes", m_root );
-    if ( l_nScene!=NULL ) {
+    if ( l_nScene!=nullptr ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
-        if ( l_nScene!=NULL ) {
+        if ( l_nScene!=nullptr ) {
 
-            xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );//Transform *pTrans = new Transform ( getValProp ( "Node","id",l_nNode ), getValProp ( "Node","name",l_nNode ) );
+            xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );//Transform *pTrans = new Transform ( getAtributoXML ( "Node","id",l_nNode ), getAtributoXML ( "Node","name",l_nNode ) );
             createNode ( l_nNode, m_pScene );
         }
     }
-
-    return m_numNodes;
+    
+    if (m_numNodes == 0) {
+        LOG4CXX_WARN ( logger , "Nao ha Nodes de cena registrados!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string(std::string("Nodes de cena Registrados:") + std::to_string( m_numNodes) ));
+    } 
 }
 
 void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix ) {
@@ -634,7 +663,7 @@ void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &lis
         ponteiroFloat[indice] = listaMatrix[indice];
     }
 
-    _pTrans->setFromOpenGLMatrix( ponteiroFloat );
+    _pTrans->setFromOpenGLMatrix ( ponteiroFloat );
     delete ponteiroFloat;
     ponteiroFloat = nullptr;
 }
@@ -648,14 +677,16 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
             xmlChar *pSID = nullptr;
             Node *pFilho = nullptr;
 
-            std::vector<float> l_arrayValores;
+            m_numNodes++;
             
+            std::vector<float> l_arrayValores;
+
             const xmlChar *l_pNomeNode = l_nNode->name;
             //xmlChar *l_pName = xmlGetProp ( l_nNode, ( const xmlChar* ) "name" );
-            std::string l_name =  getValProp ( "Node","name",l_nNode );
-            std::string l_id = getValProp ( "Node","id",l_nNode );
+            std::string l_name =  getAtributoXML ( "Node","name",l_nNode );
+            std::string l_id = getAtributoXML ( "Node","id",l_nNode );
             btTransform l_transform;
-            
+
             xmlNodePtr l_nTransforma = findNode ( ( char* ) "matrix", l_nNode->children );
 
             if ( l_nTransforma ) {
@@ -671,25 +702,29 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
             xmlNodePtr l_nInstance;;
             if ( l_nInstance = findNode ( ( char* ) "instance_geometry", l_nNode->children ) ) {
-                 Object *pObj = new Object;
-                 pObj->setName(l_name);
-                 pObj->setId(l_id);
-                 pObj->transform = l_transform;
-                 _pNode->addChild(pObj);
-                 
-                 pFilho = pObj;
-                 m_numNodes++;
-                 
-                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
-                 if ( pURL != NULL ) {
-                     Mesh *pMesh = ( Mesh* ) m_pScene->m_mDraw[ ( ( char* ) &pURL[1] )];
-                     if ( pMesh ) {
-                         
-                         pObj->pDraw = pMesh;
- 
-                         //Carrega Material se existir
-                         if ( l_nInstance->children ) {
-                             xmlNodePtr l_nBindMat = findNode ( ( char* ) "bind_material", l_nInstance->children );
+                Object *pObj = new Object;
+                pObj->setName ( l_name );
+                pObj->setId ( l_id );
+                pObj->transform = l_transform;
+                _pNode->addChild ( pObj );
+
+                pFilho = pObj;
+                
+
+                xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
+                if ( pURL != nullptr ) {
+
+                    //Mesh *pMesh = ( Mesh* ) m_pScene->m_mDraw[ ( ( char* ) &pURL[1] )];
+                    std::string l_nomeMesh = ( char* ) &pURL[1];
+                    Mesh *pMesh = ( Mesh* ) Node::findObjById ( EntityKind::DRAW, l_nomeMesh ); //m_pScene->m_mDraw[ ( ( char* ) &pURL[1] )];
+
+                    if ( pMesh ) {
+
+                        pObj->addChild ( pMesh );
+
+                        //Carrega Material se existir
+                        if ( l_nInstance->children ) {
+                            xmlNodePtr l_nBindMat = findNode ( ( char* ) "bind_material", l_nInstance->children );
                             if ( l_nBindMat ) {
                                 l_nBindMat = findNode ( ( char* ) "technique_common", l_nBindMat->children );
                                 if ( l_nBindMat ) {
@@ -697,56 +732,58 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                                     if ( l_nBindMat ) {
                                         pURL = xmlGetProp ( l_nBindMat, ( const xmlChar* ) "target" );
                                         if ( pURL ) {
-                                            Material *pMat = m_pScene->m_mMaterial[ ( char* ) &pURL[1]];
+
+                                            std::string l_nomeMaterial = ( char* ) &pURL[1];
+
+                                            Material *pMat = ( Material* ) Node::findObjById ( EntityKind::MATERIAL,l_nomeMaterial ); //m_pScene->m_mMaterial[ ( char* ) &pURL[1]];
                                             if ( pMat ) {
-                                                pMesh->pMaterial = pMat;
+
+                                                pMesh->addChild ( pMat );
+
                                             }
                                         }
                                     }
                                 }
-                             }
-                         }
-                     }
-                 }
+                            }
+                        }
+                    }
+                }
             } else if ( l_nInstance = findNode ( ( char* ) "instance_light", l_nNode->children ) ) {
                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
-                if ( pURL != NULL ) {
-                    
+                if ( pURL != nullptr ) {
+
                     Light *pLight = ( Light* ) Node::findObjById ( EntityKind::LIGHT, ( char* ) &pURL[1] );
-                    if ( pLight!=NULL ) {
-                        
-                        Light *pLightScene = new Light(*pLight);
-                        pLightScene->setName(l_name);
-                        pLightScene->setId(l_id);
+                    if ( pLight!=nullptr ) {
+
+                        Light *pLightScene = new Light ( *pLight );
+                        pLightScene->setName ( l_name );
+                        pLightScene->setId ( l_id );
                         pLightScene->transform = l_transform;
-                        
-                        
+
                         _pNode->addChild ( pLightScene );
                         pFilho = pLightScene;
-                        
+
                     }
                 }
             } else if ( l_nInstance = findNode ( ( char* ) "instance_camera", l_nNode->children ) ) {
-                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
-                 if ( pURL != NULL ) {
-                     
-                     //Camera *pCam = ( Camera* ) m_pScene->findObjById ( EntityKind::CAMERA,( char* ) &pURL[1] );
-                     
-                     Camera *pCam = ( Camera* )Node::findObjById(EntityKind::CAMERA,( char* ) &pURL[1] );
-                 
-                     if ( pCam!=NULL ) {
-                         
-                         Camera *pCamScena = new Camera(*pCam);
-                         pCamScena->setName(l_name);
-                         pCamScena->setId(l_id);
-                         pCamScena->transform = l_transform;
-                         
-                         _pNode->addChild(pCamScena);
-                         pFilho = pCamScena;
+                xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
+                if ( pURL != nullptr ) {
 
-                     }
-                 }
-             }
+                    Camera *pCam = ( Camera* ) Node::findObjById ( EntityKind::CAMERA, ( char* ) &pURL[1] );
+
+                    if ( pCam!=nullptr ) {
+
+                        Camera *pCamScena = new Camera ( *pCam );
+                        pCamScena->setName ( l_name );
+                        pCamScena->setId ( l_id );
+                        pCamScena->transform = l_transform;
+
+                        _pNode->addChild ( pCamScena );
+                        pFilho = pCamScena;
+
+                    }
+                }
+            }
 
             Node* l_buffer = _pNode;
             createNode ( l_nInstance->next, pFilho );
@@ -853,7 +890,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 // int Loader::libPhysicsScenes ( void ) {
 //     unsigned l_num=0;
 //     xmlNodePtr l_nPhyScene = findNode ( ( char* ) "library_physics_scenes", m_root );
-//     if ( l_nPhyScene!=NULL ) {
+//     if ( l_nPhyScene!=nullptr ) {
 //         l_nPhyScene = findNode ( ( char* ) "instance_physics_model", l_nPhyScene->children );
 //         if ( l_nPhyScene ) {
 //             xmlNodePtr l_nRigid = findNode ( ( char* ) "instance_rigid_body", l_nPhyScene->children );
@@ -887,9 +924,9 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 // // // //	{
 // // // //		if (_nodeXML->type==XML_ELEMENT_NODE)
 // // // //		{
-// // // //			xmlChar *pSID = NULL;
-// // // //			xmlChar* l_pVal = NULL;
-// // // //			Transform *pTempNode = NULL;
+// // // //			xmlChar *pSID = nullptr;
+// // // //			xmlChar* l_pVal = nullptr;
+// // // //			Transform *pTempNode = nullptr;
 // // // //			std::vector<float> l_arrayValores;
 // // // //
 // // // //			if (xmlStrcmp(_nodeXML->name,(xmlChar*)"translate")==0)
@@ -949,7 +986,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 // // // //				m_pScene->m_vObject.push_back(pObj);
 // // // //
 // // // //				xmlChar *pURL = xmlGetProp(_nodeXML,(const xmlChar*)"url");
-// // // //				if (pURL != NULL)
+// // // //				if (pURL != nullptr)
 // // // //				{
 // // // //					std::string l_url = (char*)&pURL[1];
 // // // //					pObj->setName(l_url + std::string("-OBJ"));
@@ -991,22 +1028,22 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 // // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"instance_light")==0)
 // // // //			{
 // // // //				xmlChar *pURL = xmlGetProp(_nodeXML,(const xmlChar*)"url");
-// // // //				if (pURL != NULL)
+// // // //				if (pURL != nullptr)
 // // // //				{
 // // // //					std::string l_url = (char*)&pURL[1];
 // // // //					Light *pLight = (Light*)m_pScene->findInList(l_url,LIGHT);
-// // // //					if (pLight!=NULL)
+// // // //					if (pLight!=nullptr)
 // // // //						_pNode->add(pLight);
 // // // //				}
 // // // //			}
 // // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"instance_camera")==0)
 // // // //			{
 // // // //				xmlChar *pURL = xmlGetProp(_nodeXML,(const xmlChar*)"url");
-// // // //				if (pURL != NULL)
+// // // //				if (pURL != nullptr)
 // // // //				{
 // // // //					std::string l_url = (char*)&pURL[1];
 // // // //					Camera *pCam = (Camera*)m_pScene->findInList(l_url,CAMERA);
-// // // //					if (pCam!=NULL)
+// // // //					if (pCam!=nullptr)
 // // // //						_pNode->add(pCam);
 // // // //				}
 // // // //			}

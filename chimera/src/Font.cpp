@@ -3,11 +3,11 @@
 namespace Chimera {
 
 Font::Font ( const char* _fontFile, int _size ) {
-    if ( _fontFile == NULL )
+    if ( _fontFile == nullptr )
         CHIMERA_THROW ( 99,"Arquivo de Fonte Nulo" );
 
     m_pFont = new FTGLPixmapFont ( _fontFile );
-    if ( m_pFont==NULL )
+    if ( m_pFont==nullptr )
         CHIMERA_THROW ( 99,"Carga de arquivo invalida" );
 
     if ( m_pFont->Error() )
@@ -16,7 +16,7 @@ Font::Font ( const char* _fontFile, int _size ) {
     if ( m_pFont->FaceSize ( _size ) ==false ) {
         if ( m_pFont ) {
             delete m_pFont;
-            m_pFont = NULL;
+            m_pFont = nullptr;
         }
         CHIMERA_THROW ( 99,"Tamanho Fonte invalida" );
     }
@@ -28,7 +28,7 @@ Font::Font ( const char* _fontFile, int _size ) {
 Font::~Font ( void ) {
     if ( pFont ) {
         delete pFont;
-        pFont = NULL;
+        pFont = nullptr;
     }
 }
 

@@ -60,6 +60,14 @@ public:
         return fov;
     }
 
+    bool isPerspective() {
+        return perspective;
+    }
+    
+    void setPerspective(bool _perspective) {
+        perspective = _perspective; //TODO implementar isto para ortogonal (false);
+    }
+    
 protected:     
     CameraType type;
     
@@ -74,6 +82,7 @@ private:
     float far;
     float fov;
  
+    bool perspective;
 };
 
 }

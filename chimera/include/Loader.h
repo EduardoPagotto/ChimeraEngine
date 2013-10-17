@@ -45,8 +45,8 @@ private:
     void createScene();
     void carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix);
     
-    std::string getValProp (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
-    std::string getAttribute(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
+    std::string getAtributoXML (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
+    std::string getValueFromProp(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
     
     xmlNodePtr findNode ( const char* _nomeNode, xmlNodePtr _nodePos );
     
@@ -59,15 +59,13 @@ private:
 
     void createNode ( xmlNodePtr _nodeXML, Node *_pNode );
 
-    int libCam ( void );
-    int libLight ( void );
-    int libEffect ( void );
-    int libMaterial ( void );
-
-    int libGeometry ( void );
-    int libImage ( void );
-
-    int libScene ( void );
+    void libCam ();
+    void libLight ();
+    void libEffect ();
+    void libImage ();
+    void libMaterial ();
+    void libGeometry ();
+    void libScene ();
 
     int libPhysicsModels ( void );
     int libPhysicsScenes ( void );

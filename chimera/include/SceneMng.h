@@ -38,7 +38,7 @@ private:
     std::vector<Object*> m_vObject;
 
 //     std::list<Physics*> m_mPhysics;
-     std::map<std::string, Draw*> m_mDraw;
+//     std::map<std::string, Draw*> m_mDraw;
 //     std::map<std::string, Image*> m_mImage;
 //     std::map<std::string, Effect*> m_mEffect;
 //     std::map<std::string, Material*> m_mMaterial;

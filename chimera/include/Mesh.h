@@ -17,7 +17,7 @@ template <class T>
 class ListPtr {
 public:
     ListPtr() {
-        ptr = NULL;
+        ptr = nullptr;
         size = 0;
     }
 
@@ -26,11 +26,11 @@ public:
     }
 
     ListPtr ( const ListPtr &_cpy ) {
-        if ( _cpy.ptr != NULL ) {
+        if ( _cpy.ptr != nullptr ) {
             create ( _cpy.size );
             memcpy ( ptr, _cpy.ptr, sizeof ( T ) * size );
         } else {
-            ptr = NULL;
+            ptr = nullptr;
             size = 0;
         }
     }
@@ -40,7 +40,7 @@ public:
             create ( _cpy.size );
             memcpy ( ptr, _cpy.ptr, sizeof ( T ) * size );
         } else {
-            ptr = NULL;
+            ptr = nullptr;
             size = 0;
         }
     }
@@ -51,9 +51,9 @@ public:
     }
 
     void clear ( void ) {
-        if ( ptr != NULL ) {
+        if ( ptr != nullptr ) {
             delete [] ptr;
-            ptr = NULL;
+            ptr = nullptr;
             size = 0;
         }
     }
@@ -83,10 +83,14 @@ private:
 class Mesh : public Draw {
 public:
     friend class Loader;
+    
     Mesh();
     Mesh ( const Mesh &_cpy );
     virtual ~Mesh();
-    virtual btVector3 sizeQuadratic ( void );
+    
+    virtual void init();
+    virtual void update ( DataMsg *dataMsg );
+    virtual btVector3 getSizeBox();
 
 protected:
     virtual void renderizar();

@@ -30,13 +30,13 @@ Light::~Light() {
 
 //void Light::setTransform(const btVector3 &_pos, const btVector3 &_dir)
 //{
-//	if (m_pPosition==NULL)
+//	if (m_pPosition==nullptr)
 //	{
 //		m_loader = false;
 //		m_pPosition = new btVector3(_pos);
 //	}
 //
-//	if (m_pDirection==NULL)
+//	if (m_pDirection==nullptr)
 //		m_pDirection = new btVector3(_dir);
 //}
 

@@ -1,4 +1,6 @@
 #include "Loader.h"
+#include <DrawBox.h>
+#include <DrawGrid.h>
 
 namespace Chimera {
 
@@ -45,30 +47,98 @@ bool Loader::exec ( const char *_file ) {
 
     //Carrega Cameras
     libCam();
-    
+
     //Carrega Iluminacao
     libLight();
-    
+
     //Carrega Efeitos
     libEffect();
-    
+
     //Carrega Texturas
     libImage();
 
     //Carrega Material
     libMaterial();
-    
+
     //Carrega Mesh
     libGeometry();
 
     //Carrega componentes da cena
     libScene();
-    
+
 //     printf ( "PhysicMaterial Registradas %d\n",libPhysicsMaterial() );
 //     printf ( "PhysicModels Registradors %d\n",libPhysicsModels() );
 //     printf ( "PhysicScenes Registradas %d\n",libPhysicsScenes() );
 
     return true;
+}
+
+Node *Loader::cloneDraw(Draw *_srcDraw) {
+    
+    Node *novo = nullptr;
+    
+    switch(_srcDraw->getType()) {
+     
+        case DrawType::MESH:
+            novo = new Mesh(*((Mesh*)_srcDraw));
+            break;
+        case DrawType::BOX:
+            novo = new DrawBox(*((DrawBox*)_srcDraw));
+            break;
+        case DrawType::BOXGRID2:
+            //novo = new DrawGrid(*((DrawGrid*)_srcDraw));
+            break;
+        case DrawType::GRID:
+            novo = new DrawGrid(*((DrawGrid*)_srcDraw));
+            break;
+        case DrawType::SPHERE:
+            //novo = new DrawBox(*((DrawBox*)_srcDraw));
+            break;
+        
+    }
+    
+    return novo;
+}
+
+Node *Loader::clone ( Node *_src ) {
+
+    Node *novo = nullptr;
+
+    int aa = 0;
+    
+    switch(_src->getKind()) {
+        
+        case EntityKind::CAMERA:
+            novo = new Camera (*((Camera*)_src));
+            break;
+        case EntityKind::LIGHT:
+            novo = new Light (*((Light*)_src));
+            break;
+        case EntityKind::OBJECT:
+            novo = new Object (*((Object*)_src));
+            break;
+        case EntityKind::MATERIAL:
+             novo = new Material (*((Material*)_src));
+             break;
+        case EntityKind::EFFECT:
+             novo = new Effect( *((Effect*)_src ));
+             break;
+        case EntityKind::IMAGE:
+            novo = new Image( *((Image*)_src));
+           break;
+       case EntityKind::DRAW:
+           novo = cloneDraw((Draw*)_src);
+           break;
+       default:
+           throw ExceptionChimera ( ExceptionCode::READ, "Tipo de clonagem nao implementada para:" + _src->getId() );
+           break;
+     }
+  
+    for ( Node *pNode : _src->listChild ) {
+        novo->addChild ( clone ( pNode ) );
+    }
+
+    return novo;
 }
 
 
@@ -91,7 +161,7 @@ std::string Loader::getValueFromProp ( const std::string &tipoNomeNode, const st
 
     xmlNodePtr l_nElem = findNode ( chave.c_str(), _xmlNode );
     if ( l_nElem != nullptr ) {
-        
+
         xmlChar* l_pVal = xmlNodeListGetString ( m_doc, l_nElem->children, 1 );
 
         if ( l_pVal != nullptr ) {
@@ -100,14 +170,14 @@ std::string Loader::getValueFromProp ( const std::string &tipoNomeNode, const st
             xmlFree ( l_pVal );
 
             return retorno;
-            
+
         } else {
-            
+
             std::string l_erro = "Propriedade:" + tipoNomeNode + " Valor Procurado:" + chave +"nao encontrado";
-            LOG4CXX_WARN ( logger , l_erro);
-            
+            LOG4CXX_WARN ( logger , l_erro );
+
         }
-        
+
     }
 
     std::string l_erro = "Entidade '" + tipoNomeNode +"' com Atributo '" + chave + "' nao localizado";
@@ -247,8 +317,8 @@ void Loader::libCam ( void ) {
             xmlNodePtr l_nTech = findNode ( ( char* ) "perspective",l_nCam );
             if ( l_nTech != nullptr ) {
 
-                pCamera->setPerspective(true);
-                
+                pCamera->setPerspective ( true );
+
                 std::string val = getValueFromProp ( "Camera","xfov",l_nTech );
                 if ( val.size() >0 )
                     pCamera->setFov ( ( float ) atof ( val.c_str() ) );
@@ -266,13 +336,13 @@ void Loader::libCam ( void ) {
                 l_nTech = findNode ( ( char* ) "orthogonal",l_nCam );
                 if ( l_nTech!=nullptr ) {
                     //TODO: implementar camera ortogonal
-                    pCamera->setPerspective(false);
+                    pCamera->setPerspective ( false );
                     throw ExceptionChimera ( ExceptionCode::READ, "Ortogonal nao implementada" );
                 } else {
                     throw ExceptionChimera ( ExceptionCode::READ, "Nem Perspectiva ne Ortogonal encontrada" );
                 }
 
-            } 
+            }
 
         } catch ( const ExceptionChimera& ec ) {
             LOG4CXX_WARN ( logger , ec.getMessage() );
@@ -281,13 +351,13 @@ void Loader::libCam ( void ) {
         l_nCam = findNode ( ( char* ) "Camera", l_nCam->next );
         l_count++;
     }
-    
-    if (l_count == 0) {
+
+    if ( l_count == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha Camera registrada!!!" );
     } else {
-        LOG4CXX_INFO ( logger , std::string(std::string("Cameras Registradas:") + std::to_string( l_count) ));
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Cameras Registradas:" ) + std::to_string ( l_count ) ) );
     }
-           
+
 }
 
 void Loader::libLight () {
@@ -309,42 +379,42 @@ void Loader::libLight () {
                 pLight->setName ( getAtributoXML ( "Light","name",l_nLight ) );
                 pLight->setId ( getAtributoXML ( "Light","id",l_nLight ) );
                 listaNode.push ( pLight );
-               
+
                 xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children ); //TODO implementar depois tipos direcional e spot
                 if ( l_nTipo != nullptr ) {
-                
-                    std::string cores = getValueFromProp("Light","color",l_nTipo->children);
-                    if (cores.size() >0) {
-                        
+
+                    std::string cores = getValueFromProp ( "Light","color",l_nTipo->children );
+                    if ( cores.size() >0 ) {
+
                         loadArrayF ( cores.c_str() ,l_arrayValores );
                         pLight->setAmbient ( Color ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f ) );
-          
-                        l_arrayValores.clear();                    
+
+                        l_arrayValores.clear();
                     }
-                    
+
                 } else {
-                    
+
                     throw ExceptionChimera ( ExceptionCode::READ, "Luz tipo ponto nao encontrata" );
-                    
+
                 }
 
             } catch ( const ExceptionChimera& ec ) {
-                
+
                 LOG4CXX_WARN ( logger , ec.getMessage() );
-                
+
             }
 
             l_nLight = findNode ( ( char* ) "light", l_nLight->next );
             l_count++;
         }
     }
-    
-    if (l_count == 0) {
+
+    if ( l_count == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha luzes registrada!!!" );
     } else {
-        LOG4CXX_INFO ( logger , std::string(std::string("Luzes Registradas:") + std::to_string( l_count) ));
-    }  
-    
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Luzes Registradas:" ) + std::to_string ( l_count ) ) );
+    }
+
 }
 
 void Loader::libEffect ( void ) {
@@ -362,8 +432,8 @@ void Loader::libEffect ( void ) {
                 pEffect->setId ( getAtributoXML ( "Effects","id",l_nMat ) );
 
                 //pega referencia textura
-                std::string idTextura = getValueFromProp("Effects","init_from",l_nMat->children );
-                if (idTextura.size() >0) {
+                std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
+                if ( idTextura.size() >0 ) {
                     pEffect->setNameTextureId ( idTextura );
                 }
 
@@ -378,9 +448,9 @@ void Loader::libEffect ( void ) {
 
                     l_nPos = findNode ( ( char* ) "shininess",l_nPos->children );
                     if ( l_nPos ) {
-                        
-                        std::string l_shininess = getValueFromProp("Effect","float",l_nPos->children);
-                        if (l_shininess.size() >0) {
+
+                        std::string l_shininess = getValueFromProp ( "Effect","float",l_nPos->children );
+                        if ( l_shininess.size() >0 ) {
                             pEffect->setShininess ( ( float ) atof ( ( char* ) l_shininess.c_str() ) );
                         }
                     }
@@ -395,12 +465,12 @@ void Loader::libEffect ( void ) {
             l_nMat = findNode ( ( char* ) "effect", l_nMat->next );
         }
     }
-    
-    if (l_count == 0) {
+
+    if ( l_count == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha Efeitos registrada!!!" );
     } else {
-        LOG4CXX_INFO ( logger , std::string(std::string("Efeitos Registradas:") + std::to_string( l_count) ));
-    } 
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Efeitos Registradas:" ) + std::to_string ( l_count ) ) );
+    }
 }
 
 void Loader::libImage ( void ) {
@@ -416,14 +486,15 @@ void Loader::libImage ( void ) {
                 pImage->setId ( getAtributoXML ( "Image","id",l_nImage ) );
                 pImage->setName ( getAtributoXML ( "Image","name",l_nImage ) );
 
-                std::string l_pathFile = getValueFromProp("Image","init_from",l_nImage->children);
-                if (l_pathFile.size() >0 ) {
+                std::string l_pathFile = getValueFromProp ( "Image","init_from",l_nImage->children );
+                if ( l_pathFile.size() >0 ) {
                     std::string l_arquivo = m_imageDir + l_pathFile;
                     pImage->setPathFile ( l_arquivo.c_str() );
-                    l_count++;                   
+                    pImage->loadImage();
+                    l_count++;
                 }
-                
-            
+
+
             } catch ( const ExceptionChimera& ec ) {
 
                 LOG4CXX_WARN ( logger , ec.getMessage() );
@@ -433,12 +504,12 @@ void Loader::libImage ( void ) {
             l_nImage = findNode ( ( char* ) "image", l_nImage->next );
         }
     }
-    
-    if (l_count == 0) {
+
+    if ( l_count == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha Imagens registrada!!!" );
     } else {
-        LOG4CXX_INFO ( logger , std::string(std::string("Imagens Registradas:") + std::to_string( l_count) ));
-    } 
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Imagens Registradas:" ) + std::to_string ( l_count ) ) );
+    }
 }
 
 void Loader::libMaterial ( void ) {
@@ -452,9 +523,9 @@ void Loader::libMaterial ( void ) {
             try {
 
                 Material *pMat = new Material;
-                pMat->setName(getAtributoXML ( "Material","name",l_nMat ));
-                pMat->setId(getAtributoXML ( "Material","id",l_nMat ));
-                
+                pMat->setName ( getAtributoXML ( "Material","name",l_nMat ) );
+                pMat->setId ( getAtributoXML ( "Material","id",l_nMat ) );
+
                 xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
                 if ( l_nEffect ) {
                     xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
@@ -463,13 +534,13 @@ void Loader::libMaterial ( void ) {
                         Effect *pEffe = ( Effect* ) Node::findObjById ( EntityKind::EFFECT,l_nomeEffect ); //m_pScene->m_mEffect[ ( char* ) &l_val[1]];
 
                         if ( pEffe ) {
-
-                            pMat->addChild ( pEffe );
+ 
+                            pMat->addChild ( clone(pEffe) );
 
                             Image *pImage = ( Image* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
                             if ( pImage!=nullptr ) {
-
-                                pMat->addChild ( pImage );
+ 
+                                pMat->addChild (clone(pImage));
 
                             }
 
@@ -488,12 +559,12 @@ void Loader::libMaterial ( void ) {
             l_nMat = findNode ( ( char* ) "material", l_nMat->next );
         }
     }
-    
-    if (l_count == 0) {
+
+    if ( l_count == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha Material registrada!!!" );
     } else {
-        LOG4CXX_INFO ( logger , std::string(std::string("Material Registradas:") + std::to_string( l_count) ));
-    }  
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Material Registradas:" ) + std::to_string ( l_count ) ) );
+    }
 }
 
 void Loader::libGeometry ( void ) {
@@ -507,7 +578,7 @@ void Loader::libGeometry ( void ) {
         while ( l_nGeom!=nullptr ) {
 
             Mesh *pMesh = new Mesh;
-            pMesh->setName ( getAtributoXML ( "Mesh","name",l_nGeom )); 
+            pMesh->setName ( getAtributoXML ( "Mesh","name",l_nGeom ) );
             pMesh->setId ( getAtributoXML ( "Mesh","id",l_nGeom ) );
 
             xmlNodePtr l_nMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
@@ -615,11 +686,11 @@ void Loader::libGeometry ( void ) {
             l_count++;
         }
     }
-    if (l_count == 0) {
+    if ( l_count == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha Geometria registrada!!!" );
     } else {
-        LOG4CXX_INFO ( logger , std::string(std::string("Geometria Registradas:") + std::to_string( l_count) ));
-    } 
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Geometria Registradas:" ) + std::to_string ( l_count ) ) );
+    }
 }
 
 void Loader::createScene() {
@@ -628,7 +699,7 @@ void Loader::createScene() {
     if ( l_nScene!=nullptr ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
         if ( l_nScene!=nullptr ) {
-            
+
             m_pScene = new SceneMng ();
             m_pScene->setName ( getAtributoXML ( "SceneMng","name",l_nScene ) );
             m_pScene->setId ( getAtributoXML ( "SceneMng","id",l_nScene ) );
@@ -648,12 +719,12 @@ void Loader::libScene ( void ) {
             createNode ( l_nNode, m_pScene );
         }
     }
-    
-    if (m_numNodes == 0) {
+
+    if ( m_numNodes == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha Nodes de cena registrados!!!" );
     } else {
-        LOG4CXX_INFO ( logger , std::string(std::string("Nodes de cena Registrados:") + std::to_string( m_numNodes) ));
-    } 
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Nodes de cena Registrados:" ) + std::to_string ( m_numNodes ) ) );
+    }
 }
 
 void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix ) {
@@ -678,7 +749,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
             Node *pFilho = nullptr;
 
             m_numNodes++;
-            
+
             std::vector<float> l_arrayValores;
 
             const xmlChar *l_pNomeNode = l_nNode->name;
@@ -709,7 +780,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                 _pNode->addChild ( pObj );
 
                 pFilho = pObj;
-                
+
 
                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
                 if ( pURL != nullptr ) {
@@ -720,7 +791,9 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                     if ( pMesh ) {
 
-                        pObj->addChild ( pMesh );
+                       
+                        
+                        pObj->addChild (  clone(pMesh) );
 
                         //Carrega Material se existir
                         if ( l_nInstance->children ) {
@@ -737,8 +810,8 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                                             Material *pMat = ( Material* ) Node::findObjById ( EntityKind::MATERIAL,l_nomeMaterial ); //m_pScene->m_mMaterial[ ( char* ) &pURL[1]];
                                             if ( pMat ) {
-
-                                                pMesh->addChild ( pMat );
+  
+                                                pMesh->addChild (  clone(pMat) );
 
                                             }
                                         }
@@ -755,7 +828,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                     Light *pLight = ( Light* ) Node::findObjById ( EntityKind::LIGHT, ( char* ) &pURL[1] );
                     if ( pLight!=nullptr ) {
 
-                        Light *pLightScene = new Light ( *pLight );
+                        Light *pLightScene = (Light*)clone( pLight );//Light *pLightScene = new Light ( *pLight );
                         pLightScene->setName ( l_name );
                         pLightScene->setId ( l_id );
                         pLightScene->transform = l_transform;
@@ -773,7 +846,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                     if ( pCam!=nullptr ) {
 
-                        Camera *pCamScena = new Camera ( *pCam );
+                        Camera *pCamScena =  (Camera *) clone( pCam );//Camera *pCamScena = new Camera ( *pCam );
                         pCamScena->setName ( l_name );
                         pCamScena->setId ( l_id );
                         pCamScena->transform = l_transform;

@@ -71,6 +71,9 @@ private:
     int libPhysicsScenes ( void );
     int libPhysicsMaterial ( void );
 
+    Node *clone(Node *_src);
+    Node *cloneDraw(Draw *_srcDraw);
+    
     SceneMng *m_pScene;
     PhysicWorld *m_physicWorld;
 

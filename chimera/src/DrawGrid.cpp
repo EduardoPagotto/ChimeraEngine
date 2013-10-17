@@ -58,6 +58,10 @@ void DrawGrid::renderizar() {
     
 }
 
+void DrawGrid::init() {
+    
+}
+
 void DrawGrid::update ( DataMsg *dataMsg ) {
     
     Draw::update(dataMsg);

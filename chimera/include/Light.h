@@ -28,7 +28,7 @@ public:
     Light (const Light& _light );
     
     virtual ~Light();
-
+    
     virtual void update ( DataMsg *_dataMsg );
     virtual void exec();
 

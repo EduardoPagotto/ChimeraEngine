@@ -13,12 +13,17 @@ namespace Chimera {
  */
 class Node : public Entity {
 public:
+    
+    friend class Loader;
+    
     Node ( EntityKind _type);
     
     Node (const Node &_node);
     
     ~Node();
 
+    //virtual Node *clone() = 0;
+    
     virtual void update ( DataMsg *dataMsg );
 
     void addChild ( Node *child );

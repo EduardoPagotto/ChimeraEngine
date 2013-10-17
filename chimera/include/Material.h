@@ -27,9 +27,9 @@ public:
     void initTex ();
 
 private:
-    Image *pTexture;
-    Effect effect;
-    unsigned int idTex;
+    //Image *pTexture;
+   // Effect effect;
+   // unsigned int idTex;
 };
 
 }

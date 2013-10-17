@@ -22,6 +22,10 @@ public:
     Draw(const Draw &_draw);
 	virtual ~Draw();
     
+    DrawType getType() const {
+        return type;
+    }
+    
     virtual void update ( DataMsg *dataMsg );
     
     virtual void init();

@@ -24,6 +24,8 @@ public:
 
 	virtual ~Effect() {}
 
+	//virtual Node *clone();
+	
 	Color getAmbient() const {
         return ambient;
     }

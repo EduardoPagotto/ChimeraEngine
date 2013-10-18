@@ -42,7 +42,6 @@ add_library (Chimera STATIC
 				src/DrawBox.cpp
 				src/DrawGrid.cpp
 				src/Mesh.cpp
-				src/Engine3D.cpp
 				#src/Font.cpp
 				#src/HUD.cpp
 				src/Loader.cpp

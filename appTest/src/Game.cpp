@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(Chimera::Engine3D *pEngine3D, Chimera::SceneMng *_pScenMng):GameClient(pEngine3D,_pScenMng) {
+Game::Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng) : GameClient(_pVideo, _pScenMng) {
     
     timer01.setElapsedCount(1000);
     timer01.start();
@@ -36,7 +36,7 @@ bool Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
 
 void Game::start() {
     
-    //m_pSceneMng-
+    pSceneMng->execLight();
     
 }
 
@@ -55,7 +55,9 @@ void Game::onFrame(){
     pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
     pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
     
-    pEngined3D->setViewPortPerspective(pCam);
+    const SDL_Rect *tela = pVideo->getPRectangle();
+    
+    pSceneMng->setViewPortPerspective( *tela, pCam);
     
     pCam->exec();
     
@@ -63,7 +65,7 @@ void Game::onFrame(){
     pSceneMng->update(&dataMsg);
     
     //if ( pEngined3D->getLight() ==true ) {
-        pSceneMng->execLight();
+     //   pSceneMng->execLight();
     //} 
     
     //m_pEngined3D->setViewPortOrtogonal();
@@ -76,8 +78,8 @@ void Game::onFrame(){
 
 void Game::offFrame(){
     
-    //if (timer01.stepCount() == true)
-        std::cout << "FPS: " << pEngined3D->getVideo()->getFPS() << std::endl;
+    if (timer01.stepCount() == true)
+        std::cout << "FPS: " << pVideo->getFPS() << std::endl;
     
 }
 

@@ -52,6 +52,10 @@ public:
     
     int getFPS();
     
+    void initOpenGL();
+    
+    std::string getVersaoOpenGL();
+    
 private:
 
     SDL_Rect rectangle;

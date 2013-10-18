@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-    GameClient::GameClient ( Engine3D *_pEngine3D, SceneMng *_pScenMng ) : pEngined3D ( _pEngine3D ) , pSceneMng ( _pScenMng )  {
+GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pSceneMng ( _pScenMng ), pVideo(_pVideo)  {
     
     //m_pFont = new Chimera::Font("C:\\libs\\SDK\\freefont-ttf\\outras\\Vera.ttf",18);
     //m_pHUD = new HUD( m_pVideo->getRecTela());
@@ -74,8 +74,8 @@ void GameClient::gameLoop ( void ) {
                 //m_pEngined3D->end2D();
                 offFrame();
 
-                pEngined3D->getVideo()->swapWindow();
-
+                pVideo->swapWindow();
+               
             } else
                 SDL_WaitEvent ( nullptr );
 

@@ -10,7 +10,7 @@
  */
 class Game: public Chimera::GameClient {
 public:
-    Game(Chimera::Engine3D *pEngine3D, Chimera::SceneMng *_pScenMng);
+    Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng);
     virtual ~Game();
 
     virtual void start();

@@ -6,15 +6,7 @@
 #include <GL/glu.h>
 #include "Singleton.h"
 #include "Video.h"
-//#include "ChimeraTimer.h"
-//#include "ChimeraFont.h"
-#include "Engine3D.h"
 #include "SceneMng.h"
-
-
-//#include "ChimeraTransform.h"
-
-//#include "ChimeraHUD.h"
 #include "PhysicWorld.h"
 
 
@@ -22,7 +14,7 @@ namespace Chimera {
 
 class GameClient {
 public:
-    GameClient ( Engine3D *_pEngine3D, SceneMng *_pScenMng );
+    GameClient (Video *_pVideo, Chimera::SceneMng *_pScenMng);
     virtual ~GameClient();
 
     void open ();
@@ -37,8 +29,8 @@ public:
     
 protected:
 
-    Engine3D *pEngined3D;
     SceneMng *pSceneMng;
+    Video *pVideo;
     //Font *m_pFont;
     //HUD *m_pHUD;
     PhysicWorld *physicWorld;

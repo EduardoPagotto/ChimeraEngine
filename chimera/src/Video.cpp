@@ -71,6 +71,59 @@ void Video::swapWindow() {
     SDL_GL_SwapWindow ( window );
 }
 
+void Video::initOpenGL() {
+    
+    SDL_GL_SetSwapInterval ( 1 );
+    
+    /* Enable Texture Mapping ( NEW ) */
+    glEnable( GL_TEXTURE_2D );
+    
+    /* Enable smooth shading */
+    glShadeModel( GL_SMOOTH );
+    
+    /* Set the background black */
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    
+    /* Depth buffer setup */
+    glClearDepth( 1.0f );
+    
+    /* Enables Depth Testing */
+    glEnable( GL_DEPTH_TEST );
+    
+    /* The Type Of Depth Test To Do */
+    glDepthFunc( GL_LEQUAL );
+    
+    /* Really Nice Perspective Calculations */
+    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );  
+    
+    
+    //TODO AQUII!!!!!
+    //     glShadeModel ( GL_SMOOTH );
+    //     glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
+    //     glClearDepth ( 1.0f );
+    //     glEnable ( GL_DEPTH_TEST );
+    //     glEnable ( GL_CULL_FACE );
+    //     glDepthFunc ( GL_LEQUAL );
+    //     glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+    //     
+    //     setLight ( false );
+    //     setMaterial ( true );
+}
+
+std::string Video::getVersaoOpenGL() {
+    
+    std::string retorno;
+    
+    const char* version = (const char*)glGetString ( GL_VERSION );
+    if ( version != nullptr ) {
+        retorno.append(version);
+    } else {
+        throw ExceptionSDL ( ExceptionCode::READ, std::string ( SDL_GetError() ) ); 
+    }
+    
+    return retorno;
+}
+
 } /* namespace Chimera */
 
 //	if (render != nullptr) {

@@ -1,9 +1,7 @@
 #ifndef SCENE_MNG_H_
 #define SCENE_MNG_H_
 
-#include <map>
 #include <vector>
-#include "Node.h"
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
@@ -27,6 +25,11 @@ public:
     void update(DataMsg *dataMsg );
     
     void execLight();
+    
+    void setViewPortOrtogonal(const SDL_Rect &_rectangle);
+    void setViewPortPerspective(const SDL_Rect &_rectangle, const Camera *_camera);
+       
+
     
 private:
     

@@ -1,21 +1,21 @@
-#include "Image.h"
+#include "Texture.h"
 
 namespace Chimera {
 
-Image::Image() : Node ( EntityKind::IMAGE ) , pImage(nullptr),idTexturaGL(0) {
+Texture::Texture() : Node ( EntityKind::IMAGE ) , pImage(nullptr),idTexturaGL(0) {
 }
 
-Image::Image ( const Image &_imagen ) : Node ( _imagen ), pImage(_imagen.pImage),idTexturaGL(0) {
+Texture::Texture ( const Texture &_texture ) : Node ( _texture ), pImage(_texture.pImage),idTexturaGL(0) {
 }
 
-Image::~Image() {
+Texture::~Texture() {
     if ( pImage != nullptr ) {
         SDL_FreeSurface ( pImage );
         pImage = nullptr;
     }
 }
 
-int Image::link () {
+int Texture::link () {
     
     //Necessario ser chamado antes do desenho??
     if ( idTexturaGL >0 )
@@ -25,7 +25,7 @@ int Image::link () {
     
 }
 
-void Image::update ( DataMsg *dataMsg ) {
+void Texture::update ( DataMsg *dataMsg ) {
 
     Node::update ( dataMsg );
 
@@ -35,7 +35,7 @@ void Image::update ( DataMsg *dataMsg ) {
         glGenTextures ( 1, &idTexturaGL );
         //  //glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
         glBindTexture ( GL_TEXTURE_2D, idTexturaGL );
-        //glTexImage2D(GL_TEXTURE_2D, 0, 3,image->w, image->h, 0, GL_BGR,GL_UNSIGNED_BYTE, image->pixels);
+        //glTexTexture2D(GL_TEXTURE_2D, 0, 3,image->w, image->h, 0, GL_BGR,GL_UNSIGNED_BYTE, image->pixels);
         gluBuild2DMipmaps ( GL_TEXTURE_2D, 3, pImage->w,
                             pImage->h,
                             GL_RGB,
@@ -53,7 +53,7 @@ void Image::update ( DataMsg *dataMsg ) {
     }
 }
 
-void Image::loadImage () {
+void Texture::loadImage () {
 
     pImage = IMG_Load ( pathFile.c_str() );
     if ( pImage != nullptr )

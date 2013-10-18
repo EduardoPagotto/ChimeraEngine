@@ -56,7 +56,7 @@ private:
     void libCam ();
     void libLight ();
     void libEffect ();
-    void libImage ();
+    void libTexture ();
     void libMaterial ();
     void libGeometry ();
     Node* libScene ();

@@ -35,7 +35,7 @@ add_library (Chimera STATIC
 				src/TrackCam.cpp
 				src/Physics.cpp
 				src/PhysicsWorld.cpp				
-				src/Image.cpp
+				src/Texture.cpp
 				src/Effect.cpp
 				src/Material.cpp
 				src/Draw.cpp

@@ -42,12 +42,12 @@ private:
     std::vector<Light*> m_vLight;
     std::vector<Object*> m_vObject;
     std::vector<Draw*> m_vDraw;
-    std::vector<Image*> m_vImage;
+    std::vector<Texture*> m_vTexture;
     std::vector<Material*> m_vMaterial;
     std::vector<Effect*> m_vEffect;
 //     std::list<Physics*> m_mPhysics;
 //     std::map<std::string, Draw*> m_mDraw;
-//     std::map<std::string, Image*> m_mImage;
+//     std::map<std::string, Texture*> m_mTexture;
 //     std::map<std::string, Effect*> m_mEffect;
 //     std::map<std::string, Material*> m_mMaterial;
 //     std::list<btMaterial*> m_PMaterial;

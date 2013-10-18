@@ -10,12 +10,12 @@
 
 namespace Chimera {
 
-class Image : public Node {
+class Texture : public Node {
 public:
 	friend class Material;
-	Image();
-    Image (const Image &_imagen);
-	~Image();
+	Texture();
+    Texture (const Texture &_texture);
+	~Texture();
     
     int link();
     

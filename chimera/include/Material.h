@@ -7,7 +7,7 @@
 #include <string>
 
 #include "Effect.h"
-#include "Image.h"
+#include "Texture.h"
 
 namespace Chimera {
 

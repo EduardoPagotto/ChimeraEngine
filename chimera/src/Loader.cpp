@@ -58,7 +58,7 @@ Node* Loader::loadDAE ( const std::string &_file ) {
     libEffect();
 
     //Carrega Texturas
-    libImage();
+    libTexture();
 
     //Carrega Material
     libMaterial();
@@ -125,7 +125,7 @@ Node *Loader::clone ( Node *_src ) {
         novo = new Effect ( * ( ( Effect* ) _src ) );
         break;
     case EntityKind::IMAGE:
-        novo = new Image ( * ( ( Image* ) _src ) );
+        novo = new Texture ( * ( ( Texture* ) _src ) );
         break;
     case EntityKind::DRAW:
         novo = cloneDraw ( ( Draw* ) _src );
@@ -476,26 +476,26 @@ void Loader::libEffect ( void ) {
     }
 }
 
-void Loader::libImage ( void ) {
+void Loader::libTexture ( void ) {
     int l_count = 0;
-    xmlNodePtr l_nImage = findNode ( ( char* ) "library_images", m_root );
-    if ( l_nImage ) {
-        l_nImage = findNode ( ( char* ) "image", l_nImage->children );
-        while ( l_nImage ) {
+    xmlNodePtr l_nTexture = findNode ( ( char* ) "library_images", m_root );
+    if ( l_nTexture ) {
+        l_nTexture = findNode ( ( char* ) "image", l_nTexture->children );
+        while ( l_nTexture ) {
 
             try {
 
-                Image *pImage = new Image;
-                pImage->setId ( getAtributoXML ( "Image","id",l_nImage ) );
-                pImage->setName ( getAtributoXML ( "Image","name",l_nImage ) );
+                Texture *pTexture = new Texture;
+                pTexture->setId ( getAtributoXML ( "Texture","id",l_nTexture ) );
+                pTexture->setName ( getAtributoXML ( "Texture","name",l_nTexture ) );
 
-                listaNode.push ( pImage );
+                listaNode.push ( pTexture );
 
-                std::string l_pathFile = getValueFromProp ( "Image","init_from",l_nImage->children );
+                std::string l_pathFile = getValueFromProp ( "Texture","init_from",l_nTexture->children );
                 if ( l_pathFile.size() >0 ) {
                     std::string l_arquivo = m_imageDir + l_pathFile;
-                    pImage->setPathFile ( l_arquivo.c_str() );
-                    pImage->loadImage();
+                    pTexture->setPathFile ( l_arquivo.c_str() );
+                    pTexture->loadImage();
                     l_count++;
                 }
 
@@ -506,14 +506,14 @@ void Loader::libImage ( void ) {
 
             }
 
-            l_nImage = findNode ( ( char* ) "image", l_nImage->next );
+            l_nTexture = findNode ( ( char* ) "image", l_nTexture->next );
         }
     }
 
     if ( l_count == 0 ) {
-        LOG4CXX_WARN ( logger , "Nao ha Imagens registrada!!!" );
+        LOG4CXX_WARN ( logger , "Nao ha Texturens registrada!!!" );
     } else {
-        LOG4CXX_INFO ( logger , std::string ( std::string ( "Imagens Registradas:" ) + std::to_string ( l_count ) ) );
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Texturens Registradas:" ) + std::to_string ( l_count ) ) );
     }
 }
 
@@ -541,10 +541,10 @@ void Loader::libMaterial ( void ) {
                         Effect *pEffe = ( Effect* ) Node::findObjById ( EntityKind::EFFECT,l_nomeEffect ); //m_pScene->m_mEffect[ ( char* ) &l_val[1]];
 
                         if ( pEffe ) {
-                            Image *pImage = ( Image* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
-                            if ( pImage!=nullptr ) {
+                            Texture *pTexture = ( Texture* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+                            if ( pTexture!=nullptr ) {
                                 pMat->addChild ( clone ( pEffe ) );
-                                pMat->addChild ( clone ( pImage ) );
+                                pMat->addChild ( clone ( pTexture ) );
                             }
                         }
                     }

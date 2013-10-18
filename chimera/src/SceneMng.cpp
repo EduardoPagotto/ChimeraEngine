@@ -39,7 +39,7 @@ void SceneMng::addEntityToScene( Node *_pNode) {
             m_vDraw.push_back( ( Draw* ) _pNode );
             break;
         case EntityKind::IMAGE: 
-            m_vImage.push_back( ( Image* ) _pNode );
+            m_vTexture.push_back( ( Texture* ) _pNode );
             break;
         case EntityKind::MATERIAL: 
             m_vMaterial.push_back( ( Material* ) _pNode );

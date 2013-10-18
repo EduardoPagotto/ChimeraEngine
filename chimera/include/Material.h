@@ -1,13 +1,8 @@
 #ifndef MATERIAL_H_
 #define MATERIAL_H_
 
-#include <GL/gl.h>			// Header File For The OpenGL32 Library
-#include <GL/glu.h>			// Header File For The GLu32 Library
-
 #include <string>
-
-#include "Effect.h"
-#include "Texture.h"
+#include "Node.h"
 
 namespace Chimera {
 

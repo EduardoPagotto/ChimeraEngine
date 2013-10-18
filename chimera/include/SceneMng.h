@@ -5,6 +5,10 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
+#include "Texture.h"
+#include "Material.h"
+#include "Effect.h"
+#include "Draw.h"
 
 namespace Chimera {
 

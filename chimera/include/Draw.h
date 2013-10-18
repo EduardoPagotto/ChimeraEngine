@@ -1,10 +1,11 @@
 #ifndef DRAW_H_
 #define DRAW_H_
 
-#include <btBulletCollisionCommon.h>
-#include <btBulletDynamicsCommon.h>
+#include <LinearMath/btVector3.h>
 
-#include "Material.h"
+#include <GL/gl.h>
+
+#include "Node.h"
 
 namespace Chimera {
 

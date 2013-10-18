@@ -1,6 +1,7 @@
 #ifndef DRAW_GRID_H_
 #define DRAW_GRID_H_
 
+#include "Color.h"
 #include "Draw.h"
 
 namespace Chimera {

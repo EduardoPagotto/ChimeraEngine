@@ -2,12 +2,8 @@
 #define MESH_H_
 
 #include <GL/gl.h>			// Header File For The OpenGL32 Library
-#include <GL/glu.h>			// Header File For The GLu32 Library
-
 #include <vector>
-
-#include <btBulletCollisionCommon.h>
-#include <btBulletDynamicsCommon.h>
+#include <string.h>
 
 #include "Draw.h"
 

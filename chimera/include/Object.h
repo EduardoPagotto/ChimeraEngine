@@ -2,12 +2,12 @@
 #define OBJECT_H
 
 #include <GL/gl.h>			// Header File For The OpenGL32 Library
-#include <GL/glu.h>			// Header File For The GLu32 Library
 
-#include "Draw.h"
+//#include "Physics.h"
+#include <LinearMath/btTransform.h>
+#include <LinearMath/btVector3.h>
 
-#include "Physics.h"
-
+#include "Node.h"
 
 namespace Chimera {
 

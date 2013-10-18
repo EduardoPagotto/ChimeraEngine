@@ -8,7 +8,7 @@ DrawBox::DrawBox() : Draw(DrawType::BOX) {
     
 }
 
-DrawBox::DrawBox(const DrawBox &_draw) : Draw(DrawType::BOX) {
+DrawBox::DrawBox(const DrawBox &_draw) : Draw(_draw) {
     
     pMaterial = _draw.pMaterial;
     

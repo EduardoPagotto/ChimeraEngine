@@ -7,7 +7,7 @@ DrawGrid::DrawGrid () : Draw(DrawType::GRID)  {
     
 }
 
-DrawGrid::DrawGrid(const DrawGrid &_draw) : Draw(DrawType::GRID) {
+DrawGrid::DrawGrid(const DrawGrid &_draw) : Draw(_draw) {
     
 }
 

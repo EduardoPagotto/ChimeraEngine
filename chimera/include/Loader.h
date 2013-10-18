@@ -26,12 +26,8 @@ class Loader {
 public:
     Loader ();
     ~Loader();
-    bool exec ( const char *_file );
-    
-    SceneMng *getSceneMng() {
-        return m_pScene;
-    }
-    
+    Node* loadDAE (const std::string &_file );
+        
     void setModelDir(const std::string &_dir) {
         m_modelDir = _dir;
     }
@@ -42,7 +38,8 @@ public:
     
 private:
 
-    void createScene();
+    void loadArrayF ( const char *_val, std::vector<float> &_arrayF );
+    void loadArrayI ( const char *_val, std::vector<int> &_arrayI );   
     void carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix);
     
     std::string getAtributoXML (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
@@ -50,9 +47,6 @@ private:
     
     xmlNodePtr findNode ( const char* _nomeNode, xmlNodePtr _nodePos );
     
-    void loadArrayF ( const char *_val, std::vector<float> &_arrayF );
-    void loadArrayI ( const char *_val, std::vector<int> &_arrayI );
-
     Color getPhong ( xmlNodePtr _nPos,const char* _name );
 
     int getSource ( xmlNodePtr _nSource, ListPtr<float> &_arrayValores );
@@ -65,17 +59,17 @@ private:
     void libImage ();
     void libMaterial ();
     void libGeometry ();
-    void libScene ();
+    Node* libScene ();
 
-    int libPhysicsModels ( void );
-    int libPhysicsScenes ( void );
-    int libPhysicsMaterial ( void );
+    //int libPhysicsModels ( void );
+    //int libPhysicsScenes ( void );
+    //int libPhysicsMaterial ( void );
 
     Node *clone(Node *_src);
     Node *cloneDraw(Draw *_srcDraw);
     
-    SceneMng *m_pScene;
-    PhysicWorld *m_physicWorld;
+    //SceneMng *m_pScene;
+    //PhysicWorld *m_physicWorld;
 
     xmlDocPtr m_doc;
     xmlNodePtr m_root;

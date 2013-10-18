@@ -2,32 +2,60 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng () : Node(EntityKind::SCENE)  {
-
+SceneMng::SceneMng (Node *_pRoot) : pRoot(_pRoot) {
+    pRoot = _pRoot;
+    parseEntity(pRoot);
 }
 
 SceneMng::~SceneMng() {
 
 }
 
-void SceneMng::addChildToScene ( Node *_pNode ) {
+void SceneMng::parseEntity(Node *_pNode) {
+    
+    addEntityToScene( _pNode );
+    
+    for (Node *node : _pNode->listChild) {
+        parseEntity( node );
+    }
+    
+}
 
-    addChild ( _pNode );
+void SceneMng::addEntityToScene( Node *_pNode) {
 
     switch ( _pNode->getKind() ) {
-    case EntityKind::CAMERA:
-        m_vCamera.push_back ( ( Camera* ) _pNode );
-        break;
-    case EntityKind::LIGHT:
-        m_vLight.push_back ( ( Light* ) _pNode );
-        break;
-    case EntityKind::OBJECT:
-        m_vObject.push_back ( ( Object* ) _pNode );
-        break;
-    default:
-        break;
+        case EntityKind::CAMERA:
+            m_vCamera.push_back ( ( Camera* ) _pNode );
+            break;
+        case EntityKind::LIGHT:
+            m_vLight.push_back ( ( Light* ) _pNode );
+            break;
+        case EntityKind::OBJECT:
+            m_vObject.push_back ( ( Object* ) _pNode );
+            break;
+        case EntityKind::DRAW: 
+            m_vDraw.push_back( ( Draw* ) _pNode );
+            break;
+        case EntityKind::IMAGE: 
+            m_vImage.push_back( ( Image* ) _pNode );
+            break;
+        case EntityKind::MATERIAL: 
+            m_vMaterial.push_back( ( Material* ) _pNode );
+            break;
+        case EntityKind::EFFECT: 
+            m_vEffect.push_back( ( Effect* ) _pNode );
+            break;
+        default:
+            break;
     }
+    
+}
 
+void SceneMng::addChildToScene ( Node *_pNode ) {
+
+    pRoot->addChild ( _pNode );
+    addEntityToScene( _pNode );
+    
 }
 
 Node *SceneMng::getNode ( EntityKind _type, int index ) {
@@ -62,7 +90,7 @@ void SceneMng::execLight() {
 
 void SceneMng::update(DataMsg *dataMsg ) {
     
-    Node::update ( dataMsg );
+    pRoot->update ( dataMsg );
         
 }
 

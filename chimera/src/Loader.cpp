@@ -7,7 +7,7 @@ namespace Chimera {
 Loader::Loader () {
 
     m_numNodes = 0;
-    m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
+    //m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
     logger = log4cxx::Logger::getLogger ( "appTest" );
 
 }
@@ -26,24 +26,26 @@ Loader::~Loader() {
 
 }
 
-bool Loader::exec ( const char *_file ) {
+Node* Loader::loadDAE ( const std::string &_file ) {
 
-    std::string l_nomeArquivo = m_modelDir + std::string ( _file );
+    Node *pRootScene = nullptr;
+    
+    std::string l_nomeArquivo = m_modelDir +  _file;
 
     m_doc = xmlParseFile ( l_nomeArquivo.c_str() );
     if ( m_doc == nullptr )
-        return false;
+        throw ExceptionChimera ( ExceptionCode::READ, "Falha Doc XML:" + _file );
 
     m_root = xmlDocGetRootElement ( m_doc );
-    if ( m_root == nullptr )
-        return false;
+    if ( m_root == nullptr ) {
+        xmlFreeDoc ( m_doc );
+        throw ExceptionChimera ( ExceptionCode::READ, "Falha no root XML:" + _file );
+    }
 
     if ( xmlStrcmp ( m_root->name, ( const xmlChar * ) "COLLADA" ) ) {
         xmlFreeDoc ( m_doc );
-        return false;
+        throw ExceptionChimera ( ExceptionCode::READ, "Falha no root COLLADA:" + _file );
     }
-
-    createScene();
 
     //Carrega Cameras
     libCam();
@@ -64,13 +66,13 @@ bool Loader::exec ( const char *_file ) {
     libGeometry();
 
     //Carrega componentes da cena
-    libScene();
+    pRootScene = libScene();
 
 //     printf ( "PhysicMaterial Registradas %d\n",libPhysicsMaterial() );
 //     printf ( "PhysicModels Registradors %d\n",libPhysicsModels() );
 //     printf ( "PhysicScenes Registradas %d\n",libPhysicsScenes() );
 
-    return true;
+    return pRootScene;
 }
 
 Node *Loader::cloneDraw(Draw *_srcDraw) {
@@ -103,8 +105,6 @@ Node *Loader::cloneDraw(Draw *_srcDraw) {
 Node *Loader::clone ( Node *_src ) {
 
     Node *novo = nullptr;
-
-    int aa = 0;
     
     switch(_src->getKind()) {
         
@@ -693,30 +693,22 @@ void Loader::libGeometry ( void ) {
     }
 }
 
-void Loader::createScene() {
-
+Node* Loader::libScene ( void ) {
+    
+    Node *pScene = nullptr;
+    
     xmlNodePtr l_nScene = findNode ( ( char* ) "library_visual_scenes", m_root );
     if ( l_nScene!=nullptr ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
         if ( l_nScene!=nullptr ) {
 
-            m_pScene = new SceneMng ();
-            m_pScene->setName ( getAtributoXML ( "SceneMng","name",l_nScene ) );
-            m_pScene->setId ( getAtributoXML ( "SceneMng","id",l_nScene ) );
-
-        }
-    }
-
-}
-
-void Loader::libScene ( void ) {
-    xmlNodePtr l_nScene = findNode ( ( char* ) "library_visual_scenes", m_root );
-    if ( l_nScene!=nullptr ) {
-        l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
-        if ( l_nScene!=nullptr ) {
-
-            xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );//Transform *pTrans = new Transform ( getAtributoXML ( "Node","id",l_nNode ), getAtributoXML ( "Node","name",l_nNode ) );
-            createNode ( l_nNode, m_pScene );
+            
+            pScene = new Node();
+            pScene->setName ( getAtributoXML ( "Scene","name",l_nScene ) );
+            pScene->setId ( getAtributoXML ( "Scene","id",l_nScene ) );
+            
+            xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );
+            createNode ( l_nNode, pScene );
         }
     }
 
@@ -725,6 +717,8 @@ void Loader::libScene ( void ) {
     } else {
         LOG4CXX_INFO ( logger , std::string ( std::string ( "Nodes de cena Registrados:" ) + std::to_string ( m_numNodes ) ) );
     }
+    
+    return pScene;
 }
 
 void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix ) {
@@ -791,10 +785,6 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                     if ( pMesh ) {
 
-                       
-                        
-                        pObj->addChild (  clone(pMesh) );
-
                         //Carrega Material se existir
                         if ( l_nInstance->children ) {
                             xmlNodePtr l_nBindMat = findNode ( ( char* ) "bind_material", l_nInstance->children );
@@ -812,6 +802,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                                             if ( pMat ) {
   
                                                 pMesh->addChild (  clone(pMat) );
+                                                pObj->addChild (  clone(pMesh) );
 
                                             }
                                         }

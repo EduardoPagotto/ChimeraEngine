@@ -14,7 +14,10 @@ namespace Chimera {
 class Node : public Entity {
 public:
     
+    friend class SceneMng;
     friend class Loader;
+    
+    Node();
     
     Node ( EntityKind _type);
     

@@ -6,7 +6,7 @@ Mesh::Mesh() : Draw(DrawType::MESH) {
     
 }
 
-Mesh::Mesh ( const Mesh &_cpy ): Draw(DrawType::MESH) {
+Mesh::Mesh ( const Mesh &_cpy ): Draw(_cpy) {
 
     vList.set ( _cpy.vList );
     nList.set ( _cpy.nList );

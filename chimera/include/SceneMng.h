@@ -7,7 +7,6 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
-#include "Engine3D.h"
 
 namespace Chimera {
 
@@ -16,12 +15,9 @@ namespace Chimera {
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class SceneMng : public Node {
-public
-:
-    friend class Loader;
-    
-    SceneMng();
+class SceneMng {
+public:
+    SceneMng(Node *_pRoot);
     virtual ~SceneMng ();
 
     void addChildToScene ( Node *_pNode );
@@ -32,11 +28,20 @@ public
     
     void execLight();
     
-private: 
+private:
+    
+    void parseEntity(Node *_pNode);
+    void addEntityToScene( Node *_pNode);
+    
+    Node *pRoot;
+    
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
     std::vector<Object*> m_vObject;
-
+    std::vector<Draw*> m_vDraw;
+    std::vector<Image*> m_vImage;
+    std::vector<Material*> m_vMaterial;
+    std::vector<Effect*> m_vEffect;
 //     std::list<Physics*> m_mPhysics;
 //     std::map<std::string, Draw*> m_mDraw;
 //     std::map<std::string, Image*> m_mImage;

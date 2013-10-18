@@ -13,19 +13,14 @@ namespace Chimera {
  *  @since 20130925
  */
 enum class EntityKind : int8_t {
-   // BASE=0,
-   // ANY,
     NODE,
     IMAGE,
     EFFECT,
     MATERIAL,
     DRAW,
-    SCENE,
     CAMERA,
     LIGHT,
     OBJECT
-   // EFFECT//,
-    //ENGINE
 };
 
 /**

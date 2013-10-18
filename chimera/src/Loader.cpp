@@ -13,7 +13,8 @@ Loader::Loader () {
 }
 
 Loader::~Loader() {
-    Singleton<PhysicWorld>::releaseRefSingleton();
+    
+    //Singleton<PhysicWorld>::releaseRefSingleton();
 
     while ( !listaNode.empty() ) {
 
@@ -431,6 +432,8 @@ void Loader::libEffect ( void ) {
                 //pEffect->setName ( getAtributoXML ( "Effects","name",l_nMat ) );
                 pEffect->setId ( getAtributoXML ( "Effects","id",l_nMat ) );
 
+                listaNode.push(pEffect);
+                
                 //pega referencia textura
                 std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
                 if ( idTextura.size() >0 ) {
@@ -486,6 +489,8 @@ void Loader::libImage ( void ) {
                 pImage->setId ( getAtributoXML ( "Image","id",l_nImage ) );
                 pImage->setName ( getAtributoXML ( "Image","name",l_nImage ) );
 
+                listaNode.push(pImage);
+                
                 std::string l_pathFile = getValueFromProp ( "Image","init_from",l_nImage->children );
                 if ( l_pathFile.size() >0 ) {
                     std::string l_arquivo = m_imageDir + l_pathFile;
@@ -526,6 +531,8 @@ void Loader::libMaterial ( void ) {
                 pMat->setName ( getAtributoXML ( "Material","name",l_nMat ) );
                 pMat->setId ( getAtributoXML ( "Material","id",l_nMat ) );
 
+                listaNode.push(pMat);
+                
                 xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
                 if ( l_nEffect ) {
                     xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
@@ -534,18 +541,12 @@ void Loader::libMaterial ( void ) {
                         Effect *pEffe = ( Effect* ) Node::findObjById ( EntityKind::EFFECT,l_nomeEffect ); //m_pScene->m_mEffect[ ( char* ) &l_val[1]];
 
                         if ( pEffe ) {
- 
-                            pMat->addChild ( clone(pEffe) );
-
                             Image *pImage = ( Image* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
                             if ( pImage!=nullptr ) {
- 
+                                pMat->addChild ( clone(pEffe) );
                                 pMat->addChild (clone(pImage));
-
                             }
-
                         }
-
                     }
                 }
 
@@ -581,6 +582,8 @@ void Loader::libGeometry ( void ) {
             pMesh->setName ( getAtributoXML ( "Mesh","name",l_nGeom ) );
             pMesh->setId ( getAtributoXML ( "Mesh","id",l_nGeom ) );
 
+            listaNode.push(pMesh);
+            
             xmlNodePtr l_nMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
             if ( l_nMesh ) {
                 l_nMesh = findNode ( ( char* ) "source",l_nMesh->children );
@@ -702,7 +705,6 @@ Node* Loader::libScene ( void ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
         if ( l_nScene!=nullptr ) {
 
-            
             pScene = new Node();
             pScene->setName ( getAtributoXML ( "Scene","name",l_nScene ) );
             pScene->setId ( getAtributoXML ( "Scene","id",l_nScene ) );
@@ -981,153 +983,6 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 //
 //     return l_num;
 // }
-
-// // // //void Loader::createNode(xmlNodePtr _nodeXML, Node *_pNode)
-// // // //{
-// // // //	while(_nodeXML)
-// // // //	{
-// // // //		if (_nodeXML->type==XML_ELEMENT_NODE)
-// // // //		{
-// // // //			xmlChar *pSID = nullptr;
-// // // //			xmlChar* l_pVal = nullptr;
-// // // //			Transform *pTempNode = nullptr;
-// // // //			std::vector<float> l_arrayValores;
-// // // //
-// // // //			if (xmlStrcmp(_nodeXML->name,(xmlChar*)"translate")==0)
-// // // //			{
-// // // //				pSID = xmlGetProp(_nodeXML,(const xmlChar*)"sid");
-// // // //				if (xmlStrcmp(pSID,(xmlChar*)"translate")==0)
-// // // //				{
-// // // //					pTempNode = (Transform*)_pNode;
-// // // //
-// // // //					l_pVal = xmlNodeListGetString(m_doc, _nodeXML->children, 1);
-// // // //					loadArrayF((char*)l_pVal ,l_arrayValores);
-// // // //
-// // // //					pTempNode->m_position.setValue(l_arrayValores[0], l_arrayValores[1] , l_arrayValores[2] );
-// // // //
-// // // //					l_arrayValores.clear();
-// // // //					xmlFree(l_pVal);
-// // // //				}
-// // // //			}
-// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"rotate")==0) //TODO: errado isto ? uma matrix e nao
-// // // //			{
-// // // //				pTempNode = (Transform*)_pNode;
-// // // //				pSID = xmlGetProp(_nodeXML,(const xmlChar*)"sid");
-// // // //
-// // // //				l_pVal = xmlNodeListGetString(m_doc, _nodeXML->children, 1);
-// // // //				loadArrayF((char*)l_pVal ,l_arrayValores);
-// // // //
-// // // //				//ultimo elemento apenas
-// // // //				if (xmlStrcmp(pSID,(xmlChar*)"rotateZ")==0)
-// // // //					pTempNode->m_rotation.setZ(l_arrayValores[3]);
-// // // //				else if (xmlStrcmp(pSID,(xmlChar*)"rotateY")==0)
-// // // //					pTempNode->m_rotation.setY(l_arrayValores[3]);
-// // // //				else if (xmlStrcmp(pSID,(xmlChar*)"rotateX")==0)
-// // // //					pTempNode->m_rotation.setX(l_arrayValores[3]);
-// // // //
-// // // //				l_arrayValores.clear();
-// // // //				xmlFree(l_pVal);
-// // // //			}
-// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"scale")==0)
-// // // //			{
-// // // //				pTempNode = (Transform*)_pNode;
-// // // //				pSID = xmlGetProp(_nodeXML,(const xmlChar*)"sid");
-// // // //				if (xmlStrcmp(pSID,(xmlChar*)"scale")==0)
-// // // //				{
-// // // //					l_pVal = xmlNodeListGetString(m_doc, _nodeXML->children, 1);
-// // // //					loadArrayF((char*)l_pVal ,l_arrayValores);
-// // // //					pTempNode->m_scale.setValue( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2] );
-// // // //					l_arrayValores.clear();
-// // // //					xmlFree(l_pVal);
-// // // //				}
-// // // //
-// // // //			}
-// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"instance_geometry")==0)
-// // // //			{
-// // // //				Object *pObj = new Object;
-// // // //				m_numNodes++;
-// // // //
-// // // //				m_pScene->m_vObject.push_back(pObj);
-// // // //
-// // // //				xmlChar *pURL = xmlGetProp(_nodeXML,(const xmlChar*)"url");
-// // // //				if (pURL != nullptr)
-// // // //				{
-// // // //					std::string l_url = (char*)&pURL[1];
-// // // //					pObj->setName(l_url + std::string("-OBJ"));
-// // // //					_pNode->add(pObj);
-// // // //
-// // // //					Mesh *pMesh = (Mesh*)m_pScene->m_mDraw[l_url];//(Mesh*)m_pScene->findInList(l_url,DRAW);
-// // // //					if (pMesh)
-// // // //					{
-// // // //						pObj->m_pDraw = pMesh;
-// // // //
-// // // //						//Carrega Materia se existir
-// // // //						if (_nodeXML->children)
-// // // //						{
-// // // //							xmlNodePtr l_nBindMat = findNode((char*)"bind_material", _nodeXML->children);
-// // // //							if (l_nBindMat)
-// // // //							{
-// // // //								l_nBindMat = findNode((char*)"technique_common", l_nBindMat->children);
-// // // //								if (l_nBindMat)
-// // // //								{
-// // // //									l_nBindMat = findNode((char*)"instance_material", l_nBindMat->children);
-// // // //									if (l_nBindMat)
-// // // //									{
-// // // //										pURL = xmlGetProp(l_nBindMat,(const xmlChar*)"target");
-// // // //										if (pURL)
-// // // //										{
-// // // //											Material *pMat = m_pScene->m_mMaterial[(char*)&pURL[1]];
-// // // //											if (pMat)
-// // // //											{
-// // // //												pMesh->m_pMaterial = pMat;
-// // // //											}
-// // // //										}
-// // // //									}
-// // // //								}
-// // // //							}
-// // // //						}
-// // // //					}
-// // // //				}
-// // // //			}
-// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"instance_light")==0)
-// // // //			{
-// // // //				xmlChar *pURL = xmlGetProp(_nodeXML,(const xmlChar*)"url");
-// // // //				if (pURL != nullptr)
-// // // //				{
-// // // //					std::string l_url = (char*)&pURL[1];
-// // // //					Light *pLight = (Light*)m_pScene->findInList(l_url,LIGHT);
-// // // //					if (pLight!=nullptr)
-// // // //						_pNode->add(pLight);
-// // // //				}
-// // // //			}
-// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"instance_camera")==0)
-// // // //			{
-// // // //				xmlChar *pURL = xmlGetProp(_nodeXML,(const xmlChar*)"url");
-// // // //				if (pURL != nullptr)
-// // // //				{
-// // // //					std::string l_url = (char*)&pURL[1];
-// // // //					Camera *pCam = (Camera*)m_pScene->findInList(l_url,CAMERA);
-// // // //					if (pCam!=nullptr)
-// // // //						_pNode->add(pCam);
-// // // //				}
-// // // //			}
-// // // //			else if (xmlStrcmp(_nodeXML->name,(xmlChar*)"node")==0)
-// // // //			{
-// // // //				m_numNodes++;
-// // // //				Node *l_pNodeParent = _pNode;
-// // // //				_pNode = new Transform;
-// // // //
-// // // //				setIdentity(_pNode,_nodeXML);
-// // // //
-// // // //				l_pNodeParent->add(_pNode);
-// // // //
-// // // //				createNode(_nodeXML->children->next,_pNode);
-// // // //				_pNode = l_pNodeParent;
-// // // //			}
-// // // //		}
-// // // //		_nodeXML = _nodeXML->next;
-// // // //	}
-// // // //}
 
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

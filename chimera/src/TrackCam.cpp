@@ -35,20 +35,20 @@ TrackCam::~TrackCam() {
 }
 
 void TrackCam::update ( DataMsg *_dataMsg ) {
-    Camera::update ( _dataMsg );
-}
-
-void TrackCam::init ( void ) {
-
-    Camera::init();
-
-    reset();
     
-    pitch ( -rotation.x() );
-    roll ( rotation.y() );
-    yaw ( rotation.z() );
-
-    initTrackBall();
+    Camera::update ( _dataMsg );
+    
+    if (_dataMsg->getKindOp()==KindOp::START) {
+        
+        reset();
+        
+        pitch ( -rotation.x() );
+        roll ( rotation.y() );
+        yaw ( rotation.z() );
+        
+        initTrackBall();
+    }
+    
 }
 
 void TrackCam::reset() {

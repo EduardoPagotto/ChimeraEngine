@@ -26,7 +26,11 @@ GameClient::~GameClient() {
 }
 
 void GameClient::open() {
-    start();
+    
+    DataMsg dataMsg(KindOp::START,this,nullptr,nullptr);
+    pSceneMng->update(&dataMsg);
+    
+    start(); 
 }
 
 void GameClient::close ( void ) {
@@ -63,7 +67,7 @@ void GameClient::gameLoop ( void ) {
 
                 onFrame();
 
-                //DataMsg dataMsg ( KindOperation::DRAW3D,nullptr,nullptr,nullptr );
+                //DataMsg dataMsg ( KindOp::DRAW3D,nullptr,nullptr,nullptr );
                 //m_pSceneMng->getRoot()->update ( &dataMsg );
                 //m_pEngined3D->begin2D();
                 //m_pHUD->update();
@@ -102,7 +106,7 @@ void GameClient::gameLoop ( void ) {
                 break;
             }
 
-            DataMsg dataMsg ( KindOperation::SDL,this,&l_eventSDL,nullptr );
+            DataMsg dataMsg ( KindOp::SDL,this,&l_eventSDL,nullptr );
             processMsg ( &dataMsg );
 
             if(dataMsg.isDone()==false) {

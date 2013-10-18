@@ -66,5 +66,17 @@ int Material::link ( void ) {
 
 }
 
+void Material::update ( DataMsg *dataMsg ) {
+    
+    Node::update(dataMsg);
+    
+    if (dataMsg->getKindOp()==KindOp::START) {
+        
+        //         if ( pMaterial )
+        //             pMaterial->initTex();
+        
+    }
+}
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

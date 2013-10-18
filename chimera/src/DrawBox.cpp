@@ -18,11 +18,6 @@ DrawBox::~DrawBox() {
     
 }
 
-void DrawBox::init() {
-    if ( pMaterial )
-        pMaterial->initTex();
-}
-
 btVector3 DrawBox::getSizeBox(void) {
     return sizeBox;
 }
@@ -78,6 +73,11 @@ void DrawBox::renderizar() {
 void DrawBox::update ( DataMsg *dataMsg ) {
     
     Draw::update(dataMsg);
+    
+    if (dataMsg->getKindOp()==KindOp::START) {
+        if ( pMaterial )
+            pMaterial->initTex();
+    }
     
 }
 

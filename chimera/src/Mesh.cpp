@@ -94,14 +94,14 @@ void Mesh::renderizar ( void ) {
     }
 }
 
-void Mesh::init() {
-//     if ( pMaterial )
-//         pMaterial->initTex();
-}
-
 void Mesh::update ( DataMsg *dataMsg ) {
     
     Draw::update(dataMsg);
+    
+    if (dataMsg->getKindOp()==KindOp::START) {
+        //     if ( pMaterial )
+        //         pMaterial->initTex();
+    }
     
 }
 

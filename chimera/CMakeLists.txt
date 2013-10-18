@@ -36,6 +36,7 @@ add_library (Chimera STATIC
 				src/Physics.cpp
 				src/PhysicsWorld.cpp				
 				src/Image.cpp
+				src/Effect.cpp
 				src/Material.cpp
 				src/Draw.cpp
 				src/DrawBox.cpp

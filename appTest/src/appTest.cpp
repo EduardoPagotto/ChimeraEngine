@@ -31,22 +31,24 @@ int main ( int argn, char** argv ) {
         pLoader->setImageDir("../../appTest/models/");
         Chimera::Node *pRoot = pLoader->loadDAE("cuboTex1.dae");
         
+        delete pLoader;
+        pLoader = nullptr;
+        
         Chimera::SceneMng *sceneMng = new Chimera::SceneMng(pRoot);
                         
         Game *game = new Game(engine3d,sceneMng);
         game->open();
-        std::cout << "Game inicializado com sucesso" << std::endl;
+        LOG4CXX_INFO ( logger , "Game inicializado com sucesso" );
 
         game->gameLoop();
-        std::cout << "Engine encerrado com sucesso" << std::endl;
+        LOG4CXX_INFO ( logger , "Engine encerrado com sucesso" );
 
+        delete game;
+        delete sceneMng;
+        delete pRoot;
         delete video;
         delete engine3d;
-        delete sceneMng;
-        delete game;
         
-        //SDL_Delay(2000);
- 
     } catch ( const Chimera::Exception& ex ) {
 
         LOG4CXX_ERROR ( logger , "Engine Erro Critico Sistema:" << ex.what() );

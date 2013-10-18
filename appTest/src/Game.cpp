@@ -59,7 +59,7 @@ void Game::onFrame(){
     
     pCam->exec();
     
-    Chimera::DataMsg dataMsg(KindOperation::DRAW3D,this,pObj,nullptr);
+    Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
     
     pSceneMng->update(&dataMsg);
     
@@ -89,7 +89,7 @@ void Game::offFrame(){
 
 void Game::processMsg(Chimera::DataMsg *dataMsg) {
     
-    if ( dataMsg->getKindOperation() == Chimera::KindOperation::SDL ) {
+    if ( dataMsg->getKindOp() == Chimera::KindOp::SDL ) {
         
         bool encerraParse = false;
         SDL_Event *pEvento = ( SDL_Event* ) dataMsg->getParam();

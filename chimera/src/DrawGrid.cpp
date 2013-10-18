@@ -66,6 +66,12 @@ void DrawGrid::update ( DataMsg *dataMsg ) {
     
     Draw::update(dataMsg);
     
+    if (dataMsg->getKindOp()==KindOp::START) {
+    
+//         if ( pMaterial )
+//             pMaterial->initTex();
+        
+    }
 }
 
 // void DrawBoxGrid2::renderizar() {

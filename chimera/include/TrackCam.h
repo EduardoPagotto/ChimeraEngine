@@ -14,7 +14,6 @@ public:
     
     ~TrackCam();
     
-    virtual void init ( );
     virtual void update ( DataMsg *_dataMsg );
     
     void pitch ( GLfloat _theta );

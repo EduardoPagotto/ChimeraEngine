@@ -18,11 +18,6 @@ Draw::~Draw() {
 
 }
 
-void Draw::init() {
-    if ( pMaterial )
-        pMaterial->initTex();
-}
-
 void Draw::renderizar() {
     
     if ( pMaterial )
@@ -43,6 +38,11 @@ void Draw::renderizar() {
 void Draw::update ( DataMsg *dataMsg ) {
     
     Node::update(dataMsg);
+    
+    if (dataMsg->getKindOp()==KindOp::START) {
+        if ( pMaterial )
+            pMaterial->initTex();
+    }
     
 }
 

@@ -29,9 +29,7 @@ public:
     virtual void update ( DataMsg *_dataMsg );
 
     void exec ( void );
-   
-    virtual void init ( void );
-    
+       
     void setType(CameraType _type) {
         type = _type;
     }

@@ -21,7 +21,19 @@ Object::~Object () {
 
 void Object::update ( DataMsg *_dataMsg ) {
 //FIXME mais um
-    if (_dataMsg->getKindOperation() == KindOperation::DRAW3D) {
+    
+    if (_dataMsg->getKindOp()==KindOp::START) {
+
+        Node::update(_dataMsg);
+        
+        //      if (m_pDraw)
+        //          m_pDraw->init();
+        //
+        //      if (m_pPhysic)
+        //          m_pPhysic->init(&m_trans);
+        //
+        //      Node::update(_transport);
+    } if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
         
  		glPushMatrix();
 
@@ -39,17 +51,7 @@ void Object::update ( DataMsg *_dataMsg ) {
 
  		//glPopMatrix();
 
-     }
-// 	else if (_transport->code==DO_INIT)
-// 	{
-// 		if (m_pDraw)
-// 			m_pDraw->init();
-//
-// 		if (m_pPhysic)
-// 			m_pPhysic->init(&m_trans);
-//
-// 		Node::update(_transport);
-// 	}
+     } 
 }
 
 void Object::applyTorc ( const btVector3 &_vet ) {

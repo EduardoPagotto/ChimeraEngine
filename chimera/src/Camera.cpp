@@ -61,11 +61,16 @@ void Camera::exec ( void ) {
     }
 }
 
-void Camera::init ( void ) {
 
-}
 
 void Camera::update ( DataMsg *_dataMsg ) {
+    
+    if  (_dataMsg->getKindOp() == KindOp::START) {
+     
+        
+    }
+    
+    
 //FIXME
 //     if ( _transport->code==DO_DRAW_3D ) {
 //

@@ -9,22 +9,13 @@ namespace Chimera {
 class Effect : public Node {
 public:
 	
-    Effect() : Node(EntityKind::EFFECT),  shininess(10.5f)  {}
+    Effect();
 
-	Effect(const Effect& _cpy) :Node(_cpy) {
-        
-		diffuse = _cpy.diffuse;
-		ambient = _cpy.ambient;
-		specular = _cpy.specular;
-		emissive = _cpy.emissive;
-		shininess = _cpy.shininess;
-        
-		nameTextureId = _cpy.nameTextureId;
-	}
+	Effect(const Effect& _cpy);
 
 	virtual ~Effect() {}
-
-	//virtual Node *clone();
+	
+	virtual void update ( DataMsg *dataMsg );
 	
 	Color getAmbient() const {
         return ambient;

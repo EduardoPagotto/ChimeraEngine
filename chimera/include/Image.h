@@ -15,6 +15,8 @@ public:
     Image (const Image &_imagen);
 	~Image();
     
+    virtual void update ( DataMsg *dataMsg );
+    
     void loadImage();
     
     void setPathFile(const std::string &_pathFile) {

@@ -4,12 +4,11 @@
 namespace Chimera {
 
 /**
- * Enum KindOperation
+ * Enum KindOp
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-enum class KindOperation {
-    NONE,
+enum class KindOp {
     START,
     STOP,
     EVENT,
@@ -24,15 +23,36 @@ enum class KindOperation {
  */
 class DataMsg {
 public:
-    DataMsg ( KindOperation _kindOperation, void* _ptrSource, void* _param, void* _result ) : kindOperation ( _kindOperation ) , ptrSource ( _ptrSource ), param ( _param ), result ( _result ), done ( false ) { }
+    /**
+     * Contrutor da Classe de mesnagem de dados
+     * @param _kindOp tipo de operacao
+     * @param _ptrSource ponteiro de origem da chamada
+     * @param _param ponteiro com o parametro
+     * @param _result ponteiro com o resultado
+     */
+    DataMsg ( KindOp _kindOp, void* _ptrSource, void* _param, void* _result ) : kindOp ( _kindOp ) , ptrSource ( _ptrSource ), param ( _param ), result ( _result ), done ( false ) { }
+    
+    /**
+     * Destrutor
+     */
     virtual ~DataMsg() {}
 
-    inline KindOperation getKindOperation() const {
-        return kindOperation;
+    /**
+     * Retorna tipo de operacao
+     * @return O tipo de operaao que esta sendo realizado 
+     */
+    inline KindOp getKindOp() const {
+        return kindOp;
     }
-    inline void setKindOperation ( KindOperation _kindOperation ) {
-        this->kindOperation = _kindOperation;
+    
+    /**
+     * Define o tipo de operacao
+     * @param _kindOp tipo de operacao
+     */
+    inline void setKindOp ( KindOp _kindOp ) {
+        this->kindOp = _kindOp;
     }
+    
     inline void* getParam() const {
         return param;
     }
@@ -61,7 +81,7 @@ public:
     }
 
 private:
-    KindOperation kindOperation;
+    KindOp kindOp;
     void* ptrSource;
     void* param;
     void* result;

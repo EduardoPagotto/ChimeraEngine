@@ -86,9 +86,11 @@ void Light::exec() {
 }
 
 void Light::update ( DataMsg *dataMsg ) {
-//     if ( _transport->code==DO_INIT ) {
-//
-//     }
+    
+    if (dataMsg->getKindOp()==KindOp::START) {
+        
+    }
+    
     Node::update ( dataMsg );
 }
 

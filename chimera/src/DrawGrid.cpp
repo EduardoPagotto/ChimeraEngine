@@ -3,63 +3,17 @@
 namespace Chimera {
 
 
-DrawGrid::DrawGrid () : Draw(DrawType::GRID)  {
-    
+DrawGrid::DrawGrid () : Draw(DrawType::GRID)  {   
 }
 
-DrawGrid::DrawGrid(const DrawGrid &_draw) : Draw(_draw) {
-    
+DrawGrid::DrawGrid(const DrawGrid &_draw) : Draw(_draw) {   
 }
 
 DrawGrid::~DrawGrid() {
-
 }
 
 btVector3 DrawGrid::getSizeBox(void) {
     return sizeBox;
-}
-
-void DrawGrid::renderizar() {
-    btScalar px = sizeBox.getX();
-    btScalar py = sizeBox.getY();
-    btScalar pz = -sizeBox.getZ();
-
-    Draw::renderizar();
-
-    do {
-      
-        glColor3f ( colorX.r, colorX.g , colorX.b );//glColor3ub ( 255,0,0 );
-        glBegin ( GL_LINE_LOOP );
-        glVertex3f ( px, py, pz );
-        glVertex3f ( px, -py, pz );
-        glVertex3f ( -px, -py, pz );
-        glVertex3f ( -px, py, pz );
-        glEnd();
-        
-        glColor3f ( colorX.r, colorX.g , colorX.b );//glColor3ub ( 0,255,0 );
-        glBegin ( GL_LINE_LOOP );
-        glVertex3f ( pz, py, px );
-        glVertex3f ( pz, py, -px );
-        glVertex3f ( pz, -py, -px );
-        glVertex3f ( pz, -py, px );
-        glEnd();
-        
-        glColor3f ( colorX.r, colorX.g , colorX.b );//glColor3ub ( 0,0,255 );
-        glBegin ( GL_LINE_LOOP );
-        glVertex3f ( px, pz, py );
-        glVertex3f ( -px, pz, py );
-        glVertex3f ( -px, pz, -py );
-        glVertex3f ( px, pz, -py );
-        glEnd();
-        
-        pz += space;
-        
-    } while (pz < sizeBox.getZ());
-    
-}
-
-void DrawGrid::init() {
-    
 }
 
 void DrawGrid::update ( DataMsg *dataMsg ) {
@@ -71,6 +25,41 @@ void DrawGrid::update ( DataMsg *dataMsg ) {
 //         if ( pMaterial )
 //             pMaterial->initTex();
         
+    } else if (dataMsg->getKindOp()==KindOp::DRAW3D) {
+        
+        btScalar px = sizeBox.getX();
+        btScalar py = sizeBox.getY();
+        btScalar pz = -sizeBox.getZ();
+        
+        do {
+            
+            glColor3f ( colorX.r, colorX.g , colorX.b );//glColor3ub ( 255,0,0 );
+            glBegin ( GL_LINE_LOOP );
+            glVertex3f ( px, py, pz );
+            glVertex3f ( px, -py, pz );
+            glVertex3f ( -px, -py, pz );
+            glVertex3f ( -px, py, pz );
+            glEnd();
+            
+            glColor3f ( colorX.r, colorX.g , colorX.b );//glColor3ub ( 0,255,0 );
+            glBegin ( GL_LINE_LOOP );
+            glVertex3f ( pz, py, px );
+            glVertex3f ( pz, py, -px );
+            glVertex3f ( pz, -py, -px );
+            glVertex3f ( pz, -py, px );
+            glEnd();
+            
+            glColor3f ( colorX.r, colorX.g , colorX.b );//glColor3ub ( 0,0,255 );
+            glBegin ( GL_LINE_LOOP );
+            glVertex3f ( px, pz, py );
+            glVertex3f ( -px, pz, py );
+            glVertex3f ( -px, pz, -py );
+            glVertex3f ( px, pz, -py );
+            glEnd();
+            
+            pz += space;
+            
+        } while (pz < sizeBox.getZ());
     }
 }
 

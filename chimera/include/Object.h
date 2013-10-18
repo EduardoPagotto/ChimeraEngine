@@ -22,23 +22,24 @@ public:
 	virtual ~Object();
     virtual void update ( DataMsg *_dataMsg );
 
-	void setDraw(Draw *_pDraw) {
-		pDraw = _pDraw;
-	}
+// 	void setDraw(Draw *_pDraw) {
+// 		pDraw = _pDraw;
+// 	}
+// 
+// 	void setPhysic(Physics *_pPhysic) {
+// 		pPhysic = _pPhysic;
+// 	}
 
-	void setPhysic(Physics *_pPhysic) {
-		pPhysic = _pPhysic;
-	}
-
-	void applyTorc(const btVector3 &_vet);
-
-	void applyForce(const btVector3 &_vet);
+// 	void applyTorc(const btVector3 &_vet);
+// 
+// 	void applyForce(const btVector3 &_vet);
 
 	
 private:
-	Physics *pPhysic;
-	Draw *pDraw;
+	//Physics *pPhysic;
+	//Draw *pDraw;
     btTransform transform;
+    btVector3 position;
 };
 
 }

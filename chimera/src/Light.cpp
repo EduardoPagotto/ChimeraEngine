@@ -89,6 +89,8 @@ void Light::update ( DataMsg *dataMsg ) {
     
     if (dataMsg->getKindOp()==KindOp::START) {
         
+        position = transform.getOrigin();
+        
     }
     
     Node::update ( dataMsg );

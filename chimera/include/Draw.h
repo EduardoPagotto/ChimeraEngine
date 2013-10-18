@@ -27,14 +27,11 @@ public:
     }
     
     virtual void update ( DataMsg *dataMsg );
-    virtual void renderizar();
 	virtual btVector3 getSizeBox() = 0;
 
 	//void ajusteMatrix(Transform *_pTrans);
 
 protected:
-	
-	Material *pMaterial;
     DrawType type;
 };
 

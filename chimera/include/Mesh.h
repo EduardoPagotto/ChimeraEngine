@@ -91,8 +91,6 @@ public:
     virtual void update ( DataMsg *dataMsg );
     virtual btVector3 getSizeBox();
 
-protected:
-    virtual void renderizar();
 private:
     ListPtr<float> vList;
     ListPtr<float> nList;

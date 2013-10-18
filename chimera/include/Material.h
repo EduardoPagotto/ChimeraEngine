@@ -19,17 +19,8 @@ public:
     Material();
     Material ( const Material &_cpy );
     virtual ~Material();
-
     virtual void update ( DataMsg *dataMsg );
-    
-    void exec ();
-    int link ();
-    void initTex ();
 
-private:
-    //Image *pTexture;
-   // Effect effect;
-   // unsigned int idTex;
 };
 
 }

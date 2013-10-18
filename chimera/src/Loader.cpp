@@ -13,7 +13,7 @@ Loader::Loader () {
 }
 
 Loader::~Loader() {
-    
+
     //Singleton<PhysicWorld>::releaseRefSingleton();
 
     while ( !listaNode.empty() ) {
@@ -30,7 +30,7 @@ Loader::~Loader() {
 Node* Loader::loadDAE ( const std::string &_file ) {
 
     Node *pRootScene = nullptr;
-    
+
     std::string l_nomeArquivo = m_modelDir +  _file;
 
     m_doc = xmlParseFile ( l_nomeArquivo.c_str() );
@@ -76,65 +76,65 @@ Node* Loader::loadDAE ( const std::string &_file ) {
     return pRootScene;
 }
 
-Node *Loader::cloneDraw(Draw *_srcDraw) {
-    
+Node *Loader::cloneDraw ( Draw *_srcDraw ) {
+
     Node *novo = nullptr;
-    
-    switch(_srcDraw->getType()) {
-     
-        case DrawType::MESH:
-            novo = new Mesh(*((Mesh*)_srcDraw));
-            break;
-        case DrawType::BOX:
-            novo = new DrawBox(*((DrawBox*)_srcDraw));
-            break;
-        case DrawType::BOXGRID2:
-            //novo = new DrawGrid(*((DrawGrid*)_srcDraw));
-            break;
-        case DrawType::GRID:
-            novo = new DrawGrid(*((DrawGrid*)_srcDraw));
-            break;
-        case DrawType::SPHERE:
-            //novo = new DrawBox(*((DrawBox*)_srcDraw));
-            break;
-        
+
+    switch ( _srcDraw->getType() ) {
+
+    case DrawType::MESH:
+        novo = new Mesh ( * ( ( Mesh* ) _srcDraw ) );
+        break;
+    case DrawType::BOX:
+        novo = new DrawBox ( * ( ( DrawBox* ) _srcDraw ) );
+        break;
+    case DrawType::BOXGRID2:
+        //novo = new DrawGrid(*((DrawGrid*)_srcDraw));
+        break;
+    case DrawType::GRID:
+        novo = new DrawGrid ( * ( ( DrawGrid* ) _srcDraw ) );
+        break;
+    case DrawType::SPHERE:
+        //novo = new DrawBox(*((DrawBox*)_srcDraw));
+        break;
+
     }
-    
+
     return novo;
 }
 
 Node *Loader::clone ( Node *_src ) {
 
     Node *novo = nullptr;
-    
-    switch(_src->getKind()) {
-        
-        case EntityKind::CAMERA:
-            novo = new Camera (*((Camera*)_src));
-            break;
-        case EntityKind::LIGHT:
-            novo = new Light (*((Light*)_src));
-            break;
-        case EntityKind::OBJECT:
-            novo = new Object (*((Object*)_src));
-            break;
-        case EntityKind::MATERIAL:
-             novo = new Material (*((Material*)_src));
-             break;
-        case EntityKind::EFFECT:
-             novo = new Effect( *((Effect*)_src ));
-             break;
-        case EntityKind::IMAGE:
-            novo = new Image( *((Image*)_src));
-           break;
-       case EntityKind::DRAW:
-           novo = cloneDraw((Draw*)_src);
-           break;
-       default:
-           throw ExceptionChimera ( ExceptionCode::READ, "Tipo de clonagem nao implementada para:" + _src->getId() );
-           break;
-     }
-  
+
+    switch ( _src->getKind() ) {
+
+    case EntityKind::CAMERA:
+        novo = new Camera ( * ( ( Camera* ) _src ) );
+        break;
+    case EntityKind::LIGHT:
+        novo = new Light ( * ( ( Light* ) _src ) );
+        break;
+    case EntityKind::OBJECT:
+        novo = new Object ( * ( ( Object* ) _src ) );
+        break;
+    case EntityKind::MATERIAL:
+        novo = new Material ( * ( ( Material* ) _src ) );
+        break;
+    case EntityKind::EFFECT:
+        novo = new Effect ( * ( ( Effect* ) _src ) );
+        break;
+    case EntityKind::IMAGE:
+        novo = new Image ( * ( ( Image* ) _src ) );
+        break;
+    case EntityKind::DRAW:
+        novo = cloneDraw ( ( Draw* ) _src );
+        break;
+    default:
+        throw ExceptionChimera ( ExceptionCode::READ, "Tipo de clonagem nao implementada para:" + _src->getId() );
+        break;
+    }
+
     for ( Node *pNode : _src->listChild ) {
         novo->addChild ( clone ( pNode ) );
     }
@@ -432,8 +432,8 @@ void Loader::libEffect ( void ) {
                 //pEffect->setName ( getAtributoXML ( "Effects","name",l_nMat ) );
                 pEffect->setId ( getAtributoXML ( "Effects","id",l_nMat ) );
 
-                listaNode.push(pEffect);
-                
+                listaNode.push ( pEffect );
+
                 //pega referencia textura
                 std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
                 if ( idTextura.size() >0 ) {
@@ -489,8 +489,8 @@ void Loader::libImage ( void ) {
                 pImage->setId ( getAtributoXML ( "Image","id",l_nImage ) );
                 pImage->setName ( getAtributoXML ( "Image","name",l_nImage ) );
 
-                listaNode.push(pImage);
-                
+                listaNode.push ( pImage );
+
                 std::string l_pathFile = getValueFromProp ( "Image","init_from",l_nImage->children );
                 if ( l_pathFile.size() >0 ) {
                     std::string l_arquivo = m_imageDir + l_pathFile;
@@ -531,8 +531,8 @@ void Loader::libMaterial ( void ) {
                 pMat->setName ( getAtributoXML ( "Material","name",l_nMat ) );
                 pMat->setId ( getAtributoXML ( "Material","id",l_nMat ) );
 
-                listaNode.push(pMat);
-                
+                listaNode.push ( pMat );
+
                 xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
                 if ( l_nEffect ) {
                     xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
@@ -543,8 +543,8 @@ void Loader::libMaterial ( void ) {
                         if ( pEffe ) {
                             Image *pImage = ( Image* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
                             if ( pImage!=nullptr ) {
-                                pMat->addChild ( clone(pEffe) );
-                                pMat->addChild (clone(pImage));
+                                pMat->addChild ( clone ( pEffe ) );
+                                pMat->addChild ( clone ( pImage ) );
                             }
                         }
                     }
@@ -582,8 +582,8 @@ void Loader::libGeometry ( void ) {
             pMesh->setName ( getAtributoXML ( "Mesh","name",l_nGeom ) );
             pMesh->setId ( getAtributoXML ( "Mesh","id",l_nGeom ) );
 
-            listaNode.push(pMesh);
-            
+            listaNode.push ( pMesh );
+
             xmlNodePtr l_nMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
             if ( l_nMesh ) {
                 l_nMesh = findNode ( ( char* ) "source",l_nMesh->children );
@@ -697,9 +697,9 @@ void Loader::libGeometry ( void ) {
 }
 
 Node* Loader::libScene ( void ) {
-    
+
     Node *pScene = nullptr;
-    
+
     xmlNodePtr l_nScene = findNode ( ( char* ) "library_visual_scenes", m_root );
     if ( l_nScene!=nullptr ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
@@ -708,7 +708,7 @@ Node* Loader::libScene ( void ) {
             pScene = new Node();
             pScene->setName ( getAtributoXML ( "Scene","name",l_nScene ) );
             pScene->setId ( getAtributoXML ( "Scene","id",l_nScene ) );
-            
+
             xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );
             createNode ( l_nNode, pScene );
         }
@@ -719,20 +719,33 @@ Node* Loader::libScene ( void ) {
     } else {
         LOG4CXX_INFO ( logger , std::string ( std::string ( "Nodes de cena Registrados:" ) + std::to_string ( m_numNodes ) ) );
     }
-    
+
     return pScene;
 }
 
 void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix ) {
 
-    btScalar *ponteiroFloat = new btScalar[ listaMatrix.size() ];
-    for ( int indice = 0 ; indice < listaMatrix.size(); indice++ ) {
-        ponteiroFloat[indice] = listaMatrix[indice];
-    }
+    if ( listaMatrix.size() != 16 )
+        throw ExceptionChimera ( ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string ( listaMatrix.size() ) );
 
+    btScalar ponteiroFloat[16];// = new btScalar[ 16 ];
+
+//     for ( int indice = 0 ; indice < listaMatrix.size(); indice++ ) {
+//         ponteiroFloat[indice] = listaMatrix[indice];
+//     }
+
+    int indice = 0;
+    for ( int i=0; i<4; i++ ) {
+        for ( int j=0; j<4; j++ ) {
+            int pos =  i + ( 4*j );
+            ponteiroFloat[ pos ] = listaMatrix[indice];
+            indice++;
+        }
+    }
+    
     _pTrans->setFromOpenGLMatrix ( ponteiroFloat );
-    delete ponteiroFloat;
-    ponteiroFloat = nullptr;
+    //delete ponteiroFloat;
+    //ponteiroFloat = nullptr;
 }
 
 void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
@@ -802,9 +815,9 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                                             Material *pMat = ( Material* ) Node::findObjById ( EntityKind::MATERIAL,l_nomeMaterial ); //m_pScene->m_mMaterial[ ( char* ) &pURL[1]];
                                             if ( pMat ) {
-  
-                                                pMesh->addChild (  clone(pMat) );
-                                                pObj->addChild (  clone(pMesh) );
+
+                                                pMesh->addChild ( clone ( pMat ) );
+                                                pObj->addChild ( clone ( pMesh ) );
 
                                             }
                                         }
@@ -821,7 +834,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                     Light *pLight = ( Light* ) Node::findObjById ( EntityKind::LIGHT, ( char* ) &pURL[1] );
                     if ( pLight!=nullptr ) {
 
-                        Light *pLightScene = (Light*)clone( pLight );//Light *pLightScene = new Light ( *pLight );
+                        Light *pLightScene = ( Light* ) clone ( pLight ); //Light *pLightScene = new Light ( *pLight );
                         pLightScene->setName ( l_name );
                         pLightScene->setId ( l_id );
                         pLightScene->transform = l_transform;
@@ -839,7 +852,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                     if ( pCam!=nullptr ) {
 
-                        Camera *pCamScena =  (Camera *) clone( pCam );//Camera *pCamScena = new Camera ( *pCam );
+                        Camera *pCamScena = ( Camera * ) clone ( pCam ); //Camera *pCamScena = new Camera ( *pCam );
                         pCamScena->setName ( l_name );
                         pCamScena->setId ( l_id );
                         pCamScena->transform = l_transform;

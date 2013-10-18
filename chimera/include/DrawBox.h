@@ -16,10 +16,8 @@ public:
     }
     
     virtual void update ( DataMsg *dataMsg );
-    virtual void renderizar();
     virtual btVector3 getSizeBox(void);
    
-    
 private:
     btVector3 sizeBox;
     

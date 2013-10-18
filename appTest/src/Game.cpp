@@ -60,7 +60,6 @@ void Game::onFrame(){
     pCam->exec();
     
     Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
-    
     pSceneMng->update(&dataMsg);
     
     if ( pEngined3D->getLight() ==true ) {
@@ -72,12 +71,7 @@ void Game::onFrame(){
     //glRectf(100.0, 100.0, 300.0, 200.0);
     
     //m_pEngined3D->setViewPortPerspective();
-    
-    
-    
     //m_pEngined3D->setViewPortPerspective();
-    
-    
 }
 
 void Game::offFrame(){

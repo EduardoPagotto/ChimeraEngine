@@ -3,47 +3,16 @@
 namespace Chimera {
 
 Draw::Draw(DrawType _type) : Node(EntityKind::DRAW) , type(_type) {
-    
-    pMaterial = nullptr;
-    
 }
 
-Draw::Draw(const Draw &_draw) : Node (_draw) , type(_draw.type) {
-    
-    pMaterial = _draw.pMaterial;
-    
+Draw::Draw(const Draw &_draw) : Node (_draw) , type(_draw.type) {    
 }
 
 Draw::~Draw() {
-
-}
-
-void Draw::renderizar() {
-    
-    if ( pMaterial )
-        pMaterial->exec();
-    else {
-        if ( glIsEnabled ( GL_COLOR_MATERIAL ) == 1 ) {
-            Color a ( 0.2f, 0.2f, 0.2f, 1.0f );
-            Color d ( 0.8f, 0.8f, 0.8f, 1.0f );
-            Color s ( 0.0f, 0.0f, 0.0f, 1.0f );
-            glMaterialfv ( GL_FRONT, GL_AMBIENT, a.ptr() ); //GL_FRONT_AND_BACK??
-            glMaterialfv ( GL_FRONT, GL_DIFFUSE, d.ptr() );
-            glMaterialfv ( GL_FRONT, GL_SPECULAR, s.ptr() );
-            glMaterialf ( GL_FRONT, GL_SHININESS, 12.0f );
-        }
-    } 
 }
 
 void Draw::update ( DataMsg *dataMsg ) {
-    
-    Node::update(dataMsg);
-    
-    if (dataMsg->getKindOp()==KindOp::START) {
-        if ( pMaterial )
-            pMaterial->initTex();
-    }
-    
+    Node::update(dataMsg);    
 }
 
 //void Draw::ajusteMatrix ( Transform *_pTrans ) {

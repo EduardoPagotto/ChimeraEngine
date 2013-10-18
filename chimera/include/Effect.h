@@ -1,6 +1,9 @@
 #ifndef EFFECT_H_
 #define EFFECT_H_
 
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include "Color.h"
 #include "Node.h"
 

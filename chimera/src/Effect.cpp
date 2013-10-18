@@ -25,12 +25,21 @@ Effect::Effect(const Effect& _cpy) : Node(_cpy) {
 
 void Effect::update ( DataMsg *dataMsg ) {
     
-    Node::update(dataMsg);
-    
     if (dataMsg->getKindOp()==KindOp::START) {
-//         if ( pMaterial )
-//             pMaterial->initTex();
+
+    } else if (dataMsg->getKindOp()==KindOp::DRAW3D) {
+        
+        if ( glIsEnabled ( GL_COLOR_MATERIAL ) == 1 ) {
+            glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
+            glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
+            glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
+            glMaterialfv ( GL_FRONT, GL_SHININESS,  &shininess );
+            glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() ); 
+       }
+            
     }
+    
+    Node::update(dataMsg);
     
 }
 

@@ -114,7 +114,7 @@ void Engine3D::setMaterial ( bool _materialOn ) {
     if ( _materialOn==true ) {
         glEnable ( GL_TEXTURE_2D );
         glEnable ( GL_COLOR_MATERIAL );
-        glColorMaterial ( GL_FRONT,GL_DIFFUSE ); //??
+        glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //??
     } else {
         glDisable ( GL_TEXTURE_2D );
         glDisable ( GL_COLOR_MATERIAL );

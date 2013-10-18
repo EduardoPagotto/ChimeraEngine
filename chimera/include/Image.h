@@ -1,10 +1,12 @@
 #ifndef IMAGE_H_
 #define IMAGE_H_
 
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include "SDL2/SDL_image.h"
 #include "ExceptionChimera.h"
 #include "Node.h"
-
 
 namespace Chimera {
 
@@ -15,6 +17,8 @@ public:
     Image (const Image &_imagen);
 	~Image();
     
+    int link();
+    
     virtual void update ( DataMsg *dataMsg );
     
     void loadImage();
@@ -24,6 +28,7 @@ public:
     }
     
 private:
+    unsigned int idTexturaGL;
     std::string pathFile;
 	SDL_Surface *pImage;
 };

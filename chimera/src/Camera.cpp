@@ -61,22 +61,24 @@ void Camera::exec ( void ) {
     }
 }
 
-
-
 void Camera::update ( DataMsg *_dataMsg ) {
     
     if  (_dataMsg->getKindOp() == KindOp::START) {
+        position = transform.getOrigin();
+        
+        //FIXME verificar dentro a matrix estes valores
+        //position.setValue(-5.0, -5.0, -5.0);
+        
+        direction.setValue(0.0, 0.0, 0.0);
+        rotation.setValue(0.0, 0.0, 1.0);
+        
+        //direction = transform.getBasis();
+       // rotation = transform.getRotation();
      
+    } if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
         
     }
     
-    
-//FIXME
-//     if ( _transport->code==DO_DRAW_3D ) {
-//
-//     } else if ( _transport->code==DO_INIT ) {
-//         init();
-//     }
     Node::update ( _dataMsg );
 }
 

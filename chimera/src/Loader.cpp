@@ -8,7 +8,7 @@ Loader::Loader () {
 
     m_numNodes = 0;
     //m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
-    logger = log4cxx::Logger::getLogger ( "appTest" );
+    logger = log4cxx::Logger::getLogger ( "Loader" );
 
 }
 

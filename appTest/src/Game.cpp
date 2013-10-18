@@ -49,8 +49,8 @@ void Game::onFrame(){
     
     //TODO Desenho aqui
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    pEngined3D->setLight(true);
-    pEngined3D->setMaterial(true);    
+    //pEngined3D->setLight(true);
+    //pEngined3D->setMaterial(true);    
 
     pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
     pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
@@ -62,9 +62,9 @@ void Game::onFrame(){
     Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
     pSceneMng->update(&dataMsg);
     
-    if ( pEngined3D->getLight() ==true ) {
+    //if ( pEngined3D->getLight() ==true ) {
         pSceneMng->execLight();
-    } 
+    //} 
     
     //m_pEngined3D->setViewPortOrtogonal();
     //glColor3f(0.7, 0.5, 0.8);

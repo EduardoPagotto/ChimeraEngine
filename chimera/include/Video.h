@@ -40,11 +40,8 @@ public:
     Video ( int _width, int _height, std::string _nome );
     virtual ~Video();
 
-    inline int getWidth() const {
-        return width;
-    }
-    inline int getHeight() const {
-        return height;
+    const SDL_Rect *getPRectangle() const {
+        return &rectangle;
     }
 
     std::string getNomeTela() const {
@@ -56,8 +53,9 @@ public:
     int getFPS();
     
 private:
-    int width;
-    int height;
+
+    SDL_Rect rectangle;
+    
     int fps;
     
     std::string nomeTela;

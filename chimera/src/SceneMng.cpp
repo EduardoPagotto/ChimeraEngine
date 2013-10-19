@@ -120,18 +120,12 @@ void SceneMng::setLight ( bool _lightOn ) {
 void SceneMng::setMaterial ( bool _materialOn ) {
     
     hasMaterial = _materialOn;
-    //FIXME verificar com mesh sem textura;
-    if ( _materialOn==true ) {
-        
-        //glEnable ( GL_TEXTURE_2D );
-        glEnable ( GL_COLOR_MATERIAL );
-        glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //??
-        
-    } else {
-        
-        //glDisable ( GL_TEXTURE_2D );
+    if ( _materialOn==true ) { 
         glDisable ( GL_COLOR_MATERIAL );
-        
+        //glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //??  
+    } else {
+        glEnable ( GL_COLOR_MATERIAL );
+        glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //??         
     }
 }
 

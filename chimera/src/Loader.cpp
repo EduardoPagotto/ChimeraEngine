@@ -479,6 +479,8 @@ void Loader::libMaterial ( void ) {
                 if ( l_idDesenhoBase.size() > 0 ) {
 
                     DataDraw *pDataDraw = new DataDraw;
+                    pDataDraw->pEffect = nullptr;
+                    pDataDraw->pTextura = nullptr;
                     m_mDesenhoBase[ l_idDesenhoBase ] = pDataDraw;
 
                     xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
@@ -486,18 +488,19 @@ void Loader::libMaterial ( void ) {
 
                         xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
                         if ( l_val ) {
-
+                            Effect *pEffe = nullptr;
                             std::string l_nomeEffect = ( char* ) &l_val[1];
-                            Effect *pEffe = m_mEffect[ l_nomeEffect ]; //( Effect* ) Node::findObjById ( EntityKind::EFFECT,l_nomeEffect ); //m_pScene->m_mEffect[ ( char* ) &l_val[1]];
-
-                            if ( pEffe ) {
-
-                                Texture *pTexture = m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
-
-                                if ( pTexture!=nullptr ) {
+                            if (l_nomeEffect.size() >0 ) {
+                                pEffe = m_mEffect[ l_nomeEffect ];
+                                if ( pEffe ) {
                                     pDataDraw->pEffect = pEffe;
-                                    pDataDraw->pTextura = pTexture;
-                                }
+                                    if (pEffe->getNameTextureId().size() > 0) {
+                                        Texture *pTexture = m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+                                        if ( pTexture!=nullptr ) {
+                                            pDataDraw->pTextura = pTexture;
+                                        }
+                                    }
+                                } 
                             }
                         }
                     }
@@ -734,6 +737,8 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                     if ( pDrawTriMesh ) {
 
+                        pObj->pDraw = new DrawTriMesh ( *pDrawTriMesh );
+                        
                         //Carrega Material se existir
                         if ( l_nInstance->children ) {
                             xmlNodePtr l_nBindMat = findNode ( ( char* ) "bind_material", l_nInstance->children );
@@ -749,9 +754,13 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                                             DataDraw *pDataDraw = m_mDesenhoBase[  l_nomeMaterial ];
                                             if ( pDataDraw != nullptr ) {
-                                                pObj->pTexture = new Texture ( * ( pDataDraw->pTextura ) );
-                                                pObj->pEffect = new Effect ( * ( pDataDraw->pEffect ) );
-                                                pObj->pDraw = new DrawTriMesh ( *pDrawTriMesh );
+                                                
+                                                if (pDataDraw->pTextura != nullptr)
+                                                    pObj->pTexture = new Texture ( * ( pDataDraw->pTextura ) );
+                                                
+                                                if (pDataDraw->pEffect != nullptr)
+                                                    pObj->pEffect = new Effect ( * ( pDataDraw->pEffect ) );
+
                                             }
                                         }
                                     }

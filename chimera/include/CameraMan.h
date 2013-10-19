@@ -34,11 +34,6 @@ private:
     btVector3 up;
     btVector3 forward;
 
-//     btScalar horizontal;
-//     btScalar vertical;
-//     btScalar distancia;
-//     btScalar distanciaMax;
-//     btScalar distanciaMin;
 };
 
 }

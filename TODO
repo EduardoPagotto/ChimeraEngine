@@ -1,17 +1,6 @@
 
-Status			Item
-				Verificar Real necessidade no que tange a Transform:
-removido		-Ser Pai dos outros node
-removido		-Ser Atributo de outros nodes
-implementado	-nao existir e colocar as matrisez diretono btTransform <- gosto deste
-	
-				Mudar no construtor dos objetos de entidade (Camera, Luz, Objeto, Node)
-implementado	-Tirar o ID e o Name do construtor para poder realizar copia na criação da cena no final
-desnecessario	-Criar um factory estatico dentro das classes, pasando a clase a ser copiada e NAO USAR O CONTRUTOR DE COPIA!!!
-
-				Executar Teste integrado para remover erro de instancia
-				Remover o Scene de dentro do Loader
-				Verificar a necessidade real da existencia da classe Scene
-				Implementar carga de dados ortogonal
-				Implementar clonagem dos derivados de Camera
-				Implementar os restantes dos Draw's
+Status:		Item:
+ABERTO		-Implementar carga de dados ortogonal
+			-Implementar Fontes e texto
+			-Implementar grade de teste
+			-Implementar Teste com CameraMan

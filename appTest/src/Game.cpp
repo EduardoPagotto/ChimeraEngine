@@ -86,7 +86,7 @@ void Game::onFrame(){
     const SDL_Rect *tela = pVideo->getPRectangle();
     pSceneMng->setViewPortPerspective( *tela, pOrbitalCam);
     
-    pSceneMng->execLight();
+    
     
     pOrbitalCam->exec();
         
@@ -94,6 +94,8 @@ void Game::onFrame(){
     Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
     pSceneMng->update(&dataMsg);
         
+    pSceneMng->execLight();
+    
 }
 
 void Game::offFrame(){

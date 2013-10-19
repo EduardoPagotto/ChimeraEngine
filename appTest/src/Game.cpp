@@ -42,13 +42,11 @@ void Game::start() {
         
     pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
     pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
-    //pSceneMng->setLight(true);
-    //pSceneMng->setMaterial(false);
+    pSceneMng->setLight(true);
+    pSceneMng->setMaterial(true);
     
     const SDL_Rect *tela = pVideo->getPRectangle();
     pSceneMng->setViewPortPerspective( *tela, pCam);
-    
-    pObj->init();
     
     pSceneMng->execLight();
     
@@ -78,10 +76,8 @@ void Game::onFrame(){
     glRotatef( yrot, 0.0f, 1.0f, 0.0f); /* Rotate On The Y Axis By yrot */
     
    
-    
-    pObj->render();
-    //Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
-    //pSceneMng->update(&dataMsg);
+    Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
+    pSceneMng->update(&dataMsg);
     
     xrot += 1.0f;
     yrot += 1.0f;
@@ -102,7 +98,7 @@ void Game::onFrame(){
 void Game::offFrame(){
     
     if (timer01.stepCount() == true)
-        std::cout << "FPS: " << pVideo->getFPS() << std::endl;
+        std::cout << "FPS: " << getFPS() << std::endl;
     
 }
 

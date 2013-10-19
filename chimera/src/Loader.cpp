@@ -351,7 +351,8 @@ void Loader::libLight () {
                     std::string cores = getValueFromProp ( "Light","color",l_nTipo->children );
                     if ( cores.size() >0 ) {
                         loadArrayF ( cores.c_str() ,l_arrayValores );
-                        pLight->setAmbient ( Color ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f ) );
+                        //pLight->setAmbient ( Color ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f ) );
+                        pLight->setDiffuse( Color ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f ) );
                         l_arrayValores.clear();
                     }
                 } else {

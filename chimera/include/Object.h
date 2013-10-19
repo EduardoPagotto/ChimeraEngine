@@ -1,7 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <GL/gl.h>			// Header File For The OpenGL32 Library
+#include <GL/gl.h>
 
 //#include "Physics.h"
 #include <LinearMath/btTransform.h>
@@ -28,19 +28,9 @@ public:
     void init();
     void render();
     
-// 	void setDraw(Draw *_pDraw) {
-// 		pDraw = _pDraw;
-// 	}
-// 
-// 	void setPhysic(Physics *_pPhysic) {
-// 		pPhysic = _pPhysic;
-// 	}
-
 // 	void applyTorc(const btVector3 &_vet);
-// 
 // 	void applyForce(const btVector3 &_vet);
 
-	
 private:
 	//Physics *pPhysic;
 	Draw *pDraw;

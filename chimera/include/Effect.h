@@ -19,53 +19,21 @@ public:
 	
 	void render();
 	
-	Color getAmbient() const {
-        return ambient;
-    }
+	Color getAmbient() const { return ambient; }
+    Color getSpecular() const { return specular; }
+    Color getDiffuse() const { return diffuse; }
+    Color getEmissive() const { return emissive; }    
     
-    Color getSpecular() const {
-        return specular;
-    }
+    void setAmbient(Color _color) { ambient = _color;}
+    void setSpecular(Color _color) { specular = _color;}
+    void setDiffuse(Color _color) { diffuse = _color; }	
+    void setEmissive(Color _color) { emissive = _color;}    
     
-    Color getDiffuse() const {
-        return diffuse;
-    }
+    float getShininess() const { return shininess;}
+    void setShininess(float _val) {  shininess = _val;}
+	void setNameTextureId(std::string _name) { nameTextureId = _name; }
 
-    Color getEmissive() const {
-        return emissive;
-    }    
-    
-    void setAmbient(Color _color) {
-        ambient = _color;
-    }
-    
-    void setSpecular(Color _color) {
-        specular = _color;
-    }
-    
-    void setDiffuse(Color _color) {
-        diffuse = _color;
-    }	
-
-    void setEmissive(Color _color) {
-        emissive = _color;
-    }    
-    
-    float getShininess() const {
-        return shininess;
-    }
-    
-    void setShininess(float _val) {
-        shininess = _val;
-    }
-    
-	void setNameTextureId(std::string _name) {
-        nameTextureId = _name;
-    }
-
-    std::string getNameTextureId() const {
-        return nameTextureId;
-    }
+    std::string getNameTextureId() const { return nameTextureId; }
     
 private:
     
@@ -75,7 +43,6 @@ private:
     Color emissive;       /* Emissive color RGB */
     
     float shininess;
-    
     std::string nameTextureId;
 };
 

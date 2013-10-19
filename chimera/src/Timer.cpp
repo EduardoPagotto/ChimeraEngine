@@ -36,13 +36,13 @@ void Timer::resume() {
     }
 }
 
-int Timer::restart() {
-    int elapsedTicks = ticks();
+Uint32 Timer::restart() {
+    Uint32 elapsedTicks = ticks();
     start();
     return elapsedTicks;
 }
 
-int Timer::ticks() const {
+Uint32 Timer::ticks() const {
     if ( started ) {
         if ( paused ) {
             return pausedTicks;
@@ -55,7 +55,7 @@ int Timer::ticks() const {
 
 bool Timer::stepCount() {
 
-    int temp = ticks();
+    Uint32 temp = ticks();
     if ( temp < elapsedCount ) {
         step++;
     } else {

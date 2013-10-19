@@ -29,14 +29,21 @@ public:
     virtual void offFrame() = 0;
     virtual void processMsg(DataMsg *_dataMsg) = 0;
     
+    u_int32_t getFPS();
+    
 protected:
 
     SceneMng *pSceneMng;
-    Video *pVideo;
+    PhysicWorld *physicWorld;
     //Font *m_pFont;
     //HUD *m_pHUD;
-    PhysicWorld *physicWorld;
-   
+    Video *pVideo;
+private:
+    
+    unsigned int fps;
+    Timer timerFPS;
+    
+    
     log4cxx::LoggerPtr logger;
 };
 

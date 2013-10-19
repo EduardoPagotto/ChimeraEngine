@@ -49,25 +49,12 @@ public:
     }
     
     void swapWindow();
-    
-    int getFPS();
-    
-    void initOpenGL();
-    
-    std::string getVersaoOpenGL();
-    
+         
 private:
-
-    SDL_Rect rectangle;
-    
-    int fps;
-    
     std::string nomeTela;
-
+    SDL_Rect rectangle;
     SDL_Window *window;
     SDL_GLContext context;
-
-    Timer timerFPS;
 };
 
 } /* namespace Chimera */

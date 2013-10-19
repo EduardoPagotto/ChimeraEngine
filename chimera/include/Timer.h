@@ -20,8 +20,8 @@ public:
     void pause();
     void resume();
 
-    int restart();
-    int ticks() const;
+    Uint32 restart();
+    Uint32 ticks() const;
     bool stepCount();
 
     inline bool isStarted() const {
@@ -30,17 +30,21 @@ public:
     inline bool isPaused() const {
         return paused;
     }
-    inline int getCountStep() const {
+    inline Uint32 getCountStep() const {
         return countStep;
     }
-    inline void setElapsedCount ( int val ) {
+    inline void setElapsedCount (const Uint32 &val ) {
         elapsedCount = val;
     }
 
 private:
-    int startTicks, pausedTicks, elapsedCount, countStep, step;
-    bool started, paused;
-
+    bool started;
+    bool paused;
+    Uint32 startTicks;
+    Uint32 pausedTicks;
+    Uint32 step;
+    Uint32 countStep;
+    Uint32 elapsedCount;
 };
 
 } /* namespace Chimera */

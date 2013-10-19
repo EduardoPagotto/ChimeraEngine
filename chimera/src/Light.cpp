@@ -60,28 +60,15 @@ void Light::exec() {
         default:
             break;
         }
-
-
-        GLfloat posicaoLuz[] = {5.0 , -1.0 , 0.0 ,1.0f };
-        GLfloat amb[] = {0.0, 0.0, 0.0, 1.0};
-        GLfloat dif[] = {1.0, 1.0, 1.0, 1.0};
         
+        GLfloat posicaoLuz[] = {position.x() , position.y() , position.z() , 1.0f };      
         //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat*)ambient.ptr());
-        glLightfv ( testeLuz,GL_AMBIENT, amb );
-        glLightfv ( testeLuz,GL_DIFFUSE, dif );
-        //glLightfv(testeLuz,GL_SPECULAR,(GLfloat*)specular.ptr());
-        
+        glLightfv ( testeLuz,GL_AMBIENT, ( GLfloat* ) ambient.ptr() );
+        glLightfv ( testeLuz,GL_DIFFUSE, ( GLfloat* ) diffuse.ptr() );
+        glLightfv(testeLuz,GL_SPECULAR,(GLfloat*) specular.ptr());
+
         glLightfv ( testeLuz,GL_POSITION,posicaoLuz );
         glEnable ( testeLuz );
-        
- //       GLfloat posicaoLuz[] = {position.x() , position.y() , position.z() , 1.0f };      
-//         //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat*)ambient.ptr());
-//         glLightfv ( testeLuz,GL_AMBIENT, ( GLfloat* ) ambient.ptr() );
-//         glLightfv ( testeLuz,GL_DIFFUSE, ( GLfloat* ) diffuse.ptr() );
-//         //glLightfv(testeLuz,GL_SPECULAR,(GLfloat*)specular.ptr());
-// 
-//         glLightfv ( testeLuz,GL_POSITION,posicaoLuz );
-//         glEnable ( testeLuz );
     }
 }
 

@@ -51,33 +51,24 @@ void Object::update ( DataMsg *_dataMsg ) {
     
     if (_dataMsg->getKindOp()==KindOp::START) {
 
-//         position = transform.getOrigin();
-//        
-//         if (pTexture != nullptr)
-//             pTexture->init();
-//        
-//         if (pDraw!=nullptr)
-//             pDraw->init();
-
-        //      if (m_pPhysic)
-        //          m_pPhysic->init(&m_trans);
-        
+        init();
+                
         Node::update(_dataMsg);
         
     } if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
         
-        //glPushMatrix();
+        glPushMatrix();
         
         //         if (pPhysic) {
         //             Object *pSource = (Object *)_transport->fieldA;
         //             m_pPhysic->ajusteMatrix(pSource->m_pPhysic);
         //         }     
         
-     
+        render();
         
-       // Node::update(_dataMsg);
+        Node::update(_dataMsg);
        
-        //glPopMatrix();
+        glPopMatrix();
      } 
 }
 

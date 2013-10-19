@@ -1,5 +1,6 @@
 #include "SceneMng.h"
 
+
 namespace Chimera {
 
 SceneMng::SceneMng (Node *_pRoot)  {
@@ -119,15 +120,47 @@ void SceneMng::setLight ( bool _lightOn ) {
 void SceneMng::setMaterial ( bool _materialOn ) {
     
     hasMaterial = _materialOn;
-    
+    //FIXME verificar com mesh sem textura;
     if ( _materialOn==true ) {
-        glEnable ( GL_TEXTURE_2D );
-        //glEnable ( GL_COLOR_MATERIAL );
-        //glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //??
+        
+        //glEnable ( GL_TEXTURE_2D );
+        glEnable ( GL_COLOR_MATERIAL );
+        glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //??
+        
     } else {
-        glDisable ( GL_TEXTURE_2D );
+        
+        //glDisable ( GL_TEXTURE_2D );
         glDisable ( GL_COLOR_MATERIAL );
+        
     }
+}
+
+void SceneMng::initOpenGL() {
+    
+    glEnable ( GL_TEXTURE_2D );
+    glShadeModel ( GL_SMOOTH );
+    glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
+    glClearDepth ( 1.0f );
+    glEnable ( GL_DEPTH_TEST );
+    glEnable ( GL_CULL_FACE );
+    glDepthFunc ( GL_LEQUAL );
+    glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+    glEnable ( GL_LIGHTING );
+    
+}
+
+std::string SceneMng::getVersaoOpenGL() {
+    
+    std::string retorno;
+    
+    const char* version = ( const char* ) glGetString ( GL_VERSION );
+    if ( version != nullptr ) {
+        retorno.append ( version );
+    } else {
+        throw ExceptionSDL ( ExceptionCode::READ, std::string ( SDL_GetError() ) );
+    }
+    
+    return retorno;
 }
 // 
 // void Engine3D::begin2D () {

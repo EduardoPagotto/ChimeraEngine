@@ -2,6 +2,7 @@
 #define SCENE_MNG_H_
 
 #include <vector>
+#include "ExceptionSDL.h"
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
@@ -25,10 +26,13 @@ public:
     void update(DataMsg *dataMsg );
     
     void execLight();
-    
+        
     void setViewPortOrtogonal(const SDL_Rect &_rectangle);
     void setViewPortPerspective(const SDL_Rect &_rectangle, const Camera *_camera);
      
+    void initOpenGL();
+    std::string getVersaoOpenGL();
+    
     void setLight ( bool _lightOn );
     void setMaterial ( bool _materialOn );
     
@@ -40,6 +44,7 @@ private:
     bool hasMaterial;
     
     Node *pRoot;
+    
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
     std::vector<Object*> m_vObject;

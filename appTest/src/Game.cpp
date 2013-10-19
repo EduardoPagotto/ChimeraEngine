@@ -60,17 +60,30 @@ void Game::start() {
     
     using namespace Chimera;
         
+    //instancia e coloca na cena uma nova camera orbital
     Camera* pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
-    
     pOrbitalCam = new CameraSpherical( *pCam );
     pOrbitalCam->setDistanciaMaxima(1000.0f);
     pOrbitalCam->setDistanciaMinima(0.5f);
     pOrbitalCam->setId("Orbital1");
     pSceneMng->addChildToScene(pOrbitalCam);
     
+    //Ajusta objeto primario
     pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
     pSceneMng->setLight(true);
     pSceneMng->setMaterial(true);
+    
+//     //define propriedades fisicas
+//     btMaterial *pMat = new btMaterial;
+//     pMat->m_friction = 0.1f;
+//     pMat->m_restitution =0.1f;
+//     
+//     Physics *pPhysc = new Physics;
+//     pPhysc->setMass(10.0f);
+//     pPhysc->m_pPhysicMaterial = pMat;
+//     
+//     pObj->pPhysic = pPhysc;
+//     pPhysc->setShapeBox( pObj->pDraw->getSizeBox() );
     
 }
 

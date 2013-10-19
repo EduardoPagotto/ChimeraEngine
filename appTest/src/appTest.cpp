@@ -17,7 +17,7 @@ int main ( int argn, char** argv ) {
     try {    
         
         //Instancia de Video
-        Chimera::Video *video = new Chimera::Video ( 800, 800, std::string ( "Teste" ) );
+        Chimera::Video *video = new Chimera::Video ( 640, 480, std::string ( "Teste" ) );
         LOG4CXX_INFO ( logger , "Tela Iniciada com sucesso" );      
         
         //Carga de dados 
@@ -25,8 +25,8 @@ int main ( int argn, char** argv ) {
         pLoader->setModelDir("../../appTest/models/");
         pLoader->setImageDir("../../appTest/models/");
         //Chimera::Node *pRoot = pLoader->loadDAE("cuboTex1.dae");//cuboEesfera.dae
-        Chimera::Node *pRoot = pLoader->loadDAE("cuboEesfera.dae");
-        //Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.dae");
+        //Chimera::Node *pRoot = pLoader->loadDAE("cuboEesfera.dae");
+        Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.dae");
         
         delete pLoader;
         pLoader = nullptr;

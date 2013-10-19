@@ -814,130 +814,130 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
     }
 }
 
-// int Loader::libPhysicsMaterial ( void ) {
-//     unsigned l_num = 0;
-//     xmlNodePtr l_nPhMat = findNode ( ( char* ) "library_physics_materials", m_root );
-//     if ( l_nPhMat ) {
-//         l_nPhMat =  findNode ( ( char* ) "physics_material",l_nPhMat->children );
-//         while ( l_nPhMat ) {
-//             l_num++;
-//             xmlChar *l_pName = xmlGetProp ( l_nPhMat, ( const xmlChar* ) "name" );
-//
-//             btMaterial *pPMat = new btMaterial;
-//             m_pScene->m_PMaterial[ ( const char* ) l_pName] = pPMat;
-//
-//             xmlNodePtr l_nTec =  findNode ( ( char* ) "technique_common",l_nPhMat->children );
-//             if ( l_nTec ) {
-//                 xmlNodePtr l_nFric =  findNode ( ( char* ) "dynamic_friction",l_nTec->children );
-//                 if ( l_nFric ) {
-//                     xmlChar *l_pVal = xmlNodeListGetString ( m_doc, l_nFric->children, 1 );
-//                     if ( l_pVal ) {
-//                         pPMat->m_friction = atof ( ( const char* ) l_pVal );
-//                         xmlFree ( l_pVal );
-//                     }
-//                 }
-//
-//                 l_nFric =  findNode ( ( char* ) "restitution",l_nTec->children );
-//                 if ( l_nFric ) {
-//                     xmlChar *l_pVal = xmlNodeListGetString ( m_doc, l_nFric->children, 1 );
-//                     if ( l_pVal ) {
-//                         pPMat->m_restitution = atof ( ( const char* ) l_pVal );
-//                         xmlFree ( l_pVal );
-//                     }
-//                 }
-//             }
-//
-//             l_nPhMat =  findNode ( ( char* ) "physics_material",l_nPhMat->next );
-//         }
-//     }
-//     return l_num;
-// }
+int Loader::libPhysicsMaterial ( void ) {
+    unsigned l_num = 0;
+    xmlNodePtr l_nPhMat = findNode ( ( char* ) "library_physics_materials", m_root );
+    if ( l_nPhMat ) {
+        l_nPhMat =  findNode ( ( char* ) "physics_material",l_nPhMat->children );
+        while ( l_nPhMat ) {
+            l_num++;
+            xmlChar *l_pName = xmlGetProp ( l_nPhMat, ( const xmlChar* ) "name" );
 
-// int Loader::libPhysicsModels ( void ) {
-//     int l_count = 0;
-//     xmlNodePtr l_nPhysics = findNode ( ( char* ) "library_physics_models", m_root );
-//     if ( l_nPhysics ) {
-//         l_nPhysics = findNode ( ( char* ) "physics_model", l_nPhysics->children );
-//         if ( l_nPhysics ) {
-//             l_nPhysics = findNode ( ( char* ) "rigid_body", l_nPhysics );
-//             while ( l_nPhysics ) {
-//                 xmlChar *l_pName = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "name" );
-//                 xmlChar *l_pSid = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "sid" );
-//                 if ( ( l_pName ) && ( l_pSid ) ) {
-//                     Physics *pPhysc = new Physics;
-//                     m_pScene->m_mPhysics[ ( const char* ) l_pName] = pPhysc;
-//
-//                     xmlNodePtr l_nTec = findNode ( ( char* ) "technique_common", l_nPhysics->children );
-//                     if ( l_nTec ) {
-//                         xmlNodePtr l_nProp = findNode ( ( char* ) "dynamic", l_nTec->children );
-//                         if ( l_nProp ) {
-//                             xmlChar *l_pVal = xmlNodeListGetString ( m_doc, l_nProp->children, 1 );
-//                             if ( l_pVal ) {
-//                                 if ( strcmp ( ( const char* ) l_pVal, ( const char* ) "true" ) ==0 ) {
-//                                     l_nProp = findNode ( ( char* ) "mass", l_nProp );
-//                                     if ( l_nProp ) {
-//                                         xmlFree ( l_pVal );
-//                                         l_pVal = xmlNodeListGetString ( m_doc, l_nProp->children, 1 );
-//                                         if ( l_pVal )
-//                                             pPhysc->setMass ( ( float ) atof ( ( char* ) l_pVal ) );
-//                                     }
-//                                 }
-//
-//                                 xmlFree ( l_pVal );
-//                             }
-//                         }
-//
-//                         l_nProp = findNode ( ( char* ) "instance_physics_material", l_nTec->children );
-//                         if ( l_nProp ) {
-//                             xmlChar *l_pName = xmlGetProp ( l_nProp, ( const xmlChar* ) "url" );
-//                             if ( l_pName ) {
-//                                 btMaterial *pPMat = m_pScene->m_PMaterial[ ( const char* ) &l_pName[1]];
-//                                 if ( pPMat )
-//                                     pPhysc->m_pPhysicMaterial = pPMat;
-//                             }
-//                         }
-//
-//
-//
-//                     }
-//                 }
-//                 l_nPhysics = findNode ( ( char* ) "rigid_body", l_nPhysics->next );
-//             }
-//         }
-//     }
-//     return l_count;
-// }
+            btMaterial *pPMat = new btMaterial;
+            m_pPhMaterial[ ( const char* ) l_pName] = pPMat;
 
-// int Loader::libPhysicsScenes ( void ) {
-//     unsigned l_num=0;
-//     xmlNodePtr l_nPhyScene = findNode ( ( char* ) "library_physics_scenes", m_root );
-//     if ( l_nPhyScene!=nullptr ) {
-//         l_nPhyScene = findNode ( ( char* ) "instance_physics_model", l_nPhyScene->children );
-//         if ( l_nPhyScene ) {
-//             xmlNodePtr l_nRigid = findNode ( ( char* ) "instance_rigid_body", l_nPhyScene->children );
-//             while ( l_nRigid ) {
-//                 xmlChar *l_pBody = xmlGetProp ( l_nRigid, ( const xmlChar* ) "body" );
-//                 xmlChar *l_pTarget = xmlGetProp ( l_nRigid, ( const xmlChar* ) "target" );
-//                 if ( ( l_pBody ) && ( l_pTarget ) ) {
-//                     Physics *pPhysic = m_pScene->m_mPhysics[ ( const char* ) l_pBody];
-//                     Object *pObj = ( Object* ) m_pScene->findInList ( ( const char* ) &l_pTarget[1],OBJECT );
-//
-//                     if ( ( pPhysic ) && ( pObj ) ) {
-//                         DrawTriMesh *pDrawTriMesh = ( DrawTriMesh* ) pObj->m_pDraw; //todo pode ser o draw
-//                         if ( pDrawTriMesh )
-//                             pPhysic->setShapeBox ( pDrawTriMesh->sizeQuadratic() );
-//
-//                         pObj->m_pPhysic = pPhysic;
-//                         l_num++;
-//                     }
-//                 }
-//                 l_nRigid = findNode ( ( char* ) "instance_rigid_body",l_nRigid->next );
-//             }
-//         }
-//     }
-//
-//     return l_num;
-// }
+            xmlNodePtr l_nTec =  findNode ( ( char* ) "technique_common",l_nPhMat->children );
+            if ( l_nTec ) {
+                xmlNodePtr l_nFric =  findNode ( ( char* ) "dynamic_friction",l_nTec->children );
+                if ( l_nFric ) {
+                    xmlChar *l_pVal = xmlNodeListGetString ( m_doc, l_nFric->children, 1 );
+                    if ( l_pVal ) {
+                        pPMat->m_friction = atof ( ( const char* ) l_pVal );
+                        xmlFree ( l_pVal );
+                    }
+                }
+
+                l_nFric =  findNode ( ( char* ) "restitution",l_nTec->children );
+                if ( l_nFric ) {
+                    xmlChar *l_pVal = xmlNodeListGetString ( m_doc, l_nFric->children, 1 );
+                    if ( l_pVal ) {
+                        pPMat->m_restitution = atof ( ( const char* ) l_pVal );
+                        xmlFree ( l_pVal );
+                    }
+                }
+            }
+
+            l_nPhMat =  findNode ( ( char* ) "physics_material",l_nPhMat->next );
+        }
+    }
+    return l_num;
+}
+
+int Loader::libPhysicsModels () {
+    int l_count = 0;
+    xmlNodePtr l_nPhysics = findNode ( ( char* ) "library_physics_models", m_root );
+    if ( l_nPhysics ) {
+        l_nPhysics = findNode ( ( char* ) "physics_model", l_nPhysics->children );
+        if ( l_nPhysics ) {
+            l_nPhysics = findNode ( ( char* ) "rigid_body", l_nPhysics );
+            while ( l_nPhysics ) {
+                xmlChar *l_pName = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "name" );
+                xmlChar *l_pSid = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "sid" );
+                if ( ( l_pName ) && ( l_pSid ) ) {
+                    Physics *pPhysc = new Physics;
+                    m_mPhysics[ ( const char* ) l_pName] = pPhysc;
+
+                    xmlNodePtr l_nTec = findNode ( ( char* ) "technique_common", l_nPhysics->children );
+                    if ( l_nTec ) {
+                        xmlNodePtr l_nProp = findNode ( ( char* ) "dynamic", l_nTec->children );
+                        if ( l_nProp ) {
+                            xmlChar *l_pVal = xmlNodeListGetString ( m_doc, l_nProp->children, 1 );
+                            if ( l_pVal ) {
+                                if ( strcmp ( ( const char* ) l_pVal, ( const char* ) "true" ) ==0 ) {
+                                    l_nProp = findNode ( ( char* ) "mass", l_nProp );
+                                    if ( l_nProp ) {
+                                        xmlFree ( l_pVal );
+                                        l_pVal = xmlNodeListGetString ( m_doc, l_nProp->children, 1 );
+                                        if ( l_pVal )
+                                            pPhysc->setMass ( ( float ) atof ( ( char* ) l_pVal ) );
+                                    }
+                                }
+
+                                xmlFree ( l_pVal );
+                            }
+                        }
+
+                        l_nProp = findNode ( ( char* ) "instance_physics_material", l_nTec->children );
+                        if ( l_nProp ) {
+                            xmlChar *l_pName = xmlGetProp ( l_nProp, ( const xmlChar* ) "url" );
+                            if ( l_pName ) {
+                                btMaterial *pPMat =m_pPhMaterial[ ( const char* ) &l_pName[1]];
+                                if ( pPMat )
+                                    pPhysc->m_pPhysicMaterial = pPMat;
+                            }
+                        }
+
+
+
+                    }
+                }
+                l_nPhysics = findNode ( ( char* ) "rigid_body", l_nPhysics->next );
+            }
+        }
+    }
+    return l_count;
+}
+
+int Loader::libPhysicsScenes ( void ) {
+    unsigned l_num=0;
+    xmlNodePtr l_nPhyScene = findNode ( ( char* ) "library_physics_scenes", m_root );
+    if ( l_nPhyScene!=nullptr ) {
+        l_nPhyScene = findNode ( ( char* ) "instance_physics_model", l_nPhyScene->children );
+        if ( l_nPhyScene ) {
+            xmlNodePtr l_nRigid = findNode ( ( char* ) "instance_rigid_body", l_nPhyScene->children );
+            while ( l_nRigid ) {
+                xmlChar *l_pBody = xmlGetProp ( l_nRigid, ( const xmlChar* ) "body" );
+                xmlChar *l_pTarget = xmlGetProp ( l_nRigid, ( const xmlChar* ) "target" );
+                if ( ( l_pBody ) && ( l_pTarget ) ) {
+                    Physics *pPhysic = m_mPhysics[ ( const char* ) l_pBody];
+                    Object *pObj = ( Object* ) Node::findObjById(EntityKind::OBJECT, ( const char* ) &l_pTarget[1]);
+
+                    if ( ( pPhysic ) && ( pObj ) ) {
+                        DrawTriMesh *pDrawTriMesh = ( DrawTriMesh* ) pObj->pDraw; //todo pode ser o draw
+                        if ( pDrawTriMesh )
+                            pPhysic->setShapeBox ( pDrawTriMesh->getSizeBox() );
+
+                        pObj->pPhysic = pPhysic;
+                        l_num++;
+                    }
+                }
+                l_nRigid = findNode ( ( char* ) "instance_rigid_body",l_nRigid->next );
+            }
+        }
+    }
+
+    return l_num;
+}
 
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

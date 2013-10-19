@@ -3,9 +3,11 @@
 
 #include <GL/gl.h>
 
-//#include "Physics.h"
+
 #include <LinearMath/btTransform.h>
 #include <LinearMath/btVector3.h>
+
+#include "Physics.h"
 
 #include "Node.h"
 #include "Draw.h"
@@ -30,9 +32,9 @@ public:
     
 // 	void applyTorc(const btVector3 &_vet);
 // 	void applyForce(const btVector3 &_vet);
-
-private:
-	//Physics *pPhysic;
+    //FIXME depois
+public:
+	Physics *pPhysic;
 	Draw *pDraw;
     Texture *pTexture;
     Effect *pEffect;

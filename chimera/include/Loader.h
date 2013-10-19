@@ -67,9 +67,9 @@ private:
     void libGeometry ();
     Node* libScene ();
 
-    //int libPhysicsModels ( void );
-    //int libPhysicsScenes ( void );
-    //int libPhysicsMaterial ( void );
+    int libPhysicsModels ( void );
+    int libPhysicsScenes ( void );
+    int libPhysicsMaterial ( void );
 
     Node *clone(Node *_src);
     //Node *cloneDraw(Draw *_srcDraw);
@@ -91,6 +91,9 @@ private:
     std::map<std::string,Texture*> m_mTextura;
     std::map<std::string,Effect*> m_mEffect;
     std::map<std::string,DataDraw*> m_mDesenhoBase;
+    
+    std::map<std::string, btMaterial*> m_pPhMaterial;
+    std::map<std::string, Physics*> m_mPhysics;
     
     log4cxx::LoggerPtr logger;
 };

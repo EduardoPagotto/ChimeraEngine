@@ -33,7 +33,7 @@ public:
         m_pCollisionShape = new btBoxShape ( _size );
     }
 
-    //void init ( Transform *_pTrans );
+    void init ( btTransform *_pBtTrans );
 
     //usada na trans cam do mundo
     void transformacao3D ( void );
@@ -44,7 +44,8 @@ public:
     void propulcao ( const btVector3 &_prop );
     void torque ( const btVector3 &_torque );
 
-private:
+    //FIXME depois 
+public:
 
     btRigidBody* m_pRigidBody;
 
@@ -52,12 +53,13 @@ private:
 
     btScalar m_mass;
     btVector3 m_inercial;
-    btTransform m_trans;
+    //btTransform m_trans;
+    btTransform *pFisicTransform;
+    
     btScalar m_matrix[16];
 
     //btVector3 *m_pPosicao;
     //btVector3 *m_pRotacao;
-
     //Transform *m_pTrans;
 
     btCollisionShape* m_pCollisionShape;

@@ -52,23 +52,39 @@ void Object::update ( DataMsg *_dataMsg ) {
     if (_dataMsg->getKindOp()==KindOp::START) {
 
         init();
+        
+        //FIXME apenas para teste
+        //define propriedades fisicas
+        btMaterial *pMat = new btMaterial;
+        pMat->m_friction = 10.0f;
+        pMat->m_restitution =10.0f;
+        
+        Physics *l_pPhysc = new Physics;
+        l_pPhysc->setMass(0.0f);
+        l_pPhysc->m_pPhysicMaterial = pMat;
+        l_pPhysc->setShapeBox( pDraw->getSizeBox() );
+        
+        pPhysic = l_pPhysc;
+        
+        if (pPhysic != nullptr)
+            pPhysic->init( &transform );
                 
         Node::update(_dataMsg);
         
     } if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
         
-        glPushMatrix();
+        //glPushMatrix();
         
-        //         if (pPhysic) {
-        //             Object *pSource = (Object *)_transport->fieldA;
-        //             m_pPhysic->ajusteMatrix(pSource->m_pPhysic);
-        //         }     
+        if (pPhysic!=nullptr) {
+            Object *pSource = (Object *)_dataMsg->getParam();
+            pPhysic->ajusteMatrix(pSource->pPhysic);
+        }     
         
         render();
         
         Node::update(_dataMsg);
        
-        glPopMatrix();
+       // glPopMatrix();
      } 
 }
 

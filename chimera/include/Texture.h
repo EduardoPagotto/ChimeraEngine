@@ -1,25 +1,26 @@
-#ifndef IMAGE_H_
-#define IMAGE_H_
+#ifndef TEXTURE_H_
+#define TEXTURE_H_
 
 #include <GL/gl.h>
 #include <GL/glu.h>
 
 #include "SDL2/SDL_image.h"
 #include "ExceptionChimera.h"
-#include "Node.h"
 
 namespace Chimera {
 
-class Texture : public Node {
+class Texture  {
 public:
+    
 	friend class Material;
+    
 	Texture();
     Texture (const Texture &_texture);
 	~Texture();
     
-    int link();
+    int render();
     
-    virtual void update ( DataMsg *dataMsg );
+    int init();
     
     void loadImage();
     

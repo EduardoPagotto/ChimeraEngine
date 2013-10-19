@@ -84,7 +84,8 @@ public:
     Mesh ( const Mesh &_cpy );
     virtual ~Mesh();
     
-    virtual void update ( DataMsg *dataMsg );
+    virtual void init();
+    virtual void render();
     virtual btVector3 getSizeBox();
 
 private:

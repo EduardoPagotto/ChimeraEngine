@@ -5,14 +5,16 @@ namespace Chimera {
 Object::Object () : Node ( EntityKind::OBJECT ) {
     
 //     pPhysic = nullptr;
-//     pDraw = nullptr;
+     pDraw = nullptr;
+     pTexture = nullptr;
+     pEffect = nullptr;
     
 }
 
 Object::Object( const Object& _object ) : Node(_object) {
     
 //    pPhysic = _object.pPhysic;
-//    pDraw = _object.pDraw;
+    pDraw = _object.pDraw;
     
 }
 
@@ -25,6 +27,12 @@ void Object::update ( DataMsg *_dataMsg ) {
     if (_dataMsg->getKindOp()==KindOp::START) {
 
         position = transform.getOrigin();
+       
+        if (pTexture != nullptr)
+            pTexture->init();
+       
+        if (pDraw!=nullptr)
+            pDraw->init();
         
         Node::update(_dataMsg);
         
@@ -40,6 +48,15 @@ void Object::update ( DataMsg *_dataMsg ) {
         
         glPushMatrix();
         
+        if (pTexture != nullptr)
+            pTexture->render();
+        
+        if (pEffect != nullptr)
+            pEffect->render();
+        
+        if (pDraw!=nullptr)
+            pDraw->render();       
+              
         Node::update(_dataMsg);
         
         glPopMatrix();

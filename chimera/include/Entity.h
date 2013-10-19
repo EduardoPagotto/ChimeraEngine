@@ -14,10 +14,10 @@ namespace Chimera {
  */
 enum class EntityKind : int8_t {
     NODE,
-    IMAGE,
-    EFFECT,
-    MATERIAL,
-    DRAW,
+    //IMAGE,
+    //EFFECT,
+    //MATERIAL,
+    //DRAW,
     CAMERA,
     LIGHT,
     OBJECT

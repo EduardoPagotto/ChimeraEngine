@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Effect::Effect() : Node(EntityKind::EFFECT) {
+Effect::Effect() {
     
     shininess = 10.5f;
     diffuse = Color::BLACK;
@@ -13,7 +13,7 @@ Effect::Effect() : Node(EntityKind::EFFECT) {
     
 }
 
-Effect::Effect(const Effect& _cpy) : Node(_cpy) {
+Effect::Effect(const Effect& _cpy) {
     
     diffuse = _cpy.diffuse;
     ambient = _cpy.ambient;
@@ -23,24 +23,36 @@ Effect::Effect(const Effect& _cpy) : Node(_cpy) {
     nameTextureId = _cpy.nameTextureId;   
 }
 
-void Effect::update ( DataMsg *dataMsg ) {
+void Effect::render() {
     
-    if (dataMsg->getKindOp()==KindOp::START) {
-
-    } else if (dataMsg->getKindOp()==KindOp::DRAW3D) {
-        
-        if ( glIsEnabled ( GL_COLOR_MATERIAL ) == 1 ) {
-            glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
-            glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
-            glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
-            glMaterialfv ( GL_FRONT, GL_SHININESS,  &shininess );
-            glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() ); 
-       }
-            
+    if ( glIsEnabled ( GL_COLOR_MATERIAL ) == 1 ) {
+        glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
+        glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
+        glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
+        glMaterialfv ( GL_FRONT, GL_SHININESS,  &shininess );
+        glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() ); 
     }
     
-    Node::update(dataMsg);
-    
 }
+
+// void Effect::update ( DataMsg *dataMsg ) {
+//     
+//     if (dataMsg->getKindOp()==KindOp::START) {
+// 
+//     } else if (dataMsg->getKindOp()==KindOp::DRAW3D) {
+//         
+//         if ( glIsEnabled ( GL_COLOR_MATERIAL ) == 1 ) {
+//             glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
+//             glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
+//             glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
+//             glMaterialfv ( GL_FRONT, GL_SHININESS,  &shininess );
+//             glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() ); 
+//        }
+//             
+//     }
+//     
+//     Node::update(dataMsg);
+//     
+// }
 
 }

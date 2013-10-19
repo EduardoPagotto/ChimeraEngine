@@ -62,42 +62,38 @@ btVector3 Mesh::getSizeBox () {
     return retorno;
 }
 
-void Mesh::update ( DataMsg *dataMsg ) {
-    
-    Draw::update(dataMsg);
-    
-    if (dataMsg->getKindOp()==KindOp::START) {
-        
-    } else if (dataMsg->getKindOp()==KindOp::DRAW3D) {
-               
-        unsigned l_numFaces = vIndex.getSize() / 3;
-        int l_index = 0;
-        int fa = 0;
-        for ( unsigned face=0 ; face < l_numFaces ; face++ ) {
-            fa = face * 3;
-            glBegin ( GL_TRIANGLES );
-            for ( unsigned point=0 ; point < 3 ; point++ ) {
-                l_index = fa + point;
-                int posicao = 3 * vIndex[ l_index ];
-                
-                int posNormal = 3 * nIndex[ l_index ];
-                glNormal3fv ( &nList[ posNormal ] );
-                
-                if ( tIndex.getSize() > 0 ) {
-                    //Ajuste de textura do imageSDL invertendo valor de V
-                    int posTex = 2 * tIndex[ l_index ];
-                    float l_U = uvList[ posTex ];
-                    float l_V = uvList[ posTex +1 ];
-                    l_V = 1 - l_V;
-                    glTexCoord2f ( l_U, l_V );
-                }
-                
-                glVertex3fv ( &vList[ posicao ] );
+void Mesh::init() {
+      
+}
+
+void Mesh::render() {
+
+    unsigned l_numFaces = vIndex.getSize() / 3;
+    int l_index = 0;
+    int fa = 0;
+    for ( unsigned face=0 ; face < l_numFaces ; face++ ) {
+        fa = face * 3;
+        glBegin ( GL_TRIANGLES );
+        for ( unsigned point=0 ; point < 3 ; point++ ) {
+            l_index = fa + point;
+            int posicao = 3 * vIndex[ l_index ];
+            
+            int posNormal = 3 * nIndex[ l_index ];
+            glNormal3fv ( &nList[ posNormal ] );
+            
+            if ( tIndex.getSize() > 0 ) {
+                //Ajuste de textura do imageSDL invertendo valor de V
+                int posTex = 2 * tIndex[ l_index ];
+                float l_U = uvList[ posTex ];
+                float l_V = uvList[ posTex +1 ];
+                l_V = 1 - l_V;
+                glTexCoord2f ( l_U, l_V );
             }
-            glEnd();
-        }       
-    }
-    
+            
+            glVertex3fv ( &vList[ posicao ] );
+        }
+        glEnd();
+    }   
 }
 
 }

@@ -8,6 +8,9 @@
 #include <LinearMath/btVector3.h>
 
 #include "Node.h"
+#include "Draw.h"
+#include "Texture.h"
+#include "Effect.h"
 
 namespace Chimera {
 
@@ -37,7 +40,10 @@ public:
 	
 private:
 	//Physics *pPhysic;
-	//Draw *pDraw;
+	Draw *pDraw;
+    Texture *pTexture;
+    Effect *pEffect;
+    
     btTransform transform;
     btVector3 position;
 };

@@ -5,35 +5,37 @@
 
 #include <GL/gl.h>
 
-#include "Node.h"
-
 namespace Chimera {
 
 enum class DrawType {
 	BOX,
 	GRID,
-	BOXGRID2,
 	SPHERE,
 	MESH
 };
 
-class Draw : public Node {
+class Draw {
 public:
-    Draw(DrawType _type);
-    Draw(const Draw &_draw);
-	virtual ~Draw();
+    
+    friend class Loader;
+    
+    Draw(DrawType _type) : type(_type) {}
+    
+    Draw(const Draw &_draw) : type(_draw.type) {}
+    
+	virtual ~Draw() {}
     
     DrawType getType() const {
         return type;
     }
-    
-    virtual void update ( DataMsg *dataMsg );
+       
+    virtual void init() = 0;
+    virtual void render() = 0;
 	virtual btVector3 getSizeBox() = 0;
-
-	//void ajusteMatrix(Transform *_pTrans);
 
 protected:
     DrawType type;
+    
 };
 
 }

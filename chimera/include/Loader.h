@@ -23,6 +23,12 @@
 namespace Chimera {
 
 class Loader {
+    
+    struct DataDraw {
+        Texture *pTextura;
+        Effect *pEffect;
+    };
+      
 public:
     Loader ();
     ~Loader();
@@ -66,7 +72,7 @@ private:
     //int libPhysicsMaterial ( void );
 
     Node *clone(Node *_src);
-    Node *cloneDraw(Draw *_srcDraw);
+    //Node *cloneDraw(Draw *_srcDraw);
     
     //SceneMng *m_pScene;
     //PhysicWorld *m_physicWorld;
@@ -80,6 +86,11 @@ private:
     std::string m_imageDir;
     
     std::queue<Node*> listaNode;
+    
+    std::map<std::string,Mesh*> m_mMesh;
+    std::map<std::string,Texture*> m_mTextura;
+    std::map<std::string,Effect*> m_mEffect;
+    std::map<std::string,DataDraw*> m_mDesenhoBase;
     
     log4cxx::LoggerPtr logger;
 };

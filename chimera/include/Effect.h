@@ -8,7 +8,7 @@
 
 namespace Chimera {
 
-class Effect : public Node {
+class Effect {
 public:
 	
     Effect();
@@ -17,7 +17,7 @@ public:
 
 	virtual ~Effect() {}
 	
-	virtual void update ( DataMsg *dataMsg );
+	void render();
 	
 	Color getAmbient() const {
         return ambient;

@@ -17,14 +17,55 @@ Loader::~Loader() {
     //Singleton<PhysicWorld>::releaseRefSingleton();
 
     while ( !listaNode.empty() ) {
-
         Node *pNode = listaNode.front();
         listaNode.pop();
         delete pNode;
         pNode = nullptr;
-
     }
-
+   
+   while (!m_mDesenhoBase.empty()) {
+       
+       std::map<std::string,DataDraw*>::iterator it = m_mDesenhoBase.begin();
+       DataDraw *pVal = it->second;
+       m_mDesenhoBase.erase(it);
+       
+       delete pVal;
+       pVal = nullptr;
+       
+   }
+   
+    while (!m_mEffect.empty()) {
+        
+        std::map<std::string,Effect*>::iterator it = m_mEffect.begin();
+        Effect *pVal = it->second;
+        m_mEffect.erase(it);
+      
+        delete pVal;
+        pVal = nullptr;
+   
+    }
+   
+   while (!m_mTextura.empty()) {
+       
+       std::map<std::string,Texture*>::iterator it = m_mTextura.begin();
+       Texture *pVal = it->second;
+       m_mTextura.erase(it);
+       
+       delete pVal;
+       pVal = nullptr;
+       
+   }
+   
+   while (!m_mMesh.empty()) {
+       
+       std::map<std::string,Mesh*>::iterator it = m_mMesh.begin();
+       Mesh *pVal = it->second;
+       m_mMesh.erase(it);
+       
+       delete pVal;
+       pVal = nullptr;
+       
+   }
 }
 
 Node* Loader::loadDAE ( const std::string &_file ) {
@@ -76,32 +117,32 @@ Node* Loader::loadDAE ( const std::string &_file ) {
     return pRootScene;
 }
 
-Node *Loader::cloneDraw ( Draw *_srcDraw ) {
-
-    Node *novo = nullptr;
-
-    switch ( _srcDraw->getType() ) {
-
-    case DrawType::MESH:
-        novo = new Mesh ( * ( ( Mesh* ) _srcDraw ) );
-        break;
-    case DrawType::BOX:
-        novo = new DrawBox ( * ( ( DrawBox* ) _srcDraw ) );
-        break;
-    case DrawType::BOXGRID2:
-        //novo = new DrawGrid(*((DrawGrid*)_srcDraw));
-        break;
-    case DrawType::GRID:
-        novo = new DrawGrid ( * ( ( DrawGrid* ) _srcDraw ) );
-        break;
-    case DrawType::SPHERE:
-        //novo = new DrawBox(*((DrawBox*)_srcDraw));
-        break;
-
-    }
-
-    return novo;
-}
+// Node *Loader::cloneDraw ( Draw *_srcDraw ) {
+//
+//     Node *novo = nullptr;
+//
+//     switch ( _srcDraw->getType() ) {
+//
+//     case DrawType::MESH:
+//         novo = new Mesh ( * ( ( Mesh* ) _srcDraw ) );
+//         break;
+//     case DrawType::BOX:
+//         novo = new DrawBox ( * ( ( DrawBox* ) _srcDraw ) );
+//         break;
+//     case DrawType::BOXGRID2:
+//         //novo = new DrawGrid(*((DrawGrid*)_srcDraw));
+//         break;
+//     case DrawType::GRID:
+//         novo = new DrawGrid ( * ( ( DrawGrid* ) _srcDraw ) );
+//         break;
+//     case DrawType::SPHERE:
+//         //novo = new DrawBox(*((DrawBox*)_srcDraw));
+//         break;
+//
+//     }
+//
+//     return novo;
+// }
 
 Node *Loader::clone ( Node *_src ) {
 
@@ -118,18 +159,9 @@ Node *Loader::clone ( Node *_src ) {
     case EntityKind::OBJECT:
         novo = new Object ( * ( ( Object* ) _src ) );
         break;
-    case EntityKind::MATERIAL:
-        novo = new Material ( * ( ( Material* ) _src ) );
-        break;
-    case EntityKind::EFFECT:
-        novo = new Effect ( * ( ( Effect* ) _src ) );
-        break;
-    case EntityKind::IMAGE:
-        novo = new Texture ( * ( ( Texture* ) _src ) );
-        break;
-    case EntityKind::DRAW:
-        novo = cloneDraw ( ( Draw* ) _src );
-        break;
+//     case EntityKind::DRAW:
+//         novo = cloneDraw ( ( Draw* ) _src );
+//         break;
     default:
         throw ExceptionChimera ( ExceptionCode::READ, "Tipo de clonagem nao implementada para:" + _src->getId() );
         break;
@@ -422,39 +454,40 @@ void Loader::libEffect ( void ) {
     int l_count = 0;
     xmlNodePtr l_nMat = findNode ( ( char* ) "library_effects", m_root );
     if ( l_nMat ) {
+
         l_nMat = findNode ( ( char* ) "effect",l_nMat->children );
         while ( l_nMat != nullptr ) {
             l_count++;
 
             try {
 
-                Effect *pEffect = new Effect;
-                //pEffect->setName ( getAtributoXML ( "Effects","name",l_nMat ) );
-                pEffect->setId ( getAtributoXML ( "Effects","id",l_nMat ) );
+                std::string l_idEffect = getAtributoXML ( "Effects","id",l_nMat );
+                if ( l_idEffect.size() > 0 ) {
 
-                listaNode.push ( pEffect );
+                    Effect *pEffect = new Effect;
+                    m_mEffect[ l_idEffect ] = pEffect;
+                    //pega referencia textura
+                    std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
+                    if ( idTextura.size() >0 ) {
+                        pEffect->setNameTextureId ( idTextura );
+                    }
 
-                //pega referencia textura
-                std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
-                if ( idTextura.size() >0 ) {
-                    pEffect->setNameTextureId ( idTextura );
-                }
-
-                //pega cores
-                xmlNodePtr l_nPos = findNode ( ( char* ) "phong",l_nMat->children );
-                if ( l_nPos ) {
-                    xmlNodePtr l_nRootPhong = l_nPos;
-                    pEffect->setEmissive ( getPhong ( l_nPos, ( char* ) "emission" ) );
-                    pEffect->setAmbient ( getPhong ( l_nPos, ( char* ) "ambient" ) );
-                    pEffect->setDiffuse ( getPhong ( l_nPos, ( char* ) "diffuse" ) );
-                    pEffect->setSpecular ( getPhong ( l_nPos, ( char* ) "specular" ) );
-
-                    l_nPos = findNode ( ( char* ) "shininess",l_nPos->children );
+                    //pega cores
+                    xmlNodePtr l_nPos = findNode ( ( char* ) "phong",l_nMat->children );
                     if ( l_nPos ) {
+                        xmlNodePtr l_nRootPhong = l_nPos;
+                        pEffect->setEmissive ( getPhong ( l_nPos, ( char* ) "emission" ) );
+                        pEffect->setAmbient ( getPhong ( l_nPos, ( char* ) "ambient" ) );
+                        pEffect->setDiffuse ( getPhong ( l_nPos, ( char* ) "diffuse" ) );
+                        pEffect->setSpecular ( getPhong ( l_nPos, ( char* ) "specular" ) );
 
-                        std::string l_shininess = getValueFromProp ( "Effect","float",l_nPos->children );
-                        if ( l_shininess.size() >0 ) {
-                            pEffect->setShininess ( ( float ) atof ( ( char* ) l_shininess.c_str() ) );
+                        l_nPos = findNode ( ( char* ) "shininess",l_nPos->children );
+                        if ( l_nPos ) {
+
+                            std::string l_shininess = getValueFromProp ( "Effect","float",l_nPos->children );
+                            if ( l_shininess.size() >0 ) {
+                                pEffect->setShininess ( ( float ) atof ( ( char* ) l_shininess.c_str() ) );
+                            }
                         }
                     }
                 }
@@ -485,20 +518,26 @@ void Loader::libTexture ( void ) {
 
             try {
 
-                Texture *pTexture = new Texture;
-                pTexture->setId ( getAtributoXML ( "Texture","id",l_nTexture ) );
-                pTexture->setName ( getAtributoXML ( "Texture","name",l_nTexture ) );
+                std::string l_idTextura = getAtributoXML ( "Texture","id",l_nTexture );
+                if ( l_idTextura.size() >0 ) {
+                    Texture *pTexture = new Texture;
+                    m_mTextura[ l_idTextura ] = pTexture;
 
-                listaNode.push ( pTexture );
+                    std::string l_pathFile = getValueFromProp ( "Texture","init_from",l_nTexture->children );
+                    if ( l_pathFile.size() >0 ) {
 
-                std::string l_pathFile = getValueFromProp ( "Texture","init_from",l_nTexture->children );
-                if ( l_pathFile.size() >0 ) {
-                    std::string l_arquivo = m_imageDir + l_pathFile;
-                    pTexture->setPathFile ( l_arquivo.c_str() );
-                    pTexture->loadImage();
-                    l_count++;
+                        std::string l_arquivo = m_imageDir + l_pathFile;
+                        pTexture->setPathFile ( l_arquivo.c_str() );
+                        pTexture->loadImage();
+                        l_count++;
+
+                    }
+
+                } else {
+
+                    throw ExceptionChimera ( ExceptionCode::READ, "Falha Textura id" );
+
                 }
-
 
             } catch ( const ExceptionChimera& ec ) {
 
@@ -527,24 +566,29 @@ void Loader::libMaterial ( void ) {
 
             try {
 
-                Material *pMat = new Material;
-                pMat->setName ( getAtributoXML ( "Material","name",l_nMat ) );
-                pMat->setId ( getAtributoXML ( "Material","id",l_nMat ) );
+                std::string l_idDesenhoBase = getAtributoXML ( "Material","id",l_nMat );
+                if ( l_idDesenhoBase.size() > 0 ) {
 
-                listaNode.push ( pMat );
+                    DataDraw *pDataDraw = new DataDraw;
+                    m_mDesenhoBase[ l_idDesenhoBase ] = pDataDraw;
 
-                xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
-                if ( l_nEffect ) {
-                    xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
-                    if ( l_val ) {
-                        std::string l_nomeEffect = ( char* ) &l_val[1];
-                        Effect *pEffe = ( Effect* ) Node::findObjById ( EntityKind::EFFECT,l_nomeEffect ); //m_pScene->m_mEffect[ ( char* ) &l_val[1]];
+                    xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
+                    if ( l_nEffect ) {
 
-                        if ( pEffe ) {
-                            Texture *pTexture = ( Texture* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
-                            if ( pTexture!=nullptr ) {
-                                pMat->addChild ( clone ( pEffe ) );
-                                pMat->addChild ( clone ( pTexture ) );
+                        xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
+                        if ( l_val ) {
+
+                            std::string l_nomeEffect = ( char* ) &l_val[1];
+                            Effect *pEffe = m_mEffect[ l_nomeEffect ]; //( Effect* ) Node::findObjById ( EntityKind::EFFECT,l_nomeEffect ); //m_pScene->m_mEffect[ ( char* ) &l_val[1]];
+
+                            if ( pEffe ) {
+
+                                Texture *pTexture = m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+
+                                if ( pTexture!=nullptr ) {
+                                    pDataDraw->pEffect = pEffe;
+                                    pDataDraw->pTextura = pTexture;
+                                }
                             }
                         }
                     }
@@ -555,7 +599,6 @@ void Loader::libMaterial ( void ) {
                 LOG4CXX_WARN ( logger , ec.getMessage() );
 
             }
-
 
             l_nMat = findNode ( ( char* ) "material", l_nMat->next );
         }
@@ -578,115 +621,116 @@ void Loader::libGeometry ( void ) {
         l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->children );
         while ( l_nGeom!=nullptr ) {
 
-            Mesh *pMesh = new Mesh;
-            pMesh->setName ( getAtributoXML ( "Mesh","name",l_nGeom ) );
-            pMesh->setId ( getAtributoXML ( "Mesh","id",l_nGeom ) );
+            std::string l_idMesh = getAtributoXML ( "Mesh","id",l_nGeom );
+            if ( l_idMesh.size() >0 ) {
+                Mesh *pMesh = new Mesh;
+                m_mMesh[ l_idMesh ] = pMesh;
 
-            listaNode.push ( pMesh );
-
-            xmlNodePtr l_nMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
-            if ( l_nMesh ) {
-                l_nMesh = findNode ( ( char* ) "source",l_nMesh->children );
-                while ( l_nMesh ) {
-                    l_pVal = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "id" );
-                    std::string l_sVal = l_pVal;
-
-                    size_t posicaoEncontrada = l_sVal.find ( "-positions" );
-                    if ( posicaoEncontrada != std::string::npos ) {
-                        getSource ( l_nMesh,pMesh->vList );
-                    } else {
-                        posicaoEncontrada = l_sVal.find ( "-normals" );
-                        if ( posicaoEncontrada != std::string::npos )
-                            getSource ( l_nMesh,pMesh->nList );
-                        else {
-                            posicaoEncontrada = l_sVal.find ( "-map-0" );
-                            if ( posicaoEncontrada != std::string::npos )
-                                getSource ( l_nMesh,pMesh->uvList );
-                        }
-
-                    }
-
-                    l_nMesh = findNode ( ( char* ) "source",l_nMesh->next );
-                }
-
-                xmlNodePtr l_nMesh = findNode ( ( char* ) "polylist", l_nGeom->children );
+                xmlNodePtr l_nMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
                 if ( l_nMesh ) {
-                    l_pVal = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "count" );
-                    char *l_pMaterialFile = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "material" );
+                    l_nMesh = findNode ( ( char* ) "source",l_nMesh->children );
+                    while ( l_nMesh ) {
+                        l_pVal = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "id" );
+                        std::string l_sVal = l_pVal;
 
-                    if ( l_pVal ) {
-                        xmlNodePtr l_nAnterior;
-                        unsigned l_numTriangles = atoi ( l_pVal );
-                        l_nMesh = findNode ( ( char* ) "input", l_nMesh->children );
-
-                        std::vector<char*> l_vOffset;
-                        std::vector<char*> l_vSemantic;
-                        std::vector<char*> l_vSource;
-
-                        while ( l_nMesh ) {
-                            char *l_offSet = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "offset" );
-                            char *l_semantic = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "semantic" );
-                            char *l_source = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "source" );
-
-                            l_vOffset.push_back ( l_offSet );
-                            l_vSemantic.push_back ( l_semantic );
-                            l_vSource.push_back ( l_source );
-
-                            l_nAnterior = l_nMesh;
-
-                            l_nMesh = findNode ( ( char* ) "input",l_nMesh->next );
-                        }
-
-                        l_nMesh = findNode ( ( char* ) "p", l_nAnterior );
-                        if ( l_nMesh ) {
-                            l_pVal = ( char* ) xmlNodeListGetString ( m_doc, l_nMesh->children, 1 );
-                            if ( l_pVal ) {
-                                std::vector<int> l_arrayIndex;
-                                loadArrayI ( l_pVal,l_arrayIndex );
-
-                                unsigned l_veCount = 0;
-                                unsigned l_noCount = 0;
-                                unsigned l_uvCount = 0;
-
-                                for ( unsigned l_contador = 0 ; l_contador < l_arrayIndex.size() ; l_contador++ ) {
-                                    int index = l_contador % l_vOffset.size();
-
-                                    char *l_offSet = l_vOffset[index];
-                                    char *l_semantic = l_vSemantic[index];
-                                    char *l_source = l_vSource[index];
-                                    if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) {
-                                        if ( pMesh->vIndex.getSize() == 0 )
-                                            pMesh->vIndex.create ( l_numTriangles * 3 );
-
-                                        pMesh->vIndex[l_veCount] = l_arrayIndex[l_contador];
-                                        l_veCount++;
-                                    } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) {
-                                        if ( pMesh->nIndex.getSize() ==0 )
-                                            pMesh->nIndex.create ( l_numTriangles * 3 );
-
-                                        pMesh->nIndex[l_noCount] = l_arrayIndex[l_contador];
-                                        l_noCount++;
-                                    } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) {
-                                        if ( pMesh->tIndex.getSize() ==0 )
-                                            pMesh->tIndex.create ( l_numTriangles* 3 );
-
-                                        pMesh->tIndex[l_uvCount] = l_arrayIndex[l_contador];
-                                        l_uvCount++;
-                                    }
-                                }
-                                l_arrayIndex.clear();
+                        size_t posicaoEncontrada = l_sVal.find ( "-positions" );
+                        if ( posicaoEncontrada != std::string::npos ) {
+                            getSource ( l_nMesh,pMesh->vList );
+                        } else {
+                            posicaoEncontrada = l_sVal.find ( "-normals" );
+                            if ( posicaoEncontrada != std::string::npos )
+                                getSource ( l_nMesh,pMesh->nList );
+                            else {
+                                posicaoEncontrada = l_sVal.find ( "-map-0" );
+                                if ( posicaoEncontrada != std::string::npos )
+                                    getSource ( l_nMesh,pMesh->uvList );
                             }
-                            xmlFree ( ( xmlChar* ) l_pVal );
+
                         }
-                        l_vOffset.clear();
-                        l_vSemantic.clear();
-                        l_vSource.clear();
+
+                        l_nMesh = findNode ( ( char* ) "source",l_nMesh->next );
                     }
+
+                    xmlNodePtr l_nMesh = findNode ( ( char* ) "polylist", l_nGeom->children );
+                    if ( l_nMesh ) {
+                        l_pVal = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "count" );
+                        char *l_pMaterialFile = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "material" );
+
+                        if ( l_pVal ) {
+                            xmlNodePtr l_nAnterior;
+                            unsigned l_numTriangles = atoi ( l_pVal );
+                            l_nMesh = findNode ( ( char* ) "input", l_nMesh->children );
+
+                            std::vector<char*> l_vOffset;
+                            std::vector<char*> l_vSemantic;
+                            std::vector<char*> l_vSource;
+
+                            while ( l_nMesh ) {
+                                char *l_offSet = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "offset" );
+                                char *l_semantic = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "semantic" );
+                                char *l_source = ( char* ) xmlGetProp ( l_nMesh, ( const xmlChar* ) "source" );
+
+                                l_vOffset.push_back ( l_offSet );
+                                l_vSemantic.push_back ( l_semantic );
+                                l_vSource.push_back ( l_source );
+
+                                l_nAnterior = l_nMesh;
+
+                                l_nMesh = findNode ( ( char* ) "input",l_nMesh->next );
+                            }
+
+                            l_nMesh = findNode ( ( char* ) "p", l_nAnterior );
+                            if ( l_nMesh ) {
+                                l_pVal = ( char* ) xmlNodeListGetString ( m_doc, l_nMesh->children, 1 );
+                                if ( l_pVal ) {
+                                    std::vector<int> l_arrayIndex;
+                                    loadArrayI ( l_pVal,l_arrayIndex );
+
+                                    unsigned l_veCount = 0;
+                                    unsigned l_noCount = 0;
+                                    unsigned l_uvCount = 0;
+
+                                    for ( unsigned l_contador = 0 ; l_contador < l_arrayIndex.size() ; l_contador++ ) {
+                                        int index = l_contador % l_vOffset.size();
+
+                                        char *l_offSet = l_vOffset[index];
+                                        char *l_semantic = l_vSemantic[index];
+                                        char *l_source = l_vSource[index];
+                                        if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) {
+                                            if ( pMesh->vIndex.getSize() == 0 )
+                                                pMesh->vIndex.create ( l_numTriangles * 3 );
+
+                                            pMesh->vIndex[l_veCount] = l_arrayIndex[l_contador];
+                                            l_veCount++;
+                                        } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) {
+                                            if ( pMesh->nIndex.getSize() ==0 )
+                                                pMesh->nIndex.create ( l_numTriangles * 3 );
+
+                                            pMesh->nIndex[l_noCount] = l_arrayIndex[l_contador];
+                                            l_noCount++;
+                                        } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) {
+                                            if ( pMesh->tIndex.getSize() ==0 )
+                                                pMesh->tIndex.create ( l_numTriangles* 3 );
+
+                                            pMesh->tIndex[l_uvCount] = l_arrayIndex[l_contador];
+                                            l_uvCount++;
+                                        }
+                                    }
+                                    l_arrayIndex.clear();
+                                }
+                                xmlFree ( ( xmlChar* ) l_pVal );
+                            }
+                            l_vOffset.clear();
+                            l_vSemantic.clear();
+                            l_vSource.clear();
+                        }
+                    }
+                    //pObj->setMesh((*pMesh));
                 }
-                //pObj->setMesh((*pMesh));
+                l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->next );
+                l_count++;
+
             }
-            l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->next );
-            l_count++;
         }
     }
     if ( l_count == 0 ) {
@@ -728,12 +772,7 @@ void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &lis
     if ( listaMatrix.size() != 16 )
         throw ExceptionChimera ( ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string ( listaMatrix.size() ) );
 
-    btScalar ponteiroFloat[16];// = new btScalar[ 16 ];
-
-//     for ( int indice = 0 ; indice < listaMatrix.size(); indice++ ) {
-//         ponteiroFloat[indice] = listaMatrix[indice];
-//     }
-
+    btScalar ponteiroFloat[16];
     int indice = 0;
     for ( int i=0; i<4; i++ ) {
         for ( int j=0; j<4; j++ ) {
@@ -742,10 +781,8 @@ void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &lis
             indice++;
         }
     }
-    
+
     _pTrans->setFromOpenGLMatrix ( ponteiroFloat );
-    //delete ponteiroFloat;
-    //ponteiroFloat = nullptr;
 }
 
 void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
@@ -796,7 +833,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                     //Mesh *pMesh = ( Mesh* ) m_pScene->m_mDraw[ ( ( char* ) &pURL[1] )];
                     std::string l_nomeMesh = ( char* ) &pURL[1];
-                    Mesh *pMesh = ( Mesh* ) Node::findObjById ( EntityKind::DRAW, l_nomeMesh ); //m_pScene->m_mDraw[ ( ( char* ) &pURL[1] )];
+                    Mesh *pMesh = m_mMesh[ l_nomeMesh];//( Mesh* ) Node::findObjById ( EntityKind::DRAW, l_nomeMesh ); //m_pScene->m_mDraw[ ( ( char* ) &pURL[1] )];
 
                     if ( pMesh ) {
 
@@ -813,12 +850,11 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                                             std::string l_nomeMaterial = ( char* ) &pURL[1];
 
-                                            Material *pMat = ( Material* ) Node::findObjById ( EntityKind::MATERIAL,l_nomeMaterial ); //m_pScene->m_mMaterial[ ( char* ) &pURL[1]];
-                                            if ( pMat ) {
-
-                                                pMesh->addChild ( clone ( pMat ) );
-                                                pObj->addChild ( clone ( pMesh ) );
-
+                                            DataDraw *pDataDraw = m_mDesenhoBase[  l_nomeMaterial ];
+                                            if ( pDataDraw != nullptr ) {
+                                                pObj->pTexture = new Texture( * ( pDataDraw->pTextura ));
+                                                pObj->pEffect = new Effect(* ( pDataDraw->pEffect ));
+                                                pObj->pDraw = new Mesh( *pMesh );
                                             }
                                         }
                                     }

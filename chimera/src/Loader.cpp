@@ -1,6 +1,4 @@
 #include "Loader.h"
-#include <DrawBox.h>
-#include <DrawGrid.h>
 
 namespace Chimera {
 

@@ -1,6 +1,5 @@
 #include "Color.h"
 
-
 namespace Chimera {
 
 const Color Color::ZERO = Color(0.0,0.0,0.0,0.0);

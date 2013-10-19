@@ -2,7 +2,6 @@
 #define DRAW_H_
 
 #include <LinearMath/btVector3.h>
-
 #include <GL/gl.h>
 
 namespace Chimera {

@@ -60,7 +60,7 @@ void Object::update ( DataMsg *_dataMsg ) {
         pMat->m_restitution =10.0f;
         
         Physics *l_pPhysc = new Physics;
-        l_pPhysc->setMass(10.0f);
+        l_pPhysc->setMass(5.0f);
         l_pPhysc->setPhysicMaterial(pMat);
         l_pPhysc->setShapeBox( pDraw->getSizeBox() );
         

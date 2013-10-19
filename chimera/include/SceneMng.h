@@ -5,10 +5,6 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
-#include "Texture.h"
-#include "Material.h"
-#include "Effect.h"
-#include "Draw.h"
 
 namespace Chimera {
 
@@ -36,24 +32,13 @@ public:
 
     
 private:
-    
     void parseEntity(Node *_pNode);
     void addEntityToScene( Node *_pNode);
     
     Node *pRoot;
-    
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
     std::vector<Object*> m_vObject;
-    std::vector<Draw*> m_vDraw;
-    std::vector<Texture*> m_vTexture;
-   // std::vector<Material*> m_vMaterial;
-    std::vector<Effect*> m_vEffect;
-//     std::list<Physics*> m_mPhysics;
-//     std::map<std::string, Draw*> m_mDraw;
-//     std::map<std::string, Texture*> m_mTexture;
-//     std::map<std::string, Effect*> m_mEffect;
-//     std::map<std::string, Material*> m_mMaterial;
 //     std::list<btMaterial*> m_PMaterial;
 
 };

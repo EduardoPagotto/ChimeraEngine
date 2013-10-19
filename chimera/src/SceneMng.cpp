@@ -35,9 +35,6 @@ void SceneMng::addEntityToScene( Node *_pNode) {
         case EntityKind::OBJECT:
             m_vObject.push_back ( ( Object* ) _pNode );
             break;
-//         case EntityKind::DRAW: 
-//             m_vDraw.push_back( ( Draw* ) _pNode );
-//             break;
         default:
             break;
     }

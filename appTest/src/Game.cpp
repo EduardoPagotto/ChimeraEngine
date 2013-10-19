@@ -42,13 +42,6 @@ void Game::start() {
     pSceneMng->setLight(true);
     pSceneMng->setMaterial(true);
     
-    const SDL_Rect *tela = pVideo->getPRectangle();
-    pSceneMng->setViewPortPerspective( *tela, pCam);
-    
-    pSceneMng->execLight();
-    
-    xrot = 0.0;
-    yrot = 0.0;
 }
 
 void Game::stop(){
@@ -61,35 +54,17 @@ void Game::onFrame(){
     //TODO Desenho aqui
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
-    //pCam->exec();
+    const SDL_Rect *tela = pVideo->getPRectangle();
+    pSceneMng->setViewPortPerspective( *tela, pCam);
     
-    /* Reset the view */
-    glLoadIdentity( );
+    pSceneMng->execLight();
     
-    /* Translate Into/Out Of The Screen By z */
-    glTranslatef( 0.0f, 0.0f, -5.0 );
-    
-    glRotatef( xrot, 1.0f, 0.0f, 0.0f); /* Rotate On The X Axis By xrot */
-    glRotatef( yrot, 0.0f, 1.0f, 0.0f); /* Rotate On The Y Axis By yrot */
-    
+    pCam->exec();
+        
    
     Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
     pSceneMng->update(&dataMsg);
-    
-    xrot += 1.0f;
-    yrot += 1.0f;
-    
-    //pSceneMng->execLight();
-    //if ( pEngined3D->getLight() ==true ) {
-     //   pSceneMng->execLight();
-    //} 
-    
-    //m_pEngined3D->setViewPortOrtogonal();
-    //glColor3f(0.7, 0.5, 0.8);
-    //glRectf(100.0, 100.0, 300.0, 200.0);
-    
-    //m_pEngined3D->setViewPortPerspective();
-    //m_pEngined3D->setViewPortPerspective();
+        
 }
 
 void Game::offFrame(){

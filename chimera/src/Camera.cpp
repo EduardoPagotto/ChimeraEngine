@@ -4,15 +4,16 @@ namespace Chimera {
 
 Camera::Camera () : Node ( EntityKind::CAMERA ) {
     
-    type = CameraType::AIR_CAM;
-    near = 0.1f;
-    far = 1000.0f;
-    fov = 45.0f;
-    
+    type = CameraType::Base;
     position.setZero();
     rotation.setZero();
     direction.setZero();
+    transform.setIdentity();
     
+    near = 0.1f;
+    far = 1000.0f;
+    fov = 45.0f;
+   
     perspective = true;
  
 }
@@ -27,6 +28,8 @@ Camera::Camera (const Camera& _camera ) : Node ( _camera ) {
     position = _camera.position;
     rotation = _camera.rotation;
     direction = _camera.direction;
+    
+    transform = _camera.transform;
     
     perspective = _camera.perspective;
 }
@@ -61,20 +64,20 @@ void Camera::exec ( void ) {
     }
 }
 
+void Camera::init() {
+    
+    position = transform.getOrigin();        
+    direction.setValue(0.0, 0.0, 0.0);//FIXME encontrar no transform
+    rotation.setValue(0.0, 0.0, 1.0);//FIXME encontrar no transform
+    
+}
+
 void Camera::update ( DataMsg *_dataMsg ) {
     
     if  (_dataMsg->getKindOp() == KindOp::START) {
-        position = transform.getOrigin();
-        
-        //FIXME verificar dentro a matrix estes valores
-        //position.setValue(-5.0, -5.0, -5.0);
-        
-        direction.setValue(0.0, 0.0, 0.0);
-        rotation.setValue(0.0, 0.0, 1.0);
-        
-        //direction = transform.getBasis();
-       // rotation = transform.getRotation();
-     
+  
+        init();
+             
     } if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
         
     }

@@ -50,10 +50,10 @@ void GameClient::open() {
     std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + pSceneMng->getVersaoOpenGL();
     LOG4CXX_INFO ( logger , l_msg );  
     
+    start();
+    
     DataMsg dataMsg(KindOp::START,this,nullptr,nullptr);
     pSceneMng->update(&dataMsg);
-    
-    start(); 
 }
 
 void GameClient::close ( void ) {
@@ -95,6 +95,7 @@ void GameClient::gameLoop ( void ) {
                 //m_pEngined3D->begin2D();
                 //m_pHUD->update();
                 //m_pEngined3D->end2D();
+                
                 offFrame();
 
                 pVideo->swapWindow();

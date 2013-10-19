@@ -25,11 +25,34 @@ bool Game::keyCapture ( SDL_Keycode tecla ) {
 
 }
 
+bool Game::mouseButtonUpCapture ( SDL_MouseButtonEvent mb ) {
+    
+    botaoIndex = mb.button;
+    estadoBotao = mb.state;
+    
+}
+
 bool Game::mouseButtonDownCapture ( SDL_MouseButtonEvent mb ) {
+    
+    botaoIndex = mb.button;
+    estadoBotao = mb.state;
+    
     return false;
 }
 
 bool Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
+    
+    if (estadoBotao == SDL_PRESSED) {
+        if (botaoIndex == 1) {
+            pOrbitalCam->trackBall( mm.yrel, mm.xrel , 0);
+        } else if (botaoIndex == 2) {
+            pOrbitalCam->trackBall( 0, 0 , mm.yrel);
+        } 
+    } else {
+           
+    }
+    
+    
     return false;
 }
 
@@ -37,7 +60,14 @@ void Game::start() {
     
     using namespace Chimera;
         
-    pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
+    Camera* pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
+    
+    pOrbitalCam = new CameraSpherical( *pCam );
+    pOrbitalCam->setDistanciaMaxima(1000.0f);
+    pOrbitalCam->setDistanciaMinima(0.5f);
+    pOrbitalCam->setId("Orbital1");
+    pSceneMng->addChildToScene(pOrbitalCam);
+    
     pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
     pSceneMng->setLight(true);
     pSceneMng->setMaterial(true);
@@ -51,15 +81,14 @@ void Game::onFrame(){
     
     using namespace Chimera;
    
-    //TODO Desenho aqui
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
     const SDL_Rect *tela = pVideo->getPRectangle();
-    pSceneMng->setViewPortPerspective( *tela, pCam);
+    pSceneMng->setViewPortPerspective( *tela, pOrbitalCam);
     
     pSceneMng->execLight();
     
-    pCam->exec();
+    pOrbitalCam->exec();
         
    
     Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
@@ -90,6 +119,8 @@ void Game::processMsg(Chimera::DataMsg *dataMsg) {
             case SDL_MOUSEBUTTONDOWN:
                 encerraParse = mouseButtonDownCapture ( pEvento->button );
                 break;
+            case SDL_MOUSEBUTTONUP:    
+                encerraParse = mouseButtonUpCapture( pEvento->button );
             case SDL_MOUSEMOTION:
                 encerraParse = mouseMotionCapture ( pEvento->motion );
                 break;

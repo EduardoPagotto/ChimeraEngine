@@ -12,8 +12,10 @@
 namespace Chimera {
 
 enum class CameraType { 
-    LAND_CAM, 
-    AIR_CAM 
+    Base,
+    Spherical,
+    Land,
+    Air
 };    
 
 class Camera : public Node {
@@ -29,7 +31,9 @@ public:
 
     virtual void update ( DataMsg *_dataMsg );
 
-    void exec ( void );
+    virtual void init();
+    
+    void exec ();
        
     void setType(CameraType _type) {
         type = _type;

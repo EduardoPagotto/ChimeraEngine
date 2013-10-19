@@ -5,14 +5,16 @@
 
 namespace Chimera {
 
-class TrackCam : public Camera {
+class CameraSpherical : public Camera {
     
 public:
-    TrackCam();
+    CameraSpherical();
     
-    TrackCam(const TrackCam& _trackCam);
+    CameraSpherical(const CameraSpherical& _cameraSpherical);
     
-    ~TrackCam();
+    CameraSpherical ( const Camera& _camera );
+    
+    ~CameraSpherical();
     
     virtual void update ( DataMsg *_dataMsg );
     
@@ -28,6 +30,14 @@ public:
     
     void reset();
     void updateTrack();
+    
+    void setDistanciaMaxima(btScalar _distanciaMaxima) {
+        distanciaMax = _distanciaMaxima;
+    }
+
+    void setDistanciaMinima(btScalar _distanciaMinima) {
+        distanciaMin = _distanciaMinima;
+    }
     
 private:
     

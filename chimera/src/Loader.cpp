@@ -274,7 +274,7 @@ void Loader::libCam ( void ) {
             Camera *pCamera = new Camera();
             pCamera->setId ( getAtributoXML ( "Camera","id",l_nCam ) );
             pCamera->setName ( getAtributoXML ( "Camera","name",l_nCam ) );
-            pCamera->setType ( CameraType::AIR_CAM );
+            pCamera->setType ( CameraType::Base );
 
             //Salva na lista de cameras
             listaNode.push ( pCamera );

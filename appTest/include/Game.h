@@ -3,6 +3,8 @@
 
 #include "GameClient.h"
 
+#include "CameraSpherical.h"
+
 /**
  * Class Game
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
@@ -21,10 +23,16 @@ public:
     
     bool keyCapture ( SDL_Keycode tecla );
     bool mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
+    bool mouseButtonUpCapture ( SDL_MouseButtonEvent mb );
     bool mouseMotionCapture ( SDL_MouseMotionEvent mm );
     
 private:
-    Chimera::Camera *pCam;
+    
+    int botaoIndex;
+    int estadoBotao;
+    
+    //Chimera::Camera *pCam;
+    Chimera::CameraSpherical *pOrbitalCam;
     Chimera::Object *pObj;
 
     log4cxx::LoggerPtr logger;

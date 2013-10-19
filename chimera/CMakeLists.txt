@@ -32,7 +32,7 @@ add_library (Chimera STATIC
 				src/Light.cpp
 				src/Object.cpp
 				src/Camera.cpp
-				src/TrackCam.cpp
+				src/CameraSpherical.cpp
 				src/Physics.cpp
 				src/PhysicsWorld.cpp				
 				src/Texture.cpp

@@ -444,6 +444,7 @@ void Loader::libTexture ( void ) {
                     if ( l_pathFile.size() >0 ) {
                         std::string l_arquivo = m_imageDir + l_pathFile;
                         pTexture->setPathFile ( l_arquivo.c_str() );
+                        pTexture->init();
                         //pTexture->loadImage();
                         l_count++;
                     }

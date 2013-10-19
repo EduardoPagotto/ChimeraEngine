@@ -2,108 +2,150 @@
 
 namespace Chimera {
 
-Texture::Texture() :  pImage(nullptr),idTexturaGL(0) {
+Texture::Texture() {
+
+    texturaCarregada = false;
     pathFile = "none";
+    setFilter ( TextureFilter::Nearest );
+    textureList[0] = 0;
+    textureList[1] = 0;
+    textureList[2] = 0;
+
+    logger = log4cxx::Logger::getLogger ( "Texture" );
+    
 }
 
-Texture::Texture ( const Texture &_texture ) : pImage(_texture.pImage), idTexturaGL(_texture.idTexturaGL), pathFile(_texture.pathFile) {
+Texture::Texture ( const Texture &_texture ) {
+
+    pathFile = _texture.pathFile;
+    indiceFilter = _texture.indiceFilter;
+    texturaCarregada = _texture.texturaCarregada;
+    textureList[0] = _texture.textureList[0];
+    textureList[1] = _texture.textureList[1];
+    textureList[2] = _texture.textureList[2];
+    
+    logger = log4cxx::Logger::getLogger ( "Texture" );
 }
 
 Texture::~Texture() {
-    if ( pImage != nullptr ) {
-        SDL_FreeSurface ( pImage );
-        pImage = nullptr;
+    //TODO descobrir como remover textura do openGL quando textura deixar de existir
+}
+
+void Texture::setFilter ( TextureFilter _filter ) {
+
+    switch ( _filter ) {
+    case TextureFilter::Nearest:
+        indiceFilter = 0;
+        break;
+    case TextureFilter::Linear:
+        indiceFilter = 1;
+        break;
+    case TextureFilter::Mipmapped:
+        indiceFilter = 2;
+        break;
+
     }
+
 }
 
-int Texture::render() {
-    
-    //Necessario ser chamado antes do desenho??
-//     if ( idTexturaGL >0 )
-//         glBindTexture ( GL_TEXTURE_2D, idTexturaGL );
+TextureFilter Texture::getFilter() {
 
-    glBindTexture( GL_TEXTURE_2D, texture[2] );
-    return idTexturaGL;
-    
+    TextureFilter retorno;
+
+    switch ( indiceFilter ) {
+    case 0:
+        retorno = TextureFilter::Nearest;
+        break;
+    case 1:
+        retorno = TextureFilter::Linear;
+        break;
+    case 2:
+        retorno = TextureFilter::Mipmapped;
+        break;
+
+    }
+
+    return retorno;
+
 }
 
-int Texture::init() {
-    
-    loadImage();
-    
-    /* Create The Texture */
-    glGenTextures( 3, &texture[0] );
-    
-    /* Load in texture 1 */
-    /* Typical Texture Generation Using Data From The Bitmap */
-    glBindTexture( GL_TEXTURE_2D, texture[0] );
-    
-    /* Generate The Texture */
-    glTexImage2D( GL_TEXTURE_2D, 0, 3,  pImage->w,
-                  pImage->h, 0, GL_BGR,
-                  GL_UNSIGNED_BYTE,  pImage->pixels );
-    
-    /* Nearest Filtering */
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                     GL_NEAREST );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-                     GL_NEAREST );
-    
-    /* Load in texture 2 */
-    /* Typical Texture Generation Using Data From The Bitmap */
-    glBindTexture( GL_TEXTURE_2D, texture[1] );
-    
-    /* Linear Filtering */
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                     GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-                     GL_LINEAR );
-    
-    /* Generate The Texture */
-    glTexImage2D( GL_TEXTURE_2D, 0, 3,  pImage->w,
-                  pImage->h, 0, GL_BGR,
-                  GL_UNSIGNED_BYTE,  pImage->pixels );
-    
-    /* Load in texture 3 */
-    /* Typical Texture Generation Using Data From The Bitmap */
-    glBindTexture( GL_TEXTURE_2D, texture[2] );
-    
-    /* Mipmapped Filtering */
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                     GL_LINEAR_MIPMAP_NEAREST );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-                     GL_LINEAR );
-    
-    /* Generate The MipMapped Texture ( NEW ) */
-    gluBuild2DMipmaps( GL_TEXTURE_2D, 3,  pImage->w,
-                       pImage->h, GL_BGR,
+void Texture::render() {
+
+    glBindTexture ( GL_TEXTURE_2D, textureList[indiceFilter] );
+
+}
+
+void Texture::init() {
+
+    if ( texturaCarregada == false ) {
+
+        SDL_Surface *pImage = loadImage();
+
+        /* Create The Texture */
+        glGenTextures ( 3, &textureList[0] );
+
+        /* Load in texture 1 */
+        glBindTexture ( GL_TEXTURE_2D, textureList[0] ); /* Typical Texture Generation Using Data From The Bitmap */
+
+        /* Generate The Texture */
+        glTexImage2D ( GL_TEXTURE_2D, 0, 3,  pImage->w,
+                       pImage->h, 0, GL_BGR,
                        GL_UNSIGNED_BYTE,  pImage->pixels );
-    
-    SDL_FreeSurface( pImage );
-//     //antigo -> initTex();
-//     glGenTextures ( 1, &idTexturaGL );
-//     //  //glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-//     glBindTexture ( GL_TEXTURE_2D, idTexturaGL );
-//     //glTexTexture2D(GL_TEXTURE_2D, 0, 3,image->w, image->h, 0, GL_BGR,GL_UNSIGNED_BYTE, image->pixels);
-//     gluBuild2DMipmaps ( GL_TEXTURE_2D, 3, pImage->w,
-//                         pImage->h,
-//                         GL_RGB,
-//                         GL_UNSIGNED_BYTE,
-//                         pImage->pixels );
-//     
-//     //TODO:carregar conf do arquivo collada
-//     glTexParameteri ( GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR );
-//     glTexParameteri ( GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR );
-    
+
+        /* Nearest Filtering */
+        glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                          GL_NEAREST );
+        glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                          GL_NEAREST );
+
+
+        /* Load in texture 2 */
+        glBindTexture ( GL_TEXTURE_2D, textureList[1] ); /* Typical Texture Generation Using Data From The Bitmap */
+
+        /* Linear Filtering */
+        glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                          GL_LINEAR );
+        glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                          GL_LINEAR );
+
+        /* Generate The Texture */
+        glTexImage2D ( GL_TEXTURE_2D, 0, 3,  pImage->w,
+                       pImage->h, 0, GL_BGR,
+                       GL_UNSIGNED_BYTE,  pImage->pixels );
+
+        /* Load in texture 3 */
+        glBindTexture ( GL_TEXTURE_2D, textureList[2] ); /* Typical Texture Generation Using Data From The Bitmap */
+
+        /* Mipmapped Filtering */
+        glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                          GL_LINEAR_MIPMAP_NEAREST );
+        glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                          GL_LINEAR );
+
+        /* Generate The MipMapped Texture ( NEW ) */
+        gluBuild2DMipmaps ( GL_TEXTURE_2D, 3,  pImage->w,
+                            pImage->h, GL_BGR,
+                            GL_UNSIGNED_BYTE,  pImage->pixels );
+
+        SDL_FreeSurface ( pImage );
+        
+        texturaCarregada = true;
+    }
+
 }
 
-void Texture::loadImage () {
+SDL_Surface *Texture::loadImage () {
 
-    pImage = IMG_Load ( pathFile.c_str() );
-    if ( pImage != nullptr )
-        return;
+    SDL_Surface *pImage = IMG_Load ( pathFile.c_str() );
+    if ( pImage != nullptr ) {
+        
+        std::string l_msg = "Imagem carregada:" + pathFile;
+        LOG4CXX_INFO ( logger , l_msg );
+        
+        return pImage;
+    }
 
-    throw ExceptionChimera ( ExceptionCode::READ, "Falha ao ler arquivo:"+pathFile );
+    throw ExceptionChimera ( ExceptionCode::READ, "Falha ao ler arquivo:" + pathFile );
 }
 
 }

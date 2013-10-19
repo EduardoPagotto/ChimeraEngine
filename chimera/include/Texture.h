@@ -4,11 +4,20 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include <log4cxx/logger.h>
+
 #include "SDL2/SDL_image.h"
 #include "ExceptionChimera.h"
 
 namespace Chimera {
 
+enum class TextureFilter {
+    Nearest,
+    Linear,
+    Mipmapped
+};
+    
+    
 class Texture  {
 public:
     
@@ -18,22 +27,26 @@ public:
     Texture (const Texture &_texture);
 	~Texture();
     
-    int render();
+    void render(); 
+    void init();
     
-    int init();
-    
-    void loadImage();
+    SDL_Surface *loadImage();
     
     void setPathFile(const std::string &_pathFile) {
         pathFile = _pathFile;
     }
     
-private:
-    unsigned int idTexturaGL;
-    std::string pathFile;
-	SDL_Surface *pImage;
+    void setFilter(TextureFilter _filter);
     
-    GLuint texture[3];
+    TextureFilter getFilter();
+    
+private:
+    std::string pathFile;
+    GLuint textureList[3];
+    int indiceFilter;
+    bool texturaCarregada;
+    
+    log4cxx::LoggerPtr logger;
 };
 
 }

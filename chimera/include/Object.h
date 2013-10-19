@@ -30,10 +30,10 @@ public:
     void init();
     void render();
     
-// 	void applyTorc(const btVector3 &_vet);
-// 	void applyForce(const btVector3 &_vet);
-    //FIXME depois
-public:
+	void applyTorc(const btVector3 &_vet);
+	void applyForce(const btVector3 &_vet);
+    
+private:
 	Physics *pPhysic;
 	Draw *pDraw;
     Texture *pTexture;

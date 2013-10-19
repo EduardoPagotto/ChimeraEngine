@@ -4,7 +4,7 @@ namespace Chimera {
 
 Object::Object () : Node ( EntityKind::OBJECT ) {
     
-//     pPhysic = nullptr;
+     pPhysic = nullptr;
      pDraw = nullptr;
      pTexture = nullptr;
      pEffect = nullptr;
@@ -13,7 +13,7 @@ Object::Object () : Node ( EntityKind::OBJECT ) {
 
 Object::Object( const Object& _object ) : Node(_object) {
     
-//    pPhysic = _object.pPhysic;
+    pPhysic = _object.pPhysic;
     pDraw = _object.pDraw;
     
 }
@@ -60,8 +60,8 @@ void Object::update ( DataMsg *_dataMsg ) {
         pMat->m_restitution =10.0f;
         
         Physics *l_pPhysc = new Physics;
-        l_pPhysc->setMass(0.0f);
-        l_pPhysc->m_pPhysicMaterial = pMat;
+        l_pPhysc->setMass(10.0f);
+        l_pPhysc->setPhysicMaterial(pMat);
         l_pPhysc->setShapeBox( pDraw->getSizeBox() );
         
         pPhysic = l_pPhysc;
@@ -73,7 +73,7 @@ void Object::update ( DataMsg *_dataMsg ) {
         
     } if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
         
-        //glPushMatrix();
+        glPushMatrix();
         
         if (pPhysic!=nullptr) {
             Object *pSource = (Object *)_dataMsg->getParam();
@@ -84,19 +84,20 @@ void Object::update ( DataMsg *_dataMsg ) {
         
         Node::update(_dataMsg);
        
-       // glPopMatrix();
+        glPopMatrix();
      } 
 }
 
-// void Object::applyTorc ( const btVector3 &_vet ) {
-//     if ( pPhysic )
-//         pPhysic->torque ( _vet );
-// }
-// 
-// void Object::applyForce ( const btVector3 &_vet ) {
-//     if ( pPhysic )
-//         pPhysic->propulcao ( _vet );
-// }
+void Object::applyTorc ( const btVector3 &_vet ) {
+    if ( pPhysic )
+        pPhysic->torque ( _vet );
+}
+
+void Object::applyForce ( const btVector3 &_vet ) {
+    if ( pPhysic )
+        pPhysic->propulcao ( _vet );
+}
+
 //void Draw::ajusteMatrix ( Transform *_pTrans ) {
 //  //float *pRotacao = (float*)dBodyGetRotation(m_bodyId);
 //float *pPosicao = (float*)dBodyGetPosition(m_bodyId);

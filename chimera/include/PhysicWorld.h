@@ -41,7 +41,6 @@ private:
 	SDL_Event s_event;
 
 	Uint32 m_lastExec;
-
 	btScalar m_timeElapsed;
 };
 

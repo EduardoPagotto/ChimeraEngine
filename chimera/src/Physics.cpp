@@ -3,16 +3,20 @@
 namespace Chimera {
 
 Physics::Physics() {
+    
     m_pRigidBody = nullptr;
     m_pCollisionShape = nullptr;
     m_pPhysicMaterial = nullptr;
     m_mass = 0.0f;
     m_inercial.setZero();
     m_estatica = true;
+    
     m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
+    
 }
 
 Physics::~Physics() {
+    
     if ( m_pRigidBody ) {
         m_physicWorld->m_pDynamicsWorld->removeRigidBody ( m_pRigidBody );
         delete m_pRigidBody->getMotionState();

@@ -44,8 +44,11 @@ public:
     void propulcao ( const btVector3 &_prop );
     void torque ( const btVector3 &_torque );
 
-    //FIXME depois 
-public:
+    void setPhysicMaterial(btMaterial *_pPhysicMaterial) {
+        m_pPhysicMaterial = _pPhysicMaterial;
+    }
+    
+private:
 
     btRigidBody* m_pRigidBody;
 

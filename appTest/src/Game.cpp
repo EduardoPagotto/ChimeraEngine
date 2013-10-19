@@ -60,6 +60,8 @@ void Game::start() {
     
     using namespace Chimera;
         
+    physicWorld->setGravity( btVector3(0.0f, 0.0f, 0.0f) );
+    
     //instancia e coloca na cena uma nova camera orbital
     Camera* pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
     pOrbitalCam = new CameraSpherical( *pCam );

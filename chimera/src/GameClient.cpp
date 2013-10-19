@@ -86,7 +86,7 @@ void GameClient::gameLoop ( void ) {
         //Testa se ha eventos pendentes
         if ( SDL_PollEvent ( &l_eventSDL ) == 0 ) {	//Se Nao Ha eventos Pendentes execute o Render
             if ( l_isActive==true ) {			//Se nao houver foco na tela pule o render
-                //m_physicWorld->stepSim();
+                physicWorld->stepSim();
                 countFrame();
                 onFrame();
 

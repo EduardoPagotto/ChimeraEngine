@@ -29,8 +29,12 @@ public:
     virtual void offFrame() = 0;
     virtual void processMsg(DataMsg *_dataMsg) = 0;
     
+    unsigned int getFps() const {
+        return fps;
+    }
+    
     bool newFPS();
-    u_int32_t getFPS();
+    void countFrame();
     
 protected:
 

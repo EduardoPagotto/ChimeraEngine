@@ -95,7 +95,7 @@ void Game::onFrame(){
 void Game::offFrame(){
     
     if (newFPS() == true)
-        std::cout << "FPS: " << getFPS() << std::endl;
+        std::cout << "FPS: " << getFps() << std::endl;
     
 }
 

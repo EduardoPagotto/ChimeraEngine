@@ -38,12 +38,10 @@ bool GameClient::newFPS() {
     return timerSegundo.stepCount();
 }
 
-u_int32_t GameClient::getFPS() {
+void GameClient::countFrame() {
     if ( timerFPS.stepCount() == true ) {
         fps = timerFPS.getCountStep();
-    }
-    
-    return fps;    
+    }   
 }
 
 void GameClient::open() {
@@ -89,7 +87,7 @@ void GameClient::gameLoop ( void ) {
         if ( SDL_PollEvent ( &l_eventSDL ) == 0 ) {	//Se Nao Ha eventos Pendentes execute o Render
             if ( l_isActive==true ) {			//Se nao houver foco na tela pule o render
                 //m_physicWorld->stepSim();
-
+                countFrame();
                 onFrame();
 
                 //DataMsg dataMsg ( KindOp::DRAW3D,nullptr,nullptr,nullptr );

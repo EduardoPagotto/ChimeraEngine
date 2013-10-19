@@ -1,10 +1,7 @@
 #include "Game.h"
 
 Game::Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng) : GameClient(_pVideo, _pScenMng) {
-    
-    timer01.setElapsedCount(1000);
-    timer01.start();
-    
+       
     logger = log4cxx::Logger::getLogger ( "Game" );
 }
 
@@ -97,7 +94,7 @@ void Game::onFrame(){
 
 void Game::offFrame(){
     
-    if (timer01.stepCount() == true)
+    if (newFPS() == true)
         std::cout << "FPS: " << getFPS() << std::endl;
     
 }

@@ -15,6 +15,9 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     timerFPS.setElapsedCount ( 1000 );
     timerFPS.start();
     
+    timerSegundo.setElapsedCount(1000);
+    timerSegundo.start();
+    
     logger = log4cxx::Logger::getLogger ( "GameClient" );
     
     physicWorld = Singleton<PhysicWorld>::getRefSingleton();
@@ -29,6 +32,10 @@ GameClient::~GameClient() {
 //         delete m_pHUD;
 
     Singleton<PhysicWorld>::releaseRefSingleton();
+}
+
+bool GameClient::newFPS() {
+    return timerSegundo.stepCount();
 }
 
 u_int32_t GameClient::getFPS() {

@@ -28,6 +28,7 @@ void Timer::pause() {
     }
 }
 
+
 void Timer::resume() {
     if ( paused ) {
         paused = false;

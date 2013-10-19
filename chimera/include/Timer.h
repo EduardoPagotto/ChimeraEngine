@@ -37,6 +37,7 @@ public:
         elapsedCount = val;
     }
 
+    
 private:
     bool started;
     bool paused;

@@ -22,9 +22,8 @@ public:
     bool keyCapture ( SDL_Keycode tecla );
     bool mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
     bool mouseMotionCapture ( SDL_MouseMotionEvent mm );
-private:
     
-    Chimera::Timer timer01;
+private:
     Chimera::Camera *pCam;
     Chimera::Object *pObj;
 

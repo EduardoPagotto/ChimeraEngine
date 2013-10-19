@@ -29,6 +29,7 @@ public:
     virtual void offFrame() = 0;
     virtual void processMsg(DataMsg *_dataMsg) = 0;
     
+    bool newFPS();
     u_int32_t getFPS();
     
 protected:
@@ -42,7 +43,7 @@ private:
     
     unsigned int fps;
     Timer timerFPS;
-    
+    Timer timerSegundo;
     
     log4cxx::LoggerPtr logger;
 };

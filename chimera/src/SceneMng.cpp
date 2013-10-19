@@ -106,29 +106,29 @@ void SceneMng::setViewPortPerspective(const SDL_Rect &_rectangle, const Camera *
     
 }
 
-// void Engine3D::setLight ( bool _lightOn ) {
-//     
-//     hasLight = _lightOn;
-//     
-//     if ( _lightOn==true )
-//         glEnable ( GL_LIGHTING );
-//     else
-//         glDisable ( GL_LIGHTING );
-// }
-// 
-// void Engine3D::setMaterial ( bool _materialOn ) {
-//     
-//     hasMaterial = _materialOn;
-//     
-//     if ( _materialOn==true ) {
-//         glEnable ( GL_TEXTURE_2D );
-//        //glEnable ( GL_COLOR_MATERIAL );
-//        // glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //??
-//     } else {
-//         glDisable ( GL_TEXTURE_2D );
-//         glDisable ( GL_COLOR_MATERIAL );
-//     }
-// }
+void SceneMng::setLight ( bool _lightOn ) {
+    
+    hasLight = _lightOn;
+    
+    if ( _lightOn==true )
+        glEnable ( GL_LIGHTING );
+    else
+        glDisable ( GL_LIGHTING );
+}
+
+void SceneMng::setMaterial ( bool _materialOn ) {
+    
+    hasMaterial = _materialOn;
+    
+    if ( _materialOn==true ) {
+        glEnable ( GL_TEXTURE_2D );
+        //glEnable ( GL_COLOR_MATERIAL );
+        //glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //??
+    } else {
+        glDisable ( GL_TEXTURE_2D );
+        glDisable ( GL_COLOR_MATERIAL );
+    }
+}
 // 
 // void Engine3D::begin2D () {
 //     //Salva config bitŽs

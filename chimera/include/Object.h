@@ -25,6 +25,9 @@ public:
 	virtual ~Object();
     virtual void update ( DataMsg *_dataMsg );
 
+    void init();
+    void render();
+    
 // 	void setDraw(Draw *_pDraw) {
 // 		pDraw = _pDraw;
 // 	}

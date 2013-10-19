@@ -8,8 +8,8 @@ Video::Video ( int _width, int _height, std::string _nome ) : nomeTela ( _nome )
     rectangle.y = 0;
     rectangle.w = _width;
     rectangle.h = _height;
-        
-        
+
+
     if ( SDL_Init ( SDL_INIT_EVERYTHING ) == 0 ) {
 
         // set the opengl context version
@@ -27,18 +27,18 @@ Video::Video ( int _width, int _height, std::string _nome ) : nomeTela ( _nome )
                                     rectangle.w,                                  //    width, in pixels
                                     rectangle.h,                                 //    height, in pixels
                                     SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL ); //    flags - see below
-        
+
         if ( window != nullptr ) {
-            
+
             context = SDL_GL_CreateContext ( window );
             if ( context != nullptr ) {
-                
+
                 timerFPS.setElapsedCount ( 1000 );
                 timerFPS.start();
                 return;
-                
-            } 
-        }     
+
+            }
+        }
     }
 
     throw ExceptionSDL ( ExceptionCode::CREATE, std::string ( SDL_GetError() ) );
@@ -72,55 +72,30 @@ void Video::swapWindow() {
 }
 
 void Video::initOpenGL() {
-    
-    SDL_GL_SetSwapInterval ( 1 );
-    
-    /* Enable Texture Mapping ( NEW ) */
-    glEnable( GL_TEXTURE_2D );
-    
-    /* Enable smooth shading */
-    glShadeModel( GL_SMOOTH );
-    
-    /* Set the background black */
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-    
-    /* Depth buffer setup */
-    glClearDepth( 1.0f );
-    
-    /* Enables Depth Testing */
-    glEnable( GL_DEPTH_TEST );
-    
-    /* The Type Of Depth Test To Do */
-    glDepthFunc( GL_LEQUAL );
-    
-    /* Really Nice Perspective Calculations */
-    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );  
-    
-    
-    //TODO AQUII!!!!!
-    //     glShadeModel ( GL_SMOOTH );
-    //     glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
-    //     glClearDepth ( 1.0f );
-    //     glEnable ( GL_DEPTH_TEST );
-    //     glEnable ( GL_CULL_FACE );
-    //     glDepthFunc ( GL_LEQUAL );
-    //     glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
-    //     
-    //     setLight ( false );
-    //     setMaterial ( true );
+
+    glEnable ( GL_TEXTURE_2D );
+    glShadeModel ( GL_SMOOTH );
+    glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
+    glClearDepth ( 1.0f );
+    glEnable ( GL_DEPTH_TEST );
+   // glEnable ( GL_CULL_FACE );
+    glDepthFunc ( GL_LEQUAL );
+    glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+    glEnable ( GL_LIGHTING );
+
 }
 
 std::string Video::getVersaoOpenGL() {
-    
+
     std::string retorno;
-    
-    const char* version = (const char*)glGetString ( GL_VERSION );
+
+    const char* version = ( const char* ) glGetString ( GL_VERSION );
     if ( version != nullptr ) {
-        retorno.append(version);
+        retorno.append ( version );
     } else {
-        throw ExceptionSDL ( ExceptionCode::READ, std::string ( SDL_GetError() ) ); 
+        throw ExceptionSDL ( ExceptionCode::READ, std::string ( SDL_GetError() ) );
     }
-    
+
     return retorno;
 }
 

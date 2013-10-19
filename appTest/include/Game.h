@@ -28,6 +28,10 @@ private:
     Chimera::Camera *pCam;
     Chimera::Object *pObj;
 
+    log4cxx::LoggerPtr logger;
+    
+    float xrot;
+    float yrot;
 };
 
 #endif /* GAME_H_ */

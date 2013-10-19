@@ -4,6 +4,8 @@ Game::Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng) : GameClient(_
     
     timer01.setElapsedCount(1000);
     timer01.start();
+    
+    logger = log4cxx::Logger::getLogger ( "Game" );
 }
 
 Game::~Game() { 
@@ -36,8 +38,22 @@ bool Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
 
 void Game::start() {
     
+    using namespace Chimera;
+        
+    pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
+    pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
+    //pSceneMng->setLight(true);
+    //pSceneMng->setMaterial(false);
+    
+    const SDL_Rect *tela = pVideo->getPRectangle();
+    pSceneMng->setViewPortPerspective( *tela, pCam);
+    
+    pObj->init();
+    
     pSceneMng->execLight();
     
+    xrot = 0.0;
+    yrot = 0.0;
 }
 
 void Game::stop(){
@@ -46,24 +62,31 @@ void Game::stop(){
 void Game::onFrame(){
     
     using namespace Chimera;
-    
+   
     //TODO Desenho aqui
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //pEngined3D->setLight(true);
-    //pEngined3D->setMaterial(true);    
-
-    pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);
-    pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
+       
+    //pCam->exec();
     
-    const SDL_Rect *tela = pVideo->getPRectangle();
+    /* Reset the view */
+    glLoadIdentity( );
     
-    pSceneMng->setViewPortPerspective( *tela, pCam);
+    /* Translate Into/Out Of The Screen By z */
+    glTranslatef( 0.0f, 0.0f, -5.0 );
     
-    pCam->exec();
+    glRotatef( xrot, 1.0f, 0.0f, 0.0f); /* Rotate On The X Axis By xrot */
+    glRotatef( yrot, 0.0f, 1.0f, 0.0f); /* Rotate On The Y Axis By yrot */
     
-    Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
-    pSceneMng->update(&dataMsg);
+   
     
+    pObj->render();
+    //Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
+    //pSceneMng->update(&dataMsg);
+    
+    xrot += 1.0f;
+    yrot += 1.0f;
+    
+    //pSceneMng->execLight();
     //if ( pEngined3D->getLight() ==true ) {
      //   pSceneMng->execLight();
     //} 

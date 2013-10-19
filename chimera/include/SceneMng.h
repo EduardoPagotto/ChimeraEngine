@@ -28,12 +28,16 @@ public:
     
     void setViewPortOrtogonal(const SDL_Rect &_rectangle);
     void setViewPortPerspective(const SDL_Rect &_rectangle, const Camera *_camera);
-       
-
+     
+    void setLight ( bool _lightOn );
+    void setMaterial ( bool _materialOn );
     
 private:
     void parseEntity(Node *_pNode);
     void addEntityToScene( Node *_pNode);
+    
+    bool hasLight;
+    bool hasMaterial;
     
     Node *pRoot;
     std::vector<Camera*> m_vCamera;

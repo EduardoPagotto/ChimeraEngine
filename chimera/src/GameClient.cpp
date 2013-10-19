@@ -11,6 +11,8 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     ////m_pHUD->addSquare(10,440,630,470,Color(0.0f,1.0f, 0.0f, 0.2f));
     //m_pHUD->addText(0,0,0,5,Color::RED,&m_sFPS);
 
+    logger = log4cxx::Logger::getLogger ( "GameClient" );
+    
     physicWorld = Singleton<PhysicWorld>::getRefSingleton();
 }
 
@@ -26,6 +28,10 @@ GameClient::~GameClient() {
 }
 
 void GameClient::open() {
+    
+    pVideo->initOpenGL();
+    std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + pVideo->getVersaoOpenGL();
+    LOG4CXX_INFO ( logger , l_msg );  
     
     DataMsg dataMsg(KindOp::START,this,nullptr,nullptr);
     pSceneMng->update(&dataMsg);

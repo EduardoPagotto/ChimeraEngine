@@ -28,19 +28,8 @@ Light::~Light() {
 
 }
 
-//void Light::setTransform(const btVector3 &_pos, const btVector3 &_dir)
-//{
-//	if (m_pPosition==nullptr)
-//	{
-//		m_loader = false;
-//		m_pPosition = new btVector3(_pos);
-//	}
-//
-//	if (m_pDirection==nullptr)
-//		m_pDirection = new btVector3(_dir);
-//}
-
 void Light::exec() {
+    
     if ( getStatus() ) {
         int testeLuz;
         switch ( number ) {
@@ -73,15 +62,26 @@ void Light::exec() {
         }
 
 
-        GLfloat posicaoLuz[] = {position.x() , position.y() , position.z() , 1.0f };
-
+        GLfloat posicaoLuz[] = {5.0 , -1.0 , 0.0 ,1.0f };
+        GLfloat amb[] = {0.0, 0.0, 0.0, 1.0};
+        GLfloat dif[] = {1.0, 1.0, 1.0, 1.0};
+        
         //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat*)ambient.ptr());
-        glLightfv ( testeLuz,GL_AMBIENT, ( GLfloat* ) ambient.ptr() );
-        glLightfv ( testeLuz,GL_DIFFUSE, ( GLfloat* ) diffuse.ptr() );
+        glLightfv ( testeLuz,GL_AMBIENT, amb );
+        glLightfv ( testeLuz,GL_DIFFUSE, dif );
         //glLightfv(testeLuz,GL_SPECULAR,(GLfloat*)specular.ptr());
-
+        
         glLightfv ( testeLuz,GL_POSITION,posicaoLuz );
         glEnable ( testeLuz );
+        
+ //       GLfloat posicaoLuz[] = {position.x() , position.y() , position.z() , 1.0f };      
+//         //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat*)ambient.ptr());
+//         glLightfv ( testeLuz,GL_AMBIENT, ( GLfloat* ) ambient.ptr() );
+//         glLightfv ( testeLuz,GL_DIFFUSE, ( GLfloat* ) diffuse.ptr() );
+//         //glLightfv(testeLuz,GL_SPECULAR,(GLfloat*)specular.ptr());
+// 
+//         glLightfv ( testeLuz,GL_POSITION,posicaoLuz );
+//         glEnable ( testeLuz );
     }
 }
 

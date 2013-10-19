@@ -1,6 +1,8 @@
 #ifndef __GAME_CLIENT_H
 #define __GAME_CLIENT_H
 
+#include <log4cxx/logger.h>
+
 #include <SDL2/SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -34,7 +36,8 @@ protected:
     //Font *m_pFont;
     //HUD *m_pHUD;
     PhysicWorld *physicWorld;
-    
+   
+    log4cxx::LoggerPtr logger;
 };
 
 }

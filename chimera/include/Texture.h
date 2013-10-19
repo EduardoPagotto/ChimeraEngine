@@ -32,6 +32,8 @@ private:
     unsigned int idTexturaGL;
     std::string pathFile;
 	SDL_Surface *pImage;
+    
+    GLuint texture[3];
 };
 
 }

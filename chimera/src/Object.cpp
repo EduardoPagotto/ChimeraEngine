@@ -21,63 +21,63 @@ Object::Object( const Object& _object ) : Node(_object) {
 Object::~Object () {
 }
 
+void Object::init() {
+    
+    position = transform.getOrigin();
+    
+    if (pTexture != nullptr)
+        pTexture->init();
+    
+    if (pDraw!=nullptr)
+        pDraw->init();  
+    
+}
+
+void Object::render() {
+    
+    if (pEffect != nullptr)
+        pEffect->render();
+    
+    if (pTexture != nullptr)
+        pTexture->render();
+        
+    if (pDraw!=nullptr)
+        pDraw->render();
+    
+}
+
 void Object::update ( DataMsg *_dataMsg ) {
 //FIXME mais um
     
     if (_dataMsg->getKindOp()==KindOp::START) {
 
-        position = transform.getOrigin();
-       
-        if (pTexture != nullptr)
-            pTexture->init();
-       
-        if (pDraw!=nullptr)
-            pDraw->init();
-        
-        Node::update(_dataMsg);
-        
-        //      if (m_pDraw)
-        //          m_pDraw->init();
-        //
+//         position = transform.getOrigin();
+//        
+//         if (pTexture != nullptr)
+//             pTexture->init();
+//        
+//         if (pDraw!=nullptr)
+//             pDraw->init();
+
         //      if (m_pPhysic)
         //          m_pPhysic->init(&m_trans);
-        //
-        //      Node::update(_transport);
+        
+        Node::update(_dataMsg);
         
     } if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
         
-        glPushMatrix();
+        //glPushMatrix();
         
-        if (pTexture != nullptr)
-            pTexture->render();
+        //         if (pPhysic) {
+        //             Object *pSource = (Object *)_transport->fieldA;
+        //             m_pPhysic->ajusteMatrix(pSource->m_pPhysic);
+        //         }     
         
-        if (pEffect != nullptr)
-            pEffect->render();
+     
         
-        if (pDraw!=nullptr)
-            pDraw->render();       
-              
-        Node::update(_dataMsg);
-        
-        glPopMatrix();
-        
-        
-//         glPushMatrix();
-// 
-//         if (pPhysic) {
-//             Object *pSource = (Object *)_transport->fieldA;
-//             m_pPhysic->ajusteMatrix(pSource->m_pPhysic);
-//         }
-// 
-//         if (pDraw)
-//         pDraw->renderizar();
-// 
-//         glPopMatrix();
-// 
-//         Node::update(_dataMsg);
-// 
-//         glPopMatrix();
-
+       // Node::update(_dataMsg);
+       
+        //glPopMatrix();
      } 
 }
 

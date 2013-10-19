@@ -203,7 +203,7 @@
         <instance_camera url="#Camera01-camera"/>
       </node>
       <node id="luz01" name="luz01" type="NODE">
-        <matrix sid="transform">-0.1733842 -0.7895962 0.5886219 6 0.9833067 -0.1052982 0.1483921 -9 -0.05518906 0.6045247 0.7946723 6 0 0 0 1</matrix>
+        <matrix sid="transform">-0.1733842 -0.7895962 0.5886219 5 0.9833067 -0.1052982 0.1483921 -1 -0.05518906 0.6045247 0.7946723 5 0 0 0 1</matrix>
         <instance_light url="#luz01-light"/>
       </node>
       <node id="cubo01" name="cubo01" type="NODE">

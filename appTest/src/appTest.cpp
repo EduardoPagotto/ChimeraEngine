@@ -18,11 +18,7 @@ int main ( int argn, char** argv ) {
         
         //Instancia de Video
         Chimera::Video *video = new Chimera::Video ( 640, 480, std::string ( "Teste" ) );
-        video->initOpenGL();
-        LOG4CXX_INFO ( logger , "Tela Iniciada com sucesso" );
-        
-        std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + video->getVersaoOpenGL();
-        LOG4CXX_INFO ( logger , l_msg );        
+        LOG4CXX_INFO ( logger , "Tela Iniciada com sucesso" );      
         
         //Carga de dados 
         Chimera::Loader *pLoader = new Chimera::Loader();

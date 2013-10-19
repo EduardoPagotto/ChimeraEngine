@@ -76,13 +76,13 @@ private:
 };
 
 
-class Mesh : public Draw {
+class DrawTriMesh : public Draw {
 public:
     friend class Loader;
     
-    Mesh();
-    Mesh ( const Mesh &_cpy );
-    virtual ~Mesh();
+    DrawTriMesh();
+    DrawTriMesh ( const DrawTriMesh &_cpy );
+    virtual ~DrawTriMesh();
     
     virtual void init();
     virtual void render();

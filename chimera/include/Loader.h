@@ -18,7 +18,7 @@
 
 #include "SceneMng.h"
 #include "PhysicWorld.h"
-#include "Mesh.h"
+#include "DrawTriMesh.h"
 
 namespace Chimera {
 
@@ -87,7 +87,7 @@ private:
     
     std::queue<Node*> listaNode;
     
-    std::map<std::string,Mesh*> m_mMesh;
+    std::map<std::string,DrawTriMesh*> m_mDrawTriMesh;
     std::map<std::string,Texture*> m_mTextura;
     std::map<std::string,Effect*> m_mEffect;
     std::map<std::string,DataDraw*> m_mDesenhoBase;

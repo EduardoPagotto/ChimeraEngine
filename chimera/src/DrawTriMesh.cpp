@@ -1,12 +1,12 @@
-#include "Mesh.h"
+#include "DrawTriMesh.h"
 
 namespace Chimera {
 
-Mesh::Mesh() : Draw(DrawType::MESH) {
+DrawTriMesh::DrawTriMesh() : Draw(DrawType::MESH) {
     
 }
 
-Mesh::Mesh ( const Mesh &_cpy ): Draw(_cpy) {
+DrawTriMesh::DrawTriMesh ( const DrawTriMesh &_cpy ): Draw(_cpy) {
 
     vList.set ( _cpy.vList );
     nList.set ( _cpy.nList );
@@ -18,7 +18,7 @@ Mesh::Mesh ( const Mesh &_cpy ): Draw(_cpy) {
 
 }
 
-Mesh::~Mesh() {
+DrawTriMesh::~DrawTriMesh() {
     vList.clear();
     nList.clear();
     uvList.clear();
@@ -28,7 +28,7 @@ Mesh::~Mesh() {
     tIndex.clear();
 }
 
-btVector3 Mesh::getSizeBox () {
+btVector3 DrawTriMesh::getSizeBox () {
     btVector3 retorno ( 0.0f,0.0f,0.0f );
     btVector3 l_max ( 0.0f,0.0f,0.0f );
     btVector3 l_min ( 0.0f,0.0f,0.0f );
@@ -62,11 +62,11 @@ btVector3 Mesh::getSizeBox () {
     return retorno;
 }
 
-void Mesh::init() {
+void DrawTriMesh::init() {
       
 }
 
-void Mesh::render() {
+void DrawTriMesh::render() {
 
     unsigned l_numFaces = vIndex.getSize() / 3;
     int l_index = 0;

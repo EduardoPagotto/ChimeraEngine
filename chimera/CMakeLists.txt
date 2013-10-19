@@ -37,10 +37,9 @@ add_library (Chimera STATIC
 				src/PhysicsWorld.cpp				
 				src/Texture.cpp
 				src/Effect.cpp
-				src/Draw.cpp
 				src/DrawBox.cpp
 				src/DrawGrid.cpp
-				src/Mesh.cpp
+				src/DrawTriMesh.cpp
 				#src/Font.cpp
 				#src/HUD.cpp
 				src/Loader.cpp

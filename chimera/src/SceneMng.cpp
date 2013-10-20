@@ -1,6 +1,5 @@
 #include "SceneMng.h"
 
-
 namespace Chimera {
 
 SceneMng::SceneMng (Node *_pRoot)  {
@@ -156,33 +155,33 @@ std::string SceneMng::getVersaoOpenGL() {
     
     return retorno;
 }
-// 
-// void Engine3D::begin2D () {
-//     //Salva config bitŽs
-//     glPushAttrib ( GL_ENABLE_BIT );
-//     
-//     glDisable ( GL_DEPTH_TEST );
-//     glDisable ( GL_CULL_FACE );
-//     
-//     glDisable ( GL_COLOR_MATERIAL );
-//     glDisable ( GL_LIGHTING );
-//     
-//     //TODO problemas de contaminacao de cor no HUD
-//     //glEnable(GL_TEXTURE_2D);
-//     glDisable ( GL_TEXTURE_2D );
-//     
-//     /* This allows alpha blending of 2D textures with the scene */
-//     glEnable ( GL_BLEND );
-//     glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-// }
-// 
-// void Engine3D::end2D ( void ) {
-//     //Retorna para estado de maquina 3d
-//     glPopAttrib();
-//     
-//     //TODO Corrigir reaster problemas de constaminacao de cor no 3D
-//     glColor3f ( 1.0,1.0,1.0 );
-// }
+
+void SceneMng::begin2D() {
+    //Salva config bitŽs
+    glPushAttrib ( GL_ENABLE_BIT );
+    
+    glDisable ( GL_DEPTH_TEST );
+    glDisable ( GL_CULL_FACE );
+    
+    glDisable ( GL_COLOR_MATERIAL );
+    glDisable ( GL_LIGHTING );
+    
+    //TODO problemas de contaminacao de cor no HUD
+    //glEnable(GL_TEXTURE_2D);
+    glDisable ( GL_TEXTURE_2D );
+    
+    /* This allows alpha blending of 2D textures with the scene */
+    glEnable ( GL_BLEND );
+    glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+}
+
+void SceneMng::end2D() {
+    //Retorna para estado de maquina 3d
+    glPopAttrib();
+    
+    //TODO Corrigir reaster problemas de constaminacao de cor no 3D
+    glColor3f ( 1.0,1.0,1.0 );
+}
 
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

@@ -132,10 +132,7 @@ void Game::onFrame(){
 }
 
 void Game::offFrame(){
-    
-    if (newFPS() == true)
-        std::cout << "FPS: " << getFps() << std::endl;
-    
+        
 }
 
 void Game::processMsg(Chimera::DataMsg *dataMsg) {

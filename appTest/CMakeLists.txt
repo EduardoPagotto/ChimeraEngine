@@ -20,6 +20,21 @@ if (Log4Cxx_FOUND)
 	link_libraries (${Log4Cxx_LIBRARIES})	
 	endif (Log4Cxx_FOUND)
 
+find_package (Freetype REQUIRED)
+if (FREETYPE_FOUND)
+	add_definitions( ${Freetype_DEFINITIONS} )
+	include_directories(${FREETYPE_INCLUDE_DIRS})
+	link_libraries (${FREETYPE_LIBRARIES})	
+	endif (FREETYPE_FOUND)	
+	
+find_package(FTGL REQUIRED)	
+if (FTGL_FOUND)
+	add_definitions( ${FTGL_DEFINITIONS} )
+	include_directories(${FTGL_INCLUDE_DIRS})
+	link_libraries (${FTGL_LIBRARIES})	
+	endif (FTGL_FOUND)
+
+	
 include_directories(include ../chimera/include/ ${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS} ${BULLET_INCLUDE_DIR})
 
 link_libraries(/usr/lib64/liblog4cxx.so)

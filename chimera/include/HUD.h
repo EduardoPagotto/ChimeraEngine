@@ -1,19 +1,20 @@
 #ifndef HUD_H_
 #define HUD_H_
 
-#include <GL/gl.h>			// Header File For The OpenGL32 Library
-#include <GL/glu.h>			// Header File For The GLu32 Library
+#include <GL/gl.h>	
+#include <GL/glu.h>
 #include <vector>
 
+#include <SDL2/SDL.h>
+
 #include "Font.h"
-//#include "ChimeraGenericTypes.h"
 
 namespace Chimera {
 class HUD {
 public:
 
     struct HUDSquare {
-        Rectangular tela;
+        SDL_Rect tela;
         Color color;
     };
 
@@ -26,19 +27,19 @@ public:
         Color color;
     };
 
-    HUD ( const Rectangular _rec );
+    HUD ( const SDL_Rect &_displayArea );
 
     ~HUD();
 
     void addFont ( Font *_pFont );
-    void addSquare ( const Rectangular _rec, Color _color );
+    void addSquare ( const SDL_Rect _rec, Color _color );
 
-    void setStatus ( const bool _status ) {
-        m_status = _status;
+    void setOn ( const bool _on ) {
+        on = _on;
     }
 
-    bool getStatus ( void ) const {
-        return m_status;
+    bool isOn ( void ) const {
+        return on;
     }
 
     void addText ( int _fontIndex, int _squareIndex, int _posX, int _posY, Color _colorText, std::string *_txt );
@@ -48,13 +49,13 @@ private:
     void beginOrtho ( void );
     void endOrtho ( void );
 
-    bool m_status;
+    bool on;
 
-    Rectangular m_tela;
+    SDL_Rect displayArea;
 
-    std::vector<HUDSquare*> m_vpSquare;
-    std::vector<HUDTxt*> m_vText;
-    std::vector<Font*> m_vpFont;
+    std::vector<HUDSquare*> vSquare;
+    std::vector<HUDTxt*> vLineText;
+    std::vector<Font*> vFonts;
 };
 }
 

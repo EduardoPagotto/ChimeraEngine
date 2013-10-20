@@ -11,7 +11,6 @@ if (LIBXML2_FOUND)
 	link_libraries (${LIBXML2_LIBRARIES})
 	endif (LIBXML2_FOUND)
 
-
 find_package (Log4Cxx REQUIRED)
 if (Log4Cxx_FOUND)
 	add_definitions( ${Log4Cxx_DEFINITIONS} )
@@ -19,7 +18,24 @@ if (Log4Cxx_FOUND)
 	link_libraries (${Log4Cxx_LIBRARIES})	
 	endif (Log4Cxx_FOUND)	
 
+find_package (Freetype REQUIRED)
+if (FREETYPE_FOUND)
+	add_definitions( ${Freetype_DEFINITIONS} )
+	include_directories(${FREETYPE_INCLUDE_DIRS})
+	link_libraries (${FREETYPE_LIBRARIES})	
+	endif (FREETYPE_FOUND)	
+	
+	
+find_package(FTGL REQUIRED)	
+if (FTGL_FOUND)
+	add_definitions( ${FTGL_DEFINITIONS} )
+	include_directories(${FTGL_INCLUDE_DIRS})
+	link_libraries (${FTGL_LIBRARIES})	
+	endif (FTGL_FOUND)	
 
+
+
+	
 include_directories(include ${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS} ${BULLET_INCLUDE_DIR})
 #target_link_libraries(chimera ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} -lSDL2)
 
@@ -41,8 +57,8 @@ add_library (Chimera STATIC
 				src/DrawBox.cpp
 				src/DrawGrid.cpp
 				src/DrawTriMesh.cpp
-				#src/Font.cpp
-				#src/HUD.cpp
+				src/Font.cpp
+				src/HUD.cpp
 				src/Loader.cpp
 				src/Timer.cpp 
 				src/Video.cpp

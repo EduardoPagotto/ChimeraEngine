@@ -7,34 +7,21 @@
 
 #include <FTGL/ftgl.h>
 
-#include "Exception.h"
+#include "ExceptionChimera.h"
 #include "Color.h"
 
 namespace Chimera {
-
-#define CHIMERA_MAX_LINE_SIZE 512
 
 class Font {
 public:
     Font ( const char*_fontFile, int _size );
     virtual ~Font ( void );
 
-    bool getStatus ( void ) const {
-        return m_status;
-    }
-
-    void setStatus ( bool _status ) {
-        m_status = _status;
-    }
-
-    void render2 ( float _x, float _y, Color _color, const char *_txt );
-    void render ( float _x, float _y, Color _color, const char *_fmt, ... );
-    void render ( float _x, float _y, Color _color, std::string *_txt );
+    void render (const float &_x, const float &_y,const Color &_color, std::string *_pTxt);
 
 private:
-    bool status;
-    char txt[CHIMERA_MAX_LINE_SIZE];
     FTGLPixmapFont *pFont;
+    
 };
 
 }

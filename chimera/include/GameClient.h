@@ -10,7 +10,7 @@
 #include "Video.h"
 #include "SceneMng.h"
 #include "PhysicWorld.h"
-
+#include "HUD.h"
 
 namespace Chimera {
 
@@ -40,12 +40,15 @@ protected:
 
     SceneMng *pSceneMng;
     PhysicWorld *physicWorld;
-    //Font *m_pFont;
-    //HUD *m_pHUD;
+    Font *pFont;
+    HUD *pHUD;
     Video *pVideo;
 private:
     
     unsigned int fps;
+    
+    std::string textoFPS;
+    
     Timer timerFPS;
     Timer timerSegundo;
     

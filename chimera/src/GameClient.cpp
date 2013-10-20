@@ -4,12 +4,20 @@ namespace Chimera {
 
 GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pSceneMng ( _pScenMng ), pVideo(_pVideo)  {
     
-    //m_pFont = new Chimera::Font("C:\\libs\\SDK\\freefont-ttf\\outras\\Vera.ttf",18);
-    //m_pHUD = new HUD( m_pVideo->getRecTela());
-    //m_pHUD->addFont(m_pFont);
-    //m_pHUD->addSquare(Rectangular(10,10,500,40), Color(1.0f,1.0f, 1.0f, 0.2f));
-    ////m_pHUD->addSquare(10,440,630,470,Color(0.0f,1.0f, 0.0f, 0.2f));
-    //m_pHUD->addText(0,0,0,5,Color::RED,&m_sFPS);
+    textoFPS = "fps: " + std::to_string(0);
+    
+    pFont = new Chimera::Font("/usr/share/fonts/gnu-free/FreeSans.ttf",18);
+    pHUD = new HUD( *pVideo->getPRectangle());
+    pHUD->addFont(pFont);
+    
+    SDL_Rect area;
+    area.x = 10;
+    area.y = 10;
+    area.w = 500;
+    area.h = 40;
+    
+    pHUD->addSquare(area, Color(1.0f,1.0f, 1.0f, 0.2f));    
+    pHUD->addText(0,0,0,5,Color::RED,&textoFPS);
 
     fps = 0;
     timerFPS.setElapsedCount ( 1000 );
@@ -25,11 +33,11 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
 
 GameClient::~GameClient() {
     
-//     if ( m_pFont )
-//         delete m_pFont;
-//
-//     if ( m_pHUD )
-//         delete m_pHUD;
+    if ( pFont )
+        delete pFont;
+
+    if ( pHUD )
+        delete pHUD;
 
     Singleton<PhysicWorld>::releaseRefSingleton();
 }
@@ -41,6 +49,7 @@ bool GameClient::newFPS() {
 void GameClient::countFrame() {
     if ( timerFPS.stepCount() == true ) {
         fps = timerFPS.getCountStep();
+        textoFPS = "fps: " + std::to_string(fps);
     }   
 }
 
@@ -54,6 +63,8 @@ void GameClient::open() {
     
     DataMsg dataMsg(KindOp::START,this,nullptr,nullptr);
     pSceneMng->update(&dataMsg);
+    
+    pHUD->setOn(true);
 }
 
 void GameClient::close ( void ) {
@@ -92,12 +103,13 @@ void GameClient::gameLoop ( void ) {
 
                 //DataMsg dataMsg ( KindOp::DRAW3D,nullptr,nullptr,nullptr );
                 //m_pSceneMng->getRoot()->update ( &dataMsg );
-                //m_pEngined3D->begin2D();
-                //m_pHUD->update();
-                //m_pEngined3D->end2D();
-                
+                                
                 offFrame();
 
+                pSceneMng->begin2D();
+                pHUD->update();
+                pSceneMng->end2D();
+                
                 pVideo->swapWindow();
                
             } else

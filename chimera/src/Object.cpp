@@ -47,7 +47,6 @@ void Object::render() {
 }
 
 void Object::update ( DataMsg *_dataMsg ) {
-//FIXME mais um
     
     if (_dataMsg->getKindOp()==KindOp::START) {
 

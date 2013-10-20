@@ -36,6 +36,9 @@ public:
     void setLight ( bool _lightOn );
     void setMaterial ( bool _materialOn );
     
+    void begin2D();
+    void end2D();
+    
 private:
     void parseEntity(Node *_pNode);
     void addEntityToScene( Node *_pNode);

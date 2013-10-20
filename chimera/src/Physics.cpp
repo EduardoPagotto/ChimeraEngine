@@ -10,7 +10,7 @@ Physics::Physics() {
     m_mass = 0.0f;
     m_inercial.setZero();
     m_estatica = true;
-    
+   
     m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
     
 }

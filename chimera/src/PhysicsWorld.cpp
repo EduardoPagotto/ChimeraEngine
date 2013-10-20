@@ -29,6 +29,8 @@ void PhysicWorld::stepSim ( void ) {
 
     m_timeElapsed = ( btScalar ) ( 0.001 * ( SDL_GetTicks() - m_lastExec ) );
 
+  //  m_pDynamicsWorld->stepSimulation ( SDL_GetTicks() / 1000.0f, 1 );
+    
     if ( s_primeiro == false ) {
         if ( ( m_timeElapsed > 0 ) && ( m_timeElapsed < 10 ) ) {
             m_pDynamicsWorld->stepSimulation ( m_timeElapsed,10 );

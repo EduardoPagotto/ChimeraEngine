@@ -11,8 +11,8 @@ find_package(FTGL REQUIRED)
 find_package(Log4Cxx REQUIRED)
 
 include_directories(
-	include
-	../chimera/include/
+	${appTest_SOURCE_DIR}/include
+	${Chimera_SOURCE_DIR}/include
 	${OPENGL_INCLUDE_DIR}
 	${SDL2_INCLUDE_DIR}
 	${LIBXML2_INCLUDE_DIR}
@@ -22,9 +22,11 @@ include_directories(
 	${LOG4CXX_INCLUDE_DIR}
 )
 
-add_executable(appTest
-        src/Game.cpp
-        src/appTest.cpp)
+add_executable(
+	appTest
+	${appTest_SOURCE_DIR}/src/Game.cpp
+	${appTest_SOURCE_DIR}/src/appTest.cpp
+)
 
 target_link_libraries(
 	appTest 
@@ -36,7 +38,8 @@ target_link_libraries(
 	${FREETYPE_LIBRARY} 
 	${FTGL_LIBRARY} 
 	${LOG4CXX_LIBRARIES} 
-	-lSDL2_image)
+	-lSDL2_image
+)
 
 add_dependencies(appTest chimera)
 

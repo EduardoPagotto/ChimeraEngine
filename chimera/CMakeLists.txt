@@ -2,44 +2,29 @@ PROJECT(Chimera)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(LibXml2 REQUIRED)
 find_package(Bullet REQUIRED)
-find_package (LibXml2 REQUIRED)
-
-if (LIBXML2_FOUND)
-	add_definitions( ${LIBXML2_DEFINITIONS} )
-	include_directories(${LIBXML2_INCLUDE_DIR})
-	link_libraries (${LIBXML2_LIBRARIES})
-	endif (LIBXML2_FOUND)
-
-find_package (Log4Cxx REQUIRED)
-if (Log4Cxx_FOUND)
-	add_definitions( ${Log4Cxx_DEFINITIONS} )
-	include_directories(${Log4Cxx_INCLUDE_DIR})
-	link_libraries (${Log4Cxx_LIBRARIES})	
-	endif (Log4Cxx_FOUND)	
-
-find_package (Freetype REQUIRED)
-if (FREETYPE_FOUND)
-	add_definitions( ${Freetype_DEFINITIONS} )
-	include_directories(${FREETYPE_INCLUDE_DIRS})
-	link_libraries (${FREETYPE_LIBRARIES})	
-	endif (FREETYPE_FOUND)	
-	
-	
+find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)	
-if (FTGL_FOUND)
-	add_definitions( ${FTGL_DEFINITIONS} )
-	include_directories(${FTGL_INCLUDE_DIRS})
-	link_libraries (${FTGL_LIBRARIES})	
-	endif (FTGL_FOUND)	
+find_package(Log4Cxx REQUIRED)
 
+set(INCLUDE_DIRECTORIES ${Chimera}/include/)
 
+include_directories(
+	${Chimera_SOURCE_DIR}/include
+	${OPENGL_INCLUDE_DIR}
+	${SDL2_INCLUDE_DIR}
+	${LIBXML2_INCLUDE_DIR}
+	${BULLET_INCLUDE_DIR}
+	${FREETYPE_INCLUDE_DIRS}
+	${FTGL_INCLUDE_DIR}
+	${LOG4CXX_INCLUDE_DIR}
+)
 
-	
-include_directories(include ${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS} ${BULLET_INCLUDE_DIR})
-#target_link_libraries(chimera ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} -lSDL2)
-
-MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+	message(STATUS "Include dir='${dir}'")
+	endforeach()
 
 add_library (Chimera STATIC
 				src/Color.cpp
@@ -67,4 +52,3 @@ add_library (Chimera STATIC
 			)
 
 INSTALL(FILES ${Chimera_BINARY_DIR}/libChimera.a DESTINATION lib)
-#SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

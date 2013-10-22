@@ -29,7 +29,7 @@ Physics::~Physics() {
     Singleton<PhysicWorld>::releaseRefSingleton();
 }
 
-void Physics::init ( btTransform *_pBtTrans ) {
+void Physics::init ( btTransform *_pBtTrans, unsigned _serial ) {
     
     //Transformacao quando Euley nao apagar
     //btQuaternion l_qtn;
@@ -38,26 +38,28 @@ void Physics::init ( btTransform *_pBtTrans ) {
    // m_trans.setRotation ( l_qtn );
    // m_trans.setOrigin ( _pTrans->getPosition() );
     pFisicTransform = _pBtTrans;
-    
-    btVector3 localInertia ( 0,0,0 );
-    if ( m_estatica==false )
-        m_pCollisionShape->calculateLocalInertia ( m_mass,localInertia );
-
+   
     m_pMotionState = new btDefaultMotionState ( *pFisicTransform );
     //m_pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 
+    btVector3 localInertia ( 0.0, 0.0, 0.0 );
+    if ( m_estatica==false )
+        m_pCollisionShape->calculateLocalInertia ( m_mass,localInertia );
+    
     m_pRigidBodyCI = new btRigidBody::btRigidBodyConstructionInfo ( m_mass, m_pMotionState, m_pCollisionShape ,localInertia );
     m_pRigidBody = new btRigidBody ( *m_pRigidBodyCI );
 
-    //m_pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+   // m_pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
     m_pRigidBody->setActivationState ( DISABLE_DEACTIVATION );
 
+    m_pRigidBody->setUserPointer((void*)&_serial);
+    
     if ( m_pPhysicMaterial ) {
         m_pRigidBody->setFriction ( m_pPhysicMaterial->m_friction );
         m_pRigidBody->setRestitution ( m_pPhysicMaterial->m_restitution );
     }
 
-    m_physicWorld->m_pDynamicsWorld->addRigidBody ( m_pRigidBody );
+    m_physicWorld->m_pDynamicsWorld->addRigidBody ( m_pRigidBody, 1, 1 );
 
 }
 
@@ -68,6 +70,7 @@ void Physics::transformacao3D ( void ) {
 }
 
 void Physics::ajusteMatrix ( Physics *_pPhysic ) {
+    
     m_pRigidBody->getMotionState()->getWorldTransform ( *pFisicTransform );
     btVector3 l_vec = _pPhysic->m_pRigidBody->getWorldTransform().getOrigin();
     pFisicTransform->getOpenGLMatrix ( m_matrix );

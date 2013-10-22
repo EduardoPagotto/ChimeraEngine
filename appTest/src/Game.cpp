@@ -17,6 +17,9 @@ bool Game::keyCapture ( SDL_Keycode tecla ) {
         GameClient::close();
         retorno = true;
         break;
+    case SDLK_F1:
+        pHUD->setOn( !pHUD->isOn() );
+        break;
     case SDLK_UP:
         pObj->applyForce( btVector3(10.0, 0.0, 0.0) );
         break;
@@ -78,7 +81,7 @@ void Game::start() {
     
     using namespace Chimera;
         
-    physicWorld->setGravity( btVector3(0.0f, 0.0f, 0.0f) );
+//     physicWorld->setGravity( btVector3(0.0f, 0.0f, 0.0f) );
     
     //instancia e coloca na cena uma nova camera orbital
     Camera* pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA,0);

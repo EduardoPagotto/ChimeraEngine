@@ -33,7 +33,7 @@ public:
         m_pCollisionShape = new btBoxShape ( _size );
     }
 
-    void init ( btTransform *_pBtTrans );
+    void init (btTransform *_pBtTrans, unsigned _serial);
 
     //usada na trans cam do mundo
     void transformacao3D ( void );
@@ -56,14 +56,10 @@ private:
 
     btScalar m_mass;
     btVector3 m_inercial;
-    //btTransform m_trans;
+
     btTransform *pFisicTransform;
     
     btScalar m_matrix[16];
-
-    //btVector3 *m_pPosicao;
-    //btVector3 *m_pRotacao;
-    //Transform *m_pTrans;
 
     btCollisionShape* m_pCollisionShape;
 

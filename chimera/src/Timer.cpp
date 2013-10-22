@@ -45,10 +45,10 @@ Uint32 Timer::restart() {
 
 Uint32 Timer::ticks() const {
     if ( started ) {
-        if ( paused ) {
-            return pausedTicks;
-        } else {
+        if ( !paused ) {
             return SDL_GetTicks() - startTicks;
+        } else {
+            return pausedTicks;
         }
     }
     return 0;

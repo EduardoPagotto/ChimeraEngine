@@ -66,7 +66,7 @@ void Object::update ( DataMsg *_dataMsg ) {
         pPhysic = l_pPhysc;
         
         if (pPhysic != nullptr)
-            pPhysic->init( &transform );
+            pPhysic->init( &transform , getSerial());
                 
         Node::update(_dataMsg);
         

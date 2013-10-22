@@ -6,6 +6,8 @@
 #include <LinearMath/btVector3.h> //Bullet
 #include <SDL2/SDL.h>
 
+#include "Timer.h"
+
 namespace Chimera {
 
 class PhysicWorld {
@@ -28,7 +30,14 @@ public:
 		return m_timeElapsed;
 	}
 
+	
+    
+	
 private:
+    
+    static void doTickCallBack(btDynamicsWorld *world, btScalar timeStep);
+    void processTickCallBack(btScalar timeStep);
+    
 	btBroadphaseInterface* m_pBroadphase;
 	//btAxisSweep3 *m_pBroadphase;
     btDefaultCollisionConfiguration* m_pCollisionConfiguration;
@@ -37,10 +46,11 @@ private:
     btSequentialImpulseConstraintSolver* m_pSolver;
     btDiscreteDynamicsWorld* m_pDynamicsWorld;
 
+    
+    Timer timerSimutation;
 	/// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
-	SDL_Event s_event;
+	//SDL_Event s_event;
 
-	Uint32 m_lastExec;
 	btScalar m_timeElapsed;
 };
 

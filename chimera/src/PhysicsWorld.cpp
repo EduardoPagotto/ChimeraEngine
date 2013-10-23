@@ -32,18 +32,18 @@ PhysicWorld::~PhysicWorld() {
 
 void PhysicWorld::stepSim ( void ) {
     
-    static bool s_primeiro = true;
-    
-    if (s_primeiro == false) {
-        
-        m_pDynamicsWorld->stepSimulation ( countPeriod() , 8);
-        
-    } else {
-        
-        m_pDynamicsWorld->stepSimulation ( 0.016667f );
-        clockCounter.reset();
-        s_primeiro = false;
-    }
+//     static bool s_primeiro = true;
+//     
+//     if (s_primeiro == false) {
+//         
+//         m_pDynamicsWorld->stepSimulation ( countPeriod() , 8);
+//         
+//     } else {
+//         
+         m_pDynamicsWorld->stepSimulation ( 0.016667f,10 );
+//         clockCounter.reset();
+//         s_primeiro = false;
+//     }
     
 
     

@@ -25,13 +25,15 @@ public:
 	inline void setGravity(const btVector3 &_vet) {
 		m_pDynamicsWorld->setGravity(_vet);
 	}
-
-	inline btScalar getTimeElapsed(void) const {
-		return m_timeElapsed;
-	}
-
 	
-    
+	inline btScalar countPeriod() {
+        period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f); // m_clock.getTimeMicroseconds();
+        clockCounter.reset();
+    }
+	
+	inline btScalar getLastPeriod() {
+        return period;
+    }
 	
 private:
     
@@ -51,7 +53,8 @@ private:
 	/// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
 	//SDL_Event s_event;
 
-	btScalar m_timeElapsed;
+    btClock clockCounter;
+    btScalar period;
 };
 
 }

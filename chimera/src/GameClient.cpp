@@ -49,7 +49,7 @@ bool GameClient::newFPS() {
 void GameClient::countFrame() {
     if ( timerFPS.stepCount() == true ) {
         fps = timerFPS.getCountStep();
-        textoFPS = "fps: " + std::to_string(fps);
+        textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string( physicWorld->getLastPeriod() );
     }   
 }
 

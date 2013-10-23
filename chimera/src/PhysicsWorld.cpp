@@ -17,11 +17,6 @@ PhysicWorld::PhysicWorld() {
     
     //physicWorld->setGravity( btVector3(0.0f, 0.0f, 0.0f) );
     
-    timerSimutation.start();
-    
-    
-    
-    
 }
 
 PhysicWorld::~PhysicWorld() {
@@ -36,19 +31,20 @@ PhysicWorld::~PhysicWorld() {
 }
 
 void PhysicWorld::stepSim ( void ) {
+    
     static bool s_primeiro = true;
-
-    m_timeElapsed = (btScalar) (timerSimutation.restart() / 1000.0f);
+    
+    if (s_primeiro == false) {
         
-    if ( s_primeiro == false ) {
-        if ( ( m_timeElapsed > 0.0 ) && ( m_timeElapsed < 10.0 ) ) {
-            m_pDynamicsWorld->stepSimulation ( m_timeElapsed, 5 );
-            //m_pDynamicsWorld->debugDrawWorld();
-        }
+        m_pDynamicsWorld->stepSimulation ( countPeriod() , 8);
+        
     } else {
-       m_pDynamicsWorld->stepSimulation ( 0.016667f,10 );
-       s_primeiro = false;
+        
+        m_pDynamicsWorld->stepSimulation ( 0.016667f );
+        clockCounter.reset();
+        s_primeiro = false;
     }
+    
 
     
 }

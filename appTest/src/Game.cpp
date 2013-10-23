@@ -21,22 +21,22 @@ bool Game::keyCapture ( SDL_Keycode tecla ) {
         pHUD->setOn( !pHUD->isOn() );
         break;
     case SDLK_UP:
-        pObj->applyForce( btVector3(10.0, 0.0, 0.0) );
+        pObj->applyForce( btVector3(100.0, 0.0, 0.0) );
         break;
     case SDLK_DOWN:
-        pObj->applyForce( btVector3(-10.0, 0.0, 0.0) );
+        pObj->applyForce( btVector3(-100.0, 0.0, 0.0) );
         break;
     case SDLK_LEFT:
-        pObj->applyForce( btVector3(0.0, 10.0, 0.0) );
+        pObj->applyForce( btVector3(0.0, 100.0, 0.0) );
         break;
     case SDLK_RIGHT:
-        pObj->applyForce( btVector3(0.0, -10.0, 0.0) );
+        pObj->applyForce( btVector3(0.0, -100.0, 0.0) );
         break;
     case SDLK_MINUS:
-        pObj->applyTorc( btVector3(0.0, -10.0, 0.0) );
+        pObj->applyTorc( btVector3(0.0, -100.0, 0.0) );
         break;
     case SDLK_PLUS:
-        pObj->applyTorc( btVector3(0.0, 10.0, 0.0) );
+        pObj->applyTorc( btVector3(0.0, 100.0, 0.0) );
         break;
     default:
         break;

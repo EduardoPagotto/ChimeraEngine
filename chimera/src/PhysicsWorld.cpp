@@ -12,11 +12,7 @@ PhysicWorld::PhysicWorld() {
     m_pDynamicsWorld = new btDiscreteDynamicsWorld ( m_pDispatcher,m_pBroadphase,m_pSolver,m_pCollisionConfiguration );
     
     m_pDynamicsWorld->setInternalTickCallback( PhysicWorld::doTickCallBack, static_cast<void*>(this), false); //true para forca aplicada apenas dentro do callback
-    
-    m_pDynamicsWorld->setGravity( btVector3(0.0f, 0.0f, 0.0f));
-    
-    //physicWorld->setGravity( btVector3(0.0f, 0.0f, 0.0f) );
-    
+        
 }
 
 PhysicWorld::~PhysicWorld() {
@@ -34,16 +30,17 @@ void PhysicWorld::stepSim ( void ) {
     
     static bool s_primeiro = true;
     
-//     if (s_primeiro == false) {
-//         
-//         m_pDynamicsWorld->stepSimulation ( countPeriod() );
-//         
-//     } else {
-        countPeriod();//FIXME tirar isto
+    if (s_primeiro == false) {
+        
+        //FIXME Descobri porque o stepSim nao esta sincrnizando com os quadros
+        countPeriod();
+        //m_pDynamicsWorld->stepSimulation ( countPeriod() );
         m_pDynamicsWorld->stepSimulation ( 0.016667f );
-        //clockCounter.reset();
+        
+    } else {
+        m_pDynamicsWorld->stepSimulation ( 0.016667f );
         s_primeiro = false;
-//     }
+    }
     
 
     

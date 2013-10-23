@@ -1,8 +1,8 @@
 #ifndef PHYSICS_H_
 #define PHYSICS_H_
 
-#include <GL/gl.h>			// Header File For The OpenGL32 Library
-#include <GL/glu.h>			// Header File For The GLu32 Library
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
@@ -23,17 +23,14 @@ public:
     ~Physics();
 
     inline void setMass ( float _mass ) {
-        if ( _mass > 0 )
-            m_estatica = false;
-
-        m_mass = _mass;
+        mass = _mass;
     }
 
     void setShapeBox ( const btVector3 &_size ) {
-        m_pCollisionShape = new btBoxShape ( _size );
+        pShapeCollision = new btBoxShape ( _size );
     }
 
-    void init (btTransform *_pBtTrans, unsigned _serial);
+    void init (btTransform &_tTrans, unsigned _serial);
 
     //usada na trans cam do mundo
     void transformacao3D ( void );
@@ -49,23 +46,16 @@ public:
     }
     
     inline btVector3& getPosition() {
-        return m_pRigidBody->getWorldTransform().getOrigin();
+        return pRigidBody->getWorldTransform().getOrigin();
     }
     
 private:
 
-    btRigidBody* m_pRigidBody;
+    btRigidBody* pRigidBody;
 
-    bool m_estatica;
-
-    btScalar m_mass;
-    btVector3 m_inercial;
-
-    btTransform *pFisicTransform;
+    btScalar mass;
     
-    btScalar m_matrix[16];
-
-    btCollisionShape* m_pCollisionShape;
+    btCollisionShape* pShapeCollision;
 
     btTriangleIndexVertexArray *m_pIndexVertexArrays;
 

@@ -4,12 +4,10 @@ namespace Chimera {
 
 Physics::Physics() {
     
-    m_pRigidBody = nullptr;
-    m_pCollisionShape = nullptr;
+    pRigidBody = nullptr;
+    pShapeCollision = nullptr;
     m_pPhysicMaterial = nullptr;
-    m_mass = 0.0f;
-    m_inercial.setZero();
-    m_estatica = true;
+    mass = 0.0f;
    
     m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
     
@@ -17,19 +15,19 @@ Physics::Physics() {
 
 Physics::~Physics() {
     
-    if ( m_pRigidBody ) {
-        m_physicWorld->m_pDynamicsWorld->removeRigidBody ( m_pRigidBody );
-        delete m_pRigidBody->getMotionState();
-        delete m_pRigidBody;
+    if ( pRigidBody ) {
+        m_physicWorld->m_pDynamicsWorld->removeRigidBody ( pRigidBody );
+        delete pRigidBody->getMotionState();
+        delete pRigidBody;
     }
 
-    if ( m_pCollisionShape )
-        delete m_pCollisionShape;
+    if ( pShapeCollision )
+        delete pShapeCollision;
 
     Singleton<PhysicWorld>::releaseRefSingleton();
 }
 
-void Physics::init ( btTransform *_pBtTrans, unsigned _serial ) {
+void Physics::init (btTransform &_tTrans, unsigned _serial ) {
     
     //Transformacao quando Euley nao apagar
     //btQuaternion l_qtn;
@@ -37,66 +35,79 @@ void Physics::init ( btTransform *_pBtTrans, unsigned _serial ) {
     //l_qtn.setEulerZYX ( _pTrans->getRotation().x(), _pTrans->getRotation().y(), _pTrans->getRotation().z() );
    // m_trans.setRotation ( l_qtn );
    // m_trans.setOrigin ( _pTrans->getPosition() );
-    pFisicTransform = _pBtTrans;
+    
+    //pFisicTransform = &_tTrans;
    
-    m_pMotionState = new btDefaultMotionState ( *pFisicTransform );
+    m_pMotionState = new btDefaultMotionState ( _tTrans );
     //m_pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 
     btVector3 localInertia ( 0.0, 0.0, 0.0 );
-    if ( m_estatica==false )
-        m_pCollisionShape->calculateLocalInertia ( m_mass,localInertia );
+    if ( mass != 0.0f )
+        pShapeCollision->calculateLocalInertia ( mass,localInertia );
     
-    btRigidBody::btRigidBodyConstructionInfo rBodyInfo( m_mass, m_pMotionState, m_pCollisionShape ,localInertia );
-    m_pRigidBody = new btRigidBody ( rBodyInfo );
+    btRigidBody::btRigidBodyConstructionInfo rBodyInfo( mass, m_pMotionState, pShapeCollision ,localInertia );
+    pRigidBody = new btRigidBody ( rBodyInfo );
 
-   // m_pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
-    m_pRigidBody->setActivationState ( DISABLE_DEACTIVATION );
+   // pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+    pRigidBody->setActivationState ( DISABLE_DEACTIVATION );
 
-    m_pRigidBody->setUserPointer((void*)&_serial);
+    pRigidBody->setUserPointer((void*)&_serial);
     
     if ( m_pPhysicMaterial ) {
-        m_pRigidBody->setFriction ( m_pPhysicMaterial->m_friction );
-        m_pRigidBody->setRestitution ( m_pPhysicMaterial->m_restitution );
+        pRigidBody->setFriction ( m_pPhysicMaterial->m_friction );
+        pRigidBody->setRestitution ( m_pPhysicMaterial->m_restitution );
     }
 
-    m_physicWorld->m_pDynamicsWorld->addRigidBody ( m_pRigidBody, 1, 1 );
+    m_physicWorld->m_pDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
 
 }
 
 void Physics::transformacao3D ( void ) {
-    m_pRigidBody->getMotionState()->getWorldTransform ( *pFisicTransform );
-    pFisicTransform->getOpenGLMatrix ( m_matrix );
-    glMultMatrixf ( m_matrix );
+    btTransform transLocal;
+    btScalar matrix[16];
+
+    pRigidBody->getMotionState()->getWorldTransform ( transLocal );
+    transLocal.getOpenGLMatrix ( matrix );
+    
+    glMultMatrixf ( matrix );
+    
 }
 
 void Physics::ajusteMatrix ( Physics *_pPhysic ) {
     
-    m_pRigidBody->getMotionState()->getWorldTransform ( *pFisicTransform );
-    btVector3 l_vec = _pPhysic->m_pRigidBody->getWorldTransform().getOrigin();
-    pFisicTransform->getOpenGLMatrix ( m_matrix );
+    btTransform transLocal;
+    btScalar matrix[16];
+    
+    //Pega posicao do corpo atual e ajusta sua matrix (posicao e rotacao)
+    pRigidBody->getMotionState()->getWorldTransform ( transLocal );
+    transLocal.getOpenGLMatrix ( matrix );
+    
+    //pega posicao do objeto horigem de desenho (camera travada)
+    btVector3 l_vec = _pPhysic->pRigidBody->getWorldTransform().getOrigin();
+    
+    //desloca desenha para o pbjeto horigem
+    matrix[12] -= l_vec.getX();
+    matrix[13] -= l_vec.getY();
+    matrix[14] -= l_vec.getZ();
 
-    m_matrix[12] -= l_vec.getX();
-    m_matrix[13] -= l_vec.getY();
-    m_matrix[14] -= l_vec.getZ();
-
-    glMultMatrixf ( m_matrix );
+    glMultMatrixf ( matrix );
 }
 
 void Physics::torque ( const btVector3 &_torque ) {
-    m_pRigidBody->applyTorque ( _torque );
+    pRigidBody->applyTorque ( _torque );
 }
 
 void Physics::propulcao ( const btVector3 &_prop ) {
     //Jeito um
     //btTransform boxTrans;
-    //m_pRigidBody->getMotionState()->getWorldTransform(boxTrans);
+    //pRigidBody->getMotionState()->getWorldTransform(boxTrans);
     //btVector3 correctedForce = (boxTrans *_prop) - boxTrans.getOrigin();
-    //m_pRigidBody->applyCentralForce(correctedForce);
+    //pRigidBody->applyCentralForce(correctedForce);
 
     //Jeito 2
-    btMatrix3x3& boxRot = m_pRigidBody->getWorldTransform().getBasis();
+    btMatrix3x3& boxRot = pRigidBody->getWorldTransform().getBasis();
     btVector3 correctedForce = boxRot *_prop;
-    m_pRigidBody->applyCentralForce ( correctedForce );
+    pRigidBody->applyCentralForce ( correctedForce );
 }
 
 }

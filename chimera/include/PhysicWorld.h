@@ -3,10 +3,8 @@
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
-#include <LinearMath/btVector3.h> //Bullet
+#include <LinearMath/btVector3.h>
 #include <SDL2/SDL.h>
-
-#include "Timer.h"
 
 namespace Chimera {
 
@@ -27,7 +25,7 @@ public:
 	}
 	
 	inline btScalar countPeriod() {
-        period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f); // m_clock.getTimeMicroseconds();
+        period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f);
         clockCounter.reset();
     }
 	
@@ -41,15 +39,13 @@ private:
     void processTickCallBack(btScalar timeStep);
     
 	btBroadphaseInterface* m_pBroadphase;
-	//btAxisSweep3 *m_pBroadphase;
+
     btDefaultCollisionConfiguration* m_pCollisionConfiguration;
     btCollisionDispatcher* m_pDispatcher;
 
     btSequentialImpulseConstraintSolver* m_pSolver;
     btDiscreteDynamicsWorld* m_pDynamicsWorld;
 
-    
-    Timer timerSimutation;
 	/// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
 	//SDL_Event s_event;
 

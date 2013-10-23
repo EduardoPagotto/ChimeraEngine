@@ -55,8 +55,8 @@ void Object::update ( DataMsg *_dataMsg ) {
         //FIXME apenas para teste
         //define propriedades fisicas
         btMaterial *pMat = new btMaterial;
-        pMat->m_friction = 10.0f;
-        pMat->m_restitution =10.0f;
+        pMat->m_friction = 0.0f;
+        pMat->m_restitution = 0.0f;
         
         Physics *l_pPhysc = new Physics;
         l_pPhysc->setMass(5.0f);
@@ -66,7 +66,7 @@ void Object::update ( DataMsg *_dataMsg ) {
         pPhysic = l_pPhysc;
         
         if (pPhysic != nullptr)
-            pPhysic->init( &transform , getSerial());
+            pPhysic->init( transform , getSerial());
                 
         Node::update(_dataMsg);
         

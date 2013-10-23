@@ -4,12 +4,12 @@ namespace Chimera {
 
 Loader::Loader () {
     m_numNodes = 0;
-    //m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
+    //m_physicWorld = Singleton<PhysicsControl>::getRefSingleton();
     logger = log4cxx::Logger::getLogger ( "Loader" );
 }
 
 Loader::~Loader() {
-    //Singleton<PhysicWorld>::releaseRefSingleton();
+    //Singleton<PhysicsControl>::releaseRefSingleton();
     while ( !listaNode.empty() ) {
         Node *pNode = listaNode.front();
         listaNode.pop();
@@ -893,7 +893,8 @@ int Loader::libPhysicsModels () {
                             if ( l_pName ) {
                                 btMaterial *pPMat =m_pPhMaterial[ ( const char* ) &l_pName[1]];
                                 if ( pPMat )
-                                    pPhysc->pMaterial = pPMat;
+                                    pPhysc->setFriction( pPMat->m_friction );
+                                    pPhysc->setRestitution( pPMat->m_restitution );
                             }
                         }
 

@@ -9,7 +9,7 @@
 
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 
-#include "PhysicWorld.h"
+#include "PhysicsControl.h"
 #include "Singleton.h"
 
 
@@ -22,14 +22,16 @@ public:
     Physics();
     ~Physics();
 
-    inline void setMass (const float &_mass ) {
-        mass = _mass;
-    }
+    inline void setMass (const float &_mass ) { mass = _mass; }
+    
+    inline void setFriction (const float &_friction ) { friction = _friction; }    
+    
+    inline void setRestitution (const float &_restitution ) { restitution = _restitution; }
+    
+    inline void setShapeBox ( const btVector3 &_size ) { pShapeCollision = new btBoxShape ( _size );}
 
-    void setShapeBox ( const btVector3 &_size ) {
-        pShapeCollision = new btBoxShape ( _size );
-    }
-
+    inline btVector3& getPosition() { return pRigidBody->getWorldTransform().getOrigin();}
+    
     void init (btTransform &_tTrans, unsigned _serial);
 
     //usada na trans cam do mundo
@@ -40,24 +42,17 @@ public:
 
     void propulcao ( const btVector3 &_prop );
     void torque ( const btVector3 &_torque );
-
-    void setPhysicMaterial(btMaterial *_pPhysicMaterial) {
-        pMaterial = _pPhysicMaterial;
-    }
-    
-    inline btVector3& getPosition() {
-        return pRigidBody->getWorldTransform().getOrigin();
-    }
     
 private:
-
     btScalar mass;
+    btScalar friction;
+    btScalar restitution;
+    
     btRigidBody* pRigidBody;
     btCollisionShape* pShapeCollision;
     btDefaultMotionState *pMotionState;
-    btMaterial *pMaterial;
-    
-    PhysicWorld *pWorld;
+   
+    PhysicsControl *pWorld;
     
     //btTriangleIndexVertexArray *m_pIndexVertexArrays;
 };

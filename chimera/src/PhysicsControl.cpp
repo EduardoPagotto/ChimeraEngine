@@ -1,8 +1,8 @@
-#include "PhysicWorld.h"
+#include "PhysicsControl.h"
 
 namespace Chimera {
 
-PhysicWorld::PhysicWorld() {
+PhysicsControl::PhysicsControl() {
     
     m_pCollisionConfiguration = new btDefaultCollisionConfiguration();
     m_pDispatcher = new btCollisionDispatcher ( m_pCollisionConfiguration );
@@ -11,11 +11,11 @@ PhysicWorld::PhysicWorld() {
     m_pSolver = new btSequentialImpulseConstraintSolver;
     m_pDynamicsWorld = new btDiscreteDynamicsWorld ( m_pDispatcher,m_pBroadphase,m_pSolver,m_pCollisionConfiguration );
     
-    m_pDynamicsWorld->setInternalTickCallback( PhysicWorld::doTickCallBack, static_cast<void*>(this), false); //true para forca aplicada apenas dentro do callback
+    m_pDynamicsWorld->setInternalTickCallback( PhysicsControl::doTickCallBack, static_cast<void*>(this), false); //true para forca aplicada apenas dentro do callback
         
 }
 
-PhysicWorld::~PhysicWorld() {
+PhysicsControl::~PhysicsControl() {
     removeAllObjs();
     clearAllShapes();
 
@@ -26,7 +26,7 @@ PhysicWorld::~PhysicWorld() {
     delete m_pBroadphase;
 }
 
-void PhysicWorld::stepSim ( void ) {
+void PhysicsControl::stepSim ( void ) {
     
     static bool s_primeiro = true;
     
@@ -46,14 +46,14 @@ void PhysicWorld::stepSim ( void ) {
     
 }
 
-void PhysicWorld::doTickCallBack(btDynamicsWorld *world, btScalar timeStep) {
+void PhysicsControl::doTickCallBack(btDynamicsWorld *world, btScalar timeStep) {
     
-    PhysicWorld *w = static_cast<PhysicWorld*>(world->getWorldUserInfo());
+    PhysicsControl *w = static_cast<PhysicsControl*>(world->getWorldUserInfo());
     w->processTickCallBack(timeStep);
     
 }
 
-void PhysicWorld::processTickCallBack(btScalar timeStep) {
+void PhysicsControl::processTickCallBack(btScalar timeStep) {
     
 //     btCollisionObjectArray objects = m_pDynamicsWorld->getCollisionObjectArray();
 //     m_pDynamicsWorld->clearForces();
@@ -71,7 +71,7 @@ void PhysicWorld::processTickCallBack(btScalar timeStep) {
  
 }
 
-void PhysicWorld::removeAllObjs() {
+void PhysicsControl::removeAllObjs() {
     //remove the rigidbodies from the dynamics world and delete them
     for ( int i = m_pDynamicsWorld->getNumCollisionObjects()-1; i >= 0 ; i-- ) {
         
@@ -87,7 +87,7 @@ void PhysicWorld::removeAllObjs() {
     }
 }
 
-void PhysicWorld::clearAllShapes() {
+void PhysicsControl::clearAllShapes() {
     //delete collision shapes
 // 	for (int j=0; j < m_collisionShapes.size(); j++)
 // 	{

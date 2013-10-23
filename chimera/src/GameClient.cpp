@@ -28,7 +28,7 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     
     logger = log4cxx::Logger::getLogger ( "GameClient" );
     
-    physicWorld = Singleton<PhysicWorld>::getRefSingleton();
+    physicWorld = Singleton<PhysicsControl>::getRefSingleton();
 }
 
 GameClient::~GameClient() {
@@ -39,7 +39,7 @@ GameClient::~GameClient() {
     if ( pHUD )
         delete pHUD;
 
-    Singleton<PhysicWorld>::releaseRefSingleton();
+    Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
 bool GameClient::newFPS() {

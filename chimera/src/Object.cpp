@@ -52,18 +52,12 @@ void Object::update ( DataMsg *_dataMsg ) {
 
         init();
         
-        //FIXME apenas para teste
-        //define propriedades fisicas
-        btMaterial *pMat = new btMaterial;
-        pMat->m_friction = 0.0f;
-        pMat->m_restitution = 0.0f;
-        
-        Physics *l_pPhysc = new Physics;
-        l_pPhysc->setMass(5.0f);
-        l_pPhysc->setPhysicMaterial(pMat);
-        l_pPhysc->setShapeBox( pDraw->getSizeBox() );
-        
-        pPhysic = l_pPhysc;
+        //FIXME apenas para teste define propriedades fisicas
+        pPhysic = new Physics;
+        pPhysic->setMass(5.0f);
+        pPhysic->setFriction(0.0f);
+        pPhysic->setRestitution(0.0f);
+        pPhysic->setShapeBox( pDraw->getSizeBox() );
         
         if (pPhysic != nullptr)
             pPhysic->init( transform , getSerial());

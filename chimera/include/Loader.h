@@ -17,7 +17,7 @@
 #include "ExceptionChimera.h"
 
 #include "SceneMng.h"
-#include "PhysicWorld.h"
+#include "PhysicsControl.h"
 #include "DrawTriMesh.h"
 
 namespace Chimera {
@@ -75,7 +75,7 @@ private:
     //Node *cloneDraw(Draw *_srcDraw);
     
     //SceneMng *m_pScene;
-    //PhysicWorld *m_physicWorld;
+    //PhysicsControl *m_physicWorld;
 
     xmlDocPtr m_doc;
     xmlNodePtr m_root;

@@ -9,7 +9,7 @@
 #include "Singleton.h"
 #include "Video.h"
 #include "SceneMng.h"
-#include "PhysicWorld.h"
+#include "PhysicsControl.h"
 #include "HUD.h"
 
 namespace Chimera {
@@ -39,7 +39,7 @@ public:
 protected:
 
     SceneMng *pSceneMng;
-    PhysicWorld *physicWorld;
+    PhysicsControl *physicWorld;
     Font *pFont;
     HUD *pHUD;
     Video *pVideo;

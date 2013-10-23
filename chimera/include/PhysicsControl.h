@@ -8,12 +8,12 @@
 
 namespace Chimera {
 
-class PhysicWorld {
+class PhysicsControl {
 public:
 	friend class Physics;
 
-	PhysicWorld(void);
-	~PhysicWorld(void);
+	PhysicsControl(void);
+	~PhysicsControl(void);
 
 	void clearAllShapes(void);
 	void removeAllObjs(void);

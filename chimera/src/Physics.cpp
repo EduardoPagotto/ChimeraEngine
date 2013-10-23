@@ -7,10 +7,12 @@ Physics::Physics() {
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
     pMotionState = nullptr;
-    pMaterial = nullptr;
     
     mass = 0.0f;
-    pWorld = Singleton<PhysicWorld>::getRefSingleton();
+    friction = 0.0f;
+    restitution = 0.0f;
+    
+    pWorld = Singleton<PhysicsControl>::getRefSingleton();
     
 }
 
@@ -25,22 +27,12 @@ Physics::~Physics() {
     if ( pShapeCollision )
         delete pShapeCollision;
 
-    Singleton<PhysicWorld>::releaseRefSingleton();
+    Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
 void Physics::init (btTransform &_tTrans, unsigned _serial ) {
-    
-    //Transformacao quando Euley nao apagar
-    //btQuaternion l_qtn;
-    //m_trans.setIdentity();
-    //l_qtn.setEulerZYX ( _pTrans->getRotation().x(), _pTrans->getRotation().y(), _pTrans->getRotation().z() );
-   // m_trans.setRotation ( l_qtn );
-   // m_trans.setOrigin ( _pTrans->getPosition() );
-    
-    //pFisicTransform = &_tTrans;
-   
+        
     pMotionState = new btDefaultMotionState ( _tTrans );
-    //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 
     btVector3 localInertia ( 0.0, 0.0, 0.0 );
     if ( mass != 0.0f )
@@ -49,15 +41,11 @@ void Physics::init (btTransform &_tTrans, unsigned _serial ) {
     btRigidBody::btRigidBodyConstructionInfo rBodyInfo( mass, pMotionState, pShapeCollision ,localInertia );
     pRigidBody = new btRigidBody ( rBodyInfo );
 
-   // pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
     pRigidBody->setActivationState ( DISABLE_DEACTIVATION );
-
     pRigidBody->setUserPointer((void*)&_serial);
-    
-    if ( pMaterial ) {
-        pRigidBody->setFriction ( pMaterial->m_friction );
-        pRigidBody->setRestitution ( pMaterial->m_restitution );
-    }
+    pRigidBody->setFriction ( friction );
+    pRigidBody->setRestitution ( restitution );
+    //pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);  
 
     pWorld->m_pDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
 
@@ -110,6 +98,14 @@ void Physics::propulcao ( const btVector3 &_prop ) {
     btVector3 correctedForce = boxRot *_prop;
     pRigidBody->applyCentralForce ( correctedForce );
 }
+
+    //Transformacao quando Euley nao apagar
+    //btQuaternion l_qtn;
+    //m_trans.setIdentity();
+    //l_qtn.setEulerZYX ( _pTrans->getRotation().x(), _pTrans->getRotation().y(), _pTrans->getRotation().z() );
+   // m_trans.setRotation ( l_qtn );
+   // m_trans.setOrigin ( _pTrans->getPosition() );
+    //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

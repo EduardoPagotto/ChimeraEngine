@@ -67,8 +67,6 @@ private:
 
     btDefaultMotionState *m_pMotionState;
 
-    btRigidBody::btRigidBodyConstructionInfo *m_pRigidBodyCI;
-
     PhysicWorld *m_physicWorld;
 
     btMaterial *m_pPhysicMaterial;

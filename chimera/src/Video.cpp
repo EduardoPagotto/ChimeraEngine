@@ -13,8 +13,8 @@ Video::Video ( int _width, int _height, std::string _nome ) : nomeTela ( _nome )
     if ( SDL_Init ( SDL_INIT_EVERYTHING ) == 0 ) {
 
         // set the opengl context version
-        SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
-        SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MINOR_VERSION, 2 );
+        //SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
+        //SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MINOR_VERSION, 2 );
 
         // turn on double buffering set the depth buffer to 24 bits
         // you may need to change this to 16 or 32 for your system

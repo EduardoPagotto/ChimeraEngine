@@ -46,8 +46,8 @@ void Physics::init ( btTransform *_pBtTrans, unsigned _serial ) {
     if ( m_estatica==false )
         m_pCollisionShape->calculateLocalInertia ( m_mass,localInertia );
     
-    m_pRigidBodyCI = new btRigidBody::btRigidBodyConstructionInfo ( m_mass, m_pMotionState, m_pCollisionShape ,localInertia );
-    m_pRigidBody = new btRigidBody ( *m_pRigidBodyCI );
+    btRigidBody::btRigidBodyConstructionInfo rBodyInfo( m_mass, m_pMotionState, m_pCollisionShape ,localInertia );
+    m_pRigidBody = new btRigidBody ( rBodyInfo );
 
    // m_pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
     m_pRigidBody->setActivationState ( DISABLE_DEACTIVATION );

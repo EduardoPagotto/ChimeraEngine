@@ -40,7 +40,7 @@ void PhysicWorld::stepSim ( void ) {
 //         
 //     } else {
 //         
-         m_pDynamicsWorld->stepSimulation ( 0.016667f,10 );
+         m_pDynamicsWorld->stepSimulation ( 0.016667f );
 //         clockCounter.reset();
 //         s_primeiro = false;
 //     }

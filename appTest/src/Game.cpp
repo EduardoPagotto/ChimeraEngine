@@ -107,7 +107,7 @@ void Game::start() {
 //     
 //     Physics *pPhysc = new Physics;
 //     pPhysc->setMass(10.0f);
-//     pPhysc->m_pPhysicMaterial = pMat;
+//     pPhysc->pMaterial = pMat;
 //     
 //     pObj->pPhysic = pPhysc;
 //     pPhysc->setShapeBox( pObj->pDraw->getSizeBox() );

@@ -893,7 +893,7 @@ int Loader::libPhysicsModels () {
                             if ( l_pName ) {
                                 btMaterial *pPMat =m_pPhMaterial[ ( const char* ) &l_pName[1]];
                                 if ( pPMat )
-                                    pPhysc->m_pPhysicMaterial = pPMat;
+                                    pPhysc->pMaterial = pPMat;
                             }
                         }
 

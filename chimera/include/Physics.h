@@ -22,7 +22,7 @@ public:
     Physics();
     ~Physics();
 
-    inline void setMass ( float _mass ) {
+    inline void setMass (const float &_mass ) {
         mass = _mass;
     }
 
@@ -33,7 +33,7 @@ public:
     void init (btTransform &_tTrans, unsigned _serial);
 
     //usada na trans cam do mundo
-    void transformacao3D ( void );
+    void transformacao3D ();
 
     //usada na trans da cam objeto
     void ajusteMatrix ( Physics *_pPhysic );
@@ -42,7 +42,7 @@ public:
     void torque ( const btVector3 &_torque );
 
     void setPhysicMaterial(btMaterial *_pPhysicMaterial) {
-        m_pPhysicMaterial = _pPhysicMaterial;
+        pMaterial = _pPhysicMaterial;
     }
     
     inline btVector3& getPosition() {
@@ -51,19 +51,15 @@ public:
     
 private:
 
-    btRigidBody* pRigidBody;
-
     btScalar mass;
-    
+    btRigidBody* pRigidBody;
     btCollisionShape* pShapeCollision;
-
-    btTriangleIndexVertexArray *m_pIndexVertexArrays;
-
-    btDefaultMotionState *m_pMotionState;
-
-    PhysicWorld *m_physicWorld;
-
-    btMaterial *m_pPhysicMaterial;
+    btDefaultMotionState *pMotionState;
+    btMaterial *pMaterial;
+    
+    PhysicWorld *pWorld;
+    
+    //btTriangleIndexVertexArray *m_pIndexVertexArrays;
 };
 
 }

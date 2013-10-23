@@ -6,17 +6,18 @@ Physics::Physics() {
     
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
-    m_pPhysicMaterial = nullptr;
+    pMotionState = nullptr;
+    pMaterial = nullptr;
+    
     mass = 0.0f;
-   
-    m_physicWorld = Singleton<PhysicWorld>::getRefSingleton();
+    pWorld = Singleton<PhysicWorld>::getRefSingleton();
     
 }
 
 Physics::~Physics() {
     
     if ( pRigidBody ) {
-        m_physicWorld->m_pDynamicsWorld->removeRigidBody ( pRigidBody );
+        pWorld->m_pDynamicsWorld->removeRigidBody ( pRigidBody );
         delete pRigidBody->getMotionState();
         delete pRigidBody;
     }
@@ -38,14 +39,14 @@ void Physics::init (btTransform &_tTrans, unsigned _serial ) {
     
     //pFisicTransform = &_tTrans;
    
-    m_pMotionState = new btDefaultMotionState ( _tTrans );
-    //m_pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
+    pMotionState = new btDefaultMotionState ( _tTrans );
+    //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 
     btVector3 localInertia ( 0.0, 0.0, 0.0 );
     if ( mass != 0.0f )
         pShapeCollision->calculateLocalInertia ( mass,localInertia );
     
-    btRigidBody::btRigidBodyConstructionInfo rBodyInfo( mass, m_pMotionState, pShapeCollision ,localInertia );
+    btRigidBody::btRigidBodyConstructionInfo rBodyInfo( mass, pMotionState, pShapeCollision ,localInertia );
     pRigidBody = new btRigidBody ( rBodyInfo );
 
    // pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
@@ -53,12 +54,12 @@ void Physics::init (btTransform &_tTrans, unsigned _serial ) {
 
     pRigidBody->setUserPointer((void*)&_serial);
     
-    if ( m_pPhysicMaterial ) {
-        pRigidBody->setFriction ( m_pPhysicMaterial->m_friction );
-        pRigidBody->setRestitution ( m_pPhysicMaterial->m_restitution );
+    if ( pMaterial ) {
+        pRigidBody->setFriction ( pMaterial->m_friction );
+        pRigidBody->setRestitution ( pMaterial->m_restitution );
     }
 
-    m_physicWorld->m_pDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
+    pWorld->m_pDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
 
 }
 

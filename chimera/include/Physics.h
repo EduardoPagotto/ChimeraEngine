@@ -48,6 +48,10 @@ public:
         m_pPhysicMaterial = _pPhysicMaterial;
     }
     
+    inline btVector3& getPosition() {
+        return m_pRigidBody->getWorldTransform().getOrigin();
+    }
+    
 private:
 
     btRigidBody* m_pRigidBody;

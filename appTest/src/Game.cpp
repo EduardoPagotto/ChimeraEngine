@@ -96,6 +96,10 @@ void Game::start() {
     pSceneMng->setLight(true);
     pSceneMng->setMaterial(true);
     
+	sPosicaoObj = "pos:(,,)";
+	
+	pHUD->addText(0,0,255,5,Color::BLUE,&sPosicaoObj);
+	
 //     //define propriedades fisicas
 //     btMaterial *pMat = new btMaterial;
 //     pMat->m_friction = 0.1f;
@@ -132,6 +136,12 @@ void Game::onFrame(){
         
     pSceneMng->execLight();
     
+	
+	btVector3 val1 = pObj->getPosition();
+	
+	
+	sPosicaoObj = "pos:(" + std::to_string(val1.getX())+ ","+std::to_string(val1.getY())+","+std::to_string(val1.getZ())+")";
+	
 }
 
 void Game::offFrame(){

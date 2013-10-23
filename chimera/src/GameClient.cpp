@@ -13,7 +13,7 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     SDL_Rect area;
     area.x = 10;
     area.y = 10;
-    area.w = 500;
+    area.w = 600;
     area.h = 40;
     
     pHUD->addSquare(area, Color(1.0f,1.0f, 1.0f, 0.2f));    

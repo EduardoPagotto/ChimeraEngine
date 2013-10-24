@@ -9,7 +9,12 @@ Node::Node() : Entity(EntityKind::NODE) {
     name = "name-Node";
     id = "id-Node";
     parent = nullptr;
-    listNode.push_back(this);    
+    listNode.push_back(this);
+    
+    logger = log4cxx::Logger::getLogger ( "Node" );
+    
+    std::string l_msg = Node::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado";
+    LOG4CXX_INFO ( logger , l_msg );
     
 }
 
@@ -20,6 +25,11 @@ Node::Node(EntityKind _type) : Entity(_type) {
     parent = nullptr;
     listNode.push_back(this);
     
+    logger = log4cxx::Logger::getLogger ( "Node" );
+    
+    std::string l_msg = Node::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado";
+    LOG4CXX_INFO ( logger , l_msg );
+    
 }
 
 Node::Node (const Node &_node) : Entity(_node) {
@@ -27,15 +37,13 @@ Node::Node (const Node &_node) : Entity(_node) {
     name = _node.name;
     id = _node.id;
     parent = nullptr;
-    
-    //FIXME preciso copiar mesmo???
-    //if (_node.parent != nullptr) {
-    //    parent = _node.parent;
-    //    _node.parent->addChild(this);
-    //}
-        
+            
     listNode.push_back(this);
     
+    logger = log4cxx::Logger::getLogger ( "Node" );
+    
+    std::string l_msg = Node::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado, Origem:" + _node.getId();
+    LOG4CXX_INFO ( logger , l_msg );
 }
 
 Node::~Node() {
@@ -44,12 +52,23 @@ Node::~Node() {
     listChild.clear();
     listNode.remove ( this );
     
+    std::string l_msg = Node::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Destruido";
+    LOG4CXX_INFO ( logger , l_msg );
 }
 
 void Node::addChild(Node *child) {
 
     listChild.push_back(child);
     child->parent = this;
+    
+    std::string l_msg = Node::getNameKindNode(child->getKind())+ 
+                        " id:" + child->getId() + 
+                        ", serial:"+ std::to_string( child->getSerial() )+ 
+                        " anexado a " + Node::getNameKindNode(getKind()) +
+                        " id:" + getId() + 
+                        ", serial:"+ std::to_string( getSerial() );                        
+       
+    LOG4CXX_INFO ( logger , l_msg );
 
 }
 
@@ -115,6 +134,26 @@ Node *Node::findObjById ( std::string id ) {
     }
     
     return nullptr;
+}
+
+std::string Node::getNameKindNode(EntityKind _kind) {
+    
+    switch (_kind) {
+        case EntityKind::NODE:
+            return std::string("NODE");
+            break;
+        case EntityKind::CAMERA:
+            return std::string("CAMERA");
+            break;
+        case EntityKind::LIGHT:
+            return std::string("LIGHT");
+            break;
+        case EntityKind::OBJECT:
+            return std::string("OBJCT");
+            break;
+    }
+    
+    return std::string("Desconhecido");
 }
 
 }

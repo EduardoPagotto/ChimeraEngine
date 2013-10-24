@@ -1,6 +1,8 @@
 #ifndef NODE_H_
 #define NODE_H_
 
+#include <log4cxx/logger.h>
+
 #include "Entity.h"
 #include "DataMsg.h"
 
@@ -51,7 +53,8 @@ public:
     static Node *findObjById ( std::string id );
     static Node *findObjByName ( EntityKind type,std::string name );
     static Node *findObjByName ( std::string name );
-
+    static std::string getNameKindNode(EntityKind _kind);
+    
 protected:
     Node *parent;
     std::list<Node*> listChild;
@@ -60,6 +63,8 @@ private:
     std::string name;
     std::string id;
     static std::list<Node*> listNode;
+    
+    log4cxx::LoggerPtr logger;
 };
 
 }

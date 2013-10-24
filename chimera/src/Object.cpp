@@ -8,6 +8,10 @@ Object::Object () : Node ( EntityKind::OBJECT ) {
      pDraw = nullptr;
      pTexture = nullptr;
      pEffect = nullptr;
+     
+     collide = false;
+     
+     logger = log4cxx::Logger::getLogger ( "Object" );
     
 }
 
@@ -60,7 +64,7 @@ void Object::update ( DataMsg *_dataMsg ) {
         pPhysic->setShapeBox( pDraw->getSizeBox() );
         
         if (pPhysic != nullptr)
-            pPhysic->init( transform , getSerial());
+            pPhysic->init( transform , this);
                 
         Node::update(_dataMsg);
         
@@ -81,6 +85,10 @@ void Object::update ( DataMsg *_dataMsg ) {
      } 
 }
 
+btVector3& Object::getPosition() {
+    return pPhysic->getPosition();
+}
+
 void Object::applyTorc ( const btVector3 &_vet ) {
     if ( pPhysic )
         pPhysic->torque ( _vet );
@@ -89,6 +97,39 @@ void Object::applyTorc ( const btVector3 &_vet ) {
 void Object::applyForce ( const btVector3 &_vet ) {
     if ( pPhysic )
         pPhysic->propulcao ( _vet );
+}
+
+bool Object::get_check_collision() {
+     
+    std::string l_msg = "obj " + getId() + " " + "func: get_check_collision";
+    
+    LOG4CXX_INFO ( logger , l_msg );
+    
+     return true;
+}
+
+void  Object::on_start_collision(Object *_pObj) {
+    
+    std::string l_msg = "obj " + getId() + " " + "func: on_start_collision com: " + _pObj->getId();
+    
+    LOG4CXX_INFO ( logger ,l_msg );
+    
+}
+
+void  Object::on_collision(Object *_pObj) {
+    
+    std::string l_msg = "obj " + getId() + " " + "func: on_collision com: " + _pObj->getId();
+    
+    LOG4CXX_INFO ( logger , l_msg );
+    
+}
+
+void Object::on_end_collision(Object *_pObj) {
+    
+    std::string l_msg = "obj " + getId() + " " + "func: on_end_collision com: " + _pObj->getId();
+    
+    LOG4CXX_INFO ( logger ,l_msg );
+    
 }
 
 //void Draw::ajusteMatrix ( Transform *_pTrans ) {

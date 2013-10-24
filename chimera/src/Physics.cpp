@@ -19,7 +19,7 @@ Physics::Physics() {
 Physics::~Physics() {
     
     if ( pRigidBody ) {
-        pWorld->m_pDynamicsWorld->removeRigidBody ( pRigidBody );
+        pWorld->discretDynamicsWorld->removeRigidBody ( pRigidBody );
         delete pRigidBody->getMotionState();
         delete pRigidBody;
     }
@@ -30,7 +30,7 @@ Physics::~Physics() {
     Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
-void Physics::init (btTransform &_tTrans, unsigned _serial ) {
+void Physics::init (btTransform &_tTrans, void *pObj ) {
         
     pMotionState = new btDefaultMotionState ( _tTrans );
 
@@ -38,16 +38,20 @@ void Physics::init (btTransform &_tTrans, unsigned _serial ) {
     if ( mass != 0.0f )
         pShapeCollision->calculateLocalInertia ( mass,localInertia );
     
+    //pShapeCollision->setUserPointer((void*)this);
+    
     btRigidBody::btRigidBodyConstructionInfo rBodyInfo( mass, pMotionState, pShapeCollision ,localInertia );
     pRigidBody = new btRigidBody ( rBodyInfo );
 
     pRigidBody->setActivationState ( DISABLE_DEACTIVATION );
-    pRigidBody->setUserPointer((void*)&_serial);
+    
+    pRigidBody->setUserPointer((void*)pObj);
+
     pRigidBody->setFriction ( friction );
     pRigidBody->setRestitution ( restitution );
     //pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);  
 
-    pWorld->m_pDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
+    pWorld->discretDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
 
 }
 
@@ -59,6 +63,7 @@ void Physics::transformacao3D ( void ) {
     transLocal.getOpenGLMatrix ( matrix );
     
     glMultMatrixf ( matrix );
+    
     
 }
 

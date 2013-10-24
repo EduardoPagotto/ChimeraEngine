@@ -15,6 +15,8 @@
 
 namespace Chimera {
 
+    class PhysicsControl;
+    
 class Physics {
 public:
     friend class Loader;
@@ -29,10 +31,12 @@ public:
     inline void setRestitution (const float &_restitution ) { restitution = _restitution; }
     
     inline void setShapeBox ( const btVector3 &_size ) { pShapeCollision = new btBoxShape ( _size );}
+    
+    inline void setShapeCilinder(const btVector3 &_val) { pShapeCollision = new btCylinderShape( _val ); }
 
     inline btVector3& getPosition() { return pRigidBody->getWorldTransform().getOrigin();}
     
-    void init (btTransform &_tTrans, unsigned _serial);
+    void init (btTransform &_tTrans, void *pObj);
 
     //usada na trans cam do mundo
     void transformacao3D ();

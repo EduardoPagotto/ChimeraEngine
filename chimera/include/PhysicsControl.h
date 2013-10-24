@@ -1,13 +1,20 @@
 #ifndef __CHIMERA_PHYSICSWORLD_H
 #define __CHIMERA_PHYSICSWORLD_H
 
+#include <map>
+
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
+
 #include <LinearMath/btVector3.h>
 #include <SDL2/SDL.h>
 
+#include <Object.h>
+
 namespace Chimera {
 
+	class Object;
+	
 class PhysicsControl {
 public:
 	friend class Physics;
@@ -20,8 +27,10 @@ public:
 
 	void stepSim(void);
 
+	void checkCollisions();
+	
 	inline void setGravity(const btVector3 &_vet) {
-		m_pDynamicsWorld->setGravity(_vet);
+		discretDynamicsWorld->setGravity(_vet);
 	}
 	
 	inline btScalar countPeriod() {
@@ -38,17 +47,18 @@ private:
     static void doTickCallBack(btDynamicsWorld *world, btScalar timeStep);
     void processTickCallBack(btScalar timeStep);
     
-	btBroadphaseInterface* m_pBroadphase;
+	btBroadphaseInterface* broadPhase;
 
-    btDefaultCollisionConfiguration* m_pCollisionConfiguration;
-    btCollisionDispatcher* m_pDispatcher;
+    btDefaultCollisionConfiguration* collisionConfig;
+    btCollisionDispatcher* dispatcher;
 
-    btSequentialImpulseConstraintSolver* m_pSolver;
-    btDiscreteDynamicsWorld* m_pDynamicsWorld;
+    btSequentialImpulseConstraintSolver* solver;
+    btDiscreteDynamicsWorld* discretDynamicsWorld;
 
 	/// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
 	//SDL_Event s_event;
-
+	std::map< btCollisionObject*, std::pair<Object*, Object*> >contactActives;
+	
     btClock clockCounter;
     btScalar period;
 };

@@ -17,7 +17,7 @@ int main ( int argn, char** argv ) {
     try {    
         
         //Instancia de Video
-        Chimera::Video *video = new Chimera::Video ( 640, 480, std::string ( "Teste" ) );
+        Chimera::Video *video = new Chimera::Video ( 800, 600, std::string ( "Teste" ) );
         LOG4CXX_INFO ( logger , "Tela Iniciada com sucesso" );      
         
         //Carga de dados 

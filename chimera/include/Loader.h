@@ -67,9 +67,10 @@ private:
     void libGeometry ();
     Node* libScene ();
 
-    int libPhysicsModels ( void );
-    int libPhysicsScenes ( void );
-    int libPhysicsMaterial ( void );
+    void libPhysicsMaterial();
+    void libPhysicsModels ();
+    void libPhysicsScenes ();
+   
 
     Node *clone(Node *_src);
     //Node *cloneDraw(Draw *_srcDraw);

@@ -16,6 +16,19 @@ Physics::Physics() {
     
 }
 
+Physics::Physics(const Physics& _physics) {
+    
+    mass = _physics.mass;
+    friction = _physics.friction;
+    restitution = _physics.restitution;
+
+    pRigidBody = nullptr;
+    pShapeCollision = nullptr;
+    pMotionState = nullptr;    
+    
+    pWorld = Singleton<PhysicsControl>::getRefSingleton();
+}
+
 Physics::~Physics() {
     
     if ( pRigidBody ) {
@@ -56,6 +69,7 @@ void Physics::init (btTransform &_tTrans, void *pObj ) {
 }
 
 void Physics::transformacao3D ( void ) {
+    
     btTransform transLocal;
     btScalar matrix[16];
 
@@ -63,7 +77,6 @@ void Physics::transformacao3D ( void ) {
     transLocal.getOpenGLMatrix ( matrix );
     
     glMultMatrixf ( matrix );
-    
     
 }
 
@@ -85,6 +98,7 @@ void Physics::ajusteMatrix ( Physics *_pPhysic ) {
     matrix[14] -= l_vec.getZ();
 
     glMultMatrixf ( matrix );
+    
 }
 
 void Physics::torque ( const btVector3 &_torque ) {
@@ -102,6 +116,7 @@ void Physics::propulcao ( const btVector3 &_prop ) {
     btMatrix3x3& boxRot = pRigidBody->getWorldTransform().getBasis();
     btVector3 correctedForce = boxRot *_prop;
     pRigidBody->applyCentralForce ( correctedForce );
+    
 }
 
     //Transformacao quando Euley nao apagar

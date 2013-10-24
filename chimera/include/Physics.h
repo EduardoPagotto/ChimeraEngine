@@ -19,9 +19,13 @@ namespace Chimera {
     
 class Physics {
 public:
+    
     friend class Loader;
 
     Physics();
+    
+    Physics(const Physics& _physics);
+    
     ~Physics();
 
     inline void setMass (const float &_mass ) { mass = _mass; }

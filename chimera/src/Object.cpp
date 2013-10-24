@@ -26,9 +26,7 @@ Object::~Object () {
 }
 
 void Object::init() {
-    
-    position = transform.getOrigin();
-    
+        
     if (pTexture != nullptr)
         pTexture->init();
     
@@ -56,15 +54,20 @@ void Object::update ( DataMsg *_dataMsg ) {
 
         init();
         
-        //FIXME apenas para teste define propriedades fisicas
-        pPhysic = new Physics;
-        pPhysic->setMass(5.0f);
-        pPhysic->setFriction(0.0f);
-        pPhysic->setRestitution(0.0f);
-        pPhysic->setShapeBox( pDraw->getSizeBox() );
+        if (pPhysic == nullptr) {
         
-        if (pPhysic != nullptr)
-            pPhysic->init( transform , this);
+            //FIXME apenas para teste define propriedades fisicas
+            pPhysic = new Physics;
+            pPhysic->setMass(5.0f);
+            pPhysic->setFriction(0.0f);
+            pPhysic->setRestitution(0.0f);
+            
+            if (pDraw != nullptr)
+                pPhysic->setShapeBox( pDraw->getSizeBox() );
+            
+        }
+         
+        pPhysic->init( transform , this);
                 
         Node::update(_dataMsg);
         

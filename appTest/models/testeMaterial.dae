@@ -303,29 +303,14 @@
     <visual_scene id="Scene" name="Scene">
       <node id="Camera01" name="Camera01" type="NODE">
         <matrix sid="transform">0.6427873 -0.3358116 0.6885166 7 0.7660447 0.2817791 -0.5777336 -6 0 0.8987942 0.4383707 5 0 0 0 1</matrix>
-        <translate sid="location">7 -6 5</translate>
-        <rotate sid="rotationZ">0 0 1 50.00002</rotate>
-        <rotate sid="rotationY">0 1 0 0</rotate>
-        <rotate sid="rotationX">1 0 0 64.00003</rotate>
-        <scale sid="scale">1 0.9999999 1</scale>
         <instance_camera url="#Camera01-camera"/>
       </node>
       <node id="luz01" name="luz01" type="NODE">
         <matrix sid="transform">-0.1733842 -0.7895962 0.5886219 6 0.9833067 -0.1052982 0.1483921 -9 -0.05518906 0.6045247 0.7946723 6 0 0 0 1</matrix>
-        <translate sid="location">6 -9 6</translate>
-        <rotate sid="rotationZ">0 0 1 100</rotate>
-        <rotate sid="rotationY">0 1 0 3.163707</rotate>
-        <rotate sid="rotationX">1 0 0 37.26105</rotate>
-        <scale sid="scale">1 1 1</scale>
         <instance_light url="#luz01-light"/>
       </node>
       <node id="cubo01" name="cubo01" type="NODE">
         <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-        <translate sid="location">0 0 0</translate>
-        <rotate sid="rotationZ">0 0 1 0</rotate>
-        <rotate sid="rotationY">0 1 0 0</rotate>
-        <rotate sid="rotationX">1 0 0 0</rotate>
-        <scale sid="scale">1 1 1</scale>
         <instance_geometry url="#Cube-mesh">
           <bind_material>
             <technique_common>
@@ -338,20 +323,10 @@
       </node>
       <node id="Icosphere" name="Icosphere" type="NODE">
         <matrix sid="transform">1 0 0 5 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-        <translate sid="location">5 0 0</translate>
-        <rotate sid="rotationZ">0 0 1 0</rotate>
-        <rotate sid="rotationY">0 1 0 0</rotate>
-        <rotate sid="rotationX">1 0 0 0</rotate>
-        <scale sid="scale">1 1 1</scale>
         <instance_geometry url="#Icosphere-mesh"/>
       </node>
       <node id="cilindro01" name="cilindro01" type="NODE">
         <matrix sid="transform">1 0 0 -5 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-        <translate sid="location">-5 0 0</translate>
-        <rotate sid="rotationZ">0 0 1 0</rotate>
-        <rotate sid="rotationY">0 1 0 0</rotate>
-        <rotate sid="rotationX">1 0 0 0</rotate>
-        <scale sid="scale">1 1 1</scale>
         <instance_geometry url="#Cylinder-mesh">
           <bind_material>
             <technique_common>
@@ -362,6 +337,95 @@
       </node>
     </visual_scene>
   </library_visual_scenes>
+  
+  <library_physics_materials>
+
+	<physics_material id="cubo01-PhysicsMaterial" name="cubo01-PhysicsMaterial">
+		<technique_common>
+			<dynamic_friction>0</dynamic_friction>
+			<restitution>0</restitution>
+			<static_friction>0</static_friction>
+		</technique_common>
+	</physics_material>
+
+	<physics_material id="Icosphere-PhysicsMaterial" name="Icosphere-PhysicsMaterial">
+		<technique_common>
+			<dynamic_friction>0</dynamic_friction>
+			<restitution>0</restitution>
+			<static_friction>0</static_friction>
+		</technique_common>
+	</physics_material>
+
+	<physics_material id="cilindro01-PhysicsMaterial" name="cilindro01-PhysicsMaterial">
+		<technique_common>
+			<dynamic_friction>0</dynamic_friction>
+			<restitution>0</restitution>
+			<static_friction>0</static_friction>
+		</technique_common>
+	</physics_material>
+
+   </library_physics_materials>
+
+	<library_physics_models>
+		
+		<physics_model id="Scene-PhysicsModel" name="Scene-PhysicsModel">
+			
+			<rigid_body name="cubo01-RigidBody" sid="cubo01-RigidBody">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>2.0</mass>
+					<instance_physics_material url="#cubo01-PhysicsMaterial"/>
+					<shape>
+						<sphere>
+							<radius>1.0</radius>
+						</sphere>
+					</shape>
+				</technique_common>
+			</rigid_body>
+			
+			<rigid_body name="Icosphere-RigidBody" sid="Icosphere-RigidBody">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>2.0</mass>
+					<instance_physics_material url="#Icosphere-PhysicsMaterial"/>
+					<shape>
+						<sphere>
+							<radius>1.0</radius>
+						</sphere>
+					</shape>
+				</technique_common>
+			</rigid_body>
+
+			<rigid_body name="cilindro01-RigidBody" sid="cilindro01-RigidBody">
+				<technique_common>
+					<dynamic>true</dynamic>
+					<mass>2.0</mass>
+					<instance_physics_material url="#cilindro01-PhysicsMaterial"/>
+					<shape>
+						<sphere>
+							<radius>1.0</radius>
+						</sphere>
+					</shape>
+				</technique_common>
+			</rigid_body>
+
+		</physics_model>
+		
+	</library_physics_models>
+
+	<library_physics_scenes>
+		<physics_scene id="Scene-Physics" name="Scene-Physics">
+			<instance_physics_model url="#Scene-PhysicsModel">
+				
+				<instance_rigid_body body="cubo01-RigidBody" target="#cubo01"/>
+				<instance_rigid_body body="Icosphere-RigidBody" target="#Icosphere"/>
+				<instance_rigid_body body="cilindro01-RigidBody" target="#cilindro01"/>
+				
+			</instance_physics_model>
+		</physics_scene>
+	</library_physics_scenes>
+
+
   <scene>
     <instance_visual_scene url="#Scene"/>
   </scene>

@@ -89,10 +89,12 @@ Node* Loader::loadDAE ( const std::string &_file ) {
     //Carrega componentes da cena
     pRootScene = libScene();
 
-//     printf ( "PhysicMaterial Registradas %d\n",libPhysicsMaterial() );
-//     printf ( "PhysicModels Registradors %d\n",libPhysicsModels() );
-//     printf ( "PhysicScenes Registradas %d\n",libPhysicsScenes() );
-
+    libPhysicsMaterial();
+    
+    libPhysicsModels();
+    
+    libPhysicsScenes();
+    
     return pRootScene;
 }
 
@@ -814,7 +816,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
     }
 }
 
-int Loader::libPhysicsMaterial ( void ) {
+void Loader::libPhysicsMaterial ( void ) {
     unsigned l_num = 0;
     xmlNodePtr l_nPhMat = findNode ( ( char* ) "library_physics_materials", m_root );
     if ( l_nPhMat ) {
@@ -850,10 +852,16 @@ int Loader::libPhysicsMaterial ( void ) {
             l_nPhMat =  findNode ( ( char* ) "physics_material",l_nPhMat->next );
         }
     }
-    return l_num;
+    
+    if ( l_num == 0 ) {
+        LOG4CXX_WARN ( logger , "Nao ha Material Fisico registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Materia Fisico Registradas:" ) + std::to_string ( l_num ) ) );
+    }
 }
 
-int Loader::libPhysicsModels () {
+void Loader::libPhysicsModels () {
+    
     int l_count = 0;
     xmlNodePtr l_nPhysics = findNode ( ( char* ) "library_physics_models", m_root );
     if ( l_nPhysics ) {
@@ -861,6 +869,7 @@ int Loader::libPhysicsModels () {
         if ( l_nPhysics ) {
             l_nPhysics = findNode ( ( char* ) "rigid_body", l_nPhysics );
             while ( l_nPhysics ) {
+                l_count++;
                 xmlChar *l_pName = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "name" );
                 xmlChar *l_pSid = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "sid" );
                 if ( ( l_pName ) && ( l_pSid ) ) {
@@ -880,6 +889,9 @@ int Loader::libPhysicsModels () {
                                         l_pVal = xmlNodeListGetString ( m_doc, l_nProp->children, 1 );
                                         if ( l_pVal )
                                             pPhysc->setMass ( ( float ) atof ( ( char* ) l_pVal ) );
+                                        
+                                        //TODO carga do shape de colisao
+                                        
                                     }
                                 }
 
@@ -906,10 +918,16 @@ int Loader::libPhysicsModels () {
             }
         }
     }
-    return l_count;
+    
+    if ( l_count == 0 ) {
+        LOG4CXX_WARN ( logger , "Nao ha Modelo Fisico registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Modelo Fisico Registradas:" ) + std::to_string ( l_count ) ) );
+    }
+ 
 }
 
-int Loader::libPhysicsScenes ( void ) {
+void Loader::libPhysicsScenes ( void ) {
     unsigned l_num=0;
     xmlNodePtr l_nPhyScene = findNode ( ( char* ) "library_physics_scenes", m_root );
     if ( l_nPhyScene!=nullptr ) {
@@ -937,7 +955,11 @@ int Loader::libPhysicsScenes ( void ) {
         }
     }
 
-    return l_num;
+    if ( l_num == 0 ) {
+        LOG4CXX_WARN ( logger , "Nao ha Modelo Fisico registrada!!!" );
+    } else {
+        LOG4CXX_INFO ( logger , std::string ( std::string ( "Modelo Fisico Registradas:" ) + std::to_string ( l_num ) ) );
+    }
 }
 
 }

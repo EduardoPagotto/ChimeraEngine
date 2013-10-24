@@ -25,6 +25,7 @@ class Object : public Node {
 public: 
     
     friend class Loader;
+    friend class Physics;
 
     Object();
     Object( const Object& _object );
@@ -45,8 +46,6 @@ public:
 	void on_collision(Object *_pObj);
 	void on_end_collision(Object *_pObj);
 	
-	
-	
 private:
     Physics *pPhysic;
     Draw *pDraw;
@@ -56,7 +55,7 @@ private:
 	bool collide;
 	
     btTransform transform;
-    btVector3 position;
+    //btVector3 position;
 	
 	log4cxx::LoggerPtr logger;
 };

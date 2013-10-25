@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Physics::Physics() {
+Physics::Physics() : Node(EntityKind::PHYSICS) {
     
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
@@ -16,7 +16,7 @@ Physics::Physics() {
     
 }
 
-Physics::Physics(const Physics& _physics) {
+Physics::Physics(const Physics& _physics) : Node(_physics) {
     
     mass = _physics.mass;
     friction = _physics.friction;

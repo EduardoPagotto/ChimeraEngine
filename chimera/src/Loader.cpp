@@ -10,9 +10,9 @@ Loader::Loader () {
 
 Loader::~Loader() {
     //Singleton<PhysicsControl>::releaseRefSingleton();
-    while ( !listaNode.empty() ) {
-        Node *pNode = listaNode.front();
-        listaNode.pop();
+    while ( !listaNodeRemover.empty() ) {
+        Node *pNode = listaNodeRemover.front();
+        listaNodeRemover.pop();
         delete pNode;
         pNode = nullptr;
     }
@@ -98,12 +98,38 @@ Node* Loader::loadDAE ( const std::string &_file ) {
     return pRootScene;
 }
 
-Node *Loader::clone ( Node *_src ) {
+Node *Loader::cloneDraw ( Draw *_srcDraw ) {
+    
     Node *novo = nullptr;
+    
+    switch ( _srcDraw->getType() ) {
+        
+        case DrawType::MESH:
+            novo = new DrawTriMesh ( * ( ( DrawTriMesh* ) _srcDraw ) );
+            break;
+        case DrawType::BOX:
+            novo = new DrawBox ( * ( ( DrawBox* ) _srcDraw ) );
+            break;
+        case DrawType::GRID:
+            novo = new DrawGrid ( * ( ( DrawGrid* ) _srcDraw ) );
+            break;
+        case DrawType::SPHERE:
+            //novo = new Draw(*((DrawBox*)_srcDraw));
+            break;
+            
+    }
+    
+    return novo;
+}
+
+Node *Loader::clone ( Node *_src ) {
+    
+    Node *novo = nullptr;
+    
     switch ( _src->getKind() ) {
         case EntityKind::NODE:
             novo = new Node( * (( Node*) _src));
-            break;
+            break;       
         case EntityKind::CAMERA:
             novo = new Camera ( * ( ( Camera* ) _src ) );
             break;
@@ -113,24 +139,32 @@ Node *Loader::clone ( Node *_src ) {
         case EntityKind::OBJECT:
             novo = new Object ( * ( ( Object* ) _src ) );
             break;
+        case EntityKind::MATERIAL:
+            novo = new Material ( * ( ( Material* ) _src ) );
+            break;
         case EntityKind::EFFECT:
-            novo = new Effect( * ((Effect*) _src ));
+            novo = new Effect ( * ( ( Effect* ) _src ) );
             break;
         case EntityKind::TEXTURE:
-            novo = new Texture( *((Texture*) _src));
+            novo = new Texture ( * ( ( Texture* ) _src ) );
+            break;
+        case EntityKind::DRAW:
+            novo = cloneDraw ( ( Draw* ) _src );
+            break;
+        case EntityKind::PHYSICS:
+            novo = new Physics(*((Physics*) _src));
             break;
         default:
             throw ExceptionChimera ( ExceptionCode::READ, "Tipo de clonagem nao implementada para:" + _src->getId() );
             break;
     }
-
+    
     for ( Node *pNode : _src->listChild ) {
         novo->addChild ( clone ( pNode ) );
     }
-
+    
     return novo;
 }
-
 
 std::string Loader::getAtributoXML ( const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
     xmlChar *pStr = xmlGetProp ( _xmlNode, ( const xmlChar* ) chave.c_str() );
@@ -288,7 +322,7 @@ void Loader::libCam ( void ) {
             pCamera->setType ( CameraType::Base );
 
             //Salva na lista de cameras
-            listaNode.push ( pCamera );
+            listaNodeRemover.push ( pCamera );
 
             //Verifica se exite Elemento Perspectiva
             xmlNodePtr l_nTech = findNode ( ( char* ) "perspective",l_nCam );
@@ -355,7 +389,7 @@ void Loader::libLight () {
                 pLight->setType ( LightType::POINT );
                 pLight->setName ( getAtributoXML ( "Light","name",l_nLight ) );
                 pLight->setId ( getAtributoXML ( "Light","id",l_nLight ) );
-                listaNode.push ( pLight );
+                listaNodeRemover.push ( pLight );
 
                 xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children ); //TODO implementar depois tipos direcional e spot
                 if ( l_nTipo != nullptr ) {

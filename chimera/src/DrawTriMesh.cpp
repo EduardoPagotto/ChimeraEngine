@@ -96,5 +96,9 @@ void DrawTriMesh::render() {
     }   
 }
 
+void DrawTriMesh::update ( DataMsg *dataMsg ) {
+    Node::update(dataMsg);
+}
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

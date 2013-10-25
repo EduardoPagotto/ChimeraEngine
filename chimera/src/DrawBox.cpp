@@ -66,4 +66,8 @@ void DrawBox::init() {
     
 }
 
+void DrawBox::update ( DataMsg *dataMsg ) {
+    Node::update(dataMsg);
+}
+
 }

@@ -15,7 +15,8 @@ public:
         sizeBox = _sizeBox;
     }
     
-   // virtual void update ( DataMsg *dataMsg );
+    virtual void update ( DataMsg *dataMsg );
+    
     virtual void init();
     virtual void render();
     virtual btVector3 getSizeBox(void);

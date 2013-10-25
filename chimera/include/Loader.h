@@ -18,6 +18,9 @@
 #include "SceneMng.h"
 #include "PhysicsControl.h"
 #include "DrawTriMesh.h"
+#include "DrawBox.h"
+#include "DrawGrid.h"
+#include "Material.h"
 
 namespace Chimera {
 
@@ -72,11 +75,8 @@ private:
    
 
     Node *clone(Node *_src);
-    //Node *cloneDraw(Draw *_srcDraw);
+    Node *cloneDraw(Draw *_srcDraw);
     
-    //SceneMng *m_pScene;
-    //PhysicsControl *m_physicWorld;
-
     xmlDocPtr m_doc;
     xmlNodePtr m_root;
 
@@ -85,7 +85,7 @@ private:
     std::string m_modelDir;
     std::string m_imageDir;
     
-    std::queue<Node*> listaNode;
+    std::queue<Node*> listaNodeRemover;
     
     std::map<std::string,DrawTriMesh*> m_mDrawTriMesh;
     std::map<std::string,Texture*> m_mTextura;

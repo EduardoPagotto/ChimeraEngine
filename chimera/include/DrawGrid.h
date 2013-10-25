@@ -32,6 +32,8 @@ public:
         colorZ = _color;
     }
 
+    virtual void update ( DataMsg *dataMsg );
+    
     virtual void init();
     virtual void render();
     virtual btVector3 getSizeBox ( void );

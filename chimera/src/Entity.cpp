@@ -19,6 +19,19 @@ std::string Entity::getNameKindNode(EntityKind _kind) {
         case EntityKind::OBJECT:
             return std::string("OBJCT");
             break;
+        case EntityKind::DRAW:
+            return std::string("DRAW");
+            break;
+        case EntityKind::EFFECT:
+            return std::string("EFFECT");
+            break;
+        case EntityKind::TEXTURE:
+            return std::string("TEXTURE");
+            break;
+        case EntityKind::PHYSICS:
+            return std::string("PHYSICS");
+        case EntityKind::MATERIAL:
+            return std::string("MATERIAL");
     }
     
     return std::string("Desconhecido");

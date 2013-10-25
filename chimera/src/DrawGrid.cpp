@@ -56,6 +56,9 @@ void DrawGrid::render() {
     } while (pz < sizeBox.getZ());
 }
 
+void DrawGrid::update ( DataMsg *dataMsg ) {
+    Node::update(dataMsg);
+}
 
 // void DrawBoxGrid2::renderizar() {
 //  #define MAX_LINE 1000

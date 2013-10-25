@@ -84,6 +84,8 @@ public:
     DrawTriMesh ( const DrawTriMesh &_cpy );
     virtual ~DrawTriMesh();
     
+    virtual void update ( DataMsg *dataMsg );
+    
     virtual void init();
     virtual void render();
     virtual btVector3 getSizeBox();

@@ -12,10 +12,9 @@
 #include "PhysicsControl.h"
 #include "Singleton.h"
 
-
 namespace Chimera {
     
-class Physics {
+class Physics : public Node {
 public:
     
     friend class Loader;

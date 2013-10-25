@@ -4,6 +4,8 @@
 #include <LinearMath/btVector3.h>
 #include <GL/gl.h>
 
+#include "Node.h"
+
 namespace Chimera {
 
 enum class DrawType {
@@ -13,12 +15,17 @@ enum class DrawType {
     MESH
 };
 
-class Draw {
+class Draw : public Node {
 public:
-    Draw ( DrawType _type ) : type ( _type ) {}
-    Draw ( const Draw &_draw ) : type ( _draw.type ) {}
+    Draw ( DrawType _type ) : Node(EntityKind::DRAW),  type ( _type ) {}
+    Draw ( const Draw &_draw ) : Node(_draw),  type ( _draw.type ) {}
 
     virtual ~Draw() {}
+    
+    virtual void update ( DataMsg *dataMsg ) {
+        Node::update(dataMsg);
+    }
+    
     virtual void init() = 0;
     virtual void render() = 0;
     virtual btVector3 getSizeBox() = 0;

@@ -17,8 +17,7 @@ public:
 
     virtual void start();
     virtual void stop();
-    virtual void onFrame();
-    virtual void offFrame();
+    virtual void render();
     virtual void keyCapture ( SDL_Keycode tecla );
     virtual void mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
     virtual void mouseButtonUpCapture ( SDL_MouseButtonEvent mb );
@@ -30,12 +29,9 @@ private:
     int botaoIndex;
     int estadoBotao;
     
-    //Chimera::Camera *pCam;
     Chimera::CameraSpherical *pOrbitalCam;
     Chimera::Object *pObj;
-
     std::string sPosicaoObj;
-    
     log4cxx::LoggerPtr logger;
 
 };

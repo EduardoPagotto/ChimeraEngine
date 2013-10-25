@@ -24,8 +24,6 @@ public:
     Node *getNode(EntityKind _type, int index);
     
     void update(DataMsg *dataMsg );
-    
-    void execLight();
         
     void setViewPortOrtogonal(const SDL_Rect &_rectangle);
     void setViewPortPerspective(const SDL_Rect &_rectangle, const Camera *_camera);
@@ -39,7 +37,18 @@ public:
     void begin2D();
     void end2D();
     
+    void cameraAtiva(Camera *_pCam) {
+        pCameraAtiva = _pCam;
+    }
+    
+    void objetoAtivo(Object *_pObject) {
+        pObjeto = _pObject;
+    }
+    
+    void draw3d();
+    
 private:
+    void execLight();
     void parseEntity(Node *_pNode);
     void addEntityToScene( Node *_pNode);
     
@@ -48,10 +57,12 @@ private:
     
     Node *pRoot;
     
+    Camera *pCameraAtiva;
+    Object *pObjeto;
+    
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
     std::vector<Object*> m_vObject;
-//     std::list<btMaterial*> m_PMaterial;
 
 };
 

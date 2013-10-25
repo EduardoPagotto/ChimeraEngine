@@ -6,7 +6,7 @@ SceneMng::SceneMng (Node *_pRoot)  {
     
     pRoot = _pRoot;
     parseEntity(pRoot);
-    
+    pCameraAtiva = nullptr;
 }
 
 SceneMng::~SceneMng() {
@@ -182,6 +182,18 @@ void SceneMng::end2D() {
     //TODO Corrigir reaster problemas de constaminacao de cor no 3D
     glColor3f ( 1.0,1.0,1.0 );
 }
+
+void SceneMng::draw3d() {
+    
+    pCameraAtiva->exec();
+       
+    Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObjeto,nullptr);
+    update(&dataMsg);
+   
+    execLight();
+    
+}
+
 
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

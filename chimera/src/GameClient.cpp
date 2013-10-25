@@ -83,12 +83,7 @@ void GameClient::processaGame() {
     physicWorld->checkCollisions();
 
     countFrame();
-    onFrame();
-
-    //DataMsg dataMsg ( KindOp::DRAW3D,nullptr,nullptr,nullptr );
-    //m_pSceneMng->getRoot()->update ( &dataMsg );
-
-    offFrame();
+    render();
 
     pSceneMng->begin2D();
     pHUD->update();

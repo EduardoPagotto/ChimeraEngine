@@ -63,8 +63,6 @@ void Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
         } else if (botaoIndex == 2) {
             pOrbitalCam->trackBall( 0, 0 , mm.yrel);
         } 
-    } else {
-           
     }
     
 }
@@ -97,35 +95,22 @@ void Game::start() {
 void Game::stop(){
 }
 
-void Game::onFrame(){
-    
+void Game::render() {
+
     using namespace Chimera;
    
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
     const SDL_Rect *tela = pVideo->getPRectangle();
+	
     pSceneMng->setViewPortPerspective( *tela, pOrbitalCam);
-    
-    
-    
-    pOrbitalCam->exec();
-        
-   
-    Chimera::DataMsg dataMsg(KindOp::DRAW3D,this,pObj,nullptr);
-    pSceneMng->update(&dataMsg);
-        
-    pSceneMng->execLight();
-    
-	
+    pSceneMng->cameraAtiva(pOrbitalCam);
+	pSceneMng->objetoAtivo(pObj);
+	pSceneMng->draw3d();
+		
 	btVector3 val1 = pObj->getPosition();
-	
-	
 	sPosicaoObj = "pos:(" + std::to_string(val1.getX())+ ","+std::to_string(val1.getY())+","+std::to_string(val1.getZ())+")";
 	
-}
-
-void Game::offFrame(){
-        
 }
 
 void Game::executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB) {
@@ -148,16 +133,10 @@ void Game::executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA
 	}
 	
 	std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getId() + " ObjB:" + _pNodeB->getId(); 
-	
 	LOG4CXX_INFO ( logger ,l_completa );
-	
-	
+
 }
 
 void Game::userEvent(const SDL_Event &_event) {
-	
 	LOG4CXX_INFO ( logger ,"Evento nao implemtentado" );
-	
 }
-
-

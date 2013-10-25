@@ -26,10 +26,10 @@ namespace Chimera {
 
 class Loader {
     
-    struct DataDraw {
-        Texture *pTextura;
-        Effect *pEffect;
-    };
+//     struct DataDraw {
+//         Texture *pTextura;
+//         Effect *pEffect;
+//     };
       
 public:
     Loader ();
@@ -87,13 +87,13 @@ private:
     
     std::queue<Node*> listaNodeRemover;
     
-    std::map<std::string,DrawTriMesh*> m_mDrawTriMesh;
-    std::map<std::string,Texture*> m_mTextura;
-    std::map<std::string,Effect*> m_mEffect;
-    std::map<std::string,DataDraw*> m_mDesenhoBase;
+    //std::map<std::string,DrawTriMesh*> m_mDrawTriMesh;
+    //std::map<std::string,Texture*> m_mTextura;
+    //std::map<std::string,Effect*> m_mEffect;
+    //std::map<std::string,DataDraw*> m_mDesenhoBase;
     
     std::map<std::string, btMaterial*> m_pPhMaterial;
-    std::map<std::string, Physics*> m_mPhysics;
+    //std::map<std::string, Physics*> m_mPhysics;
     
     log4cxx::LoggerPtr logger;
 };

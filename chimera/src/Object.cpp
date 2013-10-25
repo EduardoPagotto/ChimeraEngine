@@ -61,11 +61,11 @@ void Object::update ( DataMsg *_dataMsg ) {
             pPhysic->setMass(5.0f);
             pPhysic->setFriction(0.0f);
             pPhysic->setRestitution(0.0f);
-            
-            if (pDraw != nullptr)
-                pPhysic->setShapeBox( pDraw->getSizeBox() );
-            
+                        
         }
+         
+        if (pDraw != nullptr)
+            pPhysic->setShapeBox( pDraw->getSizeBox() );
          
         pPhysic->init( transform , this);
                 

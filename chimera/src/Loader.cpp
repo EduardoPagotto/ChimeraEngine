@@ -17,37 +17,6 @@ Loader::~Loader() {
         pNode = nullptr;
     }
 
-    while ( !m_mDesenhoBase.empty() ) {
-        std::map<std::string,DataDraw*>::iterator it = m_mDesenhoBase.begin();
-        DataDraw *pVal = it->second;
-        m_mDesenhoBase.erase ( it );
-        delete pVal;
-        pVal = nullptr;
-    }
-
-    while ( !m_mEffect.empty() ) {
-        std::map<std::string,Effect*>::iterator it = m_mEffect.begin();
-        Effect *pVal = it->second;
-        m_mEffect.erase ( it );
-        delete pVal;
-        pVal = nullptr;
-    }
-
-    while ( !m_mTextura.empty() ) {
-        std::map<std::string,Texture*>::iterator it = m_mTextura.begin();
-        Texture *pVal = it->second;
-        m_mTextura.erase ( it );
-        delete pVal;
-        pVal = nullptr;
-    }
-
-    while ( !m_mDrawTriMesh.empty() ) {
-        std::map<std::string,DrawTriMesh*>::iterator it = m_mDrawTriMesh.begin();
-        DrawTriMesh *pVal = it->second;
-        m_mDrawTriMesh.erase ( it );
-        delete pVal;
-        pVal = nullptr;
-    }
 }
 
 Node* Loader::loadDAE ( const std::string &_file ) {
@@ -172,8 +141,11 @@ std::string Loader::getAtributoXML ( const std::string &tipoNomeNode, const std:
         return std::string ( ( const char* ) pStr );
     } else {
         std::string l_erro = "Entidade '" + tipoNomeNode +"' com Propriedade '" + chave + "' nao localizado";
-        throw ExceptionChimera ( ExceptionCode::READ, l_erro );
+        LOG4CXX_WARN ( logger , l_erro );
+        //throw ExceptionChimera ( ExceptionCode::READ, l_erro );
     }
+    
+    return std::string("");
 }
 
 std::string Loader::getValueFromProp ( const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
@@ -432,7 +404,8 @@ void Loader::libEffect ( void ) {
                 if ( l_idEffect.size() > 0 ) {
 
                     Effect *pEffect = new Effect;
-                    m_mEffect[ l_idEffect ] = pEffect;
+                    pEffect->setId( l_idEffect ); //m_mEffect[ l_idEffect ] = pEffect;
+                    listaNodeRemover.push(pEffect);
                     //pega referencia textura
                     std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
                     if ( idTextura.size() >0 ) {
@@ -484,8 +457,9 @@ void Loader::libTexture ( void ) {
                 std::string l_idTextura = getAtributoXML ( "Texture","id",l_nTexture );
                 if ( l_idTextura.size() >0 ) {
                     Texture *pTexture = new Texture;
-                    m_mTextura[ l_idTextura ] = pTexture;
-
+                    listaNodeRemover.push( pTexture );
+                    pTexture->setId(l_idTextura); //m_mTextura[ l_idTextura ] = pTexture;
+                    pTexture->setName(getAtributoXML ( "Texture","name",l_nTexture ));
                     std::string l_pathFile = getValueFromProp ( "Texture","init_from",l_nTexture->children );
                     if ( l_pathFile.size() >0 ) {
                         std::string l_arquivo = m_imageDir + l_pathFile;
@@ -523,26 +497,24 @@ void Loader::libMaterial ( void ) {
                 std::string l_idDesenhoBase = getAtributoXML ( "Material","id",l_nMat );
                 if ( l_idDesenhoBase.size() > 0 ) {
 
-                    DataDraw *pDataDraw = new DataDraw;
-                    pDataDraw->pEffect = nullptr;
-                    pDataDraw->pTextura = nullptr;
-                    m_mDesenhoBase[ l_idDesenhoBase ] = pDataDraw;
-
+                    Material *pMaterial = new Material;
+                    pMaterial->setName(l_idDesenhoBase);
+                    pMaterial->setName(getAtributoXML ( "Material","name",l_nMat ));
+                    listaNodeRemover.push(pMaterial);
                     xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
                     if ( l_nEffect ) {
 
                         xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
                         if ( l_val ) {
-                            Effect *pEffe = nullptr;
                             std::string l_nomeEffect = ( char* ) &l_val[1];
                             if (l_nomeEffect.size() >0 ) {
-                                pEffe = m_mEffect[ l_nomeEffect ];
+                                Effect *pEffe =(Effect*) Node::findObjById(EntityKind::EFFECT, l_nomeEffect); //m_mEffect[ l_nomeEffect ];
                                 if ( pEffe ) {
-                                    pDataDraw->pEffect = pEffe;
+                                    pMaterial->pEffect = pEffe;//new Effect( *pEffe );
                                     if (pEffe->getNameTextureId().size() > 0) {
-                                        Texture *pTexture = m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+                                        Texture *pTexture = (Texture*) Node::findObjById(EntityKind::TEXTURE,pEffe->getNameTextureId()); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
                                         if ( pTexture!=nullptr ) {
-                                            pDataDraw->pTextura = pTexture;
+                                            pMaterial->pTextura = pTexture;//new Texture( *pTexture );
                                         }
                                     }
                                 } 
@@ -576,9 +548,13 @@ void Loader::libGeometry ( void ) {
         while ( l_nGeom!=nullptr ) {
             std::string l_idDrawTriMesh = getAtributoXML ( "DrawTriMesh","id",l_nGeom );
             if ( l_idDrawTriMesh.size() >0 ) {
+                
                 DrawTriMesh *pDrawTriMesh = new DrawTriMesh;
-                m_mDrawTriMesh[ l_idDrawTriMesh ] = pDrawTriMesh;
-
+                pDrawTriMesh->setId(l_idDrawTriMesh);//m_mDrawTriMesh[ l_idDrawTriMesh ] = pDrawTriMesh;
+                pDrawTriMesh->setName(getAtributoXML ( "DrawTriMesh","name",l_nGeom ));
+                
+                listaNodeRemover.push(pDrawTriMesh);
+                
                 xmlNodePtr l_nDrawTriMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
                 if ( l_nDrawTriMesh ) {
                     l_nDrawTriMesh = findNode ( ( char* ) "source",l_nDrawTriMesh->children );
@@ -778,11 +754,11 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                     
                     std::string l_nomeDrawTriMesh = ( char* ) &pURL[1];
-                    DrawTriMesh *pDrawTriMesh = m_mDrawTriMesh[ l_nomeDrawTriMesh];
+                    DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)Node::findObjById(EntityKind::DRAW,l_nomeDrawTriMesh);//m_mDrawTriMesh[ l_nomeDrawTriMesh];
 
                     if ( pDrawTriMesh ) {
 
-                        pObj->pDraw = new DrawTriMesh ( *pDrawTriMesh );
+                        pObj->pDraw = (DrawTriMesh*)clone(pDrawTriMesh);//new DrawTriMesh ( *pDrawTriMesh );
                         
                         //Carrega Material se existir
                         if ( l_nInstance->children ) {
@@ -797,14 +773,15 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                                             std::string l_nomeMaterial = ( char* ) &pURL[1];
 
-                                            DataDraw *pDataDraw = m_mDesenhoBase[  l_nomeMaterial ];
-                                            if ( pDataDraw != nullptr ) {
+                                            Material *pMaterial = (Material*)Node::findObjById(EntityKind::MATERIAL,l_nomeMaterial );
+                                            //DataDraw *pDataDraw = m_mDesenhoBase[  l_nomeMaterial ];
+                                            if ( pMaterial != nullptr ) {
                                                 
-                                                if (pDataDraw->pTextura != nullptr)
-                                                    pObj->pTexture = new Texture ( * ( pDataDraw->pTextura ) );
+                                                if (pMaterial->pTextura != nullptr)
+                                                    pObj->pTexture = (Texture*)clone(pMaterial->pTextura);
                                                 
-                                                if (pDataDraw->pEffect != nullptr)
-                                                    pObj->pEffect = new Effect ( * ( pDataDraw->pEffect ) );
+                                                if (pMaterial->pEffect != nullptr)
+                                                    pObj->pEffect = (Effect*)clone( pMaterial->pEffect );
 
                                             }
                                         }
@@ -917,8 +894,10 @@ void Loader::libPhysicsModels () {
                 xmlChar *l_pSid = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "sid" );
                 if ( ( l_pName ) && ( l_pSid ) ) {
                     Physics *pPhysc = new Physics;
-                    m_mPhysics[ ( const char* ) l_pName] = pPhysc;
-
+                    pPhysc->setId(std::string((char*)l_pName));
+                    pPhysc->setName(std::string((char*)l_pSid));
+                    listaNodeRemover.push(pPhysc);
+                    
                     xmlNodePtr l_nTec = findNode ( ( char* ) "technique_common", l_nPhysics->children );
                     if ( l_nTec ) {
                         xmlNodePtr l_nProp = findNode ( ( char* ) "dynamic", l_nTec->children );
@@ -952,9 +931,6 @@ void Loader::libPhysicsModels () {
                                     pPhysc->setRestitution( pPMat->m_restitution );
                             }
                         }
-
-
-
                     }
                 }
                 l_nPhysics = findNode ( ( char* ) "rigid_body", l_nPhysics->next );
@@ -981,15 +957,17 @@ void Loader::libPhysicsScenes ( void ) {
                 xmlChar *l_pBody = xmlGetProp ( l_nRigid, ( const xmlChar* ) "body" );
                 xmlChar *l_pTarget = xmlGetProp ( l_nRigid, ( const xmlChar* ) "target" );
                 if ( ( l_pBody ) && ( l_pTarget ) ) {
-                    Physics *pPhysic = m_mPhysics[ ( const char* ) l_pBody];
+                    
+                    Physics *pPhysic = (Physics*)Node::findObjById(EntityKind::PHYSICS, std::string((char*)l_pBody));//m_mPhysics[ ( const char* ) l_pBody];
+                   
                     Object *pObj = ( Object* ) Node::findObjById(EntityKind::OBJECT, ( const char* ) &l_pTarget[1]);
 
                     if ( ( pPhysic ) && ( pObj ) ) {
-                        DrawTriMesh *pDrawTriMesh = ( DrawTriMesh* ) pObj->pDraw; //todo pode ser o draw
-                        if ( pDrawTriMesh )
-                            pPhysic->setShapeBox ( pDrawTriMesh->getSizeBox() );
+                        //DrawTriMesh *pDrawTriMesh = ( DrawTriMesh* ) pObj->pDraw; //todo pode ser o draw
+                        //if ( pDrawTriMesh ) 
+                        //    pPhysic->setShapeBox ( pDrawTriMesh->getSizeBox() );
 
-                        pObj->pPhysic = pPhysic;
+                        pObj->pPhysic = (Physics*) clone( pPhysic );
                         l_num++;
                     }
                 }

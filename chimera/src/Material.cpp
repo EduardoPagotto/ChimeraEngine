@@ -3,6 +3,8 @@
 namespace Chimera {
 
 Material::Material ( void ) : Node ( EntityKind::MATERIAL ) {
+    pEffect = nullptr;
+    pTextura = nullptr;
 }
 
 Material::Material ( const Material &_cpy ) : Node ( _cpy ) {

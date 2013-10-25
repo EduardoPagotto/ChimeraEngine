@@ -2,7 +2,8 @@
 #define MATERIAL_H_
 
 #include <string>
-#include "Node.h"
+#include "Texture.h"
+#include "Effect.h"
 
 namespace Chimera {
 
@@ -15,7 +16,11 @@ public:
     Material ( const Material &_cpy );
     virtual ~Material();
     virtual void update ( DataMsg *dataMsg );
-
+private:
+    
+    Texture *pTextura;
+    Effect *pEffect;
+    
 };
 
 }

@@ -14,6 +14,7 @@ PhysicsControl::PhysicsControl() {
     //true para forca aplicada apenas dentro docallback
     discretDynamicsWorld->setInternalTickCallback ( PhysicsControl::doTickCallBack, static_cast < void *> ( this ), false );
 
+    logger = log4cxx::Logger::getLogger ( "PhysicsControl" );
 }
 
 PhysicsControl::~PhysicsControl() {
@@ -36,7 +37,7 @@ void PhysicsControl::stepSim ( void ) {
         // FIXME Descobri porque o stepSim nao esta sincrnizando com
         // os quadros
         countPeriod();
-        // discretDynamicsWorld->stepSimulation ( countPeriod() );
+        //discretDynamicsWorld->stepSimulation ( countPeriod() );
         discretDynamicsWorld->stepSimulation ( 0.016667f );
 
     } else {
@@ -100,75 +101,103 @@ void PhysicsControl::clearAllShapes() {
     // }
 }
 
+bool PhysicsControl::checkAllowCollision ( Node *pNode ) {
+
+    DataMsg dataMsg ( KindOp::IS_ALLOW_COLLIDE,this,nullptr,nullptr );
+    pNode->update ( &dataMsg );
+
+    return ( dataMsg.isDone() );
+}
+
+void PhysicsControl::sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *_nodeB ) {
+
+    SDL_Event event;
+    SDL_zero ( event );
+    event.type = SDL_USEREVENT;
+    event.user.code = ( int ) _kindOf;
+    event.user.data1 = _nodeA;
+    event.user.data2 = _nodeB;
+    SDL_PushEvent ( &event );
+
+}
+
 void PhysicsControl::checkCollisions() {
 
-    std::map< btCollisionObject*, std::pair<Object*, Object*> > new_contacts;
-    
+    std::map< btCollisionObject*, std::pair<Node*, Node*> > new_contacts;
+
     int numManifolds = discretDynamicsWorld->getDispatcher()->getNumManifolds();
-    
+
     for ( int i=0; i<numManifolds; i++ ) {
-        
+
         btPersistentManifold* contactManiFold = discretDynamicsWorld->getDispatcher()->getManifoldByIndexInternal ( i );
-        
-        btCollisionObject* objA = (btCollisionObject*)contactManiFold->getBody0();
-        btCollisionObject* objB = (btCollisionObject*)contactManiFold->getBody1();
+
+        btCollisionObject* objA = ( btCollisionObject* ) contactManiFold->getBody0();
+        btCollisionObject* objB = ( btCollisionObject* ) contactManiFold->getBody1();
 
         int numContacts = contactManiFold->getNumContacts();
-        for ( int j=0; j<numContacts; j++ ) {
-            
+        for ( int j=0; j < numContacts; j++ ) {
+
             btManifoldPoint& pt = contactManiFold->getContactPoint ( j );
-            
+
             if ( pt.getDistance() < 0.0f ) {
-                
+
                 if ( new_contacts.find ( objB ) == new_contacts.end() ) {
+
+                    Node* l_pNodeB = (Node*)objB->getUserPointer(); //rigidbody contem o dado
+                    Node* l_pNodeA = (Node*)objA->getUserPointer(); //rigidbody contem o dado
                     
-                    Object* ptrObj = (Object*)objB->getUserPointer();//rigidbody contem o dado
-                    
-                    if ( ptrObj ) {
-                        if ( ptrObj->get_check_collision() )
-                            new_contacts[objB] = std::make_pair<Object*, Object*> ( static_cast<Object*> ( objB->getUserPointer() ),static_cast<Object*> ( objA->getUserPointer() ) );
+                    if ( l_pNodeB ) {
+                        if ( checkAllowCollision (l_pNodeB) ==true )
+                            new_contacts[objB] = std::make_pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeA ),static_cast<Node*> ( l_pNodeB ) );
                     }
-                    
+
                 }
 
                 if ( new_contacts.find ( objA ) == new_contacts.end() ) {
+
+                    Node* l_pNodeA = (Node*)objA->getUserPointer(); //rigidbody contem o dado
+                    Node* l_pNodeB = (Node*)objB->getUserPointer(); //rigidbody contem o dado
                     
-                     Object* ptrObj = (Object*)objA->getUserPointer();
-                    
-                    if ( ptrObj ) {
-                        if ( ptrObj->get_check_collision() )
-                            new_contacts[objA] = std::make_pair<Object*, Object*> ( static_cast<Object*> ( objA->getUserPointer() ),static_cast<Object*> ( objB->getUserPointer() ) );
+                    if ( l_pNodeA ) {
+                        if ( checkAllowCollision ( l_pNodeA ) ==true )
+                            new_contacts[objA] = std::make_pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA ) );
                     }
                 }
             }
         }
     }
 
-    std::map< btCollisionObject*, std::pair<Object*, Object*> >::iterator it;
+    std::map< btCollisionObject*, std::pair<Node*, Node*> >::iterator it;
     if ( !new_contacts.empty() ) {
-        
+
         for ( it = new_contacts.begin(); it != new_contacts.end(); it++ ) {
             if ( contactActives.find ( ( *it ).first ) == contactActives.end() ) {
-                if ( ( *it ).second.first->get_check_collision() )
-                    ( *it ).second.first->on_start_collision ( ( *it ).second.second );
+                
+                if (checkAllowCollision( ( *it ).second.first ) == true)
+                   sendMessageCollision(KindOp::START_COLLIDE, ( *it ).second.first, ( *it ).second.second);
+             
             } else {
-                if ( ( *it ).second.first->get_check_collision() )
-                    ( *it ).second.first->on_collision ( ( *it ).second.second );
+                
+/*                if (checkAllowCollision( ( *it ).second.first ) == true)
+                    sendMessageCollision(KindOp::ON_COLLIDE, ( *it ).second.first, ( *it ).second.second);  */              
+                
             }
         }
-        
+
     }
 
     if ( !contactActives.empty() ) {
         for ( it = contactActives.begin(); it != contactActives.end(); it++ ) {
             if ( new_contacts.find ( ( *it ).first ) == new_contacts.end() ) {
-                if ( ( *it ).second.first->get_check_collision() )
-                    ( *it ).second.first->on_end_collision ( ( *it ).second.second );
+                
+                 if (checkAllowCollision( ( *it ).second.first ) == true)
+                    sendMessageCollision(KindOp::OFF_COLLIDE, ( *it ).second.first, ( *it ).second.second);                
+                
             }
         }
     }
 
-    contactActives = new_contacts;
+   contactActives = new_contacts;
 
 }
 

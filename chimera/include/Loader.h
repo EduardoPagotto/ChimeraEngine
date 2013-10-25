@@ -9,7 +9,6 @@
 #include <queue>
 
 #include <log4cxx/logger.h>
-#include <log4cxx/xml/domconfigurator.h>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>

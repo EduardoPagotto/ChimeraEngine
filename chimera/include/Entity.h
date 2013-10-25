@@ -67,6 +67,8 @@ public:
         return mode; 
     }    
 
+    static std::string getNameKindNode(EntityKind _kind);
+    
 private:
     bool status;
     int mode;

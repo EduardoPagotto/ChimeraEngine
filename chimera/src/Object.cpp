@@ -85,7 +85,11 @@ void Object::update ( DataMsg *_dataMsg ) {
         Node::update(_dataMsg);
        
         glPopMatrix();
-     } 
+     } if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
+         
+         _dataMsg->setDone(true);
+         
+     }
 }
 
 btVector3& Object::getPosition() {
@@ -102,38 +106,16 @@ void Object::applyForce ( const btVector3 &_vet ) {
         pPhysic->propulcao ( _vet );
 }
 
-bool Object::get_check_collision() {
-     
-    std::string l_msg = "obj " + getId() + " " + "func: get_check_collision";
-    
-    LOG4CXX_INFO ( logger , l_msg );
-    
-     return true;
-}
+// bool Object::get_check_collision() {
+//      
+//     std::string l_msg = "obj " + getId() + " " + "func: get_check_collision";
+//     
+//     LOG4CXX_INFO ( logger , l_msg );
+//     
+//      return true;
+// }
 
-void  Object::on_start_collision(Object *_pObj) {
-    
-    std::string l_msg = "obj " + getId() + " " + "func: on_start_collision com: " + _pObj->getId();
-    
-    LOG4CXX_INFO ( logger ,l_msg );
-    
-}
 
-void  Object::on_collision(Object *_pObj) {
-    
-    std::string l_msg = "obj " + getId() + " " + "func: on_collision com: " + _pObj->getId();
-    
-    LOG4CXX_INFO ( logger , l_msg );
-    
-}
-
-void Object::on_end_collision(Object *_pObj) {
-    
-    std::string l_msg = "obj " + getId() + " " + "func: on_end_collision com: " + _pObj->getId();
-    
-    LOG4CXX_INFO ( logger ,l_msg );
-    
-}
 
 //void Draw::ajusteMatrix ( Transform *_pTrans ) {
 //  //float *pRotacao = (float*)dBodyGetRotation(m_bodyId);

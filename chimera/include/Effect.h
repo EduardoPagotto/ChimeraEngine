@@ -2,9 +2,9 @@
 #define EFFECT_H_
 
 #include <GL/gl.h>
-
+#include <string>
 #include "Color.h"
-#include "Node.h"
+
 
 namespace Chimera {
 

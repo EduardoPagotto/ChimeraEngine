@@ -13,7 +13,7 @@ Node::Node() : Entity(EntityKind::NODE) {
     
     logger = log4cxx::Logger::getLogger ( "Node" );
     
-    std::string l_msg = Node::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado";
+    std::string l_msg = Entity::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado";
     LOG4CXX_INFO ( logger , l_msg );
     
 }
@@ -27,7 +27,7 @@ Node::Node(EntityKind _type) : Entity(_type) {
     
     logger = log4cxx::Logger::getLogger ( "Node" );
     
-    std::string l_msg = Node::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado";
+    std::string l_msg = Entity::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado";
     LOG4CXX_INFO ( logger , l_msg );
     
 }
@@ -42,7 +42,7 @@ Node::Node (const Node &_node) : Entity(_node) {
     
     logger = log4cxx::Logger::getLogger ( "Node" );
     
-    std::string l_msg = Node::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado, Origem:" + _node.getId();
+    std::string l_msg = Entity::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado, Origem:" + _node.getId();
     LOG4CXX_INFO ( logger , l_msg );
 }
 
@@ -52,7 +52,7 @@ Node::~Node() {
     listChild.clear();
     listNode.remove ( this );
     
-    std::string l_msg = Node::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Destruido";
+    std::string l_msg = Entity::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Destruido";
     LOG4CXX_INFO ( logger , l_msg );
 }
 
@@ -61,10 +61,10 @@ void Node::addChild(Node *child) {
     listChild.push_back(child);
     child->parent = this;
     
-    std::string l_msg = Node::getNameKindNode(child->getKind())+ 
+    std::string l_msg = Entity::getNameKindNode(child->getKind())+ 
                         " id:" + child->getId() + 
                         ", serial:"+ std::to_string( child->getSerial() )+ 
-                        " anexado a " + Node::getNameKindNode(getKind()) +
+                        " anexado a " + Entity::getNameKindNode(getKind()) +
                         " id:" + getId() + 
                         ", serial:"+ std::to_string( getSerial() );                        
        
@@ -134,26 +134,6 @@ Node *Node::findObjById ( std::string id ) {
     }
     
     return nullptr;
-}
-
-std::string Node::getNameKindNode(EntityKind _kind) {
-    
-    switch (_kind) {
-        case EntityKind::NODE:
-            return std::string("NODE");
-            break;
-        case EntityKind::CAMERA:
-            return std::string("CAMERA");
-            break;
-        case EntityKind::LIGHT:
-            return std::string("LIGHT");
-            break;
-        case EntityKind::OBJECT:
-            return std::string("OBJCT");
-            break;
-    }
-    
-    return std::string("Desconhecido");
 }
 
 }

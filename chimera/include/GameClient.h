@@ -27,7 +27,12 @@ public:
     virtual void stop() = 0;
     virtual void onFrame() = 0;
     virtual void offFrame() = 0;
-    virtual void processMsg(DataMsg *_dataMsg) = 0;
+    virtual void keyCapture ( SDL_Keycode tecla ) = 0;
+    virtual void mouseButtonDownCapture ( SDL_MouseButtonEvent mb ) = 0;
+    virtual void mouseButtonUpCapture ( SDL_MouseButtonEvent mb ) = 0;
+    virtual void mouseMotionCapture ( SDL_MouseMotionEvent mm ) = 0;
+    virtual void executeColisao(const KindOp &_kindOp, Node *_pNodeA, Node *_pNodeB) = 0;
+    virtual void userEvent(const SDL_Event &_event) = 0;
     
     unsigned int getFps() const {
         return fps;
@@ -37,13 +42,15 @@ public:
     void countFrame();
     
 protected:
-
     SceneMng *pSceneMng;
     PhysicsControl *physicWorld;
     Font *pFont;
     HUD *pHUD;
     Video *pVideo;
+    
 private:
+    void processaGame();
+    void validaOpColisao(const SDL_Event &_event);
     
     unsigned int fps;
     

@@ -53,7 +53,7 @@ public:
     static Node *findObjById ( std::string id );
     static Node *findObjByName ( EntityKind type,std::string name );
     static Node *findObjByName ( std::string name );
-    static std::string getNameKindNode(EntityKind _kind);
+    
     
 protected:
     Node *parent;

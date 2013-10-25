@@ -2,8 +2,8 @@
 #define GAME_H_
 
 #include "GameClient.h"
-
 #include "CameraSpherical.h"
+#include "DataMsg.h"
 
 /**
  * Class Game
@@ -19,15 +19,14 @@ public:
     virtual void stop();
     virtual void onFrame();
     virtual void offFrame();
-    virtual void processMsg(Chimera::DataMsg *dataMsg);
+    virtual void keyCapture ( SDL_Keycode tecla );
+    virtual void mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
+    virtual void mouseButtonUpCapture ( SDL_MouseButtonEvent mb );
+    virtual void mouseMotionCapture ( SDL_MouseMotionEvent mm );
+    virtual void executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB);
+    virtual void userEvent(const SDL_Event &_event);
     
-    bool keyCapture ( SDL_Keycode tecla );
-    bool mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
-    bool mouseButtonUpCapture ( SDL_MouseButtonEvent mb );
-    bool mouseMotionCapture ( SDL_MouseMotionEvent mm );
-    
-private:
-    
+private:    
     int botaoIndex;
     int estadoBotao;
     

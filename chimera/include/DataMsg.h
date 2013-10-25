@@ -13,7 +13,11 @@ enum class KindOp {
     STOP,
     EVENT,
     DRAW3D,
-    SDL
+    SDL,
+    IS_ALLOW_COLLIDE,
+    START_COLLIDE,
+    ON_COLLIDE,
+    OFF_COLLIDE
 };
 
 /**

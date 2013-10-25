@@ -8,14 +8,11 @@ Game::Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng) : GameClient(_
 Game::~Game() { 
 }
 
-bool Game::keyCapture ( SDL_Keycode tecla ) {
-
-    bool retorno = false;
+void Game::keyCapture ( SDL_Keycode tecla ) {
 
     switch ( tecla ) {
     case SDLK_ESCAPE:
         GameClient::close();
-        retorno = true;
         break;
     case SDLK_F1:
         pHUD->setOn( !pHUD->isOn() );
@@ -42,26 +39,23 @@ bool Game::keyCapture ( SDL_Keycode tecla ) {
         break;
     }
 
-    return retorno;
-
 }
 
-bool Game::mouseButtonUpCapture ( SDL_MouseButtonEvent mb ) {
+void Game::mouseButtonUpCapture ( SDL_MouseButtonEvent mb ) {
     
     botaoIndex = mb.button;
     estadoBotao = mb.state;
     
 }
 
-bool Game::mouseButtonDownCapture ( SDL_MouseButtonEvent mb ) {
+void Game::mouseButtonDownCapture ( SDL_MouseButtonEvent mb ) {
     
     botaoIndex = mb.button;
     estadoBotao = mb.state;
     
-    return false;
 }
 
-bool Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
+void Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
     
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
@@ -73,8 +67,6 @@ bool Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
            
     }
     
-    
-    return false;
 }
 
 void Game::start() {
@@ -100,18 +92,6 @@ void Game::start() {
 	
 	pHUD->addText(0,0,255,5,Color::BLUE,&sPosicaoObj);
 	
-//     //define propriedades fisicas
-//     btMaterial *pMat = new btMaterial;
-//     pMat->m_friction = 0.1f;
-//     pMat->m_restitution =0.1f;
-//     
-//     Physics *pPhysc = new Physics;
-//     pPhysc->setMass(10.0f);
-//     pPhysc->pMaterial = pMat;
-//     
-//     pObj->pPhysic = pPhysc;
-//     pPhysc->setShapeBox( pObj->pDraw->getSizeBox() );
-    
 }
 
 void Game::stop(){
@@ -148,32 +128,36 @@ void Game::offFrame(){
         
 }
 
-void Game::processMsg(Chimera::DataMsg *dataMsg) {
-    
-    if ( dataMsg->getKindOp() == Chimera::KindOp::SDL ) {
-        
-        bool encerraParse = false;
-        SDL_Event *pEvento = ( SDL_Event* ) dataMsg->getParam();
-        
-        switch ( pEvento->type ) {
-            case SDL_QUIT:
-                break;
-            case SDL_KEYDOWN:
-                encerraParse = keyCapture ( pEvento->key.keysym.sym );
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                encerraParse = mouseButtonDownCapture ( pEvento->button );
-                break;
-            case SDL_MOUSEBUTTONUP:    
-                encerraParse = mouseButtonUpCapture( pEvento->button );
-            case SDL_MOUSEMOTION:
-                encerraParse = mouseMotionCapture ( pEvento->motion );
-                break;
-            default:
-                break;
-        }
-       
-        dataMsg->setDone(encerraParse); 
-    }   
+void Game::executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB) {
+	
+	std::string l_msg;
+	
+	switch (_kindOp) {
+	case Chimera::KindOp::START_COLLIDE:
+		l_msg = " START ";
+		break;
+	case Chimera::KindOp::ON_COLLIDE:
+		l_msg = " ON ";
+		break;
+	case Chimera::KindOp::OFF_COLLIDE:
+		l_msg = " OFF ";
+		break;
+	default:
+		//userEvent(pEvento);
+		break;
+	}
+	
+	std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getId() + " ObjB:" + _pNodeB->getId(); 
+	
+	LOG4CXX_INFO ( logger ,l_completa );
+	
+	
 }
+
+void Game::userEvent(const SDL_Event &_event) {
+	
+	LOG4CXX_INFO ( logger ,"Evento nao implemtentado" );
+	
+}
+
 

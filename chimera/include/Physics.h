@@ -14,8 +14,6 @@
 
 
 namespace Chimera {
-
-    class PhysicsControl;
     
 class Physics {
 public:

@@ -19,8 +19,6 @@
 
 namespace Chimera {
 
-	class Physics;
-	
 class Object : public Node {
 public: 
     
@@ -40,12 +38,7 @@ public:
     void applyForce(const btVector3 &_vet);
     
 	btVector3& getPosition();
-	
-	bool get_check_collision();
-	void on_start_collision(Object *_pObj);
-	void on_collision(Object *_pObj);
-	void on_end_collision(Object *_pObj);
-	
+		
 private:
     Physics *pPhysic;
     Draw *pDraw;

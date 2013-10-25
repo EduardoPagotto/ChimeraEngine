@@ -3,20 +3,21 @@
 
 #include <map>
 
+#include <log4cxx/logger.h>
+
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 
 #include <LinearMath/btVector3.h>
 #include <SDL2/SDL.h>
 
-#include <Object.h>
+#include "Node.h"
 
 namespace Chimera {
-
-	class Object;
 	
 class PhysicsControl {
 public:
+	
 	friend class Physics;
 
 	PhysicsControl(void);
@@ -28,6 +29,8 @@ public:
 	void stepSim(void);
 
 	void checkCollisions();
+	bool checkAllowCollision(Node *pNode);
+	void sendMessageCollision(KindOp _kindOf, Node *_nodeA, Node *_nodeB);
 	
 	inline void setGravity(const btVector3 &_vet) {
 		discretDynamicsWorld->setGravity(_vet);
@@ -57,10 +60,12 @@ private:
 
 	/// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
 	//SDL_Event s_event;
-	std::map< btCollisionObject*, std::pair<Object*, Object*> >contactActives;
+	std::map< btCollisionObject*, std::pair<Node*, Node*> > contactActives;
 	
     btClock clockCounter;
     btScalar period;
+	
+	log4cxx::LoggerPtr logger;
 };
 
 }

@@ -15,9 +15,6 @@ enum class DrawType {
 
 class Draw {
 public:
-
-    friend class Loader;
-
     Draw ( DrawType _type ) : type ( _type ) {}
     Draw ( const Draw &_draw ) : type ( _draw.type ) {}
 

@@ -9,6 +9,8 @@
 #include "SDL2/SDL_image.h"
 #include "ExceptionChimera.h"
 
+#include "Node.h"
+
 namespace Chimera {
 
 enum class TextureFilter {
@@ -18,14 +20,15 @@ enum class TextureFilter {
 };
     
     
-class Texture  {
+class Texture : public Node {
 public:
-    
-	friend class Material;
-    
+        
 	Texture();
     Texture (const Texture &_texture);
-	~Texture();
+    
+	virtual ~Texture();
+    
+    virtual void update ( DataMsg *dataMsg );
     
     void render(); 
     void init();

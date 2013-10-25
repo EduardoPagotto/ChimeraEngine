@@ -14,11 +14,11 @@ namespace Chimera {
  */
 enum class EntityKind : int8_t {
     NODE,
+    TEXTURE,//nova
+    EFFECT,//nova
     CAMERA,
     LIGHT,
     OBJECT
-    //IMAGE,
-    //EFFECT,
     //MATERIAL,
     //DRAW,
 };
@@ -30,9 +30,9 @@ enum class EntityKind : int8_t {
  */
 class Entity {
 public:
-    Entity ( EntityKind _kind ) : kind ( _kind ) , serial ( ++serialMaster ), mode(0), status(true), maxMode(2) {}
+    Entity ( EntityKind _kind ) : kind ( _kind ) , serial ( ++serialMaster ), status(true) {}
     
-    Entity ( const Entity &_entity ) : kind ( _entity.kind ), serial ( ++serialMaster ), mode(_entity.mode), status(_entity.status), maxMode(_entity.maxMode) {}
+    Entity ( const Entity &_entity ) : kind ( _entity.kind ), serial ( ++serialMaster ), status(_entity.status){}
 
     virtual ~Entity() {}
     
@@ -55,24 +55,11 @@ public:
     bool virtual getStatus() const { 
         return status; 
     }
-    
-    void virtual setMode(int _valor) {
-        if (_valor<=maxMode) 
-            mode = _valor;
-        else
-            mode = maxMode;
-    }
-    
-    int virtual getMode() { 
-        return mode; 
-    }    
-
+      
     static std::string getNameKindNode(EntityKind _kind);
     
 private:
     bool status;
-    int mode;
-    int maxMode;
     EntityKind kind;
     unsigned serial;
     static unsigned serialMaster;

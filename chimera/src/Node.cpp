@@ -6,8 +6,8 @@ std::list<Node*> Node::listNode;
     
 Node::Node() : Entity(EntityKind::NODE) {
 
-    name = "name-Node";
-    id = "id-Node";
+    name = "";
+    id = "";
     parent = nullptr;
     listNode.push_back(this);
     
@@ -20,8 +20,8 @@ Node::Node() : Entity(EntityKind::NODE) {
 
 Node::Node(EntityKind _type) : Entity(_type) {
     
-    name = "name-Node";
-    id = "id-Node";
+    name = "";
+    id = "";
     parent = nullptr;
     listNode.push_back(this);
     

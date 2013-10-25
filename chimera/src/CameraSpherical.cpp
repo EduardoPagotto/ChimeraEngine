@@ -59,28 +59,26 @@ void CameraSpherical::initTrackBall ( void ) {
 }
 
 void CameraSpherical::trackBall ( int _mx, int _my, int _mz ) {
-    if ( getMode() ==0 ) {
+    
+    horizontal += _mx;
+    vertical += _my;
+    if ( _mz ) {
         
-        horizontal += _mx;
-        vertical += _my;
-        if ( _mz ) {
-            
-            float l_distTemp = distancia; //tempDistancia = distancia;
-            l_distTemp += _mz;
-            if ( ( l_distTemp > distanciaMin ) && ( l_distTemp < distanciaMax ) )
-                distancia = l_distTemp;
-            
-        }
-
-        float l_kx = horizontal * 0.017453293f;
-        float l_ky = vertical * 0.017453293f;
-
-        //Transform *trans = ( Transform* ) parent;
-        position.setX(distancia * cos ( l_kx ) * sin ( l_ky ));
-        position.setY(distancia * cos ( l_kx ) * cos ( l_ky ));
-        position.setZ(distancia * sin ( l_kx ));
-               
+        float l_distTemp = distancia; //tempDistancia = distancia;
+        l_distTemp += _mz;
+        if ( ( l_distTemp > distanciaMin ) && ( l_distTemp < distanciaMax ) )
+            distancia = l_distTemp;
+        
     }
+
+    float l_kx = horizontal * 0.017453293f;
+    float l_ky = vertical * 0.017453293f;
+
+    //Transform *trans = ( Transform* ) parent;
+    position.setX(distancia * cos ( l_kx ) * sin ( l_ky ));
+    position.setY(distancia * cos ( l_kx ) * cos ( l_ky ));
+    position.setZ(distancia * sin ( l_kx ));
+               
 }
 
 }

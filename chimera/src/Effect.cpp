@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Effect::Effect() {
+Effect::Effect() : Node(EntityKind::EFFECT) {
 
     shininess = 10.5f;
     diffuse = Color::BLACK;
@@ -13,7 +13,7 @@ Effect::Effect() {
 
 }
 
-Effect::Effect ( const Effect& _cpy ) {
+Effect::Effect ( const Effect& _cpy ) : Node (_cpy) {
 
     diffuse = _cpy.diffuse;
     ambient = _cpy.ambient;
@@ -21,6 +21,7 @@ Effect::Effect ( const Effect& _cpy ) {
     emissive = _cpy.emissive;
     shininess = _cpy.shininess;
     nameTextureId = _cpy.nameTextureId;
+    
 }
 
 void Effect::render() {
@@ -33,6 +34,10 @@ void Effect::render() {
         glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
     //}
 
+}
+
+void Effect::update ( DataMsg *dataMsg ){
+   Node::update(dataMsg);
 }
 
 }

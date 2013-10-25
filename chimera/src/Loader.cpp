@@ -101,18 +101,27 @@ Node* Loader::loadDAE ( const std::string &_file ) {
 Node *Loader::clone ( Node *_src ) {
     Node *novo = nullptr;
     switch ( _src->getKind() ) {
-    case EntityKind::CAMERA:
-        novo = new Camera ( * ( ( Camera* ) _src ) );
-        break;
-    case EntityKind::LIGHT:
-        novo = new Light ( * ( ( Light* ) _src ) );
-        break;
-    case EntityKind::OBJECT:
-        novo = new Object ( * ( ( Object* ) _src ) );
-        break;
-    default:
-        throw ExceptionChimera ( ExceptionCode::READ, "Tipo de clonagem nao implementada para:" + _src->getId() );
-        break;
+        case EntityKind::NODE:
+            novo = new Node( * (( Node*) _src));
+            break;
+        case EntityKind::CAMERA:
+            novo = new Camera ( * ( ( Camera* ) _src ) );
+            break;
+        case EntityKind::LIGHT:
+            novo = new Light ( * ( ( Light* ) _src ) );
+            break;
+        case EntityKind::OBJECT:
+            novo = new Object ( * ( ( Object* ) _src ) );
+            break;
+        case EntityKind::EFFECT:
+            novo = new Effect( * ((Effect*) _src ));
+            break;
+        case EntityKind::TEXTURE:
+            novo = new Texture( *((Texture*) _src));
+            break;
+        default:
+            throw ExceptionChimera ( ExceptionCode::READ, "Tipo de clonagem nao implementada para:" + _src->getId() );
+            break;
     }
 
     for ( Node *pNode : _src->listChild ) {

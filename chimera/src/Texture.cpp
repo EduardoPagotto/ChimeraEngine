@@ -2,10 +2,10 @@
 
 namespace Chimera {
 
-Texture::Texture() {
+Texture::Texture() : Node(EntityKind::TEXTURE) {
 
     texturaCarregada = false;
-    pathFile = "none";
+    pathFile = "";
     setFilter ( TextureFilter::Nearest );
     textureList[0] = 0;
     textureList[1] = 0;
@@ -15,7 +15,7 @@ Texture::Texture() {
     
 }
 
-Texture::Texture ( const Texture &_texture ) {
+Texture::Texture ( const Texture &_texture ) : Node(_texture) {
 
     pathFile = _texture.pathFile;
     indiceFilter = _texture.indiceFilter;
@@ -146,6 +146,10 @@ SDL_Surface *Texture::loadImage () {
     }
 
     throw ExceptionChimera ( ExceptionCode::READ, "Falha ao ler arquivo:" + pathFile );
+}
+
+void Texture::update ( DataMsg *dataMsg ){
+    Node::update(dataMsg);
 }
 
 }

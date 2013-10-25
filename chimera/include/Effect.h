@@ -4,11 +4,11 @@
 #include <GL/gl.h>
 #include <string>
 #include "Color.h"
-
+#include "Node.h"
 
 namespace Chimera {
 
-class Effect {
+class Effect : public Node {
 public:
 	
     Effect();
@@ -16,6 +16,8 @@ public:
 	Effect(const Effect& _cpy);
 
 	virtual ~Effect() {}
+	
+	virtual void update ( DataMsg *dataMsg );
 	
 	void render();
 	

@@ -8,7 +8,7 @@ namespace Chimera {
 class CameraSpherical : public Camera {
     
 public:
-    CameraSpherical();
+    CameraSpherical(std::string _id, std::string _name);
     
     CameraSpherical(const CameraSpherical& _cameraSpherical);
     

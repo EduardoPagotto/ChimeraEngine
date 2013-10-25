@@ -2,10 +2,10 @@
 
 namespace Chimera {
 
-Light::Light () : Node ( EntityKind::LIGHT) {
+Light::Light (LightType _lightType, std::string _id, std::string _name) : Node ( EntityKind::LIGHT,_id, _name ) {
 
     number = 0;
-    type = LightType::POINT;
+    type = _lightType;
     ambient = Color::ZERO;
     specular = Color::ZERO;
     diffuse = Color::ZERO;

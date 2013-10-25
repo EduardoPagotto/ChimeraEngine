@@ -45,9 +45,9 @@ add_library (Chimera STATIC
 				src/DrawTriMesh.cpp
 				src/Font.cpp
 				src/HUD.cpp
-				src/Loader.cpp
 				src/Timer.cpp 
 				src/Video.cpp
+				src/Loader.cpp
 				src/SceneMng.cpp
 				src/GameClient.cpp
 			)

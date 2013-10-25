@@ -80,7 +80,7 @@ class DrawTriMesh : public Draw {
 public:
     friend class Loader;
     
-    DrawTriMesh();
+    DrawTriMesh(std::string _id, std::string _name);
     DrawTriMesh ( const DrawTriMesh &_cpy );
     virtual ~DrawTriMesh();
     

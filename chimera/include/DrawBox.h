@@ -7,7 +7,7 @@ namespace Chimera {
 
 class DrawBox : public Draw {
 public:
-    DrawBox();
+    DrawBox(std::string _id, std::string _name);
     DrawBox(const DrawBox &_draw);
     virtual ~DrawBox();
         

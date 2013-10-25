@@ -23,7 +23,7 @@ enum class TextureFilter {
 class Texture : public Node {
 public:
         
-	Texture();
+    Texture(std::string _id, std::string _name);
     Texture (const Texture &_texture);
     
 	virtual ~Texture();

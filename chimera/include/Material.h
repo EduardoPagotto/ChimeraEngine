@@ -12,7 +12,7 @@ public:
 
     friend class Loader;
 
-    Material();
+    Material(std::string _id, std::string _name);
     Material ( const Material &_cpy );
     virtual ~Material();
     virtual void update ( DataMsg *dataMsg );

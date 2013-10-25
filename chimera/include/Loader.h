@@ -26,11 +26,6 @@ namespace Chimera {
 
 class Loader {
     
-//     struct DataDraw {
-//         Texture *pTextura;
-//         Effect *pEffect;
-//     };
-      
 public:
     Loader ();
     ~Loader();
@@ -46,14 +41,15 @@ public:
     
 private:
 
-    void loadArrayF ( const char *_val, std::vector<float> &_arrayF );
-    void loadArrayI ( const char *_val, std::vector<int> &_arrayI );   
-    void carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix);
-    
+    static Node *clone(Node *_src);
+    static Node *cloneDraw(Draw *_srcDraw);
+    static void loadArrayF ( const char *_val, std::vector<float> &_arrayF );
+    static void loadArrayI ( const char *_val, std::vector<int> &_arrayI );
+    static void carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix);
     std::string getAtributoXML (const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
     std::string getValueFromProp(const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode );
     
-    xmlNodePtr findNode ( const char* _nomeNode, xmlNodePtr _nodePos );
+    static xmlNodePtr findNode ( const char* _nomeNode, xmlNodePtr _nodePos );
     
     Color getPhong ( xmlNodePtr _nPos,const char* _name );
 
@@ -72,11 +68,7 @@ private:
     void libPhysicsMaterial();
     void libPhysicsModels ();
     void libPhysicsScenes ();
-   
-
-    Node *clone(Node *_src);
-    Node *cloneDraw(Draw *_srcDraw);
-    
+       
     xmlDocPtr m_doc;
     xmlNodePtr m_root;
 
@@ -86,14 +78,8 @@ private:
     std::string m_imageDir;
     
     std::queue<Node*> listaNodeRemover;
-    
-    //std::map<std::string,DrawTriMesh*> m_mDrawTriMesh;
-    //std::map<std::string,Texture*> m_mTextura;
-    //std::map<std::string,Effect*> m_mEffect;
-    //std::map<std::string,DataDraw*> m_mDesenhoBase;
-    
+        
     std::map<std::string, btMaterial*> m_pPhMaterial;
-    //std::map<std::string, Physics*> m_mPhysics;
     
     log4cxx::LoggerPtr logger;
 };

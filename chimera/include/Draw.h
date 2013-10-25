@@ -17,7 +17,7 @@ enum class DrawType {
 
 class Draw : public Node {
 public:
-    Draw ( DrawType _type ) : Node(EntityKind::DRAW),  type ( _type ) {}
+    Draw ( DrawType _type, std::string _id, std::string _name ) : Node(EntityKind::DRAW, _id, _name),  type ( _type ) {}
     Draw ( const Draw &_draw ) : Node(_draw),  type ( _draw.type ) {}
 
     virtual ~Draw() {}

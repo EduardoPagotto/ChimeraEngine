@@ -2,8 +2,7 @@
 
 namespace Chimera {
 
-DrawTriMesh::DrawTriMesh() : Draw(DrawType::MESH) {
-    
+DrawTriMesh::DrawTriMesh(std::string _id, std::string _name) : Draw(DrawType::MESH,_id,_name) {  
 }
 
 DrawTriMesh::DrawTriMesh ( const DrawTriMesh &_cpy ): Draw(_cpy) {

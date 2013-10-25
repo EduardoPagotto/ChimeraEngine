@@ -21,7 +21,7 @@ public:
     
     friend class Loader;
     
-    Light ();
+    Light (LightType _lightType, std::string _id, std::string _name);
     
     Light (const Light& _light );
     

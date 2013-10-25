@@ -23,7 +23,7 @@ public:
     
     friend class Loader;
     
-    Camera ();
+    Camera (CameraType _type, std::string _id, std::string _name);
     
     Camera (const Camera& _camera);
     

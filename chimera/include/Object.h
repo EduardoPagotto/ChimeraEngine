@@ -25,7 +25,7 @@ public:
     friend class Loader;
     friend class Physics;
 
-    Object();
+    Object(std::string _id, std::string _name );
     Object( const Object& _object );
     
     virtual ~Object();

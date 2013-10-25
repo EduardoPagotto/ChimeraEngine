@@ -2,9 +2,9 @@
 
 namespace Chimera {
 
-Camera::Camera () : Node ( EntityKind::CAMERA ) {
+ Camera::Camera (CameraType _type, std::string _id, std::string _name) : Node ( EntityKind::CAMERA,_id, _name ) {
     
-    type = CameraType::Base;
+    type = _type;
     position.setZero();
     rotation.setZero();
     direction.setZero();

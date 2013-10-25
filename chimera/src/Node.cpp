@@ -4,30 +4,16 @@ namespace Chimera {
 
 std::list<Node*> Node::listNode;
     
-Node::Node() : Entity(EntityKind::NODE) {
-
-    name = "";
-    id = "";
+Node::Node(EntityKind _type, std::string _id, std::string _name) : Entity(_type) {
+    
+    name = _name;
+    id = _id;
     parent = nullptr;
     listNode.push_back(this);
     
     logger = log4cxx::Logger::getLogger ( "Node" );
     
-    std::string l_msg = Entity::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado";
-    LOG4CXX_INFO ( logger , l_msg );
-    
-}
-
-Node::Node(EntityKind _type) : Entity(_type) {
-    
-    name = "";
-    id = "";
-    parent = nullptr;
-    listNode.push_back(this);
-    
-    logger = log4cxx::Logger::getLogger ( "Node" );
-    
-    std::string l_msg = Entity::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado";
+    std::string l_msg = "NEW "+ Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() );
     LOG4CXX_INFO ( logger , l_msg );
     
 }
@@ -42,7 +28,7 @@ Node::Node (const Node &_node) : Entity(_node) {
     
     logger = log4cxx::Logger::getLogger ( "Node" );
     
-    std::string l_msg = Entity::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Criado, Origem:" + _node.getId();
+    std::string l_msg = "COPY " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() ) + ",Source:" + std::to_string( _node.getSerial()) ;
     LOG4CXX_INFO ( logger , l_msg );
 }
 
@@ -52,7 +38,7 @@ Node::~Node() {
     listChild.clear();
     listNode.remove ( this );
     
-    std::string l_msg = Entity::getNameKindNode(getKind())+ " id:" + getId() + ", serial:"+ std::to_string( getSerial() )+ " Destruido";
+    std::string l_msg = "DELETE " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Serial:"+ std::to_string( getSerial() );
     LOG4CXX_INFO ( logger , l_msg );
 }
 
@@ -61,12 +47,10 @@ void Node::addChild(Node *child) {
     listChild.push_back(child);
     child->parent = this;
     
-    std::string l_msg = Entity::getNameKindNode(child->getKind())+ 
-                        " id:" + child->getId() + 
-                        ", serial:"+ std::to_string( child->getSerial() )+ 
-                        " anexado a " + Entity::getNameKindNode(getKind()) +
-                        " id:" + getId() + 
-                        ", serial:"+ std::to_string( getSerial() );                        
+    std::string l_msg = "CHILD " + Entity::getNameKindNode(child->getKind())+ 
+                        ",serial:"+ std::to_string( child->getSerial() )+ 
+                        " IN " + Entity::getNameKindNode(getKind()) +
+                        ",serial:"+ std::to_string( getSerial() );                        
        
     LOG4CXX_INFO ( logger , l_msg );
 

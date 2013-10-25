@@ -11,7 +11,7 @@ namespace Chimera {
 class Effect : public Node {
 public:
 	
-    Effect();
+    Effect(std::string _id, std::string _name);
 
 	Effect(const Effect& _cpy);
 

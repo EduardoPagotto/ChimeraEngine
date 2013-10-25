@@ -2,9 +2,8 @@
 
 namespace Chimera {
 
-CameraSpherical::CameraSpherical ( ) : Camera () {
+CameraSpherical::CameraSpherical (std::string _id, std::string _name ) : Camera ( CameraType::Spherical, _id,_name) {
 
-    type = CameraType::Spherical;
     horizontal = 0.0f;
     vertical = 0.0f;
     distancia = 0;

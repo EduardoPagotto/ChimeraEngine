@@ -2,9 +2,8 @@
 
 namespace Chimera {
 
-CameraMan::CameraMan ( ) : Camera () {
+CameraMan::CameraMan (std::string _id, std::string _name ) : Camera (CameraType::Spherical,_id,_name) {
 
-    type = CameraType::Spherical;
     along.setValue ( 1.0f, 0.0f, 0.0f );
     up.setValue ( 0.0f, 1.0f, 0.0f );
     forward.setValue ( 0.0f,  0.0f, -1.0f );

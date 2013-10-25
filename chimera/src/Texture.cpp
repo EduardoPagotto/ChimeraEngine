@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Texture::Texture() : Node(EntityKind::TEXTURE) {
+Texture::Texture(std::string _id, std::string _name) : Node(EntityKind::TEXTURE,_id,_name) {
 
     texturaCarregada = false;
     pathFile = "";

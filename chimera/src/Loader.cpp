@@ -288,13 +288,8 @@ void Loader::libCam ( void ) {
 
         try {
 
-            Camera *pCamera = new Camera();
-            pCamera->setId ( getAtributoXML ( "Camera","id",l_nCam ) );
-            pCamera->setName ( getAtributoXML ( "Camera","name",l_nCam ) );
-            pCamera->setType ( CameraType::Base );
-
-            //Salva na lista de cameras
-            listaNodeRemover.push ( pCamera );
+            Camera *pCamera = new Camera(CameraType::Base, getAtributoXML ( "Camera","id",l_nCam ),getAtributoXML ( "Camera","name",l_nCam ) );
+            listaNodeRemover.push ( pCamera ); //Salva na lista de remocao
 
             //Verifica se exite Elemento Perspectiva
             xmlNodePtr l_nTech = findNode ( ( char* ) "perspective",l_nCam );
@@ -357,11 +352,8 @@ void Loader::libLight () {
 
             try {
 
-                Light *pLight = new Light ();
-                pLight->setType ( LightType::POINT );
-                pLight->setName ( getAtributoXML ( "Light","name",l_nLight ) );
-                pLight->setId ( getAtributoXML ( "Light","id",l_nLight ) );
-                listaNodeRemover.push ( pLight );
+                Light *pLight = new Light ( LightType::POINT, getAtributoXML ( "Light","id",l_nLight ), getAtributoXML ( "Light","name",l_nLight ));
+                listaNodeRemover.push ( pLight ); //Salva na lista de remocao
 
                 xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children ); //TODO implementar depois tipos direcional e spot
                 if ( l_nTipo != nullptr ) {
@@ -400,37 +392,35 @@ void Loader::libEffect ( void ) {
         while ( l_nMat != nullptr ) {
             l_count++;
             try {
-                std::string l_idEffect = getAtributoXML ( "Effects","id",l_nMat );
-                if ( l_idEffect.size() > 0 ) {
+               
+                Effect *pEffect = new Effect(getAtributoXML ( "Effects","id",l_nMat ), "Effects");
+                listaNodeRemover.push(pEffect);
+                
+                //pega referencia textura
+                std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
+                if ( idTextura.size() >0 ) {
+                    pEffect->setNameTextureId ( idTextura );
+                }
 
-                    Effect *pEffect = new Effect;
-                    pEffect->setId( l_idEffect ); //m_mEffect[ l_idEffect ] = pEffect;
-                    listaNodeRemover.push(pEffect);
-                    //pega referencia textura
-                    std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
-                    if ( idTextura.size() >0 ) {
-                        pEffect->setNameTextureId ( idTextura );
-                    }
+                //pega cores
+                xmlNodePtr l_nPos = findNode ( ( char* ) "phong",l_nMat->children );
+                if ( l_nPos ) {
+                    xmlNodePtr l_nRootPhong = l_nPos;
+                    pEffect->setEmissive ( getPhong ( l_nPos, ( char* ) "emission" ) );
+                    pEffect->setAmbient ( getPhong ( l_nPos, ( char* ) "ambient" ) );
+                    pEffect->setDiffuse ( getPhong ( l_nPos, ( char* ) "diffuse" ) );
+                    pEffect->setSpecular ( getPhong ( l_nPos, ( char* ) "specular" ) );
 
-                    //pega cores
-                    xmlNodePtr l_nPos = findNode ( ( char* ) "phong",l_nMat->children );
+                    l_nPos = findNode ( ( char* ) "shininess",l_nPos->children );
                     if ( l_nPos ) {
-                        xmlNodePtr l_nRootPhong = l_nPos;
-                        pEffect->setEmissive ( getPhong ( l_nPos, ( char* ) "emission" ) );
-                        pEffect->setAmbient ( getPhong ( l_nPos, ( char* ) "ambient" ) );
-                        pEffect->setDiffuse ( getPhong ( l_nPos, ( char* ) "diffuse" ) );
-                        pEffect->setSpecular ( getPhong ( l_nPos, ( char* ) "specular" ) );
 
-                        l_nPos = findNode ( ( char* ) "shininess",l_nPos->children );
-                        if ( l_nPos ) {
-
-                            std::string l_shininess = getValueFromProp ( "Effect","float",l_nPos->children );
-                            if ( l_shininess.size() >0 ) {
-                                pEffect->setShininess ( ( float ) atof ( ( char* ) l_shininess.c_str() ) );
-                            }
+                        std::string l_shininess = getValueFromProp ( "Effect","float",l_nPos->children );
+                        if ( l_shininess.size() >0 ) {
+                            pEffect->setShininess ( ( float ) atof ( ( char* ) l_shininess.c_str() ) );
                         }
                     }
                 }
+                
 
             } catch ( const ExceptionChimera& ec ) {
                 LOG4CXX_WARN ( logger , ec.getMessage() );
@@ -454,23 +444,19 @@ void Loader::libTexture ( void ) {
         l_nTexture = findNode ( ( char* ) "image", l_nTexture->children );
         while ( l_nTexture ) {
             try {
-                std::string l_idTextura = getAtributoXML ( "Texture","id",l_nTexture );
-                if ( l_idTextura.size() >0 ) {
-                    Texture *pTexture = new Texture;
-                    listaNodeRemover.push( pTexture );
-                    pTexture->setId(l_idTextura); //m_mTextura[ l_idTextura ] = pTexture;
-                    pTexture->setName(getAtributoXML ( "Texture","name",l_nTexture ));
-                    std::string l_pathFile = getValueFromProp ( "Texture","init_from",l_nTexture->children );
-                    if ( l_pathFile.size() >0 ) {
-                        std::string l_arquivo = m_imageDir + l_pathFile;
-                        pTexture->setPathFile ( l_arquivo.c_str() );
-                        pTexture->init();
-                        //pTexture->loadImage();
-                        l_count++;
-                    }
-                } else {
-                    throw ExceptionChimera ( ExceptionCode::READ, "Falha Textura id" );
+
+                Texture *pTexture = new Texture(getAtributoXML ( "Texture","id",l_nTexture ),getAtributoXML ( "Texture","name",l_nTexture ));
+                listaNodeRemover.push( pTexture );
+
+                std::string l_pathFile = getValueFromProp ( "Texture","init_from",l_nTexture->children );
+                if ( l_pathFile.size() >0 ) {
+                    std::string l_arquivo = m_imageDir + l_pathFile;
+                    pTexture->setPathFile ( l_arquivo.c_str() );
+                    pTexture->init();
+                    //pTexture->loadImage();
+                    l_count++;
                 }
+
             } catch ( const ExceptionChimera& ec ) {
                 LOG4CXX_WARN ( logger , ec.getMessage() );
             }
@@ -497,10 +483,9 @@ void Loader::libMaterial ( void ) {
                 std::string l_idDesenhoBase = getAtributoXML ( "Material","id",l_nMat );
                 if ( l_idDesenhoBase.size() > 0 ) {
 
-                    Material *pMaterial = new Material;
-                    pMaterial->setName(l_idDesenhoBase);
-                    pMaterial->setName(getAtributoXML ( "Material","name",l_nMat ));
+                    Material *pMaterial = new Material(getAtributoXML ( "Material","id",l_nMat ),getAtributoXML ( "Material","name",l_nMat ));
                     listaNodeRemover.push(pMaterial);
+                    
                     xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
                     if ( l_nEffect ) {
 
@@ -546,118 +531,114 @@ void Loader::libGeometry ( void ) {
         char *l_pVal = nullptr;
         l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->children );
         while ( l_nGeom!=nullptr ) {
-            std::string l_idDrawTriMesh = getAtributoXML ( "DrawTriMesh","id",l_nGeom );
-            if ( l_idDrawTriMesh.size() >0 ) {
-                
-                DrawTriMesh *pDrawTriMesh = new DrawTriMesh;
-                pDrawTriMesh->setId(l_idDrawTriMesh);//m_mDrawTriMesh[ l_idDrawTriMesh ] = pDrawTriMesh;
-                pDrawTriMesh->setName(getAtributoXML ( "DrawTriMesh","name",l_nGeom ));
-                
-                listaNodeRemover.push(pDrawTriMesh);
-                
-                xmlNodePtr l_nDrawTriMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
-                if ( l_nDrawTriMesh ) {
-                    l_nDrawTriMesh = findNode ( ( char* ) "source",l_nDrawTriMesh->children );
-                    while ( l_nDrawTriMesh ) {
-                        l_pVal = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "id" );
-                        std::string l_sVal = l_pVal;
 
-                        size_t posicaoEncontrada = l_sVal.find ( "-positions" );
-                        if ( posicaoEncontrada != std::string::npos ) {
-                            getSource ( l_nDrawTriMesh,pDrawTriMesh->vList );
-                        } else {
-                            posicaoEncontrada = l_sVal.find ( "-normals" );
+                
+            DrawTriMesh *pDrawTriMesh = new DrawTriMesh(getAtributoXML ( "DrawTriMesh","id",l_nGeom ),getAtributoXML ( "DrawTriMesh","name",l_nGeom ));                
+            listaNodeRemover.push(pDrawTriMesh);
+            
+            xmlNodePtr l_nDrawTriMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
+            if ( l_nDrawTriMesh ) {
+                l_nDrawTriMesh = findNode ( ( char* ) "source",l_nDrawTriMesh->children );
+                while ( l_nDrawTriMesh ) {
+                    l_pVal = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "id" );
+                    std::string l_sVal = l_pVal;
+
+                    size_t posicaoEncontrada = l_sVal.find ( "-positions" );
+                    if ( posicaoEncontrada != std::string::npos ) {
+                        getSource ( l_nDrawTriMesh,pDrawTriMesh->vList );
+                    } else {
+                        posicaoEncontrada = l_sVal.find ( "-normals" );
+                        if ( posicaoEncontrada != std::string::npos )
+                            getSource ( l_nDrawTriMesh,pDrawTriMesh->nList );
+                        else {
+                            posicaoEncontrada = l_sVal.find ( "-map-0" );
                             if ( posicaoEncontrada != std::string::npos )
-                                getSource ( l_nDrawTriMesh,pDrawTriMesh->nList );
-                            else {
-                                posicaoEncontrada = l_sVal.find ( "-map-0" );
-                                if ( posicaoEncontrada != std::string::npos )
-                                    getSource ( l_nDrawTriMesh,pDrawTriMesh->uvList );
-                            }
-                        }
-
-                        l_nDrawTriMesh = findNode ( ( char* ) "source",l_nDrawTriMesh->next );
-                    }
-
-                    xmlNodePtr l_nDrawTriMesh = findNode ( ( char* ) "polylist", l_nGeom->children );
-                    if ( l_nDrawTriMesh ) {
-                        l_pVal = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "count" );
-                        char *l_pMaterialFile = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "material" );
-                        if ( l_pVal ) {
-                            xmlNodePtr l_nAnterior;
-                            unsigned l_numTriangles = atoi ( l_pVal );
-                            l_nDrawTriMesh = findNode ( ( char* ) "input", l_nDrawTriMesh->children );
-
-                            std::vector<char*> l_vOffset;
-                            std::vector<char*> l_vSemantic;
-                            std::vector<char*> l_vSource;
-
-                            while ( l_nDrawTriMesh ) {
-                                char *l_offSet = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "offset" );
-                                char *l_semantic = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "semantic" );
-                                char *l_source = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "source" );
-
-                                l_vOffset.push_back ( l_offSet );
-                                l_vSemantic.push_back ( l_semantic );
-                                l_vSource.push_back ( l_source );
-
-                                l_nAnterior = l_nDrawTriMesh;
-
-                                l_nDrawTriMesh = findNode ( ( char* ) "input",l_nDrawTriMesh->next );
-                            }
-
-                            l_nDrawTriMesh = findNode ( ( char* ) "p", l_nAnterior );
-                            if ( l_nDrawTriMesh ) {
-                                l_pVal = ( char* ) xmlNodeListGetString ( m_doc, l_nDrawTriMesh->children, 1 );
-                                if ( l_pVal ) {
-                                    std::vector<int> l_arrayIndex;
-                                    loadArrayI ( l_pVal,l_arrayIndex );
-
-                                    unsigned l_veCount = 0;
-                                    unsigned l_noCount = 0;
-                                    unsigned l_uvCount = 0;
-
-                                    for ( unsigned l_contador = 0 ; l_contador < l_arrayIndex.size() ; l_contador++ ) {
-                                        int index = l_contador % l_vOffset.size();
-
-                                        char *l_offSet = l_vOffset[index];
-                                        char *l_semantic = l_vSemantic[index];
-                                        char *l_source = l_vSource[index];
-                                        if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) {
-                                            if ( pDrawTriMesh->vIndex.getSize() == 0 )
-                                                pDrawTriMesh->vIndex.create ( l_numTriangles * 3 );
-
-                                            pDrawTriMesh->vIndex[l_veCount] = l_arrayIndex[l_contador];
-                                            l_veCount++;
-                                        } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) {
-                                            if ( pDrawTriMesh->nIndex.getSize() ==0 )
-                                                pDrawTriMesh->nIndex.create ( l_numTriangles * 3 );
-
-                                            pDrawTriMesh->nIndex[l_noCount] = l_arrayIndex[l_contador];
-                                            l_noCount++;
-                                        } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) {
-                                            if ( pDrawTriMesh->tIndex.getSize() ==0 )
-                                                pDrawTriMesh->tIndex.create ( l_numTriangles* 3 );
-
-                                            pDrawTriMesh->tIndex[l_uvCount] = l_arrayIndex[l_contador];
-                                            l_uvCount++;
-                                        }
-                                    }
-                                    l_arrayIndex.clear();
-                                }
-                                xmlFree ( ( xmlChar* ) l_pVal );
-                            }
-                            l_vOffset.clear();
-                            l_vSemantic.clear();
-                            l_vSource.clear();
+                                getSource ( l_nDrawTriMesh,pDrawTriMesh->uvList );
                         }
                     }
-                    //pObj->setDrawTriMesh((*pDrawTriMesh));
+
+                    l_nDrawTriMesh = findNode ( ( char* ) "source",l_nDrawTriMesh->next );
                 }
-                l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->next );
-                l_count++;
 
+                xmlNodePtr l_nDrawTriMesh = findNode ( ( char* ) "polylist", l_nGeom->children );
+                if ( l_nDrawTriMesh ) {
+                    l_pVal = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "count" );
+                    char *l_pMaterialFile = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "material" );
+                    if ( l_pVal ) {
+                        xmlNodePtr l_nAnterior;
+                        unsigned l_numTriangles = atoi ( l_pVal );
+                        l_nDrawTriMesh = findNode ( ( char* ) "input", l_nDrawTriMesh->children );
+
+                        std::vector<char*> l_vOffset;
+                        std::vector<char*> l_vSemantic;
+                        std::vector<char*> l_vSource;
+
+                        while ( l_nDrawTriMesh ) {
+                            char *l_offSet = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "offset" );
+                            char *l_semantic = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "semantic" );
+                            char *l_source = ( char* ) xmlGetProp ( l_nDrawTriMesh, ( const xmlChar* ) "source" );
+
+                            l_vOffset.push_back ( l_offSet );
+                            l_vSemantic.push_back ( l_semantic );
+                            l_vSource.push_back ( l_source );
+
+                            l_nAnterior = l_nDrawTriMesh;
+
+                            l_nDrawTriMesh = findNode ( ( char* ) "input",l_nDrawTriMesh->next );
+                        }
+
+                        l_nDrawTriMesh = findNode ( ( char* ) "p", l_nAnterior );
+                        if ( l_nDrawTriMesh ) {
+                            l_pVal = ( char* ) xmlNodeListGetString ( m_doc, l_nDrawTriMesh->children, 1 );
+                            if ( l_pVal ) {
+                                std::vector<int> l_arrayIndex;
+                                loadArrayI ( l_pVal,l_arrayIndex );
+
+                                unsigned l_veCount = 0;
+                                unsigned l_noCount = 0;
+                                unsigned l_uvCount = 0;
+
+                                for ( unsigned l_contador = 0 ; l_contador < l_arrayIndex.size() ; l_contador++ ) {
+                                    int index = l_contador % l_vOffset.size();
+
+                                    char *l_offSet = l_vOffset[index];
+                                    char *l_semantic = l_vSemantic[index];
+                                    char *l_source = l_vSource[index];
+                                    if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) {
+                                        if ( pDrawTriMesh->vIndex.getSize() == 0 )
+                                            pDrawTriMesh->vIndex.create ( l_numTriangles * 3 );
+
+                                        pDrawTriMesh->vIndex[l_veCount] = l_arrayIndex[l_contador];
+                                        l_veCount++;
+                                    } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) {
+                                        if ( pDrawTriMesh->nIndex.getSize() ==0 )
+                                            pDrawTriMesh->nIndex.create ( l_numTriangles * 3 );
+
+                                        pDrawTriMesh->nIndex[l_noCount] = l_arrayIndex[l_contador];
+                                        l_noCount++;
+                                    } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) {
+                                        if ( pDrawTriMesh->tIndex.getSize() ==0 )
+                                            pDrawTriMesh->tIndex.create ( l_numTriangles* 3 );
+
+                                        pDrawTriMesh->tIndex[l_uvCount] = l_arrayIndex[l_contador];
+                                        l_uvCount++;
+                                    }
+                                }
+                                l_arrayIndex.clear();
+                            }
+                            xmlFree ( ( xmlChar* ) l_pVal );
+                        }
+                        l_vOffset.clear();
+                        l_vSemantic.clear();
+                        l_vSource.clear();
+                    }
+                }
+                //pObj->setDrawTriMesh((*pDrawTriMesh));
             }
+            l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->next );
+            l_count++;
+
+            
         }
     }
     if ( l_count == 0 ) {
@@ -675,9 +656,8 @@ Node* Loader::libScene ( void ) {
     if ( l_nScene!=nullptr ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
         if ( l_nScene!=nullptr ) {
-            pScene = new Node();
-            pScene->setName ( getAtributoXML ( "Scene","name",l_nScene ) );
-            pScene->setId ( getAtributoXML ( "Scene","id",l_nScene ) );
+            
+            pScene = new Node(EntityKind::NODE, getAtributoXML ( "Scene","id",l_nScene ),getAtributoXML ( "Scene","name",l_nScene ) );
             xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );
             createNode ( l_nNode, pScene );
         }
@@ -721,9 +701,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
             m_numNodes++;
             std::vector<float> l_arrayValores;
             const xmlChar *l_pNomeNode = l_nNode->name;
-            
-            std::string l_name =  getAtributoXML ( "Node","name",l_nNode );
-            std::string l_id = getAtributoXML ( "Node","id",l_nNode );
+                        
             btTransform l_transform;
 
             xmlNodePtr l_nTransforma = findNode ( ( char* ) "matrix", l_nNode->children );
@@ -741,10 +719,10 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
             xmlNodePtr l_nInstance;;
             if ( l_nInstance = findNode ( ( char* ) "instance_geometry", l_nNode->children ) ) {
-                Object *pObj = new Object;
-                pObj->setName ( l_name );
-                pObj->setId ( l_id );
+                               
+                Object *pObj = new Object(getAtributoXML ( "Node","id",l_nNode ),getAtributoXML ( "Node","name",l_nNode ) );
                 pObj->transform = l_transform;
+                
                 _pNode->addChild ( pObj );
 
                 pFilho = pObj;
@@ -799,8 +777,6 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                     if ( pLight!=nullptr ) {
 
                         Light *pLightScene = ( Light* ) clone ( pLight ); //Light *pLightScene = new Light ( *pLight );
-                        pLightScene->setName ( l_name );
-                        pLightScene->setId ( l_id );
                         pLightScene->transform = l_transform;
 
                         _pNode->addChild ( pLightScene );
@@ -817,8 +793,6 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                     if ( pCam!=nullptr ) {
 
                         Camera *pCamScena = ( Camera * ) clone ( pCam ); //Camera *pCamScena = new Camera ( *pCam );
-                        pCamScena->setName ( l_name );
-                        pCamScena->setId ( l_id );
                         pCamScena->transform = l_transform;
 
                         _pNode->addChild ( pCamScena );
@@ -893,9 +867,8 @@ void Loader::libPhysicsModels () {
                 xmlChar *l_pName = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "name" );
                 xmlChar *l_pSid = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "sid" );
                 if ( ( l_pName ) && ( l_pSid ) ) {
-                    Physics *pPhysc = new Physics;
-                    pPhysc->setId(std::string((char*)l_pName));
-                    pPhysc->setName(std::string((char*)l_pSid));
+                    
+                    Physics *pPhysc = new Physics(std::string((char*)l_pName),std::string((char*)l_pSid));
                     listaNodeRemover.push(pPhysc);
                     
                     xmlNodePtr l_nTec = findNode ( ( char* ) "technique_common", l_nPhysics->children );

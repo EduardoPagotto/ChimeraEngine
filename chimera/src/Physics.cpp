@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Physics::Physics() : Node(EntityKind::PHYSICS) {
+Physics::Physics(std::string _id, std::string _name) : Node(EntityKind::PHYSICS,_id,_name) {
     
     pRigidBody = nullptr;
     pShapeCollision = nullptr;

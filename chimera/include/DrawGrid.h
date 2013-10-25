@@ -8,7 +8,7 @@ namespace Chimera {
 
 class DrawGrid : public Draw {
 public:
-    DrawGrid();
+    DrawGrid(std::string _id, std::string _name);
     DrawGrid ( const DrawGrid &_draw );
     virtual ~DrawGrid();
 

@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-DrawBox::DrawBox() : Draw(DrawType::BOX) {    
+DrawBox::DrawBox(std::string _id, std::string _name) : Draw(DrawType::BOX,_id,_name) {    
 }
 
 DrawBox::DrawBox(const DrawBox &_draw) : Draw(_draw) {

@@ -8,7 +8,7 @@ namespace Chimera {
 class CameraMan : public Camera {
 
 public:
-    CameraMan();
+    CameraMan(std::string _id, std::string _name);
 
     CameraMan ( const CameraMan& _cameraMan );
 

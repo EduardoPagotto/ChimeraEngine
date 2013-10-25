@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Effect::Effect() : Node(EntityKind::EFFECT) {
+Effect::Effect(std::string _id, std::string _name) : Node(EntityKind::EFFECT,_id,_name) {
 
     shininess = 10.5f;
     diffuse = Color::BLACK;

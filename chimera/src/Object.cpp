@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Object::Object () : Node ( EntityKind::OBJECT ) {
+Object::Object (std::string _id, std::string _name) : Node ( EntityKind::OBJECT,_id,_name ) {
     
      pPhysic = nullptr;
      pDraw = nullptr;
@@ -57,7 +57,7 @@ void Object::update ( DataMsg *_dataMsg ) {
         if (pPhysic == nullptr) {
         
             //FIXME apenas para teste define propriedades fisicas
-            pPhysic = new Physics;
+            pPhysic = new Physics("","");
             pPhysic->setMass(5.0f);
             pPhysic->setFriction(0.0f);
             pPhysic->setRestitution(0.0f);

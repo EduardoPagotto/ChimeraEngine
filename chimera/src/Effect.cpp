@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Effect::Effect(std::string _id, std::string _name) : Node(EntityKind::EFFECT,_id,_name) {
+Effect::Effect ( std::string _id, std::string _name ) : Node ( EntityKind::EFFECT,_id,_name ) {
 
     shininess = 10.5f;
     diffuse = Color::BLACK;
@@ -13,7 +13,7 @@ Effect::Effect(std::string _id, std::string _name) : Node(EntityKind::EFFECT,_id
 
 }
 
-Effect::Effect ( const Effect& _cpy ) : Node (_cpy) {
+Effect::Effect ( const Effect& _cpy ) : Node ( _cpy ) {
 
     diffuse = _cpy.diffuse;
     ambient = _cpy.ambient;
@@ -21,28 +21,38 @@ Effect::Effect ( const Effect& _cpy ) : Node (_cpy) {
     emissive = _cpy.emissive;
     shininess = _cpy.shininess;
     nameTextureId = _cpy.nameTextureId;
-    
+
 }
 
 void Effect::render() {
 
     //if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
-        glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
-        glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
-        glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
-        glMaterialfv ( GL_FRONT, GL_SHININESS,  &shininess );
-        glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
+    glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
+    glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
+    glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
+    glMaterialfv ( GL_FRONT, GL_SHININESS,  &shininess );
+    glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
     //}
 
 }
 
-void Effect::clone(Node **ppNode ) {
-    *ppNode = new Effect( *this ); 
-    Node::clone( ppNode );  
+void Effect::init() {
+
 }
 
-void Effect::update ( DataMsg *dataMsg ){
-   Node::update(dataMsg);
+void Effect::clone ( Node **ppNode ) {
+    *ppNode = new Effect ( *this );
+    Node::clone ( ppNode );
+}
+
+void Effect::update ( DataMsg *dataMsg ) {
+
+    if ( dataMsg->getKindOp() ==KindOp::START ) {
+
+        init();
+    }
+
+    Node::update ( dataMsg );
 }
 
 }

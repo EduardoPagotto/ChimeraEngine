@@ -21,6 +21,8 @@ public:
 
     virtual void clone ( Node **ppNode );
 
+	void init();
+	
     void render();
 
     Color getAmbient() const {

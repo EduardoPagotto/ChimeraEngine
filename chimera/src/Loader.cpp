@@ -3,13 +3,14 @@
 namespace Chimera {
 
 Loader::Loader () {
+
     m_numNodes = 0;
-    //m_physicWorld = Singleton<PhysicsControl>::getRefSingleton();
     logger = log4cxx::Logger::getLogger ( "Loader" );
+
 }
 
 Loader::~Loader() {
-    //Singleton<PhysicsControl>::releaseRefSingleton();
+
     while ( !listaNodeRemover.empty() ) {
         Node *pNode = listaNodeRemover.front();
         listaNodeRemover.pop();
@@ -37,102 +38,18 @@ Node* Loader::loadDAE ( const std::string &_file ) {
         throw ExceptionChimera ( ExceptionCode::READ, "Falha no root COLLADA:" + _file );
     }
 
-    //Carrega Cameras
-    libCam();
-
-    //Carrega Iluminacao
-    libLight();
-
-    //Carrega Efeitos
-    libEffect();
-
-    //Carrega Texturas
-    libTexture();
-
-    //Carrega Material
-    libMaterial();
-
-    //Carrega DrawTriMesh
-    libGeometry();
-
-    //Carrega componentes da cena
-    pRootScene = libScene();
-
+    libCam();//Carrega Cameras
+    libLight();//Carrega Iluminacao
+    libEffect();//Carrega Efeitos
+    libTexture();//Carrega Texturas
+    libMaterial();//Carrega Material
+    libGeometry(); //Carrega DrawTriMesh
+    pRootScene = libScene();//Carrega componentes da cena
     libPhysicsMaterial();
-    
     libPhysicsModels();
-    
     libPhysicsScenes();
-    
+
     return pRootScene;
-}
-
-Node *Loader::cloneDraw ( Draw *_srcDraw ) {
-    
-    Node *novo = nullptr;
-    
-    switch ( _srcDraw->getType() ) {
-        
-        case DrawType::MESH:
-            novo = new DrawTriMesh ( * ( ( DrawTriMesh* ) _srcDraw ) );
-            break;
-        case DrawType::BOX:
-            novo = new DrawBox ( * ( ( DrawBox* ) _srcDraw ) );
-            break;
-        case DrawType::GRID:
-            novo = new DrawGrid ( * ( ( DrawGrid* ) _srcDraw ) );
-            break;
-        case DrawType::SPHERE:
-            //novo = new Draw(*((DrawBox*)_srcDraw));
-            break;
-            
-    }
-    
-    return novo;
-}
-
-Node *Loader::clone ( Node *_src ) {
-    
-    Node *novo = nullptr;
-    
-    switch ( _src->getKind() ) {
-        case EntityKind::NODE:
-            novo = new Node( * (( Node*) _src));
-            break;       
-        case EntityKind::CAMERA:
-            novo = new Camera ( * ( ( Camera* ) _src ) );
-            break;
-        case EntityKind::LIGHT:
-            novo = new Light ( * ( ( Light* ) _src ) );
-            break;
-        case EntityKind::OBJECT:
-            novo = new Object ( * ( ( Object* ) _src ) );
-            break;
-        case EntityKind::MATERIAL:
-            novo = new Material ( * ( ( Material* ) _src ) );
-            break;
-        case EntityKind::EFFECT:
-            novo = new Effect ( * ( ( Effect* ) _src ) );
-            break;
-        case EntityKind::TEXTURE:
-            novo = new Texture ( * ( ( Texture* ) _src ) );
-            break;
-        case EntityKind::DRAW:
-            novo = cloneDraw ( ( Draw* ) _src );
-            break;
-        case EntityKind::PHYSICS:
-            novo = new Physics(*((Physics*) _src));
-            break;
-        default:
-            throw ExceptionChimera ( ExceptionCode::READ, "Tipo de clonagem nao implementada para:" + _src->getId() );
-            break;
-    }
-    
-    for ( Node *pNode : _src->listChild ) {
-        novo->addChild ( clone ( pNode ) );
-    }
-    
-    return novo;
 }
 
 std::string Loader::getAtributoXML ( const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
@@ -144,8 +61,8 @@ std::string Loader::getAtributoXML ( const std::string &tipoNomeNode, const std:
         LOG4CXX_WARN ( logger , l_erro );
         //throw ExceptionChimera ( ExceptionCode::READ, l_erro );
     }
-    
-    return std::string("");
+
+    return std::string ( "" );
 }
 
 std::string Loader::getValueFromProp ( const std::string &tipoNomeNode, const std::string &chave, xmlNodePtr _xmlNode ) {
@@ -288,7 +205,7 @@ void Loader::libCam ( void ) {
 
         try {
 
-            Camera *pCamera = new Camera(CameraType::Base, getAtributoXML ( "Camera","id",l_nCam ),getAtributoXML ( "Camera","name",l_nCam ) );
+            Camera *pCamera = new Camera ( CameraType::Base, getAtributoXML ( "Camera","id",l_nCam ),getAtributoXML ( "Camera","name",l_nCam ) );
             listaNodeRemover.push ( pCamera ); //Salva na lista de remocao
 
             //Verifica se exite Elemento Perspectiva
@@ -351,8 +268,7 @@ void Loader::libLight () {
             //Carrega atributos
 
             try {
-
-                Light *pLight = new Light ( LightType::POINT, getAtributoXML ( "Light","id",l_nLight ), getAtributoXML ( "Light","name",l_nLight ));
+                Light *pLight = new Light ( LightType::POINT, getAtributoXML ( "Light","id",l_nLight ), getAtributoXML ( "Light","name",l_nLight ) );
                 listaNodeRemover.push ( pLight ); //Salva na lista de remocao
 
                 xmlNodePtr l_nTipo = findNode ( ( char* ) "point", l_nLight->children ); //TODO implementar depois tipos direcional e spot
@@ -361,7 +277,7 @@ void Loader::libLight () {
                     if ( cores.size() >0 ) {
                         loadArrayF ( cores.c_str() ,l_arrayValores );
                         //pLight->setAmbient ( Color ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f ) );
-                        pLight->setDiffuse( Color ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f ) );
+                        pLight->setDiffuse ( Color ( l_arrayValores[0] , l_arrayValores[1] , l_arrayValores[2], 1.0f ) );
                         l_arrayValores.clear();
                     }
                 } else {
@@ -392,16 +308,15 @@ void Loader::libEffect ( void ) {
         while ( l_nMat != nullptr ) {
             l_count++;
             try {
-               
-                Effect *pEffect = new Effect(getAtributoXML ( "Effects","id",l_nMat ), "Effects");
-                listaNodeRemover.push(pEffect);
-                
+
+                Effect *pEffect = new Effect ( getAtributoXML ( "Effects","id",l_nMat ), "Effects" );
+                listaNodeRemover.push ( pEffect );
+
                 //pega referencia textura
                 std::string idTextura = getValueFromProp ( "Effects","init_from",l_nMat->children );
-                if ( idTextura.size() >0 ) {
+                if ( idTextura.size() >0 ) 
                     pEffect->setNameTextureId ( idTextura );
-                }
-
+                
                 //pega cores
                 xmlNodePtr l_nPos = findNode ( ( char* ) "phong",l_nMat->children );
                 if ( l_nPos ) {
@@ -420,7 +335,6 @@ void Loader::libEffect ( void ) {
                         }
                     }
                 }
-                
 
             } catch ( const ExceptionChimera& ec ) {
                 LOG4CXX_WARN ( logger , ec.getMessage() );
@@ -445,15 +359,14 @@ void Loader::libTexture ( void ) {
         while ( l_nTexture ) {
             try {
 
-                Texture *pTexture = new Texture(getAtributoXML ( "Texture","id",l_nTexture ),getAtributoXML ( "Texture","name",l_nTexture ));
-                listaNodeRemover.push( pTexture );
+                Texture *pTexture = new Texture ( getAtributoXML ( "Texture","id",l_nTexture ),getAtributoXML ( "Texture","name",l_nTexture ) );
+                listaNodeRemover.push ( pTexture );
 
                 std::string l_pathFile = getValueFromProp ( "Texture","init_from",l_nTexture->children );
                 if ( l_pathFile.size() >0 ) {
                     std::string l_arquivo = m_imageDir + l_pathFile;
                     pTexture->setPathFile ( l_arquivo.c_str() );
                     pTexture->init();
-                    //pTexture->loadImage();
                     l_count++;
                 }
 
@@ -483,26 +396,26 @@ void Loader::libMaterial ( void ) {
                 std::string l_idDesenhoBase = getAtributoXML ( "Material","id",l_nMat );
                 if ( l_idDesenhoBase.size() > 0 ) {
 
-                    Material *pMaterial = new Material(getAtributoXML ( "Material","id",l_nMat ),getAtributoXML ( "Material","name",l_nMat ));
-                    listaNodeRemover.push(pMaterial);
-                    
+                    Material *pMaterial = new Material ( getAtributoXML ( "Material","id",l_nMat ),getAtributoXML ( "Material","name",l_nMat ) );
+                    listaNodeRemover.push ( pMaterial );
+
                     xmlNodePtr l_nEffect = findNode ( ( char* ) "instance_effect", l_nMat->children ); //TODO:Corrigir ha um bug aqui ele passa 2 vezes
                     if ( l_nEffect ) {
 
                         xmlChar *l_val = xmlGetProp ( l_nEffect, ( const xmlChar* ) "url" );
                         if ( l_val ) {
                             std::string l_nomeEffect = ( char* ) &l_val[1];
-                            if (l_nomeEffect.size() >0 ) {
-                                Effect *pEffe =(Effect*) Node::findNodeById(EntityKind::EFFECT, l_nomeEffect); //m_mEffect[ l_nomeEffect ];
+                            if ( l_nomeEffect.size() >0 ) {
+                                Effect *pEffe = ( Effect* ) Node::findNodeById ( EntityKind::EFFECT, l_nomeEffect ); //m_mEffect[ l_nomeEffect ];
                                 if ( pEffe ) {
                                     pMaterial->pEffect = pEffe;//new Effect( *pEffe );
-                                    if (pEffe->getNameTextureId().size() > 0) {
-                                        Texture *pTexture = (Texture*) Node::findNodeById(EntityKind::TEXTURE,pEffe->getNameTextureId()); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findNodeById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+                                    if ( pEffe->getNameTextureId().size() > 0 ) {
+                                        Texture *pTexture = ( Texture* ) Node::findNodeById ( EntityKind::TEXTURE,pEffe->getNameTextureId() ); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findNodeById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
                                         if ( pTexture!=nullptr ) {
                                             pMaterial->pTextura = pTexture;//new Texture( *pTexture );
                                         }
                                     }
-                                } 
+                                }
                             }
                         }
                     }
@@ -532,10 +445,10 @@ void Loader::libGeometry ( void ) {
         l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->children );
         while ( l_nGeom!=nullptr ) {
 
-                
-            DrawTriMesh *pDrawTriMesh = new DrawTriMesh(getAtributoXML ( "DrawTriMesh","id",l_nGeom ),getAtributoXML ( "DrawTriMesh","name",l_nGeom ));                
-            listaNodeRemover.push(pDrawTriMesh);
-            
+
+            DrawTriMesh *pDrawTriMesh = new DrawTriMesh ( getAtributoXML ( "DrawTriMesh","id",l_nGeom ),getAtributoXML ( "DrawTriMesh","name",l_nGeom ) );
+            listaNodeRemover.push ( pDrawTriMesh );
+
             xmlNodePtr l_nDrawTriMesh = findNode ( ( char* ) "mesh", l_nGeom->children );
             if ( l_nDrawTriMesh ) {
                 l_nDrawTriMesh = findNode ( ( char* ) "source",l_nDrawTriMesh->children );
@@ -638,7 +551,7 @@ void Loader::libGeometry ( void ) {
             l_nGeom = findNode ( ( char* ) "geometry", l_nGeom->next );
             l_count++;
 
-            
+
         }
     }
     if ( l_count == 0 ) {
@@ -656,8 +569,8 @@ Node* Loader::libScene ( void ) {
     if ( l_nScene!=nullptr ) {
         l_nScene = findNode ( ( char* ) "visual_scene", l_nScene->children );
         if ( l_nScene!=nullptr ) {
-            
-            pScene = new Node(EntityKind::NODE, getAtributoXML ( "Scene","id",l_nScene ),getAtributoXML ( "Scene","name",l_nScene ) );
+
+            pScene = new Node ( EntityKind::NODE, getAtributoXML ( "Scene","id",l_nScene ),getAtributoXML ( "Scene","name",l_nScene ) );
             xmlNodePtr l_nNode = findNode ( ( char* ) "node",l_nScene->children );
             createNode ( l_nNode, pScene );
         }
@@ -694,6 +607,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
     xmlNodePtr l_nNode = _nodeXML;//findNode((char*)"node", _nodeXML->children);
 
     while ( l_nNode ) {
+        
         if ( l_nNode->type==XML_ELEMENT_NODE ) {
             xmlChar* l_pVal = nullptr;
             xmlChar *pSID = nullptr;
@@ -701,7 +615,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
             m_numNodes++;
             std::vector<float> l_arrayValores;
             const xmlChar *l_pNomeNode = l_nNode->name;
-                        
+
             btTransform l_transform;
 
             xmlNodePtr l_nTransforma = findNode ( ( char* ) "matrix", l_nNode->children );
@@ -719,56 +633,69 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
             xmlNodePtr l_nInstance;;
             if ( l_nInstance = findNode ( ( char* ) "instance_geometry", l_nNode->children ) ) {
-                               
-                Object *pObj = new Object(getAtributoXML ( "Node","id",l_nNode ),getAtributoXML ( "Node","name",l_nNode ) );
-                pObj->transform = l_transform;
-                
-                _pNode->addChild ( pObj );
 
-                pFilho = pObj;
+                DrawTriMesh *pDrawTriMesh =nullptr;
+                Material *pMaterial = nullptr;
+                
+                Object *pObj = new Object ( getAtributoXML ( "Node","id",l_nNode ),getAtributoXML ( "Node","name",l_nNode ) );
+                pObj->setTransform ( l_transform );
 
                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
                 if ( pURL != nullptr ) {
+                    pDrawTriMesh = ( DrawTriMesh* ) Node::findNodeById ( EntityKind::DRAW, ( char* ) &pURL[1] ); //m_mDrawTriMesh[ l_nomeDrawTriMesh];
 
-                    
-                    std::string l_nomeDrawTriMesh = ( char* ) &pURL[1];
-                    DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)Node::findNodeById(EntityKind::DRAW,l_nomeDrawTriMesh);//m_mDrawTriMesh[ l_nomeDrawTriMesh];
-
-                    if ( pDrawTriMesh ) {
-
-                        pObj->pDraw = (DrawTriMesh*)clone(pDrawTriMesh);//new DrawTriMesh ( *pDrawTriMesh );
-                        
-                        //Carrega Material se existir
-                        if ( l_nInstance->children ) {
-                            xmlNodePtr l_nBindMat = findNode ( ( char* ) "bind_material", l_nInstance->children );
+                    if ( l_nInstance->children ) {
+                        xmlNodePtr l_nBindMat = findNode ( ( char* ) "bind_material", l_nInstance->children );
+                        if ( l_nBindMat ) {
+                            l_nBindMat = findNode ( ( char* ) "technique_common", l_nBindMat->children );
                             if ( l_nBindMat ) {
-                                l_nBindMat = findNode ( ( char* ) "technique_common", l_nBindMat->children );
+                                l_nBindMat = findNode ( ( char* ) "instance_material", l_nBindMat->children );
                                 if ( l_nBindMat ) {
-                                    l_nBindMat = findNode ( ( char* ) "instance_material", l_nBindMat->children );
-                                    if ( l_nBindMat ) {
-                                        pURL = xmlGetProp ( l_nBindMat, ( const xmlChar* ) "target" );
-                                        if ( pURL ) {
-
-                                            std::string l_nomeMaterial = ( char* ) &pURL[1];
-
-                                            Material *pMaterial = (Material*)Node::findNodeById(EntityKind::MATERIAL,l_nomeMaterial );
-                                            //DataDraw *pDataDraw = m_mDesenhoBase[  l_nomeMaterial ];
-                                            if ( pMaterial != nullptr ) {
-                                                
-                                                if (pMaterial->pTextura != nullptr)
-                                                    pObj->pTexture = (Texture*)clone(pMaterial->pTextura);
-                                                
-                                                if (pMaterial->pEffect != nullptr)
-                                                    pObj->pEffect = (Effect*)clone( pMaterial->pEffect );
-
-                                            }
-                                        }
-                                    }
+                                    pURL = xmlGetProp ( l_nBindMat, ( const xmlChar* ) "target" );
+                                    if ( pURL )
+                                        pMaterial = ( Material* ) Node::findNodeById ( EntityKind::MATERIAL,( char* ) &pURL[1] );
                                 }
                             }
                         }
                     }
+
                 }
+
+                //Se ha material carregue
+                if ( pMaterial != nullptr ) {
+
+                    //Se ha effeito (color_material) carregue
+                    if ( pMaterial->pEffect != nullptr ) {
+
+                        Effect *novoEffect = nullptr;
+                        pMaterial->pEffect->clone ( ( Node** ) &novoEffect );
+                        pObj->addChild ( novoEffect );
+                        //pObj->pEffect = (Effect*)clone( pMaterial->pEffect );
+                    }
+
+                    //Se há textura carregue
+                    if ( pMaterial->pTextura != nullptr ) {
+
+                        Texture *novaTextura = nullptr;
+                        pMaterial->pTextura->clone ( ( Node** ) &novaTextura );
+                        pObj->addChild ( novaTextura );
+                        //pObj->pTexture = (Texture*)clone(pMaterial->pTextura);
+                    }
+                }
+
+                //se há trimesh carregue
+                if ( pDrawTriMesh ) {
+                    DrawTriMesh *nodeFinal = nullptr;
+                    pDrawTriMesh->clone ( ( Node** ) &nodeFinal );
+                    pObj->addChild ( nodeFinal );
+                }
+
+                //ajusta ele como filho atual
+                pFilho = pObj;
+
+                //Carrega OBJ na cena
+                _pNode->addChild ( pObj );
+
             } else if ( l_nInstance = findNode ( ( char* ) "instance_light", l_nNode->children ) ) {
                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
                 if ( pURL != nullptr ) {
@@ -776,7 +703,8 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                     Light *pLight = ( Light* ) Node::findNodeById ( EntityKind::LIGHT, ( char* ) &pURL[1] );
                     if ( pLight!=nullptr ) {
 
-                        Light *pLightScene = ( Light* ) clone ( pLight ); //Light *pLightScene = new Light ( *pLight );
+                        Light *pLightScene = nullptr;
+                        pLight->clone ( ( Node** ) &pLightScene );
                         pLightScene->transform = l_transform;
 
                         _pNode->addChild ( pLightScene );
@@ -789,10 +717,10 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                 if ( pURL != nullptr ) {
 
                     Camera *pCam = ( Camera* ) Node::findNodeById ( EntityKind::CAMERA, ( char* ) &pURL[1] );
-
                     if ( pCam!=nullptr ) {
 
-                        Camera *pCamScena = ( Camera * ) clone ( pCam ); //Camera *pCamScena = new Camera ( *pCam );
+                        Camera *pCamScena = nullptr;//( Camera * ) clone ( pCam ); //Camera *pCamScena = new Camera ( *pCam );
+                        pCam->clone ( ( Node** ) &pCamScena );
                         pCamScena->transform = l_transform;
 
                         _pNode->addChild ( pCamScena );
@@ -846,7 +774,7 @@ void Loader::libPhysicsMaterial ( void ) {
             l_nPhMat =  findNode ( ( char* ) "physics_material",l_nPhMat->next );
         }
     }
-    
+
     if ( l_num == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha Material Fisico registrada!!!" );
     } else {
@@ -855,7 +783,7 @@ void Loader::libPhysicsMaterial ( void ) {
 }
 
 void Loader::libPhysicsModels () {
-    
+
     int l_count = 0;
     xmlNodePtr l_nPhysics = findNode ( ( char* ) "library_physics_models", m_root );
     if ( l_nPhysics ) {
@@ -867,10 +795,10 @@ void Loader::libPhysicsModels () {
                 xmlChar *l_pName = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "name" );
                 xmlChar *l_pSid = xmlGetProp ( l_nPhysics, ( const xmlChar* ) "sid" );
                 if ( ( l_pName ) && ( l_pSid ) ) {
-                    
-                    Physics *pPhysc = new Physics(std::string((char*)l_pName),std::string((char*)l_pSid));
-                    listaNodeRemover.push(pPhysc);
-                    
+
+                    Physics *pPhysc = new Physics ( std::string ( ( char* ) l_pName ),std::string ( ( char* ) l_pSid ) );
+                    listaNodeRemover.push ( pPhysc );
+
                     xmlNodePtr l_nTec = findNode ( ( char* ) "technique_common", l_nPhysics->children );
                     if ( l_nTec ) {
                         xmlNodePtr l_nProp = findNode ( ( char* ) "dynamic", l_nTec->children );
@@ -884,12 +812,9 @@ void Loader::libPhysicsModels () {
                                         l_pVal = xmlNodeListGetString ( m_doc, l_nProp->children, 1 );
                                         if ( l_pVal )
                                             pPhysc->setMass ( ( float ) atof ( ( char* ) l_pVal ) );
-                                        
                                         //TODO carga do shape de colisao
-                                        
                                     }
                                 }
-
                                 xmlFree ( l_pVal );
                             }
                         }
@@ -899,9 +824,10 @@ void Loader::libPhysicsModels () {
                             xmlChar *l_pName = xmlGetProp ( l_nProp, ( const xmlChar* ) "url" );
                             if ( l_pName ) {
                                 btMaterial *pPMat =m_pPhMaterial[ ( const char* ) &l_pName[1]];
-                                if ( pPMat )
-                                    pPhysc->setFriction( pPMat->m_friction );
-                                    pPhysc->setRestitution( pPMat->m_restitution );
+                                if ( pPMat ) {
+                                    pPhysc->setFriction ( pPMat->m_friction );
+                                    pPhysc->setRestitution ( pPMat->m_restitution );
+                                }
                             }
                         }
                     }
@@ -910,13 +836,13 @@ void Loader::libPhysicsModels () {
             }
         }
     }
-    
+
     if ( l_count == 0 ) {
         LOG4CXX_WARN ( logger , "Nao ha Modelo Fisico registrada!!!" );
     } else {
         LOG4CXX_INFO ( logger , std::string ( std::string ( "Modelo Fisico Registradas:" ) + std::to_string ( l_count ) ) );
     }
- 
+
 }
 
 void Loader::libPhysicsScenes ( void ) {
@@ -930,17 +856,16 @@ void Loader::libPhysicsScenes ( void ) {
                 xmlChar *l_pBody = xmlGetProp ( l_nRigid, ( const xmlChar* ) "body" );
                 xmlChar *l_pTarget = xmlGetProp ( l_nRigid, ( const xmlChar* ) "target" );
                 if ( ( l_pBody ) && ( l_pTarget ) ) {
-                    
-                    Physics *pPhysic = (Physics*)Node::findNodeById(EntityKind::PHYSICS, std::string((char*)l_pBody));//m_mPhysics[ ( const char* ) l_pBody];
-                   
-                    Object *pObj = ( Object* ) Node::findNodeById(EntityKind::OBJECT, ( const char* ) &l_pTarget[1]);
+
+                    Physics *pPhysic = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, std::string ( ( char* ) l_pBody ) ); //m_mPhysics[ ( const char* ) l_pBody];
+                    Object *pObj = ( Object* ) Node::findNodeById ( EntityKind::OBJECT, ( const char* ) &l_pTarget[1] );
 
                     if ( ( pPhysic ) && ( pObj ) ) {
-                        //DrawTriMesh *pDrawTriMesh = ( DrawTriMesh* ) pObj->pDraw; //todo pode ser o draw
-                        //if ( pDrawTriMesh ) 
-                        //    pPhysic->setShapeBox ( pDrawTriMesh->getSizeBox() );
 
-                        pObj->pPhysic = (Physics*) clone( pPhysic );
+                        Physics *novoPhy = nullptr;
+                        pPhysic->clone ( ( Node** )&novoPhy );
+                        pObj->addChild ( novoPhy );
+
                         l_num++;
                     }
                 }

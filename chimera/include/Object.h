@@ -21,7 +21,7 @@ namespace Chimera {
 class Object : public Node {
 public:
 
-    friend class Loader;
+    //friend class Loader;
     friend class Physics;
 
     Object ( std::string _id, std::string _name );
@@ -40,6 +40,10 @@ public:
 
     btVector3& getPosition();
 
+	void setTransform(btTransform _trans) {
+		transform = _trans;
+	}
+	
 private:
     Physics *pPhysic;
     Draw *pDraw;

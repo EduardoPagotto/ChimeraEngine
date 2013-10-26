@@ -91,6 +91,24 @@ void Node::update ( DataMsg *dataMsg ){
     }
 }
 
+Node *Node::findChildByKind(EntityKind type, int index) {
+    
+    int l_index = 0;
+    for ( Node* node : listChild) {
+     
+        if (node->getKind() == type) {
+            if (l_index == index)
+                return node;
+            
+            l_index++;
+            
+        }
+        
+    }
+    
+    return nullptr;
+}
+
 Node *Node::findNodeByName ( EntityKind type,std::string name ) {
     
     for ( Node *node : listNode ) {

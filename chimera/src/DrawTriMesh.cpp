@@ -97,7 +97,7 @@ void DrawTriMesh::render() {
 
 void DrawTriMesh::clone(Node **ppNode ) {
     *ppNode = new DrawTriMesh( *this ); 
-    Node::clone( ppNode );  
+    Draw::clone( ppNode );  
 }
 
 void DrawTriMesh::update ( DataMsg *dataMsg ) {

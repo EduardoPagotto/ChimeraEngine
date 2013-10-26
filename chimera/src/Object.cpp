@@ -27,12 +27,11 @@ Object::~Object () {
 
 void Object::init() {
         
-    if (pTexture != nullptr)
-        pTexture->init();
-    
-    if (pDraw!=nullptr)
-        pDraw->init();  
-    
+    pTexture = (Texture*) findChildByKind(EntityKind::TEXTURE,0);
+    pEffect = (Effect*) findChildByKind(EntityKind::EFFECT,0);
+    pDraw = (Draw*) findChildByKind(EntityKind::DRAW,0);
+    pPhysic = (Physics*) findChildByKind(EntityKind::PHYSICS,0);
+        
 }
 
 void Object::render() {

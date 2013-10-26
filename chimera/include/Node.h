@@ -47,6 +47,8 @@ public:
         this->id = name;
     }
 
+    Node *findChildByKind(EntityKind type, int index);
+    
     static Node *findNodeById ( EntityKind type,std::string id );
     static Node *findNodeById ( std::string id );
     static Node *findNodeByName ( EntityKind type,std::string name );

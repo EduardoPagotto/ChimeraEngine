@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Texture::Texture(std::string _id, std::string _name) : Node(EntityKind::TEXTURE,_id,_name) {
+Texture::Texture ( std::string _id, std::string _name ) : Node ( EntityKind::TEXTURE,_id,_name ) {
 
     texturaCarregada = false;
     pathFile = "";
@@ -12,10 +12,10 @@ Texture::Texture(std::string _id, std::string _name) : Node(EntityKind::TEXTURE,
     textureList[2] = 0;
 
     logger = log4cxx::Logger::getLogger ( "Texture" );
-    
+
 }
 
-Texture::Texture ( const Texture &_texture ) : Node(_texture) {
+Texture::Texture ( const Texture &_texture ) : Node ( _texture ) {
 
     pathFile = _texture.pathFile;
     indiceFilter = _texture.indiceFilter;
@@ -23,7 +23,7 @@ Texture::Texture ( const Texture &_texture ) : Node(_texture) {
     textureList[0] = _texture.textureList[0];
     textureList[1] = _texture.textureList[1];
     textureList[2] = _texture.textureList[2];
-    
+
     logger = log4cxx::Logger::getLogger ( "Texture" );
 }
 
@@ -128,7 +128,7 @@ void Texture::init() {
                             GL_UNSIGNED_BYTE,  pImage->pixels );
 
         SDL_FreeSurface ( pImage );
-        
+
         texturaCarregada = true;
     }
 
@@ -138,23 +138,29 @@ SDL_Surface *Texture::loadImage () {
 
     SDL_Surface *pImage = IMG_Load ( pathFile.c_str() );
     if ( pImage != nullptr ) {
-        
+
         std::string l_msg = "Imagem carregada:" + pathFile;
         LOG4CXX_INFO ( logger , l_msg );
-        
+
         return pImage;
     }
 
     throw ExceptionChimera ( ExceptionCode::READ, "Falha ao ler arquivo:" + pathFile );
 }
 
-void Texture::clone(Node **ppNode ) {
-    *ppNode = new Texture( *this ); 
-    Node::clone( ppNode );  
+void Texture::clone ( Node **ppNode ) {
+    *ppNode = new Texture ( *this );
+    Node::clone ( ppNode );
 }
 
-void Texture::update ( DataMsg *dataMsg ){
-    Node::update(dataMsg);
+void Texture::update ( DataMsg *dataMsg ) {
+
+    if ( dataMsg->getKindOp() ==KindOp::START ) {
+
+        init();
+    }
+
+    Node::update ( dataMsg );
 }
 
 }

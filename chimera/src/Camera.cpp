@@ -14,8 +14,7 @@ namespace Chimera {
     far = 1000.0f;
     fov = 45.0f;
    
-    perspective = true;
- 
+    perspective = true; 
 }
 
 Camera::Camera (const Camera& _camera ) : Node ( _camera ) {
@@ -35,6 +34,11 @@ Camera::Camera (const Camera& _camera ) : Node ( _camera ) {
 }
 
 Camera::~Camera() {
+}
+
+void Camera::clone(Node **ppNode ) {
+    *ppNode = new Camera( *this ); 
+    Node::clone( ppNode );  
 }
 
 void Camera::exec ( void ) {
@@ -80,7 +84,7 @@ void Camera::update ( DataMsg *_dataMsg ) {
              
     } if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
         
-    }
+    } 
     
     Node::update ( _dataMsg );
 }

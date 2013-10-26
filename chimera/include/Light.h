@@ -18,16 +18,19 @@ enum class LightType {
 
 class Light : public Node {
 public:
-    
+
     friend class Loader;
-    
-    Light (LightType _lightType, std::string _id, std::string _name);
-    
-    Light (const Light& _light );
-    
+
+    Light ( LightType _lightType, std::string _id, std::string _name );
+
+    Light ( const Light& _light );
+
     virtual ~Light();
-    
+
     virtual void update ( DataMsg *_dataMsg );
+
+    virtual void clone ( Node **ppNode );
+
     virtual void exec();
 
     Color getAmbient() {
@@ -37,36 +40,36 @@ public:
     Color getSpecular() {
         return specular;
     }
-    
+
     Color getDiffuse() {
         return diffuse;
     }
-    
-    void setAmbient(Color _color) {
-       ambient = _color;
+
+    void setAmbient ( Color _color ) {
+        ambient = _color;
     }
 
-    void setSpecular(Color _color) {
+    void setSpecular ( Color _color ) {
         specular = _color;
     }
-    
-    void setDiffuse(Color _color) {
-       diffuse = _color;
+
+    void setDiffuse ( Color _color ) {
+        diffuse = _color;
     }
-    
-    void setType(LightType _type) {
+
+    void setType ( LightType _type ) {
         type = _type;
     }
-    
+
 private:
 
     btTransform transform;
     btVector3 position;
-    
+
     Color ambient;
     Color specular;
     Color diffuse;
-    
+
     int number;
     LightType type;
 };

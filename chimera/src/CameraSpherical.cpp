@@ -36,6 +36,11 @@ CameraSpherical::CameraSpherical(const Camera& _camera) : Camera(_camera) {
 CameraSpherical::~CameraSpherical() {
 }
 
+void CameraSpherical::clone(Node **ppNode ) {
+    *ppNode = new CameraSpherical( *this ); 
+    Node::clone( ppNode );  
+}
+
 void CameraSpherical::update ( DataMsg *_dataMsg ) {
     
     Camera::update ( _dataMsg );

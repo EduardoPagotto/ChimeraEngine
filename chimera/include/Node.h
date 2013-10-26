@@ -25,7 +25,7 @@ public:
     
     ~Node();
 
-    //virtual Node *clone() = 0;
+    virtual void clone ( Node **ppNode );
     
     virtual void update ( DataMsg *dataMsg );
 
@@ -47,10 +47,10 @@ public:
         this->id = name;
     }
 
-    static Node *findObjById ( EntityKind type,std::string id );
-    static Node *findObjById ( std::string id );
-    static Node *findObjByName ( EntityKind type,std::string name );
-    static Node *findObjByName ( std::string name );
+    static Node *findNodeById ( EntityKind type,std::string id );
+    static Node *findNodeById ( std::string id );
+    static Node *findNodeByName ( EntityKind type,std::string name );
+    static Node *findNodeByName ( std::string name );
     
     
 protected:

@@ -8,7 +8,7 @@ namespace Chimera {
 
 class DrawGrid : public Draw {
 public:
-    DrawGrid(std::string _id, std::string _name);
+    DrawGrid ( std::string _id, std::string _name );
     DrawGrid ( const DrawGrid &_draw );
     virtual ~DrawGrid();
 
@@ -33,7 +33,9 @@ public:
     }
 
     virtual void update ( DataMsg *dataMsg );
-    
+
+    virtual void clone ( Node **ppNode );
+
     virtual void init();
     virtual void render();
     virtual btVector3 getSizeBox ( void );

@@ -31,6 +31,11 @@ CameraMan::CameraMan ( const Camera& _camera ) : Camera ( _camera ) {
 CameraMan::~CameraMan() {
 }
 
+void CameraMan::clone(Node **ppNode ) {
+    *ppNode = new CameraMan( *this ); 
+    Node::clone( ppNode );  
+}
+
 void CameraMan::update ( DataMsg *_dataMsg ) {
     Camera::update ( _dataMsg );
     if ( _dataMsg->getKindOp() ==KindOp::START ) {

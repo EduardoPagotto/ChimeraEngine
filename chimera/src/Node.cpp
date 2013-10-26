@@ -42,6 +42,24 @@ Node::~Node() {
     LOG4CXX_INFO ( logger , l_msg );
 }
 
+void Node::clone(Node **ppNode) {
+          
+    std::string l_msg = "CLONE " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() ); ;
+    LOG4CXX_INFO ( logger , l_msg );
+    
+    for ( Node *pNode : listChild ) {
+        
+        Node *pNovo = nullptr;
+        Node *pClone = *ppNode;
+        
+        pNode->clone( &pNovo );
+        
+        pClone->addChild( pNovo );
+       
+    }
+    
+}
+
 void Node::addChild(Node *child) {
 
     listChild.push_back(child);
@@ -58,6 +76,11 @@ void Node::addChild(Node *child) {
 
 void Node::update ( DataMsg *dataMsg ){
 
+    if (dataMsg->isDebugTrack()) {
+        std::string l_msg = "TRACK "+ Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() );
+        LOG4CXX_INFO ( logger , l_msg );
+    }
+    
     for (Node *node : listChild) {
         
         if (dataMsg->isDone() == true)
@@ -68,7 +91,7 @@ void Node::update ( DataMsg *dataMsg ){
     }
 }
 
-Node *Node::findObjByName ( EntityKind type,std::string name ) {
+Node *Node::findNodeByName ( EntityKind type,std::string name ) {
     
     for ( Node *node : listNode ) {
         
@@ -81,7 +104,7 @@ Node *Node::findObjByName ( EntityKind type,std::string name ) {
     return nullptr;
 }
 
-Node *Node::findObjByName ( std::string name ) {
+Node *Node::findNodeByName ( std::string name ) {
     
     for ( Node *node : listNode ) {
         
@@ -94,7 +117,7 @@ Node *Node::findObjByName ( std::string name ) {
     return nullptr;
 }
 
-Node *Node::findObjById ( EntityKind type,std::string id ) {
+Node *Node::findNodeById ( EntityKind type,std::string id ) {
     
     for ( Node *node : listNode ) {
         
@@ -107,7 +130,7 @@ Node *Node::findObjById ( EntityKind type,std::string id ) {
     return nullptr;
 }
 
-Node *Node::findObjById ( std::string id ) {
+Node *Node::findNodeById ( std::string id ) {
     
     for ( Node *node : listNode ) {
         

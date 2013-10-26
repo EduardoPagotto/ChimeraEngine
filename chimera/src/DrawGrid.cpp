@@ -60,6 +60,11 @@ void DrawGrid::update ( DataMsg *dataMsg ) {
     Node::update(dataMsg);
 }
 
+void DrawGrid::clone(Node **ppNode ) {
+    *ppNode = new DrawGrid( *this ); 
+    Node::clone( ppNode );  
+}
+
 // void DrawBoxGrid2::renderizar() {
 //  #define MAX_LINE 1000
 //  #define DELTA_LINE 50

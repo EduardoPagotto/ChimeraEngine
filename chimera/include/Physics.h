@@ -13,31 +13,47 @@
 #include "Singleton.h"
 
 namespace Chimera {
-    
+
 class Physics : public Node {
 public:
-    
+
     friend class Loader;
 
-    Physics(std::string _id, std::string _name);
-    
-    Physics(const Physics& _physics);
-    
+    Physics ( std::string _id, std::string _name );
+
+    Physics ( const Physics& _physics );
+
     ~Physics();
 
-    inline void setMass (const float &_mass ) { mass = _mass; }
-    
-    inline void setFriction (const float &_friction ) { friction = _friction; }    
-    
-    inline void setRestitution (const float &_restitution ) { restitution = _restitution; }
-    
-    inline void setShapeBox ( const btVector3 &_size ) { pShapeCollision = new btBoxShape ( _size );}
-    
-    inline void setShapeCilinder(const btVector3 &_val) { pShapeCollision = new btCylinderShape( _val ); }
+    inline void setMass ( const float &_mass ) {
+        mass = _mass;
+    }
 
-    inline btVector3& getPosition() { return pRigidBody->getWorldTransform().getOrigin();}
-    
-    void init (btTransform &_tTrans, void *pObj);
+    inline void setFriction ( const float &_friction ) {
+        friction = _friction;
+    }
+
+    inline void setRestitution ( const float &_restitution ) {
+        restitution = _restitution;
+    }
+
+    inline void setShapeBox ( const btVector3 &_size ) {
+        pShapeCollision = new btBoxShape ( _size );
+    }
+
+    inline void setShapeCilinder ( const btVector3 &_val ) {
+        pShapeCollision = new btCylinderShape ( _val );
+    }
+
+    inline btVector3& getPosition() {
+        return pRigidBody->getWorldTransform().getOrigin();
+    }
+
+    void init ( btTransform &_tTrans, void *pObj );
+
+    virtual void update ( DataMsg *_dataMsg );
+
+    virtual void clone ( Node **ppNode );
 
     //usada na trans cam do mundo
     void transformacao3D ();
@@ -47,18 +63,18 @@ public:
 
     void propulcao ( const btVector3 &_prop );
     void torque ( const btVector3 &_torque );
-    
+
 private:
     btScalar mass;
     btScalar friction;
     btScalar restitution;
-    
+
     btRigidBody* pRigidBody;
     btCollisionShape* pShapeCollision;
     btDefaultMotionState *pMotionState;
-   
+
     PhysicsControl *pWorld;
-    
+
     //btTriangleIndexVertexArray *m_pIndexVertexArrays;
 };
 

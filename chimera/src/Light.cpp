@@ -72,6 +72,11 @@ void Light::exec() {
     }
 }
 
+void Light::clone(Node **ppNode ) {
+    *ppNode = new Light( *this ); 
+    Node::clone( ppNode );  
+}
+
 void Light::update ( DataMsg *dataMsg ) {
     
     if (dataMsg->getKindOp()==KindOp::START) {

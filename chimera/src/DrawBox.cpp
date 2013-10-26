@@ -66,6 +66,11 @@ void DrawBox::init() {
     
 }
 
+void DrawBox::clone(Node **ppNode ) {
+    *ppNode = new DrawBox( *this ); 
+    Node::clone( ppNode );  
+}
+
 void DrawBox::update ( DataMsg *dataMsg ) {
     Node::update(dataMsg);
 }

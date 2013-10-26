@@ -43,6 +43,15 @@ Physics::~Physics() {
     Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
+void Physics::clone(Node **ppNode ) {
+    *ppNode = new Physics( *this ); 
+    Node::clone( ppNode );  
+}
+
+void Physics::update ( DataMsg *_dataMsg ) {
+    Node::update(_dataMsg);
+}
+
 void Physics::init (btTransform &_tTrans, void *pObj ) {
         
     pMotionState = new btDefaultMotionState ( _tTrans );

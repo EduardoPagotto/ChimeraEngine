@@ -8,7 +8,7 @@ namespace Chimera {
 class CameraMan : public Camera {
 
 public:
-    CameraMan(std::string _id, std::string _name);
+    CameraMan ( std::string _id, std::string _name );
 
     CameraMan ( const CameraMan& _cameraMan );
 
@@ -17,6 +17,8 @@ public:
     ~CameraMan();
 
     virtual void update ( DataMsg *_dataMsg );
+
+    virtual void clone ( Node **ppNode );
 
     void pitch ( GLfloat _theta );
     void yaw ( GLfloat _theta );

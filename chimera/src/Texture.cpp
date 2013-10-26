@@ -148,6 +148,11 @@ SDL_Surface *Texture::loadImage () {
     throw ExceptionChimera ( ExceptionCode::READ, "Falha ao ler arquivo:" + pathFile );
 }
 
+void Texture::clone(Node **ppNode ) {
+    *ppNode = new Texture( *this ); 
+    Node::clone( ppNode );  
+}
+
 void Texture::update ( DataMsg *dataMsg ){
     Node::update(dataMsg);
 }

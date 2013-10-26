@@ -7,24 +7,26 @@ namespace Chimera {
 
 class DrawBox : public Draw {
 public:
-    DrawBox(std::string _id, std::string _name);
-    DrawBox(const DrawBox &_draw);
+    DrawBox ( std::string _id, std::string _name );
+    DrawBox ( const DrawBox &_draw );
     virtual ~DrawBox();
-        
-    void setSizeBox(btVector3 _sizeBox) {
+
+    void setSizeBox ( btVector3 _sizeBox ) {
         sizeBox = _sizeBox;
     }
-    
+
     virtual void update ( DataMsg *dataMsg );
-    
+
+    virtual void clone ( Node **ppNode );
+
     virtual void init();
     virtual void render();
-    virtual btVector3 getSizeBox(void);
-   
+    virtual btVector3 getSizeBox ( void );
+
 private:
     btVector3 sizeBox;
-    
-};    
+
+};
 
 }
 

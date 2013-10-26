@@ -33,6 +33,8 @@ public:
 
     virtual void init();
     
+    virtual void clone(Node **ppNode);
+    
     void exec ();
        
     void setType(CameraType _type) {

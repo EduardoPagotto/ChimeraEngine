@@ -36,6 +36,11 @@ void Effect::render() {
 
 }
 
+void Effect::clone(Node **ppNode ) {
+    *ppNode = new Effect( *this ); 
+    Node::clone( ppNode );  
+}
+
 void Effect::update ( DataMsg *dataMsg ){
    Node::update(dataMsg);
 }

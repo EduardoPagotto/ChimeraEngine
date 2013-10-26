@@ -17,7 +17,8 @@ enum class KindOp {
     IS_ALLOW_COLLIDE,
     START_COLLIDE,
     ON_COLLIDE,
-    OFF_COLLIDE
+    OFF_COLLIDE,
+    NOP
 };
 
 /**
@@ -34,7 +35,13 @@ public:
      * @param _param ponteiro com o parametro
      * @param _result ponteiro com o resultado
      */
-    DataMsg ( KindOp _kindOp, void* _ptrSource, void* _param, void* _result ) : kindOp ( _kindOp ) , ptrSource ( _ptrSource ), param ( _param ), result ( _result ), done ( false ) { }
+    DataMsg ( KindOp _kindOp, void* _ptrSource, void* _param, void* _result, bool _debugTrack = false ) : 
+        kindOp ( _kindOp ) , 
+        ptrSource ( _ptrSource ), 
+        param ( _param ), 
+        result ( _result ), 
+        done ( false ), 
+        debugTrack(_debugTrack) { }
     
     /**
      * Destrutor
@@ -84,12 +91,21 @@ public:
         done = _done;
     }
 
+    inline void setDebugTrack(bool _debugTrack) {
+        debugTrack = _debugTrack;
+    }
+    
+    inline bool isDebugTrack() const {
+        return debugTrack;
+    }
+    
 private:
     KindOp kindOp;
     void* ptrSource;
     void* param;
     void* result;
     bool done;
+    bool debugTrack;
 };
 }
 #endif

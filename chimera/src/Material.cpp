@@ -13,6 +13,11 @@ Material::Material ( const Material &_cpy ) : Node ( _cpy ) {
 Material::~Material() {
 }
 
+void Material::clone(Node **ppNode ) {
+    *ppNode = new Material( *this ); 
+    Node::clone( ppNode );  
+}
+
 void Material::update ( DataMsg *dataMsg ) {
     Node::update ( dataMsg );
 }

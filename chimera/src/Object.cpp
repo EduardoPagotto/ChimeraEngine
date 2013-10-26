@@ -48,6 +48,11 @@ void Object::render() {
     
 }
 
+void Object::clone(Node **ppNode ) {
+    *ppNode = new Object( *this ); 
+    Node::clone( ppNode );  
+}
+
 void Object::update ( DataMsg *_dataMsg ) {
     
     if (_dataMsg->getKindOp()==KindOp::START) {

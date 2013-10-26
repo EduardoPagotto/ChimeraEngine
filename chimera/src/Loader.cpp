@@ -493,11 +493,11 @@ void Loader::libMaterial ( void ) {
                         if ( l_val ) {
                             std::string l_nomeEffect = ( char* ) &l_val[1];
                             if (l_nomeEffect.size() >0 ) {
-                                Effect *pEffe =(Effect*) Node::findObjById(EntityKind::EFFECT, l_nomeEffect); //m_mEffect[ l_nomeEffect ];
+                                Effect *pEffe =(Effect*) Node::findNodeById(EntityKind::EFFECT, l_nomeEffect); //m_mEffect[ l_nomeEffect ];
                                 if ( pEffe ) {
                                     pMaterial->pEffect = pEffe;//new Effect( *pEffe );
                                     if (pEffe->getNameTextureId().size() > 0) {
-                                        Texture *pTexture = (Texture*) Node::findObjById(EntityKind::TEXTURE,pEffe->getNameTextureId()); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findObjById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+                                        Texture *pTexture = (Texture*) Node::findNodeById(EntityKind::TEXTURE,pEffe->getNameTextureId()); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findNodeById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
                                         if ( pTexture!=nullptr ) {
                                             pMaterial->pTextura = pTexture;//new Texture( *pTexture );
                                         }
@@ -732,7 +732,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                     
                     std::string l_nomeDrawTriMesh = ( char* ) &pURL[1];
-                    DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)Node::findObjById(EntityKind::DRAW,l_nomeDrawTriMesh);//m_mDrawTriMesh[ l_nomeDrawTriMesh];
+                    DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)Node::findNodeById(EntityKind::DRAW,l_nomeDrawTriMesh);//m_mDrawTriMesh[ l_nomeDrawTriMesh];
 
                     if ( pDrawTriMesh ) {
 
@@ -751,7 +751,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
 
                                             std::string l_nomeMaterial = ( char* ) &pURL[1];
 
-                                            Material *pMaterial = (Material*)Node::findObjById(EntityKind::MATERIAL,l_nomeMaterial );
+                                            Material *pMaterial = (Material*)Node::findNodeById(EntityKind::MATERIAL,l_nomeMaterial );
                                             //DataDraw *pDataDraw = m_mDesenhoBase[  l_nomeMaterial ];
                                             if ( pMaterial != nullptr ) {
                                                 
@@ -773,7 +773,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
                 if ( pURL != nullptr ) {
 
-                    Light *pLight = ( Light* ) Node::findObjById ( EntityKind::LIGHT, ( char* ) &pURL[1] );
+                    Light *pLight = ( Light* ) Node::findNodeById ( EntityKind::LIGHT, ( char* ) &pURL[1] );
                     if ( pLight!=nullptr ) {
 
                         Light *pLightScene = ( Light* ) clone ( pLight ); //Light *pLightScene = new Light ( *pLight );
@@ -788,7 +788,7 @@ void Loader::createNode ( xmlNodePtr _nodeXML, Node *_pNode ) {
                 xmlChar *pURL = xmlGetProp ( l_nInstance, ( const xmlChar* ) "url" );
                 if ( pURL != nullptr ) {
 
-                    Camera *pCam = ( Camera* ) Node::findObjById ( EntityKind::CAMERA, ( char* ) &pURL[1] );
+                    Camera *pCam = ( Camera* ) Node::findNodeById ( EntityKind::CAMERA, ( char* ) &pURL[1] );
 
                     if ( pCam!=nullptr ) {
 
@@ -931,9 +931,9 @@ void Loader::libPhysicsScenes ( void ) {
                 xmlChar *l_pTarget = xmlGetProp ( l_nRigid, ( const xmlChar* ) "target" );
                 if ( ( l_pBody ) && ( l_pTarget ) ) {
                     
-                    Physics *pPhysic = (Physics*)Node::findObjById(EntityKind::PHYSICS, std::string((char*)l_pBody));//m_mPhysics[ ( const char* ) l_pBody];
+                    Physics *pPhysic = (Physics*)Node::findNodeById(EntityKind::PHYSICS, std::string((char*)l_pBody));//m_mPhysics[ ( const char* ) l_pBody];
                    
-                    Object *pObj = ( Object* ) Node::findObjById(EntityKind::OBJECT, ( const char* ) &l_pTarget[1]);
+                    Object *pObj = ( Object* ) Node::findNodeById(EntityKind::OBJECT, ( const char* ) &l_pTarget[1]);
 
                     if ( ( pPhysic ) && ( pObj ) ) {
                         //DrawTriMesh *pDrawTriMesh = ( DrawTriMesh* ) pObj->pDraw; //todo pode ser o draw

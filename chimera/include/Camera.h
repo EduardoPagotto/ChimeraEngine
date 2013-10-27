@@ -73,6 +73,8 @@ public:
         perspective = _perspective; //TODO implementar isto para ortogonal (false);
     }
     
+    void setPositionRotation(btVector3 _posicao, btVector3 _rotation);
+    
 protected:     
     CameraType type;
     

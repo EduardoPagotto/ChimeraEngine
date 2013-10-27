@@ -3,8 +3,6 @@
 
 #include <GL/gl.h>
 
-#include <log4cxx/logger.h>
-
 #include <LinearMath/btTransform.h>
 #include <LinearMath/btVector3.h>
 
@@ -38,6 +36,8 @@ public:
     void applyTorc ( const btVector3 &_vet );
     void applyForce ( const btVector3 &_vet );
 
+	void setPositionRotation(btVector3 _posicao, btVector3 _rotation);
+	
     btVector3& getPosition();
 
 	void setTransform(btTransform _trans) {
@@ -53,9 +53,8 @@ private:
     bool collide;
 
     btTransform transform;
-    //btVector3 position;
 
-    log4cxx::LoggerPtr logger;
+  //  log4cxx::LoggerPtr logger;
 };
 
 }

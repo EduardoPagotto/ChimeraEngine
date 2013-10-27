@@ -4,8 +4,10 @@
 #include <log4cxx/logger.h>
 
 #include <SDL2/SDL.h>
+
 #include <GL/gl.h>
 #include <GL/glu.h>
+
 #include "Singleton.h"
 #include "Video.h"
 #include "SceneMng.h"

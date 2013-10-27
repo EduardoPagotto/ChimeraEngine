@@ -47,7 +47,7 @@ void CameraSpherical::update ( DataMsg *_dataMsg ) {
     
     if (_dataMsg->getKindOp()==KindOp::START) {
         
-        init();        
+       /* init(); */       
         initTrackBall();
         
     }

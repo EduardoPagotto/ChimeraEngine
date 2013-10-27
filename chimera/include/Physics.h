@@ -49,6 +49,12 @@ public:
         return pRigidBody->getWorldTransform().getOrigin();
     }
 
+    void setPosition(const btVector3 &_pos);
+    
+    void setRotation(const btVector3 &_rotation);
+    
+    btVector3 getRotation();
+    
     void init ( btTransform &_tTrans, void *pObj );
 
     virtual void update ( DataMsg *_dataMsg );

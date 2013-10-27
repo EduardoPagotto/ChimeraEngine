@@ -1,5 +1,5 @@
-#ifndef GAME_H_
-#define GAME_H_
+#ifndef GAME_XX_H_
+#define GAME_XX H_
 
 #include "GameClient.h"
 #include "CameraSpherical.h"
@@ -35,5 +35,4 @@ private:
 
 };
 
-#endif /* GAME_H_ */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+#endif

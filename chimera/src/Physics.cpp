@@ -110,6 +110,27 @@ void Physics::ajusteMatrix ( Physics *_pPhysic ) {
     
 }
 
+void Physics::setPosition(const btVector3 &_pos) {
+    btTransform l_transform = pRigidBody->getCenterOfMassTransform();
+    l_transform.setOrigin(_pos);
+    pRigidBody->setCenterOfMassTransform(l_transform);
+}
+
+void Physics::setRotation(const btVector3 &_rotation){
+    btTransform transform = pRigidBody->getCenterOfMassTransform();
+    
+    transform.setRotation(btQuaternion(_rotation.getY(), _rotation.getX(), _rotation.getZ()));
+    pRigidBody->setCenterOfMassTransform(transform);
+}
+
+btVector3 Physics::getRotation(){
+
+    btScalar rotZ,rotY,rotX;    
+    pRigidBody->getWorldTransform().getBasis().getEulerZYX(rotZ, rotY, rotX);
+    
+    return btVector3(rotX,rotY,rotZ);
+}
+
 void Physics::torque ( const btVector3 &_torque ) {
     pRigidBody->applyTorque ( _torque );
 }

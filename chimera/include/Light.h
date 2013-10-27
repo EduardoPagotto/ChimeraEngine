@@ -61,6 +61,8 @@ public:
         type = _type;
     }
 
+    void setPositionRotation(btVector3 _posicao, btVector3 _rotation);
+    
 private:
 
     btTransform transform;

@@ -11,7 +11,7 @@ Object::Object (std::string _id, std::string _name) : Node ( EntityKind::OBJECT,
      
      collide = false;
      
-     logger = log4cxx::Logger::getLogger ( "Object" );
+     transform.setIdentity();
     
 }
 
@@ -19,10 +19,27 @@ Object::Object( const Object& _object ) : Node(_object) {
     
     pPhysic = _object.pPhysic;
     pDraw = _object.pDraw;
+    pTexture = _object.pTexture;
+    pEffect = _object.pEffect;
+    collide = _object.collide;
     
+    transform = _object.transform;
+
 }
 
 Object::~Object () {
+}
+
+void Object::setPositionRotation(btVector3 _posicao, btVector3 _rotation) {
+
+    //Transformacao quando Euley nao apagar
+    btQuaternion l_qtn;
+    transform.setIdentity();
+    l_qtn.setEulerZYX ( _rotation.getX(), _rotation.getY(), _rotation.getZ() );
+    transform.setRotation ( l_qtn );
+    transform.setOrigin ( _posicao );
+    //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
+  
 }
 
 void Object::init() {

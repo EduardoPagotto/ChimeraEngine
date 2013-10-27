@@ -10,6 +10,8 @@ Light::Light (LightType _lightType, std::string _id, std::string _name) : Node (
     specular = Color::ZERO;
     diffuse = Color::ZERO;
     position.setZero();
+    
+    transform.setIdentity();
 
 }
 
@@ -22,10 +24,23 @@ Light::Light ( const Light& _light ) : Node ( _light ) {
     diffuse = _light.diffuse;
 
     position = _light.position;
+    
+    transform = _light.transform;
 }
 
 Light::~Light() {
 
+}
+
+void Light::setPositionRotation(btVector3 _posicao, btVector3 _rotation) {
+
+    //Transformacao quando Euley nao apagar
+    btQuaternion l_qtn;
+    transform.setIdentity();
+    l_qtn.setEulerZYX ( _rotation.getX(), _rotation.getY(), _rotation.getZ() );
+    transform.setRotation ( l_qtn );
+    transform.setOrigin ( _posicao );
+    //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 }
 
 void Light::exec() {

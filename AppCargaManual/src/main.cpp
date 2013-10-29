@@ -6,6 +6,7 @@
 
 #include "Game.h"
 #include "DrawBox.h"
+#include "DrawGrid.h"
 //#include "Loader.h"
 
 int main ( int argn, char** argv ) {
@@ -43,7 +44,7 @@ int main ( int argn, char** argv ) {
 		pEffect->setSpecular(Color(1.0f, 1.0f, 1.0f));
 		
 		DrawBox *pDraw = new DrawBox("caixa01","caixa01");
-		pDraw->setSizeBox(btVector3(1.0f,1.0f,1.0f));
+		pDraw->setSizeBox(btVector3(5.0f,5.0f,5.0f));
 		
 		Physics *pPysics = new Physics("rigid-body01","rigid-body01");
 		pPysics->setMass(10.0f);
@@ -55,14 +56,6 @@ int main ( int argn, char** argv ) {
 		pObj->addChild(pDraw);
 		pObj->addChild(pPysics);
 		pObj->addChild(pEffect);
-
-		Object *pObj2 = nullptr;
-		pObj->clone((Node**)&pObj2 );
-		pObj2->setPositionRotation(btVector3(5.0f, 5.0f, 0.0f), btVector3(0.0f, 0.0f, 0.0f));
-		pRoot->addChild(pObj2);
-		
-		
-		
 		
 		
 		pRoot->addChild(pObj);

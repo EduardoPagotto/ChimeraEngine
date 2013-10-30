@@ -2,7 +2,7 @@ PROJECT(Chimera)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(LibXml2 REQUIRED)
+#find_package(LibXml2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)	
@@ -14,7 +14,8 @@ include_directories(
 	${Chimera_SOURCE_DIR}/include
 	${OPENGL_INCLUDE_DIR}
 	${SDL2_INCLUDE_DIR}
-	${LIBXML2_INCLUDE_DIR}
+#	${LIBXML2_INCLUDE_DIR}
+	/usr/local/include/
 	${BULLET_INCLUDE_DIR}
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
@@ -27,6 +28,7 @@ foreach(dir ${dirs})
 	endforeach()
 
 add_library (Chimera STATIC
+				src/ChimeraUtils.cpp
 				src/Color.cpp
 				src/Entity.cpp
 				src/Node.cpp

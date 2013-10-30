@@ -104,5 +104,125 @@ void DrawTriMesh::update ( DataMsg *dataMsg ) {
     Node::update(dataMsg);
 }
 
+int DrawTriMesh::getSource (tinyxml2::XMLElement* _source , ListPtr<float> &_arrayValores ) {
+    
+    tinyxml2::XMLElement* l_nSource = _source->FirstChildElement("float_array");
+    if (l_nSource != nullptr) {
+        
+        const char *l_numCount = l_nSource->Attribute("count");
+        if (l_numCount != nullptr) {
+            
+            std::vector<float> l_array;
+            const char* l_vals = l_nSource->GetText();
+            loadArrayBtScalar(l_vals,l_array);
+            _arrayValores.create( l_array.size() );
+            for ( unsigned l_contador = 0 ; l_contador < l_array.size() ; l_contador++ )
+                _arrayValores[l_contador] = l_array[l_contador];           
+            
+            return _arrayValores.getSize();
+        }
+    }
+    
+    return -1;
+    
+}
+
+void DrawTriMesh::loadCollada(tinyxml2::XMLElement* _nNode) {
+    
+    tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement ( "mesh" );
+    if (l_nMesh != nullptr) {
+        
+        tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement ( "source" );
+        
+        while (l_nSource != nullptr) {
+            
+            const char *l_id = l_nSource->Attribute("id");
+            if ( strstr ( l_id, ( char* ) "-positions" ) != nullptr ) { 
+                getSource ( l_nSource , vList ); 
+            } else if ( strstr ( l_id, ( char* ) "-normals" ) != nullptr ) {
+                getSource ( l_nSource , nList );
+            } else if ( strstr ( l_id, ( char* ) "-map-0" ) != nullptr ) {
+                getSource ( l_nSource , uvList );
+            }
+            
+            l_nSource = l_nSource->NextSiblingElement("source");
+        }
+        
+        tinyxml2::XMLElement* l_nPoly = l_nMesh->FirstChildElement ( "polylist" );
+        if (l_nPoly != nullptr) {
+            
+            const char *l_count = l_nPoly->Attribute("count");
+            const char *l_mat = l_nPoly->Attribute("material");
+            
+            tinyxml2::XMLElement* l_nInput = l_nPoly->FirstChildElement ( "input" );
+            
+            std::vector<const char*> l_vOffset;
+            std::vector<const char*> l_vSemantic;
+            std::vector<const char*> l_vSource;
+            
+            while (l_nInput != nullptr) {
+                
+                const char *l_offSet = l_nInput->Attribute("offset"); 
+                const char *l_semantic = l_nInput->Attribute("semantic");
+                const char *l_source = l_nInput->Attribute("source");
+                
+                l_vOffset.push_back ( l_offSet );
+                l_vSemantic.push_back ( l_semantic );
+                l_vSource.push_back ( l_source );
+                
+                l_nInput = l_nInput->NextSiblingElement("input");
+            }
+            
+            tinyxml2::XMLElement* l_nP = l_nPoly->FirstChildElement ( "p" );
+            const char *l_indices = l_nP->GetText();
+            std::vector<int> l_arrayIndex;
+            
+            loadArrayI ( l_indices,l_arrayIndex );
+            
+            unsigned l_veCount = 0;
+            unsigned l_noCount = 0;
+            unsigned l_uvCount = 0;
+            
+            int l_numTriangles = atoi (l_count);
+            
+            for ( unsigned l_contador = 0 ; l_contador < l_arrayIndex.size() ; l_contador++ ) {
+                int index = l_contador % l_vOffset.size();
+                
+                const char *l_offSet = l_vOffset[index];
+                const char *l_semantic = l_vSemantic[index];
+                const char *l_source = l_vSource[index];
+                
+                if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) {
+                    if ( vIndex.getSize() == 0 )
+                        vIndex.create ( l_numTriangles * 3 );
+                    
+                    vIndex[l_veCount] = l_arrayIndex[l_contador];
+                    l_veCount++;
+                } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) {
+                    if ( nIndex.getSize() ==0 )
+                        nIndex.create ( l_numTriangles * 3 );
+                    
+                    nIndex[l_noCount] = l_arrayIndex[l_contador];
+                    l_noCount++;
+                } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) {
+                    if ( tIndex.getSize() ==0 )
+                        tIndex.create ( l_numTriangles* 3 );
+                    
+                    tIndex[l_uvCount] = l_arrayIndex[l_contador];
+                    l_uvCount++;
+                }
+            }
+            l_arrayIndex.clear(); 
+            
+            l_vOffset.clear();
+            l_vSemantic.clear();
+            l_vSource.clear();
+            
+        }
+        
+    }
+    
+}
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

@@ -29,12 +29,31 @@ void Game::keyCapture ( SDL_Keycode tecla ) {
     case SDLK_RIGHT:
         pObj->applyForce( btVector3(0.0, -10.0, 0.0) );
         break;
-    case SDLK_MINUS:
-        pObj->applyTorc( btVector3(0.0, -10.0, 0.0) );
+    case SDLK_9:
+        pObj->applyForce( btVector3(0.0, 0.0, -10.0) );
         break;
-    case SDLK_PLUS:
+    case SDLK_0:
+        pObj->applyForce( btVector3(0.0, 0.0, 10.0) );
+        break;
+    case SDLK_a:
+        pObj->applyTorc( btVector3(10.0, 0.0, 0.0) );
+        break;
+    case SDLK_z:
+        pObj->applyTorc( btVector3(-10.0, 0.0, 0.0) );
+        break;
+    case SDLK_q:
         pObj->applyTorc( btVector3(0.0, 10.0, 0.0) );
         break;
+    case SDLK_w:
+        pObj->applyTorc( btVector3(0.0, -10.0, 0.0) );
+        break;
+    case SDLK_s:
+        pObj->applyTorc( btVector3(0.0, 0.0, -10.0) );
+        break;
+    case SDLK_x:
+        pObj->applyTorc( btVector3(0.0, 0.0, 10.0) );
+        break;	
+	
     default:
         break;
     }

@@ -79,10 +79,9 @@ private:
     void libMaterial ();
     void libGeometry ();
     Node* libScene ();
-//
-//     void libPhysicsMaterial();
-//     void libPhysicsModels ();
-//     void libPhysicsScenes ();
+    void libPhysicsMaterial();
+    void libPhysicsModels ();
+    void libPhysicsScenes ();
 //
 //     xmlDocPtr m_doc;
 //     xmlNodePtr m_root;
@@ -93,7 +92,7 @@ private:
 //
     std::queue<Node*> listaNodeRemover;
 //
-//     std::map<std::string, btMaterial*> m_pPhMaterial;
+     std::map<std::string, btMaterial*> m_pPhMaterial;
 
     log4cxx::LoggerPtr logger;
 };

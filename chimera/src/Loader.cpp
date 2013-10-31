@@ -47,6 +47,9 @@ Node* Loader::loadDAE ( const std::string &_file ) {
     pRootScene = libScene();//Carrega componentes da cena
     libPhysicsMaterial();
     libPhysicsModels();
+    
+    libConstraint();
+    
     libPhysicsScenes();
 
     return pRootScene;
@@ -403,6 +406,74 @@ void Loader::libPhysicsMaterial ( void ) {
     }
 }
 
+void Loader::libConstraint() {
+
+    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_physics_models" );
+    if ( l_nNode != nullptr ) {
+        l_nNode = l_nNode->FirstChildElement ( "physics_model" );
+        if ( l_nNode != nullptr ) {
+            l_nNode = l_nNode->FirstChildElement ( "rigid_constraint" );
+            while ( l_nNode != nullptr ) {
+
+                Constraint *pConstraint = new Constraint ( l_nNode->Attribute ( "name" ),l_nNode->Attribute ( "sid" ) );
+                listaNodeRemover.push ( pConstraint );
+
+                tinyxml2::XMLElement* l_nRefAttachent = l_nNode->FirstChildElement ( "ref_attachment" );
+                if ( l_nRefAttachent != nullptr ) {
+
+                    const char *l_rigidA = l_nRefAttachent->Attribute ( "rigid_body" );
+
+                    Physics *pPhysc = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_rigidA );
+                    pConstraint->pPhysicsA = pPhysc;
+
+                    tinyxml2::XMLElement* l_nTrans = l_nRefAttachent->FirstChildElement ( "matrix" );
+                    if ( l_nTrans != nullptr ) {
+
+                        btTransform transform;
+
+                        std::vector<float> l_arrayValores;
+
+                        const char* l_matrix = l_nTrans->GetText();
+                        loadArrayBtScalar ( l_matrix, l_arrayValores );
+
+                        carregaMatrix ( &transform, l_arrayValores );
+
+                        pConstraint->transformA = transform;
+
+                    }
+
+                    tinyxml2::XMLElement* l_nAttachent = l_nNode->FirstChildElement ( "attachment" );
+                    if ( l_nAttachent != nullptr ) {
+
+                        const char *l_rigidB = l_nAttachent->Attribute ( "rigid_body" );
+
+                        Physics *pPhysc = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_rigidB );
+                        pConstraint->pPhysicsB = pPhysc;
+
+                        tinyxml2::XMLElement* l_nTrans = l_nAttachent->FirstChildElement ( "matrix" );
+                        if ( l_nTrans != nullptr ) {
+
+                            btTransform transform;
+
+                            std::vector<float> l_arrayValores;
+
+                            const char* l_matrix = l_nTrans->GetText();
+                            loadArrayBtScalar ( l_matrix, l_arrayValores );
+
+                            carregaMatrix ( &transform, l_arrayValores );
+
+                            pConstraint->transformB = transform;
+
+                        }
+                    }
+                }
+                l_nNode = l_nNode->NextSiblingElement ( "rigid_constraint" );
+            }
+        }
+    }
+
+}
+
 void Loader::libPhysicsModels () {
 
     tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_physics_models" );
@@ -442,6 +513,7 @@ void Loader::libPhysicsModels () {
                 }
 
                 l_nNode = l_nNode->NextSiblingElement ( "rigid_body" );
+
             }
         }
     }
@@ -454,28 +526,28 @@ void Loader::libPhysicsScenes ( void ) {
         l_nNode = l_nNode->FirstChildElement ( "physics_scene" );
         if ( l_nNode != nullptr ) {
             l_nNode = l_nNode->FirstChildElement ( "instance_physics_model" );
-            
-            if (l_nNode != nullptr) {
+
+            if ( l_nNode != nullptr ) {
                 l_nNode = l_nNode->FirstChildElement ( "instance_rigid_body" );
-                
+
                 while ( l_nNode != nullptr ) {
-                    
-                    const char *l_body = l_nNode->Attribute("body");
-                    const char *l_target = l_nNode->Attribute("target");
-                    
+
+                    const char *l_body = l_nNode->Attribute ( "body" );
+                    const char *l_target = l_nNode->Attribute ( "target" );
+
                     Physics *pPhysic = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_body ); //m_mPhysics[ ( const char* ) l_pBody];
                     Object *pObj = ( Object* ) Node::findNodeById ( EntityKind::OBJECT, &l_target[1] );
-                    
+
                     if ( ( pPhysic ) && ( pObj ) ) {
-                        
+
                         Physics *novoPhy = nullptr;
-                        pPhysic->clone ( ( Node** )&novoPhy );
+                        pPhysic->clone ( ( Node** ) &novoPhy );
                         pObj->addChild ( novoPhy );
-                        
-                    }              
-                    
+
+                    }
+
                     l_nNode = l_nNode->NextSiblingElement ( "instance_rigid_body" );
-                }                
+                }
             }
         }
     }

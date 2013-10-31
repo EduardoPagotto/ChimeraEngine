@@ -30,8 +30,13 @@ std::string Entity::getNameKindNode(EntityKind _kind) {
             break;
         case EntityKind::PHYSICS:
             return std::string("PHYSICS");
+            break;
         case EntityKind::MATERIAL:
             return std::string("MATERIAL");
+            break;
+        case EntityKind::CONSTRAINT:
+            return std::string("CONSTRAINT");
+            break;
     }
     
     return std::string("Desconhecido");

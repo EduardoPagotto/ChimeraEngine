@@ -21,7 +21,8 @@ enum class EntityKind : int8_t {
     LIGHT,
     OBJECT,
     PHYSICS,
-    DRAW
+    DRAW,
+    CONSTRAINT
 };
 
 /**

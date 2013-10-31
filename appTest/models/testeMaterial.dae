@@ -409,6 +409,28 @@
 				</technique_common>
 			</rigid_body>
 
+			<rigid_constraint name="Const" sid="Const">
+				<ref_attachment rigid_body="cubo01-RigidBody">
+					<matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+				</ref_attachment>
+				<attachment rigid_body="Icosphere-RigidBody">
+					<matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+				</attachment>
+				<technique_common>
+					<enabled>true</enabled>
+					<limits>
+						<linear>
+							<min>0 0 0</min>
+							<max>0 0 0</max>
+						</linear>
+						<swing_cone_and_twist>
+							<min>-INF 0 0</min>
+							<max>INF 0 0</max>
+						</swing_cone_and_twist>
+					</limits>
+				</technique_common>
+			</rigid_constraint>
+
 		</physics_model>
 		
 	</library_physics_models>
@@ -420,7 +442,8 @@
 				<instance_rigid_body body="cubo01-RigidBody" target="#cubo01"/>
 				<instance_rigid_body body="Icosphere-RigidBody" target="#Icosphere"/>
 				<instance_rigid_body body="cilindro01-RigidBody" target="#cilindro01"/>
-				
+				<instance_rigid_constraint constraint="Const"/>
+
 			</instance_physics_model>
 		</physics_scene>
 	</library_physics_scenes>

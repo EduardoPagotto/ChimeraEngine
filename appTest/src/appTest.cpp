@@ -26,8 +26,8 @@ int main ( int argn, char** argv ) {
         pLoader->setImageDir("../../appTest/models/");
         //Chimera::Node *pRoot = pLoader->loadDAE("cuboTex1.dae");//cuboEesfera.dae
         //Chimera::Node *pRoot = pLoader->loadDAE("cuboEesfera.dae");
-        Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.dae");
-        //Chimera::Node *pRoot = pLoader->loadDAE("zoltan.dae");
+        //Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.dae");
+        Chimera::Node *pRoot = pLoader->loadDAE("zoltan.dae");
         
         delete pLoader;
         pLoader = nullptr;

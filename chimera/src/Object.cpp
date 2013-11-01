@@ -49,16 +49,16 @@ void Object::init() {
     pDraw = ( Draw* ) findChildByKind ( EntityKind::DRAW,0 );
     pPhysic = ( Physics* ) findChildByKind ( EntityKind::PHYSICS,0 );
 
-//     if ( pEffect == nullptr ) {
-// 
-//         pEffect = new Effect ( "effect_interno","effect_interno" );
-//         pEffect->setDiffuse ( Color ( 0.6, 0.6, 0.6 ) );
-//         pEffect->setEmissive ( Color ( 0.1,0.1,0.1 ) );
-//         pEffect->setAmbient ( Color ( 0.1,0.1,0.1 ) );
-//         pEffect->setSpecular ( Color ( 0.5,0.5,0.5 ) );
-//         pEffect->setShininess ( 0.5 );
-// 
-//     }
+    if ( pEffect == nullptr ) {
+
+        pEffect = new Effect ( "effect_interno","effect_interno" );
+        pEffect->setDiffuse ( Color ( 0.6, 0.6, 0.6 ) );
+        pEffect->setEmissive ( Color ( 0.1,0.1,0.1 ) );
+        pEffect->setAmbient ( Color ( 0.1,0.1,0.1 ) );
+        pEffect->setSpecular ( Color ( 0.5,0.5,0.5 ) );
+        pEffect->setShininess ( 0.5 );
+
+    }
 
 }
 

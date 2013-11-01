@@ -41,23 +41,23 @@ public:
         return emissive;
     }
 
-    void setAmbient ( Color _color ) {
+    void setAmbient (const Color &_color ) {
         ambient = _color;
     }
-    void setSpecular ( Color _color ) {
+    void setSpecular (const Color &_color ) {
         specular = _color;
     }
-    void setDiffuse ( Color _color ) {
+    void setDiffuse (const Color &_color ) {
         diffuse = _color;
     }
-    void setEmissive ( Color _color ) {
+    void setEmissive (const Color &_color ) {
         emissive = _color;
     }
 
     float getShininess() const {
         return shininess;
     }
-    void setShininess ( float _val ) {
+    void setShininess (const float &_val ) {
         shininess = _val;
     }
     void setNameTextureId ( std::string _name ) {

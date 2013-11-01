@@ -508,6 +508,104 @@ void Loader::libPhysicsModels () {
                         }
                     }
 
+                    tinyxml2::XMLElement* l_nShape = l_nTecnicCommon->FirstChildElement ( "shape" );
+                    if (l_nShape != nullptr) {
+                     
+                        l_nShape = l_nShape->FirstChildElement();
+                        const char *l_tipoShape = l_nShape->Value();
+                        
+                        if (strcmp(l_tipoShape,"sphere")==0) {
+                         
+                            tinyxml2::XMLElement* l_nEsfera = l_nShape->FirstChildElement();
+                            const char *l_raio = l_nEsfera->GetText();
+                            
+                            std::vector<float> l_arrayValores;
+                            
+                            loadArrayBtScalar(l_raio,l_arrayValores);
+                            if (l_arrayValores.size() == 1) {
+                                
+                                btVector3 raio(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
+                                pPhysc->setShapeCilinder(raio);
+                                
+                            } else if (l_arrayValores.size() == 3) {
+                                
+                                btVector3 raio(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
+                                pPhysc->setShapeCilinder(raio);
+                                
+                            } else {
+                                
+                            }
+                            
+                        } else if (strcmp(l_tipoShape,"box")==0) {
+
+                            tinyxml2::XMLElement* l_nBox = l_nShape->FirstChildElement();
+                            const char *l_size = l_nBox->GetText();                            
+                            
+                            std::vector<float> l_arrayValores;
+                            loadArrayBtScalar(l_size,l_arrayValores);
+                            
+                            if (l_arrayValores.size() == 1) {
+                                
+                                btVector3 cubo(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
+                                pPhysc->setShapeBox(cubo);
+                                
+                            } else if (l_arrayValores.size() == 3) {
+                                
+                                btVector3 caixa(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
+                                pPhysc->setShapeBox(caixa);
+                                
+                            } else {
+                                
+                            }
+                            
+                        } else if (strcmp(l_tipoShape,"cylinder")==0) {
+                            
+                            tinyxml2::XMLElement* l_nCyl = l_nShape->FirstChildElement();
+                            const char *l_size = l_nCyl->GetText();                            
+                            
+                            std::vector<float> l_arrayValores;
+                            loadArrayBtScalar(l_size,l_arrayValores);
+                            
+                            if (l_arrayValores.size() == 1) {
+                                
+                                btVector3 cili(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
+                                pPhysc->setShapeCilinder(cili);
+                                
+                            } else if (l_arrayValores.size() == 3) {
+                                
+                                btVector3 cili(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
+                                pPhysc->setShapeBox(cili);
+                                
+                            } else {
+                                
+                            }
+                            //Cylinder 
+     
+                            
+                            //Cylinder 
+                        } else if (strcmp(l_tipoShape,"mesh")==0) {
+                            
+                            //instance_geometry
+                            tinyxml2::XMLElement* l_nMesh = l_nShape->FirstChildElement();
+                            if (l_nMesh != nullptr) {
+                                const char *l_mesh = l_nMesh->Attribute("url");
+                                if (l_mesh != nullptr) {
+                                    
+                                    DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)Node::findNodeById(EntityKind::DRAW, &l_mesh[1]);
+                                   
+                                    if (pDrawTriMesh != nullptr) {
+                                     
+                                        btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray(pDrawTriMesh->vIndex.getSize(),pDrawTriMesh->vIndex.ptrVal(),3*sizeof(int),
+                                                                                                                      pDrawTriMesh->vList.getSize(),pDrawTriMesh->vList.ptrVal(),3*sizeof(float));
+                                        
+                                        pPhysc->setIndexVertexArray(indexVertexArray);
+                                        
+                                    }
+                                }
+                            }                          
+                        }
+                    }
+                   
                     //TODO carga do shape de colisao
 
                 }

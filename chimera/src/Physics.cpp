@@ -77,6 +77,16 @@ void Physics::init (btTransform &_tTrans, void *pObj ) {
 
 }
 
+void Physics::setIndexVertexArray(btTriangleIndexVertexArray *_indexVertexArray) {
+    
+    trimesh = new btGImpactMeshShape(_indexVertexArray);
+    trimesh->updateBound();
+    pShapeCollision = trimesh;
+    // pShapeCollision->updateBound();
+    //pShapeCollision = new pShapeCollision(trimesh);
+    
+}
+
 void Physics::transformacao3D ( void ) {
     
     btTransform transLocal;

@@ -376,9 +376,9 @@
 					<mass>2.0</mass>
 					<instance_physics_material url="#cubo01-PhysicsMaterial"/>
 					<shape>
-						<sphere>
-							<radius>1.0</radius>
-						</sphere>
+						<mesh>
+							<instance_geometry url="#Cube-mesh"/>
+						</mesh>						
 					</shape>
 				</technique_common>
 			</rigid_body>
@@ -390,7 +390,7 @@
 					<instance_physics_material url="#Icosphere-PhysicsMaterial"/>
 					<shape>
 						<sphere>
-							<radius>1.0</radius>
+							<radius>1.0 1.0 1.0</radius>
 						</sphere>
 					</shape>
 				</technique_common>
@@ -402,9 +402,9 @@
 					<mass>2.0</mass>
 					<instance_physics_material url="#cilindro01-PhysicsMaterial"/>
 					<shape>
-						<sphere>
-							<radius>1.0</radius>
-						</sphere>
+						<cylinder>
+							<half_size>1.0</half_size>
+						</cylinder>
 					</shape>
 				</technique_common>
 			</rigid_body>

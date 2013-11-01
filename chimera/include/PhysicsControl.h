@@ -7,6 +7,7 @@
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 #include <LinearMath/btVector3.h>
 #include <SDL2/SDL.h>

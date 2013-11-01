@@ -8,6 +8,7 @@
 #include <btBulletDynamicsCommon.h>
 
 #include <BulletCollision/CollisionShapes/btMaterial.h>
+#include <BulletCollision/Gimpact/btGImpactShape.h>
 
 #include "PhysicsControl.h"
 #include "Singleton.h"
@@ -70,15 +71,22 @@ public:
     void propulcao ( const btVector3 &_prop );
     void torque ( const btVector3 &_torque );
 
+    void setIndexVertexArray(btTriangleIndexVertexArray *_indexVertexArray);
+    
 private:
     btScalar mass;
     btScalar friction;
     btScalar restitution;
 
     btRigidBody* pRigidBody;
+    
     btCollisionShape* pShapeCollision;
+    btGImpactMeshShape *trimesh;
+    
     btDefaultMotionState *pMotionState;
 
+    //btTriangleIndexVertexArray *indexVertexArray;
+    
     PhysicsControl *pWorld;
 
     //btTriangleIndexVertexArray *m_pIndexVertexArrays;

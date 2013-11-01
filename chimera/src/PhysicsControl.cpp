@@ -7,6 +7,8 @@ PhysicsControl::PhysicsControl() {
     collisionConfig = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher ( collisionConfig );
 
+    btGImpactCollisionAlgorithm::registerAlgorithm( dispatcher );
+    
     broadPhase = new btDbvtBroadphase();
     solver = new btSequentialImpulseConstraintSolver;
     discretDynamicsWorld = new btDiscreteDynamicsWorld ( dispatcher, broadPhase, solver, collisionConfig );

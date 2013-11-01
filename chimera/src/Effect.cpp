@@ -25,14 +25,14 @@ Effect::Effect ( const Effect& _cpy ) : Node ( _cpy ) {
 }
 
 void Effect::render() {
-
-    //if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
+    
+   if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
     glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
     glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
     glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
     glMaterialfv ( GL_FRONT, GL_SHININESS,  &shininess );
     glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
-    //}
+   }
 
 }
 
@@ -70,8 +70,12 @@ bool Effect::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElemen
                     const char* l_cor = l_nColor->GetText();
                     loadArrayBtScalar ( l_cor, l_arrayF );
                     
-                    _color.set ( l_arrayF[0], l_arrayF[1], l_arrayF[2], l_arrayF[3] );
+                    _color.set ( l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0 );
                     return true;
+                } else {
+                    
+                    _color.set ( 1.0, 1.0, 1.0, 1.0 );//FIXME preciso??
+                    
                 }
             }
         }

@@ -287,7 +287,7 @@ void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
 
                 Light *pLightScena = nullptr;
                 pLight->clone ( ( Node** ) &pLightScena );
-                pLight->setTransform ( *pTrans );
+                pLightScena->setTransform ( *pTrans );
 
                 _pNode->addChild ( pLightScena );
                 pFilho = pLightScena;

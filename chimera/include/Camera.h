@@ -7,6 +7,8 @@
 #include <LinearMath/btVector3.h>
 #include <LinearMath/btTransform.h>
 
+#include <tinyxml2.h>
+
 #include "Node.h"
 
 namespace Chimera {
@@ -20,9 +22,7 @@ enum class CameraType {
 
 class Camera : public Node {
 public:
-    
-    friend class Loader;
-    
+      
     Camera (CameraType _type, std::string _id, std::string _name);
     
     Camera (const Camera& _camera);
@@ -73,7 +73,13 @@ public:
         perspective = _perspective; //TODO implementar isto para ortogonal (false);
     }
     
+    void setTransform(const btTransform &_trans) {
+        transform = _trans;
+    }
+    
     void setPositionRotation(btVector3 _posicao, btVector3 _rotation);
+    
+    void loadCollada(tinyxml2::XMLElement* _nNode);
     
 protected:     
     CameraType type;

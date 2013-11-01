@@ -103,5 +103,20 @@ void Light::update ( DataMsg *dataMsg ) {
     Node::update ( dataMsg );
 }
 
+void Light::loadCollada(tinyxml2::XMLElement* _nNode) {
+    
+    tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement("technique_common")->FirstChildElement("point");
+    if (l_nPoint != nullptr) {
+        
+        std::vector<btScalar> l_arrayF;
+        const char *l_val = l_nPoint->FirstChildElement("color")->GetText();
+        loadArrayBtScalar(l_val, l_arrayF);
+        
+        setDiffuse( Color(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f) );
+        
+    } 
+    
+}
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

@@ -1,10 +1,13 @@
 #ifndef EFFECT_H_
 #define EFFECT_H_
 
+#include <tinyxml2.h>
+
 #include <GL/gl.h>
 #include <string>
 #include "Color.h"
 #include "Node.h"
+#include "ChimeraUtils.h"
 
 namespace Chimera {
 
@@ -65,8 +68,12 @@ public:
         return nameTextureId;
     }
 
+    void loadCollada(tinyxml2::XMLElement* _nNode);
+    
 private:
 
+    bool getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode );
+    
     Color diffuse;        /* Diffuse color RGBA */
     Color ambient;        /* Ambient color RGB */
     Color specular;       /* Specular 'shininess' */

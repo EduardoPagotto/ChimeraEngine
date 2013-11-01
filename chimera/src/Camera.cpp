@@ -103,5 +103,22 @@ void Camera::update ( DataMsg *_dataMsg ) {
     Node::update ( _dataMsg );
 }
 
+void Camera::loadCollada(tinyxml2::XMLElement* _nNode) {
+    
+    tinyxml2::XMLElement *l_nPerspective = _nNode->FirstChildElement ( "optics" )->FirstChildElement ( "technique_common" )->FirstChildElement ( "perspective" );
+    if ( l_nPerspective != nullptr ) {
+        
+        setPerspective ( true );
+        setFov ( atof ( l_nPerspective->FirstChildElement ( "xfov" )->GetText() ) );
+        setNear ( atof ( l_nPerspective->FirstChildElement ( "znear" )->GetText() ) );
+        setFar ( atof ( l_nPerspective->FirstChildElement ( "zfar" )->GetText() ) );
+        
+    } else {
+        //TODO testar ecarregar ortogonal aqui
+        
+    }
+    
+}
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

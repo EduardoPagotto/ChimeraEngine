@@ -34,7 +34,8 @@ target_link_libraries(
 	${OPENGL_LIBRARIES} 
 	${SDL2_LIBRARY} 
 #	${LIBXML2_LIBRARIES}
-	/usr/local/lib64/libtinyxml2.a
+	#/usr/local/lib64/libtinyxml2.a
+	/usr/lib64/libtinyxml2.so
 	${BULLET_LIBRARIES} 
 	${FREETYPE_LIBRARY} 
 	${FTGL_LIBRARY} 

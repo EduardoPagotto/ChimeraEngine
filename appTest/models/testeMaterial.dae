@@ -125,7 +125,7 @@
               <texture texture="image1_jpg-sampler" texcoord="UVMap"/>
             </diffuse>
             <specular>
-              <color sid="specular">0.5 0.5 0.5 1</color>
+              <color sid="specular">0.8 0.8 0.8 1</color>
             </specular>
             <shininess>
               <float sid="shininess">50</float>
@@ -154,7 +154,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.04 0.8 0.04 1</color>
+              <color sid="diffuse">0.9 0.9 0.9 1</color>
             </diffuse>
             <specular>
               <color sid="specular">0.02204138 0.02316758 0.5 1</color>

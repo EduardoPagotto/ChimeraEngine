@@ -26,13 +26,13 @@ Effect::Effect ( const Effect& _cpy ) : Node ( _cpy ) {
 
 void Effect::render() {
 
-    //if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
+   if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
     glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
     glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
     glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
     glMaterialfv ( GL_FRONT, GL_SHININESS,  &shininess );
     glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
-    //}
+   }
 
 }
 

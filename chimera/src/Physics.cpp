@@ -1,4 +1,12 @@
 #include "Physics.h"
+#include "Singleton.h"
+
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 namespace Chimera {
 

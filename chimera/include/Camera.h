@@ -1,9 +1,6 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include <GL/gl.h>          // Header File For The OpenGL32 Library
-#include <GL/glu.h>         // Header File For The GLu32 Library
-
 #include <LinearMath/btVector3.h>
 #include <LinearMath/btTransform.h>
 
@@ -42,11 +39,11 @@ public:
     }
     
     void setNear(float _near) {
-        this->near = _near;
+        this->nearDistance = _near;
     }
     
     void setFar(float _far) {
-        this->far = _far;
+        this->farDistance = _far;
     }
     
     void setFov(float _fov) {
@@ -54,11 +51,11 @@ public:
     }
     
     float getNear() const {
-        return near;
+        return nearDistance;
     }
     
     float getFar() const {
-        return far;
+        return farDistance;
     }
     
     float getFov() const {
@@ -77,7 +74,7 @@ public:
         transform = _trans;
     }
     
-    void setPositionRotation(btVector3 _posicao, btVector3 _rotation);
+    void setPositionRotation(const btVector3 &_posicao,const btVector3 &_rotation);
     
     void loadCollada(tinyxml2::XMLElement* _nNode);
     
@@ -91,8 +88,8 @@ protected:
     btTransform transform;
     
 private:
-    float near;
-    float far;
+    float nearDistance;
+    float farDistance;
     float fov;
  
     bool perspective;

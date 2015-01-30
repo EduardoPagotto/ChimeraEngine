@@ -1,5 +1,12 @@
 #include "Camera.h"
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 namespace Chimera {
 
  Camera::Camera (CameraType _type, std::string _id, std::string _name) : Node ( EntityKind::CAMERA,_id, _name ) {
@@ -10,8 +17,8 @@ namespace Chimera {
     direction.setZero();
     transform.setIdentity();
     
-    near = 0.1f;
-    far = 1000.0f;
+    nearDistance = 0.1f;
+    farDistance = 1000.0f;
     fov = 45.0f;
    
     perspective = true; 
@@ -20,8 +27,8 @@ namespace Chimera {
 Camera::Camera (const Camera& _camera ) : Node ( _camera ) {
     
     type = _camera.type;
-    near = _camera.near;
-    far = _camera.far;
+    nearDistance = _camera.nearDistance;
+    farDistance = _camera.farDistance;
     fov = _camera.fov;
     
     position = _camera.position;
@@ -41,7 +48,7 @@ void Camera::clone(Node **ppNode ) {
     Node::clone( ppNode );  
 }
     
-void Camera::setPositionRotation(btVector3 _posicao, btVector3 _rotation) {
+void Camera::setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation) {
 
     //Transformacao quando Euley nao apagar
     btQuaternion l_qtn;
@@ -103,6 +110,7 @@ void Camera::update ( DataMsg *_dataMsg ) {
     Node::update ( _dataMsg );
 }
 
+//TODO criar classe de loader
 void Camera::loadCollada(tinyxml2::XMLElement* _nNode) {
     
     tinyxml2::XMLElement *l_nPerspective = _nNode->FirstChildElement ( "optics" )->FirstChildElement ( "technique_common" )->FirstChildElement ( "perspective" );

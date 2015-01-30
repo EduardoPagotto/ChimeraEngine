@@ -1,8 +1,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <GL/gl.h>
-
 #include <LinearMath/btTransform.h>
 #include <LinearMath/btVector3.h>
 
@@ -36,11 +34,11 @@ public:
     void applyTorc ( const btVector3 &_vet );
     void applyForce ( const btVector3 &_vet );
 
-	void setPositionRotation(btVector3 _posicao, btVector3 _rotation);
+	void setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation);
 	
     btVector3& getPosition();
 
-	void setTransform(btTransform _trans) {
+	void setTransform(const btTransform &_trans) {
 		transform = _trans;
 	}
 	

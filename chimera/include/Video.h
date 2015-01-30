@@ -1,37 +1,22 @@
 #ifndef VIDEO_H_
 #define VIDEO_H_
 
-//#include <GL/glew.h>
-//#include <GL/glfw3native.h>
-//#include <GL/glfw3.h>
-//#include <glm/glm.hpp>
-/*
- * http://www.opengl-tutorial.org/
- * http://www.opengl-tutorial.org/miscellaneous/useful-tools-links/
- * http://www.opengl-tutorial.org/miscellaneous/building-your-own-c-application/
- *
- *
- * https://github.com/meandmark/SDLOpenGLIntro/blob/sdl2/GameApp.cpp
- * http://meandmark.com/blog/2013/06/creating-an-opengl-context-in-sdl2/
- *
- * verificar GLFW, GLM, GLEW
- */
+//TODO verificar em Linux se sera necessario
+//#include <cstddef>
+//#include <string>
+//#include <iostream>
 
-#include <cstddef>
-#include <string>
-#include <iostream>
-
+#ifndef WIN32
 #include <SDL2/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#include "ExceptionSDL.h"
-#include "Timer.h"
+#else
+#include <SDL.h>
+#include <string>
+#endif
 
 namespace Chimera {
 
 /**
- * Class Timer
+ * Class Video
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
@@ -50,11 +35,28 @@ public:
     
     void swapWindow();
          
+	void setViewPortOrtogonal();
+	void setViewPortOrtogonal(const SDL_Rect &_rectangle);
+	void setViewPortPerspective(const float &_fov, const float &_near, const float &_far);
+	void setViewPortPerspective(const SDL_Rect &_rectangle, const float &_fov, const float &_near, const float &_far);
+	void initOpenGL();
+	void begin2D();
+	void end2D();
+	void setLight ( bool _lightOn );
+	void setMaterial ( bool _materialOn );
+
+	std::string getVersaoOpenGL();
+
+	void initScene();
+
 private:
     std::string nomeTela;
     SDL_Rect rectangle;
     SDL_Window *window;
     SDL_GLContext context;
+
+	bool hasLight;
+	bool hasMaterial;
 };
 
 } /* namespace Chimera */

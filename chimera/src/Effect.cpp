@@ -1,5 +1,14 @@
 #include "Effect.h"
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <gl/GLU.h>
+
+#include "ChimeraUtils.h"
+
 namespace Chimera {
 
 Effect::Effect ( std::string _id, std::string _name ) : Node ( EntityKind::EFFECT,_id,_name ) {

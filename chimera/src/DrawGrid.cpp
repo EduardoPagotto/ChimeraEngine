@@ -1,5 +1,12 @@
 #include "DrawGrid.h"
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 namespace Chimera {
 
 DrawGrid::DrawGrid (std::string _id, std::string _name) : Draw(DrawType::GRID,_id,_name)  {   

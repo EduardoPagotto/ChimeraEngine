@@ -1,5 +1,14 @@
 #include "DrawTriMesh.h"
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+#include "ChimeraUtils.h"
+
 namespace Chimera {
 
 DrawTriMesh::DrawTriMesh(std::string _id, std::string _name) : Draw(DrawType::MESH,_id,_name) {  

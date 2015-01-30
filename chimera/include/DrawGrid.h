@@ -12,7 +12,7 @@ public:
     DrawGrid ( const DrawGrid &_draw );
     virtual ~DrawGrid();
 
-    void setSizeBox ( btVector3 _sizeBox ) {
+    void setSizeBox (const btVector3 &_sizeBox ) {
         sizeBox = _sizeBox;
     }
 

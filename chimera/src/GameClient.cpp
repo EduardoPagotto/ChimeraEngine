@@ -1,5 +1,12 @@
 #include "GameClient.h"
 
+//#include <SDL2/SDL.h>
+
+//#include <GL/gl.h>
+//#include <GL/glu.h>
+
+#include "Singleton.h"
+
 namespace Chimera {
 
 GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pSceneMng ( _pScenMng ), pVideo ( _pVideo )  {
@@ -26,7 +33,7 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     timerSegundo.setElapsedCount ( 1000 );
     timerSegundo.start();
 
-    logger = log4cxx::Logger::getLogger ( "GameClient" );
+    //logger = log4cxx::Logger::getLogger ( "GameClient" );
 
     physicWorld = Singleton<PhysicsControl>::getRefSingleton();
 }
@@ -55,9 +62,9 @@ void GameClient::countFrame() {
 
 void GameClient::open() {
 
-    pSceneMng->initOpenGL();
-    std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + pSceneMng->getVersaoOpenGL();
-    LOG4CXX_INFO ( logger , l_msg );
+	pVideo->initOpenGL();
+    //std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + pSceneMng->getVersaoOpenGL();
+    //LOG4CXX_INFO ( logger , l_msg );
 
     start();
 
@@ -85,9 +92,9 @@ void GameClient::processaGame() {
     countFrame();
     render();
 
-    pSceneMng->begin2D();
+	pVideo->begin2D();
     pHUD->update();
-    pSceneMng->end2D();
+	pVideo->end2D();
 
     pVideo->swapWindow();
 

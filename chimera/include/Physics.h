@@ -1,9 +1,6 @@
 #ifndef PHYSICS_H_
 #define PHYSICS_H_
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 
@@ -11,7 +8,6 @@
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 
 #include "PhysicsControl.h"
-#include "Singleton.h"
 
 namespace Chimera {
 

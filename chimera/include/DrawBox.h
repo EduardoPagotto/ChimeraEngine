@@ -11,7 +11,7 @@ public:
     DrawBox ( const DrawBox &_draw );
     virtual ~DrawBox();
 
-    void setSizeBox ( btVector3 _sizeBox ) {
+    void setSizeBox (const btVector3 &_sizeBox ) {
         sizeBox = _sizeBox;
     }
 

@@ -1,12 +1,13 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+//#include <log4cxx/logger.h>
 
-#include <log4cxx/logger.h>
-
+#ifdef WIN32
+#include "SDL_image.h"
+#else
 #include "SDL2/SDL_image.h"
+#endif
 #include "ExceptionChimera.h"
 
 #include "Node.h"
@@ -47,11 +48,11 @@ public:
 
 private:
     std::string pathFile;
-    GLuint textureList[3];
+    int textureList[3];
     int indiceFilter;
     bool texturaCarregada;
 
-    log4cxx::LoggerPtr logger;
+    //log4cxx::LoggerPtr logger;
 };
 
 }

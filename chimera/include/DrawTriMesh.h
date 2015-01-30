@@ -1,13 +1,10 @@
 #ifndef MESH_H_
 #define MESH_H_
 
-#include <GL/gl.h>			// Header File For The OpenGL32 Library
 #include <vector>
 #include <string.h>
 
 #include <tinyxml2.h>
-
-#include "ChimeraUtils.h"
 
 #include "Draw.h"
 
@@ -96,11 +93,11 @@ public:
     virtual void render();
     virtual btVector3 getSizeBox();
 
-    void loadCollada ( tinyxml2::XMLElement* _nNode );
+     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
 private:
 
-    int getSource ( tinyxml2::XMLElement* _source , ListPtr<float> &_arrayValores );
+     int getSource ( tinyxml2::XMLElement* _source , ListPtr<float> &_arrayValores );
 
     ListPtr<float> vList;
     ListPtr<float> nList;

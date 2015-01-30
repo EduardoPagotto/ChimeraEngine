@@ -6,10 +6,10 @@
 
 #include <tinyxml2.h>
 
-#include <GL/gl.h>			// Header File For The OpenGL32 Library
+//#include <GL/gl.h>			// Header File For The OpenGL32 Library
 #include "Color.h"
 #include "Node.h"
-#include "ChimeraUtils.h"
+//#include "ChimeraUtils.h"
 
 namespace Chimera {
 
@@ -66,7 +66,7 @@ public:
         transform = _trans;
     }
     
-    void setPositionRotation(btVector3 _posicao, btVector3 _rotation);
+    void setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation);
     
     void loadCollada(tinyxml2::XMLElement* _nNode);
     

@@ -1,5 +1,12 @@
 #include "DrawBox.h"
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 namespace Chimera {
 
 DrawBox::DrawBox(std::string _id, std::string _name) : Draw(DrawType::BOX,_id,_name) {    

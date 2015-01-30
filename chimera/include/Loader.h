@@ -8,7 +8,7 @@
 
 #include <tinyxml2.h>
 
-#include <log4cxx/logger.h>
+//#include <log4cxx/logger.h>
 
 #include "ExceptionChimera.h"
 #include "Node.h"
@@ -65,7 +65,7 @@ private:
     std::queue<Node*> listaNodeRemover;
     std::map<std::string, btMaterial*> m_pPhMaterial;
 
-    log4cxx::LoggerPtr logger;
+    //log4cxx::LoggerPtr logger;
 };
 
 }

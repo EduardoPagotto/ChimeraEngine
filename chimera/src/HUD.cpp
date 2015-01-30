@@ -1,5 +1,12 @@
 #include "HUD.h"
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 namespace Chimera {
 
 HUD::HUD ( const SDL_Rect &_displayArea ) : on ( true ), displayArea ( _displayArea ) {

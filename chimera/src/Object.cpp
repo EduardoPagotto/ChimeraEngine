@@ -1,5 +1,11 @@
 #include "Object.h"
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+
 namespace Chimera {
 
 Object::Object ( std::string _id, std::string _name ) : Node ( EntityKind::OBJECT,_id,_name ) {
@@ -30,7 +36,7 @@ Object::Object ( const Object& _object ) : Node ( _object ) {
 Object::~Object () {
 }
 
-void Object::setPositionRotation ( btVector3 _posicao, btVector3 _rotation ) {
+void Object::setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation) {
 
     //Transformacao quando Euley nao apagar
     btQuaternion l_qtn;
@@ -52,10 +58,10 @@ void Object::init() {
     if ( pEffect == nullptr ) {
 
         pEffect = new Effect ( "effect_interno","effect_interno" );
-        pEffect->setDiffuse ( Color ( 0.6, 0.6, 0.6 ) );
-        pEffect->setEmissive ( Color ( 0.1,0.1,0.1 ) );
-        pEffect->setAmbient ( Color ( 0.1,0.1,0.1 ) );
-        pEffect->setSpecular ( Color ( 0.5,0.5,0.5 ) );
+        pEffect->setDiffuse ( Color ( 0.6f, 0.6f, 0.6f ) );
+        pEffect->setEmissive ( Color ( 0.1f,0.1f,0.1f ) );
+        pEffect->setAmbient ( Color ( 0.1f,0.1f,0.1f ) );
+        pEffect->setSpecular ( Color ( 0.5f,0.5f,0.5f) );
         pEffect->setShininess ( 0.5 );
 
     }

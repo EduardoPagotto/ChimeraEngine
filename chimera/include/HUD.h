@@ -1,11 +1,14 @@
 #ifndef HUD_H_
 #define HUD_H_
 
-#include <GL/gl.h>	
-#include <GL/glu.h>
+
 #include <vector>
 
+#ifndef WIN32
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
 
 #include "Font.h"
 

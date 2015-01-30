@@ -11,10 +11,10 @@ Node::Node(EntityKind _type, std::string _id, std::string _name) : Entity(_type)
     parent = nullptr;
     listNode.push_back(this);
     
-    logger = log4cxx::Logger::getLogger ( "Node" );
+    //logger = log4cxx::Logger::getLogger ( "Node" );
     
-    std::string l_msg = "NEW "+ Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() );
-    LOG4CXX_INFO ( logger , l_msg );
+    //std::string l_msg = "NEW "+ Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() );
+    //LOG4CXX_INFO ( logger , l_msg );
     
 }
 
@@ -26,10 +26,10 @@ Node::Node (const Node &_node) : Entity(_node) {
             
     listNode.push_back(this);
     
-    logger = log4cxx::Logger::getLogger ( "Node" );
+    //logger = log4cxx::Logger::getLogger ( "Node" );
     
-    std::string l_msg = "COPY " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() ) + ",Source:" + std::to_string( _node.getSerial()) ;
-    LOG4CXX_INFO ( logger , l_msg );
+    //std::string l_msg = "COPY " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() ) + ",Source:" + std::to_string( _node.getSerial()) ;
+   // LOG4CXX_INFO ( logger , l_msg );
 }
 
 Node::~Node() {
@@ -38,14 +38,14 @@ Node::~Node() {
     listChild.clear();
     listNode.remove ( this );
     
-    std::string l_msg = "DELETE " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Serial:"+ std::to_string( getSerial() );
-    LOG4CXX_INFO ( logger , l_msg );
+    //std::string l_msg = "DELETE " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Serial:"+ std::to_string( getSerial() );
+    //LOG4CXX_INFO ( logger , l_msg );
 }
 
 void Node::clone(Node **ppNode) {
           
-    std::string l_msg = "CLONE " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() ); ;
-    LOG4CXX_INFO ( logger , l_msg );
+    //std::string l_msg = "CLONE " + Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() ); ;
+    //LOG4CXX_INFO ( logger , l_msg );
     
     for ( Node *pNode : listChild ) {
         
@@ -65,21 +65,21 @@ void Node::addChild(Node *child) {
     listChild.push_back(child);
     child->parent = this;
     
-    std::string l_msg = "CHILD " + Entity::getNameKindNode(child->getKind())+ 
-                        ",serial:"+ std::to_string( child->getSerial() )+ 
-                        " IN " + Entity::getNameKindNode(getKind()) +
-                        ",serial:"+ std::to_string( getSerial() );                        
-       
-    LOG4CXX_INFO ( logger , l_msg );
+    //std::string l_msg = "CHILD " + Entity::getNameKindNode(child->getKind())+ 
+    //                    ",serial:"+ std::to_string( child->getSerial() )+ 
+    //                    " IN " + Entity::getNameKindNode(getKind()) +
+    //                    ",serial:"+ std::to_string( getSerial() );                        
+    //   
+    //LOG4CXX_INFO ( logger , l_msg );
 
 }
 
 void Node::update ( DataMsg *dataMsg ){
 
-    if (dataMsg->isDebugTrack()) {
-        std::string l_msg = "TRACK "+ Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() );
-        LOG4CXX_INFO ( logger , l_msg );
-    }
+    //if (dataMsg->isDebugTrack()) {
+    //    std::string l_msg = "TRACK "+ Entity::getNameKindNode(getKind())+ ",Id:" + getId() + ",Name:" + getName() + ",Serial:"+ std::to_string( getSerial() );
+    //    LOG4CXX_INFO ( logger , l_msg );
+    //}
     
     for (Node *node : listChild) {
         

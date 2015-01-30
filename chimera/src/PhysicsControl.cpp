@@ -1,5 +1,12 @@
 #include "PhysicsControl.h"
 
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#include <utility>
+#endif
+
 namespace Chimera {
 
 PhysicsControl::PhysicsControl() {
@@ -16,7 +23,7 @@ PhysicsControl::PhysicsControl() {
     //true para forca aplicada apenas dentro docallback
     discretDynamicsWorld->setInternalTickCallback ( PhysicsControl::doTickCallBack, static_cast < void *> ( this ), false );
 
-    logger = log4cxx::Logger::getLogger ( "PhysicsControl" );
+    //logger = log4cxx::Logger::getLogger ( "PhysicsControl" );
 }
 
 PhysicsControl::~PhysicsControl() {
@@ -150,7 +157,8 @@ void PhysicsControl::checkCollisions() {
                     
                     if ( l_pNodeB ) {
                         if ( checkAllowCollision (l_pNodeB) ==true )
-                            new_contacts[objB] = std::make_pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeA ),static_cast<Node*> ( l_pNodeB ) );
+                            new_contacts[objB] = std::pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeA ),static_cast<Node*> ( l_pNodeB ) );
+						  //new_contacts[objB] = std::make_pair<Node*, Node*>(static_cast<Node*> (l_pNodeA), static_cast<Node*> (l_pNodeB));
                     }
 
                 }
@@ -162,7 +170,8 @@ void PhysicsControl::checkCollisions() {
                     
                     if ( l_pNodeA ) {
                         if ( checkAllowCollision ( l_pNodeA ) ==true )
-                            new_contacts[objA] = std::make_pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA ) );
+                            new_contacts[objA] = std::pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA ) );
+						  //new_contacts[objA] = std::make_pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA ) );
                     }
                 }
             }

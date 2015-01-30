@@ -1,11 +1,10 @@
 #ifndef FONT_H_
 #define FONT_H_
 
+//#include <GL/gl.h>			// Header File For The OpenGL32 Library
+//#include <GL/glu.h>			// Header File For The GLu32 Library
 
-#include <GL/gl.h>			// Header File For The OpenGL32 Library
-#include <GL/glu.h>			// Header File For The GLu32 Library
-
-#include <FTGL/ftgl.h>
+//#include <FTGL/ftgl.h>
 
 #include "ExceptionChimera.h"
 #include "Color.h"
@@ -20,7 +19,7 @@ public:
     void render (const float &_x, const float &_y,const Color &_color, std::string *_pTxt);
 
 private:
-    FTGLPixmapFont *pFont;
+   // FTGLPixmapFont *pFont;
     
 };
 

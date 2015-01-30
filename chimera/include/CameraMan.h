@@ -20,13 +20,13 @@ public:
 
     virtual void clone ( Node **ppNode );
 
-    void pitch ( GLfloat _theta );
-    void yaw ( GLfloat _theta );
-    void roll ( GLfloat _theta );
+    void pitch ( float _theta );
+    void yaw ( float _theta );
+    void roll ( float _theta );
 
-    void walk ( GLfloat _delta, bool _wall[4] );
-    void strafe ( GLfloat _delta, bool _wall[4] );
-    void fly ( GLfloat _delta, bool _wall[4] );
+    void walk ( float _delta, bool _wall[4] );
+    void strafe ( float _delta, bool _wall[4] );
+    void fly ( float _delta, bool _wall[4] );
 
     void reset();
     void updateMove();

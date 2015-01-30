@@ -3,11 +3,8 @@
 
 #include <tinyxml2.h>
 
-#include <GL/gl.h>
-#include <string>
 #include "Color.h"
 #include "Node.h"
-#include "ChimeraUtils.h"
 
 namespace Chimera {
 

@@ -3,14 +3,15 @@
 
 #include <map>
 
-#include <log4cxx/logger.h>
+//#include <log4cxx/logger.h>
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 #include <LinearMath/btVector3.h>
-#include <SDL2/SDL.h>
+
+//#include <SDL2/SDL.h>
 
 #include "Node.h"
 
@@ -40,6 +41,8 @@ public:
 	inline btScalar countPeriod() {
         period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f);
         clockCounter.reset();
+		return period;
+
     }
 	
 	inline btScalar getLastPeriod() {
@@ -66,7 +69,7 @@ private:
     btClock clockCounter;
     btScalar period;
 	
-	log4cxx::LoggerPtr logger;
+	//log4cxx::LoggerPtr logger;
 };
 
 }

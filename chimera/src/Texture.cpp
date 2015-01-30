@@ -1,5 +1,15 @@
 #include "Texture.h"
 
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <gl/GLU.h>
+
 namespace Chimera {
 
 Texture::Texture ( std::string _id, std::string _name ) : Node ( EntityKind::TEXTURE,_id,_name ) {
@@ -11,7 +21,7 @@ Texture::Texture ( std::string _id, std::string _name ) : Node ( EntityKind::TEX
     textureList[1] = 0;
     textureList[2] = 0;
 
-    logger = log4cxx::Logger::getLogger ( "Texture" );
+    //logger = log4cxx::Logger::getLogger ( "Texture" );
 
 }
 
@@ -24,7 +34,7 @@ Texture::Texture ( const Texture &_texture ) : Node ( _texture ) {
     textureList[1] = _texture.textureList[1];
     textureList[2] = _texture.textureList[2];
 
-    logger = log4cxx::Logger::getLogger ( "Texture" );
+    //logger = log4cxx::Logger::getLogger ( "Texture" );
 }
 
 Texture::~Texture() {
@@ -82,14 +92,14 @@ void Texture::init() {
         SDL_Surface *pImage = loadImage();
 
         /* Create The Texture */
-        glGenTextures ( 3, &textureList[0] );
+        glGenTextures ( 3, (GLuint*)&textureList[0] );
 
         /* Load in texture 1 */
         glBindTexture ( GL_TEXTURE_2D, textureList[0] ); /* Typical Texture Generation Using Data From The Bitmap */
 
         /* Generate The Texture */
         glTexImage2D ( GL_TEXTURE_2D, 0, 3,  pImage->w,
-                       pImage->h, 0, GL_BGR,
+						pImage->h, 0, GL_BGR_EXT,
                        GL_UNSIGNED_BYTE,  pImage->pixels );
 
         /* Nearest Filtering */
@@ -110,7 +120,7 @@ void Texture::init() {
 
         /* Generate The Texture */
         glTexImage2D ( GL_TEXTURE_2D, 0, 3,  pImage->w,
-                       pImage->h, 0, GL_BGR,
+					pImage->h, 0, GL_BGR_EXT,
                        GL_UNSIGNED_BYTE,  pImage->pixels );
 
         /* Load in texture 3 */
@@ -124,7 +134,7 @@ void Texture::init() {
 
         /* Generate The MipMapped Texture ( NEW ) */
         gluBuild2DMipmaps ( GL_TEXTURE_2D, 3,  pImage->w,
-                            pImage->h, GL_BGR,
+                            pImage->h, GL_BGR_EXT,
                             GL_UNSIGNED_BYTE,  pImage->pixels );
 
         SDL_FreeSurface ( pImage );
@@ -139,8 +149,8 @@ SDL_Surface *Texture::loadImage () {
     SDL_Surface *pImage = IMG_Load ( pathFile.c_str() );
     if ( pImage != nullptr ) {
 
-        std::string l_msg = "Imagem carregada:" + pathFile;
-        LOG4CXX_INFO ( logger , l_msg );
+        //std::string l_msg = "Imagem carregada:" + pathFile;
+        //LOG4CXX_INFO ( logger , l_msg );
 
         return pImage;
     }

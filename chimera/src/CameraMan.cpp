@@ -1,5 +1,12 @@
 #include "CameraMan.h"
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 namespace Chimera {
 
 CameraMan::CameraMan (std::string _id, std::string _name ) : Camera (CameraType::Spherical,_id,_name) {
@@ -89,7 +96,7 @@ void CameraMan::updateMove() {
     glLoadMatrixf ( ( GLfloat * ) &ViewMatrix );
 }
 
-void CameraMan::yaw ( GLfloat _theta ) {
+void CameraMan::yaw ( float _theta ) {
     along = along * cos ( _theta * SIMD_RADS_PER_DEG ) + forward * sin ( _theta * SIMD_RADS_PER_DEG ); //along = along * cos(theta * DEG2RAD) + forward * sin(theta * DEG2RAD);
     along.normalize();
 
@@ -97,7 +104,7 @@ void CameraMan::yaw ( GLfloat _theta ) {
     updateMove();
 }
 
-void CameraMan::pitch ( GLfloat _theta ) {
+void CameraMan::pitch ( float _theta ) {
     // Invert UP/DOWN for air cameras
     if ( type == CameraType::Air )
         _theta = -_theta;
@@ -108,7 +115,7 @@ void CameraMan::pitch ( GLfloat _theta ) {
     updateMove();
 }
 
-void CameraMan::roll ( GLfloat _theta ) {
+void CameraMan::roll ( float _theta ) {
     if ( type == CameraType::Land )
         return; // Not for land cams
 
@@ -118,7 +125,7 @@ void CameraMan::roll ( GLfloat _theta ) {
     updateMove();
 }
 
-void CameraMan::walk ( GLfloat _delta, bool _wall[4] ) {
+void CameraMan::walk ( float _delta, bool _wall[4] ) {
 
     if ( type == CameraType::Land )
         position -= btVector3 ( forward.x() * ! ( _wall[0] && forward.x() * _delta > 0.0 || _wall[1] && forward.x() * _delta < 0.0 ),
@@ -130,7 +137,7 @@ void CameraMan::walk ( GLfloat _delta, bool _wall[4] ) {
     updateMove();
 }
 
-void CameraMan::strafe ( GLfloat _delta, bool _wall[4] ) {
+void CameraMan::strafe ( float _delta, bool _wall[4] ) {
 
     if ( type == CameraType::Land )
         position -= btVector3 ( along.x() * ! ( _wall[0] && along.x() * _delta > 0.0 || _wall[1] && along.x() * _delta < 0.0 ),
@@ -142,7 +149,7 @@ void CameraMan::strafe ( GLfloat _delta, bool _wall[4] ) {
     updateMove();
 }
 
-void CameraMan::fly ( GLfloat _delta, bool _wall[4] ) {
+void CameraMan::fly ( float _delta, bool _wall[4] ) {
 
     // Don't allow for land cameras
     if ( type == CameraType::Land )

@@ -1,7 +1,7 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include <log4cxx/logger.h>
+//#include <log4cxx/logger.h>
 
 #include "Entity.h"
 #include "DataMsg.h"
@@ -64,7 +64,7 @@ private:
     std::string id;
     static std::list<Node*> listNode;
     
-    log4cxx::LoggerPtr logger;
+    //log4cxx::LoggerPtr logger;
 };
 
 }

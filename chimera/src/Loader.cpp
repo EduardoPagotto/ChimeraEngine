@@ -1,12 +1,14 @@
 #include "Loader.h"
 
+#include "ChimeraUtils.h"
+
 namespace Chimera {
 
 Loader::Loader () {
 
     doc = nullptr;
     root = nullptr;
-    logger = log4cxx::Logger::getLogger ( "Loader" );
+    //logger = log4cxx::Logger::getLogger ( "Loader" );
 
 }
 
@@ -62,7 +64,7 @@ std::string Loader::retornaAtributo ( const std::string &_atributo, tinyxml2::XM
         return std::string ( l_value );
     }
 
-    LOG4CXX_WARN ( logger , std::string ( "Atributo [ " + _atributo + " ] Elemento [ " + _node->Value() + " ] nao encontrado" ) );
+    //LOG4CXX_WARN ( logger , std::string ( "Atributo [ " + _atributo + " ] Elemento [ " + _node->Value() + " ] nao encontrado" ) );
 
     return std::string ( "" );
 }

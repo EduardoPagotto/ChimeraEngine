@@ -1,5 +1,15 @@
 #include "Light.h"
 
+#include <vector>
+#include "ChimeraUtils.h"
+
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 namespace Chimera {
 
 Light::Light (LightType _lightType, std::string _id, std::string _name) : Node ( EntityKind::LIGHT,_id, _name ) {
@@ -32,7 +42,7 @@ Light::~Light() {
 
 }
 
-void Light::setPositionRotation(btVector3 _posicao, btVector3 _rotation) {
+void Light::setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation) {
 
     //Transformacao quando Euley nao apagar
     btQuaternion l_qtn;
@@ -103,6 +113,7 @@ void Light::update ( DataMsg *dataMsg ) {
     Node::update ( dataMsg );
 }
 
+//TODO colocar no loader
 void Light::loadCollada(tinyxml2::XMLElement* _nNode) {
     
     tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement("technique_common")->FirstChildElement("point");

@@ -1,14 +1,9 @@
 #ifndef __GAME_CLIENT_H
 #define __GAME_CLIENT_H
 
-#include <log4cxx/logger.h>
+//#include <log4cxx/logger.h>
 
-#include <SDL2/SDL.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#include "Singleton.h"
+#include "Timer.h"
 #include "Video.h"
 #include "SceneMng.h"
 #include "PhysicsControl.h"
@@ -53,7 +48,7 @@ private:
     Timer timerFPS;
     Timer timerSegundo;
     
-    log4cxx::LoggerPtr logger;
+    //log4cxx::LoggerPtr logger;
 };
 
 }

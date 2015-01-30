@@ -1,28 +1,37 @@
+
+
+#ifndef WIN32
 #include <iostream>
 #include <cstdio>
+#else
+#include "stdafx.h"
+#endif
 
-#include <log4cxx/logger.h>
-#include <log4cxx/xml/domconfigurator.h>
+//#include <log4cxx/logger.h>
+//#include <log4cxx/xml/domconfigurator.h>
 
 #include "Game.h"
 #include "DrawBox.h"
 #include "DrawGrid.h"
-//#include "Loader.h"
 
+#ifndef WIN32
 int main ( int argn, char** argv ) {
+#else
+int _tmain(int argc, _TCHAR* argv[]) {
+#endif
 
     using namespace Chimera;
 
     // Load XML configuration file using DOMConfigurator
-    log4cxx::xml::DOMConfigurator::configure ( "../../appTest/config/Log4cxxConfig.xml" );
-    log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger ( "appTest" );
-    LOG4CXX_INFO ( logger , "Inicio app!!" );
-
+    //log4cxx::xml::DOMConfigurator::configure ( "../../appTest/config/Log4cxxConfig.xml" );
+    //log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger ( "appTest" );
+    //LOG4CXX_INFO ( logger , "Inicio app!!" );
+	
     try {
 
         //Instancia de Video
         Chimera::Video *video = new Chimera::Video ( 800, 600, std::string ( "Teste" ) );
-        LOG4CXX_INFO ( logger , "Tela Iniciada com sucesso" );
+        //LOG4CXX_INFO ( logger , "Tela Iniciada com sucesso" );
 
 		Node *pRoot = new Node ( EntityKind::NODE, "cena01","cona01" );
 		
@@ -57,29 +66,25 @@ int main ( int argn, char** argv ) {
 		pObj->addChild(pPysics);
 		pObj->addChild(pEffect);
 		
-		
 		pRoot->addChild(pObj);
 		
         SceneMng *sceneMng = new SceneMng ( pRoot );
 
         Game *game = new Game ( video, sceneMng );
         game->open();
-        LOG4CXX_INFO ( logger , "Game inicializado com sucesso" );
+        //LOG4CXX_INFO ( logger , "Game inicializado com sucesso" );
 
         game->gameLoop();
-        LOG4CXX_INFO ( logger , "Engine encerrado com sucesso" );
+        //LOG4CXX_INFO ( logger , "Engine encerrado com sucesso" );
 
         delete game;
         delete sceneMng;
         delete pRoot;
         delete video;
 
-
     } catch ( const Exception& ex ) {
-
-        LOG4CXX_ERROR ( logger , "Engine Erro Critico Sistema:" << ex.what() );
-
+        //LOG4CXX_ERROR ( logger , "Engine Erro Critico Sistema:" << ex.what() );
     }
-
+	
     return 0;
 }

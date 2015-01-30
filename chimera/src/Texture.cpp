@@ -8,7 +8,7 @@
 #endif
 
 #include <GL/gl.h>
-#include <gl/GLU.h>
+#include <GL/glu.h>
 
 namespace Chimera {
 

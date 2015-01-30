@@ -5,7 +5,7 @@
 #endif
 
 #include <GL/gl.h>
-#include <gl/GLU.h>
+//#include <gl/GLU.h>
 
 #include "ChimeraUtils.h"
 

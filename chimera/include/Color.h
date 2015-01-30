@@ -1,6 +1,10 @@
 #ifndef COLOR_H_
 #define COLOR_H_
 
+#ifndef WIN32
+#include <cstring>
+#endif
+
 namespace Chimera {
 
 class Color {

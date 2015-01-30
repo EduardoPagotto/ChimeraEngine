@@ -10,8 +10,9 @@
 #include <SDL2/SDL.h>
 #else
 #include <SDL.h>
-#include <string>
 #endif
+
+#include <string>
 
 namespace Chimera {
 

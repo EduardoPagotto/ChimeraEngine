@@ -2,7 +2,7 @@
 
 Game::Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng) : GameClient(_pVideo, _pScenMng) {
        
-    logger = log4cxx::Logger::getLogger ( "Game" );
+    //logger = log4cxx::Logger::getLogger ( "Game" );
 }
 
 Game::~Game() { 
@@ -102,8 +102,8 @@ void Game::start() {
     
     //Ajusta objeto primario
     pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,0);
-    pSceneMng->setLight(true);
-    pSceneMng->setMaterial(true);
+    pVideo->setLight(true);
+    pVideo->setMaterial(true);
     
 	sPosicaoObj = "pos:(,,)";
 	
@@ -118,11 +118,11 @@ void Game::render() {
 
     using namespace Chimera;
    
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    pVideo->initScene();
        
-    const SDL_Rect *tela = pVideo->getPRectangle();
-	
-    pSceneMng->setViewPortPerspective( *tela, pOrbitalCam);
+    //const SDL_Rect *tela = pVideo->getPRectangle();
+    pVideo->setViewPortPerspective(pOrbitalCam->getFov(), pOrbitalCam->getNear(), pOrbitalCam->getFar());
+    
     pSceneMng->cameraAtiva(pOrbitalCam);
 	pSceneMng->objetoAtivo(pObj);
 	pSceneMng->draw3d();
@@ -151,11 +151,11 @@ void Game::executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA
 		break;
 	}
 	
-	std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getId() + " ObjB:" + _pNodeB->getId(); 
-	LOG4CXX_INFO ( logger ,l_completa );
+	//std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getId() + " ObjB:" + _pNodeB->getId(); 
+	//LOG4CXX_INFO ( logger ,l_completa );
 
 }
 
 void Game::userEvent(const SDL_Event &_event) {
-	LOG4CXX_INFO ( logger ,"Evento nao implemtentado" );
+	//LOG4CXX_INFO ( logger ,"Evento nao implemtentado" );
 }

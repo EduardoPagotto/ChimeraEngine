@@ -41,6 +41,7 @@ target_link_libraries(
 	${FTGL_LIBRARY} 
 	${LOG4CXX_LIBRARIES} 
 	-lSDL2_image
+	-lSDL2_ttf
 )
 
 add_dependencies(AppCargaManual chimera)

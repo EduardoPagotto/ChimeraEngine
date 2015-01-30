@@ -4,12 +4,20 @@
 #include "windows.h"
 #endif
 
+#include <ExceptionSDL.h>
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 
 namespace Chimera {
 
 HUD::HUD ( const SDL_Rect &_displayArea ) : on ( true ), displayArea ( _displayArea ) {
+  
+#ifdef TTF_NOVO
+    if( TTF_Init() == -1 )
+        throw ExceptionSDL ( ExceptionCode::ALLOC, std::string ( SDL_GetError() ) );
+#endif        
+    
 }
 
 HUD::~HUD() {
@@ -75,6 +83,7 @@ void HUD::addText ( int _fontIndex, int _squareIndex, int _posX, int _posY, Colo
 void HUD::update() {
     if ( on ) {
 
+        glPushAttrib(GL_ENABLE_BIT);
         beginOrtho();
 
         for (HUDSquare* l_square: vSquare) {
@@ -89,6 +98,10 @@ void HUD::update() {
             
         }
         
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        
         for (HUDTxt *l_pTxt : vLineText) {
 
             HUDSquare* l_square = vSquare[l_pTxt->indexSquare];
@@ -96,11 +109,12 @@ void HUD::update() {
             int l_novoX = l_square->tela.x + l_pTxt->posX;
             int l_novoY = l_square->tela.y + l_pTxt->posY;
             
-            vFonts[l_pTxt->indexFonte]->render ( l_novoX, l_novoY, l_pTxt->color, l_pTxt->pText );            
+            vFonts[l_pTxt->indexFonte]->render ( l_novoX, l_novoY, 0, l_pTxt->color, l_pTxt->pText);            
         }
         
         endOrtho();
 
+        glPopAttrib();
     }
 }
 

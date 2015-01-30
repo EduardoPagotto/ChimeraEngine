@@ -13,8 +13,10 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
 
     textoFPS = "fps: " + std::to_string ( 0 );
 
-    pFont = new Chimera::Font ( "/usr/share/fonts/gnu-free/FreeSans.ttf",18 );
     pHUD = new HUD ( *pVideo->getPRectangle() );
+    
+    pFont = new Chimera::Font ( "/usr/share/fonts/gnu-free/FreeSans.ttf",18 );
+    
     pHUD->addFont ( pFont );
 
     SDL_Rect area;

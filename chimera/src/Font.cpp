@@ -64,22 +64,23 @@ void Font::render (const float &_x, const float &_y,const float &_z ,const Color
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
          
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0,GL_BGRA,
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0,GL_BGRA_EXT,
                      GL_UNSIGNED_BYTE, Message->pixels);
         
         /*Draw this texture on a quad with the given xyz coordinates.*/
-//         glBegin(GL_QUADS);
-//                 glTexCoord2d(1, 1); glVertex3d(_x, _y, _z);
-//                 glTexCoord2d(0, 1); glVertex3d(_x+Message->w, _y, _z);
-//                 glTexCoord2d(0, 0); glVertex3d(_x+Message->w, _y+Message->h, _z);
-//                 glTexCoord2d(1, 0); glVertex3d(_x, _y+Message->h, _z);
-//         glEnd();
-        glBegin(GL_QUADS);
-                glTexCoord2d(0, 0); glVertex3d(_x, _y, _z);
-                glTexCoord2d(1, 0); glVertex3d(_x+Message->w, _y, _z);
-                glTexCoord2d(1, 1); glVertex3d(_x+Message->w, _y+Message->h, _z);
-                glTexCoord2d(0, 1); glVertex3d(_x, _y+Message->h, _z);
-        glEnd();
+         glBegin(GL_QUADS);
+                 glTexCoord2d(0, 1); glVertex3d(_x, _y, _z);
+                 glTexCoord2d(1, 1); glVertex3d(_x+Message->w, _y, _z);
+                 glTexCoord2d(1, 0); glVertex3d(_x+Message->w, _y+Message->h, _z);
+                 glTexCoord2d(0, 0); glVertex3d(_x, _y+Message->h, _z);
+         glEnd();
+
+        //glBegin(GL_QUADS);
+        //        glTexCoord2d(0, 0); glVertex3d(_x, _y, _z);
+        //        glTexCoord2d(1, 0); glVertex3d(_x+Message->w, _y, _z);
+        //        glTexCoord2d(1, 1); glVertex3d(_x+Message->w, _y+Message->h, _z);
+        //        glTexCoord2d(0, 1); glVertex3d(_x, _y+Message->h, _z);
+        //glEnd();
  
         /*Clean up.*/
         glDeleteTextures(1, &Texture);

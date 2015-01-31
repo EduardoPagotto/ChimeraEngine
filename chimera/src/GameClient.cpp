@@ -15,7 +15,11 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
 
     pHUD = new HUD ( *pVideo->getPRectangle() );
     
+#ifdef WIN32
+	pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
+#else
     pFont = new Chimera::Font ( "/usr/share/fonts/gnu-free/FreeSans.ttf",18 );
+#endif
     
     pHUD->addFont ( pFont );
 

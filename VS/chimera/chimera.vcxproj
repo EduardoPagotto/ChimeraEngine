@@ -51,7 +51,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../chimera/include;C:\libs\SDL2-2.0.3\include;C:\libs\bullet3-master\src;C:\libs\tinyxml2;C:\libs\SDL2_image-2.0.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../chimera/include;C:\libs\SDL2-2.0.3\include;C:\libs\SDL2_image-2.0.0\include;C:\libs\SDL2_ttf-2.0.12\include;C:\libs\bullet3-master\src;C:\libs\tinyxml2</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>

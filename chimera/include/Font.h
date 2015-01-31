@@ -4,7 +4,13 @@
 #define TTF_NOVO
 
 #ifdef TTF_NOVO
+
+#ifndef WIN32
 #include <SDL2/SDL_ttf.h>
+#else
+#include <SDL_ttf.h>
+#endif
+
 #else
 #include <FTGL/ftgl.h>
 #endif

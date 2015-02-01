@@ -1,7 +1,7 @@
 #ifndef FONT_H_
 #define FONT_H_
 
-//#define TTF_NOVO
+#define TTF_NOVO
 
 #ifdef TTF_NOVO
 

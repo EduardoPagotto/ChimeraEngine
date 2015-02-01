@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../chimera/include/;C:\libs\SDL2-2.0.3\include;C:\libs\SDL2_image-2.0.0\include;C:\libs\SDL2_ttf-2.0.12\include;../../AppCargaManual/include;C:\libs\bullet3-master\src;C:\libs\tinyxml2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../chimera/include/;C:\libs\SDL2-2.0.3\include;C:\libs\SDL2_image-2.0.0\include;C:\libs\SDL2_ttf-2.0.12\include;../../AppCargaManual/include;C:\libs\bullet3-master\src;C:\libs\tinyxml2;C:\libs\ftgl-2.1.3-rc5\src;C:\libs\freetype-2.5.5\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
       <CallingConvention>Cdecl</CallingConvention>

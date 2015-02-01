@@ -102,7 +102,7 @@ void HUD::update() {
         glPushAttrib(GL_ENABLE_BIT);
         beginOrtho();
 
-		//glPushAttrib(GL_COLOR_BUFFER_BIT);
+		glPushAttrib(GL_CURRENT_BIT);//preserva a cor original
 
         for (HUDSquare* l_square: vSquare) {
             
@@ -116,7 +116,7 @@ void HUD::update() {
             
         }
         
-		//glPopAttrib();
+		glPopAttrib();//retorna paleta
 
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);

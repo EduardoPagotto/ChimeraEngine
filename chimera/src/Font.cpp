@@ -43,48 +43,54 @@ Font::Font ( const char* _fontFile, int _size ) {
 
 Font::~Font ( void ) {
     
+#ifdef TTF_NOVO
+	TTF_CloseFont(pFont);
+	pFont = nullptr;
+#else
+
     if ( pFont != nullptr ) {
        delete pFont;
        pFont = nullptr;
     }
+#endif
     
 }
 
 void Font::render (const float &_x, const float &_y,const float &_z ,const Color &_color, std::string *_pTxt ) {
    
 #ifdef TTF_NOVO 
-        SDL_Color Color = {_color.r , _color.g , _color.b};
-        SDL_Surface *Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(pFont), _pTxt->c_str(), Color);
-        unsigned Texture = 0;
+	SDL_Color Color = { (uint8_t)(255 * _color.r), (uint8_t)(255 * _color.g), (uint8_t)(255 * _color.b) };
+    SDL_Surface *Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(pFont), _pTxt->c_str(), Color);
+    unsigned Texture = 0;
  
-        /*Generate an OpenGL 2D texture from the SDL_Surface*.*/
-        glGenTextures(1, &Texture);
-        glBindTexture(GL_TEXTURE_2D, Texture);
+    /*Generate an OpenGL 2D texture from the SDL_Surface*.*/
+    glGenTextures(1, &Texture);
+    glBindTexture(GL_TEXTURE_2D, Texture);
  
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
          
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0,GL_BGRA_EXT,
-                     GL_UNSIGNED_BYTE, Message->pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0,GL_BGRA_EXT,
+                    GL_UNSIGNED_BYTE, Message->pixels);
         
-        /*Draw this texture on a quad with the given xyz coordinates.*/
-         glBegin(GL_QUADS);
-                 glTexCoord2d(0, 1); glVertex3d(_x, _y, _z);
-                 glTexCoord2d(1, 1); glVertex3d(_x+Message->w, _y, _z);
-                 glTexCoord2d(1, 0); glVertex3d(_x+Message->w, _y+Message->h, _z);
-                 glTexCoord2d(0, 0); glVertex3d(_x, _y+Message->h, _z);
-         glEnd();
+    /*Draw this texture on a quad with the given xyz coordinates.*/
+        glBegin(GL_QUADS);
+                glTexCoord2d(0, 1); glVertex3d(_x, _y, _z);
+                glTexCoord2d(1, 1); glVertex3d(_x+Message->w, _y, _z);
+                glTexCoord2d(1, 0); glVertex3d(_x+Message->w, _y+Message->h, _z);
+                glTexCoord2d(0, 0); glVertex3d(_x, _y+Message->h, _z);
+        glEnd();
 
-        //glBegin(GL_QUADS);
-        //        glTexCoord2d(0, 0); glVertex3d(_x, _y, _z);
-        //        glTexCoord2d(1, 0); glVertex3d(_x+Message->w, _y, _z);
-        //        glTexCoord2d(1, 1); glVertex3d(_x+Message->w, _y+Message->h, _z);
-        //        glTexCoord2d(0, 1); glVertex3d(_x, _y+Message->h, _z);
-        //glEnd();
+    //glBegin(GL_QUADS);
+    //        glTexCoord2d(0, 0); glVertex3d(_x, _y, _z);
+    //        glTexCoord2d(1, 0); glVertex3d(_x+Message->w, _y, _z);
+    //        glTexCoord2d(1, 1); glVertex3d(_x+Message->w, _y+Message->h, _z);
+    //        glTexCoord2d(0, 1); glVertex3d(_x, _y+Message->h, _z);
+    //glEnd();
  
-        /*Clean up.*/
-        glDeleteTextures(1, &Texture);
-        SDL_FreeSurface(Message);
+    /*Clean up.*/
+    glDeleteTextures(1, &Texture);
+    SDL_FreeSurface(Message);
 #else  
     
     glColor3fv ( _color.ptr() );

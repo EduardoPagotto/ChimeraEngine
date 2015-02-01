@@ -14,7 +14,7 @@ namespace Chimera {
 HUD::HUD ( const SDL_Rect &_displayArea ) : on ( true ), displayArea ( _displayArea ) {
   
 #ifdef TTF_NOVO
-    if( TTF_Init() == -1 )
+	if (!TTF_WasInit() && TTF_Init() == -1)
         throw ExceptionSDL ( ExceptionCode::ALLOC, std::string ( SDL_GetError() ) );
 #endif        
     
@@ -22,14 +22,30 @@ HUD::HUD ( const SDL_Rect &_displayArea ) : on ( true ), displayArea ( _displayA
 
 HUD::~HUD() {
 
-    vFonts.clear();
-    while ( vLineText.size() > 0 ) {
+	while (!vFonts.empty()) {
+		Font *pFont = vFonts.back();
+		vFonts.pop_back();
+		delete pFont;
+		pFont = nullptr;
+	}
 
+	while(!vSquare.empty()){
+
+		HUDSquare *pScare = vSquare.back();
+		vSquare.pop_back();
+		delete pScare;
+		pScare = nullptr;
+	}
+
+    while ( !vLineText.empty() ) {
         HUDTxt *lixo = vLineText.back();
         vLineText.pop_back();
         delete lixo;
-
     }
+
+#ifdef TTF_NOVO
+	TTF_Quit();
+#endif
 
 }
 
@@ -86,6 +102,8 @@ void HUD::update() {
         glPushAttrib(GL_ENABLE_BIT);
         beginOrtho();
 
+		//glPushAttrib(GL_COLOR_BUFFER_BIT);
+
         for (HUDSquare* l_square: vSquare) {
             
             glColor4fv ( l_square->color.ptr() );
@@ -98,6 +116,8 @@ void HUD::update() {
             
         }
         
+		//glPopAttrib();
+
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

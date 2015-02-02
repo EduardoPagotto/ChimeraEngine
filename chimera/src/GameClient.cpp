@@ -12,7 +12,7 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
 #ifdef WIN32
     pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
 #else
-    pFont = new Chimera::Font ( "/home/locutus/Projetos/ChimeraEngine/fonts/FreeSans.ttf",18 );
+    pFont = new Chimera::Font ( "../../fonts/FreeSans.ttf",18 );
 #endif
     
     pHUD->addFont ( pFont );

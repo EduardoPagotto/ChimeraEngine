@@ -76,6 +76,9 @@
     <ClCompile Include="..\..\chimera\src\Video.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="OvrDevice.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chimera\include\Camera.h">
@@ -173,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\DataMsg.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="OvrDevice.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

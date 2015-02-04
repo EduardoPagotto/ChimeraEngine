@@ -89,9 +89,9 @@ void GameClient::processaGame() {
     countFrame();
     render();
 
-	pVideo->begin2D();
-    pHUD->update();
-	pVideo->end2D();
+    //pVideo->begin2D();
+    //pHUD->update();
+   // pVideo->end2D();
 
     pVideo->swapWindow();
 

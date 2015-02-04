@@ -98,19 +98,19 @@ void Game::stop(){
 void Game::render() {
 
     using namespace Chimera;
-   
-	pVideo->initScene();
-       
+
+    pVideo->initScene();
+
     const SDL_Rect *tela = pVideo->getPRectangle();
 	
-	pVideo->setViewPortPerspective(pOrbitalCam->getFov(), pOrbitalCam->getNear(), pOrbitalCam->getFar());
+    pVideo->setViewPortPerspective(pOrbitalCam->getFov(), pOrbitalCam->getNear(), pOrbitalCam->getFar());
 
     pSceneMng->cameraAtiva(pOrbitalCam);
-	pSceneMng->objetoAtivo(pObj);
-	pSceneMng->draw3d();
-		
-	btVector3 val1 = pObj->getPosition();
-	sPosicaoObj = "pos:(" + std::to_string(val1.getX())+ ","+std::to_string(val1.getY())+","+std::to_string(val1.getZ())+")";
+    pSceneMng->objetoAtivo(pObj);
+    pSceneMng->draw3d();
+	    
+    btVector3 val1 = pObj->getPosition();
+    sPosicaoObj = "pos:(" + std::to_string(val1.getX())+ ","+std::to_string(val1.getY())+","+std::to_string(val1.getZ())+")";
 	
 }
 

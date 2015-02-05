@@ -14,52 +14,48 @@
 
 #include <string>
 
-namespace Chimera {
+namespace Chimera
+{
 
 /**
  * Class Video
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class Video  {
-public:
-    Video ( int _width, int _height, std::string _nome );
-    virtual ~Video();
+  class Video
+  {
+  public:
+    Video (int _width, int _height, std::string _nome);
+    virtual ~ Video ();
 
-    const SDL_Rect *getPRectangle() const {
-        return &rectangle;
+    const SDL_Rect *getPRectangle () const{
+      return &rectangle;
     }
 
-    std::string getNomeTela() const {
-        return nomeTela;
+    std::string getNomeTela () const{
+      return nomeTela;
     }
-    
-    void swapWindow();
-         
-	void setViewPortOrtogonal();
-	void setViewPortOrtogonal(const SDL_Rect &_rectangle);
-	void setViewPortPerspective(const float &_fov, const float &_near, const float &_far);
-	void setViewPortPerspective(const SDL_Rect &_rectangle, const float &_fov, const float &_near, const float &_far);
-	void initOpenGL();
-	void begin2D();
-	void end2D();
-	void setLight ( bool _lightOn );
-	void setMaterial ( bool _materialOn );
 
-	std::string getVersaoOpenGL();
+    void swapWindow ();
+    void setViewPortOrtogonal ();
+    void setViewPortOrtogonal (const SDL_Rect & _rectangle);
+    void setViewPortPerspective (const float &_fov, const float &_near,const float &_far);
+    void setViewPortPerspective (const SDL_Rect & _rectangle,const float &_fov, const float &_near, const float &_far);
+    void initGL ();
+    void begin2D ();
+    void end2D ();
+    void setLight (bool _lightOn);
+    void setMaterial (bool _materialOn);
+    void initScene ();
+    std::string getVersaoOpenGL ();
 
-	void initScene();
-
-private:
+  private:
     std::string nomeTela;
     SDL_Rect rectangle;
     SDL_Window *window;
     SDL_GLContext context;
+  };
 
-	bool hasLight;
-	bool hasMaterial;
-};
-
-} /* namespace Chimera */
-#endif /* VIDEO_H_ */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+}				/* namespace Chimera */
+#endif				/* VIDEO_H_ */
+// kate: indent-mode cstyle; indent-width 2; replace-tabs on; ;

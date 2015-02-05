@@ -8,13 +8,13 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     textoFPS = "fps: " + std::to_string ( 0 );
 
     pHUD = new HUD ( *pVideo->getPRectangle() );
-    
+
 #ifdef WIN32
     pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
 #else
     pFont = new Chimera::Font ( "../../fonts/FreeSans.ttf",18 );
 #endif
-    
+
     pHUD->addFont ( pFont );
 
     SDL_Rect area;
@@ -59,7 +59,7 @@ void GameClient::countFrame() {
 
 void GameClient::open() {
 
-    pVideo->initOpenGL();
+    pVideo->initGL();
     //std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + pSceneMng->getVersaoOpenGL();
     //LOG4CXX_INFO ( logger , l_msg );
 
@@ -89,28 +89,28 @@ void GameClient::processaGame() {
     countFrame();
     render();
 
-    //pVideo->begin2D();
-    //pHUD->update();
-   // pVideo->end2D();
+    pVideo->begin2D();
+    pHUD->update();
+    pVideo->end2D();
 
     pVideo->swapWindow();
 
 }
 
 void GameClient::validaOpColisao(const SDL_Event &_event) {
-    
+
      KindOp op = (KindOp) _event.user.code;
-    
+
     if ((op == Chimera::KindOp::START_COLLIDE)||
         (op == Chimera::KindOp::ON_COLLIDE) ||
         (op == Chimera::KindOp::OFF_COLLIDE)) {
-    
-        executeColisao ( op, (Node*)_event.user.data1,(Node*)_event.user.data2);    
-    
+
+        executeColisao ( op, (Node*)_event.user.data1,(Node*)_event.user.data2);
+
     } else {
         userEvent(_event);
     }
-    
+
 }
 
 void GameClient::gameLoop ( void ) {
@@ -122,7 +122,7 @@ void GameClient::gameLoop ( void ) {
     while ( !l_quit ) {
 
         while ( SDL_PollEvent ( &l_eventSDL )) {
-            
+
             switch ( l_eventSDL.type ) {
             case SDL_USEREVENT:
                 validaOpColisao(l_eventSDL);
@@ -133,7 +133,7 @@ void GameClient::gameLoop ( void ) {
             case SDL_MOUSEBUTTONDOWN:
                 mouseButtonDownCapture ( l_eventSDL.button );
                 break;
-            case SDL_MOUSEBUTTONUP:    
+            case SDL_MOUSEBUTTONUP:
                 mouseButtonUpCapture( l_eventSDL.button );
                 break;
             case SDL_MOUSEMOTION:
@@ -159,17 +159,17 @@ void GameClient::gameLoop ( void ) {
             default:
                 break;
             }
-            
+
         }
-        
+
         if (l_isActive==true) {
             //Se nao houver foco na tela pule o render
             processaGame();
-            
+
         }
-                
+
     }
 }
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

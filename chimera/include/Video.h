@@ -6,6 +6,15 @@
 //#include <string>
 //#include <iostream>
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include "GL/glew.h"
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #ifndef WIN32
 #include <SDL2/SDL.h>
 #else
@@ -46,14 +55,25 @@ namespace Chimera
     void end2D ();
     void setLight (bool _lightOn);
     void setMaterial (bool _materialOn);
-    void initScene ();
+    //void initScene ();
     std::string getVersaoOpenGL ();
 
+    void openFrameBuffer();
+    void closeFrameBuffer();
+    
+    void initDraw();
+    void endDraw();
+    
   private:
     std::string nomeTela;
     SDL_Rect rectangle;
     SDL_Window *window;
     SDL_GLContext context;
+    
+    GLuint frameBuffer;
+    GLuint renderBuffer;
+    GLuint texture;
+    
   };
 
 }				/* namespace Chimera */

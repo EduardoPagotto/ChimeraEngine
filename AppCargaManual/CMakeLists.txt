@@ -42,6 +42,8 @@ target_link_libraries(
 	${LOG4CXX_LIBRARIES} 
 	-lSDL2_image
 	-lSDL2_ttf
+	/usr/lib64/libGLEW.so
+	/usr/lib64/libGLEWmx.so
 )
 
 add_dependencies(AppCargaManual chimera)

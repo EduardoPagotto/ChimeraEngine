@@ -60,6 +60,7 @@ void GameClient::countFrame() {
 void GameClient::open() {
 
     pVideo->initGL();
+    pVideo->openFrameBuffer();
     //std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + pSceneMng->getVersaoOpenGL();
     //LOG4CXX_INFO ( logger , l_msg );
 
@@ -73,6 +74,8 @@ void GameClient::open() {
 
 void GameClient::close ( void ) {
 
+    pVideo->closeFrameBuffer();
+    
     SDL_Event l_eventQuit;
     l_eventQuit.type = SDL_QUIT;
     if ( SDL_PushEvent ( &l_eventQuit ) == -1 ) {
@@ -87,14 +90,16 @@ void GameClient::processaGame() {
     physicWorld->checkCollisions();
 
     countFrame();
+    
+    pVideo->initDraw();
+    
     render();
 
     pVideo->begin2D();
     pHUD->update();
     pVideo->end2D();
 
-    pVideo->swapWindow();
-
+    pVideo->endDraw();
 }
 
 void GameClient::validaOpColisao(const SDL_Event &_event) {

@@ -99,10 +99,7 @@ void Game::render() {
 
     using namespace Chimera;
 
-    pVideo->initScene();
-
     const SDL_Rect *tela = pVideo->getPRectangle();
-	
     pVideo->setViewPortPerspective(pOrbitalCam->getFov(), pOrbitalCam->getNear(), pOrbitalCam->getFar());
 
     pSceneMng->cameraAtiva(pOrbitalCam);

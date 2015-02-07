@@ -7,7 +7,7 @@ find_package(SDL2 REQUIRED)
 #find_package(LibXml2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(FTGL REQUIRED)	
+find_package(FTGL REQUIRED)
 find_package(Log4Cxx REQUIRED)
 
 include_directories(
@@ -20,6 +20,7 @@ include_directories(
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
 	${LOG4CXX_INCLUDE_DIR}
+	/usr/local/ovr_sdk_linux_0.4.4/LibOVR
 )
 
 add_executable(
@@ -29,21 +30,32 @@ add_executable(
 )
 
 target_link_libraries(
-	AppCargaManual 
-	${Chimera_BINARY_DIR}/libChimera.a 
-	${OPENGL_LIBRARIES} 
-	${SDL2_LIBRARY} 
+	AppCargaManual
+	${Chimera_BINARY_DIR}/libChimera.a
+	${OPENGL_LIBRARIES}
+	${SDL2_LIBRARY}
 #	${LIBXML2_LIBRARIES}
 	#/usr/local/lib64/libtinyxml2.a
 	/usr/lib64/libtinyxml2.so
-	${BULLET_LIBRARIES} 
-	${FREETYPE_LIBRARY} 
-	${FTGL_LIBRARY} 
-	${LOG4CXX_LIBRARIES} 
+	${BULLET_LIBRARIES}
+	${FREETYPE_LIBRARY}
+	${FTGL_LIBRARY}
+	${LOG4CXX_LIBRARIES}
 	-lSDL2_image
 	-lSDL2_ttf
 	/usr/lib64/libGLEW.so
 	/usr/lib64/libGLEWmx.so
+
+	librt.so
+	libXrandr.so
+	#libGL.so
+	#libXxf86vm.so
+	#libpthread.so
+	#${UDEV_LIBRARIES}
+	#${XINERAMA_LIBRARY}
+	#${X11_LIBRARIES}
+
+	/usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a
 )
 
 add_dependencies(AppCargaManual chimera)

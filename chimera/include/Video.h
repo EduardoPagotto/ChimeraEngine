@@ -6,20 +6,20 @@
 //#include <string>
 //#include <iostream>
 
-#ifdef WIN32
-#include "windows.h"
-#endif
-
-#include "GL/glew.h"
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#ifndef WIN32
-#include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
+// #ifdef WIN32
+// #include "windows.h"
+// #endif
+//
+// #include "GL/glew.h"
+//
+// #include <GL/gl.h>
+// #include <GL/glu.h>
+//
+// #ifndef WIN32
+// #include <SDL2/SDL.h>
+// #else
+// #include <SDL.h>
+// #endif
 
 #include <string>
 
@@ -34,46 +34,46 @@ namespace Chimera
   class Video
   {
   public:
-    Video (int _width, int _height, std::string _nome);
+
+    Video(std::string _nome);
+
     virtual ~ Video ();
 
-    const SDL_Rect *getPRectangle () const{
-      return &rectangle;
-    }
+    //virtual void initHardware() = 0;
 
-    std::string getNomeTela () const{
+    virtual void initGL () = 0;
+    virtual void initDraw() = 0;
+    virtual void endDraw() = 0;
+    virtual void getGeometry(int &_x, int &_y, int &_w, int &_h) = 0;
+//     const SDL_Rect *getPRectangle () const{
+//       return &rectangle;
+//     }
+
+    std::string getNomeTela () const {
       return nomeTela;
     }
 
-    void swapWindow ();
-    void setViewPortOrtogonal ();
-    void setViewPortOrtogonal (const SDL_Rect & _rectangle);
-    void setViewPortPerspective (const float &_fov, const float &_near,const float &_far);
-    void setViewPortPerspective (const SDL_Rect & _rectangle,const float &_fov, const float &_near, const float &_far);
-    void initGL ();
+    void setViewPortOrtogonal (const int &_x, const int &_y, const int &_w, const int &_h);
+    void setViewPortPerspective ( const int &_x, const int &_y, const int &_w, const int &_h, const float &_fov, const float &_near, const float &_far);
+
     void begin2D ();
     void end2D ();
+
     void setLight (bool _lightOn);
     void setMaterial (bool _materialOn);
-    //void initScene ();
+
     std::string getVersaoOpenGL ();
 
-    void openFrameBuffer();
-    void closeFrameBuffer();
-    
-    void initDraw();
-    void endDraw();
-    
-  private:
+  protected:
     std::string nomeTela;
-    SDL_Rect rectangle;
-    SDL_Window *window;
-    SDL_GLContext context;
-    
-    GLuint frameBuffer;
-    GLuint renderBuffer;
-    GLuint texture;
-    
+  //  SDL_Rect rectangle;
+    //SDL_Window *window;
+   // SDL_GLContext context;
+
+   // GLuint frameBufferObject;
+   // GLuint renderBuffer;
+   // GLuint texture;
+
   };
 
 }				/* namespace Chimera */

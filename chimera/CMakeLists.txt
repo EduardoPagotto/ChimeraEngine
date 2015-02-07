@@ -5,7 +5,7 @@ find_package(SDL2 REQUIRED)
 #find_package(LibXml2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(FTGL REQUIRED)	
+find_package(FTGL REQUIRED)
 find_package(Log4Cxx REQUIRED)
 
 set(INCLUDE_DIRECTORIES ${Chimera}/include/)
@@ -20,6 +20,7 @@ include_directories(
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
 	${LOG4CXX_INCLUDE_DIR}
+	/usr/local/ovr_sdk_linux_0.4.4/LibOVR
 )
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
@@ -39,7 +40,7 @@ add_library (Chimera STATIC
 				src/CameraSpherical.cpp
 				src/CameraMan.cpp
 				src/Physics.cpp
-				src/PhysicsControl.cpp	
+				src/PhysicsControl.cpp
 				src/Constraint.cpp
 				src/Texture.cpp
 				src/Effect.cpp
@@ -48,8 +49,10 @@ add_library (Chimera STATIC
 				src/DrawTriMesh.cpp
 				src/Font.cpp
 				src/HUD.cpp
-				src/Timer.cpp 
+				src/Timer.cpp
 				src/Video.cpp
+				src/VideoDevice.cpp
+				src/OvrDevice.cpp
 				src/Loader.cpp
 				src/SceneMng.cpp
 				src/GameClient.cpp

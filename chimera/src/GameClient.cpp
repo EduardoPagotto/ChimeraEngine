@@ -7,7 +7,10 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
 
     textoFPS = "fps: " + std::to_string ( 0 );
 
-    pHUD = new HUD ( *pVideo->getPRectangle() );
+    SDL_Rect geometriaTela;
+    pVideo->getGeometry(geometriaTela.x, geometriaTela.y, geometriaTela.w, geometriaTela.h  );
+
+    pHUD = new HUD (geometriaTela );
 
 #ifdef WIN32
     pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
@@ -60,7 +63,7 @@ void GameClient::countFrame() {
 void GameClient::open() {
 
     pVideo->initGL();
-    pVideo->openFrameBuffer();
+    //pVideo->openFrameBuffer();
     //std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + pSceneMng->getVersaoOpenGL();
     //LOG4CXX_INFO ( logger , l_msg );
 
@@ -74,8 +77,8 @@ void GameClient::open() {
 
 void GameClient::close ( void ) {
 
-    pVideo->closeFrameBuffer();
-    
+    //pVideo->closeFrameBuffer();
+
     SDL_Event l_eventQuit;
     l_eventQuit.type = SDL_QUIT;
     if ( SDL_PushEvent ( &l_eventQuit ) == -1 ) {
@@ -90,9 +93,9 @@ void GameClient::processaGame() {
     physicWorld->checkCollisions();
 
     countFrame();
-    
+
     pVideo->initDraw();
-    
+
     render();
 
     pVideo->begin2D();

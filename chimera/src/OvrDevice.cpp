@@ -123,18 +123,26 @@ void OvrDevice::initOVRSubSys(){
 
 	ovrGLConfig cfg;
 	cfg.OGL.Header.API = ovrRenderAPI_OpenGL;
-	cfg.OGL.Header.RTSize = Sizei(hmd->Resolution.w, hmd->Resolution.h);
+	cfg.OGL.Header.BackBufferSize = Sizei(hmd->Resolution.w, hmd->Resolution.h);
 	cfg.OGL.Header.Multisample = 1;
-	#if defined(OVR_OS_WIN32)
+#if defined(OVR_OS_WIN32)
 	if (!(hmd->HmdCaps & ovrHmdCap_ExtendDesktop))
 		ovrHmd_AttachToWindow(hmd, info.info.win.window, NULL, NULL);
 
 	cfg.OGL.Window = info.info.win.window;
 	cfg.OGL.DC = NULL;
-	#elif defined(OVR_OS_LINUX)
+#elif defined(OVR_OS_LINUX)
 	cfg.OGL.Disp = info.info.x11.display;
 	cfg.OGL.Win = info.info.x11.window;
-	#endif
+#endif
+
+	ovrEyeRenderDesc eyeRenderDesc[2];
+
+	ovrHmd_ConfigureRendering(hmd, &cfg.Config, ovrDistortionCap_Chromatic | ovrDistortionCap_Vignette | ovrDistortionCap_TimeWarp | ovrDistortionCap_Overdrive, eyeFov, eyeRenderDesc);
+
+	ovrHmd_SetEnabledCaps(hmd, ovrHmdCap_LowPersistence | ovrHmdCap_DynamicPrediction);
+
+	ovrHmd_ConfigureTracking(hmd, ovrTrackingCap_Orientation | ovrTrackingCap_MagYawCorrection | ovrTrackingCap_Position, 0);
 
 }
 

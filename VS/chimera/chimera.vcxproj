@@ -112,7 +112,7 @@
     <ClInclude Include="..\..\chimera\include\Texture.h" />
     <ClInclude Include="..\..\chimera\include\Timer.h" />
     <ClInclude Include="..\..\chimera\include\Video.h" />
-    <ClInclude Include="OvrDevice.h" />
+    <ClInclude Include="..\..\chimera\include\OvrDevice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\chimera\src\Camera.cpp" />
@@ -140,7 +140,8 @@
     <ClCompile Include="..\..\chimera\src\Texture.cpp" />
     <ClCompile Include="..\..\chimera\src\Timer.cpp" />
     <ClCompile Include="..\..\chimera\src\Video.cpp" />
-    <ClCompile Include="OvrDevice.cpp" />
+    <ClCompile Include="..\..\chimera\src\VideoDevice.cpp" />
+    <ClCompile Include="..\..\chimera\src\OvrDevice.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,7 +8,7 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     textoFPS = "fps: " + std::to_string ( 0 );
 
     SDL_Rect geometriaTela;
-    pVideo->getGeometry(geometriaTela.x, geometriaTela.y, geometriaTela.w, geometriaTela.h  );
+    pVideo->getGeometry(geometriaTela.x, geometriaTela.y, geometriaTela.w, geometriaTela.h, 0);//FIXME verificar como ficara!!!
 
     pHUD = new HUD (geometriaTela );
 

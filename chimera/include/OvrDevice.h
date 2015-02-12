@@ -36,8 +36,9 @@ public:
     void initGL ();
     void initDraw();
     void endDraw();
-    void getGeometry(int &_x, int &_y, int &_w, int &_h);
+    void getGeometry(int &_x, int &_y, int &_w, int &_h, int index);
 
+    virtual void executeViewPerspective(Camera *pCamera, int _eye);
 
 private:
 	void initOVRSubSys();
@@ -49,6 +50,8 @@ private:
 
 	//SDL_Rect rectangle;
     OVR::Sizei renderTargetSize;
+    ovrRecti eyeRenderViewport[2];
+    ovrPosef eyeRenderPose[2];
 
 	SDL_Window *window;
 	SDL_GLContext context;

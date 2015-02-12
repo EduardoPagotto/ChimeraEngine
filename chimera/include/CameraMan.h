@@ -14,7 +14,7 @@ public:
 
     CameraMan ( const Camera& _camera );
 
-    ~CameraMan();
+    virtual ~CameraMan();
 
     virtual void update ( DataMsg *_dataMsg );
 
@@ -40,4 +40,4 @@ private:
 
 }
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

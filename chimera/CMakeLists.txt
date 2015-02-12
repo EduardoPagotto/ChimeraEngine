@@ -39,6 +39,7 @@ add_library (Chimera STATIC
 				src/Material.cpp
 				src/CameraSpherical.cpp
 				src/CameraMan.cpp
+				src/CameraOvr.cpp
 				src/Physics.cpp
 				src/PhysicsControl.cpp
 				src/Constraint.cpp

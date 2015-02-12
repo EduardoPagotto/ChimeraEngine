@@ -25,7 +25,9 @@ namespace Chimera
     void initDraw();
     void endDraw();
 
-    void getGeometry(int &_x, int &_y, int &_w, int &_h);
+    void getGeometry(int &_x, int &_y, int &_w, int &_h, int index);
+
+    virtual void executeViewPerspective(Camera *pCamera, int _eye);
 
   private:
 

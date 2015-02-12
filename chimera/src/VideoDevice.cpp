@@ -20,6 +20,8 @@ namespace Chimera {
 		rectangle.w = SDL_WINDOWPOS_CENTERED;
 		rectangle.h = SDL_WINDOWPOS_CENTERED;
 
+		kindDevice = KIND_DEVICE::SCREEN;
+
 		initHardware();
 
 	}
@@ -30,6 +32,8 @@ namespace Chimera {
 		rectangle.y = 0;
 		rectangle.w = _width;
 		rectangle.h = _height;
+
+		kindDevice = KIND_DEVICE::SCREEN;
 
 		initHardware();
 
@@ -145,7 +149,7 @@ namespace Chimera {
 		SDL_GL_SwapWindow( window );
 	}
 
-	void VideoDevice::getGeometry(int &_x, int &_y, int &_w, int &_h) {
+	void VideoDevice::getGeometry(int &_x, int &_y, int &_w, int &_h, int index) {
 
 		_x = rectangle.x;
 		_y = rectangle.y;
@@ -153,5 +157,18 @@ namespace Chimera {
 		_h = rectangle.h;
 
 	}
+
+	void VideoDevice::executeViewPerspective( Camera *pCamera, int _eye ) {
+
+		glViewport( rectangle.x, rectangle.y, rectangle.w, rectangle.h );
+
+		glMatrixMode( GL_PROJECTION );
+		glLoadIdentity();
+		gluPerspective( pCamera->getFov(), ( GLfloat )( float ) rectangle.w / ( float ) rectangle.h, pCamera->getNear(), pCamera->getFar() );
+		glMatrixMode( GL_MODELVIEW );
+		glLoadIdentity();
+
+	}
+
 
 }

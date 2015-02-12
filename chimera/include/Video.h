@@ -22,9 +22,15 @@
 // #endif
 
 #include <string>
+#include "Camera.h"
 
 namespace Chimera
 {
+
+  enum class KIND_DEVICE {
+    SCREEN = 0,
+    OVR_OCULUS
+  };
 
 /**
  * Class Video
@@ -44,7 +50,10 @@ namespace Chimera
     virtual void initGL () = 0;
     virtual void initDraw() = 0;
     virtual void endDraw() = 0;
-    virtual void getGeometry(int &_x, int &_y, int &_w, int &_h) = 0;
+    virtual void getGeometry(int &_x, int &_y, int &_w, int &_h, int index) = 0;
+
+    virtual void executeViewPerspective(Camera *pCamera, int _eye) = 0;
+
 //     const SDL_Rect *getPRectangle () const{
 //       return &rectangle;
 //     }
@@ -54,7 +63,7 @@ namespace Chimera
     }
 
     void setViewPortOrtogonal (const int &_x, const int &_y, const int &_w, const int &_h);
-    void setViewPortPerspective ( const int &_x, const int &_y, const int &_w, const int &_h, const float &_fov, const float &_near, const float &_far);
+    //void setViewPortPerspective ( const int &_x, const int &_y, const int &_w, const int &_h, const float &_fov, const float &_near, const float &_far);
 
     void begin2D ();
     void end2D ();
@@ -64,8 +73,13 @@ namespace Chimera
 
     std::string getVersaoOpenGL ();
 
+    inline KIND_DEVICE getKindDevice() const {
+      return kindDevice;
+    }
+
   protected:
     std::string nomeTela;
+    KIND_DEVICE kindDevice;
   //  SDL_Rect rectangle;
     //SDL_Window *window;
    // SDL_GLContext context;

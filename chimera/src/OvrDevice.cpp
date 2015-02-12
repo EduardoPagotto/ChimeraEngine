@@ -1,6 +1,8 @@
 #include "OvrDevice.h"
 #include "ExceptionSDL.h"
 
+#define GLEW_STATIC
+
 #ifdef WIN32
 #include "../Src/OVR_CAPI_GL.h"
 #else
@@ -14,6 +16,8 @@
 namespace Chimera {
 
 OvrDevice::OvrDevice(std::string nomeTela) : Video(nomeTela) {
+
+	kindDevice = KIND_DEVICE::OVR_OCULUS;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 
@@ -100,7 +104,6 @@ void OvrDevice::initOVRSubSys(){
 
 	ovrFovPort eyeFov[2] = { hmd->DefaultEyeFov[0], hmd->DefaultEyeFov[1] };
 
-	ovrRecti eyeRenderViewport[2];
 	eyeRenderViewport[0].Pos = Vector2i(0, 0);
 	eyeRenderViewport[0].Size = Sizei(renderTargetSize.w / 2, renderTargetSize.h);
 	eyeRenderViewport[1].Pos = Vector2i((renderTargetSize.w + 1) / 2, 0);
@@ -133,7 +136,7 @@ void OvrDevice::initOVRSubSys(){
 	cfg.OGL.DC = NULL;
 #elif defined(OVR_OS_LINUX)
 	cfg.OGL.Disp = info.info.x11.display;
-	cfg.OGL.Win = info.info.x11.window;
+	//cfg.OGL.Win = info.info.x11.window; //FIXME verificar o que vai no lugar
 #endif
 
 	ovrEyeRenderDesc eyeRenderDesc[2];
@@ -203,9 +206,58 @@ void OvrDevice::closeFrameBuffer() {
 
 }
 
+void OvrDevice::initDraw(){
+
+	ovrFrameTiming frameTiming = ovrHmd_BeginFrame(hmd, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+}
+
+void OvrDevice::endDraw(){
+
+	//glBindVertexArray(0);
+
+	//ovrHmd_EndFrame(hmd, eyeRenderPose, &eyeTexture[0].Texture);
+
+	//glBindVertexArray(vertexArray);
+
+}
+
 void OvrDevice::initGL (){}
-void OvrDevice::initDraw(){}
-void OvrDevice::endDraw(){}
-void OvrDevice::getGeometry(int &_x, int &_y, int &_w, int &_h){}
+
+
+void OvrDevice::getGeometry(int &_x, int &_y, int &_w, int &_h, int index){
+
+	if ((index >= 0)&&(index < 2)) {
+
+		_x = eyeRenderViewport[index].Pos.x;
+		_y = eyeRenderViewport[index].Pos.y;
+		_w = eyeRenderViewport[index].Size.w;
+		_h = eyeRenderViewport[index].Size.h;
+
+	} else {
+		throw ExceptionSDL(ExceptionCode::READ, "Indice do eye fora de faixa");
+	}
+
+}
+
+void OvrDevice::executeViewPerspective( Camera *pCamera, int eyeIndex ) {
+
+	using namespace OVR;
+
+	ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
+	eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
+
+
+	glViewport(eyeRenderViewport[eye].Pos.x, eyeRenderViewport[eye].Pos.y, eyeRenderViewport[eye].Size.w, eyeRenderViewport[eye].Size.h);
+
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+	gluPerspective( pCamera->getFov(), ( GLfloat )( float ) eyeRenderViewport[eye].Size.w / ( float ) eyeRenderViewport[eye].Size.h, pCamera->getNear(), pCamera->getFar() );
+	glMatrixMode( GL_MODELVIEW );
+	glLoadIdentity();
+
+}
 
 }

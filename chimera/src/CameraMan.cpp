@@ -39,8 +39,8 @@ CameraMan::~CameraMan() {
 }
 
 void CameraMan::clone(Node **ppNode ) {
-    *ppNode = new CameraMan( *this ); 
-    Node::clone( ppNode );  
+    *ppNode = new CameraMan( *this );
+    Node::clone( ppNode );
 }
 
 void CameraMan::update ( DataMsg *_dataMsg ) {
@@ -161,4 +161,4 @@ void CameraMan::fly ( float _delta, bool _wall[4] ) {
 }
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

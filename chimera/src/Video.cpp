@@ -221,14 +221,14 @@ namespace Chimera {
 		glLoadIdentity();
 	}
 
-	void Video::setViewPortPerspective( const int &_x, const int &_y, const int &_w, const int &_h, const float &_fov, const float &_near, const float &_far ) {
-		glViewport( _x, _y, _w, _h );
-		glMatrixMode( GL_PROJECTION );
-		glLoadIdentity();
-		gluPerspective( _fov, ( GLfloat )( float ) _w / ( float ) _h, _near, _far );
-		glMatrixMode( GL_MODELVIEW );
-		glLoadIdentity();
-	}
+// 	void Video::setViewPortPerspective( const int &_x, const int &_y, const int &_w, const int &_h, const float &_fov, const float &_near, const float &_far ) {
+// 		glViewport( _x, _y, _w, _h );
+// 		glMatrixMode( GL_PROJECTION );
+// 		glLoadIdentity();
+// 		gluPerspective( _fov, ( GLfloat )( float ) _w / ( float ) _h, _near, _far );
+// 		glMatrixMode( GL_MODELVIEW );
+// 		glLoadIdentity();
+// 	}
 
 	std::string Video::getVersaoOpenGL() {
 

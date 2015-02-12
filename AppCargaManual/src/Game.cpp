@@ -99,19 +99,26 @@ void Game::render() {
 
     using namespace Chimera;
 
-    //const SDL_Rect *tela = pVideo->getPRectangle();
-	SDL_Rect tela;
-	pVideo->getGeometry(tela.x, tela.y, tela.w, tela.h);
+	pSceneMng->cameraAtiva(pOrbitalCam);
+	pSceneMng->objetoAtivo(pObj);
 
-	pVideo->setViewPortPerspective(tela.x, tela.y, tela.w, tela.h, pOrbitalCam->getFov(), pOrbitalCam->getNear(), pOrbitalCam->getFar());
-    //pVideo->setViewPortPerspective(pOrbitalCam->getFov(), pOrbitalCam->getNear(), pOrbitalCam->getFar());
+	btVector3 val1 = pObj->getPosition();
+	sPosicaoObj = "pos:(" + std::to_string(val1.getX())+ ","+std::to_string(val1.getY())+","+std::to_string(val1.getZ())+")";
 
-    pSceneMng->cameraAtiva(pOrbitalCam);
-    pSceneMng->objetoAtivo(pObj);
-    pSceneMng->draw3d();
+	int indiceDesenho = 1;
+	if (pVideo->getKindDevice()==KIND_DEVICE::OVR_OCULUS)
+		indiceDesenho = 2;
 
-    btVector3 val1 = pObj->getPosition();
-    sPosicaoObj = "pos:(" + std::to_string(val1.getX())+ ","+std::to_string(val1.getY())+","+std::to_string(val1.getZ())+")";
+	for (int eye = 0; eye < indiceDesenho; eye++) {
+
+		pVideo->executeViewPerspective(pOrbitalCam,eye);
+
+		//SDL_Rect tela;
+		//pVideo->getGeometry(tela.x, tela.y, tela.w, tela.h, eye); //FIXME colocar tudo dentro de um metodo
+		//pVideo->setViewPortPerspective(tela.x, tela.y, tela.w, tela.h, pOrbitalCam->getFov(), pOrbitalCam->getNear(), pOrbitalCam->getFar());
+
+		pSceneMng->draw3d();
+	}
 
 }
 

@@ -1,7 +1,7 @@
 #include "OvrDevice.h"
 #include "ExceptionSDL.h"
 
-#define GLEW_STATIC
+
 
 #ifdef WIN32
 #include "../Src/OVR_CAPI_GL.h"
@@ -247,8 +247,8 @@ void OvrDevice::executeViewPerspective( Camera *pCamera, int eyeIndex ) {
 	using namespace OVR;
 
 	ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
-	eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
-
+	//eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
+	eyeRenderPose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
 
 	glViewport(eyeRenderViewport[eye].Pos.x, eyeRenderViewport[eye].Pos.y, eyeRenderViewport[eye].Size.w, eyeRenderViewport[eye].Size.h);
 

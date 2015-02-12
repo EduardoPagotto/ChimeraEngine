@@ -1,6 +1,8 @@
 #ifndef OVR_DEVICE_H_
 #define OVR_DEVICE_H_
 
+#define GLEW_STATIC
+
 #include "Video.h"
 
 #ifdef WIN32
@@ -8,7 +10,6 @@
 #endif
 
 #include "GL/glew.h"
-
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -21,8 +22,10 @@
 #include <string>
 
 #ifdef WIN32
+#define OVR_OS_WIN32
 #include "OVR.h"
 #else
+#define OVR_OS_LINUX
 #include "Include/OVR.h"
 #endif
 

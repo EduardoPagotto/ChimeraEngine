@@ -51,7 +51,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../chimera/include;C:\libs\SDL2-2.0.3\include;C:\libs\SDL2_image-2.0.0\include;C:\libs\SDL2_ttf-2.0.12\include;C:\libs\bullet3-master\src;C:\libs\tinyxml2;C:\libs\OculusSDK\LibOVR\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../chimera/include;C:\libs\SDL2-2.0.3\include;C:\libs\SDL2_image-2.0.0\include;C:\libs\SDL2_ttf-2.0.12\include;C:\libs\bullet3-master\src;C:\libs\tinyxml2;C:\libs\OculusSDK\LibOVR\Include;C:\libs\glew-1.12.0\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -82,6 +82,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\chimera\include\Camera.h" />
     <ClInclude Include="..\..\chimera\include\CameraMan.h" />
+    <ClInclude Include="..\..\chimera\include\CameraOvr.h" />
     <ClInclude Include="..\..\chimera\include\CameraSpherical.h" />
     <ClInclude Include="..\..\chimera\include\ChimeraUtils.h" />
     <ClInclude Include="..\..\chimera\include\Color.h" />
@@ -117,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\chimera\src\Camera.cpp" />
     <ClCompile Include="..\..\chimera\src\CameraMan.cpp" />
+    <ClCompile Include="..\..\chimera\src\CameraOvr.cpp" />
     <ClCompile Include="..\..\chimera\src\CameraSpherical.cpp" />
     <ClCompile Include="..\..\chimera\src\ChimeraUtils.cpp" />
     <ClCompile Include="..\..\chimera\src\Color.cpp" />

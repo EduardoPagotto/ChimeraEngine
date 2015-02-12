@@ -1,11 +1,10 @@
-
-
 #ifndef WIN32
-#include <iostream>
 #include <cstdio>
 #else
 #include "stdafx.h"
 #endif
+
+#include <iostream>
 
 //#include <log4cxx/logger.h>
 //#include <log4cxx/xml/domconfigurator.h>

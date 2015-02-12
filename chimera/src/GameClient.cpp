@@ -170,11 +170,11 @@ void GameClient::gameLoop ( void ) {
 
         }
 
-        if (l_isActive==true) {
+        //if (l_isActive==true) {
             //Se nao houver foco na tela pule o render
             processaGame();
 
-        }
+        //}
 
     }
 }

@@ -208,7 +208,52 @@ void OvrDevice::endDraw(){
 
 }
 
-void OvrDevice::initGL (){}
+void OvrDevice::initGL (){
+
+	GLenum error = GL_NO_ERROR;
+
+	//Initialize Projection Matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	//Check for error
+	error = glGetError();
+
+	if (error != GL_NO_ERROR)
+		throw ExceptionSDL(ExceptionCode::CREATE, std::string("Falha ao Iniciar o OpenGL:" + std::string((const char *)gluErrorString(error))));
+
+	//Initialize Modelview Matrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	//Check for error
+	error = glGetError();
+
+	if (error != GL_NO_ERROR)
+		throw ExceptionSDL(ExceptionCode::CREATE, std::string("Falha ao Iniciar o OpenGL:" + std::string((const char *)gluErrorString(error))));
+
+	//Initialize clear color
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+
+	//Check for error
+	error = glGetError();
+
+	if (error != GL_NO_ERROR)
+		throw ExceptionSDL(ExceptionCode::CREATE, std::string("Falha ao Iniciar o OpenGL:" + std::string((const char *)gluErrorString(error))));
+
+	//TODO retirar daqui e colocar na inicializacao do sceneMng
+	//estado inicial do openGL
+	glEnable(GL_TEXTURE_2D);
+	glShadeModel(GL_SMOOTH);
+	glClearDepth(1.0f);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDepthFunc(GL_LEQUAL);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glEnable(GL_LIGHTING);
+
+
+}
 
 
 void OvrDevice::getGeometry(int &_x, int &_y, int &_w, int &_h, int index){

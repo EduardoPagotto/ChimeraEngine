@@ -1,15 +1,6 @@
 #include "OvrDevice.h"
 #include "ExceptionSDL.h"
 
-
-
-#ifdef WIN32
-#include "../Src/OVR_CAPI_GL.h"
-#else
-#include "Src/OVR_CAPI_GL.h"
-#include <algorithm>
-#endif
-
 #include <SDL_opengl.h>
 #include <SDL_syswm.h>
 
@@ -85,31 +76,29 @@ OvrDevice::OvrDevice(std::string nomeTela) : Video(nomeTela) {
 
 OvrDevice::~OvrDevice(){
 
+	if (context!=nullptr)
+		SDL_GL_DeleteContext(context);
+
+	if (window!=nullptr)
+		SDL_DestroyWindow(window);
+
+	if (hmd != nullptr)
+		ovrHmd_Destroy(hmd);
+
+	ovr_Shutdown();
+
 }
 
 void OvrDevice::initOVRSubSys(){
 
-	using namespace OVR;
-
-// 	Sizei recommendedTex0Size = ovrHmd_GetFovTextureSize(hmd, ovrEye_Left, hmd->DefaultEyeFov[0], 1.0f);
-// 	Sizei recommendedTex1Size = ovrHmd_GetFovTextureSize(hmd, ovrEye_Right, hmd->DefaultEyeFov[1], 1.0f);
-// 	//Sizei renderTargetSize;
-// 	renderTargetSize.w = recommendedTex0Size.w + recommendedTex1Size.w;
-//
-// 	#ifdef WIN32
-// 	renderTargetSize.h = max(recommendedTex0Size.h, recommendedTex1Size.h);
-// 	#else
-// 	renderTargetSize.h = std::max(recommendedTex0Size.h, recommendedTex1Size.h);
-// 	#endif
-
 	ovrFovPort eyeFov[2] = { hmd->DefaultEyeFov[0], hmd->DefaultEyeFov[1] };
 
-	eyeRenderViewport[0].Pos = Vector2i(0, 0);
-	eyeRenderViewport[0].Size = Sizei(renderTargetSize.w / 2, renderTargetSize.h);
-	eyeRenderViewport[1].Pos = Vector2i((renderTargetSize.w + 1) / 2, 0);
+	eyeRenderViewport[0].Pos = OVR::Vector2i(0, 0);
+	eyeRenderViewport[0].Size = OVR::Sizei(renderTargetSize.w / 2, renderTargetSize.h);
+	eyeRenderViewport[1].Pos = OVR::Vector2i((renderTargetSize.w + 1) / 2, 0);
 	eyeRenderViewport[1].Size = eyeRenderViewport[0].Size;
 
-	ovrGLTexture eyeTexture[2];
+	//ovrGLTexture eyeTexture[2];
 	eyeTexture[0].OGL.Header.API = ovrRenderAPI_OpenGL;
 	eyeTexture[0].OGL.Header.TextureSize = renderTargetSize;
 	eyeTexture[0].OGL.Header.RenderViewport = eyeRenderViewport[0];
@@ -126,7 +115,7 @@ void OvrDevice::initOVRSubSys(){
 
 	ovrGLConfig cfg;
 	cfg.OGL.Header.API = ovrRenderAPI_OpenGL;
-	cfg.OGL.Header.BackBufferSize = Sizei(hmd->Resolution.w, hmd->Resolution.h);
+	cfg.OGL.Header.BackBufferSize = OVR::Sizei(hmd->Resolution.w, hmd->Resolution.h);
 	cfg.OGL.Header.Multisample = 1;
 #if defined(OVR_OS_WIN32)
 	if (!(hmd->HmdCaps & ovrHmdCap_ExtendDesktop))
@@ -139,14 +128,9 @@ void OvrDevice::initOVRSubSys(){
 	//cfg.OGL.Win = info.info.x11.window; //FIXME verificar o que vai no lugar
 #endif
 
-	ovrEyeRenderDesc eyeRenderDesc[2];
-
 	ovrHmd_ConfigureRendering(hmd, &cfg.Config, ovrDistortionCap_Chromatic | ovrDistortionCap_Vignette | ovrDistortionCap_TimeWarp | ovrDistortionCap_Overdrive, eyeFov, eyeRenderDesc);
-
 	ovrHmd_SetEnabledCaps(hmd, ovrHmdCap_LowPersistence | ovrHmdCap_DynamicPrediction);
-
 	ovrHmd_ConfigureTracking(hmd, ovrTrackingCap_Orientation | ovrTrackingCap_MagYawCorrection | ovrTrackingCap_Position, 0);
-
 }
 
 void OvrDevice::openFrameBuffer() {
@@ -218,7 +202,7 @@ void OvrDevice::endDraw(){
 
 	//glBindVertexArray(0);
 
-	//ovrHmd_EndFrame(hmd, eyeRenderPose, &eyeTexture[0].Texture);
+	ovrHmd_EndFrame(hmd, eyeRenderPose, &eyeTexture[0].Texture);
 
 	//glBindVertexArray(vertexArray);
 
@@ -249,6 +233,10 @@ void OvrDevice::executeViewPerspective( Camera *pCamera, int eyeIndex ) {
 	ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
 	//eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
 	eyeRenderPose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
+
+	//FIXME ver em camera
+	// Matrix4f MVPMatrix = Matrix4f(ovrMatrix4f_Projection(eyeRenderDesc[eye].Fov, 0.01f, 10000.0f, true)) * Matrix4f::Translation(eyeRenderDesc[eye].ViewAdjust) * Matrix4f(Quatf(eyeRenderPose[eye].Orientation).Inverted());
+	//glUniformMatrix4fv(MVPMatrixLocation, 1, GL_FALSE, &MVPMatrix.Transposed().M[0][0]);
 
 	glViewport(eyeRenderViewport[eye].Pos.x, eyeRenderViewport[eye].Pos.y, eyeRenderViewport[eye].Size.w, eyeRenderViewport[eye].Size.h);
 

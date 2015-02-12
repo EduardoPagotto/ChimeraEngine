@@ -23,11 +23,22 @@
 
 #ifdef WIN32
 #define OVR_OS_WIN32
+#include "../Src/OVR_CAPI_GL.h"
 #include "OVR.h"
 #else
 #define OVR_OS_LINUX
 #include "Include/OVR.h"
+#include "Src/OVR_CAPI_GL.h"
+#include <algorithm>
 #endif
+
+// #ifdef WIN32
+// #include "../Src/OVR_CAPI_GL.h"
+// #else
+// #include "Src/OVR_CAPI_GL.h"
+// #include <algorithm>
+// #endif
+
 
 namespace Chimera {
 
@@ -49,12 +60,12 @@ private:
     void openFrameBuffer();
     void closeFrameBuffer();
 
-	ovrHmd hmd;
-
-	//SDL_Rect rectangle;
-    OVR::Sizei renderTargetSize;
+    ovrHmd hmd;
     ovrRecti eyeRenderViewport[2];
     ovrPosef eyeRenderPose[2];
+    ovrEyeRenderDesc eyeRenderDesc[2];
+    ovrGLTexture eyeTexture[2];
+    OVR::Sizei renderTargetSize;
 
 	SDL_Window *window;
 	SDL_GLContext context;

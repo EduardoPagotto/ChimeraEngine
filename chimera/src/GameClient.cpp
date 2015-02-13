@@ -22,7 +22,7 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     area.w = 600;
     area.h = 40;
 
-    pHUD->addSquare ( area, Color ( 1.0f,1.0f, 1.0f, 0.5f ) );
+    pHUD->addSquare ( area, Color ( 1.0f,1.0f, 1.0f, 0.2f ) );
     pHUD->addText ( 0,0,0,5,Color::RED,&textoFPS );
 
     fps = 0;

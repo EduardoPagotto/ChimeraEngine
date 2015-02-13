@@ -50,6 +50,9 @@ public:
 
 private:
 
+    void drawBoxes();
+    void drawFonts();
+    
     bool on;
 
     std::vector<HUDSquare*> vSquare;

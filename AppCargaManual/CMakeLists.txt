@@ -45,17 +45,15 @@ target_link_libraries(
 	-lSDL2_ttf
 	/usr/lib64/libGLEW.so
 	/usr/lib64/libGLEWmx.so
-
 	librt.so
 	libXrandr.so
+	/usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a
 	#libGL.so
 	#libXxf86vm.so
 	#libpthread.so
 	#${UDEV_LIBRARIES}
 	#${XINERAMA_LIBRARY}
 	#${X11_LIBRARIES}
-
-	/usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a
 )
 
 add_dependencies(AppCargaManual chimera)

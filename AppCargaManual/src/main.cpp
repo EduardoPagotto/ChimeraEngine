@@ -30,8 +30,13 @@ int _tmain(int argc, _TCHAR* argv[]) {
 		
 		//Carga de dados 
 		Chimera::Loader *pLoader = new Chimera::Loader();
+#ifdef WIN32
 		pLoader->setModelDir("C:\\Projetos\\ChimeraEngine\\appTest\\models\\");
 		pLoader->setImageDir("C:\\Projetos\\ChimeraEngine\\appTest\\models\\");
+#else
+		pLoader->setModelDir("../../appTest/models/");
+		pLoader->setImageDir("../../appTest/models/");
+#endif
 		//Chimera::Node *pRoot = pLoader->loadDAE("cuboTex1.dae");//cuboEesfera.dae
 		Chimera::Node *pRoot = pLoader->loadDAE("cuboEesfera.dae");
 		//Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.dae");

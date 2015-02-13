@@ -49,27 +49,6 @@ HUD::~HUD() {
 
 }
 
-//void HUD::beginOrtho ( void ) {
-//
-//    glMatrixMode ( GL_PROJECTION );
-//    glPushMatrix( );
-//    glLoadIdentity( );
-//    glOrtho ( displayArea.x,  displayArea.w, displayArea.y, displayArea.h, -1, 1 );
-//    glMatrixMode ( GL_MODELVIEW );
-//    glPushMatrix( );
-//    glLoadIdentity( );
-//
-//}
-
-//void HUD::endOrtho ( void ) {
-//
-//    glMatrixMode ( GL_PROJECTION );
-//    glPopMatrix( );
-//    glMatrixMode ( GL_MODELVIEW );
-//    glPopMatrix( );
-//
-//}
-
 void HUD::addFont ( Font *_pFont ) {
     vFonts.push_back ( _pFont );
 }
@@ -96,46 +75,72 @@ void HUD::addText ( int _fontIndex, int _squareIndex, int _posX, int _posY, Colo
     vLineText.push_back ( newTxt );
 }
 
+void HUD::drawBoxes()
+{
+    for (HUDSquare* l_square: vSquare) {
+        
+        glColor4fv ( l_square->color.ptr() );
+        glBegin ( GL_QUADS );
+        glVertex2i ( l_square->tela.x, l_square->tela.y );
+        glVertex2i ( l_square->tela.x, l_square->tela.h );
+        glVertex2i ( l_square->tela.w, l_square->tela.h );
+        glVertex2i ( l_square->tela.w, l_square->tela.y );
+        glEnd();            
+        
+    }
+}
+
+void HUD::drawFonts()
+{
+        
+    for (HUDTxt *l_pTxt : vLineText) {
+        
+        HUDSquare* l_square = vSquare[l_pTxt->indexSquare];
+        
+        int l_novoX = l_square->tela.x + l_pTxt->posX;
+        int l_novoY = l_square->tela.y + l_pTxt->posY;
+        
+        vFonts[l_pTxt->indexFonte]->render ( l_novoX, l_novoY, 0, l_pTxt->color, l_pTxt->pText);            
+    }
+}
+
+
 void HUD::update() {
-    //if ( on ) {
 
-      //  glPushAttrib(GL_ENABLE_BIT);
-      //  beginOrtho();
+    // salva flags de bit
+    glPushAttrib( GL_ENABLE_BIT );
+    
+    // desabilita oculta face
+    glDisable( GL_DEPTH_TEST );
+    glDisable( GL_CULL_FACE );
+    
+    // desliga texturas e iluminacao
+    glDisable( GL_COLOR_MATERIAL );
+    glDisable( GL_LIGHTING );
+    glDisable( GL_TEXTURE_2D );
+    
+    // habilita mistura de tons a cena
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    
+    //preserva a cor original
+    glPushAttrib(GL_CURRENT_BIT);
+    
+    //desenha retangulos
+    drawBoxes();
+    
+    //retorna paleta
+    glPopAttrib();
 
-        glPushAttrib(GL_CURRENT_BIT);//preserva a cor original
+    //habilita testura para as fontes
+    glEnable(GL_TEXTURE_2D);
+    
+    //desenha as fontes em texturas
+    drawFonts();
+    
+    // restaura da pinha de flags 
+    glPopAttrib();
 
-        for (HUDSquare* l_square: vSquare) {
-            
-            glColor4fv ( l_square->color.ptr() );
-            glBegin ( GL_QUADS );
-            glVertex2i ( l_square->tela.x, l_square->tela.y );
-            glVertex2i ( l_square->tela.x, l_square->tela.h );
-            glVertex2i ( l_square->tela.w, l_square->tela.h );
-            glVertex2i ( l_square->tela.w, l_square->tela.y );
-            glEnd();            
-            
-        }
-        
-        glPopAttrib();//retorna paleta
-
-        glEnable(GL_TEXTURE_2D);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        
-        for (HUDTxt *l_pTxt : vLineText) {
-
-            HUDSquare* l_square = vSquare[l_pTxt->indexSquare];
-            
-            int l_novoX = l_square->tela.x + l_pTxt->posX;
-            int l_novoY = l_square->tela.y + l_pTxt->posY;
-            
-            vFonts[l_pTxt->indexFonte]->render ( l_novoX, l_novoY, 0, l_pTxt->color, l_pTxt->pText);            
-        }
-        
-      //  endOrtho();
-
-      //  glPopAttrib();
-   // }
 }
 
 }

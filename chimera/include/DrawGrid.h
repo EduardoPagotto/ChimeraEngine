@@ -6,50 +6,50 @@
 
 namespace Chimera {
 
-class DrawGrid : public Draw {
-public:
-    DrawGrid ( std::string _id, std::string _name );
-    DrawGrid ( const DrawGrid &_draw );
-    virtual ~DrawGrid();
+	class DrawGrid : public Draw {
+	public:
+		DrawGrid(std::string _id, std::string _name);
+		DrawGrid(const DrawGrid &_draw);
+		virtual ~DrawGrid();
 
-    void setSizeBox (const btVector3 &_sizeBox ) {
-        sizeBox = _sizeBox;
-    }
+		void setSizeBox(const btVector3 &_sizeBox) {
+			sizeBox = _sizeBox;
+		}
 
-    void setSpace ( btScalar _space ) {
-        space = _space;
-    }
+		void setSpace(btScalar _space) {
+			space = _space;
+		}
 
-    void setColorX ( Color _color ) {
-        colorX = _color;
-    }
+		void setColorX(Color _color) {
+			colorX = _color;
+		}
 
-    void setColorY ( Color _color ) {
-        colorY = _color;
-    }
+		void setColorY(Color _color) {
+			colorY = _color;
+		}
 
-    void setColorZ ( Color _color ) {
-        colorZ = _color;
-    }
+		void setColorZ(Color _color) {
+			colorZ = _color;
+		}
 
-    virtual void update ( DataMsg *dataMsg );
+		virtual void update(DataMsg *dataMsg);
 
-    virtual void clone ( Node **ppNode );
+		virtual void clone(Node **ppNode);
 
-    virtual void init();
-    virtual void render();
-    virtual btVector3 getSizeBox ( void );
+		virtual void init();
+		virtual void render();
+		virtual btVector3 getSizeBox(void);
 
 
-private:
-    btVector3 sizeBox;
-    btScalar space;
+	private:
+		btVector3 sizeBox;
+		btScalar space;
 
-    Color colorX;
-    Color colorY;
-    Color colorZ;
+		Color colorX;
+		Color colorY;
+		Color colorZ;
 
-};
+	};
 
 }
 

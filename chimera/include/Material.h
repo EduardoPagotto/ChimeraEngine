@@ -7,25 +7,25 @@
 
 namespace Chimera {
 
-class Material : Node {
-public:
+	class Material : Node {
+	public:
 
-    friend class Loader;
+		friend class Loader;
 
-    Material ( std::string _id, std::string _name );
-    Material ( const Material &_cpy );
-    virtual ~Material();
+		Material(std::string _id, std::string _name);
+		Material(const Material &_cpy);
+		virtual ~Material();
 
-    virtual void update ( DataMsg *dataMsg );
+		virtual void update(DataMsg *dataMsg);
 
-    virtual void clone ( Node **ppNode );
+		virtual void clone(Node **ppNode);
 
-private:
+	private:
 
-    Texture *pTextura;
-    Effect *pEffect;
+		Texture *pTextura;
+		Effect *pEffect;
 
-};
+	};
 
 }
 

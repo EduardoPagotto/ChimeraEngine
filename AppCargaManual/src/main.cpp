@@ -27,7 +27,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 		//Instancia de Video
 		//Chimera::Video *video = new Chimera::OvrDevice("Teste");
 		Chimera::Video *video = new Chimera::VideoDevice(800, 640, "teste");
-		
+
 		//Carga de dados 
 		Chimera::Loader *pLoader = new Chimera::Loader();
 #ifdef WIN32
@@ -49,9 +49,9 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
 		Game *game = new Game(video, sceneMng);
 		game->open();
-		
+
 		game->gameLoop();
-		
+
 		delete game;
 		delete sceneMng;
 		delete pRoot;

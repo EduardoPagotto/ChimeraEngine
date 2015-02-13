@@ -42,39 +42,39 @@
 
 namespace Chimera {
 
-class OvrDevice : public Video {
-public:
-	OvrDevice(std::string nomeTela);
-	virtual ~OvrDevice();
+	class OvrDevice : public Video {
+	public:
+		OvrDevice(std::string nomeTela);
+		virtual ~OvrDevice();
 
-    void initGL ();
-    void initDraw();
-    void endDraw();
-    void getGeometry(int &_x, int &_y, int &_w, int &_h, int index);
+		void initGL();
+		void initDraw();
+		void endDraw();
+		void getGeometry(int &_x, int &_y, int &_w, int &_h, int index);
 
-    virtual void executeViewPerspective(Camera *pCamera, int _eye);
-	virtual void executeViewOrto(int eyeIndex);
+		virtual void executeViewPerspective(Camera *pCamera, int _eye);
+		virtual void executeViewOrto(int eyeIndex);
 
-private:
-	void initOVRSubSys();
+	private:
+		void initOVRSubSys();
 
-    void openFrameBuffer();
-    void closeFrameBuffer();
+		void openFrameBuffer();
+		void closeFrameBuffer();
 
-    ovrHmd hmd;
-    ovrRecti eyeRenderViewport[2];
-    ovrPosef eyeRenderPose[2];
-    ovrEyeRenderDesc eyeRenderDesc[2];
-    ovrGLTexture eyeTexture[2];
-    OVR::Sizei renderTargetSize;
+		ovrHmd hmd;
+		ovrRecti eyeRenderViewport[2];
+		ovrPosef eyeRenderPose[2];
+		ovrEyeRenderDesc eyeRenderDesc[2];
+		ovrGLTexture eyeTexture[2];
+		OVR::Sizei renderTargetSize;
 
-	SDL_Window *window;
-	SDL_GLContext context;
+		SDL_Window *window;
+		SDL_GLContext context;
 
-    GLuint frameBufferObject;
-    GLuint renderBuffer;
-    GLuint texture;
-};
+		GLuint frameBufferObject;
+		GLuint renderBuffer;
+		GLuint texture;
+	};
 
 
 }

@@ -9,208 +9,210 @@
 
 namespace Chimera {
 
-PhysicsControl::PhysicsControl() {
+	PhysicsControl::PhysicsControl() {
 
-    collisionConfig = new btDefaultCollisionConfiguration();
-    dispatcher = new btCollisionDispatcher ( collisionConfig );
+		collisionConfig = new btDefaultCollisionConfiguration();
+		dispatcher = new btCollisionDispatcher(collisionConfig);
 
-    btGImpactCollisionAlgorithm::registerAlgorithm( dispatcher );
-    
-    broadPhase = new btDbvtBroadphase();
-    solver = new btSequentialImpulseConstraintSolver;
-    discretDynamicsWorld = new btDiscreteDynamicsWorld ( dispatcher, broadPhase, solver, collisionConfig );
+		btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
 
-    //true para forca aplicada apenas dentro docallback
-    discretDynamicsWorld->setInternalTickCallback ( PhysicsControl::doTickCallBack, static_cast < void *> ( this ), false );
+		broadPhase = new btDbvtBroadphase();
+		solver = new btSequentialImpulseConstraintSolver;
+		discretDynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, collisionConfig);
 
-    //logger = log4cxx::Logger::getLogger ( "PhysicsControl" );
-}
+		//true para forca aplicada apenas dentro docallback
+		discretDynamicsWorld->setInternalTickCallback(PhysicsControl::doTickCallBack, static_cast <void *> (this), false);
 
-PhysicsControl::~PhysicsControl() {
-    removeAllObjs();
-    clearAllShapes();
+		//logger = log4cxx::Logger::getLogger ( "PhysicsControl" );
+	}
 
-    delete discretDynamicsWorld;
-    delete solver;
-    delete collisionConfig;
-    delete dispatcher;
-    delete broadPhase;
-}
+	PhysicsControl::~PhysicsControl() {
+		removeAllObjs();
+		clearAllShapes();
 
-void PhysicsControl::stepSim ( void ) {
+		delete discretDynamicsWorld;
+		delete solver;
+		delete collisionConfig;
+		delete dispatcher;
+		delete broadPhase;
+	}
 
-    static bool s_primeiro = true;
+	void PhysicsControl::stepSim(void) {
 
-    if ( s_primeiro == false ) {
+		static bool s_primeiro = true;
 
-        // FIXME Descobri porque o stepSim nao esta sincrnizando com
-        // os quadros
-        countPeriod();
-        //discretDynamicsWorld->stepSimulation ( countPeriod(), 50 );
-        discretDynamicsWorld->stepSimulation ( 0.016667f );
+		if (s_primeiro == false) {
 
-    } else {
-        discretDynamicsWorld->stepSimulation ( 0.016667f );
-        s_primeiro = false;
-    }
+			// FIXME Descobri porque o stepSim nao esta sincrnizando com
+			// os quadros
+			countPeriod();
+			//discretDynamicsWorld->stepSimulation ( countPeriod(), 50 );
+			discretDynamicsWorld->stepSimulation(0.016667f);
 
-}
+		}
+		else {
+			discretDynamicsWorld->stepSimulation(0.016667f);
+			s_primeiro = false;
+		}
 
-void
-PhysicsControl::doTickCallBack ( btDynamicsWorld * world, btScalar timeStep ) {
+	}
 
-    PhysicsControl *w =static_cast < PhysicsControl * > ( world->getWorldUserInfo() );
-    w->processTickCallBack ( timeStep );
+	void
+		PhysicsControl::doTickCallBack(btDynamicsWorld * world, btScalar timeStep) {
 
-}
+			PhysicsControl *w = static_cast <PhysicsControl *> (world->getWorldUserInfo());
+			w->processTickCallBack(timeStep);
 
-void PhysicsControl::processTickCallBack ( btScalar timeStep ) {
+		}
 
-    // btCollisionObjectArray objects =
-    // discretDynamicsWorld->getCollisionObjectArray();
-    // discretDynamicsWorld->clearForces();
-    // for (int i = 0; i < objects.size(); i++) {
-    //
-    // btRigidBody *rigidBody = btRigidBody::upcast(objects[i]);
-    // if (!rigidBody) {
-    // continue;
-    // }
-    //
-    // rigidBody->applyGravity();
-    // //rigidBody->applyForce(btVector3(-10., 0., 0.), btVector3(0.,
-    // 0., 0.));
-    // }
-    // return;
+	void PhysicsControl::processTickCallBack(btScalar timeStep) {
 
-}
+		// btCollisionObjectArray objects =
+		// discretDynamicsWorld->getCollisionObjectArray();
+		// discretDynamicsWorld->clearForces();
+		// for (int i = 0; i < objects.size(); i++) {
+		//
+		// btRigidBody *rigidBody = btRigidBody::upcast(objects[i]);
+		// if (!rigidBody) {
+		// continue;
+		// }
+		//
+		// rigidBody->applyGravity();
+		// //rigidBody->applyForce(btVector3(-10., 0., 0.), btVector3(0.,
+		// 0., 0.));
+		// }
+		// return;
 
-void PhysicsControl::removeAllObjs() {
-    // remove the rigidbodies from the dynamics world and delete them
-    for ( int i = discretDynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i-- ) {
+	}
 
-        btCollisionObject *pObj =discretDynamicsWorld->getCollisionObjectArray() [i];
-        btRigidBody *pBody = btRigidBody::upcast ( pObj );
+	void PhysicsControl::removeAllObjs() {
+		// remove the rigidbodies from the dynamics world and delete them
+		for (int i = discretDynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
 
-        if ( pBody && pBody->getMotionState() )
-            delete pBody->getMotionState();
+			btCollisionObject *pObj = discretDynamicsWorld->getCollisionObjectArray()[i];
+			btRigidBody *pBody = btRigidBody::upcast(pObj);
 
-        discretDynamicsWorld->removeCollisionObject ( pObj );
-        delete pObj;
+			if (pBody && pBody->getMotionState())
+				delete pBody->getMotionState();
 
-    }
-}
+			discretDynamicsWorld->removeCollisionObject(pObj);
+			delete pObj;
 
-void PhysicsControl::clearAllShapes() {
-    // delete collision shapes
-    // for (int j=0; j < m_collisionShapes.size(); j++)
-    // {
-    // btCollisionShape* pShape = m_collisionShapes[j];
-    // m_collisionShapes[j] = 0;
-    // delete pShape;
-    // }
-}
+		}
+	}
 
-bool PhysicsControl::checkAllowCollision ( Node *pNode ) {
+	void PhysicsControl::clearAllShapes() {
+		// delete collision shapes
+		// for (int j=0; j < m_collisionShapes.size(); j++)
+		// {
+		// btCollisionShape* pShape = m_collisionShapes[j];
+		// m_collisionShapes[j] = 0;
+		// delete pShape;
+		// }
+	}
 
-    DataMsg dataMsg ( KindOp::IS_ALLOW_COLLIDE,this,nullptr,nullptr );
-    pNode->update ( &dataMsg );
+	bool PhysicsControl::checkAllowCollision(Node *pNode) {
 
-    return ( dataMsg.isDone() );
-}
+		DataMsg dataMsg(KindOp::IS_ALLOW_COLLIDE, this, nullptr, nullptr);
+		pNode->update(&dataMsg);
 
-void PhysicsControl::sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *_nodeB ) {
+		return (dataMsg.isDone());
+	}
 
-    SDL_Event event;
-    SDL_zero ( event );
-    event.type = SDL_USEREVENT;
-    event.user.code = ( int ) _kindOf;
-    event.user.data1 = _nodeA;
-    event.user.data2 = _nodeB;
-    SDL_PushEvent ( &event );
+	void PhysicsControl::sendMessageCollision(KindOp _kindOf, Node *_nodeA, Node *_nodeB) {
 
-}
+		SDL_Event event;
+		SDL_zero(event);
+		event.type = SDL_USEREVENT;
+		event.user.code = (int)_kindOf;
+		event.user.data1 = _nodeA;
+		event.user.data2 = _nodeB;
+		SDL_PushEvent(&event);
 
-void PhysicsControl::checkCollisions() {
+	}
 
-    std::map< btCollisionObject*, std::pair<Node*, Node*> > new_contacts;
+	void PhysicsControl::checkCollisions() {
 
-    int numManifolds = discretDynamicsWorld->getDispatcher()->getNumManifolds();
+		std::map< btCollisionObject*, std::pair<Node*, Node*> > new_contacts;
 
-    for ( int i=0; i<numManifolds; i++ ) {
+		int numManifolds = discretDynamicsWorld->getDispatcher()->getNumManifolds();
 
-        btPersistentManifold* contactManiFold = discretDynamicsWorld->getDispatcher()->getManifoldByIndexInternal ( i );
+		for (int i = 0; i < numManifolds; i++) {
 
-        btCollisionObject* objA = ( btCollisionObject* ) contactManiFold->getBody0();
-        btCollisionObject* objB = ( btCollisionObject* ) contactManiFold->getBody1();
+			btPersistentManifold* contactManiFold = discretDynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
 
-        int numContacts = contactManiFold->getNumContacts();
-        for ( int j=0; j < numContacts; j++ ) {
+			btCollisionObject* objA = (btCollisionObject*)contactManiFold->getBody0();
+			btCollisionObject* objB = (btCollisionObject*)contactManiFold->getBody1();
 
-            btManifoldPoint& pt = contactManiFold->getContactPoint ( j );
+			int numContacts = contactManiFold->getNumContacts();
+			for (int j = 0; j < numContacts; j++) {
 
-            if ( pt.getDistance() < 0.0f ) {
+				btManifoldPoint& pt = contactManiFold->getContactPoint(j);
 
-                if ( new_contacts.find ( objB ) == new_contacts.end() ) {
+				if (pt.getDistance() < 0.0f) {
 
-                    Node* l_pNodeB = (Node*)objB->getUserPointer(); //rigidbody contem o dado
-                    Node* l_pNodeA = (Node*)objA->getUserPointer(); //rigidbody contem o dado
-                    
-                    if ( l_pNodeB ) {
-                        if ( checkAllowCollision (l_pNodeB) ==true )
-                            new_contacts[objB] = std::pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeA ),static_cast<Node*> ( l_pNodeB ) );
-						  //new_contacts[objB] = std::make_pair<Node*, Node*>(static_cast<Node*> (l_pNodeA), static_cast<Node*> (l_pNodeB));
-                    }
+					if (new_contacts.find(objB) == new_contacts.end()) {
 
-                }
+						Node* l_pNodeB = (Node*)objB->getUserPointer(); //rigidbody contem o dado
+						Node* l_pNodeA = (Node*)objA->getUserPointer(); //rigidbody contem o dado
 
-                if ( new_contacts.find ( objA ) == new_contacts.end() ) {
+						if (l_pNodeB) {
+							if (checkAllowCollision(l_pNodeB) == true)
+								new_contacts[objB] = std::pair<Node*, Node*>(static_cast<Node*> (l_pNodeA), static_cast<Node*> (l_pNodeB));
+							//new_contacts[objB] = std::make_pair<Node*, Node*>(static_cast<Node*> (l_pNodeA), static_cast<Node*> (l_pNodeB));
+						}
 
-                    Node* l_pNodeA = (Node*)objA->getUserPointer(); //rigidbody contem o dado
-                    Node* l_pNodeB = (Node*)objB->getUserPointer(); //rigidbody contem o dado
-                    
-                    if ( l_pNodeA ) {
-                        if ( checkAllowCollision ( l_pNodeA ) ==true )
-                            new_contacts[objA] = std::pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA ) );
-						  //new_contacts[objA] = std::make_pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA ) );
-                    }
-                }
-            }
-        }
-    }
+					}
 
-    std::map< btCollisionObject*, std::pair<Node*, Node*> >::iterator it;
-    if ( !new_contacts.empty() ) {
+					if (new_contacts.find(objA) == new_contacts.end()) {
 
-        for ( it = new_contacts.begin(); it != new_contacts.end(); it++ ) {
-            if ( contactActives.find ( ( *it ).first ) == contactActives.end() ) {
-                
-                if (checkAllowCollision( ( *it ).second.first ) == true)
-                   sendMessageCollision(KindOp::START_COLLIDE, ( *it ).second.first, ( *it ).second.second);
-             
-            } else {
-                
-/*                if (checkAllowCollision( ( *it ).second.first ) == true)
-                    sendMessageCollision(KindOp::ON_COLLIDE, ( *it ).second.first, ( *it ).second.second);  */              
-                
-            }
-        }
+						Node* l_pNodeA = (Node*)objA->getUserPointer(); //rigidbody contem o dado
+						Node* l_pNodeB = (Node*)objB->getUserPointer(); //rigidbody contem o dado
 
-    }
+						if (l_pNodeA) {
+							if (checkAllowCollision(l_pNodeA) == true)
+								new_contacts[objA] = std::pair<Node*, Node*>(static_cast<Node*> (l_pNodeB), static_cast<Node*> (l_pNodeA));
+							//new_contacts[objA] = std::make_pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA ) );
+						}
+					}
+				}
+			}
+		}
 
-    if ( !contactActives.empty() ) {
-        for ( it = contactActives.begin(); it != contactActives.end(); it++ ) {
-            if ( new_contacts.find ( ( *it ).first ) == new_contacts.end() ) {
-                
-                 if (checkAllowCollision( ( *it ).second.first ) == true)
-                    sendMessageCollision(KindOp::OFF_COLLIDE, ( *it ).second.first, ( *it ).second.second);                
-                
-            }
-        }
-    }
+		std::map< btCollisionObject*, std::pair<Node*, Node*> >::iterator it;
+		if (!new_contacts.empty()) {
 
-   contactActives = new_contacts;
+			for (it = new_contacts.begin(); it != new_contacts.end(); it++) {
+				if (contactActives.find((*it).first) == contactActives.end()) {
 
-}
+					if (checkAllowCollision((*it).second.first) == true)
+						sendMessageCollision(KindOp::START_COLLIDE, (*it).second.first, (*it).second.second);
+
+				}
+				else {
+
+					/*                if (checkAllowCollision( ( *it ).second.first ) == true)
+										sendMessageCollision(KindOp::ON_COLLIDE, ( *it ).second.first, ( *it ).second.second);  */
+
+				}
+			}
+
+		}
+
+		if (!contactActives.empty()) {
+			for (it = contactActives.begin(); it != contactActives.end(); it++) {
+				if (new_contacts.find((*it).first) == new_contacts.end()) {
+
+					if (checkAllowCollision((*it).second.first) == true)
+						sendMessageCollision(KindOp::OFF_COLLIDE, (*it).second.first, (*it).second.second);
+
+				}
+			}
+		}
+
+		contactActives = new_contacts;
+
+	}
 
 
 }

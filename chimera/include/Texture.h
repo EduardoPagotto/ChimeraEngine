@@ -14,46 +14,46 @@
 
 namespace Chimera {
 
-enum class TextureFilter {
-    Nearest,
-    Linear,
-    Mipmapped
-};
+	enum class TextureFilter {
+		Nearest,
+		Linear,
+		Mipmapped
+	};
 
 
-class Texture : public Node {
-public:
+	class Texture : public Node {
+	public:
 
-    Texture ( std::string _id, std::string _name );
-    Texture ( const Texture &_texture );
+		Texture(std::string _id, std::string _name);
+		Texture(const Texture &_texture);
 
-    virtual ~Texture();
+		virtual ~Texture();
 
-    virtual void update ( DataMsg *dataMsg );
+		virtual void update(DataMsg *dataMsg);
 
-    virtual void clone ( Node **ppNode );
+		virtual void clone(Node **ppNode);
 
-    void render();
-    void init();
+		void render();
+		void init();
 
-    SDL_Surface *loadImage();
+		SDL_Surface *loadImage();
 
-    void setPathFile ( const std::string &_pathFile ) {
-        pathFile = _pathFile;
-    }
+		void setPathFile(const std::string &_pathFile) {
+			pathFile = _pathFile;
+		}
 
-    void setFilter ( TextureFilter _filter );
+		void setFilter(TextureFilter _filter);
 
-    TextureFilter getFilter();
+		TextureFilter getFilter();
 
-private:
-    std::string pathFile;
-    int textureList[3];
-    int indiceFilter;
-    bool texturaCarregada;
+	private:
+		std::string pathFile;
+		int textureList[3];
+		int indiceFilter;
+		bool texturaCarregada;
 
-    //log4cxx::LoggerPtr logger;
-};
+		//log4cxx::LoggerPtr logger;
+	};
 
 }
 #endif

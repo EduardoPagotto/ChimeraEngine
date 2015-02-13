@@ -19,11 +19,11 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     SDL_Rect area;
     area.x = 10;
     area.y = 10;
-    area.w = 600;
-    area.h = 40;
+    area.w = 540;
+    area.h = 22;
 
     pHUD->addSquare ( area, Color ( 1.0f,1.0f, 1.0f, 0.2f ) );
-    pHUD->addText ( 0,0,0,5,Color::RED,&textoFPS );
+    pHUD->addText ( 0,0,0,0,Color::RED,&textoFPS );
 
     fps = 0;
     timerFPS.setElapsedCount ( 1000 );

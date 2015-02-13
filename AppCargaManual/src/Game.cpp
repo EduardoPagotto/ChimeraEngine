@@ -86,9 +86,9 @@ void Game::start() {
     pVideo->setLight(true);
     pVideo->setMaterial(true);
 
-	sPosicaoObj = "pos:(,,)";
+    sPosicaoObj = "pos:(,,)";
 
-	pHUD->addText(0,0,255,5,Color::BLUE,&sPosicaoObj);
+    pHUD->addText(0,0,255,0,Color::BLUE,&sPosicaoObj);
 
 }
 

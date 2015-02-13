@@ -79,12 +79,17 @@ void HUD::drawBoxes()
 {
     for (HUDSquare* l_square: vSquare) {
         
+        int cantoA = l_square->tela.y + l_square->tela.h;
+        int cantoB = l_square->tela.x + l_square->tela.w;
+        
         glColor4fv ( l_square->color.ptr() );
         glBegin ( GL_QUADS );
+        
+        glVertex2i ( l_square->tela.x, cantoA );
+        glVertex2i ( cantoB, cantoA );
+        glVertex2i ( cantoB, l_square->tela.y );
         glVertex2i ( l_square->tela.x, l_square->tela.y );
-        glVertex2i ( l_square->tela.x, l_square->tela.h );
-        glVertex2i ( l_square->tela.w, l_square->tela.h );
-        glVertex2i ( l_square->tela.w, l_square->tela.y );
+
         glEnd();            
         
     }

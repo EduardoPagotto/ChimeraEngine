@@ -1,7 +1,5 @@
 #ifndef HUD_H_
 #define HUD_H_
-
-
 #include <vector>
 
 #ifndef WIN32
@@ -37,11 +35,11 @@ public:
     void addFont ( Font *_pFont );
     void addSquare ( const SDL_Rect _rec, Color _color );
 
-    void setOn ( const bool _on ) {
+    inline void setOn ( const bool _on ) {
         on = _on;
     }
 
-    bool isOn ( void ) const {
+    inline bool isOn ( void ) const {
         return on;
     }
 
@@ -54,7 +52,6 @@ private:
     void drawFonts();
     
     bool on;
-
     std::vector<HUDSquare*> vSquare;
     std::vector<HUDTxt*> vLineText;
     std::vector<Font*> vFonts;

@@ -4,655 +4,668 @@
 
 namespace Chimera {
 
-Loader::Loader () {
+	Loader::Loader() {
 
-    doc = nullptr;
-    root = nullptr;
-    //logger = log4cxx::Logger::getLogger ( "Loader" );
+		doc = nullptr;
+		root = nullptr;
+		//logger = log4cxx::Logger::getLogger ( "Loader" );
 
-}
+	}
 
-Loader::~Loader() {
+	Loader::~Loader() {
 
-    if ( doc != nullptr ) {
-        delete doc;
-        doc = nullptr;
-    }
+		if (doc != nullptr) {
+			delete doc;
+			doc = nullptr;
+		}
 
-    while ( !listaNodeRemover.empty() ) {
-        Node *pNode = listaNodeRemover.front();
-        listaNodeRemover.pop();
-        delete pNode;
-        pNode = nullptr;
-    }
+		while (!listaNodeRemover.empty()) {
+			Node *pNode = listaNodeRemover.front();
+			listaNodeRemover.pop();
+			delete pNode;
+			pNode = nullptr;
+		}
 
-}
+	}
 
-Node* Loader::loadDAE ( const std::string &_file ) {
+	Node* Loader::loadDAE(const std::string &_file) {
 
-    Node *pRootScene = nullptr;
-    std::string l_nomeArquivo = m_modelDir +  _file;
+		Node *pRootScene = nullptr;
+		std::string l_nomeArquivo = m_modelDir + _file;
 
-    doc = new tinyxml2::XMLDocument();
-    doc->LoadFile ( l_nomeArquivo.c_str() );
-    root = doc->FirstChildElement ( "COLLADA" );
-    if ( root == nullptr ) {
-        throw ExceptionChimera ( ExceptionCode::READ, "Falha Doc XML:" + _file + std::string ( " :" ) + doc->GetErrorStr1() );
-    }
+		doc = new tinyxml2::XMLDocument();
+		doc->LoadFile(l_nomeArquivo.c_str());
+		root = doc->FirstChildElement("COLLADA");
+		if (root == nullptr) {
+			throw ExceptionChimera(ExceptionCode::READ, "Falha Doc XML:" + _file + std::string(" :") + doc->GetErrorStr1());
+		}
 
-    libCam();
-    libLight();
-    libEffect();
-    libTexture();
-    libMaterial();
-    libGeometry();
-    pRootScene = libScene();//Carrega componentes da cena
-    libPhysicsMaterial();
-    libPhysicsModels();
-    
-    libConstraint();
-    
-    libPhysicsScenes();
+		libCam();
+		libLight();
+		libEffect();
+		libTexture();
+		libMaterial();
+		libGeometry();
+		pRootScene = libScene();//Carrega componentes da cena
+		libPhysicsMaterial();
+		libPhysicsModels();
 
-    return pRootScene;
-}
+		libConstraint();
 
-std::string Loader::retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement* _node ) {
+		libPhysicsScenes();
 
-    const char *l_value = _node->Attribute ( _atributo.c_str() );
-    if ( l_value != nullptr ) {
-        return std::string ( l_value );
-    }
+		return pRootScene;
+	}
 
-    //LOG4CXX_WARN ( logger , std::string ( "Atributo [ " + _atributo + " ] Elemento [ " + _node->Value() + " ] nao encontrado" ) );
+	std::string Loader::retornaAtributo(const std::string &_atributo, tinyxml2::XMLElement* _node) {
 
-    return std::string ( "" );
-}
+		const char *l_value = _node->Attribute(_atributo.c_str());
+		if (l_value != nullptr) {
+			return std::string(l_value);
+		}
 
-void Loader::libCam ( void ) {
+		//LOG4CXX_WARN ( logger , std::string ( "Atributo [ " + _atributo + " ] Elemento [ " + _node->Value() + " ] nao encontrado" ) );
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_cameras" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "camera" );
-        while ( l_nNode != nullptr ) {
+		return std::string("");
+	}
 
-            Camera *pCamera = new Camera ( CameraType::Base, retornaAtributo ( "id",l_nNode ),retornaAtributo ( "name",l_nNode ) );
-            listaNodeRemover.push ( pCamera );
+	void Loader::libCam(void) {
 
-            pCamera->loadCollada ( l_nNode );
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_cameras");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("camera");
+			while (l_nNode != nullptr) {
 
-            l_nNode = l_nNode->NextSiblingElement ( "camera" );
-        }
-    }
-}
+				Camera *pCamera = new Camera(CameraType::Base, retornaAtributo("id", l_nNode), retornaAtributo("name", l_nNode));
+				listaNodeRemover.push(pCamera);
 
-void Loader::libLight () {
+				pCamera->loadCollada(l_nNode);
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_lights" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "light" );
-        while ( l_nNode != nullptr ) {
+				l_nNode = l_nNode->NextSiblingElement("camera");
+			}
+		}
+	}
 
-            Light *pLight = new Light ( LightType::POINT,  retornaAtributo ( "id",l_nNode ),retornaAtributo ( "name",l_nNode ) );
-            listaNodeRemover.push ( pLight ); //Salva na lista de remocao
+	void Loader::libLight() {
 
-            pLight->loadCollada ( l_nNode );
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_lights");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("light");
+			while (l_nNode != nullptr) {
 
-            l_nNode = l_nNode->NextSiblingElement ( "light" );
-        }
-    }
-}
+				Light *pLight = new Light(LightType::POINT, retornaAtributo("id", l_nNode), retornaAtributo("name", l_nNode));
+				listaNodeRemover.push(pLight); //Salva na lista de remocao
 
-void Loader::libEffect ( void ) {
+				pLight->loadCollada(l_nNode);
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_effects" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "effect" );
-        while ( l_nNode != nullptr ) {
+				l_nNode = l_nNode->NextSiblingElement("light");
+			}
+		}
+	}
 
-            Effect *pEffect = new Effect ( retornaAtributo ( "id",l_nNode ),"Effect" );
-            listaNodeRemover.push ( pEffect );
+	void Loader::libEffect(void) {
 
-            pEffect->loadCollada ( l_nNode );
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_effects");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("effect");
+			while (l_nNode != nullptr) {
 
-            l_nNode = l_nNode->NextSiblingElement ( "effect" );
-        }
+				Effect *pEffect = new Effect(retornaAtributo("id", l_nNode), "Effect");
+				listaNodeRemover.push(pEffect);
 
-    }
-}
+				pEffect->loadCollada(l_nNode);
 
-void Loader::libTexture ( void ) {
+				l_nNode = l_nNode->NextSiblingElement("effect");
+			}
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_images" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "image" );
-        while ( l_nNode != nullptr ) {
-            Texture *pTexture = new Texture ( retornaAtributo ( "id",l_nNode ),retornaAtributo ( "name",l_nNode ) );
-            listaNodeRemover.push ( pTexture );
+		}
+	}
 
-            const char* l_val = l_nNode->FirstChildElement ( "init_from" )->GetText();
-            pTexture->setPathFile ( m_imageDir + std::string ( l_val ) );
-            pTexture->init();
+	void Loader::libTexture(void) {
 
-            l_nNode = l_nNode->NextSiblingElement ( "image" );
-        }
-    }
-}
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_images");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("image");
+			while (l_nNode != nullptr) {
+				Texture *pTexture = new Texture(retornaAtributo("id", l_nNode), retornaAtributo("name", l_nNode));
+				listaNodeRemover.push(pTexture);
 
-void Loader::libMaterial ( void ) {
+				const char* l_val = l_nNode->FirstChildElement("init_from")->GetText();
+				pTexture->setPathFile(m_imageDir + std::string(l_val));
+				pTexture->init();
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_materials" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "material" );
-        while ( l_nNode != nullptr ) {
+				l_nNode = l_nNode->NextSiblingElement("image");
+			}
+		}
+	}
 
-            Material *pMaterial = new Material ( retornaAtributo ( "id",l_nNode ),retornaAtributo ( "name",l_nNode ) );
-            listaNodeRemover.push ( pMaterial );
+	void Loader::libMaterial(void) {
 
-            const char* l_val = l_nNode->FirstChildElement ( "instance_effect" )->Attribute ( "url" );
-            if ( l_val != nullptr ) {
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_materials");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("material");
+			while (l_nNode != nullptr) {
 
-                Effect *pEffe = ( Effect* ) Node::findNodeById ( EntityKind::EFFECT,  &l_val[1] ); //m_mEffect[ l_nomeEffect ];
-                if ( pEffe ) {
-                    pMaterial->pEffect = pEffe;
-                    if ( pEffe->getNameTextureId().size() > 0 ) {
+				Material *pMaterial = new Material(retornaAtributo("id", l_nNode), retornaAtributo("name", l_nNode));
+				listaNodeRemover.push(pMaterial);
 
-                        Texture *pTexture = ( Texture* ) Node::findNodeById ( EntityKind::TEXTURE,pEffe->getNameTextureId() ); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findNodeById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
-                        if ( pTexture!=nullptr ) {
-                            pMaterial->pTextura = pTexture;//new Texture( *pTexture );
-                        }
+				const char* l_val = l_nNode->FirstChildElement("instance_effect")->Attribute("url");
+				if (l_val != nullptr) {
 
-                    }
-                }
+					Effect *pEffe = (Effect*)Node::findNodeById(EntityKind::EFFECT, &l_val[1]); //m_mEffect[ l_nomeEffect ];
+					if (pEffe) {
+						pMaterial->pEffect = pEffe;
+						if (pEffe->getNameTextureId().size() > 0) {
 
-            }
+							Texture *pTexture = (Texture*)Node::findNodeById(EntityKind::TEXTURE, pEffe->getNameTextureId()); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findNodeById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+							if (pTexture != nullptr) {
+								pMaterial->pTextura = pTexture;//new Texture( *pTexture );
+							}
 
-            l_nNode = l_nNode->NextSiblingElement ( "material" );
-        }
-    }
-}
+						}
+					}
 
-void Loader::libGeometry ( void ) {
+				}
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_geometries" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "geometry" );
-        while ( l_nNode != nullptr ) {
+				l_nNode = l_nNode->NextSiblingElement("material");
+			}
+		}
+	}
 
-            DrawTriMesh *pDrawTriMesh = new DrawTriMesh ( retornaAtributo ( "id",l_nNode ),retornaAtributo ( "name",l_nNode ) );
-            listaNodeRemover.push ( pDrawTriMesh );
+	void Loader::libGeometry(void) {
 
-            pDrawTriMesh->loadCollada ( l_nNode );
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_geometries");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("geometry");
+			while (l_nNode != nullptr) {
 
-            l_nNode = l_nNode->NextSiblingElement ( "geometry" );
-        }
-    }
-}
+				DrawTriMesh *pDrawTriMesh = new DrawTriMesh(retornaAtributo("id", l_nNode), retornaAtributo("name", l_nNode));
+				listaNodeRemover.push(pDrawTriMesh);
 
-Node* Loader::libScene ( void ) {
+				pDrawTriMesh->loadCollada(l_nNode);
 
-    Node *pScene = nullptr;
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_visual_scenes" );
-    if ( l_nNode != nullptr ) {
+				l_nNode = l_nNode->NextSiblingElement("geometry");
+			}
+		}
+	}
 
-        l_nNode = l_nNode->FirstChildElement ( "visual_scene" );
-        pScene = new Node ( EntityKind::NODE, retornaAtributo ( "id",l_nNode ),retornaAtributo ( "name",l_nNode ) );
+	Node* Loader::libScene(void) {
 
-        l_nNode = l_nNode->FirstChildElement ( "node" );
-        while ( l_nNode != nullptr ) {
+		Node *pScene = nullptr;
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_visual_scenes");
+		if (l_nNode != nullptr) {
 
-            createNode ( l_nNode, pScene );
-            l_nNode = l_nNode->NextSiblingElement ( "node" );
+			l_nNode = l_nNode->FirstChildElement("visual_scene");
+			pScene = new Node(EntityKind::NODE, retornaAtributo("id", l_nNode), retornaAtributo("name", l_nNode));
 
-        }
-    }
+			l_nNode = l_nNode->FirstChildElement("node");
+			while (l_nNode != nullptr) {
 
-    return pScene;
-}
+				createNode(l_nNode, pScene);
+				l_nNode = l_nNode->NextSiblingElement("node");
 
-void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix ) {
+			}
+		}
 
-    if ( listaMatrix.size() != 16 )
-        throw ExceptionChimera ( ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string ( listaMatrix.size() ) );
+		return pScene;
+	}
 
-    btScalar ponteiroFloat[16];
-    int indice = 0;
-    for ( int i=0; i<4; i++ ) {
-        for ( int j=0; j<4; j++ ) {
-            int pos =  i + ( 4*j );
-            ponteiroFloat[ pos ] = listaMatrix[indice];
-            indice++;
-        }
-    }
+	void Loader::carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix) {
 
-    _pTrans->setFromOpenGLMatrix ( ponteiroFloat );
-}
+		if (listaMatrix.size() != 16)
+			throw ExceptionChimera(ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string(listaMatrix.size()));
 
-void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
+		btScalar ponteiroFloat[16];
+		int indice = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				int pos = i + (4 * j);
+				ponteiroFloat[pos] = listaMatrix[indice];
+				indice++;
+			}
+		}
 
-    const char* l_id = _nNodeXML->Attribute ( "id" );
-    const char* l_nome = _nNodeXML->Attribute ( "name" );
+		_pTrans->setFromOpenGLMatrix(ponteiroFloat);
+	}
 
-    Node *pFilho = _pNode;
+	void Loader::createNode(tinyxml2::XMLElement* _nNodeXML, Node *_pNode) {
 
-    tinyxml2::XMLElement* l_nNodeVal = _nNodeXML->FirstChildElement();
+		const char* l_id = _nNodeXML->Attribute("id");
+		const char* l_nome = _nNodeXML->Attribute("name");
 
-    std::queue<btTransform*> pilhaTransformacao;
+		Node *pFilho = _pNode;
 
-    while ( l_nNodeVal != nullptr ) {
+		tinyxml2::XMLElement* l_nNodeVal = _nNodeXML->FirstChildElement();
 
-        const char* l_nomeElemento = l_nNodeVal->Value();
+		std::queue<btTransform*> pilhaTransformacao;
 
-        if ( strcmp ( l_nomeElemento,"matrix" ) == 0 ) {
+		while (l_nNodeVal != nullptr) {
 
-            btTransform *l_pTransform = new btTransform;
+			const char* l_nomeElemento = l_nNodeVal->Value();
 
-            std::vector<float> l_arrayValores;
+			if (strcmp(l_nomeElemento, "matrix") == 0) {
 
-            const char* l_matrix = l_nNodeVal->GetText();
-            loadArrayBtScalar ( l_matrix, l_arrayValores );
+				btTransform *l_pTransform = new btTransform;
 
-            carregaMatrix ( l_pTransform, l_arrayValores );
+				std::vector<float> l_arrayValores;
 
-            pilhaTransformacao.push ( l_pTransform );
+				const char* l_matrix = l_nNodeVal->GetText();
+				loadArrayBtScalar(l_matrix, l_arrayValores);
 
-        } else if ( strcmp ( l_nomeElemento, "instance_camera" ) ==0 ) {
+				carregaMatrix(l_pTransform, l_arrayValores);
 
-            const char* l_url = l_nNodeVal->Attribute ( "url" );
+				pilhaTransformacao.push(l_pTransform);
 
-            btTransform* pTrans = pilhaTransformacao.front();
-            pilhaTransformacao.pop();
+			}
+			else if (strcmp(l_nomeElemento, "instance_camera") == 0) {
 
-            Camera *pCam = ( Camera* ) Node::findNodeById ( EntityKind::CAMERA, ( char* ) &l_url[1] );
-            if ( pCam!=nullptr ) {
+				const char* l_url = l_nNodeVal->Attribute("url");
 
-                Camera *pCamScena = nullptr;
-                pCam->clone ( ( Node** ) &pCamScena );
-                pCamScena->setTransform ( *pTrans );
+				btTransform* pTrans = pilhaTransformacao.front();
+				pilhaTransformacao.pop();
 
-                _pNode->addChild ( pCamScena );
-                pFilho = pCamScena;
+				Camera *pCam = (Camera*)Node::findNodeById(EntityKind::CAMERA, (char*)&l_url[1]);
+				if (pCam != nullptr) {
 
-            }
+					Camera *pCamScena = nullptr;
+					pCam->clone((Node**)&pCamScena);
+					pCamScena->setTransform(*pTrans);
 
-            delete pTrans;
+					_pNode->addChild(pCamScena);
+					pFilho = pCamScena;
 
-        } else if ( strcmp ( l_nomeElemento, "instance_light" ) ==0 ) {
+				}
 
-            const char* l_url = l_nNodeVal->Attribute ( "url" );
+				delete pTrans;
 
-            btTransform* pTrans = pilhaTransformacao.front();
-            pilhaTransformacao.pop();
+			}
+			else if (strcmp(l_nomeElemento, "instance_light") == 0) {
 
-            Light *pLight = ( Light* ) Node::findNodeById ( EntityKind::LIGHT, ( char* ) &l_url[1] );
-            if ( pLight!=nullptr ) {
+				const char* l_url = l_nNodeVal->Attribute("url");
 
-                Light *pLightScena = nullptr;
-                pLight->clone ( ( Node** ) &pLightScena );
-                pLightScena->setTransform ( *pTrans );
+				btTransform* pTrans = pilhaTransformacao.front();
+				pilhaTransformacao.pop();
 
-                _pNode->addChild ( pLightScena );
-                pFilho = pLightScena;
+				Light *pLight = (Light*)Node::findNodeById(EntityKind::LIGHT, (char*)&l_url[1]);
+				if (pLight != nullptr) {
 
-            }
+					Light *pLightScena = nullptr;
+					pLight->clone((Node**)&pLightScena);
+					pLightScena->setTransform(*pTrans);
 
-            delete pTrans;
+					_pNode->addChild(pLightScena);
+					pFilho = pLightScena;
 
-        } else if ( strcmp ( l_nomeElemento, "instance_geometry" ) ==0 ) {
+				}
 
+				delete pTrans;
 
-            btTransform* pTrans = pilhaTransformacao.front();
-            pilhaTransformacao.pop();
+			}
+			else if (strcmp(l_nomeElemento, "instance_geometry") == 0) {
 
-            DrawTriMesh *pDrawTriMesh =nullptr;
-            Material *pMaterial = nullptr;
 
-            Object *pObj = new Object ( l_id ,l_nome );
-            pObj->setTransform ( *pTrans );
+				btTransform* pTrans = pilhaTransformacao.front();
+				pilhaTransformacao.pop();
 
-            const char* l_url = l_nNodeVal->Attribute ( "url" );
-            pDrawTriMesh = ( DrawTriMesh* ) Node::findNodeById ( EntityKind::DRAW, ( char* ) &l_url[1] );
+				DrawTriMesh *pDrawTriMesh = nullptr;
+				Material *pMaterial = nullptr;
 
-            tinyxml2::XMLElement* l_nBindMat =  l_nNodeVal->FirstChildElement ( "bind_material" );
-            if ( l_nBindMat != nullptr ) {
-                tinyxml2::XMLElement* l_nTecnicCommon =  l_nBindMat->FirstChildElement ( "technique_common" );
-                if ( l_nTecnicCommon != nullptr ) {
-                    tinyxml2::XMLElement* l_nInstanceMaterial =  l_nTecnicCommon->FirstChildElement ( "instance_material" );
-                    if ( l_nInstanceMaterial != nullptr ) {
+				Object *pObj = new Object(l_id, l_nome);
+				pObj->setTransform(*pTrans);
 
-                        const char *l_target = l_nInstanceMaterial->Attribute ( "target" );
-                        pMaterial = ( Material* ) Node::findNodeById ( EntityKind::MATERIAL, ( char* ) &l_target[1] );
+				const char* l_url = l_nNodeVal->Attribute("url");
+				pDrawTriMesh = (DrawTriMesh*)Node::findNodeById(EntityKind::DRAW, (char*)&l_url[1]);
 
-                    }
-                }
-            }
+				tinyxml2::XMLElement* l_nBindMat = l_nNodeVal->FirstChildElement("bind_material");
+				if (l_nBindMat != nullptr) {
+					tinyxml2::XMLElement* l_nTecnicCommon = l_nBindMat->FirstChildElement("technique_common");
+					if (l_nTecnicCommon != nullptr) {
+						tinyxml2::XMLElement* l_nInstanceMaterial = l_nTecnicCommon->FirstChildElement("instance_material");
+						if (l_nInstanceMaterial != nullptr) {
 
-            //Se ha material carregue
-            if ( pMaterial != nullptr ) {
+							const char *l_target = l_nInstanceMaterial->Attribute("target");
+							pMaterial = (Material*)Node::findNodeById(EntityKind::MATERIAL, (char*)&l_target[1]);
 
-                //Se ha effeito (color_material) carregue
-                if ( pMaterial->pEffect != nullptr ) {
-                    Effect *novoEffect = nullptr;
-                    pMaterial->pEffect->clone ( ( Node** ) &novoEffect );
-                    pObj->addChild ( novoEffect );
-                }
+						}
+					}
+				}
 
-                //Se há textura carregue
-                if ( pMaterial->pTextura != nullptr ) {
+				//Se ha material carregue
+				if (pMaterial != nullptr) {
 
-                    Texture *novaTextura = nullptr;
-                    pMaterial->pTextura->clone ( ( Node** ) &novaTextura );
-                    pObj->addChild ( novaTextura );
-                }
-            }
+					//Se ha effeito (color_material) carregue
+					if (pMaterial->pEffect != nullptr) {
+						Effect *novoEffect = nullptr;
+						pMaterial->pEffect->clone((Node**)&novoEffect);
+						pObj->addChild(novoEffect);
+					}
 
-            //se há trimesh carregue
-            if ( pDrawTriMesh ) {
-                DrawTriMesh *nodeFinal = nullptr;
-                pDrawTriMesh->clone ( ( Node** ) &nodeFinal );
-                pObj->addChild ( nodeFinal );
-            }
+					//Se há textura carregue
+					if (pMaterial->pTextura != nullptr) {
 
-            //ajusta ele como filho atual
-            pFilho = pObj;
-            _pNode->addChild ( pObj );
+						Texture *novaTextura = nullptr;
+						pMaterial->pTextura->clone((Node**)&novaTextura);
+						pObj->addChild(novaTextura);
+					}
+				}
 
-            delete pTrans;
+				//se há trimesh carregue
+				if (pDrawTriMesh) {
+					DrawTriMesh *nodeFinal = nullptr;
+					pDrawTriMesh->clone((Node**)&nodeFinal);
+					pObj->addChild(nodeFinal);
+				}
 
-        } else if ( strcmp ( l_nomeElemento, "node" ) ==0 ) {
+				//ajusta ele como filho atual
+				pFilho = pObj;
+				_pNode->addChild(pObj);
 
-            Node *pBuffer = pFilho;
-            createNode ( l_nNodeVal,pFilho );
-            pFilho = pBuffer;
+				delete pTrans;
 
-        }
+			}
+			else if (strcmp(l_nomeElemento, "node") == 0) {
 
-        l_nNodeVal = l_nNodeVal->NextSiblingElement();
-    }
-}
+				Node *pBuffer = pFilho;
+				createNode(l_nNodeVal, pFilho);
+				pFilho = pBuffer;
 
-void Loader::libPhysicsMaterial ( void ) {
+			}
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_physics_materials" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "physics_material" );
-        while ( l_nNode != nullptr ) {
+			l_nNodeVal = l_nNodeVal->NextSiblingElement();
+		}
+	}
 
-            const char* l_id = l_nNode->Attribute ( "id" );
-            const char *l_nome = l_nNode->Attribute ( "name" );
+	void Loader::libPhysicsMaterial(void) {
 
-            btMaterial *pPMat = new btMaterial;
-            m_pPhMaterial[ l_nome ] = pPMat;
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_physics_materials");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("physics_material");
+			while (l_nNode != nullptr) {
 
-            tinyxml2::XMLElement* l_nTec = l_nNode->FirstChildElement ( "technique_common" );
-            if ( l_nTec != nullptr ) {
+				const char* l_id = l_nNode->Attribute("id");
+				const char *l_nome = l_nNode->Attribute("name");
 
-                tinyxml2::XMLElement* l_nFric = l_nTec->FirstChildElement ( "dynamic_friction" );
-                if ( l_nFric != nullptr ) {
-                    const char *l_fric = l_nFric->GetText();
-                    if ( l_fric !=nullptr )
-                        pPMat->m_friction = atof ( l_fric );
-                }
+				btMaterial *pPMat = new btMaterial;
+				m_pPhMaterial[l_nome] = pPMat;
 
-                tinyxml2::XMLElement* l_nRes = l_nTec->FirstChildElement ( "restitution" );
-                if ( l_nRes != nullptr ) {
-                    const char *l_res = l_nRes->GetText();
-                    if ( l_res !=nullptr )
-                        pPMat->m_friction = atof ( l_res );
-                }
+				tinyxml2::XMLElement* l_nTec = l_nNode->FirstChildElement("technique_common");
+				if (l_nTec != nullptr) {
 
-            }
+					tinyxml2::XMLElement* l_nFric = l_nTec->FirstChildElement("dynamic_friction");
+					if (l_nFric != nullptr) {
+						const char *l_fric = l_nFric->GetText();
+						if (l_fric != nullptr)
+							pPMat->m_friction = atof(l_fric);
+					}
 
-            l_nNode = l_nNode->NextSiblingElement ( "physics_material" );
-        }
-    }
-}
+					tinyxml2::XMLElement* l_nRes = l_nTec->FirstChildElement("restitution");
+					if (l_nRes != nullptr) {
+						const char *l_res = l_nRes->GetText();
+						if (l_res != nullptr)
+							pPMat->m_friction = atof(l_res);
+					}
 
-void Loader::libConstraint() {
+				}
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_physics_models" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "physics_model" );
-        if ( l_nNode != nullptr ) {
-            l_nNode = l_nNode->FirstChildElement ( "rigid_constraint" );
-            while ( l_nNode != nullptr ) {
+				l_nNode = l_nNode->NextSiblingElement("physics_material");
+			}
+		}
+	}
 
-                Constraint *pConstraint = new Constraint ( l_nNode->Attribute ( "name" ),l_nNode->Attribute ( "sid" ) );
-                listaNodeRemover.push ( pConstraint );
+	void Loader::libConstraint() {
 
-                tinyxml2::XMLElement* l_nRefAttachent = l_nNode->FirstChildElement ( "ref_attachment" );
-                if ( l_nRefAttachent != nullptr ) {
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_physics_models");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("physics_model");
+			if (l_nNode != nullptr) {
+				l_nNode = l_nNode->FirstChildElement("rigid_constraint");
+				while (l_nNode != nullptr) {
 
-                    const char *l_rigidA = l_nRefAttachent->Attribute ( "rigid_body" );
+					Constraint *pConstraint = new Constraint(l_nNode->Attribute("name"), l_nNode->Attribute("sid"));
+					listaNodeRemover.push(pConstraint);
 
-                    Physics *pPhysc = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_rigidA );
-                    pConstraint->pPhysicsA = pPhysc;
+					tinyxml2::XMLElement* l_nRefAttachent = l_nNode->FirstChildElement("ref_attachment");
+					if (l_nRefAttachent != nullptr) {
 
-                    tinyxml2::XMLElement* l_nTrans = l_nRefAttachent->FirstChildElement ( "matrix" );
-                    if ( l_nTrans != nullptr ) {
+						const char *l_rigidA = l_nRefAttachent->Attribute("rigid_body");
 
-                        btTransform transform;
+						Physics *pPhysc = (Physics*)Node::findNodeById(EntityKind::PHYSICS, l_rigidA);
+						pConstraint->pPhysicsA = pPhysc;
 
-                        std::vector<float> l_arrayValores;
+						tinyxml2::XMLElement* l_nTrans = l_nRefAttachent->FirstChildElement("matrix");
+						if (l_nTrans != nullptr) {
 
-                        const char* l_matrix = l_nTrans->GetText();
-                        loadArrayBtScalar ( l_matrix, l_arrayValores );
+							btTransform transform;
 
-                        carregaMatrix ( &transform, l_arrayValores );
+							std::vector<float> l_arrayValores;
 
-                        pConstraint->transformA = transform;
+							const char* l_matrix = l_nTrans->GetText();
+							loadArrayBtScalar(l_matrix, l_arrayValores);
 
-                    }
+							carregaMatrix(&transform, l_arrayValores);
 
-                    tinyxml2::XMLElement* l_nAttachent = l_nNode->FirstChildElement ( "attachment" );
-                    if ( l_nAttachent != nullptr ) {
+							pConstraint->transformA = transform;
 
-                        const char *l_rigidB = l_nAttachent->Attribute ( "rigid_body" );
+						}
 
-                        Physics *pPhysc = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_rigidB );
-                        pConstraint->pPhysicsB = pPhysc;
+						tinyxml2::XMLElement* l_nAttachent = l_nNode->FirstChildElement("attachment");
+						if (l_nAttachent != nullptr) {
 
-                        tinyxml2::XMLElement* l_nTrans = l_nAttachent->FirstChildElement ( "matrix" );
-                        if ( l_nTrans != nullptr ) {
+							const char *l_rigidB = l_nAttachent->Attribute("rigid_body");
 
-                            btTransform transform;
+							Physics *pPhysc = (Physics*)Node::findNodeById(EntityKind::PHYSICS, l_rigidB);
+							pConstraint->pPhysicsB = pPhysc;
 
-                            std::vector<float> l_arrayValores;
+							tinyxml2::XMLElement* l_nTrans = l_nAttachent->FirstChildElement("matrix");
+							if (l_nTrans != nullptr) {
 
-                            const char* l_matrix = l_nTrans->GetText();
-                            loadArrayBtScalar ( l_matrix, l_arrayValores );
+								btTransform transform;
 
-                            carregaMatrix ( &transform, l_arrayValores );
+								std::vector<float> l_arrayValores;
 
-                            pConstraint->transformB = transform;
+								const char* l_matrix = l_nTrans->GetText();
+								loadArrayBtScalar(l_matrix, l_arrayValores);
 
-                        }
-                    }
-                }
-                l_nNode = l_nNode->NextSiblingElement ( "rigid_constraint" );
-            }
-        }
-    }
+								carregaMatrix(&transform, l_arrayValores);
 
-}
+								pConstraint->transformB = transform;
 
-void Loader::libPhysicsModels () {
+							}
+						}
+					}
+					l_nNode = l_nNode->NextSiblingElement("rigid_constraint");
+				}
+			}
+		}
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_physics_models" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "physics_model" );
-        if ( l_nNode != nullptr ) {
-            l_nNode = l_nNode->FirstChildElement ( "rigid_body" );
-            while ( l_nNode != nullptr ) {
+	}
 
-                Physics *pPhysc = new Physics ( l_nNode->Attribute ( "name" ),l_nNode->Attribute ( "sid" ) );
-                listaNodeRemover.push ( pPhysc );
+	void Loader::libPhysicsModels() {
 
-                tinyxml2::XMLElement* l_nTecnicCommon = l_nNode->FirstChildElement ( "technique_common" );
-                if ( l_nTecnicCommon != nullptr ) {
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_physics_models");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("physics_model");
+			if (l_nNode != nullptr) {
+				l_nNode = l_nNode->FirstChildElement("rigid_body");
+				while (l_nNode != nullptr) {
 
-                    tinyxml2::XMLElement* l_nMass = l_nTecnicCommon->FirstChildElement ( "mass" );
-                    if ( l_nMass != nullptr ) {
-                        const char* l_mass = l_nMass->GetText();
-                        pPhysc->setMass ( atof ( l_mass ) );
-                    }
+					Physics *pPhysc = new Physics(l_nNode->Attribute("name"), l_nNode->Attribute("sid"));
+					listaNodeRemover.push(pPhysc);
 
-                    tinyxml2::XMLElement* l_nInstaceMaterial = l_nTecnicCommon->FirstChildElement ( "instance_physics_material" );
-                    if ( l_nInstaceMaterial != nullptr ) {
-                        const char* l_url = l_nInstaceMaterial->Attribute ( "url" );
-                        if ( l_url != nullptr ) {
+					tinyxml2::XMLElement* l_nTecnicCommon = l_nNode->FirstChildElement("technique_common");
+					if (l_nTecnicCommon != nullptr) {
 
-                            btMaterial *pPMat =m_pPhMaterial[ ( const char* ) &l_url[1]];
-                            if ( pPMat ) {
-                                pPhysc->setFriction ( pPMat->m_friction );
-                                pPhysc->setRestitution ( pPMat->m_restitution );
-                            }
-                        }
-                    }
-
-                    tinyxml2::XMLElement* l_nShape = l_nTecnicCommon->FirstChildElement ( "shape" );
-                    if (l_nShape != nullptr) {
-                     
-                        l_nShape = l_nShape->FirstChildElement();
-                        const char *l_tipoShape = l_nShape->Value();
-                        
-                        if (strcmp(l_tipoShape,"sphere")==0) {
-                         
-                            tinyxml2::XMLElement* l_nEsfera = l_nShape->FirstChildElement();
-                            const char *l_raio = l_nEsfera->GetText();
-                            
-                            std::vector<float> l_arrayValores;
-                            
-                            loadArrayBtScalar(l_raio,l_arrayValores);
-                            if (l_arrayValores.size() == 1) {
-                                
-                                btVector3 raio(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
-                                pPhysc->setShapeCilinder(raio);
-                                
-                            } else if (l_arrayValores.size() == 3) {
-                                
-                                btVector3 raio(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
-                                pPhysc->setShapeCilinder(raio);
-                                
-                            } else {
-                                
-                            }
-                            
-                        } else if (strcmp(l_tipoShape,"box")==0) {
+						tinyxml2::XMLElement* l_nMass = l_nTecnicCommon->FirstChildElement("mass");
+						if (l_nMass != nullptr) {
+							const char* l_mass = l_nMass->GetText();
+							pPhysc->setMass(atof(l_mass));
+						}
 
-                            tinyxml2::XMLElement* l_nBox = l_nShape->FirstChildElement();
-                            const char *l_size = l_nBox->GetText();                            
-                            
-                            std::vector<float> l_arrayValores;
-                            loadArrayBtScalar(l_size,l_arrayValores);
-                            
-                            if (l_arrayValores.size() == 1) {
-                                
-                                btVector3 cubo(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
-                                pPhysc->setShapeBox(cubo);
-                                
-                            } else if (l_arrayValores.size() == 3) {
-                                
-                                btVector3 caixa(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
-                                pPhysc->setShapeBox(caixa);
-                                
-                            } else {
-                                
-                            }
-                            
-                        } else if (strcmp(l_tipoShape,"cylinder")==0) {
-                            
-                            tinyxml2::XMLElement* l_nCyl = l_nShape->FirstChildElement();
-                            const char *l_size = l_nCyl->GetText();                            
-                            
-                            std::vector<float> l_arrayValores;
-                            loadArrayBtScalar(l_size,l_arrayValores);
-                            
-                            if (l_arrayValores.size() == 1) {
-                                
-                                btVector3 cili(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
-                                pPhysc->setShapeCilinder(cili);
-                                
-                            } else if (l_arrayValores.size() == 3) {
-                                
-                                btVector3 cili(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
-                                pPhysc->setShapeBox(cili);
-                                
-                            } else {
-                                
-                            }
-                            //Cylinder 
-     
-                            
-                            //Cylinder 
-                        } else if (strcmp(l_tipoShape,"mesh")==0) {
-                            
-                            //instance_geometry
-                            tinyxml2::XMLElement* l_nMesh = l_nShape->FirstChildElement();
-                            if (l_nMesh != nullptr) {
-                                const char *l_mesh = l_nMesh->Attribute("url");
-                                if (l_mesh != nullptr) {
-                                    
-                                    DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)Node::findNodeById(EntityKind::DRAW, &l_mesh[1]);
-                                   
-                                    if (pDrawTriMesh != nullptr) {
-                                     
-                                        btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray(pDrawTriMesh->vIndex.getSize(),pDrawTriMesh->vIndex.ptrVal(),3*sizeof(int),
-                                                                                                                      pDrawTriMesh->vList.getSize(),pDrawTriMesh->vList.ptrVal(),3*sizeof(float));
-                                        
-                                        pPhysc->setIndexVertexArray(indexVertexArray);
-                                        
-                                    }
-                                }
-                            }                          
-                        }
-                    }
-                   
-                    //TODO carga do shape de colisao
+						tinyxml2::XMLElement* l_nInstaceMaterial = l_nTecnicCommon->FirstChildElement("instance_physics_material");
+						if (l_nInstaceMaterial != nullptr) {
+							const char* l_url = l_nInstaceMaterial->Attribute("url");
+							if (l_url != nullptr) {
 
-                }
+								btMaterial *pPMat = m_pPhMaterial[(const char*)&l_url[1]];
+								if (pPMat) {
+									pPhysc->setFriction(pPMat->m_friction);
+									pPhysc->setRestitution(pPMat->m_restitution);
+								}
+							}
+						}
 
-                l_nNode = l_nNode->NextSiblingElement ( "rigid_body" );
+						tinyxml2::XMLElement* l_nShape = l_nTecnicCommon->FirstChildElement("shape");
+						if (l_nShape != nullptr) {
 
-            }
-        }
-    }
-}
+							l_nShape = l_nShape->FirstChildElement();
+							const char *l_tipoShape = l_nShape->Value();
 
-void Loader::libPhysicsScenes ( void ) {
+							if (strcmp(l_tipoShape, "sphere") == 0) {
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_physics_scenes" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "physics_scene" );
-        if ( l_nNode != nullptr ) {
-            l_nNode = l_nNode->FirstChildElement ( "instance_physics_model" );
+								tinyxml2::XMLElement* l_nEsfera = l_nShape->FirstChildElement();
+								const char *l_raio = l_nEsfera->GetText();
 
-            if ( l_nNode != nullptr ) {
-                l_nNode = l_nNode->FirstChildElement ( "instance_rigid_body" );
+								std::vector<float> l_arrayValores;
 
-                while ( l_nNode != nullptr ) {
+								loadArrayBtScalar(l_raio, l_arrayValores);
+								if (l_arrayValores.size() == 1) {
 
-                    const char *l_body = l_nNode->Attribute ( "body" );
-                    const char *l_target = l_nNode->Attribute ( "target" );
+									btVector3 raio(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
+									pPhysc->setShapeCilinder(raio);
 
-                    Physics *pPhysic = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_body ); //m_mPhysics[ ( const char* ) l_pBody];
-                    Object *pObj = ( Object* ) Node::findNodeById ( EntityKind::OBJECT, &l_target[1] );
+								}
+								else if (l_arrayValores.size() == 3) {
 
-                    if ( ( pPhysic ) && ( pObj ) ) {
+									btVector3 raio(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
+									pPhysc->setShapeCilinder(raio);
 
-                        Physics *novoPhy = nullptr;
-                        pPhysic->clone ( ( Node** ) &novoPhy );
-                        pObj->addChild ( novoPhy );
+								}
+								else {
 
-                    }
+								}
 
-                    l_nNode = l_nNode->NextSiblingElement ( "instance_rigid_body" );
-                }
-            }
-        }
-    }
+							}
+							else if (strcmp(l_tipoShape, "box") == 0) {
 
-}
+								tinyxml2::XMLElement* l_nBox = l_nShape->FirstChildElement();
+								const char *l_size = l_nBox->GetText();
+
+								std::vector<float> l_arrayValores;
+								loadArrayBtScalar(l_size, l_arrayValores);
+
+								if (l_arrayValores.size() == 1) {
+
+									btVector3 cubo(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
+									pPhysc->setShapeBox(cubo);
+
+								}
+								else if (l_arrayValores.size() == 3) {
+
+									btVector3 caixa(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
+									pPhysc->setShapeBox(caixa);
+
+								}
+								else {
+
+								}
+
+							}
+							else if (strcmp(l_tipoShape, "cylinder") == 0) {
+
+								tinyxml2::XMLElement* l_nCyl = l_nShape->FirstChildElement();
+								const char *l_size = l_nCyl->GetText();
+
+								std::vector<float> l_arrayValores;
+								loadArrayBtScalar(l_size, l_arrayValores);
+
+								if (l_arrayValores.size() == 1) {
+
+									btVector3 cili(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
+									pPhysc->setShapeCilinder(cili);
+
+								}
+								else if (l_arrayValores.size() == 3) {
+
+									btVector3 cili(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
+									pPhysc->setShapeBox(cili);
+
+								}
+								else {
+
+								}
+								//Cylinder 
+
+
+								//Cylinder 
+							}
+							else if (strcmp(l_tipoShape, "mesh") == 0) {
+
+								//instance_geometry
+								tinyxml2::XMLElement* l_nMesh = l_nShape->FirstChildElement();
+								if (l_nMesh != nullptr) {
+									const char *l_mesh = l_nMesh->Attribute("url");
+									if (l_mesh != nullptr) {
+
+										DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)Node::findNodeById(EntityKind::DRAW, &l_mesh[1]);
+
+										if (pDrawTriMesh != nullptr) {
+
+											btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray(pDrawTriMesh->vIndex.getSize(), pDrawTriMesh->vIndex.ptrVal(), 3 * sizeof(int),
+												pDrawTriMesh->vList.getSize(), pDrawTriMesh->vList.ptrVal(), 3 * sizeof(float));
+
+											pPhysc->setIndexVertexArray(indexVertexArray);
+
+										}
+									}
+								}
+							}
+						}
+
+						//TODO carga do shape de colisao
+
+					}
+
+					l_nNode = l_nNode->NextSiblingElement("rigid_body");
+
+				}
+			}
+		}
+	}
+
+	void Loader::libPhysicsScenes(void) {
+
+		tinyxml2::XMLElement* l_nNode = root->FirstChildElement("library_physics_scenes");
+		if (l_nNode != nullptr) {
+			l_nNode = l_nNode->FirstChildElement("physics_scene");
+			if (l_nNode != nullptr) {
+				l_nNode = l_nNode->FirstChildElement("instance_physics_model");
+
+				if (l_nNode != nullptr) {
+					l_nNode = l_nNode->FirstChildElement("instance_rigid_body");
+
+					while (l_nNode != nullptr) {
+
+						const char *l_body = l_nNode->Attribute("body");
+						const char *l_target = l_nNode->Attribute("target");
+
+						Physics *pPhysic = (Physics*)Node::findNodeById(EntityKind::PHYSICS, l_body); //m_mPhysics[ ( const char* ) l_pBody];
+						Object *pObj = (Object*)Node::findNodeById(EntityKind::OBJECT, &l_target[1]);
+
+						if ((pPhysic) && (pObj)) {
+
+							Physics *novoPhy = nullptr;
+							pPhysic->clone((Node**)&novoPhy);
+							pObj->addChild(novoPhy);
+
+						}
+
+						l_nNode = l_nNode->NextSiblingElement("instance_rigid_body");
+					}
+				}
+			}
+		}
+
+	}
 
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

@@ -14,46 +14,46 @@
 
 namespace Chimera {
 
-class Object : public Node {
-public:
+	class Object : public Node {
+	public:
 
-    //friend class Loader;
-    friend class Physics;
+		//friend class Loader;
+		friend class Physics;
 
-    Object ( std::string _id, std::string _name );
-    Object ( const Object& _object );
+		Object(std::string _id, std::string _name);
+		Object(const Object& _object);
 
-    virtual ~Object();
-    virtual void update ( DataMsg *_dataMsg );
+		virtual ~Object();
+		virtual void update(DataMsg *_dataMsg);
 
-    virtual void clone ( Node **ppNode );
+		virtual void clone(Node **ppNode);
 
-    void init();
-    void render();
+		void init();
+		void render();
 
-    void applyTorc ( const btVector3 &_vet );
-    void applyForce ( const btVector3 &_vet );
+		void applyTorc(const btVector3 &_vet);
+		void applyForce(const btVector3 &_vet);
 
-	void setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation);
-	
-    btVector3& getPosition();
+		void setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation);
 
-	void setTransform(const btTransform &_trans) {
-		transform = _trans;
-	}
-	
-private:
-    Physics *pPhysic;
-    Draw *pDraw;
-    Texture *pTexture;
-    Effect *pEffect;
+		btVector3& getPosition();
 
-    bool collide;
+		void setTransform(const btTransform &_trans) {
+			transform = _trans;
+		}
 
-    btTransform transform;
+	private:
+		Physics *pPhysic;
+		Draw *pDraw;
+		Texture *pTexture;
+		Effect *pEffect;
 
-  //  log4cxx::LoggerPtr logger;
-};
+		bool collide;
+
+		btTransform transform;
+
+		//  log4cxx::LoggerPtr logger;
+	};
 
 }
 

@@ -8,30 +8,30 @@
 
 namespace Chimera {
 
-class Constraint : public Node {
-public:
-    
-    friend class Loader;
-    
-    Constraint ( std::string _id, std::string _name );
-    Constraint ( const Constraint& _constraint );
-    virtual ~Constraint();
+	class Constraint : public Node {
+	public:
 
-    virtual void clone ( Node **ppNode );
+		friend class Loader;
 
-    virtual void update ( DataMsg *dataMsg );
+		Constraint(std::string _id, std::string _name);
+		Constraint(const Constraint& _constraint);
+		virtual ~Constraint();
 
-private:
-    
-    Physics *pPhysicsA;
-    Physics *pPhysicsB;
-    
-   // btRigidBody* pRigidBodyA;
-   // btRigidBody* pRigidBodyB;
-    
-    btTransform transformA;
-    btTransform transformB;
-};
+		virtual void clone(Node **ppNode);
+
+		virtual void update(DataMsg *dataMsg);
+
+	private:
+
+		Physics *pPhysicsA;
+		Physics *pPhysicsB;
+
+		// btRigidBody* pRigidBodyA;
+		// btRigidBody* pRigidBodyB;
+
+		btTransform transformA;
+		btTransform transformB;
+	};
 
 }
 #endif

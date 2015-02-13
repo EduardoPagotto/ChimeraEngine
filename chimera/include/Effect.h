@@ -8,77 +8,77 @@
 
 namespace Chimera {
 
-class Effect : public Node {
-public:
+	class Effect : public Node {
+	public:
 
-    Effect ( std::string _id, std::string _name );
+		Effect(std::string _id, std::string _name);
 
-    Effect ( const Effect& _cpy );
+		Effect(const Effect& _cpy);
 
-    virtual ~Effect() {}
+		virtual ~Effect() {}
 
-    virtual void update ( DataMsg *dataMsg );
+		virtual void update(DataMsg *dataMsg);
 
-    virtual void clone ( Node **ppNode );
+		virtual void clone(Node **ppNode);
 
-	void init();
-	
-    void render();
+		void init();
 
-    Color getAmbient() const {
-        return ambient;
-    }
-    Color getSpecular() const {
-        return specular;
-    }
-    Color getDiffuse() const {
-        return diffuse;
-    }
-    Color getEmissive() const {
-        return emissive;
-    }
+		void render();
 
-    void setAmbient (const Color &_color ) {
-        ambient = _color;
-    }
-    void setSpecular (const Color &_color ) {
-        specular = _color;
-    }
-    void setDiffuse (const Color &_color ) {
-        diffuse = _color;
-    }
-    void setEmissive (const Color &_color ) {
-        emissive = _color;
-    }
+		Color getAmbient() const {
+			return ambient;
+		}
+		Color getSpecular() const {
+			return specular;
+		}
+		Color getDiffuse() const {
+			return diffuse;
+		}
+		Color getEmissive() const {
+			return emissive;
+		}
 
-    float getShininess() const {
-        return shininess;
-    }
-    void setShininess (const float &_val ) {
-        shininess = _val;
-    }
-    void setNameTextureId ( std::string _name ) {
-        nameTextureId = _name;
-    }
+		void setAmbient(const Color &_color) {
+			ambient = _color;
+		}
+		void setSpecular(const Color &_color) {
+			specular = _color;
+		}
+		void setDiffuse(const Color &_color) {
+			diffuse = _color;
+		}
+		void setEmissive(const Color &_color) {
+			emissive = _color;
+		}
 
-    std::string getNameTextureId() const {
-        return nameTextureId;
-    }
+		float getShininess() const {
+			return shininess;
+		}
+		void setShininess(const float &_val) {
+			shininess = _val;
+		}
+		void setNameTextureId(std::string _name) {
+			nameTextureId = _name;
+		}
 
-    void loadCollada(tinyxml2::XMLElement* _nNode);
-    
-private:
+		std::string getNameTextureId() const {
+			return nameTextureId;
+		}
 
-    bool getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode );
-    
-    Color diffuse;        /* Diffuse color RGBA */
-    Color ambient;        /* Ambient color RGB */
-    Color specular;       /* Specular 'shininess' */
-    Color emissive;       /* Emissive color RGB */
+		void loadCollada(tinyxml2::XMLElement* _nNode);
 
-    float shininess;
-    std::string nameTextureId;
-};
+	private:
+
+		bool getPhong(const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode);
+
+		Color diffuse;        /* Diffuse color RGBA */
+		Color ambient;        /* Ambient color RGB */
+		Color specular;       /* Specular 'shininess' */
+		Color emissive;       /* Emissive color RGB */
+
+		float shininess;
+		std::string nameTextureId;
+	};
 
 }
 

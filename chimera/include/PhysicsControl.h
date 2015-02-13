@@ -16,61 +16,61 @@
 #include "Node.h"
 
 namespace Chimera {
-	
-class PhysicsControl {
-public:
-	
-	friend class Physics;
 
-	PhysicsControl(void);
-	~PhysicsControl(void);
+	class PhysicsControl {
+	public:
 
-	void clearAllShapes(void);
-	void removeAllObjs(void);
+		friend class Physics;
 
-	void stepSim(void);
+		PhysicsControl(void);
+		~PhysicsControl(void);
 
-	void checkCollisions();
-	bool checkAllowCollision(Node *pNode);
-	void sendMessageCollision(KindOp _kindOf, Node *_nodeA, Node *_nodeB);
-	
-	inline void setGravity(const btVector3 &_vet) {
-		discretDynamicsWorld->setGravity(_vet);
-	}
-	
-	inline btScalar countPeriod() {
-        period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f);
-        clockCounter.reset();
-		return period;
+		void clearAllShapes(void);
+		void removeAllObjs(void);
 
-    }
-	
-	inline btScalar getLastPeriod() {
-        return period;
-    }
-	
-private:
-    
-    static void doTickCallBack(btDynamicsWorld *world, btScalar timeStep);
-    void processTickCallBack(btScalar timeStep);
-    
-	btBroadphaseInterface* broadPhase;
+		void stepSim(void);
 
-    btDefaultCollisionConfiguration* collisionConfig;
-    btCollisionDispatcher* dispatcher;
+		void checkCollisions();
+		bool checkAllowCollision(Node *pNode);
+		void sendMessageCollision(KindOp _kindOf, Node *_nodeA, Node *_nodeB);
 
-    btSequentialImpulseConstraintSolver* solver;
-    btDiscreteDynamicsWorld* discretDynamicsWorld;
+		inline void setGravity(const btVector3 &_vet) {
+			discretDynamicsWorld->setGravity(_vet);
+		}
 
-	/// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
-	//SDL_Event s_event;
-	std::map< btCollisionObject*, std::pair<Node*, Node*> > contactActives;
-	
-    btClock clockCounter;
-    btScalar period;
-	
-	//log4cxx::LoggerPtr logger;
-};
+		inline btScalar countPeriod() {
+			period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f);
+			clockCounter.reset();
+			return period;
+
+		}
+
+		inline btScalar getLastPeriod() {
+			return period;
+		}
+
+	private:
+
+		static void doTickCallBack(btDynamicsWorld *world, btScalar timeStep);
+		void processTickCallBack(btScalar timeStep);
+
+		btBroadphaseInterface* broadPhase;
+
+		btDefaultCollisionConfiguration* collisionConfig;
+		btCollisionDispatcher* dispatcher;
+
+		btSequentialImpulseConstraintSolver* solver;
+		btDiscreteDynamicsWorld* discretDynamicsWorld;
+
+		/// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
+		//SDL_Event s_event;
+		std::map< btCollisionObject*, std::pair<Node*, Node*> > contactActives;
+
+		btClock clockCounter;
+		btScalar period;
+
+		//log4cxx::LoggerPtr logger;
+	};
 
 }
 #endif

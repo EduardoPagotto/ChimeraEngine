@@ -7,9 +7,9 @@
 #include <LinearMath/btScalar.h>
 
 namespace Chimera {
-    
-void loadArrayBtScalar ( const char *_val, std::vector<btScalar> &_arrayF );
-void loadArrayI ( const char *_val, std::vector<int> &_arrayI );    
+
+	void loadArrayBtScalar(const char *_val, std::vector<btScalar> &_arrayF);
+	void loadArrayI(const char *_val, std::vector<int> &_arrayI);
 
 }
 

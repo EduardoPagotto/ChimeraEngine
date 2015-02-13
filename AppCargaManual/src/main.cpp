@@ -6,9 +6,6 @@
 
 #include <iostream>
 
-//#include <log4cxx/logger.h>
-//#include <log4cxx/xml/domconfigurator.h>
-
 #include "VideoDevice.h"
 #include "OvrDevice.h"
 #include "Game.h"

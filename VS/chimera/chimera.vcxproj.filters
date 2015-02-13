@@ -189,6 +189,9 @@
     <ClInclude Include="..\..\chimera\include\OvrDevice.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\chimera\include\VideoDevice.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

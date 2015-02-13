@@ -170,5 +170,16 @@ namespace Chimera {
 
 	}
 
+	void VideoDevice::executeViewOrto(int eye) {
+
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho(rectangle.x, rectangle.w, rectangle.y, rectangle.h, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+
+	}
 
 }

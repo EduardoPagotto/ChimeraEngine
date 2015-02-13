@@ -53,6 +53,7 @@ public:
     void getGeometry(int &_x, int &_y, int &_w, int &_h, int index);
 
     virtual void executeViewPerspective(Camera *pCamera, int _eye);
+	virtual void executeViewOrto(int eyeIndex);
 
 private:
 	void initOVRSubSys();

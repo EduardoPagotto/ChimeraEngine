@@ -11,7 +11,7 @@
 
 namespace Chimera {
 
-HUD::HUD ( const SDL_Rect &_displayArea ) : on ( true ), displayArea ( _displayArea ) {
+HUD::HUD() : on(true) {
   
 #ifdef TTF_NOVO
 	if (!TTF_WasInit() && TTF_Init() == -1)
@@ -49,26 +49,26 @@ HUD::~HUD() {
 
 }
 
-void HUD::beginOrtho ( void ) {
+//void HUD::beginOrtho ( void ) {
+//
+//    glMatrixMode ( GL_PROJECTION );
+//    glPushMatrix( );
+//    glLoadIdentity( );
+//    glOrtho ( displayArea.x,  displayArea.w, displayArea.y, displayArea.h, -1, 1 );
+//    glMatrixMode ( GL_MODELVIEW );
+//    glPushMatrix( );
+//    glLoadIdentity( );
+//
+//}
 
-    glMatrixMode ( GL_PROJECTION );
-    glPushMatrix( );
-    glLoadIdentity( );
-    glOrtho ( displayArea.x,  displayArea.w, displayArea.y, displayArea.h, -1, 1 );
-    glMatrixMode ( GL_MODELVIEW );
-    glPushMatrix( );
-    glLoadIdentity( );
-
-}
-
-void HUD::endOrtho ( void ) {
-
-    glMatrixMode ( GL_PROJECTION );
-    glPopMatrix( );
-    glMatrixMode ( GL_MODELVIEW );
-    glPopMatrix( );
-
-}
+//void HUD::endOrtho ( void ) {
+//
+//    glMatrixMode ( GL_PROJECTION );
+//    glPopMatrix( );
+//    glMatrixMode ( GL_MODELVIEW );
+//    glPopMatrix( );
+//
+//}
 
 void HUD::addFont ( Font *_pFont ) {
     vFonts.push_back ( _pFont );
@@ -97,10 +97,10 @@ void HUD::addText ( int _fontIndex, int _squareIndex, int _posX, int _posY, Colo
 }
 
 void HUD::update() {
-    if ( on ) {
+    //if ( on ) {
 
-        glPushAttrib(GL_ENABLE_BIT);
-        beginOrtho();
+      //  glPushAttrib(GL_ENABLE_BIT);
+      //  beginOrtho();
 
         glPushAttrib(GL_CURRENT_BIT);//preserva a cor original
 
@@ -132,10 +132,10 @@ void HUD::update() {
             vFonts[l_pTxt->indexFonte]->render ( l_novoX, l_novoY, 0, l_pTxt->color, l_pTxt->pText);            
         }
         
-        endOrtho();
+      //  endOrtho();
 
-        glPopAttrib();
-    }
+      //  glPopAttrib();
+   // }
 }
 
 }

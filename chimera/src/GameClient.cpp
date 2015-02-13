@@ -6,11 +6,7 @@ namespace Chimera {
 GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pSceneMng ( _pScenMng ), pVideo ( _pVideo )  {
 
     textoFPS = "fps: " + std::to_string ( 0 );
-
-    SDL_Rect geometriaTela;
-    pVideo->getGeometry(geometriaTela.x, geometriaTela.y, geometriaTela.w, geometriaTela.h, 0);//FIXME verificar como ficara!!!
-
-    pHUD = new HUD (geometriaTela );
+    pHUD = new HUD ();
 
 #ifdef WIN32
     pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
@@ -26,7 +22,7 @@ GameClient::GameClient ( Video *_pVideo, Chimera::SceneMng *_pScenMng ) : pScene
     area.w = 600;
     area.h = 40;
 
-    pHUD->addSquare ( area, Color ( 1.0f,1.0f, 1.0f, 0.1f ) );
+    pHUD->addSquare ( area, Color ( 1.0f,1.0f, 1.0f, 0.5f ) );
     pHUD->addText ( 0,0,0,5,Color::RED,&textoFPS );
 
     fps = 0;
@@ -97,10 +93,6 @@ void GameClient::processaGame() {
     pVideo->initDraw();
 
     render();
-
-    pVideo->begin2D();
-    pHUD->update();
-    pVideo->end2D();
 
     pVideo->endDraw();
 }

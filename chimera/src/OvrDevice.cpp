@@ -271,6 +271,23 @@ void OvrDevice::getGeometry(int &_x, int &_y, int &_w, int &_h, int index){
 
 }
 
+void OvrDevice::executeViewOrto(int eyeIndex) {
+
+	ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
+	//eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
+	eyeRenderPose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
+
+	//begin orto
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(eyeRenderViewport[eye].Pos.x, eyeRenderViewport[eye].Size.w, eyeRenderViewport[eye].Pos.y, eyeRenderViewport[eye].Size.h, - 1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+}
+
+
 void OvrDevice::executeViewPerspective( Camera *pCamera, int eyeIndex ) {
 
 	using namespace OVR;

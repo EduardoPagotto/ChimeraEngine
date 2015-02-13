@@ -114,6 +114,7 @@
     <ClInclude Include="..\..\chimera\include\Timer.h" />
     <ClInclude Include="..\..\chimera\include\Video.h" />
     <ClInclude Include="..\..\chimera\include\OvrDevice.h" />
+    <ClInclude Include="..\..\chimera\include\VideoDevice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\chimera\src\Camera.cpp" />

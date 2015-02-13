@@ -30,7 +30,7 @@ public:
         Color color;
     };
 
-    HUD ( const SDL_Rect &_displayArea );
+	HUD();
 
     ~HUD();
 
@@ -49,12 +49,8 @@ public:
     void update ( void );
 
 private:
-    void beginOrtho ( void );
-    void endOrtho ( void );
 
     bool on;
-
-    SDL_Rect displayArea;
 
     std::vector<HUDSquare*> vSquare;
     std::vector<HUDTxt*> vLineText;

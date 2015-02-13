@@ -113,12 +113,12 @@ void Game::render() {
 
 		pVideo->executeViewPerspective(pOrbitalCam,eye);
 
-		//SDL_Rect tela;
-		//pVideo->getGeometry(tela.x, tela.y, tela.w, tela.h, eye); //FIXME colocar tudo dentro de um metodo
-		//pVideo->setViewPortPerspective(tela.x, tela.y, tela.w, tela.h, pOrbitalCam->getFov(), pOrbitalCam->getNear(), pOrbitalCam->getFar());
-
 		pSceneMng->draw3d();
+
+		pVideo->updateHud(pHUD, eye);
 	}
+
+	
 
 }
 

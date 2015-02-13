@@ -212,14 +212,14 @@ namespace Chimera {
 // 		glLoadIdentity();
 // 	}
 
-	void Video::setViewPortOrtogonal( const int &_x, const int &_y, const int &_w, const int &_h ) {
-		glViewport( _x, _y, _w, _h );
-		glMatrixMode( GL_PROJECTION );
-		glLoadIdentity();
-		glOrtho( _x, _w, _y, _h, -1.0, 1.0 );
-		glMatrixMode( GL_MODELVIEW );
-		glLoadIdentity();
-	}
+	//void Video::setViewPortOrtogonal( const int &_x, const int &_y, const int &_w, const int &_h ) {
+	//	glViewport( _x, _y, _w, _h );
+	//	glMatrixMode( GL_PROJECTION );
+	//	glLoadIdentity();
+	//	glOrtho( _x, _w, _y, _h, -1.0, 1.0 );
+	//	glMatrixMode( GL_MODELVIEW );
+	//	glLoadIdentity();
+	//}
 
 // 	void Video::setViewPortPerspective( const int &_x, const int &_y, const int &_w, const int &_h, const float &_fov, const float &_near, const float &_far ) {
 // 		glViewport( _x, _y, _w, _h );
@@ -229,6 +229,36 @@ namespace Chimera {
 // 		glMatrixMode( GL_MODELVIEW );
 // 		glLoadIdentity();
 // 	}
+
+void  Video::updateHud(HUD *pHud, int eye) {
+
+		if (pHud->isOn() == true) {
+
+			begin2D();
+
+			glPushAttrib(GL_ENABLE_BIT);
+
+			executeViewOrto(eye);
+
+			pHud->update();
+
+			glPopAttrib();
+
+			restoreMatrix();
+
+			end2D();
+		}
+
+	}
+
+	void Video::restoreMatrix() {
+
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+
+	}
 
 	std::string Video::getVersaoOpenGL() {
 

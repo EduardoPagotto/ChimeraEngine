@@ -23,6 +23,7 @@
 
 #include <string>
 #include "Camera.h"
+#include "HUD.h"
 
 namespace Chimera
 {
@@ -53,6 +54,7 @@ namespace Chimera
     virtual void getGeometry(int &_x, int &_y, int &_w, int &_h, int index) = 0;
 
     virtual void executeViewPerspective(Camera *pCamera, int _eye) = 0;
+	virtual void executeViewOrto(int eyeIndex) = 0;
 
 //     const SDL_Rect *getPRectangle () const{
 //       return &rectangle;
@@ -62,11 +64,17 @@ namespace Chimera
       return nomeTela;
     }
 
-    void setViewPortOrtogonal (const int &_x, const int &_y, const int &_w, const int &_h);
+	void updateHud(HUD *pHud, int eye);
+
+	void restoreMatrix();
+
+    //void setViewPortOrtogonal (const int &_x, const int &_y, const int &_w, const int &_h);
     //void setViewPortPerspective ( const int &_x, const int &_y, const int &_w, const int &_h, const float &_fov, const float &_near, const float &_far);
 
     void begin2D ();
     void end2D ();
+
+	
 
     void setLight (bool _lightOn);
     void setMaterial (bool _materialOn);

@@ -11,7 +11,7 @@ namespace Chimera {
 #ifdef WIN32
 		pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
 #else
-		pFont = new Chimera::Font ( "../../fonts/FreeSans.ttf",18 );
+		pFont = new Chimera::Font("../../fonts/FreeSans.ttf", 18);
 #endif
 
 		pHUD->addFont(pFont);
@@ -21,6 +21,10 @@ namespace Chimera {
 		area.y = 10;
 		area.w = 540;
 		area.h = 22;
+		//area.x = 200;
+		//area.y = 800;
+		//area.w = 540;
+		//area.h = 22;
 
 		pHUD->addSquare(area, Color(1.0f, 1.0f, 1.0f, 0.2f));
 		pHUD->addText(0, 0, 0, 0, Color::RED, &textoFPS);

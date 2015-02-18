@@ -180,9 +180,6 @@
     <ClInclude Include="..\..\chimera\include\Video.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\chimera\include\DataMsg.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\chimera\include\CameraOvr.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -190,6 +187,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\VideoDevice.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\DataMsg.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

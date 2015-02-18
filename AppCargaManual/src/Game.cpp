@@ -116,7 +116,10 @@ void Game::render() {
 
 		pSceneMng->draw3d();
 
-		pVideo->updateHud(pHUD, eye);
+		//if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
+		//	pVideo->updateHud(pHUD, 1);
+		//else
+			pVideo->updateHud(pHUD, eye);
 	}
 
 

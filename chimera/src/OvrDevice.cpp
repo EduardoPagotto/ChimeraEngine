@@ -12,8 +12,8 @@ namespace Chimera {
 
 		if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 
-			int x = 600;//SDL_WINDOWPOS_CENTERED;
-			int y = 600;//SDL_WINDOWPOS_CENTERED;
+			int x = 800;//SDL_WINDOWPOS_CENTERED;
+			int y = 800;//SDL_WINDOWPOS_CENTERED;
 			Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 			bool debug = false;

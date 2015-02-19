@@ -119,9 +119,9 @@ void Game::render() {
 
 		pSceneMng->draw3d();
 
-		//if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
-		//	pVideo->updateHud(pHUD, 1);
-		//else
+		if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
+			pVideo->updateHud(pHUD, 0);
+		else
 			pVideo->updateHud(pHUD, eye);
 	}
 

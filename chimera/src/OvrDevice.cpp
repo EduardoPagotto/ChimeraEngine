@@ -65,8 +65,8 @@ namespace Chimera {
 		SDL_SetWindowSize(window, hmd->Resolution.w, hmd->Resolution.h);
 		SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
-		//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		//SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 		win_width = hmd->Resolution.w;
 		win_height = hmd->Resolution.h;
@@ -475,8 +475,7 @@ namespace Chimera {
 	void OvrDevice::executeViewOrto(int eyeIndex) {
 
 		ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
-		//eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
-		pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);//FIXME erro aqui!!!
+		pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
 		 
 		//begin orto
 		glMatrixMode(GL_PROJECTION);
@@ -490,7 +489,6 @@ namespace Chimera {
 			fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.h,
 			-1, 
 			1);
-
 
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
@@ -511,59 +509,112 @@ namespace Chimera {
 		// 		glLoadIdentity();
 	}
 
-
 	void OvrDevice::executeViewPerspective(Camera *pCamera, int eyeIndex) {
 
 		using namespace OVR;
 
+		ovrMatrix4f proj;
+		float rot_mat[16];
+
 		ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
-		//eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
-		pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
+		//pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
 
-		//FIXME ver em camera
-		// Matrix4f MVPMatrix = Matrix4f(ovrMatrix4f_Projection(eyeRenderDesc[eye].Fov, 0.01f, 10000.0f, true)) * Matrix4f::Translation(eyeRenderDesc[eye].ViewAdjust) * Matrix4f(Quatf(eyeRenderPose[eye].Orientation).Inverted());
-		//glUniformMatrix4fv(MVPMatrixLocation, 1, GL_FALSE, &MVPMatrix.Transposed().M[0][0]);
+		glViewport(eye == ovrEye_Left ? 0 : fb_width / 2, 0, fb_width / 2, fb_height);
 
-		//glViewport(eyeRenderViewport[eye].Pos.x, eyeRenderViewport[eye].Pos.y, eyeRenderViewport[eye].Size.w, eyeRenderViewport[eye].Size.h);
-		//glViewport(eye == ovrEye_Left ? 0 : fb_width / 2, 0, fb_width / 2, fb_height);
-
-		//fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.x
-		glViewport(fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.x,
-					fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.y, 
-					fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.w, 
-					fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.h);
-
+		proj = ovrMatrix4f_Projection(hmd->DefaultEyeFov[eye], 0.5, 500.0, 1);
 		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
+		glLoadTransposeMatrixf(proj.M[0]);
 
-		//gluPerspective(pCamera->getFov(), (GLfloat)(float)eyeRenderViewport[eye].Size.w / (float)eyeRenderViewport[eye].Size.h, pCamera->getNear(), pCamera->getFar());
-		gluPerspective(pCamera->getFov(), 
-			(GLfloat)fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.w / (float)fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.h, 
-			pCamera->getNear(), 
-			pCamera->getFar());
 
+		/* -- view/camera transformation --
+		* we need to construct a view matrix by combining all the information provided by the oculus
+		* SDK, about the position and orientation of the user's head in the world.
+		*/
+		/* TODO: use ovrHmd_GetEyePoses out of the loop instead */
+		pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-
-
-		//using namespace OVR;
-		// 
-		//ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
-		////eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
-		//eyeRenderPose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
-		// 
-		////FIXME ver em camera
-		//// Matrix4f MVPMatrix = Matrix4f(ovrMatrix4f_Projection(eyeRenderDesc[eye].Fov, 0.01f, 10000.0f, true)) * Matrix4f::Translation(eyeRenderDesc[eye].ViewAdjust) * Matrix4f(Quatf(eyeRenderPose[eye].Orientation).Inverted());
-		////glUniformMatrix4fv(MVPMatrixLocation, 1, GL_FALSE, &MVPMatrix.Transposed().M[0][0]);
-		// 
-		//glViewport(eyeRenderViewport[eye].Pos.x, eyeRenderViewport[eye].Pos.y, eyeRenderViewport[eye].Size.w, eyeRenderViewport[eye].Size.h);
-		// 
-		//glMatrixMode(GL_PROJECTION);
-		//glLoadIdentity();
-		//gluPerspective(pCamera->getFov(), (GLfloat)(float)eyeRenderViewport[eye].Size.w / (float)eyeRenderViewport[eye].Size.h, pCamera->getNear(), pCamera->getFar());
-		//glMatrixMode(GL_MODELVIEW);
-		//glLoadIdentity();
+		glTranslatef(eye_rdesc[eye].HmdToEyeViewOffset.x,
+			eye_rdesc[eye].HmdToEyeViewOffset.y,
+			eye_rdesc[eye].HmdToEyeViewOffset.z);
+		/* retrieve the orientation quaternion and convert it to a rotation matrix */
+		quat_to_matrix(&pose[eye].Orientation.x, rot_mat);
+		glMultMatrixf(rot_mat);
+		/* translate the view matrix with the positional tracking */
+		glTranslatef(-pose[eye].Position.x, -pose[eye].Position.y, -pose[eye].Position.z);
+		/* move the camera to the eye level of the user */
+		glTranslatef(0, -ovrHmd_GetFloat(hmd, OVR_KEY_EYE_HEIGHT, 1.65), 0);
 
 	}
+	
+	/* convert a quaternion to a rotation matrix */
+	void OvrDevice::quat_to_matrix(const float *quat, float *mat)
+	{
+		mat[0] = 1.0 - 2.0 * quat[1] * quat[1] - 2.0 * quat[2] * quat[2];
+		mat[4] = 2.0 * quat[0] * quat[1] + 2.0 * quat[3] * quat[2];
+		mat[8] = 2.0 * quat[2] * quat[0] - 2.0 * quat[3] * quat[1];
+		mat[12] = 0.0f;
+
+		mat[1] = 2.0 * quat[0] * quat[1] - 2.0 * quat[3] * quat[2];
+		mat[5] = 1.0 - 2.0 * quat[0] * quat[0] - 2.0 * quat[2] * quat[2];
+		mat[9] = 2.0 * quat[1] * quat[2] + 2.0 * quat[3] * quat[0];
+		mat[13] = 0.0f;
+
+		mat[2] = 2.0 * quat[2] * quat[0] + 2.0 * quat[3] * quat[1];
+		mat[6] = 2.0 * quat[1] * quat[2] - 2.0 * quat[3] * quat[0];
+		mat[10] = 1.0 - 2.0 * quat[0] * quat[0] - 2.0 * quat[1] * quat[1];
+		mat[14] = 0.0f;
+
+		mat[3] = mat[7] = mat[11] = 0.0f;
+		mat[15] = 1.0f;
+	}
+
+	//void OvrDevice::executeViewPerspective(Camera *pCamera, int eyeIndex) {
+
+	//	using namespace OVR;
+
+	//	ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
+	//	pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
+
+	//	//glViewport(eye == ovrEye_Left ? 0 : fb_width / 2, 0, fb_width / 2, fb_height);
+
+	//	////fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.x
+	//	glViewport(fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.x,
+	//		fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.y,
+	//		fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.w,
+	//		fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.h);
+
+	//	glMatrixMode(GL_PROJECTION);
+	//	glLoadIdentity();
+
+	//	//gluPerspective(pCamera->getFov(), (GLfloat)(float)eyeRenderViewport[eye].Size.w / (float)eyeRenderViewport[eye].Size.h, pCamera->getNear(), pCamera->getFar());
+	//	gluPerspective(pCamera->getFov(),
+	//		(GLfloat)fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.w / (float)fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.h,
+	//		pCamera->getNear(),
+	//		pCamera->getFar());
+
+	//	glMatrixMode(GL_MODELVIEW);
+	//	glLoadIdentity();
+	//}
+
+	//	//using namespace OVR;
+	//	// 
+	//	//ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
+	//	////eyeRenderPose[eye] = ovrHmd_GetEyePose(hmd, eye);
+	//	//eyeRenderPose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
+	//	// 
+	//	////FIXME ver em camera
+	//	//// Matrix4f MVPMatrix = Matrix4f(ovrMatrix4f_Projection(eyeRenderDesc[eye].Fov, 0.01f, 10000.0f, true)) * Matrix4f::Translation(eyeRenderDesc[eye].ViewAdjust) * Matrix4f(Quatf(eyeRenderPose[eye].Orientation).Inverted());
+	//	////glUniformMatrix4fv(MVPMatrixLocation, 1, GL_FALSE, &MVPMatrix.Transposed().M[0][0]);
+	//	// 
+	//	//glViewport(eyeRenderViewport[eye].Pos.x, eyeRenderViewport[eye].Pos.y, eyeRenderViewport[eye].Size.w, eyeRenderViewport[eye].Size.h);
+	//	// 
+	//	//glMatrixMode(GL_PROJECTION);
+	//	//glLoadIdentity();
+	//	//gluPerspective(pCamera->getFov(), (GLfloat)(float)eyeRenderViewport[eye].Size.w / (float)eyeRenderViewport[eye].Size.h, pCamera->getNear(), pCamera->getFar());
+	//	//glMatrixMode(GL_MODELVIEW);
+	//	//glLoadIdentity();
+
+	//}
 
 }

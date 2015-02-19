@@ -62,6 +62,8 @@ namespace Chimera {
 		virtual void reshape(int x, int y);
 		void update_rtarg(int width, int height);
 		unsigned int next_pow2(unsigned int x);
+		void quat_to_matrix(const float *quat, float *mat);
+
 		virtual void toggleFullScreen();
 		
 		void initOVRSubSys();

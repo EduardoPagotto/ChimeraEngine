@@ -17,14 +17,14 @@ namespace Chimera {
 		pHUD->addFont(pFont);
 
 		SDL_Rect area;
-		area.x = 10;
-		area.y = 10;
-		area.w = 540;
-		area.h = 22;
-		//area.x = 200;
-		//area.y = 800;
+		//area.x = 10;
+		//area.y = 10;
 		//area.w = 540;
 		//area.h = 22;
+		area.x = 350;
+		area.y = 400;
+		area.w = 540;
+		area.h = 22;
 
 		pHUD->addSquare(area, Color(1.0f, 1.0f, 1.0f, 0.2f));
 		pHUD->addText(0, 0, 0, 0, Color::RED, &textoFPS);

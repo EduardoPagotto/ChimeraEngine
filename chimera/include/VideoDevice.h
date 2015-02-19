@@ -29,6 +29,8 @@ namespace Chimera
 
 		virtual void executeViewPerspective(Camera *pCamera, int _eye);
 		virtual void executeViewOrto(int eye);
+		virtual void reshape(int x, int y);
+		virtual void toggleFullScreen();
 
 	private:
 

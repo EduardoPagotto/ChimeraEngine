@@ -32,6 +32,9 @@ namespace Chimera
 		virtual void executeViewPerspective(Camera *pCamera, int _eye) = 0;
 		virtual void executeViewOrto(int eyeIndex) = 0;
 
+		virtual void reshape(int x, int y) = 0;
+		virtual void toggleFullScreen() = 0;
+
 		std::string getNomeTela() const {
 			return nomeTela;
 		}

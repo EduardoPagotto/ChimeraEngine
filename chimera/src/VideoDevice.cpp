@@ -182,4 +182,11 @@ namespace Chimera {
 
 	}
 
+	void VideoDevice::reshape(int x, int y) {
+		//TODO
+	}
+
+	void VideoDevice::toggleFullScreen() {
+		//TODO
+	}
 }

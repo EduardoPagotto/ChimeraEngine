@@ -17,6 +17,9 @@ void Game::keyCapture(SDL_Keycode tecla) {
 	case SDLK_F1:
 		pHUD->setOn(!pHUD->isOn());
 		break;
+	case SDLK_F10:
+		pVideo->toggleFullScreen();
+		break;
 	case SDLK_UP:
 		pObj->applyForce(btVector3(10.0, 0.0, 0.0));
 		break;

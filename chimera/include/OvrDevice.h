@@ -58,8 +58,11 @@ namespace Chimera {
 		virtual void executeViewOrto(int eyeIndex);
 
 	private:
+		void initDevice();
+		virtual void reshape(int x, int y);
 		void update_rtarg(int width, int height);
 		unsigned int next_pow2(unsigned int x);
+		virtual void toggleFullScreen();
 		
 		void initOVRSubSys();
 
@@ -77,13 +80,17 @@ namespace Chimera {
 		SDL_GLContext context;
 
 		unsigned int fbo, fb_tex, fb_depth;
-		static int fb_tex_width, fb_tex_height;
+		int fb_tex_width, fb_tex_height;
 		ovrGLTexture fb_ovr_tex[2];
 		union ovrGLConfig glcfg;
 		unsigned int hmd_caps;
 		unsigned int distort_caps;
 		ovrEyeRenderDesc eye_rdesc[2];
-		
+		ovrPosef pose[2];
+		int win_width;
+		int win_height;
+		int fb_width, fb_height;
+
 		//GLuint frameBufferObject;
 		//GLuint renderBuffer;
 		//GLuint texture;

@@ -156,6 +156,13 @@ namespace Chimera {
 										  case SDL_WINDOWEVENT_LEAVE:
 											  l_isActive = false;
 											  break;
+
+										  case SDL_WINDOWEVENT_RESIZED:
+
+											  pVideo->reshape(l_eventSDL.window.data1,
+												  l_eventSDL.window.data2);
+
+											  break;
 										  default:
 											  break;
 										  }

@@ -8,6 +8,8 @@ namespace Chimera {
 
 	OvrDevice::OvrDevice(std::string nomeTela) : Video(nomeTela, KIND_DEVICE::OVR_OCULUS) {
 
+		fullscreenStatus = false;
+		
 		//inicializa o OVR
 		ovr_Initialize();
 
@@ -45,8 +47,8 @@ namespace Chimera {
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-		winGeometry.w = hmd->Resolution.w;
-		winGeometry.h = hmd->Resolution.h;
+		winSizeW = hmd->Resolution.w;
+		winSizeH = hmd->Resolution.h;
 
 		ovrSizei eyeres[2];
 		/* enable position and rotation tracking */
@@ -79,8 +81,8 @@ namespace Chimera {
 		*/
 		memset(&glcfg, 0, sizeof glcfg);
 		glcfg.OGL.Header.API = ovrRenderAPI_OpenGL;
-		glcfg.OGL.Header.BackBufferSize.w = winGeometry.w;
-		glcfg.OGL.Header.BackBufferSize.h = winGeometry.h;
+		glcfg.OGL.Header.BackBufferSize.w = winSizeW;
+		glcfg.OGL.Header.BackBufferSize.h = winSizeH;
 		glcfg.OGL.Header.Multisample = 1;
 
 #ifdef OVR_OS_WIN32
@@ -189,26 +191,29 @@ namespace Chimera {
 
 	OvrDevice::~OvrDevice(){
 
+		//close frame buffer, render buffer, texture
+		glDeleteFramebuffers(1, &fbo);
+		glDeleteTextures(1, &fb_tex);
+		glDeleteRenderbuffers(1, &fb_depth);
+		
 		ovr_Shutdown();
 
 	}
 
-	void OvrDevice::reshape(int x, int y)
+	void OvrDevice::reshape(int _w, int _h)
 	{
-		winGeometry.w = x;
-		winGeometry.h = y;
+		winSizeW = _w;
+		winSizeH = _h;
 	}
 
 	void OvrDevice::toggleFullScreen(void)
 	{
-		static int fullscr, prev_x, prev_y;
-		fullscr = !fullscr;
 
-		if (fullscr) {
+		if (fullscreenStatus == false) {
 			/* going fullscreen on the rift. save current window position, and move it
 			* to the rift's part of the desktop before going fullscreen
 			*/
-			SDL_GetWindowPosition(window, &prev_x, &prev_y);
+			SDL_GetWindowPosition(window, &winPosPrev.x, &winPosPrev.y);
 			SDL_SetWindowPosition(window, hmd->WindowsPos.x, hmd->WindowsPos.y);
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
@@ -227,7 +232,7 @@ namespace Chimera {
 		else {
 			/* return to windowed mode and move the window back to its original position */
 			SDL_SetWindowFullscreen(window, 0);
-			SDL_SetWindowPosition(window, prev_x, prev_y);
+			SDL_SetWindowPosition(window, winPosPrev.x, winPosPrev.y);
 
 #ifdef OVR_OS_LINUX
 			glcfg.OGL.Header.BackBufferSize = hmd->Resolution;
@@ -235,17 +240,10 @@ namespace Chimera {
 			distort_caps &= ~ovrDistortionCap_LinuxDevFullscreen;
 			ovrHmd_ConfigureRendering(hmd, &glcfg.Config, distort_caps, hmd->DefaultEyeFov, eye_rdesc);
 #endif
-
 		}
+		
+		fullscreenStatus = !fullscreenStatus;
 	}
-
-	//void OvrDevice::closeFrameBuffer() {
-
-	//	// 		glDeleteFramebuffers(1, &frameBufferObject);
-	//	// 		glDeleteTextures(1, &texture);
-	//	// 		glDeleteRenderbuffers(1, &renderBuffer);
-
-	//}
 
 	void OvrDevice::initDraw(){
 

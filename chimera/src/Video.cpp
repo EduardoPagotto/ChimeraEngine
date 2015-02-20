@@ -14,19 +14,15 @@ namespace Chimera {
 
 	Video::Video(std::string _nome, KIND_DEVICE _kindDevice) : nomeTela(_nome), kindDevice(_kindDevice) {
 
-		winGeometry.x = SDL_WINDOWPOS_UNDEFINED;
-		winGeometry.y = SDL_WINDOWPOS_UNDEFINED;
-		winGeometry.w = SDL_WINDOWPOS_CENTERED;
-		winGeometry.h = SDL_WINDOWPOS_CENTERED;
+		winSizeW = SDL_WINDOWPOS_CENTERED;
+		winSizeH = SDL_WINDOWPOS_CENTERED;
 
 	}
 
 	Video::Video(std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h) : nomeTela(_nome), kindDevice(_kindDevice) {
 
-		winGeometry.x = SDL_WINDOWPOS_UNDEFINED;
-		winGeometry.y = SDL_WINDOWPOS_UNDEFINED;
-		winGeometry.w = _w;
-		winGeometry.h = _h;
+		winSizeW = _w;
+		winSizeH = _h;
 
 	}
 
@@ -63,10 +59,10 @@ namespace Chimera {
 		//Cria aJanela
 		Uint32 flags = SDL_WINDOW_OPENGL;// | SDL_WINDOW_SHOWN;
 		if ((window = SDL_CreateWindow(nomeTela.c_str(),//window title
-			winGeometry.x,							//initial x position
-			winGeometry.y,							//initial y position
-			winGeometry.w,							//width, in pixels
-			winGeometry.h,							//height, in pixels
+			SDL_WINDOWPOS_UNDEFINED,					//initial x position
+			SDL_WINDOWPOS_UNDEFINED,					//initial y position
+			winSizeW,									//width, in pixels
+			winSizeH,									//height, in pixels
 			flags)) == nullptr) {
 
 			throw ExceptionSDL(ExceptionCode::CREATE, std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
@@ -82,8 +78,8 @@ namespace Chimera {
 		if (interval < 0)
 			throw ExceptionSDL(ExceptionCode::CREATE, std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError())));
 
-		SDL_GetWindowPosition(window, &winGeometry.x, &winGeometry.y);
-		SDL_GetWindowSize(window, &winGeometry.w, &winGeometry.h);
+		//SDL_GetWindowPosition(window, &winGeometry.x, &winGeometry.y);
+		SDL_GetWindowSize(window, &winSizeW, &winSizeH);
 
 	}
 
@@ -133,14 +129,14 @@ namespace Chimera {
 
 	}
 
-	void Video::getGeometry(SDL_Rect &winGeometry) {
-
-		winGeometry.x = this->winGeometry.x;
-		winGeometry.y = this->winGeometry.y;
-		winGeometry.w = this->winGeometry.w;
-		winGeometry.h = this->winGeometry.h;
-
-	}
+// 	void Video::getGeometry(SDL_Rect &winGeometry) {
+// 
+// 		winGeometry.x = this->winGeometry.x;
+// 		winGeometry.y = this->winGeometry.y;
+// 		winGeometry.w = this->winGeometry.w;
+// 		winGeometry.h = this->winGeometry.h;
+// 
+// 	}
 
 	void  Video::updateHud(HUD *pHud, int eye) {
 

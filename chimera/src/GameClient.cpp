@@ -16,11 +16,7 @@ namespace Chimera {
 
 		pHUD->addFont(pFont);
 
-		SDL_Rect size;
-		pVideo->getGeometry(size);
-		//size.x = (int)size.x * 0.4f;
-
-		SDL_Rect area = { (int)size.w * 0.2f, (int)size.h * 0.2f, 540, 22 };
+		SDL_Rect area = { (int)pVideo->getWinSizeW() * 0.2f, (int)pVideo->getWinSizeH() * 0.2f, 540, 22 };
 		//SDL_Rect area = { 350, 400, 540, 22 };
 
 		pHUD->addSquare(area, Color(1.0f, 1.0f, 1.0f, 0.2f));

@@ -44,11 +44,11 @@ namespace Chimera {
 
 	void VideoDevice::executeViewPerspective(Camera *pCamera, int _eye) {
 
-		glViewport(0, 0, winGeometry.w, winGeometry.h);
+		glViewport(0, 0, winSizeW, winSizeH);
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		gluPerspective(pCamera->getFov(), (GLfloat)(float)winGeometry.w / (float)winGeometry.h, pCamera->getNear(), pCamera->getFar());
+		gluPerspective(pCamera->getFov(), (GLfloat)(float)winSizeW / (float)winSizeH, pCamera->getNear(), pCamera->getFar());
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
@@ -59,24 +59,24 @@ namespace Chimera {
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		glOrtho(0, winGeometry.w, 0, winGeometry.h, -1, 1);
+		glOrtho(0, winSizeW, 0, winSizeH, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glLoadIdentity();
 
 	}
 
-	void VideoDevice::reshape(int x, int y) {
-		winGeometry.w = x;
-		winGeometry.h = y;
+	void VideoDevice::reshape(int _w, int _h) {
+		winSizeW = _w;
+		winSizeH = _h;
 	}
 
 	void VideoDevice::toggleFullScreen() {
 
 		if (fullscreenStatus == false) {
 
-			SDL_GetWindowPosition(window, &winGeometryPrev.x, &winGeometryPrev.y);
-			SDL_GetWindowSize(window, &winGeometryPrev.w, &winGeometryPrev.h);
+			SDL_GetWindowPosition(window, &winPosPrev.x, &winPosPrev.y);
+			//SDL_GetWindowSize(window, &winGeometryPrev.w, &winGeometryPrev.h);
 
 			SDL_SetWindowPosition(window, 0, 0);
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -85,8 +85,8 @@ namespace Chimera {
 		else {
 
 			SDL_SetWindowFullscreen(window, 0);
-			SDL_SetWindowPosition(window, winGeometryPrev.x, winGeometryPrev.y);
-			SDL_SetWindowSize(window, winGeometryPrev.w, winGeometryPrev.h);
+			SDL_SetWindowPosition(window, winPosPrev.x, winPosPrev.y);
+			//SDL_SetWindowSize(window, winGeometryPrev.w, winGeometryPrev.h);
 
 		}
 

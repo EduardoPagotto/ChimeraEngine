@@ -35,11 +35,18 @@ namespace Chimera
 		virtual void endDraw() = 0;
 		virtual void executeViewPerspective(Camera *pCamera, int _eye) = 0;
 		virtual void executeViewOrto(int eyeIndex) = 0;
-		virtual void reshape(int x, int y) = 0;
+		virtual void reshape(int _w, int _y) = 0;
 		virtual void toggleFullScreen() = 0;
 
 		void initGL();
-		void getGeometry(SDL_Rect &winGeometry);
+		//void getGeometry(SDL_Rect &winGeometry);
+        int getWinSizeW() const {
+          return winSizeW;
+        }
+        
+        int getWinSizeH() const {
+          return winSizeH;
+        }
 
 		std::string getNomeTela() const {
 			return nomeTela;
@@ -62,7 +69,8 @@ namespace Chimera
 	protected:
 		void initSDL();
 
-		SDL_Rect winGeometry;
+        int winSizeW;
+        int winSizeH;
 
 		std::string nomeTela;
 		KIND_DEVICE kindDevice;

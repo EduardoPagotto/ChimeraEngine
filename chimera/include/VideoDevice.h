@@ -16,12 +16,12 @@ namespace Chimera
 		virtual void endDraw();
 		virtual void executeViewPerspective(Camera *pCamera, int _eye);
 		virtual void executeViewOrto(int eye);
-		virtual void reshape(int x, int y);
+		virtual void reshape(int _w, int _h);
 		virtual void toggleFullScreen();
 
 	private:
 		bool fullscreenStatus;
-		SDL_Rect winGeometryPrev;
+		SDL_Point winPosPrev;
 	};
 
 }

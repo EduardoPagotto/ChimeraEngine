@@ -45,7 +45,7 @@ namespace Chimera {
 		virtual void endDraw();
 		virtual void executeViewPerspective(Camera *pCamera, int _eye);
 		virtual void executeViewOrto(int eyeIndex);
-		virtual void reshape(int x, int y);
+		virtual void reshape(int _w, int _h);
 		virtual void toggleFullScreen();
 
 	private:
@@ -67,6 +67,9 @@ namespace Chimera {
 		ovrGLTexture fb_ovr_tex[2];
 		ovrEyeRenderDesc eye_rdesc[2];
 		ovrPosef pose[2];
+		
+		bool fullscreenStatus;
+		ovrVector2i winPosPrev;
 	};
 
 

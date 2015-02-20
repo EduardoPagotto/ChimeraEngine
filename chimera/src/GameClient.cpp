@@ -16,15 +16,12 @@ namespace Chimera {
 
 		pHUD->addFont(pFont);
 
-		SDL_Rect area;
-		//area.x = 10;
-		//area.y = 10;
-		//area.w = 540;
-		//area.h = 22;
-		area.x = 350;
-		area.y = 400;
-		area.w = 540;
-		area.h = 22;
+		SDL_Rect size;
+		pVideo->getGeometry(size);
+		//size.x = (int)size.x * 0.4f;
+
+		SDL_Rect area = { (int)size.w * 0.2f, (int)size.h * 0.2f, 540, 22 };
+		//SDL_Rect area = { 350, 400, 540, 22 };
 
 		pHUD->addSquare(area, Color(1.0f, 1.0f, 1.0f, 0.2f));
 		pHUD->addText(0, 0, 0, 0, Color::RED, &textoFPS);
@@ -159,8 +156,7 @@ namespace Chimera {
 
 										  case SDL_WINDOWEVENT_RESIZED:
 
-											  pVideo->reshape(l_eventSDL.window.data1,
-												  l_eventSDL.window.data2);
+											  pVideo->reshape(l_eventSDL.window.data1, l_eventSDL.window.data2);
 
 											  break;
 										  default:

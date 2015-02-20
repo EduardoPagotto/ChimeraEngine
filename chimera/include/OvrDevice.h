@@ -34,14 +34,6 @@
 #include <algorithm>
 #endif
 
-// #ifdef WIN32
-// #include "../Src/OVR_CAPI_GL.h"
-// #else
-// #include "Src/OVR_CAPI_GL.h"
-// #include <algorithm>
-// #endif
-
-
 namespace Chimera {
 
 	class OvrDevice : public Video {
@@ -49,53 +41,32 @@ namespace Chimera {
 		OvrDevice(std::string nomeTela);
 		virtual ~OvrDevice();
 
-		void initGL();
-		void initDraw();
-		void endDraw();
-		void getGeometry(int &_x, int &_y, int &_w, int &_h, int index);
-
+		virtual void initDraw();
+		virtual void endDraw();
 		virtual void executeViewPerspective(Camera *pCamera, int _eye);
 		virtual void executeViewOrto(int eyeIndex);
+		virtual void reshape(int x, int y);
+		virtual void toggleFullScreen();
 
 	private:
 		void initDevice();
-		virtual void reshape(int x, int y);
 		void update_rtarg(int width, int height);
-		unsigned int next_pow2(unsigned int x);
 		void quat_to_matrix(const float *quat, float *mat);
+		unsigned int next_pow2(unsigned int x);
 
-		virtual void toggleFullScreen();
-		
-		void initOVRSubSys();
-
-		void openFrameBuffer();
-		void closeFrameBuffer();
-
-		ovrHmd hmd;
-		//ovrRecti eyeRenderViewport[2];
-		//ovrPosef eyeRenderPose[2];
-		//ovrEyeRenderDesc eyeRenderDesc[2];
-		//ovrGLTexture eyeTexture[2];
-		//OVR::Sizei renderTargetSize;
-
-		SDL_Window *window;
-		SDL_GLContext context;
-
-		unsigned int fbo, fb_tex, fb_depth;
-		int fb_tex_width, fb_tex_height;
-		ovrGLTexture fb_ovr_tex[2];
-		union ovrGLConfig glcfg;
+		unsigned int fbo;
+		unsigned int fb_tex;
+		unsigned int fb_depth;
 		unsigned int hmd_caps;
 		unsigned int distort_caps;
+
+		union ovrGLConfig glcfg;
+		ovrSizei fbSize;
+		ovrSizei fbTexSize;
+		ovrHmd hmd;
+		ovrGLTexture fb_ovr_tex[2];
 		ovrEyeRenderDesc eye_rdesc[2];
 		ovrPosef pose[2];
-		int win_width;
-		int win_height;
-		int fb_width, fb_height;
-
-		//GLuint frameBufferObject;
-		//GLuint renderBuffer;
-		//GLuint texture;
 	};
 
 

@@ -5,6 +5,12 @@
 #include "Camera.h"
 #include "HUD.h"
 
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
+
 namespace Chimera
 {
 	enum class KIND_DEVICE {
@@ -21,19 +27,19 @@ namespace Chimera
 	{
 	public:
 
-		Video(std::string _nome);
+		Video(std::string _nome, KIND_DEVICE _kindDevice);
+		Video(std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h);
 		virtual ~Video();
 
-		virtual void initGL() = 0;
 		virtual void initDraw() = 0;
 		virtual void endDraw() = 0;
-		virtual void getGeometry(int &_x, int &_y, int &_w, int &_h, int index) = 0;
-
 		virtual void executeViewPerspective(Camera *pCamera, int _eye) = 0;
 		virtual void executeViewOrto(int eyeIndex) = 0;
-
 		virtual void reshape(int x, int y) = 0;
 		virtual void toggleFullScreen() = 0;
+
+		void initGL();
+		void getGeometry(SDL_Rect &winGeometry);
 
 		std::string getNomeTela() const {
 			return nomeTela;
@@ -52,10 +58,17 @@ namespace Chimera
 			return kindDevice;
 		}
 
+
 	protected:
+		void initSDL();
+
+		SDL_Rect winGeometry;
+
 		std::string nomeTela;
 		KIND_DEVICE kindDevice;
 
+		SDL_Window *window;
+		SDL_GLContext context;
 	};
 
 }				/* namespace Chimera */

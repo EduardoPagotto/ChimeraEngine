@@ -590,7 +590,7 @@ namespace Chimera {
 								else if (l_arrayValores.size() == 3) {
 
 									btVector3 cili(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
-									pPhysc->setShapeBox(cili);
+									pPhysc->setShapeCilinder(cili);
 
 								}
 								else {

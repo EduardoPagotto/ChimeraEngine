@@ -42,6 +42,10 @@ namespace Chimera {
 			pShapeCollision = new btCylinderShape(_val);
 		}
 
+		inline void setShapeSphere(btScalar _raio) {
+			pShapeCollision = new btSphereShape(_raio);
+		}
+
 		inline btVector3& getPosition() {
 			return pRigidBody->getWorldTransform().getOrigin();
 		}
@@ -68,6 +72,14 @@ namespace Chimera {
 		void torque(const btVector3 &_torque);
 
 		void setIndexVertexArray(btTriangleIndexVertexArray *_indexVertexArray);
+
+		bool isShapeDefine() {
+
+			if (pShapeCollision != nullptr)
+				return true;
+
+			return false;
+		}
 
 	private:
 		btScalar mass;

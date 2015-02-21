@@ -66,6 +66,24 @@ namespace Chimera {
 
 		}
 
+		if (pPhysic == nullptr) {
+
+			//FIXME apenas para teste define propriedades fisicas
+			pPhysic = new Physics("", "");
+			pPhysic->setMass(0.5f);
+			pPhysic->setFriction(0.0f);
+			pPhysic->setRestitution(0.0f);
+
+			if (pDraw != nullptr)
+				pPhysic->setShapeBox(pDraw->getSizeBox());
+		}
+
+		if (pPhysic->isShapeDefine()==false)
+			pPhysic->setShapeBox(pDraw->getSizeBox());
+
+
+		pPhysic->init(transform, this);
+
 	}
 
 	void Object::render() {
@@ -91,21 +109,6 @@ namespace Chimera {
 		if (_dataMsg->getKindOp() == KindOp::START) {
 
 			init();
-
-			if (pPhysic == nullptr) {
-
-				//FIXME apenas para teste define propriedades fisicas
-				pPhysic = new Physics("", "");
-				pPhysic->setMass(5.0f);
-				pPhysic->setFriction(0.0f);
-				pPhysic->setRestitution(0.0f);
-
-			}
-
-			if (pDraw != nullptr)
-				pPhysic->setShapeBox(pDraw->getSizeBox());
-
-			pPhysic->init(transform, this);
 
 			Node::update(_dataMsg);
 

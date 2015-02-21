@@ -70,6 +70,9 @@ namespace Chimera {
 		
 		bool fullscreenStatus;
 		ovrVector2i winPosPrev;
+
+
+		ovrMatrix4f orthoProjection[2];
 	};
 
 

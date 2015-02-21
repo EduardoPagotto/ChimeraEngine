@@ -15,6 +15,7 @@ namespace Chimera {
 		pRigidBody = nullptr;
 		pShapeCollision = nullptr;
 		pMotionState = nullptr;
+		trimesh = nullptr;
 
 		mass = 0.0f;
 		friction = 0.0f;
@@ -31,8 +32,9 @@ namespace Chimera {
 		restitution = _physics.restitution;
 
 		pRigidBody = nullptr;
-		pShapeCollision = nullptr;
+		pShapeCollision = _physics.pShapeCollision;
 		pMotionState = nullptr;
+		trimesh = nullptr;
 
 		pWorld = Singleton<PhysicsControl>::getRefSingleton();
 	}
@@ -88,6 +90,7 @@ namespace Chimera {
 	void Physics::setIndexVertexArray(btTriangleIndexVertexArray *_indexVertexArray) {
 
 		trimesh = new btGImpactMeshShape(_indexVertexArray);
+		trimesh->setLocalScaling(btVector3(1.f, 1.f, 1.f));
 		trimesh->updateBound();
 		pShapeCollision = trimesh;
 		// pShapeCollision->updateBound();

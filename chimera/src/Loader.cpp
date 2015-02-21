@@ -386,6 +386,9 @@ namespace Chimera {
 				const char *l_nome = l_nNode->Attribute("name");
 
 				btMaterial *pPMat = new btMaterial;
+				pPMat->m_friction = 0;
+				pPMat->m_restitution = 0;
+
 				m_pPhMaterial[l_nome] = pPMat;
 
 				tinyxml2::XMLElement* l_nTec = l_nNode->FirstChildElement("technique_common");
@@ -402,7 +405,7 @@ namespace Chimera {
 					if (l_nRes != nullptr) {
 						const char *l_res = l_nRes->GetText();
 						if (l_res != nullptr)
-							pPMat->m_friction = atof(l_res);
+							pPMat->m_restitution = atof(l_res);
 					}
 
 				}
@@ -490,7 +493,7 @@ namespace Chimera {
 				while (l_nNode != nullptr) {
 
 					Physics *pPhysc = new Physics(l_nNode->Attribute("name"), l_nNode->Attribute("sid"));
-					listaNodeRemover.push(pPhysc);
+					//listaNodeRemover.push(pPhysc);
 
 					tinyxml2::XMLElement* l_nTecnicCommon = l_nNode->FirstChildElement("technique_common");
 					if (l_nTecnicCommon != nullptr) {
@@ -530,14 +533,14 @@ namespace Chimera {
 								loadArrayBtScalar(l_raio, l_arrayValores);
 								if (l_arrayValores.size() == 1) {
 
-									btVector3 raio(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
-									pPhysc->setShapeCilinder(raio);
+									//btVector3 raio(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]);
+									pPhysc->setShapeSphere(l_arrayValores[0]);
 
 								}
 								else if (l_arrayValores.size() == 3) {
 
-									btVector3 raio(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
-									pPhysc->setShapeCilinder(raio);
+									//btVector3 raio(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]);
+									pPhysc->setShapeSphere(l_arrayValores[0]);
 
 								}
 								else {
@@ -598,7 +601,7 @@ namespace Chimera {
 
 								//Cylinder 
 							}
-							else if (strcmp(l_tipoShape, "mesh") == 0) {
+							else if (strcmp(l_tipoShape, "mesh") == 0) {//FIXME ERRADO!!!!
 
 								//instance_geometry
 								tinyxml2::XMLElement* l_nMesh = l_nShape->FirstChildElement();
@@ -610,8 +613,14 @@ namespace Chimera {
 
 										if (pDrawTriMesh != nullptr) {
 
-											btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray(pDrawTriMesh->vIndex.getSize(), pDrawTriMesh->vIndex.ptrVal(), 3 * sizeof(int),
-												pDrawTriMesh->vList.getSize(), pDrawTriMesh->vList.ptrVal(), 3 * sizeof(float));
+											btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray(
+												pDrawTriMesh->vIndex.getSize() / 3,	//num triangles
+												pDrawTriMesh->vIndex.ptrVal(),	//lista de indice
+												3 * sizeof(int),				//tamanho do indice por elemento
+												pDrawTriMesh->vList.getSize(),	//num Vertices
+												pDrawTriMesh->vList.ptrVal(),	//lista de vertice
+												3 * sizeof(float)				//tamanho do vertice por elemento
+												);
 
 											pPhysc->setIndexVertexArray(indexVertexArray);
 
@@ -652,10 +661,10 @@ namespace Chimera {
 						Object *pObj = (Object*)Node::findNodeById(EntityKind::OBJECT, &l_target[1]);
 
 						if ((pPhysic) && (pObj)) {
-
-							Physics *novoPhy = nullptr;
-							pPhysic->clone((Node**)&novoPhy);
-							pObj->addChild(novoPhy);
+							//FIXME ERRADO, Refazer tudo, usar o XML como um DB partudo de cima para baixo e nao o contrario
+							//Physics *novoPhy = nullptr;
+							//pPhysic->clone((Node**)&novoPhy);
+							pObj->addChild(pPhysic);
 
 						}
 

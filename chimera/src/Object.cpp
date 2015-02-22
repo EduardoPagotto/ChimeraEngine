@@ -88,14 +88,23 @@ namespace Chimera {
 
 	void Object::render() {
 
-		if (pEffect != nullptr)
+		if (pEffect != nullptr) {
 			pEffect->render();
+		}
 
-		if (pTexture != nullptr)
+		if (pTexture != nullptr) {
+			//glPushAttrib(GL_CURRENT_BIT);
+			//glColor3f(1.0f, 1.0f, 1.0f);
 			pTexture->render();
+		}
 
 		if (pDraw != nullptr)
 			pDraw->render();
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//if (pTexture != nullptr)
+		//	glPopAttrib();
 
 	}
 

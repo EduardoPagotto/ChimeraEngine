@@ -18,8 +18,8 @@ int testeCargaArquivo() {
 	try {
 
 		//Instancia de Video
-		//Chimera::Video *video = new Chimera::OvrDevice("Teste");
-		Chimera::Video *video = new Chimera::VideoDevice(1200, 800, "teste");
+		Chimera::Video *video = new Chimera::OvrDevice("Teste");
+		//Chimera::Video *video = new Chimera::VideoDevice(1200, 800, "teste");
 
 		//Carga de dados 
 		Chimera::Loader *pLoader = new Chimera::Loader();
@@ -32,7 +32,9 @@ int testeCargaArquivo() {
 #endif
 		//Chimera::Node *pRoot = pLoader->loadDAE("cuboTex1.dae");//cuboEesfera.dae
 		//Chimera::Node *pRoot = pLoader->loadDAE("cuboEesfera.dae");
-		Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.xml");
+		//Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.xml");
+		//Chimera::Node *pRoot = pLoader->loadDAE("CuboEsferaMaterial.dae");
+		Chimera::Node *pRoot = pLoader->loadDAE("piso1.dae");
 		//Chimera::Node *pRoot = pLoader->loadDAE("zoltan.dae");
 
 		delete pLoader;

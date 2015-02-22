@@ -25,17 +25,9 @@ namespace Chimera {
 
 		void update(DataMsg *dataMsg);
 
-		//void setViewPortOrtogonal(const SDL_Rect &_rectangle);
-		//void setViewPortPerspective(const SDL_Rect &_rectangle, const Camera *_camera);
-
-		// void initOpenGL();
-		//std::string getVersaoOpenGL();
-
-		//void setLight ( bool _lightOn );
-		//void setMaterial ( bool _materialOn );
-
-		//void begin2D();
-		//void end2D();
+		Node* getRoot() {
+			return pRoot;
+		}
 
 		void cameraAtiva(Camera *_pCam) {
 			pCameraAtiva = _pCam;

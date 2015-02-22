@@ -86,7 +86,9 @@ void Game::start() {
 	pSceneMng->addChildToScene(pOrbitalCam);
 
 	//Ajusta objeto primario
-	pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT, 0);
+	//pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT, 0);//Cube.001
+	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "cubo01");
+
 	pVideo->setLight(true);
 	pVideo->setMaterial(true);
 

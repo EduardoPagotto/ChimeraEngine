@@ -126,6 +126,7 @@ namespace Chimera {
 		glDepthFunc(GL_LEQUAL);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glEnable(GL_LIGHTING);
+		
 
 	}
 
@@ -181,14 +182,14 @@ namespace Chimera {
 
 	void Video::setMaterial(bool _materialOn) {
 
-		if (_materialOn == true) {
-			glDisable(GL_COLOR_MATERIAL);
-			//glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //TODO verificar necessidade
-		}
-		else {
-			glEnable(GL_COLOR_MATERIAL);
-			glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
-		}
+		//if (_materialOn == true) {
+		//	glDisable(GL_COLOR_MATERIAL);
+		//	glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //TODO verificar necessidade
+		//}
+		//else {
+		//	glEnable(GL_COLOR_MATERIAL);
+		//	glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
+		//}
 	}
 
 } /* namespace Chimera */

@@ -7,7 +7,7 @@ namespace Chimera {
 
 		textoFPS = "fps: " + std::to_string(0);
 		pHUD = new HUD();
-
+		
 #ifdef WIN32
 		pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
 #else

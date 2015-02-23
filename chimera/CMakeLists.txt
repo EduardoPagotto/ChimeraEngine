@@ -55,6 +55,7 @@ add_library (Chimera STATIC
 				src/VideoDevice.cpp
 				src/OvrDevice.cpp
 				src/Loader.cpp
+				src/LoaderDae.cpp
 				src/SceneMng.cpp
 				src/GameClient.cpp
 			)

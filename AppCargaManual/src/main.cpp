@@ -19,16 +19,19 @@ int testeCargaArquivo() {
 
 	try {
 
+#ifdef WIN32
+		std::string dirDados = "C:\\Projetos\\ChimeraEngine\\appTest\\models";
+#else
+		std::string dirDados = "../../appTest/models";
+#endif
+		
 		//Instancia de Video
 		//Chimera::Video *video = new Chimera::OvrDevice("Teste");
-		Chimera::Video *video = new Chimera::VideoDevice(1200, 800, "teste");
+		Chimera::Video *video = new Chimera::VideoDevice(640, 480, "teste");
 
 		//Carga de dados 
-#ifdef WIN32
-		ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("C:\\Projetos\\ChimeraEngine\\appTest\\models", "C:\\Projetos\\ChimeraEngine\\appTest\\models");
-#else
-		ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("../../appTest/models","../../appTest/models");
-#endif
+		ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae(dirDados, dirDados);
+
 		//Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");//cuboEesfera.dae
 		//Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
 		//Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.xml");
@@ -125,19 +128,6 @@ int testeCargaManual() {
 	return 0;
 }
 
-int testeNovaCarga() {
-	
-	//ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("../../appTest/models/","../../appTest/models/testeMaterial.xml");
-	//ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("C:\\Projetos\\ChimeraEngine\\appTest\\models");
-		
-	//Chimera::Node *pRoot = pLoader->loadFile("C:\\Projetos\\ChimeraEngine\\appTest\\models\\testeMaterial.xml");
-
-	//delete pLoader;
-	//pLoader = nullptr;
-
-	return 0;
-}
-
 #ifndef WIN32
 int main(int argn, char** argv) {
 #else
@@ -145,7 +135,6 @@ int _tmain(int argc, _TCHAR* argv[]) {
 #endif
 	//return testeCargaManual();
 	return testeCargaArquivo();
-	//return testeNovaCarga();
 }
 
 

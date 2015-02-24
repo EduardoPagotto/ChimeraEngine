@@ -33,7 +33,12 @@ namespace ChimeraLoader {
 	Chimera::Node* LoaderDae::loadFile(const std::string &file) {
 
 		Chimera::Node *pRootScene = nullptr;
+#ifdef WIN32		
 		std::string dir_arquivo = modelDir + "\\" + file;
+#else
+		std::string dir_arquivo = modelDir + "/" + file;
+#endif
+		
 		doc = new tinyxml2::XMLDocument();
 
 		if (doc->LoadFile(dir_arquivo.c_str()) != 0)
@@ -194,7 +199,12 @@ namespace ChimeraLoader {
 					Chimera::Texture *pTexture = new Chimera::Texture(retornaAtributo("id", l_nNodeSourceData), retornaAtributo("id", l_nNodeSourceData));
 
 					const char* l_val = l_nNodeSourceData->FirstChildElement("init_from")->GetText();
+#ifdef WIN32
 					pTexture->setPathFile(textureDir + "\\" + std::string(l_val));
+#else
+					pTexture->setPathFile(textureDir + "/" + std::string(l_val));
+#endif
+					
 					pTexture->init();
 
 					_pNodePai->addChild(pTexture);

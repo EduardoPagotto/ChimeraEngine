@@ -8,9 +8,11 @@
 
 #include "Node.h"
 #include "Draw.h"
-#include "Texture.h"
-#include "Effect.h"
+//#include "Texture.h"
+//#include "Effect.h"
+#include "Material.h"
 #include "Physics.h"
+
 
 namespace Chimera {
 
@@ -45,8 +47,11 @@ namespace Chimera {
 	private:
 		Physics *pPhysic;
 		Draw *pDraw;
-		Texture *pTexture;
-		Effect *pEffect;
+		
+		Material *pMaterial;
+		//Texture *pTexture;
+		//Effect *pEffect;
+
 
 		bool collide;
 

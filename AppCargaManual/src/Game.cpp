@@ -87,7 +87,8 @@ void Game::start() {
 
 	//Ajusta objeto primario
 	//pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT, 0);//Cube.001
-	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "cubo01");
+	//pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Zoltan");//Zoltan//cubo01
+	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "cubo01");//Zoltan//cubo01
 
 	pVideo->setLight(true);
 	pVideo->setMaterial(true);

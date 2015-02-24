@@ -11,7 +11,7 @@
 #include "Game.h"
 #include "DrawBox.h"
 #include "DrawGrid.h"
-#include "Loader.h"
+//#include "Loader.h"
 
 #include "LoaderDae.h"
 
@@ -20,24 +20,21 @@ int testeCargaArquivo() {
 	try {
 
 		//Instancia de Video
-		Chimera::Video *video = new Chimera::OvrDevice("Teste");
-		//Chimera::Video *video = new Chimera::VideoDevice(1200, 800, "teste");
+		//Chimera::Video *video = new Chimera::OvrDevice("Teste");
+		Chimera::Video *video = new Chimera::VideoDevice(1200, 800, "teste");
 
 		//Carga de dados 
-		Chimera::Loader *pLoader = new Chimera::Loader();
 #ifdef WIN32
-		pLoader->setModelDir("C:\\Projetos\\ChimeraEngine\\appTest\\models\\");
-		pLoader->setImageDir("C:\\Projetos\\ChimeraEngine\\appTest\\models\\");
+		ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("C:\\Projetos\\ChimeraEngine\\appTest\\models", "C:\\Projetos\\ChimeraEngine\\appTest\\models");
 #else
-		pLoader->setModelDir("../../appTest/models/");
-		pLoader->setImageDir("../../appTest/models/");
+		ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("../../appTest/models","../../appTest/models");
 #endif
-		//Chimera::Node *pRoot = pLoader->loadDAE("cuboTex1.dae");//cuboEesfera.dae
-		//Chimera::Node *pRoot = pLoader->loadDAE("cuboEesfera.dae");
-		//Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.xml");
-		//Chimera::Node *pRoot = pLoader->loadDAE("CuboEsferaMaterial.dae");
-		Chimera::Node *pRoot = pLoader->loadDAE("piso1.dae");
-		//Chimera::Node *pRoot = pLoader->loadDAE("zoltan.dae");
+		//Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");//cuboEesfera.dae
+		//Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
+		//Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.xml");
+		//Chimera::Node *pRoot = pLoader->loadFile("CuboEsferaMaterial.dae");
+		Chimera::Node *pRoot = pLoader->loadFile("piso1.dae");
+		//Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
 
 		delete pLoader;
 		pLoader = nullptr;
@@ -130,9 +127,15 @@ int testeCargaManual() {
 
 int testeNovaCarga() {
 	
-	ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("../../appTest/models/","../../appTest/models/testeMaterial.xml");
-	
-	
+	//ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("../../appTest/models/","../../appTest/models/testeMaterial.xml");
+	//ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae("C:\\Projetos\\ChimeraEngine\\appTest\\models");
+		
+	//Chimera::Node *pRoot = pLoader->loadFile("C:\\Projetos\\ChimeraEngine\\appTest\\models\\testeMaterial.xml");
+
+	//delete pLoader;
+	//pLoader = nullptr;
+
+	return 0;
 }
 
 #ifndef WIN32
@@ -141,8 +144,8 @@ int main(int argn, char** argv) {
 int _tmain(int argc, _TCHAR* argv[]) {
 #endif
 	//return testeCargaManual();
-	//return testeCargaArquivo();
-	return testeNovaCarga();
+	return testeCargaArquivo();
+	//return testeNovaCarga();
 }
 
 

@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-	class Material : Node {
+	class Material : public Node {
 	public:
 
 		friend class Loader;
@@ -19,6 +19,18 @@ namespace Chimera {
 		virtual void update(DataMsg *dataMsg);
 
 		virtual void clone(Node **ppNode);
+
+		Texture *getTexture() const {
+			return pTextura;
+		}
+
+		Effect *getEffect() const {
+			return pEffect;
+		}
+
+		void createDefaultEffect();
+
+		void render();
 
 	private:
 

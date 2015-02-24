@@ -12,8 +12,9 @@ namespace Chimera {
 
 		pPhysic = nullptr;
 		pDraw = nullptr;
-		pTexture = nullptr;
-		pEffect = nullptr;
+		pMaterial = nullptr;
+		//pTexture = nullptr;
+		//pEffect = nullptr;
 
 		collide = false;
 
@@ -25,8 +26,9 @@ namespace Chimera {
 
 		pPhysic = _object.pPhysic;
 		pDraw = _object.pDraw;
-		pTexture = _object.pTexture;
-		pEffect = _object.pEffect;
+		pMaterial = _object.pMaterial;
+		//pTexture = _object.pTexture;
+		//pEffect = _object.pEffect;
 		collide = _object.collide;
 
 		transform = _object.transform;
@@ -50,22 +52,15 @@ namespace Chimera {
 
 	void Object::init() {
 
-		pTexture = (Texture*)findChildByKind(EntityKind::TEXTURE, 0);
-		pEffect = (Effect*)findChildByKind(EntityKind::EFFECT, 0);
-		pDraw = (Draw*)findChildByKind(EntityKind::DRAW, 0);
-		pPhysic = (Physics*)findChildByKind(EntityKind::PHYSICS, 0);
-
-		if (pEffect == nullptr) {
-
-			pEffect = new Effect("effect_interno", "effect_interno");
-			pEffect->setDiffuse(Color(0.6f, 0.6f, 0.6f));
-			pEffect->setEmissive(Color(0.1f, 0.1f, 0.1f));
-			pEffect->setAmbient(Color(0.1f, 0.1f, 0.1f));
-			pEffect->setSpecular(Color(0.5f, 0.5f, 0.5f));
-			pEffect->setShininess(0.5);
-
+		pMaterial = (Material*)findChildByKind(EntityKind::MATERIAL, 0);
+		if (pMaterial == nullptr) {
+			pMaterial = new Material(getId() + "_Material_defaultCreate", getName() + "_Material_default_create");
+			pMaterial->createDefaultEffect();
 		}
 
+		pDraw = (Draw*)findChildByKind(EntityKind::DRAW, 0);
+
+		pPhysic = (Physics*)findChildByKind(EntityKind::PHYSICS, 0);
 		if (pPhysic == nullptr) {
 
 			//FIXME apenas para teste define propriedades fisicas
@@ -81,30 +76,18 @@ namespace Chimera {
 		if (pPhysic->isShapeDefine()==false)
 			pPhysic->setShapeBox(pDraw->getSizeBox());
 
-
 		pPhysic->init(transform, this);
 
 	}
 
 	void Object::render() {
 
-		if (pEffect != nullptr) {
-			pEffect->render();
-		}
-
-		if (pTexture != nullptr) {
-			//glPushAttrib(GL_CURRENT_BIT);
-			//glColor3f(1.0f, 1.0f, 1.0f);
-			pTexture->render();
-		}
+		pMaterial->render();
 
 		if (pDraw != nullptr)
 			pDraw->render();
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-
-		//if (pTexture != nullptr)
-		//	glPopAttrib();
 
 	}
 
@@ -117,9 +100,11 @@ namespace Chimera {
 
 		if (_dataMsg->getKindOp() == KindOp::START) {
 
-			init();
-
+			//inicialize primeiro os filhos para garantir textura e efeito em material
 			Node::update(_dataMsg);
+
+			//inicializa objeto local
+			init();
 
 		}
 		if (_dataMsg->getKindOp() == KindOp::DRAW3D) {

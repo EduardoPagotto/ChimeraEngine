@@ -19,7 +19,40 @@ namespace Chimera {
 	}
 
 	void Material::update(DataMsg *dataMsg) {
-		Node::update(dataMsg);
+
+		if (dataMsg->getKindOp() == KindOp::START) {
+
+			pEffect = (Effect*)findChildByKind(EntityKind::EFFECT, 0);
+			if (pEffect == nullptr) {
+				createDefaultEffect();
+			}
+
+			pTextura = (Texture*)findChildByKind(EntityKind::TEXTURE, 0);
+
+			Node::update(dataMsg);
+
+		}
+	}
+
+	void Material::createDefaultEffect() {
+
+		pEffect = new Effect("effect_interno", "effect_interno");
+		pEffect->setDiffuse(Color(0.6f, 0.6f, 0.6f));
+		pEffect->setEmissive(Color(0.1f, 0.1f, 0.1f));
+		pEffect->setAmbient(Color(0.1f, 0.1f, 0.1f));
+		pEffect->setSpecular(Color(0.5f, 0.5f, 0.5f));
+		pEffect->setShininess(0.5);
+
+		//Node::addChild(pEffect);//preciso ??
+	}
+
+	void Material::render() {
+
+		pEffect->render();
+		
+		if (pTextura != nullptr) {
+			pTextura->render();
+		}
 	}
 
 }

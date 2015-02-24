@@ -4,6 +4,7 @@
 #include <map>
 
 //#include <log4cxx/logger.h>
+#include <tinyxml2.h>
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
@@ -49,6 +50,8 @@ namespace Chimera {
 			return period;
 		}
 
+		void loadCollada(tinyxml2::XMLElement* _nNode);
+		
 	private:
 
 		static void doTickCallBack(btDynamicsWorld *world, btScalar timeStep);

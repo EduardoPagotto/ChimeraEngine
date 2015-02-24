@@ -178,5 +178,9 @@ namespace Chimera {
 	// m_trans.setOrigin ( _pTrans->getPosition() );
 	//pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 
+	
+	
+	
+	
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

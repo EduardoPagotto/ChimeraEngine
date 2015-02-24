@@ -34,9 +34,9 @@ int testeCargaArquivo() {
 
 		//Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");//cuboEesfera.dae
 		//Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
-		//Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.xml");
+		Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.dae");
 		//Chimera::Node *pRoot = pLoader->loadFile("CuboEsferaMaterial.dae");
-		Chimera::Node *pRoot = pLoader->loadFile("piso1.dae");
+		//Chimera::Node *pRoot = pLoader->loadFile("piso1.dae");
 		//Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
 
 		delete pLoader;

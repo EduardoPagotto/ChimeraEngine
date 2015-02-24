@@ -339,15 +339,13 @@
   </library_visual_scenes>
   
   <library_physics_materials>
-
 	<physics_material id="cubo01-PhysicsMaterial" name="cubo01-PhysicsMaterial">
 		<technique_common>
 			<dynamic_friction>0</dynamic_friction>
 			<restitution>0</restitution>
-			<static_friction>0</static_friction>
+			<static_friction>0</static_friction>	
 		</technique_common>
 	</physics_material>
-
 	<physics_material id="Icosphere-PhysicsMaterial" name="Icosphere-PhysicsMaterial">
 		<technique_common>
 			<dynamic_friction>0</dynamic_friction>
@@ -355,7 +353,6 @@
 			<static_friction>0</static_friction>
 		</technique_common>
 	</physics_material>
-
 	<physics_material id="cilindro01-PhysicsMaterial" name="cilindro01-PhysicsMaterial">
 		<technique_common>
 			<dynamic_friction>0</dynamic_friction>
@@ -363,13 +360,10 @@
 			<static_friction>0</static_friction>
 		</technique_common>
 	</physics_material>
-
    </library_physics_materials>
 
 	<library_physics_models>
-		
 		<physics_model id="Scene-PhysicsModel" name="Scene-PhysicsModel">
-			
 			<rigid_body name="cubo01-RigidBody" sid="cubo01-RigidBody">
 				<technique_common>
 					<dynamic>true</dynamic>
@@ -378,11 +372,10 @@
 					<shape>
 						<mesh>
 							<instance_geometry url="#Cube-mesh"/>
-						</mesh>						
+						</mesh>
 					</shape>
 				</technique_common>
 			</rigid_body>
-			
 			<rigid_body name="Icosphere-RigidBody" sid="Icosphere-RigidBody">
 				<technique_common>
 					<dynamic>true</dynamic>
@@ -395,7 +388,6 @@
 					</shape>
 				</technique_common>
 			</rigid_body>
-
 			<rigid_body name="cilindro01-RigidBody" sid="cilindro01-RigidBody">
 				<technique_common>
 					<dynamic>true</dynamic>
@@ -408,7 +400,6 @@
 					</shape>
 				</technique_common>
 			</rigid_body>
-
 			<rigid_constraint name="Const" sid="Const">
 				<ref_attachment rigid_body="cubo01-RigidBody">
 					<matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
@@ -430,26 +421,26 @@
 					</limits>
 				</technique_common>
 			</rigid_constraint>
-
 		</physics_model>
-		
 	</library_physics_models>
 
 	<library_physics_scenes>
 		<physics_scene id="Scene-Physics" name="Scene-Physics">
 			<instance_physics_model url="#Scene-PhysicsModel">
-				
 				<instance_rigid_body body="cubo01-RigidBody" target="#cubo01"/>
 				<instance_rigid_body body="Icosphere-RigidBody" target="#Icosphere"/>
 				<instance_rigid_body body="cilindro01-RigidBody" target="#cilindro01"/>
 				<instance_rigid_constraint constraint="Const"/>
-
 			</instance_physics_model>
+			<technique_common>
+				<gravity>0 -9.8 0</gravity>
+				<time_step>3.e-002</time_step>
+			</technique_common>	
 		</physics_scene>
 	</library_physics_scenes>
 
-
   <scene>
+	<instance_physics_scene url="#Scene-Physics"/>
     <instance_visual_scene url="#Scene"/>
   </scene>
 </COLLADA>

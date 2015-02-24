@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "LoaderDae.h"
-
+#include "ChimeraUtils.h"
 #include "ExceptionChimera.h"
 #include "Camera.h"
 #include "Light.h"
@@ -99,7 +99,7 @@ namespace ChimeraLoader {
 				if (strcmp(l_tipoTransform, (const char*)"transform") == 0) {
 
 					l_pTransform = new btTransform;
-					loadTransformMatrix(_nNode, l_pTransform);
+					Chimera::loadTransformMatrix(_nNode, l_pTransform);
 
 				}
 				else {
@@ -137,7 +137,7 @@ namespace ChimeraLoader {
 
 				loadNodeLib((const char*)&l_url[1], "library_geometries", "geometry", &l_nNodeSourceData);
 
-				Chimera::DrawTriMesh *pDrawTriMesh = new Chimera::DrawTriMesh(retornaAtributo("id", l_nNodeSourceData), retornaAtributo("name", l_nNodeSourceData));
+				Chimera::DrawTriMesh *pDrawTriMesh = new Chimera::DrawTriMesh(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("name", l_nNodeSourceData));
 				pDrawTriMesh->loadCollada(l_nNodeSourceData);
 
 				Chimera::Object *pObj = new Chimera::Object(_id, _name);
@@ -170,7 +170,7 @@ namespace ChimeraLoader {
 
 				loadNodeLib((const char*)&l_target[1], "library_materials", "material", &l_nNodeSourceData);
 
-				Chimera::Material *pMaterial = new Chimera::Material(retornaAtributo("id", l_nNodeSourceData), retornaAtributo("name", l_nNodeSourceData));
+				Chimera::Material *pMaterial = new Chimera::Material(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("name", l_nNodeSourceData));
 				_pNodePai->addChild(pMaterial);
 
 				pLastNodeDone = pMaterial;
@@ -187,7 +187,7 @@ namespace ChimeraLoader {
 			else if (strcmp(l_nomeElemento, (const char*)"instance_effect") == 0) {
 
 				loadNodeLib((const char*)&l_url[1], "library_effects", "effect", &l_nNodeSourceData);
-				Chimera::Effect *pEffect = new Chimera::Effect(retornaAtributo("id", l_nNodeSourceData), retornaAtributo("id", l_nNodeSourceData));
+				Chimera::Effect *pEffect = new Chimera::Effect(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("id", l_nNodeSourceData));
 				pEffect->loadCollada(l_nNodeSourceData);
 				_pNodePai->addChild(pEffect);
 
@@ -196,7 +196,7 @@ namespace ChimeraLoader {
 				if (pEffect->getNameTextureId().size() > 0) {
 
 					loadNodeLib((const char*)pEffect->getNameTextureId().c_str(), "library_images", "image", &l_nNodeSourceData);
-					Chimera::Texture *pTexture = new Chimera::Texture(retornaAtributo("id", l_nNodeSourceData), retornaAtributo("id", l_nNodeSourceData));
+					Chimera::Texture *pTexture = new Chimera::Texture(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("id", l_nNodeSourceData));
 
 					const char* l_val = l_nNodeSourceData->FirstChildElement("init_from")->GetText();
 #ifdef WIN32
@@ -204,13 +204,10 @@ namespace ChimeraLoader {
 #else
 					pTexture->setPathFile(textureDir + "/" + std::string(l_val));
 #endif
-					
 					pTexture->init();
 
 					_pNodePai->addChild(pTexture);
-
 				}
-
 			}
 			else if (strcmp(l_nomeElemento, (const char*)"node") == 0) {
 
@@ -258,67 +255,7 @@ namespace ChimeraLoader {
 		else {
 			throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string(_libName));
 		}
-
 	}
-
-	std::string LoaderDae::retornaAtributo(const std::string &_atributo, tinyxml2::XMLElement* _node) {
-
-		const char *l_value = _node->Attribute(_atributo.c_str());
-		if (l_value != nullptr) {
-			return std::string(l_value);
-		}
-
-		std::cout << std::string("Atributo [ " + _atributo + " ] Elemento [ " + _node->Value() + " ] nao encontrado") << std::endl;
-		return std::string("");
-	}
-
-	void LoaderDae::loadTransformMatrix(tinyxml2::XMLElement* _nNode, btTransform *_pTransform) {
-
-		std::vector<float> l_arrayValores;
-		const char* l_matrix = _nNode->GetText();
-		loadArrayBtScalar(l_matrix, l_arrayValores);
-		carregaMatrix(_pTransform, l_arrayValores);
-
-	}
-
-	void LoaderDae::loadArrayBtScalar(const char *_val, std::vector<btScalar> &_arrayF) {
-
-		char l_numTemp[32];
-		const char *pchFim;
-		const char *pchInit = _val;
-		const char *deadEnd = _val + strlen(_val);
-		do {
-			pchFim = strchr(pchInit, ' ');
-			if (pchFim == nullptr)
-				pchFim = deadEnd;
-
-			int l_tam = pchFim - pchInit;
-			memcpy(l_numTemp, pchInit, l_tam);
-			l_numTemp[l_tam] = 0;
-			_arrayF.push_back((float)atof(l_numTemp));
-
-			pchInit = pchFim + 1;
-		} while (pchInit < deadEnd);
-	}
-
-	void LoaderDae::carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix) {
-
-		if (listaMatrix.size() != 16)
-			throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string(listaMatrix.size()));
-
-		btScalar ponteiroFloat[16];
-		int indice = 0;
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				int pos = i + (4 * j);
-				ponteiroFloat[pos] = listaMatrix[indice];
-				indice++;
-			}
-		}
-
-		_pTrans->setFromOpenGLMatrix(ponteiroFloat);
-	}
-
 
 	tinyxml2::XMLElement* LoaderDae::findVisualScene() {
 
@@ -349,7 +286,6 @@ namespace ChimeraLoader {
 					else {
 						std::cout << "Visual Scene: vazio " << std::endl;
 					}
-
 					// 					std::cout << "Visual Scene: " << (const char*)&l_url[1] << " nao encontrado " << std::endl;
 				}
 				else {

@@ -1,4 +1,6 @@
+#include <iostream>
 #include "ChimeraUtils.h"
+#include "ExceptionChimera.h"
 
 namespace Chimera {
 
@@ -42,4 +44,42 @@ namespace Chimera {
 		} while (pchInit < deadEnd);
 	}
 
+	void loadTransformMatrix(tinyxml2::XMLElement* _nNode, btTransform *_pTransform) {
+		
+		std::vector<float> l_arrayValores;
+		const char* l_matrix = _nNode->GetText();
+		loadArrayBtScalar(l_matrix, l_arrayValores);
+		carregaMatrix(_pTransform, l_arrayValores);
+		
+	}
+	
+	void carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix) {
+		
+		if (listaMatrix.size() != 16)
+			throw ExceptionChimera(ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string(listaMatrix.size()));
+		
+		btScalar ponteiroFloat[16];
+		int indice = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				int pos = i + (4 * j);
+				ponteiroFloat[pos] = listaMatrix[indice];
+				indice++;
+			}
+		}
+		
+		_pTrans->setFromOpenGLMatrix(ponteiroFloat);
+	}
+	
+	std::string retornaAtributo(const std::string &_atributo, tinyxml2::XMLElement* _node) {
+		
+		const char *l_value = _node->Attribute(_atributo.c_str());
+		if (l_value != nullptr) {
+			return std::string(l_value);
+		}
+		
+		std::cout << std::string("Atributo [ " + _atributo + " ] Elemento [ " + _node->Value() + " ] nao encontrado") << std::endl;
+		return std::string("");
+	}
+	
 }

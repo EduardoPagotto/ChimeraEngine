@@ -82,7 +82,7 @@ namespace Chimera {
 
 		pRigidBody->setFriction(friction);
 		pRigidBody->setRestitution(restitution);
-		//pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);  
+		//pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
 
 		pWorld->discretDynamicsWorld->addRigidBody(pRigidBody, 1, 1);
 
@@ -244,16 +244,16 @@ namespace Chimera {
 			}
 			else if (strcmp(l_tipoShape, "mesh") == 0) {//FIXME ERRADO!!!!
 
-				setShapeBox(btVector3(1.0, 1.0, 1.0));
+				//setShapeBox(btVector3(1.0, 1.0, 1.0));
 
-				////instance_geometry
-				//tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement();
-				//if (l_nMesh != nullptr) {
-				//	const char *l_mesh = l_nMesh->Attribute("url");
-				//	if (l_mesh != nullptr) {
-				//		_meshName = (const char*)&l_mesh[1];
-				//	}
-				//}
+				//instance_geometry
+				tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement();
+				if (l_nMesh != nullptr) {
+					const char *l_mesh = l_nMesh->Attribute("url");
+					if (l_mesh != nullptr) {
+						_meshName = (const char*)&l_mesh[1];
+					}
+				}
 			}
 		}
 	}
@@ -313,4 +313,4 @@ namespace Chimera {
 	}
 }
 
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

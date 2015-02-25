@@ -38,7 +38,7 @@ namespace ChimeraLoader {
 	Chimera::Node* LoaderDae::loadFile(const std::string &file) {
 
 		Chimera::Node *pRootScene = nullptr;
-#ifdef WIN32		
+#ifdef WIN32
 		std::string dir_arquivo = modelDir + "\\" + file;
 #else
 		std::string dir_arquivo = modelDir + "/" + file;
@@ -103,12 +103,12 @@ namespace ChimeraLoader {
 					if (pDrawTriMesh != nullptr) {
 
 						btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray(
-							pDrawTriMesh->vIndex.getSize() / 3,	//num triangles
-							pDrawTriMesh->vIndex.ptrVal(),	//lista de indice
-							3 * sizeof(int),				//tamanho do indice por elemento
-							pDrawTriMesh->vList.getSize(),	//num Vertices
-							pDrawTriMesh->vList.ptrVal(),	//lista de vertice
-							3 * sizeof(float)				//tamanho do vertice por elemento
+							pDrawTriMesh->vIndex.getSize() / 3, //num triangles
+							pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
+							3 * sizeof(int),					//tamanho do indice por elemento
+							pDrawTriMesh->vList.getSize() / 3,	//num Vertices
+							pDrawTriMesh->vList.ptrVal(),		//lista de vertice
+							3 * sizeof(float)					//tamanho do vertice por elemento
 							);
 
 						pPhysic->setIndexVertexArray(indexVertexArray);
@@ -165,11 +165,11 @@ namespace ChimeraLoader {
 		//		//TODO constraints
 		//		const char *l_name = l_nRigidBodyConstraint->Attribute("name");
 		//		const char *l_sid = l_nRigidBodyConstraint->Attribute("sid");
-		//		
+		//
 		//		const char * l_teste = l_nRigidBodyConstraint->Name();
 		//		std::cout << "DEBUG: " << l_teste <<std::endl;
-		//		
-		//		
+		//
+		//
 		//		l_nRigidBodyConstraint = l_nRigidBodyConstraint->NextSiblingElement("rigid_constraint");
 		//	}
 		//}

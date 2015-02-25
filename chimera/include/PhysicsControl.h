@@ -3,7 +3,6 @@
 
 #include <map>
 
-//#include <log4cxx/logger.h>
 #include <tinyxml2.h>
 
 #include <btBulletCollisionCommon.h>
@@ -11,8 +10,6 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 #include <LinearMath/btVector3.h>
-
-//#include <SDL2/SDL.h>
 
 #include "Node.h"
 
@@ -51,7 +48,7 @@ namespace Chimera {
 		}
 
 		void loadCollada(tinyxml2::XMLElement* _nNode);
-		
+
 	private:
 
 		static void doTickCallBack(btDynamicsWorld *world, btScalar timeStep);
@@ -71,8 +68,6 @@ namespace Chimera {
 
 		btClock clockCounter;
 		btScalar period;
-
-		//log4cxx::LoggerPtr logger;
 	};
 
 }

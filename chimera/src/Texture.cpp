@@ -21,8 +21,6 @@ namespace Chimera {
 		textureList[1] = 0;
 		textureList[2] = 0;
 
-		//logger = log4cxx::Logger::getLogger ( "Texture" );
-
 	}
 
 	Texture::Texture(const Texture &_texture) : Node(_texture) {
@@ -34,7 +32,6 @@ namespace Chimera {
 		textureList[1] = _texture.textureList[1];
 		textureList[2] = _texture.textureList[2];
 
-		//logger = log4cxx::Logger::getLogger ( "Texture" );
 	}
 
 	Texture::~Texture() {
@@ -147,13 +144,8 @@ namespace Chimera {
 	SDL_Surface *Texture::loadImage() {
 
 		SDL_Surface *pImage = IMG_Load(pathFile.c_str());
-		if (pImage != nullptr) {
-
-			//std::string l_msg = "Imagem carregada:" + pathFile;
-			//LOG4CXX_INFO ( logger , l_msg );
-
+		if (pImage != nullptr)
 			return pImage;
-		}
 
 		throw ExceptionChimera(ExceptionCode::READ, "Falha ao ler arquivo:" + pathFile);
 	}
@@ -165,13 +157,11 @@ namespace Chimera {
 
 	void Texture::update(DataMsg *dataMsg) {
 
-		if (dataMsg->getKindOp() == KindOp::START) {
-
+		if (dataMsg->getKindOp() == KindOp::START)
 			init();
-		}
 
 		Node::update(dataMsg);
 	}
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

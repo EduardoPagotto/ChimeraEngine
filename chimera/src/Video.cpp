@@ -126,18 +126,9 @@ namespace Chimera {
 		glDepthFunc(GL_LEQUAL);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glEnable(GL_LIGHTING);
-		
+
 
 	}
-
-// 	void Video::getGeometry(SDL_Rect &winGeometry) {
-// 
-// 		winGeometry.x = this->winGeometry.x;
-// 		winGeometry.y = this->winGeometry.y;
-// 		winGeometry.w = this->winGeometry.w;
-// 		winGeometry.h = this->winGeometry.h;
-// 
-// 	}
 
 	void  Video::updateHud(HUD *pHud, int eye) {
 

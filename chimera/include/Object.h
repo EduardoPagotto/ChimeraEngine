@@ -8,8 +8,6 @@
 
 #include "Node.h"
 #include "Draw.h"
-//#include "Texture.h"
-//#include "Effect.h"
 #include "Material.h"
 #include "Physics.h"
 
@@ -19,7 +17,6 @@ namespace Chimera {
 	class Object : public Node {
 	public:
 
-		//friend class Loader;
 		friend class Physics;
 
 		Object(std::string _id, std::string _name);
@@ -47,17 +44,9 @@ namespace Chimera {
 	private:
 		Physics *pPhysic;
 		Draw *pDraw;
-		
 		Material *pMaterial;
-		//Texture *pTexture;
-		//Effect *pEffect;
-
-
-		bool collide;
 
 		btTransform transform;
-
-		//  log4cxx::LoggerPtr logger;
 	};
 
 }

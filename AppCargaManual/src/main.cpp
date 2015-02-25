@@ -11,7 +11,6 @@
 #include "Game.h"
 #include "DrawBox.h"
 #include "DrawGrid.h"
-//#include "Loader.h"
 
 #include "LoaderDae.h"
 
@@ -24,12 +23,12 @@ int testeCargaArquivo() {
 #else
 		std::string dirDados = "../../appTest/models";
 #endif
-		
+
 		//Instancia de Video
 		//Chimera::Video *video = new Chimera::OvrDevice("Teste");
 		Chimera::Video *video = new Chimera::VideoDevice(640, 480, "teste");
 
-		//Carga de dados 
+		//Carga de dados
 		ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae(dirDados, dirDados);
 
 		//Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");//cuboEesfera.dae

@@ -1,8 +1,6 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
-//#include <log4cxx/logger.h>
-
 #ifdef WIN32
 #include "SDL_image.h"
 #else
@@ -51,8 +49,6 @@ namespace Chimera {
 		int textureList[3];
 		int indiceFilter;
 		bool texturaCarregada;
-
-		//log4cxx::LoggerPtr logger;
 	};
 
 }

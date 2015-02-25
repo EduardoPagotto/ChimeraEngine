@@ -1,8 +1,6 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-//#include <log4cxx/logger.h>
-
 #include "Entity.h"
 #include "DataMsg.h"
 
@@ -63,11 +61,9 @@ namespace Chimera {
 		std::string name;
 		std::string id;
 		static std::list<Node*> listNode;
-
-		//log4cxx::LoggerPtr logger;
 	};
 
 }
 
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

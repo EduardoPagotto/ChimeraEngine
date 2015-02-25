@@ -1,8 +1,6 @@
 #ifndef __GAME_CLIENT_H
 #define __GAME_CLIENT_H
 
-//#include <log4cxx/logger.h>
-
 #include "Timer.h"
 #include "Video.h"
 #include "SceneMng.h"
@@ -47,11 +45,9 @@ namespace Chimera {
 		std::string textoFPS;
 		Timer timerFPS;
 		Timer timerSegundo;
-
-		//log4cxx::LoggerPtr logger;
 	};
 
 }
 
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

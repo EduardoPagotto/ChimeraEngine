@@ -7,7 +7,7 @@ namespace Chimera {
 
 		textoFPS = "fps: " + std::to_string(0);
 		pHUD = new HUD();
-		
+
 #ifdef WIN32
 		pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
 #else
@@ -16,8 +16,6 @@ namespace Chimera {
 
 		pHUD->addFont(pFont);
 
-		//SDL_Rect area = { (int)pVideo->getWinSizeW() * 0.2f, (int)pVideo->getWinSizeH() * 0.3f, 540, 522 };
-		//SDL_Rect area = { 300, 400, 300, 300 };
 		SDL_Rect area = { 30, 30, 600, 20 };
 
 		pHUD->addSquare(area, Color(1.0f, 1.0f, 1.0f, 0.2f));
@@ -29,8 +27,6 @@ namespace Chimera {
 
 		timerSegundo.setElapsedCount(1000);
 		timerSegundo.start();
-
-		//logger = log4cxx::Logger::getLogger ( "GameClient" );
 
 		physicWorld = Singleton<PhysicsControl>::getRefSingleton();
 	}
@@ -57,9 +53,6 @@ namespace Chimera {
 	void GameClient::open() {
 
 		pVideo->initGL();
-		//pVideo->openFrameBuffer();
-		//std::string l_msg =  "OpenGL iniciado com sucesso, versao: " + pSceneMng->getVersaoOpenGL();
-		//LOG4CXX_INFO ( logger , l_msg );
 
 		start();
 
@@ -70,8 +63,6 @@ namespace Chimera {
 	}
 
 	void GameClient::close(void) {
-
-		//pVideo->closeFrameBuffer();
 
 		SDL_Event l_eventQuit;
 		l_eventQuit.type = SDL_QUIT;

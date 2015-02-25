@@ -13,10 +13,6 @@ namespace Chimera {
 		pPhysic = nullptr;
 		pDraw = nullptr;
 		pMaterial = nullptr;
-		//pTexture = nullptr;
-		//pEffect = nullptr;
-
-		collide = false;
 
 		transform.setIdentity();
 
@@ -27,9 +23,6 @@ namespace Chimera {
 		pPhysic = _object.pPhysic;
 		pDraw = _object.pDraw;
 		pMaterial = _object.pMaterial;
-		//pTexture = _object.pTexture;
-		//pEffect = _object.pEffect;
-		collide = _object.collide;
 
 		transform = _object.transform;
 
@@ -63,7 +56,7 @@ namespace Chimera {
 		pPhysic = (Physics*)findChildByKind(EntityKind::PHYSICS, 0);
 		if (pPhysic == nullptr) {
 
-			//FIXME apenas para teste define propriedades fisicas
+			//Cria corpo caso nao exista
 			pPhysic = new Physics("", "");
 			pPhysic->setMass(0.5f);
 			pPhysic->setFriction(0.0f);
@@ -144,4 +137,4 @@ namespace Chimera {
 	}
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

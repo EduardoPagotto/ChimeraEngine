@@ -6,10 +6,8 @@
 
 #include <tinyxml2.h>
 
-//#include <GL/gl.h>			// Header File For The OpenGL32 Library
 #include "Color.h"
 #include "Node.h"
-//#include "ChimeraUtils.h"
 
 namespace Chimera {
 
@@ -85,4 +83,4 @@ namespace Chimera {
 
 }
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

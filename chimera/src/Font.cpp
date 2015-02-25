@@ -11,7 +11,7 @@ namespace Chimera {
 
 	Font::Font(const char* _fontFile, int _size) {
 
-#ifdef TTF_NOVO 
+#ifdef TTF_NOVO
 
 		pFont = TTF_OpenFont(_fontFile, _size);
 		if (!pFont)
@@ -19,7 +19,7 @@ namespace Chimera {
 
 		TTF_SetFontStyle(pFont, TTF_STYLE_NORMAL);
 
-#else  
+#else
 		if (_fontFile == nullptr)
 			ExceptionChimera(ExceptionCode::READ, "Arquivo de Fonte Nulo");
 
@@ -38,7 +38,7 @@ namespace Chimera {
 			ExceptionChimera(ExceptionCode::READ, "Tamanho Fonte invalida");
 		}
 
-#endif 
+#endif
 	}
 
 	Font::~Font(void) {
@@ -58,7 +58,7 @@ namespace Chimera {
 
 	void Font::render(const float &_x, const float &_y, const float &_z, const Color &_color, std::string *_pTxt) {
 
-#ifdef TTF_NOVO 
+#ifdef TTF_NOVO
 		SDL_Color Color = { (uint8_t)(255 * _color.r), (uint8_t)(255 * _color.g), (uint8_t)(255 * _color.b) };
 		SDL_Surface *Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(pFont), _pTxt->c_str(), Color);
 		unsigned Texture = 0;
@@ -81,24 +81,17 @@ namespace Chimera {
 		glTexCoord2d(0, 0); glVertex3d(_x, _y + Message->h, _z);
 		glEnd();
 
-		//glBegin(GL_QUADS);
-		//        glTexCoord2d(0, 0); glVertex3d(_x, _y, _z);
-		//        glTexCoord2d(1, 0); glVertex3d(_x+Message->w, _y, _z);
-		//        glTexCoord2d(1, 1); glVertex3d(_x+Message->w, _y+Message->h, _z);
-		//        glTexCoord2d(0, 1); glVertex3d(_x, _y+Message->h, _z);
-		//glEnd();
-
 		/*Clean up.*/
 		glDeleteTextures(1, &Texture);
 		SDL_FreeSurface(Message);
-#else  
+#else
 
 		glColor3fv(_color.ptr());
 		glRasterPos2f(_x, _y);
 		pFont->Render(_pTxt->c_str(), _pTxt->size());
 
-#endif 
+#endif
 	}
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

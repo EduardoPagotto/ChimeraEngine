@@ -76,7 +76,6 @@ namespace Chimera {
 		if (fullscreenStatus == false) {
 
 			SDL_GetWindowPosition(window, &winPosPrev.x, &winPosPrev.y);
-			//SDL_GetWindowSize(window, &winGeometryPrev.w, &winGeometryPrev.h);
 
 			SDL_SetWindowPosition(window, 0, 0);
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -86,7 +85,6 @@ namespace Chimera {
 
 			SDL_SetWindowFullscreen(window, 0);
 			SDL_SetWindowPosition(window, winPosPrev.x, winPosPrev.y);
-			//SDL_SetWindowSize(window, winGeometryPrev.w, winGeometryPrev.h);
 
 		}
 

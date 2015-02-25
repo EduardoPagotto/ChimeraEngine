@@ -2,7 +2,6 @@
 
 Game::Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng) : GameClient(_pVideo, _pScenMng) {
 
-	//logger = log4cxx::Logger::getLogger ( "Game" );
 }
 
 Game::~Game() {
@@ -87,8 +86,8 @@ void Game::start() {
 
 	//Ajusta objeto primario
 	//pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT, 0);//Cube.001
-	//pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Zoltan");//Zoltan//cubo01
-	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "cubo01");//Zoltan//cubo01
+	//pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Zoltan");
+	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "cubo01");
 
 	pVideo->setLight(true);
 	pVideo->setMaterial(true);
@@ -152,7 +151,6 @@ void Game::executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA
 	}
 
 	std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getId() + " ObjB:" + _pNodeB->getId();
-	//LOG4CXX_INFO ( logger ,l_completa );
 
 }
 

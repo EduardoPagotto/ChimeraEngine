@@ -31,8 +31,6 @@ private:
 	Chimera::CameraSpherical *pOrbitalCam;
 	Chimera::Object *pObj;
 	std::string sPosicaoObj;
-	//log4cxx::LoggerPtr logger;
-
 };
 
 #endif

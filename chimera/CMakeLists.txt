@@ -58,6 +58,8 @@ add_library (Chimera STATIC
 				src/LoaderDae.cpp
 				src/SceneMng.cpp
 				src/GameClient.cpp
+				src/JoystickManager.cpp
+				src/JoystickState.cpp
 			)
 
 INSTALL(FILES ${Chimera_BINARY_DIR}/libChimera.a DESTINATION lib)

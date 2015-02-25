@@ -7,6 +7,8 @@
 #include "PhysicsControl.h"
 #include "HUD.h"
 
+#include "JoystickManager.h"
+
 namespace Chimera {
 
 	class GameClient {
@@ -36,6 +38,10 @@ namespace Chimera {
 		Video *pVideo;
 
 	private:
+
+        double deadzone;
+        JoystickManager Joy;
+
 		bool newFPS();
 		void countFrame();
 		void processaGame();

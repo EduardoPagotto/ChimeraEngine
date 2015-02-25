@@ -9,6 +9,8 @@
 
 #include "PhysicsControl.h"
 
+#include <tinyxml2.h>
+
 namespace Chimera {
 
 	class Physics : public Node {
@@ -40,6 +42,10 @@ namespace Chimera {
 
 		inline void setShapeCilinder(const btVector3 &_val) {
 			pShapeCollision = new btCylinderShape(_val);
+		}
+
+		inline void setShapePlane(const btVector3 &_val, const float &_constant) {
+			pShapeCollision = new btStaticPlaneShape(_val, _constant);
 		}
 
 		inline void setShapeSphere(btScalar _raio) {
@@ -81,7 +87,12 @@ namespace Chimera {
 			return false;
 		}
 
+		void loadColladaPhysicsModel(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName);
+
 	private:
+
+		void loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName);
+
 		btScalar mass;
 		btScalar friction;
 		btScalar restitution;

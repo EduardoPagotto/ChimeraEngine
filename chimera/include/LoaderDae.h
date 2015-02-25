@@ -20,7 +20,8 @@ namespace ChimeraLoader {
 		Chimera::Node* getNodeSceneInFile();
 		
 		void getPhysicSceneInfile();
-		void getDadosPhysicModel(const char* _url);
+
+		tinyxml2::XMLElement* getDadoRigidBody(const char* _url, const char* _sid);
 		
 		void getDadosInstancePhysicModel(tinyxml2::XMLElement* _nPhysicScene);
 		
@@ -29,7 +30,7 @@ namespace ChimeraLoader {
 		//tinyxml2::XMLElement* findPhysicScene();
 		//tinyxml2::XMLElement* findVisualScene();
 		void carregaNode(Chimera::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type);
-		void loadNodeLib(const char* _url, const char* _libName, const char* _nodeName, tinyxml2::XMLElement** _nNode);
+		
 
 		std::string textureDir;
 		std::string modelDir;

@@ -81,5 +81,34 @@ namespace Chimera {
 		std::cout << std::string("Atributo [ " + _atributo + " ] Elemento [ " + _node->Value() + " ] nao encontrado") << std::endl;
 		return std::string("");
 	}
+
+	void loadNodeLib(tinyxml2::XMLElement* _root, const char* _url, const char* _libName, const char* _nodeName, tinyxml2::XMLElement** _nNode) {
+
+		tinyxml2::XMLElement* l_nLib = _root->FirstChildElement(_libName);
+		if (l_nLib != nullptr) {
+
+			tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement(_nodeName);
+			if (l_nNodeBase != nullptr) {
+
+				while (l_nNodeBase != nullptr) {
+
+					const char *l_id = l_nNodeBase->Attribute("id");
+					if (strcmp(l_id, _url) == 0) {
+
+						*_nNode = l_nNodeBase;
+						return;
+					}
+					l_nNodeBase = l_nNodeBase->NextSiblingElement();
+				}
+				throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string(_url));
+			}
+			else {
+				throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string(_nodeName));
+			}
+		}
+		else {
+			throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string(_libName));
+		}
+	}
 	
 }

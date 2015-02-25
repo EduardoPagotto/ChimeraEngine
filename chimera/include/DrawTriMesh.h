@@ -82,6 +82,7 @@ namespace Chimera {
 	class DrawTriMesh : public Draw {
 	public:
 		friend class Loader;
+		
 
 		DrawTriMesh(std::string _id, std::string _name);
 		DrawTriMesh(const DrawTriMesh &_cpy);
@@ -97,15 +98,16 @@ namespace Chimera {
 
 		void loadCollada(tinyxml2::XMLElement* _nNode);
 
+		ListPtr<float> vList;
+		ListPtr<int> vIndex;
+
 	private:
 
 		int getSource(tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores);
 
-		ListPtr<float> vList;
 		ListPtr<float> nList;
 		ListPtr<float> uvList;
 
-		ListPtr<int> vIndex;
 		ListPtr<int> nIndex;
 		ListPtr<int> tIndex;
 	};

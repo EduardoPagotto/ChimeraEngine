@@ -22,7 +22,7 @@ namespace ChimeraLoader {
 		this->modelDir = modelDir;
 
 		pPhysicsControl = Chimera::Singleton<Chimera::PhysicsControl>::getRefSingleton();
-		
+
 	}
 
 	LoaderDae::~LoaderDae(){
@@ -31,7 +31,7 @@ namespace ChimeraLoader {
 			delete doc;
 			doc = nullptr;
 		}
-		
+
 		Chimera::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 	}
 
@@ -43,7 +43,7 @@ namespace ChimeraLoader {
 #else
 		std::string dir_arquivo = modelDir + "/" + file;
 #endif
-		
+
 		doc = new tinyxml2::XMLDocument();
 
 		if (doc->LoadFile(dir_arquivo.c_str()) != 0)
@@ -54,116 +54,146 @@ namespace ChimeraLoader {
 			throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN, "Nao é um arquivo colada");
 
 		pRootScene = getNodeSceneInFile();
-		
+
 		getPhysicSceneInfile();
-		
+
 		return pRootScene;
 	}
 
 	void LoaderDae::getPhysicSceneInfile(){
 
-		tinyxml2::XMLElement* l_nPhysicScene = findSceneLib((const char*)"Physic Scene", (const char*)"instance_physics_scene",(const char*)"library_physics_scenes");
+		tinyxml2::XMLElement* l_nPhysicScene = findSceneLib((const char*)"Physic Scene", (const char*)"instance_physics_scene", (const char*)"library_physics_scenes");
 		if (l_nPhysicScene != nullptr) {
-			
+
 			const char *l_nome = l_nPhysicScene->Attribute("name");
 			const char *l_id = l_nPhysicScene->Attribute("id");
-					
+
 			pPhysicsControl->loadCollada(l_nPhysicScene);
-			
+
 			getDadosInstancePhysicModel(l_nPhysicScene);
-			
+
 		}
 	}
-	
+
 	void LoaderDae::getDadosInstancePhysicModel(tinyxml2::XMLElement* _nPhysicScene) {
-		
+
 		tinyxml2::XMLElement* l_nInstancePhysicModel = _nPhysicScene->FirstChildElement("instance_physics_model");
 		if (l_nInstancePhysicModel != nullptr) {
-			
+
 			const char *l_url = l_nInstancePhysicModel->Attribute("url");
-			
+
 			tinyxml2::XMLElement* l_nInstanceRigidBody = l_nInstancePhysicModel->FirstChildElement("instance_rigid_body");
 			if (l_nInstanceRigidBody != nullptr) {
 				while (l_nInstanceRigidBody != nullptr) {
-					
+
 					const char *l_body = l_nInstanceRigidBody->Attribute("body");
 					const char *l_target = l_nInstanceRigidBody->Attribute("target");
-					
-					
-					
+
+					tinyxml2::XMLElement* l_nRigidBody = getDadoRigidBody(l_url, l_body);
+
+					const char* l_name = l_nRigidBody->Attribute("name");
+					const char* l_sid = l_nRigidBody->Attribute("sid");
+
+					std::string nomeMesh = "";
+					Chimera::Physics *pPhysic = new Chimera::Physics(std::string(l_name), std::string(l_sid));
+					pPhysic->loadColladaPhysicsModel(root, l_nRigidBody, nomeMesh);
+
+					Chimera::DrawTriMesh *pDrawTriMesh = (Chimera::DrawTriMesh*)Chimera::Node::findNodeById(Chimera::EntityKind::DRAW, nomeMesh);
+
+					if (pDrawTriMesh != nullptr) {
+
+						btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray(
+							pDrawTriMesh->vIndex.getSize() / 3,	//num triangles
+							pDrawTriMesh->vIndex.ptrVal(),	//lista de indice
+							3 * sizeof(int),				//tamanho do indice por elemento
+							pDrawTriMesh->vList.getSize(),	//num Vertices
+							pDrawTriMesh->vList.ptrVal(),	//lista de vertice
+							3 * sizeof(float)				//tamanho do vertice por elemento
+							);
+
+						pPhysic->setIndexVertexArray(indexVertexArray);
+
+					}
+
+					//pega o node objeto
+					Chimera::Node *obj = Chimera::Node::findNodeById(Chimera::EntityKind::OBJECT, std::string((const char*)&l_target[1]));
+					obj->addChild(pPhysic);
+
 					l_nInstanceRigidBody = l_nInstanceRigidBody->NextSiblingElement("instance_rigid_body");
 				}
 			}
-			
-			tinyxml2::XMLElement* l_nInstanceRigidConstraint = l_nInstancePhysicModel->FirstChildElement("instance_rigid_constraint");
-			if (l_nInstanceRigidConstraint != nullptr) {
-				while (l_nInstanceRigidConstraint != nullptr) {
-					
-					const char *l_constraint = l_nInstanceRigidConstraint->Attribute("constraint");
-					
-					
-					
-					l_nInstanceRigidConstraint = l_nInstanceRigidConstraint->NextSiblingElement("instance_rigid_constraint");
-				}
-			}			
-		} 
+		}
+
+		tinyxml2::XMLElement* l_nInstanceRigidConstraint = l_nInstancePhysicModel->FirstChildElement("instance_rigid_constraint");
+		if (l_nInstanceRigidConstraint != nullptr) {
+			while (l_nInstanceRigidConstraint != nullptr) {
+
+				const char *l_constraint = l_nInstanceRigidConstraint->Attribute("constraint");
+				//TODO implementar
+
+
+				l_nInstanceRigidConstraint = l_nInstanceRigidConstraint->NextSiblingElement("instance_rigid_constraint");
+			}
+		}
 	}
-	
-	void LoaderDae::getDadosPhysicModel(const char* _url) {
-		
+
+	tinyxml2::XMLElement* LoaderDae::getDadoRigidBody(const char* _url, const char* _sid) {
+
 		tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
-		
-		loadNodeLib((const char*)&_url[1], "library_physics_models", "physics_model", &l_nNodeSourceData);
+
+		Chimera::loadNodeLib(root, (const char*)&_url[1], "library_physics_models", "physics_model", &l_nNodeSourceData);
 		tinyxml2::XMLElement* l_nRigidBody = l_nNodeSourceData->FirstChildElement("rigid_body");
 		if (l_nRigidBody != nullptr) {
 			while (l_nRigidBody != nullptr) {
-				
+
 				const char *l_name = l_nRigidBody->Attribute("name");
 				const char *l_sid = l_nRigidBody->Attribute("sid");
-				
-				const char * l_teste = l_nRigidBody->Name();
-				std::cout << "DEBUG: " << l_teste <<std::endl;
-				
-				
+				if (strcmp(_sid, l_sid) == 0) {
+					//const char * l_teste = l_nRigidBody->Name();
+					//std::cout << "DEBUG: " << l_teste <<std::endl;
+					return l_nRigidBody;
+				}
 				l_nRigidBody = l_nRigidBody->NextSiblingElement("rigid_body");
 			}
 		}
-		
-		tinyxml2::XMLElement* l_nRigidBodyConstraint = l_nNodeSourceData->FirstChildElement("rigid_constraint");
-		if (l_nRigidBodyConstraint != nullptr) {
-			while (l_nRigidBodyConstraint != nullptr) {
-				//TODO constraints
-				const char *l_name = l_nRigidBodyConstraint->Attribute("name");
-				const char *l_sid = l_nRigidBodyConstraint->Attribute("sid");
-				
-				const char * l_teste = l_nRigidBodyConstraint->Name();
-				std::cout << "DEBUG: " << l_teste <<std::endl;
-				
-				
-				l_nRigidBodyConstraint = l_nRigidBodyConstraint->NextSiblingElement("rigid_constraint");
-			}
-		}
+
+		return nullptr;
+		//TODO implementar em outro metodo somente para constrain
+		//tinyxml2::XMLElement* l_nRigidBodyConstraint = l_nNodeSourceData->FirstChildElement("rigid_constraint");
+		//if (l_nRigidBodyConstraint != nullptr) {
+		//	while (l_nRigidBodyConstraint != nullptr) {
+		//		//TODO constraints
+		//		const char *l_name = l_nRigidBodyConstraint->Attribute("name");
+		//		const char *l_sid = l_nRigidBodyConstraint->Attribute("sid");
+		//		
+		//		const char * l_teste = l_nRigidBodyConstraint->Name();
+		//		std::cout << "DEBUG: " << l_teste <<std::endl;
+		//		
+		//		
+		//		l_nRigidBodyConstraint = l_nRigidBodyConstraint->NextSiblingElement("rigid_constraint");
+		//	}
+		//}
 	}
-	
+
 	Chimera::Node *LoaderDae::getNodeSceneInFile() {
-		
+
 		Chimera::Node *pRootScene = nullptr;
-		
-		tinyxml2::XMLElement* l_nVisualScene = findSceneLib((const char*)"Visual Scene", (const char*)"instance_visual_scene",(const char*)"library_visual_scenes");
+
+		tinyxml2::XMLElement* l_nVisualScene = findSceneLib((const char*)"Visual Scene", (const char*)"instance_visual_scene", (const char*)"library_visual_scenes");
 		if (l_nVisualScene != nullptr) {
-			
+
 			const char *l_nome = l_nVisualScene->Attribute("name");
 			const char *l_id = l_nVisualScene->Attribute("id");
-			
+
 			pRootScene = new Chimera::Node(Chimera::EntityKind::NODE, l_id, l_nome);
 			tinyxml2::XMLElement* l_nNode = l_nVisualScene->FirstChildElement("node");
 			if (l_nNode != nullptr) {
 				while (l_nNode != nullptr) {
-					
+
 					const char * l_id = l_nNode->Attribute("id");
 					const char * l_name = l_nNode->Attribute("name");
 					const char * l_type = l_nNode->Attribute("type");
-					
+
 					tinyxml2::XMLElement* l_nDadoNode = l_nNode->FirstChildElement();
 					if (l_nDadoNode != nullptr) {
 						carregaNode(pRootScene, l_nDadoNode, l_id, l_name, l_type);
@@ -171,7 +201,7 @@ namespace ChimeraLoader {
 					else {
 						std::cout << "Node sem filho" << std::endl;
 					}
-					
+
 					l_nNode = l_nNode->NextSiblingElement("node");
 				}
 			}
@@ -180,9 +210,9 @@ namespace ChimeraLoader {
 			}
 		}
 		return pRootScene;
-		
+
 	}
-	
+
 	void LoaderDae::carregaNode(Chimera::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type) {
 
 		btTransform *l_pTransform = nullptr;
@@ -211,7 +241,7 @@ namespace ChimeraLoader {
 			}
 			else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
-				loadNodeLib((const char*)&l_url[1], "library_cameras", "camera", &l_nNodeSourceData);
+				Chimera::loadNodeLib(root, (const char*)&l_url[1], "library_cameras", "camera", &l_nNodeSourceData);
 
 				Chimera::Camera *pCamera = new Chimera::Camera(Chimera::CameraType::Base, _id, _name);
 				pCamera->loadCollada(l_nNodeSourceData);
@@ -224,7 +254,7 @@ namespace ChimeraLoader {
 			}
 			else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
-				loadNodeLib((const char*)&l_url[1], "library_lights", "light", &l_nNodeSourceData);
+				Chimera::loadNodeLib(root, (const char*)&l_url[1], "library_lights", "light", &l_nNodeSourceData);
 
 				Chimera::Light *pLight = new Chimera::Light(Chimera::LightType::POINT, _id, _name);
 				pLight->loadCollada(l_nNodeSourceData);
@@ -237,7 +267,7 @@ namespace ChimeraLoader {
 			}
 			else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
-				loadNodeLib((const char*)&l_url[1], "library_geometries", "geometry", &l_nNodeSourceData);
+				Chimera::loadNodeLib(root, (const char*)&l_url[1], "library_geometries", "geometry", &l_nNodeSourceData);
 
 				Chimera::DrawTriMesh *pDrawTriMesh = new Chimera::DrawTriMesh(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("name", l_nNodeSourceData));
 				pDrawTriMesh->loadCollada(l_nNodeSourceData);
@@ -270,7 +300,7 @@ namespace ChimeraLoader {
 			}
 			else if (strcmp(l_nomeElemento, (const char*)"instance_material") == 0) {
 
-				loadNodeLib((const char*)&l_target[1], "library_materials", "material", &l_nNodeSourceData);
+				Chimera::loadNodeLib(root, (const char*)&l_target[1], "library_materials", "material", &l_nNodeSourceData);
 
 				Chimera::Material *pMaterial = new Chimera::Material(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("name", l_nNodeSourceData));
 				_pNodePai->addChild(pMaterial);
@@ -288,7 +318,8 @@ namespace ChimeraLoader {
 			}
 			else if (strcmp(l_nomeElemento, (const char*)"instance_effect") == 0) {
 
-				loadNodeLib((const char*)&l_url[1], "library_effects", "effect", &l_nNodeSourceData);
+				Chimera::loadNodeLib(root, (const char*)&l_url[1], "library_effects", "effect", &l_nNodeSourceData);
+
 				Chimera::Effect *pEffect = new Chimera::Effect(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("id", l_nNodeSourceData));
 				pEffect->loadCollada(l_nNodeSourceData);
 				_pNodePai->addChild(pEffect);
@@ -297,7 +328,8 @@ namespace ChimeraLoader {
 
 				if (pEffect->getNameTextureId().size() > 0) {
 
-					loadNodeLib((const char*)pEffect->getNameTextureId().c_str(), "library_images", "image", &l_nNodeSourceData);
+					Chimera::loadNodeLib(root, (const char*)pEffect->getNameTextureId().c_str(), "library_images", "image", &l_nNodeSourceData);
+
 					Chimera::Texture *pTexture = new Chimera::Texture(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("id", l_nNodeSourceData));
 
 					const char* l_val = l_nNodeSourceData->FirstChildElement("init_from")->GetText();
@@ -330,59 +362,30 @@ namespace ChimeraLoader {
 		}
 	}
 
-	void LoaderDae::loadNodeLib(const char* _url, const char* _libName, const char* _nodeName, tinyxml2::XMLElement** _nNode) {
-
-		tinyxml2::XMLElement* l_nLib = root->FirstChildElement(_libName);
-		if (l_nLib != nullptr) {
-
-			tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement(_nodeName);
-			if (l_nNodeBase != nullptr) {
-
-				while (l_nNodeBase != nullptr) {
-
-					const char *l_id = l_nNodeBase->Attribute("id");
-					if (strcmp(l_id, _url) == 0) {
-
-						*_nNode = l_nNodeBase;
-						return;
-					}
-					l_nNodeBase = l_nNodeBase->NextSiblingElement();
-				}
-				throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string(_url));
-			}
-			else {
-				throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string(_nodeName));
-			}
-		}
-		else {
-			throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string(_libName));
-		}
-	}
-
 	tinyxml2::XMLElement* LoaderDae::findSceneLib(const char *rotina, const char* instance, const char* library) {
-		
+
 		tinyxml2::XMLElement* l_nNodeScene = root->FirstChildElement("scene");
 		if (l_nNodeScene != nullptr) {
-			
+
 			tinyxml2::XMLElement* l_nNode = l_nNodeScene->FirstChildElement(instance);
 			if (l_nNode != nullptr) {
-				
+
 				const char* l_url = l_nNode->Attribute("url");
 				l_nNode = root->FirstChildElement(library);
 				if (l_nNode != nullptr) {
-					
+
 					l_nNode = l_nNode->FirstChildElement();//TODO colocar um while para percorrer todas as instancias de scena(pode haver mais de 1)
 					if (l_nNode != nullptr) {
 						while (l_nNode != nullptr) {
-							
+
 							const char *l_id = l_nNode->Attribute("id");
 							if (strcmp(l_id, (const char*)&l_url[1]) == 0) {
 								return l_nNode;
 							}
-							
+
 							l_nNode = l_nNode->NextSiblingElement();
 						}
-						
+
 						std::cout << rotina << " : " << (const char*)&l_url[1] << " nao encontrado " << std::endl;
 					}
 					else {
@@ -398,7 +401,7 @@ namespace ChimeraLoader {
 				std::cout << instance << " nao encontrado " << std::endl;
 			}
 		}
-		
+
 		return nullptr;
 	}
 }

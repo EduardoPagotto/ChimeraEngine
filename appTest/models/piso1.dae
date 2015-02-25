@@ -353,7 +353,90 @@
       </node>
     </visual_scene>
   </library_visual_scenes>
+
+  <library_physics_materials>
+    <physics_material id="cubo01-PhysicsMaterial" name="cubo01-PhysicsMaterial">
+      <technique_common>
+        <dynamic_friction>10</dynamic_friction>
+        <restitution>0</restitution>
+        <static_friction>0</static_friction>
+      </technique_common>
+    </physics_material>
+    <physics_material id="Icosphere-PhysicsMaterial" name="Icosphere-PhysicsMaterial">
+      <technique_common>
+        <dynamic_friction>10</dynamic_friction>
+        <restitution>100</restitution>
+        <static_friction>0</static_friction>
+      </technique_common>
+    </physics_material>
+    <physics_material id="Plane01-PhysicsMaterial" name="Plane01-PhysicsMaterial">
+      <technique_common>
+        <dynamic_friction>10</dynamic_friction>
+        <restitution>0</restitution>
+        <static_friction>0</static_friction>
+      </technique_common>
+    </physics_material>
+  </library_physics_materials>
+
+  <library_physics_models>
+    <physics_model id="Scene-PhysicsModel" name="Scene-PhysicsModel">
+      <rigid_body name="cubo01-RigidBody" sid="cubo01-RigidBody">
+        <technique_common>
+          <dynamic>true</dynamic>
+          <mass>2.0</mass>
+          <instance_physics_material url="#cubo01-PhysicsMaterial"/>
+          <shape>
+            <mesh>
+              <instance_geometry url="#Cube-mesh"/>
+            </mesh>
+          </shape>
+        </technique_common>
+      </rigid_body>
+      <rigid_body name="Icosphere-RigidBody" sid="Icosphere-RigidBody">
+        <technique_common>
+          <dynamic>true</dynamic>
+          <mass>2.0</mass>
+          <instance_physics_material url="#Icosphere-PhysicsMaterial"/>
+          <shape>
+            <sphere>
+              <radius>2.0 2.0 2.0</radius>
+            </sphere>
+          </shape>
+        </technique_common>
+      </rigid_body>
+      <rigid_body name="Plane01-RigidBody" sid="Plane01-RigidBody">
+        <technique_common>
+          <dynamic>false</dynamic>
+          <mass>0.0</mass>
+          <instance_physics_material url="#Plane01-PhysicsMaterial"/>
+          <shape>
+            <plane>
+              <equation>0.0 0.0 1.0 0.1 </equation>
+            </plane>
+          </shape>
+        </technique_common>
+      </rigid_body>
+    </physics_model>
+  </library_physics_models>
+  
+  
+  <library_physics_scenes>
+    <physics_scene id="Scene-Physics" name="Scene-Physics">
+      <instance_physics_model url="#Scene-PhysicsModel">
+        <instance_rigid_body body="cubo01-RigidBody" target="#cubo01"/>
+        <instance_rigid_body body="Icosphere-RigidBody" target="#Icosphere"/>
+        <instance_rigid_body body="Plane01-RigidBody" target="#Plane"/>
+        <instance_rigid_constraint constraint="Const"/>
+      </instance_physics_model>
+      <technique_common>
+        <gravity>0 0 -2</gravity>
+        <time_step>3.e-002</time_step>
+      </technique_common>
+    </physics_scene>
+  </library_physics_scenes> 
+  
   <scene>
     <instance_visual_scene url="#Scene"/>
+    <instance_physics_scene url="#Scene-Physics"/>
   </scene>
 </COLLADA>

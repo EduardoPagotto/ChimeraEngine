@@ -13,6 +13,8 @@ namespace Chimera {
 	void loadTransformMatrix(tinyxml2::XMLElement* _nNode, btTransform *_pTransform);
 	void carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix);
 	std::string retornaAtributo(const std::string &_atributo, tinyxml2::XMLElement* _node);
+
+	void loadNodeLib(tinyxml2::XMLElement* _root, const char* _url, const char* _libName, const char* _nodeName, tinyxml2::XMLElement** _nNode);
 }
 
 #endif

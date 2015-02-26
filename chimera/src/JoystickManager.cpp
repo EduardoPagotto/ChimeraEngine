@@ -75,24 +75,31 @@ void JoystickManager::ReleaseJoysticks( void )
 }
 
 
-void JoystickManager::TrackEvent( SDL_Event *event )
+bool JoystickManager::TrackEvent(SDL_Event *event)
 {
 	Uint8 id = 255;
-
-	if( event->type == SDL_JOYAXISMOTION )
+	switch (event->type){
+	case SDL_JOYAXISMOTION:
 		id = event->jaxis.which;
-	else if( (event->type == SDL_JOYBUTTONDOWN) || (event->type == SDL_JOYBUTTONUP) )
+		break;
+	case SDL_JOYBUTTONDOWN:
+	case SDL_JOYBUTTONUP:
 		id = event->jbutton.which;
-	else if( event->type == SDL_JOYHATMOTION )
+		break;
+	case SDL_JOYHATMOTION:
 		id = event->jhat.which;
-	else if( event->type == SDL_JOYBALLMOTION )
+		break;
+	case SDL_JOYBALLMOTION:
 		id = event->jball.which;
-
-	if( id != 255 )
-	{
-		Joysticks[ id ].ID = id;
-		Joysticks[ id ].TrackEvent( event );
+		break;
+	default:
+		return false;
 	}
+
+	Joysticks[id].ID = id;
+	Joysticks[id].TrackEvent(event);
+	return true;
+
 }
 
 
@@ -161,7 +168,7 @@ std::string JoystickManager::GetStatusManager( void )
 	std::string return_string;
 	char cstr[ 1024 ] = "";
 
-	snprintf( cstr, 1024, "Joysticks: %i", Joysticks.size() );
+	sprintf_s(cstr, 1024, "Joysticks: %i", Joysticks.size());
 	return_string += cstr;
 
 	for( std::map<Uint8, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter ++ )

@@ -100,6 +100,8 @@
     <ClInclude Include="..\..\chimera\include\Font.h" />
     <ClInclude Include="..\..\chimera\include\GameClient.h" />
     <ClInclude Include="..\..\chimera\include\HUD.h" />
+    <ClInclude Include="..\..\chimera\include\JoystickManager.h" />
+    <ClInclude Include="..\..\chimera\include\JoystickState.h" />
     <ClInclude Include="..\..\chimera\include\Light.h" />
     <ClInclude Include="..\..\chimera\include\Loader.h" />
     <ClInclude Include="..\..\chimera\include\LoaderDae.h" />
@@ -133,6 +135,8 @@
     <ClCompile Include="..\..\chimera\src\Font.cpp" />
     <ClCompile Include="..\..\chimera\src\GameClient.cpp" />
     <ClCompile Include="..\..\chimera\src\HUD.cpp" />
+    <ClCompile Include="..\..\chimera\src\JoystickManager.cpp" />
+    <ClCompile Include="..\..\chimera\src\JoystickState.cpp" />
     <ClCompile Include="..\..\chimera\src\Light.cpp" />
     <ClCompile Include="..\..\chimera\src\Loader.cpp" />
     <ClCompile Include="..\..\chimera\src\LoaderDae.cpp" />

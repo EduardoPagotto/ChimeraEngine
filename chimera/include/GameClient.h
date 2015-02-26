@@ -27,6 +27,9 @@ namespace Chimera {
 		virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb) = 0;
 		virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb) = 0;
 		virtual void mouseMotionCapture(SDL_MouseMotionEvent mm) = 0;
+
+		virtual void joystickCapture(JoystickManager &joy) = 0;
+
 		virtual void executeColisao(const KindOp &_kindOp, Node *_pNodeA, Node *_pNodeB) = 0;
 		virtual void userEvent(const SDL_Event &_event) = 0;
 
@@ -37,11 +40,11 @@ namespace Chimera {
 		HUD *pHUD;
 		Video *pVideo;
 
+		JoystickManager joystickManager;
+
 	private:
 
         double deadzone;
-        JoystickManager Joy;
-
 		bool newFPS();
 		void countFrame();
 		void processaGame();

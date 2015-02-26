@@ -19,19 +19,23 @@ JoystickState::JoystickState( Uint8 id, SDL_Joystick *joystick, std::string name
 void JoystickState::TrackEvent( SDL_Event *event )
 {
 	// Update joystick axis and button status.
-
-	if( event->type == SDL_JOYAXISMOTION )
-		Axes[ event->jaxis.axis ] = AxisScale( event->jaxis.value );
-	else if( event->type == SDL_JOYBUTTONDOWN )
-		ButtonsDown[ event->jbutton.button ] = true;
-	else if( event->type == SDL_JOYBUTTONUP )
-		ButtonsDown[ event->jbutton.button ] = false;
-	else if( event->type == SDL_JOYHATMOTION )
-		Hats[ event->jhat.hat ] = event->jhat.value;
-	else if( event->type == SDL_JOYBALLMOTION )
-	{
-		BallsX[ event->jball.ball ] += event->jball.xrel;
-		BallsY[ event->jball.ball ] += event->jball.yrel;
+	switch (event->type){
+	case SDL_JOYAXISMOTION:
+		Axes[event->jaxis.axis] = AxisScale(event->jaxis.value);
+		break;
+	case SDL_JOYBUTTONDOWN:
+		ButtonsDown[event->jbutton.button] = true;
+		break;
+	case SDL_JOYBUTTONUP:
+		ButtonsDown[event->jbutton.button] = false;
+		break;
+	case SDL_JOYHATMOTION:
+		Hats[event->jhat.hat] = event->jhat.value;
+		break;
+	case SDL_JOYBALLMOTION:
+		BallsX[event->jball.ball] += event->jball.xrel;
+		BallsY[event->jball.ball] += event->jball.yrel;
+		break;
 	}
 }
 
@@ -39,7 +43,6 @@ void JoystickState::TrackEvent( SDL_Event *event )
 double JoystickState::AxisScale( Sint16 value )
 {
 	// Convert axis values from (-32768,32767) to (-1,1) range.
-
 	if( value >= 0 )
 		return ((double)value) / 32767.;
 	else
@@ -130,7 +133,7 @@ std::string JoystickState::GetStatusJoy()
 	std::string return_string;
 	char cstr[ 1024 ] = "";
 
-	snprintf( cstr, 1024, "Joystick %i: %s\n", ID, Name.c_str() );
+	sprintf_s(cstr, 1024, "Joystick %i: %s\n", ID, Name.c_str());
 	return_string += cstr;
 
 	return_string += "Joy axes:";
@@ -142,7 +145,7 @@ std::string JoystickState::GetStatusJoy()
 		else
 			return_string += ",";
 
-		snprintf( cstr, 1024, " %i=%.4f", axis_iter->first, axis_iter->second );
+		sprintf_s(cstr, 1024, " %i=%.4f", axis_iter->first, axis_iter->second);
 		return_string += cstr;
 	}
 	return_string += "\n";
@@ -152,7 +155,7 @@ std::string JoystickState::GetStatusJoy()
 	{
 		if( button_iter->second )
 		{
-			snprintf( cstr, 1024, " %i", button_iter->first );
+			sprintf_s(cstr, 1024, " %i", button_iter->first);
 			return_string += cstr;
 		}
 	}
@@ -167,7 +170,7 @@ std::string JoystickState::GetStatusJoy()
 		else
 			return_string += ",";
 
-		snprintf( cstr, 1024, " %i=%i%s%s%s%s%s%s", hat_iter->first, hat_iter->second,
+		sprintf_s(cstr, 1024, " %i=%i%s%s%s%s%s%s", hat_iter->first, hat_iter->second,
 		          hat_iter->second ? "(" : "",
 		          hat_iter->second & SDL_HAT_UP ? "U" : "",
 		          hat_iter->second & SDL_HAT_DOWN ? "D" : "",

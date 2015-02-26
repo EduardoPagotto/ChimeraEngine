@@ -1,6 +1,8 @@
 #include "GameClient.h"
 #include "Singleton.h"
 
+#include <iostream>
+
 namespace Chimera {
 
 	GameClient::GameClient(Video *_pVideo, Chimera::SceneMng *_pScenMng) : pSceneMng(_pScenMng), pVideo(_pVideo)  {
@@ -53,7 +55,9 @@ namespace Chimera {
 	void GameClient::open() {
 
         deadzone = 0.02;
-        Joy.Initialize();
+		joystickManager.Initialize();
+		joystickManager.FindJoysticks();
+		std::cout << "Joystick: " << joystickManager.GetStatusManager() << std::endl;
 
 		pVideo->initGL();
 
@@ -106,47 +110,6 @@ namespace Chimera {
 
 	}
 
-
-// 	// FIXME: SDL needs to be initialized before we get here.
-//
-// 	JoystickManager Joy;
-//     Joy.Initialize();
-//     double deadzone = 0.02;
-//
-//     // Main loop.
-//     bool done = false;
-//     while( ! done )
-//     {
-//         // Keep the list of joysticks up-to-date.
-//         Joy.FindJoysticks();
-//
-//         // Handle all user input.
-//         SDL_Event event;
-//         while( SDL_PollEvent( &event ) )
-//         {
-//             // Let the JoystickManager track events relevant to it.
-//             Joy.TrackEvent( &event );
-//
-//             // FIXME: Handle single-press events here (next target, etc).
-//             // Don't handle button-held-down events like firing (see below).
-//
-//             if( event.type == SDL_QUIT )
-//                 done = true;
-//         }
-//
-//         // Read joystick 0 analog axes.
-//         double roll = Joy.Axis( 0, 0, deadzone );
-//         double pitch = Joy.Axis( 0, 1, deadzone );
-//         double yaw = Joy.Axis( 0, 3, deadzone );
-//         double throttle = Joy.AxisScaled( 0, 2, 1., 0., 0., deadzone );
-//
-//         // Read joystick 0 buttons held down.
-//         bool firing = Joy.ButtonDown( 0, 0 );
-//
-//         // FIXME: Update game objects and draw graphics.
-//     }
-
-
 	void GameClient::gameLoop(void) {
 
 		SDL_Event l_eventSDL;
@@ -156,10 +119,6 @@ namespace Chimera {
 		while (!l_quit) {
 
 			while (SDL_PollEvent(&l_eventSDL)) {
-
-                Joy.FindJoysticks();
-                Joy.TrackEvent( &l_eventSDL );
-
 
 				switch (l_eventSDL.type) {
 				case SDL_USEREVENT:
@@ -189,11 +148,8 @@ namespace Chimera {
 										  case SDL_WINDOWEVENT_LEAVE:
 											  l_isActive = false;
 											  break;
-
 										  case SDL_WINDOWEVENT_RESIZED:
-
 											  pVideo->reshape(l_eventSDL.window.data1, l_eventSDL.window.data2);
-
 											  break;
 										  default:
 											  break;
@@ -201,6 +157,8 @@ namespace Chimera {
 				}
 					break;
 				default:
+					if (joystickManager.TrackEvent(&l_eventSDL) == true)
+						joystickCapture(joystickManager);
 					break;
 				}
 
@@ -208,13 +166,16 @@ namespace Chimera {
 
 			///INICIO TESTE
             // Read joystick 0 analog axes.
-            double roll = Joy.Axis( 0, 0, deadzone );
-            double pitch = Joy.Axis( 0, 1, deadzone );
-            double yaw = Joy.Axis( 0, 3, deadzone );
-            double throttle = Joy.AxisScaled( 0, 2, 1., 0., 0., deadzone );
+            //double roll = Joy.Axis( 0, 0, deadzone );
+            //double pitch = Joy.Axis( 0, 1, deadzone );
+            //double yaw = Joy.Axis( 0, 3, deadzone );
+            //double throttle = Joy.AxisScaled( 0, 2, 1., 0., 0., deadzone );
+
+			//if (throttle != 0.0)
+			//	std::cout << "Valor: " << throttle << std::endl;
 
             // Read joystick 0 buttons held down.
-            bool firing = Joy.ButtonDown( 0, 0 );
+           // bool firing = Joy.ButtonDown( 0, 0 );
             ///FIM TESTE
 
 			//if (l_isActive==true) {

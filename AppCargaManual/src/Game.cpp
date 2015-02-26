@@ -7,6 +7,31 @@ Game::Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng) : GameClient(_
 Game::~Game() {
 }
 
+void Game::joystickCapture(Chimera::JoystickManager &joy) {
+
+	//float axis = joy.Axis(0, 0, 0, 0);
+
+	//if (axis != 0.0) {
+	//	pObj->applyForce(btVector3(10.0 * axis, 0.0, 0.0));
+	//	printf("axis: %f\n", 10.0 * axis);
+	//}
+
+}
+
+
+void Game::getStatusJoystick() {
+
+	float valX = joystickManager.Axis(0, 0, 0.2);
+	float valY = joystickManager.Axis(0, 1, 0.2);
+	float valZ = joystickManager.Axis(0, 3, 0.2);
+
+
+	if ((valX != 0.0)||(valY != 0.0)||(valZ != 0.0)) {
+		pObj->applyForce(btVector3(10.0 * valX, 10.0 * -valY, -valZ));
+	}
+
+}
+
 void Game::keyCapture(SDL_Keycode tecla) {
 
 	switch (tecla) {
@@ -86,8 +111,8 @@ void Game::start() {
 
 	//Ajusta objeto primario
 	//pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT, 0);//Cube.001
-	//pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Zoltan");
-	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "cubo01");
+	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Zoltan");
+	//pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Icosphere02"); // //cubo01
 
 	pVideo->setLight(true);
 	pVideo->setMaterial(true);
@@ -127,7 +152,7 @@ void Game::render() {
 			pVideo->updateHud(pHUD, eye);
 	}
 
-
+	getStatusJoystick();
 
 }
 

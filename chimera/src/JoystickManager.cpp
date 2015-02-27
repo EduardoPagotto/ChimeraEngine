@@ -92,6 +92,10 @@ bool JoystickManager::TrackEvent(SDL_Event *event)
 	case SDL_JOYBALLMOTION:
 		id = event->jball.which;
 		break;
+	case SDL_JOYDEVICEADDED:
+	case SDL_JOYDEVICEREMOVED:
+		FindJoysticks();
+		break;
 	default:
 		return false;
 	}
@@ -176,5 +180,44 @@ std::string JoystickManager::GetStatusManager( void )
 
 	return return_string;
 }
+
+void JoystickManager::DebugDadosJoystick() {
+
+	SDL_Joystick * joystick;
+	for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+		const char * name = SDL_JoystickNameForIndex(i);
+		printf("Joystick index %d: %s\n", i, name ? name : "[no name]");
+
+		/* This much can be done without opening the controller */
+		if (SDL_IsGameController(i)) {
+			char *mapping = SDL_GameControllerMappingForGUID(
+				SDL_JoystickGetDeviceGUID(i));
+			printf("game controller: %s\n", mapping);
+			SDL_free(mapping);
+		}
+		else {
+			char guid[64];
+			SDL_JoystickGetGUIDString(SDL_JoystickGetDeviceGUID(i),
+				guid, sizeof (guid));
+			printf(" guid: %s\n", guid);
+		}
+
+		/* For anything else we have to open */
+		joystick = SDL_JoystickOpen(i);
+		if (joystick != NULL) {
+			/* Not the same as a device index! */
+			printf(" instance id: %d\n", SDL_JoystickInstanceID(joystick));
+			printf(" axes: %d\n", SDL_JoystickNumAxes(joystick));
+			printf(" hats: %d\n", SDL_JoystickNumHats(joystick));
+			printf(" buttons: %d\n", SDL_JoystickNumButtons(joystick));
+
+			/* I've _never_ seen this non-zero, if anyone has lemme know! */
+			printf(" trackballs: %d\n", SDL_JoystickNumBalls(joystick));
+			SDL_JoystickClose(joystick);
+		}
+	}
+
+}
+
 }
 

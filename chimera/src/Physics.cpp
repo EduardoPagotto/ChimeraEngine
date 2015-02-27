@@ -82,7 +82,8 @@ namespace Chimera {
 
 		pRigidBody->setFriction(friction);
 		pRigidBody->setRestitution(restitution);
-		//pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
+
+		pRigidBody->setContactProcessingThreshold(BT_LARGE_FLOAT);
 
 		pWorld->discretDynamicsWorld->addRigidBody(pRigidBody, 1, 1);
 
@@ -154,7 +155,12 @@ namespace Chimera {
 	}
 
 	void Physics::torque(const btVector3 &_torque) {
-		pRigidBody->applyTorque(_torque);
+		//pRigidBody->applyTorque(_torque);
+
+		pRigidBody->applyTorque(pRigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis() * _torque));
+
+		//pRigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis() * _torque);
+		//RigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis() * _torque);
 	}
 
 	void Physics::propulcao(const btVector3 &_prop) {

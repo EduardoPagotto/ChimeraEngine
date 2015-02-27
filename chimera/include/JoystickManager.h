@@ -43,6 +43,8 @@ public:
 	bool HatDir( int joystick_id, Uint8 hat, Uint8 dir );
 
 	std::string GetStatusManager( void );
+
+	void DebugDadosJoystick();
 };
 }
 

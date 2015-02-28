@@ -614,7 +614,7 @@
       <rigid_body name="plane-RigidBody" sid="plane-RigidBody">
         <technique_common>
           <dynamic>true</dynamic>
-          <mass>2.0</mass>
+          <mass>0.0</mass>
           <instance_physics_material url="#plane-PhysicsMaterial"/>
           <shape>
             <plane>

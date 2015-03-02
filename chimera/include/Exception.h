@@ -105,7 +105,8 @@ namespace Chimera {
 
 		/**
 		 * Retorna mensagem de erro
-		 * @return
+		 * @return String com mensagem de erro
+         *
 		 */
 		virtual std::string getMessage() const throw() {
 			return message;
@@ -121,4 +122,4 @@ namespace Chimera {
 
 } /* namespace Chimera */
 #endif /* EXCEPTION_H_ */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

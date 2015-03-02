@@ -132,8 +132,12 @@ std::string JoystickState::GetStatusJoy()
 
 	std::string return_string;
 	char cstr[ 1024 ] = "";
-
+#ifdef WIN32
 	sprintf_s(cstr, 1024, "Joystick %i: %s\n", ID, Name.c_str());
+# else
+	sprintf(cstr, "Joystick %i: %s\n", ID, Name.c_str());
+# endif
+
 	return_string += cstr;
 
 	return_string += "Joy axes:";
@@ -145,7 +149,11 @@ std::string JoystickState::GetStatusJoy()
 		else
 			return_string += ",";
 
+#ifdef WIN32
 		sprintf_s(cstr, 1024, " %i=%.4f", axis_iter->first, axis_iter->second);
+# else
+	 sprintf(cstr, " %i=%.4f", axis_iter->first, axis_iter->second);
+# endif
 		return_string += cstr;
 	}
 	return_string += "\n";
@@ -155,7 +163,11 @@ std::string JoystickState::GetStatusJoy()
 	{
 		if( button_iter->second )
 		{
+#ifdef WIN32
 			sprintf_s(cstr, 1024, " %i", button_iter->first);
+# else
+	  sprintf(cstr, " %i", button_iter->first);
+# endif
 			return_string += cstr;
 		}
 	}
@@ -169,7 +181,7 @@ std::string JoystickState::GetStatusJoy()
 			first_hat = false;
 		else
 			return_string += ",";
-
+#ifdef WIN32
 		sprintf_s(cstr, 1024, " %i=%i%s%s%s%s%s%s", hat_iter->first, hat_iter->second,
 		          hat_iter->second ? "(" : "",
 		          hat_iter->second & SDL_HAT_UP ? "U" : "",
@@ -177,6 +189,15 @@ std::string JoystickState::GetStatusJoy()
 		          hat_iter->second & SDL_HAT_LEFT ? "L" : "",
 		          hat_iter->second & SDL_HAT_RIGHT ? "R" : "",
 		          hat_iter->second ? ")" : "" );
+# else
+	 sprintf(cstr, " %i=%i%s%s%s%s%s%s", hat_iter->first, hat_iter->second,
+	  hat_iter->second ? "(" : "",
+	  hat_iter->second & SDL_HAT_UP ? "U" : "",
+	  hat_iter->second & SDL_HAT_DOWN ? "D" : "",
+	  hat_iter->second & SDL_HAT_LEFT ? "L" : "",
+	  hat_iter->second & SDL_HAT_RIGHT ? "R" : "",
+	  hat_iter->second ? ")" : "" );
+# endif
 		return_string += cstr;
 	}
 

@@ -171,8 +171,11 @@ std::string JoystickManager::GetStatusManager( void )
 
 	std::string return_string;
 	char cstr[ 1024 ] = "";
-
+#ifdef WIN32
 	sprintf_s(cstr, 1024, "Joysticks: %i", Joysticks.size());
+#else
+	sprintf(cstr, (const char*)"Joysticks: %i", Joysticks.size());
+#endif
 	return_string += cstr;
 
 	for( std::map<Uint8, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter ++ )

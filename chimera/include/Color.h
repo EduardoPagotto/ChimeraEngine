@@ -37,6 +37,18 @@ namespace Chimera {
 		bool operator==(const Color& rhs) const;
 		bool operator!=(const Color& rhs) const;
 
+	    Color operator=(const Color& other) {
+		 	r = other.r;
+		 	g = other.g;
+		 	b = other.b;
+		 	a = other.a;
+	    }
+
+	 	Color operator+(const Color& other) {
+	   		Color result(r + other.r, g+ other.g, b+ other.b, a+other.a);
+	   		return result;
+   		}
+
 		/// Array accessor operator
 		inline float operator [] (const size_t i) const {
 			return *(&r + i);

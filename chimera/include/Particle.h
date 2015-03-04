@@ -1,6 +1,7 @@
 #ifndef _PARTICLE__H
 #define _PARTICLE__H
 
+# include <LinearMath/btVector3.h>
 #include "Color.h"
 
 namespace Chimera {
@@ -11,7 +12,7 @@ namespace Chimera {
 		Particle();
 		virtual ~Particle();
 
-		void ResetParticle(Color color, float xDir, float yDir, float zDir);
+	    void ResetParticle(Color color, const btVector3 &dir);
 
 		void render();
 
@@ -21,18 +22,20 @@ namespace Chimera {
 		Color corAtiva;
 
 
+		btVector3 position;
+		//float x;      /* X Position      */
+		//float y;      /* Y Position      */
+		//float z;      /* Z Position      */
 
-		float x;      /* X Position      */
-		float y;      /* Y Position      */
-		float z;      /* Z Position      */
+	 	btVector3 direction;
+		//float xi;     /* X Direction     */
+		//float yi;     /* Y Direction     */
+		//float zi;     /* Z Direction     */
 
-		float xi;     /* X Direction     */
-		float yi;     /* Y Direction     */
-		float zi;     /* Z Direction     */
-
-		float xg;     /* X Gravity       */
-		float yg;     /* Y Gravity       */
-		float zg;     /* Z Gravity       */
+		btVector3 gravity;
+		//float xg;     /* X Gravity       */
+		//float yg;     /* Y Gravity       */
+		//float zg;     /* Z Gravity       */
 
 	};
 }

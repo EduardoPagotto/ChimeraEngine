@@ -21,39 +21,31 @@ namespace Chimera {
 
 	}
 
-	void Particle::ResetParticle(Color color, float xDir, float yDir, float zDir)
+
+	void Particle::ResetParticle(Color color, const btVector3 &dir)
 	{
 
 		active = true;	//Make the particels active
 
 		life = 1.0f; // Give the particles life
 
-		corAtiva.set(color.r,							//R
-					color.g,							//G
-					color.b,							//B
-					(float)(rand() % 100) / 1000.0f + 0.003f);	//A como fade!
+		corAtiva = color;
+	    corAtiva.a = (float)(rand() % 100) / 1000.0f + 0.003f; 	//A como fade!
 
-		x = 0.0f; // Set the position on the X,Y,Z axis
-		y = 0.0f;
-		z = 0.0f;
+		position.setZero();
 
-		xi = xDir; // Random Speed On X,Y,Z Axis
-		yi = yDir;
-		zi = zDir;
-
-		xg = 0.0f; // Set Horizontal Pull To Zero
-		yg = -0.8f;
-		zg = 0.0f;
+	 	direction = dir;                                    	// Random Speed On X,Y,Z Axis
+	 	gravity.setValue(0.0f, -0.8f,  0.0f);                   // Set Horizontal Pull To Zero
 
 	}
 
 	void Particle::render() {
 
-		GLuint col = 0;        /* Current Color Selection                            */
-		float slowdown = 2.0f;	/* Slow Down Particles                                */
+		GLuint col = 0;        	/* Current Color Selection                            */
+		float slowdown = 2.0f; 	/* Slow Down Particles                                */
 		float zoom = -40.0f;	/* Used To Zoom Out                                   */
-		float xspeed = 0;         /* Base X Speed (To Allow Keyboard Direction Of Tail) */
-		float yspeed = 0;          /* Base Y Speed (To Allow Keyboard Direction Of Tail) */
+		float xspeed = 0;		/* Base X Speed (To Allow Keyboard Direction Of Tail) */
+		float yspeed = 0;		/* Base Y Speed (To Allow Keyboard Direction Of Tail) */
 
 		if (active)
 		{
@@ -66,27 +58,34 @@ namespace Chimera {
 			glBegin(GL_TRIANGLE_STRIP);
 			/* Top Right */
 			glTexCoord2d(1, 1);
-			glVertex3f(x + 0.5f, y + 0.5f, z);
+			glVertex3f(position.getX() + 0.5f, position.getY() + 0.5f, position.getZ());
 			/* Top Left */
 			glTexCoord2d(0, 1);
-			glVertex3f(x - 0.5f, y + 0.5f, z);
+	  		glVertex3f(position.getX() - 0.5f, position.getY() + 0.5f, position.getZ());
 			/* Bottom Right */
 			glTexCoord2d(1, 0);
-			glVertex3f(x + 0.5f, y - 0.5f, z);
+	  		glVertex3f(position.getX() + 0.5f, position.getY() - 0.5f, position.getZ());
 			/* Bottom Left */
 			glTexCoord2d(0, 0);
-			glVertex3f(x - 0.5f, y - 0.5f, z);
+	  		glVertex3f(position.getX() - 0.5f, position.getY() - 0.5f, position.getZ());
 			glEnd();
 
 			/* Move On The X Axis By X,Y,Z Speed */
-			x += xi / (slowdown * 1000);
-			y += yi / (slowdown * 1000);
-			z += zi / (slowdown * 1000);
+			//position.setX( position.getX() + ( direction.getX() / (slowdown * 1000)));
+			//position.setY( position.getY() + ( direction.getY() / (slowdown * 1000)));
+			//position.setZ( position.getZ() + ( direction.getZ() / (slowdown * 1000)));
+
+	  		position += direction * ( 1 / (slowdown * 1000));
+
+			//x += xi / (slowdown * 1000);
+			//y += yi / (slowdown * 1000);
+			//z += zi / (slowdown * 1000);
 
 			/* Take Pull On X,Y,Z Axis Into Account */
-			xi += xg;
-			yi += yg;
-			zi += zg;
+			//xi += xg;
+			//yi += yg;
+			//zi += zg;
+			direction += gravity;
 
 			/* Reduce Particles Life By 'Fade' */
 			//life -= fade;
@@ -95,12 +94,17 @@ namespace Chimera {
 			/* If the particle dies, revive it */
 			if (life < 0.0f)
 			{
-				float xi, yi, zi;
-				xi = xspeed + (float)((rand() % 60) - 32.0f);
-				yi = yspeed + (float)((rand() % 60) - 30.0f);
-				zi = (float)((rand() % 60) - 30.0f);
+				//float xi, yi, zi;
+				//xi = xspeed + (float)((rand() % 60) - 32.0f);
+				//yi = yspeed + (float)((rand() % 60) - 30.0f);
+				//zi = (float)((rand() % 60) - 30.0f);
 
-				ResetParticle(corAtiva, xi, yi, zi);//FIXME: mudar a cor???
+				btVector3 novo(xspeed + (float)((rand() % 60) - 32.0f),
+								yspeed + (float)((rand() % 60) - 30.0f),
+								(float)((rand() % 60) - 30.0f));
+
+
+	   			ResetParticle(corAtiva, novo); //FIXME: mudar a cor???
 			}
 		}
 	}

@@ -32,13 +32,15 @@ namespace Chimera {
 		for (int loop = 0; loop < _max; loop++)
 		{
 			int indiceCor = (loop + 1) / (_max / coresPart.size());
-			float xi, yi, zi;
-			xi = (float)((rand() % 50) - 26.0f) * 10.0f;
-			yi = zi = (float)((rand() % 50) - 25.0f) * 10.0f;
+
+	        btVector3 novo((float)((rand() % 50) - 26.0f) * 10.0f,
+							(float)((rand() % 50) - 25.0f) * 10.0f,
+							(float)((rand() % 50) - 25.0f) * 10.0f  );           // yi e zi repetiam no original
+
 
 			Particle *pParticle = new Particle();
 
-			pParticle->ResetParticle( coresPart[indiceCor] , xi, yi, zi);
+	  		pParticle->ResetParticle( coresPart[indiceCor] , novo);
 
 			particles.push_back(pParticle);
 		}

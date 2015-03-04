@@ -15,13 +15,17 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+# include "Node.h"
+
 namespace Chimera {
 
-	class ParticleEmitter {
+	class ParticleEmitter : public Node {
 	public:
 
-		ParticleEmitter();
+		ParticleEmitter(std::string _id, std::string _name);
 		virtual ~ParticleEmitter();
+
+	    virtual void update(DataMsg *_dataMsg);
 
 		void initialize(int _max);
 

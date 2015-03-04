@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
+#include "ParticleEmitter.h"
 
 namespace Chimera {
 
@@ -55,9 +56,10 @@ namespace Chimera {
 		std::vector<Camera*> m_vCamera;
 		std::vector<Light*> m_vLight;
 		std::vector<Object*> m_vObject;
+        std::vector<ParticleEmitter*> m_vParticle;
 
 	};
 
 } /* namespace Chimera */
 #endif /* GRADE_H_ */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

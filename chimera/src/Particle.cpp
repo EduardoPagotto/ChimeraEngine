@@ -41,6 +41,7 @@ namespace Chimera {
 
 	void Particle::render() {
 
+
 		GLuint col = 0;        	/* Current Color Selection                            */
 		float slowdown = 2.0f; 	/* Slow Down Particles                                */
 		float zoom = -40.0f;	/* Used To Zoom Out                                   */

@@ -20,6 +20,7 @@ namespace Chimera {
 		CAMERA,
 		LIGHT,
 		OBJECT,
+        PARTICLE_EMITTER,
 		PHYSICS,
 		DRAW,
 		CONSTRAINT
@@ -72,4 +73,4 @@ namespace Chimera {
 
 } /* namespace Chimera */
 #endif /* BASE_H_ */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

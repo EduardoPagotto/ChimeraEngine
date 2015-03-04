@@ -35,6 +35,9 @@ namespace Chimera {
 		case EntityKind::OBJECT:
 			m_vObject.push_back((Object*)_pNode);
 			break;
+        case EntityKind::PARTICLE_EMITTER:
+            m_vParticle.push_back((ParticleEmitter*)_pNode);
+            break;
 		default:
 			break;
 		}
@@ -91,8 +94,13 @@ namespace Chimera {
 		Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
 		update(&dataMsg);
 
+        //for (ParticleEmitter *emitter : m_vParticle) {
+        //    emitter->setGL();
+       //     emitter->render();
+       // }
+
 		execLight();
 
 	}
 } /* namespace Chimera */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

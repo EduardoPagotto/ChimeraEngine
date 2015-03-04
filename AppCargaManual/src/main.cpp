@@ -14,6 +14,8 @@
 
 #include "LoaderDae.h"
 
+#include "ParticleEmitter.h"
+
 int testeCargaArquivo() {
 
 	try {
@@ -40,6 +42,12 @@ int testeCargaArquivo() {
 
 		delete pLoader;
 		pLoader = nullptr;
+
+
+		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter("testeZ1", "testeZ1");
+		std::string pathFilePaticle = dirDados + std::string("/") +std::string("Particle.bmp");
+		pParticleEmitter->loadImage( pathFilePaticle.c_str()) ;
+		pRoot->addChild(pParticleEmitter);
 
 		Chimera::SceneMng *sceneMng = new Chimera::SceneMng(pRoot);
 

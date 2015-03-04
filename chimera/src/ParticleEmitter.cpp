@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-	ParticleEmitter::ParticleEmitter() {
+	ParticleEmitter::ParticleEmitter(std::string _id, std::string _name) : Node(EntityKind::PARTICLE_EMITTER, _id, _name) {
 
 		coresPart.push_back(Color(1.0f, 0.5f, 0.5f));
 		coresPart.push_back(Color(1.0f, 0.75f, 0.5f));
@@ -31,7 +31,7 @@ namespace Chimera {
 		/* Reset all the particles */
 		for (int loop = 0; loop < _max; loop++)
 		{
-			int indiceCor = (loop + 1) / (_max / coresPart.size());
+			int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
 
 	        btVector3 novo((float)((rand() % 50) - 26.0f) * 10.0f,
 							(float)((rand() % 50) - 25.0f) * 10.0f,
@@ -43,6 +43,52 @@ namespace Chimera {
 	  		pParticle->ResetParticle( coresPart[indiceCor] , novo);
 
 			particles.push_back(pParticle);
+		}
+	}
+
+	void ParticleEmitter::update(DataMsg *_dataMsg) {
+
+		if (_dataMsg->getKindOp() == KindOp::START) {
+
+			Node::update(_dataMsg);
+
+			//inicializa objeto local
+			initialize(10);
+
+		} else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
+
+ 			glPushMatrix();
+//
+// 			if (pPhysic != nullptr) {
+// 			Object *pSource = (Object *)_dataMsg->getParam();
+// 			pPhysic->ajusteMatrix(pSource->pPhysic);
+// 			}
+//
+			// salva flags de bit
+			glPushAttrib(GL_ENABLE_BIT);
+
+			//preserva a cor original
+			glPushAttrib(GL_CURRENT_BIT);
+
+			setGL();
+
+ 			render();
+
+
+			//retorna paleta
+			glPopAttrib();
+			//retorna paleta
+			glPopAttrib();
+
+//
+// 			Node::update(_dataMsg);
+//
+ 			glPopMatrix();
+
+		} else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
+
+			//_dataMsg->setDone(true);
+
 		}
 	}
 

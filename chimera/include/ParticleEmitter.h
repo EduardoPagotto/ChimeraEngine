@@ -40,6 +40,8 @@ namespace Chimera {
 		std::vector<Particle*> particles;
 		std::vector<Color> coresPart;
 
+		btVector3 source;
+
 	};
 }
 #endif

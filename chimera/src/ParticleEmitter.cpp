@@ -2,6 +2,7 @@
 
 #include "ExceptionChimera.h"
 
+#include "Object.h"
 
 namespace Chimera {
 
@@ -18,6 +19,8 @@ namespace Chimera {
 		coresPart.push_back(Color(0.75f, 0.5f, 1.0f));
 		coresPart.push_back(Color(1.0f, 0.5f, 1.0f));
 		coresPart.push_back(Color(1.0f, 0.5f, 0.75f));
+
+		source.setZero();
 	}
 
 	ParticleEmitter::~ParticleEmitter() {
@@ -51,71 +54,46 @@ namespace Chimera {
 		if (_dataMsg->getKindOp() == KindOp::START) {
 
 			Node::update(_dataMsg);
+			initialize(100);
+			source.setZero();
 
-			//inicializa objeto local
-			initialize(10);
+		}
+		else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
 
-		} else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
+			glPushMatrix();
 
- 			glPushMatrix();
-//
-// 			if (pPhysic != nullptr) {
-// 			Object *pSource = (Object *)_dataMsg->getParam();
-// 			pPhysic->ajusteMatrix(pSource->pPhysic);
-// 			}
-//
-			// salva flags de bit
 			glPushAttrib(GL_ENABLE_BIT);
-
-			//preserva a cor original
 			glPushAttrib(GL_CURRENT_BIT);
-
-
-
-// 	  float modelview[16];
-// 	  int i,j;
-//
-// 	  // save the current modelview matrix
-// 	  glPushMatrix();
-//
-// 	  // get the current modelview matrix
-// 	  glGetFloatv(GL_MODELVIEW_MATRIX , modelview);
-//
-// 	  // undo all rotations
-// 	  // beware all scaling is lost as well
-// 	  for( i=0; i<3; i++ )
-// 	  for( j=0; j<3; j++ ) {
-// 	   if ( i==j )
-// 	   modelview[i*4+j] = 1.0;
-// 	   else
-// 	   modelview[i*4+j] = 0.0;
-// 	 }
-//
-// 	  // set the modelview with no rotations
-// 	  glLoadMatrixf(modelview);
-
-
 
 			setGL();
 
- 			render();
+			//FIXME ajustar matrix
+			//float matrix[16];
+			//glGetFloatv(GL_PROJECTION_MATRIX, matrix);
 
+			//Object *pSource = (Object *)_dataMsg->getParam();
 
-			//retorna paleta
+			////pega posicao do objeto horigem de desenho (camera travada)
+			////btVector3 l_vec = _pPhysic->pRigidBody->getWorldTransform().getOrigin();
+			//btVector3 l_vec = pSource->getPosition();
+
+			////desloca desenha para o pbjeto horigem
+			//matrix[12] -= l_vec.getX();
+			//matrix[13] -= l_vec.getY();
+			//matrix[14] -= l_vec.getZ();
+
+			//glMultMatrixf(matrix);
+
+			render(); //em baixo???
+
 			glPopAttrib();
-			//retorna paleta
 			glPopAttrib();
 
-//
-// 			Node::update(_dataMsg);
-//
- 			glPopMatrix();
-
-// 	  glPopMatrix();
-
-		} else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
-
-			//_dataMsg->setDone(true);
+			Node::update(_dataMsg);
+		
+			glPopMatrix();
+		}
+		else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
 
 		}
 	}
@@ -148,6 +126,8 @@ namespace Chimera {
 
 		/* Enable Texture Mapping */
 		glEnable(GL_TEXTURE_2D);
+
+		glDisable(GL_LIGHTING);
 
 		/* Select Our Texture */
 		glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -204,5 +184,80 @@ namespace Chimera {
 		}
 
 	}
+
+	//TODO usar no mouse do rift
+	//	void ParticleEmitter::update(DataMsg *_dataMsg) {
+	//
+	//		if (_dataMsg->getKindOp() == KindOp::START) {
+	//
+	//			Node::update(_dataMsg);
+	//
+	//			//inicializa objeto local
+	//			initialize(10);
+	//
+	//		} else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
+	//
+	// 			glPushMatrix();
+	////
+	//// 			if (pPhysic != nullptr) {
+	//// 			Object *pSource = (Object *)_dataMsg->getParam();
+	//// 			pPhysic->ajusteMatrix(pSource->pPhysic);
+	//// 			}
+	////
+	//			// salva flags de bit
+	//			glPushAttrib(GL_ENABLE_BIT);
+	//
+	//			//preserva a cor original
+	//			glPushAttrib(GL_CURRENT_BIT);
+	//
+	//
+	//
+	//// 	  float modelview[16];
+	//// 	  int i,j;
+	////
+	//// 	  // save the current modelview matrix
+	//// 	  glPushMatrix();
+	////
+	//// 	  // get the current modelview matrix
+	//// 	  glGetFloatv(GL_MODELVIEW_MATRIX , modelview);
+	////
+	//// 	  // undo all rotations
+	//// 	  // beware all scaling is lost as well
+	//// 	  for( i=0; i<3; i++ )
+	//// 	  for( j=0; j<3; j++ ) {
+	//// 	   if ( i==j )
+	//// 	   modelview[i*4+j] = 1.0;
+	//// 	   else
+	//// 	   modelview[i*4+j] = 0.0;
+	//// 	 }
+	////
+	//// 	  // set the modelview with no rotations
+	//// 	  glLoadMatrixf(modelview);
+	//
+	//
+	//
+	//			setGL();
+	//
+	// 			render();
+	//
+	//
+	//			//retorna paleta
+	//			glPopAttrib();
+	//			//retorna paleta
+	//			glPopAttrib();
+	//
+	////
+	//// 			Node::update(_dataMsg);
+	////
+	// 			glPopMatrix();
+	//
+	//// 	  glPopMatrix();
+	//
+	//		} else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
+	//
+	//			//_dataMsg->setDone(true);
+	//
+	//		}
+	//	}
 
 }

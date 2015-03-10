@@ -42,6 +42,8 @@ namespace Chimera {
 		 	g = other.g;
 		 	b = other.b;
 		 	a = other.a;
+
+			return *this;
 	    }
 
 	 	Color operator+(const Color& other) {

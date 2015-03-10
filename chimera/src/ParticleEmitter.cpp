@@ -20,7 +20,7 @@ namespace Chimera {
 		coresPart.push_back(Color(1.0f, 0.5f, 1.0f));
 		coresPart.push_back(Color(1.0f, 0.5f, 0.75f));
 
-		source.setZero();
+		pTexture = nullptr;
 	}
 
 	ParticleEmitter::~ParticleEmitter() {
@@ -55,7 +55,8 @@ namespace Chimera {
 
 			Node::update(_dataMsg);
 			initialize(100);
-			source.setZero();
+
+			pTexture->init();
 
 		}
 		else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
@@ -90,7 +91,7 @@ namespace Chimera {
 			glPopAttrib();
 
 			Node::update(_dataMsg);
-		
+
 			glPopMatrix();
 		}
 		else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
@@ -110,7 +111,7 @@ namespace Chimera {
 		//glClearDepth(1.0f);
 
 		/* Enables Depth Testing */
-		glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
 
 		/* Enable Blending */
 		glEnable(GL_BLEND);
@@ -130,48 +131,55 @@ namespace Chimera {
 		glDisable(GL_LIGHTING);
 
 		/* Select Our Texture */
-		glBindTexture(GL_TEXTURE_2D, texture[0]);
+		//glBindTexture(GL_TEXTURE_2D, texture[0]);
+		pTexture->render();
 
 	}
 
 	void ParticleEmitter::loadImage(const char *_file) {
 
-		//SDL_Surface *pImage = IMG_Load(_file);
-		//if (pImage == nullptr)
-		//	throw ExceptionChimera(ExceptionCode::READ, "Falha ao ler arquivo:" + std::string(_file));
-		/* Create storage space for the texture */
-		SDL_Surface *TextureImage[1];
+		pTexture = new Texture("testeZ1", "testeZ1");
+		pTexture->setPathFile(std::string(_file));
 
-		/* Load The Bitmap, Check For Errors, If Bitmap's Not Found Quit */
-		//if ((TextureImage[0] = SDL_LoadBMP("data/particle.bmp")))
-		if ((TextureImage[0] = SDL_LoadBMP(_file)))
-		{
-
-			/* Set the status to true */
-			//Status = TRUE;
-
-			/* Create The Texture */
-			glGenTextures(1, &texture[0]);
-
-			/* Typical Texture Generation Using Data From The Bitmap */
-			glBindTexture(GL_TEXTURE_2D, texture[0]);
-
-			/* Generate The Texture */
-			glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[0]->w,
-				TextureImage[0]->h, 0, GL_BGR_EXT,
-				GL_UNSIGNED_BYTE, TextureImage[0]->pixels);
-
-			/* Linear Filtering */
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		}
-		else {
-			throw ExceptionChimera(ExceptionCode::READ, "Falha ao ler arquivo:" + std::string(_file));
-		}
-
-		/* Free up any memory we may have used */
-		if (TextureImage[0])
-			SDL_FreeSurface(TextureImage[0]);
+// 		//SDL_Surface *pImage = IMG_Load(_file);
+// 		//if (pImage == nullptr)
+// 		//	throw ExceptionChimera(ExceptionCode::READ, "Falha ao ler arquivo:" + std::string(_file));
+// 		/* Create storage space for the texture */
+//
+//
+// 		int imgFlags = IMG_INIT_PNG;
+// 		if( !( IMG_Init( imgFlags ) & imgFlags ) )
+// 			throw ExceptionChimera(ExceptionCode::READ, "Falha ao iniciar o PNG lib:" + std::string(IMG_GetError()) + std::string(" arquivo:") + std::string(_file));
+//
+// 		/* Load The Bitmap, Check For Errors, If Bitmap's Not Found Quit */
+// 		//if ((TextureImage[0] = SDL_LoadBMP("data/particle.bmp")))
+// 		SDL_Surface *pImage = IMG_Load(_file);
+// 		if ((pImage = IMG_Load(_file)))
+// 		{
+//
+// 			/* Set the status to true */
+// 			//Status = TRUE;
+//
+// 			/* Create The Texture */
+// 			glGenTextures(1, &texture[0]);
+//
+// 			/* Typical Texture Generation Using Data From The Bitmap */
+// 			glBindTexture(GL_TEXTURE_2D, texture[0]);
+//
+// 			/* Generate The Texture */
+// 			glTexImage2D(GL_TEXTURE_2D, 0, 3, pImage->w,pImage->h, 0, GL_BGR_EXT,GL_UNSIGNED_BYTE, pImage->pixels);
+//
+// 			/* Linear Filtering */
+// 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+// 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 		}
+// 		else {
+// 			throw ExceptionChimera(ExceptionCode::READ, "Falha ao ler arquivo:" + std::string(_file));
+// 		}
+//
+// 		/* Free up any memory we may have used */
+// 		if (TextureImage[0])
+// 			SDL_FreeSurface(TextureImage[0]);
 
 	}
 

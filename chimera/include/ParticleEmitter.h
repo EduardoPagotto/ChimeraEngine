@@ -15,7 +15,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-# include "Node.h"
+# include "Texture.h"
+//# include "Node.h"
 
 namespace Chimera {
 
@@ -36,11 +37,13 @@ namespace Chimera {
 		void render();
 
 	private:
-		GLuint texture[1];
+		//GLuint texture[1];
 		std::vector<Particle*> particles;
 		std::vector<Color> coresPart;
 
-		btVector3 source;
+		Texture *pTexture;
+
+		//btVector3 source;
 
 	};
 }

@@ -77,9 +77,7 @@ namespace Chimera {
 	}
 
 	void Texture::render() {
-
 		glBindTexture(GL_TEXTURE_2D, textureList[indiceFilter]);
-
 	}
 
 	void Texture::init() {
@@ -95,44 +93,31 @@ namespace Chimera {
 			glBindTexture(GL_TEXTURE_2D, textureList[0]); /* Typical Texture Generation Using Data From The Bitmap */
 
 			/* Generate The Texture */
-			glTexImage2D(GL_TEXTURE_2D, 0, 3, pImage->w,
-				pImage->h, 0, GL_BGR_EXT,
-				GL_UNSIGNED_BYTE, pImage->pixels);
+			glTexImage2D(GL_TEXTURE_2D, 0, 3, pImage->w,pImage->h, 0, GL_BGR_EXT,GL_UNSIGNED_BYTE, pImage->pixels);
 
 			/* Nearest Filtering */
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-				GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-				GL_NEAREST);
-
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 
 			/* Load in texture 2 */
 			glBindTexture(GL_TEXTURE_2D, textureList[1]); /* Typical Texture Generation Using Data From The Bitmap */
 
 			/* Linear Filtering */
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-				GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-				GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 			/* Generate The Texture */
-			glTexImage2D(GL_TEXTURE_2D, 0, 3, pImage->w,
-				pImage->h, 0, GL_BGR_EXT,
-				GL_UNSIGNED_BYTE, pImage->pixels);
+			glTexImage2D(GL_TEXTURE_2D, 0, 3, pImage->w,pImage->h, 0, GL_BGR_EXT,GL_UNSIGNED_BYTE, pImage->pixels);
 
 			/* Load in texture 3 */
 			glBindTexture(GL_TEXTURE_2D, textureList[2]); /* Typical Texture Generation Using Data From The Bitmap */
 
 			/* Mipmapped Filtering */
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-				GL_LINEAR_MIPMAP_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-				GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 			/* Generate The MipMapped Texture ( NEW ) */
-			gluBuild2DMipmaps(GL_TEXTURE_2D, 3, pImage->w,
-				pImage->h, GL_BGR_EXT,
-				GL_UNSIGNED_BYTE, pImage->pixels);
+			gluBuild2DMipmaps(GL_TEXTURE_2D, 3, pImage->w,pImage->h, GL_BGR_EXT,GL_UNSIGNED_BYTE, pImage->pixels);
 
 			SDL_FreeSurface(pImage);
 

@@ -33,7 +33,7 @@ namespace Chimera {
 
 		particles.reserve(_max);
 
-		// Reset all the particles 
+		// Reset all the particles
 		for (int loop = 0; loop < _max; loop++)
 		{
 			int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
@@ -103,32 +103,32 @@ namespace Chimera {
 
 	void ParticleEmitter::setGL() {
 
-		// Enable smooth shading 
+		// Enable smooth shading
 		glShadeModel(GL_SMOOTH);
 
-		// Set the background black 
+		// Set the background black
 		//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-		// Depth buffer setup 
+		// Depth buffer setup
 		//glClearDepth(1.0f);
 
-		// Enables Depth Testing 
+		// Enables Depth Testing
 		//glDisable(GL_DEPTH_TEST);
 
-		// Enable Blending 
+		// Enable Blending
 		glEnable(GL_BLEND);
 
-		// Type Of Blending To Perform 
+		// Type Of Blending To Perform
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		// Really Nice Perspective Calculations 
+		// Really Nice Perspective Calculations
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-		// Really Nice Point Smoothing 
+		// Really Nice Point Smoothing
 		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 
-		// Enable Texture Mapping 
+		// Enable Texture Mapping
 		glEnable(GL_TEXTURE_2D);
 
 		glDisable(GL_LIGHTING);
@@ -144,7 +144,9 @@ namespace Chimera {
 
 	void ParticleEmitter::render() {
 
-		// Select Our Texture 
+		SortParticles();
+
+		// Select Our Texture
 		pTexture->render();
 
 		for (unsigned loop = 0; loop < particles.size() ; loop++)
@@ -155,9 +157,32 @@ namespace Chimera {
 
 	}
 
+	bool compare(Particle* a, Particle* b) {
+
+	 float m[16];
+	 glGetFloatv(GL_MODELVIEW_MATRIX, m);
+	 btVector3 camera(m[12], m[13], m[14]);
+
+	 float d1 = camera.distance(a->position);
+	 float d2 = camera.distance(b->position);
+
+	 return (d1 < d2);
+
+
+	}
+
+
 	//TODO rotina sera usada para ordenar as particulas em relacao a distancia com a camera
 	void ParticleEmitter::SortParticles(){
-		std::sort(particles.begin(), particles.end());
+
+// 	 std::sort(particles.begin(), particles.end(), [](Particle* a, Particle* b){
+// 			return false;                                            //a->getId() < b->getId;
+// 		}
+// 	);
+
+	 std::sort(particles.begin(), particles.end(), compare);
+
+
 	}
 
 	//TODO usar no mouse do rift

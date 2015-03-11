@@ -19,7 +19,9 @@ namespace Chimera {
 		int   active; /* Active (Yes/No) */
 		float life;   /* Particle Life   */
 
-		bool operator<(Particle& that);
+	    //friend bool operator< (Particle &val1, Particle &val2);
+		//bool operator<(Particle& that);
+		bool operator < (const Particle& that) const;
 
 		Color corAtiva;
 

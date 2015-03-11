@@ -95,10 +95,30 @@ namespace Chimera {
 		glEnd();
 	}
 
-	bool Particle::operator<(Particle& that) {
-		// Sort in reverse order : far particles drawn first.
-		//return this->cameradistance > that.cameradistance;
-		return false;
+
+// 	bool operator< (Particle &val1, Particle &val2)
+// 	{
+// 		//return cC1.m_nCents > cC2.m_nCents;
+//  		float m[16];
+//  		glGetFloatv(GL_MODELVIEW_MATRIX, m);
+//  		btVector3 camera(m[12], m[13], m[14]);
+//
+// 		float d1 = camera.distance(val1.position);
+// 		float d2 = camera.distance(val2.position);
+//
+//  		return (d1 > d2);
+// 	}
+
+	bool Particle::operator < (const Particle& that) const
+	{
+		float m[16];
+		glGetFloatv(GL_MODELVIEW_MATRIX, m);
+		btVector3 camera(m[12], m[13], m[14]);
+
+		float d1 = camera.distance(this->position);
+		float d2 = camera.distance(that.position);
+
+		return (d1 < d2);
 	}
 
 	void Particle::render() {

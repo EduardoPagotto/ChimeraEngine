@@ -7,6 +7,10 @@
 #include "windows.h"
 #endif
 
+#include "SDL_image.h"
+
+#include "SDL_opengl.h" 
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -20,7 +24,7 @@ namespace Chimera {
 		textureList[0] = 0;
 		textureList[1] = 0;
 		textureList[2] = 0;
-
+		//texture = 0;
 	}
 
 	Texture::Texture(const Texture &_texture) : Node(_texture) {
@@ -31,11 +35,14 @@ namespace Chimera {
 		textureList[0] = _texture.textureList[0];
 		textureList[1] = _texture.textureList[1];
 		textureList[2] = _texture.textureList[2];
+		//texture = _texture.texture;
 
 	}
 
 	Texture::~Texture() {
-		//TODO descobrir como remover textura do openGL quando textura deixar de existir
+		
+		glDeleteTextures(3, (GLuint*)&textureList[0]);
+
 	}
 
 	void Texture::setFilter(TextureFilter _filter) {
@@ -77,7 +84,9 @@ namespace Chimera {
 	}
 
 	void Texture::render() {
+
 		glBindTexture(GL_TEXTURE_2D, textureList[indiceFilter]);
+		
 	}
 
 	void Texture::init() {
@@ -86,38 +95,47 @@ namespace Chimera {
 
 			SDL_Surface *pImage = loadImage();
 
-			/* Create The Texture */
+			// Create The Texture 
 			glGenTextures(3, (GLuint*)&textureList[0]);
 
-			/* Load in texture 1 */
-			glBindTexture(GL_TEXTURE_2D, textureList[0]); /* Typical Texture Generation Using Data From The Bitmap */
+			// Load in texture 1 
+			glBindTexture(GL_TEXTURE_2D, textureList[0]); // Typical Texture Generation Using Data From The Bitmap 
 
-			/* Generate The Texture */
-			glTexImage2D(GL_TEXTURE_2D, 0, 3, pImage->w,pImage->h, 0, GL_BGR_EXT,GL_UNSIGNED_BYTE, pImage->pixels);
+			// Generate The Texture 
+			if(pImage->format->Amask != 0)
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pImage->w, pImage->h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pImage->pixels);
+			else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pImage->w, pImage->h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->pixels);
 
-			/* Nearest Filtering */
+			// Nearest Filtering 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 
-			/* Load in texture 2 */
-			glBindTexture(GL_TEXTURE_2D, textureList[1]); /* Typical Texture Generation Using Data From The Bitmap */
+			// Load in texture 2 
+			glBindTexture(GL_TEXTURE_2D, textureList[1]); // Typical Texture Generation Using Data From The Bitmap
 
-			/* Linear Filtering */
+			// Linear Filtering 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
-			/* Generate The Texture */
-			glTexImage2D(GL_TEXTURE_2D, 0, 3, pImage->w,pImage->h, 0, GL_BGR_EXT,GL_UNSIGNED_BYTE, pImage->pixels);
+			// Generate The Texture 
+			if (pImage->format->Amask != 0)
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pImage->w, pImage->h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pImage->pixels);
+			else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pImage->w, pImage->h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->pixels);
 
-			/* Load in texture 3 */
-			glBindTexture(GL_TEXTURE_2D, textureList[2]); /* Typical Texture Generation Using Data From The Bitmap */
+			// Load in texture 3 
+			glBindTexture(GL_TEXTURE_2D, textureList[2]); // Typical Texture Generation Using Data From The Bitmap 
 
-			/* Mipmapped Filtering */
+			// Mipmapped Filtering 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
-			/* Generate The MipMapped Texture ( NEW ) */
-			gluBuild2DMipmaps(GL_TEXTURE_2D, 3, pImage->w,pImage->h, GL_BGR_EXT,GL_UNSIGNED_BYTE, pImage->pixels);
+			// Generate The MipMapped Texture ( NEW ) 
+			if (pImage->format->Amask != 0)
+				gluBuild2DMipmaps(GL_TEXTURE_2D, 4, pImage->w,pImage->h, GL_BGRA_EXT,GL_UNSIGNED_BYTE, pImage->pixels);
+			else
+				gluBuild2DMipmaps(GL_TEXTURE_2D, 3, pImage->w, pImage->h, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->pixels);
 
 			SDL_FreeSurface(pImage);
 

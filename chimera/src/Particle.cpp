@@ -18,7 +18,6 @@ namespace Chimera {
 	}
 
 	Particle::~Particle() {
-
 	}
 
 	void Particle::ResetParticle(Color color, const btVector3 &dir)
@@ -109,6 +108,12 @@ namespace Chimera {
 		glVertex3f(x - r[0] - u[0], y - r[1] - u[1], z - r[2] - u[2]);
 
 		glEnd();
+	}
+
+	bool Particle::operator<(Particle& that) {
+		// Sort in reverse order : far particles drawn first.
+		//return this->cameradistance > that.cameradistance;
+		return false;
 	}
 
 	void Particle::render() {

@@ -46,7 +46,10 @@ namespace Chimera {
 
 	private:
 		std::string pathFile;
+
 		int textureList[3];
+		//int texture;
+
 		int indiceFilter;
 		bool texturaCarregada;
 	};

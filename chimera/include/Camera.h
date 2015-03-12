@@ -67,6 +67,10 @@ namespace Chimera {
 			return perspective;
 		}
 
+		btVector3 getPosition() const {
+            return position;
+        }
+
 		void setPerspective(bool _perspective) {
 			perspective = _perspective; //TODO implementar isto para ortogonal (false);
 		}

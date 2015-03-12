@@ -149,6 +149,10 @@ void Game::start() {
 	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Zoltan");
 	//pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Icosphere02"); // //cubo01
 
+	// FIXME: Quando modificar o dae remover esta entrada
+	pObj->addChild(pCam);
+
+
 	pVideo->setLight(true);
 	pVideo->setMaterial(true);
 

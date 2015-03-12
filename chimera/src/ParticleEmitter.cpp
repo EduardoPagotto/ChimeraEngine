@@ -1,6 +1,7 @@
 #include "ParticleEmitter.h"
 #include "ExceptionChimera.h"
 #include "Object.h"
+#include "Camera.h"
 #include <algorithm>
 
 namespace Chimera {
@@ -70,25 +71,18 @@ namespace Chimera {
 
 			setGL();
 
-			//FIXME ajustar matrix
-			//float matrix[16];
-			//glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-
 			Object *pSource = (Object *)_dataMsg->getParam();
 
-			////pega posicao do objeto horigem de desenho (camera travada)
-			////btVector3 l_vec = _pPhysic->pRigidBody->getWorldTransform().getOrigin();
+			// desloca objeto em relacao ao que contem a camera
 			btVector3 l_vec = pSource->getPosition();
-
 			glTranslatef(-l_vec.x(), -l_vec.y(), -l_vec.z());
-			////desloca desenha para o pbjeto horigem
-			//matrix[12] -= l_vec.getX();
-			//matrix[13] -= l_vec.getY();
-			//matrix[14] -= l_vec.getZ();
 
-			//glLoadMatrixf(matrix);
+			// armazena a camera para uso no ordenador //TODO: Otimizar criando lista de cameras no Object e indicando qual esta ativa neste momento
+			Camera *pCam = (Camera*)pSource->findChildByKind(EntityKind::CAMERA, 0);
+			if (pCam !=  nullptr)
+				SortParticles(pCam->getPosition());
 
-			render(); //em baixo???
+			render();
 
 			glPopAttrib();
 			glPopAttrib();
@@ -145,8 +139,6 @@ namespace Chimera {
 
 	void ParticleEmitter::render() {
 
-		SortParticles();
-
 		// Select Our Texture
 		pTexture->render();
 
@@ -158,32 +150,41 @@ namespace Chimera {
 
 	}
 
-	bool compare(Particle* a, Particle* b) {
+	// estrutura de comparacao
+	// TODO Otimizar
+	struct ParticleCompare {
+		const btVector3 *pPosicao;
+		bool operator() (Particle* i,Particle* j) {
 
-		float m[16];
-		glGetFloatv(GL_MODELVIEW_MATRIX, m);
-		btVector3 camera(m[12], m[13], m[14]);//FIXME
-		//btVector3 camera(7.0, -6.0, 8.0);
+			bool retorno;
+			float d1 = pPosicao->distance(i->position);
+			float d2 = pPosicao->distance(j->position);
+			retorno = (d2 < d1);
 
-		float d1 = camera.distance(a->position);
-		float d2 = camera.distance(b->position);
+			return retorno;
 
-		return (d1 < d2);
-
-
-	}
+		}
+	};
 
 
-	//TODO rotina sera usada para ordenar as particulas em relacao a distancia com a camera
-	void ParticleEmitter::SortParticles(){
+	void ParticleEmitter::SortParticles(const btVector3 &posCamera){
 
-		// 	 std::sort(particles.begin(), particles.end(), [](Particle* a, Particle* b){
-		// 			return false;                                            //a->getId() < b->getId;
-		// 		}
-		// 	);
+//// Lambda nao carrega o this
+// 		std::sort(particles.begin(), particles.end(), [](Particle* a, Particle* b){
+//
+// 			bool ret;
+// 			float d1 = posCamera.distance(a->position);
+// 			float d2 = posCamera.distance(b->position);
+//
+// 			ret = d1 < d2;
+//
+// 			return ret;
+// 		});
 
-		std::sort(particles.begin(), particles.end(), compare);
 
+	 static ParticleCompare comparador;
+	 comparador.pPosicao = &posCamera;
+	 std::sort(particles.begin(), particles.end(), comparador);
 
 	}
 

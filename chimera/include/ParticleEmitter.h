@@ -28,7 +28,7 @@ namespace Chimera {
 		void loadImage(const char *_file);
 		void setGL();
 		void render();
-		void SortParticles();
+	    void SortParticles(const btVector3 &posCamera);
 
 	private:
 		std::vector<Particle*> particles;

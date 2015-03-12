@@ -22,63 +22,60 @@ namespace Chimera {
 
 	void Particle::ResetParticle(Color color, const btVector3 &dir)
 	{
-
 		active = true;	//Make the particels active
 
-		life = 5.0f; // Give the particles life
+		life = 100.0f; // Give the particles life
 
 		corAtiva = color;
 		corAtiva.a = (float)(rand() % 100) / 1000.0f + 0.003f; 	//A como fade!
 
 		position.setZero();
-		position.setX(1.0f);
-		position.setY(-1.0f);
-		position.setZ(-1.0f);
+		position.setX(-5.0f);
+		position.setY(5.0f);
+		position.setZ(5.0f);
 
 		direction = dir;                                    	// Random Speed On X,Y,Z Axis
-		gravity.setValue(0.0f, -0.0f, 0.5f);                   // Set Horizontal Pull To Zero
-
+		gravity.setValue(0.0f, -0.0f, 0.0f);                   // Set Horizontal Pull To Zero
 	}
 
-// Roughly speaking, a modelview matrix is made up more or less like this:
-// [ EyeX_x EyeX_y EyeX_z    a
-//   EyeY_x EyeY_y EyeY_z    b
-//   EyeZ_x EyeZ_y EyeZ_z    c
-//   um don't look down here ]
-// where a, b, c are translations in _eye_ space.  (For this reason, a,b,c is not
-// the camera location - sorry!)
+	// Roughly speaking, a modelview matrix is made up more or less like this:
+	// [ EyeX_x EyeX_y EyeX_z    a
+	//   EyeY_x EyeY_y EyeY_z    b
+	//   EyeZ_x EyeZ_y EyeZ_z    c
+	//   um don't look down here ]
+	// where a, b, c are translations in _eye_ space.  (For this reason, a,b,c is not
+	// the camera location - sorry!)
 	static void camera_directions(btVector3 *right, btVector3 *up, btVector3 *look)
 	{
 		float m[16];
 		glGetFloatv(GL_MODELVIEW_MATRIX, m);
 
 		if (right != nullptr)
-			right->setValue( m[0], m[4], m[8]);
+			right->setValue(m[0], m[4], m[8]);
 
-		if (up !=  nullptr)
-			up->setValue( m[1], m[5], m[9]);
+		if (up != nullptr)
+			up->setValue(m[1], m[5], m[9]);
 
 		if (look != nullptr)
-			look->setValue( m[2], m[6], m[10]);
+			look->setValue(m[2], m[6], m[10]);
 
 	}
 
 	static void draw_billboard(const btVector3 &posicao)
 	{
-
 		btVector3 right;
 		btVector3 up;
 
 		camera_directions(&right, &up, nullptr);
 		glBegin(GL_TRIANGLE_STRIP);
 
-		float ks = 10.0f;
+		float ks = 5.0f;
 		right /= ks;
 		up /= ks;
 
-	    btVector3 final = posicao + right + up;          // right-up
+		btVector3 final = posicao + right + up;          // right-up
 		glTexCoord2d(1, 1);
-	    glVertex3fv(final.m_floats);                           //   final.x(), final.y(),  final.z());
+		glVertex3fv(final.m_floats);                           //   final.x(), final.y(),  final.z());
 
 		final = posicao - right + up;                     // Left-up
 		glTexCoord2d(0, 1);
@@ -88,37 +85,11 @@ namespace Chimera {
 		glTexCoord2d(1, 0);
 		glVertex3fv(final.m_floats);
 
-		final = posicao -right - up;                       // left-bottom
+		final = posicao - right - up;                       // left-bottom
 		glTexCoord2d(0, 0);
 		glVertex3fv(final.m_floats);
 
 		glEnd();
-	}
-
-
-// 	bool operator< (Particle &val1, Particle &val2)
-// 	{
-// 		//return cC1.m_nCents > cC2.m_nCents;
-//  		float m[16];
-//  		glGetFloatv(GL_MODELVIEW_MATRIX, m);
-//  		btVector3 camera(m[12], m[13], m[14]);
-//
-// 		float d1 = camera.distance(val1.position);
-// 		float d2 = camera.distance(val2.position);
-//
-//  		return (d1 > d2);
-// 	}
-
-	bool Particle::operator < (const Particle& that) const
-	{
-		float m[16];
-		glGetFloatv(GL_MODELVIEW_MATRIX, m);
-		btVector3 camera(m[12], m[13], m[14]);
-
-		float d1 = camera.distance(this->position);
-		float d2 = camera.distance(that.position);
-
-		return (d1 < d2);
 	}
 
 	void Particle::render() {

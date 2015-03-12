@@ -38,14 +38,14 @@ namespace Chimera {
 		{
 			int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
 
-	        btVector3 novo((float)((rand() % 50) - 26.0f) * 10.0f,
-							(float)((rand() % 50) - 25.0f) * 10.0f,
-							(float)((rand() % 50) - 25.0f) * 10.0f  );           // yi e zi repetiam no original
+			btVector3 novo((float)((rand() % 50) - 26.0f) * 10.0f,
+				(float)((rand() % 50) - 25.0f) * 10.0f,
+				(float)((rand() % 50) - 25.0f) * 10.0f);           // yi e zi repetiam no original
 
 
 			Particle *pParticle = new Particle();
 
-	  		pParticle->ResetParticle( coresPart[indiceCor] , novo);
+			pParticle->ResetParticle(coresPart[indiceCor], novo);
 
 			particles.push_back(pParticle);
 		}
@@ -56,7 +56,7 @@ namespace Chimera {
 		if (_dataMsg->getKindOp() == KindOp::START) {
 
 			Node::update(_dataMsg);
-			initialize(100);
+			initialize(150);
 
 			pTexture->init();
 
@@ -72,20 +72,21 @@ namespace Chimera {
 
 			//FIXME ajustar matrix
 			//float matrix[16];
-			//glGetFloatv(GL_PROJECTION_MATRIX, matrix);
+			//glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 
-			//Object *pSource = (Object *)_dataMsg->getParam();
+			Object *pSource = (Object *)_dataMsg->getParam();
 
 			////pega posicao do objeto horigem de desenho (camera travada)
 			////btVector3 l_vec = _pPhysic->pRigidBody->getWorldTransform().getOrigin();
-			//btVector3 l_vec = pSource->getPosition();
+			btVector3 l_vec = pSource->getPosition();
 
+			glTranslatef(-l_vec.x(), -l_vec.y(), -l_vec.z());
 			////desloca desenha para o pbjeto horigem
 			//matrix[12] -= l_vec.getX();
 			//matrix[13] -= l_vec.getY();
 			//matrix[14] -= l_vec.getZ();
 
-			//glMultMatrixf(matrix);
+			//glLoadMatrixf(matrix);
 
 			render(); //em baixo???
 
@@ -149,7 +150,7 @@ namespace Chimera {
 		// Select Our Texture
 		pTexture->render();
 
-		for (unsigned loop = 0; loop < particles.size() ; loop++)
+		for (unsigned loop = 0; loop < particles.size(); loop++)
 		{
 			Particle *pParticle = particles[loop];
 			pParticle->render();
@@ -159,14 +160,15 @@ namespace Chimera {
 
 	bool compare(Particle* a, Particle* b) {
 
-	 float m[16];
-	 glGetFloatv(GL_MODELVIEW_MATRIX, m);
-	 btVector3 camera(m[12], m[13], m[14]);
+		float m[16];
+		glGetFloatv(GL_MODELVIEW_MATRIX, m);
+		btVector3 camera(m[12], m[13], m[14]);//FIXME
+		//btVector3 camera(7.0, -6.0, 8.0);
 
-	 float d1 = camera.distance(a->position);
-	 float d2 = camera.distance(b->position);
+		float d1 = camera.distance(a->position);
+		float d2 = camera.distance(b->position);
 
-	 return (d1 < d2);
+		return (d1 < d2);
 
 
 	}
@@ -175,12 +177,12 @@ namespace Chimera {
 	//TODO rotina sera usada para ordenar as particulas em relacao a distancia com a camera
 	void ParticleEmitter::SortParticles(){
 
-// 	 std::sort(particles.begin(), particles.end(), [](Particle* a, Particle* b){
-// 			return false;                                            //a->getId() < b->getId;
-// 		}
-// 	);
+		// 	 std::sort(particles.begin(), particles.end(), [](Particle* a, Particle* b){
+		// 			return false;                                            //a->getId() < b->getId;
+		// 		}
+		// 	);
 
-	 std::sort(particles.begin(), particles.end(), compare);
+		std::sort(particles.begin(), particles.end(), compare);
 
 
 	}

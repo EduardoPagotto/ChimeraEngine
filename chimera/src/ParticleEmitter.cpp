@@ -39,15 +39,12 @@ namespace Chimera {
 		{
 			int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
 
-			btVector3 novo((float)((rand() % 50) - 26.0f) * 10.0f,
+			btVector3 direcao((float)((rand() % 50) - 26.0f) * 10.0f,
 				(float)((rand() % 50) - 25.0f) * 10.0f,
 				(float)((rand() % 50) - 25.0f) * 10.0f);           // yi e zi repetiam no original
 
 
-			Particle *pParticle = new Particle();
-
-			pParticle->ResetParticle(coresPart[indiceCor], novo);
-
+			Particle *pParticle = new Particle(btVector3(5.0, 5.0, 5.0), direcao, btVector3(0.0, 0.0, 0.0), coresPart[indiceCor], 10.0f);
 			particles.push_back(pParticle);
 		}
 	}

@@ -45,7 +45,7 @@ int testeCargaArquivo() {
 
 
 		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter("testeZ1", "testeZ1");
-		std::string pathFilePaticle = dirDados + std::string("/") +std::string("Particle2.png");
+		std::string pathFilePaticle = dirDados + std::string("/") +std::string("Particle.png");
 		pParticleEmitter->loadImage( pathFilePaticle.c_str()) ;
 		pRoot->addChild(pParticleEmitter);
 

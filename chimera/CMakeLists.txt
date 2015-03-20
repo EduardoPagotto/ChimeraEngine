@@ -62,6 +62,7 @@ add_library (Chimera STATIC
 				src/JoystickState.cpp
 				src/Particle.cpp
 				src/ParticleEmitter.cpp
+				src/SkyBox.cpp
 			)
 
 INSTALL(FILES ${Chimera_BINARY_DIR}/libChimera.a DESTINATION lib)

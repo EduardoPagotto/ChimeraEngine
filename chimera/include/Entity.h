@@ -23,7 +23,8 @@ namespace Chimera {
         PARTICLE_EMITTER,
 		PHYSICS,
 		DRAW,
-		CONSTRAINT
+		CONSTRAINT,
+        SKYBOX
 	};
 
 	/**

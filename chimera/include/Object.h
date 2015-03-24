@@ -23,7 +23,6 @@ namespace Chimera {
 		virtual void clone(Node **ppNode);
 
 		void init();
-		void render();
 
 		void applyTorc(const btVector3 &_vet);
 		void applyForce(const btVector3 &_vet);
@@ -36,10 +35,14 @@ namespace Chimera {
 			transform = _trans;
 		}
 
+		Draw * getDraw() {
+			return  (Draw*)findChildByKind(EntityKind::DRAW, 0);
+		}
+
 	private:
 		Physics *pPhysic;
 		Draw *pDraw;
-		
+
 		btTransform transform;
 	};
 

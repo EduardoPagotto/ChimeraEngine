@@ -27,9 +27,9 @@ namespace Chimera {
 			Node::clone(ppNode);
 		}
 
-		void render();
+		virtual void render();
 
-		void init();
+		virtual void init();
 
         virtual void renderExecute() = 0;
 

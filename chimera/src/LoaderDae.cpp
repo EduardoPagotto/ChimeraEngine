@@ -277,7 +277,7 @@ namespace ChimeraLoader {
 				pObj->addChild(pDrawTriMesh);
 				_pNodePai->addChild(pObj);
 
-				pLastNodeDone = pObj;
+				pLastNodeDone = pObj;                                   // FIXME modificar para pegar extra do Collada
 
 				tinyxml2::XMLElement* l_nBindMat = _nNode->FirstChildElement("bind_material");
 				if (l_nBindMat != nullptr) {

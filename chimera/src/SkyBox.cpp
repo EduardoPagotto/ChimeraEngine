@@ -1,4 +1,5 @@
 #include "SkyBox.h"
+#include <Object.h>
 
 
 namespace Chimera {
@@ -14,7 +15,7 @@ SkyBox::~SkyBox()
 }
 
 void SkyBox::update(DataMsg *_dataMsg) {
-	
+
 }
 
 }

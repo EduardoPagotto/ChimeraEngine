@@ -8,9 +8,9 @@
 
 #include "VideoDevice.h"
 #include "OvrDevice.h"
+
 #include "Game.h"
 #include "DrawBox.h"
-#include "DrawGrid.h"
 
 #include "LoaderDae.h"
 
@@ -77,6 +77,7 @@ int testeCargaManual() {
 		//Instancia de Video
 		Chimera::Video *video = new Chimera::VideoDevice(1200, 800, "teste");
 		//Chimera::Video *video = new Chimera::OvrDevice("Teste");
+
 		Chimera::Node *pRoot = new Chimera::Node(Chimera::EntityKind::NODE, "cena01", "cona01");
 
 		Chimera::CameraSpherical *pCam = new Chimera::CameraSpherical("Camera01", "Camera01");
@@ -96,8 +97,12 @@ int testeCargaManual() {
 		pEffect->setDiffuse(Chimera::Color(1.0f, 1.0f, 1.0f));
 		pEffect->setSpecular(Chimera::Color(1.0f, 1.0f, 1.0f));
 
+		Chimera::Material *pMaterial = new Chimera::Material("Mat01", "Mat01");
+		pMaterial->addChild(pEffect);
+
 		Chimera::DrawBox *pDraw = new Chimera::DrawBox("caixa01", "caixa01");
 		pDraw->setSizeBox(btVector3(5.0f, 5.0f, 5.0f));
+		pDraw->addChild(pMaterial);
 
 		Chimera::Physics *pPysics = new Chimera::Physics("rigid-body01", "rigid-body01");
 		pPysics->setMass(10.0f);
@@ -108,7 +113,7 @@ int testeCargaManual() {
 		pObj->setPositionRotation(btVector3(0.0f, 0.0f, 0.0f), btVector3(0.0f, 0.0f, 0.0f));
 		pObj->addChild(pDraw);
 		pObj->addChild(pPysics);
-		pObj->addChild(pEffect);
+
 
 		pRoot->addChild(pObj);
 

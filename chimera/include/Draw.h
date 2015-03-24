@@ -3,7 +3,7 @@
 
 #include <LinearMath/btVector3.h>
 
-#include "Node.h"
+#include "Material.h"
 
 namespace Chimera {
 
@@ -16,21 +16,23 @@ namespace Chimera {
 
 	class Draw : public Node {
 	public:
-		Draw(DrawType _type, std::string _id, std::string _name) : Node(EntityKind::DRAW, _id, _name), type(_type) {}
-		Draw(const Draw &_draw) : Node(_draw), type(_draw.type) {}
+		Draw(DrawType _type, std::string _id, std::string _name);
+		Draw(const Draw &_draw);
 
-		virtual ~Draw() {}
+		virtual ~Draw();
 
-		virtual void update(DataMsg *dataMsg) {
-			Node::update(dataMsg);
-		}
+		virtual void update(DataMsg *dataMsg);
 
 		virtual void clone(Node **ppNode) {
 			Node::clone(ppNode);
 		}
 
-		virtual void init() = 0;
-		virtual void render() = 0;
+		void render();
+
+		void init();
+
+        virtual void renderExecute() = 0;
+
 		virtual btVector3 getSizeBox() = 0;
 
 		DrawType getType() const {
@@ -39,9 +41,9 @@ namespace Chimera {
 
 	protected:
 		DrawType type;
-
+        Material *pMaterial;
 	};
 
 }
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

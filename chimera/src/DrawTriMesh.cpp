@@ -12,6 +12,7 @@
 namespace Chimera {
 
 	DrawTriMesh::DrawTriMesh(std::string _id, std::string _name) : Draw(DrawType::MESH, _id, _name) {
+
 	}
 
 	DrawTriMesh::DrawTriMesh(const DrawTriMesh &_cpy) : Draw(_cpy) {
@@ -27,6 +28,7 @@ namespace Chimera {
 	}
 
 	DrawTriMesh::~DrawTriMesh() {
+
 		vList.clear();
 		nList.clear();
 		uvList.clear();
@@ -70,57 +72,7 @@ namespace Chimera {
 		return retorno;
 	}
 
-	void DrawTriMesh::init() {
-
-	}
-
-	void DrawTriMesh::render() {
-
-		//     btVector3 sizeBox(1.0,1.0,1.0);
-		//     
-		//     glBegin(GL_QUADS);          // Face posterior
-		//     glNormal3f(0.0, 0.0, 1.0);  // Normal da face
-		//     glVertex3f(sizeBox.getX(), sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), -sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), -sizeBox.getY(), sizeBox.getZ());
-		//     glEnd();
-		//     glBegin(GL_QUADS);          // Face frontal
-		//     glNormal3f(0.0, 0.0, -1.0);     // Normal da face
-		//     glVertex3f(sizeBox.getX(), sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), -sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), -sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), sizeBox.getY(), -sizeBox.getZ());
-		//     glEnd();
-		//     glBegin(GL_QUADS);          // Face lateral esquerda
-		//     glNormal3f(-1.0, 0.0, 0.0);     // Normal da face
-		//     glVertex3f(-sizeBox.getX(), sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), -sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), -sizeBox.getY(), sizeBox.getZ());
-		//     glEnd();
-		//     glBegin(GL_QUADS);          // Face lateral direita
-		//     glNormal3f(1.0, 0.0, 0.0);  // Normal da face
-		//     glVertex3f(sizeBox.getX(), sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), -sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), -sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), sizeBox.getY(), -sizeBox.getZ());
-		//     glEnd();
-		//     glBegin(GL_QUADS);          // Face superior
-		//     glNormal3f(0.0, 1.0, 0.0);      // Normal da face
-		//     glVertex3f(-sizeBox.getX(), sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), sizeBox.getY(), -sizeBox.getZ());
-		//     glEnd();
-		//     glBegin(GL_QUADS);          // Face inferior
-		//     glNormal3f(0.0, -1.0, 0.0);     // Normal da face
-		//     glVertex3f(-sizeBox.getX(), -sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), -sizeBox.getY(), -sizeBox.getZ());
-		//     glVertex3f(sizeBox.getX(), -sizeBox.getY(), sizeBox.getZ());
-		//     glVertex3f(-sizeBox.getX(), -sizeBox.getY(), sizeBox.getZ());
-		//     glEnd(); 
-
+	void DrawTriMesh::renderExecute() {
 
 		unsigned l_numFaces = vIndex.getSize() / 3;
 		int l_index = 0;
@@ -157,7 +109,8 @@ namespace Chimera {
 	}
 
 	void DrawTriMesh::update(DataMsg *dataMsg) {
-		Node::update(dataMsg);
+
+        Draw::update(dataMsg);
 	}
 
 	int DrawTriMesh::getSource(tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores) {
@@ -285,4 +238,4 @@ namespace Chimera {
 	}
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

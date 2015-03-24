@@ -45,6 +45,7 @@ add_library (Chimera STATIC
 				src/Constraint.cpp
 				src/Texture.cpp
 				src/Effect.cpp
+				src/Draw.cpp
 				src/DrawBox.cpp
 				src/DrawGrid.cpp
 				src/DrawTriMesh.cpp

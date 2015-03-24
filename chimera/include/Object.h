@@ -4,13 +4,8 @@
 #include <LinearMath/btTransform.h>
 #include <LinearMath/btVector3.h>
 
-#include "Physics.h"
-
-#include "Node.h"
 #include "Draw.h"
-#include "Material.h"
 #include "Physics.h"
-
 
 namespace Chimera {
 
@@ -44,8 +39,7 @@ namespace Chimera {
 	private:
 		Physics *pPhysic;
 		Draw *pDraw;
-		Material *pMaterial;
-
+		
 		btTransform transform;
 	};
 

@@ -19,8 +19,9 @@ namespace Chimera {
 
 		virtual void clone(Node **ppNode);
 
-		virtual void init();
-		virtual void render();
+		void init();
+		
+		virtual void renderExecute();
 		virtual btVector3 getSizeBox(void);
 
 	private:

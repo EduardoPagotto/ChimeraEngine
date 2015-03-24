@@ -22,12 +22,7 @@ namespace Chimera {
 		return sizeBox;
 	}
 
-	void DrawGrid::init() {
-		//         if ( pMaterial )
-		//             pMaterial->initTex();   
-	}
-
-	void DrawGrid::render() {
+	void DrawGrid::renderExecute() {
 		btScalar px = sizeBox.getX();
 		btScalar py = sizeBox.getY();
 		btScalar pz = -sizeBox.getZ();
@@ -76,23 +71,23 @@ namespace Chimera {
 	//  #define MAX_LINE 1000
 	//  #define DELTA_LINE 50
 	//  #define STEP_LINE 10
-	// 
+	//
 	//  float maxY = 20;//fmod(_posicao.y,DELTA_LINE);
 	//  float maxZ = 20;//fmod(_posicao.z,DELTA_LINE);
 	//  float maxX = 20;//fmod(_posicao.x,DELTA_LINE);
-	// 
+	//
 	//  Draw::renderizar();
-	//  
+	//
 	//  glColor3ub(225,0,0);
 	//  glBegin(GL_LINES);
 	//  for (float K=-2;K<=2;K++) {
 	//      for (float J=-2;J<=2;J++) {
 	//          glVertex3f(-MAX_LINE,maxY+(DELTA_LINE*K),maxZ+(DELTA_LINE*J));
 	//          glVertex3f(MAX_LINE,maxY+(DELTA_LINE*K),maxZ+(DELTA_LINE*J));
-	// 
+	//
 	//          glVertex3f(maxX+(DELTA_LINE*J),maxY+(DELTA_LINE*K),-MAX_LINE);
 	//          glVertex3f(maxX+(DELTA_LINE*J),maxY+(DELTA_LINE*K),MAX_LINE);
-	// 
+	//
 	//          glVertex3f(maxX+(DELTA_LINE*K),-MAX_LINE,maxZ+(DELTA_LINE*J));
 	//          glVertex3f(maxX+(DELTA_LINE*K),MAX_LINE,maxZ+(DELTA_LINE*J));
 	//      }
@@ -108,11 +103,11 @@ namespace Chimera {
 	//
 	//  //btVector3 l_posicaoTeste(pPosicao);
 	//
-	//  GLfloat mrot[9] = { 0.0f, 0.0f, 0.0f, 
+	//  GLfloat mrot[9] = { 0.0f, 0.0f, 0.0f,
 	//                      0.0f, 0.0f, 0.0f,
 	//                      0.0f, 0.0f, 0.0f};
 	//  GLfloat matrix[16];
-	//  
+	//
 	//  matrix[0] = mrot[0];
 	//  matrix[1] = mrot[1];
 	//  matrix[2] = mrot[2];
@@ -129,7 +124,7 @@ namespace Chimera {
 	//  matrix[12] = _posicao.x;
 	//  matrix[13] = _posicao.y;
 	//  matrix[14] = _posicao.z;
-	//  
+	//
 	//  matrix[15] = 1;
 	//
 	//  glMultMatrixf (matrix);
@@ -137,4 +132,4 @@ namespace Chimera {
 
 }
 
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

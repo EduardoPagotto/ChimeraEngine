@@ -82,7 +82,7 @@ namespace Chimera {
 	class DrawTriMesh : public Draw {
 	public:
 		friend class Loader;
-		
+
 
 		DrawTriMesh(std::string _id, std::string _name);
 		DrawTriMesh(const DrawTriMesh &_cpy);
@@ -92,8 +92,7 @@ namespace Chimera {
 
 		virtual void clone(Node **ppNode);
 
-		virtual void init();
-		virtual void render();
+        virtual void renderExecute();
 		virtual btVector3 getSizeBox();
 
 		void loadCollada(tinyxml2::XMLElement* _nNode);
@@ -110,9 +109,10 @@ namespace Chimera {
 
 		ListPtr<int> nIndex;
 		ListPtr<int> tIndex;
+
 	};
 
 }
 
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

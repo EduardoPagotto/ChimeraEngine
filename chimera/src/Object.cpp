@@ -1,4 +1,3 @@
-#include "Object.h"
 
 #ifdef WIN32
 #include "windows.h"
@@ -6,13 +5,14 @@
 
 #include <GL/gl.h>
 
+#include "Object.h"
+
 namespace Chimera {
 
 	Object::Object(std::string _id, std::string _name) : Node(EntityKind::OBJECT, _id, _name) {
 
 		pPhysic = nullptr;
 		pDraw = nullptr;
-		pMaterial = nullptr;
 
 		transform.setIdentity();
 
@@ -22,7 +22,6 @@ namespace Chimera {
 
 		pPhysic = _object.pPhysic;
 		pDraw = _object.pDraw;
-		pMaterial = _object.pMaterial;
 
 		transform = _object.transform;
 
@@ -44,12 +43,6 @@ namespace Chimera {
 	}
 
 	void Object::init() {
-
-		pMaterial = (Material*)findChildByKind(EntityKind::MATERIAL, 0);
-		if (pMaterial == nullptr) {
-			pMaterial = new Material(getId() + "_Material_defaultCreate", getName() + "_Material_default_create");
-			pMaterial->createDefaultEffect();
-		}
 
 		pDraw = (Draw*)findChildByKind(EntityKind::DRAW, 0);
 
@@ -73,18 +66,6 @@ namespace Chimera {
 
 	}
 
-	void Object::render() {
-
-		pMaterial->begin();
-
-		if (pDraw != nullptr)
-			pDraw->render();
-
-        pMaterial->end();
-
-
-	}
-
 	void Object::clone(Node **ppNode) {
 		*ppNode = new Object(*this);
 		Node::clone(ppNode);
@@ -100,8 +81,7 @@ namespace Chimera {
 			//inicializa objeto local
 			init();
 
-		}
-		if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
+		} else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
 
 			glPushMatrix();
 
@@ -110,13 +90,14 @@ namespace Chimera {
 				pPhysic->ajusteMatrix(pSource->pPhysic);
 			}
 
-			render();
+			if (pDraw != nullptr)
+                pDraw->render();
 
 			Node::update(_dataMsg);
 
 			glPopMatrix();
-		}
-		if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
+
+		} else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
 
 			_dataMsg->setDone(true);
 

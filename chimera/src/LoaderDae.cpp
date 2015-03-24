@@ -286,7 +286,7 @@ namespace ChimeraLoader {
 
 						tinyxml2::XMLElement* l_nProximoFilho = l_nTecnicCommon->FirstChildElement();
 						if (l_nProximoFilho != nullptr) {
-							carregaNode(pObj, l_nProximoFilho, nullptr, nullptr, nullptr);
+							carregaNode(pDrawTriMesh, l_nProximoFilho, nullptr, nullptr, nullptr);
 						}
 						else {
 							std::cout << "technique_common sem filho(bind_material missing) " << std::endl;

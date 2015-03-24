@@ -137,13 +137,15 @@ namespace Chimera {
 	void ParticleEmitter::render() {
 
 		// Select Our Texture
-		pTexture->render();
+		pTexture->begin();
 
 		for (unsigned loop = 0; loop < particles.size(); loop++)
 		{
 			Particle *pParticle = particles[loop];
 			pParticle->render();
 		}
+
+		pTexture->end();
 
 	}
 

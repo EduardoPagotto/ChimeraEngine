@@ -23,7 +23,7 @@ namespace Chimera {
 
 		void init();
 
-		void render();
+		void apply();
 
 		Color getAmbient() const {
 			return ambient;

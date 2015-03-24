@@ -75,12 +75,13 @@ namespace Chimera {
 
 	void Object::render() {
 
-		pMaterial->render();
+		pMaterial->begin();
 
 		if (pDraw != nullptr)
 			pDraw->render();
 
-		glBindTexture(GL_TEXTURE_2D, 0);
+        pMaterial->end();
+
 
 	}
 

@@ -31,7 +31,10 @@ namespace Chimera {
 
 		virtual void clone(Node **ppNode);
 
-		void render();
+		void begin();
+
+		void end();
+
 		void init();
 
 		SDL_Surface *loadImage();

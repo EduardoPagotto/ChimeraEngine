@@ -30,7 +30,9 @@ namespace Chimera {
 
 		void createDefaultEffect();
 
-		void render();
+		void begin();
+
+        void end();
 
 	private:
 
@@ -42,4 +44,4 @@ namespace Chimera {
 }
 
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

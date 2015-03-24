@@ -33,7 +33,7 @@ namespace Chimera {
 
 	}
 
-	void Effect::render() {
+	void Effect::apply() {
 
 		if (glIsEnabled(GL_COLOR_MATERIAL) == GL_TRUE) {
 			glMaterialfv(GL_FRONT, GL_AMBIENT, ambient.ptr());
@@ -148,4 +148,4 @@ namespace Chimera {
 	}
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

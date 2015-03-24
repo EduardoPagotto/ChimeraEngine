@@ -34,6 +34,13 @@ namespace Chimera {
 		}
 	}
 
+    void Material::end()
+    {
+        if (pTextura != nullptr) {
+            pTextura->end();
+        }
+    }
+
 	void Material::createDefaultEffect() {
 
 		pEffect = new Effect("effect_interno", "effect_interno");
@@ -46,14 +53,14 @@ namespace Chimera {
 		//Node::addChild(pEffect);//preciso ??
 	}
 
-	void Material::render() {
+	void Material::begin() {
 
-		pEffect->render();
-		
+		pEffect->apply();
+
 		if (pTextura != nullptr) {
-			pTextura->render();
+			pTextura->begin();
 		}
 	}
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

@@ -16,6 +16,8 @@ SkyBox::~SkyBox()
 
 void SkyBox::update(DataMsg *_dataMsg) {
 
+	Node::update(_dataMsg);
+	
 }
 
 }

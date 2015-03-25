@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-	class SkyBox : Node  {
+	class SkyBox : public Node  {
 
 	public:
 		SkyBox(std::string _id, std::string _name);

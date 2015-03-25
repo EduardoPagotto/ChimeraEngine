@@ -10,6 +10,7 @@
 #include "Material.h"
 #include "Effect.h"
 #include "Texture.h"
+#include "SkyBox.h"
 #include "Singleton.h"
 
 namespace ChimeraLoader {
@@ -272,12 +273,51 @@ namespace ChimeraLoader {
 				Chimera::DrawTriMesh *pDrawTriMesh = new Chimera::DrawTriMesh(Chimera::retornaAtributo("id", l_nNodeSourceData), Chimera::retornaAtributo("name", l_nNodeSourceData));
 				pDrawTriMesh->loadCollada(l_nNodeSourceData);
 
-				Chimera::Object *pObj = new Chimera::Object(_id, _name);
-				pObj->setTransform(*l_pTransform);
-				pObj->addChild(pDrawTriMesh);
-				_pNodePai->addChild(pObj);
+				Chimera::SkyBox *pSky = nullptr;
+				//TODO OTIMIZAR
+				tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement("extra");
+				if (l_nExtra != nullptr) {
+						tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement("technique");
+						if (l_nTechnique != nullptr) {
 
-				pLastNodeDone = pObj;                                   // FIXME modificar para pegar extra do Collada
+							const char* l_profile = l_nTechnique->Attribute("profile");
+							if ((l_profile !=  nullptr) && (strcmp(l_profile, (const char*)"chimera") == 0)) {
+
+								tinyxml2::XMLElement* l_nParam = l_nTechnique->FirstChildElement("param");
+								if (l_nParam !=  nullptr) {
+
+									const char* l_name = l_nParam->Attribute("name");
+									const char* l_type = l_nParam->Attribute("type");
+									const char* l_valor = l_nParam->GetText();
+
+									if ((l_name != nullptr) && (strcmp(l_name, (const char*)"TypeNode") == 0)) {
+
+										if ((l_type != nullptr) && (strcmp(l_type, (const char*)"string") == 0)) {
+
+											if ((l_valor != nullptr) && (strcmp(l_valor, (const char*)"SKYBOX") == 0)) {
+
+												pSky = new Chimera::SkyBox(_id, _name);
+												pSky->addChild(pDrawTriMesh);
+												_pNodePai->addChild(pSky);
+												pLastNodeDone = pSky;
+
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+				if (pSky ==  nullptr) {
+					Chimera::Object *pObj = new Chimera::Object(_id, _name);
+					pObj->setTransform(*l_pTransform);
+					pObj->addChild(pDrawTriMesh);
+					_pNodePai->addChild(pObj);
+
+					pLastNodeDone = pObj;
+				}
+
 
 				tinyxml2::XMLElement* l_nBindMat = _nNode->FirstChildElement("bind_material");
 				if (l_nBindMat != nullptr) {

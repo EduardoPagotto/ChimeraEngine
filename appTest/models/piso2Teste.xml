@@ -505,18 +505,18 @@
       </node>
       <node id="Plane" name="Plane" type="NODE">
         <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-
-    	 <extra>
-    	   <technique profile="chimera">
-	     <param name="TypeNode" sid="" type="string">SKYBOX</param>
-    	     <dynamic_attributes>
-    	       <type_note_1 short_name="TypeNode" type="string">SKYBOX</weapon_name>
-    	       <type_node_2 short_name="vazio" type="string">ESPACO</weapon_damage>
-    	     </dynamic_attributes>
-    	   </technique>
-    	 </extra>
-
         <instance_geometry url="#Plane-mesh">
+
+         <extra>
+                <technique profile="chimera">
+                        <param name="TypeNode" sid="" type="string">SKYBOX</param>
+                        <dynamic_attributes>
+                                <type_note_1 short_name="TypeNode" type="string">SKYBOX</type_note_1>
+                                <type_node_2 short_name="vazio" type="string">ESPACO</type_node_2>
+                        </dynamic_attributes>
+                </technique>
+         </extra>
+
           <bind_material>
             <technique_common>
               <instance_material symbol="Material_Plano-material" target="#Material_Plano-material">

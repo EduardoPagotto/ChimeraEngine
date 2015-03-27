@@ -40,6 +40,10 @@ namespace Chimera {
 			pObjeto = _pObject;
 		}
 
+		void skyBoxAtivo(SkyBox *_pSkyBox) {
+            pSkyBox = _pSkyBox;
+        }
+
 		void draw3d();
 
 	private:
@@ -53,6 +57,7 @@ namespace Chimera {
 		Node *pRoot;
 		Camera *pCameraAtiva;
 		Object *pObjeto;
+        SkyBox *pSkyBox;
 
 		std::vector<Camera*> m_vCamera;
 		std::vector<Light*> m_vLight;

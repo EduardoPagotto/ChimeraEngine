@@ -11,6 +11,9 @@ namespace Chimera {
 		SkyBox(std::string _id, std::string _name);
 		virtual ~SkyBox();
 		virtual void update(DataMsg *_dataMsg);
+
+		void render();
+
   	private:
 		Draw *pDraw;
 	};

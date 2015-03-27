@@ -148,6 +148,11 @@ void Game::start() {
 	// FIXME: Quando modificar o dae remover esta entrada
 	pObj->addChild(pCam);
 
+
+	SkyBox* pSkyBox = (SkyBox*)pSceneMng->getNode(EntityKind::SKYBOX, 0);
+	pSceneMng->skyBoxAtivo(pSkyBox);
+
+
 	pVideo->setLight(true);
 	pVideo->setMaterial(true);
 

@@ -164,20 +164,6 @@ namespace Chimera {
 
 			}
 
-			///INICIO TESTE
-            // Read joystick 0 analog axes.
-            //double roll = Joy.Axis( 0, 0, deadzone );
-            //double pitch = Joy.Axis( 0, 1, deadzone );
-            //double yaw = Joy.Axis( 0, 3, deadzone );
-            //double throttle = Joy.AxisScaled( 0, 2, 1., 0., 0., deadzone );
-
-			//if (throttle != 0.0)
-			//	std::cout << "Valor: " << throttle << std::endl;
-
-            // Read joystick 0 buttons held down.
-           // bool firing = Joy.ButtonDown( 0, 0 );
-            ///FIM TESTE
-
 			//if (l_isActive==true) {
 			//Se nao houver foco na tela pule o render
 			processaGame();

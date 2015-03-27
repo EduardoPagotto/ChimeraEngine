@@ -7,6 +7,7 @@
 #include "Object.h"
 #include "Light.h"
 #include "ParticleEmitter.h"
+#include "SkyBox.h"
 
 namespace Chimera {
 
@@ -22,6 +23,7 @@ namespace Chimera {
 
 		void addChildToScene(Node *_pNode);
 
+        Node *getNode(EntityKind _type, const std::string &_nome);
 		Node *getNode(EntityKind _type, unsigned index);
 
 		void update(DataMsg *dataMsg);
@@ -49,7 +51,6 @@ namespace Chimera {
 		bool hasMaterial;
 
 		Node *pRoot;
-
 		Camera *pCameraAtiva;
 		Object *pObjeto;
 
@@ -57,6 +58,7 @@ namespace Chimera {
 		std::vector<Light*> m_vLight;
 		std::vector<Object*> m_vObject;
         std::vector<ParticleEmitter*> m_vParticle;
+        std::vector<SkyBox*> m_vSkyBox;
 
 	};
 

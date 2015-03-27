@@ -134,8 +134,6 @@ void Game::start() {
 
 	using namespace Chimera;
 
-	//physicWorld->setGravity(btVector3(0.0f, 0.0f, 0.0f));
-
 	//instancia e coloca na cena uma nova camera orbital
 	Camera* pCam = (Camera*)pSceneMng->getNode(EntityKind::CAMERA, 0);
 	pOrbitalCam = new CameraSpherical(*pCam);
@@ -145,13 +143,10 @@ void Game::start() {
 	pSceneMng->addChildToScene(pOrbitalCam);
 
 	//Ajusta objeto primario
-	//pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT, 0);//Cube.001
-	pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Zoltan");
-	//pObj = (Object*)pSceneMng->getRoot()->findNodeById(EntityKind::OBJECT, "Icosphere02"); // //cubo01
+	pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,"Zoltan" );
 
 	// FIXME: Quando modificar o dae remover esta entrada
 	pObj->addChild(pCam);
-
 
 	pVideo->setLight(true);
 	pVideo->setMaterial(true);

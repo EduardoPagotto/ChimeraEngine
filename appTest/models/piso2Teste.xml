@@ -605,7 +605,6 @@
         <static_friction>0</static_friction>
       </technique_common>
     </physics_material>
-    
   </library_physics_materials>
   
   <library_physics_models>
@@ -646,7 +645,6 @@
           </shape>
         </technique_common>
       </rigid_body>
-
       <rigid_body name="ico01-RigidBody" sid="ico01-RigidBody">
         <technique_common>
           <dynamic>false</dynamic>
@@ -659,7 +657,6 @@
           </shape>
         </technique_common>
       </rigid_body>
-
       <rigid_body name="ico02-RigidBody" sid="ico02-RigidBody">
         <technique_common>
           <dynamic>false</dynamic>
@@ -672,20 +669,17 @@
           </shape>
         </technique_common>
       </rigid_body>
-      
     </physics_model>
   </library_physics_models>
   
   <library_physics_scenes>
     <physics_scene id="Scene-Physics" name="Scene-Physics">
       <instance_physics_model url="#Scene-PhysicsModel">
-        
         <instance_rigid_body body="zoltan-RigidBody" target="#Zoltan"/>
-        <instance_rigid_body body="plane-RigidBody" target="#Plane"/>
+
         <instance_rigid_body body="cubo-RigidBody" target="#cubo01"/>
         <instance_rigid_body body="ico01-RigidBody" target="#Icosphere01"/>
         <instance_rigid_body body="ico02-RigidBody" target="#Icosphere02"/>
-        
       </instance_physics_model>
       <technique_common>
         <gravity>0 0 0</gravity>
@@ -694,9 +688,9 @@
     </physics_scene>
   </library_physics_scenes>
 
-
   <scene>
     <instance_visual_scene url="#Scene"/>
     <instance_physics_scene url="#Scene-Physics"/>
   </scene>
+  
 </COLLADA>

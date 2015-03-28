@@ -124,7 +124,18 @@ namespace Chimera {
 			loadArrayBtScalar(l_val, l_arrayF);
 
 			setDiffuse(Color(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f));
+			return;
+		} 
 
+		l_nPoint = _nNode->FirstChildElement("technique_common")->FirstChildElement("directional");
+		if (l_nPoint != nullptr) {
+
+			std::vector<btScalar> l_arrayF;
+			const char *l_val = l_nPoint->FirstChildElement("color")->GetText();
+			loadArrayBtScalar(l_val, l_arrayF);
+
+			setDiffuse(Color(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f));
+			return;
 		}
 
 	}

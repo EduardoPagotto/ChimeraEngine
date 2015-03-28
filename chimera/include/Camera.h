@@ -33,6 +33,8 @@ namespace Chimera {
 
 		virtual void clone(Node **ppNode);
 
+		//virtual void trackBall(int _mx, int _my, int _mz){}
+
 		void exec();
 
 		void setType(CameraType _type) {

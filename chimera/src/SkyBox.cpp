@@ -1,6 +1,12 @@
 #include "SkyBox.h"
 #include <Object.h>
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 namespace Chimera {
 
@@ -34,8 +40,23 @@ void SkyBox::update(DataMsg *_dataMsg) {
 
 void SkyBox::render()
 {
-	if (pDraw != nullptr)
+
+	if (pDraw != nullptr) {
+
+		glPushAttrib(GL_ENABLE_BIT);
+		glPushAttrib(GL_CURRENT_BIT);
+
+		// Enable smooth shading
+		glShadeModel(GL_SMOOTH);
+		glDisable(GL_LIGHTING);
+
 		pDraw->render();
+
+		glPopAttrib();
+		glPopAttrib();
+
+	}
+
 }
 
 

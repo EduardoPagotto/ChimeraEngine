@@ -4,6 +4,7 @@
 #include "ChimeraUtils.h"
 #include "ExceptionChimera.h"
 #include "Camera.h"
+#include "CameraSpherical.h"
 #include "Light.h"
 #include "Object.h"
 #include "DrawTriMesh.h"
@@ -243,8 +244,50 @@ namespace ChimeraLoader {
 			else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
 				Chimera::loadNodeLib(root, (const char*)&l_url[1], "library_cameras", "camera", &l_nNodeSourceData);
+				Chimera::Camera *pCamera = nullptr;
 
-				Chimera::Camera *pCamera = new Chimera::Camera(Chimera::CameraType::Base, _id, _name);
+				tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement("extra");
+				if (l_nExtra != nullptr) {
+					tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement("technique");
+					if (l_nTechnique != nullptr) {
+
+						const char* l_profile = l_nTechnique->Attribute("profile");
+						if ((l_profile != nullptr) && (strcmp(l_profile, (const char*)"chimera") == 0)) {
+
+							tinyxml2::XMLElement* l_nOrbital = l_nTechnique->FirstChildElement("orbital");
+							if (l_nOrbital != nullptr){
+							
+								const char* min = nullptr;
+								const char* max = nullptr;
+
+								tinyxml2::XMLElement* l_param = l_nOrbital->FirstChildElement();
+								while (l_param != nullptr) {
+
+									if (strcmp(l_param->Value(), (const char*)"min") == 0){
+										min = l_param->GetText();
+									}
+									else if (strcmp(l_param->Value(), (const char*)"max") == 0){
+										max = l_param->GetText();
+									}
+
+									l_param = l_param->NextSiblingElement();
+								}
+
+								if ((min != nullptr) && (max != nullptr)) {
+									Chimera::CameraSpherical *pCameraNew = new Chimera::CameraSpherical(_id, _name);
+									pCameraNew->setDistanciaMaxima(atof(max));
+									pCameraNew->setDistanciaMinima(atof(min));
+									pCamera = pCameraNew;
+								}
+
+							}
+						}
+					}
+				}
+
+				if (pCamera == nullptr)
+					pCamera = new Chimera::Camera(Chimera::CameraType::Base, _id, _name);
+
 				pCamera->loadCollada(l_nNodeSourceData);
 				pCamera->setTransform(*l_pTransform);
 

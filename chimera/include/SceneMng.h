@@ -47,6 +47,9 @@ namespace Chimera {
 		void draw3d();
 
 	private:
+
+        void init();
+
 		void execLight();
 		void parseEntity(Node *_pNode);
 		void addEntityToScene(Node *_pNode);

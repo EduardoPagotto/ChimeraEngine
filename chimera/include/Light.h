@@ -64,9 +64,16 @@ namespace Chimera {
 			transform = _trans;
 		}
 
+		btVector3 getPosition() const {
+            return position;
+        }
+
+
 		void setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation);
 
 		void loadCollada(tinyxml2::XMLElement* _nNode);
+
+
 
 	private:
 

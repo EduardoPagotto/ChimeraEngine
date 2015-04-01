@@ -34,6 +34,8 @@ private:
 	Chimera::CameraSpherical *pOrbitalCam;
 	Chimera::Object *pObj;
 	std::string sPosicaoObj;
+
+	Chimera::SkyBox* pSkyBox;
 };
 
 #endif

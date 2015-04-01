@@ -143,7 +143,7 @@ void Game::start() {
 	// FIXME: Quando modificar o dae remover esta entrada
 	//pObj->addChild(pOrbitalCam);
 
-	SkyBox* pSkyBox = (SkyBox*)pSceneMng->getNode(EntityKind::SKYBOX, 0);
+	pSkyBox = (SkyBox*)pSceneMng->getNode(EntityKind::SKYBOX, 0);
 	pSceneMng->skyBoxAtivo(pSkyBox);
 
 	pVideo->setLight(true);
@@ -172,11 +172,31 @@ void Game::render() {
 	if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
 		indiceDesenho = 2;
 
+
+
 	for (int eye = 0; eye < indiceDesenho; eye++) {
+
+
+		pSceneMng->RenderSceneA();
 
 		pVideo->executeViewPerspective(pOrbitalCam, eye);
 
-		pSceneMng->draw3d();
+		pOrbitalCam->exec();
+
+		if (pSkyBox != nullptr)
+			pSkyBox->render();
+
+// 	 		Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
+// 	 		update(&dataMsg);
+//
+// 	         for (Light *pLight : m_vLight) {
+// 	             pLight->exec();
+// 	         }
+
+	 		//execLight();
+
+		pSceneMng->ApplyShadowMap();
+
 
 		if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
 			pVideo->updateHud(pHUD, 0);

@@ -44,7 +44,10 @@ namespace Chimera {
             pSkyBox = _pSkyBox;
         }
 
-		void draw3d();
+		//void draw3d();
+
+        void RenderSceneA();
+        void ApplyShadowMap();
 
 	private:
 

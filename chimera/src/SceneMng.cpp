@@ -1,137 +1,5 @@
 #include "SceneMng.h"
 
-// These store our width and height for the shadow texture.  The higher the
-// texture size the better quality shadow.  Must be power of two for most video cards.
-#define SHADOW_WIDTH 512
-#define SHADOW_HEIGHT 512
-
-// This is the index into the g_Texture array that will hold our depth texture
-#define SHADOW_ID   0
-
-// The max textures we will use in our array
-#define MAX_TEXTURES 1000
-
-// The texture array where we store our image data
-unsigned int g_Texture[MAX_TEXTURES];
-
-// These arrays will store our 4x4 matrices for the light's
-// project and modelview matrix.  These will then be loaded
-// into the texture matrix for the shadow mapping.
-float g_mProjection[16] = {0};
-float g_mModelView[16] = {0};
-
-// We set the light's view position at the origin
-float g_LightView[3] = {0.0f, 0.0f, 0.0f};
-
-///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////   This function positions our view from the light for shadow mapping
-/////
-///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-
-void StoreLightMatrices(const btVector3 &posicao) //float g_LightPosition[3])
-{
-    // In this function we just set our camera position to the light's position
-    // and then store the current modelview matrix.  Lastly, we set our light's
-    // frustum (perspective) to set our depth precision.  Ideally, the smaller
-    // the frustum is, the more precision our depth map is, which gives a better
-    // quality shadow.  Notice that we change the perspective to a 60 degree field
-    // of view.  This allows us to view more of the world from our light's position.
-    // That way we can have closer near and far planes, giving better depth values.
-
-    // Reset our current light matrices
-    memset(g_mModelView, 0, sizeof(float)*16);
-    memset(g_mProjection, 0, sizeof(float)*16);
-
-    // Let's push on a new matrix so we don't change the rest of the world
-    glPushMatrix();
-
-    // Push on a new matrix to keep our view changes isolated
-    glPushMatrix();
-
-    // Reset the current modelview matrix
-    glLoadIdentity();
-
-    // This is where we set the light's position and view.
-    gluLookAt(posicao.getX(),  posicao.getY(), posicao.getZ(),
-              g_LightView[0],      g_LightView[1],      g_LightView[2],     0, 1, 0);
-
-    // Now that we have the light's view, let's save the current modelview matrix.
-    glGetFloatv(GL_MODELVIEW_MATRIX, g_mModelView);
-
-    // Now pop off the current light view's matrix
-    glPopMatrix();
-
-    // We could go to prospective mode and change the perspective,
-    // then have to restore our camera's perspective and go back to modelview
-    // mode.  However, if we just start with a new modelview matrix, then change
-    // the perspective and grab the current matrix we save some steps and restorations.
-
-    // Reset the current matrix
-    glLoadIdentity();
-
-    // Change our light's perspective to 60 degrees FOV, aspect ratio 1, with a near
-    // and far plane of 0.5 and 25.0.  The far plane is only 25 because our world isn't
-    // larger than 25.  Depending on how large your world is you will need to increase
-    // the far plane and/or add additional lights.
-    gluPerspective(60.0f, 1.0f, 0.5f, 25.0f);
-
-    // Even though we want the perspective matrix, we can still grab the
-    // current modelview matrix and use that as our projection matrix because
-    // we used gluPerspective() on a new matrix, which is the projection matrix.
-    glGetFloatv(GL_MODELVIEW_MATRIX, g_mProjection);
-
-    // Go back to the original matrix
-    glPopMatrix();
-}
-
-/////////////////////////////// CREATE RENDER TEXTURE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////   This function creates a blank texture to render to
-/////
-/////////////////////////////// CREATE RENDER TEXTURE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-
-void CreateRenderTexture(unsigned int textureArray[], int sizeX, int sizeY, int channels, int type, int textureID)
-{
-    // This function is a modified version of what we have used in previous tutorials.
-    // We just allowed the option of doing a depth texture.  When doing a depth
-    // texture we need to pass in GL_DEPTH_COMPONENT for the type AND the channels.
-    // To check for this we just see if the channels are greater than 4.  If so, we
-    // allocate a texture for just one bit per pixel, then pass in the channel value
-    // for glTexImage2D().
-
-    // Create a pointer to store the blank image data
-    unsigned int *pTexture = NULL;
-
-    // Store the current channels to be allocated by default
-    int channelsTrue = channels;
-
-    // If the channels are greater than 4 there must be a special flag like
-    // GL_DEPTH_COMPONENT, so make sure we only allocate 1 bit per pixel.
-    if(channels > 4)
-        channelsTrue = 1;
-
-    // Allocate and init memory for the image array and point to it from pTexture
-    pTexture = new unsigned int [sizeX * sizeY * channelsTrue];
-    memset(pTexture, 0, sizeX * sizeY * channelsTrue * sizeof(unsigned int));
-
-    // Register the texture with OpenGL and bind it to the texture ID
-    glGenTextures(1, &textureArray[textureID]);
-    glBindTexture(GL_TEXTURE_2D, textureArray[textureID]);
-
-    // Create the texture and store it on the video card
-    glTexImage2D(GL_TEXTURE_2D, 0, channels, sizeX, sizeY, 0, type, GL_UNSIGNED_INT, pTexture);
-
-    // Set the texture quality
-    glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-    // Since we stored the texture space with OpenGL, we can delete the image data
-    delete [] pTexture;
-}
-
 namespace Chimera {
 
 	SceneMng::SceneMng(Node *_pRoot)  {
@@ -140,6 +8,11 @@ namespace Chimera {
 		parseEntity(pRoot);
 		pCameraAtiva = nullptr;
         pObjeto = nullptr;
+
+        memset(g_mProjection,0, sizeof(float)*16);
+        memset(g_mModelView,0,sizeof(float)*16);
+        g_LightView.setZero();
+
 	}
 
 	SceneMng::~SceneMng() {
@@ -273,6 +146,39 @@ namespace Chimera {
 		}
 	}
 
+	void SceneMng::update(DataMsg *dataMsg) {
+
+        if (dataMsg->getKindOp() == KindOp::START) {
+
+            //inicialize primeiro os filhos para garantir textura e efeito em material
+            pRoot->update(dataMsg);
+
+            //inicializa objeto local
+            init();
+
+        } else {
+            pRoot->update(dataMsg);
+        }
+
+    }
+
+    //  void SceneMng::draw3d() {
+    //
+    //      pCameraAtiva->exec();
+    //
+    //      if (pSkyBox != nullptr)
+    //          pSkyBox->render();
+    //
+    //      Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
+    //      update(&dataMsg);
+    //
+    //         for (Light *pLight : m_vLight) {
+    //             pLight->exec();
+    //         }
+    //
+    //      //execLight();
+    //
+    //  }
 
     void SceneMng::init()
     {
@@ -309,6 +215,116 @@ namespace Chimera {
         // We must set the channels and type for the texture as GL_DEPTH_COMPONENT.
         CreateRenderTexture(g_Texture, SHADOW_WIDTH, SHADOW_HEIGHT, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, SHADOW_ID);
 
+    }
+
+    ///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+    /////
+    /////   This function positions our view from the light for shadow mapping
+    /////
+    ///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+
+    void SceneMng::StoreLightMatrices(const btVector3 &posicao) //float g_LightPosition[3])
+    {
+        // In this function we just set our camera position to the light's position
+        // and then store the current modelview matrix.  Lastly, we set our light's
+        // frustum (perspective) to set our depth precision.  Ideally, the smaller
+        // the frustum is, the more precision our depth map is, which gives a better
+        // quality shadow.  Notice that we change the perspective to a 60 degree field
+        // of view.  This allows us to view more of the world from our light's position.
+        // That way we can have closer near and far planes, giving better depth values.
+
+        // Reset our current light matrices
+        memset(g_mModelView, 0, sizeof(float)*16);
+        memset(g_mProjection, 0, sizeof(float)*16);
+
+        // Let's push on a new matrix so we don't change the rest of the world
+        glPushMatrix();
+
+        // Push on a new matrix to keep our view changes isolated
+        glPushMatrix();
+
+        // Reset the current modelview matrix
+        glLoadIdentity();
+
+        // This is where we set the light's position and view.
+        gluLookAt(posicao.getX(), posicao.getY(), posicao.getZ(),
+                  g_LightView.getX(), g_LightView.getY(), g_LightView.getZ(),
+                  0, 1, 0);
+
+        // Now that we have the light's view, let's save the current modelview matrix.
+        glGetFloatv(GL_MODELVIEW_MATRIX, g_mModelView);
+
+        // Now pop off the current light view's matrix
+        glPopMatrix();
+
+        // We could go to prospective mode and change the perspective,
+        // then have to restore our camera's perspective and go back to modelview
+        // mode.  However, if we just start with a new modelview matrix, then change
+        // the perspective and grab the current matrix we save some steps and restorations.
+
+        // Reset the current matrix
+        glLoadIdentity();
+
+        // Change our light's perspective to 60 degrees FOV, aspect ratio 1, with a near
+        // and far plane of 0.5 and 25.0.  The far plane is only 25 because our world isn't
+        // larger than 25.  Depending on how large your world is you will need to increase
+        // the far plane and/or add additional lights.
+        gluPerspective(60.0f, 1.0f, 0.5f, 25.0f);
+
+        // Even though we want the perspective matrix, we can still grab the
+        // current modelview matrix and use that as our projection matrix because
+        // we used gluPerspective() on a new matrix, which is the projection matrix.
+        glGetFloatv(GL_MODELVIEW_MATRIX, g_mProjection);
+
+        // Go back to the original matrix
+        glPopMatrix();
+    }
+
+    /////////////////////////////// CREATE RENDER TEXTURE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+    /////
+    /////   This function creates a blank texture to render to
+    /////
+    /////////////////////////////// CREATE RENDER TEXTURE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+
+    void SceneMng::CreateRenderTexture(unsigned int textureArray[], int sizeX, int sizeY, int channels, int type, int textureID)
+    {
+        // This function is a modified version of what we have used in previous tutorials.
+        // We just allowed the option of doing a depth texture.  When doing a depth
+        // texture we need to pass in GL_DEPTH_COMPONENT for the type AND the channels.
+        // To check for this we just see if the channels are greater than 4.  If so, we
+        // allocate a texture for just one bit per pixel, then pass in the channel value
+        // for glTexImage2D().
+
+        // Create a pointer to store the blank image data
+        unsigned int *pTexture = NULL;
+
+        // Store the current channels to be allocated by default
+        int channelsTrue = channels;
+
+        // If the channels are greater than 4 there must be a special flag like
+        // GL_DEPTH_COMPONENT, so make sure we only allocate 1 bit per pixel.
+        if(channels > 4)
+            channelsTrue = 1;
+
+        // Allocate and init memory for the image array and point to it from pTexture
+        pTexture = new unsigned int [sizeX * sizeY * channelsTrue];
+        memset(pTexture, 0, sizeX * sizeY * channelsTrue * sizeof(unsigned int));
+
+        // Register the texture with OpenGL and bind it to the texture ID
+        glGenTextures(1, &textureArray[textureID]);
+        glBindTexture(GL_TEXTURE_2D, textureArray[textureID]);
+
+        // Create the texture and store it on the video card
+        glTexImage2D(GL_TEXTURE_2D, 0, channels, sizeX, sizeY, 0, type, GL_UNSIGNED_INT, pTexture);
+
+        // Set the texture quality
+        glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+        // Since we stored the texture space with OpenGL, we can delete the image data
+        delete [] pTexture;
     }
 
     //////////////////////////////// APPLY SHADOW MAP \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
@@ -535,40 +551,5 @@ namespace Chimera {
         glLoadIdentity();
     }
 
-
-
-	void SceneMng::update(DataMsg *dataMsg) {
-
-        if (dataMsg->getKindOp() == KindOp::START) {
-
-            //inicialize primeiro os filhos para garantir textura e efeito em material
-            pRoot->update(dataMsg);
-
-            //inicializa objeto local
-            init();
-
-        } else {
-            pRoot->update(dataMsg);
-        }
-
-	}
-
-// 	void SceneMng::draw3d() {
-//
-// 		pCameraAtiva->exec();
-//
-// 		if (pSkyBox != nullptr)
-// 			pSkyBox->render();
-//
-// 		Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
-// 		update(&dataMsg);
-//
-//         for (Light *pLight : m_vLight) {
-//             pLight->exec();
-//         }
-//
-// 		//execLight();
-//
-// 	}
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

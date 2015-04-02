@@ -9,6 +9,17 @@
 #include "ParticleEmitter.h"
 #include "SkyBox.h"
 
+// These store our width and height for the shadow texture.  The higher the
+// texture size the better quality shadow.  Must be power of two for most video cards.
+#define SHADOW_WIDTH 512
+#define SHADOW_HEIGHT 512
+
+// This is the index into the g_Texture array that will hold our depth texture
+#define SHADOW_ID   0
+
+// The max textures we will use in our array
+#define MAX_TEXTURES 1000
+
 namespace Chimera {
 
 	/**
@@ -49,11 +60,16 @@ namespace Chimera {
         void RenderSceneA();
         void ApplyShadowMap();
 
+        void execLight();
+
 	private:
+
+        void StoreLightMatrices(const btVector3 &posicao);
+        void CreateRenderTexture(unsigned int textureArray[], int sizeX, int sizeY, int channels, int type, int textureID);
 
         void init();
 
-		void execLight();
+
 		void parseEntity(Node *_pNode);
 		void addEntityToScene(Node *_pNode);
 
@@ -70,6 +86,19 @@ namespace Chimera {
 		std::vector<Object*> m_vObject;
         std::vector<ParticleEmitter*> m_vParticle;
         std::vector<SkyBox*> m_vSkyBox;
+
+
+        // The texture array where we store our image data
+        unsigned int g_Texture[MAX_TEXTURES];
+
+        // These arrays will store our 4x4 matrices for the light's
+        // project and modelview matrix.  These will then be loaded
+        // into the texture matrix for the shadow mapping.
+        float g_mProjection[16];
+        float g_mModelView[16];
+
+        // We set the light's view position at the origin
+        btVector3 g_LightView;
 
 	};
 

@@ -172,12 +172,9 @@ void Game::render() {
 	if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
 		indiceDesenho = 2;
 
-
-
 	for (int eye = 0; eye < indiceDesenho; eye++) {
 
-
-		pSceneMng->RenderSceneA();
+		//pSceneMng->RenderSceneA();
 
 		pVideo->executeViewPerspective(pOrbitalCam, eye);
 
@@ -186,16 +183,13 @@ void Game::render() {
 		if (pSkyBox != nullptr)
 			pSkyBox->render();
 
-// 	 		Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
-// 	 		update(&dataMsg);
-//
-// 	         for (Light *pLight : m_vLight) {
-// 	             pLight->exec();
-// 	         }
+		Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObj, nullptr);
+		pSceneMng->update(&dataMsg);
 
-	 		//execLight();
+		pSceneMng->execLight();
 
-		pSceneMng->ApplyShadowMap();
+
+		//pSceneMng->ApplyShadowMap();
 
 
 		if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)

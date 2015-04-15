@@ -3,13 +3,6 @@
 #include "ExceptionChimera.h"
 #include "ExceptionSDL.h"
 
-#ifdef WIN32
-#include "windows.h"
-#endif
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
 namespace Chimera {
 
 	Video::Video(std::string _nome, KIND_DEVICE _kindDevice) : nomeTela(_nome), kindDevice(_kindDevice) {
@@ -81,6 +74,9 @@ namespace Chimera {
 		//SDL_GetWindowPosition(window, &winGeometry.x, &winGeometry.y);
 		SDL_GetWindowSize(window, &winSizeW, &winSizeH);
 
+		//iniciala GLEW
+		glewExperimental = GL_TRUE;
+		glewInit();
 	}
 
 	void Video::initGL() {

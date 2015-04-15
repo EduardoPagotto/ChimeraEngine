@@ -1,9 +1,19 @@
 #ifndef VIDEO_H_
 #define VIDEO_H_
 
+#define GLEW_STATIC
+
 #include <string>
 #include "Camera.h"
 #include "HUD.h"
+
+#ifdef WIN32
+#include "windows.h"
+#endif
+
+#include "GL/glew.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #ifndef WIN32
 #include <SDL2/SDL.h>

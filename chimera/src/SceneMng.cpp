@@ -184,20 +184,18 @@ namespace Chimera {
     {
         //TODO opengldeve esta inicializado!!!!!
 
-
 //         /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-//
-//         // Here we initialize our multi-texturing functions
-//         glActiveTextureARB      = (PFNGLACTIVETEXTUREARBPROC)       wglGetProcAddress("glActiveTextureARB");
-//         glMultiTexCoord2fARB    = (PFNGLMULTITEXCOORD2FARBPROC)     wglGetProcAddress("glMultiTexCoord2fARB");
+#ifdef WIN32
+         // Here we initialize our multi-texturing functions
+         glActiveTextureARB      = (PFNGLACTIVETEXTUREARBPROC)       wglGetProcAddress("glActiveTextureARB");
+         glMultiTexCoord2fARB    = (PFNGLMULTITEXCOORD2FARBPROC)     wglGetProcAddress("glMultiTexCoord2fARB");
 
-//         // Make sure our multi-texturing extensions were loaded correctly
-//         if(!glActiveTextureARB || !glMultiTexCoord2fARB)
-//         {
-//             // Print an error message and quit.
-//             MessageBox(g_hWnd, "Your current setup does not support multitexturing", "Error", MB_OK);
-//             PostQuitMessage(0);
-//         }
+         // Make sure our multi-texturing extensions were loaded correctly
+		 if (!glActiveTextureARB || !glMultiTexCoord2fARB)
+		 {
+			 throw ExceptionSDL(ExceptionCode::ALLOC, std::string("Your current setup does not support multitexturing"));
+		 }
+#endif
 //
 //         // Tell OpenGL our light's position
 //         glLightfv( GL_LIGHT0, GL_POSITION, g_LightPosition );
@@ -269,7 +267,7 @@ namespace Chimera {
         // and far plane of 0.5 and 25.0.  The far plane is only 25 because our world isn't
         // larger than 25.  Depending on how large your world is you will need to increase
         // the far plane and/or add additional lights.
-        gluPerspective(60.0f, 1.0f, 0.5f, 25.0f);
+        gluPerspective(90.0f, 1.0f, 0.5f, 25.0f);
 
         // Even though we want the perspective matrix, we can still grab the
         // current modelview matrix and use that as our projection matrix because

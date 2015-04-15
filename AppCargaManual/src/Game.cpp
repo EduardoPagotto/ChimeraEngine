@@ -91,10 +91,10 @@ void Game::keyCapture(SDL_Keycode tecla) {
 	case SDLK_RIGHT:
 		pObj->applyForce(btVector3(0.0, -10.0, 0.0));
 		break;
-	case SDLK_MINUS:
+	case SDLK_a:
 		pObj->applyTorc(btVector3(0.0, -10.0, 0.0));
 		break;
-	case SDLK_PLUS:
+	case SDLK_s:
 		pObj->applyTorc(btVector3(0.0, 10.0, 0.0));
 		break;
 	default:
@@ -172,9 +172,9 @@ void Game::render() {
 	if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
 		indiceDesenho = 2;
 
-	for (int eye = 0; eye < indiceDesenho; eye++) {
+	//pSceneMng->RenderSceneA();
 
-		//pSceneMng->RenderSceneA();
+	for (int eye = 0; eye < indiceDesenho; eye++) {
 
 		pVideo->executeViewPerspective(pOrbitalCam, eye);
 
@@ -188,9 +188,7 @@ void Game::render() {
 
 		pSceneMng->execLight();
 
-
 		//pSceneMng->ApplyShadowMap();
-
 
 		if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
 			pVideo->updateHud(pHUD, 0);

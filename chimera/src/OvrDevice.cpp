@@ -20,10 +20,6 @@ namespace Chimera {
 		fb_tex = 0;
 		fb_depth = 0;
 
-		//iniciala GLEW
-		glewExperimental = GL_TRUE;
-		glewInit();
-
 		initDevice();
 
 	}

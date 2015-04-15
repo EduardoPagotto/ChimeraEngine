@@ -1,6 +1,8 @@
 #ifndef SCENE_MNG_H_
 #define SCENE_MNG_H_
 
+#include <Video.h>
+
 #include <vector>
 #include "ExceptionSDL.h"
 #include "Camera.h"
@@ -11,8 +13,8 @@
 
 // These store our width and height for the shadow texture.  The higher the
 // texture size the better quality shadow.  Must be power of two for most video cards.
-#define SHADOW_WIDTH 512
-#define SHADOW_HEIGHT 512
+#define SHADOW_WIDTH 1024
+#define SHADOW_HEIGHT 1024
 
 // This is the index into the g_Texture array that will hold our depth texture
 #define SHADOW_ID   0

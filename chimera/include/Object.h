@@ -40,6 +40,8 @@ namespace Chimera {
 		}
 
 	private:
+		void execute(bool _texture, Object *pObj);
+
 		Physics *pPhysic;
 		Draw *pDraw;
 

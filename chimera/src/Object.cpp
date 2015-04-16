@@ -71,6 +71,18 @@ namespace Chimera {
 		Node::clone(ppNode);
 	}
 
+
+    void Object::execute(bool _texture, Object *pObj)
+    {
+        if (pPhysic != nullptr) {
+            pPhysic->ajusteMatrix(pObj->pPhysic);
+        }
+
+        if (pDraw != nullptr)
+            pDraw->render(_texture);
+    }
+
+
 	void Object::update(DataMsg *_dataMsg) {
 
 		if (_dataMsg->getKindOp() == KindOp::START) {
@@ -81,21 +93,25 @@ namespace Chimera {
 			//inicializa objeto local
 			init();
 
-		} else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
+		} else if (_dataMsg->getKindOp() == KindOp::DRAW) {
 
 			glPushMatrix();
 
-			if (pPhysic != nullptr) {
-				Object *pSource = (Object *)_dataMsg->getParam();
-				pPhysic->ajusteMatrix(pSource->pPhysic);
-			}
-
-			if (pDraw != nullptr)
-                pDraw->render(true);
+            execute(true,(Object *)_dataMsg->getParam() );
 
 			Node::update(_dataMsg);
 
 			glPopMatrix();
+
+        } else if (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX) {
+
+            glPushMatrix();
+
+            execute(false,(Object *)_dataMsg->getParam() );
+
+            Node::update(_dataMsg);
+
+            glPopMatrix();
 
 		} else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
 

@@ -59,7 +59,7 @@ namespace Chimera {
 			pTexture->init();
 
 		}
-		else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
+		else if (_dataMsg->getKindOp() == KindOp::DRAW) {
 
 			glPushMatrix();
 

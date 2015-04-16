@@ -34,32 +34,13 @@ namespace Chimera {
 
 	void Draw::update(DataMsg *dataMsg) {
 
-		if (dataMsg->getKindOp() == KindOp::START) {
-
 		//inicialize primeiro os filhos para garantir textura e efeito em material
 		Node::update(dataMsg);
 
 		//inicializa Mesh local
-		init();
-
-	} else if (dataMsg->getKindOp() == KindOp::DRAW3D) {
-
-		//             glPushMatrix();
-		//
-		//             if (pPhysic != nullptr) {
-		//                 Object *pSource = (Object *)_dataMsg->getParam();
-		//                 pPhysic->ajusteMatrix(pSource->pPhysic);
-		//             }
-		//
-		//             render();
-		//
-		//             Node::update(_dataMsg);
-		//
-		//             glPopMatrix();
-		}
-		else
-		Node::update(dataMsg);
-
+		if (dataMsg->getKindOp() == KindOp::START)
+			init();
+			
 	}
 
 }

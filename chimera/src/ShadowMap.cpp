@@ -287,7 +287,7 @@ void ShadowMap::ApplyShadowMap(void *pObjeto)
 	//FIXME Implementar o root do GE
 
 	//RenderWorld();                      // Render the world that needs to be shadowed
-	DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
+	DataMsg dataMsg(KindOp::DRAW_NO_TEX, this, pObjeto, nullptr);
 	pScene->update(&dataMsg);
 	//update(&dataMsg);
 
@@ -371,7 +371,7 @@ void ShadowMap:: RenderSceneA(void *pObjeto)
 	//FIXME Implementar o root do GE
 	// Render the world according to the light's view
 	//RenderWorld();
-	DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
+	DataMsg dataMsg(KindOp::DRAW_NO_TEX, this, pObjeto, nullptr);
 	pScene->update(&dataMsg);
 	//update(&dataMsg);
 

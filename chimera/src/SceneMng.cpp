@@ -163,7 +163,7 @@ namespace Chimera {
     }
 
     void SceneMng::draw(HUD *_pHud) {
-//#define TESTEZ1
+#define TESTEZ1
          int indiceDesenho = 1;
          if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
              indiceDesenho = 2;
@@ -183,11 +183,11 @@ namespace Chimera {
 
              pCameraAtiva->exec();
 
-             if (pSkyBox != nullptr)
-                 pSkyBox->render(true);
+             //if (pSkyBox != nullptr)
+             //    pSkyBox->render(true);
 
-             Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
-             update(&dataMsg);
+             //Chimera::DataMsg dataMsg(KindOp::DRAW, this, pObjeto, nullptr);
+             //update(&dataMsg);
 
              execLight();
 

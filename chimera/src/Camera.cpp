@@ -67,18 +67,18 @@ namespace Chimera {
 			//         btScalar m_matrix[16];
 			//         btTransform l_transform;
 			//         btQuaternion l_qpitch;
-			// 
+			//
 			//         l_transform.setIdentity();
-			// 
+			//
 			//         l_qpitch.setEuler( -(direction.getZ() * SIMD_RADS_PER_DEG) ,
 			//                            -(direction.getX() * SIMD_RADS_PER_DEG) ,
 			//                            -(direction.getY() * SIMD_RADS_PER_DEG));
-			//         
+			//
 			//         btVector3 l_tempz1(-position.getX() , -position.getZ(), position.getY() );
 			//         l_transform.setOrigin(l_tempz1);
 			//         l_transform.setRotation(l_qpitch);
 			//         l_transform.getOpenGLMatrix(m_matrix);
-			// 
+			//
 			//         glMultMatrixf(m_matrix);
 
 
@@ -102,8 +102,6 @@ namespace Chimera {
 		if (_dataMsg->getKindOp() == KindOp::START) {
 
 			init();
-
-		} if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
 
 		}
 
@@ -130,4 +128,4 @@ namespace Chimera {
 	}
 
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

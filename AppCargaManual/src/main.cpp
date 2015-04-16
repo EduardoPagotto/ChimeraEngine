@@ -50,7 +50,7 @@ int testeCargaArquivo() {
 		pParticleEmitter->loadImage( pathFilePaticle.c_str()) ;
 		pRoot->addChild(pParticleEmitter);
 
-		Chimera::SceneMng *sceneMng = new Chimera::SceneMng(pRoot);
+		Chimera::SceneMng *sceneMng = new Chimera::SceneMng(pRoot, video);
 
 		Game *game = new Game(video, sceneMng);
 		game->open();
@@ -118,7 +118,7 @@ int testeCargaManual() {
 
 		pRoot->addChild(pObj);
 
-		Chimera::SceneMng *sceneMng = new Chimera::SceneMng(pRoot);
+		Chimera::SceneMng *sceneMng = new Chimera::SceneMng(pRoot, video);
 
 		Game *game = new Game(video, sceneMng);
 		game->open();

@@ -1,9 +1,10 @@
 #ifndef SCENE_MNG_H_
 #define SCENE_MNG_H_
 
-#include <Video.h>
-
 #include <vector>
+
+#include "Video.h"
+
 #include "ExceptionSDL.h"
 #include "Camera.h"
 #include "Object.h"
@@ -11,16 +12,7 @@
 #include "ParticleEmitter.h"
 #include "SkyBox.h"
 
-// These store our width and height for the shadow texture.  The higher the
-// texture size the better quality shadow.  Must be power of two for most video cards.
-#define SHADOW_WIDTH 1024
-#define SHADOW_HEIGHT 1024
-
-// This is the index into the g_Texture array that will hold our depth texture
-#define SHADOW_ID   0
-
-// The max textures we will use in our array
-#define MAX_TEXTURES 1000
+#include "ShadowMap.h"
 
 namespace Chimera {
 
@@ -31,7 +23,7 @@ namespace Chimera {
 	 */
 	class SceneMng {
 	public:
-		SceneMng(Node *_pRoot);
+		SceneMng(Node *_pRoot, Video *_pVideo);
 		virtual ~SceneMng();
 
 		void addChildToScene(Node *_pNode);
@@ -41,36 +33,26 @@ namespace Chimera {
 
 		void update(DataMsg *dataMsg);
 
-		Node* getRoot() {
+		Node* getRoot() const {
 			return pRoot;
 		}
 
-		void cameraAtiva(Camera *_pCam) {
+		inline void cameraAtiva(Camera *_pCam) {
 			pCameraAtiva = _pCam;
 		}
 
-		void objetoAtivo(Object *_pObject) {
+		inline void objetoAtivo(Object *_pObject) {
 			pObjeto = _pObject;
 		}
 
-		void skyBoxAtivo(SkyBox *_pSkyBox) {
+		inline void skyBoxAtivo(SkyBox *_pSkyBox) {
             pSkyBox = _pSkyBox;
         }
 
-		//void draw3d();
-
-        void RenderSceneA();
-        void ApplyShadowMap();
-
-        void execLight();
+		void draw(HUD *_pHud);
 
 	private:
-
-        void StoreLightMatrices(const btVector3 &posicao);
-        void CreateRenderTexture(unsigned int textureArray[], int sizeX, int sizeY, int channels, int type, int textureID);
-
-        void init();
-
+        void execLight();
 
 		void parseEntity(Node *_pNode);
 		void addEntityToScene(Node *_pNode);
@@ -89,19 +71,9 @@ namespace Chimera {
         std::vector<ParticleEmitter*> m_vParticle;
         std::vector<SkyBox*> m_vSkyBox;
 
+        ShadowMap shadoMap;
 
-        // The texture array where we store our image data
-        unsigned int g_Texture[MAX_TEXTURES];
-
-        // These arrays will store our 4x4 matrices for the light's
-        // project and modelview matrix.  These will then be loaded
-        // into the texture matrix for the shadow mapping.
-        float g_mProjection[16];
-        float g_mModelView[16];
-
-        // We set the light's view position at the origin
-        btVector3 g_LightView;
-
+        Video *pVideo;
 	};
 
 } /* namespace Chimera */

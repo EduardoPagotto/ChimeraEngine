@@ -64,6 +64,7 @@ add_library (Chimera STATIC
 				src/Particle.cpp
 				src/ParticleEmitter.cpp
 				src/SkyBox.cpp
+				src/ShadowMap.cpp
 			)
 
 INSTALL(FILES ${Chimera_BINARY_DIR}/libChimera.a DESTINATION lib)

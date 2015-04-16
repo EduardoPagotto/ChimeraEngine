@@ -20,7 +20,6 @@ void Game::joystickCapture(Chimera::JoystickManager &joy) {
 
 void Game::getStatusJoystick() {
 
-
 	// Captura joystick 0 se existir
 	Chimera::JoystickState *joystick = joystickManager.getJoystickState(0);
 	if (joystick !=  nullptr) {
@@ -132,69 +131,37 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
 void Game::start() {
 
-	using namespace Chimera;
+	//Pega primeira camera
+	pOrbitalCam = (Chimera::CameraSpherical*)pSceneMng->getNode(Chimera::EntityKind::CAMERA, 0);
 
-	//instancia e coloca na cena uma nova camera orbital
-	pOrbitalCam = (CameraSpherical*)pSceneMng->getNode(EntityKind::CAMERA, 0);
+	//Ajusta objeto como o primario
+	pObj = (Chimera::Object*)pSceneMng->getNode(Chimera::EntityKind::OBJECT,"Zoltan" );
 
-	//Ajusta objeto primario
-	pObj = (Object*)pSceneMng->getNode(EntityKind::OBJECT,"Zoltan" );
+	// Pega o Skybox
+	pSkyBox = (Chimera::SkyBox*)pSceneMng->getNode(Chimera::EntityKind::SKYBOX, 0);
 
-	// FIXME: Quando modificar o dae remover esta entrada
-	//pObj->addChild(pOrbitalCam);
-
-	pSkyBox = (SkyBox*)pSceneMng->getNode(EntityKind::SKYBOX, 0);
 	pSceneMng->skyBoxAtivo(pSkyBox);
+	pSceneMng->cameraAtiva(pOrbitalCam);
+	pSceneMng->objetoAtivo(pObj);
 
 	pVideo->setLight(true);
 	pVideo->setMaterial(true);
 
 	sPosicaoObj = "pos:(,,)";
 
-	pHUD->addText(0, 0, 255, 0, Color::BLUE, &sPosicaoObj);
-
+	pHUD->addText(0, 0, 255, 0,Chimera:: Color::BLUE, &sPosicaoObj);
 }
 
 void Game::stop(){
+
 }
 
 void Game::render() {
 
-	using namespace Chimera;
-
-	pSceneMng->cameraAtiva(pOrbitalCam);
-	pSceneMng->objetoAtivo(pObj);
-
 	btVector3 val1 = pObj->getPosition();
 	sPosicaoObj = "pos:(" + std::to_string(val1.getX()) + "," + std::to_string(val1.getY()) + "," + std::to_string(val1.getZ()) + ")";
 
-	int indiceDesenho = 1;
-	if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
-		indiceDesenho = 2;
-
-	//pSceneMng->RenderSceneA();
-
-	for (int eye = 0; eye < indiceDesenho; eye++) {
-
-		pVideo->executeViewPerspective(pOrbitalCam, eye);
-
-		pOrbitalCam->exec();
-
-		if (pSkyBox != nullptr)
-			pSkyBox->render();
-
-		Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObj, nullptr);
-		pSceneMng->update(&dataMsg);
-
-		pSceneMng->execLight();
-
-		//pSceneMng->ApplyShadowMap();
-
-		if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
-			pVideo->updateHud(pHUD, 0);
-		else
-			pVideo->updateHud(pHUD, eye);
-	}
+	pSceneMng->draw(pHUD);
 
 	getStatusJoystick();
 

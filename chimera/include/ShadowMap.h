@@ -2,7 +2,7 @@
 #define SHADOW_MAP_H_
 
 # include <LinearMath/btVector3.h>
-# include "Node.h"
+# include "Texture.h"
 
 namespace Chimera {
 
@@ -27,7 +27,7 @@ public:
 	void RenderSceneA(void *pObjeto);
 	void ApplyShadowMap(void *pObjeto);
 	void StoreLightMatrices(const btVector3 &posicao);
-	void CreateRenderTexture(unsigned int textureArray[], int sizeX, int sizeY, int channels, int type, int textureID);
+	//void CreateRenderTexture(unsigned int textureArray[], int sizeX, int sizeY, int channels, int type, int textureID);
 	void init(Node *_pScene);
 
 private:
@@ -35,7 +35,7 @@ private:
 	Node *pScene;
 
 	// The texture array where we store our image data
-	unsigned int g_Texture[MAX_TEXTURES];
+	//unsigned int g_Texture[MAX_TEXTURES];
 
 	// These arrays will store our 4x4 matrices for the light's
 	// project and modelview matrix.  These will then be loaded
@@ -46,6 +46,7 @@ private:
 	// We set the light's view position at the origin
 	btVector3 g_LightView;
 
+	Texture *pTexture;
 };
 
 }

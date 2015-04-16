@@ -47,12 +47,16 @@ namespace Chimera {
 
 		TextureFilter getFilter();
 
+		// novo usado em ShadowMap
+		// This function creates a blank texture to render to
+		void createRenderTexture(int sizeX, int sizeY, int channels, int type);
+		void beginTexCreated();
+		void endTexCreated();
+
 	private:
 		std::string pathFile;
 
 		int textureList[3];
-		//int texture;
-
 		int indiceFilter;
 		bool texturaCarregada;
 	};

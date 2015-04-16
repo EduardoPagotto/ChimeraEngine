@@ -36,8 +36,10 @@ namespace Chimera {
 
     void Material::end()
     {
-        if (pTextura != nullptr) {
-            pTextura->end();
+        if (hasTextureAtive == true) {
+            if (pTextura != nullptr) {
+                pTextura->end();
+            }
         }
     }
 
@@ -53,13 +55,16 @@ namespace Chimera {
 		//Node::addChild(pEffect);//preciso ??
 	}
 
-	void Material::begin() {
+	void Material::begin(bool _texture) {
 
+        hasTextureAtive = _texture;
 		pEffect->apply();
 
-		if (pTextura != nullptr) {
-			pTextura->begin();
-		}
+        if (_texture == true) {
+            if (pTextura != nullptr) {
+                pTextura->begin();
+            }
+        }
 	}
 
 }

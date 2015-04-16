@@ -24,10 +24,10 @@ namespace Chimera {
 
 	}
 
-	void Draw::render() {
+	void Draw::render(bool _texture) {
 
-		pMaterial->begin();
-		renderExecute();
+		pMaterial->begin(_texture);
+		renderExecute(_texture);
 		pMaterial->end();
 
 	}

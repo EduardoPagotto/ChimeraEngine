@@ -27,11 +27,11 @@ namespace Chimera {
 			Node::clone(ppNode);
 		}
 
-		virtual void render();
+		virtual void render(bool _texture);
 
 		virtual void init();
 
-        virtual void renderExecute() = 0;
+        virtual void renderExecute(bool _texture) = 0;
 
 		virtual btVector3 getSizeBox() = 0;
 

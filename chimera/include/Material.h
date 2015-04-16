@@ -30,12 +30,13 @@ namespace Chimera {
 
 		void createDefaultEffect();
 
-		void begin();
+		void begin(bool _texture);
 
         void end();
 
 	private:
 
+        bool hasTextureAtive;
 		Texture *pTextura;
 		Effect *pEffect;
 

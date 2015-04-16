@@ -12,7 +12,7 @@ namespace Chimera {
 		virtual ~SkyBox();
 		virtual void update(DataMsg *_dataMsg);
 
-		void render();
+		void render(bool _texture);
 
   	private:
 		Draw *pDraw;

@@ -91,7 +91,7 @@ namespace Chimera {
 			}
 
 			if (pDraw != nullptr)
-                pDraw->render();
+                pDraw->render(true);
 
 			Node::update(_dataMsg);
 

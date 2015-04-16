@@ -26,7 +26,7 @@ namespace Chimera {
 
 	}
 
-	void DrawBox::renderExecute() {
+	void DrawBox::renderExecute(bool _texture) {
 
 		glBegin(GL_QUADS);          // Face posterior
 		glNormal3f(0.0, 0.0, 1.0);  // Normal da face

@@ -184,7 +184,7 @@ namespace Chimera {
              pCameraAtiva->exec();
 
              if (pSkyBox != nullptr)
-                 pSkyBox->render();
+                 pSkyBox->render(true);
 
              Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
              update(&dataMsg);

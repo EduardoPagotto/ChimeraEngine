@@ -36,7 +36,7 @@ namespace Chimera {
 
 		virtual void clone(Node **ppNode);
 
-        virtual void renderExecute();
+        virtual void renderExecute(bool _texture);
 		virtual btVector3 getSizeBox(void);
 
 

@@ -22,7 +22,7 @@ namespace Chimera {
 		return sizeBox;
 	}
 
-	void DrawGrid::renderExecute() {
+	void DrawGrid::renderExecute(bool _texture) {
 		btScalar px = sizeBox.getX();
 		btScalar py = sizeBox.getY();
 		btScalar pz = -sizeBox.getZ();

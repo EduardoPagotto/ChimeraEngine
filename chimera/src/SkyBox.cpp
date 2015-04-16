@@ -38,7 +38,7 @@ void SkyBox::update(DataMsg *_dataMsg) {
 
 }
 
-void SkyBox::render()
+void SkyBox::render(bool _texture)
 {
 
 	if (pDraw != nullptr) {
@@ -50,7 +50,7 @@ void SkyBox::render()
 		glShadeModel(GL_SMOOTH);
 		glDisable(GL_LIGHTING);
 
-		pDraw->render();
+		pDraw->render(_texture);
 
 		glPopAttrib();
 		glPopAttrib();

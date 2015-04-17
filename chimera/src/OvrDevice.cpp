@@ -443,7 +443,7 @@ namespace Chimera {
 
 
 		const Vector2f orthoScale = Vector2f(1.f) / Vector2f(eye_rdesc[eye].PixelsPerTanAngleAtCenter);
-		
+
 		//perspectiveProjection = ovrMatrix4f_Projection(hmd->DefaultEyeFov[eye], 0.5, 500.0, 1);
 		perspectiveProjection = ovrMatrix4f_Projection(eye_rdesc[eye].Fov, 0.1, 1000.0, true);
 

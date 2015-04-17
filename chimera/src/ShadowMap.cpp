@@ -1,309 +1,225 @@
+#include "Video.h"
 #include "ShadowMap.h"
 
-#ifndef WIN32
-# include <SDL2/SDL.h>
-#else
-# include <SDL.h>
-# include "windows.h"
-#endif
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#include "ExceptionSDL.h"
-//#include <Video.h>
+// These store our width and height for the shadow texture.  The higher the
+// texture size the better quality shadow.  Must be power of two for most video cards.
+# define SHADOW_WIDTH 512
+# define SHADOW_HEIGHT 512
 
 namespace Chimera {
 
-ShadowMap::ShadowMap()
-{
-	memset(g_mProjection,0, sizeof(float)*16);
-	memset(g_mModelView,0,sizeof(float)*16);
-	g_LightView.setZero();
-
-	pTexture = new Texture("ShadowMap-01", "ShadowMap-01");
-}
-
-ShadowMap::~ShadowMap()
-{
-
-}
-
-void ShadowMap::init(Node *_pScene)
-{
-	pScene = _pScene;
-
-//TODO opengldeve esta inicializado!!!!!
-
-//         /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-#ifdef WIN32
-	// Here we initialize our multi-texturing functions
-	glActiveTextureARB      = (PFNGLACTIVETEXTUREARBPROC)       wglGetProcAddress("glActiveTextureARB");
-	glMultiTexCoord2fARB    = (PFNGLMULTITEXCOORD2FARBPROC)     wglGetProcAddress("glMultiTexCoord2fARB");
-
-	// Make sure our multi-texturing extensions were loaded correctly
-	if (!glActiveTextureARB || !glMultiTexCoord2fARB)
+	ShadowMap::ShadowMap()
 	{
-		throw ExceptionSDL(ExceptionCode::ALLOC, std::string("Your current setup does not support multitexturing"));
+		memset(g_mProjection, 0, sizeof(float)* 16);
+		memset(g_mModelView, 0, sizeof(float)* 16);
+		g_LightView.setZero();
+
+		pTexture = new Texture("ShadowMap-01", "ShadowMap-01");
 	}
-#endif
-	//
-	//         // Tell OpenGL our light's position
-	//         glLightfv( GL_LIGHT0, GL_POSITION, g_LightPosition );
-	//
-	//         // This turns the background to a dark grey/black.
-	//         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	//
-	//         // Turn on our light and enable color along with the light
-	//         glEnable(GL_LIGHTING);
-	//         glEnable(GL_LIGHT0);
-	//         glEnable(GL_COLOR_MATERIAL);
 
+	ShadowMap::~ShadowMap()
+	{
 
-	// Here we allocate memory for our depth texture that will store our light's view.
-	// We must set the channels and type for the texture as GL_DEPTH_COMPONENT.
-	//CreateRenderTexture(g_Texture, SHADOW_WIDTH, SHADOW_HEIGHT, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, SHADOW_ID);
-	pTexture->createRenderTexture(SHADOW_WIDTH, SHADOW_HEIGHT, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT);
-}
+	}
 
-///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////   This function positions our view from the light for shadow mapping
-/////
-///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+	void ShadowMap::init(Node *_pScene)
+	{
+		pScene = _pScene;
 
-void ShadowMap::StoreLightMatrices(const btVector3 &posicao)
-{
-	// In this function we just set our camera position to the light's position
-	// and then store the current modelview matrix.  Lastly, we set our light's
-	// frustum (perspective) to set our depth precision.  Ideally, the smaller
-	// the frustum is, the more precision our depth map is, which gives a better
-	// quality shadow.  Notice that we change the perspective to a 60 degree field
-	// of view.  This allows us to view more of the world from our light's position.
-	// That way we can have closer near and far planes, giving better depth values.
+		// Here we allocate memory for our depth texture that will store our light's view.
+		// We must set the channels and type for the texture as GL_DEPTH_COMPONENT.
+		pTexture->createRenderTexture(SHADOW_WIDTH, SHADOW_HEIGHT, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT);
+	}
 
-	// Reset our current light matrices
-	memset(g_mModelView, 0, sizeof(float)*16);
-	memset(g_mProjection, 0, sizeof(float)*16);
+	///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+	/////
+	/////   This function positions our view from the light for shadow mapping
+	/////
+	///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+	void ShadowMap::StoreLightMatrices(const btVector3 &posicao)
+	{
+		// In this function we just set our camera position to the light's position
+		// and then store the current modelview matrix.  Lastly, we set our light's
+		// frustum (perspective) to set our depth precision.  Ideally, the smaller
+		// the frustum is, the more precision our depth map is, which gives a better
+		// quality shadow.  Notice that we change the perspective to a 60 degree field
+		// of view.  This allows us to view more of the world from our light's position.
+		// That way we can have closer near and far planes, giving better depth values.
 
-	// Let's push on a new matrix so we don't change the rest of the world
-	glPushMatrix();
+		// Reset our current light matrices
+		memset(g_mModelView, 0, sizeof(float)* 16);
+		memset(g_mProjection, 0, sizeof(float)* 16);
 
-	// Push on a new matrix to keep our view changes isolated
-	glPushMatrix();
+		// Let's push on a new matrix so we don't change the rest of the world
+		glPushMatrix();
 
-	// Reset the current modelview matrix
-	glLoadIdentity();
+		// Push on a new matrix to keep our view changes isolated
+		glPushMatrix();
 
-	// This is where we set the light's position and view.
-	gluLookAt(posicao.getX(), posicao.getY(), posicao.getZ(),
-	 g_LightView.getX(), g_LightView.getY(), g_LightView.getZ(),
-	 0, 1, 0);
+		// Reset the current modelview matrix
+		glLoadIdentity();
 
-	// Now that we have the light's view, let's save the current modelview matrix.
-	glGetFloatv(GL_MODELVIEW_MATRIX, g_mModelView);
+		// This is where we set the light's position and view.
+		gluLookAt(posicao.getX(), posicao.getY(), posicao.getZ(),
+			g_LightView.getX(), g_LightView.getY(), g_LightView.getZ(),
+			0, 1, 0);
 
-	// Now pop off the current light view's matrix
-	glPopMatrix();
+		// Now that we have the light's view, let's save the current modelview matrix.
+		glGetFloatv(GL_MODELVIEW_MATRIX, g_mModelView);
 
-	// We could go to prospective mode and change the perspective,
-	// then have to restore our camera's perspective and go back to modelview
-	// mode.  However, if we just start with a new modelview matrix, then change
-	// the perspective and grab the current matrix we save some steps and restorations.
+		// Now pop off the current light view's matrix
+		glPopMatrix();
 
-	// Reset the current matrix
-	glLoadIdentity();
+		// We could go to prospective mode and change the perspective,
+		// then have to restore our camera's perspective and go back to modelview
+		// mode.  However, if we just start with a new modelview matrix, then change
+		// the perspective and grab the current matrix we save some steps and restorations.
 
-	// Change our light's perspective to 60 degrees FOV, aspect ratio 1, with a near
-	// and far plane of 0.5 and 25.0.  The far plane is only 25 because our world isn't
-	// larger than 25.  Depending on how large your world is you will need to increase
-	// the far plane and/or add additional lights.
-	gluPerspective(90.0f, 1.0f, 0.5f, 25.0f);
+		// Reset the current matrix
+		glLoadIdentity();
 
-	// Even though we want the perspective matrix, we can still grab the
-	// current modelview matrix and use that as our projection matrix because
-	// we used gluPerspective() on a new matrix, which is the projection matrix.
-	glGetFloatv(GL_MODELVIEW_MATRIX, g_mProjection);
+		// Change our light's perspective to 60 degrees FOV, aspect ratio 1, with a near
+		// and far plane of 0.5 and 25.0.  The far plane is only 25 because our world isn't
+		// larger than 25.  Depending on how large your world is you will need to increase
+		// the far plane and/or add additional lights.
+		gluPerspective(90.0f, 1.0f, 0.5f, 25.0f);
 
-	// Go back to the original matrix
-	glPopMatrix();
-}
+		// Even though we want the perspective matrix, we can still grab the
+		// current modelview matrix and use that as our projection matrix because
+		// we used gluPerspective() on a new matrix, which is the projection matrix.
+		glGetFloatv(GL_MODELVIEW_MATRIX, g_mProjection);
 
-/////////////////////////////// CREATE RENDER TEXTURE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////   This function creates a blank texture to render to
-/////
-/////////////////////////////// CREATE RENDER TEXTURE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/*
-void ShadowMap::CreateRenderTexture(unsigned int textureArray[], int sizeX, int sizeY, int channels, int type, int textureID)
-{
-	// This function is a modified version of what we have used in previous tutorials.
-	// We just allowed the option of doing a depth texture.  When doing a depth
-	// texture we need to pass in GL_DEPTH_COMPONENT for the type AND the channels.
-	// To check for this we just see if the channels are greater than 4.  If so, we
-	// allocate a texture for just one bit per pixel, then pass in the channel value
-	// for glTexImage2D().
+		// Go back to the original matrix
+		glPopMatrix();
+	}
 
-	// Create a pointer to store the blank image data
-	unsigned int *pTexture = NULL;
+	//////////////////////////////// APPLY SHADOW MAP \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+	/////
+	/////   This function applies the shadow map to our world data
+	/////
+	//////////////////////////////// APPLY SHADOW MAP \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-	// Store the current channels to be allocated by default
-	int channelsTrue = channels;
+	void ShadowMap::ApplyShadowMap(void *pObjeto)
+	{
+		pTexture->beginTexCreated();
 
-	// If the channels are greater than 4 there must be a special flag like
-	// GL_DEPTH_COMPONENT, so make sure we only allocate 1 bit per pixel.
-	if(channels > 4)
-		channelsTrue = 1;
+		// Let's explain really fast about why we need a "bias" matrix.  Well, when we multiply
+		// our world data by the projection and modelview matrix it converts it to clip space,
+		// which is a box that is measured in -1 to 1.  Then this is later converted to screen
+		// coordinates.  Now, our texture coordinates are clamped from 0 to 1 right?  We are
+		// working in the light's clip space and we want to convert the -1 to 1 ratio to a
+		// 0 to 1 ratio, which will measure up with our texture coordinates.  To do this we
+		// need a "bias" matrix that will convert from -1 to 1 to a 0 to 1 ratio.  We first
+		// load the bias matrix into our texture matrix and then multiply the projection and
+		// modelview matrix by the bias matrix.  The bias matrix that will do this is below.
+		// It's the same thing as doing this to every coordinate: newCoord = (oldCoord + 1) / 2;
+		const float mBias[] = { 0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.5, 0.5, 0.5, 1.0 };
 
-	// Allocate and init memory for the image array and point to it from pTexture
-	pTexture = new unsigned int [sizeX * sizeY * channelsTrue];
-	memset(pTexture, 0, sizeX * sizeY * channelsTrue * sizeof(unsigned int));
+		// Now we actually do the matrix multiplication.  First we switch to texture
+		// mode.  That way we aren't effecting the modelview matrix.  Then we load in
+		// the bias matrix, multiply that by the light's projection matrix, then multiply
+		// that result by the light's modelview matrix.  This, in conjunction with our
+		// camera inverse matrix calculated by OpenGL for us, gives us the right matrix
+		// for projecting everything that needs to be projected.  That is, the camera's
+		// depth values into the light's clip space, then the generated shadow map onto
+		// the geometry of the world.
+		glMatrixMode(GL_TEXTURE);
+		glLoadMatrixf(mBias);                           // The bias matrix to convert to a 0 to 1 ratio
+		glMultMatrixf(g_mProjection);                   // The light's projection matrix
+		glMultMatrixf(g_mModelView);                    // The light's modelview matrix
+		glMatrixMode(GL_MODELVIEW);                     // Switch back to normal modelview mode
 
-	// Register the texture with OpenGL and bind it to the texture ID
-	glGenTextures(1, &textureArray[textureID]);
-	glBindTexture(GL_TEXTURE_2D, textureArray[textureID]);
+		//FIXME Implementar o root do GE
+		// Render the world that needs to be shadowed
+		DataMsg dataMsg(KindOp::DRAW_NO_TEX, this, pObjeto, nullptr);
+		pScene->update(&dataMsg);
 
-	// Create the texture and store it on the video card
-	glTexImage2D(GL_TEXTURE_2D, 0, channels, sizeX, sizeY, 0, type, GL_UNSIGNED_INT, pTexture);
+		// Now that the world is shadowed and we are done with the texture generation,
+		// let's set everything back to normal by resetting the texture matrix.
+		glMatrixMode(GL_TEXTURE);
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
 
-	// Set the texture quality
-	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		pTexture->endTexCreated();
+	}
 
-	// Since we stored the texture space with OpenGL, we can delete the image data
-	delete [] pTexture;
-}*/
+	void ShadowMap::RenderSceneA(void *pObjeto)
+	{
 
-//////////////////////////////// APPLY SHADOW MAP \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////   This function applies the shadow map to our world data
-/////
-//////////////////////////////// APPLY SHADOW MAP \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+		// Clear the screen and depth buffer so we can render from the light's view
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glLoadIdentity();
 
-void ShadowMap::ApplyShadowMap(void *pObjeto)
-{
-	 pTexture->beginTexCreated();
+		// Since our texture map that will store the depth values is a different size
+		// than our normal viewport, we need to change the viewport to make it the same
+		// size as our texture.
+		glViewport(0, 0, (int)SHADOW_WIDTH, (int)SHADOW_HEIGHT);
 
-	// Let's explain really fast about why we need a "bias" matrix.  Well, when we multiply
-	// our world data by the projection and modelview matrix it converts it to clip space,
-	// which is a box that is measured in -1 to 1.  Then this is later converted to screen
-	// coordinates.  Now, our texture coordinates are clamped from 0 to 1 right?  We are
-	// working in the light's clip space and we want to convert the -1 to 1 ratio to a
-	// 0 to 1 ratio, which will measure up with our texture coordinates.  To do this we
-	// need a "bias" matrix that will convert from -1 to 1 to a 0 to 1 ratio.  We first
-	// load the bias matrix into our texture matrix and then multiply the projection and
-	// modelview matrix by the bias matrix.  The bias matrix that will do this is below.
-	// It's the same thing as doing this to every coordinate: newCoord = (oldCoord + 1) / 2;
-	const float mBias[] = {0.5, 0.0, 0.0, 0.0,
-	 0.0, 0.5, 0.0, 0.0,
-	 0.0, 0.0, 0.5, 0.0,
-	 0.5, 0.5, 0.5, 1.0};
+		// Now we just need to set the matrices for the light before we render.
+		// We switch to projection mode and input our light's projection matrix.
+		glMatrixMode(GL_PROJECTION);
 
-	// Now we actually do the matrix multiplication.  First we switch to texture
-	// mode.  That way we aren't effecting the modelview matrix.  Then we load in
-	// the bias matrix, multiply that by the light's projection matrix, then multiply
-	// that result by the light's modelview matrix.  This, in conjunction with our
-	// camera inverse matrix calculated by OpenGL for us, gives us the right matrix
-	// for projecting everything that needs to be projected.  That is, the camera's
-	// depth values into the light's clip space, then the generated shadow map onto
-	// the geometry of the world.
-	glMatrixMode(GL_TEXTURE);
-	glLoadMatrixf(mBias);                           // The bias matrix to convert to a 0 to 1 ratio
-	glMultMatrixf(g_mProjection);                   // The light's projection matrix
-	glMultMatrixf(g_mModelView);                    // The light's modelview matrix
-	glMatrixMode(GL_MODELVIEW);                     // Switch back to normal modelview mode
+		// Push on a matrix to make sure we can restore to the old matrix easily
+		glPushMatrix();
 
-	//FIXME Implementar o root do GE
-	//RenderWorld();                      // Render the world that needs to be shadowed
-	DataMsg dataMsg(KindOp::DRAW_NO_TEX, this, pObjeto, nullptr);
-	pScene->update(&dataMsg);
-	//update(&dataMsg);
+		// Set the current projection matrix to our light's projection matrix
+		glLoadMatrixf(g_mProjection);
 
-	// Now that the world is shadowed and we are done with the texture generation,
-	// let's set everything back to normal by resetting the texture matrix.
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
+		// Load modelview mode to set our light's modelview matrix
+		glMatrixMode(GL_MODELVIEW);
 
-	pTexture->endTexCreated();
-}
+		// Load the light's modelview matrix before we render to a texture
+		glLoadMatrixf(g_mModelView);
 
-void ShadowMap:: RenderSceneA(void *pObjeto)
-{
+		// Since we don't care about color when rendering the depth values to
+		// the shadow-map texture, we disable color writing to increase speed.
+		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-	// Clear the screen and depth buffer so we can render from the light's view
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
+		// This special function fixes artifacts that lead to small errors when
+		// calculating the shadow map.  You will need to adjust the scale depending
+		// on your scene, but I chose the scale 8.0 for mine.  NVIDIA suggests 1.1
+		// or higher.  The 4.0 should stay fairly the same.
+		glPolygonOffset(8.0f, 4.0f);
 
-	// Since our texture map that will store the depth values is a different size
-	// than our normal viewport, we need to change the viewport to make it the same
-	// size as our texture.
-	glViewport(0, 0, (int)SHADOW_WIDTH, (int)SHADOW_HEIGHT);
+		// This turns of the polygon offset functionality to fix artifacts.
+		// Comment this out and run the program to see what artifacts I mean.
+		glEnable(GL_POLYGON_OFFSET_FILL);
 
-	// Now we just need to set the matrices for the light before we render.
-	// We switch to projection mode and input our light's projection matrix.
-	glMatrixMode(GL_PROJECTION);
+		//FIXME Implementar o root do GE
+		// Render the world according to the light's view
+		//RenderWorld();
+		DataMsg dataMsg(KindOp::DRAW_NO_TEX, this, pObjeto, nullptr);
+		pScene->update(&dataMsg);
 
-	// Push on a matrix to make sure we can restore to the old matrix easily
-	glPushMatrix();
+		// Now that the world is rendered, save the depth values to a texture
+		pTexture->begin();
+		//glBindTexture(GL_TEXTURE_2D, g_Texture[SHADOW_ID]);
+		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, (int)SHADOW_WIDTH, (int)SHADOW_HEIGHT);
 
-	// Set the current projection matrix to our light's projection matrix
-	glLoadMatrixf(g_mProjection);
+		// We can turn color writing back on since we already stored the depth values
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-	// Load modelview mode to set our light's modelview matrix
-	glMatrixMode(GL_MODELVIEW);
+		// Turn off polygon offsetting
+		glDisable(GL_POLYGON_OFFSET_FILL);
 
-	// Load the light's modelview matrix before we render to a texture
-	glLoadMatrixf(g_mModelView);
+		// Restore our normal viewport size to our screen width and height
+		// glViewport(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
 
-	// Since we don't care about color when rendering the depth values to
-	// the shadow-map texture, we disable color writing to increase speed.
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+		// Go back to the projection mode and restore the original matrix
+		glMatrixMode(GL_PROJECTION);
 
-	// This special function fixes artifacts that lead to small errors when
-	// calculating the shadow map.  You will need to adjust the scale depending
-	// on your scene, but I chose the scale 8.0 for mine.  NVIDIA suggests 1.1
-	// or higher.  The 4.0 should stay fairly the same.
-	glPolygonOffset(8.0f, 4.0f);
+		// Restore the original projection matrix
+		glPopMatrix();
 
-	// This turns of the polygon offset functionality to fix artifacts.
-	// Comment this out and run the program to see what artifacts I mean.
-	glEnable(GL_POLYGON_OFFSET_FILL);
+		// Go back to modelview model to start drawing like normal
+		glMatrixMode(GL_MODELVIEW);
 
-	//FIXME Implementar o root do GE
-	// Render the world according to the light's view
-	//RenderWorld();
-	DataMsg dataMsg(KindOp::DRAW_NO_TEX, this, pObjeto, nullptr);
-	pScene->update(&dataMsg);
-
-	// Now that the world is rendered, save the depth values to a texture
-	pTexture->begin();
-	//glBindTexture(GL_TEXTURE_2D, g_Texture[SHADOW_ID]);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, (int)SHADOW_WIDTH, (int)SHADOW_HEIGHT);
-
-	// We can turn color writing back on since we already stored the depth values
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-	// Turn off polygon offsetting
-	glDisable(GL_POLYGON_OFFSET_FILL);
-
-	// Restore our normal viewport size to our screen width and height
-	// glViewport(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
-
-	// Go back to the projection mode and restore the original matrix
-	glMatrixMode(GL_PROJECTION);
-
-	// Restore the original projection matrix
-	glPopMatrix();
-
-	// Go back to modelview model to start drawing like normal
-	glMatrixMode(GL_MODELVIEW);
-
-	// Clear the color and depth bits and start over from the camera's view
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-}
+		// Clear the color and depth bits and start over from the camera's view
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glLoadIdentity();
+	}
 
 }

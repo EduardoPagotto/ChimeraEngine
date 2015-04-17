@@ -50,13 +50,13 @@ namespace Chimera
 
 		void initGL();
 		//void getGeometry(SDL_Rect &winGeometry);
-        int getWinSizeW() const {
-          return winSizeW;
-        }
-        
-        int getWinSizeH() const {
-          return winSizeH;
-        }
+		int getWinSizeW() const {
+			return winSizeW;
+		}
+
+		int getWinSizeH() const {
+			return winSizeH;
+		}
 
 		std::string getNomeTela() const {
 			return nomeTela;
@@ -79,8 +79,8 @@ namespace Chimera
 	protected:
 		void initSDL();
 
-        int winSizeW;
-        int winSizeH;
+		int winSizeW;
+		int winSizeH;
 
 		std::string nomeTela;
 		KIND_DEVICE kindDevice;

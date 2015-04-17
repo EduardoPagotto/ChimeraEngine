@@ -5,7 +5,6 @@
 
 #include "Video.h"
 
-#include "ExceptionSDL.h"
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
@@ -28,7 +27,7 @@ namespace Chimera {
 
 		void addChildToScene(Node *_pNode);
 
-        Node *getNode(EntityKind _type, const std::string &_nome);
+		Node *getNode(EntityKind _type, const std::string &_nome);
 		Node *getNode(EntityKind _type, unsigned index);
 
 		void update(DataMsg *dataMsg);
@@ -46,13 +45,13 @@ namespace Chimera {
 		}
 
 		inline void skyBoxAtivo(SkyBox *_pSkyBox) {
-            pSkyBox = _pSkyBox;
-        }
+			pSkyBox = _pSkyBox;
+		}
 
 		void draw(HUD *_pHud);
 
 	private:
-        void execLight();
+		void execLight();
 
 		void parseEntity(Node *_pNode);
 		void addEntityToScene(Node *_pNode);
@@ -63,17 +62,17 @@ namespace Chimera {
 		Node *pRoot;
 		Camera *pCameraAtiva;
 		Object *pObjeto;
-        SkyBox *pSkyBox;
+		SkyBox *pSkyBox;
 
 		std::vector<Camera*> m_vCamera;
 		std::vector<Light*> m_vLight;
 		std::vector<Object*> m_vObject;
-        std::vector<ParticleEmitter*> m_vParticle;
-        std::vector<SkyBox*> m_vSkyBox;
+		std::vector<ParticleEmitter*> m_vParticle;
+		std::vector<SkyBox*> m_vSkyBox;
 
-        ShadowMap shadoMap;
+		ShadowMap shadoMap;
 
-        Video *pVideo;
+		Video *pVideo;
 	};
 
 } /* namespace Chimera */

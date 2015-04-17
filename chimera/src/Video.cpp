@@ -77,6 +77,17 @@ namespace Chimera {
 		//iniciala GLEW
 		glewExperimental = GL_TRUE;
 		glewInit();
+
+#ifdef WIN32
+		// Here we initialize our multi-texturing functions
+		glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
+		glMultiTexCoord2fARB = (PFNGLMULTITEXCOORD2FARBPROC)wglGetProcAddress("glMultiTexCoord2fARB");
+
+		// Make sure our multi-texturing extensions were loaded correctly
+		if (!glActiveTextureARB || !glMultiTexCoord2fARB)
+			throw ExceptionSDL(ExceptionCode::ALLOC, std::string("Your current setup does not support multitexturing"));
+#endif
+
 	}
 
 	void Video::initGL() {

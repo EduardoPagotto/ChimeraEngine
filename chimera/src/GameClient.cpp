@@ -1,5 +1,6 @@
 #include "GameClient.h"
 #include "Singleton.h"
+#include "ExceptionSDL.h"
 
 #include <iostream>
 

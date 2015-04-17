@@ -27,7 +27,6 @@ namespace Chimera {
 		virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb) = 0;
 		virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb) = 0;
 		virtual void mouseMotionCapture(SDL_MouseMotionEvent mm) = 0;
-
 		virtual void joystickCapture(JoystickManager &joy) = 0;
 
 		virtual void executeColisao(const KindOp &_kindOp, Node *_pNodeA, Node *_pNodeB) = 0;

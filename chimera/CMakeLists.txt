@@ -58,6 +58,7 @@ add_library (Chimera STATIC
 				src/Loader.cpp
 				src/LoaderDae.cpp
 				src/SceneMng.cpp
+				src/FlowControl.cpp
 				src/GameClient.cpp
 				src/JoystickManager.cpp
 				src/JoystickState.cpp

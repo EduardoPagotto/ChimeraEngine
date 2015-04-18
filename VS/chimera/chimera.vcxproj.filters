@@ -109,6 +109,9 @@
     <ClCompile Include="..\..\chimera\src\ShadowMap.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\chimera\src\FlowControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chimera\include\Camera.h">
@@ -235,6 +238,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\ShadowMap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\FlowControl.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

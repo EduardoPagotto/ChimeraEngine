@@ -14,8 +14,6 @@ public:
 	Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng);
 	virtual ~Game();
 
-	void getStatusJoystick();
-
 	virtual void start();
 	virtual void stop();
 	virtual void render();
@@ -24,8 +22,9 @@ public:
 	virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb);
 	virtual void mouseMotionCapture(SDL_MouseMotionEvent mm);
 	virtual void joystickCapture(Chimera::JoystickManager &joy);
+	virtual void joystickStatus(Chimera::JoystickManager &joy);
 	virtual void executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB);
-	virtual void userEvent(const SDL_Event &_event);
+	virtual void newFPS(const unsigned int &fps);
 
 private:
 	int botaoIndex;

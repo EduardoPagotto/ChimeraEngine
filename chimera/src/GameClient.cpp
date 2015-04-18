@@ -6,9 +6,9 @@
 
 namespace Chimera {
 
-	GameClient::GameClient(Video *_pVideo, Chimera::SceneMng *_pScenMng) : pSceneMng(_pScenMng), pVideo(_pVideo)  {
+	GameClient::GameClient(Video *_pVideo, Chimera::SceneMng *_pScenMng) : FlowControl(_pVideo), pSceneMng(_pScenMng)  {
 
-		textoFPS = "fps: " + std::to_string(0);
+		textoFPS = "fps: 0";
 		pHUD = new HUD();
 
 #ifdef WIN32
@@ -24,13 +24,6 @@ namespace Chimera {
 		pHUD->addSquare(area, Color(1.0f, 1.0f, 1.0f, 0.2f));
 		pHUD->addText(0, 0, 0, 0, Color::RED, &textoFPS);
 
-		fps = 0;
-		timerFPS.setElapsedCount(1000);
-		timerFPS.start();
-
-		timerSegundo.setElapsedCount(1000);
-		timerSegundo.start();
-
 		physicWorld = Singleton<PhysicsControl>::getRefSingleton();
 	}
 
@@ -42,27 +35,15 @@ namespace Chimera {
 		Singleton<PhysicsControl>::releaseRefSingleton();
 	}
 
-	bool GameClient::newFPS() {
-		return timerSegundo.stepCount();
-	}
-
-	void GameClient::countFrame() {
-		if (timerFPS.stepCount() == true) {
-			fps = timerFPS.getCountStep();
-			textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
-		}
+	void GameClient::newFPS(const unsigned int &fps) {
+		textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
 	}
 
 	void GameClient::open() {
 
-        deadzone = 0.02;
-		joystickManager.Initialize();
-		joystickManager.FindJoysticks();
-		std::cout << "Joystick: " << joystickManager.GetStatusManager() << std::endl;
+		deadzone = 0.02;
 
-		pVideo->initGL();
-
-		start();
+		FlowControl::open();
 
 		DataMsg dataMsg(KindOp::START, this, nullptr, nullptr);
 		pSceneMng->update(&dataMsg);
@@ -71,13 +52,7 @@ namespace Chimera {
 	}
 
 	void GameClient::close(void) {
-
-		SDL_Event l_eventQuit;
-		l_eventQuit.type = SDL_QUIT;
-		if (SDL_PushEvent(&l_eventQuit) == -1) {
-			throw ExceptionSDL(ExceptionCode::CLOSE, std::string(SDL_GetError()));
-		}
-
+		FlowControl::close();
 	}
 
 	void GameClient::processaGame() {
@@ -85,94 +60,18 @@ namespace Chimera {
 		physicWorld->stepSim();
 		physicWorld->checkCollisions();
 
-		countFrame();
-
-		pVideo->initDraw();
-
-		render();
-
-		pVideo->endDraw();
+		FlowControl::processaGame();
 	}
 
-	void GameClient::validaOpColisao(const SDL_Event &_event) {
+	void GameClient::userEvent(const SDL_Event &_event) {
 
 		KindOp op = (KindOp)_event.user.code;
-
 		if ((op == Chimera::KindOp::START_COLLIDE) ||
 			(op == Chimera::KindOp::ON_COLLIDE) ||
 			(op == Chimera::KindOp::OFF_COLLIDE)) {
 
 			executeColisao(op, (Node*)_event.user.data1, (Node*)_event.user.data2);
-
-		}
-		else {
-			userEvent(_event);
-		}
-
-	}
-
-	void GameClient::gameLoop(void) {
-
-		SDL_Event l_eventSDL;
-		bool l_quit = false;
-		bool l_isActive = false;
-
-		while (!l_quit) {
-
-			while (SDL_PollEvent(&l_eventSDL)) {
-
-				switch (l_eventSDL.type) {
-				case SDL_USEREVENT:
-					validaOpColisao(l_eventSDL);
-					break;
-				case SDL_KEYDOWN:
-					keyCapture(l_eventSDL.key.keysym.sym);
-					break;
-				case SDL_MOUSEBUTTONDOWN:
-					mouseButtonDownCapture(l_eventSDL.button);
-					break;
-				case SDL_MOUSEBUTTONUP:
-					mouseButtonUpCapture(l_eventSDL.button);
-					break;
-				case SDL_MOUSEMOTION:
-					mouseMotionCapture(l_eventSDL.motion);
-					break;
-				case SDL_QUIT:
-					l_quit = true;
-					stop();
-					break;
-				case SDL_WINDOWEVENT: {
-										  switch (l_eventSDL.window.event) {
-										  case SDL_WINDOWEVENT_ENTER:
-											  l_isActive = true;
-											  break;
-										  case SDL_WINDOWEVENT_LEAVE:
-											  l_isActive = false;
-											  break;
-										  case SDL_WINDOWEVENT_RESIZED:
-											  pVideo->reshape(l_eventSDL.window.data1, l_eventSDL.window.data2);
-											  break;
-										  default:
-											  break;
-										  }
-				}
-					break;
-				default:
-					if (joystickManager.TrackEvent(&l_eventSDL) == true)
-						joystickCapture(joystickManager);
-					break;
-				}
-
-			}
-
-			//if (l_isActive==true) {
-			//Se nao houver foco na tela pule o render
-			processaGame();
-
-			//}
-
 		}
 	}
-
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

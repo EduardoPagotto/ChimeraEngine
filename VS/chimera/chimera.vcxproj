@@ -97,6 +97,7 @@
     <ClInclude Include="..\..\chimera\include\Exception.h" />
     <ClInclude Include="..\..\chimera\include\ExceptionChimera.h" />
     <ClInclude Include="..\..\chimera\include\ExceptionSDL.h" />
+    <ClInclude Include="..\..\chimera\include\FlowControl.h" />
     <ClInclude Include="..\..\chimera\include\Font.h" />
     <ClInclude Include="..\..\chimera\include\GameClient.h" />
     <ClInclude Include="..\..\chimera\include\HUD.h" />
@@ -137,6 +138,7 @@
     <ClCompile Include="..\..\chimera\src\DrawTriMesh.cpp" />
     <ClCompile Include="..\..\chimera\src\Effect.cpp" />
     <ClCompile Include="..\..\chimera\src\Entity.cpp" />
+    <ClCompile Include="..\..\chimera\src\FlowControl.cpp" />
     <ClCompile Include="..\..\chimera\src\Font.cpp" />
     <ClCompile Include="..\..\chimera\src\GameClient.cpp" />
     <ClCompile Include="..\..\chimera\src\HUD.cpp" />

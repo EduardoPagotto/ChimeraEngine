@@ -7,46 +7,36 @@
 
 namespace Chimera {
 
-class FlowControl {
+	class FlowControl {
+	public:
+		FlowControl(Video *_pVideo);
+		virtual ~FlowControl();
+		virtual void open();
+		virtual void close();
+		void gameLoop();
 
-public:
-	FlowControl(Video *_pVideo);
-	virtual ~FlowControl();
+	protected:
+		virtual void start() = 0;
+		virtual void stop() = 0;
+		virtual void render() = 0;
+		virtual void keyCapture(SDL_Keycode tecla) = 0;
+		virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb) = 0;
+		virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb) = 0;
+		virtual void mouseMotionCapture(SDL_MouseMotionEvent mm) = 0;
+		virtual void joystickCapture(JoystickManager &joy) = 0;
+		virtual void joystickStatus(JoystickManager &joy) = 0;
+		virtual void userEvent(const SDL_Event &_event) = 0;
+		virtual void newFPS(const unsigned int &fps) = 0;
+		virtual void processaGame();
 
-	virtual void start() = 0;
-	virtual void stop() = 0;
-	virtual void render() = 0;
-	virtual void keyCapture(SDL_Keycode tecla) = 0;
-	virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb) = 0;
-	virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb) = 0;
-	virtual void mouseMotionCapture(SDL_MouseMotionEvent mm) = 0;
-	virtual void joystickCapture(JoystickManager &joy) = 0;
-	virtual void eventoUsuario(const SDL_Event &_event) = 0;
+		Video *pVideo;
+		
+	private:
+		void countFrame();
 
-	virtual void open();
-	virtual void close();
-	virtual void gameLoop();
-
-	virtual void processaGame();
-
-
-protected:
-	Video *pVideo;
-	JoystickManager joystickManager;
-
-private:
-
-	bool newFPS();
-	void countFrame();
-
-	//double deadzone;
-	unsigned int fps;
-	Timer timerFPS;
-	Timer timerSegundo;
-
-};
-
-
+		JoystickManager joystickManager;
+		Timer timerFPS;
+	};
 }
 
 # endif

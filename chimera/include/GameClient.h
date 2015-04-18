@@ -1,60 +1,36 @@
 #ifndef __GAME_CLIENT_H
 #define __GAME_CLIENT_H
 
-#include "Timer.h"
-#include "Video.h"
+#include "FlowControl.h"
 #include "SceneMng.h"
 #include "PhysicsControl.h"
 #include "HUD.h"
 
-#include "JoystickManager.h"
-
 namespace Chimera {
 
-	class GameClient {
+	class GameClient : public FlowControl {
 	public:
 		GameClient(Video *_pVideo, Chimera::SceneMng *_pScenMng);
 		virtual ~GameClient();
-
-		void open();
-		void close();
-		void gameLoop();
-
-		virtual void start() = 0;
-		virtual void stop() = 0;
-		virtual void render() = 0;
-		virtual void keyCapture(SDL_Keycode tecla) = 0;
-		virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb) = 0;
-		virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb) = 0;
-		virtual void mouseMotionCapture(SDL_MouseMotionEvent mm) = 0;
-		virtual void joystickCapture(JoystickManager &joy) = 0;
-
+		virtual void open();
+		virtual void close();
 		virtual void executeColisao(const KindOp &_kindOp, Node *_pNodeA, Node *_pNodeB) = 0;
-		virtual void userEvent(const SDL_Event &_event) = 0;
+		virtual void newFPS(const unsigned int &fps);
 
 	protected:
 		SceneMng *pSceneMng;
 		PhysicsControl *physicWorld;
 		Font *pFont;
 		HUD *pHUD;
-		Video *pVideo;
-
-		JoystickManager joystickManager;
 
 	private:
-
-        double deadzone;
-		bool newFPS();
-		void countFrame();
-		void processaGame();
+		void userEvent(const SDL_Event &_event);
 		void validaOpColisao(const SDL_Event &_event);
+		void processaGame();
 
-		unsigned int fps;
+		double deadzone;
 		std::string textoFPS;
-		Timer timerFPS;
-		Timer timerSegundo;
 	};
-
 }
 
 #endif

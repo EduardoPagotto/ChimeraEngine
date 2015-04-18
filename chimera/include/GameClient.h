@@ -1,23 +1,26 @@
 #ifndef __GAME_CLIENT_H
 #define __GAME_CLIENT_H
 
-#include "FlowControl.h"
+#include "IGameClientEvents.h"
 #include "SceneMng.h"
 #include "PhysicsControl.h"
 #include "HUD.h"
 
 namespace Chimera {
 
-	class GameClient : public FlowControl {
+	class GameClient : public IGameClientEvents {
 	public:
-		GameClient(Video *_pVideo, Chimera::SceneMng *_pScenMng);
+		GameClient(Chimera::SceneMng *_pScenMng);
 		virtual ~GameClient();
-		virtual void open();
-		virtual void close();
+
+	protected:
+		virtual void start();
+		virtual void stop();
 		virtual void executeColisao(const KindOp &_kindOp, Node *_pNodeA, Node *_pNodeB) = 0;
 		virtual void newFPS(const unsigned int &fps);
 
-	protected:
+		void sendMessage(KindOp _kindOf, void *_paramA, void *_paramB);
+
 		SceneMng *pSceneMng;
 		PhysicsControl *physicWorld;
 		Font *pFont;
@@ -26,7 +29,8 @@ namespace Chimera {
 	private:
 		void userEvent(const SDL_Event &_event);
 		void validaOpColisao(const SDL_Event &_event);
-		void processaGame();
+		void beginProcGame();
+		void endProcGame();
 
 		double deadzone;
 		std::string textoFPS;

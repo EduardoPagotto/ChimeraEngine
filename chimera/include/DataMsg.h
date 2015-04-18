@@ -19,6 +19,7 @@ namespace Chimera {
 		START_COLLIDE,
 		ON_COLLIDE,
 		OFF_COLLIDE,
+		VIDEO_TOGGLE_FULL_SCREEN,
 		NOP
 	};
 

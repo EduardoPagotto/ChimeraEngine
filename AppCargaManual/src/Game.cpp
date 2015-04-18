@@ -1,6 +1,7 @@
 #include "Game.h"
+#include "ExceptionSDL.h"
 
-Game::Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng) : GameClient(_pVideo, _pScenMng) {
+Game::Game(Chimera::SceneMng *_pScenMng) : GameClient( _pScenMng) {
 }
 
 Game::~Game() {
@@ -58,13 +59,17 @@ void Game::keyCapture(SDL_Keycode tecla) {
 
 	switch (tecla) {
 	case SDLK_ESCAPE:
-		GameClient::close();
+		SDL_Event l_eventQuit;
+		l_eventQuit.type = SDL_QUIT;
+		if (SDL_PushEvent(&l_eventQuit) == -1) {
+			throw Chimera::ExceptionSDL(Chimera::ExceptionCode::CLOSE, std::string(SDL_GetError()));
+		}
 		break;
 	case SDLK_F1:
 		pHUD->setOn(!pHUD->isOn());
 		break;
 	case SDLK_F10:
-		pVideo->toggleFullScreen();
+		sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr);
 		break;
 	case SDLK_UP:
 		pObj->applyForce(btVector3(10.0, 0.0, 0.0));
@@ -112,6 +117,9 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 }
 
 void Game::start() {
+
+	GameClient::start();
+
 	// Pega o Skybox
 	pSkyBox = (Chimera::SkyBox*)pSceneMng->getNode(Chimera::EntityKind::SKYBOX, 0);
 
@@ -124,9 +132,8 @@ void Game::start() {
 	pSceneMng->skyBoxAtivo(pSkyBox);
 	pSceneMng->cameraAtiva(pOrbitalCam);
 	pSceneMng->objetoAtivo(pObj);
-
-	pVideo->setLight(true);
-	pVideo->setMaterial(true);
+	pSceneMng->setLight(true);
+	pSceneMng->setMaterial(true);
 
 	sPosicaoObj = "pos:(,,)";
 
@@ -134,7 +141,7 @@ void Game::start() {
 }
 
 void Game::stop(){
-
+	GameClient::stop();
 }
 
 void Game::newFPS(const unsigned int &fps) {

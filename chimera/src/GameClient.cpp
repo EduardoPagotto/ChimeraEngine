@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-	GameClient::GameClient(Video *_pVideo, Chimera::SceneMng *_pScenMng) : FlowControl(_pVideo), pSceneMng(_pScenMng)  {
+	GameClient::GameClient(Chimera::SceneMng *_pScenMng) : pSceneMng(_pScenMng)  {
 
 		textoFPS = "fps: 0";
 		pHUD = new HUD();
@@ -39,11 +39,9 @@ namespace Chimera {
 		textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
 	}
 
-	void GameClient::open() {
+	void GameClient::start() {
 
 		deadzone = 0.02;
-
-		FlowControl::open();
 
 		DataMsg dataMsg(KindOp::START, this, nullptr, nullptr);
 		pSceneMng->update(&dataMsg);
@@ -51,16 +49,19 @@ namespace Chimera {
 		pHUD->setOn(true);
 	}
 
-	void GameClient::close(void) {
-		FlowControl::close();
+	void GameClient::stop() {
+		
 	}
 
-	void GameClient::processaGame() {
+	void GameClient::beginProcGame() {
 
 		physicWorld->stepSim();
 		physicWorld->checkCollisions();
 
-		FlowControl::processaGame();
+	}
+
+	void GameClient::endProcGame() {
+
 	}
 
 	void GameClient::userEvent(const SDL_Event &_event) {
@@ -73,5 +74,18 @@ namespace Chimera {
 			executeColisao(op, (Node*)_event.user.data1, (Node*)_event.user.data2);
 		}
 	}
+
+	void GameClient::sendMessage(KindOp _kindOf, void *_paramA, void *_paramB) {
+
+		SDL_Event event;
+		SDL_zero(event);
+		event.type = SDL_USEREVENT;
+		event.user.code = (int)_kindOf;
+		event.user.data1 = _paramA;
+		event.user.data2 = _paramB;
+		SDL_PushEvent(&event);
+
+	}
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

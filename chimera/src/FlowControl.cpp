@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-	FlowControl::FlowControl(Video* _pVideo) : pVideo(_pVideo)
+	FlowControl::FlowControl(Video *_pVideo, IGameClientEvents *_pGameClientEvents) : pVideo(_pVideo), pGameClientEvents(_pGameClientEvents)
 	{
 		timerFPS.setElapsedCount(1000);
 		timerFPS.start();
@@ -23,7 +23,7 @@ namespace Chimera {
 
 		pVideo->initGL();
 
-		start();
+		pGameClientEvents->start();
 	}
 
 	void FlowControl::close(void) {
@@ -38,16 +38,24 @@ namespace Chimera {
 	void FlowControl::countFrame() {
 		if (timerFPS.stepCount() == true) {
 			unsigned int fps = timerFPS.getCountStep();
-			newFPS(fps);
+			pGameClientEvents->newFPS(fps);
 		}
 	}
 
 	void FlowControl::processaGame() {
+
+		pGameClientEvents->beginProcGame();
+
 		countFrame();
 		pVideo->initDraw();
-		render();
+
+		pGameClientEvents->render();
+
 		pVideo->endDraw();
-		joystickStatus(joystickManager);
+
+		pGameClientEvents->joystickStatus(joystickManager);
+
+		pGameClientEvents->endProcGame();
 	}
 
 	void FlowControl::gameLoop(void) {
@@ -62,23 +70,30 @@ namespace Chimera {
 
 				switch (l_eventSDL.type) {
 				case SDL_USEREVENT:
-					userEvent(l_eventSDL);
+
+					if ((KindOp)l_eventSDL.user.code == KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
+						pVideo->toggleFullScreen();
+					}
+					else {
+						pGameClientEvents->userEvent(l_eventSDL);
+					}
+
 					break;
 				case SDL_KEYDOWN:
-					keyCapture(l_eventSDL.key.keysym.sym);
+					pGameClientEvents->keyCapture(l_eventSDL.key.keysym.sym);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-					mouseButtonDownCapture(l_eventSDL.button);
+					pGameClientEvents->mouseButtonDownCapture(l_eventSDL.button);
 					break;
 				case SDL_MOUSEBUTTONUP:
-					mouseButtonUpCapture(l_eventSDL.button);
+					pGameClientEvents->mouseButtonUpCapture(l_eventSDL.button);
 					break;
 				case SDL_MOUSEMOTION:
-					mouseMotionCapture(l_eventSDL.motion);
+					pGameClientEvents->mouseMotionCapture(l_eventSDL.motion);
 					break;
 				case SDL_QUIT:
 					l_quit = true;
-					stop();
+					pGameClientEvents->stop();
 					break;
 				case SDL_WINDOWEVENT: {
 										  switch (l_eventSDL.window.event) {
@@ -98,7 +113,7 @@ namespace Chimera {
 					break;
 				default:
 					if (joystickManager.TrackEvent(&l_eventSDL) == true)
-						joystickCapture(joystickManager);
+						pGameClientEvents->joystickCapture(joystickManager);
 					break;
 				}
 			}

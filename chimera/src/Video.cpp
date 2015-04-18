@@ -171,25 +171,6 @@ namespace Chimera {
 		return retorno;
 	}
 
-	void Video::setLight(bool _lightOn) {
-		if (_lightOn == true)
-			glEnable(GL_LIGHTING);
-		else
-			glDisable(GL_LIGHTING);
-	}
-
-	void Video::setMaterial(bool _materialOn) {
-
-		//if (_materialOn == true) {
-		//	glDisable(GL_COLOR_MATERIAL);
-		//	glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //TODO verificar necessidade
-		//}
-		//else {
-		//	glEnable(GL_COLOR_MATERIAL);
-		//	glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
-		//}
-	}
-
 } /* namespace Chimera */
 
 // kate: indent-mode cstyle; indent-width 4; replace-tabs off; tab-width 4;

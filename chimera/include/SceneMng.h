@@ -48,6 +48,9 @@ namespace Chimera {
 			pSkyBox = _pSkyBox;
 		}
 
+		void setLight(bool _lightOn);
+		void setMaterial(bool _materialOn);
+
 		void draw(HUD *_pHud);
 
 	private:

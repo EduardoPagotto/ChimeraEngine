@@ -66,9 +66,6 @@ namespace Chimera
 
 		void restoreMatrix();
 
-		void setLight(bool _lightOn);
-		void setMaterial(bool _materialOn);
-
 		std::string getVersaoOpenGL();
 
 		inline KIND_DEVICE getKindDevice() const {

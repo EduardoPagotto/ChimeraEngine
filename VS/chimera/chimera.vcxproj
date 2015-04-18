@@ -101,6 +101,7 @@
     <ClInclude Include="..\..\chimera\include\Font.h" />
     <ClInclude Include="..\..\chimera\include\GameClient.h" />
     <ClInclude Include="..\..\chimera\include\HUD.h" />
+    <ClInclude Include="..\..\chimera\include\IGameClientEvents.h" />
     <ClInclude Include="..\..\chimera\include\JoystickManager.h" />
     <ClInclude Include="..\..\chimera\include\JoystickState.h" />
     <ClInclude Include="..\..\chimera\include\Light.h" />

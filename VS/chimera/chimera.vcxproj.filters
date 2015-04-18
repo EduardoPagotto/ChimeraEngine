@@ -243,6 +243,9 @@
     <ClInclude Include="..\..\chimera\include\FlowControl.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\chimera\include\IGameClientEvents.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

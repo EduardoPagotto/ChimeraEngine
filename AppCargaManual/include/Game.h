@@ -11,7 +11,7 @@
  */
 class Game : public Chimera::GameClient {
 public:
-	Game(Chimera::Video *_pVideo, Chimera::SceneMng *_pScenMng);
+	Game(Chimera::SceneMng *_pScenMng);
 	virtual ~Game();
 
 	virtual void start();

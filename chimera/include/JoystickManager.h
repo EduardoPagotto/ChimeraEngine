@@ -1,13 +1,5 @@
-/*
- *  JoystickManager.h
- */
-
 #ifndef __JOYSTICK_MANAGER__H
 # define __JOYSTICK_MANAGER__H
-
-//class JoystickManager;
-
-//#include "platforms.h"  // Include platform-specific headers.
 
 #include <string>
 #include <map>

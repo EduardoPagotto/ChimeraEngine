@@ -1,5 +1,6 @@
 #include "FlowControl.h"
 #include "ExceptionSDL.h"
+#include "DataMsg.h"
 #include <iostream>
 
 namespace Chimera {

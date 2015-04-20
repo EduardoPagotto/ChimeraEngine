@@ -10,6 +10,7 @@
 #include "Light.h"
 #include "ParticleEmitter.h"
 #include "SkyBox.h"
+#include "HUD.h"
 
 #include "ShadowMap.h"
 
@@ -54,6 +55,7 @@ namespace Chimera {
 		void draw(HUD *_pHud);
 
 	private:
+        void hudUpdate(HUD *_pHud,int eye);
 		void execLight();
 
 		void parseEntity(Node *_pNode);

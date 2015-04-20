@@ -27,7 +27,7 @@ namespace Chimera {
 
 		virtual void initDraw();
 		virtual void endDraw();
-		virtual void executeViewPerspective(Camera *pCamera, int _eye);
+		virtual void executeViewPerspective(const float &_fov,const float &_near,const float &_far, int _eye);
 		virtual void executeViewOrto(int eyeIndex);
 		virtual void reshape(int _w, int _h);
 		virtual void toggleFullScreen();
@@ -51,7 +51,7 @@ namespace Chimera {
 		ovrGLTexture fb_ovr_tex[2];
 		ovrEyeRenderDesc eye_rdesc[2];
 		ovrPosef pose[2];
-		
+
 		bool fullscreenStatus;
 		ovrVector2i winPosPrev;
 

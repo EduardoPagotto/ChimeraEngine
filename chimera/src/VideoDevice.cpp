@@ -32,13 +32,13 @@ namespace Chimera {
 		SDL_GL_SwapWindow(window);
 	}
 
-	void VideoDevice::executeViewPerspective(Camera *pCamera, int _eye) {
+	void VideoDevice::executeViewPerspective(const float &_fov,const float &_near,const float &_far, int _eye) {
 
 		glViewport(0, 0, winSizeW, winSizeH);
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		gluPerspective(pCamera->getFov(), (GLfloat)(float)winSizeW / (float)winSizeH, pCamera->getNear(), pCamera->getFar());
+		gluPerspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 

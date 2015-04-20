@@ -34,8 +34,6 @@ target_link_libraries(
 	${Chimera_BINARY_DIR}/libChimera.a
 	${OPENGL_LIBRARIES}
 	${SDL2_LIBRARY}
-#	${LIBXML2_LIBRARIES}
-	#/usr/local/lib64/libtinyxml2.a
 	/usr/lib64/libtinyxml2.so
 	${BULLET_LIBRARIES}
 	${FREETYPE_LIBRARY}
@@ -48,14 +46,8 @@ target_link_libraries(
 	librt.so
 	libXrandr.so
 	/usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a
-	#libGL.so
-	#libXxf86vm.so
-	#libpthread.so
-	#${UDEV_LIBRARIES}
-	#${XINERAMA_LIBRARY}
-	#${X11_LIBRARIES}
 )
 
 add_dependencies(AppCargaManual chimera)
 
-INSTALL(FILES ${appTest2_BINARY_DIR}/AppCargaManual DESTINATION bin)
+INSTALL(FILES ${AppCargaManual_BINARY_DIR}/AppCargaManual DESTINATION bin)

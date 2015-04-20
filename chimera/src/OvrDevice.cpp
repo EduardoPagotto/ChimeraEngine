@@ -286,12 +286,12 @@ namespace Chimera {
 	//	orthomatrix[0][0] = k1 / (right - left);
 	//	orthomatrix[0][1] = 0;
 	//	orthomatrix[0][2] = 0;
-	//	orthomatrix[0][3] = 0; 
+	//	orthomatrix[0][3] = 0;
 
 	//	orthomatrix[1][0] = 0;
 	//	orthomatrix[1][1] = k2 / (top - bottom);
 	//	orthomatrix[1][2] = 0;
-	//	orthomatrix[1][3] = 0;// 
+	//	orthomatrix[1][3] = 0;//
 
 	//	orthomatrix[2][0] = 0;
 	//	orthomatrix[2][1] = 0;
@@ -364,15 +364,15 @@ namespace Chimera {
 
 
 	// 	// *** 2D Text - Configure Orthographic rendering.
-	// 	
+	//
 	// 	// Render UI in 2D orthographic coordinate system that maps [-1,1] range
 	// 	// to a readable FOV area centered at your eye and properly adjusted.
 	// 	pRender->ApplyStereoParams(renderViewport, OrthoProjection[eye]);
 	// 	pRender->SetDepthMode(false, false);
-	// 	
+	//
 	// 	// We set this scale up in CreateOrthoSubProjection().
 	// 	float textHeight = 22.0f;
-	// 	
+	//
 	// 	// Display Loading screen-shot in frame 0.
 	// 	if (LoadingState != LoadingState_Finished)
 	// 	{
@@ -383,22 +383,22 @@ namespace Chimera {
 	// 		DrawTextBox(pRender, 0.0f, -textHeight, textHeight, loadMessage.ToCStr(), DrawText_HCenter);
 	// 		LoadingState = LoadingState_DoLoad;
 	// 	}
-	// 	
+	//
 	// 	// HUD overlay brought up by spacebar.
 	// 	RenderTextInfoHud(textHeight);
-	// 	
-	// 	// Menu brought up by 
+	//
+	// 	// Menu brought up by
 	// 	Menu.Render(pRender);
 
 
 	// Calculate projections
 	// 	Projection[0] = ovrMatrix4f_Projection(EyeRenderDesc[0].Fov,  0.01f, 10000.0f, true);
 	// 	Projection[1] = ovrMatrix4f_Projection(EyeRenderDesc[1].Fov,  0.01f, 10000.0f, true);
-	// 	
+	//
 	// 	float    orthoDistance = 0.8f; // 2D is 0.8 meter from camera
 	// 	Vector2f orthoScale0   = Vector2f(1.0f) / Vector2f(EyeRenderDesc[0].PixelsPerTanAngleAtCenter);
 	// 	Vector2f orthoScale1   = Vector2f(1.0f) / Vector2f(EyeRenderDesc[1].PixelsPerTanAngleAtCenter);
-	// 	
+	//
 	// 	OrthoProjection[0] = ovrMatrix4f_OrthoSubProjection(Projection[0], orthoScale0, orthoDistance,
 	// 														EyeRenderDesc[0].HmdToEyeViewOffset.x);
 	// 	OrthoProjection[1] = ovrMatrix4f_OrthoSubProjection(Projection[1], orthoScale1, orthoDistance,
@@ -413,23 +413,23 @@ namespace Chimera {
 	// 		ovrVector2f scale; scale.x = scaleFactor; scale.y = scaleFactor;
 	// 		return ovrMatrix4f_OrthoSubProjection(ovrPerspectiveProjection, scale, 100.8f, erd.HmdToEyeViewOffset.x);
 	// 	}
-	// 	
-	// 	
+	//
+	//
 	// 	void OvrDevice::GetOrthoProjection(const HMDRenderState& RenderState, OVR::Matrix4f OrthoProjection[2])
 	// 	{
 	// 		OVR::Matrix4f perspectiveProjection[2];
 	// 		perspectiveProjection[0] = ovrMatrix4f_Projection(RenderState.EyeRenderDesc[0].Fov, 0.01f, 10000.f, true);
 	// 		perspectiveProjection[1] = ovrMatrix4f_Projection(RenderState.EyeRenderDesc[1].Fov, 0.01f, 10000.f, true);
-	// 		
+	//
 	// 		const float    orthoDistance = 10;//HSWDISPLAY_DISTANCE; // This is meters from the camera (viewer) that we place the ortho plane.
 	// 		const Vector2f orthoScale0   = OVR::Vector2f(1.f) / OVR::Vector2f(RenderState.EyeRenderDesc[0].PixelsPerTanAngleAtCenter);
 	// 		const Vector2f orthoScale1   = OVR::Vector2f(1.f) / OVR::Vector2f(RenderState.EyeRenderDesc[1].PixelsPerTanAngleAtCenter);
-	// 		
+	//
 	// 		OrthoProjection[0] = ovrMatrix4f_OrthoSubProjection(perspectiveProjection[0], orthoScale0, orthoDistance, RenderState.EyeRenderDesc[0].ViewAdjust.x);
 	// 		OrthoProjection[1] = ovrMatrix4f_OrthoSubProjection(perspectiveProjection[1], orthoScale1, orthoDistance, RenderState.EyeRenderDesc[1].ViewAdjust.x);
 	// 	}
 
-	void OvrDevice::executeViewPerspective(Camera *pCamera, int eyeIndex) {
+	void OvrDevice::executeViewPerspective(const float &_fov,const float &_near,const float &_far, int _eye) {
 
 		using namespace OVR;
 
@@ -438,7 +438,7 @@ namespace Chimera {
 		ovrMatrix4f perspectiveProjection;
 		float rot_mat[16];
 
-		ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
+		ovrEyeType eye = hmd->EyeRenderOrder[_eye];
 		glViewport(eye == ovrEye_Left ? 0 : fbSize.w / 2, 0, fbSize.w / 2, fbSize.h);
 
 
@@ -447,7 +447,7 @@ namespace Chimera {
 		//perspectiveProjection = ovrMatrix4f_Projection(hmd->DefaultEyeFov[eye], 0.5, 500.0, 1);
 		perspectiveProjection = ovrMatrix4f_Projection(eye_rdesc[eye].Fov, 0.1, 1000.0, true);
 
-		orthoProjection[eyeIndex] = ovrMatrix4f_OrthoSubProjection(perspectiveProjection, orthoScale, orthoDistance, eye_rdesc[eye].DistortedViewport.Pos.x);
+		orthoProjection[_eye] = ovrMatrix4f_OrthoSubProjection(perspectiveProjection, orthoScale, orthoDistance, eye_rdesc[eye].DistortedViewport.Pos.x);
 
 		//orthoProjection[eye].M[1][1] = -orthoProjection[eye].M[1][1];
 		//orthoProjection[eye].M[1][1] = -orthoProjection[eye].M[1][1];

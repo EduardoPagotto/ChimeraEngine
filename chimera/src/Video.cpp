@@ -137,15 +137,6 @@ namespace Chimera {
 
 	}
 
-	void  Video::updateHud(HUD *pHud, int eye) {
-
-		if (pHud->isOn() == true) {
-			executeViewOrto(eye);
-			pHud->update();
-			restoreMatrix();
-		}
-	}
-
 	void Video::restoreMatrix() {
 
 		glMatrixMode(GL_PROJECTION);

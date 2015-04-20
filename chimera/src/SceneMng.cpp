@@ -182,7 +182,7 @@ namespace Chimera {
 
 		for (int eye = 0; eye < indiceDesenho; eye++) {
 
-			pVideo->executeViewPerspective(pCameraAtiva, eye);
+			pVideo->executeViewPerspective(pCameraAtiva->getFov(),pCameraAtiva->getNear(),pCameraAtiva->getFar(), eye);
 
 			pCameraAtiva->exec();
 
@@ -199,12 +199,23 @@ namespace Chimera {
 #endif
 
 			if (pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS)
-				pVideo->updateHud(_pHud, 0);
+                hudUpdate(_pHud,0);
 			else
-				pVideo->updateHud(_pHud, eye);
+                hudUpdate(_pHud,eye);
+
 		}
 
 	}
+
+	void SceneMng::hudUpdate(HUD *_pHud,int eye){
+
+        if (_pHud->isOn() == true) {
+            pVideo->executeViewOrto(eye);
+            _pHud->update();
+            pVideo->restoreMatrix();
+        }
+
+    }
 
 	void SceneMng::setLight(bool _lightOn) {
 		if (_lightOn == true)

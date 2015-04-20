@@ -4,8 +4,6 @@
 #define GLEW_STATIC
 
 #include <string>
-#include "Camera.h"
-#include "HUD.h"
 
 #ifdef WIN32
 #include "windows.h"
@@ -43,7 +41,7 @@ namespace Chimera
 
 		virtual void initDraw() = 0;
 		virtual void endDraw() = 0;
-		virtual void executeViewPerspective(Camera *pCamera, int _eye) = 0;
+        virtual void executeViewPerspective(const float &_fov,const float &_near,const float &_far, int _eye) = 0;//(Camera *pCamera, int _eye) = 0;
 		virtual void executeViewOrto(int eyeIndex) = 0;
 		virtual void reshape(int _w, int _y) = 0;
 		virtual void toggleFullScreen() = 0;
@@ -61,8 +59,6 @@ namespace Chimera
 		std::string getNomeTela() const {
 			return nomeTela;
 		}
-
-		void updateHud(HUD *pHud, int eye);
 
 		void restoreMatrix();
 

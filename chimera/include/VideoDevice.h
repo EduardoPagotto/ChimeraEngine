@@ -14,7 +14,7 @@ namespace Chimera
 
 		virtual void initDraw();
 		virtual void endDraw();
-		virtual void executeViewPerspective(Camera *pCamera, int _eye);
+		virtual void executeViewPerspective(const float &_fov,const float &_near,const float &_far, int _eye);
 		virtual void executeViewOrto(int eye);
 		virtual void reshape(int _w, int _h);
 		virtual void toggleFullScreen();

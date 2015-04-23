@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppCargaManual", "AppCargaM
 		{D403B073-4A2F-498C-BF18-881B01926D64} = {D403B073-4A2F-498C-BF18-881B01926D64}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppShader", "AppShader\AppShader.vcxproj", "{84E1DAC3-949C-4252-AEB0-71DB1CE52DFC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D403B073-4A2F-498C-BF18-881B01926D64} = {D403B073-4A2F-498C-BF18-881B01926D64}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -24,6 +29,10 @@ Global
 		{1C08701D-C0DE-4C45-998F-CF54C8CFE15E}.Debug|Win32.Build.0 = Debug|Win32
 		{1C08701D-C0DE-4C45-998F-CF54C8CFE15E}.Release|Win32.ActiveCfg = Release|Win32
 		{1C08701D-C0DE-4C45-998F-CF54C8CFE15E}.Release|Win32.Build.0 = Release|Win32
+		{84E1DAC3-949C-4252-AEB0-71DB1CE52DFC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{84E1DAC3-949C-4252-AEB0-71DB1CE52DFC}.Debug|Win32.Build.0 = Debug|Win32
+		{84E1DAC3-949C-4252-AEB0-71DB1CE52DFC}.Release|Win32.ActiveCfg = Release|Win32
+		{84E1DAC3-949C-4252-AEB0-71DB1CE52DFC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,8 @@
 #ifndef __GAME_EVENTS_TEST__H_
 # define __GAME_EVENTS_TEST__H_
 
+#include "Video.h"
+
 #include "IGameClientEvents.h"
 # include "DataMsg.h"
 
@@ -24,6 +26,13 @@ public:
 	virtual void newFPS(const unsigned int &fps);
 	virtual void beginProcGame();
 	virtual void endProcGame();
+
+private :
+
+	GLuint vertexbuffer;
+	GLuint programID;
+
+
 };
 
 

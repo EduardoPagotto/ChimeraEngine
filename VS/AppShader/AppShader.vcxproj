@@ -94,6 +94,10 @@
     <ClCompile Include="..\..\AppShader\src\GameEvents.cpp" />
     <ClCompile Include="..\..\AppShader\src\stdafx.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\AppShader\shader\SimpleFragmentShader.fragmentshader" />
+    <None Include="..\..\AppShader\shader\SimpleVertexShader.vertexshader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

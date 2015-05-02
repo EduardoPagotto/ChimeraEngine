@@ -26,7 +26,4 @@ public:
 	virtual void endProcGame();
 };
 
-
-
-
 #endif

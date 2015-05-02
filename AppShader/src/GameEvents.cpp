@@ -4,12 +4,20 @@
 
 GameEvents::GameEvents() {}
 
-GameEvents::~GameEvents() {}
+GameEvents::~GameEvents() {
+
+	// Cleanup VBO
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
+}
 
 void GameEvents::start() {
 
 	// Dark blue background
-	//glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
 
 	// Create and compile our GLSL program from the shaders
 	programID = Chimera::LoadShaders("C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
@@ -36,7 +44,9 @@ void GameEvents::start() {
 
 }
 
-void GameEvents::stop() {}
+void GameEvents::stop() {
+
+}
 
 void GameEvents::render() {
 
@@ -62,7 +72,6 @@ void GameEvents::render() {
 	glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 
 	glDisableVertexAttribArray(0);
-
 
 }
 

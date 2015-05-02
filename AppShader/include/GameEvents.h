@@ -31,6 +31,7 @@ private :
 
 	GLuint vertexbuffer;
 	GLuint programID;
+	GLuint VertexArrayID;
 
 
 };

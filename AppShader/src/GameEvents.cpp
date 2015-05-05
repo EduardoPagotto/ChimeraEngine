@@ -20,8 +20,13 @@ void GameEvents::start() {
 	glBindVertexArray(VertexArrayID);
 
 	// Create and compile our GLSL program from the shaders
+#ifdef WIN32
 	programID = Chimera::LoadShaders("C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
 		"C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleFragmentShader.fragmentshader");
+# else
+    programID = Chimera::LoadShaders("/home/pagotto/Projetos/ChimeraEngine/AppShader/shader/SimpleVertexShader.vertexshader",
+        "/home/pagotto/Projetos/ChimeraEngine/AppShader/shader/SimpleFragmentShader.fragmentshader");
+# endif
 
 	// An array of 3 vectors which represents 3 vertices
 	static const GLfloat g_vertex_buffer_data[] = {

@@ -24,8 +24,8 @@ void GameEvents::start() {
 	programID = Chimera::LoadShaders("C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
 		"C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleFragmentShader.fragmentshader");
 # else
-    programID = Chimera::LoadShaders("/home/pagotto/Projetos/ChimeraEngine/AppShader/shader/SimpleVertexShader.vertexshader",
-        "/home/pagotto/Projetos/ChimeraEngine/AppShader/shader/SimpleFragmentShader.fragmentshader");
+    programID = Chimera::LoadShaders("/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleVertexShader.vertexshader",
+        "/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleFragmentShader.fragmentshader");
 # endif
 
 	// An array of 3 vectors which represents 3 vertices

@@ -48,6 +48,6 @@ target_link_libraries(
 #	/usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a
 )
 
-add_dependencies(AppEmpty chimera)
+#add_dependencies(AppEmpty chimera)
 
 INSTALL(FILES ${AppEmpty_BINARY_DIR}/AppEmpty DESTINATION bin)

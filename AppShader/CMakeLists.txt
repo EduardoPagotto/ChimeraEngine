@@ -48,6 +48,6 @@ target_link_libraries(
 #	/usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a
 )
 
-add_dependencies(AppShader chimera)
+#add_dependencies(AppShader chimera)
 
 INSTALL(FILES ${AppShader_BINARY_DIR}/AppShader DESTINATION bin)

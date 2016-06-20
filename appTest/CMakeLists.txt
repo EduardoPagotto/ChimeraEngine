@@ -56,6 +56,6 @@ target_link_libraries(
 	#${X11_LIBRARIES}
 )
 
-add_dependencies(appTest chimera)
+#add_dependencies(appTest chimera)
 
 INSTALL(FILES ${appTest_BINARY_DIR}/appTest DESTINATION bin)

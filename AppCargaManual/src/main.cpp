@@ -7,7 +7,10 @@
 #include <iostream>
 
 #include "VideoDevice.h"
-#include "OvrDevice.h"
+
+#ifdef OVR_SET_TO_USE
+  #include "OvrDevice.h"
+#endif
 
 #include "Game.h"
 #include "DrawBox.h"

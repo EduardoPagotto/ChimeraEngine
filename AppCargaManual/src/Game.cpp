@@ -84,10 +84,10 @@ void Game::keyCapture(SDL_Keycode tecla) {
 		pObj->applyForce(btVector3(0.0, -10.0, 0.0));
 		break;
 	case SDLK_a:
-		pObj->applyTorc(btVector3(0.0, -10.0, 0.0));
+		pObj->applyTorc(btVector3(0.0, 0.0, 10.0));
 		break;
 	case SDLK_s:
-		pObj->applyTorc(btVector3(0.0, 10.0, 0.0));
+		pObj->applyTorc(btVector3(0.0, 0.0, -10.0));
 		break;
 	default:
 		break;

@@ -35,15 +35,15 @@ set (SourcesChimeraAPPCargaManual
   ${Chimera_BINARY_DIR}/libChimera.a
   ${OPENGL_LIBRARIES}
   ${SDL2_LIBRARY}
-  /usr/lib64/libtinyxml2.so
   ${BULLET_LIBRARIES}
   ${FREETYPE_LIBRARY}
   ${FTGL_LIBRARY}
   ${LOG4CXX_LIBRARIES}
   -lSDL2_image
   -lSDL2_ttf
-  /usr/lib64/libGLEW.so
-  /usr/lib64/libGLEWmx.so
+  -ltinyxml2#/usr/lib64/libtinyxml2.so
+  -lGLEW#/usr/lib64/libGLEW.so
+  -lGLEWmx#/usr/lib64/libGLEWmx.so
   librt.so
   libXrandr.so
 )

@@ -14,13 +14,10 @@
 #include "Node.h"
 
 namespace Chimera {
-namespace Graph {
 
 class PhysicsControl
 {
 public:
-
-    friend class Physics;
 
     PhysicsControl ( void );
     ~PhysicsControl ( void );
@@ -32,7 +29,7 @@ public:
 
     void checkCollisions();
     bool checkAllowCollision ( Graph::Node *pNode );
-    void sendMessageCollision ( KindOp _kindOf, Graph::Node *_nodeA, Graph::Node *_nodeB );
+    void sendMessageCollision ( Graph::KindOp _kindOf, Graph::Node *_nodeA, Graph::Node *_nodeB );
 
     inline void setGravity ( const btVector3 &_vet ) {
         discretDynamicsWorld->setGravity ( _vet );
@@ -51,6 +48,10 @@ public:
 
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
+    inline btDiscreteDynamicsWorld* getWorld() {
+        return discretDynamicsWorld;
+    }
+    
 private:
 
     static void doTickCallBack ( btDynamicsWorld *world, btScalar timeStep );
@@ -71,6 +72,5 @@ private:
     btClock clockCounter;
     btScalar period;
 };
-}
 }
 #endif

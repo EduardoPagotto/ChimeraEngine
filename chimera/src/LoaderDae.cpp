@@ -23,7 +23,7 @@ LoaderDae::LoaderDae ( const std::string &textureDir, const std::string &modelDi
     this->textureDir = textureDir;
     this->modelDir = modelDir;
 
-    pPhysicsControl = Chimera::Infra::Singleton<Chimera::Graph::PhysicsControl>::getRefSingleton();
+    pPhysicsControl = Chimera::Infra::Singleton<Chimera::PhysicsControl>::getRefSingleton();
 
 }
 
@@ -34,7 +34,7 @@ LoaderDae::~LoaderDae() {
         doc = nullptr;
     }
 
-    Chimera::Infra::Singleton<Chimera::Graph::PhysicsControl>::releaseRefSingleton();
+    Chimera::Infra::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 }
 
 Chimera::Graph::Node* LoaderDae::loadFile ( const std::string &file ) {

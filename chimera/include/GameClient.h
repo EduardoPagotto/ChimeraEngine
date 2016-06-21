@@ -24,7 +24,7 @@ protected:
     void sendMessage ( Graph::KindOp _kindOf, void *_paramA, void *_paramB );
 
     SceneMng *pSceneMng;
-    Graph::PhysicsControl *physicWorld;
+    PhysicsControl *physicWorld;
     Font *pFont;
     HUD *pHUD;
 

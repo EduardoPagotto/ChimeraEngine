@@ -31,7 +31,7 @@ private:
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;
 
-    Chimera::Graph::PhysicsControl *pPhysicsControl;
+    Chimera::PhysicsControl *pPhysicsControl;
 };
 }
 

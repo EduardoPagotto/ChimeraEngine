@@ -16,8 +16,8 @@ class Node : public Entity
 {
 public:
 
-    //friend class SceneMng;
-    //friend class Loader;
+    //friend class Chimera::SceneMng;
+    //friend class Chimera::Loader;
 
     Node ( EntityKind _type, std::string _id, std::string _name );
 

@@ -44,7 +44,8 @@ Physics::Physics ( const Physics& _physics ) : Node ( _physics ) {
 Physics::~Physics() {
 
     if ( pRigidBody ) {
-        pWorld->discretDynamicsWorld->removeRigidBody ( pRigidBody );
+        //pWorld->discretDynamicsWorld->removeRigidBody ( pRigidBody );
+        pWorld->getWorld()->removeRigidBody ( pRigidBody );
         delete pRigidBody->getMotionState();
         delete pRigidBody;
     }
@@ -88,7 +89,8 @@ void Physics::init ( btTransform &_tTrans, void *pObj ) {
 
     pRigidBody->setContactProcessingThreshold ( BT_LARGE_FLOAT );
 
-    pWorld->discretDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
+    //pWorld->discretDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
+    pWorld->getWorld()->addRigidBody ( pRigidBody, 1, 1 );
 
 }
 

@@ -10,7 +10,6 @@
 #include "ChimeraUtils.h"
 
 namespace Chimera {
-namespace Graph {
     
 PhysicsControl::PhysicsControl() {
 
@@ -114,15 +113,15 @@ void PhysicsControl::clearAllShapes() {
     // }
 }
 
-bool PhysicsControl::checkAllowCollision ( Node *pNode ) {
+bool PhysicsControl::checkAllowCollision ( Graph::Node *pNode ) {
 
-    DataMsg dataMsg ( KindOp::IS_ALLOW_COLLIDE, this, nullptr, nullptr );
+    Graph::DataMsg dataMsg ( Graph::KindOp::IS_ALLOW_COLLIDE, this, nullptr, nullptr );
     pNode->update ( &dataMsg );
 
     return ( dataMsg.isDone() );
 }
 
-void PhysicsControl::sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *_nodeB ) {
+void PhysicsControl::sendMessageCollision ( Graph::KindOp _kindOf, Graph::Node *_nodeA, Graph::Node *_nodeB ) {
 
     SDL_Event event;
     SDL_zero ( event );
@@ -136,7 +135,7 @@ void PhysicsControl::sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *
 
 void PhysicsControl::checkCollisions() {
 
-    std::map< btCollisionObject*, std::pair<Node*, Node*> > new_contacts;
+    std::map< btCollisionObject*, std::pair<Graph::Node*, Graph::Node*> > new_contacts;
 
     int numManifolds = discretDynamicsWorld->getDispatcher()->getNumManifolds();
 
@@ -156,12 +155,12 @@ void PhysicsControl::checkCollisions() {
 
                 if ( new_contacts.find ( objB ) == new_contacts.end() ) {
 
-                    Node* l_pNodeB = ( Node* ) objB->getUserPointer(); //rigidbody contem o dado
-                    Node* l_pNodeA = ( Node* ) objA->getUserPointer(); //rigidbody contem o dado
+                    Graph::Node* l_pNodeB = ( Graph::Node* ) objB->getUserPointer(); //rigidbody contem o dado
+                    Graph::Node* l_pNodeA = ( Graph::Node* ) objA->getUserPointer(); //rigidbody contem o dado
 
                     if ( l_pNodeB ) {
                         if ( checkAllowCollision ( l_pNodeB ) == true ) {
-                            new_contacts[objB] = std::pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeA ), static_cast<Node*> ( l_pNodeB ) );
+                            new_contacts[objB] = std::pair<Graph::Node*, Graph::Node*> ( static_cast<Graph::Node*> ( l_pNodeA ), static_cast<Graph::Node*> ( l_pNodeB ) );
                         }
                         //new_contacts[objB] = std::make_pair<Node*, Node*>(static_cast<Node*> (l_pNodeA), static_cast<Node*> (l_pNodeB));
                     }
@@ -170,12 +169,12 @@ void PhysicsControl::checkCollisions() {
 
                 if ( new_contacts.find ( objA ) == new_contacts.end() ) {
 
-                    Node* l_pNodeA = ( Node* ) objA->getUserPointer(); //rigidbody contem o dado
-                    Node* l_pNodeB = ( Node* ) objB->getUserPointer(); //rigidbody contem o dado
+                    Graph::Node* l_pNodeA = ( Graph::Node* ) objA->getUserPointer(); //rigidbody contem o dado
+                    Graph::Node* l_pNodeB = ( Graph::Node* ) objB->getUserPointer(); //rigidbody contem o dado
 
                     if ( l_pNodeA ) {
                         if ( checkAllowCollision ( l_pNodeA ) == true ) {
-                            new_contacts[objA] = std::pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ), static_cast<Node*> ( l_pNodeA ) );
+                            new_contacts[objA] = std::pair<Graph::Node*, Graph::Node*> ( static_cast<Graph::Node*> ( l_pNodeB ), static_cast<Graph::Node*> ( l_pNodeA ) );
                         }
                         //new_contacts[objA] = std::make_pair<Node*, Node*> ( static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA ) );
                     }
@@ -184,14 +183,14 @@ void PhysicsControl::checkCollisions() {
         }
     }
 
-    std::map< btCollisionObject*, std::pair<Node*, Node*> >::iterator it;
+    std::map< btCollisionObject*, std::pair<Graph::Node*, Graph::Node*> >::iterator it;
     if ( !new_contacts.empty() ) {
 
         for ( it = new_contacts.begin(); it != new_contacts.end(); it++ ) {
             if ( contactActives.find ( ( *it ).first ) == contactActives.end() ) {
 
                 if ( checkAllowCollision ( ( *it ).second.first ) == true ) {
-                    sendMessageCollision ( KindOp::START_COLLIDE, ( *it ).second.first, ( *it ).second.second );
+                    sendMessageCollision ( Graph::KindOp::START_COLLIDE, ( *it ).second.first, ( *it ).second.second );
                 }
 
             } else {
@@ -209,7 +208,7 @@ void PhysicsControl::checkCollisions() {
             if ( new_contacts.find ( ( *it ).first ) == new_contacts.end() ) {
 
                 if ( checkAllowCollision ( ( *it ).second.first ) == true ) {
-                    sendMessageCollision ( KindOp::OFF_COLLIDE, ( *it ).second.first, ( *it ).second.second );
+                    sendMessageCollision ( Graph::KindOp::OFF_COLLIDE, ( *it ).second.first, ( *it ).second.second );
                 }
 
             }
@@ -238,7 +237,6 @@ void PhysicsControl::loadCollada ( tinyxml2::XMLElement* _nNode ) {
         }
     }
 
-}
 }
 }
 

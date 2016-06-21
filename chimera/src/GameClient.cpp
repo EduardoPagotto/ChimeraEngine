@@ -24,7 +24,7 @@ GameClient::GameClient ( Chimera::SceneMng *_pScenMng ) : pSceneMng ( _pScenMng 
     pHUD->addSquare ( area, Color ( 1.0f, 1.0f, 1.0f, 0.2f ) );
     pHUD->addText ( 0, 0, 0, 0, Color::RED, &textoFPS );
 
-    physicWorld = Infra::Singleton<Graph::PhysicsControl>::getRefSingleton();
+    physicWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
 }
 
 GameClient::~GameClient() {
@@ -33,7 +33,7 @@ GameClient::~GameClient() {
         delete pHUD;
     }
 
-    Infra::Singleton<Graph::PhysicsControl>::releaseRefSingleton();
+    Infra::Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
 void GameClient::newFPS ( const unsigned int &fps ) {

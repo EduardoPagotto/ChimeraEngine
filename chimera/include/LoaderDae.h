@@ -15,14 +15,14 @@ public:
     LoaderDae ( const std::string &textureDir, const std::string &modelDir );
     virtual ~LoaderDae();
 
-    Chimera::Node *loadFile ( const std::string &file );
+    Chimera::Graph::Node *loadFile ( const std::string &file );
 
 private:
 
     void getPhysicSceneInfile();
     void getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScene );
-    void carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type );
-    Chimera::Node* getNodeSceneInFile();
+    void carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type );
+    Chimera::Graph::Node* getNodeSceneInFile();
     tinyxml2::XMLElement* getDadoRigidBody ( const char* _url, const char* _sid );
     tinyxml2::XMLElement* findSceneLib ( const char *rotina, const char* instance, const char* library );
 
@@ -31,7 +31,7 @@ private:
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;
 
-    Chimera::PhysicsControl *pPhysicsControl;
+    Chimera::Graph::PhysicsControl *pPhysicsControl;
 };
 }
 

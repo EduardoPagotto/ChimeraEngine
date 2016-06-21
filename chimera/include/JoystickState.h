@@ -18,9 +18,9 @@
 # include <SDL.h>
 #endif
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Device {
+    
 class JoystickState
 {
 public:
@@ -87,7 +87,7 @@ public:
 
     std::string GetStatusJoy ( void );
 };
-
+}
 }
 
 #endif

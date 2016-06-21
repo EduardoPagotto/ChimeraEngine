@@ -12,9 +12,9 @@
 
 #include "JoystickState.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Device {
+    
 class JoystickManager
 {
 public:
@@ -43,6 +43,6 @@ public:
     void DebugDadosJoystick();
 };
 }
-
+}
 # endif
 

@@ -10,7 +10,8 @@
 #include "ChimeraUtils.h"
 
 namespace Chimera {
-
+namespace Graph {
+    
 DrawTriMesh::DrawTriMesh ( std::string _id, std::string _name ) : Draw ( DrawType::MESH, _id, _name ) {
 
 }
@@ -266,6 +267,6 @@ void DrawTriMesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
     }
 
 }
-
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

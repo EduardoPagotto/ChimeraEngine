@@ -7,7 +7,8 @@
 #include <SDL_syswm.h>
 
 namespace Chimera {
-
+namespace Device {
+    
 OvrDevice::OvrDevice ( std::string nomeTela ) : Video ( nomeTela, KIND_DEVICE::OVR_OCULUS ) {
 
     fullscreenStatus = false;
@@ -494,7 +495,7 @@ void OvrDevice::quat_to_matrix ( const float *quat, float *mat ) {
     mat[3] = mat[7] = mat[11] = 0.0f;
     mat[15] = 1.0f;
 }
-
+}
 }
 
 #endif //  OVR_SET_TO_USE

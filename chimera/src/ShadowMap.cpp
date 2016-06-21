@@ -13,14 +13,14 @@ ShadowMap::ShadowMap() {
     memset ( g_mModelView, 0, sizeof ( float ) * 16 );
     g_LightView.setZero();
 
-    pTexture = new Texture ( "ShadowMap-01", "ShadowMap-01" );
+    pTexture = new Graph::Texture ( "ShadowMap-01", "ShadowMap-01" );
 }
 
 ShadowMap::~ShadowMap() {
 
 }
 
-void ShadowMap::init ( Node *_pScene ) {
+void ShadowMap::init ( Graph::Node *_pScene ) {
     pScene = _pScene;
 
     // Here we allocate memory for our depth texture that will store our light's view.
@@ -130,7 +130,7 @@ void ShadowMap::ApplyShadowMap ( void *pObjeto ) {
 
     //FIXME Implementar o root do GE
     // Render the world that needs to be shadowed
-    DataMsg dataMsg ( KindOp::DRAW_NO_TEX, this, pObjeto, nullptr );
+    Graph::DataMsg dataMsg ( Graph::KindOp::DRAW_NO_TEX, this, pObjeto, nullptr );
     pScene->update ( &dataMsg );
 
     // Now that the world is shadowed and we are done with the texture generation,
@@ -186,7 +186,7 @@ void ShadowMap::RenderSceneA ( void *pObjeto ) {
     //FIXME Implementar o root do GE
     // Render the world according to the light's view
     //RenderWorld();
-    DataMsg dataMsg ( KindOp::DRAW_NO_TEX, this, pObjeto, nullptr );
+    Graph::DataMsg dataMsg ( Graph::KindOp::DRAW_NO_TEX, this, pObjeto, nullptr );
     pScene->update ( &dataMsg );
 
     // Now that the world is rendered, save the depth values to a texture

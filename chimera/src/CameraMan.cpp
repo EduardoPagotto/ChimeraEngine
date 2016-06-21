@@ -8,7 +8,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-
+namespace Graph {
+    
 CameraMan::CameraMan ( std::string _id, std::string _name ) : Camera ( CameraType::Spherical, _id, _name ) {
 
     along.setValue ( 1.0f, 0.0f, 0.0f );
@@ -164,6 +165,6 @@ void CameraMan::fly ( float _delta, bool _wall[4] ) {
 
     updateMove();
 }
-
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

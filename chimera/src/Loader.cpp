@@ -20,7 +20,7 @@ Loader::~Loader() {
     }
 
     while ( !listaNodeRemover.empty() ) {
-        Node *pNode = listaNodeRemover.front();
+        Graph::Node *pNode = listaNodeRemover.front();
         listaNodeRemover.pop();
         delete pNode;
         pNode = nullptr;
@@ -28,9 +28,9 @@ Loader::~Loader() {
 
 }
 
-Node* Loader::loadDAE ( const std::string &_file ) {
+Graph::Node* Loader::loadDAE ( const std::string &_file ) {
 
-    Node *pRootScene = nullptr;
+    Graph::Node *pRootScene = nullptr;
     std::string l_nomeArquivo = m_modelDir + _file;
 
     doc = new tinyxml2::XMLDocument();
@@ -76,7 +76,7 @@ void Loader::libCam ( void ) {
         l_nNode = l_nNode->FirstChildElement ( "camera" );
         while ( l_nNode != nullptr ) {
 
-            Camera *pCamera = new Camera ( CameraType::Base, retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
+            Graph::Camera *pCamera = new Graph::Camera ( Graph::CameraType::Base, retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
             listaNodeRemover.push ( pCamera );
 
             pCamera->loadCollada ( l_nNode );
@@ -93,7 +93,7 @@ void Loader::libLight() {
         l_nNode = l_nNode->FirstChildElement ( "light" );
         while ( l_nNode != nullptr ) {
 
-            Light *pLight = new Light ( LightType::POINT, retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
+            Graph::Light *pLight = new Graph::Light ( Graph::LightType::POINT, retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
             listaNodeRemover.push ( pLight ); //Salva na lista de remocao
 
             pLight->loadCollada ( l_nNode );
@@ -110,7 +110,7 @@ void Loader::libEffect ( void ) {
         l_nNode = l_nNode->FirstChildElement ( "effect" );
         while ( l_nNode != nullptr ) {
 
-            Effect *pEffect = new Effect ( retornaAtributo ( "id", l_nNode ), "Effect" );
+            Graph::Effect *pEffect = new Graph::Effect ( retornaAtributo ( "id", l_nNode ), "Effect" );
             listaNodeRemover.push ( pEffect );
 
             pEffect->loadCollada ( l_nNode );
@@ -127,7 +127,7 @@ void Loader::libTexture ( void ) {
     if ( l_nNode != nullptr ) {
         l_nNode = l_nNode->FirstChildElement ( "image" );
         while ( l_nNode != nullptr ) {
-            Texture *pTexture = new Texture ( retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
+            Graph::Texture *pTexture = new Graph::Texture ( retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
             listaNodeRemover.push ( pTexture );
 
             const char* l_val = l_nNode->FirstChildElement ( "init_from" )->GetText();
@@ -146,18 +146,18 @@ void Loader::libMaterial ( void ) {
         l_nNode = l_nNode->FirstChildElement ( "material" );
         while ( l_nNode != nullptr ) {
 
-            Material *pMaterial = new Material ( retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
+            Graph::Material *pMaterial = new Graph::Material ( retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
             listaNodeRemover.push ( pMaterial );
 
             const char* l_val = l_nNode->FirstChildElement ( "instance_effect" )->Attribute ( "url" );
             if ( l_val != nullptr ) {
 
-                Effect *pEffe = ( Effect* ) Node::findNodeById ( EntityKind::EFFECT, &l_val[1] ); //m_mEffect[ l_nomeEffect ];
+                Graph::Effect *pEffe = ( Graph::Effect* ) Graph::Node::findNodeById ( EntityKind::EFFECT, &l_val[1] ); //m_mEffect[ l_nomeEffect ];
                 if ( pEffe ) {
                     pMaterial->pEffect = pEffe;
                     if ( pEffe->getNameTextureId().size() > 0 ) {
 
-                        Texture *pTexture = ( Texture* ) Node::findNodeById ( EntityKind::TEXTURE, pEffe->getNameTextureId() ); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findNodeById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
+                        Graph::Texture *pTexture = ( Graph::Texture* ) Graph::Node::findNodeById ( EntityKind::TEXTURE, pEffe->getNameTextureId() ); //m_mTextura[pEffe->getNameTextureId()];//( Texture* ) Node::findNodeById ( EntityKind::IMAGE, pEffe->getNameTextureId() );
                         if ( pTexture != nullptr ) {
                             pMaterial->pTextura = pTexture;//new Texture( *pTexture );
                         }
@@ -179,7 +179,7 @@ void Loader::libGeometry ( void ) {
         l_nNode = l_nNode->FirstChildElement ( "geometry" );
         while ( l_nNode != nullptr ) {
 
-            DrawTriMesh *pDrawTriMesh = new DrawTriMesh ( retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
+            Graph::DrawTriMesh *pDrawTriMesh = new Graph::DrawTriMesh ( retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
             listaNodeRemover.push ( pDrawTriMesh );
 
             pDrawTriMesh->loadCollada ( l_nNode );
@@ -189,14 +189,14 @@ void Loader::libGeometry ( void ) {
     }
 }
 
-Node* Loader::libScene ( void ) {
+Graph::Node* Loader::libScene ( void ) {
 
-    Node *pScene = nullptr;
+    Graph::Node *pScene = nullptr;
     tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_visual_scenes" );
     if ( l_nNode != nullptr ) {
 
         l_nNode = l_nNode->FirstChildElement ( "visual_scene" );
-        pScene = new Node ( EntityKind::NODE, retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
+        pScene = new Graph::Node ( EntityKind::NODE, retornaAtributo ( "id", l_nNode ), retornaAtributo ( "name", l_nNode ) );
 
         l_nNode = l_nNode->FirstChildElement ( "node" );
         while ( l_nNode != nullptr ) {
@@ -229,12 +229,12 @@ void Loader::carregaMatrix ( btTransform *_pTrans, const std::vector<float> &lis
     _pTrans->setFromOpenGLMatrix ( ponteiroFloat );
 }
 
-void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
+void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Graph::Node *_pNode ) {
 
     const char* l_id = _nNodeXML->Attribute ( "id" );
     const char* l_nome = _nNodeXML->Attribute ( "name" );
 
-    Node *pFilho = _pNode;
+    Graph::Node *pFilho = _pNode;
 
     tinyxml2::XMLElement* l_nNodeVal = _nNodeXML->FirstChildElement();
 
@@ -264,11 +264,11 @@ void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
             btTransform* pTrans = pilhaTransformacao.front();
             pilhaTransformacao.pop();
 
-            Camera *pCam = ( Camera* ) Node::findNodeById ( EntityKind::CAMERA, ( char* ) &l_url[1] );
+            Graph::Camera *pCam = ( Graph::Camera* ) Graph::Node::findNodeById ( EntityKind::CAMERA, ( char* ) &l_url[1] );
             if ( pCam != nullptr ) {
 
-                Camera *pCamScena = nullptr;
-                pCam->clone ( ( Node** ) &pCamScena );
+                Graph::Camera *pCamScena = nullptr;
+                pCam->clone ( ( Graph::Node** ) &pCamScena );
                 pCamScena->setTransform ( *pTrans );
 
                 _pNode->addChild ( pCamScena );
@@ -285,11 +285,11 @@ void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
             btTransform* pTrans = pilhaTransformacao.front();
             pilhaTransformacao.pop();
 
-            Light *pLight = ( Light* ) Node::findNodeById ( EntityKind::LIGHT, ( char* ) &l_url[1] );
+            Graph::Light *pLight = ( Graph::Light* ) Graph::Node::findNodeById ( EntityKind::LIGHT, ( char* ) &l_url[1] );
             if ( pLight != nullptr ) {
 
-                Light *pLightScena = nullptr;
-                pLight->clone ( ( Node** ) &pLightScena );
+                Graph::Light *pLightScena = nullptr;
+                pLight->clone ( ( Graph::Node** ) &pLightScena );
                 pLightScena->setTransform ( *pTrans );
 
                 _pNode->addChild ( pLightScena );
@@ -305,14 +305,14 @@ void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
             btTransform* pTrans = pilhaTransformacao.front();
             pilhaTransformacao.pop();
 
-            DrawTriMesh *pDrawTriMesh = nullptr;
-            Material *pMaterial = nullptr;
+            Graph::DrawTriMesh *pDrawTriMesh = nullptr;
+            Graph::Material *pMaterial = nullptr;
 
-            Object *pObj = new Object ( l_id, l_nome );
+            Graph::Object *pObj = new Graph::Object ( l_id, l_nome );
             pObj->setTransform ( *pTrans );
 
             const char* l_url = l_nNodeVal->Attribute ( "url" );
-            pDrawTriMesh = ( DrawTriMesh* ) Node::findNodeById ( EntityKind::DRAW, ( char* ) &l_url[1] );
+            pDrawTriMesh = ( Graph::DrawTriMesh* ) Graph::Node::findNodeById ( EntityKind::DRAW, ( char* ) &l_url[1] );
 
             tinyxml2::XMLElement* l_nBindMat = l_nNodeVal->FirstChildElement ( "bind_material" );
             if ( l_nBindMat != nullptr ) {
@@ -322,7 +322,7 @@ void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
                     if ( l_nInstanceMaterial != nullptr ) {
 
                         const char *l_target = l_nInstanceMaterial->Attribute ( "target" );
-                        pMaterial = ( Material* ) Node::findNodeById ( EntityKind::MATERIAL, ( char* ) &l_target[1] );
+                        pMaterial = ( Graph::Material* ) Graph::Node::findNodeById ( EntityKind::MATERIAL, ( char* ) &l_target[1] );
 
                     }
                 }
@@ -333,24 +333,24 @@ void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
 
                 //Se ha effeito (color_material) carregue
                 if ( pMaterial->pEffect != nullptr ) {
-                    Effect *novoEffect = nullptr;
-                    pMaterial->pEffect->clone ( ( Node** ) &novoEffect );
+                    Graph::Effect *novoEffect = nullptr;
+                    pMaterial->pEffect->clone ( ( Graph::Node** ) &novoEffect );
                     pObj->addChild ( novoEffect );
                 }
 
                 //Se há textura carregue
                 if ( pMaterial->pTextura != nullptr ) {
 
-                    Texture *novaTextura = nullptr;
-                    pMaterial->pTextura->clone ( ( Node** ) &novaTextura );
+                    Graph::Texture *novaTextura = nullptr;
+                    pMaterial->pTextura->clone ( ( Graph::Node** ) &novaTextura );
                     pObj->addChild ( novaTextura );
                 }
             }
 
             //se há trimesh carregue
             if ( pDrawTriMesh ) {
-                DrawTriMesh *nodeFinal = nullptr;
-                pDrawTriMesh->clone ( ( Node** ) &nodeFinal );
+                Graph::DrawTriMesh *nodeFinal = nullptr;
+                pDrawTriMesh->clone ( ( Graph::Node** ) &nodeFinal );
                 pObj->addChild ( nodeFinal );
             }
 
@@ -362,7 +362,7 @@ void Loader::createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode ) {
 
         } else if ( strcmp ( l_nomeElemento, "node" ) == 0 ) {
 
-            Node *pBuffer = pFilho;
+            Graph::Node *pBuffer = pFilho;
             createNode ( l_nNodeVal, pFilho );
             pFilho = pBuffer;
 
@@ -423,7 +423,7 @@ void Loader::libConstraint() {
             l_nNode = l_nNode->FirstChildElement ( "rigid_constraint" );
             while ( l_nNode != nullptr ) {
 
-                Constraint *pConstraint = new Constraint ( l_nNode->Attribute ( "name" ), l_nNode->Attribute ( "sid" ) );
+                Graph::Constraint *pConstraint = new Graph::Constraint ( l_nNode->Attribute ( "name" ), l_nNode->Attribute ( "sid" ) );
                 listaNodeRemover.push ( pConstraint );
 
                 tinyxml2::XMLElement* l_nRefAttachent = l_nNode->FirstChildElement ( "ref_attachment" );
@@ -431,7 +431,7 @@ void Loader::libConstraint() {
 
                     const char *l_rigidA = l_nRefAttachent->Attribute ( "rigid_body" );
 
-                    Physics *pPhysc = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_rigidA );
+                    Graph::Physics *pPhysc = ( Graph::Physics* ) Graph::Node::findNodeById ( EntityKind::PHYSICS, l_rigidA );
                     pConstraint->pPhysicsA = pPhysc;
 
                     tinyxml2::XMLElement* l_nTrans = l_nRefAttachent->FirstChildElement ( "matrix" );
@@ -455,7 +455,7 @@ void Loader::libConstraint() {
 
                         const char *l_rigidB = l_nAttachent->Attribute ( "rigid_body" );
 
-                        Physics *pPhysc = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_rigidB );
+                        Graph::Physics *pPhysc = ( Graph::Physics* ) Graph::Node::findNodeById ( EntityKind::PHYSICS, l_rigidB );
                         pConstraint->pPhysicsB = pPhysc;
 
                         tinyxml2::XMLElement* l_nTrans = l_nAttachent->FirstChildElement ( "matrix" );
@@ -491,7 +491,7 @@ void Loader::libPhysicsModels() {
             l_nNode = l_nNode->FirstChildElement ( "rigid_body" );
             while ( l_nNode != nullptr ) {
 
-                Physics *pPhysc = new Physics ( l_nNode->Attribute ( "name" ), l_nNode->Attribute ( "sid" ) );
+                Graph::Physics *pPhysc = new Graph::Physics ( l_nNode->Attribute ( "name" ), l_nNode->Attribute ( "sid" ) );
                 //listaNodeRemover.push(pPhysc);
 
                 tinyxml2::XMLElement* l_nTecnicCommon = l_nNode->FirstChildElement ( "technique_common" );
@@ -599,7 +599,7 @@ void Loader::libPhysicsModels() {
                                 const char *l_mesh = l_nMesh->Attribute ( "url" );
                                 if ( l_mesh != nullptr ) {
 
-                                    DrawTriMesh *pDrawTriMesh = ( DrawTriMesh* ) Node::findNodeById ( EntityKind::DRAW, &l_mesh[1] );
+                                    Graph::DrawTriMesh *pDrawTriMesh = ( Graph::DrawTriMesh* ) Graph::Node::findNodeById ( EntityKind::DRAW, &l_mesh[1] );
 
                                     if ( pDrawTriMesh != nullptr ) {
 
@@ -647,8 +647,8 @@ void Loader::libPhysicsScenes ( void ) {
                     const char *l_body = l_nNode->Attribute ( "body" );
                     const char *l_target = l_nNode->Attribute ( "target" );
 
-                    Physics *pPhysic = ( Physics* ) Node::findNodeById ( EntityKind::PHYSICS, l_body ); //m_mPhysics[ ( const char* ) l_pBody];
-                    Object *pObj = ( Object* ) Node::findNodeById ( EntityKind::OBJECT, &l_target[1] );
+                    Graph::Physics *pPhysic = ( Graph::Physics* ) Graph::Node::findNodeById ( EntityKind::PHYSICS, l_body ); //m_mPhysics[ ( const char* ) l_pBody];
+                    Graph::Object *pObj = ( Graph::Object* ) Graph::Node::findNodeById ( EntityKind::OBJECT, &l_target[1] );
 
                     if ( ( pPhysic ) && ( pObj ) ) {
                         //FIXME ERRADO, Refazer tudo, usar o XML como um DB partudo de cima para baixo e nao o contrario

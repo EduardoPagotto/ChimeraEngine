@@ -5,8 +5,8 @@
 
 #include "Material.h"
 
-namespace Chimera
-{
+namespace Chimera {
+namespace Graph {
 
 enum class DrawType
 {
@@ -46,7 +46,7 @@ protected:
     DrawType type;
     Material *pMaterial;
 };
-
+}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

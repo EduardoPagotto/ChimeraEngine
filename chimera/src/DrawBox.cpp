@@ -8,6 +8,7 @@
 #include <GL/glu.h>
 
 namespace Chimera {
+namespace Graph {
 
 DrawBox::DrawBox ( std::string _id, std::string _name ) : Draw ( DrawType::BOX, _id, _name ) {
 }
@@ -81,5 +82,5 @@ void DrawBox::clone ( Node **ppNode ) {
 void DrawBox::update ( DataMsg *dataMsg ) {
     Node::update ( dataMsg );
 }
-
+}
 }

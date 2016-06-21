@@ -3,8 +3,8 @@
 
 #include "Camera.h"
 
-namespace Chimera
-{
+namespace Chimera {
+namespace Graph {
 
 class CameraSpherical : public Camera
 {
@@ -37,6 +37,6 @@ private:
     btScalar distanciaMax;
     btScalar distanciaMin;
 };
-
+}
 }
 #endif

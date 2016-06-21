@@ -4,9 +4,9 @@
 #include "Color.h"
 #include "Draw.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 class DrawGrid : public Draw
 {
 public:
@@ -51,7 +51,7 @@ private:
     Color colorZ;
 
 };
-
+}
 }
 
 #endif

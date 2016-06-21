@@ -30,7 +30,7 @@ class Loader
 public:
     Loader();
     ~Loader();
-    Node* loadDAE ( const std::string &_file );
+    Graph::Node* loadDAE ( const std::string &_file );
 
     void setModelDir ( const std::string &_dir ) {
         m_modelDir = _dir;
@@ -42,7 +42,7 @@ public:
 
 private:
     void carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix );
-    void createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode );
+    void createNode ( tinyxml2::XMLElement* _nNodeXML, Graph::Node *_pNode );
     std::string retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement* _node );
 
     void libCam();
@@ -51,7 +51,7 @@ private:
     void libTexture();
     void libMaterial();
     void libGeometry();
-    Node* libScene();
+    Graph::Node* libScene();
     void libPhysicsMaterial();
     void libPhysicsModels();
     void libPhysicsScenes();
@@ -64,7 +64,7 @@ private:
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;
 
-    std::queue<Node*> listaNodeRemover;
+    std::queue<Graph::Node*> listaNodeRemover;
     std::map<std::string, btMaterial*> m_pPhMaterial;
 
     //log4cxx::LoggerPtr logger;

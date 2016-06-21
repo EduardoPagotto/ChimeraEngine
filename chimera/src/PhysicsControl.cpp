@@ -10,7 +10,8 @@
 #include "ChimeraUtils.h"
 
 namespace Chimera {
-
+namespace Graph {
+    
 PhysicsControl::PhysicsControl() {
 
     collisionConfig = new btDefaultCollisionConfiguration();
@@ -238,7 +239,7 @@ void PhysicsControl::loadCollada ( tinyxml2::XMLElement* _nNode ) {
     }
 
 }
-
+}
 }
 
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; ;

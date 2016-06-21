@@ -19,8 +19,9 @@
 #include <SDL.h>
 #endif
 
-namespace Chimera
-{
+namespace Chimera {
+namespace Device {  
+  
 enum class KIND_DEVICE
 {
     SCREEN = 0,
@@ -82,7 +83,7 @@ protected:
     SDL_Window *window;
     SDL_GLContext context;
 };
-
+}
 }				/* namespace Chimera */
 #endif				/* VIDEO_H_ */
 // kate: indent-mode cstyle; indent-width 2; replace-tabs on; ;

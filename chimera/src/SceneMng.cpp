@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng ( Node *_pRoot, Video *_pVideo )  {
+SceneMng::SceneMng ( Graph::Node *_pRoot, Device::Video *_pVideo )  {
 
     pRoot = _pRoot;
     parseEntity ( pRoot );
@@ -17,33 +17,33 @@ SceneMng::~SceneMng() {
 
 }
 
-void SceneMng::parseEntity ( Node *_pNode ) {
+void SceneMng::parseEntity ( Graph::Node *_pNode ) {
 
     addEntityToScene ( _pNode );
 
-    for ( Node *node : _pNode->listChild ) {
-        parseEntity ( node );
-    }
+     for ( Graph::Node* node : _pNode->listChild ) {
+         parseEntity ( node );
+     }
 
 }
 
-void SceneMng::addEntityToScene ( Node *_pNode ) {
+void SceneMng::addEntityToScene ( Graph::Node *_pNode ) {
 
     switch ( _pNode->getKind() ) {
     case EntityKind::CAMERA:
-        m_vCamera.push_back ( ( Camera* ) _pNode );
+        m_vCamera.push_back ( ( Graph::Camera* ) _pNode );
         break;
     case EntityKind::LIGHT:
-        m_vLight.push_back ( ( Light* ) _pNode );
+        m_vLight.push_back ( ( Graph::Light* ) _pNode );
         break;
     case EntityKind::OBJECT:
-        m_vObject.push_back ( ( Object* ) _pNode );
+        m_vObject.push_back ( ( Graph::Object* ) _pNode );
         break;
     case EntityKind::PARTICLE_EMITTER:
-        m_vParticle.push_back ( ( ParticleEmitter* ) _pNode );
+        m_vParticle.push_back ( ( Graph::ParticleEmitter* ) _pNode );
         break;
     case EntityKind::SKYBOX:
-        m_vSkyBox.push_back ( ( SkyBox* ) _pNode );
+        m_vSkyBox.push_back ( ( Graph::SkyBox* ) _pNode );
         break;
     default:
         break;
@@ -51,48 +51,48 @@ void SceneMng::addEntityToScene ( Node *_pNode ) {
 
 }
 
-void SceneMng::addChildToScene ( Node *_pNode ) {
+void SceneMng::addChildToScene ( Graph::Node *_pNode ) {
 
     pRoot->addChild ( _pNode );
     addEntityToScene ( _pNode );
 
 }
 
-Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
+Graph::Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
 
-    Node *retorno = nullptr;
+    Graph::Node *retorno = nullptr;
 
     switch ( _type ) {
     case EntityKind::CAMERA:
-        for ( Node *node : m_vCamera ) {
+        for ( Graph::Node *node : m_vCamera ) {
             if ( node->getName().compare ( _nome ) == 0 ) {
                 return node;
             }
         }
         break;
     case EntityKind::LIGHT:
-        for ( Node *node : m_vLight ) {
+        for ( Graph::Node *node : m_vLight ) {
             if ( node->getName().compare ( _nome ) == 0 ) {
                 return node;
             }
         }
         break;
     case EntityKind::OBJECT:
-        for ( Node *node : m_vObject ) {
+        for ( Graph::Node *node : m_vObject ) {
             if ( node->getName().compare ( _nome ) == 0 ) {
                 return node;
             }
         }
         break;
     case EntityKind::PARTICLE_EMITTER:
-        for ( Node *node : m_vParticle ) {
+        for ( Graph::Node *node : m_vParticle ) {
             if ( node->getName().compare ( _nome ) == 0 ) {
                 return node;
             }
         }
         break;
     case EntityKind::SKYBOX:
-        for ( Node *node : m_vSkyBox ) {
+        for ( Graph::Node *node : m_vSkyBox ) {
             if ( node->getName().compare ( _nome ) == 0 ) {
                 return node;
             }
@@ -106,9 +106,9 @@ Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
 
 }
 
-Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
+Graph::Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
 
-    Node *retorno = nullptr;
+    Graph::Node *retorno = nullptr;
 
     switch ( _type ) {
     case EntityKind::CAMERA:
@@ -144,14 +144,14 @@ Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
 }
 
 void SceneMng::execLight() {
-    for ( Light *pLight : m_vLight ) {
+    for ( Graph::Light *pLight : m_vLight ) {
         pLight->exec();
     }
 }
 
-void SceneMng::update ( DataMsg *dataMsg ) {
+void SceneMng::update ( Graph::DataMsg *dataMsg ) {
 
-    if ( dataMsg->getKindOp() == KindOp::START ) {
+    if ( dataMsg->getKindOp() == Graph::KindOp::START ) {
 
         //inicialize primeiro os filhos para garantir textura e efeito em material
         pRoot->update ( dataMsg );
@@ -172,7 +172,7 @@ void SceneMng::draw ( HUD *_pHud ) {
 //#define TESTEZ1
 
     int indiceDesenho = 1;
-    if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
+    if ( pVideo->getKindDevice() == Device::KIND_DEVICE::OVR_OCULUS ) {
         indiceDesenho = 2;
     }
 
@@ -195,7 +195,7 @@ void SceneMng::draw ( HUD *_pHud ) {
             pSkyBox->render ( true );
         }
 
-        Chimera::DataMsg dataMsg ( KindOp::DRAW, this, pObjeto, nullptr );
+        Chimera::Graph::DataMsg dataMsg ( Graph::KindOp::DRAW, this, pObjeto, nullptr );
         update ( &dataMsg );
 
         execLight();
@@ -204,7 +204,7 @@ void SceneMng::draw ( HUD *_pHud ) {
         shadoMap.ApplyShadowMap ( pObjeto );
 #endif
 
-        if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
+        if ( pVideo->getKindDevice() == Device::KIND_DEVICE::OVR_OCULUS ) {
             hudUpdate ( _pHud,0 );
         } else {
             hudUpdate ( _pHud,eye );

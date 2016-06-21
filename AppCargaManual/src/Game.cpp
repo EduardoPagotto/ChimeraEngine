@@ -7,13 +7,13 @@ Game::Game ( Chimera::SceneMng *_pScenMng ) : GameClient ( _pScenMng ) {
 Game::~Game() {
 }
 
-void Game::joystickCapture ( Chimera::JoystickManager &joy ) {
+void Game::joystickCapture ( Chimera::Device::JoystickManager &joy ) {
 }
 
-void Game::joystickStatus ( Chimera::JoystickManager &joy ) {
+void Game::joystickStatus ( Chimera::Device::JoystickManager &joy ) {
 
     // Captura joystick 0 se existir
-    Chimera::JoystickState *joystick = joy.getJoystickState ( 0 );
+    Chimera::Device::JoystickState *joystick = joy.getJoystickState ( 0 );
     if ( joystick != nullptr ) {
 
         float propulsaoLRUD = 1.0;
@@ -69,7 +69,7 @@ void Game::keyCapture ( SDL_Keycode tecla ) {
         pHUD->setOn ( !pHUD->isOn() );
         break;
     case SDLK_F10:
-        sendMessage ( Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
+        sendMessage ( Chimera::Graph::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
         break;
     case SDLK_UP:
         pObj->applyForce ( btVector3 ( 10.0, 0.0, 0.0 ) );
@@ -120,13 +120,13 @@ void Game::start() {
     GameClient::start();
 
     // Pega o Skybox
-    pSkyBox = ( Chimera::SkyBox* ) pSceneMng->getNode ( Chimera::EntityKind::SKYBOX, 0 );
+    pSkyBox = ( Chimera::Graph::SkyBox* ) pSceneMng->getNode ( Chimera::EntityKind::SKYBOX, 0 );
 
     //Pega primeira camera
-    pOrbitalCam = ( Chimera::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );
+    pOrbitalCam = ( Chimera::Graph::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );
 
     //Ajusta objeto como o primario
-    pObj = ( Chimera::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "Zoltan" );
+    pObj = ( Chimera::Graph::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "Zoltan" );
 
     pSceneMng->skyBoxAtivo ( pSkyBox );
     pSceneMng->cameraAtiva ( pOrbitalCam );
@@ -157,18 +157,18 @@ void Game::render() {
 
 }
 
-void Game::executeColisao ( const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB ) {
+void Game::executeColisao ( const Chimera::Graph::KindOp &_kindOp, Chimera::Graph::Node *_pNodeA, Chimera::Graph::Node *_pNodeB ) {
 
     std::string l_msg;
 
     switch ( _kindOp ) {
-    case Chimera::KindOp::START_COLLIDE:
+    case Chimera::Graph::KindOp::START_COLLIDE:
         l_msg = " START ";
         break;
-    case Chimera::KindOp::ON_COLLIDE:
+    case Chimera::Graph::KindOp::ON_COLLIDE:
         l_msg = " ON ";
         break;
-    case Chimera::KindOp::OFF_COLLIDE:
+    case Chimera::Graph::KindOp::OFF_COLLIDE:
         l_msg = " OFF ";
         break;
     default:

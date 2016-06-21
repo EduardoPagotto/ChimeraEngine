@@ -6,9 +6,9 @@
 #include "Node.h"
 #include "Physics.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 class Constraint : public Node
 {
 public:
@@ -23,18 +23,17 @@ public:
 
     virtual void update ( DataMsg *dataMsg );
 
-private:
-
+    //FIXME Tornar privado novamente
+    
     Physics *pPhysicsA;
     Physics *pPhysicsB;
-
-    // btRigidBody* pRigidBodyA;
-    // btRigidBody* pRigidBodyB;
-
+    
     btTransform transformA;
     btTransform transformB;
-};
+private:
 
+};
+}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

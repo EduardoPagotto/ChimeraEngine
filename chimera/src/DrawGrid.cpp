@@ -8,7 +8,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-
+namespace Graph {
+    
 DrawGrid::DrawGrid ( std::string _id, std::string _name ) : Draw ( DrawType::GRID, _id, _name )  {
 }
 
@@ -131,5 +132,5 @@ void DrawGrid::clone ( Node **ppNode ) {
 //}
 
 }
-
+}
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

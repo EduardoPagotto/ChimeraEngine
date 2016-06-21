@@ -17,9 +17,9 @@
 
 # include "Texture.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 class ParticleEmitter : public Node
 {
 public:
@@ -37,5 +37,6 @@ private:
     std::vector<Color> coresPart;
     Texture *pTexture;
 };
+}
 }
 #endif

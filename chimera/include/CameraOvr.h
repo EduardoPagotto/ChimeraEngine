@@ -3,9 +3,9 @@
 
 #include "Camera.h"
 
-namespace Chimera
-{
-
+namespace Chimera{
+namespace Graph {
+    
 class CameraOvr : public Camera
 {
 public:
@@ -14,5 +14,6 @@ public:
     CameraOvr ( const Camera& _camera );
     virtual ~CameraOvr();
 };
+}
 }
 #endif

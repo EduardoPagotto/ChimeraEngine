@@ -9,9 +9,9 @@
 #include "Color.h"
 #include "Node.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 enum class LightType
 {
     POINT = 0,
@@ -22,17 +22,11 @@ enum class LightType
 class Light : public Node
 {
 public:
-
     Light ( LightType _lightType, std::string _id, std::string _name );
-
     Light ( const Light& _light );
-
     virtual ~Light();
-
     virtual void update ( DataMsg *_dataMsg );
-
     virtual void clone ( Node **ppNode );
-
     virtual void exec();
 
     Color getAmbient() {
@@ -71,26 +65,20 @@ public:
         return position;
     }
 
-
     void setPositionRotation ( const btVector3 &_posicao, const btVector3 &_rotation );
-
     void loadCollada ( tinyxml2::XMLElement* _nNode );
-
-
 
 private:
 
     btTransform transform;
     btVector3 position;
-
     Color ambient;
     Color specular;
     Color diffuse;
-
     int number;
     LightType type;
 };
-
+}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

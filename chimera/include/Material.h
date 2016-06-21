@@ -5,9 +5,9 @@
 #include "Texture.h"
 #include "Effect.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 class Material : public Node
 {
 public:
@@ -36,14 +36,17 @@ public:
 
     void end();
 
+    //FIXME manter privado
+    Effect *pEffect;
+    Texture *pTextura;
 private:
 
     bool hasTextureAtive;
-    Texture *pTextura;
-    Effect *pEffect;
+    
+    
 
 };
-
+}
 }
 
 #endif

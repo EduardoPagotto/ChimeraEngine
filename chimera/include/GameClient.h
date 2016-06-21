@@ -18,13 +18,13 @@ public:
 protected:
     virtual void start();
     virtual void stop();
-    virtual void executeColisao ( const KindOp &_kindOp, Node *_pNodeA, Node *_pNodeB ) = 0;
+    virtual void executeColisao ( const Graph::KindOp &_kindOp, Graph::Node *_pNodeA, Graph::Node *_pNodeB ) = 0;
     virtual void newFPS ( const unsigned int &fps );
 
-    void sendMessage ( KindOp _kindOf, void *_paramA, void *_paramB );
+    void sendMessage ( Graph::KindOp _kindOf, void *_paramA, void *_paramB );
 
     SceneMng *pSceneMng;
-    PhysicsControl *physicWorld;
+    Graph::PhysicsControl *physicWorld;
     Font *pFont;
     HUD *pHUD;
 

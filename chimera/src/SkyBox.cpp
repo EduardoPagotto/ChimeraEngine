@@ -9,7 +9,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-
+namespace Graph {
+    
 SkyBox::SkyBox ( std::string _id, std::string _name ) : Node ( EntityKind::SKYBOX, _id, _name ) {
 
 }
@@ -55,6 +56,5 @@ void SkyBox::render ( bool _texture ) {
     }
 
 }
-
-
+}
 }

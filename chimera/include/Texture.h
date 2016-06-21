@@ -10,9 +10,9 @@
 
 #include "Node.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 enum class TextureFilter
 {
     Nearest,
@@ -63,6 +63,6 @@ private:
     int indiceFilter;
     bool texturaCarregada;
 };
-
+}
 }
 #endif

@@ -3,8 +3,8 @@
 
 #include "Mutex.h"
 
-namespace Chimera
-{
+namespace Chimera{
+namespace Infra {
 
 /// <summary> Classe Template de Singletons </summary>
 template< class C >
@@ -84,7 +84,7 @@ private:
     static C* m_CurrentInstance;
 
     ///<summary> trava de acesso ao singleton </summary>
-    static Chimera::Mutex m_travaSingleton;
+    static Mutex m_travaSingleton;
 };
 
 template< class C >
@@ -97,5 +97,5 @@ template< class C >
 Mutex Singleton<C>::m_travaSingleton;
 
 }
-
+}
 #endif

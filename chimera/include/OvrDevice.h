@@ -20,9 +20,9 @@
 #include <algorithm>
 #endif
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Device {
+    
 class OvrDevice : public Video
 {
 public:
@@ -62,8 +62,7 @@ private:
 
     ovrMatrix4f orthoProjection[2];
 };
-
-
+}
 }
 
 #endif //  OVR_SET_TO_USE

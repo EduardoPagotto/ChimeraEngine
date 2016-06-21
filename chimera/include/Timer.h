@@ -7,9 +7,9 @@
 #include <SDL.h>
 #endif
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Device {
+    
 /**
  * Class Timer
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
@@ -53,7 +53,7 @@ private:
     Uint32 countStep;
     Uint32 elapsedCount;
 };
-
+}
 } /* namespace Chimera */
 #endif /* TIMER_H_ */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

@@ -8,9 +8,9 @@
 
 #include "Draw.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 template <class T>
 class ListPtr
 {
@@ -112,7 +112,7 @@ private:
     ListPtr<int> tIndex;
 
 };
-
+}
 }
 
 #endif

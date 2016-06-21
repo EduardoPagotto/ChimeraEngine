@@ -4,9 +4,9 @@
 #include "Entity.h"
 #include "DataMsg.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 /**
  * Class Node
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
@@ -16,8 +16,8 @@ class Node : public Entity
 {
 public:
 
-    friend class SceneMng;
-    friend class Loader;
+    //friend class SceneMng;
+    //friend class Loader;
 
     Node ( EntityKind _type, std::string _id, std::string _name );
 
@@ -54,17 +54,19 @@ public:
     static Node *findNodeByName ( EntityKind type, std::string name );
     static Node *findNodeByName ( std::string name );
 
+    //FIXME mudar para protected
+    std::list<Node*> listChild;
 
 protected:
     Node *parent;
-    std::list<Node*> listChild;
+    
 
 private:
     std::string name;
     std::string id;
     static std::list<Node*> listNode;
 };
-
+}
 }
 
 #endif

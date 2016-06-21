@@ -7,9 +7,9 @@
 #include "Draw.h"
 #include "Physics.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 class Object : public Node
 {
 public:
@@ -49,7 +49,7 @@ private:
 
     btTransform transform;
 };
-
+}
 }
 
 #endif

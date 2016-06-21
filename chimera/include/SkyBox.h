@@ -3,9 +3,9 @@
 
 #include "DrawTriMesh.h"
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 class SkyBox : public Node
 {
 
@@ -19,7 +19,7 @@ public:
 private:
     Draw *pDraw;
 };
-
+}
 }
 
 # endif

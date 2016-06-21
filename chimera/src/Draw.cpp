@@ -1,6 +1,7 @@
 #include "Draw.h"
 
 namespace Chimera {
+namespace Graph {
 
 Draw::Draw ( DrawType _type, std::string _id, std::string _name ) : Node ( EntityKind::DRAW, _id, _name ), type ( _type ) {
     pMaterial = nullptr;
@@ -43,5 +44,5 @@ void Draw::update ( DataMsg *dataMsg ) {
     }
 
 }
-
+}
 }

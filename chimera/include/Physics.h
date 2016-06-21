@@ -11,9 +11,9 @@
 
 #include <tinyxml2.h>
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 class Physics : public Node
 {
 public:
@@ -113,7 +113,7 @@ private:
 
     //btTriangleIndexVertexArray *m_pIndexVertexArrays;
 };
-
+}
 }
 #endif //Physics_H
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

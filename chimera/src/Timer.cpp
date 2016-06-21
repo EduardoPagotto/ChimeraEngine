@@ -1,7 +1,8 @@
 #include "Timer.h"
 
 namespace Chimera {
-
+namespace Device {
+    
 Timer::Timer() :
     startTicks ( 0 ), pausedTicks ( 0 ), started ( false ), paused ( false ), step ( 0 ), countStep ( 0 ), elapsedCount ( 0 ) {
 }
@@ -69,6 +70,6 @@ bool Timer::stepCount() {
     return false;
 
 }
-
+}
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

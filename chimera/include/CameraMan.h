@@ -3,8 +3,8 @@
 
 #include "Camera.h"
 
-namespace Chimera
-{
+namespace Chimera {
+namespace Graph {   
 
 class CameraMan : public Camera
 {
@@ -32,7 +32,7 @@ private:
     btVector3 up;
     btVector3 forward;
 };
-
+}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

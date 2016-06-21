@@ -10,7 +10,8 @@
 #include "ChimeraUtils.h"
 
 namespace Chimera {
-
+namespace Graph {
+    
 Effect::Effect ( std::string _id, std::string _name ) : Node ( EntityKind::EFFECT, _id, _name ) {
 
     shininess = 10.5f;
@@ -145,6 +146,6 @@ void Effect::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
     }
 }
-
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

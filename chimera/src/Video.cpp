@@ -4,7 +4,8 @@
 #include "ExceptionSDL.h"
 
 namespace Chimera {
-
+namespace Device {
+	
 Video::Video ( std::string _nome, KIND_DEVICE _kindDevice ) : nomeTela ( _nome ), kindDevice ( _kindDevice ) {
 
     winSizeW = SDL_WINDOWPOS_CENTERED;
@@ -169,5 +170,5 @@ std::string Video::getVersaoOpenGL() {
 }
 
 } /* namespace Chimera */
-
+}
 // kate: indent-mode cstyle; indent-width 4; replace-tabs off; tab-width 4;

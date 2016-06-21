@@ -10,7 +10,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-
+namespace Graph {
+    
 Physics::Physics ( std::string _id, std::string _name ) : Node ( EntityKind::PHYSICS, _id, _name ) {
 
     pRigidBody = nullptr;
@@ -22,7 +23,7 @@ Physics::Physics ( std::string _id, std::string _name ) : Node ( EntityKind::PHY
     friction = 0.0f;
     restitution = 0.0f;
 
-    pWorld = Singleton<PhysicsControl>::getRefSingleton();
+    pWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
 
 }
 
@@ -37,7 +38,7 @@ Physics::Physics ( const Physics& _physics ) : Node ( _physics ) {
     pMotionState = nullptr;
     trimesh = nullptr;
 
-    pWorld = Singleton<PhysicsControl>::getRefSingleton();
+    pWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
 }
 
 Physics::~Physics() {
@@ -52,7 +53,7 @@ Physics::~Physics() {
         delete pShapeCollision;
     }
 
-    Singleton<PhysicsControl>::releaseRefSingleton();
+    Infra::Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
 void Physics::clone ( Node **ppNode ) {
@@ -319,5 +320,5 @@ void Physics::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::X
     }
 }
 }
-
+}
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

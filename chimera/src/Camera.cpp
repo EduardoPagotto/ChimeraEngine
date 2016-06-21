@@ -8,7 +8,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-
+namespace Graph {
+    
 Camera::Camera ( CameraType _type, std::string _id, std::string _name ) : Node ( EntityKind::CAMERA, _id, _name ) {
 
     type = _type;
@@ -126,5 +127,6 @@ void Camera::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
 }
 
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

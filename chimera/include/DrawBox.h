@@ -3,8 +3,8 @@
 
 #include "Draw.h"
 
-namespace Chimera
-{
+namespace Chimera {
+namespace Graph {
 
 class DrawBox : public Draw
 {
@@ -30,7 +30,7 @@ private:
     btVector3 sizeBox;
 
 };
-
+}
 }
 
 #endif

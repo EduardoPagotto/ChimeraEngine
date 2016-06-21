@@ -1,7 +1,8 @@
 #include "Node.h"
 
 namespace Chimera {
-
+namespace Graph {
+    
 std::list<Node*> Node::listNode;
 
 Node::Node ( EntityKind _type, std::string _id, std::string _name ) : Entity ( _type ) {
@@ -128,6 +129,6 @@ Node *Node::findNodeById ( std::string id ) {
     }
     return nullptr;
 }
-
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

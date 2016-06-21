@@ -1,9 +1,8 @@
 #include "CameraOvr.h"
 
-
-
 namespace Chimera {
-
+namespace Graph {
+    
 CameraOvr::CameraOvr ( std::string _id, std::string _name ) : Camera ( CameraType::Ovr, _id, _name ) {
 
     //along.setValue ( 1.0f, 0.0f, 0.0f );
@@ -32,6 +31,5 @@ CameraOvr::CameraOvr ( const Camera& _camera ) : Camera ( _camera ) {
 
 CameraOvr::~CameraOvr() {
 }
-
-
+}
 }

@@ -7,7 +7,8 @@
 #include <cmath>
 
 namespace Chimera {
-
+namespace Device {
+    
 JoystickState::JoystickState ( Uint8 id, SDL_Joystick *joystick, std::string name ) {
     ID = id;
     Joystick = joystick;
@@ -195,4 +196,4 @@ std::string JoystickState::GetStatusJoy() {
     return return_string;
 }
 }
-
+}

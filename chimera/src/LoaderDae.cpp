@@ -23,7 +23,7 @@ LoaderDae::LoaderDae ( const std::string &textureDir, const std::string &modelDi
     this->textureDir = textureDir;
     this->modelDir = modelDir;
 
-    pPhysicsControl = Chimera::Singleton<Chimera::PhysicsControl>::getRefSingleton();
+    pPhysicsControl = Chimera::Infra::Singleton<Chimera::Graph::PhysicsControl>::getRefSingleton();
 
 }
 
@@ -34,12 +34,12 @@ LoaderDae::~LoaderDae() {
         doc = nullptr;
     }
 
-    Chimera::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
+    Chimera::Infra::Singleton<Chimera::Graph::PhysicsControl>::releaseRefSingleton();
 }
 
-Chimera::Node* LoaderDae::loadFile ( const std::string &file ) {
+Chimera::Graph::Node* LoaderDae::loadFile ( const std::string &file ) {
 
-    Chimera::Node *pRootScene = nullptr;
+    Chimera::Graph::Node *pRootScene = nullptr;
 #ifdef WIN32
     std::string dir_arquivo = modelDir + "\\" + file;
 #else
@@ -99,10 +99,10 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 const char* l_sid = l_nRigidBody->Attribute ( "sid" );
 
                 std::string nomeMesh = "";
-                Chimera::Physics *pPhysic = new Chimera::Physics ( std::string ( l_name ), std::string ( l_sid ) );
+                Chimera::Graph::Physics *pPhysic = new Chimera::Graph::Physics ( std::string ( l_name ), std::string ( l_sid ) );
                 pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
 
-                Chimera::DrawTriMesh *pDrawTriMesh = ( Chimera::DrawTriMesh* ) Chimera::Node::findNodeById ( Chimera::EntityKind::DRAW, nomeMesh );
+                Chimera::Graph::DrawTriMesh *pDrawTriMesh = ( Chimera::Graph::DrawTriMesh* ) Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::DRAW, nomeMesh );
 
                 if ( pDrawTriMesh != nullptr ) {
 
@@ -120,7 +120,7 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 }
 
                 //pega o node objeto
-                Chimera::Node *obj = Chimera::Node::findNodeById ( Chimera::EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
+                Chimera::Graph::Node *obj = Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
                 obj->addChild ( pPhysic );
 
                 l_nInstanceRigidBody = l_nInstanceRigidBody->NextSiblingElement ( "instance_rigid_body" );
@@ -179,9 +179,9 @@ tinyxml2::XMLElement* LoaderDae::getDadoRigidBody ( const char* _url, const char
     //}
 }
 
-Chimera::Node *LoaderDae::getNodeSceneInFile() {
+Chimera::Graph::Node *LoaderDae::getNodeSceneInFile() {
 
-    Chimera::Node *pRootScene = nullptr;
+    Chimera::Graph::Node *pRootScene = nullptr;
 
     tinyxml2::XMLElement* l_nVisualScene = findSceneLib ( ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
     if ( l_nVisualScene != nullptr ) {
@@ -189,7 +189,7 @@ Chimera::Node *LoaderDae::getNodeSceneInFile() {
         const char *l_nome = l_nVisualScene->Attribute ( "name" );
         const char *l_id = l_nVisualScene->Attribute ( "id" );
 
-        pRootScene = new Chimera::Node ( Chimera::EntityKind::NODE, l_id, l_nome );
+        pRootScene = new Chimera::Graph::Node ( Chimera::EntityKind::NODE, l_id, l_nome );
         tinyxml2::XMLElement* l_nNode = l_nVisualScene->FirstChildElement ( "node" );
         if ( l_nNode != nullptr ) {
             while ( l_nNode != nullptr ) {
@@ -215,10 +215,10 @@ Chimera::Node *LoaderDae::getNodeSceneInFile() {
 
 }
 
-void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type ) {
+void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type ) {
 
     btTransform *l_pTransform = nullptr;
-    Chimera::Node *pLastNodeDone = nullptr;
+    Chimera::Graph::Node *pLastNodeDone = nullptr;
 
     while ( _nNode != nullptr ) {
 
@@ -242,7 +242,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
         } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_camera" ) == 0 ) {
 
             Chimera::loadNodeLib ( root, ( const char* ) &l_url[1], "library_cameras", "camera", &l_nNodeSourceData );
-            Chimera::Camera *pCamera = nullptr;
+            Chimera::Graph::Camera *pCamera = nullptr;
 
             tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
             if ( l_nExtra != nullptr ) {
@@ -271,7 +271,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
                             }
 
                             if ( ( min != nullptr ) && ( max != nullptr ) ) {
-                                Chimera::CameraSpherical *pCameraNew = new Chimera::CameraSpherical ( _id, _name );
+                                Chimera::Graph::CameraSpherical *pCameraNew = new Chimera::Graph::CameraSpherical ( _id, _name );
                                 pCameraNew->setDistanciaMaxima ( atof ( max ) );
                                 pCameraNew->setDistanciaMinima ( atof ( min ) );
                                 pCamera = pCameraNew;
@@ -283,7 +283,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
             }
 
             if ( pCamera == nullptr ) {
-                pCamera = new Chimera::Camera ( Chimera::CameraType::Base, _id, _name );
+                pCamera = new Chimera::Graph::Camera ( Chimera::Graph::CameraType::Base, _id, _name );
             }
 
             pCamera->loadCollada ( l_nNodeSourceData );
@@ -297,7 +297,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
 
             Chimera::loadNodeLib ( root, ( const char* ) &l_url[1], "library_lights", "light", &l_nNodeSourceData );
 
-            Chimera::Light *pLight = new Chimera::Light ( Chimera::LightType::POINT, _id, _name );
+            Chimera::Graph::Light *pLight = new Chimera::Graph::Light ( Chimera::Graph::LightType::POINT, _id, _name );
             pLight->loadCollada ( l_nNodeSourceData );
             pLight->setTransform ( *l_pTransform );
 
@@ -309,10 +309,10 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
 
             Chimera::loadNodeLib ( root, ( const char* ) &l_url[1], "library_geometries", "geometry", &l_nNodeSourceData );
 
-            Chimera::DrawTriMesh *pDrawTriMesh = new Chimera::DrawTriMesh ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "name", l_nNodeSourceData ) );
+            Chimera::Graph::DrawTriMesh *pDrawTriMesh = new Chimera::Graph::DrawTriMesh ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "name", l_nNodeSourceData ) );
             pDrawTriMesh->loadCollada ( l_nNodeSourceData );
 
-            Chimera::SkyBox *pSky = nullptr;
+            Chimera::Graph::SkyBox *pSky = nullptr;
             //TODO OTIMIZAR
             tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
             if ( l_nExtra != nullptr ) {
@@ -335,7 +335,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
 
                                     if ( ( l_valor != nullptr ) && ( strcmp ( l_valor, ( const char* ) "SKYBOX" ) == 0 ) ) {
 
-                                        pSky = new Chimera::SkyBox ( _id, _name );
+                                        pSky = new Chimera::Graph::SkyBox ( _id, _name );
                                         pSky->addChild ( pDrawTriMesh );
                                         _pNodePai->addChild ( pSky );
                                         pLastNodeDone = pSky;
@@ -349,7 +349,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
             }
 
             if ( pSky ==  nullptr ) {
-                Chimera::Object *pObj = new Chimera::Object ( _id, _name );
+                Chimera::Graph::Object *pObj = new Chimera::Graph::Object ( _id, _name );
                 pObj->setTransform ( *l_pTransform );
                 pObj->addChild ( pDrawTriMesh );
                 _pNodePai->addChild ( pObj );
@@ -378,7 +378,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
 
             Chimera::loadNodeLib ( root, ( const char* ) &l_target[1], "library_materials", "material", &l_nNodeSourceData );
 
-            Chimera::Material *pMaterial = new Chimera::Material ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "name", l_nNodeSourceData ) );
+            Chimera::Graph::Material *pMaterial = new Chimera::Graph::Material ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "name", l_nNodeSourceData ) );
             _pNodePai->addChild ( pMaterial );
 
             pLastNodeDone = pMaterial;
@@ -394,7 +394,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
 
             Chimera::loadNodeLib ( root, ( const char* ) &l_url[1], "library_effects", "effect", &l_nNodeSourceData );
 
-            Chimera::Effect *pEffect = new Chimera::Effect ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
+            Chimera::Graph::Effect *pEffect = new Chimera::Graph::Effect ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
             pEffect->loadCollada ( l_nNodeSourceData );
             _pNodePai->addChild ( pEffect );
 
@@ -404,7 +404,7 @@ void LoaderDae::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _n
 
                 Chimera::loadNodeLib ( root, ( const char* ) pEffect->getNameTextureId().c_str(), "library_images", "image", &l_nNodeSourceData );
 
-                Chimera::Texture *pTexture = new Chimera::Texture ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
+                Chimera::Graph::Texture *pTexture = new Chimera::Graph::Texture ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
 
                 const char* l_val = l_nNodeSourceData->FirstChildElement ( "init_from" )->GetText();
 #ifdef WIN32

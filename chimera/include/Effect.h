@@ -6,8 +6,8 @@
 #include "Color.h"
 #include "Node.h"
 
-namespace Chimera
-{
+namespace Chimera {
+namespace Graph {
 
 class Effect : public Node
 {
@@ -81,7 +81,7 @@ private:
     float shininess;
     std::string nameTextureId;
 };
-
+}
 }
 
 #endif

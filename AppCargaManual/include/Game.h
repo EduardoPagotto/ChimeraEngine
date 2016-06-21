@@ -22,20 +22,20 @@ public:
     virtual void mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
     virtual void mouseButtonUpCapture ( SDL_MouseButtonEvent mb );
     virtual void mouseMotionCapture ( SDL_MouseMotionEvent mm );
-    virtual void joystickCapture ( Chimera::JoystickManager &joy );
-    virtual void joystickStatus ( Chimera::JoystickManager &joy );
-    virtual void executeColisao ( const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB );
+    virtual void joystickCapture ( Chimera::Device::JoystickManager &joy );
+    virtual void joystickStatus ( Chimera::Device::JoystickManager &joy );
+    virtual void executeColisao ( const Chimera::Graph::KindOp &_kindOp, Chimera::Graph::Node *_pNodeA, Chimera::Graph::Node *_pNodeB );
     virtual void newFPS ( const unsigned int &fps );
 
 private:
     int botaoIndex;
     int estadoBotao;
 
-    Chimera::CameraSpherical *pOrbitalCam;
-    Chimera::Object *pObj;
+    Chimera::Graph::CameraSpherical *pOrbitalCam;
+    Chimera::Graph::Object *pObj;
     std::string sPosicaoObj;
 
-    Chimera::SkyBox* pSkyBox;
+    Chimera::Graph::SkyBox* pSkyBox;
 };
 
 #endif

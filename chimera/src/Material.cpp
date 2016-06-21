@@ -1,7 +1,8 @@
 #include "Material.h"
 
 namespace Chimera {
-
+namespace Graph {
+    
 Material::Material ( std::string _id, std::string _name ) : Node ( EntityKind::MATERIAL, _id, _name ) {
     pEffect = nullptr;
     pTextura = nullptr;
@@ -65,6 +66,6 @@ void Material::begin ( bool _texture ) {
         }
     }
 }
-
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

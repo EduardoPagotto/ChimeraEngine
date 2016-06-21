@@ -1,9 +1,9 @@
 #ifndef DATA_MSG_H_
 #define DATA_MSG_H_
 
-namespace Chimera
-{
-
+namespace Chimera {
+namespace Graph {
+    
 /**
  * Enum KindOp
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
@@ -117,6 +117,7 @@ private:
     bool done;
     bool debugTrack;
 };
+}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

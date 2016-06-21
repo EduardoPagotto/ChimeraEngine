@@ -1,7 +1,8 @@
 #include "CameraSpherical.h"
 
 namespace Chimera {
-
+namespace Graph {
+    
 CameraSpherical::CameraSpherical ( std::string _id, std::string _name ) : Camera ( CameraType::Spherical, _id, _name ) {
 
     horizontal = 0.0f;
@@ -85,6 +86,6 @@ void CameraSpherical::trackBall ( int _mx, int _my, int _mz ) {
     position.setZ ( distancia * sin ( l_kx ) );
 
 }
-
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

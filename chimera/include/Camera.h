@@ -7,8 +7,8 @@
 
 #include "Node.h"
 
-namespace Chimera
-{
+namespace Chimera {
+namespace Graph {
 
 enum class CameraType
 {
@@ -92,7 +92,7 @@ private:
     float fov;
     bool perspective;
 };
-
+}
 }
 
 #endif

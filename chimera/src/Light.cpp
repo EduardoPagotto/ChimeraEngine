@@ -11,7 +11,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-
+namespace Graph {
+    
 Light::Light ( LightType _lightType, std::string _id, std::string _name ) : Node ( EntityKind::LIGHT, _id, _name ) {
 
     number = 0;
@@ -139,6 +140,6 @@ void Light::loadCollada ( tinyxml2::XMLElement* _nNode ) {
     }
 
 }
-
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

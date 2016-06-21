@@ -8,7 +8,8 @@
 #include "Object.h"
 
 namespace Chimera {
-
+namespace Graph {
+    
 Object::Object ( std::string _id, std::string _name ) : Node ( EntityKind::OBJECT, _id, _name ) {
 
     pPhysic = nullptr;
@@ -137,6 +138,6 @@ void Object::applyForce ( const btVector3 &_vet ) {
         pPhysic->propulcao ( _vet );
     }
 }
-
+}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

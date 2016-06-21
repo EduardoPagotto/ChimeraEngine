@@ -27,3 +27,20 @@ AppWizard uses "TODO:" comments to indicate parts of the source code you
 should add to or customize.
 
 /////////////////////////////////////////////////////////////////////////////
+
+Includes:
+../../chimera/include
+C:\Libs\SDL2-2.0.4\include
+C:\Libs\SDL2_image-2.0.1\include
+C:\Libs\SDL2_ttf-2.0.14\include
+C:\Libs\bullet3\src
+C:\libs\tinyxml2
+C:\Libs\OculusSDK\LibOVR\Include
+C:\Libs\glew-1.13.0\include
+
+Ao compilar com suporte ao Rift
+mudar de:
+NO_OVR_SET_TO_USE
+
+para:
+OVR_SET_TO_USE

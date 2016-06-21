@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -15,19 +15,20 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AppTesteWin32</RootNamespace>
     <ProjectName>AppCargaManual</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -55,7 +56,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../chimera/include/;../../AppCargaManual/include;C:\libs\SDL2-2.0.3\include;C:\libs\SDL2_image-2.0.0\include;C:\libs\SDL2_ttf-2.0.12\include;C:\libs\ftgl-2.1.3-rc5\src;C:\libs\freetype-2.5.5\include;C:\libs\glew-1.12.0\include;C:\libs\tinyxml2;C:\libs\bullet3-master\src;C:\libs\OculusSDK\LibOVR\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../chimera/include/;../../AppCargaManual/include;C:\Libs\SDL2-2.0.4\include;C:\Libs\SDL2_image-2.0.1\include;C:\Libs\SDL2_ttf-2.0.14\include;C:\libs\ftgl-2.1.3-rc5\src;C:\libs\freetype-2.5.5\include;C:\Libs\glew-1.13.0\include;C:\Libs\tinyxml2;C:\Libs\bullet3\src;C:\Libs\OculusSDK\LibOVR\Include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
       <CallingConvention>Cdecl</CallingConvention>
@@ -63,8 +64,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../Debug;C:\libs\SDL2-2.0.3\lib\x86;C:\libs\SDL2_image-2.0.0\lib\x86;C:\libs\SDL2_ttf-2.0.12\lib\x86;C:\libs\bullet3-master\bin;C:\libs\tinyxml2\tinyxml2\bin\Win32-Debug-Dll;C:\libs\glew-1.12.0\lib\Release\Win32;C:\libs\OculusSDK\LibOVR\Lib\Win32\VS2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;chimera.lib;opengl32.lib;GlU32.Lib;glew32s.lib;tinyxml2.lib;LinearMath_vs2010_debug.lib;Bullet3Common_vs2010_debug.lib;Bullet3Dynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;Bullet3Geometry_vs2010_debug.lib;Bullet3Collision_vs2010_debug.lib;libovrd.lib;WSock32.Lib;Ws2_32.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../Debug;C:\Libs\SDL2-2.0.4\lib\x86;C:\Libs\SDL2_image-2.0.1\lib\x86;C:\Libs\SDL2_ttf-2.0.14\lib\x86;C:\Libs\bullet3\bin;C:\Libs\tinyxml2\tinyxml2\Debug-Lib;C:\Libs\glew-1.13.0\lib\Release\Win32;C:\Libs\OculusSDK\LibOVR\Lib\Windows\Win32\Release\VS2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;chimera.lib;opengl32.lib;GlU32.Lib;glew32s.lib;tinyxml2.lib;LinearMath_vs2010_debug.lib;Bullet3Common_vs2010_debug.lib;Bullet3Dynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;Bullet3Geometry_vs2010_debug.lib;Bullet3Collision_vs2010_debug.lib;WSock32.Lib;Ws2_32.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib</AdditionalDependencies>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -1,6 +1,8 @@
 #ifndef OVR_DEVICE_H_
 #define OVR_DEVICE_H_
 
+#ifdef  OVR_SET_TO_USE
+
 #include "Video.h"
 
 #include <string>
@@ -61,6 +63,8 @@ namespace Chimera {
 
 
 }
+
+#endif //  OVR_SET_TO_USE
 
 #endif
 

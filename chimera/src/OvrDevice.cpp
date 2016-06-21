@@ -1,6 +1,8 @@
 #include "OvrDevice.h"
-#include "ExceptionSDL.h"
 
+#ifdef OVR_SET_TO_USE
+
+#include "ExceptionSDL.h"
 #include <SDL_opengl.h>
 #include <SDL_syswm.h>
 
@@ -499,3 +501,5 @@ namespace Chimera {
 	}
 
 }
+
+#endif //  OVR_SET_TO_USE

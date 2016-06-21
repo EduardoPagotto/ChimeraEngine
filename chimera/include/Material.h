@@ -5,42 +5,44 @@
 #include "Texture.h"
 #include "Effect.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class Material : public Node {
-	public:
+class Material : public Node
+{
+public:
 
-		friend class Loader;
+    friend class Loader;
 
-		Material(std::string _id, std::string _name);
-		Material(const Material &_cpy);
-		virtual ~Material();
+    Material ( std::string _id, std::string _name );
+    Material ( const Material &_cpy );
+    virtual ~Material();
 
-		virtual void update(DataMsg *dataMsg);
+    virtual void update ( DataMsg *dataMsg );
 
-		virtual void clone(Node **ppNode);
+    virtual void clone ( Node **ppNode );
 
-		Texture *getTexture() const {
-			return pTextura;
-		}
+    Texture *getTexture() const {
+        return pTextura;
+    }
 
-		Effect *getEffect() const {
-			return pEffect;
-		}
+    Effect *getEffect() const {
+        return pEffect;
+    }
 
-		void createDefaultEffect();
+    void createDefaultEffect();
 
-		void begin(bool _texture);
+    void begin ( bool _texture );
 
-        void end();
+    void end();
 
-	private:
+private:
 
-        bool hasTextureAtive;
-		Texture *pTextura;
-		Effect *pEffect;
+    bool hasTextureAtive;
+    Texture *pTextura;
+    Effect *pEffect;
 
-	};
+};
 
 }
 

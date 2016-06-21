@@ -18,26 +18,28 @@
 #include "ExceptionChimera.h"
 #include "Color.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class Font {
-	public:
-		Font(const char*_fontFile, int _size);
-		virtual ~Font(void);
+class Font
+{
+public:
+    Font ( const char*_fontFile, int _size );
+    virtual ~Font ( void );
 
-		void render(const float &_x, const float &_y, const float &_z, const Color &_color, std::string *_pTxt);
+    void render ( const float &_x, const float &_y, const float &_z, const Color &_color, std::string *_pTxt );
 
-	private:
+private:
 
 #ifdef TTF_NOVO
-		TTF_Font *pFont;
+    TTF_Font *pFont;
 #else
-		FTGLPixmapFont *pFont;
+    FTGLPixmapFont *pFont;
 #endif
 
-	};
+};
 
 }
 
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

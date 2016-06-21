@@ -17,23 +17,25 @@
 
 # include "Texture.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class ParticleEmitter : public Node {
-	public:
-		ParticleEmitter(std::string _id, std::string _name);
-		virtual ~ParticleEmitter();
-	    virtual void update(DataMsg *_dataMsg);
-		void initialize(int _max);
-		void loadImage(const char *_file);
-		void setGL();
-		void render();
-	    void SortParticles(const btVector3 &posCamera);
+class ParticleEmitter : public Node
+{
+public:
+    ParticleEmitter ( std::string _id, std::string _name );
+    virtual ~ParticleEmitter();
+    virtual void update ( DataMsg *_dataMsg );
+    void initialize ( int _max );
+    void loadImage ( const char *_file );
+    void setGL();
+    void render();
+    void SortParticles ( const btVector3 &posCamera );
 
-	private:
-		std::vector<Particle*> particles;
-		std::vector<Color> coresPart;
-		Texture *pTexture;
-	};
+private:
+    std::vector<Particle*> particles;
+    std::vector<Color> coresPart;
+    Texture *pTexture;
+};
 }
 #endif

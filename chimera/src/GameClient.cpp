@@ -6,86 +6,87 @@
 
 namespace Chimera {
 
-	GameClient::GameClient(Chimera::SceneMng *_pScenMng) : pSceneMng(_pScenMng)  {
+GameClient::GameClient ( Chimera::SceneMng *_pScenMng ) : pSceneMng ( _pScenMng )  {
 
-		textoFPS = "fps: 0";
-		pHUD = new HUD();
+    textoFPS = "fps: 0";
+    pHUD = new HUD();
 
 #ifdef WIN32
-		pFont = new Chimera::Font("C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18);
+    pFont = new Chimera::Font ( "C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18 );
 #else
-		pFont = new Chimera::Font("../../fonts/FreeSans.ttf", 18);
+    pFont = new Chimera::Font ( "../../fonts/FreeSans.ttf", 18 );
 #endif
 
-		pHUD->addFont(pFont);
+    pHUD->addFont ( pFont );
 
-		SDL_Rect area = { 30, 30, 600, 20 };
+    SDL_Rect area = { 30, 30, 600, 20 };
 
-		pHUD->addSquare(area, Color(1.0f, 1.0f, 1.0f, 0.2f));
-		pHUD->addText(0, 0, 0, 0, Color::RED, &textoFPS);
+    pHUD->addSquare ( area, Color ( 1.0f, 1.0f, 1.0f, 0.2f ) );
+    pHUD->addText ( 0, 0, 0, 0, Color::RED, &textoFPS );
 
-		physicWorld = Singleton<PhysicsControl>::getRefSingleton();
-	}
+    physicWorld = Singleton<PhysicsControl>::getRefSingleton();
+}
 
-	GameClient::~GameClient() {
+GameClient::~GameClient() {
 
-		if (pHUD)
-			delete pHUD;
+    if ( pHUD ) {
+        delete pHUD;
+    }
 
-		Singleton<PhysicsControl>::releaseRefSingleton();
-	}
+    Singleton<PhysicsControl>::releaseRefSingleton();
+}
 
-	void GameClient::newFPS(const unsigned int &fps) {
-		textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
-	}
+void GameClient::newFPS ( const unsigned int &fps ) {
+    textoFPS = "fps: " + std::to_string ( fps ) + std::string ( " Periodo: " ) + std::to_string ( physicWorld->getLastPeriod() );
+}
 
-	void GameClient::start() {
+void GameClient::start() {
 
-		deadzone = 0.02;
+    deadzone = 0.02;
 
-		DataMsg dataMsg(KindOp::START, this, nullptr, nullptr);
-		pSceneMng->update(&dataMsg);
+    DataMsg dataMsg ( KindOp::START, this, nullptr, nullptr );
+    pSceneMng->update ( &dataMsg );
 
-		pHUD->setOn(true);
-	}
+    pHUD->setOn ( true );
+}
 
-	void GameClient::stop() {
-		
-	}
+void GameClient::stop() {
 
-	void GameClient::beginProcGame() {
+}
 
-		physicWorld->stepSim();
-		physicWorld->checkCollisions();
+void GameClient::beginProcGame() {
 
-	}
+    physicWorld->stepSim();
+    physicWorld->checkCollisions();
 
-	void GameClient::endProcGame() {
+}
 
-	}
+void GameClient::endProcGame() {
 
-	void GameClient::userEvent(const SDL_Event &_event) {
+}
 
-		KindOp op = (KindOp)_event.user.code;
-		if ((op == Chimera::KindOp::START_COLLIDE) ||
-			(op == Chimera::KindOp::ON_COLLIDE) ||
-			(op == Chimera::KindOp::OFF_COLLIDE)) {
+void GameClient::userEvent ( const SDL_Event &_event ) {
 
-			executeColisao(op, (Node*)_event.user.data1, (Node*)_event.user.data2);
-		}
-	}
+    KindOp op = ( KindOp ) _event.user.code;
+    if ( ( op == Chimera::KindOp::START_COLLIDE ) ||
+            ( op == Chimera::KindOp::ON_COLLIDE ) ||
+            ( op == Chimera::KindOp::OFF_COLLIDE ) ) {
 
-	void GameClient::sendMessage(KindOp _kindOf, void *_paramA, void *_paramB) {
+        executeColisao ( op, ( Node* ) _event.user.data1, ( Node* ) _event.user.data2 );
+    }
+}
 
-		SDL_Event event;
-		SDL_zero(event);
-		event.type = SDL_USEREVENT;
-		event.user.code = (int)_kindOf;
-		event.user.data1 = _paramA;
-		event.user.data2 = _paramB;
-		SDL_PushEvent(&event);
+void GameClient::sendMessage ( KindOp _kindOf, void *_paramA, void *_paramB ) {
 
-	}
+    SDL_Event event;
+    SDL_zero ( event );
+    event.type = SDL_USEREVENT;
+    event.user.code = ( int ) _kindOf;
+    event.user.data1 = _paramA;
+    event.user.data2 = _paramB;
+    SDL_PushEvent ( &event );
+
+}
 
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

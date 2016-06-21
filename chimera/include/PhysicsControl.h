@@ -13,62 +13,64 @@
 
 #include "Node.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class PhysicsControl {
-	public:
+class PhysicsControl
+{
+public:
 
-		friend class Physics;
+    friend class Physics;
 
-		PhysicsControl(void);
-		~PhysicsControl(void);
+    PhysicsControl ( void );
+    ~PhysicsControl ( void );
 
-		void clearAllShapes(void);
-		void removeAllObjs(void);
+    void clearAllShapes ( void );
+    void removeAllObjs ( void );
 
-		void stepSim(void);
+    void stepSim ( void );
 
-		void checkCollisions();
-		bool checkAllowCollision(Node *pNode);
-		void sendMessageCollision(KindOp _kindOf, Node *_nodeA, Node *_nodeB);
+    void checkCollisions();
+    bool checkAllowCollision ( Node *pNode );
+    void sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *_nodeB );
 
-		inline void setGravity(const btVector3 &_vet) {
-			discretDynamicsWorld->setGravity(_vet);
-		}
+    inline void setGravity ( const btVector3 &_vet ) {
+        discretDynamicsWorld->setGravity ( _vet );
+    }
 
-		inline btScalar countPeriod() {
-			period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f);
-			clockCounter.reset();
-			return period;
+    inline btScalar countPeriod() {
+        period = ( btScalar ) ( clockCounter.getTimeMicroseconds() / 1000000.f );
+        clockCounter.reset();
+        return period;
 
-		}
+    }
 
-		inline btScalar getLastPeriod() {
-			return period;
-		}
+    inline btScalar getLastPeriod() {
+        return period;
+    }
 
-		void loadCollada(tinyxml2::XMLElement* _nNode);
+    void loadCollada ( tinyxml2::XMLElement* _nNode );
 
-	private:
+private:
 
-		static void doTickCallBack(btDynamicsWorld *world, btScalar timeStep);
-		void processTickCallBack(btScalar timeStep);
+    static void doTickCallBack ( btDynamicsWorld *world, btScalar timeStep );
+    void processTickCallBack ( btScalar timeStep );
 
-		btBroadphaseInterface* broadPhase;
+    btBroadphaseInterface* broadPhase;
 
-		btDefaultCollisionConfiguration* collisionConfig;
-		btCollisionDispatcher* dispatcher;
+    btDefaultCollisionConfiguration* collisionConfig;
+    btCollisionDispatcher* dispatcher;
 
-		btSequentialImpulseConstraintSolver* solver;
-		btDiscreteDynamicsWorld* discretDynamicsWorld;
+    btSequentialImpulseConstraintSolver* solver;
+    btDiscreteDynamicsWorld* discretDynamicsWorld;
 
-		/// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
-		//SDL_Event s_event;
-		std::map< btCollisionObject*, std::pair<Node*, Node*> > contactActives;
+    /// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
+    //SDL_Event s_event;
+    std::map< btCollisionObject*, std::pair<Node*, Node*> > contactActives;
 
-		btClock clockCounter;
-		btScalar period;
-	};
+    btClock clockCounter;
+    btScalar period;
+};
 
 }
 #endif

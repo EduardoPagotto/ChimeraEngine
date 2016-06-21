@@ -21,66 +21,67 @@
 
 namespace Chimera
 {
-	enum class KIND_DEVICE {
-		SCREEN = 0,
-		OVR_OCULUS
-	};
+enum class KIND_DEVICE
+{
+    SCREEN = 0,
+    OVR_OCULUS
+};
 
-	/**
-	 * Class Video
-	 *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
-	 *  @since 20130925
-	 */
-	class Video
-	{
-	public:
+/**
+ * Class Video
+ *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+ *  @since 20130925
+ */
+class Video
+{
+public:
 
-		Video(std::string _nome, KIND_DEVICE _kindDevice);
-		Video(std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h);
-		virtual ~Video();
+    Video ( std::string _nome, KIND_DEVICE _kindDevice );
+    Video ( std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h );
+    virtual ~Video();
 
-		virtual void initDraw() = 0;
-		virtual void endDraw() = 0;
-        virtual void executeViewPerspective(const float &_fov,const float &_near,const float &_far, int _eye) = 0;//(Camera *pCamera, int _eye) = 0;
-		virtual void executeViewOrto(int eyeIndex) = 0;
-		virtual void reshape(int _w, int _y) = 0;
-		virtual void toggleFullScreen() = 0;
+    virtual void initDraw() = 0;
+    virtual void endDraw() = 0;
+    virtual void executeViewPerspective ( const float &_fov,const float &_near,const float &_far, int _eye ) = 0; //(Camera *pCamera, int _eye) = 0;
+    virtual void executeViewOrto ( int eyeIndex ) = 0;
+    virtual void reshape ( int _w, int _y ) = 0;
+    virtual void toggleFullScreen() = 0;
 
-		void initGL();
-		//void getGeometry(SDL_Rect &winGeometry);
-		int getWinSizeW() const {
-			return winSizeW;
-		}
+    void initGL();
+    
+    int getWinSizeW() const {
+        return winSizeW;
+    }
 
-		int getWinSizeH() const {
-			return winSizeH;
-		}
+    int getWinSizeH() const {
+        return winSizeH;
+    }
 
-		std::string getNomeTela() const {
-			return nomeTela;
-		}
+    std::string getNomeTela() const {
+        return nomeTela;
+    }
 
-		void restoreMatrix();
+    void restoreMatrix();
 
-		std::string getVersaoOpenGL();
+    std::string getVersaoOpenGL();
 
-		inline KIND_DEVICE getKindDevice() const {
-			return kindDevice;
-		}
+    inline KIND_DEVICE getKindDevice() const {
+        return kindDevice;
+    }
 
 
-	protected:
-		void initSDL();
+protected:
+    void initSDL();
 
-		int winSizeW;
-		int winSizeH;
+    int winSizeW;
+    int winSizeH;
 
-		std::string nomeTela;
-		KIND_DEVICE kindDevice;
+    std::string nomeTela;
+    KIND_DEVICE kindDevice;
 
-		SDL_Window *window;
-		SDL_GLContext context;
-	};
+    SDL_Window *window;
+    SDL_GLContext context;
+};
 
 }				/* namespace Chimera */
 #endif				/* VIDEO_H_ */

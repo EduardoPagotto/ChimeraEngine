@@ -3,43 +3,40 @@
 
 #include "Camera.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class CameraSpherical : public Camera {
+class CameraSpherical : public Camera
+{
 
-	public:
-		CameraSpherical(std::string _id, std::string _name);
+public:
+    CameraSpherical ( std::string _id, std::string _name );
+    CameraSpherical ( const CameraSpherical& _cameraSpherical );
+    CameraSpherical ( const Camera& _camera );
+    ~CameraSpherical();
 
-		CameraSpherical(const CameraSpherical& _cameraSpherical);
+    virtual void update ( DataMsg *_dataMsg );
+    virtual void clone ( Node **ppNode );
+    void trackBall ( int _mx, int _my, int _mz );
 
-		CameraSpherical(const Camera& _camera);
+    void setDistanciaMaxima ( btScalar _distanciaMaxima ) {
+        distanciaMax = _distanciaMaxima;
+    }
 
-		~CameraSpherical();
+    void setDistanciaMinima ( btScalar _distanciaMinima ) {
+        distanciaMin = _distanciaMinima;
+    }
 
-		virtual void update(DataMsg *_dataMsg);
+private:
 
-		virtual void clone(Node **ppNode);
+    void initTrackBall();
 
-		void trackBall(int _mx, int _my, int _mz);
-
-		void setDistanciaMaxima(btScalar _distanciaMaxima) {
-			distanciaMax = _distanciaMaxima;
-		}
-
-		void setDistanciaMinima(btScalar _distanciaMinima) {
-			distanciaMin = _distanciaMinima;
-		}
-
-	private:
-
-		void initTrackBall();
-
-		btScalar horizontal;
-		btScalar vertical;
-		btScalar distancia;
-		btScalar distanciaMax;
-		btScalar distanciaMin;
-	};
+    btScalar horizontal;
+    btScalar vertical;
+    btScalar distancia;
+    btScalar distanciaMax;
+    btScalar distanciaMin;
+};
 
 }
 #endif

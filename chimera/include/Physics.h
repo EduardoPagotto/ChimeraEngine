@@ -11,106 +11,109 @@
 
 #include <tinyxml2.h>
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class Physics : public Node {
-	public:
+class Physics : public Node
+{
+public:
 
-		friend class Loader;
+    friend class Loader;
 
-		Physics(std::string _id, std::string _name);
+    Physics ( std::string _id, std::string _name );
 
-		Physics(const Physics& _physics);
+    Physics ( const Physics& _physics );
 
-		~Physics();
+    ~Physics();
 
-		inline void setMass(const float &_mass) {
-			mass = _mass;
-		}
+    inline void setMass ( const float &_mass ) {
+        mass = _mass;
+    }
 
-		inline void setFriction(const float &_friction) {
-			friction = _friction;
-		}
+    inline void setFriction ( const float &_friction ) {
+        friction = _friction;
+    }
 
-		inline void setRestitution(const float &_restitution) {
-			restitution = _restitution;
-		}
+    inline void setRestitution ( const float &_restitution ) {
+        restitution = _restitution;
+    }
 
-		inline void setShapeBox(const btVector3 &_size) {
-			pShapeCollision = new btBoxShape(_size);
-		}
+    inline void setShapeBox ( const btVector3 &_size ) {
+        pShapeCollision = new btBoxShape ( _size );
+    }
 
-		inline void setShapeCilinder(const btVector3 &_val) {
-			pShapeCollision = new btCylinderShape(_val);
-		}
+    inline void setShapeCilinder ( const btVector3 &_val ) {
+        pShapeCollision = new btCylinderShape ( _val );
+    }
 
-		inline void setShapePlane(const btVector3 &_val, const float &_constant) {
-			pShapeCollision = new btStaticPlaneShape(_val, _constant);
-		}
+    inline void setShapePlane ( const btVector3 &_val, const float &_constant ) {
+        pShapeCollision = new btStaticPlaneShape ( _val, _constant );
+    }
 
-		inline void setShapeSphere(btScalar _raio) {
-			pShapeCollision = new btSphereShape(_raio);
-		}
+    inline void setShapeSphere ( btScalar _raio ) {
+        pShapeCollision = new btSphereShape ( _raio );
+    }
 
-		inline btVector3& getPosition() {
-			return pRigidBody->getWorldTransform().getOrigin();
-		}
+    inline btVector3& getPosition() {
+        return pRigidBody->getWorldTransform().getOrigin();
+    }
 
-		void setPosition(const btVector3 &_pos);
+    void setPosition ( const btVector3 &_pos );
 
-		void setRotation(const btVector3 &_rotation);
+    void setRotation ( const btVector3 &_rotation );
 
-		btVector3 getRotation();
+    btVector3 getRotation();
 
-		void init(btTransform &_tTrans, void *pObj);
+    void init ( btTransform &_tTrans, void *pObj );
 
-		virtual void update(DataMsg *_dataMsg);
+    virtual void update ( DataMsg *_dataMsg );
 
-		virtual void clone(Node **ppNode);
+    virtual void clone ( Node **ppNode );
 
-		//usada na trans cam do mundo
-		void transformacao3D();
+    //usada na trans cam do mundo
+    void transformacao3D();
 
-		//usada na trans da cam objeto
-		void ajusteMatrix(Physics *_pPhysic);
+    //usada na trans da cam objeto
+    void ajusteMatrix ( Physics *_pPhysic );
 
-		void propulcao(const btVector3 &_prop);
-		void torque(const btVector3 &_torque);
+    void propulcao ( const btVector3 &_prop );
+    void torque ( const btVector3 &_torque );
 
-		void setIndexVertexArray(btTriangleIndexVertexArray *_indexVertexArray);
+    void setIndexVertexArray ( btTriangleIndexVertexArray *_indexVertexArray );
 
-		bool isShapeDefine() {
+    bool isShapeDefine() {
 
-			if (pShapeCollision != nullptr)
-				return true;
+        if ( pShapeCollision != nullptr ) {
+            return true;
+        }
 
-			return false;
-		}
+        return false;
+    }
 
-		void loadColladaPhysicsModel(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName);
+    void loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName );
 
-	private:
+private:
 
-		void loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName);
+    void loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName );
 
-		btScalar mass;
-		btScalar friction;
-		btScalar restitution;
+    btScalar mass;
+    btScalar friction;
+    btScalar restitution;
 
-		btRigidBody* pRigidBody;
+    btRigidBody* pRigidBody;
 
-		btCollisionShape* pShapeCollision;
-		btGImpactMeshShape *trimesh;
+    btCollisionShape* pShapeCollision;
+    btGImpactMeshShape *trimesh;
 
-		btDefaultMotionState *pMotionState;
+    btDefaultMotionState *pMotionState;
 
-		//btTriangleIndexVertexArray *indexVertexArray;
+    //btTriangleIndexVertexArray *indexVertexArray;
 
-		PhysicsControl *pWorld;
+    PhysicsControl *pWorld;
 
-		//btTriangleIndexVertexArray *m_pIndexVertexArrays;
-	};
+    //btTriangleIndexVertexArray *m_pIndexVertexArrays;
+};
 
 }
 #endif //Physics_H
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

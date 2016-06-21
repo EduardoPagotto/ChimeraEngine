@@ -21,54 +21,56 @@
 #include "Object.h"
 #include "Constraint.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class Loader {
+class Loader
+{
 
-	public:
-		Loader();
-		~Loader();
-		Node* loadDAE(const std::string &_file);
+public:
+    Loader();
+    ~Loader();
+    Node* loadDAE ( const std::string &_file );
 
-		void setModelDir(const std::string &_dir) {
-			m_modelDir = _dir;
-		}
+    void setModelDir ( const std::string &_dir ) {
+        m_modelDir = _dir;
+    }
 
-		void setImageDir(const std::string &_dir) {
-			m_imageDir = _dir;
-		}
+    void setImageDir ( const std::string &_dir ) {
+        m_imageDir = _dir;
+    }
 
-	private:
-		void carregaMatrix(btTransform *_pTrans, const std::vector<float> &listaMatrix);
-		void createNode(tinyxml2::XMLElement* _nNodeXML, Node *_pNode);
-		std::string retornaAtributo(const std::string &_atributo, tinyxml2::XMLElement* _node);
+private:
+    void carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix );
+    void createNode ( tinyxml2::XMLElement* _nNodeXML, Node *_pNode );
+    std::string retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement* _node );
 
-		void libCam();
-		void libLight();
-		void libEffect();
-		void libTexture();
-		void libMaterial();
-		void libGeometry();
-		Node* libScene();
-		void libPhysicsMaterial();
-		void libPhysicsModels();
-		void libPhysicsScenes();
+    void libCam();
+    void libLight();
+    void libEffect();
+    void libTexture();
+    void libMaterial();
+    void libGeometry();
+    Node* libScene();
+    void libPhysicsMaterial();
+    void libPhysicsModels();
+    void libPhysicsScenes();
 
-		void libConstraint();
+    void libConstraint();
 
-		std::string m_modelDir;
-		std::string m_imageDir;
+    std::string m_modelDir;
+    std::string m_imageDir;
 
-		tinyxml2::XMLDocument* doc;
-		tinyxml2::XMLElement* root;
+    tinyxml2::XMLDocument* doc;
+    tinyxml2::XMLElement* root;
 
-		std::queue<Node*> listaNodeRemover;
-		std::map<std::string, btMaterial*> m_pPhMaterial;
+    std::queue<Node*> listaNodeRemover;
+    std::map<std::string, btMaterial*> m_pPhMaterial;
 
-		//log4cxx::LoggerPtr logger;
-	};
+    //log4cxx::LoggerPtr logger;
+};
 
 }
 
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

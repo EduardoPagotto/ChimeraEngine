@@ -9,84 +9,87 @@
 #include "Color.h"
 #include "Node.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	enum class LightType {
-		POINT = 0,
-		SPOT,
-		DIRECTIONAL
-	};
+enum class LightType
+{
+    POINT = 0,
+    SPOT,
+    DIRECTIONAL
+};
 
-	class Light : public Node {
-	public:
+class Light : public Node
+{
+public:
 
-		Light(LightType _lightType, std::string _id, std::string _name);
+    Light ( LightType _lightType, std::string _id, std::string _name );
 
-		Light(const Light& _light);
+    Light ( const Light& _light );
 
-		virtual ~Light();
+    virtual ~Light();
 
-		virtual void update(DataMsg *_dataMsg);
+    virtual void update ( DataMsg *_dataMsg );
 
-		virtual void clone(Node **ppNode);
+    virtual void clone ( Node **ppNode );
 
-		virtual void exec();
+    virtual void exec();
 
-		Color getAmbient() {
-			return ambient;
-		}
+    Color getAmbient() {
+        return ambient;
+    }
 
-		Color getSpecular() {
-			return specular;
-		}
+    Color getSpecular() {
+        return specular;
+    }
 
-		Color getDiffuse() {
-			return diffuse;
-		}
+    Color getDiffuse() {
+        return diffuse;
+    }
 
-		void setAmbient(Color _color) {
-			ambient = _color;
-		}
+    void setAmbient ( Color _color ) {
+        ambient = _color;
+    }
 
-		void setSpecular(Color _color) {
-			specular = _color;
-		}
+    void setSpecular ( Color _color ) {
+        specular = _color;
+    }
 
-		void setDiffuse(Color _color) {
-			diffuse = _color;
-		}
+    void setDiffuse ( Color _color ) {
+        diffuse = _color;
+    }
 
-		void setType(LightType _type) {
-			type = _type;
-		}
+    void setType ( LightType _type ) {
+        type = _type;
+    }
 
-		void setTransform(const btTransform &_trans) {
-			transform = _trans;
-		}
+    void setTransform ( const btTransform &_trans ) {
+        transform = _trans;
+    }
 
-		btVector3 getPosition() const {
-            return position;
-        }
-
-
-		void setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation);
-
-		void loadCollada(tinyxml2::XMLElement* _nNode);
+    btVector3 getPosition() const {
+        return position;
+    }
 
 
+    void setPositionRotation ( const btVector3 &_posicao, const btVector3 &_rotation );
 
-	private:
+    void loadCollada ( tinyxml2::XMLElement* _nNode );
 
-		btTransform transform;
-		btVector3 position;
 
-		Color ambient;
-		Color specular;
-		Color diffuse;
 
-		int number;
-		LightType type;
-	};
+private:
+
+    btTransform transform;
+    btVector3 position;
+
+    Color ambient;
+    Color specular;
+    Color diffuse;
+
+    int number;
+    LightType type;
+};
 
 }
 #endif

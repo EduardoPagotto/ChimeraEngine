@@ -4,34 +4,36 @@
 # include <LinearMath/btVector3.h>
 # include "Texture.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class ShadowMap {
+class ShadowMap
+{
 
-	public:
-		ShadowMap();
-		virtual ~ShadowMap();
+public:
+    ShadowMap();
+    virtual ~ShadowMap();
 
-		void RenderSceneA(void *pObjeto);
-		void ApplyShadowMap(void *pObjeto);
-		void StoreLightMatrices(const btVector3 &posicao);
-		void init(Node *_pScene);
+    void RenderSceneA ( void *pObjeto );
+    void ApplyShadowMap ( void *pObjeto );
+    void StoreLightMatrices ( const btVector3 &posicao );
+    void init ( Node *_pScene );
 
-	private:
+private:
 
-		Node *pScene;
+    Node *pScene;
 
-		// These arrays will store our 4x4 matrices for the light's
-		// project and modelview matrix.  These will then be loaded
-		// into the texture matrix for the shadow mapping.
-		float g_mProjection[16];
-		float g_mModelView[16];
+    // These arrays will store our 4x4 matrices for the light's
+    // project and modelview matrix.  These will then be loaded
+    // into the texture matrix for the shadow mapping.
+    float g_mProjection[16];
+    float g_mModelView[16];
 
-		// We set the light's view position at the origin
-		btVector3 g_LightView;
+    // We set the light's view position at the origin
+    btVector3 g_LightView;
 
-		Texture *pTexture;
-	};
+    Texture *pTexture;
+};
 
 }
 

@@ -5,44 +5,47 @@
 
 #include "Material.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	enum class DrawType {
-		BOX,
-		GRID,
-		SPHERE,
-		MESH
-	};
+enum class DrawType
+{
+    BOX,
+    GRID,
+    SPHERE,
+    MESH
+};
 
-	class Draw : public Node {
-	public:
-		Draw(DrawType _type, std::string _id, std::string _name);
-		Draw(const Draw &_draw);
+class Draw : public Node
+{
+public:
+    Draw ( DrawType _type, std::string _id, std::string _name );
+    Draw ( const Draw &_draw );
 
-		virtual ~Draw();
+    virtual ~Draw();
 
-		virtual void update(DataMsg *dataMsg);
+    virtual void update ( DataMsg *dataMsg );
 
-		virtual void clone(Node **ppNode) {
-			Node::clone(ppNode);
-		}
+    virtual void clone ( Node **ppNode ) {
+        Node::clone ( ppNode );
+    }
 
-		virtual void render(bool _texture);
+    virtual void render ( bool _texture );
 
-		virtual void init();
+    virtual void init();
 
-        virtual void renderExecute(bool _texture) = 0;
+    virtual void renderExecute ( bool _texture ) = 0;
 
-		virtual btVector3 getSizeBox() = 0;
+    virtual btVector3 getSizeBox() = 0;
 
-		DrawType getType() const {
-			return type;
-		}
+    DrawType getType() const {
+        return type;
+    }
 
-	protected:
-		DrawType type;
-        Material *pMaterial;
-	};
+protected:
+    DrawType type;
+    Material *pMaterial;
+};
 
 }
 #endif

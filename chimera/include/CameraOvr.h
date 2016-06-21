@@ -3,15 +3,16 @@
 
 #include "Camera.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class CameraOvr : public Camera {
-
-	public:
-		CameraOvr(std::string _id, std::string _name);
-		CameraOvr(const CameraOvr& _cameraOvr);
-		CameraOvr(const Camera& _camera);
-		virtual ~CameraOvr();
-	};
+class CameraOvr : public Camera
+{
+public:
+    CameraOvr ( std::string _id, std::string _name );
+    CameraOvr ( const CameraOvr& _cameraOvr );
+    CameraOvr ( const Camera& _camera );
+    virtual ~CameraOvr();
+};
 }
 #endif

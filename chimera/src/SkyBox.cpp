@@ -10,52 +10,49 @@
 
 namespace Chimera {
 
-SkyBox::SkyBox(std::string _id, std::string _name): Node(EntityKind::SKYBOX, _id, _name)
-{
+SkyBox::SkyBox ( std::string _id, std::string _name ) : Node ( EntityKind::SKYBOX, _id, _name ) {
 
 }
 
-SkyBox::~SkyBox()
-{
+SkyBox::~SkyBox() {
 
 }
 
-void SkyBox::update(DataMsg *_dataMsg) {
+void SkyBox::update ( DataMsg *_dataMsg ) {
 
-	if (_dataMsg->getKindOp() == KindOp::START) {
+    if ( _dataMsg->getKindOp() == KindOp::START ) {
 
-	 //inicialize primeiro os filhos para garantir textura e efeito em material
-	 Node::update(_dataMsg);
+        //inicialize primeiro os filhos para garantir textura e efeito em material
+        Node::update ( _dataMsg );
 
-	 //inicializa objeto local
-	 pDraw = (Draw*)findChildByKind(EntityKind::DRAW, 0);
+        //inicializa objeto local
+        pDraw = ( Draw* ) findChildByKind ( EntityKind::DRAW, 0 );
 
-   } else {
+    } else {
 
-	   Node::update(_dataMsg);
+        Node::update ( _dataMsg );
 
-   }
+    }
 
 }
 
-void SkyBox::render(bool _texture)
-{
+void SkyBox::render ( bool _texture ) {
 
-	if (pDraw != nullptr) {
+    if ( pDraw != nullptr ) {
 
-		glPushAttrib(GL_ENABLE_BIT);
-		glPushAttrib(GL_CURRENT_BIT);
+        glPushAttrib ( GL_ENABLE_BIT );
+        glPushAttrib ( GL_CURRENT_BIT );
 
-		// Enable smooth shading
-		glShadeModel(GL_SMOOTH);
-		glDisable(GL_LIGHTING);
+        // Enable smooth shading
+        glShadeModel ( GL_SMOOTH );
+        glDisable ( GL_LIGHTING );
 
-		pDraw->render(_texture);
+        pDraw->render ( _texture );
 
-		glPopAttrib();
-		glPopAttrib();
+        glPopAttrib();
+        glPopAttrib();
 
-	}
+    }
 
 }
 

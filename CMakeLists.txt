@@ -9,12 +9,11 @@ set(OVR_SET_TO_USE OFF)
 #option(OVR_SET_TO_USE "Compilar sem Driver OVR" OFF)
 
 if (OVR_SET_TO_USE)
-add_definitions(-DOVR_SET_TO_USE)
+	add_definitions(-DOVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
 add_subdirectory(chimera)
-
 add_subdirectory(AppCargaManual)
-add_subdirectory(AppShader)
-add_subdirectory(AppEmpty)
+#add_subdirectory(AppShader)
+#add_subdirectory(AppEmpty)
 #add_subdirectory(appTest)

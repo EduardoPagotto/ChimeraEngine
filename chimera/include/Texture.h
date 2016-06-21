@@ -10,56 +10,59 @@
 
 #include "Node.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	enum class TextureFilter {
-		Nearest,
-		Linear,
-		Mipmapped
-	};
+enum class TextureFilter
+{
+    Nearest,
+    Linear,
+    Mipmapped
+};
 
 
-	class Texture : public Node {
-	public:
+class Texture : public Node
+{
+public:
 
-		Texture(std::string _id, std::string _name);
-		Texture(const Texture &_texture);
+    Texture ( std::string _id, std::string _name );
+    Texture ( const Texture &_texture );
 
-		virtual ~Texture();
+    virtual ~Texture();
 
-		virtual void update(DataMsg *dataMsg);
+    virtual void update ( DataMsg *dataMsg );
 
-		virtual void clone(Node **ppNode);
+    virtual void clone ( Node **ppNode );
 
-		void begin();
+    void begin();
 
-		void end();
+    void end();
 
-		void init();
+    void init();
 
-		SDL_Surface *loadImage();
+    SDL_Surface *loadImage();
 
-		void setPathFile(const std::string &_pathFile) {
-			pathFile = _pathFile;
-		}
+    void setPathFile ( const std::string &_pathFile ) {
+        pathFile = _pathFile;
+    }
 
-		void setFilter(TextureFilter _filter);
+    void setFilter ( TextureFilter _filter );
 
-		TextureFilter getFilter();
+    TextureFilter getFilter();
 
-		// novo usado em ShadowMap
-		// This function creates a blank texture to render to
-		void createRenderTexture(int sizeX, int sizeY, int channels, int type);
-		void beginTexCreated();
-		void endTexCreated();
+    // novo usado em ShadowMap
+    // This function creates a blank texture to render to
+    void createRenderTexture ( int sizeX, int sizeY, int channels, int type );
+    void beginTexCreated();
+    void endTexCreated();
 
-	private:
-		std::string pathFile;
+private:
+    std::string pathFile;
 
-		int textureList[3];
-		int indiceFilter;
-		bool texturaCarregada;
-	};
+    int textureList[3];
+    int indiceFilter;
+    bool texturaCarregada;
+};
 
 }
 #endif

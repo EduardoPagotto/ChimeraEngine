@@ -4,34 +4,36 @@
 # include <LinearMath/btVector3.h>
 #include "Color.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class Particle {
-	public:
-		Particle(const btVector3& initPosition, const btVector3& direction, const btVector3& gravity , const Color& color,const float& live);
-		virtual ~Particle();
+class Particle
+{
+public:
+    Particle ( const btVector3& initPosition, const btVector3& direction, const btVector3& gravity , const Color& color,const float& live );
+    virtual ~Particle();
 
-	    void ResetParticle(Color color, const btVector3 &dir);
+    void ResetParticle ( Color color, const btVector3 &dir );
 
-		void render();
+    void render();
 
-		int   active; /* Active (Yes/No) */
-		float life;   /* Particle Life   */
+    int   active; /* Active (Yes/No) */
+    float life;   /* Particle Life   */
 
-		bool operator < (const Particle& that) const;
+    bool operator < ( const Particle& that ) const;
 
-		Color corAtiva;
+    Color corAtiva;
 
-		btVector3 position;
-	 	btVector3 direction;
-		btVector3 gravity;
+    btVector3 position;
+    btVector3 direction;
+    btVector3 gravity;
 
-	private:
-		btVector3 initPosition;
-		float initLive;
-		void camera_directions(btVector3 *right, btVector3 *up, btVector3 *look);
-		void draw_billboard(const btVector3 &posicao);
+private:
+    btVector3 initPosition;
+    float initLive;
+    void camera_directions ( btVector3 *right, btVector3 *up, btVector3 *look );
+    void draw_billboard ( const btVector3 &posicao );
 
-	};
+};
 }
 #endif

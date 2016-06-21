@@ -10,53 +10,55 @@
 
 #include "Font.h"
 
-namespace Chimera {
-	class HUD {
-	public:
+namespace Chimera
+{
+class HUD
+{
+public:
 
-		struct HUDSquare {
-			SDL_Rect tela;
-			Color color;
-		};
+    struct HUDSquare {
+        SDL_Rect tela;
+        Color color;
+    };
 
-		struct HUDTxt {
-			int indexFonte;
-			int indexSquare;
-			int posX;
-			int posY;
-			std::string *pText;
-			Color color;
-		};
+    struct HUDTxt {
+        int indexFonte;
+        int indexSquare;
+        int posX;
+        int posY;
+        std::string *pText;
+        Color color;
+    };
 
-		HUD();
+    HUD();
 
-		~HUD();
+    ~HUD();
 
-		void addFont(Font *_pFont);
-		void addSquare(const SDL_Rect _rec, Color _color);
+    void addFont ( Font *_pFont );
+    void addSquare ( const SDL_Rect _rec, Color _color );
 
-		inline void setOn(const bool _on) {
-			on = _on;
-		}
+    inline void setOn ( const bool _on ) {
+        on = _on;
+    }
 
-		inline bool isOn(void) const {
-			return on;
-		}
+    inline bool isOn ( void ) const {
+        return on;
+    }
 
-		void addText(int _fontIndex, int _squareIndex, int _posX, int _posY, Color _colorText, std::string *_txt);
-		void update(void);
+    void addText ( int _fontIndex, int _squareIndex, int _posX, int _posY, Color _colorText, std::string *_txt );
+    void update ( void );
 
-	private:
+private:
 
-		void drawBoxes();
-		void drawFonts();
+    void drawBoxes();
+    void drawFonts();
 
-		bool on;
-		std::vector<HUDSquare*> vSquare;
-		std::vector<HUDTxt*> vLineText;
-		std::vector<Font*> vFonts;
-	};
+    bool on;
+    std::vector<HUDSquare*> vSquare;
+    std::vector<HUDTxt*> vLineText;
+    std::vector<Font*> vFonts;
+};
 }
 
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

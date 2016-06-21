@@ -3,104 +3,95 @@
 
 #include <LinearMath/btVector3.h>
 #include <LinearMath/btTransform.h>
-
 #include <tinyxml2.h>
 
 #include "Node.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	enum class CameraType {
-		Base,
-		Spherical,
-		Land,
-		Air,
-		Ovr
-	};
+enum class CameraType
+{
+    Base,
+    Spherical,
+    Land,
+    Air,
+    Ovr
+};
 
-	class Camera : public Node {
-	public:
+class Camera : public Node
+{
+public:
+    Camera ( CameraType _type, std::string _id, std::string _name );
+    Camera ( const Camera& _camera );
 
-		Camera(CameraType _type, std::string _id, std::string _name);
+    virtual ~Camera();
+    virtual void update ( DataMsg *_dataMsg );
+    virtual void init();
+    virtual void clone ( Node **ppNode );
 
-		Camera(const Camera& _camera);
+    void exec();
 
-		virtual ~Camera();
+    void setType ( CameraType _type ) {
+        type = _type;
+    }
 
-		virtual void update(DataMsg *_dataMsg);
+    void setNear ( float _near ) {
+        this->nearDistance = _near;
+    }
 
-		virtual void init();
+    void setFar ( float _far ) {
+        this->farDistance = _far;
+    }
 
-		virtual void clone(Node **ppNode);
+    void setFov ( float _fov ) {
+        this->fov = _fov;
+    }
 
-		//virtual void trackBall(int _mx, int _my, int _mz){}
+    float getNear() const {
+        return nearDistance;
+    }
 
-		void exec();
+    float getFar() const {
+        return farDistance;
+    }
 
-		void setType(CameraType _type) {
-			type = _type;
-		}
+    float getFov() const {
+        return fov;
+    }
 
-		void setNear(float _near) {
-			this->nearDistance = _near;
-		}
+    bool isPerspective() {
+        return perspective;
+    }
 
-		void setFar(float _far) {
-			this->farDistance = _far;
-		}
+    btVector3 getPosition() const {
+        return position;
+    }
 
-		void setFov(float _fov) {
-			this->fov = _fov;
-		}
+    void setPerspective ( bool _perspective ) {
+        perspective = _perspective; //TODO implementar isto para ortogonal (false);
+    }
 
-		float getNear() const {
-			return nearDistance;
-		}
+    void setTransform ( const btTransform &_trans ) {
+        transform = _trans;
+    }
 
-		float getFar() const {
-			return farDistance;
-		}
+    void setPositionRotation ( const btVector3 &_posicao, const btVector3 &_rotation );
+    void loadCollada ( tinyxml2::XMLElement* _nNode );
 
-		float getFov() const {
-			return fov;
-		}
+protected:
+    CameraType type;
+    btVector3 position;
+    btVector3 rotation;
+    btVector3 direction;
+    btTransform transform;
 
-		bool isPerspective() {
-			return perspective;
-		}
-
-		btVector3 getPosition() const {
-            return position;
-        }
-
-		void setPerspective(bool _perspective) {
-			perspective = _perspective; //TODO implementar isto para ortogonal (false);
-		}
-
-		void setTransform(const btTransform &_trans) {
-			transform = _trans;
-		}
-
-		void setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation);
-
-		void loadCollada(tinyxml2::XMLElement* _nNode);
-
-	protected:
-		CameraType type;
-
-		btVector3 position;
-		btVector3 rotation;
-		btVector3 direction;
-
-		btTransform transform;
-
-	private:
-		float nearDistance;
-		float farDistance;
-		float fov;
-
-		bool perspective;
-	};
+private:
+    float nearDistance;
+    float farDistance;
+    float fov;
+    bool perspective;
+};
 
 }
 

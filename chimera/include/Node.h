@@ -4,64 +4,66 @@
 #include "Entity.h"
 #include "DataMsg.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	/**
-	 * Class Node
-	 *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
-	 *  @since 20130925
-	 */
-	class Node : public Entity {
-	public:
+/**
+ * Class Node
+ *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+ *  @since 20130925
+ */
+class Node : public Entity
+{
+public:
 
-		friend class SceneMng;
-		friend class Loader;
+    friend class SceneMng;
+    friend class Loader;
 
-		Node(EntityKind _type, std::string _id, std::string _name);
+    Node ( EntityKind _type, std::string _id, std::string _name );
 
-		Node(const Node &_node);
+    Node ( const Node &_node );
 
-		~Node();
+    ~Node();
 
-		virtual void clone(Node **ppNode);
+    virtual void clone ( Node **ppNode );
 
-		virtual void update(DataMsg *dataMsg);
+    virtual void update ( DataMsg *dataMsg );
 
-		void addChild(Node *child);
+    void addChild ( Node *child );
 
-		inline const std::string& getName() const {
-			return name;
-		}
+    inline const std::string& getName() const {
+        return name;
+    }
 
-		inline void setName(const std::string& name) {
-			this->name = name;
-		}
+    inline void setName ( const std::string& name ) {
+        this->name = name;
+    }
 
-		inline const std::string& getId() const {
-			return id;
-		}
+    inline const std::string& getId() const {
+        return id;
+    }
 
-		inline void setId(const std::string& name) {
-			this->id = name;
-		}
+    inline void setId ( const std::string& name ) {
+        this->id = name;
+    }
 
-		Node *findChildByKind(EntityKind type, int index);
+    Node *findChildByKind ( EntityKind type, int index );
 
-		static Node *findNodeById(EntityKind type, std::string id);
-		static Node *findNodeById(std::string id);
-		static Node *findNodeByName(EntityKind type, std::string name);
-		static Node *findNodeByName(std::string name);
+    static Node *findNodeById ( EntityKind type, std::string id );
+    static Node *findNodeById ( std::string id );
+    static Node *findNodeByName ( EntityKind type, std::string name );
+    static Node *findNodeByName ( std::string name );
 
 
-	protected:
-		Node *parent;
-		std::list<Node*> listChild;
+protected:
+    Node *parent;
+    std::list<Node*> listChild;
 
-	private:
-		std::string name;
-		std::string id;
-		static std::list<Node*> listNode;
-	};
+private:
+    std::string name;
+    std::string id;
+    static std::list<Node*> listNode;
+};
 
 }
 

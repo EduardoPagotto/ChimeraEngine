@@ -6,33 +6,35 @@
 #include "Node.h"
 #include "Physics.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class Constraint : public Node {
-	public:
+class Constraint : public Node
+{
+public:
 
-		friend class Loader;
+    friend class Loader;
 
-		Constraint(std::string _id, std::string _name);
-		Constraint(const Constraint& _constraint);
-		virtual ~Constraint();
+    Constraint ( std::string _id, std::string _name );
+    Constraint ( const Constraint& _constraint );
+    virtual ~Constraint();
 
-		virtual void clone(Node **ppNode);
+    virtual void clone ( Node **ppNode );
 
-		virtual void update(DataMsg *dataMsg);
+    virtual void update ( DataMsg *dataMsg );
 
-	private:
+private:
 
-		Physics *pPhysicsA;
-		Physics *pPhysicsB;
+    Physics *pPhysicsA;
+    Physics *pPhysicsB;
 
-		// btRigidBody* pRigidBodyA;
-		// btRigidBody* pRigidBodyB;
+    // btRigidBody* pRigidBodyA;
+    // btRigidBody* pRigidBodyB;
 
-		btTransform transformA;
-		btTransform transformB;
-	};
+    btTransform transformA;
+    btTransform transformB;
+};
 
 }
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

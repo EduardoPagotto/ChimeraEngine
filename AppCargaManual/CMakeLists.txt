@@ -17,9 +17,7 @@ include_directories(
 	${BULLET_INCLUDE_DIR}
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
-	${LOG4CXX_INCLUDE_DIR}
-	
-)
+	${LOG4CXX_INCLUDE_DIR})
 
 if (OVR_SET_TO_USE)
   include_directories(/usr/local/ovr_sdk_linux_0.4.4/LibOVR)
@@ -28,24 +26,23 @@ endif(OVR_SET_TO_USE)
 add_executable(
 	AppCargaManual
 	src/Game.cpp
-	src/main.cpp
-)
+	src/main.cpp)
 
 set (SourcesChimeraAPPCargaManual 	
-  ${Chimera_BINARY_DIR}/libChimera.a
-  ${OPENGL_LIBRARIES}
-  ${SDL2_LIBRARY}
-  ${BULLET_LIBRARIES}
-  ${FREETYPE_LIBRARY}
-  ${FTGL_LIBRARY}
-  ${LOG4CXX_LIBRARIES}
-  -lSDL2_image
-  -lSDL2_ttf
-  -ltinyxml2#/usr/lib64/libtinyxml2.so
-  -lGLEW#/usr/lib64/libGLEW.so
-  -lGLEWmx#/usr/lib64/libGLEWmx.so
-  librt.so
-  libXrandr.so
+	${Chimera_BINARY_DIR}/libChimera.a
+	${OPENGL_LIBRARIES}
+	${SDL2_LIBRARY}
+	${BULLET_LIBRARIES}
+	${FREETYPE_LIBRARY}
+	${FTGL_LIBRARY}
+	${LOG4CXX_LIBRARIES}
+	-lSDL2_image
+	-lSDL2_ttf
+	-ltinyxml2
+	-lGLEW
+	-lGLEWmx
+	librt.so
+	libXrandr.so
 )
 
 if (OVR_SET_TO_USE)
@@ -54,7 +51,5 @@ if (OVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
 target_link_libraries(AppCargaManual ${SourcesChimeraAPPCargaManual})
-
-#add_dependencies(AppCargaManual chimera)
 
 INSTALL(FILES ${AppCargaManual_BINARY_DIR}/AppCargaManual DESTINATION bin)

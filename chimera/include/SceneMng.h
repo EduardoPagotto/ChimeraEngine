@@ -14,71 +14,73 @@
 
 #include "ShadowMap.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	/**
-	 * Class SceneMng
-	 *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
-	 *  @since 20130925
-	 */
-	class SceneMng {
-	public:
-		SceneMng(Node *_pRoot, Video *_pVideo);
-		virtual ~SceneMng();
+/**
+ * Class SceneMng
+ *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+ *  @since 20130925
+ */
+class SceneMng
+{
+public:
+    SceneMng ( Node *_pRoot, Video *_pVideo );
+    virtual ~SceneMng();
 
-		void addChildToScene(Node *_pNode);
+    void addChildToScene ( Node *_pNode );
 
-		Node *getNode(EntityKind _type, const std::string &_nome);
-		Node *getNode(EntityKind _type, unsigned index);
+    Node *getNode ( EntityKind _type, const std::string &_nome );
+    Node *getNode ( EntityKind _type, unsigned index );
 
-		void update(DataMsg *dataMsg);
+    void update ( DataMsg *dataMsg );
 
-		Node* getRoot() const {
-			return pRoot;
-		}
+    Node* getRoot() const {
+        return pRoot;
+    }
 
-		inline void cameraAtiva(Camera *_pCam) {
-			pCameraAtiva = _pCam;
-		}
+    inline void cameraAtiva ( Camera *_pCam ) {
+        pCameraAtiva = _pCam;
+    }
 
-		inline void objetoAtivo(Object *_pObject) {
-			pObjeto = _pObject;
-		}
+    inline void objetoAtivo ( Object *_pObject ) {
+        pObjeto = _pObject;
+    }
 
-		inline void skyBoxAtivo(SkyBox *_pSkyBox) {
-			pSkyBox = _pSkyBox;
-		}
+    inline void skyBoxAtivo ( SkyBox *_pSkyBox ) {
+        pSkyBox = _pSkyBox;
+    }
 
-		void setLight(bool _lightOn);
-		void setMaterial(bool _materialOn);
+    void setLight ( bool _lightOn );
+    void setMaterial ( bool _materialOn );
 
-		void draw(HUD *_pHud);
+    void draw ( HUD *_pHud );
 
-	private:
-        void hudUpdate(HUD *_pHud,int eye);
-		void execLight();
+private:
+    void hudUpdate ( HUD *_pHud,int eye );
+    void execLight();
 
-		void parseEntity(Node *_pNode);
-		void addEntityToScene(Node *_pNode);
+    void parseEntity ( Node *_pNode );
+    void addEntityToScene ( Node *_pNode );
 
-		bool hasLight;
-		bool hasMaterial;
+    bool hasLight;
+    bool hasMaterial;
 
-		Node *pRoot;
-		Camera *pCameraAtiva;
-		Object *pObjeto;
-		SkyBox *pSkyBox;
+    Node *pRoot;
+    Camera *pCameraAtiva;
+    Object *pObjeto;
+    SkyBox *pSkyBox;
 
-		std::vector<Camera*> m_vCamera;
-		std::vector<Light*> m_vLight;
-		std::vector<Object*> m_vObject;
-		std::vector<ParticleEmitter*> m_vParticle;
-		std::vector<SkyBox*> m_vSkyBox;
+    std::vector<Camera*> m_vCamera;
+    std::vector<Light*> m_vLight;
+    std::vector<Object*> m_vObject;
+    std::vector<ParticleEmitter*> m_vParticle;
+    std::vector<SkyBox*> m_vSkyBox;
 
-		ShadowMap shadoMap;
+    ShadowMap shadoMap;
 
-		Video *pVideo;
-	};
+    Video *pVideo;
+};
 
 } /* namespace Chimera */
 #endif /* GRADE_H_ */

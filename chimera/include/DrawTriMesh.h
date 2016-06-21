@@ -8,109 +8,110 @@
 
 #include "Draw.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	template <class T>
-	class ListPtr {
-	public:
-		ListPtr() {
-			ptr = nullptr;
-			size = 0;
-		}
+template <class T>
+class ListPtr
+{
+public:
+    ListPtr() {
+        ptr = nullptr;
+        size = 0;
+    }
 
-		~ListPtr() {
-			clear();
-		}
+    ~ListPtr() {
+        clear();
+    }
 
-		ListPtr(const ListPtr &_cpy) {
-			if (_cpy.ptr != nullptr) {
-				create(_cpy.size);
-				memcpy(ptr, _cpy.ptr, sizeof (T)* size);
-			}
-			else {
-				ptr = nullptr;
-				size = 0;
-			}
-		}
+    ListPtr ( const ListPtr &_cpy ) {
+        if ( _cpy.ptr != nullptr ) {
+            create ( _cpy.size );
+            memcpy ( ptr, _cpy.ptr, sizeof ( T ) * size );
+        } else {
+            ptr = nullptr;
+            size = 0;
+        }
+    }
 
-		void set(const ListPtr &_cpy) {
-			if (_cpy.ptr != nullptr) {
-				create(_cpy.size);
-				memcpy(ptr, _cpy.ptr, sizeof (T)* size);
-			}
-			else {
-				ptr = nullptr;
-				size = 0;
-			}
-		}
+    void set ( const ListPtr &_cpy ) {
+        if ( _cpy.ptr != nullptr ) {
+            create ( _cpy.size );
+            memcpy ( ptr, _cpy.ptr, sizeof ( T ) * size );
+        } else {
+            ptr = nullptr;
+            size = 0;
+        }
+    }
 
-		void create(unsigned _size) {
-			ptr = new T[_size];
-			size = _size;
-		}
+    void create ( unsigned _size ) {
+        ptr = new T[_size];
+        size = _size;
+    }
 
-		void clear(void) {
-			if (ptr != nullptr) {
-				delete[] ptr;
-				ptr = nullptr;
-				size = 0;
-			}
-		}
+    void clear ( void ) {
+        if ( ptr != nullptr ) {
+            delete[] ptr;
+            ptr = nullptr;
+            size = 0;
+        }
+    }
 
-		unsigned getSize() const {
-			return size;
-		}
+    unsigned getSize() const {
+        return size;
+    }
 
-		inline T & operator[] (int n) {
-			return ptr[n];
-		}
+    inline T & operator[] ( int n ) {
+        return ptr[n];
+    }
 
-		inline T operator[] (int n) const {
-			return ptr[n];
-		}
+    inline T operator[] ( int n ) const {
+        return ptr[n];
+    }
 
-		T* ptrVal(void) {
-			return ptr;
-		}
+    T* ptrVal ( void ) {
+        return ptr;
+    }
 
-	private:
-		T* ptr;
-		unsigned size;
-	};
-
-
-	class DrawTriMesh : public Draw {
-	public:
-		friend class Loader;
+private:
+    T* ptr;
+    unsigned size;
+};
 
 
-		DrawTriMesh(std::string _id, std::string _name);
-		DrawTriMesh(const DrawTriMesh &_cpy);
-		virtual ~DrawTriMesh();
+class DrawTriMesh : public Draw
+{
+public:
+    friend class Loader;
 
-		virtual void update(DataMsg *dataMsg);
 
-		virtual void clone(Node **ppNode);
+    DrawTriMesh ( std::string _id, std::string _name );
+    DrawTriMesh ( const DrawTriMesh &_cpy );
+    virtual ~DrawTriMesh();
 
-        virtual void renderExecute(bool _texture);
-		virtual btVector3 getSizeBox();
+    virtual void update ( DataMsg *dataMsg );
 
-		void loadCollada(tinyxml2::XMLElement* _nNode);
+    virtual void clone ( Node **ppNode );
 
-		ListPtr<float> vList;
-		ListPtr<int> vIndex;
+    virtual void renderExecute ( bool _texture );
+    virtual btVector3 getSizeBox();
 
-	private:
+    void loadCollada ( tinyxml2::XMLElement* _nNode );
 
-		int getSource(tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores);
+    ListPtr<float> vList;
+    ListPtr<int> vIndex;
 
-		ListPtr<float> nList;
-		ListPtr<float> uvList;
+private:
 
-		ListPtr<int> nIndex;
-		ListPtr<int> tIndex;
+    int getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores );
 
-	};
+    ListPtr<float> nList;
+    ListPtr<float> uvList;
+
+    ListPtr<int> nIndex;
+    ListPtr<int> tIndex;
+
+};
 
 }
 

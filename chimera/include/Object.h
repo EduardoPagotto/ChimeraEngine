@@ -7,46 +7,48 @@
 #include "Draw.h"
 #include "Physics.h"
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class Object : public Node {
-	public:
+class Object : public Node
+{
+public:
 
-		friend class Physics;
+    friend class Physics;
 
-		Object(std::string _id, std::string _name);
-		Object(const Object& _object);
+    Object ( std::string _id, std::string _name );
+    Object ( const Object& _object );
 
-		virtual ~Object();
-		virtual void update(DataMsg *_dataMsg);
+    virtual ~Object();
+    virtual void update ( DataMsg *_dataMsg );
 
-		virtual void clone(Node **ppNode);
+    virtual void clone ( Node **ppNode );
 
-		void init();
+    void init();
 
-		void applyTorc(const btVector3 &_vet);
-		void applyForce(const btVector3 &_vet);
+    void applyTorc ( const btVector3 &_vet );
+    void applyForce ( const btVector3 &_vet );
 
-		void setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation);
+    void setPositionRotation ( const btVector3 &_posicao, const btVector3 &_rotation );
 
-		btVector3& getPosition();
+    btVector3& getPosition();
 
-		void setTransform(const btTransform &_trans) {
-			transform = _trans;
-		}
+    void setTransform ( const btTransform &_trans ) {
+        transform = _trans;
+    }
 
-		Draw * getDraw() {
-			return  (Draw*)findChildByKind(EntityKind::DRAW, 0);
-		}
+    Draw * getDraw() {
+        return ( Draw* ) findChildByKind ( EntityKind::DRAW, 0 );
+    }
 
-	private:
-		void execute(bool _texture, Object *pObj);
+private:
+    void execute ( bool _texture, Object *pObj );
 
-		Physics *pPhysic;
-		Draw *pDraw;
+    Physics *pPhysic;
+    Draw *pDraw;
 
-		btTransform transform;
-	};
+    btTransform transform;
+};
 
 }
 

@@ -5,91 +5,95 @@
 #include <cstring>
 #endif
 
-namespace Chimera {
+namespace Chimera
+{
 
-	class Color {
-	public:
-		explicit Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f) : r(_r), g(_g), b(_b), a(_a) {}
+class Color
+{
+public:
+    explicit Color ( float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f ) : r ( _r ), g ( _g ), b ( _b ), a ( _a ) {}
 
-		Color(const Color &_c) : r(_c.r), g(_c.g), b(_c.b), a(_c.a) {}
+    Color ( const Color &_c ) : r ( _c.r ), g ( _c.g ), b ( _c.b ), a ( _c.a ) {}
 
-		void set(const Color _c) {
-			r = _c.r;
-			g = _c.g;
-			b = _c.b;
-			a = _c.a;
-		}
+    void set ( const Color _c ) {
+        r = _c.r;
+        g = _c.g;
+        b = _c.b;
+        a = _c.a;
+    }
 
-		void set(float _r, float _g, float _b, float _a) {
-			r = _r;
-			g = _g;
-			b = _b;
-			a = _a;
-		}
+    void set ( float _r, float _g, float _b, float _a ) {
+        r = _r;
+        g = _g;
+        b = _b;
+        a = _a;
+    }
 
-		static const Color ZERO;
-		static const Color BLACK;
-		static const Color WHITE;
-		static const Color RED;
-		static const Color GREEN;
-		static const Color BLUE;
+    static const Color ZERO;
+    static const Color BLACK;
+    static const Color WHITE;
+    static const Color RED;
+    static const Color GREEN;
+    static const Color BLUE;
 
-		bool operator==(const Color& rhs) const;
-		bool operator!=(const Color& rhs) const;
+    bool operator== ( const Color& rhs ) const;
+    bool operator!= ( const Color& rhs ) const;
 
-	    Color operator=(const Color& other) {
-		 	r = other.r;
-		 	g = other.g;
-		 	b = other.b;
-		 	a = other.a;
+    Color operator= ( const Color& other ) {
+        r = other.r;
+        g = other.g;
+        b = other.b;
+        a = other.a;
 
-			return *this;
-	    }
+        return *this;
+    }
 
-	 	Color operator+(const Color& other) {
-	   		Color result(r + other.r, g+ other.g, b+ other.b, a+other.a);
-	   		return result;
-   		}
+    Color operator+ ( const Color& other ) {
+        Color result ( r + other.r, g+ other.g, b+ other.b, a+other.a );
+        return result;
+    }
 
-		/// Array accessor operator
-		inline float operator [] (const size_t i) const {
-			return *(&r + i);
-		}
+    /// Array accessor operator
+    inline float operator [] ( const size_t i ) const {
+        return * ( &r + i );
+    }
 
-		/// Array accessor operator
-		inline float& operator [] (const size_t i) {
-			return *(&r + i);
-		}
+    /// Array accessor operator
+    inline float& operator [] ( const size_t i ) {
+        return * ( &r + i );
+    }
 
-		inline float* ptr()	{
-			return &r;
-		}
+    inline float* ptr()	{
+        return &r;
+    }
 
-		inline const float* ptr() const	{
-			return &r;
-		}
+    inline const float* ptr() const	{
+        return &r;
+    }
 
-		void saturate(void);
+    void saturate ( void );
 
-		Color saturateCopy(void) const {
-			Color ret = *this;
-			ret.saturate();
-			return ret;
-		}
+    Color saturateCopy ( void ) const {
+        Color ret = *this;
+        ret.saturate();
+        return ret;
+    }
 
-		union {
-			float value[4];
-			struct { float r, g, b, a; };
-		};
-	};
+    union {
+        float value[4];
+        struct {
+            float r, g, b, a;
+        };
+    };
+};
 
-	//struct Material {
-	//    Color   diffuse;        /* Diffuse color RGBA */
-	//    Color   ambient;        /* Ambient color RGB */
-	//    Color   specular;       /* Specular 'shininess' */
-	//    Color   emissive;       /* Emissive color RGB */
-	//	float  shininess;
-	//};
+//struct Material {
+//    Color   diffuse;        /* Diffuse color RGBA */
+//    Color   ambient;        /* Ambient color RGB */
+//    Color   specular;       /* Specular 'shininess' */
+//    Color   emissive;       /* Emissive color RGB */
+//	float  shininess;
+//};
 
 }
 

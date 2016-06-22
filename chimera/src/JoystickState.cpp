@@ -15,7 +15,6 @@ JoystickState::JoystickState ( Uint8 id, SDL_Joystick *joystick, std::string nam
     Name = name;
 }
 
-
 void JoystickState::TrackEvent ( SDL_Event *event ) {
     // Update joystick axis and button status.
     switch ( event->type ) {
@@ -38,7 +37,6 @@ void JoystickState::TrackEvent ( SDL_Event *event ) {
     }
 }
 
-
 double JoystickState::AxisScale ( Sint16 value ) {
     // Convert axis values from (-32768,32767) to (-1,1) range.
     if ( value >= 0 ) {
@@ -47,7 +45,6 @@ double JoystickState::AxisScale ( Sint16 value ) {
         return ( ( double ) value ) / 32768.;
     }
 }
-
 
 double JoystickState::Axis ( Uint8 axis, double deadzone, double deadzone_at_ends ) {
     // Check an axis value.

@@ -15,6 +15,28 @@
 namespace Chimera {
 namespace Device {
     
+enum class JOY_AXIX_COD {
+	LEFT_X = 0,
+	LEFT_Y = 1,
+	LEFT_TRIGGER = 2,
+	RIGHT_X = 3,
+	RIGHT_Y = 4,
+	RIGHT_TRIGGER = 5,
+};
+
+enum class JOY_BUTTON_COD {
+	A,
+	B,
+	X,
+	Y,
+	LEFT_BUMPER,
+	RIGHT_BUMPER,
+	BACK,
+	START,
+	LEFT_STICK_CLICK,
+	RIGHT_STICK_CLICK,
+};
+
 class JoystickManager
 {
 public:

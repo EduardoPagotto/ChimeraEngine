@@ -11,7 +11,7 @@ void GameEvents::render() {}
 void GameEvents::mouseButtonDownCapture ( SDL_MouseButtonEvent mb ) {}
 void GameEvents::mouseButtonUpCapture ( SDL_MouseButtonEvent mb ) {}
 void GameEvents::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {}
-void GameEvents::joystickCapture ( Chimera::JoystickManager &joy ) {}
+void GameEvents::joystickCapture ( Chimera::Device::JoystickManager &joy ) {}
 void GameEvents::userEvent ( const SDL_Event &_event ) {}
 void GameEvents::newFPS ( const unsigned int &fps ) {}
 void GameEvents::beginProcGame() {}
@@ -30,7 +30,7 @@ void GameEvents::keyCapture ( SDL_Keycode tecla ) {
     case SDLK_F1:
         break;
     case SDLK_F10:
-        sendMessage ( Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
+        sendMessage ( Chimera::Graph::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
         break;
     case SDLK_UP:
         break;
@@ -49,12 +49,12 @@ void GameEvents::keyCapture ( SDL_Keycode tecla ) {
     }
 }
 
-void GameEvents::joystickStatus ( Chimera::JoystickManager &joy ) {
-    Chimera::JoystickState *joystick = joy.getJoystickState ( 0 );
+void GameEvents::joystickStatus ( Chimera::Device::JoystickManager &joy ) {
+    Chimera::Device::JoystickState *joystick = joy.getJoystickState ( 0 );
     if ( joystick != nullptr ) { }
 }
 
-void GameEvents::sendMessage ( Chimera::KindOp _kindOf, void *_paramA, void *_paramB ) {
+void GameEvents::sendMessage ( Chimera::Graph::KindOp _kindOf, void *_paramA, void *_paramB ) {
 
     SDL_Event event;
     SDL_zero ( event );

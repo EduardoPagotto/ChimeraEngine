@@ -21,32 +21,50 @@ void Game::joystickStatus ( Chimera::Device::JoystickManager &joy ) {
         float propulsaoFrontal = 1.0;
         float torque = 0.1;
 
-        float roll = joystick->Axis ( 0, 0.2 );
-        float pitch = joystick->Axis ( 1, 0.2 );
-        float yaw = joystick->Axis ( 2, 0.2 );
+		float yaw = joystick->Axis((Uint8)Chimera::Device::JOY_AXIX_COD::LEFT_X, 0.5);
+		float pitch = joystick->Axis((Uint8)Chimera::Device::JOY_AXIX_COD::LEFT_Y, 0.5);
+        float roll = joystick->Axis ((Uint8)Chimera::Device::JOY_AXIX_COD::RIGHT_X, 0.5 );
+       
+        double throttle = -propulsaoPrincipal * ( ( 1 + joystick->Axis ((Uint8)Chimera::Device::JOY_AXIX_COD::LEFT_TRIGGER, 0.5 ) ) / 2 );
+        throttle = throttle - ( -propulsaoFrontal* ( ( 1 + joystick->Axis ((Uint8)Chimera::Device::JOY_AXIX_COD::RIGHT_TRIGGER, 0.5 ) ) / 2 ) );
 
-        double throttle = -propulsaoPrincipal * ( ( 1 + joystick->Axis ( 4, 0.1 ) ) / 2 );
-        throttle = throttle - ( -propulsaoFrontal* ( ( 1 + joystick->Axis ( 5, 0.1 ) ) / 2 ) );
+		//for (int indice = 0; indice < 16; indice++) {
+		//	if (joystick->ButtonDown(indice) == true)
+		//		printf("Botao numero %d\n", indice);
+		//}
+		
+		int val = joystick->Hat(0);
+		if (val & 0x01)
+			pObj->applyForce(btVector3(0.0, 0.0, propulsaoLRUD));
 
-        bool propUp = joystick->ButtonDown ( 0 );
-        if ( propUp == true ) {
-            pObj->applyForce ( btVector3 ( 0.0, 0.0, propulsaoLRUD ) );
-        }
+		if (val & 0x04)
+			pObj->applyForce(btVector3(0.0, 0.0, -propulsaoLRUD));
 
-        bool propDown = joystick->ButtonDown ( 1 );
-        if ( propDown == true ) {
-            pObj->applyForce ( btVector3 ( 0.0, 0.0, -propulsaoLRUD ) );
-        }
+		if (val & 0x02)
+			pObj->applyForce(btVector3(propulsaoLRUD, 0.0, 0.0));
 
-        bool propLeft = joystick->ButtonDown ( 2 );
-        if ( propLeft == true ) {
-            pObj->applyForce ( btVector3 ( propulsaoLRUD, 0.0, 0.0 ) );
-        }
+		if (val & 0x08)
+			pObj->applyForce(btVector3(-propulsaoLRUD, 0.0, 0.0));
 
-        bool propRight = joystick->ButtonDown ( 3 );
-        if ( propRight == true ) {
-            pObj->applyForce ( btVector3 ( -propulsaoLRUD, 0.0, 0.0 ) );
-        }
+        //bool propUp = joystick->ButtonDown ( 0 );
+        //if ( propUp == true ) {
+        //    pObj->applyForce ( btVector3 ( 0.0, 0.0, propulsaoLRUD ) );
+        //}
+
+        //bool propDown = joystick->ButtonDown ( 1 );
+        //if ( propDown == true ) {
+        //    pObj->applyForce ( btVector3 ( 0.0, 0.0, -propulsaoLRUD ) );
+        //}
+
+        //bool propLeft = joystick->ButtonDown ( 2 );
+        //if ( propLeft == true ) {
+        //    pObj->applyForce ( btVector3 ( propulsaoLRUD, 0.0, 0.0 ) );
+        //}
+
+        //bool propRight = joystick->ButtonDown ( 3 );
+        //if ( propRight == true ) {
+        //    pObj->applyForce ( btVector3 ( -propulsaoLRUD, 0.0, 0.0 ) );
+        //}
 
         if ( ( roll != 0.0 ) || ( pitch != 0.0 ) || ( yaw != 0.0 ) || ( throttle != 0.0 ) ) {
             pObj->applyForce ( btVector3 ( 0.0, throttle, 0.0 ) );

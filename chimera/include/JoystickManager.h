@@ -15,6 +15,9 @@
 namespace Chimera {
 namespace Device {
     
+/**
+ * Enumerador dos codigos dos Axis do Joystico do XBOX360
+ */
 enum class JOY_AXIX_COD {
 	LEFT_X = 0,
 	LEFT_Y = 1,
@@ -24,6 +27,9 @@ enum class JOY_AXIX_COD {
 	RIGHT_TRIGGER = 5,
 };
 
+/**
+ * Enumerador dos codigos dos botoes do Joystic XBOX360
+ */
 enum class JOY_BUTTON_COD {
 	A,
 	B,
@@ -37,32 +43,67 @@ enum class JOY_BUTTON_COD {
 	RIGHT_STICK_CLICK,
 };
 
+/**
+ * Enumerador dos PAD's do Joystic XBOX360
+ */
+enum class JOY_PAD_COD {
+    UP    = 0b00000001,
+    RIGHT = 0b00000010,
+    DOWN  = 0b00000100,
+    LEFT  = 0b00001000
+};
+
+/**
+ * Classe gerenciadora de todos os Joysticks identificados
+ */
 class JoystickManager
 {
 public:
-    std::map<Uint8, JoystickState> Joysticks;
-    bool Initialized;
-
     JoystickManager ( void );
     virtual ~JoystickManager ( void );
 
+    /**
+     * Inicializa o SDL para uso de Joystic
+     */
     void Initialize ( void );
-    void FindJoysticks ( void );
+    
+    /**
+     * Libera Todos os Joysticks detectados
+     */
     void ReleaseJoysticks ( void );
+    
+    /**
+     * Realiza um rastreamento para localizar todos os Joystics ativos 
+     */
+    void FindJoysticks ( void );
 
-    JoystickState* getJoystickState ( int joystick_id );
+    /**
+     * Retorna o Joystic identificado pelo ID que comeca em 0
+     * @param joystick_id identificado do Joystic
+     * @return Retorna o joystic identificado ou null caso ele nao esteja inserido
+     */
+    JoystickState* getJoystickState (const int &joystick_id );
 
+    /**
+     * Executa leitura dos controle
+     * @return true se há modificacao nos Joysticks
+     */
     bool TrackEvent ( SDL_Event *event );
 
-    //double Axis( int joystick_id, Uint8 axis, double deadzone = 0., double deadzone_at_ends = 0. );
-    //double AxisScaled( int joystick_id, Uint8 axis, double low, double high, double deadzone = 0., double deadzone_at_ends = 0. );
-    //bool ButtonDown( int joystick_id, Uint8 button );
-    //Uint8 Hat( int joystick_id, Uint8 hat );
-    //bool HatDir( int joystick_id, Uint8 hat, Uint8 dir );
-
+    /**
+     * Retorna uma string com a lista de Joysticks identificado
+     * @return nome e dados do joystick
+     */
     std::string GetStatusManager ( void );
 
+    /**
+     * Debug dos status dos Joysticks inseridos
+     */
     void DebugDadosJoystick();
+    
+private:
+    std::map<Uint8, JoystickState> Joysticks;
+    bool Initialized;   
 };
 }
 }

@@ -1,9 +1,4 @@
-/*
- *  JoystickState.cpp
- */
-
 #include "JoystickState.h"
-
 #include <cmath>
 
 namespace Chimera {
@@ -37,68 +32,47 @@ void JoystickState::TrackEvent ( SDL_Event *event ) {
     }
 }
 
-double JoystickState::AxisScale ( Sint16 value ) {
-    // Convert axis values from (-32768,32767) to (-1,1) range.
-    if ( value >= 0 ) {
-        return ( ( double ) value ) / 32767.;
-    } else {
-        return ( ( double ) value ) / 32768.;
-    }
-}
-
-double JoystickState::Axis ( Uint8 axis, double deadzone, double deadzone_at_ends ) {
-    // Check an axis value.
-    // Assume it is 0 if its state has never been recorded.
+double JoystickState::Axis (const Uint8 &axis, const double &deadzone, const double &deadzone_at_ends ) {
 
     std::map<Uint8, double>::iterator axis_iter = Axes.find ( axis );
     if ( axis_iter != Axes.end() ) {
+        
         double value = axis_iter->second;
 
-        if ( fabs ( value ) < deadzone ) {
-            value = 0.;
-        } else if ( value + deadzone_at_ends > 1. ) {
-            value = 1.;
-        } else if ( value - deadzone_at_ends < -1. ) {
-            value = -1.;
-        } else {
+        if ( fabs ( value ) < deadzone )
+            return 0.0f;
+        else if ( value + deadzone_at_ends > 1.0f )
+            return 1.0f;
+        else if ( value - deadzone_at_ends < -1.0f )
+            return -1.0f;
+        else {
             // Reclaim the range of values lost to the deadzones.
             if ( value > 0. ) {
                 value -= deadzone;
             } else {
                 value += deadzone;
             }
-            value /= ( 1. - deadzone - deadzone_at_ends );
+            
+            value /= ( 1.0f - deadzone - deadzone_at_ends );
         }
 
         return value;
     }
 
-    return 0.;
+    return 0.0f;
 }
 
-
-double JoystickState::AxisScaled ( Uint8 axis, double low, double high, double deadzone, double deadzone_at_ends ) {
-    // Scale output to (low,high) range.
-    // This can also be used to invert an axis with low>high.
-
-    return low + ( high - low ) * ( Axis ( axis, deadzone, deadzone_at_ends ) + 1. ) / 2.;
-}
-
-
-bool JoystickState::ButtonDown ( Uint8 button ) {
-    // Check if a key is down.
-    // Assume it is not down if its state has never been recorded.
+bool JoystickState::ButtonDown (const Uint8 &button ) {
 
     std::map<Uint8, bool>::iterator button_iter = ButtonsDown.find ( button );
-    if ( button_iter != ButtonsDown.end() ) {
+    if ( button_iter != ButtonsDown.end() )
         return button_iter->second;
-    }
 
     return false;
 }
 
 
-Uint8 JoystickState::Hat ( Uint8 hat ) {
+Uint8 JoystickState::Hat (const Uint8 &hat ) {
     // Check the direction of a hat switch.
 
     std::map<Uint8, Uint8>::iterator hat_iter = Hats.find ( hat );
@@ -108,15 +82,6 @@ Uint8 JoystickState::Hat ( Uint8 hat ) {
 
     return 0;
 }
-
-
-bool JoystickState::HatDir ( Uint8 hat, Uint8 dir ) {
-    // See if the hat switch is in this cardinal direction.
-    // This matches straight directions even if the hat is being pushed diagonally.
-
-    return Hat ( hat ) & dir;
-}
-
 
 std::string JoystickState::GetStatusJoy() {
     // Create a status string for this joystick.
@@ -134,6 +99,7 @@ std::string JoystickState::GetStatusJoy() {
     return_string += "Joy axes:";
     bool first_axis = true;
     for ( std::map<Uint8, double>::iterator axis_iter = Axes.begin(); axis_iter != Axes.end(); axis_iter ++ ) {
+        
         if ( first_axis ) {
             first_axis = false;
         } else {

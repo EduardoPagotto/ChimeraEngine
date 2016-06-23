@@ -27,6 +27,8 @@ void FlowControl::open() {
 
 void FlowControl::close ( void ) {
 
+    joystickManager.ReleaseJoysticks();
+    
     SDL_Event l_eventQuit;
     l_eventQuit.type = SDL_QUIT;
     if ( SDL_PushEvent ( &l_eventQuit ) == -1 ) {

@@ -12,60 +12,37 @@ void Game::joystickCapture ( Chimera::Device::JoystickManager &joy ) {
 
 void Game::joystickStatus ( Chimera::Device::JoystickManager &joy ) {
 
+    using namespace Chimera::Device;
     // Captura joystick 0 se existir
-    Chimera::Device::JoystickState *joystick = joy.getJoystickState ( 0 );
+    JoystickState *joystick = joy.getJoystickState ( 0 );
     if ( joystick != nullptr ) {
 
-        float propulsaoLRUD = 1.0;
-        float propulsaoPrincipal = 3.0;
-        float propulsaoFrontal = 1.0;
-        float torque = 0.1;
+        float propulsaoLRUD = 1.0f;
+        float propulsaoPrincipal = 3.0f;
+        float propulsaoFrontal = 1.0f;
+        float torque = 0.1f;
+        float deadZone = 0.5f;
+        
+        float yaw = joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::LEFT_X, deadZone );
+        float pitch = joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::LEFT_Y, deadZone );
+        float roll = joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::RIGHT_X, deadZone );
 
-		float yaw = joystick->Axis((Uint8)Chimera::Device::JOY_AXIX_COD::LEFT_X, 0.5);
-		float pitch = joystick->Axis((Uint8)Chimera::Device::JOY_AXIX_COD::LEFT_Y, 0.5);
-        float roll = joystick->Axis ((Uint8)Chimera::Device::JOY_AXIX_COD::RIGHT_X, 0.5 );
-       
-        double throttle = -propulsaoPrincipal * ( ( 1 + joystick->Axis ((Uint8)Chimera::Device::JOY_AXIX_COD::LEFT_TRIGGER, 0.5 ) ) / 2 );
-        throttle = throttle - ( -propulsaoFrontal* ( ( 1 + joystick->Axis ((Uint8)Chimera::Device::JOY_AXIX_COD::RIGHT_TRIGGER, 0.5 ) ) / 2 ) );
+        double throttle = -propulsaoPrincipal * ( ( 1 + joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::LEFT_TRIGGER, deadZone ) ) / 2 );
+        throttle = throttle - ( -propulsaoFrontal* ( ( 1 + joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::RIGHT_TRIGGER, deadZone ) ) / 2 ) );
 
-		//for (int indice = 0; indice < 16; indice++) {
-		//	if (joystick->ButtonDown(indice) == true)
-		//		printf("Botao numero %d\n", indice);
-		//}
-		
-		int val = joystick->Hat(0);
-		if (val & 0x01)
-			pObj->applyForce(btVector3(0.0, 0.0, propulsaoLRUD));
-
-		if (val & 0x04)
-			pObj->applyForce(btVector3(0.0, 0.0, -propulsaoLRUD));
-
-		if (val & 0x02)
-			pObj->applyForce(btVector3(propulsaoLRUD, 0.0, 0.0));
-
-		if (val & 0x08)
-			pObj->applyForce(btVector3(-propulsaoLRUD, 0.0, 0.0));
-
-        //bool propUp = joystick->ButtonDown ( 0 );
-        //if ( propUp == true ) {
-        //    pObj->applyForce ( btVector3 ( 0.0, 0.0, propulsaoLRUD ) );
-        //}
-
-        //bool propDown = joystick->ButtonDown ( 1 );
-        //if ( propDown == true ) {
-        //    pObj->applyForce ( btVector3 ( 0.0, 0.0, -propulsaoLRUD ) );
-        //}
-
-        //bool propLeft = joystick->ButtonDown ( 2 );
-        //if ( propLeft == true ) {
-        //    pObj->applyForce ( btVector3 ( propulsaoLRUD, 0.0, 0.0 ) );
-        //}
-
-        //bool propRight = joystick->ButtonDown ( 3 );
-        //if ( propRight == true ) {
-        //    pObj->applyForce ( btVector3 ( -propulsaoLRUD, 0.0, 0.0 ) );
-        //}
-
+        int val = joystick->Hat ( 0 );
+        if ( val & ( uint8_t ) JOY_PAD_COD::UP ) 
+            pObj->applyForce ( btVector3 ( 0.0, 0.0, propulsaoLRUD ) );
+        
+        if ( val & ( uint8_t ) JOY_PAD_COD::DOWN ) 
+            pObj->applyForce ( btVector3 ( 0.0, 0.0, -propulsaoLRUD ) );
+        
+        if ( val & ( uint8_t ) JOY_PAD_COD::RIGHT ) 
+            pObj->applyForce ( btVector3 ( propulsaoLRUD, 0.0, 0.0 ) );
+        
+        if ( val & ( uint8_t ) JOY_PAD_COD::LEFT ) 
+            pObj->applyForce ( btVector3 ( -propulsaoLRUD, 0.0, 0.0 ) );
+        
         if ( ( roll != 0.0 ) || ( pitch != 0.0 ) || ( yaw != 0.0 ) || ( throttle != 0.0 ) ) {
             pObj->applyForce ( btVector3 ( 0.0, throttle, 0.0 ) );
             pObj->applyTorc ( btVector3 ( -torque * pitch, -torque * roll, -torque * yaw ) );

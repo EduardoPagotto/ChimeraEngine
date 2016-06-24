@@ -33,16 +33,16 @@ void JoystickManager::FindJoysticks ( void ) {
         return;
    
     for ( int i = 0; i < SDL_NumJoysticks(); i ++ ) {
-        
-        if ( ! Joysticks[ i ].Joystick ) {
+       
+        if ( ! Joysticks[ i ].pJoystick ) {
             
-            Joysticks[ i ].ID = i;
-            Joysticks[ i ].Joystick = SDL_JoystickOpen ( i );
+            Joysticks[ i ].id = i;
+            Joysticks[ i ].pJoystick = SDL_JoystickOpen ( i );
             
-            if ( Joysticks[ i ].Joystick ) {
+            if ( Joysticks[ i ].pJoystick ) {
                
-                const char *joystick_name = SDL_JoystickName ( Joysticks[ i ].Joystick );
-                Joysticks[ i ].Name = joystick_name ? joystick_name : "Joystick";
+                const char *joystick_name = SDL_JoystickName ( Joysticks[ i ].pJoystick );
+                Joysticks[ i ].name = joystick_name ? joystick_name : "Joystick";
             }
         }
     }
@@ -55,11 +55,11 @@ void JoystickManager::ReleaseJoysticks ( void ) {
 
     for ( std::map<Uint8, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter ++ ) {
         
-        if ( joy_iter->second.Joystick ) 
-            SDL_JoystickClose ( joy_iter->second.Joystick );
+        if ( joy_iter->second.pJoystick ) 
+            SDL_JoystickClose ( joy_iter->second.pJoystick );
         
-        joy_iter->second.Joystick = NULL;
-        joy_iter->second.Name = "Disconnected";
+        joy_iter->second.pJoystick = NULL;
+        joy_iter->second.name = "Disconnected";
     }
 
     Joysticks.clear();
@@ -89,7 +89,7 @@ bool JoystickManager::TrackEvent ( SDL_Event *event ) {
         return false;
     }
 
-    Joysticks[id].ID = id;
+    Joysticks[id].id = id;
     Joysticks[id].TrackEvent ( event );
     return true;
 }

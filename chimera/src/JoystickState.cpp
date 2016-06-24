@@ -4,11 +4,9 @@
 namespace Chimera {
 namespace Device {
     
-JoystickState::JoystickState ( Uint8 id, SDL_Joystick *joystick, std::string name ) {
-    ID = id;
-    Joystick = joystick;
-    Name = name;
-}
+JoystickState::JoystickState() : id(255), pJoystick(nullptr) , name("JoyDefault") { }
+
+//JoystickState::JoystickState( Uint8 idJoy, SDL_Joystick *joystick, std::string nameJoy) : id(idJoy) , pJoystick(joystick), name(nameJoy) { }
 
 void JoystickState::TrackEvent ( SDL_Event *event ) {
     // Update joystick axis and button status.
@@ -89,9 +87,9 @@ std::string JoystickState::GetStatusJoy() {
     std::string return_string;
     char cstr[ 1024 ] = "";
 #ifdef WIN32
-    sprintf_s ( cstr, 1024, "Joystick %i: %s\n", ID, Name.c_str() );
+    sprintf_s ( cstr, 1024, "Joystick %i: %s\n", id, name.c_str() );
 # else
-    sprintf ( cstr, "Joystick %i: %s\n", ID, Name.c_str() );
+    sprintf ( cstr, "Joystick %i: %s\n", id, name.c_str() );
 # endif
 
     return_string += cstr;

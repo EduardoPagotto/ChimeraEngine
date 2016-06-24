@@ -78,7 +78,7 @@ public:
     void FindJoysticks ( void );
 
     /**
-     * Retorna o Joystic identificado pelo ID que comeca em 0
+     * Retorna o Joystic identificado pelo id que comeca em 0
      * @param joystick_id identificado do Joystic
      * @return Retorna o joystic identificado ou null caso ele nao esteja inserido
      */

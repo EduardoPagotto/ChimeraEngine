@@ -19,19 +19,26 @@ namespace Device {
 class JoystickState
 {
 public:
-    uint8_t ID;
-    std::string Name;
-    SDL_Joystick *Joystick;
+    uint8_t id;
+    std::string name;
+    SDL_Joystick *pJoystick;
     
+   /**
+	* Cria novo Joystick valores invalidos
+	*/
+	JoystickState();
+
     /**
      * Cria novo Joystick detectado no Manager
      * @param id id sequancial começamdo em 0
      * @param joystick ponteiro do SDL_Joystick
      * @param name nome do joystick detectado pelo SDL_JoystickOpen
      */
-    JoystickState ( uint8_t id = 255, SDL_Joystick *joystick = NULL, std::string name = "Joystick" );
+    //JoystickState( uint8_t idJoy, SDL_Joystick *joystick, std::string nameJoy);
 
-    /**
+	//JoystickState(Uint8 id, SDL_Joystick * joystick, std::string name);
+
+	/**
      * Chamado quando um novo evento de joystick é detectado
      * @param event evento a ser tratado
      */

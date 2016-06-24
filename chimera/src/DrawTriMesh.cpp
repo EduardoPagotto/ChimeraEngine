@@ -134,15 +134,15 @@ void DrawTriMesh::renderExecute ( bool _texture ) {
 
 }
 
-void DrawTriMesh::clone ( Node **ppNode ) {
+void DrawTriMesh::clone ( Draw **ppNode ) {
     *ppNode = new DrawTriMesh ( *this );
-    Draw::clone ( ppNode );
+    //Draw::clone ( ppNode ); //FIXME verificar se necessario desce ate o pai
 }
 
-void DrawTriMesh::update ( DataMsg *dataMsg ) {
-
-    Draw::update ( dataMsg );
-}
+// void DrawTriMesh::update ( DataMsg *dataMsg ) {
+// 
+//     Draw::update ( dataMsg );
+// }
 
 int DrawTriMesh::getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores ) {
 

@@ -91,13 +91,14 @@ Graph::Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
             }
         }
         break;
-    case EntityKind::SKYBOX:
-        for ( Graph::Node *node : m_vSkyBox ) {
-            if ( node->getName().compare ( _nome ) == 0 ) {
-                return node;
-            }
-        }
-        break;
+        //FIXME verificar como implementar
+//     case EntityKind::SKYBOX:
+//         for ( Graph::Node *node : m_vSkyBox ) {
+//             if ( node->getName().compare ( _nome ) == 0 ) {
+//                 return node;
+//             }
+//         }
+//         break;
     default:
         break;
     }
@@ -131,11 +132,11 @@ Graph::Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
             retorno = m_vParticle[index];
         }
         break;
-    case EntityKind::SKYBOX:
-        if ( m_vSkyBox.size() > index ) {
-            retorno = m_vSkyBox[index];
-        }
-        break;
+//     case EntityKind::SKYBOX: //FIXME verificar como implementar
+//         if ( m_vSkyBox.size() > index ) {
+//             retorno = m_vSkyBox[index];
+//         }
+//         break;
     default:
         break;
     }

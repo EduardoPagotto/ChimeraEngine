@@ -3,6 +3,7 @@
 
 # include <LinearMath/btVector3.h>
 # include "Texture.h"
+#include "Node.h"
 
 namespace Chimera
 {

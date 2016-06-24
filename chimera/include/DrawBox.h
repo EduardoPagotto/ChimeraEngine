@@ -17,9 +17,9 @@ public:
         sizeBox = _sizeBox;
     }
 
-    virtual void update ( DataMsg *dataMsg );
+   // virtual void update ( DataMsg *dataMsg );
 
-    virtual void clone ( Node **ppNode );
+    virtual void clone ( Draw **ppNode );
 
     void init();
 

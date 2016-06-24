@@ -84,14 +84,13 @@ class DrawTriMesh : public Draw
 public:
     friend class Loader;
 
-
     DrawTriMesh ( std::string _id, std::string _name );
     DrawTriMesh ( const DrawTriMesh &_cpy );
     virtual ~DrawTriMesh();
 
-    virtual void update ( DataMsg *dataMsg );
+    //virtual void update ( DataMsg *dataMsg );
 
-    virtual void clone ( Node **ppNode );
+    virtual void clone ( Draw **ppNode );
 
     virtual void renderExecute ( bool _texture );
     virtual btVector3 getSizeBox();

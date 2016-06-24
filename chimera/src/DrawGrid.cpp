@@ -59,13 +59,13 @@ void DrawGrid::renderExecute ( bool _texture ) {
     } while ( pz < sizeBox.getZ() );
 }
 
-void DrawGrid::update ( DataMsg *dataMsg ) {
-    Node::update ( dataMsg );
-}
+// void DrawGrid::update ( DataMsg *dataMsg ) {
+//     Node::update ( dataMsg );
+// }
 
-void DrawGrid::clone ( Node **ppNode ) {
+void DrawGrid::clone ( Draw **ppNode ) {
     *ppNode = new DrawGrid ( *this );
-    Node::clone ( ppNode );
+    //Node::clone ( ppNode ); //FIXME desce ate o pai?
 }
 
 // void DrawBoxGrid2::renderizar() {

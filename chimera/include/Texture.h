@@ -8,7 +8,7 @@
 #endif
 #include "ExceptionChimera.h"
 
-#include "Node.h"
+#include "Entity.h"
 
 namespace Chimera {
 namespace Graph {
@@ -21,23 +21,18 @@ enum class TextureFilter
 };
 
 
-class Texture : public Node
+class Texture : public Entity
 {
 public:
-
     Texture ( std::string _id, std::string _name );
     Texture ( const Texture &_texture );
 
     virtual ~Texture();
 
-    virtual void update ( DataMsg *dataMsg );
-
-    virtual void clone ( Node **ppNode );
+    virtual void clone ( Entity **ppNode );
 
     void begin();
-
     void end();
-
     void init();
 
     SDL_Surface *loadImage();

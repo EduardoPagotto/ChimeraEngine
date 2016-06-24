@@ -4,12 +4,12 @@
 #include <tinyxml2.h>
 
 #include "Color.h"
-#include "Node.h"
+#include "Entity.h"
 
 namespace Chimera {
 namespace Graph {
 
-class Effect : public Node
+class Effect : public Entity
 {
 public:
 
@@ -19,9 +19,9 @@ public:
 
     virtual ~Effect() {}
 
-    virtual void update ( DataMsg *dataMsg );
+    //virtual void update ( DataMsg *dataMsg );
 
-    virtual void clone ( Node **ppNode );
+    virtual void clone ( Entity **ppNode );
 
     void init();
 

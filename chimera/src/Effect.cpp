@@ -12,7 +12,7 @@
 namespace Chimera {
 namespace Graph {
     
-Effect::Effect ( std::string _id, std::string _name ) : Node ( EntityKind::EFFECT, _id, _name ) {
+Effect::Effect ( std::string _id, std::string _name ) : Entity ( EntityKind::EFFECT, _id, _name ) {
 
     shininess = 10.5f;
     diffuse = Color::BLACK;
@@ -23,7 +23,7 @@ Effect::Effect ( std::string _id, std::string _name ) : Node ( EntityKind::EFFEC
 
 }
 
-Effect::Effect ( const Effect& _cpy ) : Node ( _cpy ) {
+Effect::Effect ( const Effect& _cpy ) : Entity ( _cpy ) {
 
     diffuse = _cpy.diffuse;
     ambient = _cpy.ambient;
@@ -50,20 +50,20 @@ void Effect::init() {
 
 }
 
-void Effect::clone ( Node **ppNode ) {
+void Effect::clone ( Entity **ppNode ) {
     *ppNode = new Effect ( *this );
-    Node::clone ( ppNode );
+    //Node::clone ( ppNode );//FIXME preciso descer ao pai
 }
 
-void Effect::update ( DataMsg *dataMsg ) {
-
-    if ( dataMsg->getKindOp() == KindOp::START ) {
-
-        init();
-    }
-
-    Node::update ( dataMsg );
-}
+// void Effect::update ( DataMsg *dataMsg ) {
+// 
+//     if ( dataMsg->getKindOp() == KindOp::START ) {
+// 
+//         init();
+//     }
+// 
+//     Node::update ( dataMsg );
+// }
 
 bool Effect::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode ) {
 

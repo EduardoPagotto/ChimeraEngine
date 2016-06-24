@@ -15,6 +15,8 @@ Object::Object ( std::string _id, std::string _name ) : Node ( EntityKind::OBJEC
     pPhysic = nullptr;
     pDraw = nullptr;
 
+    pTexture = nullptr;
+    
     transform.setIdentity();
 
 }
@@ -25,6 +27,8 @@ Object::Object ( const Object& _object ) : Node ( _object ) {
     pDraw = _object.pDraw;
 
     transform = _object.transform;
+    
+    pTexture = _object.pTexture;
 
 }
 
@@ -90,6 +94,10 @@ void Object::update ( DataMsg *_dataMsg ) {
 
     if ( _dataMsg->getKindOp() == KindOp::START ) {
 
+        if (pTexture != nullptr)
+            pTexture->init();
+        
+        
         //inicialize primeiro os filhos para garantir textura e efeito em material
         Node::update ( _dataMsg );
 

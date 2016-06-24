@@ -3,37 +3,37 @@
 namespace Chimera {
 namespace Graph {
     
-Material::Material ( std::string _id, std::string _name ) : Node ( EntityKind::MATERIAL, _id, _name ) {
+Material::Material ( std::string _id, std::string _name ) : Entity ( EntityKind::MATERIAL, _id, _name ) {
     pEffect = nullptr;
     pTextura = nullptr;
 }
 
-Material::Material ( const Material &_cpy ) : Node ( _cpy ) {
+Material::Material ( const Material &_cpy ) : Entity ( _cpy ) {
 }
 
 Material::~Material() {
 }
 
-void Material::clone ( Node **ppNode ) {
+void Material::clone ( Entity **ppNode ) {
     *ppNode = new Material ( *this );
-    Node::clone ( ppNode );
+    //Node::clone ( ppNode ); //FIXME necessario descer ao pai?
 }
 
-void Material::update ( DataMsg *dataMsg ) {
-
-    if ( dataMsg->getKindOp() == KindOp::START ) {
-
-        pEffect = ( Effect* ) findChildByKind ( EntityKind::EFFECT, 0 );
-        if ( pEffect == nullptr ) {
-            createDefaultEffect();
-        }
-
-        pTextura = ( Texture* ) findChildByKind ( EntityKind::TEXTURE, 0 );
-
-        Node::update ( dataMsg );
-
-    }
-}
+// void Material::update ( DataMsg *dataMsg ) {
+// 
+//     if ( dataMsg->getKindOp() == KindOp::START ) {
+// 
+//         pEffect = ( Effect* ) findChildByKind ( EntityKind::EFFECT, 0 );
+//         if ( pEffect == nullptr ) {
+//             createDefaultEffect();
+//         }
+// 
+//         pTextura = ( Texture* ) findChildByKind ( EntityKind::TEXTURE, 0 );
+// 
+//         Node::update ( dataMsg );
+// 
+//     }
+// }
 
 void Material::end() {
     if ( hasTextureAtive == true ) {

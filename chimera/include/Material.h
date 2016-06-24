@@ -8,7 +8,7 @@
 namespace Chimera {
 namespace Graph {
     
-class Material : public Node
+class Material : public Entity
 {
 public:
 
@@ -18,9 +18,9 @@ public:
     Material ( const Material &_cpy );
     virtual ~Material();
 
-    virtual void update ( DataMsg *dataMsg );
+    //virtual void update ( DataMsg *dataMsg );
 
-    virtual void clone ( Node **ppNode );
+    virtual void clone ( Entity **ppNode );
 
     Texture *getTexture() const {
         return pTextura;
@@ -40,11 +40,7 @@ public:
     Effect *pEffect;
     Texture *pTextura;
 private:
-
     bool hasTextureAtive;
-    
-    
-
 };
 }
 }

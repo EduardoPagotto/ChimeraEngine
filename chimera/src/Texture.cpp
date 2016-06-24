@@ -4,7 +4,7 @@
 namespace Chimera {
 namespace Graph {
     
-Texture::Texture ( std::string _id, std::string _name ) : Node ( EntityKind::TEXTURE, _id, _name ) {
+Texture::Texture ( std::string _id, std::string _name ) : Entity ( EntityKind::TEXTURE, _id, _name ) {
 
     texturaCarregada = false;
     pathFile = "";
@@ -15,7 +15,7 @@ Texture::Texture ( std::string _id, std::string _name ) : Node ( EntityKind::TEX
 
 }
 
-Texture::Texture ( const Texture &_texture ) : Node ( _texture ) {
+Texture::Texture ( const Texture &_texture ) : Entity ( _texture ) {
 
     pathFile = _texture.pathFile;
     indiceFilter = _texture.indiceFilter;
@@ -150,20 +150,9 @@ SDL_Surface *Texture::loadImage() {
     throw ExceptionChimera ( ExceptionCode::READ, "Falha ao ler arquivo:" + pathFile );
 }
 
-void Texture::clone ( Node **ppNode ) {
+void Texture::clone ( Entity **ppNode ) {
     *ppNode = new Texture ( *this );
-    Node::clone ( ppNode );
 }
-
-void Texture::update ( DataMsg *dataMsg ) {
-
-    if ( dataMsg->getKindOp() == KindOp::START ) {
-        init();
-    }
-
-    Node::update ( dataMsg );
-}
-
 
 void Texture::createRenderTexture ( int sizeX, int sizeY, int channels, int type ) {
 

@@ -15,6 +15,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+# include "Node.h"
 # include "Texture.h"
 
 namespace Chimera {

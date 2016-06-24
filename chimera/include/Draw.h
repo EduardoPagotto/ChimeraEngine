@@ -16,7 +16,7 @@ enum class DrawType
     MESH
 };
 
-class Draw : public Node
+class Draw : public Entity
 {
 public:
     Draw ( DrawType _type, std::string _id, std::string _name );
@@ -24,10 +24,10 @@ public:
 
     virtual ~Draw();
 
-    virtual void update ( DataMsg *dataMsg );
+    //virtual void update ( DataMsg *dataMsg );
 
-    virtual void clone ( Node **ppNode ) {
-        Node::clone ( ppNode );
+    virtual void clone ( Entity **ppNode ) {
+         //*ppNode = new Draw ( *this );//FIXME verificar clonagem
     }
 
     virtual void render ( bool _texture );

@@ -47,6 +47,8 @@ private:
     Physics *pPhysic;
     Draw *pDraw;
 
+    Texture *pTexture;
+    
     btTransform transform;
 };
 }

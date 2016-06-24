@@ -34,9 +34,9 @@ public:
         colorZ = _color;
     }
 
-    virtual void update ( DataMsg *dataMsg );
+    //virtual void update ( DataMsg *dataMsg );
 
-    virtual void clone ( Node **ppNode );
+    virtual void clone ( Draw **ppNode );
 
     virtual void renderExecute ( bool _texture );
     virtual btVector3 getSizeBox ( void );

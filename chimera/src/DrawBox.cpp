@@ -74,13 +74,13 @@ void DrawBox::renderExecute ( bool _texture ) {
 
 }
 
-void DrawBox::clone ( Node **ppNode ) {
+void DrawBox::clone ( Draw **ppNode ) {
     *ppNode = new DrawBox ( *this );
-    Node::clone ( ppNode );
+    //Node::clone ( ppNode ); //FIXME necessario descer ate o pai?
 }
 
-void DrawBox::update ( DataMsg *dataMsg ) {
-    Node::update ( dataMsg );
-}
+// void DrawBox::update ( DataMsg *dataMsg ) {
+//     Node::update ( dataMsg );
+// }
 }
 }

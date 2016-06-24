@@ -37,10 +37,25 @@ enum class EntityKind : int8_t
 class Entity
 {
 public:
-    Entity ( EntityKind _kind ) : kind ( _kind ), serial ( ++serialMaster ), status ( true ) {}
+    /**
+     * Construtor principal Entity
+     * @param _kind Tipo
+     * @param _id identificador 
+     * @param _name nome 
+     */
+    Entity ( const EntityKind &_kind ,const std::string &_id, const std::string &_name )
+        : kind ( _kind ), id ( _id ), name ( _name ) ,serial ( ++serialMaster ), status ( true ) {}
 
-    Entity ( const Entity &_entity ) : kind ( _entity.kind ), serial ( ++serialMaster ), status ( _entity.status ) {}
+    /**
+     * Construtor de Copia
+     * @param _entity entidade a ser copiada
+     */
+    Entity ( const Entity &_entity ) 
+        : kind ( _entity.kind ), id(_entity.id + "_cp"), name(_entity.name + "_cp"), serial ( ++serialMaster ), status ( _entity.status ) {}
 
+    /**
+     * Destrutor 
+     */
     virtual ~Entity() {}
 
     inline unsigned getSerial() const {
@@ -63,6 +78,27 @@ public:
         return status;
     }
 
+    inline const std::string& getName() const {
+        return name;
+    }
+
+    inline void setName ( const std::string& name ) {
+        this->name = name;
+    }
+
+    inline const std::string& getId() const {
+        return id;
+    }
+
+    inline void setId ( const std::string& name ) {
+        this->id = name;
+    }
+
+    /**
+     * Retorna uma string com o nome do tipo
+     * @param _kind tipo
+     * @return nome do tipo
+     */
     static std::string getNameKindNode ( EntityKind _kind );
 
 private:
@@ -70,7 +106,8 @@ private:
     EntityKind kind;
     unsigned serial;
     static unsigned serialMaster;
-
+    std::string name;
+    std::string id;
 };
 
 //unsigned Entity::serialMaster = 0;

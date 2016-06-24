@@ -31,22 +31,6 @@ public:
 
     void addChild ( Node *child );
 
-    inline const std::string& getName() const {
-        return name;
-    }
-
-    inline void setName ( const std::string& name ) {
-        this->name = name;
-    }
-
-    inline const std::string& getId() const {
-        return id;
-    }
-
-    inline void setId ( const std::string& name ) {
-        this->id = name;
-    }
-
     Node *findChildByKind ( EntityKind type, int index );
 
     static Node *findNodeById ( EntityKind type, std::string id );
@@ -60,10 +44,7 @@ public:
 protected:
     Node *parent;
     
-
 private:
-    std::string name;
-    std::string id;
     static std::list<Node*> listNode;
 };
 }

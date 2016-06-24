@@ -24,7 +24,8 @@ private:
     void carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type );
     Chimera::Graph::Node* getNodeSceneInFile();
     tinyxml2::XMLElement* getDadoRigidBody ( const char* _url, const char* _sid );
-    tinyxml2::XMLElement* findSceneLib ( const char *rotina, const char* instance, const char* library );
+    
+    static tinyxml2::XMLElement* findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library );
 
     std::string textureDir;
     std::string modelDir;

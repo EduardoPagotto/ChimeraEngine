@@ -66,7 +66,7 @@ Chimera::Graph::Node* LoaderDae::loadFile ( const std::string &file ) {
 
 void LoaderDae::getPhysicSceneInfile() {
 
-    tinyxml2::XMLElement* l_nPhysicScene = findSceneLib ( ( const char* ) "Physic Scene", ( const char* ) "instance_physics_scene", ( const char* ) "library_physics_scenes" );
+    tinyxml2::XMLElement* l_nPhysicScene = findSceneLib (root, ( const char* ) "Physic Scene", ( const char* ) "instance_physics_scene", ( const char* ) "library_physics_scenes" );
     if ( l_nPhysicScene != nullptr ) {
 
         const char *l_nome = l_nPhysicScene->Attribute ( "name" );
@@ -183,7 +183,7 @@ Chimera::Graph::Node *LoaderDae::getNodeSceneInFile() {
 
     Chimera::Graph::Node *pRootScene = nullptr;
 
-    tinyxml2::XMLElement* l_nVisualScene = findSceneLib ( ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
+    tinyxml2::XMLElement* l_nVisualScene = findSceneLib ( root, ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
     if ( l_nVisualScene != nullptr ) {
 
         const char *l_nome = l_nVisualScene->Attribute ( "name" );
@@ -434,16 +434,16 @@ void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElem
     }
 }
 
-tinyxml2::XMLElement* LoaderDae::findSceneLib ( const char *rotina, const char* instance, const char* library ) {
-
-    tinyxml2::XMLElement* l_nNodeScene = root->FirstChildElement ( "scene" );
+tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library ) {
+    
+    tinyxml2::XMLElement* l_nNodeScene = pRoot->FirstChildElement ( "scene" );
     if ( l_nNodeScene != nullptr ) {
 
         tinyxml2::XMLElement* l_nNode = l_nNodeScene->FirstChildElement ( instance );
         if ( l_nNode != nullptr ) {
 
             const char* l_url = l_nNode->Attribute ( "url" );
-            l_nNode = root->FirstChildElement ( library );
+            l_nNode = pRoot->FirstChildElement ( library );
             if ( l_nNode != nullptr ) {
 
                 l_nNode = l_nNode->FirstChildElement();//TODO colocar um while para percorrer todas as instancias de scena(pode haver mais de 1)

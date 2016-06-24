@@ -5,23 +5,16 @@ namespace Graph {
     
 std::list<Node*> Node::listNode;
 
-Node::Node ( EntityKind _type, std::string _id, std::string _name ) : Entity ( _type ) {
+Node::Node ( EntityKind _type, std::string _id, std::string _name ) : Entity ( _type, _id, _name ) {
 
-    name = _name;
-    id = _id;
     parent = nullptr;
     listNode.push_back ( this );
-
 }
 
-Node::Node ( const Node &_node ) : Entity ( _node ) {
+Node::Node ( const Node &_node ) : Entity ( _node  ) {
 
-    name = _node.name;
-    id = _node.id;
     parent = nullptr;
-
     listNode.push_back ( this );
-
 }
 
 Node::~Node() {
@@ -29,7 +22,6 @@ Node::~Node() {
     parent = nullptr;
     listChild.clear();
     listNode.remove ( this );
-
 }
 
 void Node::clone ( Node **ppNode ) {
@@ -40,18 +32,14 @@ void Node::clone ( Node **ppNode ) {
         Node *pClone = *ppNode;
 
         pNode->clone ( &pNovo );
-
         pClone->addChild ( pNovo );
-
     }
-
 }
 
 void Node::addChild ( Node *child ) {
 
     listChild.push_back ( child );
     child->parent = this;
-
 }
 
 void Node::update ( DataMsg *dataMsg ) {
@@ -63,7 +51,6 @@ void Node::update ( DataMsg *dataMsg ) {
         }
 
         node->update ( dataMsg );
-
     }
 }
 

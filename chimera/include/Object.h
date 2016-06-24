@@ -41,11 +41,13 @@ public:
         return ( Draw* ) findChildByKind ( EntityKind::DRAW, 0 );
     }
 
+    Draw *pDraw;
+    
 private:
     void execute ( bool _texture, Object *pObj );
 
     Physics *pPhysic;
-    Draw *pDraw;
+    
 
     Texture *pTexture;
     

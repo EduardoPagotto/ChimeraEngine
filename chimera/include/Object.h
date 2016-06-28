@@ -6,6 +6,7 @@
 
 #include "Draw.h"
 #include "Physics.h"
+#include "Material.h"
 
 namespace Chimera {
 namespace Graph {
@@ -36,21 +37,17 @@ public:
     void setTransform ( const btTransform &_trans ) {
         transform = _trans;
     }
-
-    Draw * getDraw() {
-        return ( Draw* ) findChildByKind ( EntityKind::DRAW, 0 );
-    }
-
-    Draw *pDraw;
     
+	//FIXME colocar como privada
+	Draw *pDraw;
+	Material *pMaterial;
+
 private:
     void execute ( bool _texture, Object *pObj );
 
     Physics *pPhysic;
-    
 
-    Texture *pTexture;
-    
+
     btTransform transform;
 };
 }

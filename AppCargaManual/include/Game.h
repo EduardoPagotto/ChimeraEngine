@@ -35,7 +35,7 @@ private:
     Chimera::Graph::Object *pObj;
     std::string sPosicaoObj;
 
-    Chimera::Graph::SkyBox* pSkyBox;
+    //Chimera::Graph::SkyBox* pSkyBox;
 };
 
 #endif

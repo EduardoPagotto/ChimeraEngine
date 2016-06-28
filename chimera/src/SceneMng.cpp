@@ -42,9 +42,9 @@ void SceneMng::addEntityToScene ( Graph::Node *_pNode ) {
     case EntityKind::PARTICLE_EMITTER:
         m_vParticle.push_back ( ( Graph::ParticleEmitter* ) _pNode );
         break;
-    case EntityKind::SKYBOX:
-        m_vSkyBox.push_back ( ( Graph::SkyBox* ) _pNode );
-        break;
+    //case EntityKind::SKYBOX:
+    //    m_vSkyBox.push_back ( ( Graph::SkyBox* ) _pNode );
+    //    break;
     default:
         break;
     }
@@ -192,9 +192,9 @@ void SceneMng::draw ( HUD *_pHud ) {
 
         pCameraAtiva->exec();
 
-        if ( pSkyBox != nullptr ) {
-            pSkyBox->render ( true );
-        }
+        //if ( pSkyBox != nullptr ) {
+        //    pSkyBox->render ( true );
+        //}
 
         Chimera::Graph::DataMsg dataMsg ( Graph::KindOp::DRAW, this, pObjeto, nullptr );
         update ( &dataMsg );

@@ -65,6 +65,15 @@ void Effect::clone ( Entity **ppNode ) {
 //     Node::update ( dataMsg );
 // }
 
+void Effect::createDefaultEffect() {
+
+	setDiffuse(Color(0.6f, 0.6f, 0.6f));
+	setEmissive(Color(0.1f, 0.1f, 0.1f));
+	setAmbient(Color(0.1f, 0.1f, 0.1f));
+	setSpecular(Color(0.5f, 0.5f, 0.5f));
+	setShininess(0.5);
+}
+
 bool Effect::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode ) {
 
     tinyxml2::XMLElement* l_nNode = _nNode->FirstChildElement ( "technique" );

@@ -5,7 +5,7 @@ namespace Graph {
     
 Material::Material ( std::string _id, std::string _name ) : Entity ( EntityKind::MATERIAL, _id, _name ) {
     pEffect = nullptr;
-    pTextura = nullptr;
+    pTexture = nullptr;
 }
 
 Material::Material ( const Material &_cpy ) : Entity ( _cpy ) {
@@ -19,40 +19,22 @@ void Material::clone ( Entity **ppNode ) {
     //Node::clone ( ppNode ); //FIXME necessario descer ao pai?
 }
 
-// void Material::update ( DataMsg *dataMsg ) {
-// 
-//     if ( dataMsg->getKindOp() == KindOp::START ) {
-// 
-//         pEffect = ( Effect* ) findChildByKind ( EntityKind::EFFECT, 0 );
-//         if ( pEffect == nullptr ) {
-//             createDefaultEffect();
-//         }
-// 
-//         pTextura = ( Texture* ) findChildByKind ( EntityKind::TEXTURE, 0 );
-// 
-//         Node::update ( dataMsg );
-// 
-//     }
-// }
+void  Material::init() {
 
-void Material::end() {
-    if ( hasTextureAtive == true ) {
-        if ( pTextura != nullptr ) {
-            pTextura->end();
-        }
-    }
+	if (pTexture != nullptr)
+		pTexture->init();
+
+	if (pEffect == nullptr) {
+		pEffect = new Effect("effect_interno", "effect_interno");
+		pEffect->createDefaultEffect();
+	}
+
 }
 
-void Material::createDefaultEffect() {
+void Material::end() {
 
-    pEffect = new Effect ( "effect_interno", "effect_interno" );
-    pEffect->setDiffuse ( Color ( 0.6f, 0.6f, 0.6f ) );
-    pEffect->setEmissive ( Color ( 0.1f, 0.1f, 0.1f ) );
-    pEffect->setAmbient ( Color ( 0.1f, 0.1f, 0.1f ) );
-    pEffect->setSpecular ( Color ( 0.5f, 0.5f, 0.5f ) );
-    pEffect->setShininess ( 0.5 );
-
-    //Node::addChild(pEffect);//preciso ??
+	if (( hasTextureAtive == true ) && (pTexture != nullptr))
+		pTexture->end();
 }
 
 void Material::begin ( bool _texture ) {
@@ -60,11 +42,9 @@ void Material::begin ( bool _texture ) {
     hasTextureAtive = _texture;
     pEffect->apply();
 
-    if ( _texture == true ) {
-        if ( pTextura != nullptr ) {
-            pTextura->begin();
-        }
-    }
+    if (( _texture == true ) && (pTexture != nullptr))
+		pTexture->begin();
+       
 }
 }
 }

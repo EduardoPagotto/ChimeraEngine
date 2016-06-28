@@ -67,6 +67,8 @@ public:
         return nameTextureId;
     }
 
+	void createDefaultEffect();
+
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
 private:

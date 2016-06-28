@@ -14,22 +14,18 @@ Object::Object ( std::string _id, std::string _name ) : Node ( EntityKind::OBJEC
 
     pPhysic = nullptr;
     pDraw = nullptr;
-
-    pTexture = nullptr;
+	pMaterial = nullptr;
     
     transform.setIdentity();
-
 }
 
 Object::Object ( const Object& _object ) : Node ( _object ) {
 
     pPhysic = _object.pPhysic;
     pDraw = _object.pDraw;
+	pMaterial = _object.pMaterial;
 
     transform = _object.transform;
-    
-    pTexture = _object.pTexture;
-
 }
 
 Object::~Object() {
@@ -49,28 +45,29 @@ void Object::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 
 void Object::init() {
 
-    pDraw = ( Draw* ) findChildByKind ( EntityKind::DRAW, 0 );
+	if (pMaterial == nullptr)
+		pMaterial = new Material("DefaultMat", "DefaultMat");
 
-    pPhysic = ( Physics* ) findChildByKind ( EntityKind::PHYSICS, 0 );
-    if ( pPhysic == nullptr ) {
+	pMaterial->init();
 
-        //Cria corpo caso nao exista
-        pPhysic = new Physics ( "", "" );
-        pPhysic->setMass ( 0.5f );
-        pPhysic->setFriction ( 0.0f );
-        pPhysic->setRestitution ( 0.0f );
+	if (pPhysic == nullptr) {
 
-        if ( pDraw != nullptr ) {
-            pPhysic->setShapeBox ( pDraw->getSizeBox() );
-        }
-    }
+		//Cria corpo caso nao exista
+		pPhysic = new Physics("", "");
+		pPhysic->setMass(0.5f);
+		pPhysic->setFriction(0.0f);
+		pPhysic->setRestitution(0.0f);
+	}
 
-    if ( pPhysic->isShapeDefine() ==false ) {
-        pPhysic->setShapeBox ( pDraw->getSizeBox() );
-    }
+	if (pDraw != nullptr) {
+		pPhysic->setShapeBox(pDraw->getSizeBox());
+	}
 
-    pPhysic->init ( transform, this );
+	if (pPhysic->isShapeDefine() == false) {
+		pPhysic->setShapeBox(pDraw->getSizeBox());
+	}
 
+	pPhysic->init(transform, this);
 }
 
 void Object::clone ( Node **ppNode ) {
@@ -78,31 +75,25 @@ void Object::clone ( Node **ppNode ) {
     Node::clone ( ppNode );
 }
 
-
 void Object::execute ( bool _texture, Object *pObj ) {
+
     if ( pPhysic != nullptr ) {
         pPhysic->ajusteMatrix ( pObj->pPhysic );
     }
 
-    if ( pDraw != nullptr ) {
-        pDraw->render ( _texture );
-    }
+	pMaterial->begin(_texture);
+	pDraw->renderExecute(_texture);
+	pMaterial->end();
 }
-
 
 void Object::update ( DataMsg *_dataMsg ) {
 
     if ( _dataMsg->getKindOp() == KindOp::START ) {
 
-        if (pTexture != nullptr)
-            pTexture->init();
-        
-        
-        //inicialize primeiro os filhos para garantir textura e efeito em material
-        Node::update ( _dataMsg );
+		//inicialize primeiro os filhos para vinvulo de Objetos com contraints
+		Node::update(_dataMsg);
 
-        //inicializa objeto local
-        init();
+		init();
 
     } else if ( _dataMsg->getKindOp() == KindOp::DRAW ) {
 

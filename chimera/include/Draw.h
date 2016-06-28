@@ -3,7 +3,7 @@
 
 #include <LinearMath/btVector3.h>
 
-#include "Material.h"
+#include "Entity.h"
 
 namespace Chimera {
 namespace Graph {
@@ -30,10 +30,6 @@ public:
          //*ppNode = new Draw ( *this );//FIXME verificar clonagem
     }
 
-    virtual void render ( bool _texture );
-
-    virtual void init();
-
     virtual void renderExecute ( bool _texture ) = 0;
 
     virtual btVector3 getSizeBox() = 0;
@@ -44,7 +40,6 @@ public:
 
 protected:
     DrawType type;
-    Material *pMaterial;
 };
 }
 }

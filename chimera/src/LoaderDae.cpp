@@ -161,7 +161,7 @@ tinyxml2::XMLElement* LoaderDae::getDadoRigidBody ( const char* _url, const char
 //         }
 //     }
 // 
-//     return nullptr;
+     return nullptr;
 //     //TODO implementar em outro metodo somente para constrain
 //     //tinyxml2::XMLElement* l_nRigidBodyConstraint = l_nNodeSourceData->FirstChildElement("rigid_constraint");
 //     //if (l_nRigidBodyConstraint != nullptr) {
@@ -360,6 +360,7 @@ Chimera::Graph::Object * carregaGeometria(tinyxml2::XMLElement* root, tinyxml2::
 //         }
 //     }
 
+		 return pObj;
 }
 
 void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type ) {
@@ -409,46 +410,46 @@ void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElem
              
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_material" ) == 0 ) {
 
-            Chimera::loadNodeLib ( root, ( const char* ) &l_target[1], "library_materials", "material", &l_nNodeSourceData );
+   //         Chimera::loadNodeLib ( root, ( const char* ) &l_target[1], "library_materials", "material", &l_nNodeSourceData );
 
-            Chimera::Graph::Material *pMaterial = new Chimera::Graph::Material ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "name", l_nNodeSourceData ) );
-            _pNodePai->addChild ( pMaterial );
+   //         Chimera::Graph::Material *pMaterial = new Chimera::Graph::Material ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "name", l_nNodeSourceData ) );
+   //         //_pNodePai->addChild ( pMaterial );
+			////Chimera::Graph::Object *pObj = 
+			//((Chimera::Graph::Object*)pLastNodeDone)->pMaterial = pMaterial;
 
-            pLastNodeDone = pMaterial;
-
-            tinyxml2::XMLElement* l_nEffe = l_nNodeSourceData->FirstChildElement();
-            if ( l_nEffe != nullptr ) {
-                carregaNode ( pMaterial, l_nEffe, nullptr, nullptr, nullptr );
-            } else {
-                std::cout << "Falha Effeito incompleto: " << std::string ( l_target ) << std::endl;
-            }
+   //         tinyxml2::XMLElement* l_nEffe = l_nNodeSourceData->FirstChildElement();
+   //         if ( l_nEffe != nullptr ) {
+   //             carregaNode ( pMaterial, l_nEffe, nullptr, nullptr, nullptr );
+   //         } else {
+   //             std::cout << "Falha Effeito incompleto: " << std::string ( l_target ) << std::endl;
+   //         }
 
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_effect" ) == 0 ) {
-// 
-//             Chimera::loadNodeLib ( root, ( const char* ) &l_url[1], "library_effects", "effect", &l_nNodeSourceData );
-// 
-//             Chimera::Graph::Effect *pEffect = new Chimera::Graph::Effect ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
-//             pEffect->loadCollada ( l_nNodeSourceData );
-//             _pNodePai->addChild ( pEffect );
-// 
-//             pLastNodeDone = pEffect;
-// 
-//             if ( pEffect->getNameTextureId().size() > 0 ) {
-// 
-//                 Chimera::loadNodeLib ( root, ( const char* ) pEffect->getNameTextureId().c_str(), "library_images", "image", &l_nNodeSourceData );
-// 
-//                 Chimera::Graph::Texture *pTexture = new Chimera::Graph::Texture ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
-// 
-//                 const char* l_val = l_nNodeSourceData->FirstChildElement ( "init_from" )->GetText();
-// #ifdef WIN32
-//                 pTexture->setPathFile ( textureDir + "\\" + std::string ( l_val ) );
-// #else
-//                 pTexture->setPathFile ( textureDir + "/" + std::string ( l_val ) );
-// #endif
-//                 pTexture->init();
-// 
-//                 _pNodePai->addChild ( pTexture );
-//             }
+ 
+ //            Chimera::loadNodeLib ( root, ( const char* ) &l_url[1], "library_effects", "effect", &l_nNodeSourceData );
+ //
+ //            Chimera::Graph::Effect *pEffect = new Chimera::Graph::Effect ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
+ //            pEffect->loadCollada ( l_nNodeSourceData );
+ //            _pNodePai->addChild ( pEffect );
+ //
+ //            pLastNodeDone = pEffect;
+ //
+ //            if ( pEffect->getNameTextureId().size() > 0 ) {
+ //
+ //                Chimera::loadNodeLib ( root, ( const char* ) pEffect->getNameTextureId().c_str(), "library_images", "image", &l_nNodeSourceData );
+ //
+ //                Chimera::Graph::Texture *pTexture = new Chimera::Graph::Texture ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
+ //
+ //                const char* l_val = l_nNodeSourceData->FirstChildElement ( "init_from" )->GetText();
+ //#ifdef WIN32
+ //                pTexture->setPathFile ( textureDir + "\\" + std::string ( l_val ) );
+ //#else
+ //                pTexture->setPathFile ( textureDir + "/" + std::string ( l_val ) );
+ //#endif
+ //                pTexture->init();
+ //
+ //                _pNodePai->addChild ( pTexture );
+ //            }
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "node" ) == 0 ) {
 // 
 //             const char * l_id = _nNode->Attribute ( "id" );

@@ -23,22 +23,21 @@ public:
     virtual void clone ( Entity **ppNode );
 
     Texture *getTexture() const {
-        return pTextura;
+        return pTexture;
     }
 
     Effect *getEffect() const {
         return pEffect;
     }
 
-    void createDefaultEffect();
+	void init();
 
     void begin ( bool _texture );
-
     void end();
 
     //FIXME manter privado
     Effect *pEffect;
-    Texture *pTextura;
+    Texture *pTexture;
 private:
     bool hasTextureAtive;
 };

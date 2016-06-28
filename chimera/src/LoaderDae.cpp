@@ -37,6 +37,47 @@ LoaderDae::~LoaderDae() {
     Chimera::Infra::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 }
 
+int libImageMap(tinyxml2::XMLElement* root, std::map<std::string, std::string> &mapaImagens) {
+    
+    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_images" );
+    if ( l_nNode != nullptr ) {
+        l_nNode = l_nNode->FirstChildElement ( "image" );
+        while ( l_nNode != nullptr ) {
+            
+            std::string l_id = Chimera::retornaAtributo ( "id", l_nNode );
+            std::string l_val = l_nNode->FirstChildElement ( "init_from" )->GetText();
+            mapaImagens[l_id] = l_val;
+            
+            l_nNode = l_nNode->NextSiblingElement ( "image" );
+        }
+    }
+    
+    return mapaImagens.size();
+}
+
+int libEffectMap ( tinyxml2::XMLElement* root, std::map<std::string, Chimera::Graph::Effect*> &mapaEfeito) {
+
+    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_effects" );
+    if ( l_nNode != nullptr ) {
+        l_nNode = l_nNode->FirstChildElement ( "effect" );
+        while ( l_nNode != nullptr ) {
+
+            std::string l_id = Chimera::retornaAtributo ( "id", l_nNode );
+            std::string l_name = Chimera::retornaAtributo ( "name", l_nNode );
+            
+            Chimera::Graph::Effect *pEffect = new Chimera::Graph::Effect ( l_id, l_name  );
+            mapaEfeito[ l_id ] = pEffect;
+            
+            pEffect->loadCollada ( l_nNode );
+
+            l_nNode = l_nNode->NextSiblingElement ( "effect" );
+        }
+
+    }
+    
+    return mapaEfeito.size();
+}
+
 Chimera::Graph::Node* LoaderDae::loadFile ( const std::string &file ) {
 
     Chimera::Graph::Node *pRootScene = nullptr;
@@ -57,6 +98,13 @@ Chimera::Graph::Node* LoaderDae::loadFile ( const std::string &file ) {
         throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::OPEN, "Nao é um arquivo colada" );
     }
 
+    std::map<std::string, Chimera::Graph::Effect*> mapaEfeito; 
+    std::map<std::string, std::string> mapaImagens; 
+    
+    int totalEffect = libEffectMap(root, mapaEfeito);
+    int totalImagens = libImageMap(root, mapaImagens);
+    
+    
     pRootScene = getNodeSceneInFile();
 
     getPhysicSceneInfile();

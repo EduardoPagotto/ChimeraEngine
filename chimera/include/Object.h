@@ -41,11 +41,12 @@ public:
 	//FIXME colocar como privada
 	Draw *pDraw;
 	Material *pMaterial;
+    Physics *pPhysic;
 
 private:
     void execute ( bool _texture, Object *pObj );
 
-    Physics *pPhysic;
+    
 
 
     btTransform transform;

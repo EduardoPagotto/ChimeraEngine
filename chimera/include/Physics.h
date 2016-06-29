@@ -14,7 +14,7 @@
 namespace Chimera {
 namespace Graph {
     
-class Physics : public Node
+class Physics : public Entity
 {
 public:
 
@@ -66,9 +66,9 @@ public:
 
     void init ( btTransform &_tTrans, void *pObj );
 
-    virtual void update ( DataMsg *_dataMsg );
+    //virtual void update ( DataMsg *_dataMsg );
 
-    virtual void clone ( Node **ppNode );
+    //virtual void clone ( Node **ppNode );
 
     //usada na trans cam do mundo
     void transformacao3D();

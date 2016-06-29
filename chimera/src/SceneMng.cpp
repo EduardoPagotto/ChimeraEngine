@@ -8,7 +8,7 @@ SceneMng::SceneMng ( Graph::Node *_pRoot, Device::Video *_pVideo )  {
     parseEntity ( pRoot );
     pCameraAtiva = nullptr;
     pObjeto = nullptr;
-
+    pSkyBox = nullptr;
     pVideo = _pVideo;
 
 }
@@ -42,9 +42,9 @@ void SceneMng::addEntityToScene ( Graph::Node *_pNode ) {
     case EntityKind::PARTICLE_EMITTER:
         m_vParticle.push_back ( ( Graph::ParticleEmitter* ) _pNode );
         break;
-    //case EntityKind::SKYBOX:
-    //    m_vSkyBox.push_back ( ( Graph::SkyBox* ) _pNode );
-    //    break;
+    case EntityKind::SKYBOX:
+       m_vSkyBox.push_back ( ( Graph::SkyBox* ) _pNode );
+       break;
     default:
         break;
     }
@@ -92,13 +92,13 @@ Graph::Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
         }
         break;
         //FIXME verificar como implementar
-//     case EntityKind::SKYBOX:
-//         for ( Graph::Node *node : m_vSkyBox ) {
-//             if ( node->getName().compare ( _nome ) == 0 ) {
-//                 return node;
-//             }
-//         }
-//         break;
+    case EntityKind::SKYBOX:
+        for ( Graph::Node *node : m_vSkyBox ) {
+            if ( node->getName().compare ( _nome ) == 0 ) {
+                return node;
+            }
+        }
+        break;
     default:
         break;
     }
@@ -192,9 +192,9 @@ void SceneMng::draw ( HUD *_pHud ) {
 
         pCameraAtiva->exec();
 
-        //if ( pSkyBox != nullptr ) {
-        //    pSkyBox->render ( true );
-        //}
+        if ( pSkyBox != nullptr ) {
+           pSkyBox->render ( true );
+        }
 
         Chimera::Graph::DataMsg dataMsg ( Graph::KindOp::DRAW, this, pObjeto, nullptr );
         update ( &dataMsg );

@@ -179,101 +179,102 @@ Chimera::Graph::Node* LoaderDae::loadFile ( const std::string &file ) {
 
 void LoaderDae::getPhysicSceneInfile() {
 
-//     tinyxml2::XMLElement* l_nPhysicScene = findSceneLib (root, ( const char* ) "Physic Scene", ( const char* ) "instance_physics_scene", ( const char* ) "library_physics_scenes" );
-//     if ( l_nPhysicScene != nullptr ) {
-// 
-//         const char *l_nome = l_nPhysicScene->Attribute ( "name" );
-//         const char *l_id = l_nPhysicScene->Attribute ( "id" );
-// 
-//         pPhysicsControl->loadCollada ( l_nPhysicScene );
-// 
-//         getDadosInstancePhysicModel ( l_nPhysicScene );
-// 
-//     }
+    tinyxml2::XMLElement* l_nPhysicScene = findSceneLib (root, ( const char* ) "Physic Scene", ( const char* ) "instance_physics_scene", ( const char* ) "library_physics_scenes" );
+    if ( l_nPhysicScene != nullptr ) {
+
+        const char *l_nome = l_nPhysicScene->Attribute ( "name" );
+        const char *l_id = l_nPhysicScene->Attribute ( "id" );
+
+        pPhysicsControl->loadCollada ( l_nPhysicScene );
+
+        getDadosInstancePhysicModel ( l_nPhysicScene );
+
+    }
 }
 
 void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScene ) {
 
-//     tinyxml2::XMLElement* l_nInstancePhysicModel = _nPhysicScene->FirstChildElement ( "instance_physics_model" );
-//     if ( l_nInstancePhysicModel != nullptr ) {
-// 
-//         const char *l_url = l_nInstancePhysicModel->Attribute ( "url" );
-// 
-//         tinyxml2::XMLElement* l_nInstanceRigidBody = l_nInstancePhysicModel->FirstChildElement ( "instance_rigid_body" );
-//         if ( l_nInstanceRigidBody != nullptr ) {
-//             while ( l_nInstanceRigidBody != nullptr ) {
-// 
-//                 const char *l_body = l_nInstanceRigidBody->Attribute ( "body" );
-//                 const char *l_target = l_nInstanceRigidBody->Attribute ( "target" );
-// 
-//                 tinyxml2::XMLElement* l_nRigidBody = getDadoRigidBody ( l_url, l_body );
-// 
-//                 const char* l_name = l_nRigidBody->Attribute ( "name" );
-//                 const char* l_sid = l_nRigidBody->Attribute ( "sid" );
-// 
-//                 std::string nomeMesh = "";
-//                 Chimera::Graph::Physics *pPhysic = new Chimera::Graph::Physics ( std::string ( l_name ), std::string ( l_sid ) );
-//                 pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
-// 
-//                 Chimera::Graph::DrawTriMesh *pDrawTriMesh = ( Chimera::Graph::DrawTriMesh* ) Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::DRAW, nomeMesh );
-// 
-//                 if ( pDrawTriMesh != nullptr ) {
-// 
-//                     btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
-//                         pDrawTriMesh->vIndex.getSize() / 3, //num triangles
-//                         pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
-//                         3 * sizeof ( int ),					//tamanho do indice por elemento
-//                         pDrawTriMesh->vList.getSize() / 3,	//num Vertices
-//                         pDrawTriMesh->vList.ptrVal(),		//lista de vertice
-//                         3 * sizeof ( float )					//tamanho do vertice por elemento
-//                     );
-// 
-//                     pPhysic->setIndexVertexArray ( indexVertexArray );
-// 
-//                 }
-// 
-//                 //pega o node objeto
-//                 Chimera::Graph::Node *obj = Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
-//                 obj->addChild ( pPhysic );
-// 
-//                 l_nInstanceRigidBody = l_nInstanceRigidBody->NextSiblingElement ( "instance_rigid_body" );
-//             }
-//         }
-//     }
-// 
-//     tinyxml2::XMLElement* l_nInstanceRigidConstraint = l_nInstancePhysicModel->FirstChildElement ( "instance_rigid_constraint" );
-//     if ( l_nInstanceRigidConstraint != nullptr ) {
-//         while ( l_nInstanceRigidConstraint != nullptr ) {
-// 
-//             const char *l_constraint = l_nInstanceRigidConstraint->Attribute ( "constraint" );
-//             //TODO implementar
-// 
-// 
-//             l_nInstanceRigidConstraint = l_nInstanceRigidConstraint->NextSiblingElement ( "instance_rigid_constraint" );
-//         }
-//     }
+    tinyxml2::XMLElement* l_nInstancePhysicModel = _nPhysicScene->FirstChildElement ( "instance_physics_model" );
+    if ( l_nInstancePhysicModel != nullptr ) {
+
+        const char *l_url = l_nInstancePhysicModel->Attribute ( "url" );
+
+        tinyxml2::XMLElement* l_nInstanceRigidBody = l_nInstancePhysicModel->FirstChildElement ( "instance_rigid_body" );
+        if ( l_nInstanceRigidBody != nullptr ) {
+            while ( l_nInstanceRigidBody != nullptr ) {
+
+                const char *l_body = l_nInstanceRigidBody->Attribute ( "body" );
+                const char *l_target = l_nInstanceRigidBody->Attribute ( "target" );
+
+                tinyxml2::XMLElement* l_nRigidBody = getDadoRigidBody ( l_url, l_body );
+
+                const char* l_name = l_nRigidBody->Attribute ( "name" );
+                const char* l_sid = l_nRigidBody->Attribute ( "sid" );
+
+                std::string nomeMesh = "";
+                Chimera::Graph::Physics *pPhysic = new Chimera::Graph::Physics ( std::string ( l_name ), std::string ( l_sid ) );
+                pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
+
+                Chimera::Graph::DrawTriMesh *pDrawTriMesh = ( Chimera::Graph::DrawTriMesh* ) Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::DRAW, nomeMesh );
+
+                if ( pDrawTriMesh != nullptr ) {
+
+                    btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+                        pDrawTriMesh->vIndex.getSize() / 3, //num triangles
+                        pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
+                        3 * sizeof ( int ),					//tamanho do indice por elemento
+                        pDrawTriMesh->vList.getSize() / 3,	//num Vertices
+                        pDrawTriMesh->vList.ptrVal(),		//lista de vertice
+                        3 * sizeof ( float )					//tamanho do vertice por elemento
+                    );
+
+                    pPhysic->setIndexVertexArray ( indexVertexArray );
+
+                }
+
+                //pega o node objeto
+                Chimera::Graph::Object *obj = (Chimera::Graph::Object*)Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
+                //obj->addChild ( pPhysic );
+                obj->pPhysic = pPhysic;
+                
+                l_nInstanceRigidBody = l_nInstanceRigidBody->NextSiblingElement ( "instance_rigid_body" );
+            }
+        }
+    }
+
+    tinyxml2::XMLElement* l_nInstanceRigidConstraint = l_nInstancePhysicModel->FirstChildElement ( "instance_rigid_constraint" );
+    if ( l_nInstanceRigidConstraint != nullptr ) {
+        while ( l_nInstanceRigidConstraint != nullptr ) {
+
+            const char *l_constraint = l_nInstanceRigidConstraint->Attribute ( "constraint" );
+            //TODO implementar
+
+
+            l_nInstanceRigidConstraint = l_nInstanceRigidConstraint->NextSiblingElement ( "instance_rigid_constraint" );
+        }
+    }
 }
 
 tinyxml2::XMLElement* LoaderDae::getDadoRigidBody ( const char* _url, const char* _sid ) {
 
-//     tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
-// 
-//     Chimera::loadNodeLib ( root, ( const char* ) &_url[1], "library_physics_models", "physics_model", &l_nNodeSourceData );
-//     tinyxml2::XMLElement* l_nRigidBody = l_nNodeSourceData->FirstChildElement ( "rigid_body" );
-//     if ( l_nRigidBody != nullptr ) {
-//         while ( l_nRigidBody != nullptr ) {
-// 
-//             const char *l_name = l_nRigidBody->Attribute ( "name" );
-//             const char *l_sid = l_nRigidBody->Attribute ( "sid" );
-//             if ( strcmp ( _sid, l_sid ) == 0 ) {
-//                 //const char * l_teste = l_nRigidBody->Name();
-//                 //std::cout << "DEBUG: " << l_teste <<std::endl;
-//                 return l_nRigidBody;
-//             }
-//             l_nRigidBody = l_nRigidBody->NextSiblingElement ( "rigid_body" );
-//         }
-//     }
-// 
+    tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
+
+    Chimera::loadNodeLib ( root, ( const char* ) &_url[1], "library_physics_models", "physics_model", &l_nNodeSourceData );
+    tinyxml2::XMLElement* l_nRigidBody = l_nNodeSourceData->FirstChildElement ( "rigid_body" );
+    if ( l_nRigidBody != nullptr ) {
+        while ( l_nRigidBody != nullptr ) {
+
+            const char *l_name = l_nRigidBody->Attribute ( "name" );
+            const char *l_sid = l_nRigidBody->Attribute ( "sid" );
+            if ( strcmp ( _sid, l_sid ) == 0 ) {
+                //const char * l_teste = l_nRigidBody->Name();
+                //std::cout << "DEBUG: " << l_teste <<std::endl;
+                return l_nRigidBody;
+            }
+            l_nRigidBody = l_nRigidBody->NextSiblingElement ( "rigid_body" );
+        }
+    }
+
      return nullptr;
 //     //TODO implementar em outro metodo somente para constrain
 //     //tinyxml2::XMLElement* l_nRigidBodyConstraint = l_nNodeSourceData->FirstChildElement("rigid_constraint");
@@ -437,16 +438,13 @@ void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElem
             pLastNodeDone = pLight;
  
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_geometry" ) == 0 ) {
-
-             Chimera::Graph::Object *pObj = new Chimera::Graph::Object(_id, _name);
-         
-             pObj->setTransform(*l_pTransform);
              
              const char* pUrl = _nNode->Attribute("url");
              std::string l_nomeGeo = &pUrl[1];
              
-             pObj->pDraw = mapaGeometria[l_nomeGeo];
-             
+             Chimera::Graph::Material *pMaterial = nullptr;
+             Chimera::Graph::Draw *pDraw = mapaGeometria[l_nomeGeo];
+           
             tinyxml2::XMLElement* l_nBindMat = _nNode->FirstChildElement ( "bind_material" );
             if ( l_nBindMat != nullptr ) {
                 tinyxml2::XMLElement* l_nTecnicCommon = l_nBindMat->FirstChildElement ( "technique_common" );
@@ -457,48 +455,61 @@ void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElem
                     const char* pTarguet = l_nInstanceMaterial->Attribute("target");
                     std::string l_sTarguet = &pTarguet[1];
                     
-                    pObj->pMaterial = mapaMaterial[ l_sTarguet ];
+                    pMaterial = mapaMaterial[ l_sTarguet ];
+                    
                 }
             }
              
-            //    Chimera::Graph::SkyBox *pSky = nullptr;
-    //TODO OTIMIZAR
-    //FIXME implementar
-//     tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
-//     if ( l_nExtra != nullptr ) {
-//         tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
-//         if ( l_nTechnique != nullptr ) {
-// 
-//             const char* l_profile = l_nTechnique->Attribute ( "profile" );
-//             if ( ( l_profile !=  nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
-// 
-//                 tinyxml2::XMLElement* l_nParam = l_nTechnique->FirstChildElement ( "param" );
-//                 if ( l_nParam !=  nullptr ) {
-// 
-//                     const char* l_name = l_nParam->Attribute ( "name" );
-//                     const char* l_type = l_nParam->Attribute ( "type" );
-//                     const char* l_valor = l_nParam->GetText();
-// 
-//                     if ( ( l_name != nullptr ) && ( strcmp ( l_name, ( const char* ) "TypeNode" ) == 0 ) ) {
-// 
-//                         if ( ( l_type != nullptr ) && ( strcmp ( l_type, ( const char* ) "string" ) == 0 ) ) {
-// 
-//                             if ( ( l_valor != nullptr ) && ( strcmp ( l_valor, ( const char* ) "SKYBOX" ) == 0 ) ) {
-// 
-//                                 pSky = new Chimera::Graph::SkyBox ( _id, _name );
-//                                 pSky->addChild ( pDrawTriMesh );
-//                                 _pNodePai->addChild ( pSky );
-//                                 pLastNodeDone = pSky;
-// 
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     } 
-            _pNodePai->addChild ( pObj ); 
-            pLastNodeDone = pObj;
+            Chimera::Graph::SkyBox *pSky = nullptr;
+            //TODO colocat isso no skybox!!!???
+            tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
+            if ( l_nExtra != nullptr ) {
+                tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
+                if ( l_nTechnique != nullptr ) {
+
+                    const char* l_profile = l_nTechnique->Attribute ( "profile" );
+                    if ( ( l_profile !=  nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
+
+                        tinyxml2::XMLElement* l_nParam = l_nTechnique->FirstChildElement ( "param" );
+                        if ( l_nParam !=  nullptr ) {
+
+                            const char* l_name = l_nParam->Attribute ( "name" );
+                            const char* l_type = l_nParam->Attribute ( "type" );
+                            const char* l_valor = l_nParam->GetText();
+
+                            if ( ( l_name != nullptr ) && ( strcmp ( l_name, ( const char* ) "TypeNode" ) == 0 ) ) {
+
+                                if ( ( l_type != nullptr ) && ( strcmp ( l_type, ( const char* ) "string" ) == 0 ) ) {
+
+                                    if ( ( l_valor != nullptr ) && ( strcmp ( l_valor, ( const char* ) "SKYBOX" ) == 0 ) ) {
+
+                                        pSky = new Chimera::Graph::SkyBox ( _id, _name );
+                                        //pSky->setTransform(*l_pTransform); //TODO implementar
+                                        
+                                        pSky->pDraw = pDraw;
+                                        pSky->pMaterial = pMaterial;
+                                        
+                                        _pNodePai->addChild(pSky);
+                                        pLastNodeDone = pSky;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } 
+    
+            if (pSky == nullptr) {
+                
+                Chimera::Graph::Object *pObj = new Chimera::Graph::Object(_id, _name);
+                pObj->setTransform(*l_pTransform);
+                pObj->pDraw = pDraw;
+                pObj->pMaterial = pMaterial;
+                
+                _pNodePai->addChild ( pObj ); 
+                pLastNodeDone = pObj;
+                
+            }
                           
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "node" ) == 0 ) {
 

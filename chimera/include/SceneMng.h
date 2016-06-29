@@ -47,9 +47,9 @@ public:
         pObjeto = _pObject;
     }
 
-    //inline void skyBoxAtivo ( Graph::SkyBox *_pSkyBox ) {
-    //    pSkyBox = _pSkyBox;
-    //}
+    inline void skyBoxAtivo ( Graph::SkyBox *_pSkyBox ) {
+       pSkyBox = _pSkyBox;
+    }
 
     void setLight ( bool _lightOn );
     void setMaterial ( bool _materialOn );
@@ -69,13 +69,13 @@ private:
     Graph::Node *pRoot;
     Graph::Camera *pCameraAtiva;
     Graph::Object *pObjeto;
-    //Graph::SkyBox *pSkyBox;
+    Graph::SkyBox *pSkyBox;
 
     std::vector<Graph::Camera*> m_vCamera;
     std::vector<Graph::Light*> m_vLight;
     std::vector<Graph::Object*> m_vObject;
     std::vector<Graph::ParticleEmitter*> m_vParticle;
-    //std::vector<Graph::SkyBox*> m_vSkyBox;
+    std::vector<Graph::SkyBox*> m_vSkyBox;
 
     ShadowMap shadoMap;
 

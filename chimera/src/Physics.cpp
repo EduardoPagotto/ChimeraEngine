@@ -12,7 +12,7 @@
 namespace Chimera {
 namespace Graph {
     
-Physics::Physics ( std::string _id, std::string _name ) : Node ( EntityKind::PHYSICS, _id, _name ) {
+Physics::Physics ( std::string _id, std::string _name ) : Entity ( EntityKind::PHYSICS, _id, _name ) {
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
@@ -27,7 +27,7 @@ Physics::Physics ( std::string _id, std::string _name ) : Node ( EntityKind::PHY
 
 }
 
-Physics::Physics ( const Physics& _physics ) : Node ( _physics ) {
+Physics::Physics ( const Physics& _physics ) : Entity ( _physics ) {
 
     mass = _physics.mass;
     friction = _physics.friction;
@@ -57,14 +57,14 @@ Physics::~Physics() {
     Infra::Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
-void Physics::clone ( Node **ppNode ) {
-    *ppNode = new Physics ( *this );
-    Node::clone ( ppNode );
-}
+// void Physics::clone ( Node **ppNode ) {
+//     *ppNode = new Physics ( *this );
+//     Node::clone ( ppNode );
+// }
 
-void Physics::update ( DataMsg *_dataMsg ) {
-    Node::update ( _dataMsg );
-}
+// void Physics::update ( DataMsg *_dataMsg ) {
+//     Node::update ( _dataMsg );
+// }
 
 void Physics::init ( btTransform &_tTrans, void *pObj ) {
 

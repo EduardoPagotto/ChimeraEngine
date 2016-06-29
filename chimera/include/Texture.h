@@ -24,7 +24,7 @@ enum class TextureFilter
 class Texture : public Entity
 {
 public:
-    Texture ( std::string _id, std::string _name );
+    Texture ( std::string _id, std::string _name, std::string _pathFile );
     Texture ( const Texture &_texture );
 
     virtual ~Texture();
@@ -36,10 +36,6 @@ public:
     void init();
 
     SDL_Surface *loadImage();
-
-    void setPathFile ( const std::string &_pathFile ) {
-        pathFile = _pathFile;
-    }
 
     void setFilter ( TextureFilter _filter );
 

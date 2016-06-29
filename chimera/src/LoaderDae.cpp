@@ -8,9 +8,6 @@
 #include "Light.h"
 #include "Object.h"
 #include "DrawTriMesh.h"
-#include "Material.h"
-#include "Effect.h"
-#include "Texture.h"
 #include "SkyBox.h"
 #include "Singleton.h"
 
@@ -37,22 +34,32 @@ LoaderDae::~LoaderDae() {
     Chimera::Infra::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 }
 
-int libImageMap(tinyxml2::XMLElement* root, std::map<std::string, std::string> &mapaImagens) {
+int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, std::map<std::string, Chimera::Graph::Texture*> &_mapaTextura) {
     
     tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_images" );
+    
     if ( l_nNode != nullptr ) {
+        
         l_nNode = l_nNode->FirstChildElement ( "image" );
+        
         while ( l_nNode != nullptr ) {
             
             std::string l_id = Chimera::retornaAtributo ( "id", l_nNode );
+            std::string l_name = Chimera::retornaAtributo( "name", l_nNode);
             std::string l_val = l_nNode->FirstChildElement ( "init_from" )->GetText();
-            mapaImagens[l_id] = l_val;
+#ifdef WIN32            
+            Chimera::Graph::Texture *pTex = new Chimera::Graph::Texture(l_id, l_name, _textureDir+ "\\" + l_val);
+#else
+            Chimera::Graph::Texture *pTex = new Chimera::Graph::Texture(l_id, l_name, _textureDir+ "/" + l_val);
+#endif
+        
+            _mapaTextura[l_id] = pTex;
             
             l_nNode = l_nNode->NextSiblingElement ( "image" );
         }
     }
     
-    return mapaImagens.size();
+    return _mapaTextura.size();
 }
 
 int libEffectMap ( tinyxml2::XMLElement* root, std::map<std::string, Chimera::Graph::Effect*> &mapaEfeito) {
@@ -63,9 +70,8 @@ int libEffectMap ( tinyxml2::XMLElement* root, std::map<std::string, Chimera::Gr
         while ( l_nNode != nullptr ) {
 
             std::string l_id = Chimera::retornaAtributo ( "id", l_nNode );
-            std::string l_name = Chimera::retornaAtributo ( "name", l_nNode );
-            
-            Chimera::Graph::Effect *pEffect = new Chimera::Graph::Effect ( l_id, l_name  );
+           
+            Chimera::Graph::Effect *pEffect = new Chimera::Graph::Effect ( l_id, l_id  );
             mapaEfeito[ l_id ] = pEffect;
             
             pEffect->loadCollada ( l_nNode );
@@ -76,6 +82,67 @@ int libEffectMap ( tinyxml2::XMLElement* root, std::map<std::string, Chimera::Gr
     }
     
     return mapaEfeito.size();
+}
+
+int libMaterialMap(tinyxml2::XMLElement* root, 
+                   std::map<std::string, Chimera::Graph::Effect*> &mapaEfeito,
+                   std::map<std::string, Chimera::Graph::Texture*> &mapaTextura,
+                   std::map<std::string, Chimera::Graph::Material*> &mapaMaterial) {
+    
+    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_materials" );
+    if ( l_nNode != nullptr ) {
+        l_nNode = l_nNode->FirstChildElement ( "material" );
+        while ( l_nNode != nullptr ) {
+
+            std::string l_id = Chimera::retornaAtributo ( "id", l_nNode );
+            std::string l_name = Chimera::retornaAtributo ( "name", l_nNode );
+            
+            Chimera::Graph::Material *pMat = new Chimera::Graph::Material ( l_id, l_name  );
+            
+            tinyxml2::XMLElement* l_nMat =  l_nNode->FirstChildElement ( "instance_effect" );
+            const char* pNomeMat = l_nMat->Attribute("url");
+            std::string l_sNomeMat = &pNomeMat[1];
+            
+            Chimera::Graph::Effect *pEffect = mapaEfeito[ l_sNomeMat ];
+            pMat->pEffect = pEffect;
+
+            if (pEffect->getNameTextureId().length() > 0) {
+                Chimera::Graph::Texture *pTexture = mapaTextura[ pEffect->getNameTextureId() ];
+                pMat->pTexture = pTexture;
+            }
+            
+            mapaMaterial[l_id] = pMat;
+                       
+            l_nNode = l_nNode->NextSiblingElement ( "material" );
+        }
+
+    }    
+    return mapaMaterial.size();
+}
+
+int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Chimera::Graph::Draw*> &mapaGeometria) {
+    
+    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_geometries" );
+    if ( l_nNode != nullptr ) {
+        l_nNode = l_nNode->FirstChildElement ( "geometry" );
+        while ( l_nNode != nullptr ) {
+
+            std::string l_id = Chimera::retornaAtributo ( "id", l_nNode );
+            std::string l_name = Chimera::retornaAtributo ( "name", l_nNode );
+            
+            Chimera::Graph::DrawTriMesh *pDraw = new Chimera::Graph::DrawTriMesh(l_id, l_name);
+            
+            pDraw->loadCollada(l_nNode);
+            
+            mapaGeometria[l_id] = pDraw;
+                                   
+            l_nNode = l_nNode->NextSiblingElement ( "geometry" );
+        }
+
+    }    
+    
+    return mapaGeometria.size();
+    
 }
 
 Chimera::Graph::Node* LoaderDae::loadFile ( const std::string &file ) {
@@ -97,13 +164,11 @@ Chimera::Graph::Node* LoaderDae::loadFile ( const std::string &file ) {
     if ( root == nullptr ) {
         throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::OPEN, "Nao é um arquivo colada" );
     }
-
-    std::map<std::string, Chimera::Graph::Effect*> mapaEfeito; 
-    std::map<std::string, std::string> mapaImagens; 
     
     int totalEffect = libEffectMap(root, mapaEfeito);
-    int totalImagens = libImageMap(root, mapaImagens);
-    
+    int totalTexture = libTextureMap(root, textureDir, mapaTextura);
+    int totalMat = libMaterialMap(root, mapaEfeito, mapaTextura, mapaMaterial);
+    int totalGeometry = libGeometryMap(root, mapaGeometria);
     
     pRootScene = getNodeSceneInFile();
 
@@ -335,82 +400,6 @@ Chimera::Graph::Camera *carregaCamera(tinyxml2::XMLElement* root, tinyxml2::XMLE
     return pCamera;
 }
 
-Chimera::Graph::Object * carregaGeometria(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name) {
-    
-    tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
-    
-    Chimera::loadNodeLib ( root, ( const char* ) &l_url[1], "library_geometries", "geometry", &l_nNodeSourceData );
-
-    Chimera::Graph::DrawTriMesh *pDrawTriMesh = new Chimera::Graph::DrawTriMesh ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "name", l_nNodeSourceData ) );
-    pDrawTriMesh->loadCollada ( l_nNodeSourceData );
-
-//    Chimera::Graph::SkyBox *pSky = nullptr;
-    //TODO OTIMIZAR
-    //FIXME implementar
-//     tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
-//     if ( l_nExtra != nullptr ) {
-//         tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
-//         if ( l_nTechnique != nullptr ) {
-// 
-//             const char* l_profile = l_nTechnique->Attribute ( "profile" );
-//             if ( ( l_profile !=  nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
-// 
-//                 tinyxml2::XMLElement* l_nParam = l_nTechnique->FirstChildElement ( "param" );
-//                 if ( l_nParam !=  nullptr ) {
-// 
-//                     const char* l_name = l_nParam->Attribute ( "name" );
-//                     const char* l_type = l_nParam->Attribute ( "type" );
-//                     const char* l_valor = l_nParam->GetText();
-// 
-//                     if ( ( l_name != nullptr ) && ( strcmp ( l_name, ( const char* ) "TypeNode" ) == 0 ) ) {
-// 
-//                         if ( ( l_type != nullptr ) && ( strcmp ( l_type, ( const char* ) "string" ) == 0 ) ) {
-// 
-//                             if ( ( l_valor != nullptr ) && ( strcmp ( l_valor, ( const char* ) "SKYBOX" ) == 0 ) ) {
-// 
-//                                 pSky = new Chimera::Graph::SkyBox ( _id, _name );
-//                                 pSky->addChild ( pDrawTriMesh );
-//                                 _pNodePai->addChild ( pSky );
-//                                 pLastNodeDone = pSky;
-// 
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// 
-//     if ( pSky ==  nullptr ) {
-//         
-         Chimera::Graph::Object *pObj = new Chimera::Graph::Object ( _id, _name );
-//         pObj->setTransform ( *l_pTransform );
-         pObj->pDraw = pDrawTriMesh;
-//         _pNodePai->addChild ( pObj );
-// 
-//         pLastNodeDone = pObj;
-//     }
-// 
-// 
-//     tinyxml2::XMLElement* l_nBindMat = _nNode->FirstChildElement ( "bind_material" );
-//     if ( l_nBindMat != nullptr ) {
-//         tinyxml2::XMLElement* l_nTecnicCommon = l_nBindMat->FirstChildElement ( "technique_common" );
-//         if ( l_nTecnicCommon != nullptr ) {
-// 
-//             tinyxml2::XMLElement* l_nProximoFilho = l_nTecnicCommon->FirstChildElement();
-//             if ( l_nProximoFilho != nullptr ) {
-//                 carregaNode ( pDrawTriMesh, l_nProximoFilho, nullptr, nullptr, nullptr );
-//             } else {
-//                 std::cout << "technique_common sem filho(bind_material missing) " << std::endl;
-//             }
-//         } else {
-//             std::cout << "bind_material sem filho(instance_material missing) " << std::endl;
-//         }
-//     }
-
-		 return pObj;
-}
-
 void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type ) {
 
     btTransform *l_pTransform = nullptr;
@@ -449,68 +438,84 @@ void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElem
  
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_geometry" ) == 0 ) {
 
-            //TODO implementar Tudo
-            Chimera::Graph::Object *pObj = carregaGeometria(root,_nNode,l_url,_id, _name);
+             Chimera::Graph::Object *pObj = new Chimera::Graph::Object(_id, _name);
+         
+             pObj->setTransform(*l_pTransform);
              
-            pObj->setTransform ( *l_pTransform );
-            _pNodePai->addChild ( pObj );
-            pLastNodeDone = pObj;
+             const char* pUrl = _nNode->Attribute("url");
+             std::string l_nomeGeo = &pUrl[1];
              
-         } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_material" ) == 0 ) {
-
-   //         Chimera::loadNodeLib ( root, ( const char* ) &l_target[1], "library_materials", "material", &l_nNodeSourceData );
-
-   //         Chimera::Graph::Material *pMaterial = new Chimera::Graph::Material ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "name", l_nNodeSourceData ) );
-   //         //_pNodePai->addChild ( pMaterial );
-			////Chimera::Graph::Object *pObj = 
-			//((Chimera::Graph::Object*)pLastNodeDone)->pMaterial = pMaterial;
-
-   //         tinyxml2::XMLElement* l_nEffe = l_nNodeSourceData->FirstChildElement();
-   //         if ( l_nEffe != nullptr ) {
-   //             carregaNode ( pMaterial, l_nEffe, nullptr, nullptr, nullptr );
-   //         } else {
-   //             std::cout << "Falha Effeito incompleto: " << std::string ( l_target ) << std::endl;
-   //         }
-
-         } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_effect" ) == 0 ) {
- 
- //            Chimera::loadNodeLib ( root, ( const char* ) &l_url[1], "library_effects", "effect", &l_nNodeSourceData );
- //
- //            Chimera::Graph::Effect *pEffect = new Chimera::Graph::Effect ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
- //            pEffect->loadCollada ( l_nNodeSourceData );
- //            _pNodePai->addChild ( pEffect );
- //
- //            pLastNodeDone = pEffect;
- //
- //            if ( pEffect->getNameTextureId().size() > 0 ) {
- //
- //                Chimera::loadNodeLib ( root, ( const char* ) pEffect->getNameTextureId().c_str(), "library_images", "image", &l_nNodeSourceData );
- //
- //                Chimera::Graph::Texture *pTexture = new Chimera::Graph::Texture ( Chimera::retornaAtributo ( "id", l_nNodeSourceData ), Chimera::retornaAtributo ( "id", l_nNodeSourceData ) );
- //
- //                const char* l_val = l_nNodeSourceData->FirstChildElement ( "init_from" )->GetText();
- //#ifdef WIN32
- //                pTexture->setPathFile ( textureDir + "\\" + std::string ( l_val ) );
- //#else
- //                pTexture->setPathFile ( textureDir + "/" + std::string ( l_val ) );
- //#endif
- //                pTexture->init();
- //
- //                _pNodePai->addChild ( pTexture );
- //            }
-         } else if ( strcmp ( l_nomeElemento, ( const char* ) "node" ) == 0 ) {
+             pObj->pDraw = mapaGeometria[l_nomeGeo];
+             
+            tinyxml2::XMLElement* l_nBindMat = _nNode->FirstChildElement ( "bind_material" );
+            if ( l_nBindMat != nullptr ) {
+                tinyxml2::XMLElement* l_nTecnicCommon = l_nBindMat->FirstChildElement ( "technique_common" );
+                if ( l_nTecnicCommon != nullptr ) {
+                    
+                    tinyxml2::XMLElement* l_nInstanceMaterial = l_nTecnicCommon->FirstChildElement ( "instance_material" );
+                    
+                    const char* pTarguet = l_nInstanceMaterial->Attribute("target");
+                    std::string l_sTarguet = &pTarguet[1];
+                    
+                    pObj->pMaterial = mapaMaterial[ l_sTarguet ];
+                }
+            }
+             
+            //    Chimera::Graph::SkyBox *pSky = nullptr;
+    //TODO OTIMIZAR
+    //FIXME implementar
+//     tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
+//     if ( l_nExtra != nullptr ) {
+//         tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
+//         if ( l_nTechnique != nullptr ) {
 // 
-//             const char * l_id = _nNode->Attribute ( "id" );
-//             const char * l_name = _nNode->Attribute ( "name" );
-//             const char * l_type = _nNode->Attribute ( "type" );
+//             const char* l_profile = l_nTechnique->Attribute ( "profile" );
+//             if ( ( l_profile !=  nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
 // 
-//             if ( pLastNodeDone != nullptr ) {
-//                 carregaNode ( pLastNodeDone, _nNode->FirstChildElement(), l_id, l_name, l_type );
-//             } else {
-//                 throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, objeto hierarquia: " + std::string ( l_id ) );
+//                 tinyxml2::XMLElement* l_nParam = l_nTechnique->FirstChildElement ( "param" );
+//                 if ( l_nParam !=  nullptr ) {
+// 
+//                     const char* l_name = l_nParam->Attribute ( "name" );
+//                     const char* l_type = l_nParam->Attribute ( "type" );
+//                     const char* l_valor = l_nParam->GetText();
+// 
+//                     if ( ( l_name != nullptr ) && ( strcmp ( l_name, ( const char* ) "TypeNode" ) == 0 ) ) {
+// 
+//                         if ( ( l_type != nullptr ) && ( strcmp ( l_type, ( const char* ) "string" ) == 0 ) ) {
+// 
+//                             if ( ( l_valor != nullptr ) && ( strcmp ( l_valor, ( const char* ) "SKYBOX" ) == 0 ) ) {
+// 
+//                                 pSky = new Chimera::Graph::SkyBox ( _id, _name );
+//                                 pSky->addChild ( pDrawTriMesh );
+//                                 _pNodePai->addChild ( pSky );
+//                                 pLastNodeDone = pSky;
+// 
+//                             }
+//                         }
+//                     }
+//                 }
 //             }
+//         }
+//     } 
+            _pNodePai->addChild ( pObj ); 
+            pLastNodeDone = pObj;
+                          
+         } else if ( strcmp ( l_nomeElemento, ( const char* ) "node" ) == 0 ) {
+
+            const char * l_id = _nNode->Attribute ( "id" );
+            const char * l_name = _nNode->Attribute ( "name" );
+            const char * l_type = _nNode->Attribute ( "type" );
+
+            if ( pLastNodeDone != nullptr ) {
+                carregaNode ( pLastNodeDone, _nNode->FirstChildElement(), l_id, l_name, l_type );
+            } else {
+                throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, objeto hierarquia: " + std::string ( l_id ) );
+            }
+            
         } else  {
+            
             throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, objeto desconhecido: " + std::string ( l_nomeElemento ) );
+            
         }
         _nNode = _nNode->NextSiblingElement();
     }

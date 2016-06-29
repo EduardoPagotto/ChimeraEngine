@@ -6,6 +6,11 @@
 #include "Node.h"
 #include "PhysicsControl.h"
 
+#include "Material.h"
+#include "Effect.h"
+#include "Texture.h"
+#include "DrawTriMesh.h"
+
 namespace ChimeraLoader
 {
 
@@ -30,6 +35,11 @@ private:
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;
 
+    std::map<std::string, Chimera::Graph::Effect*> mapaEfeito; 
+    std::map<std::string, Chimera::Graph::Texture*> mapaTextura;
+    std::map<std::string, Chimera::Graph::Material*> mapaMaterial;
+    std::map<std::string, Chimera::Graph::Draw*> mapaGeometria;
+    
     Chimera::PhysicsControl *pPhysicsControl;
 };
 }

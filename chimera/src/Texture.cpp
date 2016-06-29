@@ -4,10 +4,11 @@
 namespace Chimera {
 namespace Graph {
     
-Texture::Texture ( std::string _id, std::string _name ) : Entity ( EntityKind::TEXTURE, _id, _name ) {
+Texture::Texture ( std::string _id, std::string _name, std::string _pathFile ) : Entity ( EntityKind::TEXTURE, _id, _name ) {
 
     texturaCarregada = false;
-    pathFile = "";
+    
+    pathFile = _pathFile;
     setFilter ( TextureFilter::Nearest );
     textureList[0] = 0;
     textureList[1] = 0;

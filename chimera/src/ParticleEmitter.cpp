@@ -129,8 +129,7 @@ void ParticleEmitter::setGL() {
 
 void ParticleEmitter::loadImage ( const char *_file ) {
 
-    pTexture = new Texture ( "testeZ1", "testeZ1" );
-    pTexture->setPathFile ( std::string ( _file ) );
+    pTexture = new Texture ( "testeZ1", "testeZ1", std::string ( _file ) );
 
 }
 

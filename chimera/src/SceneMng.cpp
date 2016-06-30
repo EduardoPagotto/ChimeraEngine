@@ -132,11 +132,11 @@ Graph::Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
             retorno = m_vParticle[index];
         }
         break;
-//     case EntityKind::SKYBOX: //FIXME verificar como implementar
-//         if ( m_vSkyBox.size() > index ) {
-//             retorno = m_vSkyBox[index];
-//         }
-//         break;
+     case EntityKind::SKYBOX: //FIXME verificar como implementar
+         if ( m_vSkyBox.size() > index ) {
+             retorno = m_vSkyBox[index];
+         }
+         break;
     default:
         break;
     }

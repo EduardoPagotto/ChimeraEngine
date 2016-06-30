@@ -115,7 +115,7 @@ void Game::start() {
     GameClient::start();
 
     // Pega o Skybox
-    //pSkyBox = ( Chimera::Graph::SkyBox* ) pSceneMng->getNode ( Chimera::EntityKind::SKYBOX, 0 );
+    pSkyBox = ( Chimera::Graph::SkyBox* ) pSceneMng->getNode ( Chimera::EntityKind::SKYBOX, 0 );
 
     //Pega primeira camera
     pOrbitalCam = ( Chimera::Graph::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );
@@ -123,7 +123,7 @@ void Game::start() {
     //Ajusta objeto como o primario
     pObj = ( Chimera::Graph::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "Zoltan" );
 
-    //pSceneMng->skyBoxAtivo ( pSkyBox );
+    pSceneMng->skyBoxAtivo ( pSkyBox );
     pSceneMng->cameraAtiva ( pOrbitalCam );
     pSceneMng->objetoAtivo ( pObj );
     pSceneMng->setLight ( true );

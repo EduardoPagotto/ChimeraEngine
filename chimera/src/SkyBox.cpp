@@ -21,7 +21,8 @@ SkyBox::~SkyBox() {
 
 void SkyBox::update ( DataMsg *_dataMsg ) {
 
-//     if ( _dataMsg->getKindOp() == KindOp::START ) {
+     if ( _dataMsg->getKindOp() == KindOp::START ) {
+		 pMaterial->init();
 // 
 //         //inicialize primeiro os filhos para garantir textura e efeito em material
 //         Node::update ( _dataMsg );
@@ -29,11 +30,11 @@ void SkyBox::update ( DataMsg *_dataMsg ) {
 //         //inicializa objeto local
 //         //pDraw = ( Draw* ) findChildByKind ( EntityKind::DRAW, 0 );
 // 
-//     } else {
+     } else {
 // 
 //         Node::update ( _dataMsg );
 // 
-//     }
+     }
     Node::update ( _dataMsg );
 
 }

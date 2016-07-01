@@ -1,48 +1,63 @@
 #include "Effect.h"
 
-#ifdef WIN32
-#include "windows.h"
-#endif
-
-#include <GL/gl.h>
 //#include <gl/GLU.h>
 
 #include "ChimeraUtils.h"
 
 namespace Chimera {
 namespace Graph {
+
+map<mode,bool> map_modes;
+map<mode,float*> map_params;
     
 Effect::Effect ( std::string _id, std::string _name ) : Entity ( EntityKind::EFFECT, _id, _name ) {
 
-    shininess = 10.5f;
-    diffuse = Color::BLACK;
-    ambient = Color::BLACK;
-    specular = Color::BLACK;
-    emissive = Color::BLACK;
+//     shininess = 10.5f;
+//     diffuse = Color::BLACK;
+//     ambient = Color::BLACK;
+//     specular = Color::BLACK;
+//     emissive = Color::BLACK;
+    
+    map_modes[AMBIENT]=false;
+    map_modes[DIFFUSE]=false;
+    map_modes[EMISSION]=false;
+    map_modes[SPECULAR]=false;
+    map_modes[SHININESS]=false;
+    
     nameTextureId = "";
 
 }
 
 Effect::Effect ( const Effect& _cpy ) : Entity ( _cpy ) {
 
-    diffuse = _cpy.diffuse;
-    ambient = _cpy.ambient;
-    specular = _cpy.specular;
-    emissive = _cpy.emissive;
-    shininess = _cpy.shininess;
-    nameTextureId = _cpy.nameTextureId;
+    //TODO refazer
+//     diffuse = _cpy.diffuse;
+//     ambient = _cpy.ambient;
+//     specular = _cpy.specular;
+//     emissive = _cpy.emissive;
+//     shininess = _cpy.shininess;
+//     nameTextureId = _cpy.nameTextureId;
 
 }
 
 void Effect::apply() {
 
-    if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
-        glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
-        glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
-        glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
-        glMaterialfv ( GL_FRONT, GL_SHININESS, &shininess );
-        glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
+    for(map<mode,bool>::iterator iter = map_modes.begin(); iter != map_modes.end(); ++iter){
+        
+            mode k= iter->first;
+            bool flag=iter->second;
+            
+            if(flag) 
+                glMaterialfv(this->f, this->m, map_params[k]);
     }
+    
+//     if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
+//         glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
+//         glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
+//         glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
+//         glMaterialfv ( GL_FRONT, GL_SHININESS, &shininess );
+//         glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
+//     }
 
 }
 

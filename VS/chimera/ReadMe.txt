@@ -44,3 +44,21 @@ NO_OVR_SET_TO_USE
 
 para:
 OVR_SET_TO_USE
+
+
+mapa Joystick Xbox360
+A Button			0	
+B Button			1
+X Button			2
+Y Button			3
+Left Bumper			4
+Right Bumper		5
+Back Button			6
+Start Button		7
+Left Stick Click	8
+Right Stick Click	9
+D-Pad Up			hat 0x01h	
+D-Pad Down		    hat 0x04h
+D-Pad Left		    hat 0x02h
+D-Pad Right		    hat 0x08h
+Xbox Button         -

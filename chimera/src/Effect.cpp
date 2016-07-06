@@ -7,50 +7,109 @@
 namespace Chimera {
 namespace Graph {
 
-map<mode,bool> map_modes;
-map<mode,float*> map_params;
-    
 Effect::Effect ( std::string _id, std::string _name ) : Entity ( EntityKind::EFFECT, _id, _name ) {
 
-//     shininess = 10.5f;
-//     diffuse = Color::BLACK;
-//     ambient = Color::BLACK;
-//     specular = Color::BLACK;
-//     emissive = Color::BLACK;
+    shine = 10.5f;
+    diffuse = Color::BLACK;
+    ambient = Color::BLACK;
+    specular = Color::BLACK;
+    emission = Color::BLACK;
     
-    map_modes[AMBIENT]=false;
-    map_modes[DIFFUSE]=false;
-    map_modes[EMISSION]=false;
-    map_modes[SPECULAR]=false;
-    map_modes[SHININESS]=false;
+    map_modes[ModeMaterial::AMBIENT]=false;
+    map_modes[ModeMaterial::DIFFUSE]=false;
+    map_modes[ModeMaterial::EMISSION]=false;
+    map_modes[ModeMaterial::SPECULAR]=false;
+    map_modes[ModeMaterial::SHININESS]=false;
     
+	setFace(FaceMaterial::FRONT);
+
     nameTextureId = "";
 
 }
 
-Effect::Effect ( const Effect& _cpy ) : Entity ( _cpy ) {
-
-    //TODO refazer
+//Effect::Effect ( const Effect& _cpy ) : Entity ( _cpy ) {
+//
 //     diffuse = _cpy.diffuse;
 //     ambient = _cpy.ambient;
 //     specular = _cpy.specular;
-//     emissive = _cpy.emissive;
-//     shininess = _cpy.shininess;
+//     emission = _cpy.emission;
+//     shine = _cpy.shine;
 //     nameTextureId = _cpy.nameTextureId;
+//
+//	 map_modes[ModeMaterial::AMBIENT] = false;
+//	 map_modes[ModeMaterial::DIFFUSE] = false;
+//	 map_modes[ModeMaterial::EMISSION] = false;
+//	 map_modes[ModeMaterial::SPECULAR] = false;
+//	 map_modes[ModeMaterial::SHININESS] = false;
+//
+//	 faceMaterial = _cpy.faceMaterial;
+//
+//	 if (_cpy.map_modes[ModeMaterial::AMBIENT] == true) {
+//
+//
+//	 }
+//}
 
+///
+
+float* getColorParam(const Color &_color)
+{
+	float* p = new float[4];
+	p[0] = _color.r;
+	p[1] = _color.g;
+	p[2] = _color.b;
+	p[3] = _color.a;
+	return p;
+}
+
+
+void Effect::setAmbient(const Color &_color)
+{
+	ambient = _color;
+	map_modes[ModeMaterial::AMBIENT] = true;
+	map_params[ModeMaterial::AMBIENT] = getColorParam(_color);
+}
+
+void Effect::setDiffuse(const Color &_color)
+{
+	diffuse = _color;
+	map_modes[ModeMaterial::DIFFUSE] = true;
+	map_params[ModeMaterial::DIFFUSE] = getColorParam(_color);
+}
+
+void Effect::setEmission(const Color &_color)
+{
+	emission = _color;
+	map_modes[ModeMaterial::EMISSION] = true;
+	map_params[ModeMaterial::EMISSION] = getColorParam(_color);
+}
+
+void Effect::setSpecular(const Color &_color)
+{
+	specular = _color;
+	map_modes[ModeMaterial::SPECULAR] = true;
+	map_params[ModeMaterial::SPECULAR] = getColorParam(_color);
+}
+
+void Effect::setShine(const float &_val)
+{
+	shine = _val;
+	map_modes[ModeMaterial::SHININESS] = true;
+	//    map_params[SHININESS]=getColorParam(color);
 }
 
 void Effect::apply() {
 
-    for(map<mode,bool>::iterator iter = map_modes.begin(); iter != map_modes.end(); ++iter){
-        
-            mode k= iter->first;
-            bool flag=iter->second;
-            
-            if(flag) 
-                glMaterialfv(this->f, this->m, map_params[k]);
-    }
-    
+	if (glIsEnabled(GL_COLOR_MATERIAL) == GL_TRUE) {
+
+		for (std::map<ModeMaterial, float*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
+
+			ModeMaterial k = iter->first;
+			float *p = iter->second;
+			glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
+
+		}
+	}
 //     if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
 //         glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
 //         glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
@@ -58,35 +117,18 @@ void Effect::apply() {
 //         glMaterialfv ( GL_FRONT, GL_SHININESS, &shininess );
 //         glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
 //     }
-
 }
 
 void Effect::init() {
-
 }
-
-void Effect::clone ( Entity **ppNode ) {
-    *ppNode = new Effect ( *this );
-    //Node::clone ( ppNode );//FIXME preciso descer ao pai
-}
-
-// void Effect::update ( DataMsg *dataMsg ) {
-// 
-//     if ( dataMsg->getKindOp() == KindOp::START ) {
-// 
-//         init();
-//     }
-// 
-//     Node::update ( dataMsg );
-// }
 
 void Effect::createDefaultEffect() {
 
 	setDiffuse(Color(0.6f, 0.6f, 0.6f));
-	setEmissive(Color(0.1f, 0.1f, 0.1f));
+	setEmission(Color(0.1f, 0.1f, 0.1f));
 	setAmbient(Color(0.1f, 0.1f, 0.1f));
 	setSpecular(Color(0.5f, 0.5f, 0.5f));
-	setShininess(0.5);
+	setShine(0.5);
 }
 
 bool Effect::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode ) {
@@ -132,7 +174,7 @@ void Effect::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
         Color cor;
         if ( getPhong ( "emission", cor, l_nProfile ) == true ) {
-            setEmissive ( cor );
+            setEmission ( cor );
         }
 
         if ( getPhong ( "ambient", cor, l_nProfile ) == true ) {
@@ -160,7 +202,7 @@ void Effect::loadCollada ( tinyxml2::XMLElement* _nNode ) {
                     const char *l_val = l_nShinnes->FirstChildElement ( "float" )->GetText();
                     if ( l_val != nullptr ) {
 
-                        setShininess ( atof ( l_val ) );
+                        setShine ( atof ( l_val ) );
 
                     }
 

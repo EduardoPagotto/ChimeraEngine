@@ -64,28 +64,28 @@ void Effect::setAmbient(const Color &_color)
 {
 	ambient = _color;
 	map_modes[ModeMaterial::AMBIENT] = true;
-	map_params[ModeMaterial::AMBIENT] = getColorParam(_color);
+	map_params[ModeMaterial::AMBIENT] = &ambient;//getColorParam(_color);
 }
 
 void Effect::setDiffuse(const Color &_color)
 {
 	diffuse = _color;
 	map_modes[ModeMaterial::DIFFUSE] = true;
-	map_params[ModeMaterial::DIFFUSE] = getColorParam(_color);
+	map_params[ModeMaterial::DIFFUSE] = &diffuse;//getColorParam(_color);
 }
 
 void Effect::setEmission(const Color &_color)
 {
 	emission = _color;
 	map_modes[ModeMaterial::EMISSION] = true;
-	map_params[ModeMaterial::EMISSION] = getColorParam(_color);
+	map_params[ModeMaterial::EMISSION] = &emission;//getColorParam(_color);
 }
 
 void Effect::setSpecular(const Color &_color)
 {
 	specular = _color;
 	map_modes[ModeMaterial::SPECULAR] = true;
-	map_params[ModeMaterial::SPECULAR] = getColorParam(_color);
+	map_params[ModeMaterial::SPECULAR] = &specular;//getColorParam(_color);
 }
 
 void Effect::setShine(const float &_val)
@@ -97,10 +97,10 @@ void Effect::setShine(const float &_val)
 
 void Effect::apply() {
 
-		for (std::map<ModeMaterial, float*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
+		for (std::map<ModeMaterial, Color*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
 			ModeMaterial k = iter->first;
-			float *p = iter->second;
-			glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
+			Color *c = iter->second;
+			glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, c->ptr());
 		}
 
 		//se ha textura coloque a cor como branca para nao interferir com a textura

@@ -113,7 +113,7 @@ private:
 	Color corMaterial[4];
 
 	std::map<ModeMaterial, bool> map_modes;
-	std::map<ModeMaterial, float*> map_params;
+	std::map<ModeMaterial, Color*> map_params;
 };
 }
 }

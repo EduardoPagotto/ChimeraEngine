@@ -71,7 +71,7 @@ public:
         return this->shine;
     }
       
-	inline bool isSet(ModeMaterial _val) {
+	inline bool isSet(const ModeMaterial &_val) {
 		return map_modes[_val];
 	}
 
@@ -83,7 +83,7 @@ public:
 
 	void apply();
 
-    void setNameTextureId ( std::string _name ) {
+    void setNameTextureId (const std::string &_name ) {
         nameTextureId = _name;
     }
 
@@ -110,10 +110,8 @@ private:
     
     FaceMaterial faceMaterial;
 
-	Color corMaterial[4];
-
 	std::map<ModeMaterial, bool> map_modes;
-	std::map<ModeMaterial, Color*> map_params;
+	std::map<ModeMaterial, void*> map_params;
 };
 }
 }

@@ -9,7 +9,7 @@ namespace Graph {
 
 Effect::Effect ( std::string _id, std::string _name ) : Entity ( EntityKind::EFFECT, _id, _name ) {
 
-    shine = 10.5f;
+    shine = 50.0f;
     diffuse = Color::BLACK;
     ambient = Color::BLACK;
     specular = Color::BLACK;
@@ -24,7 +24,6 @@ Effect::Effect ( std::string _id, std::string _name ) : Entity ( EntityKind::EFF
 	setFace(FaceMaterial::FRONT);
 
     nameTextureId = "";
-
 }
 
 //Effect::Effect ( const Effect& _cpy ) : Entity ( _cpy ) {
@@ -50,57 +49,44 @@ Effect::Effect ( std::string _id, std::string _name ) : Entity ( EntityKind::EFF
 //	 }
 //}
 
-float* getColorParam(const Color &_color)
-{
-	float* p = new float[4];
-	p[0] = _color.r;
-	p[1] = _color.g;
-	p[2] = _color.b;
-	p[3] = _color.a;
-	return p;
-}
-
-void Effect::setAmbient(const Color &_color)
-{
+void Effect::setAmbient(const Color &_color) {
 	ambient = _color;
 	map_modes[ModeMaterial::AMBIENT] = true;
-	map_params[ModeMaterial::AMBIENT] = &ambient;//getColorParam(_color);
+	map_params[ModeMaterial::AMBIENT] = &ambient;
 }
 
-void Effect::setDiffuse(const Color &_color)
-{
+void Effect::setDiffuse(const Color &_color) {
 	diffuse = _color;
 	map_modes[ModeMaterial::DIFFUSE] = true;
-	map_params[ModeMaterial::DIFFUSE] = &diffuse;//getColorParam(_color);
+	map_params[ModeMaterial::DIFFUSE] = &diffuse;
 }
 
-void Effect::setEmission(const Color &_color)
-{
+void Effect::setEmission(const Color &_color) {
 	emission = _color;
 	map_modes[ModeMaterial::EMISSION] = true;
-	map_params[ModeMaterial::EMISSION] = &emission;//getColorParam(_color);
+	map_params[ModeMaterial::EMISSION] = &emission;
 }
 
-void Effect::setSpecular(const Color &_color)
-{
+void Effect::setSpecular(const Color &_color) {
 	specular = _color;
 	map_modes[ModeMaterial::SPECULAR] = true;
-	map_params[ModeMaterial::SPECULAR] = &specular;//getColorParam(_color);
+	map_params[ModeMaterial::SPECULAR] = &specular;
 }
 
-void Effect::setShine(const float &_val)
-{
+void Effect::setShine(const float &_val) {
 	shine = _val;
 	map_modes[ModeMaterial::SHININESS] = true;
-	//    map_params[SHININESS]=getColorParam(color);
+	map_params[ModeMaterial::SHININESS] = &shine;
 }
 
 void Effect::apply() {
 
-		for (std::map<ModeMaterial, Color*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
+		for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
+
 			ModeMaterial k = iter->first;
-			Color *c = iter->second;
-			glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, c->ptr());
+			GLfloat *p = (k != ModeMaterial::SHININESS) ? (GLfloat*)((Color*)iter->second)->ptr() : (GLfloat*)iter->second;
+
+			glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
 		}
 
 		//se ha textura coloque a cor como branca para nao interferir com a textura
@@ -126,7 +112,7 @@ void Effect::createDefaultEffect() {
 	setEmission(Color(0.1f, 0.1f, 0.1f));
 	setAmbient(Color(0.1f, 0.1f, 0.1f));
 	setSpecular(Color(0.5f, 0.5f, 0.5f));
-	setShine(0.5);
+	setShine(50.0f);
 }
 
 bool Effect::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode ) {

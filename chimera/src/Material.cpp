@@ -40,10 +40,12 @@ void Material::end() {
 void Material::begin ( bool _texture ) {
 
     hasTextureAtive = _texture;
-    pEffect->apply();
+   
 
     if (( _texture == true ) && (pTexture != nullptr))
 		pTexture->begin();
+
+	pEffect->apply();
        
 }
 }

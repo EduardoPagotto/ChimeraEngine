@@ -50,8 +50,6 @@ Effect::Effect ( std::string _id, std::string _name ) : Entity ( EntityKind::EFF
 //	 }
 //}
 
-///
-
 float* getColorParam(const Color &_color)
 {
 	float* p = new float[4];
@@ -61,7 +59,6 @@ float* getColorParam(const Color &_color)
 	p[3] = _color.a;
 	return p;
 }
-
 
 void Effect::setAmbient(const Color &_color)
 {
@@ -100,23 +97,24 @@ void Effect::setShine(const float &_val)
 
 void Effect::apply() {
 
-	if (glIsEnabled(GL_COLOR_MATERIAL) == GL_TRUE) {
-
 		for (std::map<ModeMaterial, float*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
-
 			ModeMaterial k = iter->first;
 			float *p = iter->second;
 			glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
-
 		}
-	}
-//     if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
-//         glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
-//         glMaterialfv ( GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
-//         glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
-//         glMaterialfv ( GL_FRONT, GL_SHININESS, &shininess );
-//         glMaterialfv ( GL_FRONT, GL_EMISSION, emissive.ptr() );
-//     }
+
+		//se ha textura coloque a cor como branca para nao interferir com a textura
+		if (nameTextureId.length() != 0) {
+			glMaterialfv(GL_FRONT, GL_DIFFUSE, Color::WHITE.ptr());
+		}
+
+   //  if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
+   //      glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
+   //	   glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
+   //      glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
+   //      glMaterialfv ( GL_FRONT, GL_SHININESS, &shine );
+   //      glMaterialfv ( GL_FRONT, GL_EMISSION, emission.ptr() );
+   //  }
 }
 
 void Effect::init() {

@@ -7,7 +7,7 @@
 namespace Chimera {
 namespace Graph {
 
-Effect::Effect ( std::string _id, std::string _name ) : Entity ( EntityKind::EFFECT, _id, _name ) {
+Effect::Effect ( std::string _name ) : Entity ( EntityKind::EFFECT, _name ) {
 
     shine = 50.0f;
     diffuse = Color::BLACK;

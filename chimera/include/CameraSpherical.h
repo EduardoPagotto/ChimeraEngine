@@ -10,7 +10,7 @@ class CameraSpherical : public Camera
 {
 
 public:
-    CameraSpherical ( std::string _id, std::string _name );
+    CameraSpherical ( std::string _name );
     CameraSpherical ( const CameraSpherical& _cameraSpherical );
     CameraSpherical ( const Camera& _camera );
     ~CameraSpherical();

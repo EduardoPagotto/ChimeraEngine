@@ -10,7 +10,7 @@
 namespace Chimera {
 namespace Graph {
     
-Object::Object ( std::string _id, std::string _name ) : Node ( EntityKind::OBJECT, _id, _name ) {
+Object::Object ( std::string _name ) : Node ( EntityKind::OBJECT, _name ) {
 
     pPhysic = nullptr;
     pDraw = nullptr;
@@ -46,14 +46,14 @@ void Object::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 void Object::init() {
 
 	if (pMaterial == nullptr)
-		pMaterial = new Material("DefaultMat", "DefaultMat");
+		pMaterial = new Material( "DefaultMat");
 
 	pMaterial->init();
 
 	if (pPhysic == nullptr) {
 
 		//Cria corpo caso nao exista
-		pPhysic = new Physics("", "");
+		pPhysic = new Physics( "");
 		pPhysic->setMass(0.5f);
 		pPhysic->setFriction(0.0f);
 		pPhysic->setRestitution(0.0f);

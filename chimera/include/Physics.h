@@ -20,7 +20,7 @@ public:
 
     friend class Loader;
 
-    Physics ( std::string _id, std::string _name );
+    Physics ( std::string _name );
 
     Physics ( const Physics& _physics );
 

@@ -10,7 +10,7 @@ class CameraMan : public Camera
 {
 
 public:
-    CameraMan ( std::string _id, std::string _name );
+    CameraMan ( std::string _name );
     CameraMan ( const CameraMan& _cameraMan );
     CameraMan ( const Camera& _camera );
     virtual ~CameraMan();

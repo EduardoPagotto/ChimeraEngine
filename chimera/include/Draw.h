@@ -19,7 +19,7 @@ enum class DrawType
 class Draw : public Entity
 {
 public:
-    Draw ( DrawType _type, std::string _id, std::string _name );
+    Draw ( DrawType _type, std::string _name );
     Draw ( const Draw &_draw );
 
     virtual ~Draw();

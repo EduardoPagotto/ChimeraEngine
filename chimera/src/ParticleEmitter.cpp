@@ -7,7 +7,7 @@
 namespace Chimera {
 namespace Graph {
     
-ParticleEmitter::ParticleEmitter ( std::string _id, std::string _name ) : Node ( EntityKind::PARTICLE_EMITTER, _id, _name ) {
+ParticleEmitter::ParticleEmitter ( std::string _name ) : Node ( EntityKind::PARTICLE_EMITTER, _name ) {
 
     coresPart.push_back ( Color ( 1.0f, 0.5f, 0.5f ) );
     coresPart.push_back ( Color ( 1.0f, 0.75f, 0.5f ) );
@@ -129,7 +129,7 @@ void ParticleEmitter::setGL() {
 
 void ParticleEmitter::loadImage ( const char *_file ) {
 
-    pTexture = new Texture ( "testeZ1", "testeZ1", std::string ( _file ) );
+    pTexture = new Texture ( "testeZ1", std::string ( _file ) );
 
 }
 

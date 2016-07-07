@@ -12,7 +12,7 @@
 namespace Chimera {
 namespace Graph {
     
-DrawTriMesh::DrawTriMesh ( std::string _id, std::string _name ) : Draw ( DrawType::MESH, _id, _name ) {
+DrawTriMesh::DrawTriMesh ( std::string _name ) : Draw ( DrawType::MESH, _name ) {
 
 }
 

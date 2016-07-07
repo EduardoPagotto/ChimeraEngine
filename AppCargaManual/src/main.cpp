@@ -50,7 +50,7 @@ int testeCargaArquivo() {
         delete pLoader;
         pLoader = nullptr;
 
-        Chimera::Graph::ParticleEmitter* pParticleEmitter = new Chimera::Graph::ParticleEmitter ( "testeZ1", "testeZ1" );
+        Chimera::Graph::ParticleEmitter* pParticleEmitter = new Chimera::Graph::ParticleEmitter ( "testeZ1" );
         std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
         pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
         pRoot->addChild ( pParticleEmitter );

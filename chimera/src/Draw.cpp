@@ -3,7 +3,7 @@
 namespace Chimera {
 namespace Graph {
 
-Draw::Draw ( DrawType _type, std::string _id, std::string _name ) : Entity ( EntityKind::DRAW, _id, _name ), type ( _type ) {
+Draw::Draw ( DrawType _type, std::string _name ) : Entity ( EntityKind::DRAW, _name ), type ( _type ) {
     //pMaterial = nullptr;
 }
 

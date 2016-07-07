@@ -17,7 +17,7 @@ public:
 
     friend class Physics;
 
-    Object ( std::string _id, std::string _name );
+    Object ( std::string _name );
     Object ( const Object& _object );
 
     virtual ~Object();

@@ -3,7 +3,7 @@
 namespace Chimera {
 namespace Graph {
     
-CameraOvr::CameraOvr ( std::string _id, std::string _name ) : Camera ( CameraType::Ovr, _id, _name ) {
+CameraOvr::CameraOvr ( std::string _name ) : Camera ( CameraType::Ovr, _name ) {
 
     //along.setValue ( 1.0f, 0.0f, 0.0f );
     //up.setValue ( 0.0f, 1.0f, 0.0f );

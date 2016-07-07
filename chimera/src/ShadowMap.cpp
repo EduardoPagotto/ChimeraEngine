@@ -13,7 +13,7 @@ ShadowMap::ShadowMap() {
     memset ( g_mModelView, 0, sizeof ( float ) * 16 );
     g_LightView.setZero();
 
-    pTexture = new Graph::Texture ( "ShadowMap-01", "ShadowMap-01" ,"");
+    pTexture = new Graph::Texture ( "ShadowMap-01" ,"");
 }
 
 ShadowMap::~ShadowMap() {

@@ -24,7 +24,7 @@ namespace Graph {
 class ParticleEmitter : public Node
 {
 public:
-    ParticleEmitter ( std::string _id, std::string _name );
+    ParticleEmitter ( std::string _name );
     virtual ~ParticleEmitter();
     virtual void update ( DataMsg *_dataMsg );
     void initialize ( int _max );

@@ -21,7 +21,7 @@ public:
     //friend class Chimera::SceneMng;
     //friend class Chimera::Loader;
 
-    Node ( EntityKind _type, std::string _id, std::string _name );
+    Node ( EntityKind _type, std::string _name );
 
     Node ( const Node &_node );
 

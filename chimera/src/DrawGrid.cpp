@@ -10,7 +10,7 @@
 namespace Chimera {
 namespace Graph {
     
-DrawGrid::DrawGrid ( std::string _id, std::string _name ) : Draw ( DrawType::GRID, _id, _name )  {
+DrawGrid::DrawGrid ( std::string _name ) : Draw ( DrawType::GRID, _name )  {
 }
 
 DrawGrid::DrawGrid ( const DrawGrid &_draw ) : Draw ( _draw ) {

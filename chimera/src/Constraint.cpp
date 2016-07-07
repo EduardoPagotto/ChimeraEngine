@@ -3,7 +3,7 @@
 namespace Chimera {
 namespace Graph {
     
-Constraint::Constraint ( std::string _id, std::string _name ) : Node ( EntityKind::CONSTRAINT, _id, _name ) {
+Constraint::Constraint ( std::string _name ) : Node ( EntityKind::CONSTRAINT, _name ) {
 
 }
 

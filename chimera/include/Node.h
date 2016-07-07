@@ -1,6 +1,8 @@
 #ifndef NODE_H_
 #define NODE_H_
 
+#include <list>
+
 #include "Entity.h"
 #include "DataMsg.h"
 
@@ -33,17 +35,19 @@ public:
 
     Node *findChildByKind ( EntityKind type, int index );
 
-    static Node *findNodeById ( EntityKind type, std::string id );
-    static Node *findNodeById ( std::string id );
-    static Node *findNodeByName ( EntityKind type, std::string name );
-    static Node *findNodeByName ( std::string name );
+    //static Node *findNodeById ( EntityKind type, std::string id );
+    //static Node *findNodeById ( std::string id );
+    //static Node *findNodeByName ( EntityKind type, std::string name );
+    //static Node *findNodeByName ( std::string name );
 
-    //FIXME mudar para protected
-    std::list<Node*> listChild;
+	//FIXME mudar para protected
+	std::list<Node*> listChild;
 
 protected:
     Node *parent;
     
+
+
 private:
     static std::list<Node*> listNode;
 };

@@ -10,6 +10,7 @@
 #include "Effect.h"
 #include "Texture.h"
 #include "DrawTriMesh.h"
+#include "Object.h"
 
 namespace ChimeraLoader
 {
@@ -39,6 +40,7 @@ private:
     std::map<std::string, Chimera::Graph::Texture*> mapaTextura;
     std::map<std::string, Chimera::Graph::Material*> mapaMaterial;
     std::map<std::string, Chimera::Graph::Draw*> mapaGeometria;
+	std::map<std::string, Chimera::Graph::Object*> mapaObjeto;
     
     Chimera::PhysicsControl *pPhysicsControl;
 };

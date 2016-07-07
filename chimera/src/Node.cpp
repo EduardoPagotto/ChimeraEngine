@@ -70,52 +70,52 @@ Node *Node::findChildByKind ( EntityKind type, int index ) {
     return nullptr;
 }
 
-Node *Node::findNodeByName ( EntityKind type, std::string name ) {
+//Node *Node::findNodeByName ( EntityKind type, std::string name ) {
+//
+//    for ( Node *node : listNode ) {
+//        std::string l_name = node->getName();
+//        if ( ( node->getKind() == type ) && ( l_name.compare ( name ) == 0 ) ) {
+//            return node;
+//        }
+//    }
+//
+//    return nullptr;
+//}
 
-    for ( Node *node : listNode ) {
-        std::string l_name = node->getName();
-        if ( ( node->getKind() == type ) && ( l_name.compare ( name ) == 0 ) ) {
-            return node;
-        }
-    }
+//Node *Node::findNodeByName ( std::string name ) {
+//
+//    for ( Node *node : listNode ) {
+//        std::string l_name = node->getName();
+//        if ( l_name.compare ( name ) == 0 ) {
+//            return node;
+//        }
+//    }
+//
+//    return nullptr;
+//}
 
-    return nullptr;
-}
+//Node *Node::findNodeById ( EntityKind type, std::string id ) {
+//
+//    for ( Node *node : listNode ) {
+//        std::string l_id = node->getId();
+//        if ( ( node->getKind() == type ) && ( l_id.compare ( id ) == 0 ) ) {
+//            return node;
+//        }
+//    }
+//
+//    return nullptr;
+//}
 
-Node *Node::findNodeByName ( std::string name ) {
-
-    for ( Node *node : listNode ) {
-        std::string l_name = node->getName();
-        if ( l_name.compare ( name ) == 0 ) {
-            return node;
-        }
-    }
-
-    return nullptr;
-}
-
-Node *Node::findNodeById ( EntityKind type, std::string id ) {
-
-    for ( Node *node : listNode ) {
-        std::string l_id = node->getId();
-        if ( ( node->getKind() == type ) && ( l_id.compare ( id ) == 0 ) ) {
-            return node;
-        }
-    }
-
-    return nullptr;
-}
-
-Node *Node::findNodeById ( std::string id ) {
-
-    for ( Node *node : listNode ) {
-        std::string l_id = node->getId();
-        if ( l_id.compare ( id ) == 0 ) {
-            return node;
-        }
-    }
-    return nullptr;
-}
+//Node *Node::findNodeById ( std::string id ) {
+//
+//    for ( Node *node : listNode ) {
+//        std::string l_id = node->getId();
+//        if ( l_id.compare ( id ) == 0 ) {
+//            return node;
+//        }
+//    }
+//    return nullptr;
+//}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

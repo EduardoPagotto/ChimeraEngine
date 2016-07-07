@@ -63,31 +63,28 @@ void Camera::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 
 
 void Camera::exec ( void ) {
-    if ( getStatus() == true ) {
+ 
+    //         btScalar m_matrix[16];
+    //         btTransform l_transform;
+    //         btQuaternion l_qpitch;
+    //
+    //         l_transform.setIdentity();
+    //
+    //         l_qpitch.setEuler( -(direction.getZ() * SIMD_RADS_PER_DEG) ,
+    //                            -(direction.getX() * SIMD_RADS_PER_DEG) ,
+    //                            -(direction.getY() * SIMD_RADS_PER_DEG));
+    //
+    //         btVector3 l_tempz1(-position.getX() , -position.getZ(), position.getY() );
+    //         l_transform.setOrigin(l_tempz1);
+    //         l_transform.setRotation(l_qpitch);
+    //         l_transform.getOpenGLMatrix(m_matrix);
+    //
+    //         glMultMatrixf(m_matrix);
 
-        //         btScalar m_matrix[16];
-        //         btTransform l_transform;
-        //         btQuaternion l_qpitch;
-        //
-        //         l_transform.setIdentity();
-        //
-        //         l_qpitch.setEuler( -(direction.getZ() * SIMD_RADS_PER_DEG) ,
-        //                            -(direction.getX() * SIMD_RADS_PER_DEG) ,
-        //                            -(direction.getY() * SIMD_RADS_PER_DEG));
-        //
-        //         btVector3 l_tempz1(-position.getX() , -position.getZ(), position.getY() );
-        //         l_transform.setOrigin(l_tempz1);
-        //         l_transform.setRotation(l_qpitch);
-        //         l_transform.getOpenGLMatrix(m_matrix);
-        //
-        //         glMultMatrixf(m_matrix);
 
-
-        gluLookAt ( position.x(), position.y(), position.z(),
-                    direction.x(), direction.y(), direction.z(),
-                    rotation.x(), rotation.y(), rotation.z() );
-
-    }
+    gluLookAt ( position.x(), position.y(), position.z(),
+                direction.x(), direction.y(), direction.z(),
+                rotation.x(), rotation.y(), rotation.z() );
 }
 
 void Camera::init() {

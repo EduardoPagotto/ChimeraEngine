@@ -6,7 +6,6 @@
 #include "Camera.h"
 #include "CameraSpherical.h"
 #include "Light.h"
-#include "Object.h"
 #include "DrawTriMesh.h"
 #include "SkyBox.h"
 #include "Singleton.h"
@@ -215,7 +214,9 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 Chimera::Graph::Physics *pPhysic = new Chimera::Graph::Physics ( std::string ( l_name ), std::string ( l_sid ) );
                 pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
 
-                Chimera::Graph::DrawTriMesh *pDrawTriMesh = ( Chimera::Graph::DrawTriMesh* ) Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::DRAW, nomeMesh );
+                //Chimera::Graph::DrawTriMesh *pDrawTriMesh = ( Chimera::Graph::DrawTriMesh* ) Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::DRAW, nomeMesh );
+				Chimera::Graph::DrawTriMesh *pDrawTriMesh = (Chimera::Graph::DrawTriMesh*)mapaGeometria[nomeMesh];//(Chimera::Graph::DrawTriMesh*) Chimera::Graph::Node::findNodeById(Chimera::EntityKind::DRAW, nomeMesh);
+
 
                 if ( pDrawTriMesh != nullptr ) {
 
@@ -233,8 +234,10 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 }
 
                 //pega o node objeto
-                Chimera::Graph::Object *obj = (Chimera::Graph::Object*)Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
-                //obj->addChild ( pPhysic );
+                //Chimera::Graph::Object *obj = (Chimera::Graph::Object*)Chimera::Graph::Node::findNodeById ( Chimera::EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
+				Chimera::Graph::Object *obj = mapaObjeto[std::string((const char*)&l_target[1])]; //(Chimera::Graph::Object*)Chimera::Graph::Node::findNodeById(Chimera::EntityKind::OBJECT, std::string((const char*)&l_target[1]));
+
+				//obj->addChild ( pPhysic );
                 obj->pPhysic = pPhysic;
                 
                 l_nInstanceRigidBody = l_nInstanceRigidBody->NextSiblingElement ( "instance_rigid_body" );
@@ -506,6 +509,8 @@ void LoaderDae::carregaNode ( Chimera::Graph::Node *_pNodePai, tinyxml2::XMLElem
                 pObj->pDraw = pDraw;
                 pObj->pMaterial = pMaterial;
                 
+				mapaObjeto[_id] = pObj;
+
                 _pNodePai->addChild ( pObj ); 
                 pLastNodeDone = pObj;
                 

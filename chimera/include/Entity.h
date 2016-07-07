@@ -3,7 +3,6 @@
 
 #include <cstdint>
 #include <string>
-#include <list>
 
 namespace Chimera
 {
@@ -44,14 +43,14 @@ public:
      * @param _name nome 
      */
     Entity ( const EntityKind &_kind ,const std::string &_id, const std::string &_name )
-        : kind ( _kind ), id ( _id ), name ( _name ) ,serial ( ++serialMaster ), status ( true ) {}
+        : kind ( _kind ), id ( _id ), name ( _name ) ,serial ( ++serialMaster ) {}
 
     /**
      * Construtor de Copia
      * @param _entity entidade a ser copiada
      */
     Entity ( const Entity &_entity ) 
-        : kind ( _entity.kind ), id(_entity.id + "_cp"), name(_entity.name + "_cp"), serial ( ++serialMaster ), status ( _entity.status ) {}
+        : kind ( _entity.kind ), id(_entity.id + "_cp"), name(_entity.name + "_cp"), serial ( ++serialMaster ) {}
 
     /**
      * Destrutor 
@@ -68,14 +67,6 @@ public:
 
     inline EntityKind getKind() const {
         return kind;
-    }
-
-    void virtual setStatus ( bool _status ) {
-        status = _status;
-    }
-
-    bool virtual getStatus() const {
-        return status;
     }
 
     inline const std::string& getName() const {
@@ -102,7 +93,6 @@ public:
     static std::string getNameKindNode ( EntityKind _kind );
 
 private:
-    bool status;
     EntityKind kind;
     unsigned serial;
     static unsigned serialMaster;

@@ -8,9 +8,9 @@
 
 #ifdef WIN32
 #include "windows.h"
-#include <map>
 #endif
 
+#include <map>
 #include <GL/gl.h>
 
 namespace Chimera {

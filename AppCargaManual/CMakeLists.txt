@@ -7,7 +7,7 @@ find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)
-find_package(Log4Cxx REQUIRED)
+#find_package(Log4Cxx REQUIRED)
 
 include_directories(
 	${AppCargaManual_SOURCE_DIR}/include/
@@ -17,7 +17,8 @@ include_directories(
 	${BULLET_INCLUDE_DIR}
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
-	${LOG4CXX_INCLUDE_DIR})
+#	${LOG4CXX_INCLUDE_DIR}
+)
 
 if (OVR_SET_TO_USE)
   include_directories(/usr/local/ovr_sdk_linux_0.4.4/LibOVR)
@@ -35,7 +36,8 @@ set (SourcesChimeraAPPCargaManual
 	${BULLET_LIBRARIES}
 	${FREETYPE_LIBRARY}
 	${FTGL_LIBRARY}
-	${LOG4CXX_LIBRARIES}
+	#${LOG4CXX_LIBRARIES}
+	-lSDL2
 	-lSDL2_image
 	-lSDL2_ttf
 	-ltinyxml2
@@ -43,6 +45,7 @@ set (SourcesChimeraAPPCargaManual
 	-lGLEWmx
 	librt.so
 	libXrandr.so
+	-lpthread
 )
 
 if (OVR_SET_TO_USE)

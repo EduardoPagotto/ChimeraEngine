@@ -5,7 +5,7 @@ find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)
-find_package(Log4Cxx REQUIRED)
+#find_package(Log4Cxx REQUIRED)
 
 set(INCLUDE_DIRECTORIES ${Chimera}/include/)
 
@@ -17,7 +17,7 @@ include_directories(
 	${BULLET_INCLUDE_DIR}
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
-	${LOG4CXX_INCLUDE_DIR}
+	#${LOG4CXX_INCLUDE_DIR}
 )
 
 if (OVR_SET_TO_USE)

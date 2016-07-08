@@ -10,7 +10,7 @@
 namespace Chimera {
 namespace Graph {
     
-Camera::Camera ( CameraType _type, std::string _id, std::string _name ) : Node ( EntityKind::CAMERA, _id, _name ) {
+Camera::Camera ( CameraType _type, std::string _name ) : Node ( EntityKind::CAMERA, _name ) {
 
     type = _type;
     position.setZero();

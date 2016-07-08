@@ -10,7 +10,7 @@
 namespace Chimera {
 namespace Graph {
     
-CameraMan::CameraMan ( std::string _id, std::string _name ) : Camera ( CameraType::Spherical, _id, _name ) {
+CameraMan::CameraMan ( std::string _name ) : Camera ( CameraType::Spherical, _name ) {
 
     along.setValue ( 1.0f, 0.0f, 0.0f );
     up.setValue ( 0.0f, 1.0f, 0.0f );

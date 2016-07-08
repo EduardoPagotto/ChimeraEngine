@@ -10,7 +10,7 @@
 namespace Chimera {
 namespace Graph {
 
-DrawBox::DrawBox ( std::string _id, std::string _name ) : Draw ( DrawType::BOX, _id, _name ) {
+DrawBox::DrawBox ( std::string _name ) : Draw ( DrawType::BOX, _name ) {
 }
 
 DrawBox::DrawBox ( const DrawBox &_draw ) : Draw ( _draw ) {

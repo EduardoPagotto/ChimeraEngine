@@ -3,7 +3,7 @@
 namespace Chimera {
 namespace Graph {
     
-CameraSpherical::CameraSpherical ( std::string _id, std::string _name ) : Camera ( CameraType::Spherical, _id, _name ) {
+CameraSpherical::CameraSpherical ( std::string _name ) : Camera ( CameraType::Spherical, _name ) {
 
     horizontal = 0.0f;
     vertical = 0.0f;

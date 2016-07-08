@@ -22,7 +22,7 @@ enum class LightType
 class Light : public Node
 {
 public:
-    Light ( LightType _lightType, std::string _id, std::string _name );
+    Light ( LightType _lightType, std::string _name );
     Light ( const Light& _light );
     virtual ~Light();
     virtual void update ( DataMsg *_dataMsg );

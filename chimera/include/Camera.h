@@ -22,7 +22,7 @@ enum class CameraType
 class Camera : public Node
 {
 public:
-    Camera ( CameraType _type, std::string _id, std::string _name );
+    Camera ( CameraType _type, std::string _name );
     Camera ( const Camera& _camera );
 
     virtual ~Camera();

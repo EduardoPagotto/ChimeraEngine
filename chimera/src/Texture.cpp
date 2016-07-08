@@ -4,7 +4,7 @@
 namespace Chimera {
 namespace Graph {
     
-Texture::Texture ( std::string _id, std::string _name, std::string _pathFile ) : Entity ( EntityKind::TEXTURE, _id, _name ) {
+Texture::Texture ( std::string _name, std::string _pathFile ) : Entity ( EntityKind::TEXTURE, _name ) {
 
     texturaCarregada = false;
     

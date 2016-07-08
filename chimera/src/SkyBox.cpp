@@ -11,7 +11,7 @@
 namespace Chimera {
 namespace Graph {
    
-SkyBox::SkyBox ( std::string _id, std::string _name ) : Node ( EntityKind::SKYBOX, _id, _name ) {
+SkyBox::SkyBox ( std::string _name ) : Node ( EntityKind::SKYBOX, _name ) {
 
 }
 

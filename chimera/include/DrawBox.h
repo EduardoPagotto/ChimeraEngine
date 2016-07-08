@@ -9,7 +9,7 @@ namespace Graph {
 class DrawBox : public Draw
 {
 public:
-    DrawBox ( std::string _id, std::string _name );
+    DrawBox ( std::string _name );
     DrawBox ( const DrawBox &_draw );
     virtual ~DrawBox();
 

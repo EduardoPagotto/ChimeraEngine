@@ -5,7 +5,7 @@ namespace Graph {
     
 std::list<Node*> Node::listNode;
 
-Node::Node ( EntityKind _type, std::string _id, std::string _name ) : Entity ( _type, _id, _name ) {
+Node::Node ( EntityKind _type, std::string _name ) : Entity ( _type, _name ) {
 
     parent = nullptr;
     listNode.push_back ( this );

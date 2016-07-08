@@ -12,7 +12,7 @@
 namespace Chimera {
 namespace Graph {
     
-Physics::Physics ( std::string _id, std::string _name ) : Entity ( EntityKind::PHYSICS, _id, _name ) {
+Physics::Physics ( std::string _name ) : Entity ( EntityKind::PHYSICS, _name ) {
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;

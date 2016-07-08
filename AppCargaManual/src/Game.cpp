@@ -171,6 +171,6 @@ void Game::executeColisao ( const Chimera::Graph::KindOp &_kindOp, Chimera::Grap
         break;
     }
 
-    std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getId() + " ObjB:" + _pNodeB->getId();
+    std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getName() + " ObjB:" + _pNodeB->getName();
 
 }

@@ -15,7 +15,7 @@ public:
 
     friend class Loader;
 
-    Constraint ( std::string _id, std::string _name );
+    Constraint ( std::string _name );
     Constraint ( const Constraint& _constraint );
     virtual ~Constraint();
 

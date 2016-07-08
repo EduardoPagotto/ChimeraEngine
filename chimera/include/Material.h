@@ -14,7 +14,7 @@ public:
 
     friend class Loader;
 
-    Material ( std::string _id, std::string _name );
+    Material ( std::string _name );
     Material ( const Material &_cpy );
     virtual ~Material();
 

@@ -3,7 +3,7 @@
 namespace Chimera {
 namespace Graph {
     
-Material::Material ( std::string _id, std::string _name ) : Entity ( EntityKind::MATERIAL, _id, _name ) {
+Material::Material ( std::string _name ) : Entity ( EntityKind::MATERIAL, _name ) {
     pEffect = nullptr;
     pTexture = nullptr;
 }
@@ -25,7 +25,7 @@ void  Material::init() {
 		pTexture->init();
 
 	if (pEffect == nullptr) {
-		pEffect = new Effect("effect_interno", "effect_interno");
+		pEffect = new Effect( "effect_interno");
 		pEffect->createDefaultEffect();
 	}
 

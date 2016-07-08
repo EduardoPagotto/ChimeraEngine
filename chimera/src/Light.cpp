@@ -13,7 +13,7 @@
 namespace Chimera {
 namespace Graph {
     
-Light::Light ( LightType _lightType, std::string _id, std::string _name ) : Node ( EntityKind::LIGHT, _id, _name ) {
+Light::Light ( LightType _lightType, std::string _name ) : Node ( EntityKind::LIGHT, _name ) {
 
     number = 0;
     type = _lightType;

@@ -10,7 +10,7 @@ namespace Graph {
 class DrawGrid : public Draw
 {
 public:
-    DrawGrid ( std::string _id, std::string _name );
+    DrawGrid ( std::string _name );
     DrawGrid ( const DrawGrid &_draw );
     virtual ~DrawGrid();
 

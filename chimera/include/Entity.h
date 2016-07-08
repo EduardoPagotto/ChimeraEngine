@@ -42,15 +42,15 @@ public:
      * @param _id identificador 
      * @param _name nome 
      */
-    Entity ( const EntityKind &_kind ,const std::string &_id, const std::string &_name )
-        : kind ( _kind ), id ( _id ), name ( _name ) ,serial ( ++serialMaster ) {}
+    Entity ( const EntityKind &_kind ,/*const std::string &_id,*/ const std::string &_name )
+        : kind ( _kind ), /*id ( _id ),*/ name ( _name ) ,serial ( ++serialMaster ) {}
 
     /**
      * Construtor de Copia
      * @param _entity entidade a ser copiada
      */
     Entity ( const Entity &_entity ) 
-        : kind ( _entity.kind ), id(_entity.id + "_cp"), name(_entity.name + "_cp"), serial ( ++serialMaster ) {}
+        : kind ( _entity.kind ),/* id(_entity.id + "_cp"),*/ name(_entity.name + "_cp"), serial ( ++serialMaster ) {}
 
     /**
      * Destrutor 
@@ -77,13 +77,13 @@ public:
         this->name = name;
     }
 
-    inline const std::string& getId() const {
-        return id;
-    }
+    //inline const std::string& getId() const {
+    //    return id;
+    //}
 
-    inline void setId ( const std::string& name ) {
-        this->id = name;
-    }
+    //inline void setId ( const std::string& name ) {
+    //    this->id = name;
+    //}
 
     /**
      * Retorna uma string com o nome do tipo
@@ -97,7 +97,7 @@ private:
     unsigned serial;
     static unsigned serialMaster;
     std::string name;
-    std::string id;
+    //std::string id;
 };
 
 //unsigned Entity::serialMaster = 0;

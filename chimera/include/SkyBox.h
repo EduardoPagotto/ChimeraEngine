@@ -12,7 +12,7 @@ class SkyBox : public Node //FIXME mudar para Draw??
 {
 
 public:
-   SkyBox ( std::string _id, std::string _name );
+   SkyBox ( std::string _name );
    virtual ~SkyBox();
    
    virtual void update ( DataMsg *_dataMsg );

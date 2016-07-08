@@ -24,7 +24,7 @@ enum class TextureFilter
 class Texture : public Entity
 {
 public:
-    Texture ( std::string _id, std::string _name, std::string _pathFile );
+    Texture ( std::string _name, std::string _pathFile );
     Texture ( const Texture &_texture );
 
     virtual ~Texture();

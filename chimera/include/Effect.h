@@ -35,7 +35,7 @@ class Effect : public Entity
 {
 public:
 
-    Effect ( std::string _id, std::string _name );
+    Effect ( std::string _name );
 
     //Effect ( const Effect& _cpy );
 

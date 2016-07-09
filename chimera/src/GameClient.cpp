@@ -44,7 +44,7 @@ void GameClient::start() {
 
     deadzone = 0.02;
 
-    Graph::DataMsg dataMsg ( Graph::KindOp::START, this, nullptr, nullptr );
+    DataMsg dataMsg ( KindOp::START, this, nullptr, nullptr );
     pSceneMng->update ( &dataMsg );
 
     pHUD->setOn ( true );
@@ -67,16 +67,16 @@ void GameClient::endProcGame() {
 
 void GameClient::userEvent ( const SDL_Event &_event ) {
 
-    Graph::KindOp op = ( Graph::KindOp ) _event.user.code;
-    if ( ( op == Chimera::Graph::KindOp::START_COLLIDE ) ||
-            ( op == Chimera::Graph::KindOp::ON_COLLIDE ) ||
-            ( op == Chimera::Graph::KindOp::OFF_COLLIDE ) ) {
+    KindOp op = ( KindOp ) _event.user.code;
+    if ( ( op == Chimera::KindOp::START_COLLIDE ) ||
+            ( op == Chimera::KindOp::ON_COLLIDE ) ||
+            ( op == Chimera::KindOp::OFF_COLLIDE ) ) {
 
-        executeColisao ( op, ( Graph::Node* ) _event.user.data1, ( Graph::Node* ) _event.user.data2 );
+        executeColisao ( op, ( Node* ) _event.user.data1, ( Node* ) _event.user.data2 );
     }
 }
 
-void GameClient::sendMessage ( Graph::KindOp _kindOf, void *_paramA, void *_paramB ) {
+void GameClient::sendMessage ( KindOp _kindOf, void *_paramA, void *_paramB ) {
 
     SDL_Event event;
     SDL_zero ( event );

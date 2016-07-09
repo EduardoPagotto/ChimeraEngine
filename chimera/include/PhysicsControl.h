@@ -28,8 +28,8 @@ public:
     void stepSim ( void );
 
     void checkCollisions();
-    bool checkAllowCollision ( Graph::Node *pNode );
-    void sendMessageCollision ( Graph::KindOp _kindOf, Graph::Node *_nodeA, Graph::Node *_nodeB );
+    bool checkAllowCollision ( Node *pNode );
+    void sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *_nodeB );
 
     inline void setGravity ( const btVector3 &_vet ) {
         discretDynamicsWorld->setGravity ( _vet );
@@ -67,7 +67,7 @@ private:
 
     /// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
     //SDL_Event s_event;
-    std::map< btCollisionObject*, std::pair<Graph::Node*, Graph::Node*> > contactActives;
+    std::map< btCollisionObject*, std::pair<Node*, Node*> > contactActives;
 
     btClock clockCounter;
     btScalar period;

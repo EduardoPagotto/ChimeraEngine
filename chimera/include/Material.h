@@ -6,21 +6,17 @@
 #include "Effect.h"
 
 namespace Chimera {
-namespace Graph {
     
 class Material : public Entity
 {
 public:
 
     friend class Loader;
+	friend class LoaderDae;
 
     Material ( std::string _name );
     Material ( const Material &_cpy );
     virtual ~Material();
-
-    //virtual void update ( DataMsg *dataMsg );
-
-    virtual void clone ( Entity **ppNode );
 
     Texture *getTexture() const {
         return pTexture;
@@ -30,18 +26,26 @@ public:
         return pEffect;
     }
 
-	void init();
+	virtual void init();
 
     void begin ( bool _texture );
     void end();
 
-    //FIXME manter privado
-    Effect *pEffect;
-    Texture *pTexture;
+	void setEffect(Effect *_pEffect) {
+		pEffect = _pEffect;
+	}
+
+	void setTexture(Texture* _pTexture) {
+		pTexture = _pTexture;
+	}
+
 private:
+
+	Effect *pEffect;
+	Texture *pTexture;
+
     bool hasTextureAtive;
 };
-}
 }
 
 #endif

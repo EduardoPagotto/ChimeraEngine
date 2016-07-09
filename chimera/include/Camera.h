@@ -8,7 +8,6 @@
 #include "Node.h"
 
 namespace Chimera {
-namespace Graph {
 
 enum class CameraType
 {
@@ -22,15 +21,15 @@ enum class CameraType
 class Camera : public Node
 {
 public:
-    Camera ( CameraType _type, std::string _name );
-    Camera ( const Camera& _camera );
+    Camera (Node* _pNode, CameraType _type, std::string _name );
 
     virtual ~Camera();
-    virtual void update ( DataMsg *_dataMsg );
-    virtual void init();
-    virtual void clone ( Node **ppNode );
 
-    void exec();
+    virtual void init();
+
+	virtual void update(DataMsg *_dataMsg);
+
+    virtual void render();
 
     void setType ( CameraType _type ) {
         type = _type;
@@ -93,7 +92,5 @@ private:
     bool perspective;
 };
 }
-}
-
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

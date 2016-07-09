@@ -8,7 +8,6 @@
 #endif
 
 namespace Chimera {
-namespace Device {
     
 /**
  * Class Timer
@@ -53,7 +52,6 @@ private:
     Uint32 countStep;
     Uint32 elapsedCount;
 };
-}
 } /* namespace Chimera */
 #endif /* TIMER_H_ */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

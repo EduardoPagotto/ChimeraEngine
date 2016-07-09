@@ -9,7 +9,6 @@
 #include "Draw.h"
 
 namespace Chimera {
-namespace Graph {
     
 template <class T>
 class ListPtr
@@ -84,13 +83,12 @@ class DrawTriMesh : public Draw
 public:
     friend class Loader;
 
-    DrawTriMesh ( std::string _name );
-    DrawTriMesh ( const DrawTriMesh &_cpy );
+    DrawTriMesh (Node *_parent, std::string _name );
     virtual ~DrawTriMesh();
 
     //virtual void update ( DataMsg *dataMsg );
 
-    virtual void clone ( Draw **ppNode );
+	virtual void init() {}
 
     virtual void renderExecute ( bool _texture );
     virtual btVector3 getSizeBox();
@@ -111,7 +109,6 @@ private:
     ListPtr<int> tIndex;
 
 };
-}
 }
 
 #endif

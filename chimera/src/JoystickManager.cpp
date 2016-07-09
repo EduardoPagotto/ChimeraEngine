@@ -1,7 +1,6 @@
 #include "JoystickManager.h"
 
 namespace Chimera {
-namespace Device {
     
 JoystickManager::JoystickManager ( void ) {
     Initialized = false;
@@ -158,6 +157,5 @@ void JoystickManager::DebugDadosJoystick() {
         }
     }
 
-}
 }
 }

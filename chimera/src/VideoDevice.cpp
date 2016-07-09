@@ -2,8 +2,7 @@
 #include "ExceptionSDL.h"
 
 namespace Chimera {
-namespace Device {
-    
+
 VideoDevice::VideoDevice ( std::string _nome ) : Video ( _nome, KIND_DEVICE::SCREEN ) {
 
     fullscreenStatus = false;
@@ -79,6 +78,5 @@ void VideoDevice::toggleFullScreen() {
     }
 
     fullscreenStatus = !fullscreenStatus;
-}
 }
 }

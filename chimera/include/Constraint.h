@@ -3,37 +3,27 @@
 
 #include <LinearMath/btTransform.h>
 
-#include "Node.h"
+#include "Entity.h"
 #include "Physics.h"
 
 namespace Chimera {
-namespace Graph {
     
-class Constraint : public Node
+class Constraint : public Entity
 {
 public:
 
-    friend class Loader;
-
     Constraint ( std::string _name );
-    Constraint ( const Constraint& _constraint );
     virtual ~Constraint();
-
-    virtual void clone ( Node **ppNode );
-
-    virtual void update ( DataMsg *dataMsg );
-
-    //FIXME Tornar privado novamente
-    
-    Physics *pPhysicsA;
-    Physics *pPhysicsB;
-    
-    btTransform transformA;
-    btTransform transformB;
 private:
+	//FIXME Tornar privado novamente
+
+	Physics *pPhysicsA;
+	Physics *pPhysicsB;
+
+	btTransform transformA;
+	btTransform transformB;
 
 };
-}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

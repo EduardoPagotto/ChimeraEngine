@@ -5,9 +5,8 @@
 #include <algorithm>
 
 namespace Chimera {
-namespace Graph {
     
-ParticleEmitter::ParticleEmitter ( std::string _name ) : Node ( EntityKind::PARTICLE_EMITTER, _name ) {
+ParticleEmitter::ParticleEmitter (Node* _parent, std::string _name ) : Node (_parent, EntityKind::PARTICLE_EMITTER, _name ) {
 
     coresPart.push_back ( Color ( 1.0f, 0.5f, 0.5f ) );
     coresPart.push_back ( Color ( 1.0f, 0.75f, 0.5f ) );
@@ -75,7 +74,7 @@ void ParticleEmitter::update ( DataMsg *_dataMsg ) {
         glTranslatef ( -l_vec.x(), -l_vec.y(), -l_vec.z() );
 
         // armazena a camera para uso no ordenador //TODO: Otimizar criando lista de cameras no Object e indicando qual esta ativa neste momento
-        Graph::Camera *pCam = ( Graph::Camera* ) pSource->findChildByKind ( EntityKind::CAMERA, 0 );
+		Camera *pCam = (Camera*)Node::findNodeByKind(EntityKind::CAMERA, 0);//FIXME!!!!!! //pSource->findChildByKind ( EntityKind::CAMERA, 0 );
         if ( pCam !=  nullptr ) {
             SortParticles ( pCam->getPosition() );
         }
@@ -259,5 +258,4 @@ void ParticleEmitter::SortParticles ( const btVector3 &posCamera ) {
 //
 //		}
 //	}
-}
 }

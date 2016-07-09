@@ -3,10 +3,9 @@
 
 #include <LinearMath/btVector3.h>
 
-#include "Entity.h"
+#include "Node.h"
 
 namespace Chimera {
-namespace Graph {
 
 enum class DrawType
 {
@@ -16,19 +15,13 @@ enum class DrawType
     MESH
 };
 
-class Draw : public Entity
+class Draw : public Node
 {
 public:
-    Draw ( DrawType _type, std::string _name );
+    Draw (Node *_parent, DrawType _type, std::string _name );
     Draw ( const Draw &_draw );
 
     virtual ~Draw();
-
-    //virtual void update ( DataMsg *dataMsg );
-
-    virtual void clone ( Entity **ppNode ) {
-         //*ppNode = new Draw ( *this );//FIXME verificar clonagem
-    }
 
     virtual void renderExecute ( bool _texture ) = 0;
 
@@ -41,7 +34,6 @@ public:
 protected:
     DrawType type;
 };
-}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

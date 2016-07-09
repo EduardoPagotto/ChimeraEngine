@@ -2,7 +2,6 @@
 #define DATA_MSG_H_
 
 namespace Chimera {
-namespace Graph {
     
 /**
  * Enum KindOp
@@ -117,7 +116,6 @@ private:
     bool done;
     bool debugTrack;
 };
-}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

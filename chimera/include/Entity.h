@@ -77,13 +77,7 @@ public:
         this->name = name;
     }
 
-    //inline const std::string& getId() const {
-    //    return id;
-    //}
-
-    //inline void setId ( const std::string& name ) {
-    //    this->id = name;
-    //}
+	virtual void init() = 0;
 
     /**
      * Retorna uma string com o nome do tipo

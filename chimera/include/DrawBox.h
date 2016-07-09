@@ -4,12 +4,11 @@
 #include "Draw.h"
 
 namespace Chimera {
-namespace Graph {
 
 class DrawBox : public Draw
 {
 public:
-    DrawBox ( std::string _name );
+    DrawBox (Node *_parent, std::string _name );
     DrawBox ( const DrawBox &_draw );
     virtual ~DrawBox();
 
@@ -17,11 +16,7 @@ public:
         sizeBox = _sizeBox;
     }
 
-   // virtual void update ( DataMsg *dataMsg );
-
-    virtual void clone ( Draw **ppNode );
-
-    void init();
+    virtual void init();
 
     virtual void renderExecute ( bool _texture );
     virtual btVector3 getSizeBox ( void );
@@ -30,7 +25,6 @@ private:
     btVector3 sizeBox;
 
 };
-}
 }
 
 #endif

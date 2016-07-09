@@ -8,9 +8,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-namespace Graph {
     
-DrawGrid::DrawGrid ( std::string _name ) : Draw ( DrawType::GRID, _name )  {
+DrawGrid::DrawGrid (Node *_parent, std::string _name ) : Draw (_parent, DrawType::GRID, _name )  {
 }
 
 DrawGrid::DrawGrid ( const DrawGrid &_draw ) : Draw ( _draw ) {
@@ -62,11 +61,6 @@ void DrawGrid::renderExecute ( bool _texture ) {
 // void DrawGrid::update ( DataMsg *dataMsg ) {
 //     Node::update ( dataMsg );
 // }
-
-void DrawGrid::clone ( Draw **ppNode ) {
-    *ppNode = new DrawGrid ( *this );
-    //Node::clone ( ppNode ); //FIXME desce ate o pai?
-}
 
 // void DrawBoxGrid2::renderizar() {
 //  #define MAX_LINE 1000
@@ -131,6 +125,5 @@ void DrawGrid::clone ( Draw **ppNode ) {
 //  glMultMatrixf (matrix);
 //}
 
-}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

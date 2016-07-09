@@ -1,4 +1,3 @@
-
 #ifdef WIN32
 #include "windows.h"
 #endif
@@ -8,9 +7,8 @@
 #include "Object.h"
 
 namespace Chimera {
-namespace Graph {
     
-Object::Object ( std::string _name ) : Node ( EntityKind::OBJECT, _name ) {
+Object::Object (Node* _parent, std::string _name ) : Node (_parent, EntityKind::OBJECT, _name ) {
 
     pPhysic = nullptr;
     pDraw = nullptr;
@@ -67,12 +65,7 @@ void Object::init() {
 		pPhysic->setShapeBox(pDraw->getSizeBox());
 	}
 
-	pPhysic->init(transform, this);
-}
-
-void Object::clone ( Node **ppNode ) {
-    *ppNode = new Object ( *this );
-    Node::clone ( ppNode );
+	pPhysic->initTransform(transform, this);
 }
 
 void Object::execute ( bool _texture, Object *pObj ) {
@@ -136,7 +129,6 @@ void Object::applyForce ( const btVector3 &_vet ) {
     if ( pPhysic ) {
         pPhysic->propulcao ( _vet );
     }
-}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

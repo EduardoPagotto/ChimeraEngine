@@ -10,7 +10,6 @@
 #include "Node.h"
 
 namespace Chimera {
-namespace Graph {
     
 enum class LightType
 {
@@ -22,12 +21,14 @@ enum class LightType
 class Light : public Node
 {
 public:
-    Light ( LightType _lightType, std::string _name );
-    Light ( const Light& _light );
+    Light (Node* _parent, LightType _lightType, std::string _name );
     virtual ~Light();
-    virtual void update ( DataMsg *_dataMsg );
-    virtual void clone ( Node **ppNode );
-    virtual void exec();
+
+	virtual void init();
+
+	virtual void update(DataMsg *_dataMsg);
+
+    virtual void apply();
 
     Color getAmbient() {
         return ambient;
@@ -78,7 +79,6 @@ private:
     int number;
     LightType type;
 };
-}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

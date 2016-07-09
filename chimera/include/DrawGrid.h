@@ -5,12 +5,11 @@
 #include "Draw.h"
 
 namespace Chimera {
-namespace Graph {
     
 class DrawGrid : public Draw
 {
 public:
-    DrawGrid ( std::string _name );
+    DrawGrid (Node *_parent, std::string _name );
     DrawGrid ( const DrawGrid &_draw );
     virtual ~DrawGrid();
 
@@ -36,7 +35,7 @@ public:
 
     //virtual void update ( DataMsg *dataMsg );
 
-    virtual void clone ( Draw **ppNode );
+    //virtual void clone ( Draw **ppNode );
 
     virtual void renderExecute ( bool _texture );
     virtual btVector3 getSizeBox ( void );
@@ -52,7 +51,5 @@ private:
 
 };
 }
-}
-
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

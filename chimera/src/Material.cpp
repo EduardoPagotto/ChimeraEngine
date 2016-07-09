@@ -1,7 +1,6 @@
 #include "Material.h"
 
 namespace Chimera {
-namespace Graph {
     
 Material::Material ( std::string _name ) : Entity ( EntityKind::MATERIAL, _name ) {
     pEffect = nullptr;
@@ -12,11 +11,6 @@ Material::Material ( const Material &_cpy ) : Entity ( _cpy ) {
 }
 
 Material::~Material() {
-}
-
-void Material::clone ( Entity **ppNode ) {
-    *ppNode = new Material ( *this );
-    //Node::clone ( ppNode ); //FIXME necessario descer ao pai?
 }
 
 void  Material::init() {
@@ -47,7 +41,6 @@ void Material::begin ( bool _texture ) {
 
 	pEffect->apply();
        
-}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

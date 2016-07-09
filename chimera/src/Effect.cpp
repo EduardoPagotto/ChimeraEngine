@@ -5,7 +5,6 @@
 #include "ChimeraUtils.h"
 
 namespace Chimera {
-namespace Graph {
 
 Effect::Effect ( std::string _name ) : Entity ( EntityKind::EFFECT, _name ) {
 
@@ -144,58 +143,57 @@ bool Effect::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElemen
     return false;
 }
 
-void Effect::loadCollada ( tinyxml2::XMLElement* _nNode ) {
+void Effect::loadCollada(tinyxml2::XMLElement* _nNode) {
 
-    tinyxml2::XMLElement* l_nProfile = _nNode->FirstChildElement ( "profile_COMMON" );
-    if ( l_nProfile != nullptr ) {
-        tinyxml2::XMLElement* l_nParam = l_nProfile->FirstChildElement ( "newparam" );
-        if ( l_nParam != nullptr ) {
-            const char* l_val = l_nParam->FirstChildElement ( "surface" )->FirstChildElement ( "init_from" )->GetText();
-            if ( l_val != nullptr ) {
-                setNameTextureId ( l_val );
-            }
-        }
+	tinyxml2::XMLElement* l_nProfile = _nNode->FirstChildElement("profile_COMMON");
+	if (l_nProfile != nullptr) {
+		tinyxml2::XMLElement* l_nParam = l_nProfile->FirstChildElement("newparam");
+		if (l_nParam != nullptr) {
+			const char* l_val = l_nParam->FirstChildElement("surface")->FirstChildElement("init_from")->GetText();
+			if (l_val != nullptr) {
+				setNameTextureId(l_val);
+			}
+		}
 
-        Color cor;
-        if ( getPhong ( "emission", cor, l_nProfile ) == true ) {
-            setEmission ( cor );
-        }
+		Color cor;
+		if (getPhong("emission", cor, l_nProfile) == true) {
+			setEmission(cor);
+		}
 
-        if ( getPhong ( "ambient", cor, l_nProfile ) == true ) {
-            setAmbient ( cor );
-        }
+		if (getPhong("ambient", cor, l_nProfile) == true) {
+			setAmbient(cor);
+		}
 
-        if ( getPhong ( "diffuse", cor, l_nProfile ) == true ) {
-            setDiffuse ( cor );
-        }
+		if (getPhong("diffuse", cor, l_nProfile) == true) {
+			setDiffuse(cor);
+		}
 
-        if ( getPhong ( "specular", cor, l_nProfile ) == true ) {
-            setSpecular ( cor );
-        }
+		if (getPhong("specular", cor, l_nProfile) == true) {
+			setSpecular(cor);
+		}
 
 
-        tinyxml2::XMLElement* l_nNode = l_nProfile->FirstChildElement ( "technique" );
-        if ( l_nNode->Attribute ( "sid" ) != nullptr ) {
+		tinyxml2::XMLElement* l_nNode = l_nProfile->FirstChildElement("technique");
+		if (l_nNode->Attribute("sid") != nullptr) {
 
-            tinyxml2::XMLElement* l_nPhong = l_nNode->FirstChildElement ( "phong" );
-            if ( l_nPhong != nullptr ) {
+			tinyxml2::XMLElement* l_nPhong = l_nNode->FirstChildElement("phong");
+			if (l_nPhong != nullptr) {
 
-                tinyxml2::XMLElement* l_nShinnes = l_nPhong->FirstChildElement ( "shininess" );
-                if ( l_nShinnes != nullptr ) {
+				tinyxml2::XMLElement* l_nShinnes = l_nPhong->FirstChildElement("shininess");
+				if (l_nShinnes != nullptr) {
 
-                    const char *l_val = l_nShinnes->FirstChildElement ( "float" )->GetText();
-                    if ( l_val != nullptr ) {
+					const char *l_val = l_nShinnes->FirstChildElement("float")->GetText();
+					if (l_val != nullptr) {
 
-                        setShine ( atof ( l_val ) );
+						setShine(atof(l_val));
 
-                    }
+					}
 
-                }
-            }
-        }
+				}
+			}
+		}
 
-    }
-}
+	}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

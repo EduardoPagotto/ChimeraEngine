@@ -6,13 +6,12 @@
 #include "Material.h"
 
 namespace Chimera {
-namespace Graph {
    
 class SkyBox : public Node //FIXME mudar para Draw??
 {
 
 public:
-   SkyBox ( std::string _name );
+   SkyBox (Node *_parent, std::string _name );
    virtual ~SkyBox();
    
    virtual void update ( DataMsg *_dataMsg );
@@ -26,7 +25,6 @@ private:
    
    
 };
-}
 }
 
 # endif

@@ -33,16 +33,16 @@ int testeCargaArquivo() {
 
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Chimera::Device::Video *video = new Chimera::Device::VideoDevice ( 640, 480, "teste" );
+        Chimera::Video *video = new Chimera::VideoDevice ( 640, 480, "teste" );
 
         //Carga de dados
-        ChimeraLoader::LoaderDae *pLoader = new ChimeraLoader::LoaderDae ( dirDados, dirDados );
+		Chimera::LoaderDae *pLoader = new Chimera::LoaderDae ( dirDados, dirDados );
 
         //Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");//cuboEesfera.dae
         //Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("CuboEsferaMaterial.dae");
-        Chimera::Graph::Node *pRoot = pLoader->loadFile ( "piso2.xml" ); // piso2Teste.xml
+        Chimera::Node *pRoot = pLoader->loadFile ( "piso2.xml" ); // piso2Teste.xml
         //Chimera::Node *pRoot = pLoader->loadFile("piso2Teste.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("espacoTesteZ1.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
@@ -50,7 +50,7 @@ int testeCargaArquivo() {
         delete pLoader;
         pLoader = nullptr;
 
-        Chimera::Graph::ParticleEmitter* pParticleEmitter = new Chimera::Graph::ParticleEmitter ( "testeZ1" );
+        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter (nullptr, "testeZ1" );
         std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
         pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
         pRoot->addChild ( pParticleEmitter );

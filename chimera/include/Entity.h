@@ -26,7 +26,8 @@ enum class EntityKind : int8_t
     DRAW,
     CONSTRAINT,
     SKYBOX,
-	SCENEROOT
+	SCENEROOT,
+    GROUP
 };
 
 /**

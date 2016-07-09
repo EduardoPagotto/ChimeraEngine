@@ -6,8 +6,6 @@
 
 #include "PhysicsControl.h"
 #include "Material.h"
-//#include "Effect.h"
-//#include "Texture.h"
 #include "DrawTriMesh.h"
 #include "Object.h"
 #include "SceneRoot.h"

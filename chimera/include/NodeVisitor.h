@@ -8,6 +8,7 @@
 #include "ParticleEmitter.h"
 #include "SkyBox.h"
 #include "SceneRoot.h"
+#include "Group.h"
 
 namespace Chimera {
 
@@ -24,6 +25,7 @@ public:
 	virtual void visit(ParticleEmitter *_pParticleEmitter) = 0;
 	virtual void visit(SkyBox *_pSkyBox) = 0;
 	virtual void visit(SceneRoot *_pSceneRoot) = 0;
+    virtual void visit(Group* _pGroup) = 0;
 
 };
 }

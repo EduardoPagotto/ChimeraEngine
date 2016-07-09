@@ -40,6 +40,9 @@ std::string Entity::getNameKindNode ( EntityKind _kind ) {
 	case EntityKind::SCENEROOT:
 		return std::string("SCENEROOT");
 		break;
+    case EntityKind::GROUP:
+        return std::string("GROUP");
+        break;
     }
 
     return std::string ( "Desconhecido" );

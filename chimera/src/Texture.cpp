@@ -2,7 +2,6 @@
 #include "Video.h"
 
 namespace Chimera {
-namespace Graph {
     
 Texture::Texture ( std::string _name, std::string _pathFile ) : Entity ( EntityKind::TEXTURE, _name ) {
 
@@ -282,7 +281,6 @@ void Texture::endTexCreated() {
     glActiveTextureARB ( GL_TEXTURE0_ARB );
     glDisable ( GL_TEXTURE_2D );
 
-}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

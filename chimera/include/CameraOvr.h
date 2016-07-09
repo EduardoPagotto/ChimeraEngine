@@ -4,16 +4,17 @@
 #include "Camera.h"
 
 namespace Chimera{
-namespace Graph {
     
 class CameraOvr : public Camera
 {
 public:
-    CameraOvr ( std::string _name );
-    CameraOvr ( const CameraOvr& _cameraOvr );
+    CameraOvr (std::string _name );
     CameraOvr ( const Camera& _camera );
+
+	virtual void init();
+	virtual void render();
+
     virtual ~CameraOvr();
 };
-}
 }
 #endif

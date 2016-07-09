@@ -10,7 +10,6 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-namespace Graph {
     
 Physics::Physics ( std::string _name ) : Entity ( EntityKind::PHYSICS, _name ) {
 
@@ -66,7 +65,11 @@ Physics::~Physics() {
 //     Node::update ( _dataMsg );
 // }
 
-void Physics::init ( btTransform &_tTrans, void *pObj ) {
+void Physics::init() {
+
+}
+
+void Physics::initTransform( btTransform &_tTrans, void *pObj ) {
 
     pMotionState = new btDefaultMotionState ( _tTrans );
 
@@ -320,7 +323,6 @@ void Physics::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::X
 
         }
     }
-}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

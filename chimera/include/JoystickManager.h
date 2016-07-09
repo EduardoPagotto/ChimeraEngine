@@ -13,7 +13,6 @@
 #include "JoystickState.h"
 
 namespace Chimera {
-namespace Device {
     
 /**
  * Enumerador dos codigos dos Axis do Joystico do XBOX360
@@ -105,7 +104,6 @@ private:
     std::map<Uint8, JoystickState> Joysticks;
     bool Initialized;   
 };
-}
 }
 # endif
 

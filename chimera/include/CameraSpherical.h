@@ -4,19 +4,19 @@
 #include "Camera.h"
 
 namespace Chimera {
-namespace Graph {
 
 class CameraSpherical : public Camera
 {
 
 public:
-    CameraSpherical ( std::string _name );
-    CameraSpherical ( const CameraSpherical& _cameraSpherical );
+    CameraSpherical (std::string _name );
     CameraSpherical ( const Camera& _camera );
     ~CameraSpherical();
 
-    virtual void update ( DataMsg *_dataMsg );
-    virtual void clone ( Node **ppNode );
+	virtual void init();
+
+	virtual void render();
+
     void trackBall ( int _mx, int _my, int _mz );
 
     void setDistanciaMaxima ( btScalar _distanciaMaxima ) {
@@ -37,6 +37,5 @@ private:
     btScalar distanciaMax;
     btScalar distanciaMin;
 };
-}
 }
 #endif

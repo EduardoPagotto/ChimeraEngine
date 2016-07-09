@@ -12,7 +12,6 @@
 #include <tinyxml2.h>
 
 namespace Chimera {
-namespace Graph {
     
 class Physics : public Entity
 {
@@ -64,7 +63,8 @@ public:
 
     btVector3 getRotation();
 
-    void init ( btTransform &_tTrans, void *pObj );
+    void initTransform ( btTransform &_tTrans, void *pObj );
+	virtual void init();
 
     //virtual void update ( DataMsg *_dataMsg );
 
@@ -113,7 +113,6 @@ private:
 
     //btTriangleIndexVertexArray *m_pIndexVertexArrays;
 };
-}
 }
 #endif //Physics_H
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

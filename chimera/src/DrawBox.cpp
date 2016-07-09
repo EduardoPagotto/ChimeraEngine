@@ -8,9 +8,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-namespace Graph {
 
-DrawBox::DrawBox ( std::string _name ) : Draw ( DrawType::BOX, _name ) {
+DrawBox::DrawBox (Node *_parent, std::string _name ) : Draw (_parent, DrawType::BOX, _name ) {
 }
 
 DrawBox::DrawBox ( const DrawBox &_draw ) : Draw ( _draw ) {
@@ -74,13 +73,7 @@ void DrawBox::renderExecute ( bool _texture ) {
 
 }
 
-void DrawBox::clone ( Draw **ppNode ) {
-    *ppNode = new DrawBox ( *this );
-    //Node::clone ( ppNode ); //FIXME necessario descer ate o pai?
-}
-
 // void DrawBox::update ( DataMsg *dataMsg ) {
 //     Node::update ( dataMsg );
 // }
-}
 }

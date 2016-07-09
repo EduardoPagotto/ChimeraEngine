@@ -14,7 +14,6 @@
 #include <GL/gl.h>
 
 namespace Chimera {
-namespace Graph {
     
 enum class FaceMaterial{
     FRONT=GL_FRONT,
@@ -79,7 +78,7 @@ public:
 		this->faceMaterial = _val;
 	}
 
-	void init();
+	virtual void init();
 
 	void apply();
 
@@ -113,7 +112,6 @@ private:
 	std::map<ModeMaterial, bool> map_modes;
 	std::map<ModeMaterial, void*> map_params;
 };
-}
 }
 
 #endif

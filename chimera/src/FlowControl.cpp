@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-FlowControl::FlowControl ( Device::Video *_pVideo, IGameClientEvents *_pGameClientEvents ) : pVideo ( _pVideo ), pGameClientEvents ( _pGameClientEvents ) {
+FlowControl::FlowControl ( Video *_pVideo, IGameClientEvents *_pGameClientEvents ) : pVideo ( _pVideo ), pGameClientEvents ( _pGameClientEvents ) {
     timerFPS.setElapsedCount ( 1000 );
     timerFPS.start();
 }
@@ -82,7 +82,7 @@ void FlowControl::gameLoop ( void ) {
             switch ( l_eventSDL.type ) {
             case SDL_USEREVENT:
 
-                if ( ( Graph::KindOp ) l_eventSDL.user.code == Graph::KindOp::VIDEO_TOGGLE_FULL_SCREEN ) {
+                if ( ( KindOp ) l_eventSDL.user.code == KindOp::VIDEO_TOGGLE_FULL_SCREEN ) {
                     pVideo->toggleFullScreen();
                 } else {
                     pGameClientEvents->userEvent ( l_eventSDL );

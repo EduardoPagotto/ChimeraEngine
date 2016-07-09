@@ -18,11 +18,11 @@ public:
     void RenderSceneA ( void *pObjeto );
     void ApplyShadowMap ( void *pObjeto );
     void StoreLightMatrices ( const btVector3 &posicao );
-    void init ( Graph::Node *_pScene );
+    void init ( Node *_pScene );
 
 private:
 
-    Graph::Node *pScene;
+    Node *pScene;
 
     // These arrays will store our 4x4 matrices for the light's
     // project and modelview matrix.  These will then be loaded
@@ -33,7 +33,7 @@ private:
     // We set the light's view position at the origin
     btVector3 g_LightView;
 
-    Graph::Texture *pTexture;
+    Texture *pTexture;
 };
 
 }

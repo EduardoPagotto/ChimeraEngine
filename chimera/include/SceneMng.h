@@ -25,29 +25,29 @@ namespace Chimera
 class SceneMng
 {
 public:
-    SceneMng ( Graph::Node *_pRoot, Device::Video *_pVideo );
+    SceneMng ( Node *_pRoot, Video *_pVideo );
     virtual ~SceneMng();
 
-    void addChildToScene ( Graph::Node *_pNode );
+    void addChildToScene ( Node *_pNode );
 
-    Graph::Node *getNode ( EntityKind _type, const std::string &_nome );
-    Graph::Node *getNode ( EntityKind _type, unsigned index );
+    Node *getNode ( EntityKind _type, const std::string &_nome );
+    Node *getNode ( EntityKind _type, unsigned index );
 
-    void update ( Graph::DataMsg *dataMsg );
+    void update ( DataMsg *dataMsg );
 
-    Graph::Node* getRoot() const {
+    Node* getRoot() const {
         return pRoot;
     }
 
-    inline void cameraAtiva ( Graph::Camera *_pCam ) {
+    inline void cameraAtiva ( Camera *_pCam ) {
         pCameraAtiva = _pCam;
     }
 
-    inline void objetoAtivo ( Graph::Object *_pObject ) {
+    inline void objetoAtivo ( Object *_pObject ) {
         pObjeto = _pObject;
     }
 
-    inline void skyBoxAtivo ( Graph::SkyBox *_pSkyBox ) {
+    inline void skyBoxAtivo ( SkyBox *_pSkyBox ) {
        pSkyBox = _pSkyBox;
     }
 
@@ -60,26 +60,26 @@ private:
     void hudUpdate ( HUD *_pHud,int eye );
     void execLight();
 
-    void parseEntity ( Graph::Node *_pNode );
-    void addEntityToScene ( Graph::Node *_pNode );
+    void parseEntity ( Node *_pNode );
+    void addEntityToScene ( Node *_pNode );
 
     bool hasLight;
     bool hasMaterial;
 
-    Graph::Node *pRoot;
-    Graph::Camera *pCameraAtiva;
-    Graph::Object *pObjeto;
-    Graph::SkyBox *pSkyBox;
+    Node *pRoot;
+    Camera *pCameraAtiva;
+    Object *pObjeto;
+    SkyBox *pSkyBox;
 
-    std::vector<Graph::Camera*> m_vCamera;
-    std::vector<Graph::Light*> m_vLight;
-    std::vector<Graph::Object*> m_vObject;
-    std::vector<Graph::ParticleEmitter*> m_vParticle;
-    std::vector<Graph::SkyBox*> m_vSkyBox;
+    std::vector<Camera*> m_vCamera;
+    std::vector<Light*> m_vLight;
+    std::vector<Object*> m_vObject;
+    std::vector<ParticleEmitter*> m_vParticle;
+    std::vector<SkyBox*> m_vSkyBox;
 
     ShadowMap shadoMap;
 
-    Device::Video *pVideo;
+    Video *pVideo;
 };
 
 } /* namespace Chimera */

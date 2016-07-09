@@ -11,7 +11,6 @@
 #endif
 
 namespace Chimera {
-namespace Device {
 
 /**
  * Classe de controle do Joystick
@@ -113,7 +112,6 @@ private:
     std::map<Uint8, int> BallsX;
     std::map<Uint8, int> BallsY;
 };
-}
 }
 
 #endif

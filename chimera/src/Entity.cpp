@@ -37,6 +37,9 @@ std::string Entity::getNameKindNode ( EntityKind _kind ) {
     case EntityKind::CONSTRAINT:
         return std::string ( "CONSTRAINT" );
         break;
+	case EntityKind::SCENEROOT:
+		return std::string("SCENEROOT");
+		break;
     }
 
     return std::string ( "Desconhecido" );

@@ -2,6 +2,8 @@
 
 #include <vector>
 #include "ChimeraUtils.h"
+#include "NodeVisitor.h"
+
 
 #ifdef WIN32
 #include "windows.h"
@@ -11,9 +13,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-namespace Graph {
-    
-Light::Light ( LightType _lightType, std::string _name ) : Node ( EntityKind::LIGHT, _name ) {
+
+Light::Light (Node* _parent, LightType _lightType, std::string _name ) : Node (_parent, EntityKind::LIGHT, _name ) {
 
     number = 0;
     type = _lightType;
@@ -24,19 +25,6 @@ Light::Light ( LightType _lightType, std::string _name ) : Node ( EntityKind::LI
 
     transform.setIdentity();
 
-}
-
-Light::Light ( const Light& _light ) : Node ( _light ) {
-
-    number = _light.number;
-    type = _light.type;
-    ambient = _light.ambient;
-    specular = _light.specular;
-    diffuse = _light.diffuse;
-
-    position = _light.position;
-
-    transform = _light.transform;
 }
 
 Light::~Light() {
@@ -54,7 +42,7 @@ void Light::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_r
     //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 }
 
-void Light::exec() {
+void Light::apply() {
 
     int testeLuz;
     switch ( number ) {
@@ -97,20 +85,25 @@ void Light::exec() {
    
 }
 
-void Light::clone ( Node **ppNode ) {
-    *ppNode = new Light ( *this );
-    Node::clone ( ppNode );
+void Light::accept(NodeVisitor * v)
+{
+	v->visit(this);
 }
 
-void Light::update ( DataMsg *dataMsg ) {
+void Light::update(DataMsg *_dataMsg) {
 
-    if ( dataMsg->getKindOp() == KindOp::START ) {
+	if (_dataMsg->getKindOp() == KindOp::START) {
 
-        position = transform.getOrigin();
+		init();
+	}
 
-    }
+	Node::update(_dataMsg);
+}
 
-    Node::update ( dataMsg );
+void Light::init() {
+
+	position = transform.getOrigin();
+
 }
 
 //TODO colocar no loader
@@ -138,7 +131,6 @@ void Light::loadCollada ( tinyxml2::XMLElement* _nNode ) {
         return;
     }
 
-}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

@@ -1,121 +1,141 @@
 #include "Node.h"
 
 namespace Chimera {
-namespace Graph {
-    
+  
 std::list<Node*> Node::listNode;
 
-Node::Node ( EntityKind _type, std::string _name ) : Entity ( _type, _name ) {
+Node::Node (Node *_parent, EntityKind _type, std::string _name ) 
+	: parent(_parent), Entity ( _type, _name ) {
 
-    parent = nullptr;
-    listNode.push_back ( this );
-}
+	if (parent != nullptr)
+		parent->vChild.push_back(this);
 
-Node::Node ( const Node &_node ) : Entity ( _node  ) {
-
-    parent = nullptr;
-    listNode.push_back ( this );
+	listNode.push_back(this);
 }
 
 Node::~Node() {
-
     parent = nullptr;
-    listChild.clear();
-    listNode.remove ( this );
+	vChild.clear();
 }
 
-void Node::clone ( Node **ppNode ) {
-
-    for ( Node *pNode : listChild ) {
-
-        Node *pNovo = nullptr;
-        Node *pClone = *ppNode;
-
-        pNode->clone ( &pNovo );
-        pClone->addChild ( pNovo );
-    }
+void Node::update(DataMsg *_dataMsg) {
+	if (!vChild.empty()) {
+		for (size_t i = 0; i < vChild.size(); ++i) {
+			if (vChild[i] != nullptr )
+				vChild[i]->update(_dataMsg);
+		}
+	}
 }
 
-void Node::addChild ( Node *child ) {
-
-    listChild.push_back ( child );
-    child->parent = this;
+void Node::init() {
+	if (!vChild.empty()) {
+		for (size_t i = 0; i < vChild.size(); ++i) {
+			if (vChild[i] != nullptr)
+				vChild[i]->init();
+		}
+	}
 }
 
-void Node::update ( DataMsg *dataMsg ) {
 
-    for ( Node *node : listChild ) {
 
-        if ( dataMsg->isDone() == true ) {
-            break;
-        }
+std::vector<Node*>* Node::getChilds() {
+	if (!vChild.empty())
+		return &(this->vChild);
 
-        node->update ( dataMsg );
-    }
+	return nullptr;
 }
 
-Node *Node::findChildByKind ( EntityKind type, int index ) {
+void Node::addChild ( Node *_child ) {
+
+	if (_child != nullptr) {
+		if (_child->getParent() == nullptr)
+			_child->setParent(this);
+	
+		vChild.push_back(_child);
+	}
+}
+
+void Node::setParent(Node *_node) {
+
+	if (parent != nullptr) 
+		parent->removeChild(this);
+	
+	parent = _node;
+}
+
+void Node::removeChild(Node* _child)
+{
+	if (_child != nullptr  && !vChild.empty()) {
+		for (size_t i = 0; i < vChild.size(); ++i) {
+			if (vChild[i] == _child) {
+				vChild.erase(vChild.begin() + i);
+				break; 
+			}
+		}
+	}
+}; 
+
+const size_t Node::countChilds(const bool &_recursiveCount) const
+{
+	if (!_recursiveCount) {
+
+		return(vChild.size());
+
+	} else {
+
+		size_t Retval = vChild.size();
+		for (size_t i = 0; i < vChild.size(); ++i) {
+			Retval += vChild[i]->countChilds(true);
+		}
+
+		return(Retval);
+	}
+}; 
+
+Node* Node::getChildByName(const std::string &_searchName)
+{
+	Node* Retval = NULL;
+	if (!vChild.empty()) {
+		for (size_t i = 0; i < vChild.size(); ++i) {
+			if ( _searchName.compare( vChild[i]->getName()) == 0) {
+				Retval = vChild[i];
+				break; // break the for loop
+			}
+		}
+	}
+	return(Retval);
+}; 
+
+Node *Node::findChildByKind ( EntityKind _type, int _index ) {
 
     int l_index = 0;
-    for ( Node* node : listChild ) {
+    for ( Node* node : vChild ) {
 
-        if ( node->getKind() == type ) {
-            if ( l_index == index ) {
+        if ( node->getKind() == _type ) {
+            if ( l_index == _index )
                 return node;
-            }
-
+         
             l_index++;
         }
     }
     return nullptr;
 }
 
-//Node *Node::findNodeByName ( EntityKind type, std::string name ) {
-//
-//    for ( Node *node : listNode ) {
-//        std::string l_name = node->getName();
-//        if ( ( node->getKind() == type ) && ( l_name.compare ( name ) == 0 ) ) {
-//            return node;
-//        }
-//    }
-//
-//    return nullptr;
-//}
+Node *Node::findNodeByKind(EntityKind _type, int _index) {
 
-//Node *Node::findNodeByName ( std::string name ) {
-//
-//    for ( Node *node : listNode ) {
-//        std::string l_name = node->getName();
-//        if ( l_name.compare ( name ) == 0 ) {
-//            return node;
-//        }
-//    }
-//
-//    return nullptr;
-//}
+	int l_index = 0;
+	for (Node* node : listNode) {
 
-//Node *Node::findNodeById ( EntityKind type, std::string id ) {
-//
-//    for ( Node *node : listNode ) {
-//        std::string l_id = node->getId();
-//        if ( ( node->getKind() == type ) && ( l_id.compare ( id ) == 0 ) ) {
-//            return node;
-//        }
-//    }
-//
-//    return nullptr;
-//}
+		if (node->getKind() == _type) {
+			if (l_index == _index)
+				return node;
 
-//Node *Node::findNodeById ( std::string id ) {
-//
-//    for ( Node *node : listNode ) {
-//        std::string l_id = node->getId();
-//        if ( l_id.compare ( id ) == 0 ) {
-//            return node;
-//        }
-//    }
-//    return nullptr;
-//}
+			l_index++;
+		}
+	}
+	return nullptr;
 }
+
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

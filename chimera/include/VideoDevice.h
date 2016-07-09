@@ -4,7 +4,6 @@
 #include "Video.h"
 
 namespace Chimera {
-namespace Device {
     
 class VideoDevice : public Video
 {
@@ -24,7 +23,6 @@ private:
     bool fullscreenStatus;
     SDL_Point winPosPrev;
 };
-}
 }
 
 #endif

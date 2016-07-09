@@ -1,4 +1,5 @@
 #include "SkyBox.h"
+#include "NodeVisitor.h"
 //#include <Object.h>
 
 #ifdef WIN32
@@ -9,9 +10,8 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-namespace Graph {
    
-SkyBox::SkyBox ( std::string _name ) : Node ( EntityKind::SKYBOX, _name ) {
+SkyBox::SkyBox ( Node *_parent, std::string _name ) : Node (_parent, EntityKind::SKYBOX, _name ) {
 
 }
 
@@ -39,6 +39,11 @@ void SkyBox::update ( DataMsg *_dataMsg ) {
 
 }
 
+void SkyBox::accept(NodeVisitor* v)
+{
+	v->visit(this);
+}
+
 void SkyBox::render ( bool _texture ) {
 
    if ( pDraw != nullptr ) {
@@ -61,6 +66,5 @@ void SkyBox::render ( bool _texture ) {
 
    }
 
-}
 }
 }

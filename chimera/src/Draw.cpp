@@ -1,18 +1,22 @@
 #include "Draw.h"
+#include "NodeVisitor.h"
 
 namespace Chimera {
-namespace Graph {
 
-Draw::Draw ( DrawType _type, std::string _name ) : Entity ( EntityKind::DRAW, _name ), type ( _type ) {
-    //pMaterial = nullptr;
+Draw::Draw (Node *_parent, DrawType _type, std::string _name ) : Node (_parent, EntityKind::DRAW, _name ), type ( _type ) {
+   
 }
 
-Draw::Draw ( const Draw &_draw ) : Entity ( _draw ) {
-    //pMaterial = _draw.pMaterial;
+Draw::Draw ( const Draw &_draw ) : Node( _draw ) {
+    
 }
 
 Draw::~Draw() {
 }
 
+void Draw::accept(NodeVisitor * v)
+{
+	v->visit(this);
 }
+
 }

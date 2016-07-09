@@ -11,7 +11,6 @@
 #include "Entity.h"
 
 namespace Chimera {
-namespace Graph {
     
 enum class TextureFilter
 {
@@ -54,6 +53,5 @@ private:
     int indiceFilter;
     bool texturaCarregada;
 };
-}
 }
 #endif

@@ -11,7 +11,7 @@ namespace Chimera
 class FlowControl
 {
 public:
-    FlowControl ( Device::Video *_pVideo, IGameClientEvents *_pGameClientEvents );
+    FlowControl ( Video *_pVideo, IGameClientEvents *_pGameClientEvents );
     virtual ~FlowControl();
     virtual void open();
     virtual void close();
@@ -21,10 +21,10 @@ private:
     virtual void processaGame();
     void countFrame();
 
-    Device::Video *pVideo;
+    Video *pVideo;
     IGameClientEvents *pGameClientEvents;
-    Device::JoystickManager joystickManager;
-    Device::Timer timerFPS;
+    JoystickManager joystickManager;
+    Timer timerFPS;
 };
 }
 

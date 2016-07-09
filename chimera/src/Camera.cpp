@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "NodeVisitor.h"
 
 #ifdef WIN32
 #include "windows.h"
@@ -8,9 +9,9 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-namespace Graph {
     
-Camera::Camera ( CameraType _type, std::string _name ) : Node ( EntityKind::CAMERA, _name ) {
+Camera::Camera (Node* _pNode, CameraType _type, std::string _name )
+	: type(_type), Node(_pNode, EntityKind::CAMERA, _name ) {
 
     type = _type;
     position.setZero();
@@ -25,28 +26,7 @@ Camera::Camera ( CameraType _type, std::string _name ) : Node ( EntityKind::CAME
     perspective = true;
 }
 
-Camera::Camera ( const Camera& _camera ) : Node ( _camera ) {
-
-    type = _camera.type;
-    nearDistance = _camera.nearDistance;
-    farDistance = _camera.farDistance;
-    fov = _camera.fov;
-
-    position = _camera.position;
-    rotation = _camera.rotation;
-    direction = _camera.direction;
-
-    transform = _camera.transform;
-
-    perspective = _camera.perspective;
-}
-
 Camera::~Camera() {
-}
-
-void Camera::clone ( Node **ppNode ) {
-    *ppNode = new Camera ( *this );
-    Node::clone ( ppNode );
 }
 
 void Camera::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_rotation ) {
@@ -62,7 +42,7 @@ void Camera::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 }
 
 
-void Camera::exec ( void ) {
+void Camera::render ( void ) {
  
     //         btScalar m_matrix[16];
     //         btTransform l_transform;
@@ -87,6 +67,11 @@ void Camera::exec ( void ) {
                 rotation.x(), rotation.y(), rotation.z() );
 }
 
+void Camera::accept(NodeVisitor * v)
+{
+	v->visit(this);
+}
+
 void Camera::init() {
 
     position = transform.getOrigin();
@@ -95,15 +80,14 @@ void Camera::init() {
 
 }
 
-void Camera::update ( DataMsg *_dataMsg ) {
+void Camera::update(DataMsg *_dataMsg) {
 
-    if ( _dataMsg->getKindOp() == KindOp::START ) {
+	if (_dataMsg->getKindOp() == KindOp::START) {
 
-        init();
+		init();
+	}
 
-    }
-
-    Node::update ( _dataMsg );
+	Node::update(_dataMsg);
 }
 
 //TODO criar classe de loader
@@ -121,8 +105,6 @@ void Camera::loadCollada ( tinyxml2::XMLElement* _nNode ) {
         //TODO testar ecarregar ortogonal aqui
 
     }
-
-}
 
 }
 }

@@ -2,7 +2,6 @@
 #include <cmath>
 
 namespace Chimera {
-namespace Device {
     
 JoystickState::JoystickState() : id(255), pJoystick(nullptr) , name("JoyDefault") { }
 
@@ -155,6 +154,5 @@ std::string JoystickState::GetStatusJoy() {
     }
 
     return return_string;
-}
 }
 }

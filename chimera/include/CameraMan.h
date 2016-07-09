@@ -3,20 +3,18 @@
 
 #include "Camera.h"
 
-namespace Chimera {
-namespace Graph {   
+namespace Chimera { 
 
 class CameraMan : public Camera
 {
 
 public:
     CameraMan ( std::string _name );
-    CameraMan ( const CameraMan& _cameraMan );
     CameraMan ( const Camera& _camera );
     virtual ~CameraMan();
     
-    virtual void update ( DataMsg *_dataMsg );
-    virtual void clone ( Node **ppNode );
+	virtual void init();
+	virtual void render();
 
     void pitch ( float _theta );
     void yaw ( float _theta );
@@ -25,6 +23,7 @@ public:
     void strafe ( float _delta, bool _wall[4] );
     void fly ( float _delta, bool _wall[4] );
     void reset();
+
     void updateMove();
 
 private:
@@ -32,7 +31,6 @@ private:
     btVector3 up;
     btVector3 forward;
 };
-}
 }
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

@@ -9,7 +9,6 @@
 #include "Material.h"
 
 namespace Chimera {
-namespace Graph {
     
 class Object : public Node
 {
@@ -17,15 +16,15 @@ public:
 
     friend class Physics;
 
-    Object ( std::string _name );
+    Object (Node* _parent, std::string _name );
     Object ( const Object& _object );
 
     virtual ~Object();
     virtual void update ( DataMsg *_dataMsg );
 
-    virtual void clone ( Node **ppNode );
+    virtual void init();
 
-    void init();
+	void accept(class NodeVisitor* v);
 
     void applyTorc ( const btVector3 &_vet );
     void applyForce ( const btVector3 &_vet );
@@ -46,12 +45,8 @@ public:
 private:
     void execute ( bool _texture, Object *pObj );
 
-    
-
-
     btTransform transform;
 };
-}
 }
 
 #endif

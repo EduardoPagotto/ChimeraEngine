@@ -10,23 +10,22 @@
 #include "ChimeraUtils.h"
 
 namespace Chimera {
-namespace Graph {
     
-DrawTriMesh::DrawTriMesh ( std::string _name ) : Draw ( DrawType::MESH, _name ) {
+DrawTriMesh::DrawTriMesh (Node *_parent, std::string _name ) : Draw (_parent, DrawType::MESH, _name ) {
 
 }
 
-DrawTriMesh::DrawTriMesh ( const DrawTriMesh &_cpy ) : Draw ( _cpy ) {
-
-    vList.set ( _cpy.vList );
-    nList.set ( _cpy.nList );
-    uvList.set ( _cpy.uvList );
-
-    vIndex.set ( _cpy.vIndex );
-    nIndex.set ( _cpy.nIndex );
-    tIndex.set ( _cpy.tIndex );
-
-}
+//DrawTriMesh::DrawTriMesh ( const DrawTriMesh &_cpy ) : Draw ( _cpy ) {
+//
+//    vList.set ( _cpy.vList );
+//    nList.set ( _cpy.nList );
+//    uvList.set ( _cpy.uvList );
+//
+//    vIndex.set ( _cpy.vIndex );
+//    nIndex.set ( _cpy.nIndex );
+//    tIndex.set ( _cpy.tIndex );
+//
+//}
 
 DrawTriMesh::~DrawTriMesh() {
 
@@ -132,11 +131,6 @@ void DrawTriMesh::renderExecute ( bool _texture ) {
 
     }
 
-}
-
-void DrawTriMesh::clone ( Draw **ppNode ) {
-    *ppNode = new DrawTriMesh ( *this );
-    //Draw::clone ( ppNode ); //FIXME verificar se necessario desce ate o pai
 }
 
 // void DrawTriMesh::update ( DataMsg *dataMsg ) {
@@ -266,7 +260,6 @@ void DrawTriMesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
     }
 
-}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

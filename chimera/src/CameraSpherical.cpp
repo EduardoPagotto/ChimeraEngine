@@ -1,25 +1,14 @@
 #include "CameraSpherical.h"
 
 namespace Chimera {
-namespace Graph {
     
-CameraSpherical::CameraSpherical ( std::string _name ) : Camera ( CameraType::Spherical, _name ) {
+CameraSpherical::CameraSpherical ( std::string _name ) : Camera (nullptr, CameraType::Spherical, _name ) {
 
     horizontal = 0.0f;
     vertical = 0.0f;
     distancia = 0;
     distanciaMin = 1.0f;
     distanciaMax = 500.0f;
-
-}
-
-CameraSpherical::CameraSpherical ( const CameraSpherical& _cameraSpherical ) : Camera ( _cameraSpherical ) {
-
-    horizontal = _cameraSpherical.horizontal;
-    vertical = _cameraSpherical.vertical;
-    distancia = _cameraSpherical.distancia;
-    distanciaMin = _cameraSpherical.distanciaMin;
-    distanciaMax = _cameraSpherical.distanciaMax;
 
 }
 
@@ -37,22 +26,15 @@ CameraSpherical::CameraSpherical ( const Camera& _camera ) : Camera ( _camera ) 
 CameraSpherical::~CameraSpherical() {
 }
 
-void CameraSpherical::clone ( Node **ppNode ) {
-    *ppNode = new CameraSpherical ( *this );
-    Node::clone ( ppNode );
+void CameraSpherical::init() {
+
+	Camera::init();
+
+	initTrackBall();
 }
 
-void CameraSpherical::update ( DataMsg *_dataMsg ) {
-
-    Camera::update ( _dataMsg );
-
-    if ( _dataMsg->getKindOp() == KindOp::START ) {
-
-        /* init(); */
-        initTrackBall();
-
-    }
-
+void CameraSpherical::render() {
+	Camera::render();
 }
 
 void CameraSpherical::initTrackBall ( void ) {
@@ -85,7 +67,6 @@ void CameraSpherical::trackBall ( int _mx, int _my, int _mz ) {
     position.setY ( distancia * cos ( l_kx ) * cos ( l_ky ) );
     position.setZ ( distancia * sin ( l_kx ) );
 
-}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

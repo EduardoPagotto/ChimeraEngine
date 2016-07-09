@@ -8,21 +8,12 @@
 #include <GL/glu.h>
 
 namespace Chimera {
-namespace Graph {
     
-CameraMan::CameraMan ( std::string _name ) : Camera ( CameraType::Spherical, _name ) {
+CameraMan::CameraMan ( std::string _name ) : Camera (nullptr, CameraType::Spherical, _name ) {
 
     along.setValue ( 1.0f, 0.0f, 0.0f );
     up.setValue ( 0.0f, 1.0f, 0.0f );
     forward.setValue ( 0.0f, 0.0f, -1.0f );
-
-}
-
-CameraMan::CameraMan ( const CameraMan& _cameraMan ) : Camera ( _cameraMan ) {
-
-    along = _cameraMan.along;
-    up = _cameraMan.up;
-    forward = _cameraMan.forward;
 
 }
 
@@ -39,20 +30,14 @@ CameraMan::CameraMan ( const Camera& _camera ) : Camera ( _camera ) {
 CameraMan::~CameraMan() {
 }
 
-void CameraMan::clone ( Node **ppNode ) {
-    *ppNode = new CameraMan ( *this );
-    Node::clone ( ppNode );
-}
-
-void CameraMan::update ( DataMsg *_dataMsg ) {
-    Camera::update ( _dataMsg );
-    if ( _dataMsg->getKindOp() == KindOp::START ) {
-        init();
-        reset();
-        pitch ( -rotation.x() );
-        roll ( rotation.y() );
-        yaw ( rotation.z() );
-    }
+void CameraMan::init () {
+   
+    Camera::init();
+    reset();
+    pitch ( -rotation.x() );
+    roll ( rotation.y() );
+    yaw ( rotation.z() );
+    
 }
 
 void CameraMan::reset() {
@@ -62,6 +47,10 @@ void CameraMan::reset() {
     forward.setValue ( 0.0f, 0.0f, -1.0f );
 
     updateMove();
+}
+
+void CameraMan::render() {
+	updateMove();
 }
 
 void CameraMan::updateMove() {
@@ -164,7 +153,6 @@ void CameraMan::fly ( float _delta, bool _wall[4] ) {
     position += up * _delta;
 
     updateMove();
-}
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

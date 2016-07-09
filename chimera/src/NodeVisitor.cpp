@@ -1,4 +1,4 @@
-#include "..\include\NodeVisitor.h"
+#include "NodeVisitor.h"
 
 namespace Chimera {
 

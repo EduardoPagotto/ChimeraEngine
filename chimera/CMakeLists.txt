@@ -67,7 +67,10 @@ set (SourcesChimeraAPI
 	src/ParticleEmitter.cpp
 	src/SkyBox.cpp
 	src/ShadowMap.cpp
-	src/Shader.cpp)
+	src/Shader.cpp
+	src/SceneRoot.cpp
+	src/NodeVisitor.cpp
+)
 	
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR Incluido no Projeto")

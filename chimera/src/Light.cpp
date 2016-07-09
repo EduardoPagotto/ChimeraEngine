@@ -2,6 +2,8 @@
 
 #include <vector>
 #include "ChimeraUtils.h"
+#include "NodeVisitor.h"
+
 
 #ifdef WIN32
 #include "windows.h"
@@ -81,6 +83,11 @@ void Light::apply() {
     glLightfv ( testeLuz, GL_POSITION, posicaoLuz );
     glEnable ( testeLuz );
    
+}
+
+void Light::accept(NodeVisitor * v)
+{
+	v->visit(this);
 }
 
 void Light::update(DataMsg *_dataMsg) {

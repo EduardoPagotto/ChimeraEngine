@@ -16,6 +16,8 @@ public:
    
    virtual void update ( DataMsg *_dataMsg );
 
+   virtual void accept(class NodeVisitor* v);
+
    void render ( bool _texture );
 
    Draw *pDraw;

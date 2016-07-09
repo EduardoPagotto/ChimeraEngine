@@ -23,6 +23,8 @@ public:
 
     virtual ~Draw();
 
+	virtual void accept(class NodeVisitor* v);
+
     virtual void renderExecute ( bool _texture ) = 0;
 
     virtual btVector3 getSizeBox() = 0;

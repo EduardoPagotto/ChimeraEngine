@@ -24,6 +24,8 @@ public:
 
     virtual void init();
 
+	void accept(class NodeVisitor* v);
+
     void applyTorc ( const btVector3 &_vet );
     void applyForce ( const btVector3 &_vet );
 

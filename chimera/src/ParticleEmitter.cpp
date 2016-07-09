@@ -2,6 +2,7 @@
 #include "ExceptionChimera.h"
 #include "Object.h"
 #include "Camera.h"
+#include "NodeVisitor.h"
 #include <algorithm>
 
 namespace Chimera {
@@ -90,6 +91,11 @@ void ParticleEmitter::update ( DataMsg *_dataMsg ) {
     } else if ( _dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE ) {
 
     }
+}
+
+void ParticleEmitter::accept(NodeVisitor * v)
+{
+	v->visit(this);
 }
 
 void ParticleEmitter::setGL() {

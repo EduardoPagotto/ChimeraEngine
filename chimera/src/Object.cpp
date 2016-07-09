@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 
 #include "Object.h"
+#include "NodeVisitor.h"
 
 namespace Chimera {
     
@@ -66,6 +67,11 @@ void Object::init() {
 	}
 
 	pPhysic->initTransform(transform, this);
+}
+
+void Object::accept(NodeVisitor * v)
+{
+	v->visit(this);
 }
 
 void Object::execute ( bool _texture, Object *pObj ) {

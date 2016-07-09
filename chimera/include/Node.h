@@ -20,11 +20,13 @@ public:
 
     Node (Node *_parent, EntityKind _type, std::string _name );
 
-    ~Node();
+    virtual ~Node();
 
     virtual void update ( DataMsg *dataMsg );
 
 	virtual void init();
+
+	virtual void accept(class NodeVisitor* v) = 0;
 
     void addChild ( Node *_child );
 
@@ -44,6 +46,14 @@ public:
 
     Node *findChildByKind ( EntityKind type, int index );
 
+	void setColor(int col) {
+		this->color = &col;
+	}
+
+	int getColor() {
+		return *(this->color);
+	}
+
 	static Node *findNodeByKind(EntityKind _type, int _index);
 
     //static Node *findNodeById ( EntityKind type, std::string id );
@@ -54,6 +64,8 @@ public:
 private:
 	Node *parent;
 	std::vector<Node*> vChild;
+
+	int* color;
 
     static std::list<Node*> listNode;
 };

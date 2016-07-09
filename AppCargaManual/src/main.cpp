@@ -14,11 +14,8 @@
 
 #include "Game.h"
 #include "DrawBox.h"
-
 #include "LoaderDae.h"
-
 #include "FlowControl.h"
-
 #include "ParticleEmitter.h"
 
 int testeCargaArquivo() {
@@ -42,7 +39,7 @@ int testeCargaArquivo() {
         //Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("CuboEsferaMaterial.dae");
-        Chimera::Node *pRoot = pLoader->loadFile ( "piso2.xml" ); // piso2Teste.xml
+        Chimera::SceneRoot *pRoot = pLoader->loadFile ( "piso2.xml" ); // piso2Teste.xml
         //Chimera::Node *pRoot = pLoader->loadFile("piso2Teste.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("espacoTesteZ1.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
@@ -50,12 +47,11 @@ int testeCargaArquivo() {
         delete pLoader;
         pLoader = nullptr;
 
-        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter (nullptr, "testeZ1" );
+        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)pRoot, "testeZ1" );
         std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
         pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
-        pRoot->addChild ( pParticleEmitter );
 
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( pRoot, video );
+        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( (Chimera::Node*)pRoot, video );
 
         Game *game = new Game ( sceneMng );
 

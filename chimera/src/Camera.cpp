@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "NodeVisitor.h"
 
 #ifdef WIN32
 #include "windows.h"
@@ -64,6 +65,11 @@ void Camera::render ( void ) {
     gluLookAt ( position.x(), position.y(), position.z(),
                 direction.x(), direction.y(), direction.z(),
                 rotation.x(), rotation.y(), rotation.z() );
+}
+
+void Camera::accept(NodeVisitor * v)
+{
+	v->visit(this);
 }
 
 void Camera::init() {

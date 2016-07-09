@@ -144,9 +144,9 @@ int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Draw*> &map
     
 }
 
-Node* LoaderDae::loadFile ( const std::string &file ) {
+SceneRoot* LoaderDae::loadFile ( const std::string &file ) {
 
-    Node *pRootScene = nullptr;
+	SceneRoot *pRootScene = nullptr;
 #ifdef WIN32
     std::string dir_arquivo = modelDir + "\\" + file;
 #else
@@ -297,9 +297,9 @@ tinyxml2::XMLElement* LoaderDae::getDadoRigidBody ( const char* _url, const char
 //     //}
 }
 
-Node *LoaderDae::getNodeSceneInFile() {
+SceneRoot *LoaderDae::getNodeSceneInFile() {
 
-    Node *pRootScene = nullptr;
+    SceneRoot *pRootScene = nullptr;
 
     tinyxml2::XMLElement* l_nVisualScene = findSceneLib ( root, ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
     if ( l_nVisualScene != nullptr ) {
@@ -307,7 +307,7 @@ Node *LoaderDae::getNodeSceneInFile() {
         const char *l_nome = l_nVisualScene->Attribute ( "name" );
         const char *l_id = l_nVisualScene->Attribute ( "id" );
 
-        pRootScene = new Node (nullptr, EntityKind::NODE, l_id );
+        pRootScene = new SceneRoot (nullptr, l_id );
         tinyxml2::XMLElement* l_nNode = l_nVisualScene->FirstChildElement ( "node" );
         if ( l_nNode != nullptr ) {
             while ( l_nNode != nullptr ) {
@@ -318,7 +318,7 @@ Node *LoaderDae::getNodeSceneInFile() {
 
                 tinyxml2::XMLElement* l_nDadoNode = l_nNode->FirstChildElement();
                 if ( l_nDadoNode != nullptr ) {
-                    carregaNode ( pRootScene, l_nDadoNode, l_id, l_name, l_type );
+                    carregaNode ( (Node*)pRootScene, l_nDadoNode, l_id, l_name, l_type );
                 } else {
                     std::cout << "Node sem filho" << std::endl;
                 }

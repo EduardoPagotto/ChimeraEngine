@@ -1,4 +1,5 @@
 #include "SkyBox.h"
+#include "NodeVisitor.h"
 //#include <Object.h>
 
 #ifdef WIN32
@@ -36,6 +37,11 @@ void SkyBox::update ( DataMsg *_dataMsg ) {
      }
     Node::update ( _dataMsg );
 
+}
+
+void SkyBox::accept(NodeVisitor* v)
+{
+	v->visit(this);
 }
 
 void SkyBox::render ( bool _texture ) {

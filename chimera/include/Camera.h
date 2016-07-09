@@ -31,6 +31,8 @@ public:
 
     virtual void render();
 
+	virtual void accept(class NodeVisitor* v);
+
     void setType ( CameraType _type ) {
         type = _type;
     }

@@ -30,6 +30,8 @@ public:
 
     virtual void apply();
 
+	virtual void accept(class NodeVisitor* v);
+
     Color getAmbient() {
         return ambient;
     }

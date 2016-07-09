@@ -26,6 +26,9 @@ public:
     ParticleEmitter (Node *_parent, std::string _name );
     virtual ~ParticleEmitter();
     virtual void update ( DataMsg *_dataMsg );
+
+	virtual void accept(class NodeVisitor* v);
+
     void initialize ( int _max );
     void loadImage ( const char *_file );
     void setGL();

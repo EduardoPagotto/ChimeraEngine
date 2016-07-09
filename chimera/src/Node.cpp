@@ -7,6 +7,9 @@ std::list<Node*> Node::listNode;
 Node::Node (Node *_parent, EntityKind _type, std::string _name ) 
 	: parent(_parent), Entity ( _type, _name ) {
 
+	if (parent != nullptr)
+		parent->vChild.push_back(this);
+
 	listNode.push_back(this);
 }
 
@@ -32,6 +35,8 @@ void Node::init() {
 		}
 	}
 }
+
+
 
 std::vector<Node*>* Node::getChilds() {
 	if (!vChild.empty())

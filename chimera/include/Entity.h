@@ -25,7 +25,8 @@ enum class EntityKind : int8_t
     PHYSICS,
     DRAW,
     CONSTRAINT,
-    SKYBOX
+    SKYBOX,
+	SCENEROOT
 };
 
 /**

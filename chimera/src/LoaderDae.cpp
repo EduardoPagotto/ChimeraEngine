@@ -12,15 +12,19 @@
 
 namespace Chimera {
 
-LoaderDae::LoaderDae ( const std::string &textureDir, const std::string &modelDir ) {
+LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_modelDir, const std::string &_file  ) {
 
     doc = nullptr;
     root = nullptr;
-    this->textureDir = textureDir;
-    this->modelDir = modelDir;
+    this->textureDir = _textureDir;
+    this->modelDir = _modelDir;
 
     pPhysicsControl = Infra::Singleton<PhysicsControl>::getRefSingleton();
 
+    pRootNode = nullptr;
+    
+    loadFile(_file);
+   
 }
 
 LoaderDae::~LoaderDae() {
@@ -144,9 +148,9 @@ int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Draw*> &map
     
 }
 
-SceneRoot* LoaderDae::loadFile ( const std::string &file ) {
+void LoaderDae::loadFile ( const std::string &file ) {
 
-	SceneRoot *pRootScene = nullptr;
+    //Ajusta infra de S.O.
 #ifdef WIN32
     std::string dir_arquivo = modelDir + "\\" + file;
 #else
@@ -155,25 +159,28 @@ SceneRoot* LoaderDae::loadFile ( const std::string &file ) {
 
     doc = new tinyxml2::XMLDocument();
 
+    //Verifica se arquivo existe
     if ( doc->LoadFile ( dir_arquivo.c_str() ) != 0 ) {
         throw ExceptionChimera ( ExceptionCode::OPEN, "Falha ao ler arquivo" );
     }
 
+    //vefifica se ele é uma estrutura compativel com collada
     root = doc->FirstChildElement ( "COLLADA" );
     if ( root == nullptr ) {
         throw ExceptionChimera ( ExceptionCode::OPEN, "Nao é um arquivo colada" );
     }
     
+    //carrega elementos de Effect, Texture, Material e Geometrias
     int totalEffect = libEffectMap(root, mapaEfeito);
     int totalTexture = libTextureMap(root, textureDir, mapaTextura);
     int totalMat = libMaterialMap(root, mapaEfeito, mapaTextura, mapaMaterial);
     int totalGeometry = libGeometryMap(root, mapaGeometria);
     
-    pRootScene = getNodeSceneInFile();
+    //Carrega hierarquia dos nodes
+    getNodeSceneInFile();
 
+    //vincula com fisica nos nodes
     getPhysicSceneInfile();
-
-    return pRootScene;
 }
 
 void LoaderDae::getPhysicSceneInfile() {
@@ -297,9 +304,9 @@ tinyxml2::XMLElement* LoaderDae::getDadoRigidBody ( const char* _url, const char
 //     //}
 }
 
-SceneRoot *LoaderDae::getNodeSceneInFile() {
+void LoaderDae::getNodeSceneInFile() {
 
-    SceneRoot *pRootScene = nullptr;
+    pRootNode = nullptr;
 
     tinyxml2::XMLElement* l_nVisualScene = findSceneLib ( root, ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
     if ( l_nVisualScene != nullptr ) {
@@ -307,7 +314,7 @@ SceneRoot *LoaderDae::getNodeSceneInFile() {
         const char *l_nome = l_nVisualScene->Attribute ( "name" );
         const char *l_id = l_nVisualScene->Attribute ( "id" );
 
-        pRootScene = new SceneRoot (nullptr, l_id );
+        pRootNode = new Group(nullptr, l_id );
         tinyxml2::XMLElement* l_nNode = l_nVisualScene->FirstChildElement ( "node" );
         if ( l_nNode != nullptr ) {
             while ( l_nNode != nullptr ) {
@@ -318,7 +325,7 @@ SceneRoot *LoaderDae::getNodeSceneInFile() {
 
                 tinyxml2::XMLElement* l_nDadoNode = l_nNode->FirstChildElement();
                 if ( l_nDadoNode != nullptr ) {
-                    carregaNode ( (Node*)pRootScene, l_nDadoNode, l_id, l_name, l_type );
+                    carregaNode ( (Node*)pRootNode, l_nDadoNode, l_id, l_name, l_type );
                 } else {
                     std::cout << "Node sem filho" << std::endl;
                 }
@@ -329,8 +336,6 @@ SceneRoot *LoaderDae::getNodeSceneInFile() {
             std::cout << "Node: vazio " << std::endl;
         }
     }
-    return pRootScene;
-
 }
 
 btTransform *carregaMatrixTransformacao(tinyxml2::XMLElement* _nNode) {

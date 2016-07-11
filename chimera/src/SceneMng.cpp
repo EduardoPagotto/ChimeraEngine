@@ -5,14 +5,27 @@ namespace Chimera {
 SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
 
     root = new SceneRoot(nullptr,"root");
-    parseEntity ((Node*) root );
-    
     pCameraAtiva = nullptr;
     pObjeto = nullptr;
     pSkyBox = nullptr;
+    pLoader = nullptr;
 }
 
 SceneMng::~SceneMng() {
+}
+
+void SceneMng::setReader ( LoaderDae* _pLoader ) {
+
+    this->pLoader = _pLoader;
+}
+
+Group *SceneMng::createSceneGraph() {
+   
+    Group *pGroup = pLoader->getNodes();
+    root->addChild(pGroup);
+    parseEntity(pGroup);
+    
+    return pGroup;
 }
 
 void SceneMng::parseEntity ( Node *_pNode ) {
@@ -26,10 +39,8 @@ void SceneMng::parseEntity ( Node *_pNode ) {
 
 			Node* pNode = vList->at(indice);
 			parseEntity(pNode);
-
 		}
 	}
-
 }
 
 void SceneMng::addEntityToScene ( Node *_pNode ) {
@@ -55,13 +66,6 @@ void SceneMng::addEntityToScene ( Node *_pNode ) {
     }
 
 }
-
-// void SceneMng::addChildToScene ( Node *_pNode ) {
-// 
-//     pRoot->addChild ( _pNode );
-//     addEntityToScene ( _pNode );
-// 
-// }
 
 Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
 
@@ -228,33 +232,15 @@ void SceneMng::setLight ( bool _lightOn ) {
 
 void SceneMng::setMaterial ( bool _materialOn ) {
 
-    //if (_materialOn == true) {
-    //	glDisable(GL_COLOR_MATERIAL);
-    //	glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //TODO verificar necessidade
-    //}
-    //else {
-    //	glEnable(GL_COLOR_MATERIAL);
-    //	glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
-    //}
+    if (_materialOn == true) {
+    	glDisable(GL_COLOR_MATERIAL);
+    	glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //TODO verificar necessidade
+    }
+    else {
+    	glEnable(GL_COLOR_MATERIAL);
+    	glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
+    }
 }
-
-//  void SceneMng::draw3d() {
-//
-//      pCameraAtiva->exec();
-//
-//      if (pSkyBox != nullptr)
-//          pSkyBox->render();
-//
-//      Chimera::DataMsg dataMsg(KindOp::DRAW3D, this, pObjeto, nullptr);
-//      update(&dataMsg);
-//
-//         for (Light *pLight : m_vLight) {
-//             pLight->exec();
-//         }
-//
-//      //execLight();
-//
-//  }
 
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

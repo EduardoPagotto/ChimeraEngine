@@ -13,6 +13,7 @@
 
 #include "ShadowMap.h"
 #include "SceneRoot.h"
+#include "LoaderDae.h"
 
 namespace Chimera
 {
@@ -28,19 +29,19 @@ public:
     SceneMng ( Video *_pVideo );
     virtual ~SceneMng();
 
-    //void addChildToScene ( Node *_pNode );
-
     Node *getNode ( EntityKind _type, const std::string &_nome );
     
     Node *getNode ( EntityKind _type, unsigned index );
 
-    //void update ( DataMsg *dataMsg );
-
     void init();
     
-    SceneRoot* getRoot() const {
-        return root;
-    }
+    void setReader( LoaderDae *_pLoader );
+    
+    Group* createSceneGraph();
+    
+//     SceneRoot* getRoot() const {
+//         return root;
+//     }
 
     inline void cameraAtiva ( Camera *_pCam ) {
         pCameraAtiva = _pCam;
@@ -69,8 +70,9 @@ private:
     bool hasLight;
     bool hasMaterial;
 
-    SceneRoot *root;
+    LoaderDae *pLoader;
     
+    SceneRoot *root;
     Camera *pCameraAtiva;
     Object *pObjeto;
     SkyBox *pSkyBox;

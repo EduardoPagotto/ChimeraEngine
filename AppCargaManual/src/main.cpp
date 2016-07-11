@@ -33,28 +33,27 @@ int testeCargaArquivo() {
         Chimera::Video *video = new Chimera::VideoDevice ( 640, 480, "teste" );
 
         //Carga de dados
-		Chimera::LoaderDae *pLoader = new Chimera::LoaderDae ( dirDados, dirDados );
-
+		Chimera::LoaderDae *pLoader = new Chimera::LoaderDae ( dirDados, dirDados, "piso2.xml" );
         //Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");//cuboEesfera.dae
         //Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("CuboEsferaMaterial.dae");
-        Chimera::SceneRoot *pRoot = pLoader->loadFile ( "piso2.xml" ); // piso2Teste.xml
+        //Chimera::Node *pRoot = pLoader->loadFile ( "piso2.xml" ); // piso2Teste.xml
         //Chimera::Node *pRoot = pLoader->loadFile("piso2Teste.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("espacoTesteZ1.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
 
-        delete pLoader;
-        pLoader = nullptr;
-
-        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)pRoot, "testeZ1" );
+        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
+        sceneMng->setReader(pLoader);
+        Chimera::Group* group1 = sceneMng->createSceneGraph();
+        
+        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)group1, "testeZ1" );
         std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
         pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
 
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
+        delete pLoader;
+        pLoader = nullptr;
 
-        
-        
         Game *game = new Game ( sceneMng );
 
         Chimera::FlowControl *pControle = new Chimera::FlowControl ( video, game );
@@ -64,7 +63,6 @@ int testeCargaArquivo() {
         delete pControle;
         delete game;
         delete sceneMng;
-        delete pRoot;
         delete video;
     } catch ( const Chimera::Exception& ex ) {
 

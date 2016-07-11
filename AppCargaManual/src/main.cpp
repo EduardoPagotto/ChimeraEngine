@@ -51,8 +51,10 @@ int testeCargaArquivo() {
         std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
         pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
 
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( (Chimera::Node*)pRoot, video );
+        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
 
+        
+        
         Game *game = new Game ( sceneMng );
 
         Chimera::FlowControl *pControle = new Chimera::FlowControl ( video, game );

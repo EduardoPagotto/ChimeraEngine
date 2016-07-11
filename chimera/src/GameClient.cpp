@@ -44,8 +44,7 @@ void GameClient::start() {
 
     deadzone = 0.02;
 
-    DataMsg dataMsg ( KindOp::START, this, nullptr, nullptr );
-    pSceneMng->update ( &dataMsg );
+    pSceneMng->init();
 
     pHUD->setOn ( true );
 }

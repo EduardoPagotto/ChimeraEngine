@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Video.h"
-
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
@@ -13,6 +12,7 @@
 #include "HUD.h"
 
 #include "ShadowMap.h"
+#include "SceneRoot.h"
 
 namespace Chimera
 {
@@ -25,18 +25,21 @@ namespace Chimera
 class SceneMng
 {
 public:
-    SceneMng ( Node *_pRoot, Video *_pVideo );
+    SceneMng ( Video *_pVideo );
     virtual ~SceneMng();
 
-    void addChildToScene ( Node *_pNode );
+    //void addChildToScene ( Node *_pNode );
 
     Node *getNode ( EntityKind _type, const std::string &_nome );
+    
     Node *getNode ( EntityKind _type, unsigned index );
 
-    void update ( DataMsg *dataMsg );
+    //void update ( DataMsg *dataMsg );
 
-    Node* getRoot() const {
-        return pRoot;
+    void init();
+    
+    SceneRoot* getRoot() const {
+        return root;
     }
 
     inline void cameraAtiva ( Camera *_pCam ) {
@@ -66,7 +69,8 @@ private:
     bool hasLight;
     bool hasMaterial;
 
-    Node *pRoot;
+    SceneRoot *root;
+    
     Camera *pCameraAtiva;
     Object *pObjeto;
     SkyBox *pSkyBox;

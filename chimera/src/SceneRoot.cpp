@@ -16,4 +16,18 @@ void SceneRoot::accept(NodeVisitor* v)
 	v->visit(this);
 }
 
+void SceneRoot::initScene() {
+ 
+    DataMsg dataMsg ( KindOp::START, this, nullptr, nullptr );
+    Node::update ( &dataMsg );
+    
+}
+
+void SceneRoot::draw(Object *pObjeto) {
+    
+    Chimera::DataMsg dataMsg ( KindOp::DRAW, this, pObjeto, nullptr );
+    Node::update ( &dataMsg );
+    
+}
+
 }

@@ -2,19 +2,17 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng ( Node *_pRoot, Video *_pVideo )  {
+SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
 
-    pRoot = _pRoot;
-    parseEntity ( pRoot );
+    root = new SceneRoot(nullptr,"root");
+    parseEntity ((Node*) root );
+    
     pCameraAtiva = nullptr;
     pObjeto = nullptr;
     pSkyBox = nullptr;
-    pVideo = _pVideo;
-
 }
 
 SceneMng::~SceneMng() {
-
 }
 
 void SceneMng::parseEntity ( Node *_pNode ) {
@@ -58,12 +56,12 @@ void SceneMng::addEntityToScene ( Node *_pNode ) {
 
 }
 
-void SceneMng::addChildToScene ( Node *_pNode ) {
-
-    pRoot->addChild ( _pNode );
-    addEntityToScene ( _pNode );
-
-}
+// void SceneMng::addChildToScene ( Node *_pNode ) {
+// 
+//     pRoot->addChild ( _pNode );
+//     addEntityToScene ( _pNode );
+// 
+// }
 
 Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
 
@@ -157,22 +155,11 @@ void SceneMng::execLight() {
     }
 }
 
-void SceneMng::update ( DataMsg *dataMsg ) {
-
-    if ( dataMsg->getKindOp() == KindOp::START ) {
-
-        //inicialize primeiro os filhos para garantir textura e efeito em material
-        pRoot->update ( dataMsg );
-
-        //inicializa objeto local
-        shadoMap.init ( pRoot );
-
-    } else {
-
-        pRoot->update ( dataMsg );
-
-    }
-
+void SceneMng::init() {
+ 
+    root->initScene();
+    shadoMap.init ( (Node*)root );
+    
 }
 
 void SceneMng::draw ( HUD *_pHud ) {
@@ -203,9 +190,8 @@ void SceneMng::draw ( HUD *_pHud ) {
            pSkyBox->render ( true );
         }
 
-        Chimera::DataMsg dataMsg ( KindOp::DRAW, this, pObjeto, nullptr );
-        update ( &dataMsg );
-
+        root->draw(pObjeto);
+        
         execLight();
 
 #ifdef TESTEZ1

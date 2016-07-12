@@ -4,27 +4,27 @@
 #include "ChimeraUtils.h"
 #include "NodeVisitor.h"
 
+#include "OpenGLDefs.h"
 
-#ifdef WIN32
-#include "windows.h"
-#endif
-
-#include <GL/gl.h>
-#include <GL/glu.h>
+// #ifdef WIN32
+// #include "windows.h"
+// #endif
+// 
+// #include <GL/gl.h>
+// #include <GL/glu.h>
 
 namespace Chimera {
 
-Light::Light (Node* _parent, LightType _lightType, std::string _name ) : Node (_parent, EntityKind::LIGHT, _name ) {
+Light::Light (Node* _parent, std::string _name ) : Node (_parent, EntityKind::LIGHT, _name ) {
 
     number = 0;
-    type = _lightType;
+    type = LightType::POSITIONAL;
     ambient = Color::ZERO;
     specular = Color::ZERO;
     diffuse = Color::ZERO;
     position.setZero();
 
     transform.setIdentity();
-
 }
 
 Light::~Light() {
@@ -42,48 +42,71 @@ void Light::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_r
     //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 }
 
-void Light::apply() {
+void Light::apply(LightNum lightNum) {//
 
-    int testeLuz;
-    switch ( number ) {
-    case 0:
-        testeLuz = GL_LIGHT0;
-        break;
-    case 1:
-        testeLuz = GL_LIGHT1;
-        break;
-    case 2:
-        testeLuz = GL_LIGHT2;
-        break;
-    case 3:
-        testeLuz = GL_LIGHT3;
-        break;
-    case 4:
-        testeLuz = GL_LIGHT4;
-        break;
-    case 5:
-        testeLuz = GL_LIGHT5;
-        break;
-    case 6:
-        testeLuz = GL_LIGHT6;
-        break;
-    case 7:
-        testeLuz = GL_LIGHT7;
-        break;
-    default:
-        break;
+    for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
+
+        ModeMaterial k = iter->first;
+        //GLfloat *p = (k != ModeMaterial::SHININESS) ? (GLfloat*)((Color*)iter->second)->ptr() : (GLfloat*)iter->second;
+        //glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
+        
+        GLfloat *p = (GLfloat*)((Color*)iter->second)->ptr();
+        
+        glLightfv(lightNum, (GLenum)k, p);
+    
     }
+    
+    GLfloat posicaoLuz[] = { position.x(), position.y(), position.z(), (type == LightType::POSITIONAL ? 0.0f : 1.0f)  };
+    
+    //GLfloat posicaoLuz[] = { position.x(), position.y(), position.z(), 1.0f }; 
 
-    GLfloat posicaoLuz[] = { position.x(), position.y(), position.z(), 1.0f };
-    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat*)ambient.ptr());
-    glLightfv ( testeLuz, GL_AMBIENT, ( GLfloat* ) ambient.ptr() );
-    glLightfv ( testeLuz, GL_DIFFUSE, ( GLfloat* ) diffuse.ptr() );
-    glLightfv ( testeLuz, GL_SPECULAR, ( GLfloat* ) specular.ptr() );
-
-    glLightfv ( testeLuz, GL_POSITION, posicaoLuz );
-    glEnable ( testeLuz );
+    glLightfv ( lightNum, GL_POSITION, posicaoLuz );
+    glEnable ( lightNum ); 
    
 }
+
+// void Light::apply() {
+// 
+//     int testeLuz;
+//     switch ( number ) {
+//     case 0:
+//         testeLuz = GL_LIGHT0;
+//         break;
+//     case 1:
+//         testeLuz = GL_LIGHT1;
+//         break;
+//     case 2:
+//         testeLuz = GL_LIGHT2;
+//         break;
+//     case 3:
+//         testeLuz = GL_LIGHT3;
+//         break;
+//     case 4:
+//         testeLuz = GL_LIGHT4;
+//         break;
+//     case 5:
+//         testeLuz = GL_LIGHT5;
+//         break;
+//     case 6:
+//         testeLuz = GL_LIGHT6;
+//         break;
+//     case 7:
+//         testeLuz = GL_LIGHT7;
+//         break;
+//     default:
+//         break;
+//     }
+// 
+//     GLfloat posicaoLuz[] = { position.x(), position.y(), position.z(), 1.0f };
+//     //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat*)ambient.ptr());
+//     glLightfv ( testeLuz, GL_AMBIENT, ( GLfloat* ) ambient.ptr() );
+//     glLightfv ( testeLuz, GL_DIFFUSE, ( GLfloat* ) diffuse.ptr() );
+//     glLightfv ( testeLuz, GL_SPECULAR, ( GLfloat* ) specular.ptr() );
+// 
+//     glLightfv ( testeLuz, GL_POSITION, posicaoLuz );
+//     glEnable ( testeLuz );
+//    
+// }
 
 void Light::accept(NodeVisitor * v)
 {
@@ -112,6 +135,8 @@ void Light::loadCollada ( tinyxml2::XMLElement* _nNode ) {
     tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "point" );
     if ( l_nPoint != nullptr ) {
 
+        type = LightType::POSITIONAL;
+        
         std::vector<btScalar> l_arrayF;
         const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
         loadArrayBtScalar ( l_val, l_arrayF );

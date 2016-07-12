@@ -6,30 +6,18 @@
 #include "Color.h"
 #include "Entity.h"
 
-#ifdef WIN32
-#include "windows.h"
-#endif
-
+#include "OpenGLDefs.h"
 #include <map>
-#include <GL/gl.h>
+
+// #ifdef WIN32
+// #include "windows.h"
+// #endif
+// 
+// #include <map>
+// #include <GL/gl.h>
 
 namespace Chimera {
     
-enum class FaceMaterial{
-    FRONT=GL_FRONT,
-    BACK=GL_BACK,
-    FRONT_BACK=GL_FRONT_AND_BACK
-}; 
-
-enum class ModeMaterial {
-    AMBIENT=GL_AMBIENT,
-    DIFFUSE=GL_DIFFUSE,
-    EMISSION=GL_EMISSION,
-    SPECULAR=GL_SPECULAR,
-    SHININESS=GL_SHININESS,
-    AMBIENT_AND_DIFFUSE=GL_AMBIENT_AND_DIFFUSE
-};
-
 class Effect : public Entity
 {
 public:

@@ -1,5 +1,7 @@
 #include "SceneMng.h"
 
+#include "OpenGLDefs.h"
+
 namespace Chimera {
 
 SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
@@ -155,7 +157,7 @@ Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
 
 void SceneMng::execLight() {
     for ( Light *pLight : m_vLight ) {
-        pLight->apply();
+        pLight->apply( LIGHT0 );
     }
 }
 

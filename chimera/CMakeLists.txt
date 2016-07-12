@@ -71,6 +71,7 @@ set (SourcesChimeraAPI
 	src/SceneRoot.cpp
 	src/NodeVisitor.cpp
 	src/Group.cpp
+	src/State.cpp
 )
 	
 if (OVR_SET_TO_USE)

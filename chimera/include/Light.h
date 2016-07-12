@@ -9,26 +9,28 @@
 #include "Color.h"
 #include "Node.h"
 
+#include "OpenGLDefs.h"
+#include <map>
+
 namespace Chimera {
     
 enum class LightType
 {
-    POINT = 0,
-    SPOT,
-    DIRECTIONAL
+    DIRECTIONAL = 0,
+    POSITIONAL = 1,
 };
 
 class Light : public Node
 {
 public:
-    Light (Node* _parent, LightType _lightType, std::string _name );
+    Light (Node* _parent, std::string _name );
     virtual ~Light();
 
 	virtual void init();
 
 	virtual void update(DataMsg *_dataMsg);
 
-    virtual void apply();
+    virtual void apply(LightNum lightNum);
 
 	virtual void accept(class NodeVisitor* v);
 
@@ -46,14 +48,17 @@ public:
 
     void setAmbient ( Color _color ) {
         ambient = _color;
+        map_params[ModeMaterial::AMBIENT] = &ambient;
     }
 
     void setSpecular ( Color _color ) {
         specular = _color;
+        map_params[ModeMaterial::SPECULAR] = &specular;
     }
 
     void setDiffuse ( Color _color ) {
         diffuse = _color;
+        map_params[ModeMaterial::DIFFUSE] = &diffuse;
     }
 
     void setType ( LightType _type ) {
@@ -75,11 +80,15 @@ private:
 
     btTransform transform;
     btVector3 position;
+    
     Color ambient;
     Color specular;
     Color diffuse;
+    
     int number;
     LightType type;
+    
+    std::map<ModeMaterial, void*> map_params;
 };
 }
 #endif

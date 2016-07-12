@@ -439,7 +439,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
 
             loadNodeLib ( root, ( const char* ) &l_url[1], "library_lights", "light", &l_nNodeSourceData );
 
-            Light *pLight = new Light (nullptr, LightType::POINT, _id );
+            Light *pLight = new Light (nullptr,_id );
             pLight->loadCollada ( l_nNodeSourceData );
             
             pLight->setTransform ( *l_pTransform );

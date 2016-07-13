@@ -7,6 +7,7 @@
 #include "Draw.h"
 #include "Physics.h"
 #include "Material.h"
+#include "Texture.h"
 
 namespace Chimera {
     
@@ -17,7 +18,7 @@ public:
     friend class Physics;
 
     Object (Node* _parent, std::string _name );
-    Object ( const Object& _object );
+    
 
     virtual ~Object();
     virtual void update ( DataMsg *_dataMsg );
@@ -40,6 +41,8 @@ public:
 	//FIXME colocar como privada
 	Draw *pDraw;
 	Material *pMaterial;
+    Texture *pTexture;
+    
     Physics *pPhysic;
 
 private:

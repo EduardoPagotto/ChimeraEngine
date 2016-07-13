@@ -14,17 +14,9 @@ Object::Object (Node* _parent, std::string _name ) : Node (_parent, EntityKind::
     pPhysic = nullptr;
     pDraw = nullptr;
 	pMaterial = nullptr;
+    pTexture = nullptr;
     
     transform.setIdentity();
-}
-
-Object::Object ( const Object& _object ) : Node ( _object ) {
-
-    pPhysic = _object.pPhysic;
-    pDraw = _object.pDraw;
-	pMaterial = _object.pMaterial;
-
-    transform = _object.transform;
 }
 
 Object::~Object() {
@@ -43,7 +35,10 @@ void Object::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 }
 
 void Object::init() {
-
+    
+    if (pTexture != nullptr)
+        pTexture->init();
+        
 	if (pMaterial == nullptr)
 		pMaterial = new Material( "DefaultMat");
 
@@ -80,9 +75,17 @@ void Object::execute ( bool _texture, Object *pObj ) {
         pPhysic->ajusteMatrix ( pObj->pPhysic );
     }
 
-	pMaterial->begin(_texture);
+    if (( _texture == true ) && (pTexture != nullptr))
+        pTexture->begin();
+    
+    pMaterial->apply( pTexture != nullptr ? true : false );
+    
+	//pMaterial->begin(_texture);
 	pDraw->renderExecute(_texture);
-	pMaterial->end();
+    
+    if (( _texture == true ) && (pTexture != nullptr))
+        pTexture->end();
+
 }
 
 void Object::update ( DataMsg *_dataMsg ) {

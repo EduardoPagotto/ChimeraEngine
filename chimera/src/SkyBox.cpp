@@ -23,6 +23,7 @@ void SkyBox::update ( DataMsg *_dataMsg ) {
 
      if ( _dataMsg->getKindOp() == KindOp::START ) {
 		 pMaterial->init();
+		 pTexture->init();
 // 
 //         //inicialize primeiro os filhos para garantir textura e efeito em material
 //         Node::update ( _dataMsg );

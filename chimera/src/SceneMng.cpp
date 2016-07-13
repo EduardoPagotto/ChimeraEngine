@@ -170,7 +170,7 @@ void SceneMng::init() {
 
 void SceneMng::draw ( HUD *_pHud ) {
 
-#define TESTEZ1
+//#define TESTEZ1
 
     int indiceDesenho = 1;
     if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {

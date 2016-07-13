@@ -65,63 +65,63 @@ int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, std::map<
     return _mapaTextura.size();
 }
 
-int libEffectMap ( tinyxml2::XMLElement* root, std::map<std::string, Effect*> &mapaEfeito) {
+// int libEffectMap ( tinyxml2::XMLElement* root, std::map<std::string, Effect*> &mapaEfeito) {
+// 
+//     tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_effects" );
+//     if ( l_nNode != nullptr ) {
+//         l_nNode = l_nNode->FirstChildElement ( "effect" );
+//         while ( l_nNode != nullptr ) {
+// 
+//             std::string l_id = retornaAtributo ( "id", l_nNode );
+//            
+//             Effect *pEffect = new Effect ( l_id  );
+//             mapaEfeito[ l_id ] = pEffect;
+//             
+//             pEffect->loadCollada ( l_nNode );
+// 
+//             l_nNode = l_nNode->NextSiblingElement ( "effect" );
+//         }
+// 
+//     }
+//     
+//     return mapaEfeito.size();
+// }
 
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_effects" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "effect" );
-        while ( l_nNode != nullptr ) {
-
-            std::string l_id = retornaAtributo ( "id", l_nNode );
-           
-            Effect *pEffect = new Effect ( l_id  );
-            mapaEfeito[ l_id ] = pEffect;
-            
-            pEffect->loadCollada ( l_nNode );
-
-            l_nNode = l_nNode->NextSiblingElement ( "effect" );
-        }
-
-    }
-    
-    return mapaEfeito.size();
-}
-
-int libMaterialMap(tinyxml2::XMLElement* root, 
-                   std::map<std::string, Effect*> &mapaEfeito,
-                   std::map<std::string, Texture*> &mapaTextura,
-                   std::map<std::string, Material*> &mapaMaterial) {
-    
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_materials" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "material" );
-        while ( l_nNode != nullptr ) {
-
-            std::string l_id = retornaAtributo ( "id", l_nNode );
-            std::string l_name = retornaAtributo ( "name", l_nNode );
-            
-            Material *pMat = new Material ( l_id  );
-            
-            tinyxml2::XMLElement* l_nMat =  l_nNode->FirstChildElement ( "instance_effect" );
-            const char* pNomeMat = l_nMat->Attribute("url");
-            std::string l_sNomeMat = &pNomeMat[1];
-            
-            Effect *pEffect = mapaEfeito[ l_sNomeMat ];
-            pMat->setEffect( pEffect );
-
-            if (pEffect->getNameTextureId().length() > 0) {
-                Texture *pTexture = mapaTextura[ pEffect->getNameTextureId() ];
-                pMat->setTexture( pTexture );
-            }
-            
-            mapaMaterial[l_id] = pMat;
-                       
-            l_nNode = l_nNode->NextSiblingElement ( "material" );
-        }
-
-    }    
-    return mapaMaterial.size();
-}
+// int libMaterialMap(tinyxml2::XMLElement* root, 
+//                    std::map<std::string, Effect*> &mapaEfeito,
+//                    std::map<std::string, Texture*> &mapaTextura,
+//                    std::map<std::string, Material*> &mapaMaterial) {
+//     
+//     tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_materials" );
+//     if ( l_nNode != nullptr ) {
+//         l_nNode = l_nNode->FirstChildElement ( "material" );
+//         while ( l_nNode != nullptr ) {
+// 
+//             std::string l_id = retornaAtributo ( "id", l_nNode );
+//             std::string l_name = retornaAtributo ( "name", l_nNode );
+//             
+//             Material *pMat = new Material ( l_id  );
+//             
+//             tinyxml2::XMLElement* l_nMat =  l_nNode->FirstChildElement ( "instance_effect" );
+//             const char* pNomeMat = l_nMat->Attribute("url");
+//             std::string l_sNomeMat = &pNomeMat[1];
+//             
+//             Effect *pEffect = mapaEfeito[ l_sNomeMat ];
+//             pMat->setEffect( pEffect );
+// 
+//             if (pEffect->getNameTextureId().length() > 0) {
+//                 Texture *pTexture = mapaTextura[ pEffect->getNameTextureId() ];
+//                 pMat->setTexture( pTexture );
+//             }
+//             
+//             mapaMaterial[l_id] = pMat;
+//                        
+//             l_nNode = l_nNode->NextSiblingElement ( "material" );
+//         }
+// 
+//     }    
+//     return mapaMaterial.size();
+// }
 
 int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Draw*> &mapaGeometria) {
     
@@ -171,9 +171,9 @@ void LoaderDae::loadFile ( const std::string &file ) {
     }
     
     //carrega elementos de Effect, Texture, Material e Geometrias
-    int totalEffect = libEffectMap(root, mapaEfeito);
+   // int totalEffect = libEffectMap(root, mapaEfeito);
     int totalTexture = libTextureMap(root, textureDir, mapaTextura);
-    int totalMat = libMaterialMap(root, mapaEfeito, mapaTextura, mapaMaterial);
+   // int totalMat = libMaterialMap(root, mapaEfeito, mapaTextura, mapaMaterial);
     int totalGeometry = libGeometryMap(root, mapaGeometria);
     
     //Carrega hierarquia dos nodes
@@ -452,6 +452,8 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
              std::string l_nomeGeo = &pUrl[1];
              
              Material *pMaterial = nullptr;
+             Texture *pTexture = nullptr;
+             
              Draw *pDraw = mapaGeometria[l_nomeGeo];
            
             tinyxml2::XMLElement* l_nBindMat = _nNode->FirstChildElement ( "bind_material" );
@@ -461,11 +463,42 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                     
                     tinyxml2::XMLElement* l_nInstanceMaterial = l_nTecnicCommon->FirstChildElement ( "instance_material" );
                     
-                    const char* pTarguet = l_nInstanceMaterial->Attribute("target");
-                    std::string l_sTarguet = &pTarguet[1];
+                    const char* pTarguet = l_nInstanceMaterial->Attribute("target");                    
+                    loadNodeLib ( root, ( const char* ) &pTarguet[1], "library_materials", "material", &l_nNodeSourceData );
+                    if (l_nNodeSourceData != nullptr) {
+                        
+                       std::string nomeMaterial = retornaAtributo("id", l_nNodeSourceData);
+                       pMaterial = new Material(nomeMaterial);
+                       pMaterial->loadCollada(root, l_nNodeSourceData); 
+                       
+                       
+                       
+                        tinyxml2::XMLElement* l_nInstanceEffect = l_nNodeSourceData->FirstChildElement ( "instance_effect" );
+                        if (l_nInstanceEffect != nullptr) {
+                        
+                            tinyxml2::XMLElement* l_nNodeSourceTex = nullptr;
+                            const char* l_pUrlEffect = l_nInstanceEffect->Attribute ( "url" );
+                            loadNodeLib ( root, ( const char* ) &l_pUrlEffect[1], "library_effects", "effect", &l_nNodeSourceTex );
+                            
+                            if (l_nNodeSourceTex != nullptr) {
+                                
+                                tinyxml2::XMLElement* l_nProfile = l_nNodeSourceTex->FirstChildElement("profile_COMMON");
+                                if (l_nProfile != nullptr) {
+                                   
+                                    tinyxml2::XMLElement* l_nParam = l_nProfile->FirstChildElement("newparam");
+                                    if (l_nParam != nullptr) {
+                                        const char* l_val = l_nParam->FirstChildElement("surface")->FirstChildElement("init_from")->GetText();
+                                        if (l_val != nullptr) {
+                                        
+                                            pTexture = mapaTextura[std::string(l_val)];
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     
-                    pMaterial = mapaMaterial[ l_sTarguet ];
-                    
+
+                    }                    
                 }
             }
              
@@ -497,6 +530,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                                         
                                         pSky->pDraw = pDraw;
                                         pSky->pMaterial = pMaterial;
+                                        pSky->pTexture = pTexture;
                                         
                                         _pNodePai->addChild(pSky);
                                         pLastNodeDone = pSky;
@@ -514,6 +548,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                 pObj->setTransform(*l_pTransform);
                 pObj->pDraw = pDraw;
                 pObj->pMaterial = pMaterial;
+                pObj->pTexture = pTexture;
                 
 				mapaObjeto[_id] = pObj;
 

@@ -19,7 +19,6 @@ enum class TextureFilter
     Mipmapped
 };
 
-
 class Texture : public Entity
 {
 public:
@@ -49,7 +48,7 @@ public:
     void createRenderTexture ( int sizeX, int sizeY, int channels, int type );
     void beginTexCreated();
     void endTexCreated();
-
+    
 private:
     std::string pathFile;
 

@@ -4,6 +4,7 @@
 #include "Node.h"
 #include "DrawTriMesh.h"
 #include "Material.h"
+#include "Texture.h"
 
 namespace Chimera {
    
@@ -22,6 +23,7 @@ public:
 
    Draw *pDraw;
    Material *pMaterial;
+   Texture *pTexture;
    
 private:
    

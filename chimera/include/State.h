@@ -2,6 +2,7 @@
 #define _STATE__H
 
 #include "Material.h"
+#include "Texture.h"
 #include "Light.h"
 
 namespace Chimera {

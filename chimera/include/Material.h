@@ -36,9 +36,12 @@ public:
     
     void createDefaultEffect();
     
-    void loadCollada ( tinyxml2::XMLElement* _nNode );
+    void loadCollada ( tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode );
     
 private:
+    
+    void loadColladaProfile(tinyxml2::XMLElement* _nNode);
+    
     bool getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode );
     
     Color diffuse;        /* Diffuse color RGBA */

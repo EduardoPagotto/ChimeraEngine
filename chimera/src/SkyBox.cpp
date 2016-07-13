@@ -54,12 +54,26 @@ void SkyBox::render ( bool _texture ) {
        // Enable smooth shading
        glShadeModel ( GL_SMOOTH );
        glDisable ( GL_LIGHTING );
-
-       pMaterial->begin(_texture);
        
-       pDraw->renderExecute ( _texture );
-
-       pMaterial->end();
+       
+ //FIXME reescrever      
+        if (( _texture == true ) && (pTexture != nullptr))
+            pTexture->begin();
+        
+        pMaterial->apply( _texture );
+        
+        //pMaterial->begin(_texture);
+        pDraw->renderExecute(_texture);
+    
+    if (( _texture == true ) && (pTexture != nullptr))
+        pTexture->end();
+    
+    
+//        pMaterial->begin(_texture);
+//        
+//        pDraw->renderExecute ( _texture );
+// 
+//        pMaterial->end();
        
        glPopAttrib();
        glPopAttrib();

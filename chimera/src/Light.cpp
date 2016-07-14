@@ -66,18 +66,13 @@ void Light::accept(NodeVisitor * v)
 
 void Light::update(DataMsg *_dataMsg) {
 
-	if (_dataMsg->getKindOp() == KindOp::START) {
-
-		init();
-	}
-
 	Node::update(_dataMsg);
 }
 
 void Light::init() {
 
 	position = transform.getOrigin();
-
+	Node::init();
 }
 
 void Light::loadCollada ( tinyxml2::XMLElement* _nNode ) {

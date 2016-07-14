@@ -19,13 +19,15 @@ SkyBox::~SkyBox() {
 
 }
 
-void SkyBox::update ( DataMsg *_dataMsg ) {
+void SkyBox::init() {
 
-     if ( _dataMsg->getKindOp() == KindOp::START ) {
-		 pMaterial->init();
-		 pTexture->init();
- 
-     } 
+	pMaterial->init();
+	pTexture->init();
+
+	Node::init();
+}
+
+void SkyBox::update ( DataMsg *_dataMsg ) {
 
     Node::update ( _dataMsg );
 }

@@ -52,14 +52,7 @@ void ParticleEmitter::initialize ( int _max ) {
 
 void ParticleEmitter::update ( DataMsg *_dataMsg ) {
 
-    if ( _dataMsg->getKindOp() == KindOp::START ) {
-
-        Node::update ( _dataMsg );
-        initialize ( 150 );
-
-        pTexture->init();
-
-    } else if ( _dataMsg->getKindOp() == KindOp::DRAW ) {
+	if ( _dataMsg->getKindOp() == KindOp::DRAW ) {
 
         glPushMatrix();
 
@@ -91,6 +84,14 @@ void ParticleEmitter::update ( DataMsg *_dataMsg ) {
     } else if ( _dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE ) {
 
     }
+}
+
+void ParticleEmitter::init()
+{
+	initialize(150);
+	pTexture->init();
+
+	Node::init();
 }
 
 void ParticleEmitter::accept(NodeVisitor * v)

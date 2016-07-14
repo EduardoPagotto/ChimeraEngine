@@ -26,6 +26,7 @@ public:
     ParticleEmitter (Node *_parent, std::string _name );
     virtual ~ParticleEmitter();
     virtual void update ( DataMsg *_dataMsg );
+	virtual void init();
 
 	virtual void accept(class NodeVisitor* v);
 

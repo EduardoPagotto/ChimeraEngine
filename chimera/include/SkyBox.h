@@ -13,10 +13,9 @@ class SkyBox : public Node //FIXME mudar para Draw??
 
 public:
    SkyBox (Node *_parent, std::string _name );
-   virtual ~SkyBox();
-   
+   virtual ~SkyBox(); 
+   virtual void init();
    virtual void update ( DataMsg *_dataMsg );
-
    virtual void accept(class NodeVisitor* v);
 
    void render ( bool _texture );
@@ -24,10 +23,9 @@ public:
    Draw *pDraw;
    Material *pMaterial;
    Texture *pTexture;
-   
+
 private:
-   
-   
+     
 };
 }
 

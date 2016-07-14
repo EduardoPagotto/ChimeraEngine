@@ -62,6 +62,8 @@ void Object::init() {
 	}
 
 	pPhysic->initTransform(transform, this);
+
+	Node::init();
 }
 
 void Object::accept(NodeVisitor * v) {
@@ -88,14 +90,7 @@ void Object::execute ( bool _texture, Object *pObj ) {
 
 void Object::update ( DataMsg *_dataMsg ) {
 
-    if ( _dataMsg->getKindOp() == KindOp::START ) {
-
-		//inicialize primeiro os filhos para vinvulo de Objetos com contraints
-		Node::update(_dataMsg);
-
-		init();
-
-    } else if ( _dataMsg->getKindOp() == KindOp::DRAW ) {
+	if ( _dataMsg->getKindOp() == KindOp::DRAW ) {
 
         glPushMatrix();
 

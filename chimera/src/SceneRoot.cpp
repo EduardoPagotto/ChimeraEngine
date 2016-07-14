@@ -13,10 +13,9 @@ void SceneRoot::accept(NodeVisitor* v) {
 	v->visit(this);
 }
 
-void SceneRoot::initScene() {
+void SceneRoot::init() {
  
-    DataMsg dataMsg ( KindOp::START, this, nullptr, nullptr );
-    Node::update ( &dataMsg );   
+	Node::init();
 }
 
 void SceneRoot::draw(Object *pObjeto) {

@@ -10,10 +10,8 @@ class Group : public Node
 public:
     Group(Node* _parent, std::string _name);
     virtual ~Group();
-    
+	virtual void init();
     void accept(class NodeVisitor* v);
-    
 };
 }
-
 #endif

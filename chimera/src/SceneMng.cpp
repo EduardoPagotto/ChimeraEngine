@@ -162,7 +162,7 @@ void SceneMng::execLight() {
 
 void SceneMng::init() {
  
-    root->initScene();
+    root->init();
     shadoMap.init ( (Node*)root );
 }
 
@@ -241,6 +241,5 @@ void SceneMng::setMaterial ( bool _materialOn ) {
     	glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
     }
 }
-
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

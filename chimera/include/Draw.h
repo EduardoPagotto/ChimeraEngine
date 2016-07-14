@@ -20,13 +20,10 @@ class Draw : public Node
 public:
     Draw (Node *_parent, DrawType _type, std::string _name );
     Draw ( const Draw &_draw );
-
     virtual ~Draw();
-
+	virtual void init();
 	virtual void accept(class NodeVisitor* v);
-
     virtual void renderExecute ( bool _texture ) = 0;
-
     virtual btVector3 getSizeBox() = 0;
 
     DrawType getType() const {

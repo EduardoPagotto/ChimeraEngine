@@ -10,18 +10,13 @@ namespace Chimera {
  */
 enum class KindOp
 {
-    START,
-    STOP,
-    EVENT,
     DRAW,
     DRAW_NO_TEX,
-    SDL,
     IS_ALLOW_COLLIDE,
     START_COLLIDE,
     ON_COLLIDE,
     OFF_COLLIDE,
-    VIDEO_TOGGLE_FULL_SCREEN,
-    NOP
+    VIDEO_TOGGLE_FULL_SCREEN
 };
 
 /**

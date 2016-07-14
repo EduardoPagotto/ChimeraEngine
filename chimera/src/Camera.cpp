@@ -67,8 +67,7 @@ void Camera::render ( void ) {
                 rotation.x(), rotation.y(), rotation.z() );
 }
 
-void Camera::accept(NodeVisitor * v)
-{
+void Camera::accept(NodeVisitor * v) {
 	v->visit(this);
 }
 
@@ -78,14 +77,10 @@ void Camera::init() {
     direction.setValue ( 0.0, 0.0, 0.0 ); //FIXME encontrar no transform
     rotation.setValue ( 0.0, 0.0, 1.0 ); //FIXME encontrar no transform
 
+	Node::init();
 }
 
 void Camera::update(DataMsg *_dataMsg) {
-
-	if (_dataMsg->getKindOp() == KindOp::START) {
-
-		init();
-	}
 
 	Node::update(_dataMsg);
 }

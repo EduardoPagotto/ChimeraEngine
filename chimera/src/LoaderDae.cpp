@@ -484,8 +484,8 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                 Object *pObj = new Object(nullptr, _id);
                 pObj->setTransform(*l_pTransform);
                 pObj->pDraw = pDraw;
-                pObj->pMaterial = pMaterial;
-                pObj->pTexture = pTexture;
+                pObj->pDraw->pMaterial = pMaterial;
+                pObj->pDraw->pTexture = pTexture;
                 
 				mapaObjeto[_id] = pObj;
 

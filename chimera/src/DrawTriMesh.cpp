@@ -38,6 +38,24 @@ DrawTriMesh::~DrawTriMesh() {
     tIndex.clear();
 }
 
+void DrawTriMesh::init() {
+    
+    if (pTexture != nullptr) {
+        pTexture->init();
+        pState->setEnableTexture(pTexture, true);
+    }
+    
+    if (pMaterial == nullptr) {
+        pMaterial = new Material("DefaultMat");
+    }
+
+    pMaterial->init();
+    pState->setEnableMaterial(pMaterial, true);
+    
+    Draw::init();
+}
+
+
 btVector3 DrawTriMesh::getSizeBox() {
     btVector3 retorno ( 0.0f, 0.0f, 0.0f );
     btVector3 l_max ( 0.0f, 0.0f, 0.0f );
@@ -80,6 +98,14 @@ btVector3 DrawTriMesh::getSizeBox() {
 
 void DrawTriMesh::renderExecute ( bool _texture ) {
 
+    if ((_texture == true) && ( pState->getTexture() != nullptr))
+        pState->appyTexture();
+    else {
+        glBindTexture(GL_TEXTURE_2D, 0); //desabilita textura atual
+    }
+    
+    pState->appyMaterial();//pMaterial->apply();
+    
     if ( _texture == true ) {
 
         unsigned l_numFaces = vIndex.getSize() / 3;

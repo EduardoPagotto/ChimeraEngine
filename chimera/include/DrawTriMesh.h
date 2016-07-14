@@ -88,7 +88,7 @@ public:
 
     //virtual void update ( DataMsg *dataMsg );
 
-	virtual void init() {}
+	virtual void init();
 
     virtual void renderExecute ( bool _texture );
     virtual btVector3 getSizeBox();

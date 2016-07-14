@@ -44,7 +44,7 @@ private:
     
     std::vector<Particle*> particles;
     std::vector<Color> coresPart;
-    Texture *pTexture;
+    //Texture *pTexture;
 };
 }
 #endif

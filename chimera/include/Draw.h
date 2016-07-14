@@ -4,6 +4,7 @@
 #include <LinearMath/btVector3.h>
 
 #include "Node.h"
+#include "State.h"
 
 namespace Chimera {
 
@@ -28,8 +29,16 @@ public:
         return type;
     }
 
+    State *getState() {
+        return pState;
+    }
+    
+    Texture *pTexture;
+    Material *pMaterial;
+    
 protected:
     DrawType type;
+    State *pState;    
 };
 }
 #endif

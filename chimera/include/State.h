@@ -29,10 +29,18 @@ public:
      void applyWireFrame();
      void apply();
     
-	 Light* getLight() {
-		 return l;
-	 }
-
+// 	 Light* getLight() {
+// 		 return l;
+// 	 }
+// 
+	 Texture* getTexture() {
+         return t;
+     }
+//      
+//      Material* getMaterial() {
+//          return m;
+//      }
+	 
 private:
      std::map<LightNum, bool> map_light;
      std::map<PolygonMode, FaceMaterial> map_polygonmode;

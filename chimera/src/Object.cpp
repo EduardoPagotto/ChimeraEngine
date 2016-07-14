@@ -13,11 +13,6 @@ Object::Object (Node* _parent, std::string _name ) : Node (_parent, EntityKind::
 
     pPhysic = nullptr;
     pDraw = nullptr;
-	pMaterial = nullptr;
-    pTexture = nullptr;
-    
-	pState = new State();
-
     transform.setIdentity();
 }
 
@@ -38,17 +33,7 @@ void Object::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 
 void Object::init() {
     
-	if (pTexture != nullptr) {
-		pTexture->init();
-		pState->setEnableTexture(pTexture, true);
-	}
-        
-	if (pMaterial == nullptr) {
-		pMaterial = new Material("DefaultMat");
-	}
-
-	pMaterial->init();
-	pState->setEnableMaterial(pMaterial, true);
+    pDraw->init();
 
 	if (pPhysic == nullptr) {
 
@@ -85,20 +70,9 @@ void Object::execute ( bool _texture, Object *pObj ) {
     if ( pPhysic != nullptr ) {
         pPhysic->ajusteMatrix ( pObj->pPhysic );
     }
-
-	if ((_texture == true) && (pTexture != nullptr))
-		pState->appyTexture(); //pTexture->begin();
-	else {
-		glBindTexture(GL_TEXTURE_2D, 0); //desabilita textura atual
-	}
-    
-	pState->appyMaterial();//pMaterial->apply();
    
 	pDraw->renderExecute(_texture);
     
-    //if (( _texture == true ) && (pTexture != nullptr))
-	//	glBindTexture(GL_TEXTURE_2D, 0);//limba buffer de textuRA
-
 }
 
 void Object::update ( DataMsg *_dataMsg ) {

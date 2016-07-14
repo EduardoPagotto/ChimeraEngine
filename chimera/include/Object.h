@@ -40,19 +40,10 @@ public:
         transform = _trans;
     }
     
-	State *getState() {
-		return pState;
-	}
-
 	//FIXME colocar como privada
 	Draw *pDraw;
 
-	Material *pMaterial;
-    Texture *pTexture;
-    
     Physics *pPhysic;
-
-	State *pState;
 
 private:
     void execute ( bool _texture, Object *pObj );

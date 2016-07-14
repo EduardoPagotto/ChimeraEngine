@@ -190,7 +190,7 @@ void ShadowMap::RenderSceneA ( void *pObjeto ) {
     pScene->update ( &dataMsg );
 
     // Now that the world is rendered, save the depth values to a texture
-    pTexture->begin();
+    pTexture->apply();
     //glBindTexture(GL_TEXTURE_2D, g_Texture[SHADOW_ID]);
     glCopyTexSubImage2D ( GL_TEXTURE_2D, 0, 0, 0, 0, 0, ( int ) SHADOW_WIDTH, ( int ) SHADOW_HEIGHT );
 

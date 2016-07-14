@@ -71,15 +71,21 @@ TextureFilter Texture::getFilter() {
 }
 
 
-void Texture::end() {
-    glBindTexture ( GL_TEXTURE_2D, 0 );
-}
+//void Texture::end() {
+//    glBindTexture ( GL_TEXTURE_2D, 0 );
+//}
+//
+//
+//void Texture::begin() {
+//
+//    glBindTexture ( GL_TEXTURE_2D, textureList[indiceFilter] );
+//
+//}
 
+void Texture::apply() {
 
-void Texture::begin() {
-
-    glBindTexture ( GL_TEXTURE_2D, textureList[indiceFilter] );
-
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureList[indiceFilter]);
 }
 
 void Texture::init() {
@@ -204,7 +210,8 @@ void Texture::beginTexCreated() {
     // Turn on our texture unit for shadow mapping and bind our depth texture
     glActiveTextureARB ( GL_TEXTURE0_ARB );
     glEnable ( GL_TEXTURE_2D );
-    begin();
+
+	apply();
     //glBindTexture(GL_TEXTURE_2D, g_Texture[SHADOW_ID]);
 
     // Here is where we set the mode and function for shadow-mapping in fixed functionality.
@@ -275,7 +282,7 @@ void Texture::endTexCreated() {
     glDisable ( GL_TEXTURE_GEN_R );
     glDisable ( GL_TEXTURE_GEN_Q );
 
-    end();
+	glBindTexture(GL_TEXTURE_2D, 0);//end();
 
     // Turn the first multi-texture pass off
     glActiveTextureARB ( GL_TEXTURE0_ARB );

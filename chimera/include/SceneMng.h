@@ -8,7 +8,6 @@
 #include "Object.h"
 #include "Light.h"
 #include "ParticleEmitter.h"
-#include "SkyBox.h"
 #include "HUD.h"
 
 #include "ShadowMap.h"
@@ -39,10 +38,6 @@ public:
     
     Group* createSceneGraph();
     
-//     SceneRoot* getRoot() const {
-//         return root;
-//     }
-
     inline void cameraAtiva ( Camera *_pCam ) {
         pCameraAtiva = _pCam;
     }
@@ -51,37 +46,31 @@ public:
         pObjeto = _pObject;
     }
 
-    inline void skyBoxAtivo ( SkyBox *_pSkyBox ) {
-       pSkyBox = _pSkyBox;
-    }
+	SceneRoot *getRoot() {
+		return root;
+	}
 
-    void setLight ( bool _lightOn );
-    void setMaterial ( bool _materialOn );
+//    void setLight ( bool _lightOn );
+//    void setMaterial ( bool _materialOn );
 
     void draw ( HUD *_pHud );
 
 private:
     void hudUpdate ( HUD *_pHud,int eye );
-    void execLight();
 
     void parseEntity ( Node *_pNode );
     void addEntityToScene ( Node *_pNode );
-
-    bool hasLight;
-    bool hasMaterial;
 
     LoaderDae *pLoader;
     
     SceneRoot *root;
     Camera *pCameraAtiva;
     Object *pObjeto;
-    SkyBox *pSkyBox;
 
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
     std::vector<Object*> m_vObject;
     std::vector<ParticleEmitter*> m_vParticle;
-    std::vector<SkyBox*> m_vSkyBox;
 
     ShadowMap shadoMap;
 

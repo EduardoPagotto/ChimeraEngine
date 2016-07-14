@@ -17,14 +17,17 @@ State::~State() {
 }
 
 void State::setEnable(GLenum face,bool flag) {
-    if(flag) glEnable(face);
-    else{
+
+    if (flag) 
+		glEnable(face);
+    else
         glDisable(face);
-    }
 }
 
 void State::setEnableClient(GLenum face,bool flag) {
-    if(flag) glEnableClientState(face);
+
+    if(flag) 
+		glEnableClientState(face);
     else{
         glDisableClientState(face);
     }
@@ -85,40 +88,20 @@ void State::apply() {
 
     using namespace std;
     
-    for(map<LightNum,bool>::iterator iter = this->map_light.begin(); iter != this->map_light.end(); ++iter) {
-        LightNum k= iter->first;
-        bool flag=iter->second;
-        if(flag) 
-            setEnable(k,flag);
-    }
+    for(map<LightNum,bool>::iterator iter = this->map_light.begin(); iter != this->map_light.end(); ++iter)
+		setEnable(iter->first, iter->second);
     
-    for(map<PolygonMode,FaceMaterial>::iterator iter = this->map_polygonmode.begin(); iter != this->map_polygonmode.end(); ++iter) {
-        PolygonMode k= iter->first;
-        FaceMaterial l=iter->second;
-                
-        glPolygonMode((GLenum)l,(GLenum)k); //TODO Testar se é isso mesmo!!
-    }
+    for(map<PolygonMode,FaceMaterial>::iterator iter = this->map_polygonmode.begin(); iter != this->map_polygonmode.end(); ++iter)
+        glPolygonMode((GLenum)iter->second,(GLenum)iter->first); //TODO Testar se é isso mesmo!!
     
-    for(map<CullFace,bool>::iterator iter = this->map_cullface.begin(); iter != this->map_cullface.end(); ++iter) {
-        CullFace k= iter->first;
-        bool flag=iter->second;
-        if(flag) 
-            setEnable(k,flag);
-    }
+    for(map<CullFace,bool>::iterator iter = this->map_cullface.begin(); iter != this->map_cullface.end(); ++iter) 
+		setEnable(iter->first, iter->second);
     
-    for(map<ClientState,bool>::iterator iter = this->map_clientstate.begin(); iter != this->map_clientstate.end(); ++iter) {
-        ClientState k= iter->first;
-        bool flag=iter->second;
-        if(flag) 
-			setEnableClient(k,flag);
-    }
+    for(map<ClientState,bool>::iterator iter = this->map_clientstate.begin(); iter != this->map_clientstate.end(); ++iter)
+		setEnableClient(iter->first, iter->second);
     
-    for(map<ColorMaterial,bool>::iterator iter = this->map_colormaterial.begin(); iter != this->map_colormaterial.end(); ++iter) {
-        ColorMaterial k= iter->first;
-        bool flag=iter->second;
-        if(flag) 
-            setEnable(k,flag);
-    }   
+    for(map<ColorMaterial,bool>::iterator iter = this->map_colormaterial.begin(); iter != this->map_colormaterial.end(); ++iter) 
+        setEnable(iter->first, iter->second);
 }
 
 void State::applyWireFrame() {
@@ -131,10 +114,10 @@ void State::appyMaterial() {
     
     //TODO implementar
      for(map<Material*,bool>::iterator iter = this->map_material.begin(); iter != this->map_material.end(); ++iter){
-                 Material* k= iter->first;
-                 bool flag=iter->second;
-				 if (flag)
-					 k->apply();
+        Material* k= iter->first;
+        bool flag=iter->second;
+		if (flag)
+			k->apply();
      }
 }
 
@@ -153,7 +136,7 @@ void State::appyTexture(){
             if(k->textureLoad() == false)
                 k->init();
                         
-            k->begin();
+            k->apply();
         }
             
     }

@@ -13,7 +13,6 @@
 #endif
 
 #include "Game.h"
-#include "DrawBox.h"
 #include "LoaderDae.h"
 #include "FlowControl.h"
 #include "ParticleEmitter.h"

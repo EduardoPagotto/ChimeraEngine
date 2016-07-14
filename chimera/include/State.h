@@ -29,6 +29,10 @@ public:
      void applyWireFrame();
      void apply();
     
+	 Light* getLight() {
+		 return l;
+	 }
+
 private:
      std::map<LightNum, bool> map_light;
      std::map<PolygonMode, FaceMaterial> map_polygonmode;

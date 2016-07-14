@@ -142,15 +142,12 @@ void ParticleEmitter::loadImage ( const char *_file ) {
 void ParticleEmitter::render() {
 
     // Select Our Texture
-    pTexture->begin();
+    pTexture->apply();
 
     for ( unsigned loop = 0; loop < particles.size(); loop++ ) {
         Particle *pParticle = particles[loop];
         pParticle->render();
     }
-
-    pTexture->end();
-
 }
 
 // estrutura de comparacao
@@ -165,7 +162,6 @@ struct ParticleCompare {
         retorno = ( d2 < d1 );
 
         return retorno;
-
     }
 };
 

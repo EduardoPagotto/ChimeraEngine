@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "ExceptionSDL.h"
 
+#include "OpenGLDefs.h"
+
 Game::Game ( Chimera::SceneMng *_pScenMng ) : GameClient ( _pScenMng ) {
 }
 
@@ -115,7 +117,9 @@ void Game::start() {
     GameClient::start();
 
     // Pega o Skybox
-    pSkyBox = ( Chimera::SkyBox* ) pSceneMng->getNode ( Chimera::EntityKind::SKYBOX, 0 );
+	Chimera::Object* pSkyBox = ( Chimera::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "SkyBox" );
+	pSkyBox->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
+	pSkyBox->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
 
     //Pega primeira camera
     pOrbitalCam = ( Chimera::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );
@@ -123,11 +127,19 @@ void Game::start() {
     //Ajusta objeto como o primario
     pObj = ( Chimera::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "Zoltan" );
 
-    pSceneMng->skyBoxAtivo ( pSkyBox );
+	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->getNode(Chimera::EntityKind::LIGHT, 0);
+
+    //pSceneMng->skyBoxAtivo ( pSkyBox );
     pSceneMng->cameraAtiva ( pOrbitalCam );
     pSceneMng->objetoAtivo ( pObj );
-    pSceneMng->setLight ( true );
-    pSceneMng->setMaterial ( true );
+
+	//ajusta scene root com luz e material ativo
+	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
+	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0, true);
+	pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
+	pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
+    //pSceneMng->setLight ( true );
+    //pSceneMng->setMaterial ( true );
 
     sPosicaoObj = "pos:(,,)";
 

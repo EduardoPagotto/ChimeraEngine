@@ -9,6 +9,8 @@
 #include "Material.h"
 #include "Texture.h"
 
+#include "State.h"
+
 namespace Chimera {
     
 class Object : public Node
@@ -38,12 +40,19 @@ public:
         transform = _trans;
     }
     
+	State *getState() {
+		return pState;
+	}
+
 	//FIXME colocar como privada
 	Draw *pDraw;
+
 	Material *pMaterial;
     Texture *pTexture;
     
     Physics *pPhysic;
+
+	State *pState;
 
 private:
     void execute ( bool _texture, Object *pObj );

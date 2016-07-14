@@ -92,8 +92,6 @@
     <ClInclude Include="..\..\chimera\include\Constraint.h" />
     <ClInclude Include="..\..\chimera\include\DataMsg.h" />
     <ClInclude Include="..\..\chimera\include\Draw.h" />
-    <ClInclude Include="..\..\chimera\include\DrawBox.h" />
-    <ClInclude Include="..\..\chimera\include\DrawGrid.h" />
     <ClInclude Include="..\..\chimera\include\DrawTriMesh.h" />
     <ClInclude Include="..\..\chimera\include\Entity.h" />
     <ClInclude Include="..\..\chimera\include\Exception.h" />
@@ -124,7 +122,6 @@
     <ClInclude Include="..\..\chimera\include\Shader.h" />
     <ClInclude Include="..\..\chimera\include\ShadowMap.h" />
     <ClInclude Include="..\..\chimera\include\Singleton.h" />
-    <ClInclude Include="..\..\chimera\include\SkyBox.h" />
     <ClInclude Include="..\..\chimera\include\State.h" />
     <ClInclude Include="..\..\chimera\include\Texture.h" />
     <ClInclude Include="..\..\chimera\include\Timer.h" />
@@ -141,8 +138,6 @@
     <ClCompile Include="..\..\chimera\src\Color.cpp" />
     <ClCompile Include="..\..\chimera\src\Constraint.cpp" />
     <ClCompile Include="..\..\chimera\src\Draw.cpp" />
-    <ClCompile Include="..\..\chimera\src\DrawBox.cpp" />
-    <ClCompile Include="..\..\chimera\src\DrawGrid.cpp" />
     <ClCompile Include="..\..\chimera\src\DrawTriMesh.cpp" />
     <ClCompile Include="..\..\chimera\src\Entity.cpp" />
     <ClCompile Include="..\..\chimera\src\FlowControl.cpp" />
@@ -166,7 +161,6 @@
     <ClCompile Include="..\..\chimera\src\SceneRoot.cpp" />
     <ClCompile Include="..\..\chimera\src\Shader.cpp" />
     <ClCompile Include="..\..\chimera\src\ShadowMap.cpp" />
-    <ClCompile Include="..\..\chimera\src\SkyBox.cpp" />
     <ClCompile Include="..\..\chimera\src\State.cpp" />
     <ClCompile Include="..\..\chimera\src\Texture.cpp" />
     <ClCompile Include="..\..\chimera\src\Timer.cpp" />

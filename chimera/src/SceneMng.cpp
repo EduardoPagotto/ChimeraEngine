@@ -9,7 +9,6 @@ SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
     root = new SceneRoot(nullptr,"root");
     pCameraAtiva = nullptr;
     pObjeto = nullptr;
-    pSkyBox = nullptr;
     pLoader = nullptr;
 }
 
@@ -60,8 +59,6 @@ void SceneMng::addEntityToScene ( Node *_pNode ) {
     case EntityKind::PARTICLE_EMITTER:
         m_vParticle.push_back ( ( ParticleEmitter* ) _pNode );
         break;
-    case EntityKind::SKYBOX:
-       m_vSkyBox.push_back ( ( SkyBox* ) _pNode );
        break;
     default:
         break;
@@ -102,14 +99,6 @@ Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
             }
         }
         break;
-        //FIXME verificar como implementar
-    case EntityKind::SKYBOX:
-        for ( Node *node : m_vSkyBox ) {
-            if ( node->getName().compare ( _nome ) == 0 ) {
-                return node;
-            }
-        }
-        break;
     default:
         break;
     }
@@ -142,22 +131,11 @@ Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
             retorno = m_vParticle[index];
         }
         break;
-     case EntityKind::SKYBOX: //FIXME verificar como implementar
-         if ( m_vSkyBox.size() > index ) {
-             retorno = m_vSkyBox[index];
-         }
-         break;
     default:
         break;
     }
 
     return retorno;
-}
-
-void SceneMng::execLight() {
-    for ( Light *pLight : m_vLight ) {
-        pLight->apply( LIGHT0 );
-    }
 }
 
 void SceneMng::init() {
@@ -176,10 +154,13 @@ void SceneMng::draw ( HUD *_pHud ) {
     }
 
 #ifdef TESTEZ1
-    for ( Light *pLight : m_vLight ) {
-        btVector3 posicao = pLight->getPosition();
-        shadoMap.StoreLightMatrices ( posicao ); //FIXME so funciona para 1 luz
-    }
+    //for ( Light *pLight : m_vLight ) {
+    //    btVector3 posicao = pLight->getPosition();
+    //    shadoMap.StoreLightMatrices ( posicao ); //FIXME so funciona para 1 luz
+    //}
+
+	btVector3 posicao = root->getState()->getLight()->getPosition();
+	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
 
     shadoMap.RenderSceneA ( pObjeto );
 #endif
@@ -190,14 +171,9 @@ void SceneMng::draw ( HUD *_pHud ) {
 
 		pCameraAtiva->render();
 
-        if ( pSkyBox != nullptr ) {
-           pSkyBox->render ( true );
-        }
-
         root->draw(pObjeto);
         
-        execLight();
-
+      
 #ifdef TESTEZ1
         shadoMap.ApplyShadowMap ( pObjeto );
 #endif
@@ -222,24 +198,24 @@ void SceneMng::hudUpdate ( HUD *_pHud,int eye ) {
 
 }
 
-void SceneMng::setLight ( bool _lightOn ) {
-    if ( _lightOn == true ) {
-        glEnable ( GL_LIGHTING );
-    } else {
-        glDisable ( GL_LIGHTING );
-    }
-}
-
-void SceneMng::setMaterial ( bool _materialOn ) {
-
-    if (_materialOn == true) {
-    	glDisable(GL_COLOR_MATERIAL);
-    	glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //TODO verificar necessidade
-    }
-    else {
-    	glEnable(GL_COLOR_MATERIAL);
-    	glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
-    }
-}
+//void SceneMng::setLight ( bool _lightOn ) {
+//    if ( _lightOn == true ) {
+//        glEnable ( GL_LIGHTING );
+//    } else {
+//        glDisable ( GL_LIGHTING );
+//    }
+//}
+//
+//void SceneMng::setMaterial ( bool _materialOn ) {
+//
+//    if (_materialOn == true) {
+//    	glDisable(GL_COLOR_MATERIAL);
+//    	glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //TODO verificar necessidade
+//    }
+//    else {
+//    	glEnable(GL_COLOR_MATERIAL);
+//    	glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
+//    }
+//}
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

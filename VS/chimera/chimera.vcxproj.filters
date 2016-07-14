@@ -19,12 +19,6 @@
     <ClCompile Include="..\..\chimera\src\Constraint.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\chimera\src\DrawBox.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\chimera\src\DrawGrid.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\chimera\src\DrawTriMesh.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -97,9 +91,6 @@
     <ClCompile Include="..\..\chimera\src\Draw.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\chimera\src\SkyBox.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\chimera\src\ShadowMap.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -142,12 +133,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Draw.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\DrawBox.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\DrawGrid.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\DrawTriMesh.h">
@@ -235,9 +220,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\ParticleEmitter.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\SkyBox.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\ShadowMap.h">

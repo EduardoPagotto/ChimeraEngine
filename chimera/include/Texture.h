@@ -29,8 +29,8 @@ public:
 
     virtual void clone ( Entity **ppNode );
 
-    void begin();
-    void end();
+	void apply();
+
     void init();
 
     SDL_Surface *loadImage();

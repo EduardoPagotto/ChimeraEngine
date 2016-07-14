@@ -16,6 +16,8 @@ Object::Object (Node* _parent, std::string _name ) : Node (_parent, EntityKind::
 	pMaterial = nullptr;
     pTexture = nullptr;
     
+	pState = new State();
+
     transform.setIdentity();
 }
 
@@ -36,32 +38,40 @@ void Object::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 
 void Object::init() {
     
-    if (pTexture != nullptr)
-        pTexture->init();
+	if (pTexture != nullptr) {
+		pTexture->init();
+		pState->setEnableTexture(pTexture, true);
+	}
         
-	if (pMaterial == nullptr)
-		pMaterial = new Material( "DefaultMat");
+	if (pMaterial == nullptr) {
+		pMaterial = new Material("DefaultMat");
+	}
 
 	pMaterial->init();
+	pState->setEnableMaterial(pMaterial, true);
 
 	if (pPhysic == nullptr) {
 
-		//Cria corpo caso nao exista
-		pPhysic = new Physics( "");
-		pPhysic->setMass(0.5f);
-		pPhysic->setFriction(0.0f);
-		pPhysic->setRestitution(0.0f);
-	}
+		printf("Objeto sem Fisica:%s\n", getName().c_str());
+		////Cria corpo caso nao exista
+		//pPhysic = new Physics( "");
+		//pPhysic->setMass(0.5f);
+		//pPhysic->setFriction(0.0f);
+		//pPhysic->setRestitution(0.0f);
 
-	if (pDraw != nullptr) {
-		pPhysic->setShapeBox(pDraw->getSizeBox());
-	}
+		//if (pDraw != nullptr) {
+		//	pPhysic->setShapeBox(pDraw->getSizeBox());
+		//}
 
-	if (pPhysic->isShapeDefine() == false) {
-		pPhysic->setShapeBox(pDraw->getSizeBox());
 	}
+	else {
 
-	pPhysic->initTransform(transform, this);
+		if (pPhysic->isShapeDefine() == false) {
+			pPhysic->setShapeBox(pDraw->getSizeBox());
+		}
+
+		pPhysic->initTransform(transform, this);
+	}
 
 	Node::init();
 }
@@ -76,15 +86,18 @@ void Object::execute ( bool _texture, Object *pObj ) {
         pPhysic->ajusteMatrix ( pObj->pPhysic );
     }
 
-    if (( _texture == true ) && (pTexture != nullptr))
-        pTexture->begin();
+	if ((_texture == true) && (pTexture != nullptr))
+		pState->appyTexture(); //pTexture->begin();
+	else {
+		glBindTexture(GL_TEXTURE_2D, 0); //desabilita textura atual
+	}
     
-    pMaterial->apply();
+	pState->appyMaterial();//pMaterial->apply();
    
 	pDraw->renderExecute(_texture);
     
-    if (( _texture == true ) && (pTexture != nullptr))
-        pTexture->end();
+    //if (( _texture == true ) && (pTexture != nullptr))
+	//	glBindTexture(GL_TEXTURE_2D, 0);//limba buffer de textuRA
 
 }
 

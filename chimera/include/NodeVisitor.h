@@ -6,7 +6,6 @@
 #include "Light.h"
 #include "Object.h"
 #include "ParticleEmitter.h"
-#include "SkyBox.h"
 #include "SceneRoot.h"
 #include "Group.h"
 
@@ -23,7 +22,6 @@ public:
 	virtual void visit(Light *_pLight) = 0;
 	virtual void visit(Object *_pObject) = 0;
 	virtual void visit(ParticleEmitter *_pParticleEmitter) = 0;
-	virtual void visit(SkyBox *_pSkyBox) = 0;
 	virtual void visit(SceneRoot *_pSceneRoot) = 0;
     virtual void visit(Group* _pGroup) = 0;
 

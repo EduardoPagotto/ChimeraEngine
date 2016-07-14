@@ -9,10 +9,8 @@ namespace Chimera {
 
 enum class DrawType
 {
-    BOX,
-    GRID,
-    SPHERE,
-    MESH
+    MESH,
+    PARTICLE_SYSTEM
 };
 
 class Draw : public Node

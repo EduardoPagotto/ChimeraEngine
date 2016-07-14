@@ -46,17 +46,13 @@ set (SourcesChimeraAPI
 	src/PhysicsControl.cpp
 	src/Constraint.cpp
 	src/Texture.cpp
-	src/Effect.cpp
 	src/Draw.cpp
-	src/DrawBox.cpp
-	src/DrawGrid.cpp
 	src/DrawTriMesh.cpp
 	src/Font.cpp
 	src/HUD.cpp
 	src/Timer.cpp
 	src/Video.cpp
 	src/VideoDevice.cpp
-	src/Loader.cpp
 	src/LoaderDae.cpp
 	src/SceneMng.cpp
 	src/FlowControl.cpp
@@ -65,7 +61,6 @@ set (SourcesChimeraAPI
 	src/JoystickState.cpp
 	src/Particle.cpp
 	src/ParticleEmitter.cpp
-	src/SkyBox.cpp
 	src/ShadowMap.cpp
 	src/Shader.cpp
 	src/SceneRoot.cpp

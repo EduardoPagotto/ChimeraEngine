@@ -7,7 +7,7 @@
 
 namespace Chimera {
     
-ParticleEmitter::ParticleEmitter (Node* _parent, std::string _name ) : Node (_parent, EntityKind::PARTICLE_EMITTER, _name ) {
+ParticleEmitter::ParticleEmitter (Node* _parent, std::string _name ) : Draw (_parent, DrawType::PARTICLE_SYSTEM, _name ) {
 
     coresPart.push_back ( Color ( 1.0f, 0.5f, 0.5f ) );
     coresPart.push_back ( Color ( 1.0f, 0.75f, 0.5f ) );
@@ -44,7 +44,6 @@ void ParticleEmitter::initialize ( int _max ) {
                             ( float ) ( ( rand() % 50 ) - 25.0f ) * 10.0f,
                             ( float ) ( ( rand() % 50 ) - 25.0f ) * 10.0f );   // yi e zi repetiam no original
 
-
         Particle *pParticle = new Particle ( btVector3 ( 5.0, 5.0, 5.0 ), direcao, btVector3 ( 0.0, 0.0, 0.0 ), coresPart[indiceCor], 10.0f );
         particles.push_back ( pParticle );
     }
@@ -73,7 +72,7 @@ void ParticleEmitter::update ( DataMsg *_dataMsg ) {
             SortParticles ( pCam->getPosition() );
         }
 
-        render();
+        renderExecute(true);
 
         glPopAttrib();
         glPopAttrib();
@@ -81,21 +80,28 @@ void ParticleEmitter::update ( DataMsg *_dataMsg ) {
         Node::update ( _dataMsg );
 
         glPopMatrix();
+        
     } else if ( _dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE ) {
 
     }
 }
 
-void ParticleEmitter::init()
-{
+void ParticleEmitter::init() {
 	initialize(150);
 	pTexture->init();
 
 	Node::init();
 }
 
-void ParticleEmitter::accept(NodeVisitor * v)
-{
+void ParticleEmitter::setSizeBox ( const btVector3& _size ) {
+    sizeBox = _size;
+}
+
+btVector3 ParticleEmitter::getSizeBox() {
+    return sizeBox;
+}
+
+void ParticleEmitter::accept(NodeVisitor * v) {
 	v->visit(this);
 }
 
@@ -139,7 +145,7 @@ void ParticleEmitter::loadImage ( const char *_file ) {
 
 }
 
-void ParticleEmitter::render() {
+void ParticleEmitter::renderExecute(bool _texture) {
 
     // Select Our Texture
     pTexture->apply();

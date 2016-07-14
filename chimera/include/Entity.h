@@ -20,7 +20,6 @@ enum class EntityKind : int8_t
     CAMERA,
     LIGHT,
     OBJECT,
-    PARTICLE_EMITTER,
     PHYSICS,
     DRAW,
     CONSTRAINT,

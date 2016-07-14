@@ -70,7 +70,6 @@ private:
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
     std::vector<Object*> m_vObject;
-    std::vector<ParticleEmitter*> m_vParticle;
 
     ShadowMap shadoMap;
 

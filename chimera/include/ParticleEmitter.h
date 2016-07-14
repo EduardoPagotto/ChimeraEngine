@@ -15,28 +15,33 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-# include "Node.h"
+# include "Draw.h"
 # include "Texture.h"
 
 namespace Chimera {
     
-class ParticleEmitter : public Node
+class ParticleEmitter : public Draw
 {
 public:
     ParticleEmitter (Node *_parent, std::string _name );
     virtual ~ParticleEmitter();
     virtual void update ( DataMsg *_dataMsg );
 	virtual void init();
-
 	virtual void accept(class NodeVisitor* v);
-
-    void initialize ( int _max );
-    void loadImage ( const char *_file );
+    virtual void renderExecute(bool _texture);
+    virtual btVector3 getSizeBox();
+    
     void setGL();
-    void render();
+    void loadImage ( const char *_file );
     void SortParticles ( const btVector3 &posCamera );
+    void setSizeBox(const btVector3 &_size);
 
 private:
+    
+    btVector3 sizeBox;
+    
+    void initialize ( int _max );
+    
     std::vector<Particle*> particles;
     std::vector<Color> coresPart;
     Texture *pTexture;

@@ -56,10 +56,6 @@ void SceneMng::addEntityToScene ( Node *_pNode ) {
     case EntityKind::OBJECT:
         m_vObject.push_back ( ( Object* ) _pNode );
         break;
-    case EntityKind::PARTICLE_EMITTER:
-        m_vParticle.push_back ( ( ParticleEmitter* ) _pNode );
-        break;
-       break;
     default:
         break;
     }
@@ -92,13 +88,6 @@ Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
             }
         }
         break;
-    case EntityKind::PARTICLE_EMITTER:
-        for ( Node *node : m_vParticle ) {
-            if ( node->getName().compare ( _nome ) == 0 ) {
-                return node;
-            }
-        }
-        break;
     default:
         break;
     }
@@ -124,11 +113,6 @@ Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
     case EntityKind::OBJECT:
         if ( m_vObject.size() > index ) {
             retorno = m_vObject[index];
-        }
-        break;
-    case EntityKind::PARTICLE_EMITTER:
-        if ( m_vParticle.size() > index ) {
-            retorno = m_vParticle[index];
         }
         break;
     default:

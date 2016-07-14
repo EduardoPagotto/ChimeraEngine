@@ -18,16 +18,13 @@ Material::Material ( std::string _name ) : Entity ( EntityKind::MATERIAL, _name 
     map_modes[ModeMaterial::SHININESS]=false;
     
 	setFace(FaceMaterial::FRONT);
-    
 }
 
 Material::~Material() {
 }
 
 void Material::init() {
-
 }
-
 
 void Material::setAmbient(const Color &_color) {
 	ambient = _color;
@@ -96,20 +93,20 @@ void Material::createDefaultEffect() {
 	setShine(50.0f);
 }
 
-void Material::apply(bool hasTexture) {
+void Material::apply() {
 
-		for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
+	for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
 
-			ModeMaterial k = iter->first;
-			GLfloat *p = (k != ModeMaterial::SHININESS) ? (GLfloat*)((Color*)iter->second)->ptr() : (GLfloat*)iter->second;
+		ModeMaterial k = iter->first;
+		GLfloat *p = (k != ModeMaterial::SHININESS) ? (GLfloat*)((Color*)iter->second)->ptr() : (GLfloat*)iter->second;
 
-			glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
-		}
+		glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
+	}
 
-		//se ha textura coloque a cor como branca para nao interferir com a textura
-		if (hasTexture) {
-			glMaterialfv(GL_FRONT, GL_DIFFUSE, Color::WHITE.ptr());
-		}
+	//se ha textura coloque a cor como branca para nao interferir com a textura
+	//if (hasTexture) {
+	//	glMaterialfv(GL_FRONT, GL_DIFFUSE, Color::WHITE.ptr());
+	//}
 
    //  if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
    //      glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
@@ -119,41 +116,6 @@ void Material::apply(bool hasTexture) {
    //      glMaterialfv ( GL_FRONT, GL_EMISSION, emission.ptr() );
    //  }
 }
-
-// 
-
-// Material::~Material() {
-// }
-// 
-// void  Material::init() {
-// 
-// 	if (pTexture != nullptr)
-// 		pTexture->init();
-// 
-// 	if (pEffect == nullptr) {
-// 		pEffect = new Effect( "effect_interno");
-// 		pEffect->createDefaultEffect();
-// 	}
-// 
-// }
-// 
-// void Material::end() {
-// 
-// 	if (( hasTextureAtive == true ) && (pTexture != nullptr))
-// 		pTexture->end();
-// }
-// 
-// void Material::begin ( bool _texture ) {
-// 
-//     hasTextureAtive = _texture;
-//    
-// 
-//     if (( _texture == true ) && (pTexture != nullptr))
-// 		pTexture->begin();
-// 
-// 	pEffect->apply();
-//        
-// }
 
 void Material::loadCollada(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode) {
     
@@ -174,13 +136,6 @@ void Material::loadColladaProfile(tinyxml2::XMLElement* _nNode) {
 
 	tinyxml2::XMLElement* l_nProfile = _nNode->FirstChildElement("profile_COMMON");
 	if (l_nProfile != nullptr) {
-// 		tinyxml2::XMLElement* l_nParam = l_nProfile->FirstChildElement("newparam");
-// 		if (l_nParam != nullptr) {
-// 			const char* l_val = l_nParam->FirstChildElement("surface")->FirstChildElement("init_from")->GetText();
-// 			if (l_val != nullptr) {
-// 				setNameTextureId(l_val);
-// 			}
-// 		}
 
         Color cor;
         if (getPhong("emission", cor, l_nProfile) == true) {
@@ -199,7 +154,6 @@ void Material::loadColladaProfile(tinyxml2::XMLElement* _nNode) {
             setSpecular(cor);
         }
 
-
         tinyxml2::XMLElement* l_nNode = l_nProfile->FirstChildElement("technique");
         if (l_nNode->Attribute("sid") != nullptr) {
 
@@ -215,11 +169,9 @@ void Material::loadColladaProfile(tinyxml2::XMLElement* _nNode) {
                         setShine(atof(l_val));
 
                     }
-
                 }
             }
         }
-
     }
 }
 
@@ -232,18 +184,22 @@ bool Material::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElem
         if ( l_nPhong != nullptr ) {
             tinyxml2::XMLElement* l_nColor = l_nPhong->FirstChildElement ( _tipoCor );
             if ( l_nColor != nullptr ) {
-                l_nColor = l_nColor->FirstChildElement ( "color" );
-                if ( l_nColor != nullptr ) {
+				tinyxml2::XMLElement* l_nColorVal = l_nColor->FirstChildElement ( "color" );
+                if (l_nColorVal != nullptr ) {
                     std::vector<btScalar> l_arrayF;
-                    const char* l_cor = l_nColor->GetText();
+                    const char* l_cor = l_nColorVal->GetText();
                     loadArrayBtScalar ( l_cor, l_arrayF );
 
                     _color.set ( l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0 );
                     return true;
                 } else {
 
-                    _color.set ( 1.0, 1.0, 1.0, 1.0 ); //FIXME preciso??
+					l_nColorVal = l_nColor->FirstChildElement("texture");
+					if (l_nColorVal != nullptr) {
 
+						_color.set(Color::WHITE);
+						return true;
+					}
                 }
             }
          }

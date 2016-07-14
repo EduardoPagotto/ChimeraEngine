@@ -24,20 +24,10 @@ void SkyBox::update ( DataMsg *_dataMsg ) {
      if ( _dataMsg->getKindOp() == KindOp::START ) {
 		 pMaterial->init();
 		 pTexture->init();
-// 
-//         //inicialize primeiro os filhos para garantir textura e efeito em material
-//         Node::update ( _dataMsg );
-// 
-//         //inicializa objeto local
-//         //pDraw = ( Draw* ) findChildByKind ( EntityKind::DRAW, 0 );
-// 
-     } else {
-// 
-//         Node::update ( _dataMsg );
-// 
-     }
-    Node::update ( _dataMsg );
+ 
+     } 
 
+    Node::update ( _dataMsg );
 }
 
 void SkyBox::accept(NodeVisitor* v)
@@ -55,31 +45,20 @@ void SkyBox::render ( bool _texture ) {
        // Enable smooth shading
        glShadeModel ( GL_SMOOTH );
        glDisable ( GL_LIGHTING );
-       
-       
- //FIXME reescrever      
+            
         if (( _texture == true ) && (pTexture != nullptr))
             pTexture->begin();
         
-        pMaterial->apply( _texture );
+        pMaterial->apply();
         
         //pMaterial->begin(_texture);
         pDraw->renderExecute(_texture);
     
     if (( _texture == true ) && (pTexture != nullptr))
         pTexture->end();
-    
-    
-//        pMaterial->begin(_texture);
-//        
-//        pDraw->renderExecute ( _texture );
-// 
-//        pMaterial->end();
-       
+           
        glPopAttrib();
        glPopAttrib();
-
    }
-
 }
 }

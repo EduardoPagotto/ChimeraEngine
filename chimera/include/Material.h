@@ -32,7 +32,7 @@ public:
 	bool isSet(const ModeMaterial &_val);
 	void setFace(const FaceMaterial &_val);
     
-    void apply(bool hasTexture);
+    void apply();
     
     void createDefaultEffect();
     
@@ -54,7 +54,6 @@ private:
     
     std::map<ModeMaterial, bool> map_modes;
 	std::map<ModeMaterial, void*> map_params;
-
 };
 }
 

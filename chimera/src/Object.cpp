@@ -64,8 +64,7 @@ void Object::init() {
 	pPhysic->initTransform(transform, this);
 }
 
-void Object::accept(NodeVisitor * v)
-{
+void Object::accept(NodeVisitor * v) {
 	v->visit(this);
 }
 
@@ -78,9 +77,8 @@ void Object::execute ( bool _texture, Object *pObj ) {
     if (( _texture == true ) && (pTexture != nullptr))
         pTexture->begin();
     
-    pMaterial->apply( pTexture != nullptr ? true : false );
-    
-	//pMaterial->begin(_texture);
+    pMaterial->apply();
+   
 	pDraw->renderExecute(_texture);
     
     if (( _texture == true ) && (pTexture != nullptr))

@@ -16,7 +16,6 @@ enum class EntityKind : int8_t
 {
     NODE,
     TEXTURE,
-    EFFECT,
     MATERIAL,
     CAMERA,
     LIGHT,
@@ -93,7 +92,6 @@ private:
     unsigned serial;
     static unsigned serialMaster;
     std::string name;
-    //std::string id;
 };
 
 //unsigned Entity::serialMaster = 0;

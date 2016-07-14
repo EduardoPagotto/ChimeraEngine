@@ -115,7 +115,6 @@ Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
     }
 
     return nullptr;
-
 }
 
 Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
@@ -165,7 +164,6 @@ void SceneMng::init() {
  
     root->initScene();
     shadoMap.init ( (Node*)root );
-    
 }
 
 void SceneMng::draw ( HUD *_pHud ) {

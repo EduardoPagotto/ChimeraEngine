@@ -22,9 +22,6 @@ std::string Entity::getNameKindNode ( EntityKind _kind ) {
     case EntityKind::DRAW:
         return std::string ( "DRAW" );
         break;
-    case EntityKind::EFFECT:
-        return std::string ( "EFFECT" );
-        break;
     case EntityKind::TEXTURE:
         return std::string ( "TEXTURE" );
         break;

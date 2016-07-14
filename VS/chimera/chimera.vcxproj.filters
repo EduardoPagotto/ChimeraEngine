@@ -28,9 +28,6 @@
     <ClCompile Include="..\..\chimera\src\DrawTriMesh.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\chimera\src\Effect.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\chimera\src\Entity.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -44,9 +41,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\chimera\src\Light.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\chimera\src\Loader.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\chimera\src\Material.cpp">
@@ -159,9 +153,6 @@
     <ClInclude Include="..\..\chimera\include\DrawTriMesh.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Effect.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\chimera\include\Entity.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -184,9 +175,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Light.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Loader.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Material.h">

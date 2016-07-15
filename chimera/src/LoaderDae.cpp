@@ -481,7 +481,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
     
             //if (pSky == nullptr) {
                 
-                Object *pObj = new Object(nullptr, _id);
+                Object *pObj = new Object(_pNodePai, _id);
                 pObj->setTransform(*l_pTransform);
 
 				pDraw->pMaterial = pMaterial;
@@ -491,7 +491,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
 
 				mapaObjeto[_id] = pObj;
 
-                _pNodePai->addChild ( pObj ); 
+                //_pNodePai->addChild ( pObj ); 
                 pLastNodeDone = pObj;
                 
            // }

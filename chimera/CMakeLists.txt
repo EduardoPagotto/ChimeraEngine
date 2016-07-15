@@ -67,6 +67,7 @@ set (SourcesChimeraAPI
 	src/NodeVisitor.cpp
 	src/Group.cpp
 	src/State.cpp
+	src/Transform.cpp
 )
 	
 if (OVR_SET_TO_USE)

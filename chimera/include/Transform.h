@@ -2,6 +2,7 @@
 #define	__TRANSFORM_H__
 
 #include <LinearMath/btVector3.h>
+#include <LinearMath/btTransform.h>
 #include "Group.h"
 
 namespace Chimera {
@@ -32,6 +33,8 @@ public:
 	bool getScaleFlag();
 	void applyTransform();
 
+    void setTransform( const btTransform &_trans );
+    
 private:
 	bool tflag;
 	bool rflag;

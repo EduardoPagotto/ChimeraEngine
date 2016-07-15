@@ -40,6 +40,7 @@ private:
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;
 
+    std::map<std::string,Physics*> mapaEntidadeFisica;
     //std::map<std::string, Effect*> mapaEfeito; 
     std::map<std::string, Texture*> mapaTextura;
     //std::map<std::string, Material*> mapaMaterial;

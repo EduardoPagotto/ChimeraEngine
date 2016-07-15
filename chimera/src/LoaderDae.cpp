@@ -8,6 +8,7 @@
 #include "Light.h"
 #include "DrawTriMesh.h"
 #include "Singleton.h"
+#include "Transform.h"
 
 namespace Chimera {
 
@@ -115,11 +116,11 @@ void LoaderDae::loadFile ( const std::string &file ) {
    // int totalMat = libMaterialMap(root, mapaEfeito, mapaTextura, mapaMaterial);
     int totalGeometry = libGeometryMap(root, mapaGeometria);
     
+    //cria lista de entidade fisicas a serem usadas
+    getPhysicSceneInfile();
+    
     //Carrega hierarquia dos nodes
     getNodeSceneInFile();
-
-    //vincula com fisica nos nodes
-    getPhysicSceneInfile();
 }
 
 void LoaderDae::getPhysicSceneInfile() {
@@ -180,12 +181,14 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
 
                 }
 
-                //pega o node objeto
-                //Object *obj = (Object*)Node::findNodeById ( EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
-				Object *obj = mapaObjeto[std::string((const char*)&l_target[1])]; //(Object*)Node::findNodeById(EntityKind::OBJECT, std::string((const char*)&l_target[1]));
-
-				//obj->addChild ( pPhysic );
-                obj->pPhysic = pPhysic;
+                mapaEntidadeFisica[std::string((const char*)&l_target[1])] = pPhysic;
+                
+//                 //pega o node objeto
+//                 //Object *obj = (Object*)Node::findNodeById ( EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
+// 				Object *obj = mapaObjeto[std::string((const char*)&l_target[1])]; //(Object*)Node::findNodeById(EntityKind::OBJECT, std::string((const char*)&l_target[1]));
+// 
+// 				//obj->addChild ( pPhysic );
+//                 obj->pPhysic = pPhysic;
                 
                 l_nInstanceRigidBody = l_nInstanceRigidBody->NextSiblingElement ( "instance_rigid_body" );
             }
@@ -480,19 +483,27 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             //} 
     
             //if (pSky == nullptr) {
+            
+                pDraw->pMaterial = pMaterial;
+                pDraw->pTexture = pTexture;
+                Physics *ph = mapaEntidadeFisica[_id];
                 
-                Object *pObj = new Object(_pNodePai, _id);
-                pObj->setTransform(*l_pTransform);
+                if (ph != nullptr) {
+                    Object *pObj = new Object(_pNodePai, _id);
+                    pObj->setTransform(*l_pTransform);
+                    pObj->addChild(pDraw);
+                     pLastNodeDone = pObj;
+                } else {
+                    Transform *pTrans = new Transform(_pNodePai, _id);
+                    pTrans->setTransform(*l_pTransform);
+                    pTrans->addChild(pDraw);
+                    pLastNodeDone = pTrans;
+                }
 
-				pDraw->pMaterial = pMaterial;
-				pDraw->pTexture = pTexture;
-
-				pObj->addChild(pDraw);
-
-				mapaObjeto[_id] = pObj;
+				//mapaObjeto[_id] = pObj;
 
                 //_pNodePai->addChild ( pObj ); 
-                pLastNodeDone = pObj;
+               
                 
            // }
                           

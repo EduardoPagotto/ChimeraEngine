@@ -34,6 +34,10 @@ void Transform::accept(class NodeVisitor* v) {
 	v->visit(this);
 }
 
+void Transform::setTransform ( const btTransform& _trans ) {
+    //TODO implementar
+}
+
 void Transform::setTranslate(const btVector3 &_vet) {
 	this->translate = _vet;
 	this->tflag = true;

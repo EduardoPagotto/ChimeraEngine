@@ -32,22 +32,23 @@ ParticleEmitter::~ParticleEmitter() {
 
 }
 
-void ParticleEmitter::initialize ( int _max ) {
-
-    particles.reserve ( _max );
-
-    // Reset all the particles
-    for ( int loop = 0; loop < _max; loop++ ) {
-        int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
-
-        btVector3 direcao ( ( float ) ( ( rand() % 50 ) - 26.0f ) * 10.0f,
-                            ( float ) ( ( rand() % 50 ) - 25.0f ) * 10.0f,
-                            ( float ) ( ( rand() % 50 ) - 25.0f ) * 10.0f );   // yi e zi repetiam no original
-
-        Particle *pParticle = new Particle ( btVector3 ( 5.0, 5.0, 5.0 ), direcao, btVector3 ( 0.0, 0.0, 0.0 ), coresPart[indiceCor], 10.0f );
-        particles.push_back ( pParticle );
-    }
-}
+//void ParticleEmitter::initialize ( int _max ) {
+//
+//    particles.reserve ( _max );
+//
+//    // Reset all the particles
+//    for ( int loop = 0; loop < _max; loop++ ) {
+//
+//        int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
+//
+//        btVector3 direcao ( ( float ) ( ( rand() % 50 ) - 26.0f ) * 10.0f,
+//                            ( float ) ( ( rand() % 50 ) - 25.0f ) * 10.0f,
+//                            ( float ) ( ( rand() % 50 ) - 25.0f ) * 10.0f );   // yi e zi repetiam no original
+//
+//        Particle *pParticle = new Particle ( &posSource, direcao, btVector3 ( 0.0, 0.0, 0.0 ), coresPart[indiceCor], 10.0f );
+//        particles.push_back ( pParticle );
+//    }
+//}
 
 void ParticleEmitter::update ( DataMsg *_dataMsg ) {
 
@@ -87,7 +88,22 @@ void ParticleEmitter::update ( DataMsg *_dataMsg ) {
 }
 
 void ParticleEmitter::init() {
-	initialize(150);
+	
+	particles.reserve(maxSeed);
+
+	// Reset all the particles
+	for (int loop = 0; loop < maxSeed; loop++) {
+
+		int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
+
+		btVector3 direcao((float)((rand() % 50) - 26.0f) * 10.0f,
+			(float)((rand() % 50) - 25.0f) * 10.0f,
+			(float)((rand() % 50) - 25.0f) * 10.0f);   // yi e zi repetiam no original
+
+		Particle *pParticle = new Particle(&posSource, direcao, btVector3(0.0, 0.0, 0.0), coresPart[indiceCor], 10.0f);
+		particles.push_back(pParticle);
+	}
+
 	pTexture->init();
 
 	Node::init();

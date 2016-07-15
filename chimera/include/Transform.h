@@ -14,6 +14,8 @@ public:
 
 	virtual ~Transform();
 
+	virtual void update(DataMsg *_dataMsg);
+
 	void accept(class NodeVisitor* v);
 
 	void setTranslate(const btVector3 &_vet);

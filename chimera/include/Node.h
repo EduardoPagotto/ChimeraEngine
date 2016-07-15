@@ -55,6 +55,7 @@ public:
 	}
 
 	static Node *findNodeByKind(EntityKind _type, int _index);
+	static Node *findNodeByName(EntityKind _type, std::string _name);
 
     //static Node *findNodeById ( EntityKind type, std::string id );
     //static Node *findNodeById ( std::string id );

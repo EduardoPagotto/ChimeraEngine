@@ -2,7 +2,7 @@
 #include "ExceptionSDL.h"
 #include "Shader.h"
 
-GameEvents::GameEvents() {}
+GameEvents::GameEvents(Chimera::SceneMng *_pScenMng) : GameClient(_pScenMng) {}
 
 GameEvents::~GameEvents() {
 
@@ -86,7 +86,7 @@ void GameEvents::mouseButtonUpCapture ( SDL_MouseButtonEvent mb ) {}
 
 void GameEvents::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {}
 
-void GameEvents::joystickCapture ( Chimera::Device::JoystickManager &joy ) {}
+void GameEvents::joystickCapture ( Chimera::JoystickManager &joy ) {}
 
 void GameEvents::userEvent ( const SDL_Event &_event ) {}
 
@@ -109,7 +109,7 @@ void GameEvents::keyCapture ( SDL_Keycode tecla ) {
     case SDLK_F1:
         break;
     case SDLK_F10:
-        sendMessage ( Chimera::Graph::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
+        sendMessage ( Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
         break;
     case SDLK_UP:
         break;

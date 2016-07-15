@@ -10,7 +10,7 @@ namespace Chimera
 class Particle
 {
 public:
-    Particle ( const btVector3& initPosition, const btVector3& direction, const btVector3& gravity , const Color& color,const float& live );
+    Particle ( btVector3 *pInitPosition, const btVector3& direction, const btVector3& gravity , const Color& color,const float& live );
     virtual ~Particle();
 
     void ResetParticle ( Color color, const btVector3 &dir );
@@ -29,7 +29,7 @@ public:
     btVector3 gravity;
 
 private:
-    btVector3 initPosition;
+    btVector3 *initPosition;
     float initLive;
     void camera_directions ( btVector3 *right, btVector3 *up, btVector3 *look );
     void draw_billboard ( const btVector3 &posicao );

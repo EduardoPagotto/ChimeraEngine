@@ -32,6 +32,23 @@ void Game::joystickStatus ( Chimera::JoystickManager &joy ) {
         double throttle = -propulsaoPrincipal * ( ( 1 + joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::LEFT_TRIGGER, deadZone ) ) / 2 );
         throttle = throttle - ( -propulsaoFrontal* ( ( 1 + joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::RIGHT_TRIGGER, deadZone ) ) / 2 ) );
 
+		if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {
+
+			btVector3 posicao = pEmissor->getPosSource();
+			posicao.setX(posicao.x() - 0.1f);
+			pEmissor->setPosSource( posicao );
+
+		}
+
+		if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {
+
+			btVector3 posicao = pEmissor->getPosSource();
+			posicao.setX(posicao.x() + 0.1);
+			pEmissor->setPosSource(posicao);
+
+		}
+
+
         int val = joystick->Hat ( 0 );
         if ( val & ( uint8_t ) JOY_PAD_COD::UP ) 
             pObj->applyForce ( btVector3 ( 0.0, 0.0, propulsaoLRUD ) );
@@ -130,6 +147,9 @@ void Game::start() {
     pObj = ( Chimera::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "Zoltan" );
 
 	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->getNode(Chimera::EntityKind::LIGHT, 0);
+
+	pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeByName(Chimera::EntityKind::DRAW, "testeZ1");
+
 
     //pSceneMng->skyBoxAtivo ( pSkyBox );
     pSceneMng->cameraAtiva ( pOrbitalCam );

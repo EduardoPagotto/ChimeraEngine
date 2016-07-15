@@ -1,7 +1,7 @@
 #include "GameEvents.h"
 #include "ExceptionSDL.h"
 
-GameEvents::GameEvents() {}
+GameEvents::GameEvents(Chimera::SceneMng *_pScenMng) : GameClient(_pScenMng) {}
 
 GameEvents::~GameEvents() {}
 
@@ -11,11 +11,12 @@ void GameEvents::render() {}
 void GameEvents::mouseButtonDownCapture ( SDL_MouseButtonEvent mb ) {}
 void GameEvents::mouseButtonUpCapture ( SDL_MouseButtonEvent mb ) {}
 void GameEvents::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {}
-void GameEvents::joystickCapture ( Chimera::Device::JoystickManager &joy ) {}
-void GameEvents::userEvent ( const SDL_Event &_event ) {}
+void GameEvents::joystickCapture ( Chimera::JoystickManager &joy ) {}
+
+//void GameEvents::userEvent ( const SDL_Event &_event ) {}
 void GameEvents::newFPS ( const unsigned int &fps ) {}
-void GameEvents::beginProcGame() {}
-void GameEvents::endProcGame() {}
+//void GameEvents::beginProcGame() {}
+//void GameEvents::endProcGame() {}
 
 void GameEvents::keyCapture ( SDL_Keycode tecla ) {
 
@@ -30,7 +31,7 @@ void GameEvents::keyCapture ( SDL_Keycode tecla ) {
     case SDLK_F1:
         break;
     case SDLK_F10:
-        sendMessage ( Chimera::Graph::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
+		sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
         break;
     case SDLK_UP:
         break;
@@ -49,18 +50,12 @@ void GameEvents::keyCapture ( SDL_Keycode tecla ) {
     }
 }
 
-void GameEvents::joystickStatus ( Chimera::Device::JoystickManager &joy ) {
-    Chimera::Device::JoystickState *joystick = joy.getJoystickState ( 0 );
+void GameEvents::joystickStatus ( Chimera::JoystickManager &joy ) {
+    Chimera::JoystickState *joystick = joy.getJoystickState ( 0 );
     if ( joystick != nullptr ) { }
 }
 
-void GameEvents::sendMessage ( Chimera::Graph::KindOp _kindOf, void *_paramA, void *_paramB ) {
-
-    SDL_Event event;
-    SDL_zero ( event );
-    event.type = SDL_USEREVENT;
-    event.user.code = ( int ) _kindOf;
-    event.user.data1 = _paramA;
-    event.user.data2 = _paramB;
-    SDL_PushEvent ( &event );
+void GameEvents::executeColisao(const Chimera::KindOp & _kindOp, Chimera::Node * _pNodeA, Chimera::Node * _pNodeB)
+{
 }
+

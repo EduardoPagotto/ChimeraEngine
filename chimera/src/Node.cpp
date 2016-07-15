@@ -136,6 +136,17 @@ Node *Node::findNodeByKind(EntityKind _type, int _index) {
 	return nullptr;
 }
 
+Node *Node::findNodeByName ( EntityKind _type, std::string _name ) {
+
+    for ( Node *node : listNode ) {
+        std::string l_name = node->getName();
+        if ( ( node->getKind() == _type ) && ( l_name.compare ( _name ) == 0 ) ) {
+            return node;
+        }
+    }
+
+    return nullptr;
+}
 
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

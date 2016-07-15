@@ -14,9 +14,9 @@
 
 namespace Chimera {
 
-Particle::Particle ( const btVector3& initPosition, const btVector3& direction, const btVector3& gravity , const Color& color,const float& live ) {
+Particle::Particle (btVector3 *pInitPosition, const btVector3& direction, const btVector3& gravity , const Color& color,const float& live ) {
 
-    this->initPosition = initPosition;
+    this->initPosition = pInitPosition;
     this->initLive = live;
     this->gravity  = gravity;
     ResetParticle ( color, direction );
@@ -32,7 +32,7 @@ void Particle::ResetParticle ( Color color, const btVector3 &dir ) {
     corAtiva = color;
     corAtiva.a = ( float ) ( rand() % 100 ) / 1000.0f + 0.003f; 	//A como fade!
 
-    position = initPosition;
+    position = *initPosition;
     direction = dir;                                    	// Random Speed On X,Y,Z Axis
 
 }

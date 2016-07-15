@@ -17,6 +17,8 @@
 #include "FlowControl.h"
 #include "ParticleEmitter.h"
 
+#include "Transform.h"
+
 int testeCargaArquivo() {
 
     try {
@@ -46,7 +48,12 @@ int testeCargaArquivo() {
         sceneMng->setReader(pLoader);
         Chimera::Group* group1 = sceneMng->createSceneGraph();
         
+		//Chimera::Transform* posParticle = new Chimera::Transform((Chimera::Node*)group1, "posicaoParticle");
+		//posParticle->setTranslate(btVector3(-5.0, 5.0, 4.0));
+
         Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)group1, "testeZ1" );
+		pParticleEmitter->setPosSource(btVector3(-5.0, 5.0, 4.0));
+		pParticleEmitter->setMaxSeed(100);
         std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
         pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
 

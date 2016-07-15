@@ -5,10 +5,11 @@
 #include <LinearMath/btVector3.h>
 
 #include "Physics.h"
+#include "Group.h"
 
 namespace Chimera {
     
-class Object : public Node
+class Object : public Group
 {
 public:
 

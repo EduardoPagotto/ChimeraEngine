@@ -36,11 +36,28 @@ public:
     void SortParticles ( const btVector3 &posCamera );
     void setSizeBox(const btVector3 &_size);
 
+	inline void setPosSource(const btVector3 &_val) {
+		posSource = _val;
+	}
+
+	inline btVector3 getPosSource() const {
+		return posSource;
+	}
+
+	inline void setMaxSeed(const int &_max) {
+		maxSeed = _max;
+	}
+
+	inline int getMaxSeed() const {
+		return maxSeed;
+	}
+
 private:
     
+	btVector3 posSource;
     btVector3 sizeBox;
     
-    void initialize ( int _max );
+	int maxSeed;
     
     std::vector<Particle*> particles;
     std::vector<Color> coresPart;

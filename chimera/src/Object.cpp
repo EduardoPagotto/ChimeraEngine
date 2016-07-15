@@ -9,7 +9,9 @@
 
 namespace Chimera {
     
-Object::Object (Node* _parent, std::string _name ) : Node (_parent, EntityKind::OBJECT, _name ) {
+Object::Object (Node* _parent, std::string _name ) : Group( _parent , _name ) {
+
+	setKind(EntityKind::OBJECT);
 
     pPhysic = nullptr;
     transform.setIdentity();

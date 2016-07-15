@@ -18,12 +18,24 @@ Transform::Transform(Node* _parent, std::string _name) : Group(_parent, _name) {
 Transform::~Transform() {
 }
 
+void Transform::update(DataMsg * _dataMsg)
+{
+	if ((_dataMsg->getKindOp() == KindOp::DRAW) || (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX)) {
+
+		this->applyTransform();
+
+	}
+
+
+	Group::update(_dataMsg);
+}
+
 void Transform::accept(class NodeVisitor* v) {
 	v->visit(this);
 }
 
 void Transform::setTranslate(const btVector3 &_vet) {
-	this->translate = translate;
+	this->translate = _vet;
 	this->tflag = true;
 }
 
@@ -36,7 +48,7 @@ bool Transform::getTranslateFlag() {
 }
 
 void Transform::setRotate(const btVector3 &_vet) {
-	this->rotate = rotate;
+	this->rotate = _vet;
 	this->rflag = true;
 }
 
@@ -49,7 +61,7 @@ bool Transform::getRotateFlag() {
 }
 
 void Transform::setScale(const btVector3 &_vet) {
-	this->scale = scale;
+	this->scale = _vet;
 	this->sflag = true;
 }
 

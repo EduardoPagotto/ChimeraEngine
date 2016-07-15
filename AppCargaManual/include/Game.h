@@ -3,6 +3,8 @@
 
 #include "GameClient.h"
 #include "CameraSpherical.h"
+//#include "Transform.h"
+#include "ParticleEmitter.h"
 
 /**
  * Class Game
@@ -34,6 +36,8 @@ private:
     Chimera::CameraSpherical *pOrbitalCam;
     Chimera::Object *pObj;
     std::string sPosicaoObj;
+
+	Chimera::ParticleEmitter *pEmissor;
 };
 
 #endif

@@ -29,7 +29,7 @@ int testeCargaArquivo() {
 
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Chimera::Video *video = new Chimera::VideoDevice ( 640, 480, "teste" );
+        Chimera::Video *video = new Chimera::VideoDevice ( 800, 600, "teste" );
 
         //Carga de dados
 		Chimera::LoaderDae *pLoader = new Chimera::LoaderDae ( dirDados, dirDados, "piso2.xml" );

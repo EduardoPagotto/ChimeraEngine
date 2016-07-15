@@ -118,8 +118,10 @@ void Game::start() {
 
     // Pega o Skybox
 	Chimera::Object* pSkyBox = ( Chimera::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "SkyBox" );
-	pSkyBox->pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
-	pSkyBox->pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
+
+	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChildByKind(Chimera::EntityKind::DRAW, 0);
+	pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
+	pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
 
     //Pega primeira camera
     pOrbitalCam = ( Chimera::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );

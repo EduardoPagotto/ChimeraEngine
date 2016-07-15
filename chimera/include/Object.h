@@ -4,12 +4,7 @@
 #include <LinearMath/btTransform.h>
 #include <LinearMath/btVector3.h>
 
-#include "Draw.h"
 #include "Physics.h"
-#include "Material.h"
-#include "Texture.h"
-
-#include "State.h"
 
 namespace Chimera {
     
@@ -21,7 +16,6 @@ public:
 
     Object (Node* _parent, std::string _name );
     
-
     virtual ~Object();
     virtual void update ( DataMsg *_dataMsg );
 
@@ -41,13 +35,9 @@ public:
     }
     
 	//FIXME colocar como privada
-	Draw *pDraw;
-
     Physics *pPhysic;
 
 private:
-    void execute ( bool _texture, Object *pObj );
-
     btTransform transform;
 };
 }

@@ -97,16 +97,18 @@ btVector3 DrawTriMesh::getSizeBox() {
 }
 
 void DrawTriMesh::renderExecute ( bool _texture ) {
+    
+	pState->apply();
 
-    if ((_texture == true) && ( pState->getTexture() != nullptr))
-        pState->appyTexture();
-    else {
-        glBindTexture(GL_TEXTURE_2D, 0); //desabilita textura atual
-    }
-    
-    pState->appyMaterial();//pMaterial->apply();
-    
     if ( _texture == true ) {
+
+		if (pState->getTexture() != nullptr)
+			pState->appyTexture();
+		else {
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+
+		pState->appyMaterial();
 
         unsigned l_numFaces = vIndex.getSize() / 3;
         int l_index = 0;
@@ -137,6 +139,8 @@ void DrawTriMesh::renderExecute ( bool _texture ) {
 
     } else {
 
+		//glBindTexture(GL_TEXTURE_2D, 0); //desabilita textura atual
+		
         unsigned l_numFaces = vIndex.getSize() / 3;
         int l_index = 0;
         int fa = 0;
@@ -149,20 +153,27 @@ void DrawTriMesh::renderExecute ( bool _texture ) {
 
                 int posNormal = 3 * nIndex[l_index];
                 glNormal3fv ( &nList[posNormal] );
-
                 glVertex3fv ( &vList[posicao] );
             }
             glEnd();
         }
-
     }
-
 }
 
-// void DrawTriMesh::update ( DataMsg *dataMsg ) {
-// 
-//     Draw::update ( dataMsg );
-// }
+ void DrawTriMesh::update ( DataMsg *dataMsg ) {
+ 
+	 if (dataMsg->getKindOp() == KindOp::DRAW) {
+
+		 renderExecute(true);
+
+	 } else if (dataMsg->getKindOp() == KindOp::DRAW_NO_TEX) {
+
+		 renderExecute(false);
+
+	 }
+
+     Draw::update ( dataMsg );
+ }
 
 int DrawTriMesh::getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores ) {
 

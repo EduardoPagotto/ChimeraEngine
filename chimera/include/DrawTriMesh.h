@@ -86,7 +86,7 @@ public:
     DrawTriMesh (Node *_parent, std::string _name );
     virtual ~DrawTriMesh();
 
-    //virtual void update ( DataMsg *dataMsg );
+    virtual void update ( DataMsg *dataMsg );
 
 	virtual void init();
 

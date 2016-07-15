@@ -29,10 +29,10 @@ public:
      void applyWireFrame();
      void apply();
     
-// 	 Light* getLight() {
-// 		 return l;
-// 	 }
-// 
+ 	 Light* getLight() {
+ 		 return l;
+ 	 }
+ 
 	 Texture* getTexture() {
          return t;
      }

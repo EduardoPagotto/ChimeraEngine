@@ -138,11 +138,6 @@ void SceneMng::draw ( HUD *_pHud ) {
     }
 
 #ifdef TESTEZ1
-    //for ( Light *pLight : m_vLight ) {
-    //    btVector3 posicao = pLight->getPosition();
-    //    shadoMap.StoreLightMatrices ( posicao ); //FIXME so funciona para 1 luz
-    //}
-
 	btVector3 posicao = root->getState()->getLight()->getPosition();
 	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
 

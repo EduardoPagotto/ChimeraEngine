@@ -12,7 +12,6 @@ namespace Chimera {
 Object::Object (Node* _parent, std::string _name ) : Node (_parent, EntityKind::OBJECT, _name ) {
 
     pPhysic = nullptr;
-    pDraw = nullptr;
     transform.setIdentity();
 }
 
@@ -33,8 +32,6 @@ void Object::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 
 void Object::init() {
     
-    pDraw->init();
-
 	if (pPhysic == nullptr) {
 
 		printf("Objeto sem Fisica:%s\n", getName().c_str());
@@ -51,6 +48,8 @@ void Object::init() {
 	}
 	else {
 
+		Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::DRAW, 0);
+
 		if (pPhysic->isShapeDefine() == false) {
 			pPhysic->setShapeBox(pDraw->getSizeBox());
 		}
@@ -65,33 +64,16 @@ void Object::accept(NodeVisitor * v) {
 	v->visit(this);
 }
 
-void Object::execute ( bool _texture, Object *pObj ) {
-
-    if ( pPhysic != nullptr ) {
-        pPhysic->ajusteMatrix ( pObj->pPhysic );
-    }
-   
-	pDraw->renderExecute(_texture);
-    
-}
-
 void Object::update ( DataMsg *_dataMsg ) {
 
-	if ( _dataMsg->getKindOp() == KindOp::DRAW ) {
+	if (( _dataMsg->getKindOp() == KindOp::DRAW ) || (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX)) {
 
         glPushMatrix();
 
-        execute ( true, ( Object * ) _dataMsg->getParam() );
-
-        Node::update ( _dataMsg );
-
-        glPopMatrix();
-
-    } else if ( _dataMsg->getKindOp() == KindOp::DRAW_NO_TEX ) {
-
-        glPushMatrix();
-
-        execute ( false, ( Object * ) _dataMsg->getParam() );
+		Object *pSource = (Object *)_dataMsg->getParam();
+		if (pPhysic != nullptr) {
+			pPhysic->ajusteMatrix(pSource->pPhysic);
+		}
 
         Node::update ( _dataMsg );
 
@@ -100,7 +82,7 @@ void Object::update ( DataMsg *_dataMsg ) {
     } else if ( _dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE ) {
 
         _dataMsg->setDone ( true );
-
+		//Node::update(_dataMsg);
     }
 }
 

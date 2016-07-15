@@ -112,6 +112,9 @@
     <ClCompile Include="..\..\chimera\src\State.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\chimera\src\Transform.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chimera\include\Camera.h">
@@ -247,6 +250,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\State.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\Transform.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

@@ -20,14 +20,12 @@ Object::~Object() {
 
 void Object::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_rotation ) {
 
-    //Transformacao quando Euley nao apagar
     btQuaternion l_qtn;
     transform.setIdentity();
     l_qtn.setEulerZYX ( _rotation.getX(), _rotation.getY(), _rotation.getZ() );
     transform.setRotation ( l_qtn );
-    transform.setOrigin ( _posicao );
+	transform.setOrigin(_posicao);
     //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
-
 }
 
 void Object::init() {

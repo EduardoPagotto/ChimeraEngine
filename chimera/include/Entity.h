@@ -25,7 +25,8 @@ enum class EntityKind : int8_t
     CONSTRAINT,
     SKYBOX,
 	SCENEROOT,
-    GROUP
+    GROUP,
+	TRANSFORM
 };
 
 /**
@@ -64,6 +65,10 @@ public:
     static unsigned getSerialMaster() {
         return ++Entity::serialMaster;
     }
+
+	inline void setKind(const EntityKind &_kind) {
+		kind = _kind;
+	}
 
     inline EntityKind getKind() const {
         return kind;

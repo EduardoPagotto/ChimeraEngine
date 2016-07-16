@@ -6,7 +6,7 @@
 #include "Camera.h"
 #include "CameraSpherical.h"
 #include "Light.h"
-#include "DrawTriMesh.h"
+#include "Mesh.h"
 #include "Singleton.h"
 #include "Transform.h"
 
@@ -69,7 +69,7 @@ int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Draw*> &map
             std::string l_id = retornaAtributo ( "id", l_nNode );
             std::string l_name = retornaAtributo ( "name", l_nNode );
             
-            DrawTriMesh *pDraw = new DrawTriMesh(nullptr, l_id);
+            Mesh *pDraw = new Mesh(nullptr, l_id);
             pDraw->loadCollada(l_nNode);
             mapaGeometria[l_id] = pDraw;
                                    
@@ -147,10 +147,10 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
 
                 std::string nomeMesh = "";
               
-				Physics *pPhysic = new Physics(nullptr, std::string(l_name));
+				Solid *pPhysic = new Solid(nullptr, std::string(l_name));
                 pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
 
-				DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)mapaGeometria[nomeMesh];
+				Mesh *pDrawTriMesh = (Mesh*)mapaGeometria[nomeMesh];
                 if ( pDrawTriMesh != nullptr ) {
 
                     btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
@@ -418,7 +418,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
              
             pDraw->pMaterial = pMaterial;
             pDraw->pTexture = pTexture;
-            Physics *ph = mapaEntidadeFisica[_id];
+			Solid *ph = mapaEntidadeFisica[_id];
             if (ph != nullptr) {
 
 				ph->setName(_id);//Preciso ???

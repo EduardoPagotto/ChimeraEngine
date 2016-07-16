@@ -1,22 +1,13 @@
-#include "Physics.h"
+#include "Solid.h"
 #include "Singleton.h"
 #include "ChimeraUtils.h"
-
 #include "Draw.h"
-
 #include "NodeVisitor.h"
-
 #include "OpenGLDefs.h"
-//#ifdef WIN32
-//#include "windows.h"
-//#endif
-//
-//#include <GL/gl.h>
-//#include <GL/glu.h>
 
 namespace Chimera {
     
-Physics::Physics (Node *_parent, std::string _name ) : Coord (_parent, _name ) {
+Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, _name ) {
 
 	setKind(EntityKind::PHYSICS);
 
@@ -32,24 +23,25 @@ Physics::Physics (Node *_parent, std::string _name ) : Coord (_parent, _name ) {
 	transform.setIdentity();
 
     pWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
-
 }
 
-//Physics::Physics ( const Physics& _physics ) : Group( _physics ) {
-//
-//    mass = _physics.mass;
-//    friction = _physics.friction;
-//    restitution = _physics.restitution;
-//
-//    pRigidBody = nullptr;
-//    pShapeCollision = _physics.pShapeCollision;
-//    pMotionState = nullptr;
-//    trimesh = nullptr;
-//
-//    pWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
-//}
+Solid::Solid ( const Solid& _solid) : Coord (_solid) {
 
-Physics::~Physics() {
+    mass = _solid.mass;
+    friction = _solid.friction;
+    restitution = _solid.restitution;
+
+    pRigidBody = nullptr;
+    pShapeCollision = _solid.pShapeCollision;
+    pMotionState = nullptr;
+    trimesh = nullptr;
+
+	transform = _solid.transform;
+
+    pWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
+}
+
+Solid::~Solid() {
 
     if ( pRigidBody ) {
 
@@ -66,13 +58,13 @@ Physics::~Physics() {
     Infra::Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
- void Physics::update ( DataMsg *_dataMsg ) {
+ void Solid::update ( DataMsg *_dataMsg ) {
 
 	 if ((_dataMsg->getKindOp() == KindOp::DRAW) || (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX)) {
 
 		 glPushMatrix();
 
-		 Physics *pSource = (Physics *)_dataMsg->getParam();
+		 Solid *pSource = (Solid *)_dataMsg->getParam();
 		 ajusteMatrix( pSource );
 
 		 Node::update(_dataMsg);
@@ -89,7 +81,7 @@ Physics::~Physics() {
 
  }
 
-void Physics::init() {
+void Solid::init() {
 
 	Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::DRAW, 0);
 
@@ -102,11 +94,11 @@ void Physics::init() {
 
 }
 
-void Physics::accept(NodeVisitor * v) {
+void Solid::accept(NodeVisitor * v) {
 	v->visit(this);
 }
 
-void Physics::setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation) {
+void Solid::setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation) {
 
 	btQuaternion l_qtn;
 	transform.setIdentity();
@@ -116,7 +108,7 @@ void Physics::setPositionRotation(const btVector3 &_posicao, const btVector3 &_r
 	//pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 }
 
-void Physics::initTransform( btTransform &_tTrans, void *pObj ) {
+void Solid::initTransform( btTransform &_tTrans, void *pObj ) {
 
     pMotionState = new btDefaultMotionState ( _tTrans );
 
@@ -144,7 +136,7 @@ void Physics::initTransform( btTransform &_tTrans, void *pObj ) {
 
 }
 
-void Physics::setIndexVertexArray ( btTriangleIndexVertexArray *_indexVertexArray ) {
+void Solid::setIndexVertexArray ( btTriangleIndexVertexArray *_indexVertexArray ) {
 
     trimesh = new btGImpactMeshShape ( _indexVertexArray );
     trimesh->setLocalScaling ( btVector3 ( 1.f, 1.f, 1.f ) );
@@ -155,7 +147,7 @@ void Physics::setIndexVertexArray ( btTriangleIndexVertexArray *_indexVertexArra
 
 }
 
-void Physics::transformacao3D ( void ) {
+void Solid::transformacao3D ( void ) {
 
     btTransform transLocal;
     btScalar matrix[16];
@@ -167,7 +159,7 @@ void Physics::transformacao3D ( void ) {
 
 }
 
-void Physics::ajusteMatrix ( Physics *_pPhysic ) {
+void Solid::ajusteMatrix ( Solid *_pPhysic ) {
 
     btTransform transLocal;
     btScalar matrix[16];
@@ -188,20 +180,20 @@ void Physics::ajusteMatrix ( Physics *_pPhysic ) {
 
 }
 
-void Physics::setPosition ( const btVector3 &_pos ) {
+void Solid::setPosition ( const btVector3 &_pos ) {
     btTransform l_transform = pRigidBody->getCenterOfMassTransform();
     l_transform.setOrigin ( _pos );
     pRigidBody->setCenterOfMassTransform ( l_transform );
 }
 
-void Physics::setRotation ( const btVector3 &_rotation ) {
+void Solid::setRotation ( const btVector3 &_rotation ) {
     btTransform transform = pRigidBody->getCenterOfMassTransform();
 
     transform.setRotation ( btQuaternion ( _rotation.getY(), _rotation.getX(), _rotation.getZ() ) );
     pRigidBody->setCenterOfMassTransform ( transform );
 }
 
-btVector3 Physics::getRotation() {
+btVector3 Solid::getRotation() {
 
     btScalar rotZ, rotY, rotX;
     pRigidBody->getWorldTransform().getBasis().getEulerZYX ( rotZ, rotY, rotX );
@@ -209,7 +201,7 @@ btVector3 Physics::getRotation() {
     return btVector3 ( rotX, rotY, rotZ );
 }
 
-void Physics::applyTorc( const btVector3 &_torque ) {
+void Solid::applyTorc( const btVector3 &_torque ) {
     //pRigidBody->applyTorque(_torque);
 
     pRigidBody->applyTorque ( pRigidBody->getInvInertiaTensorWorld().inverse() * ( pRigidBody->getWorldTransform().getBasis() * _torque ) );
@@ -218,7 +210,7 @@ void Physics::applyTorc( const btVector3 &_torque ) {
     //RigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis() * _torque);
 }
 
-void Physics::applyForce( const btVector3 &_prop ) {
+void Solid::applyForce( const btVector3 &_prop ) {
     //Jeito um
     //btTransform boxTrans;
     //pRigidBody->getMotionState()->getWorldTransform(boxTrans);
@@ -232,7 +224,7 @@ void Physics::applyForce( const btVector3 &_prop ) {
 
 }
 
-void Physics::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName ) {
+void Solid::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName ) {
 
     if ( _nShape != nullptr ) {
         _nShape = _nShape->FirstChildElement();
@@ -324,7 +316,7 @@ void Physics::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLEleme
 // m_trans.setOrigin ( _pTrans->getPosition() );
 //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 
-void Physics::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName ) {
+void Solid::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName ) {
 
     tinyxml2::XMLElement* l_nTecnicCommon = _nRigidBody->FirstChildElement ( "technique_common" );
     if ( l_nTecnicCommon != nullptr ) {

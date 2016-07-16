@@ -4,7 +4,7 @@
 #include <LinearMath/btTransform.h>
 
 #include "Entity.h"
-#include "Physics.h"
+#include "Solid.h"
 
 namespace Chimera {
     
@@ -17,8 +17,8 @@ public:
 private:
 	//FIXME Tornar privado novamente
 
-	Physics *pPhysicsA;
-	Physics *pPhysicsB;
+	Solid *pPhysicsA;
+	Solid *pPhysicsB;
 
 	btTransform transformA;
 	btTransform transformB;

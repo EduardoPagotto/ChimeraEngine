@@ -1,5 +1,5 @@
-#ifndef MESH_H_
-#define MESH_H_
+#ifndef _MESH_H__
+#define _MESH_H__
 
 #include <vector>
 #include <string.h>
@@ -78,18 +78,17 @@ private:
 };
 
 
-class DrawTriMesh : public Draw
+class Mesh : public Draw
 {
 public:
     friend class Loader;
 
-    DrawTriMesh (Node *_parent, std::string _name );
-    virtual ~DrawTriMesh();
+    Mesh (Node *_parent, std::string _name );
+	Mesh(const Mesh &_cpy);
 
-    virtual void update ( DataMsg *dataMsg );
-
+    virtual ~Mesh();
+	virtual void update(DataMsg *dataMsg);
 	virtual void init();
-
     virtual void renderExecute ( bool _texture );
     virtual btVector3 getSizeBox();
 

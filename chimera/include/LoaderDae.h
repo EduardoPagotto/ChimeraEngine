@@ -6,9 +6,9 @@
 
 #include "PhysicsControl.h"
 #include "Material.h"
-#include "DrawTriMesh.h"
 #include "Group.h"
-#include "Physics.h"
+#include "Solid.h"
+#include "Draw.h"
 
 namespace Chimera
 {
@@ -40,7 +40,7 @@ private:
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;
 
-    std::map<std::string, Physics*> mapaEntidadeFisica;
+    std::map<std::string, Solid*> mapaEntidadeFisica;
     std::map<std::string, Texture*> mapaTextura;
     std::map<std::string, Draw*> mapaGeometria;
     

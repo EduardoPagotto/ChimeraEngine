@@ -34,7 +34,7 @@ private:
 
 	std::string sPosicaoObj;
     Chimera::CameraSpherical *pOrbitalCam;
-    Chimera::Physics *pCorpoRigido;
+    Chimera::Solid *pCorpoRigido;
 	Chimera::ParticleEmitter *pEmissor;
 };
 

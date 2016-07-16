@@ -1,5 +1,5 @@
-#ifndef PHYSICS_H_
-#define PHYSICS_H_
+#ifndef _SOLID_H__
+#define _SOLID_H__
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
@@ -15,17 +15,17 @@
 
 namespace Chimera {
     
-class Physics : public Coord
+class Solid : public Coord
 {
 public:
 
     friend class Loader;
 
-    Physics (Node *_parent, std::string _name);
+    Solid (Node *_parent, std::string _name);
 
-    //Physics ( const Physics& _physics );
+    Solid ( const Solid& _solid );
 
-    virtual ~Physics();
+    virtual ~Solid();
 
 	virtual void update ( DataMsg *_dataMsg );
 
@@ -79,7 +79,7 @@ public:
     void transformacao3D();
 
     //usada na trans da cam objeto
-    void ajusteMatrix ( Physics *_pPhysic );
+    void ajusteMatrix ( Solid *_pPhysic );
     void applyForce( const btVector3 &_prop );
     void applyTorc( const btVector3 &_torque );
 

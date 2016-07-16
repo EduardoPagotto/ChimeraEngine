@@ -148,7 +148,7 @@ void Game::start() {
     pOrbitalCam = ( Chimera::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );
 
     //Ajusta objeto como o primario
-	pCorpoRigido = ( Chimera::Physics* )  Chimera::Node::findNodeByName( Chimera::EntityKind::PHYSICS, "Zoltan" );
+	pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeByName( Chimera::EntityKind::PHYSICS, "Zoltan" );
 
 	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->getNode(Chimera::EntityKind::LIGHT, 0);
 

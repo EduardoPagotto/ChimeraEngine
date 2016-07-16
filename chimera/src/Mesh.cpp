@@ -1,4 +1,4 @@
-#include "DrawTriMesh.h"
+#include "Mesh.h"
 
 #ifdef WIN32
 #include "windows.h"
@@ -11,23 +11,23 @@
 
 namespace Chimera {
     
-DrawTriMesh::DrawTriMesh (Node *_parent, std::string _name ) : Draw (_parent, DrawType::MESH, _name ) {
+Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, DrawType::MESH, _name ) {
 
 }
 
-//DrawTriMesh::DrawTriMesh ( const DrawTriMesh &_cpy ) : Draw ( _cpy ) {
-//
-//    vList.set ( _cpy.vList );
-//    nList.set ( _cpy.nList );
-//    uvList.set ( _cpy.uvList );
-//
-//    vIndex.set ( _cpy.vIndex );
-//    nIndex.set ( _cpy.nIndex );
-//    tIndex.set ( _cpy.tIndex );
-//
-//}
+Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
 
-DrawTriMesh::~DrawTriMesh() {
+    vList.set ( _cpy.vList );
+    nList.set ( _cpy.nList );
+    uvList.set ( _cpy.uvList );
+
+    vIndex.set ( _cpy.vIndex );
+    nIndex.set ( _cpy.nIndex );
+    tIndex.set ( _cpy.tIndex );
+
+}
+
+Mesh::~Mesh() {
 
     vList.clear();
     nList.clear();
@@ -38,7 +38,7 @@ DrawTriMesh::~DrawTriMesh() {
     tIndex.clear();
 }
 
-void DrawTriMesh::init() {
+void Mesh::init() {
     
     if (pTexture != nullptr) {
         pTexture->init();
@@ -56,7 +56,7 @@ void DrawTriMesh::init() {
 }
 
 
-btVector3 DrawTriMesh::getSizeBox() {
+btVector3 Mesh::getSizeBox() {
     btVector3 retorno ( 0.0f, 0.0f, 0.0f );
     btVector3 l_max ( 0.0f, 0.0f, 0.0f );
     btVector3 l_min ( 0.0f, 0.0f, 0.0f );
@@ -96,7 +96,7 @@ btVector3 DrawTriMesh::getSizeBox() {
     return retorno;
 }
 
-void DrawTriMesh::renderExecute ( bool _texture ) {
+void Mesh::renderExecute ( bool _texture ) {
     
 	pState->apply();
 
@@ -160,7 +160,7 @@ void DrawTriMesh::renderExecute ( bool _texture ) {
     }
 }
 
- void DrawTriMesh::update ( DataMsg *dataMsg ) {
+ void Mesh::update ( DataMsg *dataMsg ) {
  
 	 if (dataMsg->getKindOp() == KindOp::DRAW) {
 
@@ -175,7 +175,7 @@ void DrawTriMesh::renderExecute ( bool _texture ) {
      Draw::update ( dataMsg );
  }
 
-int DrawTriMesh::getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores ) {
+int Mesh::getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores ) {
 
     tinyxml2::XMLElement* l_nSource = _source->FirstChildElement ( "float_array" );
     if ( l_nSource != nullptr ) {
@@ -199,7 +199,7 @@ int DrawTriMesh::getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arr
 
 }
 
-void DrawTriMesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
+void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
     tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement ( "mesh" );
     if ( l_nMesh != nullptr ) {

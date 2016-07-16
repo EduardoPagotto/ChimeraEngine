@@ -19,9 +19,6 @@
     <ClCompile Include="..\..\chimera\src\Constraint.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\chimera\src\DrawTriMesh.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\chimera\src\Entity.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -41,12 +38,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\chimera\src\Node.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\chimera\src\Object.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\chimera\src\Physics.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\chimera\src\PhysicsControl.cpp">
@@ -118,6 +109,12 @@
     <ClCompile Include="..\..\chimera\src\Coord.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\chimera\src\Solid.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\chimera\src\Mesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chimera\include\Camera.h">
@@ -139,9 +136,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Draw.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\DrawTriMesh.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Entity.h">
@@ -175,12 +169,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Node.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Object.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Physics.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\PhysicsControl.h">
@@ -259,6 +247,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Coord.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\Solid.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\Mesh.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

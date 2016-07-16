@@ -90,6 +90,7 @@
     <ClInclude Include="..\..\chimera\include\ChimeraUtils.h" />
     <ClInclude Include="..\..\chimera\include\Color.h" />
     <ClInclude Include="..\..\chimera\include\Constraint.h" />
+    <ClInclude Include="..\..\chimera\include\Coord.h" />
     <ClInclude Include="..\..\chimera\include\DataMsg.h" />
     <ClInclude Include="..\..\chimera\include\Draw.h" />
     <ClInclude Include="..\..\chimera\include\DrawTriMesh.h" />
@@ -138,6 +139,7 @@
     <ClCompile Include="..\..\chimera\src\ChimeraUtils.cpp" />
     <ClCompile Include="..\..\chimera\src\Color.cpp" />
     <ClCompile Include="..\..\chimera\src\Constraint.cpp" />
+    <ClCompile Include="..\..\chimera\src\Coord.cpp" />
     <ClCompile Include="..\..\chimera\src\Draw.cpp" />
     <ClCompile Include="..\..\chimera\src\DrawTriMesh.cpp" />
     <ClCompile Include="..\..\chimera\src\Entity.cpp" />

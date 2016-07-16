@@ -9,6 +9,8 @@
 #include "SceneRoot.h"
 #include "Group.h"
 #include "Transform.h"
+#include "Physics.h"
+#include "Coord.h"
 
 namespace Chimera {
 
@@ -21,12 +23,12 @@ public:
 	virtual void visit(Camera* _pCamera) = 0;
 	virtual void visit(Draw* _pDraw) = 0;
 	virtual void visit(Light *_pLight) = 0;
-	virtual void visit(Object *_pObject) = 0;
 	virtual void visit(ParticleEmitter *_pParticleEmitter) = 0;
 	virtual void visit(SceneRoot *_pSceneRoot) = 0;
     virtual void visit(Group* _pGroup) = 0;
 	virtual void visit(Transform* _pTransform) = 0;
-
+	virtual void visit(Physics* _pPhysic) = 0;
+	virtual void visit(Coord *_pCord) = 0;
 };
 }
 

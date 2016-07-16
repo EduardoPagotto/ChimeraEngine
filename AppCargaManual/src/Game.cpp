@@ -2,12 +2,13 @@
 #include "ExceptionSDL.h"
 
 #include "Transform.h"
-
 #include "OpenGLDefs.h"
 
-
-
 Game::Game ( Chimera::SceneMng *_pScenMng ) : GameClient ( _pScenMng ) {
+
+	pCorpoRigido = nullptr;
+	pEmissor = nullptr;
+	pOrbitalCam = nullptr;
 }
 
 Game::~Game() {
@@ -52,23 +53,22 @@ void Game::joystickStatus ( Chimera::JoystickManager &joy ) {
 
 		}
 
-
         int val = joystick->Hat ( 0 );
         if ( val & ( uint8_t ) JOY_PAD_COD::UP ) 
-            pObj->applyForce ( btVector3 ( 0.0, 0.0, propulsaoLRUD ) );
+			pCorpoRigido->applyForce ( btVector3 ( 0.0, 0.0, propulsaoLRUD ) );
         
         if ( val & ( uint8_t ) JOY_PAD_COD::DOWN ) 
-            pObj->applyForce ( btVector3 ( 0.0, 0.0, -propulsaoLRUD ) );
+			pCorpoRigido->applyForce ( btVector3 ( 0.0, 0.0, -propulsaoLRUD ) );
         
         if ( val & ( uint8_t ) JOY_PAD_COD::RIGHT ) 
-            pObj->applyForce ( btVector3 ( propulsaoLRUD, 0.0, 0.0 ) );
+			pCorpoRigido->applyForce ( btVector3 ( propulsaoLRUD, 0.0, 0.0 ) );
         
         if ( val & ( uint8_t ) JOY_PAD_COD::LEFT ) 
-            pObj->applyForce ( btVector3 ( -propulsaoLRUD, 0.0, 0.0 ) );
+			pCorpoRigido->applyForce ( btVector3 ( -propulsaoLRUD, 0.0, 0.0 ) );
         
         if ( ( roll != 0.0 ) || ( pitch != 0.0 ) || ( yaw != 0.0 ) || ( throttle != 0.0 ) ) {
-            pObj->applyForce ( btVector3 ( 0.0, throttle, 0.0 ) );
-            pObj->applyTorc ( btVector3 ( -torque * pitch, -torque * roll, -torque * yaw ) );
+			pCorpoRigido->applyForce ( btVector3 ( 0.0, throttle, 0.0 ) );
+			pCorpoRigido->applyTorc ( btVector3 ( -torque * pitch, -torque * roll, -torque * yaw ) );
         }
     }
 }
@@ -90,22 +90,22 @@ void Game::keyCapture ( SDL_Keycode tecla ) {
         sendMessage ( Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
         break;
     case SDLK_UP:
-        pObj->applyForce ( btVector3 ( 10.0, 0.0, 0.0 ) );
+		pCorpoRigido->applyForce ( btVector3 ( 10.0, 0.0, 0.0 ) );
         break;
     case SDLK_DOWN:
-        pObj->applyForce ( btVector3 ( -10.0, 0.0, 0.0 ) );
+		pCorpoRigido->applyForce ( btVector3 ( -10.0, 0.0, 0.0 ) );
         break;
     case SDLK_LEFT:
-        pObj->applyForce ( btVector3 ( 0.0, 10.0, 0.0 ) );
+		pCorpoRigido->applyForce ( btVector3 ( 0.0, 10.0, 0.0 ) );
         break;
     case SDLK_RIGHT:
-        pObj->applyForce ( btVector3 ( 0.0, -10.0, 0.0 ) );
+		pCorpoRigido->applyForce ( btVector3 ( 0.0, -10.0, 0.0 ) );
         break;
     case SDLK_a:
-        pObj->applyTorc ( btVector3 ( 0.0, 0.0, 10.0 ) );
+		pCorpoRigido->applyTorc ( btVector3 ( 0.0, 0.0, 10.0 ) );
         break;
     case SDLK_s:
-        pObj->applyTorc ( btVector3 ( 0.0, 0.0, -10.0 ) );
+		pCorpoRigido->applyTorc ( btVector3 ( 0.0, 0.0, -10.0 ) );
         break;
     default:
         break;
@@ -148,24 +148,20 @@ void Game::start() {
     pOrbitalCam = ( Chimera::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );
 
     //Ajusta objeto como o primario
-    pObj = ( Chimera::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "Zoltan" );
+	pCorpoRigido = ( Chimera::Physics* )  Chimera::Node::findNodeByName( Chimera::EntityKind::PHYSICS, "Zoltan" );
 
 	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->getNode(Chimera::EntityKind::LIGHT, 0);
 
 	pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeByName(Chimera::EntityKind::DRAW, "testeZ1");
 
-
-    //pSceneMng->skyBoxAtivo ( pSkyBox );
     pSceneMng->cameraAtiva ( pOrbitalCam );
-    pSceneMng->objetoAtivo ( pObj );
+    pSceneMng->objetoAtivo (pCorpoRigido);
 
 	//ajusta scene root com luz e material ativo
 	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
 	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0, true);
 	pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
 	pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
-    //pSceneMng->setLight ( true );
-    //pSceneMng->setMaterial ( true );
 
     sPosicaoObj = "pos:(,,)";
 
@@ -178,7 +174,7 @@ void Game::stop() {
 
 void Game::newFPS ( const unsigned int &fps ) {
 
-    btVector3 val1 = pObj->getPosition();
+    btVector3 val1 = pCorpoRigido->getPosition();
     sPosicaoObj = "pos:(" + std::to_string ( val1.getX() ) + "," + std::to_string ( val1.getY() ) + "," + std::to_string ( val1.getZ() ) + ")";
 
     GameClient::newFPS ( fps );

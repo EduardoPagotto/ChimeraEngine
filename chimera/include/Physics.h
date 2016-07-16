@@ -9,21 +9,37 @@
 
 #include "PhysicsControl.h"
 
+#include "Coord.h"
+
 #include <tinyxml2.h>
 
 namespace Chimera {
     
-class Physics : public Entity
+class Physics : public Coord
 {
 public:
 
     friend class Loader;
 
-    Physics ( std::string _name );
+    Physics (Node *_parent, std::string _name);
 
-    Physics ( const Physics& _physics );
+    //Physics ( const Physics& _physics );
 
-    ~Physics();
+    virtual ~Physics();
+
+	virtual void update ( DataMsg *_dataMsg );
+
+	virtual void init();
+
+	void accept(class NodeVisitor* v);
+
+	virtual btVector3 getPosition() {
+		return pRigidBody->getWorldTransform().getOrigin();
+	}
+
+	virtual void setPosition(const btVector3 &_pos);
+
+	void setPositionRotation(const btVector3 & _posicao, const btVector3 & _rotation);
 
     inline void setMass ( const float &_mass ) {
         mass = _mass;
@@ -53,42 +69,29 @@ public:
         pShapeCollision = new btSphereShape ( _raio );
     }
 
-    inline btVector3& getPosition() {
-        return pRigidBody->getWorldTransform().getOrigin();
-    }
-
-    void setPosition ( const btVector3 &_pos );
-
     void setRotation ( const btVector3 &_rotation );
 
     btVector3 getRotation();
 
     void initTransform ( btTransform &_tTrans, void *pObj );
-	virtual void init();
-
-    //virtual void update ( DataMsg *_dataMsg );
-
-    //virtual void clone ( Node **ppNode );
 
     //usada na trans cam do mundo
     void transformacao3D();
 
     //usada na trans da cam objeto
     void ajusteMatrix ( Physics *_pPhysic );
-
-    void propulcao ( const btVector3 &_prop );
-    void torque ( const btVector3 &_torque );
+    void applyForce( const btVector3 &_prop );
+    void applyTorc( const btVector3 &_torque );
 
     void setIndexVertexArray ( btTriangleIndexVertexArray *_indexVertexArray );
 
     bool isShapeDefine() {
-
-        if ( pShapeCollision != nullptr ) {
-            return true;
-        }
-
-        return false;
+		return (pShapeCollision != nullptr ? true : false);
     }
+
+	void setTransform(const btTransform &_trans) {
+		transform = _trans;
+	}
 
     void loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName );
 
@@ -99,19 +102,14 @@ private:
     btScalar mass;
     btScalar friction;
     btScalar restitution;
-
     btRigidBody* pRigidBody;
-
     btCollisionShape* pShapeCollision;
     btGImpactMeshShape *trimesh;
-
     btDefaultMotionState *pMotionState;
-
     //btTriangleIndexVertexArray *indexVertexArray;
-
     PhysicsControl *pWorld;
-
     //btTriangleIndexVertexArray *m_pIndexVertexArrays;
+	btTransform transform;
 };
 }
 #endif //Physics_H

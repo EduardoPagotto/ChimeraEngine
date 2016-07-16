@@ -1,21 +1,23 @@
 #ifndef __TRANSFORM_H__
 #define	__TRANSFORM_H__
 
-#include <LinearMath/btVector3.h>
-#include <LinearMath/btTransform.h>
-#include "Group.h"
+#include "Coord.h"
 
 namespace Chimera {
 
 //FIXME: Mudar para operacao matrix
-class Transform : public Group {
+class Transform : public Coord {
 public:
 
 	Transform(Node* _parent, std::string _name);
-
 	virtual ~Transform();
 
 	virtual void update(DataMsg *_dataMsg);
+
+	// Inherited via Group
+	virtual btVector3 getPosition() override;
+	virtual void setPosition(const btVector3 & _pos) override;
+	
 
 	void accept(class NodeVisitor* v);
 
@@ -43,6 +45,8 @@ private:
 	btVector3 translate;
 	btVector3 rotate; 
 	btVector3 scale; 
+
+
 };
 }
 

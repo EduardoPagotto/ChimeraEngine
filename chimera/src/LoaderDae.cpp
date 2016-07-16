@@ -147,7 +147,7 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
 
                 std::string nomeMesh = "";
               
-				Physics *pPhysic = new Physics(std::string(l_name));
+				Physics *pPhysic = new Physics(nullptr, std::string(l_name));
                 pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
 
 				DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)mapaGeometria[nomeMesh];
@@ -159,7 +159,7 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                         3 * sizeof ( int ),					//tamanho do indice por elemento
                         pDrawTriMesh->vList.getSize() / 3,	//num Vertices
                         pDrawTriMesh->vList.ptrVal(),		//lista de vertice
-                        3 * sizeof ( float )					//tamanho do vertice por elemento
+                        3 * sizeof ( float )				//tamanho do vertice por elemento
                     );
 
                     pPhysic->setIndexVertexArray ( indexVertexArray );
@@ -198,8 +198,6 @@ tinyxml2::XMLElement* LoaderDae::getDadoRigidBody ( const char* _url, const char
             const char *l_name = l_nRigidBody->Attribute ( "name" );
             const char *l_sid = l_nRigidBody->Attribute ( "sid" );
             if ( strcmp ( _sid, l_sid ) == 0 ) {
-                //const char * l_teste = l_nRigidBody->Name();
-                //std::cout << "DEBUG: " << l_teste <<std::endl;
                 return l_nRigidBody;
             }
             l_nRigidBody = l_nRigidBody->NextSiblingElement ( "rigid_body" );
@@ -421,14 +419,13 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             pDraw->pMaterial = pMaterial;
             pDraw->pTexture = pTexture;
             Physics *ph = mapaEntidadeFisica[_id];
-                
             if (ph != nullptr) {
 
-                Object *pObj = new Object(_pNodePai, _id);
-				pObj->pPhysic = ph;
-                pObj->setTransform(*l_pTransform);
-                pObj->addChild(pDraw);
-                    pLastNodeDone = pObj;
+				ph->setName(_id);//Preciso ???
+				ph->setTransform(*l_pTransform);
+				ph->addChild(pDraw);
+				pLastNodeDone = ph;
+				_pNodePai->addChild(ph);
 
             } else {
 
@@ -487,7 +484,7 @@ tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, cons
                 } else {
                     std::cout << rotina << " : vazio " << std::endl;
                 }
-                // 					std::cout << "Visual Scene: " << (const char*)&l_url[1] << " nao encontrado " << std::endl;
+               
             } else {
                 std::cout << library << " nao encontrado " << std::endl;
             }

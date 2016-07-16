@@ -2,10 +2,8 @@
 #define SCENE_ROOT_H_
 
 #include "Node.h"
-
-#include "Object.h"
-
 #include "State.h"
+#include "Group.h"
 
 namespace Chimera {
 
@@ -15,7 +13,7 @@ public:
 	SceneRoot(Node* _pNode, std::string _name);
 	virtual ~SceneRoot();
     virtual void init();
-    virtual void draw(Object *pObjeto);
+    virtual void draw(Group *_pGroup);
 	virtual void accept(class NodeVisitor * v) override;
 
 	State *getState() {

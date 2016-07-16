@@ -1,5 +1,4 @@
 #include "SceneMng.h"
-
 #include "OpenGLDefs.h"
 
 namespace Chimera {
@@ -8,7 +7,7 @@ SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
 
     root = new SceneRoot(nullptr,"root");
     pCameraAtiva = nullptr;
-    pObjeto = nullptr;
+	pOrigemDesenho = nullptr;
     pLoader = nullptr;
 }
 
@@ -53,9 +52,6 @@ void SceneMng::addEntityToScene ( Node *_pNode ) {
     case EntityKind::LIGHT:
         m_vLight.push_back ( ( Light* ) _pNode );
         break;
-    case EntityKind::OBJECT:
-        m_vObject.push_back ( ( Object* ) _pNode );
-        break;
     default:
         break;
     }
@@ -81,13 +77,6 @@ Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
             }
         }
         break;
-    case EntityKind::OBJECT:
-        for ( Node *node : m_vObject ) {
-            if ( node->getName().compare ( _nome ) == 0 ) {
-                return node;
-            }
-        }
-        break;
     default:
         break;
     }
@@ -108,11 +97,6 @@ Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
     case EntityKind::LIGHT:
         if ( m_vLight.size() > index ) {
             retorno = m_vLight[index];
-        }
-        break;
-    case EntityKind::OBJECT:
-        if ( m_vObject.size() > index ) {
-            retorno = m_vObject[index];
         }
         break;
     default:
@@ -147,24 +131,18 @@ void SceneMng::draw ( HUD *_pHud ) {
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
         pVideo->executeViewPerspective ( pCameraAtiva->getFov(),pCameraAtiva->getNear(),pCameraAtiva->getFar(), eye );
-
 		pCameraAtiva->render();
-
-        root->draw(pObjeto);
+        root->draw(pOrigemDesenho);
         
-      
 #ifdef TESTEZ1
         shadoMap.ApplyShadowMap ( pObjeto );
 #endif
-
         if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
             hudUpdate ( _pHud,0 );
         } else {
             hudUpdate ( _pHud,eye );
         }
-
     }
-
 }
 
 void SceneMng::hudUpdate ( HUD *_pHud,int eye ) {
@@ -174,7 +152,6 @@ void SceneMng::hudUpdate ( HUD *_pHud,int eye ) {
         _pHud->update();
         pVideo->restoreMatrix();
     }
-
 }
 
 //void SceneMng::setLight ( bool _lightOn ) {

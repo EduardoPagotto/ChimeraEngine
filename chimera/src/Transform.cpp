@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-Transform::Transform(Node* _parent, std::string _name) : Group(_parent, _name) {
+Transform::Transform(Node* _parent, std::string _name) : Coord (_parent, _name) {
 
 	this->setKind(EntityKind::TRANSFORM);
 	this->tflag = false;
@@ -27,7 +27,7 @@ void Transform::update(DataMsg * _dataMsg)
 	}
 
 
-	Group::update(_dataMsg);
+	Coord::update(_dataMsg);
 }
 
 void Transform::accept(class NodeVisitor* v) {
@@ -36,6 +36,16 @@ void Transform::accept(class NodeVisitor* v) {
 
 void Transform::setTransform ( const btTransform& _trans ) {
     //TODO implementar
+}
+
+btVector3 Transform::getPosition()
+{
+	return translate;
+}
+
+void Transform::setPosition(const btVector3 & _pos)
+{
+	translate = _pos;
 }
 
 void Transform::setTranslate(const btVector3 &_vet) {

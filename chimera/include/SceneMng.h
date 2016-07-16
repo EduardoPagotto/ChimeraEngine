@@ -5,7 +5,6 @@
 
 #include "Video.h"
 #include "Camera.h"
-#include "Object.h"
 #include "Light.h"
 #include "ParticleEmitter.h"
 #include "HUD.h"
@@ -13,6 +12,8 @@
 #include "ShadowMap.h"
 #include "SceneRoot.h"
 #include "LoaderDae.h"
+
+#include "Coord.h"
 
 namespace Chimera
 {
@@ -29,7 +30,6 @@ public:
     virtual ~SceneMng();
 
     Node *getNode ( EntityKind _type, const std::string &_nome );
-    
     Node *getNode ( EntityKind _type, unsigned index );
 
     void init();
@@ -42,16 +42,13 @@ public:
         pCameraAtiva = _pCam;
     }
 
-    inline void objetoAtivo ( Object *_pObject ) {
-        pObjeto = _pObject;
+    inline void objetoAtivo ( Coord *_pObject ) {
+		pOrigemDesenho = _pObject;
     }
 
 	SceneRoot *getRoot() {
 		return root;
 	}
-
-//    void setLight ( bool _lightOn );
-//    void setMaterial ( bool _materialOn );
 
     void draw ( HUD *_pHud );
 
@@ -65,14 +62,12 @@ private:
     
     SceneRoot *root;
     Camera *pCameraAtiva;
-    Object *pObjeto;
+	Coord *pOrigemDesenho;
 
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
-    std::vector<Object*> m_vObject;
 
     ShadowMap shadoMap;
-
     Video *pVideo;
 };
 

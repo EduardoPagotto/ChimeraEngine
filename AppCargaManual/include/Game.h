@@ -3,7 +3,6 @@
 
 #include "GameClient.h"
 #include "CameraSpherical.h"
-//#include "Transform.h"
 #include "ParticleEmitter.h"
 
 /**
@@ -33,10 +32,9 @@ private:
     int botaoIndex;
     int estadoBotao;
 
+	std::string sPosicaoObj;
     Chimera::CameraSpherical *pOrbitalCam;
-    Chimera::Object *pObj;
-    std::string sPosicaoObj;
-
+    Chimera::Physics *pCorpoRigido;
 	Chimera::ParticleEmitter *pEmissor;
 };
 

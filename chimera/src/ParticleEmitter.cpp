@@ -1,6 +1,6 @@
 #include "ParticleEmitter.h"
 #include "ExceptionChimera.h"
-#include "Object.h"
+#include "Coord.h"
 #include "Camera.h"
 #include "NodeVisitor.h"
 #include <algorithm>
@@ -61,7 +61,8 @@ void ParticleEmitter::update ( DataMsg *_dataMsg ) {
 
         setGL();
 
-        Object *pSource = ( Object * ) _dataMsg->getParam();
+        Coord *pSource = (Coord * ) _dataMsg->getParam();
+
 
         // desloca objeto em relacao ao que contem a camera
         btVector3 l_vec = pSource->getPosition();

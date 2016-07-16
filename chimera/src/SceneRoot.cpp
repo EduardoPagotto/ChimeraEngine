@@ -19,12 +19,12 @@ void SceneRoot::init() {
 	Node::init();
 }
 
-void SceneRoot::draw(Object *pObjeto) {
+void SceneRoot::draw(Group *_pGroup) {
     
 	pState->apply();
 	pState->appyLighting();
 
-    Chimera::DataMsg dataMsg ( KindOp::DRAW, this, pObjeto, nullptr );
+    Chimera::DataMsg dataMsg ( KindOp::DRAW, this, _pGroup, nullptr );
     Node::update ( &dataMsg );   
 }
 

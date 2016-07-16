@@ -2,16 +2,23 @@
 #include "Singleton.h"
 #include "ChimeraUtils.h"
 
-#ifdef WIN32
-#include "windows.h"
-#endif
+#include "Draw.h"
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "NodeVisitor.h"
+
+#include "OpenGLDefs.h"
+//#ifdef WIN32
+//#include "windows.h"
+//#endif
+//
+//#include <GL/gl.h>
+//#include <GL/glu.h>
 
 namespace Chimera {
     
-Physics::Physics ( std::string _name ) : Entity ( EntityKind::PHYSICS, _name ) {
+Physics::Physics (Node *_parent, std::string _name ) : Coord (_parent, _name ) {
+
+	setKind(EntityKind::PHYSICS);
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
@@ -22,27 +29,30 @@ Physics::Physics ( std::string _name ) : Entity ( EntityKind::PHYSICS, _name ) {
     friction = 0.0f;
     restitution = 0.0f;
 
+	transform.setIdentity();
+
     pWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
 
 }
 
-Physics::Physics ( const Physics& _physics ) : Entity ( _physics ) {
-
-    mass = _physics.mass;
-    friction = _physics.friction;
-    restitution = _physics.restitution;
-
-    pRigidBody = nullptr;
-    pShapeCollision = _physics.pShapeCollision;
-    pMotionState = nullptr;
-    trimesh = nullptr;
-
-    pWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
-}
+//Physics::Physics ( const Physics& _physics ) : Group( _physics ) {
+//
+//    mass = _physics.mass;
+//    friction = _physics.friction;
+//    restitution = _physics.restitution;
+//
+//    pRigidBody = nullptr;
+//    pShapeCollision = _physics.pShapeCollision;
+//    pMotionState = nullptr;
+//    trimesh = nullptr;
+//
+//    pWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
+//}
 
 Physics::~Physics() {
 
     if ( pRigidBody ) {
+
         //pWorld->discretDynamicsWorld->removeRigidBody ( pRigidBody );
         pWorld->getWorld()->removeRigidBody ( pRigidBody );
         delete pRigidBody->getMotionState();
@@ -56,17 +66,54 @@ Physics::~Physics() {
     Infra::Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
-// void Physics::clone ( Node **ppNode ) {
-//     *ppNode = new Physics ( *this );
-//     Node::clone ( ppNode );
-// }
+ void Physics::update ( DataMsg *_dataMsg ) {
 
-// void Physics::update ( DataMsg *_dataMsg ) {
-//     Node::update ( _dataMsg );
-// }
+	 if ((_dataMsg->getKindOp() == KindOp::DRAW) || (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX)) {
+
+		 glPushMatrix();
+
+		 Physics *pSource = (Physics *)_dataMsg->getParam();
+		 ajusteMatrix( pSource );
+
+		 Node::update(_dataMsg);
+
+		 glPopMatrix();
+
+	 }
+	 else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
+
+		 _dataMsg->setDone(true);
+		 //Node::update(_dataMsg);
+	 }
+
+
+ }
 
 void Physics::init() {
 
+	Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::DRAW, 0);
+
+	if (isShapeDefine() == false)
+		setShapeBox(pDraw->getSizeBox());
+
+	initTransform(transform, this);
+
+	Coord::init();
+
+}
+
+void Physics::accept(NodeVisitor * v) {
+	v->visit(this);
+}
+
+void Physics::setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation) {
+
+	btQuaternion l_qtn;
+	transform.setIdentity();
+	l_qtn.setEulerZYX(_rotation.getX(), _rotation.getY(), _rotation.getZ());
+	transform.setRotation(l_qtn);
+	transform.setOrigin(_posicao);
+	//pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 }
 
 void Physics::initTransform( btTransform &_tTrans, void *pObj ) {
@@ -162,7 +209,7 @@ btVector3 Physics::getRotation() {
     return btVector3 ( rotX, rotY, rotZ );
 }
 
-void Physics::torque ( const btVector3 &_torque ) {
+void Physics::applyTorc( const btVector3 &_torque ) {
     //pRigidBody->applyTorque(_torque);
 
     pRigidBody->applyTorque ( pRigidBody->getInvInertiaTensorWorld().inverse() * ( pRigidBody->getWorldTransform().getBasis() * _torque ) );
@@ -171,7 +218,7 @@ void Physics::torque ( const btVector3 &_torque ) {
     //RigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis() * _torque);
 }
 
-void Physics::propulcao ( const btVector3 &_prop ) {
+void Physics::applyForce( const btVector3 &_prop ) {
     //Jeito um
     //btTransform boxTrans;
     //pRigidBody->getMotionState()->getWorldTransform(boxTrans);
@@ -320,7 +367,6 @@ void Physics::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::X
                     setRestitution ( atof ( l_res ) );
                 }
             }
-
         }
     }
 }

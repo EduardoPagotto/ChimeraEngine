@@ -1,17 +1,13 @@
-#ifndef __GAME_EVENTS_TEST__H_
-# define __GAME_EVENTS_TEST__H_
-
-#include "Video.h"
+#ifndef __GAME_SHADER_TEST__H_
+#define __GAME_SHADER_TEST__H_
 
 #include "GameClient.h"
-# include "DataMsg.h"
 
-
-class GameEvents : public Chimera::GameClient
+class Game : public Chimera::GameClient
 {
 public:
-    GameEvents(Chimera::SceneMng *_pScenMng);
-    virtual ~GameEvents();
+	Game(Chimera::SceneMng *_pScenMng);
+	virtual ~Game();
 
 	virtual void start();
 	virtual void stop();

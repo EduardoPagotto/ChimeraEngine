@@ -27,7 +27,7 @@
     <ClInclude Include="..\..\AppShader\include\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\AppShader\include\GameEvents.h">
+    <ClInclude Include="..\..\AppShader\include\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,7 +38,7 @@
     <ClCompile Include="..\..\AppShader\src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\AppShader\src\GameEvents.cpp">
+    <ClCompile Include="..\..\AppShader\src\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

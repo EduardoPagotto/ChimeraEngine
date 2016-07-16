@@ -1,17 +1,13 @@
 #include "HUD.h"
-
-#ifdef WIN32
-#include "windows.h"
-#endif
-
-#include <ExceptionSDL.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "NodeVisitor.h"
+#include "ExceptionSDL.h"
+#include "OpenGLDefs.h"
 
 namespace Chimera {
 
-HUD::HUD() : on ( true ) {
+HUD::HUD(Node *_parent, std::string _name) : on ( true ), Draw (_parent, DrawType::HUD, _name) {
+
+	setKind(EntityKind::HUD);
 
 #ifdef TTF_NOVO
     if ( !TTF_WasInit() && TTF_Init() == -1 ) {
@@ -108,43 +104,69 @@ void HUD::drawFonts() {
     }
 }
 
+void HUD::init() {
 
-void HUD::update() {
+	setOn(true);
 
-    // salva flags de bit
-    glPushAttrib ( GL_ENABLE_BIT );
+}
 
-    // desabilita oculta face
-    glDisable ( GL_DEPTH_TEST );
-    glDisable ( GL_CULL_FACE );
+btVector3 HUD::getSizeBox()
+{
+	return btVector3();
+}
 
-    // desliga texturas e iluminacao
-    glDisable ( GL_COLOR_MATERIAL );
-    glDisable ( GL_LIGHTING );
-    glDisable ( GL_TEXTURE_2D );
+void HUD::renderExecute(bool _texture)
+{
+	// salva flags de bit
+	glPushAttrib(GL_ENABLE_BIT);
 
-    // habilita mistura de tons a cena
-    glEnable ( GL_BLEND );
-    glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	// desabilita oculta face
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
 
-    //preserva a cor original
-    glPushAttrib ( GL_CURRENT_BIT );
+	// desliga texturas e iluminacao
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
 
-    //desenha retangulos
-    drawBoxes();
+	// habilita mistura de tons a cena
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //retorna paleta
-    glPopAttrib();
+	//preserva a cor original
+	glPushAttrib(GL_CURRENT_BIT);
 
-    //habilita testura para as fontes
-    glEnable ( GL_TEXTURE_2D );
+	//desenha retangulos
+	drawBoxes();
 
-    //desenha as fontes em texturas
-    drawFonts();
+	//retorna paleta
+	glPopAttrib();
 
-    // restaura da pinha de flags
-    glPopAttrib();
+	//habilita testura para as fontes
+	glEnable(GL_TEXTURE_2D);
 
+	//desenha as fontes em texturas
+	drawFonts();
+
+	// restaura da pinha de flags
+	glPopAttrib();
+
+}
+
+void HUD::update(DataMsg * _dataMsg) {
+
+	if (_dataMsg->getKindOp() == KindOp::DRAW_HUD) {
+
+		if (isOn() == true)
+			renderExecute(true);
+
+	}
+
+	Draw::update(_dataMsg);
+}
+
+void HUD::accept(NodeVisitor * v) {
+	v->visit(this);
 }
 
 }

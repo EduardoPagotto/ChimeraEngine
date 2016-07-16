@@ -6,8 +6,7 @@
 
 #include <iostream>
 #include "VideoDevice.h"
-#include "Node.h"
-#include "GameEvents.h"
+#include "Game.h"
 #include "FlowControl.h"
 #include "ExceptionChimera.h"
 
@@ -21,14 +20,15 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Chimera::Video *video = new Chimera::VideoDevice ( 640, 480, "teste" );
+        Chimera::Video *video = new Chimera::VideoDevice (800, 600, "teste");
+		Chimera::SceneMng *sceneMng = new Chimera::SceneMng(video);
+		Chimera::Group* group1 = sceneMng->createSceneGraph();
 
-		//FIXME tudo errado!!!!
-        GameEvents *game = new GameEvents(nullptr);
+        Game *game = new Game(sceneMng);
 
-        Chimera::FlowControl *pControle = new Chimera::FlowControl ( video, game );
-        pControle->open();
-        pControle->gameLoop();
+		Chimera::FlowControl *pControle = new Chimera::FlowControl(video, game);
+		pControle->open();
+		pControle->gameLoop();
 
         delete pControle;
         delete game;

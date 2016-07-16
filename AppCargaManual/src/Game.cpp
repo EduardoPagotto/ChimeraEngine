@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "ExceptionSDL.h"
-
 #include "Transform.h"
 #include "OpenGLDefs.h"
 
@@ -9,6 +8,9 @@ Game::Game ( Chimera::SceneMng *_pScenMng ) : GameClient ( _pScenMng ) {
 	pCorpoRigido = nullptr;
 	pEmissor = nullptr;
 	pOrbitalCam = nullptr;
+
+	textoFPS = "fps: 0";
+	sPosicaoObj = "pos:(,,)";
 }
 
 Game::~Game() {
@@ -140,9 +142,10 @@ void Game::start() {
     // Pega o Skybox
 	Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeByName( Chimera::EntityKind::TRANSFORM, "SkyBox" );
 	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChildByKind(Chimera::EntityKind::DRAW, 0);
-
 	pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
 	pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
+
+	pHUD = (Chimera::HUD*)Chimera::Node::findNodeByName(Chimera::EntityKind::HUD, "HUD-Default");
 
     //Pega primeira camera
     pOrbitalCam = ( Chimera::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );
@@ -163,9 +166,8 @@ void Game::start() {
 	pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
 	pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
 
-    sPosicaoObj = "pos:(,,)";
-
     pHUD->addText ( 0, 0, 255, 0, Chimera::Color::BLUE, &sPosicaoObj );
+	pHUD->addText ( 0, 0, 0, 0, Chimera::Color::RED, &textoFPS );
 }
 
 void Game::stop() {
@@ -176,13 +178,14 @@ void Game::newFPS ( const unsigned int &fps ) {
 
     btVector3 val1 = pCorpoRigido->getPosition();
     sPosicaoObj = "pos:(" + std::to_string ( val1.getX() ) + "," + std::to_string ( val1.getY() ) + "," + std::to_string ( val1.getZ() ) + ")";
+	textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
 
     GameClient::newFPS ( fps );
 }
 
 void Game::render() {
 
-    pSceneMng->draw ( pHUD );
+    pSceneMng->draw ();
 
 }
 

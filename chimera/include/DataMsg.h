@@ -12,6 +12,7 @@ enum class KindOp
 {
     DRAW,
     DRAW_NO_TEX,
+	DRAW_HUD,
     IS_ALLOW_COLLIDE,
     START_COLLIDE,
     ON_COLLIDE,

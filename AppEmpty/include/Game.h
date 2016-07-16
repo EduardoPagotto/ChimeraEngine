@@ -2,13 +2,12 @@
 # define __GAME_EVENTS_TEST__H_
 
 #include "GameClient.h"
-#include "DataMsg.h"
 
-class GameEvents : public Chimera::GameClient
+class Game : public Chimera::GameClient
 {
 public:
-	GameEvents(Chimera::SceneMng *_pScenMng);
-	virtual ~GameEvents();
+	Game(Chimera::SceneMng *_pScenMng);
+	virtual ~Game();
 
 	virtual void start();
 	virtual void stop();
@@ -21,7 +20,10 @@ public:
 	virtual void joystickStatus(Chimera::JoystickManager &joy);
 	virtual void executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB);
 	virtual void newFPS(const unsigned int &fps);
+
 private:
+	int botaoIndex;
+	int estadoBotao;
 };
 
 #endif

@@ -11,7 +11,8 @@ namespace Chimera {
 enum class DrawType
 {
     MESH,
-    PARTICLE_SYSTEM
+    PARTICLE_SYSTEM,
+	HUD
 };
 
 class Draw : public Node

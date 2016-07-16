@@ -26,7 +26,8 @@ enum class EntityKind : int8_t
     SKYBOX,
 	SCENEROOT,
     GROUP,
-	TRANSFORM
+	TRANSFORM,
+	HUD
 };
 
 /**

@@ -10,6 +10,7 @@
 #include "Transform.h"
 #include "Solid.h"
 #include "Coord.h"
+#include "HUD.h"
 
 namespace Chimera {
 
@@ -18,7 +19,6 @@ class NodeVisitor
 public:
 	NodeVisitor();
 	virtual ~NodeVisitor();
-
 	virtual void visit(Camera* _pCamera) = 0;
 	virtual void visit(Draw* _pDraw) = 0;
 	virtual void visit(Light *_pLight) = 0;
@@ -27,7 +27,8 @@ public:
     virtual void visit(Group* _pGroup) = 0;
 	virtual void visit(Transform* _pTransform) = 0;
 	virtual void visit(Solid* _pSolid) = 0;
-	virtual void visit(Coord *_pCord) = 0;
+	virtual void visit(Coord* _pCord) = 0;
+	virtual void visit(HUD* _pHUD) = 0;
 };
 }
 

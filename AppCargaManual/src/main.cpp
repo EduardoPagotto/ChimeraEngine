@@ -19,6 +19,8 @@
 
 #include "Transform.h"
 
+#include "HUD.h"
+
 int testeCargaArquivo() {
 
     try {
@@ -48,14 +50,25 @@ int testeCargaArquivo() {
         sceneMng->setReader(pLoader);
         Chimera::Group* group1 = sceneMng->createSceneGraph();
         
+		//Adiciona um Emissor de Particula 
 		//Chimera::Transform* posParticle = new Chimera::Transform((Chimera::Node*)group1, "posicaoParticle");
 		//posParticle->setTranslate(btVector3(-5.0, 5.0, 4.0));
-
         Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)group1, "testeZ1" );
 		pParticleEmitter->setPosSource(btVector3(-5.0, 5.0, 4.0));
 		pParticleEmitter->setMaxSeed(100);
         std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
         pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
+
+		//Adiciona um HUD ao Grapho
+		Chimera::HUD *pHUD = new Chimera::HUD(group1, "HUD-Default");
+	#ifdef WIN32
+		Chimera::Font *pFont = new Chimera::Font ( "C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18 );
+	#else
+		Chimera::Font = new Chimera::Font ( "../../fonts/FreeSans.ttf", 18 );
+	#endif
+		pHUD->addFont ( pFont );
+		SDL_Rect area = { 30, 30, 600, 20 };
+		pHUD->addSquare ( area, Chimera::Color ( 1.0f, 1.0f, 1.0f, 0.2f ) );
 
         delete pLoader;
         pLoader = nullptr;

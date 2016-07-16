@@ -50,22 +50,18 @@ void FlowControl::processaGame() {
 		pGameClientEvents->beginProcGame();
 
 		countFrame();
+
 		pVideo->initDraw();
 
 		pGameClientEvents->render();
-
 		pVideo->endDraw();
-
 		pGameClientEvents->joystickStatus(joystickManager);
 
 		pGameClientEvents->endProcGame();
 	}
 	catch ( ... ) {
-	
 		printf("Erro GRavissimo:");
 		SDL_Quit();
-	
-
 	}
 }
 

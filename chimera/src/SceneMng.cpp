@@ -21,7 +21,12 @@ void SceneMng::setReader ( LoaderDae* _pLoader ) {
 
 Group *SceneMng::createSceneGraph() {
    
-    Group *pGroup = pLoader->getNodes();
+	Group *pGroup = nullptr;
+	if (pLoader!= nullptr)
+		pGroup = pLoader->getNodes();
+	else
+		pGroup = new Group(nullptr, "Default");
+
     root->addChild(pGroup);
     parseEntity(pGroup);
     
@@ -112,7 +117,7 @@ void SceneMng::init() {
     shadoMap.init ( (Node*)root );
 }
 
-void SceneMng::draw ( HUD *_pHud ) {
+void SceneMng::draw () {
 
 //#define TESTEZ1
 
@@ -124,34 +129,38 @@ void SceneMng::draw ( HUD *_pHud ) {
 #ifdef TESTEZ1
 	btVector3 posicao = root->getState()->getLight()->getPosition();
 	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
-
-    shadoMap.RenderSceneA ( pObjeto );
+    shadoMap.RenderSceneA (pOrigemDesenho);
 #endif
 
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
-        pVideo->executeViewPerspective ( pCameraAtiva->getFov(),pCameraAtiva->getNear(),pCameraAtiva->getFar(), eye );
-		pCameraAtiva->render();
+		if (pCameraAtiva != nullptr) {
+
+			pVideo->executeViewPerspective(pCameraAtiva->getFov(), pCameraAtiva->getNear(), pCameraAtiva->getFar(), eye);
+			pCameraAtiva->render();
+		}
+
         root->draw(pOrigemDesenho);
         
 #ifdef TESTEZ1
-        shadoMap.ApplyShadowMap ( pObjeto );
+        shadoMap.ApplyShadowMap (pOrigemDesenho);
 #endif
         if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
-            hudUpdate ( _pHud,0 );
+            hudUpdate ( 0 );
         } else {
-            hudUpdate ( _pHud,eye );
+            hudUpdate ( eye );
         }
     }
 }
 
-void SceneMng::hudUpdate ( HUD *_pHud,int eye ) {
+void SceneMng::hudUpdate ( int eye ) {
 
-    if ( _pHud->isOn() == true ) {
-        pVideo->executeViewOrto ( eye );
-        _pHud->update();
-        pVideo->restoreMatrix();
-    }
+    pVideo->executeViewOrto ( eye );
+
+	root->drawHud(nullptr);
+
+    pVideo->restoreMatrix();
+
 }
 
 //void SceneMng::setLight ( bool _lightOn ) {

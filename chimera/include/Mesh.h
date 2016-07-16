@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string.h>
-
 #include <tinyxml2.h>
 
 #include "Draw.h"

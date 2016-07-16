@@ -8,45 +8,23 @@ namespace Chimera {
 
 GameClient::GameClient ( Chimera::SceneMng *_pScenMng ) : pSceneMng ( _pScenMng )  {
 
-    textoFPS = "fps: 0";
-    pHUD = new HUD();
-
-#ifdef WIN32
-    pFont = new Chimera::Font ( "C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18 );
-#else
-    pFont = new Chimera::Font ( "../../fonts/FreeSans.ttf", 18 );
-#endif
-
-    pHUD->addFont ( pFont );
-
-    SDL_Rect area = { 30, 30, 600, 20 };
-
-    pHUD->addSquare ( area, Color ( 1.0f, 1.0f, 1.0f, 0.2f ) );
-    pHUD->addText ( 0, 0, 0, 0, Color::RED, &textoFPS );
-
     physicWorld = Infra::Singleton<PhysicsControl>::getRefSingleton();
 }
 
 GameClient::~GameClient() {
 
-    if ( pHUD ) {
-        delete pHUD;
-    }
-
     Infra::Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
 void GameClient::newFPS ( const unsigned int &fps ) {
-    textoFPS = "fps: " + std::to_string ( fps ) + std::string ( " Periodo: " ) + std::to_string ( physicWorld->getLastPeriod() );
+   // textoFPS = "fps: " + std::to_string ( fps ) + std::string ( " Periodo: " ) + std::to_string ( physicWorld->getLastPeriod() );
 }
 
 void GameClient::start() {
 
     deadzone = 0.02;
-
     pSceneMng->init();
 
-    pHUD->setOn ( true );
 }
 
 void GameClient::stop() {

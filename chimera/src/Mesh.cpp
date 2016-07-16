@@ -1,13 +1,6 @@
 #include "Mesh.h"
-
-#ifdef WIN32
-#include "windows.h"
-#endif
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
 #include "ChimeraUtils.h"
+#include "OpenGLDefs.h"
 
 namespace Chimera {
     
@@ -294,9 +287,7 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
             l_vSource.clear();
 
         }
-
     }
-
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

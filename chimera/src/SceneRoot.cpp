@@ -26,6 +26,16 @@ void SceneRoot::draw(Group *_pGroup) {
 
     Chimera::DataMsg dataMsg ( KindOp::DRAW, this, _pGroup, nullptr );
     Node::update ( &dataMsg );   
+
+
 }
+
+void SceneRoot::drawHud(Group *_pGroup) {
+
+	Chimera::DataMsg dataMsg(KindOp::DRAW_HUD, this, _pGroup, nullptr);
+	Node::update(&dataMsg);
+
+}
+
 
 }

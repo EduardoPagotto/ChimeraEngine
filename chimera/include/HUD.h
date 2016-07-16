@@ -1,5 +1,8 @@
 #ifndef HUD_H_
 #define HUD_H_
+
+#include "Draw.h"
+
 #include <vector>
 
 #ifndef WIN32
@@ -12,7 +15,7 @@
 
 namespace Chimera
 {
-class HUD
+class HUD : public Draw
 {
 public:
 
@@ -30,9 +33,17 @@ public:
         Color color;
     };
 
-    HUD();
+    HUD(Node *_parent, std::string _name);
 
-    ~HUD();
+    virtual ~HUD();
+
+	virtual void init();
+	virtual void update(DataMsg *_dataMsg);
+	void accept(class NodeVisitor* v);
+
+	// Inherited via Draw
+	virtual void renderExecute(bool _texture) override;
+	virtual btVector3 getSizeBox() override;
 
     void addFont ( Font *_pFont );
     void addSquare ( const SDL_Rect _rec, Color _color );
@@ -46,10 +57,8 @@ public:
     }
 
     void addText ( int _fontIndex, int _squareIndex, int _posX, int _posY, Color _colorText, std::string *_txt );
-    void update ( void );
 
 private:
-
     void drawBoxes();
     void drawFonts();
 

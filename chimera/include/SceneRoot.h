@@ -13,7 +13,10 @@ public:
 	SceneRoot(Node* _pNode, std::string _name);
 	virtual ~SceneRoot();
     virtual void init();
+
     virtual void draw(Group *_pGroup);
+	void drawHud(Group * _pGroup);
+
 	virtual void accept(class NodeVisitor * v) override;
 
 	State *getState() {

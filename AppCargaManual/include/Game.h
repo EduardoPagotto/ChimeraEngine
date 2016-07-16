@@ -4,6 +4,7 @@
 #include "GameClient.h"
 #include "CameraSpherical.h"
 #include "ParticleEmitter.h"
+#include "HUD.h"
 
 /**
  * Class Game
@@ -32,7 +33,11 @@ private:
     int botaoIndex;
     int estadoBotao;
 
+	Chimera::HUD* pHUD;
+
 	std::string sPosicaoObj;
+	std::string textoFPS;
+
     Chimera::CameraSpherical *pOrbitalCam;
     Chimera::Solid *pCorpoRigido;
 	Chimera::ParticleEmitter *pEmissor;

@@ -7,7 +7,6 @@
 #include "Camera.h"
 #include "Light.h"
 #include "ParticleEmitter.h"
-#include "HUD.h"
 
 #include "ShadowMap.h"
 #include "SceneRoot.h"
@@ -50,10 +49,10 @@ public:
 		return root;
 	}
 
-    void draw ( HUD *_pHud );
+    void draw ();
 
 private:
-    void hudUpdate ( HUD *_pHud,int eye );
+    void hudUpdate ( int eye );
 
     void parseEntity ( Node *_pNode );
     void addEntityToScene ( Node *_pNode );

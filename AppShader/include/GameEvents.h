@@ -10,22 +10,20 @@
 class GameEvents : public Chimera::GameClient
 {
 public:
-    GameEvents();
-    virtual ~GameEvents(Chimera::SceneMng *_pScenMng);
+    GameEvents(Chimera::SceneMng *_pScenMng);
+    virtual ~GameEvents();
 
-    virtual void start();
-    virtual void stop();
-    virtual void render();
-    virtual void keyCapture ( SDL_Keycode tecla );
-    virtual void mouseButtonDownCapture ( SDL_MouseButtonEvent mb );
-    virtual void mouseButtonUpCapture ( SDL_MouseButtonEvent mb );
-    virtual void mouseMotionCapture ( SDL_MouseMotionEvent mm );
-    virtual void joystickCapture ( Chimera::JoystickManager &joy );
-    virtual void joystickStatus ( Chimera::JoystickManager &joy );
-    virtual void userEvent ( const SDL_Event &_event );
-    virtual void newFPS ( const unsigned int &fps );
-    virtual void beginProcGame();
-    virtual void endProcGame();
+	virtual void start();
+	virtual void stop();
+	virtual void render();
+	virtual void keyCapture(SDL_Keycode tecla);
+	virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb);
+	virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb);
+	virtual void mouseMotionCapture(SDL_MouseMotionEvent mm);
+	virtual void joystickCapture(Chimera::JoystickManager &joy);
+	virtual void joystickStatus(Chimera::JoystickManager &joy);
+	virtual void executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB);
+	virtual void newFPS(const unsigned int &fps);
 
 private :
     GLuint vertexbuffer;

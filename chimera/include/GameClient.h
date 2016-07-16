@@ -4,7 +4,6 @@
 #include "IGameClientEvents.h"
 #include "SceneMng.h"
 #include "PhysicsControl.h"
-#include "HUD.h"
 
 namespace Chimera
 {
@@ -25,17 +24,14 @@ protected:
 
     SceneMng *pSceneMng;
     PhysicsControl *physicWorld;
-    Font *pFont;
-    HUD *pHUD;
-
+   
 private:
     void userEvent ( const SDL_Event &_event );
-    void validaOpColisao ( const SDL_Event &_event );
+    //void validaColisao ( const SDL_Event &_event );
     void beginProcGame();
     void endProcGame();
 
     double deadzone;
-    std::string textoFPS;
 };
 }
 

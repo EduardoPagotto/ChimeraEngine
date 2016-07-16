@@ -32,31 +32,13 @@ void Object::setPositionRotation ( const btVector3 &_posicao, const btVector3 &_
 
 void Object::init() {
     
-	if (pPhysic == nullptr) {
+	Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::DRAW, 0);
 
-		printf("Objeto sem Fisica:%s\n", getName().c_str());
-		////Cria corpo caso nao exista
-		//pPhysic = new Physics( "");
-		//pPhysic->setMass(0.5f);
-		//pPhysic->setFriction(0.0f);
-		//pPhysic->setRestitution(0.0f);
+	if (pPhysic->isShapeDefine() == false)
+		pPhysic->setShapeBox(pDraw->getSizeBox());
 
-		//if (pDraw != nullptr) {
-		//	pPhysic->setShapeBox(pDraw->getSizeBox());
-		//}
-
-	}
-	else {
-
-		Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::DRAW, 0);
-
-		if (pPhysic->isShapeDefine() == false) {
-			pPhysic->setShapeBox(pDraw->getSizeBox());
-		}
-
-		pPhysic->initTransform(transform, this);
-	}
-
+	pPhysic->initTransform(transform, this);
+	
 	Node::init();
 }
 

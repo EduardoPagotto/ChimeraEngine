@@ -1,7 +1,11 @@
 #include "Game.h"
 #include "ExceptionSDL.h"
 
+#include "Transform.h"
+
 #include "OpenGLDefs.h"
+
+
 
 Game::Game ( Chimera::SceneMng *_pScenMng ) : GameClient ( _pScenMng ) {
 }
@@ -134,9 +138,9 @@ void Game::start() {
     GameClient::start();
 
     // Pega o Skybox
-	Chimera::Object* pSkyBox = ( Chimera::Object* ) pSceneMng->getNode ( Chimera::EntityKind::OBJECT, "SkyBox" );
-
+	Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeByName( Chimera::EntityKind::TRANSFORM, "SkyBox" );
 	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChildByKind(Chimera::EntityKind::DRAW, 0);
+
 	pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
 	pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
 

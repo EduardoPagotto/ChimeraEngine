@@ -442,71 +442,26 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                 }
             }
              
-            //SkyBox *pSky = nullptr;
-            ////TODO colocat isso no skybox!!!???
-            //tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
-            //if ( l_nExtra != nullptr ) {
-            //    tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
-            //    if ( l_nTechnique != nullptr ) {
-
-            //        const char* l_profile = l_nTechnique->Attribute ( "profile" );
-            //        if ( ( l_profile !=  nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
-
-            //            tinyxml2::XMLElement* l_nParam = l_nTechnique->FirstChildElement ( "param" );
-            //            if ( l_nParam !=  nullptr ) {
-
-            //                const char* l_name = l_nParam->Attribute ( "name" );
-            //                const char* l_type = l_nParam->Attribute ( "type" );
-            //                const char* l_valor = l_nParam->GetText();
-
-            //                if ( ( l_name != nullptr ) && ( strcmp ( l_name, ( const char* ) "TypeNode" ) == 0 ) ) {
-
-            //                    if ( ( l_type != nullptr ) && ( strcmp ( l_type, ( const char* ) "string" ) == 0 ) ) {
-
-            //                        if ( ( l_valor != nullptr ) && ( strcmp ( l_valor, ( const char* ) "SKYBOX" ) == 0 ) ) {
-
-            //                            pSky = new SkyBox (nullptr, _id );
-            //                            //pSky->setTransform(*l_pTransform); //TODO implementar
-            //                            
-            //                            pSky->pDraw = pDraw;
-            //                            pSky->pMaterial = pMaterial;
-            //                            pSky->pTexture = pTexture;
-            //                            
-            //                            _pNodePai->addChild(pSky);
-            //                            pLastNodeDone = pSky;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //} 
-    
-            //if (pSky == nullptr) {
-            
-                pDraw->pMaterial = pMaterial;
-                pDraw->pTexture = pTexture;
-                Physics *ph = mapaEntidadeFisica[_id];
+            pDraw->pMaterial = pMaterial;
+            pDraw->pTexture = pTexture;
+            Physics *ph = mapaEntidadeFisica[_id];
                 
-                if (ph != nullptr) {
-                    Object *pObj = new Object(_pNodePai, _id);
-                    pObj->setTransform(*l_pTransform);
-                    pObj->addChild(pDraw);
-                     pLastNodeDone = pObj;
-                } else {
-                    Transform *pTrans = new Transform(_pNodePai, _id);
-                    pTrans->setTransform(*l_pTransform);
-                    pTrans->addChild(pDraw);
-                    pLastNodeDone = pTrans;
-                }
+            if (ph != nullptr) {
 
-				//mapaObjeto[_id] = pObj;
+                Object *pObj = new Object(_pNodePai, _id);
+				pObj->pPhysic = ph;
+                pObj->setTransform(*l_pTransform);
+                pObj->addChild(pDraw);
+                    pLastNodeDone = pObj;
 
-                //_pNodePai->addChild ( pObj ); 
-               
-                
-           // }
-                          
+            } else {
+
+                Transform *pTrans = new Transform(_pNodePai, _id);
+                pTrans->setTransform(*l_pTransform);
+                pTrans->addChild(pDraw);
+                pLastNodeDone = pTrans;
+            }
+
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "node" ) == 0 ) {
 
             const char * l_id = _nNode->Attribute ( "id" );

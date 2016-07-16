@@ -53,10 +53,8 @@ void Object::update ( DataMsg *_dataMsg ) {
         glPushMatrix();
 
 		Object *pSource = (Object *)_dataMsg->getParam();
-		if (pPhysic != nullptr) {
-			pPhysic->ajusteMatrix(pSource->pPhysic);
-		}
-
+		pPhysic->ajusteMatrix(pSource->pPhysic);
+		
         Node::update ( _dataMsg );
 
         glPopMatrix();
@@ -73,15 +71,11 @@ btVector3& Object::getPosition() {
 }
 
 void Object::applyTorc ( const btVector3 &_vet ) {
-    if ( pPhysic ) {
-        pPhysic->torque ( _vet );
-    }
+    pPhysic->torque ( _vet );  
 }
 
 void Object::applyForce ( const btVector3 &_vet ) {
-    if ( pPhysic ) {
-        pPhysic->propulcao ( _vet );
-    }
+    pPhysic->propulcao ( _vet );
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

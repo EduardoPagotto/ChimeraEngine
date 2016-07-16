@@ -16,15 +16,13 @@ LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_model
 
     doc = nullptr;
     root = nullptr;
+	pRootNode = nullptr;
     this->textureDir = _textureDir;
     this->modelDir = _modelDir;
 
     pPhysicsControl = Infra::Singleton<PhysicsControl>::getRefSingleton();
 
-    pRootNode = nullptr;
-    
     loadFile(_file);
-   
 }
 
 LoaderDae::~LoaderDae() {
@@ -40,11 +38,9 @@ LoaderDae::~LoaderDae() {
 int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, std::map<std::string, Texture*> &_mapaTextura) {
     
     tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_images" );
-    
     if ( l_nNode != nullptr ) {
         
         l_nNode = l_nNode->FirstChildElement ( "image" );
-        
         while ( l_nNode != nullptr ) {
             
             std::string l_id = retornaAtributo ( "id", l_nNode );
@@ -55,9 +51,7 @@ int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, std::map<
 #else
             Texture *pTex = new Texture(l_id, _textureDir+ "/" + l_val);
 #endif
-        
             _mapaTextura[l_id] = pTex;
-            
             l_nNode = l_nNode->NextSiblingElement ( "image" );
         }
     }
@@ -76,15 +70,12 @@ int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Draw*> &map
             std::string l_name = retornaAtributo ( "name", l_nNode );
             
             DrawTriMesh *pDraw = new DrawTriMesh(nullptr, l_id);
-            
             pDraw->loadCollada(l_nNode);
-            
             mapaGeometria[l_id] = pDraw;
                                    
             l_nNode = l_nNode->NextSiblingElement ( "geometry" );
         }
     }    
-    
     return mapaGeometria.size();
 }
 
@@ -110,10 +101,8 @@ void LoaderDae::loadFile ( const std::string &file ) {
         throw ExceptionChimera ( ExceptionCode::OPEN, "Nao é um arquivo colada" );
     }
     
-    //carrega elementos de Effect, Texture, Material e Geometrias
-   // int totalEffect = libEffectMap(root, mapaEfeito);
+    //carrega elementos de Texture, Material e Geometrias
     int totalTexture = libTextureMap(root, textureDir, mapaTextura);
-   // int totalMat = libMaterialMap(root, mapaEfeito, mapaTextura, mapaMaterial);
     int totalGeometry = libGeometryMap(root, mapaGeometria);
     
     //cria lista de entidade fisicas a serem usadas
@@ -134,7 +123,6 @@ void LoaderDae::getPhysicSceneInfile() {
         pPhysicsControl->loadCollada ( l_nPhysicScene );
 
         getDadosInstancePhysicModel ( l_nPhysicScene );
-
     }
 }
 
@@ -158,14 +146,11 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 const char* l_sid = l_nRigidBody->Attribute ( "sid" );
 
                 std::string nomeMesh = "";
-               // Physics *pPhysic = new Physics ( std::string ( l_name ), std::string ( l_sid ) );
+              
 				Physics *pPhysic = new Physics(std::string(l_name));
                 pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
 
-                //DrawTriMesh *pDrawTriMesh = ( DrawTriMesh* ) Node::findNodeById ( EntityKind::DRAW, nomeMesh );
-				DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)mapaGeometria[nomeMesh];//(DrawTriMesh*) Node::findNodeById(EntityKind::DRAW, nomeMesh);
-
-
+				DrawTriMesh *pDrawTriMesh = (DrawTriMesh*)mapaGeometria[nomeMesh];
                 if ( pDrawTriMesh != nullptr ) {
 
                     btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
@@ -182,13 +167,6 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 }
 
                 mapaEntidadeFisica[std::string((const char*)&l_target[1])] = pPhysic;
-                
-//                 //pega o node objeto
-//                 //Object *obj = (Object*)Node::findNodeById ( EntityKind::OBJECT, std::string ( ( const char* ) &l_target[1] ) );
-// 				Object *obj = mapaObjeto[std::string((const char*)&l_target[1])]; //(Object*)Node::findNodeById(EntityKind::OBJECT, std::string((const char*)&l_target[1]));
-// 
-// 				//obj->addChild ( pPhysic );
-//                 obj->pPhysic = pPhysic;
                 
                 l_nInstanceRigidBody = l_nInstanceRigidBody->NextSiblingElement ( "instance_rigid_body" );
             }
@@ -412,9 +390,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                        std::string nomeMaterial = retornaAtributo("id", l_nNodeSourceData);
                        pMaterial = new Material(nomeMaterial);
                        pMaterial->loadCollada(root, l_nNodeSourceData); 
-                       
-                       
-                       
+                    
                         tinyxml2::XMLElement* l_nInstanceEffect = l_nNodeSourceData->FirstChildElement ( "instance_effect" );
                         if (l_nInstanceEffect != nullptr) {
                         

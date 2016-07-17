@@ -36,18 +36,17 @@ set (SourcesChimeraAPI
 	src/Entity.cpp
 	src/Node.cpp
 	src/Light.cpp
-	src/Object.cpp
 	src/Camera.cpp
 	src/Material.cpp
 	src/CameraSpherical.cpp
 	src/CameraMan.cpp
 	src/CameraOvr.cpp
-	src/Physics.cpp
+	src/Solid.cpp
 	src/PhysicsControl.cpp
 	src/Constraint.cpp
 	src/Texture.cpp
 	src/Draw.cpp
-	src/DrawTriMesh.cpp
+	src/Mesh.cpp
 	src/Font.cpp
 	src/HUD.cpp
 	src/Timer.cpp
@@ -68,6 +67,7 @@ set (SourcesChimeraAPI
 	src/Group.cpp
 	src/State.cpp
 	src/Transform.cpp
+	src/Coord.cpp
 )
 	
 if (OVR_SET_TO_USE)

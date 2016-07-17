@@ -64,7 +64,7 @@ int testeCargaArquivo() {
 	#ifdef WIN32
 		Chimera::Font *pFont = new Chimera::Font ( "C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18 );
 	#else
-		Chimera::Font = new Chimera::Font ( "../../fonts/FreeSans.ttf", 18 );
+		Chimera::Font *pFont = new Chimera::Font ( "../../fonts/FreeSans.ttf", 18 );
 	#endif
 		pHUD->addFont ( pFont );
 		SDL_Rect area = { 30, 30, 600, 20 };

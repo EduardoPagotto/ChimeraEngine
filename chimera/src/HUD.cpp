@@ -1,7 +1,6 @@
 #include "HUD.h"
 #include "NodeVisitor.h"
 #include "ExceptionSDL.h"
-#include "OpenGLDefs.h"
 
 namespace Chimera {
 

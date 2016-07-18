@@ -2,11 +2,11 @@
 #define MATERIAL_H_
 
 #include "Color.h"
-#include "OpenGLDefs.h"
 #include "Entity.h"
 #include <map>
 #include <tinyxml2.h>
 
+#include "OpenGLDefs.h"
 
 namespace Chimera {
     

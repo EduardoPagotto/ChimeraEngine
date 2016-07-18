@@ -5,15 +5,15 @@
 
 #include "Particle.h"
 
-#ifndef WIN32
-#include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#include "windows.h"
-#endif
-
-#include <GL/gl.h>
-#include <GL/glu.h>
+// #ifndef WIN32
+// #include <SDL2/SDL.h>
+// #else
+// #include <SDL.h>
+// #include "windows.h"
+// #endif
+// 
+// #include <GL/gl.h>
+// #include <GL/glu.h>
 
 # include "Draw.h"
 # include "Texture.h"

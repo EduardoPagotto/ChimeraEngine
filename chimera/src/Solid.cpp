@@ -3,7 +3,6 @@
 #include "ChimeraUtils.h"
 #include "Draw.h"
 #include "NodeVisitor.h"
-#include "OpenGLDefs.h"
 
 namespace Chimera {
     

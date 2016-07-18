@@ -4,15 +4,6 @@
 #include "ChimeraUtils.h"
 #include "NodeVisitor.h"
 
-#include "OpenGLDefs.h"
-
-// #ifdef WIN32
-// #include "windows.h"
-// #endif
-// 
-// #include <GL/gl.h>
-// #include <GL/glu.h>
-
 namespace Chimera {
 
 Light::Light (Node* _parent, std::string _name ) : Node (_parent, EntityKind::LIGHT, _name ) {

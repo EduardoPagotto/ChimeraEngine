@@ -98,6 +98,8 @@ public:
 
 private:
 
+    void setVertexBuffer();
+    
     int getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores );
 
     ListPtr<float> nList;
@@ -105,6 +107,12 @@ private:
 
     ListPtr<int> nIndex;
     ListPtr<int> tIndex;
+    
+    
+    GLfloat* vertices;
+    GLfloat* colors;
+    GLfloat* normals;
+    GLfloat* texturecs;
 
 };
 }

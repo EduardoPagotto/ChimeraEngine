@@ -1,6 +1,5 @@
 #include "Mesh.h"
 #include "ChimeraUtils.h"
-#include "OpenGLDefs.h"
 
 namespace Chimera {
     
@@ -44,6 +43,8 @@ void Mesh::init() {
 
     pMaterial->init();
     pState->setEnableMaterial(pMaterial, true);
+    
+    setVertexBuffer();
     
     Draw::init();
 }
@@ -121,7 +122,7 @@ void Mesh::renderExecute ( bool _texture ) {
                     int posTex = 2 * tIndex[l_index];
                     float l_U = uvList[posTex];
                     float l_V = uvList[posTex + 1];
-                    l_V = 1 - l_V;
+                    //l_V = 1 - l_V;
                     glTexCoord2f ( l_U, l_V );
                 }
 
@@ -289,5 +290,26 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
         }
     }
 }
+
+void Mesh::setVertexBuffer()
+{
+    //Ajusta Buffer de textura com imagem SDL
+    int tamanho = uvList.getSize() / 2;
+    for(int indice = 0; indice < tamanho; indice += 2) {
+        float l_v = uvList[indice + 1];
+        l_v = 1 - l_v;
+        uvList[indice + 1] = l_v;
+    }
+    
+    GLuint VertexVBOID = 0;
+    
+    glGenBuffers(1, &VertexVBOID);
+    glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(MyVertex)*3, &pvertex[0].x, GL_STATIC_DRAW);
+    
+
+}
+
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

@@ -1,5 +1,4 @@
 #include "SceneMng.h"
-#include "OpenGLDefs.h"
 
 namespace Chimera {
 

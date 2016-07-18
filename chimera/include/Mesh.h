@@ -109,11 +109,17 @@ private:
     ListPtr<int> tIndex;
     
     
-    GLfloat* vertices;
-    GLfloat* colors;
-    GLfloat* normals;
-    GLfloat* texturecs;
+    //GLfloat* vertices;
+    //GLfloat* colors;
+    //GLfloat* normals;
+    //GLfloat* texturecs;
+    
+    //GLuint VertexVBOID;
+    //GLuint IndexVBOID;
 
+    GLfloat *pTex;
+    GLfloat *pNorm;
+    
 };
 }
 

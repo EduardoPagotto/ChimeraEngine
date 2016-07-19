@@ -80,7 +80,7 @@ private:
 class Mesh : public Draw
 {
 public:
-    friend class Loader;
+    friend class LoaderDae;
 
     Mesh (Node *_parent, std::string _name );
 	Mesh(const Mesh &_cpy);
@@ -93,8 +93,7 @@ public:
 
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
-    ListPtr<float> vList;
-    ListPtr<int> vIndex;
+
 
 private:
 
@@ -102,12 +101,21 @@ private:
     
     int getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores );
 
-    ListPtr<float> nList;
-    ListPtr<float> uvList;
-
-    ListPtr<int> nIndex;
-    ListPtr<int> tIndex;
+//     std::vector<int> vertexIndex;
+//     std::vector<glm::vec3> vertexList;
+//     std::vector<int> normalIndex;
+//     std::vector<glm::vec3> normalList;
+//     std::vector<int> textureIndex;
+//     std::vector<glm::vec2> textureList;
     
+    ListPtr<int> vIndex;
+    ListPtr<float> vList;
+    
+    ListPtr<int> nIndex;
+    ListPtr<float> nList;
+    
+    ListPtr<int> tIndex;
+    ListPtr<float> uvList;    
     
     //GLfloat* vertices;
     //GLfloat* colors;
@@ -117,8 +125,8 @@ private:
     //GLuint VertexVBOID;
     //GLuint IndexVBOID;
 
-    GLfloat *pTex;
-    GLfloat *pNorm;
+    //GLfloat *pTex;
+    //GLfloat *pNorm;
     
 };
 }

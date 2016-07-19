@@ -133,8 +133,7 @@ void Mesh::renderExecute ( bool _texture ) {
 
     } else {
 
-		//glBindTexture(GL_TEXTURE_2D, 0); //desabilita textura atual
-		
+
         unsigned l_numFaces = vIndex.getSize() / 3;
         int l_index = 0;
         int fa = 0;
@@ -293,13 +292,64 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
 void Mesh::setVertexBuffer()
 {
-    //Ajusta Buffer de textura com imagem SDL
+//     //Ajusta Buffer de textura com imagem SDL
 //     int tamanho = uvList.getSize() / 2;
 //     for(int indice = 0; indice < tamanho; indice += 2) {
 //         float l_v = uvList[indice + 1];
 //         l_v = 1 - l_v;
 //         uvList[indice + 1] = l_v;
 //     }
+    
+    
+    printf("Nome: %s \n", getName().c_str());
+    int linha = 0;
+    printf("-Vertex Indice ----------( %03d )\n", vIndex.getSize());
+    for (int indice=0 ; indice < vIndex.getSize(); indice += 3) {
+        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, vIndex[indice], vIndex[indice + 1], vIndex[indice + 2]);
+        linha++;
+    }
+    printf("\n");
+    
+    linha = 0;
+    printf("-Vertex Lista ---------( %03d )\n", vList.getSize());
+    for (int indice=0 ; indice < vList.getSize(); indice += 3) {
+        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f ; %0.0f )\n",linha, indice, vList[indice], vList[indice + 1], vList[indice + 2]);
+        linha++;
+    }
+    printf("\n");
+    
+
+    linha = 0;
+    printf("Normal Indice ----------( %03d )\n", nIndex.getSize());
+    for (int indice=0 ; indice < nIndex.getSize(); indice += 3) {
+        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, nIndex[indice], nIndex[indice + 1], nIndex[indice + 2]);
+        linha++;
+    }
+    printf("\n");
+    
+    linha = 0;
+    printf("-Normal Lista ---------( %03d )\n", nList.getSize());
+    for (int indice=0 ; indice < nList.getSize(); indice += 3) {
+        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f ; %0.0f )\n",linha, indice, nList[indice], nList[indice + 1], nList[indice + 2]);
+        linha++;
+    }
+    printf("\n");
+    
+    linha = 0;
+    printf("Texture Indice ----------( %03d )\n", tIndex.getSize());
+    for (int indice=0 ; indice < tIndex.getSize(); indice += 3) {
+        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, tIndex[indice], tIndex[indice + 1], tIndex[indice + 2]);
+        linha++;
+    }
+    printf("\n");
+    
+    linha = 0;
+    printf("-Texture Lista ---------( %03d )\n", uvList.getSize());
+    for (int indice=0 ; indice < uvList.getSize(); indice += 2) {
+        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f )\n",linha, indice, uvList[indice], uvList[indice + 1]);
+        linha++;
+    }
+    printf("\n");
 }
 
 //TODO trocar quando VBO estiver funcional no init

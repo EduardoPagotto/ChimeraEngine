@@ -68,6 +68,7 @@ set (SourcesChimeraAPI
 	src/State.cpp
 	src/Transform.cpp
 	src/Coord.cpp
+	src/VboIndexer.cpp
 )
 	
 if (OVR_SET_TO_USE)

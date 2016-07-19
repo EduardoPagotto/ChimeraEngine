@@ -1,6 +1,8 @@
 #include "Mesh.h"
 #include "ChimeraUtils.h"
 
+#include "VboIndexer.hpp"
+
 namespace Chimera {
     
 Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, DrawType::MESH, _name ) {
@@ -9,25 +11,25 @@ Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, DrawType::MESH, 
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
 
-    vList.set ( _cpy.vList );
-    nList.set ( _cpy.nList );
-    uvList.set ( _cpy.uvList );
-
-    vIndex.set ( _cpy.vIndex );
-    nIndex.set ( _cpy.nIndex );
-    tIndex.set ( _cpy.tIndex );
+//     vList.set ( _cpy.vList );
+//     nList.set ( _cpy.nList );
+//     uvList.set ( _cpy.uvList );
+// 
+//     vIndex.set ( _cpy.vIndex );
+//     nIndex.set ( _cpy.nIndex );
+//     tIndex.set ( _cpy.tIndex );
 
 }
 
 Mesh::~Mesh() {
 
-    vList.clear();
-    nList.clear();
-    uvList.clear();
-
-    vIndex.clear();
-    nIndex.clear();
-    tIndex.clear();
+    vertexIndex.clear();
+    vertexList.clear();
+    normalIndex.clear();
+    normalList.clear();
+    textureIndex.clear();
+    textureList.clear();
+   
 }
 
 void Mesh::init() {
@@ -51,37 +53,30 @@ void Mesh::init() {
 
 
 btVector3 Mesh::getSizeBox() {
+    
     btVector3 retorno ( 0.0f, 0.0f, 0.0f );
     btVector3 l_max ( 0.0f, 0.0f, 0.0f );
     btVector3 l_min ( 0.0f, 0.0f, 0.0f );
 
-    int l_numVer = vList.getSize() / 3;
+    for ( int indice = 0; indice < vertexList.size(); indice++ ) {
+        
+        if ( l_max.x() < vertexList[indice].x )
+            l_max.setX ( vertexList[indice].x );
+      
+        if ( l_max.y() < vertexList[indice].y )
+            l_max.setY ( vertexList[indice].y );
 
-    for ( int contador = 0; contador < l_numVer; contador++ ) {
-        int indice = contador * 3;
-        if ( l_max.x() < vList[indice] ) {
-            l_max.setX ( vList[indice] );
-        }
+        if ( l_max.z() < vertexList[indice].z )
+            l_max.setZ ( vertexList[indice].z );
 
-        if ( l_max.y() < vList[indice + 1] ) {
-            l_max.setY ( vList[indice + 1] );
-        }
+        if ( l_min.x() > vertexList[indice].x )
+            l_min.setX ( vertexList[indice].x );
 
-        if ( l_max.z() < vList[indice + 2] ) {
-            l_max.setZ ( vList[indice + 2] );
-        }
+        if ( l_min.y() > vertexList[indice].y )
+            l_min.setY ( vertexList[indice].y );
 
-        if ( l_min.x() > vList[indice] ) {
-            l_min.setX ( vList[indice] );
-        }
-
-        if ( l_min.y() > vList[indice + 1] ) {
-            l_min.setY ( vList[indice + 1] );
-        }
-
-        if ( l_min.z() > vList[indice + 2] ) {
-            l_min.setZ ( vList[indice + 2] );
-        }
+        if ( l_min.z() > vertexList[indice].z )
+            l_min.setZ ( vertexList[indice].z );
     }
 
     retorno.setValue ( ( btFabs ( l_max.x() ) + btFabs ( l_min.x() ) ) / 2,
@@ -91,20 +86,20 @@ btVector3 Mesh::getSizeBox() {
 }
 
 void Mesh::renderExecute ( bool _texture ) {
-    
-	pState->apply();
+ 
+ pState->apply();
 
     if ( _texture == true ) {
 
-		if (pState->getTexture() != nullptr)
-			pState->appyTexture();
-		else {
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
+     if (pState->getTexture() != nullptr)
+         pState->appyTexture();
+     else {
+         glBindTexture(GL_TEXTURE_2D, 0);
+     }
 
-		pState->appyMaterial();
+     pState->appyMaterial();
           
-        unsigned l_numFaces = vIndex.getSize() / 3;
+        unsigned l_numFaces = vertexIndex.size() / 3;
         int l_index = 0;
         int fa = 0;
         for ( unsigned face = 0; face < l_numFaces; face++ ) {
@@ -112,29 +107,31 @@ void Mesh::renderExecute ( bool _texture ) {
             glBegin ( GL_TRIANGLES );
             for ( unsigned point = 0; point < 3; point++ ) {
                 l_index = fa + point;
-                int posicao = 3 * vIndex[l_index];
+                int posicao =  vertexIndex[l_index];
+                int posNormal =  normalIndex[l_index];
+                
+                glNormal3fv ( (GLfloat*) &normalList[posNormal] );
 
-                int posNormal = 3 * nIndex[l_index];
-                glNormal3fv ( &nList[posNormal] );
-
-                if ( tIndex.getSize() > 0 ) {
+                if ( textureIndex.size() > 0 ) {
+                    
                     //Ajuste de textura do imageSDL invertendo valor de V
-                    int posTex = 2 * tIndex[l_index];
-                    float l_U = uvList[posTex];
-                    float l_V = uvList[posTex + 1];
+                    int posTex =  textureIndex[l_index];
+                    
+                    float l_U = textureList[posTex].x;
+                    float l_V = textureList[posTex].y;
                     l_V = 1 - l_V;
                     glTexCoord2f ( l_U, l_V );
+                    
                 }
 
-                glVertex3fv ( &vList[posicao] );
+                glVertex3fv ( (GLfloat*) &vertexList[posicao] );
             }
             glEnd();
         }
 
     } else {
 
-
-        unsigned l_numFaces = vIndex.getSize() / 3;
+        unsigned l_numFaces = vertexIndex.size() / 3;
         int l_index = 0;
         int fa = 0;
         for ( unsigned face = 0; face < l_numFaces; face++ ) {
@@ -142,15 +139,14 @@ void Mesh::renderExecute ( bool _texture ) {
             glBegin ( GL_TRIANGLES );
             for ( unsigned point = 0; point < 3; point++ ) {
                 l_index = fa + point;
-                int posicao = 3 * vIndex[l_index];
-
-                int posNormal = 3 * nIndex[l_index];
-                glNormal3fv ( &nList[posNormal] );
-                glVertex3fv ( &vList[posicao] );
+                int posicao =  vertexIndex[l_index];
+                int posNormal =  normalIndex[l_index];
+                glNormal3fv ( (GLfloat*) &normalList[posNormal] );
+                glVertex3fv ( (GLfloat*) &vertexList[posicao] );
             }
             glEnd();
         }
-    }
+    }    
 }
 
  void Mesh::update ( DataMsg *dataMsg ) {
@@ -168,7 +164,7 @@ void Mesh::renderExecute ( bool _texture ) {
      Draw::update ( dataMsg );
  }
 
-int Mesh::getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValores ) {
+int Mesh::getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores ) {
 
     tinyxml2::XMLElement* l_nSource = _source->FirstChildElement ( "float_array" );
     if ( l_nSource != nullptr ) {
@@ -176,15 +172,10 @@ int Mesh::getSource ( tinyxml2::XMLElement* _source, ListPtr<float> &_arrayValor
         const char *l_numCount = l_nSource->Attribute ( "count" );
         if ( l_numCount != nullptr ) {
 
-            std::vector<float> l_array;
+            //std::vector<float> l_array;
             const char* l_vals = l_nSource->GetText();
-            loadArrayBtScalar ( l_vals, l_array );
-            _arrayValores.create ( l_array.size() );
-            for ( unsigned l_contador = 0; l_contador < l_array.size(); l_contador++ ) {
-                _arrayValores[l_contador] = l_array[l_contador];
-            }
-
-            return _arrayValores.getSize();
+            loadArrayBtScalar( l_vals, _arrayValores );
+            return _arrayValores.size();
         }
     }
 
@@ -199,20 +190,42 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
         tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement ( "source" );
 
+        //Carrega lista de vetores
         while ( l_nSource != nullptr ) {
 
             const char *l_id = l_nSource->Attribute ( "id" );
             if ( strstr ( l_id, ( char* ) "-positions" ) != nullptr ) {
-                getSource ( l_nSource, vList );
+                
+                //Carrega todos os vetores ponto
+                std::vector<float> lista;
+                getSource ( l_nSource, lista );
+                
+                for (int indice=0; indice < lista.size(); indice += 3) 
+                    vertexList.push_back( glm::vec3(lista[indice],lista[indice+1],lista[indice+2]) );
+                   
             } else if ( strstr ( l_id, ( char* ) "-normals" ) != nullptr ) {
-                getSource ( l_nSource, nList );
+                
+                //carrega todos os vetores normal
+                std::vector<float> lista;
+                getSource ( l_nSource, lista );
+
+                for (int indice=0; indice < lista.size(); indice += 3) 
+                    normalList.push_back( glm::vec3(lista[indice],lista[indice+1],lista[indice+2]));
+                  
             } else if ( strstr ( l_id, ( char* ) "-map-0" ) != nullptr ) {
-                getSource ( l_nSource, uvList );
+                
+                //carrega vetor posicao textura
+                std::vector<float> lista;
+                getSource ( l_nSource, lista );
+                for (int indice=0; indice < lista.size(); indice += 2)
+                    textureList.push_back( glm::vec2(lista[indice],lista[indice+1]) );
+
             }
 
             l_nSource = l_nSource->NextSiblingElement ( "source" );
         }
 
+        //Carrega Lista de indices
         tinyxml2::XMLElement* l_nPoly = l_nMesh->FirstChildElement ( "polylist" );
         if ( l_nPoly != nullptr ) {
 
@@ -244,10 +257,6 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
             loadArrayI ( l_indices, l_arrayIndex );
 
-            unsigned l_veCount = 0;
-            unsigned l_noCount = 0;
-            unsigned l_uvCount = 0;
-
             int l_numTriangles = atoi ( l_count );
 
             for ( unsigned l_contador = 0; l_contador < l_arrayIndex.size(); l_contador++ ) {
@@ -257,27 +266,18 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
                 const char *l_semantic = l_vSemantic[index];
                 const char *l_source = l_vSource[index];
 
-                if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) {
-                    if ( vIndex.getSize() == 0 ) {
-                        vIndex.create ( l_numTriangles * 3 );
-                    }
-
-                    vIndex[l_veCount] = l_arrayIndex[l_contador];
-                    l_veCount++;
-                } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) {
-                    if ( nIndex.getSize() == 0 ) {
-                        nIndex.create ( l_numTriangles * 3 );
-                    }
-
-                    nIndex[l_noCount] = l_arrayIndex[l_contador];
-                    l_noCount++;
-                } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) {
-                    if ( tIndex.getSize() == 0 ) {
-                        tIndex.create ( l_numTriangles * 3 );
-                    }
-
-                    tIndex[l_uvCount] = l_arrayIndex[l_contador];
-                    l_uvCount++;
+                if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) { //indices de vetor ponto
+                    
+                    vertexIndex.push_back( l_arrayIndex[l_contador]  );
+                    
+                } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) { //indice de vetor normal
+                    
+                    normalIndex.push_back(l_arrayIndex[l_contador]);
+                    
+                } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) { //indice de vetor posicao textura
+                    
+                    textureIndex.push_back( l_arrayIndex[l_contador] );
+                    
                 }
             }
             l_arrayIndex.clear();
@@ -288,6 +288,15 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
         }
     }
+    
+    printf("Nome: %s \n", getName().c_str());
+    printf("-Vertex Indice ------( %03d )\n", vertexIndex.size());
+    printf("-Vertex Lista -------( %03d )\n", vertexList.size());
+    printf("-Normal Indice ------( %03d )\n", normalIndex.size());
+    printf("-Normal Lista -------( %03d )\n", normalList.size());
+    printf("-Texture Indice -----( %03d )\n", textureIndex.size());
+    printf("-Texture Lista ------( %03d )\n", textureList.size());
+    printf("\n");
 }
 
 void Mesh::setVertexBuffer()
@@ -300,57 +309,78 @@ void Mesh::setVertexBuffer()
 //         uvList[indice + 1] = l_v;
 //     }
     
+    std::vector<unsigned short> out_indices;
+    std::vector<glm::vec3> out_vertices;
+    std::vector<glm::vec2> out_uvs;
+    std::vector<glm::vec3> out_normals;
+    
+    if (textureList.size() > 0)
+        indexVBO_slow(vertexList, textureList, normalList, out_indices, out_vertices, out_uvs, out_normals);
+    else
+        indexVBO_slowNoTex(vertexList, normalList, out_indices, out_vertices, out_normals);
+    
+    
+    printf("Nome: %s \n", getName().c_str());
+    printf("-Vertex Indice ------( %03d )\n", out_indices.size());
+    printf("-Vertex Lista -------( %03d )\n", out_vertices.size());
+    printf("-Normal Lista -------( %03d )\n", out_normals.size());
+    printf("-Texture Lista ------( %03d )\n", out_uvs.size());
+    printf("\n");
+    
+}
+
+void Mesh::debugDados() {
     
     printf("Nome: %s \n", getName().c_str());
     int linha = 0;
-    printf("-Vertex Indice ----------( %03d )\n", vIndex.getSize());
-    for (int indice=0 ; indice < vIndex.getSize(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, vIndex[indice], vIndex[indice + 1], vIndex[indice + 2]);
+    printf("-Vertex Indice ----------( %03d )\n", vertexIndex.size());
+    for (int indice=0 ; indice < vertexIndex.size(); indice += 3) {
+        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, vertexIndex[indice], vertexIndex[indice + 1], vertexIndex[indice + 2]);
         linha++;
     }
     printf("\n");
     
     linha = 0;
-    printf("-Vertex Lista ---------( %03d )\n", vList.getSize());
-    for (int indice=0 ; indice < vList.getSize(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f ; %0.0f )\n",linha, indice, vList[indice], vList[indice + 1], vList[indice + 2]);
-        linha++;
-    }
-    printf("\n");
-    
-
-    linha = 0;
-    printf("Normal Indice ----------( %03d )\n", nIndex.getSize());
-    for (int indice=0 ; indice < nIndex.getSize(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, nIndex[indice], nIndex[indice + 1], nIndex[indice + 2]);
+    printf("-Vertex Lista ---------( %03d )\n", vertexList.size());
+    for (int indice=0 ; indice < vertexList.size(); indice++) {
+        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f ; %0.0f )\n",linha, indice, vertexList[indice].x, vertexList[indice].y, vertexList[indice].z);
         linha++;
     }
     printf("\n");
     
     linha = 0;
-    printf("-Normal Lista ---------( %03d )\n", nList.getSize());
-    for (int indice=0 ; indice < nList.getSize(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f ; %0.0f )\n",linha, indice, nList[indice], nList[indice + 1], nList[indice + 2]);
+    printf("Normal Indice ----------( %03d )\n", normalIndex.size());
+    for (int indice=0 ; indice < normalIndex.size(); indice += 3) {
+        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, normalIndex[indice], normalIndex[indice + 1], normalIndex[indice + 2]);
         linha++;
     }
     printf("\n");
     
     linha = 0;
-    printf("Texture Indice ----------( %03d )\n", tIndex.getSize());
-    for (int indice=0 ; indice < tIndex.getSize(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, tIndex[indice], tIndex[indice + 1], tIndex[indice + 2]);
+    printf("-Normal Lista ---------( %03d )\n", normalList.size());
+    for (int indice=0 ; indice < normalList.size(); indice++) {
+        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f ; %0.0f )\n",linha, indice, normalList[indice].x, normalList[indice].y, normalList[indice].z);
         linha++;
     }
     printf("\n");
     
     linha = 0;
-    printf("-Texture Lista ---------( %03d )\n", uvList.getSize());
-    for (int indice=0 ; indice < uvList.getSize(); indice += 2) {
-        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f )\n",linha, indice, uvList[indice], uvList[indice + 1]);
+    printf("Texture Indice ----------( %03d )\n", textureIndex.size());
+    for (int indice=0 ; indice < textureIndex.size(); indice += 3) {
+        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, textureIndex[indice], textureIndex[indice + 1], textureIndex[indice + 2]);
         linha++;
     }
     printf("\n");
+    
+    linha = 0;
+    printf("-Texture Lista ---------( %03d )\n", textureList.size());
+    for (int indice=0 ; indice < textureList.size(); indice++) {
+        printf("Linha: %02d : p: %02d ( %0.0f ; %0.0f )\n",linha, indice, textureList[indice].x, textureList[indice].y);
+        linha++;
+    }
+    printf("\n");  
 }
+
 
 //TODO trocar quando VBO estiver funcional no init
 //     VertexVBOID = 0;

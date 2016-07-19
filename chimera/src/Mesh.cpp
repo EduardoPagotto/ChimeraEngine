@@ -103,60 +103,33 @@ void Mesh::renderExecute ( bool _texture ) {
 		}
 
 		pState->appyMaterial();
-        
-        //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-        
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, 0, &vList[0] );   //The starting point of the VBO, for the vertices
-                
-        //glEnableClientState(GL_NORMAL_ARRAY);
-        //glNormalPointer(GL_FLOAT, 0, &pNorm[0] );   //The starting point of normals, 12 bytes away
-        
-        glClientActiveTexture(GL_TEXTURE0);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glTexCoordPointer(2, GL_FLOAT, 0, &pTex[0] );   //The starting point of texcoords, 24 bytes away
+          
+        unsigned l_numFaces = vIndex.getSize() / 3;
+        int l_index = 0;
+        int fa = 0;
+        for ( unsigned face = 0; face < l_numFaces; face++ ) {
+            fa = face * 3;
+            glBegin ( GL_TRIANGLES );
+            for ( unsigned point = 0; point < 3; point++ ) {
+                l_index = fa + point;
+                int posicao = 3 * vIndex[l_index];
 
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-        
-        //To render, we can either use glDrawElements or glDrawRangeElements
-        //The is the number of indices. 3 indices needed to make a single triangle
-        glDrawElements(GL_TRIANGLES, vIndex.getSize(), GL_UNSIGNED_INT, &vIndex[0]);   //The starting point of the IBO
-        //0 and 3 are the first and last vertices
-        //glDrawRangeElements(GL_TRIANGLES, 0, 3, 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));   //The starting point of the IBO
-        //glDrawRangeElements may or may not give a performance advantage over glDrawElements
-  
+                int posNormal = 3 * nIndex[l_index];
+                glNormal3fv ( &nList[posNormal] );
 
-       // glDisableClientState(GL_VERTEX_ARRAY);
-       // glDisableClientState(GL_NORMAL_ARRAY);
-        
-  //glDrawArrays(GL_TRIANGLES,0,v);
-  
-//         unsigned l_numFaces = vIndex.getSize() / 3;
-//         int l_index = 0;
-//         int fa = 0;
-//         for ( unsigned face = 0; face < l_numFaces; face++ ) {
-//             fa = face * 3;
-//             glBegin ( GL_TRIANGLES );
-//             for ( unsigned point = 0; point < 3; point++ ) {
-//                 l_index = fa + point;
-//                 int posicao = 3 * vIndex[l_index];
-// 
-//                 int posNormal = 3 * nIndex[l_index];
-//                 glNormal3fv ( &nList[posNormal] );
-// 
-//                 if ( tIndex.getSize() > 0 ) {
-//                     //Ajuste de textura do imageSDL invertendo valor de V
-//                     int posTex = 2 * tIndex[l_index];
-//                     float l_U = uvList[posTex];
-//                     float l_V = uvList[posTex + 1];
-//                     //l_V = 1 - l_V;
-//                     glTexCoord2f ( l_U, l_V );
-//                 }
-// 
-//                 glVertex3fv ( &vList[posicao] );
-//             }
-//             glEnd();
-//         }
+                if ( tIndex.getSize() > 0 ) {
+                    //Ajuste de textura do imageSDL invertendo valor de V
+                    int posTex = 2 * tIndex[l_index];
+                    float l_U = uvList[posTex];
+                    float l_V = uvList[posTex + 1];
+                    l_V = 1 - l_V;
+                    glTexCoord2f ( l_U, l_V );
+                }
+
+                glVertex3fv ( &vList[posicao] );
+            }
+            glEnd();
+        }
 
     } else {
 
@@ -321,13 +294,15 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 void Mesh::setVertexBuffer()
 {
     //Ajusta Buffer de textura com imagem SDL
-    int tamanho = uvList.getSize() / 2;
-    for(int indice = 0; indice < tamanho; indice += 2) {
-        float l_v = uvList[indice + 1];
-        l_v = 1 - l_v;
-        uvList[indice + 1] = l_v;
-    }
-    
+//     int tamanho = uvList.getSize() / 2;
+//     for(int indice = 0; indice < tamanho; indice += 2) {
+//         float l_v = uvList[indice + 1];
+//         l_v = 1 - l_v;
+//         uvList[indice + 1] = l_v;
+//     }
+}
+
+//TODO trocar quando VBO estiver funcional no init
 //     VertexVBOID = 0;
 //     IndexVBOID = 0;
 //     
@@ -339,93 +314,30 @@ void Mesh::setVertexBuffer()
 //     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
 //     glBufferData(GL_ELEMENT_ARRAY_BUFFER, vIndex.getSize(), &vIndex[0], GL_STATIC_DRAW);
 
-        pTex = new GLfloat[ vIndex.getSize() * 2 ];
-        pNorm = new GLfloat[ vIndex.getSize() * 3 ];
-        
-        int k = 0;
-        int n = 0;
-        int fa = 0;
-        int l_index = 0;
-        unsigned l_numFaces = vIndex.getSize() / 3;
-        for ( unsigned face = 0; face < l_numFaces; face++ ) {
-            fa = face * 3;
-            //glBegin ( GL_TRIANGLES );
-            for ( unsigned point = 0; point < 3; point++ ) {
-                l_index = fa + point;
-                int posicao = 3 * vIndex[l_index];
-                int posNormal = 3 * nIndex[l_index];
-                
-                pNorm[n] = nList[posNormal];
-                n++;
-                
-                pNorm[n] = nList[posNormal + 1];
-                n++;
-                
-                pNorm[n] = nList[posNormal + 2];
-                n++;
-                
-                if ( tIndex.getSize() > 0 ) {
-                    //Ajuste de textura do imageSDL invertendo valor de V
-                    int posTex = 2 * tIndex[l_index];
-                    pTex[k] = uvList[posTex];
-                    k++;
-                    pTex[k] = uvList[posTex + 1];
-                    k++;
-                }
-            }
-        }
-
-
-
-//     this->vertices=(GLfloat*)malloc(sizeof(GLfloat)*(this->vcount)*3);
-//     this->colors=(GLfloat*)malloc(sizeof(GLfloat)*(this->vcount)*3);
-//     this->normals=(GLfloat*)malloc(sizeof(GLfloat)*(this->vcount)*3);
-//     this->texturecs=(GLfloat*)malloc(sizeof(GLfloat)*(this->vcount)*2);
-//     
-//     vr::Vec3 vertex;
-//     vr::Vec3 normal;
-//     vr::Vec2 texturec;
-//     vr::Vec4 col;
-//     int j=0;int k=0;
-//     
-//     for(int i=0;i<this->vcount;i++){
+//TODO trocar quando VBO estiver funcional no render
+//         //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+//         glEnableClientState(GL_VERTEX_ARRAY);
+//         glVertexPointer(3, GL_FLOAT, 0, &vList[0] );   //The starting point of the VBO, for the vertices
+//                 
+//         glEnableClientState(GL_NORMAL_ARRAY);
+//         glNormalPointer(GL_FLOAT, 0, &pNorm[0] );   //The starting point of normals, 12 bytes away
 //         
-//         vertex=this->vertex[i].getVertex();
-//         normal=this->getNormal(i);
-//         texturec=this->getTextureCoordinate(i);
-//         col=this->getMaterial(i).diffuse;
+//         if (pState->getTexture() != nullptr) {
+//             glClientActiveTexture(GL_TEXTURE0);
+//             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//             glTexCoordPointer(2, GL_FLOAT, 0, &pTex[0] );   //The starting point of texcoords, 24 bytes away
+//         }
 //         
-//         this->vertices[j]=(GLfloat)vertex.x();
-//         this->colors[j]=(GLfloat)col.x();
-//         this->normals[j]=(GLfloat)normal.x();
-//         j++;
+//         //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+//         glDrawElements(GL_TRIANGLES, vIndex.getSize(), GL_UNSIGNED_INT, &vIndex[0]);   //The starting point of the IBO
+//   
+//         glDisableClientState(GL_VERTEX_ARRAY);
 //         
-//         this->vertices[j]=(GLfloat)vertex.y();
-//         this->colors[j]=(GLfloat)col.y();
-//         this->normals[j]=(GLfloat)normal.y();
-//         j++;
+//         if (pState->getTexture() != nullptr) {
+//             glDisableClientState(GL_TEXTURE0);
+//         }
 //         
-//         this->vertices[j]=(GLfloat)vertex.z();
-//         this->colors[j]=(GLfloat)col.z();
-//         this->normals[j]=(GLfloat)normal.z();
-//         j++;
-//         
-//         
-//         this->texturecs[k]=(GLfloat)texturec.x();
-//         k++;
-//         
-//         this->texturecs[k]=(GLfloat)texturec.y();
-//         k++;
-//                              
-//                                 
-//         
-//     } 
-//     cout << "**Rendering vertex count : " << this->vcount << "\n";
-
-
-
-}
-
+//         glDisableClientState(GL_NORMAL_ARRAY);
 
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

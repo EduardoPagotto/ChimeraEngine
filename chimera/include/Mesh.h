@@ -31,6 +31,8 @@ private:
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
     void debugDados();
     
+    void renterTeste();
+    
     std::vector<int> vertexIndex;
     std::vector<glm::vec3> vertexList;
     
@@ -48,6 +50,11 @@ private:
     //GLuint VertexVBOID;
     //GLuint IndexVBOID;
 
+    std::vector<unsigned int> indexIBO;
+    std::vector<glm::vec3> vertexVBO;
+    std::vector<glm::vec2> textureVBO;
+    std::vector<glm::vec3> normalVBO;
+    
     //GLfloat *pTex;
     //GLfloat *pNorm;   
 };

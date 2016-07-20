@@ -22,7 +22,7 @@ bool getSimilarVertexIndex(
 	std::vector<glm::vec3> & out_vertices,
 	std::vector<glm::vec2> & out_uvs,
 	std::vector<glm::vec3> & out_normals,
-	unsigned short & result
+	unsigned int & result
 ){
 	// Lame linear search
 	for ( unsigned int i=0; i<out_vertices.size(); i++ ){
@@ -50,7 +50,7 @@ bool getSimilarVertexIndexNoTex(
     glm::vec3 & in_normal, 
     std::vector<glm::vec3> & out_vertices,
     std::vector<glm::vec3> & out_normals,
-    unsigned short & result
+    unsigned int & result
 ){
     // Lame linear search
     for ( unsigned int i=0; i<out_vertices.size(); i++ ){
@@ -77,7 +77,7 @@ void indexVBO_slow(
 	std::vector<glm::vec2> & in_uvs,
 	std::vector<glm::vec3> & in_normals,
 
-	std::vector<unsigned short> & out_indices,
+	std::vector<unsigned int> & out_indices,
 	std::vector<glm::vec3> & out_vertices,
 	std::vector<glm::vec2> & out_uvs,
 	std::vector<glm::vec3> & out_normals
@@ -86,7 +86,7 @@ void indexVBO_slow(
 	for ( unsigned int i=0; i<in_vertices.size(); i++ ){
 
 		// Try to find a similar vertex in out_XXXX
-		unsigned short index;
+		unsigned int index;
 		bool found = getSimilarVertexIndex(in_vertices[i], in_uvs[i], in_normals[i],     out_vertices, out_uvs, out_normals, index);
 
 		if ( found ){ // A similar vertex is already in the VBO, use it instead !
@@ -95,7 +95,7 @@ void indexVBO_slow(
 			out_vertices.push_back( in_vertices[i]);
 			out_uvs     .push_back( in_uvs[i]);
 			out_normals .push_back( in_normals[i]);
-			out_indices .push_back( (unsigned short)out_vertices.size() - 1 );
+			out_indices .push_back( (unsigned int)out_vertices.size() - 1 );
 		}
 	}
 }
@@ -104,7 +104,7 @@ void indexVBO_slowNoTex(
     std::vector<glm::vec3> & in_vertices,
     std::vector<glm::vec3> & in_normals,
 
-    std::vector<unsigned short> & out_indices,
+    std::vector<unsigned int> & out_indices,
     std::vector<glm::vec3> & out_vertices,
     std::vector<glm::vec3> & out_normals
 ){
@@ -112,7 +112,7 @@ void indexVBO_slowNoTex(
     for ( unsigned int i=0; i<in_vertices.size(); i++ ){
 
         // Try to find a similar vertex in out_XXXX
-        unsigned short index;
+        unsigned int index;
         bool found = getSimilarVertexIndexNoTex(in_vertices[i], in_normals[i], out_vertices, out_normals, index);
 
         if ( found ){ // A similar vertex is already in the VBO, use it instead !
@@ -120,7 +120,7 @@ void indexVBO_slowNoTex(
         }else{ // If not, it needs to be added in the output data.
             out_vertices.push_back( in_vertices[i]);
             out_normals .push_back( in_normals[i]);
-            out_indices .push_back( (unsigned short)out_vertices.size() - 1 );
+            out_indices .push_back( (unsigned int)out_vertices.size() - 1 );
         }
     }
 }
@@ -136,10 +136,10 @@ struct PackedVertex{
 
 bool getSimilarVertexIndex_fast( 
 	PackedVertex & packed, 
-	std::map<PackedVertex,unsigned short> & VertexToOutIndex,
-	unsigned short & result
+	std::map<PackedVertex,unsigned int> & VertexToOutIndex,
+	unsigned int & result
 ){
-	std::map<PackedVertex,unsigned short>::iterator it = VertexToOutIndex.find(packed);
+	std::map<PackedVertex,unsigned int>::iterator it = VertexToOutIndex.find(packed);
 	if ( it == VertexToOutIndex.end() ){
 		return false;
 	}else{
@@ -153,12 +153,12 @@ void indexVBO(
 	std::vector<glm::vec2> & in_uvs,
 	std::vector<glm::vec3> & in_normals,
 
-	std::vector<unsigned short> & out_indices,
+	std::vector<unsigned int> & out_indices,
 	std::vector<glm::vec3> & out_vertices,
 	std::vector<glm::vec2> & out_uvs,
 	std::vector<glm::vec3> & out_normals
 ){
-	std::map<PackedVertex,unsigned short> VertexToOutIndex;
+	std::map<PackedVertex,unsigned int> VertexToOutIndex;
 
 	// For each input vertex
 	for ( unsigned int i=0; i<in_vertices.size(); i++ ){
@@ -167,7 +167,7 @@ void indexVBO(
 		
 
 		// Try to find a similar vertex in out_XXXX
-		unsigned short index;
+		unsigned int index;
 		bool found = getSimilarVertexIndex_fast( packed, VertexToOutIndex, index);
 
 		if ( found ){ // A similar vertex is already in the VBO, use it instead !
@@ -176,11 +176,43 @@ void indexVBO(
 			out_vertices.push_back( in_vertices[i]);
 			out_uvs     .push_back( in_uvs[i]);
 			out_normals .push_back( in_normals[i]);
-			unsigned short newindex = (unsigned short)out_vertices.size() - 1;
+			unsigned int newindex = (unsigned int)out_vertices.size() - 1;
 			out_indices .push_back( newindex );
 			VertexToOutIndex[ packed ] = newindex;
 		}
 	}
+}
+
+void indexVBOnoTexture(
+    std::vector<glm::vec3> & in_vertices,
+    std::vector<glm::vec3> & in_normals,
+
+    std::vector<unsigned int> & out_indices,
+    std::vector<glm::vec3> & out_vertices,
+    std::vector<glm::vec3> & out_normals
+){
+    std::map<PackedVertex,unsigned int> VertexToOutIndex;
+
+    // For each input vertex
+    for ( unsigned int i=0; i<in_vertices.size(); i++ ){
+
+        PackedVertex packed = {in_vertices[i], glm::vec2(0.0,0.0), in_normals[i]};
+        
+
+        // Try to find a similar vertex in out_XXXX
+        unsigned int index;
+        bool found = getSimilarVertexIndex_fast( packed, VertexToOutIndex, index);
+
+        if ( found ){ // A similar vertex is already in the VBO, use it instead !
+            out_indices.push_back( index );
+        }else{ // If not, it needs to be added in the output data.
+            out_vertices.push_back( in_vertices[i]);
+            out_normals .push_back( in_normals[i]);
+            unsigned int newindex = (unsigned int)out_vertices.size() - 1;
+            out_indices .push_back( newindex );
+            VertexToOutIndex[ packed ] = newindex;
+        }
+    }
 }
 
 void indexVBO_TBN(
@@ -190,7 +222,7 @@ void indexVBO_TBN(
 	std::vector<glm::vec3> & in_tangents,
 	std::vector<glm::vec3> & in_bitangents,
 
-	std::vector<unsigned short> & out_indices,
+	std::vector<unsigned int> & out_indices,
 	std::vector<glm::vec3> & out_vertices,
 	std::vector<glm::vec2> & out_uvs,
 	std::vector<glm::vec3> & out_normals,
@@ -201,7 +233,7 @@ void indexVBO_TBN(
 	for ( unsigned int i=0; i<in_vertices.size(); i++ ){
 
 		// Try to find a similar vertex in out_XXXX
-		unsigned short index;
+		unsigned int index;
 		bool found = getSimilarVertexIndex(in_vertices[i], in_uvs[i], in_normals[i],     out_vertices, out_uvs, out_normals, index);
 
 		if ( found ){ // A similar vertex is already in the VBO, use it instead !
@@ -216,7 +248,7 @@ void indexVBO_TBN(
 			out_normals .push_back( in_normals[i]);
 			out_tangents .push_back( in_tangents[i]);
 			out_bitangents .push_back( in_bitangents[i]);
-			out_indices .push_back( (unsigned short)out_vertices.size() - 1 );
+			out_indices .push_back( (unsigned int)out_vertices.size() - 1 );
 		}
 	}
 }

@@ -85,6 +85,42 @@ btVector3 Mesh::getSizeBox() {
     return retorno;
 }
 
+void Mesh::renterTeste() {
+    
+        if (pState->getTexture() != nullptr)
+            pState->appyTexture();
+        else 
+            glBindTexture(GL_TEXTURE_2D, 0);
+       
+        pState->appyMaterial();
+    
+    //        glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+       glEnableClientState(GL_VERTEX_ARRAY);
+       //glVertexPointer(3, GL_FLOAT, 0, &vertexList[0] ); 
+       glVertexPointer(3, GL_FLOAT, 0, &vertexVBO[0] );   //The starting point of the VBO, for the vertices
+                
+//         glEnableClientState(GL_NORMAL_ARRAY);
+//         glNormalPointer(GL_FLOAT, 0, &normalVBO[0] );   //The starting point of normals, 12 bytes away
+//         
+//         if (textureVBO.size() > 0) {
+//             glClientActiveTexture(GL_TEXTURE0);
+//             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//             glTexCoordPointer(2, GL_FLOAT, 0, &textureVBO[0] );   //The starting point of texcoords, 24 bytes away
+//         }
+        
+ //       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+        //glDrawElements(GL_TRIANGLES, vertexIndex.size(), GL_UNSIGNED_INT, &vertexIndex[0]);
+        glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, &indexIBO[0]);   //The starting point of the IBO
+        
+        glDisableClientState(GL_VERTEX_ARRAY);
+        
+//         if (pState->getTexture() != nullptr) {
+//             glDisableClientState(GL_TEXTURE0);
+//         }
+//         
+//         glDisableClientState(GL_NORMAL_ARRAY);
+}
+
 void Mesh::renderExecute ( bool _texture ) {
 
     pState->apply();
@@ -96,7 +132,8 @@ void Mesh::renderExecute ( bool _texture ) {
             glBindTexture(GL_TEXTURE_2D, 0);
        
         pState->appyMaterial();
-            
+                    
+        
         unsigned l_numFaces = vertexIndex.size() / 3;
         int l_index = 0;
         int fa = 0;
@@ -145,7 +182,8 @@ void Mesh::renderExecute ( bool _texture ) {
  
 	 if (dataMsg->getKindOp() == KindOp::DRAW) {
 
-		 renderExecute(true);
+		 //renderExecute(true);
+         renterTeste();
 
 	 } else if (dataMsg->getKindOp() == KindOp::DRAW_NO_TEX) {
 
@@ -300,23 +338,29 @@ void Mesh::setVertexBuffer()
         textureList[posTex].y = 1 - textureList[posTex].y;
     }
     
-    std::vector<unsigned short> out_indices;
-    std::vector<glm::vec3> out_vertices;
-    std::vector<glm::vec2> out_uvs;
-    std::vector<glm::vec3> out_normals;
-    
     if (textureList.size() > 0)
-        indexVBO_slow(vertexList, textureList, normalList, out_indices, out_vertices, out_uvs, out_normals);
+        indexVBO(vertexList, textureList, normalList, indexIBO, vertexVBO, textureVBO, normalVBO);
     else
-        indexVBO_slowNoTex(vertexList, normalList, out_indices, out_vertices, out_normals);
-    
+        indexVBOnoTexture(vertexList, normalList, indexIBO, vertexVBO, normalVBO);
     
     printf("Nome: %s \n", getName().c_str());
-    printf("-Vertex Indice ------( %03d )\n", out_indices.size());
-    printf("-Vertex Lista -------( %03d )\n", out_vertices.size());
-    printf("-Normal Lista -------( %03d )\n", out_normals.size());
-    printf("-Texture Lista ------( %03d )\n", out_uvs.size());
+    printf("-Vertex Indice ------( %03d )\n", indexIBO.size());
+    printf("-Vertex Lista -------( %03d )\n", vertexVBO.size());
+    printf("-Normal Lista -------( %03d )\n", normalVBO.size());
+    printf("-Texture Lista ------( %03d )\n", textureVBO.size());
     printf("\n");
+    
+    //TODO trocar quando VBO estiver funcional no init
+//     VertexVBOID = 0;
+//     IndexVBOID = 0;
+//     
+//     glGenBuffers(1, &VertexVBOID);
+//     glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+//     glBufferData(GL_ARRAY_BUFFER, vertexVBO.size() , &vertexVBO[0] , GL_STATIC_DRAW);
+//     
+//     glGenBuffers(1, &IndexVBOID);
+//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexIBO.size(), &indexIBO[0], GL_STATIC_DRAW);
     
 }
 

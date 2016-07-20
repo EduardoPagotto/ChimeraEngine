@@ -86,25 +86,25 @@ btVector3 Mesh::getSizeBox() {
 }
 
 void Mesh::renderExecute ( bool _texture ) {
- 
- pState->apply();
 
+    pState->apply();
     if ( _texture == true ) {
-
-     if (pState->getTexture() != nullptr)
-         pState->appyTexture();
-     else {
-         glBindTexture(GL_TEXTURE_2D, 0);
-     }
-
-     pState->appyMaterial();
-          
+        
+        if (pState->getTexture() != nullptr)
+            pState->appyTexture();
+        else 
+            glBindTexture(GL_TEXTURE_2D, 0);
+       
+        pState->appyMaterial();
+            
         unsigned l_numFaces = vertexIndex.size() / 3;
         int l_index = 0;
         int fa = 0;
         for ( unsigned face = 0; face < l_numFaces; face++ ) {
             fa = face * 3;
+            
             glBegin ( GL_TRIANGLES );
+            
             for ( unsigned point = 0; point < 3; point++ ) {
                 l_index = fa + point;
                 int posicao =  vertexIndex[l_index];
@@ -112,20 +112,12 @@ void Mesh::renderExecute ( bool _texture ) {
                 
                 glNormal3fv ( (GLfloat*) &normalList[posNormal] );
 
-                if ( textureIndex.size() > 0 ) {
-                    
-                    //Ajuste de textura do imageSDL invertendo valor de V
-                    int posTex =  textureIndex[l_index];
-                    
-                    float l_U = textureList[posTex].x;
-                    float l_V = textureList[posTex].y;
-                    l_V = 1 - l_V;
-                    glTexCoord2f ( l_U, l_V );
-                    
-                }
-
+                if ( textureIndex.size() > 0 ) 
+                    glTexCoord2fv( (GLfloat*)&textureList[ textureIndex[l_index] ]  );
+                
                 glVertex3fv ( (GLfloat*) &vertexList[posicao] );
             }
+            
             glEnd();
         }
 
@@ -301,13 +293,12 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
 void Mesh::setVertexBuffer()
 {
-//     //Ajusta Buffer de textura com imagem SDL
-//     int tamanho = uvList.getSize() / 2;
-//     for(int indice = 0; indice < tamanho; indice += 2) {
-//         float l_v = uvList[indice + 1];
-//         l_v = 1 - l_v;
-//         uvList[indice + 1] = l_v;
-//     }
+    //Ajuste de textura do imageSDL invertendo valor de V
+    int tamanho = textureIndex.size();
+    for(int indice = 0; indice < tamanho; indice++) {
+        int posTex =  textureIndex[indice];
+        textureList[posTex].y = 1 - textureList[posTex].y;
+    }
     
     std::vector<unsigned short> out_indices;
     std::vector<glm::vec3> out_vertices;

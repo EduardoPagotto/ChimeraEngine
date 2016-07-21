@@ -74,11 +74,12 @@ void conversorVBO(
 //    std::vector<glm::vec3> & out_normals
 //);
 
-//struct Vertex {
-//	glm::vec3 position;
-//	glm::vec3 normal;
-//	glm::vec2 texture;
-//};
+struct VertexData {
+	glm::vec3 position;
+	glm::vec3 color;
+    glm::vec3 normal;
+	glm::vec2 texture;
+};
 //
 //void conversorVBO(
 //	std::vector<unsigned int> & vertexIndex,

@@ -31,7 +31,7 @@ private:
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
     void debugDados();
     
-    void renterTeste();
+    void renterTeste( bool _texture );
     
     std::vector<unsigned int> vertexIndex;
     std::vector<glm::vec3> vertexList;

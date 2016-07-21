@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "ChimeraUtils.h"
 
-#include "VboIndexer.hpp"
+
 
 namespace Chimera {
     
@@ -87,55 +87,59 @@ btVector3 Mesh::getSizeBox() {
 
 void Mesh::renderExecute(bool _texture) {
     
-    if (_texture == true) {
     
-        if (pState->getTexture() != nullptr)
-            pState->appyTexture();
-        else
-            glBindTexture(GL_TEXTURE_2D, 0);
 
-        pState->appyMaterial();
-
-        //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, 0, &vertexVBO[0]);   //The starting point of the VBO, for the vertices
-
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glNormalPointer(GL_FLOAT, 0, &normalVBO[0]);   //The starting point of normals, 12 bytes away
-
-        if (textureVBO.size() > 0) {
-            glClientActiveTexture(GL_TEXTURE0);
-            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-            glTexCoordPointer(2, GL_FLOAT, 0, &textureVBO[0]);   //The starting point of texcoords, 24 bytes away
-        }
-
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-        glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, &indexIBO[0]);   //The starting point of the IBO
-
-        glDisableClientState(GL_VERTEX_ARRAY);
-
-        if (pState->getTexture() != nullptr)
-            glDisableClientState(GL_TEXTURE0);
-
-        glDisableClientState(GL_NORMAL_ARRAY);
-        
-    } else {
-        
-        pState->appyMaterial();
-
-        //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, 0, &vertexVBO[0]);   //The starting point of the VBO, for the vertices
-
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glNormalPointer(GL_FLOAT, 0, &normalVBO[0]);   //The starting point of normals, 12 bytes away
-
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-        glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, &indexIBO[0]);   //The starting point of the IBO
-
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-    }
+    
+    
+//     if (_texture == true) {
+//     
+//         if (pState->getTexture() != nullptr)
+//             pState->appyTexture();
+//         else
+//             glBindTexture(GL_TEXTURE_2D, 0);
+// 
+//         pState->appyMaterial();
+// 
+//         //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+//         glEnableClientState(GL_VERTEX_ARRAY);
+//         glVertexPointer(3, GL_FLOAT, 0, &vertexVBO[0]);   //The starting point of the VBO, for the vertices
+// 
+//         glEnableClientState(GL_NORMAL_ARRAY);
+//         glNormalPointer(GL_FLOAT, 0, &normalVBO[0]);   //The starting point of normals, 12 bytes away
+// 
+//         if (textureVBO.size() > 0) {
+//             glClientActiveTexture(GL_TEXTURE0);
+//             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//             glTexCoordPointer(2, GL_FLOAT, 0, &textureVBO[0]);   //The starting point of texcoords, 24 bytes away
+//         }
+// 
+//         //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+//         glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, &indexIBO[0]);   //The starting point of the IBO
+// 
+//         glDisableClientState(GL_VERTEX_ARRAY);
+// 
+//         if (pState->getTexture() != nullptr)
+//             glDisableClientState(GL_TEXTURE0);
+// 
+//         glDisableClientState(GL_NORMAL_ARRAY);
+//         
+//     } else {
+//         
+//         pState->appyMaterial();
+// 
+//         //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+//         glEnableClientState(GL_VERTEX_ARRAY);
+//         glVertexPointer(3, GL_FLOAT, 0, &vertexVBO[0]);   //The starting point of the VBO, for the vertices
+// 
+//         glEnableClientState(GL_NORMAL_ARRAY);
+//         glNormalPointer(GL_FLOAT, 0, &normalVBO[0]);   //The starting point of normals, 12 bytes away
+// 
+//         //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+//         glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, &indexIBO[0]);   //The starting point of the IBO
+// 
+//         glDisableClientState(GL_VERTEX_ARRAY);
+//         glDisableClientState(GL_NORMAL_ARRAY);
+//     }
 }
 
 void Mesh::renterTeste ( bool _texture ) {
@@ -352,27 +356,15 @@ void Mesh::setVertexBuffer()
         textureList[posTex].y = 1 - textureList[posTex].y;
     }
     
-	std::vector<unsigned int> out_indices;
-	std::vector<glm::vec3> out_vertices;
-	std::vector<glm::vec2> out_uvs;
-	std::vector<glm::vec3> out_normals;
-
-	//conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, indexIBO, vertexVBO, textureVBO, normalVBO);
-	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, out_indices, out_vertices, out_uvs, out_normals);
-
-	//std::vector<Vertex> out;
-	//conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, out);
-
-    if (textureList.size() > 0)
-		indexVBO_slow(out_vertices, out_uvs, out_normals, indexIBO, vertexVBO, textureVBO, normalVBO);
-    else
-		indexVBO_slowNoTex(out_vertices, out_normals, indexIBO, vertexVBO, normalVBO);
+    std::vector<VertexData> vertexDataIn;
+    
+	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
+    indexVBO_slow(vertexDataIn, vertexData, indexIBO);
+    
     
     printf("Nome: %s \n", getName().c_str());
     printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
-    printf("-Vertex -------------( %03d )\n", vertexVBO.size());
-    printf("-Normal -------------( %03d )\n", normalVBO.size());
-    printf("-Texture-------------( %03d )\n", textureVBO.size());
+    printf("-VBO Data -----------( %03d )\n", vertexData.size());
     printf("\n");
 
 ////TODO trocar quando VBO estiver funcional no init
@@ -386,6 +378,74 @@ void Mesh::setVertexBuffer()
 //     glGenBuffers(1, &IndexVBOID);
 //     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
 //     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexIBO.size(), &indexIBO[0], GL_STATIC_DRAW);
+
+    
+ //   glGenVertexArrays(1, &vertexArrayID);
+//     glBindVertexArray(vertexArrayID);
+// 
+//     glGenBuffers(1, &vertexbuffer);
+//     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+//     glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(VertexData), &vertexData[0], GL_STATIC_DRAW);
+// 
+//     glGenBuffers(1, &elementbuffer);
+//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexIBO.size() * sizeof(unsigned int), &indexIBO[0], GL_STATIC_DRAW);
+    
+    
+//      glGenVertexArrays(1, &vertexArrayID);
+//     glBindVertexArray(vertexArrayID);
+// 
+//     glGenBuffers(1, &vertexbuffer);
+//     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+//     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+// 
+//     glGenBuffers(1, &elementbuffer);
+//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
+    
+    
+   // render??
+//     Model::Draw(ICamera camera) {
+//     GLuint matrixID = glGetUniformLocation(programID, "mvp");
+//     GLuint positionID = glGetAttribLocation(programID, "position_modelspace");
+//     GLuint uvID = glGetAttribLocation(programID, "uv");
+//     GLuint normalID = glGetAttribLocation(programID, "normal_modelspace");
+//     GLuint tangentID = glGetAttribLocation(programID, "tangent_modelspace");
+//     GLuint bitangentID = glGetAttribLocation(programID, "bitangent_modelspace");
+// 
+//     glm::mat4 projection = camera->GetProjectionMatrix(); 
+//     glm::mat4 view = camera->GetViewMatrix();
+//     glm::mat4 model = glm::mat4(1.0f);
+//     glm::mat4 mvp = projection * view * model;
+// 
+//     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &mvp[0][0]);
+// 
+//     glBindVertexArray(vertexArrayID);
+// 
+//     glEnableVertexAttribArray(positionID);
+//     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+//     glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].position);
+// 
+//     glEnableVertexAttribArray(uvID);
+//     glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].uv);
+// 
+//     glEnableVertexAttribArray(normalID);
+//     glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].normal);
+// 
+//     glEnableVertexAttribArray(tangentID);
+//     glVertexAttribPointer(tangentID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].tangent);
+// 
+//     glEnableVertexAttribArray(bitangentID);
+//     glVertexAttribPointer(bitangentID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].bitangent);
+// 
+//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+//     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+// 
+//     glDisableVertexAttribArray(positionID);
+//     glDisableVertexAttribArray(uvID);
+//     glDisableVertexAttribArray(normalID);
+//     glDisableVertexAttribArray(tangentID);
+//     glDisableVertexAttribArray(bitangentID);
     
 }
 

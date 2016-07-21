@@ -7,6 +7,7 @@
 
 #include "Draw.h"
 #include <glm/glm.hpp>
+#include "VboIndexer.hpp"
 
 namespace Chimera {
     
@@ -51,12 +52,17 @@ private:
     //GLuint IndexVBOID;
 
     std::vector<unsigned int> indexIBO;
-    std::vector<glm::vec3> vertexVBO;
-    std::vector<glm::vec2> textureVBO;
-    std::vector<glm::vec3> normalVBO;
+    std::vector<VertexData> vertexData;
+//     std::vector<glm::vec3> vertexVBO;
+//     std::vector<glm::vec2> textureVBO;
+//     std::vector<glm::vec3> normalVBO;
     
     //GLfloat *pTex;
-    //GLfloat *pNorm;   
+    //GLfloat *pNorm;  
+    
+//     GLint *vertexArrayID;
+//     GLint vertexbuffer;
+//     GLint elementbuffer;
 };
 }
 

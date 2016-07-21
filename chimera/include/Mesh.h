@@ -33,13 +33,13 @@ private:
     
     void renterTeste();
     
-    std::vector<int> vertexIndex;
+    std::vector<unsigned int> vertexIndex;
     std::vector<glm::vec3> vertexList;
     
-    std::vector<int> normalIndex;
+    std::vector<unsigned int> normalIndex;
     std::vector<glm::vec3> normalList;
     
-    std::vector<int> textureIndex;
+    std::vector<unsigned int> textureIndex;
     std::vector<glm::vec2> textureList;
         
     //GLfloat* vertices;

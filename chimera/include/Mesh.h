@@ -54,7 +54,7 @@ private:
 //     GLint vertexbuffer;
 //     GLint elementbuffer;
 
-	//GLuint VAO;
+	GLuint VAO;
 
 };
 }

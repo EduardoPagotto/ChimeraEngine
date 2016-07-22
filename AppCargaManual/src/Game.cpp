@@ -3,6 +3,8 @@
 #include "Transform.h"
 #include "OpenGLDefs.h"
 
+#include "Shader.h"
+
 Game::Game ( Chimera::SceneMng *_pScenMng ) : GameClient ( _pScenMng ) {
 
 	pCorpoRigido = nullptr;
@@ -137,6 +139,17 @@ void Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
 
 void Game::start() {
 
+    //http://www.kickjs.org/example/shader_editor/shader_editor.html template para usar
+    //http://www.lighthouse3d.com/tutorials/glsl-tutorial/attribute-variables/ como carregar
+    #ifdef WIN32
+    programID = Chimera::LoadShaders ( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
+                                        "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl" );
+# else
+    programID = Chimera::LoadShaders ( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
+                                        "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl" );
+# endif
+    
+    
     GameClient::start();
 
     // Pega o Skybox
@@ -168,6 +181,7 @@ void Game::start() {
 
     pHUD->addText ( 0, 0, 255, 0, Chimera::Color::BLUE, &sPosicaoObj );
 	pHUD->addText ( 0, 0, 0, 0, Chimera::Color::RED, &textoFPS );
+       
 }
 
 void Game::stop() {
@@ -185,6 +199,8 @@ void Game::newFPS ( const unsigned int &fps ) {
 
 void Game::render() {
 
+    glUseProgram ( programID );
+    
     pSceneMng->draw ();
 
 }

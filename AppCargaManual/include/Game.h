@@ -41,6 +41,8 @@ private:
     Chimera::CameraSpherical *pOrbitalCam;
     Chimera::Solid *pCorpoRigido;
 	Chimera::ParticleEmitter *pEmissor;
+    
+    GLuint programID;
 };
 
 #endif

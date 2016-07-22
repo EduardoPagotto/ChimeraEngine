@@ -1,16 +1,12 @@
 #include "Mesh.h"
 #include "ChimeraUtils.h"
 
-
-
 namespace Chimera {
     
 Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, DrawType::MESH, _name ) {
-
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
-
 //     vList.set ( _cpy.vList );
 //     nList.set ( _cpy.nList );
 //     uvList.set ( _cpy.uvList );
@@ -18,7 +14,6 @@ Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
 //     vIndex.set ( _cpy.vIndex );
 //     nIndex.set ( _cpy.nIndex );
 //     tIndex.set ( _cpy.tIndex );
-
 }
 
 Mesh::~Mesh() {
@@ -30,6 +25,8 @@ Mesh::~Mesh() {
     textureIndex.clear();
     textureList.clear();
    
+	glDeleteBuffers(1, &VertexVBOID);
+	glDeleteBuffers(1, &IndexVBOID);
 }
 
 void Mesh::init() {
@@ -87,115 +84,67 @@ btVector3 Mesh::getSizeBox() {
 
 void Mesh::renderExecute(bool _texture) {
     
-    
+	if (_texture == true) {
 
-    
-    
-//     if (_texture == true) {
-//     
-//         if (pState->getTexture() != nullptr)
-//             pState->appyTexture();
-//         else
-//             glBindTexture(GL_TEXTURE_2D, 0);
-// 
-//         pState->appyMaterial();
-// 
-//         //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-//         glEnableClientState(GL_VERTEX_ARRAY);
-//         glVertexPointer(3, GL_FLOAT, 0, &vertexVBO[0]);   //The starting point of the VBO, for the vertices
-// 
-//         glEnableClientState(GL_NORMAL_ARRAY);
-//         glNormalPointer(GL_FLOAT, 0, &normalVBO[0]);   //The starting point of normals, 12 bytes away
-// 
-//         if (textureVBO.size() > 0) {
-//             glClientActiveTexture(GL_TEXTURE0);
-//             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-//             glTexCoordPointer(2, GL_FLOAT, 0, &textureVBO[0]);   //The starting point of texcoords, 24 bytes away
-//         }
-// 
-//         //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-//         glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, &indexIBO[0]);   //The starting point of the IBO
-// 
-//         glDisableClientState(GL_VERTEX_ARRAY);
-// 
-//         if (pState->getTexture() != nullptr)
-//             glDisableClientState(GL_TEXTURE0);
-// 
-//         glDisableClientState(GL_NORMAL_ARRAY);
-//         
-//     } else {
-//         
-//         pState->appyMaterial();
-// 
-//         //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-//         glEnableClientState(GL_VERTEX_ARRAY);
-//         glVertexPointer(3, GL_FLOAT, 0, &vertexVBO[0]);   //The starting point of the VBO, for the vertices
-// 
-//         glEnableClientState(GL_NORMAL_ARRAY);
-//         glNormalPointer(GL_FLOAT, 0, &normalVBO[0]);   //The starting point of normals, 12 bytes away
-// 
-//         //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-//         glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, &indexIBO[0]);   //The starting point of the IBO
-// 
-//         glDisableClientState(GL_VERTEX_ARRAY);
-//         glDisableClientState(GL_NORMAL_ARRAY);
-//     }
-}
+		if (pState->getTexture() != nullptr)
+			pState->appyTexture();
+		else
+			glBindTexture(GL_TEXTURE_2D, 0);
 
-void Mesh::renterTeste ( bool _texture ) {
+		pState->appyMaterial();
 
-    pState->apply();
-    if ( _texture == true ) {
-        
-        if (pState->getTexture() != nullptr)
-            pState->appyTexture();
-        else 
-            glBindTexture(GL_TEXTURE_2D, 0);
-       
-        pState->appyMaterial();
-                    
-        unsigned l_numFaces = vertexIndex.size() / 3;
-        int l_index = 0;
-        int fa = 0;
-        for ( unsigned face = 0; face < l_numFaces; face++ ) {
-            fa = face * 3;
-            
-            glBegin ( GL_TRIANGLES );
-            
-            for ( unsigned point = 0; point < 3; point++ ) {
-                l_index = fa + point;
-                int posicao =  vertexIndex[l_index];
-                int posNormal =  normalIndex[l_index];
-                
-                glNormal3fv ( (GLfloat*) &normalList[posNormal] );
+		//vincula VertexData
+		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+		//points
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+		//Normal
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
+		//Texture
+		glClientActiveTexture(GL_TEXTURE0);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));   //The starting point of texcoords, 24 bytes away
 
-                if ( textureIndex.size() > 0 ) 
-                    glTexCoord2fv( (GLfloat*)&textureList[ textureIndex[l_index] ]  );
-                
-                glVertex3fv ( (GLfloat*) &vertexList[posicao] );
-            }
-            
-            glEnd();
-        }
+		//vincula indices
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
 
-    } else {
+		//draw
+		glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 
-        unsigned l_numFaces = vertexIndex.size() / 3;
-        int l_index = 0;
-        int fa = 0;
-        for ( unsigned face = 0; face < l_numFaces; face++ ) {
-            fa = face * 3;
-            glBegin ( GL_TRIANGLES );
-            for ( unsigned point = 0; point < 3; point++ ) {
-                l_index = fa + point;
-                int posicao =  vertexIndex[l_index];
-                int posNormal =  normalIndex[l_index];
-                glNormal3fv ( (GLfloat*) &normalList[posNormal] );
-                glVertex3fv ( (GLfloat*) &vertexList[posicao] );
-            }
-            glEnd();
-        }
-    }    
+		//desabilita client stats
+		glDisableClientState(GL_VERTEX_ARRAY);
+		 
+		if (pState->getTexture() != nullptr)
+		    glDisableClientState(GL_TEXTURE0);
+		 
+		glDisableClientState(GL_NORMAL_ARRAY);
+
+	} else {
+
+		pState->appyMaterial();
+
+		//vincula VertexData
+		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+		//points
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+																			  //Normal
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
+																			//Texture
+		//vincula indices
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+
+		//draw
+		glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+		//desabilita client stats
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+
+	}
+   
 }
 
  void Mesh::update ( DataMsg *dataMsg ) {
@@ -203,12 +152,10 @@ void Mesh::renterTeste ( bool _texture ) {
 	 if (dataMsg->getKindOp() == KindOp::DRAW) {
 
 		 renderExecute(true);
-         //renterTeste(true);
 
 	 } else if (dataMsg->getKindOp() == KindOp::DRAW_NO_TEX) {
 
 		 renderExecute(false);
-         //renterTeste(false);
 
 	 }
 
@@ -361,38 +308,53 @@ void Mesh::setVertexBuffer()
 	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
     indexVBO_slow(vertexDataIn, vertexData, indexIBO);
     
-    
     printf("Nome: %s \n", getName().c_str());
     printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
     printf("-VBO Data -----------( %03d )\n", vertexData.size());
     printf("\n");
 
-////TODO trocar quando VBO estiver funcional no init
-//     VertexVBOID = 0;
-//     IndexVBOID = 0;
-//     
-//     glGenBuffers(1, &VertexVBOID);
-//     glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-//     glBufferData(GL_ARRAY_BUFFER, vertexVBO.size() , &vertexVBO[0] , GL_STATIC_DRAW);
-//     
-//     glGenBuffers(1, &IndexVBOID);
-//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexIBO.size(), &indexIBO[0], GL_STATIC_DRAW);
+	//glGenVertexArrays(1, &VAO); // Cria o VAO
+	//glBindVertexArray(VAO); //Vincula com atual
 
-    
- //   glGenVertexArrays(1, &vertexArrayID);
-//     glBindVertexArray(vertexArrayID);
-// 
-//     glGenBuffers(1, &vertexbuffer);
-//     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-//     glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(VertexData), &vertexData[0], GL_STATIC_DRAW);
-// 
-//     glGenBuffers(1, &elementbuffer);
-//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexIBO.size() * sizeof(unsigned int), &indexIBO[0], GL_STATIC_DRAW);
-    
-    
-//      glGenVertexArrays(1, &vertexArrayID);
+	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
+	glGenBuffers(1, &VertexVBOID); //Gera o buffer de dados do Vertex
+	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID); //vincula o buffer de dados
+	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW); //passa o buffer 
+
+	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+	glGenBuffers(1, &IndexVBOID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex , &indexIBO[0], GL_STATIC_DRAW);
+
+	//antigo GL3.0, sem VAO
+	//glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+
+	//glEnableClientState(GL_NORMAL_ARRAY);
+	//glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
+
+	//glClientActiveTexture(GL_TEXTURE0);
+	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	//glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));   //The starting point of texcoords, 24 bytes away
+	//--
+
+	//Novo > GL3.1, necessita de Shade nos atributos para definir quem é quem, sem VAO
+	//glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+	//glEnableVertexAttribArray(0);    //We like submitting vertices on stream 0 for no special reason
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+
+	//glEnableVertexAttribArray(1);    //We like submitting normals on stream 1 for no special reason
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));     //The starting point of normals, 12 bytes away
+
+	//glEnableVertexAttribArray(2);    //We like submitting texcoords on stream 2 for no special reason
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));   //The starting point of texcoords, 24 bytes away
+	//--
+
+
+//------limpar quando VAO e Shade estiverem ativos
+      
+//     glGenVertexArrays(1, &vertexArrayID);
 //     glBindVertexArray(vertexArrayID);
 // 
 //     glGenBuffers(1, &vertexbuffer);
@@ -500,18 +462,5 @@ void Mesh::debugDados() {
     }
     printf("\n");  
 }
-
-//TODO trocar quando VBO estiver funcional no init
-//     VertexVBOID = 0;
-//     IndexVBOID = 0;
-//     
-//     glGenBuffers(1, &VertexVBOID);
-//     glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-//     glBufferData(GL_ARRAY_BUFFER, vList.getSize() ,   &vList[0] , GL_STATIC_DRAW);
-//     
-//     glGenBuffers(1, &IndexVBOID);
-//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, vIndex.getSize(), &vIndex[0], GL_STATIC_DRAW);
-
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

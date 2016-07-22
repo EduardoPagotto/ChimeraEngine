@@ -11,6 +11,9 @@
 
 namespace Chimera {
     
+//Define this somewhere in your header file
+#define BUFFER_OFFSET(i) ((void*)(i))
+
 class Mesh : public Draw
 {
 public:
@@ -32,8 +35,6 @@ private:
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
     void debugDados();
     
-    void renterTeste( bool _texture );
-    
     std::vector<unsigned int> vertexIndex;
     std::vector<glm::vec3> vertexList;
     
@@ -42,27 +43,19 @@ private:
     
     std::vector<unsigned int> textureIndex;
     std::vector<glm::vec2> textureList;
-        
-    //GLfloat* vertices;
-    //GLfloat* colors;
-    //GLfloat* normals;
-    //GLfloat* texturecs;
-    
-    //GLuint VertexVBOID;
-    //GLuint IndexVBOID;
+            
+    GLuint VertexVBOID;
+    GLuint IndexVBOID;
 
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
-//     std::vector<glm::vec3> vertexVBO;
-//     std::vector<glm::vec2> textureVBO;
-//     std::vector<glm::vec3> normalVBO;
-    
-    //GLfloat *pTex;
-    //GLfloat *pNorm;  
-    
+     
 //     GLint *vertexArrayID;
 //     GLint vertexbuffer;
 //     GLint elementbuffer;
+
+	//GLuint VAO;
+
 };
 }
 

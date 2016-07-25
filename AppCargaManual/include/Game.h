@@ -42,7 +42,7 @@ private:
     Chimera::Solid *pCorpoRigido;
 	Chimera::ParticleEmitter *pEmissor;
     
-    GLuint programID;
+    //GLuint programID;
 };
 
 #endif

@@ -93,61 +93,63 @@ void Mesh::renderExecute(bool _texture) {
 
 		pState->appyMaterial();
 
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES,0, indexIBO.size() );//glDrawArrays(GL_TRIANGLES,0,3);
-        //ou o de baixo
-        //glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, NULL); 
-        glBindVertexArray(0);
+//Usando VAO e FBO
+//         glBindVertexArray(VAO);
+//         glDrawArrays(GL_TRIANGLES,0, indexIBO.size() );//glDrawArrays(GL_TRIANGLES,0,3);
+//         //ou o de baixo
+//         //glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, NULL); 
+//         glBindVertexArray(0);
         
-// 		//vincula VertexData
-// 		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-// 		//points
-// 		glEnableClientState(GL_VERTEX_ARRAY);
-// 		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
-// 		//Normal
-// 		glEnableClientState(GL_NORMAL_ARRAY);
-// 		glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
-// 		//Texture
-// 		glClientActiveTexture(GL_TEXTURE0);
-// 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-// 		glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));   //The starting point of texcoords, 24 bytes away
-// 
-// 		//vincula indices
-// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-// 
-// 		//draw
-// 		glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-// 
-// 		//desabilita client stats
-// 		glDisableClientState(GL_VERTEX_ARRAY);
-// 		 
-// 		if (pState->getTexture() != nullptr)
-// 		    glDisableClientState(GL_TEXTURE0);
-// 		 
-// 		glDisableClientState(GL_NORMAL_ARRAY);
+//Usndo Apenas FBO
+		//vincula VertexData
+		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+		//points
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+		//Normal
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
+		//Texture
+		glClientActiveTexture(GL_TEXTURE0);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));   //The starting point of texcoords, 24 bytes away
+
+		//vincula indices
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+
+		//draw
+		glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+		//desabilita client stats
+		glDisableClientState(GL_VERTEX_ARRAY);
+		 
+		if (pState->getTexture() != nullptr)
+		    glDisableClientState(GL_TEXTURE0);
+		 
+		glDisableClientState(GL_NORMAL_ARRAY);
 
 	} else {
 
-// 		pState->appyMaterial();
-// 
-// 		//vincula VertexData
-// 		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-// 		//points
-// 		glEnableClientState(GL_VERTEX_ARRAY);
-// 		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
-// 																			  //Normal
-// 		glEnableClientState(GL_NORMAL_ARRAY);
-// 		glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
-// 																			//Texture
-// 		//vincula indices
-// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-// 
-// 		//draw
-// 		glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-// 
-// 		//desabilita client stats
-// 		glDisableClientState(GL_VERTEX_ARRAY);
-// 		glDisableClientState(GL_NORMAL_ARRAY);
+		pState->appyMaterial();
+
+		//vincula VertexData
+		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+		//points
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+																			  //Normal
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
+																			//Texture
+		//vincula indices
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+
+		//draw
+		glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+		//desabilita client stats
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
 
 	}
    
@@ -320,41 +322,41 @@ void Mesh::setVertexBuffer()
     printf("\n");
 
     //FBO sem o uso de VAO
-// 	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
-// 	glGenBuffers(1, &VertexVBOID); //Gera o buffer de dados do Vertex
-// 	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID); //vincula o buffer de dados
-// 	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW); //passa o buffer 
-// 
-// 	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
-// 	glGenBuffers(1, &IndexVBOID);
-// 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-// 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex , &indexIBO[0], GL_STATIC_DRAW);
+	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
+	glGenBuffers(1, &VertexVBOID); //Gera o buffer de dados do Vertex
+	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID); //vincula o buffer de dados
+	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW); //passa o buffer 
+
+	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+	glGenBuffers(1, &IndexVBOID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex , &indexIBO[0], GL_STATIC_DRAW);
 
     //FBO com VAO
-    unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
-    unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
-    
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    glGenBuffers(1, &VertexVBOID);
-    glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-    glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
-    
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(0));
-    
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
-    
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
-    
-    glGenBuffers(1, &IndexVBOID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex , &indexIBO[0], GL_STATIC_DRAW);
-        
-    glBindVertexArray(0);
+//     unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
+//     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+//     
+//     glGenVertexArrays(1, &VAO);
+//     glBindVertexArray(VAO);
+// 
+//     glGenBuffers(1, &VertexVBOID);
+//     glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+//     glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
+//     
+//     glEnableVertexAttribArray(0);
+//     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(0));
+//     
+//     glEnableVertexAttribArray(1);
+//     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
+//     
+//     glEnableVertexAttribArray(2);
+//     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
+//     
+//     glGenBuffers(1, &IndexVBOID);
+//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex , &indexIBO[0], GL_STATIC_DRAW);
+//         
+//     glBindVertexArray(0);
     
     
     

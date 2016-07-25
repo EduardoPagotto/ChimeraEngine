@@ -69,6 +69,7 @@ set (SourcesChimeraAPI
 	src/Transform.cpp
 	src/Coord.cpp
 	src/VboIndexer.cpp
+	src/InitVisitor.cpp
 )
 	
 if (OVR_SET_TO_USE)

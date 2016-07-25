@@ -63,7 +63,7 @@ void Light::update(DataMsg *_dataMsg) {
 void Light::init() {
 
 	position = transform.getOrigin();
-	Node::init();
+
 }
 
 void Light::loadCollada ( tinyxml2::XMLElement* _nNode ) {

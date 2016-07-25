@@ -1,5 +1,6 @@
 #include "SceneMng.h"
 
+
 namespace Chimera {
 
 SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
@@ -112,8 +113,33 @@ Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
 
 void SceneMng::init() {
  
-    root->init();
+    InitVisitor *iv = new InitVisitor();
+    initNodes(root, iv);
+    
     shadoMap.init ( (Node*)root );
+}
+
+
+void SceneMng::initNodes(Node* u, InitVisitor *pVisit)
+{
+    u->setColor(1);
+    u->accept(pVisit); //entrypoint
+    
+    std::vector<Node*>* children = u->getChilds();
+    
+    if ((children != nullptr)&&(children->size() > 0)) {
+        
+        for (size_t i = 0; i < children->size(); i++) {
+            
+            Node* child = children->at(i);
+            if(u->getColor()==0) 
+                initNodes(child, pVisit);
+            
+        }
+        
+    }
+     
+     u->setColor(0);
 }
 
 void SceneMng::draw () {

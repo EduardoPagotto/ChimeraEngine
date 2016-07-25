@@ -18,7 +18,7 @@ Draw::~Draw() {
 }
 
 void Draw::init() {
-	Node::init();
+
 }
 
 void Draw::accept(NodeVisitor * v) {

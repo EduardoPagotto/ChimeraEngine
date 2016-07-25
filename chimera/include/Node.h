@@ -24,9 +24,7 @@ public:
 
     virtual void update ( DataMsg *dataMsg );
 
-	virtual void init();
-
-	virtual void accept(class NodeVisitor* v) = 0;
+    virtual void accept(class NodeVisitor* v) = 0;
 
     void addChild ( Node *_child );
 

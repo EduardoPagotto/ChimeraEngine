@@ -83,8 +83,6 @@ public:
         this->name = name;
     }
 
-	virtual void init() = 0;
-
     /**
      * Retorna uma string com o nome do tipo
      * @param _kind tipo

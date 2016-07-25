@@ -16,7 +16,6 @@ void SceneRoot::accept(NodeVisitor* v) {
 
 void SceneRoot::init() {
  
-	Node::init();
 }
 
 void SceneRoot::draw(Group *_pGroup) {

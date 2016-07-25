@@ -27,17 +27,6 @@ void Node::update(DataMsg *_dataMsg) {
 	}
 }
 
-void Node::init() {
-	if (!vChild.empty()) {
-		for (size_t i = 0; i < vChild.size(); ++i) {
-			if (vChild[i] != nullptr)
-				vChild[i]->init();
-		}
-	}
-}
-
-
-
 std::vector<Node*>* Node::getChilds() {
 	if (!vChild.empty())
 		return &(this->vChild);

@@ -88,9 +88,6 @@ void Solid::init() {
 		setShapeBox(pDraw->getSizeBox());
 
 	initTransform(transform, this);
-
-	Coord::init();
-
 }
 
 void Solid::accept(NodeVisitor * v) {

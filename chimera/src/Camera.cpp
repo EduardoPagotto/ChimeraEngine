@@ -77,7 +77,6 @@ void Camera::init() {
     direction.setValue ( 0.0, 0.0, 0.0 ); //FIXME encontrar no transform
     rotation.setValue ( 0.0, 0.0, 1.0 ); //FIXME encontrar no transform
 
-	Node::init();
 }
 
 void Camera::update(DataMsg *_dataMsg) {

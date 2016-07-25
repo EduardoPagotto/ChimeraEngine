@@ -14,6 +14,8 @@
 
 #include "Coord.h"
 
+#include "InitVisitor.h"
+
 namespace Chimera
 {
 
@@ -31,6 +33,7 @@ public:
     Node *getNode ( EntityKind _type, const std::string &_nome );
     Node *getNode ( EntityKind _type, unsigned index );
 
+    void initNodes(Node* u, InitVisitor *pVisit);
     void init();
     
     void setReader( LoaderDae *_pLoader );

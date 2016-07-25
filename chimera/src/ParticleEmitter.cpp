@@ -107,7 +107,6 @@ void ParticleEmitter::init() {
 
 	pTexture->init();
 
-	Node::init();
 }
 
 void ParticleEmitter::setSizeBox ( const btVector3& _size ) {

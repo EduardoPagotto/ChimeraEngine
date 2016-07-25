@@ -27,7 +27,7 @@ public:
 
     virtual ~Solid();
 
-	virtual void update ( DataMsg *_dataMsg );
+    virtual void apply(Solid *_pSource);
 
 	virtual void init();
 

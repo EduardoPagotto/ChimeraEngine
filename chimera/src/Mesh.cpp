@@ -155,21 +155,6 @@ void Mesh::renderExecute(bool _texture) {
    
 }
 
- void Mesh::update ( DataMsg *dataMsg ) {
- 
-	 if (dataMsg->getKindOp() == KindOp::DRAW) {
-
-		 renderExecute(true);
-
-	 } else if (dataMsg->getKindOp() == KindOp::DRAW_NO_TEX) {
-
-		 renderExecute(false);
-
-	 }
-
-     Draw::update ( dataMsg );
- }
-
 int Mesh::getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores ) {
 
     tinyxml2::XMLElement* l_nSource = _source->FirstChildElement ( "float_array" );

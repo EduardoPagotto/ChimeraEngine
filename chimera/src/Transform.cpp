@@ -18,18 +18,6 @@ Transform::Transform(Node* _parent, std::string _name) : Coord (_parent, _name) 
 Transform::~Transform() {
 }
 
-void Transform::update(DataMsg * _dataMsg)
-{
-	if ((_dataMsg->getKindOp() == KindOp::DRAW) || (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX)) {
-
-		this->applyTransform();
-
-	}
-
-
-	Coord::update(_dataMsg);
-}
-
 void Transform::accept(class NodeVisitor* v) {
 	v->visit(this);
 }

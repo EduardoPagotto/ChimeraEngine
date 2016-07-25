@@ -55,11 +55,6 @@ void Light::accept(NodeVisitor * v)
 	v->visit(this);
 }
 
-void Light::update(DataMsg *_dataMsg) {
-
-	Node::update(_dataMsg);
-}
-
 void Light::init() {
 
 	position = transform.getOrigin();

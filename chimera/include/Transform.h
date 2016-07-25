@@ -12,8 +12,6 @@ public:
 	Transform(Node* _parent, std::string _name);
 	virtual ~Transform();
 
-	virtual void update(DataMsg *_dataMsg);
-
 	// Inherited via Group
 	virtual btVector3 getPosition() override;
 	virtual void setPosition(const btVector3 & _pos) override;

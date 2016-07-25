@@ -27,8 +27,6 @@ public:
 
     virtual void init();
 
-	virtual void update(DataMsg *_dataMsg);
-
     virtual void render();
 
 	virtual void accept(class NodeVisitor* v);

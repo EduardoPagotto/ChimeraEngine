@@ -38,7 +38,6 @@ public:
     virtual ~HUD();
 
 	virtual void init();
-	virtual void update(DataMsg *_dataMsg);
 	void accept(class NodeVisitor* v);
 
 	// Inherited via Draw

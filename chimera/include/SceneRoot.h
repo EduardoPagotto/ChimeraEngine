@@ -14,8 +14,7 @@ public:
 	virtual ~SceneRoot();
     virtual void init();
 
-    virtual void draw(Group *_pGroup);
-	void drawHud(Group * _pGroup);
+    virtual void apply();
 
 	virtual void accept(class NodeVisitor * v) override;
 

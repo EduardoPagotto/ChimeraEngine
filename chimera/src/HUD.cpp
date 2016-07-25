@@ -152,18 +152,6 @@ void HUD::renderExecute(bool _texture)
 
 }
 
-void HUD::update(DataMsg * _dataMsg) {
-
-	if (_dataMsg->getKindOp() == KindOp::DRAW_HUD) {
-
-		if (isOn() == true)
-			renderExecute(true);
-
-	}
-
-	Draw::update(_dataMsg);
-}
-
 void HUD::accept(NodeVisitor * v) {
 	v->visit(this);
 }

@@ -57,28 +57,41 @@ Solid::~Solid() {
     Infra::Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
- void Solid::update ( DataMsg *_dataMsg ) {
+void Solid::apply ( Solid* _pSource ) {
+    
+//       glPushMatrix();
+// 
+//       Solid *pSource = (Solid *)_dataMsg->getParam();
+       ajusteMatrix( _pSource );
+// 
+//       Node::update(_dataMsg);
+// 
+//       glPopMatrix();
+    
+}
 
-	 if ((_dataMsg->getKindOp() == KindOp::DRAW) || (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX)) {
-
-		 glPushMatrix();
-
-		 Solid *pSource = (Solid *)_dataMsg->getParam();
-		 ajusteMatrix( pSource );
-
-		 Node::update(_dataMsg);
-
-		 glPopMatrix();
-
-	 }
-	 else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
-
-		 _dataMsg->setDone(true);
-		 //Node::update(_dataMsg);
-	 }
-
-
- }
+//  void Solid::update ( DataMsg *_dataMsg ) {
+// 
+// 	 if ((_dataMsg->getKindOp() == KindOp::DRAW) || (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX)) {
+// 
+// 		 glPushMatrix();
+// 
+// 		 Solid *pSource = (Solid *)_dataMsg->getParam();
+// 		 ajusteMatrix( pSource );
+// 
+// 		 Node::update(_dataMsg);
+// 
+// 		 glPopMatrix();
+// 
+// 	 }
+// 	 else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
+// 
+// 		 _dataMsg->setDone(true);
+// 		 //Node::update(_dataMsg);
+// 	 }
+// 
+// 
+//  }
 
 void Solid::init() {
 

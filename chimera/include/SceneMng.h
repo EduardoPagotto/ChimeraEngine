@@ -15,6 +15,7 @@
 #include "Coord.h"
 
 #include "InitVisitor.h"
+#include "RenderVisitor.h"
 
 namespace Chimera
 {
@@ -44,7 +45,7 @@ public:
         pCameraAtiva = _pCam;
     }
 
-    inline void objetoAtivo ( Coord *_pObject ) {
+    inline void objetoAtivo ( Solid *_pObject ) {
 		pOrigemDesenho = _pObject;
     }
 
@@ -55,7 +56,7 @@ public:
     void draw ();
 
 private:
-    void hudUpdate ( int eye );
+    void DFS(Node* u);
 
     void parseEntity ( Node *_pNode );
     void addEntityToScene ( Node *_pNode );
@@ -64,13 +65,15 @@ private:
     
     SceneRoot *root;
     Camera *pCameraAtiva;
-	Coord *pOrigemDesenho;
+	Solid *pOrigemDesenho;
 
     std::vector<Camera*> m_vCamera;
     std::vector<Light*> m_vLight;
 
     ShadowMap shadoMap;
     Video *pVideo;
+    
+    RenderVisitor rv;
 };
 
 } /* namespace Chimera */

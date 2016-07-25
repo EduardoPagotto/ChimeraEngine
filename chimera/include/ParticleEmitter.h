@@ -14,7 +14,6 @@ class ParticleEmitter : public Draw
 public:
     ParticleEmitter (Node *_parent, std::string _name );
     virtual ~ParticleEmitter();
-    virtual void update ( DataMsg *_dataMsg );
 	virtual void init();
 	virtual void accept(class NodeVisitor* v);
     virtual void renderExecute(bool _texture);
@@ -40,6 +39,8 @@ public:
 	inline int getMaxSeed() const {
 		return maxSeed;
 	}
+
+	btVector3 l_vec;
 
 private:
     

@@ -28,8 +28,6 @@ public:
 
 	virtual void init();
 
-	virtual void update(DataMsg *_dataMsg);
-
     virtual void apply(LightNum lightNum);
 
 	virtual void accept(class NodeVisitor* v);

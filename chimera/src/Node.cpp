@@ -18,15 +18,6 @@ Node::~Node() {
 	vChild.clear();
 }
 
-void Node::update(DataMsg *_dataMsg) {
-	if (!vChild.empty()) {
-		for (size_t i = 0; i < vChild.size(); ++i) {
-			if (vChild[i] != nullptr )
-				vChild[i]->update(_dataMsg);
-		}
-	}
-}
-
 std::vector<Node*>* Node::getChilds() {
 	if (!vChild.empty())
 		return &(this->vChild);

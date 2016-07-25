@@ -115,10 +115,11 @@ void PhysicsControl::clearAllShapes() {
 
 bool PhysicsControl::checkAllowCollision ( Node *pNode ) {
 
-    DataMsg dataMsg ( KindOp::IS_ALLOW_COLLIDE, this, nullptr, nullptr );
-    pNode->update ( &dataMsg );
-
-    return ( dataMsg.isDone() );
+//     DataMsg dataMsg ( KindOp::IS_ALLOW_COLLIDE, this, nullptr, nullptr );
+//     pNode->update ( &dataMsg );
+// 
+//     return ( dataMsg.isDone() );
+    return true;
 }
 
 void PhysicsControl::sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *_nodeB ) {

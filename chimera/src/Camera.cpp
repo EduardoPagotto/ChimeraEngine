@@ -79,11 +79,6 @@ void Camera::init() {
 
 }
 
-void Camera::update(DataMsg *_dataMsg) {
-
-	Node::update(_dataMsg);
-}
-
 //TODO criar classe de loader
 void Camera::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 

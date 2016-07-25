@@ -50,44 +50,6 @@ ParticleEmitter::~ParticleEmitter() {
 //    }
 //}
 
-void ParticleEmitter::update ( DataMsg *_dataMsg ) {
-
-	if ( _dataMsg->getKindOp() == KindOp::DRAW ) {
-
-        glPushMatrix();
-
-        glPushAttrib ( GL_ENABLE_BIT );
-        glPushAttrib ( GL_CURRENT_BIT );
-
-        setGL();
-
-        Coord *pSource = (Coord * ) _dataMsg->getParam();
-
-
-        // desloca objeto em relacao ao que contem a camera
-        btVector3 l_vec = pSource->getPosition();
-        glTranslatef ( -l_vec.x(), -l_vec.y(), -l_vec.z() );
-
-        // armazena a camera para uso no ordenador //TODO: Otimizar criando lista de cameras no Object e indicando qual esta ativa neste momento
-		Camera *pCam = (Camera*)Node::findNodeByKind(EntityKind::CAMERA, 0);//FIXME!!!!!! //pSource->findChildByKind ( EntityKind::CAMERA, 0 );
-        if ( pCam !=  nullptr ) {
-            SortParticles ( pCam->getPosition() );
-        }
-
-        renderExecute(true);
-
-        glPopAttrib();
-        glPopAttrib();
-
-        Node::update ( _dataMsg );
-
-        glPopMatrix();
-        
-    } else if ( _dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE ) {
-
-    }
-}
-
 void ParticleEmitter::init() {
 	
 	particles.reserve(maxSeed);
@@ -163,6 +125,25 @@ void ParticleEmitter::loadImage ( const char *_file ) {
 
 void ParticleEmitter::renderExecute(bool _texture) {
 
+    glPushMatrix();
+
+    glPushAttrib ( GL_ENABLE_BIT );
+    glPushAttrib ( GL_CURRENT_BIT );
+
+    setGL();
+
+    // Coord *pSource = (Coord * ) _dataMsg->getParam();
+
+    // desloca objeto em relacao ao que contem a camera
+    //btVector3 l_vec = pSource->getPosition();
+    glTranslatef ( -l_vec.x(), -l_vec.y(), -l_vec.z() );
+
+    // armazena a camera para uso no ordenador //TODO: Otimizar criando lista de cameras no Object e indicando qual esta ativa neste momento
+    Camera *pCam = (Camera*)Node::findNodeByKind(EntityKind::CAMERA, 0);//FIXME!!!!!! //pSource->findChildByKind ( EntityKind::CAMERA, 0 );
+    if ( pCam !=  nullptr ) {
+        SortParticles ( pCam->getPosition() );
+    }
+    
     // Select Our Texture
     pTexture->apply();
 
@@ -170,6 +151,12 @@ void ParticleEmitter::renderExecute(bool _texture) {
         Particle *pParticle = particles[loop];
         pParticle->render();
     }
+    
+    glPopAttrib();
+    glPopAttrib();
+    
+    glPopMatrix();
+    
 }
 
 // estrutura de comparacao

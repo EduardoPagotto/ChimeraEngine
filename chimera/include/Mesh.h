@@ -23,7 +23,6 @@ public:
 	Mesh(const Mesh &_cpy);
 
     virtual ~Mesh();
-	virtual void update(DataMsg *dataMsg);
 	virtual void init();
     virtual void renderExecute ( bool _texture );
     virtual btVector3 getSizeBox();

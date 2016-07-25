@@ -142,6 +142,29 @@ void SceneMng::initNodes(Node* u, InitVisitor *pVisit)
      u->setColor(0);
 }
 
+void SceneMng::DFS(Node* u)
+{
+    u->setColor(1);
+    
+    glPushMatrix();
+    
+    u->accept(&rv);
+    
+    std::vector<Node*>* children = u->getChilds();
+    
+    if ((children!=nullptr) && (children->size() >0)){
+        
+        for (size_t i = 0; i < children->size(); i++) {
+            Node* child = children->at(i);
+            if(u->getColor()==0) 
+                DFS(child);
+        }
+    }
+    
+    u->setColor(0);
+    glPopMatrix();
+}
+
 void SceneMng::draw () {
 
 //#define TESTEZ1
@@ -157,6 +180,10 @@ void SceneMng::draw () {
     shadoMap.RenderSceneA (pOrigemDesenho);
 #endif
 
+    rv.pVideo = pVideo;
+    rv.textureOn = true;
+    rv.pOrigemDesenho = pOrigemDesenho;
+    
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
 		if (pCameraAtiva != nullptr) {
@@ -165,28 +192,30 @@ void SceneMng::draw () {
 			pCameraAtiva->render();
 		}
 
-        root->draw(pOrigemDesenho);
+		rv.eye = eye;
+		DFS(root);
+        //root->draw(pOrigemDesenho);
         
 #ifdef TESTEZ1
         shadoMap.ApplyShadowMap (pOrigemDesenho);
 #endif
-        if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
-            hudUpdate ( 0 );
-        } else {
-            hudUpdate ( eye );
-        }
+//         if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
+//             hudUpdate ( 0 );
+//         } else {
+//             hudUpdate ( eye );
+//         }
     }
 }
 
-void SceneMng::hudUpdate ( int eye ) {
-
-    pVideo->executeViewOrto ( eye );
-
-	root->drawHud(nullptr);
-
-    pVideo->restoreMatrix();
-
-}
+// void SceneMng::hudUpdate ( int eye ) {
+// 
+//     pVideo->executeViewOrto ( eye );
+// 
+// 	root->drawHud(nullptr);
+// 
+//     pVideo->restoreMatrix();
+// 
+// }
 
 //void SceneMng::setLight ( bool _lightOn ) {
 //    if ( _lightOn == true ) {

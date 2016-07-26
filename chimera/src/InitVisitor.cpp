@@ -18,10 +18,10 @@ void InitVisitor::visit ( Camera* _pCamera ) {
     _pCamera->init();  
 }
 
-void InitVisitor::visit ( Draw* _pDraw ) {
+void InitVisitor::visit ( Mesh* _pMesh ) {
 
-    std::cout << "Visit Draw:" << _pDraw->getName() << "\n";
-    _pDraw->init();  
+    std::cout << "Visit Mesh:" << _pMesh->getName() << "\n";
+    _pMesh->init();  
 }
 
 void InitVisitor::visit ( Light* _pLight ) {

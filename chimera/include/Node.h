@@ -5,7 +5,6 @@
 #include <list>
 
 #include "Entity.h"
-#include "DataMsg.h"
 
 namespace Chimera {
     

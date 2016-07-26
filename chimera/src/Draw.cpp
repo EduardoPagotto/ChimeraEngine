@@ -1,5 +1,4 @@
 #include "Draw.h"
-#include "NodeVisitor.h"
 
 namespace Chimera {
 
@@ -16,13 +15,4 @@ Draw::Draw ( const Draw &_draw ) : Node( _draw ) {
 
 Draw::~Draw() {
 }
-
-void Draw::init() {
-
-}
-
-void Draw::accept(NodeVisitor * v) {
-	v->visit(this);
-}
-
 }

@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "ChimeraUtils.h"
+#include "NodeVisitor.h"
 
 namespace Chimera {
     
@@ -45,9 +46,11 @@ void Mesh::init() {
     
     setVertexBuffer();
     
-    Draw::init();
 }
 
+void Mesh::accept(NodeVisitor * v) {
+    v->visit(this);
+}
 
 btVector3 Mesh::getSizeBox() {
     

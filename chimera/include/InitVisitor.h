@@ -11,7 +11,7 @@ public:
     virtual ~InitVisitor();
     
     virtual void visit(class Camera* _pCamera);
-    virtual void visit(class Draw* _pDraw);
+    virtual void visit(class Mesh* _pMesh);
     virtual void visit(class Light *_pLight);
     virtual void visit(class ParticleEmitter *_pParticleEmitter);
     virtual void visit(class SceneRoot *_pSceneRoot);

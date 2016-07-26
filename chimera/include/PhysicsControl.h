@@ -12,6 +12,7 @@
 #include <LinearMath/btVector3.h>
 
 #include "Node.h"
+#include "DataMsg.h"
 
 namespace Chimera {
 

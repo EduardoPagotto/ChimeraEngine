@@ -25,8 +25,11 @@ public:
     virtual ~Mesh();
 	virtual void init();
     virtual void renderExecute ( bool _texture );
+    
     virtual btVector3 getSizeBox();
 
+    void accept(class NodeVisitor* v);
+    
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
 private:

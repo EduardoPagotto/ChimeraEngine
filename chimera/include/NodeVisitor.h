@@ -2,7 +2,7 @@
 #define NODE_VISITOR__H
 
 #include "Camera.h"
-#include "Draw.h"
+#include "Mesh.h"
 #include "Light.h"
 #include "ParticleEmitter.h"
 #include "SceneRoot.h"
@@ -20,7 +20,7 @@ public:
 	NodeVisitor();
 	virtual ~NodeVisitor();
 	virtual void visit(Camera* _pCamera) = 0;
-	virtual void visit(Draw* _pDraw) = 0;
+	virtual void visit(Mesh* _pMesh) = 0;
 	virtual void visit(Light *_pLight) = 0;
 	virtual void visit(ParticleEmitter *_pParticleEmitter) = 0;
 	virtual void visit(SceneRoot *_pSceneRoot) = 0;

@@ -20,9 +20,9 @@ void RenderVisitor::visit ( Camera* _pCamera ) {
 
 }
 
-void RenderVisitor::visit ( Draw* _pDraw ) {
+void RenderVisitor::visit ( Mesh* _pMesh ) {
     
-    _pDraw->renderExecute(textureOn);
+    _pMesh->renderExecute(textureOn);
 
 }
 

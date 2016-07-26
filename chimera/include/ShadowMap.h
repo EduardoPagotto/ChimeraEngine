@@ -15,10 +15,16 @@ public:
     ShadowMap();
     virtual ~ShadowMap();
 
-    void RenderSceneA ( void *pObjeto );
-    void ApplyShadowMap ( void *pObjeto );
+    //void RenderSceneA ( void *pObjeto );
+    //void ApplyShadowMap ( void *pObjeto );
     void StoreLightMatrices ( const btVector3 &posicao );
     void init ( Node *_pScene );
+
+	void initSceneShadow();
+	void endSceneShadow();
+
+	void initApplyShadow();
+	void endApplyShadow();
 
 private:
 

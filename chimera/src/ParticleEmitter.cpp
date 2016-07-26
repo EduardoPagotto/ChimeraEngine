@@ -32,24 +32,6 @@ ParticleEmitter::~ParticleEmitter() {
 
 }
 
-//void ParticleEmitter::initialize ( int _max ) {
-//
-//    particles.reserve ( _max );
-//
-//    // Reset all the particles
-//    for ( int loop = 0; loop < _max; loop++ ) {
-//
-//        int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
-//
-//        btVector3 direcao ( ( float ) ( ( rand() % 50 ) - 26.0f ) * 10.0f,
-//                            ( float ) ( ( rand() % 50 ) - 25.0f ) * 10.0f,
-//                            ( float ) ( ( rand() % 50 ) - 25.0f ) * 10.0f );   // yi e zi repetiam no original
-//
-//        Particle *pParticle = new Particle ( &posSource, direcao, btVector3 ( 0.0, 0.0, 0.0 ), coresPart[indiceCor], 10.0f );
-//        particles.push_back ( pParticle );
-//    }
-//}
-
 void ParticleEmitter::init() {
 	
 	particles.reserve(maxSeed);
@@ -125,18 +107,13 @@ void ParticleEmitter::loadImage ( const char *_file ) {
 
 void ParticleEmitter::renderExecute(bool _texture) {
 
-    glPushMatrix();
-
     glPushAttrib ( GL_ENABLE_BIT );
     glPushAttrib ( GL_CURRENT_BIT );
 
     setGL();
 
-    // Coord *pSource = (Coord * ) _dataMsg->getParam();
-
     // desloca objeto em relacao ao que contem a camera
-    //btVector3 l_vec = pSource->getPosition();
-    glTranslatef ( -l_vec.x(), -l_vec.y(), -l_vec.z() );
+    glTranslatef ( -position.x(), -position.y(), -position.z() );
 
     // armazena a camera para uso no ordenador //TODO: Otimizar criando lista de cameras no Object e indicando qual esta ativa neste momento
     Camera *pCam = (Camera*)Node::findNodeByKind(EntityKind::CAMERA, 0);//FIXME!!!!!! //pSource->findChildByKind ( EntityKind::CAMERA, 0 );
@@ -154,9 +131,7 @@ void ParticleEmitter::renderExecute(bool _texture) {
     
     glPopAttrib();
     glPopAttrib();
-    
-    glPopMatrix();
-    
+       
 }
 
 // estrutura de comparacao
@@ -195,79 +170,4 @@ void ParticleEmitter::SortParticles ( const btVector3 &posCamera ) {
     std::sort ( particles.begin(), particles.end(), comparador );
 
 }
-
-//TODO usar no mouse do rift
-//	void ParticleEmitter::update(DataMsg *_dataMsg) {
-//
-//		if (_dataMsg->getKindOp() == KindOp::START) {
-//
-//			Node::update(_dataMsg);
-//
-//			//inicializa objeto local
-//			initialize(10);
-//
-//		} else if (_dataMsg->getKindOp() == KindOp::DRAW3D) {
-//
-// 			glPushMatrix();
-////
-//// 			if (pPhysic != nullptr) {
-//// 			Object *pSource = (Object *)_dataMsg->getParam();
-//// 			pPhysic->ajusteMatrix(pSource->pPhysic);
-//// 			}
-////
-//			// salva flags de bit
-//			glPushAttrib(GL_ENABLE_BIT);
-//
-//			//preserva a cor original
-//			glPushAttrib(GL_CURRENT_BIT);
-//
-//
-//
-//// 	  float modelview[16];
-//// 	  int i,j;
-////
-//// 	  // save the current modelview matrix
-//// 	  glPushMatrix();
-////
-//// 	  // get the current modelview matrix
-//// 	  glGetFloatv(GL_MODELVIEW_MATRIX , modelview);
-////
-//// 	  // undo all rotations
-//// 	  // beware all scaling is lost as well
-//// 	  for( i=0; i<3; i++ )
-//// 	  for( j=0; j<3; j++ ) {
-//// 	   if ( i==j )
-//// 	   modelview[i*4+j] = 1.0;
-//// 	   else
-//// 	   modelview[i*4+j] = 0.0;
-//// 	 }
-////
-//// 	  // set the modelview with no rotations
-//// 	  glLoadMatrixf(modelview);
-//
-//
-//
-//			setGL();
-//
-// 			render();
-//
-//
-//			//retorna paleta
-//			glPopAttrib();
-//			//retorna paleta
-//			glPopAttrib();
-//
-////
-//// 			Node::update(_dataMsg);
-////
-// 			glPopMatrix();
-//
-//// 	  glPopMatrix();
-//
-//		} else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
-//
-//			//_dataMsg->setDone(true);
-//
-//		}
-//	}
 }

@@ -118,6 +118,12 @@
     <ClCompile Include="..\..\chimera\src\VboIndexer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\chimera\src\InitVisitor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\chimera\src\RenderVisitor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chimera\include\Camera.h">
@@ -259,6 +265,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\VboIndexer.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\InitVisitor.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\RenderVisitor.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

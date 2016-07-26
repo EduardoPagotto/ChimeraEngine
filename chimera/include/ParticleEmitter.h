@@ -40,10 +40,13 @@ public:
 		return maxSeed;
 	}
 
-	btVector3 l_vec;
+	inline void setPosition(const btVector3 &_pos) {
+		position = _pos;
+	}
 
 private:
-    
+	btVector3 position;
+
 	btVector3 posSource;
     btVector3 sizeBox;
     

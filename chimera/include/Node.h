@@ -43,11 +43,11 @@ public:
     Node *findChildByKind ( EntityKind type, int index );
 
 	void setColor(int col) {
-		this->color = &col;
+		color = col;
 	}
 
 	int getColor() {
-		return *(this->color);
+		return color;
 	}
 
 	static Node *findNodeByKind(EntityKind _type, int _index);
@@ -59,11 +59,9 @@ public:
     //static Node *findNodeByName ( std::string name );
 
 private:
+	int color;
 	Node *parent;
 	std::vector<Node*> vChild;
-
-	int* color;
-
     static std::list<Node*> listNode;
 };
 }

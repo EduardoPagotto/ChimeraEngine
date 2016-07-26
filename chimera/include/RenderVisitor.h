@@ -25,6 +25,8 @@ public:
     
     Solid *pOrigemDesenho;
     bool textureOn;
+	bool HudOn;
+	bool particleOn;
     Video *pVideo;
     int eye;
     

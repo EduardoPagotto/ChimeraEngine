@@ -93,6 +93,7 @@
     <ClInclude Include="..\..\chimera\include\Coord.h" />
     <ClInclude Include="..\..\chimera\include\DataMsg.h" />
     <ClInclude Include="..\..\chimera\include\Draw.h" />
+    <ClInclude Include="..\..\chimera\include\InitVisitor.h" />
     <ClInclude Include="..\..\chimera\include\Mesh.h" />
     <ClInclude Include="..\..\chimera\include\Entity.h" />
     <ClInclude Include="..\..\chimera\include\Exception.h" />
@@ -115,6 +116,7 @@
     <ClInclude Include="..\..\chimera\include\OpenGLDefs.h" />
     <ClInclude Include="..\..\chimera\include\Particle.h" />
     <ClInclude Include="..\..\chimera\include\ParticleEmitter.h" />
+    <ClInclude Include="..\..\chimera\include\RenderVisitor.h" />
     <ClInclude Include="..\..\chimera\include\Solid.h" />
     <ClInclude Include="..\..\chimera\include\PhysicsControl.h" />
     <ClInclude Include="..\..\chimera\include\SceneMng.h" />
@@ -141,6 +143,7 @@
     <ClCompile Include="..\..\chimera\src\Constraint.cpp" />
     <ClCompile Include="..\..\chimera\src\Coord.cpp" />
     <ClCompile Include="..\..\chimera\src\Draw.cpp" />
+    <ClCompile Include="..\..\chimera\src\InitVisitor.cpp" />
     <ClCompile Include="..\..\chimera\src\Mesh.cpp" />
     <ClCompile Include="..\..\chimera\src\Entity.cpp" />
     <ClCompile Include="..\..\chimera\src\FlowControl.cpp" />
@@ -157,6 +160,7 @@
     <ClCompile Include="..\..\chimera\src\NodeVisitor.cpp" />
     <ClCompile Include="..\..\chimera\src\Particle.cpp" />
     <ClCompile Include="..\..\chimera\src\ParticleEmitter.cpp" />
+    <ClCompile Include="..\..\chimera\src\RenderVisitor.cpp" />
     <ClCompile Include="..\..\chimera\src\Solid.cpp" />
     <ClCompile Include="..\..\chimera\src\PhysicsControl.cpp" />
     <ClCompile Include="..\..\chimera\src\SceneMng.cpp" />

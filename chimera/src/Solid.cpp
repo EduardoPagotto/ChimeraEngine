@@ -57,42 +57,6 @@ Solid::~Solid() {
     Infra::Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
-void Solid::apply ( Solid* _pSource ) {
-    
-//       glPushMatrix();
-// 
-//       Solid *pSource = (Solid *)_dataMsg->getParam();
-       ajusteMatrix( _pSource );
-// 
-//       Node::update(_dataMsg);
-// 
-//       glPopMatrix();
-    
-}
-
-//  void Solid::update ( DataMsg *_dataMsg ) {
-// 
-// 	 if ((_dataMsg->getKindOp() == KindOp::DRAW) || (_dataMsg->getKindOp() == KindOp::DRAW_NO_TEX)) {
-// 
-// 		 glPushMatrix();
-// 
-// 		 Solid *pSource = (Solid *)_dataMsg->getParam();
-// 		 ajusteMatrix( pSource );
-// 
-// 		 Node::update(_dataMsg);
-// 
-// 		 glPopMatrix();
-// 
-// 	 }
-// 	 else if (_dataMsg->getKindOp() == KindOp::IS_ALLOW_COLLIDE) {
-// 
-// 		 _dataMsg->setDone(true);
-// 		 //Node::update(_dataMsg);
-// 	 }
-// 
-// 
-//  }
-
 void Solid::init() {
 
 	Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::DRAW, 0);
@@ -168,7 +132,7 @@ void Solid::transformacao3D ( void ) {
 
 }
 
-void Solid::ajusteMatrix ( Solid *_pPhysic ) {
+void Solid::apply(Solid *_pPhysic ) { //ajuste matricial
 
     btTransform transLocal;
     btScalar matrix[16];

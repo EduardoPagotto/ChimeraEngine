@@ -11,6 +11,8 @@ Node::Node (Node *_parent, EntityKind _type, std::string _name )
 		parent->vChild.push_back(this);
 
 	listNode.push_back(this);
+
+	setColor(0);
 }
 
 Node::~Node() {

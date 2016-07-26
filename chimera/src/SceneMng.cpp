@@ -126,38 +126,32 @@ void SceneMng::initNodes(Node* u, InitVisitor *pVisit)
     u->accept(pVisit); //entrypoint
     
     std::vector<Node*>* children = u->getChilds();
-    
     if ((children != nullptr)&&(children->size() > 0)) {
         
         for (size_t i = 0; i < children->size(); i++) {
             
             Node* child = children->at(i);
-            if(u->getColor()==0) 
-                initNodes(child, pVisit);
-            
+            if(child->getColor() == 0)
+				initNodes(child, pVisit);
         }
-        
     }
-     
-     u->setColor(0);
+    u->setColor(0);
 }
 
 void SceneMng::DFS(Node* u)
 {
     u->setColor(1);
-    
     glPushMatrix();
     
     u->accept(&rv);
     
     std::vector<Node*>* children = u->getChilds();
-    
     if ((children!=nullptr) && (children->size() >0)){
         
         for (size_t i = 0; i < children->size(); i++) {
             Node* child = children->at(i);
-            if(u->getColor()==0) 
-                DFS(child);
+            if(child->getColor()==0)
+				DFS(child);
         }
     }
     
@@ -174,16 +168,21 @@ void SceneMng::draw () {
         indiceDesenho = 2;
     }
 
+	rv.pVideo = pVideo;
+	rv.textureOn = false;
+	rv.HudOn = false;
+	rv.particleOn = false;
+	rv.pOrigemDesenho = pOrigemDesenho;
+
 #ifdef TESTEZ1
 	btVector3 posicao = root->getState()->getLight()->getPosition();
 	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
-    shadoMap.RenderSceneA (pOrigemDesenho);
+	shadoMap.initSceneShadow();
+	DFS(root);
+	shadoMap.endSceneShadow();
+    //shadoMap.RenderSceneA (pOrigemDesenho);
 #endif
 
-    rv.pVideo = pVideo;
-    rv.textureOn = true;
-    rv.pOrigemDesenho = pOrigemDesenho;
-    
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
 		if (pCameraAtiva != nullptr) {
@@ -192,12 +191,20 @@ void SceneMng::draw () {
 			pCameraAtiva->render();
 		}
 
+		rv.textureOn = true;
+		rv.HudOn = true;
+		rv.particleOn = true;
 		rv.eye = eye;
 		DFS(root);
-        //root->draw(pOrigemDesenho);
-        
+       
 #ifdef TESTEZ1
-        shadoMap.ApplyShadowMap (pOrigemDesenho);
+        //shadoMap.ApplyShadowMap (pOrigemDesenho);
+		rv.textureOn = false;
+		rv.HudOn = false;
+		rv.particleOn = false;
+		shadoMap.initApplyShadow();
+		DFS(root);
+		shadoMap.endApplyShadow();
 #endif
 //         if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
 //             hudUpdate ( 0 );

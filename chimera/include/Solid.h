@@ -77,9 +77,7 @@ public:
 
     //usada na trans cam do mundo
     void transformacao3D();
-
-    //usada na trans da cam objeto
-    void ajusteMatrix ( Solid *_pPhysic );
+    
     void applyForce( const btVector3 &_prop );
     void applyTorc( const btVector3 &_torque );
 
@@ -96,7 +94,6 @@ public:
     void loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName );
 
 private:
-
     void loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName );
 
     btScalar mass;

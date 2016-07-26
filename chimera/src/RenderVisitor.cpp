@@ -4,6 +4,12 @@ namespace Chimera {
    
 RenderVisitor::RenderVisitor() {
 
+	pOrigemDesenho = nullptr;
+	pVideo = nullptr;
+	textureOn = true;
+	HudOn = true;
+	particleOn = true;
+	eye = 0;
 }
   
 RenderVisitor::~RenderVisitor() {
@@ -26,8 +32,10 @@ void RenderVisitor::visit ( Light* _pLight ) {
 
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
     
-    _pParticleEmitter->l_vec = pOrigemDesenho->getPosition();
-    _pParticleEmitter->renderExecute(true);
+	if (particleOn == true) {
+		_pParticleEmitter->setPosition(pOrigemDesenho->getPosition());
+		_pParticleEmitter->renderExecute(true);
+	}
 
 }
 
@@ -59,9 +67,11 @@ void RenderVisitor::visit ( Chimera::Coord* ) {
 
 void RenderVisitor::visit ( HUD* _pHUD ) {
 
-    pVideo->executeViewOrto ( eye );
-    _pHUD->renderExecute(textureOn);
-    pVideo->restoreMatrix(); 
+	if (HudOn == true) {
+		pVideo->executeViewOrto(eye);
+		_pHUD->renderExecute(textureOn);
+		pVideo->restoreMatrix();
+	}
     
 }
 

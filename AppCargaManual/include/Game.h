@@ -1,17 +1,20 @@
 #ifndef GAME_XX_H_
 #define GAME_XX H_
 
-#include "GameClient.h"
+#include "IGameClientEvents.h"
+#include "SceneMng.h"
 #include "CameraSpherical.h"
 #include "ParticleEmitter.h"
 #include "HUD.h"
+#include "PhysicsControl.h"
+#include "DataMsg.h"
 
 /**
  * Class Game
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class Game : public Chimera::GameClient
+class Game : public Chimera::IGameClientEvents
 {
 public:
     Game ( Chimera::SceneMng *_pScenMng );
@@ -28,8 +31,11 @@ public:
     virtual void joystickStatus ( Chimera::JoystickManager &joy );
     virtual void executeColisao ( const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB );
     virtual void newFPS ( const unsigned int &fps );
-
+    virtual void windowEvent(const SDL_WindowEvent &_event );
+    virtual void userEvent ( const SDL_Event &_event );
+    virtual bool paused();
 private:
+    void sendMessage ( Chimera::KindOp _kindOf, void *_paramA, void *_paramB );
     int botaoIndex;
     int estadoBotao;
 
@@ -42,7 +48,11 @@ private:
     Chimera::Solid *pCorpoRigido;
 	Chimera::ParticleEmitter *pEmissor;
     
+    Chimera::SceneMng *pSceneMng;
+    Chimera::PhysicsControl *physicWorld;
     //GLuint programID;
+    
+    bool isPaused;
 };
 
 #endif

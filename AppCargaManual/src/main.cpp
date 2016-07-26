@@ -75,7 +75,7 @@ int testeCargaArquivo() {
 
         Game *game = new Game ( sceneMng );
 
-        Chimera::FlowControl *pControle = new Chimera::FlowControl ( video, game );
+        Chimera::FlowControl *pControle = new Chimera::FlowControl ( game );
         pControle->open();
         pControle->gameLoop();
 
@@ -83,6 +83,7 @@ int testeCargaArquivo() {
         delete game;
         delete sceneMng;
         delete video;
+        
     } catch ( const Chimera::Exception& ex ) {
 
         std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;

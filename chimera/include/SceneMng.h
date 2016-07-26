@@ -55,6 +55,10 @@ public:
 
     void draw ();
 
+    Video* getVideo() {
+        return pVideo;
+    }
+    
 private:
     void DFS(Node* u);
 

@@ -2,20 +2,25 @@
 #include "ExceptionSDL.h"
 #include "Transform.h"
 #include "OpenGLDefs.h"
-
+#include "Singleton.h"
 #include "Shader.h"
 
-Game::Game ( Chimera::SceneMng *_pScenMng ) : GameClient ( _pScenMng ) {
+Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
 
+    isPaused = false;
 	pCorpoRigido = nullptr;
 	pEmissor = nullptr;
 	pOrbitalCam = nullptr;
 
 	textoFPS = "fps: 0";
 	sPosicaoObj = "pos:(,,)";
+    
+    physicWorld = Chimera::Infra::Singleton<Chimera::PhysicsControl>::getRefSingleton();
 }
 
 Game::~Game() {
+    
+    Chimera::Infra::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 }
 
 void Game::joystickCapture ( Chimera::JoystickManager &joy ) {
@@ -138,7 +143,7 @@ void Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
 }
 
 void Game::start() {
-
+    
 //     //http://www.kickjs.org/example/shader_editor/shader_editor.html template para usar
 //     //http://www.lighthouse3d.com/tutorials/glsl-tutorial/attribute-variables/ como carregar
 //     #ifdef WIN32
@@ -148,9 +153,10 @@ void Game::start() {
 //     programID = Chimera::LoadShaders ( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
 //                                         "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl" );
 // # endif
+    pSceneMng->getVideo()->initGL();
+    pSceneMng->init();
     
-    
-    GameClient::start();
+    //GameClient::start();
 
     // Pega o Skybox
 	Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeByName( Chimera::EntityKind::TRANSFORM, "SkyBox" );
@@ -185,7 +191,7 @@ void Game::start() {
 }
 
 void Game::stop() {
-    GameClient::stop();
+   
 }
 
 void Game::newFPS ( const unsigned int &fps ) {
@@ -193,15 +199,70 @@ void Game::newFPS ( const unsigned int &fps ) {
     btVector3 val1 = pCorpoRigido->getPosition();
     sPosicaoObj = "pos:(" + std::to_string ( val1.getX() ) + "," + std::to_string ( val1.getY() ) + "," + std::to_string ( val1.getZ() ) + ")";
 	textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
-
-    GameClient::newFPS ( fps );
 }
 
 void Game::render() {
 
+    physicWorld->stepSim();
+    physicWorld->checkCollisions();
+    
     //glUseProgram ( programID );
     
+    pSceneMng->getVideo()->initDraw();
+    
     pSceneMng->draw ();
+    
+    pSceneMng->getVideo()->endDraw();
+
+}
+
+void Game::userEvent ( const SDL_Event &_event ) {
+
+    Chimera::KindOp op = ( Chimera::KindOp ) _event.user.code;
+    if ( ( op == Chimera::KindOp::START_COLLIDE ) ||
+            ( op == Chimera::KindOp::ON_COLLIDE ) ||
+            ( op == Chimera::KindOp::OFF_COLLIDE ) ) {
+
+        executeColisao ( op, ( Chimera::Node* ) _event.user.data1, ( Chimera::Node* ) _event.user.data2 );
+    } else if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
+        
+        pSceneMng->getVideo()->toggleFullScreen();
+        
+    }
+      
+}
+
+void Game::windowEvent ( const SDL_WindowEvent& _event ) {
+
+    switch ( _event.event ) {
+        case SDL_WINDOWEVENT_ENTER:
+            isPaused = false;
+            break;
+        case SDL_WINDOWEVENT_LEAVE:
+            isPaused = true;
+            break;
+        case SDL_WINDOWEVENT_RESIZED:
+            pSceneMng->getVideo()->reshape ( _event.data1, _event.data2 );
+            break;
+        default:
+            break;
+    }
+}
+
+bool Game::paused() {
+    return isPaused;
+}
+
+
+void Game::sendMessage ( Chimera::KindOp _kindOf, void *_paramA, void *_paramB ) {
+
+    SDL_Event event;
+    SDL_zero ( event );
+    event.type = SDL_USEREVENT;
+    event.user.code = ( int ) _kindOf;
+    event.user.data1 = _paramA;
+    event.user.data2 = _paramB;
+    SDL_PushEvent ( &event );
 
 }
 

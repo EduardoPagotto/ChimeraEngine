@@ -1,11 +1,11 @@
 #include "FlowControl.h"
 #include "ExceptionSDL.h"
 #include "DataMsg.h"
-#include <iostream>
+//#include <iostream>
 
 namespace Chimera {
 
-FlowControl::FlowControl ( Video *_pVideo, IGameClientEvents *_pGameClientEvents ) : pVideo ( _pVideo ), pGameClientEvents ( _pGameClientEvents ) {
+FlowControl::FlowControl ( IGameClientEvents *_pGameClientEvents ) : pGameClientEvents ( _pGameClientEvents ) {
     timerFPS.setElapsedCount ( 1000 );
     timerFPS.start();
 }
@@ -18,9 +18,7 @@ void FlowControl::open() {
 
     joystickManager.Initialize();
     joystickManager.FindJoysticks();
-    std::cout << "Joystick: " << joystickManager.GetStatusManager() << std::endl;
-
-    pVideo->initGL();
+    //std::cout << "Joystick: " << joystickManager.GetStatusManager() << std::endl;
 
     pGameClientEvents->start();
 }
@@ -46,18 +44,9 @@ void FlowControl::countFrame() {
 void FlowControl::processaGame() {
 
 	try {
-
-		pGameClientEvents->beginProcGame();
-
-		countFrame();
-
-		pVideo->initDraw();
-
+        countFrame();
 		pGameClientEvents->render();
-		pVideo->endDraw();
 		pGameClientEvents->joystickStatus(joystickManager);
-
-		pGameClientEvents->endProcGame();
 	}
 	catch ( ... ) {
 		printf("Erro GRavissimo:");
@@ -77,13 +66,7 @@ void FlowControl::gameLoop ( void ) {
 
             switch ( l_eventSDL.type ) {
             case SDL_USEREVENT:
-
-                if ( ( KindOp ) l_eventSDL.user.code == KindOp::VIDEO_TOGGLE_FULL_SCREEN ) {
-                    pVideo->toggleFullScreen();
-                } else {
-                    pGameClientEvents->userEvent ( l_eventSDL );
-                }
-
+                pGameClientEvents->userEvent ( l_eventSDL );
                 break;
             case SDL_KEYDOWN:
                 pGameClientEvents->keyCapture ( l_eventSDL.key.keysym.sym );
@@ -101,21 +84,8 @@ void FlowControl::gameLoop ( void ) {
                 l_quit = true;
                 pGameClientEvents->stop();
                 break;
-            case SDL_WINDOWEVENT: {
-                switch ( l_eventSDL.window.event ) {
-                case SDL_WINDOWEVENT_ENTER:
-                    l_isActive = true;
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    l_isActive = false;
-                    break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    pVideo->reshape ( l_eventSDL.window.data1, l_eventSDL.window.data2 );
-                    break;
-                default:
-                    break;
-                }
-            }
+            case SDL_WINDOWEVENT: 
+                pGameClientEvents->windowEvent(l_eventSDL.window);
             break;
             default:
                 if ( joystickManager.TrackEvent ( &l_eventSDL ) == true ) {
@@ -125,10 +95,10 @@ void FlowControl::gameLoop ( void ) {
             }
         }
 
-        //if (l_isActive==true) {
-        //Se nao houver foco na tela pule o render
-        processaGame();
-        //}
+        if (pGameClientEvents->paused() == false) {
+            //Se nao houver foco na tela pule o render
+            processaGame();
+        }
     }
 }
 }

@@ -14,20 +14,19 @@ namespace Chimera
  */
 enum class EntityKind : int8_t
 {
-    NODE,
+    GROUP,
+    SOLID,
+    TRANSFORM,
     TEXTURE,
     MATERIAL,
     CAMERA,
     LIGHT,
-    OBJECT,
-    PHYSICS,
-    DRAW,
-    CONSTRAINT,
     SKYBOX,
 	SCENEROOT,
-    GROUP,
-	TRANSFORM,
-	HUD
+	CONSTRAINT,
+    HUD,
+    MESH,
+    PARTICLE_SYSTEM,
 };
 
 /**
@@ -82,13 +81,6 @@ public:
     inline void setName ( const std::string& name ) {
         this->name = name;
     }
-
-    /**
-     * Retorna uma string com o nome do tipo
-     * @param _kind tipo
-     * @return nome do tipo
-     */
-    static std::string getNameKindNode ( EntityKind _kind );
 
 private:
     EntityKind kind;

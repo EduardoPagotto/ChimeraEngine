@@ -7,7 +7,7 @@
 
 namespace Chimera {
     
-ParticleEmitter::ParticleEmitter (Node* _parent, std::string _name ) : Draw (_parent, DrawType::PARTICLE_SYSTEM, _name ) {
+ParticleEmitter::ParticleEmitter (Node* _parent, std::string _name ) : Draw (_parent, EntityKind::PARTICLE_SYSTEM, _name ) {
 
     coresPart.push_back ( Color ( 1.0f, 0.5f, 0.5f ) );
     coresPart.push_back ( Color ( 1.0f, 0.75f, 0.5f ) );

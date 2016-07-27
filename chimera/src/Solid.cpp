@@ -6,9 +6,7 @@
 
 namespace Chimera {
     
-Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, _name ) {
-
-	setKind(EntityKind::PHYSICS);
+Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::SOLID, _name ) {
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
@@ -59,7 +57,7 @@ Solid::~Solid() {
 
 void Solid::init() {
 
-	Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::DRAW, 0);
+	Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::MESH, 0);//FIXME melhorar
 
 	if (isShapeDefine() == false)
 		setShapeBox(pDraw->getSizeBox());

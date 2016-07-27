@@ -56,7 +56,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
 		}
 		break;
 	case SDLK_F10:
-		sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+		Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
 		break;
 	case SDLK_F1:
 	case SDLK_UP:

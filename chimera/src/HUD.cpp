@@ -4,9 +4,7 @@
 
 namespace Chimera {
 
-HUD::HUD(Node *_parent, std::string _name) : on ( true ), Draw (_parent, DrawType::HUD, _name) {
-
-	setKind(EntityKind::HUD);
+HUD::HUD(Node *_parent, std::string _name) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
 
 #ifdef TTF_NOVO
     if ( !TTF_WasInit() && TTF_Init() == -1 ) {

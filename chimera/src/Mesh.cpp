@@ -4,7 +4,7 @@
 
 namespace Chimera {
     
-Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, DrawType::MESH, _name ) {
+Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH, _name ) {
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {

@@ -3,14 +3,10 @@
 
 namespace Chimera {
 
-Coord::Coord(Node * _parent, std::string _name) : Group (_parent, _name){
+Coord::Coord(Node* _parent, EntityKind _entity, std::string _name) : Node (_parent, _entity , _name){
 }
 
 Coord::~Coord(){
-}
-
-void Coord::accept(NodeVisitor * v){
-	v->visit(this);
 }
 
 }

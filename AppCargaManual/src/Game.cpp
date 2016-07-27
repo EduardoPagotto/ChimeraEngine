@@ -98,7 +98,7 @@ void Game::keyCapture ( SDL_Keycode tecla ) {
         pHUD->setOn ( !pHUD->isOn() );
         break;
     case SDLK_F10:
-        sendMessage ( Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
+        Chimera::sendMessage ( Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
         break;
     case SDLK_UP:
 		pCorpoRigido->applyForce ( btVector3 ( 10.0, 0.0, 0.0 ) );
@@ -161,7 +161,7 @@ void Game::start() {
     
     // Localiza o Skybox e ajusta iluminacao
 	Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeByName( Chimera::EntityKind::TRANSFORM, "SkyBox" );
-	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChildByKind(Chimera::EntityKind::DRAW, 0);
+	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChildByKind(Chimera::EntityKind::MESH, 0);
 	pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
 	pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
 
@@ -169,13 +169,13 @@ void Game::start() {
     pOrbitalCam = ( Chimera::CameraSpherical* )Chimera::Node::findNodeByName(Chimera::EntityKind::CAMERA, "Camera" ); 
 
     //Localiza objeto como o primario
-	pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeByName( Chimera::EntityKind::PHYSICS, "Zoltan" );
+	pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeByName( Chimera::EntityKind::SOLID, "Zoltan" );
 
 	//Localiza a luz ativa
 	Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeByName(Chimera::EntityKind::LIGHT, "luz01");
 
 	//Localiza o Emissor de particula
-	pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeByName(Chimera::EntityKind::DRAW, "testeZ1");
+	pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeByName(Chimera::EntityKind::PARTICLE_SYSTEM, "testeZ1");
 
     pSceneMng->cameraAtiva ( pOrbitalCam );
     pSceneMng->origemDesenho((Chimera::Coord*) pCorpoRigido);

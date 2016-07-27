@@ -7,9 +7,8 @@
 
 namespace Chimera {
 
-Transform::Transform(Node* _parent, std::string _name) : Coord (_parent, _name) {
+Transform::Transform(Node* _parent, std::string _name) : Coord (_parent, EntityKind::TRANSFORM, _name) {
 
-	this->setKind(EntityKind::TRANSFORM);
 	this->tflag = false;
 	this->rflag = false;
 	this->sflag = false;

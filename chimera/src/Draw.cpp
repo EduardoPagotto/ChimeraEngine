@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Draw::Draw (Node *_parent, DrawType _type, std::string _name ) : Node (_parent, EntityKind::DRAW, _name ), type ( _type ) {
+Draw::Draw (Node *_parent, EntityKind _kind, std::string _name ) : Node (_parent, _kind, _name ) {
     
     pState = new State();
 	pState->setEnableLight(Chimera::LightNum::LIGHTING, true);

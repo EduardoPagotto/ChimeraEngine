@@ -36,6 +36,9 @@ public:
      */
     virtual void accept ( class NodeVisitor* v ) = 0;
 
+    //virtual void begin() = 0;
+    //virtual void end() = 0;
+    
     /**
      * Adiciona um child ao Node atual
      * @param _child Node a ser adicionado a este como filho

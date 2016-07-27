@@ -10,11 +10,10 @@ namespace Chimera {
 class Coord : public Node
 {
 public:
-	Coord(Node* _parent, EntityKind _entity, std::string _name);
-	virtual ~Coord();
+	Coord(Node* _parent, EntityKind _entity, std::string _name) : Node (_parent, _entity , _name){}
+	virtual ~Coord(){}
 	virtual btVector3 getPosition() = 0;
 	virtual void setPosition(const btVector3 &_pos) = 0;
-
 };
 }
 

@@ -33,7 +33,7 @@ endforeach()
 set (SourcesChimeraAPI
 	src/ChimeraUtils.cpp
 	src/Color.cpp
-	src/Entity.cpp
+	#src/Entity.cpp
 	src/Node.cpp
 	src/Light.cpp
 	src/Camera.cpp
@@ -63,11 +63,11 @@ set (SourcesChimeraAPI
 	src/ShadowMap.cpp
 	src/Shader.cpp
 	src/SceneRoot.cpp
-	src/NodeVisitor.cpp
+	#src/NodeVisitor.cpp
 	src/Group.cpp
 	src/State.cpp
 	src/Transform.cpp
-	src/Coord.cpp
+	#src/Coord.cpp
 	src/VboIndexer.cpp
 	src/InitVisitor.cpp
 	src/RenderVisitor.cpp

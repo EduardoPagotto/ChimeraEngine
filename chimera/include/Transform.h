@@ -2,6 +2,7 @@
 #define	__TRANSFORM_H__
 
 #include "Coord.h"
+#include <LinearMath/btTransform.h>
 
 namespace Chimera {
 

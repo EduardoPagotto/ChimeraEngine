@@ -8,20 +8,17 @@ namespace Chimera {
    
 class RenderVisitor : public NodeVisitor {
 public:
-    
     RenderVisitor();
     virtual ~RenderVisitor();
-    
-    virtual void visit(class Camera* _pCamera);
-    virtual void visit(class Mesh* _pMesh);
-    virtual void visit(class Light *_pLight);
-    virtual void visit(class ParticleEmitter *_pParticleEmitter);
-    virtual void visit(class SceneRoot *_pSceneRoot);
-    virtual void visit(class Group* _pGroup);
-    virtual void visit(class Transform* _pTransform);
-    virtual void visit(class Solid* _pSolid);
-    virtual void visit(class Coord* _pCord);
-    virtual void visit(class HUD* _pHUD);
+    virtual void visit(class Camera* _pCamera) override;
+    virtual void visit(class Mesh* _pMesh) override;
+    virtual void visit(class Light *_pLight) override;
+    virtual void visit(class ParticleEmitter *_pParticleEmitter) override;
+    virtual void visit(class SceneRoot *_pSceneRoot) override;
+    virtual void visit(class Group* _pGroup) override;
+    virtual void visit(class Transform* _pTransform) override;
+    virtual void visit(class Solid* _pSolid) override;
+    virtual void visit(class HUD* _pHUD) override;
     
 	bool textureOn;
 	bool HudOn;

@@ -61,10 +61,6 @@ void RenderVisitor::visit ( Solid* _pSolid ) {
 
 }
 
-void RenderVisitor::visit ( Chimera::Coord* ) {
-
-}
-
 void RenderVisitor::visit ( HUD* _pHUD ) {
 
 	if (HudOn == true) {

@@ -64,13 +64,6 @@ void InitVisitor::visit ( Solid* _pSolid ) {
     
 }
 
-void InitVisitor::visit ( Coord* _pCord ) {
-    
-     std::cout << "Visit Coord:" << _pCord->getName() << "\n";
-    //_pCord->init();     
-
-}
-
 void InitVisitor::visit ( HUD* _pHUD ) {
     
     std::cout << "Visit HUD:" << _pHUD->getName() << "\n";

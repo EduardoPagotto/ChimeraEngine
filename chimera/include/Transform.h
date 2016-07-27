@@ -9,16 +9,15 @@ namespace Chimera {
 //FIXME: Mudar para operacao matrix
 class Transform : public Coord {
 public:
-
 	Transform(Node* _parent, std::string _name);
 	virtual ~Transform();
 
-	// Inherited via Group
+	// Inherited via Coord
 	virtual btVector3 getPosition() override;
 	virtual void setPosition(const btVector3 & _pos) override;
 	
-
-	void accept(class NodeVisitor* v);
+    // Inherited via Node
+	void accept(class NodeVisitor* v) override;
 
 	void setTranslate(const btVector3 &_vet);
 	btVector3 getTranslate();
@@ -44,10 +43,6 @@ private:
 	btVector3 translate;
 	btVector3 rotate; 
 	btVector3 scale; 
-
-
 };
 }
-
 #endif	/* TRANSFORM_H */
-

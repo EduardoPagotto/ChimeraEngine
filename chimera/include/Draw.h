@@ -11,6 +11,7 @@ namespace Chimera {
 class Draw : public Node
 {
 public:
+    friend class LoaderDae;
     Draw (Node *_parent, EntityKind _kind, std::string _name );
     Draw ( const Draw &_draw );
     virtual ~Draw();
@@ -21,10 +22,9 @@ public:
         return pState;
     }
     
+protected:
     Texture *pTexture;
     Material *pMaterial;
-protected:
-    
     State *pState;    
 };
 }

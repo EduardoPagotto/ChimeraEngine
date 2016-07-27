@@ -160,22 +160,22 @@ void Game::start() {
     pSceneMng->init();
     
     // Localiza o Skybox e ajusta iluminacao
-	Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeByName( Chimera::EntityKind::TRANSFORM, "SkyBox" );
-	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChildByKind(Chimera::EntityKind::MESH, 0);
+	Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeBySeq( Chimera::EntityKind::TRANSFORM, "SkyBox" );
+	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0);
 	pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
 	pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
 
     //Localiza a camera
-    pOrbitalCam = ( Chimera::CameraSpherical* )Chimera::Node::findNodeByName(Chimera::EntityKind::CAMERA, "Camera" ); 
+    pOrbitalCam = ( Chimera::CameraSpherical* )Chimera::Node::findNodeBySeq(Chimera::EntityKind::CAMERA, "Camera" ); 
 
     //Localiza objeto como o primario
-	pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeByName( Chimera::EntityKind::SOLID, "Zoltan" );
+	pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeBySeq( Chimera::EntityKind::SOLID, "Zoltan" );
 
 	//Localiza a luz ativa
-	Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeByName(Chimera::EntityKind::LIGHT, "luz01");
+	Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::LIGHT, "luz01");
 
 	//Localiza o Emissor de particula
-	pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeByName(Chimera::EntityKind::PARTICLE_SYSTEM, "testeZ1");
+	pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::PARTICLE_SYSTEM, "testeZ1");
 
     pSceneMng->cameraAtiva ( pOrbitalCam );
     pSceneMng->origemDesenho((Chimera::Coord*) pCorpoRigido);
@@ -187,7 +187,7 @@ void Game::start() {
 	pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
 
 	//Localiza o HUD
-	pHUD = (Chimera::HUD*)Chimera::Node::findNodeByName(Chimera::EntityKind::HUD, "HUD-Default");
+	pHUD = (Chimera::HUD*)Chimera::Node::findNodeBySeq(Chimera::EntityKind::HUD, "HUD-Default");
     pHUD->addText ( 0, 0, 255, 0, Chimera::Color::BLUE, &sPosicaoObj );
 	pHUD->addText ( 0, 0, 0, 0, Chimera::Color::RED, &textoFPS );
        

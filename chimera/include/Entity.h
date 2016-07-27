@@ -11,6 +11,7 @@ namespace Chimera
  * Enum EntityKind
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
+ *  @version %I%, %G%
  */
 enum class EntityKind : int8_t
 {
@@ -33,6 +34,7 @@ enum class EntityKind : int8_t
  * Class Entity
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
+ *  @version %I%, %G%
  */
 class Entity
 {

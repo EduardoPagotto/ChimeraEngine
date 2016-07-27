@@ -116,7 +116,7 @@ void ParticleEmitter::renderExecute(bool _texture) {
     glTranslatef ( -position.x(), -position.y(), -position.z() );
 
     // armazena a camera para uso no ordenador //TODO: Otimizar criando lista de cameras no Object e indicando qual esta ativa neste momento
-    Camera *pCam = (Camera*)Node::findNodeByKind(EntityKind::CAMERA, 0);//FIXME!!!!!! //pSource->findChildByKind ( EntityKind::CAMERA, 0 );
+    Camera *pCam = (Camera*)Node::findNodeBySeq(EntityKind::CAMERA, 0);//FIXME!!!!!! //pSource->findChildByKind ( EntityKind::CAMERA, 0 );
     if ( pCam !=  nullptr ) {
         SortParticles ( pCam->getPosition() );
     }

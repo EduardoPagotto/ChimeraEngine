@@ -9,7 +9,6 @@
 #include "Group.h"
 #include "Transform.h"
 #include "Solid.h"
-#include "Coord.h"
 #include "HUD.h"
 
 namespace Chimera {
@@ -27,7 +26,6 @@ public:
     virtual void visit(Group* _pGroup) = 0;
 	virtual void visit(Transform* _pTransform) = 0;
 	virtual void visit(Solid* _pSolid) = 0;
-	virtual void visit(Coord* _pCord) = 0;
 	virtual void visit(HUD* _pHUD) = 0;
 };
 }

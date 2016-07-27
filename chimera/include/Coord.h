@@ -2,7 +2,6 @@
 #define __COORD_H__
 
 #include "Node.h"
-
 #include <LinearMath/btVector3.h>
 
 namespace Chimera {

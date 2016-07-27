@@ -57,7 +57,7 @@ Solid::~Solid() {
 
 void Solid::init() {
 
-	Draw *pDraw = (Draw*)Node::findChildByKind(EntityKind::MESH, 0);//FIXME melhorar
+	Draw *pDraw = (Draw*)Node::findChild(EntityKind::MESH, 0);//FIXME melhorar
 
 	if (isShapeDefine() == false)
 		setShapeBox(pDraw->getSizeBox());

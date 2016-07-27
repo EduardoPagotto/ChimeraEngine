@@ -31,6 +31,7 @@ public:
 
 	virtual void init();
 
+    // Inherited via Node
 	void accept(class NodeVisitor* v);
 
 	virtual btVector3 getPosition() {

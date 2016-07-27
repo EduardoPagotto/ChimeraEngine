@@ -1,14 +1,18 @@
 #ifndef __GAME_SHADER_TEST__H_
 #define __GAME_SHADER_TEST__H_
 
-#include "GameClient.h"
+#include "IGameClientEvents.h"
+#include "DataMsg.h"
+#include "Node.h"
+#include "Video.h"
 
-class Game : public Chimera::GameClient
+class Game : public Chimera::IGameClientEvents
 {
 public:
-	Game(Chimera::SceneMng *_pScenMng);
-	virtual ~Game();
+	Game(Chimera::Video *_pVideo);
 
+	virtual ~Game();
+	// Inherited via IGameClientEvents
 	virtual void start();
 	virtual void stop();
 	virtual void render();
@@ -18,13 +22,21 @@ public:
 	virtual void mouseMotionCapture(SDL_MouseMotionEvent mm);
 	virtual void joystickCapture(Chimera::JoystickManager &joy);
 	virtual void joystickStatus(Chimera::JoystickManager &joy);
-	virtual void executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB);
 	virtual void newFPS(const unsigned int &fps);
+	virtual void userEvent(const SDL_Event & _event) override;
+	virtual void windowEvent(const SDL_WindowEvent & _event) override;
+	virtual bool paused() override;
 
-private :
-    GLuint vertexbuffer;
-    GLuint programID;
-    GLuint VertexArrayID;
+private:
+	Chimera::Video *pVideo;
+	int botaoIndex;
+	int estadoBotao;
+	bool isPaused;
+
+private:
+	GLuint vertexbuffer;
+	GLuint programID;
+	GLuint VertexArrayID;
 };
 
 #endif

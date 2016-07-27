@@ -3,8 +3,10 @@
 
 #include "Transform.h"
 #include "OpenGLDefs.h"
+#include "GameClient.h"
 
-Game::Game(Chimera::SceneMng *_pScenMng) : GameClient(_pScenMng) {
+Game::Game(Chimera::Video *_pVideo) : pVideo(_pVideo) {
+	isPaused = false;
 }
 
 Game::~Game() {
@@ -53,22 +55,15 @@ void Game::keyCapture(SDL_Keycode tecla) {
 			throw Chimera::ExceptionSDL(Chimera::ExceptionCode::CLOSE, std::string(SDL_GetError()));
 		}
 		break;
-	case SDLK_F1:
-		//pHUD->setOn(!pHUD->isOn());
-		break;
 	case SDLK_F10:
 		sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
 		break;
+	case SDLK_F1:
 	case SDLK_UP:
-		break;
 	case SDLK_DOWN:
-		break;
 	case SDLK_LEFT:
-		break;
 	case SDLK_RIGHT:
-		break;
 	case SDLK_a:
-		break;
 	case SDLK_s:
 		break;
 	default:
@@ -98,47 +93,49 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 }
 
 void Game::start() {
-
-	GameClient::start();
-
-	Chimera::Transform *pOrigem = new Chimera::Transform(nullptr, "origem");
-
-	pSceneMng->cameraAtiva(nullptr);
-	pSceneMng->objetoAtivo(pOrigem);
+	pVideo->initGL();
 }
 
-void Game::stop() {
-	GameClient::stop();
+void Game::stop() {	
 }
 
 void Game::newFPS(const unsigned int &fps) {
+}
 
-	GameClient::newFPS(fps);
+void Game::userEvent(const SDL_Event & _event)
+{
+	Chimera::KindOp op = (Chimera::KindOp) _event.user.code;
+	if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
+		pVideo->toggleFullScreen();
+	}
+}
+
+void Game::windowEvent(const SDL_WindowEvent & _event)
+{
+	switch (_event.event) {
+	case SDL_WINDOWEVENT_ENTER:
+		isPaused = false;
+		break;
+	case SDL_WINDOWEVENT_LEAVE:
+		isPaused = true;
+		break;
+	case SDL_WINDOWEVENT_RESIZED:
+		pVideo->reshape(_event.data1, _event.data2);
+		break;
+	default:
+		break;
+	}
+}
+
+bool Game::paused()
+{
+	return isPaused;
 }
 
 void Game::render() {
 
-	pSceneMng->draw();
-}
+	pVideo->initDraw();
+	//TODO desenhar aqui!!
 
-void Game::executeColisao(const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB) {
-
-	std::string l_msg;
-
-	switch (_kindOp) {
-	case Chimera::KindOp::START_COLLIDE:
-		l_msg = " START ";
-		break;
-	case Chimera::KindOp::ON_COLLIDE:
-		l_msg = " ON ";
-		break;
-	case Chimera::KindOp::OFF_COLLIDE:
-		l_msg = " OFF ";
-		break;
-	default:
-		l_msg = " DESCONHECIDO ";
-		break;
-	}
-
-	std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getName() + " ObjB:" + _pNodeB->getName();
+	pVideo->endDraw();
 }

@@ -23,13 +23,13 @@ public:
     virtual void visit(class Coord* _pCord);
     virtual void visit(class HUD* _pHUD);
     
-    Solid *pOrigemDesenho;
-    bool textureOn;
+	bool textureOn;
 	bool HudOn;
 	bool particleOn;
+	int eye;
+    Coord *pCoord;
     Video *pVideo;
-    int eye;
-    
+
 private:
 };    
 }

@@ -29,13 +29,11 @@ public:
     virtual void mouseMotionCapture ( SDL_MouseMotionEvent mm );
     virtual void joystickCapture ( Chimera::JoystickManager &joy );
     virtual void joystickStatus ( Chimera::JoystickManager &joy );
-    virtual void executeColisao ( const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB );
     virtual void newFPS ( const unsigned int &fps );
     virtual void windowEvent(const SDL_WindowEvent &_event );
     virtual void userEvent ( const SDL_Event &_event );
     virtual bool paused();
 private:
-    void sendMessage ( Chimera::KindOp _kindOf, void *_paramA, void *_paramB );
     int botaoIndex;
     int estadoBotao;
 

@@ -30,7 +30,6 @@ public:
 
     void checkCollisions();
     bool checkAllowCollision ( Node *pNode );
-    void sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *_nodeB );
 
     inline void setGravity ( const btVector3 &_vet ) {
         discretDynamicsWorld->setGravity ( _vet );

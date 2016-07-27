@@ -21,12 +21,10 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
         Chimera::Video *video = new Chimera::VideoDevice (800, 600, "teste");
-		Chimera::SceneMng *sceneMng = new Chimera::SceneMng(video);
-		Chimera::Group* group1 = sceneMng->createSceneGraph();
 
-        Game *game = new Game(sceneMng);
+        Game *game = new Game(video);
 
-		Chimera::FlowControl *pControle = new Chimera::FlowControl(video, game);
+		Chimera::FlowControl *pControle = new Chimera::FlowControl( game );
 		pControle->open();
 		pControle->gameLoop();
 

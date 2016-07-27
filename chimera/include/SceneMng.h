@@ -5,14 +5,12 @@
 
 #include "Video.h"
 #include "Camera.h"
-#include "Light.h"
+//#include "Light.h"
 #include "ParticleEmitter.h"
 
 #include "ShadowMap.h"
 #include "SceneRoot.h"
 #include "LoaderDae.h"
-
-#include "Coord.h"
 
 #include "InitVisitor.h"
 #include "RenderVisitor.h"
@@ -31,52 +29,38 @@ public:
     SceneMng ( Video *_pVideo );
     virtual ~SceneMng();
 
-    Node *getNode ( EntityKind _type, const std::string &_nome );
-    Node *getNode ( EntityKind _type, unsigned index );
-
-    void initNodes(Node* u, InitVisitor *pVisit);
     void init();
-    
+	void draw();
     void setReader( LoaderDae *_pLoader );
-    
     Group* createSceneGraph();
     
     inline void cameraAtiva ( Camera *_pCam ) {
         pCameraAtiva = _pCam;
     }
 
-    inline void objetoAtivo ( Solid *_pObject ) {
-		pOrigemDesenho = _pObject;
+    inline void origemDesenho (Coord *_pCoord ) {
+		pOrigem = _pCoord;
     }
 
 	SceneRoot *getRoot() {
 		return root;
 	}
 
-    void draw ();
-
     Video* getVideo() {
         return pVideo;
     }
     
 private:
+	void initNodes(Node* u, InitVisitor *pVisit);
     void DFS(Node* u);
 
-    void parseEntity ( Node *_pNode );
-    void addEntityToScene ( Node *_pNode );
-
     LoaderDae *pLoader;
-    
     SceneRoot *root;
     Camera *pCameraAtiva;
-	Solid *pOrigemDesenho;
-
-    std::vector<Camera*> m_vCamera;
-    std::vector<Light*> m_vLight;
-
-    ShadowMap shadoMap;
+	Coord *pOrigem;
     Video *pVideo;
     
+	ShadowMap shadoMap;
     RenderVisitor rv;
 };
 

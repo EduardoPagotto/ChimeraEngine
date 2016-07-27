@@ -22,8 +22,6 @@ public:
     virtual void newFPS ( const unsigned int &fps ) = 0;
     virtual void windowEvent(const SDL_WindowEvent &_event ) = 0;
     virtual bool paused() = 0;
-    //virtual void beginProcGame() = 0;
-    //virtual void endProcGame() = 0;
 };
 
 

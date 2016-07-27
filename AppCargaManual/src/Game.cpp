@@ -5,6 +5,8 @@
 #include "Singleton.h"
 #include "Shader.h"
 
+#include "GameClient.h"
+
 Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
 
     isPaused = false;
@@ -153,31 +155,30 @@ void Game::start() {
 //     programID = Chimera::LoadShaders ( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
 //                                         "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl" );
 // # endif
+
     pSceneMng->getVideo()->initGL();
     pSceneMng->init();
     
-    //GameClient::start();
-
-    // Pega o Skybox
+    // Localiza o Skybox e ajusta iluminacao
 	Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeByName( Chimera::EntityKind::TRANSFORM, "SkyBox" );
 	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChildByKind(Chimera::EntityKind::DRAW, 0);
 	pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
 	pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
 
-	pHUD = (Chimera::HUD*)Chimera::Node::findNodeByName(Chimera::EntityKind::HUD, "HUD-Default");
+    //Localiza a camera
+    pOrbitalCam = ( Chimera::CameraSpherical* )Chimera::Node::findNodeByName(Chimera::EntityKind::CAMERA, "Camera" ); 
 
-    //Pega primeira camera
-    pOrbitalCam = ( Chimera::CameraSpherical* ) pSceneMng->getNode ( Chimera::EntityKind::CAMERA, 0 );
-
-    //Ajusta objeto como o primario
+    //Localiza objeto como o primario
 	pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeByName( Chimera::EntityKind::PHYSICS, "Zoltan" );
 
-	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->getNode(Chimera::EntityKind::LIGHT, 0);
+	//Localiza a luz ativa
+	Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeByName(Chimera::EntityKind::LIGHT, "luz01");
 
+	//Localiza o Emissor de particula
 	pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeByName(Chimera::EntityKind::DRAW, "testeZ1");
 
     pSceneMng->cameraAtiva ( pOrbitalCam );
-    pSceneMng->objetoAtivo (pCorpoRigido);
+    pSceneMng->origemDesenho((Chimera::Coord*) pCorpoRigido);
 
 	//ajusta scene root com luz e material ativo
 	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
@@ -185,13 +186,14 @@ void Game::start() {
 	pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
 	pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
 
+	//Localiza o HUD
+	pHUD = (Chimera::HUD*)Chimera::Node::findNodeByName(Chimera::EntityKind::HUD, "HUD-Default");
     pHUD->addText ( 0, 0, 255, 0, Chimera::Color::BLUE, &sPosicaoObj );
 	pHUD->addText ( 0, 0, 0, 0, Chimera::Color::RED, &textoFPS );
        
 }
 
-void Game::stop() {
-   
+void Game::stop() { 
 }
 
 void Game::newFPS ( const unsigned int &fps ) {
@@ -209,9 +211,7 @@ void Game::render() {
     //glUseProgram ( programID );
     
     pSceneMng->getVideo()->initDraw();
-    
     pSceneMng->draw ();
-    
     pSceneMng->getVideo()->endDraw();
 
 }
@@ -219,17 +219,43 @@ void Game::render() {
 void Game::userEvent ( const SDL_Event &_event ) {
 
     Chimera::KindOp op = ( Chimera::KindOp ) _event.user.code;
-    if ( ( op == Chimera::KindOp::START_COLLIDE ) ||
-            ( op == Chimera::KindOp::ON_COLLIDE ) ||
-            ( op == Chimera::KindOp::OFF_COLLIDE ) ) {
+	Chimera::Node* n1 = (Chimera::Node*) _event.user.data1;
+	Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
 
-        executeColisao ( op, ( Chimera::Node* ) _event.user.data1, ( Chimera::Node* ) _event.user.data2 );
-    } else if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
-        
-        pSceneMng->getVideo()->toggleFullScreen();
-        
-    }
-      
+	std::string l_msg = "";
+		
+	switch ( op ) {
+		case Chimera::KindOp::START_COLLIDE:
+			{
+				Chimera::Node* n1 = (Chimera::Node*) _event.user.data1;
+				Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
+				l_msg = "Colisao START:" + l_msg + " A:" + n1->getName() + " B:" + n2->getName();
+			}
+			break;
+		case Chimera::KindOp::ON_COLLIDE:
+			{
+				Chimera::Node* n1 = (Chimera::Node*) _event.user.data1;
+				Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
+				l_msg = "Colisao ON:" + l_msg + " A:" + n1->getName() + " B:" + n2->getName();
+			}
+			break;
+		case Chimera::KindOp::OFF_COLLIDE:
+			{
+				Chimera::Node* n1 = (Chimera::Node*) _event.user.data1;
+				Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
+				l_msg = "Colisao OFF:" + l_msg + " A:" + n1->getName() + " B:" + n2->getName();
+			}
+			break;
+		case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
+			pSceneMng->getVideo()->toggleFullScreen();
+			break;
+		default:
+			break;
+	}
+		
+	if (l_msg.length() > 0) {
+		printf("%s\n", l_msg.c_str());
+	}
 }
 
 void Game::windowEvent ( const SDL_WindowEvent& _event ) {
@@ -251,39 +277,4 @@ void Game::windowEvent ( const SDL_WindowEvent& _event ) {
 
 bool Game::paused() {
     return isPaused;
-}
-
-
-void Game::sendMessage ( Chimera::KindOp _kindOf, void *_paramA, void *_paramB ) {
-
-    SDL_Event event;
-    SDL_zero ( event );
-    event.type = SDL_USEREVENT;
-    event.user.code = ( int ) _kindOf;
-    event.user.data1 = _paramA;
-    event.user.data2 = _paramB;
-    SDL_PushEvent ( &event );
-
-}
-
-void Game::executeColisao ( const Chimera::KindOp &_kindOp, Chimera::Node *_pNodeA, Chimera::Node *_pNodeB ) {
-
-    std::string l_msg;
-
-    switch ( _kindOp ) {
-    case Chimera::KindOp::START_COLLIDE:
-        l_msg = " START ";
-        break;
-    case Chimera::KindOp::ON_COLLIDE:
-        l_msg = " ON ";
-        break;
-    case Chimera::KindOp::OFF_COLLIDE:
-        l_msg = " OFF ";
-        break;
-    default:
-        l_msg = " DESCONHECIDO ";
-        break;
-    }
-
-    std::string l_completa = "Colisao cod:" + l_msg + "ObjA:" + _pNodeA->getName() + " ObjB:" + _pNodeB->getName();
 }

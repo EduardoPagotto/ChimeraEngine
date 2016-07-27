@@ -8,6 +8,7 @@
 #endif
 
 #include "ChimeraUtils.h"
+#include "GameClient.h"
 
 namespace Chimera {
     
@@ -122,18 +123,6 @@ bool PhysicsControl::checkAllowCollision ( Node *pNode ) {
     return true;
 }
 
-void PhysicsControl::sendMessageCollision ( KindOp _kindOf, Node *_nodeA, Node *_nodeB ) {
-
-    SDL_Event event;
-    SDL_zero ( event );
-    event.type = SDL_USEREVENT;
-    event.user.code = ( int ) _kindOf;
-    event.user.data1 = _nodeA;
-    event.user.data2 = _nodeB;
-    SDL_PushEvent ( &event );
-
-}
-
 void PhysicsControl::checkCollisions() {
 
     std::map< btCollisionObject*, std::pair<Node*, Node*> > new_contacts;
@@ -191,7 +180,7 @@ void PhysicsControl::checkCollisions() {
             if ( contactActives.find ( ( *it ).first ) == contactActives.end() ) {
 
                 if ( checkAllowCollision ( ( *it ).second.first ) == true ) {
-                    sendMessageCollision ( KindOp::START_COLLIDE, ( *it ).second.first, ( *it ).second.second );
+                    sendMessage ( KindOp::START_COLLIDE, ( *it ).second.first, ( *it ).second.second );
                 }
 
             } else {
@@ -209,7 +198,7 @@ void PhysicsControl::checkCollisions() {
             if ( new_contacts.find ( ( *it ).first ) == new_contacts.end() ) {
 
                 if ( checkAllowCollision ( ( *it ).second.first ) == true ) {
-                    sendMessageCollision ( KindOp::OFF_COLLIDE, ( *it ).second.first, ( *it ).second.second );
+                    sendMessage ( KindOp::OFF_COLLIDE, ( *it ).second.first, ( *it ).second.second );
                 }
 
             }

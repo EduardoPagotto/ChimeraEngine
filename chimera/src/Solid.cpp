@@ -132,7 +132,7 @@ void Solid::transformacao3D ( void ) {
 
 }
 
-void Solid::apply(Solid *_pPhysic ) { //ajuste matricial
+void Solid::apply(Coord *_pCoord ) { //ajuste matricial
 
     btTransform transLocal;
     btScalar matrix[16];
@@ -142,7 +142,7 @@ void Solid::apply(Solid *_pPhysic ) { //ajuste matricial
     transLocal.getOpenGLMatrix ( matrix );
 
     //pega posicao do objeto horigem de desenho (camera travada)
-    btVector3 l_vec = _pPhysic->pRigidBody->getWorldTransform().getOrigin();
+	btVector3 l_vec = _pCoord->getPosition();
 
     //desloca desenha para o pbjeto horigem
     matrix[12] -= l_vec.getX();

@@ -27,7 +27,7 @@ public:
 
     virtual ~Solid();
 
-    virtual void apply(Solid *_pSource);
+    virtual void apply(Coord *_pCoord);
 
 	virtual void init();
 

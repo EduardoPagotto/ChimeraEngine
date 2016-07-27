@@ -1,13 +1,12 @@
 #include "SceneMng.h"
 
-
 namespace Chimera {
 
 SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
 
     root = new SceneRoot(nullptr,"root");
     pCameraAtiva = nullptr;
-	pOrigemDesenho = nullptr;
+	pOrigem = nullptr;
     pLoader = nullptr;
 }
 
@@ -22,93 +21,14 @@ void SceneMng::setReader ( LoaderDae* _pLoader ) {
 Group *SceneMng::createSceneGraph() {
    
 	Group *pGroup = nullptr;
-	if (pLoader!= nullptr)
+	if (pLoader != nullptr)
 		pGroup = pLoader->getNodes();
 	else
 		pGroup = new Group(nullptr, "Default");
 
     root->addChild(pGroup);
-    parseEntity(pGroup);
     
     return pGroup;
-}
-
-void SceneMng::parseEntity ( Node *_pNode ) {
-
-    addEntityToScene ( _pNode );
-
-	std::vector<Node*>* vList  = _pNode->getChilds();
-
-	if (vList != nullptr) {
-		for (int indice = 0; indice < vList->size(); indice++) {
-
-			Node* pNode = vList->at(indice);
-			parseEntity(pNode);
-		}
-	}
-}
-
-void SceneMng::addEntityToScene ( Node *_pNode ) {
-
-    switch ( _pNode->getKind() ) {
-    case EntityKind::CAMERA:
-        m_vCamera.push_back ( ( Camera* ) _pNode );
-        break;
-    case EntityKind::LIGHT:
-        m_vLight.push_back ( ( Light* ) _pNode );
-        break;
-    default:
-        break;
-    }
-
-}
-
-Node *SceneMng::getNode ( EntityKind _type, const std::string &_nome ) {
-
-    Node *retorno = nullptr;
-
-    switch ( _type ) {
-    case EntityKind::CAMERA:
-        for ( Node *node : m_vCamera ) {
-            if ( node->getName().compare ( _nome ) == 0 ) {
-                return node;
-            }
-        }
-        break;
-    case EntityKind::LIGHT:
-        for ( Node *node : m_vLight ) {
-            if ( node->getName().compare ( _nome ) == 0 ) {
-                return node;
-            }
-        }
-        break;
-    default:
-        break;
-    }
-
-    return nullptr;
-}
-
-Node *SceneMng::getNode ( EntityKind _type, unsigned index ) {
-
-    Node *retorno = nullptr;
-
-    switch ( _type ) {
-    case EntityKind::CAMERA:
-        if ( m_vCamera.size() > index ) {
-            retorno = m_vCamera[index];
-        }
-        break;
-    case EntityKind::LIGHT:
-        if ( m_vLight.size() > index ) {
-            retorno = m_vLight[index];
-        }
-        break;
-    default:
-        break;
-    }
-
-    return retorno;
 }
 
 void SceneMng::init() {
@@ -172,7 +92,7 @@ void SceneMng::draw () {
 	rv.textureOn = false;
 	rv.HudOn = false;
 	rv.particleOn = false;
-	rv.pOrigemDesenho = pOrigemDesenho;
+	rv.pCoord = pOrigem;
 
 #ifdef TESTEZ1
 	btVector3 posicao = root->getState()->getLight()->getPosition();
@@ -195,6 +115,7 @@ void SceneMng::draw () {
 		rv.HudOn = true;
 		rv.particleOn = true;
 		rv.eye = eye;
+
 		DFS(root);
        
 #ifdef TESTEZ1
@@ -206,42 +127,7 @@ void SceneMng::draw () {
 		DFS(root);
 		shadoMap.endApplyShadow();
 #endif
-//         if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
-//             hudUpdate ( 0 );
-//         } else {
-//             hudUpdate ( eye );
-//         }
     }
 }
-
-// void SceneMng::hudUpdate ( int eye ) {
-// 
-//     pVideo->executeViewOrto ( eye );
-// 
-// 	root->drawHud(nullptr);
-// 
-//     pVideo->restoreMatrix();
-// 
-// }
-
-//void SceneMng::setLight ( bool _lightOn ) {
-//    if ( _lightOn == true ) {
-//        glEnable ( GL_LIGHTING );
-//    } else {
-//        glDisable ( GL_LIGHTING );
-//    }
-//}
-//
-//void SceneMng::setMaterial ( bool _materialOn ) {
-//
-//    if (_materialOn == true) {
-//    	glDisable(GL_COLOR_MATERIAL);
-//    	glColorMaterial ( GL_FRONT, GL_DIFFUSE ); //TODO verificar necessidade
-//    }
-//    else {
-//    	glEnable(GL_COLOR_MATERIAL);
-//    	glColorMaterial(GL_FRONT, GL_DIFFUSE);  //TODO verificar necessidade
-//    }
-//}
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

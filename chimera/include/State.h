@@ -22,6 +22,8 @@ public:
      void setEnableTexture(Texture* t,bool flag);
      void setEnableLighting(Light* l,bool flag);
      
+     void setEnableStateMachine(StateMachine _state, bool _flag);
+     
      void appyMaterial();
      void appyTexture();
      void appyLighting();
@@ -42,6 +44,10 @@ public:
 //      }
 	 
 private:
+     void setStateMachine(StateMachine _state, bool _flag) ;
+     void setEnable(GLenum face,bool flag);
+     void setEnableClient(GLenum face,bool flag);
+    
      std::map<LightNum, bool> map_light;
      std::map<PolygonMode, FaceMaterial> map_polygonmode;
      std::map<CullFace,bool> map_cullface;
@@ -51,9 +57,8 @@ private:
      std::map<Texture*,bool> map_texture;
      std::map<Light*,bool> map_lighting;
  
-     void setEnable(GLenum face,bool flag);
-     void setEnableClient(GLenum face,bool flag);
-     
+     std::map<StateMachine,bool> map_stateMachine;
+          
      Material* m;
      Texture* t;
      Light* l;

@@ -132,14 +132,14 @@ void Video::initGL() {
 
     //TODO retirar daqui e colocar na inicializacao do sceneMng
     //estado inicial do openGL
-    glEnable ( GL_TEXTURE_2D );
-    glShadeModel ( GL_SMOOTH );
-    glClearDepth ( 1.0f );
-    glEnable ( GL_DEPTH_TEST );
-    glEnable ( GL_CULL_FACE );
-    glDepthFunc ( GL_LEQUAL );
-    glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
-    glEnable ( GL_LIGHTING );
+//     glEnable ( GL_TEXTURE_2D );
+//     glShadeModel ( GL_SMOOTH );
+//     glClearDepth ( 1.0f );
+//     glEnable ( GL_DEPTH_TEST );
+//     glEnable ( GL_CULL_FACE );
+//     glDepthFunc ( GL_LEQUAL );
+//     glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+//     glEnable ( GL_LIGHTING );
 
 
 }

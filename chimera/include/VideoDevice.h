@@ -15,6 +15,10 @@ public:
     virtual void initDraw();
     virtual void endDraw();
     virtual void executeViewPerspective ( const float &_fov,const float &_near,const float &_far, int _eye );
+    
+    //TODO subistituir o executeViewPerspective
+    virtual void perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear, GLdouble zFar );
+    
     virtual void executeViewOrto ( int eye );
     virtual void reshape ( int _w, int _h );
     virtual void toggleFullScreen();

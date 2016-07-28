@@ -15,7 +15,7 @@ void SceneRoot::accept(NodeVisitor* v) {
 }
 
 void SceneRoot::init() {
- 
+     
 }
 
 void SceneRoot::apply() {

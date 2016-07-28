@@ -38,10 +38,11 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         Group* group1 = sceneMng->createSceneGraph();
         
         Transform* pTrans = new Transform(group1,"trans01");
+        pTrans->setPosition( btVector3(0.0, 0.0, 0.0) );
         
         Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
         
-        Mesh *pMesh = Mesh::createMeshParallelepiped(pTrans, "Cubo-01",glm::vec3(600,600,600),nullptr, nullptr);
+        Mesh *pMesh = Mesh::createMeshParallelepiped(pTrans, "Cubo-01",glm::vec3(50,50,50),pTex, nullptr);
         
         Game *game = new Game(sceneMng);
 

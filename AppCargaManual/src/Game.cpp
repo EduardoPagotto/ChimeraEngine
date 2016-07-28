@@ -174,8 +174,17 @@ void Game::start() {
 	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
 	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0, true);
 	pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
+    
 	pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
-
+    pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::TEXTURE_2D, true);
+    pSceneMng->getRoot()->getState()->setEnableSmooth(true);
+    pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::DEPTH_TEST, true);
+    pSceneMng->getRoot()->getState()->setEnableCullFace(Chimera::CullFace::CULL_FACE, true);
+            
+    glClearDepth ( 1.0f );
+    glDepthFunc ( GL_LEQUAL );
+    glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+    
 	//Localiza o HUD
 	pHUD = (Chimera::HUD*)Chimera::Node::findNodeBySeq(Chimera::EntityKind::HUD, "HUD-Default");
     pHUD->addText ( 0, 0, 255, 0, Chimera::Color::BLUE, &sPosicaoObj );

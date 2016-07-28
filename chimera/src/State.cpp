@@ -84,9 +84,25 @@ void State::setEnableLighting(Light* l,bool flag) {
     this->map_lighting[l]=flag;
 }
 
+void State::setEnableStateMachine(StateMachine _state, bool _flag) {
+ 
+    this->map_stateMachine[_state] = _flag;
+}
+
+void State::setStateMachine(StateMachine _state, bool _flag) {
+    
+    if (_flag) 
+        glEnable(_state);
+    else
+        glDisable(_state);
+}
+
 void State::apply() {
 
     using namespace std;
+    
+    for(map<StateMachine,bool>::iterator iter = this->map_stateMachine.begin(); iter != map_stateMachine.end(); ++iter)
+        setStateMachine(iter->first, iter->second);
     
     for(map<LightNum,bool>::iterator iter = this->map_light.begin(); iter != this->map_light.end(); ++iter)
 		setEnable(iter->first, iter->second);
@@ -123,7 +139,7 @@ void State::appyMaterial() {
 
 void State::appyTexture(){
  
-    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);//FIXME preciso??????
  
     using namespace std;
     
@@ -176,9 +192,6 @@ void State::appyLighting(){
 		if(flag) {
 
 			k->apply(LIGHT0);
-				//k->applyLightColor(GL_LIGHT0, GL_AMBIENT);
-				//k->applyLightColor(GL_LIGHT0, GL_SPECULAR);    
-				//k->applyLightPosition(GL_LIGHT0,1);
 		}
     }
 }

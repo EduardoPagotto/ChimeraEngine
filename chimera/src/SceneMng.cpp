@@ -90,12 +90,14 @@ void SceneMng::draw () {
     }
 
 	rv.pVideo = pVideo;
-	rv.textureOn = false;
-	rv.HudOn = false;
-	rv.particleOn = false;
-	rv.pCoord = pOrigem;
-
+    rv.pCoord = pOrigem;
+    
 #ifdef TESTEZ1
+    
+    rv.textureOn = false;
+    rv.HudOn = false;
+    rv.particleOn = false;
+    
 	btVector3 posicao = root->getState()->getLight()->getPosition();
 	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
 	shadoMap.initSceneShadow();
@@ -110,7 +112,10 @@ void SceneMng::draw () {
 
 			pVideo->executeViewPerspective(pCameraAtiva->getFov(), pCameraAtiva->getNear(), pCameraAtiva->getFar(), eye);
 			pCameraAtiva->render();
-		}
+		} else {
+            
+            pVideo->executeViewPerspective(45.0, 0.5, 10000.0, eye);
+        }
 
 		rv.textureOn = true;
 		rv.HudOn = true;

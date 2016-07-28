@@ -9,17 +9,22 @@
 
 #include <GL/gl.h>
 
-
-
 namespace Chimera {
+        
     
-enum class FaceMaterial{
+enum StateMachine {
+    TEXTURE_2D = GL_TEXTURE_2D,
+    DEPTH_TEST = GL_DEPTH_TEST,
+    BLEND = GL_BLEND
+};    
+    
+enum FaceMaterial{
     FRONT=GL_FRONT,
     BACK=GL_BACK,
     FRONT_BACK=GL_FRONT_AND_BACK
 }; 
 
-enum class ModeMaterial {
+enum ModeMaterial {
     AMBIENT=GL_AMBIENT,
     DIFFUSE=GL_DIFFUSE,
     EMISSION=GL_EMISSION,

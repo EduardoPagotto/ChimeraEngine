@@ -41,7 +41,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         
         Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
         
-        Mesh *pMesh = Mesh::createMeshParallelepiped(pTrans, "Cubo-01",glm::vec3(600,600,600),pTex, nullptr);
+        Mesh *pMesh = Mesh::createMeshParallelepiped(pTrans, "Cubo-01",glm::vec3(600,600,600),nullptr, nullptr);
         
         Game *game = new Game(sceneMng);
 

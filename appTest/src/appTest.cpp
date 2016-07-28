@@ -5,13 +5,10 @@
 #endif
 
 #include <iostream>
-
 #include "VideoDevice.h"
-#include "OvrDevice.h"
 #include "Game.h"
-#include "DrawBox.h"
-#include "DrawGrid.h"
-#include "Loader.h"
+#include "FlowControl.h"
+#include "ExceptionChimera.h"
 
 #ifndef WIN32
 int main ( int argn, char** argv ) {
@@ -23,40 +20,28 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Chimera::Video *video = new Chimera::VideoDevice ( 800, 640, "teste" );
+        Chimera::Video *video = new Chimera::VideoDevice (640, 480, "teste");
 
-        //Carga de dados
-        Chimera::Loader *pLoader = new Chimera::Loader();
-#ifdef WIN32
-        pLoader->setModelDir ( "C:\\Projetos\\ChimeraEngine\\appTest\\models\\" );
-        pLoader->setImageDir ( "C:\\Projetos\\ChimeraEngine\\appTest\\models\\" );
-#else
-        pLoader->setModelDir ( "../../appTest/models/" );
-        pLoader->setImageDir ( "../../appTest/models/" );
-#endif
-        //Chimera::Node *pRoot = pLoader->loadDAE("cuboTex1.dae");//cuboEesfera.dae
-        Chimera::Node *pRoot = pLoader->loadDAE ( "cuboEesfera.dae" );
-        //Chimera::Node *pRoot = pLoader->loadDAE("testeMaterial.dae");
-        //Chimera::Node *pRoot = pLoader->loadDAE("zoltan.dae");
+        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
+        //sceneMng->setReader(pLoader);
+        Chimera::Group* group1 = sceneMng->createSceneGraph();
+        
+        
+        Game *game = new Game(sceneMng);
 
-        delete pLoader;
-        pLoader = nullptr;
+        Chimera::FlowControl *pControle = new Chimera::FlowControl( game );
+        pControle->open();
+        pControle->gameLoop();
 
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( pRoot );
-
-        Game *game = new Game ( video, sceneMng );
-        game->open();
-
-        game->gameLoop();
-
+        delete pControle;
         delete game;
-        delete sceneMng;
-        delete pRoot;
         delete video;
+
     } catch ( const Chimera::Exception& ex ) {
 
+        std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
+        return -1;
     }
 
     return 0;
 }
-

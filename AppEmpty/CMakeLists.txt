@@ -18,6 +18,7 @@ include_directories(
 	${FTGL_INCLUDE_DIR}
 #	${LOG4CXX_INCLUDE_DIR}
 )
+
 add_executable(
 	AppEmpty
 	src/Game.cpp

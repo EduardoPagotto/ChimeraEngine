@@ -10,26 +10,42 @@
 #include "FlowControl.h"
 #include "ExceptionChimera.h"
 
+#include "Transform.h"
+
 #ifndef WIN32
 int main ( int argn, char** argv ) {
 #else
 int _tmain ( int argc, _TCHAR* argv[] ) {
 #endif
 
+    using namespace Chimera;
+    
     try {
 
+#ifdef WIN32
+        std::string dirDados = "C:\\Projetos\\ChimeraEngine\\appTest\\models";
+#else
+        std::string dirDados = "../../appTest/models";
+#endif
+        
+        
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Chimera::Video *video = new Chimera::VideoDevice (640, 480, "teste");
+        Video *video = new VideoDevice (640, 480, "teste");
 
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
+        SceneMng *sceneMng = new SceneMng ( video );
         //sceneMng->setReader(pLoader);
-        Chimera::Group* group1 = sceneMng->createSceneGraph();
+        Group* group1 = sceneMng->createSceneGraph();
         
+        Transform* pTrans = new Transform(group1,"trans01");
+        
+        Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
+        
+        Mesh *pMesh = Mesh::createMeshParallelepiped(pTrans, "Cubo-01",glm::vec3(600,600,600),pTex, nullptr);
         
         Game *game = new Game(sceneMng);
 
-        Chimera::FlowControl *pControle = new Chimera::FlowControl( game );
+        FlowControl *pControle = new FlowControl( game );
         pControle->open();
         pControle->gameLoop();
 
@@ -37,7 +53,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         delete game;
         delete video;
 
-    } catch ( const Chimera::Exception& ex ) {
+    } catch ( const Exception& ex ) {
 
         std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;

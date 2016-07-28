@@ -22,6 +22,14 @@ public:
         return pState;
     }
     
+    void setTexture(Texture *_pTex) {
+        pTexture = _pTex;
+    }
+    
+    void setMaterial(Material *_pMat) {
+        pMaterial = _pMat;
+    }
+    
 protected:
     Texture *pTexture;
     Material *pMaterial;

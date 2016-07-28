@@ -34,6 +34,8 @@ public:
 
 	GLuint programID;
 
+    static Mesh* createMeshParallelepiped(Node *_pParent, const std::string &_name, const glm::vec3 &_size, Texture* _pTexture, Material *_pMaterial); 
+    
 private:
     void setVertexBuffer();   
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );

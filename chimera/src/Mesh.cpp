@@ -5,16 +5,26 @@
 namespace Chimera {
     
 Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH, _name ) {
+    VertexVBOID = 0;
+    IndexVBOID = 0;
+    VAO = 0;
+    positionID = 0;
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
-//     vList.set ( _cpy.vList );
-//     nList.set ( _cpy.nList );
-//     uvList.set ( _cpy.uvList );
-// 
-//     vIndex.set ( _cpy.vIndex );
-//     nIndex.set ( _cpy.nIndex );
-//     tIndex.set ( _cpy.tIndex );
+        
+  vertexIndex.reserve(_cpy.vertexIndex.size());
+  copy(_cpy.vertexIndex.begin(), _cpy.vertexIndex.end(), back_inserter(vertexIndex));
+  copy(_cpy.vertexList.begin(), _cpy.vertexList.end(), back_inserter(vertexList));
+  
+  normalIndex.reserve(_cpy.normalIndex.size());
+  copy(_cpy.normalIndex.begin(), _cpy.normalIndex.end(), back_inserter(normalIndex));
+  copy(_cpy.normalList.begin(), _cpy.normalList.end(), back_inserter(normalList));
+  
+  textureIndex.reserve(_cpy.textureIndex.size());
+  copy(_cpy.textureIndex.begin(), _cpy.textureIndex.end(), back_inserter(textureIndex));
+  copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
+
 }
 
 Mesh::~Mesh() {
@@ -43,6 +53,8 @@ void Mesh::init() {
 
     pMaterial->init();
     pState->setEnableMaterial(pMaterial, true);
+    
+    debugDados();
     
     setVertexBuffer();
     
@@ -506,6 +518,134 @@ void Mesh::debugDados() {
         linha++;
     }
     printf("\n");  
+}
+
+Mesh* Mesh::createMeshParallelepiped(Node *_pParent, const std::string &_name, const glm::vec3 &_size, Texture* _pTexture, Material *_pMaterial) {
+
+    //Mesh
+    Mesh *pMesh = new Mesh(_pParent, _name);
+
+    glm::vec3 sizeObj( _size.x / 2.0f , _size.y / 2.0f, _size.z / 2.0f);
+    
+    //VertexList
+    pMesh->vertexList.push_back( glm::vec3( -sizeObj.x , -sizeObj.y ,  sizeObj.z ) );
+    pMesh->vertexList.push_back( glm::vec3( -sizeObj.x ,  sizeObj.y ,  sizeObj.z ) );
+    pMesh->vertexList.push_back( glm::vec3(  sizeObj.x ,  sizeObj.y ,  sizeObj.z ) );
+    pMesh->vertexList.push_back( glm::vec3(  sizeObj.x , -sizeObj.y ,  sizeObj.z ) );
+    pMesh->vertexList.push_back( glm::vec3( -sizeObj.x , -sizeObj.y , -sizeObj.z ) );
+    pMesh->vertexList.push_back( glm::vec3( -sizeObj.x ,  sizeObj.y , -sizeObj.z ) );
+    pMesh->vertexList.push_back( glm::vec3(  sizeObj.x ,  sizeObj.y , -sizeObj.z ) );
+    pMesh->vertexList.push_back( glm::vec3(  sizeObj.x , -sizeObj.y , -sizeObj.z ) );
+
+    //VertexIndex
+    int vertexIndexArray[] = { 01 , 02 , 03 ,
+                                07 , 06 , 05 ,
+                                04 , 05 , 01 ,
+                                05 , 06 , 02 ,
+                                06 , 07 , 03 ,
+                                00 , 03 , 07 ,
+                                00 , 01 , 03 ,
+                                04 , 07 , 05 ,
+                                00 , 04 , 01 ,
+                                01 , 05 , 02 ,
+                                02 , 06 , 03 ,
+                                04 , 00 , 07 };
+                            
+    unsigned vertexIndexArraySize = sizeof(vertexIndexArray) / sizeof(int);
+    pMesh->vertexIndex.insert(pMesh->vertexIndex.end(), &vertexIndexArray[0], &vertexIndexArray[vertexIndexArraySize]);
+        
+    //NormalList
+    pMesh->normalList.push_back(glm::vec3(  0 ,  0 , -1 ));
+    pMesh->normalList.push_back(glm::vec3(  0 ,  0 ,  1 ));
+    pMesh->normalList.push_back(glm::vec3(  1 , -0 ,  0 ));
+    pMesh->normalList.push_back(glm::vec3( -0 , -1 ,  0 ));
+    pMesh->normalList.push_back(glm::vec3( -1 ,  0 , -0 ));
+    pMesh->normalList.push_back(glm::vec3(  0 ,  1 ,  0 ));
+    pMesh->normalList.push_back(glm::vec3(  0 ,  0 , -1 ));
+    pMesh->normalList.push_back(glm::vec3(  0 ,  0 ,  1 ));
+    pMesh->normalList.push_back(glm::vec3(  1 ,  0 , -0 ));
+    pMesh->normalList.push_back(glm::vec3( -0 , -1 , -0 ));
+    pMesh->normalList.push_back(glm::vec3( -1 ,  0 ,  0 ));
+    pMesh->normalList.push_back(glm::vec3(  0 ,  1 ,  0 ));
+
+    //NormalIndex
+    int normalIndexArray[] =  { 0,0,0,
+                                1,1,1, 
+                                2,2,2, 
+                                3,3,3,
+                                4,4,4,
+                                5,5,5,
+                                6,6,6,
+                                7,7,7,
+                                8,8,8,
+                                9,9,9,
+                                10,10,10,
+                                11,11,11};
+
+    unsigned normalIndexArraySize = sizeof(normalIndexArray) / sizeof(int);
+    pMesh->normalIndex.insert(pMesh->normalIndex.end(), &normalIndexArray[0], &normalIndexArray[normalIndexArraySize]);
+    
+    if (_pTexture != nullptr) {
+        //TextureList
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 1 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 1 ));
+        pMesh->textureList.push_back( glm::vec2( 0 , 0 ));
+    
+        
+        int texturaIndexArray[] = { 0  , 1  , 2 ,
+                                    3  , 4  , 5 ,
+                                    6  , 7  , 8 ,
+                                    9  , 10 , 11 ,
+                                    12 , 13 , 14 ,
+                                    15 , 16 , 17 ,
+                                    18 , 19 , 20 ,
+                                    21 , 22 , 23 ,
+                                    24 , 25 , 26 ,
+                                    27 , 28 , 29 ,
+                                    30 , 31 , 32 ,
+                                    33 , 34 , 35 };
+        
+        unsigned texturaIndexArraySize = sizeof(texturaIndexArray) / sizeof(int);
+        pMesh->textureIndex.insert(pMesh->textureIndex.end(), &texturaIndexArray[0], &texturaIndexArray[texturaIndexArraySize]);  
+        
+        pMesh->setTexture(_pTexture);
+    }
+    
+    if (_pMaterial != nullptr)
+        pMesh->setMaterial(_pMaterial);
+
+    return pMesh;
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

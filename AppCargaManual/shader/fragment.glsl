@@ -1,7 +1,18 @@
-vec3 rgb = vec3(1.0, 1.0, 1.0);
-rgb = PhongShade(g_light, g_material, position_, normal_);
-_frag_color = vec4(rgb, 1.0);
+#ifdef GL_ES
+precision highp float;
+#endif
+//varying vec2 vUv;
+//varying vec3 vNormal;
 
-//_frag_color = texel * vec4(ambient + diffuse + specular, 1.0);
+//uniform sampler2D tex;
 
+//out vec3 color;
 
+void main(void)
+{
+	//gl_FragColor = texture2D(tex,vUv) * vec4(vNormal,1);
+	//gl_FragColor = vec4(s_normal,1);
+	gl_FragColor = vec4(0,1,0,0);
+	//color = vec3(1,0,0);
+}
+	

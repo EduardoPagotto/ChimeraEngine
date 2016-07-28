@@ -32,6 +32,8 @@ public:
     
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
+	GLuint programID;
+
 private:
     void setVertexBuffer();   
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
@@ -52,11 +54,8 @@ private:
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
      
-//     GLint *vertexArrayID;
-//     GLint vertexbuffer;
-//     GLint elementbuffer;
-
 	GLuint VAO;
+	GLuint positionID;
 
 };
 }

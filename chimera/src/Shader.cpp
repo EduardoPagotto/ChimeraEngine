@@ -88,18 +88,19 @@ GLuint linkShader (const GLuint &VertexShaderID, const GLuint &FragmentShaderID 
 
 GLuint LoadShaders ( const char * vertex_file_path, const char * fragment_file_path ) {
 
+	//Ler os arquivos
     std::string VertexShaderCode = getShaderCode ( vertex_file_path );
     std::string FragmentShaderCode = getShaderCode ( fragment_file_path );
 
-    // Compile Vertex Shader
+    // Compila Vertex Shader
     std::cout << "Compiling Vertex Shader :" << vertex_file_path << std::endl;
     GLuint VertexShaderID = compileShader(VertexShaderCode, true);
     
-    // Compile Fragment Shader
+    // Compila Fragment Shader
     std::cout << "Compiling Fragment Shader : " << std::string ( fragment_file_path ) << std::endl;
     GLuint FragmentShaderID = compileShader(FragmentShaderCode, false);
 
-    // Link the program
+    // Link o programa
     std::cout << "Linking program " << std::endl;
     GLuint ProgramID = linkShader ( VertexShaderID, FragmentShaderID );
 

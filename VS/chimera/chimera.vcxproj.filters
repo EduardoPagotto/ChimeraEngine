@@ -19,9 +19,6 @@
     <ClCompile Include="..\..\chimera\src\Constraint.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\chimera\src\Entity.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\chimera\src\Font.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -91,9 +88,6 @@
     <ClCompile Include="..\..\chimera\src\Shader.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\chimera\src\NodeVisitor.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\chimera\src\SceneRoot.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -104,9 +98,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\chimera\src\Transform.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\chimera\src\Coord.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\chimera\src\Solid.cpp">

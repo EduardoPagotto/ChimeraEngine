@@ -141,11 +141,9 @@
     <ClCompile Include="..\..\chimera\src\ChimeraUtils.cpp" />
     <ClCompile Include="..\..\chimera\src\Color.cpp" />
     <ClCompile Include="..\..\chimera\src\Constraint.cpp" />
-    <ClCompile Include="..\..\chimera\src\Coord.cpp" />
     <ClCompile Include="..\..\chimera\src\Draw.cpp" />
     <ClCompile Include="..\..\chimera\src\InitVisitor.cpp" />
     <ClCompile Include="..\..\chimera\src\Mesh.cpp" />
-    <ClCompile Include="..\..\chimera\src\Entity.cpp" />
     <ClCompile Include="..\..\chimera\src\FlowControl.cpp" />
     <ClCompile Include="..\..\chimera\src\Font.cpp" />
     <ClCompile Include="..\..\chimera\src\GameClient.cpp" />
@@ -157,7 +155,6 @@
     <ClCompile Include="..\..\chimera\src\LoaderDae.cpp" />
     <ClCompile Include="..\..\chimera\src\Material.cpp" />
     <ClCompile Include="..\..\chimera\src\Node.cpp" />
-    <ClCompile Include="..\..\chimera\src\NodeVisitor.cpp" />
     <ClCompile Include="..\..\chimera\src\Particle.cpp" />
     <ClCompile Include="..\..\chimera\src\ParticleEmitter.cpp" />
     <ClCompile Include="..\..\chimera\src\RenderVisitor.cpp" />

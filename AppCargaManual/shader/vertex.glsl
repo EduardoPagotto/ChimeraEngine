@@ -1,11 +1,23 @@
-in vec3 position;
-in vec3 normal;
-in vec2 texCoord;
+attribute vec3 vertex;
+attribute vec3 normal;
+attribute vec2 uv1;
 
-position_ = MV * vec4(vVertex, 1.0);
-normal_ = normalize(N * vNormal);
-texture_ = vTexture;
-//shadow_ = S * M * vec4(vVertex, 1.0);
+uniform mat4 _mvProj;
+uniform mat3 _norm;
 
-gl_Position = MVP * vec4(vVertex, 1.0);
+//varying vec2 vUv;
+//varying vec3 vNormal;
 
+void main(void) {
+ // compute position
+ gl_Position = _mvProj * vec4(vertex, 1.0);
+ 
+
+ //gl_Position.xyz = vertex;
+ //gl_Position.w = 1.0;
+
+ //vUv = uv1;
+ // compute light info
+ //vNormal= _norm * normal;
+
+} 

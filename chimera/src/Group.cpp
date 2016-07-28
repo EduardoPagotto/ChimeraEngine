@@ -4,6 +4,7 @@
 namespace Chimera {
 
 Group::Group(Node* _parent, std::string _name) : Node (_parent, EntityKind::GROUP, _name) { 
+	idProgram = 0;
 }
 
 Group::~Group() {

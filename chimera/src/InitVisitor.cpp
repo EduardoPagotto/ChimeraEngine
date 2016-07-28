@@ -5,7 +5,7 @@
 namespace Chimera {
     
 InitVisitor::InitVisitor() {
-
+	programID = 0;
 }
 
 InitVisitor::~InitVisitor() {
@@ -21,7 +21,9 @@ void InitVisitor::visit ( Camera* _pCamera ) {
 void InitVisitor::visit ( Mesh* _pMesh ) {
 
     std::cout << "Visit Mesh:" << _pMesh->getName() << "\n";
+	_pMesh->programID = programID;
     _pMesh->init();  
+
 }
 
 void InitVisitor::visit ( Light* _pLight ) {
@@ -47,6 +49,13 @@ void InitVisitor::visit ( SceneRoot* _pSceneRoot ) {
 void InitVisitor::visit ( Group* _pGroup ) {
 
     std::cout << "Visit Group:" << _pGroup->getName() << "\n";
+	if (_pGroup->idProgram > 0) {
+		programID = _pGroup->idProgram;
+		//glUseProgram(_pGroup->idProgram);
+
+	}
+
+
     //_pGroup->init();
 }
 

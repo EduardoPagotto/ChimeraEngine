@@ -85,6 +85,177 @@ btVector3 Mesh::getSizeBox() {
     return retorno;
 }
 
+//#define _TESTE_SHADE__
+
+#ifdef _TESTE_SHADE__
+//https://cognitivewaves.wordpress.com/opengl-vbo-shader-vao/ <- a resposta aqui!!!!! matrix de model e projecao
+void Mesh::renderExecute(bool _texture) {
+
+	if (_texture == true) {
+
+		//if (pState->getTexture() != nullptr)
+		//	pState->appyTexture();
+		//else
+		//	glBindTexture(GL_TEXTURE_2D, 0);
+
+		pState->appyMaterial();
+
+		//Usando VAO e FBO
+		//glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+
+		glEnableVertexAttribArray(positionID);
+		glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+
+		glDrawArrays(GL_TRIANGLES,0, indexIBO.size() );//glDrawArrays(GL_TRIANGLES,0,3);
+		//glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+		glDisableVertexAttribArray(positionID);
+		
+		//glBindVertexArray(0);
+
+	}
+	else {
+
+	}
+
+}
+
+void Mesh::setVertexBuffer()
+{
+	glUseProgram(programID);
+
+	//Ajuste de textura do imageSDL invertendo valor de V
+	int tamanho = textureIndex.size();
+	for (int indice = 0; indice < tamanho; indice++) {
+		int posTex = textureIndex[indice];
+		textureList[posTex].y = 1 - textureList[posTex].y;
+	}
+
+	std::vector<VertexData> vertexDataIn;
+
+	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
+	indexVBO_slow(vertexDataIn, vertexData, indexIBO);
+
+	printf("Nome: %s \n", getName().c_str());
+	printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
+	printf("-VBO Data -----------( %03d )\n", vertexData.size());
+	printf("\n");
+
+	//FBO com VAO
+	positionID = glGetAttribLocation(programID, "vertex");
+	//GLuint normalID = glGetAttribLocation(programID, "normal");
+	//GLuint uvID = glGetAttribLocation(programID, "uv1");
+
+	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
+	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+
+	//glGenVertexArrays(1, &VAO);
+	//glBindVertexArray(VAO);
+
+	glGenBuffers(1, &VertexVBOID);
+	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
+
+	//glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
+	//glEnableVertexAttribArray(positionID);
+
+	//glEnableVertexAttribArray(normalID);
+	//glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
+
+	//glEnableVertexAttribArray(uvID);
+	//glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
+
+	glGenBuffers(1, &IndexVBOID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
+
+	//glBindVertexArray(0);
+
+	//------limpar quando VAO e Shade estiverem ativos
+
+
+
+	// render??
+	//  Model::Draw(ICamera camera) {
+	//     GLuint matrixID = glGetUniformLocation(programID, "mvp");
+	//     GLuint positionID = glGetAttribLocation(programID, "position_modelspace");
+	//     GLuint uvID = glGetAttribLocation(programID, "uv");
+	//     GLuint normalID = glGetAttribLocation(programID, "normal_modelspace");
+	//     GLuint tangentID = glGetAttribLocation(programID, "tangent_modelspace");
+	//     GLuint bitangentID = glGetAttribLocation(programID, "bitangent_modelspace");
+	// 
+	//     glm::mat4 projection = camera->GetProjectionMatrix(); 
+	//     glm::mat4 view = camera->GetViewMatrix();
+	//     glm::mat4 model = glm::mat4(1.0f);
+	//     glm::mat4 mvp = projection * view * model;
+	// 
+	//     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &mvp[0][0]);
+	// 
+	//     glBindVertexArray(vertexArrayID);
+	// 
+	//     glEnableVertexAttribArray(positionID);
+	//     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	//     glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].position);
+	// 
+	//     glEnableVertexAttribArray(uvID);
+	//     glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].uv);
+	// 
+	//     glEnableVertexAttribArray(normalID);
+	//     glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].normal);
+	// 
+	//     glEnableVertexAttribArray(tangentID);
+	//     glVertexAttribPointer(tangentID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].tangent);
+	// 
+	//     glEnableVertexAttribArray(bitangentID);
+	//     glVertexAttribPointer(bitangentID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].bitangent);
+	// 
+	//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	//     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	// 
+	//     glDisableVertexAttribArray(positionID);
+	//     glDisableVertexAttribArray(uvID);
+	//     glDisableVertexAttribArray(normalID);
+	//     glDisableVertexAttribArray(tangentID);
+	//     glDisableVertexAttribArray(bitangentID);
+
+}
+
+#else
+
+void Mesh::setVertexBuffer()
+{
+	//Ajuste de textura do imageSDL invertendo valor de V
+	int tamanho = textureIndex.size();
+	for (int indice = 0; indice < tamanho; indice++) {
+		int posTex = textureIndex[indice];
+		textureList[posTex].y = 1 - textureList[posTex].y;
+	}
+
+	std::vector<VertexData> vertexDataIn;
+
+	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
+	indexVBO_slow(vertexDataIn, vertexData, indexIBO);
+
+	printf("Nome: %s \n", getName().c_str());
+	printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
+	printf("-VBO Data -----------( %03d )\n", vertexData.size());
+	printf("\n");
+
+	//FBO sem o uso de VAO
+	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
+	glGenBuffers(1, &VertexVBOID); //Gera o buffer de dados do Vertex
+	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID); //vincula o buffer de dados
+	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW); //passa o buffer 
+
+	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+	glGenBuffers(1, &IndexVBOID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
+}
+
 void Mesh::renderExecute(bool _texture) {
     
 	if (_texture == true) {
@@ -95,15 +266,8 @@ void Mesh::renderExecute(bool _texture) {
 			glBindTexture(GL_TEXTURE_2D, 0);
 
 		pState->appyMaterial();
-
-//Usando VAO e FBO
-//         glBindVertexArray(VAO);
-//         glDrawArrays(GL_TRIANGLES,0, indexIBO.size() );//glDrawArrays(GL_TRIANGLES,0,3);
-//         //ou o de baixo
-//         //glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, NULL); 
-//         glBindVertexArray(0);
         
-//Usndo Apenas FBO
+////Usando Apenas FBO
 		//vincula VertexData
 		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
 		//points
@@ -157,6 +321,8 @@ void Mesh::renderExecute(bool _texture) {
 	}
    
 }
+
+#endif
 
 int Mesh::getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores ) {
 
@@ -288,134 +454,6 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 	printf("-Normal  Indice / Lista ------ ( %03d / %03d )\n", normalIndex.size(), normalList.size());
     printf("-Texture Indice / Lista ------ ( %03d / %03d )\n", textureIndex.size(), textureList.size());
     printf("\n");
-}
-
-void Mesh::setVertexBuffer()
-{
-    //Ajuste de textura do imageSDL invertendo valor de V
-    int tamanho = textureIndex.size();
-    for(int indice = 0; indice < tamanho; indice++) {
-        int posTex =  textureIndex[indice];
-        textureList[posTex].y = 1 - textureList[posTex].y;
-    }
-    
-    std::vector<VertexData> vertexDataIn;
-    
-	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
-    indexVBO_slow(vertexDataIn, vertexData, indexIBO);
-    
-    printf("Nome: %s \n", getName().c_str());
-    printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
-    printf("-VBO Data -----------( %03d )\n", vertexData.size());
-    printf("\n");
-
-    //FBO sem o uso de VAO
-	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
-	glGenBuffers(1, &VertexVBOID); //Gera o buffer de dados do Vertex
-	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID); //vincula o buffer de dados
-	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW); //passa o buffer 
-
-	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
-	glGenBuffers(1, &IndexVBOID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex , &indexIBO[0], GL_STATIC_DRAW);
-
-    //FBO com VAO
-//     unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
-//     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
-//     
-//     glGenVertexArrays(1, &VAO);
-//     glBindVertexArray(VAO);
-// 
-//     glGenBuffers(1, &VertexVBOID);
-//     glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-//     glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
-//     
-//     glEnableVertexAttribArray(0);
-//     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(0));
-//     
-//     glEnableVertexAttribArray(1);
-//     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
-//     
-//     glEnableVertexAttribArray(2);
-//     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
-//     
-//     glGenBuffers(1, &IndexVBOID);
-//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex , &indexIBO[0], GL_STATIC_DRAW);
-//         
-//     glBindVertexArray(0);
-    
-    
-    
-//Pega o position no vertex.glsl, o p e o handle retornado por programID 
-//     // get the location of attribute "position" in program <code>p</code>
-// vertexLoc = glGetAttribLocation(p,"position");
-//  
-// // bind buffer for positions and copy data into buffer
-// // GL_ARRAY_BUFFER is the buffer type we use to feed attributes
-// glBindBuffer(GL_ARRAY_BUFFER, buffer);
-//  
-// // feed the buffer, and let OpenGL know that we don't plan to
-// // change it (STATIC) and that it will be used for drawing (DRAW)
-// glBufferData(GL_ARRAY_BUFFER, sizeof(pos), pos, GL_STATIC_DRAW);
-//  
-// // Enable the attribute at that location
-// glEnableVertexAttribArray(vertexLoc );
-//  
-// // Tell OpenGL what the array contains: 
-// // it is a set of 4 floats for each vertex
-//glVertexAttribPointer(vertexLoc , 4, GL_FLOAT, 0, 0, 0);
-    
-    
-
-//------limpar quando VAO e Shade estiverem ativos
-      
-
-    
-   // render??
-//     Model::Draw(ICamera camera) {
-//     GLuint matrixID = glGetUniformLocation(programID, "mvp");
-//     GLuint positionID = glGetAttribLocation(programID, "position_modelspace");
-//     GLuint uvID = glGetAttribLocation(programID, "uv");
-//     GLuint normalID = glGetAttribLocation(programID, "normal_modelspace");
-//     GLuint tangentID = glGetAttribLocation(programID, "tangent_modelspace");
-//     GLuint bitangentID = glGetAttribLocation(programID, "bitangent_modelspace");
-// 
-//     glm::mat4 projection = camera->GetProjectionMatrix(); 
-//     glm::mat4 view = camera->GetViewMatrix();
-//     glm::mat4 model = glm::mat4(1.0f);
-//     glm::mat4 mvp = projection * view * model;
-// 
-//     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &mvp[0][0]);
-// 
-//     glBindVertexArray(vertexArrayID);
-// 
-//     glEnableVertexAttribArray(positionID);
-//     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-//     glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].position);
-// 
-//     glEnableVertexAttribArray(uvID);
-//     glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].uv);
-// 
-//     glEnableVertexAttribArray(normalID);
-//     glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].normal);
-// 
-//     glEnableVertexAttribArray(tangentID);
-//     glVertexAttribPointer(tangentID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].tangent);
-// 
-//     glEnableVertexAttribArray(bitangentID);
-//     glVertexAttribPointer(bitangentID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].bitangent);
-// 
-//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-//     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, (void*)0);
-// 
-//     glDisableVertexAttribArray(positionID);
-//     glDisableVertexAttribArray(uvID);
-//     glDisableVertexAttribArray(normalID);
-//     glDisableVertexAttribArray(tangentID);
-//     glDisableVertexAttribArray(bitangentID);
-    
 }
 
 void Mesh::debugDados() {

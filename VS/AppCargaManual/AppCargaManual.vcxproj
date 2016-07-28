@@ -99,6 +99,10 @@
     <ClCompile Include="..\..\AppCargaManual\src\main.cpp" />
     <ClCompile Include="..\..\AppCargaManual\src\stdafx.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\AppCargaManual\shader\fragment.glsl" />
+    <None Include="..\..\AppCargaManual\shader\vertex.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

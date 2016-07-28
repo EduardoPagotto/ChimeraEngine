@@ -17,7 +17,9 @@ public:
     virtual void visit(class Group* _pGroup) override;
     virtual void visit(class Transform* _pTransform) override;
     virtual void visit(class Solid* _pSolid) override;
-    virtual void visit(class HUD* _pHUD) override;    
+    virtual void visit(class HUD* _pHUD) override;  
+private:
+	GLuint programID;
 };
     
 }

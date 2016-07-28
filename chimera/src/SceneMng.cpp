@@ -37,6 +37,7 @@ void SceneMng::init() {
     initNodes(root, iv);
     
     shadoMap.init ( (Node*)root );
+
 }
 
 

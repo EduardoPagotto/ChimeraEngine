@@ -55,11 +55,11 @@ int testeCargaArquivo() {
 //http://www.kickjs.org/example/shader_editor/shader_editor.html template para usar
 //http://www.lighthouse3d.com/tutorials/glsl-tutorial/attribute-variables/ como carregar
 #ifdef WIN32
-		group1->idProgram = Chimera::LoadShaders ( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
-		                                    "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl" );
+		group1->setIdProgram( Chimera::LoadShaders ( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
+		                                    "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl" ));
 # else
-		group1->idProgram = Chimera::LoadShaders ( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
-		                                    "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl" );
+		group1->setIdProgram( Chimera::LoadShaders ( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
+		                                    "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl" ));
 # endif
 
 		//Adiciona um Emissor de Particula 

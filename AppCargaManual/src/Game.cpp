@@ -206,9 +206,7 @@ void Game::render() {
 
     physicWorld->stepSim();
     physicWorld->checkCollisions();
-    
-    //glUseProgram ( programID );
-    
+            
     pSceneMng->getVideo()->initDraw();
     pSceneMng->draw ();
     pSceneMng->getVideo()->endDraw();

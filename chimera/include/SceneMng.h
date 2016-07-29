@@ -38,6 +38,10 @@ public:
         pCameraAtiva = _pCam;
     }
 
+    inline Camera* getCamere() {
+        return pCameraAtiva;
+    }
+    
     inline void origemDesenho (Coord *_pCoord ) {
 		pOrigem = _pCoord;
     }

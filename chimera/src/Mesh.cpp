@@ -55,9 +55,19 @@ void Mesh::init() {
     pMaterial->init();
     pState->setEnableMaterial(pMaterial, true);
     
+    //Ajuste de textura do imageSDL invertendo valor de V
+    int tamanho = textureIndex.size();
+    for (int indice = 0; indice < tamanho; indice++) {
+        int posTex = textureIndex[indice];
+        textureList[posTex].y = 1 - textureList[posTex].y;
+    }
+    
     debugDados();
     
-    setVertexBuffer();
+    if (programID > 0 )
+        setVertexBuffer();
+    else 
+        setVertexBufferOnoShade();
     
 }
 
@@ -98,55 +108,141 @@ btVector3 Mesh::getSizeBox() {
     return retorno;
 }
 
-//#define _TESTE_SHADE__
-
-#ifdef _TESTE_SHADE__
 //https://cognitivewaves.wordpress.com/opengl-vbo-shader-vao/ <- a resposta aqui!!!!! matrix de model e projecao
 void Mesh::renderExecute(bool _texture) {
 
-	if (_texture == true) {
+    if (programID > 0)
+        renderVertexBuffer(_texture);
+    else
+        renderVertexBufferOnoShade(_texture);
 
-		//if (pState->getTexture() != nullptr)
-		//	pState->appyTexture();
-		//else
-		//	glBindTexture(GL_TEXTURE_2D, 0);
+}
 
-		pState->appyMaterial();
+void Mesh::setVertexBufferOnoShade() {
+    
+    std::vector<VertexData> vertexDataIn;
+    conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
+    indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
-		//Usando VAO e FBO
-		//glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+    printf("Nome: %s \n", getName().c_str());
+    printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
+    printf("-VBO Data -----------( %03d )\n", vertexData.size());
+    printf("\n");
 
-		glEnableVertexAttribArray(positionID);
-		glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
+    //FBO sem o uso de VAO
+    unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
+    glGenBuffers(1, &VertexVBOID); //Gera o buffer de dados do Vertex
+    glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID); //vincula o buffer de dados
+    glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW); //passa o buffer 
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+    unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+    glGenBuffers(1, &IndexVBOID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
+    
+}
 
-		glDrawArrays(GL_TRIANGLES,0, indexIBO.size() );//glDrawArrays(GL_TRIANGLES,0,3);
-		//glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+void Mesh::renderVertexBufferOnoShade(bool _texture) {
+    
+    if (_texture == true) {
 
-		glDisableVertexAttribArray(positionID);
-		
-		//glBindVertexArray(0);
+        if (pState->getTexture() != nullptr)
+            pState->appyTexture();
+        else
+            glBindTexture(GL_TEXTURE_2D, 0);
 
-	}
-	else {
+        pState->appyMaterial();
+        
+////Usando Apenas FBO
+        //vincula VertexData
+        glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+        //points
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+        //Normal
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
+        //Texture
+        glClientActiveTexture(GL_TEXTURE0);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));   //The starting point of texcoords, 24 bytes away
 
-	}
+        //vincula indices
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
 
+        //draw
+        glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+        //desabilita client stats
+        glDisableClientState(GL_VERTEX_ARRAY);
+         
+        if (pState->getTexture() != nullptr)
+            glDisableClientState(GL_TEXTURE0);
+         
+        glDisableClientState(GL_NORMAL_ARRAY);
+
+    } else {
+
+        pState->appyMaterial();
+
+        //vincula VertexData
+        glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+        //points
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+                                                                              //Normal
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
+                                                                            //Texture
+        //vincula indices
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+
+        //draw
+        glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+        //desabilita client stats
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_NORMAL_ARRAY);
+
+    }
+}
+
+void Mesh::renderVertexBuffer ( bool _texture ) {
+
+        if (_texture == true) {
+
+        if (pState->getTexture() != nullptr)
+            pState->appyTexture();
+        else
+            glBindTexture(GL_TEXTURE_2D, 0);
+
+        pState->appyMaterial();
+
+        //Usando VAO e FBO
+        glBindVertexArray(VAO);
+        //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+
+        //glEnableVertexAttribArray(positionID);
+        //glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
+
+        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+
+        glDrawArrays(GL_TRIANGLES,0, indexIBO.size() );//glDrawArrays(GL_TRIANGLES,0,3);
+        //glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+        //glDisableVertexAttribArray(positionID);
+        
+        glBindVertexArray(0);
+
+    }
+    else {
+
+    }
+    
 }
 
 void Mesh::setVertexBuffer()
 {
-	glUseProgram(programID);
-
-	//Ajuste de textura do imageSDL invertendo valor de V
-	int tamanho = textureIndex.size();
-	for (int indice = 0; indice < tamanho; indice++) {
-		int posTex = textureIndex[indice];
-		textureList[posTex].y = 1 - textureList[posTex].y;
-	}
-
 	std::vector<VertexData> vertexDataIn;
 
 	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
@@ -159,33 +255,34 @@ void Mesh::setVertexBuffer()
 
 	//FBO com VAO
 	positionID = glGetAttribLocation(programID, "vertex");
-	//GLuint normalID = glGetAttribLocation(programID, "normal");
-	//GLuint uvID = glGetAttribLocation(programID, "uv1");
+	GLuint normalID = 1;//glGetAttribLocation(programID, "normal");
+	GLuint uvID = 2;//glGetAttribLocation(programID, "uv1");
 
 	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
 	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-	//glGenVertexArrays(1, &VAO);
-	//glBindVertexArray(VAO);
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 
 	glGenBuffers(1, &VertexVBOID);
 	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
 	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
 
-	//glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
-	//glEnableVertexAttribArray(positionID);
+    
+	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(positionID);
 
-	//glEnableVertexAttribArray(normalID);
-	//glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
+	glEnableVertexAttribArray(normalID);
+	glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
 
-	//glEnableVertexAttribArray(uvID);
-	//glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
+	glEnableVertexAttribArray(uvID);
+	glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
 
 	glGenBuffers(1, &IndexVBOID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
 
-	//glBindVertexArray(0);
+	glBindVertexArray(0);
 
 	//------limpar quando VAO e Shade estiverem ativos
 
@@ -235,107 +332,6 @@ void Mesh::setVertexBuffer()
 	//     glDisableVertexAttribArray(bitangentID);
 
 }
-
-#else
-
-void Mesh::setVertexBuffer()
-{
-	//Ajuste de textura do imageSDL invertendo valor de V
-	int tamanho = textureIndex.size();
-	for (int indice = 0; indice < tamanho; indice++) {
-		int posTex = textureIndex[indice];
-		textureList[posTex].y = 1 - textureList[posTex].y;
-	}
-
-	std::vector<VertexData> vertexDataIn;
-
-	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
-	indexVBO_slow(vertexDataIn, vertexData, indexIBO);
-
-	printf("Nome: %s \n", getName().c_str());
-	printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
-	printf("-VBO Data -----------( %03d )\n", vertexData.size());
-	printf("\n");
-
-	//FBO sem o uso de VAO
-	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
-	glGenBuffers(1, &VertexVBOID); //Gera o buffer de dados do Vertex
-	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID); //vincula o buffer de dados
-	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW); //passa o buffer 
-
-	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
-	glGenBuffers(1, &IndexVBOID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
-}
-
-void Mesh::renderExecute(bool _texture) {
-    
-	if (_texture == true) {
-
-		if (pState->getTexture() != nullptr)
-			pState->appyTexture();
-		else
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-		pState->appyMaterial();
-        
-////Usando Apenas FBO
-		//vincula VertexData
-		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-		//points
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
-		//Normal
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
-		//Texture
-		glClientActiveTexture(GL_TEXTURE0);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));   //The starting point of texcoords, 24 bytes away
-
-		//vincula indices
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-
-		//draw
-		glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-
-		//desabilita client stats
-		glDisableClientState(GL_VERTEX_ARRAY);
-		 
-		if (pState->getTexture() != nullptr)
-		    glDisableClientState(GL_TEXTURE0);
-		 
-		glDisableClientState(GL_NORMAL_ARRAY);
-
-	} else {
-
-		pState->appyMaterial();
-
-		//vincula VertexData
-		glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-		//points
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
-																			  //Normal
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
-																			//Texture
-		//vincula indices
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-
-		//draw
-		glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-
-		//desabilita client stats
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
-
-	}
-   
-}
-
-#endif
 
 int Mesh::getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores ) {
 

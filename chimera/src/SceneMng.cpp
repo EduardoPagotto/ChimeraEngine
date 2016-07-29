@@ -105,7 +105,7 @@ void SceneMng::draw () {
 	shadoMap.endSceneShadow();
     //shadoMap.RenderSceneA (pOrigemDesenho);
 #endif
-
+    
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
 		if (pCameraAtiva != nullptr) {
@@ -122,7 +122,7 @@ void SceneMng::draw () {
 		rv.particleOn = true;
 		rv.eye = eye;
 
-		DFS(root);
+ 		DFS(root);
        
 #ifdef TESTEZ1
         //shadoMap.ApplyShadowMap (pOrigemDesenho);

@@ -19,8 +19,8 @@ public:
     // Inherited via Node
 	void accept(class NodeVisitor* v) override;
 
-	void setTranslate(const btVector3 &_vet);
-	btVector3 getTranslate();
+	//void setTranslate(const btVector3 &_vet);
+	//btVector3 getTranslate();
 	bool getTranslateFlag();
 
 	void setRotate(const btVector3 &_vet);

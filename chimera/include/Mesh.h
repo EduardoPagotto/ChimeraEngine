@@ -32,12 +32,20 @@ public:
     
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
-	GLuint programID;
+	void setProgramId(const GLuint &_id) {
+        programID = _id;
+    }
 
     static Mesh* createMeshParallelepiped(Node *_pParent, const std::string &_name, const glm::vec3 &_size, Texture* _pTexture, Material *_pMaterial); 
     
 private:
-    void setVertexBuffer();   
+    
+    void renderVertexBufferOnoShade(bool _texture);
+    void setVertexBufferOnoShade();
+    
+    void renderVertexBuffer(bool _texture);
+    void setVertexBuffer();
+    
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
     void debugDados();
     
@@ -49,7 +57,9 @@ private:
     
     std::vector<unsigned int> textureIndex;
     std::vector<glm::vec2> textureList;
-            
+    
+    GLuint programID;
+    
     GLuint VertexVBOID;
     GLuint IndexVBOID;
 

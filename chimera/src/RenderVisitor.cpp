@@ -46,7 +46,7 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 }
 
 void RenderVisitor::visit ( Group* _pGroup ) {
-
+    _pGroup->applyIdProgram();
 }
 
 void RenderVisitor::visit ( Chimera::Transform* _pTransform) {

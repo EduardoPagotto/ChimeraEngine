@@ -21,7 +21,7 @@ void InitVisitor::visit ( Camera* _pCamera ) {
 void InitVisitor::visit ( Mesh* _pMesh ) {
 
     std::cout << "Visit Mesh:" << _pMesh->getName() << "\n";
-	_pMesh->programID = programID;
+	_pMesh->setProgramId( programID );
     _pMesh->init();  
 
 }
@@ -49,14 +49,8 @@ void InitVisitor::visit ( SceneRoot* _pSceneRoot ) {
 void InitVisitor::visit ( Group* _pGroup ) {
 
     std::cout << "Visit Group:" << _pGroup->getName() << "\n";
-	if (_pGroup->idProgram > 0) {
-		programID = _pGroup->idProgram;
-		//glUseProgram(_pGroup->idProgram);
-
-	}
-
-
-    //_pGroup->init();
+    programID = _pGroup->getIdProgram();
+ 
 }
 
 void InitVisitor::visit ( Transform* _pTransform ) {

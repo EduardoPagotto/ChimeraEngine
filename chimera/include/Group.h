@@ -12,8 +12,18 @@ public:
     Group(Node* _parent, std::string _name);
     virtual ~Group();
     void accept(class NodeVisitor* v);
-
-	GLuint idProgram;
+    
+    void setIdProgram(const GLuint &_id);
+    
+    GLuint getIdProgram() const {
+        return idProgram;
+    }
+    
+    GLuint applyIdProgram();
+    
+    
+private:
+	 GLuint idProgram;
 };
 }
 #endif

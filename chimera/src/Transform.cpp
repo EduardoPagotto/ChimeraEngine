@@ -32,17 +32,18 @@ btVector3 Transform::getPosition()
 
 void Transform::setPosition(const btVector3 & _pos)
 {
+    this->tflag = true;
 	translate = _pos;
 }
 
-void Transform::setTranslate(const btVector3 &_vet) {
-	this->translate = _vet;
-	this->tflag = true;
-}
-
-btVector3 Transform::getTranslate() {
-	return this->translate;
-}
+// void Transform::setTranslate(const btVector3 &_vet) {
+// 	this->translate = _vet;
+// 	this->tflag = true;
+// }
+// 
+// btVector3 Transform::getTranslate() {
+// 	return this->translate;
+// }
 
 bool Transform::getTranslateFlag() {
 	return this->tflag;

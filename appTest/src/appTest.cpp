@@ -11,6 +11,9 @@
 #include "ExceptionChimera.h"
 
 #include "Transform.h"
+#include "Shader.h"
+
+#include "CameraSpherical.h"
 
 #ifndef WIN32
 int main ( int argn, char** argv ) {
@@ -28,21 +31,43 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         std::string dirDados = "../../appTest/models";
 #endif
         
-        
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
         Video *video = new VideoDevice (640, 480, "teste");
 
         SceneMng *sceneMng = new SceneMng ( video );
         //sceneMng->setReader(pLoader);
-        Group* group1 = sceneMng->createSceneGraph();
         
+        CameraSpherical *pCam = new CameraSpherical("Observador-01");
+        pCam->setDistanciaMaxima(1000.0);
+        pCam->setDistanciaMinima(0.5);
+        pCam->setFar(10000.0);
+        pCam->setNear(0.1);
+        pCam->setFov(45.0);  
+        pCam->setPositionRotation( btVector3(300 , 0 ,0) , btVector3(0,0,0) );
+        pCam->setPerspective(true);
+        pCam->init();
+        sceneMng->cameraAtiva(pCam);
+      
+        
+        Group* group1 = sceneMng->createSceneGraph();
+#ifdef WIN32
+        group1->setIdProgram( Chimera::LoadShaders ( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
+                                            "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl" ));
+# else
+        group1->setIdProgram( Chimera::LoadShaders ( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
+                                            "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl" ));
+# endif
+         
         Transform* pTrans = new Transform(group1,"trans01");
-        pTrans->setPosition( btVector3(0.0, 0.0, 0.0) );
+        //pTrans->setPosition( btVector3( 0.0, 35.0, -350.0) );
+        pTrans->setPosition( btVector3( 0.0, 0.0, 0.0) );
+        
+        sceneMng->origemDesenho((Coord*)pTrans);
         
         Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
         
-        Mesh *pMesh = Mesh::createMeshParallelepiped(pTrans, "Cubo-01",glm::vec3(50,50,50),pTex, nullptr);
+        Mesh *pMesh = Mesh::createMeshParallelepiped(pTrans, "Cubo-01",glm::vec3(50,50,50),nullptr, nullptr);
         
         Game *game = new Game(sceneMng);
 

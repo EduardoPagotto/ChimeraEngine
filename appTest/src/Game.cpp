@@ -6,6 +6,8 @@
 #include "GameClient.h"
 #include "SceneMng.h"
 
+#include "CameraSpherical.h"
+
 Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
     isPaused = false;
 }
@@ -84,11 +86,13 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
+    Chimera::CameraSpherical* pCamZ = (Chimera::CameraSpherical*)pSceneMng->getCamere();
+    
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
-            //pOrbitalCam->trackBall(mm.yrel, mm.xrel, 0);
+            pCamZ->trackBall(mm.yrel, mm.xrel, 0);
         } else if (botaoIndex == 2) {
-            //pOrbitalCam->trackBall(0, 0, mm.yrel);
+            pCamZ->trackBall(0, 0, mm.yrel);
         }
     }
 }

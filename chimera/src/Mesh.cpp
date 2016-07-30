@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "ChimeraUtils.h"
 #include "NodeVisitor.h"
+#include <iterator>
 
 namespace Chimera {
     
@@ -8,7 +9,7 @@ Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH
     VertexVBOID = 0;
     IndexVBOID = 0;
     VAO = 0;
-    positionID = 0;
+	programID = 0;
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
@@ -62,8 +63,7 @@ void Mesh::init() {
         textureList[posTex].y = 1 - textureList[posTex].y;
     }
     
-    debugDados();
-    
+    //debugDados();
     if (programID > 0 )
         setVertexBuffer();
     else 
@@ -115,7 +115,6 @@ void Mesh::renderExecute(bool _texture) {
         renderVertexBuffer(_texture);
     else
         renderVertexBufferOnoShade(_texture);
-
 }
 
 void Mesh::setVertexBufferOnoShade() {
@@ -153,8 +152,8 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
 
         pState->appyMaterial();
         
-////Usando Apenas FBO
-        //vincula VertexData
+		//Usando Apenas FBO
+        //vincula VBO
         glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
         //points
         glEnableClientState(GL_VERTEX_ARRAY);
@@ -203,7 +202,6 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
         //desabilita client stats
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
-
     }
 }
 
@@ -218,33 +216,19 @@ void Mesh::renderVertexBuffer ( bool _texture ) {
 
         pState->appyMaterial();
 
-        //Usando VAO e FBO
         glBindVertexArray(VAO);
-        //glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-
-        //glEnableVertexAttribArray(positionID);
-        //glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
-
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-
-        glDrawArrays(GL_TRIANGLES,0, indexIBO.size() );//glDrawArrays(GL_TRIANGLES,0,3);
-        //glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-
-        //glDisableVertexAttribArray(positionID);
-        
+        glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
         glBindVertexArray(0);
 
     }
     else {
-
+		//TODO: como fazer isso??
     }
-    
 }
 
 void Mesh::setVertexBuffer()
 {
 	std::vector<VertexData> vertexDataIn;
-
 	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
 	indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
@@ -253,42 +237,53 @@ void Mesh::setVertexBuffer()
 	printf("-VBO Data -----------( %03d )\n", vertexData.size());
 	printf("\n");
 
-	//FBO com VAO
-	positionID = glGetAttribLocation(programID, "vertex");
-	GLuint normalID = 1;//glGetAttribLocation(programID, "normal");
-	GLuint uvID = 2;//glGetAttribLocation(programID, "uv1");
-
 	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
 	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
+	//Buffer de vertice
 	glGenBuffers(1, &VertexVBOID);
 	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
 	glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    
-	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(positionID);
-
-	glEnableVertexAttribArray(normalID);
-	glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
-
-	glEnableVertexAttribArray(uvID);
-	glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
-
+	//Buffer de indice
 	glGenBuffers(1, &IndexVBOID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	//cria o VAO
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	//vincula VBO
+	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+
+	//Vertice
+	GLuint positionID = glGetAttribLocation(programID, "vertex");
+	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(positionID);
+	
+	//Normal
+	GLuint normalID = glGetAttribLocation(programID, "normal");
+	glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
+	glEnableVertexAttribArray(normalID);
+
+	//Texture
+	GLuint uvID = glGetAttribLocation(programID, "uv1");
+	glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
+	glEnableVertexAttribArray(uvID);
+
+	//vincula IBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+
+	//limpa dados
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	glDisableVertexAttribArray(positionID);
+	glDisableVertexAttribArray(normalID);
+	glDisableVertexAttribArray(uvID);
 
-	//------limpar quando VAO e Shade estiverem ativos
-
-
-
-	// render??
 	//  Model::Draw(ICamera camera) {
 	//     GLuint matrixID = glGetUniformLocation(programID, "mvp");
 	//     GLuint positionID = glGetAttribLocation(programID, "position_modelspace");
@@ -304,33 +299,6 @@ void Mesh::setVertexBuffer()
 	// 
 	//     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &mvp[0][0]);
 	// 
-	//     glBindVertexArray(vertexArrayID);
-	// 
-	//     glEnableVertexAttribArray(positionID);
-	//     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	//     glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].position);
-	// 
-	//     glEnableVertexAttribArray(uvID);
-	//     glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].uv);
-	// 
-	//     glEnableVertexAttribArray(normalID);
-	//     glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].normal);
-	// 
-	//     glEnableVertexAttribArray(tangentID);
-	//     glVertexAttribPointer(tangentID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].tangent);
-	// 
-	//     glEnableVertexAttribArray(bitangentID);
-	//     glVertexAttribPointer(bitangentID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertices[0].bitangent);
-	// 
-	//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	//     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, (void*)0);
-	// 
-	//     glDisableVertexAttribArray(positionID);
-	//     glDisableVertexAttribArray(uvID);
-	//     glDisableVertexAttribArray(normalID);
-	//     glDisableVertexAttribArray(tangentID);
-	//     glDisableVertexAttribArray(bitangentID);
-
 }
 
 int Mesh::getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores ) {
@@ -349,7 +317,6 @@ int Mesh::getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayV
     }
 
     return -1;
-
 }
 
 void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {

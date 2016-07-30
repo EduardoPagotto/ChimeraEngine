@@ -59,16 +59,14 @@ private:
     std::vector<glm::vec2> textureList;
     
     GLuint programID;
-    
+	GLuint VAO;
     GLuint VertexVBOID;
     GLuint IndexVBOID;
 
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
      
-	GLuint VAO;
-	GLuint positionID;
-
+	
 };
 }
 

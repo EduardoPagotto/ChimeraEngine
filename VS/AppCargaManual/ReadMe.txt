@@ -54,6 +54,7 @@ C:\Libs\glew-1.13.0\include
 C:\Libs\tinyxml2
 C:\Libs\bullet3\src
 C:\Libs\OculusSDK\LibOVR\Include
+C:\Libs\glm
 
 Arquivos Necessarios ao Lib:
 ../../Debug

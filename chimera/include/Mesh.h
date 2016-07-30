@@ -57,6 +57,9 @@ private:
     
     std::vector<unsigned int> textureIndex;
     std::vector<glm::vec2> textureList;
+
+
+
     
     GLuint programID;
 	GLuint VAO;

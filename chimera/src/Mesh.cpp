@@ -120,7 +120,8 @@ void Mesh::renderExecute(bool _texture) {
 void Mesh::setVertexBufferOnoShade() {
     
     std::vector<VertexData> vertexDataIn;
-    conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
+    //conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, pMaterial->getDiffuse() ,vertexDataIn);
+	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
     indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
     printf("Nome: %s \n", getName().c_str());
@@ -129,7 +130,8 @@ void Mesh::setVertexBufferOnoShade() {
     printf("\n");
 
     //FBO sem o uso de VAO
-    unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
+	int sizeOfStruct = sizeof(struct VertexData);
+    unsigned int sizeBufferVertex = vertexData.size() * sizeOfStruct;
     glGenBuffers(1, &VertexVBOID); //Gera o buffer de dados do Vertex
     glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID); //vincula o buffer de dados
     glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW); //passa o buffer 
@@ -157,14 +159,22 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
         glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
         //points
         glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
+        glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));
+
+		//Color
+		//glEnableClientState(GL_COLOR_ARRAY);
+		//glColorPointer(4, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12)); 
+
         //Normal
         glEnableClientState(GL_NORMAL_ARRAY);
-        glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
+        glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));
+
         //Texture
-        glClientActiveTexture(GL_TEXTURE0);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));   //The starting point of texcoords, 24 bytes away
+		if (pState->getTexture() != nullptr) {
+			glClientActiveTexture(GL_TEXTURE0);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));
+		}
 
         //vincula indices
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
@@ -174,12 +184,12 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
 
         //desabilita client stats
         glDisableClientState(GL_VERTEX_ARRAY);
-         
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+
         if (pState->getTexture() != nullptr)
             glDisableClientState(GL_TEXTURE0);
          
-        glDisableClientState(GL_NORMAL_ARRAY);
-
     } else {
 
         pState->appyMaterial();
@@ -189,7 +199,10 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
         //points
         glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
-                                                                              //Normal
+		//color																  //Color
+		//glEnableClientState(GL_COLOR_ARRAY);
+		//glColorPointer(4, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of the VBO, for the vertices
+		//normal														       //Normal
         glEnableClientState(GL_NORMAL_ARRAY);
         glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
                                                                             //Texture
@@ -229,6 +242,7 @@ void Mesh::renderVertexBuffer ( bool _texture ) {
 void Mesh::setVertexBuffer()
 {
 	std::vector<VertexData> vertexDataIn;
+	//conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, pMaterial->getDiffuse(), vertexDataIn);
 	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
 	indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
@@ -264,6 +278,11 @@ void Mesh::setVertexBuffer()
 	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(positionID);
 	
+	//Color
+	//GLuint colorID = glGetAttribLocation(programID, "color");
+	//glVertexAttribPointer(colorID, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));
+	//glEnableVertexAttribArray(colorID);
+
 	//Normal
 	GLuint normalID = glGetAttribLocation(programID, "normal");
 	glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
@@ -281,6 +300,7 @@ void Mesh::setVertexBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glDisableVertexAttribArray(positionID);
+	//glDisableVertexAttribArray(colorID);
 	glDisableVertexAttribArray(normalID);
 	glDisableVertexAttribArray(uvID);
 

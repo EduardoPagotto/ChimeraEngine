@@ -6,10 +6,10 @@
 #include "Color.h"
 
 struct VertexData {
-    glm::vec3 position; //12 0-11
-	//glm::vec4 color;    //16 12-27
-    glm::vec3 normal;	//12 28-39
-    glm::vec2 texture;  //8  40-48
+    glm::vec3 position; //3 * 4 = 12 (0 -11)
+    glm::vec3 normal;	//3 * 4 = 12 (12-23)
+    glm::vec2 texture;  //2 * 4 = 08 (24-31)
+    glm::vec4 color;    //4 * 4 = 16 (32-47) //cuidado com a posicao, muda o sizeof(VertexData)
 };
 
 void conversorVBO(
@@ -19,7 +19,7 @@ void conversorVBO(
     std::vector<glm::vec3> & normalList,
     std::vector<unsigned int> & textureIndex,
     std::vector<glm::vec2> & textureList,
-	//Chimera::Color cor,
+	Chimera::Color cor,
     std::vector<VertexData> &outData
 );
 

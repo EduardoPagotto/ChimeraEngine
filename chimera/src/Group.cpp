@@ -8,6 +8,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_inverse.hpp> 
 
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace Chimera {
 
 Group::Group(Node* _parent, std::string _name) : Node (_parent, EntityKind::GROUP, _name) { 
@@ -78,6 +81,25 @@ GLuint Group::applyIdProgram() {
     
     return idProgram;
 }
+ 
+ ///
+void teste() {
+    float pitch;
+    float yaw;
+    float roll;
+    
+    glm::vec3 position(0,0,0);
+    
+    //Euler to Quarterion pitch, yaw, roll angul em radianos
+    glm::vec3 myEuler (pitch, yaw, roll);//yaw, pitch, roll ?????
+    glm::quat myQuat (myEuler);
+    
+    glm::mat4 matRot = glm::toMat4(myQuat); //matriz rotacao
+    glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), position); //matriz translacao
+    glm::mat4 final = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!! 
+}
+///
+ 
  
 }
 

@@ -53,16 +53,21 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
       
         
         Group* group1 = sceneMng->createSceneGraph();
-#ifdef WIN32
-       group1->setIdProgram( Chimera::LoadShaders ( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
-                                           "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl" ));
-# else
-       group1->setIdProgram( Chimera::LoadShaders ( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
-                                           "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl" ));
-# endif
+// #ifdef WIN32
+//        group1->setIdProgram( Chimera::LoadShaders ( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
+//                                            "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl" ));
+// # else
+//        group1->setIdProgram( Chimera::LoadShaders ( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
+//                                            "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl" ));
+// # endif
          
         Transform* pTrans = new Transform(group1,"trans01");
         pTrans->setPosition( btVector3( 0.0, 0.0, 0.0) );
+        
+        Light* pLight = new Light(group1,"Luz1"); 
+        pLight->setDiffuse(Color::WHITE);
+        pLight->setPositionRotation(btVector3(10,10,10), btVector3(0,0,0));
+        //pLight->init();
         
         sceneMng->origemDesenho((Coord*)pTrans);
         

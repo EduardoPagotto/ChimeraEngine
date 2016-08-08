@@ -46,7 +46,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pCam->setFar(10000.0);
         pCam->setNear(0.1);
         pCam->setFov(45.0);  
-        pCam->setPositionRotation( btVector3(300 , 0 ,0) , btVector3(0,0,0) );
+        pCam->setPositionRotation( glm::vec3(300 , 0 ,0) , glm::vec3(0,0,0) );
         pCam->setPerspective(true);
         pCam->init();
         sceneMng->cameraAtiva(pCam);
@@ -62,11 +62,11 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 // # endif
          
         Transform* pTrans = new Transform(group1,"trans01");
-        pTrans->setPosition( btVector3( 0.0, 0.0, 0.0) );
+        pTrans->setPosition( glm::vec3( 0.0, 0.0, 0.0) );
         
         Light* pLight = new Light(group1,"Luz1"); 
         pLight->setDiffuse(Color::WHITE);
-        pLight->setPositionRotation(btVector3(10,10,10), btVector3(0,0,0));
+        pLight->setPositionRotation(glm::vec3(10,10,10), glm::vec3(0,0,0));
         //pLight->init();
         
         sceneMng->origemDesenho((Coord*)pTrans);

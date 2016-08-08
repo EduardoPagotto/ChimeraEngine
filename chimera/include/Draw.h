@@ -1,10 +1,9 @@
 #ifndef DRAW_H_
 #define DRAW_H_
 
-#include <LinearMath/btVector3.h>
-
 #include "Node.h"
 #include "State.h"
+#include "glm/glm.hpp"
 
 namespace Chimera {
 
@@ -16,7 +15,7 @@ public:
     Draw ( const Draw &_draw );
     virtual ~Draw();
     virtual void renderExecute ( bool _texture ) = 0;
-    virtual btVector3 getSizeBox() = 0;
+    virtual glm::vec3 getSizeBox() = 0;
 
     State *getState() {
         return pState;

@@ -2,7 +2,7 @@
 #define __COORD_H__
 
 #include "Node.h"
-#include <LinearMath/btVector3.h>
+#include "glm/glm.hpp"
 
 namespace Chimera {
 
@@ -11,8 +11,8 @@ class Coord : public Node
 public:
 	Coord(Node* _parent, EntityKind _entity, std::string _name) : Node (_parent, _entity , _name){}
 	virtual ~Coord(){}
-	virtual btVector3 getPosition() = 0;
-	virtual void setPosition(const btVector3 &_pos) = 0;
+	virtual glm::vec3 getPosition() = 0;
+	virtual void setPosition(const glm::vec3 &_pos) = 0;
 };
 }
 

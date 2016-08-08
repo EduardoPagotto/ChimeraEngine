@@ -1,7 +1,7 @@
 #ifndef SHADOW_MAP_H_
 #define SHADOW_MAP_H_
 
-# include <LinearMath/btVector3.h>
+#include <glm/glm.hpp>
 # include "Texture.h"
 #include "Node.h"
 
@@ -17,7 +17,7 @@ public:
 
     //void RenderSceneA ( void *pObjeto );
     //void ApplyShadowMap ( void *pObjeto );
-    void StoreLightMatrices ( const btVector3 &posicao );
+    void StoreLightMatrices ( const glm::vec3 &posicao );
     void init ( Node *_pScene );
 
 	void initSceneShadow();
@@ -37,7 +37,7 @@ private:
     float g_mModelView[16];
 
     // We set the light's view position at the origin
-    btVector3 g_LightView;
+    glm::vec3 g_LightView;
 
     Texture *pTexture;
 };

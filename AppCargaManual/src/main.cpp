@@ -66,7 +66,7 @@ int testeCargaArquivo() {
 		//Chimera::Transform* posParticle = new Chimera::Transform((Chimera::Node*)group1, "posicaoParticle");
 		//posParticle->setTranslate(btVector3(-5.0, 5.0, 4.0));
         Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)group1, "testeZ1" );
-		pParticleEmitter->setPosSource(btVector3(-5.0, 5.0, 4.0));
+		pParticleEmitter->setPosSource(glm::vec3(-5.0, 5.0, 4.0));
 		pParticleEmitter->setMaxSeed(100);
         std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
         pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;

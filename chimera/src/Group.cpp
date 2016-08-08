@@ -68,9 +68,9 @@ GLuint Group::applyIdProgram() {
             Light *pLight = (Light*)findNodeBySeq(EntityKind::LIGHT,0);//FIXME usar outro jeito para pegar esta luz
             if (pLight != nullptr) {
                 
-                btVector3 posicaoLuzZ1 =  pLight->getPosition();
+                glm::vec3 posicaoLuzZ1 =  pLight->getPosition();
                 
-                glm::vec3 vLuz(posicaoLuzZ1.getX(), posicaoLuzZ1.getY(), posicaoLuzZ1.getZ());
+                glm::vec3 vLuz(posicaoLuzZ1.x, posicaoLuzZ1.y, posicaoLuzZ1.z);
                 float *pvl = glm::value_ptr(vLuz);
                 
                 glUniform3fv(llumLoc, 1, pvl);

@@ -1,8 +1,7 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include <LinearMath/btVector3.h>
-#include <LinearMath/btTransform.h>
+#include <glm/glm.hpp>
 #include <tinyxml2.h>
 
 #include "Node.h"
@@ -63,7 +62,7 @@ public:
         return perspective;
     }
 
-    btVector3 getPosition() const {
+    glm::vec3 getPosition() const {
         return position;
     }
 
@@ -71,19 +70,19 @@ public:
         perspective = _perspective; //TODO implementar isto para ortogonal (false);
     }
 
-    void setTransform ( const btTransform &_trans ) {
+    void setTransform ( const glm::mat4 &_trans ) {
         transform = _trans;
     }
 
-    void setPositionRotation ( const btVector3 &_posicao, const btVector3 &_rotation );
+    void setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_rotation );
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
 protected:
     CameraType type;
-    btVector3 position;
-    btVector3 rotation;
-    btVector3 direction;
-    btTransform transform;
+    glm::vec3 position;
+    glm::vec3 rotation;
+    glm::vec3 direction;
+    glm::mat4 transform;
 
 private:
     float nearDistance;

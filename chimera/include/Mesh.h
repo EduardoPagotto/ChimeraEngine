@@ -26,7 +26,7 @@ public:
 	virtual void init();
     virtual void renderExecute ( bool _texture );
     
-    virtual btVector3 getSizeBox();
+    virtual glm::vec3 getSizeBox();
 
     void accept(class NodeVisitor* v);
     

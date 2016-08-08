@@ -2,19 +2,22 @@
 
 #include <stdlib.h>
 
-#ifndef WIN32
-#include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#include "windows.h"
-#endif
+// #ifndef WIN32
+// #include <SDL2/SDL.h>
+// #else
+// #include <SDL.h>
+// #include "windows.h"
+// #endif
+// 
+// #include <GL/gl.h>
+// #include <GL/glu.h>
+#include <OpenGLDefs.h>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
 
-Particle::Particle (btVector3 *pInitPosition, const btVector3& direction, const btVector3& gravity , const Color& color,const float& live ) {
+Particle::Particle (glm::vec3 *pInitPosition, const glm::vec3& direction, const glm::vec3& gravity , const Color& color,const float& live ) {
 
     this->initPosition = pInitPosition;
     this->initLive = live;
@@ -25,7 +28,7 @@ Particle::Particle (btVector3 *pInitPosition, const btVector3& direction, const 
 Particle::~Particle() {
 }
 
-void Particle::ResetParticle ( Color color, const btVector3 &dir ) {
+void Particle::ResetParticle ( Color color, const glm::vec3 &dir ) {
     active = true;	//Make the particels active
     life = initLive;// Give the particles life
 
@@ -44,27 +47,27 @@ void Particle::ResetParticle ( Color color, const btVector3 &dir ) {
 //   um don't look down here ]
 // where a, b, c are translations in _eye_ space.  (For this reason, a,b,c is not
 // the camera location - sorry!)
-void Particle::camera_directions ( btVector3 *right, btVector3 *up, btVector3 *look ) {
+void Particle::camera_directions ( glm::vec3 *right, glm::vec3 *up, glm::vec3 *look ) {
     float m[16];
     glGetFloatv ( GL_MODELVIEW_MATRIX, m );
 
     if ( right != nullptr ) {
-        right->setValue ( m[0], m[4], m[8] );
+        *right = glm::vec3( m[0], m[4], m[8] );
     }
 
     if ( up != nullptr ) {
-        up->setValue ( m[1], m[5], m[9] );
+        *up = glm::vec3( m[1], m[5], m[9] );
     }
 
     if ( look != nullptr ) {
-        look->setValue ( m[2], m[6], m[10] );
+        *look = glm::vec3( m[2], m[6], m[10] );
     }
 
 }
 
-void Particle::draw_billboard ( const btVector3 &posicao ) {
-    btVector3 right;
-    btVector3 up;
+void Particle::draw_billboard ( const glm::vec3 &posicao ) {
+    glm::vec3 right;
+    glm::vec3 up;
 
     camera_directions ( &right, &up, nullptr );
     glBegin ( GL_TRIANGLE_STRIP );
@@ -73,21 +76,21 @@ void Particle::draw_billboard ( const btVector3 &posicao ) {
     right /= ks;
     up /= ks;
 
-    btVector3 final = posicao + right + up;          // right-up
+    glm::vec3 final = posicao + right + up;          // right-up
     glTexCoord2d ( 1, 1 );
-    glVertex3fv ( final.m_floats );                        //   final.x(), final.y(),  final.z());
+    glVertex3fv ( glm::value_ptr(final));                        //   final.x(), final.y(),  final.z());
 
     final = posicao - right + up;                     // Left-up
     glTexCoord2d ( 0, 1 );
-    glVertex3fv ( final.m_floats );
+    glVertex3fv ( glm::value_ptr(final) );
 
     final = posicao + right - up;                      // right-bottom
     glTexCoord2d ( 1, 0 );
-    glVertex3fv ( final.m_floats );
+    glVertex3fv ( glm::value_ptr(final) );
 
     final = posicao - right - up;                       // left-bottom
     glTexCoord2d ( 0, 0 );
-    glVertex3fv ( final.m_floats );
+    glVertex3fv ( glm::value_ptr(final) );
 
     glEnd();
 }
@@ -118,7 +121,7 @@ void Particle::render() {
 
         // If the particle dies, revive it
         if ( life < 0.0f ) {
-            btVector3 novaDirecao ( xspeed + ( float ) ( ( rand() % 60 ) - 32.0f ),
+            glm::vec3 novaDirecao ( xspeed + ( float ) ( ( rand() % 60 ) - 32.0f ),
                                     yspeed + ( float ) ( ( rand() % 60 ) - 30.0f ),
                                     ( float ) ( ( rand() % 60 ) - 30.0f ) );
 

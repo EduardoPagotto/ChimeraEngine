@@ -186,7 +186,7 @@ bool Material::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElem
             if ( l_nColor != nullptr ) {
 				tinyxml2::XMLElement* l_nColorVal = l_nColor->FirstChildElement ( "color" );
                 if (l_nColorVal != nullptr ) {
-                    std::vector<btScalar> l_arrayF;
+                    std::vector<float> l_arrayF;
                     const char* l_cor = l_nColorVal->GetText();
                     loadArrayBtScalar ( l_cor, l_arrayF );
 

@@ -107,9 +107,9 @@ void HUD::init() {
 
 }
 
-btVector3 HUD::getSizeBox()
+glm::vec3 HUD::getSizeBox()
 {
-	return btVector3();
+	return glm::vec3();
 }
 
 void HUD::renderExecute(bool _texture)

@@ -1,9 +1,6 @@
 #ifndef LIGHT_H_
 #define LIGHT_H_
 
-#include <LinearMath/btVector3.h>
-#include <LinearMath/btTransform.h>
-
 #include <tinyxml2.h>
 
 #include "Color.h"
@@ -11,6 +8,7 @@
 
 #include "OpenGLDefs.h"
 #include <map>
+#include "glm/glm.hpp"
 
 namespace Chimera {
     
@@ -63,21 +61,21 @@ public:
         type = _type;
     }
 
-    void setTransform ( const btTransform &_trans ) {
+    void setTransform ( const glm::mat4 &_trans ) {
         transform = _trans;
     }
 
-    btVector3 getPosition() const {
+    glm::vec3 getPosition() const {
         return position;
     }
 
-    void setPositionRotation ( const btVector3 &_posicao, const btVector3 &_rotation );
+    void setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_rotation );
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
 private:
 
-    btTransform transform;
-    btVector3 position;
+    glm::mat4 transform;
+    glm::vec3 position;
     
     Color ambient;
     Color specular;

@@ -21,16 +21,16 @@ void Transform::accept(class NodeVisitor* v) {
 	v->visit(this);
 }
 
-void Transform::setTransform ( const btTransform& _trans ) {
+void Transform::setTransform ( const glm::mat4& _trans ) {
     //TODO implementar
 }
 
-btVector3 Transform::getPosition()
+glm::vec3 Transform::getPosition()
 {
 	return translate;
 }
 
-void Transform::setPosition(const btVector3 & _pos)
+void Transform::setPosition(const glm::vec3 & _pos)
 {
     this->tflag = true;
 	translate = _pos;
@@ -49,12 +49,12 @@ bool Transform::getTranslateFlag() {
 	return this->tflag;
 }
 
-void Transform::setRotate(const btVector3 &_vet) {
+void Transform::setRotate(const glm::vec3 &_vet) {
 	this->rotate = _vet;
 	this->rflag = true;
 }
 
-btVector3 Transform::getRotate() {
+glm::vec3 Transform::getRotate() {
 	return this->rotate;
 }
 
@@ -62,12 +62,12 @@ bool Transform::getRotateFlag() {
 	return this->rflag;
 }
 
-void Transform::setScale(const btVector3 &_vet) {
+void Transform::setScale(const glm::vec3 &_vet) {
 	this->scale = _vet;
 	this->sflag = true;
 }
 
-btVector3 Transform::getScale() {
+glm::vec3 Transform::getScale() {
 	return this->scale;
 }
 
@@ -78,13 +78,13 @@ bool Transform::getScaleFlag() {
 void Transform::applyTransform()
 {
 	if (this->getTranslateFlag()) 
-		glTranslatef(this->translate.x(), this->translate.y(), this->translate.z());
+		glTranslatef(this->translate.x, this->translate.y, this->translate.z);
 
 	if (this->getRotateFlag()) 
-		glRotatef(this->rotate.x(), this->rotate.y(), this->rotate.z(), this->rotate.w());
+		glRotatef(0.0, this->rotate.x, this->rotate.y, this->rotate.z);
 
 	if (this->getScaleFlag()) 
-		glScalef(this->scale.x(), this->scale.y(), this->scale.z());
+		glScalef(this->scale.x, this->scale.y, this->scale.z);
 }
 
 }

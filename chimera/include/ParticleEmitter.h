@@ -17,18 +17,18 @@ public:
 	virtual void init();
 	virtual void accept(class NodeVisitor* v);
     virtual void renderExecute(bool _texture);
-    virtual btVector3 getSizeBox();
+    virtual glm::vec3 getSizeBox();
     
     void setGL();
     void loadImage ( const char *_file );
-    void SortParticles ( const btVector3 &posCamera );
-    void setSizeBox(const btVector3 &_size);
+    void SortParticles ( const glm::vec3 &posCamera );
+    void setSizeBox(const glm::vec3 &_size);
 
-	inline void setPosSource(const btVector3 &_val) {
+	inline void setPosSource(const glm::vec3 &_val) {
 		posSource = _val;
 	}
 
-	inline btVector3 getPosSource() const {
+	inline glm::vec3 getPosSource() const {
 		return posSource;
 	}
 
@@ -40,15 +40,14 @@ public:
 		return maxSeed;
 	}
 
-	inline void setPosition(const btVector3 &_pos) {
+	inline void setPosition(const glm::vec3 &_pos) {
 		position = _pos;
 	}
 
 private:
-	btVector3 position;
-
-	btVector3 posSource;
-    btVector3 sizeBox;
+	glm::vec3 position;
+	glm::vec3 posSource;
+    glm::vec3 sizeBox;
     
 	int maxSeed;
     

@@ -1,8 +1,8 @@
 #ifndef _PARTICLE__H
 #define _PARTICLE__H
 
-# include <LinearMath/btVector3.h>
 #include "Color.h"
+#include "glm/glm.hpp"
 
 namespace Chimera
 {
@@ -10,10 +10,10 @@ namespace Chimera
 class Particle
 {
 public:
-    Particle ( btVector3 *pInitPosition, const btVector3& direction, const btVector3& gravity , const Color& color,const float& live );
+    Particle ( glm::vec3 *pInitPosition, const glm::vec3& direction, const glm::vec3& gravity , const Color& color,const float& live );
     virtual ~Particle();
 
-    void ResetParticle ( Color color, const btVector3 &dir );
+    void ResetParticle ( Color color, const glm::vec3 &dir );
 
     void render();
 
@@ -24,15 +24,15 @@ public:
 
     Color corAtiva;
 
-    btVector3 position;
-    btVector3 direction;
-    btVector3 gravity;
+    glm::vec3 position;
+    glm::vec3 direction;
+    glm::vec3 gravity;
 
 private:
-    btVector3 *initPosition;
+    glm::vec3 *initPosition;
     float initLive;
-    void camera_directions ( btVector3 *right, btVector3 *up, btVector3 *look );
-    void draw_billboard ( const btVector3 &posicao );
+    void camera_directions ( glm::vec3 *right, glm::vec3 *up, glm::vec3 *look );
+    void draw_billboard ( const glm::vec3 &posicao );
 
 };
 }

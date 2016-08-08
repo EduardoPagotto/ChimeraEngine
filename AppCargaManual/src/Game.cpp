@@ -50,36 +50,36 @@ void Game::joystickStatus ( Chimera::JoystickManager &joy ) {
 
 		if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {
 
-			btVector3 posicao = pEmissor->getPosSource();
-			posicao.setX(posicao.x() - 0.1f);
+			glm::vec3 posicao = pEmissor->getPosSource();
+			posicao.x = posicao.x - 0.1f;
 			pEmissor->setPosSource( posicao );
 
 		}
 
 		if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {
 
-			btVector3 posicao = pEmissor->getPosSource();
-			posicao.setX(posicao.x() + 0.1);
+			glm::vec3 posicao = pEmissor->getPosSource();
+			posicao.x = posicao.x + 0.1f;
 			pEmissor->setPosSource(posicao);
 
 		}
 
         int val = joystick->Hat ( 0 );
         if ( val & ( uint8_t ) JOY_PAD_COD::UP ) 
-			pCorpoRigido->applyForce ( btVector3 ( 0.0, 0.0, propulsaoLRUD ) );
+			pCorpoRigido->applyForce ( glm::vec3 ( 0.0, 0.0, propulsaoLRUD ) );
         
         if ( val & ( uint8_t ) JOY_PAD_COD::DOWN ) 
-			pCorpoRigido->applyForce ( btVector3 ( 0.0, 0.0, -propulsaoLRUD ) );
+			pCorpoRigido->applyForce ( glm::vec3 ( 0.0, 0.0, -propulsaoLRUD ) );
         
         if ( val & ( uint8_t ) JOY_PAD_COD::RIGHT ) 
-			pCorpoRigido->applyForce ( btVector3 ( propulsaoLRUD, 0.0, 0.0 ) );
+			pCorpoRigido->applyForce ( glm::vec3 ( propulsaoLRUD, 0.0, 0.0 ) );
         
         if ( val & ( uint8_t ) JOY_PAD_COD::LEFT ) 
-			pCorpoRigido->applyForce ( btVector3 ( -propulsaoLRUD, 0.0, 0.0 ) );
+			pCorpoRigido->applyForce ( glm::vec3 ( -propulsaoLRUD, 0.0, 0.0 ) );
         
         if ( ( roll != 0.0 ) || ( pitch != 0.0 ) || ( yaw != 0.0 ) || ( throttle != 0.0 ) ) {
-			pCorpoRigido->applyForce ( btVector3 ( 0.0, throttle, 0.0 ) );
-			pCorpoRigido->applyTorc ( btVector3 ( -torque * pitch, -torque * roll, -torque * yaw ) );
+			pCorpoRigido->applyForce ( glm::vec3 ( 0.0, throttle, 0.0 ) );
+			pCorpoRigido->applyTorc ( glm::vec3 ( -torque * pitch, -torque * roll, -torque * yaw ) );
         }
     }
 }
@@ -101,22 +101,22 @@ void Game::keyCapture ( SDL_Keycode tecla ) {
         Chimera::sendMessage ( Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN,nullptr, nullptr );
         break;
     case SDLK_UP:
-		pCorpoRigido->applyForce ( btVector3 ( 10.0, 0.0, 0.0 ) );
+		pCorpoRigido->applyForce ( glm::vec3 ( 10.0, 0.0, 0.0 ) );
         break;
     case SDLK_DOWN:
-		pCorpoRigido->applyForce ( btVector3 ( -10.0, 0.0, 0.0 ) );
+		pCorpoRigido->applyForce ( glm::vec3 ( -10.0, 0.0, 0.0 ) );
         break;
     case SDLK_LEFT:
-		pCorpoRigido->applyForce ( btVector3 ( 0.0, 10.0, 0.0 ) );
+		pCorpoRigido->applyForce ( glm::vec3 ( 0.0, 10.0, 0.0 ) );
         break;
     case SDLK_RIGHT:
-		pCorpoRigido->applyForce ( btVector3 ( 0.0, -10.0, 0.0 ) );
+		pCorpoRigido->applyForce ( glm::vec3 ( 0.0, -10.0, 0.0 ) );
         break;
     case SDLK_a:
-		pCorpoRigido->applyTorc ( btVector3 ( 0.0, 0.0, 10.0 ) );
+		pCorpoRigido->applyTorc ( glm::vec3 ( 0.0, 0.0, 10.0 ) );
         break;
     case SDLK_s:
-		pCorpoRigido->applyTorc ( btVector3 ( 0.0, 0.0, -10.0 ) );
+		pCorpoRigido->applyTorc ( glm::vec3 ( 0.0, 0.0, -10.0 ) );
         break;
     default:
         break;
@@ -197,8 +197,8 @@ void Game::stop() {
 
 void Game::newFPS ( const unsigned int &fps ) {
 
-    btVector3 val1 = pCorpoRigido->getPosition();
-    sPosicaoObj = "pos:(" + std::to_string ( val1.getX() ) + "," + std::to_string ( val1.getY() ) + "," + std::to_string ( val1.getZ() ) + ")";
+    glm::vec3 val1 = pCorpoRigido->getPosition();
+    sPosicaoObj = "pos:(" + std::to_string ( val1.x ) + "," + std::to_string ( val1.y ) + "," + std::to_string ( val1.z ) + ")";
 	textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
 }
 

@@ -2,9 +2,11 @@
 #include "ChimeraUtils.h"
 #include "ExceptionChimera.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace Chimera {
 
-void loadArrayBtScalar ( const char *_val, std::vector<btScalar> &_arrayF ) {
+void loadArrayBtScalar ( const char *_val, std::vector<float> &_arrayF ) {
 
     char l_numTemp[32];
     const char *pchFim;
@@ -46,33 +48,50 @@ void loadArrayI ( const char *_val, std::vector<int> &_arrayI ) {
     } while ( pchInit < deadEnd );
 }
 
-void loadTransformMatrix ( tinyxml2::XMLElement* _nNode, btTransform *_pTransform ) {
+glm::mat4 loadTransformMatrix ( tinyxml2::XMLElement* _nNode) {
 
     std::vector<float> l_arrayValores;
     const char* l_matrix = _nNode->GetText();
     loadArrayBtScalar ( l_matrix, l_arrayValores );
-    carregaMatrix ( _pTransform, l_arrayValores );
+    //carregaMatrix ( _pTransform, l_arrayValores );
 
+    return glm::make_mat4(&l_arrayValores[0]);
 }
 
-void carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix ) {
-
-    if ( listaMatrix.size() != 16 ) {
-        throw ExceptionChimera ( ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string ( listaMatrix.size() ) );
+glm::mat4 carregaMatrixTransformacao(tinyxml2::XMLElement* _nNode) {
+        
+    const char* l_tipoTransform = _nNode->Attribute ( "sid" );
+    if ( strcmp ( l_tipoTransform, ( const char* ) "transform" ) == 0 ) {
+        
+        return loadTransformMatrix ( _nNode );
+        
+    } else {
+        
+        throw ExceptionChimera ( ExceptionCode::READ, "Matrix de transformacao invalida" );
+        //TODO: implementar carga de posicao, rotacao e transformar em matricial em l_pTransform
     }
-
-    btScalar ponteiroFloat[16];
-    int indice = 0;
-    for ( int i = 0; i < 4; i++ ) {
-        for ( int j = 0; j < 4; j++ ) {
-            int pos = i + ( 4 * j );
-            ponteiroFloat[pos] = listaMatrix[indice];
-            indice++;
-        }
-    }
-
-    _pTrans->setFromOpenGLMatrix ( ponteiroFloat );
+    
+    return glm::mat4(1.0);
 }
+
+// void carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix ) {
+// 
+//     if ( listaMatrix.size() != 16 ) {
+//         throw ExceptionChimera ( ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string ( listaMatrix.size() ) );
+//     }
+// 
+//     btScalar ponteiroFloat[16];
+//     int indice = 0;
+//     for ( int i = 0; i < 4; i++ ) {
+//         for ( int j = 0; j < 4; j++ ) {
+//             int pos = i + ( 4 * j );
+//             ponteiroFloat[pos] = listaMatrix[indice];
+//             indice++;
+//         }
+//     }
+// 
+//     _pTrans->setFromOpenGLMatrix ( ponteiroFloat );
+// }
 
 std::string retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement* _node ) {
 

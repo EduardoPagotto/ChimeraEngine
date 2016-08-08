@@ -42,7 +42,7 @@ public:
 
 	// Inherited via Draw
 	virtual void renderExecute(bool _texture) override;
-	virtual btVector3 getSizeBox() override;
+	virtual glm::vec3 getSizeBox() override;
 
     void addFont ( Font *_pFont );
     void addSquare ( const SDL_Rect _rec, Color _color );

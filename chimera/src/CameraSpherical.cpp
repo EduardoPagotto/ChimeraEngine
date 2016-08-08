@@ -39,9 +39,9 @@ void CameraSpherical::render() {
 
 void CameraSpherical::initTrackBall ( void ) {
 
-    distancia = position.distance ( direction );
-    vertical = asin ( ( btFabs ( position.z() ) - btFabs ( direction.z() ) ) / position.distance ( direction ) ) / 0.017453293f;
-    horizontal = asin ( ( btFabs ( position.y() ) - btFabs ( direction.y() ) ) / position.distance ( direction ) ) / 0.017453293f;
+    distancia = glm::distance(position, direction ); //position.distance ( direction );
+    vertical =   asin ( ( glm::abs ( position.z ) - glm::abs ( direction.z ) ) / glm::distance(position, direction) ) / 0.017453293f;
+    horizontal = asin ( ( glm::abs ( position.y ) - glm::abs ( direction.y ) ) / glm::distance(position, direction) ) / 0.017453293f;
 
 }
 
@@ -63,9 +63,9 @@ void CameraSpherical::trackBall ( int _mx, int _my, int _mz ) {
     float l_ky = vertical * 0.017453293f;
 
     //Transform *trans = ( Transform* ) parent;
-    position.setX ( distancia * cos ( l_kx ) * sin ( l_ky ) );
-    position.setY ( distancia * cos ( l_kx ) * cos ( l_ky ) );
-    position.setZ ( distancia * sin ( l_kx ) );
+    position.x = distancia * cos ( l_kx ) * sin ( l_ky );
+    position.y = distancia * cos ( l_kx ) * cos ( l_ky );
+    position.z = distancia * sin ( l_kx );
 
 }
 }

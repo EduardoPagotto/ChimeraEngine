@@ -264,23 +264,6 @@ void LoaderDae::getNodeSceneInFile() {
     }
 }
 
-btTransform *carregaMatrixTransformacao(tinyxml2::XMLElement* _nNode) {
-    
-    btTransform *l_pTransform = nullptr;
-    const char* l_tipoTransform = _nNode->Attribute ( "sid" );
-    if ( strcmp ( l_tipoTransform, ( const char* ) "transform" ) == 0 ) {
-
-        l_pTransform = new btTransform;
-        loadTransformMatrix ( _nNode, l_pTransform );
-        return l_pTransform;
-        
-    } else {
-        //FIXME: Colocar mensagem de erro de carga
-        //TODO: implementar carga de posicao, rotacao e transformar em matricial em l_pTransform
-    }
-	return nullptr;
-}
-
 //TODO mover para camera do tipo correto
 Camera *carregaCamera(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name) {
    
@@ -338,7 +321,8 @@ Camera *carregaCamera(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, 
 
 void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type ) {
 
-    btTransform *l_pTransform = nullptr;
+    //btTransform *l_pTransform = nullptr;
+    glm::mat4 l_pTransform;
     Node *pLastNodeDone = nullptr;
 
     while ( _nNode != nullptr ) {
@@ -355,7 +339,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_camera" ) == 0 ) {
              
            Camera *pCamera = carregaCamera(root, _nNode, l_url, _id, _name);
-           pCamera->setTransform ( *l_pTransform );
+           pCamera->setTransform ( l_pTransform );
 
            _pNodePai->addChild ( pCamera );
 
@@ -368,7 +352,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             Light *pLight = new Light (nullptr,_id );
             pLight->loadCollada ( l_nNodeSourceData );
             
-            pLight->setTransform ( *l_pTransform );
+            pLight->setTransform ( l_pTransform );
             _pNodePai->addChild ( pLight );
             pLastNodeDone = pLight;
  
@@ -430,7 +414,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             if (ph != nullptr) {
 
 				ph->setName(_id);//Preciso ???
-				ph->setTransform(*l_pTransform);
+				ph->setTransform(l_pTransform);
 				ph->addChild(pDraw);
 				pLastNodeDone = ph;
 				_pNodePai->addChild(ph);
@@ -438,7 +422,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             } else {
 
                 Transform *pTrans = new Transform(_pNodePai, _id);
-                pTrans->setTransform(*l_pTransform);
+                pTrans->setTransform(l_pTransform);
                 pTrans->addChild(pDraw);
                 pLastNodeDone = pTrans;
             }

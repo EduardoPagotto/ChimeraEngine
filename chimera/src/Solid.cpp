@@ -69,18 +69,21 @@ void Solid::accept(NodeVisitor * v) {
 	v->visit(this);
 }
 
-void Solid::setPositionRotation(const btVector3 &_posicao, const btVector3 &_rotation) {
+void Solid::setPositionRotation(const glm::vec3 &_posicao, const glm::vec3 &_rotation) {
 
 	btQuaternion l_qtn;
 	transform.setIdentity();
-	l_qtn.setEulerZYX(_rotation.getX(), _rotation.getY(), _rotation.getZ());
+	l_qtn.setEulerZYX(_rotation.x, _rotation.y, _rotation.z);
 	transform.setRotation(l_qtn);
-	transform.setOrigin(_posicao);
+	transform.setOrigin( btVector3(_posicao.x, _posicao.y, _posicao.z) );
 	//pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 }
 
-void Solid::initTransform( btTransform &_tTrans, void *pObj ) {
+void Solid::initTransform( const btTransform &_tTrans, void *pObj ) {
 
+    //btTransform trans;
+    //trans.getOpenGLMatrix( glm::value_ptr( _tTrans )  );
+    
     pMotionState = new btDefaultMotionState ( _tTrans );
 
     btVector3 localInertia ( 0.0, 0.0, 0.0 );
@@ -140,48 +143,51 @@ void Solid::apply(Coord *_pCoord ) { //ajuste matricial
     transLocal.getOpenGLMatrix ( matrix );
 
     //pega posicao do objeto horigem de desenho (camera travada)
-	btVector3 l_vec = _pCoord->getPosition();
+	glm::vec3 l_vec = _pCoord->getPosition();
 
     //desloca desenha para o pbjeto horigem
-    matrix[12] -= l_vec.getX();
-    matrix[13] -= l_vec.getY();
-    matrix[14] -= l_vec.getZ();
+    matrix[12] -= l_vec.x;
+    matrix[13] -= l_vec.y;
+    matrix[14] -= l_vec.z;
 
     glMultMatrixf ( matrix );
 
 }
 
-void Solid::setPosition ( const btVector3 &_pos ) {
+void Solid::setPosition ( const glm::vec3 &_pos ) {
+    
     btTransform l_transform = pRigidBody->getCenterOfMassTransform();
-    l_transform.setOrigin ( _pos );
+    l_transform.setOrigin ( btVector3( _pos.x, _pos.y, _pos.z ) );
     pRigidBody->setCenterOfMassTransform ( l_transform );
+    
 }
 
-void Solid::setRotation ( const btVector3 &_rotation ) {
+void Solid::setRotation ( const glm::vec3 &_rotation ) {
+    
     btTransform transform = pRigidBody->getCenterOfMassTransform();
 
-    transform.setRotation ( btQuaternion ( _rotation.getY(), _rotation.getX(), _rotation.getZ() ) );
+    transform.setRotation ( btQuaternion ( _rotation.y, _rotation.x, _rotation.z ) );
     pRigidBody->setCenterOfMassTransform ( transform );
 }
 
-btVector3 Solid::getRotation() {
+glm::vec3 Solid::getRotation() {
 
     btScalar rotZ, rotY, rotX;
     pRigidBody->getWorldTransform().getBasis().getEulerZYX ( rotZ, rotY, rotX );
 
-    return btVector3 ( rotX, rotY, rotZ );
+    return glm::vec3 ( rotX, rotY, rotZ );
 }
 
-void Solid::applyTorc( const btVector3 &_torque ) {
+void Solid::applyTorc( const glm::vec3 &_torque ) {
     //pRigidBody->applyTorque(_torque);
-
-    pRigidBody->applyTorque ( pRigidBody->getInvInertiaTensorWorld().inverse() * ( pRigidBody->getWorldTransform().getBasis() * _torque ) );
+    
+    pRigidBody->applyTorque ( pRigidBody->getInvInertiaTensorWorld().inverse() * ( pRigidBody->getWorldTransform().getBasis() * btVector3(_torque.x, _torque.y, _torque.z ) ) );
 
     //pRigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis() * _torque);
     //RigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis() * _torque);
 }
 
-void Solid::applyForce( const btVector3 &_prop ) {
+void Solid::applyForce( const glm::vec3 &_prop ) {
     //Jeito um
     //btTransform boxTrans;
     //pRigidBody->getMotionState()->getWorldTransform(boxTrans);
@@ -190,7 +196,10 @@ void Solid::applyForce( const btVector3 &_prop ) {
 
     //Jeito 2
     btMatrix3x3& boxRot = pRigidBody->getWorldTransform().getBasis();
-    btVector3 correctedForce = boxRot *_prop;
+    
+    btVector3 prop(_prop.x, _prop.y, _prop.z);
+    
+    btVector3 correctedForce = boxRot * prop;
     pRigidBody->applyCentralForce ( correctedForce );
 
 }
@@ -227,9 +236,9 @@ void Solid::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement
             loadArrayBtScalar ( l_size, l_arrayValores );
 
             if ( l_arrayValores.size() == 1 ) {
-                setShapePlane ( btVector3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ), l_arrayValores[0] );
+                setShapePlane ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ), l_arrayValores[0] );
             } else if ( l_arrayValores.size() == 4 ) {
-                setShapePlane ( btVector3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ), l_arrayValores[3] );
+                setShapePlane ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ), l_arrayValores[3] );
             } else {
 
             }
@@ -243,9 +252,9 @@ void Solid::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement
             loadArrayBtScalar ( l_size, l_arrayValores );
 
             if ( l_arrayValores.size() == 1 ) {
-                setShapeBox ( btVector3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
+                setShapeBox ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
             } else if ( l_arrayValores.size() == 3 ) {
-                setShapeBox ( btVector3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
+                setShapeBox ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
             } else {
 
             }
@@ -259,9 +268,9 @@ void Solid::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement
             loadArrayBtScalar ( l_size, l_arrayValores );
 
             if ( l_arrayValores.size() == 1 ) {
-                setShapeCilinder ( btVector3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
+                setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
             } else if ( l_arrayValores.size() == 3 ) {
-                setShapeCilinder ( btVector3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
+                setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
             }
         } else if ( strcmp ( l_tipoShape, "mesh" ) == 0 ) { //FIXME ERRADO!!!!
 

@@ -41,11 +41,11 @@ void ParticleEmitter::init() {
 
 		int indiceCor = loop % coresPart.size();                 // (loop + 1) / (_max / coresPart.size());
 
-		btVector3 direcao((float)((rand() % 50) - 26.0f) * 10.0f,
-			(float)((rand() % 50) - 25.0f) * 10.0f,
-			(float)((rand() % 50) - 25.0f) * 10.0f);   // yi e zi repetiam no original
+		glm::vec3 direcao(  (float)((rand() % 50) - 26.0f) * 10.0f,
+                            (float)((rand() % 50) - 25.0f) * 10.0f,
+                            (float)((rand() % 50) - 25.0f) * 10.0f);   // yi e zi repetiam no original
 
-		Particle *pParticle = new Particle(&posSource, direcao, btVector3(0.0, 0.0, 0.0), coresPart[indiceCor], 10.0f);
+		Particle *pParticle = new Particle(&posSource, direcao, glm::vec3(0.0, 0.0, 0.0), coresPart[indiceCor], 10.0f);
 		particles.push_back(pParticle);
 	}
 
@@ -53,11 +53,11 @@ void ParticleEmitter::init() {
 
 }
 
-void ParticleEmitter::setSizeBox ( const btVector3& _size ) {
+void ParticleEmitter::setSizeBox ( const glm::vec3& _size ) {
     sizeBox = _size;
 }
 
-btVector3 ParticleEmitter::getSizeBox() {
+glm::vec3 ParticleEmitter::getSizeBox() {
     return sizeBox;
 }
 
@@ -113,7 +113,7 @@ void ParticleEmitter::renderExecute(bool _texture) {
     setGL();
 
     // desloca objeto em relacao ao que contem a camera
-    glTranslatef ( -position.x(), -position.y(), -position.z() );
+    glTranslatef ( -position.x , -position.y , -position.z );
 
     // armazena a camera para uso no ordenador //TODO: Otimizar criando lista de cameras no Object e indicando qual esta ativa neste momento
     Camera *pCam = (Camera*)Node::findNodeBySeq(EntityKind::CAMERA, 0);//FIXME!!!!!! //pSource->findChildByKind ( EntityKind::CAMERA, 0 );
@@ -137,12 +137,13 @@ void ParticleEmitter::renderExecute(bool _texture) {
 // estrutura de comparacao
 // TODO Otimizar
 struct ParticleCompare {
-    const btVector3 *pPosicao;
+    const glm::vec3 *pPosicao;
     bool operator() ( Particle* i,Particle* j ) {
 
         bool retorno;
-        float d1 = pPosicao->distance ( i->position );
-        float d2 = pPosicao->distance ( j->position );
+                
+        float d1 = glm::distance(*pPosicao , i->position); //pPosicao->distance ( i->position );
+        float d2 = glm::distance(*pPosicao , j->position); //pPosicao->distance ( j->position );
         retorno = ( d2 < d1 );
 
         return retorno;
@@ -150,7 +151,7 @@ struct ParticleCompare {
 };
 
 
-void ParticleEmitter::SortParticles ( const btVector3 &posCamera ) {
+void ParticleEmitter::SortParticles ( const glm::vec3 &posCamera ) {
 
 //// Lambda nao carrega o this
 // 		std::sort(particles.begin(), particles.end(), [](Particle* a, Particle* b){

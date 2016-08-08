@@ -27,9 +27,9 @@ public:
     void updateMove();
 
 private:
-    btVector3 along;
-    btVector3 up;
-    btVector3 forward;
+    glm::vec3 along;
+    glm::vec3 up;
+    glm::vec3 forward;
 };
 }
 #endif

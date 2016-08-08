@@ -74,37 +74,36 @@ void Mesh::accept(NodeVisitor * v) {
     v->visit(this);
 }
 
-btVector3 Mesh::getSizeBox() {
+glm::vec3 Mesh::getSizeBox() {
     
-    btVector3 retorno ( 0.0f, 0.0f, 0.0f );
-    btVector3 l_max ( 0.0f, 0.0f, 0.0f );
-    btVector3 l_min ( 0.0f, 0.0f, 0.0f );
+    glm::vec3 retorno ( 0.0f, 0.0f, 0.0f );
+    glm::vec3 l_max ( 0.0f, 0.0f, 0.0f );
+    glm::vec3 l_min ( 0.0f, 0.0f, 0.0f );
 
     for (unsigned int indice = 0; indice < vertexList.size(); indice++ ) {
         
-        if ( l_max.x() < vertexList[indice].x )
-            l_max.setX ( vertexList[indice].x );
+        if ( l_max.x < vertexList[indice].x )
+            l_max.x = vertexList[indice].x;
       
-        if ( l_max.y() < vertexList[indice].y )
-            l_max.setY ( vertexList[indice].y );
+        if ( l_max.y < vertexList[indice].y )
+            l_max.y = vertexList[indice].y;
 
-        if ( l_max.z() < vertexList[indice].z )
-            l_max.setZ ( vertexList[indice].z );
+        if ( l_max.z < vertexList[indice].z )
+            l_max.z = vertexList[indice].z;
 
-        if ( l_min.x() > vertexList[indice].x )
-            l_min.setX ( vertexList[indice].x );
+        if ( l_min.x > vertexList[indice].x )
+            l_min.x = vertexList[indice].x;
 
-        if ( l_min.y() > vertexList[indice].y )
-            l_min.setY ( vertexList[indice].y );
+        if ( l_min.y > vertexList[indice].y )
+            l_min.y = vertexList[indice].y;
 
-        if ( l_min.z() > vertexList[indice].z )
-            l_min.setZ ( vertexList[indice].z );
+        if ( l_min.z > vertexList[indice].z )
+            l_min.z = vertexList[indice].z;
     }
 
-    retorno.setValue ( ( btFabs ( l_max.x() ) + btFabs ( l_min.x() ) ) / 2,
-                       ( btFabs ( l_max.y() ) + btFabs ( l_min.y() ) ) / 2,
-                       ( btFabs ( l_max.z() ) + btFabs ( l_min.z() ) ) / 2 );
-    return retorno;
+    return glm::vec3(( glm::abs ( l_max.x ) + glm::abs ( l_min.x ) ) / 2,
+                     ( glm::abs ( l_max.y ) + glm::abs ( l_min.y ) ) / 2,
+                     ( glm::abs ( l_max.z ) + glm::abs ( l_min.z ) ) / 2 );
 }
 
 //https://cognitivewaves.wordpress.com/opengl-vbo-shader-vao/ <- a resposta aqui!!!!! matrix de model e projecao

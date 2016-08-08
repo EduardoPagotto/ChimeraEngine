@@ -98,7 +98,7 @@ void SceneMng::draw () {
     rv.HudOn = false;
     rv.particleOn = false;
     
-	btVector3 posicao = root->getState()->getLight()->getPosition();
+	glm::vec3 posicao = root->getState()->getLight()->getPosition();
 	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
 	shadoMap.initSceneShadow();
 	DFS(root);

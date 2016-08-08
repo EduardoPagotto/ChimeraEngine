@@ -11,7 +11,7 @@ namespace Chimera {
 ShadowMap::ShadowMap() {
     memset ( g_mProjection, 0, sizeof ( float ) * 16 );
     memset ( g_mModelView, 0, sizeof ( float ) * 16 );
-    g_LightView.setZero();
+    g_LightView = glm::vec3(0.0,0.0,0.0);
 
     pTexture = new Texture ( "ShadowMap-01" ,"");
 }
@@ -33,7 +33,7 @@ void ShadowMap::init ( Node *_pScene ) {
 /////   This function positions our view from the light for shadow mapping
 /////
 ///////////////////////////////// STORE LIGHT MATRICES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-void ShadowMap::StoreLightMatrices ( const btVector3 &posicao ) {
+void ShadowMap::StoreLightMatrices ( const glm::vec3 &posicao ) {
     // In this function we just set our camera position to the light's position
     // and then store the current modelview matrix.  Lastly, we set our light's
     // frustum (perspective) to set our depth precision.  Ideally, the smaller
@@ -56,8 +56,8 @@ void ShadowMap::StoreLightMatrices ( const btVector3 &posicao ) {
     glLoadIdentity();
 
     // This is where we set the light's position and view.
-    gluLookAt ( posicao.getX(), posicao.getY(), posicao.getZ(),
-                g_LightView.getX(), g_LightView.getY(), g_LightView.getZ(),
+    gluLookAt ( posicao.x, posicao.y, posicao.z,
+                g_LightView.x, g_LightView.y, g_LightView.z,
                 0, 1, 0 );
 
     // Now that we have the light's view, let's save the current modelview matrix.

@@ -19,11 +19,11 @@ public:
 
     void trackBall ( int _mx, int _my, int _mz );
 
-    void setDistanciaMaxima ( btScalar _distanciaMaxima ) {
+    void setDistanciaMaxima (const float &_distanciaMaxima ) {
         distanciaMax = _distanciaMaxima;
     }
 
-    void setDistanciaMinima ( btScalar _distanciaMinima ) {
+    void setDistanciaMinima (const float &_distanciaMinima ) {
         distanciaMin = _distanciaMinima;
     }
 
@@ -31,11 +31,11 @@ private:
 
     void initTrackBall();
 
-    btScalar horizontal;
-    btScalar vertical;
-    btScalar distancia;
-    btScalar distanciaMax;
-    btScalar distanciaMin;
+    float horizontal;
+    float vertical;
+    float distancia;
+    float distanciaMax;
+    float distanciaMin;
 };
 }
 #endif

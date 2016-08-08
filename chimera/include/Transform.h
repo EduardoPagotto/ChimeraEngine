@@ -2,7 +2,6 @@
 #define	__TRANSFORM_H__
 
 #include "Coord.h"
-#include <LinearMath/btTransform.h>
 
 namespace Chimera {
 
@@ -13,8 +12,8 @@ public:
 	virtual ~Transform();
 
 	// Inherited via Coord
-	virtual btVector3 getPosition() override;
-	virtual void setPosition(const btVector3 & _pos) override;
+	virtual glm::vec3 getPosition() override;
+	virtual void setPosition(const glm::vec3 & _pos) override;
 	
     // Inherited via Node
 	void accept(class NodeVisitor* v) override;
@@ -23,26 +22,26 @@ public:
 	//btVector3 getTranslate();
 	bool getTranslateFlag();
 
-	void setRotate(const btVector3 &_vet);
-	btVector3 getRotate();
+	void setRotate(const glm::vec3 &_vet);
+	glm::vec3 getRotate();
 	bool getRotateFlag();
 
-	void setScale(const btVector3 &_vet);
-	btVector3 getScale();
+	void setScale(const glm::vec3 &_vet);
+	glm::vec3 getScale();
 
 	bool getScaleFlag();
 	void applyTransform();
 
-    void setTransform( const btTransform &_trans );
+    void setTransform( const glm::mat4 &_trans );
     
 private:
 	bool tflag;
 	bool rflag;
 	bool sflag;
 
-	btVector3 translate;
-	btVector3 rotate; 
-	btVector3 scale; 
+	glm::vec3 translate;
+	glm::vec3 rotate; 
+	glm::vec3 scale; 
 };
 }
 #endif	/* TRANSFORM_H */

@@ -12,8 +12,7 @@ void loadArrayBtScalar ( const char *_val, std::vector<float> &_arrayF );
 void loadArrayI ( const char *_val, std::vector<int> &_arrayI );
 glm::mat4 loadTransformMatrix ( tinyxml2::XMLElement* _nNode);
 glm::mat4 carregaMatrixTransformacao(tinyxml2::XMLElement* _nNode);
-
-//void carregaMatrix ( btTransform *_pTrans, const std::vector<float> &listaMatrix );
+glm::mat4 carregaMatrix (const std::vector<float> &listaMatrix );
 std::string retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement* _node );
 
 void loadNodeLib ( tinyxml2::XMLElement* _root, const char* _url, const char* _libName, const char* _nodeName, tinyxml2::XMLElement** _nNode );

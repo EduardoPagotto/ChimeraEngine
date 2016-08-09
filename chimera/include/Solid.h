@@ -90,8 +90,7 @@ public:
     }
 
 	void setTransform(const glm::mat4 &_trans) {
-                
-		transform.getOpenGLMatrix((btScalar*)glm::value_ptr(_trans));//TODO TESTAR!!!!!
+        transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
 	}
 
     void loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName );

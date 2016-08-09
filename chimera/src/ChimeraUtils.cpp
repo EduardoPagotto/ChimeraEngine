@@ -65,33 +65,14 @@ glm::mat4 carregaMatrix ( const std::vector<float> &listaMatrix ) {
     }
 
     return glm::make_mat4(&ponteiroFloat[0]);
-    //_pTrans->setFromOpenGLMatrix ( ponteiroFloat );
 }
 
-glm::mat4 loadTransformMatrix ( tinyxml2::XMLElement* _nNode) {
+glm::mat4 loadTransformMatrix (const char* _matrix) {
 
     std::vector<float> l_arrayValores;
-    const char* l_matrix = _nNode->GetText();
-    loadArrayBtScalar ( l_matrix, l_arrayValores );
+    loadArrayBtScalar ( _matrix, l_arrayValores );
     return carregaMatrix ( l_arrayValores );
 
-    //return glm::make_mat4(&l_arrayValores[0]);
-}
-
-glm::mat4 carregaMatrixTransformacao(tinyxml2::XMLElement* _nNode) {
-        
-    const char* l_tipoTransform = _nNode->Attribute ( "sid" );
-    if ( strcmp ( l_tipoTransform, ( const char* ) "transform" ) == 0 ) {
-        
-        return loadTransformMatrix ( _nNode );
-        
-    } else {
-        
-        throw ExceptionChimera ( ExceptionCode::READ, "Matrix de transformacao invalida" );
-        //TODO: implementar carga de posicao, rotacao e transformar em matricial em l_pTransform
-    }
-    
-    return glm::mat4(1.0);
 }
 
 std::string retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement* _node ) {

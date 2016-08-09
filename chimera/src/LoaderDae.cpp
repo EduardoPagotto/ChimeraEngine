@@ -321,7 +321,6 @@ Camera *carregaCamera(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, 
 
 void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type ) {
 
-    //btTransform *l_pTransform = nullptr;
     glm::mat4 l_pTransform;
     Node *pLastNodeDone = nullptr;
 
@@ -334,7 +333,17 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
 
         if ( strcmp ( l_nomeElemento, ( const char* ) "matrix" ) == 0 ) {
 
-            l_pTransform = carregaMatrixTransformacao(_nNode);
+            const char* l_tipoTransform = _nNode->Attribute ( "sid" );
+            if ( strcmp ( l_tipoTransform, ( const char* ) "transform" ) == 0 ) {
+                
+                l_pTransform = loadTransformMatrix ( _nNode->GetText() );
+                
+            } else {
+                
+                throw ExceptionChimera ( ExceptionCode::READ, "Matrix de transformacao invalida" );
+                //TODO: implementar carga de posicao, rotacao e transformar em matricial em l_pTransform
+            }
+                
             
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_camera" ) == 0 ) {
              
@@ -487,4 +496,5 @@ tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, cons
 
     return nullptr;
 }
+
 }

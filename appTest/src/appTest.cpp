@@ -15,6 +15,8 @@
 
 #include "CameraSpherical.h"
 
+#include "MeshUtil.h"
+
 #include <glm/glm.hpp>
 
 #ifndef WIN32
@@ -66,14 +68,15 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         
         Light* pLight = new Light(group1,"Luz1"); 
         pLight->setDiffuse(Color::WHITE);
-        pLight->setPositionRotation(glm::vec3(10,10,10), glm::vec3(0,0,0));
+        pLight->setPositionRotation(glm::vec3(100,100,100), glm::vec3(0,0,0));
         //pLight->init();
         
         sceneMng->origemDesenho((Coord*)pTrans);
         
-        Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
+        //Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
+        Texture *pTex = new Texture("Texture-teste",dirDados + "/image1.jpg");
         
-        Mesh *pMesh = Mesh::createMeshParallelepiped(pTrans, "Cubo-01",glm::vec3(50,50,50),pTex, nullptr);
+        Mesh *pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",glm::vec3(50,50,50),pTex, nullptr);
         
         Game *game = new Game(sceneMng);
 

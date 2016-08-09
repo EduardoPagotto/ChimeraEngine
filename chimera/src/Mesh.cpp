@@ -3,6 +3,8 @@
 #include "NodeVisitor.h"
 #include <iterator>
 
+#include "MeshUtil.h"
+
 namespace Chimera {
     
 Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH, _name ) {
@@ -56,6 +58,8 @@ void Mesh::init() {
     pMaterial->init();
     pState->setEnableMaterial(pMaterial, true);
     
+     Chimera::debugDados(this);//FIXME: vai dar pau no windows
+    
     //Ajuste de textura do imageSDL invertendo valor de V
     int tamanho = textureIndex.size();
     for (int indice = 0; indice < tamanho; indice++) {
@@ -63,7 +67,6 @@ void Mesh::init() {
         textureList[posTex].y = 1 - textureList[posTex].y;
     }
     
-    //debugDados();
     if (programID > 0 )
         setVertexBuffer();
     else 
@@ -241,7 +244,6 @@ void Mesh::setVertexBuffer()
 {
 	std::vector<VertexData> vertexDataIn;
 	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, pMaterial->getDiffuse(), vertexDataIn);
-	//conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
 	indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
 	printf("Nome: %s \n", getName().c_str());
@@ -450,185 +452,5 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
     printf("\n");
 }
 
-void Mesh::debugDados() {
-    
-    printf("Nome: %s \n", getName().c_str());
-    int linha = 0;
-    printf("-Vertex Indice ----------( %03d )\n", vertexIndex.size());
-    for (unsigned int indice=0 ; indice < vertexIndex.size(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, vertexIndex[indice], vertexIndex[indice + 1], vertexIndex[indice + 2]);
-        linha++;
-    }
-    printf("\n");
-    
-    linha = 0;
-    printf("-Vertex Lista ---------( %03d )\n", vertexList.size());
-    for (unsigned int indice=0 ; indice < vertexList.size(); indice++) {
-        printf("Linha: %02d : p: %02d ( %05.3f ; %05.3f ; %05.3f )\n",linha, indice, vertexList[indice].x, vertexList[indice].y, vertexList[indice].z);
-        linha++;
-    }
-    printf("\n");
-    
-    linha = 0;
-    printf("Normal Indice ----------( %03d )\n", normalIndex.size());
-    for (unsigned int indice=0 ; indice < normalIndex.size(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, normalIndex[indice], normalIndex[indice + 1], normalIndex[indice + 2]);
-        linha++;
-    }
-    printf("\n");
-    
-    linha = 0;
-    printf("-Normal Lista ---------( %03d )\n", normalList.size());
-    for (unsigned int indice=0 ; indice < normalList.size(); indice++) {
-        printf("Linha: %02d : p: %02d ( %05.3f ; %05.3f ; %05.3f )\n",linha, indice, normalList[indice].x, normalList[indice].y, normalList[indice].z);
-        linha++;
-    }
-    printf("\n");
-    
-    linha = 0;
-    printf("Texture Indice ----------( %03d )\n", textureIndex.size());
-    for (unsigned int indice=0 ; indice < textureIndex.size(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, textureIndex[indice], textureIndex[indice + 1], textureIndex[indice + 2]);
-        linha++;
-    }
-    printf("\n");
-    
-    linha = 0;
-    printf("-Texture Lista ---------( %03d )\n", textureList.size());
-    for (unsigned int indice=0 ; indice < textureList.size(); indice++) {
-        printf("Linha: %02d : p: %02d ( %05.3f ; %05.3f )\n",linha, indice, textureList[indice].x, textureList[indice].y);
-        linha++;
-    }
-    printf("\n");  
-}
-
-Mesh* Mesh::createMeshParallelepiped(Node *_pParent, const std::string &_name, const glm::vec3 &_size, Texture* _pTexture, Material *_pMaterial) {
-
-    //Mesh
-    Mesh *pMesh = new Mesh(_pParent, _name);
-
-    glm::vec3 sizeObj( _size.x / 2.0f , _size.y / 2.0f, _size.z / 2.0f);
-    
-    //VertexList
-    pMesh->vertexList.push_back( glm::vec3( -sizeObj.x , -sizeObj.y ,  sizeObj.z ) );
-    pMesh->vertexList.push_back( glm::vec3( -sizeObj.x ,  sizeObj.y ,  sizeObj.z ) );
-    pMesh->vertexList.push_back( glm::vec3(  sizeObj.x ,  sizeObj.y ,  sizeObj.z ) );
-    pMesh->vertexList.push_back( glm::vec3(  sizeObj.x , -sizeObj.y ,  sizeObj.z ) );
-    pMesh->vertexList.push_back( glm::vec3( -sizeObj.x , -sizeObj.y , -sizeObj.z ) );
-    pMesh->vertexList.push_back( glm::vec3( -sizeObj.x ,  sizeObj.y , -sizeObj.z ) );
-    pMesh->vertexList.push_back( glm::vec3(  sizeObj.x ,  sizeObj.y , -sizeObj.z ) );
-    pMesh->vertexList.push_back( glm::vec3(  sizeObj.x , -sizeObj.y , -sizeObj.z ) );
-
-    //VertexIndex
-    int vertexIndexArray[] = { 01 , 02 , 03 ,
-                                07 , 06 , 05 ,
-                                04 , 05 , 01 ,
-                                05 , 06 , 02 ,
-                                06 , 07 , 03 ,
-                                00 , 03 , 07 ,
-                                00 , 01 , 03 ,
-                                04 , 07 , 05 ,
-                                00 , 04 , 01 ,
-                                01 , 05 , 02 ,
-                                02 , 06 , 03 ,
-                                04 , 00 , 07 };
-                            
-    unsigned vertexIndexArraySize = sizeof(vertexIndexArray) / sizeof(int);
-    pMesh->vertexIndex.insert(pMesh->vertexIndex.end(), &vertexIndexArray[0], &vertexIndexArray[vertexIndexArraySize]);
-        
-    //NormalList
-    pMesh->normalList.push_back(glm::vec3(  0 ,  0 , -1 ));
-    pMesh->normalList.push_back(glm::vec3(  0 ,  0 ,  1 ));
-    pMesh->normalList.push_back(glm::vec3(  1 , -0 ,  0 ));
-    pMesh->normalList.push_back(glm::vec3( -0 , -1 ,  0 ));
-    pMesh->normalList.push_back(glm::vec3( -1 ,  0 , -0 ));
-    pMesh->normalList.push_back(glm::vec3(  0 ,  1 ,  0 ));
-    pMesh->normalList.push_back(glm::vec3(  0 ,  0 , -1 ));
-    pMesh->normalList.push_back(glm::vec3(  0 ,  0 ,  1 ));
-    pMesh->normalList.push_back(glm::vec3(  1 ,  0 , -0 ));
-    pMesh->normalList.push_back(glm::vec3( -0 , -1 , -0 ));
-    pMesh->normalList.push_back(glm::vec3( -1 ,  0 ,  0 ));
-    pMesh->normalList.push_back(glm::vec3(  0 ,  1 ,  0 ));
-
-    //NormalIndex
-    int normalIndexArray[] =  { 0,0,0,
-                                1,1,1, 
-                                2,2,2, 
-                                3,3,3,
-                                4,4,4,
-                                5,5,5,
-                                6,6,6,
-                                7,7,7,
-                                8,8,8,
-                                9,9,9,
-                                10,10,10,
-                                11,11,11};
-
-    unsigned normalIndexArraySize = sizeof(normalIndexArray) / sizeof(int);
-    pMesh->normalIndex.insert(pMesh->normalIndex.end(), &normalIndexArray[0], &normalIndexArray[normalIndexArraySize]);
-    
-    if (_pTexture != nullptr) {
-        //TextureList
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.000 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.000 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 1.000 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 1.000 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.750 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.750 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.750 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.000 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.000 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.000 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 1.000 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 1.000 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 1.000 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 1.000 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.750 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.750 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.750 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.500 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.333 ));
-        pMesh->textureList.push_back( glm::vec2( 0.250 , 0.667 ));
-        pMesh->textureList.push_back( glm::vec2( 0.000 , 0.333 ));      
-        
-        int texturaIndexArray[] = { 0  , 1  , 2 ,
-                                    3  , 4  , 5 ,
-                                    6  , 7  , 8 ,
-                                    9  , 10 , 11 ,
-                                    12 , 13 , 14 ,
-                                    15 , 16 , 17 ,
-                                    18 , 19 , 20 ,
-                                    21 , 22 , 23 ,
-                                    24 , 25 , 26 ,
-                                    27 , 28 , 29 ,
-                                    30 , 31 , 32 ,
-                                    33 , 34 , 35 };
-        
-        unsigned texturaIndexArraySize = sizeof(texturaIndexArray) / sizeof(int);
-        pMesh->textureIndex.insert(pMesh->textureIndex.end(), &texturaIndexArray[0], &texturaIndexArray[texturaIndexArraySize]);  
-        
-        pMesh->setTexture(_pTexture);
-    }
-    
-    if (_pMaterial != nullptr)
-        pMesh->setMaterial(_pMaterial);
-
-    return pMesh;
-}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

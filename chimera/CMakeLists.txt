@@ -68,6 +68,7 @@ set (SourcesChimeraAPI
 	src/VboIndexer.cpp
 	src/InitVisitor.cpp
 	src/RenderVisitor.cpp
+	src/MeshUtil.cpp
 )
 	
 if (OVR_SET_TO_USE)

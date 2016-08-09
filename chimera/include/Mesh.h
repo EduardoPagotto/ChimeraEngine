@@ -36,7 +36,14 @@ public:
         programID = _id;
     }
 
-    static Mesh* createMeshParallelepiped(Node *_pParent, const std::string &_name, const glm::vec3 &_size, Texture* _pTexture, Material *_pMaterial); 
+    std::vector<unsigned int> vertexIndex;
+    std::vector<glm::vec3> vertexList;
+    
+    std::vector<unsigned int> normalIndex;
+    std::vector<glm::vec3> normalList;
+    
+    std::vector<unsigned int> textureIndex;
+    std::vector<glm::vec2> textureList;
     
 private:
     
@@ -47,17 +54,7 @@ private:
     void setVertexBuffer();
     
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
-    void debugDados();
     
-    std::vector<unsigned int> vertexIndex;
-    std::vector<glm::vec3> vertexList;
-    
-    std::vector<unsigned int> normalIndex;
-    std::vector<glm::vec3> normalList;
-    
-    std::vector<unsigned int> textureIndex;
-    std::vector<glm::vec2> textureList;
-
     GLuint programID;
 	GLuint VAO;
     GLuint VertexVBOID;

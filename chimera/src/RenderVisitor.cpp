@@ -13,6 +13,7 @@ RenderVisitor::RenderVisitor() {
 
 	projection = glm::mat4(1.0f);
 	view = glm::mat4(1.0f);
+    model = glm::mat4(1.0f);
 }
   
 RenderVisitor::~RenderVisitor() {
@@ -56,14 +57,15 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 
 void RenderVisitor::visit ( Chimera::Transform* _pTransform) {
     
-    _pTransform->applyTransform();
-    
+    model = _pTransform->getMatrix();//applyTransform();
+    glMultMatrixf(glm::value_ptr(model));
 }
 
 void RenderVisitor::visit ( Solid* _pSolid ) {
     
 	//TODO acumular esta matriz 
-    _pSolid->getModelMatrix(pCoord);
+    model = _pSolid->getModelMatrix(pCoord);
+    glMultMatrixf(glm::value_ptr(model));
 
 }
 

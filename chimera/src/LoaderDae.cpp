@@ -423,7 +423,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             if (ph != nullptr) {
 
 				ph->setName(_id);//Preciso ???
-				ph->setTransform(l_pTransform);
+				ph->setMatrix(l_pTransform);
 				ph->addChild(pDraw);
 				pLastNodeDone = ph;
 				_pNodePai->addChild(ph);
@@ -431,7 +431,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             } else {
 
                 Transform *pTrans = new Transform(_pNodePai, _id);
-                pTrans->setTransform(l_pTransform);
+                pTrans->setMatrix(l_pTransform);
                 pTrans->addChild(pDraw);
                 pLastNodeDone = pTrans;
             }

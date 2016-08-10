@@ -123,27 +123,13 @@ void Solid::setIndexVertexArray ( btTriangleIndexVertexArray *_indexVertexArray 
 
 }
 
-//void Solid::transformacao3D ( void ) {
-//
-//    btTransform transLocal;
-//    btScalar matrix[16];
-//
-//    pRigidBody->getMotionState()->getWorldTransform ( transLocal );
-//    transLocal.getOpenGLMatrix ( matrix );
-//
-//    glMultMatrixf ( matrix );
-//
-//}
-
 glm::mat4 Solid::getModelMatrix(Coord *_pCoord ) { //ajuste matricial
 
     btTransform transLocal;
     btScalar matrix[16];
-	//glm::mat4 tempMat = glm::mat4(1.0f);
 
     //Pega posicao do corpo atual e ajusta sua matrix (posicao e rotacao)
     pRigidBody->getMotionState()->getWorldTransform ( transLocal );
-    //transLocal.getOpenGLMatrix (glm::value_ptr(tempMat));
 	transLocal.getOpenGLMatrix(&matrix[0]);
 
     //pega posicao do objeto horigem de desenho (camera travada)
@@ -154,14 +140,17 @@ glm::mat4 Solid::getModelMatrix(Coord *_pCoord ) { //ajuste matricial
 	matrix[13] -= l_vec.y;
 	matrix[14] -= l_vec.z;
 
-	//tempMat = glm::translate(tempMat, -l_vec);
-
 	glm::mat4 tempMat = glm::make_mat4(matrix);
 
     //glMultMatrixf (glm::value_ptr(tempMat));
-	glMultMatrixf(matrix);
+	//glMultMatrixf(matrix);
 
 	return tempMat;
+}
+
+glm::vec3 Solid::getPosition() {
+    btVector3 pos = pRigidBody->getWorldTransform().getOrigin();
+    return glm::vec3(pos.getX(), pos.getY(), pos.getZ());
 }
 
 void Solid::setPosition ( const glm::vec3 &_pos ) {
@@ -187,6 +176,28 @@ glm::vec3 Solid::getRotation() {
 
     return glm::vec3 ( rotX, rotY, rotZ );
 }
+
+glm::mat4 Solid::getMatrix() {
+    
+    btTransform transLocal;
+    btScalar matrix[16];
+
+    //Pega posicao do corpo atual e ajusta sua matrix (posicao e rotacao)
+    pRigidBody->getMotionState()->getWorldTransform ( transLocal );
+    transLocal.getOpenGLMatrix(&matrix[0]);
+
+    //glMultMatrixf (glm::value_ptr(tempMat));
+    //glMultMatrixf(matrix);
+
+    return glm::make_mat4(matrix);;
+}
+
+void Solid::setMatrix( const glm::mat4& _trans ) {
+    
+    transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
+    
+}
+
 
 void Solid::applyTorc( const glm::vec3 &_torque ) {
     //pRigidBody->applyTorque(_torque);

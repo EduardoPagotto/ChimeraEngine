@@ -54,13 +54,13 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         sceneMng->cameraAtiva(pCam);
       
         Group* group1 = sceneMng->createSceneGraph();
- #ifdef WIN32
-        group1->shader.load( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
-                             "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl");
- #else
-        group1->shader.load( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
-                             "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl");
- #endif
+//  #ifdef WIN32
+//         group1->shader.load( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
+//                              "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl");
+//  #else
+//         group1->shader.load( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
+//                              "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl");
+//  #endif
          
         Transform* pTrans = new Transform(group1,"trans01");
         pTrans->setPosition( glm::vec3( 0.0, 0.0, 0.0) );

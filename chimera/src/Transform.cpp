@@ -5,13 +5,16 @@
 #include "Transform.h"
 #include "OpenGLDefs.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
+
 namespace Chimera {
 
 Transform::Transform(Node* _parent, std::string _name) : Coord (_parent, EntityKind::TRANSFORM, _name) {
 
-	this->tflag = false;
-	this->rflag = false;
-	this->sflag = false;
+    model = glm::mat4(1.0f);
+    
 }
 
 Transform::~Transform() {
@@ -21,61 +24,46 @@ void Transform::accept(class NodeVisitor* v) {
 	v->visit(this);
 }
 
-void Transform::setTransform ( const glm::mat4& _trans ) {
-    //TODO implementar
+glm::vec3 Transform::getPosition() {
+    
+	return glm::vec3(model[3]);
+    
 }
 
-glm::vec3 Transform::getPosition()
-{
-	return translate;
+void Transform::setPosition(const glm::vec3 & _pos) {
+    
+    model = glm::translate(model, _pos);
+    
 }
 
-void Transform::setPosition(const glm::vec3 & _pos)
-{
-    this->tflag = true;
-	translate = _pos;
+glm::vec3 Transform::getRotation() {
+    
+    return glm::vec3(0.0, 0.0, 0.0);
+    
 }
 
-bool Transform::getTranslateFlag() {
-	return this->tflag;
+void Transform::setRotation ( const glm::vec3& _rotation ) {
+    
+    model = glm::eulerAngleYXZ(_rotation.y, _rotation.x, _rotation.z); 
+    
 }
 
-void Transform::setRotate(const glm::vec3 &_vet) {
-	this->rotate = _vet;
-	this->rflag = true;
+glm::mat4 Transform::getMatrix() {
+    
+    return model;
+    
 }
 
-glm::vec3 Transform::getRotate() {
-	return this->rotate;
+void Transform::setMatrix ( const glm::mat4& _trans ) {
+    
+    model = _trans;
+    
 }
 
-bool Transform::getRotateFlag() {
-	return this->rflag;
+void Transform::setPositionRotation ( const glm::vec3& _posicao, const glm::vec3& _rotation ) {
+    
+    this->setPosition(_posicao);
+    this->setRotation(_rotation);
+    
 }
-
-void Transform::setScale(const glm::vec3 &_vet) {
-	this->scale = _vet;
-	this->sflag = true;
-}
-
-glm::vec3 Transform::getScale() {
-	return this->scale;
-}
-
-bool Transform::getScaleFlag() {
-	return this->sflag;
-}
-
-void Transform::applyTransform()
-{
-	if (this->getTranslateFlag()) 
-		glTranslatef(this->translate.x, this->translate.y, this->translate.z);
-
-	if (this->getRotateFlag()) 
-		glRotatef(0.0, this->rotate.x, this->rotate.y, this->rotate.z);
-
-	if (this->getScaleFlag()) 
-		glScalef(this->scale.x, this->scale.y, this->scale.z);
-}
-
 }

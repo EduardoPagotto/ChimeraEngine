@@ -36,14 +36,14 @@ public:
     // Inherited via Node
 	void accept(class NodeVisitor* v);
 
-	virtual glm::vec3 getPosition() {
-		btVector3 pos = pRigidBody->getWorldTransform().getOrigin();
-        return glm::vec3(pos.getX(), pos.getY(), pos.getZ());
-	}
-
-	virtual void setPosition(const glm::vec3 &_pos);
-
-	void setPositionRotation(const glm::vec3 & _posicao, const glm::vec3 & _rotation);
+    // Inherited via Coord
+	virtual glm::vec3 getPosition() override;
+	virtual void setPosition(const glm::vec3 &_pos) override;
+    virtual glm::vec3 getRotation() override;
+    virtual void setRotation ( const glm::vec3 &_rotation ) override;
+    virtual glm::mat4 getMatrix() override;
+    virtual void setMatrix(const glm::mat4 &_trans) override;
+	virtual void setPositionRotation(const glm::vec3 & _posicao, const glm::vec3 & _rotation) override;
 
     inline void setMass ( const float &_mass ) {
         mass = _mass;
@@ -72,13 +72,6 @@ public:
     inline void setShapeSphere ( float _raio ) {
         pShapeCollision = new btSphereShape ( (btScalar)_raio );
     }
-
-    void setRotation ( const glm::vec3 &_rotation );
-
-    glm::vec3 getRotation();
-
-    //usada na trans cam do mundo
-    //void transformacao3D();
     
     void applyForce( const glm::vec3 &_prop );
     void applyTorc( const glm::vec3 &_torque );
@@ -89,9 +82,9 @@ public:
 		return (pShapeCollision != nullptr ? true : false);
     }
 
-	void setTransform(const glm::mat4 &_trans) {
-        transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
-	}
+// 	void setTransform(const glm::mat4 &_trans) {
+//         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
+// 	}
 
     void loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName );
 

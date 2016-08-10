@@ -58,7 +58,7 @@ void Mesh::init() {
     pMaterial->init();
     pState->setEnableMaterial(pMaterial, true);
     
-     Chimera::debugDados(this);//FIXME: vai dar pau no windows
+     //Chimera::debugDados(this);//FIXME: vai dar pau no windows
     
     //Ajuste de textura do imageSDL invertendo valor de V
     int tamanho = textureIndex.size();

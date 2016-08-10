@@ -82,6 +82,9 @@ void SceneMng::DFS(Node* u)
 
 void SceneMng::draw () {
 
+	//midanca radical no tratamento de camera e objeto para uso de GLSL 
+	//http://learnopengl.com/#!Getting-started/Camera
+
 //#define TESTEZ1
 
     int indiceDesenho = 1;

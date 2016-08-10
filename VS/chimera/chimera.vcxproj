@@ -110,6 +110,7 @@
     <ClInclude Include="..\..\chimera\include\Light.h" />
     <ClInclude Include="..\..\chimera\include\LoaderDae.h" />
     <ClInclude Include="..\..\chimera\include\Material.h" />
+    <ClInclude Include="..\..\chimera\include\MeshUtil.h" />
     <ClInclude Include="..\..\chimera\include\Mutex.h" />
     <ClInclude Include="..\..\chimera\include\Node.h" />
     <ClInclude Include="..\..\chimera\include\NodeVisitor.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="..\..\chimera\src\Light.cpp" />
     <ClCompile Include="..\..\chimera\src\LoaderDae.cpp" />
     <ClCompile Include="..\..\chimera\src\Material.cpp" />
+    <ClCompile Include="..\..\chimera\src\MeshUtil.cpp" />
     <ClCompile Include="..\..\chimera\src\Node.cpp" />
     <ClCompile Include="..\..\chimera\src\Particle.cpp" />
     <ClCompile Include="..\..\chimera\src\ParticleEmitter.cpp" />

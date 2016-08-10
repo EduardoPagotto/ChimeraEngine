@@ -115,6 +115,9 @@
     <ClCompile Include="..\..\chimera\src\RenderVisitor.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\chimera\src\MeshUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chimera\include\Camera.h">
@@ -262,6 +265,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\RenderVisitor.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\MeshUtil.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

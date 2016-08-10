@@ -82,7 +82,7 @@ void SceneMng::DFS(Node* u)
 
 void SceneMng::draw () {
 
-	//midanca radical no tratamento de camera e objeto para uso de GLSL 
+	//mudanca radical no tratamento de camera e objeto para uso de GLSL 
 	//http://learnopengl.com/#!Getting-started/Camera
 
 //#define TESTEZ1
@@ -108,16 +108,18 @@ void SceneMng::draw () {
 	shadoMap.endSceneShadow();
     //shadoMap.RenderSceneA (pOrigemDesenho);
 #endif
-    
+   
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
 		if (pCameraAtiva != nullptr) {
 
-			pVideo->executeViewPerspective(pCameraAtiva->getFov(), pCameraAtiva->getNear(), pCameraAtiva->getFar(), eye);
-			pCameraAtiva->render();
+			rv.projection = pVideo->getPerspectiveProjectionMatrix(pCameraAtiva->getFov(), pCameraAtiva->getNear(), pCameraAtiva->getFar(), eye);
+			rv.view = pCameraAtiva->getViewMatrix();
+
 		} else {
-            
-            pVideo->executeViewPerspective(45.0, 0.5, 10000.0, eye);
+
+			rv.projection = pVideo->getPerspectiveProjectionMatrix(45.0, 0.5, 10000.0, eye);
+         
         }
 
 		rv.textureOn = true;

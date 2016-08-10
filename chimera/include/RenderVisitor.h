@@ -27,6 +27,9 @@ public:
     Coord *pCoord;
     Video *pVideo;
 
+	glm::mat4 projection;
+	glm::mat4 view;
+
 private:
 };    
 }

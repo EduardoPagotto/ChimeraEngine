@@ -36,15 +36,6 @@ void Transform::setPosition(const glm::vec3 & _pos)
 	translate = _pos;
 }
 
-// void Transform::setTranslate(const btVector3 &_vet) {
-// 	this->translate = _vet;
-// 	this->tflag = true;
-// }
-// 
-// btVector3 Transform::getTranslate() {
-// 	return this->translate;
-// }
-
 bool Transform::getTranslateFlag() {
 	return this->tflag;
 }

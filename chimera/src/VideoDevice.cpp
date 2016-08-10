@@ -1,6 +1,9 @@
 #include "VideoDevice.h"
 #include "ExceptionSDL.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
+
 namespace Chimera {
 
 VideoDevice::VideoDevice ( std::string _nome ) : Video ( _nome, KIND_DEVICE::SCREEN ) {
@@ -32,29 +35,30 @@ void VideoDevice::endDraw() {
     SDL_GL_SwapWindow ( window );
 }
 
-void VideoDevice::executeViewPerspective ( const float &_fov,const float &_near,const float &_far, int _eye ) {
+glm::mat4 VideoDevice::getPerspectiveProjectionMatrix(const float &_fov, const float &_near, const float &_far, int _eye) {
+//void VideoDevice::executeViewPerspective ( const float &_fov,const float &_near,const float &_far, int _eye ) {
 
     glViewport ( 0, 0, winSizeW, winSizeH );
+	return glm::perspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
 
-    glMatrixMode ( GL_PROJECTION );
-    glLoadIdentity();
-    gluPerspective ( _fov, ( GLfloat ) ( float ) winSizeW / ( float ) winSizeH, _near, _far );
-    glMatrixMode ( GL_MODELVIEW );
-    glLoadIdentity();
-
+    //glMatrixMode ( GL_PROJECTION );
+    //glLoadIdentity();
+    //gluPerspective ( _fov, ( GLfloat ) ( float ) winSizeW / ( float ) winSizeH, _near, _far );
+    //glMatrixMode ( GL_MODELVIEW );
+    //glLoadIdentity();
 }
 
-void VideoDevice::perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear, GLdouble zFar )//TODO subistituir o executeViewPerspective
-{
-    const GLdouble pi = 3.1415926535897932384626433832795;
-    GLdouble fW, fH;
-
-    //fH = tan( (fovY / 2) / 180 * pi ) * zNear;
-    fH = tan( fovY / 360 * pi ) * zNear;
-    fW = fH * aspect;
-
-    glFrustum( -fW, fW, -fH, fH, zNear, zFar );
-}
+//void VideoDevice::perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear, GLdouble zFar )//TODO subistituir o executeViewPerspective
+//{
+//    const GLdouble pi = 3.1415926535897932384626433832795;
+//    GLdouble fW, fH;
+//
+//    //fH = tan( (fovY / 2) / 180 * pi ) * zNear;
+//    fH = tan( fovY / 360 * pi ) * zNear;
+//    fW = fH * aspect;
+//
+//    glFrustum( -fW, fW, -fH, fH, zNear, zFar );
+//}
 
 void VideoDevice::executeViewOrto ( int eye ) {
 

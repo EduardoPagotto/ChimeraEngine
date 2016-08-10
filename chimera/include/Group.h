@@ -4,6 +4,8 @@
 #include "Node.h"
 #include "OpenGLDefs.h"
 
+#include <glm/glm.hpp>
+
 namespace Chimera {
 
 class Group : public Node
@@ -19,8 +21,7 @@ public:
         return idProgram;
     }
     
-    GLuint applyIdProgram();
-    
+    GLuint applyIdProgram(const glm::mat4 &_view,const glm::mat4 &_proj);
     
 private:
 	 GLuint idProgram;

@@ -29,7 +29,7 @@ void Group::setIdProgram(const GLuint &_id) {
         idProgram = _id;
 } 
  
-GLuint Group::applyIdProgram() {
+GLuint Group::applyIdProgram(const glm::mat4 &_view, const glm::mat4 &_proj) {
     
     if (idProgram > 0) {
         
@@ -39,30 +39,16 @@ GLuint Group::applyIdProgram() {
         GLint mvloc = glGetUniformLocation(idProgram, "umvMat");
         GLint ploc = glGetUniformLocation(idProgram, "upMat");
         GLint nloc = glGetUniformLocation(idProgram, "noMat");
+		GLint llumLoc = glGetUniformLocation(idProgram, "l_dir");
+
+		glUniformMatrix4fv(mvloc, 1, false, glm::value_ptr(_view));
+		glUniformMatrix4fv(ploc, 1, false, glm::value_ptr(_proj));
         
-        // Pass the model-view matrix to the shader
-        GLfloat mvMat[16]; 
-        glGetFloatv(GL_MODELVIEW_MATRIX, mvMat); 
-        glUniformMatrix4fv(mvloc, 1, false, mvMat);
-    
-        // Pass the projection matrix to the shader
-        GLfloat pMat[16]; 
-        glGetFloatv(GL_PROJECTION_MATRIX, pMat); 
-        glUniformMatrix4fv(ploc, 1, false, pMat);
+		if (nloc >= 0) {
+			glm::mat3 gl_NormalMatrix = glm::inverseTranspose(glm::mat3(_view));
+			glUniformMatrix3fv(nloc, 1, false, glm::value_ptr(gl_NormalMatrix));
+		}
         
-        //glm::mat4 modelViewMat;
-        //float *ptrMat = glm::value_ptr(modelViewMat);
-        //glGetFloatv(GL_MODELVIEW_MATRIX, ptrMat);
-        
-        if (nloc >= 0) {
-            glm::mat4 modelViewMat = glm::make_mat4(mvMat);
-            glm::mat3 gl_NormalMatrix = glm::inverseTranspose(glm::mat3(modelViewMat));
-            float *pnMat = glm::value_ptr(gl_NormalMatrix);
-            glUniformMatrix3fv(nloc, 1, false, pnMat);
-        }
-        
-        
-        GLint llumLoc = glGetUniformLocation (idProgram, "l_dir");
         if (llumLoc >= 0) {
          
             Light *pLight = (Light*)findNodeBySeq(EntityKind::LIGHT,0);//FIXME usar outro jeito para pegar esta luz
@@ -77,7 +63,19 @@ GLuint Group::applyIdProgram() {
                 
             }  
         }
-    }
+
+	} else {
+
+		//openGL 1.4
+		//so ate mudar
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glMultMatrixf(glm::value_ptr(_proj));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glMultMatrixf(glm::value_ptr(_view));
+
+	}
     
     return idProgram;
 }

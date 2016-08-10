@@ -29,9 +29,9 @@ public:
 
     virtual ~Solid();
 
-    virtual void apply(Coord *_pCoord);
-
 	virtual void init();
+
+	glm::mat4 getModelMatrix(Coord *_pCoord);
 
     // Inherited via Node
 	void accept(class NodeVisitor* v);
@@ -78,7 +78,7 @@ public:
     glm::vec3 getRotation();
 
     //usada na trans cam do mundo
-    void transformacao3D();
+    //void transformacao3D();
     
     void applyForce( const glm::vec3 &_prop );
     void applyTorc( const glm::vec3 &_torque );

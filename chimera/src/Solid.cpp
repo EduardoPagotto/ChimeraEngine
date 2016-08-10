@@ -4,6 +4,8 @@
 #include "Draw.h"
 #include "NodeVisitor.h"
 
+#include <glm\gtc\matrix_transform.hpp>
+
 namespace Chimera {
     
 Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::SOLID, _name ) {
@@ -121,37 +123,45 @@ void Solid::setIndexVertexArray ( btTriangleIndexVertexArray *_indexVertexArray 
 
 }
 
-void Solid::transformacao3D ( void ) {
+//void Solid::transformacao3D ( void ) {
+//
+//    btTransform transLocal;
+//    btScalar matrix[16];
+//
+//    pRigidBody->getMotionState()->getWorldTransform ( transLocal );
+//    transLocal.getOpenGLMatrix ( matrix );
+//
+//    glMultMatrixf ( matrix );
+//
+//}
+
+glm::mat4 Solid::getModelMatrix(Coord *_pCoord ) { //ajuste matricial
 
     btTransform transLocal;
     btScalar matrix[16];
-
-    pRigidBody->getMotionState()->getWorldTransform ( transLocal );
-    transLocal.getOpenGLMatrix ( matrix );
-
-    glMultMatrixf ( matrix );
-
-}
-
-void Solid::apply(Coord *_pCoord ) { //ajuste matricial
-
-    btTransform transLocal;
-    btScalar matrix[16];
+	//glm::mat4 tempMat = glm::mat4(1.0f);
 
     //Pega posicao do corpo atual e ajusta sua matrix (posicao e rotacao)
     pRigidBody->getMotionState()->getWorldTransform ( transLocal );
-    transLocal.getOpenGLMatrix ( matrix );
+    //transLocal.getOpenGLMatrix (glm::value_ptr(tempMat));
+	transLocal.getOpenGLMatrix(&matrix[0]);
 
     //pega posicao do objeto horigem de desenho (camera travada)
 	glm::vec3 l_vec = _pCoord->getPosition();
 
     //desloca desenha para o pbjeto horigem
-    matrix[12] -= l_vec.x;
-    matrix[13] -= l_vec.y;
-    matrix[14] -= l_vec.z;
+	matrix[12] -= l_vec.x;
+	matrix[13] -= l_vec.y;
+	matrix[14] -= l_vec.z;
 
-    glMultMatrixf ( matrix );
+	//tempMat = glm::translate(tempMat, -l_vec);
 
+	glm::mat4 tempMat = glm::make_mat4(matrix);
+
+    //glMultMatrixf (glm::value_ptr(tempMat));
+	glMultMatrixf(matrix);
+
+	return tempMat;
 }
 
 void Solid::setPosition ( const glm::vec3 &_pos ) {

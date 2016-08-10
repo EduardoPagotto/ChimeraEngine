@@ -19,6 +19,8 @@
 #include <SDL.h>
 #endif
 
+#include <glm/glm.hpp>
+
 namespace Chimera {
   
 enum class KIND_DEVICE
@@ -42,7 +44,7 @@ public:
 
     virtual void initDraw() = 0;
     virtual void endDraw() = 0;
-    virtual void executeViewPerspective ( const float &_fov,const float &_near,const float &_far, int _eye ) = 0; //(Camera *pCamera, int _eye) = 0;
+    virtual glm::mat4 getPerspectiveProjectionMatrix ( const float &_fov,const float &_near,const float &_far, int _eye ) = 0; //(Camera *pCamera, int _eye) = 0;
     virtual void executeViewOrto ( int eyeIndex ) = 0;
     virtual void reshape ( int _w, int _y ) = 0;
     virtual void toggleFullScreen() = 0;

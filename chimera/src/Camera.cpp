@@ -1,8 +1,6 @@
 #include "Camera.h"
 #include "NodeVisitor.h"
 
-
-//#include <glm/gtc/matrix_inverse.hpp> 
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -15,38 +13,36 @@ Camera::Camera (Node* _pNode, CameraType _type, std::string _name )
     position = glm::vec3(0.0,0.0,0.0);// setZero();
     rotation = glm::vec3(0.0,0.0,0.0);//.setZero();
     direction = glm::vec3(0.0,0.0,0.0);//.setZero();
-    transform = glm::mat4(1.0);//transform.setIdentity();
-
+   // transform = glm::mat4(1.0);//transform.setIdentity();
     nearDistance = 0.1f;
     farDistance = 1000.0f;
     fov = 45.0f;
-
     perspective = true;
 }
 
 Camera::~Camera() {
 }
 
-void Camera::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_rotation ) {
-
-    //Transformacao quando Euley nao apagar
-//     btQuaternion l_qtn;
-//     transform.setIdentity();
-//     l_qtn.setEulerZYX ( _rotation.getX(), _rotation.getY(), _rotation.getZ() );
-//     transform.setRotation ( l_qtn );
-//     transform.setOrigin ( _posicao );
-     
-    //Euler to Quarterion pitch, yaw, roll angul em radianos
-    glm::quat myQuat (_rotation); // trocar (pitch, yaw, roll) por (yaw, pitch, roll) ?????
-    
-    glm::mat4 matRot = glm::toMat4(myQuat); //matriz rotacao
-    glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), _posicao); //matriz translacao
-    transform = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!! 
-    
+void Camera::setTransform(const glm::mat4 & _trans)
+{
+	position = glm::vec3(_trans[3]);
+	direction = glm::vec3(0.0, 0.0, 0.0); //FIXME encontrar na matrix _trans
+	rotation = glm::vec3(0.0, 0.0, -1.0);  //FIXME pegar no arquivo do collada
 }
 
+void Camera::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_rotation ) {
+    ////Euler to Quarterion pitch, yaw, roll angul em radianos
+    //glm::quat myQuat (_rotation); // trocar (pitch, yaw, roll) por (yaw, pitch, roll) ?????
+    //
+    //glm::mat4 matRot = glm::toMat4(myQuat); //matriz rotacao
+    //glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), _posicao); //matriz translacao
+    //transform = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!! 
+	position = _posicao;
+	direction = _rotation;
+	rotation = glm::vec3(0.0, 0.0, 1.0);  //FIXME pegar no arquivo do collada
+}
 
-void Camera::render ( void ) {
+glm::mat4 Camera::getViewMatrix( void ) {
  
     //         btScalar m_matrix[16];
     //         btTransform l_transform;
@@ -66,22 +62,15 @@ void Camera::render ( void ) {
     //         glMultMatrixf(m_matrix);
 
 
-    gluLookAt ( position.x, position.y, position.z,
-                direction.x, direction.y, direction.z,
-                rotation.x, rotation.y, rotation.z );
+    //gluLookAt ( position.x, position.y, position.z,
+    //            direction.x, direction.y, direction.z,
+    //            rotation.x, rotation.y, rotation.z );
+
+	return glm::lookAt(position, direction, rotation);
 }
 
 void Camera::accept(NodeVisitor * v) {
 	v->visit(this);
-}
-
-void Camera::init() {
-
-   
-    position = glm::vec3(transform[3]);//position = transform.getOrigin();
-    direction = glm::vec3 ( 0.0, 0.0, 0.0 ); //FIXME encontrar no transform
-    rotation = glm::vec3 ( 0.0, 0.0, 1.0 ); //FIXME encontrar no transform
-
 }
 
 //TODO criar classe de loader
@@ -97,9 +86,7 @@ void Camera::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
     } else {
         //TODO testar ecarregar ortogonal aqui
-
     }
-
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

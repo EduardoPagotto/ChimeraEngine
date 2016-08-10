@@ -24,9 +24,9 @@ public:
 
     virtual ~Camera();
 
-    virtual void init();
+	virtual void init() {}
 
-    virtual void render();
+	glm::mat4 getViewMatrix(void);
 
 	virtual void accept(class NodeVisitor* v);
 
@@ -70,11 +70,9 @@ public:
         perspective = _perspective; //TODO implementar isto para ortogonal (false);
     }
 
-    void setTransform ( const glm::mat4 &_trans ) {
-        transform = _trans;
-    }
-
+	void setTransform(const glm::mat4 &_trans);
     void setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_rotation );
+
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
 protected:
@@ -82,7 +80,8 @@ protected:
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 direction;
-    glm::mat4 transform;
+
+    //glm::mat4 transform;
 
 private:
     float nearDistance;

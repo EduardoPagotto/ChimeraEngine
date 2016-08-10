@@ -15,8 +15,6 @@ public:
 
 	virtual void init();
 
-	virtual void render();
-
     void trackBall ( int _mx, int _my, int _mz );
 
     void setDistanciaMaxima (const float &_distanciaMaxima ) {

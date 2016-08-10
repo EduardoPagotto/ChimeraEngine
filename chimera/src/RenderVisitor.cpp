@@ -10,6 +10,9 @@ RenderVisitor::RenderVisitor() {
 	HudOn = true;
 	particleOn = true;
 	eye = 0;
+
+	projection = glm::mat4(1.0f);
+	view = glm::mat4(1.0f);
 }
   
 RenderVisitor::~RenderVisitor() {
@@ -46,7 +49,9 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 }
 
 void RenderVisitor::visit ( Group* _pGroup ) {
-    _pGroup->applyIdProgram();
+
+	_pGroup->applyIdProgram(view, projection);
+
 }
 
 void RenderVisitor::visit ( Chimera::Transform* _pTransform) {
@@ -57,7 +62,8 @@ void RenderVisitor::visit ( Chimera::Transform* _pTransform) {
 
 void RenderVisitor::visit ( Solid* _pSolid ) {
     
-    _pSolid->apply(pCoord);
+	//TODO acumular esta matriz 
+    _pSolid->getModelMatrix(pCoord);
 
 }
 

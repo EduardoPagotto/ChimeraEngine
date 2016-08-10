@@ -33,10 +33,6 @@ void CameraSpherical::init() {
 	initTrackBall();
 }
 
-void CameraSpherical::render() {
-	Camera::render();
-}
-
 void CameraSpherical::initTrackBall ( void ) {
 
     distancia = glm::distance(position, direction ); //position.distance ( direction );

@@ -102,12 +102,14 @@ void Game::start() {
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
+    
+    
 	// Create and compile our GLSL program from the shaders
 #ifdef WIN32
-	programID = Chimera::LoadShaders("C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
+	shader.load("C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
 		"C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleFragmentShader.fragmentshader");
 # else
-	programID = Chimera::LoadShaders("/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleVertexShader.vertexshader",
+	shader.load("/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleVertexShader.vertexshader",
 		"/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleFragmentShader.fragmentshader");
 # endif
 
@@ -177,7 +179,8 @@ void Game::render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Use our shader
-	glUseProgram(programID);
+	//glUseProgram(programID);
+    shader.link();
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

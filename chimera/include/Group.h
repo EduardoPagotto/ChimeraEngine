@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Shader.h>
+
 namespace Chimera {
 
 class Group : public Node
@@ -14,17 +16,12 @@ public:
     Group(Node* _parent, std::string _name);
     virtual ~Group();
     void accept(class NodeVisitor* v);
+        
+    void apply(const glm::mat4 &_view,const glm::mat4 &_proj);
     
-    void setIdProgram(const GLuint &_id);
+    //bool createShade(const char* vertex_file_path, const char* fragment_file_path);
     
-    GLuint getIdProgram() const {
-        return idProgram;
-    }
-    
-    GLuint applyIdProgram(const glm::mat4 &_view,const glm::mat4 &_proj);
-    
-private:
-	 GLuint idProgram;
+    Shader shader;
 };
 }
 #endif

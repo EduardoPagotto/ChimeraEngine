@@ -50,7 +50,7 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 
 void RenderVisitor::visit ( Group* _pGroup ) {
 
-	_pGroup->applyIdProgram(view, projection);
+	_pGroup->apply(view, projection);
 
 }
 

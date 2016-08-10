@@ -8,6 +8,7 @@
 #include "Draw.h"
 #include <glm/glm.hpp>
 #include "VboIndexer.hpp"
+#include "Shader.h"
 
 namespace Chimera {
     
@@ -32,8 +33,8 @@ public:
     
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
-	void setProgramId(const GLuint &_id) {
-        programID = _id;
+	void setShader(const Shader &_shader) {
+        shader = _shader;
     }
 
     std::vector<unsigned int> vertexIndex;
@@ -55,11 +56,13 @@ private:
     
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
     
-    GLuint programID;
+    //GLuint programID;
 	GLuint VAO;
     GLuint VertexVBOID;
     GLuint IndexVBOID;
 
+    Shader shader;
+    
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
 };

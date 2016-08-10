@@ -6,6 +6,8 @@
 #include "Node.h"
 #include "Video.h"
 
+#include "Shader.h"
+
 class Game : public Chimera::IGameClientEvents
 {
 public:
@@ -34,8 +36,8 @@ private:
 	bool isPaused;
 
 private:
+    Chimera::Shader shader;
 	GLuint vertexbuffer;
-	GLuint programID;
 	GLuint VertexArrayID;
 };
 

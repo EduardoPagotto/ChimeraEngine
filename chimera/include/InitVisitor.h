@@ -2,6 +2,7 @@
 #define __INIT_VISITOR__H
 
 #include "NodeVisitor.h"
+#include "Shader.h"
 
 namespace Chimera {
         
@@ -19,7 +20,7 @@ public:
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;  
 private:
-	GLuint programID;
+	Shader shader;//GLuint programID;
 };
     
 }

@@ -11,7 +11,6 @@ Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH
     VertexVBOID = 0;
     IndexVBOID = 0;
     VAO = 0;
-	programID = 0;
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
@@ -67,7 +66,7 @@ void Mesh::init() {
         textureList[posTex].y = 1 - textureList[posTex].y;
     }
     
-    if (programID > 0 )
+    if (shader.getIdProgram() > 0 )
         setVertexBuffer();
     else 
         setVertexBufferOnoShade();
@@ -112,7 +111,7 @@ glm::vec3 Mesh::getSizeBox() {
 //https://cognitivewaves.wordpress.com/opengl-vbo-shader-vao/ <- a resposta aqui!!!!! matrix de model e projecao
 void Mesh::renderExecute(bool _texture) {
 
-    if (programID > 0)
+    if (shader.getIdProgram() > 0)
         renderVertexBuffer(_texture);
     else
         renderVertexBufferOnoShade(_texture);
@@ -274,22 +273,22 @@ void Mesh::setVertexBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
 
 	//Vertice
-	GLuint positionID = glGetAttribLocation(programID, "vertex");
+	GLuint positionID = glGetAttribLocation(shader.getIdProgram(), "vertex");
 	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(positionID);
 	
 	//Normal
-	GLuint normalID = glGetAttribLocation(programID, "normal");
+	GLuint normalID = glGetAttribLocation(shader.getIdProgram(), "normal");
 	glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(12));
 	glEnableVertexAttribArray(normalID);
 
 	//Texture
-	GLuint uvID = glGetAttribLocation(programID, "uv1");
+	GLuint uvID = glGetAttribLocation(shader.getIdProgram(), "uv1");
 	glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),  BUFFER_OFFSET(24));
 	glEnableVertexAttribArray(uvID);
 
     //Color
-    GLuint colorID = glGetAttribLocation(programID, "color");
+    GLuint colorID = glGetAttribLocation(shader.getIdProgram(), "color");
     glVertexAttribPointer(colorID, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(32));
     glEnableVertexAttribArray(colorID);    
     

@@ -16,7 +16,7 @@ public:
    Shader(const Shader &_shader);
    virtual ~Shader();
    
-    inline bool hasError() const {
+    inline int getErroCode() const {
         return erroCode;
     }
 

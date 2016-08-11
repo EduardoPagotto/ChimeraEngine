@@ -23,17 +23,6 @@ void Group::accept(NodeVisitor* v){
     v->visit(this);
 }
  
-// bool Group::createShade ( const char* vertex_file_path, const char* fragment_file_path ) {
-// 
-//     shader.load(vertex_file_path, fragment_file_path);
-//     
-// }
-  
-// void Group::setIdProgram(const GLuint &_id) {
-//     if (_id > 0)
-//         idProgram = _id;
-// } 
- 
 void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
     
     if (shader.getIdProgram() > 0) {
@@ -43,6 +32,7 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
         GLint mvloc = glGetUniformLocation(shader.getIdProgram(), "umvMat");
         GLint ploc = glGetUniformLocation(shader.getIdProgram(), "upMat");
         GLint nloc = glGetUniformLocation(shader.getIdProgram(), "noMat");
+
 		GLint llumLoc = glGetUniformLocation(shader.getIdProgram(), "l_dir");
 
 		glUniformMatrix4fv(mvloc, 1, false, glm::value_ptr(_view));

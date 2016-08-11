@@ -52,27 +52,52 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 void RenderVisitor::visit ( Group* _pGroup ) {
 
 	_pGroup->apply(view, projection);
+	shader = _pGroup->shader;
 
 }
 
 void RenderVisitor::visit ( Chimera::Transform* _pTransform) {
     
-    model = _pTransform->getMatrix();//applyTransform();
-    glMultMatrixf(glm::value_ptr(model));
+    model = _pTransform->getMatrix();
+	if (shader.getIdProgram() > 0) {
+
+		GLint modelloc = glGetUniformLocation(shader.getIdProgram(), "modelMat");
+		glUniformMatrix4fv(modelloc, 1, false, glm::value_ptr(model));
+
+	}
+	else {
+
+		glMultMatrixf(glm::value_ptr(model));
+
+	}
 }
 
 void RenderVisitor::visit ( Solid* _pSolid ) {
     
 	//TODO acumular esta matriz 
     model = _pSolid->getModelMatrix(pCoord);
-    glMultMatrixf(glm::value_ptr(model));
+	if (shader.getIdProgram() > 0) {
+
+		GLint modelloc = glGetUniformLocation(shader.getIdProgram(), "modelMat");
+		glUniformMatrix4fv(modelloc, 1, false, glm::value_ptr(model));
+
+	}
+	else {
+
+		glMultMatrixf(glm::value_ptr(model));
+
+	}
 
 }
 
 void RenderVisitor::visit ( HUD* _pHUD ) {
 
+	
 	if (HudOn == true) {
 		if (_pHUD->isOn() == true) {
+
+			Shader::unlink();
+
 			pVideo->executeViewOrto(eye);
 			_pHUD->renderExecute(textureOn);
 			pVideo->restoreMatrix();

@@ -11,11 +11,13 @@ varying vec4 v_color;
 
 uniform mat4 umvMat;
 uniform mat4 upMat;
+uniform mat4 modelMat;
 uniform mat3 noMat;
+
 
 void main () {
 
-	gl_Position = upMat * umvMat * vec4(vertex, 1.0);
+	gl_Position = upMat * umvMat * modelMat * vec4(vertex, 1.0f);
 
 	vec3 n = normalize(noMat * normal);//http://www.lighthouse3d.com/tutorials/glsl-tutorial/directional-lights/
 	

@@ -3,6 +3,7 @@
 
 #include "NodeVisitor.h"
 #include "Video.h"
+#include "Shader.h"
 
 namespace Chimera {
    
@@ -31,6 +32,7 @@ public:
 	glm::mat4 view;
     glm::mat4 model;
 
+	Shader shader;
 private:
 };    
 }

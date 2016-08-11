@@ -58,6 +58,15 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
 				glUniform4fv(llumColor, 1, pLight->getDiffuse().ptr());
 		}
 
+		Camera *pCam = (Camera*)findNodeBySeq(EntityKind::CAMERA, 0);
+		if (pCam != nullptr) {
+
+			GLint viewPosLoc = glGetUniformLocation(shader.getIdProgram(), "in_viewPos");
+			if (viewPosLoc >= 0)
+				glUniform3f(viewPosLoc, pCam->getPosition().x, pCam->getPosition().y, pCam->getPosition().z);
+
+		}
+
 	} else {
 
 		//openGL 1.4

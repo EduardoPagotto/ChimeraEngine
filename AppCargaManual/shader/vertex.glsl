@@ -18,6 +18,8 @@ uniform mat4 upMat;
 uniform mat4 modelMat;
 uniform mat3 noMat;
 
+uniform vec3 in_viewPos;
+varying vec3 viewPos;
 
 void main () {
 
@@ -25,12 +27,9 @@ void main () {
 	v_FragPos = vec3(modelMat * vec4(vertex, 1.0f));
 	v_color = color;
 	v_lightColor = lightColor;
-	v_normal = normal;
+	v_normal = mat3(transpose(inverse(modelMat))) * normal; //mudar para CPU
 	v_lightPos = lightPos;
+	viewPos = in_viewPos;
 
-	//gl_Position = upMat * umvMat * modelMat * vec4(vertex, 1.0f);
-	//vec3 n = normalize(noMat * normal);
-	//float intensity = max(dot(n, lightPos), 0.0);
-	//v_color = intensity * color;
 	//v_texcoord0 = uv1;
 }

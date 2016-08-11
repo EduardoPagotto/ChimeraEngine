@@ -1,3 +1,4 @@
+#version 130 //#version 300 es
 attribute vec3 vertex;
 attribute vec4 color;
 attribute vec2 uv1;
@@ -31,5 +32,5 @@ void main () {
 	v_lightPos = lightPos;
 	viewPos = in_viewPos;
 
-	//v_texcoord0 = uv1;
+	v_texcoord0 = uv1;
 }

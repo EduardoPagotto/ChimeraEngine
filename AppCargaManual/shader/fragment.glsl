@@ -1,3 +1,4 @@
+#version 130 //#version 300 es
 uniform sampler2D t_texture0;
 varying vec2 v_texcoord0;
 varying vec4 v_color;

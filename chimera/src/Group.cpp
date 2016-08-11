@@ -29,34 +29,34 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
         shader.link();
         
         // Get the variables from the shader to which data will be passed
-        GLint mvloc = glGetUniformLocation(shader.getIdProgram(), "umvMat");
-        GLint ploc = glGetUniformLocation(shader.getIdProgram(), "upMat");
-        GLint nloc = glGetUniformLocation(shader.getIdProgram(), "noMat");
 
-		GLint llumLoc = glGetUniformLocation(shader.getIdProgram(), "l_dir");
+		GLint ploc = glGetUniformLocation(shader.getIdProgram(), "upMat");
+		if (ploc >= 0)
+			glUniformMatrix4fv(ploc, 1, false, glm::value_ptr(_proj));
 
-		glUniformMatrix4fv(mvloc, 1, false, glm::value_ptr(_view));
-		glUniformMatrix4fv(ploc, 1, false, glm::value_ptr(_proj));
-        
+		GLint mvloc = glGetUniformLocation(shader.getIdProgram(), "umvMat");
+		if (mvloc >= 0) 
+			glUniformMatrix4fv(mvloc, 1, false, glm::value_ptr(_view));
+	
+		GLint nloc = glGetUniformLocation(shader.getIdProgram(), "noMat");
 		if (nloc >= 0) {
 			glm::mat3 gl_NormalMatrix = glm::inverseTranspose(glm::mat3(_view));
 			glUniformMatrix3fv(nloc, 1, false, glm::value_ptr(gl_NormalMatrix));
 		}
-        
-        if (llumLoc >= 0) {
-         
-            Light *pLight = (Light*)findNodeBySeq(EntityKind::LIGHT,0);//FIXME usar outro jeito para pegar esta luz
-            if (pLight != nullptr) {
-                
-                glm::vec3 posicaoLuzZ1 =  pLight->getPosition();
-                
-                glm::vec3 vLuz(posicaoLuzZ1.x, posicaoLuzZ1.y, posicaoLuzZ1.z);
-                float *pvl = glm::value_ptr(vLuz);
-                
-                glUniform3fv(llumLoc, 1, pvl);
-                
-            }  
-        }
+
+		Light *pLight = (Light*)findNodeBySeq(EntityKind::LIGHT, 0);//FIXME usar outro jeito para pegar esta luz
+		if (pLight != nullptr) {
+
+			GLint llumLoc = glGetUniformLocation(shader.getIdProgram(), "lightPos");
+			if (llumLoc >= 0) {
+				glm::vec3 posicaoLuzZ1 = pLight->getPosition();
+				glUniform3fv(llumLoc, 1, glm::value_ptr( posicaoLuzZ1 ));
+			}
+
+			GLint llumColor = glGetUniformLocation(shader.getIdProgram(), "lightColor");
+			if (llumColor >= 0) 
+				glUniform4fv(llumColor, 1, pLight->getDiffuse().ptr());
+		}
 
 	} else {
 

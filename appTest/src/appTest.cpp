@@ -54,29 +54,40 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         sceneMng->cameraAtiva(pCam);
       
         Group* group1 = sceneMng->createSceneGraph();
-//  #ifdef WIN32
-//         group1->shader.load( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
-//                              "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl");
-//  #else
-//         group1->shader.load( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
-//                              "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl");
-//  #endif
+  #ifdef WIN32
+         group1->shader.load( "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
+                              "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl");
+  #else
+         group1->shader.load( "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
+                              "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl");
+  #endif
          
         Transform* pTrans = new Transform(group1,"trans01");
         pTrans->setPosition( glm::vec3( 0.0, 0.0, 0.0) );
         
         Light* pLight = new Light(group1,"Luz1"); 
         pLight->setDiffuse(Color::WHITE);
-        pLight->setPositionRotation(glm::vec3(100,100,100), glm::vec3(0,0,0));
+        pLight->setPositionRotation(glm::vec3(80,100,150), glm::vec3(0,0,0));
         //pLight->init();
         
         sceneMng->origemDesenho((Coord*)pTrans);
         
         //Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
-        Texture *pTex = new Texture("Texture-teste",dirDados + "/image1.jpg");
+        //Texture *pTex = new Texture("Texture-teste",dirDados + "/image1.jpg");
+		Material *pMat1 = new Material("Mat1");
+		pMat1->setDiffuse(Color::RED);
+
+        Mesh *pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",glm::vec3(50,50,50), nullptr, pMat1);
         
-        Mesh *pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",glm::vec3(50,50,50),pTex, nullptr);
-        
+		Transform* pTrans2 = new Transform(group1, "trans02");
+		pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
+
+		Material *pMat2 = new Material("Mat2");
+		pMat2->setDiffuse(Color::BLUE);
+
+		Mesh *pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), nullptr, pMat2);
+
+
         Game *game = new Game(sceneMng);
 
         FlowControl *pControle = new FlowControl( game );

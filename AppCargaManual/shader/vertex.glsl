@@ -3,11 +3,15 @@ attribute vec4 color;
 attribute vec2 uv1;
 attribute vec3 normal;
 
-uniform vec3 l_dir; 
+uniform vec3 lightPos; 
+uniform vec4 lightColor;
 
 varying vec2 v_texcoord0;
 varying vec4 v_color;
-//varying vec3 v_normal;
+varying vec4 v_lightColor;
+varying vec3 v_normal;
+varying vec3 v_FragPos;
+varying vec3 v_lightPos;
 
 uniform mat4 umvMat;
 uniform mat4 upMat;
@@ -18,16 +22,15 @@ uniform mat3 noMat;
 void main () {
 
 	gl_Position = upMat * umvMat * modelMat * vec4(vertex, 1.0f);
+	v_FragPos = vec3(modelMat * vec4(vertex, 1.0f));
+	v_color = color;
+	v_lightColor = lightColor;
+	v_normal = normal;
+	v_lightPos = lightPos;
 
-	vec3 n = normalize(noMat * normal);//http://www.lighthouse3d.com/tutorials/glsl-tutorial/directional-lights/
-	
-	// compute the intensity as the dot product
-	// the max prevents negative intensity values
-	float intensity = max(dot(n, l_dir), 0.0);
-	
-	v_color = intensity * color;
-	
-	//v_color = color;
-	//v_normal = normal;
-	v_texcoord0 = uv1;
+	//gl_Position = upMat * umvMat * modelMat * vec4(vertex, 1.0f);
+	//vec3 n = normalize(noMat * normal);
+	//float intensity = max(dot(n, lightPos), 0.0);
+	//v_color = intensity * color;
+	//v_texcoord0 = uv1;
 }

@@ -104,10 +104,10 @@ void Game::start() {
     
     //ajusta scene root com luz e material ativo
     //Localiza a luz ativa
-    Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::LIGHT, 0);
-    pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
-    pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0, true);
-    pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
+//    Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::LIGHT, 0);
+//    pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
+//    pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0, true);
+//    pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
     
     
     //pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);//

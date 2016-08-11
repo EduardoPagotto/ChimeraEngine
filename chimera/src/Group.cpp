@@ -30,19 +30,19 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
         
         // Get the variables from the shader to which data will be passed
 
-		GLint ploc = glGetUniformLocation(shader.getIdProgram(), "upMat");
+		GLint ploc = glGetUniformLocation(shader.getIdProgram(), "projection");
 		if (ploc >= 0)
 			glUniformMatrix4fv(ploc, 1, false, glm::value_ptr(_proj));
 
-		GLint mvloc = glGetUniformLocation(shader.getIdProgram(), "umvMat");
+		GLint mvloc = glGetUniformLocation(shader.getIdProgram(), "view");
 		if (mvloc >= 0) 
 			glUniformMatrix4fv(mvloc, 1, false, glm::value_ptr(_view));
 	
-		GLint nloc = glGetUniformLocation(shader.getIdProgram(), "noMat");
-		if (nloc >= 0) {
-			glm::mat3 gl_NormalMatrix = glm::inverseTranspose(glm::mat3(_view));
-			glUniformMatrix3fv(nloc, 1, false, glm::value_ptr(gl_NormalMatrix));
-		}
+// 		GLint nloc = glGetUniformLocation(shader.getIdProgram(), "noMat");
+// 		if (nloc >= 0) {
+// 			glm::mat3 gl_NormalMatrix = glm::inverseTranspose(glm::mat3(_view));
+// 			glUniformMatrix3fv(nloc, 1, false, glm::value_ptr(gl_NormalMatrix));
+// 		}
 
 		Light *pLight = (Light*)findNodeBySeq(EntityKind::LIGHT, 0);//FIXME usar outro jeito para pegar esta luz
 		if (pLight != nullptr) {
@@ -61,12 +61,21 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
 		Camera *pCam = (Camera*)findNodeBySeq(EntityKind::CAMERA, 0);
 		if (pCam != nullptr) {
 
-			GLint viewPosLoc = glGetUniformLocation(shader.getIdProgram(), "in_viewPos");
+			GLint viewPosLoc = glGetUniformLocation(shader.getIdProgram(), "viewPos");
 			if (viewPosLoc >= 0)
 				glUniform3f(viewPosLoc, pCam->getPosition().x, pCam->getPosition().y, pCam->getPosition().z);
 
 		}
 
+		GLint objColorLoc = glGetUniformLocation(shader.getIdProgram(), "objectColor");
+        if (objColorLoc >= 0) {
+            
+            Color teste(Color::BLUE);
+            
+            glUniform4fv(objColorLoc, 1, teste.ptr());
+        }
+		
+		
 	} else {
 
 		//openGL 1.4

@@ -61,7 +61,7 @@ void RenderVisitor::visit ( Chimera::Transform* _pTransform) {
     model = _pTransform->getMatrix();
 	if (shader.getIdProgram() > 0) {
 
-		GLint modelloc = glGetUniformLocation(shader.getIdProgram(), "modelMat");
+		GLint modelloc = glGetUniformLocation(shader.getIdProgram(), "model");
 		glUniformMatrix4fv(modelloc, 1, false, glm::value_ptr(model));
 
 	}
@@ -78,7 +78,7 @@ void RenderVisitor::visit ( Solid* _pSolid ) {
     model = _pSolid->getModelMatrix(pCoord);
 	if (shader.getIdProgram() > 0) {
 
-		GLint modelloc = glGetUniformLocation(shader.getIdProgram(), "modelMat");
+		GLint modelloc = glGetUniformLocation(shader.getIdProgram(), "model");
 		glUniformMatrix4fv(modelloc, 1, false, glm::value_ptr(model));
 
 	}

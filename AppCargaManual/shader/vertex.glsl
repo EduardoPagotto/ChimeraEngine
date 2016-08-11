@@ -1,36 +1,20 @@
-#version 130 //#version 300 es
-attribute vec3 vertex;
-attribute vec4 color;
-attribute vec2 uv1;
-attribute vec3 normal;
+#version 300 es
 
-uniform vec3 lightPos; 
-uniform vec4 lightColor;
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 normal;
+//layout (location = 2) in vec2 uv1;
+out vec3 Normal;
+out vec3 FragPos;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
-varying vec2 v_texcoord0;
-varying vec4 v_color;
-varying vec4 v_lightColor;
-varying vec3 v_normal;
-varying vec3 v_FragPos;
-varying vec3 v_lightPos;
-
-uniform mat4 umvMat;
-uniform mat4 upMat;
-uniform mat4 modelMat;
-uniform mat3 noMat;
-
-uniform vec3 in_viewPos;
-varying vec3 viewPos;
+//varying vec2 v_texcoord0;
+//uniform mat3 noMat;
 
 void main () {
-
-	gl_Position = upMat * umvMat * modelMat * vec4(vertex, 1.0f);
-	v_FragPos = vec3(modelMat * vec4(vertex, 1.0f));
-	v_color = color;
-	v_lightColor = lightColor;
-	v_normal = mat3(transpose(inverse(modelMat))) * normal; //mudar para CPU
-	v_lightPos = lightPos;
-	viewPos = in_viewPos;
-
-	v_texcoord0 = uv1;
+	
+	gl_Position = projection * view *  model * vec4(position, 1.0f);
+    FragPos = vec3(model * vec4(position, 1.0f));
+    Normal = mat3(transpose(inverse(model))) * normal;  
 }

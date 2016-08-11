@@ -15,7 +15,7 @@ void conversorVBO(
     std::vector<glm::vec3> & normalList,
     std::vector<unsigned int> & textureIndex,
     std::vector<glm::vec2> & textureList,
-	Chimera::Color cor,
+	//Chimera::Color cor,
     std::vector<VertexData> &outData
 ) {
     
@@ -30,8 +30,8 @@ void conversorVBO(
 			outData.push_back({
 				vertexList[vertexIndex[l_index]],
 				normalList[normalIndex[l_index]],
-				(textureIndex.size() > 0) ? textureList[textureIndex[l_index]] : glm::vec2(0.0,0.0),
-                glm::vec4(cor.r, cor.g, cor.b, cor.a)
+				(textureIndex.size() > 0) ? textureList[textureIndex[l_index]] : glm::vec2(0.0,0.0)//,
+                //glm::vec4(cor.r, cor.g, cor.b, cor.a)
             });
 		}
 	}
@@ -51,12 +51,12 @@ bool getSimilarVertexIndex( VertexData &in_vertex, std::vector<VertexData> &out_
 			is_near(in_vertex.normal.z, out_vertex[i].normal.z) &&
 
 			is_near(in_vertex.texture.x, out_vertex[i].texture.x) &&
-			is_near(in_vertex.texture.y, out_vertex[i].texture.y) &&
+			is_near(in_vertex.texture.y, out_vertex[i].texture.y) //&&
             
-            is_near(in_vertex.color.x, out_vertex[i].color.x) &&
-            is_near(in_vertex.color.y, out_vertex[i].color.y) &&
-            is_near(in_vertex.color.z, out_vertex[i].color.z) &&
-            is_near(in_vertex.color.w, out_vertex[i].color.w) 
+//             is_near(in_vertex.color.x, out_vertex[i].color.x) &&
+//             is_near(in_vertex.color.y, out_vertex[i].color.y) &&
+//             is_near(in_vertex.color.z, out_vertex[i].color.z) &&
+//             is_near(in_vertex.color.w, out_vertex[i].color.w) 
         )
 		{
 			result = i;

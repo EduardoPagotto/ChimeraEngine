@@ -7,6 +7,7 @@
 #include <tinyxml2.h>
 
 #include "OpenGLDefs.h"
+#include "Shader.h"
 
 namespace Chimera {
     
@@ -32,7 +33,7 @@ public:
 	bool isSet(const ModeMaterial &_val);
 	void setFace(const FaceMaterial &_val);
     
-    void apply();
+    void apply(Shader *pShader);
     
     void createDefaultEffect();
     

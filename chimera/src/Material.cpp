@@ -93,16 +93,45 @@ void Material::createDefaultEffect() {
 	setShine(50.0f);
 }
 
-void Material::apply() {
+void Material::apply(Shader *pShader) {
 
 	for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
 
 		ModeMaterial k = iter->first;
-		GLfloat *p = (k != ModeMaterial::SHININESS) ? (GLfloat*)((Color*)iter->second)->ptr() : (GLfloat*)iter->second;
+		float *p = (k != ModeMaterial::SHININESS) ? (float*)((Color*)iter->second)->ptr() : (float*)iter->second;
 
-		glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
+        if (pShader == nullptr) {
+            
+            glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
+            
+        } else {
+        
+            if (k == AMBIENT) {
+                
+                GLint matAmbientLoc  = glGetUniformLocation( pShader->getIdProgram(), "material.ambient" );
+                glUniform4fv(matAmbientLoc, 1, p);
+                
+            } else if (k == DIFFUSE) {
+                
+                GLint matDiffuseLoc  = glGetUniformLocation( pShader->getIdProgram(), "material.diffuse" );
+                glUniform4fv(matDiffuseLoc, 1, p);
+                
+            } else if (k == SPECULAR) { 
+                
+                GLint matSpecularLoc = glGetUniformLocation( pShader->getIdProgram(), "material.specular" );
+                glUniform4fv(matSpecularLoc, 1, p);
+                
+            } else if (k == SHININESS) {
+                
+                GLint matShineLoc    = glGetUniformLocation( pShader->getIdProgram(), "material.shininess" ); 
+                glUniform1fv(matShineLoc, 1, p);
+            
+            } else {
+                //TODO erro
+            }
+        }
 	}
-
+	
 	//se ha textura coloque a cor como branca para nao interferir com a textura
 	//if (hasTexture) {
 	//	glMaterialfv(GL_FRONT, GL_DIFFUSE, Color::WHITE.ptr());

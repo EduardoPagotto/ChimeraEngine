@@ -4,6 +4,7 @@
 #include "Material.h"
 #include "Texture.h"
 #include "Light.h"
+#include "Shader.h"
 
 namespace Chimera {
 
@@ -24,7 +25,7 @@ public:
      
      void setEnableStateMachine(StateMachine _state, bool _flag);
      
-     void appyMaterial();
+     void appyMaterial(Shader *_pShader);
      void appyTexture();
      void appyLighting();
      

@@ -75,15 +75,21 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         //Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
         //Texture *pTex = new Texture("Texture-teste",dirDados + "/image1.jpg");
 		Material *pMat1 = new Material("Mat1");
-		pMat1->setDiffuse(Color::RED);
-
+		pMat1->setAmbient( Color( 1.0f, 0.5f, 0.31f ) );
+        pMat1->setDiffuse( Color( 1.0f, 0.5f, 0.31f ) );
+        pMat1->setSpecular( Color( 0.5f, 0.5f, 0.5f ) );
+        pMat1->setShine(32.0f);
+        
         Mesh *pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",glm::vec3(50,50,50), nullptr, pMat1);
         
 		Transform* pTrans2 = new Transform(group1, "trans02");
 		pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
 
 		Material *pMat2 = new Material("Mat2");
-		pMat2->setDiffuse(Color::BLUE);
+        pMat2->setAmbient( Color( 0.5f, 0.5f, 0.31f ) );
+        pMat2->setDiffuse( Color( 0.5f, 0.5f, 0.5f ) );
+        pMat2->setSpecular( Color( 0.5f, 0.5f, 0.5f ) );
+        pMat2->setShine(32.0f);
 
 		Mesh *pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), nullptr, pMat2);
 

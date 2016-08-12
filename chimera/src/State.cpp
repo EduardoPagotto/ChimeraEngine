@@ -124,7 +124,7 @@ void State::applyWireFrame() {
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 }
 
-void State::appyMaterial() {
+void State::appyMaterial(Shader *_pShader) {
     
     using namespace std;
     
@@ -133,7 +133,7 @@ void State::appyMaterial() {
         Material* k= iter->first;
         bool flag=iter->second;
 		if (flag)
-			k->apply();
+			k->apply(_pShader);
      }
 }
 

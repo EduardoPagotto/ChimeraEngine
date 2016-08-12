@@ -151,7 +151,7 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
         else
             glBindTexture(GL_TEXTURE_2D, 0);
 
-        pState->appyMaterial();
+        pState->appyMaterial(nullptr);
         
 		//Usando Apenas FBO
         //vincula VBO
@@ -192,7 +192,7 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
          
     } else {
 
-        pState->appyMaterial();
+        pState->appyMaterial(nullptr);
 
         //vincula VertexData
         glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
@@ -227,8 +227,8 @@ void Mesh::renderVertexBuffer ( bool _texture ) {
         else
             glBindTexture(GL_TEXTURE_2D, 0);
 
-        pState->appyMaterial();
-
+        pState->appyMaterial(&shader);
+        
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
         glBindVertexArray(0);

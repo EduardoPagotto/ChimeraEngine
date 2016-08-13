@@ -22,16 +22,15 @@ public:
     }
     
     void setTexture(Texture *_pTex) {
-        pTexture = _pTex;
+		pState->setEnableTexture(_pTex, true);
     }
     
     void setMaterial(Material *_pMat) {
-        pMaterial = _pMat;
+		pState->setEnableMaterial(_pMat, true);
     }
     
 protected:
-    Texture *pTexture;
-    Material *pMaterial;
+
     State *pState;    
 };
 }

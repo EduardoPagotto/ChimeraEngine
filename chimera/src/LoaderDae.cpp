@@ -417,8 +417,12 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                 }
             }
              
-            pDraw->pMaterial = pMaterial;
-            pDraw->pTexture = pTexture;
+			if (pMaterial != nullptr)
+				pDraw->getState()->setEnableMaterial(pMaterial, true);
+
+			if (pTexture != nullptr)
+				pDraw->getState()->setEnableTexture(pTexture, true);
+
 			Solid *ph = mapaEntidadeFisica[_id];
             if (ph != nullptr) {
 

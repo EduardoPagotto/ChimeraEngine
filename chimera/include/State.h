@@ -12,6 +12,9 @@ class State{
 public:
     State();
     ~State();
+
+	void init();
+
      void setEnableLight(LightNum state,bool flag);
      void setEnablePolygonMode(PolygonMode state,FaceMaterial face);
      void setEnableSmooth(bool flag);
@@ -39,6 +42,9 @@ public:
 	 Texture* getTexture() {
          return t;
      }
+
+	 unsigned int getSizeMaterial();
+
 //      
 //      Material* getMaterial() {
 //          return m;

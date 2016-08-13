@@ -16,6 +16,29 @@ State::State() {
 State::~State() { 
 }
 
+void State::init() {
+
+	using namespace std;
+
+	for (map<Texture*, bool>::iterator iter = this->map_texture.begin(); iter != this->map_texture.end(); ++iter) {
+		Texture* k = iter->first;
+		bool flag = iter->second;
+
+		if (flag) {
+			if (k->textureLoad() == false)
+				k->init();
+		}
+	}
+
+	for (map<Material*, bool>::iterator iter = this->map_material.begin(); iter != this->map_material.end(); ++iter) {
+		Material* k = iter->first;
+		bool flag = iter->second;
+		if (flag)
+			k->init();
+	}
+
+}
+
 void State::setEnable(GLenum face,bool flag) {
 
     if (flag) 
@@ -89,6 +112,11 @@ void State::setEnableStateMachine(StateMachine _state, bool _flag) {
     this->map_stateMachine[_state] = _flag;
 }
 
+unsigned int State::getSizeMaterial()
+{
+	return map_material.size();
+}
+
 void State::setStateMachine(StateMachine _state, bool _flag) {
     
     if (_flag) 
@@ -128,7 +156,6 @@ void State::appyMaterial(Shader *_pShader) {
     
     using namespace std;
     
-    //TODO implementar
      for(map<Material*,bool>::iterator iter = this->map_material.begin(); iter != this->map_material.end(); ++iter){
         Material* k= iter->first;
         bool flag=iter->second;
@@ -144,17 +171,12 @@ void State::appyTexture(){
     using namespace std;
     
     for(map<Texture*,bool>::iterator iter = this->map_texture.begin(); iter != this->map_texture.end(); ++iter){
-        Texture* k= iter->first;
-        bool flag=iter->second;
+
+        Texture* k = iter->first;
+        bool flag = iter->second;
                 
-        if(flag) {
-                    
-            if(k->textureLoad() == false)
-                k->init();
-                        
+        if(flag)      
             k->apply();
-        }
-            
     }
     
 //     for(map<Texture*,bool>::iterator iter = this->map_texture.begin(); iter != this->map_texture.end(); ++iter){

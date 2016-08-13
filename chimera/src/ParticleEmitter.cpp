@@ -20,16 +20,9 @@ ParticleEmitter::ParticleEmitter (Node* _parent, std::string _name ) : Draw (_pa
     coresPart.push_back ( Color ( 0.75f, 0.5f, 1.0f ) );
     coresPart.push_back ( Color ( 1.0f, 0.5f, 1.0f ) );
     coresPart.push_back ( Color ( 1.0f, 0.5f, 0.75f ) );
-
-    pTexture = nullptr;
 }
 
 ParticleEmitter::~ParticleEmitter() {
-
-    if ( pTexture != nullptr ) {
-        delete pTexture;
-    }
-
 }
 
 void ParticleEmitter::init() {
@@ -49,11 +42,7 @@ void ParticleEmitter::init() {
 		particles.push_back(pParticle);
 	}
 
-	if (pTexture != nullptr) {
-		pTexture->init();
-		pState->setEnableTexture(pTexture, true);
-	}
-
+	pState->init();
 }
 
 void ParticleEmitter::setSizeBox ( const glm::vec3& _size ) {
@@ -104,8 +93,9 @@ void ParticleEmitter::setGL() {
 
 void ParticleEmitter::loadImage ( const char *_file ) {
 
-    pTexture = new Texture ( "testeZ1", std::string ( _file ) );
-
+	Texture *pTex = new Texture("TexParticleEmmiter_" + std::to_string(getSerial()), std::string(_file));
+	pState->setEnableTexture(pTex, true);
+	
 }
 
 void ParticleEmitter::renderExecute(bool _texture) {
@@ -125,7 +115,6 @@ void ParticleEmitter::renderExecute(bool _texture) {
     }
     
     // Select Our Texture
-    //pTexture->apply();
 	if (pState->getTexture() != nullptr)
 		pState->appyTexture();
 	else

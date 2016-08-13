@@ -49,7 +49,10 @@ void ParticleEmitter::init() {
 		particles.push_back(pParticle);
 	}
 
-	pTexture->init();
+	if (pTexture != nullptr) {
+		pTexture->init();
+		pState->setEnableTexture(pTexture, true);
+	}
 
 }
 
@@ -122,7 +125,12 @@ void ParticleEmitter::renderExecute(bool _texture) {
     }
     
     // Select Our Texture
-    pTexture->apply();
+    //pTexture->apply();
+	if (pState->getTexture() != nullptr)
+		pState->appyTexture();
+	else
+		glBindTexture(GL_TEXTURE_2D, 0);
+
 
     for ( unsigned loop = 0; loop < particles.size(); loop++ ) {
         Particle *pParticle = particles[loop];

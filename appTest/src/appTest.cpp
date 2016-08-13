@@ -79,8 +79,9 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pMat1->setDiffuse( Color( 1.0f, 0.5f, 0.31f ) );
         pMat1->setSpecular( Color( 0.5f, 0.5f, 0.5f ) );
         pMat1->setShine(32.0f);
-        
-        Mesh *pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",glm::vec3(50,50,50), nullptr, pMat1);
+		//pMat1->setTexDiffuse(pTex);
+
+        Mesh *pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",glm::vec3(50,50,50), pMat1);
         
 		Transform* pTrans2 = new Transform(group1, "trans02");
 		pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
@@ -90,8 +91,9 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pMat2->setDiffuse( Color( 0.5f, 0.5f, 0.5f ) );
         pMat2->setSpecular( Color( 0.5f, 0.5f, 0.5f ) );
         pMat2->setShine(32.0f);
+		//pMat2->setTexDiffuse(pTex);
 
-		Mesh *pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), nullptr, pMat2);
+		Mesh *pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), pMat2);
 
 
         Game *game = new Game(sceneMng);

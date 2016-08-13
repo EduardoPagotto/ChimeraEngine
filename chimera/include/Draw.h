@@ -17,20 +17,11 @@ public:
     virtual void renderExecute ( bool _texture ) = 0;
     virtual glm::vec3 getSizeBox() = 0;
 
-    State *getState() {
+    inline State *getState() {
         return pState;
     }
-    
-    void setTexture(Texture *_pTex) {
-		pState->setEnableTexture(_pTex, true);
-    }
-    
-    void setMaterial(Material *_pMat) {
-		pState->setEnableMaterial(_pMat, true);
-    }
-    
+        
 protected:
-
     State *pState;    
 };
 }

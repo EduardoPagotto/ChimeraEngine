@@ -8,6 +8,7 @@
 
 #include "OpenGLDefs.h"
 #include "Shader.h"
+#include "Texture.h"
 
 namespace Chimera {
     
@@ -26,7 +27,7 @@ public:
 	void setShine(const float &_val);
 	
     Color getAmbient() const;
-    Color getSpecular() const ;
+    Color getSpecular() const;
     Color getDiffuse() const;
     Color getEmission() const;
     float getShine() const;
@@ -39,6 +40,25 @@ public:
     
     void loadCollada ( tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode );
     
+	void setTexDiffuse(Texture *_pTex) {
+		texturePresent = true;
+		pTexDiffuse = _pTex;
+	}
+
+	void setTexSpecular(Texture *_pTex) {
+		texturePresent = true;
+		pTexSpecular = _pTex;
+	}
+
+	void setTexEmission(Texture *_pTex) {
+		texturePresent = true;
+		pTexEmissive = _pTex;
+	}
+
+	bool hasTexture() {
+		return texturePresent;
+	}
+
 private:
     
     void loadColladaProfile(tinyxml2::XMLElement* _nNode);
@@ -51,6 +71,11 @@ private:
     Color emission;       /* Emissive color RGB */
 	float shine;
     
+	bool texturePresent;
+	Texture *pTexDiffuse;
+	Texture *pTexSpecular;
+	Texture *pTexEmissive;
+
     FaceMaterial faceMaterial;
     
     std::map<ModeMaterial, bool> map_modes;

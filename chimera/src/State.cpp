@@ -1,15 +1,10 @@
 #include "State.h"
 
-/*
-#define FORI(x,j) \
-    for(int x=0;x<j;x++)*/
-
 namespace Chimera {
 
 State::State() {
 
-	m = nullptr;
-	t = nullptr;
+	pMaterialAtivo = nullptr;
 	l = nullptr;
 }
 
@@ -17,26 +12,7 @@ State::~State() {
 }
 
 void State::init() {
-
-	using namespace std;
-
-	for (map<Texture*, bool>::iterator iter = this->map_texture.begin(); iter != this->map_texture.end(); ++iter) {
-		Texture* k = iter->first;
-		bool flag = iter->second;
-
-		if (flag) {
-			if (k->textureLoad() == false)
-				k->init();
-		}
-	}
-
-	for (map<Material*, bool>::iterator iter = this->map_material.begin(); iter != this->map_material.end(); ++iter) {
-		Material* k = iter->first;
-		bool flag = iter->second;
-		if (flag)
-			k->init();
-	}
-
+	pMaterialAtivo->init();
 }
 
 void State::setEnable(GLenum face,bool flag) {
@@ -89,16 +65,9 @@ void State::setEnableColorMaterial(ColorMaterial state,bool flag) {
     this->map_colormaterial[state]=flag;
 }
 
-void State::setEnableMaterial(Material* m,bool flag) {
+void State::setMaterial(Material* _pMat) {
 
-    this->m=m;
-    this->map_material[m]=flag;
-}
-
-void State::setEnableTexture(Texture* t,bool flag) {
-
-    this->t=t;
-    this->map_texture[t]=flag;
+	this->pMaterialAtivo = _pMat;
 }
 
 void State::setEnableLighting(Light* l,bool flag) {
@@ -110,11 +79,6 @@ void State::setEnableLighting(Light* l,bool flag) {
 void State::setEnableStateMachine(StateMachine _state, bool _flag) {
  
     this->map_stateMachine[_state] = _flag;
-}
-
-unsigned int State::getSizeMaterial()
-{
-	return map_material.size();
 }
 
 void State::setStateMachine(StateMachine _state, bool _flag) {
@@ -154,55 +118,8 @@ void State::applyWireFrame() {
 
 void State::appyMaterial(Shader *_pShader) {
     
-    using namespace std;
-    
-     for(map<Material*,bool>::iterator iter = this->map_material.begin(); iter != this->map_material.end(); ++iter){
-        Material* k= iter->first;
-        bool flag=iter->second;
-		if (flag)
-			k->apply(_pShader);
-     }
-}
+	pMaterialAtivo->apply(_pShader);
 
-void State::appyTexture(){
- 
-    glEnable(GL_TEXTURE_2D);//FIXME preciso??????
- 
-    using namespace std;
-    
-    for(map<Texture*,bool>::iterator iter = this->map_texture.begin(); iter != this->map_texture.end(); ++iter){
-
-        Texture* k = iter->first;
-        bool flag = iter->second;
-                
-        if(flag)      
-            k->apply();
-    }
-    
-//     for(map<Texture*,bool>::iterator iter = this->map_texture.begin(); iter != this->map_texture.end(); ++iter){
-//                 Texture* k= iter->first;
-//                 bool flag=iter->second;
-//                 if(flag){
-//                     if(k->hasTexture()){
-//                         GLuint textureID;
-//                         const unsigned char* data=k->getTImageData();
-//                         int width=k->getTImageWidth();
-//                         int height=k->getTImageHeight();
-//                         k->createTexture(1,&textureID);
-//                         k->BindTexture(GL_TEXTURE_2D,&textureID);
-//                         k->applyGLTexture2D(GL_TEXTURE_2D , 0 , GL_RGB , 
-//                             width , height , 0, GL_BGR , GL_UNSIGNED_BYTE , 
-//                             data);
-//                         
-//                         glTexParameteri(GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_REPEAT);
-//                         glTexParameteri(GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_CLAMP);
-// 
-//                         
-//   
-//                     }
-//                 }
-//                     
-//     }
 }
 
 void State::appyLighting(){

@@ -94,7 +94,11 @@ void ParticleEmitter::setGL() {
 void ParticleEmitter::loadImage ( const char *_file ) {
 
 	Texture *pTex = new Texture("TexParticleEmmiter_" + std::to_string(getSerial()), std::string(_file));
-	pState->setEnableTexture(pTex, true);
+
+	Material *pMat = new Material("MatParticleEmmiter_" + std::to_string(getSerial()));
+	pMat->setTexDiffuse(pTex);
+
+	pState->setMaterial(pMat);
 	
 }
 
@@ -115,11 +119,11 @@ void ParticleEmitter::renderExecute(bool _texture) {
     }
     
     // Select Our Texture
-	if (pState->getTexture() != nullptr)
-		pState->appyTexture();
-	else
-		glBindTexture(GL_TEXTURE_2D, 0);
-
+	//if (pState->getTexture() != nullptr)
+	//	pState->appyTexture();
+	//else
+	//	glBindTexture(GL_TEXTURE_2D, 0);
+	pState->appyMaterial(nullptr);
 
     for ( unsigned loop = 0; loop < particles.size(); loop++ ) {
         Particle *pParticle = particles[loop];

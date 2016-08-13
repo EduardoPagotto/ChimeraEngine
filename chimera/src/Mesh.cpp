@@ -44,9 +44,9 @@ Mesh::~Mesh() {
 
 void Mesh::init() {
     
-	if (pState->getSizeMaterial() == 0) {
+	if (pState->getMaterial() == nullptr) {
 		Material* pMat = new Material("DefaultMat-" + std::to_string(getSerial()));
-		pState->setEnableMaterial(pMat, true);
+		pState->setMaterial(pMat);
 	}
     
 	pState->init();
@@ -140,11 +140,6 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
     
     if (_texture == true) {
 
-        if (pState->getTexture() != nullptr)
-            pState->appyTexture();
-        else
-            glBindTexture(GL_TEXTURE_2D, 0);
-
         pState->appyMaterial(nullptr);
         
 		//Usando Apenas FBO
@@ -159,15 +154,11 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
         glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));
 
         //Texture
-		if (pState->getTexture() != nullptr) {
+		if (pState->getMaterial()->hasTexture() == true) {
 			glClientActiveTexture(GL_TEXTURE0);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glTexCoordPointer(2, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(24));
 		}
-
-		//Color
-        //glEnableClientState(GL_COLOR_ARRAY);
-        //glColorPointer(4, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(32)); 
 		
         //vincula indices
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
@@ -179,10 +170,8 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
         glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 
-        if (pState->getTexture() != nullptr)
+        if (pState->getMaterial()->hasTexture() == true)
             glDisableClientState(GL_TEXTURE0);
-        
-        //glDisableClientState(GL_COLOR_ARRAY);
          
     } else {
 
@@ -190,15 +179,15 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
 
         //vincula VertexData
         glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+
         //points
         glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(3, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
-		//normal														       //Normal
+		
+		//normal														       
         glEnableClientState(GL_NORMAL_ARRAY);
         glNormalPointer(GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(12));   //The starting point of normals, 12 bytes away
-        //color                                                               //Color
-        //glEnableClientState(GL_COLOR_ARRAY);
-       // glColorPointer(4, GL_FLOAT, sizeof(VertexData), BUFFER_OFFSET(32));   //The starting point of the VBO, for the vertices                                                                            
+                                                                         
         //vincula indices
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
 
@@ -208,29 +197,16 @@ void Mesh::renderVertexBufferOnoShade(bool _texture) {
         //desabilita client stats
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
-        //glDisableClientState(GL_COLOR_ARRAY);
     }
 }
 
 void Mesh::renderVertexBuffer ( bool _texture ) {
 
-        if (_texture == true) {
-
-        if (pState->getTexture() != nullptr)
-            pState->appyTexture();
-        else
-            glBindTexture(GL_TEXTURE_2D, 0);
-
-        pState->appyMaterial(&shader);
+    pState->appyMaterial(&shader);
         
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-        glBindVertexArray(0);
-
-    }
-    else {
-		//TODO: como fazer isso??
-    }
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+    glBindVertexArray(0);
 }
 
 void Mesh::setVertexBuffer()

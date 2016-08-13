@@ -140,7 +140,7 @@ void HUD::renderExecute(bool _texture)
 	glPopAttrib();
 
 	//habilita testura para as fontes
-	glEnable(GL_TEXTURE_2D);//FIXME preciso ??
+	glEnable(GL_TEXTURE_2D);
 
 	//desenha as fontes em texturas
 	drawFonts();

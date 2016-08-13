@@ -83,8 +83,6 @@ TextureFilter Texture::getFilter() {
 //}
 
 void Texture::apply() {
-
-	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureList[indiceFilter]);
 }
 

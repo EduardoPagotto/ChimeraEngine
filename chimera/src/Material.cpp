@@ -18,42 +18,66 @@ Material::Material ( std::string _name ) : Entity ( EntityKind::MATERIAL, _name 
     map_modes[ModeMaterial::SHININESS]=false;
     
 	setFace(FaceMaterial::FRONT);
+
+	texturePresent = false;
+	pTexDiffuse = nullptr;
+	pTexSpecular = nullptr;
+	pTexEmissive = nullptr;
 }
 
 Material::~Material() {
 }
 
 void Material::init() {
+
+	if (pTexDiffuse != nullptr)
+		pTexDiffuse->init();
+
+	if (pTexSpecular != nullptr)
+		pTexSpecular->init();
+
+	if (pTexEmissive != nullptr)
+		pTexEmissive->init();
 }
 
 void Material::setAmbient(const Color &_color) {
+
 	ambient = _color;
 	map_modes[ModeMaterial::AMBIENT] = true;
 	map_params[ModeMaterial::AMBIENT] = &ambient;
+
 }
 
 void Material::setDiffuse(const Color &_color) {
+
 	diffuse = _color;
 	map_modes[ModeMaterial::DIFFUSE] = true;
 	map_params[ModeMaterial::DIFFUSE] = &diffuse;
+
 }
 
 void Material::setEmission(const Color &_color) {
+
 	emission = _color;
 	map_modes[ModeMaterial::EMISSION] = true;
 	map_params[ModeMaterial::EMISSION] = &emission;
+
 }
 
 void Material::setSpecular(const Color &_color) {
+
 	specular = _color;
 	map_modes[ModeMaterial::SPECULAR] = true;
 	map_params[ModeMaterial::SPECULAR] = &specular;
+
 }
 
 void Material::setShine(const float &_val) {
+
 	shine = _val;
 	map_modes[ModeMaterial::SHININESS] = true;
 	map_params[ModeMaterial::SHININESS] = &shine;
+
 }
 
 Color Material::getAmbient() const{
@@ -132,6 +156,23 @@ void Material::apply(Shader *pShader) {
         }
 	}
 	
+	if (texturePresent == true) {
+
+		glEnable(GL_TEXTURE_2D);
+
+		if (pTexDiffuse != nullptr)
+			pTexDiffuse->apply();
+
+		if (pTexSpecular != nullptr)
+			pTexSpecular->apply();
+
+		if (pTexEmissive != nullptr)
+			pTexEmissive->apply();
+	}
+	else {
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
 	//se ha textura coloque a cor como branca para nao interferir com a textura
 	//if (hasTexture) {
 	//	glMaterialfv(GL_FRONT, GL_DIFFUSE, Color::WHITE.ptr());

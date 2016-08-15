@@ -3,8 +3,6 @@
 
 #include "OpenGLDefs.h"
 
-//#include <glm\gtx\inverse_transpose.hpp>
-
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_inverse.hpp> 
 
@@ -29,52 +27,24 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
         shader.link();
         
         // Get the variables from the shader to which data will be passed
-
-		GLint ploc = glGetUniformLocation(shader.getIdProgram(), "projection");
-		if (ploc >= 0)
-			glUniformMatrix4fv(ploc, 1, false, glm::value_ptr(_proj));
-
-		GLint mvloc = glGetUniformLocation(shader.getIdProgram(), "view");
-		if (mvloc >= 0) 
-			glUniformMatrix4fv(mvloc, 1, false, glm::value_ptr(_view));
-	
-// 		GLint nloc = glGetUniformLocation(shader.getIdProgram(), "noMat");
-// 		if (nloc >= 0) {
-// 			glm::mat3 gl_NormalMatrix = glm::inverseTranspose(glm::mat3(_view));
-// 			glUniformMatrix3fv(nloc, 1, false, glm::value_ptr(gl_NormalMatrix));
-// 		}
+        shader.setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(_proj));
+        shader.setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(_view));
+        //shader.setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
 
 		Light *pLight = (Light*)findNodeBySeq(EntityKind::LIGHT, 0);//FIXME usar outro jeito para pegar esta luz
 		if (pLight != nullptr) {
+            
+            shader.setGlUniform3fv( "lightPos", 1, glm::value_ptr( pLight->getPosition() ) );
+            shader.setGlUniform4fv( "lightColor", 1, pLight->getDiffuse().ptr());
 
-			GLint llumLoc = glGetUniformLocation(shader.getIdProgram(), "lightPos");
-			if (llumLoc >= 0) {
-				glm::vec3 posicaoLuzZ1 = pLight->getPosition();
-				glUniform3fv(llumLoc, 1, glm::value_ptr( posicaoLuzZ1 ));
-			}
-
-			GLint llumColor = glGetUniformLocation(shader.getIdProgram(), "lightColor");
-			if (llumColor >= 0) 
-				glUniform4fv(llumColor, 1, pLight->getDiffuse().ptr());
 		}
 
 		Camera *pCam = (Camera*)findNodeBySeq(EntityKind::CAMERA, 0);
 		if (pCam != nullptr) {
 
-			GLint viewPosLoc = glGetUniformLocation(shader.getIdProgram(), "viewPos");
-			if (viewPosLoc >= 0)
-				glUniform3f(viewPosLoc, pCam->getPosition().x, pCam->getPosition().y, pCam->getPosition().z);
-
-		}
-
-		GLint objColorLoc = glGetUniformLocation(shader.getIdProgram(), "objectColor");
-        if (objColorLoc >= 0) {
-            
-            Color teste(Color::BLUE);
-            
-            glUniform4fv(objColorLoc, 1, teste.ptr());
-        }
-		
+            shader.setGlUniform3fv("viewPos", 1, glm::value_ptr( pCam->getPosition() ) );
+           
+		}		
 		
 	} else {
 
@@ -91,21 +61,21 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
 }
  
  ///
-void teste() {
-    float pitch;
-    float yaw;
-    float roll;
-    
-    glm::vec3 position(0,0,0);
-    
-    //Euler to Quarterion pitch, yaw, roll angul em radianos
-    glm::vec3 myEuler (pitch, yaw, roll);//yaw, pitch, roll ?????
-    glm::quat myQuat (myEuler);
-    
-    glm::mat4 matRot = glm::toMat4(myQuat); //matriz rotacao
-    glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), position); //matriz translacao
-    glm::mat4 final = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!! 
-}
+// void teste() {
+//     float pitch;
+//     float yaw;
+//     float roll;
+//     
+//     glm::vec3 position(0,0,0);
+//     
+//     //Euler to Quarterion pitch, yaw, roll angul em radianos
+//     glm::vec3 myEuler (pitch, yaw, roll);//yaw, pitch, roll ?????
+//     glm::quat myQuat (myEuler);
+//     
+//     glm::mat4 matRot = glm::toMat4(myQuat); //matriz rotacao
+//     glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), position); //matriz translacao
+//     glm::mat4 final = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!! 
+// }
 ///
  
  

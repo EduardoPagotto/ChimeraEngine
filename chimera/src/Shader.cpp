@@ -122,5 +122,62 @@ GLuint Shader::linkShader (const GLuint &VertexShaderID, const GLuint &FragmentS
     return ProgramID;
 }
 
+bool Shader::setGlUniform3fv ( const char* _nameVar, const unsigned int& _num, const float* _pointer ) {
+    
+     GLint loc  = glGetUniformLocation( idProgram, _nameVar );
+     if ( loc >= 0 ) {
+        glUniform3fv(loc, _num, _pointer);
+        return true;
+     }
+    
+    return false;
+}
+
+
+bool Shader::setGlUniform4fv ( const char* _nameVar, const unsigned &_num, float *_pointer ) {
+
+     GLint loc  = glGetUniformLocation( idProgram, _nameVar );
+     if ( loc >= 0 ) {
+        glUniform4fv(loc, _num, _pointer);
+        return true;
+     }
+    
+    return false;
+}
+
+bool Shader::setGlUniform1fv ( const char* _nameVar, const unsigned int& _num, float* _pointer ) {
+    
+     GLint loc  = glGetUniformLocation( idProgram, _nameVar );
+     if ( loc >= 0 ) {
+        glUniform1fv(loc, _num, _pointer);
+        return true;
+     }
+    
+    return false;
+}
+
+bool Shader::setGlUniformMatrix4fv ( const char* _nameVar, const unsigned int& _num, const bool& _normal,const float* _pointer ) {
+
+    GLint ploc = glGetUniformLocation( idProgram, _nameVar );
+    if (ploc >= 0) {
+        glUniformMatrix4fv(ploc, _num, _normal, _pointer);
+        return true;
+    }
+    
+    return false;
+}
+
+bool Shader::setGlUniformMatrix3fv ( const char* _nameVar, const unsigned int& _num, const bool& _normal, const float* _pointer ) {
+    
+    GLint ploc = glGetUniformLocation( idProgram, _nameVar );
+    if (ploc >= 0) {
+        glUniformMatrix3fv(ploc, _num, _normal, _pointer);
+        return true;
+    }
+    
+    return false;
+}
+
+
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

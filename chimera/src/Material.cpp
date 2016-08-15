@@ -130,27 +130,15 @@ void Material::apply(Shader *pShader) {
             
         } else {
         
-            if (k == AMBIENT) {
-                
-                GLint matAmbientLoc  = glGetUniformLocation( pShader->getIdProgram(), "material.ambient" );
-                glUniform4fv(matAmbientLoc, 1, p);
-                
-            } else if (k == DIFFUSE) {
-                
-                GLint matDiffuseLoc  = glGetUniformLocation( pShader->getIdProgram(), "material.diffuse" );
-                glUniform4fv(matDiffuseLoc, 1, p);
-                
-            } else if (k == SPECULAR) { 
-                
-                GLint matSpecularLoc = glGetUniformLocation( pShader->getIdProgram(), "material.specular" );
-                glUniform4fv(matSpecularLoc, 1, p);
-                
-            } else if (k == SHININESS) {
-                
-                GLint matShineLoc    = glGetUniformLocation( pShader->getIdProgram(), "material.shininess" ); 
-                glUniform1fv(matShineLoc, 1, p);
-            
-            } else {
+            if (k == AMBIENT)                
+                pShader->setGlUniform4fv("material.ambient", 1, p);
+             else if (k == DIFFUSE)                 
+                pShader->setGlUniform4fv("material.diffuse", 1, p);                                
+             else if (k == SPECULAR)                 
+                pShader->setGlUniform4fv("material.specular", 1, p);               
+             else if (k == SHININESS)         
+                pShader->setGlUniform1fv("material.shininess", 1, p);
+             else {
                 //TODO erro
             }
         }

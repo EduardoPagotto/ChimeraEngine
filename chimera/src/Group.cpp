@@ -34,7 +34,7 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
 		Light *pLight = (Light*)findNodeBySeq(EntityKind::LIGHT, 0);//FIXME usar outro jeito para pegar esta luz
 		if (pLight != nullptr) {
             
-            shader.setGlUniform3fv( "lightPos", 1, glm::value_ptr( pLight->getPosition() ) );
+            shader.setGlUniform3fv( "light.position", 1, glm::value_ptr( pLight->getPosition() ) );
             shader.setGlUniform4fv( "light.ambient", 1, pLight->getAmbient().ptr() );
 			shader.setGlUniform4fv( "light.diffuse", 1, pLight->getDiffuse().ptr() );
 			shader.setGlUniform4fv( "light.specular", 1, pLight->getSpecular().ptr() );

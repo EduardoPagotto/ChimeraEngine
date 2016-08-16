@@ -7,6 +7,10 @@
 # include "Draw.h"
 # include "Texture.h"
 
+// Verificar para implementar usando GLSL - http://www.opengl-tutorial.org/intermediate-tutorials/billboards-particles/particles-instancing/
+// Verificar para implementar usando GLSL - http://ogldev.atspace.co.uk/
+// Verificar para implementar usando GLSL - http://www.mbsoftworks.sk/index.php?page=tutorials&series=1&tutorial=26
+
 namespace Chimera {
     
 class ParticleEmitter : public Draw

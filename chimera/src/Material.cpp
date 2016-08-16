@@ -143,6 +143,24 @@ void Material::apply(Shader *pShader) {
             }
         }
 	}
+
+	if (pShader != nullptr) {
+
+		if (hasTexture() == false) {
+
+			pShader->setGlUniform1i("tipo", 0);
+
+		}
+		else {
+
+			if ((pTexDiffuse != nullptr) && (pTexSpecular == nullptr))
+				pShader->setGlUniform1i("tipo", 1);
+			else
+				pShader->setGlUniform1i("tipo", 2);
+
+		}
+
+	}
 	
 	if (texturePresent == true) {
 

@@ -419,7 +419,9 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
              
 			if (pMaterial != nullptr) {
 
-				pMaterial->setTexDiffuse(pTexture);
+				if (pTexture != nullptr)
+					pMaterial->setTexDiffuse(pTexture);
+
 				pDraw->getState()->setMaterial(pMaterial);
 				
 			}

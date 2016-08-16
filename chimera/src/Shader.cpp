@@ -39,9 +39,7 @@ bool Shader::load ( const char* vertex_file_path, const char* fragment_file_path
     
     return erroCode != 0 ? false :true;
 }
-    
-    
-    
+
 std::string Shader::getShaderCode ( const char * file_path ) {
 
     // Read the Vertex Shader code from the file
@@ -122,7 +120,18 @@ GLuint Shader::linkShader (const GLuint &VertexShaderID, const GLuint &FragmentS
     return ProgramID;
 }
 
-bool Shader::setGlUniform3fv ( const char* _nameVar, const unsigned int& _num, const float* _pointer ) {
+bool Shader::setGlUniform1i(const char * _nameVar, const int &_val)
+{
+	GLint loc = glGetUniformLocation(idProgram, _nameVar);
+	if (loc >= 0) {
+		glUniform1i(loc, (GLint)_val);
+		return true;
+	}
+
+	return false;
+}
+
+bool Shader::setGlUniform3fv ( const char* _nameVar, const unsigned& _num, const float* _pointer ) {
     
      GLint loc  = glGetUniformLocation( idProgram, _nameVar );
      if ( loc >= 0 ) {
@@ -145,7 +154,7 @@ bool Shader::setGlUniform4fv ( const char* _nameVar, const unsigned &_num, float
     return false;
 }
 
-bool Shader::setGlUniform1fv ( const char* _nameVar, const unsigned int& _num, float* _pointer ) {
+bool Shader::setGlUniform1fv ( const char* _nameVar, const unsigned& _num, float* _pointer ) {
     
      GLint loc  = glGetUniformLocation( idProgram, _nameVar );
      if ( loc >= 0 ) {
@@ -156,7 +165,7 @@ bool Shader::setGlUniform1fv ( const char* _nameVar, const unsigned int& _num, f
     return false;
 }
 
-bool Shader::setGlUniformMatrix4fv ( const char* _nameVar, const unsigned int& _num, const bool& _normal,const float* _pointer ) {
+bool Shader::setGlUniformMatrix4fv ( const char* _nameVar, const unsigned& _num, const bool& _normal,const float* _pointer ) {
 
     GLint ploc = glGetUniformLocation( idProgram, _nameVar );
     if (ploc >= 0) {
@@ -167,7 +176,7 @@ bool Shader::setGlUniformMatrix4fv ( const char* _nameVar, const unsigned int& _
     return false;
 }
 
-bool Shader::setGlUniformMatrix3fv ( const char* _nameVar, const unsigned int& _num, const bool& _normal, const float* _pointer ) {
+bool Shader::setGlUniformMatrix3fv ( const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer ) {
     
     GLint ploc = glGetUniformLocation( idProgram, _nameVar );
     if (ploc >= 0) {
@@ -177,7 +186,5 @@ bool Shader::setGlUniformMatrix3fv ( const char* _nameVar, const unsigned int& _
     
     return false;
 }
-
-
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; 

@@ -42,11 +42,18 @@ public:
         elapsedCount = val;
     }
 
+	inline Uint32 delta() {
+		Uint32 current = SDL_GetTicks();
+		Uint32 val = current - lastTicks;
+		lastTicks = current;
+		return val;
+	}
 
 private:
     bool started;
     bool paused;
     Uint32 startTicks;
+	Uint32 lastTicks;
     Uint32 pausedTicks;
     Uint32 step;
     Uint32 countStep;

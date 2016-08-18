@@ -50,17 +50,17 @@ void Game::joystickStatus ( Chimera::JoystickManager &joy ) {
 
 		if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {
 
-			glm::vec3 posicao = pEmissor->getPosSource();
-			posicao.x = posicao.x - 0.1f;
-			pEmissor->setPosSource( posicao );
+			//glm::vec3 posicao = pEmissor->getPosSource();
+			//posicao.x = posicao.x - 0.1f;
+			//pEmissor->setPosSource( posicao );
 
 		}
 
 		if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {
 
-			glm::vec3 posicao = pEmissor->getPosSource();
-			posicao.x = posicao.x + 0.1f;
-			pEmissor->setPosSource(posicao);
+			//glm::vec3 posicao = pEmissor->getPosSource();
+			//posicao.x = posicao.x + 0.1f;
+			//pEmissor->setPosSource(posicao);
 
 		}
 

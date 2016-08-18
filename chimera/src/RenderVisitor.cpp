@@ -37,7 +37,7 @@ void RenderVisitor::visit ( Light* _pLight ) {
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
     
 	if (particleOn == true) {
-		_pParticleEmitter->setPosition(pCoord->getPosition());
+		//_pParticleEmitter->setPosition(pCoord->getPosition()); //FIXME esta errado, verificar como fazer em debug
 		_pParticleEmitter->renderExecute(true);
 	}
 

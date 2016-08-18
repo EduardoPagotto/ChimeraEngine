@@ -62,11 +62,27 @@ int testeCargaArquivo() {
 		//Adiciona um Emissor de Particula 
 		//Chimera::Transform* posParticle = new Chimera::Transform((Chimera::Node*)group1, "posicaoParticle");
 		//posParticle->setTranslate(btVector3(-5.0, 5.0, 4.0));
-        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)group1, "testeZ1" );
-		pParticleEmitter->setPosSource(glm::vec3(-5.0, 5.0, 4.0));
-		pParticleEmitter->setMaxSeed(100);
-        std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
-        pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
+        //Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)group1, "testeZ1", 10000 );
+		//pParticleEmitter->setPosSource(glm::vec3(-5.0, 5.0, 4.0));
+		//pParticleEmitter->setMaxSeed(100);
+        //std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
+        //pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
+
+		//Novo Emissor GLSL
+		Chimera::Group *gParticle = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "ParticleGroup" );
+#ifdef WIN32
+		gParticle->shader.load("C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\ParticleVertexShader.glsl",
+			"C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\ParticleFragmentShader.glsl");
+# else
+		gParticle->shader.load("/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/ParticleVertexShader.glsl",
+			"/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/ParticleFragmentShader.glsl");
+# endif
+		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter((Chimera::Node*)gParticle, "testeZ1", 10000);
+		Chimera::Material *pMatParticleEmiter = new Chimera::Material("MatParticleEmitter");
+		Chimera::Texture *pTexParticleEmitter = new Chimera::Texture("TexParticleEmmiter", dirDados + std::string("/") + std::string("Particle.png"));
+		pMatParticleEmiter->setTexDiffuse(pTexParticleEmitter);
+		pParticleEmitter->getState()->setMaterial(pMatParticleEmiter);
+
 
 		//Adiciona um HUD ao Grapho
 		Chimera::HUD *pHUD = new Chimera::HUD(group1, "HUD-Default");

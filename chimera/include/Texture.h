@@ -43,6 +43,10 @@ public:
         return texturaCarregada;
     }
     
+	int getTextureId(int _index) {
+		return textureList[_index];
+	}
+
     // novo usado em ShadowMap
     // This function creates a blank texture to render to
     void createRenderTexture ( int sizeX, int sizeY, int channels, int type );

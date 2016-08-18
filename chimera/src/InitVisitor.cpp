@@ -31,6 +31,7 @@ void InitVisitor::visit ( Light* _pLight ) {
 void InitVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 
     std::cout << "Visit ParticleEmitter:" << _pParticleEmitter->getName() << "\n";
+	_pParticleEmitter->setShader( shader );
     _pParticleEmitter->init();    
     
 }

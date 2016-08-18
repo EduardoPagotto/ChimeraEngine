@@ -50,6 +50,10 @@ public:
 		pTexSpecular = _pTex;
 	}
 
+	Texture *getTexDiffuse() {
+		return pTexDiffuse;
+	}
+
 	void setTexEmission(Texture *_pTex) {
 		texturePresent = true;
 		pTexEmissive = _pTex;

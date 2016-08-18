@@ -20,10 +20,11 @@ void ParticleEmitter::init() {
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
+    
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
 
-	GLuint VertexArrayID;
+	//GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
@@ -31,12 +32,12 @@ void ParticleEmitter::init() {
 	//GLuint programID = LoadShaders("Particle.vertexshader", "Particle.fragmentshader");
 
 	// Vertex shader
-	CameraRight_worldspace_ID = glGetUniformLocation(shader.getIdProgram(), "CameraRight_worldspace");
-	CameraUp_worldspace_ID = glGetUniformLocation(shader.getIdProgram(), "CameraUp_worldspace");
-	ViewProjMatrixID = glGetUniformLocation(shader.getIdProgram(), "VP");
+	//CameraRight_worldspace_ID = glGetUniformLocation(shader.getIdProgram(), "CameraRight_worldspace");
+	//CameraUp_worldspace_ID = glGetUniformLocation(shader.getIdProgram(), "CameraUp_worldspace");
+	//ViewProjMatrixID = glGetUniformLocation(shader.getIdProgram(), "VP");
 
 	// fragment shader
-	TextureID = glGetUniformLocation(shader.getIdProgram(), "myTextureSampler");
+	//TextureID = glGetUniformLocation(shader.getIdProgram(), "myTextureSampler");
 
 	g_particule_position_size_data = new GLfloat[MaxParticles * 4];
 	g_particule_color_data = new GLubyte[MaxParticles * 4];
@@ -47,7 +48,7 @@ void ParticleEmitter::init() {
 	//	ParticlesContainer[i].cameradistance = -1.0f;
 	//}
 
-	Texture = pState->getMaterial()->getTexDiffuse()->getTextureId(0);//loadDDS("particle.DDS");
+	
 
 	// The VBO containing the 4 vertices of the particles.
 	// Thanks to instancing, they will be shared by all particles.
@@ -109,15 +110,14 @@ void ParticleEmitter::renderExecute(bool _texture)
 	//lastTime = currentTime;
 
 	//computeMatricesFromInputs();
-	glm::mat4 ProjectionMatrix;// = getProjectionMatrix();
-	glm::mat4 ViewMatrix;// = getViewMatrix();
+	//glm::mat4 ProjectionMatrix;// = getProjectionMatrix();
+	//glm::mat4 ViewMatrix;// = getViewMatrix();
 
 	// We will need the camera's position in order to sort the particles
 	// w.r.t the camera's distance.
 	// There should be a getCameraPosition() function in common/controls.cpp, 
 	// but this works too.
 	glm::vec3 CameraPosition(glm::inverse(ViewMatrix)[3]);
-
 	glm::mat4 ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
 
 
@@ -219,7 +219,8 @@ void ParticleEmitter::renderExecute(bool _texture)
 	// but this is outside the scope of this tutorial.
 	// http://www.opengl.org/wiki/Buffer_Object_Streaming
 
-
+    glBindVertexArray(VertexArrayID);//coloquei aqui porque acho que tenho que ligar antes 
+    
 	glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
 	glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
 	glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLfloat) * 4, g_particule_position_size_data);
@@ -235,9 +236,20 @@ void ParticleEmitter::renderExecute(bool _texture)
 	// Use our shader
 	shader.link();//glUseProgram(programID);
 
+	// Vertex shader
+    GLuint CameraRight_worldspace_ID = glGetUniformLocation(shader.getIdProgram(), "CameraRight_worldspace");
+    GLuint CameraUp_worldspace_ID = glGetUniformLocation(shader.getIdProgram(), "CameraUp_worldspace");
+    GLuint ViewProjMatrixID = glGetUniformLocation(shader.getIdProgram(), "VP");
+
+    // fragment shader
+    GLuint TextureID = glGetUniformLocation(shader.getIdProgram(), "myTextureSampler");
+
+    GLuint Texture = pState->getMaterial()->getTexDiffuse()->getTextureId(0);//loadDDS("particle.DDS");
+    
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Texture);
+    
 	// Set our "myTextureSampler" sampler to user Texture Unit 0
 	glUniform1i(TextureID, 0);
 

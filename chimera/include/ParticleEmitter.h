@@ -39,6 +39,9 @@ public:
 		shader = _shader;
 	}
 
+	glm::mat4 ProjectionMatrix;// = getProjectionMatrix();
+    glm::mat4 ViewMatrix;// = getViewMatrix();
+	
 private:
 	int FindUnusedParticle();
 
@@ -55,18 +58,12 @@ private:
 	int LastUsedParticle;
 
 	float lastTime;
-
-	// Vertex shader
-	GLuint CameraRight_worldspace_ID;// = glGetUniformLocation(shader.getIdProgram, "CameraRight_worldspace");
-	GLuint CameraUp_worldspace_ID;// = glGetUniformLocation(shader.getIdProgram, "CameraUp_worldspace");
-	GLuint ViewProjMatrixID;// = glGetUniformLocation(shader.getIdProgram, "VP");
-
 	GLuint billboard_vertex_buffer;
 	GLuint particles_position_buffer;
 	GLuint particles_color_buffer;
-	GLuint Texture;
-	GLuint TextureID;
 
+    GLuint VertexArrayID;
+    
 	Timer timer;
 };
 

@@ -18,11 +18,11 @@ void ParticleEmitter::init() {
 
 	pState->init();
 
-	// Enable depth test
-	glEnable(GL_DEPTH_TEST);
-    
-	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
+	//// Enable depth test
+	//glEnable(GL_DEPTH_TEST);
+ //   
+	//// Accept fragment if it closer to the camera than the former one
+	//glDepthFunc(GL_LESS);
 
 	//GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -31,14 +31,24 @@ void ParticleEmitter::init() {
 	g_particule_position_size_data = new GLfloat[MaxParticles * 4];
 	g_particule_color_data = new GLubyte[MaxParticles * 4];
 
+	float sizeBase = 0.5f;
+
 	// The VBO containing the 4 vertices of the particles.
 	// Thanks to instancing, they will be shared by all particles.
+	//static const GLfloat g_vertex_buffer_data[] = {
+	//	-0.5f, -0.5f, 0.0f,
+	//	0.5f, -0.5f, 0.0f,
+	//	-0.5f,  0.5f, 0.0f,
+	//	0.5f,  0.5f, 0.0f,
+	//};
 	static const GLfloat g_vertex_buffer_data[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f,
-		0.5f,  0.5f, 0.0f,
+		-sizeBase, -sizeBase, 0.0f,
+		sizeBase, -sizeBase, 0.0f,
+		-sizeBase, sizeBase, 0.0f,
+		sizeBase,  sizeBase, 0.0f,
 	};
+
+
 	
 	glGenBuffers(1, &billboard_vertex_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, billboard_vertex_buffer);
@@ -150,6 +160,21 @@ void ParticleEmitter::renderExecute(bool _texture)
 	glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLubyte) * 4, g_particule_color_data);
 
 
+	// salva flags de bit
+	glPushAttrib(GL_ENABLE_BIT);
+
+	//preserva a cor original
+	glPushAttrib(GL_CURRENT_BIT);
+
+
+
+
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+
+	// Accept fragment if it closer to the camera than the former one
+	glDepthFunc(GL_LESS);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -232,6 +257,13 @@ void ParticleEmitter::renderExecute(bool _texture)
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+
+
+	//retorna paleta
+	glPopAttrib();
+
+	//retorna paleta
+	glPopAttrib();
 }
 
 int ParticleEmitter::FindUnusedParticle() {

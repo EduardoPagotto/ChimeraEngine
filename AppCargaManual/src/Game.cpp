@@ -138,7 +138,7 @@ void Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
     if ( estadoBotao == SDL_PRESSED ) {
         if ( botaoIndex == 1 ) {
             pOrbitalCam->trackBall ( mm.yrel, mm.xrel, 0 );
-        } else if ( botaoIndex == 2 ) {
+        } else if ( botaoIndex == 3 ) {
             pOrbitalCam->trackBall ( 0, 0, mm.yrel );
         }
     }

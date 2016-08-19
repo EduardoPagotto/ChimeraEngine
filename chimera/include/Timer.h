@@ -42,7 +42,11 @@ public:
         elapsedCount = val;
     }
 
-	inline Uint32 delta() {
+    inline double deltaTimeSecounds() {
+        return 1000.0f / ((double)deltaCountMS());
+    }
+    
+	inline Uint32 deltaCountMS() {
 		Uint32 current = SDL_GetTicks();
 		Uint32 val = current - lastTicks;
 		lastTicks = current;

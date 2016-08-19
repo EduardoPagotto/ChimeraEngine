@@ -55,8 +55,8 @@ int testeCargaArquivo() {
    		group1->shader.load("C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
    		                    "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl");
    # else
-   		group1->shader.load("/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
-   		                    "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl");
+   		group1->shader.load("../../AppCargaManual/shader/vertex.glsl",
+   		                    "../../AppCargaManual/shader/fragment.glsl");
    # endif
 
 		//Adiciona um Emissor de Particula 
@@ -74,8 +74,8 @@ int testeCargaArquivo() {
 		gParticle->shader.load("C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\ParticleVertexShader.glsl",
 			"C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\ParticleFragmentShader.glsl");
 # else
-		gParticle->shader.load("/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/ParticleVertexShader.glsl",
-			"/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/ParticleFragmentShader.glsl");
+		gParticle->shader.load("../../AppCargaManual/shader/ParticleVertexShader.glsl",
+			"../../AppCargaManual/shader/ParticleFragmentShader.glsl");
 # endif
 		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter((Chimera::Node*)gParticle, "testeZ1", 10000);
 		Chimera::Material *pMatParticleEmiter = new Chimera::Material("MatParticleEmitter");

@@ -90,9 +90,7 @@ void ParticleEmitter::SortParticles() {
 
 int ParticleEmitter::recycleParticleLife(const glm::vec3 &_camPosition) {
 
-	//Uint32 delta = 1;//timer.delta() / 50;
-	//double delta = 1.0f / timer.delta();
-    double delta = timer.deltaTimeSecounds();
+	double delta = timer.deltaTimeSecounds();
     
 	// Generate 10 new particule each millisecond,
 	// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),

@@ -43,7 +43,7 @@ public:
     }
 
     inline double deltaTimeSecounds() {
-        return 1000.0f / ((double)deltaCountMS());
+        return ((double)deltaCountMS()) / 1000.0f;
     }
     
 	inline Uint32 deltaCountMS() {

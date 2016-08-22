@@ -187,8 +187,13 @@ void Game::start() {
     
 	//Localiza o HUD
 	pHUD = (Chimera::HUD*)Chimera::Node::findNodeBySeq(Chimera::EntityKind::HUD, "HUD-Default");
-    pHUD->addText ( 0, 0, 255, 0, Chimera::Color::BLUE, &sPosicaoObj );
-	pHUD->addText ( 0, 0, 0, 0, Chimera::Color::RED, &textoFPS );
+//     pHUD->addText ( 0, 0, 255, 0, Chimera::Color::BLUE, &sPosicaoObj );
+// 	   pHUD->addText ( 0, 0, 0, 0, Chimera::Color::RED, &textoFPS );
+//     
+    pHUD->addText(0, 0, 255, Chimera::Color::BLUE,1.0, &sPosicaoObj);
+	pHUD->addText(0, 0, 0, Chimera::Color::RED, 1.0, &textoFPS  );
+    
+    
        
 }
 

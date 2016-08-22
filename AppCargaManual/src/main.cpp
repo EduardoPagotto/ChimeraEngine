@@ -83,17 +83,25 @@ int testeCargaArquivo() {
 		pMatParticleEmiter->setTexDiffuse(pTexParticleEmitter);
 		pParticleEmitter->getState()->setMaterial(pMatParticleEmiter);
 
-
+        Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");
+#ifdef WIN32
+		gHud->shader.load("C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\HudVertexShader.glsl",
+			"C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\HudFragmentShader.glsl");
+# else
+		gHud->shader.load("../../AppCargaManual/shader/HudVertexShader.glsl",
+			"../../AppCargaManual/shader/HudFragmentShader.glsl");
+# endif        
+    
 		//Adiciona um HUD ao Grapho
-		Chimera::HUD *pHUD = new Chimera::HUD(group1, "HUD-Default");
+		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default");
 	#ifdef WIN32
 		Chimera::Font *pFont = new Chimera::Font ( "C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18 );
 	#else
 		Chimera::Font *pFont = new Chimera::Font ( "../../fonts/FreeSans.ttf", 18 );
 	#endif
 		pHUD->addFont ( pFont );
-		SDL_Rect area = { 30, 30, 600, 20 };
-		pHUD->addSquare ( area, Chimera::Color ( 1.0f, 1.0f, 1.0f, 0.2f ) );
+		//SDL_Rect area = { 30, 30, 600, 20 };
+		//pHUD->addSquare ( area, Chimera::Color ( 1.0f, 1.0f, 1.0f, 0.2f ) );
 
         delete pLoader;
         pLoader = nullptr;

@@ -68,6 +68,7 @@ void InitVisitor::visit ( HUD* _pHUD ) {
     
     std::cout << "Visit HUD:" << _pHUD->getName() << "\n";
     _pHUD->init();  
+    _pHUD->shade = shader;
     
 }
 

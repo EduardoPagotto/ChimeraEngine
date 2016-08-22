@@ -60,17 +60,24 @@ glm::mat4 VideoDevice::getPerspectiveProjectionMatrix(const float &_fov, const f
 //    glFrustum( -fW, fW, -fH, fH, zNear, zFar );
 //}
 
-void VideoDevice::executeViewOrto ( int eye ) {
-
-    glMatrixMode ( GL_PROJECTION );
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho ( 0, winSizeW, 0, winSizeH, -1, 1 );
-    glMatrixMode ( GL_MODELVIEW );
-    glPushMatrix();
-    glLoadIdentity();
-
+glm::mat4 VideoDevice::getOrthoProjectionMatrix( int eyeIndex ) {
+ 
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(winSizeW), 0.0f, static_cast<GLfloat>(winSizeH));
+    
+    return projection;
 }
+
+// void VideoDevice::executeViewOrto ( int eye ) {
+// 
+//     glMatrixMode ( GL_PROJECTION );
+//     glPushMatrix();
+//     glLoadIdentity();
+//     glOrtho ( 0, winSizeW, 0, winSizeH, -1, 1 );
+//     glMatrixMode ( GL_MODELVIEW );
+//     glPushMatrix();
+//     glLoadIdentity();
+// 
+// }
 
 void VideoDevice::reshape ( int _w, int _h ) {
     winSizeW = _w;

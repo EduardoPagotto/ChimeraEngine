@@ -95,11 +95,11 @@ void RenderVisitor::visit ( HUD* _pHUD ) {
 	if (HudOn == true) {
 		if (_pHUD->isOn() == true) {
 
-			Shader::unlink();
-
-			pVideo->executeViewOrto(eye);
+			//Shader::unlink();
+            projection = pVideo->getOrthoProjectionMatrix(eye); //pVideo->executeViewOrto(eye);
+            _pHUD->projection = projection;
 			_pHUD->renderExecute(textureOn);
-			pVideo->restoreMatrix();
+			//pVideo->restoreMatrix();
 		}
 	}  
 }

@@ -19,7 +19,8 @@ public:
     //TODO subistituir o executeViewPerspective
     //virtual void perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear, GLdouble zFar );
     
-    virtual void executeViewOrto ( int eye );
+    virtual glm::mat4 getOrthoProjectionMatrix( int eyeIndex );//virtual void executeViewOrto ( int eye );
+    
     virtual void reshape ( int _w, int _h );
     virtual void toggleFullScreen();
 

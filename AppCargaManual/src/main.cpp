@@ -25,12 +25,12 @@ int testeCargaArquivo() {
     try {
 
 #ifdef WIN32
-        std::string dirDados = "C:\\Projetos\\ChimeraEngine\\appTest\\models";
-		std::string dirBase = "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\";
+        std::string dirDados = "C:\\Projetos\\ChimeraEngine\\models";
+		std::string dirBase = "C:\\Projetos\\ChimeraEngine\\shader\\";
 		std::string dirFontes = "C:\\Projetos\\ChimeraEngine\\fonts\\";
 #else
-        std::string dirDados = "../../appTest/models";
-		std::string dirBase = "../../AppCargaManual/shader/";
+        std::string dirDados = "../../models";
+		std::string dirBase = "../../shader/";
 		std::string dirFontes = "../../fonts/";
 #endif
 
@@ -53,8 +53,8 @@ int testeCargaArquivo() {
         sceneMng->setReader(pLoader);
         Chimera::Group* group1 = sceneMng->createSceneGraph();
 		group1->shader.load("default", dirBase + "vertex.glsl", dirBase + "fragment.glsl");
-   		                   
-		//Adiciona um Emissor de Particula 
+
+		//Adiciona um Emissor de Particula
 		//Chimera::Transform* posParticle = new Chimera::Transform((Chimera::Node*)group1, "posicaoParticle");
 		//posParticle->setTranslate(btVector3(-5.0, 5.0, 4.0));
         //Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)group1, "testeZ1", 10000 );
@@ -75,7 +75,7 @@ int testeCargaArquivo() {
 
         Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");
 		gHud->shader.load("default", dirBase +  "HudVertexShader.glsl", dirBase + "HudFragmentShader.glsl");
-      
+
 		//Adiciona um HUD ao Grapho
 		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default");
 		Chimera::Font *pFont = new Chimera::Font ( dirFontes + "FreeSans.ttf", 18 );
@@ -94,7 +94,7 @@ int testeCargaArquivo() {
         delete game;
         delete sceneMng;
         delete video;
-        
+
     } catch ( const Chimera::Exception& ex ) {
 
         std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;

@@ -31,7 +31,7 @@ bool Shader::load (const std::string &programName, const std::string &vertex_fil
     std::cout << "Linking   : " << programName << std::endl;
     idProgram = linkShader ( VertexShaderID, FragmentShaderID );
 
-	if (idProgram >= 0) {
+	if (idProgram != -1) {
 		mapaId[programName] = idProgram;
 		currentProgram = programName;
 		currentIdProgram = idProgram;

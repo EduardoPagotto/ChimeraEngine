@@ -41,6 +41,12 @@ should add to or customize.
 
 
 
+Referencias Site:
+http://www.kickjs.org/example/shader_editor/shader_editor.html : template para usar
+http://www.lighthouse3d.com/tutorials/glsl-tutorial/attribute-variables/ : como carregar
+
+
+
 
 Arquivos necessarios ao include:
 ../../chimera/include/

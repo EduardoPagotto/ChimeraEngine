@@ -26,8 +26,12 @@ int testeCargaArquivo() {
 
 #ifdef WIN32
         std::string dirDados = "C:\\Projetos\\ChimeraEngine\\appTest\\models";
+		std::string dirBase = "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\";
+		std::string dirFontes = "C:\\Projetos\\ChimeraEngine\\fonts\\";
 #else
         std::string dirDados = "../../appTest/models";
+		std::string dirBase = "../../AppCargaManual/shader/";
+		std::string dirFontes = "../../fonts/";
 #endif
 
         //Instancia de Video
@@ -48,17 +52,8 @@ int testeCargaArquivo() {
         Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
         sceneMng->setReader(pLoader);
         Chimera::Group* group1 = sceneMng->createSceneGraph();
-        
-//http://www.kickjs.org/example/shader_editor/shader_editor.html template para usar
-//http://www.lighthouse3d.com/tutorials/glsl-tutorial/attribute-variables/ como carregar
-   #ifdef WIN32
-   		group1->shader.load("C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
-   		                    "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl");
-   # else
-   		group1->shader.load("../../AppCargaManual/shader/vertex.glsl",
-   		                    "../../AppCargaManual/shader/fragment.glsl");
-   # endif
-
+		group1->shader.load("default", dirBase + "vertex.glsl", dirBase + "fragment.glsl");
+   		                   
 		//Adiciona um Emissor de Particula 
 		//Chimera::Transform* posParticle = new Chimera::Transform((Chimera::Node*)group1, "posicaoParticle");
 		//posParticle->setTranslate(btVector3(-5.0, 5.0, 4.0));
@@ -70,13 +65,8 @@ int testeCargaArquivo() {
 
 		//Novo Emissor GLSL
 		Chimera::Group *gParticle = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "ParticleGroup" );
-#ifdef WIN32
-		gParticle->shader.load("C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\ParticleVertexShader.glsl",
-			"C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\ParticleFragmentShader.glsl");
-# else
-		gParticle->shader.load("../../AppCargaManual/shader/ParticleVertexShader.glsl",
-			"../../AppCargaManual/shader/ParticleFragmentShader.glsl");
-# endif
+		gParticle->shader.load("default", dirBase + "ParticleVertexShader.glsl", dirBase + "ParticleFragmentShader.glsl");
+
 		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter((Chimera::Node*)gParticle, "testeZ1", 10000);
 		Chimera::Material *pMatParticleEmiter = new Chimera::Material("MatParticleEmitter");
 		Chimera::Texture *pTexParticleEmitter = new Chimera::Texture("TexParticleEmmiter", dirDados + std::string("/") + std::string("Particle2.png"));
@@ -84,24 +74,12 @@ int testeCargaArquivo() {
 		pParticleEmitter->getState()->setMaterial(pMatParticleEmiter);
 
         Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");
-#ifdef WIN32
-		gHud->shader.load("C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\HudVertexShader.glsl",
-			"C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\HudFragmentShader.glsl");
-# else
-		gHud->shader.load("../../AppCargaManual/shader/HudVertexShader.glsl",
-			"../../AppCargaManual/shader/HudFragmentShader.glsl");
-# endif        
-    
+		gHud->shader.load("default", dirBase +  "HudVertexShader.glsl", dirBase + "HudFragmentShader.glsl");
+      
 		//Adiciona um HUD ao Grapho
 		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default");
-	#ifdef WIN32
-		Chimera::Font *pFont = new Chimera::Font ( "C:\\Projetos\\ChimeraEngine\\fonts\\FreeSans.ttf", 18 );
-	#else
-		Chimera::Font *pFont = new Chimera::Font ( "../../fonts/FreeSans.ttf", 18 );
-	#endif
+		Chimera::Font *pFont = new Chimera::Font ( dirFontes + "FreeSans.ttf", 18 );
 		pHUD->addFont ( pFont );
-		//SDL_Rect area = { 30, 30, 600, 20 };
-		//pHUD->addSquare ( area, Chimera::Color ( 1.0f, 1.0f, 1.0f, 0.2f ) );
 
         delete pLoader;
         pLoader = nullptr;
@@ -127,71 +105,6 @@ int testeCargaArquivo() {
 }
 
 int testeCargaManual() {
-
-    //try {
-
-    //	//Instancia de Video
-    //	Chimera::Video *video = new Chimera::VideoDevice(1200, 800, "teste");
-    //	//Chimera::Video *video = new Chimera::OvrDevice("Teste");
-
-    //	Chimera::Node *pRoot = new Chimera::Node(Chimera::EntityKind::NODE, "cena01", "cona01");
-
-    //	Chimera::CameraSpherical *pCam = new Chimera::CameraSpherical("Camera01", "Camera01");
-    //	pCam->setNear(0.1f);
-    //	pCam->setFar(1000.0f);
-    //	pCam->setFov(45.0f);
-    //	pCam->setPerspective(true);
-    //	pCam->setPositionRotation(btVector3(15.0f, 15.0f, 15.0f), btVector3(45.0f, 45.0f, 45.0f));
-    //	pRoot->addChild(pCam);
-
-    //	Chimera::Light *pLight = new Chimera::Light(Chimera::LightType::POINT, "Luz01", "Luz01");
-    //	pLight->setDiffuse(Chimera::Color(1.0f, 0.5f, 0.5f, 1.0f));
-    //	pLight->setPositionRotation(btVector3(15.0f, 15.0f, 15.0f), btVector3(45.0f, 45.0f, 45.0f));
-    //	pRoot->addChild(pLight);
-
-    //	Chimera::Effect *pEffect = new Chimera::Effect("cor01", "cor01");
-    //	pEffect->setDiffuse(Chimera::Color(1.0f, 1.0f, 1.0f));
-    //	pEffect->setSpecular(Chimera::Color(1.0f, 1.0f, 1.0f));
-
-    //	Chimera::Material *pMaterial = new Chimera::Material("Mat01", "Mat01");
-    //	pMaterial->addChild(pEffect);
-
-    //	Chimera::DrawBox *pDraw = new Chimera::DrawBox("caixa01", "caixa01");
-    //	pDraw->setSizeBox(btVector3(5.0f, 5.0f, 5.0f));
-    //	pDraw->addChild(pMaterial);
-
-    //	Chimera::Physics *pPysics = new Chimera::Physics("rigid-body01", "rigid-body01");
-    //	pPysics->setMass(10.0f);
-    //	pPysics->setFriction(0.0f);
-    //	pPysics->setRestitution(0.0f);
-
-    //	Chimera::Object *pObj = new Chimera::Object("ator01", "ator01");
-    //	pObj->setPositionRotation(btVector3(0.0f, 0.0f, 0.0f), btVector3(0.0f, 0.0f, 0.0f));
-    //	pObj->addChild(pDraw);
-    //	pObj->addChild(pPysics);
-
-
-    //	pRoot->addChild(pObj);
-
-    //	Chimera::SceneMng *sceneMng = new Chimera::SceneMng(pRoot, video);
-
-    //	Game *game = new Game(video, sceneMng);
-    //	game->open();
-
-    //	game->gameLoop();
-
-    //	delete game;
-    //	delete sceneMng;
-    //	delete pRoot;
-    //	delete video;
-
-    //}
-    //catch (const Chimera::Exception& ex) {
-
-    //	std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
-    //	return -1;
-
-    //}
 
     return 0;
 }

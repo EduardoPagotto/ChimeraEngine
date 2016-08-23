@@ -1,19 +1,10 @@
 #ifndef HUD_H_
 #define HUD_H_
 
-#include "Draw.h"
-
 #include <vector>
 
-// #ifndef WIN32
-// #include <SDL2/SDL.h>
-// #else
-// #include <SDL.h>
-// #endif
-
+#include "Draw.h"
 #include "Font.h"
-
-//#include <glm/glm.hpp>
 
 namespace Chimera
 {
@@ -42,7 +33,6 @@ public:
 	virtual glm::vec3 getSizeBox() override;
 
     void addFont ( Font *_pFont );
-    //void addSquare ( const SDL_Rect _rec, Color _color );
 
     inline void setOn ( const bool _on ) {
         on = _on;
@@ -59,11 +49,9 @@ public:
     glm::mat4 projection;
     
 private:
-    //void drawBoxes();
     void drawFonts();
 
     bool on;
-    //std::vector<HUDSquare*> vSquare;
     std::vector<HUDTxt*> vLineText;
     std::vector<Font*> vFonts;
 };

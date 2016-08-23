@@ -3,9 +3,10 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <GL/glew.h>
+#include <map>
+#include <string>
 
-#include <OpenGLDefs.h>
+#include "OpenGLDefs.h"
 
 namespace Chimera
 {
@@ -15,6 +16,8 @@ public:
    Shader();
    Shader(const Shader &_shader);
    virtual ~Shader();
+
+   bool load(const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path);
    
     inline int getErroCode() const {
         return erroCode;
@@ -32,12 +35,10 @@ public:
         return idProgram;
     }
     
-     bool load(const char * vertex_file_path, const char * fragment_file_path);
-    
 	 bool setGlUniform1i(const char *_nameVar, const int &_val);
 	 bool setGlUniform3fv( const char *_nameVar, const unsigned &_num, const float *_pointer );
      bool setGlUniform4fv( const char *_nameVar, const unsigned &_num, const float *_pointer ); 
-     bool setGlUniform1fv( const char *_nameVar, const unsigned &_num, float *_pointer );
+     bool setGlUniform1fv( const char *_nameVar, const unsigned &_num, const float *_pointer );
      bool setGlUniformMatrix4fv( const char* _nameVar, const unsigned& _num,const bool& _normal,const float* _pointer );
      bool setGlUniformMatrix3fv( const char* _nameVar, const unsigned& _num,const bool& _normal,const float* _pointer );
      
@@ -46,8 +47,13 @@ private:
     GLuint compileShader ( const std::string &shaderCode, bool _shadeKind );
     GLuint linkShader (const GLuint &VertexShaderID, const GLuint &FragmentShaderID );
    
-    int erroCode;;
+    int erroCode;
     GLuint idProgram;
+
+	std::map<std::string, GLuint> mapaId;
+
+	std::string currentProgram;
+	GLuint currentIdProgram;
 };
 }
 

@@ -1,22 +1,11 @@
 #include "Font.h"
 
 #include <ExceptionSDL.h>
-//
-// #ifdef WIN32
-// #include "windows.h"
-// #endif
-// #include <GL/gl.h>
-
-
 #include <iostream>
-
-
 
 namespace Chimera {
 
-
-
-Font::Font ( const char* _fontFile, int _size ) {
+Font::Font (const std::string &_fontFile, const int &_size) {
 
     // FreeType
     FT_Library ft;
@@ -27,8 +16,8 @@ Font::Font ( const char* _fontFile, int _size ) {
 
     // Load font as face
     FT_Face face;
-    if (FT_New_Face(ft, _fontFile, 0, &face))
-        throw ExceptionSDL ( ExceptionCode::READ, "Arquivo de fonte falha ao carregar:" + std::string ( _fontFile ) );
+    if (FT_New_Face(ft, _fontFile.c_str(), 0, &face))
+        throw ExceptionSDL ( ExceptionCode::READ, "Arquivo de fonte falha ao carregar:" + _fontFile );
 
     // Set size to load glyphs as
     FT_Set_Pixel_Sizes(face, 0, _size);
@@ -92,63 +81,17 @@ Font::Font ( const char* _fontFile, int _size ) {
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
-// #ifdef TTF_NOVO
-//
-//     pFont = TTF_OpenFont ( _fontFile, _size );
-//     if ( !pFont ) {
-//         throw ExceptionSDL ( ExceptionCode::READ, "Arquivo de fonte falha ao carregar:" + std::string ( _fontFile ) );
-//     }
-//
-//     TTF_SetFontStyle ( pFont, TTF_STYLE_NORMAL );
-//
-// #else
-//     if ( _fontFile == nullptr ) {
-//         ExceptionChimera ( ExceptionCode::READ, "Arquivo de Fonte Nulo" );
-//     }
-//
-//     pFont = new FTGLPixmapFont ( _fontFile );
-//     if ( pFont == nullptr ) {
-//         ExceptionChimera ( ExceptionCode::READ, "Carga de arquivo invalida" );
-//     }
-//
-//     if ( pFont->Error() ) {
-//         ExceptionChimera ( ExceptionCode::READ, "Carga de Fonte invalida" );
-//     }
-//
-//     if ( pFont->FaceSize ( _size ) == false ) {
-//         if ( pFont ) {
-//             delete pFont;
-//             pFont = nullptr;
-//         }
-//         ExceptionChimera ( ExceptionCode::READ, "Tamanho Fonte invalida" );
-//     }
-//
-// #endif
 }
 
 Font::~Font ( void ) {
-
-// #ifdef TTF_NOVO
-//     TTF_CloseFont ( pFont );
-//     pFont = nullptr;
-// #else
-//
-//     if ( pFont != nullptr ) {
-//         delete pFont;
-//         pFont = nullptr;
-//     }
-// #endif
-
+	//TODO implementar release
 }
 
 void Font::RenderText(Shader *pShader, std::string *pText, GLfloat x, GLfloat y, GLfloat scale, const Color &_color)
 {
     // Activate corresponding render state
-    pShader->link();//shader.Use();
-
+    pShader->link();
 	pShader->setGlUniform4fv("textColor", 1, _color.ptr());
-    //glUniform3f(glGetUniformLocation(pShader->getIdProgram(), "textColor"), _color.r, _color.g, _color.b);
 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
@@ -174,62 +117,24 @@ void Font::RenderText(Shader *pShader, std::string *pText, GLfloat x, GLfloat y,
             { xpos + w, ypos,       1.0, 1.0 },
             { xpos + w, ypos + h,   1.0, 0.0 }
         };
+
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+
         // Update content of VBO memory
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+
         // Render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
         x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-// void Font::render ( const float &_x, const float &_y, const float &_z, const Color &_color, std::string *_pTxt ) {
-//
-// // #ifdef TTF_NOVO
-// //     SDL_Color Color = { ( uint8_t ) ( 255 * _color.r ), ( uint8_t ) ( 255 * _color.g ), ( uint8_t ) ( 255 * _color.b ) };
-// //     SDL_Surface *Message = TTF_RenderText_Blended ( const_cast<TTF_Font*> ( pFont ), _pTxt->c_str(), Color );
-// //     unsigned Texture = 0;
-// //
-// //     /*Generate an OpenGL 2D texture from the SDL_Surface*.*/
-// //     glGenTextures ( 1, &Texture );
-// //     glBindTexture ( GL_TEXTURE_2D, Texture );
-// //
-// //     glTexParameterf ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-// //     glTexParameterf ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-// //
-// //     glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0, GL_BGRA_EXT,
-// //                    GL_UNSIGNED_BYTE, Message->pixels );
-// //
-// //     /*Draw this texture on a quad with the given xyz coordinates.*/
-// //     glBegin ( GL_QUADS );
-// //     glTexCoord2d ( 0, 1 );
-// //     glVertex3d ( _x, _y, _z );
-// //     glTexCoord2d ( 1, 1 );
-// //     glVertex3d ( _x + Message->w, _y, _z );
-// //     glTexCoord2d ( 1, 0 );
-// //     glVertex3d ( _x + Message->w, _y + Message->h, _z );
-// //     glTexCoord2d ( 0, 0 );
-// //     glVertex3d ( _x, _y + Message->h, _z );
-// //     glEnd();
-// //
-// //     /*Clean up.*/
-// //     glDeleteTextures ( 1, &Texture );
-// //     SDL_FreeSurface ( Message );
-// // #else
-// //
-// //     glColor3fv ( _color.ptr() );
-// //     glRasterPos2f ( _x, _y );
-// //     pFont->Render ( _pTxt->c_str(), _pTxt->size() );
-// //
-// // #endif
-// }
-
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

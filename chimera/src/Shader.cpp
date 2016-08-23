@@ -12,9 +12,9 @@ Shader::Shader () : erroCode(0) , idProgram(0) {}
 Shader::Shader ( const Shader& _shader ) : erroCode(_shader.erroCode), idProgram(_shader.idProgram) {}
 
 Shader::~Shader() {}
-        
+
 bool Shader::load (const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path) {
-    
+
     //Ler os arquivos
     std::string VertexShaderCode = getShaderCode ( vertex_file_path.c_str() );
     std::string FragmentShaderCode = getShaderCode ( fragment_file_path.c_str() );
@@ -22,7 +22,7 @@ bool Shader::load (const std::string &programName, const std::string &vertex_fil
     // Compila Vertex Shader
     std::cout << "Compiling : " << programName << ", Vertex Shader :" << vertex_file_path << std::endl;
     GLuint VertexShaderID = compileShader(VertexShaderCode, true);
-    
+
     // Compila Fragment Shader
     std::cout << "Compiling : " << programName << ", Fragment Shader : " <<  fragment_file_path << std::endl;
     GLuint FragmentShaderID = compileShader(FragmentShaderCode, false);
@@ -41,7 +41,7 @@ bool Shader::load (const std::string &programName, const std::string &vertex_fil
 
     glDeleteShader ( VertexShaderID );
     glDeleteShader ( FragmentShaderID );
-    
+
     return erroCode != 0 ? false :true;
 }
 
@@ -76,14 +76,14 @@ GLuint Shader::compileShader ( const std::string &shaderCode, bool _shadeKind ) 
         shaderID = glCreateShader ( GL_FRAGMENT_SHADER );
     else
         shaderID = glCreateShader ( GL_VERTEX_SHADER );
-    
+
     char const * sourcePointer = shaderCode.c_str();
     glShaderSource ( shaderID, 1, &sourcePointer, NULL );
     glCompileShader ( shaderID );
 
     // Check Fragment Shader
     glGetShaderiv ( shaderID, GL_COMPILE_STATUS, &Result );
-    
+
     if (Result == GL_FALSE) {
         glGetShaderiv ( shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength );
         if ( InfoLogLength > 0 ) {
@@ -110,9 +110,9 @@ GLuint Shader::linkShader (const GLuint &VertexShaderID, const GLuint &FragmentS
 
     // Check the program
     glGetProgramiv ( ProgramID, GL_LINK_STATUS, &Result );
-    
+
     if (Result == GL_FALSE) {
-    
+
         glGetProgramiv ( ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength );
         if ( InfoLogLength > 0 ) {
             std::vector<char> ProgramErrorMessage ( InfoLogLength + 1 );
@@ -137,13 +137,13 @@ bool Shader::setGlUniform1i(const char * _nameVar, const int &_val)
 }
 
 bool Shader::setGlUniform3fv ( const char* _nameVar, const unsigned& _num, const float* _pointer ) {
-    
+
      GLint loc  = glGetUniformLocation( idProgram, _nameVar );
      if ( loc >= 0 ) {
         glUniform3fv(loc, _num, _pointer);
         return true;
      }
-    
+
     return false;
 }
 
@@ -155,18 +155,18 @@ bool Shader::setGlUniform4fv ( const char* _nameVar, const unsigned &_num, const
         glUniform4fv(loc, _num, _pointer);
         return true;
      }
-    
+
     return false;
 }
 
 bool Shader::setGlUniform1fv ( const char* _nameVar, const unsigned& _num, const float* _pointer ) {
-    
+
      GLint loc  = glGetUniformLocation( idProgram, _nameVar );
      if ( loc >= 0 ) {
         glUniform1fv(loc, _num, _pointer);
         return true;
      }
-    
+
     return false;
 }
 
@@ -177,19 +177,19 @@ bool Shader::setGlUniformMatrix4fv ( const char* _nameVar, const unsigned& _num,
         glUniformMatrix4fv(ploc, _num, _normal, _pointer);
         return true;
     }
-    
+
     return false;
 }
 
 bool Shader::setGlUniformMatrix3fv ( const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer ) {
-    
+
     GLint ploc = glGetUniformLocation( idProgram, _nameVar );
     if (ploc >= 0) {
         glUniformMatrix3fv(ploc, _num, _normal, _pointer);
         return true;
     }
-    
+
     return false;
 }
 }
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

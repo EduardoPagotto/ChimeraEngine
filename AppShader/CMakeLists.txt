@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5.2)
 
 PROJECT(AppShader)
 
@@ -34,7 +34,7 @@ target_link_libraries(
 	librt.so
 	libXrandr.so)
 
-set (SourcesChimeraAPPShader 	
+set (SourcesChimeraAPPShader
 	${Chimera_BINARY_DIR}/libChimera.a
 	${OPENGL_LIBRARIES}
 	${SDL2_LIBRARY}
@@ -60,6 +60,6 @@ endif(OVR_SET_TO_USE)
 
 target_link_libraries(AppShader ${SourcesChimeraAPPShader})
 
-#add_dependencies(AppShader chimera)
+add_dependencies(AppShader Chimera)
 
 INSTALL(FILES ${AppShader_BINARY_DIR}/AppShader DESTINATION bin)

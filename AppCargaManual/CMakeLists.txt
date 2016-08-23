@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5.2)
 
 PROJECT(AppCargaManual)
 
@@ -16,7 +16,7 @@ include_directories(
 	${SDL2_INCLUDE_DIR}
 	${BULLET_INCLUDE_DIR}
 	${FREETYPE_INCLUDE_DIRS}
-	${FTGL_INCLUDE_DIR}
+#	${FTGL_INCLUDE_DIR}
 #	${LOG4CXX_INCLUDE_DIR}
 )
 
@@ -29,7 +29,7 @@ add_executable(
 	src/Game.cpp
 	src/main.cpp)
 
-set (SourcesChimeraAPPCargaManual 	
+set (SourcesChimeraAPPCargaManual
 	${Chimera_BINARY_DIR}/libChimera.a
 	${OPENGL_LIBRARIES}
 	${SDL2_LIBRARY}
@@ -54,5 +54,7 @@ if (OVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
 target_link_libraries(AppCargaManual ${SourcesChimeraAPPCargaManual})
+
+add_dependencies(AppCargaManual Chimera)
 
 INSTALL(FILES ${AppCargaManual_BINARY_DIR}/AppCargaManual DESTINATION bin)

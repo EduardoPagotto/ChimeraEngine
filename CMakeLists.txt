@@ -1,6 +1,6 @@
-PROJECT(ChimeraEngine)
+cmake_minimum_required(VERSION 3.5.2)
 
-cmake_minimum_required(VERSION 2.8)
+PROJECT(ChimeraEngine)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs")
 
@@ -12,8 +12,8 @@ if (OVR_SET_TO_USE)
 	add_definitions(-DOVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
-add_subdirectory(chimera)
 add_subdirectory(AppCargaManual)
 add_subdirectory(AppEmpty)
 add_subdirectory(AppShader)
 add_subdirectory(appTest)
+add_subdirectory(chimera)

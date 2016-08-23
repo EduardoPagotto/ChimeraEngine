@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5.2)
 
 PROJECT(appTest)
 
@@ -35,7 +35,7 @@ target_link_libraries(
 	librt.so
 	libXrandr.so)
 
-set (SourcesChimeraAPPTest 	
+set (SourcesChimeraAPPTest
 	${Chimera_BINARY_DIR}/libChimera.a
 	${OPENGL_LIBRARIES}
 	${SDL2_LIBRARY}
@@ -60,5 +60,7 @@ if (OVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
 target_link_libraries(appTest ${SourcesChimeraAPPTest})
+
+add_dependencies(appTest Chimera)
 
 INSTALL(FILES ${appTest_BINARY_DIR}/appTest DESTINATION bin)

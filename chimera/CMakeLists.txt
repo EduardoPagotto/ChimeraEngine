@@ -1,10 +1,12 @@
+cmake_minimum_required(VERSION 3.5.2)
+
 PROJECT(Chimera)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(FTGL REQUIRED)
+#find_package(FTGL REQUIRED)
 #find_package(Log4Cxx REQUIRED)
 
 set(INCLUDE_DIRECTORIES ${Chimera}/include/)
@@ -70,7 +72,7 @@ set (SourcesChimeraAPI
 	src/RenderVisitor.cpp
 	src/MeshUtil.cpp
 )
-	
+
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR Incluido no Projeto")
 	set(SourcesChimeraAPI ${SourcesChimeraAPI} src/OvrDevice.cpp)

@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-std::list<Node*> Node::listNode;
+//std::list<Node*> Node::listNode;
 
 Node::Node ( Node *_parent, EntityKind _type, std::string _name )
     : parent ( _parent ), Entity ( _type, _name ) {
@@ -11,7 +11,7 @@ Node::Node ( Node *_parent, EntityKind _type, std::string _name )
         parent->vChild.push_back ( this );
     }
 
-    listNode.push_back ( this );
+    //listNode.push_back ( this );
 
     setColor ( 0 );
 }
@@ -76,20 +76,29 @@ const size_t Node::countChilds ( const bool &_recursiveCount ) const {
     }
 };
 
-Node* Node::findChild ( const std::string &_searchName ) {
-    Node* Retval = NULL;
+Node* Node::findChild ( const std::string &_searchName, const bool &_findInChild ) {
+
     if ( !vChild.empty() ) {
         for ( size_t i = 0; i < vChild.size(); ++i ) {
-            if ( _searchName.compare ( vChild[i]->getName() ) == 0 ) {
-                Retval = vChild[i];
-                break; // break the for loop
-            }
+            if ( _searchName.compare ( vChild[i]->getName() ) == 0 )
+                return vChild[i];
         }
+
+        for ( size_t i = 0; i < vChild.size(); ++i ) {
+
+            Node *retVal = vChild[i]->findChild(_searchName, _findInChild);
+
+            if (retVal != nullptr)
+                return retVal;
+
+        }
+
     }
-    return ( Retval );
+
+    return nullptr;
 };
 
-Node *Node::findChild ( const EntityKind &_type, const int &_index ) {
+Node *Node::findChild ( const EntityKind &_type, const int &_index, const bool &_findInChild ) {
 
     int l_index = 0;
     for ( Node* node : vChild ) {
@@ -102,36 +111,48 @@ Node *Node::findChild ( const EntityKind &_type, const int &_index ) {
             l_index++;
         }
     }
-    return nullptr;
-}
 
-Node *Node::findNodeBySeq ( const EntityKind &_type, const int &_index ) {
+    if (_findInChild == true) {
 
-    int l_index = 0;
-    for ( Node* node : listNode ) {
+        for ( Node* node : vChild ) {
 
-        if ( node->getKind() == _type ) {
-            if ( l_index == _index ) {
-                return node;
-            }
+            Node* result = node->findChild(_type, _index, _findInChild);
+            if (result != nullptr)
+                return result;
 
-            l_index++;
-        }
-    }
-    return nullptr;
-}
-
-Node *Node::findNodeBySeq ( const EntityKind &_type, const std::string &_name ) {
-
-    for ( Node *node : listNode ) {
-        std::string l_name = node->getName();
-        if ( ( node->getKind() == _type ) && ( l_name.compare ( _name ) == 0 ) ) {
-            return node;
         }
     }
 
     return nullptr;
 }
+
+// Node *Node::findNodeBySeq ( const EntityKind &_type, const int &_index ) {
+//
+//     int l_index = 0;
+//     for ( Node* node : listNode ) {
+//
+//         if ( node->getKind() == _type ) {
+//             if ( l_index == _index ) {
+//                 return node;
+//             }
+//
+//             l_index++;
+//         }
+//     }
+//     return nullptr;
+// }
+//
+// Node *Node::findNodeBySeq ( const EntityKind &_type, const std::string &_name ) {
+//
+//     for ( Node *node : listNode ) {
+//         std::string l_name = node->getName();
+//         if ( ( node->getKind() == _type ) && ( l_name.compare ( _name ) == 0 ) ) {
+//             return node;
+//         }
+//     }
+//
+//     return nullptr;
+// }
 
 unsigned Entity::serialMaster = 0;
 

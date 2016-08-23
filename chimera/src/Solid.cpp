@@ -7,7 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {
-    
+
 Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::SOLID, _name ) {
 
     pRigidBody = nullptr;
@@ -59,7 +59,7 @@ Solid::~Solid() {
 
 void Solid::init() {
 
-	Draw *pDraw = (Draw*)Node::findChild(EntityKind::MESH, 0);//FIXME melhorar
+	Draw *pDraw = (Draw*)Node::findChild(EntityKind::MESH, 0, false);//FIXME melhorar
 
 	if (isShapeDefine() == false)
 		setShapeBox(pDraw->getSizeBox());
@@ -85,7 +85,7 @@ void Solid::initTransform( const btTransform &_tTrans, void *pObj ) {
 
     //btTransform trans;
     //trans.getOpenGLMatrix( glm::value_ptr( _tTrans )  );
-    
+
     pMotionState = new btDefaultMotionState ( _tTrans );
 
     btVector3 localInertia ( 0.0, 0.0, 0.0 );
@@ -154,15 +154,15 @@ glm::vec3 Solid::getPosition() {
 }
 
 void Solid::setPosition ( const glm::vec3 &_pos ) {
-    
+
     btTransform l_transform = pRigidBody->getCenterOfMassTransform();
     l_transform.setOrigin ( btVector3( _pos.x, _pos.y, _pos.z ) );
     pRigidBody->setCenterOfMassTransform ( l_transform );
-    
+
 }
 
 void Solid::setRotation ( const glm::vec3 &_rotation ) {
-    
+
     btTransform transform = pRigidBody->getCenterOfMassTransform();
 
     transform.setRotation ( btQuaternion ( _rotation.y, _rotation.x, _rotation.z ) );
@@ -178,7 +178,7 @@ glm::vec3 Solid::getRotation() {
 }
 
 glm::mat4 Solid::getMatrix() {
-    
+
     btTransform transLocal;
     btScalar matrix[16];
 
@@ -193,15 +193,15 @@ glm::mat4 Solid::getMatrix() {
 }
 
 void Solid::setMatrix( const glm::mat4& _trans ) {
-    
+
     transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
-    
+
 }
 
 
 void Solid::applyTorc( const glm::vec3 &_torque ) {
     //pRigidBody->applyTorque(_torque);
-    
+
     pRigidBody->applyTorque ( pRigidBody->getInvInertiaTensorWorld().inverse() * ( pRigidBody->getWorldTransform().getBasis() * btVector3(_torque.x, _torque.y, _torque.z ) ) );
 
     //pRigidBody->getInvInertiaTensorWorld().inverse()*(pRigidBody->getWorldTransform().getBasis() * _torque);
@@ -217,9 +217,9 @@ void Solid::applyForce( const glm::vec3 &_prop ) {
 
     //Jeito 2
     btMatrix3x3& boxRot = pRigidBody->getWorldTransform().getBasis();
-    
+
     btVector3 prop(_prop.x, _prop.y, _prop.z);
-    
+
     btVector3 correctedForce = boxRot * prop;
     pRigidBody->applyCentralForce ( correctedForce );
 

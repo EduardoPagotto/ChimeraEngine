@@ -16,12 +16,12 @@ Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
 
 	textoFPS = "fps: 0";
 	sPosicaoObj = "pos:(,,)";
-    
+
     physicWorld = Chimera::Infra::Singleton<Chimera::PhysicsControl>::getRefSingleton();
 }
 
 Game::~Game() {
-    
+
     Chimera::Infra::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 }
 
@@ -40,7 +40,7 @@ void Game::joystickStatus ( Chimera::JoystickManager &joy ) {
         float propulsaoFrontal = 1.0f;
         float torque = 0.1f;
         float deadZone = 0.5f;
-        
+
         float yaw = joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::LEFT_X, deadZone );
         float pitch = joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::LEFT_Y, deadZone );
         float roll = joystick->Axis ( ( Uint8 ) JOY_AXIX_COD::RIGHT_X, deadZone );
@@ -65,18 +65,18 @@ void Game::joystickStatus ( Chimera::JoystickManager &joy ) {
 		}
 
         int val = joystick->Hat ( 0 );
-        if ( val & ( uint8_t ) JOY_PAD_COD::UP ) 
+        if ( val & ( uint8_t ) JOY_PAD_COD::UP )
 			pCorpoRigido->applyForce ( glm::vec3 ( 0.0, 0.0, propulsaoLRUD ) );
-        
-        if ( val & ( uint8_t ) JOY_PAD_COD::DOWN ) 
+
+        if ( val & ( uint8_t ) JOY_PAD_COD::DOWN )
 			pCorpoRigido->applyForce ( glm::vec3 ( 0.0, 0.0, -propulsaoLRUD ) );
-        
-        if ( val & ( uint8_t ) JOY_PAD_COD::RIGHT ) 
+
+        if ( val & ( uint8_t ) JOY_PAD_COD::RIGHT )
 			pCorpoRigido->applyForce ( glm::vec3 ( propulsaoLRUD, 0.0, 0.0 ) );
-        
-        if ( val & ( uint8_t ) JOY_PAD_COD::LEFT ) 
+
+        if ( val & ( uint8_t ) JOY_PAD_COD::LEFT )
 			pCorpoRigido->applyForce ( glm::vec3 ( -propulsaoLRUD, 0.0, 0.0 ) );
-        
+
         if ( ( roll != 0.0 ) || ( pitch != 0.0 ) || ( yaw != 0.0 ) || ( throttle != 0.0 ) ) {
 			pCorpoRigido->applyForce ( glm::vec3 ( 0.0, throttle, 0.0 ) );
 			pCorpoRigido->applyTorc ( glm::vec3 ( -torque * pitch, -torque * roll, -torque * yaw ) );
@@ -145,27 +145,35 @@ void Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
 }
 
 void Game::start() {
-    
+
     pSceneMng->getVideo()->initGL();
     pSceneMng->init();
-    
+
     // Localiza o Skybox e ajusta iluminacao
-	Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeBySeq( Chimera::EntityKind::TRANSFORM, "SkyBox" );
-	Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0);
-	pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
-	pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
+    Chimera::Transform* pSkyBox = ( Chimera::Transform* )pSceneMng->getRoot()->findChild( "SkyBox", true);
+	//Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeBySeq( Chimera::EntityKind::TRANSFORM, "SkyBox" );
+
+    if (pSkyBox != nullptr) {
+        Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
+        pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
+        pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
+    }
 
     //Localiza a camera
-    pOrbitalCam = ( Chimera::CameraSpherical* )Chimera::Node::findNodeBySeq(Chimera::EntityKind::CAMERA, "Camera" ); 
+    pOrbitalCam = ( Chimera::CameraSpherical* )pSceneMng->getRoot()->findChild( "Camera", true );
+    //pOrbitalCam = ( Chimera::CameraSpherical* )Chimera::Node::findNodeBySeq(Chimera::EntityKind::CAMERA, "Camera" );
 
     //Localiza objeto como o primario
-	pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeBySeq( Chimera::EntityKind::SOLID, "Zoltan" );
+    pCorpoRigido = ( Chimera::Solid* )pSceneMng->getRoot()->findChild( "Zoltan" , true);
+	//pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeBySeq( Chimera::EntityKind::SOLID, "Zoltan" );
 
 	//Localiza a luz ativa
-	Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::LIGHT, "luz01");
+	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->getRoot()->findChild("luz01", true);
+    //Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::LIGHT, "luz01");
 
 	//Localiza o Emissor de particula
-	pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::PARTICLE_SYSTEM, "testeZ1");
+    pEmissor = (Chimera::ParticleEmitter*)pSceneMng->getRoot()->findChild( "testeZ1", true);
+	//pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::PARTICLE_SYSTEM, "testeZ1");
 
     pSceneMng->cameraAtiva ( pOrbitalCam );
     pSceneMng->origemDesenho((Chimera::Coord*) pCorpoRigido);
@@ -174,26 +182,27 @@ void Game::start() {
 	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
 	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0, true);
 	pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
-    
+
 	pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
     pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::TEXTURE_2D, true);
     pSceneMng->getRoot()->getState()->setEnableSmooth(true);
     pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::DEPTH_TEST, true);
     pSceneMng->getRoot()->getState()->setEnableCullFace(Chimera::CullFace::CULL_FACE, true);
-            
+
     glClearDepth ( 1.0f );
     glDepthFunc ( GL_LEQUAL );
     glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
-    
+
 	//Localiza o HUD
-	pHUD = (Chimera::HUD*)Chimera::Node::findNodeBySeq(Chimera::EntityKind::HUD, "HUD-Default");
-   
+	pHUD = (Chimera::HUD*)pSceneMng->getRoot()->findChild("HUD-Default", true);
+    //pHUD = (Chimera::HUD*)Chimera::Node::findNodeBySeq(Chimera::EntityKind::HUD, "HUD-Default");
+
     pHUD->addText(0, 350, 30, Chimera::Color::BLUE,1.0, &sPosicaoObj);
 	pHUD->addText(0, 10, 30, Chimera::Color::RED, 1.0, &textoFPS  );
-           
+
 }
 
-void Game::stop() { 
+void Game::stop() {
 }
 
 void Game::newFPS ( const unsigned int &fps ) {
@@ -207,7 +216,7 @@ void Game::render() {
 
     physicWorld->stepSim();
     physicWorld->checkCollisions();
-            
+
     pSceneMng->getVideo()->initDraw();
     pSceneMng->draw ();
     pSceneMng->getVideo()->endDraw();
@@ -221,7 +230,7 @@ void Game::userEvent ( const SDL_Event &_event ) {
 	Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
 
 	std::string l_msg = "";
-		
+
 	switch ( op ) {
 		case Chimera::KindOp::START_COLLIDE:
 			{
@@ -250,7 +259,7 @@ void Game::userEvent ( const SDL_Event &_event ) {
 		default:
 			break;
 	}
-		
+
 	if (l_msg.length() > 0) {
 		printf("%s\n", l_msg.c_str());
 	}

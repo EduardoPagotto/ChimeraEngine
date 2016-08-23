@@ -44,7 +44,42 @@ should add to or customize.
 Referencias Site:
 http://www.kickjs.org/example/shader_editor/shader_editor.html : template para usar
 http://www.lighthouse3d.com/tutorials/glsl-tutorial/attribute-variables/ : como carregar
+https://cognitivewaves.wordpress.com/opengl-vbo-shader-vao/ : a resposta aqui!!!!! matrix de model e projecao
 
+	//  Model::Draw(ICamera camera) {
+	//     GLuint matrixID = glGetUniformLocation(programID, "mvp");
+	//     GLuint positionID = glGetAttribLocation(programID, "position_modelspace");
+	//     GLuint uvID = glGetAttribLocation(programID, "uv");
+	//     GLuint normalID = glGetAttribLocation(programID, "normal_modelspace");
+	//     GLuint tangentID = glGetAttribLocation(programID, "tangent_modelspace");
+	//     GLuint bitangentID = glGetAttribLocation(programID, "bitangent_modelspace");
+	//
+	//     glm::mat4 projection = camera->GetProjectionMatrix();
+	//     glm::mat4 view = camera->GetViewMatrix();
+	//     glm::mat4 model = glm::mat4(1.0f);
+	//     glm::mat4 mvp = projection * view * model;
+	//
+	//     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &mvp[0][0]);
+	//
+
+
+ ///
+// void teste() {
+//     float pitch;
+//     float yaw;
+//     float roll;
+//
+//     glm::vec3 position(0,0,0);
+//
+//     //Euler to Quarterion pitch, yaw, roll angul em radianos
+//     glm::vec3 myEuler (pitch, yaw, roll);//yaw, pitch, roll ?????
+//     glm::quat myQuat (myEuler);
+//
+//     glm::mat4 matRot = glm::toMat4(myQuat); //matriz rotacao
+//     glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), position); //matriz translacao
+//     glm::mat4 final = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!!
+// }
+///
 
 
 

@@ -24,27 +24,24 @@ public:
      * @param _name nome do Node
      */
     Node ( Node *_parent, EntityKind _type, std::string _name );
-    
+
     /**
      * Destructor
      */
     virtual ~Node();
-    
+
     /**
      * Entry point de visitor
      * @param v ponteiro do visitor
      */
     virtual void accept ( class NodeVisitor* v ) = 0;
 
-    //virtual void begin() = 0;
-    //virtual void end() = 0;
-    
     /**
      * Adiciona um child ao Node atual
      * @param _child Node a ser adicionado a este como filho
      */
     void addChild ( Node *_child );
-    
+
     /**
      * Define novo Pai, removendo o original se existir
      * @param _node Novo node pai
@@ -75,15 +72,15 @@ public:
      * @param _searchName nome a se perquisar
      * @return Node ou <code>nullptr</code> se nao encontrado
      */
-    Node* findChild ( const std::string &_searchName );
+    Node* findChild ( const std::string &_searchName, const bool &_findInChild );
 
     /**
      * Localiza child com o nome
      * @param _type tipo do Node a se perquisar
      * @param _index indice do Node de mesmo tipo
      * @return Node ou <code>nullptr</code> se nao encontrado
-     */    
-    Node* findChild ( const EntityKind &_type, const int &_index );
+     */
+    Node* findChild ( const EntityKind &_type, const int &_index, const bool &_findInChild );
 
     /**
      * Retorna node Pai
@@ -95,7 +92,7 @@ public:
 
     /**
      * Define o Status de Uso do Node
-     * @param _col se <code>0</code> livre <p> Se <code>1</code> Ocupado 
+     * @param _col se <code>0</code> livre <p> Se <code>1</code> Ocupado
      */
     inline void setColor ( const int &_col ) {
         color = _col;
@@ -103,7 +100,7 @@ public:
 
     /**
      * Retorna o status de uso do Node
-     * @return <code>0</code> livre <p> Se <code>1</code> Ocupado 
+     * @return <code>0</code> livre <p> Se <code>1</code> Ocupado
      */
     inline int getColor() const {
         return color;
@@ -113,9 +110,9 @@ public:
      * Busca sequencial em todos dos Nodes criados
      * @param _type tipo do Node
      * @param _index indice do Tipo
-     * @return ponteiro do Node encontrado ou <code>nullptr</code> 
+     * @return ponteiro do Node encontrado ou <code>nullptr</code>
      */
-    static Node *findNodeBySeq ( const EntityKind &_type, const int &_index );
+    //static Node *findNodeBySeq ( const EntityKind &_type, const int &_index );
 
     /**
      * Busca sequencial em todos dos Nodes criados
@@ -123,20 +120,20 @@ public:
      * @param _name Nome do Node
      * @return ponteiro do Node encontrado ou <code>nullptr</code>
      */
-    static Node *findNodeBySeq ( const EntityKind &_type, const std::string &_name );
+    //static Node *findNodeBySeq ( const EntityKind &_type, const std::string &_name );
 
 private:
     /** Controle de Ocupado Livre*/
     int color;
-    
+
     /** Node Pai */
     Node *parent;
-    
+
     /** vetor de Filhos*/
     std::vector<Node*> vChild;
-    
+
     /** Lista Sequencial de Nodes*/
-    static std::list<Node*> listNode;
+    //static std::list<Node*> listNode;
 };
 }
 

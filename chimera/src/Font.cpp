@@ -146,7 +146,9 @@ void Font::RenderText(Shader *pShader, std::string *pText, GLfloat x, GLfloat y,
 {
     // Activate corresponding render state
     pShader->link();//shader.Use();
-    glUniform3f(glGetUniformLocation(pShader->getIdProgram(), "textColor"), _color.r, _color.g, _color.b);
+
+	pShader->setGlUniform4fv("textColor", 1, _color.ptr());
+    //glUniform3f(glGetUniformLocation(pShader->getIdProgram(), "textColor"), _color.r, _color.g, _color.b);
 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);

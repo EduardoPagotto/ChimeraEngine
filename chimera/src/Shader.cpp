@@ -143,7 +143,7 @@ bool Shader::setGlUniform3fv ( const char* _nameVar, const unsigned& _num, const
 }
 
 
-bool Shader::setGlUniform4fv ( const char* _nameVar, const unsigned &_num, float *_pointer ) {
+bool Shader::setGlUniform4fv ( const char* _nameVar, const unsigned &_num, const float *_pointer ) {
 
      GLint loc  = glGetUniformLocation( idProgram, _nameVar );
      if ( loc >= 0 ) {

@@ -96,7 +96,11 @@ void RenderVisitor::visit ( HUD* _pHUD ) {
 		if (_pHUD->isOn() == true) {
 
 			//Shader::unlink();
+			
             projection = pVideo->getOrthoProjectionMatrix(eye); //pVideo->executeViewOrto(eye);
+
+			shader.setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(_pHUD->projection));
+
             _pHUD->projection = projection;
 			_pHUD->renderExecute(textureOn);
 			//pVideo->restoreMatrix();

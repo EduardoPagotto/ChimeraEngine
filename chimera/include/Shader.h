@@ -36,7 +36,7 @@ public:
     
 	 bool setGlUniform1i(const char *_nameVar, const int &_val);
 	 bool setGlUniform3fv( const char *_nameVar, const unsigned &_num, const float *_pointer );
-     bool setGlUniform4fv( const char *_nameVar, const unsigned &_num, float *_pointer ); 
+     bool setGlUniform4fv( const char *_nameVar, const unsigned &_num, const float *_pointer ); 
      bool setGlUniform1fv( const char *_nameVar, const unsigned &_num, float *_pointer );
      bool setGlUniformMatrix4fv( const char* _nameVar, const unsigned& _num,const bool& _normal,const float* _pointer );
      bool setGlUniformMatrix3fv( const char* _nameVar, const unsigned& _num,const bool& _normal,const float* _pointer );

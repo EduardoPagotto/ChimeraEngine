@@ -36,7 +36,7 @@ private:
 	bool isPaused;
 
 private:
-    Chimera::Shader shader;
+    Chimera::Shader *shader;
 	GLuint vertexbuffer;
 	GLuint VertexArrayID;
 };

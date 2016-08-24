@@ -4,13 +4,17 @@
 #include "Transform.h"
 #include "OpenGLDefs.h"
 #include "GameClient.h"
-#include "Shader.h"
+
+#include "Singleton.h"
 
 Game::Game(Chimera::Video *_pVideo) : pVideo(_pVideo) {
 	isPaused = false;
+
+	shader =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
 }
 
 Game::~Game() {
+	Chimera::Singleton<Chimera::Shader>::releaseRefSingleton();
 }
 
 void Game::joystickCapture(Chimera::JoystickManager &joy) {
@@ -106,10 +110,10 @@ void Game::start() {
 
 	// Create and compile our GLSL program from the shaders
 #ifdef WIN32
-	shader.load("default","C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
+	shader->load("default","C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
 		"C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleFragmentShader.fragmentshader");
 # else
-	shader.load("default","/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleVertexShader.vertexshader",
+	shader->load("default","/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleVertexShader.vertexshader",
 		"/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleFragmentShader.fragmentshader");
 # endif
 
@@ -180,7 +184,7 @@ void Game::render() {
 
 	// Use our shader
 	//glUseProgram(programID);
-    shader.link();
+    shader->link();
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

@@ -19,12 +19,13 @@
 #include "Transform.h"
 #include "HUD.h"
 #include "Shader.h"
+#include "Singleton.h"
 
 int testeCargaArquivo() {
 
     try {
 #ifdef WIN32
-        std::string dirDados = "C:\\Projetos\\ChimeraEngine\\models";
+        std::string dirDados = "C:\\Projetos\\ChimeraEngine\\models\\";
 		std::string dirBase = "C:\\Projetos\\ChimeraEngine\\shader\\";
 		std::string dirFontes = "C:\\Projetos\\ChimeraEngine\\fonts\\";
 #else
@@ -47,10 +48,15 @@ int testeCargaArquivo() {
         //Chimera::Node *pRoot = pLoader->loadFile("espacoTesteZ1.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
 
+		Chimera::Shader *shader =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
+		shader->load("mesh-default", dirBase + "vertex.glsl", dirBase + "fragment.glsl");
+		shader->load("particle-default", dirBase + "ParticleVertexShader.glsl", dirBase + "ParticleFragmentShader.glsl");
+		shader->load("hud-default", dirBase +  "HudVertexShader.glsl", dirBase + "HudFragmentShader.glsl");
+
         Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
         sceneMng->setReader(pLoader);
         Chimera::Group* group1 = sceneMng->createSceneGraph();
-		group1->shader.load("mesh-default", dirBase + "vertex.glsl", dirBase + "fragment.glsl");
+		group1->setShaderName("mesh-default");
 
 		//Adiciona um Emissor de Particula
 		//Chimera::Transform* posParticle = new Chimera::Transform((Chimera::Node*)group1, "posicaoParticle");
@@ -63,7 +69,7 @@ int testeCargaArquivo() {
 
 		//Novo Emissor GLSL
 		Chimera::Group *gParticle = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "ParticleGroup" );
-		gParticle->shader.load("particle-default", dirBase + "ParticleVertexShader.glsl", dirBase + "ParticleFragmentShader.glsl");
+		gParticle->setShaderName("particle-default");
 
 		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter((Chimera::Node*)gParticle, "testeZ1", 10000);
 		Chimera::Material *pMatParticleEmiter = new Chimera::Material("MatParticleEmitter");
@@ -72,7 +78,7 @@ int testeCargaArquivo() {
 		pParticleEmitter->getState()->setMaterial(pMatParticleEmiter);
 
         Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");
-		gHud->shader.load("hud-default", dirBase +  "HudVertexShader.glsl", dirBase + "HudFragmentShader.glsl");
+		gHud->setShaderName("hud-default");
 
 		//Adiciona um HUD ao Grapho
 		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default");

@@ -5,7 +5,7 @@
 #include "Shader.h"
 
 namespace Chimera {
-        
+
 class InitVisitor : public NodeVisitor {
 public:
     InitVisitor();
@@ -18,11 +18,11 @@ public:
     virtual void visit(class Group* _pGroup) override;
     virtual void visit(class Transform* _pTransform) override;
     virtual void visit(class Solid* _pSolid) override;
-    virtual void visit(class HUD* _pHUD) override;  
+    virtual void visit(class HUD* _pHUD) override;
 private:
-	Shader shader;//GLuint programID;
+	Shader *shader;//GLuint programID;
 };
-    
+
 }
 
 #endif

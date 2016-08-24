@@ -9,9 +9,13 @@ namespace Chimera {
 ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
 	//MaxParticles = _max;
 	LastUsedParticle = 0;
+
+	shader =  Singleton<Shader>::getRefSingleton();
 }
 
 ParticleEmitter::~ParticleEmitter(){
+
+	Singleton<Shader>::releaseRefSingleton();
 }
 
 void ParticleEmitter::init() {
@@ -57,11 +61,11 @@ void ParticleEmitter::init() {
 void ParticleEmitter::setSizeBox ( const glm::vec3& _size ) {
 	sizeBox = _size;
 }
-	
+
 glm::vec3 ParticleEmitter::getSizeBox() {
 	return sizeBox;
 }
-	
+
 void ParticleEmitter::accept(NodeVisitor * v) {
 	v->visit(this);
 }
@@ -74,7 +78,7 @@ void ParticleEmitter::SortParticles() {
 int ParticleEmitter::recycleParticleLife(const glm::vec3 &_camPosition) {
 
 	double delta = timer.deltaTimeSecounds();
-    
+
 	// Generate 10 new particule each millisecond,
 	// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
 	// newparticles will be huge and the next frame even longer.
@@ -119,7 +123,7 @@ void ParticleEmitter::renderExecute(bool _texture)
 {
 	// We will need the camera's position in order to sort the particles
 	// w.r.t the camera's distance.
-	// There should be a getCameraPosition() function in common/controls.cpp, 
+	// There should be a getCameraPosition() function in common/controls.cpp,
 	// but this works too.
 	glm::vec3 CameraPosition(glm::inverse(ViewMatrix)[3]);
 	glm::mat4 ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
@@ -127,12 +131,12 @@ void ParticleEmitter::renderExecute(bool _texture)
 	int ParticlesCount = recycleParticleLife(CameraPosition);
 
 	// Update the buffers that OpenGL uses for rendering.
-	// There are much more sophisticated means to stream data from the CPU to the GPU, 
+	// There are much more sophisticated means to stream data from the CPU to the GPU,
 	// but this is outside the scope of this tutorial.
 	// http://www.opengl.org/wiki/Buffer_Object_Streaming
 
-    glBindVertexArray(VertexArrayID);//coloquei aqui porque acho que tenho que ligar antes 
-    
+    glBindVertexArray(VertexArrayID);//coloquei aqui porque acho que tenho que ligar antes
+
 	glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
 	glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
 	glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLfloat) * 4, g_particule_position_size_data);
@@ -157,17 +161,17 @@ void ParticleEmitter::renderExecute(bool _texture)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Use our shader
-	shader.link();//glUseProgram(programID);
+	shader->link();//glUseProgram(programID);
 
 	// Vertex shader
-	shader.setGlUniform3f("CameraRight_worldspace", ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
-	shader.setGlUniform3f("CameraUp_worldspace", ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
-	shader.setGlUniformMatrix4fv("VP",1, GL_FALSE, &ViewProjectionMatrix[0][0]);
+	shader->setGlUniform3f("CameraRight_worldspace", ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
+	shader->setGlUniform3f("CameraUp_worldspace", ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
+	shader->setGlUniformMatrix4fv("VP",1, GL_FALSE, &ViewProjectionMatrix[0][0]);
 
     // fragment shader
-	shader.setGlUniform1i("myTextureSampler", 0);
+	shader->setGlUniform1i("myTextureSampler", 0);
     GLuint Texture = pState->getMaterial()->getTexDiffuse()->getTextureId(0);//loadDDS("particle.DDS");
-    
+
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Texture);
@@ -219,7 +223,7 @@ void ParticleEmitter::renderExecute(bool _texture)
 								 // Draw the particules !
 								 // This draws many times a small triangle_strip (which looks like a quad).
 								 // This is equivalent to :
-								 // for(i in ParticlesCount) : glDrawArrays(GL_TRIANGLE_STRIP, 0, 4), 
+								 // for(i in ParticlesCount) : glDrawArrays(GL_TRIANGLE_STRIP, 0, 4),
 								 // but faster.
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, ParticlesCount);
 

@@ -6,7 +6,7 @@
 #include "Shader.h"
 
 namespace Chimera {
-   
+
 class RenderVisitor : public NodeVisitor {
 public:
     RenderVisitor();
@@ -20,7 +20,7 @@ public:
     virtual void visit(class Transform* _pTransform) override;
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;
-    
+
 	bool textureOn;
 	bool HudOn;
 	bool particleOn;
@@ -31,10 +31,9 @@ public:
 	glm::mat4 projection;
 	glm::mat4 view;
     glm::mat4 model;
-
-	Shader shader;
 private:
-};    
+	Shader *shader;
+};
 }
 
 #endif

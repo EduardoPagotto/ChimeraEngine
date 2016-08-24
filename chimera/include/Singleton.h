@@ -4,7 +4,6 @@
 #include "Mutex.h"
 
 namespace Chimera{
-namespace Infra {
 
 /// <summary> Classe Template de Singletons </summary>
 template< class C >
@@ -69,14 +68,15 @@ public:
         m_travaSingleton.unlock();
     }
 
-private:
+protected:
 
-    /// <summary> Bloqueio ao Construtor </summary>
+	/// <summary> Bloqueio ao Construtor </summary>
     Singleton();
 
     /// <summary> Bloqueio ao Construtor de Copia </summary>
     Singleton ( Singleton const& );
 
+private:
     ///<summary> Contador de referncia </summary>
     static long m_refCount;
 
@@ -96,6 +96,5 @@ long Singleton<C>::m_refCount = 0;
 template< class C >
 Mutex Singleton<C>::m_travaSingleton;
 
-}
 }
 #endif

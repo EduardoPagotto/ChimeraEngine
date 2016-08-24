@@ -16,8 +16,7 @@
 //#include <map>
 
 namespace Chimera {
-namespace Infra {
-    
+
 /// <summary> Wrapper Windows-Posix para status de mutex </summary>
 enum MUTEX_STATUS {
 #ifdef _WIN32
@@ -232,6 +231,5 @@ private:
 //     pthread_mutex_t m_mutex;
 // };
 // #endif
-}
 }
 #endif

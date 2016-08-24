@@ -3,7 +3,6 @@
 #include "Transform.h"
 #include "OpenGLDefs.h"
 #include "Singleton.h"
-#include "Shader.h"
 
 #include "GameClient.h"
 
@@ -17,12 +16,12 @@ Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
 	textoFPS = "fps: 0";
 	sPosicaoObj = "pos:(,,)";
 
-    physicWorld = Chimera::Infra::Singleton<Chimera::PhysicsControl>::getRefSingleton();
+    physicWorld = Chimera::Singleton<Chimera::PhysicsControl>::getRefSingleton();
 }
 
 Game::~Game() {
 
-    Chimera::Infra::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
+    Chimera::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 }
 
 void Game::joystickCapture ( Chimera::JoystickManager &joy ) {

@@ -1,14 +1,20 @@
 #include "HUD.h"
 #include "NodeVisitor.h"
 #include "ExceptionSDL.h"
+#include "Singleton.h"
 
 namespace Chimera {
 
 HUD::HUD(Node *_parent, std::string _name) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
+
+    shader =  Singleton<Shader>::getRefSingleton();
 }
 
 HUD::~HUD() {
 	//TODO: implementar release
+
+    Singleton<Shader>::releaseRefSingleton();
+
 }
 
 void HUD::addFont ( Font *_pFont ) {
@@ -31,13 +37,13 @@ void HUD::addText ( int _fontIndex, int _posX, int _posY, Color _colorText, GLfl
 void HUD::drawFonts() {
 
 	// Activate corresponding render state
-	shade.link();
+	shader->link();
 
 	glActiveTexture(GL_TEXTURE0);
 
 	for (HUDTxt *l_pTxt : vLineText) {
 
-		shade.setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
+		shader->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
 
 		vFonts[l_pTxt->indexFonte]->RenderText( l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
 	}
@@ -45,12 +51,12 @@ void HUD::drawFonts() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void HUD::init() { 
+void HUD::init() {
 
 	setOn(true);
 }
 
-glm::vec3 HUD::getSizeBox() { 
+glm::vec3 HUD::getSizeBox() {
 
 	return glm::vec3();
 }
@@ -59,10 +65,10 @@ void HUD::renderExecute(bool _texture)
 {
     // salva flags de bit
 	glPushAttrib(GL_ENABLE_BIT);
-    
+
     //preserva a cor original
 	glPushAttrib(GL_CURRENT_BIT);
-    
+
     // Set OpenGL options
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
@@ -73,9 +79,9 @@ void HUD::renderExecute(bool _texture)
     //glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
     //shader.Use();
     //glUniformMatrix4fv(glGetUniformLocation(shade.getIdProgram() , "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    
+
     drawFonts();
-    
+
     glPopAttrib();
     glPopAttrib();
 }

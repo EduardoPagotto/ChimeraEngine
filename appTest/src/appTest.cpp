@@ -25,53 +25,54 @@ int main ( int argn, char** argv ) {
 int _tmain ( int argc, _TCHAR* argv[] ) {
 #endif
 
+#ifdef WIN32
+        std::string dirDados = "C:\\Projetos\\ChimeraEngine\\models\\";
+		std::string dirBase = "C:\\Projetos\\ChimeraEngine\\shader\\";
+		std::string dirFontes = "C:\\Projetos\\ChimeraEngine\\fonts\\";
+#else
+        std::string dirDados = "../../models";
+		std::string dirBase = "../../shader/";
+		std::string dirFontes = "../../fonts/";
+#endif
+
     using namespace Chimera;
-    
+
     try {
 
-#ifdef WIN32
-        std::string dirDados = "C:\\Projetos\\ChimeraEngine\\appTest\\models";
-#else
-        std::string dirDados = "../../appTest/models";
-#endif
-        
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
         Video *video = new VideoDevice (640, 480, "teste");
 
         SceneMng *sceneMng = new SceneMng ( video );
         //sceneMng->setReader(pLoader);
-        
+
         CameraSpherical *pCam = new CameraSpherical("Observador-01");
         pCam->setDistanciaMaxima(1000.0);
         pCam->setDistanciaMinima(0.5);
         pCam->setFar(10000.0);
         pCam->setNear(0.1);
-        pCam->setFov(45.0);  
+        pCam->setFov(45.0);
         pCam->setPositionRotation( glm::vec3(300 , 0 ,0) , glm::vec3(0,0,0) );
         pCam->setPerspective(true);
         pCam->init();
         sceneMng->cameraAtiva(pCam);
-      
+
         Group* group1 = sceneMng->createSceneGraph();
-  #ifdef WIN32
-         group1->shader.load("default", "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\vertex.glsl",
-                              "C:\\Projetos\\ChimeraEngine\\AppCargaManual\\shader\\fragment.glsl");
-  #else
-         group1->shader.load("default", "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/vertex.glsl",
-                              "/home/locutus/Projetos/ChimeraEngine/AppCargaManual/shader/fragment.glsl");
-  #endif
-         
+
+		Shader *shader =  Singleton<Shader>::getRefSingleton();
+		shader->load("default", dirBase + "vertex.glsl", dirBase + "fragment.glsl");
+
+
         Transform* pTrans = new Transform(group1,"trans01");
         pTrans->setPosition( glm::vec3( 0.0, 0.0, 0.0) );
-        
-        Light* pLight = new Light(group1,"Luz1"); 
+
+        Light* pLight = new Light(group1,"Luz1");
         pLight->setDiffuse(Color::WHITE);
         pLight->setPositionRotation(glm::vec3(80,100,150), glm::vec3(0,0,0));
         //pLight->init();
-        
+
         sceneMng->origemDesenho((Coord*)pTrans);
-        
+
         //Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
         //Texture *pTex = new Texture("Texture-teste",dirDados + "/image1.jpg");
 		Material *pMat1 = new Material("Mat1");
@@ -82,7 +83,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 		//pMat1->setTexDiffuse(pTex);
 
         Mesh *pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",glm::vec3(50,50,50), pMat1);
-        
+
 		Transform* pTrans2 = new Transform(group1, "trans02");
 		pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
 

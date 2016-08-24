@@ -4,6 +4,7 @@
 #include <iterator>
 
 #include "MeshUtil.h"
+#include "Singleton.h"
 
 namespace Chimera {
 
@@ -11,6 +12,8 @@ Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH
     VertexVBOID = 0;
     IndexVBOID = 0;
     VAO = 0;
+
+    shader =  Singleton<Shader>::getRefSingleton();
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
@@ -27,6 +30,7 @@ Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
   copy(_cpy.textureIndex.begin(), _cpy.textureIndex.end(), back_inserter(textureIndex));
   copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
 
+  shader =  Singleton<Shader>::getRefSingleton();
 }
 
 Mesh::~Mesh() {
@@ -40,6 +44,8 @@ Mesh::~Mesh() {
 
 	glDeleteBuffers(1, &VertexVBOID);
 	glDeleteBuffers(1, &IndexVBOID);
+
+    Singleton<Shader>::releaseRefSingleton();
 }
 
 void Mesh::init() {
@@ -99,7 +105,7 @@ glm::vec3 Mesh::getSizeBox() {
 
 void Mesh::renderExecute ( bool _texture ) {
 
-    pState->appyMaterial(&shader);
+    pState->appyMaterial(shader);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));

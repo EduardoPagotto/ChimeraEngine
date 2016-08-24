@@ -33,10 +33,6 @@ public:
 
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 
-	void setShader(const Shader &_shader) {
-        shader = _shader;
-    }
-
     std::vector<unsigned int> vertexIndex;
     std::vector<glm::vec3> vertexList;
 
@@ -55,7 +51,7 @@ private:
     GLuint VertexVBOID;
     GLuint IndexVBOID;
 
-    Shader shader;
+    Shader *shader;
 
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;

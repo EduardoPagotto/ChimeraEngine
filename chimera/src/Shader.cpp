@@ -7,11 +7,19 @@
 
 namespace Chimera {
 
-Shader::Shader () : idProgram(0) {}
+Shader::Shader() noexcept {
 
-Shader::Shader ( const Shader& _shader ) : idProgram(_shader.idProgram) {}
+    idProgram = 0;
+    currentProgram = "default";
+}
 
-Shader::~Shader() {}
+void Shader::reset() noexcept {
+  std::cerr<<"Closing down shader manager\n";
+//   for(auto programs : m_shaderPrograms)
+//     delete programs.second;
+//   for(auto shader : m_shaders)
+//     delete shader.second;
+}
 
 bool Shader::load (const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path) {
 

@@ -136,6 +136,18 @@ bool Shader::setGlUniform1i(const char * _nameVar, const int &_val)
 	return false;
 }
 
+bool Shader::setGlUniform3f(const char *_nameVar, const unsigned &_num, const float &_x, const float &_y, const float &_z) {
+
+	GLint loc = glGetUniformLocation(idProgram, _nameVar);
+	if (loc >= 0) {
+		glUniform3f(loc, _x, _y, _z);
+		return true;
+	}
+
+	return false;
+
+}
+
 bool Shader::setGlUniform3fv ( const char* _nameVar, const unsigned& _num, const float* _pointer ) {
 
      GLint loc  = glGetUniformLocation( idProgram, _nameVar );

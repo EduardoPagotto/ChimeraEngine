@@ -103,9 +103,9 @@ glm::vec3 Mesh::getSizeBox() {
                      ( glm::abs ( l_max.z ) + glm::abs ( l_min.z ) ) / 2 );
 }
 
-void Mesh::renderExecute ( bool _texture ) {
+void Mesh::render () {
 
-    pState->appyMaterial(shader);
+    pState->appyMaterial();
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));

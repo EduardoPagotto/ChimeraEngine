@@ -27,7 +27,7 @@ public:
      
      void setEnableStateMachine(StateMachine _state, bool _flag);
      
-     void appyMaterial(Shader *_pShader);
+     void appyMaterial();
 
      void appyLighting();
      

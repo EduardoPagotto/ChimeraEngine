@@ -82,9 +82,6 @@ void SceneMng::DFS(Node* u)
 
 void SceneMng::draw () {
 
-	//mudanca radical no tratamento de camera e objeto para uso de GLSL 
-	//http://learnopengl.com/#!Getting-started/Camera
-
 //#define TESTEZ1
 
     int indiceDesenho = 1;
@@ -122,7 +119,6 @@ void SceneMng::draw () {
          
         }
 
-		rv.textureOn = true;
 		rv.HudOn = true;
 		rv.particleOn = true;
 		rv.eye = eye;

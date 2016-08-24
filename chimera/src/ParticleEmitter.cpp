@@ -119,7 +119,7 @@ int ParticleEmitter::recycleParticleLife(const glm::vec3 &_camPosition) {
 	return ParticlesCount;
 }
 
-void ParticleEmitter::renderExecute(bool _texture)
+void ParticleEmitter::render()
 {
 	// We will need the camera's position in order to sort the particles
 	// w.r.t the camera's distance.

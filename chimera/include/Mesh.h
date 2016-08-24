@@ -25,11 +25,13 @@ public:
 
     virtual ~Mesh();
 	virtual void init();
-    virtual void renderExecute ( bool _texture );
 
+	// Inherited via Node
+	void accept(class NodeVisitor* v) override;
+
+	// Inherited via Draw
+    virtual void render () override;
     virtual glm::vec3 getSizeBox();
-
-    void accept(class NodeVisitor* v);
 
     void loadCollada ( tinyxml2::XMLElement* _nNode );
 

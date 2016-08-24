@@ -22,11 +22,11 @@ public:
 	ParticleEmitter(Node *_parent, std::string _name, int _max);
 	virtual ~ParticleEmitter();
 
+	// Inherited via Node
 	virtual void accept(class NodeVisitor* v) override;
-	void SortParticles();
-
-	virtual void renderExecute(bool _texture) override;
-
+	
+	// Inherited via Draw
+	virtual void render() override;
 	virtual glm::vec3 getSizeBox() override;
 
 	void setSizeBox(const glm::vec3 &_size);
@@ -37,6 +37,7 @@ public:
     glm::mat4 ViewMatrix;
 
 private:
+	void SortParticles();
 	int recycleParticleLife(const glm::vec3 &_camPosition);
 
 	int FindUnusedParticle();

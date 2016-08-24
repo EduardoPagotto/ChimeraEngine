@@ -23,9 +23,13 @@ Material::Material ( std::string _name ) : Entity ( EntityKind::MATERIAL, _name 
 	pTexDiffuse = nullptr;
 	pTexSpecular = nullptr;
 	pTexEmissive = nullptr;
+
+	shader = Singleton<Shader>::getRefSingleton();
 }
 
 Material::~Material() {
+
+	Singleton<Shader>::releaseRefSingleton();
 }
 
 void Material::init() {
@@ -117,44 +121,35 @@ void Material::createDefaultEffect() {
 	setShine(50.0f);
 }
 
-void Material::apply(Shader *pShader) {
+void Material::apply() {
 
 	for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
 
 		ModeMaterial k = iter->first;
 		float *p = (k != ModeMaterial::SHININESS) ? (float*)((Color*)iter->second)->ptr() : (float*)iter->second;
-
-        if (pShader == nullptr) {
-            
-            glMaterialfv((GLenum)this->faceMaterial, (GLenum)k, p);
-            
-        } else {
         
-            if (k == AMBIENT)                
-                pShader->setGlUniform4fv("material.ambient", 1, p);
-             else if (k == DIFFUSE)                 
-                pShader->setGlUniform4fv("material.diffuse", 1, p);                                
-             else if (k == SPECULAR)                 
-                pShader->setGlUniform4fv("material.specular", 1, p);               
-             else if (k == SHININESS)         
-                pShader->setGlUniform1fv("material.shininess", 1, p);
-             else {
-                //TODO erro
-            }
+        if (k == AMBIENT)                
+            shader->setGlUniform4fv("material.ambient", 1, p);
+        else if (k == DIFFUSE)                 
+			shader->setGlUniform4fv("material.diffuse", 1, p);
+        else if (k == SPECULAR)                 
+			shader->setGlUniform4fv("material.specular", 1, p);
+        else if (k == SHININESS)         
+			shader->setGlUniform1fv("material.shininess", 1, p);
+        else {
+            //TODO erro
         }
+        
 	}
 
-	if (pShader != nullptr) {
-
-		if (hasTexture() == false) 
-			pShader->setGlUniform1i("tipo", 0);
-		else if ((pTexDiffuse != nullptr) && (pTexSpecular == nullptr) && (pTexEmissive == nullptr))
-			pShader->setGlUniform1i("tipo", 1);
-		else if ((pTexDiffuse != nullptr) && (pTexSpecular != nullptr) && (pTexEmissive == nullptr))
-			pShader->setGlUniform1i("tipo", 2);
-		else 
-			pShader->setGlUniform1i("tipo", 3);
-	}
+	if (hasTexture() == false) 
+		shader->setGlUniform1i("tipo", 0);
+	else if ((pTexDiffuse != nullptr) && (pTexSpecular == nullptr) && (pTexEmissive == nullptr))
+		shader->setGlUniform1i("tipo", 1);
+	else if ((pTexDiffuse != nullptr) && (pTexSpecular != nullptr) && (pTexEmissive == nullptr))
+		shader->setGlUniform1i("tipo", 2);
+	else 
+		shader->setGlUniform1i("tipo", 3);
 	
 	if (texturePresent == true) {
 
@@ -172,19 +167,6 @@ void Material::apply(Shader *pShader) {
 	else {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-
-	//se ha textura coloque a cor como branca para nao interferir com a textura
-	//if (hasTexture) {
-	//	glMaterialfv(GL_FRONT, GL_DIFFUSE, Color::WHITE.ptr());
-	//}
-
-   //  if ( glIsEnabled ( GL_COLOR_MATERIAL ) == GL_TRUE ) {
-   //      glMaterialfv ( GL_FRONT, GL_AMBIENT, ambient.ptr() );
-   //	   glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse.ptr() );
-   //      glMaterialfv ( GL_FRONT, GL_SPECULAR, specular.ptr() );
-   //      glMaterialfv ( GL_FRONT, GL_SHININESS, &shine );
-   //      glMaterialfv ( GL_FRONT, GL_EMISSION, emission.ptr() );
-   //  }
 }
 
 void Material::loadCollada(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode) {

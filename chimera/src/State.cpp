@@ -116,9 +116,9 @@ void State::applyWireFrame() {
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 }
 
-void State::appyMaterial(Shader *_pShader) {
+void State::appyMaterial() {
     
-	pMaterialAtivo->apply(_pShader);
+	pMaterialAtivo->apply();
 
 }
 

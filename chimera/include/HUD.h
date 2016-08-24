@@ -26,10 +26,12 @@ public:
     virtual ~HUD();
 
 	virtual void init();
-	void accept(class NodeVisitor* v);
+
+	// Inherited via Node
+	void accept(class NodeVisitor* v) override;
 
 	// Inherited via Draw
-	virtual void renderExecute(bool _texture) override;
+	virtual void render() override;
 	virtual glm::vec3 getSizeBox() override;
 
     void addFont ( Font *_pFont );
@@ -47,8 +49,7 @@ public:
     glm::mat4 projection;
 
 private:
-    void drawFonts();
-
+    
     Shader *shader;
     bool on;
     std::vector<HUDTxt*> vLineText;

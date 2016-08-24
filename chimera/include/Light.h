@@ -28,7 +28,8 @@ public:
 
     virtual void apply(LightNum lightNum);
 
-	virtual void accept(class NodeVisitor* v);
+	// Inherited via Node
+	virtual void accept(class NodeVisitor* v) override;
 
     Color getAmbient() {
         return ambient;

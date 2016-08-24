@@ -14,7 +14,8 @@ public:
     Draw (Node *_parent, EntityKind _kind, std::string _name );
     Draw ( const Draw &_draw );
     virtual ~Draw();
-    virtual void renderExecute ( bool _texture ) = 0;
+
+    virtual void render() = 0;
     virtual glm::vec3 getSizeBox() = 0;
 
     inline State *getState() {

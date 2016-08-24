@@ -6,7 +6,6 @@ RenderVisitor::RenderVisitor() {
 
 	pCoord = nullptr;
 	pVideo = nullptr;
-	textureOn = true;
 	HudOn = true;
 	particleOn = true;
 	eye = 0;
@@ -30,7 +29,7 @@ void RenderVisitor::visit ( Camera* _pCamera ) {
 
 void RenderVisitor::visit ( Mesh* _pMesh ) {
 
-    _pMesh->renderExecute(textureOn);
+    _pMesh->render();
 
 }
 
@@ -44,7 +43,7 @@ void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 		//_pParticleEmitter->setPosition(pCoord->getPosition()); //FIXME esta errado, verificar como fazer em debug
         _pParticleEmitter->ProjectionMatrix = projection;
         _pParticleEmitter->ViewMatrix = view;
-		_pParticleEmitter->renderExecute(true);
+		_pParticleEmitter->render();
 	}
 
 }
@@ -80,7 +79,6 @@ void RenderVisitor::visit ( Solid* _pSolid ) {
 
 void RenderVisitor::visit ( HUD* _pHUD ) {
 
-
 	if (HudOn == true) {
 		if (_pHUD->isOn() == true) {
 
@@ -89,7 +87,7 @@ void RenderVisitor::visit ( HUD* _pHUD ) {
 			shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(_pHUD->projection));
 
             _pHUD->projection = projection;
-			_pHUD->renderExecute(textureOn);
+			_pHUD->render();
 			//pVideo->restoreMatrix();
 		}
 	}

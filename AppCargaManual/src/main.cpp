@@ -58,20 +58,15 @@ int testeCargaArquivo() {
         Chimera::Group* group1 = sceneMng->createSceneGraph();
 		group1->setShaderName("mesh-default");
 
-		//Adiciona um Emissor de Particula
-		//Chimera::Transform* posParticle = new Chimera::Transform((Chimera::Node*)group1, "posicaoParticle");
-		//posParticle->setTranslate(btVector3(-5.0, 5.0, 4.0));
-        //Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter ((Chimera::Node*)group1, "testeZ1", 10000 );
-		//pParticleEmitter->setPosSource(glm::vec3(-5.0, 5.0, 4.0));
-		//pParticleEmitter->setMaxSeed(100);
-        //std::string pathFilePaticle = dirDados + std::string ( "/" ) +std::string ( "Particle.png" );
-        //pParticleEmitter->loadImage ( pathFilePaticle.c_str() ) ;
-
 		//Novo Emissor GLSL
 		Chimera::Group *gParticle = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "ParticleGroup" );
 		gParticle->setShaderName("particle-default");
 
-		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter((Chimera::Node*)gParticle, "testeZ1", 10000);
+		//Adiciona um Emissor de Particula
+		//Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
+		//posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
+
+		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(gParticle, "testeZ1", 10000);
 		Chimera::Material *pMatParticleEmiter = new Chimera::Material("MatParticleEmitter");
 		Chimera::Texture *pTexParticleEmitter = new Chimera::Texture("TexParticleEmmiter", dirDados + std::string("/") + std::string("Particle2.png"));
 		pMatParticleEmiter->setTexDiffuse(pTexParticleEmitter);

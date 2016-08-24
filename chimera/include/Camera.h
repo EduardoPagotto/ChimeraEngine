@@ -28,7 +28,8 @@ public:
 
 	glm::mat4 getViewMatrix(void);
 
-	virtual void accept(class NodeVisitor* v);
+	// Inherited via Node
+	virtual void accept(class NodeVisitor* v) override;
 
     void setType ( CameraType _type ) {
         type = _type;

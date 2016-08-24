@@ -21,7 +21,6 @@ public:
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;
 
-	bool textureOn;
 	bool HudOn;
 	bool particleOn;
 	int eye;

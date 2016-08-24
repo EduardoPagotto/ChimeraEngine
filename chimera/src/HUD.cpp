@@ -34,23 +34,6 @@ void HUD::addText ( int _fontIndex, int _posX, int _posY, Color _colorText, GLfl
     vLineText.push_back ( newTxt );
 }
 
-void HUD::drawFonts() {
-
-	// Activate corresponding render state
-	shader->link();
-
-	glActiveTexture(GL_TEXTURE0);
-
-	for (HUDTxt *l_pTxt : vLineText) {
-
-		shader->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
-
-		vFonts[l_pTxt->indexFonte]->RenderText( l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
-	}
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
 void HUD::init() {
 
 	setOn(true);
@@ -61,7 +44,7 @@ glm::vec3 HUD::getSizeBox() {
 	return glm::vec3();
 }
 
-void HUD::renderExecute(bool _texture)
+void HUD::render()
 {
     // salva flags de bit
 	glPushAttrib(GL_ENABLE_BIT);
@@ -80,7 +63,19 @@ void HUD::renderExecute(bool _texture)
     //shader.Use();
     //glUniformMatrix4fv(glGetUniformLocation(shade.getIdProgram() , "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-    drawFonts();
+	// Activate corresponding render state
+	shader->link();
+
+	glActiveTexture(GL_TEXTURE0);
+
+	for (HUDTxt *l_pTxt : vLineText) {
+
+		shader->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
+
+		vFonts[l_pTxt->indexFonte]->RenderText(l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 
     glPopAttrib();
     glPopAttrib();

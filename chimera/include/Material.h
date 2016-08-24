@@ -34,7 +34,7 @@ public:
 	bool isSet(const ModeMaterial &_val);
 	void setFace(const FaceMaterial &_val);
     
-    void apply(Shader *pShader);
+    void apply();
     
     void createDefaultEffect();
     
@@ -64,7 +64,6 @@ public:
 	}
 
 private:
-    
     void loadColladaProfile(tinyxml2::XMLElement* _nNode);
     
     bool getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode );
@@ -84,6 +83,8 @@ private:
     
     std::map<ModeMaterial, bool> map_modes;
 	std::map<ModeMaterial, void*> map_params;
+
+	Shader *shader;
 };
 }
 

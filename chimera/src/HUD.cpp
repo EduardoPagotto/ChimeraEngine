@@ -30,8 +30,19 @@ void HUD::addText ( int _fontIndex, int _posX, int _posY, Color _colorText, GLfl
 
 void HUD::drawFonts() {
 
-    for ( HUDTxt *l_pTxt : vLineText )
-        vFonts[l_pTxt->indexFonte]->RenderText( &shade, l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale ,l_pTxt->color);
+	// Activate corresponding render state
+	shade.link();
+
+	glActiveTexture(GL_TEXTURE0);
+
+	for (HUDTxt *l_pTxt : vLineText) {
+
+		shade.setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
+
+		vFonts[l_pTxt->indexFonte]->RenderText( l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void HUD::init() { 

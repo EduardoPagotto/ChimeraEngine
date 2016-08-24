@@ -25,7 +25,7 @@ class Font
 public:
     Font ( const std::string &_fontFile,const int &_size );
     virtual ~Font ( void );
-    void RenderText(Shader *pShader, std::string *pText, GLfloat x, GLfloat y, GLfloat scale, const Color &_color);
+    void RenderText( std::string *pText, GLfloat x, GLfloat y, GLfloat scale);
 
 private:
     GLuint VAO, VBO;

@@ -87,13 +87,9 @@ Font::~Font ( void ) {
 	//TODO implementar release
 }
 
-void Font::RenderText(Shader *pShader, std::string *pText, GLfloat x, GLfloat y, GLfloat scale, const Color &_color)
+void Font::RenderText( std::string *pText, GLfloat x, GLfloat y, GLfloat scale)
 {
-    // Activate corresponding render state
-    pShader->link();
-	pShader->setGlUniform4fv("textColor", 1, _color.ptr());
-
-    glActiveTexture(GL_TEXTURE0);
+ 
     glBindVertexArray(VAO);
 
     // Iterate through all characters
@@ -134,7 +130,6 @@ void Font::RenderText(Shader *pShader, std::string *pText, GLfloat x, GLfloat y,
         x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
     glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

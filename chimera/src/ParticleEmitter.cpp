@@ -160,26 +160,17 @@ void ParticleEmitter::renderExecute(bool _texture)
 	shader.link();//glUseProgram(programID);
 
 	// Vertex shader
-    GLuint CameraRight_worldspace_ID = glGetUniformLocation(shader.getIdProgram(), "CameraRight_worldspace");
-    GLuint CameraUp_worldspace_ID = glGetUniformLocation(shader.getIdProgram(), "CameraUp_worldspace");
-    GLuint ViewProjMatrixID = glGetUniformLocation(shader.getIdProgram(), "VP");
+	shader.setGlUniform3f("CameraRight_worldspace", ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
+	shader.setGlUniform3f("CameraUp_worldspace", ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
+	shader.setGlUniformMatrix4fv("VP",1, GL_FALSE, &ViewProjectionMatrix[0][0]);
 
     // fragment shader
-    GLuint TextureID = glGetUniformLocation(shader.getIdProgram(), "myTextureSampler");
-
+	shader.setGlUniform1i("myTextureSampler", 0);
     GLuint Texture = pState->getMaterial()->getTexDiffuse()->getTextureId(0);//loadDDS("particle.DDS");
     
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Texture);
-    
-	// Set our "myTextureSampler" sampler to user Texture Unit 0
-	glUniform1i(TextureID, 0);
-
-	// Same as the billboards tutorial
-	glUniform3f(CameraRight_worldspace_ID, ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
-	glUniform3f(CameraUp_worldspace_ID, ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
-	glUniformMatrix4fv(ViewProjMatrixID, 1, GL_FALSE, &ViewProjectionMatrix[0][0]);
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

@@ -111,11 +111,11 @@ void Game::start() {
     
     
     //pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);//
-    pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
-    pSceneMng->getRoot()->getState()->setEnableCullFace(Chimera::CullFace::CULL_FACE, true);
-    pSceneMng->getRoot()->getState()->setEnableSmooth(true);
-    pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::TEXTURE_2D, false);
-    pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::DEPTH_TEST, true);
+    //pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
+    //pSceneMng->getRoot()->getState()->setEnableCullFace(Chimera::CullFace::CULL_FACE, true);
+    //pSceneMng->getRoot()->getState()->setEnableSmooth(true);
+    //pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::TEXTURE_2D, false);
+    //pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::DEPTH_TEST, true);
     
     glClearDepth ( 1.0f );
     glDepthFunc ( GL_LEQUAL );

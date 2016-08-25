@@ -14,6 +14,7 @@ Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH
     VAO = 0;
 
     shader =  Singleton<Shader>::getRefSingleton();
+	material = nullptr;
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
@@ -31,6 +32,8 @@ Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
   copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
 
   shader =  Singleton<Shader>::getRefSingleton();
+
+  material = _cpy.material;
 }
 
 Mesh::~Mesh() {
@@ -46,20 +49,19 @@ Mesh::~Mesh() {
 	glDeleteBuffers(1, &IndexVBOID);
 
     Singleton<Shader>::releaseRefSingleton();
+
+	material = nullptr;
 }
 
 void Mesh::init() {
 
-	if (pState->getMaterial() == nullptr) {
-		Material* pMat = new Material("DefaultMat-" + std::to_string(getSerial()));
-		pState->setMaterial(pMat);
-	}
-
-	pState->init();
+	if (material == nullptr)
+		material = new Material("DefaultMat-" + std::to_string(getSerial()));
+	
+	material->init();
 
     //Ajuste de textura do imageSDL invertendo valor de V
-    int tamanho = textureIndex.size();
-    for (int indice = 0; indice < tamanho; indice++) {
+    for (int indice = 0; indice < textureIndex.size(); indice++) {
         int posTex = textureIndex[indice];
         textureList[posTex].y = 1 - textureList[posTex].y;
     }
@@ -103,9 +105,11 @@ glm::vec3 Mesh::getSizeBox() {
                      ( glm::abs ( l_max.z ) + glm::abs ( l_min.z ) ) / 2 );
 }
 
+
+
 void Mesh::render () {
 
-    pState->appyMaterial();
+    material->apply();
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));

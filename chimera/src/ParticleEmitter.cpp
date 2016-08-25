@@ -20,7 +20,7 @@ ParticleEmitter::~ParticleEmitter(){
 
 void ParticleEmitter::init() {
 
-	pState->init();
+	material->init();
 
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
@@ -170,7 +170,7 @@ void ParticleEmitter::render()
 
     // fragment shader
 	shader->setGlUniform1i("myTextureSampler", 0);
-    GLuint Texture = pState->getMaterial()->getTexDiffuse()->getTextureId(0);//loadDDS("particle.DDS");
+    GLuint Texture = material->getTexDiffuse()->getTextureId(0);//loadDDS("particle.DDS");
 
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);

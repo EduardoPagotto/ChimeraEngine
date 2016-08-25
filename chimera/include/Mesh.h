@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include "VboIndexer.hpp"
 #include "Shader.h"
+#include "Material.h"
 
 namespace Chimera {
 
@@ -48,7 +49,6 @@ private:
     void setVertexBuffer();
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
 
-    //GLuint programID;
 	GLuint VAO;
     GLuint VertexVBOID;
     GLuint IndexVBOID;

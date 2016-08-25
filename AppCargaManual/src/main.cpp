@@ -70,7 +70,7 @@ int testeCargaArquivo() {
 		Chimera::Material *pMatParticleEmiter = new Chimera::Material("MatParticleEmitter");
 		Chimera::Texture *pTexParticleEmitter = new Chimera::Texture("TexParticleEmmiter", dirDados + std::string("/") + std::string("Particle2.png"));
 		pMatParticleEmiter->setTexDiffuse(pTexParticleEmitter);
-		pParticleEmitter->getState()->setMaterial(pMatParticleEmiter);
+		pParticleEmitter->setMaterial(pMatParticleEmiter);
 
         Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");
 		gHud->setShaderName("hud-default");

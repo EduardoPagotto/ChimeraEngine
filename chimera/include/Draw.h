@@ -2,8 +2,8 @@
 #define DRAW_H_
 
 #include "Node.h"
-#include "State.h"
 #include "glm/glm.hpp"
+#include "Material.h"
 
 namespace Chimera {
 
@@ -18,12 +18,16 @@ public:
     virtual void render() = 0;
     virtual glm::vec3 getSizeBox() = 0;
 
-    inline State *getState() {
-        return pState;
-    }
+	void setMaterial(Material* _pMat) {
+		this->material = _pMat;
+	}
+
+	Material* getMaterial() const {
+		return material;
+	}
         
-protected:
-    State *pState;    
+protected: 
+	Material *material;
 };
 }
 #endif

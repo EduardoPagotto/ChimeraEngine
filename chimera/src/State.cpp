@@ -3,8 +3,6 @@
 namespace Chimera {
 
 State::State() {
-
-	pMaterialAtivo = nullptr;
 	l = nullptr;
 }
 
@@ -12,7 +10,6 @@ State::~State() {
 }
 
 void State::init() {
-	pMaterialAtivo->init();
 }
 
 void State::setEnable(GLenum face,bool flag) {
@@ -33,7 +30,6 @@ void State::setEnableClient(GLenum face,bool flag) {
 }
 
 void State::setEnableLight(LightNum state,bool flag) {
-    //setEnable(state,flag);
     this->map_light[state]=flag;
 }
 
@@ -42,7 +38,6 @@ void State::setEnablePolygonMode(PolygonMode state,FaceMaterial face) {
 }
 
 void State::setEnableSmooth(bool flag) {
-    
     if(flag) 
         glShadeModel(GL_SMOOTH);
     else{
@@ -51,7 +46,6 @@ void State::setEnableSmooth(bool flag) {
 }
 
 void State::setEnableCullFace(CullFace state,bool flag) {
-    //setEnable(state,flag);
     this->map_cullface[state]=flag;
 }
 
@@ -60,29 +54,19 @@ void State::setEnableClientState(ClientState state,bool flag) {
 }
 
 void State::setEnableColorMaterial(ColorMaterial state,bool flag) {
-    //setEnable(state,flag);
-   
     this->map_colormaterial[state]=flag;
 }
 
-void State::setMaterial(Material* _pMat) {
-
-	this->pMaterialAtivo = _pMat;
-}
-
 void State::setEnableLighting(Light* l,bool flag) {
-
     this->l=l;
     this->map_lighting[l]=flag;
 }
 
 void State::setEnableStateMachine(StateMachine _state, bool _flag) {
- 
     this->map_stateMachine[_state] = _flag;
 }
 
 void State::setStateMachine(StateMachine _state, bool _flag) {
-    
     if (_flag) 
         glEnable(_state);
     else
@@ -100,7 +84,7 @@ void State::apply() {
 		setEnable(iter->first, iter->second);
     
     for(map<PolygonMode,FaceMaterial>::iterator iter = this->map_polygonmode.begin(); iter != this->map_polygonmode.end(); ++iter)
-        glPolygonMode((GLenum)iter->second,(GLenum)iter->first); //TODO Testar se é isso mesmo!!
+        glPolygonMode((GLenum)iter->second,(GLenum)iter->first);
     
     for(map<CullFace,bool>::iterator iter = this->map_cullface.begin(); iter != this->map_cullface.end(); ++iter) 
 		setEnable(iter->first, iter->second);
@@ -113,13 +97,7 @@ void State::apply() {
 }
 
 void State::applyWireFrame() {
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-}
-
-void State::appyMaterial() {
-    
-	pMaterialAtivo->apply();
-
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void State::appyLighting(){

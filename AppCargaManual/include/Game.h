@@ -48,7 +48,6 @@ private:
     
     Chimera::SceneMng *pSceneMng;
     Chimera::PhysicsControl *physicWorld;
-    //GLuint programID;
     
     bool isPaused;
 };

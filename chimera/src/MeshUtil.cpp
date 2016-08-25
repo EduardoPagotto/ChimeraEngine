@@ -184,7 +184,7 @@ Mesh* createMeshParallelepiped(Node *_pParent, const std::string &_name, const g
 		}
 	}
 
-	pMesh->getState()->setMaterial(pMatFinal);
+	pMesh->setMaterial(pMatFinal);
 
     return pMesh;
 }
@@ -318,7 +318,7 @@ Mesh* createMeshParallelepiped2(Node *_pParent, const std::string &_name, const 
 		}
 	}
    
-    pMesh->getState()->setMaterial(_pMaterial);
+    pMesh->setMaterial(_pMaterial);
 
     return pMesh;
 }

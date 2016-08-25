@@ -3,7 +3,6 @@
 #include "Transform.h"
 #include "OpenGLDefs.h"
 #include "Singleton.h"
-
 #include "GameClient.h"
 
 Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
@@ -150,43 +149,28 @@ void Game::start() {
 
     // Localiza o Skybox e ajusta iluminacao
     Chimera::Transform* pSkyBox = ( Chimera::Transform* )pSceneMng->getRoot()->findChild( "SkyBox", true);
-	//Chimera::Transform* pSkyBox = ( Chimera::Transform* ) Chimera::Node::findNodeBySeq( Chimera::EntityKind::TRANSFORM, "SkyBox" );
 
-    if (pSkyBox != nullptr) {
+    if (pSkyBox != nullptr)
         Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
-        pDraw->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);
-        pDraw->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, true);
-    }
-
+ 
     //Localiza a camera
     pOrbitalCam = ( Chimera::CameraSpherical* )pSceneMng->getRoot()->findChild( "Camera", true );
-    //pOrbitalCam = ( Chimera::CameraSpherical* )Chimera::Node::findNodeBySeq(Chimera::EntityKind::CAMERA, "Camera" );
-
+ 
     //Localiza objeto como o primario
     pCorpoRigido = ( Chimera::Solid* )pSceneMng->getRoot()->findChild( "Zoltan" , true);
-	//pCorpoRigido = ( Chimera::Solid* )Chimera::Node::findNodeBySeq( Chimera::EntityKind::SOLID, "Zoltan" );
 
 	//Localiza a luz ativa
 	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->getRoot()->findChild("luz01", true);
-    //Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::LIGHT, "luz01");
 
 	//Localiza o Emissor de particula
     pEmissor = (Chimera::ParticleEmitter*)pSceneMng->getRoot()->findChild( "testeZ1", true);
-	//pEmissor = (Chimera::ParticleEmitter*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::PARTICLE_SYSTEM, "testeZ1");
 
     pSceneMng->cameraAtiva ( pOrbitalCam );
     pSceneMng->origemDesenho((Chimera::Coord*) pCorpoRigido);
-
-	//ajusta scene root com luz e material ativo
-	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
-	pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0, true);
-	pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
-
-	pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
-    pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::TEXTURE_2D, true);
-    pSceneMng->getRoot()->getState()->setEnableSmooth(true);
-    pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::DEPTH_TEST, true);
-    pSceneMng->getRoot()->getState()->setEnableCullFace(Chimera::CullFace::CULL_FACE, true);
+    
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 
     glClearDepth ( 1.0f );
     glDepthFunc ( GL_LEQUAL );
@@ -194,10 +178,10 @@ void Game::start() {
 
 	//Localiza o HUD
 	pHUD = (Chimera::HUD*)pSceneMng->getRoot()->findChild("HUD-Default", true);
-    //pHUD = (Chimera::HUD*)Chimera::Node::findNodeBySeq(Chimera::EntityKind::HUD, "HUD-Default");
-
-    pHUD->addText(0, 350, 30, Chimera::Color::BLUE,1.0, &sPosicaoObj);
-	pHUD->addText(0, 10, 30, Chimera::Color::RED, 1.0, &textoFPS  );
+	if (pHUD != nullptr) {
+		pHUD->addText(0, 350, 30, Chimera::Color::BLUE, 1.0, &sPosicaoObj);
+		pHUD->addText(0, 10, 30, Chimera::Color::RED, 1.0, &textoFPS);
+	}
 
 }
 

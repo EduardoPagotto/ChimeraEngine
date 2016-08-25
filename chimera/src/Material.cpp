@@ -139,7 +139,6 @@ void Material::apply() {
         else {
             //TODO erro
         }
-        
 	}
 
 	if (hasTexture() == false) 

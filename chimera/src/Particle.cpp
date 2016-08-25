@@ -64,6 +64,6 @@ void Particle::decrease(const float &_delta, int _particlesCount, GLfloat*  pPos
 
 void Particle::reset() {
 	life = 5.0f; // This particle will live 5 seconds.
-	pos = glm::vec3(0.0f, 0.0f, 5.0f);
+	pos = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 }

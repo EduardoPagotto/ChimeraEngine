@@ -19,11 +19,20 @@ public:
     virtual glm::vec3 getRotation() override;
     virtual void setRotation ( const glm::vec3 &_rotation ) override;
     virtual glm::mat4 getMatrix() override;
+	glm::mat4 getModelMatrix(Coord * _pCoord);
     virtual void setMatrix(const glm::mat4 &_trans) override;
     virtual void setPositionRotation(const glm::vec3 & _posicao, const glm::vec3 & _rotation) override;
     
-private:
+	void setStaticTranslation(bool val) {
+		staticTranslation = val;
+	}
 
+	bool getStaticTranslation() const {
+		return staticTranslation;
+	}
+
+private:
+	bool staticTranslation;
     glm::mat4 model;
 };
 }

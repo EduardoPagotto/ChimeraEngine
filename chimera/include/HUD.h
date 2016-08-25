@@ -46,10 +46,7 @@ public:
 
     void addText ( int _fontIndex, int _posX, int _posY, Color _colorText, GLfloat _scale, std::string *_txt );
 
-    glm::mat4 projection;
-
 private:
-    
     Shader *shader;
     bool on;
     std::vector<HUDTxt*> vLineText;

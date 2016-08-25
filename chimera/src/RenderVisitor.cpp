@@ -40,8 +40,6 @@ void RenderVisitor::visit ( Light* _pLight ) {
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 
 	if (particleOn == true) {
-		//_pParticleEmitter->setPosition(pCoord->getPosition()); //FIXME esta errado, verificar como fazer em debug
-        _pParticleEmitter->ProjectionMatrix = projection;
         _pParticleEmitter->ViewMatrix = view;
 		_pParticleEmitter->render();
 	}
@@ -63,7 +61,7 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 void RenderVisitor::visit ( Chimera::Transform* _pTransform) {
 
 	//TODO acumular esta matriz
-    model = _pTransform->getMatrix();
+	model = _pTransform->getModelMatrix(pCoord);
 	shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model) );
 
 }
@@ -73,8 +71,6 @@ void RenderVisitor::visit ( Solid* _pSolid ) {
 	//TODO acumular esta matriz
     model = _pSolid->getModelMatrix(pCoord);
 	shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model) );
-
-
 }
 
 void RenderVisitor::visit ( HUD* _pHUD ) {
@@ -82,11 +78,7 @@ void RenderVisitor::visit ( HUD* _pHUD ) {
 	if (HudOn == true) {
 		if (_pHUD->isOn() == true) {
 
-            projection = pVideo->getOrthoProjectionMatrix(eye); //pVideo->executeViewOrto(eye);
-
-			shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(_pHUD->projection));
-
-            _pHUD->projection = projection;
+			shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr( pVideo->getOrthoProjectionMatrix(eye) ));
 			_pHUD->render();
 			//pVideo->restoreMatrix();
 		}

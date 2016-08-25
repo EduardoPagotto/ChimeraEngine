@@ -62,9 +62,7 @@ glm::mat4 VideoDevice::getPerspectiveProjectionMatrix(const float &_fov, const f
 
 glm::mat4 VideoDevice::getOrthoProjectionMatrix( int eyeIndex ) {
  
-    glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(winSizeW), 0.0f, static_cast<GLfloat>(winSizeH));
-    
-    return projection;
+    return glm::ortho(0.0f, static_cast<GLfloat>(winSizeW), 0.0f, static_cast<GLfloat>(winSizeH));
 }
 
 // void VideoDevice::executeViewOrto ( int eye ) {

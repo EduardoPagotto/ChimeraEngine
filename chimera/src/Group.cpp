@@ -42,7 +42,7 @@ void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
     shader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(_view));
     //shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
 
-    Light *pLight = (Light*)findChild(EntityKind::LIGHT, 0, false);//(Light*)findNodeBySeq(EntityKind::LIGHT, 0);//FIXME usar outro jeito para pegar esta luz
+    Light *pLight = (Light*)findChild(EntityKind::LIGHT, 0, false);//FIXME usar outro jeito para pegar esta luz
     if (pLight != nullptr) {
 
         shader->setGlUniform3fv( "light.position", 1, glm::value_ptr( pLight->getPosition() ) );

@@ -126,7 +126,13 @@ void ParticleEmitter::render()
 	// There should be a getCameraPosition() function in common/controls.cpp,
 	// but this works too.
 	glm::vec3 CameraPosition(glm::inverse(ViewMatrix)[3]);
-	glm::mat4 ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
+	
+	// Vertex shader
+	shader->setGlUniform3f("CameraRight_worldspace", ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
+	shader->setGlUniform3f("CameraUp_worldspace", ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
+	
+	// fragment shader
+	shader->setGlUniform1i("myTextureSampler", 0);
 
 	int ParticlesCount = recycleParticleLife(CameraPosition);
 
@@ -160,17 +166,7 @@ void ParticleEmitter::render()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Use our shader
-	shader->link();//glUseProgram(programID);
-
-	// Vertex shader
-	shader->setGlUniform3f("CameraRight_worldspace", ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
-	shader->setGlUniform3f("CameraUp_worldspace", ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
-	shader->setGlUniformMatrix4fv("VP",1, GL_FALSE, &ViewProjectionMatrix[0][0]);
-
-    // fragment shader
-	shader->setGlUniform1i("myTextureSampler", 0);
-    GLuint Texture = material->getTexDiffuse()->getTextureId(0);//loadDDS("particle.DDS");
+    GLuint Texture = material->getTexDiffuse()->getTextureId(0);
 
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);

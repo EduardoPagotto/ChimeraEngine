@@ -33,31 +33,27 @@ public:
 
 	void init();
 
-	glm::mat4 ProjectionMatrix;
-    glm::mat4 ViewMatrix;
+	glm::mat4 ViewMatrix;
 
 private:
 	void SortParticles();
 	int recycleParticleLife(const glm::vec3 &_camPosition);
-
 	int FindUnusedParticle();
 
-	glm::vec3 sizeBox;
-
 	Shader* shader;
-
 	GLfloat* g_particule_position_size_data;
 	GLubyte* g_particule_color_data;
 
-	Particle ParticlesContainer[MaxParticles];
 	int LastUsedParticle;
-
 	float lastTime;
+
 	GLuint billboard_vertex_buffer;
 	GLuint particles_position_buffer;
 	GLuint particles_color_buffer;
-    GLuint VertexArrayID;
+	GLuint VertexArrayID;
 
+	glm::vec3 sizeBox;
+	Particle ParticlesContainer[MaxParticles];
 	Timer timer;
 };
 }

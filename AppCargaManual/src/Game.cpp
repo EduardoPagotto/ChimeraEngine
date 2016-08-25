@@ -150,8 +150,10 @@ void Game::start() {
     // Localiza o Skybox e ajusta iluminacao
     Chimera::Transform* pSkyBox = ( Chimera::Transform* )pSceneMng->getRoot()->findChild( "SkyBox", true);
 
-    if (pSkyBox != nullptr)
-        Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
+	if (pSkyBox != nullptr) {
+		Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
+		pSkyBox->setStaticTranslation(true);
+	}
  
     //Localiza a camera
     pOrbitalCam = ( Chimera::CameraSpherical* )pSceneMng->getRoot()->findChild( "Camera", true );

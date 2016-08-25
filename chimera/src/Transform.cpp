@@ -1,6 +1,3 @@
-//#include <vr/Vec3.h>
-//#include <vr/Vec4.h>
-
 #include "NodeVisitor.h"
 #include "Transform.h"
 #include "OpenGLDefs.h"
@@ -14,7 +11,7 @@ namespace Chimera {
 Transform::Transform(Node* _parent, std::string _name) : Coord (_parent, EntityKind::TRANSFORM, _name) {
 
     model = glm::mat4(1.0f);
-    
+	staticTranslation = false;
 }
 
 Transform::~Transform() {
@@ -52,6 +49,28 @@ glm::mat4 Transform::getMatrix() {
     
     return model;
     
+}
+
+glm::mat4 Transform::getModelMatrix(Coord *_pCoord) { //ajuste matricial
+
+	if (staticTranslation == false) {
+
+		glm::mat4 matrixCoord = model;
+
+		float *matrix = glm::value_ptr(matrixCoord);
+
+		//pega posicao do objeto horigem de desenho (camera travada)
+		glm::vec3 l_vec = _pCoord->getPosition();
+
+		//desloca desenha para o pbjeto horigem
+		matrix[12] -= l_vec.x;
+		matrix[13] -= l_vec.y;
+		matrix[14] -= l_vec.z;
+
+		return glm::make_mat4(matrix);
+	} 
+
+	return model;
 }
 
 void Transform::setMatrix ( const glm::mat4& _trans ) {

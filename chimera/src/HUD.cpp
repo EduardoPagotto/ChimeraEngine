@@ -57,15 +57,6 @@ void HUD::render()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Compile and setup the shader
-    //Shader shader("shaders/text.vs", "shaders/text.frag");
-    //glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
-    //shader.Use();
-    //glUniformMatrix4fv(glGetUniformLocation(shade.getIdProgram() , "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-	// Activate corresponding render state
-	shader->link();
-
 	glActiveTexture(GL_TEXTURE0);
 
 	for (HUDTxt *l_pTxt : vLineText) {

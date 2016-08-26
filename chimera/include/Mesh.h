@@ -8,8 +8,6 @@
 #include "Draw.h"
 #include <glm/glm.hpp>
 #include "VboIndexer.hpp"
-#include "Shader.h"
-#include "Material.h"
 
 namespace Chimera {
 
@@ -52,8 +50,6 @@ private:
 	GLuint VAO;
     GLuint VertexVBOID;
     GLuint IndexVBOID;
-
-    Shader *shader;
 
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;

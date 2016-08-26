@@ -28,6 +28,7 @@ public:
         
 protected: 
 	Material *material;
+	Shader *shader;
 };
 }
 #endif

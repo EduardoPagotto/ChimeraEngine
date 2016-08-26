@@ -12,9 +12,6 @@ Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH
     VertexVBOID = 0;
     IndexVBOID = 0;
     VAO = 0;
-
-    shader =  Singleton<Shader>::getRefSingleton();
-	material = nullptr;
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
@@ -31,9 +28,6 @@ Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
   copy(_cpy.textureIndex.begin(), _cpy.textureIndex.end(), back_inserter(textureIndex));
   copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
 
-  shader =  Singleton<Shader>::getRefSingleton();
-
-  material = _cpy.material;
 }
 
 Mesh::~Mesh() {
@@ -47,10 +41,6 @@ Mesh::~Mesh() {
 
 	glDeleteBuffers(1, &VertexVBOID);
 	glDeleteBuffers(1, &IndexVBOID);
-
-    Singleton<Shader>::releaseRefSingleton();
-
-	material = nullptr;
 }
 
 void Mesh::init() {

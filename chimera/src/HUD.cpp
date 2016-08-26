@@ -6,15 +6,10 @@
 namespace Chimera {
 
 HUD::HUD(Node *_parent, std::string _name) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
-
-    shader =  Singleton<Shader>::getRefSingleton();
 }
 
 HUD::~HUD() {
 	//TODO: implementar release
-
-    Singleton<Shader>::releaseRefSingleton();
-
 }
 
 void HUD::addFont ( Font *_pFont ) {

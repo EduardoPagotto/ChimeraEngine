@@ -9,13 +9,9 @@ namespace Chimera {
 ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
 	//MaxParticles = _max;
 	LastUsedParticle = 0;
-
-	shader =  Singleton<Shader>::getRefSingleton();
 }
 
 ParticleEmitter::~ParticleEmitter(){
-
-	Singleton<Shader>::releaseRefSingleton();
 }
 
 void ParticleEmitter::init() {

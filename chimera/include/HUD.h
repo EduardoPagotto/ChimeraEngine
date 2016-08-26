@@ -47,7 +47,6 @@ public:
     void addText ( int _fontIndex, int _posX, int _posY, Color _colorText, GLfloat _scale, std::string *_txt );
 
 private:
-    Shader *shader;
     bool on;
     std::vector<HUDTxt*> vLineText;
     std::vector<Font*> vFonts;

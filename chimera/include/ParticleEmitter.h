@@ -4,8 +4,6 @@
 #include<vector>
 #include "Particle.h"
 #include "Draw.h"
-#include "Texture.h"
-#include "Shader.h"
 #include "Timer.h"
 
 // Verificar para implementar usando GLSL - http://www.opengl-tutorial.org/intermediate-tutorials/billboards-particles/particles-instancing/
@@ -40,7 +38,6 @@ private:
 	int recycleParticleLife(const glm::vec3 &_camPosition);
 	int FindUnusedParticle();
 
-	Shader* shader;
 	GLfloat* g_particule_position_size_data;
 	GLubyte* g_particule_color_data;
 

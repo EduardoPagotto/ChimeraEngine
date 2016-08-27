@@ -108,16 +108,16 @@ void SceneMng::draw () {
    
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
-		if (pCameraAtiva != nullptr) {
+		//if (pCameraAtiva != nullptr) {
 
-			rv.projection = pVideo->getPerspectiveProjectionMatrix(pCameraAtiva->getFov(), pCameraAtiva->getNear(), pCameraAtiva->getFar(), eye);
-			rv.view = pCameraAtiva->getViewMatrix();
+		//	//rv.projection = pVideo->getPerspectiveProjectionMatrix(pCameraAtiva->getFov(), pCameraAtiva->getNear(), pCameraAtiva->getFar(), eye);
+		//	//rv.view = pCameraAtiva->getViewMatrix();
 
-		} else {
+		//} else {
 
-			rv.projection = pVideo->getPerspectiveProjectionMatrix(45.0, 0.5, 10000.0, eye);
-         
-        }
+		//	//rv.projection = pVideo->getPerspectiveProjectionMatrix(45.0, 0.5, 10000.0, eye);
+  //       
+  //      }
 
 		rv.HudOn = true;
 		rv.particleOn = true;

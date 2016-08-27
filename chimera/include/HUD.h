@@ -31,7 +31,7 @@ public:
 	void accept(class NodeVisitor* v) override;
 
 	// Inherited via Draw
-	virtual void render() override;
+	virtual void render(const glm::mat4 &_projection, const glm::mat4 &_view, const glm::mat4 &_model) override;
 	virtual glm::vec3 getSizeBox() override;
 
     void addFont ( Font *_pFont );

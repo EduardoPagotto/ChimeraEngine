@@ -18,9 +18,12 @@ Camera::Camera (Node* _pNode, CameraType _type, std::string _name )
     farDistance = 1000.0f;
     fov = 45.0f;
     perspective = true;
+
+	shader = Singleton<Shader>::getRefSingleton();
 }
 
 Camera::~Camera() {
+	Singleton<Shader>::releaseRefSingleton();
 }
 
 void Camera::setTransform(const glm::mat4 & _trans)
@@ -40,6 +43,11 @@ void Camera::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_
 	position = _posicao;
 	direction = _rotation;
 	rotation = glm::vec3(0.0, 0.0, 1.0);  //FIXME pegar no arquivo do collada
+}
+
+void Camera::apply()
+{
+	shader->setGlUniform3fv("viewPos", 1, glm::value_ptr(getPosition()));
 }
 
 glm::mat4 Camera::getViewMatrix( void ) {

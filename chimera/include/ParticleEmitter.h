@@ -24,14 +24,14 @@ public:
 	virtual void accept(class NodeVisitor* v) override;
 	
 	// Inherited via Draw
-	virtual void render() override;
+	virtual void render(const glm::mat4 &_projection, const glm::mat4 &_view, const glm::mat4 &_model) override;
 	virtual glm::vec3 getSizeBox() override;
 
 	void setSizeBox(const glm::vec3 &_size);
 
 	void init();
 
-	glm::mat4 ViewMatrix;
+	//glm::mat4 ViewMatrix;
 
 private:
 	void SortParticles();

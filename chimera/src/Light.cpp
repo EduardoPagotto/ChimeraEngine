@@ -18,10 +18,12 @@ Light::Light (Node* _parent, std::string _name ) : Node (_parent, EntityKind::LI
     diffuse = Color::ZERO;
     position = glm::vec3(0.0, 0.0, 0.0);
     transform = glm::mat4(1.0);//transform.setIdentity();
+
+	shader = Singleton<Shader>::getRefSingleton();
 }
 
 Light::~Light() {
-
+	Singleton<Shader>::releaseRefSingleton();
 }
 
 void Light::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_rotation ) {
@@ -41,20 +43,25 @@ void Light::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_r
     
 }
 
-void Light::apply(LightNum lightNum) {
+void Light::apply() {
 
-    for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
+	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(getPosition()));
+	shader->setGlUniform4fv("light.ambient", 1, getAmbient().ptr());
+	shader->setGlUniform4fv("light.diffuse", 1, getDiffuse().ptr());
+	shader->setGlUniform4fv("light.specular", 1, getSpecular().ptr());
 
-        ModeMaterial k = iter->first;
-        GLfloat *p = (GLfloat*)((Color*)iter->second)->ptr();
-        
-        glLightfv(lightNum, (GLenum)k, p);
-    }
-    
-    GLfloat posicaoLuz[] = { position.x, position.y, position.z, (type == LightType::POSITIONAL ? 0.0f : 1.0f)  };
-    
-    glLightfv ( lightNum, GL_POSITION, posicaoLuz );
-    glEnable ( lightNum ); 
+    //for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
+
+    //    ModeMaterial k = iter->first;
+    //    GLfloat *p = (GLfloat*)((Color*)iter->second)->ptr();
+    //    
+    //    glLightfv(lightNum, (GLenum)k, p);
+    //}
+    //
+    //GLfloat posicaoLuz[] = { position.x, position.y, position.z, (type == LightType::POSITIONAL ? 0.0f : 1.0f)  };
+    //
+    //glLightfv ( lightNum, GL_POSITION, posicaoLuz );
+    //glEnable ( lightNum ); 
    
 }
 

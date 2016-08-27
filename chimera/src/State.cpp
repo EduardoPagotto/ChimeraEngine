@@ -108,7 +108,7 @@ void State::appyLighting(){
 		bool flag=iter->second;
 		if(flag) {
 
-			k->apply(LIGHT0);
+			k->apply();
 		}
     }
 }

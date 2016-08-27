@@ -99,13 +99,6 @@ glm::vec3 Mesh::getSizeBox() {
 
 void Mesh::render (const glm::mat4 &_projection, const glm::mat4 &_view, const glm::mat4 &_model) {
 
-	// Get the variables from the shader to which data will be passed
-	shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(_projection));
-	shader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(_view));
-	//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
-
-	shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(_model));
-
     material->apply();
 
     glBindVertexArray(VAO);

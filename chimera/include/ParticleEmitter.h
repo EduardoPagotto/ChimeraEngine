@@ -31,7 +31,7 @@ public:
 
 	void init();
 
-	//glm::mat4 ViewMatrix;
+	glm::vec3 CameraPosition;
 
 private:
 	void SortParticles();

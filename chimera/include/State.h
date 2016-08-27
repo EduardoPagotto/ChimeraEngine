@@ -24,7 +24,7 @@ public:
      void setEnableStateMachine(StateMachine _state, bool _flag);
 
 	 void apply();
-     void appyLighting();
+    // void appyLighting();
      void applyWireFrame();
 
  	 Light* getLight() {

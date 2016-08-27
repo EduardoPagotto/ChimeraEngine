@@ -62,8 +62,7 @@ void SceneMng::initNodes(Node* u, InitVisitor *pVisit)
 void SceneMng::DFS(Node* u)
 {
     u->setColor(1);
-    glPushMatrix();
-    
+   // glPushMatrix();
     u->accept(&rv);
     
     std::vector<Node*>* children = u->getChilds();
@@ -75,14 +74,13 @@ void SceneMng::DFS(Node* u)
 				DFS(child);
         }
     }
-    
     u->setColor(0);
-    glPopMatrix();
+  //  glPopMatrix();
 }
 
 void SceneMng::draw () {
 
-//#define TESTEZ1
+#define TESTEZ1
 
     int indiceDesenho = 1;
     if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
@@ -97,8 +95,10 @@ void SceneMng::draw () {
     //rv.textureOn = false;
     rv.HudOn = false;
     rv.particleOn = false;
-    
-	glm::vec3 posicao = root->getState()->getLight()->getPosition();
+	rv.runningShadow = true;
+
+	Camera *nodeCam = (Camera*)root->findChild(Chimera::EntityKind::CAMERA, 0, true);
+	glm::vec3 posicao = nodeCam->getPosition();//root->findChild(Chimera::EntityKind::CAMERA, 0, true);//getState()->getLight()->getPosition();
 	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
 	shadoMap.initSceneShadow();
 	DFS(root);

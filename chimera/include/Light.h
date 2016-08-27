@@ -28,8 +28,6 @@ public:
 
 	virtual void init();
 
-    virtual void apply();
-
 	// Inherited via Node
 	virtual void accept(class NodeVisitor* v) override;
 

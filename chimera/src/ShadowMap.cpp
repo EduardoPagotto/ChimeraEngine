@@ -77,6 +77,7 @@ void ShadowMap::StoreLightMatrices ( const glm::vec3 &lightPos) {
 	lightSpaceMatrix = lightProjection * lightView;
 	// - now render scene from light's point of view
 
+	simpleDepthShader->selectCurrent("simpleDepthShader");
 	simpleDepthShader->link();
 	simpleDepthShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 	//glUniformMatrix4fv(glGetUniformLocation(simpleDepthShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
@@ -250,6 +251,10 @@ void ShadowMap::endApplyShadow() {
 
 void ShadowMap::initSceneShadow() {
 
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
 	//// Clear the screen and depth buffer so we can render from the light's view
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glLoadIdentity();
@@ -291,6 +296,8 @@ void ShadowMap::initSceneShadow() {
 }
 
 void ShadowMap::endSceneShadow() {
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//// Now that the world is rendered, save the depth values to a texture
 	//pTexture->apply();

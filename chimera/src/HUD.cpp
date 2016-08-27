@@ -41,9 +41,6 @@ glm::vec3 HUD::getSizeBox() {
 
 void HUD::render(const glm::mat4 &_projection, const glm::mat4 &_view, const glm::mat4 &_model)
 {
-
-	shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(_projection));
-
     // salva flags de bit
 	glPushAttrib(GL_ENABLE_BIT);
 

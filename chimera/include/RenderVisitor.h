@@ -28,11 +28,16 @@ public:
     Coord *pCoord;
     Video *pVideo;
 
-	glm::mat4 projection;
-	glm::mat4 view;
+	bool runningShadow;
 
 private:
+
+	
+
+	glm::mat4 projection;
+	glm::mat4 view;
     glm::mat4 model;
+
 	Shader *shader;
 };
 }

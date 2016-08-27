@@ -43,28 +43,6 @@ void Light::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_r
     
 }
 
-void Light::apply() {
-
-	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(getPosition()));
-	shader->setGlUniform4fv("light.ambient", 1, getAmbient().ptr());
-	shader->setGlUniform4fv("light.diffuse", 1, getDiffuse().ptr());
-	shader->setGlUniform4fv("light.specular", 1, getSpecular().ptr());
-
-    //for (std::map<ModeMaterial, void*>::iterator iter = map_params.begin(); iter != map_params.end(); ++iter) {
-
-    //    ModeMaterial k = iter->first;
-    //    GLfloat *p = (GLfloat*)((Color*)iter->second)->ptr();
-    //    
-    //    glLightfv(lightNum, (GLenum)k, p);
-    //}
-    //
-    //GLfloat posicaoLuz[] = { position.x, position.y, position.z, (type == LightType::POSITIONAL ? 0.0f : 1.0f)  };
-    //
-    //glLightfv ( lightNum, GL_POSITION, posicaoLuz );
-    //glEnable ( lightNum ); 
-   
-}
-
 void Light::accept(NodeVisitor * v)
 {
 	v->visit(this);

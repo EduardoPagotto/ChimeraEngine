@@ -100,16 +100,16 @@ void State::applyWireFrame() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-void State::appyLighting(){
-    
-    using namespace std;
-    for(map<Light*,bool>::iterator iter = this->map_lighting.begin(); iter != this->map_lighting.end(); ++iter){
-		Light* k= iter->first;
-		bool flag=iter->second;
-		if(flag) {
-
-			k->apply();
-		}
-    }
-}
+//void State::appyLighting(){
+//    
+//    using namespace std;
+//    for(map<Light*,bool>::iterator iter = this->map_lighting.begin(); iter != this->map_lighting.end(); ++iter){
+//		Light* k= iter->first;
+//		bool flag=iter->second;
+//		if(flag) {
+//
+//			k->apply();
+//		}
+//    }
+//}
 }

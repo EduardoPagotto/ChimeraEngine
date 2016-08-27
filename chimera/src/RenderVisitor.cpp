@@ -1,5 +1,12 @@
 #include "RenderVisitor.h"
 
+#include "OpenGLDefs.h"
+
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace Chimera {
 
 RenderVisitor::RenderVisitor() {
@@ -24,7 +31,7 @@ RenderVisitor::~RenderVisitor() {
 
 void RenderVisitor::visit ( Camera* _pCamera ) {
 
-	_pCamera->apply();
+	shader->setGlUniform3fv("viewPos", 1, glm::value_ptr( _pCamera->getPosition() ));
 
 	projection = pVideo->getPerspectiveProjectionMatrix(_pCamera->getFov(), _pCamera->getNear(), _pCamera->getFar(), eye);
 	view = _pCamera->getViewMatrix();
@@ -33,19 +40,50 @@ void RenderVisitor::visit ( Camera* _pCamera ) {
 
 void RenderVisitor::visit ( Mesh* _pMesh ) {
 
+	// Get the variables from the shader to which data will be passed
+	shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+	shader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+	shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+	//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
+
     _pMesh->render(projection, view, model);
 
 }
 
 void RenderVisitor::visit ( Light* _pLight ) {
 
-	_pLight->apply();
-
+	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
+	shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
+	shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
+	shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
 }
 
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 
 	if (particleOn == true) {
+
+
+		// Get the variables from the shader to which data will be passed
+		shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+		shader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+		//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
+
+		shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+
+		// We will need the camera's position in order to sort the particles
+		// w.r.t the camera's distance.
+		// There should be a getCameraPosition() function in common/controls.cpp,
+		// but this works too.
+		glm::vec3 CameraPosition(glm::inverse(view)[3]);
+
+		// Vertex shader
+		shader->setGlUniform3f("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
+		shader->setGlUniform3f("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
+
+		// fragment shader
+		shader->setGlUniform1i("myTextureSampler", 0);
+
+		_pParticleEmitter->CameraPosition = CameraPosition;
 		_pParticleEmitter->render(projection, view, model);
 	}
 
@@ -59,8 +97,12 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 
 void RenderVisitor::visit ( Group* _pGroup ) {
 
-	shader->selectCurrent(_pGroup->getShaderName());
-	shader->link();
+	if (runningShadow == false) {
+
+		shader->selectCurrent(_pGroup->getShaderName());
+		shader->link();
+
+	}
 
 }
 
@@ -80,7 +122,9 @@ void RenderVisitor::visit ( HUD* _pHUD ) {
 
 	if (HudOn == true) {
 		if (_pHUD->isOn() == true) {
-			_pHUD->render(pVideo->getOrthoProjectionMatrix(eye), view, model);
+
+			shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr( pVideo->getOrthoProjectionMatrix(eye) ));
+			_pHUD->render(projection, view, model);
 			//pVideo->restoreMatrix();
 		}
 	}

@@ -45,11 +45,6 @@ void Camera::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_
 	rotation = glm::vec3(0.0, 0.0, 1.0);  //FIXME pegar no arquivo do collada
 }
 
-void Camera::apply()
-{
-	shader->setGlUniform3fv("viewPos", 1, glm::value_ptr(getPosition()));
-}
-
 glm::mat4 Camera::getViewMatrix( void ) {
  
     //         btScalar m_matrix[16];

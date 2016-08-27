@@ -2,8 +2,11 @@
 #define SHADOW_MAP_H_
 
 #include <glm/glm.hpp>
-# include "Texture.h"
+#include "Texture.h"
 #include "Node.h"
+
+#include "Shader.h"
+
 
 namespace Chimera
 {
@@ -33,13 +36,16 @@ private:
     // These arrays will store our 4x4 matrices for the light's
     // project and modelview matrix.  These will then be loaded
     // into the texture matrix for the shadow mapping.
-    float g_mProjection[16];
-    float g_mModelView[16];
+    //float g_mProjection[16];
+    //float g_mModelView[16];
 
     // We set the light's view position at the origin
-    glm::vec3 g_LightView;
+    //glm::vec3 g_LightView;
 
-    Texture *pTexture;
+    //Texture *pTexture;
+	GLuint depthMapFBO;
+
+	Shader *simpleDepthShader;
 };
 
 }

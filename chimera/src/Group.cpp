@@ -12,13 +12,9 @@
 namespace Chimera {
 
 Group::Group(Node* _parent, std::string _name) : Node (_parent, EntityKind::GROUP, _name) {
-
-	shader =  Singleton<Shader>::getRefSingleton();
 }
 
 Group::~Group() {
-
-	Singleton<Shader>::releaseRefSingleton();
 }
 
 void Group::accept(NodeVisitor* v){
@@ -26,12 +22,6 @@ void Group::accept(NodeVisitor* v){
 }
 
 void Group::init() {
-}
-
-void Group::apply(const glm::mat4 &_view, const glm::mat4 &_proj) {
-
-	shader->selectCurrent(shadeName);
-    shader->link();
 }
 }
 

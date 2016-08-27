@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Shader.h>
+
 
 namespace Chimera {
 
@@ -16,16 +16,18 @@ public:
     Group(Node* _parent, std::string _name);
     virtual ~Group();
     void accept(class NodeVisitor* v);
-    void apply(const glm::mat4 &_view,const glm::mat4 &_proj);
 	void init();
 
 	void setShaderName(const std::string &_name) {
 		shadeName = _name;
 	}
 
+	std::string getShaderName() const {
+		return shadeName;
+	}
+
 private:
 	std::string shadeName;
-    Shader *shader;
 };
 }
 #endif

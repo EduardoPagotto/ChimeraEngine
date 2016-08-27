@@ -94,7 +94,7 @@ void SceneMng::draw () {
     
 #ifdef TESTEZ1
     
-    rv.textureOn = false;
+    //rv.textureOn = false;
     rv.HudOn = false;
     rv.particleOn = false;
     
@@ -108,26 +108,13 @@ void SceneMng::draw () {
    
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
-		//if (pCameraAtiva != nullptr) {
-
-		//	//rv.projection = pVideo->getPerspectiveProjectionMatrix(pCameraAtiva->getFov(), pCameraAtiva->getNear(), pCameraAtiva->getFar(), eye);
-		//	//rv.view = pCameraAtiva->getViewMatrix();
-
-		//} else {
-
-		//	//rv.projection = pVideo->getPerspectiveProjectionMatrix(45.0, 0.5, 10000.0, eye);
-  //       
-  //      }
-
 		rv.HudOn = true;
 		rv.particleOn = true;
 		rv.eye = eye;
-
  		DFS(root);
        
 #ifdef TESTEZ1
         //shadoMap.ApplyShadowMap (pOrigemDesenho);
-		rv.textureOn = false;
 		rv.HudOn = false;
 		rv.particleOn = false;
 		shadoMap.initApplyShadow();

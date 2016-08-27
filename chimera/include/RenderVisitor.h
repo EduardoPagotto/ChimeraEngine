@@ -4,6 +4,8 @@
 #include "NodeVisitor.h"
 #include "Video.h"
 
+#include <Shader.h>
+
 namespace Chimera {
 
 class RenderVisitor : public NodeVisitor {
@@ -31,6 +33,7 @@ public:
 
 private:
     glm::mat4 model;
+	Shader *shader;
 };
 }
 

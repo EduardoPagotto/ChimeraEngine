@@ -13,9 +13,13 @@ RenderVisitor::RenderVisitor() {
 	projection = glm::mat4(1.0f);
 	view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
+
+	shader =  Singleton<Shader>::getRefSingleton();
 }
 
 RenderVisitor::~RenderVisitor() {
+
+	Singleton<Shader>::releaseRefSingleton();
 }
 
 void RenderVisitor::visit ( Camera* _pCamera ) {
@@ -55,7 +59,8 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 
 void RenderVisitor::visit ( Group* _pGroup ) {
 
-	_pGroup->apply(view, projection);
+	shader->selectCurrent(_pGroup->getShaderName());
+	shader->link();
 
 }
 

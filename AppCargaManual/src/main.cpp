@@ -53,6 +53,10 @@ int testeCargaArquivo() {
 		shader->load("particle-default", dirBase + "ParticleVertexShader.glsl", dirBase + "ParticleFragmentShader.glsl");
 		shader->load("hud-default", dirBase +  "HudVertexShader.glsl", dirBase + "HudFragmentShader.glsl");
 
+		//ShadowMap
+		shader->load("simpleDepthShader", dirBase + "shadow_mapping_depth.vs", dirBase + "shadow_mapping_depth.frag");
+		shader->load("debugDepthQuad", dirBase + "debug_quad.vs", dirBase + "debug_quad_depth.frag");
+
         Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
         sceneMng->setReader(pLoader);
         Chimera::Group* group1 = sceneMng->createSceneGraph();

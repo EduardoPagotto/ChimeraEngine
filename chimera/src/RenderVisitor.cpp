@@ -21,6 +21,8 @@ RenderVisitor::RenderVisitor() {
 	view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
+    runningShadow = false;
+    
 	shader =  Singleton<Shader>::getRefSingleton();
 }
 
@@ -52,10 +54,12 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 
 void RenderVisitor::visit ( Light* _pLight ) {
 
-	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
-	shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
-	shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
-	shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
+    shader->setGlUniform3fv("lightPos", 1, glm::value_ptr(_pLight->getPosition()));
+    
+// 	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
+// 	shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
+// 	shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
+// 	shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
 }
 
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
@@ -102,7 +106,14 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 		shader->selectCurrent(_pGroup->getShaderName());
 		shader->link();
 
-	}
+        
+        shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+        
+	} else  {
+     
+        
+        
+    }
 
 }
 

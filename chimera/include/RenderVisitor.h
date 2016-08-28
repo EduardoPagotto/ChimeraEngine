@@ -30,6 +30,7 @@ public:
 
 	bool runningShadow;
 
+    glm::mat4 lightSpaceMatrix;
 private:
 
 	

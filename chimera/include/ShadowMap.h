@@ -29,6 +29,7 @@ public:
 	void initApplyShadow();
 	void endApplyShadow();
 
+    glm::mat4 lightSpaceMatrix;
 private:
 
     Node *pScene;

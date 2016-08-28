@@ -80,7 +80,7 @@ void SceneMng::DFS(Node* u)
 
 void SceneMng::draw () {
 
-#define TESTEZ1
+//#define TESTEZ1
 
     int indiceDesenho = 1;
     if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
@@ -99,6 +99,7 @@ void SceneMng::draw () {
 
 	Camera *nodeCam = (Camera*)root->findChild(Chimera::EntityKind::CAMERA, 0, true);
 	glm::vec3 posicao = nodeCam->getPosition();//root->findChild(Chimera::EntityKind::CAMERA, 0, true);//getState()->getLight()->getPosition();
+	rv.lightSpaceMatrix = shadoMap.lightSpaceMatrix;
 	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
 	shadoMap.initSceneShadow();
 	DFS(root);

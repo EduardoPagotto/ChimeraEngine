@@ -69,7 +69,7 @@ void ShadowMap::init ( Node *_pScene ) {
 void ShadowMap::StoreLightMatrices ( const glm::vec3 &lightPos) {
 
 	glm::mat4 lightProjection, lightView;
-	glm::mat4 lightSpaceMatrix;
+	//glm::mat4 lightSpaceMatrix;
 	GLfloat near_plane = 1.0f, far_plane = 7.5f;
 	lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 	//lightProjection = glm::perspective(45.0f, (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // Note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene.

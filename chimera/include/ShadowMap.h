@@ -46,6 +46,8 @@ private:
     //Texture *pTexture;
 	GLuint depthMapFBO;
 
+	GLuint depthMap;
+
 	Shader *simpleDepthShader;
 };
 

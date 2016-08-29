@@ -22,7 +22,7 @@ RenderVisitor::RenderVisitor() {
     model = glm::mat4(1.0f);
 
     runningShadow = false;
-    
+
 	shader =  Singleton<Shader>::getRefSingleton();
 }
 
@@ -55,7 +55,7 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 void RenderVisitor::visit ( Light* _pLight ) {
 
     shader->setGlUniform3fv("lightPos", 1, glm::value_ptr(_pLight->getPosition()));
-    
+
 // 	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
 // 	shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
 // 	shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
@@ -106,14 +106,23 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 		shader->selectCurrent(_pGroup->getShaderName());
 		shader->link();
 
-        
-        shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-        
+
+		int shadows = 0;
+		shader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
+
+//         glActiveTexture(GL_TEXTURE0);
+//         glBindTexture(GL_TEXTURE_2D, woodTexture);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, depthMap);
+
 	} else  {
-     
-        
-        
+
+
+
     }
+
+    shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
 }
 

@@ -18,11 +18,14 @@ struct Light {
     vec4 specular;
 };
 
-out vec4 color;
+in VS_OUT {
+    vec3 FragPos;
+    vec3 Normal;
+    vec2 TexCoords;
+    vec4 FragPosLightSpace;
+} fs_in;
 
-in vec3 Normal; 
-in vec3 FragPos;  
-in vec2 TexCoords;
+out vec4 FragColor;
 
 uniform Material material;
 uniform Light light;
@@ -37,14 +40,14 @@ void main()
 	vec4 emission;
 
     // part Diffuse 
-    vec3 norm = normalize(Normal);
+    vec3 normal = normalize(fs_in.Normal);
     //vec3 lightDir = normalize(-light.position); //direction light
-	vec3 lightDir = normalize(light.position - FragPos); //point light
-    float diff = max(dot(norm, lightDir), 0.0);
+	vec3 lightDir = normalize(light.position - fs_in.FragPos); //point light
+    float diff = max(dot(normal, lightDir), 0.0);
 
     // part Specular
-    vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);  
+    vec3 viewDir = normalize(viewPos - fs_in.FragPos);
+    vec3 reflectDir = reflect(-lightDir, normal);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
 	if (tipo == 0) { //Sem Textura
@@ -52,34 +55,39 @@ void main()
 		ambient = light.ambient * material.ambient;
 		diffuse = light.diffuse * (diff * material.diffuse);
 		specular = light.specular * (spec * material.specular);
-
-		color = ambient + diffuse + specular;
+		FragColor = ambient + diffuse + specular;
 
 	} else if (tipo == 1) { //Apenas Diffuse
 
-		ambient = light.ambient * vec4(texture(material.tDiffuse, TexCoords));
-		diffuse = light.diffuse * diff * vec4(texture(material.tDiffuse, TexCoords));	
+		vec4 color = vec4(texture(material.tDiffuse, fs_in.TexCoords));
+
+		ambient = light.ambient * color;
+		diffuse = light.diffuse * diff * color;	
 		specular = light.specular * (spec * material.specular);
 
-		color = ambient + diffuse + specular;
+		FragColor = ambient + diffuse + specular;
 	
 	} else if (tipo == 2) { //Difusse e Specula
 
-		ambient = light.ambient * vec4(texture(material.tDiffuse, TexCoords));
-		diffuse = light.diffuse * diff * vec4(texture(material.tDiffuse, TexCoords));
-		specular = light.specular * spec * vec4(texture(material.tSpecular, TexCoords));
+		vec4 color = vec4(texture(material.tDiffuse, fs_in.TexCoords));
 
-		color = ambient + diffuse + specular + emission;
+		ambient = light.ambient * color;
+		diffuse = light.diffuse * diff * color;
+		specular = light.specular * spec * vec4(texture(material.tSpecular, fs_in.TexCoords));
+
+		FragColor = ambient + diffuse + specular + emission;
 	
 	} else { 
 
-		ambient = light.ambient * vec4(texture(material.tDiffuse, TexCoords));
-		diffuse = light.diffuse * diff * vec4(texture(material.tDiffuse, TexCoords));
-		specular = light.specular * spec * vec4(texture(material.tSpecular, TexCoords));
+		vec4 color = vec4(texture(material.tDiffuse, fs_in.TexCoords));
+
+		ambient = light.ambient * color;
+		diffuse = light.diffuse * diff * color;
+		specular = light.specular * spec * vec4(texture(material.tSpecular, fs_in.TexCoords));
 	
 		// Emission
-		emission = vec4(texture(material.tEmission, TexCoords));
-		color = ambient + diffuse + specular + emission;	
+		emission = vec4(texture(material.tEmission, fs_in.TexCoords));
+		FragColor = ambient + diffuse + specular + emission;	
 	}
 } 
 	

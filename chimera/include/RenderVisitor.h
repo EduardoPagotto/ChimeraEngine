@@ -4,6 +4,8 @@
 #include "NodeVisitor.h"
 #include "Video.h"
 
+#include "ShadowMap.h"
+
 #include <Shader.h>
 
 namespace Chimera {
@@ -12,6 +14,9 @@ class RenderVisitor : public NodeVisitor {
 public:
     RenderVisitor();
     virtual ~RenderVisitor();
+	
+	void execute(Node *_node, const unsigned &_eye);
+
     virtual void visit(class Camera* _pCamera) override;
     virtual void visit(class Mesh* _pMesh) override;
     virtual void visit(class Light *_pLight) override;
@@ -22,24 +27,25 @@ public:
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;
 
-	bool HudOn;
-	bool particleOn;
-	int eye;
     Coord *pCoord;
     Video *pVideo;
 
-	bool runningShadow;
-
     glm::mat4 lightSpaceMatrix;
 private:
+	void DFS(Node * u);
 
-	
+	bool HudOn;
+	bool particleOn;
+	bool runningShadow;
+
+	int eye;
 
 	glm::mat4 projection;
 	glm::mat4 view;
     glm::mat4 model;
 
 	Shader *shader;
+	ShadowMap *shadoMap;
 };
 }
 

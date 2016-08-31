@@ -23,12 +23,72 @@ RenderVisitor::RenderVisitor() {
 
     runningShadow = false;
 
+	shadoMap = nullptr;
+	//shadoMap = new ShadowMap();
+
 	shader =  Singleton<Shader>::getRefSingleton();
 }
 
 RenderVisitor::~RenderVisitor() {
 
 	Singleton<Shader>::releaseRefSingleton();
+}
+
+void RenderVisitor::execute(Node * _node, const unsigned &_eye)
+{
+	if (shadoMap == nullptr) {
+
+		this->eye = _eye;
+		HudOn = true;
+		particleOn = true;
+
+		DFS(_node);
+
+	}
+	else {
+
+		Light *nodeCam = (Light*)_node->findChild(Chimera::EntityKind::LIGHT, 0, true);
+		glm::vec3 posicao = nodeCam->getPosition(); //root->findChild(Chimera::EntityKind::CAMERA, 0, true);//getState()->getLight()->getPosition();
+		shadoMap->StoreLightMatrices(posicao);
+		shadoMap->initSceneShadow();
+
+		HudOn = false;
+		particleOn = false;
+		runningShadow = true;
+		DFS(_node);
+
+		shadoMap->endSceneShadow();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		HudOn = true;
+		particleOn = true;
+		runningShadow = false;
+
+		DFS(_node);
+
+
+		
+
+	}
+
+}
+
+void RenderVisitor::DFS(Node* u)
+{
+	u->setColor(1);
+	u->accept(this);
+
+	std::vector<Node*>* children = u->getChilds();
+	if ((children != nullptr) && (children->size() >0)) {
+
+		for (size_t i = 0; i < children->size(); i++) {
+			Node* child = children->at(i);
+			if (child->getColor() == 0)
+				DFS(child);
+		}
+	}
+	u->setColor(0);
 }
 
 void RenderVisitor::visit ( Camera* _pCamera ) {
@@ -48,18 +108,25 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 	shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 	//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
 
+	if (runningShadow == false)
+		_pMesh->getMaterial()->apply();
+
     _pMesh->render(projection, view, model);
 
 }
 
 void RenderVisitor::visit ( Light* _pLight ) {
 
-    shader->setGlUniform3fv("lightPos", 1, glm::value_ptr(_pLight->getPosition()));
+	if (shadoMap != nullptr) {
+		shader->setGlUniform3fv("lightPos", 1, glm::value_ptr(_pLight->getPosition()));
+	}
+	else {
 
-// 	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
-// 	shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
-// 	shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
-// 	shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
+		shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
+		shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
+		shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
+		shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
+	}
 }
 
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
@@ -106,23 +173,23 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 		shader->selectCurrent(_pGroup->getShaderName());
 		shader->link();
 
-
-		int shadows = 0;
-		shader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
+//		int shadows = 0;
+//		shader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
 
 //         glActiveTexture(GL_TEXTURE0);
 //         glBindTexture(GL_TEXTURE_2D, woodTexture);
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, depthMap);
+ //       glActiveTexture(GL_TEXTURE1);
+ //       glBindTexture(GL_TEXTURE_2D, depthMap);
 
 	} else  {
 
 
+		//shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
     }
 
-    shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+    
 
 }
 

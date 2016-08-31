@@ -8,17 +8,12 @@
 #endif
 #include "ExceptionChimera.h"
 
+#include "OpenGLDefs.h"
+
 #include "Entity.h"
 
 namespace Chimera {
     
-enum class TextureFilter
-{
-    Nearest,
-    Linear,
-    Mipmapped
-};
-
 class Texture : public Entity
 {
 public:
@@ -27,36 +22,28 @@ public:
 
     virtual ~Texture();
 
-    virtual void clone ( Entity **ppNode );
-
 	void apply();
 
     void init();
-
-    SDL_Surface *loadImage();
-
-    void setFilter ( TextureFilter _filter );
-
-    TextureFilter getFilter();
 
     bool textureLoad() {
         return texturaCarregada;
     }
     
-	int getTextureId(int _index) {
-		return textureList[_index];
+	int getIdTexture() {
+		return idTexture;
 	}
-
-    // novo usado em ShadowMap
-    // This function creates a blank texture to render to
-    void createRenderTexture ( int sizeX, int sizeY, int channels, int type );
-    void beginTexCreated();
-    void endTexCreated();
     
+	GLuint createTextureFrameBuffer(const int & _width, const int & _height);
+
 private:
+
+	SDL_Surface *loadImage();
+
     std::string pathFile;
 
-    int textureList[3];
+
+	GLuint idTexture;
     int indiceFilter;
     bool texturaCarregada;
 };

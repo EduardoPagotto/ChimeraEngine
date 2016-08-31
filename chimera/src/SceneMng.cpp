@@ -36,7 +36,7 @@ void SceneMng::init() {
     InitVisitor *iv = new InitVisitor();
     initNodes(root, iv);
     
-    shadoMap.init ( (Node*)root );
+   // shadoMap.init ( (Node*)root );
 
 }
 
@@ -59,24 +59,24 @@ void SceneMng::initNodes(Node* u, InitVisitor *pVisit)
     u->setColor(0);
 }
 
-void SceneMng::DFS(Node* u)
-{
-    u->setColor(1);
-   // glPushMatrix();
-    u->accept(&rv);
-    
-    std::vector<Node*>* children = u->getChilds();
-    if ((children!=nullptr) && (children->size() >0)){
-        
-        for (size_t i = 0; i < children->size(); i++) {
-            Node* child = children->at(i);
-            if(child->getColor()==0)
-				DFS(child);
-        }
-    }
-    u->setColor(0);
-  //  glPopMatrix();
-}
+//void SceneMng::DFS(Node* u)
+//{
+//    u->setColor(1);
+//   // glPushMatrix();
+//    u->accept(&rv);
+//    
+//    std::vector<Node*>* children = u->getChilds();
+//    if ((children!=nullptr) && (children->size() >0)){
+//        
+//        for (size_t i = 0; i < children->size(); i++) {
+//            Node* child = children->at(i);
+//            if(child->getColor()==0)
+//				DFS(child);
+//        }
+//    }
+//    u->setColor(0);
+//  //  glPopMatrix();
+//}
 
 void SceneMng::draw () {
 
@@ -90,38 +90,39 @@ void SceneMng::draw () {
 	rv.pVideo = pVideo;
     rv.pCoord = pOrigem;
     
-#ifdef TESTEZ1
-    
-    //rv.textureOn = false;
-    rv.HudOn = false;
-    rv.particleOn = false;
-	rv.runningShadow = true;
-
-	Camera *nodeCam = (Camera*)root->findChild(Chimera::EntityKind::CAMERA, 0, true);
-	glm::vec3 posicao = nodeCam->getPosition();//root->findChild(Chimera::EntityKind::CAMERA, 0, true);//getState()->getLight()->getPosition();
-	rv.lightSpaceMatrix = shadoMap.lightSpaceMatrix;
-	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
-	shadoMap.initSceneShadow();
-	DFS(root);
-	shadoMap.endSceneShadow();
-    //shadoMap.RenderSceneA (pOrigemDesenho);
-#endif
+//#ifdef TESTEZ1
+//    
+//    //rv.textureOn = false;
+//    rv.HudOn = false;
+//    rv.particleOn = false;
+//	rv.runningShadow = true;
+//
+//	Camera *nodeCam = (Camera*)root->findChild(Chimera::EntityKind::CAMERA, 0, true);
+//	glm::vec3 posicao = nodeCam->getPosition();//root->findChild(Chimera::EntityKind::CAMERA, 0, true);//getState()->getLight()->getPosition();
+//	rv.lightSpaceMatrix = shadoMap.lightSpaceMatrix;
+//	shadoMap.StoreLightMatrices(posicao); //FIXME so funciona para 1 luz
+//	shadoMap.initSceneShadow();
+//	DFS(root);
+//	shadoMap.endSceneShadow();
+//    //shadoMap.RenderSceneA (pOrigemDesenho);
+//#endif
    
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
 
-		rv.HudOn = true;
-		rv.particleOn = true;
-		rv.eye = eye;
- 		DFS(root);
-       
-#ifdef TESTEZ1
-        //shadoMap.ApplyShadowMap (pOrigemDesenho);
-		rv.HudOn = false;
-		rv.particleOn = false;
-		shadoMap.initApplyShadow();
-		DFS(root);
-		shadoMap.endApplyShadow();
-#endif
+		//rv.HudOn = true;
+		//rv.particleOn = true;
+		//rv.eye = eye;
+ 		//DFS(root);
+		rv.execute(root, eye);
+
+//#ifdef TESTEZ1
+//        //shadoMap.ApplyShadowMap (pOrigemDesenho);
+//		rv.HudOn = false;
+//		rv.particleOn = false;
+//		shadoMap.initApplyShadow();
+//		DFS(root);
+//		shadoMap.endApplyShadow();
+//#endif
     }
 }
 } /* namespace Chimera */

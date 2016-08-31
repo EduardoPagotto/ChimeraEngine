@@ -169,7 +169,7 @@ void ParticleEmitter::render(const glm::mat4 &_projection, const glm::mat4 &_vie
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    GLuint Texture = material->getTexDiffuse()->getTextureId(0);
+	GLuint Texture = material->getTexDiffuse()->getIdTexture();
 
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);

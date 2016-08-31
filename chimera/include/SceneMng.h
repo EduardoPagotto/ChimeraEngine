@@ -56,7 +56,7 @@ public:
     
 private:
 	void initNodes(Node* u, InitVisitor *pVisit);
-    void DFS(Node* u);
+    //void DFS(Node* u);
 
     LoaderDae *pLoader;
     SceneRoot *root;
@@ -64,7 +64,7 @@ private:
 	Coord *pOrigem;
     Video *pVideo;
     
-	ShadowMap shadoMap;
+	//ShadowMap shadoMap;
     RenderVisitor rv;
 };
 

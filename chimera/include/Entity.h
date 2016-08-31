@@ -64,8 +64,8 @@ public:
         return serial;
     }
 
-    static unsigned getSerialMaster() {
-        return ++Entity::serialMaster;
+    static unsigned getNextSerialMaster() {
+        return Entity::serialMaster;
     }
 
 	inline void setKind(const EntityKind &_kind) {

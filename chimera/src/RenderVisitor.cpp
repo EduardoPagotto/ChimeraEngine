@@ -66,12 +66,7 @@ void RenderVisitor::execute(Node * _node, const unsigned &_eye)
 		runningShadow = false;
 
 		DFS(_node);
-
-
-		
-
 	}
-
 }
 
 void RenderVisitor::DFS(Node* u)
@@ -102,6 +97,9 @@ void RenderVisitor::visit ( Camera* _pCamera ) {
 
 void RenderVisitor::visit ( Mesh* _pMesh ) {
 
+	int shadows = 0;
+	shader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
+
 	// Get the variables from the shader to which data will be passed
 	shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
 	shader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
@@ -117,22 +115,15 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 
 void RenderVisitor::visit ( Light* _pLight ) {
 
-	if (shadoMap != nullptr) {
-		shader->setGlUniform3fv("lightPos", 1, glm::value_ptr(_pLight->getPosition()));
-	}
-	else {
-
-		shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
-		shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
-		shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
-		shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
-	}
+	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
+	shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
+	shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
+	shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
 }
 
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 
 	if (particleOn == true) {
-
 
 		// Get the variables from the shader to which data will be passed
 		shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
@@ -172,10 +163,6 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 
 		shader->selectCurrent(_pGroup->getShaderName());
 		shader->link();
-
-//		int shadows = 0;
-//		shader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
-
 //         glActiveTexture(GL_TEXTURE0);
 //         glBindTexture(GL_TEXTURE_2D, woodTexture);
 

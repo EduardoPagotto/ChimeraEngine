@@ -2,11 +2,8 @@
 #define __GROUP_H__
 
 #include "Node.h"
-#include "OpenGLDefs.h"
-
-#include <glm/glm.hpp>
-
-
+//#include "OpenGLDefs.h"
+//#include <glm/glm.hpp>
 
 namespace Chimera {
 

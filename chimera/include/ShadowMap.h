@@ -23,6 +23,12 @@ public:
 	void initSceneShadow();
 	void endSceneShadow();
 
+	void applyShadow();
+
+	unsigned getTextureIndex() {
+		return pTexture->getCount();
+	}
+
 private:
 	GLuint depthMapFBO;
     Texture *pTexture;

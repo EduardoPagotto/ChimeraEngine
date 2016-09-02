@@ -34,6 +34,10 @@ public:
 		return idTexture;
 	}
     
+	unsigned getCount() const {
+		return count;
+	}
+
 	GLuint createTextureFrameBuffer(const int & _width, const int & _height);
 
 private:

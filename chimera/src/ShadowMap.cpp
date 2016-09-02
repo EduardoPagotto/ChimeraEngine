@@ -47,4 +47,11 @@ void ShadowMap::endSceneShadow() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 }
+
+void ShadowMap::applyShadow() {
+
+	pTexture->apply();
+
+}
+
 }

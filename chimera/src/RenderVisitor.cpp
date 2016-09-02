@@ -41,10 +41,9 @@ void RenderVisitor::execute(Node * _node, const unsigned &_eye)
 	if (shadoMap != nullptr) {
 
 		Light *nodeCam = (Light*)_node->findChild(Chimera::EntityKind::LIGHT, 0, true);
-		glm::vec3 posicao = nodeCam->getPosition(); //root->findChild(Chimera::EntityKind::CAMERA, 0, true);//getState()->getLight()->getPosition();
-		lightSpaceMatrix = shadoMap->calcLightSpaceMatrices(posicao);  //shadoMap->StoreLightMatrices(posicao);
+		glm::vec3 posicao = nodeCam->getPosition(); 
+		lightSpaceMatrix = shadoMap->calcLightSpaceMatrices(posicao);
 
-		//std::string currentShader = shader->getCurrent();
 		shader->selectCurrent("simpleDepthShader");
 		shader->link();
 		shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
@@ -59,11 +58,6 @@ void RenderVisitor::execute(Node * _node, const unsigned &_eye)
 		shadoMap->endSceneShadow();
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//shader->selectCurrent(currentShader);
-		//shader->link();
-
-		//shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 	}
 
 	HudOn = true;
@@ -112,6 +106,14 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 
 	if (runningShadow == false)
 		_pMesh->getMaterial()->apply();
+
+	if (shadoMap != nullptr) {
+		if (runningShadow == false) {
+			shadoMap->applyShadow();
+			shader->setGlUniform1i("shadowMap", shadoMap->getTextureIndex());
+		}
+	}
+
 
     _pMesh->render(projection, view, model);
 
@@ -168,7 +170,7 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 		shader->selectCurrent(_pGroup->getShaderName());
 		shader->link();
 
-		//shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+		shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
 	} else  {
 

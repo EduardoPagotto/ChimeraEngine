@@ -20,6 +20,7 @@ RenderVisitor::RenderVisitor() {
 	projection = glm::mat4(1.0f);
 	view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
+	lightSpaceMatrix = glm::mat4(1.0f);
 
     runningShadow = false;
 
@@ -36,20 +37,18 @@ RenderVisitor::~RenderVisitor() {
 
 void RenderVisitor::execute(Node * _node, const unsigned &_eye)
 {
-	if (shadoMap == nullptr) {
-
-		this->eye = _eye;
-		HudOn = true;
-		particleOn = true;
-
-		DFS(_node);
-
-	}
-	else {
+	eye = _eye;
+	if (shadoMap != nullptr) {
 
 		Light *nodeCam = (Light*)_node->findChild(Chimera::EntityKind::LIGHT, 0, true);
 		glm::vec3 posicao = nodeCam->getPosition(); //root->findChild(Chimera::EntityKind::CAMERA, 0, true);//getState()->getLight()->getPosition();
-		shadoMap->StoreLightMatrices(posicao);
+		lightSpaceMatrix = shadoMap->calcLightSpaceMatrices(posicao);  //shadoMap->StoreLightMatrices(posicao);
+
+		//std::string currentShader = shader->getCurrent();
+		shader->selectCurrent("simpleDepthShader");
+		shader->link();
+		shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
 		shadoMap->initSceneShadow();
 
 		HudOn = false;
@@ -61,12 +60,17 @@ void RenderVisitor::execute(Node * _node, const unsigned &_eye)
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		HudOn = true;
-		particleOn = true;
-		runningShadow = false;
+		//shader->selectCurrent(currentShader);
+		//shader->link();
 
-		DFS(_node);
+		//shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 	}
+
+	HudOn = true;
+	particleOn = true;
+	runningShadow = false;
+	DFS(_node);
+
 }
 
 void RenderVisitor::DFS(Node* u)
@@ -163,11 +167,8 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 
 		shader->selectCurrent(_pGroup->getShaderName());
 		shader->link();
-//         glActiveTexture(GL_TEXTURE0);
-//         glBindTexture(GL_TEXTURE_2D, woodTexture);
 
- //       glActiveTexture(GL_TEXTURE1);
- //       glBindTexture(GL_TEXTURE_2D, depthMap);
+		//shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
 	} else  {
 

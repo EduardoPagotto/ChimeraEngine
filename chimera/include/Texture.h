@@ -17,7 +17,7 @@ namespace Chimera {
 class Texture : public Entity
 {
 public:
-    Texture ( std::string _name, std::string _pathFile );
+    Texture ( std::string _name, std::string _pathFile, unsigned _count );
     Texture ( const Texture &_texture );
 
     virtual ~Texture();
@@ -37,6 +37,8 @@ public:
 	GLuint createTextureFrameBuffer(const int & _width, const int & _height);
 
 private:
+
+	unsigned count;
 
 	SDL_Surface *loadImage();
 

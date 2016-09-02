@@ -3,8 +3,9 @@
 
 namespace Chimera {
     
-Texture::Texture ( std::string _name, std::string _pathFile ) : Entity ( EntityKind::TEXTURE, _name ) {
+Texture::Texture ( std::string _name, std::string _pathFile, unsigned _count) : Entity ( EntityKind::TEXTURE, _name ) {
 
+	count = _count;
     texturaCarregada = false;
     pathFile = _pathFile;
 	idTexture = 0;
@@ -23,6 +24,7 @@ Texture::~Texture() {
 }
 
 void Texture::apply() {
+	glActiveTexture(GL_TEXTURE0 + count );
 	glBindTexture(GL_TEXTURE_2D, idTexture);
 }
 

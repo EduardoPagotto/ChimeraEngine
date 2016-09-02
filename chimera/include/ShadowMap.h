@@ -18,22 +18,14 @@ public:
     ShadowMap();
     virtual ~ShadowMap();
 
-    void StoreLightMatrices ( const glm::vec3 &posicao );
+	glm::mat4 calcLightSpaceMatrices ( const glm::vec3 &_posicaoLight );
 
 	void initSceneShadow();
 	void endSceneShadow();
 
-	void initApplyShadow();
-	void endApplyShadow();
-
-    glm::mat4 lightSpaceMatrix;
 private:
-
-    Node *pScene;
-
-    Texture *pTexture;
 	GLuint depthMapFBO;
-
+    Texture *pTexture;
 	Shader *simpleDepthShader;
 };
 

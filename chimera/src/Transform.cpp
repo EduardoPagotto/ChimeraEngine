@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "OpenGLDefs.h"
 
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -22,33 +23,33 @@ void Transform::accept(class NodeVisitor* v) {
 }
 
 glm::vec3 Transform::getPosition() {
-    
+
 	return glm::vec3(model[3]);
-    
+
 }
 
 void Transform::setPosition(const glm::vec3 & _pos) {
-    
+
     model = glm::translate(model, _pos);
-    
+
 }
 
 glm::vec3 Transform::getRotation() {
-    
+
     return glm::vec3(0.0, 0.0, 0.0);
-    
+
 }
 
 void Transform::setRotation ( const glm::vec3& _rotation ) {
-    
-    model = glm::eulerAngleYXZ(_rotation.y, _rotation.x, _rotation.z); 
-    
+
+    model = glm::eulerAngleYXZ(_rotation.y, _rotation.x, _rotation.z);
+
 }
 
 glm::mat4 Transform::getMatrix() {
-    
+
     return model;
-    
+
 }
 
 glm::mat4 Transform::getModelMatrix(Coord *_pCoord) { //ajuste matricial
@@ -68,21 +69,21 @@ glm::mat4 Transform::getModelMatrix(Coord *_pCoord) { //ajuste matricial
 		matrix[14] -= l_vec.z;
 
 		return glm::make_mat4(matrix);
-	} 
+	}
 
 	return model;
 }
 
 void Transform::setMatrix ( const glm::mat4& _trans ) {
-    
+
     model = _trans;
-    
+
 }
 
 void Transform::setPositionRotation ( const glm::vec3& _posicao, const glm::vec3& _rotation ) {
-    
+
     this->setPosition(_posicao);
     this->setRotation(_rotation);
-    
+
 }
 }

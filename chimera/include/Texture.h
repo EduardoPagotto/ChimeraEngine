@@ -13,7 +13,7 @@
 #include "Entity.h"
 
 namespace Chimera {
-    
+
 class Texture : public Entity
 {
 public:
@@ -29,16 +29,24 @@ public:
     bool textureLoad() {
         return texturaCarregada;
     }
-    
+
 	int getIdTexture() {
 		return idTexture;
 	}
-    
+
 	unsigned getCount() const {
 		return count;
 	}
 
 	GLuint createTextureFrameBuffer(const int & _width, const int & _height);
+
+	unsigned getWidth() const {
+		return width;
+	}
+
+	unsigned getHeight() const {
+		return height;
+	}
 
 private:
 
@@ -48,6 +56,8 @@ private:
 
     std::string pathFile;
 
+	unsigned width;
+	unsigned height;
 
 	GLuint idTexture;
     int indiceFilter;

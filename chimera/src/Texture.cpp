@@ -2,13 +2,16 @@
 #include "Video.h"
 
 namespace Chimera {
-    
+
 Texture::Texture ( std::string _name, std::string _pathFile, unsigned _count) : Entity ( EntityKind::TEXTURE, _name ) {
 
 	count = _count;
     texturaCarregada = false;
     pathFile = _pathFile;
 	idTexture = 0;
+
+    height = 0;
+    width = 0;
 }
 
 Texture::Texture ( const Texture &_texture ) : Entity ( _texture ) {
@@ -39,6 +42,9 @@ void Texture::init() {
 
         // Load in texture
         glBindTexture ( GL_TEXTURE_2D, idTexture ); // Typical Texture Generation Using Data From The Bitmap
+
+        height = pImage->h;
+        width = pImage->w;
 
         // Generate The Texture
         if ( pImage->format->Amask != 0 ) {
@@ -87,6 +93,9 @@ SDL_Surface *Texture::loadImage() {
 
 GLuint Texture::createTextureFrameBuffer(const int &_width, const int &_height) {
 
+    width = _width;
+    height = _height;
+
 	GLuint depthMapFBO;
 	glGenFramebuffers(1, &depthMapFBO);
 	// - Create depth texture
@@ -94,7 +103,7 @@ GLuint Texture::createTextureFrameBuffer(const int &_width, const int &_height) 
 	glGenTextures(1, &idTexture);
 	glBindTexture(GL_TEXTURE_2D, idTexture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _width, _height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);

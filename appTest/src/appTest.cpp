@@ -15,6 +15,8 @@
 
 #include "CameraSpherical.h"
 
+#include "Light.h"
+
 #include "MeshUtil.h"
 
 #include <glm/glm.hpp>

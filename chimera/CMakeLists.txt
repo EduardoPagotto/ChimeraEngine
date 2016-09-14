@@ -71,6 +71,7 @@ set (SourcesChimeraAPI
 	src/InitVisitor.cpp
 	src/RenderVisitor.cpp
 	src/MeshUtil.cpp
+	src/ShadowMapVisitor.cpp
 )
 
 if (OVR_SET_TO_USE)

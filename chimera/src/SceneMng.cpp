@@ -19,7 +19,7 @@ void SceneMng::setReader ( LoaderDae* _pLoader ) {
 }
 
 Group *SceneMng::createSceneGraph() {
-   
+
 	Group *pGroup = nullptr;
 	if (pLoader != nullptr)
 		pGroup = pLoader->getNodes();
@@ -27,12 +27,12 @@ Group *SceneMng::createSceneGraph() {
 		pGroup = new Group(nullptr, "Default");
 
     root->addChild(pGroup);
-    
+
     return pGroup;
 }
 
 void SceneMng::init() {
- 
+
     InitVisitor *iv = new InitVisitor();
     initNodes(root, iv);
 }
@@ -40,13 +40,13 @@ void SceneMng::init() {
 void SceneMng::initNodes(Node* u, InitVisitor *pVisit)
 {
     u->setColor(1);
-    u->accept(pVisit); 
-    
+    u->accept(pVisit);
+
     std::vector<Node*>* children = u->getChilds();
     if ((children != nullptr)&&(children->size() > 0)) {
-        
+
         for (size_t i = 0; i < children->size(); i++) {
-            
+
             Node* child = children->at(i);
             if(child->getColor() == 0)
 				initNodes(child, pVisit);
@@ -54,6 +54,24 @@ void SceneMng::initNodes(Node* u, InitVisitor *pVisit)
     }
     u->setColor(0);
 }
+
+void SceneMng::DFS(Node* u)
+{
+	u->setColor(1);
+	u->accept(&rv);
+
+	std::vector<Node*>* children = u->getChilds();
+	if ((children != nullptr) && (children->size() >0)) {
+
+		for (size_t i = 0; i < children->size(); i++) {
+			Node* child = children->at(i);
+			if (child->getColor() == 0)
+				DFS(child);
+		}
+	}
+	u->setColor(0);
+}
+
 
 void SceneMng::draw () {
 
@@ -64,9 +82,10 @@ void SceneMng::draw () {
 
 	rv.pVideo = pVideo;
     rv.pCoord = pOrigem;
-    
+
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
-		rv.execute(root, eye);
+        rv.eye = eye;
+		DFS(root);
     }
 }
 } /* namespace Chimera */

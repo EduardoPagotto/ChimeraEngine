@@ -35,12 +35,12 @@ void Light::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_r
 //     transform.setRotation ( l_qtn );
 //     transform.setOrigin ( _posicao );
 //     //pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
-   
+
     glm::quat myQuat (_rotation); // trocar (pitch, yaw, roll) por (yaw, pitch, roll) ?????
     glm::mat4 matRot = glm::toMat4(myQuat); //matriz rotacao
     glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), _posicao); //matriz translacao
-    transform = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!! 
-    
+    transform = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!!
+
 }
 
 void Light::accept(NodeVisitor * v)
@@ -60,8 +60,8 @@ void Light::loadCollada ( tinyxml2::XMLElement* _nNode ) {
     if ( l_nPoint != nullptr ) {
 
         type = LightType::POSITIONAL;
-        
-        std::vector<btScalar> l_arrayF;
+
+        std::vector<float> l_arrayF;
         const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
         loadArrayBtScalar ( l_val, l_arrayF );
 
@@ -74,7 +74,7 @@ void Light::loadCollada ( tinyxml2::XMLElement* _nNode ) {
 
 		type = LightType::DIRECTIONAL;
 
-        std::vector<btScalar> l_arrayF;
+        std::vector<float> l_arrayF;
         const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
         loadArrayBtScalar ( l_val, l_arrayF );
 

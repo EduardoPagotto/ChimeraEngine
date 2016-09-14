@@ -2,8 +2,8 @@
 #define __GROUP_H__
 
 #include "Node.h"
-//#include "OpenGLDefs.h"
-//#include <glm/glm.hpp>
+
+#include "ShadowMapVisitor.h"
 
 namespace Chimera {
 
@@ -25,6 +25,9 @@ public:
 
 private:
 	std::string shadeName;
+
+	ShadowMapVisitor *shadoMapVisitor;
+
 };
 }
 #endif

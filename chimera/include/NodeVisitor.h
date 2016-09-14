@@ -1,16 +1,6 @@
 #ifndef NODE_VISITOR__H
 #define NODE_VISITOR__H
 
-#include "Camera.h"
-#include "Mesh.h"
-#include "Light.h"
-#include "ParticleEmitter.h"
-#include "SceneRoot.h"
-#include "Group.h"
-#include "Transform.h"
-#include "Solid.h"
-#include "HUD.h"
-
 namespace Chimera {
 
 class NodeVisitor
@@ -18,15 +8,15 @@ class NodeVisitor
 public:
 	NodeVisitor(){}
 	virtual ~NodeVisitor(){}
-	virtual void visit(Camera* _pCamera) = 0;
-	virtual void visit(Mesh* _pMesh) = 0;
-	virtual void visit(Light *_pLight) = 0;
-	virtual void visit(ParticleEmitter *_pParticleEmitter) = 0;
-	virtual void visit(SceneRoot *_pSceneRoot) = 0;
-    virtual void visit(Group* _pGroup) = 0;
-	virtual void visit(Transform* _pTransform) = 0;
-	virtual void visit(Solid* _pSolid) = 0;
-	virtual void visit(HUD* _pHUD) = 0;
+	virtual void visit(class Camera* _pCamera) = 0;
+	virtual void visit(class Mesh* _pMesh) = 0;
+	virtual void visit(class Light *_pLight) = 0;
+	virtual void visit(class ParticleEmitter *_pParticleEmitter) = 0;
+	virtual void visit(class SceneRoot *_pSceneRoot) = 0;
+    virtual void visit(class Group* _pGroup) = 0;
+	virtual void visit(class Transform* _pTransform) = 0;
+	virtual void visit(class Solid* _pSolid) = 0;
+	virtual void visit(class HUD* _pHUD) = 0;
 };
 }
 

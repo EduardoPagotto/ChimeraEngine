@@ -1,5 +1,15 @@
 #include "InitVisitor.h"
 
+#include "Camera.h"
+#include "Mesh.h"
+#include "Light.h"
+#include "ParticleEmitter.h"
+#include "SceneRoot.h"
+#include "Group.h"
+#include "Transform.h"
+#include "Solid.h"
+#include "HUD.h"
+
 #include <iostream>
 
 namespace Chimera {

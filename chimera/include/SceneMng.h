@@ -5,7 +5,6 @@
 
 #include "Video.h"
 #include "Camera.h"
-//#include "Light.h"
 #include "ParticleEmitter.h"
 
 #include "ShadowMap.h"
@@ -14,6 +13,8 @@
 
 #include "InitVisitor.h"
 #include "RenderVisitor.h"
+
+
 
 namespace Chimera
 {
@@ -33,7 +34,7 @@ public:
 	void draw();
     void setReader( LoaderDae *_pLoader );
     Group* createSceneGraph();
-    
+
     inline void cameraAtiva ( Camera *_pCam ) {
         pCameraAtiva = _pCam;
     }
@@ -41,7 +42,7 @@ public:
     inline Camera* getCamere() {
         return pCameraAtiva;
     }
-    
+
     inline void origemDesenho (Coord *_pCoord ) {
 		pOrigem = _pCoord;
     }
@@ -53,17 +54,17 @@ public:
     Video* getVideo() {
         return pVideo;
     }
-    
+
 private:
 	void initNodes(Node* u, InitVisitor *pVisit);
-    //void DFS(Node* u);
+    void DFS(Node* u);
 
     LoaderDae *pLoader;
     SceneRoot *root;
     Camera *pCameraAtiva;
 	Coord *pOrigem;
     Video *pVideo;
-    
+
 	//ShadowMap shadoMap;
     RenderVisitor rv;
 };

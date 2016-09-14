@@ -1,5 +1,15 @@
 #include "RenderVisitor.h"
 
+#include "Camera.h"
+#include "Mesh.h"
+#include "Light.h"
+#include "ParticleEmitter.h"
+#include "SceneRoot.h"
+#include "Group.h"
+#include "Transform.h"
+#include "Solid.h"
+#include "HUD.h"
+
 #include "OpenGLDefs.h"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -22,9 +32,9 @@ RenderVisitor::RenderVisitor() {
     model = glm::mat4(1.0f);
 	//lightSpaceMatrix = glm::mat4(1.0f);
 
-    runningShadow = false;
+    //runningShadow = false;
 
-	shadoMap = nullptr;
+	//shadoMap = nullptr;
 	//shadoMap = new ShadowMap();
 
 	shader =  Singleton<Shader>::getRefSingleton();
@@ -35,52 +45,35 @@ RenderVisitor::~RenderVisitor() {
 	Singleton<Shader>::releaseRefSingleton();
 }
 
-void RenderVisitor::execute(Node * _node, const unsigned &_eye)
-{
-	eye = _eye;
-
-	Light *nodeLight = (Light*)_node->findChild(Chimera::EntityKind::LIGHT, 0, true);
-	Camera *nodeCam = (Camera*)_node->findChild(Chimera::EntityKind::CAMERA, 0, true);
-
-	if (shadoMap != nullptr) {
-
-		
-		shadoMap->createLightViewPosition( nodeLight->getPosition() );
-
-		HudOn = false;
-		particleOn = false;
-		runningShadow = true;
-
-		DFS(_node);
-
-		shadoMap->endSceneShadow();
-	}
-
-	HudOn = true;
-	particleOn = true;
-	runningShadow = false;
-
-
-	DFS(_node);
-
-}
-
-void RenderVisitor::DFS(Node* u)
-{
-	u->setColor(1);
-	u->accept(this);
-
-	std::vector<Node*>* children = u->getChilds();
-	if ((children != nullptr) && (children->size() >0)) {
-
-		for (size_t i = 0; i < children->size(); i++) {
-			Node* child = children->at(i);
-			if (child->getColor() == 0)
-				DFS(child);
-		}
-	}
-	u->setColor(0);
-}
+// void RenderVisitor::execute(Node * _node, const unsigned &_eye)
+// {
+// 	eye = _eye;
+//
+// 	Light *nodeLight = (Light*)_node->findChild(Chimera::EntityKind::LIGHT, 0, true);
+// 	Camera *nodeCam = (Camera*)_node->findChild(Chimera::EntityKind::CAMERA, 0, true);
+//
+// 	if (shadoMap != nullptr) {
+//
+//
+// 		shadoMap->createLightViewPosition( nodeLight->getPosition() );
+//
+// 		HudOn = false;
+// 		particleOn = false;
+// 		runningShadow = true;
+//
+// 		DFS(_node);
+//
+// 		shadoMap->endSceneShadow();
+// 	}
+//
+// 	HudOn = true;
+// 	particleOn = true;
+// 	runningShadow = false;
+//
+//
+// 	DFS(_node);
+//
+// }
 
 void RenderVisitor::visit ( Camera* _pCamera ) {
 
@@ -93,7 +86,7 @@ void RenderVisitor::visit ( Camera* _pCamera ) {
 
 void RenderVisitor::visit ( Mesh* _pMesh ) {
 
-	int shadows = 1;
+	int shadows = 0;
 	shader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
 
 	// Get the variables from the shader to which data will be passed
@@ -102,15 +95,15 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 	shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 	//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
 
-	if (runningShadow == false)
-		_pMesh->getMaterial()->apply();
+	//if (runningShadow == false)
+	_pMesh->getMaterial()->apply();
 
-	if (shadoMap != nullptr) {
-		if (runningShadow == false) {
-			shadoMap->applyShadow();
-			shader->setGlUniform1i("shadowMap", shadoMap->getTextureIndex());
-		}
-	}
+// 	if (shadoMap != nullptr) {
+// 		if (runningShadow == false) {
+// 			shadoMap->applyShadow();
+// 			shader->setGlUniform1i("shadowMap", shadoMap->getTextureIndex());
+// 		}
+// 	}
 
 
     _pMesh->render(projection, view, model);
@@ -163,21 +156,8 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 
 void RenderVisitor::visit ( Group* _pGroup ) {
 
-	if (runningShadow == false) {
-
-		shader->selectCurrent(_pGroup->getShaderName());
-		shader->link();
-
-		//shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-
-	} else  {
-
-
-		//shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-
-    }
-
-    
+	shader->selectCurrent(_pGroup->getShaderName());
+	shader->link();
 
 }
 

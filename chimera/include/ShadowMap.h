@@ -20,6 +20,8 @@ public:
 
 	glm::mat4 calcLightSpaceMatrices ( const glm::vec3 &_posicaoLight );
 
+	void createLightViewPosition(const glm::vec3 & _posicaoLight);
+
 	void initSceneShadow();
 	void endSceneShadow();
 

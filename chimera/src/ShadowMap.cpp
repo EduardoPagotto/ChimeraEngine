@@ -34,12 +34,23 @@ glm::mat4 ShadowMap::calcLightSpaceMatrices(const glm::vec3 &_posicaoLight ) {
 	return lightSpaceMatrix;
 }
 
+void ShadowMap::createLightViewPosition(const glm::vec3 &_posicaoLight) {
+
+	glm::mat4  lightSpaceMatrix = calcLightSpaceMatrices(_posicaoLight);
+	
+	simpleDepthShader->selectCurrent("simpleDepthShader");
+	simpleDepthShader->link();
+	simpleDepthShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
+	initSceneShadow();
+}
+
 void ShadowMap::initSceneShadow() {
 
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
-
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void ShadowMap::endSceneShadow() {

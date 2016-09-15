@@ -6,93 +6,105 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Camera.h"
+#include "Mesh.h"
 #include "Light.h"
+#include "ParticleEmitter.h"
+#include "SceneRoot.h"
+#include "Group.h"
+#include "Transform.h"
+#include "Solid.h"
+#include "HUD.h"
+
+#include "NodeParse.h"
 
 namespace Chimera {
 
 ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned &_width, const unsigned &_height) : NodeVisitor() {
 
-	pTexture = new Texture("Shadow-Map-Tex_" + _name + std::string("_") + std::to_string(Entity::getNextSerialMaster() + 1) ,"FRAME_BUFFER", 1); //FIXME mudar o shadowmap para um count maior
-   	depthMapFBO = pTexture->createTextureFrameBuffer(_width, _height);
+	shadowMap = new ShadowMap(_name, _width, _height);
 	simpleDepthShader = Singleton<Shader>::getRefSingleton();
 }
 
 ShadowMapVisitor::~ShadowMapVisitor() {
 
+	delete shadowMap;
+	shadowMap = nullptr;
+
 	Singleton<Shader>::releaseRefSingleton();
 }
 
-void ShadowMapVisitor::execute(Node * _node, const unsigned &_eye)
-{
-	//eye = _eye;
+void ShadowMapVisitor::execute(Node *_pNode) {
 
-	Light *nodeLight = (Light*)_node->findChild(Chimera::EntityKind::LIGHT, 0, true);
-	//Camera *nodeCam = (Camera*)_node->findChild(Chimera::EntityKind::CAMERA, 0, true);
+	Light *nodeLight = (Light*)_pNode->findChild(Chimera::EntityKind::LIGHT, 0, false);
 
-
-	createLightViewPosition( nodeLight->getPosition() );
-
-	//HudOn = false;
-	//particleOn = false;
-	//runningShadow = true;
-
-	DFS(_node);
-
-	endSceneShadow();
-}
-
-void ShadowMapVisitor::DFS(Node* u)
-{
-	u->setColor(1);
-	u->accept(this);
-
-	std::vector<Node*>* children = u->getChilds();
-	if ((children != nullptr) && (children->size() >0)) {
-
-		for (size_t i = 0; i < children->size(); i++) {
-			Node* child = children->at(i);
-			if (child->getColor() == 0)
-				DFS(child);
-		}
-	}
-	u->setColor(0);
-}
-
-glm::mat4 ShadowMapVisitor::calcLightSpaceMatrices(const glm::vec3 &_posicaoLight ) {
-
-	GLfloat near_plane = 1.0f, far_plane = 7.5f;
-	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-	//lightProjection = glm::perspective(45.0f, (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // Note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene.
-	glm::mat4 lightView = glm::lookAt(_posicaoLight, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
-
-	return lightSpaceMatrix;
-}
-
-void ShadowMapVisitor::createLightViewPosition(const glm::vec3 &_posicaoLight) {
-
-	glm::mat4  lightSpaceMatrix = calcLightSpaceMatrices(_posicaoLight);
+	glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix( nodeLight->getPosition() );
 
 	simpleDepthShader->selectCurrent("simpleDepthShader");
 	simpleDepthShader->link();
 	simpleDepthShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
-	initSceneShadow();
+	shadowMap->initSceneShadow();
+
+	NodeParse::tree(_pNode,this);
+
+	shadowMap->endSceneShadow();
 }
 
-void ShadowMapVisitor::initSceneShadow() {
+// void ShadowMapVisitor::execute(Node * _node, const unsigned &_eye)
+// {
+// 	//eye = _eye;
+//
+// 	Light *nodeLight = (Light*)_node->findChild(Chimera::EntityKind::LIGHT, 0, true);
+// 	//Camera *nodeCam = (Camera*)_node->findChild(Chimera::EntityKind::CAMERA, 0, true);
+//
+//
+// 	createLightViewPosition( nodeLight->getPosition() );
+//
+// 	//HudOn = false;
+// 	//particleOn = false;
+// 	//runningShadow = true;
+//
+// 	DFS(_node);
+//
+// 	endSceneShadow();
+// }
 
-	glViewport(0, 0, pTexture->getWidth(), pTexture->getHeight() );
-	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
+// glm::mat4 ShadowMapVisitor::calcLightSpaceMatrices(const glm::vec3 &_posicaoLight ) {
+//
+// 	GLfloat near_plane = 1.0f, far_plane = 7.5f;
+// 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+// 	//lightProjection = glm::perspective(45.0f, (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // Note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene.
+// 	glm::mat4 lightView = glm::lookAt(_posicaoLight, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+// 	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+//
+// 	return lightSpaceMatrix;
+// }
 
-void ShadowMapVisitor::endSceneShadow() {
+// void ShadowMapVisitor::createLightViewPosition(const glm::vec3 &_posicaoLight) {
+//
+// 	glm::mat4  lightSpaceMatrix = calcLightSpaceMatrices(_posicaoLight);
+//
+// 	simpleDepthShader->selectCurrent("simpleDepthShader");//FIXME mudar para o construtor
+// 	simpleDepthShader->link();
+// 	simpleDepthShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+//
+// 	initSceneShadow();
+// }
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-}
+// void ShadowMapVisitor::initSceneShadow() {
+//
+// 	glViewport(0, 0, pTexture->getWidth(), pTexture->getHeight() );
+// 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+// 	glClear(GL_DEPTH_BUFFER_BIT);
+// 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+// }
+//
+// void ShadowMapVisitor::endSceneShadow() {
+//
+// 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//
+// }
 
 void ShadowMapVisitor::visit ( Camera* _pCamera ) {
 
@@ -123,7 +135,7 @@ void ShadowMapVisitor::visit ( Mesh* _pMesh ) {
 	//	}
 	//}
 
-    ////////_pMesh->render(projection, view, model);
+    //////_pMesh->render(projection, view, model);
 
 }
 
@@ -146,6 +158,20 @@ void ShadowMapVisitor::visit ( SceneRoot* _pSceneRoot ) {
 }
 
 void ShadowMapVisitor::visit ( Group* _pGroup ) {
+
+// 	Light *nodeLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
+//
+// 	glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix( nodeLight->getPosition() );
+//
+// 	simpleDepthShader->selectCurrent("simpleDepthShader");
+// 	simpleDepthShader->link();
+// 	simpleDepthShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+//
+// 	shadowMap->initSceneShadow();
+
+
+	//createLightViewPosition( nodeLight->getPosition() );
+
 /*
 	if (runningShadow == false) {
 
@@ -168,13 +194,13 @@ void ShadowMapVisitor::visit ( Group* _pGroup ) {
 void ShadowMapVisitor::visit ( Chimera::Transform* _pTransform) {
 
 	//TODO acumular esta matriz
-	//model = _pTransform->getModelMatrix(pCoord);
+	model = _pTransform->getModelMatrix(pCoord);
 }
 
 void ShadowMapVisitor::visit ( Solid* _pSolid ) {
 
 	//TODO acumular esta matriz
-    //model = _pSolid->getModelMatrix(pCoord);
+    model = _pSolid->getModelMatrix(pCoord);
 }
 
 void ShadowMapVisitor::visit ( HUD* _pHUD ) {

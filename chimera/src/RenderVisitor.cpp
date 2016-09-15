@@ -32,11 +32,6 @@ RenderVisitor::RenderVisitor() {
     model = glm::mat4(1.0f);
 	//lightSpaceMatrix = glm::mat4(1.0f);
 
-    //runningShadow = false;
-
-	//shadoMap = nullptr;
-	//shadoMap = new ShadowMap();
-
 	shader =  Singleton<Shader>::getRefSingleton();
 }
 
@@ -44,36 +39,6 @@ RenderVisitor::~RenderVisitor() {
 
 	Singleton<Shader>::releaseRefSingleton();
 }
-
-// void RenderVisitor::execute(Node * _node, const unsigned &_eye)
-// {
-// 	eye = _eye;
-//
-// 	Light *nodeLight = (Light*)_node->findChild(Chimera::EntityKind::LIGHT, 0, true);
-// 	Camera *nodeCam = (Camera*)_node->findChild(Chimera::EntityKind::CAMERA, 0, true);
-//
-// 	if (shadoMap != nullptr) {
-//
-//
-// 		shadoMap->createLightViewPosition( nodeLight->getPosition() );
-//
-// 		HudOn = false;
-// 		particleOn = false;
-// 		runningShadow = true;
-//
-// 		DFS(_node);
-//
-// 		shadoMap->endSceneShadow();
-// 	}
-//
-// 	HudOn = true;
-// 	particleOn = true;
-// 	runningShadow = false;
-//
-//
-// 	DFS(_node);
-//
-// }
 
 void RenderVisitor::visit ( Camera* _pCamera ) {
 
@@ -104,8 +69,6 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 // 			shader->setGlUniform1i("shadowMap", shadoMap->getTextureIndex());
 // 		}
 // 	}
-
-
     _pMesh->render(projection, view, model);
 
 }
@@ -155,6 +118,8 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 }
 
 void RenderVisitor::visit ( Group* _pGroup ) {
+
+	_pGroup->executeShadoMap(pCoord);
 
 	shader->selectCurrent(_pGroup->getShaderName());
 	shader->link();

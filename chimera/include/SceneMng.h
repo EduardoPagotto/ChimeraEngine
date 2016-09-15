@@ -7,14 +7,10 @@
 #include "Camera.h"
 #include "ParticleEmitter.h"
 
-#include "ShadowMap.h"
 #include "SceneRoot.h"
 #include "LoaderDae.h"
 
-#include "InitVisitor.h"
 #include "RenderVisitor.h"
-
-
 
 namespace Chimera
 {
@@ -56,19 +52,13 @@ public:
     }
 
 private:
-	void initNodes(Node* u, InitVisitor *pVisit);
-    void DFS(Node* u);
-
     LoaderDae *pLoader;
     SceneRoot *root;
     Camera *pCameraAtiva;
 	Coord *pOrigem;
     Video *pVideo;
-
-	//ShadowMap shadoMap;
     RenderVisitor rv;
 };
-
 } /* namespace Chimera */
 #endif /* GRADE_H_ */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

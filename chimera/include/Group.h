@@ -2,8 +2,8 @@
 #define __GROUP_H__
 
 #include "Node.h"
-
 #include "ShadowMapVisitor.h"
+#include "Coord.h"
 
 namespace Chimera {
 
@@ -23,11 +23,15 @@ public:
 		return shadeName;
 	}
 
+	void setShadowMap(ShadowMapVisitor *_shadoMapVisitor) {
+		this->shadoMapVisitor = _shadoMapVisitor;
+	}
+
+	bool executeShadoMap( Coord *_pCoord );
+
 private:
 	std::string shadeName;
-
 	ShadowMapVisitor *shadoMapVisitor;
-
 };
 }
 #endif

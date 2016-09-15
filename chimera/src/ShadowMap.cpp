@@ -4,26 +4,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// These store our width and height for the shadow texture.  The higher the
-// texture size the better quality shadow.  Must be power of two for most video cards.
-# define SHADOW_WIDTH 512
-# define SHADOW_HEIGHT 512
-
 namespace Chimera {
 
-ShadowMap::ShadowMap() {
+ShadowMap::ShadowMap(std::string _name, const unsigned &_width, const unsigned &_height) {
 
-   	pTexture = new Texture("Shadow-Map-Tex_" +  std::to_string(Entity::getNextSerialMaster() + 1) ,"FRAME_BUFFER", 1); //FIXME mudar o shadowmap para um count maior
-   	depthMapFBO = pTexture->createTextureFrameBuffer(SHADOW_WIDTH, SHADOW_HEIGHT);
-
-	simpleDepthShader = Singleton<Shader>::getRefSingleton();
+   	pTexture = new Texture("Shadow-Map-Tex_" + _name + std::string("_") + std::to_string(Entity::getNextSerialMaster() + 1) ,"FRAME_BUFFER", 1); //FIXME mudar o shadowmap para um count maior
+   	depthMapFBO = pTexture->createTextureFrameBuffer(_width, _height);
 }
 
 ShadowMap::~ShadowMap() {
-	Singleton<Shader>::releaseRefSingleton();
+
+	delete pTexture;
+	pTexture = nullptr;
 }
 
-glm::mat4 ShadowMap::calcLightSpaceMatrices(const glm::vec3 &_posicaoLight ) {
+glm::mat4 ShadowMap::createLightSpaceMatrix(const glm::vec3 &_posicaoLight) {
 
 	GLfloat near_plane = 1.0f, far_plane = 7.5f;
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
@@ -34,20 +29,9 @@ glm::mat4 ShadowMap::calcLightSpaceMatrices(const glm::vec3 &_posicaoLight ) {
 	return lightSpaceMatrix;
 }
 
-void ShadowMap::createLightViewPosition(const glm::vec3 &_posicaoLight) {
-
-	glm::mat4  lightSpaceMatrix = calcLightSpaceMatrices(_posicaoLight);
-
-	simpleDepthShader->selectCurrent("simpleDepthShader");
-	simpleDepthShader->link();
-	simpleDepthShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-
-	initSceneShadow();
-}
-
 void ShadowMap::initSceneShadow() {
 
-	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	glViewport(0, 0, pTexture->getWidth(), pTexture->getHeight() );
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

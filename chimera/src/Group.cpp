@@ -1,9 +1,10 @@
 #include "Group.h"
-#include "NodeVisitor.h"
+
 
 namespace Chimera {
 
 Group::Group(Node* _parent, std::string _name) : Node (_parent, EntityKind::GROUP, _name) {
+	shadoMapVisitor = nullptr;
 }
 
 Group::~Group() {
@@ -15,6 +16,19 @@ void Group::accept(NodeVisitor* v){
 
 void Group::init() {
 }
+
+bool Group::executeShadoMap( Coord *_pCoord ) {
+
+	if (shadoMapVisitor != nullptr) {
+		shadoMapVisitor->pCoord = _pCoord;
+		shadoMapVisitor->execute(this);
+		return true;
+	}
+
+	return false;
+}
+
+
 }
 
 

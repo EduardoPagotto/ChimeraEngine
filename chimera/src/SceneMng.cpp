@@ -1,4 +1,6 @@
 #include "SceneMng.h"
+#include "NodeParse.h"
+#include "InitVisitor.h"
 
 namespace Chimera {
 
@@ -34,44 +36,8 @@ Group *SceneMng::createSceneGraph() {
 void SceneMng::init() {
 
     InitVisitor *iv = new InitVisitor();
-    initNodes(root, iv);
+    NodeParse::tree(root,iv); //dfs(root, iv);
 }
-
-void SceneMng::initNodes(Node* u, InitVisitor *pVisit)
-{
-    u->setColor(1);
-    u->accept(pVisit);
-
-    std::vector<Node*>* children = u->getChilds();
-    if ((children != nullptr)&&(children->size() > 0)) {
-
-        for (size_t i = 0; i < children->size(); i++) {
-
-            Node* child = children->at(i);
-            if(child->getColor() == 0)
-				initNodes(child, pVisit);
-        }
-    }
-    u->setColor(0);
-}
-
-void SceneMng::DFS(Node* u)
-{
-	u->setColor(1);
-	u->accept(&rv);
-
-	std::vector<Node*>* children = u->getChilds();
-	if ((children != nullptr) && (children->size() >0)) {
-
-		for (size_t i = 0; i < children->size(); i++) {
-			Node* child = children->at(i);
-			if (child->getColor() == 0)
-				DFS(child);
-		}
-	}
-	u->setColor(0);
-}
-
 
 void SceneMng::draw () {
 
@@ -85,7 +51,7 @@ void SceneMng::draw () {
 
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
         rv.eye = eye;
-		DFS(root);
+		NodeParse::tree(root, &rv); //dfs(root, &rv);//DFS(root);
     }
 }
 } /* namespace Chimera */

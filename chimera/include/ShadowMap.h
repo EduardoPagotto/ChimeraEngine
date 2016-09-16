@@ -26,7 +26,6 @@ public:
 	glm::mat4 lightSpaceMatrix;
 
 private:
-	GLuint depthMapFBO;
     Texture *pTexture;
 };
 

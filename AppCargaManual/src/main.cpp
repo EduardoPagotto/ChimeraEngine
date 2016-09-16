@@ -20,6 +20,7 @@
 #include "HUD.h"
 #include "Shader.h"
 #include "Singleton.h"
+#include "ExceptionChimera.h"
 
 int testeCargaArquivo() {
 

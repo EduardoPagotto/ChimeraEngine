@@ -8,8 +8,8 @@ namespace Chimera {
 
 ShadowMap::ShadowMap(std::string _name, const unsigned &_width, const unsigned &_height) {
 
-   	pTexture = new Texture("Shadow-Map-Tex_" + _name + std::string("_") + std::to_string(Entity::getNextSerialMaster() + 1) ,"FRAME_BUFFER", 1); //FIXME mudar o shadowmap para um count maior
-   	depthMapFBO = pTexture->createTextureFrameBuffer(_width, _height);
+	pTexture = new Texture("Shadow-Map-Tex_" + _name, _width, _height);
+
 }
 
 ShadowMap::~ShadowMap() {
@@ -32,7 +32,7 @@ glm::mat4 ShadowMap::createLightSpaceMatrix(const glm::vec3 &_posicaoLight) {
 void ShadowMap::initSceneShadow() {
 
 	glViewport(0, 0, pTexture->getWidth(), pTexture->getHeight() );
-	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, pTexture->getFrameBufferId());
 	glClear(GL_DEPTH_BUFFER_BIT);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

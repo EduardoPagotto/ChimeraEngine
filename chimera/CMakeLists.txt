@@ -73,6 +73,7 @@ set (SourcesChimeraAPI
 	src/MeshUtil.cpp
 	src/ShadowMapVisitor.cpp
 	src/NodeParse.cpp
+	src/TextureManager.cpp
 )
 
 if (OVR_SET_TO_USE)

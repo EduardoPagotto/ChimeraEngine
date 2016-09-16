@@ -45,7 +45,7 @@ void ShadowMap::endSceneShadow() {
 
 void ShadowMap::applyShadow() {
 
-	pTexture->apply();
+	pTexture->apply(1);
 
 }
 

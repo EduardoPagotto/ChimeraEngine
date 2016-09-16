@@ -32,6 +32,8 @@ RenderVisitor::RenderVisitor() {
     model = glm::mat4(1.0f);
 	//lightSpaceMatrix = glm::mat4(1.0f);
 
+	shadowOn = nullptr;
+
 	shader =  Singleton<Shader>::getRefSingleton();
 }
 
@@ -62,6 +64,11 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 
 	//if (runningShadow == false)
 	_pMesh->getMaterial()->apply();
+
+	if (shadowOn != nullptr) {
+		shadowOn->applyShadow();
+		shader->setGlUniform1i("shadowMap", shadowOn->getTextureIndex());
+	}
 
 // 	if (shadoMap != nullptr) {
 // 		if (runningShadow == false) {
@@ -119,13 +126,16 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 
 void RenderVisitor::visit ( Group* _pGroup ) {
 
-	ShadowMap *shadowOn = _pGroup->executeShadoMap(pCoord);
-	if (shadowOn != nullptr) {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-
+	shadowOn = _pGroup->executeShadoMap(pCoord);
 	shader->selectCurrent(_pGroup->getShaderName());
 	shader->link();
+
+	if (shadowOn != nullptr) {
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(shadowOn->lightSpaceMatrix));
+
+	}
 
 	Camera *pCam = (Camera*)_pGroup->findChild(Chimera::EntityKind::CAMERA, 0, false);
 	if (pCam != nullptr) {
@@ -143,13 +153,6 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 		shader->setGlUniform4fv("light.specular", 1, pLight->getSpecular().ptr());
 
 	}
-
-	if (shadowOn != nullptr) {
-
-		shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(shadowOn->lightSpaceMatrix));
-		shadowOn->applyShadow();
-	}
-
 }
 
 void RenderVisitor::visit ( Chimera::Transform* _pTransform) {

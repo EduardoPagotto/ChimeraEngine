@@ -9,13 +9,13 @@ namespace Chimera {
 class Texture : public Entity
 {
 public:
-    Texture ( const std::string &_name, const std::string &_pathFile, const unsigned &_count );
+    Texture ( const std::string &_name, const std::string &_pathFile );
 	Texture ( const std::string &_name, const unsigned &_width, const unsigned &_height);
     Texture ( const Texture &_texture );
 
     virtual ~Texture();
 
-	void apply();
+	void apply(const unsigned int &_active);
 
     void init();
 
@@ -26,12 +26,6 @@ public:
 	int getIdTexture() {
 		return idTexture;
 	}
-
-	unsigned getCount() const {
-		return count;
-	}
-
-	//void createTextureFrameBuffer(const int & _width, const int & _height);
 
 	unsigned getWidth() const {
 		return width;
@@ -62,8 +56,6 @@ private:
 	GLuint depthMapFBO;
 
 	unsigned int refCount;
-
-	unsigned count;
 
     std::string pathFile;
 

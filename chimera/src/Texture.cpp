@@ -9,9 +9,8 @@
 
 namespace Chimera {
 
-Texture::Texture ( const std::string &_name, const std::string &_pathFile, const unsigned &_count ) : Entity ( EntityKind::TEXTURE, _name ) {
+Texture::Texture ( const std::string &_name, const std::string &_pathFile) : Entity ( EntityKind::TEXTURE, _name ) {
 
-	count = _count;
     texturaCarregada = false;
     pathFile = _pathFile;
 	idTexture = 0;
@@ -60,9 +59,9 @@ Texture::~Texture() {
     glDeleteTextures ( 1, ( GLuint* ) &idTexture);
 }
 
-void Texture::apply() {
+void Texture::apply(const unsigned int &_active) {
 
-	glActiveTexture(GL_TEXTURE0 + count );
+    glActiveTexture(GL_TEXTURE0 + _active );
 	glBindTexture(GL_TEXTURE_2D, idTexture);
 
 }

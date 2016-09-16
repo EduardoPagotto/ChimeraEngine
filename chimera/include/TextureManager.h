@@ -26,7 +26,13 @@ public:
 	unsigned int refCount(const unsigned int &_serial);
 	unsigned int getIdByName(const std::string &_name);
 
+	void bind(const unsigned int &_serial, unsigned int &_indice);
+	void unBind();
+
 private:
+
+	int totalBind;
+
 	unsigned int addAvaible(Texture *_pTex);
 	std::map<unsigned int, Texture*> mapTex;
 };

@@ -2,21 +2,21 @@
 #include "ChimeraUtils.h"
 
 namespace Chimera {
-    
+
 Material::Material ( std::string _name ) : Entity ( EntityKind::MATERIAL, _name ) {
-    
+
     shine = 50.0f;
     diffuse = Color::BLACK;
     ambient = Color::BLACK;
     specular = Color::BLACK;
     emission = Color::BLACK;
-    
+
     map_modes[ModeMaterial::AMBIENT]=false;
     map_modes[ModeMaterial::DIFFUSE]=false;
     map_modes[ModeMaterial::EMISSION]=false;
     map_modes[ModeMaterial::SPECULAR]=false;
     map_modes[ModeMaterial::SHININESS]=false;
-    
+
 	setFace(FaceMaterial::FRONT);
 
 	texturePresent = false;
@@ -87,7 +87,7 @@ void Material::setShine(const float &_val) {
 Color Material::getAmbient() const{
     return this->ambient;
 }
-    
+
 Color Material::getSpecular() const {
     return this->specular;
 }
@@ -103,7 +103,7 @@ Color Material::getEmission() const {
 float Material::getShine() const {
     return this->shine;
 }
-      
+
 bool Material::isSet(const ModeMaterial &_val) {
     return map_modes[_val];
 }
@@ -127,41 +127,43 @@ void Material::apply() {
 
 		ModeMaterial k = iter->first;
 		float *p = (k != ModeMaterial::SHININESS) ? (float*)((Color*)iter->second)->ptr() : (float*)iter->second;
-        
-        if (k == AMBIENT)                
+
+        if (k == AMBIENT)
             shader->setGlUniform4fv("material.ambient", 1, p);
-        else if (k == DIFFUSE)                 
+        else if (k == DIFFUSE)
 			shader->setGlUniform4fv("material.diffuse", 1, p);
-        else if (k == SPECULAR)                 
+        else if (k == SPECULAR)
 			shader->setGlUniform4fv("material.specular", 1, p);
-        else if (k == SHININESS)         
+        else if (k == SHININESS)
 			shader->setGlUniform1fv("material.shininess", 1, p);
         else {
             //TODO erro
         }
 	}
 
-	if (hasTexture() == false) 
+	if (hasTexture() == false)
 		shader->setGlUniform1i("tipo", 0);
 	else if ((pTexDiffuse != nullptr) && (pTexSpecular == nullptr) && (pTexEmissive == nullptr))
 		shader->setGlUniform1i("tipo", 1);
 	else if ((pTexDiffuse != nullptr) && (pTexSpecular != nullptr) && (pTexEmissive == nullptr))
 		shader->setGlUniform1i("tipo", 2);
-	else 
+	else
 		shader->setGlUniform1i("tipo", 3);
-	
+
 	if (texturePresent == true) {
 
 		glEnable(GL_TEXTURE_2D);
 
-		if (pTexDiffuse != nullptr)
-			pTexDiffuse->apply();
+		if (pTexDiffuse != nullptr) {
+			pTexDiffuse->apply(0);
+            shader->setGlUniform1i("material.tDiffuse", 0);
+        }
 
 		if (pTexSpecular != nullptr)
-			pTexSpecular->apply();
+			pTexSpecular->apply(1);
 
 		if (pTexEmissive != nullptr)
-			pTexEmissive->apply();
+			pTexEmissive->apply(2);
 	}
 	else {
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -169,16 +171,16 @@ void Material::apply() {
 }
 
 void Material::loadCollada(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode) {
-    
+
     tinyxml2::XMLElement* l_nInstanceEffect = _nNode->FirstChildElement ( "instance_effect" );
     if (l_nInstanceEffect != nullptr) {
-     
+
         tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
         const char* l_pUrlEffect = l_nInstanceEffect->Attribute ( "url" );
         loadNodeLib ( root, ( const char* ) &l_pUrlEffect[1], "library_effects", "effect", &l_nNodeSourceData );
-        
+
         if (l_nNodeSourceData != nullptr) {
-            loadColladaProfile(l_nNodeSourceData); 
+            loadColladaProfile(l_nNodeSourceData);
         }
     }
 }

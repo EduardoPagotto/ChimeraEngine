@@ -19,8 +19,8 @@ public:
 	void endSceneShadow();
 	void applyShadow();
 
-	unsigned getTextureIndex() {
-		return pTexture->getCount();
+	int getTextureIndex() {
+		return 1;
 	}
 
 	glm::mat4 lightSpaceMatrix;

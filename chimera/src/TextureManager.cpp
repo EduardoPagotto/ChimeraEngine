@@ -14,7 +14,7 @@ TextureManager::~TextureManager() {
 unsigned int TextureManager::fromFile(std::string _name, std::string _pathFile) {
 
 	//TODO: colocar uma verificacao se o nome nao existe
-	Texture *tex = new Texture(_name, _pathFile,0);
+	Texture *tex = new Texture(_name, _pathFile);
 	return addAvaible(tex);
 
 }
@@ -96,6 +96,19 @@ void TextureManager::destroyAll() {
 
 		it = mapTex.begin();
 	}
+}
+
+void TextureManager::bind(const unsigned int &_serial, unsigned int &_indice) {
+
+	Texture *pTex = mapTex[ _serial ];
+	pTex->apply(_indice);
 
 }
+
+void TextureManager::unBind() {
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+}
+
 }

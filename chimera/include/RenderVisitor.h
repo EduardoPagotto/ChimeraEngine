@@ -6,6 +6,8 @@
 #include "Shader.h"
 #include "Coord.h"
 
+#include "ShadowMap.h"
+
 namespace Chimera {
 
 class RenderVisitor : public NodeVisitor {
@@ -35,6 +37,8 @@ private:
     glm::mat4 model;
 
 	Shader *shader;
+
+	ShadowMap *shadowOn;
 };
 }
 

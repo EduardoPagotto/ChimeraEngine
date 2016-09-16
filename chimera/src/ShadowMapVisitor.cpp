@@ -20,8 +20,8 @@
 
 namespace Chimera {
 
-ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned &_width, const unsigned &_height) : NodeVisitor() {
-
+ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned int & _width, const unsigned int & _height)
+{
 	shadowMap = new ShadowMap(_name, _width, _height);
 	simpleDepthShader = Singleton<Shader>::getRefSingleton();
 }
@@ -34,7 +34,7 @@ ShadowMapVisitor::~ShadowMapVisitor() {
 	Singleton<Shader>::releaseRefSingleton();
 }
 
-void ShadowMapVisitor::execute(Node *_pNode) {
+ShadowMap* ShadowMapVisitor::execute(Node *_pNode) {
 
 	Light *nodeLight = (Light*)_pNode->findChild(Chimera::EntityKind::LIGHT, 0, false);
 
@@ -49,6 +49,8 @@ void ShadowMapVisitor::execute(Node *_pNode) {
 	NodeParse::tree(_pNode,this);
 
 	shadowMap->endSceneShadow();
+
+	return shadowMap;
 }
 
 // void ShadowMapVisitor::execute(Node * _node, const unsigned &_eye)
@@ -116,26 +118,8 @@ void ShadowMapVisitor::visit ( Camera* _pCamera ) {
 
 void ShadowMapVisitor::visit ( Mesh* _pMesh ) {
 
-	//int shadows = 1;
-	//shader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
-
-	// Get the variables from the shader to which data will be passed
-	//shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-	//shader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-	//shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
-	//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
-
-	//if (runningShadow == false)
-	//	_pMesh->getMaterial()->apply();
-
-	//if (shadoMap != nullptr) {
-	//	if (runningShadow == false) {
-	//		shadoMap->applyShadow();
-	//		shader->setGlUniform1i("shadowMap", shadoMap->getTextureIndex());
-	//	}
-	//}
-
-    //////_pMesh->render(projection, view, model);
+	simpleDepthShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    _pMesh->render(glm::mat4(1.0f), glm::mat4(1.0f), model); //FIXME: remover estas matrizes
 
 }
 

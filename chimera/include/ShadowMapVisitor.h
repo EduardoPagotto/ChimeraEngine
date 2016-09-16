@@ -18,7 +18,7 @@ public:
     ShadowMapVisitor ( const std::string _name, const unsigned int& _width, const unsigned int& _height );
     virtual ~ShadowMapVisitor();
 
-	void execute(Node *_pNode);
+	ShadowMap* execute(Node *_pNode);
 
     virtual void visit(class Camera* _pCamera) override;
     virtual void visit(class Mesh* _pMesh) override;

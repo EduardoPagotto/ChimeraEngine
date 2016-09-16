@@ -113,11 +113,13 @@
     <ClInclude Include="..\..\chimera\include\MeshUtil.h" />
     <ClInclude Include="..\..\chimera\include\Mutex.h" />
     <ClInclude Include="..\..\chimera\include\Node.h" />
+    <ClInclude Include="..\..\chimera\include\NodeParse.h" />
     <ClInclude Include="..\..\chimera\include\NodeVisitor.h" />
     <ClInclude Include="..\..\chimera\include\OpenGLDefs.h" />
     <ClInclude Include="..\..\chimera\include\Particle.h" />
     <ClInclude Include="..\..\chimera\include\ParticleEmitter.h" />
     <ClInclude Include="..\..\chimera\include\RenderVisitor.h" />
+    <ClInclude Include="..\..\chimera\include\ShadowMapVisitor.h" />
     <ClInclude Include="..\..\chimera\include\Solid.h" />
     <ClInclude Include="..\..\chimera\include\PhysicsControl.h" />
     <ClInclude Include="..\..\chimera\include\SceneMng.h" />
@@ -157,9 +159,11 @@
     <ClCompile Include="..\..\chimera\src\Material.cpp" />
     <ClCompile Include="..\..\chimera\src\MeshUtil.cpp" />
     <ClCompile Include="..\..\chimera\src\Node.cpp" />
+    <ClCompile Include="..\..\chimera\src\NodeParse.cpp" />
     <ClCompile Include="..\..\chimera\src\Particle.cpp" />
     <ClCompile Include="..\..\chimera\src\ParticleEmitter.cpp" />
     <ClCompile Include="..\..\chimera\src\RenderVisitor.cpp" />
+    <ClCompile Include="..\..\chimera\src\ShadowMapVisitor.cpp" />
     <ClCompile Include="..\..\chimera\src\Solid.cpp" />
     <ClCompile Include="..\..\chimera\src\PhysicsControl.cpp" />
     <ClCompile Include="..\..\chimera\src\SceneMng.cpp" />

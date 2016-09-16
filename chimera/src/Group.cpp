@@ -17,15 +17,14 @@ void Group::accept(NodeVisitor* v){
 void Group::init() {
 }
 
-bool Group::executeShadoMap( Coord *_pCoord ) {
+ShadowMap* Group::executeShadoMap( Coord *_pCoord ) {
 
 	if (shadoMapVisitor != nullptr) {
 		shadoMapVisitor->pCoord = _pCoord;
-		shadoMapVisitor->execute(this);
-		return true;
+		return shadoMapVisitor->execute(this);
 	}
 
-	return false;
+	return nullptr;
 }
 
 

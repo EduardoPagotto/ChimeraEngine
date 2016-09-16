@@ -5,15 +5,10 @@
 #include "Texture.h"
 #include "Node.h"
 
-//#include "Shader.h"
-
-
 namespace Chimera
 {
 
-class ShadowMap
-{
-
+class ShadowMap {
 public:
     ShadowMap(std::string _name, const unsigned &_width, const unsigned &_height);
     virtual ~ShadowMap();
@@ -22,12 +17,13 @@ public:
 
 	void initSceneShadow();
 	void endSceneShadow();
-
 	void applyShadow();
 
 	unsigned getTextureIndex() {
 		return pTexture->getCount();
 	}
+
+	glm::mat4 lightSpaceMatrix;
 
 private:
 	GLuint depthMapFBO;

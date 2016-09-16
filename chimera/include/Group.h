@@ -27,7 +27,7 @@ public:
 		this->shadoMapVisitor = _shadoMapVisitor;
 	}
 
-	bool executeShadoMap( Coord *_pCoord );
+	ShadowMap* executeShadoMap( Coord *_pCoord );
 
 private:
 	std::string shadeName;

@@ -61,7 +61,7 @@ int testeCargaArquivo() {
         sceneMng->setReader(pLoader);
         Chimera::Group* group1 = sceneMng->createSceneGraph();
 		group1->setShaderName("mesh-default");
-		//group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",512,512));
+		group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",512,512));
 
 		//Novo Emissor GLSL
 		Chimera::Group *gParticle = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "ParticleGroup" );

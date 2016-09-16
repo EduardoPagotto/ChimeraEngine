@@ -42,16 +42,16 @@ RenderVisitor::~RenderVisitor() {
 
 void RenderVisitor::visit ( Camera* _pCamera ) {
 
-	shader->setGlUniform3fv("viewPos", 1, glm::value_ptr( _pCamera->getPosition() ));
+	//shader->setGlUniform3fv("viewPos", 1, glm::value_ptr( _pCamera->getPosition() ));
 
-	projection = pVideo->getPerspectiveProjectionMatrix(_pCamera->getFov(), _pCamera->getNear(), _pCamera->getFar(), eye);
-	view = _pCamera->getViewMatrix();
+	//projection = pVideo->getPerspectiveProjectionMatrix(_pCamera->getFov(), _pCamera->getNear(), _pCamera->getFar(), eye);
+	//view = _pCamera->getViewMatrix();
 
 }
 
 void RenderVisitor::visit ( Mesh* _pMesh ) {
 
-	int shadows = 0;
+	int shadows = 1;
 	shader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
 
 	// Get the variables from the shader to which data will be passed
@@ -75,10 +75,10 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 
 void RenderVisitor::visit ( Light* _pLight ) {
 
-	shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
-	shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
-	shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
-	shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
+	//shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
+	//shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
+	//shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
+	//shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
 }
 
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
@@ -119,10 +119,36 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 
 void RenderVisitor::visit ( Group* _pGroup ) {
 
-	_pGroup->executeShadoMap(pCoord);
+	ShadowMap *shadowOn = _pGroup->executeShadoMap(pCoord);
+	if (shadowOn != nullptr) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
 
 	shader->selectCurrent(_pGroup->getShaderName());
 	shader->link();
+
+	Camera *pCam = (Camera*)_pGroup->findChild(Chimera::EntityKind::CAMERA, 0, false);
+	if (pCam != nullptr) {
+		shader->setGlUniform3fv("viewPos", 1, glm::value_ptr(pCam->getPosition()));
+		projection = pVideo->getPerspectiveProjectionMatrix(pCam->getFov(), pCam->getNear(), pCam->getFar(), eye);
+		view = pCam->getViewMatrix();
+	}
+
+	Light *pLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
+	if (pLight != nullptr) {
+
+		shader->setGlUniform3fv("light.position", 1, glm::value_ptr(pLight->getPosition()));
+		shader->setGlUniform4fv("light.ambient", 1, pLight->getAmbient().ptr());
+		shader->setGlUniform4fv("light.diffuse", 1, pLight->getDiffuse().ptr());
+		shader->setGlUniform4fv("light.specular", 1, pLight->getSpecular().ptr());
+
+	}
+
+	if (shadowOn != nullptr) {
+
+		shader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(shadowOn->lightSpaceMatrix));
+		shadowOn->applyShadow();
+	}
 
 }
 

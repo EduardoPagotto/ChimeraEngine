@@ -1,3 +1,4 @@
+//#version 330 core
 #version 300 es
 precision mediump float;
 
@@ -60,6 +61,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     // PCF
     float shadow = 0.0;
     vec2 texelSize = 1.0 / vec2(textureSize(shadowMap, 0));
+	//vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
     for(int x = -1; x <= 1; ++x)
     {
         for(int y = -1; y <= 1; ++y)

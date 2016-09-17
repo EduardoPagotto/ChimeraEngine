@@ -124,6 +124,9 @@
     <ClCompile Include="..\..\chimera\src\ShadowMapVisitor.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\chimera\src\TextureManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chimera\include\Camera.h">
@@ -280,6 +283,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\ShadowMapVisitor.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\chimera\include\TextureManager.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

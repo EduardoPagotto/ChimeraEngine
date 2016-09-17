@@ -13,6 +13,8 @@ public:
     ShadowMap(std::string _name, const unsigned &_width, const unsigned &_height);
     virtual ~ShadowMap();
 
+	void init();
+
 	glm::mat4 createLightSpaceMatrix(const glm::vec3 & _posicaoLight);
 
 	void initSceneShadow();

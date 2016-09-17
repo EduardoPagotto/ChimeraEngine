@@ -15,6 +15,11 @@ void Group::accept(NodeVisitor* v){
 }
 
 void Group::init() {
+
+	if (shadoMapVisitor != nullptr) {
+		shadoMapVisitor->init();
+	}
+
 }
 
 ShadowMap* Group::executeShadoMap( Coord *_pCoord ) {

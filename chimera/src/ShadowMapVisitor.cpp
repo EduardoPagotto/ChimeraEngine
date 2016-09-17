@@ -53,6 +53,11 @@ ShadowMap* ShadowMapVisitor::execute(Node *_pNode) {
 	return shadowMap;
 }
 
+void ShadowMapVisitor::init()
+{
+	shadowMap->init();
+}
+
 // void ShadowMapVisitor::execute(Node * _node, const unsigned &_eye)
 // {
 // 	//eye = _eye;

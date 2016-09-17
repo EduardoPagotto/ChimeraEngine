@@ -20,6 +20,8 @@ public:
 
 	ShadowMap* execute(Node *_pNode);
 
+	void init();
+
     virtual void visit(class Camera* _pCamera) override;
     virtual void visit(class Mesh* _pMesh) override;
     virtual void visit(class Light *_pLight) override;

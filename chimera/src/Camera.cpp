@@ -42,7 +42,7 @@ void Camera::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_
     //transform = matRot * matTrans; //primeiro translada depois rotaciona, ordem é importante!!! 
 	position = _posicao;
 	direction = _rotation;
-	rotation = glm::vec3(0.0, 0.0, 1.0);  //FIXME pegar no arquivo do collada
+	rotation = glm::vec3(0.0, 0.0, -1.0);  //FIXME pegar no arquivo do collada
 }
 
 glm::mat4 Camera::getViewMatrix( void ) {

@@ -30,7 +30,6 @@ RenderVisitor::RenderVisitor() {
 	projection = glm::mat4(1.0f);
 	view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
-	//lightSpaceMatrix = glm::mat4(1.0f);
 
 	shadowOn = nullptr;
 
@@ -43,11 +42,6 @@ RenderVisitor::~RenderVisitor() {
 }
 
 void RenderVisitor::visit ( Camera* _pCamera ) {
-
-	//shader->setGlUniform3fv("viewPos", 1, glm::value_ptr( _pCamera->getPosition() ));
-
-	//projection = pVideo->getPerspectiveProjectionMatrix(_pCamera->getFov(), _pCamera->getNear(), _pCamera->getFar(), eye);
-	//view = _pCamera->getViewMatrix();
 
 }
 
@@ -62,7 +56,6 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 	shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 	//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
 
-	//if (runningShadow == false)
 	_pMesh->getMaterial()->apply();
 
 	if (shadowOn != nullptr) {
@@ -70,22 +63,12 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 		shader->setGlUniform1i("shadowMap", shadowOn->getTextureIndex());
 	}
 
-// 	if (shadoMap != nullptr) {
-// 		if (runningShadow == false) {
-// 			shadoMap->applyShadow();
-// 			shader->setGlUniform1i("shadowMap", shadoMap->getTextureIndex());
-// 		}
-// 	}
-    _pMesh->render(projection, view, model);
+    _pMesh->render();
 
 }
 
 void RenderVisitor::visit ( Light* _pLight ) {
 
-	//shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
-	//shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
-	//shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
-	//shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
 }
 
 void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
@@ -113,7 +96,7 @@ void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 		shader->setGlUniform1i("myTextureSampler", 0);
 
 		_pParticleEmitter->CameraPosition = CameraPosition;
-		_pParticleEmitter->render(projection, view, model);
+		_pParticleEmitter->render();
 	}
 
 }
@@ -127,6 +110,7 @@ void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
 void RenderVisitor::visit ( Group* _pGroup ) {
 
 	shadowOn = _pGroup->executeShadoMap(pCoord);
+
 	shader->selectCurrent(_pGroup->getShaderName());
 	shader->link();
 
@@ -173,8 +157,7 @@ void RenderVisitor::visit ( HUD* _pHUD ) {
 		if (_pHUD->isOn() == true) {
 
 			shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr( pVideo->getOrthoProjectionMatrix(eye) ));
-			_pHUD->render(projection, view, model);
-			//pVideo->restoreMatrix();
+			_pHUD->render();
 		}
 	}
 }

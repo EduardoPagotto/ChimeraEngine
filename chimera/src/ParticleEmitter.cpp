@@ -115,27 +115,13 @@ int ParticleEmitter::recycleParticleLife(const glm::vec3 &_camPosition) {
 	return ParticlesCount;
 }
 
-void ParticleEmitter::render(const glm::mat4 &_projection, const glm::mat4 &_view, const glm::mat4 &_model)
+void ParticleEmitter::render()
 {
-	//// Get the variables from the shader to which data will be passed
-	//shader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(_projection));
-	//shader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(_view));
-	////shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
-
-	//shader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(_model));
-
 	//// We will need the camera's position in order to sort the particles
 	//// w.r.t the camera's distance.
 	//// There should be a getCameraPosition() function in common/controls.cpp,
 	//// but this works too.
 	//glm::vec3 CameraPosition(glm::inverse(_view)[3]);
-	//
-	//// Vertex shader
-	//shader->setGlUniform3f("CameraRight_worldspace", _view[0][0], _view[1][0], _view[2][0]);
-	//shader->setGlUniform3f("CameraUp_worldspace", _view[0][1], _view[1][1], _view[2][1]);
-	//
-	//// fragment shader
-	//shader->setGlUniform1i("myTextureSampler", 0);
 
 	int ParticlesCount = recycleParticleLife(CameraPosition);
 
@@ -143,7 +129,6 @@ void ParticleEmitter::render(const glm::mat4 &_projection, const glm::mat4 &_vie
 	// There are much more sophisticated means to stream data from the CPU to the GPU,
 	// but this is outside the scope of this tutorial.
 	// http://www.opengl.org/wiki/Buffer_Object_Streaming
-
     glBindVertexArray(VertexArrayID);//coloquei aqui porque acho que tenho que ligar antes
 
 	glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);

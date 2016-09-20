@@ -16,6 +16,14 @@ namespace Chimera {
 #define SHADE_SPECULA "material.tSpecular"
 #define SHADE_EMISSIVE "material.tEmissive"
 
+#define SHADE_MAT_AMBIENTE "material.ambient"
+#define SHADE_MAT_DIFFUSE "material.diffuse"
+#define SHADE_MAT_SPECULA "material.specular"
+#define SHADE_MAT_EMISSIVE "material.emissive"
+#define SHADE_MAT_SHININESS "material.shininess"
+
+#define SHADE_SELETOR_TIPO_TEXTURAS "tipo"
+
 class Material : public Entity
 {
 public:
@@ -35,13 +43,9 @@ public:
     Color getDiffuse() const;
     Color getEmission() const;
     float getShine() const;
-	bool isSet(const ModeMaterial &_val);
-	void setFace(const FaceMaterial &_val);
 
     void apply();
-
     void createDefaultEffect();
-
     void loadCollada ( tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode );
 
 	void setTexDiffuse(Texture *_pTex) {
@@ -66,7 +70,6 @@ public:
 
 private:
     void loadColladaProfile(tinyxml2::XMLElement* _nNode);
-
     bool getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode );
 
     Color diffuse;        /* Diffuse color RGBA */
@@ -77,17 +80,12 @@ private:
 
     int tipoTexturasDisponiveis;
 
-    FaceMaterial faceMaterial;
-
-    std::map<ModeMaterial, bool> map_modes;
-	std::map<ModeMaterial, void*> map_params;
-
+    std::map<std::string, void*> mapMatVal;
     std::map<std::string, Texture*> mapTex;
 
     TextureManager *texManager;
 	Shader *shader;
 };
 }
-
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

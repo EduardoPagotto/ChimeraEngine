@@ -8,7 +8,9 @@ namespace Chimera {
 
 enum class TEX_SEQ {
 	DIFFUSE = 0,
-	SHADOWMAP = 1
+	SHADOWMAP = 1,
+	SPECULAR = 2,
+	EMISSIVE = 3
 };
 
 class Texture : public Entity

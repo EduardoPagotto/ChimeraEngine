@@ -19,29 +19,56 @@ Material::Material ( std::string _name ) : Entity ( EntityKind::MATERIAL, _name 
 
 	setFace(FaceMaterial::FRONT);
 
-	texturePresent = false;
-	pTexDiffuse = nullptr;
-	pTexSpecular = nullptr;
-	pTexEmissive = nullptr;
+    tipoTexturasDisponiveis = -1;
 
+    texManager = Singleton<TextureManager>::getRefSingleton();
 	shader = Singleton<Shader>::getRefSingleton();
 }
 
 Material::~Material() {
 
+    Singleton<TextureManager>::releaseRefSingleton();
 	Singleton<Shader>::releaseRefSingleton();
 }
 
 void Material::init() {
 
-	if (pTexDiffuse != nullptr)
-		pTexDiffuse->init();
+    bool hasDifuse = false;
+    bool hasEspecular = false;
+    bool hasEmissive = false;
 
-	if (pTexSpecular != nullptr)
-		pTexSpecular->init();
+    for( std::map<std::string, Texture*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
 
-	if (pTexEmissive != nullptr)
-		pTexEmissive->init();
+        Texture *pTex = iTex->second;
+
+        switch (pTex->getIndexTextureSeq()) {
+            case TEX_SEQ::DIFFUSE:
+                hasDifuse = true;
+                break;
+            case TEX_SEQ::EMISSIVE:
+                hasEmissive = true;
+                break;
+            case TEX_SEQ::SPECULAR:
+                hasEspecular = true;
+                break;
+            default:
+                break;
+        }
+
+        pTex->init();
+    }
+
+    if (mapTex.size() == 0)
+        tipoTexturasDisponiveis = 0;
+    else if ((hasDifuse == true) && (hasEspecular == false) && (hasEmissive == false))
+        tipoTexturasDisponiveis = 1;
+    else if ((hasDifuse == true) && (hasEspecular == true) && (hasEmissive == false))
+        tipoTexturasDisponiveis = 2;
+    else if ((hasDifuse == true) && (hasEspecular == true) && (hasEmissive == true))
+        tipoTexturasDisponiveis = 3;
+    else
+        tipoTexturasDisponiveis = 4;
+
 }
 
 void Material::setAmbient(const Color &_color) {
@@ -141,37 +168,24 @@ void Material::apply() {
         }
 	}
 
-	if (hasTexture() == false)
-		shader->setGlUniform1i("tipo", 0);
-	else if ((pTexDiffuse != nullptr) && (pTexSpecular == nullptr) && (pTexEmissive == nullptr))
-		shader->setGlUniform1i("tipo", 1);
-	else if ((pTexDiffuse != nullptr) && (pTexSpecular != nullptr) && (pTexEmissive == nullptr))
-		shader->setGlUniform1i("tipo", 2);
-	else
-		shader->setGlUniform1i("tipo", 3);
+	shader->setGlUniform1i("tipo", tipoTexturasDisponiveis);
 
-	if (texturePresent == true) {
+    if (mapTex.size() > 0) {
 
-		glEnable(GL_TEXTURE_2D);
+        glEnable(GL_TEXTURE_2D);
 
-		if (pTexDiffuse != nullptr) {
-			pTexDiffuse->apply();
-            shader->setGlUniform1i("material.tDiffuse", (int)pTexDiffuse->getIndexTextureSeq());
+        for( std::map<std::string, Texture*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
+
+            std::string name = iTex->first;
+            Texture *pTex = iTex->second;
+
+            pTex->apply();
+            shader->setGlUniform1i(name.c_str(), (int)pTex->getIndexTextureSeq());
         }
+    } else {
 
-		if (pTexSpecular != nullptr){
-			pTexSpecular->apply();
-            shader->setGlUniform1i("material.tSpecular", (int)pTexDiffuse->getIndexTextureSeq()); //TODO implementar no shader
-        }
-
-		if (pTexEmissive != nullptr) {
-			pTexEmissive->apply();
-            shader->setGlUniform1i("material.tEmissive", (int)pTexDiffuse->getIndexTextureSeq()); //TODO implementar no shader
-        }
-	}
-	else {
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }
 
 void Material::loadCollada(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode) {

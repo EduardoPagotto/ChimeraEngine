@@ -1,5 +1,6 @@
 #include "Video.h"
 #include "ShadowMap.h"
+#include "Singleton.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,19 +9,19 @@ namespace Chimera {
 
 ShadowMap::ShadowMap(std::string _name, const unsigned &_width, const unsigned &_height) {
 
-	pTexture = new Texture("Shadow-Map-Tex_" + _name, _width, _height);
-
+	texManager = Singleton<TextureManager>::getRefSingleton();
+	pTexture = texManager->getTexture( texManager->fromFrameBuffer(_name, TEX_SEQ::SHADOWMAP, _width, _height) );
 }
 
 ShadowMap::~ShadowMap() {
 
-	delete pTexture;
-	pTexture = nullptr;
+	texManager->release( pTexture->getSerial() ); //libera textura, se zero deleta da memoria (init necessario se for reaproveitar)
+	Singleton<TextureManager>::releaseRefSingleton();
 }
 
 void ShadowMap::init()
 {
-	pTexture->init();
+	texManager->init( pTexture->getSerial() );//incrementa referencia de uso da textura
 }
 
 glm::mat4 ShadowMap::createLightSpaceMatrix(const glm::vec3 &_posicaoLight) {
@@ -49,7 +50,7 @@ void ShadowMap::endSceneShadow() {
 
 void ShadowMap::applyShadow() {
 
-	pTexture->apply(1);
+	pTexture->apply();
 
 }
 

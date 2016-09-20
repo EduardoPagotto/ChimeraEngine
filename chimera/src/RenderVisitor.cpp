@@ -60,7 +60,7 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 
 	if (shadowOn != nullptr) {
 		shadowOn->applyShadow();
-		shader->setGlUniform1i("shadowMap", shadowOn->getTextureIndex());
+		shader->setGlUniform1i("shadowMap", (int)shadowOn->getShadowIndexTextureSeq());
 	}
 
     _pMesh->render();

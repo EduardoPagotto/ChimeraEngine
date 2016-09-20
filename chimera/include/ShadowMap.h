@@ -2,8 +2,8 @@
 #define SHADOW_MAP_H_
 
 #include <glm/glm.hpp>
-#include "Texture.h"
 #include "Node.h"
+#include "TextureManager.h"
 
 namespace Chimera
 {
@@ -21,13 +21,14 @@ public:
 	void endSceneShadow();
 	void applyShadow();
 
-	int getTextureIndex() {
-		return 1;
+	TEX_SEQ getShadowIndexTextureSeq() const {
+		return pTexture->getIndexTextureSeq();
 	}
 
 	glm::mat4 lightSpaceMatrix;
 
 private:
+	TextureManager *texManager;
     Texture *pTexture;
 };
 

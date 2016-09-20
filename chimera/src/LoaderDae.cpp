@@ -49,7 +49,7 @@ int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, std::map<
 #ifdef WIN32
             Texture *pTex = new Texture(l_id, _textureDir+ "\\" + l_val); //FIXME quando outras texturas presentes 0 difuse, 1 specula, 2 emissive
 #else
-            Texture *pTex = new Texture(l_id, _textureDir+ "/" + l_val);
+            Texture *pTex = new Texture(l_id, TEX_SEQ::DIFFUSE ,_textureDir+ "/" + l_val);
 #endif
             _mapaTextura[l_id] = pTex;
             l_nNode = l_nNode->NextSiblingElement ( "image" );

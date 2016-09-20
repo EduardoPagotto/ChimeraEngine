@@ -155,15 +155,19 @@ void Material::apply() {
 		glEnable(GL_TEXTURE_2D);
 
 		if (pTexDiffuse != nullptr) {
-			pTexDiffuse->apply(0);
-            shader->setGlUniform1i("material.tDiffuse", 0);
+			pTexDiffuse->apply();
+            shader->setGlUniform1i("material.tDiffuse", (int)pTexDiffuse->getIndexTextureSeq());
         }
 
-		if (pTexSpecular != nullptr)
-			pTexSpecular->apply(1);
+		if (pTexSpecular != nullptr){
+			pTexSpecular->apply();
+            shader->setGlUniform1i("material.tSpecular", (int)pTexDiffuse->getIndexTextureSeq()); //TODO implementar no shader
+        }
 
-		if (pTexEmissive != nullptr)
-			pTexEmissive->apply(2);
+		if (pTexEmissive != nullptr) {
+			pTexEmissive->apply();
+            shader->setGlUniform1i("material.tEmissive", (int)pTexDiffuse->getIndexTextureSeq()); //TODO implementar no shader
+        }
 	}
 	else {
 		glBindTexture(GL_TEXTURE_2D, 0);

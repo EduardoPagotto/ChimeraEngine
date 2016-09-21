@@ -20,6 +20,8 @@ Texture::Texture ( const std::string &_name, const TEX_SEQ &_indexTextureSeq, co
     width = 0;
 
     depthMapFBO = 0;
+
+	refCount = 0;
 }
 
 Texture::Texture (const std::string &_name, const TEX_SEQ &_indexTextureSeq, const unsigned &_width, const unsigned &_height) : Entity ( EntityKind::TEXTURE, _name ) {
@@ -43,6 +45,7 @@ Texture::Texture (const std::string &_name, const TEX_SEQ &_indexTextureSeq, con
 	GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
+	refCount = 0;
 }
 
 Texture::~Texture() {
@@ -103,7 +106,7 @@ void Texture::init() {
         }
 
         texturaCarregada = true;
-        printf("Texture Name: %s id: %u\n", getName().c_str(), idTexture);
+        printf("Texture Name: %s id: %u num instancia: %d\n", getName().c_str(), idTexture, getRefCount());
     }
 }
 }

@@ -47,7 +47,7 @@ void Material::init() {
                 break;
         }
 
-        pTex->init();
+		texManager->init( pTex->getSerial() );
     }
 
     if (mapTex.size() == 0)
@@ -65,7 +65,6 @@ void Material::init() {
 void Material::setAmbient(const Color &_color) {
 	ambient = _color;
     mapMatVal[ SHADE_MAT_AMBIENTE ] = &ambient;
-
 }
 
 void Material::setDiffuse(const Color &_color) {
@@ -79,16 +78,38 @@ void Material::setEmission(const Color &_color) { //TODO implementar
 }
 
 void Material::setSpecular(const Color &_color) {
-
 	specular = _color;
     mapMatVal[ SHADE_MAT_SPECULA ] = &specular;
-
 }
 
 void Material::setShine(const float &_val) {
 
 	shine = _val;
     mapMatVal[ SHADE_MAT_SHININESS ] = &shine;
+}
+
+void Material::defineTextureByIndex(const unsigned int & _serial)
+{
+	Texture *pTex = texManager->getTexture(_serial);
+	switch (pTex->getIndexTextureSeq()) {
+		case TEX_SEQ::DIFFUSE:
+			mapTex[SHADE_TEXTURE_DIFFUSE] = pTex;
+			break;
+		case TEX_SEQ::EMISSIVE:
+			mapTex[SHADE_TEXTURE_EMISSIVE] = pTex;
+			break;
+		case TEX_SEQ::SPECULAR:
+			mapTex[SHADE_TEXTURE_SPECULA] = pTex;
+			break;
+		default:
+			break;
+	}
+}
+
+void Material::loadTextureFromFile(const std::string &_nome, const TEX_SEQ & _seq, const std::string & _arquivo)
+{
+	int val = texManager->fromFile( _nome , _seq, _arquivo );
+	defineTextureByIndex(val);
 }
 
 Color Material::getAmbient() const{
@@ -131,12 +152,11 @@ void Material::apply() {
             shader->setGlUniform1fv(nome.c_str(), 1, (float*)iter->second); //ponteiro de um float
 	}
 
-	shader->setGlUniform1i(SHADE_SELETOR_TIPO_TEXTURAS, tipoTexturasDisponiveis);
+	shader->setGlUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
 
     if (mapTex.size() > 0) {
 
-        glEnable(GL_TEXTURE_2D);
-
+        //glEnable(GL_TEXTURE_2D);
         for( std::map<std::string, Texture*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
 
             std::string name = iTex->first;
@@ -146,7 +166,6 @@ void Material::apply() {
             shader->setGlUniform1i(name.c_str(), (int)pTex->getIndexTextureSeq());
         }
     } else {
-
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 }

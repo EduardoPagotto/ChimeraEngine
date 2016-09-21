@@ -37,8 +37,8 @@ void TextureManager::init(const unsigned int &_serial) {
 
 	Texture *pTex = this->getTexture(_serial);
 	if (pTex != nullptr) {
-		pTex->init();
 		pTex->addRefCount();
+		pTex->init();
 	}
 }
 
@@ -109,7 +109,7 @@ Texture *TextureManager::getTexture(const unsigned int &_serial) {
 	if (it != mapTex.end()) {
 		pTex = it->second;
 	} else {
-		printf("Erro Textura nao existe id:%d", _serial);
+		printf("Erro Textura nao existe id: %d", _serial);
 	}
 
 	return pTex;

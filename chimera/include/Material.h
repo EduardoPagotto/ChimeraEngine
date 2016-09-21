@@ -12,17 +12,16 @@
 
 namespace Chimera {
 
-#define SHADE_DIFFUSE "material.tDiffuse"
-#define SHADE_SPECULA "material.tSpecular"
-#define SHADE_EMISSIVE "material.tEmissive"
+#define SHADE_TEXTURE_DIFFUSE "material.tDiffuse"
+#define SHADE_TEXTURE_SPECULA "material.tSpecular"
+#define SHADE_TEXTURE_EMISSIVE "material.tEmissive"
+#define SHADE_TEXTURE_SELETOR_TIPO_VALIDO "tipo"
 
 #define SHADE_MAT_AMBIENTE "material.ambient"
 #define SHADE_MAT_DIFFUSE "material.diffuse"
 #define SHADE_MAT_SPECULA "material.specular"
 #define SHADE_MAT_EMISSIVE "material.emissive"
 #define SHADE_MAT_SHININESS "material.shininess"
-
-#define SHADE_SELETOR_TIPO_TEXTURAS "tipo"
 
 class Material : public Entity
 {
@@ -48,21 +47,9 @@ public:
     void createDefaultEffect();
     void loadCollada ( tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode );
 
-	void setTexDiffuse(Texture *_pTex) {
-        mapTex[ SHADE_DIFFUSE ] = _pTex; //nome do shader usado como chave
-	}
+	void defineTextureByIndex(const unsigned int &_serial);
 
-	void setTexSpecular(Texture *_pTex) {
-        mapTex[ SHADE_SPECULA ] = _pTex;
-	}
-
-    void setTexEmission(Texture *_pTex) {
-        mapTex[ SHADE_EMISSIVE ] = _pTex;
-	}
-
-	Texture *getTexDiffuse() {
-        return mapTex[ SHADE_DIFFUSE ];
-	}
+	void loadTextureFromFile(const std::string &_nome, const TEX_SEQ & _seq, const std::string & _arquivo);
 
 	bool hasTexture() {
 		return mapTex.size() > 0 ? true : false;

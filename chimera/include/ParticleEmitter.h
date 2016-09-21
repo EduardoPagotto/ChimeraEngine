@@ -33,6 +33,8 @@ public:
 
 	glm::vec3 CameraPosition;
 
+	void loadTexDiffuse(const std::string &_nome, const std::string &_arquivo);
+
 private:
 	void SortParticles();
 	int recycleParticleLife(const glm::vec3 &_camPosition);

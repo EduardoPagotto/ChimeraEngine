@@ -22,7 +22,6 @@ Font::Font (const std::string &_fontFile, const int &_size) {
     // Set size to load glyphs as
     FT_Set_Pixel_Sizes(face, 0, _size);
 
-
     // Disable byte-alignment restriction
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -39,17 +38,7 @@ Font::Font (const std::string &_fontFile, const int &_size) {
         GLuint texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_RED,
-            face->glyph->bitmap.width,
-            face->glyph->bitmap.rows,
-            0,
-            GL_RED,
-            GL_UNSIGNED_BYTE,
-            face->glyph->bitmap.buffer
-        );
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer );
         // Set texture options
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -84,7 +73,16 @@ Font::Font (const std::string &_fontFile, const int &_size) {
 }
 
 Font::~Font ( void ) {
-	//TODO implementar release
+	
+	std::map<GLchar, Character>::iterator it = Characters.begin();
+	while (it != Characters.end()) {
+
+		Character c = it->second;
+		glDeleteTextures(1, (GLuint*)&c.TextureID);
+
+		Characters.erase(it);
+		it = Characters.begin();
+	}
 }
 
 void Font::RenderText( std::string *pText, GLfloat x, GLfloat y, GLfloat scale)

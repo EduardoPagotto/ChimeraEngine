@@ -72,15 +72,11 @@ int testeCargaArquivo() {
 		Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
 		posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
-		Chimera::Material *pMatParticleEmiter = new Chimera::Material("MatParticleEmitter");
-		Chimera::Texture *pTexParticleEmitter = new Chimera::Texture("TexParticleEmmiter", Chimera::TEX_SEQ::DIFFUSE ,dirDados + std::string("/") + std::string("Particle2.png"));
-		pMatParticleEmiter->setTexDiffuse(pTexParticleEmitter);
-		pParticleEmitter->setMaterial(pMatParticleEmiter);
-
-        Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");
-		gHud->setShaderName("hud-default");
+		pParticleEmitter->loadTexDiffuse("TexParticleEmmiter" , dirDados + std::string("Particle2.png"));
 
 		//Adiciona um HUD ao Grapho
+        Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");
+		gHud->setShaderName("hud-default");
 		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default");
 		Chimera::Font *pFont = new Chimera::Font ( dirFontes + "FreeSans.ttf", 18 );
 		pHUD->addFont ( pFont );

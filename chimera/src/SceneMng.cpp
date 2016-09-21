@@ -13,6 +13,7 @@ SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
 }
 
 SceneMng::~SceneMng() {
+	//TODO: deletar o grapho
 }
 
 void SceneMng::setReader ( LoaderDae* _pLoader ) {

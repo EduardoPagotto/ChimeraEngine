@@ -92,9 +92,6 @@ void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 		shader->setGlUniform3f("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
 		shader->setGlUniform3f("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
 
-		// fragment shader
-		shader->setGlUniform1i("myTextureSampler", 0);
-
 		_pParticleEmitter->CameraPosition = CameraPosition;
 		_pParticleEmitter->render();
 	}

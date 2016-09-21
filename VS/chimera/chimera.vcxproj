@@ -50,7 +50,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;OVR_SET_TO_USE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;NO_OVR_SET_TO_USE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../chimera/include;C:\Libs\SDL2-2.0.4\include;C:\Libs\SDL2_image-2.0.1\include;C:\Libs\SDL2_ttf-2.0.14\include;C:\Libs\bullet3\src;C:\libs\tinyxml2;C:\Libs\glew-1.13.0\include;C:\Libs\glm;C:\Libs\freetype-2.3.5-1-lib\include;C:\Libs\freetype-2.3.5-1-lib\include\freetype2;C:\Libs\OculusSDK\LibOVR\Include;C:\Libs\OculusSDK\LibOVRKernel\Src</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>

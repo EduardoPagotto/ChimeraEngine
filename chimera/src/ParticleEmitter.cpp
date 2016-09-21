@@ -9,6 +9,8 @@ namespace Chimera {
 ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
 	//MaxParticles = _max;
 	LastUsedParticle = 0;
+
+	material = new Material("AutoMaterialParticleEmmiter_" + std::to_string( Entity::getNextSerialMaster() + 1 ));
 }
 
 ParticleEmitter::~ParticleEmitter(){
@@ -52,6 +54,11 @@ void ParticleEmitter::init() {
 	glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
 
 	timer.start();
+}
+
+void ParticleEmitter::loadTexDiffuse(const std::string &_nome, const std::string &_arquivo) {
+
+	material->loadTextureFromFile(_nome, TEX_SEQ::DIFFUSE, _arquivo);
 }
 
 void ParticleEmitter::setSizeBox ( const glm::vec3& _size ) {
@@ -154,11 +161,8 @@ void ParticleEmitter::render()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	GLuint Texture = material->getTexDiffuse()->getIdTexture();
-
-	// Bind our texture in Texture Unit 0
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, Texture);
+	// Bind our texture
+	material->apply();
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

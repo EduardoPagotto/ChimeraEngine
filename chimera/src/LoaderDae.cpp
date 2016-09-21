@@ -21,6 +21,7 @@ LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_model
     this->modelDir = _modelDir;
 
     pPhysicsControl = Singleton<PhysicsControl>::getRefSingleton();
+	texManager = Singleton<TextureManager>::getRefSingleton();
 
     loadFile(_file);
 }
@@ -33,30 +34,32 @@ LoaderDae::~LoaderDae() {
     }
 
     Singleton<PhysicsControl>::releaseRefSingleton();
+	Singleton<TextureManager>::releaseRefSingleton();
 }
 
-int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, std::map<std::string, Texture*> &_mapaTextura) {
+int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, TextureManager *_texManager) {
 
+	int totalTexturas = 0;
     tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_images" );
     if ( l_nNode != nullptr ) {
 
-        l_nNode = l_nNode->FirstChildElement ( "image" );
+        l_nNode = l_nNode->FirstChildElement ( "image" ); //FIXME quando outras texturas presentes 0 difuse, 1 specula, 2 emissive
         while ( l_nNode != nullptr ) {
 
             std::string l_id = retornaAtributo ( "id", l_nNode );
             std::string l_name = retornaAtributo( "name", l_nNode);
-            std::string l_val = l_nNode->FirstChildElement ( "init_from" )->GetText();
+            std::string l_val = l_nNode->FirstChildElement( "init_from" )->GetText();
 #ifdef WIN32
-            Texture *pTex = new Texture(l_id, TEX_SEQ::DIFFUSE , _textureDir+ "\\" + l_val); //FIXME quando outras texturas presentes 0 difuse, 1 specula, 2 emissive
+			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "\\" + l_val);
 #else
-            Texture *pTex = new Texture(l_id, TEX_SEQ::DIFFUSE ,_textureDir+ "/" + l_val);
+			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "/" + l_val);
 #endif
-            _mapaTextura[l_id] = pTex;
             l_nNode = l_nNode->NextSiblingElement ( "image" );
+			totalTexturas++;
         }
     }
 
-    return _mapaTextura.size();
+	return totalTexturas;
 }
 
 int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Draw*> &mapaGeometria) {
@@ -102,7 +105,7 @@ void LoaderDae::loadFile ( const std::string &file ) {
     }
 
     //carrega elementos de Texture, Material e Geometrias
-    int totalTexture = libTextureMap(root, textureDir, mapaTextura);
+    int totalTexture = libTextureMap(root, textureDir, texManager);
     int totalGeometry = libGeometryMap(root, mapaGeometria);
 
     //cria lista de entidade fisicas a serem usadas
@@ -371,7 +374,8 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
              std::string l_nomeGeo = &pUrl[1];
 
              Material *pMaterial = nullptr;
-             Texture *pTexture = nullptr;
+            // Texture *pTexture = nullptr;
+			 std::string textureName = "";
 
              Draw *pDraw = mapaGeometria[l_nomeGeo];
 
@@ -405,10 +409,8 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                                     tinyxml2::XMLElement* l_nParam = l_nProfile->FirstChildElement("newparam");
                                     if (l_nParam != nullptr) {
                                         const char* l_val = l_nParam->FirstChildElement("surface")->FirstChildElement("init_from")->GetText();
-                                        if (l_val != nullptr) {
-
-                                            pTexture = mapaTextura[std::string(l_val)];
-                                        }
+                                        if (l_val != nullptr)
+											textureName.assign(l_val);
                                     }
                                 }
                             }
@@ -419,11 +421,12 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
 
 			if (pMaterial != nullptr) {
 
-				if (pTexture != nullptr)
-					pMaterial->setTexDiffuse(pTexture);
+				if (textureName.length() > 0) {
+					unsigned serialTex = texManager->getIdByName(textureName);
+					pMaterial->defineTextureByIndex(serialTex);
+				}
 
 				pDraw->setMaterial(pMaterial);
-
 			}
 
 			Solid *ph = mapaEntidadeFisica[_id];

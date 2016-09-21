@@ -9,6 +9,7 @@
 #include "Group.h"
 #include "Solid.h"
 #include "Draw.h"
+#include "TextureManager.h"
 
 namespace Chimera
 {
@@ -41,12 +42,12 @@ private:
     tinyxml2::XMLElement* root;
 
     std::map<std::string, Solid*> mapaEntidadeFisica;
-    std::map<std::string, Texture*> mapaTextura;
     std::map<std::string, Draw*> mapaGeometria;
     
     Group *pRootNode;
     
     PhysicsControl *pPhysicsControl;
+	TextureManager *texManager;
 };
 }
 

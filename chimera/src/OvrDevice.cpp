@@ -13,7 +13,7 @@ OvrDevice::OvrDevice ( std::string nomeTela ) : Video ( nomeTela, KIND_DEVICE::O
     fullscreenStatus = false;
 
     //inicializa o OVR
-    ovr_Initialize();
+    ovr_Initialize(0); //Modifiquei nova
 
     initSDL();
 

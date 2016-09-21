@@ -53,7 +53,9 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
     // Calculate bias (based on depth map resolution and slope)
     vec3 normal = normalize(Normal);
-    vec3 lightDir = normalize(light.position - FragPos);
+    //vec3 lightDir = normalize(light.position - FragPos); //light point
+	vec3 lightDir = normalize(light.position); //light dir (invertido do exemplo)
+
     float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
 
     // Check whether current frag pos is in shadow
@@ -83,8 +85,8 @@ void main()
 {
     // part Diffuse
     vec3 normal = normalize(Normal);
-    //vec3 lightDir = normalize(-light.position); //direction light
-	vec3 lightDir = normalize(light.position - FragPos); //point light
+    vec3 lightDir = normalize(light.position); //direction light
+	//vec3 lightDir = normalize(light.position - FragPos); //point light
     float diff = max(dot(normal, lightDir), 0.0);
 
     // part Specular

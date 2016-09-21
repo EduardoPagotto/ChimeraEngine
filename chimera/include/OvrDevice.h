@@ -9,8 +9,9 @@
 
 #ifdef WIN32
 #define OVR_OS_WIN32
-#include "../Src/OVR_CAPI_GL.h"
+//#include "../Src/OVR_CAPI_GL.h"
 #include "OVR.h"
+#include "OVR_CAPI_GL.h"
 #else
 #define OVR_OS_LINUX
 #include <X11/Xlib.h>

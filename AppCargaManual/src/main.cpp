@@ -73,7 +73,7 @@ int testeCargaArquivo() {
 		posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
 		Chimera::Material *pMatParticleEmiter = new Chimera::Material("MatParticleEmitter");
-		Chimera::Texture *pTexParticleEmitter = new Chimera::Texture("TexParticleEmmiter", dirDados + std::string("/") + std::string("Particle2.png"));
+		Chimera::Texture *pTexParticleEmitter = new Chimera::Texture("TexParticleEmmiter", Chimera::TEX_SEQ::DIFFUSE ,dirDados + std::string("/") + std::string("Particle2.png"));
 		pMatParticleEmiter->setTexDiffuse(pTexParticleEmitter);
 		pParticleEmitter->setMaterial(pMatParticleEmiter);
 

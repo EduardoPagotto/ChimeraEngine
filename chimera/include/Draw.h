@@ -15,7 +15,7 @@ public:
     Draw ( const Draw &_draw );
     virtual ~Draw();
 
-    virtual void render(const glm::mat4 &_projection, const glm::mat4 &_view, const glm::mat4 &_model) = 0;
+    virtual void render() = 0;
     virtual glm::vec3 getSizeBox() = 0;
 
 	void setMaterial(Material* _pMat) {
@@ -25,8 +25,8 @@ public:
 	Material* getMaterial() const {
 		return material;
 	}
-        
-protected: 
+
+protected:
 	Material *material;
 	Shader *shader;
 };

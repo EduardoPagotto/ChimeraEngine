@@ -22,9 +22,9 @@ public:
 
 	// Inherited via Node
 	virtual void accept(class NodeVisitor* v) override;
-	
+
 	// Inherited via Draw
-	virtual void render(const glm::mat4 &_projection, const glm::mat4 &_view, const glm::mat4 &_model) override;
+	virtual void render() override;
 	virtual glm::vec3 getSizeBox() override;
 
 	void setSizeBox(const glm::vec3 &_size);

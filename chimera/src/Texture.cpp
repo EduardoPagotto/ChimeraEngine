@@ -9,8 +9,9 @@
 
 namespace Chimera {
 
-Texture::Texture ( const std::string &_name, const std::string &_pathFile) : Entity ( EntityKind::TEXTURE, _name ) {
+Texture::Texture ( const std::string &_name, const TEX_SEQ &_indexTextureSeq, const std::string &_pathFile) : Entity ( EntityKind::TEXTURE, _name ) {
 
+    indexTextureSeq = _indexTextureSeq;
     texturaCarregada = false;
     pathFile = _pathFile;
 	idTexture = 0;
@@ -21,8 +22,9 @@ Texture::Texture ( const std::string &_name, const std::string &_pathFile) : Ent
     depthMapFBO = 0;
 }
 
-Texture::Texture (const std::string &_name, const unsigned &_width, const unsigned &_height) : Entity ( EntityKind::TEXTURE, _name ) {
+Texture::Texture (const std::string &_name, const TEX_SEQ &_indexTextureSeq, const unsigned &_width, const unsigned &_height) : Entity ( EntityKind::TEXTURE, _name ) {
 
+    indexTextureSeq = _indexTextureSeq;
     texturaCarregada = false;
     pathFile = "FRAME_BUFFER";
     depthMapFBO = 0;
@@ -43,25 +45,13 @@ Texture::Texture (const std::string &_name, const unsigned &_width, const unsign
 
 }
 
-
-Texture::Texture ( const Texture &_texture ) : Entity ( _texture ) {
-
-    pathFile = _texture.pathFile;
-    texturaCarregada = _texture.texturaCarregada;
-	idTexture = _texture.idTexture;
-    height = _texture.height;
-    width = _texture.width;
-    depthMapFBO = _texture.depthMapFBO;
-
-}
-
 Texture::~Texture() {
     glDeleteTextures ( 1, ( GLuint* ) &idTexture);
 }
 
-void Texture::apply(const unsigned int &_active) {
+void Texture::apply() {
 
-    glActiveTexture(GL_TEXTURE0 + _active );
+    glActiveTexture(GL_TEXTURE0 + (unsigned)indexTextureSeq );
 	glBindTexture(GL_TEXTURE_2D, idTexture);
 
 }

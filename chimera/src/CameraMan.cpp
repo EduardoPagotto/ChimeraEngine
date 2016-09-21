@@ -1,15 +1,8 @@
 #include "CameraMan.h"
-
-// #ifdef WIN32
-// #include "windows.h"
-// #endif
-// 
-// #include <GL/gl.h>
-// #include <GL/glu.h>
-#include <OpenGLDefs.h>
+#include "OpenGLDefs.h"
 
 namespace Chimera {
-    
+
 CameraMan::CameraMan ( std::string _name ) : Camera (nullptr, CameraType::Spherical, _name ) {
 
     along = glm::vec3( 1.0f, 0.0f, 0.0f );
@@ -32,13 +25,13 @@ CameraMan::~CameraMan() {
 }
 
 void CameraMan::init () {
-   
+
     Camera::init();
     reset();
     pitch ( -rotation.x );
     roll ( rotation.y );
     yaw ( rotation.z );
-    
+
 }
 
 void CameraMan::reset() {
@@ -90,7 +83,7 @@ void CameraMan::updateMove() {
 void CameraMan::yaw ( float _theta ) {
 //     along = along * cos ( _theta * SIMD_RADS_PER_DEG ) + forward * sin ( _theta * SIMD_RADS_PER_DEG ); //along = along * cos(theta * DEG2RAD) + forward * sin(theta * DEG2RAD);
 //     along.normalize();
-// 
+//
 //     forward = along.cross ( up ) * -1.0f; // (along % up) * -1.0f;
 //     updateMove();
 }
@@ -100,7 +93,7 @@ void CameraMan::pitch ( float _theta ) {
 //     if ( type == CameraType::Air ) {
 //         _theta = -_theta;
 //     }
-// 
+//
 //     forward = forward * cos ( _theta * SIMD_RADS_PER_DEG ) + up * sin ( _theta * SIMD_RADS_PER_DEG );
 //     forward.normalize();
 //     up = forward.cross ( along ) * -1.0f; //(forward % along) * -1.0f;//CrossProduct(forward, along) * -1.0;
@@ -111,7 +104,7 @@ void CameraMan::roll ( float _theta ) {
 //     if ( type == CameraType::Land ) {
 //         return;    // Not for land cams
 //     }
-// 
+//
 //     up = up * cos ( _theta * SIMD_RADS_PER_DEG ) - along * sin ( _theta * SIMD_RADS_PER_DEG );
 //     up.normalize();
 //     along = forward.cross ( up ); // ( forward % up ); //CrossProduct(forward, up);
@@ -127,7 +120,7 @@ void CameraMan::walk ( float _delta, bool _wall[4] ) {
 //     else {
 //         position -= forward * _delta;    // Air camera
 //     }
-// 
+//
 //     updateMove();
 }
 
@@ -140,7 +133,7 @@ void CameraMan::strafe ( float _delta, bool _wall[4] ) {
 //     else {
 //         position += along * _delta;    // Air camera
 //     }
-// 
+//
 //     updateMove();
 }
 
@@ -150,9 +143,9 @@ void CameraMan::fly ( float _delta, bool _wall[4] ) {
 //     if ( type == CameraType::Land ) {
 //         return;
 //     }
-// 
+//
 //     position += up * _delta;
-// 
+//
 //     updateMove();
 }
 }

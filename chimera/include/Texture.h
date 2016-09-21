@@ -6,16 +6,21 @@
 
 namespace Chimera {
 
+enum class TEX_SEQ {
+	DIFFUSE = 0,
+	SHADOWMAP = 1,
+	SPECULAR = 2,
+	EMISSIVE = 3
+};
+
 class Texture : public Entity
 {
 public:
-    Texture ( const std::string &_name, const std::string &_pathFile );
-	Texture ( const std::string &_name, const unsigned &_width, const unsigned &_height);
-    Texture ( const Texture &_texture );
-
+    Texture ( const std::string &_name, const TEX_SEQ &_indexTextureSeq, const std::string &_pathFile );
+	Texture ( const std::string &_name, const TEX_SEQ &_indexTextureSeq, const unsigned &_width, const unsigned &_height );
     virtual ~Texture();
 
-	void apply(const unsigned int &_active);
+	void apply();
 
     void init();
 
@@ -52,7 +57,14 @@ public:
 		return depthMapFBO;
 	}
 
+	TEX_SEQ getIndexTextureSeq() const {
+		return indexTextureSeq;
+	}
+
 private:
+
+	TEX_SEQ indexTextureSeq;
+
 	GLuint depthMapFBO;
 
 	unsigned int refCount;

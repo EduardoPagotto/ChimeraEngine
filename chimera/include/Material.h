@@ -8,10 +8,22 @@
 
 #include "OpenGLDefs.h"
 #include "Shader.h"
-#include "Texture.h"
+#include "TextureManager.h"
 
 namespace Chimera {
-    
+
+#define SHADE_DIFFUSE "material.tDiffuse"
+#define SHADE_SPECULA "material.tSpecular"
+#define SHADE_EMISSIVE "material.tEmissive"
+
+#define SHADE_MAT_AMBIENTE "material.ambient"
+#define SHADE_MAT_DIFFUSE "material.diffuse"
+#define SHADE_MAT_SPECULA "material.specular"
+#define SHADE_MAT_EMISSIVE "material.emissive"
+#define SHADE_MAT_SHININESS "material.shininess"
+
+#define SHADE_SELETOR_TIPO_TEXTURAS "tipo"
+
 class Material : public Entity
 {
 public:
@@ -19,74 +31,61 @@ public:
     virtual ~Material();
 
     virtual void init();
-    
+
     void setAmbient(const Color &_color);
 	void setSpecular(const Color &_color);
 	void setDiffuse(const Color &_color);
 	void setEmission(const Color &_color);
 	void setShine(const float &_val);
-	
+
     Color getAmbient() const;
     Color getSpecular() const;
     Color getDiffuse() const;
     Color getEmission() const;
     float getShine() const;
-	bool isSet(const ModeMaterial &_val);
-	void setFace(const FaceMaterial &_val);
-    
+
     void apply();
-    
     void createDefaultEffect();
-    
     void loadCollada ( tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode );
-    
+
 	void setTexDiffuse(Texture *_pTex) {
-		texturePresent = true;
-		pTexDiffuse = _pTex;
+        mapTex[ SHADE_DIFFUSE ] = _pTex; //nome do shader usado como chave
 	}
 
 	void setTexSpecular(Texture *_pTex) {
-		texturePresent = true;
-		pTexSpecular = _pTex;
+        mapTex[ SHADE_SPECULA ] = _pTex;
+	}
+
+    void setTexEmission(Texture *_pTex) {
+        mapTex[ SHADE_EMISSIVE ] = _pTex;
 	}
 
 	Texture *getTexDiffuse() {
-		return pTexDiffuse;
-	}
-
-	void setTexEmission(Texture *_pTex) {
-		texturePresent = true;
-		pTexEmissive = _pTex;
+        return mapTex[ SHADE_DIFFUSE ];
 	}
 
 	bool hasTexture() {
-		return texturePresent;
+		return mapTex.size() > 0 ? true : false;
 	}
 
 private:
     void loadColladaProfile(tinyxml2::XMLElement* _nNode);
-    
     bool getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode );
-    
+
     Color diffuse;        /* Diffuse color RGBA */
     Color ambient;        /* Ambient color RGB */
     Color specular;       /* Specular 'shininess' */
     Color emission;       /* Emissive color RGB */
 	float shine;
-    
-	bool texturePresent;
-	Texture *pTexDiffuse;
-	Texture *pTexSpecular;
-	Texture *pTexEmissive;
 
-    FaceMaterial faceMaterial;
-    
-    std::map<ModeMaterial, bool> map_modes;
-	std::map<ModeMaterial, void*> map_params;
+    int tipoTexturasDisponiveis;
 
+    std::map<std::string, void*> mapMatVal;
+    std::map<std::string, Texture*> mapTex;
+
+    TextureManager *texManager;
 	Shader *shader;
 };
 }
-
 #endif
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

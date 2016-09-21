@@ -47,7 +47,7 @@ void Mesh::init() {
 
 	if (material == nullptr)
 		material = new Material("DefaultMat-" + std::to_string(getSerial()));
-	
+
 	material->init();
 
     //Ajuste de textura do imageSDL invertendo valor de V
@@ -97,9 +97,7 @@ glm::vec3 Mesh::getSizeBox() {
 
 
 
-void Mesh::render (const glm::mat4 &_projection, const glm::mat4 &_view, const glm::mat4 &_model) {
-
-   // material->apply();
+void Mesh::render () {
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));

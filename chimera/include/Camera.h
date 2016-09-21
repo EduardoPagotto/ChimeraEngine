@@ -6,8 +6,6 @@
 
 #include "Node.h"
 
-#include "Shader.h"
-
 namespace Chimera {
 
 enum class CameraType
@@ -84,15 +82,11 @@ protected:
     glm::vec3 rotation;
     glm::vec3 direction;
 
-    //glm::mat4 transform;
-
 private:
     float nearDistance;
     float farDistance;
     float fov;
     bool perspective;
-
-	Shader *shader;
 };
 }
 #endif

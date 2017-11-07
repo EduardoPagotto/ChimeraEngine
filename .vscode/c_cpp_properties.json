@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "null",
+            "includePath": [
+                "${workspaceRoot}/chimera/include",
+                "/usr/include/freetype2/"
+            ],
+            "defines": [],
+            "browse": {
+                "path": [
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 3
+}

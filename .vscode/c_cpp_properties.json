@@ -2,15 +2,10 @@
     "configurations": [
         {
             "name": "null",
-            "includePath": [
-                "${workspaceRoot}/chimera/include",
-                "/usr/include/freetype2/"
-            ],
+            "includePath": [],
             "defines": [],
             "browse": {
-                "path": [
-                    "${workspaceRoot}"
-                ],
+                "path": [],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },

@@ -6,6 +6,7 @@
     "isShellCommand": true,
     "args": ["-c"],
     "showOutput": "always",
+    "suppressTaskName": true,
     "options": {
         "cwd": "${workspaceRoot}/build"
     },
@@ -16,8 +17,20 @@
         },
         {
             "taskName": "make",
-            "args": ["make -j 4"],
-            "isBuildCommand": true            
+            "args" : ["make"],
+            "isBuildCommand": true,
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": "absolute",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
         }
     ]
 }

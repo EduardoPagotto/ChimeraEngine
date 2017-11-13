@@ -2,10 +2,10 @@
         "version": "0.2.0",
         "configurations": [
             {
-                "name": "(gdb) Launch",
+                "name": "(gdb) Launch AppCargaManual",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "enter program name, for example ${workspaceRoot}/a.out",
+                "program": "${workspaceRoot}/build/AppCargaManual",
                 "args": [],
                 "stopAtEntry": false,
                 "cwd": "${workspaceRoot}",

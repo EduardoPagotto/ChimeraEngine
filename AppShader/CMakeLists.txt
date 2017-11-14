@@ -9,13 +9,13 @@ find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)
 
 include_directories(
-	${AppShader_SOURCE_DIR}/include/
 	${Chimera_SOURCE_DIR}/include
 	${OPENGL_INCLUDE_DIR}
 	${SDL2_INCLUDE_DIR}
 	${BULLET_INCLUDE_DIR}
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
+	${AppShader_SOURCE_DIR}/include/
 #	${LOG4CXX_INCLUDE_DIR}
 )
 

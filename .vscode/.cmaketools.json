@@ -49,7 +49,7 @@
                 ],
                 "fullName": "AppShader",
                 "linkLanguageFlags": "-std=c++11  -g -ftest-coverage -fprofile-arcs -g",
-                "linkLibraries": "-Wl,-rpath,/usr/local/lib ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so -lGLEW -lGLEWmx -lrt -lXrandr ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/local/lib/libBulletDynamics.so /usr/local/lib/libBulletCollision.so /usr/local/lib/libLinearMath.so /usr/local/lib/libBulletSoftBody.so /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/x86_64-linux-gnu/libftgl.so -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lGLEW -lGLEWmx -lrt -lXrandr -lpthread ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so -lGLEW -lGLEWmx /usr/local/lib/libBulletDynamics.so /usr/local/lib/libBulletCollision.so /usr/local/lib/libLinearMath.so /usr/local/lib/libBulletSoftBody.so /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/x86_64-linux-gnu/libftgl.so -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lGLEW -lGLEWmx -lpthread",
+                "linkLibraries": "-Wl,-rpath,/usr/local/lib ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so -lrt -lXrandr ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/local/lib/libBulletDynamics.so /usr/local/lib/libBulletCollision.so /usr/local/lib/libLinearMath.so /usr/local/lib/libBulletSoftBody.so /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/x86_64-linux-gnu/libftgl.so -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lGLEW -lrt -lXrandr -lpthread ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/local/lib/libBulletDynamics.so /usr/local/lib/libBulletCollision.so /usr/local/lib/libLinearMath.so /usr/local/lib/libBulletSoftBody.so /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/x86_64-linux-gnu/libftgl.so -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lGLEW -lpthread",
                 "linkerLanguage": "CXX",
                 "name": "AppShader",
                 "sourceDirectory": "/home/pagotto/Projetos/ChimeraEngine/AppShader",
@@ -72,9 +72,6 @@
                     "compileFlags": "-std=c++11  -g -ftest-coverage -fprofile-arcs -g  ",
                     "includePath": [
                       {
-                        "path": "/home/pagotto/Projetos/ChimeraEngine/chimera/include"
-                      },
-                      {
                         "path": "/usr/local/include"
                       },
                       {
@@ -82,6 +79,9 @@
                       },
                       {
                         "path": "/usr/include/freetype2"
+                      },
+                      {
+                        "path": "/home/pagotto/Projetos/ChimeraEngine/chimera/include"
                       }
                     ],
                     "isGenerated": false,
@@ -146,9 +146,9 @@
             "targets": [
               {
                 "artifacts": [
-                  "/home/pagotto/Projetos/ChimeraEngine/build/chimera/libChimera.a"
+                  "/home/pagotto/Projetos/ChimeraEngine/build/AppShader/AppShader"
                 ],
-                "buildDirectory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+                "buildDirectory": "/home/pagotto/Projetos/ChimeraEngine/build/AppShader",
                 "fileGroups": [
                   {
                     "compileFlags": "-std=c++11  -g -ftest-coverage -fprofile-arcs -g  ",
@@ -157,6 +157,41 @@
                         "path": "/home/pagotto/Projetos/ChimeraEngine/chimera/include"
                       },
                       {
+                        "path": "/usr/local/include/bullet"
+                      },
+                      {
+                        "path": "/usr/include/freetype2"
+                      },
+                      {
+                        "path": "/home/pagotto/Projetos/ChimeraEngine/AppShader/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/Game.cpp",
+                      "src/AppShader.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "AppShader",
+                "linkLanguageFlags": "-std=c++11  -g -ftest-coverage -fprofile-arcs -g",
+                "linkLibraries": "-Wl,-rpath,/usr/local/lib ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so -lrt -lXrandr ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/local/lib/libBulletDynamics.so /usr/local/lib/libBulletCollision.so /usr/local/lib/libLinearMath.so /usr/local/lib/libBulletSoftBody.so /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/x86_64-linux-gnu/libftgl.so -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lGLEW -lrt -lXrandr -lpthread ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/local/lib/libBulletDynamics.so /usr/local/lib/libBulletCollision.so /usr/local/lib/libLinearMath.so /usr/local/lib/libBulletSoftBody.so /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/x86_64-linux-gnu/libftgl.so -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lGLEW -lpthread",
+                "linkerLanguage": "CXX",
+                "name": "AppShader",
+                "sourceDirectory": "/home/pagotto/Projetos/ChimeraEngine/AppShader",
+                "type": "EXECUTABLE"
+              },
+              {
+                "artifacts": [
+                  "/home/pagotto/Projetos/ChimeraEngine/build/chimera/libChimera.a"
+                ],
+                "buildDirectory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+                "fileGroups": [
+                  {
+                    "compileFlags": "-std=c++11  -g -ftest-coverage -fprofile-arcs -g  ",
+                    "includePath": [
+                      {
                         "path": "/usr/local/include"
                       },
                       {
@@ -164,6 +199,9 @@
                       },
                       {
                         "path": "/usr/include/freetype2"
+                      },
+                      {
+                        "path": "/home/pagotto/Projetos/ChimeraEngine/chimera/include"
                       }
                     ],
                     "isGenerated": false,
@@ -218,51 +256,13 @@
                 "name": "Chimera",
                 "sourceDirectory": "/home/pagotto/Projetos/ChimeraEngine/chimera",
                 "type": "STATIC_LIBRARY"
-              },
-              {
-                "artifacts": [
-                  "/home/pagotto/Projetos/ChimeraEngine/build/AppShader/AppShader"
-                ],
-                "buildDirectory": "/home/pagotto/Projetos/ChimeraEngine/build/AppShader",
-                "fileGroups": [
-                  {
-                    "compileFlags": "-std=c++11  -g -ftest-coverage -fprofile-arcs -g  ",
-                    "includePath": [
-                      {
-                        "path": "/home/pagotto/Projetos/ChimeraEngine/chimera/include"
-                      },
-                      {
-                        "path": "/usr/local/include/bullet"
-                      },
-                      {
-                        "path": "/usr/include/freetype2"
-                      },
-                      {
-                        "path": "/home/pagotto/Projetos/ChimeraEngine/AppShader/include"
-                      }
-                    ],
-                    "isGenerated": false,
-                    "language": "CXX",
-                    "sources": [
-                      "src/Game.cpp",
-                      "src/AppShader.cpp"
-                    ]
-                  }
-                ],
-                "fullName": "AppShader",
-                "linkLanguageFlags": "-std=c++11  -g -ftest-coverage -fprofile-arcs -g",
-                "linkLibraries": "-Wl,-rpath,/usr/local/lib ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so -lGLEW -lGLEWmx -lrt -lXrandr ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/local/lib/libBulletDynamics.so /usr/local/lib/libBulletCollision.so /usr/local/lib/libLinearMath.so /usr/local/lib/libBulletSoftBody.so /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/x86_64-linux-gnu/libftgl.so -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lGLEW -lGLEWmx -lrt -lXrandr -lpthread ../chimera/libChimera.a /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so -lGLEW -lGLEWmx /usr/local/lib/libBulletDynamics.so /usr/local/lib/libBulletCollision.so /usr/local/lib/libLinearMath.so /usr/local/lib/libBulletSoftBody.so /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/x86_64-linux-gnu/libftgl.so -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lGLEW -lGLEWmx -lpthread",
-                "linkerLanguage": "CXX",
-                "name": "AppShader",
-                "sourceDirectory": "/home/pagotto/Projetos/ChimeraEngine/AppShader",
-                "type": "EXECUTABLE"
               }
             ]
           }
         ]
       }
     ],
-    "cookie": "0.1609796609175651",
+    "cookie": "0.9312142020473277",
     "inReplyTo": "codemodel",
     "type": "reply"
   }

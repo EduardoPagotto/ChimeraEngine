@@ -29,8 +29,10 @@ target_link_libraries(
 	${Chimera_BINARY_DIR}/libChimera.a
 	${OPENGL_LIBRARIES}
 	${SDL2_LIBRARY}
-	/usr/lib64/libGLEW.so
-	/usr/lib64/libGLEWmx.so
+	/usr/lib/x86_64-linux-gnu/libGLEW.so
+	#/usr/lib/x86_64-linux-gnu/libGLEWmx.so.1.13
+	#/usr/lib64/libGLEW.so
+	#/usr/lib64/libGLEWmx.so
 	librt.so
 	libXrandr.so)
 
@@ -47,7 +49,7 @@ set (SourcesChimeraAPPShader
 	-lSDL2_ttf
 	-ltinyxml2
 	-lGLEW
-	-lGLEWmx
+	#-lGLEWmx
 	librt.so
 	libXrandr.so
 	-lpthread

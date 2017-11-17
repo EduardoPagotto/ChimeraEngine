@@ -9,10 +9,9 @@ find_package(Freetype REQUIRED)
 #find_package(FTGL REQUIRED)
 #find_package(Log4Cxx REQUIRED)
 
-set(INCLUDE_DIRECTORIES ${Chimera}/include/)
+#set(INCLUDE_DIRECTORIES ${Chimera}/include/)
 
 include_directories(
-	${Chimera_SOURCE_DIR}/include
 	${OPENGL_INCLUDE_DIR}
 	${SDL2_INCLUDE_DIR}
 	/usr/local/include/
@@ -20,6 +19,7 @@ include_directories(
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
 	#${LOG4CXX_INCLUDE_DIR}
+	${Chimera_SOURCE_DIR}/include
 )
 
 if (OVR_SET_TO_USE)

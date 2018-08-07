@@ -1,16 +1,19 @@
 {
     "configurations": [
         {
-            "name": "null",
-            "includePath": [],
+            "name": "chimera_compile",
+            "includePath": [
+                "${workspaceRoot}/chimera/include"
+            ],
             "defines": [],
             "browse": {
                 "path": [],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },
-            "intelliSenseMode": "clang-x64"
+            "intelliSenseMode": "clang-x64",
+            "configurationProvider": "vector-of-bool.cmake-tools"
         }
     ],
-    "version": 3
+    "version": 4
 }

@@ -1,13 +1,13 @@
 #ifndef GAME_XX_H_
 #define GAME_XX H_
 
-#include "IGameClientEvents.h"
-#include "SceneMng.h"
-#include "CameraSpherical.h"
-#include "ParticleEmitter.h"
-#include "HUD.h"
-#include "PhysicsControl.h"
-#include "DataMsg.h"
+#include <IGameClientEvents.h>
+#include <SceneMng.h>
+#include <CameraSpherical.h>
+#include <ParticleEmitter.h>
+#include <HUD.h>
+#include <PhysicsControl.h>
+#include <DataMsg.h>
 
 /**
  * Class Game

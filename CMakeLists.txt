@@ -14,6 +14,6 @@ endif(OVR_SET_TO_USE)
 
 #add_subdirectory(AppCargaManual)
 #add_subdirectory(AppEmpty)
-add_subdirectory(AppShader)
-#add_subdirectory(appTest)
+#add_subdirectory(AppShader)
+add_subdirectory(appTest)
 add_subdirectory(chimera)

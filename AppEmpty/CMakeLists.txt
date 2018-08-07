@@ -48,7 +48,7 @@ set (SourcesChimeraAPPEmpty
 	-lSDL2_ttf
 	-ltinyxml2
 	-lGLEW
-	-lGLEWmx
+	#-lGLEWmx
 	librt.so
 	libXrandr.so
 	-lpthread

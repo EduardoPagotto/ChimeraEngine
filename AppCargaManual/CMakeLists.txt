@@ -10,6 +10,7 @@ find_package(FTGL REQUIRED)
 #find_package(Log4Cxx REQUIRED)
 
 include_directories(
+	../../chimera/include
 	${AppCargaManual_SOURCE_DIR}/include/
 	${Chimera_SOURCE_DIR}/include
 	${OPENGL_INCLUDE_DIR}
@@ -42,7 +43,7 @@ set (SourcesChimeraAPPCargaManual
 	-lSDL2_ttf
 	-ltinyxml2
 	-lGLEW
-	-lGLEWmx
+	#-lGLEWmx
 	librt.so
 	libXrandr.so
 	-lpthread

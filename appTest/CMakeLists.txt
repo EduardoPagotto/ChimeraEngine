@@ -9,6 +9,7 @@ find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)
 
 include_directories(
+	../../chimera/include
 	${appTest_SOURCE_DIR}/include/
 	${Chimera_SOURCE_DIR}/include
 	${OPENGL_INCLUDE_DIR}
@@ -48,7 +49,7 @@ set (SourcesChimeraAPPTest
 	-lSDL2_ttf
 	-ltinyxml2
 	-lGLEW
-	-lGLEWmx
+	#-lGLEWmx
 	librt.so
 	libXrandr.so
 	-lpthread

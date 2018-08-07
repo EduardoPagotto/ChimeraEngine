@@ -1,5 +1,6 @@
 {
     "C_Cpp.intelliSenseEngine": "Default",
     "editor.minimap.enabled": false,
-    "C_Cpp.intelliSenseEngineFallback": "Enabled"
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "cmake.configureOnOpen": true
 }

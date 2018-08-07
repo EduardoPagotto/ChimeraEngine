@@ -10,6 +10,7 @@ find_package(Freetype REQUIRED)
 #find_package(Log4Cxx REQUIRED)
 
 #set(INCLUDE_DIRECTORIES ${Chimera}/include/)
+add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 include_directories(
 	${OPENGL_INCLUDE_DIR}

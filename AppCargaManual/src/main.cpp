@@ -6,21 +6,21 @@
 
 #include <iostream>
 
-#include "VideoDevice.h"
+#include <VideoDevice.h>
 
 #ifdef OVR_SET_TO_USE
 #include "OvrDevice.h"
 #endif
 
-#include "Game.h"
-#include "LoaderDae.h"
-#include "FlowControl.h"
-#include "ParticleEmitter.h"
-#include "Transform.h"
-#include "HUD.h"
-#include "Shader.h"
-#include "Singleton.h"
-#include "ExceptionChimera.h"
+#include <Game.h>
+#include <LoaderDae.h>
+#include <FlowControl.h>
+#include <ParticleEmitter.h>
+#include <Transform.h>
+#include <HUD.h>
+#include <Shader.h>
+#include <Singleton.h>
+#include <ExceptionChimera.h>
 
 int testeCargaArquivo() {
 

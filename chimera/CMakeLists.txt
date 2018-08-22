@@ -6,6 +6,7 @@ find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
+find_package(GLEW REQUIRED)
 #find_package(FTGL REQUIRED)
 #find_package(Log4Cxx REQUIRED)
 
@@ -21,6 +22,7 @@ include_directories(
 	${FTGL_INCLUDE_DIR}
 	#${LOG4CXX_INCLUDE_DIR}
 	${Chimera_SOURCE_DIR}/include
+	${GLEW_INCLUDE_DIRS}
 )
 
 if (OVR_SET_TO_USE)

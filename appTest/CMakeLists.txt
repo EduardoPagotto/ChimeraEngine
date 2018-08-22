@@ -31,8 +31,9 @@ target_link_libraries(
 	${Chimera_BINARY_DIR}/libChimera.a
 	${OPENGL_LIBRARIES}
 	${SDL2_LIBRARY}
-	/usr/lib64/libGLEW.so
-	/usr/lib64/libGLEWmx.so
+	#${GLEW_LIBRARIES}
+	#/usr/lib64/libGLEW.so
+	#/usr/lib64/libGLEWmx.so
 	librt.so
 	libXrandr.so)
 

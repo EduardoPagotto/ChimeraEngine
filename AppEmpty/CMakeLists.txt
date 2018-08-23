@@ -7,6 +7,7 @@ find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)
+find_package(GLEW REQUIRED)
 
 include_directories(
 	${AppEmpty_SOURCE_DIR}/include/
@@ -30,10 +31,12 @@ target_link_libraries(
 	${Chimera_BINARY_DIR}/libChimera.a
 	${OPENGL_LIBRARIES}
 	${SDL2_LIBRARY}
-	/usr/lib64/libGLEW.so
-	/usr/lib64/libGLEWmx.so
-	librt.so
-	libXrandr.so)
+	${GLEW_LIBRARIES}
+	#/usr/lib64/libGLEW.so
+	#/usr/lib64/libGLEWmx.so
+	#librt.so
+	#libXrandr.so
+	)
 
 set (SourcesChimeraAPPEmpty
 	${Chimera_BINARY_DIR}/libChimera.a

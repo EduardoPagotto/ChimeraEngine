@@ -7,6 +7,7 @@ find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)
+find_package(GLEW REQUIRED)
 #find_package(Log4Cxx REQUIRED)
 
 include_directories(
@@ -37,6 +38,7 @@ set (SourcesChimeraAPPCargaManual
 	${BULLET_LIBRARIES}
 	${FREETYPE_LIBRARY}
 	${FTGL_LIBRARY}
+	${GLEW_LIBRARIES}
 	#${LOG4CXX_LIBRARIES}
 	-lSDL2
 	-lSDL2_image

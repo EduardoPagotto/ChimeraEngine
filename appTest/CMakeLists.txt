@@ -7,8 +7,9 @@ find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(FTGL REQUIRED)
+find_package(GLEW REQUIRED)
 
-include_directories(
+include_directories (
 	../../chimera/include
 	${appTest_SOURCE_DIR}/include/
 	${Chimera_SOURCE_DIR}/include
@@ -17,8 +18,10 @@ include_directories(
 	${BULLET_INCLUDE_DIR}
 	${FREETYPE_INCLUDE_DIRS}
 	${FTGL_INCLUDE_DIR}
-#	${LOG4CXX_INCLUDE_DIR}
 )
+	#${GLEW_INCLUDE_DIR}
+	#${LOG4CXX_INCLUDE_DIR}
+
 
 add_executable(
 	appTest
@@ -26,16 +29,17 @@ add_executable(
 	src/appTest.cpp
 )
 
-target_link_libraries(
+target_link_libraries (
 	appTest
 	${Chimera_BINARY_DIR}/libChimera.a
 	${OPENGL_LIBRARIES}
 	${SDL2_LIBRARY}
-	#${GLEW_LIBRARIES}
+	${GLEW_LIBRARIES}
+)
 	#/usr/lib64/libGLEW.so
 	#/usr/lib64/libGLEWmx.so
-	librt.so
-	libXrandr.so)
+	#librt.so
+	#libXrandr.so)
 
 set (SourcesChimeraAPPTest
 	${Chimera_BINARY_DIR}/libChimera.a
@@ -51,8 +55,8 @@ set (SourcesChimeraAPPTest
 	-ltinyxml2
 	-lGLEW
 	#-lGLEWmx
-	librt.so
-	libXrandr.so
+	#librt.so
+	#libXrandr.so
 	-lpthread
 )
 

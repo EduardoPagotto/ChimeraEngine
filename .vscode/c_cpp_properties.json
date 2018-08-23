@@ -5,9 +5,13 @@
             "includePath": [
                 "${workspaceRoot}/chimera/include"
             ],
-            "defines": [],
+            "defines": [
+                "_DEBUG"
+            ],
             "browse": {
-                "path": [],
+                "path": [
+                    "${workspaceRoot}/chimera/include"
+                ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },

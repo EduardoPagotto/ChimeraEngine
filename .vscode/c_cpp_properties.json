@@ -3,7 +3,8 @@
         {
             "name": "chimera_compile",
             "includePath": [
-                "${workspaceRoot}/chimera/include"
+                "${workspaceRoot}/chimera/include",
+                "/usr/include/freetype2"
             ],
             "defines": [
                 "_DEBUG"

@@ -6,61 +6,42 @@ find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(FTGL REQUIRED)
+find_package(GLEW REQUIRED)
 
-include_directories(
-	${Chimera_SOURCE_DIR}/include
-	${OPENGL_INCLUDE_DIR}
-	${SDL2_INCLUDE_DIR}
-	${BULLET_INCLUDE_DIR}
-	${FREETYPE_INCLUDE_DIRS}
-	${FTGL_INCLUDE_DIR}
-	${AppShader_SOURCE_DIR}/include/
-#	${LOG4CXX_INCLUDE_DIR}
+set (IncludesAppShare ${Chimera_SOURCE_DIR}/include
+					  ${AppShader_SOURCE_DIR}/include/
+					  ${OPENGL_INCLUDE_DIR}
+					  ${SDL2_INCLUDE_DIR}
+					  ${BULLET_INCLUDE_DIR}
+					  ${FREETYPE_INCLUDE_DIRS}
+					  #${LOG4CXX_INCLUDE_DIR}
 )
 
-add_executable(
-	AppShader
-	src/Game.cpp
-	src/AppShader.cpp)
-
-target_link_libraries(
-	AppShader
-	${Chimera_BINARY_DIR}/libChimera.a
-	${OPENGL_LIBRARIES}
-	${SDL2_LIBRARY}
-	/usr/lib/x86_64-linux-gnu/libGLEW.so
-	#/usr/lib/x86_64-linux-gnu/libGLEWmx.so.1.13
-	#/usr/lib64/libGLEW.so
-	#/usr/lib64/libGLEWmx.so
-	librt.so
-	libXrandr.so)
-
-set (SourcesChimeraAPPShader
-	${Chimera_BINARY_DIR}/libChimera.a
-	${OPENGL_LIBRARIES}
-	${SDL2_LIBRARY}
-	${BULLET_LIBRARIES}
-	${FREETYPE_LIBRARY}
-	${FTGL_LIBRARY}
-	#${LOG4CXX_LIBRARIES}
-	-lSDL2
-	-lSDL2_image
-	-lSDL2_ttf
-	-ltinyxml2
-	-lGLEW
-	#-lGLEWmx
-	librt.so
-	libXrandr.so
-	-lpthread
+set (LibsAppShader ${Chimera_BINARY_DIR}/libChimera.a
+				   ${OPENGL_LIBRARIES}
+				   ${SDL2_LIBRARY}
+				   ${BULLET_LIBRARIES}
+				   ${FREETYPE_LIBRARY}
+				   ${GLEW_LIBRARY}
+				   #${LOG4CXX_LIBRARIES}
+				   -lSDL2
+				   -lSDL2_image
+				   -lSDL2_ttf
+				   -ltinyxml2
+				   -lpthread
 )
 
 if (OVR_SET_TO_USE)
     message(STATUS "OVR Incluido no Projeto")
-    set(SourcesChimeraAPPShader ${SourcesChimeraAPPShader} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
+    set(LibsAppShader ${LibsAppShader} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-target_link_libraries(AppShader ${SourcesChimeraAPPShader})
+add_executable(AppShader src/Game.cpp
+						 src/AppShader.cpp
+)
+
+target_link_libraries(AppShader ${LibsAppShader})
+target_include_directories (AppShader PRIVATE ${IncludesAppShare})
 
 add_dependencies(AppShader Chimera)
 

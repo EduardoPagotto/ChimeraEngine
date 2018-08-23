@@ -5,10 +5,10 @@
 #endif
 
 #include <iostream>
-#include "VideoDevice.h"
+#include <VideoDevice.h>
 #include "Game.h"
-#include "FlowControl.h"
-#include "ExceptionChimera.h"
+#include <FlowControl.h>
+#include <ExceptionChimera.h>
 
 #ifndef WIN32
 int main ( int argn, char** argv ) {

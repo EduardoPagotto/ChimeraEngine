@@ -4,14 +4,17 @@
             "name": "chimera_compile",
             "includePath": [
                 "${workspaceRoot}/chimera/include",
-                "/usr/include/freetype2"
+                "/usr/include/freetype2",
+                "/usr/include"
             ],
             "defines": [
                 "_DEBUG"
             ],
             "browse": {
                 "path": [
-                    "${workspaceRoot}/chimera/include"
+                    "${workspaceRoot}/chimera/include",
+                    "/usr/include/freetype2",
+                    "/usr/include"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""

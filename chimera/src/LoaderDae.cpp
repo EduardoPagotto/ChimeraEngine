@@ -94,14 +94,15 @@ void LoaderDae::loadFile ( const std::string &file ) {
     doc = new tinyxml2::XMLDocument();
 
     //Verifica se arquivo existe
-    if ( doc->LoadFile ( dir_arquivo.c_str() ) != 0 ) {
-        throw ExceptionChimera ( ExceptionCode::OPEN, "Falha ao ler arquivo" );
+    tinyxml2::XMLError a_eResult = doc->LoadFile ( dir_arquivo.c_str());
+    if ( a_eResult != 0 ) {
+        throw ExceptionChimera ( ExceptionCode::OPEN, "Falha ao ler arquivo erro: " + std::to_string(a_eResult) );
     }
 
-    //vefifica se ele é uma estrutura compativel com collada
+    //vefifica se ele ï¿½ uma estrutura compativel com collada
     root = doc->FirstChildElement ( "COLLADA" );
     if ( root == nullptr ) {
-        throw ExceptionChimera ( ExceptionCode::OPEN, "Nao é um arquivo colada" );
+        throw ExceptionChimera ( ExceptionCode::OPEN, "Nao ï¿½ um arquivo colada" );
     }
 
     //carrega elementos de Texture, Material e Geometrias

@@ -2,11 +2,36 @@
         "version": "0.2.0",
         "configurations": [
             {
-                "name": "(gdb) Launch AppCargaManual",
+                "name": "(gdb)AppCargaManual",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "${workspaceRoot}/build/AppCargaManual",
-                "args": [],
+                "program": "${workspaceRoot}/build/AppCargaManual/AppCargaManual",
+                "args": [
+                    "-p",
+                    "${workspaceRoot}"
+                ],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": true,
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            {
+                "name": "(gdb)AppEmpty",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceRoot}/build/AppEmpty/AppEmpty",
+                "args": [
+                    "-p",
+                    "${workspaceRoot}"
+                ],
                 "stopAtEntry": false,
                 "cwd": "${workspaceRoot}",
                 "environment": [],

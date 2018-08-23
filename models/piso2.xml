@@ -9,7 +9,7 @@
     <modified>2015-02-26T01:12:12</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
-  </asset>  
+  </asset>
   <library_cameras>
     <camera id="Camera-camera" name="Camera.002">
       <optics>
@@ -640,7 +640,7 @@
               </orbital>
             </technique>
           </extra>
-          
+
         </instance_camera>
       </node>
       <node id="luz01" name="luz01" type="NODE">
@@ -718,9 +718,9 @@
         <static_friction>0</static_friction>
       </technique_common>
     </physics_material>
-    
+
   </library_physics_materials>
-  
+
   <library_physics_models>
     <physics_model id="Scene-PhysicsModel" name="Scene-PhysicsModel">
       <rigid_body name="zoltan-RigidBody" sid="zoltan-RigidBody">
@@ -785,20 +785,20 @@
           </shape>
         </technique_common>
       </rigid_body>
-      
+
     </physics_model>
   </library_physics_models>
-  
+
   <library_physics_scenes>
     <physics_scene id="Scene-Physics" name="Scene-Physics">
       <instance_physics_model url="#Scene-PhysicsModel">
-        
+
         <instance_rigid_body body="zoltan-RigidBody" target="#Zoltan"/>
         <instance_rigid_body body="plane-RigidBody" target="#Plane"/>
         <instance_rigid_body body="cubo-RigidBody" target="#cubo01"/>
         <instance_rigid_body body="ico01-RigidBody" target="#Icosphere01"/>
         <instance_rigid_body body="ico02-RigidBody" target="#Icosphere02"/>
-        
+
       </instance_physics_model>
       <technique_common>
         <gravity>0 0 0</gravity>
@@ -821,7 +821,7 @@
       </library_node_kind>
     </technique>
   </extra>
-  
+
   <scene>
     <instance_visual_scene url="#Scene"/>
     <instance_physics_scene url="#Scene-Physics"/>

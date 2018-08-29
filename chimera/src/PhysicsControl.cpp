@@ -25,8 +25,6 @@ PhysicsControl::PhysicsControl() {
 
     //true para forca aplicada apenas dentro docallback
     discretDynamicsWorld->setInternalTickCallback ( PhysicsControl::doTickCallBack, static_cast <void *> ( this ), false );
-
-    //logger = log4cxx::Logger::getLogger ( "PhysicsControl" );
 }
 
 PhysicsControl::~PhysicsControl() {

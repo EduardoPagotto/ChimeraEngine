@@ -16,7 +16,6 @@ set (IncludesAppTest ../../chimera/include
 					 ${BULLET_INCLUDE_DIR}
 					 ${FREETYPE_INCLUDE_DIRS}
 					 ${GLEW_INCLUDE_DIR}
-					 #${LOG4CXX_INCLUDE_DIR}
 )
 
 set (LibsAppTest ${Chimera_BINARY_DIR}/libChimera.a #SourcesChimeraAPPTest
@@ -25,7 +24,6 @@ set (LibsAppTest ${Chimera_BINARY_DIR}/libChimera.a #SourcesChimeraAPPTest
 				 ${BULLET_LIBRARIES}
 				 ${FREETYPE_LIBRARY}
 				 ${GLEW_LIBRARIES}
-				 #${LOG4CXX_LIBRARIES}
 				 -lSDL2
 				 -lSDL2_image
 				 -lSDL2_ttf

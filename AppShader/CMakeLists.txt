@@ -14,7 +14,6 @@ set (IncludesAppShare ${Chimera_SOURCE_DIR}/include
 					  ${SDL2_INCLUDE_DIR}
 					  ${BULLET_INCLUDE_DIR}
 					  ${FREETYPE_INCLUDE_DIRS}
-					  #${LOG4CXX_INCLUDE_DIR}
 )
 
 set (LibsAppShader ${Chimera_BINARY_DIR}/libChimera.a
@@ -23,7 +22,6 @@ set (LibsAppShader ${Chimera_BINARY_DIR}/libChimera.a
 				   ${BULLET_LIBRARIES}
 				   ${FREETYPE_LIBRARY}
 				   ${GLEW_LIBRARY}
-				   #${LOG4CXX_LIBRARIES}
 				   -lSDL2
 				   -lSDL2_image
 				   -lSDL2_ttf

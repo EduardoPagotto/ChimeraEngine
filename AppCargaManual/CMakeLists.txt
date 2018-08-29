@@ -7,7 +7,6 @@ find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
-#find_package(Log4Cxx REQUIRED)
 
 set (IncludesAppCargaManual ../../chimera/include
 							${AppCargaManual_SOURCE_DIR}/include/
@@ -16,7 +15,6 @@ set (IncludesAppCargaManual ../../chimera/include
 							${SDL2_INCLUDE_DIR}
 							${BULLET_INCLUDE_DIR}
 							${FREETYPE_INCLUDE_DIRS}
-							#${LOG4CXX_INCLUDE_DIR}
 )
 
 set (LibsAppCargaManual ${Chimera_BINARY_DIR}/libChimera.a
@@ -24,9 +22,7 @@ set (LibsAppCargaManual ${Chimera_BINARY_DIR}/libChimera.a
 						${SDL2_LIBRARY}
 						${BULLET_LIBRARIES}
 						${FREETYPE_LIBRARY}
-						${FTGL_LIBRARY}
 						${GLEW_LIBRARIES}
-						#${LOG4CXX_LIBRARIES}
 						-lSDL2
 						-lSDL2_image
 						-lSDL2_ttf

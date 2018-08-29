@@ -16,7 +16,6 @@ set (LibsAppEmpty ${Chimera_BINARY_DIR}/libChimera.a
 				  ${SDL2_IBRARIES}
 				  ${BULLET_LIBRARIES}
 				  ${FREETYPE_LIBRARY}
-				  #${LOG4CXX_LIBRARIES}
 				  -lSDL2
 				  -ltinyxml2
 				  -lGLEW
@@ -30,7 +29,6 @@ set (IncludesAppEmpty ${CMAKE_CURRENT_SOURCE_DIR}/include
 					  ${SDL2_INCLUDE_DIR}
 					  ${BULLET_INCLUDE_DIR}
 					  ${FREETYPE_INCLUDE_DIRS}
-					  #${LOG4CXX_INCLUDE_DIR}
 )
 
 if (OVR_SET_TO_USE)

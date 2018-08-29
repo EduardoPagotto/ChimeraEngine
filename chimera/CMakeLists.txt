@@ -7,7 +7,6 @@ find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
-#find_package(Log4Cxx REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 

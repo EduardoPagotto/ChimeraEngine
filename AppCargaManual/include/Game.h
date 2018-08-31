@@ -1,5 +1,5 @@
 #ifndef GAME_XX_H_
-#define GAME_XX H_
+#define GAME_XX_H_
 
 #include <IGameClientEvents.h>
 #include <SceneMng.h>

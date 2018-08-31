@@ -1,6 +1,5 @@
 #include "ParticleEmitter.h"
 #include "ExceptionChimera.h"
-#include "Coord.h"
 #include "Camera.h"
 #include "NodeVisitor.h"
 #include <algorithm>

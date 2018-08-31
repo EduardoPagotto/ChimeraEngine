@@ -32,9 +32,9 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 		std::string dirBase = "C:\\Projetos\\ChimeraEngine\\shader\\";
 		std::string dirFontes = "C:\\Projetos\\ChimeraEngine\\fonts\\";
 #else
-        std::string dirDados = "../../models";
-		std::string dirBase = "../../shader/";
-		std::string dirFontes = "../../fonts/";
+        std::string dirDados = "/home/pagotto/Projetos/ChimeraEngine/models";
+		std::string dirBase = "/home/pagotto/Projetos/ChimeraEngine/shader/";
+		std::string dirFontes = "/home/pagotto/Projetos/ChimeraEngine/fonts/";
 #endif
 
     using namespace Chimera;

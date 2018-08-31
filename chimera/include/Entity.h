@@ -8,7 +8,7 @@ namespace Chimera
 {
 
 /**
- * Enum EntityKind
+ * @brief Enum EntityKind
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  *  @version %I%, %G%
@@ -31,7 +31,7 @@ enum class EntityKind : int8_t
 };
 
 /**
- * Class Entity
+ * @brief Class Entity
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  *  @version %I%, %G%
@@ -45,15 +45,15 @@ public:
      * @param _id identificador 
      * @param _name nome 
      */
-    Entity ( const EntityKind &_kind ,/*const std::string &_id,*/ const std::string &_name )
-        : kind ( _kind ), /*id ( _id ),*/ name ( _name ) ,serial ( ++serialMaster ) {}
+    Entity ( const EntityKind &_kind , const std::string &_name )
+        : kind ( _kind ), name ( _name ) ,serial ( ++serialMaster ) {}
 
     /**
      * Construtor de Copia
      * @param _entity entidade a ser copiada
      */
     Entity ( const Entity &_entity ) 
-        : kind ( _entity.kind ),/* id(_entity.id + "_cp"),*/ name(_entity.name + "_cp"), serial ( ++serialMaster ) {}
+        : kind ( _entity.kind ), name(_entity.name + "_cp"), serial ( ++serialMaster ) {}
 
     /**
      * Destrutor 

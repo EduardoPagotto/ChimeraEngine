@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.2)
+cmake_minimum_required(VERSION 3.10.2)
 
 PROJECT(AppShader)
 
@@ -13,8 +13,7 @@ set (IncludesAppShare ${AppShader_SOURCE_DIR}/include/
 					  ${OPENGL_INCLUDE_DIR}
 					  ${SDL2_INCLUDE_DIR}
 					  ${BULLET_INCLUDE_DIR}
-					  ${FREETYPE_INCLUDE_DIRS}
-)
+					  ${FREETYPE_INCLUDE_DIRS})
 
 set (LibsAppShader ${Chimera_BINARY_DIR}/libChimera.a
 				   ${OPENGL_LIBRARIES}
@@ -26,8 +25,7 @@ set (LibsAppShader ${Chimera_BINARY_DIR}/libChimera.a
 				   -lSDL2_image
 				   -lSDL2_ttf
 				   -ltinyxml2
-				   -lpthread
-)
+				   -lpthread)
 
 if (OVR_SET_TO_USE)
     message(STATUS "OVR Incluido no Projeto")
@@ -35,8 +33,7 @@ if (OVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
 add_executable(AppShader src/Game.cpp
-						 src/AppShader.cpp
-)
+						 src/AppShader.cpp)
 
 target_link_libraries(AppShader ${LibsAppShader})
 target_include_directories (AppShader PRIVATE ${IncludesAppShare})

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.2)
+cmake_minimum_required(VERSION 3.10.2)
 
 PROJECT(appTest)
 
@@ -14,8 +14,7 @@ set (IncludesAppTest ${appTest_SOURCE_DIR}/include/
 					 ${SDL2_INCLUDE_DIR}
 					 ${BULLET_INCLUDE_DIR}
 					 ${FREETYPE_INCLUDE_DIRS}
-					 ${GLEW_INCLUDE_DIR}
-)
+					 ${GLEW_INCLUDE_DIR})
 
 set (LibsAppTest ${Chimera_BINARY_DIR}/libChimera.a #SourcesChimeraAPPTest
 				 ${OPENGL_LIBRARIES}
@@ -27,12 +26,10 @@ set (LibsAppTest ${Chimera_BINARY_DIR}/libChimera.a #SourcesChimeraAPPTest
 				 -lSDL2_image
 				 -lSDL2_ttf
 				 -ltinyxml2
-				 -lpthread
-)
+				 -lpthread)
 
 add_executable(appTest src/Game.cpp
-					   src/appTest.cpp
-)
+					   src/appTest.cpp)
 
 if (OVR_SET_TO_USE)
     message(STATUS "OVR Incluido no Projeto")

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.2)
+cmake_minimum_required(VERSION 3.10.2)
 
 PROJECT(AppEmpty)
 
@@ -19,8 +19,7 @@ set (LibsAppEmpty ${Chimera_BINARY_DIR}/libChimera.a
 				  -lSDL2
 				  -ltinyxml2
 				  -lGLEW
-				  -lpthread
-)
+				  -lpthread)
 
 #define os includes
 set (IncludesAppEmpty ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -28,8 +27,7 @@ set (IncludesAppEmpty ${CMAKE_CURRENT_SOURCE_DIR}/include
 					  ${OPENGL_INCLUDE_DIR}
 					  ${SDL2_INCLUDE_DIR}
 					  ${BULLET_INCLUDE_DIR}
-					  ${FREETYPE_INCLUDE_DIRS}
-)
+					  ${FREETYPE_INCLUDE_DIRS})
 
 
 if (OVR_SET_TO_USE)
@@ -38,8 +36,7 @@ if (OVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
 add_executable (AppEmpty src/Game.cpp
-						 src/AppEmpty.cpp
-)
+						 src/AppEmpty.cpp)
 
 target_link_libraries(AppEmpty ${LibsAppEmpty})
 target_include_directories (AppEmpty PRIVATE ${IncludesAppEmpty})

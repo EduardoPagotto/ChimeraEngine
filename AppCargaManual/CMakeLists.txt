@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.2)
+cmake_minimum_required(VERSION 3.10.2)
 
 PROJECT(AppCargaManual)
 
@@ -13,8 +13,7 @@ set (IncludesAppCargaManual ${AppCargaManual_SOURCE_DIR}/include/
 							${OPENGL_INCLUDE_DIR}
 							${SDL2_INCLUDE_DIR}
 							${BULLET_INCLUDE_DIR}
-							${FREETYPE_INCLUDE_DIRS}
-)
+							${FREETYPE_INCLUDE_DIRS})
 
 set (LibsAppCargaManual ${Chimera_BINARY_DIR}/libChimera.a
 						${OPENGL_LIBRARIES}
@@ -26,8 +25,7 @@ set (LibsAppCargaManual ${Chimera_BINARY_DIR}/libChimera.a
 						-lSDL2_image
 						-lSDL2_ttf
 						-ltinyxml2
-						-lpthread
-)
+						-lpthread)
 
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR Incluido no Projeto")
@@ -36,8 +34,7 @@ if (OVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
 add_executable(AppCargaManual src/Game.cpp
-							  src/main.cpp
-)
+							  src/main.cpp)
 
 target_include_directories(AppCargaManual PRIVATE ${IncludesAppCargaManual})
 target_link_libraries(AppCargaManual ${LibsAppCargaManual})

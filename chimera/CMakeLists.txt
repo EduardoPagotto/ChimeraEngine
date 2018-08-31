@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.2)
+cmake_minimum_required(VERSION 3.10.2)
 
 PROJECT(Chimera)
 
@@ -51,8 +51,7 @@ set (SourcesChimeraAPI 	src/ChimeraUtils.cpp
 						src/MeshUtil.cpp
 						src/ShadowMapVisitor.cpp
 						src/NodeParse.cpp
-						src/TextureManager.cpp
-)
+						src/TextureManager.cpp)
 
 #define os includes
 set (IncludesChimeraAPI ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -60,8 +59,7 @@ set (IncludesChimeraAPI ${CMAKE_CURRENT_SOURCE_DIR}/include
 						${SDL2_INCLUDE_DIR}
 						${BULLET_INCLUDE_DIR}
 						${FREETYPE_INCLUDE_DIRS}
-						${GLEW_INCLUDE_DIRS}
-)
+						${GLEW_INCLUDE_DIRS})
 
 #Adiciona objetos e includes do OVR ao SourcesChimeraAPI e IncludesChimeraAPI
 if (OVR_SET_TO_USE)

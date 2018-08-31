@@ -24,12 +24,13 @@ set (LibsAppEmpty ${Chimera_BINARY_DIR}/libChimera.a
 
 #define os includes
 set (IncludesAppEmpty ${CMAKE_CURRENT_SOURCE_DIR}/include
-					  /home/pagotto/Projetos/ChimeraEngine/chimera/include
+					  ${Chimera_SOURCE_DIR}/include
 					  ${OPENGL_INCLUDE_DIR}
 					  ${SDL2_INCLUDE_DIR}
 					  ${BULLET_INCLUDE_DIR}
 					  ${FREETYPE_INCLUDE_DIRS}
 )
+
 
 if (OVR_SET_TO_USE)
     message(STATUS "OVR Incluido no Projeto")

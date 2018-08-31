@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceRoot}/chimera/include",
                 "/usr/include/freetype2",
-                "/usr/include"
+                "/usr/include",
+                "/usr/include/bullet"
             ],
             "defines": [
                 "_DEBUG"
@@ -14,7 +15,8 @@
                 "path": [
                     "${workspaceRoot}/chimera/include",
                     "/usr/include/freetype2",
-                    "/usr/include"
+                    "/usr/include",
+                    "/usr/include/bullet"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""

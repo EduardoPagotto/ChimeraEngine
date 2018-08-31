@@ -8,8 +8,7 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
-set (IncludesAppCargaManual ../../chimera/include
-							${AppCargaManual_SOURCE_DIR}/include/
+set (IncludesAppCargaManual ${AppCargaManual_SOURCE_DIR}/include/
 							${Chimera_SOURCE_DIR}/include
 							${OPENGL_INCLUDE_DIR}
 							${SDL2_INCLUDE_DIR}

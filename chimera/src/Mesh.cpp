@@ -6,6 +6,8 @@
 #include "MeshUtil.h"
 #include "Singleton.h"
 
+// Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
+
 namespace Chimera {
 
 Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH, _name ) {

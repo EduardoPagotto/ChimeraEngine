@@ -1,0 +1,252 @@
+[
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppCargaManual",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppCargaManual/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppCargaManual.dir/src/Game.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppCargaManual/src/Game.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/AppCargaManual/src/Game.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppCargaManual",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppCargaManual/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppCargaManual.dir/src/main.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppCargaManual/src/main.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/AppCargaManual/src/main.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppEmpty",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppEmpty/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppEmpty.dir/src/Game.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppEmpty/src/Game.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/AppEmpty/src/Game.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppEmpty",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppEmpty/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppEmpty.dir/src/AppEmpty.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppEmpty/src/AppEmpty.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/AppEmpty/src/AppEmpty.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppShader",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppShader/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppShader.dir/src/Game.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppShader/src/Game.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/AppShader/src/Game.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppShader",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppShader/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppShader.dir/src/AppShader.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppShader/src/AppShader.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/AppShader/src/AppShader.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/appTest",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/appTest/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/appTest.dir/src/Game.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/appTest/src/Game.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/appTest/src/Game.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/appTest",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/appTest/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/appTest.dir/src/appTest.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/appTest/src/appTest.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/appTest/src/appTest.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/ChimeraUtils.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/ChimeraUtils.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/ChimeraUtils.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Color.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Color.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Color.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Node.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Node.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Node.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Light.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Light.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Light.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Camera.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Camera.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Camera.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Material.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Material.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Material.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/CameraSpherical.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/CameraSpherical.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/CameraSpherical.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/CameraMan.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/CameraMan.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/CameraMan.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/CameraOvr.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/CameraOvr.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/CameraOvr.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Solid.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Solid.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Solid.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/PhysicsControl.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/PhysicsControl.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/PhysicsControl.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Constraint.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Constraint.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Constraint.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Texture.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Texture.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Texture.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Draw.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Draw.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Draw.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Mesh.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Mesh.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Mesh.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Font.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Font.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Font.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/HUD.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/HUD.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/HUD.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Timer.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Timer.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Timer.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Video.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Video.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Video.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/VideoDevice.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/VideoDevice.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/VideoDevice.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/LoaderDae.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/LoaderDae.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/LoaderDae.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/SceneMng.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/SceneMng.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/SceneMng.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/FlowControl.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/FlowControl.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/FlowControl.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/GameClient.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/GameClient.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/GameClient.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/JoystickManager.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/JoystickManager.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/JoystickManager.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/JoystickState.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/JoystickState.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/JoystickState.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Particle.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Particle.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Particle.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/ParticleEmitter.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/ParticleEmitter.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/ParticleEmitter.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/ShadowMap.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/ShadowMap.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/ShadowMap.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Shader.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Shader.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Shader.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/SceneRoot.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/SceneRoot.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/SceneRoot.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Group.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Group.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Group.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/State.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/State.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/State.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/Transform.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/Transform.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/Transform.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/VboIndexer.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/VboIndexer.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/VboIndexer.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/InitVisitor.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/InitVisitor.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/InitVisitor.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/RenderVisitor.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/RenderVisitor.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/RenderVisitor.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/MeshUtil.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/MeshUtil.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/MeshUtil.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/ShadowMapVisitor.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/ShadowMapVisitor.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/ShadowMapVisitor.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/NodeParse.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/NodeParse.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/NodeParse.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/TextureManager.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/TextureManager.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/TextureManager.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/chimera",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGLM_ENABLE_EXPERIMENTAL -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/Chimera.dir/src/HmdDevice.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/chimera/src/HmdDevice.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/chimera/src/HmdDevice.cpp"
+}
+]

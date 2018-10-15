@@ -68,6 +68,11 @@ if (OVR_SET_TO_USE)
 	set(IncludesChimeraAPI ${IncludesChimeraAPI} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
 endif(OVR_SET_TO_USE)
 
+if (HMD_Z1_SET_TO_USE)
+	message(STATUS "HMD_Z1 Incluido no Projeto")
+	set(SourcesChimeraAPI ${SourcesChimeraAPI} src/HmdDevice.cpp) #adiciona o cpp
+endif(HMD_Z1_SET_TO_USE)
+
 # Define o Target
 add_library (Chimera STATIC ${SourcesChimeraAPI})
 

@@ -26,7 +26,8 @@ namespace Chimera {
 enum class KIND_DEVICE
 {
     SCREEN = 0,
-    OVR_OCULUS
+    OVR_OCULUS,
+    HMD_Z1
 };
 
 /**

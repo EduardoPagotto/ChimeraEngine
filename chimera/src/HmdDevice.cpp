@@ -1,3 +1,8 @@
+//#include <GL/glext.h>
+//#include "OpenGLDefs.h"
+
+#include <vector>
+
 #include "HmdDevice.h"
 #include "ExceptionSDL.h"
 
@@ -10,67 +15,55 @@
 
 namespace Chimera {
 
-HmdDevice::HmdDevice ( std::string _nome ) : Video ( _nome, KIND_DEVICE::SCREEN ) {
+HmdDevice::HmdDevice ( std::string _nome ) : Video ( _nome, KIND_DEVICE::HMD_Z1 ) {
 
-    fullscreenStatus = false;
-
-    hmd.resolution.w = SDL_WINDOWPOS_CENTERED;
-    hmd.resolution.h = SDL_WINDOWPOS_CENTERED
-
+    //hmd.resolution.w = SDL_WINDOWPOS_CENTERED;
+    //hmd.resolution.h = SDL_WINDOWPOS_CENTERED;
+    hmd.resolution.w = 900;
+    hmd.resolution.h = 900;
     //chama inicializacao do SDL na classe Pai
     initSDL();
-
 }
 
 HmdDevice::HmdDevice ( int _width, int _height, std::string _nome ) : Video ( _nome, KIND_DEVICE::SCREEN, _width, _height ) {
-
-    fullscreenStatus = false;
 
     // FIXME: necessario verificar se nao é outyro valor como o do olho +- 960x540 (1920x1080 / 2 ou 900x900)
     hmd.resolution.w = _width;
     hmd.resolution.h = _height;
 
-
-
     //chama inicializacao do SDL na classe Pai
     initSDL();
-
     initDevice();
 }
 
 HmdDevice::~HmdDevice() {
-
 }
 
 void HmdDevice::initDevice(void){
 
 
-    glGenFramebuffers(1, &this->fbo);
-    glGenRenderbuffers(1, &this->render_buf);
-    glBindRenderbuffer(this->render_buf);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_BGRA8, hmd.resolution.w, hmd.resolution.h);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER​, this->fbo);
-    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, this->render_buf);
-
-
-
+    glGenFramebuffers(1,&fbo);
+    glGenRenderbuffers(1,&render_buf);
+    glBindRenderbuffer(GL_RENDERBUFFER, render_buf);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, hmd.resolution.w, hmd.resolution.h); //GL_RGBA ??
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, render_buf);
 }
 
 void HmdDevice::initDraw() {
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER​,&this->fbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
 
 }
 
 void HmdDevice::endDraw() {
 
-    std::vector<std::uint8_t> data(hmd.resolution.w * hmd.resolution.h * 4);
+    std::vector<std::uint8_t> data( hmd.resolution.w * hmd.resolution.h * 4);
     glReadBuffer(GL_COLOR_ATTACHMENT0);
-    glReadPixels(0,0,width,height,GL_BGRA,GL_UNSIGNED_BYTE,&data[0]);
-
+    glReadPixels(0, 0, hmd.resolution.w ,hmd.resolution.h, GL_RGBA8, GL_UNSIGNED_BYTE, &data[0]); //GL_RGBA ??
     // Return to onscreen rendering:
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER​,0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
     SDL_GL_SwapWindow ( window );
 }
@@ -78,8 +71,8 @@ void HmdDevice::endDraw() {
 glm::mat4 HmdDevice::getPerspectiveProjectionMatrix(const float &_fov, const float &_near, const float &_far, int _eye) {
 //void VideoDevice::executeViewPerspective ( const float &_fov,const float &_near,const float &_far, int _eye ) {
 
-    glViewport ( 0, 0, winSizeW, winSizeH );
-	return glm::perspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
+    glViewport ( 0, 0, hmd.resolution.w, hmd.resolution.h );
+	return glm::perspective(_fov, (GLfloat)(float)hmd.resolution.w / (float)hmd.resolution.h, _near, _far);
 
     //glMatrixMode ( GL_PROJECTION );
     //glLoadIdentity();
@@ -102,7 +95,7 @@ glm::mat4 HmdDevice::getPerspectiveProjectionMatrix(const float &_fov, const flo
 
 glm::mat4 HmdDevice::getOrthoProjectionMatrix( int eyeIndex ) {
  
-    return glm::ortho(0.0f, static_cast<GLfloat>(winSizeW), 0.0f, static_cast<GLfloat>(winSizeH));
+    return glm::ortho(0.0f, static_cast<GLfloat>(hmd.resolution.w), 0.0f, static_cast<GLfloat>(hmd.resolution.h));
 }
 
 // void VideoDevice::executeViewOrto ( int eye ) {
@@ -117,27 +110,27 @@ glm::mat4 HmdDevice::getOrthoProjectionMatrix( int eyeIndex ) {
 // 
 // }
 
-void VideoDevice::reshape ( int _w, int _h ) {
-    winSizeW = _w;
-    winSizeH = _h;
+void HmdDevice::reshape ( int _w, int _h ) {
+    hmd.resolution.w = _w;
+    hmd.resolution.h = _h;
 }
 
-void VideoDevice::toggleFullScreen() {
+void HmdDevice::toggleFullScreen() {
 
-    if ( fullscreenStatus == false ) {
+    // if ( fullscreenStatus == false ) {
 
-        SDL_GetWindowPosition ( window, &winPosPrev.x, &winPosPrev.y );
+    //     SDL_GetWindowPosition ( window, &winPosPrev.x, &winPosPrev.y );
 
-        SDL_SetWindowPosition ( window, 0, 0 );
-        SDL_SetWindowFullscreen ( window, SDL_WINDOW_FULLSCREEN_DESKTOP );
+    //     SDL_SetWindowPosition ( window, 0, 0 );
+    //     SDL_SetWindowFullscreen ( window, SDL_WINDOW_FULLSCREEN_DESKTOP );
 
-    } else {
+    // } else {
 
-        SDL_SetWindowFullscreen ( window, 0 );
-        SDL_SetWindowPosition ( window, winPosPrev.x, winPosPrev.y );
+    //     SDL_SetWindowFullscreen ( window, 0 );
+    //     SDL_SetWindowPosition ( window, winPosPrev.x, winPosPrev.y );
 
-    }
+    // }
 
-    fullscreenStatus = !fullscreenStatus;
+    // fullscreenStatus = !fullscreenStatus;
 }
 }

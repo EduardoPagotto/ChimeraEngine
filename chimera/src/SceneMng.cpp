@@ -43,6 +43,7 @@ void SceneMng::init() {
 void SceneMng::draw () {
 
     int indiceDesenho = 1;
+    // FIXME: colocar o HMD_Z1
     if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
         indiceDesenho = 2;
     }

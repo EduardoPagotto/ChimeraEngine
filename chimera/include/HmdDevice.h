@@ -6,13 +6,13 @@
 namespace Chimera {
 
 struct Canvas {
-    int w,
-    int h
-}
+    int w;
+    int h;
+};
 
 struct HMD {
-    Canvas resolution
-}
+    Canvas resolution;
+};
 
 class HmdDevice : public Video
 {
@@ -37,11 +37,11 @@ private:
 
     void initDevice();
 
-    GLuint fbo, render_buf
+    GLuint fbo;
+    GLuint render_buf;
 
     HMD hmd;
-
-    Canvas fbSize
+    Canvas fbSize;
    // bool fullscreenStatus;
    // SDL_Point winPosPrev;
 };

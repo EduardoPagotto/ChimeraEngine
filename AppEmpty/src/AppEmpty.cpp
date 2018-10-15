@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <VideoDevice.h>
+//#include <HmdDevice.h>
 #include "Game.h"
 #include <FlowControl.h>
 #include <ExceptionChimera.h>
@@ -32,7 +33,9 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Chimera::Video *video = new Chimera::VideoDevice (800, 600, "teste");
+        //Chimera::Video *video = new Chimera::VideoDevice (800, 600, "teste");
+        Chimera::Video *video = new Chimera::VideoDevice (900, 900, "teste");
+        //Chimera::Video *video = new Chimera::HmdDevice("teste");
 
         Game *game = new Game(video);
 

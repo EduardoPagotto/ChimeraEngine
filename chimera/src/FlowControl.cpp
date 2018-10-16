@@ -86,7 +86,7 @@ void FlowControl::gameLoop ( void ) {
                 break;
             case SDL_WINDOWEVENT: 
                 pGameClientEvents->windowEvent(l_eventSDL.window);
-            break;
+                break;
             default:
                 if ( joystickManager.TrackEvent ( &l_eventSDL ) == true ) {
                     pGameClientEvents->joystickCapture ( joystickManager );

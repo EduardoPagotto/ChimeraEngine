@@ -20,12 +20,15 @@ make install
 
 ## Ambiente de desenvolvimento
 
- - Caso use o vscode extenções abaixo ajudam muito
+ - vscode extenções uteis: 
 
-    ```
+    ```    
+    code --list-extensions | xargs -L 1 echo code --install-extension
+    ...
     code --install-extension cschlosser.doxdocgen
     code --install-extension DotJoshJohnson.xml
     code --install-extension eamodio.gitlens
+    code --install-extension Gruntfuggly.todo-tree
     code --install-extension mohsen1.prettify-json
     code --install-extension ms-vscode.cpptools
     code --install-extension redhat.vscode-yaml
@@ -33,6 +36,7 @@ make install
     code --install-extension slevesque.shader
     code --install-extension twxs.cmake
     code --install-extension vector-of-bool.cmake-tools
+    code --install-extension wayou.vscode-todo-highlight
     ```
 
  - Kdevelop ainda suportado

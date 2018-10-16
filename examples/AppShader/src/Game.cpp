@@ -11,7 +11,7 @@ Game::Game(const std::string &vertex, const std::string &fragment, Chimera::Vide
 	isPaused = false;
 
 	vertexFile = vertex;
-	fragmentFile = fragmentFile;
+	fragmentFile = fragment;
 
 	shader =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
 }

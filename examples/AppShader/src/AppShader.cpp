@@ -55,6 +55,8 @@ int _tmain(int argc, _TCHAR* argv[]) {
 		pControle->open();
 		pControle->gameLoop();
 
+		console->info("Loop de Game encerrado!!!!");
+
 		delete pControle;
 		delete game;
 		delete video;
@@ -74,7 +76,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         //std::cout << "Falha Desconhecida " << std::endl;
     }
 
-
+	console->info("AppShader finalizado com sucesso");
 	return 0;
 }
 

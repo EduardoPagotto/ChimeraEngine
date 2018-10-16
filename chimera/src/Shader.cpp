@@ -15,6 +15,8 @@ Shader::Shader() noexcept {
 
 void Shader::reset() noexcept {
   std::cerr<<"Closing down shader manager\n";
+  // TODO: Implementar finalização do shader
+  
 //   for(auto programs : m_shaderPrograms)
 //     delete programs.second;
 //   for(auto shader : m_shaders)

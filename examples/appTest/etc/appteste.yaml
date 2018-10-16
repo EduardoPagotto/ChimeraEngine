@@ -1,0 +1,21 @@
+screen:
+  name: teste
+  canvas:
+    w: 900
+    h: 900
+shader:
+  vertex: ./examples/appTest/shader/vertex.glsl
+  fragment: ./examples/appTest/shader/fragment.glsl
+
+Entidades:
+  camera:
+    nome: Observador-01
+    distancia:
+      minima: 1000.0
+      maxima: 0.5
+      optica:
+        near: 0.1
+        far: 45.0
+    posicao: [300.0, 0.0, 0.0]
+    rotacao: [0.0, 0.0, 0.0]
+    perspectiva: True

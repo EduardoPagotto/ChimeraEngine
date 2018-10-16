@@ -27,7 +27,7 @@ Group *SceneMng::createSceneGraph() {
 	if (pLoader != nullptr)
 		pGroup = pLoader->getNodes();
 	else
-		pGroup = new Group(nullptr, "Default");
+		pGroup = new Group(nullptr, "DefaultSG");
 
     root->addChild(pGroup);
 

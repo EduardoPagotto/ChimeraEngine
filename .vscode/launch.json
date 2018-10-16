@@ -71,7 +71,7 @@
                 "name": "(gdb)appTest",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "${workspaceRoot}/build/appTest/appTest",
+                "program": "${workspaceRoot}/build/examples/appTest/appTest",
                 "args": [
                     "-p",
                     "${workspaceRoot}"

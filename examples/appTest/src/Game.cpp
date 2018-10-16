@@ -162,7 +162,7 @@ bool Game::paused()
 void Game::render() {
 
     pSceneMng->getVideo()->initDraw();
-    pSceneMng->draw ();
+    pSceneMng->draw();
     pSceneMng->getVideo()->endDraw();
     
 }

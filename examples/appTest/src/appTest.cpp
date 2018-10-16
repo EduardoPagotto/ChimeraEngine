@@ -21,6 +21,9 @@
 
 #include <glm/glm.hpp>
 
+#include <spdlog/spdlog.h>
+#include <yaml-cpp/yaml.h>
+
 #ifndef WIN32
 int main ( int argn, char** argv ) {
 #else
@@ -29,21 +32,44 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
 #ifdef WIN32
         std::string dirDados = "C:\\Projetos\\ChimeraEngine\\models\\";
-		std::string dirBase = "C:\\Projetos\\ChimeraEngine\\shader\\";
 		std::string dirFontes = "C:\\Projetos\\ChimeraEngine\\fonts\\";
 #else
         std::string dirDados = "/home/pagotto/Projetos/ChimeraEngine/models/";
-		std::string dirBase = "/home/pagotto/Projetos/ChimeraEngine/shader/";
 		std::string dirFontes = "/home/pagotto/Projetos/ChimeraEngine/fonts/";
 #endif
 
     using namespace Chimera;
 
+    auto console = spdlog::stdout_color_st("main");
+    console->info("appTest Iniciado");
+    for (int i=0 ; i < argn; i++) {
+        console->info("Parametros {0}: {1}", i, argv[i]);
+    }
+
     try {
+
+		std::string config_file = "./examples/appTest/etc/appteste.yaml";
+        console->info("Carregar arquivo:{0}",config_file);
+        YAML::Node config = YAML::LoadFile(config_file);
+
+        YAML::Node screen = config["screen"];
+        std::string nome = screen["name"].as<std::string>();
+
+        YAML::Node canvas = screen["canvas"];
+        int w = canvas["w"].as<int>();
+        int h = canvas["h"].as<int>();
+
+		YAML::Node shader = config["shader"];
+		std::string vertexFile = shader["vertex"].as<std::string>();
+		std::string fragmentFile = shader["fragment"].as<std::string>();
+
+        console->info("Iniciar Tela: {0}, w: {1}, h: {2}", nome, w, h);
+		console->info("Shader: Vertex: {0}", vertexFile);
+		console->info("Shader: Fragment: {0}", fragmentFile);
 
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Video *video = new VideoDevice (640, 480, "teste");
+        Video *video = new VideoDevice (w, h, nome);
 
         SceneMng *sceneMng = new SceneMng ( video );
         //sceneMng->setReader(pLoader);
@@ -59,11 +85,11 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pCam->init();
         sceneMng->cameraAtiva(pCam);
 
+		Shader *shader_engine =  Singleton<Shader>::getRefSingleton();
+		shader_engine->load("default", vertexFile, fragmentFile);
+
         Group* group1 = sceneMng->createSceneGraph();
-
-		Shader *shader =  Singleton<Shader>::getRefSingleton();
-		shader->load("default", dirBase + "vertex.glsl", dirBase + "fragment.glsl");
-
+        group1->setShaderName("default");
 
         Transform* pTrans = new Transform(group1,"trans01");
         pTrans->setPosition( glm::vec3( 0.0, 0.0, 0.0) );
@@ -98,22 +124,35 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
 		Mesh *pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), pMat2);
 
-
         Game *game = new Game(sceneMng);
 
         FlowControl *pControle = new FlowControl( game );
         pControle->open();
         pControle->gameLoop();
 
+        Singleton<Shader>::releaseRefSingleton();
+
+        console->info("Loop de Game encerrado!!!!");
+
         delete pControle;
         delete game;
         delete video;
 
-    } catch ( const Exception& ex ) {
-
-        std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
+    } catch (const Chimera::Exception& ex) {
+        console->error("Falha grave:{0}", ex.getMessage());
+        //std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;
+    } catch (const std::exception& ex) {
+        console->error("Falha grave:{0}", ex.what());
+        //std::cout << "Falha grave: " << ex.what() << " " << std::endl;
+    } catch (const std::string& ex) {
+        console->error("Falha grave:{0}", ex);
+    } catch (...) {
+        console->error("Falha Desconhecida");
+        //std::cout << "Falha Desconhecida " << std::endl;
     }
+
+	console->info("appTest finalizado com sucesso");
 
     return 0;
 }

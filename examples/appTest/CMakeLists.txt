@@ -26,7 +26,8 @@ set (LibsAppTest ${Chimera_BINARY_DIR}/libChimera.a #SourcesChimeraAPPTest
 				 -lSDL2_image
 				 -lSDL2_ttf
 				 -ltinyxml2
-				 -lpthread)
+				 -lpthread
+				 -lyaml-cpp)
 
 add_executable(appTest src/Game.cpp
 					   src/appTest.cpp)

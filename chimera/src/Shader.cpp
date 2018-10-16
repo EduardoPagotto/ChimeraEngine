@@ -149,7 +149,7 @@ bool Shader::selectCurrent(const std::string & _cur)
 		return true;
 	}
 
-	std::cout << "Shader Valido: " << _cur << " ID: " << idProgram << std::endl;
+	std::cout << "Shader Invalido: " << _cur << " ID: " << idProgram << std::endl;
 	return false;
 }
 

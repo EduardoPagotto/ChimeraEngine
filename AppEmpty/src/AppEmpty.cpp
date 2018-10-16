@@ -5,15 +5,14 @@
 #endif
 
 #include <iostream>
-#include <VideoDevice.h>
-//#include <HmdDevice.h>
+//#include <VideoDevice.h>
+#include <HmdDevice.h>
 #include "Game.h"
 #include <FlowControl.h>
 #include <ExceptionChimera.h>
 
-//
 #include <spdlog/spdlog.h>
-//#include <spdlog/sinks/stdout_color_sinks.h>
+#include "yaml-cpp/yaml.h"
 
 #ifndef WIN32
 int main ( int argn, char** argv ) {
@@ -21,21 +20,29 @@ int main ( int argn, char** argv ) {
 int _tmain ( int argc, _TCHAR* argv[] ) {
 #endif
 
+    auto console = spdlog::stdout_color_st("main");
+    console->info("Empty Iniciado");
+    for (int i=0 ; i < argn; i++) {
+        console->info("Parametros {0}: {1}", i, argv[i]);
+    }
+
     try {
+        console->info("Carregar arquivo:{0}","./etc/empty.yaml");
+        YAML::Node config = YAML::LoadFile("./etc/empty.yaml");
+        YAML::Node screen = config["screen"];
+        std::string nome = screen["name"].as<std::string>();
 
-        auto console = spdlog::stdout_color_st("console");
-        console->info("Welcome to spdlog!") ;
-        console->info("An info message example {}..", 1);
+        YAML::Node canvas = screen["canvas"];
+        int w = canvas["w"].as<int>();
+        int h = canvas["h"].as<int>();
 
-        for (int i=0 ; i < argn; i++) {
-            console->info("Valor {0}: {1}",i ,argv[i]) ;
-        }
+        console->info("Iniciar Tela {0}, w:{1}, h:{2}", nome, w, h);
 
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
         //Chimera::Video *video = new Chimera::VideoDevice (800, 600, "teste");
-        Chimera::Video *video = new Chimera::VideoDevice (900, 900, "teste");
-        //Chimera::Video *video = new Chimera::HmdDevice("teste");
+        //Chimera::Video *video = new Chimera::VideoDevice (w, h, nome);
+        Chimera::Video *video = new Chimera::HmdDevice("teste");
 
         Game *game = new Game(video);
 
@@ -43,12 +50,14 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 		pControle->open();
 		pControle->gameLoop();
 
+        console->warn("Encerrado!!!!");
+
         delete pControle;
         delete game;
         delete video;
 
     } catch ( const Chimera::Exception& ex ) {
-
+        console->error("Falha grave:{0}", ex.getMessage());
         std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;
     }

@@ -19,7 +19,8 @@ set (LibsAppEmpty ${Chimera_BINARY_DIR}/libChimera.a
 				  -lSDL2
 				  -ltinyxml2
 				  -lGLEW
-				  -lpthread)
+				  -lpthread
+				  -lyaml-cpp)
 
 #define os includes
 set (IncludesAppEmpty ${CMAKE_CURRENT_SOURCE_DIR}/include

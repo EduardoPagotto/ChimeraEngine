@@ -40,7 +40,7 @@ private:
     GLuint fbo;
     GLuint render_buf;
 
-    HMD hmd;
+    //HMD hmd;
     Canvas fbSize;
    // bool fullscreenStatus;
    // SDL_Point winPosPrev;

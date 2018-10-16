@@ -1,0 +1,6 @@
+screen:
+  name: teste
+  canvas:
+    w: 900
+    h: 900
+  

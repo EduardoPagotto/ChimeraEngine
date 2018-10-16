@@ -1,0 +1,8 @@
+screen:
+  name: teste
+  canvas:
+    w: 900
+    h: 900
+  shader:
+    vertex: ./etc/examples/AppShader/SimpleFragmentShader.fragmentshader
+    fragment: ./etc/examples/AppShader/SimpleVertexShader.vertexshader

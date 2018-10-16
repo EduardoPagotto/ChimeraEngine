@@ -12,7 +12,7 @@
 #include <ExceptionChimera.h>
 
 #include <spdlog/spdlog.h>
-#include "yaml-cpp/yaml.h"
+#include <yaml-cpp/yaml.h>
 
 #ifndef WIN32
 int main ( int argn, char** argv ) {
@@ -21,7 +21,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 #endif
 
     auto console = spdlog::stdout_color_st("main");
-    console->info("Empty Iniciado");
+    console->info("AppEmpty Iniciado");
     for (int i=0 ; i < argn; i++) {
         console->info("Parametros {0}: {1}", i, argv[i]);
     }

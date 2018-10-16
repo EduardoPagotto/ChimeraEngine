@@ -2,9 +2,10 @@
 
 Simple Game Engine
 
-## Para o log no ubuntu:
+## Para o log e carga de yaml no ubuntu:
 ```
 apt-get install libspdlog-dev
+apt install libyaml-cpp-dev
 ```
 
 ## Caso precise compilar o bullet:
@@ -17,10 +18,29 @@ make j4
 make install
 ```
 
+## Ambiente de desenvolvimento
+
+ - Caso use o vscode extenções abaixo ajudam muito
+
+    ```
+    code --install-extension cschlosser.doxdocgen
+    code --install-extension DotJoshJohnson.xml
+    code --install-extension eamodio.gitlens
+    code --install-extension mohsen1.prettify-json
+    code --install-extension ms-vscode.cpptools
+    code --install-extension redhat.vscode-yaml
+    code --install-extension robertohuertasm.vscode-icons
+    code --install-extension slevesque.shader
+    code --install-extension twxs.cmake
+    code --install-extension vector-of-bool.cmake-tools
+    ```
+
+ - Kdevelop ainda suportado
+
+
 ## Nova versao com desenvolvimento de HMD
-```
-apt install libyaml-cpp-dev
-```
+
+Iniciado tentativa de criar um HMD e posteriormente integrar suporte ao OpenHMD
 
 # Versão Teste com o HMD
 

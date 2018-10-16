@@ -1,5 +1,15 @@
 [
 {
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/examples/AppEmpty",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/examples/AppEmpty/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppEmpty.dir/src/Game.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/examples/AppEmpty/src/Game.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/examples/AppEmpty/src/Game.cpp"
+},
+{
+  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/examples/AppEmpty",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/examples/AppEmpty/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppEmpty.dir/src/AppEmpty.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/examples/AppEmpty/src/AppEmpty.cpp",
+  "file": "/home/pagotto/Projetos/ChimeraEngine/examples/AppEmpty/src/AppEmpty.cpp"
+},
+{
   "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppCargaManual",
   "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppCargaManual/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppCargaManual.dir/src/Game.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppCargaManual/src/Game.cpp",
   "file": "/home/pagotto/Projetos/ChimeraEngine/AppCargaManual/src/Game.cpp"
@@ -8,16 +18,6 @@
   "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppCargaManual",
   "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppCargaManual/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppCargaManual.dir/src/main.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppCargaManual/src/main.cpp",
   "file": "/home/pagotto/Projetos/ChimeraEngine/AppCargaManual/src/main.cpp"
-},
-{
-  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppEmpty",
-  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppEmpty/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppEmpty.dir/src/Game.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppEmpty/src/Game.cpp",
-  "file": "/home/pagotto/Projetos/ChimeraEngine/AppEmpty/src/Game.cpp"
-},
-{
-  "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppEmpty",
-  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DHMD_Z1_SET_TO_USE -I/home/pagotto/Projetos/ChimeraEngine/AppEmpty/include -I/home/pagotto/Projetos/ChimeraEngine/chimera/include -I/usr/include/SDL2 -I/usr/include/bullet -I/usr/include/freetype2  -std=c++11  -g -ftest-coverage -fprofile-arcs -g   -o CMakeFiles/AppEmpty.dir/src/AppEmpty.cpp.o -c /home/pagotto/Projetos/ChimeraEngine/AppEmpty/src/AppEmpty.cpp",
-  "file": "/home/pagotto/Projetos/ChimeraEngine/AppEmpty/src/AppEmpty.cpp"
 },
 {
   "directory": "/home/pagotto/Projetos/ChimeraEngine/build/AppShader",

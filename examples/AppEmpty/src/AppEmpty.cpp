@@ -27,8 +27,11 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
     }
 
     try {
-        console->info("Carregar arquivo:{0}","./etc/empty.yaml");
-        YAML::Node config = YAML::LoadFile("./etc/empty.yaml");
+        std::string config_file = "./etc/examples/AppEmpty/empty.yaml";
+
+        console->info("Carregar arquivo:{0}",config_file);
+        YAML::Node config = YAML::LoadFile(config_file);
+
         YAML::Node screen = config["screen"];
         std::string nome = screen["name"].as<std::string>();
 
@@ -40,7 +43,6 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
         //Instancia de Video
         //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        //Chimera::Video *video = new Chimera::VideoDevice (800, 600, "teste");
         //Chimera::Video *video = new Chimera::VideoDevice (w, h, nome);
         Chimera::Video *video = new Chimera::HmdDevice("teste");
 
@@ -58,8 +60,16 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
     } catch ( const Chimera::Exception& ex ) {
         console->error("Falha grave:{0}", ex.getMessage());
-        std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
+        //std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;
+    } catch (const std::exception& ex) {
+        console->error("Falha grave:{0}", ex.what());
+        //std::cout << "Falha grave: " << ex.what() << " " << std::endl;
+    } catch (const std::string& ex) {
+        console->error("Falha grave:{0}", ex);
+    } catch (...) {
+        console->error("Falha Desconhecida");
+        //std::cout << "Falha Desconhecida " << std::endl;
     }
 
     return 0;

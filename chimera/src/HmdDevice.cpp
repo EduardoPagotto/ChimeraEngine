@@ -39,7 +39,6 @@ HmdDevice::~HmdDevice() {
 
 void HmdDevice::initDevice(void){
 
-
     glGenFramebuffers(1,&fbo);
     glGenRenderbuffers(1,&render_buf);
     glBindRenderbuffer(GL_RENDERBUFFER, render_buf);

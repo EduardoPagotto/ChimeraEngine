@@ -27,7 +27,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
     }
 
     try {
-        std::string config_file = "./etc/examples/AppEmpty/empty.yaml";
+        std::string config_file = "./examples/AppEmpty/etc/empty.yaml";
 
         console->info("Carregar arquivo:{0}",config_file);
         YAML::Node config = YAML::LoadFile(config_file);

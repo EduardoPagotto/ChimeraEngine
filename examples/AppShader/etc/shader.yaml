@@ -3,6 +3,6 @@ screen:
   canvas:
     w: 900
     h: 900
-  shader:
-    vertex: ./etc/examples/AppShader/SimpleFragmentShader.fragmentshader
-    fragment: ./etc/examples/AppShader/SimpleVertexShader.vertexshader
+shader:
+  vertex: ./examples/AppShader/shader/SimpleVertexShader.vertexshader
+  fragment: ./examples/AppShader/shader/SimpleFragmentShader.fragmentshader

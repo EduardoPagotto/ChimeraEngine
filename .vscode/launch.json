@@ -27,7 +27,29 @@
                 "name": "(gdb)AppEmpty",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "${workspaceRoot}/build/AppEmpty/AppEmpty",
+                "program": "${workspaceRoot}/build/examples/AppEmpty/AppEmpty",
+                "args": [
+                    "-p",
+                    "${workspaceRoot}"
+                ],
+                "stopAtEntry": false,
+                "cwd": "${workspaceRoot}",
+                "environment": [],
+                "externalConsole": true,
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            {
+                "name": "(gdb)AppShader",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceRoot}/build/examples/AppShader/AppShader",
                 "args": [
                     "-p",
                     "${workspaceRoot}"

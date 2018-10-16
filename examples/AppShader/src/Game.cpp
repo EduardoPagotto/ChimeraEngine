@@ -7,8 +7,11 @@
 
 #include "Singleton.h"
 
-Game::Game(Chimera::Video *_pVideo) : pVideo(_pVideo) {
+Game::Game(const std::string &vertex, const std::string &fragment, Chimera::Video *_pVideo) : pVideo(_pVideo) {
 	isPaused = false;
+
+	vertexFile = vertex;
+	fragmentFile = fragmentFile;
 
 	shader =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
 }
@@ -108,11 +111,11 @@ void Game::start() {
 
 	// Create and compile our GLSL program from the shaders
 #ifdef WIN32
+	// FIXME melhorar ara win32
 	shader->load("default","C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
 		"C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleFragmentShader.fragmentshader");
 # else
-	shader->load("default","/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleVertexShader.vertexshader",
-		"/home/locutus/Projetos/ChimeraEngine/AppShader/shader/SimpleFragmentShader.fragmentshader");
+	shader->load("default", vertexFile, fragmentFile);
 # endif
 
 	// An array of 3 vectors which represents 3 vertices

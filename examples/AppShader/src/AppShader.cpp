@@ -26,16 +26,30 @@ int _tmain(int argc, _TCHAR* argv[]) {
     }
 
 	try {
-		std::string config_file = "./etc/examples/AppShader/shader.yaml";
+		std::string config_file = "./examples/AppShader/etc/shader.yaml";
         console->info("Carregar arquivo:{0}",config_file);
         YAML::Node config = YAML::LoadFile(config_file);
 
+        YAML::Node screen = config["screen"];
+        std::string nome = screen["name"].as<std::string>();
 
+        YAML::Node canvas = screen["canvas"];
+        int w = canvas["w"].as<int>();
+        int h = canvas["h"].as<int>();
+
+		YAML::Node shader = config["shader"];
+		std::string vertexFile = shader["vertex"].as<std::string>();
+		std::string fragmentFile = shader["fragment"].as<std::string>();
+
+        console->info("Iniciar Tela: {0}, w: {1}, h: {2}", nome, w, h);
+		console->info("Shader: Vertex: {0}", vertexFile);
+		console->info("Shader: Fragment: {0}", fragmentFile);
+		
 		//Instancia de Video
 		//Chimera::Video *video = new Chimera::OvrDevice("Teste");
-		Chimera::Video *video = new Chimera::VideoDevice(800, 600, "teste");
+		Chimera::Video *video = new Chimera::VideoDevice(w, h, nome);
 
-		Game *game = new Game(video);
+		Game *game = new Game(vertexFile, fragmentFile, video);
 
 		Chimera::FlowControl *pControle = new Chimera::FlowControl(game);
 		pControle->open();
@@ -47,10 +61,19 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
 	}
 	catch (const Chimera::Exception& ex) {
+        console->error("Falha grave:{0}", ex.getMessage());
+        //std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
+        return -1;
+    } catch (const std::exception& ex) {
+        console->error("Falha grave:{0}", ex.what());
+        //std::cout << "Falha grave: " << ex.what() << " " << std::endl;
+    } catch (const std::string& ex) {
+        console->error("Falha grave:{0}", ex);
+    } catch (...) {
+        console->error("Falha Desconhecida");
+        //std::cout << "Falha Desconhecida " << std::endl;
+    }
 
-		std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
-		return -1;
-	}
 
 	return 0;
 }

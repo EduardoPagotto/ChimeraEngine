@@ -25,7 +25,8 @@ set (LibsAppShader ${Chimera_BINARY_DIR}/libChimera.a
 				   -lSDL2_image
 				   -lSDL2_ttf
 				   -ltinyxml2
-				   -lpthread)
+				   -lpthread
+				   -lyaml-cpp)
 
 if (OVR_SET_TO_USE)
     message(STATUS "OVR Incluido no Projeto")

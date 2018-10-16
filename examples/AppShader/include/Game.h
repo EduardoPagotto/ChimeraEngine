@@ -11,7 +11,7 @@
 class Game : public Chimera::IGameClientEvents
 {
 public:
-	Game(Chimera::Video *_pVideo);
+	Game(const std::string &vertex, const std::string &fragment, Chimera::Video *_pVideo);
 
 	virtual ~Game();
 	// Inherited via IGameClientEvents
@@ -36,6 +36,10 @@ private:
 	bool isPaused;
 
 private:
+
+	std::string vertexFile;
+	std::string fragmentFile;
+
     Chimera::Shader *shader;
 	GLuint vertexbuffer;
 	GLuint VertexArrayID;

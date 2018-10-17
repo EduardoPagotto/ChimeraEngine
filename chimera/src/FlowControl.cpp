@@ -51,7 +51,7 @@ void FlowControl::processaGame() {
 		pGameClientEvents->joystickStatus(joystickManager);
 	}
 	catch ( ... ) {
-		printf("Erro GRavissimo:");
+		log->error("Erro GRavissimo:");
 		SDL_Quit();
 	}
 }

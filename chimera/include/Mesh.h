@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include "VboIndexer.hpp"
 
+#include <spdlog/spdlog.h>
+
 namespace Chimera {
 
 //Define this somewhere in your header file
@@ -53,6 +55,8 @@ private:
 
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
+
+    std::shared_ptr<spdlog::logger> log;
 };
 }
 

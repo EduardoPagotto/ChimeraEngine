@@ -14,6 +14,8 @@ Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH
     VertexVBOID = 0;
     IndexVBOID = 0;
     VAO = 0;
+    log = spdlog::stdout_color_st("Mesh");
+    log->info("Iniciado");
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
@@ -112,10 +114,12 @@ void Mesh::setVertexBuffer()
 	conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
 	indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
-	printf("Nome: %s \n", getName().c_str());
-	printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
-	printf("-VBO Data -----------( %03d )\n", vertexData.size());
-	printf("\n");
+    log->debug("VBO Nome: {0} Indice: {1} Data: {2}", getName().c_str(), indexIBO.size(), vertexData.size());
+
+	// printf("Nome: %s \n", getName().c_str());
+	// printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
+	// printf("-VBO Data -----------( %03d )\n", vertexData.size());
+	// printf("\n");
 
 	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
 	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
@@ -289,11 +293,11 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
         }
     }
 
-    printf("Nome: %s \n", getName().c_str());
-    printf("-Vertex  Indice / Lista ------ ( %03d / %03d )\n", vertexIndex.size(), vertexList.size());
-	printf("-Normal  Indice / Lista ------ ( %03d / %03d )\n", normalIndex.size(), normalList.size());
-    printf("-Texture Indice / Lista ------ ( %03d / %03d )\n", textureIndex.size(), textureList.size());
-    printf("\n");
+    log->debug("Nome: {0}", getName().c_str());
+    log->debug("Vertex  Indice / Lista ------ ( {0:03d} / {1:03d} )", vertexIndex.size(), vertexList.size());
+	log->debug("Normal  Indice / Lista ------ ( {0:03d} / {1:03d} )", normalIndex.size(), normalList.size());
+    log->debug("Texture Indice / Lista ------ ( {0:03d} / {1:03d} )", textureIndex.size(), textureList.size());
+    
 }
 
 }

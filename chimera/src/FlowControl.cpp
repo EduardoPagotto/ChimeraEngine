@@ -8,6 +8,8 @@ namespace Chimera {
 FlowControl::FlowControl ( IGameClientEvents *_pGameClientEvents ) : pGameClientEvents ( _pGameClientEvents ) {
     timerFPS.setElapsedCount ( 1000 );
     timerFPS.start();
+    log = spdlog::stdout_color_st("FlowControl");
+    log->info("Iniciado");
 }
 
 FlowControl::~FlowControl() {
@@ -18,7 +20,7 @@ void FlowControl::open() {
 
     joystickManager.Initialize();
     joystickManager.FindJoysticks();
-    //std::cout << "Joystick: " << joystickManager.GetStatusManager() << std::endl;
+    log->debug("Joystick: {0}", joystickManager.GetStatusManager());
 
     pGameClientEvents->start();
 }
@@ -81,6 +83,7 @@ void FlowControl::gameLoop ( void ) {
                 pGameClientEvents->mouseMotionCapture ( l_eventSDL.motion );
                 break;
             case SDL_QUIT:
+                log->info("QUIT Sinalizado");
                 l_quit = true;
                 pGameClientEvents->stop();
                 break;

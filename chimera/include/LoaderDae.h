@@ -10,6 +10,7 @@
 #include "Solid.h"
 #include "Draw.h"
 #include "TextureManager.h"
+#include <spdlog/spdlog.h>
 
 namespace Chimera
 {
@@ -48,6 +49,7 @@ private:
     
     PhysicsControl *pPhysicsControl;
 	TextureManager *texManager;
+    std::shared_ptr<spdlog::logger> log;
 };
 }
 

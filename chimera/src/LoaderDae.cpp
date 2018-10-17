@@ -19,6 +19,9 @@ LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_model
 	pRootNode = nullptr;
     this->textureDir = _textureDir;
     this->modelDir = _modelDir;
+ 
+    log = spdlog::stdout_color_st("LoaderDae");
+    log->info("Iniciado");
 
     pPhysicsControl = Singleton<PhysicsControl>::getRefSingleton();
 	texManager = Singleton<TextureManager>::getRefSingleton();
@@ -257,13 +260,13 @@ void LoaderDae::getNodeSceneInFile() {
                 if ( l_nDadoNode != nullptr ) {
                     carregaNode ( (Node*)pRootNode, l_nDadoNode, l_id, l_name, l_type );
                 } else {
-                    std::cout << "Node sem filho" << std::endl;
+                    log->warn("Node sem filho");
                 }
 
                 l_nNode = l_nNode->NextSiblingElement ( "node" );
             }
         } else {
-            std::cout << "Node: vazio " << std::endl;
+            log->warn("Node: vazio");
         }
     }
 }
@@ -470,6 +473,9 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
 
 tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library ) {
 
+    auto log = spdlog::stdout_color_st("LoaderDae::findSceneLib");
+    log->info("Iniciado");
+
     tinyxml2::XMLElement* l_nNodeScene = pRoot->FirstChildElement ( "scene" );
     if ( l_nNodeScene != nullptr ) {
 
@@ -492,16 +498,16 @@ tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, cons
                         l_nNode = l_nNode->NextSiblingElement();
                     }
 
-                    std::cout << rotina << " : " << ( const char* ) &l_url[1] << " nao encontrado " << std::endl;
+                    log->warn("{0} : {1} nao encontrado", std::string(rotina), std::string((const char*) &l_url[1]));
                 } else {
-                    std::cout << rotina << " : vazio " << std::endl;
+                    log->warn("{0} vazio", std::string(rotina));
                 }
 
             } else {
-                std::cout << library << " nao encontrado " << std::endl;
+                log->warn("{0} nao encontrado", std::string(library));
             }
         } else {
-            std::cout << instance << " nao encontrado " << std::endl;
+            log->warn("{0} nao encontrado", std::string(instance));
         }
     }
 

@@ -3,6 +3,7 @@
 
 #include "IGameClientEvents.h"
 # include "Timer.h"
+#include <spdlog/spdlog.h>
 
 namespace Chimera
 {
@@ -23,6 +24,8 @@ private:
     IGameClientEvents *pGameClientEvents;
     JoystickManager joystickManager;
     Timer timerFPS;
+    
+    std::shared_ptr<spdlog::logger> log;
 };
 }
 

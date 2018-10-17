@@ -66,16 +66,13 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
 	} catch (const Chimera::Exception& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
-        //std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;
     } catch (const std::exception& ex) {
         console->error("Falha grave:{0}", ex.what());
-        //std::cout << "Falha grave: " << ex.what() << " " << std::endl;
     } catch (const std::string& ex) {
         console->error("Falha grave:{0}", ex);
     } catch (...) {
         console->error("Falha Desconhecida");
-        //std::cout << "Falha Desconhecida " << std::endl;
     }
 
 	console->info("AppShader finalizado com sucesso");

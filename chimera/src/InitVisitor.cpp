@@ -15,6 +15,8 @@
 namespace Chimera {
 
 InitVisitor::InitVisitor() {
+    log = spdlog::stdout_color_st("InitVisitor");
+    log->info("Iniciado");
 	shader =  Singleton<Shader>::getRefSingleton();
 }
 
@@ -23,64 +25,47 @@ InitVisitor::~InitVisitor() {
 }
 
 void InitVisitor::visit ( Camera* _pCamera ) {
-
-     std::cout << "Visit Camera:" << _pCamera->getName() << "\n";
+    log->debug("Visit Camera: {0}", _pCamera->getName());
     _pCamera->init();
 }
 
 void InitVisitor::visit ( Mesh* _pMesh ) {
-
-    std::cout << "Visit Mesh:" << _pMesh->getName() << "\n";
+    log->debug("Visit Mesh: {0}", _pMesh->getName());
     _pMesh->init();
-
 }
 
 void InitVisitor::visit ( Light* _pLight ) {
-
-    std::cout << "Visit Light:" << _pLight->getName() << "\n";
+    log->debug("Visit Light: {0}", _pLight->getName());
     _pLight->init();
 }
 
 void InitVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
-
-    std::cout << "Visit ParticleEmitter:" << _pParticleEmitter->getName() << "\n";
+    log->debug("Visit ParticleEmitter: {0}", _pParticleEmitter->getName());
     _pParticleEmitter->init();
-
 }
 
 void InitVisitor::visit ( SceneRoot* _pSceneRoot ) {
-
-    std::cout << "Visit SceneRoot:" << _pSceneRoot->getName() << "\n";
+    log->debug("Visit SceneRoot: {0}", _pSceneRoot->getName());
     _pSceneRoot->init();
-
 }
 
 void InitVisitor::visit ( Group* _pGroup ) {
-
-    std::cout << "Visit Group:" << _pGroup->getName() << "\n";
+    log->debug("Visit Group: {0}", _pGroup->getName());
 	_pGroup->init(); //seleciona o shader
-
 }
 
 void InitVisitor::visit ( Transform* _pTransform ) {
-
-     std::cout << "Visit Transform:" << _pTransform->getName() << "\n";
+    log->debug("Visit Transform: {0}", _pTransform->getName());
     //_pTransform->init();
-
 }
 
 void InitVisitor::visit ( Solid* _pSolid ) {
-
-     std::cout << "Visit Solid:" << _pSolid->getName() << "\n";
+    log->debug("Visit Solid: {0}", _pSolid->getName());
     _pSolid->init();
-
 }
 
 void InitVisitor::visit ( HUD* _pHUD ) {
-
-    std::cout << "Visit HUD:" << _pHUD->getName() << "\n";
+    log->debug("Visit HUD: {0}", _pHUD->getName());
     _pHUD->init();
-
 }
-
 }

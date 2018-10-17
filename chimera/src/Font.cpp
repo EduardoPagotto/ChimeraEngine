@@ -3,6 +3,7 @@
 #include <ExceptionSDL.h>
 #include <iostream>
 
+#include <spdlog/spdlog.h>
 namespace Chimera {
 
 Font::Font (const std::string &_fontFile, const int &_size) {
@@ -31,7 +32,8 @@ Font::Font (const std::string &_fontFile, const int &_size) {
         // Load character glyph
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
         {
-            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+            auto console = spdlog::stdout_color_st("Font");
+            console->warn("ERROR::FREETYTPE: Failed to load Glyph");
             continue;
         }
         // Generate texture

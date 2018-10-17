@@ -4,6 +4,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+#include <spdlog/spdlog.h>
+
 namespace Chimera {
 
 void loadArrayBtScalar ( const char *_val, std::vector<float> &_arrayF ) {
@@ -82,8 +84,10 @@ std::string retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement
         return std::string ( l_value );
     }
 
-    std::cout << std::string ( "Atributo [ " + _atributo + " ] Elemento [ " + _node->Value() + " ] nao encontrado" ) << std::endl;
-    return std::string ( "" );
+    auto console = spdlog::stdout_color_st("ChimeraUtils");
+    console->warn("Atributo [{0}] Elemento [{1}] nao encontrado", _atributo, std::string(_node->Value()));
+    
+    return std::string ("");
 }
 
 void loadNodeLib ( tinyxml2::XMLElement* _root, const char* _url, const char* _libName, const char* _nodeName, tinyxml2::XMLElement** _nNode ) {

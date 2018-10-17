@@ -48,5 +48,5 @@ Iniciado tentativa de criar um HMD e posteriormente integrar suporte ao OpenHMD
 
 # Versão Teste com o HMD
 
-AppEmpty esta em andamento
+re-modelamento arquivos e sub-projetos 
 yaml ref: https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML

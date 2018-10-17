@@ -9,6 +9,8 @@
 #include "Singleton.h"
 #include "OpenGLDefs.h"
 
+#include <spdlog/spdlog.h>
+
 namespace Chimera
 {
 
@@ -57,11 +59,9 @@ private:
     GLuint linkShader (const GLuint &VertexShaderID, const GLuint &FragmentShaderID );
 
     GLuint idProgram;
-
 	std::map<std::string, GLuint> mapaId;
-
 	std::string currentProgram;
-	//GLuint currentIdProgram;
+	std::shared_ptr<spdlog::logger> log;
 };
 }
 

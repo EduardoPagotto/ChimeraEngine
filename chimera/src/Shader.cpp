@@ -8,19 +8,22 @@
 namespace Chimera {
 
 Shader::Shader() noexcept {
-
     idProgram = 0;
     currentProgram = "default";
+    log = spdlog::stdout_color_st("shader");
+    log->info("Iniciado");
 }
 
 void Shader::reset() noexcept {
-  std::cerr<<"Closing down shader manager\n";
-  // TODO: Implementar finalização do shader
-  
-//   for(auto programs : m_shaderPrograms)
-//     delete programs.second;
-//   for(auto shader : m_shaders)
-//     delete shader.second;
+    log->info("Finalizado");  
+
+    //std::cerr<<"Closing down shader manager\n";
+    // TODO: Implementar finalização do shader
+
+    //   for(auto programs : m_shaderPrograms)
+    //     delete programs.second;
+    //   for(auto shader : m_shaders)
+    //     delete shader.second;
 }
 
 bool Shader::load (const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path) {
@@ -32,15 +35,15 @@ bool Shader::load (const std::string &programName, const std::string &vertex_fil
     std::string FragmentShaderCode = getShaderCode ( fragment_file_path.c_str() );
 
     // Compila Vertex Shader
-    std::cout << "Compiling : " << programName << ", Vertex Shader :" << vertex_file_path << std::endl;
+    log->debug("Compiling :{0} Vertex Shader:{1}",programName, vertex_file_path);
     GLuint VertexShaderID = compileShader(VertexShaderCode, true);
 
     // Compila Fragment Shader
-    std::cout << "Compiling : " << programName << ", Fragment Shader : " <<  fragment_file_path << std::endl;
+    log->debug("Compiling :{0} Fragment Shader:{1}",programName, fragment_file_path);
     GLuint FragmentShaderID = compileShader(FragmentShaderCode, false);
 
     // Link o programa
-    std::cout << "Linking   : " << programName << std::endl;
+    log->debug("Linking: {0}", programName);
     idProgram = linkShader ( VertexShaderID, FragmentShaderID );
 
 	glDeleteShader(VertexShaderID);
@@ -50,13 +53,11 @@ bool Shader::load (const std::string &programName, const std::string &vertex_fil
 	currentProgram = programName;
 
 	if (idProgram != -1) {
-
-		std::cout << "Shader Valido: " << programName << " ID: " <<  idProgram << std::endl;
+        log->debug("Shader Valido: {0} Id: {1}", programName, idProgram);
 		retorno = true;
 	}
 	else {
-
-		std::cout << "Shader Invalido: " << programName << std::endl;
+        log->error("Shader Invalido: {0}", programName);
 	}
 
 	return retorno;
@@ -106,8 +107,7 @@ GLuint Shader::compileShader ( const std::string &shaderCode, bool _shadeKind ) 
         if ( InfoLogLength > 0 ) {
             std::vector<char> shaderErrorMessage ( InfoLogLength + 1 );
             glGetShaderInfoLog ( shaderID, InfoLogLength, NULL, &shaderErrorMessage[0] );
-
-            std::cout << "Check Fragment Shader " << std::string ( &shaderErrorMessage[0] ) << std::endl;
+            log->error("Check Fragment Shader: {0}", std::string ( &shaderErrorMessage[0] ));
         }
     }
 
@@ -133,8 +133,7 @@ GLuint Shader::linkShader (const GLuint &VertexShaderID, const GLuint &FragmentS
         if ( InfoLogLength > 0 ) {
             std::vector<char> ProgramErrorMessage ( InfoLogLength + 1 );
             glGetProgramInfoLog ( ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0] );
-
-            std::cout << "Check program " << std::string ( &ProgramErrorMessage[0] ) << std::endl;
+            log->error("Check program: {0}", std::string ( &ProgramErrorMessage[0] ));
         }
     }
     return ProgramID;
@@ -149,7 +148,7 @@ bool Shader::selectCurrent(const std::string & _cur)
 		return true;
 	}
 
-	std::cout << "Shader Invalido: " << _cur << " ID: " << idProgram << std::endl;
+    log->error("Shader Invalido: {0} Id:{1}", _cur, idProgram);
 	return false;
 }
 
@@ -158,7 +157,7 @@ GLint Shader::getUniformLocation(const char* _name) const noexcept
 	// nasty C lib uses -1 return value for error
 	GLint loc = glGetUniformLocation(idProgram, _name);
 	if (loc == -1)
-		std::cerr << "Uniform \"" << _name << "\" not found in Program \"" << currentProgram << "\"\n";
+        log->error("Uniform \"{0}\" not found in Program \"{1}\"", _name, currentProgram);
 
 	return loc;
 }

@@ -110,13 +110,7 @@ void Game::start() {
 	glBindVertexArray(VertexArrayID);
 
 	// Create and compile our GLSL program from the shaders
-#ifdef WIN32
-	// FIXME melhorar ara win32
-	shader->load("default","C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleVertexShader.vertexshader",
-		"C:\\Projetos\\ChimeraEngine\\AppShader\\shader\\SimpleFragmentShader.fragmentshader");
-# else
 	shader->load("default", vertexFile, fragmentFile);
-# endif
 
 	// An array of 3 vectors which represents 3 vertices
 	static const GLfloat g_vertex_buffer_data[] = {

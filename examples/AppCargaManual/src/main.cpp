@@ -33,6 +33,9 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
     auto console = spdlog::stdout_color_st("main");
     console->info("AppShader Iniciado");
+
+    spdlog::set_level(spdlog::level::debug);
+
     for (int i=0 ; i < argn; i++) {
         console->info("Parametros {0}: {1}", i, argv[i]);
     }

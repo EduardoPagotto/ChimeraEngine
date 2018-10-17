@@ -1,0 +1,30 @@
+screen:
+  name: teste
+  canvas:
+    w: 800
+    h: 600
+model: piso2.xml
+path_tex: ./models/
+path_model: ./models/
+shaders:
+  - name: mesh-default
+    vertex: ./examples/AppCargaManual/shader/vertex.glsl
+    fragment: ./examples/AppCargaManual/shader/fragment.glsl
+  - name: particle-default
+    vertex: ./examples/AppCargaManual/shader/ParticleVertexShader.glsl
+    fragment: ./examples/AppCargaManual/shader/ParticleFragmentShader.glsl
+  - name: hud-default
+    vertex: ./examples/AppCargaManual/shader/HudVertexShader.glsl
+    fragment: ./examples/AppCargaManual/shader/HudFragmentShader.glsl
+  - name: simpleDepthShader
+    vertex: ./examples/AppCargaManual/shader/shadow_mapping_depth.vs
+    fragment: ./examples/AppCargaManual/shader/shadow_mapping_depth.frag
+  - name: debugDepthQuad
+    vertex: ./examples/AppCargaManual/shader/debug_quad.vs
+    fragment: ./examples/AppCargaManual/shader/debug_quad_depth.frag
+font: ./examples/AppCargaManual/fonts/FreeSans.ttf
+size: 18
+
+textures:
+  - name: TexParticleEmmiter
+    tex: ./models/Particle2.png

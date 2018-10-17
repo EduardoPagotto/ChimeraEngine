@@ -5,7 +5,7 @@
                 "name": "(gdb)AppCargaManual",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "${workspaceRoot}/build/AppCargaManual/AppCargaManual",
+                "program": "${workspaceRoot}/build/examples/AppCargaManual/AppCargaManual",
                 "args": [
                     "-p",
                     "${workspaceRoot}"

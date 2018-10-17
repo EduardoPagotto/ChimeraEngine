@@ -19,8 +19,4 @@ if (HMD_Z1_SET_TO_USE)
 endif(HMD_Z1_SET_TO_USE)
 
 add_subdirectory(examples)
-add_subdirectory(AppCargaManual)
-#add_subdirectory(AppEmpty)
-#add_subdirectory(AppShader)
-#add_subdirectory(appTest)
 add_subdirectory(chimera)

@@ -14,8 +14,8 @@ Mesh::Mesh (Node *_parent, std::string _name ) : Draw (_parent, EntityKind::MESH
     VertexVBOID = 0;
     IndexVBOID = 0;
     VAO = 0;
-    log = spdlog::stdout_color_st("Mesh");
-    log->info("Iniciado");
+    log = spdlog::get("chimera");
+    log->debug("Constructor Mesh:{}", _name);
 }
 
 Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
@@ -32,6 +32,9 @@ Mesh::Mesh ( const Mesh &_cpy ) : Draw ( _cpy ) {
   copy(_cpy.textureIndex.begin(), _cpy.textureIndex.end(), back_inserter(textureIndex));
   copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
 
+
+    log = spdlog::get("chimera");
+    log->debug("Constructor Copy Mesh {}", _cpy.getName());
 }
 
 Mesh::~Mesh() {
@@ -45,6 +48,8 @@ Mesh::~Mesh() {
 
 	glDeleteBuffers(1, &VertexVBOID);
 	glDeleteBuffers(1, &IndexVBOID);
+
+    log->debug("Destructor Mesh:{}", getName());
 }
 
 void Mesh::init() {

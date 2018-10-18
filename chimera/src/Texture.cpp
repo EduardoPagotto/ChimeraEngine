@@ -22,6 +22,9 @@ Texture::Texture ( const std::string &_name, const TEX_SEQ &_indexTextureSeq, co
     depthMapFBO = 0;
 
 	refCount = 0;
+
+    log = spdlog::get("chimera");
+    log->debug("Constructor textura nome:{} arquivo:{}", _name, _pathFile);
 }
 
 Texture::Texture (const std::string &_name, const TEX_SEQ &_indexTextureSeq, const unsigned &_width, const unsigned &_height) : Entity ( EntityKind::TEXTURE, _name ) {
@@ -46,6 +49,9 @@ Texture::Texture (const std::string &_name, const TEX_SEQ &_indexTextureSeq, con
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	refCount = 0;
+
+    log = spdlog::get("chimera");
+    log->debug("Constructor textura nome:{0} vazia: {1:03d}x{2:03d}", _name, _width, _height);
 }
 
 Texture::~Texture() {
@@ -106,7 +112,7 @@ void Texture::init() {
         }
 
         texturaCarregada = true;
-        printf("Texture Name: %s id: %u num instancia: %d\n", getName().c_str(), idTexture, getRefCount());
+        log->info("Instanciada textura Nome:{0} id:{1:d} num instancias:{2:d}", getName(), idTexture, getRefCount());
     }
 }
 }

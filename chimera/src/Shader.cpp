@@ -10,12 +10,12 @@ namespace Chimera {
 Shader::Shader() noexcept {
     idProgram = 0;
     currentProgram = "default";
-    log = spdlog::stdout_color_st("shader");
-    log->info("Iniciado");
+    log = spdlog::get("chimera");
+    log->debug("Contructor Shader");
 }
 
 void Shader::reset() noexcept {
-    log->info("Finalizado");  
+    log->debug("Destructor Shader");  
 
     //std::cerr<<"Closing down shader manager\n";
     // TODO: Implementar finalização do shader
@@ -34,17 +34,19 @@ bool Shader::load (const std::string &programName, const std::string &vertex_fil
     std::string VertexShaderCode = getShaderCode ( vertex_file_path.c_str() );
     std::string FragmentShaderCode = getShaderCode ( fragment_file_path.c_str() );
 
+    log->debug("Shader name:{}", programName);
+
     // Compila Vertex Shader
-    log->debug("Compiling :{0} Vertex Shader:{1}",programName, vertex_file_path);
+    log->debug("Compiling Vertex:{}", vertex_file_path);
     GLuint VertexShaderID = compileShader(VertexShaderCode, true);
 
     // Compila Fragment Shader
-    log->debug("Compiling :{0} Fragment Shader:{1}",programName, fragment_file_path);
+    log->debug("Compiling Fragment:{}", fragment_file_path);
     GLuint FragmentShaderID = compileShader(FragmentShaderCode, false);
 
     // Link o programa
-    log->debug("Linking: {0}", programName);
     idProgram = linkShader ( VertexShaderID, FragmentShaderID );
+    log->debug("Linked: {0:03d}", idProgram);
 
 	glDeleteShader(VertexShaderID);
 	glDeleteShader(FragmentShaderID);
@@ -53,11 +55,11 @@ bool Shader::load (const std::string &programName, const std::string &vertex_fil
 	currentProgram = programName;
 
 	if (idProgram != -1) {
-        log->debug("Shader Valido: {0} Id: {1}", programName, idProgram);
+        log->info("Shader OK:{0} Id:{1:03d}", programName, idProgram);
 		retorno = true;
 	}
 	else {
-        log->error("Shader Invalido: {0}", programName);
+        log->error("Shader Erro: {}", programName);
 	}
 
 	return retorno;
@@ -107,7 +109,7 @@ GLuint Shader::compileShader ( const std::string &shaderCode, bool _shadeKind ) 
         if ( InfoLogLength > 0 ) {
             std::vector<char> shaderErrorMessage ( InfoLogLength + 1 );
             glGetShaderInfoLog ( shaderID, InfoLogLength, NULL, &shaderErrorMessage[0] );
-            log->error("Check Fragment Shader: {0}", std::string ( &shaderErrorMessage[0] ));
+            log->error("Shader Check Fragment Shader: {}", std::string ( &shaderErrorMessage[0] ));
         }
     }
 
@@ -133,7 +135,7 @@ GLuint Shader::linkShader (const GLuint &VertexShaderID, const GLuint &FragmentS
         if ( InfoLogLength > 0 ) {
             std::vector<char> ProgramErrorMessage ( InfoLogLength + 1 );
             glGetProgramInfoLog ( ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0] );
-            log->error("Check program: {0}", std::string ( &ProgramErrorMessage[0] ));
+            log->error("Shader Check program: {}", std::string ( &ProgramErrorMessage[0] ));
         }
     }
     return ProgramID;
@@ -148,7 +150,7 @@ bool Shader::selectCurrent(const std::string & _cur)
 		return true;
 	}
 
-    log->error("Shader Invalido: {0} Id:{1}", _cur, idProgram);
+    log->error("Shader Invalido: {0} Id:{1:03d}", _cur, idProgram);
 	return false;
 }
 
@@ -157,7 +159,7 @@ GLint Shader::getUniformLocation(const char* _name) const noexcept
 	// nasty C lib uses -1 return value for error
 	GLint loc = glGetUniformLocation(idProgram, _name);
 	if (loc == -1)
-        log->error("Uniform \"{0}\" not found in Program \"{1}\"", _name, currentProgram);
+        log->error("Shader Uniform \"{0}\" not found in Program \"{1}\"", _name, currentProgram);
 
 	return loc;
 }

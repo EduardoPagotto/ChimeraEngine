@@ -1,57 +1,55 @@
 #include "MeshUtil.h"
 
+#include <spdlog/spdlog.h>
+
 namespace Chimera {
 
 void debugDados(Mesh *pMesh) {
     
-    printf("Nome: %s \n", pMesh->getName().c_str());
+    std::shared_ptr<spdlog::logger> log = spdlog::get("chimera");
+    log->debug("Debug Mess Nome: {}", pMesh->getName());
+
     int linha = 0;
-    printf("-Vertex Indice ----------( %03d )\n", pMesh->vertexIndex.size());
+    log->debug("Vertex Indice ----------({0:03d})", pMesh->vertexIndex.size());
     for (unsigned int indice=0 ; indice < pMesh->vertexIndex.size(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, pMesh->vertexIndex[indice], pMesh->vertexIndex[indice + 1], pMesh->vertexIndex[indice + 2]);
+        log->debug("Linha:{0:02d} : p:{1:02d} ({2:02d}; {3:02d}; {4:02d})", linha, indice, pMesh->vertexIndex[indice], pMesh->vertexIndex[indice + 1], pMesh->vertexIndex[indice + 2]);
         linha++;
     }
-    printf("\n");
-    
+
     linha = 0;
-    printf("-Vertex Lista ---------( %03d )\n", pMesh->vertexList.size());
+    log->debug("Vertex Lista ---------({0:03d})", pMesh->vertexList.size());
     for (unsigned int indice=0 ; indice < pMesh->vertexList.size(); indice++) {
-        printf("Linha: %02d : p: %02d ( %05.3f ; %05.3f ; %05.3f )\n",linha, indice, pMesh->vertexList[indice].x, pMesh->vertexList[indice].y, pMesh->vertexList[indice].z);
+        log->debug("Linha: {0:02d} : p:{1:02d} ({2:05.3f}; {3:05.3f}; {4:05.3f})", linha, indice, pMesh->vertexList[indice].x, pMesh->vertexList[indice].y, pMesh->vertexList[indice].z);
         linha++;
     }
-    printf("\n");
     
     linha = 0;
-    printf("Normal Indice ----------( %03d )\n", pMesh->normalIndex.size());
+    log->debug("Normal Indice ----------({0:03d})", pMesh->normalIndex.size());
     for (unsigned int indice=0 ; indice < pMesh->normalIndex.size(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, pMesh->normalIndex[indice], pMesh->normalIndex[indice + 1], pMesh->normalIndex[indice + 2]);
+        log->debug("Linha: {0:02d} : p:{1:02d} ({2:02d}; {3:02d}; {4:02d})",linha, indice, pMesh->normalIndex[indice], pMesh->normalIndex[indice + 1], pMesh->normalIndex[indice + 2]);
         linha++;
     }
-    printf("\n");
     
     linha = 0;
-    printf("-Normal Lista ---------( %03d )\n", pMesh->normalList.size());
+    log->debug("Normal Lista ---------({0:03d})", pMesh->normalList.size());
     for (unsigned int indice=0 ; indice < pMesh->normalList.size(); indice++) {
-        printf("Linha: %02d : p: %02d ( %05.3f ; %05.3f ; %05.3f )\n",linha, indice, pMesh->normalList[indice].x, pMesh->normalList[indice].y, pMesh->normalList[indice].z);
+        log->debug("Linha: {0:02d} : p:{1:02d} ({2:05.3f}; {3:05.3f}; {4:05.3f})",linha, indice, pMesh->normalList[indice].x, pMesh->normalList[indice].y, pMesh->normalList[indice].z);
         linha++;
     }
-    printf("\n");
     
     linha = 0;
-    printf("Texture Indice ----------( %03d )\n", pMesh->textureIndex.size());
+    log->debug("Texture Indice ----------({0:03d})", pMesh->textureIndex.size());
     for (unsigned int indice=0 ; indice < pMesh->textureIndex.size(); indice += 3) {
-        printf("Linha: %02d : p: %02d ( %02d ; %02d ; %02d )\n",linha, indice, pMesh->textureIndex[indice], pMesh->textureIndex[indice + 1], pMesh->textureIndex[indice + 2]);
+        log->debug("Linha: {0:02d} : p: {1:02d} ({2:02d}; {3:02d}; {4:02d})",linha, indice, pMesh->textureIndex[indice], pMesh->textureIndex[indice + 1], pMesh->textureIndex[indice + 2]);
         linha++;
     }
-    printf("\n");
     
     linha = 0;
-    printf("-Texture Lista ---------( %03d )\n", pMesh->textureList.size());
+    log->debug("Texture Lista ---------({0:03d})", pMesh->textureList.size());
     for (unsigned int indice=0 ; indice < pMesh->textureList.size(); indice++) {
-        printf("Linha: %02d : p: %02d ( %05.3f ; %05.3f )\n",linha, indice, pMesh->textureList[indice].x, pMesh->textureList[indice].y);
+        log->debug("Linha: {0:02d} : p: {1:02d} ({2:05.3f}; {3:05.3f})",linha, indice, pMesh->textureList[indice].x, pMesh->textureList[indice].y);
         linha++;
     }
-    printf("\n");  
 }    
     
     
@@ -319,12 +317,6 @@ Mesh* createMeshParallelepiped2(Node *_pParent, const std::string &_name, const 
 	}
    
     pMesh->setMaterial(_pMaterial);
-
     return pMesh;
 }
-    
-    
-
 }
-
-

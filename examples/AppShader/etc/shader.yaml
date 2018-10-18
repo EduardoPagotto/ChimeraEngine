@@ -1,8 +1,8 @@
 screen:
   name: teste
   canvas:
-    w: 900
-    h: 900
+    w: 480
+    h: 240
 shader:
   vertex: ./examples/AppShader/shader/SimpleVertexShader.vertexshader
   fragment: ./examples/AppShader/shader/SimpleFragmentShader.fragmentshader

@@ -20,8 +20,8 @@ LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_model
     this->textureDir = _textureDir;
     this->modelDir = _modelDir;
  
-    log = spdlog::stdout_color_st("LoaderDae");
-    log->info("Iniciado");
+    log = spdlog::get("chimera");
+    log->debug("Constructor LoaderDae File:{}", _file);
 
     pPhysicsControl = Singleton<PhysicsControl>::getRefSingleton();
 	texManager = Singleton<TextureManager>::getRefSingleton();
@@ -30,6 +30,8 @@ LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_model
 }
 
 LoaderDae::~LoaderDae() {
+
+    log->debug("Destructor LoaderDae");
 
     if ( doc != nullptr ) {
         delete doc;
@@ -473,8 +475,8 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
 
 tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library ) {
 
-    auto log = spdlog::stdout_color_st("LoaderDae::findSceneLib");
-    log->info("Iniciado");
+    std::shared_ptr<spdlog::logger> log = spdlog::get("chimera");
+    log->info("findSceneLib");
 
     tinyxml2::XMLElement* l_nNodeScene = pRoot->FirstChildElement ( "scene" );
     if ( l_nNodeScene != nullptr ) {

@@ -19,7 +19,10 @@ int main(int argn, char** argv) {
 int _tmain(int argc, _TCHAR* argv[]) {
 #endif
 
-    auto console = spdlog::stdout_color_st("main");
+    auto console = spdlog::stdout_color_st("chimera");
+
+    spdlog::set_level(spdlog::level::debug);
+    
     console->info("AppShader Iniciado");
 
     spdlog::set_level(spdlog::level::debug);
@@ -30,7 +33,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
 	try {
 		std::string config_file = "./examples/AppShader/etc/shader.yaml";
-        console->info("Carregar arquivo:{0}",config_file);
+        console->info("Carregar arquivo:{}",config_file);
         YAML::Node config = YAML::LoadFile(config_file);
 
         YAML::Node screen = config["screen"];
@@ -44,9 +47,9 @@ int _tmain(int argc, _TCHAR* argv[]) {
 		std::string vertexFile = shader["vertex"].as<std::string>();
 		std::string fragmentFile = shader["fragment"].as<std::string>();
 
-        console->info("Iniciar Tela: {0}, w: {1}, h: {2}", nome, w, h);
-		console->info("Shader: Vertex: {0}", vertexFile);
-		console->info("Shader: Fragment: {0}", fragmentFile);
+        console->info("Iniciar Tela: {0}, w: {1:03d}, h: {2:03d}", nome, w, h);
+		console->info("Shader: Vertex: {}", vertexFile);
+		console->info("Shader: Fragment: {}", fragmentFile);
 		
 		//Instancia de Video
 		//Chimera::Video *video = new Chimera::OvrDevice("Teste");

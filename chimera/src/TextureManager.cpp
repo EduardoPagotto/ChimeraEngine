@@ -4,11 +4,13 @@
 namespace Chimera {
 
 TextureManager::TextureManager () {
+	log = spdlog::get("chimera");
+    log->debug("Constructor TextureManager");
 }
 
 TextureManager::~TextureManager() {
-
 	destroyAll();
+	log->debug("Destructor TextureManager");
 }
 
 unsigned int TextureManager::fromFile(std::string _name, const TEX_SEQ &_indexTextureSeq, std::string _pathFile) {
@@ -109,7 +111,7 @@ Texture *TextureManager::getTexture(const unsigned int &_serial) {
 	if (it != mapTex.end()) {
 		pTex = it->second;
 	} else {
-		printf("Erro Textura nao existe id: %d", _serial);
+		log->error("Erro, Textura nao existe id: {0:d}", _serial);
 	}
 
 	return pTex;

@@ -40,7 +40,10 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
     using namespace Chimera;
 
-    auto console = spdlog::stdout_color_st("main");
+    auto console = spdlog::stdout_color_st("chimera");
+    
+    spdlog::set_level(spdlog::level::debug);
+
     console->info("appTest Iniciado");
     for (int i=0 ; i < argn; i++) {
         console->info("Parametros {0}: {1}", i, argv[i]);

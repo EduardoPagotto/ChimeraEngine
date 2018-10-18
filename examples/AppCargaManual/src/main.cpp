@@ -31,7 +31,7 @@ int main ( int argn, char** argv ) {
 int _tmain ( int argc, _TCHAR* argv[] ) {
 #endif
 
-    auto console = spdlog::stdout_color_st("main");
+    auto console = spdlog::stdout_color_st("chimera");
     console->info("AppShader Iniciado");
 
     spdlog::set_level(spdlog::level::debug);

@@ -4,6 +4,8 @@
 #include "OpenGLDefs.h"
 #include "Entity.h"
 
+#include <spdlog/spdlog.h>
+
 namespace Chimera {
 
 enum class TEX_SEQ {
@@ -77,6 +79,8 @@ private:
 	GLuint idTexture;
    // int indiceFilter;
     bool texturaCarregada;
+
+	std::shared_ptr<spdlog::logger> log;
 };
 }
 #endif

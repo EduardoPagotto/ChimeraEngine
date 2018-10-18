@@ -36,6 +36,8 @@ public:
 private:
 	unsigned int addAvaible(Texture *_pTex);
 	std::map<unsigned int, Texture*> mapTex;
+
+	std::shared_ptr<spdlog::logger> log;
 };
 }
 

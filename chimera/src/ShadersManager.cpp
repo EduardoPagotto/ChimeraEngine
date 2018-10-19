@@ -15,15 +15,19 @@ ShadersManager::ShadersManager() noexcept {
 }
 
 void ShadersManager::reset() noexcept {
+
     log->debug("Destructor Shader");  
+    //Remove os shaders registrados
+    for (auto item : mapaId) {
 
-    //std::cerr<<"Closing down shader manager\n";
-    // TODO: Implementar finalização do shader
+		std::string nome = item.first;
+		GLuint idProgram = item.second;
 
-    //   for(auto programs : m_shaderPrograms)
-    //     delete programs.second;
-    //   for(auto shader : m_shaders)
-    //     delete shader.second;
+        log->debug("Remove Shader: {}", nome);
+        glDeleteProgram(idProgram);
+    }
+
+    mapaId.clear();
 }
 
 bool ShadersManager::load (const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path) {

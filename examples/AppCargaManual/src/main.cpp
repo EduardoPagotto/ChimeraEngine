@@ -63,14 +63,9 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
         for (std::size_t i=0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
-            std::string nameShade = shader_item["name"].as<std::string>();
-            std::string vertexFile = shader_item["vertex"].as<std::string>();
-            std::string fragmentFile = shader_item["fragment"].as<std::string>();
-            console->info("Shader: Name: {0}", nameShade);
-            console->info("Shader: Vertex: {0}", vertexFile);
-            console->info("Shader: Fragment: {0}", fragmentFile);
-            // FIXME: colocar log de carga no shader->loader
-            shader->load(nameShade, vertexFile, fragmentFile);
+            shader->load(shader_item["name"].as<std::string>(),
+                         shader_item["vertex"].as<std::string>(),
+                         shader_item["fragment"].as<std::string>());
         }
 
         std::string model = config["model"].as<std::string>();

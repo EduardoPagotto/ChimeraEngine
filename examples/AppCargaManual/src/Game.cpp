@@ -15,10 +15,15 @@ Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
 	textoFPS = "fps: 0";
 	sPosicaoObj = "pos:(,,)";
 
+	log = spdlog::get("chimera");
+    log->debug("Constructor Game");
+
     physicWorld = Chimera::Singleton<Chimera::PhysicsControl>::getRefSingleton();
 }
 
 Game::~Game() {
+
+    log->debug("Destructor Game");
 
     Chimera::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 }
@@ -214,28 +219,26 @@ void Game::userEvent ( const SDL_Event &_event ) {
 	Chimera::Node* n1 = (Chimera::Node*) _event.user.data1;
 	Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
 
-	std::string l_msg = "";
-
 	switch ( op ) {
 		case Chimera::KindOp::START_COLLIDE:
 			{
 				Chimera::Node* n1 = (Chimera::Node*) _event.user.data1;
 				Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
-				l_msg = "Colisao START:" + l_msg + " A:" + n1->getName() + " B:" + n2->getName();
+                log->debug("Colisao start: {} -> {}", n1->getName(), n2->getName());
 			}
 			break;
 		case Chimera::KindOp::ON_COLLIDE:
 			{
 				Chimera::Node* n1 = (Chimera::Node*) _event.user.data1;
 				Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
-				l_msg = "Colisao ON:" + l_msg + " A:" + n1->getName() + " B:" + n2->getName();
+                log->debug("Colisao on: {} -> {}", n1->getName(), n2->getName());
 			}
 			break;
 		case Chimera::KindOp::OFF_COLLIDE:
 			{
 				Chimera::Node* n1 = (Chimera::Node*) _event.user.data1;
 				Chimera::Node* n2 = (Chimera::Node*) _event.user.data2;
-				l_msg = "Colisao OFF:" + l_msg + " A:" + n1->getName() + " B:" + n2->getName();
+                log->debug("Colisao off: {} -> {}", n1->getName(), n2->getName());
 			}
 			break;
 		case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
@@ -243,10 +246,6 @@ void Game::userEvent ( const SDL_Event &_event ) {
 			break;
 		default:
 			break;
-	}
-
-	if (l_msg.length() > 0) {
-		printf("%s\n", l_msg.c_str());
 	}
 }
 

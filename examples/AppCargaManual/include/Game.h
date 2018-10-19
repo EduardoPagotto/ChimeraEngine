@@ -9,6 +9,8 @@
 #include <PhysicsControl.h>
 #include <DataMsg.h>
 
+#include <spdlog/spdlog.h>
+
 /**
  * Class Game
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
@@ -50,6 +52,8 @@ private:
     Chimera::PhysicsControl *physicWorld;
     
     bool isPaused;
+
+    std::shared_ptr<spdlog::logger> log;
 };
 
 #endif

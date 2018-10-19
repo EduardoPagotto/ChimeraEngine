@@ -4,5 +4,5 @@ screen:
     w: 480
     h: 240
 shader:
-  vertex: ./examples/AppShader/shader/SimpleVertexShader.vertexshader
-  fragment: ./examples/AppShader/shader/SimpleFragmentShader.fragmentshader
+  vertex: ./examples/AppShader/shader/simple.vert
+  fragment: ./examples/AppShader/shader/simple.frag

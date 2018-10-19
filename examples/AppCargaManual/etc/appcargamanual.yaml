@@ -8,16 +8,16 @@ path_tex: ./models/
 path_model: ./models/
 shaders:
   - name: mesh-default
-    vertex: ./examples/AppCargaManual/shader/vertex.glsl
-    fragment: ./examples/AppCargaManual/shader/fragment.glsl
+    vertex: ./examples/AppCargaManual/shader/mesh.vert
+    fragment: ./examples/AppCargaManual/shader/mesh.frag
   - name: particle-default
-    vertex: ./examples/AppCargaManual/shader/ParticleVertexShader.glsl
-    fragment: ./examples/AppCargaManual/shader/ParticleFragmentShader.glsl
+    vertex: ./examples/AppCargaManual/shader/particle.vert
+    fragment: ./examples/AppCargaManual/shader/particle.frag
   - name: hud-default
-    vertex: ./examples/AppCargaManual/shader/HudVertexShader.glsl
-    fragment: ./examples/AppCargaManual/shader/HudFragmentShader.glsl
+    vertex: ./examples/AppCargaManual/shader/hud.vert
+    fragment: ./examples/AppCargaManual/shader/hud.frag
   - name: simpleDepthShader
-    vertex: ./examples/AppCargaManual/shader/shadow_mapping_depth.vs
+    vertex: ./examples/AppCargaManual/shader/shadow_mapping_depth.vert 
     fragment: ./examples/AppCargaManual/shader/shadow_mapping_depth.frag
 font: ./examples/AppCargaManual/fonts/FreeSans.ttf
 size: 18

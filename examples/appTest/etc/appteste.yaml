@@ -5,8 +5,8 @@ screen:
     h: 900
 shaders:
   - name: debugDepthQuad
-    vertex: ./examples/appTest/shader/debug_quad.vs
-    fragment: ./examples/appTest/shader/debug_quad_depth.frag
+    vertex: ./examples/appTest/shader/debug_quad.vert
+    fragment: ./examples/appTest/shader/debug_quad.frag
   - name: shadow_mapping
     vertex: ./examples/appTest/shader/shadow_mapping.vs
     fragment: ./examples/appTest/shader/shadow_mapping.frag

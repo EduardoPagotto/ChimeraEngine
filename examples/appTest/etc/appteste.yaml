@@ -8,7 +8,7 @@ shaders:
     vertex: ./examples/appTest/shader/debug_quad.vert
     fragment: ./examples/appTest/shader/debug_quad.frag
   - name: shadow_mapping
-    vertex: ./examples/appTest/shader/shadow_mapping.vs
+    vertex: ./examples/appTest/shader/shadow_mapping.vert
     fragment: ./examples/appTest/shader/shadow_mapping.frag
 
 Entidades:

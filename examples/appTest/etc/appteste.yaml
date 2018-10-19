@@ -3,9 +3,13 @@ screen:
   canvas:
     w: 900
     h: 900
-shader:
-  vertex: ./examples/appTest/shader/vertex.glsl
-  fragment: ./examples/appTest/shader/fragment.glsl
+shaders:
+  - name: debugDepthQuad
+    vertex: ./examples/appTest/shader/debug_quad.vs
+    fragment: ./examples/appTest/shader/debug_quad_depth.frag
+  - name: shadow_mapping
+    vertex: ./examples/appTest/shader/shadow_mapping.vs
+    fragment: ./examples/appTest/shader/shadow_mapping.frag
 
 Entidades:
   camera:

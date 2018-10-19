@@ -19,9 +19,6 @@ shaders:
   - name: simpleDepthShader
     vertex: ./examples/AppCargaManual/shader/shadow_mapping_depth.vs
     fragment: ./examples/AppCargaManual/shader/shadow_mapping_depth.frag
-  - name: debugDepthQuad
-    vertex: ./examples/AppCargaManual/shader/debug_quad.vs
-    fragment: ./examples/AppCargaManual/shader/debug_quad_depth.frag
 font: ./examples/AppCargaManual/fonts/FreeSans.ttf
 size: 18
 

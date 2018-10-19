@@ -51,9 +51,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
 		YAML::Node shaders = config["shaders"];
         Chimera::Shader *shader =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
-
         console->info("Shaders identificados: {0}", shaders.size());
-
         for (std::size_t i=0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
             shader->load(shader_item["name"].as<std::string>(),

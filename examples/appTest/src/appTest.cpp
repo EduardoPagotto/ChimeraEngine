@@ -30,14 +30,6 @@ int main ( int argn, char** argv ) {
 int _tmain ( int argc, _TCHAR* argv[] ) {
 #endif
 
-#ifdef WIN32
-        std::string dirDados = "C:\\Projetos\\ChimeraEngine\\models\\";
-		std::string dirFontes = "C:\\Projetos\\ChimeraEngine\\fonts\\";
-#else
-        std::string dirDados = "/home/pagotto/Projetos/ChimeraEngine/models/";
-		std::string dirFontes = "/home/pagotto/Projetos/ChimeraEngine/fonts/";
-#endif
-
     using namespace Chimera;
 
     auto console = spdlog::stdout_color_st("chimera");
@@ -73,12 +65,19 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pCam->init();
         sceneMng->cameraAtiva(pCam);
 
-		Shader *shader_engine =  Singleton<Shader>::getRefSingleton();
-		YAML::Node shader = config["shader"];
-        shader_engine->load("default", shader["vertex"].as<std::string>(), shader["fragment"].as<std::string>());
+        //Carga dos shaders
+		YAML::Node shaders = config["shaders"];
+        Chimera::Shader *shader_engine =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
+        console->info("Shaders identificados: {0}", shaders.size());
+        for (std::size_t i=0; i < shaders.size(); i++) {
+            YAML::Node shader_item = shaders[i];
+            shader_engine->load(shader_item["name"].as<std::string>(),
+                                shader_item["vertex"].as<std::string>(),
+                                shader_item["fragment"].as<std::string>());
+        }
 
         Group* group1 = sceneMng->createSceneGraph();
-        group1->setShaderName("default");
+        group1->setShaderName("debugDepthQuad");
 
         Transform* pTrans = new Transform(group1,"trans01");
         pTrans->setPosition( glm::vec3( 0.0, 0.0, 0.0) );

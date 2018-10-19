@@ -2,7 +2,6 @@
 #define _STATE__H
 
 #include "Light.h"
-//#include "Shader.h"
 #include "OpenGLDefs.h"
 
 namespace Chimera {

@@ -194,7 +194,7 @@ void ParticleEmitter::render()
 		2,                                // attribute. No particular reason for 1, but must match the layout in the shader.
 		4,                                // size : r + g + b + a => 4
 		GL_UNSIGNED_BYTE,                 // type
-		GL_TRUE,                          // normalized?    *** YES, this means that the unsigned char[4] will be accessible with a vec4 (floats) in the shader ***
+		GL_TRUE,                          // normalized?    *** YES, this means that the unsigned char[4] will be accessible with a vec4 (floats) in the ShadersManager ***
 		0,                                // stride
 		(void*)0                          // array buffer offset
 	);

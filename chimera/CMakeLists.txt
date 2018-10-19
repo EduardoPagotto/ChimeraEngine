@@ -40,7 +40,7 @@ set (SourcesChimeraAPI 	src/ChimeraUtils.cpp
 						src/Particle.cpp
 						src/ParticleEmitter.cpp
 						src/ShadowMap.cpp
-						src/Shader.cpp
+						src/ShadersManager.cpp
 						src/SceneRoot.cpp
 						src/Group.cpp
 						src/State.cpp

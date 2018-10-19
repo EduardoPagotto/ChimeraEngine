@@ -2,19 +2,19 @@
 #include <iostream>
 #include <fstream>
 
-#include "Shader.h"
+#include "ShadersManager.h"
 #include "ExceptionChimera.h"
 
 namespace Chimera {
 
-Shader::Shader() noexcept {
+ShadersManager::ShadersManager() noexcept {
     idProgram = 0;
     currentProgram = "default";
     log = spdlog::get("chimera");
     log->debug("Contructor Shader");
 }
 
-void Shader::reset() noexcept {
+void ShadersManager::reset() noexcept {
     log->debug("Destructor Shader");  
 
     //std::cerr<<"Closing down shader manager\n";
@@ -26,7 +26,7 @@ void Shader::reset() noexcept {
     //     delete shader.second;
 }
 
-bool Shader::load (const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path) {
+bool ShadersManager::load (const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path) {
 
 	bool retorno = false;
 
@@ -65,7 +65,7 @@ bool Shader::load (const std::string &programName, const std::string &vertex_fil
 	return retorno;
 }
 
-std::string Shader::getShaderCode ( const char * file_path ) {
+std::string ShadersManager::getShaderCode ( const char * file_path ) {
 
     // Read the Vertex Shader code from the file
     std::string shaderCode;
@@ -86,7 +86,7 @@ std::string Shader::getShaderCode ( const char * file_path ) {
     return shaderCode;
 }
 
-GLuint Shader::compileShader ( const std::string &shaderCode, bool _shadeKind ) {
+GLuint ShadersManager::compileShader ( const std::string &shaderCode, bool _shadeKind ) {
 
     GLint Result = GL_FALSE;
     int InfoLogLength;
@@ -116,7 +116,7 @@ GLuint Shader::compileShader ( const std::string &shaderCode, bool _shadeKind ) 
     return shaderID;
 }
 
-GLuint Shader::linkShader (const GLuint &VertexShaderID, const GLuint &FragmentShaderID ) {
+GLuint ShadersManager::linkShader (const GLuint &VertexShaderID, const GLuint &FragmentShaderID ) {
 
     GLint Result = GL_FALSE;
     int InfoLogLength;
@@ -141,7 +141,7 @@ GLuint Shader::linkShader (const GLuint &VertexShaderID, const GLuint &FragmentS
     return ProgramID;
 }
 
-bool Shader::selectCurrent(const std::string & _cur)
+bool ShadersManager::selectCurrent(const std::string & _cur)
 {
 	auto var = mapaId.find(_cur);
 	if (var != mapaId.end()) {
@@ -154,7 +154,7 @@ bool Shader::selectCurrent(const std::string & _cur)
 	return false;
 }
 
-GLint Shader::getUniformLocation(const char* _name) const noexcept
+GLint ShadersManager::getUniformLocation(const char* _name) const noexcept
 {
 	// nasty C lib uses -1 return value for error
 	GLint loc = glGetUniformLocation(idProgram, _name);
@@ -164,31 +164,31 @@ GLint Shader::getUniformLocation(const char* _name) const noexcept
 	return loc;
 }
 
-void Shader::setGlUniform1i(const char * _nameVar, const int &_val) const noexcept {
+void ShadersManager::setGlUniform1i(const char * _nameVar, const int &_val) const noexcept {
 	glUniform1i(getUniformLocation(_nameVar), _val);
 }
 
-void Shader::setGlUniform3f(const char *_nameVar, const float &_x, const float &_y, const float &_z) const noexcept {
+void ShadersManager::setGlUniform3f(const char *_nameVar, const float &_x, const float &_y, const float &_z) const noexcept {
 	glUniform3f(getUniformLocation(_nameVar), _x, _y, _z);
 }
 
-void Shader::setGlUniform3fv ( const char* _nameVar, const unsigned& _num, const float* _pointer ) const noexcept {
+void ShadersManager::setGlUniform3fv ( const char* _nameVar, const unsigned& _num, const float* _pointer ) const noexcept {
 	glUniform3fv(getUniformLocation(_nameVar), _num, _pointer);
 }
 
-void Shader::setGlUniform4fv ( const char* _nameVar, const unsigned &_num, const float *_pointer ) const noexcept {
+void ShadersManager::setGlUniform4fv ( const char* _nameVar, const unsigned &_num, const float *_pointer ) const noexcept {
     glUniform4fv(getUniformLocation(_nameVar), _num, _pointer);
 }
 
-void Shader::setGlUniform1fv ( const char* _nameVar, const unsigned& _num, const float* _pointer ) const noexcept {
+void ShadersManager::setGlUniform1fv ( const char* _nameVar, const unsigned& _num, const float* _pointer ) const noexcept {
     glUniform1fv(getUniformLocation(_nameVar), _num, _pointer);
 }
 
-void Shader::setGlUniformMatrix4fv ( const char* _nameVar, const unsigned& _num, const bool& _normal,const float* _pointer ) const noexcept {
+void ShadersManager::setGlUniformMatrix4fv ( const char* _nameVar, const unsigned& _num, const bool& _normal,const float* _pointer ) const noexcept {
     glUniformMatrix4fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
 }
 
-void Shader::setGlUniformMatrix3fv ( const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer ) const noexcept {
+void ShadersManager::setGlUniformMatrix3fv ( const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer ) const noexcept {
     glUniformMatrix3fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
 }
 }

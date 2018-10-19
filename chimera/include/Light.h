@@ -10,8 +10,6 @@
 #include <map>
 #include "glm/glm.hpp"
 
-#include "Shader.h"
-
 namespace Chimera {
     
 enum class LightType
@@ -25,7 +23,6 @@ class Light : public Node
 public:
     Light (Node* _parent, std::string _name );
     virtual ~Light();
-
 	virtual void init();
 
 	// Inherited via Node
@@ -86,8 +83,6 @@ private:
     LightType type;
     
     std::map<ModeMaterial, void*> map_params;
-
-	Shader *shader;
 };
 }
 #endif

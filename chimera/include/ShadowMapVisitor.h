@@ -6,7 +6,7 @@
 
 #include "NodeVisitor.h"
 //#include "Node.h"
-#include "Shader.h"
+#include "ShadersManager.h"
 //#include "Texture.h"
 #include "Coord.h"
 #include "ShadowMap.h"
@@ -40,7 +40,7 @@ private:
 	//void initSceneShadow();
 	//void endSceneShadow();
 	ShadowMap *shadowMap;
-	Shader *simpleDepthShader;
+	ShadersManager *simpleDepthShader;
 	//GLuint depthMapFBO;
     //Texture *pTexture;
 

@@ -2,7 +2,6 @@
 #define __INIT_VISITOR__H
 
 #include "NodeVisitor.h"
-#include "Shader.h"
 #include <spdlog/spdlog.h>
 
 namespace Chimera {
@@ -21,7 +20,6 @@ public:
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;
 private:
-	Shader *shader;//GLuint programID;
     std::shared_ptr<spdlog::logger> log;
 };
 

@@ -237,7 +237,7 @@
     <ClInclude Include="..\..\chimera\include\IGameClientEvents.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Shader.h">
+    <ClInclude Include="..\..\chimera\include\ShadersManager.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\NodeVisitor.h">

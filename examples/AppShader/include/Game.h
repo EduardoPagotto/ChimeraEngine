@@ -6,7 +6,7 @@
 #include "Node.h"
 #include "Video.h"
 
-#include "Shader.h"
+#include "ShadersManager.h"
 
 class Game : public Chimera::IGameClientEvents
 {
@@ -40,7 +40,7 @@ private:
 	std::string vertexFile;
 	std::string fragmentFile;
 
-    Chimera::Shader *shader;
+    Chimera::ShadersManager *shadersManager;
 	GLuint vertexbuffer;
 	GLuint VertexArrayID;
 };

@@ -17,12 +17,10 @@ namespace Chimera {
 InitVisitor::InitVisitor() {
     log = spdlog::get("chimera");
     log->debug("Constructor InitVisitor");
-	shader =  Singleton<Shader>::getRefSingleton();
 }
 
 InitVisitor::~InitVisitor() {
     log->debug("Destructor InitVisitor");
-	Singleton<Shader>::releaseRefSingleton();
 }
 
 void InitVisitor::visit ( Camera* _pCamera ) {

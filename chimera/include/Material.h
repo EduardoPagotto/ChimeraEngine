@@ -7,7 +7,7 @@
 #include <tinyxml2.h>
 
 #include "OpenGLDefs.h"
-#include "Shader.h"
+#include "ShadersManager.h"
 #include "TextureManager.h"
 
 namespace Chimera {
@@ -71,7 +71,7 @@ private:
     std::map<std::string, Texture*> mapTex;
 
     TextureManager *texManager;
-	Shader *shader;
+	ShadersManager *shaderManager;
 };
 }
 #endif

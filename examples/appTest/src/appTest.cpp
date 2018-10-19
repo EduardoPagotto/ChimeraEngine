@@ -11,7 +11,7 @@
 #include "ExceptionChimera.h"
 
 #include "Transform.h"
-#include "Shader.h"
+#include "ShadersManager.h"
 
 #include "CameraSpherical.h"
 
@@ -67,7 +67,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
         //Carga dos shaders
 		YAML::Node shaders = config["shaders"];
-        Chimera::Shader *shader_engine =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
+        Chimera::ShadersManager *shader_engine =  Chimera::Singleton<Chimera::ShadersManager>::getRefSingleton();
         console->info("Shaders identificados: {0}", shaders.size());
         for (std::size_t i=0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
@@ -118,7 +118,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pControle->open();
         pControle->gameLoop();
 
-        Singleton<Shader>::releaseRefSingleton();
+        Singleton<ShadersManager >::releaseRefSingleton();
 
         console->info("Loop de Game encerrado!!!!");
 

@@ -14,13 +14,13 @@ Material::Material ( std::string _name ) : Entity ( EntityKind::MATERIAL, _name 
     tipoTexturasDisponiveis = -1;
 
     texManager = Singleton<TextureManager>::getRefSingleton();
-	shader = Singleton<Shader>::getRefSingleton();
+	shaderManager = Singleton<ShadersManager >::getRefSingleton();
 }
 
 Material::~Material() {
 
     Singleton<TextureManager>::releaseRefSingleton();
-	Singleton<Shader>::releaseRefSingleton();
+	Singleton<ShadersManager >::releaseRefSingleton();
 }
 
 void Material::init() {
@@ -147,12 +147,12 @@ void Material::apply() {
 
         std::string nome = iter->first;
         if (nome.compare(SHADE_MAT_SHININESS) != 0)
-            shader->setGlUniform4fv(nome.c_str(), 1, (float*)((Color*)iter->second)->ptr()); //ponteiro de um color
+            shaderManager->setGlUniform4fv(nome.c_str(), 1, (float*)((Color*)iter->second)->ptr()); //ponteiro de um color
         else
-            shader->setGlUniform1fv(nome.c_str(), 1, (float*)iter->second); //ponteiro de um float
+            shaderManager->setGlUniform1fv(nome.c_str(), 1, (float*)iter->second); //ponteiro de um float
 	}
 
-	shader->setGlUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
+	shaderManager->setGlUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
 
     if (mapTex.size() > 0) {
 
@@ -163,7 +163,7 @@ void Material::apply() {
             Texture *pTex = iTex->second;
 
             pTex->apply();
-            shader->setGlUniform1i(name.c_str(), (int)pTex->getIndexTextureSeq());
+            shaderManager->setGlUniform1i(name.c_str(), (int)pTex->getIndexTextureSeq());
         }
     } else {
         glBindTexture(GL_TEXTURE_2D, 0);

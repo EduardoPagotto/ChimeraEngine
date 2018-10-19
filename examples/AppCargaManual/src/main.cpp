@@ -18,7 +18,7 @@
 #include <ParticleEmitter.h>
 #include <Transform.h>
 #include <HUD.h>
-#include <Shader.h>
+#include <ShadersManager.h>
 #include <Singleton.h>
 #include <ExceptionChimera.h>
 
@@ -50,7 +50,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         Chimera::Video *video = new Chimera::VideoDevice ( canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
 		YAML::Node shaders = config["shaders"];
-        Chimera::Shader *shader =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
+        Chimera::ShadersManager *shader =  Chimera::Singleton<Chimera::ShadersManager>::getRefSingleton();
         console->info("Shaders identificados: {0}", shaders.size());
         for (std::size_t i=0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];

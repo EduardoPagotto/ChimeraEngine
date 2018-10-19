@@ -3,7 +3,7 @@
 
 #include "NodeVisitor.h"
 #include "Video.h"
-#include "Shader.h"
+#include "ShadersManager.h"
 #include "Coord.h"
 
 #include "ShadowMap.h"
@@ -36,7 +36,7 @@ private:
 	glm::mat4 view;
     glm::mat4 model;
 
-	Shader *shader;
+	ShadersManager *shadersManager;
 
 	ShadowMap *shadowOn;
 };

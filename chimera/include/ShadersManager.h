@@ -1,5 +1,5 @@
-#ifndef SHADER_H
-#define SHADER_H
+#ifndef SHADER_MANAGER_H
+#define SHADER_MANAGER_H
 
 #include <stdlib.h>
 #include <string.h>
@@ -14,8 +14,8 @@
 namespace Chimera
 {
 
-class Shader {
-	friend class Singleton<Shader>;
+class ShadersManager {
+	friend class Singleton<ShadersManager >;
 public:
 
 	bool load(const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path);
@@ -45,13 +45,13 @@ public:
 	void setGlUniformMatrix3fv( const char* _nameVar, const unsigned& _num,const bool& _normal,const float* _pointer )const noexcept;
 
 protected:
-	Shader() noexcept;
+	ShadersManager() noexcept;
 
-	virtual ~Shader() {
+	virtual ~ShadersManager() {
 		reset();
 	}
 
-	Shader(const Shader&)=delete;
+	ShadersManager(const ShadersManager&)=delete;
 
 private:
     std::string getShaderCode ( const char * file_path );

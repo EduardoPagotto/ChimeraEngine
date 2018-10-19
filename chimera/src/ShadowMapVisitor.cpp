@@ -23,7 +23,7 @@ namespace Chimera {
 ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned int & _width, const unsigned int & _height)
 {
 	shadowMap = new ShadowMap(_name, _width, _height);
-	simpleDepthShader = Singleton<Shader>::getRefSingleton();
+	simpleDepthShader = Singleton<ShadersManager >::getRefSingleton();
 }
 
 ShadowMapVisitor::~ShadowMapVisitor() {
@@ -31,7 +31,7 @@ ShadowMapVisitor::~ShadowMapVisitor() {
 	delete shadowMap;
 	shadowMap = nullptr;
 
-	Singleton<Shader>::releaseRefSingleton();
+	Singleton<ShadersManager >::releaseRefSingleton();
 }
 
 ShadowMap* ShadowMapVisitor::execute(Node *_pNode) {

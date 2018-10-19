@@ -56,7 +56,7 @@ void HUD::render()
 
 	for (HUDTxt *l_pTxt : vLineText) {
 
-		shader->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
+		shadersManager->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
 
 		vFonts[l_pTxt->indexFonte]->RenderText(l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
 	}

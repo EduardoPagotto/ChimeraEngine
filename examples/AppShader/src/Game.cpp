@@ -13,11 +13,11 @@ Game::Game(const std::string &vertex, const std::string &fragment, Chimera::Vide
 	vertexFile = vertex;
 	fragmentFile = fragment;
 
-	shader =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();
+	shadersManager =  Chimera::Singleton<Chimera::ShadersManager>::getRefSingleton();
 }
 
 Game::~Game() {
-	Chimera::Singleton<Chimera::Shader>::releaseRefSingleton();
+	Chimera::Singleton<Chimera::ShadersManager>::releaseRefSingleton();
 }
 
 void Game::joystickCapture(Chimera::JoystickManager &joy) {
@@ -110,7 +110,7 @@ void Game::start() {
 	glBindVertexArray(VertexArrayID);
 
 	// Create and compile our GLSL program from the shaders
-	shader->load("default", vertexFile, fragmentFile);
+	shadersManager->load("default", vertexFile, fragmentFile);
 
 	// An array of 3 vectors which represents 3 vertices
 	static const GLfloat g_vertex_buffer_data[] = {
@@ -177,9 +177,9 @@ void Game::render() {
 	//TODO desenhar aqui!!
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// Use our shader
+	// Use our shadersManager
 	//glUseProgram(programID);
-    shader->link();
+    shadersManager->link();
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

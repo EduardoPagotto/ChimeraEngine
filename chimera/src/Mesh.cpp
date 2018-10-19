@@ -121,11 +121,6 @@ void Mesh::setVertexBuffer()
 
     log->debug("VBO Nome: {0} Indice: {1} Data: {2}", getName().c_str(), indexIBO.size(), vertexData.size());
 
-	// printf("Nome: %s \n", getName().c_str());
-	// printf("-VBO Indice ---------( %03d )\n", indexIBO.size());
-	// printf("-VBO Data -----------( %03d )\n", vertexData.size());
-	// printf("\n");
-
 	unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
 	unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
@@ -302,8 +297,6 @@ void Mesh::loadCollada ( tinyxml2::XMLElement* _nNode ) {
     log->debug("Vertex  Indice / Lista ------ ( {0:03d} / {1:03d} )", vertexIndex.size(), vertexList.size());
 	log->debug("Normal  Indice / Lista ------ ( {0:03d} / {1:03d} )", normalIndex.size(), normalList.size());
     log->debug("Texture Indice / Lista ------ ( {0:03d} / {1:03d} )", textureIndex.size(), textureList.size());
-    
 }
-
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

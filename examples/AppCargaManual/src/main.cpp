@@ -46,15 +46,8 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         YAML::Node config = YAML::LoadFile(config_file);
 
         YAML::Node screen = config["screen"];
-        std::string nome = screen["name"].as<std::string>();
         YAML::Node canvas = screen["canvas"];
-        int w = canvas["w"].as<int>();
-        int h = canvas["h"].as<int>();
-
-        console->info("Iniciar Tela: {0}, w: {1}, h: {2}", nome, w, h);
-
-        //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Chimera::Video *video = new Chimera::VideoDevice ( w, h, nome );
+        Chimera::Video *video = new Chimera::VideoDevice ( canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
 		YAML::Node shaders = config["shaders"];
         Chimera::Shader *shader =  Chimera::Singleton<Chimera::Shader>::getRefSingleton();

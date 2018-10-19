@@ -36,18 +36,8 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         YAML::Node config = YAML::LoadFile(config_file);
 
         YAML::Node screen = config["screen"];
-        std::string nome = screen["name"].as<std::string>();
-
         YAML::Node canvas = screen["canvas"];
-        int w = canvas["w"].as<int>();
-        int h = canvas["h"].as<int>();
-
-        console->info("Iniciar Tela {0}, w:{1}, h:{2}", nome, w, h);
-
-        //Instancia de Video
-        //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        //Chimera::Video *video = new Chimera::VideoDevice (w, h, nome);
-        Chimera::Video *video = new Chimera::HmdDevice("teste");
+        Chimera::Video *video = new Chimera::HmdDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
         Game *game = new Game(video);
 

@@ -37,25 +37,12 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node config = YAML::LoadFile(config_file);
 
         YAML::Node screen = config["screen"];
-        std::string nome = screen["name"].as<std::string>();
-
         YAML::Node canvas = screen["canvas"];
-        int w = canvas["w"].as<int>();
-        int h = canvas["h"].as<int>();
-
 		YAML::Node shader = config["shader"];
-		std::string vertexFile = shader["vertex"].as<std::string>();
-		std::string fragmentFile = shader["fragment"].as<std::string>();
 
-        console->info("Iniciar Tela: {0}, w: {1:03d}, h: {2:03d}", nome, w, h);
-		console->info("Shader: Vertex: {}", vertexFile);
-		console->info("Shader: Fragment: {}", fragmentFile);
-		
-		//Instancia de Video
-		//Chimera::Video *video = new Chimera::OvrDevice("Teste");
-		Chimera::Video *video = new Chimera::VideoDevice(w, h, nome);
+		Chimera::Video *video = new Chimera::VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
-		Game *game = new Game(vertexFile, fragmentFile, video);
+		Game *game = new Game(shader["vertex"].as<std::string>(), shader["fragment"].as<std::string>(), video);
 
 		Chimera::FlowControl *pControle = new Chimera::FlowControl(game);
 		pControle->open();

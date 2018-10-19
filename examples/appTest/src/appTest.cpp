@@ -50,29 +50,14 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
     }
 
     try {
-
 		std::string config_file = "./examples/appTest/etc/appteste.yaml";
         console->info("Carregar arquivo:{0}",config_file);
+
         YAML::Node config = YAML::LoadFile(config_file);
-
         YAML::Node screen = config["screen"];
-        std::string nome = screen["name"].as<std::string>();
-
         YAML::Node canvas = screen["canvas"];
-        int w = canvas["w"].as<int>();
-        int h = canvas["h"].as<int>();
 
-		YAML::Node shader = config["shader"];
-		std::string vertexFile = shader["vertex"].as<std::string>();
-		std::string fragmentFile = shader["fragment"].as<std::string>();
-
-        console->info("Iniciar Tela: {0}, w: {1}, h: {2}", nome, w, h);
-		console->info("Shader: Vertex: {0}", vertexFile);
-		console->info("Shader: Fragment: {0}", fragmentFile);
-
-        //Instancia de Video
-        //Chimera::Video *video = new Chimera::OvrDevice("Teste");
-        Video *video = new VideoDevice (w, h, nome);
+        Video *video = new VideoDevice (canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
         SceneMng *sceneMng = new SceneMng ( video );
         //sceneMng->setReader(pLoader);
@@ -89,7 +74,8 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         sceneMng->cameraAtiva(pCam);
 
 		Shader *shader_engine =  Singleton<Shader>::getRefSingleton();
-		shader_engine->load("default", vertexFile, fragmentFile);
+		YAML::Node shader = config["shader"];
+        shader_engine->load("default", shader["vertex"].as<std::string>(), shader["fragment"].as<std::string>());
 
         Group* group1 = sceneMng->createSceneGraph();
         group1->setShaderName("default");

@@ -13,6 +13,7 @@ VideoDevice::VideoDevice ( std::string _nome ) : Video ( _nome, KIND_DEVICE::SCR
     //chama inicializacao do SDL na classe Pai
     initSDL();
 
+    log->debug("Instanciado VideoDevice");
 }
 
 VideoDevice::VideoDevice ( int _width, int _height, std::string _nome ) : Video ( _nome, KIND_DEVICE::SCREEN, _width, _height ) {
@@ -21,6 +22,8 @@ VideoDevice::VideoDevice ( int _width, int _height, std::string _nome ) : Video 
 
     //chama inicializacao do SDL na classe Pai
     initSDL();
+
+    log->debug("Instanciado VideoDevice");
 }
 
 VideoDevice::~VideoDevice() {

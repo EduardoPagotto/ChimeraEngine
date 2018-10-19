@@ -21,6 +21,8 @@
 
 #include <glm/glm.hpp>
 
+#include <spdlog/spdlog.h>
+
 namespace Chimera {
   
 enum class KIND_DEVICE
@@ -84,6 +86,9 @@ protected:
 
     SDL_Window *window;
     SDL_GLContext context;
+
+    std::shared_ptr<spdlog::logger> log;
+
 };
 }				/* namespace Chimera */
 #endif				/* VIDEO_H_ */

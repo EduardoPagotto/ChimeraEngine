@@ -8,9 +8,11 @@ namespace Chimera {
 	
 Video::Video ( std::string _nome, KIND_DEVICE _kindDevice ) : nomeTela ( _nome ), kindDevice ( _kindDevice ) {
 
-    winSizeW = SDL_WINDOWPOS_CENTERED;
-    winSizeH = SDL_WINDOWPOS_CENTERED;
+    winSizeW = 800;
+    winSizeH = 600;
 
+    log = spdlog::get("chimera");
+    log->debug("Contructor Video:{0} w:{1:03d} h:{2:03d}", _nome, winSizeW, winSizeH);
 }
 
 Video::Video ( std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h ) : nomeTela ( _nome ), kindDevice ( _kindDevice ) {
@@ -18,6 +20,8 @@ Video::Video ( std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h ) : no
     winSizeW = _w;
     winSizeH = _h;
 
+    log = spdlog::get("chimera");
+    log->debug("Contructor Video:{0} w:{1:03d} h:{2:03d}", _nome, winSizeW, winSizeH);
 }
 
 Video::~Video() {
@@ -31,6 +35,8 @@ Video::~Video() {
         SDL_DestroyWindow ( window );
         window = nullptr;
     }
+
+    log->debug("Destructor Video");
 
     SDL_Quit();
 }

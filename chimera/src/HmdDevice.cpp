@@ -18,7 +18,10 @@ namespace Chimera {
 HmdDevice::HmdDevice ( std::string _nome ) : Video ( _nome, KIND_DEVICE::HMD_Z1 ) {
 
     winSizeW = 800;
-    winSizeH = 480;
+    winSizeH = 600;
+
+    log->debug("Instanciado HmdDevice");
+
     initSDL();
     initDevice();
 }
@@ -28,6 +31,9 @@ HmdDevice::HmdDevice ( int _width, int _height, std::string _nome ) : Video ( _n
     // FIXME: necessario verificar se nao é outyro valor como o do olho +- 960x540 (1920x1080 / 2 ou 900x900)
     winSizeW = _width; // winSizeW/2
     winSizeH = _height;
+
+    log->debug("Instanciado HmdDevice");
+
 
     //chama inicializacao do SDL na classe Pai
     initSDL();

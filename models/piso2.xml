@@ -112,16 +112,16 @@
   </library_lights>
   <library_images>
     <image id="spacebox_png" name="spacebox_png">
-      <init_from>spacebox.png</init_from>
+      <init_from>./models/spacebox.png</init_from>
     </image>
     <image id="teste1_png" name="teste1_png">
-      <init_from>teste1.png</init_from>
+      <init_from>./models/teste1.png</init_from>
     </image>
     <image id="metal-grid-tile-floor-texture_jpg" name="metal-grid-tile-floor-texture_jpg">
-      <init_from>metal-grid-tile-floor-texture.jpg</init_from>
+      <init_from>./models/metal-grid-tile-floor-texture.jpg</init_from>
     </image>
     <image id="image1_jpg" name="image1_jpg">
-      <init_from>image1.jpg</init_from>
+      <init_from>./models/image1.jpg</init_from>
     </image>
   </library_images>
   <library_effects>

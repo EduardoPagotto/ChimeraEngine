@@ -12,13 +12,13 @@
 
 namespace Chimera {
 
-LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_modelDir, const std::string &_file  ) {
+LoaderDae::LoaderDae(const std::string &_file) {
 
     doc = nullptr;
     root = nullptr;
 	pRootNode = nullptr;
-    this->textureDir = _textureDir;
-    this->modelDir = _modelDir;
+    //this->textureDir = _textureDir;
+    //this->modelDir = _modelDir;
  
     log = spdlog::get("chimera");
     log->debug("Constructor LoaderDae File:{}", _file);
@@ -26,7 +26,29 @@ LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_model
     pPhysicsControl = Singleton<PhysicsControl>::getRefSingleton();
 	texManager = Singleton<TextureManager>::getRefSingleton();
 
-    loadFile(_file);
+    doc = new tinyxml2::XMLDocument();
+
+    //Verifica se arquivo existe
+    tinyxml2::XMLError a_eResult = doc->LoadFile ( _file.c_str());
+    if ( a_eResult != 0 ) {
+        throw ExceptionChimera ( ExceptionCode::OPEN, "Falha ao ler arquivo erro: " + std::to_string(a_eResult) );
+    }
+
+    //vefifica se ele � uma estrutura compativel com collada
+    root = doc->FirstChildElement ( "COLLADA" );
+    if ( root == nullptr ) {
+        throw ExceptionChimera ( ExceptionCode::OPEN, "Nao é um arquivo colada" );
+    }
+
+    //carrega elementos de Texture, Material e Geometrias
+    int totalTexture = libTextureMap(root, texManager);
+    int totalGeometry = libGeometryMap(root, mapaGeometria);
+
+    //cria lista de entidade fisicas a serem usadas
+    getPhysicSceneInfile();
+
+    //Carrega hierarquia dos nodes
+    getNodeSceneInFile();
 }
 
 LoaderDae::~LoaderDae() {
@@ -40,40 +62,6 @@ LoaderDae::~LoaderDae() {
 
     Singleton<PhysicsControl>::releaseRefSingleton();
 	Singleton<TextureManager>::releaseRefSingleton();
-}
-
-void LoaderDae::loadFile ( const std::string &file ) {
-
-    //Ajusta infra de S.O.
-#ifdef WIN32
-    std::string dir_arquivo = modelDir + "\\" + file;
-#else
-    std::string dir_arquivo = modelDir + "/" + file;
-#endif
-
-    doc = new tinyxml2::XMLDocument();
-
-    //Verifica se arquivo existe
-    tinyxml2::XMLError a_eResult = doc->LoadFile ( dir_arquivo.c_str());
-    if ( a_eResult != 0 ) {
-        throw ExceptionChimera ( ExceptionCode::OPEN, "Falha ao ler arquivo erro: " + std::to_string(a_eResult) );
-    }
-
-    //vefifica se ele � uma estrutura compativel com collada
-    root = doc->FirstChildElement ( "COLLADA" );
-    if ( root == nullptr ) {
-        throw ExceptionChimera ( ExceptionCode::OPEN, "Nao � um arquivo colada" );
-    }
-
-    //carrega elementos de Texture, Material e Geometrias
-    int totalTexture = libTextureMap(root, textureDir, texManager);
-    int totalGeometry = libGeometryMap(root, mapaGeometria);
-
-    //cria lista de entidade fisicas a serem usadas
-    getPhysicSceneInfile();
-
-    //Carrega hierarquia dos nodes
-    getNodeSceneInFile();
 }
 
 void LoaderDae::getPhysicSceneInfile() {
@@ -416,7 +404,7 @@ tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, cons
     return nullptr;
 }
 
-int LoaderDae::libTextureMap(tinyxml2::XMLElement* _root, std::string _textureDir, TextureManager *_texManager) {
+int LoaderDae::libTextureMap(tinyxml2::XMLElement* _root, TextureManager *_texManager) {
 
 	int totalTexturas = 0;
     tinyxml2::XMLElement* l_nNode = _root->FirstChildElement ( "library_images" );
@@ -428,11 +416,9 @@ int LoaderDae::libTextureMap(tinyxml2::XMLElement* _root, std::string _textureDi
             std::string l_id = retornaAtributo ( "id", l_nNode );
             std::string l_name = retornaAtributo( "name", l_nNode);
             std::string l_val = l_nNode->FirstChildElement( "init_from" )->GetText();
-#ifdef WIN32
-			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "\\" + l_val);
-#else
-			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "/" + l_val);
-#endif
+
+			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, l_val);
+
             l_nNode = l_nNode->NextSiblingElement ( "image" );
 			totalTexturas++;
         }

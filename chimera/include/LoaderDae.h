@@ -18,7 +18,7 @@ namespace Chimera
 class LoaderDae
 {
 public:
-    LoaderDae ( const std::string &_textureDir, const std::string &_modelDir,const std::string &_file );
+    LoaderDae (const std::string &_file);
     virtual ~LoaderDae();
 	
     Group* getNodes() {
@@ -26,14 +26,15 @@ public:
     }
     
 private:
-    void loadFile ( const std::string &file );
+    
     void getNodeSceneInFile();
     
     void getPhysicSceneInfile();
     void getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScene );
     void carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type );
 
-    int libTextureMap(tinyxml2::XMLElement* _root, std::string _textureDir, TextureManager *_texManager);
+    int libTextureMap(tinyxml2::XMLElement* _root, TextureManager *_texManager);
+
     int libGeometryMap(tinyxml2::XMLElement* _root, std::map<std::string, Draw*> &mapaGeometria);
     Camera *carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name);
 
@@ -41,8 +42,6 @@ private:
     
     static tinyxml2::XMLElement* findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library );
 
-    std::string textureDir;
-    std::string modelDir;
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;
 

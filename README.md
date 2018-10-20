@@ -51,3 +51,9 @@ Iniciado tentativa de criar um HMD e posteriormente integrar suporte ao OpenHMD
 re-modelamento arquivos e sub-projetos 
 yaml ref: https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML
 Logs ref: https://github.com/gabime/spdlog/blob/v1.x/example/example.cpp
+
+OpenGL
+https://gamedev.stackexchange.com/questions/60313/implementing-a-skybox-with-glsl-version-330​
+https://learnopengl.com/Advanced-OpenGL/Cubemaps​
+http://antongerdelan.net/opengl/cubemaps.html
+https://www.khronos.org/opengl/wiki/Example_Code

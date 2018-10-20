@@ -33,6 +33,10 @@ private:
     void getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScene );
     void carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type );
 
+    int libTextureMap(tinyxml2::XMLElement* _root, std::string _textureDir, TextureManager *_texManager);
+    int libGeometryMap(tinyxml2::XMLElement* _root, std::map<std::string, Draw*> &mapaGeometria);
+    Camera *carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name);
+
     tinyxml2::XMLElement* getDadoRigidBody ( const char* _url, const char* _sid );
     
     static tinyxml2::XMLElement* findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library );

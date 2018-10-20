@@ -42,51 +42,6 @@ LoaderDae::~LoaderDae() {
 	Singleton<TextureManager>::releaseRefSingleton();
 }
 
-int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, TextureManager *_texManager) {
-
-	int totalTexturas = 0;
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_images" );
-    if ( l_nNode != nullptr ) {
-
-        l_nNode = l_nNode->FirstChildElement ( "image" ); //FIXME quando outras texturas presentes 0 difuse, 1 specula, 2 emissive
-        while ( l_nNode != nullptr ) {
-
-            std::string l_id = retornaAtributo ( "id", l_nNode );
-            std::string l_name = retornaAtributo( "name", l_nNode);
-            std::string l_val = l_nNode->FirstChildElement( "init_from" )->GetText();
-#ifdef WIN32
-			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "\\" + l_val);
-#else
-			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "/" + l_val);
-#endif
-            l_nNode = l_nNode->NextSiblingElement ( "image" );
-			totalTexturas++;
-        }
-    }
-
-	return totalTexturas;
-}
-
-int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Draw*> &mapaGeometria) {
-
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_geometries" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "geometry" );
-        while ( l_nNode != nullptr ) {
-
-            std::string l_id = retornaAtributo ( "id", l_nNode );
-            std::string l_name = retornaAtributo ( "name", l_nNode );
-
-            Mesh *pDraw = new Mesh(nullptr, l_id);
-            pDraw->loadCollada(l_nNode);
-            mapaGeometria[l_id] = pDraw;
-
-            l_nNode = l_nNode->NextSiblingElement ( "geometry" );
-        }
-    }
-    return mapaGeometria.size();
-}
-
 void LoaderDae::loadFile ( const std::string &file ) {
 
     //Ajusta infra de S.O.
@@ -271,61 +226,6 @@ void LoaderDae::getNodeSceneInFile() {
             log->warn("Node: vazio");
         }
     }
-}
-
-//TODO mover para camera do tipo correto
-Camera *carregaCamera(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name) {
-
-    tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
-
-    loadNodeLib ( root, ( const char* ) &l_url[1], "library_cameras", "camera", &l_nNodeSourceData );
-    Camera *pCamera = nullptr;
-
-    tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
-    if ( l_nExtra != nullptr ) {
-        tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
-        if ( l_nTechnique != nullptr ) {
-
-            const char* l_profile = l_nTechnique->Attribute ( "profile" );
-            if ( ( l_profile != nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
-
-                tinyxml2::XMLElement* l_nOrbital = l_nTechnique->FirstChildElement ( "orbital" );
-                if ( l_nOrbital != nullptr ) {
-
-                    const char* min = nullptr;
-                    const char* max = nullptr;
-
-                    tinyxml2::XMLElement* l_param = l_nOrbital->FirstChildElement();
-                    while ( l_param != nullptr ) {
-
-                        if ( strcmp ( l_param->Value(), ( const char* ) "min" ) == 0 ) {
-                            min = l_param->GetText();
-                        } else if ( strcmp ( l_param->Value(), ( const char* ) "max" ) == 0 ) {
-                            max = l_param->GetText();
-                        }
-
-                        l_param = l_param->NextSiblingElement();
-                    }
-
-                    if ( ( min != nullptr ) && ( max != nullptr ) ) {
-                        CameraSpherical *pCameraNew = new CameraSpherical ( _id );
-                        pCameraNew->setDistanciaMaxima ( atof ( max ) );
-                        pCameraNew->setDistanciaMinima ( atof ( min ) );
-                        pCamera = pCameraNew;
-                    }
-
-                }
-            }
-        }
-    }
-
-    if ( pCamera == nullptr ) {
-        pCamera = new Camera (nullptr, CameraType::Base, _id );
-    }
-
-    pCamera->loadCollada ( l_nNodeSourceData );
-
-    return pCamera;
 }
 
 void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type ) {
@@ -514,6 +414,106 @@ tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, cons
     }
 
     return nullptr;
+}
+
+int LoaderDae::libTextureMap(tinyxml2::XMLElement* _root, std::string _textureDir, TextureManager *_texManager) {
+
+	int totalTexturas = 0;
+    tinyxml2::XMLElement* l_nNode = _root->FirstChildElement ( "library_images" );
+    if ( l_nNode != nullptr ) {
+
+        l_nNode = l_nNode->FirstChildElement ( "image" ); //FIXME quando outras texturas presentes 0 difuse, 1 specula, 2 emissive
+        while ( l_nNode != nullptr ) {
+
+            std::string l_id = retornaAtributo ( "id", l_nNode );
+            std::string l_name = retornaAtributo( "name", l_nNode);
+            std::string l_val = l_nNode->FirstChildElement( "init_from" )->GetText();
+#ifdef WIN32
+			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "\\" + l_val);
+#else
+			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "/" + l_val);
+#endif
+            l_nNode = l_nNode->NextSiblingElement ( "image" );
+			totalTexturas++;
+        }
+    }
+
+	return totalTexturas;
+}
+
+int LoaderDae::libGeometryMap(tinyxml2::XMLElement* _root, std::map<std::string, Draw*> &mapaGeometria) {
+
+    tinyxml2::XMLElement* l_nNode = _root->FirstChildElement ( "library_geometries" );
+    if ( l_nNode != nullptr ) {
+        l_nNode = l_nNode->FirstChildElement ( "geometry" );
+        while ( l_nNode != nullptr ) {
+
+            std::string l_id = retornaAtributo ( "id", l_nNode );
+            std::string l_name = retornaAtributo ( "name", l_nNode );
+
+            Mesh *pDraw = new Mesh(nullptr, l_id);
+            pDraw->loadCollada(l_nNode);
+            mapaGeometria[l_id] = pDraw;
+
+            l_nNode = l_nNode->NextSiblingElement ( "geometry" );
+        }
+    }
+    return mapaGeometria.size();
+}
+
+//TODO mover para camera do tipo correto
+Camera *LoaderDae::carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name) {
+
+    tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
+
+    loadNodeLib ( _root, ( const char* ) &l_url[1], "library_cameras", "camera", &l_nNodeSourceData );
+    Camera *pCamera = nullptr;
+
+    tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
+    if ( l_nExtra != nullptr ) {
+        tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
+        if ( l_nTechnique != nullptr ) {
+
+            const char* l_profile = l_nTechnique->Attribute ( "profile" );
+            if ( ( l_profile != nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
+
+                tinyxml2::XMLElement* l_nOrbital = l_nTechnique->FirstChildElement ( "orbital" );
+                if ( l_nOrbital != nullptr ) {
+
+                    const char* min = nullptr;
+                    const char* max = nullptr;
+
+                    tinyxml2::XMLElement* l_param = l_nOrbital->FirstChildElement();
+                    while ( l_param != nullptr ) {
+
+                        if ( strcmp ( l_param->Value(), ( const char* ) "min" ) == 0 ) {
+                            min = l_param->GetText();
+                        } else if ( strcmp ( l_param->Value(), ( const char* ) "max" ) == 0 ) {
+                            max = l_param->GetText();
+                        }
+
+                        l_param = l_param->NextSiblingElement();
+                    }
+
+                    if ( ( min != nullptr ) && ( max != nullptr ) ) {
+                        CameraSpherical *pCameraNew = new CameraSpherical ( _id );
+                        pCameraNew->setDistanciaMaxima ( atof ( max ) );
+                        pCameraNew->setDistanciaMinima ( atof ( min ) );
+                        pCamera = pCameraNew;
+                    }
+
+                }
+            }
+        }
+    }
+
+    if ( pCamera == nullptr ) {
+        pCamera = new Camera (nullptr, CameraType::Base, _id );
+    }
+
+    pCamera->loadCollada ( l_nNodeSourceData );
+
+    return pCamera;
 }
 
 }

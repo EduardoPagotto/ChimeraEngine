@@ -1,7 +1,7 @@
 #include "Light.h"
 
 #include <vector>
-#include "ChimeraUtils.h"
+#include "LoaderDaeUtils.h"
 #include "NodeVisitor.h"
 
 #include <glm/gtx/quaternion.hpp>

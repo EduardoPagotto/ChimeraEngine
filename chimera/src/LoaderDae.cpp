@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "LoaderDae.h"
-#include "ChimeraUtils.h"
+#include "LoaderDaeUtils.h"
 #include "ExceptionChimera.h"
 #include "Camera.h"
 #include "CameraSpherical.h"

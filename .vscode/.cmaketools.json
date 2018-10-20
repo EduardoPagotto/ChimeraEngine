@@ -87,7 +87,7 @@
                     "isGenerated": false,
                     "language": "CXX",
                     "sources": [
-                      "src/ChimeraUtils.cpp",
+                      "src/LoaderDaeUtils.cpp",
                       "src/Color.cpp",
                       "src/Node.cpp",
                       "src/Light.cpp",
@@ -207,7 +207,7 @@
                     "isGenerated": false,
                     "language": "CXX",
                     "sources": [
-                      "src/ChimeraUtils.cpp",
+                      "src/LoaderDaeUtils.cpp",
                       "src/Color.cpp",
                       "src/Node.cpp",
                       "src/Light.cpp",

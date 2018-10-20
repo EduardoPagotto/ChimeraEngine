@@ -87,7 +87,7 @@
     <ClInclude Include="..\..\chimera\include\CameraMan.h" />
     <ClInclude Include="..\..\chimera\include\CameraOvr.h" />
     <ClInclude Include="..\..\chimera\include\CameraSpherical.h" />
-    <ClInclude Include="..\..\chimera\include\ChimeraUtils.h" />
+    <ClInclude Include="..\..\chimera\include\LoaderDaeUtils.h" />
     <ClInclude Include="..\..\chimera\include\Color.h" />
     <ClInclude Include="..\..\chimera\include\Constraint.h" />
     <ClInclude Include="..\..\chimera\include\Coord.h" />
@@ -142,7 +142,7 @@
     <ClCompile Include="..\..\chimera\src\CameraMan.cpp" />
     <ClCompile Include="..\..\chimera\src\CameraOvr.cpp" />
     <ClCompile Include="..\..\chimera\src\CameraSpherical.cpp" />
-    <ClCompile Include="..\..\chimera\src\ChimeraUtils.cpp" />
+    <ClCompile Include="..\..\chimera\src\LoaderDaeUtils.cpp" />
     <ClCompile Include="..\..\chimera\src\Color.cpp" />
     <ClCompile Include="..\..\chimera\src\Constraint.cpp" />
     <ClCompile Include="..\..\chimera\src\Draw.cpp" />

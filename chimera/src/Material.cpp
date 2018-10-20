@@ -1,5 +1,5 @@
 #include "Material.h"
-#include "ChimeraUtils.h"
+#include "LoaderDaeUtils.h"
 
 namespace Chimera {
 

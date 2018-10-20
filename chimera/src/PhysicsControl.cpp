@@ -7,7 +7,7 @@
 #include <utility>
 #endif
 
-#include "ChimeraUtils.h"
+#include "LoaderDaeUtils.h"
 #include "GameClient.h"
 
 namespace Chimera {

@@ -10,7 +10,7 @@
     <ClCompile Include="..\..\chimera\src\CameraSpherical.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\chimera\src\ChimeraUtils.cpp">
+    <ClCompile Include="..\..\chimera\src\LoaderDaeUtils.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\chimera\src\Color.cpp">
@@ -138,7 +138,7 @@
     <ClInclude Include="..\..\chimera\include\CameraSpherical.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\chimera\include\ChimeraUtils.h">
+    <ClInclude Include="..\..\chimera\include\LoaderDaeUtils.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Color.h">

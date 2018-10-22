@@ -28,18 +28,15 @@ public:
 private:
     
     void getNodeSceneInFile();
-    
     void getPhysicSceneInfile();
     void getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScene );
+    
     void carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type );
 
-    int libTextureMap(tinyxml2::XMLElement* _root, TextureManager *_texManager);
-
-    int libGeometryMap(tinyxml2::XMLElement* _root, std::map<std::string, Draw*> &mapaGeometria);
-    Camera *carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name);
-
-    tinyxml2::XMLElement* getDadoRigidBody ( const char* _url, const char* _sid );
-    
+    static Camera *carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name);
+    static int libGeometryMap(tinyxml2::XMLElement* _root, std::map<std::string, Draw*> &mapaGeometria);
+    static int libTextureMap(tinyxml2::XMLElement* _root, TextureManager *_texManager);
+    static tinyxml2::XMLElement* getDadoRigidBody(tinyxml2::XMLElement* _root, const char* _url, const char* _sid );
     static tinyxml2::XMLElement* findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library );
 
     tinyxml2::XMLDocument* doc;

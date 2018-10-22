@@ -41,8 +41,8 @@ LoaderDae::LoaderDae(const std::string &_file) {
     }
 
     //carrega elementos de Texture, Material e Geometrias
-    int totalTexture = libTextureMap(root, texManager);
-    int totalGeometry = libGeometryMap(root, mapaGeometria);
+    int totalTexture = LoaderDae::libTextureMap(root, texManager);
+    int totalGeometry = LoaderDae::libGeometryMap(root, mapaGeometria);
 
     //cria lista de entidade fisicas a serem usadas
     getPhysicSceneInfile();
@@ -66,7 +66,7 @@ LoaderDae::~LoaderDae() {
 
 void LoaderDae::getPhysicSceneInfile() {
 
-    tinyxml2::XMLElement* l_nPhysicScene = findSceneLib (root, ( const char* ) "Physic Scene", ( const char* ) "instance_physics_scene", ( const char* ) "library_physics_scenes" );
+    tinyxml2::XMLElement* l_nPhysicScene = LoaderDae::findSceneLib (root, ( const char* ) "Physic Scene", ( const char* ) "instance_physics_scene", ( const char* ) "library_physics_scenes" );
     if ( l_nPhysicScene != nullptr ) {
 
         const char *l_nome = l_nPhysicScene->Attribute ( "name" );
@@ -92,7 +92,7 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 const char *l_body = l_nInstanceRigidBody->Attribute ( "body" );
                 const char *l_target = l_nInstanceRigidBody->Attribute ( "target" );
 
-                tinyxml2::XMLElement* l_nRigidBody = getDadoRigidBody ( l_url, l_body );
+                tinyxml2::XMLElement* l_nRigidBody = LoaderDae::getDadoRigidBody (root, l_url, l_body );
 
                 const char* l_name = l_nRigidBody->Attribute ( "name" );
                 const char* l_sid = l_nRigidBody->Attribute ( "sid" );
@@ -146,11 +146,11 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
     }
 }
 
-tinyxml2::XMLElement* LoaderDae::getDadoRigidBody ( const char* _url, const char* _sid ) {
+tinyxml2::XMLElement* LoaderDae::getDadoRigidBody (tinyxml2::XMLElement* _root, const char* _url, const char* _sid ) {
 
     tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
 
-    loadNodeLib ( root, ( const char* ) &_url[1], "library_physics_models", "physics_model", &l_nNodeSourceData );
+    loadNodeLib ( _root, ( const char* ) &_url[1], "library_physics_models", "physics_model", &l_nNodeSourceData );
     tinyxml2::XMLElement* l_nRigidBody = l_nNodeSourceData->FirstChildElement ( "rigid_body" );
     if ( l_nRigidBody != nullptr ) {
         while ( l_nRigidBody != nullptr ) {
@@ -186,7 +186,7 @@ void LoaderDae::getNodeSceneInFile() {
 
     pRootNode = nullptr;
 
-    tinyxml2::XMLElement* l_nVisualScene = findSceneLib ( root, ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
+    tinyxml2::XMLElement* l_nVisualScene = LoaderDae::findSceneLib ( root, ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
     if ( l_nVisualScene != nullptr ) {
 
         const char *l_nome = l_nVisualScene->Attribute ( "name" );
@@ -244,7 +244,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
 
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_camera" ) == 0 ) {
 
-           Camera *pCamera = carregaCamera(root, _nNode, l_url, _id, _name);
+           Camera *pCamera = LoaderDae::carregaCamera(root, _nNode, l_url, _id, _name);
            pCamera->setTransform ( l_pTransform );
 
            _pNodePai->addChild ( pCamera );

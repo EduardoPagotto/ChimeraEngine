@@ -256,10 +256,14 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             loadNodeLib ( root, ( const char* ) &l_url[1], "library_lights", "light", &l_nNodeSourceData );
 
             Light *pLight = new Light (nullptr,_id );
-            pLight->loadCollada ( l_nNodeSourceData );
 
+            auto ret_data = LoaderDae::loadDiffuseLightColor(l_nNodeSourceData);
+            pLight->setDiffuse(std::get<0>(ret_data));
+            pLight->setType(std::get<1>(ret_data));
             pLight->setTransform ( l_pTransform );
+
             _pNodePai->addChild ( pLight );
+
             pLastNodeDone = pLight;
 
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_geometry" ) == 0 ) {
@@ -284,9 +288,11 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                     loadNodeLib ( root, ( const char* ) &pTarguet[1], "library_materials", "material", &l_nNodeSourceData );
                     if (l_nNodeSourceData != nullptr) {
 
-                       std::string nomeMaterial = retornaAtributo("id", l_nNodeSourceData);
-                       pMaterial = new Material(nomeMaterial);
-                       pMaterial->loadCollada(root, l_nNodeSourceData);
+                        std::string nomeMaterial = retornaAtributo("id", l_nNodeSourceData);
+
+                        pMaterial = new Material(nomeMaterial);
+
+                        LoaderDae::loadMaterial(root, l_nNodeSourceData, pMaterial);
 
                         tinyxml2::XMLElement* l_nInstanceEffect = l_nNodeSourceData->FirstChildElement ( "instance_effect" );
                         if (l_nInstanceEffect != nullptr) {
@@ -447,7 +453,8 @@ int LoaderDae::libGeometryMap(tinyxml2::XMLElement* _root, std::map<std::string,
     return mapaGeometria.size();
 }
 
-//TODO mover para camera do tipo correto
+//---------Camera-------
+
 Camera *LoaderDae::carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name) {
 
     tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
@@ -501,5 +508,128 @@ Camera *LoaderDae::carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLEleme
 
     return pCamera;
 }
+
+//------Light--------
+
+std::tuple<Color, LightType> LoaderDae::loadDiffuseLightColor(tinyxml2::XMLElement* _nNode)
+{
+    tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "point" );
+    if ( l_nPoint != nullptr ) {
+
+        std::vector<float> l_arrayF;
+        const char *l_val = l_nPoint->FirstChildElement("color")->GetText();
+        loadArrayBtScalar ( l_val, l_arrayF );
+        Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
+
+        return std::make_tuple(cor, LightType::POSITIONAL);
+    }
+
+    l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "directional" );
+    if ( l_nPoint != nullptr ) {
+
+        std::vector<float> l_arrayF;
+        const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
+        loadArrayBtScalar ( l_val, l_arrayF );
+
+        Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
+
+        return std::make_tuple(cor, LightType::DIRECTIONAL);
+    }
+
+}
+
+//----------Material-----
+
+void LoaderDae::loadMaterial(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, Material *_pMat) {
+
+    tinyxml2::XMLElement* l_nInstanceEffect = _nNode->FirstChildElement ( "instance_effect" );
+    if (l_nInstanceEffect != nullptr) {
+
+        tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
+        const char* l_pUrlEffect = l_nInstanceEffect->Attribute ( "url" );
+        loadNodeLib ( root, ( const char* ) &l_pUrlEffect[1], "library_effects", "effect", &l_nNodeSourceData );
+
+        if (l_nNodeSourceData != nullptr) {
+            LoaderDae::loadMaterialProfile(l_nNodeSourceData, _pMat);
+        }
+    }
+}
+
+void LoaderDae::loadMaterialProfile(tinyxml2::XMLElement* _nNode, Material *_pMat) {
+
+	tinyxml2::XMLElement* l_nProfile = _nNode->FirstChildElement("profile_COMMON");
+	if (l_nProfile != nullptr) {
+
+        Color cor;
+        if (getPhong("emission", cor, l_nProfile) == true) {
+            _pMat->setEmission(cor);
+        }
+
+        if (getPhong("ambient", cor, l_nProfile) == true) {
+            _pMat->setAmbient(cor);
+        }
+
+        if (getPhong("diffuse", cor, l_nProfile) == true) {
+            _pMat->setDiffuse(cor);
+        }
+
+        if (getPhong("specular", cor, l_nProfile) == true) {
+            _pMat->setSpecular(cor);
+        }
+
+        tinyxml2::XMLElement* l_nNode = l_nProfile->FirstChildElement("technique");
+        if (l_nNode->Attribute("sid") != nullptr) {
+
+            tinyxml2::XMLElement* l_nPhong = l_nNode->FirstChildElement("phong");
+            if (l_nPhong != nullptr) {
+
+                tinyxml2::XMLElement* l_nShinnes = l_nPhong->FirstChildElement("shininess");
+                if (l_nShinnes != nullptr) {
+
+                    const char *l_val = l_nShinnes->FirstChildElement("float")->GetText();
+                    if (l_val != nullptr) {
+
+                        _pMat->setShine(atof(l_val));
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool LoaderDae::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode ) {
+
+    tinyxml2::XMLElement* l_nNode = _nNode->FirstChildElement ( "technique" );
+    if ( l_nNode->Attribute ( "sid" ) != nullptr ) {
+
+        tinyxml2::XMLElement* l_nPhong = l_nNode->FirstChildElement ( "phong" );
+        if ( l_nPhong != nullptr ) {
+            tinyxml2::XMLElement* l_nColor = l_nPhong->FirstChildElement ( _tipoCor );
+            if ( l_nColor != nullptr ) {
+				tinyxml2::XMLElement* l_nColorVal = l_nColor->FirstChildElement ( "color" );
+                if (l_nColorVal != nullptr ) {
+                    std::vector<float> l_arrayF;
+                    const char* l_cor = l_nColorVal->GetText();
+                    loadArrayBtScalar ( l_cor, l_arrayF );
+
+                    _color.set ( l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0 );
+                    return true;
+                } else {
+
+					l_nColorVal = l_nColor->FirstChildElement("texture");
+					if (l_nColorVal != nullptr) {
+
+						_color.set(Color::WHITE);
+						return true;
+					}
+                }
+            }
+         }
+    }
+
+    return false;
+}
+
 
 }

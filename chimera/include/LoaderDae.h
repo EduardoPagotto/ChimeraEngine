@@ -3,12 +3,16 @@
 
 #include <tinyxml2.h>
 #include <string>
+#include <tuple>
 
 #include "PhysicsControl.h"
 #include "Material.h"
 #include "Group.h"
 #include "Solid.h"
 #include "Draw.h"
+
+#include "Light.h"
+
 #include "TextureManager.h"
 #include <spdlog/spdlog.h>
 
@@ -38,6 +42,14 @@ private:
     static int libTextureMap(tinyxml2::XMLElement* _root, TextureManager *_texManager);
     static tinyxml2::XMLElement* getDadoRigidBody(tinyxml2::XMLElement* _root, const char* _url, const char* _sid );
     static tinyxml2::XMLElement* findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library );
+
+
+    static std::tuple<Color, LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
+
+    static void loadMaterial(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, Material *_pMat);
+    static void loadMaterialProfile(tinyxml2::XMLElement* _nNode, Material *_pMat);
+    static bool getPhong (const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode);
+
 
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;

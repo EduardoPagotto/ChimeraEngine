@@ -45,7 +45,6 @@ public:
 
     void apply();
     void createDefaultEffect();
-    void loadCollada ( tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode );
 
 	void defineTextureByIndex(const unsigned int &_serial);
 
@@ -56,8 +55,7 @@ public:
 	}
 
 private:
-    void loadColladaProfile(tinyxml2::XMLElement* _nNode);
-    bool getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode );
+
 
     Color diffuse;        /* Diffuse color RGBA */
     Color ambient;        /* Ambient color RGB */

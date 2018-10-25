@@ -72,7 +72,7 @@ void LoaderDae::getPhysicSceneInfile() {
         const char *l_nome = l_nPhysicScene->Attribute ( "name" );
         const char *l_id = l_nPhysicScene->Attribute ( "id" );
 
-        pPhysicsControl->loadCollada ( l_nPhysicScene );
+        LoaderDae::loadPhysicControlCollada( l_nPhysicScene, pPhysicsControl);
 
         getDadosInstancePhysicModel ( l_nPhysicScene );
     }
@@ -763,5 +763,27 @@ void LoaderDae::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2:
         }
     }
 }
+
+//------- PhysicControl
+
+void LoaderDae::loadPhysicControlCollada ( tinyxml2::XMLElement* _nNode, PhysicsControl *_pPhysicsControl ) {
+
+    tinyxml2::XMLElement* l_nTecnicCommon = _nNode->FirstChildElement ( "technique_common" );
+    if ( l_nTecnicCommon != nullptr ) {
+
+        tinyxml2::XMLElement* l_nNodeGravity = l_nTecnicCommon->FirstChildElement ( "gravity" );
+        if ( l_nNodeGravity != nullptr ) {
+
+            std::vector<btScalar> l_arrayF;
+            const char* vetor = l_nNodeGravity->GetText();
+            loadArrayBtScalar ( vetor, l_arrayF );
+
+            _pPhysicsControl->setGravity ( btVector3 ( l_arrayF[0], l_arrayF[1], l_arrayF[2] ) );
+
+        }
+    }
+
+}
+
 
 }

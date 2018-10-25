@@ -46,8 +46,6 @@ public:
         return period;
     }
 
-    void loadCollada ( tinyxml2::XMLElement* _nNode );
-
     inline btDiscreteDynamicsWorld* getWorld() {
         return discretDynamicsWorld;
     }

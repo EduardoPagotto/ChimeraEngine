@@ -1,6 +1,5 @@
 #include "Solid.h"
 #include "Singleton.h"
-#include "LoaderDaeUtils.h"
 #include "Draw.h"
 #include "NodeVisitor.h"
 

@@ -7,7 +7,6 @@
 #include <utility>
 #endif
 
-#include "LoaderDaeUtils.h"
 #include "GameClient.h"
 
 namespace Chimera {
@@ -207,25 +206,6 @@ void PhysicsControl::checkCollisions() {
 
 }
 
-
-void PhysicsControl::loadCollada ( tinyxml2::XMLElement* _nNode ) {
-
-    tinyxml2::XMLElement* l_nTecnicCommon = _nNode->FirstChildElement ( "technique_common" );
-    if ( l_nTecnicCommon != nullptr ) {
-
-        tinyxml2::XMLElement* l_nNodeGravity = l_nTecnicCommon->FirstChildElement ( "gravity" );
-        if ( l_nNodeGravity != nullptr ) {
-
-            std::vector<btScalar> l_arrayF;
-            const char* vetor = l_nNodeGravity->GetText();
-            loadArrayBtScalar ( vetor, l_arrayF );
-
-            setGravity ( btVector3 ( l_arrayF[0], l_arrayF[1], l_arrayF[2] ) );
-
-        }
-    }
-
-}
 }
 
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; ;

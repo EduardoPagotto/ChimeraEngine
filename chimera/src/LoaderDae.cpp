@@ -100,7 +100,7 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 std::string nomeMesh = "";
 
 				Solid *pPhysic = new Solid(nullptr, std::string(l_name));
-                pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
+                LoaderDae::loadColladaPhysicsModel( root, l_nRigidBody, nomeMesh, pPhysic);
 
 				Mesh *pDrawTriMesh = (Mesh*)mapaGeometria[nomeMesh];
                 if ( pDrawTriMesh != nullptr ) {
@@ -631,5 +631,137 @@ bool LoaderDae::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLEle
     return false;
 }
 
+//------solid----
+
+void LoaderDae::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName, Solid *_pPhysic) {
+
+    if ( _nShape != nullptr ) {
+        _nShape = _nShape->FirstChildElement();
+        const char *l_tipoShape = _nShape->Value();
+
+        if ( strcmp ( l_tipoShape, "sphere" ) == 0 ) {
+
+            tinyxml2::XMLElement* l_nEsfera = _nShape->FirstChildElement();
+            const char *l_raio = l_nEsfera->GetText();
+
+            std::vector<float> l_arrayValores;
+            loadArrayBtScalar ( l_raio, l_arrayValores );
+            if ( l_arrayValores.size() == 1 ) {
+                _pPhysic->setShapeSphere ( l_arrayValores[0] );
+            } else if ( l_arrayValores.size() == 3 ) {
+                _pPhysic->setShapeSphere ( l_arrayValores[0] );
+            } else {
+
+            }
+
+        } else if ( strcmp ( l_tipoShape, "plane" ) == 0 ) {
+
+            //setShapeBox(btVector3(2.0, 2.0, 2.0));
+
+            tinyxml2::XMLElement* l_nBox = _nShape->FirstChildElement();
+            const char *l_size = l_nBox->GetText();
+
+            std::vector<float> l_arrayValores;
+            loadArrayBtScalar ( l_size, l_arrayValores );
+
+            if ( l_arrayValores.size() == 1 ) {
+                _pPhysic->setShapePlane ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ), l_arrayValores[0] );
+            } else if ( l_arrayValores.size() == 4 ) {
+                _pPhysic->setShapePlane ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ), l_arrayValores[3] );
+            } else {
+
+            }
+
+        } else if ( strcmp ( l_tipoShape, "box" ) == 0 ) {
+
+            tinyxml2::XMLElement* l_nBox = _nShape->FirstChildElement();
+            const char *l_size = l_nBox->GetText();
+
+            std::vector<float> l_arrayValores;
+            loadArrayBtScalar ( l_size, l_arrayValores );
+
+            if ( l_arrayValores.size() == 1 ) {
+                _pPhysic->setShapeBox ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
+            } else if ( l_arrayValores.size() == 3 ) {
+                _pPhysic->setShapeBox ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
+            } else {
+
+            }
+
+        } else if ( strcmp ( l_tipoShape, "cylinder" ) == 0 ) {
+
+            tinyxml2::XMLElement* l_nCyl = _nShape->FirstChildElement();
+            const char *l_size = l_nCyl->GetText();
+
+            std::vector<float> l_arrayValores;
+            loadArrayBtScalar ( l_size, l_arrayValores );
+
+            if ( l_arrayValores.size() == 1 ) {
+                _pPhysic->setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
+            } else if ( l_arrayValores.size() == 3 ) {
+                _pPhysic->setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
+            }
+        } else if ( strcmp ( l_tipoShape, "mesh" ) == 0 ) { //FIXME ERRADO!!!!
+
+            //setShapeBox(btVector3(1.0, 1.0, 1.0));
+
+            //instance_geometry
+            tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement();
+            if ( l_nMesh != nullptr ) {
+                const char *l_mesh = l_nMesh->Attribute ( "url" );
+                if ( l_mesh != nullptr ) {
+                    _meshName = ( const char* ) &l_mesh[1];
+                }
+            }
+        }
+    }
+}
+
+void LoaderDae::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName, Solid *_pPhysic) {
+
+    tinyxml2::XMLElement* l_nTecnicCommon = _nRigidBody->FirstChildElement ( "technique_common" );
+    if ( l_nTecnicCommon != nullptr ) {
+
+        //Massa
+        tinyxml2::XMLElement* l_nMass = l_nTecnicCommon->FirstChildElement ( "mass" );
+        if ( l_nMass != nullptr ) {
+            const char* l_mass = l_nMass->GetText();
+            _pPhysic->setMass ( atof ( l_mass ) );
+        }
+    }
+
+    //shape
+    tinyxml2::XMLElement* l_nShape = l_nTecnicCommon->FirstChildElement ( "shape" );
+    loadColladaShape ( _root, l_nShape, _meshName, _pPhysic);
+
+    //material
+    tinyxml2::XMLElement* l_nInstaceMaterial = l_nTecnicCommon->FirstChildElement ( "instance_physics_material" );
+    if ( l_nInstaceMaterial != nullptr ) {
+        const char* l_url = l_nInstaceMaterial->Attribute ( "url" );
+
+        tinyxml2::XMLElement* l_nMateriual = nullptr;
+        Chimera::loadNodeLib ( _root, ( const char* ) &l_url[1], "library_physics_materials", "physics_material", &l_nMateriual );
+
+        tinyxml2::XMLElement* l_nTec = l_nMateriual->FirstChildElement ( "technique_common" );
+        if ( l_nTec != nullptr ) {
+
+            tinyxml2::XMLElement* l_nFric = l_nTec->FirstChildElement ( "dynamic_friction" );
+            if ( l_nFric != nullptr ) {
+                const char *l_fric = l_nFric->GetText();
+                if ( l_fric != nullptr ) {
+                    _pPhysic->setFriction ( atof ( l_fric ) );
+                }
+            }
+
+            tinyxml2::XMLElement* l_nRes = l_nTec->FirstChildElement ( "restitution" );
+            if ( l_nRes != nullptr ) {
+                const char *l_res = l_nRes->GetText();
+                if ( l_res != nullptr ) {
+                    _pPhysic->setRestitution ( atof ( l_res ) );
+                }
+            }
+        }
+    }
+}
 
 }

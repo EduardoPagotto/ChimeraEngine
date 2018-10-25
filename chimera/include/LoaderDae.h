@@ -50,6 +50,8 @@ private:
     static void loadMaterialProfile(tinyxml2::XMLElement* _nNode, Material *_pMat);
     static bool getPhong (const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode);
 
+    static void loadColladaPhysicsModel(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName, Solid *_pPhysic);
+    static void loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName, Solid *_pPhysic);
 
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;

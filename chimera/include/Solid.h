@@ -86,12 +86,9 @@ public:
 //         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
 // 	}
 
-    void loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName );
-
 private:
     
     void initTransform (const btTransform &_tTrans, void *pObj );
-    void loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName );
 
     btScalar mass;
     btScalar friction;

@@ -10,8 +10,10 @@
 #include "Group.h"
 #include "Solid.h"
 #include "Draw.h"
-
 #include "Light.h"
+#include "Mesh.h"
+#include "Camera.h"
+#include "CameraSpherical.h"
 
 #include "TextureManager.h"
 #include <spdlog/spdlog.h>

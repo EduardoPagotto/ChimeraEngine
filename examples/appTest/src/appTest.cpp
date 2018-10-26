@@ -76,7 +76,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
                                 shader_item["fragment"].as<std::string>());
         }
 
-        Group* group1 = sceneMng->createSceneGraph();
+        Group* group1 = sceneMng->createSceneGraph(nullptr);
         group1->setShaderName("debugDepthQuad");
 
         Transform* pTrans = new Transform(group1,"trans01");

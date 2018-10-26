@@ -8,7 +8,7 @@
 #include "ParticleEmitter.h"
 
 #include "SceneRoot.h"
-#include "LoaderDae.h"
+//#include "LoaderDae.h"
 
 #include "RenderVisitor.h"
 
@@ -28,8 +28,9 @@ public:
 
     void init();
 	void draw();
-    void setReader( LoaderDae *_pLoader );
-    Group* createSceneGraph();
+    //void setReader( LoaderDae *_pLoader );
+
+    Group* createSceneGraph(Group *_pGroup);
 
     inline void cameraAtiva ( Camera *_pCam ) {
         pCameraAtiva = _pCam;
@@ -52,7 +53,7 @@ public:
     }
 
 private:
-    LoaderDae *pLoader;
+    //LoaderDae *pLoader;
     SceneRoot *root;
     Camera *pCameraAtiva;
 	Coord *pOrigem;

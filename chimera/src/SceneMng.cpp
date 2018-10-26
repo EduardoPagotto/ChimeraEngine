@@ -9,29 +9,25 @@ SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
     root = new SceneRoot(nullptr,"root");
     pCameraAtiva = nullptr;
 	pOrigem = nullptr;
-    pLoader = nullptr;
+    //pLoader = nullptr;
 }
 
 SceneMng::~SceneMng() {
 	//TODO: deletar o grapho
 }
 
-void SceneMng::setReader ( LoaderDae* _pLoader ) {
+// void SceneMng::setReader ( LoaderDae* _pLoader ) {
 
-    this->pLoader = _pLoader;
-}
+//     this->pLoader = _pLoader;
+// }
 
-Group *SceneMng::createSceneGraph() {
+Group *SceneMng::createSceneGraph(Group *_pGroup) {
 
-	Group *pGroup = nullptr;
-	if (pLoader != nullptr)
-		pGroup = pLoader->getNodes();
-	else
-		pGroup = new Group(nullptr, "DefaultSG");
+	if (_pGroup == nullptr)
+		_pGroup = new Group(nullptr, "DefaultSG");
 
-    root->addChild(pGroup);
-
-    return pGroup;
+    root->addChild(_pGroup);
+    return _pGroup;
 }
 
 void SceneMng::init() {

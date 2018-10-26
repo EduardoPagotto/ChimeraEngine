@@ -3,10 +3,7 @@
 #include "LoaderDae.h"
 #include "LoaderDaeUtils.h"
 #include "ExceptionChimera.h"
-#include "Camera.h"
-#include "CameraSpherical.h"
-#include "Light.h"
-#include "Mesh.h"
+
 #include "Singleton.h"
 #include "Transform.h"
 

@@ -17,6 +17,7 @@ enum class EntityKind : int8_t
 {
     GROUP,
     SOLID,
+    SOLID_MATERIAL,
     TRANSFORM,
     TEXTURE,
     MATERIAL,

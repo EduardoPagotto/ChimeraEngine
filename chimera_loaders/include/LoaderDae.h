@@ -67,6 +67,8 @@ private:
     std::map<std::string, Solid*> mapaEntidadeFisica;
     std::map<std::string, Draw*> mapaGeometria;
     
+    std::map<std::string, SolidMaterial*> mapaPhysicMaterial;
+
     Group *pRootNode;
     
     PhysicsControl *pPhysicsControl;

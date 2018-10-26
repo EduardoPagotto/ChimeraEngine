@@ -16,7 +16,53 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
-    
+
+class SolidMaterial : Entity {
+public:
+    SolidMaterial(std::string _name) : Entity(EntityKind::SOLID_MATERIAL, _name) {
+        frictionDynamic = 10.0;
+        frictionStatic = 0.0;
+        restitution = 0.0;
+    }
+
+    SolidMaterial(const SolidMaterial& _solidMaterial) : Entity(_solidMaterial) {
+        frictionDynamic = _solidMaterial.frictionDynamic;
+        frictionStatic = _solidMaterial.frictionStatic;
+        restitution = _solidMaterial.restitution;   
+    }
+
+    virtual ~SolidMaterial(){}
+
+    inline void setFrictionDynamic ( const float &_friction ) {
+        frictionDynamic = _friction;
+    }
+
+    inline void setFrictionStatic ( const float &_friction ) {
+        frictionStatic = _friction;
+    }
+
+    inline void setRestitution ( const float &_restitution ) {
+        restitution = _restitution;
+    }
+
+    inline btScalar getFrictionDynamic() const {
+        return frictionDynamic;
+    }
+
+    inline btScalar getFrictionStatic() const {
+        return frictionStatic;
+    }
+
+    inline btScalar getRestitution() const {
+        return restitution;
+    }
+
+private:
+    btScalar frictionDynamic;
+    btScalar frictionStatic;
+    btScalar restitution;
+};
+
 class Solid : public Coord
 {
 public:
@@ -49,14 +95,6 @@ public:
         mass = _mass;
     }
 
-    inline void setFriction ( const float &_friction ) {
-        friction = _friction;
-    }
-
-    inline void setRestitution ( const float &_restitution ) {
-        restitution = _restitution;
-    }
-
     inline void setShapeBox ( const glm::vec3 &_size ) {
         pShapeCollision = new btBoxShape ( btVector3( _size.x, _size.y, _size.z ));
     }
@@ -82,6 +120,21 @@ public:
 		return (pShapeCollision != nullptr ? true : false);
     }
 
+    void setSolidMaterial(SolidMaterial _solidMaterial) {
+        if (pSolidMaterial != nullptr)
+            delete pSolidMaterial;
+
+        pSolidMaterial = new SolidMaterial(_solidMaterial);
+    }
+
+    //inline void setFriction ( const float &_friction ) {
+    //    friction = _friction;
+    //}
+
+    //inline void setRestitution ( const float &_restitution ) {
+    //    restitution = _restitution;
+    //}
+
 // 	void setTransform(const glm::mat4 &_trans) {
 //         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
 // 	}
@@ -91,8 +144,12 @@ private:
     void initTransform (const btTransform &_tTrans, void *pObj );
 
     btScalar mass;
-    btScalar friction;
-    btScalar restitution;
+
+    //btScalar friction;
+    //btScalar restitution;
+
+    SolidMaterial *pSolidMaterial;
+
     btRigidBody* pRigidBody;
     btCollisionShape* pShapeCollision;
     btGImpactMeshShape *trimesh;

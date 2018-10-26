@@ -15,8 +15,7 @@ Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::S
     trimesh = nullptr;
 
     mass = 0.0f;
-    friction = 0.0f;
-    restitution = 0.0f;
+    pSolidMaterial = nullptr;
 
 	transform.setIdentity();
 
@@ -26,8 +25,10 @@ Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::S
 Solid::Solid ( const Solid& _solid) : Coord (_solid) {
 
     mass = _solid.mass;
-    friction = _solid.friction;
-    restitution = _solid.restitution;
+
+    if (_solid.pSolidMaterial != nullptr) {
+       pSolidMaterial = new SolidMaterial(*_solid.pSolidMaterial);
+    }
 
     pRigidBody = nullptr;
     pShapeCollision = _solid.pShapeCollision;
@@ -101,8 +102,12 @@ void Solid::initTransform( const btTransform &_tTrans, void *pObj ) {
 
     pRigidBody->setUserPointer ( ( void* ) pObj );
 
-    pRigidBody->setFriction ( friction );
-    pRigidBody->setRestitution ( restitution );
+
+    if (pSolidMaterial != nullptr) {
+        // FIXME: implementar o atrito estatico
+        pRigidBody->setFriction(pSolidMaterial->getFrictionDynamic());
+        pRigidBody->setRestitution(pSolidMaterial->getRestitution());        
+    }
 
     pRigidBody->setContactProcessingThreshold ( BT_LARGE_FLOAT );
 

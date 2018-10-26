@@ -60,13 +60,10 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         }
 
         std::string model = config["model"].as<std::string>();
-        std::string path_tex = config["path_tex"].as<std::string>();
-        std::string path_model = config["path_model"].as<std::string>();
-
         std::string font = config["font"].as<std::string>();
 
         //Carga de dados
-		Chimera::LoaderDae *pLoader = new Chimera::LoaderDae( path_model, path_tex, model);
+		Chimera::LoaderDae *pLoader = new Chimera::LoaderDae(model);
         //Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.dae");
@@ -89,7 +86,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 		Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
 		posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
-		pParticleEmitter->loadTexDiffuse("TexParticleEmmiter" , path_model + std::string("Particle2.png"));
+		pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
 		//Adiciona um HUD ao Grapho
         Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");

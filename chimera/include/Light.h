@@ -68,7 +68,6 @@ public:
     }
 
     void setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_rotation );
-    void loadCollada ( tinyxml2::XMLElement* _nNode );
 
 private:
 

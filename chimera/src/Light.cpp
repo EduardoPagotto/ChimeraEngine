@@ -1,7 +1,6 @@
 #include "Light.h"
 
 #include <vector>
-#include "ChimeraUtils.h"
 #include "NodeVisitor.h"
 
 #include <glm/gtx/quaternion.hpp>
@@ -40,45 +39,13 @@ void Light::setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_r
 
 }
 
-void Light::accept(NodeVisitor * v)
-{
+void Light::accept(NodeVisitor * v) {
 	v->visit(this);
 }
 
 void Light::init() {
-
 	position = glm::vec3(transform[3]);//position = transform.getOrigin();
-
 }
 
-void Light::loadCollada ( tinyxml2::XMLElement* _nNode ) {
-
-    tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "point" );
-    if ( l_nPoint != nullptr ) {
-
-        type = LightType::POSITIONAL;
-
-        std::vector<float> l_arrayF;
-        const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
-        loadArrayBtScalar ( l_val, l_arrayF );
-
-        setDiffuse ( Color ( l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f ) );
-        return;
-    }
-
-    l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "directional" );
-    if ( l_nPoint != nullptr ) {
-
-		type = LightType::DIRECTIONAL;
-
-        std::vector<float> l_arrayF;
-        const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
-        loadArrayBtScalar ( l_val, l_arrayF );
-
-        setDiffuse ( Color ( l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f ) );
-        return;
-    }
-
-}
 }
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

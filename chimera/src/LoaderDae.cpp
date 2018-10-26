@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "LoaderDae.h"
-#include "ChimeraUtils.h"
+#include "LoaderDaeUtils.h"
 #include "ExceptionChimera.h"
 #include "Camera.h"
 #include "CameraSpherical.h"
@@ -12,13 +12,13 @@
 
 namespace Chimera {
 
-LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_modelDir, const std::string &_file  ) {
+LoaderDae::LoaderDae(const std::string &_file) {
 
     doc = nullptr;
     root = nullptr;
 	pRootNode = nullptr;
-    this->textureDir = _textureDir;
-    this->modelDir = _modelDir;
+    //this->textureDir = _textureDir;
+    //this->modelDir = _modelDir;
  
     log = spdlog::get("chimera");
     log->debug("Constructor LoaderDae File:{}", _file);
@@ -26,7 +26,29 @@ LoaderDae::LoaderDae ( const std::string &_textureDir, const std::string &_model
     pPhysicsControl = Singleton<PhysicsControl>::getRefSingleton();
 	texManager = Singleton<TextureManager>::getRefSingleton();
 
-    loadFile(_file);
+    doc = new tinyxml2::XMLDocument();
+
+    //Verifica se arquivo existe
+    tinyxml2::XMLError a_eResult = doc->LoadFile ( _file.c_str());
+    if ( a_eResult != 0 ) {
+        throw ExceptionChimera ( ExceptionCode::OPEN, "Falha ao ler arquivo erro: " + std::to_string(a_eResult) );
+    }
+
+    //vefifica se ele � uma estrutura compativel com collada
+    root = doc->FirstChildElement ( "COLLADA" );
+    if ( root == nullptr ) {
+        throw ExceptionChimera ( ExceptionCode::OPEN, "Nao é um arquivo colada" );
+    }
+
+    //carrega elementos de Texture, Material e Geometrias
+    int totalTexture = LoaderDae::libTextureMap(root, texManager);
+    int totalGeometry = LoaderDae::libGeometryMap(root, mapaGeometria);
+
+    //cria lista de entidade fisicas a serem usadas
+    getPhysicSceneInfile();
+
+    //Carrega hierarquia dos nodes
+    getNodeSceneInFile();
 }
 
 LoaderDae::~LoaderDae() {
@@ -42,94 +64,15 @@ LoaderDae::~LoaderDae() {
 	Singleton<TextureManager>::releaseRefSingleton();
 }
 
-int libTextureMap(tinyxml2::XMLElement* root, std::string _textureDir, TextureManager *_texManager) {
-
-	int totalTexturas = 0;
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_images" );
-    if ( l_nNode != nullptr ) {
-
-        l_nNode = l_nNode->FirstChildElement ( "image" ); //FIXME quando outras texturas presentes 0 difuse, 1 specula, 2 emissive
-        while ( l_nNode != nullptr ) {
-
-            std::string l_id = retornaAtributo ( "id", l_nNode );
-            std::string l_name = retornaAtributo( "name", l_nNode);
-            std::string l_val = l_nNode->FirstChildElement( "init_from" )->GetText();
-#ifdef WIN32
-			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "\\" + l_val);
-#else
-			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, _textureDir + "/" + l_val);
-#endif
-            l_nNode = l_nNode->NextSiblingElement ( "image" );
-			totalTexturas++;
-        }
-    }
-
-	return totalTexturas;
-}
-
-int libGeometryMap(tinyxml2::XMLElement* root, std::map<std::string, Draw*> &mapaGeometria) {
-
-    tinyxml2::XMLElement* l_nNode = root->FirstChildElement ( "library_geometries" );
-    if ( l_nNode != nullptr ) {
-        l_nNode = l_nNode->FirstChildElement ( "geometry" );
-        while ( l_nNode != nullptr ) {
-
-            std::string l_id = retornaAtributo ( "id", l_nNode );
-            std::string l_name = retornaAtributo ( "name", l_nNode );
-
-            Mesh *pDraw = new Mesh(nullptr, l_id);
-            pDraw->loadCollada(l_nNode);
-            mapaGeometria[l_id] = pDraw;
-
-            l_nNode = l_nNode->NextSiblingElement ( "geometry" );
-        }
-    }
-    return mapaGeometria.size();
-}
-
-void LoaderDae::loadFile ( const std::string &file ) {
-
-    //Ajusta infra de S.O.
-#ifdef WIN32
-    std::string dir_arquivo = modelDir + "\\" + file;
-#else
-    std::string dir_arquivo = modelDir + "/" + file;
-#endif
-
-    doc = new tinyxml2::XMLDocument();
-
-    //Verifica se arquivo existe
-    tinyxml2::XMLError a_eResult = doc->LoadFile ( dir_arquivo.c_str());
-    if ( a_eResult != 0 ) {
-        throw ExceptionChimera ( ExceptionCode::OPEN, "Falha ao ler arquivo erro: " + std::to_string(a_eResult) );
-    }
-
-    //vefifica se ele � uma estrutura compativel com collada
-    root = doc->FirstChildElement ( "COLLADA" );
-    if ( root == nullptr ) {
-        throw ExceptionChimera ( ExceptionCode::OPEN, "Nao � um arquivo colada" );
-    }
-
-    //carrega elementos de Texture, Material e Geometrias
-    int totalTexture = libTextureMap(root, textureDir, texManager);
-    int totalGeometry = libGeometryMap(root, mapaGeometria);
-
-    //cria lista de entidade fisicas a serem usadas
-    getPhysicSceneInfile();
-
-    //Carrega hierarquia dos nodes
-    getNodeSceneInFile();
-}
-
 void LoaderDae::getPhysicSceneInfile() {
 
-    tinyxml2::XMLElement* l_nPhysicScene = findSceneLib (root, ( const char* ) "Physic Scene", ( const char* ) "instance_physics_scene", ( const char* ) "library_physics_scenes" );
+    tinyxml2::XMLElement* l_nPhysicScene = LoaderDae::findSceneLib (root, ( const char* ) "Physic Scene", ( const char* ) "instance_physics_scene", ( const char* ) "library_physics_scenes" );
     if ( l_nPhysicScene != nullptr ) {
 
         const char *l_nome = l_nPhysicScene->Attribute ( "name" );
         const char *l_id = l_nPhysicScene->Attribute ( "id" );
 
-        pPhysicsControl->loadCollada ( l_nPhysicScene );
+        LoaderDae::loadPhysicControlCollada( l_nPhysicScene, pPhysicsControl);
 
         getDadosInstancePhysicModel ( l_nPhysicScene );
     }
@@ -149,7 +92,7 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 const char *l_body = l_nInstanceRigidBody->Attribute ( "body" );
                 const char *l_target = l_nInstanceRigidBody->Attribute ( "target" );
 
-                tinyxml2::XMLElement* l_nRigidBody = getDadoRigidBody ( l_url, l_body );
+                tinyxml2::XMLElement* l_nRigidBody = LoaderDae::getDadoRigidBody (root, l_url, l_body );
 
                 const char* l_name = l_nRigidBody->Attribute ( "name" );
                 const char* l_sid = l_nRigidBody->Attribute ( "sid" );
@@ -157,7 +100,7 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
                 std::string nomeMesh = "";
 
 				Solid *pPhysic = new Solid(nullptr, std::string(l_name));
-                pPhysic->loadColladaPhysicsModel ( root, l_nRigidBody, nomeMesh );
+                LoaderDae::loadColladaPhysicsModel( root, l_nRigidBody, nomeMesh, pPhysic);
 
 				Mesh *pDrawTriMesh = (Mesh*)mapaGeometria[nomeMesh];
                 if ( pDrawTriMesh != nullptr ) {
@@ -203,11 +146,11 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
     }
 }
 
-tinyxml2::XMLElement* LoaderDae::getDadoRigidBody ( const char* _url, const char* _sid ) {
+tinyxml2::XMLElement* LoaderDae::getDadoRigidBody (tinyxml2::XMLElement* _root, const char* _url, const char* _sid ) {
 
     tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
 
-    loadNodeLib ( root, ( const char* ) &_url[1], "library_physics_models", "physics_model", &l_nNodeSourceData );
+    loadNodeLib ( _root, ( const char* ) &_url[1], "library_physics_models", "physics_model", &l_nNodeSourceData );
     tinyxml2::XMLElement* l_nRigidBody = l_nNodeSourceData->FirstChildElement ( "rigid_body" );
     if ( l_nRigidBody != nullptr ) {
         while ( l_nRigidBody != nullptr ) {
@@ -243,7 +186,7 @@ void LoaderDae::getNodeSceneInFile() {
 
     pRootNode = nullptr;
 
-    tinyxml2::XMLElement* l_nVisualScene = findSceneLib ( root, ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
+    tinyxml2::XMLElement* l_nVisualScene = LoaderDae::findSceneLib ( root, ( const char* ) "Visual Scene", ( const char* ) "instance_visual_scene", ( const char* ) "library_visual_scenes" );
     if ( l_nVisualScene != nullptr ) {
 
         const char *l_nome = l_nVisualScene->Attribute ( "name" );
@@ -271,61 +214,6 @@ void LoaderDae::getNodeSceneInFile() {
             log->warn("Node: vazio");
         }
     }
-}
-
-//TODO mover para camera do tipo correto
-Camera *carregaCamera(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name) {
-
-    tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
-
-    loadNodeLib ( root, ( const char* ) &l_url[1], "library_cameras", "camera", &l_nNodeSourceData );
-    Camera *pCamera = nullptr;
-
-    tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
-    if ( l_nExtra != nullptr ) {
-        tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
-        if ( l_nTechnique != nullptr ) {
-
-            const char* l_profile = l_nTechnique->Attribute ( "profile" );
-            if ( ( l_profile != nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
-
-                tinyxml2::XMLElement* l_nOrbital = l_nTechnique->FirstChildElement ( "orbital" );
-                if ( l_nOrbital != nullptr ) {
-
-                    const char* min = nullptr;
-                    const char* max = nullptr;
-
-                    tinyxml2::XMLElement* l_param = l_nOrbital->FirstChildElement();
-                    while ( l_param != nullptr ) {
-
-                        if ( strcmp ( l_param->Value(), ( const char* ) "min" ) == 0 ) {
-                            min = l_param->GetText();
-                        } else if ( strcmp ( l_param->Value(), ( const char* ) "max" ) == 0 ) {
-                            max = l_param->GetText();
-                        }
-
-                        l_param = l_param->NextSiblingElement();
-                    }
-
-                    if ( ( min != nullptr ) && ( max != nullptr ) ) {
-                        CameraSpherical *pCameraNew = new CameraSpherical ( _id );
-                        pCameraNew->setDistanciaMaxima ( atof ( max ) );
-                        pCameraNew->setDistanciaMinima ( atof ( min ) );
-                        pCamera = pCameraNew;
-                    }
-
-                }
-            }
-        }
-    }
-
-    if ( pCamera == nullptr ) {
-        pCamera = new Camera (nullptr, CameraType::Base, _id );
-    }
-
-    pCamera->loadCollada ( l_nNodeSourceData );
-
-    return pCamera;
 }
 
 void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type ) {
@@ -356,7 +244,7 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
 
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_camera" ) == 0 ) {
 
-           Camera *pCamera = carregaCamera(root, _nNode, l_url, _id, _name);
+           Camera *pCamera = LoaderDae::carregaCamera(root, _nNode, l_url, _id, _name);
            pCamera->setTransform ( l_pTransform );
 
            _pNodePai->addChild ( pCamera );
@@ -368,10 +256,14 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
             loadNodeLib ( root, ( const char* ) &l_url[1], "library_lights", "light", &l_nNodeSourceData );
 
             Light *pLight = new Light (nullptr,_id );
-            pLight->loadCollada ( l_nNodeSourceData );
 
+            auto ret_data = LoaderDae::loadDiffuseLightColor(l_nNodeSourceData);
+            pLight->setDiffuse(std::get<0>(ret_data));
+            pLight->setType(std::get<1>(ret_data));
             pLight->setTransform ( l_pTransform );
+
             _pNodePai->addChild ( pLight );
+
             pLastNodeDone = pLight;
 
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_geometry" ) == 0 ) {
@@ -396,9 +288,11 @@ void LoaderDae::carregaNode ( Node *_pNodePai, tinyxml2::XMLElement* _nNode, con
                     loadNodeLib ( root, ( const char* ) &pTarguet[1], "library_materials", "material", &l_nNodeSourceData );
                     if (l_nNodeSourceData != nullptr) {
 
-                       std::string nomeMaterial = retornaAtributo("id", l_nNodeSourceData);
-                       pMaterial = new Material(nomeMaterial);
-                       pMaterial->loadCollada(root, l_nNodeSourceData);
+                        std::string nomeMaterial = retornaAtributo("id", l_nNodeSourceData);
+
+                        pMaterial = new Material(nomeMaterial);
+
+                        LoaderDae::loadMaterial(root, l_nNodeSourceData, pMaterial);
 
                         tinyxml2::XMLElement* l_nInstanceEffect = l_nNodeSourceData->FirstChildElement ( "instance_effect" );
                         if (l_nInstanceEffect != nullptr) {
@@ -514,6 +408,514 @@ tinyxml2::XMLElement* LoaderDae::findSceneLib (tinyxml2::XMLElement* pRoot, cons
     }
 
     return nullptr;
+}
+
+int LoaderDae::libTextureMap(tinyxml2::XMLElement* _root, TextureManager *_texManager) {
+
+	int totalTexturas = 0;
+    tinyxml2::XMLElement* l_nNode = _root->FirstChildElement ( "library_images" );
+    if ( l_nNode != nullptr ) {
+
+        l_nNode = l_nNode->FirstChildElement ( "image" ); //FIXME quando outras texturas presentes 0 difuse, 1 specula, 2 emissive
+        while ( l_nNode != nullptr ) {
+
+            std::string l_id = retornaAtributo ( "id", l_nNode );
+            std::string l_name = retornaAtributo( "name", l_nNode);
+            std::string l_val = l_nNode->FirstChildElement( "init_from" )->GetText();
+
+			_texManager->fromFile(l_id, TEX_SEQ::DIFFUSE, l_val);
+
+            l_nNode = l_nNode->NextSiblingElement ( "image" );
+			totalTexturas++;
+        }
+    }
+
+	return totalTexturas;
+}
+
+int LoaderDae::libGeometryMap(tinyxml2::XMLElement* _root, std::map<std::string, Draw*> &mapaGeometria) {
+
+    tinyxml2::XMLElement* l_nNode = _root->FirstChildElement ( "library_geometries" );
+    if ( l_nNode != nullptr ) {
+        l_nNode = l_nNode->FirstChildElement ( "geometry" );
+        while ( l_nNode != nullptr ) {
+
+            std::string l_id = retornaAtributo ( "id", l_nNode );
+            std::string l_name = retornaAtributo ( "name", l_nNode );
+
+            Mesh *pDraw = new Mesh(nullptr, l_id);
+            LoaderDae::loadMeshCollada(l_nNode, pDraw);
+            mapaGeometria[l_id] = pDraw;
+
+            l_nNode = l_nNode->NextSiblingElement ( "geometry" );
+        }
+    }
+    return mapaGeometria.size();
+}
+
+//---------Camera-------
+
+Camera *LoaderDae::carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nNode, const char* l_url, const char* _id, const char* _name) {
+
+    tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
+
+    loadNodeLib ( _root, ( const char* ) &l_url[1], "library_cameras", "camera", &l_nNodeSourceData );
+    Camera *pCamera = nullptr;
+
+    tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
+    if ( l_nExtra != nullptr ) {
+        tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
+        if ( l_nTechnique != nullptr ) {
+
+            const char* l_profile = l_nTechnique->Attribute ( "profile" );
+            if ( ( l_profile != nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
+
+                tinyxml2::XMLElement* l_nOrbital = l_nTechnique->FirstChildElement ( "orbital" );
+                if ( l_nOrbital != nullptr ) {
+
+                    const char* min = nullptr;
+                    const char* max = nullptr;
+
+                    tinyxml2::XMLElement* l_param = l_nOrbital->FirstChildElement();
+                    while ( l_param != nullptr ) {
+
+                        if ( strcmp ( l_param->Value(), ( const char* ) "min" ) == 0 ) {
+                            min = l_param->GetText();
+                        } else if ( strcmp ( l_param->Value(), ( const char* ) "max" ) == 0 ) {
+                            max = l_param->GetText();
+                        }
+
+                        l_param = l_param->NextSiblingElement();
+                    }
+
+                    if ( ( min != nullptr ) && ( max != nullptr ) ) {
+                        CameraSpherical *pCameraNew = new CameraSpherical ( _id );
+                        pCameraNew->setDistanciaMaxima ( atof ( max ) );
+                        pCameraNew->setDistanciaMinima ( atof ( min ) );
+                        pCamera = pCameraNew;
+                    }
+
+                }
+            }
+        }
+    }
+
+    if ( pCamera == nullptr ) {
+        pCamera = new Camera (nullptr, CameraType::Base, _id );
+    }
+
+    pCamera->loadCollada ( l_nNodeSourceData );
+
+    return pCamera;
+}
+
+//------Light--------
+
+std::tuple<Color, LightType> LoaderDae::loadDiffuseLightColor(tinyxml2::XMLElement* _nNode)
+{
+    tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "point" );
+    if ( l_nPoint != nullptr ) {
+
+        std::vector<float> l_arrayF;
+        const char *l_val = l_nPoint->FirstChildElement("color")->GetText();
+        loadArrayBtScalar ( l_val, l_arrayF );
+        Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
+
+        return std::make_tuple(cor, LightType::POSITIONAL);
+    }
+
+    l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "directional" );
+    if ( l_nPoint != nullptr ) {
+
+        std::vector<float> l_arrayF;
+        const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
+        loadArrayBtScalar ( l_val, l_arrayF );
+
+        Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
+
+        return std::make_tuple(cor, LightType::DIRECTIONAL);
+    }
+
+}
+
+//----------Material-----
+
+void LoaderDae::loadMaterial(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, Material *_pMat) {
+
+    tinyxml2::XMLElement* l_nInstanceEffect = _nNode->FirstChildElement ( "instance_effect" );
+    if (l_nInstanceEffect != nullptr) {
+
+        tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
+        const char* l_pUrlEffect = l_nInstanceEffect->Attribute ( "url" );
+        loadNodeLib ( root, ( const char* ) &l_pUrlEffect[1], "library_effects", "effect", &l_nNodeSourceData );
+
+        if (l_nNodeSourceData != nullptr) {
+            LoaderDae::loadMaterialProfile(l_nNodeSourceData, _pMat);
+        }
+    }
+}
+
+void LoaderDae::loadMaterialProfile(tinyxml2::XMLElement* _nNode, Material *_pMat) {
+
+	tinyxml2::XMLElement* l_nProfile = _nNode->FirstChildElement("profile_COMMON");
+	if (l_nProfile != nullptr) {
+
+        Color cor;
+        if (getPhong("emission", cor, l_nProfile) == true) {
+            _pMat->setEmission(cor);
+        }
+
+        if (getPhong("ambient", cor, l_nProfile) == true) {
+            _pMat->setAmbient(cor);
+        }
+
+        if (getPhong("diffuse", cor, l_nProfile) == true) {
+            _pMat->setDiffuse(cor);
+        }
+
+        if (getPhong("specular", cor, l_nProfile) == true) {
+            _pMat->setSpecular(cor);
+        }
+
+        tinyxml2::XMLElement* l_nNode = l_nProfile->FirstChildElement("technique");
+        if (l_nNode->Attribute("sid") != nullptr) {
+
+            tinyxml2::XMLElement* l_nPhong = l_nNode->FirstChildElement("phong");
+            if (l_nPhong != nullptr) {
+
+                tinyxml2::XMLElement* l_nShinnes = l_nPhong->FirstChildElement("shininess");
+                if (l_nShinnes != nullptr) {
+
+                    const char *l_val = l_nShinnes->FirstChildElement("float")->GetText();
+                    if (l_val != nullptr) {
+
+                        _pMat->setShine(atof(l_val));
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool LoaderDae::getPhong ( const char* _tipoCor, Color &_color, tinyxml2::XMLElement* _nNode ) {
+
+    tinyxml2::XMLElement* l_nNode = _nNode->FirstChildElement ( "technique" );
+    if ( l_nNode->Attribute ( "sid" ) != nullptr ) {
+
+        tinyxml2::XMLElement* l_nPhong = l_nNode->FirstChildElement ( "phong" );
+        if ( l_nPhong != nullptr ) {
+            tinyxml2::XMLElement* l_nColor = l_nPhong->FirstChildElement ( _tipoCor );
+            if ( l_nColor != nullptr ) {
+				tinyxml2::XMLElement* l_nColorVal = l_nColor->FirstChildElement ( "color" );
+                if (l_nColorVal != nullptr ) {
+                    std::vector<float> l_arrayF;
+                    const char* l_cor = l_nColorVal->GetText();
+                    loadArrayBtScalar ( l_cor, l_arrayF );
+
+                    _color.set ( l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0 );
+                    return true;
+                } else {
+
+					l_nColorVal = l_nColor->FirstChildElement("texture");
+					if (l_nColorVal != nullptr) {
+
+						_color.set(Color::WHITE);
+						return true;
+					}
+                }
+            }
+         }
+    }
+
+    return false;
+}
+
+//------solid----
+
+void LoaderDae::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, std::string &_meshName, Solid *_pPhysic) {
+
+    if ( _nShape != nullptr ) {
+        _nShape = _nShape->FirstChildElement();
+        const char *l_tipoShape = _nShape->Value();
+
+        if ( strcmp ( l_tipoShape, "sphere" ) == 0 ) {
+
+            tinyxml2::XMLElement* l_nEsfera = _nShape->FirstChildElement();
+            const char *l_raio = l_nEsfera->GetText();
+
+            std::vector<float> l_arrayValores;
+            loadArrayBtScalar ( l_raio, l_arrayValores );
+            if ( l_arrayValores.size() == 1 ) {
+                _pPhysic->setShapeSphere ( l_arrayValores[0] );
+            } else if ( l_arrayValores.size() == 3 ) {
+                _pPhysic->setShapeSphere ( l_arrayValores[0] );
+            } else {
+
+            }
+
+        } else if ( strcmp ( l_tipoShape, "plane" ) == 0 ) {
+
+            //setShapeBox(btVector3(2.0, 2.0, 2.0));
+
+            tinyxml2::XMLElement* l_nBox = _nShape->FirstChildElement();
+            const char *l_size = l_nBox->GetText();
+
+            std::vector<float> l_arrayValores;
+            loadArrayBtScalar ( l_size, l_arrayValores );
+
+            if ( l_arrayValores.size() == 1 ) {
+                _pPhysic->setShapePlane ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ), l_arrayValores[0] );
+            } else if ( l_arrayValores.size() == 4 ) {
+                _pPhysic->setShapePlane ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ), l_arrayValores[3] );
+            } else {
+
+            }
+
+        } else if ( strcmp ( l_tipoShape, "box" ) == 0 ) {
+
+            tinyxml2::XMLElement* l_nBox = _nShape->FirstChildElement();
+            const char *l_size = l_nBox->GetText();
+
+            std::vector<float> l_arrayValores;
+            loadArrayBtScalar ( l_size, l_arrayValores );
+
+            if ( l_arrayValores.size() == 1 ) {
+                _pPhysic->setShapeBox ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
+            } else if ( l_arrayValores.size() == 3 ) {
+                _pPhysic->setShapeBox ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
+            } else {
+
+            }
+
+        } else if ( strcmp ( l_tipoShape, "cylinder" ) == 0 ) {
+
+            tinyxml2::XMLElement* l_nCyl = _nShape->FirstChildElement();
+            const char *l_size = l_nCyl->GetText();
+
+            std::vector<float> l_arrayValores;
+            loadArrayBtScalar ( l_size, l_arrayValores );
+
+            if ( l_arrayValores.size() == 1 ) {
+                _pPhysic->setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
+            } else if ( l_arrayValores.size() == 3 ) {
+                _pPhysic->setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
+            }
+        } else if ( strcmp ( l_tipoShape, "mesh" ) == 0 ) { //FIXME ERRADO!!!!
+
+            //setShapeBox(btVector3(1.0, 1.0, 1.0));
+
+            //instance_geometry
+            tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement();
+            if ( l_nMesh != nullptr ) {
+                const char *l_mesh = l_nMesh->Attribute ( "url" );
+                if ( l_mesh != nullptr ) {
+                    _meshName = ( const char* ) &l_mesh[1];
+                }
+            }
+        }
+    }
+}
+
+void LoaderDae::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nRigidBody, std::string &_meshName, Solid *_pPhysic) {
+
+    tinyxml2::XMLElement* l_nTecnicCommon = _nRigidBody->FirstChildElement ( "technique_common" );
+    if ( l_nTecnicCommon != nullptr ) {
+
+        //Massa
+        tinyxml2::XMLElement* l_nMass = l_nTecnicCommon->FirstChildElement ( "mass" );
+        if ( l_nMass != nullptr ) {
+            const char* l_mass = l_nMass->GetText();
+            _pPhysic->setMass ( atof ( l_mass ) );
+        }
+    }
+
+    //shape
+    tinyxml2::XMLElement* l_nShape = l_nTecnicCommon->FirstChildElement ( "shape" );
+    loadColladaShape ( _root, l_nShape, _meshName, _pPhysic);
+
+    //material
+    tinyxml2::XMLElement* l_nInstaceMaterial = l_nTecnicCommon->FirstChildElement ( "instance_physics_material" );
+    if ( l_nInstaceMaterial != nullptr ) {
+        const char* l_url = l_nInstaceMaterial->Attribute ( "url" );
+
+        tinyxml2::XMLElement* l_nMateriual = nullptr;
+        Chimera::loadNodeLib ( _root, ( const char* ) &l_url[1], "library_physics_materials", "physics_material", &l_nMateriual );
+
+        tinyxml2::XMLElement* l_nTec = l_nMateriual->FirstChildElement ( "technique_common" );
+        if ( l_nTec != nullptr ) {
+
+            tinyxml2::XMLElement* l_nFric = l_nTec->FirstChildElement ( "dynamic_friction" );
+            if ( l_nFric != nullptr ) {
+                const char *l_fric = l_nFric->GetText();
+                if ( l_fric != nullptr ) {
+                    _pPhysic->setFriction ( atof ( l_fric ) );
+                }
+            }
+
+            tinyxml2::XMLElement* l_nRes = l_nTec->FirstChildElement ( "restitution" );
+            if ( l_nRes != nullptr ) {
+                const char *l_res = l_nRes->GetText();
+                if ( l_res != nullptr ) {
+                    _pPhysic->setRestitution ( atof ( l_res ) );
+                }
+            }
+        }
+    }
+}
+
+//------- PhysicControl
+
+void LoaderDae::loadPhysicControlCollada ( tinyxml2::XMLElement* _nNode, PhysicsControl *_pPhysicsControl ) {
+
+    tinyxml2::XMLElement* l_nTecnicCommon = _nNode->FirstChildElement ( "technique_common" );
+    if ( l_nTecnicCommon != nullptr ) {
+
+        tinyxml2::XMLElement* l_nNodeGravity = l_nTecnicCommon->FirstChildElement ( "gravity" );
+        if ( l_nNodeGravity != nullptr ) {
+
+            std::vector<btScalar> l_arrayF;
+            const char* vetor = l_nNodeGravity->GetText();
+            loadArrayBtScalar ( vetor, l_arrayF );
+
+            _pPhysicsControl->setGravity ( btVector3 ( l_arrayF[0], l_arrayF[1], l_arrayF[2] ) );
+
+        }
+    }
+
+}
+
+//-------Mesh
+
+int LoaderDae::getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores ) {
+
+    tinyxml2::XMLElement* l_nSource = _source->FirstChildElement ( "float_array" );
+    if ( l_nSource != nullptr ) {
+
+        const char *l_numCount = l_nSource->Attribute ( "count" );
+        if ( l_numCount != nullptr ) {
+
+            //std::vector<float> l_array;
+            const char* l_vals = l_nSource->GetText();
+            loadArrayBtScalar( l_vals, _arrayValores );
+            return _arrayValores.size();
+        }
+    }
+
+    return -1;
+}
+
+void LoaderDae::loadMeshCollada ( tinyxml2::XMLElement* _nNode, Mesh *_pDraw) {
+
+    tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement ( "mesh" );
+    if ( l_nMesh != nullptr ) {
+
+        tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement ( "source" );
+
+        //Carrega lista de vetores
+        while ( l_nSource != nullptr ) {
+
+            const char *l_id = l_nSource->Attribute ( "id" );
+            if ( strstr ( l_id, ( char* ) "-positions" ) != nullptr ) {
+
+                //Carrega todos os vetores ponto
+                std::vector<float> lista;
+                getSource ( l_nSource, lista );
+
+                for (unsigned int indice=0; indice < lista.size(); indice += 3)
+                    _pDraw->vertexList.push_back( glm::vec3(lista[indice],lista[indice+1],lista[indice+2]) );
+
+            } else if ( strstr ( l_id, ( char* ) "-normals" ) != nullptr ) {
+
+                //carrega todos os vetores normal
+                std::vector<float> lista;
+                getSource ( l_nSource, lista );
+
+                for (unsigned int indice=0; indice < lista.size(); indice += 3)
+                    _pDraw->normalList.push_back( glm::vec3(lista[indice],lista[indice+1],lista[indice+2]));
+
+            } else if ( strstr ( l_id, ( char* ) "-map-0" ) != nullptr ) {
+
+                //carrega vetor posicao textura
+                std::vector<float> lista;
+                getSource ( l_nSource, lista );
+                for (unsigned int indice=0; indice < lista.size(); indice += 2)
+                    _pDraw->textureList.push_back( glm::vec2(lista[indice],lista[indice+1]) );
+
+            }
+
+            l_nSource = l_nSource->NextSiblingElement ( "source" );
+        }
+
+        //Carrega Lista de indices
+        tinyxml2::XMLElement* l_nPoly = l_nMesh->FirstChildElement ( "polylist" );
+        if ( l_nPoly != nullptr ) {
+
+            const char *l_count = l_nPoly->Attribute ( "count" );
+            const char *l_mat = l_nPoly->Attribute ( "material" );
+
+            tinyxml2::XMLElement* l_nInput = l_nPoly->FirstChildElement ( "input" );
+
+            std::vector<const char*> l_vOffset;
+            std::vector<const char*> l_vSemantic;
+            std::vector<const char*> l_vSource;
+
+            while ( l_nInput != nullptr ) {
+
+                const char *l_offSet = l_nInput->Attribute ( "offset" );
+                const char *l_semantic = l_nInput->Attribute ( "semantic" );
+                const char *l_source = l_nInput->Attribute ( "source" );
+
+                l_vOffset.push_back ( l_offSet );
+                l_vSemantic.push_back ( l_semantic );
+                l_vSource.push_back ( l_source );
+
+                l_nInput = l_nInput->NextSiblingElement ( "input" );
+            }
+
+            tinyxml2::XMLElement* l_nP = l_nPoly->FirstChildElement ( "p" );
+            const char *l_indices = l_nP->GetText();
+            std::vector<int> l_arrayIndex;
+
+            loadArrayI ( l_indices, l_arrayIndex );
+
+            int l_numTriangles = atoi ( l_count );
+
+            for ( unsigned l_contador = 0; l_contador < l_arrayIndex.size(); l_contador++ ) {
+                int index = l_contador % l_vOffset.size();
+
+                const char *l_offSet = l_vOffset[index];
+                const char *l_semantic = l_vSemantic[index];
+                const char *l_source = l_vSource[index];
+
+                if ( strstr ( l_source, ( char* ) "-vertices" ) != nullptr ) { //indices de vetor ponto
+
+                    _pDraw->vertexIndex.push_back( l_arrayIndex[l_contador]  );
+
+                } else if ( strstr ( l_source, ( char* ) "-normals" ) != nullptr ) { //indice de vetor normal
+
+                    _pDraw->normalIndex.push_back(l_arrayIndex[l_contador]);
+
+                } else if ( strstr ( l_source, ( char* ) "-map-0" ) != nullptr ) { //indice de vetor posicao textura
+
+                    _pDraw->textureIndex.push_back( l_arrayIndex[l_contador] );
+
+                }
+            }
+            l_arrayIndex.clear();
+
+            l_vOffset.clear();
+            l_vSemantic.clear();
+            l_vSource.clear();
+
+        }
+    }
+
+    std::shared_ptr<spdlog::logger> log = spdlog::get("chimera");
+    log->debug("Nome: {0}", _pDraw->getName().c_str());
+    log->debug("Vertex  Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->vertexIndex.size(), _pDraw->vertexList.size());
+	log->debug("Normal  Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->normalIndex.size(), _pDraw->normalList.size());
+    log->debug("Texture Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->textureIndex.size(), _pDraw->textureList.size());
 }
 
 }

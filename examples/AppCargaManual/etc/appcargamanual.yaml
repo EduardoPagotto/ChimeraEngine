@@ -3,9 +3,7 @@ screen:
   canvas:
     w: 800
     h: 600
-model: piso2.xml
-path_tex: ./models/
-path_model: ./models/
+model: ./models/piso2.xml
 shaders:
   - name: mesh-default
     vertex: ./examples/AppCargaManual/shader/mesh.vert

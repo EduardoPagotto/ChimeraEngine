@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ChimeraUtils.h"
+#include "LoaderDaeUtils.h"
 #include "ExceptionChimera.h"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -84,7 +84,7 @@ std::string retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement
         return std::string ( l_value );
     }
 
-    auto console = spdlog::stdout_color_st("ChimeraUtils");
+    auto console = spdlog::get("chimera");
     console->warn("Atributo [{0}] Elemento [{1}] nao encontrado", _atributo, std::string(_node->Value()));
     
     return std::string ("");

@@ -55,6 +55,10 @@ private:
 
     static void loadPhysicControlCollada ( tinyxml2::XMLElement* _nNode, PhysicsControl *_pPhysicsControl);
 
+
+    static int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
+    static void loadMeshCollada (tinyxml2::XMLElement* _nNode, Mesh *_pDraw);
+
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* root;
 

@@ -34,8 +34,6 @@ public:
     virtual void render () override;
     virtual glm::vec3 getSizeBox();
 
-    void loadCollada ( tinyxml2::XMLElement* _nNode );
-
     std::vector<unsigned int> vertexIndex;
     std::vector<glm::vec3> vertexList;
 
@@ -47,7 +45,6 @@ public:
 
 private:
     void setVertexBuffer();
-    int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
 
 	GLuint VAO;
     GLuint VertexVBOID;

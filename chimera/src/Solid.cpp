@@ -15,7 +15,9 @@ Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::S
     trimesh = nullptr;
 
     mass = 0.0f;
-    pSolidMaterial = nullptr;
+    frictionDynamic = 15.0f;
+    frictionStatic = 10.0f;
+    restitution = 0.0f;
 
 	transform.setIdentity();
 
@@ -26,9 +28,9 @@ Solid::Solid ( const Solid& _solid) : Coord (_solid) {
 
     mass = _solid.mass;
 
-    if (_solid.pSolidMaterial != nullptr) {
-       pSolidMaterial = new SolidMaterial(*_solid.pSolidMaterial);
-    }
+    frictionDynamic = _solid.frictionDynamic;
+    frictionStatic = _solid.frictionStatic;
+    restitution = _solid.restitution;
 
     pRigidBody = nullptr;
     pShapeCollision = _solid.pShapeCollision;
@@ -102,18 +104,14 @@ void Solid::initTransform( const btTransform &_tTrans, void *pObj ) {
 
     pRigidBody->setUserPointer ( ( void* ) pObj );
 
-
-    if (pSolidMaterial != nullptr) {
-        // FIXME: implementar o atrito estatico
-        pRigidBody->setFriction(pSolidMaterial->getFrictionDynamic());
-        pRigidBody->setRestitution(pSolidMaterial->getRestitution());        
-    }
-
+    // TODO: implementar o atrito estatico
+    pRigidBody->setFriction(frictionDynamic);
+    pRigidBody->setRestitution(restitution);   
+    
     pRigidBody->setContactProcessingThreshold ( BT_LARGE_FLOAT );
 
     //pWorld->discretDynamicsWorld->addRigidBody ( pRigidBody, 1, 1 );
     pWorld->getWorld()->addRigidBody ( pRigidBody, 1, 1 );
-
 }
 
 void Solid::setIndexVertexArray ( btTriangleIndexVertexArray *_indexVertexArray ) {
@@ -197,11 +195,8 @@ glm::mat4 Solid::getMatrix() {
 }
 
 void Solid::setMatrix( const glm::mat4& _trans ) {
-
     transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
-
 }
-
 
 void Solid::applyTorc( const glm::vec3 &_torque ) {
     //pRigidBody->applyTorque(_torque);

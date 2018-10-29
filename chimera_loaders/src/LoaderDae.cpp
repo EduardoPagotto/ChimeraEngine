@@ -746,7 +746,7 @@ void LoaderDae::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2:
             if ( l_nFric != nullptr ) {
                 const char *l_fric = l_nFric->GetText();
                 if ( l_fric != nullptr ) {
-                    _pPhysic->setFriction ( atof ( l_fric ) );
+                    _pPhysic->setFrictionDynamic ( atof ( l_fric ) );
                 }
             }
 

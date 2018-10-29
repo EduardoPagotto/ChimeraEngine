@@ -3,78 +3,25 @@
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
-
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 
 #include "PhysicsControl.h"
-
 #include "Coord.h"
 
 #include <tinyxml2.h>
-
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
-
-class SolidMaterial : Entity {
-public:
-    SolidMaterial(std::string _name) : Entity(EntityKind::SOLID_MATERIAL, _name) {
-        frictionDynamic = 10.0;
-        frictionStatic = 0.0;
-        restitution = 0.0;
-    }
-
-    SolidMaterial(const SolidMaterial& _solidMaterial) : Entity(_solidMaterial) {
-        frictionDynamic = _solidMaterial.frictionDynamic;
-        frictionStatic = _solidMaterial.frictionStatic;
-        restitution = _solidMaterial.restitution;   
-    }
-
-    virtual ~SolidMaterial(){}
-
-    inline void setFrictionDynamic ( const float &_friction ) {
-        frictionDynamic = _friction;
-    }
-
-    inline void setFrictionStatic ( const float &_friction ) {
-        frictionStatic = _friction;
-    }
-
-    inline void setRestitution ( const float &_restitution ) {
-        restitution = _restitution;
-    }
-
-    inline btScalar getFrictionDynamic() const {
-        return frictionDynamic;
-    }
-
-    inline btScalar getFrictionStatic() const {
-        return frictionStatic;
-    }
-
-    inline btScalar getRestitution() const {
-        return restitution;
-    }
-
-private:
-    btScalar frictionDynamic;
-    btScalar frictionStatic;
-    btScalar restitution;
-};
 
 class Solid : public Coord
 {
 public:
 
     friend class Loader;
-
     Solid (Node *_parent, std::string _name);
-
     Solid ( const Solid& _solid );
-
     virtual ~Solid();
-
 	virtual void init();
 
 	glm::mat4 getModelMatrix(Coord *_pCoord);
@@ -120,20 +67,17 @@ public:
 		return (pShapeCollision != nullptr ? true : false);
     }
 
-    void setSolidMaterial(SolidMaterial _solidMaterial) {
-        if (pSolidMaterial != nullptr)
-            delete pSolidMaterial;
-
-        pSolidMaterial = new SolidMaterial(_solidMaterial);
+    inline void setFrictionDynamic ( const float &_friction ) {
+       frictionDynamic = _friction;
     }
 
-    //inline void setFriction ( const float &_friction ) {
-    //    friction = _friction;
-    //}
+    inline void setFrictionStatic ( const float &_friction ) {
+       frictionStatic = _friction;
+    }
 
-    //inline void setRestitution ( const float &_restitution ) {
-    //    restitution = _restitution;
-    //}
+    inline void setRestitution ( const float &_restitution ) {
+       restitution = _restitution;
+    }
 
 // 	void setTransform(const glm::mat4 &_trans) {
 //         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
@@ -145,10 +89,9 @@ private:
 
     btScalar mass;
 
-    //btScalar friction;
-    //btScalar restitution;
-
-    SolidMaterial *pSolidMaterial;
+    btScalar frictionDynamic;
+    btScalar frictionStatic;
+    btScalar restitution;
 
     btRigidBody* pRigidBody;
     btCollisionShape* pShapeCollision;

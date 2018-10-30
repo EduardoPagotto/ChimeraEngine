@@ -3,8 +3,6 @@
 
 #include <map>
 
-#include <tinyxml2.h>
-
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>

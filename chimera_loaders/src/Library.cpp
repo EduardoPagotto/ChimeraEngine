@@ -56,4 +56,25 @@ tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {
     return nullptr;
 }
 
+int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam) {
+
+    tinyxml2::XMLElement* l_nParam = _nNode->FirstChildElement ( "param" );
+
+    while (l_nParam != nullptr) {
+
+        ParamCollada novo;
+        novo.name = l_nParam->Attribute ( "name" );
+        novo.sid = l_nParam->Attribute ( "sid" );
+        novo.type = l_nParam->Attribute ( "type" );
+        novo.value = l_nParam->GetText();
+        _pVectorParam->push_back(novo);
+
+        l_nParam = l_nParam->NextSiblingElement();
+    }
+
+    return _pVectorParam->size();
+}
+
+
+
 }

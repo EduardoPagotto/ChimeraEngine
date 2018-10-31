@@ -39,4 +39,21 @@ Library::~Library() {
     }
 
 }
+
+tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {
+
+    tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
+    if ( l_nExtra != nullptr ) {
+        tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
+        if ( l_nTechnique != nullptr ) {
+            const char* l_profile = l_nTechnique->Attribute ( "profile" );
+            if ( ( l_profile != nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
+                return l_nTechnique;//l_nTechnique->FirstChild();
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 }

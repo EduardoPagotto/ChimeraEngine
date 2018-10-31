@@ -1,6 +1,4 @@
 #include "LibraryImages.h"
-
-//#include "LoaderDaeUtils.h"
 #include "ExceptionChimera.h"
 
 namespace ChimeraLoaders {

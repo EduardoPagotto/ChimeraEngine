@@ -13,15 +13,21 @@
   <library_cameras>
     <camera id="Camera-camera" name="Camera.002">
       <optics>
-        <!--
+        
         <extra>
           <technique profile="chimera">
+            <orbital>
+              <min>1.5</min>
+              <max>80.0</max>
+            </orbital>
+            <!--
             <param name="TypeNode" sid="" type="string">ORBITAL_CAM</param>
-            <param name="Min" sid="" type="float">0.5</param>
-            <param name="Max" sid="" type="float">1000.0</param>
+            <param name="min" sid="" type="float">0.5</param>
+            <param name="max" sid="" type="float">1000.0</param>
+            -->
           </technique>
         </extra>
-        -->
+
         <technique_common>
           <perspective>
             <xfov sid="xfov">49.13434</xfov>
@@ -631,7 +637,7 @@
       <node id="Camera" name="Camera" type="NODE">
         <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>
         <instance_camera url="#Camera-camera">
-
+          <!--
           <extra>
             <technique profile="chimera">
               <orbital>
@@ -640,7 +646,7 @@
               </orbital>
             </technique>
           </extra>
-
+          -->
         </instance_camera>
       </node>
       <node id="luz01" name="luz01" type="NODE">

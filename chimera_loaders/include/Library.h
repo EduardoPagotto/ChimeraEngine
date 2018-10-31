@@ -16,6 +16,9 @@ private:
     tinyxml2::XMLDocument* doc;
 
 protected:
+
+    tinyxml2::XMLElement* findExtra(tinyxml2::XMLElement* _nNode);
+
     std::string url;
     tinyxml2::XMLElement* root;
 };

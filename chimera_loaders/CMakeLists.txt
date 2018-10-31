@@ -13,7 +13,9 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 #define objetos a compilar
 set (SourcesChimeraLoadersAPI src/LoaderDaeUtils.cpp
 							  src/LoaderDae.cpp
-							  src/LibraryPhysicsMaterials.cpp)
+							  src/Library.cpp
+							  src/LibraryPhysicsMaterials.cpp
+							  src/LibraryImages.cpp)
 
 #define os includes
 set (IncludesChimeraLoadersAPI  ${CMAKE_CURRENT_SOURCE_DIR}/include

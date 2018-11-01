@@ -1,18 +1,20 @@
 #include "LibraryImages.h"
-#include "Singleton.h"
+//#include "Singleton.h"
 #include "ExceptionChimera.h"
+
+#include <tuple>
 
 namespace ChimeraLoaders {
 
 LibraryImages::LibraryImages(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
-    pTexManager = Chimera::Singleton<Chimera::TextureManager>::getRefSingleton();
+    //pTexManager = Chimera::Singleton<Chimera::TextureManager>::getRefSingleton();
 }
 
 LibraryImages::~LibraryImages() {
-    Chimera::Singleton<Chimera::TextureManager>::releaseRefSingleton();
+    //Chimera::Singleton<Chimera::TextureManager>::releaseRefSingleton();
 }
 
-void LibraryImages::target() {
+std::tuple<std::string, std::string> LibraryImages::target() {
 
     tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_images");
     if ( l_nLib != nullptr ) {
@@ -28,7 +30,10 @@ void LibraryImages::target() {
                     if ( l_nTec != nullptr ) {
 
                         std::string pathFileImage = l_nTec->GetText();
-                        pTexManager->fromFile(l_id, Chimera::TEX_SEQ::DIFFUSE, pathFileImage);
+                        //return pathFileImage;
+                        //pTexManager->fromFile(l_id, Chimera::TEX_SEQ::DIFFUSE, pathFileImage);
+                        return std::make_tuple(l_id, pathFileImage);
+
                     }
                     throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "init_from, nao encontrado image");        
                 }

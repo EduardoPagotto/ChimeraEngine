@@ -25,6 +25,7 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
         }
     } else {
 
+        doc = nullptr;
         root = _root;
         url = _url.substr(posicao + 1, std::string::npos);
 
@@ -32,12 +33,10 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
 }
 
 Library::~Library() {
-
     if ( doc != nullptr ) {
         delete doc;
         doc = nullptr;
     }
-
 }
 
 tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {

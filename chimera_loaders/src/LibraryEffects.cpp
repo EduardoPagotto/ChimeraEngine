@@ -2,7 +2,7 @@
 #include "Singleton.h"
 #include "ExceptionChimera.h"
 #include "LoaderDaeUtils.h"
-//#include "CameraSpherical.h"
+#include "LibraryImages.h"
 
 namespace ChimeraLoaders {
 
@@ -70,6 +70,13 @@ unsigned LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
 
             auto textureName = surface->second;
 
+            LibraryImages li(root, textureName);
+            std::tuple<std::string, std::string> val = li.target();
+
+            std::string valId = std::get<0>(val);
+            std::string valPathFile = std::get<1>(val);
+
+            pTexManager->fromFile(valId, Chimera::TEX_SEQ::DIFFUSE, valPathFile);
             unsigned serialTex = pTexManager->getIdByName(textureName);
             return serialTex;
         }

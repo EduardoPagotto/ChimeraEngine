@@ -1,6 +1,8 @@
 #include "LibraryMaterials.h"
-//#include "ExceptionChimera.h"
+#include "ExceptionChimera.h"
 //#include "LoaderDaeUtils.h"
+#include "LibraryEffects.h"
+
 
 namespace ChimeraLoaders {
 
@@ -10,65 +12,38 @@ LibraryMaterials::LibraryMaterials(tinyxml2::XMLElement* _root, const std::strin
 LibraryMaterials::~LibraryMaterials() {
 }
 
-// Chimera::Light *LibraryLights::target(glm::mat4 l_pTransform) {
+Chimera::Material *LibraryMaterials::target() {
 
-//     // tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_lights");
-//     // if ( l_nLib != nullptr ) {
+    tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_materials");
+    if ( l_nLib != nullptr ) {
 
-//     //     tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement ("light");
-//     //     if ( l_nNodeBase != nullptr ) {
+        tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement ("material");
+        if ( l_nNodeBase != nullptr ) {
 
-//     //         while ( l_nNodeBase != nullptr ) {
-//     //             std::string l_id = l_nNodeBase->Attribute ( "id" );
-//     //             if (url.compare(l_id) == 0) {
+            while ( l_nNodeBase != nullptr ) {
+                std::string l_id = l_nNodeBase->Attribute ( "id" );
+                if (url.compare(l_id) == 0) {
 
-//     //                 Chimera::Light *pLight = new Chimera::Light (nullptr,l_id );
+                    tinyxml2::XMLElement* l_nEff = l_nNodeBase->FirstChildElement("instance_effect");
+                    if (l_nEff != nullptr) {
 
-//     //                 auto ret_data = loadDiffuseLightColor(l_nNodeBase);
-//     //                 pLight->setDiffuse(std::get<0>(ret_data));
-//     //                 pLight->setType(std::get<1>(ret_data));
-
-//     //                 // FIXME: colocar para fora na garga do node
-//     //                 pLight->setTransform ( l_pTransform );
-
-//     //                 return pLight;      
-//     //             }
-//     //             l_nNodeBase = l_nNodeBase->NextSiblingElement();
-//     //         }
-//     //         throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string ( url ) );
-//     //     } else {
-//     //         throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string ( "light" ) );
-//     //     }
-//     // } else {
-//     //     throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "library_lights" ) );
-//     // }
-// }
-
-// std::tuple<Chimera::Color, Chimera::LightType> LibraryLights::loadDiffuseLightColor(tinyxml2::XMLElement* _nNode)
-// {
-//     tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "point" );
-//     if ( l_nPoint != nullptr ) {
-
-//         std::vector<float> l_arrayF;
-//         const char *l_val = l_nPoint->FirstChildElement("color")->GetText();
-//         Chimera::loadArrayBtScalar ( l_val, l_arrayF );
-//         Chimera::Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
-
-//         return std::make_tuple(cor, Chimera::LightType::POSITIONAL);
-//     }
-
-//     l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "directional" );
-//     if ( l_nPoint != nullptr ) {
-
-//         std::vector<float> l_arrayF;
-//         const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
-//         Chimera::loadArrayBtScalar ( l_val, l_arrayF );
-
-//         Chimera::Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
-
-//         return std::make_tuple(cor, Chimera::LightType::DIRECTIONAL);
-//     }
-
-// }
+                        std::string url = l_nEff->Attribute("url");
+                        
+                        LibraryEffects le(root, url);
+                        Chimera::Material* retorno = le.target();
+                        return retorno;
+                    }
+                    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado instance_effect do material: " + std::string ( url ) );     
+                }
+                l_nNodeBase = l_nNodeBase->NextSiblingElement();
+            }
+            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string ( url ) );
+        } else {
+            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string ( "material" ) );
+        }
+    } else {
+        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "library_materials" ) );
+    }
+}
 
 }

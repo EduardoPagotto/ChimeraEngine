@@ -1,12 +1,15 @@
 #include "LibraryImages.h"
+#include "Singleton.h"
 #include "ExceptionChimera.h"
 
 namespace ChimeraLoaders {
 
-LibraryImages::LibraryImages(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::TextureManager *_texManager) : Library(_root, _url) {
+LibraryImages::LibraryImages(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+    pTexManager = Chimera::Singleton<Chimera::TextureManager>::getRefSingleton();
 }
 
 LibraryImages::~LibraryImages() {
+    Chimera::Singleton<Chimera::TextureManager>::releaseRefSingleton();
 }
 
 void LibraryImages::target() {

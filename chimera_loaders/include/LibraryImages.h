@@ -3,21 +3,17 @@
 
 #include "Library.h"
 #include "TextureManager.h"
-//#include "PhysicMaterial.h"
 
 namespace ChimeraLoaders {
 
 class LibraryImages: public Library {
 
 public:
-    LibraryImages(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::TextureManager *_texManager);
+    LibraryImages(tinyxml2::XMLElement* _root, const std::string &_url);
     virtual ~LibraryImages();
-
-   void target();
-
+    void target();
 private:
     Chimera::TextureManager *pTexManager;
-
 };
 }
 

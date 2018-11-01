@@ -17,7 +17,9 @@ set (SourcesChimeraLoadersAPI src/LoaderDaeUtils.cpp
 							  src/LibraryPhysicsMaterials.cpp
 							  src/LibraryImages.cpp
 							  src/LibraryLights.cpp
-							  src/LibraryCameras.cpp)
+							  src/LibraryCameras.cpp
+							  src/LibraryEffects.cpp
+							  src/LibraryMaterials.cpp)
 
 #define os includes
 set (IncludesChimeraLoadersAPI  ${CMAKE_CURRENT_SOURCE_DIR}/include

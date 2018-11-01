@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_CAMERA_H
-#define __CHIMERA_LOADER_LIBRARY_CAMERA_H
+#ifndef __CHIMERA_LOADER_LIBRARY_CAMERAS_H
+#define __CHIMERA_LOADER_LIBRARY_CAMERAS_H
 
 #include "Library.h"
 #include "Camera.h"
@@ -15,7 +15,6 @@ public:
 private:
     void loadbase ( tinyxml2::XMLElement* _nNode, Chimera::Camera *_pCamera);
     void extra(tinyxml2::XMLElement* _nNode, Chimera::Camera *_pCamera);
-    //std::tuple<Chimera::Color, Chimera::LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
 };
 }
 

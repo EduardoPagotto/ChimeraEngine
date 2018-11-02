@@ -3,7 +3,7 @@ screen:
   canvas:
     w: 800
     h: 600
-model: ./models/piso2.xml
+model: ./models/piso2_old.xml
 shaders:
   - name: mesh-default
     vertex: ./examples/AppCargaManual/shader/mesh.vert

@@ -11,7 +11,7 @@ class LibraryLights: public Library {
 public:
     LibraryLights(tinyxml2::XMLElement* _root, const std::string &_url);
     virtual ~LibraryLights();
-    Chimera::Light *target(glm::mat4 l_pTransform);
+    Chimera::Light *target();
 private:
     std::tuple<Chimera::Color, Chimera::LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
 };

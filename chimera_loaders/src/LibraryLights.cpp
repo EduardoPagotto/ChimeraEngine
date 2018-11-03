@@ -10,7 +10,7 @@ LibraryLights::LibraryLights(tinyxml2::XMLElement* _root, const std::string &_ur
 LibraryLights::~LibraryLights() {
 }
 
-Chimera::Light *LibraryLights::target(glm::mat4 l_pTransform) {
+Chimera::Light *LibraryLights::target() {
 
     tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_lights");
     if ( l_nLib != nullptr ) {
@@ -27,9 +27,6 @@ Chimera::Light *LibraryLights::target(glm::mat4 l_pTransform) {
                     auto ret_data = loadDiffuseLightColor(l_nNodeBase);
                     pLight->setDiffuse(std::get<0>(ret_data));
                     pLight->setType(std::get<1>(ret_data));
-
-                    // FIXME: colocar para fora na garga do node
-                    pLight->setTransform ( l_pTransform );
 
                     return pLight;      
                 }

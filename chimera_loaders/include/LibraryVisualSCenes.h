@@ -13,6 +13,7 @@ public:
     virtual ~LibraryVisualScenes();
     Chimera::Group *target();
 private:
+    glm::mat4 getTransformation(tinyxml2::XMLElement* _nNode);
     void carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type );
 };
 }

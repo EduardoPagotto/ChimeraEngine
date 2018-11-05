@@ -6,10 +6,7 @@
 #include "Video.h"
 #include "Camera.h"
 #include "ParticleEmitter.h"
-
 #include "SceneRoot.h"
-//#include "LoaderDae.h"
-
 #include "RenderVisitor.h"
 
 namespace Chimera

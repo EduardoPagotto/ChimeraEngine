@@ -808,7 +808,7 @@
       </instance_physics_model>
       <technique_common>
         <gravity>0 0 0</gravity>
-        <time_step>3.e-002</time_step>
+        <time_step>0.016667</time_step>
       </technique_common>
     </physics_scene>
   </library_physics_scenes>

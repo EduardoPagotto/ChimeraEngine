@@ -2,8 +2,9 @@
 #define __CHIMERA_LOADER_LIBRARY_PHYSICS_SCENES_H
 
 #include "Library.h"
-#include "Light.h"
+#include "Group.h"
 
+#include "PhysicsControl.h"
 namespace ChimeraLoaders {
 
 class LibraryPhysicsScenes: public Library {
@@ -11,9 +12,9 @@ class LibraryPhysicsScenes: public Library {
 public:
     LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url);
     virtual ~LibraryPhysicsScenes();
-    //Chimera::Light *target();
+    Chimera::Group *target();
 private:
-    //std::tuple<Chimera::Color, Chimera::LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
+    void loadPhysicControlCollada(tinyxml2::XMLElement* _nNode, Chimera::PhysicsControl *_pPhysicsControl);
 };
 }
 

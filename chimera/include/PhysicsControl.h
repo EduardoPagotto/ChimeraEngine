@@ -48,6 +48,14 @@ public:
         return discretDynamicsWorld;
     }
     
+    inline void setStep(const float &_step) {
+        step = _step;
+    }
+
+    inline btScalar getStep() const {
+        return step;
+    }
+
 private:
 
     static void doTickCallBack ( btDynamicsWorld *world, btScalar timeStep );
@@ -67,6 +75,8 @@ private:
 
     btClock clockCounter;
     btScalar period;
+
+    btScalar step;
 };
 }
 #endif

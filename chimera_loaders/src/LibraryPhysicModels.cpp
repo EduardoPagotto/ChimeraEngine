@@ -80,6 +80,8 @@ Chimera::Group *LibraryPhysicModels::target() {
 
                             pGroup->addChild(pPhysic);
                         } 
+
+                        l_nRigid = l_nRigid->NextSiblingElement();  
                     }
 
                     return pGroup;

@@ -2,7 +2,6 @@
 #define __CHIMERA_LOADER_LIBRARY_PHYSIC_MODELS_H
 
 #include "Library.h"
-//#include "Solid.h"
 #include "Group.h"
 
 namespace ChimeraLoaders {
@@ -15,7 +14,6 @@ public:
     Chimera::Group *target();
 private:
     void loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, Chimera::Solid *_pPhysic);
-    //std::tuple<Chimera::Color, Chimera::LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
 };
 }
 

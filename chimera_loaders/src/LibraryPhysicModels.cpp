@@ -163,54 +163,43 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
             } else if ( l_arrayValores.size() == 3 ) {
                 _pPhysic->setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[1], l_arrayValores[2] ) );
             }
-        } else if ( strcmp ( l_tipoShape, "mesh" ) == 0 ) { //FIXME ERRADO!!!!
+        } else if ( strcmp ( l_tipoShape, "mesh" ) == 0 ) {
 
+            // TODO: implementar triMesh de colisao abaixo
+            // tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement(); //instance_geometry
+            // if ( l_nMesh != nullptr ) {
+            //     const char *l_mesh = l_nMesh->Attribute ( "url" );
+            //     if ( l_mesh != nullptr ) {
 
-            //setShapeBox(btVector3(1.0, 1.0, 1.0));
-            //instance_geometry
-            tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement();
-            if ( l_nMesh != nullptr ) {
-                const char *l_mesh = l_nMesh->Attribute ( "url" );
-                if ( l_mesh != nullptr ) {
+            //         LibraryGeometrys lib(_root, l_mesh);
+            //         auto pDrawTriMesh = lib.target();
 
-                    LibraryGeometrys lib(_root, l_mesh);
-                    auto mesh = lib.target();
+            //         if ( pDrawTriMesh != nullptr ) {
 
-                    // TODO: CONTINUA AQUI!!!!!!!!! Localizar onde esta agora o mesh se e cubico 
+            //             // FIXME: ERRADO!!!! verificar porque trava, Usar o VBO como dado desta vez 
+            //             btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+            //                 pDrawTriMesh->vertexIndex.size(),       //num triangles
+            //                 (int*)&pDrawTriMesh->vertexIndex[0],    //lista de indice
+            //                 3 * sizeof ( int ),                     //tamanho do indice por elemento
+            //                 pDrawTriMesh->vertexList.size(),        //num Vertices
+            //                 (float*)&pDrawTriMesh->vertexList[0],   //vList.ptrVal(),       //lista de vertice
+            //                 3 * sizeof ( float )                    //tamanho do vertice por elemento
+            //             );
 
-                   // _meshName = ( const char* ) &l_mesh[1];
-                }
-            }
+            //             // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+            //             //     pDrawTriMesh->vIndex.getSize() / 3,  //num triangles
+            //             //     pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
+            //             //     3 * sizeof ( int ),					//tamanho do indice por elemento
+            //             //     pDrawTriMesh->vList.getSize() / 3,	//num Vertices
+            //             //     pDrawTriMesh->vList.ptrVal(),		//lista de vertice
+            //             //     3 * sizeof ( float )				    //tamanho do vertice por elemento
+            //             // );
+
+            //             _pPhysic->setIndexVertexArray ( indexVertexArray );
+            //         }
+            //     }
+            // }
         }
     }
 }
-
-
-// std::tuple<Chimera::Color, Chimera::LightType> LibraryLights::loadDiffuseLightColor(tinyxml2::XMLElement* _nNode)
-// {
-//     tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "point" );
-//     if ( l_nPoint != nullptr ) {
-
-//         std::vector<float> l_arrayF;
-//         const char *l_val = l_nPoint->FirstChildElement("color")->GetText();
-//         Chimera::loadArrayBtScalar ( l_val, l_arrayF );
-//         Chimera::Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
-
-//         return std::make_tuple(cor, Chimera::LightType::POSITIONAL);
-//     }
-
-//     l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "directional" );
-//     if ( l_nPoint != nullptr ) {
-
-//         std::vector<float> l_arrayF;
-//         const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
-//         Chimera::loadArrayBtScalar ( l_val, l_arrayF );
-
-//         Chimera::Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
-
-//         return std::make_tuple(cor, Chimera::LightType::DIRECTIONAL);
-//     }
-
-// }
-
 }

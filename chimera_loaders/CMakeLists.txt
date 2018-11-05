@@ -22,7 +22,8 @@ set (SourcesChimeraLoadersAPI src/LoaderDaeUtils.cpp
 							  src/LibraryMaterials.cpp
 							  src/LibraryGeometrys.cpp
 							  src/LibraryVisualSCenes.cpp
-							  src/LibraryPhysicModels.cpp)
+							  src/LibraryPhysicModels.cpp
+							  src/LibraryPhysicsScenes.cpp)
 
 #define os includes
 set (IncludesChimeraLoadersAPI  ${CMAKE_CURRENT_SOURCE_DIR}/include

@@ -11,8 +11,7 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesChimeraAPI 	src/LoaderDaeUtils.cpp
-						src/Color.cpp
+set (SourcesChimeraAPI 	src/Color.cpp
 						src/Node.cpp
 						src/Light.cpp
 						src/Camera.cpp
@@ -31,7 +30,6 @@ set (SourcesChimeraAPI 	src/LoaderDaeUtils.cpp
 						src/Timer.cpp
 						src/Video.cpp
 						src/VideoDevice.cpp
-						src/LoaderDae.cpp
 						src/SceneMng.cpp
 						src/FlowControl.cpp
 						src/GameClient.cpp

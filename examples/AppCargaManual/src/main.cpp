@@ -73,8 +73,8 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         //Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
 
         Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
-        sceneMng->setReader(pLoader);
-        Chimera::Group* group1 = sceneMng->createSceneGraph();
+        //sceneMng->setReader(pLoader);
+        Chimera::Group* group1 = sceneMng->createSceneGraph(pLoader->getNodes());
 		group1->setShaderName("mesh-default");
 		group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
 

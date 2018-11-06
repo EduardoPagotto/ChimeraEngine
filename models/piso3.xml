@@ -13,21 +13,15 @@
   <library_cameras>
     <camera id="Camera-camera" name="Camera.002">
       <optics>
-        
+        <!--
         <extra>
           <technique profile="chimera">
-            <orbital>
-              <min>1.5</min>
-              <max>80.0</max>
-            </orbital>
-            <!--
             <param name="TypeNode" sid="" type="string">ORBITAL_CAM</param>
-            <param name="min" sid="" type="float">0.5</param>
-            <param name="max" sid="" type="float">1000.0</param>
-            -->
+            <param name="Min" sid="" type="float">0.5</param>
+            <param name="Max" sid="" type="float">1000.0</param>
           </technique>
         </extra>
-
+        -->
         <technique_common>
           <perspective>
             <xfov sid="xfov">49.13434</xfov>
@@ -117,56 +111,17 @@
     </light>
   </library_lights>
   <library_images>
-    <image id="spacebox_png" name="spacebox_png">
-      <init_from>./models/spacebox.png</init_from>
-    </image>
     <image id="teste1_png" name="teste1_png">
-      <init_from>./models/teste1.png</init_from>
+      <init_from>teste1.png</init_from>
     </image>
     <image id="metal-grid-tile-floor-texture_jpg" name="metal-grid-tile-floor-texture_jpg">
-      <init_from>./models/metal-grid-tile-floor-texture.jpg</init_from>
+      <init_from>metal-grid-tile-floor-texture.jpg</init_from>
     </image>
     <image id="image1_jpg" name="image1_jpg">
-      <init_from>./models/image1.jpg</init_from>
+      <init_from>image1.jpg</init_from>
     </image>
   </library_images>
   <library_effects>
-    <effect id="MaterialSkyBox-effect">
-      <profile_COMMON>
-        <newparam sid="spacebox_png-surface">
-          <surface type="2D">
-            <init_from>spacebox_png</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="spacebox_png-sampler">
-          <sampler2D>
-            <source>spacebox_png-surface</source>
-          </sampler2D>
-        </newparam>
-        <technique sid="common">
-          <phong>
-            <emission>
-              <color sid="emission">0 0 0 1</color>
-            </emission>
-            <ambient>
-              <color sid="ambient">0 0 0 1</color>
-            </ambient>
-            <diffuse>
-              <texture texture="spacebox_png-sampler" texcoord="UVMap"/>
-            </diffuse>
-            <specular>
-              <color sid="specular">0.5 0.5 0.5 1</color>
-            </specular>
-            <shininess>
-              <float sid="shininess">50</float>
-            </shininess>
-            <index_of_refraction>
-              <float sid="index_of_refraction">1</float>
-            </index_of_refraction>
-          </phong>
-        </technique>
-      </profile_COMMON>
-    </effect>
     <effect id="MaterialZoltan-effect">
       <profile_COMMON>
         <newparam sid="teste1_png-surface">
@@ -329,9 +284,6 @@
     </effect>
   </library_effects>
   <library_materials>
-    <material id="MaterialSkyBox-material" name="MaterialSkyBox">
-      <instance_effect url="#MaterialSkyBox-effect"/>
-    </material>
     <material id="MaterialZoltan-material" name="MaterialZoltan">
       <instance_effect url="#MaterialZoltan-effect"/>
     </material>
@@ -593,17 +545,11 @@
     <visual_scene id="Scene" name="Scene">
       <node id="SkyBox" name="SkyBox" type="NODE">
         <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-        <instance_geometry url="#MeshSkyBox-mesh">
-
-          <extra>
-            <technique profile="chimera">
-              <param name="TypeNode" sid="" type="string">SKYBOX</param>
-            </technique>
-          </extra>
+        <instance_geometry url="file:./models/skybox_teste1.dae#MeshSkyBox-mesh">
 
           <bind_material>
             <technique_common>
-              <instance_material symbol="MaterialSkyBox-material" target="#MaterialSkyBox-material">
+              <instance_material symbol="MaterialSkyBox-material" target="./models/skybox_teste1.dae#MaterialSkyBox-material">
                 <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>
@@ -637,7 +583,7 @@
       <node id="Camera" name="Camera" type="NODE">
         <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>
         <instance_camera url="#Camera-camera">
-          <!--
+
           <extra>
             <technique profile="chimera">
               <orbital>
@@ -646,7 +592,7 @@
               </orbital>
             </technique>
           </extra>
-          -->
+
         </instance_camera>
       </node>
       <node id="luz01" name="luz01" type="NODE">
@@ -808,7 +754,7 @@
       </instance_physics_model>
       <technique_common>
         <gravity>0 0 0</gravity>
-        <time_step>0.016667</time_step>
+        <time_step>3.e-002</time_step>
       </technique_common>
     </physics_scene>
   </library_physics_scenes>

@@ -3,8 +3,6 @@
 
 #include <map>
 
-#include <tinyxml2.h>
-
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
@@ -16,12 +14,14 @@
 
 namespace Chimera {
 
-class PhysicsControl
+class PhysicsControl : public Node
 {
 public:
 
     PhysicsControl ( void );
     ~PhysicsControl ( void );
+
+    void accept ( class NodeVisitor* v ){}
 
     void clearAllShapes ( void );
     void removeAllObjs ( void );
@@ -50,6 +50,14 @@ public:
         return discretDynamicsWorld;
     }
     
+    inline void setStep(const float &_step) {
+        step = _step;
+    }
+
+    inline btScalar getStep() const {
+        return step;
+    }
+
 private:
 
     static void doTickCallBack ( btDynamicsWorld *world, btScalar timeStep );
@@ -69,6 +77,8 @@ private:
 
     btClock clockCounter;
     btScalar period;
+
+    btScalar step;
 };
 }
 #endif

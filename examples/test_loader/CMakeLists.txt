@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-PROJECT(AppCargaManual)
+PROJECT(TestLoader)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -8,7 +8,7 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
-set (IncludesAppCargaManual ${AppCargaManual_SOURCE_DIR}/include/
+set (IncludesTestLoader #${TestLoader_SOURCE_DIR}/include/
 							${Chimera_SOURCE_DIR}/include
 							${ChimeraLoaders_SOURCE_DIR}/include/
 							${OPENGL_INCLUDE_DIR}
@@ -16,7 +16,7 @@ set (IncludesAppCargaManual ${AppCargaManual_SOURCE_DIR}/include/
 							${BULLET_INCLUDE_DIR}
 							${FREETYPE_INCLUDE_DIRS})
 
-set (LibsAppCargaManual ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a #ordem é importante!!!
+set (LibsTestLoader ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a #ordem é importante!!!
 						${Chimera_BINARY_DIR}/libChimera.a
 						${OPENGL_LIBRARIES}
 						${SDL2_LIBRARY}
@@ -32,17 +32,16 @@ set (LibsAppCargaManual ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a #ordem 
 
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR Incluido no Projeto")
-	set(IncludesAppCargaManual ${IncludesAppCargaManual} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
-    set(LibsAppCargaManual ${LibsAppCargaManual} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
+	set(IncludesTestLoader ${IncludesTestLoader} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
+    set(LibsTestLoader ${LibsTestLoader} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-add_executable(AppCargaManual src/Game.cpp
-							  src/main.cpp)
+add_executable(TestLoader TestLoader.cpp)
 
-target_include_directories(AppCargaManual PRIVATE ${IncludesAppCargaManual})
-target_link_libraries(AppCargaManual ${LibsAppCargaManual})
+target_include_directories(TestLoader PRIVATE ${IncludesTestLoader})
+target_link_libraries(TestLoader ${LibsTestLoader})
 
-add_dependencies(AppCargaManual Chimera
-								ChimeraLoaders)
+add_dependencies(TestLoader Chimera
+							ChimeraLoaders)
 
-INSTALL(FILES ${AppCargaManual_BINARY_DIR}/AppCargaManual DESTINATION bin)
+INSTALL(FILES ${TestLoader_BINARY_DIR}/TestLoader DESTINATION bin)

@@ -11,7 +11,7 @@
 
 namespace Chimera {
     
-PhysicsControl::PhysicsControl() {
+PhysicsControl::PhysicsControl() : Node(nullptr, EntityKind::PHYSICS_CONTROL, "controle_fisica") {
 
     collisionConfig = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher ( collisionConfig );
@@ -24,6 +24,8 @@ PhysicsControl::PhysicsControl() {
 
     //true para forca aplicada apenas dentro docallback
     discretDynamicsWorld->setInternalTickCallback ( PhysicsControl::doTickCallBack, static_cast <void *> ( this ), false );
+
+    step = 0.016667f;
 }
 
 PhysicsControl::~PhysicsControl() {
@@ -47,10 +49,10 @@ void PhysicsControl::stepSim ( void ) {
         // os quadros
         countPeriod();
         //discretDynamicsWorld->stepSimulation ( countPeriod(), 50 );
-        discretDynamicsWorld->stepSimulation ( 0.016667f );
+        discretDynamicsWorld->stepSimulation ( step );
 
     } else {
-        discretDynamicsWorld->stepSimulation ( 0.016667f );
+        discretDynamicsWorld->stepSimulation ( step );
         s_primeiro = false;
     }
 

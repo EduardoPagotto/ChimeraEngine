@@ -90,6 +90,19 @@ std::string retornaAtributo ( const std::string &_atributo, tinyxml2::XMLElement
     return std::string ("");
 }
 
+const char* getUniqueTextElemetName(tinyxml2::XMLElement* _node, const char *_elementName) {
+
+    tinyxml2::XMLElement* l_nEle = _node->FirstChildElement(_elementName);
+    if ( l_nEle != nullptr ) {
+        const char *l_ele = l_nEle->GetText();
+        if ( l_ele != nullptr ) {
+            return l_ele;
+        }
+    }
+
+    return nullptr;
+}
+
 void loadNodeLib ( tinyxml2::XMLElement* _root, const char* _url, const char* _libName, const char* _nodeName, tinyxml2::XMLElement** _nNode ) {
 
     tinyxml2::XMLElement* l_nLib = _root->FirstChildElement ( _libName );

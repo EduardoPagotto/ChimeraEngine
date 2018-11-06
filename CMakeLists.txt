@@ -18,5 +18,6 @@ if (HMD_Z1_SET_TO_USE)
 	add_definitions(-DHMD_Z1_SET_TO_USE)
 endif(HMD_Z1_SET_TO_USE)
 
-add_subdirectory(examples)
 add_subdirectory(chimera)
+add_subdirectory(chimera_loaders)
+add_subdirectory(examples)

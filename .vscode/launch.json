@@ -23,6 +23,30 @@
                     }
                 ]
             },
+
+            {
+                "name": "(gdb)TesteLoader",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceRoot}/build/examples/test_loader/TestLoader",
+                "args": [
+                    "-p",
+                    "${workspaceRoot}"
+                ],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": true,
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+
             {
                 "name": "(gdb)AppEmpty",
                 "type": "cppdbg",

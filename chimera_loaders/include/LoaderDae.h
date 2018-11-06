@@ -10,10 +10,15 @@
 #include "Group.h"
 #include "Solid.h"
 #include "Draw.h"
-
 #include "Light.h"
+#include "Mesh.h"
+#include "Camera.h"
+#include "CameraSpherical.h"
 
 #include "TextureManager.h"
+
+#include "PhysicMaterial.h"
+
 #include <spdlog/spdlog.h>
 
 namespace Chimera
@@ -65,6 +70,8 @@ private:
     std::map<std::string, Solid*> mapaEntidadeFisica;
     std::map<std::string, Draw*> mapaGeometria;
     
+    std::map<std::string, PhysicMaterial*> mapaPhysicMaterial;
+
     Group *pRootNode;
     
     PhysicsControl *pPhysicsControl;

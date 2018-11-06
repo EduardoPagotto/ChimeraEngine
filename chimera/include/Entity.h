@@ -17,6 +17,7 @@ enum class EntityKind : int8_t
 {
     GROUP,
     SOLID,
+    SOLID_MATERIAL,
     TRANSFORM,
     TEXTURE,
     MATERIAL,
@@ -28,6 +29,7 @@ enum class EntityKind : int8_t
     HUD,
     MESH,
     PARTICLE_SYSTEM,
+    PHYSICS_CONTROL
 };
 
 /**

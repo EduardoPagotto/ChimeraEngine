@@ -9,6 +9,8 @@
 #include <PhysicsControl.h>
 #include <DataMsg.h>
 
+#include <Solid.h>
+
 #include <spdlog/spdlog.h>
 
 /**

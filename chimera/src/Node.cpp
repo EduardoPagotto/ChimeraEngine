@@ -30,22 +30,17 @@ std::vector<Node*>* Node::getChilds() {
 }
 
 void Node::addChild ( Node *_child ) {
-
     if ( _child != nullptr ) {
-        if ( _child->getParent() == nullptr ) {
-            _child->setParent ( this );
-        }
-
+        _child->setParent ( this );
         vChild.push_back ( _child );
     }
 }
 
 void Node::setParent ( Node *_node ) {
 
-    if ( parent != nullptr ) {
+    if ( parent != nullptr ) 
         parent->removeChild ( this );
-    }
-
+    
     parent = _node;
 }
 
@@ -84,13 +79,15 @@ Node* Node::findChild ( const std::string &_searchName, const bool &_findInChild
                 return vChild[i];
         }
 
-        for ( size_t i = 0; i < vChild.size(); ++i ) {
+        if (_findInChild == true) {
+            for ( size_t i = 0; i < vChild.size(); ++i ) {
 
-            Node *retVal = vChild[i]->findChild(_searchName, _findInChild);
+                Node *retVal = vChild[i]->findChild(_searchName, _findInChild);
 
-            if (retVal != nullptr)
-                return retVal;
+                if (retVal != nullptr)
+                    return retVal;
 
+            }
         }
 
     }

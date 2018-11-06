@@ -3,10 +3,7 @@
 #include "LoaderDae.h"
 #include "LoaderDaeUtils.h"
 #include "ExceptionChimera.h"
-#include "Camera.h"
-#include "CameraSpherical.h"
-#include "Light.h"
-#include "Mesh.h"
+
 #include "Singleton.h"
 #include "Transform.h"
 
@@ -104,26 +101,24 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
 
 				Mesh *pDrawTriMesh = (Mesh*)mapaGeometria[nomeMesh];
                 if ( pDrawTriMesh != nullptr ) {
-//FIXME verificar porque trava
-//                     btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
-//
-//                         pDrawTriMesh->vertexIndex.size(), //num triangles
-//                         (int*)&pDrawTriMesh->vertexIndex[0],       //lista de indice
-//                         3 * sizeof ( int ),                 //tamanho do indice por elemento
-//                         pDrawTriMesh->vertexList.size(), //num Vertices
-//                         (float*)&pDrawTriMesh->vertexList[0],//vList.ptrVal(),       //lista de vertice
-//                         3 * sizeof ( float )                //tamanho do vertice por elemento
-//
-// //                         pDrawTriMesh->vIndex.getSize() / 3, //num triangles
-// //                         pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
-// //                         3 * sizeof ( int ),					//tamanho do indice por elemento
-// //                         pDrawTriMesh->vList.getSize() / 3,	//num Vertices
-// //                         pDrawTriMesh->vList.ptrVal(),		//lista de vertice
-// //                         3 * sizeof ( float )				//tamanho do vertice por elemento
-//                     );
-//
-//                     pPhysic->setIndexVertexArray ( indexVertexArray );
-
+                    // // FIXME: verificar porque trava
+                    // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+                    //     pDrawTriMesh->vertexIndex.size(),       //num triangles
+                    //     (int*)&pDrawTriMesh->vertexIndex[0],    //lista de indice
+                    //     3 * sizeof ( int ),                     //tamanho do indice por elemento
+                    //     pDrawTriMesh->vertexList.size(),        //num Vertices
+                    //     (float*)&pDrawTriMesh->vertexList[0],   //vList.ptrVal(),       //lista de vertice
+                    //     3 * sizeof ( float )                    //tamanho do vertice por elemento
+                    // );
+                    // // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+                    // //     pDrawTriMesh->vIndex.getSize() / 3,  //num triangles
+                    // //     pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
+                    // //     3 * sizeof ( int ),					//tamanho do indice por elemento
+                    // //     pDrawTriMesh->vList.getSize() / 3,	//num Vertices
+                    // //     pDrawTriMesh->vList.ptrVal(),		//lista de vertice
+                    // //     3 * sizeof ( float )				    //tamanho do vertice por elemento
+                    // // );
+                    // pPhysic->setIndexVertexArray ( indexVertexArray );
                 }
 
                 mapaEntidadeFisica[std::string((const char*)&l_target[1])] = pPhysic;
@@ -749,7 +744,7 @@ void LoaderDae::loadColladaPhysicsModel ( tinyxml2::XMLElement* _root, tinyxml2:
             if ( l_nFric != nullptr ) {
                 const char *l_fric = l_nFric->GetText();
                 if ( l_fric != nullptr ) {
-                    _pPhysic->setFriction ( atof ( l_fric ) );
+                    _pPhysic->setFrictionDynamic ( atof ( l_fric ) );
                 }
             }
 

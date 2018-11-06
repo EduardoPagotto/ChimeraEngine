@@ -16,14 +16,17 @@
                     "${workspaceRoot}/chimera/include",
                     "/usr/include/freetype2",
                     "/usr/include",
-                    "/usr/include/bullet"
+                    "/usr/include/bullet",
+                    "${workspaceRoot}"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
-                "databaseFilename": ""
+                "databaseFilename": "${workspaceFolder}/build/browse.vc.db"
             },
             "intelliSenseMode": "gcc-x64",
             "configurationProvider": "vector-of-bool.cmake-tools",
-            "compileCommands": "${workspaceFolder}/compile_commands.json"
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+            "cStandard": "c11",
+            "cppStandard": "c++14"
         }
     ],
     "version": 4

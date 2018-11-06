@@ -3,32 +3,25 @@
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
-
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 
 #include "PhysicsControl.h"
-
 #include "Coord.h"
 
 #include <tinyxml2.h>
-
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
-    
+
 class Solid : public Coord
 {
 public:
 
     friend class Loader;
-
     Solid (Node *_parent, std::string _name);
-
     Solid ( const Solid& _solid );
-
     virtual ~Solid();
-
 	virtual void init();
 
 	glm::mat4 getModelMatrix(Coord *_pCoord);
@@ -47,14 +40,6 @@ public:
 
     inline void setMass ( const float &_mass ) {
         mass = _mass;
-    }
-
-    inline void setFriction ( const float &_friction ) {
-        friction = _friction;
-    }
-
-    inline void setRestitution ( const float &_restitution ) {
-        restitution = _restitution;
     }
 
     inline void setShapeBox ( const glm::vec3 &_size ) {
@@ -82,6 +67,18 @@ public:
 		return (pShapeCollision != nullptr ? true : false);
     }
 
+    inline void setFrictionDynamic ( const float &_friction ) {
+       frictionDynamic = _friction;
+    }
+
+    inline void setFrictionStatic ( const float &_friction ) {
+       frictionStatic = _friction;
+    }
+
+    inline void setRestitution ( const float &_restitution ) {
+       restitution = _restitution;
+    }
+
 // 	void setTransform(const glm::mat4 &_trans) {
 //         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
 // 	}
@@ -91,8 +88,11 @@ private:
     void initTransform (const btTransform &_tTrans, void *pObj );
 
     btScalar mass;
-    btScalar friction;
+
+    btScalar frictionDynamic;
+    btScalar frictionStatic;
     btScalar restitution;
+
     btRigidBody* pRigidBody;
     btCollisionShape* pShapeCollision;
     btGImpactMeshShape *trimesh;

@@ -10,11 +10,12 @@ namespace ChimeraLoaders {
 class LibraryPhysicsScenes: public Library {
 
 public:
-    LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url);
+    LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::Group *_pScene);
     virtual ~LibraryPhysicsScenes();
-    Chimera::Group *target();
+    Chimera::PhysicsControl *target();
 private:
     void loadPhysicControlCollada(tinyxml2::XMLElement* _nNode, Chimera::PhysicsControl *_pPhysicsControl);
+    Chimera::Group *pScene;
 };
 }
 

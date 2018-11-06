@@ -21,6 +21,7 @@ Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::S
 
 	transform.setIdentity();
 
+    //pWorld = (PhysicsControl*)Node::getParent();
     pWorld = Singleton<PhysicsControl>::getRefSingleton();
 }
 
@@ -39,6 +40,7 @@ Solid::Solid ( const Solid& _solid) : Coord (_solid) {
 
 	transform = _solid.transform;
 
+    //pWorld = (PhysicsControl*)Node::getParent();
     pWorld = Singleton<PhysicsControl>::getRefSingleton();
 }
 

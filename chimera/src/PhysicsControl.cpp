@@ -11,7 +11,7 @@
 
 namespace Chimera {
     
-PhysicsControl::PhysicsControl() {
+PhysicsControl::PhysicsControl() : Node(nullptr, EntityKind::PHYSICS_CONTROL, "controle_fisica") {
 
     collisionConfig = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher ( collisionConfig );

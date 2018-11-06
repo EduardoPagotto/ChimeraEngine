@@ -29,6 +29,7 @@ enum class EntityKind : int8_t
     HUD,
     MESH,
     PARTICLE_SYSTEM,
+    PHYSICS_CONTROL
 };
 
 /**

@@ -4,15 +4,18 @@
 
 #include "LibraryPhysicModels.h"
 
+#include "Solid.h"
+
 namespace ChimeraLoaders {
 
-LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::Group *_pScene) : Library(_root, _url) {
+    pScene = _pScene;
 }
 
 LibraryPhysicsScenes::~LibraryPhysicsScenes() {
 }
 
-Chimera::Group *LibraryPhysicsScenes::target() {
+Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
 
     tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_physics_scenes");
     if ( l_nLib != nullptr ) {
@@ -24,9 +27,11 @@ Chimera::Group *LibraryPhysicsScenes::target() {
                 std::string l_id = l_nNodeBase->Attribute ( "id" );
                 if (url.compare(l_id) == 0) {
 
-                    Chimera::Group *pGroup = new Chimera::Group(nullptr, l_id);
+                    //Chimera::Group *pGroup = new Chimera::Group(nullptr, l_id);
+                    // FIXME: carga com nome do l_id
+                    Chimera::PhysicsControl *pPhysicsControl = new Chimera::PhysicsControl();
 
-                    loadPhysicControlCollada(l_nNodeBase, nullptr);
+                    loadPhysicControlCollada(l_nNodeBase, pPhysicsControl);
 
                     tinyxml2::XMLElement* l_nPyModel = l_nNodeBase->FirstChildElement("instance_physics_model");
                     if (l_nPyModel != nullptr) {
@@ -40,20 +45,18 @@ Chimera::Group *LibraryPhysicsScenes::target() {
                             tinyxml2::XMLElement* l_nRigid = l_nPyModel->FirstChildElement("instance_rigid_body");
                             while (l_nRigid != nullptr) {
 
-                                const char *body = l_nRigid->Attribute("body");
-                                const char *target = l_nRigid->Attribute("target");
+                                std::string body = l_nRigid->Attribute("body");
+                                std::string target = l_nRigid->Attribute("target");
 
+                                Chimera::Solid *pSolid = (Chimera::Solid*)pGroupInner->findChild(body, false);
+                                Chimera::Node *node = pScene->findChild(target, true);
 
-                            // Chimera::Light *pLight = new Chimera::Light (nullptr,l_id );
+                                Chimera::Node *transforOld = node->getParent();
+                                Chimera::Node *pai = transforOld->getParent();
 
-                            // auto ret_data = loadDiffuseLightColor(l_nNodeBase);
-                            // pLight->setDiffuse(std::get<0>(ret_data));
-                            // pLight->setType(std::get<1>(ret_data));
-
-                            // return pLight;   
-
-
-
+                                pai->removeChild(transforOld);
+                                pai->addChild(pSolid);
+                                pSolid->addChild(node);
 
                                 l_nRigid = l_nRigid->NextSiblingElement();
                             }
@@ -63,7 +66,7 @@ Chimera::Group *LibraryPhysicsScenes::target() {
                         }    
                     }
 
-                    return pGroup;
+                    return pPhysicsControl;
                 }
                 l_nNodeBase = l_nNodeBase->NextSiblingElement();
             }

@@ -30,22 +30,17 @@ std::vector<Node*>* Node::getChilds() {
 }
 
 void Node::addChild ( Node *_child ) {
-
     if ( _child != nullptr ) {
-        if ( _child->getParent() == nullptr ) {
-            _child->setParent ( this );
-        }
-
+        _child->setParent ( this );
         vChild.push_back ( _child );
     }
 }
 
 void Node::setParent ( Node *_node ) {
 
-    if ( parent != nullptr ) {
+    if ( parent != nullptr ) 
         parent->removeChild ( this );
-    }
-
+    
     parent = _node;
 }
 

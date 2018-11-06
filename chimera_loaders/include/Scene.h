@@ -4,6 +4,7 @@
 #include "Library.h"
 #include "Group.h"
 #include "PhysicsControl.h"
+#include "TextureManager.h"
 
 namespace ChimeraLoaders {
 
@@ -16,6 +17,7 @@ public:
 private:
     Chimera::PhysicsControl *pPhysicsControl;
     Chimera::Group *pGroup;
+    Chimera::TextureManager *pTexManager;
 };
 }
 

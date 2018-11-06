@@ -91,7 +91,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Materi
     tinyxml2::XMLElement* l_nTec = _nProfile->FirstChildElement("technique");
     if (l_nTec != nullptr) {
 
-        tinyxml2::XMLElement* l_nPhong = _nProfile->FirstChildElement("phong");
+        tinyxml2::XMLElement* l_nPhong = l_nTec->FirstChildElement("phong");
         if (l_nPhong != nullptr) {
 
             tinyxml2::XMLElement* l_nCor = l_nPhong->FirstChildElement();
@@ -203,7 +203,6 @@ void LibraryEffects::loadNewParam(tinyxml2::XMLElement* _nProfile) {
 
             std::string val = l_nSurface->FirstChildElement("init_from")->GetText();
             mapaEfeito.insert(std::pair<std::string, std::string>(sid,val));
-            continue;
         }
 
         tinyxml2::XMLElement* l_nSample2D = l_nParam->FirstChildElement("sampler2D");
@@ -211,7 +210,6 @@ void LibraryEffects::loadNewParam(tinyxml2::XMLElement* _nProfile) {
 
             std::string val = l_nSample2D->FirstChildElement("source")->GetText();
             mapaEfeito.insert(std::pair<std::string, std::string>(sid,val));
-            continue;
         }
 
         l_nParam = l_nParam->NextSiblingElement();

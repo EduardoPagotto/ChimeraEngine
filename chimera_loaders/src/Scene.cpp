@@ -5,10 +5,12 @@
 
 namespace ChimeraLoaders {
 
-Scene::Scene(const std::string &_file) : Library(nullptr, "#" + _file) {
+Scene::Scene(const std::string &_file) : Library(nullptr, "!" + _file) {
+    pTexManager = Chimera::Singleton<Chimera::TextureManager>::getRefSingleton();
 }
 
 Scene::~Scene() {
+    Chimera::Singleton<Chimera::TextureManager>::releaseRefSingleton();
 }
 
 Chimera::Node *Scene::target() {
@@ -33,6 +35,9 @@ Chimera::Node *Scene::target() {
             LibraryPhysicsScenes lib(root, l_url, pGroup);
             pPhysicsControl = lib.target();
         }
+
+        return pGroup;
+
     } else {
         throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "scene" ) );
     }

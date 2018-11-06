@@ -5,10 +5,43 @@ namespace ChimeraLoaders {
 
 Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
 
-    std::size_t posicao = _url.find('#');// != std::string::npos
-    if (posicao != 0) {
+    std::size_t posicao = _url.find('!');
+    if (posicao == 0 ) {
 
+        //carrega arquivo root
+        std::string file = _url.substr(posicao + 1, std::string::npos);
+
+        doc = new tinyxml2::XMLDocument();
+
+        //Verifica se arquivo existe
+        tinyxml2::XMLError a_eResult = doc->LoadFile( file.c_str());
+        if ( a_eResult != 0 ) {
+            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN, "Falha ao ler arquivo erro: " + std::to_string(a_eResult));
+        }
+
+        //vefifica se ele � uma estrutura compativel com collada
+        root = doc->FirstChildElement ("COLLADA");
+        if ( root == nullptr ) {
+            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::OPEN, "Nao é um arquivo colada: " + file);
+        }
+
+        return;
+    }
+
+    posicao = _url.find('#');
+
+    if (posicao == std::string::npos) {
+
+        //Carrega tag se # exlicito (local file)
+        doc = nullptr;
+        root = _root;
+        url = _url;
+
+    } else if (posicao !=0 ) {
+
+        //Carrega tag de outro arquivo
         std::string file = _url.substr (0, posicao - 1);
+
         url = _url.substr(posicao + 1, std::string::npos);
         doc = new tinyxml2::XMLDocument();
 
@@ -23,8 +56,10 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
         if ( root == nullptr ) {
             throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::OPEN, "Nao é um arquivo colada: " + file);
         }
+
     } else {
 
+        // carrega com tag na posicao zero
         doc = nullptr;
         root = _root;
         url = _url.substr(posicao + 1, std::string::npos);

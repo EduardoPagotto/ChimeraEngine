@@ -18,22 +18,17 @@ Chimera::Camera *LibraryCameras::target() {
         std::string l_id = l_nCam->Attribute ( "id" );
         if (url.compare(l_id) == 0) {
 
-            tinyxml2::XMLElement* l_param = findExtra(l_nCam)->FirstChildElement("orbital")->FirstChildElement();
-
             Chimera::CameraSpherical *pCameraNew = new Chimera::CameraSpherical( l_id );
+            loadbase(l_nCam, pCameraNew);
 
-            for (l_param; l_param; l_param->NextSiblingElement()) {
-
-                const char *parametro = l_param->Value();
-                if ( strcmp(parametro,(const char*)"min") == 0 ) 
-                    pCameraNew->setDistanciaMinima(atof(l_param->GetText()));
-                else if ( strcmp (parametro, ( const char* ) "max" ) == 0 )
-                    pCameraNew->setDistanciaMaxima (atof(l_param->GetText()));
-
+            tinyxml2::XMLElement* l_nExtra = findExtra(l_nCam);
+            if (l_nExtra) {
+                tinyxml2::XMLElement* l_nMin = l_nExtra->FirstChildElement("orbital")->FirstChildElement("min");
+                tinyxml2::XMLElement* l_nMax = l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
+                pCameraNew->setDistanciaMinima(atof(l_nMin->GetText()));
+                pCameraNew->setDistanciaMaxima(atof(l_nMax->GetText()));
             }
 
-            //Carrega dados basicos de camera
-            loadbase(l_nCam, pCameraNew);
             return pCameraNew;
         }
     }

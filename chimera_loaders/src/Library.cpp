@@ -76,26 +76,20 @@ Library::~Library() {
 
 tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {
 
-    tinyxml2::XMLElement* l_nExtra = _nNode->FirstChildElement ( "extra" );
-    if ( l_nExtra != nullptr ) {
-        tinyxml2::XMLElement* l_nTechnique = l_nExtra->FirstChildElement ( "technique" );
-        if ( l_nTechnique != nullptr ) {
-            const char* l_profile = l_nTechnique->Attribute ( "profile" );
-            if ( ( l_profile != nullptr ) && ( strcmp ( l_profile, ( const char* ) "chimera" ) == 0 ) ) {
-                return l_nTechnique;//l_nTechnique->FirstChild();
-            }
+    tinyxml2::XMLElement* l_nTec = _nNode->FirstChildElement("extra")->FirstChildElement("technique");
+    for (l_nTec; l_nTec; l_nTec = l_nTec->NextSiblingElement()) {
+        const char* l_profile = l_nTec->Attribute ( "profile" );
+        if (strcmp(l_profile, (const char*)"chimera") == 0) {
+            return l_nTec;
         }
     }
-
     return nullptr;
 }
 
 int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam) {
 
     tinyxml2::XMLElement* l_nParam = _nNode->FirstChildElement ( "param" );
-
-    while (l_nParam != nullptr) {
-
+    for (l_nParam; l_nParam; l_nParam->NextSiblingElement()) {
         ParamCollada novo;
         novo.name = l_nParam->Attribute ( "name" );
         novo.sid = l_nParam->Attribute ( "sid" );
@@ -103,9 +97,8 @@ int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam) {
         novo.value = l_nParam->GetText();
         _pVectorParam->push_back(novo);
 
-        l_nParam = l_nParam->NextSiblingElement();
+        l_nParam = l_nParam->NextSiblingElement();    
     }
-
     return _pVectorParam->size();
 }
 

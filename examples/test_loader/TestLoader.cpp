@@ -25,7 +25,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
     try {
 
-        ChimeraLoaders::Scene lib("./models/piso2_old.xml");
+        ChimeraLoaders::Scene lib("./models/piso2.xml");
         auto var = lib.target();
 
 

@@ -7,10 +7,12 @@ namespace ChimeraLoaders {
 
 Scene::Scene(const std::string &_file) : Library(nullptr, "!" + _file) {
     pTexManager = Chimera::Singleton<Chimera::TextureManager>::getRefSingleton();
+    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
 }
 
 Scene::~Scene() {
     Chimera::Singleton<Chimera::TextureManager>::releaseRefSingleton();
+    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
 Chimera::Node *Scene::target() {

@@ -3,6 +3,7 @@
 
 #include "Library.h"
 #include "Group.h"
+#include "ListNodes.h"
 
 namespace ChimeraLoaders {
 
@@ -14,6 +15,7 @@ public:
     Chimera::Group *target();
 private:
     void loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, Chimera::Solid *_pPhysic);
+    ListNodes *pListNodes;
 };
 }
 

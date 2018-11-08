@@ -10,9 +10,11 @@
 namespace ChimeraLoaders {
 
 LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
 }
 
 LibraryPhysicModels::~LibraryPhysicModels() {
+    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
 Chimera::Group *LibraryPhysicModels::target() {
@@ -137,40 +139,33 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
     } else if ( strcmp ( l_tipoShape, "mesh" ) == 0 ) {
 
         // TODO: implementar triMesh de colisao abaixo
-        // tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement(); //instance_geometry
-        // if ( l_nMesh != nullptr ) {
-        //     const char *l_mesh = l_nMesh->Attribute ( "url" );
-        //     if ( l_mesh != nullptr ) {
+        tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement(); //instance_geometry
+        std::string l_mesh = l_nMesh->Attribute ( "url" );
 
-        //         LibraryGeometrys lib(_root, l_mesh);
-        //         auto pDrawTriMesh = lib.target();
+        Chimera::Mesh* pDrawTriMesh = (Chimera::Mesh*)pListNodes->getByName(Chimera::EntityKind::MESH,  getIdFromUrl(l_mesh));
+        if ( pDrawTriMesh != nullptr ) {
 
-        //         if ( pDrawTriMesh != nullptr ) {
+            // // FIXME: ERRADO!!!! verificar porque trava, Usar o VBO como dado desta vez 
+            // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+            //     pDrawTriMesh->vertexIndex.size(),       //num triangles
+            //     (int*)&pDrawTriMesh->vertexIndex[0],    //lista de indice
+            //     3 * sizeof ( int ),                     //tamanho do indice por elemento
+            //     pDrawTriMesh->vertexList.size(),        //num Vertices
+            //     (float*)&pDrawTriMesh->vertexList[0],   //vList.ptrVal(),       //lista de vertice
+            //     3 * sizeof ( float )                    //tamanho do vertice por elemento
+            // );
 
-        //             // FIXME: ERRADO!!!! verificar porque trava, Usar o VBO como dado desta vez 
-        //             btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
-        //                 pDrawTriMesh->vertexIndex.size(),       //num triangles
-        //                 (int*)&pDrawTriMesh->vertexIndex[0],    //lista de indice
-        //                 3 * sizeof ( int ),                     //tamanho do indice por elemento
-        //                 pDrawTriMesh->vertexList.size(),        //num Vertices
-        //                 (float*)&pDrawTriMesh->vertexList[0],   //vList.ptrVal(),       //lista de vertice
-        //                 3 * sizeof ( float )                    //tamanho do vertice por elemento
-        //             );
+            // // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+            // //     pDrawTriMesh->vIndex.getSize() / 3,  //num triangles
+            // //     pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
+            // //     3 * sizeof ( int ),					//tamanho do indice por elemento
+            // //     pDrawTriMesh->vList.getSize() / 3,	//num Vertices
+            // //     pDrawTriMesh->vList.ptrVal(),		//lista de vertice
+            // //     3 * sizeof ( float )				    //tamanho do vertice por elemento
+            // // );
 
-        //             // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
-        //             //     pDrawTriMesh->vIndex.getSize() / 3,  //num triangles
-        //             //     pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
-        //             //     3 * sizeof ( int ),					//tamanho do indice por elemento
-        //             //     pDrawTriMesh->vList.getSize() / 3,	//num Vertices
-        //             //     pDrawTriMesh->vList.ptrVal(),		//lista de vertice
-        //             //     3 * sizeof ( float )				    //tamanho do vertice por elemento
-        //             // );
-
-        //             _pPhysic->setIndexVertexArray ( indexVertexArray );
-        //         }
-        //     }
-        // }
+            // _pPhysic->setIndexVertexArray ( indexVertexArray );
+        }
     }
-
 }
 }

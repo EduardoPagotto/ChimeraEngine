@@ -5,9 +5,11 @@
 namespace ChimeraLoaders {
 
 LibraryLights::LibraryLights(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
 }
 
 LibraryLights::~LibraryLights() {
+    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
 Chimera::Light *LibraryLights::target() {
@@ -23,6 +25,9 @@ Chimera::Light *LibraryLights::target() {
             auto ret_data = loadDiffuseLightColor(l_nLight);
             pLight->setDiffuse(std::get<0>(ret_data));
             pLight->setType(std::get<1>(ret_data));
+
+            pListNodes->addNode(pLight);
+
             return pLight;      
         }
     }

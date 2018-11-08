@@ -84,6 +84,17 @@ Library::~Library() {
     }
 }
 
+std::string Library::getIdFromUrl(const std::string &_url) {
+
+    std::size_t posicao = _url.find('#');
+    if (posicao == std::string::npos)
+        return _url;
+    
+    return _url.substr(posicao + 1, std::string::npos);
+}
+
+
+
 tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {
 
     tinyxml2::XMLElement* l_nTec = _nNode->FirstChildElement("extra")->FirstChildElement("technique");

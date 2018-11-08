@@ -44,7 +44,7 @@ Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
                     std::string target = l_nRigid->Attribute("target");
 
                     Chimera::Solid *pSolid = (Chimera::Solid*)pGroupInner->findChild(body, false);
-                    Chimera::Node *node = pScene->findChild(target.substr(1, std::string::npos), true); 
+                    Chimera::Node *node = pScene->findChild(getIdFromUrl(target), true); 
 
                     Chimera::Node *transforfParent = node->getParent();
                     Chimera::Node *mesh = node->findChild(Chimera::EntityKind::MESH, 0, false);

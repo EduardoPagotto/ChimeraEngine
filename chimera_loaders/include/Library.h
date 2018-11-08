@@ -26,6 +26,7 @@ private:
     tinyxml2::XMLDocument* doc;
 
 protected:
+    std::string getIdFromUrl(const std::string &_url);
     tinyxml2::XMLElement* findExtra(tinyxml2::XMLElement* _nNode);
     int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam);
 

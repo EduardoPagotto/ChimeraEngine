@@ -5,9 +5,11 @@
 namespace ChimeraLoaders {
 
 LibraryCameras::LibraryCameras(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
 }
 
 LibraryCameras::~LibraryCameras() {
+    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
 Chimera::Camera *LibraryCameras::target() {
@@ -28,6 +30,8 @@ Chimera::Camera *LibraryCameras::target() {
                 pCameraNew->setDistanciaMinima(atof(l_nMin->GetText()));
                 pCameraNew->setDistanciaMaxima(atof(l_nMax->GetText()));
             }
+
+            pListNodes->addNode(pCameraNew);
 
             return pCameraNew;
         }

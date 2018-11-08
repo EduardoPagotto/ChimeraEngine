@@ -3,6 +3,7 @@
 
 #include "Library.h"
 #include "Light.h"
+#include "ListNodes.h"
 
 namespace ChimeraLoaders {
 
@@ -15,6 +16,7 @@ public:
 private:
     Chimera::Color getColor( tinyxml2::XMLElement* l_nColorVal);
     std::tuple<Chimera::Color, Chimera::LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
+    ListNodes *pListNodes;
 };
 }
 

@@ -14,12 +14,9 @@ class Scene: public Library {
 public:
     Scene(const std::string &_file);
     virtual ~Scene();
-    Chimera::Node *target();
+    std::tuple<Chimera::Group*,Chimera::PhysicsControl*> target();
 private:
-    Chimera::PhysicsControl *pPhysicsControl;
-    Chimera::Group *pGroup;
     Chimera::TextureManager *pTexManager;
-    
     ListNodes *pListNodes;
 };
 }

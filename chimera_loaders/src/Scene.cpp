@@ -15,7 +15,10 @@ Scene::~Scene() {
     Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
-Chimera::Node *Scene::target() {
+std::tuple<Chimera::Group*,Chimera::PhysicsControl*> Scene::target() {
+
+    Chimera::Group *pGroup = nullptr;
+    Chimera::PhysicsControl *pPhysicsControl = nullptr;
 
     tinyxml2::XMLElement* l_nVisual = root->FirstChildElement("scene")->FirstChildElement("instance_visual_scene");
     tinyxml2::XMLElement* l_nPhysic = root->FirstChildElement("scene")->FirstChildElement("instance_physics_scene");
@@ -30,9 +33,10 @@ Chimera::Node *Scene::target() {
     if (l_nPhysic) {
          std::string l_url = l_nPhysic->Attribute("url");
 
-        LibraryPhysicsScenes lib(root, l_url, pGroup);
+        LibraryPhysicsScenes lib(root, l_url);
         pPhysicsControl = lib.target();
     }
-    return pGroup;
+
+    return std::make_tuple(pGroup, pPhysicsControl);
 }
 }

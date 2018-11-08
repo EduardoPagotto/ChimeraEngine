@@ -11,9 +11,11 @@
 namespace ChimeraLoaders {
 
 LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
 }
 
 LibraryVisualScenes::~LibraryVisualScenes() {
+    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
 Chimera::Group *LibraryVisualScenes::target() {
@@ -82,6 +84,8 @@ void LibraryVisualScenes::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLE
             LibraryCameras lib(root, l_url);
             Chimera::Camera *pCamera = lib.target();
 
+            pListNodes->addNode(pCamera);
+
             pCamera->setTransform ( l_pTransform );
 
             _pNodePai->addChild ( pCamera );
@@ -92,6 +96,8 @@ void LibraryVisualScenes::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLE
             LibraryLights lib(root, l_url);
             Chimera::Light *pLight = lib.target();
 
+            pListNodes->addNode(pLight);
+
             pLight->setTransform ( l_pTransform );
 
             _pNodePai->addChild ( pLight );
@@ -99,11 +105,16 @@ void LibraryVisualScenes::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLE
 
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_geometry" ) == 0 ) {
 
-             LibraryGeometrys lib(root, l_url);
-             Chimera::Draw *pDraw = lib.target();
+            LibraryGeometrys lib(root, l_url);
+            Chimera::Draw *pDraw = lib.target();
+
+            pListNodes->addNode(pDraw);
 
             //FIXME: quando uar solido, como contornar??
             Chimera::Transform *pTrans = new Chimera::Transform(_pNodePai, _id);
+
+            pListNodes->addNode(pTrans);
+
             pTrans->setMatrix(l_pTransform);
             pTrans->addChild(pDraw);
             pLastNodeDone = pTrans;

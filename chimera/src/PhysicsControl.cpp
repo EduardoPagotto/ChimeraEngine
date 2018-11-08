@@ -11,7 +11,7 @@
 
 namespace Chimera {
     
-PhysicsControl::PhysicsControl() : Node(nullptr, EntityKind::PHYSICS_CONTROL, "controle_fisica") {
+PhysicsControl::PhysicsControl() {
 
     collisionConfig = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher ( collisionConfig );
@@ -205,9 +205,7 @@ void PhysicsControl::checkCollisions() {
     }
 
     contactActives = new_contacts;
-
 }
-
 }
 
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on; ;

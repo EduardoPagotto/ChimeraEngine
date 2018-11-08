@@ -20,9 +20,12 @@ protected:
 	ListNodes(const ListNodes&)=delete;
 
 private:
+
+    //std::map<Chimera::EntityKind, std::vector<Chimera::Node*>> mapaKindNode;
     std::vector<Chimera::Node*> vMesh;
     std::vector<Chimera::Node*> vLight;
     std::vector<Chimera::Node*> vCamera;
+    std::vector<Chimera::Node*> vTransform;
 };
 }
 #endif

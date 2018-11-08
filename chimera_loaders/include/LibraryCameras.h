@@ -3,7 +3,6 @@
 
 #include "Library.h"
 #include "Camera.h"
-#include "ListNodes.h"
 
 namespace ChimeraLoaders {
 
@@ -16,7 +15,6 @@ public:
 private:
     void loadbase ( tinyxml2::XMLElement* _nNode, Chimera::Camera *_pCamera);
     void extra(tinyxml2::XMLElement* _nNode, Chimera::Camera *_pCamera);
-    ListNodes *pListNodes;
 };
 }
 

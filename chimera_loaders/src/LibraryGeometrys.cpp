@@ -6,11 +6,9 @@
 namespace ChimeraLoaders {
 
 LibraryGeometrys::LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
-    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
 }
 
 LibraryGeometrys::~LibraryGeometrys() {
-    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
 Chimera::Mesh *LibraryGeometrys::target() {
@@ -28,9 +26,6 @@ Chimera::Mesh *LibraryGeometrys::target() {
             Chimera::Material *pMaterial = lm.target();
 
             pDraw->setMaterial(pMaterial);
-
-            pListNodes->addNode(pDraw);
-
             return pDraw;    
         }
     }

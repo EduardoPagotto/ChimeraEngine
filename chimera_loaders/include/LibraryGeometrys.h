@@ -3,7 +3,6 @@
 
 #include "Library.h"
 #include "Mesh.h"
-#include "ListNodes.h"
 
 namespace ChimeraLoaders {
 
@@ -16,7 +15,6 @@ public:
 private:
     int getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores );
     std::string loadMeshCollada ( tinyxml2::XMLElement* _nNode, Chimera::Mesh *_pDraw);
-    ListNodes *pListNodes;
 };
 }
 

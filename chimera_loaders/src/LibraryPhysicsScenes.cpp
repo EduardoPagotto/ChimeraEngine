@@ -5,14 +5,16 @@
 #include "LibraryPhysicModels.h"
 
 #include "Solid.h"
+#include "Transform.h"
 
 namespace ChimeraLoaders {
 
-LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::Group *_pScene) : Library(_root, _url) {
-    pScene = _pScene;
+LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
 }
 
 LibraryPhysicsScenes::~LibraryPhysicsScenes() {
+    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
 Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
@@ -44,13 +46,17 @@ Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
                     std::string target = l_nRigid->Attribute("target");
 
                     Chimera::Solid *pSolid = (Chimera::Solid*)pGroupInner->findChild(body, false);
-                    Chimera::Node *node = pScene->findChild(getIdFromUrl(target), true); 
-
+                    Chimera::Node *node = pListNodes->getByName(Chimera::EntityKind::TRANSFORM, getIdFromUrl(target)); 
                     Chimera::Node *transforfParent = node->getParent();
                     Chimera::Node *mesh = node->findChild(Chimera::EntityKind::MESH, 0, false);
 
+                    //Transfere dados
+                    Chimera::Transform *pTrans = (Chimera::Transform*)node;
+                    pSolid->setMatrix(pTrans->getMatrix());
+
                     transforfParent->addChild(pSolid);
-                    mesh->setParent(pSolid);
+                    pSolid->addChild(mesh);
+                    //mesh->setParent(pSolid);
 
                     transforfParent->removeChild(node);
 

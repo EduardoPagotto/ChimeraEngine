@@ -32,7 +32,7 @@ Chimera::Camera *LibraryCameras::target() {
             return pCameraNew;
         }
     }
-    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Camera, nao encontrada: " + url);
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Camera nao encontrada: " + url);
 }
 
 void LibraryCameras::loadbase ( tinyxml2::XMLElement* _nNode, Chimera::Camera *_pCamera) {

@@ -30,6 +30,6 @@ Chimera::PhysicMaterial *LibraryPhysicsMaterials::target() {
             return pMaterial;
         }
     }
-    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string ( url ) );
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Physics material nao encontrado: " + std::string ( url ) );
 }
 }

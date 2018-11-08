@@ -18,48 +18,30 @@ LibraryVisualScenes::~LibraryVisualScenes() {
 
 Chimera::Group *LibraryVisualScenes::target() {
 
-    tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_visual_scenes");
-    if ( l_nLib != nullptr ) {
+    tinyxml2::XMLElement* l_nScene = root->FirstChildElement("library_visual_scenes")->FirstChildElement ("visual_scene");
+    for(l_nScene; l_nScene; l_nScene=l_nScene->NextSiblingElement()) {
 
-        tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement ("visual_scene");
-        if ( l_nNodeBase != nullptr ) {
+        std::string l_id = l_nScene->Attribute ( "id" );
+        if (url.compare(l_id) == 0) {
 
-            while ( l_nNodeBase != nullptr ) {
-                std::string l_id = l_nNodeBase->Attribute ( "id" );
-                if (url.compare(l_id) == 0) {
+            Chimera::Group *pRootNode = new Chimera::Group(nullptr, l_id );
+            tinyxml2::XMLElement* l_nNode = l_nScene->FirstChildElement ("node");
+            for(l_nNode; l_nNode; l_nNode=l_nNode->NextSiblingElement()) {
 
-                    Chimera::Group *pRootNode = new Chimera::Group(nullptr, l_id );
+                const char * l_idR = l_nNode->Attribute ( "id" );
+                const char * l_name = l_nNode->Attribute ( "name" );
+                const char * l_type = l_nNode->Attribute ( "type" );
 
-                    tinyxml2::XMLElement* l_nNode = l_nNodeBase->FirstChildElement ("node");
-
-                    do {
-
-                        const char * l_idR = l_nNode->Attribute ( "id" );
-                        const char * l_name = l_nNode->Attribute ( "name" );
-                        const char * l_type = l_nNode->Attribute ( "type" );
-
-                        tinyxml2::XMLElement* l_nDadoNode = l_nNode->FirstChildElement();
-                        if ( l_nDadoNode != nullptr ) {
-                            carregaNode ( (Chimera::Node*)pRootNode, l_nDadoNode, l_idR, l_name, l_type );
-                        } else {
-                            //log->warn("Node sem filho");
-                        }
-
-                        l_nNode = l_nNode->NextSiblingElement();
-                    } while ( l_nNode != nullptr );
-
-                    return pRootNode;
-
-                }
-                l_nNodeBase = l_nNodeBase->NextSiblingElement();
+                tinyxml2::XMLElement* l_nDadoNode = l_nNode->FirstChildElement();
+                if ( l_nDadoNode != nullptr ) {
+                    carregaNode ( (Chimera::Node*)pRootNode, l_nDadoNode, l_idR, l_name, l_type );
+                } 
             }
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string ( url ) );
-        } else {
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string ( "visual_scene" ) );
+            return pRootNode;
         }
-    } else {
-        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "library_visual_scenes" ) );
     }
+
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Visual scenes nao encontrado: " + url );
 }
 
 
@@ -83,9 +65,10 @@ void LibraryVisualScenes::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLE
     glm::mat4 l_pTransform;
     Chimera::Node *pLastNodeDone = nullptr;
 
-    while ( _nNode != nullptr ) {
+    for(_nNode; _nNode; _nNode=_nNode->NextSiblingElement()){
 
         tinyxml2::XMLElement* l_nNodeSourceData = nullptr;
+
         const char* l_url = _nNode->Attribute ( "url" );
         const char* l_target = _nNode->Attribute ( "target" );
         const char* l_nomeElemento = _nNode->Value();
@@ -140,7 +123,6 @@ void LibraryVisualScenes::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLE
         } else  {
             throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, objeto desconhecido: " + std::string ( l_nomeElemento ) );
         }
-        _nNode = _nNode->NextSiblingElement();
     }
 }
 

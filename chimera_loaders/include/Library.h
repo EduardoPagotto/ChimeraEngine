@@ -29,6 +29,7 @@ protected:
     tinyxml2::XMLElement* findExtra(tinyxml2::XMLElement* _nNode);
     int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam);
 
+    std::string file_atual;
     std::string url;
     tinyxml2::XMLElement* root;
 };

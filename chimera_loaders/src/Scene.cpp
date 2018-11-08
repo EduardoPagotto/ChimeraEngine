@@ -15,26 +15,21 @@ Scene::~Scene() {
 
 Chimera::Node *Scene::target() {
 
-    tinyxml2::XMLElement* child = root->FirstChildElement("scene")->FirstChildElement();
-    for(child;  child;  child = child->NextSiblingElement()) {
+    tinyxml2::XMLElement* l_nVisual = root->FirstChildElement("scene")->FirstChildElement("instance_visual_scene");
+    tinyxml2::XMLElement* l_nPhysic = root->FirstChildElement("scene")->FirstChildElement("instance_physics_scene");
 
-        const char* valElemet = child->Value();
+    if (l_nVisual) {
+        std::string l_url = l_nVisual->Attribute("url");
 
-        if (child->ToElement()->Attribute("url")) {
+        LibraryVisualScenes lib(root, l_url);
+        pGroup = lib.target();
+    }
 
-            std::string l_url = child->ToElement()->Attribute("url");
+    if (l_nPhysic) {
+         std::string l_url = l_nPhysic->Attribute("url");
 
-            if (strcmp(valElemet, (const char*)"instance_visual_scene") == 0) {
-
-                LibraryVisualScenes lib(root, l_url);
-                pGroup = lib.target();
-                
-            } else if (strcmp(valElemet, (const char*)"instance_physics_scene") == 0) {
-                
-                LibraryPhysicsScenes lib(root, l_url, pGroup);
-                pPhysicsControl = lib.target();
-            }
-        }
+        LibraryPhysicsScenes lib(root, l_url, pGroup);
+        pPhysicsControl = lib.target();
     }
     return pGroup;
 }

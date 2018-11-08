@@ -25,7 +25,7 @@ Chimera::Material *LibraryMaterials::target() {
             return retorno;
         }
     }
-    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha Material, nao encontrado Node: " + url);
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Material nao encontrado Node: " + url);
 }
 
 }

@@ -28,7 +28,6 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         ChimeraLoaders::Scene lib("./models/piso2.xml");
         auto var = lib.target();
 
-
 	} catch (const Chimera::Exception& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
         return -1;

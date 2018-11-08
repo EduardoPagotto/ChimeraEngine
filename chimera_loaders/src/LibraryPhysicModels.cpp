@@ -62,7 +62,7 @@ Chimera::Group *LibraryPhysicModels::target() {
         }
     }
 
-    throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Falha library_physics_models, nao encontrado: " + url);
+    throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ, "Physics model nao encontrado: " + url);
 }
 
 void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, Chimera::Solid *_pPhysic) {

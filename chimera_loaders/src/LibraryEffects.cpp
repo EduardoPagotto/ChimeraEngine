@@ -33,7 +33,7 @@ Chimera::Material *LibraryEffects::target() {
         }
     }
 
-    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Effect, nao encontrado: " + url);
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Effect nao encontrado: " + url);
 }
 
 Chimera::Color LibraryEffects::getColor( tinyxml2::XMLElement* l_nColorVal) {

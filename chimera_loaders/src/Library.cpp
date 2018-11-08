@@ -25,6 +25,8 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
             throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::OPEN, "Nao é um arquivo colada: " + file);
         }
 
+        file_atual = file;
+
         return;
     }
 
@@ -41,6 +43,14 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
 
         //Carrega tag de outro arquivo
         std::string file = _url.substr (0, posicao - 1);
+
+        if (file_atual.compare(file) == 0) {
+            //Arqivo apntado e o mesmo que estou
+            doc = nullptr;
+            root = _root;
+            url = _url;
+            return;
+        }
 
         url = _url.substr(posicao + 1, std::string::npos);
         doc = new tinyxml2::XMLDocument();

@@ -27,7 +27,7 @@ Chimera::Light *LibraryLights::target() {
         }
     }
 
-    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Light, nao encontrada: " + url);
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Light nao encontrada: " + url);
 }
 
 Chimera::Color LibraryLights::getColor( tinyxml2::XMLElement* l_nColorVal) {

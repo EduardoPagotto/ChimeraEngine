@@ -13,52 +13,37 @@ LibraryGeometrys::~LibraryGeometrys() {
 
 Chimera::Mesh *LibraryGeometrys::target() {
 
-    tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_geometries");
-    if ( l_nLib != nullptr ) {
+    tinyxml2::XMLElement* l_nGeo = root->FirstChildElement("library_geometries")->FirstChildElement ("geometry");
+    for(l_nGeo; l_nGeo; l_nGeo=l_nGeo->NextSiblingElement()) {
 
-        tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement ("geometry");
-        if ( l_nNodeBase != nullptr ) {
+        std::string l_id = l_nGeo->Attribute ( "id" );
+        if (url.compare(l_id) == 0) {
 
-            while ( l_nNodeBase != nullptr ) {
-                std::string l_id = l_nNodeBase->Attribute ( "id" );
-                if (url.compare(l_id) == 0) {
+            Chimera::Mesh *pDraw = new Chimera::Mesh(nullptr, l_id);
+            std::string idMaterial = loadMeshCollada(l_nGeo, pDraw);
 
-                    Chimera::Mesh *pDraw = new Chimera::Mesh(nullptr, l_id);
-                    std::string idMaterial = loadMeshCollada(l_nNodeBase, pDraw);
+            LibraryMaterials lm(root, idMaterial);
+            Chimera::Material *pMaterial = lm.target();
 
-                    LibraryMaterials lm(root, idMaterial);
-                    Chimera::Material *pMaterial = lm.target();
+            pDraw->setMaterial(pMaterial);
 
-                    pDraw->setMaterial(pMaterial);
-
-                    return pDraw;    
-                }
-                l_nNodeBase = l_nNodeBase->NextSiblingElement();
-            }
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string ( url ) );
-        } else {
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string ( "geometry" ) );
+            return pDraw;    
         }
-    } else {
-        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "library_geometries" ) );
     }
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Geometry nao encontrado: " + url);
 }
 
 int LibraryGeometrys::getSource ( tinyxml2::XMLElement* _source, std::vector<float> &_arrayValores ) {
 
-    tinyxml2::XMLElement* l_nSource = _source->FirstChildElement ( "float_array" );
-    if ( l_nSource != nullptr ) {
+    const char *l_numCount = _source->FirstChildElement ( "float_array" )->Attribute ( "count" );
+    if ( l_numCount != nullptr ) {
 
-        const char *l_numCount = l_nSource->Attribute ( "count" );
-        if ( l_numCount != nullptr ) {
-
-            //std::vector<float> l_array;
-            const char* l_vals = l_nSource->GetText();
-            Chimera::loadArrayBtScalar( l_vals, _arrayValores );
-            return _arrayValores.size();
-        }
+        //std::vector<float> l_array;
+        const char* l_vals = _source->FirstChildElement ( "float_array" )->GetText();
+        Chimera::loadArrayBtScalar( l_vals, _arrayValores );
+        return _arrayValores.size();
     }
-
+    
     return -1;
 }
 
@@ -68,10 +53,9 @@ std::string LibraryGeometrys::loadMeshCollada ( tinyxml2::XMLElement* _nNode, Ch
     tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement ( "mesh" );
     if ( l_nMesh != nullptr ) {
 
-        tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement ( "source" );
-
         //Carrega lista de vetores
-        while ( l_nSource != nullptr ) {
+        tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement ( "source" );
+        for(l_nSource; l_nSource; l_nSource=l_nSource->NextSiblingElement("source")) {
 
             const char *l_id = l_nSource->Attribute ( "id" );
             if ( strstr ( l_id, ( char* ) "-positions" ) != nullptr ) {
@@ -101,8 +85,6 @@ std::string LibraryGeometrys::loadMeshCollada ( tinyxml2::XMLElement* _nNode, Ch
                     _pDraw->textureList.push_back( glm::vec2(lista[indice],lista[indice+1]) );
 
             }
-
-            l_nSource = l_nSource->NextSiblingElement ( "source" );
         }
 
         //Carrega Lista de indices
@@ -120,7 +102,7 @@ std::string LibraryGeometrys::loadMeshCollada ( tinyxml2::XMLElement* _nNode, Ch
             std::vector<const char*> l_vSemantic;
             std::vector<const char*> l_vSource;
 
-            while ( l_nInput != nullptr ) {
+            for(l_nInput; l_nInput; l_nInput=l_nInput->NextSiblingElement("input")) {
 
                 const char *l_offSet = l_nInput->Attribute ( "offset" );
                 const char *l_semantic = l_nInput->Attribute ( "semantic" );
@@ -130,7 +112,6 @@ std::string LibraryGeometrys::loadMeshCollada ( tinyxml2::XMLElement* _nNode, Ch
                 l_vSemantic.push_back ( l_semantic );
                 l_vSource.push_back ( l_source );
 
-                l_nInput = l_nInput->NextSiblingElement ( "input" );
             }
 
             tinyxml2::XMLElement* l_nP = l_nPoly->FirstChildElement ( "p" );

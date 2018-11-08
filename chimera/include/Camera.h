@@ -2,8 +2,6 @@
 #define CAMERA_H_
 
 #include <glm/glm.hpp>
-#include <tinyxml2.h>
-
 #include "Node.h"
 
 namespace Chimera {
@@ -73,8 +71,6 @@ public:
 
 	void setTransform(const glm::mat4 &_trans);
     void setPositionRotation ( const glm::vec3 &_posicao, const glm::vec3 &_rotation );
-
-    void loadCollada ( tinyxml2::XMLElement* _nNode );
 
 protected:
     CameraType type;

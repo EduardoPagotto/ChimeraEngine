@@ -12,57 +12,44 @@ LibraryLights::~LibraryLights() {
 
 Chimera::Light *LibraryLights::target() {
 
-    tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_lights");
-    if ( l_nLib != nullptr ) {
+    tinyxml2::XMLElement* l_nLight = root->FirstChildElement("library_lights")->FirstChildElement ("light");
+    for (l_nLight; l_nLight; l_nLight = l_nLight->NextSiblingElement()) {
 
-        tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement ("light");
-        if ( l_nNodeBase != nullptr ) {
+        std::string l_id = l_nLight->Attribute ( "id" );
+        if (url.compare(l_id) == 0) {
 
-            while ( l_nNodeBase != nullptr ) {
-                std::string l_id = l_nNodeBase->Attribute ( "id" );
-                if (url.compare(l_id) == 0) {
+            Chimera::Light *pLight = new Chimera::Light (nullptr,l_id );
 
-                    Chimera::Light *pLight = new Chimera::Light (nullptr,l_id );
-
-                    auto ret_data = loadDiffuseLightColor(l_nNodeBase);
-                    pLight->setDiffuse(std::get<0>(ret_data));
-                    pLight->setType(std::get<1>(ret_data));
-
-                    return pLight;      
-                }
-                l_nNodeBase = l_nNodeBase->NextSiblingElement();
-            }
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string ( url ) );
-        } else {
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string ( "light" ) );
+            auto ret_data = loadDiffuseLightColor(l_nLight);
+            pLight->setDiffuse(std::get<0>(ret_data));
+            pLight->setType(std::get<1>(ret_data));
+            return pLight;      
         }
-    } else {
-        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "library_lights" ) );
     }
+
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Light nao encontrada: " + url);
+}
+
+Chimera::Color LibraryLights::getColor( tinyxml2::XMLElement* l_nColorVal) {
+
+    std::vector<float> l_arrayF;
+    const char *l_val = l_nColorVal->FirstChildElement("color")->GetText();
+    Chimera::loadArrayBtScalar ( l_val, l_arrayF );
+    return Chimera::Color(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
+
 }
 
 std::tuple<Chimera::Color, Chimera::LightType> LibraryLights::loadDiffuseLightColor(tinyxml2::XMLElement* _nNode)
 {
     tinyxml2::XMLElement *l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "point" );
-    if ( l_nPoint != nullptr ) {
-
-        std::vector<float> l_arrayF;
-        const char *l_val = l_nPoint->FirstChildElement("color")->GetText();
-        Chimera::loadArrayBtScalar ( l_val, l_arrayF );
-        Chimera::Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
-
+    if (l_nPoint) {
+        Chimera::Color cor = getColor(l_nPoint);
         return std::make_tuple(cor, Chimera::LightType::POSITIONAL);
     }
-
+    
     l_nPoint = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "directional" );
     if ( l_nPoint != nullptr ) {
-
-        std::vector<float> l_arrayF;
-        const char *l_val = l_nPoint->FirstChildElement ( "color" )->GetText();
-        Chimera::loadArrayBtScalar ( l_val, l_arrayF );
-
-        Chimera::Color cor(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
-
+        Chimera::Color cor = getColor(l_nPoint);
         return std::make_tuple(cor, Chimera::LightType::DIRECTIONAL);
     }
 

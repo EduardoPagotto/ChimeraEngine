@@ -13,6 +13,7 @@ public:
     virtual ~LibraryLights();
     Chimera::Light *target();
 private:
+    Chimera::Color getColor( tinyxml2::XMLElement* l_nColorVal);
     std::tuple<Chimera::Color, Chimera::LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
 };
 }

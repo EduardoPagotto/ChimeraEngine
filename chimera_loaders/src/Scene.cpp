@@ -15,31 +15,22 @@ Scene::~Scene() {
 
 Chimera::Node *Scene::target() {
 
-    tinyxml2::XMLElement* l_nLib = root->FirstChildElement("scene");
-    if ( l_nLib != nullptr ) {
+    tinyxml2::XMLElement* l_nVisual = root->FirstChildElement("scene")->FirstChildElement("instance_visual_scene");
+    tinyxml2::XMLElement* l_nPhysic = root->FirstChildElement("scene")->FirstChildElement("instance_physics_scene");
 
-        //Chimera::Group *vs = nullptr;
+    if (l_nVisual) {
+        std::string l_url = l_nVisual->Attribute("url");
 
-        tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement ("instance_visual_scene");
-        if ( l_nNodeBase != nullptr ) {
-            std::string l_url = l_nNodeBase->Attribute ( "url" );
-
-            LibraryVisualScenes lib(root, l_url);
-            pGroup = lib.target();
-        }
-
-        l_nNodeBase = l_nLib->FirstChildElement ("instance_physics_scene");
-        if ( l_nNodeBase != nullptr ) {
-            std::string l_url = l_nNodeBase->Attribute ( "url" );
-
-            LibraryPhysicsScenes lib(root, l_url, pGroup);
-            pPhysicsControl = lib.target();
-        }
-
-        return pGroup;
-
-    } else {
-        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "scene" ) );
+        LibraryVisualScenes lib(root, l_url);
+        pGroup = lib.target();
     }
+
+    if (l_nPhysic) {
+         std::string l_url = l_nPhysic->Attribute("url");
+
+        LibraryPhysicsScenes lib(root, l_url, pGroup);
+        pPhysicsControl = lib.target();
+    }
+    return pGroup;
 }
 }

@@ -12,60 +12,27 @@ LibraryCameras::~LibraryCameras() {
 
 Chimera::Camera *LibraryCameras::target() {
 
-    tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_cameras");
-    if ( l_nLib != nullptr ) {
+    tinyxml2::XMLElement* l_nCam = root->FirstChildElement("library_cameras")->FirstChildElement ("camera");
+    for (l_nCam; l_nCam; l_nCam = l_nCam->NextSiblingElement()) {
 
-        tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement ("camera");
-        if ( l_nNodeBase != nullptr ) {
+        std::string l_id = l_nCam->Attribute ( "id" );
+        if (url.compare(l_id) == 0) {
 
-            while ( l_nNodeBase != nullptr ) {
-                std::string l_id = l_nNodeBase->Attribute ( "id" );
-                if (url.compare(l_id) == 0) {
+            Chimera::CameraSpherical *pCameraNew = new Chimera::CameraSpherical( l_id );
+            loadbase(l_nCam, pCameraNew);
 
-                    tinyxml2::XMLElement* l_pTechnique = findExtra(l_nNodeBase);
-                    if (l_pTechnique != nullptr) {
-
-                        tinyxml2::XMLElement* l_nOrbital = l_pTechnique->FirstChildElement ( "orbital" );
-                        if ( l_nOrbital != nullptr ) {
-
-                            Chimera::CameraSpherical *pCameraNew = new Chimera::CameraSpherical( l_id );
-
-                            tinyxml2::XMLElement* l_param = l_nOrbital->FirstChildElement();
-                            while ( l_param != nullptr ) {
-
-                                if ( strcmp ( l_param->Value(), ( const char* ) "min" ) == 0 ) {
-
-                                    pCameraNew->setDistanciaMinima ( atof ( l_param->GetText() ) );
-
-                                } else if ( strcmp ( l_param->Value(), ( const char* ) "max" ) == 0 ) {
-
-                                    pCameraNew->setDistanciaMaxima ( atof ( l_param->GetText() ) );
-
-                                }
-
-                                l_param = l_param->NextSiblingElement();
-                            }
-
-                            //Carrega dados basicos de camera
-                            loadbase(l_nNodeBase, pCameraNew);
-
-                            return pCameraNew;
-
-                        }
-                        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "orbital nao definido, nao encontrado camera");    
-                    }
-
-                    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "extra, nao encontrado camera");        
-                }
-                l_nNodeBase = l_nNodeBase->NextSiblingElement();
+            tinyxml2::XMLElement* l_nExtra = findExtra(l_nCam);
+            if (l_nExtra) {
+                tinyxml2::XMLElement* l_nMin = l_nExtra->FirstChildElement("orbital")->FirstChildElement("min");
+                tinyxml2::XMLElement* l_nMax = l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
+                pCameraNew->setDistanciaMinima(atof(l_nMin->GetText()));
+                pCameraNew->setDistanciaMaxima(atof(l_nMax->GetText()));
             }
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string ( url ) );
-        } else {
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string ( "camera" ) );
+
+            return pCameraNew;
         }
-    } else {
-        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "library_cameras" ) );
     }
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Camera nao encontrada: " + url);
 }
 
 void LibraryCameras::loadbase ( tinyxml2::XMLElement* _nNode, Chimera::Camera *_pCamera) {
@@ -79,8 +46,7 @@ void LibraryCameras::loadbase ( tinyxml2::XMLElement* _nNode, Chimera::Camera *_
 
     } else {
         //TODO testar ecarregar ortogonal aqui
+        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Camera, Ortogonal nao implementada: " + url);
     }
 }
-
-
 }

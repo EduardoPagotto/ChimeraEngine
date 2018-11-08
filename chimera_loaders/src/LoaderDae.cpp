@@ -499,10 +499,31 @@ Camera *LoaderDae::carregaCamera(tinyxml2::XMLElement* _root, tinyxml2::XMLEleme
         pCamera = new Camera (nullptr, CameraType::Base, _id );
     }
 
-    pCamera->loadCollada ( l_nNodeSourceData );
+    //pCamera->loadCollada ( l_nNodeSourceData );
+    LoaderDae::loadCamCollada(l_nNodeSourceData, pCamera);
 
     return pCamera;
 }
+
+//------Camera-------
+
+
+void LoaderDae::loadCamCollada ( tinyxml2::XMLElement* _nNode, Chimera::Camera *_pCam ) {
+
+    tinyxml2::XMLElement *l_nPerspective = _nNode->FirstChildElement ( "optics" )->FirstChildElement ( "technique_common" )->FirstChildElement ( "perspective" );
+    if ( l_nPerspective != nullptr ) {
+
+        _pCam->setPerspective ( true );
+        _pCam->setFov ( atof ( l_nPerspective->FirstChildElement ( "xfov" )->GetText() ) );
+        _pCam->setNear ( atof ( l_nPerspective->FirstChildElement ( "znear" )->GetText() ) );
+        _pCam->setFar ( atof ( l_nPerspective->FirstChildElement ( "zfar" )->GetText() ) );
+
+    } else {
+        //TODO testar ecarregar ortogonal aqui
+    }
+}
+
+
 
 //------Light--------
 

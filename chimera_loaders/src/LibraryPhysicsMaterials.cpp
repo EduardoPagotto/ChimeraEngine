@@ -12,42 +12,24 @@ LibraryPhysicsMaterials::~LibraryPhysicsMaterials() {
 
 Chimera::PhysicMaterial *LibraryPhysicsMaterials::target() {
 
-    tinyxml2::XMLElement* l_nLib = root->FirstChildElement("library_physics_materials");
-    if ( l_nLib != nullptr ) {
+    tinyxml2::XMLElement* l_nPyMat = root->FirstChildElement("library_physics_materials")->FirstChildElement ("physics_material");
+    for (l_nPyMat; l_nPyMat; l_nPyMat=l_nPyMat->NextSiblingElement()) {
 
-        tinyxml2::XMLElement* l_nNodeBase = l_nLib->FirstChildElement ("physics_material");
-        if ( l_nNodeBase != nullptr ) {
+        std::string l_id = l_nPyMat->Attribute ( "id" );
+        if (url.compare(l_id) == 0) {
+            tinyxml2::XMLElement* l_nTecDyn = l_nPyMat->FirstChildElement("technique_common")->FirstChildElement("dynamic_friction");
+            tinyxml2::XMLElement* l_nTecRes = l_nPyMat->FirstChildElement("technique_common")->FirstChildElement("restitution");
 
-            while ( l_nNodeBase != nullptr ) {
-                std::string l_id = l_nNodeBase->Attribute ( "id" );
-                if (url.compare(l_id) == 0) {
+            Chimera::PhysicMaterial *pMaterial = new Chimera::PhysicMaterial(l_id);
+            if (l_nTecDyn)
+                pMaterial->setFrictionDynamic ( atof ( l_nTecDyn->GetText() ) );
+    
+            if (l_nTecRes)
+                pMaterial->setRestitution ( atof ( l_nTecRes->GetText() ) );
 
-                    tinyxml2::XMLElement* l_nTec = l_nNodeBase->FirstChildElement ( "technique_common" );
-                    if ( l_nTec != nullptr ) {
-
-                        Chimera::PhysicMaterial *pMaterial = new Chimera::PhysicMaterial(l_id);
-
-                        const char *val = Chimera::getUniqueTextElemetName(l_nTec, "dynamic_friction");
-                        if (val != nullptr)
-                            pMaterial->setFrictionDynamic ( atof ( val ) );
-                        
-                        val = Chimera::getUniqueTextElemetName(l_nTec, "restitution");
-                        if (val != nullptr)
-                            pMaterial->setRestitution ( atof ( val ) );
-
-                        return pMaterial;
-                    }
-
-                    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "technique_common, nao encontrado physics_material");        
-                }
-                l_nNodeBase = l_nNodeBase->NextSiblingElement();
-            }
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node: " + std::string ( url ) );
-        } else {
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Node Tipo: " + std::string ( "physics_material" ) );
+            return pMaterial;
         }
-    } else {
-        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Falha, nao encontrado Library: " + std::string ( "library_physics_materials" ) );
     }
+    throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Physics material nao encontrado: " + std::string ( url ) );
 }
 }

@@ -13,21 +13,6 @@
   <library_cameras>
     <camera id="Camera-camera" name="Camera.002">
       <optics>
-        
-        <extra>
-          <technique profile="chimera">
-            <orbital>
-              <min>1.5</min>
-              <max>80.0</max>
-            </orbital>
-            <!--
-            <param name="TypeNode" sid="" type="string">ORBITAL_CAM</param>
-            <param name="min" sid="" type="float">0.5</param>
-            <param name="max" sid="" type="float">1000.0</param>
-            -->
-          </technique>
-        </extra>
-
         <technique_common>
           <perspective>
             <xfov sid="xfov">49.13434</xfov>
@@ -42,6 +27,17 @@
           <YF_dofdist>0</YF_dofdist>
           <shiftx>0</shiftx>
           <shifty>0</shifty>
+        </technique>
+        <technique profile="chimera">
+          <orbital>
+            <min>1.5</min>
+            <max>80.0</max>
+          </orbital>
+          <!--
+          <param name="TypeNode" sid="" type="string">ORBITAL_CAM</param>
+          <param name="min" sid="" type="float">0.5</param>
+          <param name="max" sid="" type="float">1000.0</param>
+          -->
         </technique>
       </extra>
     </camera>

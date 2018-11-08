@@ -48,7 +48,7 @@ private:
     static tinyxml2::XMLElement* getDadoRigidBody(tinyxml2::XMLElement* _root, const char* _url, const char* _sid );
     static tinyxml2::XMLElement* findSceneLib (tinyxml2::XMLElement* pRoot, const char *rotina, const char* instance, const char* library );
 
-
+    static void loadCamCollada ( tinyxml2::XMLElement* _nNode, Chimera::Camera *_pCam );
     static std::tuple<Color, LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
 
     static void loadMaterial(tinyxml2::XMLElement* root, tinyxml2::XMLElement* _nNode, Material *_pMat);

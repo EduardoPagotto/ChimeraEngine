@@ -1,24 +1,37 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
-    "version": "0.1.0",
-    "command": "sh",
-    "isShellCommand": true,
-    "args": ["-c"],
-    "showOutput": "always",
-    "suppressTaskName": true,
-    "options": {
-        "cwd": "${workspaceRoot}/build"
-    },
+    "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "cmake",
-            "args": ["cmake -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE=Debug .."]     
+            "label": "cmake",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "cmake",
+            "args": [
+                "-G",
+                "Unix Makefiles",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                ".."
+            ],
+
         },
         {
-            "taskName": "make",
-            "args" : ["make"],
-            "isBuildCommand": true,
+            "label": "make",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "dependsOn": [
+                "cmake"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "make",
             "problemMatcher": {
                 "owner": "cpp",
                 "fileLocation": "absolute",

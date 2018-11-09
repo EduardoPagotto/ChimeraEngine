@@ -6,10 +6,13 @@ namespace Chimera {
 
 SceneMng::SceneMng () : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
 	pOrigem = nullptr;
+    log = spdlog::get("chimera");
+    log->debug("Contructor SceneMng");
 }
 
 SceneMng::~SceneMng() {
 	//TODO: deletar o grapho
+    log->debug("Destructor SceneMng");  
 }
 
 void SceneMng::accept(NodeVisitor* v){
@@ -17,6 +20,13 @@ void SceneMng::accept(NodeVisitor* v){
 }
 
 void SceneMng::init() {
+    log->debug("SceneMng Inicializado {0}", getName());
+}
+
+void SceneMng::start (Video *_pVideo) {
+
+    _pVideo->initGL();
+
     InitVisitor *iv = new InitVisitor();
     NodeParse::tree(this, iv); //dfs(root, iv);
 }

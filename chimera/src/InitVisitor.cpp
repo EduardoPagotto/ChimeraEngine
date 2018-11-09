@@ -45,8 +45,7 @@ void InitVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 
 void InitVisitor::visit ( SceneMng* _pSceneMng ) {
     log->debug("InitVisitor ScenMng: {0}", _pSceneMng->getName());
-    // TODO: necessario o SceneMng
-    //_pSceneMng->init();
+    _pSceneMng->init();
 }
 
 void InitVisitor::visit ( Group* _pGroup ) {

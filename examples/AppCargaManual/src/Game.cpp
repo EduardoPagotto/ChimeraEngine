@@ -149,9 +149,7 @@ void Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
 
 void Game::start() {
 
-    pVideo->initGL();
-
-    pSceneMng->init();
+    pSceneMng->start(pVideo);
 
     // Localiza o Skybox e ajusta iluminacao
     Chimera::Transform* pSkyBox = ( Chimera::Transform* )pSceneMng->findChild( "SkyBox", true);

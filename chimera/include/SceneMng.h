@@ -5,6 +5,8 @@
 
 #include "Video.h"
 #include "ParticleEmitter.h"
+#include <spdlog/spdlog.h>
+
 #include "RenderVisitor.h"
 
 namespace Chimera
@@ -25,6 +27,7 @@ public:
 
     void init();
 	void draw(Video *_pVideo);
+    void start(Video *_pVideo);
 
     inline void origemDesenho (Coord *_pCoord ) {
 		pOrigem = _pCoord;
@@ -33,6 +36,7 @@ public:
 private:
 	Coord *pOrigem;
     RenderVisitor rv;
+    std::shared_ptr<spdlog::logger> log;
 };
 } /* namespace Chimera */
 #endif /* GRADE_H_ */

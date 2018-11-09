@@ -99,8 +99,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
 void Game::start() {
     
-    pVideo->initGL();
-    pSceneMng->init();
+    pSceneMng->start(pVideo);
     
     //ajusta scene root com luz e material ativo
     //Localiza a luz ativa

@@ -4,11 +4,8 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng (Video *_pVideo) : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
-
-    this->pVideo = _pVideo;
+SceneMng::SceneMng () : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
 	pOrigem = nullptr;
-
 }
 
 SceneMng::~SceneMng() {
@@ -20,21 +17,19 @@ void SceneMng::accept(NodeVisitor* v){
 }
 
 void SceneMng::init() {
-
     InitVisitor *iv = new InitVisitor();
     NodeParse::tree(this, iv); //dfs(root, iv);
-    
 }
 
-void SceneMng::draw () {
+void SceneMng::draw (Video *_pVideo) {
 
     int indiceDesenho = 1;
     // FIXME: colocar o HMD_Z1
-    if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
+    if ( _pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
         indiceDesenho = 2;
     }
 
-    rv.pVideo = pVideo;
+    rv.pVideo = _pVideo;
     rv.pCoord = pOrigem;
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
         rv.eye = eye;

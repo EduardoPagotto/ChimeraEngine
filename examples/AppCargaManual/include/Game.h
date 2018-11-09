@@ -21,7 +21,7 @@
 class Game : public Chimera::IGameClientEvents
 {
 public:
-    Game ( Chimera::SceneMng *_pScenMng );
+    Game ( Chimera::SceneMng *_pScenMng, Chimera::Video *_pVideo );
     virtual ~Game();
 
     virtual void start();
@@ -54,6 +54,8 @@ private:
     Chimera::PhysicsControl *physicWorld;
     
     bool isPaused;
+
+    Chimera::Video *pVideo;
 
     std::shared_ptr<spdlog::logger> log;
 };

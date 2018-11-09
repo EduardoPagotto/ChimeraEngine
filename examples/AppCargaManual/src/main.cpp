@@ -72,7 +72,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         //Chimera::Node *pRoot = pLoader->loadFile("espacoTesteZ1.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
         
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng(video);
+        Chimera::SceneMng *sceneMng = new Chimera::SceneMng();
         
         Chimera::Group* group1  = pLoader->getNodes();
 		group1->setShaderName("mesh-default");
@@ -100,7 +100,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         delete pLoader;
         pLoader = nullptr;
 
-        Game *game = new Game ( sceneMng );
+        Game *game = new Game ( sceneMng, video );
 
         Chimera::FlowControl *pControle = new Chimera::FlowControl ( game );
         pControle->open();

@@ -5,7 +5,7 @@
 #include "Singleton.h"
 #include "GameClient.h"
 
-Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
+Game::Game ( Chimera::SceneMng *_pScenMng, Chimera::Video *_pVideo ) : pSceneMng(_pScenMng), pVideo(_pVideo) {
 
     isPaused = false;
 	pCorpoRigido = nullptr;
@@ -149,7 +149,8 @@ void Game::mouseMotionCapture ( SDL_MouseMotionEvent mm ) {
 
 void Game::start() {
 
-    pSceneMng->getVideo()->initGL();
+    pVideo->initGL();
+
     pSceneMng->init();
 
     // Localiza o Skybox e ajusta iluminacao
@@ -206,9 +207,9 @@ void Game::render() {
     physicWorld->stepSim();
     physicWorld->checkCollisions();
 
-    pSceneMng->getVideo()->initDraw();
-    pSceneMng->draw ();
-    pSceneMng->getVideo()->endDraw();
+    pVideo->initDraw();
+    pSceneMng->draw (pVideo);
+    pVideo->endDraw();
 
 }
 
@@ -241,7 +242,7 @@ void Game::userEvent ( const SDL_Event &_event ) {
 			}
 			break;
 		case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
-			pSceneMng->getVideo()->toggleFullScreen();
+			pVideo->toggleFullScreen();
 			break;
 		default:
 			break;
@@ -258,7 +259,7 @@ void Game::windowEvent ( const SDL_WindowEvent& _event ) {
             isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
-            pSceneMng->getVideo()->reshape ( _event.data1, _event.data2 );
+            pVideo->reshape ( _event.data1, _event.data2 );
             break;
         default:
             break;

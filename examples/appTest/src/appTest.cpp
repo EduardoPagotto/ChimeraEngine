@@ -53,7 +53,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
         Video *video = new VideoDevice (canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
-        SceneMng *sceneMng = new SceneMng ( video );
+        SceneMng *sceneMng = new SceneMng ( );
         //sceneMng->setReader(pLoader);
 
         CameraSpherical *pCam = new CameraSpherical("Observador-01");
@@ -114,7 +114,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
 		Mesh *pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), pMat2);
 
-        Game *game = new Game(sceneMng);
+        Game *game = new Game(sceneMng, video);
 
         FlowControl *pControle = new FlowControl( game );
         pControle->open();

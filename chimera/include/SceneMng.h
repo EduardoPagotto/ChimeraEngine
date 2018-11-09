@@ -18,25 +18,20 @@ namespace Chimera
 class SceneMng : public Node
 {
 public:
-    SceneMng(Video *_pVideo);
+    SceneMng();
     virtual ~SceneMng() noexcept;
 
     virtual void accept(class NodeVisitor* v);
 
     void init();
-	void draw();
+	void draw(Video *_pVideo);
 
     inline void origemDesenho (Coord *_pCoord ) {
 		pOrigem = _pCoord;
     }
 
-    Video* getVideo() {
-        return pVideo;
-    }
-
 private:
 	Coord *pOrigem;
-    Video *pVideo;
     RenderVisitor rv;
 };
 } /* namespace Chimera */

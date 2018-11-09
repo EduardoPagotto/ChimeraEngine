@@ -153,7 +153,7 @@ void Game::start() {
     pSceneMng->init();
 
     // Localiza o Skybox e ajusta iluminacao
-    Chimera::Transform* pSkyBox = ( Chimera::Transform* )pSceneMng->getRoot()->findChild( "SkyBox", true);
+    Chimera::Transform* pSkyBox = ( Chimera::Transform* )pSceneMng->findChild( "SkyBox", true);
 
 	if (pSkyBox != nullptr) {
 		Chimera::Draw *pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
@@ -161,16 +161,16 @@ void Game::start() {
 	}
  
     //Localiza a camera
-    pOrbitalCam = ( Chimera::CameraSpherical* )pSceneMng->getRoot()->findChild( "Camera", true );
+    pOrbitalCam = ( Chimera::CameraSpherical* )pSceneMng->findChild( "Camera", true );
  
     //Localiza objeto como o primario
-    pCorpoRigido = ( Chimera::Solid* )pSceneMng->getRoot()->findChild( "Zoltan" , true);
+    pCorpoRigido = ( Chimera::Solid* )pSceneMng->findChild( "Zoltan" , true);
 
 	//Localiza a luz ativa
-	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->getRoot()->findChild("luz01", true);
+	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->findChild("luz01", true);
 
 	//Localiza o Emissor de particula
-    pEmissor = (Chimera::ParticleEmitter*)pSceneMng->getRoot()->findChild( "testeZ1", true);
+    pEmissor = (Chimera::ParticleEmitter*)pSceneMng->findChild( "testeZ1", true);
 
     pSceneMng->cameraAtiva ( pOrbitalCam );
     pSceneMng->origemDesenho((Chimera::Coord*) pCorpoRigido);
@@ -184,7 +184,7 @@ void Game::start() {
     glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
 
 	//Localiza o HUD
-	pHUD = (Chimera::HUD*)pSceneMng->getRoot()->findChild("HUD-Default", true);
+	pHUD = (Chimera::HUD*)pSceneMng->findChild("HUD-Default", true);
 	if (pHUD != nullptr) {
 		pHUD->addText(0, 350, 30, Chimera::Color::BLUE, 1.0, &sPosicaoObj);
 		pHUD->addText(0, 10, 30, Chimera::Color::RED, 1.0, &textoFPS);

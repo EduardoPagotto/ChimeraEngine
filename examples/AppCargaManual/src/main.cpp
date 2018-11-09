@@ -71,15 +71,17 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         //Chimera::Node *pRoot = pLoader->loadFile("piso2Teste.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("espacoTesteZ1.xml");
         //Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
-
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng ( video );
-        //sceneMng->setReader(pLoader);
-        Chimera::Group* group1 = sceneMng->createSceneGraph(pLoader->getNodes());
+        
+        Chimera::SceneMng *sceneMng = new Chimera::SceneMng(video);
+        
+        Chimera::Group* group1  = pLoader->getNodes();
 		group1->setShaderName("mesh-default");
 		group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
 
+        sceneMng->addChild(group1);
+
 		//Novo Emissor GLSL
-		Chimera::Group *gParticle = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "ParticleGroup" );
+		Chimera::Group *gParticle = new Chimera::Group( (Chimera::Node*)sceneMng, "ParticleGroup" );
 		gParticle->setShaderName("particle-default");
 
 		//Adiciona um Emissor de Particula
@@ -89,7 +91,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 		pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
 		//Adiciona um HUD ao Grapho
-        Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng->getRoot(), "HUD-Group");
+        Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng, "HUD-Group");
 		gHud->setShaderName("hud-default");
 		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default");
 		Chimera::Font *pFont = new Chimera::Font ( font, 18 ); // TODO: carregar size da fonte

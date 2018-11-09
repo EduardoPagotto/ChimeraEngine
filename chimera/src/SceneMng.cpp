@@ -4,36 +4,27 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
+SceneMng::SceneMng (Video *_pVideo) : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
 
-    root = new SceneRoot(nullptr,"root");
+    this->pVideo = _pVideo;
     pCameraAtiva = nullptr;
 	pOrigem = nullptr;
-    //pLoader = nullptr;
+
 }
 
 SceneMng::~SceneMng() {
 	//TODO: deletar o grapho
 }
 
-// void SceneMng::setReader ( LoaderDae* _pLoader ) {
-
-//     this->pLoader = _pLoader;
-// }
-
-Group *SceneMng::createSceneGraph(Group *_pGroup) {
-
-	if (_pGroup == nullptr)
-		_pGroup = new Group(nullptr, "DefaultSG");
-
-    root->addChild(_pGroup);
-    return _pGroup;
+void SceneMng::accept(NodeVisitor* v){
+    v->visit(this);
 }
 
 void SceneMng::init() {
 
     InitVisitor *iv = new InitVisitor();
-    NodeParse::tree(root,iv); //dfs(root, iv);
+    NodeParse::tree(this, iv); //dfs(root, iv);
+    
 }
 
 void SceneMng::draw () {
@@ -44,12 +35,11 @@ void SceneMng::draw () {
         indiceDesenho = 2;
     }
 
-	rv.pVideo = pVideo;
+    rv.pVideo = pVideo;
     rv.pCoord = pOrigem;
-
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
         rv.eye = eye;
-		NodeParse::tree(root, &rv); //dfs(root, &rv);//DFS(root);
+		NodeParse::tree(this, &rv); //dfs(root, &rv);//DFS(root);
     }
 }
 } /* namespace Chimera */

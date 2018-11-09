@@ -12,7 +12,7 @@ public:
 	virtual void visit(class Mesh* _pMesh) = 0;
 	virtual void visit(class Light *_pLight) = 0;
 	virtual void visit(class ParticleEmitter *_pParticleEmitter) = 0;
-	virtual void visit(class SceneRoot *_pSceneRoot) = 0;
+	virtual void visit(class SceneMng *_pSceneMng) = 0;
     virtual void visit(class Group* _pGroup) = 0;
 	virtual void visit(class Transform* _pTransform) = 0;
 	virtual void visit(class Solid* _pSolid) = 0;

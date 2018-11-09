@@ -1,12 +1,11 @@
-#ifndef SCENE_MNG_H_
-#define SCENE_MNG_H_
+#ifndef __SCENE_MNG_H
+#define __SCENE_MNG_H
 
 #include <vector>
 
 #include "Video.h"
 #include "Camera.h"
 #include "ParticleEmitter.h"
-#include "SceneRoot.h"
 #include "RenderVisitor.h"
 
 namespace Chimera
@@ -14,20 +13,19 @@ namespace Chimera
 
 /**
  * Class SceneMng
- *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+ *  @author <a href="mailto:edupagotto@gmail.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class SceneMng
+class SceneMng : public Node
 {
 public:
-    SceneMng ( Video *_pVideo );
-    virtual ~SceneMng();
+    SceneMng(Video *_pVideo);
+    virtual ~SceneMng() noexcept;
+
+    virtual void accept(class NodeVisitor* v);
 
     void init();
 	void draw();
-    //void setReader( LoaderDae *_pLoader );
-
-    Group* createSceneGraph(Group *_pGroup);
 
     inline void cameraAtiva ( Camera *_pCam ) {
         pCameraAtiva = _pCam;
@@ -41,17 +39,11 @@ public:
 		pOrigem = _pCoord;
     }
 
-	SceneRoot *getRoot() {
-		return root;
-	}
-
     Video* getVideo() {
         return pVideo;
     }
 
 private:
-    //LoaderDae *pLoader;
-    SceneRoot *root;
     Camera *pCameraAtiva;
 	Coord *pOrigem;
     Video *pVideo;

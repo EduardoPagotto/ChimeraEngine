@@ -18,7 +18,7 @@ public:
     virtual void visit(class Mesh* _pMesh) override;
     virtual void visit(class Light *_pLight) override;
     virtual void visit(class ParticleEmitter *_pParticleEmitter) override;
-    virtual void visit(class SceneRoot *_pSceneRoot) override;
+    virtual void visit(class SceneMng *_pSceneMng) override;
     virtual void visit(class Group* _pGroup) override;
     virtual void visit(class Transform* _pTransform) override;
     virtual void visit(class Solid* _pSolid) override;

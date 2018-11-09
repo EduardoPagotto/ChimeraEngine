@@ -4,7 +4,7 @@
 #include "Mesh.h"
 #include "Light.h"
 #include "ParticleEmitter.h"
-#include "SceneRoot.h"
+#include "SceneMng.h"
 #include "Group.h"
 #include "Transform.h"
 #include "Solid.h"
@@ -43,9 +43,10 @@ void InitVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
     _pParticleEmitter->init();
 }
 
-void InitVisitor::visit ( SceneRoot* _pSceneRoot ) {
-    log->debug("InitVisitor SceneRoot: {0}", _pSceneRoot->getName());
-    _pSceneRoot->init();
+void InitVisitor::visit ( SceneMng* _pSceneMng ) {
+    log->debug("InitVisitor ScenMng: {0}", _pSceneMng->getName());
+    // TODO: necessario o SceneMng
+    //_pSceneMng->init();
 }
 
 void InitVisitor::visit ( Group* _pGroup ) {

@@ -10,7 +10,6 @@
 #include "Mesh.h"
 #include "Light.h"
 #include "ParticleEmitter.h"
-#include "SceneRoot.h"
 #include "Group.h"
 #include "Transform.h"
 #include "Solid.h"
@@ -66,6 +65,10 @@ void ShadowMapVisitor::visit ( Camera* _pCamera ) {
 
 }
 
+void ShadowMapVisitor::visit ( SceneMng* _pSceneMng ) {
+	// TODO: necessario o SceneMng
+}
+
 void ShadowMapVisitor::visit ( Mesh* _pMesh ) {
 
 	simpleDepthShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
@@ -83,9 +86,6 @@ void ShadowMapVisitor::visit ( Light* _pLight ) {
 }
 
 void ShadowMapVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
-}
-
-void ShadowMapVisitor::visit ( SceneRoot* _pSceneRoot ) {
 }
 
 void ShadowMapVisitor::visit ( Group* _pGroup ) {

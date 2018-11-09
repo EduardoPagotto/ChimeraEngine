@@ -86,7 +86,7 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::CameraSpherical* pCamZ = (Chimera::CameraSpherical*)pSceneMng->getCamere();
+    Chimera::CameraSpherical* pCamZ = (Chimera::CameraSpherical*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
     
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {

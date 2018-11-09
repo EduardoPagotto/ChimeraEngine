@@ -172,7 +172,6 @@ void Game::start() {
 	//Localiza o Emissor de particula
     pEmissor = (Chimera::ParticleEmitter*)pSceneMng->findChild( "testeZ1", true);
 
-    pSceneMng->cameraAtiva ( pOrbitalCam );
     pSceneMng->origemDesenho((Chimera::Coord*) pCorpoRigido);
     
 	glShadeModel(GL_SMOOTH);

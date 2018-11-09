@@ -7,7 +7,6 @@ namespace Chimera {
 SceneMng::SceneMng (Video *_pVideo) : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
 
     this->pVideo = _pVideo;
-    pCameraAtiva = nullptr;
 	pOrigem = nullptr;
 
 }

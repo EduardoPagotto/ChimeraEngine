@@ -65,7 +65,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pCam->setPositionRotation( glm::vec3(300 , 0 ,0) , glm::vec3(0,0,0) );
         pCam->setPerspective(true);
         pCam->init();
-        sceneMng->cameraAtiva(pCam);
+        sceneMng->addChild(pCam);
 
         //Carga dos shaders
 		YAML::Node shaders = config["shaders"];

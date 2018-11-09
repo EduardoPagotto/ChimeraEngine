@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Video.h"
-#include "Camera.h"
 #include "ParticleEmitter.h"
 #include "RenderVisitor.h"
 
@@ -27,14 +26,6 @@ public:
     void init();
 	void draw();
 
-    inline void cameraAtiva ( Camera *_pCam ) {
-        pCameraAtiva = _pCam;
-    }
-
-    inline Camera* getCamere() {
-        return pCameraAtiva;
-    }
-
     inline void origemDesenho (Coord *_pCoord ) {
 		pOrigem = _pCoord;
     }
@@ -44,7 +35,6 @@ public:
     }
 
 private:
-    Camera *pCameraAtiva;
 	Coord *pOrigem;
     Video *pVideo;
     RenderVisitor rv;

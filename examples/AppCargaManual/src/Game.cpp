@@ -207,9 +207,7 @@ void Game::render() {
     physicWorld->stepSim();
     physicWorld->checkCollisions();
 
-    pVideo->initDraw();
     pSceneMng->draw (pVideo);
-    pVideo->endDraw();
 
 }
 

@@ -23,6 +23,8 @@ void SceneMng::init() {
 
 void SceneMng::draw (Video *_pVideo) {
 
+    _pVideo->initDraw();
+
     int indiceDesenho = 1;
     // FIXME: colocar o HMD_Z1
     if ( _pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
@@ -35,6 +37,8 @@ void SceneMng::draw (Video *_pVideo) {
         rv.eye = eye;
 		NodeParse::tree(this, &rv); //dfs(root, &rv);//DFS(root);
     }
+
+    _pVideo->endDraw();
 }
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

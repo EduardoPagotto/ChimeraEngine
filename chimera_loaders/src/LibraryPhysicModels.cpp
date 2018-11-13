@@ -58,9 +58,8 @@ void LibraryPhysicModels::target() {
                     //_pPhysic->setMass ( atof ( l_mass ) );
                 }
                 pListNodes->addNode(pPhysic);
-                //pGroup->addChild(pPhysic);
             }
-            //return pListNodes;
+            return;
         }
     }
 

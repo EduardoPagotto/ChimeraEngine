@@ -37,7 +37,6 @@ Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
                 std::string l_url = l_nPyModel->Attribute("url");
 
                 LibraryPhysicModels lib(root, l_url, pPhysicsControl);
-                //Chimera::Group *pGroupInner = 
                 lib.target();
 
                 tinyxml2::XMLElement* l_nRigid = l_nPyModel->FirstChildElement("instance_rigid_body");

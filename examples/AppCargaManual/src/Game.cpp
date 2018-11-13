@@ -5,7 +5,7 @@
 #include "Singleton.h"
 #include "GameClient.h"
 
-Game::Game ( Chimera::SceneMng *_pScenMng, Chimera::Video *_pVideo ) : pSceneMng(_pScenMng), pVideo(_pVideo) {
+Game::Game ( Chimera::SceneMng *_pScenMng, Chimera::Video *_pVideo, Chimera::PhysicsControl *_physicWorld ) : pSceneMng(_pScenMng), pVideo(_pVideo) {
 
     isPaused = false;
 	pCorpoRigido = nullptr;
@@ -18,14 +18,13 @@ Game::Game ( Chimera::SceneMng *_pScenMng, Chimera::Video *_pVideo ) : pSceneMng
 	log = spdlog::get("chimera");
     log->debug("Constructor Game");
 
-    physicWorld = Chimera::Singleton<Chimera::PhysicsControl>::getRefSingleton();
+    //physicWorld = Chimera::Singleton<Chimera::PhysicsControl>::getRefSingleton();
+    physicWorld = _physicWorld;
 }
 
 Game::~Game() {
-
     log->debug("Destructor Game");
-
-    Chimera::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
+    //Chimera::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
 }
 
 void Game::joystickCapture ( Chimera::JoystickManager &joy ) {

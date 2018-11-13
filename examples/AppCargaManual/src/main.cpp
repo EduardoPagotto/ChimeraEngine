@@ -13,7 +13,8 @@
 #endif
 
 #include <Game.h>
-#include <LoaderDae.h>
+//#include <LoaderDae.h>
+#include <Scene.h>
 #include <FlowControl.h>
 #include <ParticleEmitter.h>
 #include <Transform.h>
@@ -63,7 +64,13 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         std::string font = config["font"].as<std::string>();
 
         //Carga de dados
-		Chimera::LoaderDae *pLoader = new Chimera::LoaderDae(model);
+		//Chimera::LoaderDae *pLoader = new Chimera::LoaderDae(model);
+
+        ChimeraLoaders::Scene lib(model);
+        auto var = lib.target();
+        Chimera::Group *group1 = std::get<0>(var);
+        Chimera::PhysicsControl *pPC = std::get<1>(var);
+
         //Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.dae");
@@ -74,7 +81,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         
         Chimera::SceneMng *sceneMng = new Chimera::SceneMng();
         
-        Chimera::Group* group1  = pLoader->getNodes();
+        //Chimera::Group* group1  = pLoader->getNodes();
 		group1->setShaderName("mesh-default");
 		group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
 
@@ -97,10 +104,10 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 		Chimera::Font *pFont = new Chimera::Font ( font, 18 ); // TODO: carregar size da fonte
 		pHUD->addFont ( pFont );
 
-        delete pLoader;
-        pLoader = nullptr;
+        //delete pLoader;
+        //pLoader = nullptr;
 
-        Game *game = new Game ( sceneMng, video );
+        Game *game = new Game ( sceneMng, video, pPC );
 
         Chimera::FlowControl *pControle = new Chimera::FlowControl ( game );
         pControle->open();

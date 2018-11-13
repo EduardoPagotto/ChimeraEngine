@@ -21,7 +21,7 @@
 class Game : public Chimera::IGameClientEvents
 {
 public:
-    Game ( Chimera::SceneMng *_pScenMng, Chimera::Video *_pVideo );
+    Game ( Chimera::SceneMng *_pScenMng, Chimera::Video *_pVideo, Chimera::PhysicsControl *_physicWorld);
     virtual ~Game();
 
     virtual void start();

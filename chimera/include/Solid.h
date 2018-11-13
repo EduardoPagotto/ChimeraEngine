@@ -19,7 +19,7 @@ class Solid : public Coord
 public:
 
     friend class Loader;
-    Solid (Node *_parent, std::string _name);
+    Solid (Node *_parent, std::string _name, PhysicsControl *_pWorld);
     Solid ( const Solid& _solid );
     virtual ~Solid();
 	virtual void init();

@@ -6,14 +6,16 @@ ListNodes::ListNodes() noexcept {
 }
 
 void ListNodes::reset() noexcept {
+    vCamera.clear();
     vMesh.clear();
     vLight.clear();
-    vCamera.clear();
+    vTransform.clear();
 }
 
 Chimera::Node* ListNodes::getByName(const Chimera::EntityKind &_kind, const std::string &_name) const {
 
     switch(_kind){
+
         case Chimera::EntityKind::CAMERA:
             for ( Chimera::Node *node : vCamera )
                 if (node->getName().compare(_name) == 0)
@@ -31,8 +33,15 @@ Chimera::Node* ListNodes::getByName(const Chimera::EntityKind &_kind, const std:
                 if (node->getName().compare(_name) == 0)
                     return node;
             break;
+
         case Chimera::EntityKind::TRANSFORM:
             for ( Chimera::Node *node : vTransform )
+                if (node->getName().compare(_name) == 0)
+                    return node;
+            break;
+
+        case Chimera::EntityKind::SOLID:
+            for ( Chimera::Node *node : vSolid )
                 if (node->getName().compare(_name) == 0)
                     return node;
             break;
@@ -45,6 +54,7 @@ Chimera::Node* ListNodes::getByName(const Chimera::EntityKind &_kind, const std:
 void ListNodes::addNode(Chimera::Node *_pNode) {
 
     switch(_pNode->getKind()){
+
         case Chimera::EntityKind::CAMERA:
             vCamera.push_back(_pNode);
             break;
@@ -55,10 +65,16 @@ void ListNodes::addNode(Chimera::Node *_pNode) {
 
         case Chimera::EntityKind::LIGHT:
             vLight.push_back(_pNode);
-            break; 
+            break;
+
         case Chimera::EntityKind::TRANSFORM:
             vTransform.push_back(_pNode);
-            break; 
+            break;
+
+        case Chimera::EntityKind::SOLID:
+            vSolid.push_back(_pNode);
+            break;
+
     }
 }
 }

@@ -36,8 +36,9 @@ Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
 
                 std::string l_url = l_nPyModel->Attribute("url");
 
-                LibraryPhysicModels lib(root, l_url);
-                Chimera::Group *pGroupInner = lib.target();
+                LibraryPhysicModels lib(root, l_url, pPhysicsControl);
+                //Chimera::Group *pGroupInner = 
+                lib.target();
 
                 tinyxml2::XMLElement* l_nRigid = l_nPyModel->FirstChildElement("instance_rigid_body");
                 for(l_nRigid; l_nRigid; l_nRigid=l_nRigid->NextSiblingElement()) {
@@ -45,7 +46,9 @@ Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
                     std::string body = l_nRigid->Attribute("body");
                     std::string target = l_nRigid->Attribute("target");
 
-                    Chimera::Solid *pSolid = (Chimera::Solid*)pGroupInner->findChild(body, false);
+                    //Chimera::Solid *pSolid = (Chimera::Solid*)pGroupInner->findChild(body, false);
+                    // TODO: Testar
+                    Chimera::Solid *pSolid = (Chimera::Solid*)pListNodes->getByName(Chimera::EntityKind::SOLID, getIdFromUrl(body));// ->findChild(body, false);
                     Chimera::Node *node = pListNodes->getByName(Chimera::EntityKind::TRANSFORM, getIdFromUrl(target)); 
                     Chimera::Node *transforfParent = node->getParent();
                     Chimera::Node *mesh = node->findChild(Chimera::EntityKind::MESH, 0, false);

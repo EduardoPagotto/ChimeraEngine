@@ -26,6 +26,7 @@ private:
     std::vector<Chimera::Node*> vLight;
     std::vector<Chimera::Node*> vCamera;
     std::vector<Chimera::Node*> vTransform;
+    std::vector<Chimera::Node*> vSolid;
 };
 }
 #endif

@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::SOLID, _name ) {
+Solid::Solid (Node *_parent, std::string _name, PhysicsControl *_pWorld ) : Coord (_parent, EntityKind::SOLID, _name ) {
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
@@ -21,8 +21,8 @@ Solid::Solid (Node *_parent, std::string _name ) : Coord (_parent, EntityKind::S
 
 	transform.setIdentity();
 
-    //pWorld = (PhysicsControl*)Node::getParent();
-    pWorld = Singleton<PhysicsControl>::getRefSingleton();
+    pWorld = _pWorld;
+    //pWorld = Singleton<PhysicsControl>::getRefSingleton();
 }
 
 Solid::Solid ( const Solid& _solid) : Coord (_solid) {
@@ -40,8 +40,8 @@ Solid::Solid ( const Solid& _solid) : Coord (_solid) {
 
 	transform = _solid.transform;
 
-    //pWorld = (PhysicsControl*)Node::getParent();
-    pWorld = Singleton<PhysicsControl>::getRefSingleton();
+    pWorld = _solid.pWorld;
+    //pWorld = Singleton<PhysicsControl>::getRefSingleton();
 }
 
 Solid::~Solid() {
@@ -58,7 +58,7 @@ Solid::~Solid() {
         delete pShapeCollision;
     }
 
-    Singleton<PhysicsControl>::releaseRefSingleton();
+    //Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
 void Solid::init() {

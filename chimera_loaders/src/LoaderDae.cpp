@@ -96,7 +96,7 @@ void LoaderDae::getDadosInstancePhysicModel ( tinyxml2::XMLElement* _nPhysicScen
 
                 std::string nomeMesh = "";
 
-				Solid *pPhysic = new Solid(nullptr, std::string(l_name));
+				Solid *pPhysic = new Solid(nullptr, std::string(l_name), pPhysicsControl);
                 LoaderDae::loadColladaPhysicsModel( root, l_nRigidBody, nomeMesh, pPhysic);
 
 				Mesh *pDrawTriMesh = (Mesh*)mapaGeometria[nomeMesh];

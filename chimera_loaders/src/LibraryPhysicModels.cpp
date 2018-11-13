@@ -9,15 +9,16 @@
 
 namespace ChimeraLoaders {
 
-LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::PhysicsControl *_pWorld) : Library(_root, _url) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
+    pWorld = _pWorld;
 }
 
 LibraryPhysicModels::~LibraryPhysicModels() {
     Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
-Chimera::Group *LibraryPhysicModels::target() {
+void LibraryPhysicModels::target() {
 
     tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")->FirstChildElement ("physics_model");
     for(l_nPhyModel; l_nPhyModel; l_nPhyModel=l_nPhyModel->NextSiblingElement()) {
@@ -25,14 +26,12 @@ Chimera::Group *LibraryPhysicModels::target() {
         std::string l_id = l_nPhyModel->Attribute ( "id" );
         if (url.compare(l_id) == 0) {
 
-            Chimera::Group *pGroup = new Chimera::Group(nullptr, l_id);
-
             tinyxml2::XMLElement* l_nRigid = l_nPhyModel->FirstChildElement ("rigid_body");
             for(l_nRigid; l_nRigid; l_nRigid=l_nRigid->NextSiblingElement()) {
 
                 std::string l_nNameRb = l_nRigid->Attribute("name");
 
-                Chimera::Solid *pPhysic = new Chimera::Solid(nullptr, l_nNameRb);
+                Chimera::Solid *pPhysic = new Chimera::Solid(nullptr, l_nNameRb, pWorld);
 
                 tinyxml2::XMLElement* l_nMass = l_nRigid->FirstChildElement ("technique_common")->FirstChildElement ( "mass" );
                 if ( l_nMass != nullptr ) {
@@ -58,9 +57,10 @@ Chimera::Group *LibraryPhysicModels::target() {
                     //const char* l_mass = l_nShape->GetText();
                     //_pPhysic->setMass ( atof ( l_mass ) );
                 }
-                pGroup->addChild(pPhysic);
+                pListNodes->addNode(pPhysic);
+                //pGroup->addChild(pPhysic);
             }
-            return pGroup;
+            //return pListNodes;
         }
     }
 

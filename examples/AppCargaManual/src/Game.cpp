@@ -159,13 +159,13 @@ void Game::start() {
 	}
  
     //Localiza a camera
-    pOrbitalCam = ( Chimera::CameraSpherical* )pSceneMng->findChild( "Camera", true );
+    pOrbitalCam = ( Chimera::CameraSpherical* )pSceneMng->findChild( "Camera-camera", true );
  
     //Localiza objeto como o primario
-    pCorpoRigido = ( Chimera::Solid* )pSceneMng->findChild( "Zoltan" , true);
+    pCorpoRigido = ( Chimera::Solid* )pSceneMng->findChild( "zoltan-RigidBody" , true);
 
 	//Localiza a luz ativa
-	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->findChild("luz01", true);
+	Chimera::Light *pLight = (Chimera::Light*) pSceneMng->findChild("luz01-light", true);
 
 	//Localiza o Emissor de particula
     pEmissor = (Chimera::ParticleEmitter*)pSceneMng->findChild( "testeZ1", true);

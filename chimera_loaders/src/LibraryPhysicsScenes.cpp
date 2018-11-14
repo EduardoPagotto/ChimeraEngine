@@ -9,15 +9,16 @@
 
 namespace ChimeraLoaders {
 
-LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::PhysicsControl *_pPhysicsControl) : Library(_root, _url) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
+    pPhysicsControl = _pPhysicsControl;
 }
 
 LibraryPhysicsScenes::~LibraryPhysicsScenes() {
     Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
-Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
+void LibraryPhysicsScenes::target() {
 
     tinyxml2::XMLElement* l_nPhyScene = root->FirstChildElement("library_physics_scenes")->FirstChildElement ("physics_scene");
     for(l_nPhyScene; l_nPhyScene; l_nPhyScene=l_nPhyScene->NextSiblingElement()) {
@@ -27,9 +28,9 @@ Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
 
             //Chimera::Group *pGroup = new Chimera::Group(nullptr, l_id);
             // FIXME: carga com nome do l_id
-            Chimera::PhysicsControl *pPhysicsControl = new Chimera::PhysicsControl();
+            //Chimera::PhysicsControl *pPhysicsControl = new Chimera::PhysicsControl();
 
-            loadPhysicControlCollada(l_nPhyScene, pPhysicsControl);
+            loadPhysicControlCollada(l_nPhyScene);
 
             tinyxml2::XMLElement* l_nPyModel = l_nPhyScene->FirstChildElement("instance_physics_model");
             if (l_nPyModel != nullptr) {
@@ -68,13 +69,13 @@ Chimera::PhysicsControl *LibraryPhysicsScenes::target() {
                     //pSolid->addChild(node);
                 }
             }
-            return pPhysicsControl;
+            return;
         }
     }
     throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Physics scene nao encontrado: " + url);
 }
 
-void LibraryPhysicsScenes::loadPhysicControlCollada ( tinyxml2::XMLElement* _nNode, Chimera::PhysicsControl *_pPhysicsControl ) {
+void LibraryPhysicsScenes::loadPhysicControlCollada ( tinyxml2::XMLElement* _nNode) {
 
         tinyxml2::XMLElement* l_nNodeGravity = _nNode->FirstChildElement ( "technique_common" )->FirstChildElement ( "gravity" );
         if ( l_nNodeGravity != nullptr ) {
@@ -82,7 +83,7 @@ void LibraryPhysicsScenes::loadPhysicControlCollada ( tinyxml2::XMLElement* _nNo
             std::vector<btScalar> l_arrayF;
             const char* vetor = l_nNodeGravity->GetText();
             Chimera::loadArrayBtScalar ( vetor, l_arrayF );
-            _pPhysicsControl->setGravity ( btVector3 ( l_arrayF[0], l_arrayF[1], l_arrayF[2] ) );
+            pPhysicsControl->setGravity ( btVector3 ( l_arrayF[0], l_arrayF[1], l_arrayF[2] ) );
 
         }
 
@@ -90,7 +91,7 @@ void LibraryPhysicsScenes::loadPhysicControlCollada ( tinyxml2::XMLElement* _nNo
         if ( l_nNodeStep != nullptr ) {
 
             const char* vetor = l_nNodeStep->GetText();
-            _pPhysicsControl->setStep( atof ( vetor) );
+            pPhysicsControl->setStep( atof ( vetor) );
 
         }
 }

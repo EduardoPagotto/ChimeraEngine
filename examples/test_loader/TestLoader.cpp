@@ -7,7 +7,8 @@
 #include <spdlog/spdlog.h>
 #include <ExceptionChimera.h>
 
-#include <Scene.h>
+#include <VisualScene.h>
+#include <PhysicsScene.h>
 
 #ifndef WIN32
 int main ( int argn, char** argv ) {
@@ -25,11 +26,14 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
     try {
 
-        ChimeraLoaders::Scene lib("./models/piso2.xml");
-        auto var = lib.target();
+        Chimera::Group *group1 = new Chimera::Group(nullptr,"none");
+        ChimeraLoaders::VisualScene libV("./models/piso2.xml", group1);
+        libV.target();
 
-        Chimera::Group *pGroup = std::get<0>(var);
-        Chimera::PhysicsControl *pPC = std::get<1>(var);
+        Chimera::PhysicsControl *pPC = new Chimera::PhysicsControl();
+        ChimeraLoaders::PhysicsScene libP("./models/piso2.xml", pPC);
+        libP.target();
+
 
 	} catch (const Chimera::Exception& ex) {
         console->error("TesteLoader falha grave:{0}", ex.getMessage());

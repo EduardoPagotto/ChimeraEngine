@@ -24,7 +24,8 @@ set (SourcesChimeraLoadersAPI src/LoaderDaeUtils.cpp
 							  src/LibraryVisualSCenes.cpp
 							  src/LibraryPhysicModels.cpp
 							  src/LibraryPhysicsScenes.cpp
-							  src/Scene.cpp
+							  src/VisualScene.cpp
+							  src/PhysicsScene.cpp
 							  src/ListNodes.cpp)
 
 #define os includes

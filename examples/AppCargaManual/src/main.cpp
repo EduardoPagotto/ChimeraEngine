@@ -14,7 +14,10 @@
 
 #include <Game.h>
 //#include <LoaderDae.h>
-#include <Scene.h>
+
+#include <VisualScene.h>
+#include <PhysicsScene.h>
+
 #include <FlowControl.h>
 #include <ParticleEmitter.h>
 #include <Transform.h>
@@ -66,10 +69,13 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         //Carga de dados
 		//Chimera::LoaderDae *pLoader = new Chimera::LoaderDae(model);
 
-        ChimeraLoaders::Scene lib(model);
-        auto var = lib.target();
-        Chimera::Group *group1 = std::get<0>(var);
-        Chimera::PhysicsControl *pPC = std::get<1>(var);
+        Chimera::Group *group1 = new Chimera::Group(nullptr,"none");
+        ChimeraLoaders::VisualScene libV(model, group1);
+        libV.target();
+
+        Chimera::PhysicsControl *pPC = new Chimera::PhysicsControl();
+        ChimeraLoaders::PhysicsScene libP(model, pPC);
+        libP.target();
 
         //Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");
         //Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");

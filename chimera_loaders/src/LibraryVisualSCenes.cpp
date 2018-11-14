@@ -10,15 +10,16 @@
 
 namespace ChimeraLoaders {
 
-LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::Group *_pRootNode) : Library(_root, _url) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
+    pRootNode = _pRootNode;
 }
 
 LibraryVisualScenes::~LibraryVisualScenes() {
     Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
-Chimera::Group *LibraryVisualScenes::target() {
+void LibraryVisualScenes::target() {
 
     tinyxml2::XMLElement* l_nScene = root->FirstChildElement("library_visual_scenes")->FirstChildElement ("visual_scene");
     for(l_nScene; l_nScene; l_nScene=l_nScene->NextSiblingElement()) {
@@ -26,7 +27,8 @@ Chimera::Group *LibraryVisualScenes::target() {
         std::string l_id = l_nScene->Attribute ( "id" );
         if (url.compare(l_id) == 0) {
 
-            Chimera::Group *pRootNode = new Chimera::Group(nullptr, l_id );
+            //pRootNode = new Chimera::Group(nullptr, l_id );
+            pRootNode->setName(l_id);
             tinyxml2::XMLElement* l_nNode = l_nScene->FirstChildElement ("node");
             for(l_nNode; l_nNode; l_nNode=l_nNode->NextSiblingElement()) {
 
@@ -39,7 +41,7 @@ Chimera::Group *LibraryVisualScenes::target() {
                     carregaNode ( (Chimera::Node*)pRootNode, l_nDadoNode, l_idR, l_name, l_type );
                 } 
             }
-            return pRootNode;
+            return;// pRootNode;
         }
     }
 

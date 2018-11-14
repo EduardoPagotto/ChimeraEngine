@@ -66,61 +66,48 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         std::string model = config["model"].as<std::string>();
         std::string font = config["font"].as<std::string>();
 
-        //Carga de dados
-		//Chimera::LoaderDae *pLoader = new Chimera::LoaderDae(model);
+        //Cria gerenciado de cena
+        Chimera::SceneMng *sceneMng = new Chimera::SceneMng();
 
-        Chimera::Group *group1 = new Chimera::Group(nullptr,"none");
+        //Cria grupo shader como filho de scene
+        Chimera::Group *group1 = new Chimera::Group(sceneMng, "none");
         ChimeraLoaders::VisualScene libV(model, group1);
         libV.target();
 
+        //Cria mundo fisico e o vincula a scena
         Chimera::PhysicsControl *pPC = new Chimera::PhysicsControl();
         ChimeraLoaders::PhysicsScene libP(model, pPC);
         libP.target();
 
-        //Chimera::Node *pRoot = pLoader->loadFile("cuboTex1.dae");
-        //Chimera::Node *pRoot = pLoader->loadFile("cuboEesfera.dae");
-        //Chimera::Node *pRoot = pLoader->loadFile("testeMaterial.dae");
-        //Chimera::Node *pRoot = pLoader->loadFile("CuboEsferaMaterial.dae");
-        //Chimera::Node *pRoot = pLoader->loadFile("piso2Teste.xml");
-        //Chimera::Node *pRoot = pLoader->loadFile("espacoTesteZ1.xml");
-        //Chimera::Node *pRoot = pLoader->loadFile("zoltan.dae");
-        
-        Chimera::SceneMng *sceneMng = new Chimera::SceneMng();
-        
-        //Chimera::Group* group1  = pLoader->getNodes();
+        //Vincula o shader de mesh com sombra a scena carregada
 		group1->setShaderName("mesh-default");
 		group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
 
-        sceneMng->addChild(group1);
-
-		//Novo Emissor GLSL
-		Chimera::Group *gParticle = new Chimera::Group( (Chimera::Node*)sceneMng, "ParticleGroup" );
+		//Novo Grupos com shader de Emissor particula GLSL de particula e o vincula a cena e ao shader
+		Chimera::Group *gParticle = new Chimera::Group(sceneMng, "ParticleGroup" );
 		gParticle->setShaderName("particle-default");
 
-		//Adiciona um Emissor de Particula
 		Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
 		posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
 		pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
-		//Adiciona um HUD ao Grapho
+		//Novo Grupos com shader de um HUD ao Grapho da cena
         Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng, "HUD-Group");
 		gHud->setShaderName("hud-default");
 		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default");
 		Chimera::Font *pFont = new Chimera::Font ( font, 18 ); // TODO: carregar size da fonte
 		pHUD->addFont ( pFont );
 
-        //delete pLoader;
-        //pLoader = nullptr;
-
+        //Passa a game a scena, o video e o mundo fisico
         Game *game = new Game ( sceneMng, video, pPC );
 
+        //Controle de fluxo do programa
         Chimera::FlowControl *pControle = new Chimera::FlowControl ( game );
         pControle->open();
         pControle->gameLoop();
 
         console->info("Loop de Game encerrado!!!!");
-
         delete pControle;
         delete game;
         delete sceneMng;

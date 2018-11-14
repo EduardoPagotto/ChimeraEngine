@@ -26,14 +26,15 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
     try {
 
+        //Carrega Referencias a texturas mesh, cans, light, trans, em nodes encadeados em arvore
         Chimera::Group *group1 = new Chimera::Group(nullptr,"none");
         ChimeraLoaders::VisualScene libV("./models/piso2.xml", group1);
         libV.target();
 
+        //Carrega dados fisicos do ambiente, solidos e os vincula aos mesh por singleton de lista de nodes
         Chimera::PhysicsControl *pPC = new Chimera::PhysicsControl();
         ChimeraLoaders::PhysicsScene libP("./models/piso2.xml", pPC);
         libP.target();
-
 
 	} catch (const Chimera::Exception& ex) {
         console->error("TesteLoader falha grave:{0}", ex.getMessage());

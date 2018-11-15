@@ -195,10 +195,4 @@ glm::mat4 Library::loadTransformMatrix (const char* _matrix) {
     return carregaMatrix ( l_arrayValores );
 
 }
-
-
-
-
-
-
 }

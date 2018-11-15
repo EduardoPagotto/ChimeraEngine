@@ -13,7 +13,6 @@
 #endif
 
 #include <Game.h>
-//#include <LoaderDae.h>
 
 #include <VisualScene.h>
 #include <PhysicsScene.h>

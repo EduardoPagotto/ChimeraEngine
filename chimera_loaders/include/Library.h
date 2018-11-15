@@ -28,9 +28,10 @@ private:
     tinyxml2::XMLDocument* doc;
 
 protected:
-    std::string getIdFromUrl(const std::string &_url);
-    tinyxml2::XMLElement* findExtra(tinyxml2::XMLElement* _nNode);
-    int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam);
+    static std::string getIdFromUrl(const std::string &_url);
+    static tinyxml2::XMLElement* findExtra(tinyxml2::XMLElement* _nNode);
+
+    static int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam);
 
     static void loadArrayBtScalar ( const char *_val, std::vector<float> &_arrayF );
     static void loadArrayI ( const char *_val, std::vector<int> &_arrayI );

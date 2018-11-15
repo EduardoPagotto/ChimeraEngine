@@ -4,53 +4,51 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng ( Video *_pVideo ) : pVideo(_pVideo) {
-
-    root = new SceneRoot(nullptr,"root");
-    pCameraAtiva = nullptr;
+SceneMng::SceneMng () : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
 	pOrigem = nullptr;
-    //pLoader = nullptr;
+    log = spdlog::get("chimera");
+    log->debug("Contructor SceneMng");
 }
 
 SceneMng::~SceneMng() {
 	//TODO: deletar o grapho
+    log->debug("Destructor SceneMng");  
 }
 
-// void SceneMng::setReader ( LoaderDae* _pLoader ) {
-
-//     this->pLoader = _pLoader;
-// }
-
-Group *SceneMng::createSceneGraph(Group *_pGroup) {
-
-	if (_pGroup == nullptr)
-		_pGroup = new Group(nullptr, "DefaultSG");
-
-    root->addChild(_pGroup);
-    return _pGroup;
+void SceneMng::accept(NodeVisitor* v){
+    v->visit(this);
 }
 
 void SceneMng::init() {
-
-    InitVisitor *iv = new InitVisitor();
-    NodeParse::tree(root,iv); //dfs(root, iv);
+    log->debug("SceneMng Inicializado {0}", getName());
 }
 
-void SceneMng::draw () {
+void SceneMng::start (Video *_pVideo) {
+
+    _pVideo->initGL();
+
+    InitVisitor *iv = new InitVisitor();
+    NodeParse::tree(this, iv); //dfs(root, iv);
+}
+
+void SceneMng::draw (Video *_pVideo) {
+
+    _pVideo->initDraw();
 
     int indiceDesenho = 1;
     // FIXME: colocar o HMD_Z1
-    if ( pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
+    if ( _pVideo->getKindDevice() == KIND_DEVICE::OVR_OCULUS ) {
         indiceDesenho = 2;
     }
 
-	rv.pVideo = pVideo;
+    rv.pVideo = _pVideo;
     rv.pCoord = pOrigem;
-
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
         rv.eye = eye;
-		NodeParse::tree(root, &rv); //dfs(root, &rv);//DFS(root);
+		NodeParse::tree(this, &rv); //dfs(root, &rv);//DFS(root);
     }
+
+    _pVideo->endDraw();
 }
 } /* namespace Chimera */
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

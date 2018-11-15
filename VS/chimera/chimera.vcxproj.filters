@@ -138,7 +138,6 @@
     <ClInclude Include="..\..\chimera\include\CameraSpherical.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\chimera\include\LoaderDaeUtils.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\chimera\include\Color.h">

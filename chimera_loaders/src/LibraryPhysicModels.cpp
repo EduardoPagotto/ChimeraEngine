@@ -1,6 +1,5 @@
 #include "LibraryPhysicModels.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 #include "Group.h"
 #include "Solid.h"
 #include "LibraryPhysicsMaterials.h"
@@ -9,13 +8,16 @@
 
 namespace ChimeraLoaders {
 
-LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::PhysicsControl *_pWorld) : Library(_root, _url) {
+    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
+    pWorld = _pWorld;
 }
 
 LibraryPhysicModels::~LibraryPhysicModels() {
+    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
-Chimera::Group *LibraryPhysicModels::target() {
+void LibraryPhysicModels::target() {
 
     tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")->FirstChildElement ("physics_model");
     for(l_nPhyModel; l_nPhyModel; l_nPhyModel=l_nPhyModel->NextSiblingElement()) {
@@ -23,14 +25,12 @@ Chimera::Group *LibraryPhysicModels::target() {
         std::string l_id = l_nPhyModel->Attribute ( "id" );
         if (url.compare(l_id) == 0) {
 
-            Chimera::Group *pGroup = new Chimera::Group(nullptr, l_id);
-
             tinyxml2::XMLElement* l_nRigid = l_nPhyModel->FirstChildElement ("rigid_body");
             for(l_nRigid; l_nRigid; l_nRigid=l_nRigid->NextSiblingElement()) {
 
                 std::string l_nNameRb = l_nRigid->Attribute("name");
 
-                Chimera::Solid *pPhysic = new Chimera::Solid(nullptr, l_nNameRb);
+                Chimera::Solid *pPhysic = new Chimera::Solid(nullptr, l_nNameRb, pWorld);
 
                 tinyxml2::XMLElement* l_nMass = l_nRigid->FirstChildElement ("technique_common")->FirstChildElement ( "mass" );
                 if ( l_nMass != nullptr ) {
@@ -56,9 +56,9 @@ Chimera::Group *LibraryPhysicModels::target() {
                     //const char* l_mass = l_nShape->GetText();
                     //_pPhysic->setMass ( atof ( l_mass ) );
                 }
-                pGroup->addChild(pPhysic);
+                pListNodes->addNode(pPhysic);
             }
-            return pGroup;
+            return;
         }
     }
 
@@ -76,7 +76,7 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
         const char *l_raio = l_nEsfera->GetText();
 
         std::vector<float> l_arrayValores;
-        Chimera::loadArrayBtScalar ( l_raio, l_arrayValores );
+        loadArrayBtScalar ( l_raio, l_arrayValores );
         if ( l_arrayValores.size() == 1 ) {
             _pPhysic->setShapeSphere ( l_arrayValores[0] );
         } else if ( l_arrayValores.size() == 3 ) {
@@ -93,7 +93,7 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
         const char *l_size = l_nBox->GetText();
 
         std::vector<float> l_arrayValores;
-        Chimera::loadArrayBtScalar ( l_size, l_arrayValores );
+        loadArrayBtScalar ( l_size, l_arrayValores );
 
         if ( l_arrayValores.size() == 1 ) {
             _pPhysic->setShapePlane ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ), l_arrayValores[0] );
@@ -109,7 +109,7 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
         const char *l_size = l_nBox->GetText();
 
         std::vector<float> l_arrayValores;
-        Chimera::loadArrayBtScalar ( l_size, l_arrayValores );
+        loadArrayBtScalar ( l_size, l_arrayValores );
 
         if ( l_arrayValores.size() == 1 ) {
             _pPhysic->setShapeBox ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
@@ -125,7 +125,7 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
         const char *l_size = l_nCyl->GetText();
 
         std::vector<float> l_arrayValores;
-        Chimera::loadArrayBtScalar ( l_size, l_arrayValores );
+        loadArrayBtScalar ( l_size, l_arrayValores );
 
         if ( l_arrayValores.size() == 1 ) {
             _pPhysic->setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
@@ -137,40 +137,33 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
     } else if ( strcmp ( l_tipoShape, "mesh" ) == 0 ) {
 
         // TODO: implementar triMesh de colisao abaixo
-        // tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement(); //instance_geometry
-        // if ( l_nMesh != nullptr ) {
-        //     const char *l_mesh = l_nMesh->Attribute ( "url" );
-        //     if ( l_mesh != nullptr ) {
+        tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement(); //instance_geometry
+        std::string l_mesh = l_nMesh->Attribute ( "url" );
 
-        //         LibraryGeometrys lib(_root, l_mesh);
-        //         auto pDrawTriMesh = lib.target();
+        Chimera::Mesh* pDrawTriMesh = (Chimera::Mesh*)pListNodes->getByName(Chimera::EntityKind::MESH,  getIdFromUrl(l_mesh));
+        if ( pDrawTriMesh != nullptr ) {
 
-        //         if ( pDrawTriMesh != nullptr ) {
+            // // FIXME: ERRADO!!!! verificar porque trava, Usar o VBO como dado desta vez 
+            // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+            //     pDrawTriMesh->vertexIndex.size(),       //num triangles
+            //     (int*)&pDrawTriMesh->vertexIndex[0],    //lista de indice
+            //     3 * sizeof ( int ),                     //tamanho do indice por elemento
+            //     pDrawTriMesh->vertexList.size(),        //num Vertices
+            //     (float*)&pDrawTriMesh->vertexList[0],   //vList.ptrVal(),       //lista de vertice
+            //     3 * sizeof ( float )                    //tamanho do vertice por elemento
+            // );
 
-        //             // FIXME: ERRADO!!!! verificar porque trava, Usar o VBO como dado desta vez 
-        //             btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
-        //                 pDrawTriMesh->vertexIndex.size(),       //num triangles
-        //                 (int*)&pDrawTriMesh->vertexIndex[0],    //lista de indice
-        //                 3 * sizeof ( int ),                     //tamanho do indice por elemento
-        //                 pDrawTriMesh->vertexList.size(),        //num Vertices
-        //                 (float*)&pDrawTriMesh->vertexList[0],   //vList.ptrVal(),       //lista de vertice
-        //                 3 * sizeof ( float )                    //tamanho do vertice por elemento
-        //             );
+            // // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
+            // //     pDrawTriMesh->vIndex.getSize() / 3,  //num triangles
+            // //     pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
+            // //     3 * sizeof ( int ),					//tamanho do indice por elemento
+            // //     pDrawTriMesh->vList.getSize() / 3,	//num Vertices
+            // //     pDrawTriMesh->vList.ptrVal(),		//lista de vertice
+            // //     3 * sizeof ( float )				    //tamanho do vertice por elemento
+            // // );
 
-        //             // btTriangleIndexVertexArray *indexVertexArray = new btTriangleIndexVertexArray (
-        //             //     pDrawTriMesh->vIndex.getSize() / 3,  //num triangles
-        //             //     pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
-        //             //     3 * sizeof ( int ),					//tamanho do indice por elemento
-        //             //     pDrawTriMesh->vList.getSize() / 3,	//num Vertices
-        //             //     pDrawTriMesh->vList.ptrVal(),		//lista de vertice
-        //             //     3 * sizeof ( float )				    //tamanho do vertice por elemento
-        //             // );
-
-        //             _pPhysic->setIndexVertexArray ( indexVertexArray );
-        //         }
-        //     }
-        // }
+            // _pPhysic->setIndexVertexArray ( indexVertexArray );
+        }
     }
-
 }
 }

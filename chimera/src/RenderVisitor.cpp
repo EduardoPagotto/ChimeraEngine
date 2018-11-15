@@ -4,7 +4,6 @@
 #include "Mesh.h"
 #include "Light.h"
 #include "ParticleEmitter.h"
-#include "SceneRoot.h"
 #include "Group.h"
 #include "Transform.h"
 #include "Solid.h"
@@ -98,17 +97,17 @@ void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 
 }
 
-void RenderVisitor::visit ( SceneRoot* _pSceneRoot ) {
-
-    _pSceneRoot->apply();
-
+void RenderVisitor::visit ( SceneMng* _pSceneMng ) {
+    //_pSceneRoot->apply();
+	// TODO: necessario o SceneMng
 }
 
 void RenderVisitor::visit ( Group* _pGroup ) {
 
 	shadowOn = _pGroup->executeShadoMap(pCoord);
-
-	shadersManager->selectCurrent(_pGroup->getShaderName());
+	if (shadersManager->selectCurrent(_pGroup->getShaderName())==false)
+		return;
+	
 	shadersManager->link();
 
 	if (shadowOn != nullptr) {

@@ -19,6 +19,8 @@
 
 #include "MeshUtil.h"
 
+#include "Group.h"
+
 #include <glm/glm.hpp>
 
 #include <spdlog/spdlog.h>
@@ -51,7 +53,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
         Video *video = new VideoDevice (canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
-        SceneMng *sceneMng = new SceneMng ( video );
+        SceneMng *sceneMng = new SceneMng ( );
         //sceneMng->setReader(pLoader);
 
         CameraSpherical *pCam = new CameraSpherical("Observador-01");
@@ -63,7 +65,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pCam->setPositionRotation( glm::vec3(300 , 0 ,0) , glm::vec3(0,0,0) );
         pCam->setPerspective(true);
         pCam->init();
-        sceneMng->cameraAtiva(pCam);
+        sceneMng->addChild(pCam);
 
         //Carga dos shaders
 		YAML::Node shaders = config["shaders"];
@@ -76,7 +78,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
                                 shader_item["fragment"].as<std::string>());
         }
 
-        Group* group1 = sceneMng->createSceneGraph(nullptr);
+        Group* group1 = new Group(nullptr, "modelos");
         group1->setShaderName("debugDepthQuad");
 
         Transform* pTrans = new Transform(group1,"trans01");
@@ -112,7 +114,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
 		Mesh *pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), pMat2);
 
-        Game *game = new Game(sceneMng);
+        Game *game = new Game(sceneMng, video);
 
         FlowControl *pControle = new FlowControl( game );
         pControle->open();

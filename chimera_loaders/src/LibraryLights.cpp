@@ -1,6 +1,5 @@
 #include "LibraryLights.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 
 namespace ChimeraLoaders {
 
@@ -23,6 +22,7 @@ Chimera::Light *LibraryLights::target() {
             auto ret_data = loadDiffuseLightColor(l_nLight);
             pLight->setDiffuse(std::get<0>(ret_data));
             pLight->setType(std::get<1>(ret_data));
+
             return pLight;      
         }
     }
@@ -34,7 +34,7 @@ Chimera::Color LibraryLights::getColor( tinyxml2::XMLElement* l_nColorVal) {
 
     std::vector<float> l_arrayF;
     const char *l_val = l_nColorVal->FirstChildElement("color")->GetText();
-    Chimera::loadArrayBtScalar ( l_val, l_arrayF );
+    loadArrayBtScalar ( l_val, l_arrayF );
     return Chimera::Color(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
 
 }

@@ -1,6 +1,5 @@
 #include "LibraryVisualSCenes.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 
 #include "LibraryCameras.h"
 #include "LibraryLights.h"
@@ -10,13 +9,16 @@
 
 namespace ChimeraLoaders {
 
-LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string &_url) : Library(_root, _url) {
+LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::Group *_pRootNode) : Library(_root, _url) {
+    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
+    pRootNode = _pRootNode;
 }
 
 LibraryVisualScenes::~LibraryVisualScenes() {
+    Chimera::Singleton<ListNodes>::releaseRefSingleton();
 }
 
-Chimera::Group *LibraryVisualScenes::target() {
+void LibraryVisualScenes::target() {
 
     tinyxml2::XMLElement* l_nScene = root->FirstChildElement("library_visual_scenes")->FirstChildElement ("visual_scene");
     for(l_nScene; l_nScene; l_nScene=l_nScene->NextSiblingElement()) {
@@ -24,7 +26,8 @@ Chimera::Group *LibraryVisualScenes::target() {
         std::string l_id = l_nScene->Attribute ( "id" );
         if (url.compare(l_id) == 0) {
 
-            Chimera::Group *pRootNode = new Chimera::Group(nullptr, l_id );
+            //pRootNode = new Chimera::Group(nullptr, l_id );
+            pRootNode->setName(l_id);
             tinyxml2::XMLElement* l_nNode = l_nScene->FirstChildElement ("node");
             for(l_nNode; l_nNode; l_nNode=l_nNode->NextSiblingElement()) {
 
@@ -37,7 +40,7 @@ Chimera::Group *LibraryVisualScenes::target() {
                     carregaNode ( (Chimera::Node*)pRootNode, l_nDadoNode, l_idR, l_name, l_type );
                 } 
             }
-            return pRootNode;
+            return;// pRootNode;
         }
     }
 
@@ -51,7 +54,7 @@ glm::mat4  LibraryVisualScenes::getTransformation(tinyxml2::XMLElement* _nNode) 
 
     const char* l_tipoTransform = _nNode->Attribute ( "sid" );
     if ( strcmp ( l_tipoTransform, ( const char* ) "transform" ) == 0 ) {
-        l_pTransform = Chimera::loadTransformMatrix ( _nNode->GetText() );
+        l_pTransform = loadTransformMatrix ( _nNode->GetText() );
     } else {
         throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Matrix de transformacao invalida" );
         //TODO: implementar carga de posicao, rotacao e transformar em matricial em l_pTransform
@@ -82,6 +85,8 @@ void LibraryVisualScenes::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLE
             LibraryCameras lib(root, l_url);
             Chimera::Camera *pCamera = lib.target();
 
+            pListNodes->addNode(pCamera);
+
             pCamera->setTransform ( l_pTransform );
 
             _pNodePai->addChild ( pCamera );
@@ -92,6 +97,8 @@ void LibraryVisualScenes::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLE
             LibraryLights lib(root, l_url);
             Chimera::Light *pLight = lib.target();
 
+            pListNodes->addNode(pLight);
+
             pLight->setTransform ( l_pTransform );
 
             _pNodePai->addChild ( pLight );
@@ -99,11 +106,16 @@ void LibraryVisualScenes::carregaNode ( Chimera::Node *_pNodePai, tinyxml2::XMLE
 
          } else if ( strcmp ( l_nomeElemento, ( const char* ) "instance_geometry" ) == 0 ) {
 
-             LibraryGeometrys lib(root, l_url);
-             Chimera::Draw *pDraw = lib.target();
+            LibraryGeometrys lib(root, l_url);
+            Chimera::Draw *pDraw = lib.target();
+
+            pListNodes->addNode(pDraw);
 
             //FIXME: quando uar solido, como contornar??
             Chimera::Transform *pTrans = new Chimera::Transform(_pNodePai, _id);
+
+            pListNodes->addNode(pTrans);
+
             pTrans->setMatrix(l_pTransform);
             pTrans->addChild(pDraw);
             pLastNodeDone = pTrans;

@@ -15,7 +15,7 @@ namespace Chimera
 {
 
 class ShadersManager {
-	friend class Singleton<ShadersManager >;
+	friend class Singleton<ShadersManager>;
 public:
 
 	bool load(const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path);

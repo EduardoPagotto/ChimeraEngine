@@ -7,7 +7,8 @@
 #include <spdlog/spdlog.h>
 #include <ExceptionChimera.h>
 
-#include <Scene.h>
+#include <VisualScene.h>
+#include <PhysicsScene.h>
 
 #ifndef WIN32
 int main ( int argn, char** argv ) {
@@ -25,21 +26,31 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
     try {
 
-        ChimeraLoaders::Scene lib("./models/piso2.xml");
-        auto var = lib.target();
+        //Carrega Referencias a texturas mesh, cans, light, trans, em nodes encadeados em arvore
+        Chimera::Group *group1 = new Chimera::Group(nullptr,"none");
+        ChimeraLoaders::VisualScene libV("./models/piso2.xml", group1);
+        libV.target();
+
+        //Carrega dados fisicos do ambiente, solidos e os vincula aos mesh por singleton de lista de nodes
+        Chimera::PhysicsControl *pPC = new Chimera::PhysicsControl();
+        ChimeraLoaders::PhysicsScene libP("./models/piso2.xml", pPC);
+        libP.target();
 
 	} catch (const Chimera::Exception& ex) {
-        console->error("Falha grave:{0}", ex.getMessage());
+        console->error("TesteLoader falha grave:{0}", ex.getMessage());
         return -1;
     } catch (const std::exception& ex) {
-        console->error("Falha grave:{0}", ex.what());
+        console->error("TesteLoader falha grave:{0}", ex.what());
+        return -1;
     } catch (const std::string& ex) {
-        console->error("Falha grave:{0}", ex);
+        console->error("TesteLoader falha grave:{0}", ex);
+        return -1;
     } catch (...) {
-        console->error("Falha Desconhecida");
+        console->error("TesteLoader falha Desconhecida");
+        return -1;
     }
 
-	console->info("AppShader finalizado com sucesso");
+	console->info("TesteLoader finalizado com sucesso");
 	return 0;
 }
 

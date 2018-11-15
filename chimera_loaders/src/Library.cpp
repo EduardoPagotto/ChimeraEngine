@@ -1,6 +1,8 @@
 #include "Library.h"
 #include "ExceptionChimera.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace ChimeraLoaders {
 
 Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
@@ -84,6 +86,17 @@ Library::~Library() {
     }
 }
 
+std::string Library::getIdFromUrl(const std::string &_url) {
+
+    std::size_t posicao = _url.find('#');
+    if (posicao == std::string::npos)
+        return _url;
+    
+    return _url.substr(posicao + 1, std::string::npos);
+}
+
+
+
 tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {
 
     tinyxml2::XMLElement* l_nTec = _nNode->FirstChildElement("extra")->FirstChildElement("technique");
@@ -112,6 +125,74 @@ int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam) {
     return _pVectorParam->size();
 }
 
+//---------
+
+void Library::loadArrayBtScalar ( const char *_val, std::vector<float> &_arrayF ) {
+
+    char l_numTemp[32];
+    const char *pchFim;
+    const char *pchInit = _val;
+    const char *deadEnd = _val + strlen ( _val );
+    do {
+        pchFim = strchr ( pchInit, ' ' );
+        if ( pchFim == nullptr ) {
+            pchFim = deadEnd;
+        }
+
+        int l_tam = pchFim - pchInit;
+        memcpy ( l_numTemp, pchInit, l_tam );
+        l_numTemp[l_tam] = 0;
+        _arrayF.push_back ( ( float ) atof ( l_numTemp ) );
+
+        pchInit = pchFim + 1;
+    } while ( pchInit < deadEnd );
+}
 
 
+void Library::loadArrayI ( const char *_val, std::vector<int> &_arrayI ) {
+    char l_numTemp[32];
+    const char *pchFim;
+    const char *pchInit = _val;
+    const char *deadEnd = _val + strlen ( _val );
+    do {
+        pchFim = strchr ( pchInit, ' ' );
+        if ( pchFim == nullptr ) {
+            pchFim = deadEnd;
+        }
+
+        int l_tam = pchFim - pchInit;
+        memcpy ( l_numTemp, pchInit, l_tam );
+        l_numTemp[l_tam] = 0;
+        _arrayI.push_back ( atoi ( l_numTemp ) );
+
+        pchInit = pchFim + 1;
+    } while ( pchInit < deadEnd );
+}
+
+glm::mat4 Library::carregaMatrix ( const std::vector<float> &listaMatrix ) {
+
+    if ( listaMatrix.size() != 16 ) {
+        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string ( listaMatrix.size() ) );
+    }
+
+    float ponteiroFloat[16];
+    int indice = 0;
+    for ( int i = 0; i < 4; i++ ) {
+        for ( int j = 0; j < 4; j++ ) {
+            int pos = i + ( 4 * j );
+            ponteiroFloat[pos] = listaMatrix[indice];
+            indice++;
+        }
+    }
+
+    return glm::make_mat4(&ponteiroFloat[0]);
+}
+
+glm::mat4 Library::loadTransformMatrix (const char* _matrix) {
+
+    std::vector<float> l_arrayValores;
+    loadArrayBtScalar ( _matrix, l_arrayValores );
+    return carregaMatrix ( l_arrayValores );
+
+}
 }

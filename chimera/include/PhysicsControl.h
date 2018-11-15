@@ -14,12 +14,12 @@
 
 namespace Chimera {
 
-class PhysicsControl : public Node
+class PhysicsControl
 {
 public:
 
     PhysicsControl ( void );
-    ~PhysicsControl ( void );
+    virtual ~PhysicsControl ( void );
 
     void accept ( class NodeVisitor* v ){}
 

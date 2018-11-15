@@ -8,7 +8,7 @@
 
 #include "CameraSpherical.h"
 
-Game::Game ( Chimera::SceneMng *_pScenMng ) : pSceneMng(_pScenMng) {
+Game::Game ( Chimera::SceneMng *_pScenMng , Chimera::Video *_pVideo) : pSceneMng(_pScenMng), pVideo(_pVideo) {
     isPaused = false;
 }
 
@@ -86,7 +86,7 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::CameraSpherical* pCamZ = (Chimera::CameraSpherical*)pSceneMng->getCamere();
+    Chimera::CameraSpherical* pCamZ = (Chimera::CameraSpherical*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
     
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
@@ -99,8 +99,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
 void Game::start() {
     
-    pSceneMng->getVideo()->initGL();
-    pSceneMng->init();
+    pSceneMng->start(pVideo);
     
     //ajusta scene root com luz e material ativo
     //Localiza a luz ativa
@@ -133,7 +132,7 @@ void Game::userEvent(const SDL_Event & _event)
 {
     Chimera::KindOp op = (Chimera::KindOp) _event.user.code;
     if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
-        pSceneMng->getVideo()->toggleFullScreen();
+        pVideo->toggleFullScreen();
     }
 }
 
@@ -147,7 +146,7 @@ void Game::windowEvent(const SDL_WindowEvent & _event)
         isPaused = true;
         break;
     case SDL_WINDOWEVENT_RESIZED:
-        pSceneMng->getVideo()->reshape ( _event.data1, _event.data2 );
+        pVideo->reshape ( _event.data1, _event.data2 );
         break;
     default:
         break;
@@ -160,9 +159,5 @@ bool Game::paused()
 }
 
 void Game::render() {
-
-    pSceneMng->getVideo()->initDraw();
-    pSceneMng->draw();
-    pSceneMng->getVideo()->endDraw();
-    
+    pSceneMng->draw(pVideo); 
 }

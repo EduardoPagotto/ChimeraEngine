@@ -147,15 +147,20 @@ GLuint ShadersManager::linkShader (const GLuint &VertexShaderID, const GLuint &F
 
 bool ShadersManager::selectCurrent(const std::string & _cur)
 {
-	auto var = mapaId.find(_cur);
-	if (var != mapaId.end()) {
-		currentProgram = var->first;
-		idProgram = var->second;
-		return true;
-	}
+    if (_cur.length() != 0) {
+        auto var = mapaId.find(_cur);
+        if (var != mapaId.end()) {
+            currentProgram = var->first;
+            idProgram = var->second;
+            return true;
+        }
 
-    log->error("Shader Invalido: {0} Id:{1:03d}", _cur, idProgram);
-	return false;
+        log->error("Shader Invalido: {0} Id:{1:03d}", _cur, idProgram);
+        return false;
+    } else {
+        log->error("Shader Vazio");
+    }
+    return false;
 }
 
 GLint ShadersManager::getUniformLocation(const char* _name) const noexcept

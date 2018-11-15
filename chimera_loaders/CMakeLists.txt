@@ -11,9 +11,7 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesChimeraLoadersAPI src/LoaderDaeUtils.cpp
-							  src/LoaderDae.cpp
-							  src/Library.cpp
+set (SourcesChimeraLoadersAPI src/Library.cpp
 							  src/LibraryPhysicsMaterials.cpp
 							  src/LibraryImages.cpp
 							  src/LibraryLights.cpp
@@ -24,7 +22,9 @@ set (SourcesChimeraLoadersAPI src/LoaderDaeUtils.cpp
 							  src/LibraryVisualSCenes.cpp
 							  src/LibraryPhysicModels.cpp
 							  src/LibraryPhysicsScenes.cpp
-							  src/Scene.cpp)
+							  src/VisualScene.cpp
+							  src/PhysicsScene.cpp
+							  src/ListNodes.cpp)
 
 #define os includes
 set (IncludesChimeraLoadersAPI  ${CMAKE_CURRENT_SOURCE_DIR}/include

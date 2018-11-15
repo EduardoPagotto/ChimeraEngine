@@ -87,7 +87,6 @@
     <ClInclude Include="..\..\chimera\include\CameraMan.h" />
     <ClInclude Include="..\..\chimera\include\CameraOvr.h" />
     <ClInclude Include="..\..\chimera\include\CameraSpherical.h" />
-    <ClInclude Include="..\..\chimera\include\LoaderDaeUtils.h" />
     <ClInclude Include="..\..\chimera\include\Color.h" />
     <ClInclude Include="..\..\chimera\include\Constraint.h" />
     <ClInclude Include="..\..\chimera\include\Coord.h" />

@@ -1,6 +1,5 @@
 #include "LibraryPhysicsMaterials.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 
 namespace ChimeraLoaders {
 

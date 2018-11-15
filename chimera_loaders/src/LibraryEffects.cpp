@@ -1,7 +1,6 @@
 #include "LibraryEffects.h"
 #include "Singleton.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 #include "LibraryImages.h"
 
 namespace ChimeraLoaders {
@@ -40,7 +39,7 @@ Chimera::Color LibraryEffects::getColor( tinyxml2::XMLElement* l_nColorVal) {
 
     std::vector<float> l_arrayF;
     const char* l_cor = l_nColorVal->GetText();
-    Chimera::loadArrayBtScalar ( l_cor, l_arrayF );
+    loadArrayBtScalar ( l_cor, l_arrayF );
     return Chimera::Color(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0);
 
 }

@@ -1,6 +1,5 @@
 #include "LibraryVisualSCenes.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 
 #include "LibraryCameras.h"
 #include "LibraryLights.h"
@@ -55,7 +54,7 @@ glm::mat4  LibraryVisualScenes::getTransformation(tinyxml2::XMLElement* _nNode) 
 
     const char* l_tipoTransform = _nNode->Attribute ( "sid" );
     if ( strcmp ( l_tipoTransform, ( const char* ) "transform" ) == 0 ) {
-        l_pTransform = Chimera::loadTransformMatrix ( _nNode->GetText() );
+        l_pTransform = loadTransformMatrix ( _nNode->GetText() );
     } else {
         throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Matrix de transformacao invalida" );
         //TODO: implementar carga de posicao, rotacao e transformar em matricial em l_pTransform

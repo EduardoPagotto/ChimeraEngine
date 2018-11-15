@@ -1,6 +1,5 @@
 #include "LibraryGeometrys.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 #include "LibraryMaterials.h"
 
 namespace ChimeraLoaders {
@@ -39,7 +38,7 @@ int LibraryGeometrys::getSource ( tinyxml2::XMLElement* _source, std::vector<flo
 
         //std::vector<float> l_array;
         const char* l_vals = _source->FirstChildElement ( "float_array" )->GetText();
-        Chimera::loadArrayBtScalar( l_vals, _arrayValores );
+        loadArrayBtScalar( l_vals, _arrayValores );
         return _arrayValores.size();
     }
     
@@ -117,7 +116,7 @@ std::string LibraryGeometrys::loadMeshCollada ( tinyxml2::XMLElement* _nNode, Ch
             const char *l_indices = l_nP->GetText();
             std::vector<int> l_arrayIndex;
 
-            Chimera::loadArrayI ( l_indices, l_arrayIndex );
+            loadArrayI ( l_indices, l_arrayIndex );
 
             int l_numTriangles = atoi ( l_count );
 

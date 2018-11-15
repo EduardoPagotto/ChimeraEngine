@@ -11,8 +11,7 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesChimeraLoadersAPI src/LoaderDaeUtils.cpp
-							  src/Library.cpp
+set (SourcesChimeraLoadersAPI src/Library.cpp
 							  src/LibraryPhysicsMaterials.cpp
 							  src/LibraryImages.cpp
 							  src/LibraryLights.cpp

@@ -1,6 +1,5 @@
 #include "LibraryPhysicsScenes.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 
 #include "LibraryPhysicModels.h"
 
@@ -82,7 +81,7 @@ void LibraryPhysicsScenes::loadPhysicControlCollada ( tinyxml2::XMLElement* _nNo
 
             std::vector<btScalar> l_arrayF;
             const char* vetor = l_nNodeGravity->GetText();
-            Chimera::loadArrayBtScalar ( vetor, l_arrayF );
+            loadArrayBtScalar ( vetor, l_arrayF );
             pPhysicsControl->setGravity ( btVector3 ( l_arrayF[0], l_arrayF[1], l_arrayF[2] ) );
 
         }

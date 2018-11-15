@@ -1,6 +1,5 @@
 #include "LibraryPhysicModels.h"
 #include "ExceptionChimera.h"
-#include "LoaderDaeUtils.h"
 #include "Group.h"
 #include "Solid.h"
 #include "LibraryPhysicsMaterials.h"
@@ -77,7 +76,7 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
         const char *l_raio = l_nEsfera->GetText();
 
         std::vector<float> l_arrayValores;
-        Chimera::loadArrayBtScalar ( l_raio, l_arrayValores );
+        loadArrayBtScalar ( l_raio, l_arrayValores );
         if ( l_arrayValores.size() == 1 ) {
             _pPhysic->setShapeSphere ( l_arrayValores[0] );
         } else if ( l_arrayValores.size() == 3 ) {
@@ -94,7 +93,7 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
         const char *l_size = l_nBox->GetText();
 
         std::vector<float> l_arrayValores;
-        Chimera::loadArrayBtScalar ( l_size, l_arrayValores );
+        loadArrayBtScalar ( l_size, l_arrayValores );
 
         if ( l_arrayValores.size() == 1 ) {
             _pPhysic->setShapePlane ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ), l_arrayValores[0] );
@@ -110,7 +109,7 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
         const char *l_size = l_nBox->GetText();
 
         std::vector<float> l_arrayValores;
-        Chimera::loadArrayBtScalar ( l_size, l_arrayValores );
+        loadArrayBtScalar ( l_size, l_arrayValores );
 
         if ( l_arrayValores.size() == 1 ) {
             _pPhysic->setShapeBox ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );
@@ -126,7 +125,7 @@ void LibraryPhysicModels::loadColladaShape ( tinyxml2::XMLElement* _root, tinyxm
         const char *l_size = l_nCyl->GetText();
 
         std::vector<float> l_arrayValores;
-        Chimera::loadArrayBtScalar ( l_size, l_arrayValores );
+        loadArrayBtScalar ( l_size, l_arrayValores );
 
         if ( l_arrayValores.size() == 1 ) {
             _pPhysic->setShapeCilinder ( glm::vec3 ( l_arrayValores[0], l_arrayValores[0], l_arrayValores[0] ) );

@@ -116,10 +116,13 @@ void Game::start() {
     // pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::TEXTURE_2D, false);
     // pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::DEPTH_TEST, true);
     
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
     glClearDepth ( 1.0f );
     glDepthFunc ( GL_LEQUAL );
     glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
-    
 }
 
 void Game::stop() { 

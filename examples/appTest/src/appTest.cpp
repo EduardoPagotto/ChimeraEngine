@@ -71,7 +71,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         group1->setShaderName("mesh-default");
 		//group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
 
-
+        //define a origem da rotacao da camera!!
         Transform* pTrans = new Transform(group1,"trans01");
         pTrans->setPosition( glm::vec3( 0.0, 0.0, 0.0) );
         sceneMng->origemDesenho((Coord*)pTrans);
@@ -86,7 +86,6 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pCam->setPerspective(true);
         pCam->init();
         group1->addChild(pCam);
-        //sceneMng->addChild(pCam);
 
         Light* pLight = new Light(group1,"Luz1");
         pLight->setDiffuse(Color::WHITE);

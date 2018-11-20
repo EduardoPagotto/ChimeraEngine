@@ -6,8 +6,6 @@ namespace Chimera {
 class NodeVisitor
 {
 public:
-	NodeVisitor(){}
-	virtual ~NodeVisitor(){}
 	virtual void visit(class Camera* _pCamera) = 0;
 	virtual void visit(class Mesh* _pMesh) = 0;
 	virtual void visit(class Light *_pLight) = 0;

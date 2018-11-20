@@ -4,12 +4,15 @@ screen:
     w: 900
     h: 900
 shaders:
-  - name: debugDepthQuad
-    vertex: ./examples/appTest/shader/debug_quad.vert
-    fragment: ./examples/appTest/shader/debug_quad.frag
-  - name: shadow_mapping
-    vertex: ./examples/appTest/shader/shadow_mapping.vert
-    fragment: ./examples/appTest/shader/shadow_mapping.frag
+  - name: mesh-default
+    vertex: ./examples/AppCargaManual/shader/mesh.vert
+    fragment: ./examples/AppCargaManual/shader/mesh.frag
+  #- name: debugDepthQuad
+  #  vertex: ./examples/appTest/shader/debug_quad.vert
+  #  fragment: ./examples/appTest/shader/debug_quad.frag
+  #- name: shadow_mapping
+  #  vertex: ./examples/appTest/shader/shadow_mapping.vert
+  #  fragment: ./examples/appTest/shader/shadow_mapping.frag
 
 Entidades:
   camera:

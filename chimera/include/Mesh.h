@@ -19,8 +19,6 @@ namespace Chimera {
 class Mesh : public Draw
 {
 public:
-    friend class LoaderDae;
-
     Mesh (Node *_parent, std::string _name );
 	Mesh(const Mesh &_cpy);
 

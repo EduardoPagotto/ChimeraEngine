@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-TextureManager::TextureManager () {
+TextureManager::TextureManager () noexcept {
 	log = spdlog::get("chimera");
     log->debug("Constructor TextureManager");
 }
@@ -88,7 +88,7 @@ void TextureManager::destroy(const unsigned int &_serial) {
 
 }
 
-void TextureManager::destroyAll() {
+void TextureManager::destroyAll() noexcept {
 
 	std::map<unsigned int, Texture*>::iterator it = mapTex.begin();
 	while (it != mapTex.end()) {

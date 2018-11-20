@@ -10,7 +10,6 @@ namespace Chimera {
 class Draw : public Node
 {
 public:
-    friend class LoaderDae;
     Draw (Node *_parent, EntityKind _kind, std::string _name );
     Draw ( const Draw &_draw );
     virtual ~Draw();
@@ -28,7 +27,6 @@ public:
 
 protected:
 	Material *material;
-	ShadersManager *shadersManager;
 };
 }
 #endif

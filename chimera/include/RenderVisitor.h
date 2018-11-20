@@ -12,7 +12,7 @@ namespace Chimera {
 
 class RenderVisitor : public NodeVisitor {
 public:
-    RenderVisitor();
+    RenderVisitor(ShadersManager *_pShadersManager);
     virtual ~RenderVisitor();
     virtual void visit(class Camera* _pCamera) override;
     virtual void visit(class Mesh* _pMesh) override;
@@ -37,7 +37,6 @@ private:
     glm::mat4 model;
 
 	ShadersManager *shadersManager;
-
 	ShadowMap *shadowOn;
 };
 }

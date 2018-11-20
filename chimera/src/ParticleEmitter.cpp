@@ -5,9 +5,11 @@
 #include <algorithm>
 
 namespace Chimera {
-ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
+ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max, ShadersManager *_pShader) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
 	//MaxParticles = _max;
 	LastUsedParticle = 0;
+
+	pShader = _pShader;
 
 	material = new Material("AutoMaterialParticleEmmiter_" + std::to_string( Entity::getNextSerialMaster() + 1 ));
 }
@@ -161,7 +163,7 @@ void ParticleEmitter::render()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Bind our texture
-	material->apply();
+	material->apply(pShader);
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

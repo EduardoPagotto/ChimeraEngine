@@ -6,13 +6,19 @@ namespace Chimera {
 
 SceneMng::SceneMng () : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
 	pOrigem = nullptr;
+
     log = spdlog::get("chimera");
     log->debug("Contructor SceneMng");
+
+    shadersManager =  Singleton<ShadersManager>::getRefSingleton();
+
+    pRV = new RenderVisitor(shadersManager);
 }
 
 SceneMng::~SceneMng() {
 	//TODO: deletar o grapho
-    log->debug("Destructor SceneMng");  
+    log->debug("Destructor SceneMng");
+    Singleton<ShadersManager>::releaseRefSingleton();  
 }
 
 void SceneMng::accept(NodeVisitor* v){
@@ -41,11 +47,11 @@ void SceneMng::draw (Video *_pVideo) {
         indiceDesenho = 2;
     }
 
-    rv.pVideo = _pVideo;
-    rv.pCoord = pOrigem;
+    pRV->pVideo = _pVideo;
+    pRV->pCoord = pOrigem;
     for ( int eye = 0; eye < indiceDesenho; eye++ ) {
-        rv.eye = eye;
-		NodeParse::tree(this, &rv); //dfs(root, &rv);//DFS(root);
+        pRV->eye = eye;
+		NodeParse::tree(this, pRV); //dfs(root, &rv);//DFS(root);
     }
 
     _pVideo->endDraw();

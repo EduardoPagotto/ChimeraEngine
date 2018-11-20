@@ -4,10 +4,9 @@
 #include <vector>
 
 #include "Video.h"
-#include "ParticleEmitter.h"
-#include <spdlog/spdlog.h>
-
+#include "ShadersManager.h"
 #include "RenderVisitor.h"
+#include <spdlog/spdlog.h>
 
 namespace Chimera
 {
@@ -33,9 +32,14 @@ public:
 		pOrigem = _pCoord;
     }
 
+    inline ShadersManager *getShadersManager() {
+        return shadersManager;
+    }
+
 private:
 	Coord *pOrigem;
-    RenderVisitor rv;
+    ShadersManager *shadersManager;
+    RenderVisitor *pRV;
     std::shared_ptr<spdlog::logger> log;
 };
 } /* namespace Chimera */

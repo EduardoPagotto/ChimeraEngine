@@ -21,7 +21,7 @@ public:
         Color color;
     };
 
-    HUD(Node *_parent, std::string _name);
+    HUD(Node *_parent, std::string _name, ShadersManager *_pShader);
 
     virtual ~HUD();
 
@@ -50,6 +50,8 @@ private:
     bool on;
     std::vector<HUDTxt*> vLineText;
     std::vector<Font*> vFonts;
+
+    ShadersManager *pShader;
 };
 }
 

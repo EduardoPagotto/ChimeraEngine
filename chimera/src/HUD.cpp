@@ -5,7 +5,8 @@
 
 namespace Chimera {
 
-HUD::HUD(Node *_parent, std::string _name) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
+HUD::HUD(Node *_parent, std::string _name, ShadersManager *_pShader) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
+    pShader = _pShader;
 }
 
 HUD::~HUD() {
@@ -56,7 +57,7 @@ void HUD::render()
 
 	for (HUDTxt *l_pTxt : vLineText) {
 
-		shadersManager->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
+		pShader->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
 
 		vFonts[l_pTxt->indexFonte]->RenderText(l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
 	}

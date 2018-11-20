@@ -9,9 +9,7 @@
 #include "Game.h"
 #include "FlowControl.h"
 #include "ExceptionChimera.h"
-
 #include "Transform.h"
-#include "ShadersManager.h"
 #include "CameraSpherical.h"
 #include "Light.h"
 #include "MeshUtil.h"
@@ -45,11 +43,15 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         YAML::Node screen = config["screen"];
         YAML::Node canvas = screen["canvas"];
 
+        // Controlador de video
         Video *video = new VideoDevice (canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
+        
+        // Gerenciador do grapho de cena
+        SceneMng *sceneMng = new SceneMng();
 
         //Carga dos shaders
 		YAML::Node shaders = config["shaders"];
-        Chimera::ShadersManager *shader_engine =  Chimera::Singleton<Chimera::ShadersManager>::getRefSingleton();
+        Chimera::ShadersManager *shader_engine =  sceneMng->getShadersManager();
         console->info("Shaders identificados: {0}", shaders.size());
         for (std::size_t i=0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
@@ -57,9 +59,6 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
                                 shader_item["vertex"].as<std::string>(),
                                 shader_item["fragment"].as<std::string>());
         }
-
-
-        SceneMng *sceneMng = new SceneMng();
 
         Group* group1 = new Group(sceneMng, "modelos");
         group1->setShaderName("mesh-default");
@@ -121,29 +120,24 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pControle->open();
         pControle->gameLoop();
 
-        Singleton<ShadersManager >::releaseRefSingleton();
-
         console->info("Loop de Game encerrado!!!!");
 
         delete pControle;
         delete game;
+        delete sceneMng;
         delete video;
 
     } catch (const Chimera::Exception& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
-        //std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;
     } catch (const std::exception& ex) {
         console->error("Falha grave:{0}", ex.what());
-        //std::cout << "Falha grave: " << ex.what() << " " << std::endl;
     } catch (const std::string& ex) {
         console->error("Falha grave:{0}", ex);
     } catch (...) {
         console->error("Falha Desconhecida");
-        //std::cout << "Falha Desconhecida " << std::endl;
     }
 
 	console->info("appTest finalizado com sucesso");
-
     return 0;
 }

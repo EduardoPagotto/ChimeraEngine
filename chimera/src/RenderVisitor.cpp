@@ -18,7 +18,7 @@
 
 namespace Chimera {
 
-RenderVisitor::RenderVisitor() {
+RenderVisitor::RenderVisitor(ShadersManager *_pShadersManager) {
 
 	pCoord = nullptr;
 	pVideo = nullptr;
@@ -32,12 +32,10 @@ RenderVisitor::RenderVisitor() {
 
 	shadowOn = nullptr;
 
-	shadersManager =  Singleton<ShadersManager >::getRefSingleton();
+	shadersManager = _pShadersManager;
 }
 
 RenderVisitor::~RenderVisitor() {
-
-	Singleton<ShadersManager >::releaseRefSingleton();
 }
 
 void RenderVisitor::visit ( Camera* _pCamera ) {
@@ -55,7 +53,7 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 	shadersManager->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 	//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
 
-	_pMesh->getMaterial()->apply();
+	_pMesh->getMaterial()->apply(shadersManager);
 
 	if (shadowOn != nullptr) {
 		shadowOn->applyShadow();

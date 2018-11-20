@@ -5,6 +5,7 @@
 #include "Particle.h"
 #include "Draw.h"
 #include "Timer.h"
+#include "ShadersManager.h"
 
 // Verificar para implementar usando GLSL - http://www.opengl-tutorial.org/intermediate-tutorials/billboards-particles/particles-instancing/
 // Verificar para implementar usando GLSL - http://ogldev.atspace.co.uk/
@@ -17,7 +18,7 @@ namespace Chimera {
 class ParticleEmitter : public Draw
 {
 public:
-	ParticleEmitter(Node *_parent, std::string _name, int _max);
+	ParticleEmitter(Node *_parent, std::string _name, int _max, ShadersManager *_pShader);
 	virtual ~ParticleEmitter();
 
 	// Inherited via Node
@@ -54,6 +55,8 @@ private:
 	glm::vec3 sizeBox;
 	Particle ParticlesContainer[MaxParticles];
 	Timer timer;
+
+	ShadersManager *pShader;
 };
 }
 #endif

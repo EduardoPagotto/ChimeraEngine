@@ -43,7 +43,7 @@ public:
     Color getEmission() const;
     float getShine() const;
 
-    void apply();
+    void apply(ShadersManager *_shaderManager);
     void createDefaultEffect();
 
 	void defineTextureByIndex(const unsigned int &_serial);
@@ -55,8 +55,6 @@ public:
 	}
 
 private:
-
-
     Color diffuse;        /* Diffuse color RGBA */
     Color ambient;        /* Ambient color RGB */
     Color specular;       /* Specular 'shininess' */
@@ -69,7 +67,6 @@ private:
     std::map<std::string, Texture*> mapTex;
 
     TextureManager *texManager;
-	ShadersManager *shaderManager;
 };
 }
 #endif

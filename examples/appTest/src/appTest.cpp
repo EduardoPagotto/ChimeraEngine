@@ -12,17 +12,12 @@
 
 #include "Transform.h"
 #include "ShadersManager.h"
-
 #include "CameraSpherical.h"
-
 #include "Light.h"
-
 #include "MeshUtil.h"
-
 #include "Group.h"
 
 #include <glm/glm.hpp>
-
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
@@ -35,7 +30,6 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
     using namespace Chimera;
 
     auto console = spdlog::stdout_color_st("chimera");
-    
     spdlog::set_level(spdlog::level::debug);
 
     console->info("appTest Iniciado");
@@ -65,7 +59,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         }
 
 
-        SceneMng *sceneMng = new SceneMng ( );
+        SceneMng *sceneMng = new SceneMng();
 
         Group* group1 = new Group(sceneMng, "modelos");
         group1->setShaderName("mesh-default");
@@ -76,6 +70,7 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pTrans->setPosition( glm::vec3( 0.0, 0.0, 0.0) );
         sceneMng->origemDesenho((Coord*)pTrans);
 
+        //Propriedades da camera
         CameraSpherical *pCam = new CameraSpherical("Observador-01");
         pCam->setDistanciaMaxima(1000.0);
         pCam->setDistanciaMinima(0.5);
@@ -87,36 +82,41 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         pCam->init();
         group1->addChild(pCam);
 
+        //Propriedades da luz
         Light* pLight = new Light(group1,"Luz1");
         pLight->setDiffuse(Color::WHITE);
+        pLight->setAmbient(Chimera::Color(0.2f, 0.2f, 0.2f));
         pLight->setPositionRotation(glm::vec3(80,100,150), glm::vec3(0,0,0));
-        //pLight->init();
 
-        //Texture *pTex = new Texture("Texture-teste",dirDados + "/spacebox.png");
-        //Texture *pTex = new Texture("Texture-teste", TEX_SEQ::DIFFUSE, "./models/image1.jpg");
+        //Material do cubo 1 com textura
 		Material *pMat1 = new Material("Mat1");
 		pMat1->setAmbient( Color( 1.0f, 0.5f, 0.31f ) );
         pMat1->setDiffuse( Color( 1.0f, 0.5f, 0.31f ) );
         pMat1->setSpecular( Color( 0.5f, 0.5f, 0.5f ) );
         pMat1->setShine(32.0f);
-		//pMat1->setTexDiffuse(pTex);
+        pMat1->loadTextureFromFile("Texture-teste", TEX_SEQ::DIFFUSE, "./models/image1.jpg");
 
+        //Mesh do cubo1 filho de posicao 1
         Mesh *pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",glm::vec3(50,50,50), pMat1);
 
+        // Posicao Cubo2
 		Transform* pTrans2 = new Transform(group1, "trans02");
 		pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
 
+        // Material Cubo 2 sem textura
 		Material *pMat2 = new Material("Mat2");
         pMat2->setAmbient( Color( 0.5f, 0.5f, 0.31f ) );
         pMat2->setDiffuse( Color( 0.5f, 0.5f, 0.5f ) );
         pMat2->setSpecular( Color( 0.5f, 0.5f, 0.5f ) );
         pMat2->setShine(32.0f);
-		//pMat2->setTexDiffuse(pTex);
 
+        //Mesh do cubo 2 vinculado posicao 2
 		Mesh *pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), pMat2);
 
+        //Wrapper do game 
         Game *game = new Game(sceneMng, video);
 
+        //Controle do fluxo de programa
         FlowControl *pControle = new FlowControl( game );
         pControle->open();
         pControle->gameLoop();

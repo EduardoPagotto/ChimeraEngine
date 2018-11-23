@@ -24,7 +24,8 @@ set (SourcesChimeraLoadersAPI src/Library.cpp
 							  src/LibraryPhysicsScenes.cpp
 							  src/VisualScene.cpp
 							  src/PhysicsScene.cpp
-							  src/ListNodes.cpp)
+							  src/ListNodes.cpp
+							  src/ShadersLoader.cpp)
 
 #define os includes
 set (IncludesChimeraLoadersAPI  ${CMAKE_CURRENT_SOURCE_DIR}/include

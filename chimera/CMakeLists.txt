@@ -39,6 +39,7 @@ set (SourcesChimeraAPI 	src/Color.cpp
 						src/ParticleEmitter.cpp
 						src/ShadowMap.cpp
 						src/ShadersManager.cpp
+						src/Shader.cpp
 						src/Group.cpp
 						src/State.cpp
 						src/Transform.cpp

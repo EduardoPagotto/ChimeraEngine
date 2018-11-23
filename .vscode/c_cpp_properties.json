@@ -6,7 +6,8 @@
                 "${workspaceRoot}/chimera/include",
                 "/usr/include/freetype2",
                 "/usr/include",
-                "/usr/include/bullet"
+                "/usr/include/bullet",
+                "${workspaceFolder}/chimera_loaders/include"
             ],
             "defines": [
                 "_DEBUG"
@@ -14,6 +15,7 @@
             "browse": {
                 "path": [
                     "${workspaceRoot}/chimera/include",
+                    "${workspaceFolder}/chimera_loaders/include",
                     "/usr/include/freetype2",
                     "/usr/include",
                     "/usr/include/bullet",

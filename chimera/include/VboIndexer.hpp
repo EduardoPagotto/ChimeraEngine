@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_VBOINDEXER_HPP
 #define __CHIMERA_VBOINDEXER_HPP
 
-#include "Color.h"
+#include "Color.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

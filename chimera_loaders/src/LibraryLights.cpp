@@ -1,5 +1,5 @@
-#include "LibraryLights.h"
-#include "ExceptionChimera.h"
+#include "LibraryLights.hpp"
+#include "ExceptionChimera.hpp"
 
 namespace ChimeraLoaders {
 

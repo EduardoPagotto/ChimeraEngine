@@ -1,5 +1,5 @@
-#include "Shader.h"
-#include "ExceptionChimera.h"
+#include "Shader.hpp"
+#include "ExceptionChimera.hpp"
 
 namespace Chimera {
 

@@ -1,4 +1,4 @@
-#include "GameClient.h"
+#include "GameClient.hpp"
 
 namespace Chimera {
 

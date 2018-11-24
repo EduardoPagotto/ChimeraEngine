@@ -1,6 +1,6 @@
-#include "Transform.h"
-#include "NodeVisitor.h"
-#include "OpenGLDefs.h"
+#include "Transform.hpp"
+#include "NodeVisitor.hpp"
+#include "OpenGLDefs.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

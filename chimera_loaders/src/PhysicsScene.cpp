@@ -1,5 +1,5 @@
-#include "PhysicsScene.h"
-#include "LibraryPhysicsScenes.h"
+#include "PhysicsScene.hpp"
+#include "LibraryPhysicsScenes.hpp"
 
 namespace ChimeraLoaders {
 

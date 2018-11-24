@@ -1,4 +1,4 @@
-#include "Font.h"
+#include "Font.hpp"
 
 #include <ExceptionSDL.h>
 #include <iostream>

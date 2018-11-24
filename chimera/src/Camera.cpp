@@ -1,5 +1,5 @@
-#include "Camera.h"
-#include "NodeVisitor.h"
+#include "Camera.hpp"
+#include "NodeVisitor.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>

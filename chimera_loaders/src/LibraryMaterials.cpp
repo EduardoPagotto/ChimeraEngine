@@ -1,6 +1,6 @@
-#include "LibraryMaterials.h"
-#include "ExceptionChimera.h"
-#include "LibraryEffects.h"
+#include "LibraryMaterials.hpp"
+#include "ExceptionChimera.hpp"
+#include "LibraryEffects.hpp"
 
 namespace ChimeraLoaders {
 

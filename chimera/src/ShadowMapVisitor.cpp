@@ -1,21 +1,21 @@
-#include "ShadowMapVisitor.h"
+#include "ShadowMapVisitor.hpp"
 
-#include "OpenGLDefs.h"
+#include "OpenGLDefs.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "Camera.h"
-#include "Group.h"
-#include "HUD.h"
-#include "Light.h"
-#include "Mesh.h"
-#include "ParticleEmitter.h"
-#include "Solid.h"
-#include "Transform.h"
+#include "Camera.hpp"
+#include "Group.hpp"
+#include "HUD.hpp"
+#include "Light.hpp"
+#include "Mesh.hpp"
+#include "ParticleEmitter.hpp"
+#include "Solid.hpp"
+#include "Transform.hpp"
 
-#include "NodeParse.h"
+#include "NodeParse.hpp"
 
 namespace Chimera {
 

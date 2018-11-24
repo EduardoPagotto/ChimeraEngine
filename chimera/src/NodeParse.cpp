@@ -1,6 +1,6 @@
-#include "NodeParse.h"
-#include "Node.h"
-#include "NodeVisitor.h"
+#include "NodeParse.hpp"
+#include "Node.hpp"
+#include "NodeVisitor.hpp"
 
 namespace Chimera {
 

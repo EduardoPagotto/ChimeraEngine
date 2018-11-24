@@ -1,10 +1,10 @@
 //#include <GL/glext.h>
-//#include "OpenGLDefs.h"
+//#include "OpenGLDefs.hpp"
 
 #include <vector>
 
-#include "ExceptionSDL.h"
-#include "HmdDevice.h"
+#include "ExceptionSDL.hpp"
+#include "HmdDevice.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>

@@ -1,14 +1,14 @@
-#include "InitVisitor.h"
+#include "InitVisitor.hpp"
 
-#include "Camera.h"
-#include "Group.h"
-#include "HUD.h"
-#include "Light.h"
-#include "Mesh.h"
-#include "ParticleEmitter.h"
-#include "SceneMng.h"
-#include "Solid.h"
-#include "Transform.h"
+#include "Camera.hpp"
+#include "Group.hpp"
+#include "HUD.hpp"
+#include "Light.hpp"
+#include "Mesh.hpp"
+#include "ParticleEmitter.hpp"
+#include "SceneMng.hpp"
+#include "Solid.hpp"
+#include "Transform.hpp"
 
 #include <iostream>
 

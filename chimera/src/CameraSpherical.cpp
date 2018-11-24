@@ -1,4 +1,4 @@
-#include "CameraSpherical.h"
+#include "CameraSpherical.hpp"
 
 namespace Chimera {
 

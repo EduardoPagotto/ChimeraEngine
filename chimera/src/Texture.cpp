@@ -1,11 +1,11 @@
 #ifdef WIN32
-#include "SDL_image.h"
+#include <SDL_image.h>
 #else
-#include "SDL2/SDL_image.h"
+#include <SDL2/SDL_image.h>
 #endif
-#include "ExceptionChimera.h"
+#include "ExceptionChimera.hpp"
 
-#include "Texture.h"
+#include "Texture.hpp"
 
 namespace Chimera {
 

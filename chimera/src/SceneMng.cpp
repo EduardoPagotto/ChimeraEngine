@@ -1,6 +1,6 @@
-#include "SceneMng.h"
-#include "InitVisitor.h"
-#include "NodeParse.h"
+#include "SceneMng.hpp"
+#include "InitVisitor.hpp"
+#include "NodeParse.hpp"
 
 namespace Chimera {
 

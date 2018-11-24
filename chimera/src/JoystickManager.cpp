@@ -1,4 +1,4 @@
-#include "JoystickManager.h"
+#include "JoystickManager.hpp"
 
 namespace Chimera {
 

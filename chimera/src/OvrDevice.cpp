@@ -1,8 +1,8 @@
-#include "OvrDevice.h"
+#include "OvrDevice.hpp"
 
 #ifdef OVR_SET_TO_USE
 
-#include "ExceptionSDL.h"
+#include "ExceptionSDL.hpp"
 #include <SDL_opengl.h>
 #include <SDL_syswm.h>
 

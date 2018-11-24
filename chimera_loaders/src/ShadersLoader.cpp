@@ -1,7 +1,7 @@
 #include <fstream>
 
-#include "ExceptionChimera.h"
-#include "ShadersLoader.h"
+#include "ExceptionChimera.hpp"
+#include "ShadersLoader.hpp"
 
 namespace ChimeraLoaders {
 

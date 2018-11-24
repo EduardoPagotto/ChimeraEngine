@@ -1,12 +1,12 @@
-#include "Game.h"
-#include "ExceptionSDL.h"
+#include "Game.hpp"
+#include "ExceptionSDL.hpp"
 
-#include "GameClient.h"
-#include "OpenGLDefs.h"
-#include "SceneMng.h"
-#include "Transform.h"
+#include "GameClient.hpp"
+#include "OpenGLDefs.hpp"
+#include "SceneMng.hpp"
+#include "Transform.hpp"
 
-#include "CameraSpherical.h"
+#include "CameraSpherical.hpp"
 
 Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo)
     : pSceneMng(_pScenMng), pVideo(_pVideo) {

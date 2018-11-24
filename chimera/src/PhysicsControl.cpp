@@ -1,4 +1,4 @@
-#include "PhysicsControl.h"
+#include "PhysicsControl.hpp"
 
 #ifndef WIN32
 #include <SDL2/SDL.h>
@@ -7,7 +7,7 @@
 #include <utility>
 #endif
 
-#include "GameClient.h"
+#include "GameClient.hpp"
 
 namespace Chimera {
 

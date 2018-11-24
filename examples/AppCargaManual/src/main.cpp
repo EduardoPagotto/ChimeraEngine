@@ -1,7 +1,7 @@
 #ifndef WIN32
 #include <cstdio>
 #else
-#include "stdafx.h"
+#include "stdafx.hpp"
 #endif
 
 #include <iostream>
@@ -11,7 +11,7 @@
 #include <VideoDevice.h>
 
 #ifdef OVR_SET_TO_USE
-#include "OvrDevice.h"
+#include "OvrDevice.hpp"
 #endif
 
 #include <Game.h>

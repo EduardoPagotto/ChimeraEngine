@@ -1,4 +1,4 @@
-#include "MeshUtil.h"
+#include "MeshUtil.hpp"
 
 #include <spdlog/spdlog.h>
 

@@ -1,4 +1,4 @@
-#include "Constraint.h"
+#include "Constraint.hpp"
 
 namespace Chimera {
 

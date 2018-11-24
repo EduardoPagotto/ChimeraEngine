@@ -1,12 +1,12 @@
 #ifndef WIN32
 #include <cstdio>
 #else
-#include "stdafx.h"
+#include "stdafx.hpp"
 #endif
 
 #include <iostream>
 //#include <VideoDevice.h>
-#include "Game.h"
+#include "Game.hpp"
 #include <ExceptionChimera.h>
 #include <FlowControl.h>
 #include <HmdDevice.h>

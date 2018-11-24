@@ -1,7 +1,7 @@
-#include "Solid.h"
-#include "Draw.h"
-#include "NodeVisitor.h"
-#include "Singleton.h"
+#include "Solid.hpp"
+#include "Draw.hpp"
+#include "NodeVisitor.hpp"
+#include "Singleton.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 

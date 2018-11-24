@@ -1,6 +1,6 @@
-#include "LibraryCameras.h"
-#include "CameraSpherical.h"
-#include "ExceptionChimera.h"
+#include "LibraryCameras.hpp"
+#include "CameraSpherical.hpp"
+#include "ExceptionChimera.hpp"
 
 namespace ChimeraLoaders {
 

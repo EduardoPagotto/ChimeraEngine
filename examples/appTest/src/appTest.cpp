@@ -1,21 +1,21 @@
 #ifndef WIN32
 #include <cstdio>
 #else
-#include "stdafx.h"
+#include "stdafx.hpp"
 #endif
 
-#include "CameraSpherical.h"
-#include "ExceptionChimera.h"
-#include "FlowControl.h"
-#include "Game.h"
-#include "Group.h"
-#include "Light.h"
-#include "MeshUtil.h"
-#include "Transform.h"
-#include "VideoDevice.h"
+#include "CameraSpherical.hpp"
+#include "ExceptionChimera.hpp"
+#include "FlowControl.hpp"
+#include "Game.hpp"
+#include "Group.hpp"
+#include "Light.hpp"
+#include "MeshUtil.hpp"
+#include "Transform.hpp"
+#include "VideoDevice.hpp"
 #include <iostream>
 
-#include "ShadersLoader.h"
+#include "ShadersLoader.hpp"
 
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>

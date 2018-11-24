@@ -1,6 +1,6 @@
-#include "LibraryGeometrys.h"
-#include "ExceptionChimera.h"
-#include "LibraryMaterials.h"
+#include "LibraryGeometrys.hpp"
+#include "ExceptionChimera.hpp"
+#include "LibraryMaterials.hpp"
 
 namespace ChimeraLoaders {
 

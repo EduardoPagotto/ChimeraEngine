@@ -1,6 +1,6 @@
-#include "ShadowMap.h"
-#include "Singleton.h"
-#include "Video.h"
+#include "ShadowMap.hpp"
+#include "Singleton.hpp"
+#include "Video.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

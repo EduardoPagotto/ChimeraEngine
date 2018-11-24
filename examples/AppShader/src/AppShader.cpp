@@ -1,16 +1,16 @@
 #ifndef WIN32
 #include <cstdio>
 #else
-#include "stdafx.h"
+#include "stdafx.hpp"
 #endif
 
-#include "ExceptionChimera.h"
-#include "FlowControl.h"
-#include "Game.h"
-#include "VideoDevice.h"
+#include "ExceptionChimera.hpp"
+#include "FlowControl.hpp"
+#include "Game.hpp"
+#include "VideoDevice.hpp"
 #include <iostream>
 
-#include "ShadersLoader.h"
+#include "ShadersLoader.hpp"
 
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>

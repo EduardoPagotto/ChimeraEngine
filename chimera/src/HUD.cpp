@@ -1,7 +1,7 @@
-#include "HUD.h"
-#include "ExceptionSDL.h"
-#include "NodeVisitor.h"
-#include "Singleton.h"
+#include "HUD.hpp"
+#include "ExceptionSDL.hpp"
+#include "NodeVisitor.hpp"
+#include "Singleton.hpp"
 
 namespace Chimera {
 

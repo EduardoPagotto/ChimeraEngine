@@ -1,9 +1,9 @@
-#include "Mesh.h"
-#include "NodeVisitor.h"
+#include "Mesh.hpp"
+#include "NodeVisitor.hpp"
 #include <iterator>
 
-#include "MeshUtil.h"
-#include "Singleton.h"
+#include "MeshUtil.hpp"
+#include "Singleton.hpp"
 
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
 

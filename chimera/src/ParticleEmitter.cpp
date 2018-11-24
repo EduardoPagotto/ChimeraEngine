@@ -1,7 +1,7 @@
-#include "ParticleEmitter.h"
-#include "Camera.h"
-#include "ExceptionChimera.h"
-#include "NodeVisitor.h"
+#include "ParticleEmitter.hpp"
+#include "Camera.hpp"
+#include "ExceptionChimera.hpp"
+#include "NodeVisitor.hpp"
 #include <algorithm>
 
 namespace Chimera {

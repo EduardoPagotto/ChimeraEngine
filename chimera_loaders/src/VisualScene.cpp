@@ -1,6 +1,6 @@
-#include "VisualScene.h"
-#include "ExceptionChimera.h"
-#include "LibraryVisualSCenes.h"
+#include "VisualScene.hpp"
+#include "ExceptionChimera.hpp"
+#include "LibraryVisualSCenes.hpp"
 
 namespace ChimeraLoaders {
 

@@ -1,7 +1,7 @@
-#include "LibraryEffects.h"
-#include "ExceptionChimera.h"
-#include "LibraryImages.h"
-#include "Singleton.h"
+#include "LibraryEffects.hpp"
+#include "ExceptionChimera.hpp"
+#include "LibraryImages.hpp"
+#include "Singleton.hpp"
 
 namespace ChimeraLoaders {
 

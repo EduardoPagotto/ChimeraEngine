@@ -1,11 +1,11 @@
-#include "Game.h"
-#include "ExceptionSDL.h"
+#include "Game.hpp"
+#include "ExceptionSDL.hpp"
 
-#include "GameClient.h"
-#include "OpenGLDefs.h"
-#include "Transform.h"
+#include "GameClient.hpp"
+#include "OpenGLDefs.hpp"
+#include "Transform.hpp"
 
-#include "Singleton.h"
+#include "Singleton.hpp"
 
 Game::Game(Chimera::Shader* _pShader, Chimera::Video* _pVideo) : pVideo(_pVideo) {
     isPaused = false;

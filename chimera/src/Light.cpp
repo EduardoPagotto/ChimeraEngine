@@ -1,6 +1,6 @@
-#include "Light.h"
+#include "Light.hpp"
 
-#include "NodeVisitor.h"
+#include "NodeVisitor.hpp"
 #include <vector>
 
 #include <glm/gtc/matrix_transform.hpp>

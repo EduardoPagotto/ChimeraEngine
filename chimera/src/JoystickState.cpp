@@ -1,4 +1,4 @@
-#include "JoystickState.h"
+#include "JoystickState.hpp"
 #include <cmath>
 
 namespace Chimera {

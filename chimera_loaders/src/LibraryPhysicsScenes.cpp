@@ -1,10 +1,10 @@
-#include "LibraryPhysicsScenes.h"
-#include "ExceptionChimera.h"
+#include "LibraryPhysicsScenes.hpp"
+#include "ExceptionChimera.hpp"
 
-#include "LibraryPhysicModels.h"
+#include "LibraryPhysicModels.hpp"
 
-#include "Solid.h"
-#include "Transform.h"
+#include "Solid.hpp"
+#include "Transform.hpp"
 
 namespace ChimeraLoaders {
 

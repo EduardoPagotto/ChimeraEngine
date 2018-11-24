@@ -1,5 +1,5 @@
-#include "LibraryPhysicsMaterials.h"
-#include "ExceptionChimera.h"
+#include "LibraryPhysicsMaterials.hpp"
+#include "ExceptionChimera.hpp"
 
 namespace ChimeraLoaders {
 

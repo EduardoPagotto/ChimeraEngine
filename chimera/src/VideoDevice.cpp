@@ -1,5 +1,5 @@
-#include "VideoDevice.h"
-#include "ExceptionSDL.h"
+#include "VideoDevice.hpp"
+#include "ExceptionSDL.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>

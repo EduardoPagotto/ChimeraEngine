@@ -1,9 +1,9 @@
-#include "Game.h"
-#include "ExceptionSDL.h"
-#include "GameClient.h"
-#include "OpenGLDefs.h"
-#include "Singleton.h"
-#include "Transform.h"
+#include "Game.hpp"
+#include "ExceptionSDL.hpp"
+#include "GameClient.hpp"
+#include "OpenGLDefs.hpp"
+#include "Singleton.hpp"
+#include "Transform.hpp"
 
 Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo,
            Chimera::PhysicsControl* _physicWorld)

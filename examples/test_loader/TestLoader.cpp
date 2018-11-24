@@ -1,7 +1,7 @@
 #ifndef WIN32
 #include <cstdio>
 #else
-#include "stdafx.h"
+#include "stdafx.hpp"
 #endif
 
 #include <ExceptionChimera.h>

@@ -1,5 +1,5 @@
-#include "Library.h"
-#include "ExceptionChimera.h"
+#include "Library.hpp"
+#include "ExceptionChimera.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 

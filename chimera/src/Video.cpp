@@ -1,7 +1,7 @@
-#include "Video.h"
+#include "Video.hpp"
 
-#include "ExceptionChimera.h"
-#include "ExceptionSDL.h"
+#include "ExceptionChimera.hpp"
+#include "ExceptionSDL.hpp"
 
 namespace Chimera {
 

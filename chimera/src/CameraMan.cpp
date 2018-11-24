@@ -1,5 +1,5 @@
-#include "CameraMan.h"
-#include "OpenGLDefs.h"
+#include "CameraMan.hpp"
+#include "OpenGLDefs.hpp"
 
 namespace Chimera {
 

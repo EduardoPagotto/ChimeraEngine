@@ -1,11 +1,11 @@
-#include "LibraryVisualSCenes.h"
-#include "ExceptionChimera.h"
+#include "LibraryVisualSCenes.hpp"
+#include "ExceptionChimera.hpp"
 
-#include "LibraryCameras.h"
-#include "LibraryGeometrys.h"
-#include "LibraryLights.h"
+#include "LibraryCameras.hpp"
+#include "LibraryGeometrys.hpp"
+#include "LibraryLights.hpp"
 
-#include "Transform.h"
+#include "Transform.hpp"
 
 namespace ChimeraLoaders {
 

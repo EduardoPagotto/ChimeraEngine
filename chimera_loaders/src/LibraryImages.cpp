@@ -1,5 +1,5 @@
-#include "LibraryImages.h"
-#include "ExceptionChimera.h"
+#include "LibraryImages.hpp"
+#include "ExceptionChimera.hpp"
 
 #include <tuple>
 

@@ -70,7 +70,7 @@ void ShadowMapVisitor::visit ( SceneMng* _pSceneMng ) {
 void ShadowMapVisitor::visit ( Mesh* _pMesh ) {
 
 	pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
-    _pMesh->render();
+    _pMesh->render(nullptr);
 
 }
 

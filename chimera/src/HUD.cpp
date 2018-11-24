@@ -5,8 +5,7 @@
 
 namespace Chimera {
 
-HUD::HUD(Node *_parent, std::string _name, Shader *_pShader) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
-    pShader = _pShader;
+HUD::HUD(Node *_parent, std::string _name) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
 }
 
 HUD::~HUD() {
@@ -40,7 +39,7 @@ glm::vec3 HUD::getSizeBox() {
 	return glm::vec3();
 }
 
-void HUD::render()
+void HUD::render(Shader *_pShader)
 {
     // salva flags de bit
 	glPushAttrib(GL_ENABLE_BIT);
@@ -57,7 +56,7 @@ void HUD::render()
 
 	for (HUDTxt *l_pTxt : vLineText) {
 
-		pShader->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
+		_pShader->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
 
 		vFonts[l_pTxt->indexFonte]->RenderText(l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
 	}

@@ -14,7 +14,7 @@ public:
     Draw ( const Draw &_draw );
     virtual ~Draw();
 
-    virtual void render() = 0;
+    virtual void render(Shader *_pShader) = 0;
     virtual glm::vec3 getSizeBox() = 0;
 
 	void setMaterial(Material* _pMat) {

@@ -98,13 +98,13 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 
 		Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
 		posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000, mapa["particle-default"]);
+		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
 		pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
 		//Novo Grupos com shader de um HUD ao Grapho da cena
         Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng, "HUD-Group");
 		gHud->setShader(mapa["hud-default"]);
-		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default", mapa["hud-default"]);
+		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default");
 		Chimera::Font *pFont = new Chimera::Font ( font, 18 ); // TODO: carregar size da fonte
 		pHUD->addFont ( pFont );
 

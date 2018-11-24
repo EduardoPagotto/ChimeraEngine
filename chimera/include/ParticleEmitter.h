@@ -18,14 +18,14 @@ namespace Chimera {
 class ParticleEmitter : public Draw
 {
 public:
-	ParticleEmitter(Node *_parent, std::string _name, int _max, Shader *_pShader);
+	ParticleEmitter(Node *_parent, std::string _name, int _max);
 	virtual ~ParticleEmitter();
 
 	// Inherited via Node
 	virtual void accept(class NodeVisitor* v) override;
 
 	// Inherited via Draw
-	virtual void render() override;
+	virtual void render(Shader *_pShader) override;
 	virtual glm::vec3 getSizeBox() override;
 
 	void setSizeBox(const glm::vec3 &_size);
@@ -55,8 +55,6 @@ private:
 	glm::vec3 sizeBox;
 	Particle ParticlesContainer[MaxParticles];
 	Timer timer;
-
-	Shader *pShader;
 };
 }
 #endif

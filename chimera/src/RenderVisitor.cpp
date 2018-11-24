@@ -62,7 +62,7 @@ void RenderVisitor::visit ( Mesh* _pMesh ) {
 		pShader->setGlUniform1i("shadowMap", (int)shadowOn->getShadowIndexTextureSeq());
 	}
 
-    _pMesh->render();
+    _pMesh->render(pShader);
 
 }
 
@@ -95,7 +95,7 @@ void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 		pShader->setGlUniform3f("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
 
 		_pParticleEmitter->CameraPosition = CameraPosition;
-		_pParticleEmitter->render();
+		_pParticleEmitter->render(pShader);
 	}
 
 }
@@ -158,7 +158,7 @@ void RenderVisitor::visit ( HUD* _pHUD ) {
 		if (_pHUD->isOn() == true) {
 
 			pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr( pVideo->getOrthoProjectionMatrix(eye) ));
-			_pHUD->render();
+			_pHUD->render(pShader);
 		}
 	}
 }

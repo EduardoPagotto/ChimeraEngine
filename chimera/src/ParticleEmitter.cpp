@@ -5,12 +5,9 @@
 #include <algorithm>
 
 namespace Chimera {
-ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max, Shader *_pShader) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
+ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
 	//MaxParticles = _max;
 	LastUsedParticle = 0;
-
-	pShader = _pShader;
-
 	material = new Material("AutoMaterialParticleEmmiter_" + std::to_string( Entity::getNextSerialMaster() + 1 ));
 }
 
@@ -123,7 +120,7 @@ int ParticleEmitter::recycleParticleLife(const glm::vec3 &_camPosition) {
 	return ParticlesCount;
 }
 
-void ParticleEmitter::render()
+void ParticleEmitter::render(Shader *_pShader)
 {
 	//// We will need the camera's position in order to sort the particles
 	//// w.r.t the camera's distance.
@@ -163,7 +160,7 @@ void ParticleEmitter::render()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Bind our texture
-	material->apply(pShader);
+	material->apply(_pShader);
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

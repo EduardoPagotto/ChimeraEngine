@@ -29,7 +29,7 @@ public:
 	void accept(class NodeVisitor* v) override;
 
 	// Inherited via Draw
-    virtual void render () override;
+    virtual void render (Shader *_pShader) override;
     virtual glm::vec3 getSizeBox();
 
     std::vector<unsigned int> vertexIndex;

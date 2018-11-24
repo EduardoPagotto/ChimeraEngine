@@ -21,7 +21,7 @@ public:
         Color color;
     };
 
-    HUD(Node *_parent, std::string _name, Shader *_pShader);
+    HUD(Node *_parent, std::string _name);
 
     virtual ~HUD();
 
@@ -31,7 +31,7 @@ public:
 	void accept(class NodeVisitor* v) override;
 
 	// Inherited via Draw
-	virtual void render() override;
+	virtual void render(Shader *_pShader) override;
 	virtual glm::vec3 getSizeBox() override;
 
     void addFont ( Font *_pFont );
@@ -50,8 +50,6 @@ private:
     bool on;
     std::vector<HUDTxt*> vLineText;
     std::vector<Font*> vFonts;
-
-    Shader *pShader;
 };
 }
 

@@ -105,7 +105,7 @@ glm::vec3 Mesh::getSizeBox() {
 
 
 
-void Mesh::render () {
+void Mesh::render (Shader *_pShader) {
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));

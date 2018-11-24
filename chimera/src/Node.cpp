@@ -4,8 +4,8 @@ namespace Chimera {
 
 //std::list<Node*> Node::listNode;
 
-Node::Node ( Node *_parent, EntityKind _type, std::string _name )
-    : parent ( _parent ), Entity ( _type, _name ) {
+Node::Node(Node *_parent, EntityKind _type, std::string _name)
+    : parent(_parent), Entity(_type, _name) {
 
     if ( parent != nullptr ) {
         parent->vChild.push_back ( this );
@@ -29,14 +29,14 @@ std::vector<Node*>* Node::getChilds() {
     return nullptr;
 }
 
-void Node::addChild ( Node *_child ) {
+void Node::addChild(Node *_child) {
     if ( _child != nullptr ) {
         _child->setParent ( this );
         vChild.push_back ( _child );
     }
 }
 
-void Node::setParent ( Node *_node ) {
+void Node::setParent(Node *_node) {
 
     if ( parent != nullptr ) 
         parent->removeChild ( this );
@@ -44,7 +44,7 @@ void Node::setParent ( Node *_node ) {
     parent = _node;
 }
 
-void Node::removeChild ( Node* _child ) {
+void Node::removeChild(Node* _child) {
     if ( _child != nullptr  && !vChild.empty() ) {
         for ( size_t i = 0; i < vChild.size(); ++i ) {
             if ( vChild[i] == _child ) {
@@ -55,7 +55,7 @@ void Node::removeChild ( Node* _child ) {
     }
 };
 
-const size_t Node::countChilds ( const bool &_recursiveCount ) const {
+const size_t Node::countChilds(const bool &_recursiveCount) const {
     if ( !_recursiveCount ) {
 
         return ( vChild.size() );
@@ -71,7 +71,7 @@ const size_t Node::countChilds ( const bool &_recursiveCount ) const {
     }
 };
 
-Node* Node::findChild ( const std::string &_searchName, const bool &_findInChild ) {
+Node* Node::findChild(const std::string &_searchName, const bool &_findInChild) {
 
     if ( !vChild.empty() ) {
         for ( size_t i = 0; i < vChild.size(); ++i ) {
@@ -95,7 +95,7 @@ Node* Node::findChild ( const std::string &_searchName, const bool &_findInChild
     return nullptr;
 };
 
-Node *Node::findChild ( const EntityKind &_type, const int &_index, const bool &_findInChild ) {
+Node *Node::findChild(const EntityKind &_type, const int &_index, const bool &_findInChild) {
 
     int l_index = 0;
     for ( Node* node : vChild ) {

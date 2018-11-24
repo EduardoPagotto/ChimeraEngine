@@ -11,7 +11,7 @@ public:
 	Transform(Node* _parent, std::string _name);
 	virtual ~Transform();
 
-	void accept(class NodeVisitor * v);
+	virtual void accept(class NodeVisitor * v) override;
 
 	// Inherited via Coord
     virtual glm::vec3 getPosition() override;

@@ -22,7 +22,6 @@ Solid::Solid (Node *_parent, std::string _name, PhysicsControl *_pWorld ) : Coor
 	transform.setIdentity();
 
     pWorld = _pWorld;
-    //pWorld = Singleton<PhysicsControl>::getRefSingleton();
 }
 
 Solid::Solid ( const Solid& _solid) : Coord (_solid) {
@@ -41,7 +40,6 @@ Solid::Solid ( const Solid& _solid) : Coord (_solid) {
 	transform = _solid.transform;
 
     pWorld = _solid.pWorld;
-    //pWorld = Singleton<PhysicsControl>::getRefSingleton();
 }
 
 Solid::~Solid() {
@@ -57,8 +55,6 @@ Solid::~Solid() {
     if ( pShapeCollision ) {
         delete pShapeCollision;
     }
-
-    //Singleton<PhysicsControl>::releaseRefSingleton();
 }
 
 void Solid::init() {

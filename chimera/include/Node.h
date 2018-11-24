@@ -23,7 +23,7 @@ public:
      * @param _parent ponteiro do Node Pai ou <code>nullptr</code>
      * @param _name nome do Node
      */
-    Node ( Node *_parent, EntityKind _type, std::string _name );
+    Node (Node *_parent, EntityKind _type, std::string _name);
 
     /**
      * Destructor
@@ -34,19 +34,19 @@ public:
      * Entry point de visitor
      * @param v ponteiro do visitor
      */
-    virtual void accept ( class NodeVisitor* v ) = 0;
+    virtual void accept(class NodeVisitor* v) = 0;
 
     /**
      * Adiciona um child ao Node atual
      * @param _child Node a ser adicionado a este como filho
      */
-    void addChild ( Node *_child );
+    void addChild(Node *_child);
 
     /**
      * Define novo Pai, removendo o original se existir
      * @param _node Novo node pai
      */
-    void setParent ( Node *_node );
+    void setParent(Node *_node);
 
     /**
      * Retorna um vector com os filhos deste Node
@@ -58,21 +58,21 @@ public:
      * Remove Node Child deste node Pai
      * @param _child node a ser removido dos filhos
      */
-    void removeChild ( Node* _child );
+    void removeChild(Node* _child);
 
     /**
      * Retorna o Numero de filhos deste pai ou de todos os descendentes
      * @param _recursiveCount se <code>TRUE</code> define toda a linhagem<p> se Pai apoenas os locais
      * @return numero de filhos
      */
-    const size_t countChilds ( const bool &_recursiveCount ) const;
+    const size_t countChilds(const bool &_recursiveCount) const;
 
     /**
      * Localiza child com o nome
      * @param _searchName nome a se perquisar
      * @return Node ou <code>nullptr</code> se nao encontrado
      */
-    Node* findChild ( const std::string &_searchName, const bool &_findInChild );
+    Node* findChild(const std::string &_searchName, const bool &_findInChild);
 
     /**
      * Localiza child com o nome
@@ -80,7 +80,7 @@ public:
      * @param _index indice do Node de mesmo tipo
      * @return Node ou <code>nullptr</code> se nao encontrado
      */
-    Node* findChild ( const EntityKind &_type, const int &_index, const bool &_findInChild );
+    Node* findChild(const EntityKind &_type, const int &_index, const bool &_findInChild);
 
     /**
      * Retorna node Pai
@@ -94,7 +94,7 @@ public:
      * Define o Status de Uso do Node
      * @param _col se <code>0</code> livre <p> Se <code>1</code> Ocupado
      */
-    inline void setColor ( const int &_col ) {
+    inline void setColor(const int &_col) {
         color = _col;
     }
 

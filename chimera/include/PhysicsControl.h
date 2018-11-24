@@ -17,11 +17,8 @@ namespace Chimera {
 class PhysicsControl
 {
 public:
-
     PhysicsControl ( void );
     virtual ~PhysicsControl ( void );
-
-    void accept ( class NodeVisitor* v ){}
 
     void clearAllShapes ( void );
     void removeAllObjs ( void );
@@ -59,7 +56,6 @@ public:
     }
 
 private:
-
     static void doTickCallBack ( btDynamicsWorld *world, btScalar timeStep );
     void processTickCallBack ( btScalar timeStep );
 

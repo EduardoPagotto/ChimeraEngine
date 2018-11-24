@@ -18,7 +18,7 @@ Transform::Transform(Node* _parent, std::string _name) : Coord (_parent, EntityK
 Transform::~Transform() {
 }
 
-void Transform::accept(class NodeVisitor* v) {
+void Transform::accept(NodeVisitor* v) {
 	v->visit(this);
 }
 

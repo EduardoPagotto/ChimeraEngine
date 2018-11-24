@@ -33,20 +33,16 @@ public:
 	Coord *pCoord;
 
 private:
-	//glm::mat4 calcLightSpaceMatrices ( const glm::vec3 &_posicaoLight );
+	ShadowMap *shadowMap;
+    Shader *pShader;
+	glm::mat4 model;
+
+    //glm::mat4 calcLightSpaceMatrices ( const glm::vec3 &_posicaoLight );
 	//void createLightViewPosition(const glm::vec3 & _posicaoLight);
 	//void initSceneShadow();
 	//void endSceneShadow();
-	ShadowMap *shadowMap;
-
-
-    Shader *pShader;
-	//ShadersManager *simpleDepthShader;
-
 	//GLuint depthMapFBO;
     //Texture *pTexture;
-
-	glm::mat4 model;
 };
 }
 

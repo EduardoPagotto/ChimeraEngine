@@ -169,8 +169,7 @@ void Game::render() {
 	//TODO desenhar aqui!!
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// Use our shadersManager
-	//glUseProgram(programID);
+	// Use our shaders
     pShader->link();
 
 	// 1rst attribute buffer : vertices

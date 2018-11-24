@@ -23,15 +23,12 @@ ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned int &
 {
 	shadowMap = new ShadowMap(_name, _width, _height);
 	pShader = _pShader;
-	//simpleDepthShader = Singleton<ShadersManager >::getRefSingleton();
 }
 
 ShadowMapVisitor::~ShadowMapVisitor() {
 
 	delete shadowMap;
 	shadowMap = nullptr;
-
-	//Singleton<ShadersManager >::releaseRefSingleton();
 }
 
 ShadowMap* ShadowMapVisitor::execute(Node *_pNode) {
@@ -40,8 +37,7 @@ ShadowMap* ShadowMapVisitor::execute(Node *_pNode) {
 
 	glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix( nodeLight->getPosition() );
 
-	// TODO: jogar a carga deste no mail
-	//simpleDepthShader->selectCurrent("simpleDepthShader");
+	//Shader selecionado correto no RenderVisitor via Group
 	pShader->link();
 	pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 

@@ -36,10 +36,6 @@ private:
 	bool isPaused;
 
 private:
-
-	//std::string vertexFile;
-	//std::string fragmentFile;
-
     Chimera::Shader *pShader;
 	GLuint vertexbuffer;
 	GLuint VertexArrayID;

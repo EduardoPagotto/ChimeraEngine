@@ -2,6 +2,26 @@
 
 Simple Game Engine
 
+#formatação codigo fonte com clang
+ref: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+```
+apt install clang-format
+```
+
+#Configuracao do clang no vscode (.vscode\settings.json) format string
+```json
+{
+   "BasedOnStyle": "LLVM", 
+   "IndentWidth": 4,
+   "IndentCaseLabels": true, 
+   "AllowShortBlocksOnASingleLine": true, 
+   "ColumnLimit": 90, 
+   "PointerAlignment": "Left", 
+   "DerivePointerAlignment": false
+}
+```
+
 ## Para o log e carga de yaml no ubuntu:
 ```
 apt-get install libspdlog-dev

@@ -1,14 +1,9 @@
-#include "Constraint.h"
+#include "Constraint.hpp"
 
 namespace Chimera {
-    
-Constraint::Constraint ( std::string _name ) : Entity ( EntityKind::CONSTRAINT, _name ) {
 
-}
+Constraint::Constraint(std::string _name) : Entity(EntityKind::CONSTRAINT, _name) {}
 
-Constraint::~Constraint() {
+Constraint::~Constraint() {}
 
-}
-
-}
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;
+} // namespace Chimera

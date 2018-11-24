@@ -1,20 +1,18 @@
-#include "Timer.h"
+#include "Timer.hpp"
 
 namespace Chimera {
-    
-Timer::Timer() :
-    startTicks ( 0 ), pausedTicks ( 0 ), started ( false ), paused ( false ), step ( 0 ), countStep ( 0 ), elapsedCount ( 0 ), lastTicks(0) {
-}
 
-Timer::~Timer() {
+Timer::Timer()
+    : startTicks(0), pausedTicks(0), started(false), paused(false), step(0), countStep(0),
+      elapsedCount(0), lastTicks(0) {}
 
-}
+Timer::~Timer() {}
 
 void Timer::start() {
     started = true;
     paused = false;
     startTicks = SDL_GetTicks();
-	lastTicks = startTicks;
+    lastTicks = startTicks;
 }
 
 void Timer::stop() {
@@ -23,18 +21,17 @@ void Timer::stop() {
 }
 
 void Timer::pause() {
-    if ( started && !paused ) {
+    if (started && !paused) {
         paused = true;
         pausedTicks = SDL_GetTicks() - startTicks;
     }
 }
 
-
 void Timer::resume() {
-    if ( paused ) {
+    if (paused) {
         paused = false;
         startTicks = SDL_GetTicks() - pausedTicks;
-		lastTicks = startTicks;
+        lastTicks = startTicks;
         pausedTicks = 0;
     }
 }
@@ -46,8 +43,8 @@ Uint32 Timer::restart() {
 }
 
 Uint32 Timer::ticks() const {
-    if ( started ) {
-        if ( !paused ) {
+    if (started) {
+        if (!paused) {
             return SDL_GetTicks() - startTicks;
         } else {
             return pausedTicks;
@@ -59,7 +56,7 @@ Uint32 Timer::ticks() const {
 bool Timer::stepCount() {
 
     Uint32 temp = ticks();
-    if ( temp < elapsedCount ) {
+    if (temp < elapsedCount) {
         step++;
     } else {
         countStep = step;
@@ -70,5 +67,4 @@ bool Timer::stepCount() {
 
     return false;
 }
-} /* namespace Chimera */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;
+} // namespace Chimera

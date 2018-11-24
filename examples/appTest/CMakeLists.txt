@@ -10,13 +10,15 @@ find_package(GLEW REQUIRED)
 
 set (IncludesAppTest ${appTest_SOURCE_DIR}/include/
 					 ${Chimera_SOURCE_DIR}/include
+					 ${ChimeraLoaders_SOURCE_DIR}/include/
 					 ${OPENGL_INCLUDE_DIR}
 					 ${SDL2_INCLUDE_DIR}
 					 ${BULLET_INCLUDE_DIR}
 					 ${FREETYPE_INCLUDE_DIRS}
 					 ${GLEW_INCLUDE_DIR})
 
-set (LibsAppTest ${Chimera_BINARY_DIR}/libChimera.a #SourcesChimeraAPPTest
+set (LibsAppTest ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a
+				 ${Chimera_BINARY_DIR}/libChimera.a
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_LIBRARY}
 				 ${BULLET_LIBRARIES}
@@ -41,6 +43,7 @@ endif(OVR_SET_TO_USE)
 target_include_directories (appTest PRIVATE ${IncludesAppTest})
 target_link_libraries(appTest ${LibsAppTest})
 
-add_dependencies(appTest Chimera)
+add_dependencies(appTest Chimera
+						 ChimeraLoaders)
 
 INSTALL(FILES ${appTest_BINARY_DIR}/appTest DESTINATION bin)

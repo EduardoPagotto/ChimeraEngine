@@ -1,19 +1,19 @@
-#include "Node.h"
+#include "Node.hpp"
 
 namespace Chimera {
 
-//std::list<Node*> Node::listNode;
+// std::list<Node*> Node::listNode;
 
-Node::Node ( Node *_parent, EntityKind _type, std::string _name )
-    : parent ( _parent ), Entity ( _type, _name ) {
+Node::Node(Node* _parent, EntityKind _type, std::string _name)
+    : parent(_parent), Entity(_type, _name) {
 
-    if ( parent != nullptr ) {
-        parent->vChild.push_back ( this );
+    if (parent != nullptr) {
+        parent->vChild.push_back(this);
     }
 
-    //listNode.push_back ( this );
+    // listNode.push_back ( this );
 
-    setColor ( 0 );
+    setColor(0);
 }
 
 Node::~Node() {
@@ -22,86 +22,85 @@ Node::~Node() {
 }
 
 std::vector<Node*>* Node::getChilds() {
-    if ( !vChild.empty() ) {
-        return & ( this->vChild );
+    if (!vChild.empty()) {
+        return &(this->vChild);
     }
 
     return nullptr;
 }
 
-void Node::addChild ( Node *_child ) {
-    if ( _child != nullptr ) {
-        _child->setParent ( this );
-        vChild.push_back ( _child );
+void Node::addChild(Node* _child) {
+    if (_child != nullptr) {
+        _child->setParent(this);
+        vChild.push_back(_child);
     }
 }
 
-void Node::setParent ( Node *_node ) {
+void Node::setParent(Node* _node) {
 
-    if ( parent != nullptr ) 
-        parent->removeChild ( this );
-    
+    if (parent != nullptr)
+        parent->removeChild(this);
+
     parent = _node;
 }
 
-void Node::removeChild ( Node* _child ) {
-    if ( _child != nullptr  && !vChild.empty() ) {
-        for ( size_t i = 0; i < vChild.size(); ++i ) {
-            if ( vChild[i] == _child ) {
-                vChild.erase ( vChild.begin() + i );
+void Node::removeChild(Node* _child) {
+    if (_child != nullptr && !vChild.empty()) {
+        for (size_t i = 0; i < vChild.size(); ++i) {
+            if (vChild[i] == _child) {
+                vChild.erase(vChild.begin() + i);
                 break;
             }
         }
     }
 };
 
-const size_t Node::countChilds ( const bool &_recursiveCount ) const {
-    if ( !_recursiveCount ) {
+const size_t Node::countChilds(const bool& _recursiveCount) const {
+    if (!_recursiveCount) {
 
-        return ( vChild.size() );
+        return (vChild.size());
 
     } else {
 
         size_t Retval = vChild.size();
-        for ( size_t i = 0; i < vChild.size(); ++i ) {
-            Retval += vChild[i]->countChilds ( true );
+        for (size_t i = 0; i < vChild.size(); ++i) {
+            Retval += vChild[i]->countChilds(true);
         }
 
-        return ( Retval );
+        return (Retval);
     }
 };
 
-Node* Node::findChild ( const std::string &_searchName, const bool &_findInChild ) {
+Node* Node::findChild(const std::string& _searchName, const bool& _findInChild) {
 
-    if ( !vChild.empty() ) {
-        for ( size_t i = 0; i < vChild.size(); ++i ) {
-            if ( _searchName.compare ( vChild[i]->getName() ) == 0 )
+    if (!vChild.empty()) {
+        for (size_t i = 0; i < vChild.size(); ++i) {
+            if (_searchName.compare(vChild[i]->getName()) == 0)
                 return vChild[i];
         }
 
         if (_findInChild == true) {
-            for ( size_t i = 0; i < vChild.size(); ++i ) {
+            for (size_t i = 0; i < vChild.size(); ++i) {
 
-                Node *retVal = vChild[i]->findChild(_searchName, _findInChild);
+                Node* retVal = vChild[i]->findChild(_searchName, _findInChild);
 
                 if (retVal != nullptr)
                     return retVal;
-
             }
         }
-
     }
 
     return nullptr;
 };
 
-Node *Node::findChild ( const EntityKind &_type, const int &_index, const bool &_findInChild ) {
+Node* Node::findChild(const EntityKind& _type, const int& _index,
+                      const bool& _findInChild) {
 
     int l_index = 0;
-    for ( Node* node : vChild ) {
+    for (Node* node : vChild) {
 
-        if ( node->getKind() == _type ) {
-            if ( l_index == _index ) {
+        if (node->getKind() == _type) {
+            if (l_index == _index) {
                 return node;
             }
 
@@ -111,12 +110,11 @@ Node *Node::findChild ( const EntityKind &_type, const int &_index, const bool &
 
     if (_findInChild == true) {
 
-        for ( Node* node : vChild ) {
+        for (Node* node : vChild) {
 
             Node* result = node->findChild(_type, _index, _findInChild);
             if (result != nullptr)
                 return result;
-
         }
     }
 
@@ -153,5 +151,4 @@ Node *Node::findChild ( const EntityKind &_type, const int &_index, const bool &
 
 unsigned Entity::serialMaster = 0;
 
-}
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;
+} // namespace Chimera

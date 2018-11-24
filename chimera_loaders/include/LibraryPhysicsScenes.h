@@ -1,23 +1,25 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_PHYSICS_SCENES_H
-#define __CHIMERA_LOADER_LIBRARY_PHYSICS_SCENES_H
+#ifndef __CHIMERA_LOADER_LIBRARY_PHYSICS_SCENES__HPP
+#define __CHIMERA_LOADER_LIBRARY_PHYSICS_SCENES__HPP
 
 #include "Library.h"
-#include "PhysicsControl.h"
 #include "ListNodes.h"
+#include "PhysicsControl.h"
 
 namespace ChimeraLoaders {
 
-class LibraryPhysicsScenes: public Library {
-public:
-    LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string &_url, Chimera::PhysicsControl *_pPhysicsControl);
+class LibraryPhysicsScenes : public Library {
+  public:
+    LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url,
+                         Chimera::PhysicsControl* _pPhysicsControl);
     virtual ~LibraryPhysicsScenes();
     void target();
-private:
+
+  private:
     void loadPhysicControlCollada(tinyxml2::XMLElement* _nNode);
 
-    ListNodes *pListNodes;
-    Chimera::PhysicsControl *pPhysicsControl;
+    ListNodes* pListNodes;
+    Chimera::PhysicsControl* pPhysicsControl;
 };
-}
+} // namespace ChimeraLoaders
 
 #endif

@@ -1,14 +1,14 @@
-#ifndef MUTEX_H
-#define MUTEX_H
+#ifndef __CHIMERA_MUTEX__HPP
+#define __CHIMERA_MUTEX__HPP
 
 #ifdef _WIN32
 #include <Windows.h>
 #else
 #include <cstdarg>
-#include <pthread.h>
-#include <sys/time.h>
-#include <sys/errno.h>
 #include <iterator>
+#include <pthread.h>
+#include <sys/errno.h>
+#include <sys/time.h>
 #endif
 
 //#include <ctime>
@@ -20,8 +20,8 @@ namespace Chimera {
 /// <summary> Wrapper Windows-Posix para status de mutex </summary>
 enum MUTEX_STATUS {
 #ifdef _WIN32
-    MUTEX_OK = TRUE,	//WAIT_OBJECT_0,
-    MUTEX_TIME_OUT = FALSE	//WAIT_TIMEOUT
+    MUTEX_OK = TRUE,       // WAIT_OBJECT_0,
+    MUTEX_TIME_OUT = FALSE // WAIT_TIMEOUT
 #else
     MUTEX_OK = 0,
     MUTEX_TIME_OUT = EBUSY
@@ -31,96 +31,82 @@ enum MUTEX_STATUS {
 #ifdef _WIN32
 
 /// <summary> Mutex em tempo de kernel(apenas win32) </summary>
-class Mutex
-{
-public:
-
+class Mutex {
+  public:
     /// <summary> Contrutor padaro mudex livre </summary>
-    Mutex ( void ) {
-        m_mutex = CreateMutex ( nullptr, FALSE, nullptr );
-    }
+    Mutex(void) { m_mutex = CreateMutex(nullptr, FALSE, nullptr); }
 
     /// <summary> Destrutor padrao release de Handle </summary>
-    virtual ~Mutex ( void ) {
-        WaitForSingleObject ( m_mutex, INFINITE );
-        CloseHandle ( m_mutex );
+    virtual ~Mutex(void) {
+        WaitForSingleObject(m_mutex, INFINITE);
+        CloseHandle(m_mutex);
     }
 
     /// <summary> Trava Mutex </summary>
-    inline DWORD lock ( void ) {
-        return WaitForSingleObject ( m_mutex, INFINITE );
-    }
+    inline DWORD lock(void) { return WaitForSingleObject(m_mutex, INFINITE); }
 
     /// <summary> Tenta Travar Mutex </summary>
     /// <returns>
     /// MUTEX_OK (TRUE) se obteve a trava
     /// MUTEX_TIME_OUT (FALSE) se falhou na obtcao de trava
     /// </returns>
-    inline DWORD tryLock ( DWORD _milisec = 0 ) {
-        return WaitForSingleObject ( m_mutex, _milisec );
+    inline DWORD tryLock(DWORD _milisec = 0) {
+        return WaitForSingleObject(m_mutex, _milisec);
     }
 
     /// <summary> Destrava Mutex </summary>
-    inline DWORD unlock ( void ) {
-        if ( ReleaseMutex ( m_mutex ) != 0 ) {
+    inline DWORD unlock(void) {
+        if (ReleaseMutex(m_mutex) != 0) {
             return 0;
         }
         return LONG_MAX;
     }
-private:
+
+  private:
     /// <summary> Handle de controle do Mutex </summary>
     HANDLE m_mutex;
 };
 
 #else
-class Mutex
-{
-public:
-    Mutex ( void ) {
+class Mutex {
+  public:
+    Mutex(void) {
         pthread_mutexattr_t mattr;
-        pthread_mutexattr_init ( &mattr );
-        pthread_mutex_init ( &m_mutex,&mattr );
+        pthread_mutexattr_init(&mattr);
+        pthread_mutex_init(&m_mutex, &mattr);
     }
-    virtual ~Mutex ( void ) {
-        pthread_mutex_lock ( &m_mutex );
-        pthread_mutex_unlock ( &m_mutex );
-        pthread_mutex_destroy ( &m_mutex );
+    virtual ~Mutex(void) {
+        pthread_mutex_lock(&m_mutex);
+        pthread_mutex_unlock(&m_mutex);
+        pthread_mutex_destroy(&m_mutex);
     }
-    inline int lock ( void ) {
-        return pthread_mutex_lock ( &this->m_mutex );
-    }
+    inline int lock(void) { return pthread_mutex_lock(&this->m_mutex); }
 
-    inline int tryLock ( void ) {
-        return pthread_mutex_trylock ( &this->m_mutex );
-    }
+    inline int tryLock(void) { return pthread_mutex_trylock(&this->m_mutex); }
 
-    inline int unlock ( void )	{
-        return pthread_mutex_unlock ( &this->m_mutex );
-    }
-protected:
+    inline int unlock(void) { return pthread_mutex_unlock(&this->m_mutex); }
+
+  protected:
     pthread_mutex_t m_mutex;
 };
 #endif
 
 /// <summary> Trava de Mutex Atraves de opercao em Stack-Pointer </summary>
-class Lock
-{
-public:
+class Lock {
+  public:
     /// <summary> Contrutor Trava Mutex </summary>
     /// <param name=" _pMutex"> Mutex a ser travado no Stack-Pointer </param>
-    Lock ( Mutex *_pMutex ) {
+    Lock(Mutex* _pMutex) {
         m_pMutex = _pMutex;
         m_pMutex->lock();
     }
 
     /// <summary> Destrutor Destrava Mutex </summary>
-    ~Lock() {
-        m_pMutex->unlock();
-    }
+    ~Lock() { m_pMutex->unlock(); }
 
-private:
+  private:
     /// <summary> Ponteiro do Mutex </summary>
-    Mutex *m_pMutex;
+    Mutex* m_pMutex;
 };
 
 // #ifdef _WIN32
@@ -210,8 +196,8 @@ private:
 //     /// vazio infinito
 //     /// 0 intantaneo
 //     /// </param>
-//     /// <returns>Retorno 0 em caso de liberacao por sinal ou ETIME em caso de estouro de tempo</returns>
-//     inline DWORD wait(DWORD _milisec = INFINITE) {
+//     /// <returns>Retorno 0 em caso de liberacao por sinal ou ETIME em caso de estouro
+//     de tempo</returns> inline DWORD wait(DWORD _milisec = INFINITE) {
 //         //TODO:TESTAR unix
 //         if (_milisec == INFINITE)
 //         {
@@ -231,5 +217,5 @@ private:
 //     pthread_mutex_t m_mutex;
 // };
 // #endif
-}
+} // namespace Chimera
 #endif

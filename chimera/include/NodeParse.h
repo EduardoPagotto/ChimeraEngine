@@ -1,14 +1,12 @@
-#ifndef NODE_PARSE__H
-#define NODE_PARSE__H
+#ifndef __CHIMERA_NODE_PARSE__HPP
+#define __CHIMERA_NODE_PARSE__HPP
 
 namespace Chimera {
 
-class NodeParse
-{
-public:
-    static void tree(class Node* u, class NodeVisitor *pVisit);
-
+class NodeParse {
+  public:
+    static void tree(class Node* u, class NodeVisitor* pVisit);
 };
-}
+} // namespace Chimera
 
-# endif
+#endif

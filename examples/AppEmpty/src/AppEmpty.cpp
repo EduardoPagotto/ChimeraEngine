@@ -6,18 +6,18 @@
 
 #include <iostream>
 //#include <VideoDevice.h>
-#include <HmdDevice.h>
 #include "Game.h"
-#include <FlowControl.h>
 #include <ExceptionChimera.h>
+#include <FlowControl.h>
+#include <HmdDevice.h>
 
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
 #ifndef WIN32
-int main ( int argn, char** argv ) {
+int main(int argn, char** argv) {
 #else
-int _tmain ( int argc, _TCHAR* argv[] ) {
+int _tmain(int argc, _TCHAR* argv[]) {
 #endif
 
     auto console = spdlog::stdout_color_st("chimera");
@@ -25,25 +25,27 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
     spdlog::set_level(spdlog::level::debug);
 
     console->info("AppEmpty Iniciado");
-    for (int i=0 ; i < argn; i++) {
+    for (int i = 0; i < argn; i++) {
         console->info("Parametros {0}: {1}", i, argv[i]);
     }
 
     try {
         std::string config_file = "./examples/AppEmpty/etc/empty.yaml";
 
-        console->info("Carregar arquivo:{0}",config_file);
+        console->info("Carregar arquivo:{0}", config_file);
         YAML::Node config = YAML::LoadFile(config_file);
 
         YAML::Node screen = config["screen"];
         YAML::Node canvas = screen["canvas"];
-        Chimera::Video *video = new Chimera::HmdDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
+        Chimera::Video* video =
+            new Chimera::HmdDevice(canvas["w"].as<int>(), canvas["h"].as<int>(),
+                                   screen["name"].as<std::string>());
 
-        Game *game = new Game(video);
+        Game* game = new Game(video);
 
-		Chimera::FlowControl *pControle = new Chimera::FlowControl( game );
-		pControle->open();
-		pControle->gameLoop();
+        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
+        pControle->open();
+        pControle->gameLoop();
 
         console->info("Loop de Game encerrado!!!!");
 
@@ -51,23 +53,21 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         delete game;
         delete video;
 
-    } catch ( const Chimera::Exception& ex ) {
+    } catch (const Chimera::ExceptionBase& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
-        //std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
+        // std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;
     } catch (const std::exception& ex) {
         console->error("Falha grave:{0}", ex.what());
-        //std::cout << "Falha grave: " << ex.what() << " " << std::endl;
+        // std::cout << "Falha grave: " << ex.what() << " " << std::endl;
     } catch (const std::string& ex) {
         console->error("Falha grave:{0}", ex);
     } catch (...) {
         console->error("Falha Desconhecida");
-        //std::cout << "Falha Desconhecida " << std::endl;
+        // std::cout << "Falha Desconhecida " << std::endl;
     }
 
     console->info("AppShader finalizado com sucesso");
 
     return 0;
 }
-
-

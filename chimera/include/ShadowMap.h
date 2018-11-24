@@ -1,37 +1,34 @@
-#ifndef SHADOW_MAP_H_
-#define SHADOW_MAP_H_
+#ifndef __CHIMERA_SHADOW_MAP__HPP
+#define __CHIMERA_SHADOW_MAP__HPP
 
-#include <glm/glm.hpp>
 #include "Node.h"
 #include "TextureManager.h"
+#include <glm/glm.hpp>
 
-namespace Chimera
-{
+namespace Chimera {
 
 class ShadowMap {
-public:
-    ShadowMap(std::string _name, const unsigned &_width, const unsigned &_height);
+  public:
+    ShadowMap(std::string _name, const unsigned& _width, const unsigned& _height);
     virtual ~ShadowMap();
 
-	void init();
+    void init();
 
-	glm::mat4 createLightSpaceMatrix(const glm::vec3 & _posicaoLight);
+    glm::mat4 createLightSpaceMatrix(const glm::vec3& _posicaoLight);
 
-	void initSceneShadow();
-	void endSceneShadow();
-	void applyShadow();
+    void initSceneShadow();
+    void endSceneShadow();
+    void applyShadow();
 
-	TEX_SEQ getShadowIndexTextureSeq() const {
-		return pTexture->getIndexTextureSeq();
-	}
+    TEX_SEQ getShadowIndexTextureSeq() const { return pTexture->getIndexTextureSeq(); }
 
-	glm::mat4 lightSpaceMatrix;
+    glm::mat4 lightSpaceMatrix;
 
-private:
-	TextureManager *texManager;
-    Texture *pTexture;
+  private:
+    TextureManager* texManager;
+    Texture* pTexture;
 };
 
-}
+} // namespace Chimera
 
-# endif
+#endif

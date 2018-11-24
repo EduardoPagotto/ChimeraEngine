@@ -1,86 +1,65 @@
-#ifndef TEXTURE_H_
-#define TEXTURE_H_
+#ifndef __CHIMERA_TEXTURE__HPP
+#define __CHIMERA_TEXTURE__HPP
 
-#include "OpenGLDefs.h"
 #include "Entity.h"
+#include "OpenGLDefs.h"
 
 #include <spdlog/spdlog.h>
 
 namespace Chimera {
 
-enum class TEX_SEQ {
-	DIFFUSE = 0,
-	SHADOWMAP = 1,
-	SPECULAR = 2,
-	EMISSIVE = 3
-};
+enum class TEX_SEQ { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };
 
-class Texture : public Entity
-{
-public:
-    Texture ( const std::string &_name, const TEX_SEQ &_indexTextureSeq, const std::string &_pathFile );
-	Texture ( const std::string &_name, const TEX_SEQ &_indexTextureSeq, const unsigned &_width, const unsigned &_height );
+class Texture : public Entity {
+  public:
+    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq,
+            const std::string& _pathFile);
+    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq,
+            const unsigned& _width, const unsigned& _height);
     virtual ~Texture();
 
-	void apply();
+    void apply();
 
     void init();
 
-    bool textureLoad() {
-        return texturaCarregada;
+    bool textureLoad() { return texturaCarregada; }
+
+    int getIdTexture() { return idTexture; }
+
+    unsigned getWidth() const { return width; }
+
+    unsigned getHeight() const { return height; }
+
+    unsigned int getRefCount() const { return refCount; }
+
+    void addRefCount() { refCount++; }
+
+    void releaseRefCount() {
+        if (refCount > 0)
+            refCount--;
     }
 
-	int getIdTexture() {
-		return idTexture;
-	}
+    GLuint getFrameBufferId() const { return depthMapFBO; }
 
-	unsigned getWidth() const {
-		return width;
-	}
+    TEX_SEQ getIndexTextureSeq() const { return indexTextureSeq; }
 
-	unsigned getHeight() const {
-		return height;
-	}
+  private:
+    TEX_SEQ indexTextureSeq;
 
-	unsigned int getRefCount() const {
-		return refCount;
-	}
+    GLuint depthMapFBO;
 
-	void addRefCount() {
-		refCount++;
-	}
-
-	void releaseRefCount() {
-		if (refCount > 0)
-			refCount--;
-	}
-
-	GLuint getFrameBufferId() const {
-		return depthMapFBO;
-	}
-
-	TEX_SEQ getIndexTextureSeq() const {
-		return indexTextureSeq;
-	}
-
-private:
-
-	TEX_SEQ indexTextureSeq;
-
-	GLuint depthMapFBO;
-
-	unsigned int refCount;
+    unsigned int refCount;
 
     std::string pathFile;
 
-	unsigned width;
-	unsigned height;
+    unsigned width;
+    unsigned height;
 
-	GLuint idTexture;
-   // int indiceFilter;
+    GLuint idTexture;
+    // int indiceFilter;
     bool texturaCarregada;
 
-	std::shared_ptr<spdlog::logger> log;
+    std::shared_ptr<spdlog::logger> log;
 };
-}
+} // namespace Chimera
 #endif

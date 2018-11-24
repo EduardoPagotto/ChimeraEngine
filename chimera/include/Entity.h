@@ -1,11 +1,10 @@
-#ifndef ENTITY_H_
-#define ENTITY_H_
+#ifndef __CHIMERA_ENTITY__HPP
+#define __CHIMERA_ENTITY__HPP
 
 #include <cstdint>
 #include <string>
 
-namespace Chimera
-{
+namespace Chimera {
 
 /**
  * @brief Enum EntityKind
@@ -13,8 +12,7 @@ namespace Chimera
  *  @since 20130925
  *  @version %I%, %G%
  */
-enum class EntityKind : int8_t
-{
+enum class EntityKind : int8_t {
     GROUP,
     SOLID,
     SOLID_MATERIAL,
@@ -24,8 +22,8 @@ enum class EntityKind : int8_t
     CAMERA,
     LIGHT,
     SKYBOX,
-	SCENEROOT,
-	CONSTRAINT,
+    SCENEROOT,
+    CONSTRAINT,
     HUD,
     MESH,
     PARTICLE_SYSTEM,
@@ -38,63 +36,49 @@ enum class EntityKind : int8_t
  *  @since 20130925
  *  @version %I%, %G%
  */
-class Entity
-{
-public:
+class Entity {
+  public:
     /**
      * Construtor principal Entity
      * @param _kind Tipo
-     * @param _id identificador 
-     * @param _name nome 
+     * @param _id identificador
+     * @param _name nome
      */
-    Entity ( const EntityKind &_kind , const std::string &_name )
-        : kind ( _kind ), name ( _name ) ,serial ( ++serialMaster ) {}
+    Entity(const EntityKind& _kind, const std::string& _name)
+        : kind(_kind), name(_name), serial(++serialMaster) {}
 
     /**
      * Construtor de Copia
      * @param _entity entidade a ser copiada
      */
-    Entity ( const Entity &_entity ) 
-        : kind ( _entity.kind ), name(_entity.name + "_cp"), serial ( ++serialMaster ) {}
+    Entity(const Entity& _entity)
+        : kind(_entity.kind), name(_entity.name + "_cp"), serial(++serialMaster) {}
 
     /**
-     * Destrutor 
+     * Destrutor
      */
     virtual ~Entity() {}
 
-    inline unsigned getSerial() const {
-        return serial;
-    }
+    inline unsigned getSerial() const { return serial; }
 
-    static unsigned getNextSerialMaster() {
-        return Entity::serialMaster;
-    }
+    static unsigned getNextSerialMaster() { return Entity::serialMaster; }
 
-	inline void setKind(const EntityKind &_kind) {
-		kind = _kind;
-	}
+    inline void setKind(const EntityKind& _kind) { kind = _kind; }
 
-    inline EntityKind getKind() const {
-        return kind;
-    }
+    inline EntityKind getKind() const { return kind; }
 
-    inline const std::string& getName() const {
-        return name;
-    }
+    inline const std::string& getName() const { return name; }
 
-    inline void setName ( const std::string& name ) {
-        this->name = name;
-    }
+    inline void setName(const std::string& name) { this->name = name; }
 
-private:
+  private:
     EntityKind kind;
     unsigned serial;
     static unsigned serialMaster;
     std::string name;
 };
 
-//unsigned Entity::serialMaster = 0;
+// unsigned Entity::serialMaster = 0;
 
-} /* namespace Chimera */
-#endif /* BASE_H_ */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;
+} // namespace Chimera
+#endif

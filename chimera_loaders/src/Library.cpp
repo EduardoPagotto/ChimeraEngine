@@ -5,26 +5,29 @@
 
 namespace ChimeraLoaders {
 
-Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
+Library::Library(tinyxml2::XMLElement* _root, const std::string& _url) {
 
     std::size_t posicao = _url.find('!');
-    if (posicao == 0 ) {
+    if (posicao == 0) {
 
-        //carrega arquivo root
+        // carrega arquivo root
         std::string file = _url.substr(posicao + 1, std::string::npos);
 
         doc = new tinyxml2::XMLDocument();
 
-        //Verifica se arquivo existe
-        tinyxml2::XMLError a_eResult = doc->LoadFile( file.c_str());
-        if ( a_eResult != 0 ) {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN, "Falha ao ler arquivo erro: " + std::to_string(a_eResult));
+        // Verifica se arquivo existe
+        tinyxml2::XMLError a_eResult = doc->LoadFile(file.c_str());
+        if (a_eResult != 0) {
+            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
+                                            "Falha ao ler arquivo erro: " +
+                                                std::to_string(a_eResult));
         }
 
-        //vefifica se ele � uma estrutura compativel com collada
-        root = doc->FirstChildElement ("COLLADA");
-        if ( root == nullptr ) {
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::OPEN, "Nao é um arquivo colada: " + file);
+        // vefifica se ele � uma estrutura compativel com collada
+        root = doc->FirstChildElement("COLLADA");
+        if (root == nullptr) {
+            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
+                                            "Nao é um arquivo colada: " + file);
         }
 
         file_atual = file;
@@ -36,18 +39,18 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
 
     if (posicao == std::string::npos) {
 
-        //Carrega tag se # exlicito (local file)
+        // Carrega tag se # exlicito (local file)
         doc = nullptr;
         root = _root;
         url = _url;
 
-    } else if (posicao !=0 ) {
+    } else if (posicao != 0) {
 
-        //Carrega tag de outro arquivo
-        std::string file = _url.substr (0, posicao - 1);
+        // Carrega tag de outro arquivo
+        std::string file = _url.substr(0, posicao - 1);
 
         if (file_atual.compare(file) == 0) {
-            //Arqivo apntado e o mesmo que estou
+            // Arqivo apntado e o mesmo que estou
             doc = nullptr;
             root = _root;
             url = _url;
@@ -57,16 +60,19 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
         url = _url.substr(posicao + 1, std::string::npos);
         doc = new tinyxml2::XMLDocument();
 
-        //Verifica se arquivo existe
-        tinyxml2::XMLError a_eResult = doc->LoadFile( file.c_str());
-        if ( a_eResult != 0 ) {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN, "Falha ao ler arquivo erro: " + std::to_string(a_eResult));
+        // Verifica se arquivo existe
+        tinyxml2::XMLError a_eResult = doc->LoadFile(file.c_str());
+        if (a_eResult != 0) {
+            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
+                                            "Falha ao ler arquivo erro: " +
+                                                std::to_string(a_eResult));
         }
 
-        //vefifica se ele � uma estrutura compativel com collada
-        root = doc->FirstChildElement ("COLLADA");
-        if ( root == nullptr ) {
-            throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::OPEN, "Nao é um arquivo colada: " + file);
+        // vefifica se ele � uma estrutura compativel com collada
+        root = doc->FirstChildElement("COLLADA");
+        if (root == nullptr) {
+            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
+                                            "Nao é um arquivo colada: " + file);
         }
 
     } else {
@@ -75,33 +81,31 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string &_url) {
         doc = nullptr;
         root = _root;
         url = _url.substr(posicao + 1, std::string::npos);
-
     }
 }
 
 Library::~Library() {
-    if ( doc != nullptr ) {
+    if (doc != nullptr) {
         delete doc;
         doc = nullptr;
     }
 }
 
-std::string Library::getIdFromUrl(const std::string &_url) {
+std::string Library::getIdFromUrl(const std::string& _url) {
 
     std::size_t posicao = _url.find('#');
     if (posicao == std::string::npos)
         return _url;
-    
+
     return _url.substr(posicao + 1, std::string::npos);
 }
 
-
-
 tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {
 
-    tinyxml2::XMLElement* l_nTec = _nNode->FirstChildElement("extra")->FirstChildElement("technique");
+    tinyxml2::XMLElement* l_nTec =
+        _nNode->FirstChildElement("extra")->FirstChildElement("technique");
     for (l_nTec; l_nTec; l_nTec = l_nTec->NextSiblingElement()) {
-        const char* l_profile = l_nTec->Attribute ( "profile" );
+        const char* l_profile = l_nTec->Attribute("profile");
         if (strcmp(l_profile, (const char*)"chimera") == 0) {
             return l_nTec;
         }
@@ -109,77 +113,78 @@ tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {
     return nullptr;
 }
 
-int findParams(tinyxml2::XMLElement* _nNode, VectorParam *_pVectorParam) {
+int findParams(tinyxml2::XMLElement* _nNode, VectorParam* _pVectorParam) {
 
-    tinyxml2::XMLElement* l_nParam = _nNode->FirstChildElement ( "param" );
+    tinyxml2::XMLElement* l_nParam = _nNode->FirstChildElement("param");
     for (l_nParam; l_nParam; l_nParam->NextSiblingElement()) {
         ParamCollada novo;
-        novo.name = l_nParam->Attribute ( "name" );
-        novo.sid = l_nParam->Attribute ( "sid" );
-        novo.type = l_nParam->Attribute ( "type" );
+        novo.name = l_nParam->Attribute("name");
+        novo.sid = l_nParam->Attribute("sid");
+        novo.type = l_nParam->Attribute("type");
         novo.value = l_nParam->GetText();
         _pVectorParam->push_back(novo);
 
-        l_nParam = l_nParam->NextSiblingElement();    
+        l_nParam = l_nParam->NextSiblingElement();
     }
     return _pVectorParam->size();
 }
 
 //---------
 
-void Library::loadArrayBtScalar ( const char *_val, std::vector<float> &_arrayF ) {
+void Library::loadArrayBtScalar(const char* _val, std::vector<float>& _arrayF) {
 
     char l_numTemp[32];
-    const char *pchFim;
-    const char *pchInit = _val;
-    const char *deadEnd = _val + strlen ( _val );
+    const char* pchFim;
+    const char* pchInit = _val;
+    const char* deadEnd = _val + strlen(_val);
     do {
-        pchFim = strchr ( pchInit, ' ' );
-        if ( pchFim == nullptr ) {
+        pchFim = strchr(pchInit, ' ');
+        if (pchFim == nullptr) {
             pchFim = deadEnd;
         }
 
         int l_tam = pchFim - pchInit;
-        memcpy ( l_numTemp, pchInit, l_tam );
+        memcpy(l_numTemp, pchInit, l_tam);
         l_numTemp[l_tam] = 0;
-        _arrayF.push_back ( ( float ) atof ( l_numTemp ) );
+        _arrayF.push_back((float)atof(l_numTemp));
 
         pchInit = pchFim + 1;
-    } while ( pchInit < deadEnd );
+    } while (pchInit < deadEnd);
 }
 
-
-void Library::loadArrayI ( const char *_val, std::vector<int> &_arrayI ) {
+void Library::loadArrayI(const char* _val, std::vector<int>& _arrayI) {
     char l_numTemp[32];
-    const char *pchFim;
-    const char *pchInit = _val;
-    const char *deadEnd = _val + strlen ( _val );
+    const char* pchFim;
+    const char* pchInit = _val;
+    const char* deadEnd = _val + strlen(_val);
     do {
-        pchFim = strchr ( pchInit, ' ' );
-        if ( pchFim == nullptr ) {
+        pchFim = strchr(pchInit, ' ');
+        if (pchFim == nullptr) {
             pchFim = deadEnd;
         }
 
         int l_tam = pchFim - pchInit;
-        memcpy ( l_numTemp, pchInit, l_tam );
+        memcpy(l_numTemp, pchInit, l_tam);
         l_numTemp[l_tam] = 0;
-        _arrayI.push_back ( atoi ( l_numTemp ) );
+        _arrayI.push_back(atoi(l_numTemp));
 
         pchInit = pchFim + 1;
-    } while ( pchInit < deadEnd );
+    } while (pchInit < deadEnd);
 }
 
-glm::mat4 Library::carregaMatrix ( const std::vector<float> &listaMatrix ) {
+glm::mat4 Library::carregaMatrix(const std::vector<float>& listaMatrix) {
 
-    if ( listaMatrix.size() != 16 ) {
-        throw Chimera::ExceptionChimera ( Chimera::ExceptionCode::READ, "Tamanho da Matrix invalido" + std::to_string ( listaMatrix.size() ) );
+    if (listaMatrix.size() != 16) {
+        throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
+                                        "Tamanho da Matrix invalido" +
+                                            std::to_string(listaMatrix.size()));
     }
 
     float ponteiroFloat[16];
     int indice = 0;
-    for ( int i = 0; i < 4; i++ ) {
-        for ( int j = 0; j < 4; j++ ) {
-            int pos = i + ( 4 * j );
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            int pos = i + (4 * j);
             ponteiroFloat[pos] = listaMatrix[indice];
             indice++;
         }
@@ -188,11 +193,10 @@ glm::mat4 Library::carregaMatrix ( const std::vector<float> &listaMatrix ) {
     return glm::make_mat4(&ponteiroFloat[0]);
 }
 
-glm::mat4 Library::loadTransformMatrix (const char* _matrix) {
+glm::mat4 Library::loadTransformMatrix(const char* _matrix) {
 
     std::vector<float> l_arrayValores;
-    loadArrayBtScalar ( _matrix, l_arrayValores );
-    return carregaMatrix ( l_arrayValores );
-
+    loadArrayBtScalar(_matrix, l_arrayValores);
+    return carregaMatrix(l_arrayValores);
 }
-}
+} // namespace ChimeraLoaders

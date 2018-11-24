@@ -1,40 +1,36 @@
-#ifndef EXCEPTION_CHIMERA_H_
-#define EXCEPTION_CHIMERA_H_
+#ifndef __CHIMERA_EXCEPTION__HPP
+#define __CHIMERA_EXCEPTION__HPP
 
-#include <Exception.h>
+#include <ExceptionBase.h>
 
-namespace Chimera
-{
+namespace Chimera {
 
 /**
  * Class ExceptionSDL
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class ExceptionChimera : public Exception
-{
-public:
-
+class ExceptionChimera : public ExceptionBase {
+  public:
     /**
      * Construtor de copia
      * @param ex
      */
-    ExceptionChimera ( const ExceptionChimera &_ex ) : Exception ( _ex ) {}
+    ExceptionChimera(const ExceptionChimera& _ex) : ExceptionBase(_ex) {}
 
     /**
      * Construtor com dados
      * @param _code
      * @param _message
      */
-    ExceptionChimera ( ExceptionCode _code, std::string _message ) : Exception ( ExceptionType::CHIMERA_EXCEPTION, _code, _message ) {}
+    ExceptionChimera(ExceptionCode _code, std::string _message)
+        : ExceptionBase(ExceptionType::CHIMERA_EXCEPTION, _code, _message) {}
 
     /**
      * Destrutor Padrao
      */
-    //virtual ~ExceptionSDL(){}
-
+    // virtual ~ExceptionSDL(){}
 };
 
-} /* namespace Chimera */
-#endif /* EXCEPTIONSDL_H_ */
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;
+} // namespace Chimera
+#endif

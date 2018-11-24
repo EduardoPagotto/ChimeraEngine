@@ -1,5 +1,5 @@
-#ifndef MATERIAL_H_
-#define MATERIAL_H_
+#ifndef __CHIMERA_MATERIAL__HPP
+#define __CHIMERA_MATERIAL__HPP
 
 #include "Color.h"
 #include "Entity.h"
@@ -23,19 +23,18 @@ namespace Chimera {
 #define SHADE_MAT_EMISSIVE "material.emissive"
 #define SHADE_MAT_SHININESS "material.shininess"
 
-class Material : public Entity
-{
-public:
-    Material ( std::string _name );
+class Material : public Entity {
+  public:
+    Material(std::string _name);
     virtual ~Material();
 
     virtual void init();
 
-    void setAmbient(const Color &_color);
-	void setSpecular(const Color &_color);
-	void setDiffuse(const Color &_color);
-	void setEmission(const Color &_color);
-	void setShine(const float &_val);
+    void setAmbient(const Color& _color);
+    void setSpecular(const Color& _color);
+    void setDiffuse(const Color& _color);
+    void setEmission(const Color& _color);
+    void setShine(const float& _val);
 
     Color getAmbient() const;
     Color getSpecular() const;
@@ -43,31 +42,29 @@ public:
     Color getEmission() const;
     float getShine() const;
 
-    void apply(Shader *_shader);
+    void apply(Shader* _shader);
     void createDefaultEffect();
 
-	void defineTextureByIndex(const unsigned int &_serial);
+    void defineTextureByIndex(const unsigned int& _serial);
 
-	void loadTextureFromFile(const std::string &_nome, const TEX_SEQ & _seq, const std::string & _arquivo);
+    void loadTextureFromFile(const std::string& _nome, const TEX_SEQ& _seq,
+                             const std::string& _arquivo);
 
-	bool hasTexture() {
-		return mapTex.size() > 0 ? true : false;
-	}
+    bool hasTexture() { return mapTex.size() > 0 ? true : false; }
 
-private:
-    Color diffuse;        /* Diffuse color RGBA */
-    Color ambient;        /* Ambient color RGB */
-    Color specular;       /* Specular 'shininess' */
-    Color emission;       /* Emissive color RGB */
-	float shine;
+  private:
+    Color diffuse;  /* Diffuse color RGBA */
+    Color ambient;  /* Ambient color RGB */
+    Color specular; /* Specular 'shininess' */
+    Color emission; /* Emissive color RGB */
+    float shine;
 
     int tipoTexturasDisponiveis;
 
     std::map<std::string, void*> mapMatVal;
     std::map<std::string, Texture*> mapTex;
 
-    TextureManager *texManager;
+    TextureManager* texManager;
 };
-}
+} // namespace Chimera
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

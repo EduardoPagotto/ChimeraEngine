@@ -1,12 +1,11 @@
-#ifndef NODE_H_
-#define NODE_H_
+#ifndef __CHIMERA_NODE__HPP
+#define __CHIMERA_NODE__HPP
 
-#include <vector>
-#include <list>
 #include "Entity.h"
+#include <list>
+#include <vector>
 
-namespace Chimera
-{
+namespace Chimera {
 
 /**
  * Class Node
@@ -14,16 +13,14 @@ namespace Chimera
  *  @since 20130925
  *  @version %I%, %G%
  */
-class Node : public Entity
-{
-public:
-
+class Node : public Entity {
+  public:
     /**
      * Constructor inicializa _tipo e _name
      * @param _parent ponteiro do Node Pai ou <code>nullptr</code>
      * @param _name nome do Node
      */
-    Node (Node *_parent, EntityKind _type, std::string _name);
+    Node(Node* _parent, EntityKind _type, std::string _name);
 
     /**
      * Destructor
@@ -40,13 +37,13 @@ public:
      * Adiciona um child ao Node atual
      * @param _child Node a ser adicionado a este como filho
      */
-    void addChild(Node *_child);
+    void addChild(Node* _child);
 
     /**
      * Define novo Pai, removendo o original se existir
      * @param _node Novo node pai
      */
-    void setParent(Node *_node);
+    void setParent(Node* _node);
 
     /**
      * Retorna um vector com os filhos deste Node
@@ -62,17 +59,18 @@ public:
 
     /**
      * Retorna o Numero de filhos deste pai ou de todos os descendentes
-     * @param _recursiveCount se <code>TRUE</code> define toda a linhagem<p> se Pai apoenas os locais
+     * @param _recursiveCount se <code>TRUE</code> define toda a linhagem<p> se Pai
+     * apoenas os locais
      * @return numero de filhos
      */
-    const size_t countChilds(const bool &_recursiveCount) const;
+    const size_t countChilds(const bool& _recursiveCount) const;
 
     /**
      * Localiza child com o nome
      * @param _searchName nome a se perquisar
      * @return Node ou <code>nullptr</code> se nao encontrado
      */
-    Node* findChild(const std::string &_searchName, const bool &_findInChild);
+    Node* findChild(const std::string& _searchName, const bool& _findInChild);
 
     /**
      * Localiza child com o nome
@@ -80,31 +78,25 @@ public:
      * @param _index indice do Node de mesmo tipo
      * @return Node ou <code>nullptr</code> se nao encontrado
      */
-    Node* findChild(const EntityKind &_type, const int &_index, const bool &_findInChild);
+    Node* findChild(const EntityKind& _type, const int& _index, const bool& _findInChild);
 
     /**
      * Retorna node Pai
      * @return Node Pai ou <code>nullptr</code>
      */
-    inline Node *getParent() {
-        return parent;
-    }
+    inline Node* getParent() { return parent; }
 
     /**
      * Define o Status de Uso do Node
      * @param _col se <code>0</code> livre <p> Se <code>1</code> Ocupado
      */
-    inline void setColor(const int &_col) {
-        color = _col;
-    }
+    inline void setColor(const int& _col) { color = _col; }
 
     /**
      * Retorna o status de uso do Node
      * @return <code>0</code> livre <p> Se <code>1</code> Ocupado
      */
-    inline int getColor() const {
-        return color;
-    }
+    inline int getColor() const { return color; }
 
     /**
      * Busca sequencial em todos dos Nodes criados
@@ -112,7 +104,7 @@ public:
      * @param _index indice do Tipo
      * @return ponteiro do Node encontrado ou <code>nullptr</code>
      */
-    //static Node *findNodeBySeq ( const EntityKind &_type, const int &_index );
+    // static Node *findNodeBySeq ( const EntityKind &_type, const int &_index );
 
     /**
      * Busca sequencial em todos dos Nodes criados
@@ -120,22 +112,20 @@ public:
      * @param _name Nome do Node
      * @return ponteiro do Node encontrado ou <code>nullptr</code>
      */
-    //static Node *findNodeBySeq ( const EntityKind &_type, const std::string &_name );
+    // static Node *findNodeBySeq ( const EntityKind &_type, const std::string &_name );
 
-private:
+  private:
     /** Controle de Ocupado Livre*/
     int color;
 
     /** Node Pai */
-    Node *parent;
+    Node* parent;
 
     /** vetor de Filhos*/
     std::vector<Node*> vChild;
 
     /** Lista Sequencial de Nodes*/
-    //static std::list<Node*> listNode;
+    // static std::list<Node*> listNode;
 };
-}
-
+} // namespace Chimera
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

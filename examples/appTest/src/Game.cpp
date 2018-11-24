@@ -1,28 +1,27 @@
 #include "Game.h"
 #include "ExceptionSDL.h"
 
-#include "Transform.h"
-#include "OpenGLDefs.h"
 #include "GameClient.h"
+#include "OpenGLDefs.h"
 #include "SceneMng.h"
+#include "Transform.h"
 
 #include "CameraSpherical.h"
 
-Game::Game ( Chimera::SceneMng *_pScenMng , Chimera::Video *_pVideo) : pSceneMng(_pScenMng), pVideo(_pVideo) {
+Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo)
+    : pSceneMng(_pScenMng), pVideo(_pVideo) {
     isPaused = false;
 }
 
-Game::~Game() {
-}
+Game::~Game() {}
 
-void Game::joystickCapture(Chimera::JoystickManager &joy) {
-}
+void Game::joystickCapture(Chimera::JoystickManager& joy) {}
 
-void Game::joystickStatus(Chimera::JoystickManager &joy) {
+void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
     using namespace Chimera;
     // Captura joystick 0 se existir
-    JoystickState *joystick = joy.getJoystickState(0);
+    JoystickState* joystick = joy.getJoystickState(0);
     if (joystick != nullptr) {
 
         float deadZone = 0.5f;
@@ -33,8 +32,13 @@ void Game::joystickStatus(Chimera::JoystickManager &joy) {
         float pitch = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_Y, deadZone);
         float roll = joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_X, deadZone);
 
-        double throttle = -propulsaoPrincipal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
-        throttle = throttle - (-propulsaoFrontal* ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
+        double throttle =
+            -propulsaoPrincipal *
+            ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
+        throttle =
+            throttle -
+            (-propulsaoFrontal *
+             ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
 
         if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {}
         if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {}
@@ -51,26 +55,28 @@ void Game::joystickStatus(Chimera::JoystickManager &joy) {
 void Game::keyCapture(SDL_Keycode tecla) {
 
     switch (tecla) {
-    case SDLK_ESCAPE:
-        SDL_Event l_eventQuit;
-        l_eventQuit.type = SDL_QUIT;
-        if (SDL_PushEvent(&l_eventQuit) == -1) {
-            throw Chimera::ExceptionSDL(Chimera::ExceptionCode::CLOSE, std::string(SDL_GetError()));
-        }
-        break;
-    case SDLK_F10:
-        Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
-        break;
-    case SDLK_F1:
-    case SDLK_UP:
-    case SDLK_DOWN:
-    case SDLK_LEFT:
-    case SDLK_RIGHT:
-    case SDLK_a:
-    case SDLK_s:
-        break;
-    default:
-        break;
+        case SDLK_ESCAPE:
+            SDL_Event l_eventQuit;
+            l_eventQuit.type = SDL_QUIT;
+            if (SDL_PushEvent(&l_eventQuit) == -1) {
+                throw Chimera::ExceptionSDL(Chimera::ExceptionCode::CLOSE,
+                                            std::string(SDL_GetError()));
+            }
+            break;
+        case SDLK_F10:
+            Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr,
+                                 nullptr);
+            break;
+        case SDLK_F1:
+        case SDLK_UP:
+        case SDLK_DOWN:
+        case SDLK_LEFT:
+        case SDLK_RIGHT:
+        case SDLK_a:
+        case SDLK_s:
+            break;
+        default:
+            break;
     }
 }
 
@@ -86,8 +92,9 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::CameraSpherical* pCamZ = (Chimera::CameraSpherical*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
-    
+    Chimera::CameraSpherical* pCamZ = (Chimera::CameraSpherical*)pSceneMng->findChild(
+        Chimera::EntityKind::CAMERA, 0, true);
+
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
             pCamZ->trackBall(mm.yrel, mm.xrel, 0);
@@ -98,69 +105,65 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 }
 
 void Game::start() {
-    
+
     pSceneMng->start(pVideo);
-    
-    //ajusta scene root com luz e material ativo
-    //Localiza a luz ativa
-//    Chimera::Light *pLight = (Chimera::Light*) Chimera::Node::findNodeBySeq(Chimera::EntityKind::LIGHT, 0);
-//    pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, true);
-//    pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0, true);
-//    pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
-    
-    
-    // pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING, false);//
-    // pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL, false);
-    // pSceneMng->getRoot()->getState()->setEnableCullFace(Chimera::CullFace::CULL_FACE, true);
-    // pSceneMng->getRoot()->getState()->setEnableSmooth(true);
-    // pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::TEXTURE_2D, false);
-    // pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::DEPTH_TEST, true);
-    
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
 
-    glClearDepth ( 1.0f );
-    glDepthFunc ( GL_LEQUAL );
-    glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+    // ajusta scene root com luz e material ativo
+    // Localiza a luz ativa
+    //    Chimera::Light *pLight = (Chimera::Light*)
+    //    Chimera::Node::findNodeBySeq(Chimera::EntityKind::LIGHT, 0);
+    //    pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING,
+    //    true);
+    //    pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHT0,
+    //    true); pSceneMng->getRoot()->getState()->setEnableLighting(pLight, true);
+
+    // pSceneMng->getRoot()->getState()->setEnableLight(Chimera::LightNum::LIGHTING,
+    // false);//
+    // pSceneMng->getRoot()->getState()->setEnableColorMaterial(Chimera::ColorMaterial::COLOR_MATERIAL,
+    // false);
+    // pSceneMng->getRoot()->getState()->setEnableCullFace(Chimera::CullFace::CULL_FACE,
+    // true); pSceneMng->getRoot()->getState()->setEnableSmooth(true);
+    // pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::TEXTURE_2D,
+    // false);
+    // pSceneMng->getRoot()->getState()->setEnableStateMachine(Chimera::StateMachine::DEPTH_TEST,
+    // true);
+
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
-void Game::stop() { 
-}
+void Game::stop() {}
 
-void Game::newFPS(const unsigned int &fps) {
-}
+void Game::newFPS(const unsigned int& fps) {}
 
-void Game::userEvent(const SDL_Event & _event)
-{
-    Chimera::KindOp op = (Chimera::KindOp) _event.user.code;
+void Game::userEvent(const SDL_Event& _event) {
+    Chimera::KindOp op = (Chimera::KindOp)_event.user.code;
     if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
         pVideo->toggleFullScreen();
     }
 }
 
-void Game::windowEvent(const SDL_WindowEvent & _event)
-{
+void Game::windowEvent(const SDL_WindowEvent& _event) {
     switch (_event.event) {
-    case SDL_WINDOWEVENT_ENTER:
-        isPaused = false;
-        break;
-    case SDL_WINDOWEVENT_LEAVE:
-        isPaused = true;
-        break;
-    case SDL_WINDOWEVENT_RESIZED:
-        pVideo->reshape ( _event.data1, _event.data2 );
-        break;
-    default:
-        break;
+        case SDL_WINDOWEVENT_ENTER:
+            isPaused = false;
+            break;
+        case SDL_WINDOWEVENT_LEAVE:
+            isPaused = true;
+            break;
+        case SDL_WINDOWEVENT_RESIZED:
+            pVideo->reshape(_event.data1, _event.data2);
+            break;
+        default:
+            break;
     }
 }
 
-bool Game::paused()
-{
-    return isPaused;
-}
+bool Game::paused() { return isPaused; }
 
-void Game::render() {
-    pSceneMng->draw(pVideo); 
-}
+void Game::render() { pSceneMng->draw(pVideo); }

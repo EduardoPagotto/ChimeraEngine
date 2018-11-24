@@ -1,5 +1,5 @@
-#ifndef CONSTRAINT_H_
-#define CONSTRAINT_H_
+#ifndef __CHIMERA_CONSTRAINT__HPP
+#define __CHIMERA_CONSTRAINT__HPP
 
 #include <LinearMath/btTransform.h>
 
@@ -7,23 +7,20 @@
 #include "Solid.h"
 
 namespace Chimera {
-    
-class Constraint : public Entity
-{
-public:
 
-    Constraint ( std::string _name );
+class Constraint : public Entity {
+  public:
+    Constraint(std::string _name);
     virtual ~Constraint();
-private:
-	//FIXME Tornar privado novamente
 
-	Solid *pPhysicsA;
-	Solid *pPhysicsB;
+  private:
+    // FIXME Tornar privado novamente
 
-	btTransform transformA;
-	btTransform transformB;
+    Solid* pPhysicsA;
+    Solid* pPhysicsB;
 
+    btTransform transformA;
+    btTransform transformB;
 };
-}
+} // namespace Chimera
 #endif
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

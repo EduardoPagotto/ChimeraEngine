@@ -1,47 +1,49 @@
-#ifndef TEXTURE_MANAGER_H_
-#define TEXTURE_MANAGER_H_
+#ifndef __CHIMERA_TEXTURE_MANAGER__HPP
+#define __CHIMERA_TEXTURE_MANAGER__HPP
 
-#include <string>
 #include <map>
+#include <string>
 
 #include <glm/glm.hpp>
 
 #include "OpenGLDefs.h"
-#include "Texture.h"
 #include "Singleton.h"
+#include "Texture.h"
 
 namespace Chimera {
 
-class TextureManager
-{
-	friend class Singleton<TextureManager>;
-public:
-	unsigned int fromFile(std::string _name, const TEX_SEQ &_indexTextureSeq, std::string _pathFile);
-	unsigned int fromFrameBuffer(std::string _name, const TEX_SEQ &_indexTextureSeq, const unsigned &_width, const unsigned &_height);
+class TextureManager {
+    friend class Singleton<TextureManager>;
 
-	void init(const unsigned int &_serial);
-	void release(const unsigned int &_serial);
-	void destroy(const unsigned int &_serial);
-	void destroyAll() noexcept;
-	unsigned int getIdByName(const std::string &_name);
+  public:
+    unsigned int fromFile(std::string _name, const TEX_SEQ& _indexTextureSeq,
+                          std::string _pathFile);
+    unsigned int fromFrameBuffer(std::string _name, const TEX_SEQ& _indexTextureSeq,
+                                 const unsigned& _width, const unsigned& _height);
 
-	glm::ivec2 getGeometria(const unsigned int &_serial);
+    void init(const unsigned int& _serial);
+    void release(const unsigned int& _serial);
+    void destroy(const unsigned int& _serial);
+    void destroyAll() noexcept;
+    unsigned int getIdByName(const std::string& _name);
 
-	Texture *getTexture(const unsigned int &_serial);
+    glm::ivec2 getGeometria(const unsigned int& _serial);
 
- 	void bind(const unsigned int &_serial);
- 	static void unBindAll();
+    Texture* getTexture(const unsigned int& _serial);
 
-protected:
-	TextureManager() noexcept;
-	~TextureManager();
+    void bind(const unsigned int& _serial);
+    static void unBindAll();
 
-private:
-	unsigned int addAvaible(Texture *_pTex);
-	std::map<unsigned int, Texture*> mapTex;
+  protected:
+    TextureManager() noexcept;
+    ~TextureManager();
 
-	std::shared_ptr<spdlog::logger> log;
+  private:
+    unsigned int addAvaible(Texture* _pTex);
+    std::map<unsigned int, Texture*> mapTex;
+
+    std::shared_ptr<spdlog::logger> log;
 };
-}
+} // namespace Chimera
 
 #endif

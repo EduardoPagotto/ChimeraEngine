@@ -2,8 +2,7 @@
 
 namespace ChimeraLoaders {
 
-ListNodes::ListNodes() noexcept {
-}
+ListNodes::ListNodes() noexcept {}
 
 void ListNodes::reset() noexcept {
     vCamera.clear();
@@ -12,48 +11,48 @@ void ListNodes::reset() noexcept {
     vTransform.clear();
 }
 
-Chimera::Node* ListNodes::getByName(const Chimera::EntityKind &_kind, const std::string &_name) const {
+Chimera::Node* ListNodes::getByName(const Chimera::EntityKind& _kind,
+                                    const std::string& _name) const {
 
-    switch(_kind){
+    switch (_kind) {
 
         case Chimera::EntityKind::CAMERA:
-            for ( Chimera::Node *node : vCamera )
+            for (Chimera::Node* node : vCamera)
                 if (node->getName().compare(_name) == 0)
                     return node;
             break;
 
         case Chimera::EntityKind::MESH:
-            for ( Chimera::Node *node : vMesh )
+            for (Chimera::Node* node : vMesh)
                 if (node->getName().compare(_name) == 0)
                     return node;
             break;
 
         case Chimera::EntityKind::LIGHT:
-            for ( Chimera::Node *node : vLight )
+            for (Chimera::Node* node : vLight)
                 if (node->getName().compare(_name) == 0)
                     return node;
             break;
 
         case Chimera::EntityKind::TRANSFORM:
-            for ( Chimera::Node *node : vTransform )
+            for (Chimera::Node* node : vTransform)
                 if (node->getName().compare(_name) == 0)
                     return node;
             break;
 
         case Chimera::EntityKind::SOLID:
-            for ( Chimera::Node *node : vSolid )
+            for (Chimera::Node* node : vSolid)
                 if (node->getName().compare(_name) == 0)
                     return node;
             break;
-
     }
 
     return nullptr;
 }
 
-void ListNodes::addNode(Chimera::Node *_pNode) {
+void ListNodes::addNode(Chimera::Node* _pNode) {
 
-    switch(_pNode->getKind()){
+    switch (_pNode->getKind()) {
 
         case Chimera::EntityKind::CAMERA:
             vCamera.push_back(_pNode);
@@ -74,7 +73,6 @@ void ListNodes::addNode(Chimera::Node *_pNode) {
         case Chimera::EntityKind::SOLID:
             vSolid.push_back(_pNode);
             break;
-
     }
 }
-}
+} // namespace ChimeraLoaders

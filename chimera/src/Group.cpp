@@ -2,41 +2,33 @@
 
 namespace Chimera {
 
-Group::Group(Node* _parent, std::string _name) : Node (_parent, EntityKind::GROUP, _name) {
-	shadoMapVisitor = nullptr;
-	pShader = nullptr;
+Group::Group(Node* _parent, std::string _name) : Node(_parent, EntityKind::GROUP, _name) {
+    shadoMapVisitor = nullptr;
+    pShader = nullptr;
 }
 
 Group::~Group() {
 
-	if (pShader != nullptr)
-		delete pShader;
-
+    if (pShader != nullptr)
+        delete pShader;
 }
 
-void Group::accept(NodeVisitor* v){
-    v->visit(this);
-}
+void Group::accept(NodeVisitor* v) { v->visit(this); }
 
 void Group::init() {
 
-	if (shadoMapVisitor != nullptr) {
-		shadoMapVisitor->init();
-	}
-
+    if (shadoMapVisitor != nullptr) {
+        shadoMapVisitor->init();
+    }
 }
 
-ShadowMap* Group::executeShadoMap( Coord *_pCoord ) {
+ShadowMap* Group::executeShadoMap(Coord* _pCoord) {
 
-	if (shadoMapVisitor != nullptr) {
-		shadoMapVisitor->pCoord = _pCoord;
-		return shadoMapVisitor->execute(this);
-	}
+    if (shadoMapVisitor != nullptr) {
+        shadoMapVisitor->pCoord = _pCoord;
+        return shadoMapVisitor->execute(this);
+    }
 
-	return nullptr;
+    return nullptr;
 }
-
-
-}
-
-
+} // namespace Chimera

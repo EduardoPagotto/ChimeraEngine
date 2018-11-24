@@ -1,63 +1,53 @@
-#ifndef __CHIMERA_PHYSICSWORLD_H
-#define __CHIMERA_PHYSICSWORLD_H
+#ifndef __CHIMERA_PHYSICSWORLD__HPP
+#define __CHIMERA_PHYSICSWORLD__HPP
 
 #include <map>
 
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 #include <LinearMath/btVector3.h>
 
-#include "Node.h"
 #include "DataMsg.h"
+#include "Node.h"
 
 namespace Chimera {
 
-class PhysicsControl
-{
-public:
-    PhysicsControl ( void );
-    virtual ~PhysicsControl ( void );
+class PhysicsControl {
+  public:
+    PhysicsControl(void);
+    virtual ~PhysicsControl(void);
 
-    void clearAllShapes ( void );
-    void removeAllObjs ( void );
+    void clearAllShapes(void);
+    void removeAllObjs(void);
 
-    void stepSim ( void );
+    void stepSim(void);
 
     void checkCollisions();
-    bool checkAllowCollision ( Node *pNode );
+    bool checkAllowCollision(Node* pNode);
 
-    inline void setGravity ( const btVector3 &_vet ) {
-        discretDynamicsWorld->setGravity ( _vet );
+    inline void setGravity(const btVector3& _vet) {
+        discretDynamicsWorld->setGravity(_vet);
     }
 
     inline btScalar countPeriod() {
-        period = ( btScalar ) ( clockCounter.getTimeMicroseconds() / 1000000.f );
+        period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f);
         clockCounter.reset();
         return period;
-
     }
 
-    inline btScalar getLastPeriod() {
-        return period;
-    }
+    inline btScalar getLastPeriod() { return period; }
 
-    inline btDiscreteDynamicsWorld* getWorld() {
-        return discretDynamicsWorld;
-    }
-    
-    inline void setStep(const float &_step) {
-        step = _step;
-    }
+    inline btDiscreteDynamicsWorld* getWorld() { return discretDynamicsWorld; }
 
-    inline btScalar getStep() const {
-        return step;
-    }
+    inline void setStep(const float& _step) { step = _step; }
 
-private:
-    static void doTickCallBack ( btDynamicsWorld *world, btScalar timeStep );
-    void processTickCallBack ( btScalar timeStep );
+    inline btScalar getStep() const { return step; }
+
+  private:
+    static void doTickCallBack(btDynamicsWorld* world, btScalar timeStep);
+    void processTickCallBack(btScalar timeStep);
 
     btBroadphaseInterface* broadPhase;
 
@@ -67,14 +57,15 @@ private:
     btSequentialImpulseConstraintSolver* solver;
     btDiscreteDynamicsWorld* discretDynamicsWorld;
 
-    /// <summary> evento usando na colisao de corpos se s_dealCollision for false </summary>
-    //SDL_Event s_event;
-    std::map< btCollisionObject*, std::pair<Node*, Node*> > contactActives;
+    /// <summary> evento usando na colisao de corpos se s_dealCollision for false
+    /// </summary>
+    // SDL_Event s_event;
+    std::map<btCollisionObject*, std::pair<Node*, Node*>> contactActives;
 
     btClock clockCounter;
     btScalar period;
 
     btScalar step;
 };
-}
+} // namespace Chimera
 #endif

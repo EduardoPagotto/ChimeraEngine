@@ -1,6 +1,6 @@
- #ifndef __GAME_CLIENT_H
- #define __GAME_CLIENT_H
- 
+#ifndef __CHIMERA_GAME_CLIENT__HPP
+#define __CHIMERA_GAME_CLIENT__HPP
+
 #ifndef WIN32
 #include <SDL2/SDL.h>
 #else
@@ -9,10 +9,8 @@
 
 #include "DataMsg.h"
 
- namespace Chimera
- {
-	 void sendMessage(KindOp _kindOf, void *_paramA, void *_paramB);
- }
- 
- #endif
- // kate: indent-mode cstyle; indent-width 4; replace-tabs on;
+namespace Chimera {
+void sendMessage(KindOp _kindOf, void* _paramA, void* _paramB);
+}
+
+#endif

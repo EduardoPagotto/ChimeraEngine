@@ -6,12 +6,12 @@
 #include "Node.h"
 #include "Video.h"
 
-#include "ShadersManager.h"
+#include "Shader.h"
 
 class Game : public Chimera::IGameClientEvents
 {
 public:
-	Game(const std::string &vertex, const std::string &fragment, Chimera::Video *_pVideo);
+	Game(Chimera::Shader *_pShader, Chimera::Video *_pVideo);
 
 	virtual ~Game();
 	// Inherited via IGameClientEvents
@@ -37,10 +37,10 @@ private:
 
 private:
 
-	std::string vertexFile;
-	std::string fragmentFile;
+	//std::string vertexFile;
+	//std::string fragmentFile;
 
-    Chimera::ShadersManager *shadersManager;
+    Chimera::Shader *pShader;
 	GLuint vertexbuffer;
 	GLuint VertexArrayID;
 };

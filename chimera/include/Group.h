@@ -2,6 +2,7 @@
 #define __GROUP_H__
 
 #include "Node.h"
+#include "Shader.h"
 #include "ShadowMapVisitor.h"
 #include "Coord.h"
 
@@ -15,12 +16,12 @@ public:
     void accept(class NodeVisitor* v);
 	void init();
 
-	void setShaderName(const std::string &_name) {
-		shadeName = _name;
+	void setShader(Shader *_pShader) {
+		pShader = _pShader;
 	}
 
-	std::string getShaderName() const {
-		return shadeName;
+	Shader *getShader() {
+		return pShader;
 	}
 
 	void setShadowMap(ShadowMapVisitor *_shadoMapVisitor) {
@@ -30,7 +31,7 @@ public:
 	ShadowMap* executeShadoMap( Coord *_pCoord );
 
 private:
-	std::string shadeName;
+	Shader *pShader;
 	ShadowMapVisitor *shadoMapVisitor;
 };
 }

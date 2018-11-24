@@ -7,17 +7,12 @@
 
 #include "Singleton.h"
 
-Game::Game(const std::string &vertex, const std::string &fragment, Chimera::Video *_pVideo) : pVideo(_pVideo) {
+Game::Game(Chimera::Shader *_pShader, Chimera::Video *_pVideo) : pVideo(_pVideo) {
 	isPaused = false;
-
-	vertexFile = vertex;
-	fragmentFile = fragment;
-
-	shadersManager =  Chimera::Singleton<Chimera::ShadersManager>::getRefSingleton();
+	pShader = _pShader;
 }
 
 Game::~Game() {
-	Chimera::Singleton<Chimera::ShadersManager>::releaseRefSingleton();
 }
 
 void Game::joystickCapture(Chimera::JoystickManager &joy) {
@@ -109,9 +104,6 @@ void Game::start() {
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
-	// Create and compile our GLSL program from the shaders
-	shadersManager->load("default", vertexFile, fragmentFile);
-
 	// An array of 3 vectors which represents 3 vertices
 	static const GLfloat g_vertex_buffer_data[] = {
 		-1.0f, -1.0f, 0.0f,
@@ -179,7 +171,7 @@ void Game::render() {
 
 	// Use our shadersManager
 	//glUseProgram(programID);
-    shadersManager->link();
+    pShader->link();
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

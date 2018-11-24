@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "OpenGLDefs.h"
+#include "Shader.h"
 
 #include <spdlog/spdlog.h>
 
@@ -15,6 +16,8 @@ public:
 	ShadersLoader();
 	virtual ~ShadersLoader() {}
 	GLuint load(const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path);
+	Chimera::Shader *loadShader(const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path);
+
 
 private:
     std::string getShaderCode ( const char * file_path );

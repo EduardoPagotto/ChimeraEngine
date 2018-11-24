@@ -7,7 +7,7 @@
 #include <tinyxml2.h>
 
 #include "OpenGLDefs.h"
-#include "ShadersManager.h"
+#include "Shader.h"
 #include "TextureManager.h"
 
 namespace Chimera {
@@ -43,7 +43,7 @@ public:
     Color getEmission() const;
     float getShine() const;
 
-    void apply(ShadersManager *_shaderManager);
+    void apply(Shader *_shader);
     void createDefaultEffect();
 
 	void defineTextureByIndex(const unsigned int &_serial);

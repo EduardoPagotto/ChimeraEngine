@@ -18,7 +18,7 @@
 
 namespace Chimera {
 
-RenderVisitor::RenderVisitor(ShadersManager *_pShadersManager) {
+RenderVisitor::RenderVisitor() {
 
 	pCoord = nullptr;
 	pVideo = nullptr;
@@ -31,8 +31,7 @@ RenderVisitor::RenderVisitor(ShadersManager *_pShadersManager) {
     model = glm::mat4(1.0f);
 
 	shadowOn = nullptr;
-
-	shadersManager = _pShadersManager;
+	pShader = nullptr;
 }
 
 RenderVisitor::~RenderVisitor() {
@@ -44,20 +43,23 @@ void RenderVisitor::visit ( Camera* _pCamera ) {
 
 void RenderVisitor::visit ( Mesh* _pMesh ) {
 
+	if (pShader == nullptr)
+		return;
+
 	int shadows = 1;
-	shadersManager->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
+	pShader->setGlUniform1i("shadows", shadows); //glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
 
 	// Get the variables from the shader to which data will be passed
-	shadersManager->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-	shadersManager->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-	shadersManager->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+	pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+	pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+	pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 	//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
 
-	_pMesh->getMaterial()->apply(shadersManager);
+	_pMesh->getMaterial()->apply(pShader);
 
 	if (shadowOn != nullptr) {
 		shadowOn->applyShadow();
-		shadersManager->setGlUniform1i("shadowMap", (int)shadowOn->getShadowIndexTextureSeq());
+		pShader->setGlUniform1i("shadowMap", (int)shadowOn->getShadowIndexTextureSeq());
 	}
 
     _pMesh->render();
@@ -72,12 +74,15 @@ void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 
 	if (particleOn == true) {
 
+		if (pShader == nullptr)
+			return;
+
 		// Get the variables from the shader to which data will be passed
-		shadersManager->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-		shadersManager->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+		pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+		pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
 		//shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr( glm::inverseTranspose(glm::mat3(_view))));
 
-		shadersManager->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+		pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
 		// We will need the camera's position in order to sort the particles
 		// w.r.t the camera's distance.
@@ -86,8 +91,8 @@ void RenderVisitor::visit ( ParticleEmitter* _pParticleEmitter ) {
 		glm::vec3 CameraPosition(glm::inverse(view)[3]);
 
 		// Vertex shader
-		shadersManager->setGlUniform3f("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
-		shadersManager->setGlUniform3f("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
+		pShader->setGlUniform3f("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
+		pShader->setGlUniform3f("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
 
 		_pParticleEmitter->CameraPosition = CameraPosition;
 		_pParticleEmitter->render();
@@ -102,22 +107,24 @@ void RenderVisitor::visit ( SceneMng* _pSceneMng ) {
 
 void RenderVisitor::visit ( Group* _pGroup ) {
 
+	pShader = _pGroup->getShader();
 	shadowOn = _pGroup->executeShadoMap(pCoord);
-	if (shadersManager->selectCurrent(_pGroup->getShaderName())==false)
+
+	if (pShader == nullptr)
 		return;
-	
-	shadersManager->link();
+
+	pShader->link();
 
 	if (shadowOn != nullptr) {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shadersManager->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(shadowOn->lightSpaceMatrix));
+		pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(shadowOn->lightSpaceMatrix));
 
 	}
 
 	Camera *pCam = (Camera*)_pGroup->findChild(Chimera::EntityKind::CAMERA, 0, false);
 	if (pCam != nullptr) {
-		shadersManager->setGlUniform3fv("viewPos", 1, glm::value_ptr(pCam->getPosition()));
+		pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(pCam->getPosition()));
 		projection = pVideo->getPerspectiveProjectionMatrix(pCam->getFov(), pCam->getNear(), pCam->getFar(), eye);
 		view = pCam->getViewMatrix();
 	}
@@ -125,10 +132,10 @@ void RenderVisitor::visit ( Group* _pGroup ) {
 	Light *pLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
 	if (pLight != nullptr) {
 
-		shadersManager->setGlUniform3fv("light.position", 1, glm::value_ptr(pLight->getPosition()));
-		shadersManager->setGlUniform4fv("light.ambient", 1, pLight->getAmbient().ptr());
-		shadersManager->setGlUniform4fv("light.diffuse", 1, pLight->getDiffuse().ptr());
-		shadersManager->setGlUniform4fv("light.specular", 1, pLight->getSpecular().ptr());
+		pShader->setGlUniform3fv("light.position", 1, glm::value_ptr(pLight->getPosition()));
+		pShader->setGlUniform4fv("light.ambient", 1, pLight->getAmbient().ptr());
+		pShader->setGlUniform4fv("light.diffuse", 1, pLight->getDiffuse().ptr());
+		pShader->setGlUniform4fv("light.specular", 1, pLight->getSpecular().ptr());
 
 	}
 }
@@ -150,7 +157,7 @@ void RenderVisitor::visit ( HUD* _pHUD ) {
 	if (HudOn == true) {
 		if (_pHUD->isOn() == true) {
 
-			shadersManager->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr( pVideo->getOrthoProjectionMatrix(eye) ));
+			pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr( pVideo->getOrthoProjectionMatrix(eye) ));
 			_pHUD->render();
 		}
 	}

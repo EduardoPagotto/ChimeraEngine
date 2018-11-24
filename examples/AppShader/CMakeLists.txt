@@ -10,12 +10,14 @@ find_package(GLEW REQUIRED)
 
 set (IncludesAppShare ${AppShader_SOURCE_DIR}/include/
 					  ${Chimera_SOURCE_DIR}/include
+					  ${ChimeraLoaders_SOURCE_DIR}/include/
 					  ${OPENGL_INCLUDE_DIR}
 					  ${SDL2_INCLUDE_DIR}
 					  ${BULLET_INCLUDE_DIR}
 					  ${FREETYPE_INCLUDE_DIRS})
 
-set (LibsAppShader ${Chimera_BINARY_DIR}/libChimera.a
+set (LibsAppShader ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a
+				   ${Chimera_BINARY_DIR}/libChimera.a
 				   ${OPENGL_LIBRARIES}
 				   ${SDL2_LIBRARY}
 				   ${BULLET_LIBRARIES}
@@ -39,6 +41,7 @@ add_executable(AppShader src/Game.cpp
 target_link_libraries(AppShader ${LibsAppShader})
 target_include_directories (AppShader PRIVATE ${IncludesAppShare})
 
-add_dependencies(AppShader Chimera)
+add_dependencies(AppShader Chimera
+						   ChimeraLoaders)
 
 INSTALL(FILES ${AppShader_BINARY_DIR}/AppShader DESTINATION bin)

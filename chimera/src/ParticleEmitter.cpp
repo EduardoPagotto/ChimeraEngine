@@ -5,7 +5,7 @@
 #include <algorithm>
 
 namespace Chimera {
-ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max, ShadersManager *_pShader) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
+ParticleEmitter::ParticleEmitter(Node * _parent, std::string _name, int _max, Shader *_pShader) : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name){
 	//MaxParticles = _max;
 	LastUsedParticle = 0;
 

@@ -15,6 +15,8 @@
 #include "MeshUtil.h"
 #include "Group.h"
 
+#include "ShadersLoader.h"
+
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
@@ -26,6 +28,8 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
 #endif
 
     using namespace Chimera;
+
+    std::map<std::string, Chimera::Shader*> mapa;
 
     auto console = spdlog::stdout_color_st("chimera");
     spdlog::set_level(spdlog::level::debug);
@@ -49,19 +53,23 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         // Gerenciador do grapho de cena
         SceneMng *sceneMng = new SceneMng();
 
+        ChimeraLoaders::ShadersLoader sl;
         //Carga dos shaders
 		YAML::Node shaders = config["shaders"];
-        Chimera::ShadersManager *shader_engine =  sceneMng->getShadersManager();
+
+        //Chimera::ShadersManager *shader =  sceneMng->getShadersManager();
         console->info("Shaders identificados: {0}", shaders.size());
         for (std::size_t i=0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
-            shader_engine->load(shader_item["name"].as<std::string>(),
-                                shader_item["vertex"].as<std::string>(),
-                                shader_item["fragment"].as<std::string>());
+            Chimera::Shader *pShader = sl.loadShader(shader_item["name"].as<std::string>(),
+                                                      shader_item["vertex"].as<std::string>(),
+                                                      shader_item["fragment"].as<std::string>());
+            
+            mapa[pShader->getCurrentProgram()] = pShader;
         }
 
         Group* group1 = new Group(sceneMng, "modelos");
-        group1->setShaderName("mesh-default");
+        group1->setShader(mapa["mesh-default"]);
 		//group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
 
         //define a origem da rotacao da camera!!
@@ -126,6 +134,8 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         delete game;
         delete sceneMng;
         delete video;
+
+        mapa.clear();
 
     } catch (const Chimera::Exception& ex) {
         console->error("Falha grave:{0}", ex.getMessage());

@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#include <map>
+
 #include <VideoDevice.h>
 
 #ifdef OVR_SET_TO_USE
@@ -16,6 +18,7 @@
 
 #include <VisualScene.h>
 #include <PhysicsScene.h>
+#include <ShadersLoader.h>
 
 #include <FlowControl.h>
 #include <ParticleEmitter.h>
@@ -32,6 +35,8 @@ int main ( int argn, char** argv ) {
 #else
 int _tmain ( int argc, _TCHAR* argv[] ) {
 #endif
+
+    std::map<std::string, Chimera::Shader*> mapa;
 
     auto console = spdlog::stdout_color_st("chimera");
     console->info("AppShader Iniciado");
@@ -56,14 +61,18 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
        // Gerenciador do grapho de cena
         Chimera::SceneMng *sceneMng = new Chimera::SceneMng();
 
+        ChimeraLoaders::ShadersLoader sl;// = new ChimeraLoaders::ShadersLoader();
+
 		YAML::Node shaders = config["shaders"];
-        Chimera::ShadersManager *shader =  sceneMng->getShadersManager();
+        //Chimera::ShadersManager *shader =  sceneMng->getShadersManager();
         console->info("Shaders identificados: {0}", shaders.size());
         for (std::size_t i=0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
-            shader->load(shader_item["name"].as<std::string>(),
-                         shader_item["vertex"].as<std::string>(),
-                         shader_item["fragment"].as<std::string>());
+            Chimera::Shader *pShader = sl.loadShader(shader_item["name"].as<std::string>(),
+                                                      shader_item["vertex"].as<std::string>(),
+                                                      shader_item["fragment"].as<std::string>());
+            
+            mapa[pShader->getCurrentProgram()] = pShader;
         }
 
         std::string model = config["model"].as<std::string>();
@@ -80,22 +89,22 @@ int _tmain ( int argc, _TCHAR* argv[] ) {
         libP.target();
 
         //Vincula o shader de mesh com sombra a scena carregada
-		group1->setShaderName("mesh-default");
-		group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
+		group1->setShader(mapa["mesh-default"]); //group1->setShaderName("mesh-default");
+		group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048, mapa["simpleDepthShader"]));
 
 		//Novo Grupos com shader de Emissor particula GLSL de particula e o vincula a cena e ao shader
 		Chimera::Group *gParticle = new Chimera::Group(sceneMng, "ParticleGroup" );
-		gParticle->setShaderName("particle-default");
+		gParticle->setShader(mapa["particle-default"]); //gParticle->setShaderName("particle-default");
 
 		Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
 		posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000, sceneMng->getShadersManager());
+		Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000, mapa["particle-default"]);
 		pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
 		//Novo Grupos com shader de um HUD ao Grapho da cena
         Chimera::Group *gHud = new Chimera::Group( (Chimera::Node*)sceneMng, "HUD-Group");
-		gHud->setShaderName("hud-default");
-		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default", sceneMng->getShadersManager());
+		gHud->setShader(mapa["hud-default"]);
+		Chimera::HUD *pHUD = new Chimera::HUD(gHud, "HUD-Default", mapa["hud-default"]);
 		Chimera::Font *pFont = new Chimera::Font ( font, 18 ); // TODO: carregar size da fonte
 		pHUD->addFont ( pFont );
 

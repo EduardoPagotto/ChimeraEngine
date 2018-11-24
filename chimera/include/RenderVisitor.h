@@ -3,7 +3,7 @@
 
 #include "NodeVisitor.h"
 #include "Video.h"
-#include "ShadersManager.h"
+#include "Shader.h"
 #include "Coord.h"
 
 #include "ShadowMap.h"
@@ -12,7 +12,7 @@ namespace Chimera {
 
 class RenderVisitor : public NodeVisitor {
 public:
-    RenderVisitor(ShadersManager *_pShadersManager);
+    RenderVisitor();
     virtual ~RenderVisitor();
     virtual void visit(class Camera* _pCamera) override;
     virtual void visit(class Mesh* _pMesh) override;
@@ -36,7 +36,7 @@ private:
 	glm::mat4 view;
     glm::mat4 model;
 
-	ShadersManager *shadersManager;
+	Shader *pShader;
 	ShadowMap *shadowOn;
 };
 }

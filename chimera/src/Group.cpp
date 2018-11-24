@@ -1,13 +1,17 @@
 #include "Group.h"
 
-
 namespace Chimera {
 
 Group::Group(Node* _parent, std::string _name) : Node (_parent, EntityKind::GROUP, _name) {
 	shadoMapVisitor = nullptr;
+	pShader = nullptr;
 }
 
 Group::~Group() {
+
+	if (pShader != nullptr)
+		delete pShader;
+
 }
 
 void Group::accept(NodeVisitor* v){

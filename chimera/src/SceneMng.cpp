@@ -10,15 +10,15 @@ SceneMng::SceneMng () : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
     log = spdlog::get("chimera");
     log->debug("Contructor SceneMng");
 
-    shadersManager =  Singleton<ShadersManager>::getRefSingleton();
-
-    pRV = new RenderVisitor(shadersManager);
+    pRV = new RenderVisitor();
 }
 
 SceneMng::~SceneMng() {
 	//TODO: deletar o grapho
+    
     log->debug("Destructor SceneMng");
-    Singleton<ShadersManager>::releaseRefSingleton();  
+    delete pRV;
+    pRV = nullptr;
 }
 
 void SceneMng::accept(NodeVisitor* v){

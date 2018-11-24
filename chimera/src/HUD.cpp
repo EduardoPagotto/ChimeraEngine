@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-HUD::HUD(Node *_parent, std::string _name, ShadersManager *_pShader) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
+HUD::HUD(Node *_parent, std::string _name, Shader *_pShader) : on ( true ), Draw (_parent, EntityKind::HUD, _name) {
     pShader = _pShader;
 }
 

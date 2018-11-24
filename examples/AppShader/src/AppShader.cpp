@@ -10,6 +10,8 @@
 #include "FlowControl.h"
 #include "ExceptionChimera.h"
 
+#include "ShadersLoader.h"
+
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
@@ -42,7 +44,11 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
 		Chimera::Video *video = new Chimera::VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
-		Game *game = new Game(shader["vertex"].as<std::string>(), shader["fragment"].as<std::string>(), video);
+
+        ChimeraLoaders::ShadersLoader *pSL = new ChimeraLoaders::ShadersLoader();
+        Chimera::Shader *pShader = pSL->loadShader("default", shader["vertex"].as<std::string>(), shader["fragment"].as<std::string>());
+        
+		Game *game = new Game(pShader, video);
 
 		Chimera::FlowControl *pControle = new Chimera::FlowControl(game);
 		pControle->open();
@@ -52,6 +58,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
 		delete pControle;
 		delete game;
+        delete pShader;
 		delete video;
 
 	} catch (const Chimera::Exception& ex) {

@@ -19,10 +19,11 @@
 
 namespace Chimera {
 
-ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned int & _width, const unsigned int & _height)
+ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned int & _width, const unsigned int & _height, Shader *_pShader)
 {
 	shadowMap = new ShadowMap(_name, _width, _height);
-	simpleDepthShader = Singleton<ShadersManager >::getRefSingleton();
+	pShader = _pShader;
+	//simpleDepthShader = Singleton<ShadersManager >::getRefSingleton();
 }
 
 ShadowMapVisitor::~ShadowMapVisitor() {
@@ -30,7 +31,7 @@ ShadowMapVisitor::~ShadowMapVisitor() {
 	delete shadowMap;
 	shadowMap = nullptr;
 
-	Singleton<ShadersManager >::releaseRefSingleton();
+	//Singleton<ShadersManager >::releaseRefSingleton();
 }
 
 ShadowMap* ShadowMapVisitor::execute(Node *_pNode) {
@@ -39,9 +40,10 @@ ShadowMap* ShadowMapVisitor::execute(Node *_pNode) {
 
 	glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix( nodeLight->getPosition() );
 
-	simpleDepthShader->selectCurrent("simpleDepthShader");
-	simpleDepthShader->link();
-	simpleDepthShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+	// TODO: jogar a carga deste no mail
+	//simpleDepthShader->selectCurrent("simpleDepthShader");
+	pShader->link();
+	pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
 	shadowMap->initSceneShadow();
 
@@ -71,7 +73,7 @@ void ShadowMapVisitor::visit ( SceneMng* _pSceneMng ) {
 
 void ShadowMapVisitor::visit ( Mesh* _pMesh ) {
 
-	simpleDepthShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+	pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
     _pMesh->render();
 
 }

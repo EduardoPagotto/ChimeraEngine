@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Video.h"
-#include "ShadersManager.h"
 #include "RenderVisitor.h"
 #include <spdlog/spdlog.h>
 
@@ -32,13 +31,8 @@ public:
 		pOrigem = _pCoord;
     }
 
-    inline ShadersManager *getShadersManager() {
-        return shadersManager;
-    }
-
 private:
 	Coord *pOrigem;
-    ShadersManager *shadersManager;
     RenderVisitor *pRV;
     std::shared_ptr<spdlog::logger> log;
 };

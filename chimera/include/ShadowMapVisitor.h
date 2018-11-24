@@ -5,7 +5,7 @@
 //#include <glm/glm.hpp>
 
 #include "NodeVisitor.h"
-#include "ShadersManager.h"
+#include "Shader.h"
 #include "Coord.h"
 #include "ShadowMap.h"
 
@@ -13,7 +13,7 @@ namespace Chimera {
 
 class ShadowMapVisitor : public NodeVisitor {
 public:
-    ShadowMapVisitor ( const std::string _name, const unsigned int& _width, const unsigned int& _height );
+    ShadowMapVisitor ( const std::string _name, const unsigned int& _width, const unsigned int& _height, Shader *_pShader);
     virtual ~ShadowMapVisitor();
 
 	ShadowMap* execute(Node *_pNode);
@@ -38,7 +38,11 @@ private:
 	//void initSceneShadow();
 	//void endSceneShadow();
 	ShadowMap *shadowMap;
-	ShadersManager *simpleDepthShader;
+
+
+    Shader *pShader;
+	//ShadersManager *simpleDepthShader;
+
 	//GLuint depthMapFBO;
     //Texture *pTexture;
 

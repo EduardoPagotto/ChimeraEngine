@@ -10,6 +10,13 @@ ShadersLoader::ShadersLoader() {
     log->debug("Contructor ShadersLoader");
 }
 
+Chimera::Shader *ShadersLoader::loadShader(const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path) {
+
+    GLuint id = load(programName, vertex_file_path, fragment_file_path);
+    Chimera::Shader *pShader = new Chimera::Shader(programName, id);
+    return pShader;
+}
+
 GLuint ShadersLoader::load(const std::string &programName, const std::string &vertex_file_path, const std::string &fragment_file_path) {
 
 	bool retorno = false;

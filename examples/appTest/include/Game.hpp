@@ -1,10 +1,10 @@
 #ifndef __GAME_EVENTS_TEST__HPP
 #define __GAME_EVENTS_TEST__HPP
 
-#include <DataMsg.h>
-#include <IGameClientEvents.h>
-#include <Node.h>
-#include <SceneMng.h>
+#include "DataMsg.hpp"
+#include "IGameClientEvents.hpp"
+#include "Node.hpp"
+#include "SceneMng.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

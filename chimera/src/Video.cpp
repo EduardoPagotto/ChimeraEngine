@@ -1,5 +1,4 @@
 #include "Video.hpp"
-
 #include "ExceptionChimera.hpp"
 #include "ExceptionSDL.hpp"
 

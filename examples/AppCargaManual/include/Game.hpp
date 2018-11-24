@@ -1,15 +1,15 @@
 #ifndef __GAME_XX__HPP
 #define __GAME_XX__HPP
 
-#include <CameraSpherical.h>
-#include <DataMsg.h>
-#include <HUD.h>
-#include <IGameClientEvents.h>
-#include <ParticleEmitter.h>
-#include <PhysicsControl.h>
-#include <SceneMng.h>
+#include "CameraSpherical.hpp"
+#include "DataMsg.hpp"
+#include "HUD.hpp"
+#include "IGameClientEvents.hpp"
+#include "ParticleEmitter.hpp"
+#include "PhysicsControl.hpp"
+#include "SceneMng.hpp"
 
-#include <Solid.h>
+#include "Solid.hpp"
 
 #include <spdlog/spdlog.h>
 

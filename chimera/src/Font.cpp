@@ -1,6 +1,6 @@
 #include "Font.hpp"
+#include "ExceptionSDL.hpp"
 
-#include <ExceptionSDL.h>
 #include <iostream>
 
 #include <spdlog/spdlog.h>

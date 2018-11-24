@@ -8,24 +8,24 @@
 
 #include <map>
 
-#include <VideoDevice.h>
+#include "VideoDevice.hpp"
 
 #ifdef OVR_SET_TO_USE
 #include "OvrDevice.hpp"
 #endif
 
-#include <Game.h>
+#include "Game.hpp"
 
-#include <PhysicsScene.h>
-#include <ShadersLoader.h>
-#include <VisualScene.h>
+#include "PhysicsScene.hpp"
+#include "ShadersLoader.hpp"
+#include "VisualScene.hpp"
 
-#include <ExceptionChimera.h>
-#include <FlowControl.h>
-#include <HUD.h>
-#include <ParticleEmitter.h>
-#include <Singleton.h>
-#include <Transform.h>
+#include "ExceptionChimera.hpp"
+#include "FlowControl.hpp"
+#include "HUD.hpp"
+#include "ParticleEmitter.hpp"
+#include "Singleton.hpp"
+#include "Transform.hpp"
 
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>

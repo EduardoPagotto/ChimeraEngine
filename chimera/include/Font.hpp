@@ -8,8 +8,8 @@
 #include FT_FREETYPE_H
 
 #include "Color.hpp"
+#include "OpenGLDefs.hpp"
 
-#include <OpenGLDefs.h>
 #include <map>
 #include <stdlib.h>
 #include <string.h>

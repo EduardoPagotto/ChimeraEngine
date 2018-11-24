@@ -1,15 +1,15 @@
 #ifndef WIN32
 #include <cstdio>
 #else
-#include "stdafx.hpp"
+#include "stdafx.h"
 #endif
 
 #include <iostream>
-//#include <VideoDevice.h>
+//#include "VideoDevice.hpp"
+#include "ExceptionChimera.hpp"
+#include "FlowControl.hpp"
 #include "Game.hpp"
-#include <ExceptionChimera.h>
-#include <FlowControl.h>
-#include <HmdDevice.h>
+#include "HmdDevice.hpp"
 
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>

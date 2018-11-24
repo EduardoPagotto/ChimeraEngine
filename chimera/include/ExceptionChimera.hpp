@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_EXCEPTION__HPP
 #define __CHIMERA_EXCEPTION__HPP
 
-#include <ExceptionBase.h>
+#include "ExceptionBase.hpp"
 
 namespace Chimera {
 

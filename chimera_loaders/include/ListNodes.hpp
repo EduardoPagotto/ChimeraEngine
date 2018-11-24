@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include <Node.h>
-#include <Singleton.h>
+#include "Node.hpp"
+#include "Singleton.hpp"
 
 namespace ChimeraLoaders {
 

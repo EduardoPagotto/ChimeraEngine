@@ -1,14 +1,14 @@
 #ifndef WIN32
 #include <cstdio>
 #else
-#include "stdafx.hpp"
+#include "stdafx.h"
 #endif
 
-#include <ExceptionChimera.h>
+#include "ExceptionChimera.hpp"
 #include <spdlog/spdlog.h>
 
-#include <PhysicsScene.h>
-#include <VisualScene.h>
+#include "PhysicsScene.hpp"
+#include "VisualScene.hpp"
 
 #ifndef WIN32
 int main(int argn, char** argv) {

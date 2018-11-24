@@ -1,7 +1,7 @@
 #ifndef _PHYSIC_MATERIAL__HPP
 #define _PHYSIC_MATERIAL__HPP
 
-#include <Entity.h>
+#include "Entity.hpp"
 #include <LinearMath/btScalar.h>
 
 namespace Chimera {

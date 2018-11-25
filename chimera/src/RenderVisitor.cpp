@@ -110,20 +110,17 @@ void RenderVisitor::visit(Group* _pGroup) {
     if (pShader == nullptr)
         return;
 
-    // Renderiza o ShadowMap usando o shader de sombreamneto dentro do ShadowMapVisitor
+    // Renderiza o ShadowMap que e filho dr group pelo ShadowMapVisitor
     // retornando uma textura dentro do shadowMap
-    // ShadowMapVisitor* sVisit = (ShadowMapVisitor*)_pGroup->getNodeVisitor();
-    // shadowMap = (sVisit != nullptr) ? sVisit->render(pCoord, _pGroup) : nullptr;
-
     ShadowMapVisitor* sVisit = (ShadowMapVisitor*)_pGroup->getNodeVisitor();
     if (sVisit != nullptr) {
-        sVisit->pCoord = pCoord;
-        if (sVisit->shadowMap == nullptr) {
-            sVisit->shadowMap = new ShadowMap("shadow1", 2048, 2048);
-            sVisit->shadowMap->init();
-        }
 
-        shadowMap = sVisit->shadowMap;
+        // TODO: colocar a carga na inicializacao??
+        shadowMap = (ShadowMap*)_pGroup->findChild(Chimera::EntityKind::SHADOWMAP, 0, false);
+
+        // TODO: passar parametros de outra forma para generalizar aqui
+        sVisit->shadowMap = shadowMap;
+        sVisit->pCoord = pCoord;
 
         shadowMap->initSceneShadow();
         NodeParse::tree(_pGroup, sVisit);
@@ -172,5 +169,7 @@ void RenderVisitor::visit(HUD* _pHUD) {
         }
     }
 }
+
+void RenderVisitor::visit(ShadowMap* _pShadowMap) {}
 
 } // namespace Chimera

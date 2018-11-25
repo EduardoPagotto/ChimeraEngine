@@ -1,13 +1,15 @@
 #include "ShadowMap.hpp"
 #include "Singleton.hpp"
 //#include "Video.hpp"
+#include "NodeVisitor.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
 
-ShadowMap::ShadowMap(std::string _name, const unsigned& _width, const unsigned& _height) {
+ShadowMap::ShadowMap(Node* _pNode, std::string _name, const unsigned& _width, const unsigned& _height)
+    : Node(_pNode, EntityKind::SHADOWMAP, _name) {
 
     texManager = Singleton<TextureManager>::getRefSingleton();
     pTexture = texManager->getTexture(texManager->fromFrameBuffer(_name, TEX_SEQ::SHADOWMAP, _width, _height));
@@ -22,6 +24,8 @@ ShadowMap::~ShadowMap() {
 void ShadowMap::init() {
     texManager->init(pTexture->getSerial()); // incrementa referencia de uso da textura
 }
+
+void ShadowMap::accept(NodeVisitor* v) { v->visit(this); }
 
 glm::mat4 ShadowMap::createLightSpaceMatrix(const glm::vec3& _posicaoLight) {
 

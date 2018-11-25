@@ -22,6 +22,7 @@ enum class EntityKind : int8_t {
     CAMERA,
     LIGHT,
     SKYBOX,
+    SHADOWMAP,
     SCENEROOT,
     CONSTRAINT,
     HUD,
@@ -44,15 +45,13 @@ class Entity {
      * @param _id identificador
      * @param _name nome
      */
-    Entity(const EntityKind& _kind, const std::string& _name)
-        : kind(_kind), name(_name), serial(++serialMaster) {}
+    Entity(const EntityKind& _kind, const std::string& _name) : kind(_kind), name(_name), serial(++serialMaster) {}
 
     /**
      * Construtor de Copia
      * @param _entity entidade a ser copiada
      */
-    Entity(const Entity& _entity)
-        : kind(_entity.kind), name(_entity.name + "_cp"), serial(++serialMaster) {}
+    Entity(const Entity& _entity) : kind(_entity.kind), name(_entity.name + "_cp"), serial(++serialMaster) {}
 
     /**
      * Destrutor

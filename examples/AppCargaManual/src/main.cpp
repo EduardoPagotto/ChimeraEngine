@@ -91,14 +91,15 @@ int _tmain(int argc, _TCHAR* argv[]) {
         ChimeraLoaders::PhysicsScene libP(model, pPC);
         libP.target();
 
-        // Vincula o shader de mesh com sombra a scena carregada
-        group1->setShader(mapa["mesh-default"]); // group1->setShaderName("mesh-default");
+        // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado
+        group1->setShader(mapa["mesh-default"]);
         group1->setNodeVisitor(new Chimera::ShadowMapVisitor(mapa["simpleDepthShader"]));
+        Chimera::ShadowMap* pShadowMap = new Chimera::ShadowMap(group1, "shadow1", 2048, 2048);
 
         // Novo Grupos com shader de Emissor particula GLSL de particula e o vincula a
         // cena e ao shader
         Chimera::Group* gParticle = new Chimera::Group(sceneMng, "ParticleGroup");
-        gParticle->setShader(mapa["particle-default"]); // gParticle->setShaderName("particle-default");
+        gParticle->setShader(mapa["particle-default"]);
 
         Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
         posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
@@ -124,6 +125,9 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete pControle;
         delete game;
         delete sceneMng;
+
+        delete pShadowMap;
+
         delete video;
 
     } catch (const Chimera::ExceptionBase& ex) {

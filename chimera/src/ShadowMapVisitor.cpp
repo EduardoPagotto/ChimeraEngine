@@ -15,8 +15,6 @@
 #include "Solid.hpp"
 #include "Transform.hpp"
 
-#include "NodeParse.hpp"
-
 namespace Chimera {
 
 ShadowMapVisitor::ShadowMapVisitor(Shader* _pShader) {
@@ -73,5 +71,7 @@ void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) { model = _pTransf
 void ShadowMapVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
 
 void ShadowMapVisitor::visit(HUD* _pHUD) {}
+
+void ShadowMapVisitor::visit(ShadowMap* _pShadowMap) {}
 
 } // namespace Chimera

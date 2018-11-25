@@ -17,7 +17,7 @@ class ShadowMapVisitor : public NodeVisitor {
                      const unsigned int& _height, Shader* _pShader);
     virtual ~ShadowMapVisitor();
 
-    ShadowMap* render(Node* _pNode);
+    ShadowMap* render(Coord* _pCoord, Node* _pNode);
 
     void init();
 
@@ -31,9 +31,8 @@ class ShadowMapVisitor : public NodeVisitor {
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;
 
-    Coord* pCoord;
-
   private:
+    Coord* pCoord;
     ShadowMap* shadowMap;
     Shader* pShader;
     glm::mat4 model;

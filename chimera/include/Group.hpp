@@ -19,11 +19,9 @@ class Group : public Node {
 
     Shader* getShader() { return pShader; }
 
-    void setShadowMap(ShadowMapVisitor* _shadoMapVisitor) {
-        this->shadoMapVisitor = _shadoMapVisitor;
-    }
+    void setShadowMap(ShadowMapVisitor* _shadoMapVisitor) { this->shadoMapVisitor = _shadoMapVisitor; }
 
-    ShadowMap* createSceneShadoMap(Coord* _pCoord);
+    NodeVisitor* getNodeVisitor() { return shadoMapVisitor; }
 
   private:
     Shader* pShader;

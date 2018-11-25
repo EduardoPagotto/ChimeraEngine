@@ -22,13 +22,13 @@ void Group::init() {
     }
 }
 
-ShadowMap* Group::createSceneShadoMap(Coord* _pCoord) {
+// ShadowMap* Group::createSceneShadoMap(Coord* _pCoord) {
 
-    if (shadoMapVisitor != nullptr) {
-        shadoMapVisitor->pCoord = _pCoord;
-        return shadoMapVisitor->render(this);
-    }
+//     if (shadoMapVisitor != nullptr) {
+//         shadoMapVisitor->pCoord = _pCoord;
+//         return shadoMapVisitor->render(this);
+//     }
 
-    return nullptr;
-}
+//     return nullptr;
+// }
 } // namespace Chimera

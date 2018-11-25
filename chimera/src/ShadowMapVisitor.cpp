@@ -19,8 +19,8 @@
 
 namespace Chimera {
 
-ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned int& _width,
-                                   const unsigned int& _height, Shader* _pShader) {
+ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned int& _width, const unsigned int& _height,
+                                   Shader* _pShader) {
     shadowMap = new ShadowMap(_name, _width, _height);
     pShader = _pShader;
 }
@@ -31,17 +31,17 @@ ShadowMapVisitor::~ShadowMapVisitor() {
     shadowMap = nullptr;
 }
 
-ShadowMap* ShadowMapVisitor::render(Node* _pNode) {
+ShadowMap* ShadowMapVisitor::render(Coord* _pCoord, Node* _pNode) {
+
+    pCoord = _pCoord;
 
     Light* nodeLight = (Light*)_pNode->findChild(Chimera::EntityKind::LIGHT, 0, false);
 
-    glm::mat4 lightSpaceMatrix =
-        shadowMap->createLightSpaceMatrix(nodeLight->getPosition());
+    glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix(nodeLight->getPosition());
 
     // Shader selecionado correto no RenderVisitor via Group
     pShader->link();
-    pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE,
-                                   glm::value_ptr(lightSpaceMatrix));
+    pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
     shadowMap->initSceneShadow();
 
@@ -85,10 +85,7 @@ void ShadowMapVisitor::visit(ParticleEmitter* _pParticleEmitter) {}
 
 void ShadowMapVisitor::visit(Group* _pGroup) {}
 
-void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) {
-
-    model = _pTransform->getModelMatrix(pCoord);
-}
+void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) { model = _pTransform->getModelMatrix(pCoord); }
 
 void ShadowMapVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
 

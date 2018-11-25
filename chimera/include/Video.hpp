@@ -64,6 +64,7 @@ class Video {
 
     std::string getVersaoOpenGL();
 
+    virtual int getTotEyes() = 0;
     inline KIND_DEVICE getKindDevice() const { return kindDevice; }
 
   protected:

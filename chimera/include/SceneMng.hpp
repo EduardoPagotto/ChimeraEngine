@@ -29,7 +29,7 @@ class SceneMng : public Node {
 
   private:
     Coord* pOrigem;
-    RenderVisitor* pRV;
+    RenderVisitor renderV;
     std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera

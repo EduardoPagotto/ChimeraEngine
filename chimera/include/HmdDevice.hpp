@@ -36,6 +36,8 @@ class HmdDevice : public Video {
     virtual void reshape(int _w, int _h);
     virtual void toggleFullScreen();
 
+    virtual int getTotEyes() { return 2; }
+
   private:
     void initDevice();
 

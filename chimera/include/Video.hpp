@@ -52,6 +52,8 @@ class Video {
 
     void initGL();
 
+    void afterStart();
+
     int getWinSizeW() const { return winSizeW; }
 
     int getWinSizeH() const { return winSizeH; }

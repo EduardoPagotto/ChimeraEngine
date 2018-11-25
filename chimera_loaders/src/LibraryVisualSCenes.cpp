@@ -120,7 +120,6 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai,
 
             pListNodes->addNode(pDraw);
 
-            // FIXME: quando uar solido, como contornar??
             Chimera::Transform* pTrans = new Chimera::Transform(_pNodePai, _id);
 
             pListNodes->addNode(pTrans);

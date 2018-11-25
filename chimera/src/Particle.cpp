@@ -28,8 +28,7 @@ void Particle::create(const glm::vec3& _maindir, const float& _spread) {
     speed = _maindir + randomdir * _spread;
 
     // Very bad way to generate a random color
-    color.set(rand() % 256, rand() % 256, rand() % 256,
-              rand() % 256 / 3); // FIXME acho que esta errado, conferir em debug
+    color.set(rand() % 256, rand() % 256, rand() % 256, rand() % 256 / 3);
     size = (rand() % 1000) / 2000.0f + 0.1f;
 }
 

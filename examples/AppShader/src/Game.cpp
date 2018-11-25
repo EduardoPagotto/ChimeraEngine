@@ -159,7 +159,6 @@ bool Game::paused() { return isPaused; }
 void Game::render() {
 
     pVideo->initDraw();
-    // TODO desenhar aqui!!
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Use our shaders

@@ -87,15 +87,10 @@ void ShadowMapVisitor::visit(Group* _pGroup) {}
 
 void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) {
 
-    // TODO acumular esta matriz
     model = _pTransform->getModelMatrix(pCoord);
 }
 
-void ShadowMapVisitor::visit(Solid* _pSolid) {
-
-    // TODO acumular esta matriz
-    model = _pSolid->getModelMatrix(pCoord);
-}
+void ShadowMapVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
 
 void ShadowMapVisitor::visit(HUD* _pHUD) {}
 

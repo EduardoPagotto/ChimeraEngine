@@ -172,7 +172,6 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root,
             Chimera::EntityKind::MESH, getIdFromUrl(l_mesh));
         if (pDrawTriMesh != nullptr) {
 
-            // // FIXME: ERRADO!!!! verificar porque trava, Usar o VBO como dado desta vez
             // btTriangleIndexVertexArray *indexVertexArray = new
             // btTriangleIndexVertexArray (
             //     pDrawTriMesh->vertexIndex.size(),       //num triangles
@@ -188,12 +187,12 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root,
             // btTriangleIndexVertexArray (
             // //     pDrawTriMesh->vIndex.getSize() / 3,  //num triangles
             // //     pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
-            // //     3 * sizeof ( int ),					//tamanho do indice por
-            // elemento
+            // //     3 * sizeof ( int ),					//tamanho do indice
+            // por elemento
             // //     pDrawTriMesh->vList.getSize() / 3,	//num Vertices
             // //     pDrawTriMesh->vList.ptrVal(),		//lista de vertice
-            // //     3 * sizeof ( float )				    //tamanho do vertice por
-            // elemento
+            // //     3 * sizeof ( float )				    //tamanho do vertice
+            // por elemento
             // // );
 
             // _pPhysic->setIndexVertexArray ( indexVertexArray );

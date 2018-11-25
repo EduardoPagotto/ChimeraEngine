@@ -29,10 +29,6 @@ void LibraryPhysicsScenes::target() {
         std::string l_id = l_nPhyScene->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            // Chimera::Group *pGroup = new Chimera::Group(nullptr, l_id);
-            // FIXME: carga com nome do l_id
-            // Chimera::PhysicsControl *pPhysicsControl = new Chimera::PhysicsControl();
-
             loadPhysicControlCollada(l_nPhyScene);
 
             tinyxml2::XMLElement* l_nPyModel =
@@ -51,9 +47,6 @@ void LibraryPhysicsScenes::target() {
                     std::string body = l_nRigid->Attribute("body");
                     std::string target = l_nRigid->Attribute("target");
 
-                    // Chimera::Solid *pSolid =
-                    // (Chimera::Solid*)pGroupInner->findChild(body, false);
-                    // TODO: Testar
                     Chimera::Solid* pSolid = (Chimera::Solid*)pListNodes->getByName(
                         Chimera::EntityKind::SOLID,
                         getIdFromUrl(body)); // ->findChild(body, false);

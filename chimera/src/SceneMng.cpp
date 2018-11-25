@@ -31,6 +31,8 @@ void SceneMng::start(Video* _pVideo) {
 
     InitVisitor* iv = new InitVisitor();
     NodeParse::tree(this, iv); // dfs(root, iv);
+
+    _pVideo->afterStart();
 }
 
 void SceneMng::draw(Video* _pVideo) {

@@ -44,8 +44,9 @@ void RenderVisitor::visit(Mesh* _pMesh) {
         return;
 
     int shadows = 1;
-    pShader->setGlUniform1i("shadows", shadows); // glUniform1i(glGetUniformLocation(shader.Program,
-                                                 // "shadows"), shadows);
+    pShader->setGlUniform1i("shadows",
+                            shadows); // glUniform1i(glGetUniformLocation(shader.Program,
+                                      // "shadows"), shadows);
 
     // Get the variables from the shader to which data will be passed
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
@@ -142,15 +143,10 @@ void RenderVisitor::visit(Group* _pGroup) {
 
 void RenderVisitor::visit(Chimera::Transform* _pTransform) {
 
-    // TODO acumular esta matriz
     model = _pTransform->getModelMatrix(pCoord);
 }
 
-void RenderVisitor::visit(Solid* _pSolid) {
-
-    // TODO acumular esta matriz
-    model = _pSolid->getModelMatrix(pCoord);
-}
+void RenderVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
 
 void RenderVisitor::visit(HUD* _pHUD) {
 

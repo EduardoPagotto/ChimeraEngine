@@ -27,6 +27,8 @@
 #include "Singleton.hpp"
 #include "Transform.hpp"
 
+#include "ShadowMapVisitor.hpp"
+
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
@@ -57,8 +59,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
         // Controlador de video
         Chimera::Video* video =
-            new Chimera::VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(),
-                                     screen["name"].as<std::string>());
+            new Chimera::VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
         // Gerenciador do grapho de cena
         Chimera::SceneMng* sceneMng = new Chimera::SceneMng();
@@ -71,8 +72,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         for (std::size_t i = 0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
             Chimera::Shader* pShader =
-                sl.loadShader(shader_item["name"].as<std::string>(),
-                              shader_item["vertex"].as<std::string>(),
+                sl.loadShader(shader_item["name"].as<std::string>(), shader_item["vertex"].as<std::string>(),
                               shader_item["fragment"].as<std::string>());
 
             mapa[pShader->getCurrentProgram()] = pShader;
@@ -91,31 +91,26 @@ int _tmain(int argc, _TCHAR* argv[]) {
         ChimeraLoaders::PhysicsScene libP(model, pPC);
         libP.target();
 
-        // Vincula o shader de mesh com sombra a scena carregada
-        group1->setShader(mapa["mesh-default"]); // group1->setShaderName("mesh-default");
-        group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1", 2048, 2048,
-                                                           mapa["simpleDepthShader"]));
+        // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado
+        group1->setShader(mapa["mesh-default"]);
+        group1->setNodeVisitor(new Chimera::ShadowMapVisitor(mapa["simpleDepthShader"]));
+        Chimera::ShadowMap* pShadowMap = new Chimera::ShadowMap(group1, "shadow1", 2048, 2048);
 
         // Novo Grupos com shader de Emissor particula GLSL de particula e o vincula a
         // cena e ao shader
         Chimera::Group* gParticle = new Chimera::Group(sceneMng, "ParticleGroup");
-        gParticle->setShader(
-            mapa["particle-default"]); // gParticle->setShaderName("particle-default");
+        gParticle->setShader(mapa["particle-default"]);
 
-        Chimera::Transform* posParticle =
-            new Chimera::Transform(gParticle, "posicaoParticle");
+        Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
         posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-        Chimera::ParticleEmitter* pParticleEmitter =
-            new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
-        pParticleEmitter->loadTexDiffuse("TexParticleEmmiter",
-                                         std::string("./models/Particle2.png"));
+        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
+        pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
         // Novo Grupos com shader de um HUD ao Grapho da cena
         Chimera::Group* gHud = new Chimera::Group((Chimera::Node*)sceneMng, "HUD-Group");
         gHud->setShader(mapa["hud-default"]);
         Chimera::HUD* pHUD = new Chimera::HUD(gHud, "HUD-Default");
-        Chimera::Font* pFont =
-            new Chimera::Font(font, 18); // TODO: carregar size da fonte
+        Chimera::Font* pFont = new Chimera::Font(font, 18); // TODO: carregar size da fonte
         pHUD->addFont(pFont);
 
         // Passa a game a scena, o video e o mundo fisico
@@ -130,14 +125,15 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete pControle;
         delete game;
         delete sceneMng;
+
+        delete pShadowMap;
+
         delete video;
 
     } catch (const Chimera::ExceptionBase& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
         return -1;
-    } catch (const std::exception& ex) {
-        console->error("Falha grave:{0}", ex.what());
-    } catch (const std::string& ex) {
+    } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {
         console->error("Falha grave:{0}", ex);
     } catch (...) { console->error("Falha Desconhecida"); }
 

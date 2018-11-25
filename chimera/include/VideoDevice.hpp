@@ -21,8 +21,9 @@ class VideoDevice : public Video {
     // virtual void perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
     // GLdouble zFar );
 
-    virtual glm::mat4
-    getOrthoProjectionMatrix(int eyeIndex); // virtual void executeViewOrto ( int eye );
+    virtual int getTotEyes() { return 1; }
+    // virtual void executeViewOrto ( int eye );
+    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
 
     virtual void reshape(int _w, int _h);
     virtual void toggleFullScreen();

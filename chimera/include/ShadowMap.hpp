@@ -7,12 +7,13 @@
 
 namespace Chimera {
 
-class ShadowMap {
+class ShadowMap : public Node {
   public:
-    ShadowMap(std::string _name, const unsigned& _width, const unsigned& _height);
+    ShadowMap(Node* _pNode, std::string _name, const unsigned& _width, const unsigned& _height);
     virtual ~ShadowMap();
 
-    void init();
+    virtual void init();
+    virtual void accept(class NodeVisitor* v) override;
 
     glm::mat4 createLightSpaceMatrix(const glm::vec3& _posicaoLight);
 

@@ -388,8 +388,8 @@ void OvrDevice::executeViewOrto(int eyeIndex) {
 
 // Calculate projections
 // 	Projection[0] = ovrMatrix4f_Projection(EyeRenderDesc[0].Fov,  0.01f, 10000.0f,
-// true); 	Projection[1] = ovrMatrix4f_Projection(EyeRenderDesc[1].Fov,  0.01f, 10000.0f,
-// true);
+// true); 	Projection[1] = ovrMatrix4f_Projection(EyeRenderDesc[1].Fov,  0.01f,
+// 10000.0f, true);
 //
 // 	float    orthoDistance = 0.8f; // 2D is 0.8 meter from camera
 // 	Vector2f orthoScale0   = Vector2f(1.0f) /
@@ -397,15 +397,16 @@ void OvrDevice::executeViewOrto(int eyeIndex) {
 // Vector2f(1.0f) / Vector2f(EyeRenderDesc[1].PixelsPerTanAngleAtCenter);
 //
 // 	OrthoProjection[0] = ovrMatrix4f_OrthoSubProjection(Projection[0], orthoScale0,
-// orthoDistance, 														EyeRenderDesc[0].HmdToEyeViewOffset.x); 	OrthoProjection[1] =
+// orthoDistance,
+// EyeRenderDesc[0].HmdToEyeViewOffset.x); 	OrthoProjection[1] =
 // ovrMatrix4f_OrthoSubProjection(Projection[1], orthoScale1, orthoDistance,
 // 														EyeRenderDesc[1].HmdToEyeViewOffset.x);
 
 //	OVR::Matrix4f OvrDevice::getOrthographic() {
 // 		const ovrEyeRenderDesc & erd = getEyeRenderDesc();
-// 		ovrMatrix4f ovrPerspectiveProjection = ovrMatrix4f_Projection(erd.Fov, 0.01f,
-// 100000.0f, true); 		ovrVector2f scale; scale.x = scaleFactor; scale.y = scaleFactor;
-// 		return ovrMatrix4f_OrthoSubProjection(ovrPerspectiveProjection, scale,
+// 		ovrMatrix4f ovrPerspectiveProjection = ovrMatrix4f_Projection(erd.Fov,
+// 0.01f, 100000.0f, true); 		ovrVector2f scale; scale.x = scaleFactor; scale.y
+// = scaleFactor; 		return ovrMatrix4f_OrthoSubProjection(ovrPerspectiveProjection, scale,
 // 100.8f, erd.HmdToEyeViewOffset.x);
 // 	}
 //
@@ -420,16 +421,17 @@ void OvrDevice::executeViewOrto(int eyeIndex) {
 // ovrMatrix4f_Projection(RenderState.EyeRenderDesc[1].Fov, 0.01f, 10000.f, true);
 //
 // 		const float    orthoDistance = 10;//HSWDISPLAY_DISTANCE; // This is meters
-// from the camera (viewer) that we place the ortho plane. 		const Vector2f orthoScale0   =
-// OVR::Vector2f(1.f) /
-// OVR::Vector2f(RenderState.EyeRenderDesc[0].PixelsPerTanAngleAtCenter); 		const Vector2f
-// orthoScale1   = OVR::Vector2f(1.f) /
+// from the camera (viewer) that we place the ortho plane. 		const Vector2f
+// orthoScale0   = OVR::Vector2f(1.f) /
+// OVR::Vector2f(RenderState.EyeRenderDesc[0].PixelsPerTanAngleAtCenter); 		const
+// Vector2f orthoScale1   = OVR::Vector2f(1.f) /
 // OVR::Vector2f(RenderState.EyeRenderDesc[1].PixelsPerTanAngleAtCenter);
 //
-// 		OrthoProjection[0] = ovrMatrix4f_OrthoSubProjection(perspectiveProjection[0],
-// orthoScale0, orthoDistance, RenderState.EyeRenderDesc[0].ViewAdjust.x);
-// 		OrthoProjection[1] = ovrMatrix4f_OrthoSubProjection(perspectiveProjection[1],
-// orthoScale1, orthoDistance, RenderState.EyeRenderDesc[1].ViewAdjust.x);
+// 		OrthoProjection[0] =
+// ovrMatrix4f_OrthoSubProjection(perspectiveProjection[0], orthoScale0, orthoDistance,
+// RenderState.EyeRenderDesc[0].ViewAdjust.x); 		OrthoProjection[1] =
+// ovrMatrix4f_OrthoSubProjection(perspectiveProjection[1], orthoScale1, orthoDistance,
+// RenderState.EyeRenderDesc[1].ViewAdjust.x);
 // 	}
 
 void OvrDevice::executeViewPerspective(const float& _fov, const float& _near,

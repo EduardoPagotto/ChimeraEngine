@@ -65,4 +65,10 @@ void InitVisitor::visit(HUD* _pHUD) {
     log->debug("InitVisitor HUD: {0}", _pHUD->getName());
     _pHUD->init();
 }
+
+void InitVisitor::visit(ShadowMap* _pShadowMap) {
+    log->debug("InitVisitor ShadowMap: {0}", _pShadowMap->getName());
+    _pShadowMap->init();
+}
+
 } // namespace Chimera

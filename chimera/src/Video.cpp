@@ -151,17 +151,19 @@ void Video::initGL() {
                            std::string("Falha ao Iniciar o OpenGL:" +
                                        std::string((const char*)gluErrorString(error))));
     }
+}
 
-    // TODO retirar daqui e colocar na inicializacao do sceneMng
-    // estado inicial do openGL
-    //     glEnable ( GL_TEXTURE_2D );
-    //     glShadeModel ( GL_SMOOTH );
-    //     glClearDepth ( 1.0f );
-    //     glEnable ( GL_DEPTH_TEST );
-    //     glEnable ( GL_CULL_FACE );
-    //     glDepthFunc ( GL_LEQUAL );
-    //     glHint ( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
-    //     glEnable ( GL_LIGHTING );
+void Video::afterStart() {
+
+    // glEnable ( GL_TEXTURE_2D );
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    // glEnable ( GL_LIGHTING );
 }
 
 void Video::restoreMatrix() {

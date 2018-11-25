@@ -47,8 +47,6 @@ void PhysicsControl::stepSim(void) {
 
     if (s_primeiro == false) {
 
-        // FIXME Descobri porque o stepSim nao esta sincrnizando com
-        // os quadros
         countPeriod();
         // discretDynamicsWorld->stepSimulation ( countPeriod(), 50 );
         discretDynamicsWorld->stepSimulation(step);

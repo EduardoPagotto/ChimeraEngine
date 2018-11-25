@@ -181,14 +181,6 @@ void Game::start() {
 
     pSceneMng->origemDesenho((Chimera::Coord*)pCorpoRigido);
 
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-
-    glClearDepth(1.0f);
-    glDepthFunc(GL_LEQUAL);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
     // Localiza o HUD
     pHUD = (Chimera::HUD*)pSceneMng->findChild("HUD-Default", true);
     if (pHUD != nullptr) {

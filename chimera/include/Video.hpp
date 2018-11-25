@@ -52,6 +52,8 @@ class Video {
 
     void initGL();
 
+    void afterStart();
+
     int getWinSizeW() const { return winSizeW; }
 
     int getWinSizeH() const { return winSizeH; }
@@ -62,6 +64,7 @@ class Video {
 
     std::string getVersaoOpenGL();
 
+    virtual int getTotEyes() = 0;
     inline KIND_DEVICE getKindDevice() const { return kindDevice; }
 
   protected:

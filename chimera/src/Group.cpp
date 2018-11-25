@@ -17,18 +17,18 @@ void Group::accept(NodeVisitor* v) { v->visit(this); }
 
 void Group::init() {
 
-    if (shadoMapVisitor != nullptr) {
-        shadoMapVisitor->init();
-    }
+    // if (shadoMapVisitor != nullptr) {
+    //     shadoMapVisitor->init();
+    // }
 }
 
-ShadowMap* Group::executeShadoMap(Coord* _pCoord) {
+// ShadowMap* Group::createSceneShadoMap(Coord* _pCoord) {
 
-    if (shadoMapVisitor != nullptr) {
-        shadoMapVisitor->pCoord = _pCoord;
-        return shadoMapVisitor->execute(this);
-    }
+//     if (shadoMapVisitor != nullptr) {
+//         shadoMapVisitor->pCoord = _pCoord;
+//         return shadoMapVisitor->render(this);
+//     }
 
-    return nullptr;
-}
+//     return nullptr;
+// }
 } // namespace Chimera

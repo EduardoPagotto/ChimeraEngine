@@ -23,6 +23,7 @@ class RenderVisitor : public NodeVisitor {
     virtual void visit(class Transform* _pTransform) override;
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;
+    virtual void visit(class ShadowMap* _pShadowMap) override;
 
     Coord* pCoord;
     Video* pVideo;
@@ -37,7 +38,7 @@ class RenderVisitor : public NodeVisitor {
     glm::mat4 model;
 
     Shader* pShader;
-    ShadowMap* shadowOn;
+    ShadowMap* shadowMap;
 };
 } // namespace Chimera
 

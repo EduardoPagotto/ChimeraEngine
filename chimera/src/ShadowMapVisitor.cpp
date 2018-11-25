@@ -15,50 +15,24 @@
 #include "Solid.hpp"
 #include "Transform.hpp"
 
-#include "NodeParse.hpp"
-
 namespace Chimera {
 
-ShadowMapVisitor::ShadowMapVisitor(const std::string _name, const unsigned int& _width,
-                                   const unsigned int& _height, Shader* _pShader) {
-    shadowMap = new ShadowMap(_name, _width, _height);
+ShadowMapVisitor::ShadowMapVisitor(Shader* _pShader) {
     pShader = _pShader;
-}
-
-ShadowMapVisitor::~ShadowMapVisitor() {
-
-    delete shadowMap;
     shadowMap = nullptr;
+    pCoord = nullptr;
 }
 
-ShadowMap* ShadowMapVisitor::execute(Node* _pNode) {
-
-    Light* nodeLight = (Light*)_pNode->findChild(Chimera::EntityKind::LIGHT, 0, false);
-
-    glm::mat4 lightSpaceMatrix =
-        shadowMap->createLightSpaceMatrix(nodeLight->getPosition());
-
-    // Shader selecionado correto no RenderVisitor via Group
-    pShader->link();
-    pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE,
-                                   glm::value_ptr(lightSpaceMatrix));
-
-    shadowMap->initSceneShadow();
-
-    NodeParse::tree(_pNode, this);
-
-    shadowMap->endSceneShadow();
-
-    return shadowMap;
-}
-
-void ShadowMapVisitor::init() { shadowMap->init(); }
+ShadowMapVisitor::~ShadowMapVisitor() {}
 
 void ShadowMapVisitor::visit(Camera* _pCamera) {
 
-    // shader->setGlUniform3fv("viewPos", 1, glm::value_ptr( _pCamera->getPosition() ));
+    // shader->setGlUniform3fv("viewPos", 1, glm::value_ptr(_pCamera->getPosition()));
     // projection = pVideo->getPerspectiveProjectionMatrix(_pCamera->getFov(),
-    // _pCamera->getNear(), _pCamera->getFar(), eye); view = _pCamera->getViewMatrix();
+    //                                                     _pCamera->getNear(),
+    //                                                     _pCamera->getFar(),
+    //                                                     eye);
+    // view = _pCamera->getViewMatrix();
 }
 
 void ShadowMapVisitor::visit(SceneMng* _pSceneMng) {
@@ -72,31 +46,32 @@ void ShadowMapVisitor::visit(Mesh* _pMesh) {
 }
 
 void ShadowMapVisitor::visit(Light* _pLight) {
-    /*
-            shader->setGlUniform3fv("light.position", 1,
-       glm::value_ptr(_pLight->getPosition())); shader->setGlUniform4fv("light.ambient",
-       1, _pLight->getAmbient().ptr()); shader->setGlUniform4fv("light.diffuse", 1,
-       _pLight->getDiffuse().ptr()); shader->setGlUniform4fv("light.specular", 1,
-       _pLight->getSpecular().ptr());
-    */
+
+    // shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
+    // shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
+    // shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
+    // shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
 }
 
 void ShadowMapVisitor::visit(ParticleEmitter* _pParticleEmitter) {}
 
-void ShadowMapVisitor::visit(Group* _pGroup) {}
+void ShadowMapVisitor::visit(Group* _pGroup) {
 
-void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) {
+    Light* nodeLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
 
-    // TODO acumular esta matriz
-    model = _pTransform->getModelMatrix(pCoord);
+    glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix(nodeLight->getPosition());
+
+    // Shader selecionado correto no RenderVisitor via Group
+    pShader->link();
+    pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
-void ShadowMapVisitor::visit(Solid* _pSolid) {
+void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) { model = _pTransform->getModelMatrix(pCoord); }
 
-    // TODO acumular esta matriz
-    model = _pSolid->getModelMatrix(pCoord);
-}
+void ShadowMapVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
 
 void ShadowMapVisitor::visit(HUD* _pHUD) {}
+
+void ShadowMapVisitor::visit(ShadowMap* _pShadowMap) {}
 
 } // namespace Chimera

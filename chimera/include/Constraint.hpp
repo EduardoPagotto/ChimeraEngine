@@ -14,8 +14,6 @@ class Constraint : public Entity {
     virtual ~Constraint();
 
   private:
-    // FIXME Tornar privado novamente
-
     Solid* pPhysicsA;
     Solid* pPhysicsB;
 

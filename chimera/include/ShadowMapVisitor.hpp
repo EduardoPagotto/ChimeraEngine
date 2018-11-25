@@ -13,13 +13,8 @@ namespace Chimera {
 
 class ShadowMapVisitor : public NodeVisitor {
   public:
-    ShadowMapVisitor(const std::string _name, const unsigned int& _width,
-                     const unsigned int& _height, Shader* _pShader);
+    ShadowMapVisitor(Shader* _pShader);
     virtual ~ShadowMapVisitor();
-
-    ShadowMap* execute(Node* _pNode);
-
-    void init();
 
     virtual void visit(class Camera* _pCamera) override;
     virtual void visit(class Mesh* _pMesh) override;
@@ -30,20 +25,14 @@ class ShadowMapVisitor : public NodeVisitor {
     virtual void visit(class Transform* _pTransform) override;
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;
+    virtual void visit(class ShadowMap* _pShadowMap) override;
 
     Coord* pCoord;
+    ShadowMap* shadowMap;
 
   private:
-    ShadowMap* shadowMap;
     Shader* pShader;
     glm::mat4 model;
-
-    // glm::mat4 calcLightSpaceMatrices ( const glm::vec3 &_posicaoLight );
-    // void createLightViewPosition(const glm::vec3 & _posicaoLight);
-    // void initSceneShadow();
-    // void endSceneShadow();
-    // GLuint depthMapFBO;
-    // Texture *pTexture;
 };
 } // namespace Chimera
 

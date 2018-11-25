@@ -31,7 +31,7 @@ ShadowMapVisitor::~ShadowMapVisitor() {
     shadowMap = nullptr;
 }
 
-ShadowMap* ShadowMapVisitor::execute(Node* _pNode) {
+ShadowMap* ShadowMapVisitor::render(Node* _pNode) {
 
     Light* nodeLight = (Light*)_pNode->findChild(Chimera::EntityKind::LIGHT, 0, false);
 

@@ -22,11 +22,11 @@ void Group::init() {
     }
 }
 
-ShadowMap* Group::executeShadoMap(Coord* _pCoord) {
+ShadowMap* Group::createSceneShadoMap(Coord* _pCoord) {
 
     if (shadoMapVisitor != nullptr) {
         shadoMapVisitor->pCoord = _pCoord;
-        return shadoMapVisitor->execute(this);
+        return shadoMapVisitor->render(this);
     }
 
     return nullptr;

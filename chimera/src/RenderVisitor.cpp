@@ -30,7 +30,7 @@ RenderVisitor::RenderVisitor() {
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    shadowOn = nullptr;
+    shadowMap = nullptr;
     pShader = nullptr;
 }
 
@@ -57,9 +57,9 @@ void RenderVisitor::visit(Mesh* _pMesh) {
 
     _pMesh->getMaterial()->apply(pShader);
 
-    if (shadowOn != nullptr) {
-        shadowOn->applyShadow();
-        pShader->setGlUniform1i("shadowMap", (int)shadowOn->getShadowIndexTextureSeq());
+    if (shadowMap != nullptr) {
+        shadowMap->applyShadow();
+        pShader->setGlUniform1i("shadowMap", (int)shadowMap->getShadowIndexTextureSeq());
     }
 
     _pMesh->render(pShader);
@@ -108,18 +108,21 @@ void RenderVisitor::visit(SceneMng* _pSceneMng) {
 void RenderVisitor::visit(Group* _pGroup) {
 
     pShader = _pGroup->getShader();
-    shadowOn = _pGroup->executeShadoMap(pCoord);
+
+    // Primeiro processa a sombra usando o shader de sombreamneto, toda a cena retorna uma
+    // textura dentro de shadowMap
+    shadowMap = _pGroup->createSceneShadoMap(pCoord);
 
     if (pShader == nullptr)
         return;
 
     pShader->link();
 
-    if (shadowOn != nullptr) {
+    if (shadowMap != nullptr) {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE,
-                                       glm::value_ptr(shadowOn->lightSpaceMatrix));
+                                       glm::value_ptr(shadowMap->lightSpaceMatrix));
     }
 
     Camera* pCam = (Camera*)_pGroup->findChild(Chimera::EntityKind::CAMERA, 0, false);

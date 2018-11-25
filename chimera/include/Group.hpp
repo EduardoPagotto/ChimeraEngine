@@ -23,7 +23,7 @@ class Group : public Node {
         this->shadoMapVisitor = _shadoMapVisitor;
     }
 
-    ShadowMap* executeShadoMap(Coord* _pCoord);
+    ShadowMap* createSceneShadoMap(Coord* _pCoord);
 
   private:
     Shader* pShader;

@@ -37,7 +37,7 @@ class RenderVisitor : public NodeVisitor {
     glm::mat4 model;
 
     Shader* pShader;
-    ShadowMap* shadowOn;
+    ShadowMap* shadowMap;
 };
 } // namespace Chimera
 

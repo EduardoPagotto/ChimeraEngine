@@ -17,7 +17,7 @@ class ShadowMapVisitor : public NodeVisitor {
                      const unsigned int& _height, Shader* _pShader);
     virtual ~ShadowMapVisitor();
 
-    ShadowMap* execute(Node* _pNode);
+    ShadowMap* render(Node* _pNode);
 
     void init();
 

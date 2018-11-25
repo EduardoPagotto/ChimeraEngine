@@ -25,10 +25,9 @@ class SceneMng : public Node {
     void draw(Video* _pVideo);
     void start(Video* _pVideo);
 
-    inline void origemDesenho(Coord* _pCoord) { pOrigem = _pCoord; }
+    inline void origemDesenho(Coord* _pCoord) { renderV.pCoord = _pCoord; }
 
   private:
-    Coord* pOrigem;
     RenderVisitor renderV;
     std::shared_ptr<spdlog::logger> log;
 };

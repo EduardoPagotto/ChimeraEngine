@@ -5,7 +5,6 @@
 namespace Chimera {
 
 SceneMng::SceneMng() : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {
-    pOrigem = nullptr;
     log = spdlog::get("chimera");
     log->debug("Contructor SceneMng");
 }
@@ -33,8 +32,6 @@ void SceneMng::start(Video* _pVideo) {
 void SceneMng::draw(Video* _pVideo) {
 
     _pVideo->initDraw();
-
-    renderV.pCoord = pOrigem;
 
     for (int eye = 0; eye < _pVideo->getTotEyes(); eye++) {
         renderV.eye = eye;

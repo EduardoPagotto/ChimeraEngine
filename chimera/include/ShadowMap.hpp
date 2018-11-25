@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_SHADOW_MAP__HPP
 #define __CHIMERA_SHADOW_MAP__HPP
 
-#include "Node.hpp"
+//#include "Node.hpp"
 #include "TextureManager.hpp"
 #include <glm/glm.hpp>
 

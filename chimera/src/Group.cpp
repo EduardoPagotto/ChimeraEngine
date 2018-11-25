@@ -17,9 +17,9 @@ void Group::accept(NodeVisitor* v) { v->visit(this); }
 
 void Group::init() {
 
-    if (shadoMapVisitor != nullptr) {
-        shadoMapVisitor->init();
-    }
+    // if (shadoMapVisitor != nullptr) {
+    //     shadoMapVisitor->init();
+    // }
 }
 
 // ShadowMap* Group::createSceneShadoMap(Coord* _pCoord) {

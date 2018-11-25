@@ -9,6 +9,9 @@
 #include "Solid.hpp"
 #include "Transform.hpp"
 
+#include "NodeParse.hpp"
+#include "ShadowMapVisitor.hpp"
+
 #include "OpenGLDefs.hpp"
 
 #include <glm/gtc/matrix_inverse.hpp>
@@ -109,8 +112,25 @@ void RenderVisitor::visit(Group* _pGroup) {
 
     // Renderiza o ShadowMap usando o shader de sombreamneto dentro do ShadowMapVisitor
     // retornando uma textura dentro do shadowMap
+    // ShadowMapVisitor* sVisit = (ShadowMapVisitor*)_pGroup->getNodeVisitor();
+    // shadowMap = (sVisit != nullptr) ? sVisit->render(pCoord, _pGroup) : nullptr;
+
     ShadowMapVisitor* sVisit = (ShadowMapVisitor*)_pGroup->getNodeVisitor();
-    shadowMap = (sVisit != nullptr) ? sVisit->render(pCoord, _pGroup) : nullptr;
+    if (sVisit != nullptr) {
+        sVisit->pCoord = pCoord;
+        if (sVisit->shadowMap == nullptr) {
+            sVisit->shadowMap = new ShadowMap("shadow1", 2048, 2048);
+            sVisit->shadowMap->init();
+        }
+
+        shadowMap = sVisit->shadowMap;
+
+        shadowMap->initSceneShadow();
+        NodeParse::tree(_pGroup, sVisit);
+        shadowMap->endSceneShadow();
+    } else {
+        shadowMap = nullptr;
+    }
 
     pShader->link();
 

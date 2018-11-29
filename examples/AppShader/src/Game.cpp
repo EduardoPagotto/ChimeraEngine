@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "ExceptionSDL.hpp"
+#include "ExceptionChimera.hpp"
 
 #include "GameClient.hpp"
 #include "OpenGLDefs.hpp"
@@ -31,13 +31,9 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
         float pitch = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_Y, deadZone);
         float roll = joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_X, deadZone);
 
-        double throttle =
-            -propulsaoPrincipal *
-            ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
+        double throttle = -propulsaoPrincipal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
         throttle =
-            throttle -
-            (-propulsaoFrontal *
-             ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
+            throttle - (-propulsaoFrontal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
 
         if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {}
         if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {}
@@ -58,8 +54,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             SDL_Event l_eventQuit;
             l_eventQuit.type = SDL_QUIT;
             if (SDL_PushEvent(&l_eventQuit) == -1) {
-                throw Chimera::ExceptionSDL(Chimera::ExceptionCode::CLOSE,
-                                            std::string(SDL_GetError()));
+                throw Chimera::ExceptionChimera(std::string(SDL_GetError()));
             }
             break;
         case SDLK_F10:
@@ -122,8 +117,7 @@ void Game::start() {
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 
     // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data,
-                 GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 }
 
 void Game::stop() {}
@@ -167,9 +161,9 @@ void Game::render() {
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glVertexAttribPointer(0, // attribute 0. No particular reason for 0, but must match
-                             // the layout in the shader.
-                          3, // size
+    glVertexAttribPointer(0,        // attribute 0. No particular reason for 0, but must match
+                                    // the layout in the shader.
+                          3,        // size
                           GL_FLOAT, // type
                           GL_FALSE, // normalized?
                           0,        // stride

@@ -10,8 +10,7 @@ ShadersLoader::ShadersLoader() {
     log->debug("Contructor ShadersLoader");
 }
 
-Chimera::Shader* ShadersLoader::loadShader(const std::string& programName,
-                                           const std::string& vertex_file_path,
+Chimera::Shader* ShadersLoader::loadShader(const std::string& programName, const std::string& vertex_file_path,
                                            const std::string& fragment_file_path) {
 
     GLuint id = load(programName, vertex_file_path, fragment_file_path);
@@ -19,8 +18,7 @@ Chimera::Shader* ShadersLoader::loadShader(const std::string& programName,
     return pShader;
 }
 
-GLuint ShadersLoader::load(const std::string& programName,
-                           const std::string& vertex_file_path,
+GLuint ShadersLoader::load(const std::string& programName, const std::string& vertex_file_path,
                            const std::string& fragment_file_path) {
 
     bool retorno = false;
@@ -69,9 +67,7 @@ std::string ShadersLoader::getShaderCode(const char* file_path) {
 
     } else {
 
-        throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
-                                        "Impossivel abrir arquivo: " +
-                                            std::string(file_path));
+        throw Chimera::ExceptionChimera("Impossivel abrir arquivo: " + std::string(file_path));
     }
 
     return shaderCode;
@@ -100,16 +96,14 @@ GLuint ShadersLoader::compileShader(const std::string& shaderCode, bool _shadeKi
         if (InfoLogLength > 0) {
             std::vector<char> shaderErrorMessage(InfoLogLength + 1);
             glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &shaderErrorMessage[0]);
-            log->error("Shader Check Fragment Shader: {}",
-                       std::string(&shaderErrorMessage[0]));
+            log->error("Shader Check Fragment Shader: {}", std::string(&shaderErrorMessage[0]));
         }
     }
 
     return shaderID;
 }
 
-GLuint ShadersLoader::linkShader(const GLuint& VertexShaderID,
-                                 const GLuint& FragmentShaderID) {
+GLuint ShadersLoader::linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID) {
 
     GLint Result = GL_FALSE;
     int InfoLogLength;

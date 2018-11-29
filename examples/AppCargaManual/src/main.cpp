@@ -130,7 +130,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
         delete video;
 
-    } catch (const Chimera::ExceptionBase& ex) {
+    } catch (const Chimera::ExceptionChimera& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
         return -1;
     } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {

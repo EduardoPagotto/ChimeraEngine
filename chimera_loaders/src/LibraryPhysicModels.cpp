@@ -8,22 +8,19 @@
 
 namespace ChimeraLoaders {
 
-LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root,
-                                         const std::string& _url,
+LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url,
                                          Chimera::PhysicsControl* _pWorld)
     : Library(_root, _url) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
     pWorld = _pWorld;
 }
 
-LibraryPhysicModels::~LibraryPhysicModels() {
-    Chimera::Singleton<ListNodes>::releaseRefSingleton();
-}
+LibraryPhysicModels::~LibraryPhysicModels() { Chimera::Singleton<ListNodes>::releaseRefSingleton(); }
 
 void LibraryPhysicModels::target() {
 
-    tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")
-                                            ->FirstChildElement("physics_model");
+    tinyxml2::XMLElement* l_nPhyModel =
+        root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");
     for (l_nPhyModel; l_nPhyModel; l_nPhyModel = l_nPhyModel->NextSiblingElement()) {
 
         std::string l_id = l_nPhyModel->Attribute("id");
@@ -37,16 +34,14 @@ void LibraryPhysicModels::target() {
                 Chimera::Solid* pPhysic = new Chimera::Solid(nullptr, l_nNameRb, pWorld);
 
                 tinyxml2::XMLElement* l_nMass =
-                    l_nRigid->FirstChildElement("technique_common")
-                        ->FirstChildElement("mass");
+                    l_nRigid->FirstChildElement("technique_common")->FirstChildElement("mass");
                 if (l_nMass != nullptr) {
                     const char* l_mass = l_nMass->GetText();
                     pPhysic->setMass(atof(l_mass));
                 }
 
                 tinyxml2::XMLElement* l_npm =
-                    l_nRigid->FirstChildElement("technique_common")
-                        ->FirstChildElement("instance_physics_material");
+                    l_nRigid->FirstChildElement("technique_common")->FirstChildElement("instance_physics_material");
                 if (l_npm != nullptr) {
                     const char* l_url = l_npm->Attribute("url");
 
@@ -59,8 +54,7 @@ void LibraryPhysicModels::target() {
                 }
 
                 tinyxml2::XMLElement* l_nShape =
-                    l_nRigid->FirstChildElement("technique_common")
-                        ->FirstChildElement("shape");
+                    l_nRigid->FirstChildElement("technique_common")->FirstChildElement("shape");
                 if (l_nShape != nullptr) {
                     loadColladaShape(root, l_nShape, pPhysic);
                     // const char* l_mass = l_nShape->GetText();
@@ -72,12 +66,10 @@ void LibraryPhysicModels::target() {
         }
     }
 
-    throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                    "Physics model nao encontrado: " + url);
+    throw Chimera::ExceptionChimera("Physics model nao encontrado: " + url);
 }
 
-void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root,
-                                           tinyxml2::XMLElement* _nShape,
+void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape,
                                            Chimera::Solid* _pPhysic) {
 
     _nShape = _nShape->FirstChildElement();
@@ -95,9 +87,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root,
         } else if (l_arrayValores.size() == 3) {
             _pPhysic->setShapeSphere(l_arrayValores[0]);
         } else {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                            "Shape Sphere Array valores invalidos: " +
-                                                url);
+            throw Chimera::ExceptionChimera("Shape Sphere Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "plane") == 0) {
@@ -111,17 +101,13 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root,
         loadArrayBtScalar(l_size, l_arrayValores);
 
         if (l_arrayValores.size() == 1) {
-            _pPhysic->setShapePlane(
-                glm::vec3(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]),
-                l_arrayValores[0]);
+            _pPhysic->setShapePlane(glm::vec3(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]),
+                                    l_arrayValores[0]);
         } else if (l_arrayValores.size() == 4) {
-            _pPhysic->setShapePlane(
-                glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]),
-                l_arrayValores[3]);
+            _pPhysic->setShapePlane(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]),
+                                    l_arrayValores[3]);
         } else {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                            "Shape Plane Array valores invalidos: " +
-                                                url);
+            throw Chimera::ExceptionChimera("Shape Plane Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "box") == 0) {
@@ -133,14 +119,11 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root,
         loadArrayBtScalar(l_size, l_arrayValores);
 
         if (l_arrayValores.size() == 1) {
-            _pPhysic->setShapeBox(
-                glm::vec3(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]));
+            _pPhysic->setShapeBox(glm::vec3(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]));
         } else if (l_arrayValores.size() == 3) {
-            _pPhysic->setShapeBox(
-                glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]));
+            _pPhysic->setShapeBox(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]));
         } else {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                            "Shape Box Array valores invalidos: " + url);
+            throw Chimera::ExceptionChimera("Shape Box Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "cylinder") == 0) {
@@ -152,15 +135,11 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root,
         loadArrayBtScalar(l_size, l_arrayValores);
 
         if (l_arrayValores.size() == 1) {
-            _pPhysic->setShapeCilinder(
-                glm::vec3(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]));
+            _pPhysic->setShapeCilinder(glm::vec3(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]));
         } else if (l_arrayValores.size() == 3) {
-            _pPhysic->setShapeCilinder(
-                glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]));
+            _pPhysic->setShapeCilinder(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]));
         } else {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                            "Shape Cylinder Array valores invalidos: " +
-                                                url);
+            throw Chimera::ExceptionChimera("Shape Cylinder Array valores invalidos: " + url);
         }
     } else if (strcmp(l_tipoShape, "mesh") == 0) {
 
@@ -168,8 +147,8 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root,
         tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement(); // instance_geometry
         std::string l_mesh = l_nMesh->Attribute("url");
 
-        Chimera::Mesh* pDrawTriMesh = (Chimera::Mesh*)pListNodes->getByName(
-            Chimera::EntityKind::MESH, getIdFromUrl(l_mesh));
+        Chimera::Mesh* pDrawTriMesh =
+            (Chimera::Mesh*)pListNodes->getByName(Chimera::EntityKind::MESH, getIdFromUrl(l_mesh));
         if (pDrawTriMesh != nullptr) {
 
             // btTriangleIndexVertexArray *indexVertexArray = new

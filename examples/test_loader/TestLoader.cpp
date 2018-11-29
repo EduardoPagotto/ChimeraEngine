@@ -38,7 +38,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         ChimeraLoaders::PhysicsScene libP("./models/piso2.xml", pPC);
         libP.target();
 
-    } catch (const Chimera::ExceptionBase& ex) {
+    } catch (const Chimera::ExceptionChimera& ex) {
         console->error("TesteLoader falha grave:{0}", ex.getMessage());
         return -1;
     } catch (const std::exception& ex) {

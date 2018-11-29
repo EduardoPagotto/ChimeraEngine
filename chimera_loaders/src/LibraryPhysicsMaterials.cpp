@@ -3,26 +3,23 @@
 
 namespace ChimeraLoaders {
 
-LibraryPhysicsMaterials::LibraryPhysicsMaterials(tinyxml2::XMLElement* _root,
-                                                 const std::string& _url)
+LibraryPhysicsMaterials::LibraryPhysicsMaterials(tinyxml2::XMLElement* _root, const std::string& _url)
     : Library(_root, _url) {}
 
 LibraryPhysicsMaterials::~LibraryPhysicsMaterials() {}
 
 Chimera::PhysicMaterial* LibraryPhysicsMaterials::target() {
 
-    tinyxml2::XMLElement* l_nPyMat = root->FirstChildElement("library_physics_materials")
-                                         ->FirstChildElement("physics_material");
+    tinyxml2::XMLElement* l_nPyMat =
+        root->FirstChildElement("library_physics_materials")->FirstChildElement("physics_material");
     for (l_nPyMat; l_nPyMat; l_nPyMat = l_nPyMat->NextSiblingElement()) {
 
         std::string l_id = l_nPyMat->Attribute("id");
         if (url.compare(l_id) == 0) {
             tinyxml2::XMLElement* l_nTecDyn =
-                l_nPyMat->FirstChildElement("technique_common")
-                    ->FirstChildElement("dynamic_friction");
+                l_nPyMat->FirstChildElement("technique_common")->FirstChildElement("dynamic_friction");
             tinyxml2::XMLElement* l_nTecRes =
-                l_nPyMat->FirstChildElement("technique_common")
-                    ->FirstChildElement("restitution");
+                l_nPyMat->FirstChildElement("technique_common")->FirstChildElement("restitution");
 
             Chimera::PhysicMaterial* pMaterial = new Chimera::PhysicMaterial(l_id);
             if (l_nTecDyn)
@@ -34,8 +31,6 @@ Chimera::PhysicMaterial* LibraryPhysicsMaterials::target() {
             return pMaterial;
         }
     }
-    throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                    "Physics material nao encontrado: " +
-                                        std::string(url));
+    throw Chimera::ExceptionChimera("Physics material nao encontrado: " + std::string(url));
 }
 } // namespace ChimeraLoaders

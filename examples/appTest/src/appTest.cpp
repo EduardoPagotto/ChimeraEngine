@@ -48,8 +48,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        Video* video = new VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(),
-                                       screen["name"].as<std::string>());
+        Video* video = new VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
         // Gerenciador do grapho de cena
         SceneMng* sceneMng = new SceneMng();
@@ -63,8 +62,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         for (std::size_t i = 0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
             Chimera::Shader* pShader =
-                sl.loadShader(shader_item["name"].as<std::string>(),
-                              shader_item["vertex"].as<std::string>(),
+                sl.loadShader(shader_item["name"].as<std::string>(), shader_item["vertex"].as<std::string>(),
                               shader_item["fragment"].as<std::string>());
 
             mapa[pShader->getCurrentProgram()] = pShader;
@@ -103,12 +101,10 @@ int _tmain(int argc, _TCHAR* argv[]) {
         pMat1->setDiffuse(Color(1.0f, 0.5f, 0.31f));
         pMat1->setSpecular(Color(0.5f, 0.5f, 0.5f));
         pMat1->setShine(32.0f);
-        pMat1->loadTextureFromFile("Texture-teste", TEX_SEQ::DIFFUSE,
-                                   "./models/image1.jpg");
+        pMat1->loadTextureFromFile("Texture-teste", TEX_SEQ::DIFFUSE, "./models/image1.jpg");
 
         // Mesh do cubo1 filho de posicao 1
-        Mesh* pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01",
-                                                         glm::vec3(50, 50, 50), pMat1);
+        Mesh* pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01", glm::vec3(50, 50, 50), pMat1);
 
         // Posicao Cubo2
         Transform* pTrans2 = new Transform(group1, "trans02");
@@ -122,8 +118,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         pMat2->setShine(32.0f);
 
         // Mesh do cubo 2 vinculado posicao 2
-        Mesh* pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02",
-                                                          glm::vec3(20, 20, 20), pMat2);
+        Mesh* pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), pMat2);
 
         // Wrapper do game
         Game* game = new Game(sceneMng, video);
@@ -142,13 +137,13 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
         mapa.clear();
 
-    } catch (const Chimera::ExceptionBase& ex) {
+    } catch (const Chimera::ExceptionChimera& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
         return -1;
-    } catch (const std::exception& ex) {
-        console->error("Falha grave:{0}", ex.what());
-    } catch (const std::string& ex) {
+    } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {
+
         console->error("Falha grave:{0}", ex);
+
     } catch (...) { console->error("Falha Desconhecida"); }
 
     console->info("appTest finalizado com sucesso");

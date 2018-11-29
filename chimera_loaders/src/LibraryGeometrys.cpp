@@ -4,15 +4,13 @@
 
 namespace ChimeraLoaders {
 
-LibraryGeometrys::LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url)
-    : Library(_root, _url) {}
+LibraryGeometrys::LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
 LibraryGeometrys::~LibraryGeometrys() {}
 
 Chimera::Mesh* LibraryGeometrys::target() {
 
-    tinyxml2::XMLElement* l_nGeo =
-        root->FirstChildElement("library_geometries")->FirstChildElement("geometry");
+    tinyxml2::XMLElement* l_nGeo = root->FirstChildElement("library_geometries")->FirstChildElement("geometry");
     for (l_nGeo; l_nGeo; l_nGeo = l_nGeo->NextSiblingElement()) {
 
         std::string l_id = l_nGeo->Attribute("id");
@@ -28,15 +26,12 @@ Chimera::Mesh* LibraryGeometrys::target() {
             return pDraw;
         }
     }
-    throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                    "Geometry nao encontrado: " + url);
+    throw Chimera::ExceptionChimera("Geometry nao encontrado: " + url);
 }
 
-int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source,
-                                std::vector<float>& _arrayValores) {
+int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source, std::vector<float>& _arrayValores) {
 
-    const char* l_numCount =
-        _source->FirstChildElement("float_array")->Attribute("count");
+    const char* l_numCount = _source->FirstChildElement("float_array")->Attribute("count");
     if (l_numCount != nullptr) {
 
         // std::vector<float> l_array;
@@ -48,8 +43,7 @@ int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source,
     return -1;
 }
 
-std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode,
-                                              Chimera::Mesh* _pDraw) {
+std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chimera::Mesh* _pDraw) {
 
     std::string retorno = "";
     tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement("mesh");
@@ -67,8 +61,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode,
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pDraw->vertexList.push_back(
-                        glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    _pDraw->vertexList.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-normals") != nullptr) {
 
@@ -77,8 +70,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode,
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pDraw->normalList.push_back(
-                        glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    _pDraw->normalList.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-map-0") != nullptr) {
 
@@ -86,8 +78,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode,
                 std::vector<float> lista;
                 getSource(l_nSource, lista);
                 for (unsigned int indice = 0; indice < lista.size(); indice += 2)
-                    _pDraw->textureList.push_back(
-                        glm::vec2(lista[indice], lista[indice + 1]));
+                    _pDraw->textureList.push_back(glm::vec2(lista[indice], lista[indice + 1]));
             }
         }
 
@@ -125,26 +116,22 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode,
 
             int l_numTriangles = atoi(l_count);
 
-            for (unsigned l_contador = 0; l_contador < l_arrayIndex.size();
-                 l_contador++) {
+            for (unsigned l_contador = 0; l_contador < l_arrayIndex.size(); l_contador++) {
                 int index = l_contador % l_vOffset.size();
 
                 const char* l_offSet = l_vOffset[index];
                 const char* l_semantic = l_vSemantic[index];
                 const char* l_source = l_vSource[index];
 
-                if (strstr(l_source, (char*)"-vertices") !=
-                    nullptr) { // indices de vetor ponto
+                if (strstr(l_source, (char*)"-vertices") != nullptr) { // indices de vetor ponto
 
                     _pDraw->vertexIndex.push_back(l_arrayIndex[l_contador]);
 
-                } else if (strstr(l_source, (char*)"-normals") !=
-                           nullptr) { // indice de vetor normal
+                } else if (strstr(l_source, (char*)"-normals") != nullptr) { // indice de vetor normal
 
                     _pDraw->normalIndex.push_back(l_arrayIndex[l_contador]);
 
-                } else if (strstr(l_source, (char*)"-map-0") !=
-                           nullptr) { // indice de vetor posicao textura
+                } else if (strstr(l_source, (char*)"-map-0") != nullptr) { // indice de vetor posicao textura
 
                     _pDraw->textureIndex.push_back(l_arrayIndex[l_contador]);
                 }
@@ -159,12 +146,12 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode,
 
     std::shared_ptr<spdlog::logger> log = spdlog::get("chimera");
     log->debug("Nome: {0}", _pDraw->getName().c_str());
-    log->debug("Vertex  Indice / Lista ------ ( {0:03d} / {1:03d} )",
-               _pDraw->vertexIndex.size(), _pDraw->vertexList.size());
-    log->debug("Normal  Indice / Lista ------ ( {0:03d} / {1:03d} )",
-               _pDraw->normalIndex.size(), _pDraw->normalList.size());
-    log->debug("Texture Indice / Lista ------ ( {0:03d} / {1:03d} )",
-               _pDraw->textureIndex.size(), _pDraw->textureList.size());
+    log->debug("Vertex  Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->vertexIndex.size(),
+               _pDraw->vertexList.size());
+    log->debug("Normal  Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->normalIndex.size(),
+               _pDraw->normalList.size());
+    log->debug("Texture Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->textureIndex.size(),
+               _pDraw->textureList.size());
 
     return retorno;
 }

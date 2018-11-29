@@ -1,5 +1,5 @@
 #include "VideoDevice.hpp"
-#include "ExceptionSDL.hpp"
+#include "ExceptionChimera.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>
@@ -33,15 +33,13 @@ void VideoDevice::initDraw() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
 
 void VideoDevice::endDraw() { SDL_GL_SwapWindow(window); }
 
-glm::mat4 VideoDevice::getPerspectiveProjectionMatrix(const float& _fov,
-                                                      const float& _near,
-                                                      const float& _far, int _eye) {
+glm::mat4 VideoDevice::getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
+                                                      int _eye) {
     // void VideoDevice::executeViewPerspective ( const float &_fov,const float
     // &_near,const float &_far, int _eye ) {
 
     glViewport(0, 0, winSizeW, winSizeH);
-    return glm::perspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near,
-                            _far);
+    return glm::perspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
 
     // glMatrixMode ( GL_PROJECTION );
     // glLoadIdentity();
@@ -64,8 +62,7 @@ glm::mat4 VideoDevice::getPerspectiveProjectionMatrix(const float& _fov,
 
 glm::mat4 VideoDevice::getOrthoProjectionMatrix(int eyeIndex) {
 
-    return glm::ortho(0.0f, static_cast<GLfloat>(winSizeW), 0.0f,
-                      static_cast<GLfloat>(winSizeH));
+    return glm::ortho(0.0f, static_cast<GLfloat>(winSizeW), 0.0f, static_cast<GLfloat>(winSizeH));
 }
 
 // void VideoDevice::executeViewOrto ( int eye ) {

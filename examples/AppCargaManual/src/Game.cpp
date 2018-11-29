@@ -1,12 +1,11 @@
 #include "Game.hpp"
-#include "ExceptionSDL.hpp"
+#include "ExceptionChimera.hpp"
 #include "GameClient.hpp"
 #include "OpenGLDefs.hpp"
 #include "Singleton.hpp"
 #include "Transform.hpp"
 
-Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo,
-           Chimera::PhysicsControl* _physicWorld)
+Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo, Chimera::PhysicsControl* _physicWorld)
     : pSceneMng(_pScenMng), pVideo(_pVideo) {
 
     isPaused = false;
@@ -48,13 +47,9 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
         float pitch = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_Y, deadZone);
         float roll = joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_X, deadZone);
 
-        double throttle =
-            -propulsaoPrincipal *
-            ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
+        double throttle = -propulsaoPrincipal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
         throttle =
-            throttle -
-            (-propulsaoFrontal *
-             ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
+            throttle - (-propulsaoFrontal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
 
         if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {
 
@@ -85,8 +80,7 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
         if ((roll != 0.0) || (pitch != 0.0) || (yaw != 0.0) || (throttle != 0.0)) {
             pCorpoRigido->applyForce(glm::vec3(0.0, throttle, 0.0));
-            pCorpoRigido->applyTorc(
-                glm::vec3(-torque * pitch, -torque * roll, -torque * yaw));
+            pCorpoRigido->applyTorc(glm::vec3(-torque * pitch, -torque * roll, -torque * yaw));
         }
     }
 }
@@ -98,16 +92,14 @@ void Game::keyCapture(SDL_Keycode tecla) {
             SDL_Event l_eventQuit;
             l_eventQuit.type = SDL_QUIT;
             if (SDL_PushEvent(&l_eventQuit) == -1) {
-                throw Chimera::ExceptionSDL(Chimera::ExceptionCode::CLOSE,
-                                            std::string(SDL_GetError()));
+                throw Chimera::ExceptionChimera(std::string(SDL_GetError()));
             }
             break;
         case SDLK_F1:
             pHUD->setOn(!pHUD->isOn());
             break;
         case SDLK_F10:
-            Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr,
-                                 nullptr);
+            Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_UP:
             pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
@@ -158,12 +150,10 @@ void Game::start() {
     pSceneMng->start(pVideo);
 
     // Localiza o Skybox e ajusta iluminacao
-    Chimera::Transform* pSkyBox =
-        (Chimera::Transform*)pSceneMng->findChild("SkyBox", true);
+    Chimera::Transform* pSkyBox = (Chimera::Transform*)pSceneMng->findChild("SkyBox", true);
 
     if (pSkyBox != nullptr) {
-        Chimera::Draw* pDraw =
-            (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
+        Chimera::Draw* pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
         pSkyBox->setStaticTranslation(true);
     }
 
@@ -194,10 +184,8 @@ void Game::stop() {}
 void Game::newFPS(const unsigned int& fps) {
 
     glm::vec3 val1 = pCorpoRigido->getPosition();
-    sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," +
-                  std::to_string(val1.z) + ")";
-    textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") +
-               std::to_string(physicWorld->getLastPeriod());
+    sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
+    textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
 }
 
 void Game::render() {

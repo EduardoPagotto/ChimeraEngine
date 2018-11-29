@@ -1,5 +1,5 @@
 #include "HUD.hpp"
-#include "ExceptionSDL.hpp"
+#include "ExceptionChimera.hpp"
 #include "NodeVisitor.hpp"
 #include "Singleton.hpp"
 

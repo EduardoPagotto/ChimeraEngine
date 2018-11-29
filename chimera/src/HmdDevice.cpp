@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "ExceptionSDL.hpp"
+#include "ExceptionChimera.hpp"
 #include "HmdDevice.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>

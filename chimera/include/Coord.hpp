@@ -20,8 +20,7 @@ class Coord : public Node {
      * @param _entity : tipo de entidade
      * @param _name : Nome da coordenada
      */
-    Coord(Node* _parent, EntityKind _entity, std::string _name)
-        : Node(_parent, _entity, _name) {}
+    Coord(Node* _parent, EntityKind _entity, std::string _name) : Node(_parent, _entity, _name) {}
 
     /**
      * @brief Destroy the Coord object
@@ -77,8 +76,7 @@ class Coord : public Node {
      * @param _posicao
      * @param _rotation
      */
-    virtual void setPositionRotation(const glm::vec3& _posicao,
-                                     const glm::vec3& _rotation) = 0;
+    virtual void setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) = 0;
 };
 } // namespace Chimera
 

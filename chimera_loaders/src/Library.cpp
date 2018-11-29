@@ -18,16 +18,13 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string& _url) {
         // Verifica se arquivo existe
         tinyxml2::XMLError a_eResult = doc->LoadFile(file.c_str());
         if (a_eResult != 0) {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
-                                            "Falha ao ler arquivo erro: " +
-                                                std::to_string(a_eResult));
+            throw Chimera::ExceptionChimera("Falha ao ler arquivo erro: " + std::to_string(a_eResult));
         }
 
         // vefifica se ele � uma estrutura compativel com collada
         root = doc->FirstChildElement("COLLADA");
         if (root == nullptr) {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
-                                            "Nao é um arquivo colada: " + file);
+            throw Chimera::ExceptionChimera("Nao é um arquivo colada: " + file);
         }
 
         file_atual = file;
@@ -63,16 +60,13 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string& _url) {
         // Verifica se arquivo existe
         tinyxml2::XMLError a_eResult = doc->LoadFile(file.c_str());
         if (a_eResult != 0) {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
-                                            "Falha ao ler arquivo erro: " +
-                                                std::to_string(a_eResult));
+            throw Chimera::ExceptionChimera("Falha ao ler arquivo erro: " + std::to_string(a_eResult));
         }
 
         // vefifica se ele � uma estrutura compativel com collada
         root = doc->FirstChildElement("COLLADA");
         if (root == nullptr) {
-            throw Chimera::ExceptionChimera(Chimera::ExceptionCode::OPEN,
-                                            "Nao é um arquivo colada: " + file);
+            throw Chimera::ExceptionChimera("Nao é um arquivo colada: " + file);
         }
 
     } else {
@@ -102,8 +96,7 @@ std::string Library::getIdFromUrl(const std::string& _url) {
 
 tinyxml2::XMLElement* Library::findExtra(tinyxml2::XMLElement* _nNode) {
 
-    tinyxml2::XMLElement* l_nTec =
-        _nNode->FirstChildElement("extra")->FirstChildElement("technique");
+    tinyxml2::XMLElement* l_nTec = _nNode->FirstChildElement("extra")->FirstChildElement("technique");
     for (l_nTec; l_nTec; l_nTec = l_nTec->NextSiblingElement()) {
         const char* l_profile = l_nTec->Attribute("profile");
         if (strcmp(l_profile, (const char*)"chimera") == 0) {
@@ -175,9 +168,7 @@ void Library::loadArrayI(const char* _val, std::vector<int>& _arrayI) {
 glm::mat4 Library::carregaMatrix(const std::vector<float>& listaMatrix) {
 
     if (listaMatrix.size() != 16) {
-        throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                        "Tamanho da Matrix invalido" +
-                                            std::to_string(listaMatrix.size()));
+        throw Chimera::ExceptionChimera("Tamanho da Matrix invalido" + std::to_string(listaMatrix.size()));
     }
 
     float ponteiroFloat[16];

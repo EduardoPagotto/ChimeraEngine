@@ -1,35 +1,58 @@
 #ifndef __CHIMERA_EXCEPTION__HPP
 #define __CHIMERA_EXCEPTION__HPP
 
-#include "ExceptionBase.hpp"
+#include <exception>
+#include <sstream>
+#include <string>
 
 namespace Chimera {
 
 /**
- * Class ExceptionSDL
+ * Class Exception
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class ExceptionChimera : public ExceptionBase {
+class ExceptionChimera : public std::exception {
   public:
     /**
-     * Construtor de copia
-     * @param ex
+     * Construtor Entity Limpa protegida
      */
-    ExceptionChimera(const ExceptionChimera& _ex) : ExceptionBase(_ex) {}
+    ExceptionChimera() : std::exception() { message = "UNKNOWN_EXCEPTION"; }
 
     /**
-     * Construtor com dados
-     * @param _code
-     * @param _message
+     * Construtor de copia
+     * @param exception
      */
-    ExceptionChimera(ExceptionCode _code, std::string _message)
-        : ExceptionBase(ExceptionType::CHIMERA_EXCEPTION, _code, _message) {}
+    ExceptionChimera(const ExceptionChimera& _exception) { message = _exception.message; }
+
+    /**
+     * Construtor tipificado
+     * @param _exceptionType codigo de tipode excessao
+     * @param _code codigo do erro
+     * @param _message messagem de erro
+     */
+    ExceptionChimera(std::string _message) { message = _message; }
 
     /**
      * Destrutor Padrao
      */
-    // virtual ~ExceptionSDL(){}
+    virtual ~ExceptionChimera() throw() {}
+
+    /**
+     * Retorna mensagem de erro
+     * @return
+     */
+    virtual const char* what() const throw() { return message.c_str(); }
+
+    /**
+     * Retorna mensagem de erro
+     * @return String com mensagem de erro
+     *
+     */
+    virtual std::string getMessage() const throw() { return message; }
+
+  private:
+    std::string message;
 };
 
 } // namespace Chimera

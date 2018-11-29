@@ -4,15 +4,13 @@
 
 namespace ChimeraLoaders {
 
-LibraryCameras::LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _url)
-    : Library(_root, _url) {}
+LibraryCameras::LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
 LibraryCameras::~LibraryCameras() {}
 
 Chimera::Camera* LibraryCameras::target() {
 
-    tinyxml2::XMLElement* l_nCam =
-        root->FirstChildElement("library_cameras")->FirstChildElement("camera");
+    tinyxml2::XMLElement* l_nCam = root->FirstChildElement("library_cameras")->FirstChildElement("camera");
     for (l_nCam; l_nCam; l_nCam = l_nCam->NextSiblingElement()) {
 
         std::string l_id = l_nCam->Attribute("id");
@@ -23,10 +21,8 @@ Chimera::Camera* LibraryCameras::target() {
 
             tinyxml2::XMLElement* l_nExtra = findExtra(l_nCam);
             if (l_nExtra) {
-                tinyxml2::XMLElement* l_nMin =
-                    l_nExtra->FirstChildElement("orbital")->FirstChildElement("min");
-                tinyxml2::XMLElement* l_nMax =
-                    l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
+                tinyxml2::XMLElement* l_nMin = l_nExtra->FirstChildElement("orbital")->FirstChildElement("min");
+                tinyxml2::XMLElement* l_nMax = l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
                 pCameraNew->setDistanciaMinima(atof(l_nMin->GetText()));
                 pCameraNew->setDistanciaMaxima(atof(l_nMax->GetText()));
             }
@@ -34,15 +30,12 @@ Chimera::Camera* LibraryCameras::target() {
             return pCameraNew;
         }
     }
-    throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                    "Camera nao encontrada: " + url);
+    throw Chimera::ExceptionChimera("Camera nao encontrada: " + url);
 }
 
 void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::Camera* _pCamera) {
-
-    tinyxml2::XMLElement* l_nPerspective = _nNode->FirstChildElement("optics")
-                                               ->FirstChildElement("technique_common")
-                                               ->FirstChildElement("perspective");
+    tinyxml2::XMLElement* l_nPerspective =
+        _nNode->FirstChildElement("optics")->FirstChildElement("technique_common")->FirstChildElement("perspective");
     if (l_nPerspective != nullptr) {
         _pCamera->setPerspective(true);
         _pCamera->setFov(atof(l_nPerspective->FirstChildElement("xfov")->GetText()));
@@ -51,8 +44,7 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::Camera* _pC
 
     } else {
         // TODO testar ecarregar ortogonal aqui
-        throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                        "Camera, Ortogonal nao implementada: " + url);
+        throw Chimera::ExceptionChimera("Camera, Ortogonal nao implementada: " + url);
     }
 }
 } // namespace ChimeraLoaders

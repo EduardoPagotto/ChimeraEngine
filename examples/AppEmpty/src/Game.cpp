@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "ExceptionSDL.hpp"
+#include "ExceptionChimera.hpp"
 
 #include "GameClient.hpp"
 #include "OpenGLDefs.hpp"
@@ -26,13 +26,9 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
         float pitch = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_Y, deadZone);
         float roll = joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_X, deadZone);
 
-        double throttle =
-            -propulsaoPrincipal *
-            ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
+        double throttle = -propulsaoPrincipal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
         throttle =
-            throttle -
-            (-propulsaoFrontal *
-             ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
+            throttle - (-propulsaoFrontal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
 
         if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {}
         if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {}
@@ -53,13 +49,11 @@ void Game::keyCapture(SDL_Keycode tecla) {
             SDL_Event l_eventQuit;
             l_eventQuit.type = SDL_QUIT;
             if (SDL_PushEvent(&l_eventQuit) == -1) {
-                throw Chimera::ExceptionSDL(Chimera::ExceptionCode::CLOSE,
-                                            std::string(SDL_GetError()));
+                throw Chimera::ExceptionChimera(std::string(SDL_GetError()));
             }
             break;
         case SDLK_F10:
-            Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr,
-                                 nullptr);
+            Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_F1:
         case SDLK_UP:

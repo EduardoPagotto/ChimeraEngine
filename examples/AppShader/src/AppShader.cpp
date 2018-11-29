@@ -43,13 +43,11 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node shader = config["shader"];
 
         Chimera::Video* video =
-            new Chimera::VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(),
-                                     screen["name"].as<std::string>());
+            new Chimera::VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
         ChimeraLoaders::ShadersLoader* pSL = new ChimeraLoaders::ShadersLoader();
         Chimera::Shader* pShader =
-            pSL->loadShader("default", shader["vertex"].as<std::string>(),
-                            shader["fragment"].as<std::string>());
+            pSL->loadShader("default", shader["vertex"].as<std::string>(), shader["fragment"].as<std::string>());
 
         Game* game = new Game(pShader, video);
 
@@ -64,12 +62,10 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete pShader;
         delete video;
 
-    } catch (const Chimera::ExceptionBase& ex) {
+    } catch (const Chimera::ExceptionChimera& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
         return -1;
-    } catch (const std::exception& ex) {
-        console->error("Falha grave:{0}", ex.what());
-    } catch (const std::string& ex) {
+    } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {
         console->error("Falha grave:{0}", ex);
     } catch (...) { console->error("Falha Desconhecida"); }
 

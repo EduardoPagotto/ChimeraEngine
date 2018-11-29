@@ -1,12 +1,11 @@
 #include "FlowControl.hpp"
 #include "DataMsg.hpp"
-#include "ExceptionSDL.hpp"
+#include "ExceptionChimera.hpp"
 //#include <iostream>
 
 namespace Chimera {
 
-FlowControl::FlowControl(IGameClientEvents* _pGameClientEvents)
-    : pGameClientEvents(_pGameClientEvents) {
+FlowControl::FlowControl(IGameClientEvents* _pGameClientEvents) : pGameClientEvents(_pGameClientEvents) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     log = spdlog::get("chimera");
@@ -31,7 +30,7 @@ void FlowControl::close(void) {
     SDL_Event l_eventQuit;
     l_eventQuit.type = SDL_QUIT;
     if (SDL_PushEvent(&l_eventQuit) == -1) {
-        throw ExceptionSDL(ExceptionCode::CLOSE, std::string(SDL_GetError()));
+        throw ExceptionChimera(std::string(SDL_GetError()));
     }
 }
 

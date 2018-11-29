@@ -9,9 +9,7 @@ const Color Color::RED = Color(1.0, 0.0, 0.0);
 const Color Color::GREEN = Color(0.0, 1.0, 0.0);
 const Color Color::BLUE = Color(0.0, 0.0, 1.0);
 
-bool Color::operator==(const Color& rhs) const {
-    return (r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a);
-}
+bool Color::operator==(const Color& rhs) const { return (r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a); }
 
 bool Color::operator!=(const Color& rhs) const { return !(*this == rhs); }
 

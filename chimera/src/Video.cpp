@@ -1,11 +1,9 @@
 #include "Video.hpp"
 #include "ExceptionChimera.hpp"
-#include "ExceptionSDL.hpp"
 
 namespace Chimera {
 
-Video::Video(std::string _nome, KIND_DEVICE _kindDevice)
-    : nomeTela(_nome), kindDevice(_kindDevice) {
+Video::Video(std::string _nome, KIND_DEVICE _kindDevice) : nomeTela(_nome), kindDevice(_kindDevice) {
 
     winSizeW = 800;
     winSizeH = 600;
@@ -14,8 +12,7 @@ Video::Video(std::string _nome, KIND_DEVICE _kindDevice)
     log->debug("Contructor Video:{0} w:{1:03d} h:{2:03d}", _nome, winSizeW, winSizeH);
 }
 
-Video::Video(std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h)
-    : nomeTela(_nome), kindDevice(_kindDevice) {
+Video::Video(std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h) : nomeTela(_nome), kindDevice(_kindDevice) {
 
     winSizeW = _w;
     winSizeH = _h;
@@ -45,8 +42,7 @@ void Video::initSDL() {
 
     // Inicializa o SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        throw ExceptionSDL(ExceptionCode::CREATE,
-                           std::string(std::string("Falha init SDL:") + SDL_GetError()));
+        throw ExceptionChimera(std::string(std::string("Falha init SDL:") + SDL_GetError()));
     }
 
     // Ajusta o contexto de versao do opengl
@@ -67,24 +63,18 @@ void Video::initSDL() {
                                    winSizeH,                // height, in pixels
                                    flags)) == nullptr) {
 
-        throw ExceptionSDL(
-            ExceptionCode::CREATE,
-            std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
+        throw ExceptionChimera(std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
     }
 
     // Contexto do SDL
     if ((context = SDL_GL_CreateContext(window)) == nullptr) {
-        throw ExceptionSDL(
-            ExceptionCode::CREATE,
-            std::string(std::string("Falha Criar contexto SDL:") + SDL_GetError()));
+        throw ExceptionChimera(std::string(std::string("Falha Criar contexto SDL:") + SDL_GetError()));
     }
 
     // Swap buffer interval
     int interval = SDL_GL_SetSwapInterval(1);
     if (interval < 0) {
-        throw ExceptionSDL(
-            ExceptionCode::CREATE,
-            std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError())));
+        throw ExceptionChimera(std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError())));
     }
 
     // SDL_GetWindowPosition(window, &winGeometry.x, &winGeometry.y);
@@ -96,16 +86,12 @@ void Video::initSDL() {
 
 #ifdef WIN32
     // Here we initialize our multi-texturing functions
-    glActiveTextureARB =
-        (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
-    glMultiTexCoord2fARB =
-        (PFNGLMULTITEXCOORD2FARBPROC)wglGetProcAddress("glMultiTexCoord2fARB");
+    glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
+    glMultiTexCoord2fARB = (PFNGLMULTITEXCOORD2FARBPROC)wglGetProcAddress("glMultiTexCoord2fARB");
 
     // Make sure our multi-texturing extensions were loaded correctly
     if (!glActiveTextureARB || !glMultiTexCoord2fARB) {
-        throw ExceptionSDL(
-            ExceptionCode::ALLOC,
-            std::string("Your current setup does not support multitexturing"));
+        throw ExceptionSDL(ExceptionCode::ALLOC, std::string("Your current setup does not support multitexturing"));
     }
 #endif
 }
@@ -122,9 +108,8 @@ void Video::initGL() {
     error = glGetError();
 
     if (error != GL_NO_ERROR) {
-        throw ExceptionSDL(ExceptionCode::CREATE,
-                           std::string("Falha ao Iniciar o OpenGL:" +
-                                       std::string((const char*)gluErrorString(error))));
+        throw ExceptionChimera(
+            std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
     }
 
     // Initialize Modelview Matrix
@@ -135,9 +120,8 @@ void Video::initGL() {
     error = glGetError();
 
     if (error != GL_NO_ERROR) {
-        throw ExceptionSDL(ExceptionCode::CREATE,
-                           std::string("Falha ao Iniciar o OpenGL:" +
-                                       std::string((const char*)gluErrorString(error))));
+        throw ExceptionChimera(
+            std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
     }
 
     // Initialize clear color
@@ -147,9 +131,8 @@ void Video::initGL() {
     error = glGetError();
 
     if (error != GL_NO_ERROR) {
-        throw ExceptionSDL(ExceptionCode::CREATE,
-                           std::string("Falha ao Iniciar o OpenGL:" +
-                                       std::string((const char*)gluErrorString(error))));
+        throw ExceptionChimera(
+            std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
     }
 }
 
@@ -184,8 +167,7 @@ std::string Video::getVersaoOpenGL() {
     } else {
         // Check for error
         GLenum error = glGetError();
-        throw ExceptionChimera(ExceptionCode::READ,
-                               std::string((const char*)gluErrorString(error)));
+        throw ExceptionChimera(std::string((const char*)gluErrorString(error)));
     }
 
     return retorno;

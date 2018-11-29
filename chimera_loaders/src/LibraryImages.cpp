@@ -5,15 +5,13 @@
 
 namespace ChimeraLoaders {
 
-LibraryImages::LibraryImages(tinyxml2::XMLElement* _root, const std::string& _url)
-    : Library(_root, _url) {}
+LibraryImages::LibraryImages(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
 LibraryImages::~LibraryImages() {}
 
 std::tuple<std::string, std::string> LibraryImages::target() {
 
-    tinyxml2::XMLElement* l_nImgs =
-        root->FirstChildElement("library_images")->FirstChildElement("image");
+    tinyxml2::XMLElement* l_nImgs = root->FirstChildElement("library_images")->FirstChildElement("image");
     for (l_nImgs; l_nImgs; l_nImgs = l_nImgs->NextSiblingElement()) {
 
         std::string l_id = l_nImgs->Attribute("id");
@@ -27,7 +25,6 @@ std::tuple<std::string, std::string> LibraryImages::target() {
         }
     }
 
-    throw Chimera::ExceptionChimera(Chimera::ExceptionCode::READ,
-                                    "Imagen não encontrada:" + url);
+    throw Chimera::ExceptionChimera("Imagen não encontrada:" + url);
 }
 } // namespace ChimeraLoaders

@@ -38,8 +38,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node screen = config["screen"];
         YAML::Node canvas = screen["canvas"];
         Chimera::Video* video =
-            new Chimera::HmdDevice(canvas["w"].as<int>(), canvas["h"].as<int>(),
-                                   screen["name"].as<std::string>());
+            new Chimera::HmdDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
 
         Game* game = new Game(video);
 
@@ -53,16 +52,14 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete game;
         delete video;
 
-    } catch (const Chimera::ExceptionBase& ex) {
+    } catch (const Chimera::ExceptionChimera& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
         // std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;
     } catch (const std::exception& ex) {
         console->error("Falha grave:{0}", ex.what());
         // std::cout << "Falha grave: " << ex.what() << " " << std::endl;
-    } catch (const std::string& ex) {
-        console->error("Falha grave:{0}", ex);
-    } catch (...) {
+    } catch (const std::string& ex) { console->error("Falha grave:{0}", ex); } catch (...) {
         console->error("Falha Desconhecida");
         // std::cout << "Falha Desconhecida " << std::endl;
     }

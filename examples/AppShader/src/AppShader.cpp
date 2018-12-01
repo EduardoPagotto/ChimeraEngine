@@ -4,14 +4,15 @@
 #include "stdafx.hpp"
 #endif
 
-#include "ExceptionChimera.hpp"
-#include "FlowControl.hpp"
 #include "Game.hpp"
-#include "VideoDevice.hpp"
+
+#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/VideoDevice.hpp"
+
+#include "chimera/loader/ShadersLoader.hpp"
+
 #include <iostream>
-
-#include "ShadersLoader.hpp"
-
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 

@@ -9,15 +9,15 @@ find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
 set (IncludesAppCargaManual ${AppCargaManual_SOURCE_DIR}/include/
-							${Chimera_SOURCE_DIR}/include
-							${ChimeraLoaders_SOURCE_DIR}/include/
+							${CMAKE_SOURCE_DIR}/libs
 							${OPENGL_INCLUDE_DIR}
 							${SDL2_INCLUDE_DIR}
 							${BULLET_INCLUDE_DIR}
 							${FREETYPE_INCLUDE_DIRS})
 
 set (LibsAppCargaManual ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a #ordem é importante!!!
-						${Chimera_BINARY_DIR}/libChimera.a
+						${ChimeraNode_BINARY_DIR}/libChimeraNode.a
+						${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 						${OPENGL_LIBRARIES}
 						${SDL2_LIBRARY}
 						${BULLET_LIBRARIES}
@@ -42,7 +42,8 @@ add_executable(AppCargaManual src/Game.cpp
 target_include_directories(AppCargaManual PRIVATE ${IncludesAppCargaManual})
 target_link_libraries(AppCargaManual ${LibsAppCargaManual})
 
-add_dependencies(AppCargaManual Chimera
+add_dependencies(AppCargaManual ChimeraCore
+								ChimeraNode
 								ChimeraLoaders)
 
 INSTALL(FILES ${AppCargaManual_BINARY_DIR}/AppCargaManual DESTINATION bin)

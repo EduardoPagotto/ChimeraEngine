@@ -1,15 +1,14 @@
 #ifndef __GAME_XX__HPP
 #define __GAME_XX__HPP
 
-#include "CameraSpherical.hpp"
-#include "DataMsg.hpp"
-#include "HUD.hpp"
-#include "IGameClientEvents.hpp"
-#include "ParticleEmitter.hpp"
-#include "PhysicsControl.hpp"
-#include "SceneMng.hpp"
-
-#include "Solid.hpp"
+#include "chimera/core/DataMsg.hpp"
+#include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/node/HUD.hpp"
+#include "chimera/node/ParticleEmitter.hpp"
+#include "chimera/node/PhysicsControl.hpp"
+#include "chimera/node/SceneMng.hpp"
+#include "chimera/node/Solid.hpp"
 
 #include <spdlog/spdlog.h>
 
@@ -20,8 +19,7 @@
  */
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo,
-         Chimera::PhysicsControl* _physicWorld);
+    Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo, Chimera::PhysicsControl* _physicWorld);
     virtual ~Game();
 
     virtual void start();

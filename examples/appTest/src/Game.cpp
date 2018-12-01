@@ -1,12 +1,10 @@
 #include "Game.hpp"
-#include "ExceptionChimera.hpp"
-
-#include "GameClient.hpp"
-#include "OpenGLDefs.hpp"
-#include "SceneMng.hpp"
-#include "Transform.hpp"
-
-#include "CameraSpherical.hpp"
+#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/GameClient.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/node/SceneMng.hpp"
+#include "chimera/node/Transform.hpp"
 
 Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo) : pSceneMng(_pScenMng), pVideo(_pVideo) {
     isPaused = false;

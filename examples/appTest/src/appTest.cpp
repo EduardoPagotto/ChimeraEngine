@@ -4,20 +4,19 @@
 #include "stdafx.hpp"
 #endif
 
-#include "CameraSpherical.hpp"
-#include "ExceptionChimera.hpp"
-#include "FlowControl.hpp"
 #include "Game.hpp"
-#include "Group.hpp"
-#include "Light.hpp"
-#include "MeshUtil.hpp"
-#include "Transform.hpp"
-#include "VideoDevice.hpp"
-#include <iostream>
-
-#include "ShadersLoader.hpp"
+#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/VideoDevice.hpp"
+#include "chimera/loader/ShadersLoader.hpp"
+#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/node/Group.hpp"
+#include "chimera/node/Light.hpp"
+#include "chimera/node/MeshUtil.hpp"
+#include "chimera/node/Transform.hpp"
 
 #include <glm/glm.hpp>
+#include <iostream>
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 

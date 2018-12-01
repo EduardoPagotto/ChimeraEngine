@@ -9,16 +9,16 @@ find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
 set (IncludesAppTest ${appTest_SOURCE_DIR}/include/
-					 ${Chimera_SOURCE_DIR}/include
-					 ${ChimeraLoaders_SOURCE_DIR}/include/
+					 ${CMAKE_SOURCE_DIR}/libs
 					 ${OPENGL_INCLUDE_DIR}
 					 ${SDL2_INCLUDE_DIR}
 					 ${BULLET_INCLUDE_DIR}
 					 ${FREETYPE_INCLUDE_DIRS}
 					 ${GLEW_INCLUDE_DIR})
 
-set (LibsAppTest ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a
-				 ${Chimera_BINARY_DIR}/libChimera.a
+set (LibsAppTest ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a #ordem é importante!!!
+				 ${ChimeraNode_BINARY_DIR}/libChimeraNode.a
+				 ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_LIBRARY}
 				 ${BULLET_LIBRARIES}
@@ -43,7 +43,8 @@ endif(OVR_SET_TO_USE)
 target_include_directories (appTest PRIVATE ${IncludesAppTest})
 target_link_libraries(appTest ${LibsAppTest})
 
-add_dependencies(appTest Chimera
+add_dependencies(appTest ChimeraCore
+						 ChimeraNode
 						 ChimeraLoaders)
 
 INSTALL(FILES ${appTest_BINARY_DIR}/appTest DESTINATION bin)

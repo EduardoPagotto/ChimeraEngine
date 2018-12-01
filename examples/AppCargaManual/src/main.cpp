@@ -8,7 +8,7 @@
 
 #include <map>
 
-#include "VideoDevice.hpp"
+#include "chimera/core/VideoDevice.hpp"
 
 #ifdef OVR_SET_TO_USE
 #include "OvrDevice.hpp"
@@ -16,18 +16,18 @@
 
 #include "Game.hpp"
 
-#include "PhysicsScene.hpp"
-#include "ShadersLoader.hpp"
-#include "VisualScene.hpp"
+#include "chimera/loader/PhysicsScene.hpp"
+#include "chimera/loader/ShadersLoader.hpp"
+#include "chimera/loader/VisualScene.hpp"
 
-#include "ExceptionChimera.hpp"
-#include "FlowControl.hpp"
-#include "HUD.hpp"
-#include "ParticleEmitter.hpp"
-#include "Singleton.hpp"
-#include "Transform.hpp"
+#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/Singleton.hpp"
+#include "chimera/node/HUD.hpp"
+#include "chimera/node/ParticleEmitter.hpp"
+#include "chimera/node/Transform.hpp"
 
-#include "ShadowMapVisitor.hpp"
+#include "chimera/node/ShadowMapVisitor.hpp"
 
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>

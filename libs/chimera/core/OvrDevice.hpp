@@ -3,7 +3,7 @@
 
 #ifdef OVR_SET_TO_USE
 
-#include "Video.hpp"
+#include "chimera/core/Video.hpp"
 
 #include <string>
 
@@ -30,8 +30,7 @@ class OvrDevice : public Video {
 
     virtual void initDraw();
     virtual void endDraw();
-    virtual void executeViewPerspective(const float& _fov, const float& _near,
-                                        const float& _far, int _eye);
+    virtual void executeViewPerspective(const float& _fov, const float& _near, const float& _far, int _eye);
     virtual void executeViewOrto(int eyeIndex);
     virtual void reshape(int _w, int _h);
     virtual void toggleFullScreen();

@@ -2,7 +2,7 @@
 #define __CHIMERA_PARTICLE__HPP
 
 #include "Color.hpp"
-#include "OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include "glm/glm.hpp"
 
 namespace Chimera {
@@ -13,8 +13,8 @@ class Particle {
 
     void create(const glm::vec3& _maindir, const float& _spread);
 
-    void decrease(const float& _delta, int _particlesCount, GLfloat* pPositionSizeData,
-                  GLubyte* pColorData, const glm::vec3& _cameraPosition);
+    void decrease(const float& _delta, int _particlesCount, GLfloat* pPositionSizeData, GLubyte* pColorData,
+                  const glm::vec3& _cameraPosition);
 
     void reset();
 

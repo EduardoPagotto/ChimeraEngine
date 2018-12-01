@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_IGAME_CLIENT_EVENTS__HPP
 #define __CHIMERA_IGAME_CLIENT_EVENTS__HPP
 
-#include "JoystickManager.hpp"
+#include "chimera/core/JoystickManager.hpp"
 
 namespace Chimera {
 

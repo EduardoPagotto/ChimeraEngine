@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_VIDEO_DEVICE__HPP
 #define __CHIMERA_VIDEO_DEVICE__HPP
 
-#include "Video.hpp"
+#include "chimera/core/Video.hpp"
 
 namespace Chimera {
 
@@ -13,9 +13,8 @@ class VideoDevice : public Video {
 
     virtual void initDraw();
     virtual void endDraw();
-    virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov,
-                                                     const float& _near,
-                                                     const float& _far, int _eye);
+    virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
+                                                     int _eye);
 
     // TODO subistituir o executeViewPerspective
     // virtual void perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,

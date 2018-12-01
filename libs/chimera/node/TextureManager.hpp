@@ -6,9 +6,9 @@
 
 #include <glm/glm.hpp>
 
-#include "OpenGLDefs.hpp"
-#include "Singleton.hpp"
 #include "Texture.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/Singleton.hpp"
 
 namespace Chimera {
 
@@ -16,10 +16,9 @@ class TextureManager {
     friend class Singleton<TextureManager>;
 
   public:
-    unsigned int fromFile(std::string _name, const TEX_SEQ& _indexTextureSeq,
-                          std::string _pathFile);
-    unsigned int fromFrameBuffer(std::string _name, const TEX_SEQ& _indexTextureSeq,
-                                 const unsigned& _width, const unsigned& _height);
+    unsigned int fromFile(std::string _name, const TEX_SEQ& _indexTextureSeq, std::string _pathFile);
+    unsigned int fromFrameBuffer(std::string _name, const TEX_SEQ& _indexTextureSeq, const unsigned& _width,
+                                 const unsigned& _height);
 
     void init(const unsigned int& _serial);
     void release(const unsigned int& _serial);

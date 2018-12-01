@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_SINGLETON__HPP
 #define __CHIMERA_SINGLETON__HPP
 
-#include "Mutex.hpp"
+#include "chimera/core/Mutex.hpp"
 
 namespace Chimera {
 

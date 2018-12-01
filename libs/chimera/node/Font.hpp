@@ -8,7 +8,7 @@
 #include FT_FREETYPE_H
 
 #include "Color.hpp"
-#include "OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 
 #include <map>
 #include <stdlib.h>
@@ -21,7 +21,7 @@ struct Character {
     GLuint TextureID;   // ID handle of the glyph texture
     glm::ivec2 Size;    // Size of glyph
     glm::ivec2 Bearing; // Offset from baseline to left/top of glyph
-    long int Advance; // GLuint Advance;     // Horizontal offset to advance to next glyph
+    long int Advance;   // GLuint Advance;     // Horizontal offset to advance to next glyph
 };
 
 class Font {

@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_SHADER__HPP
 #define __CHIMERA_SHADER__HPP
 
-#include "OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <spdlog/spdlog.h>
 #include <string.h>
 
@@ -24,18 +24,14 @@ class Shader {
 
     GLint getUniformLocation(const char* _name) const noexcept;
     void setGlUniform1i(const char* _nameVar, const int& _val) const noexcept;
-    void setGlUniform3f(const char* _nameVar, const float& _x, const float& _y,
-                        const float& _z) const noexcept;
-    void setGlUniform3fv(const char* _nameVar, const unsigned& _num,
-                         const float* _pointer) const noexcept;
-    void setGlUniform4fv(const char* _nameVar, const unsigned& _num,
-                         const float* _pointer) const noexcept;
-    void setGlUniform1fv(const char* _nameVar, const unsigned& _num,
-                         const float* _pointer) const noexcept;
-    void setGlUniformMatrix4fv(const char* _nameVar, const unsigned& _num,
-                               const bool& _normal, const float* _pointer) const noexcept;
-    void setGlUniformMatrix3fv(const char* _nameVar, const unsigned& _num,
-                               const bool& _normal, const float* _pointer) const noexcept;
+    void setGlUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const noexcept;
+    void setGlUniform3fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept;
+    void setGlUniform4fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept;
+    void setGlUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept;
+    void setGlUniformMatrix4fv(const char* _nameVar, const unsigned& _num, const bool& _normal,
+                               const float* _pointer) const noexcept;
+    void setGlUniformMatrix3fv(const char* _nameVar, const unsigned& _num, const bool& _normal,
+                               const float* _pointer) const noexcept;
 
   private:
     GLuint idProgram;

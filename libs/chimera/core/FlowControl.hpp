@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_FLOW_CONTROL__HPP
 #define __CHIMERA_FLOW_CONTROL__HPP
 
-#include "IGameClientEvents.hpp"
-#include "Timer.hpp"
+#include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/Timer.hpp"
 #include <spdlog/spdlog.h>
 
 namespace Chimera {

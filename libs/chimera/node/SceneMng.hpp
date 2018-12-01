@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "RenderVisitor.hpp"
-#include "Video.hpp"
+#include "chimera/core/Video.hpp"
 #include <spdlog/spdlog.h>
 
 namespace Chimera {

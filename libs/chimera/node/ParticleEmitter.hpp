@@ -3,8 +3,8 @@
 
 #include "Draw.hpp"
 #include "Particle.hpp"
-#include "Shader.hpp"
-#include "Timer.hpp"
+#include "chimera/core/Shader.hpp"
+#include "chimera/core/Timer.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -

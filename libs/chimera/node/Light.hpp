@@ -6,7 +6,7 @@
 #include "Color.hpp"
 #include "Node.hpp"
 
-#include "OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include "glm/glm.hpp"
 #include <map>
 
@@ -70,4 +70,3 @@ class Light : public Node {
 };
 } // namespace Chimera
 #endif
-

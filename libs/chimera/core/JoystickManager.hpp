@@ -10,7 +10,7 @@
 #include <SDL.h>
 #endif
 
-#include "JoystickState.hpp"
+#include "chimera/core/JoystickState.hpp"
 
 namespace Chimera {
 
@@ -45,12 +45,7 @@ enum class JOY_BUTTON_COD {
 /**
  * Enumerador dos PAD's do Joystic XBOX360
  */
-enum class JOY_PAD_COD {
-    UP = 0b00000001,
-    RIGHT = 0b00000010,
-    DOWN = 0b00000100,
-    LEFT = 0b00001000
-};
+enum class JOY_PAD_COD { UP = 0b00000001, RIGHT = 0b00000010, DOWN = 0b00000100, LEFT = 0b00001000 };
 
 /**
  * Classe gerenciadora de todos os Joysticks identificados

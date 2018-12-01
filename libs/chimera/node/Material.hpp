@@ -6,9 +6,9 @@
 #include <map>
 #include <tinyxml2.h>
 
-#include "OpenGLDefs.hpp"
-#include "Shader.hpp"
 #include "TextureManager.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/Shader.hpp"
 
 namespace Chimera {
 
@@ -47,8 +47,7 @@ class Material : public Entity {
 
     void defineTextureByIndex(const unsigned int& _serial);
 
-    void loadTextureFromFile(const std::string& _nome, const TEX_SEQ& _seq,
-                             const std::string& _arquivo);
+    void loadTextureFromFile(const std::string& _nome, const TEX_SEQ& _seq, const std::string& _arquivo);
 
     bool hasTexture() { return mapTex.size() > 0 ? true : false; }
 

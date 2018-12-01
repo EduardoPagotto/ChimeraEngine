@@ -7,7 +7,7 @@
 #include <SDL.h>
 #endif
 
-#include "DataMsg.hpp"
+#include "chimera/core/DataMsg.hpp"
 
 namespace Chimera {
 void sendMessage(KindOp _kindOf, void* _paramA, void* _paramB);

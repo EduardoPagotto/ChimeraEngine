@@ -2,7 +2,7 @@
 #define __CHIMERA_TEXTURE__HPP
 
 #include "Entity.hpp"
-#include "OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 
 #include <spdlog/spdlog.h>
 
@@ -12,10 +12,8 @@ enum class TEX_SEQ { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };
 
 class Texture : public Entity {
   public:
-    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq,
-            const std::string& _pathFile);
-    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq,
-            const unsigned& _width, const unsigned& _height);
+    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, const std::string& _pathFile);
+    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, const unsigned& _width, const unsigned& _height);
     virtual ~Texture();
 
     void apply();

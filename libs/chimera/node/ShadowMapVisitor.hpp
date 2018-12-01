@@ -6,8 +6,8 @@
 
 #include "Coord.hpp"
 #include "NodeVisitor.hpp"
-#include "Shader.hpp"
 #include "ShadowMap.hpp"
+#include "chimera/core/Shader.hpp"
 
 namespace Chimera {
 

@@ -3,8 +3,8 @@
 
 #include "Coord.hpp"
 #include "NodeVisitor.hpp"
-#include "Shader.hpp"
-#include "Video.hpp"
+#include "chimera/core/Shader.hpp"
+#include "chimera/core/Video.hpp"
 
 #include "ShadowMap.hpp"
 

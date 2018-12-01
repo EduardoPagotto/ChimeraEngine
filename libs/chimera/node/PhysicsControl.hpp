@@ -9,8 +9,8 @@
 
 #include <LinearMath/btVector3.h>
 
-#include "DataMsg.hpp"
 #include "Node.hpp"
+#include "chimera/core/DataMsg.hpp"
 
 namespace Chimera {
 
@@ -27,9 +27,7 @@ class PhysicsControl {
     void checkCollisions();
     bool checkAllowCollision(Node* pNode);
 
-    inline void setGravity(const btVector3& _vet) {
-        discretDynamicsWorld->setGravity(_vet);
-    }
+    inline void setGravity(const btVector3& _vet) { discretDynamicsWorld->setGravity(_vet); }
 
     inline btScalar countPeriod() {
         period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f);

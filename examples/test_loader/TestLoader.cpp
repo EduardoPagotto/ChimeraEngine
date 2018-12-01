@@ -4,11 +4,11 @@
 #include "stdafx.h"
 #endif
 
-#include "ExceptionChimera.hpp"
-#include <spdlog/spdlog.h>
+#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/loader/PhysicsScene.hpp"
+#include "chimera/loader/VisualScene.hpp"
 
-#include "PhysicsScene.hpp"
-#include "VisualScene.hpp"
+#include <spdlog/spdlog.h>
 
 #ifndef WIN32
 int main(int argn, char** argv) {

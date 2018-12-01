@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-PROJECT(AppEmpty)
+PROJECT(HelloWorld)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -11,7 +11,7 @@ find_package(GLEW REQUIRED)
 #get_target_property(Chimera CHIMERA_INCLUDE_DIR INTERFACE_INCLUDE_DIRECTORIES)
 
 #define os Lib's a serem usados
-set (LibsAppEmpty ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
+set (LibsHelloWorld ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 				  ${OPENGL_LIBRARIES}
 				  ${SDL2_IBRARIES}
 				  ${BULLET_LIBRARIES}
@@ -23,7 +23,7 @@ set (LibsAppEmpty ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 				  -lyaml-cpp)
 
 #define os includes
-set (IncludesAppEmpty ${CMAKE_CURRENT_SOURCE_DIR}/include
+set (IncludesHelloWorld ${CMAKE_CURRENT_SOURCE_DIR}/include
 					  ${CMAKE_SOURCE_DIR}/libs
 					  ${OPENGL_INCLUDE_DIR}
 					  ${SDL2_INCLUDE_DIR}
@@ -33,15 +33,14 @@ set (IncludesAppEmpty ${CMAKE_CURRENT_SOURCE_DIR}/include
 
 if (OVR_SET_TO_USE)
     message(STATUS "OVR Incluido no Projeto")
-    set(LibsAppEmpty ${LibsAppEmpty} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
+    set(LibsHelloWorld ${LibsHelloWorld} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-add_executable (AppEmpty src/Game.cpp
-						 src/AppEmpty.cpp)
+add_executable (HelloWorld Game.cpp main.cpp)
 
-target_link_libraries(AppEmpty ${LibsAppEmpty})
-target_include_directories (AppEmpty PRIVATE ${IncludesAppEmpty})
+target_link_libraries(HelloWorld ${LibsHelloWorld})
+target_include_directories (HelloWorld PRIVATE ${IncludesHelloWorld})
 
-add_dependencies(AppEmpty ChimeraCore)
+add_dependencies(HelloWorld ChimeraCore)
 
-INSTALL(FILES ${AppEmpty_BINARY_DIR}/AppEmpty DESTINATION bin)
+INSTALL(FILES ${HelloWorld_BINARY_DIR}/HelloWorld DESTINATION bin)

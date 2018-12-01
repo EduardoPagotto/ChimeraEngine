@@ -1,9 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
-
 #include "chimera/core/GameClient.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
-
 #include "chimera/node/Transform.hpp"
 
 Game::Game(Chimera::Video* _pVideo) : pVideo(_pVideo) { isPaused = false; }

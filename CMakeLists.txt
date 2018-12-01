@@ -21,6 +21,4 @@ endif(HMD_Z1_SET_TO_USE)
 set (OpenGL_GL_PREFERENCE GLVND)
 
 add_subdirectory(src)
-#add_subdirectory(chimera)
-#add_subdirectory(chimera_loaders)
 add_subdirectory(examples)

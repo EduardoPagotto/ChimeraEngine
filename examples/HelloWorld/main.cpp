@@ -1,15 +1,8 @@
-#ifndef WIN32
-#include <cstdio>
-#else
-#include "stdafx.h"
-#endif
-
 #include "Game.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/HmdDevice.hpp"
 #include <iostream>
-
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
@@ -29,7 +22,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
     }
 
     try {
-        std::string config_file = "./examples/AppEmpty/etc/empty.yaml";
+        std::string config_file = "./examples/HelloWorld/etc/empty.yaml";
 
         console->info("Carregar arquivo:{0}", config_file);
         YAML::Node config = YAML::LoadFile(config_file);

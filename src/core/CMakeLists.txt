@@ -43,12 +43,7 @@ add_library (ChimeraCore STATIC ${SourcesCore})
 # Define os includes privados para este target
 target_include_directories (ChimeraCore PRIVATE ${IncludeCore})
 
-# Lista os Includes
-# get_property(dirs DIRECTORY ${CMAKE_SOURCE_DIR}/libs/chimera/core PROPERTY INCLUDE_DIRECTORIES)
-# foreach(dir ${dirs})
-# 	message(STATUS "Include dir='${dir}'")
-# endforeach()
-
+## Lista os Includes
 # get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
 # foreach(dir ${dirs})
 # 	message(STATUS "Include dir='${dir}'")

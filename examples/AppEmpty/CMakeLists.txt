@@ -11,7 +11,7 @@ find_package(GLEW REQUIRED)
 #get_target_property(Chimera CHIMERA_INCLUDE_DIR INTERFACE_INCLUDE_DIRECTORIES)
 
 #define os Lib's a serem usados
-set (LibsAppEmpty ${Chimera_BINARY_DIR}/libChimera.a
+set (LibsAppEmpty ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 				  ${OPENGL_LIBRARIES}
 				  ${SDL2_IBRARIES}
 				  ${BULLET_LIBRARIES}
@@ -24,7 +24,7 @@ set (LibsAppEmpty ${Chimera_BINARY_DIR}/libChimera.a
 
 #define os includes
 set (IncludesAppEmpty ${CMAKE_CURRENT_SOURCE_DIR}/include
-					  ${Chimera_SOURCE_DIR}/include
+					  ${CMAKE_SOURCE_DIR}/libs
 					  ${OPENGL_INCLUDE_DIR}
 					  ${SDL2_INCLUDE_DIR}
 					  ${BULLET_INCLUDE_DIR}
@@ -42,6 +42,6 @@ add_executable (AppEmpty src/Game.cpp
 target_link_libraries(AppEmpty ${LibsAppEmpty})
 target_include_directories (AppEmpty PRIVATE ${IncludesAppEmpty})
 
-add_dependencies(AppEmpty Chimera)
+add_dependencies(AppEmpty ChimeraCore)
 
 INSTALL(FILES ${AppEmpty_BINARY_DIR}/AppEmpty DESTINATION bin)

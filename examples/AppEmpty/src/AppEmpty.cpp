@@ -4,12 +4,11 @@
 #include "stdafx.h"
 #endif
 
-#include <iostream>
-//#include "VideoDevice.hpp"
-#include "ExceptionChimera.hpp"
-#include "FlowControl.hpp"
 #include "Game.hpp"
-#include "HmdDevice.hpp"
+#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/HmdDevice.hpp"
+#include <iostream>
 
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>

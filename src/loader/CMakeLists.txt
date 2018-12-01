@@ -47,6 +47,6 @@ target_include_directories (ChimeraLoaders PRIVATE ${IncludeLoader})
 # 	message(STATUS "Include dir='${dir}'")
 # endforeach()
 
-add_dependencies(ChimeraLoaders ChimeraCore)
+add_dependencies(ChimeraLoaders ChimeraCore ChimeraNode)
 
 INSTALL(FILES ${Chimera_BINARY_DIR}/libChimeraLoaders.a DESTINATION lib)

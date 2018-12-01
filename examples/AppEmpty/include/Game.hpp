@@ -1,10 +1,10 @@
 #ifndef __GAME_EVENTS_TEST__HPP
 #define __GAME_EVENTS_TEST__HPP
 
-#include "DataMsg.hpp"
-#include "IGameClientEvents.hpp"
-#include "Node.hpp"
-#include "Video.hpp"
+#include "chimera/core/DataMsg.hpp"
+#include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/Video.hpp"
+#include "chimera/node/Node.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

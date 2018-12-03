@@ -1,7 +1,6 @@
 #ifndef __GAME_XX__HPP
 #define __GAME_XX__HPP
 
-#include "chimera/core/DataMsg.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/node/CameraSpherical.hpp"
 #include "chimera/node/HUD.hpp"

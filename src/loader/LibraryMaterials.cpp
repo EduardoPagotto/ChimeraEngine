@@ -1,6 +1,6 @@
-#include "chimera/loader/LibraryMaterials.hpp"
+#include "LibraryMaterials.hpp"
+#include "LibraryEffects.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
-#include "chimera/loader/LibraryEffects.hpp"
 
 namespace ChimeraLoaders {
 

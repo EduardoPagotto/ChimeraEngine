@@ -1,8 +1,8 @@
 #include "chimera/core/ExceptionChimera.hpp"
 
-#include "chimera/loader/LibraryGeometrys.hpp"
-#include "chimera/loader/LibraryPhysicModels.hpp"
-#include "chimera/loader/LibraryPhysicsMaterials.hpp"
+#include "LibraryGeometrys.hpp"
+#include "LibraryPhysicModels.hpp"
+#include "LibraryPhysicsMaterials.hpp"
 
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Mesh.hpp"

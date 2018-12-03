@@ -28,18 +28,19 @@ set (SourcesLoader Library.cpp
 				   ShadersLoader.cpp)
 
 #define os includes
-set (IncludeLoader  ${CMAKE_SOURCE_DIR}/libs
-					${OPENGL_INCLUDE_DIR}
-					${SDL2_INCLUDE_DIR}
-					${BULLET_INCLUDE_DIR}
-					${FREETYPE_INCLUDE_DIRS}
-					${GLEW_INCLUDE_DIRS})
+set (IncludeLoader  ${CMAKE_SOURCE_DIR}/libs)
+set (IncludeLoaderAux	${OPENGL_INCLUDE_DIR}
+						${SDL2_INCLUDE_DIR}
+						${BULLET_INCLUDE_DIR}
+						${FREETYPE_INCLUDE_DIRS}
+						${GLEW_INCLUDE_DIRS})
 
 # Define o Target
 add_library (ChimeraLoaders STATIC ${SourcesLoader})
 
 # Define os includes privados para este target
-target_include_directories (ChimeraLoaders PRIVATE ${IncludeLoader})
+target_include_directories (ChimeraLoaders PUBLIC ${IncludeLoader}
+										   PRIVATE ${IncludeLoaderAux})
 
 # Lista os Includes
 # get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
@@ -49,4 +50,5 @@ target_include_directories (ChimeraLoaders PRIVATE ${IncludeLoader})
 
 add_dependencies(ChimeraLoaders ChimeraCore ChimeraNode)
 
-INSTALL(FILES ${Chimera_BINARY_DIR}/libChimeraLoaders.a DESTINATION lib)
+INSTALL(FILES ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a DESTINATION lib)
+INSTALL(DIRECTORY ${IncludeLoader}/chimera/loader DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

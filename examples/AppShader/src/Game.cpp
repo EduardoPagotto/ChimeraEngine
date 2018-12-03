@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
+#include "chimera/core/Events.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
-#include "chimera/core/GameClient.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Singleton.hpp"
 
@@ -58,7 +58,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             }
             break;
         case SDLK_F10:
-            sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_F1:
         case SDLK_UP:

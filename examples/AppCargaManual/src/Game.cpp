@@ -1,6 +1,6 @@
 #include "Game.hpp"
+#include "chimera/core/Events.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
-#include "chimera/core/GameClient.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/Transform.hpp"
@@ -19,14 +19,10 @@ Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo, Chimera::Physi
     log = spdlog::get("chimera");
     log->debug("Constructor Game");
 
-    // physicWorld = Chimera::Singleton<Chimera::PhysicsControl>::getRefSingleton();
     physicWorld = _physicWorld;
 }
 
-Game::~Game() {
-    log->debug("Destructor Game");
-    // Chimera::Singleton<Chimera::PhysicsControl>::releaseRefSingleton();
-}
+Game::~Game() { log->debug("Destructor Game"); }
 
 void Game::joystickCapture(Chimera::JoystickManager& joy) {}
 
@@ -99,7 +95,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             pHUD->setOn(!pHUD->isOn());
             break;
         case SDLK_F10:
-            Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_UP:
             pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));

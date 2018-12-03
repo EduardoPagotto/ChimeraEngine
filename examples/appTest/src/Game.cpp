@@ -1,6 +1,6 @@
 #include "Game.hpp"
+#include "chimera/core/Events.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
-#include "chimera/core/GameClient.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/node/CameraSpherical.hpp"
 #include "chimera/node/SceneMng.hpp"
@@ -56,15 +56,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             }
             break;
         case SDLK_F10:
-            Chimera::sendMessage(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
-            break;
-        case SDLK_F1:
-        case SDLK_UP:
-        case SDLK_DOWN:
-        case SDLK_LEFT:
-        case SDLK_RIGHT:
-        case SDLK_a:
-        case SDLK_s:
+            Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         default:
             break;

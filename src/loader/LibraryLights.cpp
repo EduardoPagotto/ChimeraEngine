@@ -1,4 +1,4 @@
-#include "chimera/loader/LibraryLights.hpp"
+#include "LibraryLights.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
 
 namespace ChimeraLoaders {

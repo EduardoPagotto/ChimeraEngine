@@ -1,9 +1,9 @@
 #include "chimera/core/ExceptionChimera.hpp"
 
-#include "chimera/loader/LibraryCameras.hpp"
-#include "chimera/loader/LibraryGeometrys.hpp"
-#include "chimera/loader/LibraryLights.hpp"
-#include "chimera/loader/LibraryVisualSCenes.hpp"
+#include "LibraryCameras.hpp"
+#include "LibraryGeometrys.hpp"
+#include "LibraryLights.hpp"
+#include "LibraryVisualSCenes.hpp"
 
 #include "chimera/node/Transform.hpp"
 

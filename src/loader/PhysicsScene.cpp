@@ -1,5 +1,5 @@
 #include "chimera/loader/PhysicsScene.hpp"
-#include "chimera/loader/LibraryPhysicsScenes.hpp"
+#include "LibraryPhysicsScenes.hpp"
 
 namespace ChimeraLoaders {
 

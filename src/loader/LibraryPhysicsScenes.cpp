@@ -1,7 +1,7 @@
 #include "chimera/core/ExceptionChimera.hpp"
 
-#include "chimera/loader/LibraryPhysicModels.hpp"
-#include "chimera/loader/LibraryPhysicsScenes.hpp"
+#include "LibraryPhysicModels.hpp"
+#include "LibraryPhysicsScenes.hpp"
 
 #include "chimera/node/Solid.hpp"
 #include "chimera/node/Transform.hpp"

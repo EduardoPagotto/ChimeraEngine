@@ -1,4 +1,4 @@
-#include "chimera/loader/LibraryPhysicsMaterials.hpp"
+#include "LibraryPhysicsMaterials.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
 
 namespace ChimeraLoaders {

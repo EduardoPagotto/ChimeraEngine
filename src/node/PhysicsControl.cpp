@@ -7,7 +7,7 @@
 #include <utility>
 #endif
 
-#include "chimera/core/GameClient.hpp"
+#include "chimera/core/Events.hpp"
 
 namespace Chimera {
 
@@ -177,13 +177,13 @@ void PhysicsControl::checkCollisions() {
             if (contactActives.find((*it).first) == contactActives.end()) {
 
                 if (checkAllowCollision((*it).second.first) == true) {
-                    sendMessage(KindOp::START_COLLIDE, (*it).second.first, (*it).second.second);
+                    eventsSend(KindOp::START_COLLIDE, (*it).second.first, (*it).second.second);
                 }
 
             } else {
 
                 /*                if (checkAllowCollision( ( *it ).second.first ) == true)
-                                                        sendMessageCollision(KindOp::ON_COLLIDE,
+                                                        eventsSendCollision(KindOp::ON_COLLIDE,
                    ( *it ).second.first, ( *it ).second.second);  */
             }
         }
@@ -194,7 +194,7 @@ void PhysicsControl::checkCollisions() {
             if (new_contacts.find((*it).first) == new_contacts.end()) {
 
                 if (checkAllowCollision((*it).second.first) == true) {
-                    sendMessage(KindOp::OFF_COLLIDE, (*it).second.first, (*it).second.second);
+                    eventsSend(KindOp::OFF_COLLIDE, (*it).second.first, (*it).second.second);
                 }
             }
         }

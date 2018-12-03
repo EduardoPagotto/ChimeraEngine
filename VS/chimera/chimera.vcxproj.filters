@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" 
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\chimera\src\Camera.cpp">
       <Filter>src</Filter>
@@ -138,165 +139,165 @@
     <ClInclude Include="..\..\chimera\include\CameraSpherical.h">
       <Filter>include</Filter>
     </ClInclude>
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Color.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Constraint.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Draw.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Entity.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Exception.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\ExceptionChimera.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\ExceptionSDL.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Font.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\GameClient.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\HUD.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Light.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Material.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Mutex.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Node.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\PhysicsControl.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\SceneMng.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Singleton.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Texture.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Timer.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Video.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\CameraOvr.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\OvrDevice.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\VideoDevice.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\DataMsg.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\LoaderDae.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\JoystickManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\JoystickState.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Particle.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\ParticleEmitter.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\ShadowMap.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\FlowControl.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\IGameClientEvents.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\ShadersManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\NodeVisitor.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\SceneRoot.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Group.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\OpenGLDefs.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\State.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Transform.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Coord.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Solid.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\Mesh.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\VboIndexer.hpp">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\InitVisitor.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\RenderVisitor.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\MeshUtil.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\NodeParse.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\ShadowMapVisitor.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\chimera\include\TextureManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="include">
-      <UniqueIdentifier>{d16ef35f-7dce-4fab-87da-dcc66546745d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{351a7849-d542-448d-bf31-ade96b6b841a}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Color.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Constraint.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Draw.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Entity.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Exception.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\ExceptionChimera.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\ExceptionSDL.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Font.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\GameClient.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\HUD.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Light.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Material.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Mutex.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Node.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\PhysicsControl.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\SceneMng.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Singleton.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Texture.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Timer.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Video.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\CameraOvr.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\OvrDevice.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\VideoDevice.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\DataMsg.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\LoaderDae.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\JoystickManager.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\JoystickState.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\Particle.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\ParticleEmitter.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\ShadowMap.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\FlowControl.h">
+    <Filter>include</Filter>
+  </ClInclude>
+  <ClInclude Include="..\..\chimera\include\IGameClientEvents.hpp>
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\ShadersManager.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\NodeVisitor.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\SceneRoot.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\Group.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\OpenGLDefs.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\State.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\Transform.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\Coord.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\Solid.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\Mesh.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\VboIndexer.hpp">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\InitVisitor.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\RenderVisitor.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\MeshUtil.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\NodeParse.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\ShadowMapVisitor.h">
+<Filter>include</Filter>
+</ClInclude>
+<ClInclude Include="..\..\chimera\include\TextureManager.h">
+<Filter>include</Filter>
+</ClInclude>
+</ItemGroup>
+<ItemGroup>
+<Text Include="ReadMe.txt" />
+</ItemGroup>
+<ItemGroup>
+<Filter Include="include">
+<UniqueIdentifier>{d16ef35f-7dce-4fab-87da-dcc66546745d}</UniqueIdentifier>
+</Filter>
+<Filter Include="src">
+<UniqueIdentifier>{351a7849-d542-448d-bf31-ade96b6b841a}</UniqueIdentifier>
+</Filter>
+</ItemGroup>
 </Project>

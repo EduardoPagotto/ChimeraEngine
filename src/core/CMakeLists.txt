@@ -15,7 +15,7 @@ set (SourcesCore Video.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
 				 Shader.cpp	
-				 GameClient.cpp
+				 Events.cpp
 				 FlowControl.cpp
 				 State.cpp)
 

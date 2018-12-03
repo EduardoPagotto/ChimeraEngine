@@ -1,7 +1,6 @@
 #ifndef __GAME_SHADER_TEST___HPP
 #define __GAME_SHADER_TEST___HPP
 
-#include "chimera/core/DataMsg.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Video.hpp"

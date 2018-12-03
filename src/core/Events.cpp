@@ -1,8 +1,8 @@
-#include "chimera/core/GameClient.hpp"
+#include "chimera/core/Events.hpp"
 
 namespace Chimera {
 
-void sendMessage(KindOp _kindOf, void* _paramA, void* _paramB) {
+void eventsSend(KindOp _kindOf, void* _paramA, void* _paramB) {
 
     SDL_Event event;
     SDL_zero(event);

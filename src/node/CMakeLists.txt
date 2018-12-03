@@ -42,18 +42,19 @@ set (SourceNode Color.cpp
 				TextureManager.cpp)
 
 #define os includes
-set (IncludeNode ${CMAKE_SOURCE_DIR}/libs
-				 ${OPENGL_INCLUDE_DIR}
-				 ${SDL2_INCLUDE_DIR}
-				 ${BULLET_INCLUDE_DIR}
-				 ${FREETYPE_INCLUDE_DIRS}
-				 ${GLEW_INCLUDE_DIRS})
+set (IncludeNode ${CMAKE_SOURCE_DIR}/libs)
+set (IncludeNodeAux ${OPENGL_INCLUDE_DIR}
+				 	${SDL2_INCLUDE_DIR}
+				 	${BULLET_INCLUDE_DIR}
+				 	${FREETYPE_INCLUDE_DIRS}
+				 	${GLEW_INCLUDE_DIRS})
 
 # Define o Target
 add_library (ChimeraNode STATIC ${SourceNode})
 
 # Define os includes privados para este target
-target_include_directories (ChimeraNode PRIVATE ${IncludeNode})
+target_include_directories (ChimeraNode PUBLIC ${IncludeNode}
+										PRIVATE ${IncludeNodeAux})
 
 # Lista os Includes
 # get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
@@ -63,4 +64,5 @@ target_include_directories (ChimeraNode PRIVATE ${IncludeNode})
 
 add_dependencies(ChimeraNode ChimeraCore)
 
-INSTALL(FILES ${Chimera_BINARY_DIR}/libChimeraNode.a DESTINATION lib)
+INSTALL(FILES ${ChimeraNode_BINARY_DIR}/libChimeraNode.a DESTINATION lib)
+INSTALL(DIRECTORY ${IncludeNode}/chimera/node DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

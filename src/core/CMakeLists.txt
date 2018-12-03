@@ -20,10 +20,10 @@ set (SourcesCore Video.cpp
 				 State.cpp)
 
 # #define os includes
-set (IncludeCore ${CMAKE_SOURCE_DIR}/libs #../../libs
-				 ${OPENGL_INCLUDE_DIR}
-				 ${SDL2_INCLUDE_DIR}
-				 ${GLEW_INCLUDE_DIRS})
+set (IncludeCore ${CMAKE_SOURCE_DIR}/libs)
+set (IncludeCoreAux ${OPENGL_INCLUDE_DIR}
+				 	${SDL2_INCLUDE_DIR}
+				 	${GLEW_INCLUDE_DIRS})
 
 #Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
 if (OVR_SET_TO_USE)
@@ -41,12 +41,14 @@ endif(HMD_Z1_SET_TO_USE)
 add_library (ChimeraCore STATIC ${SourcesCore})
 
 # Define os includes privados para este target
-target_include_directories (ChimeraCore PRIVATE ${IncludeCore})
+target_include_directories (ChimeraCore PUBLIC ${IncludeCore} 
+										PRIVATE ${IncludeCoreAux})
 
-## Lista os Includes
-# get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+# Lista os Includes
+# get_property(dirs DIRECTORY ${IncludeCore}/chimera/core PROPERTY INCLUDE_DIRECTORIES)
 # foreach(dir ${dirs})
 # 	message(STATUS "Include dir='${dir}'")
 # endforeach()
 
-INSTALL(FILES ${Chimera_BINARY_DIR}/libChimeraCore.a DESTINATION lib)
+INSTALL(FILES ${ChimeraCore_BINARY_DIR}/libChimeraCore.a DESTINATION lib)
+INSTALL(DIRECTORY ${IncludeCore}/chimera/core DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

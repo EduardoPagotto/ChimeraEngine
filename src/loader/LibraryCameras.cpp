@@ -1,4 +1,4 @@
-#include "chimera/loader/LibraryCameras.hpp"
+#include "LibraryCameras.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
 #include "chimera/node/CameraSpherical.hpp"
 

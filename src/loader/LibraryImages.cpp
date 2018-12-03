@@ -1,4 +1,4 @@
-#include "chimera/loader/LibraryImages.hpp"
+#include "LibraryImages.hpp"
 #include "chimera/core/ExceptionChimera.hpp"
 
 #include <tuple>

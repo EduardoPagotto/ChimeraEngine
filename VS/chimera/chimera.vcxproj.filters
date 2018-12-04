@@ -156,7 +156,7 @@
   <ClInclude Include="..\..\chimera\include\Exception.h">
     <Filter>include</Filter>
   </ClInclude>
-  <ClInclude Include="..\..\chimera\include\ExceptionChimera.h">
+  <ClInclude Include="..\..\chimera\include\Exception.h">
     <Filter>include</Filter>
   </ClInclude>
   <ClInclude Include="..\..\chimera\include\ExceptionSDL.h">

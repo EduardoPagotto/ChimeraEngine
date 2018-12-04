@@ -2,7 +2,7 @@
 
 #ifdef OVR_SET_TO_USE
 
-#include "ExceptionChimera.hpp"
+#include "Exception.hpp"
 #include <SDL_opengl.h>
 #include <SDL_syswm.h>
 

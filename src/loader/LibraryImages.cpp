@@ -1,5 +1,5 @@
 #include "LibraryImages.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 #include <tuple>
 
@@ -25,6 +25,6 @@ std::tuple<std::string, std::string> LibraryImages::target() {
         }
     }
 
-    throw Chimera::ExceptionChimera("Imagen não encontrada:" + url);
+    throw Chimera::Exception("Imagen não encontrada:" + url);
 }
 } // namespace ChimeraLoaders

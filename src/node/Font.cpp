@@ -1,5 +1,5 @@
 #include "chimera/node/Font.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 #include <iostream>
 
@@ -13,12 +13,12 @@ Font::Font(const std::string& _fontFile, const int& _size) {
 
     // All functions return a value different than 0 whenever an error occurred
     if (FT_Init_FreeType(&ft))
-        throw ExceptionChimera("Falha ao iniciar o FreeType");
+        throw Exception("Falha ao iniciar o FreeType");
 
     // Load font as face
     FT_Face face;
     if (FT_New_Face(ft, _fontFile.c_str(), 0, &face))
-        throw ExceptionChimera("Arquivo de fonte falha ao carregar:" + _fontFile);
+        throw Exception("Arquivo de fonte falha ao carregar:" + _fontFile);
 
     // Set size to load glyphs as
     FT_Set_Pixel_Sizes(face, 0, _size);

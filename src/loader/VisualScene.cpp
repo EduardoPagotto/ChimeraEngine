@@ -1,4 +1,4 @@
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 #include "LibraryVisualSCenes.hpp"
 #include "chimera/loader/VisualScene.hpp"

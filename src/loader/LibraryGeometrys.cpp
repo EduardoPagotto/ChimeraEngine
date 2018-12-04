@@ -1,6 +1,6 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryMaterials.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 namespace ChimeraLoaders {
 
@@ -26,7 +26,7 @@ Chimera::Mesh* LibraryGeometrys::target() {
             return pDraw;
         }
     }
-    throw Chimera::ExceptionChimera("Geometry nao encontrado: " + url);
+    throw Chimera::Exception("Geometry nao encontrado: " + url);
 }
 
 int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source, std::vector<float>& _arrayValores) {

@@ -1,6 +1,6 @@
 #include "chimera/core/Video.hpp"
 
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 namespace Chimera {
 
@@ -43,7 +43,7 @@ void Video::initSDL() {
 
     // Inicializa o SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        throw ExceptionChimera(std::string(std::string("Falha init SDL:") + SDL_GetError()));
+        throw Exception(std::string(std::string("Falha init SDL:") + SDL_GetError()));
     }
 
     // Ajusta o contexto de versao do opengl
@@ -64,18 +64,18 @@ void Video::initSDL() {
                                    winSizeH,                // height, in pixels
                                    flags)) == nullptr) {
 
-        throw ExceptionChimera(std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
+        throw Exception(std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
     }
 
     // Contexto do SDL
     if ((context = SDL_GL_CreateContext(window)) == nullptr) {
-        throw ExceptionChimera(std::string(std::string("Falha Criar contexto SDL:") + SDL_GetError()));
+        throw Exception(std::string(std::string("Falha Criar contexto SDL:") + SDL_GetError()));
     }
 
     // Swap buffer interval
     int interval = SDL_GL_SetSwapInterval(1);
     if (interval < 0) {
-        throw ExceptionChimera(std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError())));
+        throw Exception(std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError())));
     }
 
     // SDL_GetWindowPosition(window, &winGeometry.x, &winGeometry.y);
@@ -109,7 +109,7 @@ void Video::initGL() {
     error = glGetError();
 
     if (error != GL_NO_ERROR) {
-        throw ExceptionChimera(
+        throw Exception(
             std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
     }
 
@@ -121,7 +121,7 @@ void Video::initGL() {
     error = glGetError();
 
     if (error != GL_NO_ERROR) {
-        throw ExceptionChimera(
+        throw Exception(
             std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
     }
 
@@ -132,7 +132,7 @@ void Video::initGL() {
     error = glGetError();
 
     if (error != GL_NO_ERROR) {
-        throw ExceptionChimera(
+        throw Exception(
             std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
     }
 }
@@ -168,7 +168,7 @@ std::string Video::getVersaoOpenGL() {
     } else {
         // Check for error
         GLenum error = glGetError();
-        throw ExceptionChimera(std::string((const char*)gluErrorString(error)));
+        throw Exception(std::string((const char*)gluErrorString(error)));
     }
 
     return retorno;

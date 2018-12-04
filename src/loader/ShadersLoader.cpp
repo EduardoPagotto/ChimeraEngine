@@ -1,6 +1,6 @@
 #include <fstream>
 
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 #include "chimera/loader/ShadersLoader.hpp"
 
@@ -68,7 +68,7 @@ std::string ShadersLoader::getShaderCode(const char* file_path) {
 
     } else {
 
-        throw Chimera::ExceptionChimera("Impossivel abrir arquivo: " + std::string(file_path));
+        throw Chimera::Exception("Impossivel abrir arquivo: " + std::string(file_path));
     }
 
     return shaderCode;

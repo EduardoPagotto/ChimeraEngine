@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 #include "chimera/core/HmdDevice.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>

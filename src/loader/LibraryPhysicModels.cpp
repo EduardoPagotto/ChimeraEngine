@@ -1,4 +1,4 @@
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 #include "LibraryGeometrys.hpp"
 #include "LibraryPhysicModels.hpp"
@@ -68,7 +68,7 @@ void LibraryPhysicModels::target() {
         }
     }
 
-    throw Chimera::ExceptionChimera("Physics model nao encontrado: " + url);
+    throw Chimera::Exception("Physics model nao encontrado: " + url);
 }
 
 void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape,
@@ -89,7 +89,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         } else if (l_arrayValores.size() == 3) {
             _pPhysic->setShapeSphere(l_arrayValores[0]);
         } else {
-            throw Chimera::ExceptionChimera("Shape Sphere Array valores invalidos: " + url);
+            throw Chimera::Exception("Shape Sphere Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "plane") == 0) {
@@ -109,7 +109,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
             _pPhysic->setShapePlane(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]),
                                     l_arrayValores[3]);
         } else {
-            throw Chimera::ExceptionChimera("Shape Plane Array valores invalidos: " + url);
+            throw Chimera::Exception("Shape Plane Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "box") == 0) {
@@ -125,7 +125,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         } else if (l_arrayValores.size() == 3) {
             _pPhysic->setShapeBox(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]));
         } else {
-            throw Chimera::ExceptionChimera("Shape Box Array valores invalidos: " + url);
+            throw Chimera::Exception("Shape Box Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "cylinder") == 0) {
@@ -141,7 +141,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         } else if (l_arrayValores.size() == 3) {
             _pPhysic->setShapeCilinder(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]));
         } else {
-            throw Chimera::ExceptionChimera("Shape Cylinder Array valores invalidos: " + url);
+            throw Chimera::Exception("Shape Cylinder Array valores invalidos: " + url);
         }
     } else if (strcmp(l_tipoShape, "mesh") == 0) {
 

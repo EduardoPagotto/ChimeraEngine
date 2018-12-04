@@ -2,7 +2,7 @@
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 #include <algorithm>
 

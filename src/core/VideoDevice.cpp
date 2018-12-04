@@ -1,5 +1,5 @@
 #include "chimera/core/VideoDevice.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>

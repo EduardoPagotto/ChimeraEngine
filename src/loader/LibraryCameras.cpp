@@ -1,5 +1,5 @@
 #include "LibraryCameras.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 #include "chimera/node/CameraSpherical.hpp"
 
 namespace ChimeraLoaders {
@@ -30,7 +30,7 @@ Chimera::Camera* LibraryCameras::target() {
             return pCameraNew;
         }
     }
-    throw Chimera::ExceptionChimera("Camera nao encontrada: " + url);
+    throw Chimera::Exception("Camera nao encontrada: " + url);
 }
 
 void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::Camera* _pCamera) {
@@ -44,7 +44,7 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::Camera* _pC
 
     } else {
         // TODO testar ecarregar ortogonal aqui
-        throw Chimera::ExceptionChimera("Camera, Ortogonal nao implementada: " + url);
+        throw Chimera::Exception("Camera, Ortogonal nao implementada: " + url);
     }
 }
 } // namespace ChimeraLoaders

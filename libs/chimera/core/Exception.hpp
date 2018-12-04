@@ -12,18 +12,18 @@ namespace Chimera {
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class ExceptionChimera : public std::exception {
+class Exception : public std::exception {
   public:
     /**
      * Construtor Entity Limpa protegida
      */
-    ExceptionChimera() : std::exception() { message = "UNKNOWN_EXCEPTION"; }
+    Exception() : std::exception() { message = "UNKNOWN_EXCEPTION"; }
 
     /**
      * Construtor de copia
      * @param exception
      */
-    ExceptionChimera(const ExceptionChimera& _exception) { message = _exception.message; }
+    Exception(const Exception& _exception) { message = _exception.message; }
 
     /**
      * Construtor tipificado
@@ -31,12 +31,12 @@ class ExceptionChimera : public std::exception {
      * @param _code codigo do erro
      * @param _message messagem de erro
      */
-    ExceptionChimera(std::string _message) { message = _message; }
+    Exception(std::string _message) { message = _message; }
 
     /**
      * Destrutor Padrao
      */
-    virtual ~ExceptionChimera() throw() {}
+    virtual ~Exception() throw() {}
 
     /**
      * Retorna mensagem de erro

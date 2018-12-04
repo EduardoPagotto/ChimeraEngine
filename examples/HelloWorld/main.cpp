@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/HmdDevice.hpp"
 #include <iostream>
@@ -44,7 +44,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete game;
         delete video;
 
-    } catch (const Chimera::ExceptionChimera& ex) {
+    } catch (const Chimera::Exception& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
         // std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;

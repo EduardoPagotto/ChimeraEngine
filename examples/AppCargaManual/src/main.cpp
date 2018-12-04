@@ -20,7 +20,7 @@
 #include "chimera/loader/ShadersLoader.hpp"
 #include "chimera/loader/VisualScene.hpp"
 
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/HUD.hpp"
@@ -130,7 +130,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
         delete video;
 
-    } catch (const Chimera::ExceptionChimera& ex) {
+    } catch (const Chimera::Exception& ex) {
         console->error("Falha grave:{0}", ex.getMessage());
         return -1;
     } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {

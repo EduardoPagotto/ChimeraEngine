@@ -1,5 +1,5 @@
 #include "LibraryPhysicsMaterials.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 namespace ChimeraLoaders {
 
@@ -31,6 +31,6 @@ Chimera::PhysicMaterial* LibraryPhysicsMaterials::target() {
             return pMaterial;
         }
     }
-    throw Chimera::ExceptionChimera("Physics material nao encontrado: " + std::string(url));
+    throw Chimera::Exception("Physics material nao encontrado: " + std::string(url));
 }
 } // namespace ChimeraLoaders

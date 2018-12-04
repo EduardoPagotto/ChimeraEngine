@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #endif
 
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 #include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"
 
@@ -38,7 +38,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         ChimeraLoaders::PhysicsScene libP("./models/piso2.xml", pPC);
         libP.target();
 
-    } catch (const Chimera::ExceptionChimera& ex) {
+    } catch (const Chimera::Exception& ex) {
         console->error("TesteLoader falha grave:{0}", ex.getMessage());
         return -1;
     } catch (const std::exception& ex) {

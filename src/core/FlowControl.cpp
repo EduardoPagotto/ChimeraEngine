@@ -1,5 +1,5 @@
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 namespace Chimera {
 
@@ -28,7 +28,7 @@ void FlowControl::close(void) {
     SDL_Event l_eventQuit;
     l_eventQuit.type = SDL_QUIT;
     if (SDL_PushEvent(&l_eventQuit) == -1) {
-        throw ExceptionChimera(std::string(SDL_GetError()));
+        throw Exception(std::string(SDL_GetError()));
     }
 }
 

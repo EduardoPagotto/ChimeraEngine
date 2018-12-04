@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
 #include "chimera/core/Events.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Singleton.hpp"
 
@@ -54,7 +54,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             SDL_Event l_eventQuit;
             l_eventQuit.type = SDL_QUIT;
             if (SDL_PushEvent(&l_eventQuit) == -1) {
-                throw Chimera::ExceptionChimera(std::string(SDL_GetError()));
+                throw Chimera::Exception(std::string(SDL_GetError()));
             }
             break;
         case SDLK_F10:

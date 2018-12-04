@@ -1,5 +1,5 @@
 #include "LibraryLights.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 namespace ChimeraLoaders {
 
@@ -25,7 +25,7 @@ Chimera::Light* LibraryLights::target() {
         }
     }
 
-    throw Chimera::ExceptionChimera("Light nao encontrada: " + url);
+    throw Chimera::Exception("Light nao encontrada: " + url);
 }
 
 Chimera::Color LibraryLights::getColor(tinyxml2::XMLElement* l_nColorVal) {

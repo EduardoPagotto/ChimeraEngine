@@ -97,7 +97,7 @@
     <ClInclude Include="..\..\chimera\include\Mesh.h" />
     <ClInclude Include="..\..\chimera\include\Entity.h" />
     <ClInclude Include="..\..\chimera\include\Exception.h" />
-    <ClInclude Include="..\..\chimera\include\ExceptionChimera.h" />
+    <ClInclude Include="..\..\chimera\include\Exception.h" />
     <ClInclude Include="..\..\chimera\include\ExceptionSDL.h" />
     <ClInclude Include="..\..\chimera\include\FlowControl.h" />
     <ClInclude Include="..\..\chimera\include\Font.h" />

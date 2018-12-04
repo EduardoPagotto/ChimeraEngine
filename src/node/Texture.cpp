@@ -4,7 +4,7 @@
 #include <SDL2/SDL_image.h>
 #endif
 
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 
 #include "chimera/node/Texture.hpp"
 
@@ -74,7 +74,7 @@ void Texture::init() {
 
             SDL_Surface* pImage = IMG_Load(pathFile.c_str());
             if (pImage == nullptr)
-                throw ExceptionChimera("Falha ao ler arquivo:" + pathFile);
+                throw Exception("Falha ao ler arquivo:" + pathFile);
 
             // Create The Texture
             glGenTextures(1, (GLuint*)&idTexture);

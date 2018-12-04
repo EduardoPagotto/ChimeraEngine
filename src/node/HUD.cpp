@@ -1,5 +1,5 @@
 #include "chimera/node/HUD.hpp"
-#include "chimera/core/ExceptionChimera.hpp"
+#include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 

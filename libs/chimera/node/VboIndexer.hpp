@@ -13,12 +13,9 @@ struct VertexData {
     // sizeof(VertexData)
 };
 
-void conversorVBO(std::vector<unsigned int>& vertexIndex,
-                  std::vector<glm::vec3>& vertexList,
-                  std::vector<unsigned int>& normalIndex,
-                  std::vector<glm::vec3>& normalList,
-                  std::vector<unsigned int>& textureIndex,
-                  std::vector<glm::vec2>& textureList,
+void conversorVBO(std::vector<unsigned int>& vertexIndex, std::vector<glm::vec3>& vertexList,
+                  std::vector<unsigned int>& normalIndex, std::vector<glm::vec3>& normalList,
+                  std::vector<unsigned int>& textureIndex, std::vector<glm::vec2>& textureList,
                   // Chimera::Color cor,
                   std::vector<VertexData>& outData);
 

@@ -7,7 +7,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "Color.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
 #include <map>

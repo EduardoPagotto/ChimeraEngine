@@ -16,8 +16,7 @@ set (SourcesCore Video.cpp
 				 JoystickManager.cpp
 				 Shader.cpp	
 				 Events.cpp
-				 FlowControl.cpp
-				 State.cpp)
+				 FlowControl.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}/libs)

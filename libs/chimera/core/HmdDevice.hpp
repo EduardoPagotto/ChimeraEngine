@@ -1,7 +1,7 @@
 #ifndef __CHIMERA__HDM_DEVICE__HPP
 #define __CHIMERA__HDM_DEVICE__HPP
 
-#include "chimera/core/Video.hpp"
+#include "chimera/core/Canvas.hpp"
 
 namespace Chimera {
 

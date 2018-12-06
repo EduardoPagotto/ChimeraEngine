@@ -5,9 +5,9 @@
 #endif
 
 #include "Game.hpp"
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/VideoDevice.hpp"
 #include "chimera/loader/ShadersLoader.hpp"
 #include "chimera/node/CameraSpherical.hpp"
 #include "chimera/node/Group.hpp"

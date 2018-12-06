@@ -3,7 +3,7 @@
 
 #ifdef OVR_SET_TO_USE
 
-#include "chimera/core/Video.hpp"
+#include "chimera/core/Canvas.hpp"
 
 #include <string>
 

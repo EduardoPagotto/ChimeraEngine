@@ -1,7 +1,7 @@
 #include "Game.hpp"
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/VideoDevice.hpp"
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>

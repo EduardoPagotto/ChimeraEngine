@@ -1,9 +1,9 @@
 #ifndef __GAME_SHADER_TEST___HPP
 #define __GAME_SHADER_TEST___HPP
 
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Shader.hpp"
-#include "chimera/core/VideoDevice.hpp"
 
 #include "chimera/node/Node.hpp"
 

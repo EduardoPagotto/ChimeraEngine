@@ -1,5 +1,5 @@
 //#include "chimera/core/Exception.hpp"
-#include "chimera/core/FrameBuffer.hpp"
+#include "chimera/core/CanvasFrameBuffer.hpp"
 
 namespace Chimera {
 

@@ -8,7 +8,7 @@
 
 #include <map>
 
-#include "chimera/core/VideoDevice.hpp"
+#include "chimera/core/CanvasGL.hpp"
 
 #ifdef OVR_SET_TO_USE
 #include "OvrDevice.hpp"

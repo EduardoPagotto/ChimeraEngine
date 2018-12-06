@@ -1,8 +1,8 @@
 #ifndef __GAME_EVENTS_TEST__HPP
 #define __GAME_EVENTS_TEST__HPP
 
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/VideoDevice.hpp"
 #include "chimera/node/Node.hpp"
 
 class Game : public Chimera::IGameClientEvents {

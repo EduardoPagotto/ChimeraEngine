@@ -8,7 +8,7 @@
 
 #include <glm/glm.hpp>
 
-#include "chimera/core/Video.hpp"
+#include "chimera/core/Canvas.hpp"
 
 namespace Chimera {
 

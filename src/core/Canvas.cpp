@@ -1,4 +1,4 @@
-#include "chimera/core/Video.hpp"
+#include "chimera/core/Canvas.hpp"
 
 #include "chimera/core/Exception.hpp"
 

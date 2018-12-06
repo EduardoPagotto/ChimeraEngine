@@ -2,12 +2,12 @@
 #define __GAME_EVENTS_TEST__HPP
 
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Video.hpp"
+#include "chimera/core/VideoDevice.hpp"
 #include "chimera/node/Node.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::Video* _pVideo);
+    Game(Chimera::CanvasGL* _pVideo);
 
     virtual ~Game();
     // Inherited via IGameClientEvents
@@ -26,7 +26,7 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    Chimera::Video* pVideo;
+    Chimera::CanvasGL* pVideo;
     int botaoIndex;
     int estadoBotao;
     bool isPaused;

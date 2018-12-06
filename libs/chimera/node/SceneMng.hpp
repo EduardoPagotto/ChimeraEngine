@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "RenderVisitor.hpp"
-#include "chimera/core/Video.hpp"
+#include "chimera/core/VideoDevice.hpp"
 #include <spdlog/spdlog.h>
 
 namespace Chimera {
@@ -22,8 +22,8 @@ class SceneMng : public Node {
     virtual void accept(class NodeVisitor* v);
 
     void init();
-    void draw(Video* _pVideo);
-    void start(Video* _pVideo);
+    void draw(CanvasGL* _pVideo);
+    void start(CanvasGL* _pVideo);
 
     inline void origemDesenho(Coord* _pCoord) { renderV.pCoord = _pCoord; }
 

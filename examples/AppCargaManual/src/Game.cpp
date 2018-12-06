@@ -5,7 +5,7 @@
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/Transform.hpp"
 
-Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo, Chimera::PhysicsControl* _physicWorld)
+Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo, Chimera::PhysicsControl* _physicWorld)
     : pSceneMng(_pScenMng), pVideo(_pVideo) {
 
     isPaused = false;

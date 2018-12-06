@@ -4,7 +4,7 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/node/Transform.hpp"
 
-Game::Game(Chimera::Video* _pVideo) : pVideo(_pVideo) { isPaused = false; }
+Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) { isPaused = false; }
 
 Game::~Game() {}
 
@@ -68,7 +68,7 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
 bool Game::paused() { return isPaused; }
 
 void Game::render() {
-    pVideo->initDraw();
+    pVideo->before();
     // TODO desenhar aqui!!
-    pVideo->endDraw();
+    pVideo->after();
 }

@@ -4,81 +4,48 @@
 #define GLEW_STATIC
 
 #include <string>
-
-#ifdef WIN32
-#include "windows.h"
-#endif
-
-#include <GL/glew.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#ifndef WIN32
+//#include <GL/glew.h>
+//#include <GL/gl.h>
+//#include <GL/glu.h>
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
 
-#include <glm/glm.hpp>
+//#include <glm/glm.hpp>
 
 #include <spdlog/spdlog.h>
 
 namespace Chimera {
 
-enum class KIND_DEVICE { SCREEN = 0, OVR_OCULUS, HMD_Z1 };
+// enum class KIND_DEVICE { SCREEN = 0, OVR_OCULUS, HMD_Z1 };
 
 /**
- * Class Video
+ * Class Canvas
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
+ *  @update 20181206
  */
-class Video {
+class Canvas {
   public:
-    Video(std::string _nome, KIND_DEVICE _kindDevice);
-    Video(std::string _nome, KIND_DEVICE _kindDevice, int _w, int _h);
-    virtual ~Video();
+    Canvas(const std::string& _title, int _width, int _height, bool _fullScreen = false);
+    virtual ~Canvas();
 
-    virtual void initDraw() = 0;
-    virtual void endDraw() = 0;
-    virtual glm::mat4
-    getPerspectiveProjectionMatrix(const float& _fov, const float& _near,
-                                   const float& _far,
-                                   int _eye) = 0; //(Camera *pCamera, int _eye) = 0;
-    virtual glm::mat4 getOrthoProjectionMatrix(
-        int eyeIndex) = 0; // virtual void executeViewOrto ( int eyeIndex ) = 0;
-    virtual void reshape(int _w, int _y) = 0;
+    virtual void before() = 0;
+    virtual void after() = 0;
     virtual void toggleFullScreen() = 0;
+    virtual void reshape(int _width, int _height) = 0;
 
-    void initGL();
-
-    void afterStart();
-
-    int getWinSizeW() const { return winSizeW; }
-
-    int getWinSizeH() const { return winSizeH; }
-
-    std::string getNomeTela() const { return nomeTela; }
-
-    void restoreMatrix();
-
-    std::string getVersaoOpenGL();
-
-    virtual int getTotEyes() = 0;
-    inline KIND_DEVICE getKindDevice() const { return kindDevice; }
+    inline int getWidth() const { return width; }
+    inline int getHeight() const { return height; }
+    inline bool getFullScreen() const { return fullScreen; }
 
   protected:
-    void initSDL();
+    // virtual void init() = 0;
 
-    int winSizeW;
-    int winSizeH;
-
-    std::string nomeTela;
-    KIND_DEVICE kindDevice;
-
+    bool fullScreen;
+    int width;
+    int height;
+    std::string title;
     SDL_Window* window;
-    SDL_GLContext context;
-
+    SDL_Point winPosPrev;
     std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera

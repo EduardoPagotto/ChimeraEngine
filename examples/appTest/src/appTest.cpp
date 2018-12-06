@@ -47,7 +47,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        Video* video = new VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
+        CanvasGL* video = new CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         // Gerenciador do grapho de cena
         SceneMng* sceneMng = new SceneMng();

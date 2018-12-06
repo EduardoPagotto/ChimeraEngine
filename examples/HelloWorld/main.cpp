@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/HmdDevice.hpp"
+#include "chimera/core/VideoDevice.hpp"
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
@@ -29,8 +29,8 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
         YAML::Node screen = config["screen"];
         YAML::Node canvas = screen["canvas"];
-        Chimera::Video* video =
-            new Chimera::HmdDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
+        Chimera::CanvasGL* video =
+            new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         Game* game = new Game(video);
 

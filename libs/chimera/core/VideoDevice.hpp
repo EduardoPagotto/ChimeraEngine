@@ -1,20 +1,30 @@
 #ifndef __CHIMERA_VIDEO_DEVICE__HPP
 #define __CHIMERA_VIDEO_DEVICE__HPP
 
+#include <GL/glew.h>
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+#include <glm/glm.hpp>
+
 #include "chimera/core/Video.hpp"
 
 namespace Chimera {
 
-class VideoDevice : public Video {
+class CanvasGL : public Canvas {
   public:
-    VideoDevice(std::string _nome);
-    VideoDevice(int _width, int _height, std::string _nome);
-    virtual ~VideoDevice();
+    CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen = false);
+    virtual ~CanvasGL();
 
-    virtual void initDraw();
-    virtual void endDraw();
-    virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
-                                                     int _eye);
+    virtual void before() override;
+    virtual void after() override;
+    virtual void toggleFullScreen() override;
+    virtual void reshape(int _width, int _height) override;
+
+    glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far, int _eye);
+
+    glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
 
     // TODO subistituir o executeViewPerspective
     // virtual void perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
@@ -22,14 +32,14 @@ class VideoDevice : public Video {
 
     virtual int getTotEyes() { return 1; }
     // virtual void executeViewOrto ( int eye );
-    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
 
-    virtual void reshape(int _w, int _h);
-    virtual void toggleFullScreen();
+    void initGL();
+    void afterStart();
+    void restoreMatrix();
+    std::string getVersaoOpenGL();
 
   private:
-    bool fullscreenStatus;
-    SDL_Point winPosPrev;
+    SDL_GLContext context;
 };
 } // namespace Chimera
 

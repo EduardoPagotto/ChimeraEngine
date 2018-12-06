@@ -7,7 +7,7 @@
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo);
+    Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo);
     virtual ~Game();
     // Inherited via IGameClientEvents
     virtual void start();
@@ -27,7 +27,7 @@ class Game : public Chimera::IGameClientEvents {
   private:
     Chimera::SceneMng* pSceneMng;
 
-    Chimera::Video* pVideo;
+    Chimera::CanvasGL* pVideo;
 
     int botaoIndex;
     int estadoBotao;

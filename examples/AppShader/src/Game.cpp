@@ -7,7 +7,7 @@
 
 #include "chimera/node/Transform.hpp"
 
-Game::Game(Chimera::Shader* _pShader, Chimera::Video* _pVideo) : pVideo(_pVideo) {
+Game::Game(Chimera::Shader* _pShader, Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) {
     isPaused = false;
     pShader = _pShader;
 }
@@ -152,7 +152,7 @@ bool Game::paused() { return isPaused; }
 
 void Game::render() {
 
-    pVideo->initDraw();
+    pVideo->before();
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Use our shaders
@@ -176,5 +176,5 @@ void Game::render() {
 
     glDisableVertexAttribArray(0);
 
-    pVideo->endDraw();
+    pVideo->after();
 }

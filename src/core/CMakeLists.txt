@@ -9,9 +9,9 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesCore Video.cpp
-				 VideoDevice.cpp
-				 FrameBuffer.cpp
+set (SourcesCore Canvas.cpp
+				 CanvasGL.cpp
+				 CanvasFrameBuffer.cpp
 				 Timer.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp

@@ -13,7 +13,8 @@ CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _ful
     if (SDL_CreateWindowAndRenderer(_width, _height, 0, &window, &renderer) != 0)
         throw Exception(std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
 
-    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, _width, _height);
+    pixelFormat = SDL_PIXELFORMAT_RGBA8888;
+    texture = SDL_CreateTexture(renderer, pixelFormat, SDL_TEXTUREACCESS_STREAMING, _width, _height);
 
     pixels = new uint32_t[_width * _height];
 

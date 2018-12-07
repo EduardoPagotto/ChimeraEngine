@@ -17,8 +17,11 @@ class CanvasFB : public Canvas {
 
     uint32_t* getPixels() { return pixels; }
 
+    uint32_t getPixelFormat() { return pixelFormat; }
+
   private:
     uint32_t* pixels;
+    uint32_t pixelFormat;
     SDL_Texture* texture;
     SDL_Renderer* renderer;
 };

@@ -1,5 +1,7 @@
 #include <cmath>
 
+#include <SDL2/SDL.h>
+
 #include "raycasting.hpp"
 
 bool LoadWorld(const char filename[], World* world) {
@@ -47,7 +49,8 @@ void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t col
     uint8_t type = world.data[what.mapX + what.mapY * world.width];
 
     // selecione cor com base no tipo de bloco
-    uint8_t r, g, b;
+    uint8_t r, g, b, a;
+    a = 0;
     switch (type) {
         case 1: {
             r = 0;
@@ -98,33 +101,22 @@ void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t col
     for (uint32_t c = cropup; c < (colh - cropdown); c++) {
         // desenhe o pixel da cor selecionada
 
-        // FIXME: colocar em ordem o RGBA
-        uint32_t valR = r << 16; //(0x00FF0000 & r);
-        uint32_t valG = g << 8;  //(0x0000FF00 & g);
-        uint32_t valB = b;       //(0x000000FF & b);
-
-        frame.data[index] = (valR | valG | valB);
-        // frame.data[index].r = r;
-        // frame.data[index].g = g;
-        // frame.data[index].b = b;
+        uint32_t valor_final = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), r, g, b, a);
+        frame.data[index] = valor_final;
 
         index += frame.width;
     }
 }
 
 void RenderScene(State state, World world, Frame frame) {
-    uint32_t i = 0;
+    // uint32_t i = 0;
 
-    int tamanho_frame = (frame.width * frame.height);
-    for (i = 0; i < tamanho_frame; i++) {
-
-        // // FIXME: colocar em ordem o RGBA
-        uint32_t valZero = 0;
-        frame.data[i] = 0;
-        // frame.data[i].r = 0;
-        // frame.data[i].g = 0;
-        // frame.data[i].b = 0;
-    }
+    // int tamanho_frame = (frame.width * frame.height);
+    // for (i = 0; i < tamanho_frame; i++) {
+    //     // // FIXME: colocar em ordem o RGBA
+    //     uint32_t valZero = 0;
+    //     frame.data[i] = 0;
+    // }
 
     for (uint32_t column = 0; column < frame.width; column++) // Para cada coluna
     {

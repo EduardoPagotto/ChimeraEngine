@@ -5,4 +5,5 @@ add_subdirectory(AppCargaManual)
 add_subdirectory(HelloWorld)
 add_subdirectory(AppShader)
 add_subdirectory(appTest)
+add_subdirectory(simpleRayCasting)
 

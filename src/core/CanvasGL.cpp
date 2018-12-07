@@ -2,15 +2,11 @@
 #include "chimera/core/Exception.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
 
 CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen)
     : Canvas(_title, _width, _height, _fullScreen) {
-    // fullscreenStatus = false;
-    // chama inicializacao do SDL na classe Pai
-    // initSDL();
 
     // Ajusta o contexto de versao do opengl
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);

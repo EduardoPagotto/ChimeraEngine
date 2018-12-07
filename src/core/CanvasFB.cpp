@@ -1,19 +1,51 @@
-//#include "chimera/core/Exception.hpp"
-#include "chimera/core/CanvasFrameBuffer.hpp"
+#include "chimera/core/CanvasFB.hpp"
+#include "chimera/core/Exception.hpp"
 
 namespace Chimera {
 
-CanvasFrameBuffer::CanvasFrameBuffer(const std::string& _title, int _width, int _height, bool _fullScreen)
+// refs
+// https://forums.libsdl.org/viewtopic.php?p=51664
+// https://jeux.developpez.com/tutoriels/sdl-2/guide-migration/
+
+CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen)
     : Canvas(_title, _width, _height, _fullScreen) {
+
+    if (SDL_CreateWindowAndRenderer(_width, _height, 0, &window, &renderer) != 0)
+        throw Exception(std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
+
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, _width, _height);
+
+    pixels = new Uint32[_width * _height];
+    memset(pixels, 255, _width * _height * sizeof(Uint32));
 
     log->debug("Instanciado CanvasFrameBuffer");
 }
 
-CanvasFrameBuffer::~CanvasFrameBuffer() {}
-void CanvasFrameBuffer::before() {}
-void CanvasFrameBuffer::after() {}
+CanvasFB::~CanvasFB() {
+    delete[] pixels;
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+}
 
-void CanvasFrameBuffer::toggleFullScreen() {
+void CanvasFB::before() {}
+
+void CanvasFB::after() {
+
+    // Atualiza a textura
+    SDL_UpdateTexture(texture, NULL, pixels, width * sizeof(Uint32));
+
+    // Limpa a tela atual
+    SDL_RenderClear(renderer);
+
+    // Copia a textura
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+    // exibe
+    SDL_RenderPresent(renderer);
+}
+
+void CanvasFB::toggleFullScreen() {
 
     if (fullScreen == false) {
 
@@ -31,7 +63,7 @@ void CanvasFrameBuffer::toggleFullScreen() {
     fullScreen = !fullScreen;
 }
 
-void CanvasFrameBuffer::reshape(int _width, int _height) {
+void CanvasFB::reshape(int _width, int _height) {
     width = _width;
     height = _height;
 }

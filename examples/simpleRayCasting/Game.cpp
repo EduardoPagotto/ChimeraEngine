@@ -81,6 +81,9 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {}
 
 void Game::start() {
 
+    moveSpeed = MOVSPEED;
+    rotSpeed = ROTSPEED;
+
     // init framebuffer
     frame = new Frame;
     frame->data = pCanvas->getPixels(); // new TrueColorPixel[SCREEN_W * SCREEN_H];
@@ -104,7 +107,11 @@ void Game::start() {
     }
 }
 
-void Game::stop() {}
+void Game::stop() {
+    // delete world;
+    // delete state;
+    // delete frame;
+}
 
 void Game::newFPS(const unsigned int& fps) {}
 

@@ -15,8 +15,7 @@ CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _ful
 
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, _width, _height);
 
-    pixels = new Uint32[_width * _height];
-    memset(pixels, 255, _width * _height * sizeof(Uint32));
+    pixels = new uint32_t[_width * _height];
 
     log->debug("Instanciado CanvasFrameBuffer");
 }
@@ -28,12 +27,15 @@ CanvasFB::~CanvasFB() {
     SDL_DestroyWindow(window);
 }
 
-void CanvasFB::before() {}
+void CanvasFB::before() {
+    // Limpa
+    memset(pixels, 0, width * height * sizeof(uint32_t));
+}
 
 void CanvasFB::after() {
 
     // Atualiza a textura
-    SDL_UpdateTexture(texture, NULL, pixels, width * sizeof(Uint32));
+    SDL_UpdateTexture(texture, NULL, pixels, width * sizeof(uint32_t));
 
     // Limpa a tela atual
     SDL_RenderClear(renderer);

@@ -15,10 +15,10 @@ class CanvasFB : public Canvas {
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
 
-    Uint32* getPixels() { return pixels; }
+    uint32_t* getPixels() { return pixels; }
 
   private:
-    Uint32* pixels;
+    uint32_t* pixels;
     SDL_Texture* texture;
     SDL_Renderer* renderer;
 };

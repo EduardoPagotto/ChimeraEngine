@@ -3,6 +3,7 @@
 
 #include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
+#include "raycasting.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -29,6 +30,13 @@ class Game : public Chimera::IGameClientEvents {
     int botaoIndex;
     int estadoBotao;
     bool isPaused;
+
+    // ray
+    Frame* frame;
+    State* state;
+    World* world;
+    double moveSpeed;
+    double rotSpeed;
 };
 
 #endif

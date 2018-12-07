@@ -25,6 +25,49 @@ void Game::keyCapture(SDL_Keycode tecla) {
         case SDLK_F10:
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
+        case SDLK_w: {
+            int currX = (int)state->posx;
+            int currY = (int)state->posy;
+            int nextX = (int)(state->posx + state->dirx * moveSpeed * 2);
+            int nextY = (int)(state->posy + state->diry * moveSpeed * 2);
+
+            if (world->data[nextX + currY * world->width] == 0) {
+                state->posx += state->dirx * moveSpeed;
+            }
+
+            if (world->data[currX + nextY * world->width] == 0) {
+                state->posy += state->diry * moveSpeed;
+            }
+        } break;
+        case SDLK_s: {
+            int currX = (int)state->posx;
+            int currY = (int)state->posy;
+            int nextX = (int)(state->posx - state->dirx * moveSpeed * 2);
+            int nextY = (int)(state->posy - state->diry * moveSpeed * 2);
+
+            if (world->data[nextX + currY * world->width] == 0) {
+                state->posx -= state->dirx * moveSpeed;
+            }
+            if (world->data[currX + nextY * world->width] == 0) {
+                state->posy -= state->diry * moveSpeed;
+            }
+        } break;
+        case SDLK_a: {
+            double oldDirX = state->dirx;
+            state->dirx = state->dirx * cos(rotSpeed) - state->diry * sin(rotSpeed);
+            state->diry = oldDirX * sin(rotSpeed) + state->diry * cos(rotSpeed);
+            double oldcamx = state->camx;
+            state->camx = state->camx * cos(rotSpeed) - state->camy * sin(rotSpeed);
+            state->camy = oldcamx * sin(rotSpeed) + state->camy * cos(rotSpeed);
+        } break;
+        case SDLK_d: {
+            double oldDirX = state->dirx;
+            state->dirx = state->dirx * cos(-rotSpeed) - state->diry * sin(-rotSpeed);
+            state->diry = oldDirX * sin(-rotSpeed) + state->diry * cos(-rotSpeed);
+            double oldcamx = state->camx;
+            state->camx = state->camx * cos(-rotSpeed) - state->camy * sin(-rotSpeed);
+            state->camy = oldcamx * sin(-rotSpeed) + state->camy * cos(-rotSpeed);
+        } break;
         default:
             break;
     }
@@ -37,7 +80,28 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {}
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {}
 
 void Game::start() {
-    // pCanvas->initGL();
+
+    // init framebuffer
+    frame = new Frame;
+    frame->data = pCanvas->getPixels(); // new TrueColorPixel[SCREEN_W * SCREEN_H];
+    frame->width = pCanvas->getWidth();
+    frame->height = pCanvas->getHeight();
+
+    // estado de inicialização
+    state = new State;
+    state->posx = 3;
+    state->posy = 3;
+    state->dirx = -1;
+    state->diry = 0;
+    state->camx = 0;
+    state->camy = FOV;
+
+    world = new World;
+
+    if (!LoadWorld("./examples/simpleRayCasting/world.txt", world)) {
+        printf("\nError loading world file!");
+        exit(0);
+    }
 }
 
 void Game::stop() {}
@@ -71,6 +135,8 @@ bool Game::paused() { return isPaused; }
 
 void Game::render() {
     pCanvas->before();
-    // TODO desenhar aqui!!
+
+    RenderScene(*state, *world, *frame);
+
     pCanvas->after();
 }

@@ -1,37 +1,21 @@
 #include "Game.hpp"
-#include "chimera/core/CanvasGL.hpp"
+#include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include <iostream>
 #include <spdlog/spdlog.h>
-#include <yaml-cpp/yaml.h>
 
 #ifndef WIN32
 int main(int argn, char** argv) {
 #else
 int _tmain(int argc, _TCHAR* argv[]) {
 #endif
-
     auto console = spdlog::stdout_color_st("chimera");
 
     spdlog::set_level(spdlog::level::debug);
 
-    console->info("AppEmpty Iniciado");
-    for (int i = 0; i < argn; i++) {
-        console->info("Parametros {0}: {1}", i, argv[i]);
-    }
-
     try {
-        std::string config_file = "./examples/HelloWorld/etc/empty.yaml";
-
-        console->info("Carregar arquivo:{0}", config_file);
-        YAML::Node config = YAML::LoadFile(config_file);
-
-        YAML::Node screen = config["screen"];
-        YAML::Node canvas = screen["canvas"];
-        Chimera::CanvasGL* video =
-            new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
-
+        Chimera::CanvasFB* video = new Chimera::CanvasFB("RayCasting", 640, 480);
         Game* game = new Game(video);
 
         Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
@@ -56,7 +40,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         // std::cout << "Falha Desconhecida " << std::endl;
     }
 
-    console->info("AppShader finalizado com sucesso");
+    console->info("raycasting finalizado com sucesso");
 
     return 0;
 }

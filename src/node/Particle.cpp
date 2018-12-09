@@ -50,10 +50,10 @@ void Particle::decrease(const float& _delta, int _particlesCount, GLfloat* pPosi
 
         pPositionSizeData[4 * _particlesCount + 3] = size;
 
-        pColorData[4 * _particlesCount + 0] = color.r; // p.r;
-        pColorData[4 * _particlesCount + 1] = color.g; // p.g;
-        pColorData[4 * _particlesCount + 2] = color.b; // p.b;
-        pColorData[4 * _particlesCount + 3] = color.a; // p.a;
+        pColorData[4 * _particlesCount + 0] = color[0]; //.r; // p.r;
+        pColorData[4 * _particlesCount + 1] = color[1]; //.g; // p.g;
+        pColorData[4 * _particlesCount + 2] = color[2]; //.b; // p.b;
+        pColorData[4 * _particlesCount + 3] = color[3]; //.a; // p.a;
 
     } else {
         // Particles that just died will be put at the end of the buffer in

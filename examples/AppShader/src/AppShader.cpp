@@ -6,9 +6,9 @@
 
 #include "Game.hpp"
 
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/VideoDevice.hpp"
 
 #include "chimera/loader/ShadersLoader.hpp"
 
@@ -43,8 +43,8 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node canvas = screen["canvas"];
         YAML::Node shader = config["shader"];
 
-        Chimera::Video* video =
-            new Chimera::VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
+        Chimera::CanvasGL* video =
+            new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         ChimeraLoaders::ShadersLoader* pSL = new ChimeraLoaders::ShadersLoader();
         Chimera::Shader* pShader =

@@ -3,8 +3,8 @@
 
 #include "Coord.hpp"
 #include "NodeVisitor.hpp"
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Shader.hpp"
-#include "chimera/core/Video.hpp"
 
 #include "ShadowMap.hpp"
 
@@ -26,7 +26,7 @@ class RenderVisitor : public NodeVisitor {
     virtual void visit(class ShadowMap* _pShadowMap) override;
 
     Coord* pCoord;
-    Video* pVideo;
+    CanvasGL* pVideo;
     int eye;
 
   private:

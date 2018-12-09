@@ -17,7 +17,7 @@ void SceneMng::accept(NodeVisitor* v) { v->visit(this); }
 
 void SceneMng::init() { log->debug("SceneMng Inicializado {0}", getName()); }
 
-void SceneMng::start(Video* _pVideo) {
+void SceneMng::start(CanvasGL* _pVideo) {
 
     _pVideo->initGL();
 
@@ -29,15 +29,15 @@ void SceneMng::start(Video* _pVideo) {
     renderV.pVideo = _pVideo;
 }
 
-void SceneMng::draw(Video* _pVideo) {
+void SceneMng::draw(CanvasGL* _pVideo) {
 
-    _pVideo->initDraw();
+    _pVideo->before();
 
     for (int eye = 0; eye < _pVideo->getTotEyes(); eye++) {
         renderV.eye = eye;
         NodeParse::tree(this, &renderV); // dfs(root, &rv);//DFS(root);
     }
 
-    _pVideo->endDraw();
+    _pVideo->after();
 }
 } // namespace Chimera

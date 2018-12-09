@@ -6,7 +6,7 @@
 #include "chimera/node/SceneMng.hpp"
 #include "chimera/node/Transform.hpp"
 
-Game::Game(Chimera::SceneMng* _pScenMng, Chimera::Video* _pVideo) : pSceneMng(_pScenMng), pVideo(_pVideo) {
+Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo) : pSceneMng(_pScenMng), pVideo(_pVideo) {
     isPaused = false;
 }
 

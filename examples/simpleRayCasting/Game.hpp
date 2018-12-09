@@ -1,15 +1,13 @@
-#ifndef __GAME_SHADER_TEST___HPP
-#define __GAME_SHADER_TEST___HPP
+#ifndef __GAME_SIMPLE_RAYCASTING__HPP
+#define __GAME_SIMPLE_RAYCASTING__HPP
 
-#include "chimera/core/CanvasGL.hpp"
+#include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Shader.hpp"
-
-#include "chimera/node/Node.hpp"
+#include "raycasting.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::Shader* _pShader, Chimera::CanvasGL* _pVideo);
+    Game(Chimera::CanvasFB* _pCanvas);
 
     virtual ~Game();
     // Inherited via IGameClientEvents
@@ -28,15 +26,17 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    Chimera::CanvasGL* pVideo;
+    Chimera::CanvasFB* pCanvas;
     int botaoIndex;
     int estadoBotao;
     bool isPaused;
 
-  private:
-    Chimera::Shader* pShader;
-    GLuint vertexbuffer;
-    GLuint VertexArrayID;
+    // ray
+    Frame* frame;
+    State* state;
+    World* world;
+    double moveSpeed;
+    double rotSpeed;
 };
 
 #endif

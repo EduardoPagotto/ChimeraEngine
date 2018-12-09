@@ -9,15 +9,15 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesCore Video.cpp
-				 VideoDevice.cpp
+set (SourcesCore Canvas.cpp
+				 CanvasGL.cpp
+				 CanvasFB.cpp
 				 Timer.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
 				 Shader.cpp	
 				 Events.cpp
-				 FlowControl.cpp
-				 State.cpp)
+				 FlowControl.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}/libs)

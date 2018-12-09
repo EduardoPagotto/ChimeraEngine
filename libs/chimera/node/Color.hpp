@@ -5,26 +5,28 @@
 #include <cstring>
 #endif
 
+#include <glm/glm.hpp>
+
 namespace Chimera {
 
 class Color {
   public:
-    explicit Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f) : r(_r), g(_g), b(_b), a(_a) {}
-
-    Color(const Color& _c) : r(_c.r), g(_c.g), b(_c.b), a(_c.a) {}
-
-    void set(const Color _c) {
-        r = _c.r;
-        g = _c.g;
-        b = _c.b;
-        a = _c.a;
+    explicit Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f) {
+        value[0] = _r;
+        value[1] = _g;
+        value[2] = _b;
+        value[3] = _a;
     }
 
+    Color(const Color& _c) : value(_c.value) {}
+
+    void set(const Color _c) { value = _c.value; }
+
     void set(float _r, float _g, float _b, float _a) {
-        r = _r;
-        g = _g;
-        b = _b;
-        a = _a;
+        value[0] = _r;
+        value[1] = _g;
+        value[2] = _b;
+        value[3] = _a;
     }
 
     static const Color ZERO;
@@ -34,57 +36,35 @@ class Color {
     static const Color GREEN;
     static const Color BLUE;
 
-    bool operator==(const Color& rhs) const;
-    bool operator!=(const Color& rhs) const;
+    bool operator==(const Color& rhs) const { return (value == rhs.value); }
+    bool operator!=(const Color& rhs) const { return !(*this == rhs); }
 
     Color operator=(const Color& other) {
-        r = other.r;
-        g = other.g;
-        b = other.b;
-        a = other.a;
-
+        value = other.value;
         return *this;
     }
 
     Color operator+(const Color& other) {
-        Color result(r + other.r, g + other.g, b + other.b, a + other.a);
-        return result;
+        glm::vec4 vv = value + other.value;
+        return Color(vv[0], vv[1], vv[2], vv[3]);
     }
 
-    /// Array accessor operator
-    inline float operator[](const size_t i) const { return *(&r + i); }
+    // Array accessor operator
+    inline float operator[](const size_t i) const { return *(&value[i]); }
 
-    /// Array accessor operator
-    inline float& operator[](const size_t i) { return *(&r + i); }
+    // Array accessor operator
+    inline float& operator[](const size_t i) { return *(&value[i]); }
 
-    inline float* ptr() { return &r; }
+    inline float* ptr() { return &value[0]; }
 
-    inline const float* ptr() const { return &r; }
+    inline const float* ptr() const { return &value[0]; }
 
     void saturate(void);
 
-    Color saturateCopy(void) const {
-        Color ret = *this;
-        ret.saturate();
-        return ret;
-    }
+    Color saturateCopy(void) const;
 
-    union {
-        float value[4];
-        struct {
-            float r, g, b, a;
-        };
-    };
+    glm::vec4 value;
 };
-
-// struct Material {
-//    Color   diffuse;        /* Diffuse color RGBA */
-//    Color   ambient;        /* Ambient color RGB */
-//    Color   specular;       /* Specular 'shininess' */
-//    Color   emissive;       /* Emissive color RGB */
-//	float  shininess;
-//};
-
 } // namespace Chimera
 
 #endif

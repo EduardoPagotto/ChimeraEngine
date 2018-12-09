@@ -8,7 +8,7 @@
 
 #include <map>
 
-#include "chimera/core/VideoDevice.hpp"
+#include "chimera/core/CanvasGL.hpp"
 
 #ifdef OVR_SET_TO_USE
 #include "OvrDevice.hpp"
@@ -58,8 +58,8 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        Chimera::Video* video =
-            new Chimera::VideoDevice(canvas["w"].as<int>(), canvas["h"].as<int>(), screen["name"].as<std::string>());
+        Chimera::CanvasGL* video =
+            new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         // Gerenciador do grapho de cena
         Chimera::SceneMng* sceneMng = new Chimera::SceneMng();

@@ -16,6 +16,7 @@ bool LoadWorld(const char filename[], World* world) {
     // tamanho do mapa
     fgets(string, 1024, file);
     world->width = atoi(string);
+
     fgets(string, 1024, file);
     world->height = atoi(string);
 
@@ -49,39 +50,24 @@ void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t col
     uint8_t type = world.data[what.map.x + what.map.y * world.width];
 
     // selecione cor com base no tipo de bloco
-    uint8_t r, g, b, a;
-    a = 0;
+    uint32_t corVal = 0;
     switch (type) {
-        case 1: {
-            r = 0;
-            g = 255;
-            b = 0;
+        case 1:
+            corVal = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), 0, 255, 0, 0);
             break;
-        }
-        case 2: {
-            r = 155;
-            g = 155;
-            b = 155;
+        case 2:
+            corVal = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), 155, 155, 155, 0);
             break;
-        }
-        case 3: {
-            r = 0;
-            g = 0;
-            b = 255;
+        case 3:
+            corVal = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), 0, 0, 255, 0);
             break;
-        }
-        case 4: {
-            r = 255;
-            g = 0;
-            b = 0;
+        case 4:
+            corVal = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), 255, 0, 0, 0);
             break;
-        }
     }
 
     // calcular a altura da coluna
-
     uint32_t colh = abs(int(frame.height / what.distance));
-
     uint32_t cropup = 0;
     uint32_t cropdown = 0;
     uint32_t index = 0;
@@ -100,10 +86,7 @@ void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t col
     // desenhar coluna
     for (uint32_t c = cropup; c < (colh - cropdown); c++) {
         // desenhe o pixel da cor selecionada
-
-        uint32_t valor_final = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), r, g, b, a);
-        frame.data[index] = valor_final;
-
+        frame.data[index] = corVal;
         index += frame.width;
     }
 }
@@ -115,7 +98,7 @@ void RenderScene(State state, World world, Frame frame) {
         // calcular a posição e direção do feixe
         double cameraX = 2 * column / double(frame.width) - 1;
         glm::vec2 rayPos = state.pos;
-        glm::vec2 rayDir(state.dir.x + state.cam.x * cameraX, state.dir.y + state.cam.y * cameraX);
+        glm::vec2 rayDir = glm::vec2(state.dir.x + state.cam.x * cameraX, state.dir.y + state.cam.y * cameraX);
 
         // o bloco atual onde estamos
         glm::ivec2 map(int(rayPos.x), int(rayPos.y));
@@ -127,12 +110,8 @@ void RenderScene(State state, World world, Frame frame) {
         glm::vec2 deltaDist(sqrt(1 + (rayDir.y * rayDir.y) / (rayDir.x * rayDir.x)),
                             sqrt(1 + (rayDir.x * rayDir.x) / (rayDir.y * rayDir.y)));
 
-        double perpWallDist;
-
         // direção para onde ir (+1 ou -1), tanto para X quanto para Y
         glm::ivec2 step(0, 0);
-        int side; // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
-
         if (rayDir.x < 0) {
             step.x = -1;
             sideDist.x = (rayPos.x - map.x) * deltaDist.x;
@@ -150,6 +129,7 @@ void RenderScene(State state, World world, Frame frame) {
         }
 
         // vamos lançar o raio
+        int side; // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
         while ((world.data[map.x + map.y * world.width] == 0)) // até nos encontrarmos com uma parede ...
         {
             // vamos para o próximo bloco no mapa
@@ -164,6 +144,7 @@ void RenderScene(State state, World world, Frame frame) {
             }
         }
 
+        double perpWallDist;
         // cálculo do comprimento do raio
         if (side == 0) {
             perpWallDist = fabs((map.x - rayPos.x + (1 - step.x) / 2) / rayDir.x);

@@ -26,29 +26,27 @@ void Game::keyCapture(SDL_Keycode tecla) {
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_w: {
-            int currX = (int)state->pos.x;
-            int currY = (int)state->pos.y;
-            int nextX = (int)(state->pos.x + state->dir.x * moveSpeed * 2);
-            int nextY = (int)(state->pos.y + state->dir.y * moveSpeed * 2);
+            glm::ivec2 curr(state->pos.x, state->pos.y);
+            glm::ivec2 next((int)(state->pos.x + state->dir.x * moveSpeed * 2),
+                            (int)(state->pos.y + state->dir.y * moveSpeed * 2));
 
-            if (world->data[nextX + currY * world->width] == 0) {
+            if (world->data[next.x + curr.y * world->width] == 0) {
                 state->pos.x += state->dir.x * moveSpeed;
             }
 
-            if (world->data[currX + nextY * world->width] == 0) {
+            if (world->data[curr.x + next.y * world->width] == 0) {
                 state->pos.y += state->dir.y * moveSpeed;
             }
         } break;
         case SDLK_s: {
-            int currX = (int)state->pos.x;
-            int currY = (int)state->pos.y;
-            int nextX = (int)(state->pos.x - state->dir.x * moveSpeed * 2);
-            int nextY = (int)(state->pos.y - state->dir.y * moveSpeed * 2);
+            glm::ivec2 curr(state->pos.x, state->pos.y);
+            glm::ivec2 next((int)(state->pos.x - state->dir.x * moveSpeed * 2),
+                            (int)(state->pos.y - state->dir.y * moveSpeed * 2));
 
-            if (world->data[nextX + currY * world->width] == 0) {
+            if (world->data[next.x + curr.y * world->width] == 0) {
                 state->pos.x -= state->dir.x * moveSpeed;
             }
-            if (world->data[currX + nextY * world->width] == 0) {
+            if (world->data[curr.x + next.y * world->width] == 0) {
                 state->pos.y -= state->dir.y * moveSpeed;
             }
         } break;
@@ -86,18 +84,15 @@ void Game::start() {
 
     // init framebuffer
     frame = new Frame;
-    frame->data = pCanvas->getPixels(); // new TrueColorPixel[SCREEN_W * SCREEN_H];
+    frame->data = pCanvas->getPixels();
     frame->width = pCanvas->getWidth();
     frame->height = pCanvas->getHeight();
 
     // estado de inicialização
     state = new State;
-    state->pos.x = 3;
-    state->pos.y = 3;
-    state->dir.x = -1;
-    state->dir.y = 0;
-    state->cam.x = 0;
-    state->cam.y = FOV;
+    state->pos = glm::vec2(3, 3);
+    state->dir = glm::vec2(-1, 0);
+    state->cam = glm::vec2(0, FOV);
 
     world = new World;
 

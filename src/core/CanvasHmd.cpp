@@ -1,4 +1,4 @@
-#include "chimera/core/HmdDevice.hpp"
+#include "chimera/core/CanvasHmd.hpp"
 #include "chimera/core/Exception.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>

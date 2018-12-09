@@ -34,7 +34,7 @@ endif(OVR_SET_TO_USE)
 
 if (HMD_Z1_SET_TO_USE)
 	message(STATUS "HMD_Z1 Incluido no Projeto")
-	set(SourcesCore ${SourcesCore} HmdDevice.cpp) #adiciona o cpp
+	set(SourcesCore ${SourcesCore} CanvasHmd.cpp) #adiciona o cpp
 endif(HMD_Z1_SET_TO_USE)
 
 # Define o Target

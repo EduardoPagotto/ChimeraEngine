@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_VIDEO_DEVICE__HPP
-#define __CHIMERA_VIDEO_DEVICE__HPP
+#ifndef __CHIMERA_CANVAS_GL__HPP
+#define __CHIMERA_CANVAS_GL__HPP
 
 #include <GL/glew.h>
 
@@ -26,12 +26,7 @@ class CanvasGL : public Canvas {
 
     glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
 
-    // TODO subistituir o executeViewPerspective
-    // virtual void perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
-    // GLdouble zFar );
-
     virtual int getTotEyes() { return 1; }
-    // virtual void executeViewOrto ( int eye );
 
     void initGL();
     void afterStart();

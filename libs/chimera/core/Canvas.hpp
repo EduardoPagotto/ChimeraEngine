@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_VIDEO__HPP
-#define __CHIMERA_VIDEO__HPP
+#ifndef __CHIMERA_CANVAS__HPP
+#define __CHIMERA_CANVAS__HPP
 
 #define GLEW_STATIC
 

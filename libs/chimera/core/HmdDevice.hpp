@@ -1,52 +1,41 @@
-#ifndef __CHIMERA__HDM_DEVICE__HPP
-#define __CHIMERA__HDM_DEVICE__HPP
+#ifndef __CHIMERA_CANVAS_HDM__HPP
+#define __CHIMERA_CANVAS_HDM__HPP
+
+#include <GL/glew.h>
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+#include <glm/glm.hpp>
 
 #include "chimera/core/Canvas.hpp"
 
 namespace Chimera {
 
-// struct Canvas {
-//     int w;
-//     int h;
-// };
+class CanvasHmd : public Canvas {
+  public:
+    CanvasHmd(const std::string& _title, int _width, int _height);
+    virtual ~CanvasHmd();
 
-// struct HMD {
-//     Canvas resolution;
-// };
+    virtual void before() override;
+    virtual void after() override;
+    virtual void toggleFullScreen() override;
+    virtual void reshape(int _width, int _height) override;
 
-// class HmdDevice : public Video {
-//   public:
-//     HmdDevice(std::string _nome);
-//     HmdDevice(int _width, int _height, std::string _nome);
-//     virtual ~HmdDevice();
+    glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far, int _eye);
 
-//     virtual void initDraw();
-//     virtual void endDraw();
-//     virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
-//                                                      int _eye);
+    glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
 
-//     // TODO subistituir o executeViewPerspective
-//     // virtual void perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
-//     // GLdouble zFar );
+    virtual int getTotEyes() { return 2; }
 
-//     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex); // virtual void executeViewOrto ( int eye );
+    void initGL();
+    void afterStart();
+    void restoreMatrix();
+    std::string getVersaoOpenGL();
 
-//     virtual void reshape(int _w, int _h);
-//     virtual void toggleFullScreen();
-
-//     virtual int getTotEyes() { return 2; }
-
-//   private:
-//     void initDevice();
-
-//     GLuint fbo;
-//     GLuint render_buf;
-
-//     // HMD hmd;
-//     Canvas fbSize;
-//     // bool fullscreenStatus;
-//     // SDL_Point winPosPrev;
-// };
+  private:
+    SDL_GLContext context;
+};
 } // namespace Chimera
 
 #endif

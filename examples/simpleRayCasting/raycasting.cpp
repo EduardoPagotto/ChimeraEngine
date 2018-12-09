@@ -118,67 +118,63 @@ void RenderScene(State state, World world, Frame frame) {
         glm::vec2 rayDir(state.dir.x + state.cam.x * cameraX, state.dir.y + state.cam.y * cameraX);
 
         // o bloco atual onde estamos
-        // int mapX = int(rayPos.x);
-        // int mapY = int(rayPos.y);
         glm::ivec2 map(int(rayPos.x), int(rayPos.y));
 
         // comprimento do feixe da posição atual para o próximo bloco
-        double sideDistX;
-        double sideDistY;
+        glm::vec2 sideDist;
 
         // comprimento do raio de um bloco para outro
-        double deltaDistX = sqrt(1 + (rayDir.y * rayDir.y) / (rayDir.x * rayDir.x));
-        double deltaDistY = sqrt(1 + (rayDir.x * rayDir.x) / (rayDir.y * rayDir.y));
+        glm::vec2 deltaDist(sqrt(1 + (rayDir.y * rayDir.y) / (rayDir.x * rayDir.x)),
+                            sqrt(1 + (rayDir.x * rayDir.x) / (rayDir.y * rayDir.y)));
+
         double perpWallDist;
 
         // direção para onde ir (+1 ou -1), tanto para X quanto para Y
-        int stepX;
-        int stepY;
+        glm::ivec2 step(0, 0);
         int side; // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
 
         if (rayDir.x < 0) {
-            stepX = -1;
-            sideDistX = (rayPos.x - map.x) * deltaDistX;
+            step.x = -1;
+            sideDist.x = (rayPos.x - map.x) * deltaDist.x;
         } else {
-            stepX = 1;
-            sideDistX = (map.x + 1.0 - rayPos.x) * deltaDistX;
+            step.x = 1;
+            sideDist.x = (map.x + 1.0 - rayPos.x) * deltaDist.x;
         }
 
         if (rayDir.y < 0) {
-            stepY = -1;
-            sideDistY = (rayPos.y - map.y) * deltaDistY;
+            step.y = -1;
+            sideDist.y = (rayPos.y - map.y) * deltaDist.y;
         } else {
-            stepY = 1;
-            sideDistY = (map.y + 1.0 - rayPos.y) * deltaDistY;
+            step.y = 1;
+            sideDist.y = (map.y + 1.0 - rayPos.y) * deltaDist.y;
         }
 
         // vamos lançar o raio
         while ((world.data[map.x + map.y * world.width] == 0)) // até nos encontrarmos com uma parede ...
         {
             // vamos para o próximo bloco no mapa
-            if (sideDistX < sideDistY) {
-                sideDistX += deltaDistX;
-                map.x += stepX;
+            if (sideDist.x < sideDist.y) {
+                sideDist.x += deltaDist.x;
+                map.x += step.x;
                 side = 0;
             } else {
-                sideDistY += deltaDistY;
-                map.y += stepY;
+                sideDist.y += deltaDist.y;
+                map.y += step.y;
                 side = 1;
             }
         }
 
         // cálculo do comprimento do raio
         if (side == 0) {
-            perpWallDist = fabs((map.x - rayPos.x + (1 - stepX) / 2) / rayDir.x);
+            perpWallDist = fabs((map.x - rayPos.x + (1 - step.x) / 2) / rayDir.x);
         } else {
-            perpWallDist = fabs((map.y - rayPos.y + (1 - stepY) / 2) / rayDir.y);
+            perpWallDist = fabs((map.y - rayPos.y + (1 - step.y) / 2) / rayDir.y);
         }
 
         // cobrar RayHit com as informações para desenhar a coluna
         RayHit what;
         what.distance = perpWallDist;
-        what.map.x = map.x;
-        what.map.y = map.y;
+        what.map = map;
         what.side = side;
         what.rayDir = rayDir;
 
@@ -186,5 +182,3 @@ void RenderScene(State state, World world, Frame frame) {
         DrawColumn(what, world, state, frame, column);
     }
 }
-
-// void DrawScene(Display& display, Frame frame) { display.update(frame.data); }

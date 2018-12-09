@@ -46,7 +46,7 @@ bool LoadWorld(const char filename[], World* world) {
 
 void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t column) {
     // tipo de bloco detectado
-    uint8_t type = world.data[what.mapX + what.mapY * world.width];
+    uint8_t type = world.data[what.map.x + what.map.y * world.width];
 
     // selecione cor com base no tipo de bloco
     uint8_t r, g, b, a;
@@ -109,27 +109,18 @@ void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t col
 }
 
 void RenderScene(State state, World world, Frame frame) {
-    // uint32_t i = 0;
-
-    // int tamanho_frame = (frame.width * frame.height);
-    // for (i = 0; i < tamanho_frame; i++) {
-    //     // // FIXME: colocar em ordem o RGBA
-    //     uint32_t valZero = 0;
-    //     frame.data[i] = 0;
-    // }
 
     for (uint32_t column = 0; column < frame.width; column++) // Para cada coluna
     {
         // calcular a posição e direção do feixe
         double cameraX = 2 * column / double(frame.width) - 1;
-        double rayPosX = state.posx;
-        double rayPosY = state.posy;
-        double rayDirX = state.dirx + state.camx * cameraX;
-        double rayDirY = state.diry + state.camy * cameraX;
+        glm::vec2 rayPos = state.pos;
+        double rayDirX = state.dir.x + state.cam.x * cameraX;
+        double rayDirY = state.dir.y + state.cam.y * cameraX;
 
         // o bloco atual onde estamos
-        int mapX = int(rayPosX);
-        int mapY = int(rayPosY);
+        int mapX = int(rayPos.x);
+        int mapY = int(rayPos.y);
 
         // comprimento do feixe da posição atual para o próximo bloco
         double sideDistX;
@@ -147,18 +138,18 @@ void RenderScene(State state, World world, Frame frame) {
 
         if (rayDirX < 0) {
             stepX = -1;
-            sideDistX = (rayPosX - mapX) * deltaDistX;
+            sideDistX = (rayPos.x - mapX) * deltaDistX;
         } else {
             stepX = 1;
-            sideDistX = (mapX + 1.0 - rayPosX) * deltaDistX;
+            sideDistX = (mapX + 1.0 - rayPos.x) * deltaDistX;
         }
 
         if (rayDirY < 0) {
             stepY = -1;
-            sideDistY = (rayPosY - mapY) * deltaDistY;
+            sideDistY = (rayPos.y - mapY) * deltaDistY;
         } else {
             stepY = 1;
-            sideDistY = (mapY + 1.0 - rayPosY) * deltaDistY;
+            sideDistY = (mapY + 1.0 - rayPos.y) * deltaDistY;
         }
 
         // vamos lançar o raio
@@ -178,19 +169,19 @@ void RenderScene(State state, World world, Frame frame) {
 
         // cálculo do comprimento do raio
         if (side == 0) {
-            perpWallDist = fabs((mapX - rayPosX + (1 - stepX) / 2) / rayDirX);
+            perpWallDist = fabs((mapX - rayPos.x + (1 - stepX) / 2) / rayDirX);
         } else {
-            perpWallDist = fabs((mapY - rayPosY + (1 - stepY) / 2) / rayDirY);
+            perpWallDist = fabs((mapY - rayPos.y + (1 - stepY) / 2) / rayDirY);
         }
 
         // cobrar RayHit com as informações para desenhar a coluna
         RayHit what;
         what.distance = perpWallDist;
-        what.mapX = mapX;
-        what.mapY = mapY;
+        what.map.x = mapX;
+        what.map.y = mapY;
         what.side = side;
-        what.rayDirX = rayDirX;
-        what.rayDirY = rayDirY;
+        what.rayDir.x = rayDirX;
+        what.rayDir.y = rayDirY;
 
         // desenhe a coluna
         DrawColumn(what, world, state, frame, column);

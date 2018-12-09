@@ -26,47 +26,47 @@ void Game::keyCapture(SDL_Keycode tecla) {
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_w: {
-            int currX = (int)state->posx;
-            int currY = (int)state->posy;
-            int nextX = (int)(state->posx + state->dirx * moveSpeed * 2);
-            int nextY = (int)(state->posy + state->diry * moveSpeed * 2);
+            int currX = (int)state->pos.x;
+            int currY = (int)state->pos.y;
+            int nextX = (int)(state->pos.x + state->dir.x * moveSpeed * 2);
+            int nextY = (int)(state->pos.y + state->dir.y * moveSpeed * 2);
 
             if (world->data[nextX + currY * world->width] == 0) {
-                state->posx += state->dirx * moveSpeed;
+                state->pos.x += state->dir.x * moveSpeed;
             }
 
             if (world->data[currX + nextY * world->width] == 0) {
-                state->posy += state->diry * moveSpeed;
+                state->pos.y += state->dir.y * moveSpeed;
             }
         } break;
         case SDLK_s: {
-            int currX = (int)state->posx;
-            int currY = (int)state->posy;
-            int nextX = (int)(state->posx - state->dirx * moveSpeed * 2);
-            int nextY = (int)(state->posy - state->diry * moveSpeed * 2);
+            int currX = (int)state->pos.x;
+            int currY = (int)state->pos.y;
+            int nextX = (int)(state->pos.x - state->dir.x * moveSpeed * 2);
+            int nextY = (int)(state->pos.y - state->dir.y * moveSpeed * 2);
 
             if (world->data[nextX + currY * world->width] == 0) {
-                state->posx -= state->dirx * moveSpeed;
+                state->pos.x -= state->dir.x * moveSpeed;
             }
             if (world->data[currX + nextY * world->width] == 0) {
-                state->posy -= state->diry * moveSpeed;
+                state->pos.y -= state->dir.y * moveSpeed;
             }
         } break;
         case SDLK_a: {
-            double oldDirX = state->dirx;
-            state->dirx = state->dirx * cos(rotSpeed) - state->diry * sin(rotSpeed);
-            state->diry = oldDirX * sin(rotSpeed) + state->diry * cos(rotSpeed);
-            double oldcamx = state->camx;
-            state->camx = state->camx * cos(rotSpeed) - state->camy * sin(rotSpeed);
-            state->camy = oldcamx * sin(rotSpeed) + state->camy * cos(rotSpeed);
+            double oldDirX = state->dir.x;
+            state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
+            state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
+            double oldcamx = state->cam.x;
+            state->cam.x = state->cam.x * cos(rotSpeed) - state->cam.y * sin(rotSpeed);
+            state->cam.y = oldcamx * sin(rotSpeed) + state->cam.y * cos(rotSpeed);
         } break;
         case SDLK_d: {
-            double oldDirX = state->dirx;
-            state->dirx = state->dirx * cos(-rotSpeed) - state->diry * sin(-rotSpeed);
-            state->diry = oldDirX * sin(-rotSpeed) + state->diry * cos(-rotSpeed);
-            double oldcamx = state->camx;
-            state->camx = state->camx * cos(-rotSpeed) - state->camy * sin(-rotSpeed);
-            state->camy = oldcamx * sin(-rotSpeed) + state->camy * cos(-rotSpeed);
+            double oldDirX = state->dir.x;
+            state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
+            state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);
+            double oldcamx = state->cam.x;
+            state->cam.x = state->cam.x * cos(-rotSpeed) - state->cam.y * sin(-rotSpeed);
+            state->cam.y = oldcamx * sin(-rotSpeed) + state->cam.y * cos(-rotSpeed);
         } break;
         default:
             break;
@@ -92,12 +92,12 @@ void Game::start() {
 
     // estado de inicialização
     state = new State;
-    state->posx = 3;
-    state->posy = 3;
-    state->dirx = -1;
-    state->diry = 0;
-    state->camx = 0;
-    state->camy = FOV;
+    state->pos.x = 3;
+    state->pos.y = 3;
+    state->dir.x = -1;
+    state->dir.y = 0;
+    state->cam.x = 0;
+    state->cam.y = FOV;
 
     world = new World;
 

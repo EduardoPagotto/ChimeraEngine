@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <string>
 
+#include <glm/glm.hpp>
 // ref: http://www.gianlucaghettini.net/motore-3d-in-c-raycasting/
 
 // Field Of View
@@ -26,21 +27,16 @@ struct World {
 
 // estado da câmera (posição, direção, plano de projeção)
 struct State {
-    double posx;
-    double posy;
-    double dirx;
-    double diry;
-    double camx;
-    double camy;
+    glm::vec2 pos;
+    glm::vec2 dir;
+    glm::vec2 cam;
 };
 
 // informação de raio
 struct RayHit {
     double distance;
-    int mapX;
-    int mapY;
-    double rayDirX;
-    double rayDirY;
+    glm::ivec2 map;
+    glm::vec2 rayDir;
     int side;
 };
 

@@ -6,8 +6,6 @@
 
 #include "Polygon.hpp"
 
-enum SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
-
 class Octahedron {
   public:
     Octahedron();
@@ -33,29 +31,6 @@ class Cube {
     void setFaces(Polygon* face);
     Vertex* getColors();
     void setColors(Vertex* cols);
-};
-
-class List {
-  public:
-    int nextindex;
-    Polygon* planes;
-    int noofplanes;
-    List();
-    void Add(Polygon* plane);
-    Polygon* Next();
-};
-
-class Node {
-  public:
-    Polygon partition;
-    List polygons;
-    Node* frontNode;
-    Node* backNode;
-    Node();
-    void BuildTree(Node* rootNode, List polygons);
-    SIDE classifyPolygon(Polygon* cPolygon);
-    float classify(Vertex* plane, Vertex* eye);
-    void DrawTree(Node* finaltree, Vertex* eyepoint, List* finalfaces);
 };
 
 #endif

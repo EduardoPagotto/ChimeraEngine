@@ -7,6 +7,9 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include <GL/freeglut.h>
 
+#include "List.hpp"
+#include "Node.hpp"
+
 #define canvas_width 400
 #define canvas_height 400
 #define canvas_name "Assignment 3: Visibility : Manish Lal Joshi"

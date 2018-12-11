@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "Draw.hpp"
-#include "VboIndexer.hpp"
+#include "chimera/core/VboIndexer.hpp"
 #include <glm/glm.hpp>
 
 #include <spdlog/spdlog.h>

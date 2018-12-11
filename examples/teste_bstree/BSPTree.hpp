@@ -1,36 +1,12 @@
+#ifndef __BSTREE__HPP
+#define __BSTREE__HPP
 
 // Ref:
 // https://miztakenjoshi.wordpress.com/2009/11/06/hidden-surface-removal-using-binary-space-partition-bsp-algorithm-in-opengl/
 
+#include "Polygon.hpp"
+
 enum SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
-
-class Vertex {
-  public:
-    float x;
-    float y;
-    float z;
-    Vertex();
-    Vertex(float x, float y, float z);
-    ~Vertex();
-    float* getPoint();
-    void setPoint(float x, float y, float z);
-};
-
-class Polygon {
-  public:
-    int id;
-    Vertex vertices[3];
-    Vertex normal;
-    Vertex color;
-    Polygon();
-    ~Polygon();
-    Vertex* getVertices();
-    void setVertices(Vertex p1, Vertex p2, Vertex p3);
-    Vertex getNormals();
-    void setNormals(Vertex n);
-    void setColor(Vertex col);
-    Vertex getColor();
-};
 
 class Octahedron {
   public:
@@ -81,3 +57,5 @@ class Node {
     float classify(Vertex* plane, Vertex* eye);
     void DrawTree(Node* finaltree, Vertex* eyepoint, List* finalfaces);
 };
+
+#endif

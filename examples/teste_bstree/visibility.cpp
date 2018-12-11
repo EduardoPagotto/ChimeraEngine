@@ -28,13 +28,6 @@ Note: I have tested the application with my_setup.h attached with the source.
 
 ***************************************************************************************/
 
-/*Since the cube is 100 units of length. these points will be used to create a cube
-of such unit length.*/
-GLfloat cube_vertices[][3] = {{-100.0, -100.0, -100.0}, {100.0, -100.0, -100.0}, {100.0, 100.0, -100.0},
-                              {-100.0, 100.0, -100.0},  {-100.0, -100.0, 100.0}, {100.0, -100.0, 100.0},
-                              {100.0, 100.0, 100.0},    {-100.0, 100.0, 100.0}};
-GLfloat colors[8][3] = {{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}, {0, 0, 1}, {1, 0, 1}, {1, 1, 1}, {0, 1, 1}};
-
 bool rotate = false;
 float rotationAngle = 0;
 float eyeX = 0;
@@ -206,35 +199,6 @@ void setOctahedran() {
     }
 }
 
-// this draw walls.
-void drawCube() {
-    // glColor3f(1,1,1);
-    Vertex* c = cub.getColors();
-    Polygon* p = cub.getFaces();
-    Vertex* n = cub.getNormal();
-    for (int i = 0; i < 10; i++) {
-        glColor3f(c[i].x, c[i].y, c[i].z);
-        glNormal3f(n[i].x, n[i].y, n[i].z);
-        glBegin(GL_TRIANGLES);
-        for (int j = 0; j < 3; j++)
-            glVertex3f(p[i].vertices[j].x, p[i].vertices[j].y, p[i].vertices[j].z);
-        glEnd();
-    }
-}
-// this draws octahedran
-void drawOctahedron() {
-    glColor3f(1, 0, 0);
-    Polygon* t = oct.getFaces();
-    for (int i = 0; i < 8; i++) {
-        Vertex* p = t[i].getVertices();
-        glNormal3f(t[i].normal.x, t[i].normal.y, t[i].normal.z);
-        glBegin(GL_TRIANGLES);
-        glVertex3f(p[0].x, p[0].y, p[0].z);
-        glVertex3f(p[1].x, p[1].y, p[1].z);
-        glVertex3f(p[2].x, p[2].y, p[2].z);
-        glEnd();
-    }
-}
 // this function is registered to handle special key function.
 void special_handler(int code, int x, int y) {
     if (code == GLUT_KEY_UP) {

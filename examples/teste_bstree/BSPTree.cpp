@@ -5,6 +5,7 @@
 //  --List
 
 bool v = false;
+
 List::List() {
     List::noofplanes = 0;
     List::nextindex = 0;
@@ -72,14 +73,19 @@ void Polygon::setColor(Vertex col) {
 }
 
 Vertex* Polygon::getVertices() { return Polygon::vertices; }
+
 Vertex Polygon::getNormals() { return Polygon::normal; }
 
 //  --Cube
 
 Cube::Cube() {}
+
 Cube::~Cube() {}
+
 Polygon* Cube::getFaces() { return Cube::faces; }
+
 Vertex* Cube::getNormal() { return Cube::normals; }
+
 void Cube::setFaces(Polygon* face) {
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 3; j++) {
@@ -89,6 +95,7 @@ void Cube::setFaces(Polygon* face) {
         }
     }
 }
+
 void Cube::setNormal(Vertex* normal) {
     for (int i = 0; i < 10; i++) {
         Cube::normals[i].x = normal[i].x;
@@ -107,6 +114,7 @@ void Cube::setColors(Vertex* cols) {
 //  --Vertex
 
 Vertex::Vertex() {}
+
 Vertex::~Vertex() {
     Vertex::x = 0;
     Vertex::y = 0;
@@ -140,6 +148,7 @@ Octahedron::Octahedron() {}
 Octahedron::~Octahedron() {}
 
 Polygon* Octahedron::getFaces() { return Octahedron::faces; }
+
 void Octahedron::setFaces(Polygon* inface) {
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 3; j++) {

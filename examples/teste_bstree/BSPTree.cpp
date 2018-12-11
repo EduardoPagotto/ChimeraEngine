@@ -34,7 +34,6 @@ glm::vec3* Cube::getColors() { return Cube::colors; }
 
 void Cube::setColors(glm::vec3* cols) {
     for (int i = 0; i < 10; i++)
-        // Cube::colors[i].setPoint(cols[i].x, cols[i].y, cols[i].z);
         Cube::colors[i] = cols[i];
 }
 

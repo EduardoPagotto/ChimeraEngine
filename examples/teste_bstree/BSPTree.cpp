@@ -2,11 +2,7 @@
 #include <malloc.h>
 #include <stdio.h>
 
-//  --List
-
 bool v = true;
-
-//  --Cube
 
 Cube::Cube() {}
 
@@ -14,7 +10,7 @@ Cube::~Cube() {}
 
 Polygon* Cube::getFaces() { return Cube::faces; }
 
-Vertex* Cube::getNormal() { return Cube::normals; }
+glm::vec3* Cube::getNormal() { return Cube::normals; }
 
 void Cube::setFaces(Polygon* face) {
     for (int i = 0; i < 10; i++) {
@@ -26,7 +22,7 @@ void Cube::setFaces(Polygon* face) {
     }
 }
 
-void Cube::setNormal(Vertex* normal) {
+void Cube::setNormal(glm::vec3* normal) {
     for (int i = 0; i < 10; i++) {
         Cube::normals[i].x = normal[i].x;
         Cube::normals[i].y = normal[i].y;
@@ -34,16 +30,13 @@ void Cube::setNormal(Vertex* normal) {
     }
 }
 
-Vertex* Cube::getColors() { return Cube::colors; }
+glm::vec3* Cube::getColors() { return Cube::colors; }
 
-void Cube::setColors(Vertex* cols) {
+void Cube::setColors(glm::vec3* cols) {
     for (int i = 0; i < 10; i++)
-        Cube::colors[i].setPoint(cols[i].x, cols[i].y, cols[i].z);
+        // Cube::colors[i].setPoint(cols[i].x, cols[i].y, cols[i].z);
+        Cube::colors[i] = cols[i];
 }
-
-//  --Vertex
-
-// --Octahedron
 
 Octahedron::Octahedron() {}
 
@@ -64,9 +57,9 @@ void Octahedron::setFaces(Polygon* inface) {
     }
 }
 
-Vertex* Octahedron::getVertices() { return Octahedron::vertices; }
+glm::vec3* Octahedron::getVertices() { return Octahedron::vertices; }
 
-void Octahedron::setVertices(Vertex* verts) {
+void Octahedron::setVertices(glm::vec3* verts) {
     for (int i = 0; i < 6; i++) {
         Octahedron::vertices[i].x = verts[i].x;
         Octahedron::vertices[i].y = verts[i].y;

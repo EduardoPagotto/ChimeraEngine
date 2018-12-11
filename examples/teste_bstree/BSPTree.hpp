@@ -10,10 +10,10 @@ class Octahedron {
   public:
     Octahedron();
     ~Octahedron();
-    Vertex vertices[6];
+    glm::vec3 vertices[6];
     Polygon faces[8];
-    Vertex* getVertices();
-    void setVertices(Vertex* verts);
+    glm::vec3* getVertices();
+    void setVertices(glm::vec3* verts);
     Polygon* getFaces();
     void setFaces(Polygon* faces);
 };
@@ -23,14 +23,14 @@ class Cube {
     Cube();
     ~Cube();
     Polygon faces[10];
-    Vertex normals[10];
-    Vertex* getNormal();
-    Vertex colors[10];
-    void setNormal(Vertex* normal);
+    glm::vec3 normals[10];
+    glm::vec3* getNormal();
+    glm::vec3 colors[10];
+    void setNormal(glm::vec3* normal);
     Polygon* getFaces();
     void setFaces(Polygon* face);
-    Vertex* getColors();
-    void setColors(Vertex* cols);
+    glm::vec3* getColors();
+    void setColors(glm::vec3* cols);
 };
 
 #endif

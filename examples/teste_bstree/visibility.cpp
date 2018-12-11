@@ -76,54 +76,54 @@ void orthographicMatrixMul() {
 
 void setCube() {
     Polygon p[10];
-    Vertex v[10];
-    Vertex n[10];
-    Vertex c[10];
-    v[0].setPoint(-100, -100, 100);
-    v[1].setPoint(-100, 100, 100);
-    v[2].setPoint(100, 100, 100);
-    v[3].setPoint(100, -100, 100);
-    v[4].setPoint(-100, -100, -100);
-    v[5].setPoint(-100, 100, -100);
-    v[6].setPoint(100, 100, -100);
-    v[7].setPoint(100, -100, -100);
+    glm::vec3 v[10];
+    glm::vec3 n[10];
+    glm::vec3 c[10];
+    v[0] = glm::vec3(-100, -100, 100);
+    v[1] = glm::vec3(-100, 100, 100);
+    v[2] = glm::vec3(100, 100, 100);
+    v[3] = glm::vec3(100, -100, 100);
+    v[4] = glm::vec3(-100, -100, -100);
+    v[5] = glm::vec3(-100, 100, -100);
+    v[6] = glm::vec3(100, 100, -100);
+    v[7] = glm::vec3(100, -100, -100);
 
     // Right Wall
     p[0].setVertices(v[2], v[3], v[7]);
-    n[0].setPoint(1, 0, 0);
-    c[0].setPoint(1, 1, 1);
+    n[0] = glm::vec3(1, 0, 0);
+    c[0] = glm::vec3(1, 1, 1);
     p[1].setVertices(v[2], v[7], v[6]);
-    n[1].setPoint(1, 0, 0);
-    c[1].setPoint(1, 1, 1);
+    n[1] = glm::vec3(1, 0, 0);
+    c[1] = glm::vec3(1, 1, 1);
 
     // Back Wall
     p[2].setVertices(v[4], v[5], v[6]);
-    n[2].setPoint(0, 0, -1);
-    c[2].setPoint(1, 1, 1);
+    n[2] = glm::vec3(0, 0, -1);
+    c[2] = glm::vec3(1, 1, 1);
     p[3].setVertices(v[4], v[6], v[7]);
-    n[3].setPoint(0, 0, -1);
-    c[3].setPoint(1, 1, 1);
+    n[3] = glm::vec3(0, 0, -1);
+    c[3] = glm::vec3(1, 1, 1);
     // Left Wall
     p[4].setVertices(v[5], v[4], v[0]);
-    n[4].setPoint(-1, 0, 0);
-    c[4].setPoint(1, 1, 1);
+    n[4] = glm::vec3(-1, 0, 0);
+    c[4] = glm::vec3(1, 1, 1);
     p[5].setVertices(v[5], v[0], v[1]);
-    n[5].setPoint(-1, 0, 0);
-    c[5].setPoint(1, 1, 1);
+    n[5] = glm::vec3(-1, 0, 0);
+    c[5] = glm::vec3(1, 1, 1);
     // Floor
     p[6].setVertices(v[3], v[7], v[4]);
-    n[6].setPoint(0, -1, 0);
-    c[6].setPoint(0, 0, 0);
+    n[6] = glm::vec3(0, -1, 0);
+    c[6] = glm::vec3(0, 0, 0);
     p[7].setVertices(v[3], v[4], v[0]);
-    n[7].setPoint(0, -1, 0);
-    c[7].setPoint(0, 0, 0);
+    n[7] = glm::vec3(0, -1, 0);
+    c[7] = glm::vec3(0, 0, 0);
     // Ceiling
     p[8].setVertices(v[2], v[6], v[5]);
-    n[8].setPoint(0, 1, 0);
-    c[8].setPoint(0, 0, 0);
+    n[8] = glm::vec3(0, 1, 0);
+    c[8] = glm::vec3(0, 0, 0);
     p[9].setVertices(v[2], v[5], v[1]);
-    n[9].setPoint(0, 1, 0);
-    c[9].setPoint(0, 0, 0);
+    n[9] = glm::vec3(0, 1, 0);
+    c[9] = glm::vec3(0, 0, 0);
 
     cub.setColors(c);
     cub.setFaces(p);
@@ -138,16 +138,13 @@ void setCube() {
 }
 
 // computes normal
-Vertex computeNormal(Vertex A, Vertex B, Vertex C) {
-    Vertex* BC = new Vertex();
-    Vertex* BA = new Vertex();
-    BC->setPoint(C.x - B.x, C.y - B.y, C.z - B.z);
-    BA->setPoint(A.x - B.x, A.y - B.y, A.z - B.z);
-    Vertex N;
-    N.setPoint(BC->y * BA->z - BA->y * BC->z, -(BC->x * BA->z - BA->x * BC->z), BC->x * BA->y - BA->x * BC->y);
+glm::vec3 computeNormal(glm::vec3 A, glm::vec3 B, glm::vec3 C) {
+    glm::vec3 BC(C.x - B.x, C.y - B.y, C.z - B.z);
+    glm::vec3 BA(A.x - B.x, A.y - B.y, A.z - B.z);
+    glm::vec3 N(BC.y * BA.z - BA.y * BC.z, -(BC.x * BA.z - BA.x * BC.z), BC.x * BA.y - BA.x * BC.y);
     float f = sqrtf(N.x * N.x + N.y * N.y + N.z * N.z);
-    N.setPoint(N.x / f, N.y / f, N.z / f);
-    return N;
+
+    return glm::vec3(N.x / f, N.y / f, N.z / f);
 }
 
 // set lighting parameters
@@ -164,15 +161,15 @@ void setLightingParameters() {
 
 // set the octahedran parameters
 void setOctahedran() {
-    Vertex p[6];
+    glm::vec3 p[6];
     Polygon t[8];
 
-    p[0].setPoint(0, 50, 0);
-    p[1].setPoint(0, 0, -50);
-    p[2].setPoint(-50, 0, 0);
-    p[3].setPoint(50, 0, 0);
-    p[4].setPoint(0, 0, 50);
-    p[5].setPoint(0, -50, 0);
+    p[0] = glm::vec3(0, 50, 0);
+    p[1] = glm::vec3(0, 0, -50);
+    p[2] = glm::vec3(-50, 0, 0);
+    p[3] = glm::vec3(50, 0, 0);
+    p[4] = glm::vec3(0, 0, 50);
+    p[5] = glm::vec3(0, -50, 0);
     oct.setVertices(p);
 
     t[0].setVertices(p[0], p[1], p[2]);
@@ -193,8 +190,7 @@ void setOctahedran() {
     t[7].setNormals(computeNormal(p[5], p[2], p[4]));
 
     oct.setFaces(t);
-    Vertex c;
-    c.setPoint(1, 0, 0);
+    glm::vec3 c(1, 0, 0);
     for (int i = 0; i < 8; i++) {
         t[i].id = polygon_id++;
         t[i].setColor(c);
@@ -246,14 +242,14 @@ void display_func() {
     else
         gluLookAt(eyeX, eyeY, 75, 0, 0, 0, 0, 1, 0);
     setLightingParameters();
-    Vertex* eye = new Vertex();
-    eye->setPoint(eyeX, eyeY, 75);
+    glm::vec3 eye(eyeX, eyeY, 75);
+
     List* finalpl = new List();
-    node->DrawTree(root, eye, finalpl);
+    node->DrawTree(root, &eye, finalpl);
     finalpl->nextindex = 0;
     Polygon* fi = new Polygon();
     while ((fi = finalpl->Next()) != NULL) {
-        Vertex cc = fi->getColor();
+        glm::vec3 cc = fi->getColor();
         glColor3f(cc.x, cc.y, cc.z);
         glNormal3f(fi->normal.x, fi->normal.y, fi->normal.z);
         glBegin(GL_TRIANGLES);

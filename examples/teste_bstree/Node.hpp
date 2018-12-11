@@ -11,8 +11,8 @@ class Node {
     Node();
     void BuildTree(Node* rootNode, List polygons);
     SIDE classifyPolygon(Polygon* cPolygon);
-    float classify(Vertex* plane, Vertex* eye);
-    void DrawTree(Node* finaltree, Vertex* eyepoint, List* finalfaces);
+    float classify(glm::vec3* plane, glm::vec3* eye);
+    void DrawTree(Node* finaltree, glm::vec3* eyepoint, List* finalfaces);
 
     Polygon partition;
     List polygons;

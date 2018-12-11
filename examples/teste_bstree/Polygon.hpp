@@ -2,36 +2,23 @@
 #ifndef __POLYGON__HPP
 #define __POLYGON__HPP
 
-//#include <glm/glm.hpp>
-
-class Vertex {
-  public:
-    Vertex();
-    Vertex(float x, float y, float z);
-    ~Vertex();
-    float* getPoint();
-    void setPoint(float x, float y, float z);
-
-    float x;
-    float y;
-    float z;
-};
+#include <glm/glm.hpp>
 
 class Polygon {
   public:
     Polygon();
     ~Polygon();
-    Vertex* getVertices();
-    void setVertices(Vertex p1, Vertex p2, Vertex p3);
-    Vertex getNormals();
-    void setNormals(Vertex n);
-    void setColor(Vertex col);
-    Vertex getColor();
+    glm::vec3* getVertices();
+    void setVertices(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+    glm::vec3 getNormals();
+    void setNormals(glm::vec3 n);
+    void setColor(glm::vec3 col);
+    glm::vec3 getColor();
 
     int id;
-    Vertex vertices[3];
-    Vertex normal;
-    Vertex color;
+    glm::vec3 vertices[3];
+    glm::vec3 normal;
+    glm::vec3 color;
 };
 
 #endif

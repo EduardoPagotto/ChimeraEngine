@@ -26,7 +26,7 @@ SIDE Node::classifyPolygon(Polygon* cPolygon) {
         return IS_SPANNING;
 }
 
-float Node::classify(Vertex* normal, Vertex* eye) {
+float Node::classify(glm::vec3* normal, glm::vec3* eye) {
     float A = normal->x;
     float B = normal->y;
     float C = normal->z;
@@ -96,7 +96,7 @@ void Node::BuildTree(Node* tree, List polygons) {
     }
 }
 
-void Node::DrawTree(Node* finalTree, Vertex* eyePoint, List* finalFaces) {
+void Node::DrawTree(Node* finalTree, glm::vec3* eyePoint, List* finalFaces) {
     if (finalTree == NULL) {
         return;
     } else {

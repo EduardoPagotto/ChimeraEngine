@@ -219,7 +219,7 @@ void display_func() {
 
     List* finalpl = new List();
     node->DrawTree(root, &eye, finalpl);
-    finalpl->nextindex = 0;
+    finalpl->resetNext();
     Polygon* fi = new Polygon();
     while ((fi = finalpl->Next()) != NULL) {
         glm::vec3 cc = fi->color;

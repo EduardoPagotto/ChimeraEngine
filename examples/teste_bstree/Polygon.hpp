@@ -14,5 +14,7 @@ struct Polygon {
 void setPolygonVerticesAndCalcNormal(struct Polygon* p, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
 void setPolygonVertices(struct Polygon* p, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
 void computePolygonNormal(struct Polygon* p);
+void cpyPolygon(struct Polygon* _pSrc, struct Polygon* _pDst);
+struct Polygon* createCpyPolygon(struct Polygon* _pSrc);
 
 #endif

@@ -17,3 +17,19 @@ void setPolygonVerticesAndCalcNormal(struct Polygon* p, const glm::vec3& a, cons
     setPolygonVertices(p, a, b, c);
     computePolygonNormal(p);
 }
+
+struct Polygon* createCpyPolygon(struct Polygon* _pSrc) {
+    Polygon* p = new Polygon;
+    cpyPolygon(_pSrc, p);
+    return p;
+}
+
+void cpyPolygon(struct Polygon* _pSrc, struct Polygon* _pDst) {
+
+    for (int i = 0; i < 3; i++)
+        _pDst->vertices[i] = _pSrc->vertices[i];
+
+    _pDst->id = _pSrc->id;
+    _pDst->normal = _pSrc->normal;
+    _pDst->color = _pSrc->color;
+}

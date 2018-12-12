@@ -36,7 +36,8 @@ float Node::classify(glm::vec3* normal, glm::vec3* eye) {
 }
 
 void Node::BuildTree(Node* tree, List _polygons) {
-    _polygons.nextindex = 0;
+
+    _polygons.resetNext();
     // Initilizing the first root node.
     Polygon* root = _polygons.Next();
     tree->partition = *root;
@@ -45,6 +46,7 @@ void Node::BuildTree(Node* tree, List _polygons) {
         // printf("<---\n[%f %f %f] \n[%f %f %f] \n[%f %f
         // %f]\n--->\n",root->vertices[0].x,root->vertices[0].y,root->vertices[0].z,root->vertices[1].x,root->vertices[1].y,root->vertices[1].z,root->vertices[2].x,root->vertices[2].y,root->vertices[2].z);
     }
+
     // Add Plane to planar list.
     tree->polygons.Add(root);
     List front;
@@ -81,56 +83,59 @@ void Node::BuildTree(Node* tree, List _polygons) {
                 break;
         }
     }
+
     // If there are polygons in front side node.
-    if (front.noofplanes > 0) {
-        Node* f = new Node();
-        tree->frontNode = f;
+    if (front.size() > 0) {
+        tree->frontNode = new Node();
         BuildTree(tree->frontNode, front);
     }
 
     // If there are polygons in back side node.
-    if (behind.noofplanes > 0) {
-        Node* b = new Node();
-        tree->backNode = b;
+    if (behind.size() > 0) {
+        tree->backNode = new Node();
         BuildTree(tree->backNode, behind);
     }
 }
 
 void Node::DrawTree(Node* finalTree, glm::vec3* eyePoint, List* finalFaces) {
-    if (finalTree == NULL) {
-        return;
-    } else {
-        Polygon part = finalTree->partition;
-        float s = finalTree->classify(&part.normal, eyePoint);
-        if (v)
-            printf("%f\n", s);
-        if (s > 0) // TRAVERSE BACK
-        {
-            DrawTree(finalTree->backNode, eyePoint, finalFaces);
-            // finalFaces->Add(&finalTree->partition);
-            // STORE THE COORDINATES
-            finalTree->polygons.nextindex = 0;
-            Polygon* p = new Polygon();
-            while ((p = finalTree->polygons.Next()) != NULL) {
-                finalFaces->Add(p);
-            }
-            finalTree->polygons.nextindex = 0;
-            // END OF STORING
-            DrawTree(finalTree->frontNode, eyePoint, finalFaces);
 
-        } else // TRAVERSE FRONT
-        {
-            DrawTree(finalTree->frontNode, eyePoint, finalFaces);
-            // finalFaces->Add(&finalTree->partition);
-            // STORE THE COORDINATES
-            finalTree->polygons.nextindex = 0;
-            Polygon* p = new Polygon();
-            while ((p = finalTree->polygons.Next()) != NULL) {
-                finalFaces->Add(p);
-            }
-            finalTree->polygons.nextindex = 0;
-            // END OF STORING
-            DrawTree(finalTree->backNode, eyePoint, finalFaces);
-        }
+    if (finalTree == NULL)
+        return;
+
+    Polygon part = finalTree->partition;
+    float s = finalTree->classify(&part.normal, eyePoint);
+
+    if (v)
+        printf("%f\n", s);
+
+    Polygon* p = nullptr;
+
+    if (s > 0) {
+        // TRAVERSE BACK
+        DrawTree(finalTree->backNode, eyePoint, finalFaces);
+
+        // finalFaces->Add(&finalTree->partition);
+        // STORE THE COORDINATES
+        finalTree->polygons.resetNext();
+        while ((p = finalTree->polygons.Next()) != NULL)
+            finalFaces->Add(p);
+
+        // END OF STORING
+        finalTree->polygons.resetNext();
+        DrawTree(finalTree->frontNode, eyePoint, finalFaces);
+
+    } else {
+        // TRAVERSE FRONT
+        DrawTree(finalTree->frontNode, eyePoint, finalFaces);
+
+        // finalFaces->Add(&finalTree->partition);
+        // STORE THE COORDINATES
+        finalTree->polygons.resetNext();
+        while ((p = finalTree->polygons.Next()) != NULL)
+            finalFaces->Add(p);
+
+        // END OF STORING
+        finalTree->polygons.resetNext();
+        DrawTree(finalTree->backNode, eyePoint, finalFaces);
     }
 }

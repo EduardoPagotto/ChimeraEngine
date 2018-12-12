@@ -3,15 +3,19 @@
 
 #include "Polygon.hpp"
 
+#include <vector>
+
 class List {
   public:
     List();
     void Add(Polygon* plane);
     Polygon* Next();
+    void resetNext() { nextindex = 0; }
+    size_t size() { return lplanes.size(); }
 
+  private:
     int nextindex;
-    int noofplanes;
-    Polygon* planes;
+    std::vector<Polygon*> lplanes;
 };
 
 #endif

@@ -5,9 +5,9 @@
 
 #include <vector>
 
-class List {
+class ListPolygon {
   public:
-    List();
+    ListPolygon();
     void Add(Polygon* plane);
     Polygon* Next();
     void resetNext() { nextindex = 0; }

@@ -39,7 +39,7 @@ float centerY = 0;
 int polygon_id = 1;
 Node* root = new Node();
 Node* node = new Node();
-List* polygonList = new List();
+ListPolygon* polygonList = new ListPolygon();
 GLfloat lightPosition[] = {0, 99.9, 0, 1};
 bool moveeye = false;
 
@@ -217,7 +217,7 @@ void display_func() {
     setLightingParameters();
     glm::vec3 eye(eyeX, eyeY, 75);
 
-    List* finalpl = new List();
+    ListPolygon* finalpl = new ListPolygon();
     node->DrawTree(root, &eye, finalpl);
     finalpl->resetNext();
     Polygon* fi = new Polygon();

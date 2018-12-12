@@ -16,11 +16,11 @@ class Node {
     SIDE classifyPolygon(Polygon* cPolygon);
     float classify(glm::vec3* plane, glm::vec3* eye);
 
-    void BuildTree(Node* rootNode, List polygons);
-    void DrawTree(Node* finaltree, glm::vec3* eyepoint, List* finalfaces);
+    void BuildTree(Node* rootNode, ListPolygon polygons);
+    void DrawTree(Node* finaltree, glm::vec3* eyepoint, ListPolygon* finalfaces);
 
     Polygon partition;
-    List polygons;
+    ListPolygon polygons;
     Node* frontNode;
     Node* backNode;
 

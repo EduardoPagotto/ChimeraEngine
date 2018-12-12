@@ -35,7 +35,7 @@ float Node::classify(glm::vec3* normal, glm::vec3* eye) {
     return p;
 }
 
-void Node::BuildTree(Node* tree, List _polygons) {
+void Node::BuildTree(Node* tree, ListPolygon _polygons) {
 
     _polygons.resetNext();
     // Initilizing the first root node.
@@ -49,8 +49,8 @@ void Node::BuildTree(Node* tree, List _polygons) {
 
     // Add Plane to planar list.
     tree->polygons.Add(root);
-    List front;
-    List behind;
+    ListPolygon front;
+    ListPolygon behind;
     Polygon* poly;
     while ((poly = _polygons.Next()) != NULL) {
         SIDE result = tree->classifyPolygon(poly);
@@ -97,7 +97,7 @@ void Node::BuildTree(Node* tree, List _polygons) {
     }
 }
 
-void Node::DrawTree(Node* finalTree, glm::vec3* eyePoint, List* finalFaces) {
+void Node::DrawTree(Node* finalTree, glm::vec3* eyePoint, ListPolygon* finalFaces) {
 
     if (finalTree == NULL)
         return;

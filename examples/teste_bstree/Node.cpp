@@ -35,10 +35,10 @@ float Node::classify(glm::vec3* normal, glm::vec3* eye) {
     return p;
 }
 
-void Node::BuildTree(Node* tree, List polygons) {
-    polygons.nextindex = 0;
+void Node::BuildTree(Node* tree, List _polygons) {
+    _polygons.nextindex = 0;
     // Initilizing the first root node.
-    Polygon* root = polygons.Next();
+    Polygon* root = _polygons.Next();
     tree->partition = *root;
     if (v) {
         printf("ROOT:- %d\n", root->id);
@@ -50,7 +50,7 @@ void Node::BuildTree(Node* tree, List polygons) {
     List front;
     List behind;
     Polygon* poly;
-    while ((poly = polygons.Next()) != NULL) {
+    while ((poly = _polygons.Next()) != NULL) {
         SIDE result = tree->classifyPolygon(poly);
         if (v) {
             if (result == IS_INFRONT)

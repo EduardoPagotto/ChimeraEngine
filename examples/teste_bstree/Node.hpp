@@ -1,7 +1,7 @@
 #ifndef __BSPTREE_NODE__HPP
 #define __BSPTREE_NODE__HPP
 
-#include "List.hpp"
+#include "ListPolygon.hpp"
 #include "Polygon.hpp"
 
 // Ref:

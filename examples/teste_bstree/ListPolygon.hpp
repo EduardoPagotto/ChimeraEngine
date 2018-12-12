@@ -1,5 +1,5 @@
-#ifndef __BSPTREE_LIST__HPP
-#define __BSPTREE_LIST__HPP
+#ifndef __BSPTREE_LIST_POLYGON__HPP
+#define __BSPTREE_LIST_POLYGON__HPP
 
 #include "Polygon.hpp"
 

@@ -14,8 +14,10 @@ SIDE Node::classifyPolygon(Polygon* cPolygon) {
     float C = partition.normal.z;
     float D = -(A * partition.vertices[0].x + B * partition.vertices[0].y + C * partition.vertices[0].z);
     float p[3];
+
     for (int i = 0; i < 3; i++)
         p[i] = A * cPolygon->vertices[i].x + B * cPolygon->vertices[i].y + C * cPolygon->vertices[i].z + D;
+
     if (p[0] > 0 && p[1] > 0 && p[2] > 0)
         return IS_INFRONT;
     else if (p[0] == 0 && p[1] == 0 && p[2] == 0)

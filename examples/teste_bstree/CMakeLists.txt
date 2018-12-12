@@ -8,20 +8,20 @@ find_package(GLEW REQUIRED)
 
 #define os Lib's a serem usados
 set (LibsTesteBSTree ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
-				  ${OPENGL_INCLUDE_DIR}
-				  ${SDL2_IBRARIES}
-				  -lGL
-				  -lGLU
-				  -lglut
-				  -lSDL2
-				  -lGLEW
-				  -lpthread)
+					 ${OPENGL_LIBRARIES}
+					 ${SDL2_IBRARIES}
+					 -lGL
+					 -lGLU
+					 -lglut
+					 -lSDL2
+					 -lGLEW
+					 -lpthread)
 
 #define os includes
 set (IncludesTesteBSTree ${CMAKE_CURRENT_SOURCE_DIR}/include
-					  ${CMAKE_SOURCE_DIR}/libs
-					  ${OPENGL_LIBRARIES}
-					  ${SDL2_INCLUDE_DIR})
+						 ${CMAKE_SOURCE_DIR}/libs
+						 ${OPENGL_INCLUDE_DIR}
+						 ${SDL2_INCLUDE_DIR})
 
 add_executable (TesteBSTree Polygon.cpp
 							ListPolygon.cpp 

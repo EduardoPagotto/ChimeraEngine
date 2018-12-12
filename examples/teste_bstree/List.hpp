@@ -5,12 +5,13 @@
 
 class List {
   public:
-    int nextindex;
-    Polygon* planes;
-    int noofplanes;
     List();
     void Add(Polygon* plane);
     Polygon* Next();
+
+    int nextindex;
+    int noofplanes;
+    Polygon* planes;
 };
 
 #endif

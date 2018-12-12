@@ -37,8 +37,7 @@ float eyeX = 0;
 float eyeY = 0;
 float centerX = 0;
 float centerY = 0;
-Octahedron oct;
-Cube cub;
+
 int polygon_id = 1;
 Node* root = new Node();
 Node* node = new Node();
@@ -125,10 +124,6 @@ void setCube() {
     n[9] = glm::vec3(0, 1, 0);
     c[9] = glm::vec3(0, 0, 0);
 
-    cub.setColors(c);
-    cub.setFaces(p);
-    cub.setNormal(n);
-
     for (int i = 0; i < 10; i++) {
         p[i].normal = n[i];
         p[i].color = c[i];
@@ -160,7 +155,6 @@ void setOctahedran() {
     p[3] = glm::vec3(50, 0, 0);
     p[4] = glm::vec3(0, 0, 50);
     p[5] = glm::vec3(0, -50, 0);
-    oct.setVertices(p);
 
     setPolygonVerticesAndCalcNormal(&t[0], p[0], p[1], p[2]);
     setPolygonVerticesAndCalcNormal(&t[1], p[0], p[1], p[3]);
@@ -171,7 +165,6 @@ void setOctahedran() {
     setPolygonVerticesAndCalcNormal(&t[6], p[5], p[1], p[2]);
     setPolygonVerticesAndCalcNormal(&t[7], p[5], p[2], p[4]);
 
-    oct.setFaces(t);
     glm::vec3 c(1, 0, 0);
     for (int i = 0; i < 8; i++) {
         t[i].id = polygon_id++;

@@ -4,21 +4,15 @@
 
 #include <glm/glm.hpp>
 
-class Polygon {
-  public:
-    Polygon();
-    ~Polygon();
-    glm::vec3* getVertices();
-    void setVertices(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
-    glm::vec3 getNormals();
-    void setNormals(glm::vec3 n);
-    void setColor(glm::vec3 col);
-    glm::vec3 getColor();
-
+struct Polygon {
     int id;
-    glm::vec3 vertices[3];
     glm::vec3 normal;
     glm::vec3 color;
+    glm::vec3 vertices[3];
 };
+
+void setPolygonVerticesAndCalcNormal(struct Polygon* p, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
+void setPolygonVertices(struct Polygon* p, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
+void computePolygonNormal(struct Polygon* p);
 
 #endif

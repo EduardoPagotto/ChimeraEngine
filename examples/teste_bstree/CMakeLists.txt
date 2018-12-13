@@ -25,7 +25,7 @@ set (IncludesTesteBSTree ${CMAKE_CURRENT_SOURCE_DIR}/include
 
 add_executable (TesteBSTree Polygon.cpp
 							ListPolygon.cpp 
-							Node.cpp
+							BSPTree.cpp #Node.cpp
 							visibility.cpp)
 							#Game.cpp 
 							#main.cpp)

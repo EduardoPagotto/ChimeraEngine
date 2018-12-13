@@ -1,35 +1,43 @@
 #include "Polygon.hpp"
 
-void setPolygonVertices(struct Polygon* p, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) {
-    p->vertices[0] = a;
-    p->vertices[1] = b;
-    p->vertices[2] = c;
-};
+Polygon::Polygon() {
 
-// computes normal
-void computePolygonNormal(struct Polygon* p) {
-    glm::vec3 e1 = p->vertices[0] - p->vertices[1];
-    glm::vec3 e2 = p->vertices[2] - p->vertices[1];
-    p->normal = glm::cross(e1, e2);
-}
-
-void setPolygonVerticesAndCalcNormal(struct Polygon* p, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) {
-    setPolygonVertices(p, a, b, c);
-    computePolygonNormal(p);
-}
-
-struct Polygon* createCpyPolygon(struct Polygon* _pSrc) {
-    Polygon* p = new Polygon;
-    cpyPolygon(_pSrc, p);
-    return p;
-}
-
-void cpyPolygon(struct Polygon* _pSrc, struct Polygon* _pDst) {
-
+    this->id = 0;
     for (int i = 0; i < 3; i++)
-        _pDst->vertices[i] = _pSrc->vertices[i];
+        vertices[i] = glm::vec3(0, 0, 0);
 
-    _pDst->id = _pSrc->id;
-    _pDst->normal = _pSrc->normal;
-    _pDst->color = _pSrc->color;
+    normal = glm::vec3(0, 0, 0);
+    color = glm::vec3(0, 0, 0);
+}
+
+Polygon::Polygon(const int& _id) {
+
+    this->id = _id;
+    for (int i = 0; i < 3; i++)
+        vertices[i] = glm::vec3(0, 0, 0);
+
+    normal = glm::vec3(0, 0, 0);
+    color = glm::vec3(0, 0, 0);
+}
+
+Polygon::Polygon(const Polygon& _cpy) {
+
+    id = _cpy.id;
+    for (int i = 0; i < 3; i++)
+        vertices[i] = _cpy.vertices[i];
+
+    normal = _cpy.normal;
+    color = _cpy.color;
+}
+
+void Polygon::setVertices(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) {
+    this->vertices[0] = a;
+    this->vertices[1] = b;
+    this->vertices[2] = c;
+}
+
+void Polygon::computeNormalVertices() {
+    glm::vec3 e1 = this->vertices[0] - this->vertices[1];
+    glm::vec3 e2 = this->vertices[2] - this->vertices[1];
+    this->normal = glm::cross(e1, e2);
 }

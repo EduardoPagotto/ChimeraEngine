@@ -1,8 +1,9 @@
-#include <malloc.h>
 
 #include "ListPolygon.hpp"
 
 ListPolygon::ListPolygon() { nextindex = 0; }
+
+// ListPolygon::ListPolygon(const ListPolygon& _cpy) { nextindex = 0; }
 
 void ListPolygon::Add(Polygon* plane) { lplanes.push_back(createCpyPolygon(plane)); }
 

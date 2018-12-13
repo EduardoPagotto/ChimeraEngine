@@ -57,6 +57,7 @@ BSPTreeNode* BuildBSPTreeNode(list polygons) {
     }
     tree->front = BuildBSPTreeNode(front_list);
     tree->back = BuildBSPTreeNode(back_list);
+    return tree;
 }
 
 void DrawBSPTree(BSP_tree* tree, point eye) {

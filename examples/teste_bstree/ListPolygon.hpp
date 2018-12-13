@@ -8,6 +8,7 @@
 class ListPolygon {
   public:
     ListPolygon();
+    // ListPolygon(const ListPolygon& _cpy); // {}
     void Add(Polygon* plane);
     Polygon* Next();
     void resetNext() { nextindex = 0; }

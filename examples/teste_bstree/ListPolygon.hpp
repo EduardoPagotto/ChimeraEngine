@@ -9,6 +9,7 @@ class ListPolygon {
   public:
     ListPolygon();
     ListPolygon(const ListPolygon& _cpy);
+    ~ListPolygon();
 
     inline void addToList(Polygon* plane) { lplanes.push_back(new Polygon(*plane)); }
     inline bool isEmpty() { return lplanes.empty(); }

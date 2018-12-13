@@ -34,9 +34,9 @@ SIDE classifyPolygon(Polygon* _pPartition, Polygon* _pPolygon) {
 
 void splitPolygon(Polygon* _poly, Polygon* _partition, Polygon* _front_piece, Polygon* _back_piece) {}
 
-BSPTree* buildBSPTree(ListPolygon polygons) {
+BSPTree* buildBSPTree(ListPolygon* polygons) {
     BSPTree* result = new BSPTree;
-    result->root = buildBSPTreeNode(polygons);
+    result->root = buildBSPTreeNode(*polygons);
     return result;
 };
 
@@ -54,7 +54,7 @@ BSPTreeNode* buildBSPTreeNode(ListPolygon polygons) {
 
     Polygon* poly;
     while ((poly = polygons.getFromList()) != 0) {
-        int result = classifyPolygon(&tree->partition, poly); //.ClassifyPolygon(poly);
+        int result = classifyPolygon(&tree->partition, poly);
         switch (result) {
             case IS_COPLANAR:
                 tree->polygons.addToList(poly);

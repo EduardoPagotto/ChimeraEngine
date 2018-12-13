@@ -28,7 +28,7 @@ struct BSPTree {
 
 BSPTreeNode* buildBSPTreeNode(ListPolygon polygons);
 
-BSPTree* buildBSPTree(ListPolygon polygons);
+BSPTree* buildBSPTree(ListPolygon* polygons);
 
 SIDE classifyPolygon(Polygon* _pPartition, Polygon* _pPolygon);
 

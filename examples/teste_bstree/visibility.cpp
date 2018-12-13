@@ -40,8 +40,10 @@ float centerY = 0;
 int polygon_id = 1;
 // Node* root = new Node();
 // Node* node = new Node();
+BSPTree* bspTree = nullptr;
 
-ListPolygon* polygonList = new ListPolygon();
+// ListPolygon* polygonList = new ListPolygon();
+ListPolygon polygonList; // = new ListPolygon();
 GLfloat lightPosition[] = {0, 99.9, 0, 1};
 bool moveeye = false;
 
@@ -136,7 +138,7 @@ void setCube() {
         p[i].setNormal(n[i]);
         p[i].setColor(c[i]);
         p[i].setId(polygon_id++);
-        polygonList->addToList(&p[i]);
+        polygonList.addToList(&p[i]);
     }
 }
 
@@ -177,7 +179,7 @@ void setOctahedran() {
         t[i].setId(polygon_id++);
         t[i].setColor(glm::vec3(1, 0, 0));
         t[i].computeNormalVertices();
-        polygonList->addToList(&t[i]);
+        polygonList.addToList(&t[i]);
     }
 }
 
@@ -278,6 +280,8 @@ int main(int argc, char** argv) {
     glutDisplayFunc(display_func);
     setCube();
     setOctahedran();
+
+    bspTree = buildBSPTree(&polygonList);
 
     // node->BuildTree(root, *polygonList);
     displayMessage();

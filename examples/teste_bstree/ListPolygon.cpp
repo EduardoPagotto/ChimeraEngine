@@ -1,20 +1,47 @@
 
 #include "ListPolygon.hpp"
 
-ListPolygon::ListPolygon() { nextindex = 0; }
+ListPolygon::ListPolygon() { iIndex = lplanes.begin(); }
 
-// ListPolygon::ListPolygon(const ListPolygon& _cpy) { nextindex = 0; }
+ListPolygon::~ListPolygon() {
 
-void ListPolygon::Add(Polygon* plane) { lplanes.push_back(createCpyPolygon(plane)); }
+    for (std::list<Polygon*>::iterator i = lplanes.begin(); i != lplanes.end(); i++) {
+        Polygon* plane = (*i);
+        delete plane;
+        plane = nullptr;
+    }
 
-Polygon* ListPolygon::Next() {
+    lplanes.clear();
+}
 
-    Polygon* p = NULL;
-    if (nextindex == lplanes.size())
+ListPolygon::ListPolygon(const ListPolygon& _cpy) {
+
+    std::list<Polygon*> old = _cpy.lplanes;
+    for (std::list<Polygon*>::iterator i = old.begin(); i != old.end(); i++) {
+        Polygon* plane = (*i);
+        this->lplanes.push_back(new Polygon(*plane));
+    }
+
+    iIndex = lplanes.begin();
+}
+
+Polygon* ListPolygon::getFromList() {
+
+    if (lplanes.empty() == false) {
+        Polygon* p = lplanes.front();
+        lplanes.pop_front();
         return p;
+    }
 
-    p = createCpyPolygon(lplanes[nextindex]);
+    return nullptr;
+}
 
-    nextindex++;
-    return p;
+Polygon* ListPolygon::next() {
+
+    if (iIndex != lplanes.end()) {
+        Polygon* p = (*iIndex);
+        iIndex++;
+        return p;
+    }
+    return nullptr;
 }

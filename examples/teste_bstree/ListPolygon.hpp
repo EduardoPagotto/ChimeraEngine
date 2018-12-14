@@ -3,20 +3,25 @@
 
 #include "Polygon.hpp"
 
-#include <vector>
+#include <list>
 
 class ListPolygon {
   public:
     ListPolygon();
-    // ListPolygon(const ListPolygon& _cpy); // {}
-    void Add(Polygon* plane);
-    Polygon* Next();
-    void resetNext() { nextindex = 0; }
-    size_t size() { return lplanes.size(); }
+    ListPolygon(const ListPolygon& _cpy);
+    ~ListPolygon();
+
+    inline void addToList(Polygon* plane) { lplanes.push_back(new Polygon(*plane)); }
+    inline bool isEmpty() { return lplanes.empty(); }
+    inline size_t size() { return lplanes.size(); }
+    inline void begin() { iIndex = lplanes.begin(); }
+
+    Polygon* getFromList();
+    Polygon* next();
 
   private:
-    int nextindex;
-    std::vector<Polygon*> lplanes;
+    std::list<Polygon*>::iterator iIndex;
+    std::list<Polygon*> lplanes;
 };
 
 #endif

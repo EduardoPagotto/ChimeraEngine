@@ -2,13 +2,9 @@
 #include "Polygon.hpp"
 
 float classify(glm::vec3* normal, glm::vec3* eye) {
-
-    // FIXME: esta errado, verificar original!!!
-    float A = normal->x;
-    float B = normal->y;
-    float C = normal->z;
-    float D = -(A * normal->x + B * normal->y + C * normal->z);
-    float p = A * eye->x + B * eye->y + C * eye->z + D;
+    // TODO: Converir se e isto mesmo
+    float dotVal1 = -(glm::dot(*normal, *normal));
+    float p = (glm::dot(*normal, *eye)) + dotVal1;
     return p;
 }
 
@@ -79,21 +75,37 @@ BSPTreeNode* buildBSPTreeNode(ListPolygon polygons) {
     return tree;
 }
 
-void drawBSPTree(BSPTree* tree, glm::vec3* eye) {
-    // if (tree == NULL)
-    //     return;
-    // real result = tree->partition.ClassifyPoint(eye);
-    // if (result > 0) {
-    //     DrawBSPTree(tree->back, eye);
-    //     tree->polygons.DrawPolygons();
-    //     DrawBSPTree(tree->front, eye);
-    // } else if (result < 0) {
-    //     DrawBSPTree(tree->front, eye);
-    //     tree->polygons.DrawPolygonList();
-    //     DrawBSPTree(tree->back, eye);
-    // } else {
-    //     // the eye point is on the partition plane...
-    //     DrawBSPTree(tree->front, eye);
-    //     DrawBSPTree(tree->back, eye);
-    // }
+void drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ListPolygon* finalFaces) {
+    if (tree == nullptr)
+        return;
+
+    Polygon* p = nullptr;
+    glm::vec3 normal = tree->partition.getNormal();
+    float result = classify(&normal, eye);
+    if (result > 0) {
+        drawBSPTree(tree->back, eye, finalFaces);
+
+        tree->polygons.begin();
+        while ((p = tree->polygons.next()) != NULL)
+            finalFaces->addToList(p);
+        tree->polygons.begin();
+        // tree->polygons.DrawPolygons();
+
+        drawBSPTree(tree->front, eye, finalFaces);
+
+    } else if (result < 0) {
+        drawBSPTree(tree->front, eye, finalFaces);
+
+        tree->polygons.begin();
+        while ((p = tree->polygons.next()) != NULL)
+            finalFaces->addToList(p);
+        tree->polygons.begin();
+        // tree->polygons.DrawPolygonList();
+
+        drawBSPTree(tree->back, eye, finalFaces);
+    } else {
+        // the eye point is on the partition plane...
+        drawBSPTree(tree->front, eye, finalFaces);
+        drawBSPTree(tree->back, eye, finalFaces);
+    }
 }

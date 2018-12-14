@@ -27,15 +27,10 @@ struct BSPTree {
 };
 
 BSPTreeNode* buildBSPTreeNode(ListPolygon polygons);
-
 BSPTree* buildBSPTree(ListPolygon* polygons);
-
 SIDE classifyPolygon(Polygon* _pPartition, Polygon* _pPolygon);
-
 float classify(glm::vec3* normal, glm::vec3* eye);
-
-void drawBSPTree(BSPTree* tree, glm::vec3* eye);
-
+void drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ListPolygon* finalFaces);
 void splitPolygon(Polygon* _poly, Polygon* _partition, Polygon* _front_piece, Polygon* _back_piece);
 
 #endif

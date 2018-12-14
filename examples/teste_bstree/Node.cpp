@@ -103,46 +103,46 @@ void Node::BuildTree(Node* tree, ListPolygon _polygons) {
     }
 }
 
-// void Node::DrawTree(Node* finalTree, glm::vec3* eyePoint, ListPolygon* finalFaces) {
+void Node::DrawTree(Node* finalTree, glm::vec3* eyePoint, ListPolygon* finalFaces) {
 
-//     if (finalTree == NULL)
-//         return;
+    if (finalTree == NULL)
+        return;
 
-//     // Polygon part = finalTree->partition;
-//     glm::vec3 part = finalTree->partition.getNormal();
-//     float s = finalTree->classify(&part, eyePoint);
+    // Polygon part = finalTree->partition;
+    glm::vec3 part = finalTree->partition.getNormal();
+    float s = finalTree->classify(&part, eyePoint);
 
-//     if (v)
-//         printf("%f\n", s);
+    if (v)
+        printf("%f\n", s);
 
-//     Polygon* p = nullptr;
+    Polygon* p = nullptr;
 
-//     if (s > 0) {
-//         // TRAVERSE BACK
-//         DrawTree(finalTree->backNode, eyePoint, finalFaces);
+    if (s > 0) {
+        // TRAVERSE BACK
+        DrawTree(finalTree->backNode, eyePoint, finalFaces);
 
-//         // finalFaces->Add(&finalTree->partition);
-//         // STORE THE COORDINATES
-//         finalTree->polygons.begin();
-//         while ((p = finalTree->polygons.next()) != NULL)
-//             finalFaces->addToList(p);
+        // finalFaces->Add(&finalTree->partition);
+        // STORE THE COORDINATES
+        finalTree->polygons.begin();
+        while ((p = finalTree->polygons.next()) != NULL)
+            finalFaces->addToList(p);
 
-//         // END OF STORING
-//         finalTree->polygons.begin();
-//         DrawTree(finalTree->frontNode, eyePoint, finalFaces);
+        // END OF STORING
+        finalTree->polygons.begin();
+        DrawTree(finalTree->frontNode, eyePoint, finalFaces);
 
-//     } else {
-//         // TRAVERSE FRONT
-//         DrawTree(finalTree->frontNode, eyePoint, finalFaces);
+    } else {
+        // TRAVERSE FRONT
+        DrawTree(finalTree->frontNode, eyePoint, finalFaces);
 
-//         // finalFaces->Add(&finalTree->partition);
-//         // STORE THE COORDINATES
-//         finalTree->polygons.begin();
-//         while ((p = finalTree->polygons.next()) != NULL)
-//             finalFaces->addToList(p);
+        // finalFaces->Add(&finalTree->partition);
+        // STORE THE COORDINATES
+        finalTree->polygons.begin();
+        while ((p = finalTree->polygons.next()) != NULL)
+            finalFaces->addToList(p);
 
-//         // END OF STORING
-//         finalTree->polygons.begin();
-//         DrawTree(finalTree->backNode, eyePoint, finalFaces);
-//     }
-// }
+        // END OF STORING
+        finalTree->polygons.begin();
+        DrawTree(finalTree->backNode, eyePoint, finalFaces);
+    }
+}

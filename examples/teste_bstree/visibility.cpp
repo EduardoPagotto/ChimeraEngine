@@ -38,12 +38,9 @@ float centerX = 0;
 float centerY = 0;
 
 int polygon_id = 1;
-// Node* root = new Node();
-// Node* node = new Node();
 BSPTree* bspTree = nullptr;
 
-// ListPolygon* polygonList = new ListPolygon();
-ListPolygon polygonList; // = new ListPolygon();
+ListPolygon polygonList;
 GLfloat lightPosition[] = {0, 99.9, 0, 1};
 bool moveeye = false;
 
@@ -229,20 +226,26 @@ void display_func() {
     setLightingParameters();
     glm::vec3 eye(eyeX, eyeY, 75);
 
-    // ListPolygon* finalpl = new ListPolygon();
-    // node->DrawTree(root, &eye, finalpl);
-    // finalpl->resetNext();
-    // Polygon* fi = new Polygon();
-    // while ((fi = finalpl->Next()) != NULL) {
-    //     glm::vec3 cc = fi->color;
-    //     glColor3f(cc.x, cc.y, cc.z);
-    //     glNormal3f(fi->normal.x, fi->normal.y, fi->normal.z);
-    //     glBegin(GL_TRIANGLES);
-    //     for (int i = 0; i < 3; i++) {
-    //         glVertex3f(fi->vertices[i].x, fi->vertices[i].y, fi->vertices[i].z);
-    //     }
-    //     glEnd();
-    // }
+    ListPolygon* finalpl = new ListPolygon();
+
+    drawBSPTree(bspTree->root, &eye, finalpl);
+    finalpl->begin();
+
+    Polygon* fi = nullptr;
+    while ((fi = finalpl->next()) != NULL) {
+        glm::vec3 cc = fi->getColor();
+        glColor3f(cc.x, cc.y, cc.z);
+        glNormal3f(fi->getNormal().x, fi->getNormal().y, fi->getNormal().z);
+        glBegin(GL_TRIANGLES);
+        for (int i = 0; i < 3; i++) {
+            glVertex3f(fi->getVertices()[i].x, fi->getVertices()[i].y, fi->getVertices()[i].z);
+        }
+        glEnd();
+    }
+
+    delete finalpl;
+    finalpl = nullptr;
+
     glutSwapBuffers();
 }
 // this initilizes rendering parameters.
@@ -283,7 +286,6 @@ int main(int argc, char** argv) {
 
     bspTree = buildBSPTree(&polygonList);
 
-    // node->BuildTree(root, *polygonList);
     displayMessage();
     glutMainLoop();
     return 0;

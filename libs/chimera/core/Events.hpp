@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_GAME_CLIENT__HPP
-#define __CHIMERA_GAME_CLIENT__HPP
+#ifndef __CHIMERA_EVENTS__HPP
+#define __CHIMERA_EVENTS__HPP
 
 #ifndef WIN32
 #include <SDL2/SDL.h>

@@ -33,7 +33,6 @@ set (SourceNode Color.cpp
 				ShadowMap.cpp
 				Group.cpp
 				Transform.cpp
-				VboIndexer.cpp
 				InitVisitor.cpp
 				RenderVisitor.cpp
 				MeshUtil.cpp

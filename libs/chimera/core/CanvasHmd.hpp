@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_CANVAS_GL__HPP
-#define __CHIMERA_CANVAS_GL__HPP
+#ifndef __CHIMERA_CANVAS_HDM__HPP
+#define __CHIMERA_CANVAS_HDM__HPP
 
 #include <GL/glew.h>
 
@@ -12,10 +12,10 @@
 
 namespace Chimera {
 
-class CanvasGL : public Canvas {
+class CanvasHmd : public Canvas {
   public:
-    CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen = false);
-    virtual ~CanvasGL();
+    CanvasHmd(const std::string& _title, int _width, int _height);
+    virtual ~CanvasHmd();
 
     virtual void before() override;
     virtual void after() override;
@@ -26,7 +26,7 @@ class CanvasGL : public Canvas {
 
     glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
 
-    virtual int getTotEyes() { return 1; }
+    virtual int getTotEyes() { return 2; }
 
     void initGL();
     void afterStart();

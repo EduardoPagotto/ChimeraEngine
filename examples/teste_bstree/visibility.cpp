@@ -5,9 +5,8 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include <GL/freeglut.h>
 
-#include "ListPolygon.hpp"
-//#include "Node.hpp"
 #include "BSPTree.h"
+#include "ListPolygon.hpp"
 
 #define canvas_width 400
 #define canvas_height 400

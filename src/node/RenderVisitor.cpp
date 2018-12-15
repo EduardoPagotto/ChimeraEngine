@@ -144,13 +144,8 @@ void RenderVisitor::visit(Group* _pGroup) {
     }
 
     Light* pLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
-    if (pLight != nullptr) {
-
-        pShader->setGlUniform3fv("light.position", 1, glm::value_ptr(pLight->getPosition()));
-        pShader->setGlUniform4fv("light.ambient", 1, pLight->getAmbient().ptr());
-        pShader->setGlUniform4fv("light.diffuse", 1, pLight->getDiffuse().ptr());
-        pShader->setGlUniform4fv("light.specular", 1, pLight->getSpecular().ptr());
-    }
+    if (pLight != nullptr)
+        pLight->apply(pShader);
 }
 
 void RenderVisitor::visit(Chimera::Transform* _pTransform) { model = _pTransform->getModelMatrix(pCoord); }

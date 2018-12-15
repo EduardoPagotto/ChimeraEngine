@@ -59,6 +59,8 @@ class Color {
 
     inline const float* ptr() const { return &value[0]; }
 
+    inline glm::vec4 get() const { return value; }
+
     void saturate(void);
 
     Color saturateCopy(void) const;

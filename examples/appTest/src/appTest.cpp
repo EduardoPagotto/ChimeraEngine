@@ -9,7 +9,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/loader/ShadersLoader.hpp"
-#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
 #include "chimera/node/MeshUtil.hpp"
@@ -77,16 +77,16 @@ int _tmain(int argc, _TCHAR* argv[]) {
         sceneMng->origemDesenho((Coord*)pTrans);
 
         // Propriedades da camera
-        CameraSpherical* pCam = new CameraSpherical("Observador-01");
-        pCam->setDistanciaMaxima(1000.0);
-        pCam->setDistanciaMinima(0.5);
+        Camera* pCam = new Camera(group1, "Observador-01");
+        pCam->createTrackBall();
+        pCam->getTrackBall()->setDistanciaMaxima(1000.0);
+        pCam->getTrackBall()->setDistanciaMinima(0.5);
         pCam->getViewPoint()->far = 10000.0;
         pCam->getViewPoint()->near = 0.1;
         pCam->getViewPoint()->fov = 45.0;
         pCam->getViewPoint()->position = glm::vec3(300, 0, 0);
         pCam->getViewPoint()->rotation = glm::vec3(0, 0, 1);
         pCam->init();
-        group1->addChild(pCam);
 
         // Propriedades da luz
         Light* pLight = new Light(group1, "Luz1");

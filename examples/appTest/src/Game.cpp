@@ -2,7 +2,7 @@
 #include "chimera/core/Events.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/node/Camera.hpp"
 #include "chimera/node/SceneMng.hpp"
 #include "chimera/node/Transform.hpp"
 
@@ -75,14 +75,13 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::CameraSpherical* pCamZ =
-        (Chimera::CameraSpherical*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
+    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
-            pCamZ->trackBall(mm.yrel, mm.xrel, 0);
+            pCamZ->getTrackBall()->tracking(mm.yrel, mm.xrel, 0);
         } else if (botaoIndex == 2) {
-            pCamZ->trackBall(0, 0, mm.yrel);
+            pCamZ->getTrackBall()->tracking(0, 0, mm.yrel);
         }
     }
 }

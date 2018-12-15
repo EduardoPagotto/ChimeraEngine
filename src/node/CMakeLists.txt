@@ -16,9 +16,7 @@ set (SourceNode Color.cpp
 				Light.cpp
 				Camera.cpp
 				Material.cpp
-				CameraSpherical.cpp
-				CameraMan.cpp
-				CameraOvr.cpp
+
 				Solid.cpp
 				PhysicsControl.cpp
 				Constraint.cpp

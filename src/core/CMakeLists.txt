@@ -13,6 +13,8 @@ set (SourcesCore Canvas.cpp
 				 CanvasGL.cpp
 				 CanvasFB.cpp
 				 Timer.cpp
+				 TrackBall.cpp
+				 TrackWalk.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
 				 Shader.cpp	

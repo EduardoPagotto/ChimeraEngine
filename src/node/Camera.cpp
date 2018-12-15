@@ -6,12 +6,31 @@
 
 namespace Chimera {
 
-Camera::Camera(Node* _pNode, CameraType _type, std::string _name)
-    : type(_type), Node(_pNode, EntityKind::CAMERA, _name) {
+Camera::Camera(Node* _pNode, std::string _name) : Node(_pNode, EntityKind::CAMERA, _name) {
     viewPoint.zero();
+    pTrackBall = nullptr;
+    pTrackWalk = nullptr;
 }
 
-Camera::~Camera() {}
+Camera::~Camera() {
+    if (pTrackBall != nullptr)
+        delete pTrackBall;
+
+    if (pTrackWalk != nullptr)
+        delete pTrackWalk;
+}
+
+void Camera::init() {
+    if (pTrackBall != nullptr)
+        pTrackBall->init(&viewPoint);
+
+    if (pTrackWalk != nullptr)
+        pTrackWalk->init(&viewPoint, WalkType::Air);
+}
+
+void Camera::createTrackBall() { pTrackBall = new TrackBall(); }
+
+void Camera::createTrackWalk() { pTrackWalk = new TrackWalk(); }
 
 void Camera::accept(NodeVisitor* v) { v->visit(this); }
 } // namespace Chimera

@@ -2,7 +2,7 @@
 #define __GAME_XX__HPP
 
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/node/Camera.hpp"
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/PhysicsControl.hpp"
@@ -44,7 +44,7 @@ class Game : public Chimera::IGameClientEvents {
     std::string sPosicaoObj;
     std::string textoFPS;
 
-    Chimera::CameraSpherical* pOrbitalCam;
+    Chimera::Camera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;
     Chimera::ParticleEmitter* pEmissor;
 

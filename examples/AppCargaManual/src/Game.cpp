@@ -134,9 +134,9 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
-            pOrbitalCam->trackBall(mm.yrel, mm.xrel, 0);
+            pOrbitalCam->getTrackBall()->tracking(mm.yrel, mm.xrel, 0);
         } else if (botaoIndex == 3) {
-            pOrbitalCam->trackBall(0, 0, mm.yrel);
+            pOrbitalCam->getTrackBall()->tracking(0, 0, mm.yrel);
         }
     }
 }
@@ -154,7 +154,7 @@ void Game::start() {
     }
 
     // Localiza a camera
-    pOrbitalCam = (Chimera::CameraSpherical*)pSceneMng->findChild("Camera-camera", true);
+    pOrbitalCam = (Chimera::Camera*)pSceneMng->findChild("Camera-camera", true);
 
     // Localiza objeto como o primario
     pCorpoRigido = (Chimera::Solid*)pSceneMng->findChild("zoltan-RigidBody", true);

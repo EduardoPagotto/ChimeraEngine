@@ -89,7 +89,7 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
 
             pListNodes->addNode(pCamera);
 
-            pCamera->setTransform(l_pTransform);
+            pCamera->getViewPoint()->setTransform(l_pTransform);
 
             _pNodePai->addChild(pCamera);
             pLastNodeDone = pCamera;

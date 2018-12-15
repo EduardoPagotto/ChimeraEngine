@@ -80,11 +80,11 @@ int _tmain(int argc, _TCHAR* argv[]) {
         CameraSpherical* pCam = new CameraSpherical("Observador-01");
         pCam->setDistanciaMaxima(1000.0);
         pCam->setDistanciaMinima(0.5);
-        pCam->setFar(10000.0);
-        pCam->setNear(0.1);
-        pCam->setFov(45.0);
-        pCam->setPositionRotation(glm::vec3(300, 0, 0), glm::vec3(0, 0, 0));
-        pCam->setPerspective(true);
+        pCam->getViewPoint()->far = 10000.0;
+        pCam->getViewPoint()->near = 0.1;
+        pCam->getViewPoint()->fov = 45.0;
+        pCam->getViewPoint()->position = glm::vec3(300, 0, 0);
+        pCam->getViewPoint()->rotation = glm::vec3(0, 0, 1);
         pCam->init();
         group1->addChild(pCam);
 

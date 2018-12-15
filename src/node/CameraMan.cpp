@@ -25,9 +25,9 @@ void CameraMan::init() {
 
     Camera::init();
     reset();
-    pitch(-rotation.x);
-    roll(rotation.y);
-    yaw(rotation.z);
+    pitch(-viewPoint.rotation.x);
+    roll(viewPoint.rotation.y);
+    yaw(viewPoint.rotation.z);
 }
 
 void CameraMan::reset() {
@@ -44,11 +44,11 @@ void CameraMan::render() { updateMove(); }
 void CameraMan::updateMove() {
     // TODO: TESTAR e verificar ser bullet ja nao tem este algoritmo !!!
 
-    GLfloat x = glm::dot(along, position);   //  along * (*m_pPosition); //Dot Product (produto
-                                             //  escalar) // DotProduct(along, Position); //GLfloat
-                                             //  x = DotProduct(along, Position);
-    GLfloat y = glm::dot(up, position);      // up * (*m_pPosition); //  DotProduct(up, Position);
-    GLfloat z = glm::dot(forward, position); // forward * (*m_pPosition); // DotProduct(forward, Position);
+    GLfloat x = glm::dot(along, viewPoint.position);   //  along * (*m_pPosition); //Dot Product (produto
+                                                       //  escalar) // DotProduct(along, Position); //GLfloat
+                                                       //  x = DotProduct(along, Position);
+    GLfloat y = glm::dot(up, viewPoint.position);      // up * (*m_pPosition); //  DotProduct(up, Position);
+    GLfloat z = glm::dot(forward, viewPoint.position); // forward * (*m_pPosition); // DotProduct(forward, Position);
 
     GLfloat ViewMatrix[4][4];
 

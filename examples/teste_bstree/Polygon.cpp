@@ -46,8 +46,8 @@ void Polygon::computeFaceNormalsFromVertices() {
 
     glm::vec3 u = this->vertices[0] - this->vertices[2];
     glm::vec3 v = this->vertices[0] - this->vertices[1];
-    // glm::vec3 normal = glm::normalize(glm::cross(u, v));
-    glm::vec3 normal = glm::cross(u, v);
+    glm::vec3 normal = glm::normalize(glm::cross(u, v));
+    // glm::vec3 normal = glm::cross(u, v);
 
     this->normais[0] = this->normais[1] = this->normais[2] = normal;
 

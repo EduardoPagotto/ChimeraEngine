@@ -37,10 +37,11 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::Camera* _pC
     tinyxml2::XMLElement* l_nPerspective =
         _nNode->FirstChildElement("optics")->FirstChildElement("technique_common")->FirstChildElement("perspective");
     if (l_nPerspective != nullptr) {
-        _pCamera->setPerspective(true);
-        _pCamera->setFov(atof(l_nPerspective->FirstChildElement("xfov")->GetText()));
-        _pCamera->setNear(atof(l_nPerspective->FirstChildElement("znear")->GetText()));
-        _pCamera->setFar(atof(l_nPerspective->FirstChildElement("zfar")->GetText()));
+        //_pCamera->setPerspective(true);
+        Chimera::ViewPoint* vp = _pCamera->getViewPoint();
+        vp->fov = atof(l_nPerspective->FirstChildElement("xfov")->GetText());
+        vp->near = atof(l_nPerspective->FirstChildElement("znear")->GetText());
+        vp->far = atof(l_nPerspective->FirstChildElement("zfar")->GetText());
 
     } else {
         // TODO testar ecarregar ortogonal aqui

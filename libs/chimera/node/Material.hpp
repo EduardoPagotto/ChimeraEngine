@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_MATERIAL__HPP
 #define __CHIMERA_MATERIAL__HPP
 
-#include "Color.hpp"
 #include "Entity.hpp"
+#include "chimera/core/Color.hpp"
 #include <map>
 #include <tinyxml2.h>
 

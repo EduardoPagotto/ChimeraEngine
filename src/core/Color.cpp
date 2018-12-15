@@ -1,4 +1,4 @@
-#include "chimera/node/Color.hpp"
+#include "chimera/core/Color.hpp"
 
 namespace Chimera {
 

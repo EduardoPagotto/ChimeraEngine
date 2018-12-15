@@ -17,7 +17,7 @@ struct ViewPoint {
 
     void zero() {
         position = glm::vec3(0.0, 0.0, 0.0);
-        rotation = glm::vec3(0.0, 0.0, 0.0);
+        rotation = glm::vec3(0.0, 0.0, -1.0);
         direction = glm::vec3(0.0, 0.0, 0.0);
         near = 0.1f;
         far = 1000.0f;

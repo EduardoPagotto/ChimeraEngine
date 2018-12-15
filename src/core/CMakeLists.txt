@@ -12,6 +12,7 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (SourcesCore Canvas.cpp
 				 CanvasGL.cpp
 				 CanvasFB.cpp
+				 Color.cpp
 				 Timer.cpp
 				 TrackBall.cpp
 				 TrackWalk.cpp

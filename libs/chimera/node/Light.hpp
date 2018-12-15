@@ -3,9 +3,8 @@
 
 #include <tinyxml2.h>
 
-#include "Color.hpp"
 #include "Node.hpp"
-
+#include "chimera/core/Color.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "glm/glm.hpp"
 #include <map>

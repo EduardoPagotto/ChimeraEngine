@@ -10,23 +10,12 @@ namespace Chimera {
 
 ShadowMap::ShadowMap(Node* _pNode, std::string _name, const unsigned& _width, const unsigned& _height)
     : Node(_pNode, EntityKind::SHADOWMAP, _name) {
-
-    // texManager = Singleton<TextureManager>::getRefSingleton();
     pTexture = new TexFBO(_width, _height);
-    // texManager->getTexture(texManager->fromFrameBuffer(_name, TEX_SEQ::SHADOWMAP, _width, _height));
 }
 
-ShadowMap::~ShadowMap() {
-    // libera textura, se zero deleta da memoria (init necessario se for reaproveitar)
-    // texManager->release(pTexture->getSerial());
-    // Singleton<TextureManager>::releaseRefSingleton();
-    delete pTexture;
-}
+ShadowMap::~ShadowMap() { delete pTexture; }
 
-void ShadowMap::init() {
-    // texManager->init(pTexture->getSerial()); // incrementa referencia de uso da textura
-    pTexture->init();
-}
+void ShadowMap::init() { pTexture->init(); }
 
 void ShadowMap::accept(NodeVisitor* v) { v->visit(this); }
 
@@ -51,7 +40,6 @@ glm::mat4 ShadowMap::createLightSpaceMatrix(const glm::vec3& _posicaoLight) {
 }
 
 void ShadowMap::initSceneShadow() {
-
     glViewport(0, 0, pTexture->getWidth(), pTexture->getHeight());
     glBindFramebuffer(GL_FRAMEBUFFER, pTexture->getFrameBufferId());
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -60,8 +48,7 @@ void ShadowMap::initSceneShadow() {
 void ShadowMap::endSceneShadow() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 void ShadowMap::applyShadow(const std::string& nameProp, Shader* _pShader) {
-    pTexture->setShaderProp(nameProp);
-    pTexture->apply((unsigned)TEX_KIND::SHADOWMAP, _pShader);
+    pTexture->apply((unsigned)TEX_KIND::SHADOWMAP, nameProp, _pShader);
 }
 
 } // namespace Chimera

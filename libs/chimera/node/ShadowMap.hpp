@@ -21,12 +21,9 @@ class ShadowMap : public Node {
     void endSceneShadow();
     void applyShadow(const std::string& nameProp, Shader* _pShader);
 
-    // TEX_SEQ getShadowIndexTextureSeq() const { return pTexture->getIndexTextureSeq(); }
-
     glm::mat4 lightSpaceMatrix;
 
   private:
-    // TextureManager* texManager;
     TexFBO* pTexture;
 };
 

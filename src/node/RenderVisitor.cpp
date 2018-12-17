@@ -57,11 +57,8 @@ void RenderVisitor::visit(Mesh* _pMesh) {
 
     _pMesh->getMaterial()->apply(pShader);
 
-    if (shadowMap != nullptr) {
-
+    if (shadowMap != nullptr)
         shadowMap->applyShadow("shadowMap", pShader);
-        // pShader->setGlUniform1i("shadowMap", (int)shadowMap->getShadowIndexTextureSeq());
-    }
 
     _pMesh->render(pShader);
 }

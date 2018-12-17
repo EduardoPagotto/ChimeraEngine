@@ -11,8 +11,6 @@ namespace Chimera {
 
 unsigned Tex::serialMaster = 0;
 
-TexFBO::TexFBO(const unsigned& _width, const unsigned& _height) : Tex(_width, _height), depthMapFBO(0) {}
-
 TexFBO::~TexFBO() {}
 
 void TexFBO::init() {
@@ -37,9 +35,6 @@ void TexFBO::init() {
 }
 
 //--------
-
-TexImg::TexImg(const std::string& _pathFile) : Tex(0, 0), pathFile(_pathFile) {}
-
 TexImg::~TexImg() {}
 
 void TexImg::init() {

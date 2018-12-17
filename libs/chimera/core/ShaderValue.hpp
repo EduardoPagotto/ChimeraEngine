@@ -2,6 +2,7 @@
 #include <string>
 
 #include "chimera/core/Shader.hpp"
+#include "chimera/core/Tex.hpp"
 #include "glm/glm.hpp"
 
 namespace Chimera {
@@ -49,16 +50,15 @@ class ShaderValue1i : public ShaderValue {
     int value;
 };
 
-// class ShaderValueTex : public ShaderValue {
-//   public:
-//     Effect4vf(const char* _name, Texture* _value) : Effect(_name), value(_value) {}
-//     virtual void apply(Shader* _shader) override {
-//         _value->apply();
-//         _shader->setGlUniform41i(name, 1, _value->getIndexTextureSeq());
-//     }
+class ShaderValueTex : public ShaderValue {
+  public:
+    ShaderValueTex(const std::string& _name, Tex* _pTex, const unsigned& _indexTextureNumber)
+        : ShaderValue(_name), pTex(_pTex), indexTextureNumber(_indexTextureNumber) {}
+    virtual void apply(Shader* _shader) override { pTex->apply(indexTextureNumber, name, _shader); }
 
-//   private:
-//     Texture* _value;
-// };
+  private:
+    unsigned indexTextureNumber;
+    Tex* pTex;
+};
 
 } // namespace Chimera

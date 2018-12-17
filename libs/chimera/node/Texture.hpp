@@ -20,9 +20,8 @@ class Texture : public Entity {
 
     void init();
 
-    bool textureLoad() { return texturaCarregada; }
-
-    int getIdTexture() { return idTexture; }
+    // bool textureLoad() { return texturaCarregada; }
+    // int getIdTexture() { return idTexture; }
 
     unsigned getWidth() const { return width; }
 
@@ -54,7 +53,6 @@ class Texture : public Entity {
     unsigned height;
 
     GLuint idTexture;
-    // int indiceFilter;
     bool texturaCarregada;
 
     std::shared_ptr<spdlog::logger> log;

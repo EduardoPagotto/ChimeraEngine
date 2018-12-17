@@ -1,6 +1,7 @@
 #ifndef __CHIMERA_TEX__HPP
 #define __CHIMERA_TEX__HPP
 
+#include "Shader.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
 namespace Chimera {
@@ -18,19 +19,19 @@ class Tex {
         glBindTexture(GL_TEXTURE_2D, idTexture);
     }
 
-    void apply(const TEX_KIND& _texKind /*, Shader* _pShader*/) {
+    void apply(const unsigned& _indexTextureNumber, Shader* _pShader) {
 
-        glActiveTexture(GL_TEXTURE0 + (unsigned)_texKind);
+        glActiveTexture(GL_TEXTURE0 + _indexTextureNumber);
         glBindTexture(GL_TEXTURE_2D, idTexture);
 
-        // if (_pShader != nullptr)
-        //    _shader->setGlUniform1i(shaderPropName.c_str(), (int)pTex->getIndexTextureSeq());
+        if (_pShader != nullptr)
+            _pShader->setGlUniform1i(shaderPropName.c_str(), _indexTextureNumber);
     }
 
     inline unsigned getWidth() const { return width; }
     inline unsigned getHeight() const { return height; }
     inline unsigned getSerial() const { return serial; }
-    // inline void setShaderProp(const std::string& _shaderPropName) { shaderPropName = _shaderPropName }
+    inline void setShaderProp(const std::string& _shaderPropName) { shaderPropName = _shaderPropName; }
 
   protected:
     unsigned width;
@@ -40,7 +41,7 @@ class Tex {
   private:
     unsigned serial;
     static unsigned serialMaster;
-    // std::string shaderPropName;
+    std::string shaderPropName;
 };
 
 class TexFBO : public Tex {

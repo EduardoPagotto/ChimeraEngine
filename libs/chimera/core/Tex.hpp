@@ -10,12 +10,18 @@ enum class TEX_KIND { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };
 
 class Tex {
   public:
-    Tex(const unsigned& _width, const unsigned& _height) : width(_width), height(_height), serial(++serialMaster) {}
+    Tex(const unsigned& _width, const unsigned& _height)
+        : width(_width), height(_height), serial(++serialMaster), idTexture(0) {}
     virtual ~Tex() { glDeleteTextures(1, (GLuint*)&idTexture); }
 
-    virtual void init() {
-        glGenTextures(1, &idTexture);
-        glBindTexture(GL_TEXTURE_2D, idTexture);
+    virtual bool init() {
+        if (idTexture == 0) {
+            glGenTextures(1, &idTexture);
+            glBindTexture(GL_TEXTURE_2D, idTexture);
+            return true;
+        }
+
+        return false;
     }
 
     void apply(const unsigned& _indexTextureNumber, const std::string& _shaderPropName, Shader* _pShader) {
@@ -43,7 +49,7 @@ class TexFBO : public Tex {
   public:
     TexFBO(const unsigned& _width, const unsigned& _height) : Tex(_width, _height), depthMapFBO(0) {}
     virtual ~TexFBO() override;
-    virtual void init() override;
+    virtual bool init() override;
     inline GLuint getFrameBufferId() const { return depthMapFBO; }
 
   protected:
@@ -54,7 +60,7 @@ class TexImg : public Tex {
   public:
     TexImg(const std::string& _pathFile) : Tex(0, 0), pathFile(_pathFile) {}
     virtual ~TexImg() override;
-    virtual void init() override;
+    virtual bool init() override;
 
   protected:
     std::string pathFile;

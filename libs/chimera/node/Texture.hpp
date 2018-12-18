@@ -14,7 +14,9 @@ class Texture : public Entity {
     Texture(const std::string& _name, const TEX_KIND& _indexTextureSeq, const std::string& _pathFile);
     virtual ~Texture();
 
-    void apply(const std::string& _shaderPropName, Shader* _pShader);
+    inline void apply(const std::string& _shaderPropName, Shader* _pShader) {
+        pTex->apply((unsigned)indexTextureSeq, _shaderPropName, _pShader);
+    }
 
     void init();
 

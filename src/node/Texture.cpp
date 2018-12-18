@@ -5,7 +5,6 @@
 #endif
 
 #include "chimera/core/Exception.hpp"
-
 #include "chimera/node/Texture.hpp"
 
 namespace Chimera {
@@ -24,13 +23,6 @@ Texture::Texture(const std::string& _name, const TEX_KIND& _indexTextureSeq, con
 }
 
 Texture::~Texture() { delete pTex; }
-
-void Texture::apply(const std::string& _shaderPropName, Shader* _pShader) {
-
-    // glActiveTexture(GL_TEXTURE0 + (unsigned)indexTextureSeq);
-    // glBindTexture(GL_TEXTURE_2D, idTexture);
-    pTex->apply((unsigned)indexTextureSeq, _shaderPropName, _pShader);
-}
 
 void Texture::init() {
 

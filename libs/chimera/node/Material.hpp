@@ -8,9 +8,7 @@
 #include "TextureManager.hpp"
 #include "chimera/core/Color.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/Shader.hpp"
 #include "chimera/core/ShaderValue.hpp"
-#include "chimera/core/Tex.hpp"
 
 namespace Chimera {
 

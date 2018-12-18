@@ -24,7 +24,6 @@ class TextureManager {
 
   private:
     std::map<unsigned int, Texture*> mapTex;
-    std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera
 

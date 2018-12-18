@@ -2,10 +2,7 @@
 
 namespace Chimera {
 
-TextureManager::TextureManager() noexcept {
-    log = spdlog::get("chimera");
-    log->debug("Constructor TextureManager");
-}
+TextureManager::TextureManager() noexcept {}
 
 TextureManager::~TextureManager() {
 
@@ -20,8 +17,6 @@ TextureManager::~TextureManager() {
 
         it = mapTex.begin();
     }
-
-    log->debug("Destructor TextureManager");
 }
 
 Texture* TextureManager::fromFile(std::string _name, const TEX_KIND& _indexTextureSeq, std::string _pathFile) {

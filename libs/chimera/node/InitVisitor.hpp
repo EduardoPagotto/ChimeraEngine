@@ -2,7 +2,6 @@
 #define __CHIMERA_INIT_VISITOR__HPP
 
 #include "NodeVisitor.hpp"
-#include <spdlog/spdlog.h>
 
 namespace Chimera {
 
@@ -20,9 +19,6 @@ class InitVisitor : public NodeVisitor {
     virtual void visit(class Solid* _pSolid) override;
     virtual void visit(class HUD* _pHUD) override;
     virtual void visit(class ShadowMap* _pShadowMap) override;
-
-  private:
-    std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera
 #endif

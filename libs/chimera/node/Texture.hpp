@@ -5,8 +5,6 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Tex.hpp"
 
-#include <spdlog/spdlog.h>
-
 namespace Chimera {
 
 class Texture : public Entity {
@@ -25,11 +23,8 @@ class Texture : public Entity {
   private:
     TEX_KIND indexTextureSeq;
     std::string pathFile;
-
     TexImg* pTex;
-
     bool texturaCarregada;
-    std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera
 #endif

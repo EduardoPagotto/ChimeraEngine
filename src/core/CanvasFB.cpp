@@ -17,8 +17,6 @@ CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _ful
     texture = SDL_CreateTexture(renderer, pixelFormat, SDL_TEXTUREACCESS_STREAMING, _width, _height);
 
     pixels = new uint32_t[_width * _height];
-
-    log->debug("Instanciado CanvasFrameBuffer");
 }
 
 CanvasFB::~CanvasFB() {

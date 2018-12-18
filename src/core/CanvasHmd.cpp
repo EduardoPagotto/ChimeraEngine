@@ -59,8 +59,6 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : Canva
         throw ExceptionSDL(ExceptionCode::ALLOC, std::string("Your current setup does not support multitexturing"));
     }
 #endif
-
-    log->debug("Instanciado CanvasGL");
 }
 
 CanvasHmd::~CanvasHmd() {
@@ -74,8 +72,6 @@ CanvasHmd::~CanvasHmd() {
         SDL_DestroyWindow(window);
         window = nullptr;
     }
-
-    log->debug("Destructor CanvasGL");
 }
 
 void CanvasHmd::before() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }

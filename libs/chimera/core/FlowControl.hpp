@@ -3,7 +3,6 @@
 
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Timer.hpp"
-#include <spdlog/spdlog.h>
 
 namespace Chimera {
 
@@ -22,8 +21,6 @@ class FlowControl {
     IGameClientEvents* pGameClientEvents;
     JoystickManager joystickManager;
     Timer timerFPS;
-
-    std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera
 

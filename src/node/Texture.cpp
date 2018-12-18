@@ -29,35 +29,6 @@ Texture::Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, cons
     log->debug("Constructor textura nome:{} arquivo:{}", _name, _pathFile);
 }
 
-Texture::Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, const unsigned& _width,
-                 const unsigned& _height)
-    : Entity(EntityKind::TEXTURE, _name) {
-
-    indexTextureSeq = _indexTextureSeq;
-    texturaCarregada = false;
-    pathFile = "FRAME_BUFFER";
-    depthMapFBO = 0;
-    height = _height;
-    width = _width;
-
-    glGenTextures(1, &idTexture);
-    glBindTexture(GL_TEXTURE_2D, idTexture);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
-    GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
-    refCount = 0;
-
-    log = spdlog::get("chimera");
-    log->debug("Constructor textura nome:{0} vazia: {1:03d}x{2:03d}", _name, _width, _height);
-}
-
 Texture::~Texture() { glDeleteTextures(1, (GLuint*)&idTexture); }
 
 void Texture::apply() {

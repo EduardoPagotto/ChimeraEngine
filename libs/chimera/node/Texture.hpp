@@ -13,15 +13,12 @@ enum class TEX_SEQ { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };
 class Texture : public Entity {
   public:
     Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, const std::string& _pathFile);
-    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, const unsigned& _width, const unsigned& _height);
+
     virtual ~Texture();
 
     void apply();
 
     void init();
-
-    // bool textureLoad() { return texturaCarregada; }
-    // int getIdTexture() { return idTexture; }
 
     unsigned getWidth() const { return width; }
 

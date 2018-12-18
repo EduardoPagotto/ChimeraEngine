@@ -51,7 +51,7 @@ class Material : public Entity {
 
     void apply(Shader* _shader);
     void createDefaultEffect();
-    void defineTextureByIndex(const unsigned int& _serial);
+    void setTexture(Texture* _pTex);
     void loadTextureFromFile(const std::string& _nome, const TEX_SEQ& _seq, const std::string& _arquivo);
     bool hasTexture() { return mapTex.size() > 0 ? true : false; }
 

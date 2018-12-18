@@ -18,6 +18,7 @@ void Material::init() {
     for (std::map<std::string, Texture*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
 
         Texture* pTex = iTex->second;
+        pTex->init();
 
         switch (pTex->getIndexTextureSeq()) {
             case TEX_SEQ::DIFFUSE:
@@ -32,8 +33,6 @@ void Material::init() {
             default:
                 break;
         }
-
-        texManager->init(pTex->getSerial());
     }
 
     if (mapTex.size() == 0)
@@ -48,17 +47,16 @@ void Material::init() {
         tipoTexturasDisponiveis = 4;
 }
 
-void Material::defineTextureByIndex(const unsigned int& _serial) {
-    Texture* pTex = texManager->getTexture(_serial);
-    switch (pTex->getIndexTextureSeq()) {
+void Material::setTexture(Texture* _pTex) {
+    switch (_pTex->getIndexTextureSeq()) {
         case TEX_SEQ::DIFFUSE:
-            mapTex[SHADE_TEXTURE_DIFFUSE] = pTex;
+            mapTex[SHADE_TEXTURE_DIFFUSE] = _pTex;
             break;
         case TEX_SEQ::EMISSIVE:
-            mapTex[SHADE_TEXTURE_EMISSIVE] = pTex;
+            mapTex[SHADE_TEXTURE_EMISSIVE] = _pTex;
             break;
         case TEX_SEQ::SPECULAR:
-            mapTex[SHADE_TEXTURE_SPECULA] = pTex;
+            mapTex[SHADE_TEXTURE_SPECULA] = _pTex;
             break;
         default:
             break;
@@ -66,8 +64,7 @@ void Material::defineTextureByIndex(const unsigned int& _serial) {
 }
 
 void Material::loadTextureFromFile(const std::string& _nome, const TEX_SEQ& _seq, const std::string& _arquivo) {
-    int val = texManager->fromFile(_nome, _seq, _arquivo);
-    defineTextureByIndex(val);
+    setTexture(texManager->fromFile(_nome, _seq, _arquivo));
 }
 
 void Material::createDefaultEffect() {

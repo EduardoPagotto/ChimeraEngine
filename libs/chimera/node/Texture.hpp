@@ -24,15 +24,6 @@ class Texture : public Entity {
 
     unsigned getHeight() const { return height; }
 
-    unsigned int getRefCount() const { return refCount; }
-
-    void addRefCount() { refCount++; }
-
-    void releaseRefCount() {
-        if (refCount > 0)
-            refCount--;
-    }
-
     GLuint getFrameBufferId() const { return depthMapFBO; }
 
     TEX_SEQ getIndexTextureSeq() const { return indexTextureSeq; }
@@ -41,8 +32,6 @@ class Texture : public Entity {
     TEX_SEQ indexTextureSeq;
 
     GLuint depthMapFBO;
-
-    unsigned int refCount;
 
     std::string pathFile;
 

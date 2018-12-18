@@ -18,11 +18,6 @@ class TextureManager {
   public:
     Texture* fromFile(std::string _name, const TEX_SEQ& _indexTextureSeq, std::string _pathFile);
 
-    // void init(const unsigned int& _serial);
-    void release(const unsigned int& _serial);
-    void destroy(const unsigned int& _serial);
-    void destroyAll() noexcept;
-
   protected:
     TextureManager() noexcept;
     ~TextureManager();

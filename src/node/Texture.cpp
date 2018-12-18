@@ -23,8 +23,6 @@ Texture::Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, cons
 
     depthMapFBO = 0;
 
-    refCount = 0;
-
     log = spdlog::get("chimera");
     log->debug("Constructor textura nome:{} arquivo:{}", _name, _pathFile);
 }
@@ -86,7 +84,7 @@ void Texture::init() {
         }
 
         texturaCarregada = true;
-        log->info("Instanciada textura Nome:{0} id:{1:d} num instancias:{2:d}", getName(), idTexture, getRefCount());
+        log->info("Instanciada textura Nome:{0} id:{1:d}", getName(), idTexture);
     }
 }
 } // namespace Chimera

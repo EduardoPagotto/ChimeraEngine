@@ -16,7 +16,7 @@ class TextureManager {
     friend class Singleton<TextureManager>;
 
   public:
-    Texture* fromFile(std::string _name, const TEX_SEQ& _indexTextureSeq, std::string _pathFile);
+    Texture* fromFile(std::string _name, const TEX_KIND& _indexTextureSeq, std::string _pathFile);
 
   protected:
     TextureManager() noexcept;

@@ -100,7 +100,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         pMat1->setDiffuse(Color(1.0f, 0.5f, 0.31f));
         pMat1->setSpecular(Color(0.5f, 0.5f, 0.5f));
         pMat1->setShine(32.0f);
-        pMat1->loadTextureFromFile("Texture-teste", TEX_SEQ::DIFFUSE, "./models/image1.jpg");
+        pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
 
         // Mesh do cubo1 filho de posicao 1
         Mesh* pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01", glm::vec3(50, 50, 50), pMat1);

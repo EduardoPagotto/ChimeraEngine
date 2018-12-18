@@ -21,13 +21,13 @@ void Material::init() {
         pTex->init();
 
         switch (pTex->getIndexTextureSeq()) {
-            case TEX_SEQ::DIFFUSE:
+            case TEX_KIND::DIFFUSE:
                 hasDifuse = true;
                 break;
-            case TEX_SEQ::EMISSIVE:
+            case TEX_KIND::EMISSIVE:
                 hasEmissive = true;
                 break;
-            case TEX_SEQ::SPECULAR:
+            case TEX_KIND::SPECULAR:
                 hasEspecular = true;
                 break;
             default:
@@ -49,13 +49,13 @@ void Material::init() {
 
 void Material::setTexture(Texture* _pTex) {
     switch (_pTex->getIndexTextureSeq()) {
-        case TEX_SEQ::DIFFUSE:
+        case TEX_KIND::DIFFUSE:
             mapTex[SHADE_TEXTURE_DIFFUSE] = _pTex;
             break;
-        case TEX_SEQ::EMISSIVE:
+        case TEX_KIND::EMISSIVE:
             mapTex[SHADE_TEXTURE_EMISSIVE] = _pTex;
             break;
-        case TEX_SEQ::SPECULAR:
+        case TEX_KIND::SPECULAR:
             mapTex[SHADE_TEXTURE_SPECULA] = _pTex;
             break;
         default:
@@ -63,7 +63,7 @@ void Material::setTexture(Texture* _pTex) {
     }
 }
 
-void Material::loadTextureFromFile(const std::string& _nome, const TEX_SEQ& _seq, const std::string& _arquivo) {
+void Material::loadTextureFromFile(const std::string& _nome, const TEX_KIND& _seq, const std::string& _arquivo) {
     setTexture(texManager->fromFile(_nome, _seq, _arquivo));
 }
 
@@ -86,13 +86,9 @@ void Material::apply(Shader* _shader) {
 
     if (mapTex.size() > 0) {
         for (std::map<std::string, Texture*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
-
             std::string name = iTex->first;
             Texture* pTex = iTex->second;
-
-            pTex->apply();
-
-            _shader->setGlUniform1i(name.c_str(), (int)pTex->getIndexTextureSeq());
+            pTex->apply(name, _shader);
         }
     } else {
         glBindTexture(GL_TEXTURE_2D, 0);

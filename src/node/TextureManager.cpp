@@ -24,7 +24,7 @@ TextureManager::~TextureManager() {
     log->debug("Destructor TextureManager");
 }
 
-Texture* TextureManager::fromFile(std::string _name, const TEX_SEQ& _indexTextureSeq, std::string _pathFile) {
+Texture* TextureManager::fromFile(std::string _name, const TEX_KIND& _indexTextureSeq, std::string _pathFile) {
     // TODO: colocar uma verificacao se o nome nao existe
     Texture* tex = new Texture(_name, _indexTextureSeq, _pathFile);
     mapTex[tex->getSerial()] = tex;

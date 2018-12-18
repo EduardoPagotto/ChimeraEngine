@@ -1,19 +1,12 @@
-#ifndef WIN32
 #include <cstdio>
-#else
-#include "stdafx.hpp"
-#endif
 
 #include "Game.hpp"
-
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-
+#include "chimera/core/Logger.hpp"
 #include "chimera/loader/ShadersLoader.hpp"
-
 #include <iostream>
-#include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
 #ifndef WIN32
@@ -22,21 +15,16 @@ int main(int argn, char** argv) {
 int _tmain(int argc, _TCHAR* argv[]) {
 #endif
 
-    auto console = spdlog::stdout_color_st("chimera");
-
-    spdlog::set_level(spdlog::level::debug);
-
+    auto console = Chimera::Logger::get();
     console->info("AppShader Iniciado");
 
-    spdlog::set_level(spdlog::level::debug);
-
     for (int i = 0; i < argn; i++) {
-        console->info("Parametros {0}: {1}", i, argv[i]);
+        console->info("Parametros %i: %s", i, argv[i]);
     }
 
     try {
         std::string config_file = "./examples/AppShader/etc/shader.yaml";
-        console->info("Carregar arquivo:{}", config_file);
+        console->info("Carregar arquivo: %s", config_file.c_str());
         YAML::Node config = YAML::LoadFile(config_file);
 
         YAML::Node screen = config["screen"];
@@ -64,10 +52,10 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete video;
 
     } catch (const Chimera::Exception& ex) {
-        console->error("Falha grave:{0}", ex.getMessage());
+        console->error("Falha grave: " + ex.getMessage());
         return -1;
-    } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {
-        console->error("Falha grave:{0}", ex);
+    } catch (const std::exception& ex) { console->error("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
+        console->error("Falha grave: " + ex);
     } catch (...) { console->error("Falha Desconhecida"); }
 
     console->info("AppShader finalizado com sucesso");

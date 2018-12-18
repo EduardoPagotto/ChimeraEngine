@@ -1,9 +1,9 @@
 #include "chimera/node/Font.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/Logger.hpp"
 
 #include <iostream>
 
-#include <spdlog/spdlog.h>
 namespace Chimera {
 
 Font::Font(const std::string& _fontFile, const int& _size) {
@@ -30,7 +30,8 @@ Font::Font(const std::string& _fontFile, const int& _size) {
     for (GLubyte c = 0; c < 128; c++) {
         // Load character glyph
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-            auto console = spdlog::stdout_color_st("Font");
+
+            auto console = Chimera::Logger::get();
             console->warn("ERROR::FREETYTPE: Failed to load Glyph");
             continue;
         }

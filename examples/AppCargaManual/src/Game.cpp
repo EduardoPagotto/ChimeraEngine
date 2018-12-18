@@ -16,7 +16,7 @@ Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo, Chimera::Ph
     textoFPS = "fps: 0";
     sPosicaoObj = "pos:(,,)";
 
-    log = spdlog::get("chimera");
+    log = Chimera::Logger::get();
     log->debug("Constructor Game");
 
     physicWorld = _physicWorld;
@@ -202,17 +202,17 @@ void Game::userEvent(const SDL_Event& _event) {
         case Chimera::KindOp::START_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao start: {} -> {}", n1->getName(), n2->getName());
+            log->debug("Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::ON_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao on: {} -> {}", n1->getName(), n2->getName());
+            log->debug("Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::OFF_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao off: {} -> {}", n1->getName(), n2->getName());
+            log->debug("Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
             pVideo->toggleFullScreen();

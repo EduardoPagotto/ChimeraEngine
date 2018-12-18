@@ -1,13 +1,8 @@
-#ifndef WIN32
-#include <cstdio>
-#else
-#include "stdafx.hpp"
-#endif
-
 #include "Game.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
+#include "chimera/core/Logger.hpp"
 #include "chimera/loader/ShadersLoader.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
@@ -15,9 +10,9 @@
 #include "chimera/node/MeshUtil.hpp"
 #include "chimera/node/Transform.hpp"
 
+#include <cstdio>
 #include <glm/glm.hpp>
 #include <iostream>
-#include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
 #ifndef WIN32
@@ -30,17 +25,17 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
     std::map<std::string, Chimera::Shader*> mapa;
 
-    auto console = spdlog::stdout_color_st("chimera");
-    spdlog::set_level(spdlog::level::debug);
+    Chimera::Logger* console = Chimera::Logger::get();
+    // spdlog::set_level(spdlog::level::debug);
 
     console->info("appTest Iniciado");
     for (int i = 0; i < argn; i++) {
-        console->info("Parametros {0}: {1}", i, argv[i]);
+        console->info("Parametros %d: %s", i, argv[i]);
     }
 
     try {
         std::string config_file = "./examples/appTest/etc/appteste.yaml";
-        console->info("Carregar arquivo:{0}", config_file);
+        console->info("Carregar arquivo: %s" + config_file);
 
         YAML::Node config = YAML::LoadFile(config_file);
         YAML::Node screen = config["screen"];
@@ -57,7 +52,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node shaders = config["shaders"];
 
         // Chimera::ShadersManager *shader =  sceneMng->getShadersManager();
-        console->info("Shaders identificados: {0}", shaders.size());
+        console->info("Shaders identificados: %d", shaders.size());
         for (std::size_t i = 0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
             Chimera::Shader* pShader =
@@ -137,11 +132,11 @@ int _tmain(int argc, _TCHAR* argv[]) {
         mapa.clear();
 
     } catch (const Chimera::Exception& ex) {
-        console->error("Falha grave:{0}", ex.getMessage());
+        console->error("Falha grave: " + ex.getMessage());
         return -1;
-    } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {
+    } catch (const std::exception& ex) { console->error("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
 
-        console->error("Falha grave:{0}", ex);
+        console->error("Falha grave:" + ex);
 
     } catch (...) { console->error("Falha Desconhecida"); }
 

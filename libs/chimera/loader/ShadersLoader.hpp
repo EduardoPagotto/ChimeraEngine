@@ -3,10 +3,9 @@
 
 #include <string.h>
 
+#include "chimera/core/Logger.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Shader.hpp"
-
-#include <spdlog/spdlog.h>
 
 namespace ChimeraLoaders {
 
@@ -24,7 +23,7 @@ class ShadersLoader {
     GLuint compileShader(const std::string& shaderCode, bool _shadeKind);
     GLuint linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID);
 
-    std::shared_ptr<spdlog::logger> log;
+    Chimera::Logger* log;
 };
 } // namespace ChimeraLoaders
 

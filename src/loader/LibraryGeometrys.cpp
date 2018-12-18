@@ -1,6 +1,7 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryMaterials.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/Logger.hpp"
 
 namespace ChimeraLoaders {
 
@@ -144,14 +145,11 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
         }
     }
 
-    std::shared_ptr<spdlog::logger> log = spdlog::get("chimera");
-    log->debug("Nome: {0}", _pDraw->getName().c_str());
-    log->debug("Vertex  Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->vertexIndex.size(),
-               _pDraw->vertexList.size());
-    log->debug("Normal  Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->normalIndex.size(),
-               _pDraw->normalList.size());
-    log->debug("Texture Indice / Lista ------ ( {0:03d} / {1:03d} )", _pDraw->textureIndex.size(),
-               _pDraw->textureList.size());
+    Chimera::Logger* log = Chimera::Logger::get();
+    log->debug("Nome: " + _pDraw->getName());
+    log->debug("Vertex  Indice / Lista --- ( %03d / %03d )", _pDraw->vertexIndex.size(), _pDraw->vertexList.size());
+    log->debug("Normal  Indice / Lista --- ( %03d / %03d )", _pDraw->normalIndex.size(), _pDraw->normalList.size());
+    log->debug("Texture Indice / Lista --- ( %03d / %03d} )", _pDraw->textureIndex.size(), _pDraw->textureList.size());
 
     return retorno;
 }

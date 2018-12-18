@@ -6,83 +6,39 @@
 #include <string>
 #include <time.h>
 
-// ref:https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
-
-//#define SMART_LOG(message) smart_log(__FUNCTION__, message)
-//#define (message) smart_log(__FUNCTION__, message)
-//#define LOGGERZ Chimera::Logger::GetLogger()
-
-// using namespace std;
+// ref: https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
+// ref: https://en.wikipedia.org/wiki/ANSI_escape_code
 
 namespace Chimera {
-
-/**
- *   Singleton Logger Class.
- */
 class Logger {
   public:
-    /**
-     *   Logs a message
-     *   @param sMessage message to be logged.
-     */
     void info(const std::string& sMessage);
-    /**
-     *   Variable Length Logger function
-     *   @param format string for the message to be logged.
-     */
     void info(const char* format, ...);
-
     void warn(const char* format, ...);
-
     void warn(const std::string& sMessage);
-
     void debug(const char* format, ...);
-
     void debug(const std::string& sMessage);
-
     void error(const char* format, ...);
-
     void error(const std::string& sMessage);
 
-    /**
-     *   << overloaded function to Logs a message
-     *   @param sMessage message to be logged.
-     */
     Logger& operator<<(const std::string& sMessage);
-    /**
-     *   Funtion to create the instance of logger class.
-     *   @return singleton object of Clogger class..
-     */
+
     static Logger* get();
 
+    // 0 -> error
+    // 1 -> warning , error
+    // 2 -> info, warning , error
+    // 3 -> debug, info, warning, error (default)
+    inline void setLevel(int val) { level = val; }
+
   private:
-    /**
-     *    Default constructor for the Logger class.
-     */
     Logger();
-    /**
-     *   copy constructor for the Logger class.
-     */
-    Logger(const Logger&){}; // copy constructor is private
-    /**
-     *   assignment operator for the Logger class.
-     */
+    Logger(const Logger&){};                            // copy constructor is private
     Logger& operator=(const Logger&) { return *this; }; // assignment operator is private
-    /**
-     *   Log file name.
-     **/
 
+    int level;
+    static Logger* pLogger;
     const std::string currentDateTime();
-
-    // static const std::string sFileName;
-    /**
-     *   Singleton logger class object pointer.
-     **/
-    static Logger* pThis;
-    /**
-     *   Log file stream object.
-     **/
-    // static std::ofstream logfile;
 };
 } // namespace Chimera
 #endif

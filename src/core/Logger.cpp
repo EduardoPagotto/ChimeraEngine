@@ -11,18 +11,14 @@ int _vscprintf(const char* format, va_list pargs) {
     return retval;
 }
 
-// const std::string Logger::sFileName = "Log.txt";
-Logger* Logger::pThis = nullptr;
-// std::ofstream Logger::logfile;
-
-Logger::Logger() {}
+Logger* Logger::pLogger = nullptr;
+Logger::Logger() : level(3) {}
 
 Logger* Logger::get() {
-    if (pThis == nullptr) {
-        pThis = new Logger();
-        // logfile.open(sFileName.c_str(), std::ios::out | std::ios::app);
-    }
-    return pThis;
+    if (pLogger == nullptr)
+        pLogger = new Logger();
+
+    return pLogger;
 }
 
 void Logger::debug(const char* format, ...) {
@@ -35,63 +31,11 @@ void Logger::debug(const char* format, ...) {
     // vsprintf(sMessage, nLength, format, args);
     vsprintf(sMessage, format, args);
 
-    std::cout << currentDateTime() << "\t";
-    std::cout << sMessage << "\n";
+    debug(std::string(sMessage));
 
     va_end(args);
 
     delete[] sMessage;
-}
-
-void Logger::debug(const std::string& sMessage) {
-    std::cout << currentDateTime() << "\t";
-    std::cout << sMessage << "\n";
-}
-
-void Logger::error(const char* format, ...) {
-    char* sMessage = nullptr;
-    int nLength = 0;
-    va_list args;
-    va_start(args, format);
-    nLength = _vscprintf(format, args) + 1;
-    sMessage = new char[nLength];
-    // vsprintf(sMessage, nLength, format, args);
-    vsprintf(sMessage, format, args);
-
-    std::cout << currentDateTime() << "\t";
-    std::cout << sMessage << "\n";
-
-    va_end(args);
-
-    delete[] sMessage;
-}
-
-void Logger::error(const std::string& sMessage) {
-    std::cout << currentDateTime() << "\t";
-    std::cout << sMessage << "\n";
-}
-
-void Logger::warn(const char* format, ...) {
-    char* sMessage = nullptr;
-    int nLength = 0;
-    va_list args;
-    va_start(args, format);
-    nLength = _vscprintf(format, args) + 1;
-    sMessage = new char[nLength];
-    // vsprintf(sMessage, nLength, format, args);
-    vsprintf(sMessage, format, args);
-
-    std::cout << currentDateTime() << "\t";
-    std::cout << sMessage << "\n";
-
-    va_end(args);
-
-    delete[] sMessage;
-}
-
-void Logger::warn(const std::string& sMessage) {
-    std::cout << currentDateTime() << "\t";
-    std::cout << sMessage << "\n";
 }
 
 void Logger::info(const char* format, ...) {
@@ -104,17 +48,71 @@ void Logger::info(const char* format, ...) {
     // vsprintf(sMessage, nLength, format, args);
     vsprintf(sMessage, format, args);
 
-    std::cout << currentDateTime() << "\t";
-    std::cout << sMessage << "\n";
+    info(std::string(sMessage));
 
     va_end(args);
 
     delete[] sMessage;
 }
 
+void Logger::warn(const char* format, ...) {
+    char* sMessage = nullptr;
+    int nLength = 0;
+    va_list args;
+    va_start(args, format);
+    nLength = _vscprintf(format, args) + 1;
+    sMessage = new char[nLength];
+    // vsprintf(sMessage, nLength, format, args);
+    vsprintf(sMessage, format, args);
+
+    warn(sMessage);
+
+    va_end(args);
+
+    delete[] sMessage;
+}
+
+void Logger::error(const char* format, ...) {
+    char* sMessage = nullptr;
+    int nLength = 0;
+    va_list args;
+    va_start(args, format);
+    nLength = _vscprintf(format, args) + 1;
+    sMessage = new char[nLength];
+    // vsprintf(sMessage, nLength, format, args);
+    vsprintf(sMessage, format, args);
+
+    error(std::string(sMessage));
+
+    va_end(args);
+
+    delete[] sMessage;
+}
+
+void Logger::debug(const std::string& sMessage) {
+
+    if (level > 2)
+        std::cout << "\033[96m" << currentDateTime() << " " << sMessage << "\033[39m"
+                  << "\n";
+}
+
 void Logger::info(const std::string& sMessage) {
-    std::cout << currentDateTime() << "\t";
-    std::cout << sMessage << "\n";
+
+    if (level > 1)
+        std::cout << "\033[97m" << currentDateTime() << " " << sMessage << "\033[39m"
+                  << "\n";
+}
+
+void Logger::warn(const std::string& sMessage) {
+
+    if (level > 0)
+        std::cout << "\033[93m" << currentDateTime() << " " << sMessage << "\033[39m"
+                  << "\n";
+}
+
+void Logger::error(const std::string& sMessage) {
+    std::cout << "\033[91m" << currentDateTime() << " " << sMessage << "\033[39m"
+              << "\n";
 }
 
 Logger& Logger::operator<<(const std::string& sMessage) {
@@ -130,8 +128,8 @@ const std::string Logger::currentDateTime() {
     char buffer[80];
     time(&rawtime);
     timeinfo = localtime(&rawtime);
-    strftime(buffer, 80, "%Y%m%d-%X", timeinfo);
+    // strftime(buffer, 80, "%Y%m%d-%X", timeinfo);
+    strftime(buffer, 80, "%X", timeinfo);
     return buffer;
 }
-
 } // namespace Chimera

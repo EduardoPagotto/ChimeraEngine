@@ -3,15 +3,8 @@
 
 #define GLEW_STATIC
 
-#include <string>
-//#include <GL/glew.h>
-//#include <GL/gl.h>
-//#include <GL/glu.h>
 #include <SDL2/SDL.h>
-
-//#include <glm/glm.hpp>
-
-#include <spdlog/spdlog.h>
+#include <string>
 
 namespace Chimera {
 
@@ -38,15 +31,12 @@ class Canvas {
     inline bool getFullScreen() const { return fullScreen; }
 
   protected:
-    // virtual void init() = 0;
-
     bool fullScreen;
     int width;
     int height;
     std::string title;
     SDL_Window* window;
     SDL_Point winPosPrev;
-    std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera
 #endif

@@ -2,14 +2,13 @@
 #define __GAME_XX__HPP
 
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/core/Logger.hpp"
+#include "chimera/node/Camera.hpp"
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/PhysicsControl.hpp"
 #include "chimera/node/SceneMng.hpp"
 #include "chimera/node/Solid.hpp"
-
-#include <spdlog/spdlog.h>
 
 /**
  * Class Game
@@ -44,7 +43,7 @@ class Game : public Chimera::IGameClientEvents {
     std::string sPosicaoObj;
     std::string textoFPS;
 
-    Chimera::CameraSpherical* pOrbitalCam;
+    Chimera::Camera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;
     Chimera::ParticleEmitter* pEmissor;
 
@@ -55,7 +54,7 @@ class Game : public Chimera::IGameClientEvents {
 
     Chimera::CanvasGL* pVideo;
 
-    std::shared_ptr<spdlog::logger> log;
+    Chimera::Logger* log;
 };
 
 #endif

@@ -16,7 +16,7 @@ Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo, Chimera::Ph
     textoFPS = "fps: 0";
     sPosicaoObj = "pos:(,,)";
 
-    log = spdlog::get("chimera");
+    log = Chimera::Logger::get();
     log->debug("Constructor Game");
 
     physicWorld = _physicWorld;
@@ -134,9 +134,9 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
-            pOrbitalCam->trackBall(mm.yrel, mm.xrel, 0);
+            pOrbitalCam->getTrackBall()->tracking(mm.yrel, mm.xrel, 0);
         } else if (botaoIndex == 3) {
-            pOrbitalCam->trackBall(0, 0, mm.yrel);
+            pOrbitalCam->getTrackBall()->tracking(0, 0, mm.yrel);
         }
     }
 }
@@ -154,7 +154,7 @@ void Game::start() {
     }
 
     // Localiza a camera
-    pOrbitalCam = (Chimera::CameraSpherical*)pSceneMng->findChild("Camera-camera", true);
+    pOrbitalCam = (Chimera::Camera*)pSceneMng->findChild("Camera-camera", true);
 
     // Localiza objeto como o primario
     pCorpoRigido = (Chimera::Solid*)pSceneMng->findChild("zoltan-RigidBody", true);
@@ -202,17 +202,17 @@ void Game::userEvent(const SDL_Event& _event) {
         case Chimera::KindOp::START_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao start: {} -> {}", n1->getName(), n2->getName());
+            log->debug("Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::ON_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao on: {} -> {}", n1->getName(), n2->getName());
+            log->debug("Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::OFF_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao off: {} -> {}", n1->getName(), n2->getName());
+            log->debug("Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
             pVideo->toggleFullScreen();

@@ -2,7 +2,7 @@
 #define __CHIMERA_SHADOW_MAP__HPP
 
 #include "Node.hpp"
-#include "TextureManager.hpp"
+#include "chimera/core/Tex.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
@@ -19,15 +19,12 @@ class ShadowMap : public Node {
 
     void initSceneShadow();
     void endSceneShadow();
-    void applyShadow();
-
-    TEX_SEQ getShadowIndexTextureSeq() const { return pTexture->getIndexTextureSeq(); }
+    void applyShadow(const std::string& nameProp, Shader* _pShader);
 
     glm::mat4 lightSpaceMatrix;
 
   private:
-    TextureManager* texManager;
-    Texture* pTexture;
+    TexFBO* pTexture;
 };
 
 } // namespace Chimera

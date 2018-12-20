@@ -5,9 +5,8 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include <GL/freeglut.h>
 
-#include "ListPolygon.hpp"
-//#include "Node.hpp"
 #include "BSPTree.h"
+#include "ListPolygon.hpp"
 
 #define canvas_width 400
 #define canvas_height 400
@@ -132,7 +131,7 @@ void setCube() {
     c[9] = glm::vec3(0, 0, 0);
 
     for (int i = 0; i < 10; i++) {
-        p[i].setNormal(n[i]);
+        p[i].setNormais(n[i], n[i], n[i]);
         p[i].setColor(c[i]);
         p[i].setId(polygon_id++);
         polygonList.addToList(&p[i]);
@@ -175,7 +174,7 @@ void setOctahedran() {
     for (int i = 0; i < 8; i++) {
         t[i].setId(polygon_id++);
         t[i].setColor(glm::vec3(1, 0, 0));
-        t[i].computeNormalVertices();
+        t[i].computeFaceNormalsFromVertices();
         polygonList.addToList(&t[i]);
     }
 }
@@ -235,9 +234,9 @@ void display_func() {
     while ((fi = finalpl->next()) != NULL) {
         glm::vec3 cc = fi->getColor();
         glColor3f(cc.x, cc.y, cc.z);
-        glNormal3f(fi->getNormal().x, fi->getNormal().y, fi->getNormal().z);
         glBegin(GL_TRIANGLES);
         for (int i = 0; i < 3; i++) {
+            glNormal3f(fi->getNormais()[i].x, fi->getNormais()[i].y, fi->getNormais()[i].z);
             glVertex3f(fi->getVertices()[i].x, fi->getVertices()[i].y, fi->getVertices()[i].z);
         }
         glEnd();

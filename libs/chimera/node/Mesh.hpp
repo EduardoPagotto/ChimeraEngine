@@ -6,10 +6,9 @@
 #include <vector>
 
 #include "Draw.hpp"
+#include "chimera/core/Logger.hpp"
 #include "chimera/core/VboIndexer.hpp"
 #include <glm/glm.hpp>
-
-#include <spdlog/spdlog.h>
 
 namespace Chimera {
 
@@ -50,7 +49,7 @@ class Mesh : public Draw {
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
 
-    std::shared_ptr<spdlog::logger> log;
+    Chimera::Logger* log;
 };
 } // namespace Chimera
 #endif

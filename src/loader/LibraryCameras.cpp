@@ -1,6 +1,6 @@
 #include "LibraryCameras.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/node/Camera.hpp"
 
 namespace ChimeraLoaders {
 
@@ -16,15 +16,17 @@ Chimera::Camera* LibraryCameras::target() {
         std::string l_id = l_nCam->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            Chimera::CameraSpherical* pCameraNew = new Chimera::CameraSpherical(l_id);
+            Chimera::Camera* pCameraNew = new Chimera::Camera(nullptr, l_id);
             loadbase(l_nCam, pCameraNew);
 
             tinyxml2::XMLElement* l_nExtra = findExtra(l_nCam);
             if (l_nExtra) {
                 tinyxml2::XMLElement* l_nMin = l_nExtra->FirstChildElement("orbital")->FirstChildElement("min");
                 tinyxml2::XMLElement* l_nMax = l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
-                pCameraNew->setDistanciaMinima(atof(l_nMin->GetText()));
-                pCameraNew->setDistanciaMaxima(atof(l_nMax->GetText()));
+
+                pCameraNew->createTrackBall();
+                pCameraNew->getTrackBall()->setDistanciaMinima(atof(l_nMin->GetText()));
+                pCameraNew->getTrackBall()->setDistanciaMaxima(atof(l_nMax->GetText()));
             }
 
             return pCameraNew;
@@ -37,10 +39,11 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::Camera* _pC
     tinyxml2::XMLElement* l_nPerspective =
         _nNode->FirstChildElement("optics")->FirstChildElement("technique_common")->FirstChildElement("perspective");
     if (l_nPerspective != nullptr) {
-        _pCamera->setPerspective(true);
-        _pCamera->setFov(atof(l_nPerspective->FirstChildElement("xfov")->GetText()));
-        _pCamera->setNear(atof(l_nPerspective->FirstChildElement("znear")->GetText()));
-        _pCamera->setFar(atof(l_nPerspective->FirstChildElement("zfar")->GetText()));
+        //_pCamera->setPerspective(true);
+        Chimera::ViewPoint* vp = _pCamera->getViewPoint();
+        vp->fov = atof(l_nPerspective->FirstChildElement("xfov")->GetText());
+        vp->near = atof(l_nPerspective->FirstChildElement("znear")->GetText());
+        vp->far = atof(l_nPerspective->FirstChildElement("zfar")->GetText());
 
     } else {
         // TODO testar ecarregar ortogonal aqui

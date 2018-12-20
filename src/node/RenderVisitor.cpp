@@ -57,10 +57,8 @@ void RenderVisitor::visit(Mesh* _pMesh) {
 
     _pMesh->getMaterial()->apply(pShader);
 
-    if (shadowMap != nullptr) {
-        shadowMap->applyShadow();
-        pShader->setGlUniform1i("shadowMap", (int)shadowMap->getShadowIndexTextureSeq());
-    }
+    if (shadowMap != nullptr)
+        shadowMap->applyShadow("shadowMap", pShader);
 
     _pMesh->render(pShader);
 }
@@ -137,19 +135,15 @@ void RenderVisitor::visit(Group* _pGroup) {
 
     Camera* pCam = (Camera*)_pGroup->findChild(Chimera::EntityKind::CAMERA, 0, false);
     if (pCam != nullptr) {
-        pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(pCam->getPosition()));
-        projection = pVideo->getPerspectiveProjectionMatrix(pCam->getFov(), pCam->getNear(), pCam->getFar(), eye);
-        view = pCam->getViewMatrix();
+        ViewPoint* vp = pCam->getViewPoint();
+        pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
+        projection = pVideo->getPerspectiveProjectionMatrix(vp->fov, vp->near, vp->far, eye);
+        view = glm::lookAt(vp->position, vp->direction, vp->rotation);
     }
 
     Light* pLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
-    if (pLight != nullptr) {
-
-        pShader->setGlUniform3fv("light.position", 1, glm::value_ptr(pLight->getPosition()));
-        pShader->setGlUniform4fv("light.ambient", 1, pLight->getAmbient().ptr());
-        pShader->setGlUniform4fv("light.diffuse", 1, pLight->getDiffuse().ptr());
-        pShader->setGlUniform4fv("light.specular", 1, pLight->getSpecular().ptr());
-    }
+    if (pLight != nullptr)
+        pLight->apply(pShader);
 }
 
 void RenderVisitor::visit(Chimera::Transform* _pTransform) { model = _pTransform->getModelMatrix(pCoord); }

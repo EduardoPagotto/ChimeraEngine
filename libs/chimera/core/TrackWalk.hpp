@@ -1,19 +1,19 @@
-#ifndef __CHIMERA_CAMERA_MAN__HPP
-#define __CHIMERA_CAMERA_MAN__HPP
+#ifndef __CHIMERA_TRACK_WALK__HPP
+#define __CHIMERA_TRACK_WALK__HPP
 
-#include "Camera.hpp"
+#include "chimera/core/ViewPoint.hpp"
 
 namespace Chimera {
 
-class CameraMan : public Camera {
+enum class WalkType { Land, Air };
 
+class TrackWalk {
   public:
-    CameraMan(std::string _name);
-    CameraMan(const Camera& _camera);
-    virtual ~CameraMan();
+    TrackWalk();
+    virtual ~TrackWalk();
 
-    virtual void init();
-    virtual void render();
+    virtual void init(ViewPoint* _vp, WalkType _type);
+    virtual void walking();
 
     void pitch(float _theta);
     void yaw(float _theta);
@@ -23,12 +23,12 @@ class CameraMan : public Camera {
     void fly(float _delta, bool _wall[4]);
     void reset();
 
-    void updateMove();
-
   private:
     glm::vec3 along;
     glm::vec3 up;
     glm::vec3 forward;
+    ViewPoint* pVp;
+    WalkType type;
 };
 } // namespace Chimera
 #endif

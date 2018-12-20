@@ -55,7 +55,7 @@ void ParticleEmitter::init() {
 
 void ParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string& _arquivo) {
 
-    material->loadTextureFromFile(_nome, TEX_SEQ::DIFFUSE, _arquivo);
+    material->loadTextureFromFile(_nome, TEX_KIND::DIFFUSE, _arquivo);
 }
 
 void ParticleEmitter::setSizeBox(const glm::vec3& _size) { sizeBox = _size; }

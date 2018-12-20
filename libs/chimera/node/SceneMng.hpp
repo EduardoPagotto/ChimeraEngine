@@ -1,11 +1,9 @@
 #ifndef __CHIMERA_SCENE_MNG__HPP
 #define __CHIMERA_SCENE_MNG__HPP
 
-#include <vector>
-
 #include "RenderVisitor.hpp"
 #include "chimera/core/CanvasGL.hpp"
-#include <spdlog/spdlog.h>
+#include <vector>
 
 namespace Chimera {
 
@@ -29,7 +27,6 @@ class SceneMng : public Node {
 
   private:
     RenderVisitor renderV;
-    std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera
 #endif

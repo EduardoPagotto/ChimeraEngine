@@ -3,61 +3,25 @@
 
 #include "Entity.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
-
-#include <spdlog/spdlog.h>
+#include "chimera/core/Tex.hpp"
 
 namespace Chimera {
 
-enum class TEX_SEQ { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };
-
 class Texture : public Entity {
   public:
-    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, const std::string& _pathFile);
-    Texture(const std::string& _name, const TEX_SEQ& _indexTextureSeq, const unsigned& _width, const unsigned& _height);
+    Texture(const std::string& _name, const TEX_KIND& _indexTextureSeq, const std::string& _pathFile);
     virtual ~Texture();
 
-    void apply();
-
-    void init();
-
-    bool textureLoad() { return texturaCarregada; }
-
-    int getIdTexture() { return idTexture; }
-
-    unsigned getWidth() const { return width; }
-
-    unsigned getHeight() const { return height; }
-
-    unsigned int getRefCount() const { return refCount; }
-
-    void addRefCount() { refCount++; }
-
-    void releaseRefCount() {
-        if (refCount > 0)
-            refCount--;
+    inline void apply(const std::string& _shaderPropName, Shader* _pShader) {
+        pTex->apply((unsigned)indexTextureSeq, _shaderPropName, _pShader);
     }
 
-    GLuint getFrameBufferId() const { return depthMapFBO; }
-
-    TEX_SEQ getIndexTextureSeq() const { return indexTextureSeq; }
+    inline bool init() { return pTex->init(); }
+    inline TEX_KIND getIndexTextureSeq() const { return indexTextureSeq; }
 
   private:
-    TEX_SEQ indexTextureSeq;
-
-    GLuint depthMapFBO;
-
-    unsigned int refCount;
-
-    std::string pathFile;
-
-    unsigned width;
-    unsigned height;
-
-    GLuint idTexture;
-    // int indiceFilter;
-    bool texturaCarregada;
-
-    std::shared_ptr<spdlog::logger> log;
+    TEX_KIND indexTextureSeq;
+    TexImg* pTex;
 };
 } // namespace Chimera
 #endif

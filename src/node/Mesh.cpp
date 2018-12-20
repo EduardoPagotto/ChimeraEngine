@@ -14,8 +14,8 @@ Mesh::Mesh(Node* _parent, std::string _name) : Draw(_parent, EntityKind::MESH, _
     VertexVBOID = 0;
     IndexVBOID = 0;
     VAO = 0;
-    log = spdlog::get("chimera");
-    log->debug("Constructor Mesh:{}", _name);
+    log = Logger::get();
+    log->debug("Constructor Mesh: " + _name);
 }
 
 Mesh::Mesh(const Mesh& _cpy) : Draw(_cpy) {
@@ -32,8 +32,8 @@ Mesh::Mesh(const Mesh& _cpy) : Draw(_cpy) {
     copy(_cpy.textureIndex.begin(), _cpy.textureIndex.end(), back_inserter(textureIndex));
     copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
 
-    log = spdlog::get("chimera");
-    log->debug("Constructor Copy Mesh {}", _cpy.getName());
+    log = Logger::get();
+    log->debug("Constructor Copy Mesh " + _cpy.getName());
 }
 
 Mesh::~Mesh() {
@@ -48,7 +48,7 @@ Mesh::~Mesh() {
     glDeleteBuffers(1, &VertexVBOID);
     glDeleteBuffers(1, &IndexVBOID);
 
-    log->debug("Destructor Mesh:{}", getName());
+    log->debug("Destructor Mesh: " + getName());
 }
 
 void Mesh::init() {
@@ -112,7 +112,7 @@ void Mesh::setVertexBuffer() {
     conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
     indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
-    log->debug("VBO Nome: {0} Indice: {1} Data: {2}", getName().c_str(), indexIBO.size(), vertexData.size());
+    log->debug("VBO Nome: %s Indice: %d Data: %d", getName().c_str(), indexIBO.size(), vertexData.size());
 
     unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);

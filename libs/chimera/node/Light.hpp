@@ -1,14 +1,13 @@
 #ifndef __CHIMERA_LIGHT__HPP
 #define __CHIMERA_LIGHT__HPP
 
-#include <tinyxml2.h>
-
-#include "Color.hpp"
-#include "Node.hpp"
-
-#include "chimera/core/OpenGLDefs.hpp"
 #include "glm/glm.hpp"
 #include <map>
+
+#include "Node.hpp"
+#include "chimera/core/Color.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/Shader.hpp"
 
 namespace Chimera {
 
@@ -26,30 +25,13 @@ class Light : public Node {
     // Inherited via Node
     virtual void accept(class NodeVisitor* v) override;
 
-    Color getAmbient() { return ambient; }
+    void apply(Shader* _pShader);
 
-    Color getSpecular() { return specular; }
-
-    Color getDiffuse() { return diffuse; }
-
-    void setAmbient(Color _color) {
-        ambient = _color;
-        map_params[ModeMaterial::AMBIENT] = &ambient;
-    }
-
-    void setSpecular(Color _color) {
-        specular = _color;
-        map_params[ModeMaterial::SPECULAR] = &specular;
-    }
-
-    void setDiffuse(Color _color) {
-        diffuse = _color;
-        map_params[ModeMaterial::DIFFUSE] = &diffuse;
-    }
-
-    void setType(LightType _type) { type = _type; }
-
-    void setTransform(const glm::mat4& _trans) { transform = _trans; }
+    inline void setAmbient(const Color& _color) { ambient = _color; }
+    inline void setSpecular(const Color& _color) { specular = _color; }
+    inline void setDiffuse(const Color& _color) { diffuse = _color; }
+    inline void setType(const LightType& _type) { type = _type; }
+    inline void setTransform(const glm::mat4& _trans) { transform = _trans; }
 
     glm::vec3 getPosition() const { return position; }
 
@@ -65,8 +47,6 @@ class Light : public Node {
 
     int number;
     LightType type;
-
-    std::map<ModeMaterial, void*> map_params;
 };
 } // namespace Chimera
 #endif

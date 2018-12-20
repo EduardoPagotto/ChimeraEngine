@@ -1,18 +1,17 @@
 #include "chimera/node/MeshUtil.hpp"
-
-#include <spdlog/spdlog.h>
+#include "chimera/core/Logger.hpp"
 
 namespace Chimera {
 
 void debugDados(Mesh* pMesh) {
 
-    std::shared_ptr<spdlog::logger> log = spdlog::get("chimera");
-    log->debug("Debug Mess Nome: {}", pMesh->getName());
+    Chimera::Logger* log = Chimera::Logger::get();
+    log->debug("Debug Mess Nome: " + pMesh->getName());
 
     int linha = 0;
-    log->debug("Vertex Indice ----------({0:03d})", pMesh->vertexIndex.size());
+    log->debug("Vertex Indice ----------(%03d)", pMesh->vertexIndex.size());
     for (unsigned int indice = 0; indice < pMesh->vertexIndex.size(); indice += 3) {
-        log->debug("Linha:{0:02d} : p:{1:02d} ({2:02d}; {3:02d}; {4:02d})", linha, indice, pMesh->vertexIndex[indice],
+        log->debug("Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice, pMesh->vertexIndex[indice],
                    pMesh->vertexIndex[indice + 1], pMesh->vertexIndex[indice + 2]);
         linha++;
     }
@@ -20,15 +19,15 @@ void debugDados(Mesh* pMesh) {
     linha = 0;
     log->debug("Vertex Lista ---------({0:03d})", pMesh->vertexList.size());
     for (unsigned int indice = 0; indice < pMesh->vertexList.size(); indice++) {
-        log->debug("Linha: {0:02d} : p:{1:02d} ({2:05.3f}; {3:05.3f}; {4:05.3f})", linha, indice,
-                   pMesh->vertexList[indice].x, pMesh->vertexList[indice].y, pMesh->vertexList[indice].z);
+        log->debug("Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f)", linha, indice, pMesh->vertexList[indice].x,
+                   pMesh->vertexList[indice].y, pMesh->vertexList[indice].z);
         linha++;
     }
 
     linha = 0;
     log->debug("Normal Indice ----------({0:03d})", pMesh->normalIndex.size());
     for (unsigned int indice = 0; indice < pMesh->normalIndex.size(); indice += 3) {
-        log->debug("Linha: {0:02d} : p:{1:02d} ({2:02d}; {3:02d}; {4:02d})", linha, indice, pMesh->normalIndex[indice],
+        log->debug("Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice, pMesh->normalIndex[indice],
                    pMesh->normalIndex[indice + 1], pMesh->normalIndex[indice + 2]);
         linha++;
     }
@@ -36,23 +35,23 @@ void debugDados(Mesh* pMesh) {
     linha = 0;
     log->debug("Normal Lista ---------({0:03d})", pMesh->normalList.size());
     for (unsigned int indice = 0; indice < pMesh->normalList.size(); indice++) {
-        log->debug("Linha: {0:02d} : p:{1:02d} ({2:05.3f}; {3:05.3f}; {4:05.3f})", linha, indice,
-                   pMesh->normalList[indice].x, pMesh->normalList[indice].y, pMesh->normalList[indice].z);
+        log->debug("Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f))", linha, indice, pMesh->normalList[indice].x,
+                   pMesh->normalList[indice].y, pMesh->normalList[indice].z);
         linha++;
     }
 
     linha = 0;
     log->debug("Texture Indice ----------({0:03d})", pMesh->textureIndex.size());
     for (unsigned int indice = 0; indice < pMesh->textureIndex.size(); indice += 3) {
-        log->debug("Linha: {0:02d} : p: {1:02d} ({2:02d}; {3:02d}; {4:02d})", linha, indice,
-                   pMesh->textureIndex[indice], pMesh->textureIndex[indice + 1], pMesh->textureIndex[indice + 2]);
+        log->debug("Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice, pMesh->textureIndex[indice],
+                   pMesh->textureIndex[indice + 1], pMesh->textureIndex[indice + 2]);
         linha++;
     }
 
     linha = 0;
     log->debug("Texture Lista ---------({0:03d})", pMesh->textureList.size());
     for (unsigned int indice = 0; indice < pMesh->textureList.size(); indice++) {
-        log->debug("Linha: {0:02d} : p: {1:02d} ({2:05.3f}; {3:05.3f})", linha, indice, pMesh->textureList[indice].x,
+        log->debug("Linha: %02d : p: %02d (%05.3f; %05.3f)", linha, indice, pMesh->textureList[indice].x,
                    pMesh->textureList[indice].y);
         linha++;
     }

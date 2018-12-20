@@ -60,12 +60,9 @@ CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _ful
         throw ExceptionSDL(ExceptionCode::ALLOC, std::string("Your current setup does not support multitexturing"));
     }
 #endif
-
-    log->debug("Instanciado CanvasGL");
 }
 
 CanvasGL::~CanvasGL() {
-
     if (context != nullptr) {
         SDL_GL_DeleteContext(context);
         context = nullptr;
@@ -75,8 +72,6 @@ CanvasGL::~CanvasGL() {
         SDL_DestroyWindow(window);
         window = nullptr;
     }
-
-    log->debug("Destructor CanvasGL");
 }
 
 void CanvasGL::before() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }

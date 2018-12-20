@@ -1,27 +1,17 @@
-#ifndef WIN32
-#include <cstdio>
-#else
-#include "stdafx.h"
-#endif
 
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/Logger.hpp"
 #include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"
+#include <cstdio>
 
-#include <spdlog/spdlog.h>
-
-#ifndef WIN32
 int main(int argn, char** argv) {
-#else
-int _tmain(int argc, _TCHAR* argv[]) {
-#endif
 
-    auto console = spdlog::stdout_color_st("chimera");
+    Chimera::Logger* console = Chimera::Logger::get();
     console->info("Teste Loader Iniciado");
-
-    spdlog::set_level(spdlog::level::debug);
+    // spdlog::set_level(spdlog::level::debug);
     for (int i = 0; i < argn; i++) {
-        console->info("Parametros {0}: {1}", i, argv[i]);
+        console->info("Parametros %i: %s", i, argv[i]);
     }
 
     try {
@@ -39,13 +29,13 @@ int _tmain(int argc, _TCHAR* argv[]) {
         libP.target();
 
     } catch (const Chimera::Exception& ex) {
-        console->error("TesteLoader falha grave:{0}", ex.getMessage());
+        console->error("TesteLoader falha grave: " + ex.getMessage());
         return -1;
     } catch (const std::exception& ex) {
-        console->error("TesteLoader falha grave:{0}", ex.what());
+        console->error("TesteLoader falha grave: %s", ex.what());
         return -1;
     } catch (const std::string& ex) {
-        console->error("TesteLoader falha grave:{0}", ex);
+        console->error("TesteLoader falha grave: " + ex);
         return -1;
     } catch (...) {
         console->error("TesteLoader falha Desconhecida");

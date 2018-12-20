@@ -1,23 +1,18 @@
-#ifndef WIN32
-#include <cstdio>
-#else
-#include "stdafx.hpp"
-#endif
-
 #include "Game.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
+#include "chimera/core/Logger.hpp"
 #include "chimera/loader/ShadersLoader.hpp"
-#include "chimera/node/CameraSpherical.hpp"
+#include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
 #include "chimera/node/MeshUtil.hpp"
 #include "chimera/node/Transform.hpp"
 
+#include <cstdio>
 #include <glm/glm.hpp>
 #include <iostream>
-#include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
 #ifndef WIN32
@@ -30,17 +25,17 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
     std::map<std::string, Chimera::Shader*> mapa;
 
-    auto console = spdlog::stdout_color_st("chimera");
-    spdlog::set_level(spdlog::level::debug);
+    Chimera::Logger* console = Chimera::Logger::get();
+    // spdlog::set_level(spdlog::level::debug);
 
     console->info("appTest Iniciado");
     for (int i = 0; i < argn; i++) {
-        console->info("Parametros {0}: {1}", i, argv[i]);
+        console->info("Parametros %d: %s", i, argv[i]);
     }
 
     try {
         std::string config_file = "./examples/appTest/etc/appteste.yaml";
-        console->info("Carregar arquivo:{0}", config_file);
+        console->info("Carregar arquivo: " + config_file);
 
         YAML::Node config = YAML::LoadFile(config_file);
         YAML::Node screen = config["screen"];
@@ -57,7 +52,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node shaders = config["shaders"];
 
         // Chimera::ShadersManager *shader =  sceneMng->getShadersManager();
-        console->info("Shaders identificados: {0}", shaders.size());
+        console->info("Shaders identificados: %d", shaders.size());
         for (std::size_t i = 0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
             Chimera::Shader* pShader =
@@ -77,16 +72,16 @@ int _tmain(int argc, _TCHAR* argv[]) {
         sceneMng->origemDesenho((Coord*)pTrans);
 
         // Propriedades da camera
-        CameraSpherical* pCam = new CameraSpherical("Observador-01");
-        pCam->setDistanciaMaxima(1000.0);
-        pCam->setDistanciaMinima(0.5);
-        pCam->setFar(10000.0);
-        pCam->setNear(0.1);
-        pCam->setFov(45.0);
-        pCam->setPositionRotation(glm::vec3(300, 0, 0), glm::vec3(0, 0, 0));
-        pCam->setPerspective(true);
+        Camera* pCam = new Camera(group1, "Observador-01");
+        pCam->createTrackBall();
+        pCam->getTrackBall()->setDistanciaMaxima(1000.0);
+        pCam->getTrackBall()->setDistanciaMinima(0.5);
+        pCam->getViewPoint()->far = 10000.0;
+        pCam->getViewPoint()->near = 0.1;
+        pCam->getViewPoint()->fov = 45.0;
+        pCam->getViewPoint()->position = glm::vec3(300, 0, 0);
+        pCam->getViewPoint()->rotation = glm::vec3(0, 0, 1);
         pCam->init();
-        group1->addChild(pCam);
 
         // Propriedades da luz
         Light* pLight = new Light(group1, "Luz1");
@@ -100,7 +95,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         pMat1->setDiffuse(Color(1.0f, 0.5f, 0.31f));
         pMat1->setSpecular(Color(0.5f, 0.5f, 0.5f));
         pMat1->setShine(32.0f);
-        pMat1->loadTextureFromFile("Texture-teste", TEX_SEQ::DIFFUSE, "./models/image1.jpg");
+        pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
 
         // Mesh do cubo1 filho de posicao 1
         Mesh* pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01", glm::vec3(50, 50, 50), pMat1);
@@ -137,11 +132,11 @@ int _tmain(int argc, _TCHAR* argv[]) {
         mapa.clear();
 
     } catch (const Chimera::Exception& ex) {
-        console->error("Falha grave:{0}", ex.getMessage());
+        console->error("Falha grave: " + ex.getMessage());
         return -1;
-    } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {
+    } catch (const std::exception& ex) { console->error("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
 
-        console->error("Falha grave:{0}", ex);
+        console->error("Falha grave:" + ex);
 
     } catch (...) { console->error("Falha Desconhecida"); }
 

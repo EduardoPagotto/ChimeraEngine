@@ -9,10 +9,15 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesCore Canvas.cpp
+set (SourcesCore Logger.cpp
+				 Canvas.cpp
 				 CanvasGL.cpp
 				 CanvasFB.cpp
+				 Tex.cpp
+				 Color.cpp
 				 Timer.cpp
+				 TrackBall.cpp
+				 TrackWalk.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
 				 Shader.cpp	

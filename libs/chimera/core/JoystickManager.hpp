@@ -84,10 +84,9 @@ class JoystickManager {
     bool TrackEvent(SDL_Event* event);
 
     /**
-     * Retorna uma string com a lista de Joysticks identificado
-     * @return nome e dados do joystick
+     * lista de Joysticks identificado no log
      */
-    std::string GetStatusManager(void);
+    void GetStatusManager(void);
 
     /**
      * Debug dos status dos Joysticks inseridos

@@ -1,33 +1,25 @@
-#include "chimera/core/Shader.hpp"
+#include <string>
+
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/Shader.hpp"
 
 namespace Chimera {
 
 Shader::Shader(const std::string& _programName, const GLuint& _idProgram)
-    : currentProgram(_programName), idProgram(_idProgram) {
-    log = spdlog::get("chimera");
-    log->debug("Contructor Shader {0} -> {1}", currentProgram, idProgram);
-}
+    : currentProgram(_programName), idProgram(_idProgram) {}
 
 Shader::Shader(const Shader& _shader) {
-
-    log = spdlog::get("chimera");
-    log->debug("Contructor Copy Shader {0} -> {1}", currentProgram, idProgram);
-
     idProgram = _shader.idProgram;
     currentProgram = _shader.currentProgram;
 }
 
-Shader::~Shader() {
-    log->debug("Remove Shader: {0} -> {1} ", currentProgram, idProgram);
-    glDeleteProgram(idProgram);
-}
+Shader::~Shader() { glDeleteProgram(idProgram); }
 
 GLint Shader::getUniformLocation(const char* _name) const noexcept {
     // nasty C lib uses -1 return value for error
     GLint loc = glGetUniformLocation(idProgram, _name);
     if (loc == -1)
-        log->error("Shader Uniform \"{0}\" not found in Program \"{1}\"", _name, currentProgram);
+        printf("Shader Uniform \"%s\" not found in Program \"%s\"", _name, currentProgram.c_str());
 
     return loc;
 }

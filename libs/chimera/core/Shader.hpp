@@ -2,7 +2,6 @@
 #define __CHIMERA_SHADER__HPP
 
 #include "chimera/core/OpenGLDefs.hpp"
-#include <spdlog/spdlog.h>
 #include <string.h>
 
 namespace Chimera {
@@ -36,7 +35,6 @@ class Shader {
   private:
     GLuint idProgram;
     std::string currentProgram;
-    std::shared_ptr<spdlog::logger> log;
 };
 } // namespace Chimera
 #endif

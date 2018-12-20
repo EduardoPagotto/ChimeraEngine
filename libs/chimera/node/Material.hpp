@@ -1,14 +1,14 @@
 #ifndef __CHIMERA_MATERIAL__HPP
 #define __CHIMERA_MATERIAL__HPP
 
-#include "Color.hpp"
-#include "Entity.hpp"
+#include <list>
 #include <map>
-#include <tinyxml2.h>
 
+#include "Entity.hpp"
 #include "TextureManager.hpp"
+#include "chimera/core/Color.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/Shader.hpp"
+#include "chimera/core/ShaderValue.hpp"
 
 namespace Chimera {
 
@@ -30,39 +30,34 @@ class Material : public Entity {
 
     virtual void init();
 
-    void setAmbient(const Color& _color);
-    void setSpecular(const Color& _color);
-    void setDiffuse(const Color& _color);
-    void setEmission(const Color& _color);
-    void setShine(const float& _val);
+    inline void setAmbient(const Color& _color) {
+        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_AMBIENTE, _color.get()));
+    }
 
-    Color getAmbient() const;
-    Color getSpecular() const;
-    Color getDiffuse() const;
-    Color getEmission() const;
-    float getShine() const;
+    inline void setSpecular(const Color& _color) {
+        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_SPECULA, _color.get()));
+    }
+
+    inline void setDiffuse(const Color& _color) {
+        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_DIFFUSE, _color.get()));
+    }
+
+    inline void setEmission(const Color& _color) { // TODO implementar
+        // listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_EMISSIVE, _color.ptr()));
+    }
+
+    inline void setShine(const float& _val) { listMaterial.push_back(new ShaderValue1vf(SHADE_MAT_SHININESS, _val)); }
 
     void apply(Shader* _shader);
     void createDefaultEffect();
-
-    void defineTextureByIndex(const unsigned int& _serial);
-
-    void loadTextureFromFile(const std::string& _nome, const TEX_SEQ& _seq, const std::string& _arquivo);
-
+    void setTexture(Texture* _pTex);
+    void loadTextureFromFile(const std::string& _nome, const TEX_KIND& _seq, const std::string& _arquivo);
     bool hasTexture() { return mapTex.size() > 0 ? true : false; }
 
   private:
-    Color diffuse;  /* Diffuse color RGBA */
-    Color ambient;  /* Ambient color RGB */
-    Color specular; /* Specular 'shininess' */
-    Color emission; /* Emissive color RGB */
-    float shine;
-
     int tipoTexturasDisponiveis;
-
-    std::map<std::string, void*> mapMatVal;
+    std::list<ShaderValue*> listMaterial;
     std::map<std::string, Texture*> mapTex;
-
     TextureManager* texManager;
 };
 } // namespace Chimera

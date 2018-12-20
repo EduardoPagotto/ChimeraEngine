@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 
@@ -16,13 +17,21 @@ Light::Light(Node* _parent, std::string _name) : Node(_parent, EntityKind::LIGHT
     specular = Color::ZERO;
     diffuse = Color::ZERO;
     position = glm::vec3(0.0, 0.0, 0.0);
-    transform = glm::mat4(1.0); // transform.setIdentity();
+    transform = glm::mat4(1.0); // Matrix identidade
 }
 
 Light::~Light() {}
 
+void Light::apply(Shader* _pShader) {
+    _pShader->setGlUniform3fv("light.position", 1, (float*)&position[0]);
+    _pShader->setGlUniform4fv("light.ambient", 1, ambient.ptr());
+    _pShader->setGlUniform4fv("light.diffuse", 1, diffuse.ptr());
+    _pShader->setGlUniform4fv("light.specular", 1, specular.ptr());
+}
+
 void Light::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
 
+    // TODO: Usar para consertar conf de coordenada no loader e afins
     //     //Transformacao quando Euley nao apagar
     //     btQuaternion l_qtn;
     //     transform.setIdentity();

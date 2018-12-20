@@ -11,14 +11,10 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourceNode Color.cpp
-				Node.cpp
+set (SourceNode Node.cpp
 				Light.cpp
 				Camera.cpp
 				Material.cpp
-				CameraSpherical.cpp
-				CameraMan.cpp
-				CameraOvr.cpp
 				Solid.cpp
 				PhysicsControl.cpp
 				Constraint.cpp

@@ -1,40 +1,36 @@
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/quaternion.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtx/quaternion.hpp>
 
 namespace Chimera {
 
-Camera::Camera(Node* _pNode, CameraType _type, std::string _name)
-    : type(_type), Node(_pNode, EntityKind::CAMERA, _name) {
-
-    type = _type;
-    position = glm::vec3(0.0, 0.0, 0.0);  // setZero();
-    rotation = glm::vec3(0.0, 0.0, 0.0);  //.setZero();
-    direction = glm::vec3(0.0, 0.0, 0.0); //.setZero();
-    nearDistance = 0.1f;
-    farDistance = 1000.0f;
-    fov = 45.0f;
-    perspective = true;
+Camera::Camera(Node* _pNode, std::string _name) : Node(_pNode, EntityKind::CAMERA, _name) {
+    viewPoint.zero();
+    pTrackBall = nullptr;
+    pTrackWalk = nullptr;
 }
 
-Camera::~Camera() {}
+Camera::~Camera() {
+    if (pTrackBall != nullptr)
+        delete pTrackBall;
 
-void Camera::setTransform(const glm::mat4& _trans) {
-    position = glm::vec3(_trans[3]);
-    direction = glm::vec3(0.0, 0.0, 0.0); // FIXME encontrar na matrix _trans
-    rotation = glm::vec3(0.0, 0.0, -1.0); // FIXME pegar no arquivo do collada
+    if (pTrackWalk != nullptr)
+        delete pTrackWalk;
 }
 
-void Camera::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
+void Camera::init() {
+    if (pTrackBall != nullptr)
+        pTrackBall->init(&viewPoint);
 
-    position = _posicao;
-    direction = _rotation;                // FIXME: esta errado aqui
-    rotation = glm::vec3(0.0, 0.0, -1.0); // FIXME pegar no arquivo do collada
+    if (pTrackWalk != nullptr)
+        pTrackWalk->init(&viewPoint, WalkType::Air);
 }
 
-glm::mat4 Camera::getViewMatrix(void) { return glm::lookAt(position, direction, rotation); }
+void Camera::createTrackBall() { pTrackBall = new TrackBall(); }
+
+void Camera::createTrackWalk() { pTrackWalk = new TrackWalk(); }
 
 void Camera::accept(NodeVisitor* v) { v->visit(this); }
 } // namespace Chimera

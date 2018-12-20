@@ -1,4 +1,5 @@
 #include "chimera/core/JoystickManager.hpp"
+#include "chimera/core/Logger.hpp"
 
 namespace Chimera {
 
@@ -102,55 +103,44 @@ JoystickState* JoystickManager::getJoystickState(const int& joystick_id) {
     return nullptr;
 }
 
-std::string JoystickManager::GetStatusManager(void) {
+void JoystickManager::GetStatusManager(void) {
+    // TODO: Testar!!!!
     // Create a status string for all joysticks.
-
-    std::string return_string;
-    char cstr[1024] = "";
-#ifdef WIN32
-    sprintf_s(cstr, 1024, "Joysticks: %i", Joysticks.size());
-#else
-    sprintf(cstr, (const char*)"Joysticks: %i", Joysticks.size());
-#endif
-    return_string += cstr;
-
+    std::string return_string = std::string("Joysticks size: ") + std::to_string(Joysticks.size());
     for (std::map<Uint8, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end();
          joy_iter++) {
-        return_string += "\n" + joy_iter->second.GetStatusJoy();
+        joy_iter->second.GetStatusJoy();
     }
-
-    return return_string;
 }
 
 void JoystickManager::DebugDadosJoystick() {
-
+    // TODO: Testar!!!!
+    Logger* pLog = Logger::get();
     SDL_Joystick* joystick;
     for (int i = 0; i < SDL_NumJoysticks(); ++i) {
         const char* name = SDL_JoystickNameForIndex(i);
-        printf("Joystick index %d: %s\n", i, name ? name : "[no name]");
-
-        /* This much can be done without opening the controller */
+        pLog->debug("Joystick index %d: %s", i, name ? name : "[no name]");
+        // This much can be done without opening the controller
         if (SDL_IsGameController(i)) {
             char* mapping = SDL_GameControllerMappingForGUID(SDL_JoystickGetDeviceGUID(i));
-            printf("game controller: %s\n", mapping);
+            pLog->debug("game controller: %s", mapping);
             SDL_free(mapping);
         } else {
             char guid[64];
             SDL_JoystickGetGUIDString(SDL_JoystickGetDeviceGUID(i), guid, sizeof(guid));
-            printf(" guid: %s\n", guid);
+            pLog->debug(" guid: %s", guid);
         }
 
-        /* For anything else we have to open */
+        // For anything else we have to open
         joystick = SDL_JoystickOpen(i);
-        if (joystick != NULL) {
-            /* Not the same as a device index! */
-            printf(" instance id: %d\n", SDL_JoystickInstanceID(joystick));
-            printf(" axes: %d\n", SDL_JoystickNumAxes(joystick));
-            printf(" hats: %d\n", SDL_JoystickNumHats(joystick));
-            printf(" buttons: %d\n", SDL_JoystickNumButtons(joystick));
-
-            /* I've _never_ seen this non-zero, if anyone has lemme know! */
-            printf(" trackballs: %d\n", SDL_JoystickNumBalls(joystick));
+        if (joystick != nullptr) {
+            // Not the same as a device index!
+            pLog->debug("Joystick instance id: %d", SDL_JoystickInstanceID(joystick));
+            pLog->debug("Joystick axes: %d", SDL_JoystickNumAxes(joystick));
+            pLog->debug("Joystick hats: %d", SDL_JoystickNumHats(joystick));
+            pLog->debug("Joystick buttons: %d", SDL_JoystickNumButtons(joystick));
+            // I've _never_ seen this non-zero, if anyone has lemme know!
+            pLog->debug("Joystick trackballs: %d", SDL_JoystickNumBalls(joystick));
             SDL_JoystickClose(joystick);
         }
     }

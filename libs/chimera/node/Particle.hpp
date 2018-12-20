@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_PARTICLE__HPP
 #define __CHIMERA_PARTICLE__HPP
 
-#include "Color.hpp"
+#include "chimera/core/Color.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "glm/glm.hpp"
 

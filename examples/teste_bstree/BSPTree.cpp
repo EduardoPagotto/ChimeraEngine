@@ -10,7 +10,7 @@ float classify(glm::vec3* normal, glm::vec3* eye) {
 
 SIDE classifyPolygon(Polygon* _pPartition, Polygon* _pPolygon) {
 
-    glm::vec3 n1 = _pPartition->getNormal();
+    glm::vec3 n1 = _pPartition->getFaceNormal();
     glm::vec3 v1 = _pPartition->getVertices()[0];
     float dotVal1 = -(glm::dot(n1, v1));
 
@@ -80,7 +80,7 @@ void drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ListPolygon* finalFaces) {
         return;
 
     Polygon* p = nullptr;
-    glm::vec3 normal = tree->partition.getNormal();
+    glm::vec3 normal = tree->partition.getFaceNormal();
     float result = classify(&normal, eye);
     if (result > 0) {
         drawBSPTree(tree->back, eye, finalFaces);

@@ -22,14 +22,13 @@
 
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
+#include "chimera/core/Logger.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
+#include "chimera/node/ShadowMapVisitor.hpp"
 #include "chimera/node/Transform.hpp"
 
-#include "chimera/node/ShadowMapVisitor.hpp"
-
-#include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
 #ifndef WIN32
@@ -40,18 +39,16 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
     std::map<std::string, Chimera::Shader*> mapa;
 
-    auto console = spdlog::stdout_color_st("chimera");
+    Chimera::Logger* console = Chimera::Logger::get();
     console->info("AppShader Iniciado");
 
-    spdlog::set_level(spdlog::level::debug);
-
     for (int i = 0; i < argn; i++) {
-        console->info("Parametros {0}: {1}", i, argv[i]);
+        console->info("Parametros %i: %s", i, argv[i]);
     }
 
     try {
         std::string config_file = "./examples/AppCargaManual/etc/appcargamanual.yaml";
-        console->info("Carregar arquivo:{0}", config_file);
+        console->info("Carregar arquivo: " + config_file);
         YAML::Node config = YAML::LoadFile(config_file);
 
         YAML::Node screen = config["screen"];
@@ -68,7 +65,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
         YAML::Node shaders = config["shaders"];
         // Chimera::ShadersManager *shader =  sceneMng->getShadersManager();
-        console->info("Shaders identificados: {0}", shaders.size());
+        console->info("Shaders identificados: %d", shaders.size());
         for (std::size_t i = 0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
             Chimera::Shader* pShader =
@@ -131,10 +128,10 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete video;
 
     } catch (const Chimera::Exception& ex) {
-        console->error("Falha grave:{0}", ex.getMessage());
+        console->error("Falha grave: " + ex.getMessage());
         return -1;
-    } catch (const std::exception& ex) { console->error("Falha grave:{0}", ex.what()); } catch (const std::string& ex) {
-        console->error("Falha grave:{0}", ex);
+    } catch (const std::exception& ex) { console->error("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
+        console->error("Falha grave: " + ex);
     } catch (...) { console->error("Falha Desconhecida"); }
 
     console->info("AppShader finalizado com sucesso");

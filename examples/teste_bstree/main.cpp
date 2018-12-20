@@ -2,17 +2,13 @@
 #include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
+#include "chimera/core/Logger.hpp"
 #include <iostream>
-#include <spdlog/spdlog.h>
 
-#ifndef WIN32
 int main(int argn, char** argv) {
-#else
-int _tmain(int argc, _TCHAR* argv[]) {
-#endif
-    auto console = spdlog::stdout_color_st("chimera");
 
-    spdlog::set_level(spdlog::level::debug);
+    Chimera::Logger* console = Chimera::Logger::get();
+    // spdlog::set_level(spdlog::level::debug);
 
     try {
         Chimera::CanvasFB* video = new Chimera::CanvasFB("TesteBSTree", 640, 480);
@@ -29,13 +25,13 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete video;
 
     } catch (const Chimera::Exception& ex) {
-        console->error("Falha grave:{0}", ex.getMessage());
+        console->error("Falha grave: " + ex.getMessage());
         // std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
         return -1;
     } catch (const std::exception& ex) {
-        console->error("Falha grave:{0}", ex.what());
+        console->error("Falha grave: %s", ex.what());
         // std::cout << "Falha grave: " << ex.what() << " " << std::endl;
-    } catch (const std::string& ex) { console->error("Falha grave:{0}", ex); } catch (...) {
+    } catch (const std::string& ex) { console->error("Falha grave: " + ex); } catch (...) {
         console->error("Falha Desconhecida");
         // std::cout << "Falha Desconhecida " << std::endl;
     }

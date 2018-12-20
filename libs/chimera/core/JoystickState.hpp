@@ -61,11 +61,9 @@ class JoystickState {
      * @param deadzone_at_ends valor de fim do deadzone
      * @return valor do axis entre -1 e 1
      */
-    inline double AxisScaled(const Uint8& axis, const double& low, const double& high,
-                             const double& deadzone = 0.0f,
+    inline double AxisScaled(const Uint8& axis, const double& low, const double& high, const double& deadzone = 0.0f,
                              const double& deadzone_at_ends = 0.0f) {
-        return low +
-               (high - low) * (Axis(axis, deadzone, deadzone_at_ends) + 1.0f) / 2.0f;
+        return low + (high - low) * (Axis(axis, deadzone, deadzone_at_ends) + 1.0f) / 2.0f;
     }
 
     /**
@@ -75,8 +73,7 @@ class JoystickState {
      * @param deadzone_at_ends valor de fim do deadzone
      * @return valor do axis entre -1 e 1
      */
-    double Axis(const Uint8& axis, const double& deadzone = 0.0f,
-                const double& deadzone_at_ends = 0.0f);
+    double Axis(const Uint8& axis, const double& deadzone = 0.0f, const double& deadzone_at_ends = 0.0f);
 
     /**
      * Retorna status do botao selecionado
@@ -101,10 +98,9 @@ class JoystickState {
     inline bool HatDir(const Uint8& hat, const Uint8& dir) { return Hat(hat) & dir; }
 
     /**
-     * Debug do status do Joystick
-     * @return string com info do joystick
+     * Debug do status do Joystick no log
      */
-    std::string GetStatusJoy(void);
+    void GetStatusJoy(void);
 
   private:
     std::map<Uint8, double> Axes;

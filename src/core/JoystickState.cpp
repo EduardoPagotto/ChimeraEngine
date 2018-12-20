@@ -1,4 +1,5 @@
 #include "chimera/core/JoystickState.hpp"
+#include "chimera/core/Logger.hpp"
 #include <cmath>
 
 namespace Chimera {
@@ -80,74 +81,32 @@ Uint8 JoystickState::Hat(const Uint8& hat) {
     return 0;
 }
 
-std::string JoystickState::GetStatusJoy() {
-    // Create a status string for this joystick.
+void JoystickState::GetStatusJoy() {
 
-    std::string return_string;
-    char cstr[1024] = "";
-#ifdef WIN32
-    sprintf_s(cstr, 1024, "Joystick %i: %s\n", id, name.c_str());
-#else
-    sprintf(cstr, "Joystick %i: %s\n", id, name.c_str());
-#endif
+    // Log do status de joystick
+    Logger* pLog = Logger::get();
 
-    return_string += cstr;
+    pLog->debug(std::string("Joystick (" + std::to_string(id) + "): " + name));
+    for (std::map<Uint8, double>::iterator axis_iter = Axes.begin(); axis_iter != Axes.end(); axis_iter++)
+        pLog->debug(
+            std::string("Joy axes:" + std::to_string(axis_iter->first) + " " + std::to_string(axis_iter->second)));
 
-    return_string += "Joy axes:";
-    bool first_axis = true;
-    for (std::map<Uint8, double>::iterator axis_iter = Axes.begin(); axis_iter != Axes.end(); axis_iter++) {
-
-        if (first_axis) {
-            first_axis = false;
-        } else {
-            return_string += ",";
-        }
-
-#ifdef WIN32
-        sprintf_s(cstr, 1024, " %i=%.4f", axis_iter->first, axis_iter->second);
-#else
-        sprintf(cstr, " %i=%.4f", axis_iter->first, axis_iter->second);
-#endif
-        return_string += cstr;
-    }
-    return_string += "\n";
-
-    return_string += "Joy buttons down:";
     for (std::map<Uint8, bool>::iterator button_iter = ButtonsDown.begin(); button_iter != ButtonsDown.end();
          button_iter++) {
-        if (button_iter->second) {
-#ifdef WIN32
-            sprintf_s(cstr, 1024, " %i", button_iter->first);
-#else
-            sprintf(cstr, " %i", button_iter->first);
-#endif
-            return_string += cstr;
-        }
+        if (button_iter->second)
+            pLog->debug(std::string("Joy buttons down: " + std::to_string(button_iter->first)));
     }
-    return_string += "\n";
 
-    return_string += "Joy hats:";
-    bool first_hat = true;
+    std::string tot = "";
     for (std::map<Uint8, Uint8>::iterator hat_iter = Hats.begin(); hat_iter != Hats.end(); hat_iter++) {
-        if (first_hat) {
-            first_hat = false;
-        } else {
-            return_string += ",";
+        if (hat_iter->second) {
+            tot += hat_iter->second & SDL_HAT_UP ? "U" : "";
+            tot += hat_iter->second & SDL_HAT_DOWN ? "D" : "";
+            tot += hat_iter->second & SDL_HAT_LEFT ? "L" : "";
+            tot += hat_iter->second & SDL_HAT_RIGHT ? "R" : "";
         }
-#ifdef WIN32
-        sprintf_s(cstr, 1024, " %i=%i%s%s%s%s%s%s", hat_iter->first, hat_iter->second, hat_iter->second ? "(" : "",
-                  hat_iter->second & SDL_HAT_UP ? "U" : "", hat_iter->second & SDL_HAT_DOWN ? "D" : "",
-                  hat_iter->second & SDL_HAT_LEFT ? "L" : "", hat_iter->second & SDL_HAT_RIGHT ? "R" : "",
-                  hat_iter->second ? ")" : "");
-#else
-        sprintf(cstr, " %i=%i%s%s%s%s%s%s", hat_iter->first, hat_iter->second, hat_iter->second ? "(" : "",
-                hat_iter->second & SDL_HAT_UP ? "U" : "", hat_iter->second & SDL_HAT_DOWN ? "D" : "",
-                hat_iter->second & SDL_HAT_LEFT ? "L" : "", hat_iter->second & SDL_HAT_RIGHT ? "R" : "",
-                hat_iter->second ? ")" : "");
-#endif
-        return_string += cstr;
+        pLog->debug(std::string(std::string("Joy hats:") + std::to_string(hat_iter->first) + " " +
+                                std::to_string(hat_iter->second) + " [" + tot + "]"));
     }
-
-    return return_string;
 }
 } // namespace Chimera

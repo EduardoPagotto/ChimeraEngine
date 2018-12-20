@@ -147,9 +147,9 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
 
     Chimera::Logger* log = Chimera::Logger::get();
     log->debug("Nome: " + _pDraw->getName());
-    log->debug("Vertex  Indice / Lista --- ( %03d / %03d )", _pDraw->vertexIndex.size(), _pDraw->vertexList.size());
-    log->debug("Normal  Indice / Lista --- ( %03d / %03d )", _pDraw->normalIndex.size(), _pDraw->normalList.size());
-    log->debug("Texture Indice / Lista --- ( %03d / %03d} )", _pDraw->textureIndex.size(), _pDraw->textureList.size());
+    log->debug("Vertex  Indice / Lista - ( %03d / %03d )", _pDraw->vertexIndex.size(), _pDraw->vertexList.size());
+    log->debug("Normal  Indice / Lista - ( %03d / %03d )", _pDraw->normalIndex.size(), _pDraw->normalList.size());
+    log->debug("Texture Indice / Lista - ( %03d / %03d )", _pDraw->textureIndex.size(), _pDraw->textureList.size());
 
     return retorno;
 }

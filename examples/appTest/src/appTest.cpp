@@ -35,7 +35,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
     try {
         std::string config_file = "./examples/appTest/etc/appteste.yaml";
-        console->info("Carregar arquivo: %s" + config_file);
+        console->info("Carregar arquivo: " + config_file);
 
         YAML::Node config = YAML::LoadFile(config_file);
         YAML::Node screen = config["screen"];

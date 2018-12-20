@@ -16,15 +16,12 @@ class Texture : public Entity {
         pTex->apply((unsigned)indexTextureSeq, _shaderPropName, _pShader);
     }
 
-    void init();
-
-    TEX_KIND getIndexTextureSeq() const { return indexTextureSeq; }
+    inline bool init() { return pTex->init(); }
+    inline TEX_KIND getIndexTextureSeq() const { return indexTextureSeq; }
 
   private:
     TEX_KIND indexTextureSeq;
-    std::string pathFile;
     TexImg* pTex;
-    bool texturaCarregada;
 };
 } // namespace Chimera
 #endif

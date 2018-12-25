@@ -71,72 +71,72 @@ void orthographicMatrixMul() {
     glMultMatrixf(orthographicsMatrix);
 }
 
-void setCube() {
-    Polygon p[10];
-    glm::vec3 v[10];
-    glm::vec3 n[10];
-    glm::vec3 c[10];
-    v[0] = glm::vec3(-100, -100, 100);
-    v[1] = glm::vec3(-100, 100, 100);
-    v[2] = glm::vec3(100, 100, 100);
-    v[3] = glm::vec3(100, -100, 100);
-    v[4] = glm::vec3(-100, -100, -100);
-    v[5] = glm::vec3(-100, 100, -100);
-    v[6] = glm::vec3(100, 100, -100);
-    v[7] = glm::vec3(100, -100, -100);
+// void setCube() {
+//     Polygon p[10];
+//     glm::vec3 v[10];
+//     glm::vec3 n[10];
+//     glm::vec3 c[10];
+//     v[0] = glm::vec3(-100, -100, 100);
+//     v[1] = glm::vec3(-100, 100, 100);
+//     v[2] = glm::vec3(100, 100, 100);
+//     v[3] = glm::vec3(100, -100, 100);
+//     v[4] = glm::vec3(-100, -100, -100);
+//     v[5] = glm::vec3(-100, 100, -100);
+//     v[6] = glm::vec3(100, 100, -100);
+//     v[7] = glm::vec3(100, -100, -100);
 
-    // Right Wall
-    p[0].setVertices(v[2], v[3], v[7]);
-    n[0] = glm::vec3(1, 0, 0);
-    c[0] = glm::vec3(1, 1, 1);
+//     // Right Wall
+//     p[0].setVertices(v[2], v[3], v[7]);
+//     n[0] = glm::vec3(1, 0, 0);
+//     c[0] = glm::vec3(1, 1, 1);
 
-    p[1].setVertices(v[2], v[7], v[6]);
-    n[1] = glm::vec3(1, 0, 0);
-    c[1] = glm::vec3(1, 1, 1);
+//     p[1].setVertices(v[2], v[7], v[6]);
+//     n[1] = glm::vec3(1, 0, 0);
+//     c[1] = glm::vec3(1, 1, 1);
 
-    // Back Wall
-    p[2].setVertices(v[4], v[5], v[6]);
-    n[2] = glm::vec3(0, 0, -1);
-    c[2] = glm::vec3(1, 1, 1);
+//     // Back Wall
+//     p[2].setVertices(v[4], v[5], v[6]);
+//     n[2] = glm::vec3(0, 0, -1);
+//     c[2] = glm::vec3(1, 1, 1);
 
-    p[3].setVertices(v[4], v[6], v[7]);
-    n[3] = glm::vec3(0, 0, -1);
-    c[3] = glm::vec3(1, 1, 1);
+//     p[3].setVertices(v[4], v[6], v[7]);
+//     n[3] = glm::vec3(0, 0, -1);
+//     c[3] = glm::vec3(1, 1, 1);
 
-    // Left Wall
-    p[4].setVertices(v[5], v[4], v[0]);
-    n[4] = glm::vec3(-1, 0, 0);
-    c[4] = glm::vec3(1, 1, 1);
+//     // Left Wall
+//     p[4].setVertices(v[5], v[4], v[0]);
+//     n[4] = glm::vec3(-1, 0, 0);
+//     c[4] = glm::vec3(1, 1, 1);
 
-    p[5].setVertices(v[5], v[0], v[1]);
-    n[5] = glm::vec3(-1, 0, 0);
-    c[5] = glm::vec3(1, 1, 1);
+//     p[5].setVertices(v[5], v[0], v[1]);
+//     n[5] = glm::vec3(-1, 0, 0);
+//     c[5] = glm::vec3(1, 1, 1);
 
-    // Floor
-    p[6].setVertices(v[3], v[7], v[4]);
-    n[6] = glm::vec3(0, -1, 0);
-    c[6] = glm::vec3(0, 0, 0);
+//     // Floor
+//     p[6].setVertices(v[3], v[7], v[4]);
+//     n[6] = glm::vec3(0, -1, 0);
+//     c[6] = glm::vec3(0, 0, 0);
 
-    p[7].setVertices(v[3], v[4], v[0]);
-    n[7] = glm::vec3(0, -1, 0);
-    c[7] = glm::vec3(0, 0, 0);
+//     p[7].setVertices(v[3], v[4], v[0]);
+//     n[7] = glm::vec3(0, -1, 0);
+//     c[7] = glm::vec3(0, 0, 0);
 
-    // Ceiling
-    p[8].setVertices(v[2], v[6], v[5]);
-    n[8] = glm::vec3(0, 1, 0);
-    c[8] = glm::vec3(0, 0, 0);
+//     // Ceiling
+//     p[8].setVertices(v[2], v[6], v[5]);
+//     n[8] = glm::vec3(0, 1, 0);
+//     c[8] = glm::vec3(0, 0, 0);
 
-    p[9].setVertices(v[2], v[5], v[1]);
-    n[9] = glm::vec3(0, 1, 0);
-    c[9] = glm::vec3(0, 0, 0);
+//     p[9].setVertices(v[2], v[5], v[1]);
+//     n[9] = glm::vec3(0, 1, 0);
+//     c[9] = glm::vec3(0, 0, 0);
 
-    for (int i = 0; i < 10; i++) {
-        p[i].setNormais(n[i], n[i], n[i]);
-        p[i].setColor(c[i]);
-        p[i].setId(polygon_id++);
-        polygonList.addToList(&p[i]);
-    }
-}
+//     for (int i = 0; i < 10; i++) {
+//         p[i].setNormais(n[i], n[i], n[i]);
+//         p[i].setColor(c[i]);
+//         p[i].setId(polygon_id++);
+//         polygonList.addToList(&p[i]);
+//     }
+// }
 
 // set lighting parameters
 void setLightingParameters() {
@@ -151,33 +151,33 @@ void setLightingParameters() {
 }
 
 // set the octahedran parameters
-void setOctahedran() {
-    glm::vec3 p[6];
-    Polygon t[8];
+// void setOctahedran() {
+//     glm::vec3 p[6];
+//     Polygon t[8];
 
-    p[0] = glm::vec3(0, 50, 0);
-    p[1] = glm::vec3(0, 0, -50);
-    p[2] = glm::vec3(-50, 0, 0);
-    p[3] = glm::vec3(50, 0, 0);
-    p[4] = glm::vec3(0, 0, 50);
-    p[5] = glm::vec3(0, -50, 0);
+//     p[0] = glm::vec3(0, 50, 0);
+//     p[1] = glm::vec3(0, 0, -50);
+//     p[2] = glm::vec3(-50, 0, 0);
+//     p[3] = glm::vec3(50, 0, 0);
+//     p[4] = glm::vec3(0, 0, 50);
+//     p[5] = glm::vec3(0, -50, 0);
 
-    t[0].setVertices(p[0], p[1], p[2]);
-    t[1].setVertices(p[0], p[1], p[3]);
-    t[2].setVertices(p[0], p[4], p[3]);
-    t[3].setVertices(p[0], p[4], p[2]);
-    t[4].setVertices(p[5], p[4], p[3]);
-    t[5].setVertices(p[5], p[3], p[1]);
-    t[6].setVertices(p[5], p[1], p[2]);
-    t[7].setVertices(p[5], p[2], p[4]);
+//     t[0].setVertices(p[0], p[1], p[2]);
+//     t[1].setVertices(p[0], p[1], p[3]);
+//     t[2].setVertices(p[0], p[4], p[3]);
+//     t[3].setVertices(p[0], p[4], p[2]);
+//     t[4].setVertices(p[5], p[4], p[3]);
+//     t[5].setVertices(p[5], p[3], p[1]);
+//     t[6].setVertices(p[5], p[1], p[2]);
+//     t[7].setVertices(p[5], p[2], p[4]);
 
-    for (int i = 0; i < 8; i++) {
-        t[i].setId(polygon_id++);
-        t[i].setColor(glm::vec3(1, 0, 0));
-        t[i].computeFaceNormalsFromVertices();
-        polygonList.addToList(&t[i]);
-    }
-}
+//     for (int i = 0; i < 8; i++) {
+//         t[i].setId(polygon_id++);
+//         t[i].setColor(glm::vec3(1, 0, 0));
+//         t[i].computeFaceNormalsFromVertices();
+//         polygonList.addToList(&t[i]);
+//     }
+// }
 
 // this function is registered to handle special key function.
 void special_handler(int code, int x, int y) {

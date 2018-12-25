@@ -1,12 +1,14 @@
 #ifndef __GAME_TESTE_BSTREE__HPP
 #define __GAME_TESTE_BSTREE__HPP
 
-#include "chimera/core/CanvasFB.hpp"
+#include "BSPTree.h"
+#include "ListPolygon.hpp"
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::CanvasFB* _pCanvas);
+    Game(Chimera::CanvasGL* _pCanvas);
 
     virtual ~Game();
     // Inherited via IGameClientEvents
@@ -25,7 +27,18 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    Chimera::CanvasFB* pCanvas;
+    void setCube(ListPolygon* _pPolygonList);
+    void setOctahedran(ListPolygon* _pPolygonList);
+    // ListPolygon* pPolygonList;
+    BSPTree* pBspTree;
+    int polygon_id;
+    GLfloat lightPosition[4]; // = {0, 99.9, 0, 1};
+    float eyeX;               // = 0;
+    float eyeY;               // = 0;
+    float centerX;            // = 0;
+    float centerY;            // = 0;
+
+    Chimera::CanvasGL* pCanvas;
     int botaoIndex;
     int estadoBotao;
     bool isPaused;

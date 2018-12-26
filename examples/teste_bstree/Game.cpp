@@ -3,6 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/node/Transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 Game::Game(Chimera::CanvasGL* _pCanvas) : pCanvas(_pCanvas) { isPaused = false; }
 
@@ -30,11 +31,25 @@ void Game::keyCapture(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseButtonUpCapture(SDL_MouseButtonEvent mb) {}
+void Game::mouseButtonUpCapture(SDL_MouseButtonEvent mb) {
+    botaoIndex = mb.button;
+    estadoBotao = mb.state;
+}
 
-void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {}
+void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
+    botaoIndex = mb.button;
+    estadoBotao = mb.state;
+}
 
-void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {}
+void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
+
+    if (estadoBotao == SDL_PRESSED) {
+        if (botaoIndex == 1)
+            trackBall.tracking(mm.yrel, mm.xrel, 0);
+        else if (botaoIndex == 2)
+            trackBall.tracking(0, 0, mm.yrel);
+    }
+}
 
 void Game::setCube(ListPolygon* _pPolygonList) {
     Polygon p[10];
@@ -133,17 +148,15 @@ void Game::setOctahedran(ListPolygon* _pPolygonList) {
 
 void Game::start() {
 
-    lightPosition[0] = 0;
-    lightPosition[1] = 99.9;
-    lightPosition[2] = 0;
-    lightPosition[3] = 1;
+    Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
+    pVp->position = glm::vec3(200.0, 200.0, 75.0);
+    pVp->direction = glm::vec3(0.0, 0.0, 0.0);
+    pVp->rotation = glm::vec3(0.0, 1.0, 0.0);
+    trackBall.init(pVp);
+
+    lightPosition = glm::vec4(0.0, 100.0, 0.0, 1.0);
 
     polygon_id = 0;
-
-    eyeX = 0;
-    eyeY = 0;
-    centerX = 0;
-    centerY = 0;
 
     ListPolygon* pPolygonList = new ListPolygon();
     setCube(pPolygonList);
@@ -161,14 +174,6 @@ void Game::start() {
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
-
-    GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-    GLfloat diffusedLightColor[] = {0.75, 0.75, 0.75, 1};
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffusedLightColor);
-    GLfloat specularLightColor[] = {0.0, 1, 1, 1};
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor);
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 }
 
 void Game::stop() {}
@@ -193,22 +198,6 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
         case SDL_WINDOWEVENT_RESIZED:
             pCanvas->reshape(_event.data1, _event.data2);
             break;
-        case SDLK_r:
-            eyeX -= 10;
-            centerX -= 10;
-            break;
-        case SDLK_l:
-            eyeX += 10;
-            centerX += 10;
-            break;
-        case SDLK_u:
-            eyeY -= 10;
-            centerY -= 10;
-            break;
-        case SDLK_d:
-            eyeY += 10;
-            centerY += 10;
-            break;
     }
 }
 
@@ -217,41 +206,24 @@ bool Game::paused() { return isPaused; }
 void Game::render() {
     pCanvas->before();
 
-    // glClearColor(1, 1, 0.0, 1.0);
-    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Chimera::ViewPoint* vp = trackBall.getViewPoint();
+
+    glViewport(0, 0, pCanvas->getWidth(), pCanvas->getHeight());
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    // orthographicMatrixMul();
-    GLfloat left = -300, right = 300, top = 300, bottom = -300, near = 300, far = -300;
-    GLfloat tx = -(right + left) / (right - left);
-    GLfloat ty = -(top + bottom) / (top - bottom);
-    GLfloat tz = -(far + near) / (far - near);
-    GLfloat orthographicsMatrix[16] = {
-        2 / (right - left), 0, 0, 0, 0, 2 / (top - bottom), 0, 0, 0, 0, -2 / (far - near), 0, tx, ty, tz, 1};
-    glMultMatrixf(orthographicsMatrix);
+    gluPerspective(vp->fov, (GLfloat)(float)pCanvas->getWidth() / (float)pCanvas->getHeight(), vp->near, vp->far);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    // if (moveeye)
-    //    gluLookAt(eyeX, eyeY, 75, centerX, centerY, 0, 0, 1, 0);
-    // else
-    gluLookAt(eyeX, eyeY, 75, 0, 0, 0, 0, 1, 0);
 
-    // setLightingParameters();
-    GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-    GLfloat diffusedLightColor[] = {0.75, 0.75, 0.75, 1};
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffusedLightColor);
-    GLfloat specularLightColor[] = {0.0, 1, 1, 1};
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor);
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-
-    glm::vec3 eye(eyeX, eyeY, 75);
+    gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->direction.x, vp->direction.y, vp->direction.z,
+              vp->rotation.x, vp->rotation.y, vp->rotation.z);
 
     ListPolygon* finalpl = new ListPolygon();
 
-    drawBSPTree(pBspTree->root, &eye, finalpl);
+    drawBSPTree(pBspTree->root, &vp->position, finalpl);
 
     finalpl->begin();
 
@@ -270,7 +242,16 @@ void Game::render() {
     delete finalpl;
     finalpl = nullptr;
 
-    // glutSwapBuffers();
+    GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+
+    GLfloat diffusedLightColor[] = {0.75, 0.75, 0.75, 1};
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffusedLightColor);
+
+    GLfloat specularLightColor[] = {0.0, 1, 1, 1};
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, glm::value_ptr(lightPosition));
 
     pCanvas->after();
 }

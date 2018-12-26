@@ -7,6 +7,8 @@ namespace Chimera {
 
 struct ViewPoint {
 
+    ViewPoint() { this->zero(); }
+
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 direction;

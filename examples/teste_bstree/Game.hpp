@@ -5,6 +5,7 @@
 #include "ListPolygon.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/TrackBall.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -29,18 +30,15 @@ class Game : public Chimera::IGameClientEvents {
   private:
     void setCube(ListPolygon* _pPolygonList);
     void setOctahedran(ListPolygon* _pPolygonList);
-    // ListPolygon* pPolygonList;
+
     BSPTree* pBspTree;
     int polygon_id;
-    GLfloat lightPosition[4]; // = {0, 99.9, 0, 1};
-    float eyeX;               // = 0;
-    float eyeY;               // = 0;
-    float centerX;            // = 0;
-    float centerY;            // = 0;
-
-    Chimera::CanvasGL* pCanvas;
     int botaoIndex;
     int estadoBotao;
+    glm::vec4 lightPosition;
+    Chimera::TrackBall trackBall;
+
+    Chimera::CanvasGL* pCanvas;
     bool isPaused;
 };
 

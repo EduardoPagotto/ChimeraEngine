@@ -18,6 +18,8 @@ class TrackBall {
     void setDistanciaMaxima(const float& _distanciaMaxima) { distanciaMax = _distanciaMaxima; }
     void setDistanciaMinima(const float& _distanciaMinima) { distanciaMin = _distanciaMinima; }
 
+    ViewPoint* getViewPoint() { return pVp; }
+
   private:
     float horizontal;
     float vertical;

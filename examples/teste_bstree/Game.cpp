@@ -152,12 +152,13 @@ void Game::start() {
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
     pVp->position = glm::vec3(200.0, 200.0, 75.0);
     pVp->direction = glm::vec3(0.0, 0.0, 0.0);
-    pVp->rotation = glm::vec3(0.0, 1.0, 0.0);
+    pVp->rotation = glm::vec3(0.0, 0.0, 1.0);
     trackBall.init(pVp);
+    trackBall.setDistanciaMaxima(1000.0);
 
     lightPosition = glm::vec4(0.0, 100.0, 0.0, 1.0);
 
-    polygon_id = 0;
+    polygon_id = 1;
 
     ListPolygon* pPolygonList = new ListPolygon();
     setCube(pPolygonList);
@@ -226,7 +227,6 @@ void Game::render() {
 
     ListPolygon* finalpl = new ListPolygon();
     pBspTree->draw(&vp->position, finalpl);
-    // drawBSPTree(pBspTree->root, &vp->position, finalpl);
 
     finalpl->begin();
 

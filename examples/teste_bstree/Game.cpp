@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "BSPTreeBuilder.hpp"
 #include "chimera/core/Events.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
@@ -161,7 +162,9 @@ void Game::start() {
     ListPolygon* pPolygonList = new ListPolygon();
     setCube(pPolygonList);
     setOctahedran(pPolygonList);
-    pBspTree = buildBSPTree(pPolygonList);
+
+    BSPTreeBuilder builder(pPolygonList);
+    pBspTree = new BSPTree(builder.getNodeRoot()); // buildBSPTree(pPolygonList);
 
     delete pPolygonList;
     pPolygonList = nullptr;
@@ -222,8 +225,8 @@ void Game::render() {
               vp->rotation.x, vp->rotation.y, vp->rotation.z);
 
     ListPolygon* finalpl = new ListPolygon();
-
-    drawBSPTree(pBspTree->root, &vp->position, finalpl);
+    pBspTree->draw(&vp->position, finalpl);
+    // drawBSPTree(pBspTree->root, &vp->position, finalpl);
 
     finalpl->begin();
 

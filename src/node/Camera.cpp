@@ -25,7 +25,7 @@ void Camera::init() {
         pTrackBall->init(&viewPoint);
 
     if (pTrackWalk != nullptr)
-        pTrackWalk->init(&viewPoint, WalkType::Air);
+        pTrackWalk->init(&viewPoint);
 }
 
 void Camera::createTrackBall() { pTrackBall = new TrackBall(); }

@@ -150,9 +150,9 @@ void Game::setOctahedran(ListPolygon* _pPolygonList) {
 void Game::start() {
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
-    pVp->position = glm::vec3(200.0, 200.0, 75.0);
+    pVp->position = glm::vec3(300.0, 300.0, 100.0);
     pVp->front = glm::vec3(0.0, 0.0, 0.0);
-    pVp->up = glm::vec3(0.0, 0.0, 1.0);
+    pVp->up = glm::vec3(0.0, 1.0, 0.0);
     trackBall.init(pVp);
     trackBall.setMax(1000.0);
 

@@ -17,8 +17,7 @@ class TrackHead {
     void rotation(float xoffset, float yoffset, bool constrainPitch = true);
     void move(Camera_Movement direction, float deltaTime);
 
-    glm::mat4 getViewMatrix() { return glm::lookAt(pVp->position, pVp->position + pVp->front, pVp->up); }
-
+    inline glm::mat4 getViewMatrix() { return glm::lookAt(pVp->position, pVp->position + pVp->front, pVp->up); }
     inline ViewPoint* getViewPoint() { return pVp; }
 
   private:

@@ -3,8 +3,8 @@
 namespace Chimera {
 
 TrackBall::TrackBall() {
-    yaw = 0.0f;
-    pitch = 0.0f;
+    yaw = 45.0f;
+    pitch = -45.0f;
     distancia = 0;
     min = 1.0f;
     max = 500.0f;
@@ -16,10 +16,10 @@ TrackBall::~TrackBall() {}
 void TrackBall::init(ViewPoint* _vp) {
     pVp = _vp;
     distancia = glm::distance(pVp->position, pVp->front);
-    yaw = asin((glm::abs(pVp->position.z) - glm::abs(pVp->front.z)) / distancia) / 0.017453293f;
-    pitch = asin((glm::abs(pVp->position.y) - glm::abs(pVp->front.y)) / distancia) / 0.017453293f;
+    // yaw = asin((glm::abs(pVp->position.z) - glm::abs(pVp->front.z)) / distancia) / 0.017453293f;
+    // pitch = asin((glm::abs(pVp->position.y) - glm::abs(pVp->front.y)) / distancia) / 0.017453293f;
 
-    // updateVectors();
+    updateVectors();
 }
 
 void TrackBall::updateVectors() {

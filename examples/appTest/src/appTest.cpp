@@ -81,7 +81,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         pCam->getViewPoint()->fov = 45.0;
         pCam->getViewPoint()->position = glm::vec3(0, 0, 300);
         pCam->getViewPoint()->front = glm::vec3(0, 0, 0);
-        pCam->getViewPoint()->up = glm::vec3(0, 0, -1);
+        pCam->getViewPoint()->up = glm::vec3(0, 0, 1);
 
         // pCam->getViewPoint()->rotation = glm::vec3(0, 0, 1);
         pCam->init();

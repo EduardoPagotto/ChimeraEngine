@@ -46,7 +46,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1)
-            trackBall.tracking(mm.yrel, mm.xrel);
+            trackBall.tracking(mm.xrel, mm.yrel);
         else if (botaoIndex == 2)
             trackBall.offSet(mm.yrel);
     }
@@ -151,10 +151,10 @@ void Game::start() {
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
     pVp->position = glm::vec3(200.0, 200.0, 75.0);
-    // pVp->direction = glm::vec3(0.0, 0.0, 0.0);
-    // pVp->rotation = glm::vec3(0.0, 0.0, 1.0);
+    pVp->front = glm::vec3(0.0, 0.0, 0.0);
+    pVp->up = glm::vec3(0.0, 0.0, 1.0);
     trackBall.init(pVp);
-    // trackBall.setDistanciaMaxima(1000.0);
+    trackBall.setMax(1000.0);
 
     lightPosition = glm::vec4(0.0, 100.0, 0.0, 1.0);
 
@@ -222,9 +222,10 @@ void Game::render() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glm::vec3 dir = vp->position + vp->front;
-
-    gluLookAt(vp->position.x, vp->position.y, vp->position.z, dir.x, dir.y, dir.z, vp->up.x, vp->up.y, vp->up.z);
+    // glm::vec3 dir = vp->position + vp->front;
+    gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->front.x, vp->front.y, vp->front.z, vp->up.x, vp->up.y,
+              vp->up.z);
+    // gluLookAt(vp->position.x, vp->position.y, vp->position.z, dir.x, dir.y, dir.z, vp->up.x, vp->up.y, vp->up.z);
     // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->direction.x, vp->direction.y, vp->direction.z,
     //          vp->rotation.x, vp->rotation.y, vp->rotation.z);
 

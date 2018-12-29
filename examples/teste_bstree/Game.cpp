@@ -96,20 +96,20 @@ void Game::setCube(ListPolygon* _pPolygonList) {
     // Floor
     p[6].setVertices(v[3], v[7], v[4]);
     n[6] = glm::vec3(0, -1, 0);
-    c[6] = glm::vec3(0, 0, 0);
+    c[6] = glm::vec3(1, 1, 1);
 
     p[7].setVertices(v[3], v[4], v[0]);
     n[7] = glm::vec3(0, -1, 0);
-    c[7] = glm::vec3(0, 0, 0);
+    c[7] = glm::vec3(1, 1, 1);
 
     // Ceiling
     p[8].setVertices(v[2], v[6], v[5]);
     n[8] = glm::vec3(0, 1, 0);
-    c[8] = glm::vec3(0, 0, 0);
+    c[8] = glm::vec3(1, 1, 1);
 
     p[9].setVertices(v[2], v[5], v[1]);
     n[9] = glm::vec3(0, 1, 0);
-    c[9] = glm::vec3(0, 0, 0);
+    c[9] = glm::vec3(1, 1, 1);
 
     for (int i = 0; i < 10; i++) {
         p[i].setNormais(n[i], n[i], n[i]);
@@ -147,10 +147,59 @@ void Game::setOctahedran(ListPolygon* _pPolygonList) {
     }
 }
 
+void Game::setDrawTest(ListPolygon* _pPolygonList) {
+
+    Polygon p[6];
+    glm::vec3 v[7];
+    glm::vec3 n[7];
+    glm::vec3 c[6];
+    glm::ivec3 index[6];
+
+    v[0] = glm::vec3(100, 100, 100);
+    v[1] = glm::vec3(-100, 100, 100);
+    v[2] = glm::vec3(-100, -100, 100);
+    v[3] = glm::vec3(100, -100, 100);
+    v[4] = glm::vec3(100, -100, -100);
+    v[5] = glm::vec3(-100, -100, -100);
+    v[6] = glm::vec3(-100, 100, -100);
+
+    n[0] = glm::vec3(0, 0, -1);
+    n[1] = glm::vec3(0, 0, -1);
+    n[2] = glm::vec3(0, 0, -1);
+
+    n[3] = glm::vec3(0, 0, -1);
+    n[4] = glm::vec3(0, 0, -1);
+    n[5] = glm::vec3(0, 0, -1);
+
+    n[6] = glm::vec3(0, 0, -1);
+
+    index[0] = glm::ivec3(0, 1, 2);
+    index[1] = glm::ivec3(2, 3, 0);
+    index[2] = glm::ivec3(3, 2, 5);
+    index[3] = glm::ivec3(5, 4, 3);
+    index[4] = glm::ivec3(1, 2, 5);
+    index[5] = glm::ivec3(5, 6, 1);
+
+    c[0] = glm::vec3(1, 1, 1);
+    c[1] = glm::vec3(1, 1, 1);
+    c[2] = glm::vec3(1, 0, 0);
+    c[3] = glm::vec3(1, 0, 0);
+    c[4] = glm::vec3(0, 0, 1);
+    c[5] = glm::vec3(0, 0, 1);
+
+    for (int face = 0; face < 6; face++) {
+        p[face].setId(face);
+        p[face].setVertices(v[index[face].x], v[index[face].y], v[index[face].z]);
+        p[face].setColor(c[face]);
+        p[face].setNormais(n[index[face].x], n[index[face].y], n[index[face].z]);
+        _pPolygonList->addToList(&p[face]);
+    }
+}
+
 void Game::start() {
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
-    pVp->position = glm::vec3(300.0, 300.0, 100.0);
+    pVp->position = glm::vec3(0.0, 0.0, 600.0);
     pVp->front = glm::vec3(0.0, 0.0, 0.0);
     pVp->up = glm::vec3(0.0, 1.0, 0.0);
     trackBall.init(pVp);
@@ -161,8 +210,9 @@ void Game::start() {
     polygon_id = 1;
 
     ListPolygon* pPolygonList = new ListPolygon();
-    setCube(pPolygonList);
-    setOctahedran(pPolygonList);
+    // setCube(pPolygonList);
+    // setOctahedran(pPolygonList);
+    setDrawTest(pPolygonList);
 
     BSPTreeBuilder builder(pPolygonList);
     pBspTree = new BSPTree(builder.getNodeRoot()); // buildBSPTree(pPolygonList);
@@ -174,10 +224,14 @@ void Game::start() {
 
     // pCanvas->afterStart();
     glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
+
+    // glEnable(GL_LIGHTING);
+    // glEnable(GL_LIGHT0);
+    // glEnable(GL_NORMALIZE);
+    // glShadeModel(GL_SMOOTH);
+
+    glDisable(GL_LIGHTING);
+    glCullFace(GL_BACK);
 }
 
 void Game::stop() {}
@@ -249,16 +303,16 @@ void Game::render() {
     delete finalpl;
     finalpl = nullptr;
 
-    GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+    // GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};
+    // glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
-    GLfloat diffusedLightColor[] = {0.75, 0.75, 0.75, 1};
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffusedLightColor);
+    // GLfloat diffusedLightColor[] = {0.75, 0.75, 0.75, 1};
+    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffusedLightColor);
 
-    GLfloat specularLightColor[] = {0.0, 1, 1, 1};
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor);
+    // GLfloat specularLightColor[] = {0.0, 1, 1, 1};
+    // glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor);
 
-    glLightfv(GL_LIGHT0, GL_POSITION, glm::value_ptr(lightPosition));
+    // glLightfv(GL_LIGHT0, GL_POSITION, glm::value_ptr(lightPosition));
 
     pCanvas->after();
 }

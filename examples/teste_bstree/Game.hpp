@@ -30,6 +30,7 @@ class Game : public Chimera::IGameClientEvents {
   private:
     void setCube(ListPolygon* _pPolygonList);
     void setOctahedran(ListPolygon* _pPolygonList);
+    void setDrawTest(ListPolygon* _pPolygonList);
 
     BSPTree* pBspTree;
     int polygon_id;

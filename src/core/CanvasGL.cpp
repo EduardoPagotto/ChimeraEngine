@@ -108,10 +108,11 @@ glm::mat4 CanvasGL::getPerspectiveProjectionMatrix(const float& _fov, const floa
     glViewport(0, 0, width, height);
     return glm::perspective(_fov, (GLfloat)(float)width / (float)height, _near, _far);
 
-    // glMatrixMode ( GL_PROJECTION );
+    // glMatrixMode(GL_PROJECTION);
     // glLoadIdentity();
-    // gluPerspective ( _fov, ( GLfloat ) ( float ) winSizeW / ( float ) winSizeH, _near,
-    // _far ); glMatrixMode ( GL_MODELVIEW ); glLoadIdentity();
+    // gluPerspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
+    // glMatrixMode(GL_MODELVIEW);
+    // glLoadIdentity();
 }
 
 // void VideoDevice::perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,

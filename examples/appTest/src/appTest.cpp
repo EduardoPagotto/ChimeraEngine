@@ -74,13 +74,16 @@ int _tmain(int argc, _TCHAR* argv[]) {
         // Propriedades da camera
         Camera* pCam = new Camera(group1, "Observador-01");
         pCam->createTrackBall();
-        pCam->getTrackBall()->setDistanciaMaxima(1000.0);
-        pCam->getTrackBall()->setDistanciaMinima(0.5);
+        pCam->getTrackBall()->setMax(1000.0);
+        pCam->getTrackBall()->setMin(0.5);
         pCam->getViewPoint()->far = 10000.0;
         pCam->getViewPoint()->near = 0.1;
         pCam->getViewPoint()->fov = 45.0;
-        pCam->getViewPoint()->position = glm::vec3(300, 0, 0);
-        pCam->getViewPoint()->rotation = glm::vec3(0, 0, 1);
+        pCam->getViewPoint()->position = glm::vec3(0, 0, 300);
+        pCam->getViewPoint()->front = glm::vec3(0, 0, 0);
+        pCam->getViewPoint()->up = glm::vec3(0, 1, 0);
+
+        // pCam->getViewPoint()->rotation = glm::vec3(0, 0, 1);
         pCam->init();
 
         // Propriedades da luz

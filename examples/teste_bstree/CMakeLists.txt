@@ -26,9 +26,9 @@ set (IncludesTesteBSTree ${CMAKE_CURRENT_SOURCE_DIR}/include
 add_executable (TesteBSTree Polygon.cpp
 							ListPolygon.cpp 
 							BSPTree.cpp
-							visibility.cpp)
-							#Game.cpp 
-							#main.cpp)
+							BSPTreeBuilder.cpp
+							Game.cpp 
+							main.cpp)
 
 target_link_libraries(TesteBSTree ${LibsTesteBSTree})
 target_include_directories (TesteBSTree PRIVATE ${IncludesTesteBSTree})

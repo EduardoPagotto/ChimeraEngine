@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "chimera/core/CanvasFB.hpp"
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Logger.hpp"
@@ -8,10 +8,10 @@
 int main(int argn, char** argv) {
 
     Chimera::Logger* console = Chimera::Logger::get();
-    // spdlog::set_level(spdlog::level::debug);
+    console->setLevel(Chimera::Logger::Level::DEBUG);
 
     try {
-        Chimera::CanvasFB* video = new Chimera::CanvasFB("TesteBSTree", 640, 480);
+        Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 640, 480);
         Game* game = new Game(video);
 
         Chimera::FlowControl* pControle = new Chimera::FlowControl(game);

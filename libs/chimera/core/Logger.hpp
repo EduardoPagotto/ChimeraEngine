@@ -10,6 +10,7 @@
 // ref: https://en.wikipedia.org/wiki/ANSI_escape_code
 
 namespace Chimera {
+
 class Logger {
   public:
     void info(const std::string& sMessage);
@@ -21,6 +22,8 @@ class Logger {
     void error(const char* format, ...);
     void error(const std::string& sMessage);
 
+    enum class Level { ERROR = 0, WARNNING = 1, INFO = 2, DEBUG = 3 };
+
     Logger& operator<<(const std::string& sMessage);
 
     static Logger* get();
@@ -29,7 +32,7 @@ class Logger {
     // 1 -> warning , error
     // 2 -> info, warning , error
     // 3 -> debug, info, warning, error (default)
-    inline void setLevel(int val) { level = val; }
+    inline void setLevel(Level _level) { level = (int)_level; }
 
   private:
     Logger();

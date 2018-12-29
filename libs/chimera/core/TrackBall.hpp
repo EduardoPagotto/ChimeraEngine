@@ -9,21 +9,24 @@ class TrackBall {
 
   public:
     TrackBall();
-    ~TrackBall();
+    virtual ~TrackBall();
 
-    virtual void init(ViewPoint* _vp);
+    void init(ViewPoint* _vp);
+    void tracking(const int& _mx, const int& _my);
+    void offSet(const int& _mz);
 
-    void tracking(int _mx, int _my, int _mz);
-
-    void setDistanciaMaxima(const float& _distanciaMaxima) { distanciaMax = _distanciaMaxima; }
-    void setDistanciaMinima(const float& _distanciaMinima) { distanciaMin = _distanciaMinima; }
+    inline void setMax(const float& _max) { max = _max; }
+    inline void setMin(const float& _min) { min = _min; }
+    inline ViewPoint* getViewPoint() { return pVp; }
+    inline glm::mat4 getViewMatrix() { return glm::lookAt(pVp->position, pVp->front, pVp->up); }
 
   private:
-    float horizontal;
-    float vertical;
+    void updateVectors();
+    float yaw;
+    float pitch;
     float distancia;
-    float distanciaMax;
-    float distanciaMin;
+    float max;
+    float min;
     ViewPoint* pVp;
 };
 } // namespace Chimera

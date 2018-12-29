@@ -3,11 +3,11 @@
 namespace Chimera {
 
 TrackBall::TrackBall() {
-    horizontal = 0.0f;
-    vertical = 0.0f;
+    // yaw = 180.0f;
+    // pitch = -90.0f;
     distancia = 0;
-    distanciaMin = 1.0f;
-    distanciaMax = 500.0f;
+    min = 1.0f;
+    max = 500.0f;
     pVp = nullptr;
 }
 
@@ -15,29 +15,59 @@ TrackBall::~TrackBall() {}
 
 void TrackBall::init(ViewPoint* _vp) {
     pVp = _vp;
-    distancia = glm::distance(pVp->position, pVp->direction);
-    vertical = asin((glm::abs(pVp->position.z) - glm::abs(pVp->direction.z)) / distancia) / 0.017453293f;
-    horizontal = asin((glm::abs(pVp->position.y) - glm::abs(pVp->direction.y)) / distancia) / 0.017453293f;
+    distancia = glm::distance(pVp->position, pVp->front);
+    yaw = asin((glm::abs(pVp->position.z) - glm::abs(pVp->front.z)) / distancia) / 0.017453293f;
+    pitch = asin((glm::abs(pVp->position.y) - glm::abs(pVp->front.y)) / distancia) / 0.017453293f;
+
+    updateVectors();
 }
 
-void TrackBall::tracking(int _mx, int _my, int _mz) {
+void TrackBall::updateVectors() {
 
-    horizontal += _mx;
-    vertical += _my;
-    if (_mz) {
+    float theta = glm::radians(yaw); // yaw * 0.017453293f;
+    float phi = glm::radians(pitch); // pitch * 0.017453293f;
+    if (pVp->up.y == 1) {
+        pVp->position.x = distancia * sin(phi) * sin(theta);
+        pVp->position.y = distancia * cos(phi);
+        pVp->position.z = distancia * sin(phi) * cos(theta);
+    } else { // pVp->up.z == 1 ou -1
+        pVp->position.x = distancia * cos(theta) * sin(phi);
+        pVp->position.y = distancia * cos(theta) * cos(phi);
+        pVp->position.z = distancia * sin(theta);
+    }
+}
 
-        float l_distTemp = distancia;
-        l_distTemp += _mz;
-        if ((l_distTemp > distanciaMin) && (l_distTemp < distanciaMax)) {
-            distancia = l_distTemp;
-        }
+void TrackBall::offSet(const int& _mz) {
+    distancia += _mz;
+    if (distancia < min)
+        distancia = min;
+    if (distancia > max)
+        distancia = max;
+
+    this->updateVectors();
+}
+
+void TrackBall::tracking(const int& _mx, const int& _my) {
+
+    if (pVp->up.y == 1) {
+
+        yaw -= _mx;
+        pitch -= _my;
+        if (pitch < 1.0f)
+            pitch = 1.0f;
+        if (pitch > 179.0f)
+            pitch = 179.0f;
+
+    } else { // pVp->up.z == 1 ou -1
+
+        yaw += _my;
+        pitch += _mx;
+        // if (yaw < 1.0f)
+        //     yaw = 1.0f;
+        // if (yaw > 179.0f)
+        //     yaw = 179.0f;
     }
 
-    float l_kx = horizontal * 0.017453293f;
-    float l_ky = vertical * 0.017453293f;
-
-    pVp->position.x = distancia * cos(l_kx) * sin(l_ky);
-    pVp->position.y = distancia * cos(l_kx) * cos(l_ky);
-    pVp->position.z = distancia * sin(l_kx);
+    this->updateVectors();
 }
 } // namespace Chimera

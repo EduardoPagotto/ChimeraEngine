@@ -25,8 +25,8 @@ Chimera::Camera* LibraryCameras::target() {
                 tinyxml2::XMLElement* l_nMax = l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
 
                 pCameraNew->createTrackBall();
-                pCameraNew->getTrackBall()->setDistanciaMinima(atof(l_nMin->GetText()));
-                pCameraNew->getTrackBall()->setDistanciaMaxima(atof(l_nMax->GetText()));
+                pCameraNew->getTrackBall()->setMin(atof(l_nMin->GetText()));
+                pCameraNew->getTrackBall()->setMax(atof(l_nMax->GetText()));
             }
 
             return pCameraNew;

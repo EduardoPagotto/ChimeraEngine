@@ -12,15 +12,20 @@ class TrackBall {
     virtual ~TrackBall();
 
     void init(ViewPoint* _vp);
-    void tracking(float xoffset, float yoffset, bool constrainPitch = true);
+    void tracking(const int& _mx, const int& _my);
+    void offSet(const int& _mz);
 
-    ViewPoint* getViewPoint() { return pVp; }
+    inline void setMax(const float& _max) { max = _max; }
+    inline void setMin(const float& _min) { min = _min; }
+    inline ViewPoint* getViewPoint() { return pVp; }
 
   private:
     void updateVectors();
-    float Yaw;
-    float Pitch;
-    float MouseSensitivity;
+    float yaw;
+    float pitch;
+    float distancia;
+    float max;
+    float min;
     ViewPoint* pVp;
 };
 } // namespace Chimera

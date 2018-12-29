@@ -18,6 +18,7 @@ set (SourcesCore Logger.cpp
 				 Timer.cpp
 				 TrackBall.cpp
 				 TrackWalk.cpp
+				 TrackHead.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
 				 Shader.cpp	

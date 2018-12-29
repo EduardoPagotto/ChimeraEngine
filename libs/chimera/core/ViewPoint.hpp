@@ -30,7 +30,8 @@ struct ViewPoint {
     }
 
     // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
-    glm::mat4 getViewMatrix() { return glm::lookAt(position, position + front, up); }
+    // glm::mat4 getViewMatrix() { return glm::lookAt(position, position + front, up); }
+    // glm::mat4 getViewMatrix() { return glm::lookAt(position, front, up); }
 
     void zoom(float _zoonOffset) {
         if (fov >= 1.0f && fov <= 45.0f)

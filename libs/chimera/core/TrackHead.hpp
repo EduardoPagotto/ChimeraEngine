@@ -5,6 +5,8 @@
 
 namespace Chimera {
 
+enum Camera_Movement { FORWARD, BACKWARD, LEFT, RIGHT };
+
 class TrackHead {
 
   public:
@@ -12,7 +14,8 @@ class TrackHead {
     virtual ~TrackHead();
 
     void init(ViewPoint* _vp);
-    void tracking(float xoffset, float yoffset, bool constrainPitch = true);
+    void rotation(float xoffset, float yoffset, bool constrainPitch = true);
+    void move(Camera_Movement direction, float deltaTime);
 
     glm::mat4 getViewMatrix() { return glm::lookAt(pVp->position, pVp->position + pVp->front, pVp->up); }
 
@@ -20,9 +23,16 @@ class TrackHead {
 
   private:
     void updateVectors();
-    float Yaw;
-    float Pitch;
-    float MouseSensitivity;
+
+    // rot
+    float yaw;
+    float pitch;
+    float rotSen;
+
+    // move
+    glm::vec3 right;
+    float movementSpeed;
+
     ViewPoint* pVp;
 };
 } // namespace Chimera

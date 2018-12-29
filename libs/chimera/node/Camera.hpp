@@ -7,7 +7,7 @@
 //#include "chimera/core/ViewPoint.hpp"
 
 #include "chimera/core/TrackBall.hpp"
-#include "chimera/core/TrackWalk.hpp"
+#include "chimera/core/TrackHead.hpp"
 
 namespace Chimera {
 
@@ -18,19 +18,19 @@ class Camera : public Node {
 
     virtual void init();
     void createTrackBall();
-    void createTrackWalk();
+    void createTrackHead();
 
     // Inherited via Node
     virtual void accept(class NodeVisitor* v) override;
 
     inline ViewPoint* getViewPoint() { return &viewPoint; }
     inline TrackBall* getTrackBall() { return pTrackBall; }
-    inline TrackWalk* getTrackWalk() { return pTrackWalk; }
+    inline TrackHead* getTrackWalk() { return pTrackHead; }
 
   protected:
     ViewPoint viewPoint;
     TrackBall* pTrackBall;
-    TrackWalk* pTrackWalk;
+    TrackHead* pTrackHead;
 };
 } // namespace Chimera
 #endif

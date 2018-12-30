@@ -6,7 +6,11 @@
 #include "chimera/node/Transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-Game::Game(Chimera::CanvasGL* _pCanvas) : pCanvas(_pCanvas) { isPaused = false; }
+Game::Game(Chimera::CanvasGL* _pCanvas) : pCanvas(_pCanvas) {
+    isPaused = false;
+    debug_init = 0;
+    log = Chimera::Logger::get();
+}
 
 Game::~Game() {}
 
@@ -23,6 +27,10 @@ void Game::keyCapture(SDL_Keycode tecla) {
             if (SDL_PushEvent(&l_eventQuit) == -1) {
                 throw Chimera::Exception(std::string(SDL_GetError()));
             }
+            break;
+        case SDLK_1:
+            debug_init = 1;
+            log->debug("iniciado log");
             break;
         case SDLK_F10:
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
@@ -150,10 +158,10 @@ void Game::setOctahedran(ListPolygon* _pPolygonList) {
 void Game::setDrawTest(ListPolygon* _pPolygonList) {
 
     Polygon p[14];
-    glm::vec3 v[16];
-    glm::vec3 n[16];
-    glm::vec3 c[8];
-    glm::ivec3 index[8];
+    glm::vec3 v[20];
+    glm::vec3 n[20];
+    glm::vec3 c[10];
+    glm::ivec3 index[10];
 
     v[0] = glm::vec3(100, 100, 100);
     v[1] = glm::vec3(-100, 100, 100);
@@ -175,13 +183,10 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
     v[14] = glm::vec3(-100, -100, -200);
     v[15] = glm::vec3(100, -100, -200);
 
-    // v[0] = glm::vec3(100, 100, 100);
-    // v[1] = glm::vec3(-100, 100, 100);
-    // v[2] = glm::vec3(-100, -100, 100);
-    // v[3] = glm::vec3(100, -100, 100);
-    // v[4] = glm::vec3(100, -100, -100);
-    // v[5] = glm::vec3(-100, -100, -100);
-    // v[6] = glm::vec3(-100, 100, -100);
+    v[16] = glm::vec3(900, 100, -500);
+    v[17] = glm::vec3(-900, 100, -500);
+    v[18] = glm::vec3(-900, -100, -500);
+    v[19] = glm::vec3(900, -100, -500);
 
     n[0] = glm::vec3(0, 0, 1);
     n[1] = glm::vec3(0, 0, 1);
@@ -203,6 +208,11 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
     n[14] = glm::vec3(0, 0, 1);
     n[15] = glm::vec3(0, 0, 1);
 
+    n[16] = glm::vec3(0, 0, 1);
+    n[17] = glm::vec3(0, 0, 1);
+    n[18] = glm::vec3(0, 0, 1);
+    n[19] = glm::vec3(0, 0, 1);
+
     index[0] = glm::ivec3(0, 1, 2);
     index[1] = glm::ivec3(2, 3, 0);
 
@@ -215,15 +225,8 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
     index[6] = glm::ivec3(12, 13, 14);
     index[7] = glm::ivec3(14, 15, 12);
 
-    // index[8] = glm::ivec3(12, 12, 14);
-    // index[9] = glm::ivec3(14, 15, 12);
-
-    // index[0] = glm::ivec3(0, 1, 2);
-    // index[1] = glm::ivec3(2, 3, 0);
-    // index[2] = glm::ivec3(3, 2, 5);
-    // index[3] = glm::ivec3(5, 4, 3);
-    // index[4] = glm::ivec3(1, 2, 5);
-    // index[5] = glm::ivec3(5, 6, 1);
+    index[8] = glm::ivec3(16, 17, 18);
+    index[9] = glm::ivec3(18, 19, 16);
 
     c[0] = glm::vec3(1, 1, 1);
     c[1] = glm::vec3(1, 1, 1);
@@ -233,8 +236,10 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
     c[5] = glm::vec3(0, 0, 1);
     c[6] = glm::vec3(0, 1, 0);
     c[7] = glm::vec3(0, 1, 0);
+    c[8] = glm::vec3(1, 1, 0);
+    c[9] = glm::vec3(1, 1, 0);
 
-    for (int face = 0; face < 8; face++) {
+    for (int face = 0; face < 10; face++) {
         p[face].setId(face);
         p[face].setVertices(v[index[face].x], v[index[face].y], v[index[face].z]);
         p[face].setColor(c[face]);
@@ -323,11 +328,11 @@ void Game::start() {
 
     // glEnable(GL_LIGHTING);
     // glEnable(GL_LIGHT0);
-    // glEnable(GL_NORMALIZE);
-    // glShadeModel(GL_SMOOTH);
+    glEnable(GL_NORMALIZE);
+    glShadeModel(GL_SMOOTH);
 
-    glDisable(GL_LIGHTING);
-    glCullFace(GL_BACK);
+    // glDisable(GL_LIGHTING);
+    // glCullFace(GL_BACK);
 }
 
 void Game::stop() {}
@@ -382,10 +387,17 @@ void Game::render() {
     ListPolygon* finalpl = new ListPolygon();
     pBspTree->draw(&vp->position, finalpl);
 
+    if (debug_init == 1)
+        log->debug("eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
+
     finalpl->begin();
 
     Polygon* fi = nullptr;
     while ((fi = finalpl->next()) != NULL) {
+
+        if (debug_init == 1)
+            log->debug("Poligono: " + std::to_string(fi->getId()));
+
         glm::vec3 cc = fi->getColor();
         glColor3f(cc.x, cc.y, cc.z);
         glBegin(GL_TRIANGLES);
@@ -395,6 +407,8 @@ void Game::render() {
         }
         glEnd();
     }
+
+    debug_init = 0;
 
     delete finalpl;
     finalpl = nullptr;

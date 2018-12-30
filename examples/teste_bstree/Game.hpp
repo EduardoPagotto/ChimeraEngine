@@ -5,6 +5,7 @@
 #include "ListPolygon.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/Logger.hpp"
 #include "chimera/core/TrackBall.hpp"
 
 class Game : public Chimera::IGameClientEvents {
@@ -38,6 +39,9 @@ class Game : public Chimera::IGameClientEvents {
     int estadoBotao;
     glm::vec4 lightPosition;
     Chimera::TrackBall trackBall;
+
+    Chimera::Logger* log;
+    int debug_init;
 
     Chimera::CanvasGL* pCanvas;
     bool isPaused;

@@ -149,36 +149,81 @@ void Game::setOctahedran(ListPolygon* _pPolygonList) {
 
 void Game::setDrawTest(ListPolygon* _pPolygonList) {
 
-    Polygon p[6];
-    glm::vec3 v[7];
-    glm::vec3 n[7];
-    glm::vec3 c[6];
-    glm::ivec3 index[6];
+    Polygon p[14];
+    glm::vec3 v[16];
+    glm::vec3 n[16];
+    glm::vec3 c[8];
+    glm::ivec3 index[8];
 
     v[0] = glm::vec3(100, 100, 100);
     v[1] = glm::vec3(-100, 100, 100);
     v[2] = glm::vec3(-100, -100, 100);
     v[3] = glm::vec3(100, -100, 100);
-    v[4] = glm::vec3(100, -100, -100);
-    v[5] = glm::vec3(-100, -100, -100);
-    v[6] = glm::vec3(-100, 100, -100);
 
-    n[0] = glm::vec3(0, 0, -1);
-    n[1] = glm::vec3(0, 0, -1);
-    n[2] = glm::vec3(0, 0, -1);
+    v[4] = glm::vec3(50, 100, 0);
+    v[5] = glm::vec3(250, 100, 0);
+    v[6] = glm::vec3(50, -100, 0);
+    v[7] = glm::vec3(250, -100, 0);
 
-    n[3] = glm::vec3(0, 0, -1);
-    n[4] = glm::vec3(0, 0, -1);
-    n[5] = glm::vec3(0, 0, -1);
+    v[8] = glm::vec3(-250, 100, -100);
+    v[9] = glm::vec3(-50, 100, -100);
+    v[10] = glm::vec3(-250, -100, -100);
+    v[11] = glm::vec3(-50, -100, -100);
 
-    n[6] = glm::vec3(0, 0, -1);
+    v[12] = glm::vec3(100, 100, -200);
+    v[13] = glm::vec3(-100, 100, -200);
+    v[14] = glm::vec3(-100, -100, -200);
+    v[15] = glm::vec3(100, -100, -200);
+
+    // v[0] = glm::vec3(100, 100, 100);
+    // v[1] = glm::vec3(-100, 100, 100);
+    // v[2] = glm::vec3(-100, -100, 100);
+    // v[3] = glm::vec3(100, -100, 100);
+    // v[4] = glm::vec3(100, -100, -100);
+    // v[5] = glm::vec3(-100, -100, -100);
+    // v[6] = glm::vec3(-100, 100, -100);
+
+    n[0] = glm::vec3(0, 0, 1);
+    n[1] = glm::vec3(0, 0, 1);
+    n[2] = glm::vec3(0, 0, 1);
+    n[3] = glm::vec3(0, 0, 1);
+
+    n[4] = glm::vec3(0, 0, 1);
+    n[5] = glm::vec3(0, 0, 1);
+    n[6] = glm::vec3(0, 0, 1);
+    n[7] = glm::vec3(0, 0, 1);
+
+    n[8] = glm::vec3(0, 0, 1);
+    n[9] = glm::vec3(0, 0, 1);
+    n[10] = glm::vec3(0, 0, 1);
+    n[11] = glm::vec3(0, 0, 1);
+
+    n[12] = glm::vec3(0, 0, 1);
+    n[13] = glm::vec3(0, 0, 1);
+    n[14] = glm::vec3(0, 0, 1);
+    n[15] = glm::vec3(0, 0, 1);
 
     index[0] = glm::ivec3(0, 1, 2);
     index[1] = glm::ivec3(2, 3, 0);
-    index[2] = glm::ivec3(3, 2, 5);
-    index[3] = glm::ivec3(5, 4, 3);
-    index[4] = glm::ivec3(1, 2, 5);
-    index[5] = glm::ivec3(5, 6, 1);
+
+    index[2] = glm::ivec3(5, 4, 6);
+    index[3] = glm::ivec3(6, 7, 5);
+
+    index[4] = glm::ivec3(9, 8, 10);
+    index[5] = glm::ivec3(10, 11, 9);
+
+    index[6] = glm::ivec3(12, 13, 14);
+    index[7] = glm::ivec3(14, 15, 12);
+
+    // index[8] = glm::ivec3(12, 12, 14);
+    // index[9] = glm::ivec3(14, 15, 12);
+
+    // index[0] = glm::ivec3(0, 1, 2);
+    // index[1] = glm::ivec3(2, 3, 0);
+    // index[2] = glm::ivec3(3, 2, 5);
+    // index[3] = glm::ivec3(5, 4, 3);
+    // index[4] = glm::ivec3(1, 2, 5);
+    // index[5] = glm::ivec3(5, 6, 1);
 
     c[0] = glm::vec3(1, 1, 1);
     c[1] = glm::vec3(1, 1, 1);
@@ -186,8 +231,10 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
     c[3] = glm::vec3(1, 0, 0);
     c[4] = glm::vec3(0, 0, 1);
     c[5] = glm::vec3(0, 0, 1);
+    c[6] = glm::vec3(0, 1, 0);
+    c[7] = glm::vec3(0, 1, 0);
 
-    for (int face = 0; face < 6; face++) {
+    for (int face = 0; face < 8; face++) {
         p[face].setId(face);
         p[face].setVertices(v[index[face].x], v[index[face].y], v[index[face].z]);
         p[face].setColor(c[face]);
@@ -195,6 +242,55 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
         _pPolygonList->addToList(&p[face]);
     }
 }
+
+// void Game::setDrawTest(ListPolygon* _pPolygonList) {
+
+//     Polygon p[6];
+//     glm::vec3 v[7];
+//     glm::vec3 n[7];
+//     glm::vec3 c[6];
+//     glm::ivec3 index[6];
+
+//     v[0] = glm::vec3(100, 100, 100);
+//     v[1] = glm::vec3(-100, 100, 100);
+//     v[2] = glm::vec3(-100, -100, 100);
+//     v[3] = glm::vec3(100, -100, 100);
+//     v[4] = glm::vec3(100, -100, -100);
+//     v[5] = glm::vec3(-100, -100, -100);
+//     v[6] = glm::vec3(-100, 100, -100);
+
+//     n[0] = glm::vec3(0, 0, -1);
+//     n[1] = glm::vec3(0, 0, -1);
+//     n[2] = glm::vec3(0, 0, -1);
+
+//     n[3] = glm::vec3(0, 0, -1);
+//     n[4] = glm::vec3(0, 0, -1);
+//     n[5] = glm::vec3(0, 0, -1);
+
+//     n[6] = glm::vec3(0, 0, -1);
+
+//     index[0] = glm::ivec3(0, 1, 2);
+//     index[1] = glm::ivec3(2, 3, 0);
+//     index[2] = glm::ivec3(3, 2, 5);
+//     index[3] = glm::ivec3(5, 4, 3);
+//     index[4] = glm::ivec3(1, 2, 5);
+//     index[5] = glm::ivec3(5, 6, 1);
+
+//     c[0] = glm::vec3(1, 1, 1);
+//     c[1] = glm::vec3(1, 1, 1);
+//     c[2] = glm::vec3(1, 0, 0);
+//     c[3] = glm::vec3(1, 0, 0);
+//     c[4] = glm::vec3(0, 0, 1);
+//     c[5] = glm::vec3(0, 0, 1);
+
+//     for (int face = 0; face < 6; face++) {
+//         p[face].setId(face);
+//         p[face].setVertices(v[index[face].x], v[index[face].y], v[index[face].z]);
+//         p[face].setColor(c[face]);
+//         p[face].setNormais(n[index[face].x], n[index[face].y], n[index[face].z]);
+//         _pPolygonList->addToList(&p[face]);
+//     }
+// }
 
 void Game::start() {
 

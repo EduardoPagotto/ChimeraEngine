@@ -54,6 +54,13 @@ void Polygon::computeFaceNormalsFromVertices() {
     this->computeFaceNormalFromNormais();
 }
 
+void Polygon::setFaceNormal(const glm::vec3& n) {
+    this->normais[0] = n;
+    this->normais[1] = n;
+    this->normais[2] = n;
+    this->faceNormal = n;
+}
+
 void Polygon::setNormais(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) {
 
     this->normais[0] = a;

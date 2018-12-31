@@ -17,6 +17,7 @@ class Polygon {
 
     void setVertices(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
     void setNormais(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
+    void setFaceNormal(const glm::vec3& n);
 
     inline int getId() const { return this->id; }
     inline glm::vec3 getColor() const { return this->color; }

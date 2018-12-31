@@ -16,6 +16,8 @@ class ListPolygon {
     inline size_t size() { return lplanes.size(); }
     inline void begin() { iIndex = lplanes.begin(); }
 
+    // void rotate(const int& indice);
+
     Polygon* getFromList();
     Polygon* next();
 

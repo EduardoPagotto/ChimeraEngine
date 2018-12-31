@@ -1,5 +1,6 @@
 
 #include "ListPolygon.hpp"
+#include <algorithm>
 
 ListPolygon::ListPolygon() { iIndex = lplanes.begin(); }
 
@@ -45,3 +46,5 @@ Polygon* ListPolygon::next() {
     }
     return nullptr;
 }
+
+// void ListPolygon::rotate(const int& indice) { std::rotate(lplanes.begin(), lplanes.begin() + 2, lplanes.end()); }

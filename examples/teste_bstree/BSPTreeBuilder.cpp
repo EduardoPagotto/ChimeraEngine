@@ -19,12 +19,12 @@ glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a,
     return a + t * (c - a);
 }
 
-float BSPTreeBuilder::f(const glm::vec3& p, Polygon* _pPartition) {
+float BSPTreeBuilder::f(const glm::vec3& p, Triangle* _pPartition) {
     glm::vec3 n = _pPartition->getFaceNormal();
     return glm::dot(n, p - _pPartition->getVertices()[0]);
 }
 
-void BSPTreeBuilder::splitPolygon(Polygon* _poly, Polygon* _partition, ListPolygon* _polygons) {
+void BSPTreeBuilder::splitPolygon(Triangle* _poly, Triangle* _partition, ListPolygon* _polygons) {
 
     glm::vec3& a = _poly->getVertices()[0];
     glm::vec3& b = _poly->getVertices()[1];
@@ -54,16 +54,16 @@ void BSPTreeBuilder::splitPolygon(Polygon* _poly, Polygon* _partition, ListPolyg
     glm::vec3 A = intersect(_partition->getFaceNormal(), _partition->getVertices()[0], a, c);
     glm::vec3 B = intersect(_partition->getFaceNormal(), _partition->getVertices()[0], b, c);
 
-    Polygon T1(a, b, A); // TreeTriangle T1(a, b, A);
-    Polygon T2(b, B, A); // TreeTriangle T2(b, B, A);
-    Polygon T3(A, B, c); // TreeTriangle T3(A, B, c);
+    Triangle T1(a, b, A); // TreeTriangle T1(a, b, A);
+    Triangle T2(b, B, A); // TreeTriangle T2(b, B, A);
+    Triangle T3(A, B, c); // TreeTriangle T3(A, B, c);
 
     _polygons->addToList(&T1); // to_add.push_back(T1);
     _polygons->addToList(&T2); // to_add.push_back(T2);
     _polygons->addToList(&T3); // to_add.push_back(T3);
 }
 
-SIDE BSPTreeBuilder::classifyPolygon(Polygon* _pPartition, Polygon* _pPolygon) {
+SIDE BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pPolygon) {
 
     glm::vec3 n1 = _pPartition->getFaceNormal();
     glm::vec3 v1 = _pPartition->getVertices()[0];
@@ -88,14 +88,14 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ListPolygon polygons) {
         return nullptr;
 
     BSPTreeNode* tree = new BSPTreeNode;
-    Polygon* root = polygons.getFromList();
+    Triangle* root = polygons.getFromList();
 
     tree->partition = *root; // root->getHyperPlane();
     tree->polygons.addToList(root);
     ListPolygon front_list;
     ListPolygon back_list;
 
-    Polygon* poly;
+    Triangle* poly;
     while ((poly = polygons.getFromList()) != 0) {
         int result = classifyPolygon(&tree->partition, poly);
         switch (result) {
@@ -110,7 +110,7 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ListPolygon polygons) {
                 break;
             case IS_SPANNING:
                 // TODO: implementar o split
-                // Polygon *front_piece, *back_piece;
+                // Triangle *front_piece, *back_piece;
                 // SplitPolygon(poly, &tree->partition, front_piece, back_piece);
                 // back_list.addToList(back_piece);
                 back_list.addToList(poly);

@@ -6,8 +6,8 @@ ListPolygon::ListPolygon() { iIndex = lplanes.begin(); }
 
 ListPolygon::~ListPolygon() {
 
-    for (std::list<Polygon*>::iterator i = lplanes.begin(); i != lplanes.end(); i++) {
-        Polygon* plane = (*i);
+    for (std::list<Triangle*>::iterator i = lplanes.begin(); i != lplanes.end(); i++) {
+        Triangle* plane = (*i);
         delete plane;
         plane = nullptr;
     }
@@ -17,19 +17,19 @@ ListPolygon::~ListPolygon() {
 
 ListPolygon::ListPolygon(const ListPolygon& _cpy) {
 
-    std::list<Polygon*> old = _cpy.lplanes;
-    for (std::list<Polygon*>::iterator i = old.begin(); i != old.end(); i++) {
-        Polygon* plane = (*i);
-        this->lplanes.push_back(new Polygon(*plane));
+    std::list<Triangle*> old = _cpy.lplanes;
+    for (std::list<Triangle*>::iterator i = old.begin(); i != old.end(); i++) {
+        Triangle* plane = (*i);
+        this->lplanes.push_back(new Triangle(*plane));
     }
 
     iIndex = lplanes.begin();
 }
 
-Polygon* ListPolygon::getFromList() {
+Triangle* ListPolygon::getFromList() {
 
     if (lplanes.empty() == false) {
-        Polygon* p = lplanes.front();
+        Triangle* p = lplanes.front();
         lplanes.pop_front();
         return p;
     }
@@ -37,10 +37,10 @@ Polygon* ListPolygon::getFromList() {
     return nullptr;
 }
 
-Polygon* ListPolygon::next() {
+Triangle* ListPolygon::next() {
 
     if (iIndex != lplanes.end()) {
-        Polygon* p = (*iIndex);
+        Triangle* p = (*iIndex);
         iIndex++;
         return p;
     }

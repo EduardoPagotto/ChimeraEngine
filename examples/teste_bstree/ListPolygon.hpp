@@ -11,19 +11,19 @@ class ListPolygon {
     ListPolygon(const ListPolygon& _cpy);
     ~ListPolygon();
 
-    inline void addToList(Polygon* plane) { lplanes.push_back(new Polygon(*plane)); }
+    inline void addToList(Triangle* plane) { lplanes.push_back(new Triangle(*plane)); }
     inline bool isEmpty() { return lplanes.empty(); }
     inline size_t size() { return lplanes.size(); }
     inline void begin() { iIndex = lplanes.begin(); }
 
     // void rotate(const int& indice);
 
-    Polygon* getFromList();
-    Polygon* next();
+    Triangle* getFromList();
+    Triangle* next();
 
   private:
-    std::list<Polygon*>::iterator iIndex;
-    std::list<Polygon*> lplanes;
+    std::list<Triangle*>::iterator iIndex;
+    std::list<Triangle*> lplanes;
 };
 
 #endif

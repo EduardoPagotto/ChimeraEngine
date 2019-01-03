@@ -10,11 +10,11 @@ class BSPTreeBuilder {
     BSPTreeNode* getNodeRoot() { return root; }
 
   private:
-    static float f(const glm::vec3& p, Polygon* _pPartition);
+    static float f(const glm::vec3& p, Triangle* _pPartition);
 
     static BSPTreeNode* buildBSPTreeNode(ListPolygon polygons);
-    static SIDE classifyPolygon(Polygon* _pPartition, Polygon* _pPolygon);
-    static void splitPolygon(Polygon* _poly, Polygon* _partition, ListPolygon* _polygons);
+    static SIDE classifyPolygon(Triangle* _pPartition, Triangle* _pPolygon);
+    static void splitPolygon(Triangle* _poly, Triangle* _partition, ListPolygon* _polygons);
 
     BSPTreeNode* root;
 };

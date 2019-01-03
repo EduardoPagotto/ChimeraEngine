@@ -62,7 +62,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
 void Game::setCube(ListPolygon* _pPolygonList) {
 
-    Polygon p[10];
+    Triangle p[10];
     glm::vec3 v[10];
     glm::vec3 n[10];
     glm::vec3 c[10];
@@ -130,7 +130,7 @@ void Game::setCube(ListPolygon* _pPolygonList) {
 void Game::setOctahedran(ListPolygon* _pPolygonList) {
 
     glm::vec3 p[6];
-    Polygon t[8];
+    Triangle t[8];
 
     p[0] = glm::vec3(0, 50, 0);
     p[1] = glm::vec3(0, 0, -50);
@@ -238,7 +238,7 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
     vColor.push_back(glm::vec3(1, 1, 0));
 
     for (int face = 0; face < 10; face++) {
-        Polygon* pPoly = new Polygon(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
+        Triangle* pPoly = new Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
         pPoly->setColor(vColor[face]);
         pPoly->setFaceNormal(vNormal[face]);
         _pPolygonList->addToList(pPoly);
@@ -250,7 +250,7 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
 
 // void Game::setDrawTest(ListPolygon* _pPolygonList) {
 
-//     Polygon p[6];
+//     Triangle p[6];
 //     glm::vec3 v[7];
 //     glm::vec3 n[7];
 //     glm::vec3 c[6];
@@ -392,7 +392,7 @@ void Game::render() {
 
     finalpl->begin();
 
-    Polygon* fi = nullptr;
+    Triangle* fi = nullptr;
     while ((fi = finalpl->next()) != NULL) {
 
         if (debug_init == 1)

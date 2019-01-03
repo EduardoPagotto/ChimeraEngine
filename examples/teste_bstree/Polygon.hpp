@@ -4,11 +4,11 @@
 
 #include <glm/glm.hpp>
 
-class Polygon {
+class Triangle {
   public:
-    Polygon();
-    Polygon(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
-    Polygon(const Polygon& _cpy);
+    Triangle();
+    Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
+    Triangle(const Triangle& _cpy);
 
     void computeFaceNormalsFromVertices();
     void setVertices(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);

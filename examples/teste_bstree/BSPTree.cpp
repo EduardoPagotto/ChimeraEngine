@@ -13,7 +13,7 @@ void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ListPolygon* finalF
     if (tree == nullptr)
         return;
 
-    Polygon* p = nullptr;
+    Triangle* p = nullptr;
     glm::vec3 normal = tree->partition.getFaceNormal();
     float result = classify(&normal, eye);
     if (result > 0) {

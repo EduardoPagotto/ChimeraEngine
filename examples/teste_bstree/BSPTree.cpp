@@ -22,6 +22,7 @@ void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ListPolygon* finalF
         tree->polygons.begin();
         while ((p = tree->polygons.next()) != NULL)
             finalFaces->addToList(p);
+
         tree->polygons.begin();
         // tree->polygons.DrawPolygons();
 
@@ -33,6 +34,7 @@ void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ListPolygon* finalF
         tree->polygons.begin();
         while ((p = tree->polygons.next()) != NULL)
             finalFaces->addToList(p);
+
         tree->polygons.begin();
         // tree->polygons.DrawPolygonList();
 

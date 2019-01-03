@@ -1,8 +1,68 @@
 #include "BSPTreeBuilder.hpp"
 
+#define EPSILON 1e-3
+
+template <class T> void swap(T& a, T& b) {
+    T c = b;
+    b = a;
+    a = c;
+}
+
 BSPTreeBuilder::BSPTreeBuilder(ListPolygon* polygons) { root = buildBSPTreeNode(*polygons); }
 
-void BSPTreeBuilder::splitPolygon(Polygon* _poly, Polygon* _partition, Polygon* _front_piece, Polygon* _back_piece) {}
+glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
+    float num = glm::dot(n, a);
+    glm::vec3 cma = c - a;
+    float denom = glm::dot(n, cma);
+    float D = -glm::dot(n, p0);
+    float t = -(num + D) / denom;
+    return a + t * (c - a);
+}
+
+float BSPTreeBuilder::f(const glm::vec3& p, Polygon* _pPartition) {
+    glm::vec3 n = _pPartition->getFaceNormal();
+    return glm::dot(n, p - _pPartition->getVertices()[0]);
+}
+
+void BSPTreeBuilder::splitPolygon(Polygon* _poly, Polygon* _partition,
+                                  ListPolygon* _polygons) { // Polygon* _front_piece, Polygon* _back_piece) {
+
+    glm::vec3& a = _poly->getVertices()[0];
+    glm::vec3& b = _poly->getVertices()[1];
+    glm::vec3& c = _poly->getVertices()[2];
+    float fa = BSPTreeBuilder::f(a, _partition);
+    float fb = BSPTreeBuilder::f(b, _partition);
+    float fc = BSPTreeBuilder::f(c, _partition);
+    if (fabs(fa) < EPSILON)
+        fa = 0.0;
+    if (fabs(fb) < EPSILON)
+        fb = 0.0;
+    if (fabs(fc) < EPSILON)
+        fc = 0.0;
+
+    if (fa * fc >= 0) {
+        swap(fb, fc);
+        swap(b, c);
+        swap(fa, fb);
+        swap(a, b);
+    } else if (fb * fc >= 0) {
+        swap(fa, fc);
+        swap(a, c);
+        swap(fa, fb);
+        swap(a, b);
+    }
+
+    glm::vec3 A = intersect(_partition->getFaceNormal(), _partition->getVertices()[0], a, c);
+    glm::vec3 B = intersect(_partition->getFaceNormal(), _partition->getVertices()[0], b, c);
+
+    Polygon T1(a, b, A); // TreeTriangle T1(a, b, A);
+    Polygon T2(b, B, A); // TreeTriangle T2(b, B, A);
+    Polygon T3(A, B, c); // TreeTriangle T3(A, B, c);
+
+    _polygons->addToList(&T1); // to_add.push_back(T1);
+    _polygons->addToList(&T2); // to_add.push_back(T2);
+    _polygons->addToList(&T3); // to_add.push_back(T3);
+}
 
 SIDE BSPTreeBuilder::classifyPolygon(Polygon* _pPartition, Polygon* _pPolygon) {
 
@@ -54,7 +114,8 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ListPolygon polygons) {
                 // Polygon *front_piece, *back_piece;
                 // SplitPolygon(poly, &tree->partition, front_piece, back_piece);
                 // back_list.addToList(back_piece);
-                back_list.addToList(poly);
+                // back_list.addToList(poly);
+                splitPolygon(poly, &tree->partition, &polygons);
                 break;
         }
     }

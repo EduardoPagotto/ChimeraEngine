@@ -61,6 +61,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 }
 
 void Game::setCube(ListPolygon* _pPolygonList) {
+
     Polygon p[10];
     glm::vec3 v[10];
     glm::vec3 n[10];
@@ -122,12 +123,12 @@ void Game::setCube(ListPolygon* _pPolygonList) {
     for (int i = 0; i < 10; i++) {
         p[i].setNormais(n[i], n[i], n[i]);
         p[i].setColor(c[i]);
-        p[i].setId(polygon_id++);
         _pPolygonList->addToList(&p[i]);
     }
 }
 
 void Game::setOctahedran(ListPolygon* _pPolygonList) {
+
     glm::vec3 p[6];
     Polygon t[8];
 
@@ -148,7 +149,6 @@ void Game::setOctahedran(ListPolygon* _pPolygonList) {
     t[7].setVertices(p[5], p[2], p[4]);
 
     for (int i = 0; i < 8; i++) {
-        t[i].setId(polygon_id++);
         t[i].setColor(glm::vec3(1, 0, 0));
         t[i].computeFaceNormalsFromVertices();
         _pPolygonList->addToList(&t[i]);
@@ -157,7 +157,6 @@ void Game::setOctahedran(ListPolygon* _pPolygonList) {
 
 void Game::setDrawTest(ListPolygon* _pPolygonList) {
 
-    Polygon p[14];
     std::vector<glm::vec3> vVertice;
     std::vector<glm::vec3> vNormal;
     std::vector<glm::ivec3> vIndex;
@@ -239,11 +238,13 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
     vColor.push_back(glm::vec3(1, 1, 0));
 
     for (int face = 0; face < 10; face++) {
-        p[face].setId(face);
-        p[face].setVertices(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
-        p[face].setColor(vColor[face]);
-        p[face].setFaceNormal(vNormal[face]);
-        _pPolygonList->addToList(&p[face]);
+        Polygon* pPoly = new Polygon(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
+        pPoly->setColor(vColor[face]);
+        pPoly->setFaceNormal(vNormal[face]);
+        _pPolygonList->addToList(pPoly);
+
+        delete pPoly;
+        pPoly = nullptr;
     }
 }
 
@@ -310,9 +311,9 @@ void Game::start() {
     polygon_id = 1;
 
     ListPolygon* pPolygonList = new ListPolygon();
-    // setCube(pPolygonList);
-    // setOctahedran(pPolygonList);
-    setDrawTest(pPolygonList);
+    setCube(pPolygonList);
+    setOctahedran(pPolygonList);
+    // setDrawTest(pPolygonList);
 
     BSPTreeBuilder builder(pPolygonList);
     pBspTree = new BSPTree(builder.getNodeRoot()); // buildBSPTree(pPolygonList);
@@ -395,7 +396,7 @@ void Game::render() {
     while ((fi = finalpl->next()) != NULL) {
 
         if (debug_init == 1)
-            log->debug("Poligono: " + std::to_string(fi->getId()));
+            log->debug("Poligono: " + std::to_string(fi->getSerial()));
 
         glm::vec3 cc = fi->getColor();
         glColor3f(cc.x, cc.y, cc.z);

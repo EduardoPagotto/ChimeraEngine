@@ -29,12 +29,11 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void setCube(ArrayTriangle* _pPolygonList);
-    void setOctahedran(ArrayTriangle* _pPolygonList);
-    void setDrawTest(ArrayTriangle* _pPolygonList);
+    void setCube(ArrayTriangle* _pArrayTriangle);
+    void setOctahedran(ArrayTriangle* _pArrayTriangle);
+    void setDrawTest(ArrayTriangle* _pArrayTriangle);
 
     BSPTree* pBspTree;
-    int polygon_id;
     int botaoIndex;
     int estadoBotao;
     glm::vec4 lightPosition;

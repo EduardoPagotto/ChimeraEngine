@@ -60,7 +60,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::setCube(ArrayTriangle* _pPolygonList) {
+void Game::setCube(ArrayTriangle* _pArrayTriangle) {
 
     Triangle p[10];
     glm::vec3 v[10];
@@ -123,11 +123,11 @@ void Game::setCube(ArrayTriangle* _pPolygonList) {
     for (int i = 0; i < 10; i++) {
         p[i].setNormais(n[i], n[i], n[i]);
         p[i].setColor(c[i]);
-        _pPolygonList->addToList(&p[i]);
+        _pArrayTriangle->addToList(&p[i]);
     }
 }
 
-void Game::setOctahedran(ArrayTriangle* _pPolygonList) {
+void Game::setOctahedran(ArrayTriangle* _pArrayTriangle) {
 
     glm::vec3 p[6];
     Triangle t[8];
@@ -151,11 +151,11 @@ void Game::setOctahedran(ArrayTriangle* _pPolygonList) {
     for (int i = 0; i < 8; i++) {
         t[i].setColor(glm::vec3(1, 0, 0));
         t[i].computeFaceNormalsFromVertices();
-        _pPolygonList->addToList(&t[i]);
+        _pArrayTriangle->addToList(&t[i]);
     }
 }
 
-void Game::setDrawTest(ArrayTriangle* _pPolygonList) {
+void Game::setDrawTest(ArrayTriangle* _pArrayTriangle) {
 
     std::vector<glm::vec3> vVertice;
     std::vector<glm::vec3> vNormal;
@@ -238,17 +238,17 @@ void Game::setDrawTest(ArrayTriangle* _pPolygonList) {
     vColor.push_back(glm::vec3(1, 1, 0));
 
     for (int face = 0; face < 10; face++) {
-        Triangle* pPoly = new Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
-        pPoly->setColor(vColor[face]);
-        pPoly->setFaceNormal(vNormal[face]);
-        _pPolygonList->addToList(pPoly);
+        Triangle* t = new Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
+        t->setColor(vColor[face]);
+        t->setFaceNormal(vNormal[face]);
+        _pArrayTriangle->addToList(t);
 
-        delete pPoly;
-        pPoly = nullptr;
+        delete t;
+        t = nullptr;
     }
 }
 
-// void Game::setDrawTest(ArrayTriangle* _pPolygonList) {
+// void Game::setDrawTest(ArrayTriangle* _pArrayTriangle) {
 
 //     Triangle p[6];
 //     glm::vec3 v[7];
@@ -293,7 +293,7 @@ void Game::setDrawTest(ArrayTriangle* _pPolygonList) {
 //         p[face].setVertices(v[index[face].x], v[index[face].y], v[index[face].z]);
 //         p[face].setColor(c[face]);
 //         p[face].setNormais(n[index[face].x], n[index[face].y], n[index[face].z]);
-//         _pPolygonList->addToList(&p[face]);
+//         _pArrayTriangle->addToList(&p[face]);
 //     }
 // }
 
@@ -308,18 +308,16 @@ void Game::start() {
 
     lightPosition = glm::vec4(0.0, 100.0, 0.0, 1.0);
 
-    polygon_id = 1;
+    ArrayTriangle* arrayTriangle = new ArrayTriangle();
+    // setCube(arrayTriangle);
+    // setOctahedran(arrayTriangle);
+    setDrawTest(arrayTriangle);
 
-    ArrayTriangle* pPolygonList = new ArrayTriangle();
-    // setCube(pPolygonList);
-    // setOctahedran(pPolygonList);
-    setDrawTest(pPolygonList);
+    BSPTreeBuilder builder(arrayTriangle);
+    pBspTree = new BSPTree(builder.getNodeRoot()); // buildBSPTree(arrayTriangle);
 
-    BSPTreeBuilder builder(pPolygonList);
-    pBspTree = new BSPTree(builder.getNodeRoot()); // buildBSPTree(pPolygonList);
-
-    delete pPolygonList;
-    pPolygonList = nullptr;
+    delete arrayTriangle;
+    arrayTriangle = nullptr;
 
     pCanvas->initGL();
 
@@ -384,16 +382,16 @@ void Game::render() {
     // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->direction.x, vp->direction.y, vp->direction.z,
     //          vp->rotation.x, vp->rotation.y, vp->rotation.z);
 
-    ArrayTriangle* finalpl = new ArrayTriangle();
-    pBspTree->draw(&vp->position, finalpl);
+    ArrayTriangle* arrayTriangle = new ArrayTriangle();
+    pBspTree->draw(&vp->position, arrayTriangle);
 
     if (debug_init == 1)
         log->debug("eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
 
-    finalpl->begin();
+    arrayTriangle->begin();
 
     Triangle* fi = nullptr;
-    while ((fi = finalpl->next()) != NULL) {
+    while ((fi = arrayTriangle->next()) != NULL) {
 
         if (debug_init == 1)
             log->debug("Poligono: " + std::to_string(fi->getSerial()));
@@ -410,8 +408,8 @@ void Game::render() {
 
     debug_init = 0;
 
-    delete finalpl;
-    finalpl = nullptr;
+    delete arrayTriangle;
+    arrayTriangle = nullptr;
 
     // GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};
     // glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);

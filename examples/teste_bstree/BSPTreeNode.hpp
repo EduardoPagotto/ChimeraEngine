@@ -11,7 +11,7 @@ enum SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
 // };
 
 struct BSPTreeNode {
-    ArrayTriangle polygons;
+    ArrayTriangle arrayTriangle;
     Triangle partition; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;

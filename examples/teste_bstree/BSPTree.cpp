@@ -1,6 +1,6 @@
 #include "BSPTree.h"
 
-void BSPTree::draw(glm::vec3* eye, ArrayTriangle* finalFaces) { BSPTree::drawBSPTree(root, eye, finalFaces); }
+void BSPTree::draw(glm::vec3* eye, ArrayTriangle* _pArrayTriangle) { BSPTree::drawBSPTree(root, eye, _pArrayTriangle); }
 
 float BSPTree::classify(glm::vec3* normal, glm::vec3* eye) {
     // TODO: Converir se e isto mesmo
@@ -9,39 +9,39 @@ float BSPTree::classify(glm::vec3* normal, glm::vec3* eye) {
     return p;
 }
 
-void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ArrayTriangle* finalFaces) {
+void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ArrayTriangle* _pArrayTriangle) {
     if (tree == nullptr)
         return;
 
-    Triangle* p = nullptr;
+    Triangle* t = nullptr;
     glm::vec3 normal = tree->partition.getFaceNormal();
     float result = classify(&normal, eye);
     if (result > 0) {
-        drawBSPTree(tree->back, eye, finalFaces);
+        drawBSPTree(tree->back, eye, _pArrayTriangle);
 
-        tree->polygons.begin();
-        while ((p = tree->polygons.next()) != NULL)
-            finalFaces->addToList(p);
+        tree->arrayTriangle.begin();
+        while ((t = tree->arrayTriangle.next()) != NULL)
+            _pArrayTriangle->addToList(t);
 
-        tree->polygons.begin();
-        // tree->polygons.DrawPolygons();
+        tree->arrayTriangle.begin();
+        // tree->arrayTriangle.DrawPolygons();
 
-        drawBSPTree(tree->front, eye, finalFaces);
+        drawBSPTree(tree->front, eye, _pArrayTriangle);
 
     } else if (result < 0) {
-        drawBSPTree(tree->front, eye, finalFaces);
+        drawBSPTree(tree->front, eye, _pArrayTriangle);
 
-        tree->polygons.begin();
-        while ((p = tree->polygons.next()) != NULL)
-            finalFaces->addToList(p);
+        tree->arrayTriangle.begin();
+        while ((t = tree->arrayTriangle.next()) != NULL)
+            _pArrayTriangle->addToList(t);
 
-        tree->polygons.begin();
-        // tree->polygons.DrawPolygonList();
+        tree->arrayTriangle.begin();
+        // tree->arrayTriangle.DrawPolygonList();
 
-        drawBSPTree(tree->back, eye, finalFaces);
+        drawBSPTree(tree->back, eye, _pArrayTriangle);
     } else {
         // the eye point is on the partition plane...
-        drawBSPTree(tree->front, eye, finalFaces);
-        drawBSPTree(tree->back, eye, finalFaces);
+        drawBSPTree(tree->front, eye, _pArrayTriangle);
+        drawBSPTree(tree->back, eye, _pArrayTriangle);
     }
 }

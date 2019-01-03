@@ -6,15 +6,15 @@
 
 class BSPTreeBuilder {
   public:
-    BSPTreeBuilder(ArrayTriangle* polygons);
+    BSPTreeBuilder(ArrayTriangle* _arrayTriangle);
     BSPTreeNode* getNodeRoot() { return root; }
 
   private:
     static float f(const glm::vec3& p, Triangle* _pPartition);
 
-    static BSPTreeNode* buildBSPTreeNode(ArrayTriangle polygons);
-    static SIDE classifyPolygon(Triangle* _pPartition, Triangle* _pPolygon);
-    static void splitPolygon(Triangle* _poly, Triangle* _partition, ArrayTriangle* _polygons);
+    static BSPTreeNode* buildBSPTreeNode(ArrayTriangle _arrayTriangle);
+    static SIDE classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle);
+    static void splitTriangle(Triangle* _pTriangle, Triangle* _partition, ArrayTriangle* _pArrayTriangle);
 
     BSPTreeNode* root;
 };

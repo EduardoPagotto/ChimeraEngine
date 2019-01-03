@@ -1,5 +1,5 @@
-#ifndef __BSPTREE_LIST_POLYGON__HPP
-#define __BSPTREE_LIST_POLYGON__HPP
+#ifndef __BSPTREE_ARRAY_TRIANGLE__HPP
+#define __BSPTREE_ARRAY_TRIANGLE__HPP
 
 #include "Triangle.hpp"
 

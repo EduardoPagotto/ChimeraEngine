@@ -1,6 +1,6 @@
 
-#ifndef __POLYGON__HPP
-#define __POLYGON__HPP
+#ifndef __TRIANGLE__HPP
+#define __TRIANGLE__HPP
 
 #include <glm/glm.hpp>
 

@@ -8,7 +8,7 @@ template <class T> void swap(T& a, T& b) {
     a = c;
 }
 
-BSPTreeBuilder::BSPTreeBuilder(ArrayTriangle* polygons) { root = buildBSPTreeNode(*polygons); }
+BSPTreeBuilder::BSPTreeBuilder(ArrayTriangle* _arrayTriangle) { root = buildBSPTreeNode(*_arrayTriangle); }
 
 glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
     float num = glm::dot(n, a);
@@ -24,11 +24,11 @@ float BSPTreeBuilder::f(const glm::vec3& p, Triangle* _pPartition) {
     return glm::dot(n, p - _pPartition->getVertices()[0]);
 }
 
-void BSPTreeBuilder::splitPolygon(Triangle* _poly, Triangle* _partition, ArrayTriangle* _polygons) {
+void BSPTreeBuilder::splitTriangle(Triangle* _pTriangle, Triangle* _partition, ArrayTriangle* _pArrayTriangle) {
 
-    glm::vec3& a = _poly->getVertices()[0];
-    glm::vec3& b = _poly->getVertices()[1];
-    glm::vec3& c = _poly->getVertices()[2];
+    glm::vec3& a = _pTriangle->getVertices()[0];
+    glm::vec3& b = _pTriangle->getVertices()[1];
+    glm::vec3& c = _pTriangle->getVertices()[2];
     float fa = BSPTreeBuilder::f(a, _partition);
     float fb = BSPTreeBuilder::f(b, _partition);
     float fc = BSPTreeBuilder::f(c, _partition);
@@ -58,12 +58,12 @@ void BSPTreeBuilder::splitPolygon(Triangle* _poly, Triangle* _partition, ArrayTr
     Triangle T2(b, B, A); // TreeTriangle T2(b, B, A);
     Triangle T3(A, B, c); // TreeTriangle T3(A, B, c);
 
-    _polygons->addToList(&T1); // to_add.push_back(T1);
-    _polygons->addToList(&T2); // to_add.push_back(T2);
-    _polygons->addToList(&T3); // to_add.push_back(T3);
+    _pArrayTriangle->addToList(&T1); // to_add.push_back(T1);
+    _pArrayTriangle->addToList(&T2); // to_add.push_back(T2);
+    _pArrayTriangle->addToList(&T3); // to_add.push_back(T3);
 }
 
-SIDE BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pPolygon) {
+SIDE BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle) {
 
     glm::vec3 n1 = _pPartition->getFaceNormal();
     glm::vec3 v1 = _pPartition->getVertices()[0];
@@ -71,7 +71,7 @@ SIDE BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pPolygon)
 
     float p[3];
     for (int i = 0; i < 3; i++)
-        p[i] = glm::dot(n1, _pPolygon->getVertices()[i]) + dotVal1;
+        p[i] = glm::dot(n1, _pTriangle->getVertices()[i]) + dotVal1;
 
     if (p[0] > 0 && p[1] > 0 && p[2] > 0)
         return IS_INFRONT;
@@ -83,38 +83,38 @@ SIDE BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pPolygon)
         return IS_SPANNING;
 }
 
-BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ArrayTriangle polygons) {
-    if (polygons.isEmpty())
+BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ArrayTriangle _arrayTriangle) {
+    if (_arrayTriangle.isEmpty())
         return nullptr;
 
     BSPTreeNode* tree = new BSPTreeNode;
-    Triangle* root = polygons.getFromList();
+    Triangle* root = _arrayTriangle.getFromList();
 
     tree->partition = *root; // root->getHyperPlane();
-    tree->polygons.addToList(root);
+    tree->arrayTriangle.addToList(root);
     ArrayTriangle front_list;
     ArrayTriangle back_list;
 
-    Triangle* poly;
-    while ((poly = polygons.getFromList()) != 0) {
-        int result = classifyPolygon(&tree->partition, poly);
+    Triangle* t;
+    while ((t = _arrayTriangle.getFromList()) != 0) {
+        int result = classifyPolygon(&tree->partition, t);
         switch (result) {
             case IS_COPLANAR:
-                tree->polygons.addToList(poly);
+                tree->arrayTriangle.addToList(t);
                 break;
             case IS_BEHIND:
-                back_list.addToList(poly);
+                back_list.addToList(t);
                 break;
             case IS_INFRONT:
-                front_list.addToList(poly);
+                front_list.addToList(t);
                 break;
             case IS_SPANNING:
                 // TODO: implementar o split
                 // Triangle *front_piece, *back_piece;
-                // SplitPolygon(poly, &tree->partition, front_piece, back_piece);
+                // splitTriangle(t, &tree->partition, front_piece, back_piece);
                 // back_list.addToList(back_piece);
-                back_list.addToList(poly);
-                // splitPolygon(poly, &tree->partition, &polygons);
+                back_list.addToList(t);
+                // splitTriangle(t, &tree->partition, &_arrayTriangle);
                 break;
         }
     }

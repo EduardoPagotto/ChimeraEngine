@@ -8,7 +8,7 @@ template <class T> void swap(T& a, T& b) {
     a = c;
 }
 
-BSPTreeBuilder::BSPTreeBuilder(ListPolygon* polygons) { root = buildBSPTreeNode(*polygons); }
+BSPTreeBuilder::BSPTreeBuilder(ArrayTriangle* polygons) { root = buildBSPTreeNode(*polygons); }
 
 glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
     float num = glm::dot(n, a);
@@ -24,7 +24,7 @@ float BSPTreeBuilder::f(const glm::vec3& p, Triangle* _pPartition) {
     return glm::dot(n, p - _pPartition->getVertices()[0]);
 }
 
-void BSPTreeBuilder::splitPolygon(Triangle* _poly, Triangle* _partition, ListPolygon* _polygons) {
+void BSPTreeBuilder::splitPolygon(Triangle* _poly, Triangle* _partition, ArrayTriangle* _polygons) {
 
     glm::vec3& a = _poly->getVertices()[0];
     glm::vec3& b = _poly->getVertices()[1];
@@ -83,7 +83,7 @@ SIDE BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pPolygon)
         return IS_SPANNING;
 }
 
-BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ListPolygon polygons) {
+BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ArrayTriangle polygons) {
     if (polygons.isEmpty())
         return nullptr;
 
@@ -92,8 +92,8 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ListPolygon polygons) {
 
     tree->partition = *root; // root->getHyperPlane();
     tree->polygons.addToList(root);
-    ListPolygon front_list;
-    ListPolygon back_list;
+    ArrayTriangle front_list;
+    ArrayTriangle back_list;
 
     Triangle* poly;
     while ((poly = polygons.getFromList()) != 0) {

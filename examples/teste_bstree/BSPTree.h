@@ -9,10 +9,10 @@
 class BSPTree {
   public:
     BSPTree(BSPTreeNode* _pRoot) : root(_pRoot) {}
-    void draw(glm::vec3* eye, ListPolygon* finalFaces);
+    void draw(glm::vec3* eye, ArrayTriangle* finalFaces);
 
   private:
-    static void drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ListPolygon* finalFaces);
+    static void drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ArrayTriangle* finalFaces);
     static float classify(glm::vec3* normal, glm::vec3* eye);
 
     BSPTreeNode* root;

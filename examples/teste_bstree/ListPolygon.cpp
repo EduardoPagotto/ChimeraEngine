@@ -2,9 +2,9 @@
 #include "ListPolygon.hpp"
 #include <algorithm>
 
-ListPolygon::ListPolygon() { iIndex = lplanes.begin(); }
+ArrayTriangle::ArrayTriangle() { iIndex = lplanes.begin(); }
 
-ListPolygon::~ListPolygon() {
+ArrayTriangle::~ArrayTriangle() {
 
     for (std::list<Triangle*>::iterator i = lplanes.begin(); i != lplanes.end(); i++) {
         Triangle* plane = (*i);
@@ -15,7 +15,7 @@ ListPolygon::~ListPolygon() {
     lplanes.clear();
 }
 
-ListPolygon::ListPolygon(const ListPolygon& _cpy) {
+ArrayTriangle::ArrayTriangle(const ArrayTriangle& _cpy) {
 
     std::list<Triangle*> old = _cpy.lplanes;
     for (std::list<Triangle*>::iterator i = old.begin(); i != old.end(); i++) {
@@ -26,7 +26,7 @@ ListPolygon::ListPolygon(const ListPolygon& _cpy) {
     iIndex = lplanes.begin();
 }
 
-Triangle* ListPolygon::getFromList() {
+Triangle* ArrayTriangle::getFromList() {
 
     if (lplanes.empty() == false) {
         Triangle* p = lplanes.front();
@@ -37,7 +37,7 @@ Triangle* ListPolygon::getFromList() {
     return nullptr;
 }
 
-Triangle* ListPolygon::next() {
+Triangle* ArrayTriangle::next() {
 
     if (iIndex != lplanes.end()) {
         Triangle* p = (*iIndex);
@@ -47,4 +47,4 @@ Triangle* ListPolygon::next() {
     return nullptr;
 }
 
-// void ListPolygon::rotate(const int& indice) { std::rotate(lplanes.begin(), lplanes.begin() + 2, lplanes.end()); }
+// void ArrayTriangle::rotate(const int& indice) { std::rotate(lplanes.begin(), lplanes.begin() + 2, lplanes.end()); }

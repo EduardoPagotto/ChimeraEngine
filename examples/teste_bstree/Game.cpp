@@ -60,7 +60,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::setCube(ListPolygon* _pPolygonList) {
+void Game::setCube(ArrayTriangle* _pPolygonList) {
 
     Triangle p[10];
     glm::vec3 v[10];
@@ -127,7 +127,7 @@ void Game::setCube(ListPolygon* _pPolygonList) {
     }
 }
 
-void Game::setOctahedran(ListPolygon* _pPolygonList) {
+void Game::setOctahedran(ArrayTriangle* _pPolygonList) {
 
     glm::vec3 p[6];
     Triangle t[8];
@@ -155,7 +155,7 @@ void Game::setOctahedran(ListPolygon* _pPolygonList) {
     }
 }
 
-void Game::setDrawTest(ListPolygon* _pPolygonList) {
+void Game::setDrawTest(ArrayTriangle* _pPolygonList) {
 
     std::vector<glm::vec3> vVertice;
     std::vector<glm::vec3> vNormal;
@@ -248,7 +248,7 @@ void Game::setDrawTest(ListPolygon* _pPolygonList) {
     }
 }
 
-// void Game::setDrawTest(ListPolygon* _pPolygonList) {
+// void Game::setDrawTest(ArrayTriangle* _pPolygonList) {
 
 //     Triangle p[6];
 //     glm::vec3 v[7];
@@ -310,7 +310,7 @@ void Game::start() {
 
     polygon_id = 1;
 
-    ListPolygon* pPolygonList = new ListPolygon();
+    ArrayTriangle* pPolygonList = new ArrayTriangle();
     // setCube(pPolygonList);
     // setOctahedran(pPolygonList);
     setDrawTest(pPolygonList);
@@ -384,7 +384,7 @@ void Game::render() {
     // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->direction.x, vp->direction.y, vp->direction.z,
     //          vp->rotation.x, vp->rotation.y, vp->rotation.z);
 
-    ListPolygon* finalpl = new ListPolygon();
+    ArrayTriangle* finalpl = new ArrayTriangle();
     pBspTree->draw(&vp->position, finalpl);
 
     if (debug_init == 1)

@@ -29,9 +29,9 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void setCube(ListPolygon* _pPolygonList);
-    void setOctahedran(ListPolygon* _pPolygonList);
-    void setDrawTest(ListPolygon* _pPolygonList);
+    void setCube(ArrayTriangle* _pPolygonList);
+    void setOctahedran(ArrayTriangle* _pPolygonList);
+    void setDrawTest(ArrayTriangle* _pPolygonList);
 
     BSPTree* pBspTree;
     int polygon_id;

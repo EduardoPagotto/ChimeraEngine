@@ -5,11 +5,11 @@
 
 #include <list>
 
-class ListPolygon {
+class ArrayTriangle {
   public:
-    ListPolygon();
-    ListPolygon(const ListPolygon& _cpy);
-    ~ListPolygon();
+    ArrayTriangle();
+    ArrayTriangle(const ArrayTriangle& _cpy);
+    ~ArrayTriangle();
 
     inline void addToList(Triangle* plane) { lplanes.push_back(new Triangle(*plane)); }
     inline bool isEmpty() { return lplanes.empty(); }

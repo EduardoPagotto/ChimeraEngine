@@ -1,6 +1,6 @@
 #include "BSPTree.h"
 
-void BSPTree::draw(glm::vec3* eye, ListPolygon* finalFaces) { BSPTree::drawBSPTree(root, eye, finalFaces); }
+void BSPTree::draw(glm::vec3* eye, ArrayTriangle* finalFaces) { BSPTree::drawBSPTree(root, eye, finalFaces); }
 
 float BSPTree::classify(glm::vec3* normal, glm::vec3* eye) {
     // TODO: Converir se e isto mesmo
@@ -9,7 +9,7 @@ float BSPTree::classify(glm::vec3* normal, glm::vec3* eye) {
     return p;
 }
 
-void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ListPolygon* finalFaces) {
+void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ArrayTriangle* finalFaces) {
     if (tree == nullptr)
         return;
 

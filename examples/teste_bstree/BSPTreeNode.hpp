@@ -2,8 +2,7 @@
 #define __BSPTREE_NODE__HPP
 
 //#include <vector>
-#include "ListPolygon.hpp"
-#include "Polygon.hpp"
+#include "ArrayTriangle.hpp"
 
 enum SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
 

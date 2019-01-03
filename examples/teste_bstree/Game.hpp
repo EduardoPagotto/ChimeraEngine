@@ -1,8 +1,8 @@
 #ifndef __GAME_TESTE_BSTREE__HPP
 #define __GAME_TESTE_BSTREE__HPP
 
+#include "ArrayTriangle.hpp"
 #include "BSPTree.h"
-#include "ListPolygon.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Logger.hpp"

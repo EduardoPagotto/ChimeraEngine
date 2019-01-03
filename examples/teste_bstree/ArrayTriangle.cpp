@@ -1,5 +1,5 @@
 
-#include "ListPolygon.hpp"
+#include "ArrayTriangle.hpp"
 #include <algorithm>
 
 ArrayTriangle::ArrayTriangle() { iIndex = lplanes.begin(); }

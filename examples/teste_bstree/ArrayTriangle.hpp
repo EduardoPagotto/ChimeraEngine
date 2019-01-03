@@ -1,7 +1,7 @@
 #ifndef __BSPTREE_LIST_POLYGON__HPP
 #define __BSPTREE_LIST_POLYGON__HPP
 
-#include "Polygon.hpp"
+#include "Triangle.hpp"
 
 #include <list>
 

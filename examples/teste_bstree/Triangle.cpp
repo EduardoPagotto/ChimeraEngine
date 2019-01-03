@@ -1,4 +1,4 @@
-#include "Polygon.hpp"
+#include "Triangle.hpp"
 
 unsigned Triangle::serialMaster = 0;
 

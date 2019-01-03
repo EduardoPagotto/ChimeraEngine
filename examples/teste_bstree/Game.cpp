@@ -311,9 +311,9 @@ void Game::start() {
     polygon_id = 1;
 
     ListPolygon* pPolygonList = new ListPolygon();
-    setCube(pPolygonList);
-    setOctahedran(pPolygonList);
-    // setDrawTest(pPolygonList);
+    // setCube(pPolygonList);
+    // setOctahedran(pPolygonList);
+    setDrawTest(pPolygonList);
 
     BSPTreeBuilder builder(pPolygonList);
     pBspTree = new BSPTree(builder.getNodeRoot()); // buildBSPTree(pPolygonList);

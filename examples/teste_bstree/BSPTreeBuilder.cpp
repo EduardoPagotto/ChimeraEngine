@@ -24,8 +24,7 @@ float BSPTreeBuilder::f(const glm::vec3& p, Polygon* _pPartition) {
     return glm::dot(n, p - _pPartition->getVertices()[0]);
 }
 
-void BSPTreeBuilder::splitPolygon(Polygon* _poly, Polygon* _partition,
-                                  ListPolygon* _polygons) { // Polygon* _front_piece, Polygon* _back_piece) {
+void BSPTreeBuilder::splitPolygon(Polygon* _poly, Polygon* _partition, ListPolygon* _polygons) {
 
     glm::vec3& a = _poly->getVertices()[0];
     glm::vec3& b = _poly->getVertices()[1];
@@ -114,8 +113,8 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ListPolygon polygons) {
                 // Polygon *front_piece, *back_piece;
                 // SplitPolygon(poly, &tree->partition, front_piece, back_piece);
                 // back_list.addToList(back_piece);
-                // back_list.addToList(poly);
-                splitPolygon(poly, &tree->partition, &polygons);
+                back_list.addToList(poly);
+                // splitPolygon(poly, &tree->partition, &polygons);
                 break;
         }
     }

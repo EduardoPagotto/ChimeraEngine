@@ -13,8 +13,9 @@ class BSPTreeBuilder {
     static float f(const glm::vec3& p, Triangle* _pPartition);
 
     static BSPTreeNode* buildBSPTreeNode(ArrayTriangle _arrayTriangle);
-    static SIDE classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle);
-    static void splitTriangle(Triangle* _pTriangle, Triangle* _partition, ArrayTriangle* _pArrayTriangle);
+    static glm::ivec3 classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle);
+    static void splitTriangle(const glm::ivec3& fx, Triangle* _pTriangle, Triangle* _partition,
+                              ArrayTriangle* _pArrayTriangle);
 
     BSPTreeNode* root;
 };

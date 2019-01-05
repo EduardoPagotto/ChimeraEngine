@@ -16,10 +16,17 @@ glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a,
     float denom = glm::dot(n, cma);
     float D = -glm::dot(n, p0);
     float t = -(num + D) / denom;
-    return a + t * (c - a);
+
+    glm::vec3 valor = a + t * (c - a);
+    return aprox(valor);
 }
 
-void BSPTreeBuilder::splitTriangle(const glm::ivec3& fx, Triangle* _pTriangle, Triangle* _partition,
+glm::vec3 aprox(const glm::vec3& dado) {
+    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x, (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,
+                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z);
+}
+
+void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
                                    ArrayTriangle* _pArrayTriangle) {
     glm::vec3& a = _pTriangle->getVertices()[0];
     glm::vec3& b = _pTriangle->getVertices()[1];
@@ -47,12 +54,57 @@ void BSPTreeBuilder::splitTriangle(const glm::ivec3& fx, Triangle* _pTriangle, T
     Triangle T2(b, B, A);
     Triangle T3(A, B, c);
 
+    T1.setColor(_pTriangle->getColor());
+    T1.setFaceNormal(_pTriangle->getFaceNormal());
+
+    T2.setColor(glm::vec3(0, 0, 1));
+    T2.setFaceNormal(_pTriangle->getFaceNormal());
+
+    T3.setColor(glm::vec3(0, 1, 0));
+    T3.setFaceNormal(_pTriangle->getFaceNormal());
+
     _pArrayTriangle->addToList(&T1);
     _pArrayTriangle->addToList(&T2);
     _pArrayTriangle->addToList(&T3);
 }
 
-glm::ivec3 BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle) {
+SIDE BSPTreeBuilder::ClassifyPolyTest(Triangle* Plane, Triangle* Poly) {
+    // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
+    int Infront = 0;
+    int Behind = 0;
+    int OnPlane = 0;
+    float result;
+
+    glm::vec3 vec1 = *Plane->getVertices();
+    for (int a = 0; a < 3; a++) {
+
+        glm::vec3 vec2 = Poly->getVertices()[a];
+        glm::vec3 Direction = vec1 - vec2;
+        result = glm::dot(Direction, Plane->getFaceNormal());
+        if (result > 0.001) {
+            Behind++;
+        } else if (result < -0.001) {
+            Infront++;
+        } else {
+            OnPlane++;
+            Infront++;
+            Behind++;
+        }
+    }
+
+    if (OnPlane == 3)
+        return SIDE::IS_COPLANAR; // CP_ONPLANE;
+
+    if (Behind == 3)
+        return SIDE::IS_BEHIND; // CP_BACK;
+
+    if (Infront == 3)
+        return SIDE::IS_INFRONT; // CP_FRONT;
+
+    return SIDE::IS_SPANNING; // CP_SPANNING;
+}
+
+glm::vec3 BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle) {
     float fs[3];
     for (int i = 0; i < 3; i++) {
         fs[i] = glm::dot(_pPartition->getFaceNormal(), _pTriangle->getVertices()[i] - _pPartition->getVertices()[0]);
@@ -60,7 +112,7 @@ glm::ivec3 BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pTr
             fs[i] = 0.0;
     }
 
-    return glm::ivec3(fs[0], fs[1], fs[2]);
+    return glm::vec3(fs[0], fs[1], fs[2]);
 }
 
 BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ArrayTriangle _arrayTriangle) {
@@ -77,16 +129,17 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ArrayTriangle _arrayTriangle) {
 
     Triangle* t;
     while ((t = _arrayTriangle.getFromList()) != 0) {
-        glm::ivec3 result = classifyPolygon(&tree->partition, t);
-        if (result.x < 0 && result.y < 0 && result.z < 0) // IS_BEHIND
+        SIDE teste = ClassifyPolyTest(&tree->partition, t);
+        glm::vec3 result = classifyPolygon(&tree->partition, t);
+        if (teste == SIDE::IS_BEHIND) // IS_BEHIND
             back_list.addToList(t);
-        else if (result.x > 0 && result.y > 0 && result.z > 0) // IS_INFRONT
+        else if (teste == SIDE::IS_INFRONT) // IS_INFRONT
             front_list.addToList(t);
-        else if (result.x == 0 && result.y == 0 && result.z == 0) // IS_COPLANAR
+        else if (teste == SIDE::IS_COPLANAR) // IS_COPLANAR
             tree->arrayTriangle.addToList(t);
         else { // IS_SPANNING
-            back_list.addToList(t);
-            // splitTriangle(result, t, &tree->partition, &_arrayTriangle);
+            // back_list.addToList(t);
+            splitTriangle(result, t, &tree->partition, &_arrayTriangle);
         }
     }
     tree->front = buildBSPTreeNode(front_list);

@@ -155,6 +155,44 @@ void Game::setOctahedran(ArrayTriangle* _pArrayTriangle) {
     }
 }
 
+void Game::setDrawSplit(ArrayTriangle* _pArrayTriangle) {
+
+    std::vector<glm::vec3> vVertice;
+    std::vector<glm::vec3> vNormal;
+    std::vector<glm::ivec3> vIndex;
+    std::vector<glm::vec3> vColor;
+
+    // T 0
+    vVertice.push_back(glm::vec3(-250, -100, 0));
+    vVertice.push_back(glm::vec3(-50, 100, 0));
+    vVertice.push_back(glm::vec3(-50, -100, 0));
+
+    // T 1
+    vVertice.push_back(glm::vec3(50, -100, -250));
+    vVertice.push_back(glm::vec3(50, 100, 100));
+    vVertice.push_back(glm::vec3(50, -100, 100));
+
+    // Face 0
+    vIndex.push_back(glm::ivec3(0, 1, 2));
+    vNormal.push_back(glm::vec3(0, 0, 1));
+    vColor.push_back(glm::vec3(1, 1, 1));
+
+    // Face 1
+    vIndex.push_back(glm::ivec3(3, 4, 5));
+    vNormal.push_back(glm::vec3(-1, 0, 0));
+    vColor.push_back(glm::vec3(1, 0, 0));
+
+    for (int face = 0; face < 2; face++) {
+        Triangle* t = new Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
+        t->setColor(vColor[face]);
+        t->setFaceNormal(vNormal[face]);
+        _pArrayTriangle->addToList(t);
+
+        delete t;
+        t = nullptr;
+    }
+}
+
 void Game::setDrawTest(ArrayTriangle* _pArrayTriangle) {
 
     std::vector<glm::vec3> vVertice;
@@ -311,7 +349,8 @@ void Game::start() {
     ArrayTriangle* arrayTriangle = new ArrayTriangle();
     // setCube(arrayTriangle);
     // setOctahedran(arrayTriangle);
-    setDrawTest(arrayTriangle);
+    setDrawSplit(arrayTriangle);
+    // setDrawTest(arrayTriangle);
 
     BSPTreeBuilder builder(arrayTriangle);
     pBspTree = new BSPTree(builder.getNodeRoot()); // buildBSPTree(arrayTriangle);

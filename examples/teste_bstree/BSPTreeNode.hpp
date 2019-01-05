@@ -4,7 +4,7 @@
 //#include <vector>
 #include "ArrayTriangle.hpp"
 
-enum SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
+enum class SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
 
 // struct HyperPlane {
 //     std::vector<float> coefficients;

@@ -32,6 +32,7 @@ class Game : public Chimera::IGameClientEvents {
     void setCube(ArrayTriangle* _pArrayTriangle);
     void setOctahedran(ArrayTriangle* _pArrayTriangle);
     void setDrawTest(ArrayTriangle* _pArrayTriangle);
+    void setDrawSplit(ArrayTriangle* _pArrayTriangle);
 
     BSPTree* pBspTree;
     int botaoIndex;

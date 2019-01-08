@@ -14,7 +14,7 @@ void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, ArrayTriangle* _pAr
         return;
 
     Triangle* t = nullptr;
-    glm::vec3 normal = tree->partition.getFaceNormal();
+    glm::vec3 normal = tree->partition.normal();
     float result = classify(&normal, eye);
     if (result > 0) {
         drawBSPTree(tree->back, eye, _pArrayTriangle);

@@ -28,9 +28,9 @@ glm::vec3 aprox(const glm::vec3& dado) {
 
 void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
                                    ArrayTriangle* _pArrayTriangle) {
-    glm::vec3& a = _pTriangle->getVertices()[0];
-    glm::vec3& b = _pTriangle->getVertices()[1];
-    glm::vec3& c = _pTriangle->getVertices()[2];
+    glm::vec3& a = _pTriangle->vertex[0].position; // getVertices()[0];
+    glm::vec3& b = _pTriangle->vertex[1].position; // getVertices()[1];
+    glm::vec3& c = _pTriangle->vertex[2].position; // getVertices()[2];
     float fa = fx.x;
     float fb = fx.y;
     float fc = fx.z;
@@ -47,21 +47,21 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
         swap(a, b);
     }
 
-    glm::vec3 A = intersect(_partition->getFaceNormal(), _partition->getVertices()[0], a, c);
-    glm::vec3 B = intersect(_partition->getFaceNormal(), _partition->getVertices()[0], b, c);
+    glm::vec3 A = intersect(_partition->normal(), _partition->vertex[0].position, a, c);
+    glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
 
     Triangle T1(a, b, A);
     Triangle T2(b, B, A);
     Triangle T3(A, B, c);
 
-    T1.setColor(_pTriangle->getColor());
-    T1.setFaceNormal(_pTriangle->getFaceNormal());
-
-    T2.setColor(glm::vec3(0, 0, 1));
-    T2.setFaceNormal(_pTriangle->getFaceNormal());
-
-    T3.setColor(glm::vec3(0, 1, 0));
-    T3.setFaceNormal(_pTriangle->getFaceNormal());
+    for (int i = 0; i < 3; i++) {
+        T1.vertex[i].color = _pTriangle->vertex[i].color;
+        T1.vertex[i].normal = _pTriangle->vertex[i].normal;
+        T2.vertex[i].color = glm::vec4(0, 0, 1, 0);
+        T2.vertex[i].normal = _pTriangle->vertex[i].normal;
+        T3.vertex[i].color = glm::vec4(0, 1, 0, 0);
+        T3.vertex[i].normal = _pTriangle->vertex[i].normal;
+    }
 
     _pArrayTriangle->addToList(&T1);
     _pArrayTriangle->addToList(&T2);
@@ -75,12 +75,12 @@ SIDE BSPTreeBuilder::ClassifyPolyTest(Triangle* Plane, Triangle* Poly) {
     int OnPlane = 0;
     float result;
 
-    glm::vec3 vec1 = *Plane->getVertices();
+    glm::vec3 vec1 = Plane->vertex[0].position; // getVertices();
     for (int a = 0; a < 3; a++) {
 
-        glm::vec3 vec2 = Poly->getVertices()[a];
+        glm::vec3 vec2 = Poly->vertex[a].position;
         glm::vec3 Direction = vec1 - vec2;
-        result = glm::dot(Direction, Plane->getFaceNormal());
+        result = glm::dot(Direction, Plane->normal());
         if (result > 0.001) {
             Behind++;
         } else if (result < -0.001) {
@@ -107,7 +107,7 @@ SIDE BSPTreeBuilder::ClassifyPolyTest(Triangle* Plane, Triangle* Poly) {
 glm::vec3 BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle) {
     float fs[3];
     for (int i = 0; i < 3; i++) {
-        fs[i] = glm::dot(_pPartition->getFaceNormal(), _pTriangle->getVertices()[i] - _pPartition->getVertices()[0]);
+        fs[i] = glm::dot(_pPartition->normal(), _pTriangle->vertex[i].position - _pPartition->vertex[0].position);
         if (fabs(fs[i]) < EPSILON)
             fs[i] = 0.0;
     }

@@ -4,31 +4,27 @@
 
 #include <glm/glm.hpp>
 
+struct VertexData {
+    glm::vec3 position; // 3 * 4 = 12 (0 -11)
+    glm::vec3 normal;   // 3 * 4 = 12 (12-23)
+    glm::vec2 texture;  // 2 * 4 = 08 (24-31)
+    glm::vec4 color;    // 4 * 4 = 16 (32-47) //cuidado com a posicao, muda o
+    // sizeof(VertexData)
+};
+
 class Triangle {
   public:
     Triangle();
     Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
     Triangle(const Triangle& _cpy);
 
-    void computeFaceNormalsFromVertices();
-    void setVertices(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
-    void setNormais(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
-    void setFaceNormal(const glm::vec3& n);
-
-    inline void setColor(const glm::vec3& _color) { this->color = _color; }
-    inline unsigned getSerial() const { return this->serial; }
-    inline glm::vec3 getColor() const { return this->color; }
-    inline glm::vec3* getVertices() { return this->vertices; }
-    inline glm::vec3* getNormais() { return this->normais; }
-    inline glm::vec3 getFaceNormal() const { return this->faceNormal; }
+    inline unsigned getSerial() const { return serial; }
+    glm::vec3 normal();
+    glm::vec3 verticeNormal();
+    VertexData vertex[3];
 
   private:
-    void computeFaceNormalFromNormais();
     unsigned serial;
     static unsigned serialMaster;
-    glm::vec3 faceNormal;
-    glm::vec3 color;
-    glm::vec3 vertices[3];
-    glm::vec3 normais[3];
 };
 #endif

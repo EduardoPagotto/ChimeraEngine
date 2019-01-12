@@ -2,13 +2,13 @@
 
 #define EPSILON 1e-3
 
-template <class T> void swap(T& a, T& b) {
+template <class T> void swapFace(T& a, T& b) {
     T c = b;
     b = a;
     a = c;
 }
 
-BSPTreeBuilder::BSPTreeBuilder(ArrayTriangle* _arrayTriangle) { root = buildBSPTreeNode(*_arrayTriangle); }
+BSPTreeBuilder::BSPTreeBuilder(std::vector<Triangle>* _pArrayTriangle) { root = buildBSPTreeNode(_pArrayTriangle); }
 
 glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
     float num = glm::dot(n, a);
@@ -27,7 +27,7 @@ glm::vec3 aprox(const glm::vec3& dado) {
 }
 
 void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
-                                   ArrayTriangle* _pArrayTriangle) {
+                                   std::vector<Triangle>* _pArrayTriangle) {
     glm::vec3& a = _pTriangle->vertex[0].position; // getVertices()[0];
     glm::vec3& b = _pTriangle->vertex[1].position; // getVertices()[1];
     glm::vec3& c = _pTriangle->vertex[2].position; // getVertices()[2];
@@ -36,15 +36,15 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     float fc = fx.z;
 
     if (fa * fc >= 0) {
-        swap(fb, fc);
-        swap(b, c);
-        swap(fa, fb);
-        swap(a, b);
+        swapFace(fb, fc);
+        swapFace(b, c);
+        swapFace(fa, fb);
+        swapFace(a, b);
     } else if (fb * fc >= 0) {
-        swap(fa, fc);
-        swap(a, c);
-        swap(fa, fb);
-        swap(a, b);
+        swapFace(fa, fc);
+        swapFace(a, c);
+        swapFace(fa, fb);
+        swapFace(a, b);
     }
 
     glm::vec3 A = intersect(_partition->normal(), _partition->vertex[0].position, a, c);
@@ -63,9 +63,9 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
         T3.vertex[i].normal = _pTriangle->vertex[i].normal;
     }
 
-    _pArrayTriangle->addToList(&T1);
-    _pArrayTriangle->addToList(&T2);
-    _pArrayTriangle->addToList(&T3);
+    _pArrayTriangle->push_back(T1);
+    _pArrayTriangle->push_back(T2);
+    _pArrayTriangle->push_back(T3);
 }
 
 SIDE BSPTreeBuilder::ClassifyPolyTest(Triangle* Plane, Triangle* Poly) {
@@ -115,34 +115,35 @@ glm::vec3 BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pTri
     return glm::vec3(fs[0], fs[1], fs[2]);
 }
 
-BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(ArrayTriangle _arrayTriangle) {
-    if (_arrayTriangle.isEmpty())
+BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(std::vector<Triangle>* _arrayTriangle) {
+    if (_arrayTriangle->empty() == true)
         return nullptr;
+    // tree->partition
+    BSPTreeNode* tree = new BSPTreeNode(_arrayTriangle->back());
+    _arrayTriangle->pop_back();
+    tree->arrayTriangle.push_back(tree->partition);
 
-    BSPTreeNode* tree = new BSPTreeNode;
-    Triangle* root = _arrayTriangle.getFromList();
+    std::vector<Triangle> front_list;
+    std::vector<Triangle> back_list;
 
-    tree->partition = *root; // root->getHyperPlane();
-    tree->arrayTriangle.addToList(root);
-    ArrayTriangle front_list;
-    ArrayTriangle back_list;
+    while (_arrayTriangle->empty() == false) {
 
-    Triangle* t;
-    while ((t = _arrayTriangle.getFromList()) != 0) {
-        SIDE teste = ClassifyPolyTest(&tree->partition, t);
-        glm::vec3 result = classifyPolygon(&tree->partition, t);
+        Triangle poly = _arrayTriangle->back();
+        _arrayTriangle->pop_back();
+
+        SIDE teste = ClassifyPolyTest(&tree->partition, &poly);
+        glm::vec3 result = classifyPolygon(&tree->partition, &poly);
+
         if (teste == SIDE::IS_BEHIND) // IS_BEHIND
-            back_list.addToList(t);
+            back_list.push_back(poly);
         else if (teste == SIDE::IS_INFRONT) // IS_INFRONT
-            front_list.addToList(t);
+            front_list.push_back(poly);
         else if (teste == SIDE::IS_COPLANAR) // IS_COPLANAR
-            tree->arrayTriangle.addToList(t);
-        else { // IS_SPANNING
-            // back_list.addToList(t);
-            splitTriangle(result, t, &tree->partition, &_arrayTriangle);
-        }
+            tree->arrayTriangle.push_back(poly);
+        else // IS_SPANNING
+            splitTriangle(result, &poly, &tree->partition, _arrayTriangle);
     }
-    tree->front = buildBSPTreeNode(front_list);
-    tree->back = buildBSPTreeNode(back_list);
+    tree->front = buildBSPTreeNode(&front_list);
+    tree->back = buildBSPTreeNode(&back_list);
     return tree;
 }

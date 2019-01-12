@@ -2,15 +2,6 @@
 
 unsigned Triangle::serialMaster = 0;
 
-Triangle::Triangle() : serial(++serialMaster) {
-    for (int i = 0; i < 3; i++) {
-        vertex[i].position = glm::vec3(0, 0, 0);
-        vertex[i].normal = glm::vec3(0, 0, 0);
-        vertex[i].texture = glm::vec2(0, 0);
-        vertex[i].color = glm::vec4(0, 0, 0, 0);
-    }
-}
-
 Triangle::Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) : serial(++serialMaster) {
     this->vertex[0].position = a;
     this->vertex[1].position = b;

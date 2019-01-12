@@ -1,7 +1,6 @@
 #ifndef __GAME_TESTE_BSTREE__HPP
 #define __GAME_TESTE_BSTREE__HPP
 
-#include "ArrayTriangle.hpp"
 #include "BSPTree.h"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
@@ -29,10 +28,10 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void setCube(ArrayTriangle* _pArrayTriangle);
-    void setOctahedran(ArrayTriangle* _pArrayTriangle);
-    void setDrawTest(ArrayTriangle* _pArrayTriangle);
-    void setDrawSplit(ArrayTriangle* _pArrayTriangle);
+    // void setCube(ArrayTriangle* _pArrayTriangle);
+    // void setOctahedran(ArrayTriangle* _pArrayTriangle);
+    void setDrawTest(std::vector<Triangle>* _pArrayTriangle);
+    void setDrawSplit(std::vector<Triangle>* _pArrayTriangle);
 
     BSPTree* pBspTree;
     int botaoIndex;

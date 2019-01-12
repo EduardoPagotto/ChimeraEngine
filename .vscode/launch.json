@@ -66,7 +66,29 @@
                     "ignoreFailures": true
                 }
             ]
-        }
+        },
+        {
+            "name": "(gdb)TesteBSPTree",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build/examples/teste_bstree/TesteBSTree",
+            "args": [
+                "-p",
+                "${workspaceRoot}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
         {
             "name": "(gdb)TesteLoader",
             "type": "cppdbg",

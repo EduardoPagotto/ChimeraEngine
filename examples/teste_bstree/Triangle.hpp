@@ -14,7 +14,6 @@ struct VertexData {
 
 class Triangle {
   public:
-    Triangle();
     Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
     Triangle(const Triangle& _cpy);
 

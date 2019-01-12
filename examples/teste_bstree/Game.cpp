@@ -4,6 +4,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/node/Transform.hpp"
+#include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 
 Game::Game(Chimera::CanvasGL* _pCanvas) : pCanvas(_pCanvas) {
@@ -60,102 +61,102 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::setCube(ArrayTriangle* _pArrayTriangle) {
+// void Game::setCube(ArrayTriangle* _pArrayTriangle) {
 
-    // Triangle p[10];
-    // glm::vec3 v[10];
-    // glm::vec3 n[10];
-    // glm::vec3 c[10];
-    // v[0] = glm::vec3(-100, -100, 100);
-    // v[1] = glm::vec3(-100, 100, 100);
-    // v[2] = glm::vec3(100, 100, 100);
-    // v[3] = glm::vec3(100, -100, 100);
-    // v[4] = glm::vec3(-100, -100, -100);
-    // v[5] = glm::vec3(-100, 100, -100);
-    // v[6] = glm::vec3(100, 100, -100);
-    // v[7] = glm::vec3(100, -100, -100);
+//     Triangle p[10];
+//     glm::vec3 v[10];
+//     glm::vec3 n[10];
+//     glm::vec3 c[10];
+//     v[0] = glm::vec3(-100, -100, 100);
+//     v[1] = glm::vec3(-100, 100, 100);
+//     v[2] = glm::vec3(100, 100, 100);
+//     v[3] = glm::vec3(100, -100, 100);
+//     v[4] = glm::vec3(-100, -100, -100);
+//     v[5] = glm::vec3(-100, 100, -100);
+//     v[6] = glm::vec3(100, 100, -100);
+//     v[7] = glm::vec3(100, -100, -100);
 
-    // // Right Wall
-    // p[0].vertex.position = setVertices(v[2], v[3], v[7]);
-    // n[0] = glm::vec3(1, 0, 0);
-    // c[0] = glm::vec3(1, 1, 1);
+//     // Right Wall
+//     p[0].vertex.position = setVertices(v[2], v[3], v[7]);
+//     n[0] = glm::vec3(1, 0, 0);
+//     c[0] = glm::vec3(1, 1, 1);
 
-    // p[1].setVertices(v[2], v[7], v[6]);
-    // n[1] = glm::vec3(1, 0, 0);
-    // c[1] = glm::vec3(1, 1, 1);
+//     p[1].setVertices(v[2], v[7], v[6]);
+//     n[1] = glm::vec3(1, 0, 0);
+//     c[1] = glm::vec3(1, 1, 1);
 
-    // // Back Wall
-    // p[2].setVertices(v[4], v[5], v[6]);
-    // n[2] = glm::vec3(0, 0, -1);
-    // c[2] = glm::vec3(1, 1, 1);
+//     // Back Wall
+//     p[2].setVertices(v[4], v[5], v[6]);
+//     n[2] = glm::vec3(0, 0, -1);
+//     c[2] = glm::vec3(1, 1, 1);
 
-    // p[3].setVertices(v[4], v[6], v[7]);
-    // n[3] = glm::vec3(0, 0, -1);
-    // c[3] = glm::vec3(1, 1, 1);
+//     p[3].setVertices(v[4], v[6], v[7]);
+//     n[3] = glm::vec3(0, 0, -1);
+//     c[3] = glm::vec3(1, 1, 1);
 
-    // // Left Wall
-    // p[4].setVertices(v[5], v[4], v[0]);
-    // n[4] = glm::vec3(-1, 0, 0);
-    // c[4] = glm::vec3(1, 1, 1);
+//     // Left Wall
+//     p[4].setVertices(v[5], v[4], v[0]);
+//     n[4] = glm::vec3(-1, 0, 0);
+//     c[4] = glm::vec3(1, 1, 1);
 
-    // p[5].setVertices(v[5], v[0], v[1]);
-    // n[5] = glm::vec3(-1, 0, 0);
-    // c[5] = glm::vec3(1, 1, 1);
+//     p[5].setVertices(v[5], v[0], v[1]);
+//     n[5] = glm::vec3(-1, 0, 0);
+//     c[5] = glm::vec3(1, 1, 1);
 
-    // // Floor
-    // p[6].setVertices(v[3], v[7], v[4]);
-    // n[6] = glm::vec3(0, -1, 0);
-    // c[6] = glm::vec3(1, 1, 1);
+//     // Floor
+//     p[6].setVertices(v[3], v[7], v[4]);
+//     n[6] = glm::vec3(0, -1, 0);
+//     c[6] = glm::vec3(1, 1, 1);
 
-    // p[7].setVertices(v[3], v[4], v[0]);
-    // n[7] = glm::vec3(0, -1, 0);
-    // c[7] = glm::vec3(1, 1, 1);
+//     p[7].setVertices(v[3], v[4], v[0]);
+//     n[7] = glm::vec3(0, -1, 0);
+//     c[7] = glm::vec3(1, 1, 1);
 
-    // // Ceiling
-    // p[8].setVertices(v[2], v[6], v[5]);
-    // n[8] = glm::vec3(0, 1, 0);
-    // c[8] = glm::vec3(1, 1, 1);
+//     // Ceiling
+//     p[8].setVertices(v[2], v[6], v[5]);
+//     n[8] = glm::vec3(0, 1, 0);
+//     c[8] = glm::vec3(1, 1, 1);
 
-    // p[9].setVertices(v[2], v[5], v[1]);
-    // n[9] = glm::vec3(0, 1, 0);
-    // c[9] = glm::vec3(1, 1, 1);
+//     p[9].setVertices(v[2], v[5], v[1]);
+//     n[9] = glm::vec3(0, 1, 0);
+//     c[9] = glm::vec3(1, 1, 1);
 
-    // for (int i = 0; i < 10; i++) {
-    //     p[i].setNormais(n[i], n[i], n[i]);
-    //     p[i].setColor(c[i]);
-    //     _pArrayTriangle->addToList(&p[i]);
-    // }
-}
+//     for (int i = 0; i < 10; i++) {
+//         p[i].setNormais(n[i], n[i], n[i]);
+//         p[i].setColor(c[i]);
+//         _pArrayTriangle->addToList(&p[i]);
+//     }
+// }
 
-void Game::setOctahedran(ArrayTriangle* _pArrayTriangle) {
+// void Game::setOctahedran(ArrayTriangle* _pArrayTriangle) {
 
-    // glm::vec3 p[6];
-    // Triangle t[8];
+//     glm::vec3 p[6];
+//     Triangle t[8];
 
-    // p[0] = glm::vec3(0, 50, 0);
-    // p[1] = glm::vec3(0, 0, -50);
-    // p[2] = glm::vec3(-50, 0, 0);
-    // p[3] = glm::vec3(50, 0, 0);
-    // p[4] = glm::vec3(0, 0, 50);
-    // p[5] = glm::vec3(0, -50, 0);
+//     p[0] = glm::vec3(0, 50, 0);
+//     p[1] = glm::vec3(0, 0, -50);
+//     p[2] = glm::vec3(-50, 0, 0);
+//     p[3] = glm::vec3(50, 0, 0);
+//     p[4] = glm::vec3(0, 0, 50);
+//     p[5] = glm::vec3(0, -50, 0);
 
-    // t[0].setVertices(p[0], p[1], p[2]);
-    // t[1].setVertices(p[0], p[1], p[3]);
-    // t[2].setVertices(p[0], p[4], p[3]);
-    // t[3].setVertices(p[0], p[4], p[2]);
-    // t[4].setVertices(p[5], p[4], p[3]);
-    // t[5].setVertices(p[5], p[3], p[1]);
-    // t[6].setVertices(p[5], p[1], p[2]);
-    // t[7].setVertices(p[5], p[2], p[4]);
+//     t[0].setVertices(p[0], p[1], p[2]);
+//     t[1].setVertices(p[0], p[1], p[3]);
+//     t[2].setVertices(p[0], p[4], p[3]);
+//     t[3].setVertices(p[0], p[4], p[2]);
+//     t[4].setVertices(p[5], p[4], p[3]);
+//     t[5].setVertices(p[5], p[3], p[1]);
+//     t[6].setVertices(p[5], p[1], p[2]);
+//     t[7].setVertices(p[5], p[2], p[4]);
 
-    // for (int i = 0; i < 8; i++) {
-    //     t[i].setColor(glm::vec3(1, 0, 0));
-    //     t[i].computeFaceNormalsFromVertices();
-    //     _pArrayTriangle->addToList(&t[i]);
-    // }
-}
+//     for (int i = 0; i < 8; i++) {
+//         t[i].setColor(glm::vec3(1, 0, 0));
+//         t[i].computeFaceNormalsFromVertices();
+//         _pArrayTriangle->addToList(&t[i]);
+//     }
+// }
 
-void Game::setDrawSplit(ArrayTriangle* _pArrayTriangle) {
+void Game::setDrawSplit(std::vector<Triangle>* _pArrayTriangle) {
 
     std::vector<glm::vec3> vVertice;
     std::vector<glm::vec3> vNormal;
@@ -183,20 +184,17 @@ void Game::setDrawSplit(ArrayTriangle* _pArrayTriangle) {
     vColor.push_back(glm::vec4(1, 0, 0, 0));
 
     for (int face = 0; face < 2; face++) {
-        Triangle* t = new Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
+        Triangle t = Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
 
         for (int i = 0; i < 3; i++) {
-            t->vertex[i].color = vColor[face];
-            t->vertex[i].normal = vNormal[face];
+            t.vertex[i].color = vColor[face];
+            t.vertex[i].normal = vNormal[face];
         }
-        _pArrayTriangle->addToList(t);
-
-        delete t;
-        t = nullptr;
+        _pArrayTriangle->push_back(t);
     }
 }
 
-void Game::setDrawTest(ArrayTriangle* _pArrayTriangle) {
+void Game::setDrawTest(std::vector<Triangle>* _pArrayTriangle) {
 
     std::vector<glm::vec3> vVertice;
     std::vector<glm::vec3> vNormal;
@@ -236,109 +234,58 @@ void Game::setDrawTest(ArrayTriangle* _pArrayTriangle) {
     // Face 0
     vIndex.push_back(glm::ivec3(0, 1, 2));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 1, 1, 1));
+    vColor.push_back(glm::vec4(1, 1, 1, 0));
     // Face 1
     vIndex.push_back(glm::ivec3(2, 3, 0));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 1, 1, 1));
+    vColor.push_back(glm::vec4(1, 1, 1, 0));
 
     // Face 2
     vIndex.push_back(glm::ivec3(5, 4, 6));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 1, 0, 0));
+    vColor.push_back(glm::vec4(1, 0, 0, 0));
     // Face 3
     vIndex.push_back(glm::ivec3(6, 7, 5));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 1, 0, 0));
+    vColor.push_back(glm::vec4(1, 0, 0, 0));
 
     // Face 4
     vIndex.push_back(glm::ivec3(9, 8, 10));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 0, 0, 1));
+    vColor.push_back(glm::vec4(0, 0, 1, 0));
     // Face 5
     vIndex.push_back(glm::ivec3(10, 11, 9));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 0, 0, 1));
+    vColor.push_back(glm::vec4(0, 0, 1, 0));
 
     // Face 6
     vIndex.push_back(glm::ivec3(12, 13, 14));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 0, 1, 0));
+    vColor.push_back(glm::vec4(0, 1, 0, 0));
     // Face 7
     vIndex.push_back(glm::ivec3(14, 15, 12));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 0, 1, 0));
+    vColor.push_back(glm::vec4(0, 1, 0, 0));
 
     // Face 8
     vIndex.push_back(glm::ivec3(16, 17, 18));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 1, 1, 0));
+    vColor.push_back(glm::vec4(1, 1, 0, 0));
     // Face 9
     vIndex.push_back(glm::ivec3(18, 19, 16));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec4(0, 1, 1, 0));
+    vColor.push_back(glm::vec4(1, 1, 0, 0));
 
     for (int face = 0; face < 10; face++) {
-        Triangle* t = new Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
-        for (int i = 0; i < 3; i++) {
-            t->vertex[i].color = vColor[face];
-            t->vertex[i].normal = vNormal[face];
-        }
-        _pArrayTriangle->addToList(t);
+        Triangle t = Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
 
-        delete t;
-        t = nullptr;
+        for (int i = 0; i < 3; i++) {
+            t.vertex[i].color = vColor[face];
+            t.vertex[i].normal = vNormal[face];
+        }
+        _pArrayTriangle->push_back(t);
     }
 }
-
-// void Game::setDrawTest(ArrayTriangle* _pArrayTriangle) {
-
-//     Triangle p[6];
-//     glm::vec3 v[7];
-//     glm::vec3 n[7];
-//     glm::vec3 c[6];
-//     glm::ivec3 index[6];
-
-//     v[0] = glm::vec3(100, 100, 100);
-//     v[1] = glm::vec3(-100, 100, 100);
-//     v[2] = glm::vec3(-100, -100, 100);
-//     v[3] = glm::vec3(100, -100, 100);
-//     v[4] = glm::vec3(100, -100, -100);
-//     v[5] = glm::vec3(-100, -100, -100);
-//     v[6] = glm::vec3(-100, 100, -100);
-
-//     n[0] = glm::vec3(0, 0, -1);
-//     n[1] = glm::vec3(0, 0, -1);
-//     n[2] = glm::vec3(0, 0, -1);
-
-//     n[3] = glm::vec3(0, 0, -1);
-//     n[4] = glm::vec3(0, 0, -1);
-//     n[5] = glm::vec3(0, 0, -1);
-
-//     n[6] = glm::vec3(0, 0, -1);
-
-//     index[0] = glm::ivec3(0, 1, 2);
-//     index[1] = glm::ivec3(2, 3, 0);
-//     index[2] = glm::ivec3(3, 2, 5);
-//     index[3] = glm::ivec3(5, 4, 3);
-//     index[4] = glm::ivec3(1, 2, 5);
-//     index[5] = glm::ivec3(5, 6, 1);
-
-//     c[0] = glm::vec3(1, 1, 1);
-//     c[1] = glm::vec3(1, 1, 1);
-//     c[2] = glm::vec3(1, 0, 0);
-//     c[3] = glm::vec3(1, 0, 0);
-//     c[4] = glm::vec3(0, 0, 1);
-//     c[5] = glm::vec3(0, 0, 1);
-
-//     for (int face = 0; face < 6; face++) {
-//         p[face].setId(face);
-//         p[face].setVertices(v[index[face].x], v[index[face].y], v[index[face].z]);
-//         p[face].setColor(c[face]);
-//         p[face].setNormais(n[index[face].x], n[index[face].y], n[index[face].z]);
-//         _pArrayTriangle->addToList(&p[face]);
-//     }
-// }
 
 void Game::start() {
 
@@ -351,17 +298,15 @@ void Game::start() {
 
     lightPosition = glm::vec4(0.0, 100.0, 0.0, 1.0);
 
-    ArrayTriangle* arrayTriangle = new ArrayTriangle();
+    std::vector<Triangle> arrayTriangle;
     // setCube(arrayTriangle);
     // setOctahedran(arrayTriangle);
-    setDrawSplit(arrayTriangle);
-    // setDrawTest(arrayTriangle);
+    setDrawSplit(&arrayTriangle);
+    // setDrawTest(&arrayTriangle);
+    std::reverse(arrayTriangle.begin(), arrayTriangle.end());
 
-    BSPTreeBuilder builder(arrayTriangle);
-    pBspTree = new BSPTree(builder.getNodeRoot()); // buildBSPTree(arrayTriangle);
-
-    delete arrayTriangle;
-    arrayTriangle = nullptr;
+    BSPTreeBuilder builder(&arrayTriangle);
+    pBspTree = new BSPTree(builder.getNodeRoot());
 
     pCanvas->initGL();
 
@@ -426,16 +371,15 @@ void Game::render() {
     // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->direction.x, vp->direction.y, vp->direction.z,
     //          vp->rotation.x, vp->rotation.y, vp->rotation.z);
 
-    ArrayTriangle* arrayTriangle = new ArrayTriangle();
-    pBspTree->draw(&vp->position, arrayTriangle);
+    std::vector<Triangle> arrayTriangle; // = new ArrayTriangle();
+    pBspTree->draw(&vp->position, &arrayTriangle);
 
     if (debug_init == 1)
         log->debug("eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
 
-    arrayTriangle->begin();
+    for (auto it = arrayTriangle.begin(); it != arrayTriangle.end(); it++) {
 
-    Triangle* fi = nullptr;
-    while ((fi = arrayTriangle->next()) != NULL) {
+        Triangle* fi = &(*it);
 
         if (debug_init == 1)
             log->debug("Poligono: " + std::to_string(fi->getSerial()));
@@ -449,11 +393,7 @@ void Game::render() {
         }
         glEnd();
     }
-
     debug_init = 0;
-
-    delete arrayTriangle;
-    arrayTriangle = nullptr;
 
     // GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};
     // glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);

@@ -61,7 +61,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-// void Game::setCube(ArrayTriangle* _pArrayTriangle) {
+// void Game::setCube(ArrayTriangle* _pListPolygon) {
 
 //     Triangle p[10];
 //     glm::vec3 v[10];
@@ -124,11 +124,11 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 //     for (int i = 0; i < 10; i++) {
 //         p[i].setNormais(n[i], n[i], n[i]);
 //         p[i].setColor(c[i]);
-//         _pArrayTriangle->addToList(&p[i]);
+//         _pListPolygon->addToList(&p[i]);
 //     }
 // }
 
-// void Game::setOctahedran(ArrayTriangle* _pArrayTriangle) {
+// void Game::setOctahedran(ArrayTriangle* _pListPolygon) {
 
 //     glm::vec3 p[6];
 //     Triangle t[8];
@@ -152,11 +152,11 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 //     for (int i = 0; i < 8; i++) {
 //         t[i].setColor(glm::vec3(1, 0, 0));
 //         t[i].computeFaceNormalsFromVertices();
-//         _pArrayTriangle->addToList(&t[i]);
+//         _pListPolygon->addToList(&t[i]);
 //     }
 // }
 
-void Game::setDrawSplit(std::vector<Triangle>* _pArrayTriangle) {
+void Game::setDrawSplit(std::vector<Triangle>* _pListPolygon) {
 
     std::vector<glm::vec3> vVertice;
     std::vector<glm::vec3> vNormal;
@@ -190,11 +190,11 @@ void Game::setDrawSplit(std::vector<Triangle>* _pArrayTriangle) {
             t.vertex[i].color = vColor[face];
             t.vertex[i].normal = vNormal[face];
         }
-        _pArrayTriangle->push_back(t);
+        _pListPolygon->push_back(t);
     }
 }
 
-void Game::setDrawTest(std::vector<Triangle>* _pArrayTriangle) {
+void Game::setDrawTest(std::vector<Triangle>* _pListPolygon) {
 
     std::vector<glm::vec3> vVertice;
     std::vector<glm::vec3> vNormal;
@@ -283,7 +283,7 @@ void Game::setDrawTest(std::vector<Triangle>* _pArrayTriangle) {
             t.vertex[i].color = vColor[face];
             t.vertex[i].normal = vNormal[face];
         }
-        _pArrayTriangle->push_back(t);
+        _pListPolygon->push_back(t);
     }
 }
 
@@ -298,14 +298,14 @@ void Game::start() {
 
     lightPosition = glm::vec4(0.0, 100.0, 0.0, 1.0);
 
-    std::vector<Triangle> arrayTriangle;
-    // setCube(arrayTriangle);
-    // setOctahedran(arrayTriangle);
-    setDrawSplit(&arrayTriangle);
-    // setDrawTest(&arrayTriangle);
-    std::reverse(arrayTriangle.begin(), arrayTriangle.end());
+    std::vector<Triangle> listPolygons;
+    // setCube(listPolygons);
+    // setOctahedran(listPolygons);
+    // setDrawSplit(&listPolygons);
+    setDrawTest(&listPolygons);
+    std::reverse(listPolygons.begin(), listPolygons.end());
 
-    BSPTreeBuilder builder(&arrayTriangle);
+    BSPTreeBuilder builder(&listPolygons);
     pBspTree = new BSPTree(builder.getNodeRoot());
 
     pCanvas->initGL();
@@ -371,13 +371,13 @@ void Game::render() {
     // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->direction.x, vp->direction.y, vp->direction.z,
     //          vp->rotation.x, vp->rotation.y, vp->rotation.z);
 
-    std::vector<Triangle> arrayTriangle; // = new ArrayTriangle();
-    pBspTree->draw(&vp->position, &arrayTriangle);
+    std::vector<Triangle> listPolygons; // = new listPolygons();
+    pBspTree->draw(&vp->position, &listPolygons);
 
     if (debug_init == 1)
         log->debug("eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
 
-    for (auto it = arrayTriangle.begin(); it != arrayTriangle.end(); it++) {
+    for (auto it = listPolygons.begin(); it != listPolygons.end(); it++) {
 
         Triangle* fi = &(*it);
 

@@ -28,10 +28,10 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    // void setCube(ArrayTriangle* _pArrayTriangle);
-    // void setOctahedran(ArrayTriangle* _pArrayTriangle);
-    void setDrawTest(std::vector<Triangle>* _pArrayTriangle);
-    void setDrawSplit(std::vector<Triangle>* _pArrayTriangle);
+    // void setCube(ArrayTriangle* _pListPolygon);
+    // void setOctahedran(ArrayTriangle* _pListPolygon);
+    void setDrawTest(std::vector<Triangle>* _pListPolygon);
+    void setDrawSplit(std::vector<Triangle>* _pListPolygon);
 
     BSPTree* pBspTree;
     int botaoIndex;

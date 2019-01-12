@@ -12,7 +12,7 @@ enum class SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
 
 struct BSPTreeNode {
     BSPTreeNode(const Triangle& _partition) : partition(_partition), front(nullptr), back(nullptr) {}
-    std::vector<Triangle> arrayTriangle;
+    std::vector<Triangle> polygons;
     Triangle partition; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;

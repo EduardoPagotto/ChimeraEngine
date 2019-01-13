@@ -301,7 +301,7 @@ void Game::start() {
     std::vector<Triangle> listPolygons;
     // setCube(listPolygons);
     // setOctahedran(listPolygons);
-    // setDrawSplit(&listPolygons);
+    setDrawSplit(&listPolygons);
     setDrawTest(&listPolygons);
     std::reverse(listPolygons.begin(), listPolygons.end());
 

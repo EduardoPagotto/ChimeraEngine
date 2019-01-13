@@ -28,22 +28,19 @@ glm::vec3 aprox(const glm::vec3& dado) {
 
 void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
                                    std::vector<Triangle>* _pListPolygon) {
-    glm::vec3& a = _pTriangle->vertex[0].position; // getVertices()[0];
-    glm::vec3& b = _pTriangle->vertex[1].position; // getVertices()[1];
-    glm::vec3& c = _pTriangle->vertex[2].position; // getVertices()[2];
-    float fa = fx.x;
-    float fb = fx.y;
-    float fc = fx.z;
+    glm::vec3& a = _pTriangle->vertex[0].position;
+    glm::vec3& b = _pTriangle->vertex[1].position;
+    glm::vec3& c = _pTriangle->vertex[2].position;
 
-    if (fa * fc >= 0) {
-        swapFace(fb, fc);
+    if (fx.x * fx.z >= 0) {
+        // swapFace(fx.y, fx.z);
         swapFace(b, c);
-        swapFace(fa, fb);
+        // swapFace(fx.x, fx.y);
         swapFace(a, b);
-    } else if (fb * fc >= 0) {
-        swapFace(fa, fc);
+    } else if (fx.y * fx.z >= 0) {
+        // swapFace(fx.x, fx.z);
         swapFace(a, c);
-        swapFace(fa, fb);
+        // swapFace(fx.x, fx.y);
         swapFace(a, b);
     }
 
@@ -68,51 +65,41 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     _pListPolygon->push_back(T3);
 }
 
-SIDE BSPTreeBuilder::ClassifyPolyTest(Triangle* Plane, Triangle* Poly) {
+SIDE BSPTreeBuilder::classifyPoly(Triangle* plane, Triangle* poly, glm::vec3& _resultTest) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    int Infront = 0;
-    int Behind = 0;
-    int OnPlane = 0;
-    float result;
+    unsigned short infront = 0;
+    unsigned short behind = 0;
+    unsigned short onPlane = 0;
+    float result[3];
 
-    glm::vec3 vec1 = Plane->vertex[0].position; // getVertices();
-    for (int a = 0; a < 3; a++) {
-
-        glm::vec3 vec2 = Poly->vertex[a].position;
-        glm::vec3 Direction = vec1 - vec2;
-        result = glm::dot(Direction, Plane->normal());
-        if (result > 0.001) {
-            Behind++;
-        } else if (result < -0.001) {
-            Infront++;
+    for (unsigned short a = 0; a < 3; a++) {
+        glm::vec3 direction = plane->vertex[0].position - poly->vertex[a].position;
+        result[a] = glm::dot(direction, plane->normal());
+        if (result[a] > EPSILON) {
+            behind++;
+        } else if (result[a] < -EPSILON) {
+            infront++;
         } else {
-            OnPlane++;
-            Infront++;
-            Behind++;
+            onPlane++;
+            infront++;
+            behind++;
         }
     }
 
-    if (OnPlane == 3)
+    _resultTest.x = result[0];
+    _resultTest.y = result[1];
+    _resultTest.z = result[2];
+
+    if (onPlane == 3)
         return SIDE::IS_COPLANAR; // CP_ONPLANE;
 
-    if (Behind == 3)
+    if (behind == 3)
         return SIDE::IS_BEHIND; // CP_BACK;
 
-    if (Infront == 3)
+    if (infront == 3)
         return SIDE::IS_INFRONT; // CP_FRONT;
 
     return SIDE::IS_SPANNING; // CP_SPANNING;
-}
-
-glm::vec3 BSPTreeBuilder::classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle) {
-    float fs[3];
-    for (int i = 0; i < 3; i++) {
-        fs[i] = glm::dot(_pPartition->normal(), _pTriangle->vertex[i].position - _pPartition->vertex[0].position);
-        if (fabs(fs[i]) < EPSILON)
-            fs[i] = 0.0;
-    }
-
-    return glm::vec3(fs[0], fs[1], fs[2]);
 }
 
 BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(std::vector<Triangle>* _pListPolygon) {
@@ -130,15 +117,14 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(std::vector<Triangle>* _pListPolyg
 
         Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
+        glm::vec3 result;
+        SIDE teste = classifyPoly(&tree->partition, &poly, result);
 
-        SIDE teste = ClassifyPolyTest(&tree->partition, &poly);
-        glm::vec3 result = classifyPolygon(&tree->partition, &poly);
-
-        if (teste == SIDE::IS_BEHIND) // IS_BEHIND
+        if (teste == SIDE::IS_BEHIND)
             back_list.push_back(poly);
-        else if (teste == SIDE::IS_INFRONT) // IS_INFRONT
+        else if (teste == SIDE::IS_INFRONT)
             front_list.push_back(poly);
-        else if (teste == SIDE::IS_COPLANAR) // IS_COPLANAR
+        else if (teste == SIDE::IS_COPLANAR)
             tree->polygons.push_back(poly);
         else // IS_SPANNING
             splitTriangle(result, &poly, &tree->partition, _pListPolygon);

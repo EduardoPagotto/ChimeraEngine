@@ -13,17 +13,15 @@ class BSPTreeBuilder {
     static float f(const glm::vec3& p, Triangle* _pPartition);
 
     static BSPTreeNode* buildBSPTreeNode(std::vector<Triangle>* _pListPolygon);
-    static glm::vec3 classifyPolygon(Triangle* _pPartition, Triangle* _pTriangle);
     static void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
                               std::vector<Triangle>* _pListPolygon);
 
-    static SIDE ClassifyPolyTest(Triangle* Plane, Triangle* Poly);
+    static SIDE classifyPoly(Triangle* plane, Triangle* poly, glm::vec3& _resultTest);
 
     BSPTreeNode* root;
 };
 
 template <class T> void swapFace(T& a, T& b);
-
 glm::vec3 aprox(const glm::vec3& dado);
 glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c);
 

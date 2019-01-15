@@ -29,7 +29,7 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void buildTree();
+    void buildBuffer(int max);
     void setSquare1(std::vector<Triangle>* _pListPolygon);
     void setDrawTest(std::vector<Triangle>* _pListPolygon);
     void setDrawSplit(std::vector<Triangle>* _pListPolygon);
@@ -47,6 +47,7 @@ class Game : public Chimera::IGameClientEvents {
     bool isPaused;
 
     Chimera::Shader* pShader;
+    unsigned int VBO, VAO; //, EBO;
 };
 
 #endif

@@ -238,27 +238,11 @@ void Game::setSquare1(std::vector<Triangle>* _pListPolygon) {
     }
 }
 
-void Game::buildTree() {
+void Game::buildBuffer(int max) {
 
-    std::vector<Triangle> listPolygons;
-    setSquare1(&listPolygons);
-    std::reverse(listPolygons.begin(), listPolygons.end());
-
-    std::vector<VertexData> vVertice;
-    for (int face = 0; face < listPolygons.size(); face++) {
-        for (int i = 0; i < 3; i++) {
-            VertexData vd = listPolygons[face].vertex[i];
-            vVertice.push_back(vd);
-        }
-    }
-
-    // BSPTreeBuilder builder(&listPolygons);
-    // pBspTree = new BSPTree(builder.getNodeRoot());
-
-    // TODO: continua com doc: http://www.songho.ca/opengl/gl_vbo.html#create e
+    // TODO: continua com doc: http://www.songho.ca/opengl/gl_vbo.html#create
     // https://www.khronos.org/opengl/wiki/Vertex_Rendering
 
-    unsigned int VBO, VAO; //, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     // glGenBuffers(1, &EBO);
@@ -266,7 +250,7 @@ void Game::buildTree() {
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vVertice.size() * sizeof(VertexData), &vVertice[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, max, nullptr, GL_STATIC_DRAW);
 
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -286,6 +270,14 @@ void Game::buildTree() {
     // texture coord attribute
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(9 * sizeof(float)));
     glEnableVertexAttribArray(3);
+
+    // limpa dados
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(2);
 }
 
 void Game::start() {
@@ -297,7 +289,14 @@ void Game::start() {
     trackBall.init(pVp);
     trackBall.setMax(1000.0);
 
-    buildTree();
+    std::vector<Triangle> listPolygons;
+    setSquare1(&listPolygons);
+    std::reverse(listPolygons.begin(), listPolygons.end());
+
+    BSPTreeBuilder builder(&listPolygons);
+    pBspTree = new BSPTree(builder.getNodeRoot());
+
+    buildBuffer(1000);
 
     pCanvas->initGL();
 
@@ -365,25 +364,44 @@ void Game::render() {
     std::vector<Triangle> listPolygons; // = new listPolygons();
     pBspTree->draw(&vp->position, &listPolygons);
 
+    std::vector<VertexData> vVertice;
+    for (int face = 0; face < listPolygons.size(); face++) {
+        for (int i = 0; i < 3; i++) {
+            VertexData vd = listPolygons[face].vertex[i];
+            vVertice.push_back(vd);
+        }
+    }
+
+    // TODO: link o shader aqui!!!
+    // TODO: Colocar viewmatrix no shade
+
+    glBindVertexArray(VAO);
+
+    glBufferSubData(GL_ARRAY_BUFFER, 0, vVertice.size() * sizeof(VertexData), &vVertice[0]);
+
     if (debug_init == 1)
         log->debug("eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
 
-    for (auto it = listPolygons.begin(); it != listPolygons.end(); it++) {
+    glDrawArrays(GL_TRIANGLES, 0, vVertice.size() * 3); //?? https://www.youtube.com/watch?v=S_xUgzFMIso
 
-        Triangle* fi = &(*it);
+    glBindVertexArray(0);
 
-        if (debug_init == 1)
-            log->debug("Poligono: " + std::to_string(fi->getSerial()));
+    // for (auto it = listPolygons.begin(); it != listPolygons.end(); it++) {
 
-        glBegin(GL_TRIANGLES);
-        for (int i = 0; i < 3; i++) {
-            glm::vec3 cc = fi->vertex[i].color;
-            glColor3f(cc.x, cc.y, cc.z);
-            glNormal3f(fi->vertex[i].normal.x, fi->vertex[i].normal.y, fi->vertex[i].normal.z);
-            glVertex3f(fi->vertex[i].position.x, fi->vertex[i].position.y, fi->vertex[i].position.z);
-        }
-        glEnd();
-    }
+    //     Triangle* fi = &(*it);
+
+    //     if (debug_init == 1)
+    //         log->debug("Poligono: " + std::to_string(fi->getSerial()));
+
+    //     glBegin(GL_TRIANGLES);
+    //     for (int i = 0; i < 3; i++) {
+    //         glm::vec3 cc = fi->vertex[i].color;
+    //         glColor3f(cc.x, cc.y, cc.z);
+    //         glNormal3f(fi->vertex[i].normal.x, fi->vertex[i].normal.y, fi->vertex[i].normal.z);
+    //         glVertex3f(fi->vertex[i].position.x, fi->vertex[i].position.y, fi->vertex[i].position.z);
+    //     }
+    //     glEnd();
+    // }
     debug_init = 0;
 
     // GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};

@@ -24,8 +24,7 @@ set (SourcesLoader Library.cpp
 				   LibraryPhysicsScenes.cpp
 				   VisualScene.cpp
 				   PhysicsScene.cpp
-				   ListNodes.cpp
-				   ShadersLoader.cpp)
+				   ListNodes.cpp)
 
 #define os includes
 set (IncludeLoader  ${CMAKE_SOURCE_DIR}/libs)

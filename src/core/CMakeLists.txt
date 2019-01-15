@@ -23,7 +23,8 @@ set (SourcesCore Logger.cpp
 				 Shader.cpp	
 				 Events.cpp
 				 FlowControl.cpp
-				 VboIndexer.cpp)
+				 VboIndexer.cpp
+				 ShadersLoader.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}/libs)

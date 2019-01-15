@@ -5,11 +5,12 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Logger.hpp"
+#include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::CanvasGL* _pCanvas);
+    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
 
     virtual ~Game();
     // Inherited via IGameClientEvents
@@ -28,15 +29,15 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    // void setCube(ArrayTriangle* _pListPolygon);
-    // void setOctahedran(ArrayTriangle* _pListPolygon);
+    void buildTree();
+    void setSquare1(std::vector<Triangle>* _pListPolygon);
     void setDrawTest(std::vector<Triangle>* _pListPolygon);
     void setDrawSplit(std::vector<Triangle>* _pListPolygon);
 
     BSPTree* pBspTree;
     int botaoIndex;
     int estadoBotao;
-    glm::vec4 lightPosition;
+    // glm::vec4 lightPosition;
     Chimera::TrackBall trackBall;
 
     Chimera::Logger* log;
@@ -44,6 +45,8 @@ class Game : public Chimera::IGameClientEvents {
 
     Chimera::CanvasGL* pCanvas;
     bool isPaused;
+
+    Chimera::Shader* pShader;
 };
 
 #endif

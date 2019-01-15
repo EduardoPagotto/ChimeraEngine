@@ -1,9 +1,9 @@
-#include "chimera/loader/ShadersLoader.hpp"
+#include "chimera/core/ShadersLoader.hpp"
 #include "chimera/core/Exception.hpp"
 #include <fstream>
 #include <vector>
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 ShadersLoader::ShadersLoader() {
     log = Chimera::Logger::get();
@@ -127,4 +127,4 @@ GLuint ShadersLoader::linkShader(const GLuint& VertexShaderID, const GLuint& Fra
     }
     return ProgramID;
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

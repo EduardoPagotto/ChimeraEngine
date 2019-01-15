@@ -17,12 +17,12 @@
 #include "Game.hpp"
 
 #include "chimera/loader/PhysicsScene.hpp"
-#include "chimera/loader/ShadersLoader.hpp"
 #include "chimera/loader/VisualScene.hpp"
 
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Logger.hpp"
+#include "chimera/core/ShadersLoader.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
@@ -61,7 +61,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         // Gerenciador do grapho de cena
         Chimera::SceneMng* sceneMng = new Chimera::SceneMng();
 
-        ChimeraLoaders::ShadersLoader sl; // = new ChimeraLoaders::ShadersLoader();
+        Chimera::ShadersLoader sl; // = new ChimeraLoaders::ShadersLoader();
 
         YAML::Node shaders = config["shaders"];
         // Chimera::ShadersManager *shader =  sceneMng->getShadersManager();

@@ -7,7 +7,7 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Shader.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class ShadersLoader {
   public:
@@ -25,6 +25,6 @@ class ShadersLoader {
 
     Chimera::Logger* log;
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

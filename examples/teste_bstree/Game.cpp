@@ -10,6 +10,11 @@
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
     isPaused = false;
     debug_init = 0;
+
+    projection = glm::mat4(1.0f);
+    view = glm::mat4(1.0f);
+    model = glm::mat4(1.0f);
+
     log = Chimera::Logger::get();
 }
 
@@ -344,19 +349,20 @@ void Game::render() {
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
-    glViewport(0, 0, pCanvas->getWidth(), pCanvas->getHeight());
+    // glViewport(0, 0, pCanvas->getWidth(), pCanvas->getHeight());
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+    // glMatrixMode(GL_PROJECTION);
+    // glLoadIdentity();
 
-    gluPerspective(vp->fov, (GLfloat)(float)pCanvas->getWidth() / (float)pCanvas->getHeight(), vp->near, vp->far);
+    // gluPerspective(vp->fov, (GLfloat)(float)pCanvas->getWidth() / (float)pCanvas->getHeight(), vp->near, vp->far);
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    // glMatrixMode(GL_MODELVIEW);
+    // glLoadIdentity();
 
     // glm::vec3 dir = vp->position + vp->front;
-    gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->front.x, vp->front.y, vp->front.z, vp->up.x, vp->up.y,
-              vp->up.z);
+    // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->front.x, vp->front.y, vp->front.z, vp->up.x,
+    // vp->up.y,
+    //          vp->up.z);
     // gluLookAt(vp->position.x, vp->position.y, vp->position.z, dir.x, dir.y, dir.z, vp->up.x, vp->up.y, vp->up.z);
     // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->direction.x, vp->direction.y, vp->direction.z,
     //          vp->rotation.x, vp->rotation.y, vp->rotation.z);
@@ -373,7 +379,16 @@ void Game::render() {
     }
 
     // TODO: link o shader aqui!!!
+    pShader->link();
+
     // TODO: Colocar viewmatrix no shade
+    projection = pCanvas->getPerspectiveProjectionMatrix(vp->fov, vp->near, vp->far, 0);
+    // View Matrix
+    view = glm::lookAt(vp->position, vp->front, vp->up);
+    pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
+    pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+    pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+    pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     glBindVertexArray(VAO);
 

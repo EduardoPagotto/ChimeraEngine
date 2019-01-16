@@ -11,6 +11,7 @@ Shader::Shader(const std::string& _programName, const GLuint& _idProgram)
 Shader::Shader(const Shader& _shader) {
     idProgram = _shader.idProgram;
     currentProgram = _shader.currentProgram;
+    log = Chimera::Logger::get();
 }
 
 Shader::~Shader() { glDeleteProgram(idProgram); }
@@ -19,7 +20,7 @@ GLint Shader::getUniformLocation(const char* _name) const noexcept {
     // nasty C lib uses -1 return value for error
     GLint loc = glGetUniformLocation(idProgram, _name);
     if (loc == -1)
-        printf("Shader Uniform \"%s\" not found in Program \"%s\"", _name, currentProgram.c_str());
+        log->error("Shader Uniform \"%s\" not found in Program \"%s\"", _name, currentProgram.c_str());
 
     return loc;
 }

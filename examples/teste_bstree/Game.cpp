@@ -255,7 +255,7 @@ void Game::buildBuffer(int max) {
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, max, nullptr, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, max, nullptr, GL_DYNAMIC_DRAW);
 
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -282,7 +282,7 @@ void Game::buildBuffer(int max) {
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(3);
 }
 
 void Game::start() {
@@ -293,15 +293,6 @@ void Game::start() {
     pVp->up = glm::vec3(0.0, 1.0, 0.0);
     trackBall.init(pVp);
     trackBall.setMax(1000.0);
-
-    std::vector<Triangle> listPolygons;
-    setSquare1(&listPolygons);
-    std::reverse(listPolygons.begin(), listPolygons.end());
-
-    BSPTreeBuilder builder(&listPolygons);
-    pBspTree = new BSPTree(builder.getNodeRoot());
-
-    buildBuffer(1000);
 
     pCanvas->initGL();
 
@@ -315,6 +306,15 @@ void Game::start() {
 
     // glDisable(GL_LIGHTING);
     // glCullFace(GL_BACK);
+
+    std::vector<Triangle> listPolygons;
+    setSquare1(&listPolygons);
+    std::reverse(listPolygons.begin(), listPolygons.end());
+
+    BSPTreeBuilder builder(&listPolygons);
+    pBspTree = new BSPTree(builder.getNodeRoot());
+
+    buildBuffer(5000);
 }
 
 void Game::stop() {}
@@ -381,18 +381,18 @@ void Game::render() {
     // TODO: link o shader aqui!!!
     pShader->link();
 
+    glBindVertexArray(VAO);
+    int tot = vVertice.size() * sizeof(VertexData) * 3;
+    glBufferSubData(GL_ARRAY_BUFFER, 0, tot, &vVertice[0]);
+
     // TODO: Colocar viewmatrix no shade
     projection = pCanvas->getPerspectiveProjectionMatrix(vp->fov, vp->near, vp->far, 0);
     // View Matrix
     view = glm::lookAt(vp->position, vp->front, vp->up);
-    pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
+    // pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
-
-    glBindVertexArray(VAO);
-
-    glBufferSubData(GL_ARRAY_BUFFER, 0, vVertice.size() * sizeof(VertexData), &vVertice[0]);
 
     if (debug_init == 1)
         log->debug("eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);

@@ -16,8 +16,8 @@ int main(int argn, char** argv) {
 
         // sempre depois de instanciar o Opengl no canvas!!!
         Chimera::ShadersLoader sl;
-        Chimera::Shader* pShader = sl.loadShader("Simples1", "./examples/AppShader/shader/simple.vert",
-                                                 "./examples/AppShader/shader/simple.frag");
+        Chimera::Shader* pShader =
+            sl.loadShader("Simples1", "./examples/teste_bstree/simples.vert", "./examples/teste_bstree/simples.frag");
 
         Game* game = new Game(video, pShader);
 

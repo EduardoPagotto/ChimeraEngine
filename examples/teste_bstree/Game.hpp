@@ -35,20 +35,15 @@ class Game : public Chimera::IGameClientEvents {
     void setDrawSplit(std::vector<Triangle>* _pListPolygon);
 
     BSPTree* pBspTree;
+    bool isPaused;
     int botaoIndex;
     int estadoBotao;
-    // glm::vec4 lightPosition;
-    Chimera::TrackBall trackBall;
-
-    Chimera::Logger* log;
     int debug_init;
-
+    Chimera::TrackBall trackBall;
+    Chimera::Logger* log;
     Chimera::CanvasGL* pCanvas;
-    bool isPaused;
-
     Chimera::Shader* pShader;
     unsigned int VBO, VAO; //, EBO;
-
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;

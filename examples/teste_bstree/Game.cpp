@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 
+#define BUFFER_OFFSET(i) ((void*)(i))
+
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
     isPaused = false;
     debug_init = 0;
@@ -245,35 +247,35 @@ void Game::setSquare1(std::vector<Triangle>* _pListPolygon) {
 
 void Game::buildBuffer(int max) {
 
-    // TODO: continua com doc: http://www.songho.ca/opengl/gl_vbo.html#create
+    // refs: ver Particle.cpp in node sub-projetc
+    // http://www.songho.ca/opengl/gl_vbo.html#create
     // https://www.khronos.org/opengl/wiki/Vertex_Rendering
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    // glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, max, nullptr, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, max, nullptr, GL_STREAM_DRAW);
 
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
     glEnableVertexAttribArray(0);
 
     // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));
     glEnableVertexAttribArray(1);
 
     // color attribute
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));
     glEnableVertexAttribArray(2);
 
     // texture coord attribute
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(9 * sizeof(float)));
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(36));
     glEnableVertexAttribArray(3);
 
     // limpa dados
@@ -349,84 +351,46 @@ void Game::render() {
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
-    // glViewport(0, 0, pCanvas->getWidth(), pCanvas->getHeight());
-
-    // glMatrixMode(GL_PROJECTION);
-    // glLoadIdentity();
-
-    // gluPerspective(vp->fov, (GLfloat)(float)pCanvas->getWidth() / (float)pCanvas->getHeight(), vp->near, vp->far);
-
-    // glMatrixMode(GL_MODELVIEW);
-    // glLoadIdentity();
-
-    // glm::vec3 dir = vp->position + vp->front;
-    // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->front.x, vp->front.y, vp->front.z, vp->up.x,
-    // vp->up.y,
-    //          vp->up.z);
-    // gluLookAt(vp->position.x, vp->position.y, vp->position.z, dir.x, dir.y, dir.z, vp->up.x, vp->up.y, vp->up.z);
-    // gluLookAt(vp->position.x, vp->position.y, vp->position.z, vp->direction.x, vp->direction.y, vp->direction.z,
-    //          vp->rotation.x, vp->rotation.y, vp->rotation.z);
-
-    std::vector<Triangle> listPolygons; // = new listPolygons();
+    std::vector<Triangle> listPolygons;
     pBspTree->draw(&vp->position, &listPolygons);
 
+    std::vector<int> listaDebug;
     std::vector<VertexData> vVertice;
     for (int face = 0; face < listPolygons.size(); face++) {
+        listaDebug.push_back(listPolygons[face].getSerial());
         for (int i = 0; i < 3; i++) {
             VertexData vd = listPolygons[face].vertex[i];
             vVertice.push_back(vd);
         }
     }
 
-    // TODO: link o shader aqui!!!
     pShader->link();
 
-    glBindVertexArray(VAO);
-    int tot = vVertice.size() * sizeof(VertexData) * 3;
-    glBufferSubData(GL_ARRAY_BUFFER, 0, tot, &vVertice[0]);
-
-    // TODO: Colocar viewmatrix no shade
     projection = pCanvas->getPerspectiveProjectionMatrix(vp->fov, vp->near, vp->far, 0);
-    // View Matrix
-    view = glm::lookAt(vp->position, vp->front, vp->up);
+    view = glm::lookAt(vp->position, vp->front, vp->up); // View Matrix
+
     // pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
-    if (debug_init == 1)
+    if (debug_init == 1) {
+        debug_init = 0;
         log->debug("eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
+        for (int i = 0; i < listaDebug.size(); i++)
+            log->debug("Poligono: %d", listaDebug[i]);
+    }
+
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    int tot = vVertice.size() * sizeof(VertexData) * 3;
+    glBufferSubData(GL_ARRAY_BUFFER, 0, tot, &vVertice[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, vVertice.size() * 3); //?? https://www.youtube.com/watch?v=S_xUgzFMIso
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
-    // for (auto it = listPolygons.begin(); it != listPolygons.end(); it++) {
-
-    //     Triangle* fi = &(*it);
-
-    //     if (debug_init == 1)
-    //         log->debug("Poligono: " + std::to_string(fi->getSerial()));
-
-    //     glBegin(GL_TRIANGLES);
-    //     for (int i = 0; i < 3; i++) {
-    //         glm::vec3 cc = fi->vertex[i].color;
-    //         glColor3f(cc.x, cc.y, cc.z);
-    //         glNormal3f(fi->vertex[i].normal.x, fi->vertex[i].normal.y, fi->vertex[i].normal.z);
-    //         glVertex3f(fi->vertex[i].position.x, fi->vertex[i].position.y, fi->vertex[i].position.z);
-    //     }
-    //     glEnd();
-    // }
-    debug_init = 0;
-
-    // GLfloat ambientColor[] = {0.4, 0.4, 0.4, 1};
-    // glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-
-    // GLfloat diffusedLightColor[] = {0.75, 0.75, 0.75, 1};
-    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffusedLightColor);
-
-    // GLfloat specularLightColor[] = {0.0, 1, 1, 1};
-    // glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor);
 
     pCanvas->after();
 }

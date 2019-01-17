@@ -310,7 +310,10 @@ void Game::start() {
     // glCullFace(GL_BACK);
 
     std::vector<Triangle> listPolygons;
-    setSquare1(&listPolygons);
+    // setSquare1(&listPolygons);
+    setDrawSplit(&listPolygons);
+    setDrawTest(&listPolygons);
+
     std::reverse(listPolygons.begin(), listPolygons.end());
 
     BSPTreeBuilder builder(&listPolygons);
@@ -376,18 +379,20 @@ void Game::render() {
 
     if (debug_init == 1) {
         debug_init = 0;
-        log->debug("eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
+        log->debug("Vertex size: %d", vVertice.size());
+        log->debug("Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
         for (int i = 0; i < listaDebug.size(); i++)
-            log->debug("Poligono: %d", listaDebug[i]);
+            log->debug("Face: %d", listaDebug[i]);
     }
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    int tot = vVertice.size() * sizeof(VertexData) * 3;
+    int tot = vVertice.size() * sizeof(VertexData);
+    // glBufferData(GL_ARRAY_BUFFER, 5000, nullptr, GL_STREAM_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, tot, &vVertice[0]);
 
-    glDrawArrays(GL_TRIANGLES, 0, vVertice.size() * 3); //?? https://www.youtube.com/watch?v=S_xUgzFMIso
+    glDrawArrays(GL_TRIANGLES, 0, vVertice.size()); //?? https://www.youtube.com/watch?v=S_xUgzFMIso
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);

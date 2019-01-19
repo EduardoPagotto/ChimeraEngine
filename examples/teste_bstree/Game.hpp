@@ -6,6 +6,7 @@
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Logger.hpp"
 #include "chimera/core/Shader.hpp"
+#include "chimera/core/Tex.hpp"
 #include "chimera/core/TrackBall.hpp"
 
 class Game : public Chimera::IGameClientEvents {
@@ -47,6 +48,8 @@ class Game : public Chimera::IGameClientEvents {
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;
+
+    Chimera::TexImg* pTex;
 };
 
 #endif

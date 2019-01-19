@@ -17,6 +17,8 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
+    pTex = new Chimera::TexImg("./models/grid2.png");
+
     log = Chimera::Logger::get();
 }
 
@@ -309,10 +311,12 @@ void Game::start() {
     // glDisable(GL_LIGHTING);
     // glCullFace(GL_BACK);
 
+    pTex->init();
+
     std::vector<Triangle> listPolygons;
-    // setSquare1(&listPolygons);
-    setDrawSplit(&listPolygons);
-    setDrawTest(&listPolygons);
+    setSquare1(&listPolygons);
+    // setDrawSplit(&listPolygons);
+    // setDrawTest(&listPolygons);
 
     std::reverse(listPolygons.begin(), listPolygons.end());
 
@@ -376,6 +380,9 @@ void Game::render() {
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+
+    // aplica a textura
+    pTex->apply(0, "material.tDiffuse", pShader);
 
     if (debug_init == 1) {
         debug_init = 0;

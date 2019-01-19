@@ -14,6 +14,7 @@ set (LibsTesteBSTree ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 					 -lGLU
 					 -lglut
 					 -lSDL2
+					 -lSDL2_image
 					 -lGLEW
 					 -lpthread)
 

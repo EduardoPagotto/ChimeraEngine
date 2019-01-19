@@ -19,7 +19,8 @@ int main(int argn, char** argv) {
         // Carrega Referencias a texturas mesh, cans, light, trans, em nodes encadeados em
         // arvore
         Chimera::Group* group1 = new Chimera::Group(nullptr, "none");
-        ChimeraLoaders::VisualScene libV("./models/piso2.xml", group1);
+        ChimeraLoaders::VisualScene libV("./models/caixa.dae", group1);
+        // ChimeraLoaders::VisualScene libV("./models/piso2.xml", group1);
         libV.target();
 
         // Carrega dados fisicos do ambiente, solidos e os vincula aos mesh por singleton

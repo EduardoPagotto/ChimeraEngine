@@ -249,17 +249,17 @@ void Game::setSquare1(std::vector<Triangle>* _pListPolygon) {
     // Face 1
     vIndex.push_back(glm::ivec3(2, 3, 0));
     vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 0, 0));
+    vColor.push_back(glm::vec3(1, 1, 1));
 
     // Face 2
     vIndex.push_back(glm::ivec3(4, 5, 6));
     vNormal.push_back(glm::vec3(-1, 0, 0));
     vColor.push_back(glm::vec3(1, 1, 1));
 
-    // // Face 3
-    // vIndex.push_back(glm::ivec3(6, 7, 4));
-    // vNormal.push_back(glm::vec3(-1, 0, 0));
-    // vColor.push_back(glm::vec3(1, 0, 0));
+    // Face 3
+    vIndex.push_back(glm::ivec3(6, 7, 4));
+    vNormal.push_back(glm::vec3(-1, 0, 0));
+    vColor.push_back(glm::vec3(1, 1, 1));
 
     for (int face = 0; face < vIndex.size(); face++) {
         Triangle t = Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);

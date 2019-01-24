@@ -47,36 +47,36 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     glm::vec3 A = intersect(_partition->normal(), _partition->vertex[0].position, a, c);
     glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
 
+    float InterTexA = (glm::distance(A, a) / glm::distance(a, c)) * _pTriangle->vertex[1].texture.x;
+    float InterTexB = (glm::distance(B, b) / glm::distance(b, c)) * _pTriangle->vertex[1].texture.y;
+
+    float InterTexB1 = (glm::distance(B, a) / glm::distance(a, b)) * _pTriangle->vertex[1].texture.y;
+
     Triangle T1(a, b, A);
     T1.vertex[0].texture = _pTriangle->vertex[1].texture;
     T1.vertex[1].texture = _pTriangle->vertex[2].texture;
-
-    float tot = glm::distance(a, c);
-    float pro = glm::distance(A, a);
-    float porcentagem = (pro) / tot;
-    float valFinalA = porcentagem * _pTriangle->vertex[1].texture.x;
-    T1.vertex[2].texture = glm::vec2(valFinalA, _pTriangle->vertex[1].texture.y);
+    T1.vertex[2].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y);
 
     Triangle T2(b, B, A);
     T2.vertex[0].texture = _pTriangle->vertex[2].texture;
-    tot = glm::distance(b, c);
-    pro = glm::distance(B, b);
-    porcentagem = (pro) / tot;
-    float valFinalB = porcentagem * _pTriangle->vertex[1].texture.y;
-    T2.vertex[1].texture = glm::vec2(valFinalA, valFinalB);
-    T2.vertex[2].texture = glm::vec2(valFinalA, _pTriangle->vertex[1].texture.y);
+    T2.vertex[1].texture = glm::vec2(InterTexA, InterTexB);
+    T2.vertex[2].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y);
 
     Triangle T3(A, B, c);
-    T3.vertex[0].texture = glm::vec2(valFinalA, _pTriangle->vertex[1].texture.y);
-    T3.vertex[1].texture = glm::vec2(valFinalA, valFinalB);
+    T3.vertex[0].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y);
+    T3.vertex[1].texture = glm::vec2(InterTexA, InterTexB);
     T3.vertex[2].texture = _pTriangle->vertex[0].texture;
 
     for (int i = 0; i < 3; i++) {
         T1.vertex[i].color = _pTriangle->vertex[i].color;
         T1.vertex[i].normal = _pTriangle->vertex[i].normal;
-        T2.vertex[i].color = glm::vec4(0, 0, 1, 0);
+
+        T2.vertex[i].color = glm::vec3(0, 0, 1);
+        // T2.vertex[i].color = _pTriangle->vertex[i].color;
         T2.vertex[i].normal = _pTriangle->vertex[i].normal;
-        T3.vertex[i].color = glm::vec4(0, 1, 0, 0);
+
+        T3.vertex[i].color = glm::vec3(0, 1, 0);
+        // T3.vertex[i].color = _pTriangle->vertex[i].color; // glm::vec3(0, 1, 0);
         T3.vertex[i].normal = _pTriangle->vertex[i].normal;
     }
 

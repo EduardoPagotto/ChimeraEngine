@@ -48,8 +48,28 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
 
     Triangle T1(a, b, A);
+    T1.vertex[0].texture = _pTriangle->vertex[1].texture;
+    T1.vertex[1].texture = _pTriangle->vertex[2].texture;
+
+    float tot = glm::distance(a, c);
+    float pro = glm::distance(A, a);
+    float porcentagem = (pro) / tot;
+    float valFinalA = porcentagem * _pTriangle->vertex[1].texture.x;
+    T1.vertex[2].texture = glm::vec2(valFinalA, _pTriangle->vertex[1].texture.y);
+
     Triangle T2(b, B, A);
+    T2.vertex[0].texture = _pTriangle->vertex[2].texture;
+    tot = glm::distance(b, c);
+    pro = glm::distance(B, b);
+    porcentagem = (pro) / tot;
+    float valFinalB = porcentagem * _pTriangle->vertex[1].texture.y;
+    T2.vertex[1].texture = glm::vec2(valFinalA, valFinalB);
+    T2.vertex[2].texture = glm::vec2(valFinalA, _pTriangle->vertex[1].texture.y);
+
     Triangle T3(A, B, c);
+    T3.vertex[0].texture = glm::vec2(valFinalA, _pTriangle->vertex[1].texture.y);
+    T3.vertex[1].texture = glm::vec2(valFinalA, valFinalB);
+    T3.vertex[2].texture = _pTriangle->vertex[0].texture;
 
     for (int i = 0; i < 3; i++) {
         T1.vertex[i].color = _pTriangle->vertex[i].color;

@@ -209,17 +209,37 @@ void Game::setSquare1(std::vector<Triangle>* _pListPolygon) {
     std::vector<glm::vec3> vColor;
     std::vector<glm::vec2> vTex;
 
-    // Quadrado
-    vVertice.push_back(glm::vec3(100, 100, 0));
-    vVertice.push_back(glm::vec3(-100, 100, 0));
+    // Face Triangulo Z
+    // vVertice.push_back(glm::vec3(0, 400, 0));
+    // vVertice.push_back(glm::vec3(-200, 0, 0));
+    // vVertice.push_back(glm::vec3(200, 0, 0));
+    // vTex.push_back(glm::vec2(0.5, 0));
+    // vTex.push_back(glm::vec2(0, 1));
+    // vTex.push_back(glm::vec2(1, 1));
+
+    // // Quadrado 1
     vVertice.push_back(glm::vec3(-100, -100, 0));
     vVertice.push_back(glm::vec3(100, -100, 0));
+    vVertice.push_back(glm::vec3(100, 100, 0));
+    vVertice.push_back(glm::vec3(-100, 100, 0));
 
-    // Texturas
+    // // Quadrado 2
+    vVertice.push_back(glm::vec3(200, -100, -100));
+    vVertice.push_back(glm::vec3(200, -100, 100));
+    vVertice.push_back(glm::vec3(200, 100, 100));
+    vVertice.push_back(glm::vec3(200, 100, -100));
+
+    // Texturas quad 1
+    vTex.push_back(glm::vec2(0, 1));
     vTex.push_back(glm::vec2(1, 1));
     vTex.push_back(glm::vec2(1, 0));
     vTex.push_back(glm::vec2(0, 0));
+
+    // Texturas quad 2
     vTex.push_back(glm::vec2(0, 1));
+    vTex.push_back(glm::vec2(1, 1));
+    vTex.push_back(glm::vec2(1, 0));
+    vTex.push_back(glm::vec2(0, 0));
 
     // Face 0
     vIndex.push_back(glm::ivec3(0, 1, 2));
@@ -231,7 +251,17 @@ void Game::setSquare1(std::vector<Triangle>* _pListPolygon) {
     vNormal.push_back(glm::vec3(0, 0, 1));
     vColor.push_back(glm::vec3(1, 0, 0));
 
-    for (int face = 0; face < 2; face++) {
+    // Face 2
+    vIndex.push_back(glm::ivec3(4, 5, 6));
+    vNormal.push_back(glm::vec3(-1, 0, 0));
+    vColor.push_back(glm::vec3(1, 1, 1));
+
+    // // Face 3
+    // vIndex.push_back(glm::ivec3(6, 7, 4));
+    // vNormal.push_back(glm::vec3(-1, 0, 0));
+    // vColor.push_back(glm::vec3(1, 0, 0));
+
+    for (int face = 0; face < vIndex.size(); face++) {
         Triangle t = Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
 
         t.vertex[0].texture = vTex[vIndex[face].x];

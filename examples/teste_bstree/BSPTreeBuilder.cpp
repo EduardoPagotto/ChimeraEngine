@@ -26,6 +26,10 @@ glm::vec3 aprox(const glm::vec3& dado) {
                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z);
 }
 
+glm::vec2 retTex1(const glm::vec2& _p0, const glm::vec2& _p1) {
+    return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
+}
+
 void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
                                    std::vector<Triangle>* _pListPolygon) {
     glm::vec3& a = _pTriangle->vertex[0].position;
@@ -56,18 +60,38 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     // float InterTexU = propAB * _pTriangle->vertex[1].texture.y; // ??????
 
     Triangle T1(a, b, A);
-    T1.vertex[0].texture = _pTriangle->vertex[1].texture;                         // a old b
-    T1.vertex[1].texture = _pTriangle->vertex[2].texture;                         // b old c
+    // T1.vertex[0].texture = _pTriangle->vertex[1].texture;
+    T1.vertex[0].texture = retTex1(_pTriangle->vertex[0].texture, _pTriangle->vertex[1].texture);
+    // 1.vertex[1].texture = _pTriangle->vertex[2].texture;
+    T1.vertex[1].texture = retTex1(_pTriangle->vertex[1].texture, _pTriangle->vertex[2].texture);
     T1.vertex[2].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y); // A
 
+    //--
+
     Triangle T2(b, B, A);
-    T2.vertex[0].texture = _pTriangle->vertex[2].texture;                         // b old c
-    T2.vertex[1].texture = glm::vec2(InterTexA, InterTexB);                       // B
+    T2.vertex[0].texture = _pTriangle->vertex[2].texture; // b old c
+    // T2.vertex[0].texture = retTex1(_pTriangle->vertex[0].texture, _pTriangle->vertex[2].texture);
+
+    // Hipotenusa e cateto oposto para pegar o seno rad1
+    float hypo = glm::distance(c, b);  // segmento de reta de c' ate b'
+    float catOp = glm::distance(a, b); // segmento a' ate b'
+    float rad1 = catOp / hypo;
+
+    // Hipotenusa e seno para calcular o valor do cateto opposo (proporcao x da textura)
+    float hypo2 = glm::distance(c, B);
+    float seno1 = rad1;
+    float val_final = seno1 * hypo2;         // valor da imagem do ponto B em Y (cateto oposto)
+    float valxTexTemp = glm::distance(a, b); // tamanho total do Y
+    float valxTex = val_final / valxTexTemp; // razao da textura em X ufa!!!
+
+    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);                         // B
     T2.vertex[2].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y); // A
+
+    // --
 
     Triangle T3(A, B, c);
     T3.vertex[0].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y); // A
-    T3.vertex[1].texture = glm::vec2(InterTexA, InterTexB);                       // B
+    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);                         // B
     T3.vertex[2].texture = _pTriangle->vertex[0].texture;                         // c old a
 
     for (int i = 0; i < 3; i++) {

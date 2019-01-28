@@ -14,7 +14,7 @@ glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a,
     float num = glm::dot(n, a);
     glm::vec3 cma = c - a;
     float denom = glm::dot(n, cma);
-    float D = -glm::dot(n, p0);
+    float D = -glm::dot(n, p0); // direção inversa
     float t = -(num + D) / denom;
 
     glm::vec3 valor = a + t * (c - a);
@@ -36,6 +36,7 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     glm::vec3& b = _pTriangle->vertex[1].position;
     glm::vec3& c = _pTriangle->vertex[2].position;
 
+    // Normaliza Triangulo para corte do hiper-plano esteja nos segmentos de reta CA e CB
     if (fx.x * fx.z >= 0) {
         swapFace(b, c);
         swapFace(a, b);
@@ -52,11 +53,11 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
 
     float propAC = (glm::distance(A, a) / glm::distance(a, c)); // razao da distancia entre a e A
-    float propBC = (glm::distance(B, b) / glm::distance(b, c)); // razao da distancia entre b e B
-    float propAB = (glm::distance(B, a) / glm::distance(a, b)); // razao da distancia entre a e B ??????
+    // float propBC = (glm::distance(B, b) / glm::distance(b, c)); // razao da distancia entre b e B
+    // float propAB = (glm::distance(B, a) / glm::distance(a, b)); // razao da distancia entre a e B ??????
 
     float InterTexA = propAC * _pTriangle->vertex[1].texture.x;
-    float InterTexB = propBC * _pTriangle->vertex[1].texture.y;
+    // float InterTexB = propBC * _pTriangle->vertex[1].texture.y;
     // float InterTexU = propAB * _pTriangle->vertex[1].texture.y; // ??????
 
     Triangle T1(a, b, A);

@@ -36,13 +36,33 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     glm::vec3& b = _pTriangle->vertex[1].position;
     glm::vec3& c = _pTriangle->vertex[2].position;
 
-    // Normaliza Triangulo para corte do hiper-plano esteja nos segmentos de reta CA e CB
-    if (fx.x * fx.z >= 0) {
+    // acerto para vertex do tex final igualar a rotacao do triangulo
+    VertexData* pVertex_a = nullptr;
+    VertexData* pVertex_b = nullptr;
+    VertexData* pVertex_c = nullptr;
+
+    // Normaliza Triangulo para que o corte do hiper-plano esteja nos segmentos de reta CA e CB (corte em a e b)
+    if (fx.x * fx.z >= 0) { // corte em a e c
         swapFace(b, c);
         swapFace(a, b);
-    } else if (fx.y * fx.z >= 0) {
+
+        pVertex_a = &_pTriangle->vertex[2]; // old c
+        pVertex_b = &_pTriangle->vertex[0]; // old a
+        pVertex_c = &_pTriangle->vertex[1]; // old b
+
+    } else if (fx.y * fx.z >= 0) { // corte em b e c
         swapFace(a, c);
         swapFace(a, b);
+        //--
+        pVertex_a = &_pTriangle->vertex[1]; // old b
+        pVertex_b = &_pTriangle->vertex[2]; // old c
+        pVertex_c = &_pTriangle->vertex[0]; // old a
+
+    } else { // Cortre em a e b
+
+        pVertex_a = &_pTriangle->vertex[0]; // old a
+        pVertex_b = &_pTriangle->vertex[1]; // old b
+        pVertex_c = &_pTriangle->vertex[2]; // old c
     }
 
     // Testar ideia
@@ -53,25 +73,18 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
 
     float propAC = (glm::distance(A, a) / glm::distance(a, c)); // razao da distancia entre a e A
-    // float propBC = (glm::distance(B, b) / glm::distance(b, c)); // razao da distancia entre b e B
-    // float propAB = (glm::distance(B, a) / glm::distance(a, b)); // razao da distancia entre a e B ??????
-
-    float InterTexA = propAC * _pTriangle->vertex[1].texture.x;
-    // float InterTexB = propBC * _pTriangle->vertex[1].texture.y;
-    // float InterTexU = propAB * _pTriangle->vertex[1].texture.y; // ??????
+    float InterTexA = propAC * pVertex_a->texture.x;
 
     Triangle T1(a, b, A);
-    // T1.vertex[0].texture = _pTriangle->vertex[1].texture;
-    T1.vertex[0].texture = retTex1(_pTriangle->vertex[0].texture, _pTriangle->vertex[1].texture);
-    // 1.vertex[1].texture = _pTriangle->vertex[2].texture;
-    T1.vertex[1].texture = retTex1(_pTriangle->vertex[1].texture, _pTriangle->vertex[2].texture);
-    T1.vertex[2].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y); // A
+    T1.vertex[0].texture = retTex1(pVertex_c->texture, pVertex_a->texture);
+    T1.vertex[1].texture = retTex1(pVertex_a->texture, pVertex_b->texture);
+    T1.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
 
     //--
 
     Triangle T2(b, B, A);
-    T2.vertex[0].texture = _pTriangle->vertex[2].texture; // b old c
-    // T2.vertex[0].texture = retTex1(_pTriangle->vertex[0].texture, _pTriangle->vertex[2].texture);
+    T2.vertex[0].texture = retTex1(pVertex_a->texture, pVertex_b->texture); // pVertex_b->texture; // b old c
+    // T2.vertex[0].texture = retTex1(pVertex_c->texture, pVertex_b->texture);
 
     // Hipotenusa e cateto oposto para pegar o seno rad1
     float hypo = glm::distance(c, b);  // segmento de reta de c' ate b'
@@ -85,26 +98,27 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     float valxTexTemp = glm::distance(a, b); // tamanho total do Y
     float valxTex = val_final / valxTexTemp; // razao da textura em X ufa!!!
 
-    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);                         // B
-    T2.vertex[2].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y); // A
+    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
+    T2.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
 
     // --
 
     Triangle T3(A, B, c);
-    T3.vertex[0].texture = glm::vec2(InterTexA, _pTriangle->vertex[1].texture.y); // A
-    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);                         // B
-    T3.vertex[2].texture = _pTriangle->vertex[0].texture;                         // c old a
+    T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
+    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
+    T3.vertex[2].texture =
+        pVertex_c->texture; // retTex1(pVertex_c->texture, pVertex_b->texture,); // pVertex_c->texture; // c old a
 
     for (int i = 0; i < 3; i++) {
         T1.vertex[i].color = _pTriangle->vertex[i].color;
         T1.vertex[i].normal = _pTriangle->vertex[i].normal;
 
-        T2.vertex[i].color = glm::vec3(0, 0, 1);
-        // T2.vertex[i].color = _pTriangle->vertex[i].color;
+        // T2.vertex[i].color = glm::vec3(0, 0, 1);
+        T2.vertex[i].color = _pTriangle->vertex[i].color;
         T2.vertex[i].normal = _pTriangle->vertex[i].normal;
 
-        T3.vertex[i].color = glm::vec3(0, 1, 0);
-        // T3.vertex[i].color = _pTriangle->vertex[i].color; // glm::vec3(0, 1, 0);
+        // T3.vertex[i].color = glm::vec3(0, 1, 0);
+        T3.vertex[i].color = _pTriangle->vertex[i].color; // glm::vec3(0, 1, 0);
         T3.vertex[i].normal = _pTriangle->vertex[i].normal;
     }
 

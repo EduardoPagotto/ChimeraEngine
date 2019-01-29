@@ -230,16 +230,16 @@ void Game::setSquare1(std::vector<Triangle>* _pListPolygon) {
     vVertice.push_back(glm::vec3(200, 100, -100));
 
     // Texturas quad 1
-    vTex.push_back(glm::vec2(0, 0));
-    vTex.push_back(glm::vec2(1, 0));
-    vTex.push_back(glm::vec2(1, 1));
-    vTex.push_back(glm::vec2(0, 1));
+    vTex.push_back(glm::vec2(0, 0)); // 0
+    vTex.push_back(glm::vec2(1, 0)); // 1
+    vTex.push_back(glm::vec2(1, 1)); // 2
+    vTex.push_back(glm::vec2(0, 1)); // 3
 
     // Texturas quad 2
-    vTex.push_back(glm::vec2(0, 0));
-    vTex.push_back(glm::vec2(1, 0));
-    vTex.push_back(glm::vec2(1, 1));
-    vTex.push_back(glm::vec2(0, 1));
+    vTex.push_back(glm::vec2(0, 0)); // 4
+    vTex.push_back(glm::vec2(1, 0)); // 5
+    vTex.push_back(glm::vec2(1, 1)); // 6
+    vTex.push_back(glm::vec2(0, 1)); // 7
 
     // Face 0
     vIndex.push_back(glm::ivec3(0, 1, 2));

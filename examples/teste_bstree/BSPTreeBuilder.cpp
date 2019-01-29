@@ -30,6 +30,28 @@ glm::vec2 retTex1(const glm::vec2& _p0, const glm::vec2& _p1) {
     return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
 }
 
+glm::vec2 retTex2(const glm::vec2& _p0, const glm::vec2& _p1) {
+    // FIXME: horrivel
+    float dx = _p1.x - _p0.x;
+    float dy = _p1.y - _p0.y;
+
+    float vx, vy;
+
+    if (dx < 0)
+        vx = _p1.x;
+    else
+        vx = _p0.x;
+
+    if (dy < 0)
+        vy = _p1.y;
+    else
+        vy = _p0.y;
+
+    return glm::vec2(vx, vy);
+
+    // return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
+}
+
 void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
                                    std::vector<Triangle>* _pListPolygon) {
     glm::vec3& a = _pTriangle->vertex[0].position;
@@ -104,10 +126,9 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     // --
 
     Triangle T3(A, B, c);
-    T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
-    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
-    T3.vertex[2].texture =
-        pVertex_c->texture; // retTex1(pVertex_c->texture, pVertex_b->texture,); // pVertex_c->texture; // c old a
+    T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y);      // A
+    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);                   // B
+    T3.vertex[2].texture = retTex2(pVertex_b->texture, pVertex_c->texture); // c old a
 
     for (int i = 0; i < 3; i++) {
         T1.vertex[i].color = _pTriangle->vertex[i].color;

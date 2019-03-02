@@ -1,25 +1,28 @@
 {
     "configurations": [
         {
+            "env": {
+                "chimera_includes_path": [
+                    "${workspaceFolder}/libs"
+                ]
+            },
             "name": "chimera_compile",
             "includePath": [
-                "${workspaceRoot}/chimera/include",
                 "/usr/include/freetype2",
                 "/usr/include",
                 "/usr/include/bullet",
-                "${workspaceFolder}/chimera_loaders/include"
+                "${chimera_includes_path}"
             ],
             "defines": [
                 "_DEBUG"
             ],
             "browse": {
                 "path": [
-                    "${workspaceRoot}/chimera/include",
-                    "${workspaceFolder}/chimera_loaders/include",
                     "/usr/include/freetype2",
                     "/usr/include",
                     "/usr/include/bullet",
-                    "${workspaceRoot}"
+                    "${workspaceFolder}/libs",
+                    "${workspaceFolder}/examples/teste_bstree"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/build/browse.vc.db"

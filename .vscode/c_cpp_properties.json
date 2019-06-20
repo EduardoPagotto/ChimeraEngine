@@ -1,17 +1,12 @@
 {
     "configurations": [
         {
-            "env": {
-                "chimera_includes_path": [
-                    "${workspaceFolder}/libs"
-                ]
-            },
             "name": "chimera_compile",
             "includePath": [
                 "/usr/include/freetype2",
                 "/usr/include",
                 "/usr/include/bullet",
-                "${chimera_includes_path}"
+                "${workspaceFolder}/libs"
             ],
             "defines": [
                 "_DEBUG"

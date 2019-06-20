@@ -5,7 +5,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Logger.hpp"
-#include "chimera/loader/ShadersLoader.hpp"
+#include "chimera/core/ShadersLoader.hpp"
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
@@ -34,7 +34,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         Chimera::CanvasGL* video =
             new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
-        ChimeraLoaders::ShadersLoader* pSL = new ChimeraLoaders::ShadersLoader();
+        Chimera::ShadersLoader* pSL = new Chimera::ShadersLoader();
         Chimera::Shader* pShader =
             pSL->loadShader("default", shader["vertex"].as<std::string>(), shader["fragment"].as<std::string>());
 

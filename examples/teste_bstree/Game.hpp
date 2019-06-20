@@ -2,14 +2,16 @@
 #define __GAME_TESTE_BSTREE__HPP
 
 #include "BSPTree.h"
-#include "ListPolygon.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/Logger.hpp"
+#include "chimera/core/Shader.hpp"
+#include "chimera/core/Tex.hpp"
 #include "chimera/core/TrackBall.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::CanvasGL* _pCanvas);
+    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
 
     virtual ~Game();
     // Inherited via IGameClientEvents
@@ -28,18 +30,26 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void setCube(ListPolygon* _pPolygonList);
-    void setOctahedran(ListPolygon* _pPolygonList);
+    void buildBuffer(int max);
+    void setSquare1(std::vector<Triangle>* _pListPolygon);
+    void setDrawTest(std::vector<Triangle>* _pListPolygon);
+    void setDrawSplit(std::vector<Triangle>* _pListPolygon);
 
     BSPTree* pBspTree;
-    int polygon_id;
+    bool isPaused;
     int botaoIndex;
     int estadoBotao;
-    glm::vec4 lightPosition;
+    int debug_init;
     Chimera::TrackBall trackBall;
-
+    Chimera::Logger* log;
     Chimera::CanvasGL* pCanvas;
-    bool isPaused;
+    Chimera::Shader* pShader;
+    unsigned int VBO, VAO; //, EBO;
+    glm::mat4 projection;
+    glm::mat4 view;
+    glm::mat4 model;
+
+    Chimera::TexImg* pTex;
 };
 
 #endif

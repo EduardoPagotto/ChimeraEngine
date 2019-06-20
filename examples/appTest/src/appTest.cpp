@@ -3,7 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Logger.hpp"
-#include "chimera/loader/ShadersLoader.hpp"
+#include "chimera/core/ShadersLoader.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
@@ -47,7 +47,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         // Gerenciador do grapho de cena
         SceneMng* sceneMng = new SceneMng();
 
-        ChimeraLoaders::ShadersLoader sl;
+        Chimera::ShadersLoader sl;
         // Carga dos shaders
         YAML::Node shaders = config["shaders"];
 

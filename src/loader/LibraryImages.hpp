@@ -13,5 +13,4 @@ class LibraryImages : public Library {
     std::tuple<std::string, std::string> target();
 };
 } // namespace ChimeraLoaders
-
 #endif

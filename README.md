@@ -2,11 +2,53 @@
 
 Simple Game Engine
 
-#formatação codigo fonte com clang
-ref: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# Dependencias Ubuntu 19.04
 
+```bash
+# Develop:
+apt install htop build-essential git gitk meld cmake g++
+
+# XML
+apt install tinyxml2*
+
+# OpenGL dev
+apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev libglm-dev libglew-dev libglewmx-dev
+
+# SDL2-Dev
+apt install libsdl2-dev libsdl2-doc libsdl2-gfx-dev libsdl2-gfx-doc libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev
+
+# FTGL-dev
+apt install libftgl-dev
+
+#formatação codigo fonte com clang
+#ref: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+apt install clang-format 
+
+# YAML config
+apt install libyaml-cpp-dev
+
+# Logs
+apt-get install libspdlog-dev
+
+# BULLET ENGINE
+apt install libbullet-dev libassimp-dev
+# Ou Instalação full do src no site: https://github.com/bulletphysics/bullet3
+# Baixar pacote e extrair em: bullet
+cd bullet
+mkdir build
+cd build
+cmake .. -G "Unix Makefiles" -DINSTALL_LIBS=ON -DBUILD_SHARED_LIBS=ON
+make j4
+make install
 ```
-apt install clang-format
+
+## Compilação:
+```bash
+cd ChimeraEngine
+mkdir build
+cd build
+cmake ../
+make
 ```
 
 #Configuracao do clang no vscode (.vscode\settings.json) format string
@@ -20,22 +62,6 @@ apt install clang-format
    "PointerAlignment": "Left", 
    "DerivePointerAlignment": false
 }
-```
-
-## Para o log e carga de yaml no ubuntu:
-```
-apt-get install libspdlog-dev
-apt install libyaml-cpp-dev
-```
-
-## Caso precise compilar o bullet:
-```
-cd bullet
-mkdir build
-cd build
-cmake .. -G "Unix Makefiles" -DINSTALL_LIBS=ON -DBUILD_SHARED_LIBS=ON
-make j4
-make install
 ```
 
 ## Ambiente de desenvolvimento

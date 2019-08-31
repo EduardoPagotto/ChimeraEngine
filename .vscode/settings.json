@@ -1,10 +1,9 @@
 {
-    "editor.minimap.enabled": false,
-    "C_Cpp.intelliSenseEngineFallback": "Enabled",
-    "cmake.configureOnOpen": true,
-    "C_Cpp.configurationWarnings": "Disabled",
     "editor.formatOnSave": true,
+    "editor.minimap.enabled": false,
+    "cmake.configureOnOpen": true,
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "C_Cpp.configurationWarnings": "Disabled",
     "C_Cpp.intelliSenseEngine": "Tag Parser",
-    "C_Cpp.clang_format_path": "/usr/bin/clang-format",
-    "C_Cpp.clang_format_fallbackStyle": "{BasedOnStyle: LLVM, IndentWidth: 4, IndentCaseLabels: true, AllowShortBlocksOnASingleLine: true, ColumnLimit: 120, PointerAlignment: Left, DerivePointerAlignment: false}"
+    "C_Cpp.clang_format_path": "/usr/bin/clang-format"
 }

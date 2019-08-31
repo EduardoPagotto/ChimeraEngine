@@ -2,7 +2,7 @@
 
 Simple Game Engine
 
-# Dependencias Ubuntu 19.04
+## Dependencias Ubuntu 19.04
 
 ```bash
 # Develop:
@@ -51,41 +51,41 @@ cmake ../
 make
 ```
 
-#Configuracao do clang no vscode (.vscode\settings.json) format string
-```json
-{
-   "BasedOnStyle": "LLVM", 
-   "IndentWidth": 4,
-   "IndentCaseLabels": true, 
-   "AllowShortBlocksOnASingleLine": true, 
-   "ColumnLimit": 90, 
-   "PointerAlignment": "Left", 
-   "DerivePointerAlignment": false
-}
+## Configuracao do clang no arquivo .clang-format
+```ini
+BasedOnStyle: LLVM
+IndentWidth: 4
+IndentCaseLabels: true
+AllowShortBlocksOnASingleLine: true
+ColumnLimit: 120
+PointerAlignment: Left
+DerivePointerAlignment: false
 ```
 
 ## Ambiente de desenvolvimento
 
- - vscode extenções uteis: 
+### vscode extenções uteis: 
+```bash
+user@host:~/.vscode/extensionscode --list-extensions | xargs -L 1 echo code --install-extension
 
-    ```    
-    code --list-extensions | xargs -L 1 echo code --install-extension
-    ...
-    code --install-extension cschlosser.doxdocgen
-    code --install-extension DotJoshJohnson.xml
-    code --install-extension eamodio.gitlens
-    code --install-extension Gruntfuggly.todo-tree
-    code --install-extension mohsen1.prettify-json
-    code --install-extension ms-vscode.cpptools
-    code --install-extension redhat.vscode-yaml
-    code --install-extension robertohuertasm.vscode-icons
-    code --install-extension slevesque.shader
-    code --install-extension twxs.cmake
-    code --install-extension vector-of-bool.cmake-tools
-    code --install-extension wayou.vscode-todo-highlight
-    ```
+code --install-extension cschlosser.doxdocgen
+code --install-extension DotJoshJohnson.xml
+code --install-extension eamodio.gitlens
+code --install-extension euskadi31.json-pretty-printer
+code --install-extension Gruntfuggly.todo-tree
+code --install-extension mohsen1.prettify-json
+code --install-extension ms-vscode.cpptools
+code --install-extension PKief.material-icon-theme
+code --install-extension redhat.vscode-yaml
+code --install-extension slevesque.shader
+code --install-extension twxs.cmake
+code --install-extension vector-of-bool.cmake-tools
+code --install-extension wayou.vscode-todo-highlight
+code --install-extension xaver.clang-format
 
- - Kdevelop ainda suportado
+```
+
+### Kdevelop ainda suportado
 
 
 ## Nova versao com desenvolvimento de HMD

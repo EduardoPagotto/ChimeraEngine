@@ -1,6 +1,4 @@
-
-Status:		Item:
-ABERTO		-Implementar carga de dados ortogonal
-			-Implementar Fontes e texto
-			-Implementar grade de teste
-			-Implementar Teste com CameraMan
+- [] Implementar carga de dados ortogonal
+- [] Implementar Fontes e texto
+- [] Implementar grade de teste
+- [] Implementar Teste com CameraMan

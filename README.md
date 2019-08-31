@@ -1,9 +1,9 @@
 # ChimeraEngine
 
-Simple Game Engine
+Just another simple game engine<p>
+OBS: Code with comments in Portuguese mostly
 
-## Dependencias Ubuntu 19.04
-
+## Ubuntu 19.04 dependencies
 ```bash
 # Develop:
 apt install htop build-essential git gitk meld cmake g++
@@ -20,8 +20,8 @@ apt install libsdl2-dev libsdl2-doc libsdl2-gfx-dev libsdl2-gfx-doc libsdl2-imag
 # FTGL-dev
 apt install libftgl-dev
 
-#formatação codigo fonte com clang
-#ref: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# Clang format and indentation
+# ref: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
 apt install clang-format 
 
 # YAML config
@@ -32,8 +32,7 @@ apt-get install libspdlog-dev
 
 # BULLET ENGINE
 apt install libbullet-dev libassimp-dev
-# Ou Instalação full do src no site: https://github.com/bulletphysics/bullet3
-# Baixar pacote e extrair em: bullet
+# Or build from SOURCE url: https://github.com/bulletphysics/bullet3
 cd bullet
 mkdir build
 cd build
@@ -42,7 +41,7 @@ make j4
 make install
 ```
 
-## Compilação:
+## Build Libs and examples app's:
 ```bash
 cd ChimeraEngine
 mkdir build
@@ -51,7 +50,9 @@ cmake ../
 make
 ```
 
-## Configuracao do clang no arquivo .clang-format
+## Development environment
+
+### Setup clang in file .clang-format
 ```ini
 BasedOnStyle: LLVM
 IndentWidth: 4
@@ -62,11 +63,9 @@ PointerAlignment: Left
 DerivePointerAlignment: false
 ```
 
-## Ambiente de desenvolvimento
-
-### vscode extenções uteis: 
+### VSCode Extensions: 
 ```bash
-user@host:~/.vscode/extensionscode --list-extensions | xargs -L 1 echo code --install-extension
+user@host:~/.vscode/extensions/code --list-extensions | xargs -L 1 echo code --install-extension
 
 code --install-extension cschlosser.doxdocgen
 code --install-extension DotJoshJohnson.xml
@@ -85,14 +84,14 @@ code --install-extension xaver.clang-format
 
 ```
 
-### Kdevelop ainda suportado
+### Kdevelop still suportted
 
 
 ## Nova versao com desenvolvimento de HMD
 
 Iniciado tentativa de criar um HMD e posteriormente integrar suporte ao OpenHMD
 
-# Versão Teste com o HMD
+### Versão Teste com o HMD
 
 re-modelamento arquivos e sub-projetos 
 yaml ref: https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML

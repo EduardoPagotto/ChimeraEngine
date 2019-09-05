@@ -22,18 +22,17 @@ class CanvasGL : public Canvas {
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
 
-    glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far, int _eye);
-
-    glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
-
+    virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
+                                                     int _eye);
+    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
     virtual int getTotEyes() { return 1; }
 
-    void initGL();
-    void afterStart();
-    void restoreMatrix();
+    virtual void initGL();
+    virtual void afterStart();
+    virtual void restoreMatrix();
     std::string getVersaoOpenGL();
 
-  private:
+  protected:
     SDL_GLContext context;
 };
 } // namespace Chimera

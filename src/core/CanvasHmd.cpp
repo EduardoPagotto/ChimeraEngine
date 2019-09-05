@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : Canvas(_title, _width, _height, true) {
+CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : CanvasGL(_title, _width, _height, false) {
 
     // Ajusta o contexto de versao do opengl
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -202,21 +202,4 @@ void CanvasHmd::restoreMatrix() {
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 }
-
-std::string CanvasHmd::getVersaoOpenGL() {
-
-    std::string retorno = "";
-    const char* version = (const char*)glGetString(GL_VERSION);
-
-    if (version != nullptr) {
-        retorno.append(version);
-    } else {
-        // Check for error
-        GLenum error = glGetError();
-        throw Exception(std::string((const char*)gluErrorString(error)));
-    }
-
-    return retorno;
-}
-
 } // namespace Chimera

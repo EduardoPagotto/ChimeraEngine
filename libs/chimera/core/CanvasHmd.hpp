@@ -8,11 +8,11 @@
 
 #include <glm/glm.hpp>
 
-#include "chimera/core/Canvas.hpp"
+#include "chimera/core/CanvasGL.hpp"
 
 namespace Chimera {
 
-class CanvasHmd : public Canvas {
+class CanvasHmd : public CanvasGL {
   public:
     CanvasHmd(const std::string& _title, int _width, int _height);
     virtual ~CanvasHmd();
@@ -22,19 +22,17 @@ class CanvasHmd : public Canvas {
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
 
-    glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far, int _eye);
-
-    glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
-
+    virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
+                                                     int _eye) override;
+    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override;
     virtual int getTotEyes() { return 2; }
 
-    void initGL();
-    void afterStart();
-    void restoreMatrix();
-    std::string getVersaoOpenGL();
+    virtual void initGL() override;
+    virtual void afterStart() override;
+    virtual void restoreMatrix() override;
 
-  private:
-    SDL_GLContext context;
+    // private:
+    //   SDL_GLContext context;
 };
 } // namespace Chimera
 

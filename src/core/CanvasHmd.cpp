@@ -31,9 +31,21 @@ CanvasHmd::~CanvasHmd() {
     }
 }
 
-void CanvasHmd::before() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+void CanvasHmd::before() {
 
-void CanvasHmd::after() { SDL_GL_SwapWindow(window); }
+    // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    CanvasGL::before();
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void CanvasHmd::after() {
+
+    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    CanvasGL::after();
+    // SDL_GL_SwapWindow(window);
+}
 
 void CanvasHmd::reshape(int _width, int _height) {
     width = _width;

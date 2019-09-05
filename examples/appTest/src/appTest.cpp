@@ -1,5 +1,6 @@
 #include "Game.hpp"
-#include "chimera/core/CanvasGL.hpp"
+//#include "chimera/core/CanvasGL.hpp"
+#include "chimera/core/CanvasHmd.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Logger.hpp"
@@ -42,7 +43,10 @@ int _tmain(int argc, _TCHAR* argv[]) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        CanvasGL* video = new CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
+        CanvasHmd* video =
+            new CanvasHmd(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
+        // CanvasGL* video = new CanvasHmd(screen["name"].as<std::string>(), canvas["w"].as<int>(),
+        // canvas["h"].as<int>());
 
         // Gerenciador do grapho de cena
         SceneMng* sceneMng = new SceneMng();

@@ -12,6 +12,11 @@
 
 namespace Chimera {
 
+struct FrameBufferTexture {
+    unsigned int w;
+    unsigned int h;
+};
+
 class CanvasHmd : public CanvasGL {
   public:
     CanvasHmd(const std::string& _title, int _width, int _height);
@@ -31,8 +36,15 @@ class CanvasHmd : public CanvasGL {
     virtual void afterStart() override;
     virtual void restoreMatrix() override;
 
-    // private:
-    //   SDL_GLContext context;
+  private:
+    FrameBufferTexture fbTexSize;
+
+    GLuint fbo;
+    GLuint fb_tex;
+    GLuint fb_depth;
+
+    void createFBO();
+    unsigned int next_pow2(unsigned int x);
 };
 } // namespace Chimera
 

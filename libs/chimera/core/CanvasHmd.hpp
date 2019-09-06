@@ -24,21 +24,17 @@ class CanvasHmd : public CanvasGL {
 
     virtual void before() override;
     virtual void after() override;
-    virtual void toggleFullScreen() override;
-    virtual void reshape(int _width, int _height) override;
 
     virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
                                                      int _eye) override;
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override;
-    virtual int getTotEyes() { return 2; }
-
-    virtual void initGL() override;
-    virtual void afterStart() override;
-    virtual void restoreMatrix() override;
+    virtual int getTotEyes() {
+        // FIXME: voltar para 2 quando esterioscopia for implementada
+        return 1;
+    }
 
   private:
     FrameBufferTexture fbTexSize;
-
     GLuint fbo;
     GLuint fb_tex;
     GLuint fb_depth;

@@ -1,6 +1,7 @@
 #include "chimera/core/CanvasHmd.hpp"
 #include "chimera/core/Exception.hpp"
 
+#include "chimera/core/ShadersLoader.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {
@@ -10,12 +11,16 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : Canva
     fb_tex = 0;
     fb_depth = 0;
     this->createFBO();
+    this->createSquare();
+
 } // namespace Chimera
 
 CanvasHmd::~CanvasHmd() {
     glDeleteFramebuffers(1, &fbo);
     glDeleteTextures(1, &fb_tex);
     glDeleteRenderbuffers(1, &fb_depth);
+
+    delete pShader;
 }
 
 void CanvasHmd::before() {
@@ -59,54 +64,83 @@ unsigned int CanvasHmd::next_pow2(unsigned int x) {
     return x + 1;
 }
 
+void CanvasHmd::createSquare() {
+
+    // The fullscreen quad's FBO
+    static const GLfloat g_quad_vertex_buffer_data[] = {
+        -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+        -1.0f, 1.0f,  0.0f, 1.0f, -1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+    };
+
+    glGenBuffers(1, &quad_vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
+
+    Chimera::ShadersLoader sl;
+    pShader = sl.loadShader("RenderToTex", "./libs/chimera/shader/Passthrough.vertexshader",
+                            "./libs/chimera/shader/WobblyTexture.fragmentshader");
+
+    GLuint texID = pShader->getUniformLocation("renderedTexture");
+    GLuint timeID = pShader->getUniformLocation("time");
+
+    // Create and compile our GLSL program from the shaders
+    // GLuint quad_programID = LoadShaders("Passthrough.vertexshader", "WobblyTexture.fragmentshader");
+    // GLuint texID = glGetUniformLocation(quad_programID, "renderedTexture");
+    // GLuint timeID = glGetUniformLocation(quad_programID, "time");
+}
+
 void CanvasHmd::createFBO() {
 
-    // ref: http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/
+    // refs:
+    // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/
+    // https://github.com/andersonfreitas/opengl-tutorial-org/blob/master/tutorial14_render_to_texture/tutorial14.cpp
 
     if (!fbo) {
-        // pass 1 cria framebuffer// GLuint FramebufferName = 0; => fbo
+        // pass 1 cria framebuffer // FramebufferName = 0; => fbo
         glGenFramebuffers(1, &fbo);
-        // pass 2 textura a ser usada // GLuint renderedTexture => fb_tex
-        glGenTextures(1, &fb_tex);
-        // pass 3  // The depth buffer //GLuint depthrenderbuffer => fb_depth
-        glGenRenderbuffers(1, &fb_depth);
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
+        // pass 2 cria textura // renderedTexture => fb_tex
+        glGenTextures(1, &fb_tex);
         // "Bind" the newly created texture : all future texture functions will modify this texture
+
+        fbTexSize.w = next_pow2(width);
+        fbTexSize.h = next_pow2(height);
+
+        // create and attach the texture that will be used as a color buffer
         glBindTexture(GL_TEXTURE_2D, fb_tex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fbTexSize.w, fbTexSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
         // Filtro linear
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        // pass 3  // The depth buffer //GLuint depthrenderbuffer => fb_depth
+        glGenRenderbuffers(1, &fb_depth);
+        glBindRenderbuffer(GL_RENDERBUFFER, fb_depth);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbTexSize.w, fbTexSize.h);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fb_depth);
+
+        // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb_tex, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fb_tex, 0);
+
+        // Pass 4
+        // Set "renderedTexture" as our colour attachement #0
+        // glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture, 0);
+
+        // Set the list of draw buffers.
+        GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+        glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+
+        // Always check that our framebuffer is ok
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            throw Exception(std::string("Falha em instanciar o Frame Buffer"));
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        printf("created render target: %dx%d (texture size: %dx%d)\n", width, height, fbTexSize.w, fbTexSize.h);
     }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-    fbTexSize.w = next_pow2(width);
-    fbTexSize.h = next_pow2(height);
-
-    /* create and attach the texture that will be used as a color buffer */
-    glBindTexture(GL_TEXTURE_2D, fb_tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fbTexSize.w, fbTexSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb_tex, 0);
-
-    glBindRenderbuffer(GL_RENDERBUFFER, fb_depth);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbTexSize.w, fbTexSize.h);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fb_depth);
-
-    // Pass 4
-    // Set "renderedTexture" as our colour attachement #0
-    // glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture, 0);
-
-    // Set the list of draw buffers.
-    // GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-    // glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-
-    // Always check that our framebuffer is ok
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        throw Exception(std::string("Falha em instanciar o Frame Buffer"));
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    printf("created render target: %dx%d (texture size: %dx%d)\n", width, height, fbTexSize.w, fbTexSize.h);
 }
 
 // void CanvasHmd::initGL() { CanvasGL::initGL(); }

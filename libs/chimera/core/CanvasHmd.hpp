@@ -10,6 +10,8 @@
 
 #include "chimera/core/CanvasGL.hpp"
 
+#include "chimera/core/Shader.hpp"
+
 namespace Chimera {
 
 struct FrameBufferTexture {
@@ -39,7 +41,16 @@ class CanvasHmd : public CanvasGL {
     GLuint fb_tex;
     GLuint fb_depth;
 
+    Shader* pShader;
+
+    GLuint texID;
+    GLuint timeID;
+
+    GLuint quad_vertexbuffer;
+
     void createFBO();
+    void createSquare();
+
     unsigned int next_pow2(unsigned int x);
 };
 } // namespace Chimera

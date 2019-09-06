@@ -50,6 +50,7 @@ class CanvasHmd : public CanvasGL {
 
     void createFBO();
     void createSquare();
+    void displayTexture();
 
     unsigned int next_pow2(unsigned int x);
 };

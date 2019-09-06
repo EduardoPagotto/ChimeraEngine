@@ -20,17 +20,22 @@ CanvasHmd::~CanvasHmd() {
     glDeleteTextures(1, &fb_tex);
     glDeleteRenderbuffers(1, &fb_depth);
 
+    glDeleteBuffers(1, &quad_vertexbuffer);
+
     delete pShader;
 }
 
 void CanvasHmd::before() {
-    // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     CanvasGL::before();
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void CanvasHmd::after() {
-    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    this->displayTexture();
+
     CanvasGL::after();
     // SDL_GL_SwapWindow(window);
 }
@@ -62,6 +67,52 @@ unsigned int CanvasHmd::next_pow2(unsigned int x) {
     x |= x >> 8;
     x |= x >> 16;
     return x + 1;
+}
+
+void CanvasHmd::displayTexture() {
+
+    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // Render on the whole framebuffer, complete from the lower left corner to the upper right
+    glViewport(0, 0, width, height);
+
+    // Clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Use our shader
+    pShader->link();
+    // glUseProgram(quad_programID);
+
+    // Bind our texture in Texture Unit 0
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fb_tex);
+    // Set our "renderedTexture" sampler to user Texture Unit 0
+    glUniform1i(texID, 0);
+
+    // glUniform1f(timeID, (float)(glfwGetTime() * 10.0f));
+    glUniform1f(timeID, (float)1.0f * 10.0f);
+
+    // 1rst attribute buffer : vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
+    glVertexAttribPointer(0,        // attribute 0. No particular reason for 0, but must match the layout in the shader.
+                          3,        // size
+                          GL_FLOAT, // type
+                          GL_FALSE, // normalized?
+                          0,        // stride
+                          (void*)0  // array buffer offset
+    );
+
+    // Draw the triangles !
+    glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
+
+    glDisableVertexAttribArray(0);
+
+    pShader->unlink();
+
+    // Swap buffers
+    // glfwSwapBuffers(window);
+    // glfwPollEvents();
 }
 
 void CanvasHmd::createSquare() {

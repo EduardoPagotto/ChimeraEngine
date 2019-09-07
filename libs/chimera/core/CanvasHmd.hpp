@@ -14,7 +14,7 @@
 
 namespace Chimera {
 
-struct FrameBufferTexture {
+struct CanvasSize {
     unsigned int w;
     unsigned int h;
 };
@@ -36,7 +36,7 @@ class CanvasHmd : public CanvasGL {
     }
 
   private:
-    FrameBufferTexture fbTexSize;
+    CanvasSize fbTexSize;
     GLuint fbo;
     GLuint fb_tex;
     GLuint fb_depth;

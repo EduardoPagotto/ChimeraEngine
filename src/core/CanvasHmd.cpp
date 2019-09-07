@@ -6,10 +6,15 @@
 
 namespace Chimera {
 
-CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : CanvasGL(_title, _width, _height, false) {
+CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
+    : CanvasGL(_title, _width * 2, _height, false) {
     fbo = 0;
     fb_tex = 0;
     fb_depth = 0;
+
+    fbTexSize.w = next_pow2(width / 2);
+    fbTexSize.h = next_pow2(height);
+
     this->createFBO();
     this->createSquare();
 
@@ -42,21 +47,13 @@ void CanvasHmd::after() {
 
 glm::mat4 CanvasHmd::getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
                                                     int _eye) {
-    // void VideoDevice::executeViewPerspective ( const float &_fov,const float
-    // &_near,const float &_far, int _eye ) {
 
-    glViewport(0, 0, width, height);
-    return glm::perspective(_fov, (GLfloat)(float)width / (float)height, _near, _far);
-
-    // glMatrixMode ( GL_PROJECTION );
-    // glLoadIdentity();
-    // gluPerspective ( _fov, ( GLfloat ) ( float ) winSizeW / ( float ) winSizeH, _near,
-    // _far ); glMatrixMode ( GL_MODELVIEW ); glLoadIdentity();
+    glViewport(0, 0, fbTexSize.w, fbTexSize.h);
+    return glm::perspective(_fov, (GLfloat)(float)fbTexSize.w / (float)fbTexSize.h, _near, _far);
 }
 
 glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {
-
-    return glm::ortho(0.0f, static_cast<GLfloat>(width), 0.0f, static_cast<GLfloat>(height));
+    return glm::ortho(0.0f, static_cast<GLfloat>(fbTexSize.w), 0.0f, static_cast<GLfloat>(fbTexSize.h));
 }
 
 unsigned int CanvasHmd::next_pow2(unsigned int x) {
@@ -71,10 +68,8 @@ unsigned int CanvasHmd::next_pow2(unsigned int x) {
 
 void CanvasHmd::displayTexture() {
 
-    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, fbTexSize.w, fbTexSize.h);
 
     // Clear the screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -109,10 +104,6 @@ void CanvasHmd::displayTexture() {
     glDisableVertexAttribArray(0);
 
     pShader->unlink();
-
-    // Swap buffers
-    // glfwSwapBuffers(window);
-    // glfwPollEvents();
 }
 
 void CanvasHmd::createSquare() {
@@ -133,11 +124,6 @@ void CanvasHmd::createSquare() {
 
     GLuint texID = pShader->getUniformLocation("renderedTexture");
     GLuint timeID = pShader->getUniformLocation("time");
-
-    // Create and compile our GLSL program from the shaders
-    // GLuint quad_programID = LoadShaders("Passthrough.vertexshader", "WobblyTexture.fragmentshader");
-    // GLuint texID = glGetUniformLocation(quad_programID, "renderedTexture");
-    // GLuint timeID = glGetUniformLocation(quad_programID, "time");
 }
 
 void CanvasHmd::createFBO() {
@@ -147,18 +133,13 @@ void CanvasHmd::createFBO() {
     // https://github.com/andersonfreitas/opengl-tutorial-org/blob/master/tutorial14_render_to_texture/tutorial14.cpp
 
     if (!fbo) {
-        // pass 1 cria framebuffer // FramebufferName = 0; => fbo
+        // pass 1 cria framebuffer // FramebufferName => fbo
         glGenFramebuffers(1, &fbo);
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-        // pass 2 cria textura // renderedTexture => fb_tex
+        // pass 2 cria textura that will be used as a color buffer // renderedTexture => fb_tex
+        // create and attach the texture
         glGenTextures(1, &fb_tex);
-        // "Bind" the newly created texture : all future texture functions will modify this texture
-
-        fbTexSize.w = next_pow2(width);
-        fbTexSize.h = next_pow2(height);
-
-        // create and attach the texture that will be used as a color buffer
         glBindTexture(GL_TEXTURE_2D, fb_tex);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fbTexSize.w, fbTexSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
@@ -168,18 +149,16 @@ void CanvasHmd::createFBO() {
         // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        // pass 3  // The depth buffer //GLuint depthrenderbuffer => fb_depth
+        // pass 3  // The depth buffer // depthrenderbuffer => fb_depth
         glGenRenderbuffers(1, &fb_depth);
         glBindRenderbuffer(GL_RENDERBUFFER, fb_depth);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbTexSize.w, fbTexSize.h);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fb_depth);
 
-        // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb_tex, 0);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fb_tex, 0);
-
         // Pass 4
         // Set "renderedTexture" as our colour attachement #0
-        // glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture, 0);
+        // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb_tex, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fb_tex, 0);
 
         // Set the list of draw buffers.
         GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};

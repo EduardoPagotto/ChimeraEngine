@@ -106,50 +106,9 @@ glm::mat4 CanvasGL::getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) {
     return glm::perspective(vp->fov, (GLfloat)(float)width / (float)height, vp->near, vp->far);
 }
 
-// glm::mat4 CanvasGL::getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far, int
-// _eye) {
-//     // void VideoDevice::executeViewPerspective ( const float &_fov,const float
-//     // &_near,const float &_far, int _eye ) {
-
-//     glViewport(0, 0, width, height);
-//     return glm::perspective(_fov, (GLfloat)(float)width / (float)height, _near, _far);
-
-//     // glMatrixMode(GL_PROJECTION);
-//     // glLoadIdentity();
-//     // gluPerspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
-//     // glMatrixMode(GL_MODELVIEW);
-//     // glLoadIdentity();
-// }
-
-// void VideoDevice::perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
-// GLdouble zFar )//TODO subistituir o executeViewPerspective
-//{
-//    const GLdouble pi = 3.1415926535897932384626433832795;
-//    GLdouble fW, fH;
-//
-//    //fH = tan( (fovY / 2) / 180 * pi ) * zNear;
-//    fH = tan( fovY / 360 * pi ) * zNear;
-//    fW = fH * aspect;
-//
-//    glFrustum( -fW, fW, -fH, fH, zNear, zFar );
-//}
-
 glm::mat4 CanvasGL::getOrthoProjectionMatrix(int eyeIndex) {
-
     return glm::ortho(0.0f, static_cast<GLfloat>(width), 0.0f, static_cast<GLfloat>(height));
 }
-
-// void VideoDevice::executeViewOrto ( int eye ) {
-//
-//     glMatrixMode ( GL_PROJECTION );
-//     glPushMatrix();
-//     glLoadIdentity();
-//     glOrtho ( 0, winSizeW, 0, winSizeH, -1, 1 );
-//     glMatrixMode ( GL_MODELVIEW );
-//     glPushMatrix();
-//     glLoadIdentity();
-//
-// }
 
 void CanvasGL::initGL() {
 

@@ -1,23 +1,10 @@
 #ifndef __CHIMERA_CANVAS_HDM__HPP
 #define __CHIMERA_CANVAS_HDM__HPP
 
-#include <GL/glew.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#include <glm/glm.hpp>
-
 #include "chimera/core/CanvasGL.hpp"
-
-#include "chimera/core/Shader.hpp"
+#include "chimera/core/Eye.hpp"
 
 namespace Chimera {
-
-struct CanvasSize {
-    unsigned int w;
-    unsigned int h;
-};
 
 class CanvasHmd : public CanvasGL {
   public:
@@ -36,23 +23,8 @@ class CanvasHmd : public CanvasGL {
     }
 
   private:
-    CanvasSize fbTexSize;
-    GLuint fbo;
-    GLuint fb_tex;
-    GLuint fb_depth;
-
+    Eye* pLeft;
     Shader* pShader;
-
-    GLuint texID;
-    GLuint timeID;
-
-    GLuint quad_vertexbuffer;
-
-    void createFBO();
-    void createSquare();
-    void displayTexture();
-
-    unsigned int next_pow2(unsigned int x);
 };
 } // namespace Chimera
 

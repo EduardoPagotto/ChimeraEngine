@@ -45,11 +45,12 @@ void CanvasHmd::after() {
     // SDL_GL_SwapWindow(window);
 }
 
-glm::mat4 CanvasHmd::getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
-                                                    int _eye) {
+glm::mat4 CanvasHmd::getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) {
+
+    // TODO: user o trackhead para posicao dos olhos
 
     glViewport(0, 0, fbTexSize.w, fbTexSize.h);
-    return glm::perspective(_fov, (GLfloat)(float)fbTexSize.w / (float)fbTexSize.h, _near, _far);
+    return glm::perspective(vp->fov, (GLfloat)(float)fbTexSize.w / (float)fbTexSize.h, vp->near, vp->far);
 }
 
 glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {

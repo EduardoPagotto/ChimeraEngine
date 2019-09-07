@@ -27,8 +27,8 @@ class CanvasHmd : public CanvasGL {
     virtual void before() override;
     virtual void after() override;
 
-    virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
-                                                     int _eye) override;
+    virtual glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) override;
+
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override;
     virtual int getTotEyes() {
         // FIXME: voltar para 2 quando esterioscopia for implementada

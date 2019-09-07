@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 
 #include "chimera/core/Canvas.hpp"
+#include "chimera/core/ViewPoint.hpp"
 
 namespace Chimera {
 
@@ -22,8 +23,8 @@ class CanvasGL : public Canvas {
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
 
-    virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
-                                                     int _eye);
+    virtual glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye);
+
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
     virtual int getTotEyes() { return 1; }
 

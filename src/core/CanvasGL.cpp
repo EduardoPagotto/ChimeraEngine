@@ -101,19 +101,25 @@ void CanvasGL::toggleFullScreen() {
     fullScreen = !fullScreen;
 }
 
-glm::mat4 CanvasGL::getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far, int _eye) {
-    // void VideoDevice::executeViewPerspective ( const float &_fov,const float
-    // &_near,const float &_far, int _eye ) {
-
+glm::mat4 CanvasGL::getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) {
     glViewport(0, 0, width, height);
-    return glm::perspective(_fov, (GLfloat)(float)width / (float)height, _near, _far);
-
-    // glMatrixMode(GL_PROJECTION);
-    // glLoadIdentity();
-    // gluPerspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
-    // glMatrixMode(GL_MODELVIEW);
-    // glLoadIdentity();
+    return glm::perspective(vp->fov, (GLfloat)(float)width / (float)height, vp->near, vp->far);
 }
+
+// glm::mat4 CanvasGL::getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far, int
+// _eye) {
+//     // void VideoDevice::executeViewPerspective ( const float &_fov,const float
+//     // &_near,const float &_far, int _eye ) {
+
+//     glViewport(0, 0, width, height);
+//     return glm::perspective(_fov, (GLfloat)(float)width / (float)height, _near, _far);
+
+//     // glMatrixMode(GL_PROJECTION);
+//     // glLoadIdentity();
+//     // gluPerspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
+//     // glMatrixMode(GL_MODELVIEW);
+//     // glLoadIdentity();
+// }
 
 // void VideoDevice::perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
 // GLdouble zFar )//TODO subistituir o executeViewPerspective

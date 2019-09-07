@@ -21,7 +21,7 @@ struct EyeSize {
 
 class Eye {
   public:
-    Eye(const int& _w, const int& _h, Shader* _pShader);
+    Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* _pShader);
     virtual ~Eye();
 
     void displayTexture();
@@ -31,6 +31,8 @@ class Eye {
     glm::mat4 getOrthoProjectionMatrix();
 
   private:
+    unsigned short indexEye;
+    unsigned int posInitW;
     GLuint fbo;
     GLuint fb_tex;
     GLuint fb_depth;

@@ -24,6 +24,7 @@ class CanvasHmd : public CanvasGL {
 
   private:
     Eye* pLeft;
+    // Eye* pRight;
     Shader* pShader;
 };
 } // namespace Chimera

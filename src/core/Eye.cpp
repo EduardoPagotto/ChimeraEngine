@@ -4,13 +4,14 @@
 
 namespace Chimera {
 
-Eye::Eye(const int& _w, const int& _h, Shader* _pShader) {
+Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* _pShader) {
 
     this->fbo = 0;
     this->fb_tex = 0;
     this->fb_depth = 0;
     this->quad_vertexbuffer = 0;
 
+    this->indexEye = _indexEye;
     this->pShader = _pShader;
     this->log = Chimera::Logger::get();
 
@@ -18,6 +19,15 @@ Eye::Eye(const int& _w, const int& _h, Shader* _pShader) {
     this->fbTexSize.h = next_pow2(_h);
     this->createFBO();
     this->createSquare();
+
+    // this->posInitW = _indexEye == 0 ? 0 : _w;
+    if (_indexEye == 0) {
+        this->posInitW = 0;
+        this->log->info("Left Eye Setup pos:%d size:%d", this->posInitW, this->fbTexSize.w);
+    } else {
+        this->posInitW = this->fbTexSize.w;
+        this->log->info("Right Eye Setup pos:%d size:%d", this->posInitW, this->fbTexSize.w);
+    }
 }
 
 Eye::~Eye() {
@@ -120,7 +130,7 @@ void Eye::createSquare() {
 void Eye::displayTexture() {
 
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
-    glViewport(0, 0, fbTexSize.w, fbTexSize.h);
+    glViewport(this->posInitW, 0, fbTexSize.w, fbTexSize.h);
 
     // Clear the screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

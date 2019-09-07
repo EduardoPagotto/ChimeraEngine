@@ -10,12 +10,14 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
     pShader = sl.loadShader("RenderToTex", "./libs/chimera/shader/Passthrough.vertexshader",
                             "./libs/chimera/shader/WobblyTexture.fragmentshader");
 
-    pLeft = new Eye(_width, _height, pShader);
+    pLeft = new Eye(0, _width, _height, pShader);
+    // pRight = new Eye(1, _width, _height, pShader);
 
 } // namespace Chimera
 
 CanvasHmd::~CanvasHmd() {
     delete pLeft;
+    // delete pRight;
     delete pShader;
 }
 

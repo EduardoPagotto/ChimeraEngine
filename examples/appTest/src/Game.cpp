@@ -80,7 +80,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
             pCamZ->getTrackBall()->tracking(mm.xrel, mm.yrel);
-        } else if (botaoIndex == 2) {
+        } else if (botaoIndex == 3) {
             pCamZ->getTrackBall()->offSet(mm.yrel);
         }
     }

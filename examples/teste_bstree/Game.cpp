@@ -436,4 +436,5 @@ void Game::render() {
     glBindVertexArray(0);
 
     pCanvas->after();
+    pCanvas->swapWindow();
 }

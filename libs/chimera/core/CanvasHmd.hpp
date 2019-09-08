@@ -11,20 +11,18 @@ class CanvasHmd : public CanvasGL {
     CanvasHmd(const std::string& _title, int _width, int _height);
     virtual ~CanvasHmd();
 
-    virtual void before() override;
-    virtual void after() override;
+    virtual void before(const unsigned short& _indexEye = 0);
+    virtual void after(const unsigned short& _indexEye = 0);
+    virtual void swapWindow();
 
     virtual glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) override;
 
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override;
-    virtual int getTotEyes() {
-        // FIXME: voltar para 2 quando esterioscopia for implementada
-        return 1;
-    }
+    virtual int getTotEyes() { return 2; }
 
   private:
     Eye* pLeft;
-    // Eye* pRight;
+    Eye* pRight;
     Shader* pShader;
 };
 } // namespace Chimera

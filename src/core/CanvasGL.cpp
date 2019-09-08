@@ -74,9 +74,11 @@ CanvasGL::~CanvasGL() {
     }
 }
 
-void CanvasGL::before() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+void CanvasGL::before(const unsigned short& _indexEye) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
-void CanvasGL::after() { SDL_GL_SwapWindow(window); }
+void CanvasGL::after(const unsigned short& _indexEye) {}
+
+void CanvasGL::swapWindow() { SDL_GL_SwapWindow(window); }
 
 void CanvasGL::reshape(int _width, int _height) {
     width = _width;

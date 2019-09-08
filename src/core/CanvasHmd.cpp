@@ -11,34 +11,60 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
                             "./libs/chimera/shader/WobblyTexture.fragmentshader");
 
     pLeft = new Eye(0, _width, _height, pShader);
-    // pRight = new Eye(1, _width, _height, pShader);
+    pRight = new Eye(1, _width, _height, pShader);
 
 } // namespace Chimera
 
 CanvasHmd::~CanvasHmd() {
     delete pLeft;
-    // delete pRight;
+    delete pRight;
     delete pShader;
 }
 
-void CanvasHmd::before() {
-    pLeft->begin();     // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    CanvasGL::before(); // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void CanvasHmd::before(const unsigned short& _indexEye) {
+
+    if (_indexEye == 0)
+        pLeft->begin(); // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    else
+        pRight->begin();
+
+    CanvasGL::before(_indexEye); // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void CanvasHmd::after() {
+void CanvasHmd::swapWindow() {
 
-    pLeft->end();            // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    pLeft->displayTexture(); // atual
-    CanvasGL::after();       // SDL_GL_SwapWindow(window);
+    CanvasGL::before();
+
+    pLeft->displayTexture();
+    pRight->displayTexture();
+    CanvasGL::swapWindow();
+}
+
+void CanvasHmd::after(const unsigned short& _indexEye) {
+
+    if (_indexEye == 0) {
+        pLeft->end(); // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    } else {
+        pRight->end(); // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    // CanvasGL::after(); // SDL_GL_SwapWindow(window);
 }
 
 glm::mat4 CanvasHmd::getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) {
     // TODO: user o trackhead para posicao dos olhos
-    return pLeft->getPerspectiveProjectionMatrix(vp);
+    if (_eye == 0)
+        return pLeft->getPerspectiveProjectionMatrix(vp);
+
+    return pRight->getPerspectiveProjectionMatrix(vp);
 }
 
-glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) { return pLeft->getOrthoProjectionMatrix(); }
+glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {
+    if (eyeIndex == 0)
+        return pLeft->getOrthoProjectionMatrix();
+
+    return pRight->getOrthoProjectionMatrix();
+}
 
 // void VideoDevice::perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
 // GLdouble zFar )//TODO subistituir o executeViewPerspective

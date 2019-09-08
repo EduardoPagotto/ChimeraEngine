@@ -133,7 +133,7 @@ void Eye::displayTexture() {
     glViewport(this->posInitW, 0, fbTexSize.w, fbTexSize.h);
 
     // Clear the screen
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Use our shader
     pShader->link();

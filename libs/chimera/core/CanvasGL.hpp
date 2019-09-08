@@ -18,10 +18,12 @@ class CanvasGL : public Canvas {
     CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen = false);
     virtual ~CanvasGL();
 
-    virtual void before() override;
-    virtual void after() override;
+    virtual void before(const unsigned short& _indexEye = 0);
+    virtual void after(const unsigned short& _indexEye = 0);
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
+
+    virtual void swapWindow();
 
     virtual glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye);
 

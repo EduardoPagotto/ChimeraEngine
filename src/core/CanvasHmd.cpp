@@ -53,8 +53,11 @@ void CanvasHmd::after(const unsigned short& _indexEye) {
 
 glm::mat4 CanvasHmd::getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) {
     // TODO: user o trackhead para posicao dos olhos
-    if (_eye == 0)
+    if (_eye == 0) {
+        glm::vec3 strafe = glm::cross(vp->front, vp->up);
+        vp->position += strafe * 1000.0f;
         return pLeft->getPerspectiveProjectionMatrix(vp);
+    }
 
     return pRight->getPerspectiveProjectionMatrix(vp);
 }

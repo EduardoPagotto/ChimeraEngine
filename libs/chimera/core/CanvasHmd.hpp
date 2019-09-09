@@ -3,6 +3,7 @@
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Eye.hpp"
+#include "chimera/core/Logger.hpp"
 
 namespace Chimera {
 
@@ -17,10 +18,13 @@ class CanvasHmd : public CanvasGL {
 
     virtual glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) override;
 
+    virtual void calcPerspectiveProjectionView(int _eye, ViewPoint* vp, glm::mat4& pView, glm::mat4& pProjection);
+
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override;
     virtual int getTotEyes() { return 2; }
 
   private:
+    Logger* log;
     Eye* pLeft;
     Eye* pRight;
     Shader* pShader;

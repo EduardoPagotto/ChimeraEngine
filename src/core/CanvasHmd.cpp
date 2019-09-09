@@ -13,6 +13,8 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
     pLeft = new Eye(0, _width, _height, pShader);
     pRight = new Eye(1, _width, _height, pShader);
 
+    this->log = Chimera::Logger::get();
+
 } // namespace Chimera
 
 CanvasHmd::~CanvasHmd() {
@@ -51,12 +53,35 @@ void CanvasHmd::after(const unsigned short& _indexEye) {
     // CanvasGL::after(); // SDL_GL_SwapWindow(window);
 }
 
+void CanvasHmd::calcPerspectiveProjectionView(int _eye, ViewPoint* vp, glm::mat4& view, glm::mat4& projection) {
+
+    if (_eye == 0) {
+        // glm::vec3 right = glm::cross(vp->front, vp->worldUp); // glm::normalize(glm::cross(vp->front, vp->worldUp));
+        // log->debug("X: %.3f ; Y: %.3f ; Z: %.3f", right.x, right.y, right.z);
+        ViewPoint nova = ViewPoint(*vp);
+        nova.position.x = 50;
+        // vp->position += right.x + 3.0f;
+        projection = pLeft->getPerspectiveProjectionMatrix(&nova);
+        // View Matrix
+        view = glm::lookAt(nova.position, nova.front, nova.up);
+    } else {
+        projection = pRight->getPerspectiveProjectionMatrix(vp);
+        view = glm::lookAt(vp->position, vp->front, vp->up);
+        // CanvasGL::calcPerspectiveProjectionView(_eye, vp, view, projection);
+    }
+}
+
 glm::mat4 CanvasHmd::getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) {
     // TODO: user o trackhead para posicao dos olhos
     if (_eye == 0) {
-        glm::vec3 strafe = glm::cross(vp->front, vp->up);
-        vp->position += strafe * 1000.0f;
-        return pLeft->getPerspectiveProjectionMatrix(vp);
+        // glm::vec3 right = glm::cross(vp->front, vp->worldUp); // glm::normalize(glm::cross(vp->front, vp->worldUp));
+        // log->debug("X: %.3f ; Y: %.3f ; Z: %.3f", right.x, right.y, right.z);
+        ViewPoint nova = ViewPoint(*vp);
+
+        nova.position.x = 500;
+
+        // vp->position += right.x + 3.0f;
+        return pLeft->getPerspectiveProjectionMatrix(&nova);
     }
 
     return pRight->getPerspectiveProjectionMatrix(vp);

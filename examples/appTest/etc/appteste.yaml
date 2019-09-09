@@ -1,8 +1,8 @@
 screen:
   name: teste
   canvas:
-    w: 512
-    h: 512
+    w: 256
+    h: 256
 shaders:
   - name: mesh-default
     vertex: ./examples/AppCargaManual/shader/mesh.vert

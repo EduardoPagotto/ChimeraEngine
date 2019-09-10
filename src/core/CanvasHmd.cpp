@@ -56,8 +56,8 @@ void CanvasHmd::after(const unsigned short& _indexEye) {
 void CanvasHmd::calcPerspectiveProjectionView(int _eye, ViewPoint* vp, glm::mat4& view, glm::mat4& projection) {
 
     if (_eye == 0) {
-        // glm::vec3 right = glm::cross(vp->front, vp->worldUp); // glm::normalize(glm::cross(vp->front, vp->worldUp));
-        // log->debug("X: %.3f ; Y: %.3f ; Z: %.3f", right.x, right.y, right.z);
+        glm::vec3 right = glm::normalize(glm::cross(vp->front, vp->worldUp)); // glm::cross(vp->front, vp->worldUp);
+        log->debug("X: %.3f ; Y: %.3f ; Z: %.3f", right.x, right.y, right.z);
         ViewPoint nova = ViewPoint(*vp);
         // nova.position.x = 50;
         // vp->position += right.x + 3.0f;

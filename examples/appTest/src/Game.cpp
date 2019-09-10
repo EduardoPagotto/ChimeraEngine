@@ -6,6 +6,8 @@
 #include "chimera/node/SceneMng.hpp"
 #include "chimera/node/Transform.hpp"
 
+#include "chimera/core/TrackHead.hpp"
+
 Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo) : pSceneMng(_pScenMng), pVideo(_pVideo) {
     isPaused = false;
 }
@@ -47,6 +49,8 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
 void Game::keyCapture(SDL_Keycode tecla) {
 
+    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
+
     switch (tecla) {
         case SDLK_ESCAPE:
             SDL_Event l_eventQuit;
@@ -55,6 +59,13 @@ void Game::keyCapture(SDL_Keycode tecla) {
                 throw Chimera::Exception(std::string(SDL_GetError()));
             }
             break;
+        case SDLK_a:
+            pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::LEFT, 10);
+            break;
+        case SDLK_d:
+            pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::RIGHT, 10);
+            break;
+
         case SDLK_F10:
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;

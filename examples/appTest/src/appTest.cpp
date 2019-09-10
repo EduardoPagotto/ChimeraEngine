@@ -78,6 +78,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         // Propriedades da camera
         Camera* pCam = new Camera(group1, "Observador-01");
         pCam->createTrackBall();
+        pCam->createTrackHead();
         pCam->getTrackBall()->setMax(1000.0);
         pCam->getTrackBall()->setMin(0.5);
         pCam->getViewPoint()->far = 10000.0;

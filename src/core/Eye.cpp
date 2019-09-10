@@ -53,9 +53,6 @@ void Eye::begin() { glBindFramebuffer(GL_FRAMEBUFFER, fbo); }
 void Eye::end() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 glm::mat4 Eye::getPerspectiveProjectionMatrix(ViewPoint* vp) {
-
-    // TODO: user o trackhead para posicao dos olhos
-
     glViewport(0, 0, fbTexSize.w, fbTexSize.h);
     return glm::perspective(vp->fov, (GLfloat)(float)fbTexSize.w / (float)fbTexSize.h, vp->near, vp->far);
 }

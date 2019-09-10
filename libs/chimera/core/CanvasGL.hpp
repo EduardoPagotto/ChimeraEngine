@@ -26,7 +26,6 @@ class CanvasGL : public Canvas {
     virtual void swapWindow();
 
     virtual void calcPerspectiveProjectionView(int _eye, ViewPoint* vp, glm::mat4& pView, glm::mat4& pProjection);
-    virtual glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye);
 
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
     virtual int getTotEyes() { return 1; }

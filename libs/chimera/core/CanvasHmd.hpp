@@ -16,8 +16,6 @@ class CanvasHmd : public CanvasGL {
     virtual void after(const unsigned short& _indexEye = 0);
     virtual void swapWindow();
 
-    virtual glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) override;
-
     virtual void calcPerspectiveProjectionView(int _eye, ViewPoint* vp, glm::mat4& pView, glm::mat4& pProjection);
 
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override;

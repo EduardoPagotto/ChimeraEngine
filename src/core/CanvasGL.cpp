@@ -104,13 +104,9 @@ void CanvasGL::toggleFullScreen() {
 }
 
 void CanvasGL::calcPerspectiveProjectionView(int _eye, ViewPoint* vp, glm::mat4& view, glm::mat4& projection) {
-    projection = this->getPerspectiveProjectionMatrix(vp, _eye);
-    view = glm::lookAt(vp->position, vp->front, vp->up);
-}
-
-glm::mat4 CanvasGL::getPerspectiveProjectionMatrix(ViewPoint* vp, int _eye) {
     glViewport(0, 0, width, height);
-    return glm::perspective(vp->fov, (GLfloat)(float)width / (float)height, vp->near, vp->far);
+    projection = glm::perspective(vp->fov, (GLfloat)(float)width / (float)height, vp->near, vp->far);
+    view = glm::lookAt(vp->position, vp->front, vp->up);
 }
 
 glm::mat4 CanvasGL::getOrthoProjectionMatrix(int eyeIndex) {

@@ -404,8 +404,8 @@ void Game::render() {
 
     pShader->link();
 
-    projection = pCanvas->getPerspectiveProjectionMatrix(vp, 0);
-    view = glm::lookAt(vp->position, vp->front, vp->up); // View Matrix
+    // Calcula view e projection baseado em vp
+    pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
     // pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));

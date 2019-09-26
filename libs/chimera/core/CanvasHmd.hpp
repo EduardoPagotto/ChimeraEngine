@@ -1,58 +1,32 @@
 #ifndef __CHIMERA_CANVAS_HDM__HPP
 #define __CHIMERA_CANVAS_HDM__HPP
 
-#include <GL/glew.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#include <glm/glm.hpp>
-
 #include "chimera/core/CanvasGL.hpp"
-
-#include "chimera/core/Shader.hpp"
+#include "chimera/core/Eye.hpp"
+#include "chimera/core/Logger.hpp"
 
 namespace Chimera {
-
-struct FrameBufferTexture {
-    unsigned int w;
-    unsigned int h;
-};
 
 class CanvasHmd : public CanvasGL {
   public:
     CanvasHmd(const std::string& _title, int _width, int _height);
     virtual ~CanvasHmd();
 
-    virtual void before() override;
-    virtual void after() override;
+    virtual void before(const unsigned short& _indexEye = 0);
+    virtual void after(const unsigned short& _indexEye = 0);
+    virtual void swapWindow();
 
-    virtual glm::mat4 getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far,
-                                                     int _eye) override;
+    virtual void calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& pView,
+                                               glm::mat4& pProjection);
+
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override;
-    virtual int getTotEyes() {
-        // FIXME: voltar para 2 quando esterioscopia for implementada
-        return 1;
-    }
+    virtual int getTotEyes() { return 2; }
 
   private:
-    FrameBufferTexture fbTexSize;
-    GLuint fbo;
-    GLuint fb_tex;
-    GLuint fb_depth;
-
+    Logger* log;
+    Eye* pLeft;
+    Eye* pRight;
     Shader* pShader;
-
-    GLuint texID;
-    GLuint timeID;
-
-    GLuint quad_vertexbuffer;
-
-    void createFBO();
-    void createSquare();
-    void displayTexture();
-
-    unsigned int next_pow2(unsigned int x);
 };
 } // namespace Chimera
 

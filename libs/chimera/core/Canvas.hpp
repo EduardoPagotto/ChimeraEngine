@@ -21,8 +21,8 @@ class Canvas {
     Canvas(const std::string& _title, int _width, int _height, bool _fullScreen = false);
     virtual ~Canvas();
 
-    virtual void before() = 0;
-    virtual void after() = 0;
+    virtual void before(const unsigned short& _indexEye = 0) = 0;
+    virtual void after(const unsigned short& _indexEye = 0) = 0;
     virtual void toggleFullScreen() = 0;
     virtual void reshape(int _width, int _height) = 0;
 

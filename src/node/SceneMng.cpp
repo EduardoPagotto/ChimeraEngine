@@ -26,13 +26,16 @@ void SceneMng::start(CanvasGL* _pVideo) {
 
 void SceneMng::draw(CanvasGL* _pVideo) {
 
-    _pVideo->before();
-
     for (int eye = 0; eye < _pVideo->getTotEyes(); eye++) {
+
+        _pVideo->before(eye);
+
         renderV.eye = eye;
         NodeParse::tree(this, &renderV); // dfs(root, &rv);//DFS(root);
+
+        _pVideo->after(eye);
     }
 
-    _pVideo->after();
+    _pVideo->swapWindow();
 }
 } // namespace Chimera

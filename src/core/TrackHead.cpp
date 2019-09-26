@@ -39,12 +39,19 @@ void TrackHead::move(Camera_Movement direction, float deltaTime) {
     float velocity = movementSpeed * deltaTime;
     if (direction == FORWARD)
         pVp->position += pVp->front * velocity;
+
     if (direction == BACKWARD)
         pVp->position -= pVp->front * velocity;
-    if (direction == LEFT)
+
+    if (direction == LEFT) {
         pVp->position -= right * velocity;
-    if (direction == RIGHT)
+        // pVp->front -= right * velocity;
+    }
+
+    if (direction == RIGHT) {
         pVp->position += right * velocity;
+        // pVp->front += right * velocity;
+    }
 
     this->updateVectors();
 }

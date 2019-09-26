@@ -6,17 +6,18 @@
 
 namespace Chimera {
 
-struct ViewPoint {
-
-    glm::vec3 position;
-    glm::vec3 front;
-    glm::vec3 up;
-    glm::vec3 worldUp;
-    float near;
-    float far;
-    float fov;
-
+class ViewPoint {
+  public:
     ViewPoint() { this->zero(); }
+
+    ViewPoint(const ViewPoint& _copy) {
+        position = _copy.position;
+        front = _copy.front;
+        up = _copy.up;
+        near = _copy.near;
+        far = _copy.far;
+        fov = _copy.fov;
+    }
 
     void zero() {
         position = glm::vec3(0.0, 0.0, 0.0);
@@ -44,6 +45,14 @@ struct ViewPoint {
         up = glm::vec3(0.0, 1.0, 0.0);
         worldUp = up;
     }
+
+    glm::vec3 position;
+    glm::vec3 front;
+    glm::vec3 up;
+    glm::vec3 worldUp;
+    float near;
+    float far;
+    float fov;
 };
 } // namespace Chimera
 #endif

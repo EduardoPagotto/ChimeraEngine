@@ -137,10 +137,11 @@ void RenderVisitor::visit(Group* _pGroup) {
     if (pCam != nullptr) {
         ViewPoint* vp = pCam->getViewPoint();
         pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
-        projection = pVideo->getPerspectiveProjectionMatrix(vp->fov, vp->near, vp->far, eye);
 
+        pVideo->calcPerspectiveProjectionView(eye, vp, view, projection);
+        // projection = pVideo->getPerspectiveProjectionMatrix(vp, eye);
         // View Matrix
-        view = glm::lookAt(vp->position, vp->front, vp->up);
+        // view = glm::lookAt(vp->position, vp->front, vp->up);
     }
 
     Light* pLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);

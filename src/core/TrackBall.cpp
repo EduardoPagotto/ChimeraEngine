@@ -24,7 +24,7 @@ void TrackBall::init(ViewPoint* _vp) {
 
 void TrackBall::updateVectors() {
 
-    float theta = glm::radians(yaw); // yaw * 0.017453293f;
+    float theta = glm::radians(yaw); // yaw * 0.017453293f; ( yaw * (PI/180) )
     float phi = glm::radians(pitch); // pitch * 0.017453293f;
     if (pVp->up.y == 1) {
         pVp->position.x = distancia * sin(phi) * sin(theta);

@@ -74,9 +74,11 @@ CanvasGL::~CanvasGL() {
     }
 }
 
-void CanvasGL::before() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+void CanvasGL::before(const unsigned short& _indexEye) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
-void CanvasGL::after() { SDL_GL_SwapWindow(window); }
+void CanvasGL::after(const unsigned short& _indexEye) {}
+
+void CanvasGL::swapWindow() { SDL_GL_SwapWindow(window); }
 
 void CanvasGL::reshape(int _width, int _height) {
     width = _width;
@@ -101,49 +103,16 @@ void CanvasGL::toggleFullScreen() {
     fullScreen = !fullScreen;
 }
 
-glm::mat4 CanvasGL::getPerspectiveProjectionMatrix(const float& _fov, const float& _near, const float& _far, int _eye) {
-    // void VideoDevice::executeViewPerspective ( const float &_fov,const float
-    // &_near,const float &_far, int _eye ) {
-
+void CanvasGL::calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& view,
+                                             glm::mat4& projection) {
     glViewport(0, 0, width, height);
-    return glm::perspective(_fov, (GLfloat)(float)width / (float)height, _near, _far);
-
-    // glMatrixMode(GL_PROJECTION);
-    // glLoadIdentity();
-    // gluPerspective(_fov, (GLfloat)(float)winSizeW / (float)winSizeH, _near, _far);
-    // glMatrixMode(GL_MODELVIEW);
-    // glLoadIdentity();
+    projection = glm::perspective(vp->fov, (GLfloat)(float)width / (float)height, vp->near, vp->far);
+    view = glm::lookAt(vp->position, vp->front, vp->up);
 }
-
-// void VideoDevice::perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
-// GLdouble zFar )//TODO subistituir o executeViewPerspective
-//{
-//    const GLdouble pi = 3.1415926535897932384626433832795;
-//    GLdouble fW, fH;
-//
-//    //fH = tan( (fovY / 2) / 180 * pi ) * zNear;
-//    fH = tan( fovY / 360 * pi ) * zNear;
-//    fW = fH * aspect;
-//
-//    glFrustum( -fW, fW, -fH, fH, zNear, zFar );
-//}
 
 glm::mat4 CanvasGL::getOrthoProjectionMatrix(int eyeIndex) {
-
     return glm::ortho(0.0f, static_cast<GLfloat>(width), 0.0f, static_cast<GLfloat>(height));
 }
-
-// void VideoDevice::executeViewOrto ( int eye ) {
-//
-//     glMatrixMode ( GL_PROJECTION );
-//     glPushMatrix();
-//     glLoadIdentity();
-//     glOrtho ( 0, winSizeW, 0, winSizeH, -1, 1 );
-//     glMatrixMode ( GL_MODELVIEW );
-//     glPushMatrix();
-//     glLoadIdentity();
-//
-// }
 
 void CanvasGL::initGL() {
 

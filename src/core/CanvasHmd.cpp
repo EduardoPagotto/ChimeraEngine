@@ -53,22 +53,32 @@ void CanvasHmd::after(const unsigned short& _indexEye) {
     // CanvasGL::after(); // SDL_GL_SwapWindow(window);
 }
 
-void CanvasHmd::calcPerspectiveProjectionView(int _eye, ViewPoint* vp, glm::mat4& view, glm::mat4& projection) {
+void CanvasHmd::calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& view,
+                                              glm::mat4& projection) {
 
-    if (_eye == 0) {
-        glm::vec3 right = glm::normalize(glm::cross(vp->front, vp->worldUp)); // glm::cross(vp->front, vp->worldUp);
-        log->debug("X: %.3f ; Y: %.3f ; Z: %.3f", right.x, right.y, right.z);
-        ViewPoint nova = ViewPoint(*vp);
-        // nova.position.x = 50;
-        // vp->position += right.x + 3.0f;
-        projection = pLeft->getPerspectiveProjectionMatrix(&nova);
-        // View Matrix
-        view = glm::lookAt(nova.position, nova.front, nova.up);
-    } else {
-        projection = pRight->getPerspectiveProjectionMatrix(vp);
+    if (_indexEye == 0) {
+
+        projection = pLeft->getPerspectiveProjectionMatrix(vp);
         view = glm::lookAt(vp->position, vp->front, vp->up);
-        // CanvasGL::calcPerspectiveProjectionView(_eye, vp, view, projection);
+
+    } else {
+
+        ViewPoint nova = ViewPoint(*vp);
+
+        glm::vec3 left_p = nova.front - nova.position;
+        glm::vec3 cross1 = glm::cross(nova.up, left_p);
+        glm::vec3 norm1 = glm::normalize(cross1);
+
+        glm::vec3 final_norm1 = norm1 * 50.0f;
+
+        nova.position = vp->position - final_norm1;
+        nova.front = vp->front - final_norm1;
+
+        projection = pRight->getPerspectiveProjectionMatrix(&nova);
+        view = glm::lookAt(nova.position, nova.front, nova.up);
     }
+
+    // CanvasGL::calcPerspectiveProjectionView(_eye, vp, view, projection);
 }
 
 glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {

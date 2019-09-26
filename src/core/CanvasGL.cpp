@@ -103,7 +103,8 @@ void CanvasGL::toggleFullScreen() {
     fullScreen = !fullScreen;
 }
 
-void CanvasGL::calcPerspectiveProjectionView(int _eye, ViewPoint* vp, glm::mat4& view, glm::mat4& projection) {
+void CanvasGL::calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& view,
+                                             glm::mat4& projection) {
     glViewport(0, 0, width, height);
     projection = glm::perspective(vp->fov, (GLfloat)(float)width / (float)height, vp->near, vp->far);
     view = glm::lookAt(vp->position, vp->front, vp->up);

@@ -6,6 +6,12 @@
 
 #include "chimera/core/Singleton.hpp"
 
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
+
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
 
 namespace Chimera {
@@ -14,8 +20,7 @@ Mesh::Mesh(Node* _parent, std::string _name) : Draw(_parent, EntityKind::MESH, _
     VertexVBOID = 0;
     IndexVBOID = 0;
     VAO = 0;
-    log = Logger::get();
-    log->debug("Constructor Mesh: " + _name);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Constructor Mesh: %s", _name.c_str());
 }
 
 Mesh::Mesh(const Mesh& _cpy) : Draw(_cpy) {
@@ -32,8 +37,7 @@ Mesh::Mesh(const Mesh& _cpy) : Draw(_cpy) {
     copy(_cpy.textureIndex.begin(), _cpy.textureIndex.end(), back_inserter(textureIndex));
     copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
 
-    log = Logger::get();
-    log->debug("Constructor Copy Mesh " + _cpy.getName());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Constructor Copy Mesh %s", _cpy.getName().c_str());
 }
 
 Mesh::~Mesh() {
@@ -48,7 +52,7 @@ Mesh::~Mesh() {
     glDeleteBuffers(1, &VertexVBOID);
     glDeleteBuffers(1, &IndexVBOID);
 
-    log->debug("Destructor Mesh: " + getName());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Destructor Mesh: %s", getName().c_str());
 }
 
 void Mesh::init() {
@@ -112,7 +116,8 @@ void Mesh::setVertexBuffer() {
     conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
     indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
-    log->debug("VBO Nome: %s Indice: %d Data: %d", getName().c_str(), indexIBO.size(), vertexData.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "VBO Nome: %s Indice: %d Data: %d", getName().c_str(), indexIBO.size(),
+                 vertexData.size());
 
     unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);

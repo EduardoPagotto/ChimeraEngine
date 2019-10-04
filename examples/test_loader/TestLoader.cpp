@@ -1,17 +1,21 @@
 
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/Logger.hpp"
 #include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"
 #include <cstdio>
 
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
+
 int main(int argn, char** argv) {
 
-    Chimera::Logger* console = Chimera::Logger::get();
-    console->info("Teste Loader Iniciado");
+    SDL_Log("Teste Loader Iniciado");
     // spdlog::set_level(spdlog::level::debug);
     for (int i = 0; i < argn; i++) {
-        console->info("Parametros %i: %s", i, argv[i]);
+        SDL_Log("Parametros %i: %s", i, argv[i]);
     }
 
     try {
@@ -30,19 +34,19 @@ int main(int argn, char** argv) {
         libP.target();
 
     } catch (const Chimera::Exception& ex) {
-        console->error("TesteLoader falha grave: " + ex.getMessage());
+        SDL_Log("TesteLoader falha grave: %s", ex.getMessage().c_str());
         return -1;
     } catch (const std::exception& ex) {
-        console->error("TesteLoader falha grave: %s", ex.what());
+        SDL_Log("TesteLoader falha grave: %s", ex.what());
         return -1;
     } catch (const std::string& ex) {
-        console->error("TesteLoader falha grave: " + ex);
+        SDL_Log("TesteLoader falha grave: %s", ex.c_str());
         return -1;
     } catch (...) {
-        console->error("TesteLoader falha Desconhecida");
+        SDL_Log("TesteLoader falha Desconhecida");
         return -1;
     }
 
-    console->info("TesteLoader finalizado com sucesso");
+    SDL_Log("TesteLoader finalizado com sucesso");
     return 0;
 }

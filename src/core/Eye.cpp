@@ -2,6 +2,12 @@
 #include "chimera/core/Exception.hpp"
 //#include <glm/gtc/matrix_transform.hpp>
 
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
+
 namespace Chimera {
 
 Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* _pShader) {
@@ -13,7 +19,6 @@ Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* 
 
     this->indexEye = _indexEye;
     this->pShader = _pShader;
-    this->log = Chimera::Logger::get();
 
     this->fbTexSize.w = next_pow2(_w);
     this->fbTexSize.h = next_pow2(_h);
@@ -23,10 +28,10 @@ Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* 
     // this->posInitW = _indexEye == 0 ? 0 : _w;
     if (_indexEye == 0) {
         this->posInitW = 0;
-        this->log->info("Left Eye Setup pos:%d size:%d", this->posInitW, this->fbTexSize.w);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Left Eye Setup pos:%d size:%d", this->posInitW, this->fbTexSize.w);
     } else {
         this->posInitW = this->fbTexSize.w;
-        this->log->info("Right Eye Setup pos:%d size:%d", this->posInitW, this->fbTexSize.w);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Right Eye Setup pos:%d size:%d", this->posInitW, this->fbTexSize.w);
     }
 }
 
@@ -104,7 +109,7 @@ void Eye::createFBO() {
             throw Exception(std::string("Falha em instanciar o Frame Buffer"));
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        log->info("created render target: %dx%d", fbTexSize.w, fbTexSize.h);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "created render target: %dx%d", fbTexSize.w, fbTexSize.h);
     }
 }
 

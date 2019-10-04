@@ -1,5 +1,4 @@
 #include "chimera/core/JoystickState.hpp"
-#include "chimera/core/Logger.hpp"
 #include <cmath>
 
 namespace Chimera {
@@ -84,17 +83,14 @@ Uint8 JoystickState::Hat(const Uint8& hat) {
 void JoystickState::GetStatusJoy() {
 
     // Log do status de joystick
-    Logger* pLog = Logger::get();
-
-    pLog->debug(std::string("Joystick (" + std::to_string(id) + "): " + name));
+    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick (%d): %s", id, name.c_str());
     for (std::map<Uint8, double>::iterator axis_iter = Axes.begin(); axis_iter != Axes.end(); axis_iter++)
-        pLog->debug(
-            std::string("Joy axes:" + std::to_string(axis_iter->first) + " " + std::to_string(axis_iter->second)));
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy axes: %d %f", axis_iter->first, axis_iter->second);
 
     for (std::map<Uint8, bool>::iterator button_iter = ButtonsDown.begin(); button_iter != ButtonsDown.end();
          button_iter++) {
         if (button_iter->second)
-            pLog->debug(std::string("Joy buttons down: " + std::to_string(button_iter->first)));
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons down: %d", button_iter->first);
     }
 
     std::string tot = "";
@@ -105,8 +101,7 @@ void JoystickState::GetStatusJoy() {
             tot += hat_iter->second & SDL_HAT_LEFT ? "L" : "";
             tot += hat_iter->second & SDL_HAT_RIGHT ? "R" : "";
         }
-        pLog->debug(std::string(std::string("Joy hats:") + std::to_string(hat_iter->first) + " " +
-                                std::to_string(hat_iter->second) + " [" + tot + "]"));
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy hats: %d %d [ %s ]", hat_iter->first, hat_iter->second, tot.c_str());
     }
 }
 } // namespace Chimera

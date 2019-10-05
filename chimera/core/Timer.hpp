@@ -1,11 +1,7 @@
 #ifndef __CHIMERA_TIMER__HPP
 #define __CHIMERA_TIMER__HPP
 
-#ifndef WIN32
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
 
 namespace Chimera {
 

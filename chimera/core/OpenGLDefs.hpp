@@ -1,21 +1,13 @@
 #ifndef __CHIMERA_OPEN_GL_DEFS__HPP
 #define __CHIMERA_OPEN_GL_DEFS__HPP
 
-#ifdef WIN32
-#include "windows.h"
-#endif
-
 #include "GL/glew.h"
 
 #include <GL/gl.h>
 
 namespace Chimera {
 
-enum StateMachine {
-    TEXTURE_2D = GL_TEXTURE_2D,
-    DEPTH_TEST = GL_DEPTH_TEST,
-    BLEND = GL_BLEND
-};
+enum StateMachine { TEXTURE_2D = GL_TEXTURE_2D, DEPTH_TEST = GL_DEPTH_TEST, BLEND = GL_BLEND };
 
 enum FaceMaterial { FRONT = GL_FRONT, BACK = GL_BACK, FRONT_BACK = GL_FRONT_AND_BACK };
 

@@ -1,13 +1,7 @@
 #ifndef __CHIMERA_EVENTS__HPP
 #define __CHIMERA_EVENTS__HPP
 
-#ifndef WIN32
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
-
-//#include "chimera/core/DataMsg.hpp"
 
 namespace Chimera {
 

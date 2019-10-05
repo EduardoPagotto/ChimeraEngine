@@ -1,3 +1,5 @@
+#ifndef __SHADER_VALUE__HPP
+#define __SHADER_VALUE__HPP
 
 #include <string>
 
@@ -62,3 +64,5 @@ class ShaderValueTex : public ShaderValue {
 };
 
 } // namespace Chimera
+
+#endif

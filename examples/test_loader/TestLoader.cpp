@@ -4,11 +4,7 @@
 #include "chimera/loader/VisualScene.hpp"
 #include <cstdio>
 
-#ifndef WIN32
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
 
 int main(int argn, char** argv) {
 

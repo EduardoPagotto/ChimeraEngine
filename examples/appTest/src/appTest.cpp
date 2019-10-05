@@ -25,7 +25,9 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
     std::map<std::string, Chimera::Shader*> mapa;
 
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("appTest Iniciado");
+
     for (int i = 0; i < argn; i++) {
         SDL_Log("Parametros %d: %s", i, argv[i]);
     }

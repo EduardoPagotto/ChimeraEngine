@@ -14,6 +14,7 @@ int main(int argn, char** argv) {
 int _tmain(int argc, _TCHAR* argv[]) {
 #endif
 
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("AppShader Iniciado");
 
     for (int i = 0; i < argn; i++) {

@@ -8,6 +8,10 @@
 int main(int argn, char** argv) {
 
     try {
+
+        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+        SDL_Log("AppEmpty Iniciado");
+
         Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 640, 480);
 
         // sempre depois de instanciar o Opengl no canvas!!!

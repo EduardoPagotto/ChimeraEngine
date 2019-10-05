@@ -12,6 +12,7 @@
 
 int main(int argn, char** argv) {
 
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("Teste Loader Iniciado");
     // spdlog::set_level(spdlog::level::debug);
     for (int i = 0; i < argn; i++) {

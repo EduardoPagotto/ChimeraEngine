@@ -37,6 +37,9 @@ int _tmain(int argc, _TCHAR* argv[]) {
 #endif
 
     std::map<std::string, Chimera::Shader*> mapa;
+
+    // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("AppShader Iniciado");
 
     for (int i = 0; i < argn; i++) {
@@ -62,7 +65,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
         YAML::Node shaders = config["shaders"];
         // Chimera::ShadersManager *shader =  sceneMng->getShadersManager();
-        SDL_Log("Shaders identificados: %d", shaders.size());
+        SDL_Log("Shaders identificados: %d", (int)shaders.size());
         for (std::size_t i = 0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
             Chimera::Shader* pShader =

@@ -7,7 +7,7 @@ find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 
 #define os Lib's a serem usados
-set (LibsTesteBSTree ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
+set (LibsTesteBSTree ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 					 ${OPENGL_LIBRARIES}
 					 ${SDL2_IBRARIES}
 					 -lGL
@@ -20,15 +20,15 @@ set (LibsTesteBSTree ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 
 #define os includes
 set (IncludesTesteBSTree ${CMAKE_CURRENT_SOURCE_DIR}/include
-						 ${CMAKE_SOURCE_DIR}/libs
+						 ${CMAKE_SOURCE_DIR}
 						 ${OPENGL_INCLUDE_DIR}
 						 ${SDL2_INCLUDE_DIR})
 
-add_executable (TesteBSTree Triangle.cpp
-							BSPTree.cpp
-							BSPTreeBuilder.cpp
-							Game.cpp 
-							main.cpp)
+add_executable (TesteBSTree src/Triangle.cpp
+							src/BSPTree.cpp
+							src/BSPTreeBuilder.cpp
+							src/Game.cpp 
+							src/main.cpp)
 
 target_link_libraries(TesteBSTree ${LibsTesteBSTree})
 target_include_directories (TesteBSTree PRIVATE ${IncludesTesteBSTree})

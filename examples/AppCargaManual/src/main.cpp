@@ -128,16 +128,16 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete video;
 
     } catch (const Chimera::Exception& ex) {
-        SDL_Log("Falha grave: %s", ex.getMessage().c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.getMessage().c_str());
         return -1;
     } catch (const std::exception& ex) {
-        SDL_Log("Falha grave: %s", ex.what());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
         return -1;
     } catch (const std::string& ex) {
-        SDL_Log("Falha grave: %s", ex.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.c_str());
         return -1;
     } catch (...) {
-        SDL_Log("Falha Desconhecida");
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida");
         return -1;
     }
 

@@ -9,16 +9,16 @@ find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
 set (IncludesAppTest ${appTest_SOURCE_DIR}/include/
-					 ${CMAKE_SOURCE_DIR}/libs
+					 ${CMAKE_SOURCE_DIR}
 					 ${OPENGL_INCLUDE_DIR}
 					 ${SDL2_INCLUDE_DIR}
 					 ${BULLET_INCLUDE_DIR}
 					 ${FREETYPE_INCLUDE_DIRS}
 					 ${GLEW_INCLUDE_DIR})
 
-set (LibsAppTest ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a #ordem é importante!!!
-				 ${ChimeraNode_BINARY_DIR}/libChimeraNode.a
-				 ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
+set (LibsAppTest ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a #ordem é importante!!!
+				 ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
+				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_LIBRARY}
 				 ${BULLET_LIBRARIES}

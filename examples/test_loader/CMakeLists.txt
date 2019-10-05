@@ -8,26 +8,26 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
-set (IncludesTestLoader ${CMAKE_SOURCE_DIR}/libs
+set (IncludesTestLoader ${CMAKE_SOURCE_DIR}
 						${OPENGL_INCLUDE_DIR}
 						${SDL2_INCLUDE_DIR}
 						${BULLET_INCLUDE_DIR}
 						${FREETYPE_INCLUDE_DIRS})
 
-set (LibsTestLoader 	${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a #ordem é importante!!!
-						${ChimeraNode_BINARY_DIR}/libChimeraNode.a
-						${ChimeraCore_BINARY_DIR}/libChimeraCore.a
-						${OPENGL_LIBRARIES}
-						${SDL2_LIBRARY}
-						${BULLET_LIBRARIES}
-						${FREETYPE_LIBRARY}
-						${GLEW_LIBRARIES}
-						-lSDL2
-						-lSDL2_image
-						-lSDL2_ttf
-						-ltinyxml2
-						-lpthread
-						-lyaml-cpp)
+set (LibsTestLoader ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a #ordem é importante!!!
+					${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
+					${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
+					${OPENGL_LIBRARIES}
+					${SDL2_LIBRARY}
+					${BULLET_LIBRARIES}
+					${FREETYPE_LIBRARY}
+					${GLEW_LIBRARIES}
+					-lSDL2
+					-lSDL2_image
+					-lSDL2_ttf
+					-ltinyxml2
+					-lpthread
+					-lyaml-cpp)
 
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR Incluido no Projeto")

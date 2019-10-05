@@ -20,5 +20,9 @@ endif(HMD_Z1_SET_TO_USE)
 
 set (OpenGL_GL_PREFERENCE GLVND)
 
-add_subdirectory(src)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+
+add_subdirectory(chimera)
 add_subdirectory(examples)

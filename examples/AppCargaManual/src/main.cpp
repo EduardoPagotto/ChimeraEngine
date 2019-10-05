@@ -1,11 +1,5 @@
-#ifndef WIN32
 #include <cstdio>
-#else
-#include "stdafx.hpp"
-#endif
-
 #include <iostream>
-
 #include <map>
 
 #include "chimera/core/CanvasGL.hpp"
@@ -23,6 +17,7 @@
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/ShadersLoader.hpp"
 #include "chimera/core/Singleton.hpp"
+
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
@@ -30,11 +25,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#ifndef WIN32
 int main(int argn, char** argv) {
-#else
-int _tmain(int argc, _TCHAR* argv[]) {
-#endif
 
     std::map<std::string, Chimera::Shader*> mapa;
 

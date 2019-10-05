@@ -3,7 +3,6 @@
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Eye.hpp"
-#include "chimera/core/Logger.hpp"
 
 namespace Chimera {
 
@@ -23,7 +22,6 @@ class CanvasHmd : public CanvasGL {
     virtual int getTotEyes() { return 2; }
 
   private:
-    Logger* log;
     Eye* pLeft;
     Eye* pRight;
     Shader* pShader;

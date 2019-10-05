@@ -1,5 +1,4 @@
 #include "chimera/core/JoystickManager.hpp"
-#include "chimera/core/Logger.hpp"
 
 namespace Chimera {
 
@@ -115,32 +114,31 @@ void JoystickManager::GetStatusManager(void) {
 
 void JoystickManager::DebugDadosJoystick() {
     // TODO: Testar!!!!
-    Logger* pLog = Logger::get();
     SDL_Joystick* joystick;
     for (int i = 0; i < SDL_NumJoysticks(); ++i) {
         const char* name = SDL_JoystickNameForIndex(i);
-        pLog->debug("Joystick index %d: %s", i, name ? name : "[no name]");
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick index %d: %s", i, name ? name : "[no name]");
         // This much can be done without opening the controller
         if (SDL_IsGameController(i)) {
             char* mapping = SDL_GameControllerMappingForGUID(SDL_JoystickGetDeviceGUID(i));
-            pLog->debug("game controller: %s", mapping);
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "game controller: %s", mapping);
             SDL_free(mapping);
         } else {
             char guid[64];
             SDL_JoystickGetGUIDString(SDL_JoystickGetDeviceGUID(i), guid, sizeof(guid));
-            pLog->debug(" guid: %s", guid);
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
         }
 
         // For anything else we have to open
         joystick = SDL_JoystickOpen(i);
         if (joystick != nullptr) {
             // Not the same as a device index!
-            pLog->debug("Joystick instance id: %d", SDL_JoystickInstanceID(joystick));
-            pLog->debug("Joystick axes: %d", SDL_JoystickNumAxes(joystick));
-            pLog->debug("Joystick hats: %d", SDL_JoystickNumHats(joystick));
-            pLog->debug("Joystick buttons: %d", SDL_JoystickNumButtons(joystick));
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick instance id: %d", SDL_JoystickInstanceID(joystick));
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick axes: %d", SDL_JoystickNumAxes(joystick));
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick hats: %d", SDL_JoystickNumHats(joystick));
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick buttons: %d", SDL_JoystickNumButtons(joystick));
             // I've _never_ seen this non-zero, if anyone has lemme know!
-            pLog->debug("Joystick trackballs: %d", SDL_JoystickNumBalls(joystick));
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick trackballs: %d", SDL_JoystickNumBalls(joystick));
             SDL_JoystickClose(joystick);
         }
     }

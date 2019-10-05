@@ -1,58 +1,62 @@
 #include "chimera/node/MeshUtil.hpp"
-#include "chimera/core/Logger.hpp"
+
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
 
 namespace Chimera {
 
 void debugDados(Mesh* pMesh) {
 
-    Chimera::Logger* log = Chimera::Logger::get();
-    log->debug("Debug Mess Nome: " + pMesh->getName());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Debug Mess Nome: %s", pMesh->getName().c_str());
 
     int linha = 0;
-    log->debug("Vertex Indice ----------(%03d)", pMesh->vertexIndex.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Indice ----------(%03d)", (int)pMesh->vertexIndex.size());
     for (unsigned int indice = 0; indice < pMesh->vertexIndex.size(); indice += 3) {
-        log->debug("Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice, pMesh->vertexIndex[indice],
-                   pMesh->vertexIndex[indice + 1], pMesh->vertexIndex[indice + 2]);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
+                     pMesh->vertexIndex[indice], pMesh->vertexIndex[indice + 1], pMesh->vertexIndex[indice + 2]);
         linha++;
     }
 
     linha = 0;
-    log->debug("Vertex Lista ---------({0:03d})", pMesh->vertexList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Lista ---------(%03d)", (int)pMesh->vertexList.size());
     for (unsigned int indice = 0; indice < pMesh->vertexList.size(); indice++) {
-        log->debug("Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f)", linha, indice, pMesh->vertexList[indice].x,
-                   pMesh->vertexList[indice].y, pMesh->vertexList[indice].z);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f)", linha, indice,
+                     pMesh->vertexList[indice].x, pMesh->vertexList[indice].y, pMesh->vertexList[indice].z);
         linha++;
     }
 
     linha = 0;
-    log->debug("Normal Indice ----------({0:03d})", pMesh->normalIndex.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Indice ----------(%03d)", (int)pMesh->normalIndex.size());
     for (unsigned int indice = 0; indice < pMesh->normalIndex.size(); indice += 3) {
-        log->debug("Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice, pMesh->normalIndex[indice],
-                   pMesh->normalIndex[indice + 1], pMesh->normalIndex[indice + 2]);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
+                     pMesh->normalIndex[indice], pMesh->normalIndex[indice + 1], pMesh->normalIndex[indice + 2]);
         linha++;
     }
 
     linha = 0;
-    log->debug("Normal Lista ---------({0:03d})", pMesh->normalList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Lista ---------(%03d)", (int)pMesh->normalList.size());
     for (unsigned int indice = 0; indice < pMesh->normalList.size(); indice++) {
-        log->debug("Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f))", linha, indice, pMesh->normalList[indice].x,
-                   pMesh->normalList[indice].y, pMesh->normalList[indice].z);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f))", linha, indice,
+                     pMesh->normalList[indice].x, pMesh->normalList[indice].y, pMesh->normalList[indice].z);
         linha++;
     }
 
     linha = 0;
-    log->debug("Texture Indice ----------({0:03d})", pMesh->textureIndex.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Indice ----------(%03d)", (int)pMesh->textureIndex.size());
     for (unsigned int indice = 0; indice < pMesh->textureIndex.size(); indice += 3) {
-        log->debug("Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice, pMesh->textureIndex[indice],
-                   pMesh->textureIndex[indice + 1], pMesh->textureIndex[indice + 2]);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
+                     pMesh->textureIndex[indice], pMesh->textureIndex[indice + 1], pMesh->textureIndex[indice + 2]);
         linha++;
     }
 
     linha = 0;
-    log->debug("Texture Lista ---------({0:03d})", pMesh->textureList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Lista ---------(%03d)", (int)pMesh->textureList.size());
     for (unsigned int indice = 0; indice < pMesh->textureList.size(); indice++) {
-        log->debug("Linha: %02d : p: %02d (%05.3f; %05.3f)", linha, indice, pMesh->textureList[indice].x,
-                   pMesh->textureList[indice].y);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p: %02d (%05.3f; %05.3f)", linha, indice,
+                     pMesh->textureList[indice].x, pMesh->textureList[indice].y);
         linha++;
     }
 }

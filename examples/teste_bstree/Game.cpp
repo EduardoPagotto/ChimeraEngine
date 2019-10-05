@@ -18,8 +18,6 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     model = glm::mat4(1.0f);
 
     pTex = new Chimera::TexImg("./models/grid2.png");
-
-    log = Chimera::Logger::get();
 }
 
 Game::~Game() {}
@@ -40,7 +38,8 @@ void Game::keyCapture(SDL_Keycode tecla) {
             break;
         case SDLK_1:
             debug_init = 1;
-            log->debug("iniciado log");
+
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "iniciado log");
             break;
         case SDLK_F10:
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
@@ -417,10 +416,11 @@ void Game::render() {
 
     if (debug_init == 1) {
         debug_init = 0;
-        log->debug("Vertex size: %d", vVertice.size());
-        log->debug("Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Vertex size: %d", (int)vVertice.size());
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
+                     vp->position.z);
         for (int i = 0; i < listaDebug.size(); i++)
-            log->debug("Face: %d", listaDebug[i]);
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face: %d", listaDebug[i]);
     }
 
     glBindVertexArray(VAO);

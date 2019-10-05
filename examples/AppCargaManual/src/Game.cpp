@@ -16,13 +16,12 @@ Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo, Chimera::Ph
     textoFPS = "fps: 0";
     sPosicaoObj = "pos:(,,)";
 
-    log = Chimera::Logger::get();
-    log->debug("Constructor Game");
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 
     physicWorld = _physicWorld;
 }
 
-Game::~Game() { log->debug("Destructor Game"); }
+Game::~Game() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game"); }
 
 void Game::joystickCapture(Chimera::JoystickManager& joy) {}
 
@@ -203,17 +202,20 @@ void Game::userEvent(const SDL_Event& _event) {
         case Chimera::KindOp::START_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(),
+                         n2->getName().c_str());
         } break;
         case Chimera::KindOp::ON_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(),
+                         n2->getName().c_str());
         } break;
         case Chimera::KindOp::OFF_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            log->debug("Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(),
+                         n2->getName().c_str());
         } break;
         case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
             pVideo->toggleFullScreen();

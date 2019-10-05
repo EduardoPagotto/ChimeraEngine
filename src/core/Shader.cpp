@@ -1,5 +1,7 @@
 #include <string>
 
+#include <SDL2/SDL.h>
+
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Shader.hpp"
 
@@ -11,7 +13,6 @@ Shader::Shader(const std::string& _programName, const GLuint& _idProgram)
 Shader::Shader(const Shader& _shader) {
     idProgram = _shader.idProgram;
     currentProgram = _shader.currentProgram;
-    log = Chimera::Logger::get();
 }
 
 Shader::~Shader() { glDeleteProgram(idProgram); }
@@ -20,8 +21,8 @@ GLint Shader::getUniformLocation(const char* _name) const noexcept {
     // nasty C lib uses -1 return value for error
     GLint loc = glGetUniformLocation(idProgram, _name);
     if (loc == -1)
-        log->error("Shader Uniform \"%s\" not found in Program \"%s\"", _name, currentProgram.c_str());
-
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _name,
+                     currentProgram.c_str());
     return loc;
 }
 

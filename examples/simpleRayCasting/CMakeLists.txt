@@ -6,7 +6,7 @@ find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 
 #define os Lib's a serem usados
-set (LibsSimpleRayCasting ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
+set (LibsSimpleRayCasting ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				  ${SDL2_IBRARIES}
 				  -lSDL2
 				  -lGLEW

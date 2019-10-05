@@ -7,7 +7,7 @@ find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 
 #define os Lib's a serem usados
-set (LibsTesteBSTree ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
+set (LibsTesteBSTree ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 					 ${OPENGL_LIBRARIES}
 					 ${SDL2_IBRARIES}
 					 -lGL

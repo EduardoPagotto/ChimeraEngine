@@ -16,9 +16,9 @@ set (IncludesAppTest ${appTest_SOURCE_DIR}/include/
 					 ${FREETYPE_INCLUDE_DIRS}
 					 ${GLEW_INCLUDE_DIR})
 
-set (LibsAppTest ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a #ordem é importante!!!
-				 ${ChimeraNode_BINARY_DIR}/libChimeraNode.a
-				 ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
+set (LibsAppTest ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a #ordem é importante!!!
+				 ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
+				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_LIBRARY}
 				 ${BULLET_LIBRARIES}

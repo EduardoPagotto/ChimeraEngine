@@ -15,8 +15,8 @@ set (IncludesAppShare ${AppShader_SOURCE_DIR}/include/
 					  ${BULLET_INCLUDE_DIR}
 					  ${FREETYPE_INCLUDE_DIRS})
 
-set (LibsAppShader ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a
-				   ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
+set (LibsAppShader ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a
+				   ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				   ${OPENGL_LIBRARIES}
 				   ${SDL2_LIBRARY}
 				   ${BULLET_LIBRARIES}

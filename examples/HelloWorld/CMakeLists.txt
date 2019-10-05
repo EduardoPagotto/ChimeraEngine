@@ -11,7 +11,7 @@ find_package(GLEW REQUIRED)
 #get_target_property(Chimera CHIMERA_INCLUDE_DIR INTERFACE_INCLUDE_DIRECTORIES)
 
 #define os Lib's a serem usados
-set (LibsHelloWorld ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
+set (LibsHelloWorld ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				  ${OPENGL_LIBRARIES}
 				  ${SDL2_IBRARIES}
 				  ${BULLET_LIBRARIES}

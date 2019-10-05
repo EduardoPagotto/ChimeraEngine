@@ -3,12 +3,15 @@
 #include <fstream>
 #include <vector>
 
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
+
 namespace Chimera {
 
-ShadersLoader::ShadersLoader() {
-    log = Chimera::Logger::get();
-    log->debug("Contructor ShadersLoader");
-}
+ShadersLoader::ShadersLoader() {}
 
 Chimera::Shader* ShadersLoader::loadShader(const std::string& programName, const std::string& vertex_file_path,
                                            const std::string& fragment_file_path) {
@@ -27,27 +30,27 @@ GLuint ShadersLoader::load(const std::string& programName, const std::string& ve
     std::string VertexShaderCode = getShaderCode(vertex_file_path.c_str());
     std::string FragmentShaderCode = getShaderCode(fragment_file_path.c_str());
 
-    log->debug("Shader name: " + programName);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader name: %s", programName.c_str());
 
     // Compila Vertex Shader
-    log->debug("Compiling Vertex: " + vertex_file_path);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compiling Vertex: %s", vertex_file_path.c_str());
     GLuint VertexShaderID = compileShader(VertexShaderCode, true);
 
     // Compila Fragment Shader
-    log->debug("Compiling Fragment: " + fragment_file_path);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compiling Fragment: %s", fragment_file_path.c_str());
     GLuint FragmentShaderID = compileShader(FragmentShaderCode, false);
 
     // Link o programa
     GLuint idProgram = linkShader(VertexShaderID, FragmentShaderID);
-    log->debug("Linked: %d", idProgram);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linked: %d", idProgram);
 
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
 
     if (idProgram != -1)
-        log->info("Shader OK:%s Id:%d", programName.c_str(), idProgram);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader OK:%s Id:%d", programName.c_str(), idProgram);
     else
-        log->error("Shader Erro: " + programName);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Erro: %s", programName.c_str());
 
     return idProgram;
 }
@@ -96,7 +99,8 @@ GLuint ShadersLoader::compileShader(const std::string& shaderCode, bool _shadeKi
         if (InfoLogLength > 0) {
             std::vector<char> shaderErrorMessage(InfoLogLength + 1);
             glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &shaderErrorMessage[0]);
-            log->error("Shader Check Fragment Shader: " + std::string(&shaderErrorMessage[0]));
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check Fragment Shader: %s",
+                         std::string(&shaderErrorMessage[0]).c_str());
         }
     }
 
@@ -122,7 +126,8 @@ GLuint ShadersLoader::linkShader(const GLuint& VertexShaderID, const GLuint& Fra
         if (InfoLogLength > 0) {
             std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
             glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-            log->error("Shader Check program: " + std::string(&ProgramErrorMessage[0]));
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check program: %s",
+                         std::string(&ProgramErrorMessage[0]).c_str());
         }
     }
     return ProgramID;

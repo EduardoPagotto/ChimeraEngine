@@ -9,8 +9,7 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesCore Logger.cpp
-				 Canvas.cpp
+set (SourcesCore Canvas.cpp
 				 CanvasGL.cpp
 				 CanvasFB.cpp
 				 Tex.cpp

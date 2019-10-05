@@ -2,7 +2,6 @@
 #define __GAME_XX__HPP
 
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Logger.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
@@ -53,8 +52,6 @@ class Game : public Chimera::IGameClientEvents {
     bool isPaused;
 
     Chimera::CanvasGL* pVideo;
-
-    Chimera::Logger* log;
 };
 
 #endif

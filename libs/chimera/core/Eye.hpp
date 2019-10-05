@@ -8,7 +8,6 @@
 
 #include <glm/glm.hpp>
 
-#include "chimera/core/Logger.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/ViewPoint.hpp"
 
@@ -40,7 +39,6 @@ class Eye {
     GLuint timeID;
     GLuint quad_vertexbuffer;
     EyeSize fbTexSize;
-    Logger* log;
     Shader* pShader;
 
     void createFBO();

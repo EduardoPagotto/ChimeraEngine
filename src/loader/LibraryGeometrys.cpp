@@ -1,7 +1,12 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryMaterials.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/Logger.hpp"
+
+#ifndef WIN32
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
 
 namespace ChimeraLoaders {
 
@@ -145,11 +150,13 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
         }
     }
 
-    Chimera::Logger* log = Chimera::Logger::get();
-    log->debug("Nome: " + _pDraw->getName());
-    log->debug("Vertex  Indice / Lista - ( %03d / %03d )", _pDraw->vertexIndex.size(), _pDraw->vertexList.size());
-    log->debug("Normal  Indice / Lista - ( %03d / %03d )", _pDraw->normalIndex.size(), _pDraw->normalList.size());
-    log->debug("Texture Indice / Lista - ( %03d / %03d )", _pDraw->textureIndex.size(), _pDraw->textureList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Nome: %s", _pDraw->getName().c_str());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex  Indice / Lista - ( %03d / %03d )", (int)_pDraw->vertexIndex.size(),
+                 (int)_pDraw->vertexList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal  Indice / Lista - ( %03d / %03d )", (int)_pDraw->normalIndex.size(),
+                 (int)_pDraw->normalList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Indice / Lista - ( %03d / %03d )", (int)_pDraw->textureIndex.size(),
+                 (int)_pDraw->textureList.size());
 
     return retorno;
 }

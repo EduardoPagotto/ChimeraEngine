@@ -12,9 +12,6 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
 
     pLeft = new Eye(0, _width, _height, pShader);
     pRight = new Eye(1, _width, _height, pShader);
-
-    this->log = Chimera::Logger::get();
-
 } // namespace Chimera
 
 CanvasHmd::~CanvasHmd() {

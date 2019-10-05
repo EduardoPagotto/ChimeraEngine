@@ -3,7 +3,6 @@
 
 #include <string.h>
 
-#include "chimera/core/Logger.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Shader.hpp"
 
@@ -22,8 +21,6 @@ class ShadersLoader {
     std::string getShaderCode(const char* file_path);
     GLuint compileShader(const std::string& shaderCode, bool _shadeKind);
     GLuint linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID);
-
-    Chimera::Logger* log;
 };
 } // namespace Chimera
 

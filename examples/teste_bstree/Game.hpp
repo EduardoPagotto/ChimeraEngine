@@ -4,7 +4,6 @@
 #include "BSPTree.h"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Logger.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Tex.hpp"
 #include "chimera/core/TrackBall.hpp"
@@ -41,7 +40,6 @@ class Game : public Chimera::IGameClientEvents {
     int estadoBotao;
     int debug_init;
     Chimera::TrackBall trackBall;
-    Chimera::Logger* log;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
     unsigned int VBO, VAO; //, EBO;

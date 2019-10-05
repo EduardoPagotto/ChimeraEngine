@@ -4,7 +4,6 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/Logger.hpp"
 #include "chimera/core/ShadersLoader.hpp"
 #include <iostream>
 #include <yaml-cpp/yaml.h>
@@ -15,16 +14,16 @@ int main(int argn, char** argv) {
 int _tmain(int argc, _TCHAR* argv[]) {
 #endif
 
-    auto console = Chimera::Logger::get();
-    console->info("AppShader Iniciado");
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+    SDL_Log("AppShader Iniciado");
 
     for (int i = 0; i < argn; i++) {
-        console->info("Parametros %i: %s", i, argv[i]);
+        SDL_Log("Parametros %i: %s", i, argv[i]);
     }
 
     try {
         std::string config_file = "./examples/AppShader/etc/shader.yaml";
-        console->info("Carregar arquivo: %s", config_file.c_str());
+        SDL_Log("Carregar arquivo: %s", config_file.c_str());
         YAML::Node config = YAML::LoadFile(config_file);
 
         YAML::Node screen = config["screen"];
@@ -44,7 +43,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
         pControle->open();
         pControle->gameLoop();
 
-        console->info("Loop de Game encerrado!!!!");
+        SDL_Log("Loop de Game encerrado!!!!");
 
         delete pControle;
         delete game;
@@ -52,12 +51,12 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete video;
 
     } catch (const Chimera::Exception& ex) {
-        console->error("Falha grave: " + ex.getMessage());
+        SDL_Log("Falha grave: %s", ex.getMessage().c_str());
         return -1;
-    } catch (const std::exception& ex) { console->error("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
-        console->error("Falha grave: " + ex);
-    } catch (...) { console->error("Falha Desconhecida"); }
+    } catch (const std::exception& ex) { SDL_Log("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
+        SDL_Log("Falha grave: %s", ex.c_str());
+    } catch (...) { SDL_Log("Falha Desconhecida"); }
 
-    console->info("AppShader finalizado com sucesso");
+    SDL_Log("AppShader finalizado com sucesso");
     return 0;
 }

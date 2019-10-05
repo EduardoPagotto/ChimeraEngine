@@ -17,9 +17,9 @@ set (IncludesSimpleRayCasting ${CMAKE_CURRENT_SOURCE_DIR}/include
 					  ${CMAKE_SOURCE_DIR}
 					  ${SDL2_INCLUDE_DIR})
 
-add_executable (SimpleRayCasting raycasting.cpp 
-								 Game.cpp 
-								 main.cpp)
+add_executable (SimpleRayCasting src/raycasting.cpp 
+								 src/Game.cpp 
+								 src/main.cpp)
 
 target_link_libraries(SimpleRayCasting ${LibsSimpleRayCasting})
 target_include_directories (SimpleRayCasting PRIVATE ${IncludesSimpleRayCasting})

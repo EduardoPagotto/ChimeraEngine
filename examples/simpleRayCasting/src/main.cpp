@@ -1,8 +1,9 @@
-#include "Game.hpp"
 #include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include <iostream>
+
+#include "Game.hpp"
 
 #ifndef WIN32
 int main(int argn, char** argv) {

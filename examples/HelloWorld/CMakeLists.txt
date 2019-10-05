@@ -36,7 +36,8 @@ if (OVR_SET_TO_USE)
     set(LibsHelloWorld ${LibsHelloWorld} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-add_executable (HelloWorld src/Game.cpp main.cpp)
+add_executable (HelloWorld src/Game.cpp 
+						   src/main.cpp)
 
 target_link_libraries(HelloWorld ${LibsHelloWorld})
 target_include_directories (HelloWorld PRIVATE ${IncludesHelloWorld})

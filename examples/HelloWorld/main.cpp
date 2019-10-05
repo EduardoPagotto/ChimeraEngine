@@ -1,15 +1,13 @@
-#include "Game.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
+
+#include "Game.hpp"
+
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
-#ifndef WIN32
 int main(int argn, char** argv) {
-#else
-int _tmain(int argc, _TCHAR* argv[]) {
-#endif
 
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("AppEmpty Iniciado");
@@ -19,7 +17,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
     }
 
     try {
-        std::string config_file = "./examples/HelloWorld/etc/empty.yaml";
+        std::string config_file = "./examples/HelloWorld/empty.yaml";
 
         SDL_Log("Carregar arquivo: %s", config_file.c_str());
         YAML::Node config = YAML::LoadFile(config_file);
@@ -41,18 +39,22 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete game;
         delete video;
 
+        SDL_Log("Sucesso");
+        return 0;
+
     } catch (const Chimera::Exception& ex) {
-        SDL_Log("Falha grave: %s", ex.getMessage().c_str());
-        // std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
-        return -1;
+        // Exception Chimera
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what());
     } catch (const std::exception& ex) {
-        SDL_Log("Falha grave: %s", ex.what());
-        // std::cout << "Falha grave: " << ex.what() << " " << std::endl;
-    } catch (const std::string& ex) { SDL_Log("Falha grave: %s", ex.c_str()); } catch (...) {
-        SDL_Log("Falha Desconhecida");
-        // std::cout << "Falha Desconhecida " << std::endl;
+        // Exception generica
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what());
+    } catch (const std::string& ex) {
+        // Exception string
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.c_str());
+    } catch (...) {
+        // desconhecida
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro Desconhecida");
     }
 
-    SDL_Log("AppShader finalizado com sucesso");
-    return 0;
+    return -1;
 }

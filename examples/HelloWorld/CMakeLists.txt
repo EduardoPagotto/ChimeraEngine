@@ -24,11 +24,11 @@ set (LibsHelloWorld ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 
 #define os includes
 set (IncludesHelloWorld ${CMAKE_CURRENT_SOURCE_DIR}/include
-					  ${CMAKE_SOURCE_DIR}/libs
-					  ${OPENGL_INCLUDE_DIR}
-					  ${SDL2_INCLUDE_DIR}
-					  ${BULLET_INCLUDE_DIR}
-					  ${FREETYPE_INCLUDE_DIRS})
+						${CMAKE_SOURCE_DIR}/libs
+						${OPENGL_INCLUDE_DIR}
+						${SDL2_INCLUDE_DIR}
+						${BULLET_INCLUDE_DIR}
+						${FREETYPE_INCLUDE_DIRS})
 
 
 if (OVR_SET_TO_USE)
@@ -36,7 +36,7 @@ if (OVR_SET_TO_USE)
     set(LibsHelloWorld ${LibsHelloWorld} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-add_executable (HelloWorld Game.cpp main.cpp)
+add_executable (HelloWorld src/Game.cpp main.cpp)
 
 target_link_libraries(HelloWorld ${LibsHelloWorld})
 target_include_directories (HelloWorld PRIVATE ${IncludesHelloWorld})

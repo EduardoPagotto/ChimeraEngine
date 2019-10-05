@@ -8,7 +8,7 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
-set (IncludesTestLoader ${CMAKE_SOURCE_DIR}/libs
+set (IncludesTestLoader ${CMAKE_SOURCE_DIR}
 						${OPENGL_INCLUDE_DIR}
 						${SDL2_INCLUDE_DIR}
 						${BULLET_INCLUDE_DIR}

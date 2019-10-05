@@ -20,7 +20,7 @@ set (LibsTesteBSTree ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 
 #define os includes
 set (IncludesTesteBSTree ${CMAKE_CURRENT_SOURCE_DIR}/include
-						 ${CMAKE_SOURCE_DIR}/libs
+						 ${CMAKE_SOURCE_DIR}
 						 ${OPENGL_INCLUDE_DIR}
 						 ${SDL2_INCLUDE_DIR})
 

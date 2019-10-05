@@ -24,7 +24,7 @@ set (LibsHelloWorld ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 
 #define os includes
 set (IncludesHelloWorld ${CMAKE_CURRENT_SOURCE_DIR}/include
-						${CMAKE_SOURCE_DIR}/libs
+						${CMAKE_SOURCE_DIR}
 						${OPENGL_INCLUDE_DIR}
 						${SDL2_INCLUDE_DIR}
 						${BULLET_INCLUDE_DIR}

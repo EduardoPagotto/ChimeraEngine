@@ -37,7 +37,7 @@ set (SourceNode Node.cpp
 				TextureManager.cpp)
 
 #define os includes
-set (IncludeNode ${CMAKE_SOURCE_DIR}/libs)
+set (IncludeNode ${CMAKE_SOURCE_DIR}) # Raiz do projeto
 set (IncludeNodeAux ${OPENGL_INCLUDE_DIR}
 				 	${SDL2_INCLUDE_DIR}
 				 	${BULLET_INCLUDE_DIR}

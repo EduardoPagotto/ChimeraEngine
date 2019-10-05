@@ -9,7 +9,7 @@ find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
 set (IncludesAppShare ${AppShader_SOURCE_DIR}/include/
-					  ${CMAKE_SOURCE_DIR}/libs
+					  ${CMAKE_SOURCE_DIR}
 					  ${OPENGL_INCLUDE_DIR}
 					  ${SDL2_INCLUDE_DIR}
 					  ${BULLET_INCLUDE_DIR}

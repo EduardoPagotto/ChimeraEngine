@@ -26,7 +26,7 @@ set (SourcesCore Canvas.cpp
 				 ShadersLoader.cpp)
 
 # #define os includes
-set (IncludeCore ${CMAKE_SOURCE_DIR}/libs)
+set (IncludeCore ${CMAKE_SOURCE_DIR})
 set (IncludeCoreAux ${OPENGL_INCLUDE_DIR}
 				 	${SDL2_INCLUDE_DIR}
 				 	${GLEW_INCLUDE_DIRS})

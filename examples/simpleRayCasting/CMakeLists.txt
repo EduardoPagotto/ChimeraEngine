@@ -14,7 +14,7 @@ set (LibsSimpleRayCasting ${ChimeraCore_BINARY_DIR}/libChimeraCore.a
 
 #define os includes
 set (IncludesSimpleRayCasting ${CMAKE_CURRENT_SOURCE_DIR}/include
-					  ${CMAKE_SOURCE_DIR}/libs
+					  ${CMAKE_SOURCE_DIR}
 					  ${SDL2_INCLUDE_DIR})
 
 add_executable (SimpleRayCasting raycasting.cpp 

@@ -7,8 +7,8 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
     : CanvasGL(_title, _width * 2, _height, false) {
 
     Chimera::ShadersLoader sl;
-    pShader = sl.loadShader("RenderToTex", "./libs/chimera/shader/Passthrough.vertexshader",
-                            "./libs/chimera/shader/WobblyTexture.fragmentshader");
+    pShader = sl.loadShader("RenderToTex", "./chimera/shaders/Passthrough.vertexshader",
+                            "./chimera/shaders/WobblyTexture.fragmentshader");
 
     pLeft = new Eye(0, _width, _height, pShader);
     pRight = new Eye(1, _width, _height, pShader);

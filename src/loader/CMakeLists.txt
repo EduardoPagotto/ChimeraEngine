@@ -27,7 +27,7 @@ set (SourcesLoader Library.cpp
 				   ListNodes.cpp)
 
 #define os includes
-set (IncludeLoader  ${CMAKE_SOURCE_DIR}/libs)
+set (IncludeLoader  ${CMAKE_SOURCE_DIR})
 set (IncludeLoaderAux	${OPENGL_INCLUDE_DIR}
 						${SDL2_INCLUDE_DIR}
 						${BULLET_INCLUDE_DIR}

@@ -32,7 +32,7 @@ set (LibsSterioscopic ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a #ordem é impo
 					  -lyaml-cpp)
 
 add_executable(sterioscopic src/Game.cpp
-					   		src/appTest.cpp)
+					   		src/main.cpp)
 
 if (OVR_SET_TO_USE)
     message(STATUS "OVR Incluido no Projeto")

@@ -35,7 +35,7 @@ if (OVR_SET_TO_USE)
     set(LibsLoader ${LibsLoader} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-add_executable(loader TestLoader.cpp)
+add_executable(loader main.cpp)
 
 target_include_directories(loader PRIVATE ${IncludesLoader})
 target_link_libraries(loader ${LibsLoader})

@@ -35,7 +35,7 @@ if (OVR_SET_TO_USE)
 endif(OVR_SET_TO_USE)
 
 add_executable(shader src/Game.cpp
-					  src/AppShader.cpp)
+					  src/main.cpp)
 
 target_link_libraries(shader ${LibsAppShader})
 target_include_directories (shader PRIVATE ${IncludesAppShare})

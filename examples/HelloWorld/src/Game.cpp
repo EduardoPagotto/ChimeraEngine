@@ -71,5 +71,7 @@ bool Game::paused() { return isPaused; }
 void Game::render() {
     pVideo->before();
     // TODO desenhar aqui!!
+    SDL_Delay(15);
+
     pVideo->after();
 }

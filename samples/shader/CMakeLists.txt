@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-PROJECT(AppShader)
+PROJECT(Shader)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -8,7 +8,7 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
-set (IncludesAppShare ${AppShader_SOURCE_DIR}/include/
+set (IncludesAppShare ${Shader_SOURCE_DIR}/include/
 					  ${CMAKE_SOURCE_DIR}
 					  ${OPENGL_INCLUDE_DIR}
 					  ${SDL2_INCLUDE_DIR}
@@ -34,13 +34,13 @@ if (OVR_SET_TO_USE)
     set(LibsAppShader ${LibsAppShader} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-add_executable(AppShader src/Game.cpp
-						 src/AppShader.cpp)
+add_executable(shader src/Game.cpp
+					  src/AppShader.cpp)
 
-target_link_libraries(AppShader ${LibsAppShader})
-target_include_directories (AppShader PRIVATE ${IncludesAppShare})
+target_link_libraries(shader ${LibsAppShader})
+target_include_directories (shader PRIVATE ${IncludesAppShare})
 
-add_dependencies(AppShader ChimeraCore
-						   ChimeraLoaders)
+add_dependencies(shader ChimeraCore
+						ChimeraLoaders)
 
-INSTALL(FILES ${AppShader_BINARY_DIR}/AppShader DESTINATION bin)
+INSTALL(FILES ${AppShader_BINARY_DIR}/shader DESTINATION bin)

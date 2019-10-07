@@ -5,11 +5,7 @@
 
 #include "Game.hpp"
 
-#ifndef WIN32
 int main(int argn, char** argv) {
-#else
-int _tmain(int argc, _TCHAR* argv[]) {
-#endif
 
     try {
 
@@ -29,10 +25,12 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete game;
         delete video;
 
+        SDL_Log("raycasting finalizado com sucesso");
+        return 0;
+
     } catch (const Chimera::Exception& ex) {
-        SDL_Log("Falha grave: %s", ex.getMessage().c_str());
+        SDL_Log("Falha grave: %s", ex.what());
         // std::cout << "Falha grave: " << ex.getMessage() << " " << std::endl;
-        return -1;
     } catch (const std::exception& ex) {
         SDL_Log("Falha grave: %s", ex.what());
         // std::cout << "Falha grave: " << ex.what() << " " << std::endl;
@@ -41,7 +39,5 @@ int _tmain(int argc, _TCHAR* argv[]) {
         // std::cout << "Falha Desconhecida " << std::endl;
     }
 
-    SDL_Log("raycasting finalizado com sucesso");
-
-    return 0;
+    return -1;
 }

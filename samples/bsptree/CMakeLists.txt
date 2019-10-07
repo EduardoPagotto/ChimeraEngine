@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-PROJECT(TesteBSTree)
+PROJECT(BSTree)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -24,15 +24,15 @@ set (IncludesTesteBSTree ${CMAKE_CURRENT_SOURCE_DIR}/include
 						 ${OPENGL_INCLUDE_DIR}
 						 ${SDL2_INCLUDE_DIR})
 
-add_executable (TesteBSTree src/Triangle.cpp
-							src/BSPTree.cpp
-							src/BSPTreeBuilder.cpp
-							src/Game.cpp 
-							src/main.cpp)
+add_executable (bsptree src/Triangle.cpp
+						src/BSPTree.cpp
+						src/BSPTreeBuilder.cpp
+						src/Game.cpp 
+						src/main.cpp)
 
-target_link_libraries(TesteBSTree ${LibsTesteBSTree})
-target_include_directories (TesteBSTree PRIVATE ${IncludesTesteBSTree})
+target_link_libraries(bsptree ${LibsTesteBSTree})
+target_include_directories (bsptree PRIVATE ${IncludesTesteBSTree})
 
-add_dependencies(TesteBSTree ChimeraCore)
+add_dependencies(bsptree ChimeraCore)
 
-INSTALL(FILES ${TesteBSTree_BINARY_DIR}/TesteBSTree DESTINATION bin)
+INSTALL(FILES ${TesteBSTree_BINARY_DIR}/bsptree DESTINATION bin)

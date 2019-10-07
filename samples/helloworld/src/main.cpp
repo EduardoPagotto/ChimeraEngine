@@ -17,7 +17,7 @@ int main(int argn, char** argv) {
     }
 
     try {
-        std::string config_file = "./examples/HelloWorld/empty.yaml";
+        std::string config_file = "./samples/helloworld/empty.yaml";
 
         SDL_Log("Carregar arquivo: %s", config_file.c_str());
         YAML::Node config = YAML::LoadFile(config_file);

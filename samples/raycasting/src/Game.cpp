@@ -96,7 +96,7 @@ void Game::start() {
 
     world = new World;
 
-    if (!LoadWorld("./examples/simpleRayCasting/world.txt", world)) {
+    if (!LoadWorld("./samples/raycasting/world.txt", world)) {
         printf("\nError loading world file!");
         exit(0);
     }

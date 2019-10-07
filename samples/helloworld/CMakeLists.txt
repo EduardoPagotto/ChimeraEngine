@@ -36,12 +36,12 @@ if (OVR_SET_TO_USE)
     set(LibsHelloWorld ${LibsHelloWorld} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-add_executable (HelloWorld src/Game.cpp 
+add_executable (helloworld src/Game.cpp 
 						   src/main.cpp)
 
-target_link_libraries(HelloWorld ${LibsHelloWorld})
-target_include_directories (HelloWorld PRIVATE ${IncludesHelloWorld})
+target_link_libraries(helloworld ${LibsHelloWorld})
+target_include_directories (helloworld PRIVATE ${IncludesHelloWorld})
 
-add_dependencies(HelloWorld ChimeraCore)
+add_dependencies(helloworld ChimeraCore)
 
-INSTALL(FILES ${HelloWorld_BINARY_DIR}/HelloWorld DESTINATION bin)
+INSTALL(FILES ${HelloWorld_BINARY_DIR}/helloworld DESTINATION bin)

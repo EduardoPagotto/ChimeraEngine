@@ -16,8 +16,8 @@ int main(int argn, char** argv) {
 
         // sempre depois de instanciar o Opengl no canvas!!!
         Chimera::ShadersLoader sl;
-        Chimera::Shader* pShader = sl.loadShader("Simples1", "./examples/teste_bstree/shaders/simples.vert",
-                                                 "./examples/teste_bstree/shaders/simples.frag");
+        Chimera::Shader* pShader = sl.loadShader("Simples1", "./samples/bsptree/shaders/simples.vert",
+                                                 "./samples/bsptree/shaders/simples.frag");
 
         Game* game = new Game(video, pShader);
 
@@ -25,19 +25,26 @@ int main(int argn, char** argv) {
         pControle->open();
         pControle->gameLoop();
 
-        SDL_Log("Loop de Game encerrado!!!!");
-
         delete pControle;
         delete game;
         delete video;
 
-    } catch (const Chimera::Exception& ex) {
-        SDL_Log("Falha grave: %s", ex.getMessage().c_str());
-        return -1;
-    } catch (const std::exception& ex) { SDL_Log("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
-        SDL_Log("Falha grave: %s", ex.c_str());
-    } catch (...) { SDL_Log("Falha Desconhecida"); }
+        SDL_Log("TesteBSTree finalizado com sucesso");
+        return 0;
 
-    SDL_Log("TesteBSTree finalizado com sucesso");
-    return 0;
+    } catch (const Chimera::Exception& ex) {
+        // fail 1
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
+    } catch (const std::exception& ex) {
+        // fali 2
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
+    } catch (const std::string& ex) {
+        // fail 3
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.c_str());
+    } catch (...) {
+        // Fail 4
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida");
+    }
+
+    return -1;
 }

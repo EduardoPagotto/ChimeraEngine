@@ -30,20 +30,22 @@ int main(int argn, char** argv) {
         ChimeraLoaders::PhysicsScene libP("./models/piso2.xml", pPC);
         libP.target();
 
+        SDL_Log("Sucesso");
+        return 0;
+
     } catch (const Chimera::Exception& ex) {
-        SDL_Log("TesteLoader falha grave: %s", ex.getMessage().c_str());
-        return -1;
+        // Exception Chimera
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what());
     } catch (const std::exception& ex) {
-        SDL_Log("TesteLoader falha grave: %s", ex.what());
-        return -1;
+        // Exception generica
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what());
     } catch (const std::string& ex) {
-        SDL_Log("TesteLoader falha grave: %s", ex.c_str());
-        return -1;
+        // Exception string
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.c_str());
     } catch (...) {
-        SDL_Log("TesteLoader falha Desconhecida");
-        return -1;
+        // desconhecida
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro Desconhecida");
     }
 
-    SDL_Log("TesteLoader finalizado com sucesso");
-    return 0;
+    return -1;
 }

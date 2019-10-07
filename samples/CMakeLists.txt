@@ -5,8 +5,9 @@ add_subdirectory(raycasting)
 add_subdirectory(shader)
 add_subdirectory(bsptree)
 add_subdirectory(stereoscopic)
+add_subdirectory(loader)
+add_subdirectory(models)
 
-# add_subdirectory(test_loader)
-# add_subdirectory(AppCargaManual)
+
 
 

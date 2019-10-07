@@ -26,4 +26,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 add_subdirectory(chimera)
 add_subdirectory(samples)
-add_subdirectory(examples)
+#add_subdirectory(examples)

@@ -8,11 +8,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
-#ifndef WIN32
 int main(int argn, char** argv) {
-#else
-int _tmain(int argc, _TCHAR* argv[]) {
-#endif
 
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("AppShader Iniciado");
@@ -50,13 +46,22 @@ int _tmain(int argc, _TCHAR* argv[]) {
         delete pShader;
         delete video;
 
-    } catch (const Chimera::Exception& ex) {
-        SDL_Log("Falha grave: %s", ex.getMessage().c_str());
-        return -1;
-    } catch (const std::exception& ex) { SDL_Log("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
-        SDL_Log("Falha grave: %s", ex.c_str());
-    } catch (...) { SDL_Log("Falha Desconhecida"); }
+        SDL_Log("Sucesso");
+        return 0;
 
-    SDL_Log("AppShader finalizado com sucesso");
-    return 0;
+    } catch (const Chimera::Exception& ex) {
+        // fail 1
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
+    } catch (const std::exception& ex) {
+        // fail 2
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
+    } catch (const std::string& ex) {
+        // fail 4
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.c_str());
+    } catch (...) {
+        // fail 4
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida");
+    }
+
+    return -1;
 }

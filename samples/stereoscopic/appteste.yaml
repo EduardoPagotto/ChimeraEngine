@@ -5,8 +5,8 @@ screen:
     h: 512
 shaders:
   - name: mesh-default
-    vertex: ./examples/AppCargaManual/shader/mesh.vert
-    fragment: ./examples/AppCargaManual/shader/mesh.frag
+    vertex: ./samples/stereoscopic/shader/mesh.vert
+    fragment: ./samples/stereoscopic/shader/mesh.frag
   #- name: debugDepthQuad
   #  vertex: ./examples/appTest/shader/debug_quad.vert
   #  fragment: ./examples/appTest/shader/debug_quad.frag

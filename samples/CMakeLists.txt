@@ -4,9 +4,9 @@ add_subdirectory(helloworld)
 add_subdirectory(raycasting)
 add_subdirectory(shader)
 add_subdirectory(bsptree)
+add_subdirectory(stereoscopic)
 
 # add_subdirectory(test_loader)
 # add_subdirectory(AppCargaManual)
-# add_subdirectory(appTest)
 
 

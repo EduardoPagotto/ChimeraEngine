@@ -15,11 +15,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
-#ifndef WIN32
 int main(int argn, char** argv) {
-#else
-int _tmain(int argc, _TCHAR* argv[]) {
-#endif
 
     using namespace Chimera;
 
@@ -33,7 +29,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
     }
 
     try {
-        std::string config_file = "./examples/appTest/appteste.yaml";
+        std::string config_file = "./samples/stereoscopic/appteste.yaml";
         SDL_Log("Carregar arquivo: %s", config_file.c_str());
 
         YAML::Node config = YAML::LoadFile(config_file);
@@ -137,13 +133,22 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
         mapa.clear();
 
-    } catch (const Chimera::Exception& ex) {
-        SDL_Log("Falha grave: %s", ex.getMessage().c_str());
-        return -1;
-    } catch (const std::exception& ex) { SDL_Log("Falha grave: %s", ex.what()); } catch (const std::string& ex) {
-        SDL_Log("Falha grave: %s", ex.c_str());
-    } catch (...) { SDL_Log("Falha Desconhecida"); }
+        SDL_Log("appTest finalizado com sucesso");
+        return 0;
 
-    SDL_Log("appTest finalizado com sucesso");
-    return 0;
+    } catch (const Chimera::Exception& ex) {
+        // fail 1
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
+    } catch (const std::exception& ex) {
+        // fail 2
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
+    } catch (const std::string& ex) {
+        // fail 4
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.c_str());
+    } catch (...) {
+        // fail 4
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha Desconhecida");
+    }
+
+    return -1;
 }

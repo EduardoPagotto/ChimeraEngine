@@ -25,12 +25,12 @@ glm::vec3 Triangle::normal() {
     return glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
 }
 
-glm::vec3 Triangle::verticeNormal() {
-    glm::vec3 u = this->vertex[0].position - this->vertex[2].position;
-    glm::vec3 v = this->vertex[0].position - this->vertex[1].position;
-    glm::vec3 normal = glm::normalize(glm::cross(u, v));
-    for (int i = 0; i < 3; i++) {
-        this->vertex[i].normal = normal;
-    }
-    return normal;
-}
+// glm::vec3 Triangle::verticeNormal() {
+//     glm::vec3 u = this->vertex[0].position - this->vertex[2].position;
+//     glm::vec3 v = this->vertex[0].position - this->vertex[1].position;
+//     glm::vec3 normal = glm::normalize(glm::cross(u, v));
+//     for (int i = 0; i < 3; i++) {
+//         this->vertex[i].normal = normal;
+//     }
+//     return normal;
+// }

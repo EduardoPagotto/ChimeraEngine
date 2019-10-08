@@ -6,6 +6,8 @@ find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 
+add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
+
 #define os Lib's a serem usados
 set (LibsTesteBSTree ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 					 ${OPENGL_LIBRARIES}

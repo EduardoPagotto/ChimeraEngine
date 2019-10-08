@@ -18,7 +18,7 @@ class Triangle {
 
     inline unsigned getSerial() const { return serial; }
     glm::vec3 normal();
-    glm::vec3 verticeNormal();
+    // glm::vec3 verticeNormal();
     VertexData vertex[3];
 
   private:

@@ -1,57 +1,26 @@
-#include "chimera/core/ShadersLoader.hpp"
+#include "chimera/core/utils.hpp"
 #include "chimera/core/Exception.hpp"
-#include <fstream>
-#include <vector>
 
 #include <SDL2/SDL.h>
 
+#include <fstream>
+#include <string>
+#include <vector>
+
 namespace Chimera {
 
-ShadersLoader::ShadersLoader() {}
-
-Chimera::Shader* ShadersLoader::loadShader(const std::string& programName, const std::string& vertex_file_path,
-                                           const std::string& fragment_file_path) {
-
-    GLuint id = load(programName, vertex_file_path, fragment_file_path);
-    Chimera::Shader* pShader = new Chimera::Shader(programName, id);
-    return pShader;
+void eventsSend(KindOp _kindOf, void* _paramA, void* _paramB) {
+    SDL_Event event;
+    SDL_zero(event);
+    event.type = SDL_USEREVENT;
+    event.user.code = (int)_kindOf;
+    event.user.data1 = _paramA;
+    event.user.data2 = _paramB;
+    SDL_PushEvent(&event);
 }
 
-GLuint ShadersLoader::load(const std::string& programName, const std::string& vertex_file_path,
-                           const std::string& fragment_file_path) {
-
-    bool retorno = false;
-
-    // Ler os arquivos
-    std::string VertexShaderCode = getShaderCode(vertex_file_path.c_str());
-    std::string FragmentShaderCode = getShaderCode(fragment_file_path.c_str());
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader name: %s", programName.c_str());
-
-    // Compila Vertex Shader
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compiling Vertex: %s", vertex_file_path.c_str());
-    GLuint VertexShaderID = compileShader(VertexShaderCode, true);
-
-    // Compila Fragment Shader
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compiling Fragment: %s", fragment_file_path.c_str());
-    GLuint FragmentShaderID = compileShader(FragmentShaderCode, false);
-
-    // Link o programa
-    GLuint idProgram = linkShader(VertexShaderID, FragmentShaderID);
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linked: %d", idProgram);
-
-    glDeleteShader(VertexShaderID);
-    glDeleteShader(FragmentShaderID);
-
-    if (idProgram != -1)
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader OK:%s Id:%d", programName.c_str(), idProgram);
-    else
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Erro: %s", programName.c_str());
-
-    return idProgram;
-}
-
-std::string ShadersLoader::getShaderCode(const char* file_path) {
+// --- shade
+std::string getShaderCode(const char* file_path) {
 
     // Read the Vertex Shader code from the file
     std::string shaderCode;
@@ -61,18 +30,15 @@ std::string ShadersLoader::getShaderCode(const char* file_path) {
         while (getline(shaderStream, Line)) {
             shaderCode += "\n" + Line;
         }
-
         shaderStream.close();
-
     } else {
-
         throw Chimera::Exception("Impossivel abrir arquivo: " + std::string(file_path));
     }
 
     return shaderCode;
 }
 
-GLuint ShadersLoader::compileShader(const std::string& shaderCode, bool _shadeKind) {
+GLuint compileShader(const std::string& shaderCode, bool _shadeKind) {
 
     GLint Result = GL_FALSE;
     int InfoLogLength;
@@ -103,7 +69,7 @@ GLuint ShadersLoader::compileShader(const std::string& shaderCode, bool _shadeKi
     return shaderID;
 }
 
-GLuint ShadersLoader::linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID) {
+GLuint linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID) {
 
     GLint Result = GL_FALSE;
     int InfoLogLength;
@@ -128,4 +94,30 @@ GLuint ShadersLoader::linkShader(const GLuint& VertexShaderID, const GLuint& Fra
     }
     return ProgramID;
 }
+
+GLuint shadeLoadProg(const char* programName, const char* vertex_file_path, const char* fragment_file_path) {
+
+    GLuint VertexShaderID = compileShader(getShaderCode(vertex_file_path), true);
+    GLuint FragmentShaderID = compileShader(getShaderCode(fragment_file_path), false);
+
+    // Link o programa
+    GLuint idProgram = linkShader(VertexShaderID, FragmentShaderID);
+
+    glDeleteShader(VertexShaderID);
+    glDeleteShader(FragmentShaderID);
+
+    if (idProgram != -1)
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", programName, idProgram);
+    else
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader %s", programName);
+
+    return idProgram;
+}
+
+// Shader* loadShader(const std::string& programName, const std::string& vertex_file_path,
+//                    const std::string& fragment_file_path) {
+//     GLuint id = load(programName, vertex_file_path, fragment_file_path);
+//     return new Shader(programName, id);
+// }
+
 } // namespace Chimera

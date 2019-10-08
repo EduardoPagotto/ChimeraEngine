@@ -3,7 +3,7 @@
 #include "chimera/core/CanvasHmd.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/ShadersLoader.hpp"
+#include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
@@ -45,7 +45,6 @@ int main(int argn, char** argv) {
         // Gerenciador do grapho de cena
         SceneMng* sceneMng = new SceneMng();
 
-        Chimera::ShadersLoader sl;
         // Carga dos shaders
         YAML::Node shaders = config["shaders"];
 
@@ -53,9 +52,12 @@ int main(int argn, char** argv) {
         SDL_Log("Shaders identificados: %d", (int)shaders.size());
         for (std::size_t i = 0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
+
+            std::string nome = shader_item["name"].as<std::string>();
+            std::string vertex = shader_item["vertex"].as<std::string>();
+            std::string fragm = shader_item["fragment"].as<std::string>();
             Chimera::Shader* pShader =
-                sl.loadShader(shader_item["name"].as<std::string>(), shader_item["vertex"].as<std::string>(),
-                              shader_item["fragment"].as<std::string>());
+                new Chimera::Shader(nome.c_str(), Chimera::shadeLoadProg(nome.c_str(), vertex.c_str(), fragm.c_str()));
 
             mapa[pShader->getCurrentProgram()] = pShader;
         }

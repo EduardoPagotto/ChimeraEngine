@@ -1,7 +1,7 @@
-#ifndef __CHIMERA_EVENTS__HPP
-#define __CHIMERA_EVENTS__HPP
+#ifndef __CHIMERA_UTILS__HPP
+#define __CHIMERA_UTILS__HPP
 
-#include <SDL2/SDL.h>
+#include "chimera/core/OpenGLDefs.hpp"
 
 namespace Chimera {
 
@@ -13,6 +13,9 @@ namespace Chimera {
 enum class KindOp { IS_ALLOW_COLLIDE, START_COLLIDE, ON_COLLIDE, OFF_COLLIDE, VIDEO_TOGGLE_FULL_SCREEN };
 
 void eventsSend(KindOp _kindOf, void* _paramA, void* _paramB);
+
+GLuint shadeLoadProg(const char* programName, const char* vertex_file_path, const char* fragment_file_path);
+
 } // namespace Chimera
 
 #endif

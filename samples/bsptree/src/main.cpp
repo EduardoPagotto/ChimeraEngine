@@ -2,7 +2,8 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/ShadersLoader.hpp"
+#include "chimera/core/Shader.hpp"
+#include "chimera/core/utils.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
@@ -15,9 +16,13 @@ int main(int argn, char** argv) {
         Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 640, 480);
 
         // sempre depois de instanciar o Opengl no canvas!!!
-        Chimera::ShadersLoader sl;
-        Chimera::Shader* pShader = sl.loadShader("Simples1", "./samples/bsptree/shaders/simples.vert",
-                                                 "./samples/bsptree/shaders/simples.frag");
+        // Chimera::ShadersLoader sl;
+        // Chimera::Shader* pShader = sl.loadShader("Simples1", "./samples/bsptree/shaders/simples.vert",
+        //                                          "./samples/bsptree/shaders/simples.frag");
+
+        Chimera::Shader* pShader =
+            new Chimera::Shader("Simples1", Chimera::shadeLoadProg("Simples1", "./samples/bsptree/shaders/simples.vert",
+                                                                   "./samples/bsptree/shaders/simples.frag"));
 
         Game* game = new Game(video, pShader);
 

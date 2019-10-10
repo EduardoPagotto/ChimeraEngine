@@ -4,6 +4,9 @@
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/utils.hpp"
+
+#include "chimera/core/LoadObj.hpp"
+
 #include <iostream>
 
 int main(int argn, char** argv) {
@@ -12,6 +15,9 @@ int main(int argn, char** argv) {
 
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("AppEmpty Iniciado");
+
+        Chimera::MeshData m;
+        loadObj((const char*)"./teste.obj", &m);
 
         Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 640, 480);
 

@@ -1,10 +1,12 @@
 #ifndef __CHIMERA_LOAD_OBJ__HPP
 #define __CHIMERA_LOAD_OBJ__HPP
 
-namespace chimera {
+#include <glm/glm.hpp>
+#include <vector>
 
-struct Meshtmp {
+namespace Chimera {
 
+struct MeshData {
     std::vector<unsigned int> vertexIndex;
     std::vector<glm::vec3> vertexList;
 
@@ -13,9 +15,10 @@ struct Meshtmp {
 
     std::vector<unsigned int> textureIndex;
     std::vector<glm::vec2> textureList;
-
 };
 
-} // namespace chimera
+void loadObj(const char* _fineName, MeshData* _mesh);
+
+} // namespace Chimera
 
 #endif

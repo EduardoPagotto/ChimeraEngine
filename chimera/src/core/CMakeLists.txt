@@ -22,7 +22,8 @@ set (SourcesCore Canvas.cpp
 				 Shader.cpp	
 				 FlowControl.cpp
 				 VboIndexer.cpp
-				 utils.cpp)
+				 utils.cpp
+				 LoadObj.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "chimera/core/LoadObj.hpp"
+
 #define BUFFER_OFFSET(i) ((void*)(i))
 
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
@@ -69,211 +71,57 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::setDrawSplit(std::vector<Triangle>* _pListPolygon) {
+void Game::debugTriangle(Triangle* _pt) {
+    for (int i = 0; i < 3; i++) {
+        if (i == 0) {
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "---------------------------------------------------");
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "A");
+        } else if (i == 1)
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "B");
+        else
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "C");
 
-    std::vector<glm::vec3> vVertice;
-    std::vector<glm::vec3> vNormal;
-    std::vector<glm::ivec3> vIndex;
-    std::vector<glm::vec3> vColor;
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "vertice (%f %f %f)", _pt->vertex[i].position.x,
+                     _pt->vertex[i].position.y, _pt->vertex[i].position.z);
 
-    // T 0
-    vVertice.push_back(glm::vec3(-250, -100, 0));
-    vVertice.push_back(glm::vec3(-50, 100, 0));
-    vVertice.push_back(glm::vec3(-50, -100, 0));
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "normal (%f %f %f)", _pt->vertex[i].normal.x,
+                     _pt->vertex[i].normal.y, _pt->vertex[i].normal.z);
 
-    // T 1
-    vVertice.push_back(glm::vec3(50, -100, -250));
-    vVertice.push_back(glm::vec3(50, 100, 100));
-    vVertice.push_back(glm::vec3(50, -100, 100));
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "color (%f %f %f)", _pt->vertex[i].color.x, _pt->vertex[i].color.y,
+                     _pt->vertex[i].color.z);
 
-    // Face 0
-    vIndex.push_back(glm::ivec3(0, 1, 2));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 1, 1));
-
-    // Face 1
-    vIndex.push_back(glm::ivec3(3, 4, 5));
-    vNormal.push_back(glm::vec3(-1, 0, 0));
-    vColor.push_back(glm::vec3(1, 0, 0));
-
-    for (int face = 0; face < 2; face++) {
-        Triangle t = Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
-
-        for (int i = 0; i < 3; i++) {
-            t.vertex[i].color = vColor[face];
-            t.vertex[i].normal = vNormal[face];
-        }
-        _pListPolygon->push_back(t);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "texture (%f %f)", _pt->vertex[i].texture.x,
+                     _pt->vertex[i].texture.y);
     }
 }
 
-void Game::setDrawTest(std::vector<Triangle>* _pListPolygon) {
+void Game::loadModelObj(const char* _file, std::vector<Triangle>* _pListPolygon) {
 
-    std::vector<glm::vec3> vVertice;
-    std::vector<glm::vec3> vNormal;
-    std::vector<glm::ivec3> vIndex;
-    std::vector<glm::vec3> vColor;
+    Chimera::MeshData m;
+    loadObj(_file, &m);
 
-    // plano 0
-    vVertice.push_back(glm::vec3(100, 100, 100));
-    vVertice.push_back(glm::vec3(-100, 100, 100));
-    vVertice.push_back(glm::vec3(-100, -100, 100));
-    vVertice.push_back(glm::vec3(100, -100, 100));
+    for (short indice = 0; indice < m.vertexIndex.size(); indice += 3) {
 
-    // plano 1
-    vVertice.push_back(glm::vec3(50, 100, 0));
-    vVertice.push_back(glm::vec3(250, 100, 0));
-    vVertice.push_back(glm::vec3(50, -100, 0));
-    vVertice.push_back(glm::vec3(250, -100, 0));
+        Triangle t = Triangle(glm::vec3(0.0, 0.0, 0.0),  // A zerados carga em loop
+                              glm::vec3(0.0, 0.0, 0.0),  // B zerados carga em loop
+                              glm::vec3(0.0, 0.0, 0.0)); // C zerados carga em loop
 
-    // plano 2
-    vVertice.push_back(glm::vec3(-250, 100, -100));
-    vVertice.push_back(glm::vec3(-50, 100, -100));
-    vVertice.push_back(glm::vec3(-250, -100, -100));
-    vVertice.push_back(glm::vec3(-50, -100, -100));
+        for (short tri = 0; tri < 3; tri++) {
 
-    // plano 3
-    vVertice.push_back(glm::vec3(100, 100, -200));
-    vVertice.push_back(glm::vec3(-100, 100, -200));
-    vVertice.push_back(glm::vec3(-100, -100, -200));
-    vVertice.push_back(glm::vec3(100, -100, -200));
+            t.vertex[tri].position = m.vertexList[m.vertexIndex[indice + tri]];
 
-    // plano 4
-    vVertice.push_back(glm::vec3(900, 100, -500));
-    vVertice.push_back(glm::vec3(-900, 100, -500));
-    vVertice.push_back(glm::vec3(-900, -100, -500));
-    vVertice.push_back(glm::vec3(900, -100, -500));
+            if (m.normalList.size() > 0)
+                t.vertex[tri].normal = m.normalList[m.normalIndex[indice + tri]];
 
-    // Face 0
-    vIndex.push_back(glm::ivec3(0, 1, 2));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 1, 1));
-    // Face 1
-    vIndex.push_back(glm::ivec3(2, 3, 0));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 1, 1));
+            if (m.colorList.size() > 0)
+                t.vertex[tri].color = m.colorList[m.vertexIndex[indice + tri]];
 
-    // Face 2
-    vIndex.push_back(glm::ivec3(5, 4, 6));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 0, 0));
-    // Face 3
-    vIndex.push_back(glm::ivec3(6, 7, 5));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 0, 0));
-
-    // Face 4
-    vIndex.push_back(glm::ivec3(9, 8, 10));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(0, 0, 1));
-    // Face 5
-    vIndex.push_back(glm::ivec3(10, 11, 9));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(0, 0, 1));
-
-    // Face 6
-    vIndex.push_back(glm::ivec3(12, 13, 14));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(0, 1, 0));
-    // Face 7
-    vIndex.push_back(glm::ivec3(14, 15, 12));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(0, 1, 0));
-
-    // Face 8
-    vIndex.push_back(glm::ivec3(16, 17, 18));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 1, 0));
-    // Face 9
-    vIndex.push_back(glm::ivec3(18, 19, 16));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 1, 0));
-
-    for (int face = 0; face < 10; face++) {
-        Triangle t = Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
-
-        for (int i = 0; i < 3; i++) {
-            t.vertex[i].color = vColor[face];
-            t.vertex[i].normal = vNormal[face];
+            if (m.textureList.size() > 0)
+                t.vertex[tri].texture = m.textureList[m.textureIndex[indice + tri]];
         }
+
         _pListPolygon->push_back(t);
-    }
-}
-
-void Game::setSquare1(std::vector<Triangle>* _pListPolygon) {
-
-    std::vector<glm::vec3> vVertice;
-    std::vector<glm::vec3> vNormal;
-    std::vector<glm::ivec3> vIndex;
-    std::vector<glm::vec3> vColor;
-    std::vector<glm::vec2> vTex;
-
-    // Face Triangulo Z
-    // vVertice.push_back(glm::vec3(0, 400, 0));
-    // vVertice.push_back(glm::vec3(-200, 0, 0));
-    // vVertice.push_back(glm::vec3(200, 0, 0));
-    // vTex.push_back(glm::vec2(0.5, 0));
-    // vTex.push_back(glm::vec2(0, 1));
-    // vTex.push_back(glm::vec2(1, 1));
-
-    // // Quadrado 1
-    vVertice.push_back(glm::vec3(-100, -100, 0));
-    vVertice.push_back(glm::vec3(100, -100, 0));
-    vVertice.push_back(glm::vec3(100, 100, 0));
-    vVertice.push_back(glm::vec3(-100, 100, 0));
-
-    // // Quadrado 2
-    vVertice.push_back(glm::vec3(200, -100, -100));
-    vVertice.push_back(glm::vec3(200, -100, 100));
-    vVertice.push_back(glm::vec3(200, 100, 100));
-    vVertice.push_back(glm::vec3(200, 100, -100));
-
-    // Texturas quad 1
-    vTex.push_back(glm::vec2(0, 0)); // 0
-    vTex.push_back(glm::vec2(1, 0)); // 1
-    vTex.push_back(glm::vec2(1, 1)); // 2
-    vTex.push_back(glm::vec2(0, 1)); // 3
-
-    // Texturas quad 2
-    vTex.push_back(glm::vec2(0, 0)); // 4
-    vTex.push_back(glm::vec2(1, 0)); // 5
-    vTex.push_back(glm::vec2(1, 1)); // 6
-    vTex.push_back(glm::vec2(0, 1)); // 7
-
-    // Face 0
-    vIndex.push_back(glm::ivec3(0, 1, 2));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 1, 1));
-
-    // Face 1
-    vIndex.push_back(glm::ivec3(2, 3, 0));
-    vNormal.push_back(glm::vec3(0, 0, 1));
-    vColor.push_back(glm::vec3(1, 1, 1));
-
-    // Face 2
-    vIndex.push_back(glm::ivec3(4, 5, 6));
-    // vIndex.push_back(glm::ivec3(5, 6, 4));
-    vNormal.push_back(glm::vec3(-1, 0, 0));
-    vColor.push_back(glm::vec3(1, 1, 1));
-
-    // Face 3
-    vIndex.push_back(glm::ivec3(6, 7, 4));
-    vNormal.push_back(glm::vec3(-1, 0, 0));
-    vColor.push_back(glm::vec3(1, 1, 1));
-
-    for (int face = 0; face < vIndex.size(); face++) {
-        Triangle t = Triangle(vVertice[vIndex[face].x], vVertice[vIndex[face].y], vVertice[vIndex[face].z]);
-
-        t.vertex[0].texture = vTex[vIndex[face].x];
-        t.vertex[1].texture = vTex[vIndex[face].y];
-        t.vertex[2].texture = vTex[vIndex[face].z];
-
-        for (int i = 0; i < 3; i++) {
-
-            t.vertex[i].color = vColor[face];
-            t.vertex[i].normal = vNormal[face];
-        }
-        _pListPolygon->push_back(t);
+        // debugTriangle(&t);
     }
 }
 
@@ -344,9 +192,9 @@ void Game::start() {
     pTex->init();
 
     std::vector<Triangle> listPolygons;
-    setSquare1(&listPolygons);
-    // setDrawSplit(&listPolygons);
-    // setDrawTest(&listPolygons);
+    // loadModelObj((const char*)"./samples/bsptree/models/square1.obj", &listPolygons);
+    // loadModelObj((const char*)"./samples/bsptree/models/split1.obj", &listPolygons);
+    loadModelObj((const char*)"./samples/bsptree/models/teste1.obj", &listPolygons);
 
     std::reverse(listPolygons.begin(), listPolygons.end());
 

@@ -9,6 +9,7 @@ namespace Chimera {
 struct MeshData {
     std::vector<unsigned int> vertexIndex;
     std::vector<glm::vec3> vertexList;
+    std::vector<glm::vec3> colorList;
 
     std::vector<unsigned int> normalIndex;
     std::vector<glm::vec3> normalList;

@@ -30,9 +30,9 @@ class Game : public Chimera::IGameClientEvents {
 
   private:
     void buildBuffer(int max);
-    void setSquare1(std::vector<Triangle>* _pListPolygon);
-    void setDrawTest(std::vector<Triangle>* _pListPolygon);
-    void setDrawSplit(std::vector<Triangle>* _pListPolygon);
+
+    void loadModelObj(const char* _file, std::vector<Triangle>* _pListPolygon);
+    void debugTriangle(Triangle* _pt);
 
     BSPTree* pBspTree;
     bool isPaused;

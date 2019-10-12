@@ -138,14 +138,7 @@ void VertexRenderStatic::render() {
 
 // void VertexRenderStatic::setVertexBuffer() {
 void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn) {
-    // std::vector<VertexData> vertexDataIn;
-    // convertMeshDataVertexData(&meshData, vertexDataIn); // FIXME: fora daqui
-    // conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
     indexVBO_slow(vertexDataIn, vertexData, indexIBO);
-
-    // SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "VBO Nome: %s Indice: %d Data: %d", getName().c_str(),
-    // (int)indexIBO.size(),
-    //              (int)vertexData.size());
 
     unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);

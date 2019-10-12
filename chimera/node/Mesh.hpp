@@ -35,15 +35,7 @@ class Mesh : public Draw {
 
   private:
     void setVertexBuffer();
-
     VertexRenderStatic renderStat;
-
-    // GLuint VAO;
-    // GLuint VertexVBOID;
-    // GLuint IndexVBOID;
-
-    // std::vector<unsigned int> indexIBO;
-    // std::vector<VertexData> vertexData;
 };
 } // namespace Chimera
 #endif

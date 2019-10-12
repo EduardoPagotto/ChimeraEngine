@@ -12,8 +12,8 @@ void conversorVBO(std::vector<unsigned int>& vertexIndex, std::vector<glm::vec3>
                   // Chimera::Color cor,
                   std::vector<VertexData>& outData);
 
-void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& outData,
-                   std::vector<unsigned int>& out_indices);
+// void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& outData,
+//                    std::vector<unsigned int>& out_indices);
 
 } // namespace Chimera
 #endif

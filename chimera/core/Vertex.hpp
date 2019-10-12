@@ -19,15 +19,35 @@ struct VertexDataFull {
     glm::vec2 texture;  // 2 * 4 = 08 (36 - 43) //cuidado, posicao muda o sizeof(VertexDataFull)
 };
 
-class VertexFull {
+void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& outData,
+                   std::vector<unsigned int>& out_indices);
+
+class VertexRenderDynamic {
   public:
-    VertexFull();
+    VertexRenderDynamic();
     void create(const unsigned int& max);
-    virtual ~VertexFull();
+    virtual ~VertexRenderDynamic();
     void render(std::vector<VertexDataFull>& vVertice);
 
   private:
     unsigned int VBO, VAO;
 };
+
+class VertexRenderStatic {
+  public:
+    VertexRenderStatic();
+    virtual ~VertexRenderStatic();
+    void create(std::vector<VertexData>& vertexDataIn); // void setVertexBuffer();
+    void render();
+
+  private:
+    unsigned int VAO;
+    unsigned int VertexVBOID;
+    unsigned int IndexVBOID;
+    std::vector<unsigned int> indexIBO;
+    std::vector<VertexData> vertexData;
+    // unsigned int VBO, VAO;
+};
+
 } // namespace Chimera
 #endif

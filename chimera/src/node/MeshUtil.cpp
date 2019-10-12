@@ -1,10 +1,6 @@
 #include "chimera/node/MeshUtil.hpp"
 
-#ifndef WIN32
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
 
 namespace Chimera {
 

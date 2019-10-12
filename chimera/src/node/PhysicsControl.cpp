@@ -1,13 +1,8 @@
 #include "chimera/node/PhysicsControl.hpp"
+//#include "chimera/core/Events.hpp"
+#include "chimera/core/utils.hpp"
 
-#ifndef WIN32
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#include <utility>
-#endif
-
-#include "chimera/core/Events.hpp"
 
 namespace Chimera {
 

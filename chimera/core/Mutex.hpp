@@ -1,15 +1,11 @@
 #ifndef __CHIMERA_MUTEX__HPP
 #define __CHIMERA_MUTEX__HPP
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
 #include <cstdarg>
 #include <iterator>
 #include <pthread.h>
 #include <sys/errno.h>
 #include <sys/time.h>
-#endif
 
 //#include <ctime>
 //#include <queue>
@@ -50,9 +46,7 @@ class Mutex {
     /// MUTEX_OK (TRUE) se obteve a trava
     /// MUTEX_TIME_OUT (FALSE) se falhou na obtcao de trava
     /// </returns>
-    inline DWORD tryLock(DWORD _milisec = 0) {
-        return WaitForSingleObject(m_mutex, _milisec);
-    }
+    inline DWORD tryLock(DWORD _milisec = 0) { return WaitForSingleObject(m_mutex, _milisec); }
 
     /// <summary> Destrava Mutex </summary>
     inline DWORD unlock(void) {

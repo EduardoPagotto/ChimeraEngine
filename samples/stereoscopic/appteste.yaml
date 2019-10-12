@@ -1,0 +1,28 @@
+screen:
+  name: teste
+  canvas:
+    w: 512
+    h: 512
+shaders:
+  - name: mesh-default
+    vertex: ./samples/stereoscopic/shader/mesh.vert
+    fragment: ./samples/stereoscopic/shader/mesh.frag
+  #- name: debugDepthQuad
+  #  vertex: ./examples/appTest/shader/debug_quad.vert
+  #  fragment: ./examples/appTest/shader/debug_quad.frag
+  #- name: shadow_mapping
+  #  vertex: ./examples/appTest/shader/shadow_mapping.vert
+  #  fragment: ./examples/appTest/shader/shadow_mapping.frag
+
+Entidades:
+  camera:
+    nome: Observador-01
+    distancia:
+      minima: 1000.0
+      maxima: 0.5
+      optica:
+        near: 0.1
+        far: 45.0
+    posicao: [300.0, 0.0, 0.0]
+    rotacao: [0.0, 0.0, 0.0]
+    perspectiva: True

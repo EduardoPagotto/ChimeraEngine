@@ -4,11 +4,7 @@
 #include <map>
 #include <string>
 
-#ifndef WIN32
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
 
 #include "chimera/core/JoystickState.hpp"
 

@@ -7,59 +7,7 @@ namespace Chimera {
 void debugDados(Mesh* pMesh) {
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Debug Mess Nome: %s", pMesh->getName().c_str());
-
-    int linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Indice ----------(%03d)", (int)pMesh->meshData.vertexIndex.size());
-    for (unsigned int indice = 0; indice < pMesh->meshData.vertexIndex.size(); indice += 3) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                     pMesh->meshData.vertexIndex[indice], pMesh->meshData.vertexIndex[indice + 1],
-                     pMesh->meshData.vertexIndex[indice + 2]);
-        linha++;
-    }
-
-    linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Lista ---------(%03d)", (int)pMesh->meshData.vertexList.size());
-    for (unsigned int indice = 0; indice < pMesh->meshData.vertexList.size(); indice++) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f)", linha, indice,
-                     pMesh->meshData.vertexList[indice].x, pMesh->meshData.vertexList[indice].y,
-                     pMesh->meshData.vertexList[indice].z);
-        linha++;
-    }
-
-    linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Indice ----------(%03d)", (int)pMesh->meshData.normalIndex.size());
-    for (unsigned int indice = 0; indice < pMesh->meshData.normalIndex.size(); indice += 3) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                     pMesh->meshData.normalIndex[indice], pMesh->meshData.normalIndex[indice + 1],
-                     pMesh->meshData.normalIndex[indice + 2]);
-        linha++;
-    }
-
-    linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Lista ---------(%03d)", (int)pMesh->meshData.normalList.size());
-    for (unsigned int indice = 0; indice < pMesh->meshData.normalList.size(); indice++) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f))", linha, indice,
-                     pMesh->meshData.normalList[indice].x, pMesh->meshData.normalList[indice].y,
-                     pMesh->meshData.normalList[indice].z);
-        linha++;
-    }
-
-    linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Indice ----------(%03d)", (int)pMesh->meshData.textureIndex.size());
-    for (unsigned int indice = 0; indice < pMesh->meshData.textureIndex.size(); indice += 3) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                     pMesh->meshData.textureIndex[indice], pMesh->meshData.textureIndex[indice + 1],
-                     pMesh->meshData.textureIndex[indice + 2]);
-        linha++;
-    }
-
-    linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Lista ---------(%03d)", (int)pMesh->meshData.textureList.size());
-    for (unsigned int indice = 0; indice < pMesh->meshData.textureList.size(); indice++) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p: %02d (%05.3f; %05.3f)", linha, indice,
-                     pMesh->meshData.textureList[indice].x, pMesh->meshData.textureList[indice].y);
-        linha++;
-    }
+    pMesh->meshData.debugDados();
 }
 
 Mesh* createMeshParallelepiped(Node* _pParent, const std::string& _name, const glm::vec3& _size, Material* _pMaterial) {

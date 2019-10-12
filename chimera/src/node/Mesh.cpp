@@ -6,11 +6,7 @@
 
 #include "chimera/core/Singleton.hpp"
 
-#ifndef WIN32
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
 
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
 

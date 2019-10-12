@@ -2,98 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb)AppCargaManual",
+            "name": "Models",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/build/examples/AppCargaManual/AppCargaManual",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "(gdb)HelloWorld",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/build/examples/HelloWorld/HelloWorld",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "(gdb)AppShader",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/build/examples/AppShader/AppShader",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "(gdb)appTest",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/build/examples/appTest/appTest",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "(gdb)TesteBSPTree",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/build/examples/teste_bstree/TesteBSTree",
+            "program": "${workspaceRoot}/bin/models",
             "args": [
                 "-p",
                 "${workspaceRoot}"
@@ -112,10 +24,10 @@
             ]
         },
         {
-            "name": "(gdb)TesteLoader",
+            "name": "HelloWorld",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/build/examples/test_loader/TestLoader",
+            "program": "${workspaceRoot}/bin/helloworld",
             "args": [
                 "-p",
                 "${workspaceRoot}"
@@ -134,37 +46,103 @@
             ]
         },
         {
-            "name": "(gdb)SimpleRayCasting",
+            "name": "Shader",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/build/examples/simpleRayCasting/SimpleRayCasting",
+            "program": "${workspaceRoot}/bin/shader",
+            "args": [
+                "-p",
+                "${workspaceRoot}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Sterioscopic",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/bin/sterioscopic",
+            "args": [
+                "-p",
+                "${workspaceRoot}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "BSPTree",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/bin/bsptree",
+            "args": [
+                "-p",
+                "${workspaceRoot}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Loader",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/bin/loader",
+            "args": [
+                "-p",
+                "${workspaceRoot}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Raycasting",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/bin/raycasting",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "(gdb)AppEmpty",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/build/examples/AppEmpty/AppEmpty",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": true,
             "MIMode": "gdb",
             "setupCommands": [
                 {

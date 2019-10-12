@@ -87,6 +87,8 @@ void FlowControl::gameLoop(void) {
         if (pGameClientEvents->paused() == false) {
             // Se nao houver foco na tela pule o render
             processaGame();
+        } else {
+            SDL_Delay(500);
         }
     }
 }

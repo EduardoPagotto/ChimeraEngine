@@ -16,6 +16,8 @@ class MeshData {
     void textureFix();
     glm::vec3 getSizeBox();
 
+    void changeSize(const float& new_size, bool hasTexture);
+
     void debugDados();
 
     std::vector<unsigned int> vertexIndex;

@@ -3,6 +3,7 @@
 #include "chimera/core/CanvasHmd.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
+#include "chimera/core/LoadObj.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
@@ -102,7 +103,10 @@ int main(int argn, char** argv) {
         pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
 
         // Mesh do cubo1 filho de posicao 1
-        Mesh* pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01", glm::vec3(50, 50, 50), pMat1);
+        // FIXME: aqui
+        Mesh* pMesh = Chimera::createEmpty(pTrans, "Cubo-01", pMat1);
+        loadObj((const char*)"./samples/bsptree/models/cube.obj", &pMesh->meshData);
+        pMesh->meshData.changeSize(25.0, pMat1->hasTexture());
 
         // Posicao Cubo2
         Transform* pTrans2 = new Transform(group1, "trans02");
@@ -116,7 +120,9 @@ int main(int argn, char** argv) {
         pMat2->setShine(32.0f);
 
         // Mesh do cubo 2 vinculado posicao 2
-        Mesh* pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), pMat2);
+        Mesh* pMesh2 = Chimera::createEmpty(pTrans2, "Cubo-02", pMat2);
+        loadObj((const char*)"./samples/bsptree/models/cube.obj", &pMesh2->meshData);
+        pMesh2->meshData.changeSize(20.0, pMat2->hasTexture());
 
         // Wrapper do game
         Game* game = new Game(sceneMng, video);

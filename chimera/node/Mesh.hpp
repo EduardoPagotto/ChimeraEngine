@@ -27,11 +27,16 @@ class Mesh : public Draw {
     virtual void render(Shader* _pShader) override;
     virtual glm::vec3 getSizeBox();
 
+    void debugDados();
+
     MeshData meshData;
 
   private:
     void setVertexBuffer();
     VertexRenderStatic renderStat;
 };
+
+Mesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMaterial);
+
 } // namespace Chimera
 #endif

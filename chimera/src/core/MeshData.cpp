@@ -72,6 +72,19 @@ glm::vec3 MeshData::getSizeBox() {
                      (glm::abs(l_max.z) + glm::abs(l_min.z)) / 2);
 }
 
+void MeshData::changeSize(const float& new_size, bool hasTexture) {
+
+    if (hasTexture == false) {
+        textureIndex.clear();
+        textureList.clear();
+    }
+
+    for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
+        glm::vec3 val = vertexList[indice];
+        vertexList[indice] = glm::vec3(val.x * new_size, val.y * new_size, val.z * new_size);
+    }
+}
+
 void MeshData::debugDados() {
 
     int linha = 0;

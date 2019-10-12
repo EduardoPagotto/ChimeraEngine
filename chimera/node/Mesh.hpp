@@ -6,7 +6,9 @@
 #include <vector>
 
 #include "Draw.hpp"
+#include "chimera/core/MeshData.hpp"
 #include "chimera/core/VboIndexer.hpp"
+#include "chimera/core/Vertex.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
@@ -29,14 +31,7 @@ class Mesh : public Draw {
     virtual void render(Shader* _pShader) override;
     virtual glm::vec3 getSizeBox();
 
-    std::vector<unsigned int> vertexIndex;
-    std::vector<glm::vec3> vertexList;
-
-    std::vector<unsigned int> normalIndex;
-    std::vector<glm::vec3> normalList;
-
-    std::vector<unsigned int> textureIndex;
-    std::vector<glm::vec2> textureList;
+    MeshData meshData;
 
   private:
     void setVertexBuffer();

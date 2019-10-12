@@ -1,10 +1,11 @@
 #include <iterator>
 
+#include "chimera/core/Singleton.hpp"
 #include "chimera/node/Mesh.hpp"
 #include "chimera/node/MeshUtil.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 
-#include "chimera/core/Singleton.hpp"
+#include "chimera/core/LoadObj.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -21,29 +22,14 @@ Mesh::Mesh(Node* _parent, std::string _name) : Draw(_parent, EntityKind::MESH, _
 
 Mesh::Mesh(const Mesh& _cpy) : Draw(_cpy) {
 
-    vertexIndex.reserve(_cpy.vertexIndex.size());
-    copy(_cpy.vertexIndex.begin(), _cpy.vertexIndex.end(), back_inserter(vertexIndex));
-    copy(_cpy.vertexList.begin(), _cpy.vertexList.end(), back_inserter(vertexList));
-
-    normalIndex.reserve(_cpy.normalIndex.size());
-    copy(_cpy.normalIndex.begin(), _cpy.normalIndex.end(), back_inserter(normalIndex));
-    copy(_cpy.normalList.begin(), _cpy.normalList.end(), back_inserter(normalList));
-
-    textureIndex.reserve(_cpy.textureIndex.size());
-    copy(_cpy.textureIndex.begin(), _cpy.textureIndex.end(), back_inserter(textureIndex));
-    copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
+    // FIXME: criar a copia do meshdata
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Constructor Copy Mesh %s", _cpy.getName().c_str());
 }
 
 Mesh::~Mesh() {
 
-    vertexIndex.clear();
-    vertexList.clear();
-    normalIndex.clear();
-    normalList.clear();
-    textureIndex.clear();
-    textureList.clear();
+    // FIXME: remover o mesh data
 
     glDeleteBuffers(1, &VertexVBOID);
     glDeleteBuffers(1, &IndexVBOID);
@@ -58,47 +44,14 @@ void Mesh::init() {
 
     material->init();
 
-    // Ajuste de textura do imageSDL invertendo valor de V
-    for (int indice = 0; indice < textureIndex.size(); indice++) {
-        int posTex = textureIndex[indice];
-        textureList[posTex].y = 1 - textureList[posTex].y;
-    }
+    meshData.textureFix();
 
     setVertexBuffer();
 }
 
 void Mesh::accept(NodeVisitor* v) { v->visit(this); }
 
-glm::vec3 Mesh::getSizeBox() {
-
-    glm::vec3 retorno(0.0f, 0.0f, 0.0f);
-    glm::vec3 l_max(0.0f, 0.0f, 0.0f);
-    glm::vec3 l_min(0.0f, 0.0f, 0.0f);
-
-    for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
-
-        if (l_max.x < vertexList[indice].x)
-            l_max.x = vertexList[indice].x;
-
-        if (l_max.y < vertexList[indice].y)
-            l_max.y = vertexList[indice].y;
-
-        if (l_max.z < vertexList[indice].z)
-            l_max.z = vertexList[indice].z;
-
-        if (l_min.x > vertexList[indice].x)
-            l_min.x = vertexList[indice].x;
-
-        if (l_min.y > vertexList[indice].y)
-            l_min.y = vertexList[indice].y;
-
-        if (l_min.z > vertexList[indice].z)
-            l_min.z = vertexList[indice].z;
-    }
-
-    return glm::vec3((glm::abs(l_max.x) + glm::abs(l_min.x)) / 2, (glm::abs(l_max.y) + glm::abs(l_min.y)) / 2,
-                     (glm::abs(l_max.z) + glm::abs(l_min.z)) / 2);
-}
+glm::vec3 Mesh::getSizeBox() { return meshData.getSizeBox(); }
 
 void Mesh::render(Shader* _pShader) {
 
@@ -109,7 +62,8 @@ void Mesh::render(Shader* _pShader) {
 
 void Mesh::setVertexBuffer() {
     std::vector<VertexData> vertexDataIn;
-    conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
+    convertMeshDataVertexData(&meshData, vertexDataIn);
+    // conversorVBO(vertexIndex, vertexList, normalIndex, normalList, textureIndex, textureList, vertexDataIn);
     indexVBO_slow(vertexDataIn, vertexData, indexIBO);
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "VBO Nome: %s Indice: %d Data: %d", getName().c_str(), (int)indexIBO.size(),

@@ -19,18 +19,6 @@ struct VertexDataFull {
     glm::vec2 texture;  // 2 * 4 = 08 (36 - 43) //cuidado, posicao muda o sizeof(VertexDataFull)
 };
 
-struct MeshData {
-    std::vector<unsigned int> vertexIndex;
-    std::vector<glm::vec3> vertexList;
-    std::vector<glm::vec3> colorList;
-
-    std::vector<unsigned int> normalIndex;
-    std::vector<glm::vec3> normalList;
-
-    std::vector<unsigned int> textureIndex;
-    std::vector<glm::vec2> textureList;
-};
-
 class VertexFull {
   public:
     VertexFull();

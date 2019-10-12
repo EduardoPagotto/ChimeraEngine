@@ -63,7 +63,8 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pDraw->vertexList.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    _pDraw->meshData.vertexList.push_back(
+                        glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-normals") != nullptr) {
 
@@ -72,7 +73,8 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pDraw->normalList.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    _pDraw->meshData.normalList.push_back(
+                        glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-map-0") != nullptr) {
 
@@ -80,7 +82,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 std::vector<float> lista;
                 getSource(l_nSource, lista);
                 for (unsigned int indice = 0; indice < lista.size(); indice += 2)
-                    _pDraw->textureList.push_back(glm::vec2(lista[indice], lista[indice + 1]));
+                    _pDraw->meshData.textureList.push_back(glm::vec2(lista[indice], lista[indice + 1]));
             }
         }
 
@@ -127,15 +129,15 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
 
                 if (strstr(l_source, (char*)"-vertices") != nullptr) { // indices de vetor ponto
 
-                    _pDraw->vertexIndex.push_back(l_arrayIndex[l_contador]);
+                    _pDraw->meshData.vertexIndex.push_back(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-normals") != nullptr) { // indice de vetor normal
 
-                    _pDraw->normalIndex.push_back(l_arrayIndex[l_contador]);
+                    _pDraw->meshData.normalIndex.push_back(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-map-0") != nullptr) { // indice de vetor posicao textura
 
-                    _pDraw->textureIndex.push_back(l_arrayIndex[l_contador]);
+                    _pDraw->meshData.textureIndex.push_back(l_arrayIndex[l_contador]);
                 }
             }
             l_arrayIndex.clear();
@@ -147,12 +149,12 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
     }
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Nome: %s", _pDraw->getName().c_str());
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex  Indice / Lista - ( %03d / %03d )", (int)_pDraw->vertexIndex.size(),
-                 (int)_pDraw->vertexList.size());
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal  Indice / Lista - ( %03d / %03d )", (int)_pDraw->normalIndex.size(),
-                 (int)_pDraw->normalList.size());
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Indice / Lista - ( %03d / %03d )", (int)_pDraw->textureIndex.size(),
-                 (int)_pDraw->textureList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex  Indice / Lista - ( %03d / %03d )",
+                 (int)_pDraw->meshData.vertexIndex.size(), (int)_pDraw->meshData.vertexList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal  Indice / Lista - ( %03d / %03d )",
+                 (int)_pDraw->meshData.normalIndex.size(), (int)_pDraw->meshData.normalList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Indice / Lista - ( %03d / %03d )",
+                 (int)_pDraw->meshData.textureIndex.size(), (int)_pDraw->meshData.textureList.size());
 
     return retorno;
 }

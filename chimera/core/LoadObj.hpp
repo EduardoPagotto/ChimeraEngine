@@ -1,6 +1,7 @@
 #ifndef __CHIMERA_LOAD_OBJ__HPP
 #define __CHIMERA_LOAD_OBJ__HPP
 
+#include "MeshData.hpp"
 #include "Triangle.hpp"
 #include "Vertex.hpp"
 #include <glm/glm.hpp>

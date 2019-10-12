@@ -87,4 +87,65 @@ void loadObj(const char* _fineName, MeshData* _mesh) {
     if (line)
         free(line);
 }
+
+void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>* _pListPolygon) {
+
+    for (short indice = 0; indice < _pMesh->vertexIndex.size(); indice += 3) {
+
+        Triangle t = Triangle(glm::vec3(0.0, 0.0, 0.0),  // A zerados carga em loop
+                              glm::vec3(0.0, 0.0, 0.0),  // B zerados carga em loop
+                              glm::vec3(0.0, 0.0, 0.0)); // C zerados carga em loop
+
+        for (short tri = 0; tri < 3; tri++) {
+
+            t.vertex[tri].position = _pMesh->vertexList[_pMesh->vertexIndex[indice + tri]];
+
+            if (_pMesh->normalList.size() > 0)
+                t.vertex[tri].normal = _pMesh->normalList[_pMesh->normalIndex[indice + tri]];
+
+            if (_pMesh->colorList.size() > 0)
+                t.vertex[tri].color = _pMesh->colorList[_pMesh->vertexIndex[indice + tri]];
+
+            if (_pMesh->textureList.size() > 0)
+                t.vertex[tri].texture = _pMesh->textureList[_pMesh->textureIndex[indice + tri]];
+        }
+
+        _pListPolygon->push_back(t);
+        // t.debugData();
+    }
+}
+
+void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outData) {
+    unsigned l_numFaces = _pMesh->vertexIndex.size() / 3;
+    unsigned int l_index = 0;
+    unsigned int fa = 0;
+    for (unsigned int face = 0; face < l_numFaces; face++) {
+        fa = face * 3;
+        for (unsigned int point = 0; point < 3; point++) {
+            l_index = fa + point;
+            outData.push_back({_pMesh->vertexList[_pMesh->vertexIndex[l_index]], // Vertice
+                               _pMesh->normalList[_pMesh->normalIndex[l_index]], // Normal
+                               (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[l_index]]
+                                                                : glm::vec2(0.0, 0.0)}); // Texture
+        }
+    }
+}
+
+void convertMeshDataVertexDataFull(MeshData* _pMesh, std::vector<VertexDataFull>& outData) {
+    unsigned l_numFaces = _pMesh->vertexIndex.size() / 3;
+    unsigned int l_index = 0;
+    unsigned int fa = 0;
+    for (unsigned int face = 0; face < l_numFaces; face++) {
+        fa = face * 3;
+        for (unsigned int point = 0; point < 3; point++) {
+            l_index = fa + point;
+            outData.push_back({_pMesh->vertexList[_pMesh->vertexIndex[l_index]], // Vertice
+                               _pMesh->normalList[_pMesh->normalIndex[l_index]], // Normal
+                               (_pMesh->colorList.size() > 0) ? _pMesh->colorList[_pMesh->vertexIndex[l_index]]
+                                                              : glm::vec3(0.0, 0.0, 0.0), // Color
+                               (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[l_index]]
+                                                                : glm::vec2(0.0, 0.0)}); // Texture
+        }
+    }
+}
 } // namespace Chimera

@@ -69,36 +69,6 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::loadModelObj(const char* _file, std::vector<Chimera::Triangle>* _pListPolygon) {
-
-    Chimera::MeshData m;
-    loadObj(_file, &m);
-
-    for (short indice = 0; indice < m.vertexIndex.size(); indice += 3) {
-
-        Chimera::Triangle t = Chimera::Triangle(glm::vec3(0.0, 0.0, 0.0),  // A zerados carga em loop
-                                                glm::vec3(0.0, 0.0, 0.0),  // B zerados carga em loop
-                                                glm::vec3(0.0, 0.0, 0.0)); // C zerados carga em loop
-
-        for (short tri = 0; tri < 3; tri++) {
-
-            t.vertex[tri].position = m.vertexList[m.vertexIndex[indice + tri]];
-
-            if (m.normalList.size() > 0)
-                t.vertex[tri].normal = m.normalList[m.normalIndex[indice + tri]];
-
-            if (m.colorList.size() > 0)
-                t.vertex[tri].color = m.colorList[m.vertexIndex[indice + tri]];
-
-            if (m.textureList.size() > 0)
-                t.vertex[tri].texture = m.textureList[m.textureIndex[indice + tri]];
-        }
-
-        _pListPolygon->push_back(t);
-        // debugTriangle(&t);
-    }
-}
-
 void Game::start() {
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
@@ -123,10 +93,14 @@ void Game::start() {
 
     pTex->init();
 
+    Chimera::MeshData m;
     std::vector<Chimera::Triangle> listPolygons;
-    loadModelObj((const char*)"./samples/bsptree/models/square1.obj", &listPolygons);
-    // loadModelObj((const char*)"./samples/bsptree/models/split1.obj", &listPolygons);
-    // loadModelObj((const char*)"./samples/bsptree/models/teste1.obj", &listPolygons);
+
+    loadObj((const char*)"./samples/bsptree/models/square1.obj", &m);
+    // loadObj((const char*)"./samples/bsptree/models/split1.obj", &m);
+    // loadObj((const char*)"./samples/bsptree/models/teste1.obj", &m);
+
+    convertMeshDataTriangle(&m, &listPolygons);
 
     std::reverse(listPolygons.begin(), listPolygons.end());
 

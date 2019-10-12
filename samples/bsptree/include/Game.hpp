@@ -29,8 +29,6 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void loadModelObj(const char* _file, std::vector<Chimera::Triangle>* _pListPolygon);
-
     BSPTree* pBspTree;
     bool isPaused;
     int botaoIndex;

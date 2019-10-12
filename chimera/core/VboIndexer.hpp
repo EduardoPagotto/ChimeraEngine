@@ -1,17 +1,10 @@
 #ifndef __CHIMERA_VBOINDEXER_HPP
 #define __CHIMERA_VBOINDEXER_HPP
 
-//#include "Color.hpp"
-#include <glm/glm.hpp>
+#include "Vertex.hpp"
 #include <vector>
 
-struct VertexData {
-    glm::vec3 position; // 3 * 4 = 12 (0 -11)
-    glm::vec3 normal;   // 3 * 4 = 12 (12-23)
-    glm::vec2 texture;  // 2 * 4 = 08 (24-31)
-    // glm::vec4 color;    //4 * 4 = 16 (32-47) //cuidado com a posicao, muda o
-    // sizeof(VertexData)
-};
+namespace Chimera {
 
 void conversorVBO(std::vector<unsigned int>& vertexIndex, std::vector<glm::vec3>& vertexList,
                   std::vector<unsigned int>& normalIndex, std::vector<glm::vec3>& normalList,
@@ -22,4 +15,5 @@ void conversorVBO(std::vector<unsigned int>& vertexIndex, std::vector<glm::vec3>
 void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& outData,
                    std::vector<unsigned int>& out_indices);
 
+} // namespace Chimera
 #endif

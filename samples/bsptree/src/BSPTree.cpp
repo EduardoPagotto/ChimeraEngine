@@ -1,6 +1,6 @@
 #include "BSPTree.h"
 
-void BSPTree::draw(glm::vec3* eye, std::vector<Triangle>* _pListPolygon) {
+void BSPTree::draw(glm::vec3* eye, std::vector<Chimera::Triangle>* _pListPolygon) {
     BSPTree::drawBSPTree(root, eye, _pListPolygon);
 }
 
@@ -11,7 +11,7 @@ float BSPTree::classify(glm::vec3* normal, glm::vec3* eye) {
     return p;
 }
 
-void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Triangle>* _pListPolygon) {
+void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::Triangle>* _pListPolygon) {
     if (tree == nullptr)
         return;
 
@@ -23,7 +23,7 @@ void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Triangl
 
         // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
         for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-            Triangle t = (*it);
+            Chimera::Triangle t = (*it);
             _pListPolygon->push_back(t);
         }
 
@@ -34,7 +34,7 @@ void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Triangl
 
         // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
         for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-            Triangle t = (*it);
+            Chimera::Triangle t = (*it);
             _pListPolygon->push_back(t);
         }
 

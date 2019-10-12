@@ -23,7 +23,9 @@ set (SourcesCore Canvas.cpp
 				 FlowControl.cpp
 				 VboIndexer.cpp
 				 utils.cpp
-				 LoadObj.cpp)
+				 LoadObj.cpp
+				 Triangle.cpp
+				 Vertex.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

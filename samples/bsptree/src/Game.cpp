@@ -9,8 +9,6 @@
 
 #include "chimera/core/LoadObj.hpp"
 
-#define BUFFER_OFFSET(i) ((void*)(i))
-
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
     isPaused = false;
     debug_init = 0;
@@ -71,40 +69,16 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::debugTriangle(Triangle* _pt) {
-    for (int i = 0; i < 3; i++) {
-        if (i == 0) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "---------------------------------------------------");
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "A");
-        } else if (i == 1)
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "B");
-        else
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "C");
-
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "vertice (%f %f %f)", _pt->vertex[i].position.x,
-                     _pt->vertex[i].position.y, _pt->vertex[i].position.z);
-
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "normal (%f %f %f)", _pt->vertex[i].normal.x,
-                     _pt->vertex[i].normal.y, _pt->vertex[i].normal.z);
-
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "color (%f %f %f)", _pt->vertex[i].color.x, _pt->vertex[i].color.y,
-                     _pt->vertex[i].color.z);
-
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "texture (%f %f)", _pt->vertex[i].texture.x,
-                     _pt->vertex[i].texture.y);
-    }
-}
-
-void Game::loadModelObj(const char* _file, std::vector<Triangle>* _pListPolygon) {
+void Game::loadModelObj(const char* _file, std::vector<Chimera::Triangle>* _pListPolygon) {
 
     Chimera::MeshData m;
     loadObj(_file, &m);
 
     for (short indice = 0; indice < m.vertexIndex.size(); indice += 3) {
 
-        Triangle t = Triangle(glm::vec3(0.0, 0.0, 0.0),  // A zerados carga em loop
-                              glm::vec3(0.0, 0.0, 0.0),  // B zerados carga em loop
-                              glm::vec3(0.0, 0.0, 0.0)); // C zerados carga em loop
+        Chimera::Triangle t = Chimera::Triangle(glm::vec3(0.0, 0.0, 0.0),  // A zerados carga em loop
+                                                glm::vec3(0.0, 0.0, 0.0),  // B zerados carga em loop
+                                                glm::vec3(0.0, 0.0, 0.0)); // C zerados carga em loop
 
         for (short tri = 0; tri < 3; tri++) {
 
@@ -123,48 +97,6 @@ void Game::loadModelObj(const char* _file, std::vector<Triangle>* _pListPolygon)
         _pListPolygon->push_back(t);
         // debugTriangle(&t);
     }
-}
-
-void Game::buildBuffer(int max) {
-
-    // refs: ver Particle.cpp in node sub-projetc
-    // http://www.songho.ca/opengl/gl_vbo.html#create
-    // https://www.khronos.org/opengl/wiki/Vertex_Rendering
-
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, max, nullptr, GL_STREAM_DRAW);
-
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(0);
-
-    // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(12));
-    glEnableVertexAttribArray(1);
-
-    // color attribute
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(24));
-    glEnableVertexAttribArray(2);
-
-    // texture coord attribute
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(36));
-    glEnableVertexAttribArray(3);
-
-    // limpa dados
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(3);
 }
 
 void Game::start() {
@@ -191,7 +123,7 @@ void Game::start() {
 
     pTex->init();
 
-    std::vector<Triangle> listPolygons;
+    std::vector<Chimera::Triangle> listPolygons;
     loadModelObj((const char*)"./samples/bsptree/models/square1.obj", &listPolygons);
     // loadModelObj((const char*)"./samples/bsptree/models/split1.obj", &listPolygons);
     // loadModelObj((const char*)"./samples/bsptree/models/teste1.obj", &listPolygons);
@@ -201,7 +133,7 @@ void Game::start() {
     BSPTreeBuilder builder(&listPolygons);
     pBspTree = new BSPTree(builder.getNodeRoot());
 
-    buildBuffer(5000);
+    vertexBuffer.create(5000);
 }
 
 void Game::stop() {}
@@ -236,15 +168,15 @@ void Game::render() {
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
-    std::vector<Triangle> listPolygons;
+    std::vector<Chimera::Triangle> listPolygons;
     pBspTree->draw(&vp->position, &listPolygons);
 
     std::vector<int> listaDebug;
-    std::vector<VertexDataFull> vVertice;
+    std::vector<Chimera::VertexDataFull> vVertice;
     for (int face = 0; face < listPolygons.size(); face++) {
         listaDebug.push_back(listPolygons[face].getSerial());
         for (int i = 0; i < 3; i++) {
-            VertexDataFull vd = listPolygons[face].vertex[i];
+            Chimera::VertexDataFull vd = listPolygons[face].vertex[i];
             vVertice.push_back(vd);
         }
     }
@@ -254,7 +186,6 @@ void Game::render() {
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
-    // pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
@@ -262,26 +193,16 @@ void Game::render() {
     // aplica a textura
     pTex->apply(0, "material.tDiffuse", pShader);
 
-    if (debug_init == 1) {
-        debug_init = 0;
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Vertex size: %d", (int)vVertice.size());
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
-                     vp->position.z);
-        for (int i = 0; i < listaDebug.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face: %d", listaDebug[i]);
-    }
+    // if (debug_init == 1) {
+    //     debug_init = 0;
+    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Vertex size: %d", (int)vVertice.size());
+    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
+    //                  vp->position.z);
+    //     for (int i = 0; i < listaDebug.size(); i++)
+    //         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face: %d", listaDebug[i]);
+    // }
 
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    int tot = vVertice.size() * sizeof(VertexDataFull);
-    // glBufferData(GL_ARRAY_BUFFER, 5000, nullptr, GL_STREAM_DRAW);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, tot, &vVertice[0]);
-
-    glDrawArrays(GL_TRIANGLES, 0, vVertice.size()); //?? https://www.youtube.com/watch?v=S_xUgzFMIso
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    vertexBuffer.render(vVertice);
 
     pCanvas->after();
     pCanvas->swapWindow();

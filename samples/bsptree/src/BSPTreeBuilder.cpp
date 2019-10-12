@@ -1,4 +1,5 @@
 #include "BSPTreeBuilder.hpp"
+#include "chimera/core/Vertex.hpp"
 
 #define EPSILON 1e-3
 
@@ -8,7 +9,9 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
-BSPTreeBuilder::BSPTreeBuilder(std::vector<Triangle>* _pListPolygon) { root = buildBSPTreeNode(_pListPolygon); }
+BSPTreeBuilder::BSPTreeBuilder(std::vector<Chimera::Triangle>* _pListPolygon) {
+    root = buildBSPTreeNode(_pListPolygon);
+}
 
 glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
     float num = glm::dot(n, a);
@@ -52,16 +55,16 @@ glm::vec2 retTex2(const glm::vec2& _p0, const glm::vec2& _p1) {
     // return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
 }
 
-void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
-                                   std::vector<Triangle>* _pListPolygon) {
+void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::Triangle* _partition,
+                                   std::vector<Chimera::Triangle>* _pListPolygon) {
     glm::vec3& a = _pTriangle->vertex[0].position;
     glm::vec3& b = _pTriangle->vertex[1].position;
     glm::vec3& c = _pTriangle->vertex[2].position;
 
     // acerto para vertex do tex final igualar a rotacao do triangulo
-    VertexDataFull* pVertex_a = nullptr;
-    VertexDataFull* pVertex_b = nullptr;
-    VertexDataFull* pVertex_c = nullptr;
+    Chimera::VertexDataFull* pVertex_a = nullptr;
+    Chimera::VertexDataFull* pVertex_b = nullptr;
+    Chimera::VertexDataFull* pVertex_c = nullptr;
 
     // Normaliza Triangulo para que o corte do hiper-plano esteja nos segmentos de reta CA e CB (corte em a e b)
     if (fx.x * fx.z >= 0) { // corte em a e c
@@ -97,14 +100,14 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     float propAC = (glm::distance(A, a) / glm::distance(a, c)); // razao da distancia entre a e A
     float InterTexA = propAC * pVertex_a->texture.x;
 
-    Triangle T1(a, b, A);
+    Chimera::Triangle T1(a, b, A);
     T1.vertex[0].texture = retTex1(pVertex_c->texture, pVertex_a->texture);
     T1.vertex[1].texture = retTex1(pVertex_a->texture, pVertex_b->texture);
     T1.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
 
     //--
 
-    Triangle T2(b, B, A);
+    Chimera::Triangle T2(b, B, A);
     T2.vertex[0].texture = retTex1(pVertex_a->texture, pVertex_b->texture); // pVertex_b->texture; // b old c
     // T2.vertex[0].texture = retTex1(pVertex_c->texture, pVertex_b->texture);
 
@@ -125,7 +128,7 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
 
     // --
 
-    Triangle T3(A, B, c);
+    Chimera::Triangle T3(A, B, c);
     T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y);      // A
     T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);                   // B
     T3.vertex[2].texture = retTex2(pVertex_b->texture, pVertex_c->texture); // c old a
@@ -148,7 +151,7 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     _pListPolygon->push_back(T3);
 }
 
-SIDE BSPTreeBuilder::classifyPoly(Triangle* plane, Triangle* poly, glm::vec3& _resultTest) {
+SIDE BSPTreeBuilder::classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* poly, glm::vec3& _resultTest) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     unsigned short infront = 0;
     unsigned short behind = 0;
@@ -185,7 +188,7 @@ SIDE BSPTreeBuilder::classifyPoly(Triangle* plane, Triangle* poly, glm::vec3& _r
     return SIDE::IS_SPANNING; // CP_SPANNING;
 }
 
-BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(std::vector<Triangle>* _pListPolygon) {
+BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(std::vector<Chimera::Triangle>* _pListPolygon) {
     if (_pListPolygon->empty() == true)
         return nullptr;
     // tree->partition
@@ -193,12 +196,12 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(std::vector<Triangle>* _pListPolyg
     _pListPolygon->pop_back();
     tree->polygons.push_back(tree->partition);
 
-    std::vector<Triangle> front_list;
-    std::vector<Triangle> back_list;
+    std::vector<Chimera::Triangle> front_list;
+    std::vector<Chimera::Triangle> back_list;
 
     while (_pListPolygon->empty() == false) {
 
-        Triangle poly = _pListPolygon->back();
+        Chimera::Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
         SIDE teste = classifyPoly(&tree->partition, &poly, result);

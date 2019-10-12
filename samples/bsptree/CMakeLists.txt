@@ -26,8 +26,7 @@ set (IncludesTesteBSTree ${CMAKE_CURRENT_SOURCE_DIR}/include
 						 ${OPENGL_INCLUDE_DIR}
 						 ${SDL2_INCLUDE_DIR})
 
-add_executable (bsptree src/Triangle.cpp
-						src/BSPTree.cpp
+add_executable (bsptree src/BSPTree.cpp
 						src/BSPTreeBuilder.cpp
 						src/Game.cpp 
 						src/main.cpp)

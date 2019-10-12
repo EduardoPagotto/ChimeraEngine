@@ -1,7 +1,7 @@
 #include "chimera/core/VboIndexer.hpp"
 
 #include <map>
-
+namespace Chimera {
 // Returns true if v1 can be considered equal to v2
 bool is_near(float v1, float v2) { return fabs(v1 - v2) < 0.01f; }
 
@@ -75,4 +75,5 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
             out_indices.push_back((unsigned int)outData.size() - 1);
         }
     }
+}
 }

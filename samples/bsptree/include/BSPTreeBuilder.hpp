@@ -6,17 +6,17 @@
 
 class BSPTreeBuilder {
   public:
-    BSPTreeBuilder(std::vector<Triangle>* _pListPolygon);
+    BSPTreeBuilder(std::vector<Chimera::Triangle>* _pListPolygon);
     BSPTreeNode* getNodeRoot() { return root; }
 
   private:
-    static float f(const glm::vec3& p, Triangle* _pPartition);
+    static float f(const glm::vec3& p, Chimera::Triangle* _pPartition);
 
-    static BSPTreeNode* buildBSPTreeNode(std::vector<Triangle>* _pListPolygon);
-    static void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Triangle* _partition,
-                              std::vector<Triangle>* _pListPolygon);
+    static BSPTreeNode* buildBSPTreeNode(std::vector<Chimera::Triangle>* _pListPolygon);
+    static void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::Triangle* _partition,
+                              std::vector<Chimera::Triangle>* _pListPolygon);
 
-    static SIDE classifyPoly(Triangle* plane, Triangle* poly, glm::vec3& _resultTest);
+    static SIDE classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* poly, glm::vec3& _resultTest);
 
     BSPTreeNode* root;
 };

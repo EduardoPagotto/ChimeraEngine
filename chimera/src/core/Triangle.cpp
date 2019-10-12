@@ -1,4 +1,6 @@
-#include "Triangle.hpp"
+#include "chimera/core/Triangle.hpp"
+
+namespace Chimera {
 
 unsigned Triangle::serialMaster = 0;
 
@@ -25,6 +27,32 @@ glm::vec3 Triangle::normal() {
     return glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
 }
 
+// void Triangle::debugData() {
+//     for (int i = 0; i < 3; i++) {
+//         if (i == 0) {
+//             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "---------------------------------------------------");
+//             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "A");
+//         } else if (i == 1)
+//             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "B");
+//         else
+//             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "C");
+
+//         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "vertice (%f %f %f)", this->vertex[i].position.x,
+//                      this->vertex[i].position.y, this->vertex[i].position.z);
+
+//         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "normal (%f %f %f)", this->vertex[i].normal.x,
+//                      this->vertex[i].normal.y, this->vertex[i].normal.z);
+
+//         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "color (%f %f %f)", this->vertex[i].color.x,
+//         this->vertex[i].color.y,
+//                      this->vertex[i].color.z);
+
+//         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "texture (%f %f)", this->vertex[i].texture.x,
+//                      this->vertex[i].texture.y);
+//     }
+// }
+
+} // namespace Chimera
 // glm::vec3 Triangle::verticeNormal() {
 //     glm::vec3 u = this->vertex[0].position - this->vertex[2].position;
 //     glm::vec3 v = this->vertex[0].position - this->vertex[1].position;

@@ -29,10 +29,7 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void buildBuffer(int max);
-
-    void loadModelObj(const char* _file, std::vector<Triangle>* _pListPolygon);
-    void debugTriangle(Triangle* _pt);
+    void loadModelObj(const char* _file, std::vector<Chimera::Triangle>* _pListPolygon);
 
     BSPTree* pBspTree;
     bool isPaused;
@@ -42,7 +39,7 @@ class Game : public Chimera::IGameClientEvents {
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    unsigned int VBO, VAO; //, EBO;
+    Chimera::VertexFull vertexBuffer;
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;

@@ -1,7 +1,7 @@
 #ifndef __BSPTREE_NODE__HPP
 #define __BSPTREE_NODE__HPP
 
-#include "Triangle.hpp"
+#include "chimera/core/Triangle.hpp"
 #include <vector>
 
 enum class SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
@@ -11,9 +11,9 @@ enum class SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
 // };
 
 struct BSPTreeNode {
-    BSPTreeNode(const Triangle& _partition) : partition(_partition), front(nullptr), back(nullptr) {}
-    std::vector<Triangle> polygons;
-    Triangle partition; // HyperPlane partition;
+    BSPTreeNode(const Chimera::Triangle& _partition) : partition(_partition), front(nullptr), back(nullptr) {}
+    std::vector<Chimera::Triangle> polygons;
+    Chimera::Triangle partition; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
 };

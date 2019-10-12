@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-struct VertexData {
+struct VertexDataFull {
     glm::vec3 position; // 3 * 4 = 12 ( 0 - 11)
     glm::vec3 normal;   // 3 * 4 = 12 (12 - 23)
     glm::vec3 color;    // 3 * 4 = 12 (24 - 35)
@@ -19,7 +19,7 @@ class Triangle {
     inline unsigned getSerial() const { return serial; }
     glm::vec3 normal();
     // glm::vec3 verticeNormal();
-    VertexData vertex[3];
+    VertexDataFull vertex[3];
 
   private:
     unsigned serial;

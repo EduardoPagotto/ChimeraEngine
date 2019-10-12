@@ -59,9 +59,9 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Tr
     glm::vec3& c = _pTriangle->vertex[2].position;
 
     // acerto para vertex do tex final igualar a rotacao do triangulo
-    VertexData* pVertex_a = nullptr;
-    VertexData* pVertex_b = nullptr;
-    VertexData* pVertex_c = nullptr;
+    VertexDataFull* pVertex_a = nullptr;
+    VertexDataFull* pVertex_b = nullptr;
+    VertexDataFull* pVertex_c = nullptr;
 
     // Normaliza Triangulo para que o corte do hiper-plano esteja nos segmentos de reta CA e CB (corte em a e b)
     if (fx.x * fx.z >= 0) { // corte em a e c

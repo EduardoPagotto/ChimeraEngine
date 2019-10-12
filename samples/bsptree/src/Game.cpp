@@ -143,19 +143,19 @@ void Game::buildBuffer(int max) {
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(0));
     glEnableVertexAttribArray(0);
 
     // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(12));
     glEnableVertexAttribArray(1);
 
     // color attribute
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(24));
     glEnableVertexAttribArray(2);
 
     // texture coord attribute
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(36));
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(36));
     glEnableVertexAttribArray(3);
 
     // limpa dados
@@ -192,9 +192,9 @@ void Game::start() {
     pTex->init();
 
     std::vector<Triangle> listPolygons;
-    // loadModelObj((const char*)"./samples/bsptree/models/square1.obj", &listPolygons);
+    loadModelObj((const char*)"./samples/bsptree/models/square1.obj", &listPolygons);
     // loadModelObj((const char*)"./samples/bsptree/models/split1.obj", &listPolygons);
-    loadModelObj((const char*)"./samples/bsptree/models/teste1.obj", &listPolygons);
+    // loadModelObj((const char*)"./samples/bsptree/models/teste1.obj", &listPolygons);
 
     std::reverse(listPolygons.begin(), listPolygons.end());
 
@@ -240,11 +240,11 @@ void Game::render() {
     pBspTree->draw(&vp->position, &listPolygons);
 
     std::vector<int> listaDebug;
-    std::vector<VertexData> vVertice;
+    std::vector<VertexDataFull> vVertice;
     for (int face = 0; face < listPolygons.size(); face++) {
         listaDebug.push_back(listPolygons[face].getSerial());
         for (int i = 0; i < 3; i++) {
-            VertexData vd = listPolygons[face].vertex[i];
+            VertexDataFull vd = listPolygons[face].vertex[i];
             vVertice.push_back(vd);
         }
     }
@@ -274,7 +274,7 @@ void Game::render() {
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    int tot = vVertice.size() * sizeof(VertexData);
+    int tot = vVertice.size() * sizeof(VertexDataFull);
     // glBufferData(GL_ARRAY_BUFFER, 5000, nullptr, GL_STREAM_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, tot, &vVertice[0]);
 

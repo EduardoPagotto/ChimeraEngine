@@ -7,14 +7,10 @@
 
 #include "Draw.hpp"
 #include "chimera/core/MeshData.hpp"
-#include "chimera/core/VboIndexer.hpp"
 #include "chimera/core/Vertex.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
-
-// Define this somewhere in your header file
-#define BUFFER_OFFSET(i) ((void*)(i))
 
 class Mesh : public Draw {
   public:

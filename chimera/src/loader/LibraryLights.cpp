@@ -48,6 +48,7 @@ std::tuple<Chimera::Color, Chimera::LightType> LibraryLights::loadDiffuseLightCo
         Chimera::Color cor = getColor(l_nPoint);
         return std::make_tuple(cor, Chimera::LightType::DIRECTIONAL);
     }
-}
 
+    return std::make_tuple(Chimera::Color(), Chimera::LightType::POSITIONAL);
+}
 } // namespace ChimeraLoaders

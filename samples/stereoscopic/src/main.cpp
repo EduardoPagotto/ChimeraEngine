@@ -8,7 +8,7 @@
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
-#include "chimera/node/MeshUtil.hpp"
+#include "chimera/node/Mesh.hpp"
 #include "chimera/node/Transform.hpp"
 
 #include <cstdio>

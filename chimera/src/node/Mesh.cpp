@@ -2,7 +2,6 @@
 
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/Mesh.hpp"
-#include "chimera/node/MeshUtil.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 
 #include "chimera/core/LoadObj.hpp"

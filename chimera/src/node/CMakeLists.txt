@@ -31,7 +31,6 @@ set (SourceNode Node.cpp
 				Transform.cpp
 				InitVisitor.cpp
 				RenderVisitor.cpp
-				MeshUtil.cpp
 				ShadowMapVisitor.cpp
 				NodeParse.cpp
 				TextureManager.cpp)

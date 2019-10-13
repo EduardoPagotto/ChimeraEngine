@@ -107,23 +107,23 @@ void VertexRenderDynamic::create(const unsigned int& max) {
     glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(12));
     glEnableVertexAttribArray(normalID);
 
-    // color attribute
-    GLuint colorID = 2;
-    glVertexAttribPointer(colorID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(24));
-    glEnableVertexAttribArray(colorID);
-
     // texture coord attribute
-    GLuint uvID = 3;
-    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(36));
+    GLuint uvID = 2;
+    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(24));
     glEnableVertexAttribArray(uvID);
+
+    // color attribute
+    GLuint colorID = 3;
+    glVertexAttribPointer(colorID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(32));
+    glEnableVertexAttribArray(colorID);
 
     // limpa dados
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glDisableVertexAttribArray(positionID);
     glDisableVertexAttribArray(normalID);
-    glDisableVertexAttribArray(colorID);
     glDisableVertexAttribArray(uvID);
+    glDisableVertexAttribArray(colorID);
 }
 
 //---------- VertexRenderStatic

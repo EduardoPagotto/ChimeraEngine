@@ -141,10 +141,10 @@ void convertMeshDataVertexDataFull(MeshData* _pMesh, std::vector<VertexDataFull>
             l_index = fa + point;
             outData.push_back({_pMesh->vertexList[_pMesh->vertexIndex[l_index]], // Vertice
                                _pMesh->normalList[_pMesh->normalIndex[l_index]], // Normal
-                               (_pMesh->colorList.size() > 0) ? _pMesh->colorList[_pMesh->vertexIndex[l_index]]
-                                                              : glm::vec3(0.0, 0.0, 0.0), // Color
                                (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[l_index]]
-                                                                : glm::vec2(0.0, 0.0)}); // Texture
+                                                                : glm::vec2(0.0, 0.0), // Texture
+                               (_pMesh->colorList.size() > 0) ? _pMesh->colorList[_pMesh->vertexIndex[l_index]]
+                                                              : glm::vec3(0.0, 0.0, 0.0)}); // Color
         }
     }
 }

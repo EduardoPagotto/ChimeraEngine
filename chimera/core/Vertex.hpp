@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+// Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
+
 namespace Chimera {
 
 struct VertexData {

@@ -76,8 +76,8 @@ void Game::start() {
     trackBall.setMax(1000.0);
 
     pCanvas->initGL();
-
-    // pCanvas->afterStart();
+    // Habilita o depth buffer/culling face
+    pCanvas->afterStart();
     glEnable(GL_COLOR_MATERIAL);
 
     // glEnable(GL_LIGHTING);
@@ -92,6 +92,7 @@ void Game::start() {
 
     Chimera::MeshData m;
     loadObj((const char*)"./samples/simples/tela01.obj", &m);
+    // loadObj((const char*)"./samples/bsptree/models/square1.obj", &m);
 
     m.changeSize(100.0, true);
     // m.textureFix();
@@ -134,19 +135,6 @@ void Game::render() {
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
-    // std::vector<Chimera::Triangle> listPolygons;
-    // pBspTree->draw(&vp->position, &listPolygons);
-
-    // std::vector<int> listaDebug;
-    // std::vector<Chimera::VertexDataFull> vVertice;
-    // for (int face = 0; face < listPolygons.size(); face++) {
-    //     listaDebug.push_back(listPolygons[face].getSerial());
-    //     for (int i = 0; i < 3; i++) {
-    //         Chimera::VertexDataFull vd = listPolygons[face].vertex[i];
-    //         vVertice.push_back(vd);
-    //     }
-    // }
-
     pShader->link();
 
     // Calcula view e projection baseado em vp
@@ -158,15 +146,6 @@ void Game::render() {
 
     // aplica a textura
     pTex->apply(0, "material.tDiffuse", pShader);
-
-    // if (debug_init == 1) {
-    //     debug_init = 0;
-    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Vertex size: %d", (int)vVertice.size());
-    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
-    //                  vp->position.z);
-    //     for (int i = 0; i < listaDebug.size(); i++)
-    //         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face: %d", listaDebug[i]);
-    // }
 
     vertexBuffer.render();
 

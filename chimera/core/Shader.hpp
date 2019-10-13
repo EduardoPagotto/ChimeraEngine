@@ -36,5 +36,8 @@ class Shader {
     GLuint idProgram;
     std::string currentProgram;
 };
+
+GLuint shadeLoadProg(const char* programName, const char* vertex_file_path, const char* fragment_file_path);
+
 } // namespace Chimera
 #endif

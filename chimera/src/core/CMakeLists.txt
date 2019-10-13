@@ -21,7 +21,6 @@ set (SourcesCore Canvas.cpp
 				 JoystickManager.cpp
 				 Shader.cpp	
 				 FlowControl.cpp
-				 utils.cpp
 				 LoadObj.cpp
 				 Triangle.cpp
 				 Vertex.cpp

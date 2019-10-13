@@ -57,6 +57,8 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
     }
 }
 
+//---------- VertexRenderDynamic
+
 VertexRenderDynamic::VertexRenderDynamic() {}
 
 VertexRenderDynamic::~VertexRenderDynamic() {
@@ -96,29 +98,35 @@ void VertexRenderDynamic::create(const unsigned int& max) {
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(0);
+    GLuint positionID = 0;
+    glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(positionID);
 
     // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(12));
-    glEnableVertexAttribArray(1);
+    GLuint normalID = 1;
+    glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(12));
+    glEnableVertexAttribArray(normalID);
 
     // color attribute
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(24));
-    glEnableVertexAttribArray(2);
+    GLuint colorID = 2;
+    glVertexAttribPointer(colorID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(24));
+    glEnableVertexAttribArray(colorID);
 
     // texture coord attribute
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(36));
-    glEnableVertexAttribArray(3);
+    GLuint uvID = 3;
+    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(36));
+    glEnableVertexAttribArray(uvID);
 
     // limpa dados
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(3);
+    glDisableVertexAttribArray(positionID);
+    glDisableVertexAttribArray(normalID);
+    glDisableVertexAttribArray(colorID);
+    glDisableVertexAttribArray(uvID);
 }
+
+//---------- VertexRenderStatic
 
 VertexRenderStatic::VertexRenderStatic() {
     VertexVBOID = 0;

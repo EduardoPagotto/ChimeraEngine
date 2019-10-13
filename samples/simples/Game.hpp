@@ -1,12 +1,12 @@
 #ifndef __GAME_SIMPLES__HPP
 #define __GAME_SIMPLES__HPP
 
-//#include "BSPTree.h"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Shader.hpp"
-//#include "chimera/core/Tex.hpp"
-//#include "chimera/core/TrackBall.hpp"
+#include "chimera/core/Tex.hpp"
+#include "chimera/core/TrackBall.hpp"
+#include "chimera/core/Vertex.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -29,20 +29,19 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    // BSPTree* pBspTree;
     bool isPaused;
-    // int botaoIndex;
-    // int estadoBotao;
-    // int debug_init;
-    // Chimera::TrackBall trackBall;
+    int botaoIndex;
+    int estadoBotao;
+    int debug_init;
+    Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    // Chimera::VertexRenderDynamic vertexBuffer;
-    // glm::mat4 projection;
-    // glm::mat4 view;
-    // glm::mat4 model;
+    Chimera::VertexRenderStatic vertexBuffer;
+    glm::mat4 projection;
+    glm::mat4 view;
+    glm::mat4 model;
 
-    // Chimera::TexImg* pTex;
+    Chimera::TexImg* pTex;
 };
 
 #endif

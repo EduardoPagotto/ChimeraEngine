@@ -100,6 +100,8 @@ void Game::start() {
     // loadObj((const char*)"./samples/bsptree/models/split1.obj", &m);
     // loadObj((const char*)"./samples/bsptree/models/teste1.obj", &m);
 
+    // m.textureFix();
+
     convertMeshDataTriangle(&m, &listPolygons);
 
     std::reverse(listPolygons.begin(), listPolygons.end());

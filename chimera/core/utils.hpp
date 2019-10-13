@@ -1,7 +1,6 @@
 #ifndef __CHIMERA_UTILS__HPP
 #define __CHIMERA_UTILS__HPP
 
-#include "chimera/core/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

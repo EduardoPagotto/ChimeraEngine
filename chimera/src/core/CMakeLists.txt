@@ -24,7 +24,8 @@ set (SourcesCore Canvas.cpp
 				 LoadObj.cpp
 				 Triangle.cpp
 				 Vertex.cpp
-				 MeshData.cpp)
+				 MeshData.cpp
+				 MatData.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

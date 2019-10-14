@@ -62,7 +62,11 @@ class TexImg : public Tex {
     virtual ~TexImg() override;
     virtual bool init() override;
 
+    inline void setIndice(const unsigned& _val) { indiceTex = _val; }
+    inline unsigned getIndice() { return indiceTex; }
+
   protected:
+    unsigned indiceTex;
     std::string pathFile;
 };
 

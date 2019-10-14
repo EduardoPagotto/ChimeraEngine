@@ -91,7 +91,7 @@ void Game::start() {
     pTex->init();
 
     Chimera::MeshData m;
-    loadObj((const char*)"./samples/simples/tela01.obj", &m);
+    loadObj((const char*)"./samples/simples/models/tela01.obj", &m);
     // loadObj((const char*)"./samples/bsptree/models/square1.obj", &m);
 
     m.changeSize(100.0, true);

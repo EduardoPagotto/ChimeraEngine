@@ -26,8 +26,8 @@ set (IncludesSimples ${CMAKE_CURRENT_SOURCE_DIR}/include
 						 ${OPENGL_INCLUDE_DIR}
 						 ${SDL2_INCLUDE_DIR})
 
-add_executable (simples Game.cpp 
-						main.cpp)
+add_executable (simples src/Game.cpp 
+						src/main.cpp)
 
 target_link_libraries(simples ${LibsSimples})
 target_include_directories (simples PRIVATE ${IncludesSimples})

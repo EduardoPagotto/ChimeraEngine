@@ -38,8 +38,6 @@ void Game::keyCapture(SDL_Keycode tecla) {
             break;
         case SDLK_1:
             debug_init = 1;
-
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "iniciado log");
             break;
         case SDLK_F10:
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
@@ -99,11 +97,9 @@ void Game::start() {
     loadObj((const char*)"./samples/bsptree/models/square1.obj", &m);
     // loadObj((const char*)"./samples/bsptree/models/split1.obj", &m);
     // loadObj((const char*)"./samples/bsptree/models/teste1.obj", &m);
-
     // m.textureFix();
 
-    convertMeshDataTriangle(&m, &listPolygons);
-
+    convertMeshDataTriangle(&m, listPolygons);
     std::reverse(listPolygons.begin(), listPolygons.end());
 
     BSPTreeBuilder builder(&listPolygons);
@@ -144,18 +140,25 @@ void Game::render() {
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
+    // cria lista de triangulos na sequancoa
     std::vector<Chimera::Triangle> listPolygons;
     pBspTree->draw(&vp->position, &listPolygons);
 
-    std::vector<int> listaDebug;
-    std::vector<Chimera::VertexDataFull> vVertice;
-    for (int face = 0; face < listPolygons.size(); face++) {
-        listaDebug.push_back(listPolygons[face].getSerial());
-        for (int i = 0; i < 3; i++) {
-            Chimera::VertexDataFull vd = listPolygons[face].vertex[i];
-            vVertice.push_back(vd);
-        }
+    if (debug_init == 1) {
+        debug_init = 0;
+        unsigned int tam = (int)listPolygons.size();
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Triangles size: %d", tam);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, // x
+                     vp->position.y,                                                           // y
+                     vp->position.z);                                                          // z
+
+        for (unsigned int face = 0; face < tam; face++)
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face: %d", listPolygons[face].getSerial());
     }
+
+    // converte lista de triangulos como lista de vertices
+    std::vector<Chimera::VertexDataFull> vVertice;
+    convertTriangleVertexDataFull(listPolygons, vVertice);
 
     pShader->link();
 
@@ -168,15 +171,6 @@ void Game::render() {
 
     // aplica a textura
     pTex->apply(0, "material.tDiffuse", pShader);
-
-    // if (debug_init == 1) {
-    //     debug_init = 0;
-    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Vertex size: %d", (int)vVertice.size());
-    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
-    //                  vp->position.z);
-    //     for (int i = 0; i < listaDebug.size(); i++)
-    //         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face: %d", listaDebug[i]);
-    // }
 
     vertexBuffer.render(vVertice);
 

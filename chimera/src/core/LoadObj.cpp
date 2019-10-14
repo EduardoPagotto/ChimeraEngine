@@ -88,7 +88,7 @@ void loadObj(const char* _fineName, MeshData* _mesh) {
         free(line);
 }
 
-void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>* _pListPolygon) {
+void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>& vecTriangle) {
 
     for (short indice = 0; indice < _pMesh->vertexIndex.size(); indice += 3) {
 
@@ -110,8 +110,16 @@ void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>* _pListPoly
                 t.vertex[tri].texture = _pMesh->textureList[_pMesh->textureIndex[indice + tri]];
         }
 
-        _pListPolygon->push_back(t);
+        vecTriangle.push_back(t);
         // t.debugData();
+    }
+}
+
+void convertTriangleVertexDataFull(std::vector<Triangle>& vecTriangle, std::vector<VertexDataFull>& outData) {
+    for (int face = 0; face < vecTriangle.size(); face++) {
+        outData.push_back(vecTriangle[face].vertex[0]);
+        outData.push_back(vecTriangle[face].vertex[1]);
+        outData.push_back(vecTriangle[face].vertex[2]);
     }
 }
 

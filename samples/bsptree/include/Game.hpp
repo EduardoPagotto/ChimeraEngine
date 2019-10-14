@@ -29,7 +29,7 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    BSPTree* pBspTree;
+    BSPTreeNode* pBSPTRoot;
     bool isPaused;
     int botaoIndex;
     int estadoBotao;

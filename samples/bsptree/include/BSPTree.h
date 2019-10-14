@@ -6,16 +6,6 @@
 
 #include "BSPTreeNode.hpp"
 
-class BSPTree {
-  public:
-    BSPTree(BSPTreeNode* _pRoot) : root(_pRoot) {}
-    void draw(glm::vec3* eye, std::vector<Chimera::Triangle>* _pListPolygon);
-
-  private:
-    static void drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::Triangle>* _pListPolygon);
-    static float classify(glm::vec3* normal, glm::vec3* eye);
-
-    BSPTreeNode* root;
-};
+void drawBSPTree(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex);
 
 #endif

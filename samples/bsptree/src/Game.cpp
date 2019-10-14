@@ -103,7 +103,9 @@ void Game::start() {
     std::reverse(listPolygons.begin(), listPolygons.end());
 
     BSPTreeBuilder builder(&listPolygons);
-    pBspTree = new BSPTree(builder.getNodeRoot());
+
+    pBSPTRoot = builder.getNodeRoot();
+    // pBspTree = new BSPTree(builder.getNodeRoot());
 
     vertexBuffer.create(5000);
 }
@@ -140,25 +142,17 @@ void Game::render() {
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
-    // cria lista de triangulos na sequancoa
-    std::vector<Chimera::Triangle> listPolygons;
-    pBspTree->draw(&vp->position, &listPolygons);
-
     if (debug_init == 1) {
+        // BSPTree.debug_parse = true;
         debug_init = 0;
-        unsigned int tam = (int)listPolygons.size();
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Triangles size: %d", tam);
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, // x
-                     vp->position.y,                                                           // y
-                     vp->position.z);                                                          // z
-
-        for (unsigned int face = 0; face < tam; face++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face: %d", listPolygons[face].getSerial());
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
+                     vp->position.z);
     }
 
-    // converte lista de triangulos como lista de vertices
+    // cria lista de vertices sequenciais
     std::vector<Chimera::VertexDataFull> vVertice;
-    convertTriangleVertexDataFull(listPolygons, vVertice);
+    drawBSPTree(pBSPTRoot, &vp->position, &vVertice);
+    // pBspTree->draw(&vp->position, &vVertice);
 
     pShader->link();
 

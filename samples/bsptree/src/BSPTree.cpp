@@ -1,17 +1,14 @@
 #include "BSPTree.h"
+#include <SDL2/SDL.h>
 
-void BSPTree::draw(glm::vec3* eye, std::vector<Chimera::Triangle>* _pListPolygon) {
-    BSPTree::drawBSPTree(root, eye, _pListPolygon);
-}
-
-float BSPTree::classify(glm::vec3* normal, glm::vec3* eye) {
-    // TODO: Converir se e isto mesmo
+float classify(glm::vec3* normal, glm::vec3* eye) {
+    // TODO: Conferir se e isto mesmo
     float dotVal1 = -(glm::dot(*normal, *normal));
     float p = (glm::dot(*normal, *eye)) + dotVal1;
     return p;
 }
 
-void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::Triangle>* _pListPolygon) {
+void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex) {
     if (tree == nullptr)
         return;
 
@@ -19,29 +16,44 @@ void BSPTree::drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera
     float result = classify(&normal, eye);
     if (result > 0) {
 
-        drawBSPTree(tree->back, eye, _pListPolygon);
+        parserTree(tree->back, eye, _pOutVertex);
 
         // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
         for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
             Chimera::Triangle t = (*it);
-            _pListPolygon->push_back(t);
+            _pOutVertex->push_back(t.vertex[0]);
+            _pOutVertex->push_back(t.vertex[1]);
+            _pOutVertex->push_back(t.vertex[2]);
+
+            // if (debug_parse == true)
+            //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
         }
 
-        drawBSPTree(tree->front, eye, _pListPolygon);
+        parserTree(tree->front, eye, _pOutVertex);
 
     } else if (result < 0) {
-        drawBSPTree(tree->front, eye, _pListPolygon);
+        parserTree(tree->front, eye, _pOutVertex);
 
         // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
         for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
             Chimera::Triangle t = (*it);
-            _pListPolygon->push_back(t);
+            _pOutVertex->push_back(t.vertex[0]);
+            _pOutVertex->push_back(t.vertex[1]);
+            _pOutVertex->push_back(t.vertex[2]);
+
+            // if (debug_parse == true)
+            //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
         }
 
-        drawBSPTree(tree->back, eye, _pListPolygon);
+        parserTree(tree->back, eye, _pOutVertex);
+
     } else {
         // the eye point is on the partition plane...
-        drawBSPTree(tree->front, eye, _pListPolygon);
-        drawBSPTree(tree->back, eye, _pListPolygon);
+        parserTree(tree->front, eye, _pOutVertex);
+        parserTree(tree->back, eye, _pOutVertex);
     }
+}
+
+void drawBSPTree(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex) {
+    parserTree(_pRoot, eye, _pOutVertex);
 }

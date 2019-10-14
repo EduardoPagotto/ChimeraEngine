@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include "BSPTreeBuilder.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"

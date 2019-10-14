@@ -14,13 +14,6 @@ struct VertexData {
     glm::vec2 texture;  // 2 * 4 = 08 (24 - 31)
 };
 
-struct VertexDataFull {
-    glm::vec3 position; // 3 * 4 = 12 ( 0 - 11)
-    glm::vec3 normal;   // 3 * 4 = 12 (12 - 23)
-    glm::vec2 texture;  // 2 * 4 = 08 (24 - 31)
-    glm::vec3 color;    // 3 * 4 = 12 (32 - 43) //cuidado, posicao muda o sizeof(VertexDataFull)
-};
-
 void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& outData,
                    std::vector<unsigned int>& out_indices);
 
@@ -29,7 +22,7 @@ class VertexRenderDynamic {
     VertexRenderDynamic();
     void create(const unsigned int& max);
     virtual ~VertexRenderDynamic();
-    void render(std::vector<VertexDataFull>& vVertice);
+    void render(std::vector<VertexData>& vVertice);
 
   private:
     unsigned int VBO, VAO;
@@ -48,7 +41,6 @@ class VertexRenderStatic {
     unsigned int IndexVBOID;
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
-    // unsigned int VBO, VAO;
 };
 
 } // namespace Chimera

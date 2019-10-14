@@ -11,7 +11,6 @@ void loadObj(const char* _fineName, MeshData* _mesh) {
     if (fp == NULL)
         throw Exception(std::string("Erro ao abrir arquivo:" + std::string(_fineName)));
 
-    short hasColorV = 0;
     bool textuaOn = false;
     bool normalOn = false;
     char* line = NULL;
@@ -20,7 +19,6 @@ void loadObj(const char* _fineName, MeshData* _mesh) {
     while ((getline(&line, &len, fp)) != -1) {
 
         float x, y, z, u, v;
-        float r, g, b;
         int A[3];
         int B[3];
         int C[3];
@@ -31,23 +29,12 @@ void loadObj(const char* _fineName, MeshData* _mesh) {
             continue;
         else if (line[0] == 'v') {
             if (line[1] == ' ') {
-                int n = sscanf(line, "v %f %f %f %f %f %f", &x, &y, &z, &r, &g, &b);
-                if (n == 3) {
-                    if (hasColorV == 2)
-                        throw Exception(std::string("linha " + std::to_string(pos_linha) +
-                                                    " itens vertice com cor arquivo " + std::string(_fineName)));
-                    hasColorV = 1;
-                } else if (n == 6) {
-                    if (hasColorV == 1)
-                        throw Exception(std::string("linha " + std::to_string(pos_linha) +
-                                                    " itens vertice sem com arquivo " + std::string(_fineName)));
-                    hasColorV = 2;
-                    _mesh->colorList.push_back(glm::vec3(r, g, b));
-                } else {
-                    throw Exception(std::string("linha " + std::to_string(pos_linha) + " parse invalido com " +
-                                                std::to_string(n) + " arquivo:" + std::string(_fineName)));
+                if (sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
+                    _mesh->vertexList.push_back(glm::vec3(x, y, z));
+                    continue;
                 }
-                _mesh->vertexList.push_back(glm::vec3(x, y, z));
+                throw Exception(std::string("linha " + std::to_string(pos_linha) +
+                                            " parse invalido arquivo:" + std::string(_fineName)));
 
             } else if (line[1] == 'n') {
                 normalOn = true;
@@ -103,23 +90,12 @@ void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>& vecTriangl
             if (_pMesh->normalList.size() > 0)
                 t.vertex[tri].normal = _pMesh->normalList[_pMesh->normalIndex[indice + tri]];
 
-            if (_pMesh->colorList.size() > 0)
-                t.vertex[tri].color = _pMesh->colorList[_pMesh->vertexIndex[indice + tri]];
-
             if (_pMesh->textureList.size() > 0)
                 t.vertex[tri].texture = _pMesh->textureList[_pMesh->textureIndex[indice + tri]];
         }
 
         vecTriangle.push_back(t);
         // t.debugData();
-    }
-}
-
-void convertTriangleVertexDataFull(std::vector<Triangle>& vecTriangle, std::vector<VertexDataFull>& outData) {
-    for (int face = 0; face < vecTriangle.size(); face++) {
-        outData.push_back(vecTriangle[face].vertex[0]);
-        outData.push_back(vecTriangle[face].vertex[1]);
-        outData.push_back(vecTriangle[face].vertex[2]);
     }
 }
 
@@ -139,21 +115,4 @@ void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outDat
     }
 }
 
-void convertMeshDataVertexDataFull(MeshData* _pMesh, std::vector<VertexDataFull>& outData) {
-    unsigned l_numFaces = _pMesh->vertexIndex.size() / 3;
-    unsigned int l_index = 0;
-    unsigned int fa = 0;
-    for (unsigned int face = 0; face < l_numFaces; face++) {
-        fa = face * 3;
-        for (unsigned int point = 0; point < 3; point++) {
-            l_index = fa + point;
-            outData.push_back({_pMesh->vertexList[_pMesh->vertexIndex[l_index]], // Vertice
-                               _pMesh->normalList[_pMesh->normalIndex[l_index]], // Normal
-                               (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[l_index]]
-                                                                : glm::vec2(0.0, 0.0), // Texture
-                               (_pMesh->colorList.size() > 0) ? _pMesh->colorList[_pMesh->vertexIndex[l_index]]
-                                                              : glm::vec3(0.0, 0.0, 0.0)}); // Color
-        }
-    }
-}
 } // namespace Chimera

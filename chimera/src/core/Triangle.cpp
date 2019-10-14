@@ -16,7 +16,6 @@ Triangle::Triangle(const Triangle& _cpy) {
         this->vertex[i].position = _cpy.vertex[i].position;
         this->vertex[i].normal = _cpy.vertex[i].normal;
         this->vertex[i].texture = _cpy.vertex[i].texture;
-        this->vertex[i].color = _cpy.vertex[i].color;
     }
 }
 
@@ -42,10 +41,6 @@ glm::vec3 Triangle::normal() {
 
 //         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "normal (%f %f %f)", this->vertex[i].normal.x,
 //                      this->vertex[i].normal.y, this->vertex[i].normal.z);
-
-//         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "color (%f %f %f)", this->vertex[i].color.x,
-//         this->vertex[i].color.y,
-//                      this->vertex[i].color.z);
 
 //         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "texture (%f %f)", this->vertex[i].texture.x,
 //                      this->vertex[i].texture.y);

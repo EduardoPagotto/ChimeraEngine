@@ -10,9 +10,6 @@ MeshData::MeshData(const MeshData& _cpy) {
     copy(_cpy.vertexIndex.begin(), _cpy.vertexIndex.end(), back_inserter(vertexIndex));
     copy(_cpy.vertexList.begin(), _cpy.vertexList.end(), back_inserter(vertexList));
 
-    colorList.reserve(_cpy.colorList.size());
-    copy(_cpy.colorList.begin(), _cpy.colorList.end(), back_inserter(colorList));
-
     normalIndex.reserve(_cpy.normalIndex.size());
     copy(_cpy.normalIndex.begin(), _cpy.normalIndex.end(), back_inserter(normalIndex));
     copy(_cpy.normalList.begin(), _cpy.normalList.end(), back_inserter(normalList));
@@ -23,10 +20,8 @@ MeshData::MeshData(const MeshData& _cpy) {
 }
 
 MeshData::~MeshData() {
-
     vertexIndex.clear();
     vertexList.clear();
-    colorList.clear();
     normalIndex.clear();
     normalList.clear();
     textureIndex.clear();
@@ -42,7 +37,6 @@ void MeshData::textureFix() {
 }
 
 glm::vec3 MeshData::getSizeBox() {
-
     glm::vec3 retorno(0.0f, 0.0f, 0.0f);
     glm::vec3 l_max(0.0f, 0.0f, 0.0f);
     glm::vec3 l_min(0.0f, 0.0f, 0.0f);
@@ -100,13 +94,6 @@ void MeshData::debugDados() {
     for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f)", linha, indice,
                      vertexList[indice].x, vertexList[indice].y, vertexList[indice].z);
-        linha++;
-    }
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Color Lista ---------(%03d)", (int)colorList.size());
-    for (unsigned int indice = 0; indice < colorList.size(); indice++) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f)", linha, indice,
-                     colorList[indice].x, colorList[indice].y, colorList[indice].z);
         linha++;
     }
 

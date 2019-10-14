@@ -2,7 +2,6 @@
 #ifndef __CHIMERA_TRIANGLE__HPP
 #define __CHIMERA_TRIANGLE__HPP
 
-//#include <glm/glm.hpp>
 #include "Vertex.hpp"
 
 namespace Chimera {
@@ -15,10 +14,9 @@ class Triangle {
     inline unsigned getSerial() const { return serial; }
     glm::vec3 normal();
     // glm::vec3 verticeNormal();
-
     // void debugData();
 
-    VertexDataFull vertex[3];
+    VertexData vertex[3];
 
   private:
     unsigned serial;

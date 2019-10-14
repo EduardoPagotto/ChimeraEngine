@@ -137,7 +137,7 @@ void Game::render() {
     }
 
     // constroi vertex dinamico baseado no viewpoint
-    std::vector<Chimera::VertexDataFull> vVertice;
+    std::vector<Chimera::VertexData> vVertice;
     bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
 
     debugParser = false;

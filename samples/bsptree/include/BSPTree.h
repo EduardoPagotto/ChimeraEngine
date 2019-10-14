@@ -24,6 +24,6 @@ struct BSPTreeNode {
 BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon);
 
 //----- parse bsptree to draw
-void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex, bool logdata);
+void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata);
 
 #endif

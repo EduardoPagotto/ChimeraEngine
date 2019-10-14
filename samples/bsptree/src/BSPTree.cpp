@@ -59,9 +59,9 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     glm::vec3& c = _pTriangle->vertex[2].position;
 
     // acerto para vertex do tex final igualar a rotacao do triangulo
-    Chimera::VertexDataFull* pVertex_a = nullptr;
-    Chimera::VertexDataFull* pVertex_b = nullptr;
-    Chimera::VertexDataFull* pVertex_c = nullptr;
+    Chimera::VertexData* pVertex_a = nullptr;
+    Chimera::VertexData* pVertex_b = nullptr;
+    Chimera::VertexData* pVertex_c = nullptr;
 
     // Normaliza Triangulo para que o corte do hiper-plano esteja nos segmentos de reta CA e CB (corte em a e b)
     if (fx.x * fx.z >= 0) { // corte em a e c
@@ -131,15 +131,8 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     T3.vertex[2].texture = retTex2(pVertex_b->texture, pVertex_c->texture); // c old a
 
     for (int i = 0; i < 3; i++) {
-        T1.vertex[i].color = _pTriangle->vertex[i].color;
         T1.vertex[i].normal = _pTriangle->vertex[i].normal;
-
-        // T2.vertex[i].color = glm::vec3(0, 0, 1);
-        T2.vertex[i].color = _pTriangle->vertex[i].color;
         T2.vertex[i].normal = _pTriangle->vertex[i].normal;
-
-        // T3.vertex[i].color = glm::vec3(0, 1, 0);
-        T3.vertex[i].color = _pTriangle->vertex[i].color; // glm::vec3(0, 1, 0);
         T3.vertex[i].normal = _pTriangle->vertex[i].normal;
     }
 
@@ -226,7 +219,7 @@ float classify(glm::vec3* normal, glm::vec3* eye) {
     return p;
 }
 
-void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex, bool logdata) {
+void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
     if (tree == nullptr)
         return;
 
@@ -274,6 +267,6 @@ void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDa
     }
 }
 
-void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex, bool logdata) {
+void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
     parserTree(_pRoot, eye, _pOutVertex, logdata);
 }

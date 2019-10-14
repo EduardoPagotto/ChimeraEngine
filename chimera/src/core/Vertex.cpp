@@ -21,13 +21,7 @@ bool getSimilarVertexIndex(VertexData& in_vertex, std::vector<VertexData>& out_v
             is_near(in_vertex.normal.z, out_vertex[i].normal.z) &&
 
             is_near(in_vertex.texture.x, out_vertex[i].texture.x) &&
-            is_near(in_vertex.texture.y, out_vertex[i].texture.y) //&&
-
-            //             is_near(in_vertex.color.x, out_vertex[i].color.x) &&
-            //             is_near(in_vertex.color.y, out_vertex[i].color.y) &&
-            //             is_near(in_vertex.color.z, out_vertex[i].color.z) &&
-            //             is_near(in_vertex.color.w, out_vertex[i].color.w)
-        ) {
+            is_near(in_vertex.texture.y, out_vertex[i].texture.y)) {
             result = i;
             return true;
         }
@@ -65,12 +59,12 @@ VertexRenderDynamic::~VertexRenderDynamic() {
     // FIXME: remover da memoria o VAO/VBO
 }
 
-void VertexRenderDynamic::render(std::vector<VertexDataFull>& vVertice) {
+void VertexRenderDynamic::render(std::vector<VertexData>& vVertice) {
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    int tot = vVertice.size() * sizeof(Chimera::VertexDataFull);
+    int tot = vVertice.size() * sizeof(Chimera::VertexData);
     // glBufferData(GL_ARRAY_BUFFER, 5000, nullptr, GL_STREAM_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, tot, &vVertice[0]);
 
@@ -99,23 +93,18 @@ void VertexRenderDynamic::create(const unsigned int& max) {
 
     // position attribute
     GLuint positionID = 0;
-    glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(0));
+    glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
     glEnableVertexAttribArray(positionID);
 
     // normal attribute
     GLuint normalID = 1;
-    glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(12));
+    glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));
     glEnableVertexAttribArray(normalID);
 
     // texture coord attribute
     GLuint uvID = 2;
-    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(24));
+    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));
     glEnableVertexAttribArray(uvID);
-
-    // color attribute
-    GLuint colorID = 3;
-    glVertexAttribPointer(colorID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataFull), BUFFER_OFFSET(32));
-    glEnableVertexAttribArray(colorID);
 
     // limpa dados
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -123,7 +112,6 @@ void VertexRenderDynamic::create(const unsigned int& max) {
     glDisableVertexAttribArray(positionID);
     glDisableVertexAttribArray(normalID);
     glDisableVertexAttribArray(uvID);
-    glDisableVertexAttribArray(colorID);
 }
 
 //---------- VertexRenderStatic

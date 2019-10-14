@@ -1,16 +1,15 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/LoadObj.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Transform.hpp"
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "chimera/core/LoadObj.hpp"
-
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
     isPaused = false;
-    debug_init = 0;
+    debugParser = false;
 
     projection = glm::mat4(1.0f);
     view = glm::mat4(1.0f);
@@ -36,7 +35,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             }
             break;
         case SDLK_1:
-            debug_init = 1;
+            debugParser = true;
             break;
         case SDLK_F10:
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
@@ -77,16 +76,9 @@ void Game::start() {
 
     pCanvas->initGL();
 
-    // pCanvas->afterStart();
     glEnable(GL_COLOR_MATERIAL);
-
-    // glEnable(GL_LIGHTING);
-    // glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
-
-    // glDisable(GL_LIGHTING);
-    // glCullFace(GL_BACK);
 
     pTex->init();
 
@@ -101,10 +93,8 @@ void Game::start() {
     convertMeshDataTriangle(&m, listPolygons);
     std::reverse(listPolygons.begin(), listPolygons.end());
 
-    BSPTreeBuilder builder(&listPolygons);
-
-    pBSPTRoot = builder.getNodeRoot();
-    // pBspTree = new BSPTree(builder.getNodeRoot());
+    // Cria o BSP
+    pBSPTRoot = bsptreeBuild(&listPolygons);
 
     vertexBuffer.create(5000);
 }
@@ -141,17 +131,16 @@ void Game::render() {
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
-    if (debug_init == 1) {
-        // BSPTree.debug_parse = true;
-        debug_init = 0;
+    if (debugParser == true) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
                      vp->position.z);
     }
 
-    // cria lista de vertices sequenciais
+    // constroi vertex dinamico baseado no viewpoint
     std::vector<Chimera::VertexDataFull> vVertice;
-    drawBSPTree(pBSPTRoot, &vp->position, &vVertice);
-    // pBspTree->draw(&vp->position, &vVertice);
+    bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
+
+    debugParser = false;
 
     pShader->link();
 

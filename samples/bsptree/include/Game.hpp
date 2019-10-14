@@ -33,7 +33,7 @@ class Game : public Chimera::IGameClientEvents {
     bool isPaused;
     int botaoIndex;
     int estadoBotao;
-    int debug_init;
+    bool debugParser;
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;

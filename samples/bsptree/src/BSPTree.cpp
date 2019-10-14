@@ -1,8 +1,6 @@
 #include "BSPTree.h"
 #include <SDL2/SDL.h>
 
-//#include "chimera/core/Vertex.hpp"
-
 //-----builder
 
 #define EPSILON 1e-3
@@ -11,26 +9,6 @@ template <class T> void swapFace(T& a, T& b) {
     T c = b;
     b = a;
     a = c;
-}
-
-BSPTreeBuilder::BSPTreeBuilder(std::vector<Chimera::Triangle>* _pListPolygon) {
-    root = buildBSPTreeNode(_pListPolygon);
-}
-
-glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
-    float num = glm::dot(n, a);
-    glm::vec3 cma = c - a;
-    float denom = glm::dot(n, cma);
-    float D = -glm::dot(n, p0); // direção inversa
-    float t = -(num + D) / denom;
-
-    glm::vec3 valor = a + t * (c - a);
-    return aprox(valor);
-}
-
-glm::vec3 aprox(const glm::vec3& dado) {
-    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x, (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,
-                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z);
 }
 
 glm::vec2 retTex1(const glm::vec2& _p0, const glm::vec2& _p1) {
@@ -55,12 +33,27 @@ glm::vec2 retTex2(const glm::vec2& _p0, const glm::vec2& _p1) {
         vy = _p0.y;
 
     return glm::vec2(vx, vy);
-
     // return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
 }
 
-void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::Triangle* _partition,
-                                   std::vector<Chimera::Triangle>* _pListPolygon) {
+glm::vec3 aprox(const glm::vec3& dado) {
+    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x, (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,
+                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z);
+}
+
+glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
+    float num = glm::dot(n, a);
+    glm::vec3 cma = c - a;
+    float denom = glm::dot(n, cma);
+    float D = -glm::dot(n, p0); // direção inversa
+    float t = -(num + D) / denom;
+
+    glm::vec3 valor = a + t * (c - a);
+    return aprox(valor);
+}
+
+void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::Triangle* _partition,
+                   std::vector<Chimera::Triangle>* _pListPolygon) {
     glm::vec3& a = _pTriangle->vertex[0].position;
     glm::vec3& b = _pTriangle->vertex[1].position;
     glm::vec3& c = _pTriangle->vertex[2].position;
@@ -155,7 +148,7 @@ void BSPTreeBuilder::splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTri
     _pListPolygon->push_back(T3);
 }
 
-SIDE BSPTreeBuilder::classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* poly, glm::vec3& _resultTest) {
+SIDE classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* poly, glm::vec3& _resultTest) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     unsigned short infront = 0;
     unsigned short behind = 0;
@@ -192,7 +185,7 @@ SIDE BSPTreeBuilder::classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* p
     return SIDE::IS_SPANNING; // CP_SPANNING;
 }
 
-BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(std::vector<Chimera::Triangle>* _pListPolygon) {
+BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
     if (_pListPolygon->empty() == true)
         return nullptr;
     // tree->partition
@@ -219,8 +212,8 @@ BSPTreeNode* BSPTreeBuilder::buildBSPTreeNode(std::vector<Chimera::Triangle>* _p
         else // IS_SPANNING
             splitTriangle(result, &poly, &tree->partition, _pListPolygon);
     }
-    tree->front = buildBSPTreeNode(&front_list);
-    tree->back = buildBSPTreeNode(&back_list);
+    tree->front = bsptreeBuild(&front_list);
+    tree->back = bsptreeBuild(&back_list);
     return tree;
 }
 
@@ -233,7 +226,7 @@ float classify(glm::vec3* normal, glm::vec3* eye) {
     return p;
 }
 
-void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex) {
+void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex, bool logdata) {
     if (tree == nullptr)
         return;
 
@@ -241,7 +234,7 @@ void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDa
     float result = classify(&normal, eye);
     if (result > 0) {
 
-        parserTree(tree->back, eye, _pOutVertex);
+        parserTree(tree->back, eye, _pOutVertex, logdata);
 
         // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
         for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
@@ -250,14 +243,15 @@ void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDa
             _pOutVertex->push_back(t.vertex[1]);
             _pOutVertex->push_back(t.vertex[2]);
 
-            // if (debug_parse == true)
-            //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
+            // FIXME: remover depois de concluir o algoritmo
+            if (logdata == true)
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
         }
 
-        parserTree(tree->front, eye, _pOutVertex);
+        parserTree(tree->front, eye, _pOutVertex, logdata);
 
     } else if (result < 0) {
-        parserTree(tree->front, eye, _pOutVertex);
+        parserTree(tree->front, eye, _pOutVertex, logdata);
 
         // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
         for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
@@ -266,19 +260,20 @@ void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDa
             _pOutVertex->push_back(t.vertex[1]);
             _pOutVertex->push_back(t.vertex[2]);
 
-            // if (debug_parse == true)
-            //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
+            // FIXME: remover depois de concluir o algoritmo
+            if (logdata == true)
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
         }
 
-        parserTree(tree->back, eye, _pOutVertex);
+        parserTree(tree->back, eye, _pOutVertex, logdata);
 
     } else {
         // the eye point is on the partition plane...
-        parserTree(tree->front, eye, _pOutVertex);
-        parserTree(tree->back, eye, _pOutVertex);
+        parserTree(tree->front, eye, _pOutVertex, logdata);
+        parserTree(tree->back, eye, _pOutVertex, logdata);
     }
 }
 
-void drawBSPTree(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex) {
-    parserTree(_pRoot, eye, _pOutVertex);
+void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexDataFull>* _pOutVertex, bool logdata) {
+    parserTree(_pRoot, eye, _pOutVertex, logdata);
 }

@@ -10,16 +10,9 @@
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
     isPaused = false;
     debug_init = 0;
-
     projection = glm::mat4(1.0f);
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
-
-    pTex = new Chimera::TexImg("./models/grid2.png");
-    pMat = new Chimera::MatData();
-
-    pMat->setDefaultEffect();
-    pMat->addTexture(0, Chimera::TEX_KIND::DIFFUSE, pTex);
 }
 
 Game::~Game() {}
@@ -92,14 +85,21 @@ void Game::start() {
     // glDisable(GL_LIGHTING);
     // glCullFace(GL_BACK);
 
-    pMat->init();
-    // pTex->init();
-
+    std::string materialFile;
     Chimera::MeshData m;
-    loadObj((const char*)"./samples/simples/models/tela01.obj", &m);
-    // loadObj((const char*)"./samples/bsptree/models/square1.obj", &m);
+    loadObj("./samples/simples/models/tela01.obj", m, materialFile);
+    // loadObj("./samples/bsptree/models/square1.obj", m, materialFile);
 
-    m.changeSize(100.0, true);
+    if (materialFile.size() != 0) {
+        loadMtl(materialFile, material);
+    } else {
+        material.setDefaultEffect();
+        material.addTexture(0, Chimera::TEX_KIND::DIFFUSE, new Chimera::TexImg("./models/grid2.png"));
+    }
+
+    material.init();
+
+    m.changeSize(100.0, material.hasTexture());
     // m.textureFix();
 
     std::vector<Chimera::VertexData> renderData;
@@ -149,7 +149,7 @@ void Game::render() {
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
-    pMat->apply(pShader);
+    material.apply(pShader);
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 

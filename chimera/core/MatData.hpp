@@ -46,6 +46,8 @@ class MatData {
         // listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_EMISSIVE, _color));
     }
 
+    bool hasTexture() { return mapTex.size() > 0 ? true : false; }
+
     inline void setShine(const float& _val) { listMaterial.push_back(new ShaderValue1vf(SHADE_MAT_SHININESS, _val)); }
 
     void apply(Shader* _shader);

@@ -105,7 +105,8 @@ int main(int argn, char** argv) {
         // Mesh do cubo1 filho de posicao 1
         // FIXME: aqui
         Mesh* pMesh = Chimera::createEmpty(pTrans, "Cubo-01", pMat1);
-        loadObj((const char*)"./samples/bsptree/models/cube.obj", &pMesh->meshData);
+        std::string materialFile;
+        loadObj("./samples/bsptree/models/cube.obj", pMesh->meshData, materialFile);
         pMesh->meshData.changeSize(25.0, pMat1->hasTexture());
 
         // Posicao Cubo2
@@ -121,7 +122,7 @@ int main(int argn, char** argv) {
 
         // Mesh do cubo 2 vinculado posicao 2
         Mesh* pMesh2 = Chimera::createEmpty(pTrans2, "Cubo-02", pMat2);
-        loadObj((const char*)"./samples/bsptree/models/cube.obj", &pMesh2->meshData);
+        loadObj((const char*)"./samples/bsptree/models/cube.obj", pMesh2->meshData, materialFile);
         pMesh2->meshData.changeSize(20.0, pMat2->hasTexture());
 
         // Wrapper do game

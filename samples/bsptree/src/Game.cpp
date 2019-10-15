@@ -85,7 +85,8 @@ void Game::start() {
     Chimera::MeshData m;
     std::vector<Chimera::Triangle> listPolygons;
 
-    loadObj((const char*)"./samples/bsptree/models/square1.obj", &m);
+    std::string materialFile;
+    loadObj("./samples/bsptree/models/square1.obj", m, materialFile);
     // loadObj((const char*)"./samples/bsptree/models/split1.obj", &m);
     // loadObj((const char*)"./samples/bsptree/models/teste1.obj", &m);
     // m.textureFix();

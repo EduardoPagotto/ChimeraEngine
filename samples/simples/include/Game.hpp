@@ -42,8 +42,7 @@ class Game : public Chimera::IGameClientEvents {
     glm::mat4 view;
     glm::mat4 model;
 
-    Chimera::TexImg* pTex;
-    Chimera::MatData* pMat;
+    Chimera::MatData material;
 };
 
 #endif

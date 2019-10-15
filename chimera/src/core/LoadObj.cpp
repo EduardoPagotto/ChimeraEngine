@@ -157,21 +157,27 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
 
 void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>& vecTriangle) {
 
-    for (short indice = 0; indice < _pMesh->vertexIndex.size(); indice += 3) {
+    unsigned int B, C;
 
-        Triangle t = Triangle(glm::vec3(0.0, 0.0, 0.0),  // A zerados carga em loop
-                              glm::vec3(0.0, 0.0, 0.0),  // B zerados carga em loop
-                              glm::vec3(0.0, 0.0, 0.0)); // C zerados carga em loop
+    // Load vertex, normal and texture of triangles A,B,C
+    for (unsigned int A = 0; A < _pMesh->vertexIndex.size(); A += 3) {
+        B = A + 1;
+        C = A + 2;
 
-        for (short tri = 0; tri < 3; tri++) {
+        Triangle t = Triangle(_pMesh->vertexList[_pMesh->vertexIndex[A]],  // vertex triangle A
+                              _pMesh->vertexList[_pMesh->vertexIndex[B]],  // vertex triangle B
+                              _pMesh->vertexList[_pMesh->vertexIndex[C]]); // vertex triangle C
 
-            t.vertex[tri].position = _pMesh->vertexList[_pMesh->vertexIndex[indice + tri]];
+        if (_pMesh->normalList.size() > 0) {
+            t.vertex[0].normal = _pMesh->normalList[_pMesh->normalIndex[A]]; // normal triangle A
+            t.vertex[1].normal = _pMesh->normalList[_pMesh->normalIndex[B]]; // normal triangle B
+            t.vertex[2].normal = _pMesh->normalList[_pMesh->normalIndex[C]]; // normal triangle C
+        }
 
-            if (_pMesh->normalList.size() > 0)
-                t.vertex[tri].normal = _pMesh->normalList[_pMesh->normalIndex[indice + tri]];
-
-            if (_pMesh->textureList.size() > 0)
-                t.vertex[tri].texture = _pMesh->textureList[_pMesh->textureIndex[indice + tri]];
+        if (_pMesh->textureList.size() > 0) {
+            t.vertex[0].texture = _pMesh->textureList[_pMesh->textureIndex[A]]; // texture triangle A
+            t.vertex[1].texture = _pMesh->textureList[_pMesh->textureIndex[B]]; // texture triangle B
+            t.vertex[2].texture = _pMesh->textureList[_pMesh->textureIndex[C]]; // texture triangle C
         }
 
         vecTriangle.push_back(t);
@@ -180,19 +186,27 @@ void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>& vecTriangl
 }
 
 void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outData) {
-    unsigned l_numFaces = _pMesh->vertexIndex.size() / 3;
-    unsigned int l_index = 0;
-    unsigned int fa = 0;
-    for (unsigned int face = 0; face < l_numFaces; face++) {
-        fa = face * 3;
-        for (unsigned int point = 0; point < 3; point++) {
-            l_index = fa + point;
-            outData.push_back({_pMesh->vertexList[_pMesh->vertexIndex[l_index]], // Vertice
-                               _pMesh->normalList[_pMesh->normalIndex[l_index]], // Normal
-                               (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[l_index]]
-                                                                : glm::vec2(0.0, 0.0)}); // Texture
-        }
+
+    unsigned int B, C;
+    for (unsigned int A = 0; A < _pMesh->vertexIndex.size(); A += 3) {
+
+        B = A + 1;
+        C = A + 2;
+
+        // vertex, normal and texture triangle A
+        outData.push_back(
+            {_pMesh->vertexList[_pMesh->vertexIndex[A]], _pMesh->normalList[_pMesh->normalIndex[A]],
+             (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[A]] : glm::vec2(0.0, 0.0)});
+
+        // vertex, normal and texture triangle A
+        outData.push_back(
+            {_pMesh->vertexList[_pMesh->vertexIndex[B]], _pMesh->normalList[_pMesh->normalIndex[B]],
+             (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[B]] : glm::vec2(0.0, 0.0)});
+
+        // vertex, normal and texture triangle A
+        outData.push_back(
+            {_pMesh->vertexList[_pMesh->vertexIndex[C]], _pMesh->normalList[_pMesh->normalIndex[C]],
+             (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[C]] : glm::vec2(0.0, 0.0)});
     }
 }
-
 } // namespace Chimera

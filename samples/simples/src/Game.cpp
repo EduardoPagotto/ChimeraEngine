@@ -16,6 +16,10 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     model = glm::mat4(1.0f);
 
     pTex = new Chimera::TexImg("./models/grid2.png");
+    pMat = new Chimera::MatData();
+
+    pMat->setDefaultEffect();
+    pMat->addTexture(0, Chimera::TEX_KIND::DIFFUSE, pTex);
 }
 
 Game::~Game() {}
@@ -88,7 +92,8 @@ void Game::start() {
     // glDisable(GL_LIGHTING);
     // glCullFace(GL_BACK);
 
-    pTex->init();
+    pMat->init();
+    // pTex->init();
 
     Chimera::MeshData m;
     loadObj((const char*)"./samples/simples/models/tela01.obj", &m);
@@ -144,8 +149,9 @@ void Game::render() {
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
+    pMat->apply(pShader);
     // aplica a textura
-    pTex->apply(0, "material.tDiffuse", pShader);
+    // pTex->apply(0, "material.tDiffuse", pShader);
 
     vertexBuffer.render();
 

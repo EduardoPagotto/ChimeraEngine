@@ -5,12 +5,12 @@ namespace Chimera {
 MatData::MatData() { tipoTexturasDisponiveis = -1; }
 MatData::~MatData() {}
 
-void MatData::createDefaultEffect() {
+void MatData::setDefaultEffect() {
     setDiffuse(glm::vec4(0.6f, 0.6f, 0.6f, 1.0f));
     setEmission(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
     setAmbient(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
     setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    setShine(50.0f);
+    // setShine(50.0f);
 }
 
 void MatData::init() {
@@ -45,7 +45,7 @@ void MatData::init() {
         tipoTexturasDisponiveis = 4;
 }
 
-void MatData::setTexture(const unsigned& indice, TEX_KIND typeTex, TexImg* _pTex) {
+void MatData::addTexture(const unsigned& indice, TEX_KIND typeTex, TexImg* _pTex) {
     switch (typeTex) {
         case TEX_KIND::DIFFUSE:
             mapTex[SHADE_TEXTURE_DIFFUSE] = _pTex;

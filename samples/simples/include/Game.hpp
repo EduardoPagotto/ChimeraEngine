@@ -3,6 +3,7 @@
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/MatData.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Tex.hpp"
 #include "chimera/core/TrackBall.hpp"
@@ -42,6 +43,7 @@ class Game : public Chimera::IGameClientEvents {
     glm::mat4 model;
 
     Chimera::TexImg* pTex;
+    Chimera::MatData* pMat;
 };
 
 #endif

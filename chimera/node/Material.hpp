@@ -30,19 +30,19 @@ class Material : public Entity {
 
     virtual void init();
 
-    inline void setAmbient(const Color& _color) {
-        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_AMBIENTE, _color.get()));
+    inline void setAmbient(const glm::vec4& _color) {
+        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_AMBIENTE, _color));
     }
 
-    inline void setSpecular(const Color& _color) {
-        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_SPECULA, _color.get()));
+    inline void setSpecular(const glm::vec4& _color) {
+        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_SPECULA, _color));
     }
 
-    inline void setDiffuse(const Color& _color) {
-        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_DIFFUSE, _color.get()));
+    inline void setDiffuse(const glm::vec4& _color) {
+        listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_DIFFUSE, _color));
     }
 
-    inline void setEmission(const Color& _color) { // TODO implementar
+    inline void setEmission(const glm::vec4& _color) { // TODO implementar
         // listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_EMISSIVE, _color.ptr()));
     }
 

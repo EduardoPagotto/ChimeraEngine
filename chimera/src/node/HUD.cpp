@@ -2,6 +2,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/NodeVisitor.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
 
@@ -13,7 +14,7 @@ HUD::~HUD() {
 
 void HUD::addFont(Font* _pFont) { vFonts.push_back(_pFont); }
 
-void HUD::addText(int _fontIndex, int _posX, int _posY, Color _colorText, GLfloat _scale, std::string* _txt) {
+void HUD::addText(int _fontIndex, int _posX, int _posY, glm::vec4 _colorText, GLfloat _scale, std::string* _txt) {
 
     HUDTxt* newTxt = new HUDTxt;
     newTxt->indexFonte = _fontIndex;
@@ -46,7 +47,7 @@ void HUD::render(Shader* _pShader) {
 
     for (HUDTxt* l_pTxt : vLineText) {
 
-        _pShader->setGlUniform4fv("textColor", 1, l_pTxt->color.ptr());
+        _pShader->setGlUniform4fv("textColor", 1, glm::value_ptr(l_pTxt->color));
 
         vFonts[l_pTxt->indexFonte]->RenderText(l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
     }

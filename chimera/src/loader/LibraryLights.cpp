@@ -28,27 +28,27 @@ Chimera::Light* LibraryLights::target() {
     throw Chimera::Exception("Light nao encontrada: " + url);
 }
 
-Chimera::Color LibraryLights::getColor(tinyxml2::XMLElement* l_nColorVal) {
+glm::vec4 LibraryLights::getColor(tinyxml2::XMLElement* l_nColorVal) {
 
     std::vector<float> l_arrayF;
     const char* l_val = l_nColorVal->FirstChildElement("color")->GetText();
     loadArrayBtScalar(l_val, l_arrayF);
-    return Chimera::Color(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
+    return glm::vec4(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
 }
 
-std::tuple<Chimera::Color, Chimera::LightType> LibraryLights::loadDiffuseLightColor(tinyxml2::XMLElement* _nNode) {
+std::tuple<glm::vec4, Chimera::LightType> LibraryLights::loadDiffuseLightColor(tinyxml2::XMLElement* _nNode) {
     tinyxml2::XMLElement* l_nPoint = _nNode->FirstChildElement("technique_common")->FirstChildElement("point");
     if (l_nPoint) {
-        Chimera::Color cor = getColor(l_nPoint);
+        glm::vec4 cor = getColor(l_nPoint);
         return std::make_tuple(cor, Chimera::LightType::POSITIONAL);
     }
 
     l_nPoint = _nNode->FirstChildElement("technique_common")->FirstChildElement("directional");
     if (l_nPoint != nullptr) {
-        Chimera::Color cor = getColor(l_nPoint);
+        glm::vec4 cor = getColor(l_nPoint);
         return std::make_tuple(cor, Chimera::LightType::DIRECTIONAL);
     }
 
-    return std::make_tuple(Chimera::Color(), Chimera::LightType::POSITIONAL);
+    return std::make_tuple(glm::vec4(), Chimera::LightType::POSITIONAL);
 }
 } // namespace ChimeraLoaders

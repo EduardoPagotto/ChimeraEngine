@@ -16,7 +16,7 @@ class LibraryEffects : public Library {
 
   private:
     void loadNewParam(tinyxml2::XMLElement* _nProfile);
-    Chimera::Color getColor(tinyxml2::XMLElement* l_nColorVal);
+    glm::vec4 getColor(tinyxml2::XMLElement* l_nColorVal);
     void loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Material* _pMat);
     Chimera::Texture* getTexture(tinyxml2::XMLElement* _nTex);
 

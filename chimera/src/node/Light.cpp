@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 namespace Chimera {
@@ -13,9 +14,9 @@ Light::Light(Node* _parent, std::string _name) : Node(_parent, EntityKind::LIGHT
 
     number = 0;
     type = LightType::POSITIONAL;
-    ambient = Color::ZERO;
-    specular = Color::ZERO;
-    diffuse = Color::ZERO;
+    ambient = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    specular = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    diffuse = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
     position = glm::vec3(0.0, 0.0, 0.0);
     transform = glm::mat4(1.0); // Matrix identidade
 }
@@ -24,9 +25,9 @@ Light::~Light() {}
 
 void Light::apply(Shader* _pShader) {
     _pShader->setGlUniform3fv("light.position", 1, (float*)&position[0]);
-    _pShader->setGlUniform4fv("light.ambient", 1, ambient.ptr());
-    _pShader->setGlUniform4fv("light.diffuse", 1, diffuse.ptr());
-    _pShader->setGlUniform4fv("light.specular", 1, specular.ptr());
+    _pShader->setGlUniform4fv("light.ambient", 1, glm::value_ptr(ambient));
+    _pShader->setGlUniform4fv("light.diffuse", 1, glm::value_ptr(diffuse));
+    _pShader->setGlUniform4fv("light.specular", 1, glm::value_ptr(specular));
 }
 
 void Light::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {

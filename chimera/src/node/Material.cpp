@@ -68,10 +68,10 @@ void Material::loadTextureFromFile(const std::string& _nome, const TEX_KIND& _se
 }
 
 void Material::createDefaultEffect() {
-    setDiffuse(Color(0.6f, 0.6f, 0.6f));
-    setEmission(Color(0.1f, 0.1f, 0.1f));
-    setAmbient(Color(0.1f, 0.1f, 0.1f));
-    setSpecular(Color(0.5f, 0.5f, 0.5f));
+    setDiffuse(glm::vec4(0.6f, 0.6f, 0.6f, 1.0f));
+    setEmission(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+    setAmbient(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+    setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
     setShine(50.0f);
 }
 

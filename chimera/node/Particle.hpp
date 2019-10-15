@@ -27,7 +27,7 @@ class Particle {
 
   private:
     glm::vec3 pos, speed;
-    Color color;
+    glm::vec4 color;
     float size, angle, weight;
     float life;
     float cameradistance;

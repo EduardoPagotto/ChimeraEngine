@@ -170,8 +170,8 @@ void Game::start() {
     // Localiza o HUD
     pHUD = (Chimera::HUD*)pSceneMng->findChild("HUD-Default", true);
     if (pHUD != nullptr) {
-        pHUD->addText(0, 350, 30, Chimera::Color::BLUE, 1.0, &sPosicaoObj);
-        pHUD->addText(0, 10, 30, Chimera::Color::RED, 1.0, &textoFPS);
+        pHUD->addText(0, 350, 30, glm::vec4(0.0, 0.0, 1.0, 1.0), 1.0, &sPosicaoObj);
+        pHUD->addText(0, 10, 30, glm::vec4(1.0, 0.0, 0.0, 1.0), 1.0, &textoFPS);
     }
 }
 

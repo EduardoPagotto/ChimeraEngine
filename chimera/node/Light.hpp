@@ -6,7 +6,6 @@
 
 #include "Node.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/core/Color.hpp"
 #include "chimera/render/Shader.hpp"
 
 namespace Chimera {

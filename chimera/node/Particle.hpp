@@ -2,7 +2,6 @@
 #define __CHIMERA_PARTICLE__HPP
 
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/core/Color.hpp"
 #include "glm/glm.hpp"
 
 namespace Chimera {

@@ -1,5 +1,5 @@
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Transform.hpp"
 

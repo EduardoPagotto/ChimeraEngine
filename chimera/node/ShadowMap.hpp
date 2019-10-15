@@ -2,7 +2,7 @@
 #define __CHIMERA_SHADOW_MAP__HPP
 
 #include "Node.hpp"
-#include "chimera/core/Tex.hpp"
+#include "chimera/render/Tex.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {

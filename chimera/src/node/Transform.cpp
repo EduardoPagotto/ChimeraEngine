@@ -1,7 +1,7 @@
 #include "chimera/node/Transform.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/OpenGLDefs.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

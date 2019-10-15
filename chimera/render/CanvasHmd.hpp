@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_CANVAS_HDM__HPP
 #define __CHIMERA_CANVAS_HDM__HPP
 
+#include "Eye.hpp"
 #include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/Eye.hpp"
 
 namespace Chimera {
 

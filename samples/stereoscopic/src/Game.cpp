@@ -1,12 +1,11 @@
 #include "Game.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/TrackHead.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/SceneMng.hpp"
 #include "chimera/node/Transform.hpp"
-
-#include "chimera/core/TrackHead.hpp"
 
 Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo) : pSceneMng(_pScenMng), pVideo(_pVideo) {
     isPaused = false;

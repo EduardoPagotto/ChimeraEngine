@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 
 #include "Texture.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Singleton.hpp"
 
 namespace Chimera {

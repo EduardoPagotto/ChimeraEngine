@@ -10,7 +10,7 @@
 #include "chimera/node/Solid.hpp"
 #include "chimera/node/Transform.hpp"
 
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/OpenGLDefs.hpp"
 
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>

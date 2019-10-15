@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/OpenGLDefs.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>

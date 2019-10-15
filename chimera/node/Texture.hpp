@@ -2,8 +2,8 @@
 #define __CHIMERA_TEXTURE__HPP
 
 #include "Entity.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/Tex.hpp"
+#include "chimera/OpenGLDefs.hpp"
+#include "chimera/render/Tex.hpp"
 
 namespace Chimera {
 

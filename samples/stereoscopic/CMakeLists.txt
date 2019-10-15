@@ -18,6 +18,7 @@ set (IncludesSterioscopic ${Sterioscopic_SOURCE_DIR}/include/
 
 set (LibsSterioscopic ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a #ordem é importante!!!
 					  ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
+					  ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 					  ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 					  ${OPENGL_LIBRARIES}
 					  ${SDL2_LIBRARY}
@@ -44,6 +45,7 @@ target_include_directories (sterioscopic PRIVATE ${IncludesSterioscopic})
 target_link_libraries(sterioscopic ${LibsSterioscopic})
 
 add_dependencies(sterioscopic ChimeraCore
+							  ChimeraRender
 							  ChimeraNode
 							  ChimeraLoaders)
 

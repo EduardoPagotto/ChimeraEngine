@@ -1,4 +1,4 @@
-#include "chimera/core/CanvasHmd.hpp"
+#include "chimera/render/CanvasHmd.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {

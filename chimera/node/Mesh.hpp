@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "Draw.hpp"
-#include "chimera/core/MeshData.hpp"
-#include "chimera/core/Vertex.hpp"
+#include "chimera/render/MeshData.hpp"
+#include "chimera/render/Vertex.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {

@@ -6,9 +6,9 @@
 
 #include "Entity.hpp"
 #include "TextureManager.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Color.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/ShaderValue.hpp"
+#include "chimera/render/ShaderValue.hpp"
 
 namespace Chimera {
 

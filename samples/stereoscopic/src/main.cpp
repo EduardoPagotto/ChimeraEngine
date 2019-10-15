@@ -1,15 +1,15 @@
 #include "Game.hpp"
 //#include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/CanvasHmd.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/LoadObj.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
 #include "chimera/node/Transform.hpp"
+#include "chimera/render/CanvasHmd.hpp"
+#include "chimera/render/LoadObj.hpp"
 
 #include <cstdio>
 #include <glm/glm.hpp>

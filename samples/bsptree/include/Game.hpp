@@ -4,9 +4,9 @@
 #include "BSPTree.h"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/Tex.hpp"
 #include "chimera/core/TrackBall.hpp"
+#include "chimera/render/Shader.hpp"
+#include "chimera/render/Tex.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

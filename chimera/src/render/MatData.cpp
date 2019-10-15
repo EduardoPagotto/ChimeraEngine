@@ -1,4 +1,4 @@
-#include "chimera/core/MatData.hpp"
+#include "chimera/render/MatData.hpp"
 
 namespace Chimera {
 

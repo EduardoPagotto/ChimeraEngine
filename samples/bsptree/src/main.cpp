@@ -2,8 +2,8 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
-#include "chimera/core/Shader.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/render/Shader.hpp"
 
 #include <iostream>
 

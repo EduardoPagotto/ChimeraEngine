@@ -1,10 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/LoadObj.hpp"
 #include "chimera/core/utils.hpp"
-// #include "chimera/core/OpenGLDefs.hpp"
-// #include "chimera/node/Transform.hpp"
-// #include <algorithm>
+#include "chimera/render/LoadObj.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {

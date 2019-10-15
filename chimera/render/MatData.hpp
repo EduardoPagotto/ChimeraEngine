@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_MATERIAL_DATA_HPP
 #define __CHIMERA_MATERIAL_DATA_HPP
 
-#include "chimera/core/ShaderValue.hpp"
+#include "ShaderValue.hpp"
 #include <glm/glm.hpp>
 #include <list>
 #include <map>

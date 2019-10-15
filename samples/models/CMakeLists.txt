@@ -17,6 +17,7 @@ set (IncludesModels ${Models_SOURCE_DIR}/include/
 
 set (LibsModels ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a #ordem é importante!!!
 				${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
+				${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				${OPENGL_LIBRARIES}
 				${SDL2_LIBRARY}
@@ -43,6 +44,7 @@ target_include_directories(models PRIVATE ${IncludesModels})
 target_link_libraries(models ${LibsModels})
 
 add_dependencies(models ChimeraCore
+						ChimeraRender
 						ChimeraNode
 						ChimeraLoaders)
 

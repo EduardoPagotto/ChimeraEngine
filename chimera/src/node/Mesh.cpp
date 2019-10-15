@@ -4,7 +4,7 @@
 #include "chimera/node/Mesh.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 
-#include "chimera/core/LoadObj.hpp"
+#include "chimera/render/LoadObj.hpp"
 
 #include <SDL2/SDL.h>
 

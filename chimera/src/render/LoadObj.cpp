@@ -1,4 +1,4 @@
-#include "chimera/core/LoadObj.hpp"
+#include "chimera/render/LoadObj.hpp"
 #include "chimera/core/Exception.hpp"
 
 #include <SDL2/SDL.h>

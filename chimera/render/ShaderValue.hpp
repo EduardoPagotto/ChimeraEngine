@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/Tex.hpp"
+#include "Shader.hpp"
+#include "Tex.hpp"
 #include "glm/glm.hpp"
 
 namespace Chimera {

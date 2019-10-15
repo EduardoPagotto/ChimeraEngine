@@ -1,5 +1,5 @@
-#include "chimera/core/Vertex.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/render/Vertex.hpp"
+#include "chimera/OpenGLDefs.hpp"
 
 namespace Chimera {
 

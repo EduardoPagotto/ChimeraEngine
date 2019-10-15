@@ -1,9 +1,9 @@
 #include "Game.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/LoadObj.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Transform.hpp"
+#include "chimera/render/LoadObj.hpp"
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 

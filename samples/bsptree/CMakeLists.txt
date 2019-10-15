@@ -9,7 +9,8 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define os Lib's a serem usados
-set (LibsTesteBSTree ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
+set (LibsTesteBSTree ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+					 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 					 ${OPENGL_LIBRARIES}
 					 ${SDL2_IBRARIES}
 					 -lGL
@@ -33,6 +34,7 @@ add_executable (bsptree src/BSPTree.cpp
 target_link_libraries(bsptree ${LibsTesteBSTree})
 target_include_directories (bsptree PRIVATE ${IncludesTesteBSTree})
 
-add_dependencies(bsptree ChimeraCore)
+add_dependencies(bsptree ChimeraCore 
+                         ChimeraRender)
 
 INSTALL(FILES ${TesteBSTree_BINARY_DIR}/bsptree DESTINATION bin)

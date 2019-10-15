@@ -28,7 +28,7 @@ class MatData {
 
     void setDefaultEffect();
 
-    void addTexture(const unsigned& indice, TEX_KIND typeTex, TexImg* _pTex);
+    void addTexture(TEX_KIND typeTex, TexImg* _pTex);
 
     inline void setAmbient(const glm::vec4& _color) {
         listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_AMBIENTE, _color));

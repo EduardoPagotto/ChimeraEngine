@@ -45,7 +45,7 @@ void MatData::init() {
         tipoTexturasDisponiveis = 4;
 }
 
-void MatData::addTexture(const unsigned& indice, TEX_KIND typeTex, TexImg* _pTex) {
+void MatData::addTexture(TEX_KIND typeTex, TexImg* _pTex) {
     switch (typeTex) {
         case TEX_KIND::DIFFUSE:
             mapTex[SHADE_TEXTURE_DIFFUSE] = _pTex;
@@ -59,8 +59,6 @@ void MatData::addTexture(const unsigned& indice, TEX_KIND typeTex, TexImg* _pTex
         default:
             break;
     }
-
-    _pTex->setIndice(indice);
 }
 
 void MatData::apply(Shader* _shader) {
@@ -77,10 +75,7 @@ void MatData::apply(Shader* _shader) {
             std::string name = iTex->first;
             TexImg* pTex = iTex->second;
 
-            // FIXME: precisa disto??? testar multiplas copias e texturas
-            unsigned indice = pTex->getIndice();
-
-            pTex->apply(indice, name, _shader);
+            pTex->apply(tipoTexturasDisponiveis, name, _shader);
         }
     } else {
         glBindTexture(GL_TEXTURE_2D, 0);

@@ -64,4 +64,44 @@ bool TexImg::init() {
     return false;
 }
 
+// -----
+// TexCentral::TexCentral() noexcept {}
+
+// TexCentral::~TexCentral() {
+
+//     std::map<std::string, TexImg*>::iterator it = mapTex.begin();
+//     while (it != mapTex.end()) {
+
+//         TexImg* pTex = it->second;
+//         mapTex.erase(it);
+
+//         delete pTex;
+//         pTex = nullptr;
+
+//         it = mapTex.begin();
+//     }
+// }
+
+// void TexCentral::initAllTex() {
+//     for (std::map<std::string, TexImg*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
+//         TexImg* pTex = iTex->second;
+//         pTex->init();
+//     }
+// }
+
+// TexImg* TexCentral::add(const std::string& name, const std::string& _pathFile) {
+
+//     TexImg* pTex;
+//     std::map<std::string, TexImg*>::iterator it = mapTex.find(name);
+//     if (it != mapTex.end()) {
+//         pTex = it->second;
+//         return pTex;
+//     }
+
+//     pTex = new TexImg(_pathFile);
+//     mapTex[name] = pTex;
+
+//     return pTex;
+// }
+
 } // namespace Chimera

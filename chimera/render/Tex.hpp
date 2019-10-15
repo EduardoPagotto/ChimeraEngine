@@ -4,6 +4,9 @@
 #include "Shader.hpp"
 #include "chimera/OpenGLDefs.hpp"
 
+#include "chimera/core/Singleton.hpp"
+#include <map>
+
 namespace Chimera {
 
 enum class TEX_KIND { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };
@@ -24,11 +27,11 @@ class Tex {
         return false;
     }
 
-    void apply(const unsigned& _indexTextureNumber, const std::string& _shaderPropName, Shader* _pShader) {
-        glActiveTexture(GL_TEXTURE0 + _indexTextureNumber);
+    void apply(const unsigned& _activeTexture, const std::string& _shaderPropName, Shader* _pShader) {
+        glActiveTexture(GL_TEXTURE0 + (int)_activeTexture);
         glBindTexture(GL_TEXTURE_2D, idTexture);
         if (_pShader != nullptr)
-            _pShader->setGlUniform1i(_shaderPropName.c_str(), _indexTextureNumber);
+            _pShader->setGlUniform1i(_shaderPropName.c_str(), _activeTexture);
     }
 
     inline unsigned getWidth() const { return width; }
@@ -62,13 +65,24 @@ class TexImg : public Tex {
     virtual ~TexImg() override;
     virtual bool init() override;
 
-    inline void setIndice(const unsigned& _val) { indiceTex = _val; }
-    inline unsigned getIndice() { return indiceTex; }
-
   protected:
-    unsigned indiceTex;
     std::string pathFile;
 };
+
+// class TexCentral {
+//     friend class Singleton<TexCentral>;
+
+//   public:
+//     void initAllTex();
+//     TexImg* add(const std::string& name, const std::string& _pathFile);
+
+//   protected:
+//     TexCentral() noexcept;
+//     ~TexCentral();
+
+//   private:
+//     std::map<std::string, TexImg*> mapTex;
+// };
 
 } // namespace Chimera
 #endif

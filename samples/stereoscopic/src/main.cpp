@@ -95,12 +95,13 @@ int main(int argn, char** argv) {
         pLight->setPositionRotation(glm::vec3(80, 100, 150), glm::vec3(0, 0, 0));
 
         // Material do cubo 1 com textura
-        Material* pMat1 = new Material("Mat1");
+        MatData* pMat1 = new MatData();
         pMat1->setAmbient(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
         pMat1->setDiffuse(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
         pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setShine(32.0f);
-        pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
+        pMat1->addTexture(TEX_KIND::DIFFUSE, new TexImg("./models/image1.jpg"));
+        // pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
 
         // Mesh do cubo1 filho de posicao 1
         // FIXME: aqui
@@ -114,7 +115,7 @@ int main(int argn, char** argv) {
         pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
 
         // Material Cubo 2 sem textura
-        Material* pMat2 = new Material("Mat2");
+        MatData* pMat2 = new MatData();
         pMat2->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
         pMat2->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat2->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));

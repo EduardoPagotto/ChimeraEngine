@@ -19,6 +19,8 @@ class Texture : public Entity {
     inline bool init() { return pTex->init(); }
     inline TEX_KIND getIndexTextureSeq() const { return indexTextureSeq; }
 
+    inline TexImg* inner() { return pTex; }
+
   private:
     TEX_KIND indexTextureSeq;
     TexImg* pTex;

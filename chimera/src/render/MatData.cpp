@@ -49,12 +49,15 @@ void MatData::addTexture(TEX_KIND typeTex, TexImg* _pTex) {
     switch (typeTex) {
         case TEX_KIND::DIFFUSE:
             mapTex[SHADE_TEXTURE_DIFFUSE] = _pTex;
+            mapKind[SHADE_TEXTURE_DIFFUSE] = TEX_KIND::DIFFUSE;
             break;
         case TEX_KIND::EMISSIVE:
             mapTex[SHADE_TEXTURE_EMISSIVE] = _pTex;
+            mapKind[SHADE_TEXTURE_EMISSIVE] = TEX_KIND::EMISSIVE;
             break;
         case TEX_KIND::SPECULAR:
             mapTex[SHADE_TEXTURE_SPECULA] = _pTex;
+            mapKind[SHADE_TEXTURE_SPECULA] = TEX_KIND::SPECULAR;
             break;
         default:
             break;
@@ -75,7 +78,11 @@ void MatData::apply(Shader* _shader) {
             std::string name = iTex->first;
             TexImg* pTex = iTex->second;
 
-            pTex->apply(tipoTexturasDisponiveis, name, _shader);
+            TEX_KIND kind = mapKind[name]; // TODO: colocar name do shader e kind direto dentro de textura
+                                           // para ser mais rapido
+
+            pTex->apply((int)kind, name, _shader);
+            // pTex->apply(tipoTexturasDisponiveis, name, _shader);
         }
     } else {
         glBindTexture(GL_TEXTURE_2D, 0);

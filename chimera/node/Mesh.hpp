@@ -36,7 +36,7 @@ class Mesh : public Draw {
     VertexRenderStatic renderStat;
 };
 
-Mesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMaterial);
+Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial);
 
 } // namespace Chimera
 #endif

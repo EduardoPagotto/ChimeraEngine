@@ -11,7 +11,7 @@ ParticleEmitter::ParticleEmitter(Node* _parent, std::string _name, int _max)
     : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name) {
     // MaxParticles = _max;
     LastUsedParticle = 0;
-    material = new Material("AutoMaterialParticleEmmiter_" + std::to_string(Entity::getNextSerialMaster() + 1));
+    material = new MatData();
 }
 
 ParticleEmitter::~ParticleEmitter() {}
@@ -54,8 +54,8 @@ void ParticleEmitter::init() {
 }
 
 void ParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string& _arquivo) {
-
-    material->loadTextureFromFile(_nome, TEX_KIND::DIFFUSE, _arquivo);
+    material->addTexture(TEX_KIND::DIFFUSE, new TexImg(_arquivo));
+    // material->loadTextureFromFile(_nome, TEX_KIND::DIFFUSE, _arquivo);
 }
 
 void ParticleEmitter::setSizeBox(const glm::vec3& _size) { sizeBox = _size; }

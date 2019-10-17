@@ -55,6 +55,7 @@ class MatData {
   private:
     int tipoTexturasDisponiveis;
     std::map<std::string, TexImg*> mapTex;
+    std::map<std::string, TEX_KIND> mapKind;
     std::list<ShaderValue*> listMaterial;
 };
 } // namespace Chimera

@@ -31,7 +31,7 @@ Mesh::~Mesh() {
 void Mesh::init() {
 
     if (material == nullptr)
-        material = new Material("DefaultMat-" + std::to_string(getSerial()));
+        material = new MatData();
 
     material->init();
 
@@ -58,13 +58,13 @@ void Mesh::debugDados() {
     meshData.debugDados();
 }
 
-Mesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMaterial) {
+Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial) {
 
     // Mesh
     Mesh* pMesh = new Mesh(_pParent, _name);
-    Material* pMatFinal = _pMaterial;
+    MatData* pMatFinal = _pMaterial;
     if (pMatFinal == nullptr)
-        pMatFinal = new Material("Mat-" + _name + "-" + std::to_string(pMesh->getSerial() + 1));
+        pMatFinal = new MatData();
 
     pMesh->setMaterial(_pMaterial);
     return pMesh;

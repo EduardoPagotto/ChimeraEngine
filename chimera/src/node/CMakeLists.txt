@@ -30,8 +30,7 @@ set (SourceNode Node.cpp
 				InitVisitor.cpp
 				RenderVisitor.cpp
 				ShadowMapVisitor.cpp
-				NodeParse.cpp
-				TextureManager.cpp)
+				NodeParse.cpp)
 
 #define os includes
 set (IncludeNode ${CMAKE_SOURCE_DIR}) # Raiz do projeto

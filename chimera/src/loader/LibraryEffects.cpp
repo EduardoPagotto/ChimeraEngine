@@ -5,11 +5,9 @@
 
 namespace ChimeraLoaders {
 
-LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {
-    pTexManager = Chimera::Singleton<Chimera::TextureManager>::getRefSingleton();
-}
+LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
-LibraryEffects::~LibraryEffects() { Chimera::Singleton<Chimera::TextureManager>::releaseRefSingleton(); }
+LibraryEffects::~LibraryEffects() {}
 
 Chimera::MatData* LibraryEffects::target() {
 
@@ -61,7 +59,8 @@ Chimera::TexImg* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
             std::string valId = std::get<0>(val);
             std::string valPathFile = std::get<1>(val);
 
-            return pTexManager->fromFile(Chimera::TEX_KIND::DIFFUSE, valPathFile);
+            Chimera::TexImg* tex = new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, valPathFile);
+            return tex;
         }
     }
 

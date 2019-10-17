@@ -2,7 +2,6 @@
 #define __CHIMERA_LOADER_LIBRARY_EFFECTS__HPP
 
 #include "chimera/loader/Library.hpp"
-#include "chimera/node/TextureManager.hpp"
 #include "chimera/render/MatData.hpp"
 
 namespace ChimeraLoaders {
@@ -20,7 +19,6 @@ class LibraryEffects : public Library {
     void loadColors(tinyxml2::XMLElement* _nProfile, Chimera::MatData* _pMat);
     Chimera::TexImg* getTexture(tinyxml2::XMLElement* _nTex);
 
-    Chimera::TextureManager* pTexManager;
     std::map<std::string, std::string> mapaEfeito;
 };
 } // namespace ChimeraLoaders

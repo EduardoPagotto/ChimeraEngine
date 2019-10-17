@@ -13,6 +13,7 @@ set (RenderSource 	Vertex.cpp
 					Triangle.cpp
 					MeshData.cpp
 					MatData.cpp
+					TransData.cpp
 					Shader.cpp
 					Tex.cpp
 					LoadObj.cpp)

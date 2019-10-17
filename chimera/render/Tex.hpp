@@ -4,17 +4,22 @@
 #include "Shader.hpp"
 #include "chimera/OpenGLDefs.hpp"
 
-#include "chimera/core/Singleton.hpp"
-#include <map>
+// #include "chimera/core/Singleton.hpp"
+// #include <map>
 
 namespace Chimera {
+
+#define SHADE_TEXTURE_DIFFUSE "material.tDiffuse"
+#define SHADE_TEXTURE_SPECULA "material.tSpecular"
+#define SHADE_TEXTURE_EMISSIVE "material.tEmissive"
+
+#define SHADE_TEXTURE_SHADOW "shadowMap" // TODO: melhorar este nome no shader
 
 enum class TEX_KIND { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };
 
 class Tex {
   public:
-    Tex(const unsigned& _width, const unsigned& _height)
-        : width(_width), height(_height), serial(++serialMaster), idTexture(0) {}
+    Tex(const TEX_KIND& _kind, const unsigned& _width, const unsigned& _height);
     virtual ~Tex() { glDeleteTextures(1, (GLuint*)&idTexture); }
 
     virtual bool init() {
@@ -27,12 +32,14 @@ class Tex {
         return false;
     }
 
-    void apply(const unsigned& _activeTexture, const std::string& _shaderPropName, Shader* _pShader) {
-        glActiveTexture(GL_TEXTURE0 + (int)_activeTexture);
+    void apply(Shader* _pShader) {
+        glActiveTexture(GL_TEXTURE0 + (int)kind);
         glBindTexture(GL_TEXTURE_2D, idTexture);
         if (_pShader != nullptr)
-            _pShader->setGlUniform1i(_shaderPropName.c_str(), _activeTexture);
+            _pShader->setGlUniform1i(shadePropName.c_str(), (int)kind);
     }
+
+    inline TEX_KIND getKind() const { return kind; }
 
     inline unsigned getWidth() const { return width; }
     inline unsigned getHeight() const { return height; }
@@ -43,6 +50,9 @@ class Tex {
     unsigned height;
     GLuint idTexture;
 
+    TEX_KIND kind;
+    std::string shadePropName;
+
   private:
     unsigned serial;
     static unsigned serialMaster;
@@ -50,7 +60,8 @@ class Tex {
 
 class TexFBO : public Tex {
   public:
-    TexFBO(const unsigned& _width, const unsigned& _height) : Tex(_width, _height), depthMapFBO(0) {}
+    TexFBO(const TEX_KIND& _kind, const unsigned& _width, const unsigned& _height)
+        : Tex(_kind, _width, _height), depthMapFBO(0) {}
     virtual ~TexFBO() override;
     virtual bool init() override;
     inline GLuint getFrameBufferId() const { return depthMapFBO; }
@@ -61,7 +72,7 @@ class TexFBO : public Tex {
 
 class TexImg : public Tex {
   public:
-    TexImg(const std::string& _pathFile) : Tex(0, 0), pathFile(_pathFile) {}
+    TexImg(const TEX_KIND& _kind, const std::string& _pathFile) : Tex(_kind, 0, 0), pathFile(_pathFile) {}
     virtual ~TexImg() override;
     virtual bool init() override;
 

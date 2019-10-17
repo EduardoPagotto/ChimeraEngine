@@ -7,8 +7,7 @@ namespace Chimera {
 
 Texture::Texture(const std::string& _name, const TEX_KIND& _indexTextureSeq, const std::string& _pathFile)
     : Entity(EntityKind::TEXTURE, _name) {
-    indexTextureSeq = _indexTextureSeq;
-    pTex = new TexImg(_pathFile);
+    pTex = new TexImg(_indexTextureSeq, _pathFile);
 }
 
 Texture::~Texture() { delete pTex; }

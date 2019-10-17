@@ -84,7 +84,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::MatDat
         tinyxml2::XMLElement* l_nTex = l_nCor->FirstChildElement("texture");
         if (l_nTex != nullptr) {
             Chimera::Texture* pTex = getTexture(l_nTex);
-            _pMat->addTexture(pTex->getIndexTextureSeq(), pTex->inner());
+            _pMat->addTexture(pTex->inner());
         }
 
         if (strcmp(l_cor, (const char*)"emission") == 0) {

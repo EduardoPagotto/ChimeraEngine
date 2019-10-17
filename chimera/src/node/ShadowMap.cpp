@@ -10,7 +10,7 @@ namespace Chimera {
 
 ShadowMap::ShadowMap(Node* _pNode, std::string _name, const unsigned& _width, const unsigned& _height)
     : Node(_pNode, EntityKind::SHADOWMAP, _name) {
-    pTexture = new TexFBO(_width, _height);
+    pTexture = new TexFBO(TEX_KIND::SHADOWMAP, _width, _height);
 }
 
 ShadowMap::~ShadowMap() { delete pTexture; }
@@ -47,8 +47,6 @@ void ShadowMap::initSceneShadow() {
 
 void ShadowMap::endSceneShadow() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
-void ShadowMap::applyShadow(const std::string& nameProp, Shader* _pShader) {
-    pTexture->apply((unsigned)TEX_KIND::SHADOWMAP, nameProp, _pShader);
-}
+void ShadowMap::applyShadow(Shader* _pShader) { pTexture->apply(_pShader); }
 
 } // namespace Chimera

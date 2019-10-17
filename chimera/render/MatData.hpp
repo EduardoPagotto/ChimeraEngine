@@ -2,15 +2,13 @@
 #define __CHIMERA_MATERIAL_DATA_HPP
 
 #include "ShaderValue.hpp"
+#include "Tex.hpp"
 #include <glm/glm.hpp>
 #include <list>
 #include <map>
 
 namespace Chimera {
 
-#define SHADE_TEXTURE_DIFFUSE "material.tDiffuse"
-#define SHADE_TEXTURE_SPECULA "material.tSpecular"
-#define SHADE_TEXTURE_EMISSIVE "material.tEmissive"
 #define SHADE_TEXTURE_SELETOR_TIPO_VALIDO "tipo"
 
 #define SHADE_MAT_AMBIENTE "material.ambient"
@@ -28,7 +26,7 @@ class MatData {
 
     void setDefaultEffect();
 
-    void addTexture(TEX_KIND typeTex, TexImg* _pTex);
+    void addTexture(TexImg* _pTex);
 
     inline void setAmbient(const glm::vec4& _color) {
         listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_AMBIENTE, _color));
@@ -46,7 +44,7 @@ class MatData {
         // listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_EMISSIVE, _color));
     }
 
-    bool hasTexture() { return mapTex.size() > 0 ? true : false; }
+    bool hasTexture() { return listTex.size() > 0 ? true : false; }
 
     inline void setShine(const float& _val) { listMaterial.push_back(new ShaderValue1vf(SHADE_MAT_SHININESS, _val)); }
 
@@ -54,8 +52,7 @@ class MatData {
 
   private:
     int tipoTexturasDisponiveis;
-    std::map<std::string, TexImg*> mapTex;
-    std::map<std::string, TEX_KIND> mapKind;
+    std::list<TexImg*> listTex;
     std::list<ShaderValue*> listMaterial;
 };
 } // namespace Chimera

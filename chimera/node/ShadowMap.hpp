@@ -19,7 +19,7 @@ class ShadowMap : public Node {
 
     void initSceneShadow();
     void endSceneShadow();
-    void applyShadow(const std::string& nameProp, Shader* _pShader);
+    void applyShadow(Shader* _pShader);
 
     glm::mat4 lightSpaceMatrix;
 

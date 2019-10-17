@@ -100,7 +100,7 @@ int main(int argn, char** argv) {
         pMat1->setDiffuse(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
         pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setShine(32.0f);
-        pMat1->addTexture(TEX_KIND::DIFFUSE, new TexImg("./models/image1.jpg"));
+        pMat1->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./models/image1.jpg"));
         // pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
 
         // Mesh do cubo1 filho de posicao 1

@@ -54,7 +54,7 @@ void ParticleEmitter::init() {
 }
 
 void ParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string& _arquivo) {
-    material->addTexture(TEX_KIND::DIFFUSE, new TexImg(_arquivo));
+    material->addTexture(new TexImg(TEX_KIND::DIFFUSE, _arquivo));
     // material->loadTextureFromFile(_nome, TEX_KIND::DIFFUSE, _arquivo);
 }
 

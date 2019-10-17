@@ -76,7 +76,7 @@ void loadMtl(const std::string& _fineNameMtl, MatData& _material) {
             // load texture
             std::string nova(line);
             if (getValidData(nova, std::string("map_Kd ")) == true)
-                _material.addTexture(TEX_KIND::DIFFUSE, new TexImg(nova));
+                _material.addTexture(new TexImg(TEX_KIND::DIFFUSE, nova));
         }
     }
 }

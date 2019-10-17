@@ -19,21 +19,27 @@ void MatData::init() {
     bool hasEspecular = false;
     bool hasEmissive = false;
 
-    for (std::map<std::string, TexImg*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
+    for (std::list<TexImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
 
-        TexImg* pTex = iTex->second;
+        TexImg* pTex = *iTex;
+
         pTex->init();
-
-        std::string name = iTex->first;
-        if (name.compare(SHADE_TEXTURE_DIFFUSE) == 0)
-            hasDifuse = true;
-        else if (name.compare(SHADE_TEXTURE_EMISSIVE) == 0)
-            hasEmissive = true;
-        else if (name.compare(SHADE_TEXTURE_SPECULA) == 0)
-            hasEspecular = true;
+        switch (pTex->getKind()) {
+            case TEX_KIND::DIFFUSE:
+                hasDifuse = true;
+                break;
+            case TEX_KIND::EMISSIVE:
+                hasEmissive = true;
+                break;
+            case TEX_KIND::SPECULAR:
+                hasEspecular = true;
+                break;
+            default:
+                break;
+        }
     }
 
-    if (mapTex.size() == 0)
+    if (listTex.size() == 0)
         tipoTexturasDisponiveis = 0;
     else if ((hasDifuse == true) && (hasEspecular == false) && (hasEmissive == false))
         tipoTexturasDisponiveis = 1;
@@ -45,24 +51,7 @@ void MatData::init() {
         tipoTexturasDisponiveis = 4;
 }
 
-void MatData::addTexture(TEX_KIND typeTex, TexImg* _pTex) {
-    switch (typeTex) {
-        case TEX_KIND::DIFFUSE:
-            mapTex[SHADE_TEXTURE_DIFFUSE] = _pTex;
-            mapKind[SHADE_TEXTURE_DIFFUSE] = TEX_KIND::DIFFUSE;
-            break;
-        case TEX_KIND::EMISSIVE:
-            mapTex[SHADE_TEXTURE_EMISSIVE] = _pTex;
-            mapKind[SHADE_TEXTURE_EMISSIVE] = TEX_KIND::EMISSIVE;
-            break;
-        case TEX_KIND::SPECULAR:
-            mapTex[SHADE_TEXTURE_SPECULA] = _pTex;
-            mapKind[SHADE_TEXTURE_SPECULA] = TEX_KIND::SPECULAR;
-            break;
-        default:
-            break;
-    }
-}
+void MatData::addTexture(TexImg* _pTex) { listTex.push_back(_pTex); }
 
 void MatData::apply(Shader* _shader) {
 
@@ -73,16 +62,10 @@ void MatData::apply(Shader* _shader) {
 
     _shader->setGlUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
 
-    if (mapTex.size() > 0) {
-        for (std::map<std::string, TexImg*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
-            std::string name = iTex->first;
-            TexImg* pTex = iTex->second;
-
-            TEX_KIND kind = mapKind[name]; // TODO: colocar name do shader e kind direto dentro de textura
-                                           // para ser mais rapido
-
-            pTex->apply((int)kind, name, _shader);
-            // pTex->apply(tipoTexturasDisponiveis, name, _shader);
+    if (listTex.size() > 0) {
+        for (std::list<TexImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
+            TexImg* pTex = *iTex;
+            pTex->apply(_shader);
         }
     } else {
         glBindTexture(GL_TEXTURE_2D, 0);

@@ -15,7 +15,7 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pTex = new Chimera::TexImg("./models/grid2.png");
+    pTex = new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, "./models/grid2.png");
 }
 
 Game::~Game() {}
@@ -153,7 +153,7 @@ void Game::render() {
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     // aplica a textura
-    pTex->apply(0, "material.tDiffuse", pShader);
+    pTex->apply(pShader);
 
     vertexBuffer.render(vVertice);
 

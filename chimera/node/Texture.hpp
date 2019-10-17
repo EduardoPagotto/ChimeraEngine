@@ -12,17 +12,13 @@ class Texture : public Entity {
     Texture(const std::string& _name, const TEX_KIND& _indexTextureSeq, const std::string& _pathFile);
     virtual ~Texture();
 
-    inline void apply(const std::string& _shaderPropName, Shader* _pShader) {
-        pTex->apply((unsigned)indexTextureSeq, _shaderPropName, _pShader);
-    }
-
+    inline void apply(Shader* _pShader) { pTex->apply(_pShader); }
     inline bool init() { return pTex->init(); }
-    inline TEX_KIND getIndexTextureSeq() const { return indexTextureSeq; }
 
     inline TexImg* inner() { return pTex; }
 
   private:
-    TEX_KIND indexTextureSeq;
+    // TEX_KIND indexTextureSeq;
     TexImg* pTex;
 };
 } // namespace Chimera

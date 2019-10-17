@@ -7,6 +7,27 @@ namespace Chimera {
 
 unsigned Tex::serialMaster = 0;
 
+Tex::Tex(const TEX_KIND& _kind, const unsigned& _width, const unsigned& _height)
+    : width(_width), height(_height), serial(++serialMaster), idTexture(0), kind(_kind) {
+
+    switch (_kind) {
+        case TEX_KIND::DIFFUSE:
+            shadePropName = SHADE_TEXTURE_DIFFUSE;
+            break;
+        case TEX_KIND::EMISSIVE:
+            shadePropName = SHADE_TEXTURE_EMISSIVE;
+            break;
+        case TEX_KIND::SPECULAR:
+            shadePropName = SHADE_TEXTURE_SPECULA;
+            break;
+        case TEX_KIND::SHADOWMAP:
+            shadePropName = SHADE_TEXTURE_SHADOW;
+            break;
+        default:
+            break;
+    }
+}
+
 TexFBO::~TexFBO() {}
 
 bool TexFBO::init() {

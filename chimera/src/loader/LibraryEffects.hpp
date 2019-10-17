@@ -18,7 +18,7 @@ class LibraryEffects : public Library {
     void loadNewParam(tinyxml2::XMLElement* _nProfile);
     glm::vec4 getColor(tinyxml2::XMLElement* l_nColorVal);
     void loadColors(tinyxml2::XMLElement* _nProfile, Chimera::MatData* _pMat);
-    Chimera::Texture* getTexture(tinyxml2::XMLElement* _nTex);
+    Chimera::TexImg* getTexture(tinyxml2::XMLElement* _nTex);
 
     Chimera::TextureManager* pTexManager;
     std::map<std::string, std::string> mapaEfeito;

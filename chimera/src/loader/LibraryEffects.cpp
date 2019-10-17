@@ -41,7 +41,7 @@ glm::vec4 LibraryEffects::getColor(tinyxml2::XMLElement* l_nColorVal) {
     return glm::vec4(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0);
 }
 
-Chimera::Texture* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
+Chimera::TexImg* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
 
     std::string texture1 = _nTex->Attribute("texture");
 
@@ -61,7 +61,7 @@ Chimera::Texture* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
             std::string valId = std::get<0>(val);
             std::string valPathFile = std::get<1>(val);
 
-            return pTexManager->fromFile(valId, Chimera::TEX_KIND::DIFFUSE, valPathFile);
+            return pTexManager->fromFile(Chimera::TEX_KIND::DIFFUSE, valPathFile);
         }
     }
 
@@ -83,8 +83,8 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::MatDat
 
         tinyxml2::XMLElement* l_nTex = l_nCor->FirstChildElement("texture");
         if (l_nTex != nullptr) {
-            Chimera::Texture* pTex = getTexture(l_nTex);
-            _pMat->addTexture(pTex->inner());
+            Chimera::TexImg* pTex = getTexture(l_nTex);
+            _pMat->addTexture(pTex);
         }
 
         if (strcmp(l_cor, (const char*)"emission") == 0) {

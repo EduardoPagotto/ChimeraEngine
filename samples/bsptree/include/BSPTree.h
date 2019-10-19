@@ -4,18 +4,26 @@
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
 
-#include "BSPTreeNode.hpp"
+#include "chimera/render/Triangle.hpp"
 
-class BSPTree {
-  public:
-    BSPTree(BSPTreeNode* _pRoot) : root(_pRoot) {}
-    void draw(glm::vec3* eye, std::vector<Triangle>* _pListPolygon);
+enum class SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
 
-  private:
-    static void drawBSPTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Triangle>* _pListPolygon);
-    static float classify(glm::vec3* normal, glm::vec3* eye);
+// struct HyperPlane {
+//     std::vector<float> coefficients;
+// };
 
-    BSPTreeNode* root;
+struct BSPTreeNode {
+    BSPTreeNode(const Chimera::Triangle& _partition) : partition(_partition), front(nullptr), back(nullptr) {}
+    std::vector<Chimera::Triangle> polygons;
+    Chimera::Triangle partition; // HyperPlane partition;
+    BSPTreeNode* front;
+    BSPTreeNode* back;
 };
+
+//----- Build bsptree
+BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon);
+
+//----- parse bsptree to draw
+void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata);
 
 #endif

@@ -1,6 +1,6 @@
 #include "Game.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Transform.hpp"
@@ -149,7 +149,7 @@ void Game::start() {
 
     if (pSkyBox != nullptr) {
         Chimera::Draw* pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
-        pSkyBox->setStaticTranslation(true);
+        pSkyBox->setStatic(true);
     }
 
     // Localiza a camera
@@ -170,8 +170,8 @@ void Game::start() {
     // Localiza o HUD
     pHUD = (Chimera::HUD*)pSceneMng->findChild("HUD-Default", true);
     if (pHUD != nullptr) {
-        pHUD->addText(0, 350, 30, Chimera::Color::BLUE, 1.0, &sPosicaoObj);
-        pHUD->addText(0, 10, 30, Chimera::Color::RED, 1.0, &textoFPS);
+        pHUD->addText(0, 350, 30, glm::vec4(0.0, 0.0, 1.0, 1.0), 1.0, &sPosicaoObj);
+        pHUD->addText(0, 10, 30, glm::vec4(1.0, 0.0, 0.0, 1.0), 1.0, &textoFPS);
     }
 }
 

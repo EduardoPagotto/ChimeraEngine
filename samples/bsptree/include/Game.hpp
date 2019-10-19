@@ -4,9 +4,9 @@
 #include "BSPTree.h"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/Tex.hpp"
 #include "chimera/core/TrackBall.hpp"
+#include "chimera/render/Shader.hpp"
+#include "chimera/render/Tex.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -29,20 +29,15 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void buildBuffer(int max);
-
-    void loadModelObj(const char* _file, std::vector<Triangle>* _pListPolygon);
-    void debugTriangle(Triangle* _pt);
-
-    BSPTree* pBspTree;
+    BSPTreeNode* pBSPTRoot;
     bool isPaused;
     int botaoIndex;
     int estadoBotao;
-    int debug_init;
+    bool debugParser;
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    unsigned int VBO, VAO; //, EBO;
+    Chimera::VertexRenderDynamic vertexBuffer;
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;

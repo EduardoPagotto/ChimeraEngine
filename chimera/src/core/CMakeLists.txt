@@ -12,18 +12,12 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (SourcesCore Canvas.cpp
 				 CanvasGL.cpp
 				 CanvasFB.cpp
-				 Tex.cpp
-				 Color.cpp
 				 Timer.cpp
 				 TrackBall.cpp
 				 TrackHead.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
-				 Shader.cpp	
-				 FlowControl.cpp
-				 VboIndexer.cpp
-				 utils.cpp
-				 LoadObj.cpp)
+				 FlowControl.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})
@@ -32,17 +26,11 @@ set (IncludeCoreAux ${OPENGL_INCLUDE_DIR}
 				 	${GLEW_INCLUDE_DIRS})
 
 #Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
-if (OVR_SET_TO_USE)
-	message(STATUS "OVR Incluido no Projeto")
-	set(SourcesCore ${SourcesCore} src/OvrDevice.cpp) #adiciona o cpp
-	set(IncludeCore ${IncludeCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
-endif(OVR_SET_TO_USE)
-
-if (HMD_Z1_SET_TO_USE)
-	message(STATUS "HMD_Z1 Incluido no Projeto")
-	set(SourcesCore ${SourcesCore} CanvasHmd.cpp) #adiciona o cpp
-	set(SourcesCore ${SourcesCore} Eye.cpp) #adiciona o cpp
-endif(HMD_Z1_SET_TO_USE)
+# if (OVR_SET_TO_USE)
+# 	message(STATUS "OVR Incluido no Projeto")
+# 	set(SourcesCore ${SourcesCore} src/OvrDevice.cpp) #adiciona o cpp
+# 	set(IncludeCore ${IncludeCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
+# endif(OVR_SET_TO_USE)
 
 # Define o Target
 add_library (ChimeraCore STATIC ${SourcesCore})

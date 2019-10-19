@@ -5,7 +5,6 @@
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/PhysicsControl.hpp"
-#include "chimera/node/TextureManager.hpp"
 
 namespace ChimeraLoaders {
 
@@ -17,7 +16,6 @@ class VisualScene : public Library {
     void target();
 
   private:
-    Chimera::TextureManager* pTexManager;
     ListNodes* pListNodes;
     Chimera::Group* pGroup;
 };

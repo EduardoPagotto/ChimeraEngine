@@ -4,7 +4,7 @@
 #include "Coord.hpp"
 #include "NodeVisitor.hpp"
 #include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/Shader.hpp"
+#include "chimera/render/Shader.hpp"
 
 #include "ShadowMap.hpp"
 

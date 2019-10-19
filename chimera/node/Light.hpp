@@ -5,9 +5,8 @@
 #include <map>
 
 #include "Node.hpp"
-#include "chimera/core/Color.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/Shader.hpp"
+#include "chimera/OpenGLDefs.hpp"
+#include "chimera/render/Shader.hpp"
 
 namespace Chimera {
 
@@ -27,9 +26,9 @@ class Light : public Node {
 
     void apply(Shader* _pShader);
 
-    inline void setAmbient(const Color& _color) { ambient = _color; }
-    inline void setSpecular(const Color& _color) { specular = _color; }
-    inline void setDiffuse(const Color& _color) { diffuse = _color; }
+    inline void setAmbient(const glm::vec4& _color) { ambient = _color; }
+    inline void setSpecular(const glm::vec4& _color) { specular = _color; }
+    inline void setDiffuse(const glm::vec4& _color) { diffuse = _color; }
     inline void setType(const LightType& _type) { type = _type; }
     inline void setTransform(const glm::mat4& _trans) { transform = _trans; }
 
@@ -41,9 +40,9 @@ class Light : public Node {
     glm::mat4 transform;
     glm::vec3 position;
 
-    Color ambient;
-    Color specular;
-    Color diffuse;
+    glm::vec4 ambient;
+    glm::vec4 specular;
+    glm::vec4 diffuse;
 
     int number;
     LightType type;

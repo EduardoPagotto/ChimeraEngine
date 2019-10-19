@@ -35,8 +35,8 @@ class Solid : public Coord {
     virtual void setRotation(const glm::vec3& _rotation) override;
     virtual glm::mat4 getMatrix() override;
     virtual void setMatrix(const glm::mat4& _trans) override;
-    virtual void setPositionRotation(const glm::vec3& _posicao,
-                                     const glm::vec3& _rotation) override;
+    // virtual void setPositionRotation(const glm::vec3& _posicao,
+    //                                  const glm::vec3& _rotation) override;
 
     inline void setMass(const float& _mass) { mass = _mass; }
 
@@ -49,13 +49,10 @@ class Solid : public Coord {
     }
 
     inline void setShapePlane(const glm::vec3& _val, const float& _constant) {
-        pShapeCollision =
-            new btStaticPlaneShape(btVector3(_val.x, _val.y, _val.z), _constant);
+        pShapeCollision = new btStaticPlaneShape(btVector3(_val.x, _val.y, _val.z), _constant);
     }
 
-    inline void setShapeSphere(float _raio) {
-        pShapeCollision = new btSphereShape((btScalar)_raio);
-    }
+    inline void setShapeSphere(float _raio) { pShapeCollision = new btSphereShape((btScalar)_raio); }
 
     void applyForce(const glm::vec3& _prop);
     void applyTorc(const glm::vec3& _torque);
@@ -64,9 +61,7 @@ class Solid : public Coord {
 
     bool isShapeDefine() { return (pShapeCollision != nullptr ? true : false); }
 
-    inline void setFrictionDynamic(const float& _friction) {
-        frictionDynamic = _friction;
-    }
+    inline void setFrictionDynamic(const float& _friction) { frictionDynamic = _friction; }
 
     inline void setFrictionStatic(const float& _friction) { frictionStatic = _friction; }
 

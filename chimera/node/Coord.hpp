@@ -69,14 +69,6 @@ class Coord : public Node {
      * @param _trans
      */
     virtual void setMatrix(const glm::mat4& _trans) = 0;
-
-    /**
-     * @brief Set the Position Rotation object
-     *
-     * @param _posicao
-     * @param _rotation
-     */
-    virtual void setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) = 0;
 };
 } // namespace Chimera
 

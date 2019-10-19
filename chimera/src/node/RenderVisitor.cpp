@@ -10,7 +10,7 @@
 #include "chimera/node/Solid.hpp"
 #include "chimera/node/Transform.hpp"
 
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/OpenGLDefs.hpp"
 
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -58,7 +58,7 @@ void RenderVisitor::visit(Mesh* _pMesh) {
     _pMesh->getMaterial()->apply(pShader);
 
     if (shadowMap != nullptr)
-        shadowMap->applyShadow("shadowMap", pShader);
+        shadowMap->applyShadow(pShader);
 
     _pMesh->render(pShader);
 }

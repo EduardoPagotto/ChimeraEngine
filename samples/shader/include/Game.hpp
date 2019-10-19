@@ -3,9 +3,8 @@
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Shader.hpp"
-
 #include "chimera/node/Node.hpp"
+#include "chimera/render/Shader.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

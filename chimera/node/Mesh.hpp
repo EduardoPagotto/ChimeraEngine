@@ -6,13 +6,11 @@
 #include <vector>
 
 #include "Draw.hpp"
-#include "chimera/core/VboIndexer.hpp"
+#include "chimera/render/MeshData.hpp"
+#include "chimera/render/Vertex.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
-
-// Define this somewhere in your header file
-#define BUFFER_OFFSET(i) ((void*)(i))
 
 class Mesh : public Draw {
   public:
@@ -29,24 +27,16 @@ class Mesh : public Draw {
     virtual void render(Shader* _pShader) override;
     virtual glm::vec3 getSizeBox();
 
-    std::vector<unsigned int> vertexIndex;
-    std::vector<glm::vec3> vertexList;
+    void debugDados();
 
-    std::vector<unsigned int> normalIndex;
-    std::vector<glm::vec3> normalList;
-
-    std::vector<unsigned int> textureIndex;
-    std::vector<glm::vec2> textureList;
+    MeshData meshData;
 
   private:
     void setVertexBuffer();
-
-    GLuint VAO;
-    GLuint VertexVBOID;
-    GLuint IndexVBOID;
-
-    std::vector<unsigned int> indexIBO;
-    std::vector<VertexData> vertexData;
+    VertexRenderStatic renderStat;
 };
+
+Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial);
+
 } // namespace Chimera
 #endif

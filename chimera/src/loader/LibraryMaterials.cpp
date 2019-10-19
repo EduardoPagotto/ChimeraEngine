@@ -8,7 +8,7 @@ LibraryMaterials::LibraryMaterials(tinyxml2::XMLElement* _root, const std::strin
 
 LibraryMaterials::~LibraryMaterials() {}
 
-Chimera::Material* LibraryMaterials::target() {
+Chimera::MatData* LibraryMaterials::target() {
 
     tinyxml2::XMLElement* l_nMat = root->FirstChildElement("library_materials")->FirstChildElement("material");
     for (l_nMat; l_nMat; l_nMat = l_nMat->NextSiblingElement()) {
@@ -17,7 +17,7 @@ Chimera::Material* LibraryMaterials::target() {
         if (url.compare(l_id) == 0) {
             std::string url = l_nMat->FirstChildElement("instance_effect")->Attribute("url");
             LibraryEffects le(root, url);
-            Chimera::Material* retorno = le.target();
+            Chimera::MatData* retorno = le.target();
             return retorno;
         }
     }

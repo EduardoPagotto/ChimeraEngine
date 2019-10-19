@@ -15,7 +15,8 @@ class HUD : public Draw {
         int posY;
         std::string* pText;
         GLfloat scale;
-        Color color;
+        glm::vec4 color;
+        // Color color;
     };
 
     HUD(Node* _parent, std::string _name);
@@ -37,8 +38,7 @@ class HUD : public Draw {
 
     inline bool isOn(void) const { return on; }
 
-    void addText(int _fontIndex, int _posX, int _posY, Color _colorText, GLfloat _scale,
-                 std::string* _txt);
+    void addText(int _fontIndex, int _posX, int _posY, glm::vec4 _colorText, GLfloat _scale, std::string* _txt);
 
   private:
     bool on;

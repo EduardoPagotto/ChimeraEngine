@@ -4,7 +4,7 @@
 #include "Coord.hpp"
 #include "Node.hpp"
 #include "NodeVisitor.hpp"
-#include "chimera/core/Shader.hpp"
+#include "chimera/render/Shader.hpp"
 
 namespace Chimera {
 

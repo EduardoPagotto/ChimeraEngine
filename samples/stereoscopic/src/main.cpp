@@ -1,14 +1,15 @@
 #include "Game.hpp"
 //#include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/CanvasHmd.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
-#include "chimera/node/MeshUtil.hpp"
+#include "chimera/node/Mesh.hpp"
 #include "chimera/node/Transform.hpp"
+#include "chimera/render/CanvasHmd.hpp"
+#include "chimera/render/LoadObj.hpp"
 
 #include <cstdio>
 #include <glm/glm.hpp>
@@ -89,34 +90,41 @@ int main(int argn, char** argv) {
 
         // Propriedades da luz
         Light* pLight = new Light(group1, "Luz1");
-        pLight->setDiffuse(Color::WHITE);
-        pLight->setAmbient(Chimera::Color(0.2f, 0.2f, 0.2f));
+        pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        pLight->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
         pLight->setPositionRotation(glm::vec3(80, 100, 150), glm::vec3(0, 0, 0));
 
         // Material do cubo 1 com textura
-        Material* pMat1 = new Material("Mat1");
-        pMat1->setAmbient(Color(1.0f, 0.5f, 0.31f));
-        pMat1->setDiffuse(Color(1.0f, 0.5f, 0.31f));
-        pMat1->setSpecular(Color(0.5f, 0.5f, 0.5f));
+        MatData* pMat1 = new MatData();
+        pMat1->setAmbient(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
+        pMat1->setDiffuse(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
+        pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setShine(32.0f);
-        pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
+        pMat1->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./models/image1.jpg"));
+        // pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
 
         // Mesh do cubo1 filho de posicao 1
-        Mesh* pMesh = Chimera::createMeshParallelepiped2(pTrans, "Cubo-01", glm::vec3(50, 50, 50), pMat1);
+        // FIXME: aqui
+        Mesh* pMesh = Chimera::createEmpty(pTrans, "Cubo-01", pMat1);
+        std::string materialFile;
+        loadObj("./samples/bsptree/models/cube.obj", pMesh->meshData, materialFile);
+        pMesh->meshData.changeSize(25.0, pMat1->hasTexture());
 
         // Posicao Cubo2
         Transform* pTrans2 = new Transform(group1, "trans02");
         pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
 
         // Material Cubo 2 sem textura
-        Material* pMat2 = new Material("Mat2");
-        pMat2->setAmbient(Color(0.5f, 0.5f, 0.31f));
-        pMat2->setDiffuse(Color(0.5f, 0.5f, 0.5f));
-        pMat2->setSpecular(Color(0.5f, 0.5f, 0.5f));
+        MatData* pMat2 = new MatData();
+        pMat2->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
+        pMat2->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+        pMat2->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat2->setShine(32.0f);
 
         // Mesh do cubo 2 vinculado posicao 2
-        Mesh* pMesh2 = Chimera::createMeshParallelepiped2(pTrans2, "Cubo-02", glm::vec3(20, 20, 20), pMat2);
+        Mesh* pMesh2 = Chimera::createEmpty(pTrans2, "Cubo-02", pMat2);
+        loadObj((const char*)"./samples/bsptree/models/cube.obj", pMesh2->meshData, materialFile);
+        pMesh2->meshData.changeSize(20.0, pMat2->hasTexture());
 
         // Wrapper do game
         Game* game = new Game(sceneMng, video);

@@ -14,11 +14,9 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (SourceNode Node.cpp
 				Light.cpp
 				Camera.cpp
-				Material.cpp
 				Solid.cpp
 				PhysicsControl.cpp
 				Constraint.cpp
-				Texture.cpp
 				Draw.cpp
 				Mesh.cpp
 				Font.cpp
@@ -28,13 +26,10 @@ set (SourceNode Node.cpp
 				ParticleEmitter.cpp
 				ShadowMap.cpp
 				Group.cpp
-				Transform.cpp
 				InitVisitor.cpp
 				RenderVisitor.cpp
-				MeshUtil.cpp
 				ShadowMapVisitor.cpp
-				NodeParse.cpp
-				TextureManager.cpp)
+				NodeParse.cpp)
 
 #define os includes
 set (IncludeNode ${CMAKE_SOURCE_DIR}) # Raiz do projeto
@@ -57,7 +52,8 @@ target_include_directories (ChimeraNode PUBLIC ${IncludeNode}
 # 	message(STATUS "Include dir='${dir}'")
 # endforeach()
 
-add_dependencies(ChimeraNode ChimeraCore)
+add_dependencies(ChimeraNode ChimeraCore 
+                             ChimeraRender)
 
 INSTALL(FILES ${ChimeraNode_BINARY_DIR}/libChimeraNode.a DESTINATION lib)
 INSTALL(DIRECTORY ${IncludeNode}/chimera/node DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

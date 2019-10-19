@@ -1,8 +1,7 @@
 #ifndef __CHIMERA_PARTICLE__HPP
 #define __CHIMERA_PARTICLE__HPP
 
-#include "chimera/core/Color.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "glm/glm.hpp"
 
 namespace Chimera {
@@ -27,7 +26,7 @@ class Particle {
 
   private:
     glm::vec3 pos, speed;
-    Color color;
+    glm::vec4 color;
     float size, angle, weight;
     float life;
     float cameradistance;

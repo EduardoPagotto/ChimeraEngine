@@ -5,13 +5,11 @@
 
 namespace ChimeraLoaders {
 
-LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {
-    pTexManager = Chimera::Singleton<Chimera::TextureManager>::getRefSingleton();
-}
+LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
-LibraryEffects::~LibraryEffects() { Chimera::Singleton<Chimera::TextureManager>::releaseRefSingleton(); }
+LibraryEffects::~LibraryEffects() {}
 
-Chimera::Material* LibraryEffects::target() {
+Chimera::MatData* LibraryEffects::target() {
 
     tinyxml2::XMLElement* l_nEffect = root->FirstChildElement("library_effects")->FirstChildElement("effect");
     for (l_nEffect; l_nEffect; l_nEffect = l_nEffect->NextSiblingElement()) {
@@ -21,7 +19,7 @@ Chimera::Material* LibraryEffects::target() {
             tinyxml2::XMLElement* l_nProfile = l_nEffect->FirstChildElement("profile_COMMON");
             if (l_nProfile != nullptr) {
 
-                Chimera::Material* pMaterial = new Chimera::Material(l_id);
+                Chimera::MatData* pMaterial = new Chimera::MatData();
 
                 loadNewParam(l_nProfile);
                 loadColors(l_nProfile, pMaterial);
@@ -33,15 +31,15 @@ Chimera::Material* LibraryEffects::target() {
     throw Chimera::Exception("Effect nao encontrado: " + url);
 }
 
-Chimera::Color LibraryEffects::getColor(tinyxml2::XMLElement* l_nColorVal) {
+glm::vec4 LibraryEffects::getColor(tinyxml2::XMLElement* l_nColorVal) {
 
     std::vector<float> l_arrayF;
     const char* l_cor = l_nColorVal->GetText();
     loadArrayBtScalar(l_cor, l_arrayF);
-    return Chimera::Color(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0);
+    return glm::vec4(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0);
 }
 
-Chimera::Texture* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
+Chimera::TexImg* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
 
     std::string texture1 = _nTex->Attribute("texture");
 
@@ -61,20 +59,21 @@ Chimera::Texture* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
             std::string valId = std::get<0>(val);
             std::string valPathFile = std::get<1>(val);
 
-            return pTexManager->fromFile(valId, Chimera::TEX_KIND::DIFFUSE, valPathFile);
+            Chimera::TexImg* tex = new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, valPathFile);
+            return tex;
         }
     }
 
     throw Chimera::Exception("Texture definido mas nao encontrado");
 }
 
-void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Material* _pMat) {
+void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::MatData* _pMat) {
 
     tinyxml2::XMLElement* l_nCor =
         _nProfile->FirstChildElement("technique")->FirstChildElement("phong")->FirstChildElement();
     for (l_nCor; l_nCor; l_nCor = l_nCor->NextSiblingElement()) {
 
-        Chimera::Color l_valCor;
+        glm::vec4 l_valCor;
         const char* l_cor = l_nCor->Value();
 
         tinyxml2::XMLElement* l_nColorVal = l_nCor->FirstChildElement("color");
@@ -82,15 +81,17 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Materi
             l_valCor = getColor(l_nColorVal);
 
         tinyxml2::XMLElement* l_nTex = l_nCor->FirstChildElement("texture");
-        if (l_nTex != nullptr)
-            _pMat->setTexture(getTexture(l_nTex));
+        if (l_nTex != nullptr) {
+            Chimera::TexImg* pTex = getTexture(l_nTex);
+            _pMat->addTexture(pTex);
+        }
 
         if (strcmp(l_cor, (const char*)"emission") == 0) {
 
             if (l_nColorVal != nullptr)
                 _pMat->setEmission(l_valCor);
             else if (l_nTex != nullptr)
-                _pMat->setEmission(Chimera::Color::WHITE);
+                _pMat->setEmission(glm::vec4(1.0, 1.0, 1.0, 1.0));
             else
                 throw Chimera::Exception("Tipo de cor emission indefinida");
 
@@ -99,7 +100,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Materi
             if (l_nColorVal != nullptr)
                 _pMat->setAmbient(l_valCor);
             else if (l_nTex != nullptr)
-                _pMat->setAmbient(Chimera::Color::WHITE);
+                _pMat->setAmbient(glm::vec4(1.0, 1.0, 1.0, 1.0));
             else
                 throw Chimera::Exception("Tipo de cor ambient indefinida");
 
@@ -108,7 +109,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Materi
             if (l_nColorVal != nullptr)
                 _pMat->setDiffuse(l_valCor);
             else if (l_nTex != nullptr)
-                _pMat->setDiffuse(Chimera::Color::WHITE);
+                _pMat->setDiffuse(glm::vec4(1.0, 1.0, 1.0, 1.0));
             else
                 throw Chimera::Exception("Tipo de cor diffuse indefinida");
 
@@ -117,7 +118,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Materi
             if (l_nColorVal != nullptr)
                 _pMat->setSpecular(l_valCor);
             else if (l_nTex != nullptr)
-                _pMat->setSpecular(Chimera::Color::WHITE);
+                _pMat->setSpecular(glm::vec4(1.0, 1.0, 1.0, 1.0));
             else
                 throw Chimera::Exception("Tipo de cor specular indefinida");
 

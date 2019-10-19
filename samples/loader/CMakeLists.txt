@@ -8,6 +8,8 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
+add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
+
 set (IncludesLoader ${CMAKE_SOURCE_DIR}
 					${OPENGL_INCLUDE_DIR}
 					${SDL2_INCLUDE_DIR}
@@ -16,6 +18,7 @@ set (IncludesLoader ${CMAKE_SOURCE_DIR}
 
 set (LibsLoader ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a #ordem é importante!!!
 				${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
+				${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				${OPENGL_LIBRARIES}
 				${SDL2_LIBRARY}
@@ -41,6 +44,8 @@ target_include_directories(loader PRIVATE ${IncludesLoader})
 target_link_libraries(loader ${LibsLoader})
 
 add_dependencies(loader ChimeraCore
+						ChimeraRender
+						ChimeraNode
 						ChimeraLoaders)
 
 INSTALL(FILES ${Loader_BINARY_DIR}/loader DESTINATION bin)

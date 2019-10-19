@@ -7,6 +7,7 @@ add_subdirectory(bsptree)
 add_subdirectory(stereoscopic)
 add_subdirectory(loader)
 add_subdirectory(models)
+add_subdirectory(simples)
 
 
 

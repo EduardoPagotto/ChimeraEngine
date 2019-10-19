@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_DRAW__HPP
 #define __CHIMERA_DRAW__HPP
 
-#include "Material.hpp"
 #include "Node.hpp"
+#include "chimera/render/MatData.hpp"
 #include "glm/glm.hpp"
 
 namespace Chimera {
@@ -16,12 +16,12 @@ class Draw : public Node {
     virtual void render(Shader* _pShader) = 0;
     virtual glm::vec3 getSizeBox() = 0;
 
-    void setMaterial(Material* _pMat) { this->material = _pMat; }
+    void setMaterial(MatData* _pMat) { this->material = _pMat; }
 
-    Material* getMaterial() const { return material; }
+    MatData* getMaterial() const { return material; }
 
   protected:
-    Material* material;
+    MatData* material;
 };
 } // namespace Chimera
 #endif

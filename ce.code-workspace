@@ -59,7 +59,14 @@
 			"utility": "cpp",
 			"valarray": "cpp",
 			"*.ipp": "cpp",
-			"string": "cpp"
+			"string": "cpp",
+			"algorithm": "cpp",
+			"iterator": "cpp",
+			"map": "cpp",
+			"memory_resource": "cpp",
+			"numeric": "cpp",
+			"random": "cpp",
+			"set": "cpp"
 		}
 	}
 }

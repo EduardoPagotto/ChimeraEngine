@@ -8,6 +8,8 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
+add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
+
 #get_target_property(Chimera CHIMERA_INCLUDE_DIR INTERFACE_INCLUDE_DIRECTORIES)
 
 #define os Lib's a serem usados

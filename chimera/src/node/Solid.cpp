@@ -68,16 +68,15 @@ void Solid::init() {
 
 void Solid::accept(NodeVisitor* v) { v->visit(this); }
 
-void Solid::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
-
-    btQuaternion l_qtn;
-    transform.setIdentity();
-    l_qtn.setEulerZYX(_rotation.x, _rotation.y, _rotation.z);
-    transform.setRotation(l_qtn);
-    transform.setOrigin(btVector3(_posicao.x, _posicao.y, _posicao.z));
-    // pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),
-    // l_posicao));
-}
+// void Solid::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
+//     btQuaternion l_qtn;
+//     transform.setIdentity();
+//     l_qtn.setEulerZYX(_rotation.x, _rotation.y, _rotation.z);
+//     transform.setRotation(l_qtn);
+//     transform.setOrigin(btVector3(_posicao.x, _posicao.y, _posicao.z));
+//     // pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),
+//     // l_posicao));
+// }
 
 void Solid::initTransform(const btTransform& _tTrans, void* pObj) {
 

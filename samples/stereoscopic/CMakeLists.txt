@@ -8,6 +8,8 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
+add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
+
 set (IncludesSterioscopic ${Sterioscopic_SOURCE_DIR}/include/
 						  ${CMAKE_SOURCE_DIR}
 						  ${OPENGL_INCLUDE_DIR}

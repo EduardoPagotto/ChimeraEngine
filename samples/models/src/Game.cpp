@@ -149,7 +149,7 @@ void Game::start() {
 
     if (pSkyBox != nullptr) {
         Chimera::Draw* pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
-        pSkyBox->setStaticTranslation(true);
+        pSkyBox->setStatic(true);
     }
 
     // Localiza a camera

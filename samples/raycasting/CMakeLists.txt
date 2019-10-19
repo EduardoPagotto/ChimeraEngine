@@ -5,6 +5,8 @@ PROJECT(RayCasting)
 find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 
+add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
+
 #define os Lib's a serem usados
 set (LibsSimpleRayCasting ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 						  ${SDL2_IBRARIES}

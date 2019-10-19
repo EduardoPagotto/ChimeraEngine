@@ -3,8 +3,6 @@
 
 namespace Chimera {
 
-// void TransData::accept(NodeVisitor* v) { v->visit(this); }
-
 glm::mat4 TransData::getModelMatrix(const glm::vec3& _position) { // ajuste matricial
     if (isStatic == false) {
         glm::mat4 matrixCoord = model;
@@ -17,11 +15,5 @@ glm::mat4 TransData::getModelMatrix(const glm::vec3& _position) { // ajuste matr
         return glm::make_mat4(matrix);
     }
     return model;
-}
-
-void TransData::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
-
-    this->setPosition(_posicao);
-    this->setRotation(_rotation);
 }
 } // namespace Chimera

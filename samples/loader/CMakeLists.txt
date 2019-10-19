@@ -8,6 +8,8 @@ find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
+add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
+
 set (IncludesLoader ${CMAKE_SOURCE_DIR}
 					${OPENGL_INCLUDE_DIR}
 					${SDL2_INCLUDE_DIR}

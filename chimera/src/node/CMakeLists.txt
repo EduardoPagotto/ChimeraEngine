@@ -26,7 +26,6 @@ set (SourceNode Node.cpp
 				ParticleEmitter.cpp
 				ShadowMap.cpp
 				Group.cpp
-				Transform.cpp
 				InitVisitor.cpp
 				RenderVisitor.cpp
 				ShadowMapVisitor.cpp

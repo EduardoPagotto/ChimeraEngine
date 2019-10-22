@@ -18,13 +18,14 @@ class Transform : public Coord {
     // Inherited via Coord
     virtual glm::vec3 getPosition() override { return trans.getPosition(); }
     virtual void setPosition(const glm::vec3& _pos) override { trans.setPosition(_pos); }
+
     virtual glm::vec3 getRotation() override { return trans.getRotation(); }
     virtual void setRotation(const glm::vec3& _rotation) override { trans.setRotation(_rotation); }
+
     virtual glm::mat4 getMatrix() override { return trans.getMatrix(); }
-    virtual glm::mat4 getModelMatrix(Coord* _pCoord) { return trans.getModelMatrix(_pCoord->getPosition()); }
     virtual void setMatrix(const glm::mat4& _trans) override { trans.setMatrix(_trans); }
-    inline void setStatic(const bool& _val) { trans.setStatic(_val); }
-    inline bool getStatic() const { return trans.getStatic(); }
+
+    virtual glm::mat4 getModelMatrix(Coord* _pCoord) { return trans.getModelMatrix(_pCoord->getPosition()); }
 
   private:
     Chimera::TransData trans;

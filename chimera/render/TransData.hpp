@@ -11,20 +11,19 @@ namespace Chimera {
 
 class TransData {
   public:
-    TransData() : model(glm::mat4(1.0f)), isStatic(false) {}
+    TransData() : model(glm::mat4(1.0f)) {}
     virtual ~TransData() {}
 
     inline glm::vec3 getPosition() const { return glm::vec3(model[3]); }
-    inline glm::vec3 getRotation() const { return glm::vec3(0.0, 0.0, 0.0); }
-    inline glm::mat4 getMatrix() const { return model; }
-    inline bool getStatic() const { return isStatic; }
-
     inline void setPosition(const glm::vec3& _pos) { model = glm::translate(model, _pos); }
+
+    inline glm::vec3 getRotation() const { return glm::vec3(0.0, 0.0, 0.0); }
     inline void setRotation(const glm::vec3& _rotation) {
         model = glm::eulerAngleYXZ(_rotation.y, _rotation.x, _rotation.z);
     }
+
+    inline glm::mat4 getMatrix() const { return model; }
     inline void setMatrix(const glm::mat4& _trans) { model = _trans; }
-    inline void setStatic(const bool& val) { isStatic = val; }
 
     glm::mat4 getModelMatrix(const glm::vec3& _position);
 

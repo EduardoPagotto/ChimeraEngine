@@ -2,6 +2,9 @@
 #define __CHIMERA_LIGHT__HPP
 
 #include "glm/glm.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+
 #include <map>
 
 #include "Node.hpp"
@@ -30,22 +33,23 @@ class Light : public Node {
     inline void setSpecular(const glm::vec4& _color) { specular = _color; }
     inline void setDiffuse(const glm::vec4& _color) { diffuse = _color; }
     inline void setType(const LightType& _type) { type = _type; }
+
     inline void setTransform(const glm::mat4& _trans) { transform = _trans; }
 
-    glm::vec3 getPosition() const { return position; }
+    inline glm::vec3 getPosition() const { return glm::vec3(transform[3]); }
+    inline void setPosition(const glm::vec3& _pos) { transform = glm::translate(transform, _pos); }
 
-    void setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation);
+    inline void setRotation(const glm::vec3& _rotation) {
+        transform = glm::eulerAngleYXZ(_rotation.y, _rotation.x, _rotation.z);
+    }
 
   private:
+    int number;
+    LightType type;
     glm::mat4 transform;
-    glm::vec3 position;
-
     glm::vec4 ambient;
     glm::vec4 specular;
     glm::vec4 diffuse;
-
-    int number;
-    LightType type;
 };
 } // namespace Chimera
 #endif

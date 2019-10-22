@@ -148,7 +148,6 @@ void Game::start() {
 
     if (pSkyBox != nullptr) {
         Chimera::Mesh* pMesh = (Chimera::Mesh*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
-        pSkyBox->setStatic(true);
     }
 
     // Localiza a camera

@@ -83,15 +83,13 @@ int main(int argn, char** argv) {
         pCam->getViewPoint()->position = glm::vec3(0, 0, 300);
         pCam->getViewPoint()->front = glm::vec3(0, 0, 0);
         pCam->getViewPoint()->up = glm::vec3(0, 1, 0);
-
-        // pCam->getViewPoint()->rotation = glm::vec3(0, 0, 1);
         pCam->init();
 
         // Propriedades da luz
         Light* pLight = new Light(group1, "Luz1");
         pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
         pLight->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-        pLight->setPositionRotation(glm::vec3(80, 100, 150), glm::vec3(0, 0, 0));
+        pLight->setPosition(glm::vec3(80, 100, 150));
 
         // Material do cubo 1 com textura
         MatData* pMat1 = new MatData();
@@ -100,10 +98,8 @@ int main(int argn, char** argv) {
         pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setShine(32.0f);
         pMat1->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./models/image1.jpg"));
-        // pMat1->loadTextureFromFile("Texture-teste", TEX_KIND::DIFFUSE, "./models/image1.jpg");
 
         // Mesh do cubo1 filho de posicao 1
-        // FIXME: aqui
         Mesh* pMesh = Chimera::createEmpty(pTrans, "Cubo-01", pMat1);
         std::string materialFile;
         loadObj("./samples/bsptree/models/cube.obj", pMesh->meshData, materialFile);

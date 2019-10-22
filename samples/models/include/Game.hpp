@@ -16,7 +16,7 @@
  */
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo, Chimera::PhysicsControl* _physicWorld);
+    Game(Chimera::SceneMng* _pScenMng, Chimera::PhysicsControl* _physicWorld);
     virtual ~Game();
 
     virtual void start();
@@ -50,8 +50,6 @@ class Game : public Chimera::IGameClientEvents {
     Chimera::PhysicsControl* physicWorld;
 
     bool isPaused;
-
-    Chimera::CanvasGL* pVideo;
 };
 
 #endif

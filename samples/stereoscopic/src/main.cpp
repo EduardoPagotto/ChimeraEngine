@@ -126,7 +126,7 @@ int main(int argn, char** argv) {
         pMesh2->meshData.changeSize(20.0, pMat2->hasTexture());
 
         // Wrapper do game
-        Game* game = new Game(sceneMng, video);
+        Game* game = new Game(sceneMng);
 
         // Controle do fluxo de programa
         FlowControl* pControle = new FlowControl(game);

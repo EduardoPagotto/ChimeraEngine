@@ -5,8 +5,7 @@
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Transform.hpp"
 
-Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo, Chimera::PhysicsControl* _physicWorld)
-    : pSceneMng(_pScenMng), pVideo(_pVideo) {
+Game::Game(Chimera::SceneMng* _pScenMng, Chimera::PhysicsControl* _physicWorld) : pSceneMng(_pScenMng) {
 
     isPaused = false;
     pCorpoRigido = nullptr;
@@ -218,7 +217,7 @@ void Game::userEvent(const SDL_Event& _event) {
                          n2->getName().c_str());
         } break;
         case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
-            pVideo->toggleFullScreen();
+            pSceneMng->getCanvas()->toggleFullScreen();
             break;
         default:
             break;
@@ -235,7 +234,7 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
             isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
-            pVideo->reshape(_event.data1, _event.data2);
+            pSceneMng->getCanvas()->reshape(_event.data1, _event.data2);
             break;
         default:
             break;

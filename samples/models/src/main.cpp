@@ -105,7 +105,7 @@ int main(int argn, char** argv) {
         pHUD->addFont(pFont);
 
         // Passa a game a scena, o video e o mundo fisico
-        Game* game = new Game(sceneMng, video, pPC);
+        Game* game = new Game(sceneMng, pPC);
 
         // Controle de fluxo do programa
         Chimera::FlowControl* pControle = new Chimera::FlowControl(game);

@@ -17,7 +17,6 @@ set (SourceNode Node.cpp
 				Solid.cpp
 				PhysicsControl.cpp
 				Constraint.cpp
-				Draw.cpp
 				Mesh.cpp
 				Font.cpp
 				HUD.cpp

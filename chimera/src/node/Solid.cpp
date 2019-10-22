@@ -1,5 +1,5 @@
 #include "chimera/node/Solid.hpp"
-#include "chimera/node/Draw.hpp"
+#include "chimera/node/Mesh.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -58,10 +58,10 @@ Solid::~Solid() {
 
 void Solid::init() {
 
-    Draw* pDraw = (Draw*)Node::findChild(EntityKind::MESH, 0, false); // FIXME melhorar
+    Mesh* pMesh = (Mesh*)Node::findChild(EntityKind::MESH, 0, false); // FIXME melhorar
 
     if (isShapeDefine() == false)
-        setShapeBox(pDraw->getSizeBox());
+        setShapeBox(pMesh->getSizeBox());
 
     initTransform(transform, this);
 }

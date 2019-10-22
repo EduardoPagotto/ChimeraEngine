@@ -148,7 +148,7 @@ void Game::start() {
     Chimera::Transform* pSkyBox = (Chimera::Transform*)pSceneMng->getRoot()->findChild("SkyBox", true);
 
     if (pSkyBox != nullptr) {
-        Chimera::Draw* pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
+        Chimera::Mesh* pMesh = (Chimera::Mesh*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
         pSkyBox->setStatic(true);
     }
 

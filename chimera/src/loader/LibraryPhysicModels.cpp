@@ -149,29 +149,28 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement(); // instance_geometry
         std::string l_mesh = l_nMesh->Attribute("url");
 
-        Chimera::Mesh* pDrawTriMesh =
-            (Chimera::Mesh*)pListNodes->getByName(Chimera::EntityKind::MESH, getIdFromUrl(l_mesh));
-        if (pDrawTriMesh != nullptr) {
+        Chimera::Mesh* pMesh = (Chimera::Mesh*)pListNodes->getByName(Chimera::EntityKind::MESH, getIdFromUrl(l_mesh));
+        if (pMesh != nullptr) {
 
             // btTriangleIndexVertexArray *indexVertexArray = new
             // btTriangleIndexVertexArray (
-            //     pDrawTriMesh->vertexIndex.size(),       //num triangles
-            //     (int*)&pDrawTriMesh->vertexIndex[0],    //lista de indice
+            //     pMesh->vertexIndex.size(),       //num triangles
+            //     (int*)&pMesh->vertexIndex[0],    //lista de indice
             //     3 * sizeof ( int ),                     //tamanho do indice por
-            //     elemento pDrawTriMesh->vertexList.size(),        //num Vertices
-            //     (float*)&pDrawTriMesh->vertexList[0],   //vList.ptrVal(),       //lista
+            //     elemento pMesh->vertexList.size(),        //num Vertices
+            //     (float*)&pMesh->vertexList[0],   //vList.ptrVal(),       //lista
             //     de vertice 3 * sizeof ( float )                    //tamanho do vertice
             //     por elemento
             // );
 
             // // btTriangleIndexVertexArray *indexVertexArray = new
             // btTriangleIndexVertexArray (
-            // //     pDrawTriMesh->vIndex.getSize() / 3,  //num triangles
-            // //     pDrawTriMesh->vIndex.ptrVal(),		//lista de indice
+            // //     pMesh->vIndex.getSize() / 3,  //num triangles
+            // //     pMesh->vIndex.ptrVal(),		//lista de indice
             // //     3 * sizeof ( int ),					//tamanho do indice
             // por elemento
-            // //     pDrawTriMesh->vList.getSize() / 3,	//num Vertices
-            // //     pDrawTriMesh->vList.ptrVal(),		//lista de vertice
+            // //     pMesh->vList.getSize() / 3,	//num Vertices
+            // //     pMesh->vList.ptrVal(),		//lista de vertice
             // //     3 * sizeof ( float )				    //tamanho do vertice
             // por elemento
             // // );

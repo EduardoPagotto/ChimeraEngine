@@ -10,11 +10,11 @@
 
 namespace Chimera {
 
-Mesh::Mesh(Node* _parent, std::string _name) : Draw(_parent, EntityKind::MESH, _name) {
+Mesh::Mesh(Node* _parent, std::string _name) : Node(_parent, EntityKind::MESH, _name) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Constructor Mesh: %s", _name.c_str());
 }
 
-Mesh::Mesh(const Mesh& _cpy) : Draw(_cpy) {
+Mesh::Mesh(const Mesh& _cpy) : Node(_cpy) {
 
     // FIXME: criar a copia do meshdata
 

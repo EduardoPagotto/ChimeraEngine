@@ -109,16 +109,16 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
             LibraryGeometrys lib(root, l_url);
-            Chimera::Draw* pDraw = lib.target();
+            Chimera::Mesh* pMesh = lib.target();
 
-            pListNodes->addNode(pDraw);
+            pListNodes->addNode(pMesh);
 
             Chimera::Transform* pTrans = new Chimera::Transform(_pNodePai, _id);
 
             pListNodes->addNode(pTrans);
 
             pTrans->setMatrix(l_pTransform);
-            pTrans->addChild(pDraw);
+            pTrans->addChild(pMesh);
             pLastNodeDone = pTrans;
 
         } else if (strcmp(l_nomeElemento, (const char*)"node") == 0) {

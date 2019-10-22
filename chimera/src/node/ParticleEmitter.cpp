@@ -8,7 +8,7 @@
 
 namespace Chimera {
 ParticleEmitter::ParticleEmitter(Node* _parent, std::string _name, int _max)
-    : Draw(_parent, EntityKind::PARTICLE_SYSTEM, _name) {
+    : Node(_parent, EntityKind::PARTICLE_SYSTEM, _name) {
     // MaxParticles = _max;
     LastUsedParticle = 0;
     material = new MatData();
@@ -57,10 +57,6 @@ void ParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string
     material->addTexture(new TexImg(TEX_KIND::DIFFUSE, _arquivo));
     // material->loadTextureFromFile(_nome, TEX_KIND::DIFFUSE, _arquivo);
 }
-
-void ParticleEmitter::setSizeBox(const glm::vec3& _size) { sizeBox = _size; }
-
-glm::vec3 ParticleEmitter::getSizeBox() { return sizeBox; }
 
 void ParticleEmitter::accept(NodeVisitor* v) { v->visit(this); }
 

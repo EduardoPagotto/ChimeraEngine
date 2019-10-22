@@ -1,9 +1,10 @@
 #ifndef __CHIMERA_PARTICLE_EMITTER__HPP
 #define __CHIMERA_PARTICLE_EMITTER__HPP
 
-#include "Draw.hpp"
+#include "Node.hpp"
 #include "Particle.hpp"
 #include "chimera/core/Timer.hpp"
+#include "chimera/render/MatData.hpp"
 #include "chimera/render/Shader.hpp"
 #include <vector>
 
@@ -17,7 +18,7 @@ namespace Chimera {
 
 #define MaxParticles 500
 
-class ParticleEmitter : public Draw {
+class ParticleEmitter : public Node {
   public:
     ParticleEmitter(Node* _parent, std::string _name, int _max);
     virtual ~ParticleEmitter();
@@ -25,11 +26,7 @@ class ParticleEmitter : public Draw {
     // Inherited via Node
     virtual void accept(class NodeVisitor* v) override;
 
-    // Inherited via Draw
-    virtual void render(Shader* _pShader) override;
-    virtual glm::vec3 getSizeBox() override;
-
-    void setSizeBox(const glm::vec3& _size);
+    virtual void render(Shader* _pShader);
 
     void init();
 
@@ -56,6 +53,8 @@ class ParticleEmitter : public Draw {
     glm::vec3 sizeBox;
     Particle ParticlesContainer[MaxParticles];
     Timer timer;
+
+    MatData* material;
 };
 } // namespace Chimera
 #endif

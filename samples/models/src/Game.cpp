@@ -3,6 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/node/Draw.hpp"
 #include "chimera/node/Transform.hpp"
 
 Game::Game(Chimera::SceneMng* _pScenMng, Chimera::PhysicsControl* _physicWorld) : pSceneMng(_pScenMng) {

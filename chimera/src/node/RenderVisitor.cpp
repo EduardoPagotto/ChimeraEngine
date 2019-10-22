@@ -95,11 +95,6 @@ void RenderVisitor::visit(ParticleEmitter* _pParticleEmitter) {
     }
 }
 
-void RenderVisitor::visit(SceneMng* _pSceneMng) {
-    //_pSceneRoot->apply();
-    // TODO: necessario o SceneMng
-}
-
 void RenderVisitor::visit(Group* _pGroup) {
 
     pShader = _pGroup->getShader();

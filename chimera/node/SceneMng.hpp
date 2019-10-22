@@ -2,9 +2,7 @@
 #define __CHIMERA_SCENE_MNG__HPP
 
 #include "RenderVisitor.hpp"
-//#include "Coord.hpp"
 #include "chimera/core/CanvasGL.hpp"
-#include <vector>
 
 namespace Chimera {
 

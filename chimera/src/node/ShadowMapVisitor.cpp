@@ -35,10 +35,6 @@ void ShadowMapVisitor::visit(Camera* _pCamera) {
     // view = _pCamera->getViewMatrix();
 }
 
-void ShadowMapVisitor::visit(SceneMng* _pSceneMng) {
-    // TODO: necessario o SceneMng
-}
-
 void ShadowMapVisitor::visit(Mesh* _pMesh) {
 
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));

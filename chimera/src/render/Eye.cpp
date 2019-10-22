@@ -122,7 +122,7 @@ void Eye::createSquare() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 
     GLuint texID = pShader->getUniformLocation("renderedTexture");
-    GLuint timeID = pShader->getUniformLocation("time");
+    // GLuint timeID = pShader->getUniformLocation("time");
 }
 
 void Eye::displayTexture() {
@@ -144,7 +144,7 @@ void Eye::displayTexture() {
     glUniform1i(texID, 0);
 
     // glUniform1f(timeID, (float)(glfwGetTime() * 10.0f));
-    glUniform1f(timeID, (float)1.0f * 10.0f);
+    // glUniform1f(timeID, (float)1.0f * 10.0f);
 
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);

@@ -8,6 +8,7 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
 
     pShader = new Shader("RenderToTex", shadeLoadProg("RenderToTex", "./chimera/shaders/Passthrough.vertexshader",
                                                       "./chimera/shaders/WobblyTexture.fragmentshader"));
+    //"./chimera/shaders/SimpleTexture.fragmentshader"));
 
     pLeft = new Eye(0, _width, _height, pShader);
     pRight = new Eye(1, _width, _height, pShader);

@@ -9,5 +9,6 @@ uniform float time;
 
 void main(){
 	// color = texture( renderedTexture, UV + 0.005*vec2( sin(time+1024.0*UV.x),cos(time+768.0*UV.y)) ).xyz ;
-	color = texture( renderedTexture, UV + 0.005*vec2( sin(time+512.0*UV.x),cos(time+512.0*UV.y)) ).xyz ;
+	// color = texture( renderedTexture, UV + 0.005*vec2( sin(time+512.0*UV.x),cos(time+512.0*UV.y)) ).xyz ;
+	color = texture( renderedTexture, UV).xyz ;
 }

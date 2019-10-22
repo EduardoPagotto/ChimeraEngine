@@ -3,11 +3,12 @@
 
 #include <vector>
 
-#include "Draw.hpp"
 #include "Font.hpp"
+#include "Node.hpp"
+#include "chimera/render/Shader.hpp"
 
 namespace Chimera {
-class HUD : public Draw {
+class HUD : public Node {
   public:
     struct HUDTxt {
         int indexFonte;
@@ -28,9 +29,7 @@ class HUD : public Draw {
     // Inherited via Node
     void accept(class NodeVisitor* v) override;
 
-    // Inherited via Draw
-    virtual void render(Shader* _pShader) override;
-    virtual glm::vec3 getSizeBox() override;
+    void render(Shader* _pShader);
 
     void addFont(Font* _pFont);
 

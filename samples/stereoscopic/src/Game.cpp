@@ -48,7 +48,7 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
 void Game::keyCapture(SDL_Keycode tecla) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
+    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::EntityKind::CAMERA, 0, true);
 
     switch (tecla) {
         case SDLK_ESCAPE:
@@ -85,7 +85,7 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
+    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::EntityKind::CAMERA, 0, true);
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
@@ -96,7 +96,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::start() { pSceneMng->start(pVideo); }
+void Game::start() { pSceneMng->init(); }
 
 void Game::stop() {}
 
@@ -127,4 +127,4 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
 
 bool Game::paused() { return isPaused; }
 
-void Game::render() { pSceneMng->draw(pVideo); }
+void Game::render() { pSceneMng->render(); }

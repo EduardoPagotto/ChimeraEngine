@@ -2,6 +2,7 @@
 #define __CHIMERA_SCENE_MNG__HPP
 
 #include "RenderVisitor.hpp"
+//#include "Coord.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include <vector>
 
@@ -12,20 +13,19 @@ namespace Chimera {
  *  @author <a href="mailto:edupagotto@gmail.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class SceneMng : public Node {
+class SceneMng {
   public:
-    SceneMng();
+    SceneMng(CanvasGL* _pCanvas, Node* _pRoot);
     virtual ~SceneMng() noexcept;
-
-    virtual void accept(class NodeVisitor* v);
-
     void init();
-    void draw(CanvasGL* _pVideo);
-    void start(CanvasGL* _pVideo);
-
+    void render();
+    inline Node* getRoot() { return pRoot; }
+    inline CanvasGL* getCanvas() { return pCanvas; }
     inline void origemDesenho(Coord* _pCoord) { renderV.pCoord = _pCoord; }
 
   private:
+    Node* pRoot;
+    CanvasGL* pCanvas;
     RenderVisitor renderV;
 };
 } // namespace Chimera

@@ -43,9 +43,6 @@ int main(int argn, char** argv) {
         // CanvasGL* video = new CanvasHmd(screen["name"].as<std::string>(), canvas["w"].as<int>(),
         // canvas["h"].as<int>());
 
-        // Gerenciador do grapho de cena
-        SceneMng* sceneMng = new SceneMng();
-
         // Carga dos shaders
         YAML::Node shaders = config["shaders"];
 
@@ -63,7 +60,9 @@ int main(int argn, char** argv) {
             mapa[pShader->getCurrentProgram()] = pShader;
         }
 
-        Group* group1 = new Group(sceneMng, "modelos");
+        Group* group1 = new Group(nullptr, "modelos");
+        SceneMng* sceneMng = new SceneMng(video, group1);
+
         group1->setShader(mapa["mesh-default"]);
         // group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
 

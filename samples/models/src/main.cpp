@@ -49,11 +49,7 @@ int main(int argn, char** argv) {
         Chimera::CanvasGL* video =
             new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
-        // Gerenciador do grapho de cena
-        Chimera::SceneMng* sceneMng = new Chimera::SceneMng();
-
         YAML::Node shaders = config["shaders"];
-        // Chimera::ShadersManager *shader =  sceneMng->getShadersManager();
         SDL_Log("Shaders identificados: %d", (int)shaders.size());
         for (std::size_t i = 0; i < shaders.size(); i++) {
             YAML::Node shader_item = shaders[i];
@@ -71,7 +67,13 @@ int main(int argn, char** argv) {
         std::string font = config["font"].as<std::string>();
 
         // Cria grupo shader como filho de scene
-        Chimera::Group* group1 = new Chimera::Group(sceneMng, "none");
+        Chimera::Group* pRoot = new Chimera::Group(nullptr, "root_real");
+
+        // Gerenciador do grapho de cena
+        Chimera::SceneMng* sceneMng = new Chimera::SceneMng(video, pRoot);
+
+        Chimera::Group* group1 = new Chimera::Group(pRoot, "none");
+
         ChimeraLoaders::VisualScene libV(model, group1);
         libV.target();
 
@@ -87,7 +89,7 @@ int main(int argn, char** argv) {
 
         // Novo Grupos com shader de Emissor particula GLSL de particula e o vincula a
         // cena e ao shader
-        Chimera::Group* gParticle = new Chimera::Group(sceneMng, "ParticleGroup");
+        Chimera::Group* gParticle = new Chimera::Group(pRoot, "ParticleGroup");
         gParticle->setShader(mapa["particle-default"]);
 
         Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
@@ -96,7 +98,7 @@ int main(int argn, char** argv) {
         pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
         // Novo Grupos com shader de um HUD ao Grapho da cena
-        Chimera::Group* gHud = new Chimera::Group((Chimera::Node*)sceneMng, "HUD-Group");
+        Chimera::Group* gHud = new Chimera::Group((Chimera::Node*)pRoot, "HUD-Group");
         gHud->setShader(mapa["hud-default"]);
         Chimera::HUD* pHUD = new Chimera::HUD(gHud, "HUD-Default");
         Chimera::Font* pFont = new Chimera::Font(font, 18); // TODO: carregar size da fonte

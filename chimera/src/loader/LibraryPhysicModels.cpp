@@ -33,7 +33,7 @@ void LibraryPhysicModels::target() {
 
                 std::string l_nNameRb = l_nRigid->Attribute("name");
 
-                Chimera::Solid* pPhysic = new Chimera::Solid(nullptr, l_nNameRb, pWorld);
+                Chimera::Solid* pPhysic = new Chimera::Solid(pWorld); //(nullptr, l_nNameRb, pWorld);
 
                 tinyxml2::XMLElement* l_nMass =
                     l_nRigid->FirstChildElement("technique_common")->FirstChildElement("mass");
@@ -62,7 +62,7 @@ void LibraryPhysicModels::target() {
                     // const char* l_mass = l_nShape->GetText();
                     //_pPhysic->setMass ( atof ( l_mass ) );
                 }
-                pListNodes->addNode(pPhysic);
+                pListNodes->addSolid(l_nNameRb, pPhysic); // addNode(pPhysic);
             }
             return;
         }

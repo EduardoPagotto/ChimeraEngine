@@ -2,7 +2,6 @@
 #define __CHIMERA_TRANSFORM__HPP
 
 #include "Coord.hpp"
-#include "chimera/node/NodeVisitor.hpp"
 #include "chimera/render/TransData.hpp"
 
 namespace Chimera {
@@ -10,10 +9,10 @@ namespace Chimera {
 // FIXME: Mudar para operacao matrix
 class Transform : public Coord {
   public:
-    Transform(Node* _parent, std::string _name) : Coord(_parent, EntityKind::TRANSFORM, _name) {}
+    Transform() : Coord() {}
     virtual ~Transform() {}
 
-    virtual void accept(class NodeVisitor* v) override { v->visit(this); }
+    // virtual void accept(class NodeVisitor* v) override { v->visit(this); }
 
     // Inherited via Coord
     virtual glm::vec3 getPosition() override { return trans.getPosition(); }
@@ -25,7 +24,8 @@ class Transform : public Coord {
     virtual glm::mat4 getMatrix() override { return trans.getMatrix(); }
     virtual void setMatrix(const glm::mat4& _trans) override { trans.setMatrix(_trans); }
 
-    virtual glm::mat4 getModelMatrix(Coord* _pCoord) { return trans.getModelMatrix(_pCoord->getPosition()); }
+    virtual glm::mat4 getModelMatrix(const glm::vec3& _pos) override { return trans.getModelMatrix(_pos); }
+    virtual void init(const glm::vec3& _size) override {}
 
   private:
     Chimera::TransData trans;

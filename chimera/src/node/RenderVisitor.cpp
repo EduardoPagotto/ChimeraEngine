@@ -7,8 +7,8 @@
 #include "chimera/node/NodeParse.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
-#include "chimera/node/Solid.hpp"
-#include "chimera/node/Transform.hpp"
+//#include "chimera/node/Solid.hpp"
+//#include "chimera/node/Transform.hpp"
 
 #include "chimera/OpenGLDefs.hpp"
 
@@ -41,6 +41,8 @@ void RenderVisitor::visit(Camera* _pCamera) {}
 
 void RenderVisitor::visit(Mesh* _pMesh) {
 
+    model = _pMesh->getCoord()->getModelMatrix(pCoord->getPosition()); //_pSolid->getModelMatrix(pCoord);
+
     if (pShader == nullptr)
         return;
 
@@ -68,6 +70,8 @@ void RenderVisitor::visit(Light* _pLight) {}
 void RenderVisitor::visit(ParticleEmitter* _pParticleEmitter) {
 
     if (particleOn == true) {
+
+        model = _pParticleEmitter->getCoord()->getModelMatrix(pCoord->getPosition());
 
         if (pShader == nullptr)
             return;
@@ -144,9 +148,11 @@ void RenderVisitor::visit(Group* _pGroup) {
         pLight->apply(pShader);
 }
 
-void RenderVisitor::visit(Chimera::Transform* _pTransform) { model = _pTransform->getModelMatrix(pCoord); }
+// void RenderVisitor::visit(Chimera::Transform* _pTransform) {
+//     model = _pTransform->getModelMatrix(pCoord->getPosition());
+// }
 
-void RenderVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
+// void RenderVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
 
 void RenderVisitor::visit(HUD* _pHUD) {
 

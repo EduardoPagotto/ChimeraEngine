@@ -14,21 +14,21 @@ namespace Chimera {
  */
 enum class EntityKind : int8_t {
     GROUP,
-    SOLID,
+    // SOLID,
     SOLID_MATERIAL,
-    TRANSFORM,
-    TEXTURE,
-    MATERIAL,
+    // TRANSFORM,
+    // TEXTURE,
+    // MATERIAL,
     CAMERA,
     LIGHT,
     SKYBOX,
     SHADOWMAP,
-    SCENEROOT,
+    // SCENEROOT,
     CONSTRAINT,
     HUD,
     MESH,
-    PARTICLE_SYSTEM,
-    SCENE_MANAGER
+    PARTICLE_SYSTEM //,
+    // SCENE_MANAGER
 };
 
 /**

@@ -1,32 +1,29 @@
 #ifndef __CHIMERA_SOLID__HPP
 #define __CHIMERA_SOLID__HPP
 
+#include "Coord.hpp"
+#include "PhysicsControl.hpp"
+#include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
-
-#include <BulletCollision/CollisionShapes/btMaterial.h>
-
-#include "Coord.hpp"
-#include "PhysicsControl.hpp"
-
 #include <glm/gtc/type_ptr.hpp>
-#include <tinyxml2.h>
+//#include <tinyxml2.h>
 
 namespace Chimera {
 
 class Solid : public Coord {
   public:
-    friend class Loader;
-    Solid(Node* _parent, std::string _name, PhysicsControl* _pWorld);
-    Solid(const Solid& _solid);
+    // friend class Loader;
+    Solid(PhysicsControl* _pWorld);
+    // Solid(const Solid& _solid);
     virtual ~Solid();
-    virtual void init();
+    virtual void init(const glm::vec3& _size) override;
 
-    glm::mat4 getModelMatrix(Coord* _pCoord);
+    virtual glm::mat4 getModelMatrix(const glm::vec3& _pos) override;
 
     // Inherited via Node
-    void accept(class NodeVisitor* v);
+    // void accept(class NodeVisitor* v);
 
     // Inherited via Coord
     virtual glm::vec3 getPosition() override;

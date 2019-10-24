@@ -1,14 +1,13 @@
 #ifndef __CHIMERA_COORD__HPP
 #define __CHIMERA_COORD__HPP
 
-#include "Node.hpp"
 #include "glm/glm.hpp"
 
 namespace Chimera {
 
-class Coord : public Node {
+class Coord {
   public:
-    Coord(Node* _parent, EntityKind _entity, std::string _name) : Node(_parent, _entity, _name) {}
+    Coord() {}
     virtual ~Coord() {}
 
     virtual glm::vec3 getPosition() = 0;
@@ -19,6 +18,9 @@ class Coord : public Node {
 
     virtual glm::mat4 getMatrix() = 0;
     virtual void setMatrix(const glm::mat4& _trans) = 0;
+
+    virtual void init(const glm::vec3& _size) = 0;
+    virtual glm::mat4 getModelMatrix(const glm::vec3& _pos) = 0;
 };
 } // namespace Chimera
 

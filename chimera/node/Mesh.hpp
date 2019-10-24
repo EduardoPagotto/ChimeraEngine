@@ -5,6 +5,7 @@
 #include <tinyxml2.h>
 #include <vector>
 
+#include "Coord.hpp"
 #include "Node.hpp"
 #include "chimera/render/MatData.hpp"
 #include "chimera/render/MeshData.hpp"
@@ -27,6 +28,8 @@ class Mesh : public Node {
     void render(Shader* _pShader);
     glm::vec3 getSizeBox();
 
+    void replaceCoord(Coord* _pCoord);
+
     void debugDados();
 
     MeshData meshData;
@@ -34,10 +37,14 @@ class Mesh : public Node {
     void setMaterial(MatData* _pMat) { this->material = _pMat; }
     MatData* getMaterial() const { return material; }
 
+    inline Coord* getCoord() const { return pCoord; }
+    void setCoord(Coord* _pCoord) { pCoord = _pCoord; }
+
   private:
     void setVertexBuffer();
     VertexRenderStatic renderStat;
     MatData* material;
+    Coord* pCoord;
 };
 
 Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial);

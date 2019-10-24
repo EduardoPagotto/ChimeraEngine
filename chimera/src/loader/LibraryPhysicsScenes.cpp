@@ -3,6 +3,7 @@
 #include "LibraryPhysicModels.hpp"
 #include "LibraryPhysicsScenes.hpp"
 
+#include "chimera/node/Mesh.hpp"
 #include "chimera/node/Solid.hpp"
 #include "chimera/node/Transform.hpp"
 
@@ -42,22 +43,26 @@ void LibraryPhysicsScenes::target() {
                     std::string body = l_nRigid->Attribute("body");
                     std::string target = l_nRigid->Attribute("target");
 
-                    Chimera::Solid* pSolid =
-                        (Chimera::Solid*)pListNodes->getByName(Chimera::EntityKind::SOLID,
-                                                               getIdFromUrl(body)); // ->findChild(body, false);
-                    Chimera::Node* node = pListNodes->getByName(Chimera::EntityKind::TRANSFORM, getIdFromUrl(target));
-                    Chimera::Node* transforfParent = node->getParent();
-                    Chimera::Node* mesh = node->findChild(Chimera::EntityKind::MESH, 0, false);
+                    Chimera::Solid* pSolid = pListNodes->mapSolids[body];
+                    Chimera::Mesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
+
+                    // (Chimera::Solid*)pListNodes->getByName(Chimera::EntityKind::SOLID,
+                    //                                        getIdFromUrl(body)); // ->findChild(body, false);
+                    // Chimera::Node* node = pListNodes->getByName(Chimera::EntityKind::TRANSFORM,
+                    // getIdFromUrl(target)); Chimera::Node* transforfParent = node->getParent(); Chimera::Node* mesh =
+                    // node->findChild(Chimera::EntityKind::MESH, 0, false);
+
+                    pMesh->replaceCoord(pSolid);
 
                     // Transfere dados
-                    Chimera::Transform* pTrans = (Chimera::Transform*)node;
-                    pSolid->setMatrix(pTrans->getMatrix());
+                    // Chimera::Transform* pTrans = (Chimera::Transform*)node;
+                    // pSolid->setMatrix(pTrans->getMatrix());
 
-                    transforfParent->addChild(pSolid);
-                    pSolid->addChild(mesh);
+                    // transforfParent->addChild(pSolid);
+                    // pSolid->addChild(mesh);
                     // mesh->setParent(pSolid);
 
-                    transforfParent->removeChild(node);
+                    // transforfParent->removeChild(node);
 
                     // Chimera::Node *pai = transforOld->getParent();
                     //->removeChild(transforOld);

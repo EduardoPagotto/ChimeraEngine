@@ -87,9 +87,11 @@ int main(int argn, char** argv) {
         // create and add particle to scene
         Chimera::Group* gParticle = new Chimera::Group(pRoot, "ParticleGroup");
         gParticle->setShader(mapa["particle-default"]);
-        Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
+        Chimera::Transform* posParticle = new Chimera::Transform();
         posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
+        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(gParticle, "testeZ1", 10000);
+        pParticleEmitter->setCoord(posParticle);
+
         pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
         // Create and add hud data text

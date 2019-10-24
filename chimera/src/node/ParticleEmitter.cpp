@@ -18,6 +18,8 @@ ParticleEmitter::~ParticleEmitter() {}
 
 void ParticleEmitter::init() {
 
+    pCoord->init(glm::vec3());
+
     material->init();
 
     glGenVertexArrays(1, &VertexArrayID);

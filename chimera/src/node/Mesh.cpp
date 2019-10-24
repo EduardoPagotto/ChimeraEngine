@@ -37,6 +37,8 @@ void Mesh::init() {
 
     meshData.textureFix();
 
+    pCoord->init(meshData.getSizeBox());
+
     setVertexBuffer();
 }
 
@@ -56,6 +58,17 @@ void Mesh::setVertexBuffer() {
 void Mesh::debugDados() {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Debug Mess Nome: %s", getName().c_str());
     meshData.debugDados();
+}
+
+void Mesh::replaceCoord(Coord* _pCoord) {
+
+    glm::mat4 matrix = pCoord->getMatrix();
+    _pCoord->setMatrix(matrix);
+
+    delete pCoord;
+    pCoord = nullptr;
+
+    pCoord = _pCoord;
 }
 
 Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial) {

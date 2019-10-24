@@ -10,8 +10,8 @@ class NodeVisitor {
     virtual void visit(class Light* _pLight) = 0;
     virtual void visit(class ParticleEmitter* _pParticleEmitter) = 0;
     virtual void visit(class Group* _pGroup) = 0;
-    virtual void visit(class Transform* _pTransform) = 0;
-    virtual void visit(class Solid* _pSolid) = 0;
+    // virtual void visit(class Transform* _pTransform) = 0;
+    // virtual void visit(class Solid* _pSolid) = 0;
     virtual void visit(class HUD* _pHUD) = 0;
     virtual void visit(class ShadowMap* _pShadowMap) = 0;
 };

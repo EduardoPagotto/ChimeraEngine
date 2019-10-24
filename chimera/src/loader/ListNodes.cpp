@@ -8,7 +8,7 @@ void ListNodes::reset() noexcept {
     vCamera.clear();
     vMesh.clear();
     vLight.clear();
-    vTransform.clear();
+    // vTransform.clear();
 }
 
 Chimera::Node* ListNodes::getByName(const Chimera::EntityKind& _kind, const std::string& _name) const {
@@ -33,17 +33,17 @@ Chimera::Node* ListNodes::getByName(const Chimera::EntityKind& _kind, const std:
                     return node;
             break;
 
-        case Chimera::EntityKind::TRANSFORM:
-            for (Chimera::Node* node : vTransform)
-                if (node->getName().compare(_name) == 0)
-                    return node;
-            break;
+            // case Chimera::EntityKind::TRANSFORM:
+            //     for (Chimera::Node* node : vTransform)
+            //         if (node->getName().compare(_name) == 0)
+            //             return node;
+            //     break;
 
-        case Chimera::EntityKind::SOLID:
-            for (Chimera::Node* node : vSolid)
-                if (node->getName().compare(_name) == 0)
-                    return node;
-            break;
+            // case Chimera::EntityKind::SOLID:
+            //     for (Chimera::Node* node : vSolid)
+            //         if (node->getName().compare(_name) == 0)
+            //             return node;
+            //     break;
     }
 
     return nullptr;
@@ -65,13 +65,13 @@ void ListNodes::addNode(Chimera::Node* _pNode) {
             vLight.push_back(_pNode);
             break;
 
-        case Chimera::EntityKind::TRANSFORM:
-            vTransform.push_back(_pNode);
-            break;
+            // case Chimera::EntityKind::TRANSFORM:
+            //     vTransform.push_back(_pNode);
+            //     break;
 
-        case Chimera::EntityKind::SOLID:
-            vSolid.push_back(_pNode);
-            break;
+            // case Chimera::EntityKind::SOLID:
+            //     vSolid.push_back(_pNode);
+            //     break;
     }
 }
 } // namespace ChimeraLoaders

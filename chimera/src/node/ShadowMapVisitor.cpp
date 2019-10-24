@@ -37,6 +37,8 @@ void ShadowMapVisitor::visit(Camera* _pCamera) {
 
 void ShadowMapVisitor::visit(Mesh* _pMesh) {
 
+    model = _pMesh->getCoord()->getModelMatrix(pCoord->getPosition());
+
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
     _pMesh->render(nullptr);
 }
@@ -62,9 +64,11 @@ void ShadowMapVisitor::visit(Group* _pGroup) {
     pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
-void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) { model = _pTransform->getModelMatrix(pCoord); }
+// void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) {
+//     model = _pTransform->getModelMatrix(pCoord->getPosition());
+// }
 
-void ShadowMapVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
+// void ShadowMapVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
 
 void ShadowMapVisitor::visit(HUD* _pHUD) {}
 

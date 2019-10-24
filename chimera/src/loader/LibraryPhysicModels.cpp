@@ -19,7 +19,7 @@ LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std:
 
 LibraryPhysicModels::~LibraryPhysicModels() { Chimera::Singleton<ListNodes>::releaseRefSingleton(); }
 
-void LibraryPhysicModels::target() {
+void LibraryPhysicModels::target(std::map<std::string, Chimera::Solid*>& _mapSolids) {
 
     tinyxml2::XMLElement* l_nPhyModel =
         root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");
@@ -62,7 +62,7 @@ void LibraryPhysicModels::target() {
                     // const char* l_mass = l_nShape->GetText();
                     //_pPhysic->setMass ( atof ( l_mass ) );
                 }
-                pListNodes->addSolid(l_nNameRb, pPhysic); // addNode(pPhysic);
+                _mapSolids[l_nNameRb] = pPhysic;
             }
             return;
         }
@@ -147,21 +147,19 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
 
         // TODO: implementar triMesh de colisao abaixo
         tinyxml2::XMLElement* l_nMesh = _nShape->FirstChildElement(); // instance_geometry
-        std::string l_mesh = l_nMesh->Attribute("url");
+        const char* idMesh = l_nMesh->Attribute("url");
+        std::string l_mesh = &idMesh[1];
 
-        Chimera::Mesh* pMesh = (Chimera::Mesh*)pListNodes->getByName(Chimera::EntityKind::MESH, getIdFromUrl(l_mesh));
+        Chimera::Mesh* pMesh = (Chimera::Mesh*)pListNodes->mapMeshNode[l_mesh];
         if (pMesh != nullptr) {
-
-            // btTriangleIndexVertexArray *indexVertexArray = new
-            // btTriangleIndexVertexArray (
-            //     pMesh->vertexIndex.size(),       //num triangles
-            //     (int*)&pMesh->vertexIndex[0],    //lista de indice
-            //     3 * sizeof ( int ),                     //tamanho do indice por
-            //     elemento pMesh->vertexList.size(),        //num Vertices
-            //     (float*)&pMesh->vertexList[0],   //vList.ptrVal(),       //lista
-            //     de vertice 3 * sizeof ( float )                    //tamanho do vertice
-            //     por elemento
-            // );
+            // btTriangleIndexVertexArray* indexVertexArray =
+            //     new btTriangleIndexVertexArray(pMesh->meshData->vertexIndex.size(),    // num triangles
+            //                                    (int*)&pMesh->meshData->vertexIndex[0], // lista de indice
+            //                                    3 * sizeof(int),                    // tamanho do indice por  elemento
+            //                                    pMesh->meshData->vertexList.size(), // num Vertices
+            //                                    (float*)&pMeshmeshData->->vertexList[0], //
+            //                                    vList.ptrVal(),                          //
+            //                                    3 * sizeof(float));                      //
 
             // // btTriangleIndexVertexArray *indexVertexArray = new
             // btTriangleIndexVertexArray (

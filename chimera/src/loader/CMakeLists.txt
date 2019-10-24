@@ -23,8 +23,7 @@ set (SourcesLoader Library.cpp
 				   LibraryPhysicModels.cpp
 				   LibraryPhysicsScenes.cpp
 				   VisualScene.cpp
-				   PhysicsScene.cpp
-				   ListNodes.cpp)
+				   PhysicsScene.cpp)
 
 #define os includes
 set (IncludeLoader  ${CMAKE_SOURCE_DIR})

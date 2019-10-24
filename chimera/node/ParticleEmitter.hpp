@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_PARTICLE_EMITTER__HPP
 #define __CHIMERA_PARTICLE_EMITTER__HPP
 
-#include "Coord.hpp"
+#include "ITransform.hpp"
 #include "Node.hpp"
 #include "Particle.hpp"
 #include "chimera/core/Timer.hpp"
@@ -35,11 +35,11 @@ class ParticleEmitter : public Node {
 
     void loadTexDiffuse(const std::string& _nome, const std::string& _arquivo);
 
-    inline Coord* getCoord() const { return pCoord; }
-    void setCoord(Coord* _pCoord) { pCoord = _pCoord; }
+    inline ITransform* getTransform() const { return pTransform; }
+    void setTransform(ITransform* _pTransform) { pTransform = _pTransform; }
 
   private:
-    Coord* pCoord;
+    ITransform* pTransform;
     void SortParticles();
     int recycleParticleLife(const glm::vec3& _camPosition);
     int FindUnusedParticle();

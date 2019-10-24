@@ -3,7 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/node/Coord.hpp"
+//#include "chimera/node/Coord.hpp"
 #include "chimera/node/Transform.hpp"
 
 Game::Game(Chimera::SceneMng* _pScenMng, Chimera::PhysicsControl* _physicWorld) : pSceneMng(_pScenMng) {
@@ -156,7 +156,7 @@ void Game::start() {
 
     // Localiza objeto como o primario //EfeitoZoltan-mesh
     Chimera::Mesh* pMesh = (Chimera::Mesh*)pSceneMng->getRoot()->findChild("EfeitoZoltan-mesh", true);
-    pCorpoRigido = (Chimera::Solid*)pMesh->getCoord();
+    pCorpoRigido = (Chimera::Solid*)pMesh->getTransform();
 
     // Localiza a luz ativa
     Chimera::Light* pLight = (Chimera::Light*)pSceneMng->getRoot()->findChild("luz01-light", true);
@@ -164,7 +164,7 @@ void Game::start() {
     // Localiza o Emissor de particula
     pEmissor = (Chimera::ParticleEmitter*)pSceneMng->getRoot()->findChild("testeZ1", true);
 
-    pSceneMng->origemDesenho((Chimera::Coord*)pCorpoRigido);
+    pSceneMng->origemDesenho((Chimera::ITransform*)pCorpoRigido);
 
     // Localiza o HUD
     pHUD = (Chimera::HUD*)pSceneMng->getRoot()->findChild("HUD-Default", true);

@@ -37,7 +37,7 @@ void Mesh::init() {
 
     meshData.textureFix();
 
-    pCoord->init(meshData.getSizeBox());
+    pTransform->init(meshData.getSizeBox());
 
     setVertexBuffer();
 }
@@ -60,15 +60,15 @@ void Mesh::debugDados() {
     meshData.debugDados();
 }
 
-void Mesh::replaceCoord(Coord* _pCoord) {
+void Mesh::replaceTransform(ITransform* _pTransform) {
 
-    glm::mat4 matrix = pCoord->getMatrix();
-    _pCoord->setMatrix(matrix);
+    glm::mat4 matrix = pTransform->getMatrix();
+    _pTransform->setMatrix(matrix);
 
-    delete pCoord;
-    pCoord = nullptr;
+    delete pTransform;
+    pTransform = nullptr;
 
-    pCoord = _pCoord;
+    pTransform = _pTransform;
 }
 
 Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial) {

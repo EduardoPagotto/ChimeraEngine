@@ -47,7 +47,7 @@ void LibraryPhysicsScenes::target() {
                     Chimera::Solid* pSolid = mapSolids[body];
                     Chimera::Mesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
 
-                    pMesh->replaceCoord(pSolid);
+                    pMesh->replaceTransform(pSolid);
                 }
                 mapSolids.clear();
             }

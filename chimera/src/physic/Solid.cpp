@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-Solid::Solid(PhysicsControl* _pWorld) : Coord() {
+Solid::Solid(PhysicsControl* _pWorld) : ITransform() {
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
@@ -20,7 +20,7 @@ Solid::Solid(PhysicsControl* _pWorld) : Coord() {
     pWorld = _pWorld;
 }
 
-// Solid::Solid(const Solid& _solid) : Coord(_solid) {
+// Solid::Solid(const Solid& _solid) : ITransform(_solid) {
 
 //     mass = _solid.mass;
 
@@ -128,7 +128,7 @@ glm::mat4 Solid::getModelMatrix(const glm::vec3& _pos) { // ajuste matricial
     transLocal.getOpenGLMatrix(&matrix[0]);
 
     // pega posicao do objeto horigem de desenho (camera travada)
-    // glm::vec3 l_vec = _pCoord->getPosition();
+    // glm::vec3 l_vec = _pITransform->getPosition();
 
     // desloca desenha para o pbjeto horigem
     matrix[12] -= _pos.x;

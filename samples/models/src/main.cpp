@@ -90,7 +90,7 @@ int main(int argn, char** argv) {
         Chimera::Transform* posParticle = new Chimera::Transform();
         posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
         Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(gParticle, "testeZ1", 10000);
-        pParticleEmitter->setCoord(posParticle);
+        pParticleEmitter->setTransform(posParticle);
 
         pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 

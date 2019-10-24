@@ -1,4 +1,5 @@
 #include "chimera/node/RenderVisitor.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/HUD.hpp"
@@ -7,11 +8,6 @@
 #include "chimera/node/NodeParse.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
-//#include "chimera/node/Solid.hpp"
-//#include "chimera/node/Transform.hpp"
-
-#include "chimera/OpenGLDefs.hpp"
-
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -21,7 +17,7 @@ namespace Chimera {
 
 RenderVisitor::RenderVisitor() {
 
-    pCoord = nullptr;
+    pTransform = nullptr;
     pVideo = nullptr;
     HudOn = true;
     particleOn = true;
@@ -41,7 +37,7 @@ void RenderVisitor::visit(Camera* _pCamera) {}
 
 void RenderVisitor::visit(Mesh* _pMesh) {
 
-    model = _pMesh->getCoord()->getModelMatrix(pCoord->getPosition()); //_pSolid->getModelMatrix(pCoord);
+    model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); //_pSolid->getModelMatrix(pTransform);
 
     if (pShader == nullptr)
         return;
@@ -71,7 +67,7 @@ void RenderVisitor::visit(ParticleEmitter* _pParticleEmitter) {
 
     if (particleOn == true) {
 
-        model = _pParticleEmitter->getCoord()->getModelMatrix(pCoord->getPosition());
+        model = _pParticleEmitter->getTransform()->getModelMatrix(pTransform->getPosition());
 
         if (pShader == nullptr)
             return;
@@ -115,7 +111,7 @@ void RenderVisitor::visit(Group* _pGroup) {
 
         // TODO: passar parametros de outra forma para generalizar aqui
         sVisit->shadowMap = shadowMap;
-        sVisit->pCoord = pCoord;
+        sVisit->pTransform = pTransform;
 
         shadowMap->initSceneShadow();
         NodeParse::tree(_pGroup, sVisit);
@@ -149,10 +145,10 @@ void RenderVisitor::visit(Group* _pGroup) {
 }
 
 // void RenderVisitor::visit(Chimera::Transform* _pTransform) {
-//     model = _pTransform->getModelMatrix(pCoord->getPosition());
+//     model = _pTransform->getModelMatrix(pTransform->getPosition());
 // }
 
-// void RenderVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
+// void RenderVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pTransform); }
 
 void RenderVisitor::visit(HUD* _pHUD) {
 

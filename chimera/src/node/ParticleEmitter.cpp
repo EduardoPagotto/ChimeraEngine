@@ -18,7 +18,7 @@ ParticleEmitter::~ParticleEmitter() {}
 
 void ParticleEmitter::init() {
 
-    pCoord->init(glm::vec3());
+    pTransform->init(glm::vec3());
 
     material->init();
 

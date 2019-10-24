@@ -19,7 +19,7 @@ namespace Chimera {
 ShadowMapVisitor::ShadowMapVisitor(Shader* _pShader) {
     pShader = _pShader;
     shadowMap = nullptr;
-    pCoord = nullptr;
+    pTransform = nullptr;
 }
 
 ShadowMapVisitor::~ShadowMapVisitor() {}
@@ -36,7 +36,7 @@ void ShadowMapVisitor::visit(Camera* _pCamera) {
 
 void ShadowMapVisitor::visit(Mesh* _pMesh) {
 
-    model = _pMesh->getCoord()->getModelMatrix(pCoord->getPosition());
+    model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
 
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
     _pMesh->render(nullptr);
@@ -64,10 +64,10 @@ void ShadowMapVisitor::visit(Group* _pGroup) {
 }
 
 // void ShadowMapVisitor::visit(Chimera::Transform* _pTransform) {
-//     model = _pTransform->getModelMatrix(pCoord->getPosition());
+//     model = _pTransform->getModelMatrix(pTransform->getPosition());
 // }
 
-// void ShadowMapVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
+// void ShadowMapVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pTransform); }
 
 void ShadowMapVisitor::visit(HUD* _pHUD) {}
 

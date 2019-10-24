@@ -1,15 +1,15 @@
 #ifndef __CHIMERA_TRANSFORM__HPP
 #define __CHIMERA_TRANSFORM__HPP
 
-#include "Coord.hpp"
+#include "ITransform.hpp"
 #include "chimera/render/TransData.hpp"
 
 namespace Chimera {
 
 // FIXME: Mudar para operacao matrix
-class Transform : public Coord {
+class Transform : public ITransform {
   public:
-    Transform() : Coord() {}
+    Transform() : ITransform() {}
     virtual ~Transform() noexcept {}
 
     // Inherited via Coord

@@ -97,11 +97,11 @@ int main(int argn, char** argv) {
         // define a origem da rotacao da camera!!
         Transform* pTrans = new Transform();
         pTrans->setPosition(glm::vec3(0.0, 0.0, 0.0));
-        sceneMng->origemDesenho((Coord*)pTrans);
+        sceneMng->origemDesenho((ITransform*)pTrans);
 
         // Mesh do cubo1 filho de posicao 1
         Mesh* pMesh = Chimera::createEmpty(group1, "Cubo-01", pMat1);
-        pMesh->setCoord(pTrans);
+        pMesh->setTransform(pTrans);
         std::string materialFile;
         loadObj("./samples/bsptree/models/cube.obj", pMesh->meshData, materialFile);
         pMesh->meshData.changeSize(25.0, pMat1->hasTexture());
@@ -119,7 +119,7 @@ int main(int argn, char** argv) {
 
         // Mesh do cubo 2 vinculado posicao 2
         Mesh* pMesh2 = Chimera::createEmpty(group1, "Cubo-02", pMat2);
-        pMesh2->setCoord(pTrans2);
+        pMesh2->setTransform(pTrans2);
         loadObj((const char*)"./samples/bsptree/models/cube.obj", pMesh2->meshData, materialFile);
         pMesh2->meshData.changeSize(20.0, pMat2->hasTexture());
 

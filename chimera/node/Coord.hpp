@@ -8,7 +8,7 @@ namespace Chimera {
 class Coord {
   public:
     Coord() {}
-    virtual ~Coord() {}
+    virtual ~Coord() noexcept {}
 
     virtual glm::vec3 getPosition() = 0;
     virtual void setPosition(const glm::vec3& _pos) = 0;

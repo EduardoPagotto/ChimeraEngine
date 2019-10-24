@@ -14,16 +14,8 @@ namespace Chimera {
 
 class Solid : public Coord {
   public:
-    // friend class Loader;
     Solid(PhysicsControl* _pWorld);
-    // Solid(const Solid& _solid);
     virtual ~Solid();
-    virtual void init(const glm::vec3& _size) override;
-
-    virtual glm::mat4 getModelMatrix(const glm::vec3& _pos) override;
-
-    // Inherited via Node
-    // void accept(class NodeVisitor* v);
 
     // Inherited via Coord
     virtual glm::vec3 getPosition() override;
@@ -32,8 +24,8 @@ class Solid : public Coord {
     virtual void setRotation(const glm::vec3& _rotation) override;
     virtual glm::mat4 getMatrix() override;
     virtual void setMatrix(const glm::mat4& _trans) override;
-    // virtual void setPositionRotation(const glm::vec3& _posicao,
-    //                                  const glm::vec3& _rotation) override;
+    virtual glm::mat4 getModelMatrix(const glm::vec3& _pos) override;
+    virtual void init(const glm::vec3& _size) override;
 
     inline void setMass(const float& _mass) { mass = _mass; }
 

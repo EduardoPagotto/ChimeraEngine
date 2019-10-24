@@ -37,7 +37,7 @@ class Mesh : public Node {
     void setMaterial(MatData* _pMat) { this->material = _pMat; }
     MatData* getMaterial() const { return material; }
 
-    inline Coord* getCoord() const { return pCoord; }
+    inline Coord* getCoord() { return pCoord; }
     void setCoord(Coord* _pCoord) { pCoord = _pCoord; }
 
   private:

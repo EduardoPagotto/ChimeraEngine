@@ -10,9 +10,7 @@ namespace Chimera {
 class Transform : public Coord {
   public:
     Transform() : Coord() {}
-    virtual ~Transform() {}
-
-    // virtual void accept(class NodeVisitor* v) override { v->visit(this); }
+    virtual ~Transform() noexcept {}
 
     // Inherited via Coord
     virtual glm::vec3 getPosition() override { return trans.getPosition(); }

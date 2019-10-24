@@ -10,8 +10,8 @@
 
 #include "Game.hpp"
 
-#include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"
+#include "chimera/physic_loader/PhysicsScene.hpp"
 
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"

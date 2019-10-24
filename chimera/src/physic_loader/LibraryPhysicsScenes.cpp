@@ -4,8 +4,8 @@
 #include "LibraryPhysicsScenes.hpp"
 
 #include "chimera/node/Mesh.hpp"
-#include "chimera/node/Solid.hpp"
 #include "chimera/node/Transform.hpp"
+#include "chimera/physic/Solid.hpp"
 
 namespace ChimeraLoaders {
 

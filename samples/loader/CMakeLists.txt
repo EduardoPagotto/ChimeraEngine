@@ -16,7 +16,10 @@ set (IncludesLoader ${CMAKE_SOURCE_DIR}
 					${BULLET_INCLUDE_DIR}
 					${FREETYPE_INCLUDE_DIRS})
 
-set (LibsLoader ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a #ordem é importante!!!
+#ordem é importante!!!
+set (LibsLoader ${CMAKE_SOURCE_DIR}/bin/libChimeraPhysicLoader.a
+				${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a
+				${CMAKE_SOURCE_DIR}/bin/libChimeraPhysic.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
@@ -46,6 +49,8 @@ target_link_libraries(loader ${LibsLoader})
 add_dependencies(loader ChimeraCore
 						ChimeraRender
 						ChimeraNode
-						ChimeraLoaders)
+						ChimeraPhysic
+						ChimeraLoaders
+						ChimeraPhysicLoader)
 
 INSTALL(FILES ${Loader_BINARY_DIR}/loader DESTINATION bin)

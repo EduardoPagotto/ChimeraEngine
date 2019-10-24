@@ -3,8 +3,8 @@
 
 #include <LinearMath/btTransform.h>
 
-#include "Entity.hpp"
 #include "Solid.hpp"
+#include "chimera/node/Entity.hpp"
 
 namespace Chimera {
 

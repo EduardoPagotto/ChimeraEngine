@@ -1,4 +1,4 @@
-#include "chimera/node/Constraint.hpp"
+#include "chimera/physic/Constraint.hpp"
 
 namespace Chimera {
 

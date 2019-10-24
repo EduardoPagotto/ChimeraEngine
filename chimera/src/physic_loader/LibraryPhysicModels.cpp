@@ -1,12 +1,11 @@
 #include "chimera/core/Exception.hpp"
-
-#include "LibraryGeometrys.hpp"
+//#include " LibraryGeometrys.hpp"
 #include "LibraryPhysicModels.hpp"
 #include "LibraryPhysicsMaterials.hpp"
 
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Mesh.hpp"
-#include "chimera/node/Solid.hpp"
+#include "chimera/physic/Solid.hpp"
 
 namespace ChimeraLoaders {
 

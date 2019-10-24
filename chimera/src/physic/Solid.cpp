@@ -1,7 +1,4 @@
-#include "chimera/node/Solid.hpp"
-//#include "chimera/node/Mesh.hpp"
-//#include "chimera/node/NodeVisitor.hpp"
-
+#include "chimera/physic/Solid.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

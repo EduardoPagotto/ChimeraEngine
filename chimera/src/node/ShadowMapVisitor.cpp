@@ -12,7 +12,6 @@
 #include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
-#include "chimera/node/Solid.hpp"
 #include "chimera/node/Transform.hpp"
 
 namespace Chimera {

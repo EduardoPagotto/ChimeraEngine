@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_SOLID__HPP
 #define __CHIMERA_SOLID__HPP
 
-#include "Coord.hpp"
 #include "PhysicsControl.hpp"
+#include "chimera/node/Coord.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>

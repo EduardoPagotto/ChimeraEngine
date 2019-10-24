@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-PROJECT(ChimeraLoaders)
+PROJECT(ChimeraPhysicLoader)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -11,19 +11,11 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesLoader Library.cpp
-				   #LibraryPhysicsMaterials.cpp
-				   LibraryImages.cpp
-				   LibraryLights.cpp
-				   LibraryCameras.cpp
-				   LibraryEffects.cpp
-				   LibraryMaterials.cpp
-				   LibraryGeometrys.cpp
-				   LibraryVisualSCenes.cpp
-				   #LibraryPhysicModels.cpp
-				   #LibraryPhysicsScenes.cpp
-				   VisualScene.cpp)
-				   #PhysicsScene.cpp)
+set (SourcesLoader 
+				   LibraryPhysicsMaterials.cpp
+				   LibraryPhysicModels.cpp
+				   LibraryPhysicsScenes.cpp
+				   PhysicsScene.cpp)
 
 #define os includes
 set (IncludeLoader  ${CMAKE_SOURCE_DIR})
@@ -34,10 +26,10 @@ set (IncludeLoaderAux	${OPENGL_INCLUDE_DIR}
 						${GLEW_INCLUDE_DIRS})
 
 # Define o Target
-add_library (ChimeraLoaders STATIC ${SourcesLoader})
+add_library (ChimeraPhysicLoader STATIC ${SourcesLoader})
 
 # Define os includes privados para este target
-target_include_directories (ChimeraLoaders PUBLIC ${IncludeLoader}
+target_include_directories (ChimeraPhysicLoader PUBLIC ${IncludeLoader}
 										   PRIVATE ${IncludeLoaderAux})
 
 # Lista os Includes
@@ -46,9 +38,11 @@ target_include_directories (ChimeraLoaders PUBLIC ${IncludeLoader}
 # 	message(STATUS "Include dir='${dir}'")
 # endforeach()
 
-add_dependencies(ChimeraLoaders ChimeraCore
-								ChimeraRender
-                                ChimeraNode)
+add_dependencies(ChimeraPhysicLoader ChimeraCore
+								     ChimeraRender
+									 ChimeraNode
+									 ChimeraPhysic
+									 ChimeraLoaders)
 
-INSTALL(FILES ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a DESTINATION lib)
+INSTALL(FILES ${ChimeraPhysicLoader_BINARY_DIR}/libChimeraPhysicLoader.a DESTINATION lib)
 INSTALL(DIRECTORY ${IncludeLoader}/chimera/loader DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

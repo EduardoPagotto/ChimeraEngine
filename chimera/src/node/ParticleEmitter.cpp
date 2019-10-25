@@ -8,15 +8,17 @@
 
 namespace Chimera {
 ParticleEmitter::ParticleEmitter(Node* _parent, std::string _name, int _max)
-    : Node(_parent, EntityKind::PARTICLE_SYSTEM, _name) {
+    : Node(_parent, Kind::PARTICLE_SYSTEM, _name) {
     // MaxParticles = _max;
     LastUsedParticle = 0;
-    material = new MatData();
+    material = new Material();
 }
 
 ParticleEmitter::~ParticleEmitter() {}
 
 void ParticleEmitter::init() {
+
+    pTransform->init(glm::vec3());
 
     material->init();
 

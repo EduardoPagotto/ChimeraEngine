@@ -4,8 +4,9 @@
 #include "Node.hpp"
 #include "Particle.hpp"
 #include "chimera/core/Timer.hpp"
-#include "chimera/render/MatData.hpp"
+#include "chimera/render/Material.hpp"
 #include "chimera/render/Shader.hpp"
+#include "chimera/render/Transform.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -
@@ -34,7 +35,11 @@ class ParticleEmitter : public Node {
 
     void loadTexDiffuse(const std::string& _nome, const std::string& _arquivo);
 
+    inline Transform* getTransform() const { return pTransform; }
+    void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
+
   private:
+    Transform* pTransform;
     void SortParticles();
     int recycleParticleLife(const glm::vec3& _camPosition);
     int FindUnusedParticle();
@@ -54,7 +59,7 @@ class ParticleEmitter : public Node {
     Particle ParticlesContainer[MaxParticles];
     Timer timer;
 
-    MatData* material;
+    Material* material;
 };
 } // namespace Chimera
 #endif

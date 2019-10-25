@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-Camera::Camera(Node* _pNode, std::string _name) : Node(_pNode, EntityKind::CAMERA, _name) {
+Camera::Camera(Node* _pNode, std::string _name) : Node(_pNode, Kind::CAMERA, _name) {
     viewPoint.zero();
     pTrackBall = nullptr;
     pTrackHead = nullptr;

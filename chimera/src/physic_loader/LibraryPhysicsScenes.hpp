@@ -3,7 +3,7 @@
 
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
-#include "chimera/node/PhysicsControl.hpp"
+#include "chimera/physic/PhysicsControl.hpp"
 
 namespace ChimeraLoaders {
 

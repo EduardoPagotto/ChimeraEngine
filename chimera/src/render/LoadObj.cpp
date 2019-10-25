@@ -23,7 +23,7 @@ bool getValidData(std::string& nova, const std::string& comando) {
     return false;
 }
 
-void loadMtl(const std::string& _fineNameMtl, MatData& _material) {
+void loadMtl(const std::string& _fineNameMtl, Material& _material) {
     FILE* fp = fopen(_fineNameMtl.c_str(), "r");
     if (fp == NULL)
         throw Exception("Erro ao abrir arquivo: " + _fineNameMtl);

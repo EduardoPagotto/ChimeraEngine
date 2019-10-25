@@ -6,8 +6,8 @@
 #include "chimera/node/Mesh.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/ShadowMap.hpp"
-#include "chimera/node/Solid.hpp"
-#include "chimera/node/Transform.hpp"
+//#include "chimera/node/Solid.hpp"
+//#include "chimera/node/Transform.hpp"
 
 #include <iostream>
 
@@ -19,8 +19,8 @@ void InitVisitor::visit(Mesh* _pMesh) { _pMesh->init(); }
 void InitVisitor::visit(Light* _pLight) { _pLight->init(); }
 void InitVisitor::visit(ParticleEmitter* _pParticleEmitter) { _pParticleEmitter->init(); }
 void InitVisitor::visit(Group* _pGroup) { _pGroup->init(); }
-void InitVisitor::visit(Transform* _pTransform) {}
-void InitVisitor::visit(Solid* _pSolid) { _pSolid->init(); }
+// void InitVisitor::visit(Transform* _pTransform) {}
+// void InitVisitor::visit(Solid* _pSolid) { _pSolid->init(); }
 void InitVisitor::visit(HUD* _pHUD) { _pHUD->init(); }
 void InitVisitor::visit(ShadowMap* _pShadowMap) { _pShadowMap->init(); }
 } // namespace Chimera

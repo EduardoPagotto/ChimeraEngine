@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "chimera/core/Singleton.hpp"
+#include "chimera/node/Mesh.hpp"
 #include "chimera/node/Node.hpp"
 
 namespace ChimeraLoaders {
@@ -12,22 +13,18 @@ class ListNodes {
     friend class Chimera::Singleton<ListNodes>;
 
   public:
-    Chimera::Node* getByName(const Chimera::EntityKind& _kind, const std::string& _name) const;
-    void addNode(Chimera::Node* _pNode);
-    void reset() noexcept;
+    void reset() noexcept {
+        mapMesh.clear();
+        mapMeshNode.clear();
+    }
+
+    std::map<std::string, Chimera::Mesh*> mapMesh;
+    std::map<std::string, Chimera::Node*> mapMeshNode;
 
   protected:
-    ListNodes() noexcept;
+    ListNodes(){};
     virtual ~ListNodes() { reset(); }
     ListNodes(const ListNodes&) = delete;
-
-  private:
-    // std::map<Chimera::EntityKind, std::vector<Chimera::Node*>> mapaKindNode;
-    std::vector<Chimera::Node*> vMesh;
-    std::vector<Chimera::Node*> vLight;
-    std::vector<Chimera::Node*> vCamera;
-    std::vector<Chimera::Node*> vTransform;
-    std::vector<Chimera::Node*> vSolid;
 };
 } // namespace ChimeraLoaders
 #endif

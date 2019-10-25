@@ -2,15 +2,10 @@
 
 namespace Chimera {
 
-// std::list<Node*> Node::listNode;
-
-Node::Node(Node* _parent, EntityKind _type, std::string _name) : parent(_parent), Entity(_type, _name) {
-
-    if (parent != nullptr) {
+Node::Node(Node* _parent, const Kind& _type, const std::string& _name)
+    : parent(_parent), type(_type), name(_name), serial(++serialMaster) {
+    if (parent != nullptr)
         parent->vChild.push_back(this);
-    }
-
-    // listNode.push_back ( this );
 
     setColor(0);
 }
@@ -21,9 +16,8 @@ Node::~Node() {
 }
 
 std::vector<Node*>* Node::getChilds() {
-    if (!vChild.empty()) {
+    if (!vChild.empty())
         return &(this->vChild);
-    }
 
     return nullptr;
 }
@@ -36,7 +30,6 @@ void Node::addChild(Node* _child) {
 }
 
 void Node::setParent(Node* _node) {
-
     if (parent != nullptr)
         parent->removeChild(this);
 
@@ -56,22 +49,17 @@ void Node::removeChild(Node* _child) {
 
 const size_t Node::countChilds(const bool& _recursiveCount) const {
     if (!_recursiveCount) {
-
         return (vChild.size());
-
     } else {
-
         size_t Retval = vChild.size();
         for (size_t i = 0; i < vChild.size(); ++i) {
             Retval += vChild[i]->countChilds(true);
         }
-
         return (Retval);
     }
 };
 
 Node* Node::findChild(const std::string& _searchName, const bool& _findInChild) {
-
     if (!vChild.empty()) {
         for (size_t i = 0; i < vChild.size(); ++i) {
             if (_searchName.compare(vChild[i]->getName()) == 0)
@@ -88,65 +76,28 @@ Node* Node::findChild(const std::string& _searchName, const bool& _findInChild) 
             }
         }
     }
-
     return nullptr;
 };
 
-Node* Node::findChild(const EntityKind& _type, const int& _index, const bool& _findInChild) {
-
+Node* Node::findChild(const Kind& _type, const int& _index, const bool& _findInChild) {
     int l_index = 0;
     for (Node* node : vChild) {
-
         if (node->getKind() == _type) {
-            if (l_index == _index) {
+            if (l_index == _index)
                 return node;
-            }
 
             l_index++;
         }
     }
 
     if (_findInChild == true) {
-
         for (Node* node : vChild) {
-
             Node* result = node->findChild(_type, _index, _findInChild);
             if (result != nullptr)
                 return result;
         }
     }
-
     return nullptr;
 }
-
-// Node *Node::findNodeBySeq ( const EntityKind &_type, const int &_index ) {
-//
-//     int l_index = 0;
-//     for ( Node* node : listNode ) {
-//
-//         if ( node->getKind() == _type ) {
-//             if ( l_index == _index ) {
-//                 return node;
-//             }
-//
-//             l_index++;
-//         }
-//     }
-//     return nullptr;
-// }
-//
-// Node *Node::findNodeBySeq ( const EntityKind &_type, const std::string &_name ) {
-//
-//     for ( Node *node : listNode ) {
-//         std::string l_name = node->getName();
-//         if ( ( node->getKind() == _type ) && ( l_name.compare ( _name ) == 0 ) ) {
-//             return node;
-//         }
-//     }
-//
-//     return nullptr;
-// }
-
-unsigned Entity::serialMaster = 0;
-
+unsigned Node::serialMaster = 0;
 } // namespace Chimera

@@ -1,20 +1,19 @@
 #ifndef _PHYSIC_MATERIAL__HPP
 #define _PHYSIC_MATERIAL__HPP
 
-#include "chimera/node/Entity.hpp"
 #include <LinearMath/btScalar.h>
 
 namespace Chimera {
 
-class PhysicMaterial : Entity {
+class PhysicMaterial {
   public:
-    PhysicMaterial(std::string _name) : Entity(EntityKind::SOLID_MATERIAL, _name) {
+    PhysicMaterial() {
         frictionDynamic = 10.0;
         frictionStatic = 0.0;
         restitution = 0.0;
     }
 
-    PhysicMaterial(const PhysicMaterial& _physicMaterial) : Entity(_physicMaterial) {
+    PhysicMaterial(const PhysicMaterial& _physicMaterial) {
         frictionDynamic = _physicMaterial.frictionDynamic;
         frictionStatic = _physicMaterial.frictionStatic;
         restitution = _physicMaterial.restitution;

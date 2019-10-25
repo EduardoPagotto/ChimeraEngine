@@ -7,9 +7,9 @@
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
-#include "chimera/node/Transform.hpp"
 #include "chimera/render/CanvasHmd.hpp"
 #include "chimera/render/LoadObj.hpp"
+#include "chimera/render/Transform.hpp"
 
 #include <cstdio>
 #include <glm/glm.hpp>
@@ -66,11 +66,6 @@ int main(int argn, char** argv) {
         group1->setShader(mapa["mesh-default"]);
         // group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
 
-        // define a origem da rotacao da camera!!
-        Transform* pTrans = new Transform(group1, "trans01");
-        pTrans->setPosition(glm::vec3(0.0, 0.0, 0.0));
-        sceneMng->origemDesenho((Coord*)pTrans);
-
         // Propriedades da camera
         Camera* pCam = new Camera(group1, "Observador-01");
         pCam->createTrackBall();
@@ -92,32 +87,39 @@ int main(int argn, char** argv) {
         pLight->setPosition(glm::vec3(80, 100, 150));
 
         // Material do cubo 1 com textura
-        MatData* pMat1 = new MatData();
+        Material* pMat1 = new Material();
         pMat1->setAmbient(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
         pMat1->setDiffuse(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
         pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setShine(32.0f);
         pMat1->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./models/image1.jpg"));
 
+        // define a origem da rotacao da camera!!
+        Transform* pTrans = new Transform();
+        pTrans->setPosition(glm::vec3(0.0, 0.0, 0.0));
+        sceneMng->origemDesenho(pTrans);
+
         // Mesh do cubo1 filho de posicao 1
-        Mesh* pMesh = Chimera::createEmpty(pTrans, "Cubo-01", pMat1);
+        Mesh* pMesh = Chimera::createEmpty(group1, "Cubo-01", pMat1);
+        pMesh->setTransform(pTrans);
         std::string materialFile;
         loadObj("./samples/bsptree/models/cube.obj", pMesh->meshData, materialFile);
         pMesh->meshData.changeSize(25.0, pMat1->hasTexture());
 
-        // Posicao Cubo2
-        Transform* pTrans2 = new Transform(group1, "trans02");
-        pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
-
         // Material Cubo 2 sem textura
-        MatData* pMat2 = new MatData();
+        Material* pMat2 = new Material();
         pMat2->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
         pMat2->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat2->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat2->setShine(32.0f);
 
+        // Posicao Cubo2
+        Transform* pTrans2 = new Transform();
+        pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
+
         // Mesh do cubo 2 vinculado posicao 2
-        Mesh* pMesh2 = Chimera::createEmpty(pTrans2, "Cubo-02", pMat2);
+        Mesh* pMesh2 = Chimera::createEmpty(group1, "Cubo-02", pMat2);
+        pMesh2->setTransform(pTrans2);
         loadObj((const char*)"./samples/bsptree/models/cube.obj", pMesh2->meshData, materialFile);
         pMesh2->meshData.changeSize(20.0, pMat2->hasTexture());
 

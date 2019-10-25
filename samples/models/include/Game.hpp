@@ -5,9 +5,9 @@
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
-#include "chimera/node/PhysicsControl.hpp"
 #include "chimera/node/SceneMng.hpp"
-#include "chimera/node/Solid.hpp"
+#include "chimera/physic/PhysicsControl.hpp"
+#include "chimera/physic/Solid.hpp"
 
 /**
  * Class Game

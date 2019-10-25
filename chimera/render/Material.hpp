@@ -17,10 +17,10 @@ namespace Chimera {
 #define SHADE_MAT_EMISSIVE "material.emissive"
 #define SHADE_MAT_SHININESS "material.shininess"
 
-class MatData {
+class Material {
   public:
-    MatData();
-    virtual ~MatData();
+    Material();
+    virtual ~Material();
 
     void init();
 

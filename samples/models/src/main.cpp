@@ -10,18 +10,16 @@
 
 #include "Game.hpp"
 
-#include "chimera/loader/PhysicsScene.hpp"
-#include "chimera/loader/VisualScene.hpp"
-
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
-
+#include "chimera/loader/VisualScene.hpp"
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
-#include "chimera/node/Transform.hpp"
+#include "chimera/physic_loader/PhysicsScene.hpp"
+#include "chimera/render/Transform.hpp"
 
 #include <yaml-cpp/yaml.h>
 
@@ -87,9 +85,11 @@ int main(int argn, char** argv) {
         // create and add particle to scene
         Chimera::Group* gParticle = new Chimera::Group(pRoot, "ParticleGroup");
         gParticle->setShader(mapa["particle-default"]);
-        Chimera::Transform* posParticle = new Chimera::Transform(gParticle, "posicaoParticle");
+        Chimera::Transform* posParticle = new Chimera::Transform();
         posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(posParticle, "testeZ1", 10000);
+        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(gParticle, "testeZ1", 10000);
+        pParticleEmitter->setTransform(posParticle);
+
         pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
 
         // Create and add hud data text

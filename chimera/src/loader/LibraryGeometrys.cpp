@@ -22,7 +22,7 @@ Chimera::Mesh* LibraryGeometrys::target() {
             std::string idMaterial = loadMeshCollada(l_nGeo, pMesh);
 
             LibraryMaterials lm(root, idMaterial);
-            Chimera::MatData* pMaterial = lm.target();
+            Chimera::Material* pMaterial = lm.target();
 
             pMesh->setMaterial(pMaterial);
             return pMesh;

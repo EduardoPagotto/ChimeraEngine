@@ -1,4 +1,5 @@
 #include "chimera/node/RenderVisitor.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/HUD.hpp"
@@ -7,11 +8,6 @@
 #include "chimera/node/NodeParse.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
-#include "chimera/node/Solid.hpp"
-#include "chimera/node/Transform.hpp"
-
-#include "chimera/OpenGLDefs.hpp"
-
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -21,7 +17,7 @@ namespace Chimera {
 
 RenderVisitor::RenderVisitor() {
 
-    pCoord = nullptr;
+    pTransform = nullptr;
     pVideo = nullptr;
     HudOn = true;
     particleOn = true;
@@ -40,6 +36,8 @@ RenderVisitor::~RenderVisitor() {}
 void RenderVisitor::visit(Camera* _pCamera) {}
 
 void RenderVisitor::visit(Mesh* _pMesh) {
+
+    model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); //_pSolid->getModelMatrix(pTransform);
 
     if (pShader == nullptr)
         return;
@@ -68,6 +66,8 @@ void RenderVisitor::visit(Light* _pLight) {}
 void RenderVisitor::visit(ParticleEmitter* _pParticleEmitter) {
 
     if (particleOn == true) {
+
+        model = _pParticleEmitter->getTransform()->getModelMatrix(pTransform->getPosition());
 
         if (pShader == nullptr)
             return;
@@ -107,11 +107,11 @@ void RenderVisitor::visit(Group* _pGroup) {
     if (sVisit != nullptr) {
 
         // TODO: colocar a carga na inicializacao??
-        shadowMap = (ShadowMap*)_pGroup->findChild(Chimera::EntityKind::SHADOWMAP, 0, false);
+        shadowMap = (ShadowMap*)_pGroup->findChild(Chimera::Kind::SHADOWMAP, 0, false);
 
         // TODO: passar parametros de outra forma para generalizar aqui
         sVisit->shadowMap = shadowMap;
-        sVisit->pCoord = pCoord;
+        sVisit->pTransform = pTransform;
 
         shadowMap->initSceneShadow();
         NodeParse::tree(_pGroup, sVisit);
@@ -128,7 +128,7 @@ void RenderVisitor::visit(Group* _pGroup) {
         pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(shadowMap->lightSpaceMatrix));
     }
 
-    Camera* pCam = (Camera*)_pGroup->findChild(Chimera::EntityKind::CAMERA, 0, false);
+    Camera* pCam = (Camera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
         ViewPoint* vp = pCam->getViewPoint();
         pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
@@ -139,14 +139,16 @@ void RenderVisitor::visit(Group* _pGroup) {
         // view = glm::lookAt(vp->position, vp->front, vp->up);
     }
 
-    Light* pLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
+    Light* pLight = (Light*)_pGroup->findChild(Chimera::Kind::LIGHT, 0, false);
     if (pLight != nullptr)
         pLight->apply(pShader);
 }
 
-void RenderVisitor::visit(Chimera::Transform* _pTransform) { model = _pTransform->getModelMatrix(pCoord); }
+// void RenderVisitor::visit(Chimera::Transform* _pTransform) {
+//     model = _pTransform->getModelMatrix(pTransform->getPosition());
+// }
 
-void RenderVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pCoord); }
+// void RenderVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pTransform); }
 
 void RenderVisitor::visit(HUD* _pHUD) {
 

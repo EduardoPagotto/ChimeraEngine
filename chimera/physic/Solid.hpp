@@ -1,42 +1,30 @@
 #ifndef __CHIMERA_SOLID__HPP
 #define __CHIMERA_SOLID__HPP
 
+#include "PhysicsControl.hpp"
+#include "chimera/render/Transform.hpp"
+#include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
-
-#include <BulletCollision/CollisionShapes/btMaterial.h>
-
-#include "Coord.hpp"
-#include "PhysicsControl.hpp"
-
 #include <glm/gtc/type_ptr.hpp>
-#include <tinyxml2.h>
 
 namespace Chimera {
 
-class Solid : public Coord {
+class Solid : public Transform {
   public:
-    friend class Loader;
-    Solid(Node* _parent, std::string _name, PhysicsControl* _pWorld);
-    Solid(const Solid& _solid);
+    Solid(PhysicsControl* _pWorld);
     virtual ~Solid();
-    virtual void init();
 
-    glm::mat4 getModelMatrix(Coord* _pCoord);
-
-    // Inherited via Node
-    void accept(class NodeVisitor* v);
-
-    // Inherited via Coord
+    // Inherited via Transform
     virtual glm::vec3 getPosition() override;
     virtual void setPosition(const glm::vec3& _pos) override;
     virtual glm::vec3 getRotation() override;
     virtual void setRotation(const glm::vec3& _rotation) override;
     virtual glm::mat4 getMatrix() override;
     virtual void setMatrix(const glm::mat4& _trans) override;
-    // virtual void setPositionRotation(const glm::vec3& _posicao,
-    //                                  const glm::vec3& _rotation) override;
+    virtual glm::mat4 getModelMatrix(const glm::vec3& _pos) override;
+    virtual void init(const glm::vec3& _size) override;
 
     inline void setMass(const float& _mass) { mass = _mass; }
 

@@ -9,7 +9,7 @@
 namespace Chimera {
 
 ShadowMap::ShadowMap(Node* _pNode, std::string _name, const unsigned& _width, const unsigned& _height)
-    : Node(_pNode, EntityKind::SHADOWMAP, _name) {
+    : Node(_pNode, Kind::SHADOWMAP, _name) {
     pTexture = new TexFBO(TEX_KIND::SHADOWMAP, _width, _height);
 }
 

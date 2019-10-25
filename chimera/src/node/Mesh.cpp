@@ -1,16 +1,13 @@
-#include <iterator>
-
-#include "chimera/core/Singleton.hpp"
 #include "chimera/node/Mesh.hpp"
+#include "chimera/core/Singleton.hpp"
 #include "chimera/node/NodeVisitor.hpp"
-
 #include "chimera/render/LoadObj.hpp"
-
 #include <SDL2/SDL.h>
+#include <iterator>
 
 namespace Chimera {
 
-Mesh::Mesh(Node* _parent, std::string _name) : Node(_parent, EntityKind::MESH, _name) {
+Mesh::Mesh(Node* _parent, std::string _name) : Node(_parent, Kind::MESH, _name) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Constructor Mesh: %s", _name.c_str());
 }
 
@@ -31,11 +28,13 @@ Mesh::~Mesh() {
 void Mesh::init() {
 
     if (material == nullptr)
-        material = new MatData();
+        material = new Material();
 
     material->init();
 
     meshData.textureFix();
+
+    pTransform->init(meshData.getSizeBox());
 
     setVertexBuffer();
 }
@@ -58,13 +57,24 @@ void Mesh::debugDados() {
     meshData.debugDados();
 }
 
-Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial) {
+void Mesh::replaceTransform(Transform* _pTransform) {
+
+    glm::mat4 matrix = pTransform->getMatrix();
+    _pTransform->setMatrix(matrix);
+
+    delete pTransform;
+    pTransform = nullptr;
+
+    pTransform = _pTransform;
+}
+
+Mesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMaterial) {
 
     // Mesh
     Mesh* pMesh = new Mesh(_pParent, _name);
-    MatData* pMatFinal = _pMaterial;
+    Material* pMatFinal = _pMaterial;
     if (pMatFinal == nullptr)
-        pMatFinal = new MatData();
+        pMatFinal = new Material();
 
     pMesh->setMaterial(_pMaterial);
     return pMesh;

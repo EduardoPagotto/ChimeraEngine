@@ -6,8 +6,9 @@
 #include <vector>
 
 #include "Node.hpp"
-#include "chimera/render/MatData.hpp"
+#include "chimera/render/Material.hpp"
 #include "chimera/render/MeshData.hpp"
+#include "chimera/render/Transform.hpp"
 #include "chimera/render/Vertex.hpp"
 #include <glm/glm.hpp>
 
@@ -27,20 +28,26 @@ class Mesh : public Node {
     void render(Shader* _pShader);
     glm::vec3 getSizeBox();
 
+    void replaceTransform(Transform* _pTransform);
+
     void debugDados();
 
     MeshData meshData;
 
-    void setMaterial(MatData* _pMat) { this->material = _pMat; }
-    MatData* getMaterial() const { return material; }
+    void setMaterial(Material* _pMat) { this->material = _pMat; }
+    Material* getMaterial() const { return material; }
+
+    inline Transform* getTransform() { return pTransform; }
+    void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
 
   private:
     void setVertexBuffer();
     VertexRenderStatic renderStat;
-    MatData* material;
+    Material* material;
+    Transform* pTransform;
 };
 
-Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial);
+Mesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMaterial);
 
 } // namespace Chimera
 #endif

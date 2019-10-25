@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-HUD::HUD(Node* _parent, std::string _name) : on(true), Node(_parent, EntityKind::HUD, _name) {}
+HUD::HUD(Node* _parent, std::string _name) : on(true), Node(_parent, Kind::HUD, _name) {}
 
 HUD::~HUD() {
     // TODO: implementar release

@@ -6,9 +6,8 @@ namespace Chimera {
 CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
     : CanvasGL(_title, _width * 2, _height, false) {
 
-    pShader = new Shader("RenderToTex", shadeLoadProg("RenderToTex", "./chimera/shaders/Passthrough.vertexshader",
-                                                      "./chimera/shaders/WobblyTexture.fragmentshader"));
-    //"./chimera/shaders/SimpleTexture.fragmentshader"));
+    pShader = new Shader("RenderToTex", shadeLoadProg("RenderToTex", "./chimera/shaders/stereov.vert",
+                                                      "./chimera/shaders/stereov.frag"));
 
     pLeft = new Eye(0, _width, _height, pShader);
     pRight = new Eye(1, _width, _height, pShader);

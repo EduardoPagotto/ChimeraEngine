@@ -44,7 +44,7 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
 void Game::keyCapture(SDL_Keycode tecla) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::EntityKind::CAMERA, 0, true);
+    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::Kind::CAMERA, 0, true);
 
     switch (tecla) {
         case SDLK_ESCAPE:
@@ -81,7 +81,7 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::EntityKind::CAMERA, 0, true);
+    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::Kind::CAMERA, 0, true);
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {

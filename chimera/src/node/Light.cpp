@@ -10,7 +10,7 @@
 
 namespace Chimera {
 
-Light::Light(Node* _parent, std::string _name) : Node(_parent, EntityKind::LIGHT, _name) {
+Light::Light(Node* _parent, std::string _name) : Node(_parent, Kind::LIGHT, _name) {
     number = 0;
     type = LightType::POSITIONAL;
     ambient = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);

@@ -53,7 +53,7 @@ void ShadowMapVisitor::visit(ParticleEmitter* _pParticleEmitter) {}
 
 void ShadowMapVisitor::visit(Group* _pGroup) {
 
-    Light* nodeLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
+    Light* nodeLight = (Light*)_pGroup->findChild(Chimera::Kind::LIGHT, 0, false);
 
     glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix(nodeLight->getPosition());
 

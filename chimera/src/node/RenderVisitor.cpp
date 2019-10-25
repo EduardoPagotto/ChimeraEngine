@@ -107,7 +107,7 @@ void RenderVisitor::visit(Group* _pGroup) {
     if (sVisit != nullptr) {
 
         // TODO: colocar a carga na inicializacao??
-        shadowMap = (ShadowMap*)_pGroup->findChild(Chimera::EntityKind::SHADOWMAP, 0, false);
+        shadowMap = (ShadowMap*)_pGroup->findChild(Chimera::Kind::SHADOWMAP, 0, false);
 
         // TODO: passar parametros de outra forma para generalizar aqui
         sVisit->shadowMap = shadowMap;
@@ -128,7 +128,7 @@ void RenderVisitor::visit(Group* _pGroup) {
         pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(shadowMap->lightSpaceMatrix));
     }
 
-    Camera* pCam = (Camera*)_pGroup->findChild(Chimera::EntityKind::CAMERA, 0, false);
+    Camera* pCam = (Camera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
         ViewPoint* vp = pCam->getViewPoint();
         pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
@@ -139,7 +139,7 @@ void RenderVisitor::visit(Group* _pGroup) {
         // view = glm::lookAt(vp->position, vp->front, vp->up);
     }
 
-    Light* pLight = (Light*)_pGroup->findChild(Chimera::EntityKind::LIGHT, 0, false);
+    Light* pLight = (Light*)_pGroup->findChild(Chimera::Kind::LIGHT, 0, false);
     if (pLight != nullptr)
         pLight->apply(pShader);
 }

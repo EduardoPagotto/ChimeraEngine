@@ -56,7 +56,7 @@ Solid::~Solid() {
 // TODO: implementar
 void Solid::init(const glm::vec3& _size) {
 
-    // Mesh* pMesh = (Mesh*)Node::findChild(EntityKind::MESH, 0, false); // FIXME melhorar
+    // Mesh* pMesh = (Mesh*)Node::findChild(Kind::MESH, 0, false); // FIXME melhorar
 
     if (isShapeDefine() == false)
         setShapeBox(_size);

@@ -21,7 +21,7 @@ Chimera::PhysicMaterial* LibraryPhysicsMaterials::target() {
             tinyxml2::XMLElement* l_nTecRes =
                 l_nPyMat->FirstChildElement("technique_common")->FirstChildElement("restitution");
 
-            Chimera::PhysicMaterial* pMaterial = new Chimera::PhysicMaterial(l_id);
+            Chimera::PhysicMaterial* pMaterial = new Chimera::PhysicMaterial();
             if (l_nTecDyn)
                 pMaterial->setFrictionDynamic(atof(l_nTecDyn->GetText()));
 

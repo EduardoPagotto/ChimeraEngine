@@ -1,12 +1,9 @@
-#include "chimera/node/Solid.hpp"
-#include "chimera/node/Draw.hpp"
-#include "chimera/node/NodeVisitor.hpp"
-
+#include "chimera/physic/Solid.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {
 
-Solid::Solid(Node* _parent, std::string _name, PhysicsControl* _pWorld) : Coord(_parent, EntityKind::SOLID, _name) {
+Solid::Solid(PhysicsControl* _pWorld) : Transform() {
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
@@ -23,23 +20,23 @@ Solid::Solid(Node* _parent, std::string _name, PhysicsControl* _pWorld) : Coord(
     pWorld = _pWorld;
 }
 
-Solid::Solid(const Solid& _solid) : Coord(_solid) {
+// Solid::Solid(const Solid& _solid) : ITransform(_solid) {
 
-    mass = _solid.mass;
+//     mass = _solid.mass;
 
-    frictionDynamic = _solid.frictionDynamic;
-    frictionStatic = _solid.frictionStatic;
-    restitution = _solid.restitution;
+//     frictionDynamic = _solid.frictionDynamic;
+//     frictionStatic = _solid.frictionStatic;
+//     restitution = _solid.restitution;
 
-    pRigidBody = nullptr;
-    pShapeCollision = _solid.pShapeCollision;
-    pMotionState = nullptr;
-    trimesh = nullptr;
+//     pRigidBody = nullptr;
+//     pShapeCollision = _solid.pShapeCollision;
+//     pMotionState = nullptr;
+//     trimesh = nullptr;
 
-    transform = _solid.transform;
+//     transform = _solid.transform;
 
-    pWorld = _solid.pWorld;
-}
+//     pWorld = _solid.pWorld;
+// }
 
 Solid::~Solid() {
 
@@ -56,17 +53,19 @@ Solid::~Solid() {
     }
 }
 
-void Solid::init() {
+// TODO: implementar
+void Solid::init(const glm::vec3& _size) {
 
-    Draw* pDraw = (Draw*)Node::findChild(EntityKind::MESH, 0, false); // FIXME melhorar
+    // Mesh* pMesh = (Mesh*)Node::findChild(Kind::MESH, 0, false); // FIXME melhorar
 
     if (isShapeDefine() == false)
-        setShapeBox(pDraw->getSizeBox());
+        setShapeBox(_size);
+    // setShapeBox(pMesh->getSizeBox());
 
     initTransform(transform, this);
 }
 
-void Solid::accept(NodeVisitor* v) { v->visit(this); }
+// void Solid::accept(NodeVisitor* v) { v->visit(this); }
 
 // void Solid::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
 //     btQuaternion l_qtn;
@@ -119,7 +118,7 @@ void Solid::setIndexVertexArray(btTriangleIndexVertexArray* _indexVertexArray) {
     // pShapeCollision = new pShapeCollision(trimesh);
 }
 
-glm::mat4 Solid::getModelMatrix(Coord* _pCoord) { // ajuste matricial
+glm::mat4 Solid::getModelMatrix(const glm::vec3& _pos) { // ajuste matricial
 
     btTransform transLocal;
     btScalar matrix[16];
@@ -129,12 +128,12 @@ glm::mat4 Solid::getModelMatrix(Coord* _pCoord) { // ajuste matricial
     transLocal.getOpenGLMatrix(&matrix[0]);
 
     // pega posicao do objeto horigem de desenho (camera travada)
-    glm::vec3 l_vec = _pCoord->getPosition();
+    // glm::vec3 l_vec = _pITransform->getPosition();
 
     // desloca desenha para o pbjeto horigem
-    matrix[12] -= l_vec.x;
-    matrix[13] -= l_vec.y;
-    matrix[14] -= l_vec.z;
+    matrix[12] -= _pos.x;
+    matrix[13] -= _pos.y;
+    matrix[14] -= _pos.z;
 
     glm::mat4 tempMat = glm::make_mat4(matrix);
 

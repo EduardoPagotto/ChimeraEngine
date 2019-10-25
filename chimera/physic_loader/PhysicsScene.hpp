@@ -2,7 +2,7 @@
 #define __CHIMERA_LOADER_PHYSICS_SCENE__HPP
 
 #include "chimera/loader/Library.hpp"
-#include "chimera/node/PhysicsControl.hpp"
+#include "chimera/physic/PhysicsControl.hpp"
 
 namespace ChimeraLoaders {
 

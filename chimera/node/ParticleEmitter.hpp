@@ -1,10 +1,12 @@
 #ifndef __CHIMERA_PARTICLE_EMITTER__HPP
 #define __CHIMERA_PARTICLE_EMITTER__HPP
 
-#include "Draw.hpp"
+#include "Node.hpp"
 #include "Particle.hpp"
 #include "chimera/core/Timer.hpp"
+#include "chimera/render/Material.hpp"
 #include "chimera/render/Shader.hpp"
+#include "chimera/render/Transform.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -
@@ -17,7 +19,7 @@ namespace Chimera {
 
 #define MaxParticles 500
 
-class ParticleEmitter : public Draw {
+class ParticleEmitter : public Node {
   public:
     ParticleEmitter(Node* _parent, std::string _name, int _max);
     virtual ~ParticleEmitter();
@@ -25,11 +27,7 @@ class ParticleEmitter : public Draw {
     // Inherited via Node
     virtual void accept(class NodeVisitor* v) override;
 
-    // Inherited via Draw
-    virtual void render(Shader* _pShader) override;
-    virtual glm::vec3 getSizeBox() override;
-
-    void setSizeBox(const glm::vec3& _size);
+    virtual void render(Shader* _pShader);
 
     void init();
 
@@ -37,7 +35,11 @@ class ParticleEmitter : public Draw {
 
     void loadTexDiffuse(const std::string& _nome, const std::string& _arquivo);
 
+    inline Transform* getTransform() const { return pTransform; }
+    void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
+
   private:
+    Transform* pTransform;
     void SortParticles();
     int recycleParticleLife(const glm::vec3& _camPosition);
     int FindUnusedParticle();
@@ -56,6 +58,8 @@ class ParticleEmitter : public Draw {
     glm::vec3 sizeBox;
     Particle ParticlesContainer[MaxParticles];
     Timer timer;
+
+    Material* material;
 };
 } // namespace Chimera
 #endif

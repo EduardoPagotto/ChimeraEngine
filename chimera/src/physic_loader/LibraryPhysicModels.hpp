@@ -3,7 +3,7 @@
 
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
-#include "chimera/node/Solid.hpp"
+#include "chimera/physic/Solid.hpp"
 
 namespace ChimeraLoaders {
 
@@ -12,7 +12,7 @@ class LibraryPhysicModels : public Library {
   public:
     LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::PhysicsControl* _pWorld);
     virtual ~LibraryPhysicModels();
-    void target();
+    void target(std::map<std::string, Chimera::Solid*>& _mapSolids);
 
   private:
     void loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, Chimera::Solid* _pPhysic);

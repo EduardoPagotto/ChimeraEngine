@@ -9,7 +9,7 @@ LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _
 
 LibraryEffects::~LibraryEffects() {}
 
-Chimera::MatData* LibraryEffects::target() {
+Chimera::Material* LibraryEffects::target() {
 
     tinyxml2::XMLElement* l_nEffect = root->FirstChildElement("library_effects")->FirstChildElement("effect");
     for (l_nEffect; l_nEffect; l_nEffect = l_nEffect->NextSiblingElement()) {
@@ -19,7 +19,7 @@ Chimera::MatData* LibraryEffects::target() {
             tinyxml2::XMLElement* l_nProfile = l_nEffect->FirstChildElement("profile_COMMON");
             if (l_nProfile != nullptr) {
 
-                Chimera::MatData* pMaterial = new Chimera::MatData();
+                Chimera::Material* pMaterial = new Chimera::Material();
 
                 loadNewParam(l_nProfile);
                 loadColors(l_nProfile, pMaterial);
@@ -67,7 +67,7 @@ Chimera::TexImg* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
     throw Chimera::Exception("Texture definido mas nao encontrado");
 }
 
-void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::MatData* _pMat) {
+void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Material* _pMat) {
 
     tinyxml2::XMLElement* l_nCor =
         _nProfile->FirstChildElement("technique")->FirstChildElement("phong")->FirstChildElement();

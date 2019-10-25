@@ -12,8 +12,8 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (RenderSource 	Vertex.cpp
 					Triangle.cpp
 					MeshData.cpp
-					MatData.cpp
-					TransData.cpp
+					Material.cpp
+					Transform.cpp
 					Shader.cpp
 					Tex.cpp
 					LoadObj.cpp)

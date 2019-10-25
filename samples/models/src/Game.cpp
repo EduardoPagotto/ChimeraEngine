@@ -3,10 +3,10 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/node/Transform.hpp"
+//#include "chimera/node/Coord.hpp"
+//#include "chimera/node/Transform.hpp"
 
-Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo, Chimera::PhysicsControl* _physicWorld)
-    : pSceneMng(_pScenMng), pVideo(_pVideo) {
+Game::Game(Chimera::SceneMng* _pScenMng, Chimera::PhysicsControl* _physicWorld) : pSceneMng(_pScenMng) {
 
     isPaused = false;
     pCorpoRigido = nullptr;
@@ -142,33 +142,32 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
 void Game::start() {
 
-    pSceneMng->start(pVideo);
+    pSceneMng->init();
 
     // Localiza o Skybox e ajusta iluminacao
-    Chimera::Transform* pSkyBox = (Chimera::Transform*)pSceneMng->findChild("SkyBox", true);
-
-    if (pSkyBox != nullptr) {
-        Chimera::Draw* pDraw = (Chimera::Draw*)pSkyBox->findChild(Chimera::EntityKind::MESH, 0, false);
-        pSkyBox->setStatic(true);
-    }
+    // Chimera::Transform* pSkyBox = (Chimera::Transform*)pSceneMng->getRoot()->findChild("SkyBox", true);
+    // if (pSkyBox != nullptr) {
+    //     Chimera::Mesh* pMesh = (Chimera::Mesh*)pSkyBox->findChild(Chimera::Kind::MESH, 0, false);
+    // }
 
     // Localiza a camera
-    pOrbitalCam = (Chimera::Camera*)pSceneMng->findChild("Camera-camera", true);
+    pOrbitalCam = (Chimera::Camera*)pSceneMng->getRoot()->findChild("Camera-camera", true);
     pOrbitalCam->getViewPoint()->up = glm::vec3(0, 0, -1);
 
-    // Localiza objeto como o primario
-    pCorpoRigido = (Chimera::Solid*)pSceneMng->findChild("zoltan-RigidBody", true);
+    // Localiza objeto como o primario //EfeitoZoltan-mesh
+    Chimera::Mesh* pMesh = (Chimera::Mesh*)pSceneMng->getRoot()->findChild("EfeitoZoltan-mesh", true);
+    pCorpoRigido = (Chimera::Solid*)pMesh->getTransform();
 
     // Localiza a luz ativa
-    Chimera::Light* pLight = (Chimera::Light*)pSceneMng->findChild("luz01-light", true);
+    Chimera::Light* pLight = (Chimera::Light*)pSceneMng->getRoot()->findChild("luz01-light", true);
 
     // Localiza o Emissor de particula
-    pEmissor = (Chimera::ParticleEmitter*)pSceneMng->findChild("testeZ1", true);
+    pEmissor = (Chimera::ParticleEmitter*)pSceneMng->getRoot()->findChild("testeZ1", true);
 
-    pSceneMng->origemDesenho((Chimera::Coord*)pCorpoRigido);
+    pSceneMng->origemDesenho((Chimera::Transform*)pCorpoRigido);
 
     // Localiza o HUD
-    pHUD = (Chimera::HUD*)pSceneMng->findChild("HUD-Default", true);
+    pHUD = (Chimera::HUD*)pSceneMng->getRoot()->findChild("HUD-Default", true);
     if (pHUD != nullptr) {
         pHUD->addText(0, 350, 30, glm::vec4(0.0, 0.0, 1.0, 1.0), 1.0, &sPosicaoObj);
         pHUD->addText(0, 10, 30, glm::vec4(1.0, 0.0, 0.0, 1.0), 1.0, &textoFPS);
@@ -189,7 +188,7 @@ void Game::render() {
     physicWorld->stepSim();
     physicWorld->checkCollisions();
 
-    pSceneMng->draw(pVideo);
+    pSceneMng->render();
 }
 
 void Game::userEvent(const SDL_Event& _event) {
@@ -218,7 +217,7 @@ void Game::userEvent(const SDL_Event& _event) {
                          n2->getName().c_str());
         } break;
         case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
-            pVideo->toggleFullScreen();
+            pSceneMng->getCanvas()->toggleFullScreen();
             break;
         default:
             break;
@@ -235,7 +234,7 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
             isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
-            pVideo->reshape(_event.data1, _event.data2);
+            pSceneMng->getCanvas()->reshape(_event.data1, _event.data2);
             break;
         default:
             break;

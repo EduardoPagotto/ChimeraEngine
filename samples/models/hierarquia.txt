@@ -1,0 +1,16 @@
+G "root_real"
+|-G "Scene"
+| |-M "MeshSkybbox"
+| |-M "EfeitoZ.."
+| |-M "Plane-mesh"
+| |-C "Camera-camera"
+| |-L "Luz01"
+| |-M "Efeito-cubo01"
+| |-M "Ico-shepre01"
+| |-M "Ico-shepre02"
+| |-S "Shwadow1" (?) ja carregou a Tex
+|-G "Particle-group"
+| |-P "testez1"
+|-G "Hud-group"
+| |-H "Hud-default"
+

@@ -1,7 +1,6 @@
 #ifndef __CHIMERA_GROUP__HPP
 #define __CHIMERA_GROUP__HPP
 
-#include "Coord.hpp"
 #include "Node.hpp"
 #include "NodeVisitor.hpp"
 #include "chimera/render/Shader.hpp"

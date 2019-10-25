@@ -4,7 +4,6 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/node/Group.hpp"
-#include "chimera/node/PhysicsControl.hpp"
 
 namespace ChimeraLoaders {
 

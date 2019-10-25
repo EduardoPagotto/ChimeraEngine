@@ -1,11 +1,11 @@
-#include "chimera/render/MatData.hpp"
+#include "chimera/render/Material.hpp"
 
 namespace Chimera {
 
-MatData::MatData() { tipoTexturasDisponiveis = -1; }
-MatData::~MatData() {}
+Material::Material() { tipoTexturasDisponiveis = -1; }
+Material::~Material() {}
 
-void MatData::setDefaultEffect() {
+void Material::setDefaultEffect() {
     setDiffuse(glm::vec4(0.6f, 0.6f, 0.6f, 1.0f));
     setEmission(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
     setAmbient(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
@@ -13,7 +13,7 @@ void MatData::setDefaultEffect() {
     // setShine(50.0f);
 }
 
-void MatData::init() {
+void Material::init() {
 
     bool hasDifuse = false;
     bool hasEspecular = false;
@@ -51,9 +51,9 @@ void MatData::init() {
         tipoTexturasDisponiveis = 4;
 }
 
-void MatData::addTexture(TexImg* _pTex) { listTex.push_back(_pTex); }
+void Material::addTexture(TexImg* _pTex) { listTex.push_back(_pTex); }
 
-void MatData::apply(Shader* _shader) {
+void Material::apply(Shader* _shader) {
 
     // aplica todos os materiais passados
     for (ShaderValue* shaderMaterial : listMaterial) {

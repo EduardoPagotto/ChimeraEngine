@@ -14,10 +14,9 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (SourceNode Node.cpp
 				Light.cpp
 				Camera.cpp
-				Solid.cpp
-				PhysicsControl.cpp
-				Constraint.cpp
-				Draw.cpp
+				#Solid.cpp
+				#PhysicsControl.cpp
+				#Constraint.cpp
 				Mesh.cpp
 				Font.cpp
 				HUD.cpp

@@ -1,11 +1,9 @@
-#include "chimera/core/Exception.hpp"
-
+#include "LibraryVisualSCenes.hpp"
 #include "LibraryCameras.hpp"
 #include "LibraryGeometrys.hpp"
 #include "LibraryLights.hpp"
-#include "LibraryVisualSCenes.hpp"
-
-#include "chimera/node/Transform.hpp"
+#include "chimera/core/Exception.hpp"
+#include "chimera/render/Transform.hpp"
 
 namespace ChimeraLoaders {
 
@@ -87,8 +85,6 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
             LibraryCameras lib(root, l_url);
             Chimera::Camera* pCamera = lib.target();
 
-            pListNodes->addNode(pCamera);
-
             pCamera->getViewPoint()->setTransform(l_pTransform);
 
             _pNodePai->addChild(pCamera);
@@ -99,8 +95,6 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
             LibraryLights lib(root, l_url);
             Chimera::Light* pLight = lib.target();
 
-            pListNodes->addNode(pLight);
-
             pLight->setTransform(l_pTransform);
 
             _pNodePai->addChild(pLight);
@@ -109,17 +103,20 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
             LibraryGeometrys lib(root, l_url);
-            Chimera::Draw* pDraw = lib.target();
+            Chimera::Mesh* pMesh = lib.target();
 
-            pListNodes->addNode(pDraw);
+            pListNodes->mapMeshNode[pMesh->getName()] = pMesh;
 
-            Chimera::Transform* pTrans = new Chimera::Transform(_pNodePai, _id);
+            Chimera::Transform* pTrans = new Chimera::Transform();
 
-            pListNodes->addNode(pTrans);
+            pListNodes->mapMesh[std::string(_id)] = pMesh;
 
             pTrans->setMatrix(l_pTransform);
-            pTrans->addChild(pDraw);
-            pLastNodeDone = pTrans;
+            pMesh->setTransform(pTrans);
+
+            _pNodePai->addChild(pMesh);
+
+            pLastNodeDone = _pNodePai; // pTrans;
 
         } else if (strcmp(l_nomeElemento, (const char*)"node") == 0) {
 

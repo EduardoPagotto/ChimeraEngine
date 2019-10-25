@@ -1,7 +1,7 @@
 
 #include "chimera/core/Exception.hpp"
-#include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"
+#include "chimera/physic_loader/PhysicsScene.hpp"
 #include <cstdio>
 
 #include <SDL2/SDL.h>

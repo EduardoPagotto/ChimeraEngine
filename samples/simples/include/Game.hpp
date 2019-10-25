@@ -4,7 +4,7 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/TrackBall.hpp"
-#include "chimera/render/MatData.hpp"
+#include "chimera/render/Material.hpp"
 #include "chimera/render/Shader.hpp"
 #include "chimera/render/Tex.hpp"
 #include "chimera/render/Vertex.hpp"
@@ -42,7 +42,7 @@ class Game : public Chimera::IGameClientEvents {
     glm::mat4 view;
     glm::mat4 model;
 
-    Chimera::MatData material;
+    Chimera::Material material;
 };
 
 #endif

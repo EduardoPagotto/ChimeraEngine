@@ -4,12 +4,8 @@
 #include "chimera/core/TrackHead.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
-#include "chimera/node/SceneMng.hpp"
-#include "chimera/node/Transform.hpp"
 
-Game::Game(Chimera::SceneMng* _pScenMng, Chimera::CanvasGL* _pVideo) : pSceneMng(_pScenMng), pVideo(_pVideo) {
-    isPaused = false;
-}
+Game::Game(Chimera::SceneMng* _pScenMng) : pSceneMng(_pScenMng) { isPaused = false; }
 
 Game::~Game() {}
 
@@ -48,7 +44,7 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
 void Game::keyCapture(SDL_Keycode tecla) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
+    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::Kind::CAMERA, 0, true);
 
     switch (tecla) {
         case SDLK_ESCAPE:
@@ -85,7 +81,7 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->findChild(Chimera::EntityKind::CAMERA, 0, true);
+    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::Kind::CAMERA, 0, true);
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
@@ -96,7 +92,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::start() { pSceneMng->start(pVideo); }
+void Game::start() { pSceneMng->init(); }
 
 void Game::stop() {}
 
@@ -105,7 +101,7 @@ void Game::newFPS(const unsigned int& fps) {}
 void Game::userEvent(const SDL_Event& _event) {
     Chimera::KindOp op = (Chimera::KindOp)_event.user.code;
     if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
-        pVideo->toggleFullScreen();
+        pSceneMng->getCanvas()->toggleFullScreen();
     }
 }
 
@@ -118,7 +114,7 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
             isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
-            pVideo->reshape(_event.data1, _event.data2);
+            pSceneMng->getCanvas()->reshape(_event.data1, _event.data2);
             break;
         default:
             break;
@@ -127,4 +123,4 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
 
 bool Game::paused() { return isPaused; }
 
-void Game::render() { pSceneMng->draw(pVideo); }
+void Game::render() { pSceneMng->render(); }

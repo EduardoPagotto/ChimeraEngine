@@ -4,38 +4,34 @@
 
 namespace Chimera {
 
-SceneMng::SceneMng() : Node(nullptr, EntityKind::SCENE_MANAGER, "DefaultSG") {}
+SceneMng::SceneMng(CanvasGL* _pCanvas, Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot) {}
 
 SceneMng::~SceneMng() {}
 
-void SceneMng::accept(NodeVisitor* v) { v->visit(this); }
+void SceneMng::init() {
 
-void SceneMng::init() {}
-
-void SceneMng::start(CanvasGL* _pVideo) {
-
-    _pVideo->initGL();
+    pCanvas->initGL();
 
     InitVisitor initV;
-    NodeParse::tree(this, &initV); // dfs(root, iv);
+    NodeParse::tree(pRoot, &initV); // dfs(root, iv);
 
-    _pVideo->afterStart();
+    pCanvas->afterStart();
 
-    renderV.pVideo = _pVideo;
+    renderV.pVideo = pCanvas;
 }
 
-void SceneMng::draw(CanvasGL* _pVideo) {
+void SceneMng::render() {
 
-    for (int eye = 0; eye < _pVideo->getTotEyes(); eye++) {
+    for (int eye = 0; eye < pCanvas->getTotEyes(); eye++) {
 
-        _pVideo->before(eye);
+        pCanvas->before(eye);
 
         renderV.eye = eye;
-        NodeParse::tree(this, &renderV); // dfs(root, &rv);//DFS(root);
+        NodeParse::tree(pRoot, &renderV); // dfs(root, &rv);//DFS(root);
 
-        _pVideo->after(eye);
+        pCanvas->after(eye);
     }
 
-    _pVideo->swapWindow();
+    pCanvas->swapWindow();
 }
 } // namespace Chimera

@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Group::Group(Node* _parent, std::string _name) : Node(_parent, EntityKind::GROUP, _name) {
+Group::Group(Node* _parent, std::string _name) : Node(_parent, Kind::GROUP, _name) {
     shadoMapVisitor = nullptr;
     pShader = nullptr;
 }

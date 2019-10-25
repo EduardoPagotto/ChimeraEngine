@@ -9,7 +9,7 @@
 
 #include <LinearMath/btVector3.h>
 
-#include "Node.hpp"
+#include "chimera/node/Node.hpp"
 
 namespace Chimera {
 

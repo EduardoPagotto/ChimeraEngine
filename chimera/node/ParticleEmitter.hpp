@@ -4,7 +4,7 @@
 #include "Node.hpp"
 #include "Particle.hpp"
 #include "chimera/core/Timer.hpp"
-#include "chimera/render/MatData.hpp"
+#include "chimera/render/Material.hpp"
 #include "chimera/render/Shader.hpp"
 #include "chimera/render/Transform.hpp"
 #include <vector>
@@ -59,7 +59,7 @@ class ParticleEmitter : public Node {
     Particle ParticlesContainer[MaxParticles];
     Timer timer;
 
-    MatData* material;
+    Material* material;
 };
 } // namespace Chimera
 #endif

@@ -87,7 +87,7 @@ int main(int argn, char** argv) {
         pLight->setPosition(glm::vec3(80, 100, 150));
 
         // Material do cubo 1 com textura
-        MatData* pMat1 = new MatData();
+        Material* pMat1 = new Material();
         pMat1->setAmbient(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
         pMat1->setDiffuse(glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
         pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
@@ -107,7 +107,7 @@ int main(int argn, char** argv) {
         pMesh->meshData.changeSize(25.0, pMat1->hasTexture());
 
         // Material Cubo 2 sem textura
-        MatData* pMat2 = new MatData();
+        Material* pMat2 = new Material();
         pMat2->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
         pMat2->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat2->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));

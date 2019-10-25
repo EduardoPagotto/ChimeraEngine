@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_LOAD_OBJ__HPP
 #define __CHIMERA_LOAD_OBJ__HPP
 
-#include "MatData.hpp"
+#include "Material.hpp"
 #include "MeshData.hpp"
 #include "Triangle.hpp"
 #include "Vertex.hpp"
@@ -10,7 +10,7 @@
 
 namespace Chimera {
 
-void loadMtl(const std::string& _fineNameMtl, MatData& _material);
+void loadMtl(const std::string& _fineNameMtl, Material& _material);
 void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _materialFile);
 void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>& vecTriangle);
 void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outData);

@@ -12,7 +12,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
 set (SourcesLoader Library.cpp
-				   #LibraryPhysicsMaterials.cpp
 				   LibraryImages.cpp
 				   LibraryLights.cpp
 				   LibraryCameras.cpp
@@ -20,10 +19,7 @@ set (SourcesLoader Library.cpp
 				   LibraryMaterials.cpp
 				   LibraryGeometrys.cpp
 				   LibraryVisualSCenes.cpp
-				   #LibraryPhysicModels.cpp
-				   #LibraryPhysicsScenes.cpp
 				   VisualScene.cpp)
-				   #PhysicsScene.cpp)
 
 #define os includes
 set (IncludeLoader  ${CMAKE_SOURCE_DIR})

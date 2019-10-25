@@ -4,7 +4,6 @@
 #include "chimera/core/TrackHead.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
-#include "chimera/node/Transform.hpp"
 
 Game::Game(Chimera::SceneMng* _pScenMng) : pSceneMng(_pScenMng) { isPaused = false; }
 

@@ -19,7 +19,7 @@ class SceneMng {
     void render();
     inline Node* getRoot() { return pRoot; }
     inline CanvasGL* getCanvas() { return pCanvas; }
-    inline void origemDesenho(ITransform* _pTransform) { renderV.pTransform = _pTransform; }
+    inline void origemDesenho(Transform* _pTransform) { renderV.pTransform = _pTransform; }
 
   private:
     Node* pRoot;

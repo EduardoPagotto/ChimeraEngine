@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-Solid::Solid(PhysicsControl* _pWorld) : ITransform() {
+Solid::Solid(PhysicsControl* _pWorld) : Transform() {
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;

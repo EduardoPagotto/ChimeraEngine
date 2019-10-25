@@ -60,7 +60,7 @@ void Mesh::debugDados() {
     meshData.debugDados();
 }
 
-void Mesh::replaceTransform(ITransform* _pTransform) {
+void Mesh::replaceTransform(Transform* _pTransform) {
 
     glm::mat4 matrix = pTransform->getMatrix();
     _pTransform->setMatrix(matrix);

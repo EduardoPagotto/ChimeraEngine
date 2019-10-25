@@ -1,10 +1,10 @@
 #ifndef __CHIMERA_RENDER_VISITOR__HPP
 #define __CHIMERA_RENDER_VISITOR__HPP
 
-#include "ITransform.hpp"
 #include "NodeVisitor.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/render/Shader.hpp"
+#include "chimera/render/Transform.hpp"
 
 #include "ShadowMap.hpp"
 
@@ -22,7 +22,7 @@ class RenderVisitor : public NodeVisitor {
     virtual void visit(class HUD* _pHUD) override;
     virtual void visit(class ShadowMap* _pShadowMap) override;
 
-    ITransform* pTransform;
+    Transform* pTransform;
     CanvasGL* pVideo;
     int eye;
 

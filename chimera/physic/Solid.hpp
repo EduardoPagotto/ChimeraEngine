@@ -2,22 +2,21 @@
 #define __CHIMERA_SOLID__HPP
 
 #include "PhysicsControl.hpp"
-#include "chimera/node/ITransform.hpp"
+#include "chimera/render/Transform.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <glm/gtc/type_ptr.hpp>
-//#include <tinyxml2.h>
 
 namespace Chimera {
 
-class Solid : public ITransform {
+class Solid : public Transform {
   public:
     Solid(PhysicsControl* _pWorld);
     virtual ~Solid();
 
-    // Inherited via ITransform
+    // Inherited via Transform
     virtual glm::vec3 getPosition() override;
     virtual void setPosition(const glm::vec3& _pos) override;
     virtual glm::vec3 getRotation() override;

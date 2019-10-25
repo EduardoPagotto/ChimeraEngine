@@ -7,9 +7,9 @@
 #include "chimera/node/Group.hpp"
 #include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
-#include "chimera/node/Transform.hpp"
 #include "chimera/render/CanvasHmd.hpp"
 #include "chimera/render/LoadObj.hpp"
+#include "chimera/render/Transform.hpp"
 
 #include <cstdio>
 #include <glm/glm.hpp>
@@ -97,7 +97,7 @@ int main(int argn, char** argv) {
         // define a origem da rotacao da camera!!
         Transform* pTrans = new Transform();
         pTrans->setPosition(glm::vec3(0.0, 0.0, 0.0));
-        sceneMng->origemDesenho((ITransform*)pTrans);
+        sceneMng->origemDesenho(pTrans);
 
         // Mesh do cubo1 filho de posicao 1
         Mesh* pMesh = Chimera::createEmpty(group1, "Cubo-01", pMat1);

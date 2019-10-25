@@ -1,12 +1,12 @@
 #ifndef __CHIMERA_PARTICLE_EMITTER__HPP
 #define __CHIMERA_PARTICLE_EMITTER__HPP
 
-#include "ITransform.hpp"
 #include "Node.hpp"
 #include "Particle.hpp"
 #include "chimera/core/Timer.hpp"
 #include "chimera/render/MatData.hpp"
 #include "chimera/render/Shader.hpp"
+#include "chimera/render/Transform.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -
@@ -35,11 +35,11 @@ class ParticleEmitter : public Node {
 
     void loadTexDiffuse(const std::string& _nome, const std::string& _arquivo);
 
-    inline ITransform* getTransform() const { return pTransform; }
-    void setTransform(ITransform* _pTransform) { pTransform = _pTransform; }
+    inline Transform* getTransform() const { return pTransform; }
+    void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
 
   private:
-    ITransform* pTransform;
+    Transform* pTransform;
     void SortParticles();
     int recycleParticleLife(const glm::vec3& _camPosition);
     int FindUnusedParticle();

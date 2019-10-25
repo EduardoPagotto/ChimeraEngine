@@ -5,10 +5,10 @@
 #include <tinyxml2.h>
 #include <vector>
 
-#include "ITransform.hpp"
 #include "Node.hpp"
 #include "chimera/render/MatData.hpp"
 #include "chimera/render/MeshData.hpp"
+#include "chimera/render/Transform.hpp"
 #include "chimera/render/Vertex.hpp"
 #include <glm/glm.hpp>
 
@@ -28,7 +28,7 @@ class Mesh : public Node {
     void render(Shader* _pShader);
     glm::vec3 getSizeBox();
 
-    void replaceTransform(ITransform* _pITransform);
+    void replaceTransform(Transform* _pTransform);
 
     void debugDados();
 
@@ -37,14 +37,14 @@ class Mesh : public Node {
     void setMaterial(MatData* _pMat) { this->material = _pMat; }
     MatData* getMaterial() const { return material; }
 
-    inline ITransform* getTransform() { return pTransform; }
-    void setTransform(ITransform* _pTransform) { pTransform = _pTransform; }
+    inline Transform* getTransform() { return pTransform; }
+    void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
 
   private:
     void setVertexBuffer();
     VertexRenderStatic renderStat;
     MatData* material;
-    ITransform* pTransform;
+    Transform* pTransform;
 };
 
 Mesh* createEmpty(Node* _pParent, const std::string& _name, MatData* _pMaterial);

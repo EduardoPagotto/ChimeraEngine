@@ -1,10 +1,10 @@
 #ifndef __CHIMERA_SHADOW_MAP_VISITOR__HPP
 #define __CHIMERA_SHADOW_MAP_VISITOR__HPP
 
-#include "ITransform.hpp"
 #include "NodeVisitor.hpp"
 #include "ShadowMap.hpp"
 #include "chimera/render/Shader.hpp"
+#include "chimera/render/Transform.hpp"
 #include <string>
 
 namespace Chimera {
@@ -22,7 +22,7 @@ class ShadowMapVisitor : public NodeVisitor {
     virtual void visit(class HUD* _pHUD) override;
     virtual void visit(class ShadowMap* _pShadowMap) override;
 
-    ITransform* pTransform;
+    Transform* pTransform;
     ShadowMap* shadowMap;
 
   private:

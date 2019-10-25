@@ -4,7 +4,7 @@
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 //#include "chimera/node/Coord.hpp"
-#include "chimera/node/Transform.hpp"
+//#include "chimera/node/Transform.hpp"
 
 Game::Game(Chimera::SceneMng* _pScenMng, Chimera::PhysicsControl* _physicWorld) : pSceneMng(_pScenMng) {
 
@@ -164,7 +164,7 @@ void Game::start() {
     // Localiza o Emissor de particula
     pEmissor = (Chimera::ParticleEmitter*)pSceneMng->getRoot()->findChild("testeZ1", true);
 
-    pSceneMng->origemDesenho((Chimera::ITransform*)pCorpoRigido);
+    pSceneMng->origemDesenho((Chimera::Transform*)pCorpoRigido);
 
     // Localiza o HUD
     pHUD = (Chimera::HUD*)pSceneMng->getRoot()->findChild("HUD-Default", true);

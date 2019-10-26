@@ -101,22 +101,25 @@ int main(int argn, char** argv) {
         pMesh->meshData.changeSize(5.0, matObj.hasTexture());
 
         // Material Cubo 2 sem textura
-        Material* pMat2 = new Material();
-        pMat2->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
-        pMat2->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-        pMat2->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-        pMat2->setShine(32.0f);
-        pMat2->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./data/images/image1.jpg"));
+        // Material* pMat2 = new Material();
+        // pMat2->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
+        // pMat2->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+        // pMat2->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+        // pMat2->setShine(32.0f);
+        // pMat2->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./data/images/image1.jpg"));
 
         // Posicao Cubo2
         Transform* pTrans2 = new Transform();
         pTrans2->setPosition(glm::vec3(150.0, 0.0, 0.0));
 
         // Mesh do cubo 2 vinculado posicao 2
-        Mesh* pMesh2 = Chimera::createEmpty(group1, "Cubo-02", pMat2);
+        Material matObj2 = Material();
+        Mesh* pMesh2 = Chimera::createEmpty(group1, "Cubo-02", &matObj2);
         pMesh2->setTransform(pTrans2);
-        loadObj((const char*)"./data/models/cube.obj", pMesh2->meshData, materialFile);
-        pMesh2->meshData.changeSize(20.0, pMat2->hasTexture());
+        loadObj((const char*)"./data/models/cubo2.obj", pMesh2->meshData, materialFile);
+        loadMtl(materialFile, &matObj2);
+        pMesh2->meshData.changeSize(10.0, matObj2.hasTexture());
+        matObj2.setShine(32.0f);
 
         // Wrapper do game
         Game* game = new Game(sceneMng);

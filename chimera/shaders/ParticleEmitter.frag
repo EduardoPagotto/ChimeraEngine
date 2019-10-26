@@ -1,4 +1,9 @@
 #version 300 es
+
+// set: ParticleEmitter.frag and ParticleEmitter.vert
+// used: Class ParticleEmitter to app models
+// Render Particle emitter
+
 precision mediump float;
 
 struct Material {
@@ -7,7 +12,7 @@ struct Material {
     vec4 specular;
     sampler2D tDiffuse;
     sampler2D tSpecular;
-	sampler2D tEmission;
+    sampler2D tEmission;
     float shininess;
 };
 
@@ -23,11 +28,11 @@ out vec4 color;
 
 uniform sampler2D myTextureSampler;
 
-void main(){
-	// Output color = color of the texture at the specified UV
-	//color = texture( myTextureSampler, UV ) * particlecolor;
-	if (tipo == 1)
-		color = texture( material.tDiffuse, UV ) * particlecolor;
-	else
-		color = texture( material.tDiffuse, UV ) * particlecolor;
+void main() {
+    // Output color = color of the texture at the specified UV
+    // color = texture( myTextureSampler, UV ) * particlecolor;
+    if (tipo == 1)
+        color = texture(material.tDiffuse, UV) * particlecolor;
+    else
+        color = texture(material.tDiffuse, UV) * particlecolor;
 }

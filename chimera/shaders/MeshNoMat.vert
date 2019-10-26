@@ -1,7 +1,7 @@
 #version 330 core
 //#version 300 es
 
-// set: simples.frag and simples.vert
+// set: MeshNoMat.frag and MeshNoMat.vert
 // used: app bsptree
 // Render Mesh with texture and without material set
 

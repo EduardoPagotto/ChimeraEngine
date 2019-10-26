@@ -106,16 +106,11 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
             Chimera::Mesh* pMesh = lib.target();
 
             pListNodes->mapMeshNode[pMesh->getName()] = pMesh;
-
-            Chimera::Transform* pTrans = new Chimera::Transform();
-
             pListNodes->mapMesh[std::string(_id)] = pMesh;
 
-            pTrans->setMatrix(l_pTransform);
-            pMesh->setTransform(pTrans);
+            pMesh->setTransform(new Chimera::Transform(l_pTransform));
 
             _pNodePai->addChild(pMesh);
-
             pLastNodeDone = _pNodePai; // pTrans;
 
         } else if (strcmp(l_nomeElemento, (const char*)"node") == 0) {

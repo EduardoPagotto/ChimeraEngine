@@ -85,10 +85,9 @@ int main(int argn, char** argv) {
         // create and add particle to scene
         Chimera::Group* gParticle = new Chimera::Group(pRoot, "ParticleGroup");
         gParticle->setShader(mapa["particle-default"]);
-        Chimera::Transform* posParticle = new Chimera::Transform();
-        posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
         Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(gParticle, "testeZ1", 10000);
-        pParticleEmitter->setTransform(posParticle);
+        pParticleEmitter->setTransform(
+            new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
 
         pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./data/images/Particle2.png"));
 

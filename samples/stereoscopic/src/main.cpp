@@ -83,19 +83,13 @@ void createMeshTexturizade(bool origem, std::string name, std::string file, floa
 
     using namespace Chimera;
 
-    // define a origem da rotacao da camera!!
-    Transform* pTrans = new Transform();
-    pTrans->setPosition(_position);
+    Material* pMap = new Material();
+    Mesh* pMesh = new Mesh(group1, name);
+    pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
+    pMesh->setMaterial(pMap);
 
     if (origem == true)
-        sceneMng->origemDesenho(pTrans);
-
-    // Mesh do cubo1 filho de posicao 1
-    Material* pMap = new Material();
-
-    Mesh* pMesh = new Mesh(group1, name);
-    pMesh->setTransform(pTrans);
-    pMesh->setMaterial(pMap);
+        sceneMng->origemDesenho(pMesh->getTransform());
 
     loadObjMtl(file, pMesh->meshData, *pMap);
     pMesh->meshData.changeSize(scale, pMap->hasTexture());
@@ -106,16 +100,12 @@ void createMesh(bool origem, std::string name, std::string file, float scale, gl
 
     using namespace Chimera;
 
-    // define a origem da rotacao da camera!!
-    Transform* pTrans = new Transform();
-    pTrans->setPosition(_position);
+    Mesh* pMesh = new Mesh(group1, name);
+    pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
+    pMesh->setMaterial(_pMap);
 
     if (origem == true)
-        sceneMng->origemDesenho(pTrans);
-
-    Mesh* pMesh = new Mesh(group1, name);
-    pMesh->setTransform(pTrans);
-    pMesh->setMaterial(_pMap);
+        sceneMng->origemDesenho(pMesh->getTransform());
 
     std::string matfile;
     loadObj(file, pMesh->meshData, matfile);

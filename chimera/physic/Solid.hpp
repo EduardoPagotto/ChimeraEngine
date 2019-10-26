@@ -14,6 +14,7 @@ namespace Chimera {
 class Solid : public Transform {
   public:
     Solid(PhysicsControl* _pWorld);
+    Solid(PhysicsControl* _pWorld, const glm::mat4& _trans);
     virtual ~Solid();
 
     // Inherited via Transform

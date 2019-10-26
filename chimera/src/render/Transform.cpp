@@ -6,6 +6,8 @@ namespace Chimera {
 
 Transform::Transform() : model(glm::mat4(1.0f)) {}
 
+Transform::Transform(const glm::mat4& _trans) : model(_trans) {}
+
 Transform::~Transform() {}
 
 glm::vec3 Transform::getPosition() { return glm::vec3(model[3]); }

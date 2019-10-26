@@ -7,6 +7,7 @@ namespace Chimera {
 class Transform {
   public:
     Transform();
+    Transform(const glm::mat4& _trans);
     virtual ~Transform();
     virtual glm::vec3 getPosition();
     virtual void setPosition(const glm::vec3& _pos);

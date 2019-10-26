@@ -1,5 +1,10 @@
 #version 330 core
 //#version 300 es
+
+// set: MeshNoMat.frag and MeshNoMat.vert
+// used: app bsptree
+// Render Mesh with texture and without material set
+
 precision mediump float;
 
 struct Material {
@@ -17,12 +22,12 @@ uniform vec3 viewPos;
 uniform Material material;
 
 void main() {
-    // Core e Textura
+    // color and texture
     // FragColor = vec4(texture(material.tDiffuse, TexCoords)) * vec4(ourColor, 1.0);
 
-    // So cor
+    // only color
     // FragColor = vec4(ourColor, 1.0);
 
-    // So textura
+    // only texture
     FragColor = vec4(texture(material.tDiffuse, TexCoords));
 }

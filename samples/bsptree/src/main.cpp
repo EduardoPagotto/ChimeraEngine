@@ -17,8 +17,8 @@ int main(int argn, char** argv) {
         Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 640, 480);
 
         Chimera::Shader* pShader =
-            new Chimera::Shader("Simples1", Chimera::shadeLoadProg("Simples1", "./samples/bsptree/shaders/simples.vert",
-                                                                   "./samples/bsptree/shaders/simples.frag"));
+            new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
+                                                                   "./chimera/shaders/MeshNoMat.frag"));
 
         Game* game = new Game(video, pShader);
 

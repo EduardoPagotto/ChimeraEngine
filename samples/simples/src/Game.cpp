@@ -84,14 +84,14 @@ void Game::start() {
 
     std::string materialFile;
     Chimera::MeshData m;
-    loadObj("./samples/simples/models/tela01.obj", m, materialFile);
-    // loadObj("./samples/bsptree/models/square1.obj", m, materialFile);
+    loadObj("./data/models/tela01.obj", m, materialFile);
+    // loadObj("./data/models/square1.obj", m, materialFile);
 
     if (materialFile.size() != 0) {
-        loadMtl(materialFile, material);
+        loadMtl(materialFile, &material);
     } else {
         material.setDefaultEffect();
-        material.addTexture(new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, "./models/grid2.png"));
+        material.addTexture(new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, "./data/images/grid2.png"));
     }
 
     material.init();

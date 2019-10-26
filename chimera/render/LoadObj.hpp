@@ -10,7 +10,7 @@
 
 namespace Chimera {
 
-void loadMtl(const std::string& _fineNameMtl, Material& _material);
+void loadMtl(const std::string& _fineNameMtl, Material* _pMaterial);
 void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _materialFile);
 void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>& vecTriangle);
 void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outData);

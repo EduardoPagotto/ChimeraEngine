@@ -76,6 +76,9 @@ class TexImg : public Tex {
     virtual ~TexImg() override;
     virtual bool init() override;
 
+  private:
+    int invert_image(int pitch, int height, void* image_pixels);
+
   protected:
     std::string pathFile;
 };

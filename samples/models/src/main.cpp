@@ -90,7 +90,7 @@ int main(int argn, char** argv) {
         Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(gParticle, "testeZ1", 10000);
         pParticleEmitter->setTransform(posParticle);
 
-        pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
+        pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./data/images/Particle2.png"));
 
         // Create and add hud data text
         Chimera::Group* gHud = new Chimera::Group((Chimera::Node*)pRoot, "HUD-Group");

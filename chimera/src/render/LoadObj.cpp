@@ -23,7 +23,7 @@ bool getValidData(std::string& nova, const std::string& comando) {
     return false;
 }
 
-void loadMtl(const std::string& _fineNameMtl, Material& _material) {
+void loadMtl(const std::string& _fineNameMtl, Material* _pMaterial) {
     FILE* fp = fopen(_fineNameMtl.c_str(), "r");
     if (fp == NULL)
         throw Exception("Erro ao abrir arquivo: " + _fineNameMtl);
@@ -43,9 +43,9 @@ void loadMtl(const std::string& _fineNameMtl, Material& _material) {
             if (line[1] == 'a') {
                 int n = sscanf(line, "Ka %f %f %f %f", &r, &g, &b, &a);
                 if (n == 3) {
-                    _material.setAmbient(glm::vec4(r, g, b, 1.0f));
+                    _pMaterial->setAmbient(glm::vec4(r, g, b, 1.0f));
                 } else if (n == 4) {
-                    _material.setAmbient(glm::vec4(r, g, b, a));
+                    _pMaterial->setAmbient(glm::vec4(r, g, b, a));
                 } else {
                     throw Exception("linha " + std::to_string(pos_linha) +
                                     " material invalido arquivo: " + _fineNameMtl);
@@ -54,9 +54,9 @@ void loadMtl(const std::string& _fineNameMtl, Material& _material) {
             } else if (line[1] == 'd') {
                 int n = sscanf(line, "Kd %f %f %f %f", &r, &g, &b, &a);
                 if (n == 3) {
-                    _material.setDiffuse(glm::vec4(r, g, b, 1.0f));
+                    _pMaterial->setDiffuse(glm::vec4(r, g, b, 1.0f));
                 } else if (n == 4) {
-                    _material.setDiffuse(glm::vec4(r, g, b, a));
+                    _pMaterial->setDiffuse(glm::vec4(r, g, b, a));
                 } else {
                     throw Exception("linha " + std::to_string(pos_linha) +
                                     " material invalido arquivo: " + _fineNameMtl);
@@ -64,9 +64,9 @@ void loadMtl(const std::string& _fineNameMtl, Material& _material) {
             } else if (line[1] == 's') {
                 int n = sscanf(line, "Ks %f %f %f %f", &r, &g, &b, &a);
                 if (n == 3) {
-                    _material.setSpecular(glm::vec4(r, g, b, 1.0f));
+                    _pMaterial->setSpecular(glm::vec4(r, g, b, 1.0f));
                 } else if (n == 4) {
-                    _material.setSpecular(glm::vec4(r, g, b, a));
+                    _pMaterial->setSpecular(glm::vec4(r, g, b, a));
                 } else {
                     throw Exception("linha " + std::to_string(pos_linha) +
                                     " material invalido arquivo:" + _fineNameMtl);
@@ -76,7 +76,7 @@ void loadMtl(const std::string& _fineNameMtl, Material& _material) {
             // load texture
             std::string nova(line);
             if (getValidData(nova, std::string("map_Kd ")) == true)
-                _material.addTexture(new TexImg(TEX_KIND::DIFFUSE, nova));
+                _pMaterial->addTexture(new TexImg(TEX_KIND::DIFFUSE, nova));
         }
     }
 }

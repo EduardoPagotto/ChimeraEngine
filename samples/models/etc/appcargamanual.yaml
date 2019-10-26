@@ -3,7 +3,7 @@ screen:
   canvas:
     w: 400
     h: 300
-model: ./models/piso2.xml
+model: ./data/models/piso2.xml
 shaders:
   - name: mesh-default
     vertex: ./samples/models/shader/mesh.vert
@@ -22,4 +22,4 @@ size: 18
 
 textures:
   - name: TexParticleEmmiter
-    tex: ./models/Particle2.png
+    tex: ./data/images/Particle2.png

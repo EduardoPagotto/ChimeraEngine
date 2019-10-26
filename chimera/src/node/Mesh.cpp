@@ -32,7 +32,7 @@ void Mesh::init() {
 
     material->init();
 
-    meshData.textureFix();
+    // meshData.textureFix();
 
     pTransform->init(meshData.getSizeBox());
 

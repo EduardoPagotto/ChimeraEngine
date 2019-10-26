@@ -32,7 +32,7 @@ void MeshData::textureFix() {
     // Ajuste de textura do imageSDL invertendo valor de V
     for (int indice = 0; indice < textureIndex.size(); indice++) {
         int posTex = textureIndex[indice];
-        textureList[posTex].y = 1 - textureList[posTex].y;
+        textureList[posTex].y = 1.0f - textureList[posTex].y;
     }
 }
 

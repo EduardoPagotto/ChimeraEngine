@@ -23,6 +23,14 @@ bool getValidData(std::string& nova, const std::string& comando) {
     return false;
 }
 
+void loadObjMtl(const std::string& _fineNameMtl, MeshData& _mesh, Material& _pMaterial) {
+    std::string matFile;
+    loadObj(_fineNameMtl, _mesh, matFile);
+
+    if (matFile.size() > 0)
+        loadMtl(matFile, &_pMaterial);
+}
+
 void loadMtl(const std::string& _fineNameMtl, Material* _pMaterial) {
     FILE* fp = fopen(_fineNameMtl.c_str(), "r");
     if (fp == NULL)

@@ -1,8 +1,6 @@
 #include "chimera/node/ShadowMap.hpp"
-#include "chimera/node/NodeVisitor.hpp"
-
 #include "chimera/core/Singleton.hpp"
-
+#include "chimera/node/NodeVisitor.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

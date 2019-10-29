@@ -1,11 +1,8 @@
 #include "chimera/node/Particle.hpp"
-
-#include <stdlib.h>
-
 #include "chimera/OpenGLDefs.hpp"
-
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
+#include <stdlib.h>
 
 namespace Chimera {
 Particle::Particle() {

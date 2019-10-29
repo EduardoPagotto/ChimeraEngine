@@ -12,16 +12,12 @@ Mesh::Mesh(Node* _parent, std::string _name) : Node(_parent, Kind::MESH, _name) 
 }
 
 Mesh::Mesh(const Mesh& _cpy) : Node(_cpy) {
-
     // FIXME: criar a copia do meshdata
-
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Constructor Copy Mesh %s", _cpy.getName().c_str());
 }
 
 Mesh::~Mesh() {
-
     // FIXME: remover o mesh data
-
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Destructor Mesh: %s", getName().c_str());
 }
 
@@ -31,11 +27,7 @@ void Mesh::init() {
         material = new Material();
 
     material->init();
-
-    // meshData.textureFix();
-
     pTransform->init(meshData.getSizeBox());
-
     setVertexBuffer();
 }
 

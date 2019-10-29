@@ -35,6 +35,13 @@ glm::mat4 Transform::getModelMatrix(const glm::vec3& _position) { // ajuste matr
     return glm::make_mat4(matrix);
 }
 
+// void Transform::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
+//     glm::quat myQuat(_rotation);            // trocar (pitch, yaw, roll) por (yaw, pitch, roll) ?????
+//     glm::mat4 matRot = glm::toMat4(myQuat); // matriz rotacao
+//     glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), _posicao); // matriz translacao
+//     transform = matRot * matTrans; // primeiro translada depois rotaciona, ordem é importante!!!
+// }
+
 void Transform::init(const glm::vec3& _size) {}
 
 } // namespace Chimera

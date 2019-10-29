@@ -2,12 +2,9 @@
 #define __CHIMERA_CAMERA__HPP
 
 #include "Node.hpp"
-#include <glm/glm.hpp>
-
-//#include "chimera/core/ViewPoint.hpp"
-
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/core/TrackHead.hpp"
+#include <glm/glm.hpp>
 
 namespace Chimera {
 

@@ -26,15 +26,7 @@ void ShadowMapVisitor::init() {
         shadowMap->init();
 }
 
-void ShadowMapVisitor::visit(Camera* _pCamera) {
-
-    // shader->setGlUniform3fv("viewPos", 1, glm::value_ptr(_pCamera->getPosition()));
-    // projection = pVideo->getPerspectiveProjectionMatrix(_pCamera->getFov(),
-    //                                                     _pCamera->getNear(),
-    //                                                     _pCamera->getFar(),
-    //                                                     eye);
-    // view = _pCamera->getViewMatrix();
-}
+void ShadowMapVisitor::visit(Camera* _pCamera) {}
 
 void ShadowMapVisitor::visit(Mesh* _pMesh) {
 
@@ -46,23 +38,15 @@ void ShadowMapVisitor::visit(Mesh* _pMesh) {
 
 void ShadowMapVisitor::visit(Light* _pLight) {
 
-    // shader->setGlUniform3fv("light.position", 1, glm::value_ptr(_pLight->getPosition()));
-    // shader->setGlUniform4fv("light.ambient", 1, _pLight->getAmbient().ptr());
-    // shader->setGlUniform4fv("light.diffuse", 1, _pLight->getDiffuse().ptr());
-    // shader->setGlUniform4fv("light.specular", 1, _pLight->getSpecular().ptr());
+    glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix(_pLight->getPosition());
+    pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
 void ShadowMapVisitor::visit(ParticleEmitter* _pParticleEmitter) {}
 
 void ShadowMapVisitor::visit(Group* _pGroup) {
-
-    Light* nodeLight = (Light*)_pGroup->findChild(Chimera::Kind::LIGHT, 0, false);
-
-    glm::mat4 lightSpaceMatrix = shadowMap->createLightSpaceMatrix(nodeLight->getPosition());
-
     // Shader selecionado correto no RenderVisitor via Group
     pShader->link();
-    pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
 void ShadowMapVisitor::visit(HUD* _pHUD) {}

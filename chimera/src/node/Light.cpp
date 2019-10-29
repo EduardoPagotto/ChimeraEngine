@@ -1,12 +1,10 @@
 #include "chimera/node/Light.hpp"
 #include "chimera/node/NodeVisitor.hpp"
-
-#include <vector>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <vector>
 
 namespace Chimera {
 
@@ -31,14 +29,5 @@ void Light::apply(Shader* _pShader) {
     _pShader->setGlUniform4fv("light.specular", 1, glm::value_ptr(specular));
 }
 
-// void Light::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
-//     glm::quat myQuat(_rotation);            // trocar (pitch, yaw, roll) por (yaw, pitch, roll) ?????
-//     glm::mat4 matRot = glm::toMat4(myQuat); // matriz rotacao
-//     glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), _posicao); // matriz translacao
-//     transform = matRot * matTrans; // primeiro translada depois rotaciona, ordem é importante!!!
-// }
-
-void Light::init() {
-    // position = glm::vec3(transform[3]); // position = transform.getOrigin();
-}
+void Light::init() {}
 } // namespace Chimera

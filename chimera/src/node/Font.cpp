@@ -1,9 +1,7 @@
 #include "chimera/node/Font.hpp"
 #include "chimera/core/Exception.hpp"
-
-#include <iostream>
-
 #include <SDL2/SDL.h>
+#include <iostream>
 
 namespace Chimera {
 

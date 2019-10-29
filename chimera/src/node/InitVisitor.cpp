@@ -5,8 +5,6 @@
 #include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
-#include "chimera/node/ShadowMap.hpp"
-#include <iostream>
 
 namespace Chimera {
 InitVisitor::InitVisitor() {}

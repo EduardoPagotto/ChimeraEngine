@@ -1,6 +1,7 @@
 #ifndef __CHIMERA_SCENE_MNG__HPP
 #define __CHIMERA_SCENE_MNG__HPP
 
+#include "Node.hpp"
 #include "RenderVisitor.hpp"
 #include "chimera/core/CanvasGL.hpp"
 

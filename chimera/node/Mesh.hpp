@@ -23,7 +23,7 @@ class Mesh : public Node {
     virtual void init();
 
     // Inherited via Node
-    void accept(class NodeVisitor* v) override;
+    virtual void accept(class NodeVisitor* v) override;
 
     void render(Shader* _pShader);
     glm::vec3 getSizeBox();
@@ -34,11 +34,11 @@ class Mesh : public Node {
 
     MeshData meshData;
 
-    void setMaterial(Material* _pMat) { this->material = _pMat; }
-    Material* getMaterial() const { return material; }
+    inline void setMaterial(Material* _pMat) { this->material = _pMat; }
+    inline Material* getMaterial() const { return material; }
 
     inline Transform* getTransform() { return pTransform; }
-    void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
+    inline void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
 
   private:
     void setVertexBuffer();

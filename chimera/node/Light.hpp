@@ -1,15 +1,13 @@
 #ifndef __CHIMERA_LIGHT__HPP
 #define __CHIMERA_LIGHT__HPP
 
-#include "glm/glm.hpp"
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/euler_angles.hpp>
-
-#include <map>
-
 #include "Node.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/render/Shader.hpp"
+#include "glm/glm.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <map>
 
 namespace Chimera {
 

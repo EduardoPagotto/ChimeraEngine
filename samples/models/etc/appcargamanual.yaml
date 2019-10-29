@@ -1,8 +1,8 @@
 screen:
   name: teste
   canvas:
-    w: 800
-    h: 600
+    w: 400
+    h: 300
 model: ./data/models/piso2.xml
 shaders:
   - name: mesh-default

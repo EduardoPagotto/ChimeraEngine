@@ -16,19 +16,8 @@ Group::~Group() {
 void Group::accept(NodeVisitor* v) { v->visit(this); }
 
 void Group::init() {
-
-    // if (shadoMapVisitor != nullptr) {
-    //     shadoMapVisitor->init();
-    // }
+    if (shadoMapVisitor != nullptr) {
+        shadoMapVisitor->init();
+    }
 }
-
-// ShadowMap* Group::createSceneShadoMap(Coord* _pCoord) {
-
-//     if (shadoMapVisitor != nullptr) {
-//         shadoMapVisitor->pCoord = _pCoord;
-//         return shadoMapVisitor->render(this);
-//     }
-
-//     return nullptr;
-// }
 } // namespace Chimera

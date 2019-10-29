@@ -33,6 +33,8 @@ RenderVisitor::RenderVisitor() {
 
 RenderVisitor::~RenderVisitor() {}
 
+void RenderVisitor::init() {}
+
 void RenderVisitor::visit(Camera* _pCamera) {}
 
 void RenderVisitor::visit(Mesh* _pMesh) {
@@ -106,11 +108,7 @@ void RenderVisitor::visit(Group* _pGroup) {
     ShadowMapVisitor* sVisit = (ShadowMapVisitor*)_pGroup->getNodeVisitor();
     if (sVisit != nullptr) {
 
-        // TODO: colocar a carga na inicializacao??
-        shadowMap = (ShadowMap*)_pGroup->findChild(Chimera::Kind::SHADOWMAP, 0, false);
-
-        // TODO: passar parametros de outra forma para generalizar aqui
-        sVisit->shadowMap = shadowMap;
+        shadowMap = sVisit->getShadowMap();
         sVisit->pTransform = pTransform;
 
         shadowMap->initSceneShadow();
@@ -144,12 +142,6 @@ void RenderVisitor::visit(Group* _pGroup) {
         pLight->apply(pShader);
 }
 
-// void RenderVisitor::visit(Chimera::Transform* _pTransform) {
-//     model = _pTransform->getModelMatrix(pTransform->getPosition());
-// }
-
-// void RenderVisitor::visit(Solid* _pSolid) { model = _pSolid->getModelMatrix(pTransform); }
-
 void RenderVisitor::visit(HUD* _pHUD) {
 
     if (HudOn == true) {
@@ -161,7 +153,4 @@ void RenderVisitor::visit(HUD* _pHUD) {
         }
     }
 }
-
-void RenderVisitor::visit(ShadowMap* _pShadowMap) {}
-
 } // namespace Chimera

@@ -8,7 +8,7 @@
 
 namespace Chimera {
 
-enum class Kind : int8_t { GROUP, CAMERA, LIGHT, SKYBOX, SHADOWMAP, HUD, MESH, PARTICLE_SYSTEM };
+enum class Kind : int8_t { GROUP, CAMERA, LIGHT, SKYBOX, HUD, MESH, PARTICLE_SYSTEM };
 
 class Node {
   public:

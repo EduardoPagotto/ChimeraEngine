@@ -8,16 +8,13 @@
 
 namespace Chimera {
 
-ShadowMap::ShadowMap(Node* _pNode, std::string _name, const unsigned& _width, const unsigned& _height)
-    : Node(_pNode, Kind::SHADOWMAP, _name) {
+ShadowMap::ShadowMap(const unsigned& _width, const unsigned& _height) {
     pTexture = new TexFBO(TEX_KIND::SHADOWMAP, _width, _height);
 }
 
 ShadowMap::~ShadowMap() { delete pTexture; }
 
 void ShadowMap::init() { pTexture->init(); }
-
-void ShadowMap::accept(NodeVisitor* v) { v->visit(this); }
 
 glm::mat4 ShadowMap::createLightSpaceMatrix(const glm::vec3& _posicaoLight) {
 

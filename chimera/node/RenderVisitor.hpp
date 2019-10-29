@@ -14,13 +14,13 @@ class RenderVisitor : public NodeVisitor {
   public:
     RenderVisitor();
     virtual ~RenderVisitor();
+    virtual void init() override;
     virtual void visit(class Camera* _pCamera) override;
     virtual void visit(class Mesh* _pMesh) override;
     virtual void visit(class Light* _pLight) override;
     virtual void visit(class ParticleEmitter* _pParticleEmitter) override;
     virtual void visit(class Group* _pGroup) override;
     virtual void visit(class HUD* _pHUD) override;
-    virtual void visit(class ShadowMap* _pShadowMap) override;
 
     Transform* pTransform;
     CanvasGL* pVideo;

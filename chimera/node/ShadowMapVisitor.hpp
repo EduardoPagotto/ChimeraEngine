@@ -11,16 +11,18 @@ namespace Chimera {
 
 class ShadowMapVisitor : public NodeVisitor {
   public:
-    ShadowMapVisitor(Shader* _pShader);
+    ShadowMapVisitor(Shader* _pShader, ShadowMap* _pShadowMap);
     virtual ~ShadowMapVisitor();
 
+    virtual void init() override;
     virtual void visit(class Camera* _pCamera) override;
     virtual void visit(class Mesh* _pMesh) override;
     virtual void visit(class Light* _pLight) override;
     virtual void visit(class ParticleEmitter* _pParticleEmitter) override;
     virtual void visit(class Group* _pGroup) override;
     virtual void visit(class HUD* _pHUD) override;
-    virtual void visit(class ShadowMap* _pShadowMap) override;
+
+    ShadowMap* getShadowMap() { return shadowMap; }
 
     Transform* pTransform;
     ShadowMap* shadowMap;

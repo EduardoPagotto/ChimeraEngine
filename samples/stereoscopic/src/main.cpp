@@ -18,7 +18,6 @@
 
 Chimera::CanvasGL* video;
 Chimera::Group* group1;
-Chimera::SceneMng* sceneMng;
 Chimera::Camera* pCam;
 Chimera::Light* pLight;
 
@@ -79,7 +78,7 @@ void loadLightData() {
     pLight->setPosition(glm::vec3(80, 100, 150));
 }
 
-void createMeshTexturizade(bool origem, std::string name, std::string file, float scale, glm::vec3 _position) {
+void createMeshTexturizade(std::string name, std::string file, float scale, glm::vec3 _position) {
 
     using namespace Chimera;
 
@@ -88,24 +87,17 @@ void createMeshTexturizade(bool origem, std::string name, std::string file, floa
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(pMap);
 
-    if (origem == true)
-        sceneMng->origemDesenho(pMesh->getTransform());
-
     loadObjMtl(file, pMesh->meshData, *pMap);
     pMesh->meshData.changeSize(scale, pMap->hasTexture());
 }
 
-void createMesh(bool origem, std::string name, std::string file, float scale, glm::vec3 _position,
-                Chimera::Material* _pMap) {
+void createMesh(std::string name, std::string file, float scale, glm::vec3 _position, Chimera::Material* _pMap) {
 
     using namespace Chimera;
 
     Mesh* pMesh = new Mesh(group1, name);
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(_pMap);
-
-    if (origem == true)
-        sceneMng->origemDesenho(pMesh->getTransform());
 
     std::string matfile;
     loadObj(file, pMesh->meshData, matfile);
@@ -128,9 +120,6 @@ int main(int argn, char** argv) {
 
         group1 = new Group(nullptr, "modelos");
         group1->setShader(mapa["mesh-default"]);
-        // group1->setShadowMap(new Chimera::ShadowMapVisitor("shadow1",2048,2048));
-
-        sceneMng = new SceneMng(video, group1);
 
         // Propriedades da camera
         loadCameraData();
@@ -138,8 +127,8 @@ int main(int argn, char** argv) {
         // Propriedades da luz
         loadLightData();
 
-        createMeshTexturizade(true, "Cubo-01", "./data/models/cubo_textura_simples.obj", 5.0, glm::vec3(0.0, 0.0, 0.0));
-        createMeshTexturizade(false, "Cubo-02", "./data/models/cubo2.obj", 10.0, glm::vec3(150.0, 0.0, 0.0));
+        createMeshTexturizade("Cubo-01", "./data/models/cubo_textura_simples.obj", 5.0, glm::vec3(0.0, 0.0, 0.0));
+        createMeshTexturizade("Cubo-02", "./data/models/cubo2.obj", 10.0, glm::vec3(150.0, 0.0, 0.0));
 
         // Material Cubo sem textura
         Material* pMat = new Material();
@@ -149,12 +138,11 @@ int main(int argn, char** argv) {
         pMat->setShine(32.0f);
         pMat->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./data/images/grid1.png"));
 
-        createMesh(false, "Teste1", "./data/models/tela01.obj", 20.0, glm::vec3(0.0, 0.0, 150.0), pMat);
-
-        createMesh(false, "Teste2", "./data/models/tela01.obj", 20.0, glm::vec3(0.0, 0.0, -150.0), pMat);
+        createMesh("Teste1", "./data/models/tela01.obj", 20.0, glm::vec3(0.0, 0.0, 150.0), pMat);
+        createMesh("Teste2", "./data/models/tela01.obj", 20.0, glm::vec3(0.0, 0.0, -150.0), pMat);
 
         // Wrapper do game
-        Game* game = new Game(sceneMng);
+        Game* game = new Game(video, group1);
 
         // Controle do fluxo de programa
         FlowControl* pControle = new FlowControl(game);
@@ -165,7 +153,6 @@ int main(int argn, char** argv) {
 
         delete pControle;
         delete game;
-        delete sceneMng;
         delete video;
 
         mapa.clear();

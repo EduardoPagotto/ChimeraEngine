@@ -99,9 +99,8 @@ int main(int argn, char** argv) {
         pHUD->addFont(pFont);
 
         // Gerenciador do grapho de cena
-        Chimera::SceneMng* sceneMng = new Chimera::SceneMng(video, pRoot);
-        // Passa a game a scena, o video e o mundo fisico
-        Game* game = new Game(sceneMng, pPC);
+        // Passa a game a video, node e o mundo fisico
+        Game* game = new Game(video, pRoot, pPC);
 
         // Controle de fluxo do programa
         Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
@@ -111,7 +110,6 @@ int main(int argn, char** argv) {
         SDL_Log("Loop de Game encerrado!!!!");
         delete pControle;
         delete game;
-        delete sceneMng;
         delete video;
 
         SDL_Log("AppShader finalizado com sucesso");

@@ -1,13 +1,14 @@
 #ifndef __GAME_EVENTS_TEST__HPP
 #define __GAME_EVENTS_TEST__HPP
 
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/node/Node.hpp"
-#include "chimera/node/SceneMng.hpp"
+#include "chimera/node/RenderVisitor.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::SceneMng* _pScenMng);
+    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot);
     virtual ~Game();
     // Inherited via IGameClientEvents
     virtual void start();
@@ -25,10 +26,13 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    Chimera::SceneMng* pSceneMng;
+    bool isPaused;
     int botaoIndex;
     int estadoBotao;
-    bool isPaused;
+
+    Chimera::RenderVisitor renderV;
+    Chimera::CanvasGL* pCanvas;
+    Chimera::Node* pRoot;
 };
 
 #endif

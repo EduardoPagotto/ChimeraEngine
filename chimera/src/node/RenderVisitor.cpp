@@ -5,9 +5,7 @@
 #include "chimera/node/HUD.hpp"
 #include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
-#include "chimera/node/NodeParse.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
-#include "chimera/node/ShadowMapVisitor.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -27,7 +25,7 @@ RenderVisitor::RenderVisitor() {
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    shadowMap = nullptr;
+    pShadowMapVisitor = nullptr;
     pShader = nullptr;
 }
 
@@ -52,8 +50,8 @@ void RenderVisitor::visit(Mesh* _pMesh) {
 
     _pMesh->getMaterial()->apply(pShader);
 
-    if (shadowMap != nullptr)
-        shadowMap->applyShadow(pShader);
+    if (pShadowMapVisitor != nullptr)
+        pShadowMapVisitor->applyShadow(pShader);
 
     _pMesh->render(pShader);
 }
@@ -98,26 +96,17 @@ void RenderVisitor::visit(Group* _pGroup) {
     if (pShader == nullptr)
         return;
 
-    // Renderiza o ShadowMap que e filho dr group pelo ShadowMapVisitor
-    // retornando uma textura dentro do shadowMap
-    ShadowMapVisitor* sVisit = (ShadowMapVisitor*)_pGroup->getNodeVisitor();
-    if (sVisit != nullptr) {
-
-        shadowMap = sVisit->getShadowMap();
-        sVisit->pTransform = pTransform;
-
-        shadowMap->initSceneShadow();
-        NodeParse::tree(_pGroup, sVisit);
-        shadowMap->endSceneShadow();
-    } else {
-        shadowMap = nullptr;
-    }
+    // Renderiza o Textura de sombra em ShadowMapVisitor
+    pShadowMapVisitor = (ShadowMapVisitor*)_pGroup->getNodeVisitor();
+    if (pShadowMapVisitor != nullptr)
+        pShadowMapVisitor->render(_pGroup, pTransform);
 
     pShader->link();
 
-    if (shadowMap != nullptr) {
+    if (pShadowMapVisitor != nullptr) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(shadowMap->lightSpaceMatrix));
+        pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE,
+                                       glm::value_ptr(pShadowMapVisitor->getLightSpaceMatrix()));
     }
 
     Camera* pCam = (Camera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
@@ -132,7 +121,6 @@ void RenderVisitor::visit(HUD* _pHUD) {
 
     if (HudOn == true) {
         if (_pHUD->isOn() == true) {
-
             pShader->setGlUniformMatrix4fv("projection", 1, false,
                                            glm::value_ptr(pVideo->getOrthoProjectionMatrix(eye)));
             _pHUD->render(pShader);

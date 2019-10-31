@@ -1,9 +1,8 @@
 #ifndef __CHIMERA_RENDER_VISITOR__HPP
 #define __CHIMERA_RENDER_VISITOR__HPP
 
-#include "NodeVisitor.hpp"
-#include "ShadowMap.hpp"
 #include "chimera/core/CanvasGL.hpp"
+#include "chimera/node/ShadowMapVisitor.hpp"
 #include "chimera/render/Shader.hpp"
 #include "chimera/render/Transform.hpp"
 
@@ -34,7 +33,7 @@ class RenderVisitor : public NodeVisitor {
     glm::mat4 model;
 
     Shader* pShader;
-    ShadowMap* shadowMap;
+    ShadowMapVisitor* pShadowMapVisitor;
 };
 } // namespace Chimera
 

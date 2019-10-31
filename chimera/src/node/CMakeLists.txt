@@ -17,10 +17,8 @@ set (SourceNode Node.cpp
 				Mesh.cpp
 				Font.cpp
 				HUD.cpp
-				SceneMng.cpp
 				Particle.cpp
 				ParticleEmitter.cpp
-				ShadowMap.cpp
 				Group.cpp
 				RenderVisitor.cpp
 				ShadowMapVisitor.cpp

@@ -1,9 +1,10 @@
 #ifndef __CHIMERA_SHADOW_MAP_VISITOR__HPP
 #define __CHIMERA_SHADOW_MAP_VISITOR__HPP
 
+#include "Node.hpp"
 #include "NodeVisitor.hpp"
-#include "ShadowMap.hpp"
 #include "chimera/render/Shader.hpp"
+#include "chimera/render/Tex.hpp"
 #include "chimera/render/Transform.hpp"
 #include <string>
 
@@ -11,7 +12,7 @@ namespace Chimera {
 
 class ShadowMapVisitor : public NodeVisitor {
   public:
-    ShadowMapVisitor(Shader* _pShader, ShadowMap* _pShadowMap);
+    ShadowMapVisitor(Shader* _pShader, const unsigned& _width, const unsigned& _height);
     virtual ~ShadowMapVisitor();
 
     virtual void init() override;
@@ -22,14 +23,19 @@ class ShadowMapVisitor : public NodeVisitor {
     virtual void visit(class Group* _pGroup) override;
     virtual void visit(class HUD* _pHUD) override;
 
-    ShadowMap* getShadowMap() { return shadowMap; }
-
-    Transform* pTransform;
-    ShadowMap* shadowMap;
+    void render(Node* _pGroup, Transform* _pTransform);
+    void applyShadow(Shader* _pShader);
+    inline glm::mat4 getLightSpaceMatrix() const { return lightSpaceMatrix; }
 
   private:
+    void initSceneShadow();
+    void endSceneShadow();
+    void setLightSpaceMatrix(const glm::vec3& _posicaoLight);
+
+    glm::mat4 lightSpaceMatrix;
+    Transform* pTransform;
     Shader* pShader;
-    glm::mat4 model;
+    TexFBO* pTexture;
 };
 } // namespace Chimera
 

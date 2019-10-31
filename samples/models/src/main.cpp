@@ -79,8 +79,7 @@ int main(int argn, char** argv) {
 
         // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado
         group1->setShader(mapa["mesh-default"]);
-        group1->setNodeVisitor(
-            new Chimera::ShadowMapVisitor(mapa["simpleDepthShader"], new Chimera::ShadowMap(2048, 2048)));
+        group1->setNodeVisitor(new Chimera::ShadowMapVisitor(mapa["simpleDepthShader"], 2048, 2048));
 
         // create and add particle to scene
         Chimera::Group* gParticle = new Chimera::Group(pRoot, "ParticleGroup");

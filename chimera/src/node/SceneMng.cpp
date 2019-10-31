@@ -12,8 +12,7 @@ void SceneMng::init() {
 
     pCanvas->initGL();
 
-    InitVisitor initV;
-    NodeParse::tree(pRoot, &initV); // dfs(root, iv);
+    pRoot->initializeChilds();
 
     pCanvas->afterStart();
 

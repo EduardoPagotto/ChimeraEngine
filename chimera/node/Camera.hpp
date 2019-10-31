@@ -13,12 +13,10 @@ class Camera : public Node {
     Camera(Node* _pNode, std::string _name);
     virtual ~Camera();
 
-    virtual void init();
+    virtual void init() override;
+    virtual void accept(class NodeVisitor* v) override;
     void createTrackBall();
     void createTrackHead();
-
-    // Inherited via Node
-    virtual void accept(class NodeVisitor* v) override;
 
     inline ViewPoint* getViewPoint() { return &viewPoint; }
     inline TrackBall* getTrackBall() { return pTrackBall; }

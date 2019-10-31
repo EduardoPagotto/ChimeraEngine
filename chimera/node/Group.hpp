@@ -11,9 +11,9 @@ class Group : public Node {
   public:
     Group(Node* _parent, std::string _name);
     virtual ~Group();
-    void accept(class NodeVisitor* v);
 
-    void init();
+    virtual void init() override;
+    virtual void accept(class NodeVisitor* v) override;
 
     void setShader(Shader* _pShader) { pShader = _pShader; }
     Shader* getShader() { return pShader; }

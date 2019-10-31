@@ -16,6 +16,9 @@ class Node {
     virtual ~Node();
 
     virtual void accept(class NodeVisitor* v) = 0;
+    virtual void init() = 0;
+
+    void initializeChilds();
 
     void addChild(Node* _child);
     void removeChild(Node* _child);

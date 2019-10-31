@@ -24,12 +24,10 @@ class ParticleEmitter : public Node {
     ParticleEmitter(Node* _parent, std::string _name, int _max);
     virtual ~ParticleEmitter();
 
-    // Inherited via Node
+    virtual void init() override;
     virtual void accept(class NodeVisitor* v) override;
 
     virtual void render(Shader* _pShader);
-
-    void init();
 
     glm::vec3 CameraPosition;
 

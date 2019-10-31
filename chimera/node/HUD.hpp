@@ -24,10 +24,8 @@ class HUD : public Node {
 
     virtual ~HUD();
 
-    virtual void init();
-
-    // Inherited via Node
-    void accept(class NodeVisitor* v) override;
+    virtual void init() override;
+    virtual void accept(class NodeVisitor* v) override;
 
     void render(Shader* _pShader);
 

@@ -20,9 +20,8 @@ class Mesh : public Node {
     Mesh(const Mesh& _cpy);
 
     virtual ~Mesh();
-    virtual void init();
 
-    // Inherited via Node
+    virtual void init() override;
     virtual void accept(class NodeVisitor* v) override;
 
     void render(Shader* _pShader);

@@ -20,9 +20,8 @@ class Light : public Node {
   public:
     Light(Node* _parent, std::string _name);
     virtual ~Light();
-    virtual void init();
 
-    // Inherited via Node
+    virtual void init() override;
     virtual void accept(class NodeVisitor* v) override;
 
     void apply(Shader* _pShader);

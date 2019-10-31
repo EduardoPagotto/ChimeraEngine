@@ -14,9 +14,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (SourceNode Node.cpp
 				Light.cpp
 				Camera.cpp
-				#Solid.cpp
-				#PhysicsControl.cpp
-				#Constraint.cpp
 				Mesh.cpp
 				Font.cpp
 				HUD.cpp
@@ -25,7 +22,6 @@ set (SourceNode Node.cpp
 				ParticleEmitter.cpp
 				ShadowMap.cpp
 				Group.cpp
-				InitVisitor.cpp
 				RenderVisitor.cpp
 				ShadowMapVisitor.cpp
 				NodeParse.cpp)

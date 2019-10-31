@@ -1,5 +1,4 @@
 #include "chimera/node/SceneMng.hpp"
-#include "chimera/node/InitVisitor.hpp"
 #include "chimera/node/NodeParse.hpp"
 
 namespace Chimera {

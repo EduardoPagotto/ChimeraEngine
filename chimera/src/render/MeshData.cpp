@@ -36,31 +36,35 @@ void MeshData::textureFix() {
     }
 }
 
-glm::vec3 MeshData::getSizeBox() {
-    glm::vec3 retorno(0.0f, 0.0f, 0.0f);
-    glm::vec3 l_max(0.0f, 0.0f, 0.0f);
-    glm::vec3 l_min(0.0f, 0.0f, 0.0f);
-
+glm::vec3 MeshData::getMin() {
+    glm::vec3 min = glm::vec3(0.0f);
     for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
-
-        if (l_max.x < vertexList[indice].x)
-            l_max.x = vertexList[indice].x;
-
-        if (l_max.y < vertexList[indice].y)
-            l_max.y = vertexList[indice].y;
-
-        if (l_max.z < vertexList[indice].z)
-            l_max.z = vertexList[indice].z;
-
-        if (l_min.x > vertexList[indice].x)
-            l_min.x = vertexList[indice].x;
-
-        if (l_min.y > vertexList[indice].y)
-            l_min.y = vertexList[indice].y;
-
-        if (l_min.z > vertexList[indice].z)
-            l_min.z = vertexList[indice].z;
+        if (min.x > vertexList[indice].x)
+            min.x = vertexList[indice].x;
+        if (min.y > vertexList[indice].y)
+            min.y = vertexList[indice].y;
+        if (min.z > vertexList[indice].z)
+            min.z = vertexList[indice].z;
     }
+    return min;
+}
+
+glm::vec3 MeshData::getMax() {
+    glm::vec3 max = glm::vec3(0.0f);
+    for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
+        if (max.x < vertexList[indice].x)
+            max.x = vertexList[indice].x;
+        if (max.y < vertexList[indice].y)
+            max.y = vertexList[indice].y;
+        if (max.z < vertexList[indice].z)
+            max.z = vertexList[indice].z;
+    }
+    return max;
+}
+
+glm::vec3 MeshData::getSizeBox() {
+    glm::vec3 l_max = getMax();
+    glm::vec3 l_min = getMin();
 
     return glm::vec3((glm::abs(l_max.x) + glm::abs(l_min.x)) / 2, (glm::abs(l_max.y) + glm::abs(l_min.y)) / 2,
                      (glm::abs(l_max.z) + glm::abs(l_min.z)) / 2);

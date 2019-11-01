@@ -15,6 +15,8 @@ class MeshData {
 
     void textureFix();
     glm::vec3 getSizeBox();
+    glm::vec3 getMin();
+    glm::vec3 getMax();
 
     void changeSize(const float& new_size, bool hasTexture);
 

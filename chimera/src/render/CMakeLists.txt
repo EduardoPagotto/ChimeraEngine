@@ -17,7 +17,9 @@ set (RenderSource 	Vertex.cpp
 					Shader.cpp
 					Tex.cpp
 					LoadObj.cpp
-					AABB.cpp)
+					AABB.cpp
+					Plane.cpp
+					Frustum.cpp)
 
 #define os includes
 set (RenderInclude ${CMAKE_SOURCE_DIR}) # Raiz do projeto

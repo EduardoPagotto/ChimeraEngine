@@ -3,6 +3,9 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/render/LoadObj.hpp"
+
+#include "chimera/render/AABB.hpp"
+
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -86,6 +89,18 @@ void Game::start() {
 
     std::string materialFile;
     loadObj("./data/models/square1.obj", m, materialFile);
+    // loadObj("./data/models/cubo_textura_simples.obj", m, materialFile);
+
+    m.changeSize(1.0, true);
+
+    glm::vec3 max = m.getMax();
+    glm::vec3 min = m.getMin();
+
+    Chimera::AABB teste;
+    teste.set(min, max);
+
+    bool val = teste.pointInside(glm::vec3(1.5f));
+
     // loadObj((const char*)"./data/models/split1.obj", &m);
     // loadObj((const char*)"./data/models/teste1.obj", &m);
     // m.textureFix();

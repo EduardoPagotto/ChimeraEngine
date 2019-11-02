@@ -4,7 +4,7 @@
 
 // ref: http://www.3dcpptutorials.sk/index.php?id=59
 
-namespace chimera {
+namespace Chimera {
 
 AABB::AABB() {}
 
@@ -39,9 +39,9 @@ bool AABB::pointInside(const glm::vec3& _point) {
     return true;
 }
 
-// bool AABB::Visible(CFrustum& Frustum) { return Frustum.AABBVisible(vertices); }
+bool AABB::visible(Frustum& _frustum) { return _frustum.AABBVisible(vertices); }
 
-// float AABB::Distance(CFrustum& Frustum) { return Frustum.AABBDistance(vertices); }
+float AABB::distance(Frustum& _frustum) { return _frustum.AABBDistance(vertices); }
 
 void AABB::render() {
     glBegin(GL_LINES);
@@ -76,4 +76,4 @@ void AABB::render() {
     glEnd();
 }
 
-} // namespace chimera
+} // namespace Chimera

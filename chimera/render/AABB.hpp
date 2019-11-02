@@ -1,6 +1,7 @@
+#include "Frustum.hpp"
 #include <glm/glm.hpp>
 
-namespace chimera {
+namespace Chimera {
 
 class AABB {
   public:
@@ -8,11 +9,11 @@ class AABB {
     ~AABB();
     void set(const glm::vec3& _min, const glm::vec3& _max);
     bool pointInside(const glm::vec3& _point);
-    // bool Visible(CFrustum &Frustum);
-    // float Distance(CFrustum &Frustum);
+    bool visible(Frustum& _frustum);
+    float distance(Frustum& _frustum);
     void render();
 
   private:
     glm::vec3 vertices[8];
 };
-} // namespace chimera
+} // namespace Chimera

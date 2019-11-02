@@ -104,6 +104,21 @@ void createMesh(std::string name, std::string file, float scale, glm::vec3 _posi
     pMesh->meshData.changeSize(scale, _pMap->hasTexture());
 }
 
+void createTerrain(std::string name, std::string file, float scale, glm::vec3 _position, Chimera::Material* _pMap) {
+
+    using namespace Chimera;
+
+    Mesh* pMesh = new Mesh(group1, name);
+    pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
+    pMesh->setMaterial(_pMap);
+
+    std::string matfile;
+    // loadObj(file, pMesh->meshData, matfile);
+    loadTerrain(file, pMesh->meshData);
+
+    pMesh->meshData.changeSize(scale, _pMap->hasTexture());
+}
+
 int main(int argn, char** argv) {
 
     using namespace Chimera;
@@ -140,6 +155,14 @@ int main(int argn, char** argv) {
 
         createMesh("Teste1", "./data/models/tela01.obj", 20.0, glm::vec3(0.0, 0.0, 150.0), pMat);
         createMesh("Teste2", "./data/models/tela01.obj", 20.0, glm::vec3(0.0, 0.0, -150.0), pMat);
+
+        Material* pMat1 = new Material();
+        pMat1->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
+        pMat1->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+        pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+        pMat1->setShine(32.0f);
+        // pMat1->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./samples/terrain/data/terrain3.jpg"));
+        createTerrain("terra", "./samples/terrain/data/terrain1.bin", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
 
         // Wrapper do game
         Game* game = new Game(video, group1);

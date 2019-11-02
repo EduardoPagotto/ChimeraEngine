@@ -217,4 +217,155 @@ void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outDat
              (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[C]] : glm::vec2(0.0, 0.0)});
     }
 }
+
+void loadTerrain(const std::string& _fileName, MeshData& _mesh) {
+
+    TerrainData t;
+    t.LoadBinary((char*)_fileName.c_str());
+
+    for (int i = 0; i < t.vertices.size(); i++) {
+        glm::vec3 pos = t.vertices[i].position;
+        glm::vec3 nor = t.vertices[i].normal;
+        _mesh.vertexList.push_back(pos);
+        _mesh.normalList.push_back(nor);
+    }
+
+    for (int i = 0; i < t.indices.size(); i++) {
+        int val = t.indices[i];
+        _mesh.normalIndex.push_back(val);
+        _mesh.vertexIndex.push_back(val);
+    }
+}
+
+//-----------
+
+TerrainData::TerrainData() { SetDefaults(); }
+TerrainData::~TerrainData() { Destroy(); }
+
+void TerrainData::SetDefaults() {
+    sizeHeight = 0;
+    sizeP1 = 0;
+    sizeD2 = 0.0f;
+    Min = Max = glm::vec3(0.0f);
+    // Heights = NULL;
+}
+
+void TerrainData::Destroy() {
+    if (heights.size() > 0)
+        heights.clear();
+
+    if (vertices.size() > 0)
+        vertices.clear();
+
+    if (indices.size() > 0)
+        indices.clear();
+
+    SetDefaults();
+}
+
+int TerrainData::GetIndex(int X, int Z) { return sizeP1 * Z + X; }
+
+float TerrainData::GetHeight(int X, int Z) {
+
+    int x1 = X < 0 ? 0 : X > sizeHeight ? sizeHeight : X;
+    int z1 = Z < 0 ? 0 : Z > sizeHeight ? sizeHeight : Z;
+    int pos = GetIndex(x1, z1);
+
+    return heights[pos];
+}
+
+bool TerrainData::LoadBinary(char* FileName) {
+
+    FILE* File = fopen(FileName, (char*)"rb");
+    if (File == nullptr) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", FileName);
+        return false;
+    }
+
+    int Size;
+
+    if (fread(&Size, sizeof(int), 1, File) != 1 || Size <= 0) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", FileName);
+        fclose(File);
+        return false;
+    }
+
+    Destroy();
+
+    this->sizeHeight = Size;
+    sizeP1 = Size + 1;
+    sizeD2 = (float)Size / 2.0f;
+
+    int verticesCount = sizeP1 * sizeP1;
+
+    heights.reserve(verticesCount);
+
+    // FIXME: melhorar esta horrivel, carga de vector deve ser direta do arquivo
+    float* h = new float[verticesCount];
+    size_t tam = fread(h, sizeof(float), verticesCount, File);
+    if (tam != verticesCount) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", FileName);
+        fclose(File);
+        Destroy();
+        return false;
+    }
+    for (int i = 0; i < verticesCount; i++) {
+        heights.push_back(h[i]);
+    }
+    delete[] h;
+
+    fclose(File);
+
+    Min.x = Min.z = -sizeD2;
+    Max.x = Max.z = sizeD2;
+
+    Min.y = Max.y = heights[0];
+
+    for (int i = 1; i < verticesCount; i++) {
+        if (heights[i] < Min.y)
+            Min.y = heights[i];
+        if (heights[i] > Max.y)
+            Max.y = heights[i];
+    }
+
+    vertices.reserve(verticesCount);
+
+    int i = 0;
+
+    for (int z = 0; z <= Size; z++) {
+        for (int x = 0; x <= Size; x++) {
+            glm::vec3 pos = glm::vec3((float)x - sizeD2,  // posx
+                                      heights[i],         // posx
+                                      sizeD2 - (float)z); // posx
+
+            glm::vec3 nor = glm::normalize(glm::vec3(GetHeight(x - 1, z) - GetHeight(x + 1, z),   // norx
+                                                     2.0f,                                        // nory
+                                                     GetHeight(x, z + 1) - GetHeight(x, z - 1))); // norz
+
+            vertices.push_back({pos, nor, glm::vec2(0.0, 0.0)});
+            i++;
+        }
+    }
+
+    int indicesCount = Size * Size * 2 * 3;
+    indices.reserve(indicesCount);
+
+    i = 0;
+
+    for (int z = 0; z < Size; z++) {
+        for (int x = 0; x < Size; x++) {
+
+            indices.push_back(GetIndex(x, z));
+            indices.push_back(GetIndex(x + 1, z));
+            indices.push_back(GetIndex(x + 1, z + 1));
+
+            indices.push_back(GetIndex(x + 1, z + 1));
+            indices.push_back(GetIndex(x, z + 1));
+            indices.push_back(GetIndex(x, z));
+        }
+    }
+
+    return true;
+}
+
 } // namespace Chimera

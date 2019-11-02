@@ -1,30 +1,18 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 
+#include "Terrain.hpp"
+//#include "chimera/render/LoadObj.hpp"
+
 int main(int argn, char** argv) {
 
     try {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        // Chimera::CanvasGL* video = new Chimera::CanvasGL("simples", 640, 480);
-
-        // Chimera::MeshData m;
-        // std::vector<Chimera::Triangle> listPolygons;
-
-        // std::string materialFile;
-        // loadObj("./data/models/square1.obj", m, materialFile);
-        // loadObj("./data/models/cubo_textura_simples.obj", m, materialFile);
-
-        // m.changeSize(1.0, true);
-
-        // glm::vec3 max = m.getMax();
-        // glm::vec3 min = m.getMin();
-
-        // Chimera::AABB teste;
-        // teste.set(min, max);
-
-        // bool val = teste.pointInside(glm::vec3(1.5f));
+        // Chimera::TerrainData t;
+        Chimera::Terrain t;
+        t.LoadBinary((char*)"./samples/terrain/data/terrain1.bin");
 
         SDL_Log("Sucesso");
         return 0;

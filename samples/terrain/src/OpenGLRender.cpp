@@ -443,4 +443,47 @@ void GetModuleDirectory() {
     // delete[] moduledirectory;
 }
 
+// FIXME: sequencia de desenho
+// void COpenGLView::OnPaint()
+// {
+// 	static DWORD LastFPSTime = GetTickCount(), LastFrameTime = LastFPSTime, Frame = 0;
+
+// 	PAINTSTRUCT ps;
+
+// 	HDC hDC = BeginPaint(hWnd, &ps);
+
+// 	DWORD Time = GetTickCount();
+
+// 	float FrameTime = (Time - LastFrameTime) * 0.001f;
+
+// 	LastFrameTime = Time;
+
+// 	if(Time - LastFPSTime > 1000)
+// 	{
+// 		FPS.Set("FPS: %d", Frame);
+
+// 		SetWindowText(hWnd, Title + " - " + Resolution + ", " + MSAA + ", " + ATF + ", " + FPS + " - " +
+// Renderer);
+
+// 		LastFPSTime = Time;
+// 		Frame = 0;
+// 	}
+// 	else
+// 	{
+// 		Frame++;
+// 	}
+
+// 	OpenGLRenderer.CheckCameraKeys(FrameTime);
+
+// 	OpenGLRenderer.Render();
+
+// 	OpenGLRenderer.Animate(FrameTime);
+
+// 	SwapBuffers(hDC);
+
+// 	EndPaint(hWnd, &ps);
+
+// 	InvalidateRect(hWnd, NULL, FALSE);
+// }
+
 } // namespace Chimera

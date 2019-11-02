@@ -1,3 +1,6 @@
+#ifndef __GAME_TERRAIN_AABB__HPP
+#define __GAME_TERRAIN_AABB__HPP
+
 #include "Frustum.hpp"
 #include <glm/glm.hpp>
 
@@ -17,3 +20,5 @@ class AABB {
     glm::vec3 vertices[8];
 };
 } // namespace Chimera
+
+#endif

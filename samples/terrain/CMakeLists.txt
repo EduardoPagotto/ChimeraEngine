@@ -30,6 +30,10 @@ set (IncludesTerrain ${CMAKE_CURRENT_SOURCE_DIR}/include
 add_executable (terrain src/AABB.cpp
 						src/Plane.cpp
 						src/Frustum.cpp
+						src/Camera.cpp
+						src/BSPTreeNode.cpp
+						src/BSPTree.cpp
+						src/Terrain.cpp
 						src/Game.cpp
 						src/main.cpp)
 

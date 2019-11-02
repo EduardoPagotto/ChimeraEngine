@@ -1,3 +1,6 @@
+#ifndef __GAME_TERRAIN_FRUSTUM__HPP
+#define __GAME_TERRAIN_FRUSTUM__HPP
+
 #include "Plane.hpp"
 
 namespace Chimera {
@@ -18,3 +21,5 @@ class Frustum {
 };
 
 } // namespace Chimera
+
+#endif

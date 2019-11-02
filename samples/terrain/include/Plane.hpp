@@ -1,3 +1,6 @@
+#ifndef __GAME_TERRAIN_PLANE__HPP
+#define __GAME_TERRAIN_PLANE__HPP
+
 #include <glm/glm.hpp>
 
 namespace Chimera {
@@ -18,3 +21,4 @@ class Plane {
 };
 
 } // namespace Chimera
+#endif

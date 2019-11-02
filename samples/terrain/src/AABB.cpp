@@ -1,4 +1,4 @@
-#include "chimera/render/AABB.hpp"
+#include "AABB.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include <glm/gtc/type_ptr.hpp>
 

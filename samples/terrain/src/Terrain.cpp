@@ -163,8 +163,8 @@ bool Terrain::LoadBinary(char* FileName) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &terrain.indices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    // FIXME: REFAZER!!!!!
-    // bspTree.Init(Vertices, Indices, IndicesCount, Min, Max);
+    // TODO: TESTAR SE VALORES PASSAM!!!!!
+    bspTree.Init(&terrain.vertices[0], &terrain.indices[0], terrain.indices.size(), terrain.getMin(), terrain.getMax());
 
     return true;
 }

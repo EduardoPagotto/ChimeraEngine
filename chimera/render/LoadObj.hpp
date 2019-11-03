@@ -3,6 +3,7 @@
 
 #include "Material.hpp"
 #include "MeshData.hpp"
+#include "TerrainData.hpp"
 #include "Triangle.hpp"
 #include "Vertex.hpp"
 #include <glm/glm.hpp>
@@ -18,29 +19,6 @@ void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>& vecTriangl
 void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outData);
 
 void loadTerrain(const std::string& _fileName, MeshData& _mesh);
-
-class TerrainData {
-  public:
-    TerrainData();
-    virtual ~TerrainData();
-    void Destroy();
-    bool LoadBinary(char* FileName);
-
-    std::vector<VertexData> vertices;
-    std::vector<int> indices;
-
-  private:
-    int GetIndex(int X, int Z);
-    float GetHeight(int X, int Z);
-    void SetDefaults();
-
-    int sizeHeight;
-    int sizeP1;
-    float sizeD2;
-    glm::vec3 Min, Max;
-
-    std::vector<float> heights;
-};
 
 } // namespace Chimera
 

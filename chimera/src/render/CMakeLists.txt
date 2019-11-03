@@ -16,6 +16,7 @@ set (RenderSource 	Vertex.cpp
 					Transform.cpp
 					Shader.cpp
 					Tex.cpp
+					TerrainData.cpp
 					LoadObj.cpp)
 
 #define os includes

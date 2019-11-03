@@ -1,8 +1,8 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
 
-#include "Terrain.hpp"
-//#include "chimera/render/LoadObj.hpp"
+//#include "Terrain.hpp"
+#include "chimera/render/LoadObj.hpp"
 
 int main(int argn, char** argv) {
 
@@ -10,9 +10,9 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        // Chimera::TerrainData t;
-        Chimera::Terrain t;
-        t.LoadBinary((char*)"./samples/terrain/data/terrain1.bin");
+        Chimera::TerrainData t;
+        // Chimera::Terrain t;
+        t.loadBinary((char*)"./samples/terrain/data/terrain1.bin");
 
         SDL_Log("Sucesso");
         return 0;

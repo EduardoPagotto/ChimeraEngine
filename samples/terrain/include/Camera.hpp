@@ -3,7 +3,7 @@
 
 #include "Frustum.hpp"
 
-namespace Chimera {
+namespace ChimeraNew {
 
 class Camera {
 
@@ -26,12 +26,12 @@ class Camera {
     glm::mat4 ViewProjectionMatrix;
     glm::mat4 ViewProjectionMatrixInverse;
 
-    Frustum frustum;
+    Chimera::Frustum frustum;
 
   private:
     void CalculateViewMatrix();
 };
 
-} // namespace Chimera
+} // namespace ChimeraNew
 
 #endif

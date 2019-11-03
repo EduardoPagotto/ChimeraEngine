@@ -1,8 +1,9 @@
+#include "Game.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
-
-//#include "Terrain.hpp"
-#include "chimera/render/LoadObj.hpp"
+#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/utils.hpp"
+#include "chimera/render/Shader.hpp"
 
 int main(int argn, char** argv) {
 
@@ -10,9 +11,24 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Chimera::TerrainData t;
+        // Chimera::TerrainData t;
         // Chimera::Terrain t;
-        t.loadBinary((char*)"./samples/terrain/data/terrain1.bin");
+        // t.loadBinary((char*)"./samples/terrain/data/terrain1.bin");
+        Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 640, 480);
+
+        Chimera::Shader* pShader =
+            new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
+                                                                   "./chimera/shaders/MeshNoMat.frag"));
+
+        Game* game = new Game(video, pShader);
+
+        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
+        pControle->open();
+        pControle->gameLoop();
+
+        delete pControle;
+        delete game;
+        delete video;
 
         SDL_Log("Sucesso");
         return 0;

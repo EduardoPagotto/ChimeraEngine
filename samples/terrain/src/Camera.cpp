@@ -1,6 +1,6 @@
 #include "Camera.hpp"
 
-namespace Chimera {
+namespace ChimeraNew {
 
 // FIXME: ver equivalencia em GLM::
 glm::vec2 rotate(const glm::vec2& u, float angle) {
@@ -212,4 +212,4 @@ void Camera::CalculateViewMatrix() {
     frustum.set(ViewProjectionMatrixInverse);
 }
 
-} // namespace Chimera
+} // namespace ChimeraNew

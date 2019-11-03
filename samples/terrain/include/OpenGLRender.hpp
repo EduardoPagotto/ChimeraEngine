@@ -33,7 +33,7 @@ class OpenGLRenderer {
     void CheckCameraTerrainPosition(glm::vec3& Movement);
     int LastX, LastY, LastClickedX, LastClickedY;
     int Width, Height;
-    Camera camera;
+    ChimeraNew::Camera camera;
     // CShaderProgram Shader;
     Terrain terrain;
     float LightAngle;

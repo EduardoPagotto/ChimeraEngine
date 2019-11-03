@@ -11,12 +11,16 @@ void TerrainData::setDefaults() {
     sizeP1 = 0;
     sizeD2 = 0.0f;
     Min = Max = glm::vec3(0.0f);
-    // Heights = NULL;
+    heights = nullptr;
 }
 
 void TerrainData::destroy() {
-    if (heights.size() > 0)
-        heights.clear();
+
+    if (heights != nullptr)
+        delete[] heights;
+
+    // if (heights.size() > 0)
+    //     heights.clear();
 
     if (vertices.size() > 0)
         vertices.clear();
@@ -36,6 +40,21 @@ float TerrainData::getHeight(int X, int Z) {
     int pos = getIndex(x1, z1);
 
     return heights[pos];
+}
+
+bool TerrainData::saveBinary(char* FileName) {
+
+    FILE* File = fopen(FileName, (char*)"wb+");
+    if (File == nullptr) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", FileName);
+        return false;
+    }
+
+    fwrite(&this->sizeHeight, sizeof(int), 1, File);
+    fwrite(heights, sizeof(float), verticesCount, File);
+    fclose(File);
+
+    return true;
 }
 
 bool TerrainData::loadBinary(char* FileName) {
@@ -60,23 +79,24 @@ bool TerrainData::loadBinary(char* FileName) {
     sizeP1 = Size + 1;
     sizeD2 = (float)Size / 2.0f;
 
-    int verticesCount = sizeP1 * sizeP1;
+    verticesCount = sizeP1 * sizeP1;
 
-    heights.reserve(verticesCount);
+    // heights.reserve(verticesCount);
+    heights = new float[verticesCount];
 
     // FIXME: melhorar esta horrivel, carga de vector deve ser direta do arquivo
-    float* h = new float[verticesCount];
-    size_t tam = fread(h, sizeof(float), verticesCount, File);
+    // float* h = new float[verticesCount];
+    size_t tam = fread(heights, sizeof(float), verticesCount, File);
     if (tam != verticesCount) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", FileName);
         fclose(File);
         destroy();
         return false;
     }
-    for (int i = 0; i < verticesCount; i++) {
-        heights.push_back(h[i]);
-    }
-    delete[] h;
+    // for (int i = 0; i < verticesCount; i++) {
+    //     heights.push_back(h[i]);
+    // }
+    // delete[] h;
 
     fclose(File);
 
@@ -130,6 +150,111 @@ bool TerrainData::loadBinary(char* FileName) {
     }
 
     return true;
+}
+
+void TerrainData::getMinMax(glm::mat4& ViewMatrix, glm::vec3& Min, glm::vec3& Max) {
+    int i = 0;
+
+    for (int z = 0; z <= sizeHeight; z++) {
+        for (int x = 0; x <= sizeHeight; x++) {
+            glm::vec4 Position = ViewMatrix * glm::vec4((float)x - sizeD2, heights[i], sizeD2 - (float)z, 1.0f);
+
+            if (i == 0) {
+                Min.x = Max.x = Position.x;
+                Min.y = Max.y = Position.y;
+                Min.z = Max.z = Position.z;
+            } else {
+                if (Position.x < Min.x)
+                    Min.x = Position.x;
+                if (Position.y < Min.y)
+                    Min.y = Position.y;
+                if (Position.z < Min.z)
+                    Min.z = Position.z;
+
+                if (Position.x > Max.x)
+                    Max.x = Position.x;
+                if (Position.y > Max.y)
+                    Max.y = Position.y;
+                if (Position.z > Max.z)
+                    Max.z = Position.z;
+            }
+
+            i++;
+        }
+    }
+}
+
+float TerrainData::GetHeight(float X, float Z) {
+    Z = -Z;
+
+    X += sizeD2;
+    Z += sizeD2;
+
+    float Size = (float)this->sizeHeight;
+
+    if (X < 0.0f)
+        X = 0.0f;
+    if (X > Size)
+        X = Size;
+    if (Z < 0.0f)
+        Z = 0.0f;
+    if (Z > Size)
+        Z = Size;
+
+    int ix = (int)X, ixp1 = ix + 1;
+    int iz = (int)Z, izp1 = iz + 1;
+
+    float fx = X - (float)ix;
+    float fz = Z - (float)iz;
+
+    float a = GetHeight(ix, iz);
+    float b = GetHeight(ixp1, iz);
+    float c = GetHeight(ix, izp1);
+    float d = GetHeight(ixp1, izp1);
+
+    float ab = a + (b - a) * fx;
+    float cd = c + (d - c) * fx;
+
+    return ab + (cd - ab) * fz;
+}
+
+// FIXME: ver se rola!!
+float TerrainData::GetHeight(float* Heights, int Size, float X, float Z) {
+    float SizeM1F = (float)Size - 1.0f;
+
+    if (X < 0.0f)
+        X = 0.0f;
+    if (X > SizeM1F)
+        X = SizeM1F;
+    if (Z < 0.0f)
+        Z = 0.0f;
+    if (Z > SizeM1F)
+        Z = SizeM1F;
+
+    int ix = (int)X, ixp1 = ix + 1;
+    int iz = (int)Z, izp1 = iz + 1;
+
+    int SizeM1 = Size - 1;
+
+    if (ixp1 > SizeM1)
+        ixp1 = SizeM1;
+    if (izp1 > SizeM1)
+        izp1 = SizeM1;
+
+    float fx = X - (float)ix;
+    float fz = Z - (float)iz;
+
+    int izMSize = iz * Size, izp1MSize = izp1 * Size;
+
+    float a = Heights[izMSize + ix];
+    float b = Heights[izMSize + ixp1];
+    float c = Heights[izp1MSize + ix];
+    float d = Heights[izp1MSize + ixp1];
+
+    float ab = a + (b - a) * fx;
+    float cd = c + (d - c) * fx;
+
+    return ab + (cd - ab) * fz;
 }
 
 } // namespace Chimera

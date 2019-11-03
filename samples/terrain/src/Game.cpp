@@ -17,7 +17,7 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pTex = new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, "./data/images/grid2.png");
+    // pTex = new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, "./data/images/grid2.png");
 }
 
 Game::~Game() {}
@@ -82,7 +82,7 @@ void Game::start() {
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
 
-    pTex->init();
+    // pTex->init();
 
     Chimera::MeshData m;
     std::vector<Chimera::Triangle> listPolygons;
@@ -167,7 +167,7 @@ void Game::render() {
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     // aplica a textura
-    pTex->apply(pShader);
+    // pTex->apply(pShader);
 
     vertexBuffer.render(vVertice);
 

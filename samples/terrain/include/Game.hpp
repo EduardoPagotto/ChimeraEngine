@@ -1,7 +1,7 @@
 #ifndef __GAME_TESTE_TERRAIN__HPP
 #define __GAME_TESTE_TERRAIN__HPP
 
-//#include "BSPTree.h"
+#include "Terrain.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/TrackBall.hpp"
@@ -30,7 +30,6 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    // BSPTreeNode* pBSPTRoot;
     bool isPaused;
     int botaoIndex;
     int estadoBotao;
@@ -42,6 +41,8 @@ class Game : public Chimera::IGameClientEvents {
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;
+
+    Chimera::Terrain terra;
 
     // Chimera::TexImg* pTex;
 };

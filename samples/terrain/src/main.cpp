@@ -11,10 +11,7 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        // Chimera::TerrainData t;
-        // Chimera::Terrain t;
-        // t.loadBinary((char*)"./samples/terrain/data/terrain1.bin");
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 640, 480);
+        Chimera::CanvasGL* video = new Chimera::CanvasGL("Terrain", 320, 240);
 
         Chimera::Shader* pShader =
             new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",

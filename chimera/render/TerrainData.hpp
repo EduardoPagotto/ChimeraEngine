@@ -13,6 +13,7 @@ class TerrainData {
     virtual ~TerrainData();
     void destroy();
     bool loadBinary(char* FileName);
+    bool loadTexture2D(char* FileName, float Scale, float Offset);
     bool saveBinary(char* FileName);
     void setDefaults();
     void getMinMax(glm::mat4& ViewMatrix, glm::vec3& Min, glm::vec3& Max);
@@ -21,17 +22,15 @@ class TerrainData {
     inline glm::vec3 getMin() const { return Min; }
     inline glm::vec3 getMax() const { return Max; }
     inline int getTrianglesCount() const { return indices.size() / 3.0f; }
-
-    float GetHeight(float X, float Z);
+    float getHeight(float X, float Z);
 
     std::vector<VertexData> vertices;
     std::vector<int> indices;
 
   private:
-
     int getIndex(int X, int Z);
     float getHeight(int X, int Z);
-    float GetHeight(float* Heights, int Size, float X, float Z);
+    float getHeight(float* Heights, int Size, float X, float Z);
 
     int verticesCount;
     int sizeHeight;

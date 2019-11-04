@@ -27,7 +27,7 @@ class Terrain {
     glm::vec3 GetMax() { return terrain.getMax(); }
     void GetMinMax(glm::mat4& ViewMatrix, glm::vec3& Min, glm::vec3& Max) { terrain.getMinMax(ViewMatrix, Min, Max); }
     int GetTrianglesCount() { return terrain.getTrianglesCount(); }
-    float GetHeight(float X, float Z) { return terrain.GetHeight(X, Z); }
+    float GetHeight(float X, float Z) { return terrain.getHeight(X, Z); }
 
   private:
     Chimera::TerrainData terrain;

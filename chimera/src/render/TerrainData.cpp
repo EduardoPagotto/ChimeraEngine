@@ -57,6 +57,140 @@ bool TerrainData::saveBinary(char* FileName) {
     return true;
 }
 
+// FIXME: trocat por tex
+bool TerrainData::loadTexture2D(char* FileName, float Scale, float Offset) {
+    // CTexture Texture;
+
+    // if (!Texture.LoadTexture2D(FileName)) {
+    //     return false;
+    // }
+
+    // if (Texture.GetWidth() != Texture.getHeight()) {
+    //     ErrorLog.Append("Unsupported texture dimensions (%s)!\r\n", FileName);
+    //     Texture.Destroy();
+    //     return false;
+    // }
+
+    // Destroy();
+
+    // Size = Texture.GetWidth();
+    // SizeP1 = Size + 1;
+    // SizeD2 = (float)Size / 2.0f;
+
+    // VerticesCount = SizeP1 * SizeP1;
+
+    // float* TextureHeights = new float[Size * Size];
+
+    // glBindTexture(GL_TEXTURE_2D, Texture);
+    // glGetTexImage(GL_TEXTURE_2D, 0, GL_GREEN, GL_FLOAT, TextureHeights);
+    // glBindTexture(GL_TEXTURE_2D, 0);
+
+    // Texture.Destroy();
+
+    // for (int i = 0; i < Size * Size; i++) {
+    //     TextureHeights[i] = TextureHeights[i] * Scale + Offset;
+    // }
+
+    // Heights = new float[VerticesCount];
+
+    // int i = 0;
+
+    // for (int z = 0; z <= Size; z++) {
+    //     for (int x = 0; x <= Size; x++) {
+    //         Heights[i++] = getHeight(TextureHeights, Size, (float)x - 0.5f, (float)z - 0.5f);
+    //     }
+    // }
+
+    // delete[] TextureHeights;
+
+    // float* SmoothedHeights = new float[VerticesCount];
+
+    // i = 0;
+
+    // for (int z = 0; z <= Size; z++) {
+    //     for (int x = 0; x <= Size; x++) {
+    //         SmoothedHeights[i] = 0.0f;
+
+    //         SmoothedHeights[i] += getHeight(x - 1, z + 1) + getHeight(x, z + 1) * 2 + getHeight(x + 1, z + 1);
+    //         SmoothedHeights[i] += getHeight(x - 1, z) * 2 + getHeight(x, z) * 3 + getHeight(x + 1, z) * 2;
+    //         SmoothedHeights[i] += getHeight(x - 1, z - 1) + getHeight(x, z - 1) * 2 + getHeight(x + 1, z - 1);
+
+    //         SmoothedHeights[i] /= 15.0f;
+
+    //         i++;
+    //     }
+    // }
+
+    // delete[] Heights;
+
+    // Heights = SmoothedHeights;
+
+    // Min.x = Min.z = -SizeD2;
+    // Max.x = Max.z = SizeD2;
+
+    // Min.y = Max.y = Heights[0];
+
+    // for (int i = 1; i < VerticesCount; i++) {
+    //     if (Heights[i] < Min.y)
+    //         Min.y = Heights[i];
+    //     if (Heights[i] > Max.y)
+    //         Max.y = Heights[i];
+    // }
+
+    // VertexData* Vertices = new VertexData[VerticesCount];
+
+    // i = 0;
+
+    // for (int z = 0; z <= Size; z++) {
+    //     for (int x = 0; x <= Size; x++) {
+    //         Vertices[i].position = glm::vec3((float)x - SizeD2, Heights[i], SizeD2 - (float)z);
+    //         Vertices[i].normal = normalize(
+    //             glm::vec3(getHeight(x - 1, z) - getHeight(x + 1, z), 2.0f, getHeight(x, z + 1) - getHeight(x, z -
+    //             1)));
+
+    //         i++;
+    //     }
+    // }
+
+    // glGenBuffers(1, &VertexBufferObject);
+
+    // glBindBuffer(GL_ARRAY_BUFFER, VertexBufferObject);
+    // glBufferData(GL_ARRAY_BUFFER, VerticesCount * sizeof(VertexData), Vertices, GL_STATIC_DRAW);
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // IndicesCount = Size * Size * 2 * 3;
+
+    // int* Indices = new int[IndicesCount];
+
+    // i = 0;
+
+    // for (int z = 0; z < Size; z++) {
+    //     for (int x = 0; x < Size; x++) {
+    //         Indices[i++] = GetIndex(x, z);
+    //         Indices[i++] = GetIndex(x + 1, z);
+    //         Indices[i++] = GetIndex(x + 1, z + 1);
+
+    //         Indices[i++] = GetIndex(x + 1, z + 1);
+    //         Indices[i++] = GetIndex(x, z + 1);
+    //         Indices[i++] = GetIndex(x, z);
+    //     }
+    // }
+
+    // glGenBuffers(1, &IndexBufferObject);
+
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBufferObject);
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, IndicesCount * sizeof(int), Indices, GL_STATIC_DRAW);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    // bspTree.Init(Vertices, Indices, IndicesCount, Min, Max);
+
+    // delete[] Vertices;
+    // delete[] Indices;
+
+    // FIXME: MUDAR PARA TRUE QUANDO IMPLEMENTAR ESTE METODO
+    return false;
+}
+
 bool TerrainData::loadBinary(char* FileName) {
 
     FILE* File = fopen(FileName, (char*)"rb");
@@ -184,7 +318,7 @@ void TerrainData::getMinMax(glm::mat4& ViewMatrix, glm::vec3& Min, glm::vec3& Ma
     }
 }
 
-float TerrainData::GetHeight(float X, float Z) {
+float TerrainData::getHeight(float X, float Z) {
     Z = -Z;
 
     X += sizeD2;
@@ -207,10 +341,10 @@ float TerrainData::GetHeight(float X, float Z) {
     float fx = X - (float)ix;
     float fz = Z - (float)iz;
 
-    float a = GetHeight(ix, iz);
-    float b = GetHeight(ixp1, iz);
-    float c = GetHeight(ix, izp1);
-    float d = GetHeight(ixp1, izp1);
+    float a = getHeight(ix, iz);
+    float b = getHeight(ixp1, iz);
+    float c = getHeight(ix, izp1);
+    float d = getHeight(ixp1, izp1);
 
     float ab = a + (b - a) * fx;
     float cd = c + (d - c) * fx;
@@ -219,7 +353,7 @@ float TerrainData::GetHeight(float X, float Z) {
 }
 
 // FIXME: ver se rola!!
-float TerrainData::GetHeight(float* Heights, int Size, float X, float Z) {
+float TerrainData::getHeight(float* Heights, int Size, float X, float Z) {
     float SizeM1F = (float)Size - 1.0f;
 
     if (X < 0.0f)

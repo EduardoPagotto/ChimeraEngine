@@ -69,49 +69,40 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
 void Game::start() {
 
-    Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
-    pVp->position = glm::vec3(0.0, 0.0, 600.0);
-    pVp->front = glm::vec3(0.0, 0.0, 0.0);
-    pVp->up = glm::vec3(0.0, 1.0, 0.0);
-    trackBall.init(pVp);
-    trackBall.setMax(1000.0);
+    // Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
+    // pVp->position = glm::vec3(0.0, 0.0, 600.0);
+    // pVp->front = glm::vec3(0.0, 0.0, 0.0);
+    // pVp->up = glm::vec3(0.0, 1.0, 0.0);
+    // trackBall.init(pVp);
+    // trackBall.setMax(1000.0);
 
     pCanvas->initGL();
 
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
+    // glEnable(GL_COLOR_MATERIAL);
+    // glEnable(GL_NORMALIZE);
+    // glShadeModel(GL_SMOOTH);
 
-    // pTex->init();
+    terra.LoadBinary((char*)"./samples/terrain/data/terrain1.bin");
 
-    Chimera::MeshData m;
-    std::vector<Chimera::Triangle> listPolygons;
+    // // pTex->init();
 
-    std::string materialFile;
-    loadObj("./data/models/square1.obj", m, materialFile);
-    // loadObj("./data/models/cubo_textura_simples.obj", m, materialFile);
+    // Chimera::MeshData m;
+    // std::vector<Chimera::Triangle> listPolygons;
 
-    // m.changeSize(1.0, true);
+    // std::string materialFile;
+    // loadObj("./data/models/square1.obj", m, materialFile);
+    // // loadObj("./data/models/cubo_textura_simples.obj", m, materialFile);
+    // // loadObj((const char*)"./data/models/split1.obj", &m);
+    // // loadObj((const char*)"./data/models/teste1.obj", &m);
+    // // m.textureFix();
 
-    // glm::vec3 max = m.getMax();
-    // glm::vec3 min = m.getMin();
+    // convertMeshDataTriangle(&m, listPolygons);
+    // std::reverse(listPolygons.begin(), listPolygons.end());
 
-    // Chimera::AABB teste;
-    // teste.set(min, max);
+    // // Cria o BSP
+    // // pBSPTRoot = bsptreeBuild(&listPolygons);
 
-    // bool val = teste.pointInside(glm::vec3(1.5f));
-
-    // loadObj((const char*)"./data/models/split1.obj", &m);
-    // loadObj((const char*)"./data/models/teste1.obj", &m);
-    // m.textureFix();
-
-    convertMeshDataTriangle(&m, listPolygons);
-    std::reverse(listPolygons.begin(), listPolygons.end());
-
-    // Cria o BSP
-    // pBSPTRoot = bsptreeBuild(&listPolygons);
-
-    vertexBuffer.create(5000);
+    // vertexBuffer.create(5000);
 }
 
 void Game::stop() {}
@@ -142,35 +133,35 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
 bool Game::paused() { return isPaused; }
 
 void Game::render() {
-    pCanvas->before();
+    // pCanvas->before();
 
-    Chimera::ViewPoint* vp = trackBall.getViewPoint();
+    // Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
-    if (debugParser == true) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
-                     vp->position.z);
-    }
+    // if (debugParser == true) {
+    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
+    //                  vp->position.z);
+    // }
 
-    // constroi vertex dinamico baseado no viewpoint
-    std::vector<Chimera::VertexData> vVertice;
-    // bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
+    // // constroi vertex dinamico baseado no viewpoint
+    // std::vector<Chimera::VertexData> vVertice;
+    // // bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
 
-    debugParser = false;
+    // debugParser = false;
 
-    pShader->link();
+    // pShader->link();
 
-    // Calcula view e projection baseado em vp
-    pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
+    // // Calcula view e projection baseado em vp
+    // pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
-    pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    // pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+    // pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+    // pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
-    // aplica a textura
-    // pTex->apply(pShader);
+    // // aplica a textura
+    // // pTex->apply(pShader);
 
-    vertexBuffer.render(vVertice);
+    // vertexBuffer.render(vVertice);
 
-    pCanvas->after();
-    pCanvas->swapWindow();
+    // pCanvas->after();
+    // pCanvas->swapWindow();
 }

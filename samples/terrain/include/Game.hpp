@@ -4,10 +4,8 @@
 #include "Terrain.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/TrackBall.hpp"
 #include "chimera/render/Shader.hpp"
-#include "chimera/render/Tex.hpp"
-#include "chimera/render/Vertex.hpp"
+#include "Camera.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -33,16 +31,20 @@ class Game : public Chimera::IGameClientEvents {
     bool isPaused;
     int botaoIndex;
     int estadoBotao;
-    bool debugParser;
-    Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    Chimera::VertexRenderDynamic vertexBuffer;
-    glm::mat4 projection;
-    glm::mat4 view;
-    glm::mat4 model;
-
+    void RenderShadowMap();
+    void CheckCameraTerrainPosition(glm::vec3& Movement);
+    int LastX, LastY, LastClickedX, LastClickedY;
+    ChimeraNew::Camera camera;
     Chimera::Terrain terra;
+    float LightAngle;
+    glm::mat4 LightViewMatrix, LightProjectionMatrix, ShadowMatrix;
+    int ShadowMapSize;
+    GLuint ShadowMap, RotationTexture, FBO;
+    bool Wireframe, DisplayShadowMap, RenderAABB, VisualizeRenderingOrder, SortVisibleGeometryNodes, RenderSlow;
+    int Depth;
+    GLuint *UniformLocations, *AttribLocations;
 
     // Chimera::TexImg* pTex;
 };

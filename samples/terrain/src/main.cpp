@@ -14,8 +14,8 @@ int main(int argn, char** argv) {
         Chimera::CanvasGL* video = new Chimera::CanvasGL("Terrain", 320, 240);
 
         Chimera::Shader* pShader =
-            new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
-                                                                   "./chimera/shaders/MeshNoMat.frag"));
+            new Chimera::Shader("Simples1", Chimera::shadeLoadProg("LegadoShader", "./samples/terrain/shader/glsl120shader.vs",
+                                                                   "./samples/terrain/shader/glsl120shader.fs"));
 
         Game* game = new Game(video, pShader);
 

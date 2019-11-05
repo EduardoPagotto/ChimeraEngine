@@ -31,6 +31,10 @@ void Shader::setGlUniform1i(const char* _nameVar, const int& _val) const noexcep
     glUniform1i(getUniformLocation(_nameVar), _val);
 }
 
+void Shader::setGlUniform1f(const char* _nameVar, const float& _val) const noexcept {
+    glUniform1f(getUniformLocation(_nameVar), _val);
+}
+
 void Shader::setGlUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const noexcept {
     glUniform3f(getUniformLocation(_nameVar), _x, _y, _z);
 }

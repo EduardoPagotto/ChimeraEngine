@@ -34,7 +34,6 @@ add_executable (terrain src/AABB.cpp
 						src/BSPTreeNode.cpp
 						src/BSPTree.cpp
 						src/Terrain.cpp
-						src/OpenGLRender.cpp
 						src/Game.cpp
 						src/main.cpp)
 

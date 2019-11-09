@@ -212,6 +212,32 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
 
 //------PARSER METODOS------
 
+int ClassifyPoint(Chimera::Triangle* partition, glm::vec3* eye) {
+    float result;
+    glm::vec3* vec1 = (glm::vec3*)&partition->vertex[0];
+    glm::vec3 dir = (*vec1) - (*eye);
+    result = glm::dot(dir, partition->normal());
+    // result = DotProduct(dir, partition->Normal);
+    // if (result < -0.001)
+    //     return CP_FRONT;
+    // if (result > 0.001)
+    //     return CP_BACK;
+    // return CP_ONPLANE;
+    return result;
+}
+
+// int ClassifyPoint(D3DVECTOR* pos, POLYGON* Plane) {
+//     float result;
+//     D3DVECTOR* vec1 = (D3DVECTOR*)&Plane->VertexList[0];
+//     D3DVECTOR Direction = (*vec1) - (*pos);
+//     result = DotProduct(Direction, Plane->Normal);
+//     if (result < -0.001)
+//         return CP_FRONT;
+//     if (result > 0.001)
+//         return CP_BACK;
+//     return CP_ONPLANE;
+// }
+
 float classify(glm::vec3* normal, glm::vec3* eye) {
     // TODO: Conferir se e isto mesmo
     float dotVal1 = -(glm::dot(*normal, *normal));
@@ -223,9 +249,10 @@ void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDa
     if (tree == nullptr)
         return;
 
-    glm::vec3 normal = tree->partition.normal();
-    float result = classify(&normal, eye);
-    if (result > 0) {
+    // glm::vec3 normal = tree->partition.normal();
+    // float result = classify(&normal, eye);
+    float result = ClassifyPoint(&tree->partition, eye);
+    if (result < 0.0f) {
 
         parserTree(tree->back, eye, _pOutVertex, logdata);
 
@@ -243,7 +270,7 @@ void parserTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexDa
 
         parserTree(tree->front, eye, _pOutVertex, logdata);
 
-    } else if (result < 0) {
+    } else if (result > 0.0f) {
         parserTree(tree->front, eye, _pOutVertex, logdata);
 
         // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha

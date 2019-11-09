@@ -85,10 +85,10 @@ void Game::start() {
     std::vector<Chimera::Triangle> listPolygons;
 
     std::string materialFile;
-    // loadObj("./data/models/square1.obj", m, materialFile);
+    loadObj("./data/models/square1.obj", m, materialFile);
 
-    loadObj("./data/models/cubo_textura_simples.obj", m, materialFile);
-    m.changeSize(30.0, true);
+    // loadObj("./data/models/cubo_textura_simples.obj", m, materialFile);
+    // m.changeSize(30.0, true);
 
     // loadObj("./data/models/split1.obj", m, materialFile);
     // loadObj((const char*)"./data/models/teste1.obj", m, materialFile);

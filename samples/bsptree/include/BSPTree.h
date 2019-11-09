@@ -6,7 +6,7 @@
 
 #include "chimera/render/Triangle.hpp"
 
-enum class SIDE { IS_COPLANAR = 0, IS_INFRONT, IS_BEHIND, IS_SPANNING };
+enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
 
 // struct HyperPlane {
 //     std::vector<float> coefficients;

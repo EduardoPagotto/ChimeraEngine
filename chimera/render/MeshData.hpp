@@ -1,6 +1,7 @@
 #ifndef __CHIMERA_MESH_DATA_HPP
 #define __CHIMERA_MESH_DATA_HPP
 
+#include "AABB.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -13,10 +14,7 @@ class MeshData {
     MeshData(const MeshData& _cpy);
     virtual ~MeshData();
 
-    void textureFix();
-    glm::vec3 getSizeBox();
-    glm::vec3 getMin();
-    glm::vec3 getMax();
+    glm::vec3 defineAABB();
 
     void changeSize(const float& new_size, bool hasTexture);
 
@@ -30,6 +28,8 @@ class MeshData {
 
     std::vector<unsigned int> textureIndex;
     std::vector<glm::vec2> textureList;
+
+    AABB aabb;
 };
 
 } // namespace Chimera

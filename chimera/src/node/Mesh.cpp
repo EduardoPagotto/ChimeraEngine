@@ -27,13 +27,11 @@ void Mesh::init() {
         material = new Material();
 
     material->init();
-    pTransform->init(meshData.getSizeBox());
+    pTransform->init(meshData.defineAABB());
     setVertexBuffer();
 }
 
 void Mesh::accept(NodeVisitor* v) { v->visit(this); }
-
-glm::vec3 Mesh::getSizeBox() { return meshData.getSizeBox(); }
 
 void Mesh::render(Shader* _pShader) { renderStat.render(); }
 

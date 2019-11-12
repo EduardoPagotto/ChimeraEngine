@@ -28,16 +28,11 @@ MeshData::~MeshData() {
     textureList.clear();
 }
 
-void MeshData::textureFix() {
-    // Ajuste de textura do imageSDL invertendo valor de V
-    for (int indice = 0; indice < textureIndex.size(); indice++) {
-        int posTex = textureIndex[indice];
-        textureList[posTex].y = 1.0f - textureList[posTex].y;
-    }
-}
+glm::vec3 MeshData::defineAABB() {
 
-glm::vec3 MeshData::getMin() {
     glm::vec3 min = glm::vec3(0.0f);
+    glm::vec3 max = glm::vec3(0.0f);
+
     for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
         if (min.x > vertexList[indice].x)
             min.x = vertexList[indice].x;
@@ -45,13 +40,6 @@ glm::vec3 MeshData::getMin() {
             min.y = vertexList[indice].y;
         if (min.z > vertexList[indice].z)
             min.z = vertexList[indice].z;
-    }
-    return min;
-}
-
-glm::vec3 MeshData::getMax() {
-    glm::vec3 max = glm::vec3(0.0f);
-    for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
         if (max.x < vertexList[indice].x)
             max.x = vertexList[indice].x;
         if (max.y < vertexList[indice].y)
@@ -59,15 +47,11 @@ glm::vec3 MeshData::getMax() {
         if (max.z < vertexList[indice].z)
             max.z = vertexList[indice].z;
     }
-    return max;
-}
 
-glm::vec3 MeshData::getSizeBox() {
-    glm::vec3 l_max = getMax();
-    glm::vec3 l_min = getMin();
-
-    return glm::vec3((glm::abs(l_max.x) + glm::abs(l_min.x)) / 2, (glm::abs(l_max.y) + glm::abs(l_min.y)) / 2,
-                     (glm::abs(l_max.z) + glm::abs(l_min.z)) / 2);
+    aabb.set(min, max);
+    return glm::vec3((glm::abs(max.x) + glm::abs(min.x)) / 2, 
+                     (glm::abs(max.y) + glm::abs(min.y)) / 2,
+                     (glm::abs(max.z) + glm::abs(min.z)) / 2);
 }
 
 void MeshData::changeSize(const float& new_size, bool hasTexture) {
@@ -81,6 +65,8 @@ void MeshData::changeSize(const float& new_size, bool hasTexture) {
         glm::vec3 val = vertexList[indice];
         vertexList[indice] = glm::vec3(val.x * new_size, val.y * new_size, val.z * new_size);
     }
+
+    defineAABB();
 }
 
 void MeshData::debugDados() {

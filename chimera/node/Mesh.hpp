@@ -25,7 +25,6 @@ class Mesh : public Node {
     virtual void accept(class NodeVisitor* v) override;
 
     void render(Shader* _pShader);
-    glm::vec3 getSizeBox();
 
     void replaceTransform(Transform* _pTransform);
 

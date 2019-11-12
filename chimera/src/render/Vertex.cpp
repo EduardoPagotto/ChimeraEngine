@@ -1,5 +1,6 @@
 #include "chimera/render/Vertex.hpp"
 #include "chimera/OpenGLDefs.hpp"
+#include <SDL2/SDL.h>
 
 namespace Chimera {
 
@@ -49,6 +50,9 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
             out_indices.push_back((unsigned int)outData.size() - 1);
         }
     }
+
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "VBO Vertex In: %04d Vertex out: %04d Index out: %04d ", inData.size(),
+                 outData.size(), out_indices.size());
 }
 
 //---------- VertexRenderDynamic

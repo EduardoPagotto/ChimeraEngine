@@ -1,8 +1,8 @@
 #ifndef __GAME_TERRAIN_BSPTREENODE__HPP
 #define __GAME_TERRAIN_BSPTREENODE__HPP
 
-#include "AABB.hpp"
-#include "Frustum.hpp"
+#include "chimera/render/AABB.hpp"
+#include "chimera/render/Frustum.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/render/Vertex.hpp"
 

@@ -1,5 +1,5 @@
-#ifndef __GAME_TERRAIN_PLANE__HPP
-#define __GAME_TERRAIN_PLANE__HPP
+#ifndef __CHIMERA_PLANE__HPP
+#define __CHIMERA_PLANE__HPP
 
 #include <glm/glm.hpp>
 

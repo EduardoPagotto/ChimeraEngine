@@ -1,5 +1,5 @@
-#ifndef __GAME_TERRAIN_FRUSTUM__HPP
-#define __GAME_TERRAIN_FRUSTUM__HPP
+#ifndef __CHIMERA_FRUSTUM__HPP
+#define __CHIMERA_FRUSTUM__HPP
 
 #include "Plane.hpp"
 

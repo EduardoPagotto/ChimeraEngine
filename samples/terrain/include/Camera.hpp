@@ -1,7 +1,7 @@
 #ifndef __GAME_TERRAIN_CAMERA__HPP
 #define __GAME_TERRAIN_CAMERA__HPP
 
-#include "Frustum.hpp"
+#include "chimera/render/Frustum.hpp"
 
 namespace ChimeraNew {
 

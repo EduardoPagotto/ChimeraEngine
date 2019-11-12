@@ -1,5 +1,5 @@
-#ifndef __GAME_TERRAIN_AABB__HPP
-#define __GAME_TERRAIN_AABB__HPP
+#ifndef __CHIMERA_AABB__HPP
+#define __CHIMERA_AABB__HPP
 
 #include "Frustum.hpp"
 #include <glm/glm.hpp>

@@ -27,10 +27,7 @@ set (IncludesTerrain ${CMAKE_CURRENT_SOURCE_DIR}/include
 					 ${OPENGL_INCLUDE_DIR}
 					 ${SDL2_INCLUDE_DIR})
 
-add_executable (terrain src/AABB.cpp
-						src/Plane.cpp
-						src/Frustum.cpp
-						src/Camera.cpp
+add_executable (terrain src/Camera.cpp
 						src/BSPTreeNode.cpp
 						src/BSPTree.cpp
 						src/Terrain.cpp

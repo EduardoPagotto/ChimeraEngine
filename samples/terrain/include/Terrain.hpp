@@ -2,7 +2,7 @@
 #define __GAME_TERRAIN_TERRAIN__HPP
 
 #include "BSPTree.hpp"
-#include "Frustum.hpp"
+#include "chimera/render/Frustum.hpp"
 #include "chimera/render/TerrainData.hpp"
 
 namespace Chimera {

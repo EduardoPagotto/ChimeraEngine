@@ -37,7 +37,6 @@ Game::~Game() {
     if (GLEW_EXT_framebuffer_object) {
         glDeleteFramebuffersEXT(1, &FBO);
     }
-
 }
 
 void Game::joystickCapture(Chimera::JoystickManager& joy) {}
@@ -45,7 +44,6 @@ void Game::joystickCapture(Chimera::JoystickManager& joy) {}
 void Game::joystickStatus(Chimera::JoystickManager& joy) {}
 
 void Game::keyCapture(SDL_Keycode tecla) {
-
 
     unsigned short Keys = 0x00;
 
@@ -73,7 +71,6 @@ void Game::keyCapture(SDL_Keycode tecla) {
     //     camera.Move(Movement);
     // }
 
-
     switch (tecla) {
         case SDLK_ESCAPE:
             SDL_Event l_eventQuit;
@@ -91,16 +88,16 @@ void Game::keyCapture(SDL_Keycode tecla) {
             Keys |= 0x04;
         case SDLK_d:
             Keys |= 0x08;
-        // case SDLK_r:
-        //     Keys |= 0x10;
-        // case SDLK_f:
-        //     Keys |= 0x20;
-        // if (GetKeyState(VK_SHIFT) & 0x80)
-        //     Keys |= 0x40;
-        // if (GetKeyState(VK_CONTROL) & 0x80)
-        //     Keys |= 0x80;
+            // case SDLK_r:
+            //     Keys |= 0x10;
+            // case SDLK_f:
+            //     Keys |= 0x20;
+            // if (GetKeyState(VK_SHIFT) & 0x80)
+            //     Keys |= 0x40;
+            // if (GetKeyState(VK_CONTROL) & 0x80)
+            //     Keys |= 0x80;
             if (Keys & 0x3F) {
-                glm::vec3 Movement = camera.OnKeys(Keys, 1.0f);//FrameTime * 0.5f);
+                glm::vec3 Movement = camera.OnKeys(Keys, 1.0f); // FrameTime * 0.5f);
                 CheckCameraTerrainPosition(Movement);
                 camera.Move(Movement);
             }
@@ -173,7 +170,6 @@ void Game::keyCapture(SDL_Keycode tecla) {
             RenderShadowMap();
             break;
 
-
         case SDLK_F10:
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
@@ -195,15 +191,15 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
     if (estadoBotao == SDL_PRESSED) {
-        if (botaoIndex == 1){
+        if (botaoIndex == 1) {
             camera.OnMouseMove(LastX - mm.xrel, LastY - mm.yrel);
             LastX = mm.xrel;
             LastY = mm.yrel;
-            //trackBall.tracking(mm.xrel, mm.yrel);
+            // trackBall.tracking(mm.xrel, mm.yrel);
+        } else if (botaoIndex == 2) {
         }
-        else if (botaoIndex == 2) {}
-            camera.OnMouseWheel(mm.yrel);
-            //trackBall.offSet(mm.yrel);
+        camera.OnMouseWheel(mm.yrel);
+        // trackBall.offSet(mm.yrel);
     }
 }
 
@@ -213,75 +209,75 @@ void Game::start() {
 
     terra.LoadBinary((char*)"./samples/terrain/data/terrain1.bin");
 
-	//Shader.UniformLocations = new GLuint[2];
+    // Shader.UniformLocations = new GLuint[2];
     UniformLocations = new GLuint[2];
-    pShader->link();//??
+    pShader->link(); //??
 
-    //Shader.UniformLocations[0] = glGetUniformLocation(Shader, "ShadowMatrix");
+    // Shader.UniformLocations[0] = glGetUniformLocation(Shader, "ShadowMatrix");
     UniformLocations[0] = pShader->getUniformLocation("ShadowMatrix");
-    //Shader.UniformLocations[1] = glGetUniformLocation(Shader, "LightDirection");
+    // Shader.UniformLocations[1] = glGetUniformLocation(Shader, "LightDirection");
     UniformLocations[1] = pShader->getUniformLocation("LightDirection");
 
-	pShader->link();//glUseProgram(Shader);??
+    pShader->link(); // glUseProgram(Shader);??
 
-	pShader->setGlUniform1i((char*)"ShadowMap", 0);
-	pShader->setGlUniform1i((char*)"RotationTexture", 1);
-	pShader->setGlUniform1f((char*)"Scale", 1.0f / 64.0f);
-	pShader->setGlUniform1f((char*)"Radius", 1.0f / 1024.0f);
-	pShader->unlink();//glUseProgram(0);
+    pShader->setGlUniform1i((char*)"ShadowMap", 0);
+    pShader->setGlUniform1i((char*)"RotationTexture", 1);
+    pShader->setGlUniform1f((char*)"Scale", 1.0f / 64.0f);
+    pShader->setGlUniform1f((char*)"Radius", 1.0f / 1024.0f);
+    pShader->unlink(); // glUseProgram(0);
 
-	ShadowMapSize = SHADOW_MAP_SIZE > gl_max_texture_size ? gl_max_texture_size : SHADOW_MAP_SIZE;
+    ShadowMapSize = SHADOW_MAP_SIZE > gl_max_texture_size ? gl_max_texture_size : SHADOW_MAP_SIZE;
 
     glGenTextures(1, &ShadowMap);
     glBindTexture(GL_TEXTURE_2D, ShadowMap);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, ShadowMapSize, ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, ShadowMapSize, ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT,
+                 NULL);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-	srand( SDL_GetTicks() );
+    srand(SDL_GetTicks());
 
-	glm::vec4 *RotationTextureData = new glm::vec4[4096];
+    glm::vec4* RotationTextureData = new glm::vec4[4096];
 
-	float RandomAngle = 3.14f * 2.0f * (float)rand() / (float)RAND_MAX;
+    float RandomAngle = 3.14f * 2.0f * (float)rand() / (float)RAND_MAX;
 
-	for(int i = 0; i < 4096; i++)
-	{
-		RotationTextureData[i].x = cos(RandomAngle);
-		RotationTextureData[i].y = sin(RandomAngle);
-		RotationTextureData[i].z = -RotationTextureData[i].y;
-		RotationTextureData[i].w = RotationTextureData[i].x;
+    for (int i = 0; i < 4096; i++) {
+        RotationTextureData[i].x = cos(RandomAngle);
+        RotationTextureData[i].y = sin(RandomAngle);
+        RotationTextureData[i].z = -RotationTextureData[i].y;
+        RotationTextureData[i].w = RotationTextureData[i].x;
 
-		RotationTextureData[i] *= 0.5f;
-		RotationTextureData[i] += 0.5f;
+        RotationTextureData[i] *= 0.5f;
+        RotationTextureData[i] += 0.5f;
 
-		RandomAngle += 3.14f * 2.0f * (float)rand() / (float)RAND_MAX;
-	}
+        RandomAngle += 3.14f * 2.0f * (float)rand() / (float)RAND_MAX;
+    }
 
-	glGenTextures(1, &RotationTexture);
-	glBindTexture(GL_TEXTURE_2D, RotationTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 64, 64, 0, GL_RGBA, GL_FLOAT, RotationTextureData);
-	glBindTexture(GL_TEXTURE_2D, 0);
+    glGenTextures(1, &RotationTexture);
+    glBindTexture(GL_TEXTURE_2D, RotationTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 64, 64, 0, GL_RGBA, GL_FLOAT, RotationTextureData);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
-	delete [] RotationTextureData;
+    delete[] RotationTextureData;
 
-	glGenFramebuffersEXT(1, &FBO);
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
-	glDrawBuffers(0, NULL); glReadBuffer(GL_NONE);
-	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, ShadowMap, 0);
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+    glGenFramebuffersEXT(1, &FBO);
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
+    glDrawBuffers(0, NULL);
+    glReadBuffer(GL_NONE);
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, ShadowMap, 0);
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 
-	RenderShadowMap();
+    RenderShadowMap();
 
-	float Height = terra.GetHeight(0.0f, 0.0f);
-
+    float Height = terra.GetHeight(0.0f, 0.0f);
 
     camera.SetPerspective(45.0f, (float)pCanvas->getWidth() / (float)pCanvas->getHeight(), 0.125f, 1024.0f);
-	camera.Look(glm::vec3(0.0f, Height + 1.75f, 0.0f), glm::vec3(0.0f, Height + 1.75f, -1.0f));
+    camera.Look(glm::vec3(0.0f, Height + 1.75f, 0.0f), glm::vec3(0.0f, Height + 1.75f, -1.0f));
 }
 
 void Game::stop() {}
@@ -315,7 +311,7 @@ void Game::render() {
 
     pCanvas->before();
 
-    Chimera::ViewPoint vp;// CADE?????
+    Chimera::ViewPoint vp; // CADE?????
 
     pCanvas->calcPerspectiveProjectionView(0, &vp, camera.ViewMatrix, camera.ProjectionMatrix);
 
@@ -423,8 +419,8 @@ void Game::CheckCameraTerrainPosition(glm::vec3& Movement) {
 
 void Game::RenderShadowMap() {
     glm::vec3 LightPosition = glm::vec3(0.0f, 20.0f, 0.0f);
-    //FIXME: ????
-    //glm::rotate(glm::vec3((float)terra.GetSize(), 0.0f, 0.0f), -LightAngle,glm::vec3(0.0f, 1.0f, -1.0f));
+    // FIXME: ????
+    // glm::rotate(glm::vec3((float)terra.GetSize(), 0.0f, 0.0f), -LightAngle,glm::vec3(0.0f, 1.0f, -1.0f));
 
     glm::vec3 LightDirection = normalize(LightPosition);
 
@@ -436,7 +432,8 @@ void Game::RenderShadowMap() {
 
     LightProjectionMatrix = glm::ortho(Min.x, Max.x, Min.y, Max.y, -Max.z, -Min.z);
 
-    glm::mat4 BiasMatrix = glm::mat4(0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 1.0f);
+    glm::mat4 BiasMatrix =
+        glm::mat4(0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 1.0f);
 
     ShadowMatrix = BiasMatrix * LightProjectionMatrix * LightViewMatrix;
 
@@ -453,12 +450,11 @@ void Game::RenderShadowMap() {
 
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    // FIXME: ?????
-    // glMatrixMode(GL_PROJECTION);
-    // glLoadMatrixf(&LightProjectionMatrix);
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(glm::value_ptr(LightProjectionMatrix));
 
-    // glMatrixMode(GL_MODELVIEW);
-    // glLoadMatrixf(&LightViewMatrix);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(glm::value_ptr(LightViewMatrix));
 
     glEnable(GL_DEPTH_TEST);
 

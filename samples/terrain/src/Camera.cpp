@@ -1,44 +1,8 @@
 #include "Camera.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace ChimeraNew {
-
-// FIXME: ver equivalencia em GLM::
-glm::vec2 rotate(const glm::vec2& u, float angle) {
-    angle = angle / 180.0f * (float)M_PI;
-
-    float c = cos(angle), s = sin(angle);
-
-    return glm::vec2(u.x * c - u.y * s, u.x * s + u.y * c);
-}
-
-// FIXME: ver equivalencia em GLM::
-glm::mat4 rotate(float angle, const glm::vec3& u) {
-    glm::mat4 Rotate;
-
-    // angle = angle / 180.0f * (float)M_PI;
-
-    // vec3 v = glm::normalize(u);
-
-    // float c = 1.0f - cos(angle), s = sin(angle);
-
-    // Rotate.M[0] = 1.0f + c * (v.x * v.x - 1.0f);
-    // Rotate.M[1] = c * v.x * v.y + v.z * s;
-    // Rotate.M[2] = c * v.x * v.z - v.y * s;
-    // Rotate.M[4] = c * v.x * v.y - v.z * s;
-    // Rotate.M[5] = 1.0f + c * (v.y * v.y - 1.0f);
-    // Rotate.M[6] = c * v.y * v.z + v.x * s;
-    // Rotate.M[8] = c * v.x * v.z + v.y * s;
-    // Rotate.M[9] = c * v.y * v.z - v.x * s;
-    // Rotate.M[10] = 1.0f + c * (v.z * v.z - 1.0f);
-
-    return Rotate;
-}
-
-// FIXME: ver equivalencia em GLM::
-glm::vec3 rotate(const glm::vec3& u, float angle, const glm::vec3& v) {
-    // return *(glm::vec3*)&(rotate(angle, v) * glm::vec4(u, 1.0f));
-    return glm::vec3(0.0f); // TODO: corrigir
-}
 
 // FIXME: ver equivalencia em GLM::
 void GetXY(const glm::vec3& Z, glm::vec3& X, glm::vec3& Y) {
@@ -58,22 +22,6 @@ void GetXY(const glm::vec3& Z, glm::vec3& X, glm::vec3& Y) {
         X = glm::vec3(1.0f, 0.0f, 0.0f);
         Y = glm::vec3(0.0f, 0.0f, -1.0f);
     }
-}
-
-// FIXME: ver equivalencia em GLM::
-glm::mat4 perspective(float fovy, float aspect, float n, float f) {
-    glm::mat4 Perspective;
-
-    // float coty = 1.0f / tan(fovy * (float)M_PI / 360.0f);
-
-    // Perspective.M[0] = coty / aspect;
-    // Perspective.M[5] = coty;
-    // Perspective.M[10] = (n + f) / (n - f);
-    // Perspective.M[11] = -1.0f;
-    // Perspective.M[14] = 2.0f * n * f / (n - f);
-    // Perspective.M[15] = 0.0f;
-
-    return Perspective;
 }
 
 Camera::Camera() {
@@ -155,16 +103,16 @@ void Camera::OnMouseMove(int dx, int dy) {
     if (dx != 0) {
         float DeltaX = (float)dx * Sensitivity;
 
-        X = rotate(X, DeltaX, glm::vec3(0.0f, 1.0f, 0.0f));
-        Y = rotate(Y, DeltaX, glm::vec3(0.0f, 1.0f, 0.0f));
-        Z = rotate(Z, DeltaX, glm::vec3(0.0f, 1.0f, 0.0f));
+        // X = rotate(X, DeltaX, glm::vec3(0.0f, 1.0f, 0.0f));
+        // Y = rotate(Y, DeltaX, glm::vec3(0.0f, 1.0f, 0.0f));
+        // Z = rotate(Z, DeltaX, glm::vec3(0.0f, 1.0f, 0.0f));
     }
 
     if (dy != 0) {
         float DeltaY = (float)dy * Sensitivity;
 
-        Y = rotate(Y, DeltaY, X);
-        Z = rotate(Z, DeltaY, X);
+        // Y = rotate(Y, DeltaY, X);
+        // Z = rotate(Z, DeltaY, X);
 
         if (Y.y < 0.0f) {
             Z = glm::vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
@@ -194,8 +142,8 @@ void Camera::OnMouseWheel(float zDelta) {
 }
 
 void Camera::SetPerspective(float fovy, float aspect, float n, float f) {
-    ProjectionMatrix = perspective(fovy, aspect, n, f);
-    ProjectionMatrixInverse = inverse(ProjectionMatrix);
+    ProjectionMatrix = glm::perspective(fovy, aspect, n, f);
+    ProjectionMatrixInverse = glm::inverse(ProjectionMatrix);
     ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
     ViewProjectionMatrixInverse = ViewMatrixInverse * ProjectionMatrixInverse;
 
@@ -205,7 +153,7 @@ void Camera::SetPerspective(float fovy, float aspect, float n, float f) {
 void Camera::CalculateViewMatrix() {
     ViewMatrix = glm::mat4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, position),
                            -dot(Y, position), -dot(Z, position), 1.0f);
-    ViewMatrixInverse = inverse(ViewMatrix);
+    ViewMatrixInverse = glm::inverse(ViewMatrix);
     ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
     ViewProjectionMatrixInverse = ViewMatrixInverse * ProjectionMatrixInverse;
 

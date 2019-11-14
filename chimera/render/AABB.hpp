@@ -16,8 +16,15 @@ class AABB {
     float distance(Frustum& _frustum);
     void render();
 
+    inline glm::vec3 getMax() const { return vertices[7]; }
+    inline glm::vec3 getMin() const { return vertices[0]; }
+    inline glm::vec3 getCenter() const { return center; }
+    inline glm::vec3 getSize() const { return size; }
+
   private:
     glm::vec3 vertices[8];
+    glm::vec3 center;
+    glm::vec3 size;
 };
 } // namespace Chimera
 

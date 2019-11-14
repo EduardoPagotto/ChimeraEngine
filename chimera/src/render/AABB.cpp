@@ -19,6 +19,12 @@ void AABB::set(const glm::vec3& _min, const glm::vec3& _max) {
     vertices[5] = glm::vec3(_max.x, _min.y, _max.z);
     vertices[6] = glm::vec3(_min.x, _max.y, _max.z);
     vertices[7] = glm::vec3(_max.x, _max.y, _max.z);
+
+    size = glm::vec3((glm::abs(_max.x) + glm::abs(_min.x)) / 2,  // X
+                     (glm::abs(_max.y) + glm::abs(_min.y)) / 2,  // Y
+                     (glm::abs(_max.z) + glm::abs(_min.z)) / 2); // Z
+
+    center = _min + size;
 }
 
 bool AABB::pointInside(const glm::vec3& _point) {

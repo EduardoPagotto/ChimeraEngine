@@ -51,7 +51,7 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
         }
     }
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "VBO Vertex In: %04d Vertex out: %04d Index out: %04d ", inData.size(),
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "VBO Vertex In: %04lu Vertex out: %04lu Index out: %04lu ", inData.size(),
                  outData.size(), out_indices.size());
 }
 

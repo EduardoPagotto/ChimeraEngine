@@ -16,6 +16,8 @@ class AABB {
     float distance(Frustum& _frustum);
     void render();
 
+    void applyTransformation(const glm::mat4& transformation);
+
     inline glm::vec3 getMax() const { return vertices[7]; }
     inline glm::vec3 getMin() const { return vertices[0]; }
     inline glm::vec3 getCenter() const { return center; }

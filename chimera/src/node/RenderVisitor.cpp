@@ -38,6 +38,9 @@ void RenderVisitor::visit(Camera* _pCamera) {}
 void RenderVisitor::visit(Mesh* _pMesh) {
 
     model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); //_pSolid->getModelMatrix(pTransform);
+    //_pMesh->meshData.aabb.applyTransformation(model);
+
+    // _pMesh->meshData.aabb.render();
 
     if (pShader == nullptr)
         return;

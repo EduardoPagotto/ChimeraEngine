@@ -49,6 +49,35 @@ bool AABB::visible(Frustum& _frustum) { return _frustum.AABBVisible(vertices); }
 
 float AABB::distance(Frustum& _frustum) { return _frustum.AABBDistance(vertices); }
 
+// TODO: TESTAR!!!!!
+// ref: https://www.gamedev.net/forums/topic/673361-axis-aligned-boxes-and-rotations/
+void AABB::applyTransformation(const glm::mat4& transformation) {
+
+    glm::vec3 min = glm::vec3(transformation * glm::vec4(vertices[0], 1.0f));
+    glm::vec3 max = glm::vec3(transformation * glm::vec4(vertices[7], 1.0f));
+
+    glm::vec3 temp = min;
+    min = glm::min(min, max);
+    max = glm::max(temp, max);
+
+    this->set(min, max);
+
+    // vertices[0] = glm::vec3(transformation * glm::vec4(vertices[0], 1.0f));
+    // vertices[1] = glm::vec3(transformation * glm::vec4(vertices[1], 1.0f));
+    // vertices[2] = glm::vec3(transformation * glm::vec4(vertices[2], 1.0f));
+    // vertices[3] = glm::vec3(transformation * glm::vec4(vertices[3], 1.0f));
+    // vertices[4] = glm::vec3(transformation * glm::vec4(vertices[4], 1.0f));
+    // vertices[5] = glm::vec3(transformation * glm::vec4(vertices[5], 1.0f));
+    // vertices[6] = glm::vec3(transformation * glm::vec4(vertices[6], 1.0f));
+    // vertices[7] = glm::vec3(transformation * glm::vec4(vertices[7], 1.0f));
+
+    // size = glm::vec3((glm::abs(vertices[7].x) + glm::abs(vertices[0].x)) / 2,  // X
+    //                  (glm::abs(vertices[7].y) + glm::abs(vertices[0].y)) / 2,  // Y
+    //                  (glm::abs(vertices[7].z) + glm::abs(vertices[0].z)) / 2); // Z
+
+    // center = vertices[0] + size;
+}
+
 void AABB::render() {
     glBegin(GL_LINES);
 
@@ -82,4 +111,45 @@ void AABB::render() {
     glEnd();
 }
 
+// void transformBox(glm::mat3x3& matrix, glm::vec3& translation, AABB& source, AABB& destination) {
+//     // matrix Transform matrix.
+//     // translation Translation matrix.
+//     // source The original bounding box.
+//     // destination The transformed bounding box.
+//     // remmember to fix matrix[col][row]
+
+//     float a, b;
+//     int i, j;
+
+//     /*Copy box A into a min array and a max array for easy reference.*/
+
+//     glm::vec3 Amin = source.vertices[0];
+//     glm::vec3 Amax = source.vertices[7];
+
+//     /* Take care of translation by beginning at T. */
+//     glm::vec3 Bmin = translation;
+//     glm::vec3 Bmax = translation;
+
+//     /* Now find the extreme points by considering the product of the */
+//     /* min and max with each component of matrix.  */
+
+//     for (i = 0; i < 3; i++)
+//         for (j = 0; j < 3; j++) {
+//             a = (float)(matrix[i][j] * Amin[j]);
+//             b = (float)(matrix[i][j] * Amax[j]);
+//             if (a < b)
+
+//             {
+//                 Bmin[i] += a;
+//                 Bmax[i] += b;
+//             } else {
+//                 Bmin[i] += b;
+//                 Bmax[i] += a;
+//             }
+//         }
+
+//     /* Copy the result into the new box. */
+
+//     destination.set(glm::vec3(Bmin[0], Bmin[1], Bmin[2]), glm::vec3(Bmax[0], Bmax[1], Bmax[2]));
+// }
 } // namespace Chimera

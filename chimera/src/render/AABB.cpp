@@ -53,29 +53,19 @@ float AABB::distance(Frustum& _frustum) { return _frustum.AABBDistance(vertices)
 // ref: https://www.gamedev.net/forums/topic/673361-axis-aligned-boxes-and-rotations/
 void AABB::applyTransformation(const glm::mat4& transformation) {
 
-    glm::vec3 min = glm::vec3(transformation * glm::vec4(vertices[0], 1.0f));
-    glm::vec3 max = glm::vec3(transformation * glm::vec4(vertices[7], 1.0f));
-
-    glm::vec3 temp = min;
-    min = glm::min(min, max);
-    max = glm::max(temp, max);
+    glm::vec3 val, min, max;
+    for (short i = 0; i < 8; i++) {
+        val = glm::vec3(transformation * glm::vec4(vertices[i], 1.0f));
+        if (i != 0) {
+            min = glm::min(min, val);
+            max = glm::max(max, val);
+        } else {
+            min = val;
+            max = val;
+        }
+    }
 
     this->set(min, max);
-
-    // vertices[0] = glm::vec3(transformation * glm::vec4(vertices[0], 1.0f));
-    // vertices[1] = glm::vec3(transformation * glm::vec4(vertices[1], 1.0f));
-    // vertices[2] = glm::vec3(transformation * glm::vec4(vertices[2], 1.0f));
-    // vertices[3] = glm::vec3(transformation * glm::vec4(vertices[3], 1.0f));
-    // vertices[4] = glm::vec3(transformation * glm::vec4(vertices[4], 1.0f));
-    // vertices[5] = glm::vec3(transformation * glm::vec4(vertices[5], 1.0f));
-    // vertices[6] = glm::vec3(transformation * glm::vec4(vertices[6], 1.0f));
-    // vertices[7] = glm::vec3(transformation * glm::vec4(vertices[7], 1.0f));
-
-    // size = glm::vec3((glm::abs(vertices[7].x) + glm::abs(vertices[0].x)) / 2,  // X
-    //                  (glm::abs(vertices[7].y) + glm::abs(vertices[0].y)) / 2,  // Y
-    //                  (glm::abs(vertices[7].z) + glm::abs(vertices[0].z)) / 2); // Z
-
-    // center = vertices[0] + size;
 }
 
 void AABB::render() {

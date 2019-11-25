@@ -30,28 +30,19 @@ MeshData::~MeshData() {
 
 glm::vec3 MeshData::defineAABB() {
 
-    glm::vec3 min = glm::vec3(0.0f);
-    glm::vec3 max = glm::vec3(0.0f);
-
+    glm::vec3 min, max;
     for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
-        if (min.x > vertexList[indice].x)
-            min.x = vertexList[indice].x;
-        if (min.y > vertexList[indice].y)
-            min.y = vertexList[indice].y;
-        if (min.z > vertexList[indice].z)
-            min.z = vertexList[indice].z;
-        if (max.x < vertexList[indice].x)
-            max.x = vertexList[indice].x;
-        if (max.y < vertexList[indice].y)
-            max.y = vertexList[indice].y;
-        if (max.z < vertexList[indice].z)
-            max.z = vertexList[indice].z;
+        if (indice != 0) {
+            min = glm::min(min, vertexList[indice]);
+            max = glm::max(max, vertexList[indice]);
+        } else {
+            min = vertexList[indice];
+            max = vertexList[indice];
+        }
     }
 
     aabb.set(min, max);
-    return glm::vec3((glm::abs(max.x) + glm::abs(min.x)) / 2, 
-                     (glm::abs(max.y) + glm::abs(min.y)) / 2,
-                     (glm::abs(max.z) + glm::abs(min.z)) / 2);
+    return aabb.getSize();
 }
 
 void MeshData::changeSize(const float& new_size, bool hasTexture) {

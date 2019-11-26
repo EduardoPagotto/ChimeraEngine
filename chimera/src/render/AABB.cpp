@@ -8,6 +8,16 @@ namespace Chimera {
 
 AABB::AABB() {}
 
+AABB::AABB(const glm::vec3& _min, const glm::vec3& _max) { this->set(_min, _max); }
+
+AABB::AABB(const AABB& _cpy) {
+    for (short i = 0; i < 8; i++)
+        vertices[i] = _cpy.vertices[i];
+
+    center = _cpy.center;
+    size = _cpy.size;
+}
+
 AABB::~AABB() {}
 
 void AABB::set(const glm::vec3& _min, const glm::vec3& _max) {
@@ -51,7 +61,7 @@ float AABB::distance(Frustum& _frustum) { return _frustum.AABBDistance(vertices)
 
 // TODO: TESTAR!!!!!
 // ref: https://www.gamedev.net/forums/topic/673361-axis-aligned-boxes-and-rotations/
-void AABB::applyTransformation(const glm::mat4& transformation) {
+AABB AABB::transformation(const glm::mat4& transformation) {
 
     glm::vec3 val, min, max;
     for (short i = 0; i < 8; i++) {
@@ -65,7 +75,7 @@ void AABB::applyTransformation(const glm::mat4& transformation) {
         }
     }
 
-    this->set(min, max);
+    return AABB(min, max);
 }
 
 void AABB::render() {
@@ -100,46 +110,4 @@ void AABB::render() {
 
     glEnd();
 }
-
-// void transformBox(glm::mat3x3& matrix, glm::vec3& translation, AABB& source, AABB& destination) {
-//     // matrix Transform matrix.
-//     // translation Translation matrix.
-//     // source The original bounding box.
-//     // destination The transformed bounding box.
-//     // remmember to fix matrix[col][row]
-
-//     float a, b;
-//     int i, j;
-
-//     /*Copy box A into a min array and a max array for easy reference.*/
-
-//     glm::vec3 Amin = source.vertices[0];
-//     glm::vec3 Amax = source.vertices[7];
-
-//     /* Take care of translation by beginning at T. */
-//     glm::vec3 Bmin = translation;
-//     glm::vec3 Bmax = translation;
-
-//     /* Now find the extreme points by considering the product of the */
-//     /* min and max with each component of matrix.  */
-
-//     for (i = 0; i < 3; i++)
-//         for (j = 0; j < 3; j++) {
-//             a = (float)(matrix[i][j] * Amin[j]);
-//             b = (float)(matrix[i][j] * Amax[j]);
-//             if (a < b)
-
-//             {
-//                 Bmin[i] += a;
-//                 Bmax[i] += b;
-//             } else {
-//                 Bmin[i] += b;
-//                 Bmax[i] += a;
-//             }
-//         }
-
-//     /* Copy the result into the new box. */
-
-//     destination.set(glm::vec3(Bmin[0], Bmin[1], Bmin[2]), glm::vec3(Bmax[0], Bmax[1], Bmax[2]));
-// }
 } // namespace Chimera

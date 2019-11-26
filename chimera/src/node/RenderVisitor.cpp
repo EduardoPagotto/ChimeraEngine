@@ -37,11 +37,7 @@ void RenderVisitor::visit(Camera* _pCamera) {}
 
 void RenderVisitor::visit(Mesh* _pMesh) {
 
-    model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); //_pSolid->getModelMatrix(pTransform);
-    //_pMesh->meshData.aabb.applyTransformation(model);
-
-    // _pMesh->meshData.aabb.render();
-
+    model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
     if (pShader == nullptr)
         return;
 
@@ -57,6 +53,9 @@ void RenderVisitor::visit(Mesh* _pMesh) {
         pShadowMapVisitor->applyShadow(pShader);
 
     _pMesh->render(pShader);
+
+    AABB aabbT = _pMesh->meshData.aabb.transformation(model);
+    aabbT.render();
 }
 
 void RenderVisitor::visit(Light* _pLight) { _pLight->apply(pShader); }

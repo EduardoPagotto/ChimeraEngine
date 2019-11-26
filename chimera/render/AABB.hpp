@@ -9,14 +9,17 @@ namespace Chimera {
 class AABB {
   public:
     AABB();
-    ~AABB();
+    AABB(const AABB& _cpy);
+    AABB(const glm::vec3& _min, const glm::vec3& _max);
+    virtual ~AABB();
+
     void set(const glm::vec3& _min, const glm::vec3& _max);
     bool pointInside(const glm::vec3& _point);
     bool visible(Frustum& _frustum);
     float distance(Frustum& _frustum);
     void render();
 
-    void applyTransformation(const glm::mat4& transformation);
+    AABB transformation(const glm::mat4& transformation);
 
     inline glm::vec3 getMax() const { return vertices[7]; }
     inline glm::vec3 getMin() const { return vertices[0]; }

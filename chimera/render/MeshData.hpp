@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_MESH_DATA_HPP
 #define __CHIMERA_MESH_DATA_HPP
 
-#include "AABB.hpp"
+//#include "AABB.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -29,7 +29,7 @@ class MeshData {
     std::vector<unsigned int> textureIndex;
     std::vector<glm::vec2> textureList;
 
-    AABB aabb;
+    // AABB aabb;
 };
 
 } // namespace Chimera

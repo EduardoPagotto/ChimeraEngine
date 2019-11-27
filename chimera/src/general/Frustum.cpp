@@ -1,4 +1,4 @@
-#include "chimera/render/Frustum.hpp"
+#include "chimera/general/Frustum.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include <glm/gtc/type_ptr.hpp>
 

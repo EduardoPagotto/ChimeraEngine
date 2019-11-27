@@ -8,7 +8,7 @@ add_subdirectory(stereoscopic)
 add_subdirectory(loader)
 add_subdirectory(models)
 add_subdirectory(simples)
-add_subdirectory(terrain)
+#add_subdirectory(terrain)
 
 
 

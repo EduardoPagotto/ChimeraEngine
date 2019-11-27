@@ -41,8 +41,11 @@ glm::vec3 MeshData::defineAABB() {
         }
     }
 
-    aabb.set(min, max);
-    return aabb.getSize();
+    return glm::vec3((glm::abs(max.x) + glm::abs(min.x)) / 2,  // X
+                     (glm::abs(max.y) + glm::abs(min.y)) / 2,  // Y
+                     (glm::abs(max.z) + glm::abs(min.z)) / 2); // Z
+    // aabb.set(min, max);
+    // return aabb.getSize();
 }
 
 void MeshData::changeSize(const float& new_size, bool hasTexture) {

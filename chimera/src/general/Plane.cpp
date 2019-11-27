@@ -1,4 +1,4 @@
-#include "chimera/render/Plane.hpp"
+#include "chimera/general/Plane.hpp"
 
 namespace Chimera {
 Plane::Plane() {}

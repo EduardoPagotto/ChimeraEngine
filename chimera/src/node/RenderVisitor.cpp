@@ -52,10 +52,10 @@ void RenderVisitor::visit(Mesh* _pMesh) {
     if (pShadowMapVisitor != nullptr)
         pShadowMapVisitor->applyShadow(pShader);
 
-    _pMesh->render(pShader);
+    // AABB aabbT = _pMesh->meshData.aabb.transformation(model);
+    // aabbT.render();
 
-    AABB aabbT = _pMesh->meshData.aabb.transformation(model);
-    aabbT.render();
+    _pMesh->render(pShader);
 }
 
 void RenderVisitor::visit(Light* _pLight) { _pLight->apply(pShader); }

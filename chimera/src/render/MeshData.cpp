@@ -3,113 +3,92 @@
 
 namespace Chimera {
 
-MeshData::MeshData() {}
-
-MeshData::MeshData(const MeshData& _cpy) {
-    vertexIndex.reserve(_cpy.vertexIndex.size());
-    copy(_cpy.vertexIndex.begin(), _cpy.vertexIndex.end(), back_inserter(vertexIndex));
-    copy(_cpy.vertexList.begin(), _cpy.vertexList.end(), back_inserter(vertexList));
-
-    normalIndex.reserve(_cpy.normalIndex.size());
-    copy(_cpy.normalIndex.begin(), _cpy.normalIndex.end(), back_inserter(normalIndex));
-    copy(_cpy.normalList.begin(), _cpy.normalList.end(), back_inserter(normalList));
-
-    textureIndex.reserve(_cpy.textureIndex.size());
-    copy(_cpy.textureIndex.begin(), _cpy.textureIndex.end(), back_inserter(textureIndex));
-    copy(_cpy.textureList.begin(), _cpy.textureList.end(), back_inserter(textureList));
+void meshDataDestroy(MeshData& m) {
+    m.vertexIndex.clear();
+    m.vertexList.clear();
+    m.normalIndex.clear();
+    m.normalList.clear();
+    m.textureIndex.clear();
+    m.textureList.clear();
 }
 
-MeshData::~MeshData() {
-    vertexIndex.clear();
-    vertexList.clear();
-    normalIndex.clear();
-    normalList.clear();
-    textureIndex.clear();
-    textureList.clear();
-}
+void meshDataMinMaxSize(const MeshData& m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
 
-glm::vec3 MeshData::defineAABB() {
-
-    glm::vec3 min, max;
-    for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
+    for (unsigned int indice = 0; indice < m.vertexList.size(); indice++) {
         if (indice != 0) {
-            min = glm::min(min, vertexList[indice]);
-            max = glm::max(max, vertexList[indice]);
+            min = glm::min(min, m.vertexList[indice]);
+            max = glm::max(max, m.vertexList[indice]);
         } else {
-            min = vertexList[indice];
-            max = vertexList[indice];
+            min = m.vertexList[indice];
+            max = m.vertexList[indice];
         }
     }
 
-    return glm::vec3((glm::abs(max.x) + glm::abs(min.x)) / 2,  // X
-                     (glm::abs(max.y) + glm::abs(min.y)) / 2,  // Y
-                     (glm::abs(max.z) + glm::abs(min.z)) / 2); // Z
-    // aabb.set(min, max);
-    // return aabb.getSize();
+    size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
+    size.y = (glm::abs(max.y) + glm::abs(min.y)) / 2.0f;
+    size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
 }
 
-void MeshData::changeSize(const float& new_size, bool hasTexture) {
+void meshDataChangeSize(MeshData& m, const float& new_size, const bool& hasTexture) {
 
     if (hasTexture == false) {
-        textureIndex.clear();
-        textureList.clear();
+        m.textureIndex.clear();
+        m.textureList.clear();
     }
 
-    for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
-        glm::vec3 val = vertexList[indice];
-        vertexList[indice] = glm::vec3(val.x * new_size, val.y * new_size, val.z * new_size);
+    for (unsigned int indice = 0; indice < m.vertexList.size(); indice++) {
+        glm::vec3 val = m.vertexList[indice];
+        m.vertexList[indice] = glm::vec3(val.x * new_size, val.y * new_size, val.z * new_size);
     }
-
-    defineAABB();
 }
 
-void MeshData::debugDados() {
+void meshDataDebugDados(const MeshData& m) {
 
     int linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Indice ----------(%03d)", (int)vertexIndex.size());
-    for (unsigned int indice = 0; indice < vertexIndex.size(); indice += 3) {
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Indice ----------(%03d)", (int)m.vertexIndex.size());
+    for (unsigned int indice = 0; indice < m.vertexIndex.size(); indice += 3) {
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                     vertexIndex[indice], vertexIndex[indice + 1], vertexIndex[indice + 2]);
+                     m.vertexIndex[indice], m.vertexIndex[indice + 1], m.vertexIndex[indice + 2]);
         linha++;
     }
 
     linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Lista ---------(%03d)", (int)vertexList.size());
-    for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Lista ---------(%03d)", (int)m.vertexList.size());
+    for (unsigned int indice = 0; indice < m.vertexList.size(); indice++) {
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f)", linha, indice,
-                     vertexList[indice].x, vertexList[indice].y, vertexList[indice].z);
+                     m.vertexList[indice].x, m.vertexList[indice].y, m.vertexList[indice].z);
         linha++;
     }
 
     linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Indice ----------(%03d)", (int)normalIndex.size());
-    for (unsigned int indice = 0; indice < normalIndex.size(); indice += 3) {
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Indice ----------(%03d)", (int)m.normalIndex.size());
+    for (unsigned int indice = 0; indice < m.normalIndex.size(); indice += 3) {
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                     normalIndex[indice], normalIndex[indice + 1], normalIndex[indice + 2]);
+                     m.normalIndex[indice], m.normalIndex[indice + 1], m.normalIndex[indice + 2]);
         linha++;
     }
 
     linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Lista ---------(%03d)", (int)normalList.size());
-    for (unsigned int indice = 0; indice < normalList.size(); indice++) {
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Lista ---------(%03d)", (int)m.normalList.size());
+    for (unsigned int indice = 0; indice < m.normalList.size(); indice++) {
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%05.3f; %05.3f; %05.3f))", linha, indice,
-                     normalList[indice].x, normalList[indice].y, normalList[indice].z);
+                     m.normalList[indice].x, m.normalList[indice].y, m.normalList[indice].z);
         linha++;
     }
 
     linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Indice ----------(%03d)", (int)textureIndex.size());
-    for (unsigned int indice = 0; indice < textureIndex.size(); indice += 3) {
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Indice ----------(%03d)", (int)m.textureIndex.size());
+    for (unsigned int indice = 0; indice < m.textureIndex.size(); indice += 3) {
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                     textureIndex[indice], textureIndex[indice + 1], textureIndex[indice + 2]);
+                     m.textureIndex[indice], m.textureIndex[indice + 1], m.textureIndex[indice + 2]);
         linha++;
     }
 
     linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Lista ---------(%03d)", (int)textureList.size());
-    for (unsigned int indice = 0; indice < textureList.size(); indice++) {
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Lista ---------(%03d)", (int)m.textureList.size());
+    for (unsigned int indice = 0; indice < m.textureList.size(); indice++) {
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Linha: %02d : p: %02d (%05.3f; %05.3f)", linha, indice,
-                     textureList[indice].x, textureList[indice].y);
+                     m.textureList[indice].x, m.textureList[indice].y);
         linha++;
     }
 }

@@ -27,7 +27,11 @@ void Mesh::init() {
         material = new Material();
 
     material->init();
-    pTransform->init(meshData.defineAABB());
+
+    glm::vec3 min, max, size;
+    meshDataMinMaxSize(meshData, min, max, size);
+    pTransform->init(size);
+
     setVertexBuffer();
 }
 
@@ -44,7 +48,7 @@ void Mesh::setVertexBuffer() {
 
 void Mesh::debugDados() {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Debug Mess Nome: %s", getName().c_str());
-    meshData.debugDados();
+    meshDataDebugDados(meshData);
 }
 
 void Mesh::replaceTransform(Transform* _pTransform) {

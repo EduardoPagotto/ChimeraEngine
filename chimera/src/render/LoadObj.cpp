@@ -228,12 +228,16 @@ void loadTerrain(const std::string& _fileName, MeshData& _mesh) {
         glm::vec3 nor = t.vertices[i].normal;
         _mesh.vertexList.push_back(pos);
         _mesh.normalList.push_back(nor);
+        // TODO: Implementar
+        //_mesh.textureList.push_back(XXX);
     }
 
     for (int i = 0; i < t.indices.size(); i++) {
         int val = t.indices[i];
         _mesh.normalIndex.push_back(val);
         _mesh.vertexIndex.push_back(val);
+        // TODO: Implementar
+        //_mesh.textureIndex.push_back(val);
     }
 }
 } // namespace Chimera

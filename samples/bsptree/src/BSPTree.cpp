@@ -2,8 +2,7 @@
 #include <SDL2/SDL.h>
 
 //-----builder
-
-#define EPSILON 1e-3
+// #define EPSILON 1e-3
 
 template <class T> void swapFace(T& a, T& b) {
     T c = b;

@@ -5,7 +5,7 @@
 #include "Triangle.hpp"
 #include "chimera/core/Material.hpp"
 #include "chimera/core/MeshData.hpp"
-#include "chimera/core/Vertex.hpp"
+#include "chimera/core/VertexData.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

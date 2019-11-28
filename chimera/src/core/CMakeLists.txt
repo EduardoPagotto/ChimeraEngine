@@ -18,7 +18,8 @@ set (SourcesCore Canvas.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
 				 FlowControl.cpp
-				 Vertex.cpp
+				 VertexDynamic.cpp 
+				 VertexStatic.cpp
 				 Shader.cpp
 				 Transform.cpp
 				 Tex.cpp

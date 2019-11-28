@@ -10,6 +10,9 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
 set (RenderSource 	Triangle.cpp
+					Plane.cpp
+					Frustum.cpp
+					AABB.cpp
 					MeshData.cpp
 					TerrainData.cpp
 					LoadObj.cpp)

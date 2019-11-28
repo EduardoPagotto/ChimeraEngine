@@ -1,11 +1,11 @@
 #ifndef __GAME_TESTE_TERRAIN__HPP
 #define __GAME_TESTE_TERRAIN__HPP
 
+#include "Camera.hpp"
 #include "Terrain.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/render/Shader.hpp"
-#include "Camera.hpp"
+#include "chimera/core/Shader.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

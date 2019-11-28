@@ -39,12 +39,6 @@ add_library (ChimeraNode STATIC ${SourceNode})
 target_include_directories (ChimeraNode PUBLIC ${IncludeNode}
 										PRIVATE ${IncludeNodeAux})
 
-# Lista os Includes
-# get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-# foreach(dir ${dirs})
-# 	message(STATUS "Include dir='${dir}'")
-# endforeach()
-
 add_dependencies(ChimeraNode ChimeraCore 
                              ChimeraRender)
 

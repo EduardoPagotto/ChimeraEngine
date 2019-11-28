@@ -2,8 +2,8 @@
 #define __GAME_TERRAIN_BSPTREE__HPP
 
 #include "BSPTreeNode.hpp"
+#include "chimera/core/Vertex.hpp"
 #include "chimera/render/Frustum.hpp"
-#include "chimera/render/Vertex.hpp"
 
 namespace Chimera {
 

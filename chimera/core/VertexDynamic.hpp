@@ -2,6 +2,7 @@
 #define __CHIMERA_VERTEX_DYNAMIC_HPP
 
 #include "VertexData.hpp"
+#include <vector>
 
 namespace Chimera {
 

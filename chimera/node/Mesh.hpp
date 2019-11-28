@@ -7,9 +7,9 @@
 
 #include "Node.hpp"
 #include "chimera/core/Material.hpp"
+#include "chimera/core/MeshData.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/Vertex.hpp"
-#include "chimera/render/MeshData.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {

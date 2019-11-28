@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_TEX__HPP
 #define __CHIMERA_TEX__HPP
 
-#include "Shader.hpp"
 #include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/Shader.hpp"
 
 // #include "chimera/core/Singleton.hpp"
 // #include <map>

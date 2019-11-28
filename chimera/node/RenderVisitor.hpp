@@ -2,8 +2,8 @@
 #define __CHIMERA_RENDER_VISITOR__HPP
 
 #include "chimera/core/CanvasGL.hpp"
+#include "chimera/core/Shader.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
-#include "chimera/render/Shader.hpp"
 #include "chimera/render/Transform.hpp"
 
 namespace Chimera {

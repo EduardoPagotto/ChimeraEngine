@@ -9,12 +9,10 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	Vertex.cpp
-					Triangle.cpp
+set (RenderSource 	Triangle.cpp
 					MeshData.cpp
 					Material.cpp
 					Transform.cpp
-					Shader.cpp
 					Tex.cpp
 					TerrainData.cpp
 					LoadObj.cpp)

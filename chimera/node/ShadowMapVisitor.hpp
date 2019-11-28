@@ -3,7 +3,7 @@
 
 #include "Node.hpp"
 #include "NodeVisitor.hpp"
-#include "chimera/render/Shader.hpp"
+#include "chimera/core/Shader.hpp"
 #include "chimera/render/Tex.hpp"
 #include "chimera/render/Transform.hpp"
 #include <string>

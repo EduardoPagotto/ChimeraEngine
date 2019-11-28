@@ -5,7 +5,7 @@
 
 #include "Font.hpp"
 #include "Node.hpp"
-#include "chimera/render/Shader.hpp"
+#include "chimera/core/Shader.hpp"
 
 namespace Chimera {
 class HUD : public Node {

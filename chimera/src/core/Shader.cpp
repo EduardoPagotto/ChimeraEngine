@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "chimera/core/Exception.hpp"
-#include "chimera/render/Shader.hpp"
+#include "chimera/core/Shader.hpp"
 
 namespace Chimera {
 

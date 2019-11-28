@@ -1,4 +1,4 @@
-#include "chimera/render/Vertex.hpp"
+#include "chimera/core/Vertex.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 

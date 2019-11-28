@@ -8,7 +8,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Shader.hpp"
+#include "chimera/core/Shader.hpp"
 #include "chimera/core/ViewPoint.hpp"
 
 namespace Chimera {

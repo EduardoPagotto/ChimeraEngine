@@ -3,9 +3,9 @@
 
 #include "Node.hpp"
 #include "Particle.hpp"
+#include "chimera/core/Shader.hpp"
 #include "chimera/core/Timer.hpp"
 #include "chimera/render/Material.hpp"
-#include "chimera/render/Shader.hpp"
 #include "chimera/render/Transform.hpp"
 #include <vector>
 

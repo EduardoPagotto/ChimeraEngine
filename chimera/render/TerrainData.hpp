@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_TERRAIN_DATA__HPP
 #define __CHIMERA_TERRAIN_DATA__HPP
 
-#include "Vertex.hpp"
+#include "chimera/core/Vertex.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

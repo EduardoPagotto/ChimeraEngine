@@ -6,10 +6,10 @@
 #include <vector>
 
 #include "Node.hpp"
+#include "chimera/core/Vertex.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/MeshData.hpp"
 #include "chimera/render/Transform.hpp"
-#include "chimera/render/Vertex.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {

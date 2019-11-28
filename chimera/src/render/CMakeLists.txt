@@ -11,7 +11,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 #define objetos a compilar
 set (RenderSource 	Triangle.cpp
 					MeshData.cpp
-					Material.cpp
 					TerrainData.cpp
 					LoadObj.cpp)
 

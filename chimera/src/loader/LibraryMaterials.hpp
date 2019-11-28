@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_LOADER_LIBRARY_MATERIALS__HPP
 #define __CHIMERA_LOADER_LIBRARY_MATERIALS__HPP
 
+#include "chimera/core/Material.hpp"
 #include "chimera/loader/Library.hpp"
-#include "chimera/render/Material.hpp"
 
 namespace ChimeraLoaders {
 

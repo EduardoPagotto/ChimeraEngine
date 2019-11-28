@@ -1,10 +1,10 @@
 #ifndef __CHIMERA_LOAD_OBJ__HPP
 #define __CHIMERA_LOAD_OBJ__HPP
 
-#include "Material.hpp"
 #include "MeshData.hpp"
 #include "TerrainData.hpp"
 #include "Triangle.hpp"
+#include "chimera/core/Material.hpp"
 #include "chimera/core/Vertex.hpp"
 #include <glm/glm.hpp>
 #include <vector>

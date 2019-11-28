@@ -3,10 +3,10 @@
 
 #include "Node.hpp"
 #include "Particle.hpp"
+#include "chimera/core/Material.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Timer.hpp"
 #include "chimera/core/Transform.hpp"
-#include "chimera/render/Material.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -

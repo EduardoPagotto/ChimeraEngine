@@ -23,13 +23,6 @@ set (RenderIncludeAux ${OPENGL_INCLUDE_DIR}
 				 	${SDL2_INCLUDE_DIR}
 				 	${GLEW_INCLUDE_DIRS})
 
-
-if (HMD_Z1_SET_TO_USE)
-	message(STATUS "HMD_Z1 Incluido no Projeto")
-	set(RenderSource ${RenderSource} CanvasHmd.cpp) #adiciona o cpp
-	set(RenderSource ${RenderSource} Eye.cpp) #adiciona o cpp
-endif(HMD_Z1_SET_TO_USE)
-
 # Define o Target
 add_library (ChimeraRender STATIC ${RenderSource})
 

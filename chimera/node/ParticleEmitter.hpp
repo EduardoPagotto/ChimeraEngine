@@ -5,8 +5,8 @@
 #include "Particle.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Timer.hpp"
+#include "chimera/core/Transform.hpp"
 #include "chimera/render/Material.hpp"
-#include "chimera/render/Transform.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -

@@ -19,7 +19,9 @@ set (SourcesCore Canvas.cpp
 				 JoystickManager.cpp
 				 FlowControl.cpp
 				 Vertex.cpp
-				 Shader.cpp)
+				 Shader.cpp
+				 Transform.cpp
+				 Tex.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

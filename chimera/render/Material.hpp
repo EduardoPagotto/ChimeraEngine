@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_MATERIAL_DATA_HPP
 #define __CHIMERA_MATERIAL_DATA_HPP
 
-#include "Tex.hpp"
 #include "chimera/core/ShaderValue.hpp"
+#include "chimera/core/Tex.hpp"
 #include <glm/glm.hpp>
 #include <list>
 #include <map>

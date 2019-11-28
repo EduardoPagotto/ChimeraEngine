@@ -3,8 +3,8 @@
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Shader.hpp"
+#include "chimera/core/Transform.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
-#include "chimera/render/Transform.hpp"
 
 namespace Chimera {
 

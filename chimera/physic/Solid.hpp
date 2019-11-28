@@ -2,7 +2,7 @@
 #define __CHIMERA_SOLID__HPP
 
 #include "PhysicsControl.hpp"
-#include "chimera/render/Transform.hpp"
+#include "chimera/core/Transform.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>

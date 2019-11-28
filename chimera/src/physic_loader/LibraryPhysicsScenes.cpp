@@ -1,11 +1,9 @@
-#include "chimera/core/Exception.hpp"
-
-#include "LibraryPhysicModels.hpp"
 #include "LibraryPhysicsScenes.hpp"
-
+#include "LibraryPhysicModels.hpp"
+#include "chimera/core/Exception.hpp"
+#include "chimera/core/Transform.hpp"
 #include "chimera/node/Mesh.hpp"
 #include "chimera/physic/Solid.hpp"
-#include "chimera/render/Transform.hpp"
 
 namespace ChimeraLoaders {
 

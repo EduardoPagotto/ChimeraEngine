@@ -4,8 +4,8 @@
 #include "Node.hpp"
 #include "NodeVisitor.hpp"
 #include "chimera/core/Shader.hpp"
-#include "chimera/render/Tex.hpp"
-#include "chimera/render/Transform.hpp"
+#include "chimera/core/Tex.hpp"
+#include "chimera/core/Transform.hpp"
 #include <string>
 
 namespace Chimera {

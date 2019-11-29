@@ -4,7 +4,7 @@
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
 
-#include "chimera/render/Triangle.hpp"
+#include "Triangle.hpp"
 #include <vector>
 
 enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };

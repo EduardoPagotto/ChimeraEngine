@@ -162,7 +162,7 @@ int main(int argn, char** argv) {
         pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setShine(32.0f);
         // pMat1->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./samples/terrain/data/terrain3.jpg"));
-        createTerrain("terra", "./samples/terrain/data/terrain1.bin", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
+        createTerrain("terra", "./data/terrain/terrain1.bin", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
 
         // Wrapper do game
         Game* game = new Game(video, group1);

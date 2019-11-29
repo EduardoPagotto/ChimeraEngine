@@ -1,5 +1,6 @@
 #include "LibraryLights.hpp"
 #include "chimera/core/Exception.hpp"
+#include <tuple>
 
 namespace ChimeraLoaders {
 
@@ -18,8 +19,8 @@ Chimera::Light* LibraryLights::target() {
             Chimera::Light* pLight = new Chimera::Light(nullptr, l_id);
 
             auto ret_data = loadDiffuseLightColor(l_nLight);
-            pLight->setDiffuse(std::get<0>(ret_data));
-            pLight->setType(std::get<1>(ret_data));
+            pLight->lightData.setDiffuse(std::get<0>(ret_data));
+            pLight->lightData.setType(std::get<1>(ret_data));
 
             return pLight;
         }

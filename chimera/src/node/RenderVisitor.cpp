@@ -58,7 +58,7 @@ void RenderVisitor::visit(Mesh* _pMesh) {
     _pMesh->render(pShader);
 }
 
-void RenderVisitor::visit(Light* _pLight) { _pLight->apply(pShader); }
+void RenderVisitor::visit(Light* _pLight) { _pLight->lightData.apply(pShader); }
 
 void RenderVisitor::visit(ParticleEmitter* _pParticleEmitter) {
 

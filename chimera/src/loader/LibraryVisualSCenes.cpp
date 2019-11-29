@@ -95,7 +95,7 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
             LibraryLights lib(root, l_url);
             Chimera::Light* pLight = lib.target();
 
-            pLight->setTransform(l_pTransform);
+            pLight->lightData.setTransform(l_pTransform);
 
             _pNodePai->addChild(pLight);
             pLastNodeDone = pLight;

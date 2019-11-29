@@ -73,9 +73,9 @@ void loadCameraData() {
 
 void loadLightData() {
     pLight = new Chimera::Light(group1, "Luz1");
-    pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    pLight->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-    pLight->setPosition(glm::vec3(80, 100, 150));
+    pLight->lightData.setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    pLight->lightData.setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+    pLight->lightData.setPosition(glm::vec3(80, 100, 150));
 }
 
 void createMeshTexturizade(std::string name, std::string file, float scale, glm::vec3 _position) {

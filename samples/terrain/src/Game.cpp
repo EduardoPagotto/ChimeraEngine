@@ -120,10 +120,10 @@ void Game::keyCapture(SDL_Keycode tecla) {
             RenderSlow = !RenderSlow;
             break;
         case SDLK_F7:
-            terra.SaveBinary((char*)"terrain-saved.bin");
+            terra.SaveBinary((char*)"./data/terrain/terrain-saved.bin");
             break;
         case SDLK_1:
-            if (terra.LoadBinary((char*)"terrain1.bin")) {
+            if (terra.LoadBinary((char*)"./data/terrain/terrain1.bin")) {
                 glm::vec3 Movement;
                 CheckCameraTerrainPosition(Movement);
                 camera.Move(Movement);
@@ -131,7 +131,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             }
             break;
         case SDLK_2:
-            if (terra.LoadTexture2D((char*)"terrain2.jpg", 32.0f, -16.0f)) {
+            if (terra.LoadTexture2D((char*)"./data/terrain/terrain2.jpg", 32.0f, -16.0f)) {
                 glm::vec3 Movement;
                 CheckCameraTerrainPosition(Movement);
                 camera.Move(Movement);
@@ -139,7 +139,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             }
             break;
         case SDLK_3:
-            if (terra.LoadTexture2D((char*)"terrain3.jpg", 128.0f, -64.0f)) {
+            if (terra.LoadTexture2D((char*)"./data/terrain/terrain3.jpg", 128.0f, -64.0f)) {
                 glm::vec3 Movement;
                 CheckCameraTerrainPosition(Movement);
                 camera.Move(Movement);
@@ -147,7 +147,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             }
             break;
         case SDLK_4:
-            if (terra.LoadTexture2D((char*)"terrain4.jpg", 128.0f, -64.0f)) {
+            if (terra.LoadTexture2D((char*)"./data/terrain/terrain4.jpg", 128.0f, -64.0f)) {
                 glm::vec3 Movement;
                 CheckCameraTerrainPosition(Movement);
                 camera.Move(Movement);
@@ -207,7 +207,7 @@ void Game::start() {
 
     pCanvas->initGL();
 
-    terra.LoadBinary((char*)"./samples/terrain/data/terrain1.bin");
+    terra.LoadBinary((char*)"./data/terrain/terrain1.bin");
 
     // Shader.UniformLocations = new GLuint[2];
     UniformLocations = new GLuint[2];

@@ -1,4 +1,4 @@
-#include "chimera/node/Light.hpp"
+#include "chimera/node/NodeLight.hpp"
 //#include "chimera/node/NodeVisitor.hpp"
 
 namespace Chimera {

@@ -3,8 +3,8 @@
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/HUD.hpp"
-#include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
+#include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeParse.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
@@ -33,7 +33,7 @@ void ShadowMapVisitor::visit(Mesh* _pMesh) {
     _pMesh->render(nullptr);
 }
 
-void ShadowMapVisitor::visit(Light* _pLight) {
+void ShadowMapVisitor::visit(NodeLight* _pLight) {
     // node de luz deve vir anter para funcionar?!
     this->setLightSpaceMatrix(_pLight->lightData.getPosition());
     pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));

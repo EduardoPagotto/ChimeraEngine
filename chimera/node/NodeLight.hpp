@@ -7,12 +7,12 @@
 
 namespace Chimera {
 
-class Light : public Node {
+class NodeLight : public Node {
   public:
-    Light(Node* _parent, std::string _name) : Node(_parent, Kind::LIGHT, _name) {}
-    virtual ~Light() {}
-    virtual void init() override{};
-    virtual void accept(class NodeVisitor* v) override { v->visit(this); };
+    NodeLight(Node* _parent, std::string _name) : Node(_parent, Kind::LIGHT, _name) {}
+    virtual ~NodeLight() {}
+    virtual void init(){};
+    virtual void accept(class NodeVisitor* v) { v->visit(this); }
     LightData lightData;
 };
 } // namespace Chimera

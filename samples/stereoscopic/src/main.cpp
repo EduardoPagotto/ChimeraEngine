@@ -7,8 +7,8 @@
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
-#include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
+#include "chimera/node/NodeLight.hpp"
 #include "chimera/render/LoadObj.hpp"
 
 #include <cstdio>
@@ -19,7 +19,7 @@
 Chimera::CanvasGL* video;
 Chimera::Group* group1;
 Chimera::Camera* pCam;
-Chimera::Light* pLight;
+Chimera::NodeLight* pLight;
 
 std::map<std::string, Chimera::Shader*> mapa;
 
@@ -72,7 +72,7 @@ void loadCameraData() {
 }
 
 void loadLightData() {
-    pLight = new Chimera::Light(group1, "Luz1");
+    pLight = new Chimera::NodeLight(group1, "Luz1");
     pLight->lightData.setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     pLight->lightData.setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
     pLight->lightData.setPosition(glm::vec3(80, 100, 150));

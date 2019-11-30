@@ -93,7 +93,7 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
         } else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
             LibraryLights lib(root, l_url);
-            Chimera::Light* pLight = lib.target();
+            Chimera::NodeLight* pLight = lib.target();
 
             pLight->lightData.setTransform(l_pTransform);
 

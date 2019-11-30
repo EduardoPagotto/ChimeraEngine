@@ -3,8 +3,8 @@
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/HUD.hpp"
-#include "chimera/node/Light.hpp"
 #include "chimera/node/Mesh.hpp"
+#include "chimera/node/NodeLight.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -58,7 +58,7 @@ void RenderVisitor::visit(Mesh* _pMesh) {
     _pMesh->render(pShader);
 }
 
-void RenderVisitor::visit(Light* _pLight) { _pLight->lightData.apply(pShader); }
+void RenderVisitor::visit(NodeLight* _pLight) { _pLight->lightData.apply(pShader); }
 
 void RenderVisitor::visit(ParticleEmitter* _pParticleEmitter) {
 

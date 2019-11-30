@@ -8,7 +8,7 @@ LibraryLights::LibraryLights(tinyxml2::XMLElement* _root, const std::string& _ur
 
 LibraryLights::~LibraryLights() {}
 
-Chimera::Light* LibraryLights::target() {
+Chimera::NodeLight* LibraryLights::target() {
 
     tinyxml2::XMLElement* l_nLight = root->FirstChildElement("library_lights")->FirstChildElement("light");
     for (l_nLight; l_nLight; l_nLight = l_nLight->NextSiblingElement()) {
@@ -16,7 +16,7 @@ Chimera::Light* LibraryLights::target() {
         std::string l_id = l_nLight->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            Chimera::Light* pLight = new Chimera::Light(nullptr, l_id);
+            Chimera::NodeLight* pLight = new Chimera::NodeLight(nullptr, l_id);
 
             auto ret_data = loadDiffuseLightColor(l_nLight);
             pLight->lightData.setDiffuse(std::get<0>(ret_data));
@@ -26,7 +26,7 @@ Chimera::Light* LibraryLights::target() {
         }
     }
 
-    throw Chimera::Exception("Light nao encontrada: " + url);
+    throw Chimera::Exception("NodeLight nao encontrada: " + url);
 }
 
 glm::vec4 LibraryLights::getColor(tinyxml2::XMLElement* l_nColorVal) {

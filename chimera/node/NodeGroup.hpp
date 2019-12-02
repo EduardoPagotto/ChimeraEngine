@@ -7,10 +7,10 @@
 
 namespace Chimera {
 
-class Group : public Node {
+class NodeGroup : public Node {
   public:
-    Group(Node* _parent, std::string _name);
-    virtual ~Group();
+    NodeGroup(Node* _parent, std::string _name);
+    virtual ~NodeGroup();
 
     virtual void init() override;
     virtual void accept(class NodeVisitor* v) override;

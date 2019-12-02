@@ -1,7 +1,7 @@
 #include "chimera/node/ShadowMapVisitor.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/node/Group.hpp"
 #include "chimera/node/NodeCamera.hpp"
+#include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
@@ -41,7 +41,7 @@ void ShadowMapVisitor::visit(NodeLight* _pLight) {
 
 void ShadowMapVisitor::visit(NodeParticleEmitter* _pParticleEmitter) {}
 
-void ShadowMapVisitor::visit(Group* _pGroup) {
+void ShadowMapVisitor::visit(NodeGroup* _pGroup) {
     // Shader selecionado correto no RenderVisitor via Group
     pShader->link();
 }

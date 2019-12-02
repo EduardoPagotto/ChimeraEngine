@@ -1,9 +1,7 @@
-#include "chimera/core/Exception.hpp"
-//#include " LibraryGeometrys.hpp"
 #include "LibraryPhysicModels.hpp"
 #include "LibraryPhysicsMaterials.hpp"
-
-#include "chimera/node/Group.hpp"
+#include "chimera/core/Exception.hpp"
+#include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/physic/Solid.hpp"
 

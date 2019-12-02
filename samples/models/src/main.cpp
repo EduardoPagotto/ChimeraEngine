@@ -65,9 +65,9 @@ int main(int argn, char** argv) {
         std::string font = config["font"].as<std::string>();
 
         // Cria grupo shader como filho de scene
-        Chimera::Group* pRoot = new Chimera::Group(nullptr, "root_real");
+        Chimera::NodeGroup* pRoot = new Chimera::NodeGroup(nullptr, "root_real");
 
-        Chimera::Group* group1 = new Chimera::Group(pRoot, "none");
+        Chimera::NodeGroup* group1 = new Chimera::NodeGroup(pRoot, "none");
 
         ChimeraLoaders::VisualScene libV(model, group1);
         libV.target();
@@ -82,7 +82,7 @@ int main(int argn, char** argv) {
         group1->setNodeVisitor(new Chimera::ShadowMapVisitor(mapa["simpleDepthShader"], 2048, 2048));
 
         // create and add particle to scene
-        Chimera::Group* gParticle = new Chimera::Group(pRoot, "ParticleGroup");
+        Chimera::NodeGroup* gParticle = new Chimera::NodeGroup(pRoot, "ParticleGroup");
         gParticle->setShader(mapa["particle-default"]);
         Chimera::NodeParticleEmitter* pParticleEmitter = new Chimera::NodeParticleEmitter(gParticle, "testeZ1", 10000);
         pParticleEmitter->setTransform(
@@ -91,7 +91,7 @@ int main(int argn, char** argv) {
         pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./data/images/Particle2.png"));
 
         // Create and add hud data text
-        Chimera::Group* gHud = new Chimera::Group((Chimera::Node*)pRoot, "HUD-Group");
+        Chimera::NodeGroup* gHud = new Chimera::NodeGroup((Chimera::Node*)pRoot, "HUD-Group");
         gHud->setShader(mapa["hud-default"]);
         Chimera::NodeHUD* pHUD = new Chimera::NodeHUD(gHud, "HUD-Default");
         Chimera::Font* pFont = new Chimera::Font(font, 18); // TODO: carregar size da fonte

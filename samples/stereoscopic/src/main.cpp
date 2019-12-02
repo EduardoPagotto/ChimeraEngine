@@ -5,8 +5,8 @@
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/node/Group.hpp"
 #include "chimera/node/NodeCamera.hpp"
+#include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/render/LoadObj.hpp"
@@ -17,7 +17,7 @@
 #include <yaml-cpp/yaml.h>
 
 Chimera::CanvasGL* video;
-Chimera::Group* group1;
+Chimera::NodeGroup* group1;
 Chimera::NodeCamera* pCam;
 Chimera::NodeLight* pLight;
 
@@ -133,7 +133,7 @@ int main(int argn, char** argv) {
     try {
         createScreemAndLoadShaders();
 
-        group1 = new Group(nullptr, "modelos");
+        group1 = new NodeGroup(nullptr, "modelos");
         group1->setShader(mapa["mesh-default"]);
 
         // Propriedades da camera

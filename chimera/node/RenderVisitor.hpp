@@ -17,7 +17,7 @@ class RenderVisitor : public NodeVisitor {
     virtual void visit(class NodeMesh* _pMesh) override;
     virtual void visit(class NodeLight* _pLight) override;
     virtual void visit(class NodeParticleEmitter* _pParticleEmitter) override;
-    virtual void visit(class Group* _pGroup) override;
+    virtual void visit(class NodeGroup* _pGroup) override;
     virtual void visit(class NodeHUD* _pHUD) override;
 
     Transform* pTransform;

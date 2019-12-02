@@ -1,7 +1,7 @@
 #include "chimera/node/RenderVisitor.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/node/Group.hpp"
 #include "chimera/node/NodeCamera.hpp"
+#include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
@@ -92,7 +92,7 @@ void RenderVisitor::visit(NodeParticleEmitter* _pParticleEmitter) {
     }
 }
 
-void RenderVisitor::visit(Group* _pGroup) {
+void RenderVisitor::visit(NodeGroup* _pGroup) {
 
     pShader = _pGroup->getShader();
     if (pShader == nullptr)

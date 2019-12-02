@@ -5,7 +5,7 @@
 
 namespace ChimeraLoaders {
 
-VisualScene::VisualScene(const std::string& _file, Chimera::Group* _pGroup) : Library(nullptr, "!" + _file) {
+VisualScene::VisualScene(const std::string& _file, Chimera::NodeGroup* _pGroup) : Library(nullptr, "!" + _file) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
     pGroup = _pGroup;
 }

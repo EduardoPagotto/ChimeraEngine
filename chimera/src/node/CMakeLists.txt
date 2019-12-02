@@ -19,7 +19,7 @@ set (SourceNode Node.cpp
 				NodeHUD.cpp
 				Particle.cpp
 				NodeParticleEmitter.cpp
-				Group.cpp
+				NodeGroup.cpp
 				RenderVisitor.cpp
 				ShadowMapVisitor.cpp
 				NodeParse.cpp)

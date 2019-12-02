@@ -1,4 +1,4 @@
-#include "chimera/node/RenderVisitor.hpp"
+#include "chimera/node/VisitorRender.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeGroup.hpp"
@@ -13,7 +13,7 @@
 
 namespace Chimera {
 
-RenderVisitor::RenderVisitor() {
+VisitorRender::VisitorRender() {
 
     pTransform = nullptr;
     pVideo = nullptr;
@@ -29,13 +29,13 @@ RenderVisitor::RenderVisitor() {
     pShader = nullptr;
 }
 
-RenderVisitor::~RenderVisitor() {}
+VisitorRender::~VisitorRender() {}
 
-void RenderVisitor::init() {}
+void VisitorRender::init() {}
 
-void RenderVisitor::visit(NodeCamera* _pCamera) {}
+void VisitorRender::visit(NodeCamera* _pCamera) {}
 
-void RenderVisitor::visit(NodeMesh* _pMesh) {
+void VisitorRender::visit(NodeMesh* _pMesh) {
 
     model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
     if (pShader == nullptr)
@@ -58,9 +58,9 @@ void RenderVisitor::visit(NodeMesh* _pMesh) {
     _pMesh->render(pShader);
 }
 
-void RenderVisitor::visit(NodeLight* _pLight) { _pLight->lightData.apply(pShader); }
+void VisitorRender::visit(NodeLight* _pLight) { _pLight->lightData.apply(pShader); }
 
-void RenderVisitor::visit(NodeParticleEmitter* _pParticleEmitter) {
+void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
 
     if (particleOn == true) {
 
@@ -92,7 +92,7 @@ void RenderVisitor::visit(NodeParticleEmitter* _pParticleEmitter) {
     }
 }
 
-void RenderVisitor::visit(NodeGroup* _pGroup) {
+void VisitorRender::visit(NodeGroup* _pGroup) {
 
     pShader = _pGroup->getShader();
     if (pShader == nullptr)
@@ -119,7 +119,7 @@ void RenderVisitor::visit(NodeGroup* _pGroup) {
     }
 }
 
-void RenderVisitor::visit(NodeHUD* _pHUD) {
+void VisitorRender::visit(NodeHUD* _pHUD) {
 
     if (HudOn == true) {
         if (_pHUD->isOn() == true) {

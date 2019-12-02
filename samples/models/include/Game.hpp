@@ -6,7 +6,7 @@
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"
-#include "chimera/node/RenderVisitor.hpp"
+#include "chimera/node/VisitorRender.hpp"
 #include "chimera/physic/PhysicsControl.hpp"
 #include "chimera/physic/Solid.hpp"
 
@@ -42,7 +42,7 @@ class Game : public Chimera::IGameClientEvents {
     std::string sPosicaoObj;
     std::string textoFPS;
 
-    Chimera::RenderVisitor renderV;
+    Chimera::VisitorRender renderV;
     Chimera::NodeHUD* pHUD;
     Chimera::NodeCamera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;

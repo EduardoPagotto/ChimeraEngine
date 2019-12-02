@@ -4,7 +4,7 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/node/Node.hpp"
-#include "chimera/node/RenderVisitor.hpp"
+#include "chimera/node/VisitorRender.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -30,7 +30,7 @@ class Game : public Chimera::IGameClientEvents {
     int botaoIndex;
     int estadoBotao;
 
-    Chimera::RenderVisitor renderV;
+    Chimera::VisitorRender renderV;
     Chimera::CanvasGL* pCanvas;
     Chimera::Node* pRoot;
 };

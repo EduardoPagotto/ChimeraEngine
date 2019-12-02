@@ -8,10 +8,10 @@
 
 namespace Chimera {
 
-class RenderVisitor : public VisitorInterface {
+class VisitorRender : public VisitorInterface {
   public:
-    RenderVisitor();
-    virtual ~RenderVisitor();
+    VisitorRender();
+    virtual ~VisitorRender();
     virtual void init() override;
     virtual void visit(class NodeCamera* _pCamera) override;
     virtual void visit(class NodeMesh* _pMesh) override;

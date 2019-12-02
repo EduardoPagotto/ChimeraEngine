@@ -18,10 +18,10 @@ enum class LightType {
     POSITIONAL = 1,
 };
 
-class LightData {
+class Light {
   public:
-    LightData();
-    virtual ~LightData();
+    Light();
+    virtual ~Light();
 
     void apply(Shader* _pShader);
 

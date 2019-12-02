@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-LightData::LightData() {
+Light::Light() {
     type = LightType::POSITIONAL;
     ambient = glm::vec4(0.0f);
     specular = glm::vec4(0.0f);
@@ -11,9 +11,9 @@ LightData::LightData() {
     transform = glm::mat4(1.0); // Matrix identidade
 }
 
-LightData::~LightData() {}
+Light::~Light() {}
 
-void LightData::apply(Shader* _pShader) {
+void Light::apply(Shader* _pShader) {
     glm::vec3 val = glm::vec3(transform[3]); // pega posicao
     _pShader->setGlUniform3fv(SHADE_LIGHT_POSITION, 1, glm::value_ptr(val));
     _pShader->setGlUniform4fv(SHADE_LIGHT_AMBIENT, 1, glm::value_ptr(ambient));

@@ -13,7 +13,7 @@ class NodeLight : public Node {
     virtual ~NodeLight() {}
     virtual void init(){};
     virtual void accept(class VisitorInterface* v) { v->visit(this); }
-    LightData lightData;
+    Light light;
 };
 } // namespace Chimera
 #endif

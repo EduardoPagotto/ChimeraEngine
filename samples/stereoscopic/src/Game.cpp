@@ -3,7 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/TrackHead.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/node/Camera.hpp"
+#include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/NodeParse.hpp"
 
@@ -46,7 +46,7 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
 void Game::keyCapture(SDL_Keycode tecla) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
+    Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 
     switch (tecla) {
         case SDLK_ESCAPE:
@@ -83,7 +83,7 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
+    Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {

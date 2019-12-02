@@ -5,8 +5,8 @@
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
+#include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/render/LoadObj.hpp"
@@ -18,7 +18,7 @@
 
 Chimera::CanvasGL* video;
 Chimera::Group* group1;
-Chimera::Camera* pCam;
+Chimera::NodeCamera* pCam;
 Chimera::NodeLight* pLight;
 
 std::map<std::string, Chimera::Shader*> mapa;
@@ -57,7 +57,7 @@ void createScreemAndLoadShaders() {
 }
 
 void loadCameraData() {
-    pCam = new Chimera::Camera(group1, "Observador-01");
+    pCam = new Chimera::NodeCamera(group1, "Observador-01");
     pCam->createTrackBall();
     pCam->createTrackHead();
     pCam->getTrackBall()->setMax(1000.0);

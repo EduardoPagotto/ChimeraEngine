@@ -83,7 +83,7 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
         } else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
             LibraryCameras lib(root, l_url);
-            Chimera::Camera* pCamera = lib.target();
+            Chimera::NodeCamera* pCamera = lib.target();
 
             pCamera->getViewPoint()->setTransform(l_pTransform);
 

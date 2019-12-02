@@ -148,7 +148,7 @@ void Game::start() {
     pCanvas->afterStart();
 
     // Localiza a camera
-    pOrbitalCam = (Chimera::Camera*)pRoot->findChild("Camera-camera", true);
+    pOrbitalCam = (Chimera::NodeCamera*)pRoot->findChild("Camera-camera", true);
     pOrbitalCam->getViewPoint()->up = glm::vec3(0, 0, -1);
 
     // Localiza objeto como o primario //EfeitoZoltan-mesh

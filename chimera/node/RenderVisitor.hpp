@@ -13,7 +13,7 @@ class RenderVisitor : public NodeVisitor {
     RenderVisitor();
     virtual ~RenderVisitor();
     virtual void init() override;
-    virtual void visit(class Camera* _pCamera) override;
+    virtual void visit(class NodeCamera* _pCamera) override;
     virtual void visit(class NodeMesh* _pMesh) override;
     virtual void visit(class NodeLight* _pLight) override;
     virtual void visit(class ParticleEmitter* _pParticleEmitter) override;

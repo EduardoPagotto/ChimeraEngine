@@ -1,8 +1,8 @@
 #include "chimera/node/RenderVisitor.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/HUD.hpp"
+#include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
@@ -33,7 +33,7 @@ RenderVisitor::~RenderVisitor() {}
 
 void RenderVisitor::init() {}
 
-void RenderVisitor::visit(Camera* _pCamera) {}
+void RenderVisitor::visit(NodeCamera* _pCamera) {}
 
 void RenderVisitor::visit(NodeMesh* _pMesh) {
 
@@ -111,7 +111,7 @@ void RenderVisitor::visit(Group* _pGroup) {
                                        glm::value_ptr(pShadowMapVisitor->getLightSpaceMatrix()));
     }
 
-    Camera* pCam = (Camera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
+    NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
         ViewPoint* vp = pCam->getViewPoint();
         pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));

@@ -1,6 +1,6 @@
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/node/Camera.hpp"
+#include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 #include <algorithm>
 

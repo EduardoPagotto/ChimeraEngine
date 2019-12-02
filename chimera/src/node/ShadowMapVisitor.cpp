@@ -1,8 +1,8 @@
 #include "chimera/node/ShadowMapVisitor.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/HUD.hpp"
+#include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/NodeParse.hpp"
@@ -23,7 +23,7 @@ ShadowMapVisitor::~ShadowMapVisitor() { delete pTexture; }
 
 void ShadowMapVisitor::init() { pTexture->init(); }
 
-void ShadowMapVisitor::visit(Camera* _pCamera) {}
+void ShadowMapVisitor::visit(NodeCamera* _pCamera) {}
 
 void ShadowMapVisitor::visit(NodeMesh* _pMesh) {
 

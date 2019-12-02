@@ -8,10 +8,10 @@
 
 namespace Chimera {
 
-class Camera : public Node {
+class NodeCamera : public Node {
   public:
-    Camera(Node* _pNode, std::string _name);
-    virtual ~Camera();
+    NodeCamera(Node* _pNode, std::string _name);
+    virtual ~NodeCamera();
 
     virtual void init() override;
     virtual void accept(class NodeVisitor* v) override;

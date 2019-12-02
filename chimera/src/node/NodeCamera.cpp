@@ -1,15 +1,15 @@
-#include "chimera/node/Camera.hpp"
+#include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 
 namespace Chimera {
 
-Camera::Camera(Node* _pNode, std::string _name) : Node(_pNode, Kind::CAMERA, _name) {
+NodeCamera::NodeCamera(Node* _pNode, std::string _name) : Node(_pNode, Kind::CAMERA, _name) {
     viewPoint.zero();
     pTrackBall = nullptr;
     pTrackHead = nullptr;
 }
 
-Camera::~Camera() {
+NodeCamera::~NodeCamera() {
     if (pTrackBall != nullptr)
         delete pTrackBall;
 
@@ -17,7 +17,7 @@ Camera::~Camera() {
         delete pTrackHead;
 }
 
-void Camera::init() {
+void NodeCamera::init() {
     if (pTrackBall != nullptr)
         pTrackBall->init(&viewPoint);
 
@@ -25,9 +25,9 @@ void Camera::init() {
         pTrackHead->init(&viewPoint);
 }
 
-void Camera::createTrackBall() { pTrackBall = new TrackBall(); }
+void NodeCamera::createTrackBall() { pTrackBall = new TrackBall(); }
 
-void Camera::createTrackHead() { pTrackHead = new TrackHead(); }
+void NodeCamera::createTrackHead() { pTrackHead = new TrackHead(); }
 
-void Camera::accept(NodeVisitor* v) { v->visit(this); }
+void NodeCamera::accept(NodeVisitor* v) { v->visit(this); }
 } // namespace Chimera

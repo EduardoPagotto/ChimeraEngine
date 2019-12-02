@@ -22,7 +22,7 @@ set (SourceNode Node.cpp
 				NodeGroup.cpp
 				VisitorRender.cpp
 				VisitorShadowMap.cpp
-				NodeParse.cpp)
+				VisitParser.cpp)
 
 #define os includes
 set (IncludeNode ${CMAKE_SOURCE_DIR}) # Raiz do projeto

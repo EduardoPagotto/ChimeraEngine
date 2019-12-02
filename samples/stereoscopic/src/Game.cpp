@@ -5,7 +5,7 @@
 #include "chimera/core/utils.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeMesh.hpp"
-#include "chimera/node/NodeParse.hpp"
+#include "chimera/node/VisitParser.hpp"
 
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot), isPaused(false) {}
 
@@ -142,7 +142,7 @@ void Game::render() {
         pCanvas->before(eye);
 
         renderV.eye = eye;
-        Chimera::NodeParse::tree(pRoot, &renderV); // dfs(root, &rv);//DFS(root);
+        Chimera::visitParserTree(pRoot, &renderV); // dfs(root, &rv);//DFS(root);
 
         pCanvas->after(eye);
     }

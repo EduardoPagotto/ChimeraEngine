@@ -5,8 +5,8 @@
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
-#include "chimera/node/NodeParse.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"
+#include "chimera/node/VisitParser.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -51,7 +51,7 @@ void VisitorShadowMap::visit(NodeHUD* _pHUD) {}
 void VisitorShadowMap::render(Node* _pGroup, Transform* _pTransform) {
     this->pTransform = _pTransform;
     this->initSceneShadow();
-    NodeParse::tree(_pGroup, this);
+    visitParserTree(_pGroup, this);
     this->endSceneShadow();
 }
 

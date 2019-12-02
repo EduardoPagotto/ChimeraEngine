@@ -1,10 +1,10 @@
-#include "chimera/node/NodeParse.hpp"
+#include "chimera/node/VisitParser.hpp"
 #include "chimera/node/Node.hpp"
 #include "chimera/node/VisitorInterface.hpp"
 
 namespace Chimera {
 
-void NodeParse::tree(class Node* u, class VisitorInterface* pVisit) {
+void visitParserTree(class Node* u, class VisitorInterface* pVisit) {
 
     u->setColor(1);
     u->accept(pVisit);
@@ -16,10 +16,9 @@ void NodeParse::tree(class Node* u, class VisitorInterface* pVisit) {
 
             Node* child = children->at(i);
             if (child->getColor() == 0)
-                tree(child, pVisit);
+                visitParserTree(child, pVisit);
         }
     }
     u->setColor(0);
 }
-
 } // namespace Chimera

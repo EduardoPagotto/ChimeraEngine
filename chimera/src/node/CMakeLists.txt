@@ -18,7 +18,7 @@ set (SourceNode Node.cpp
 				Font.cpp
 				NodeHUD.cpp
 				Particle.cpp
-				ParticleEmitter.cpp
+				NodeParticleEmitter.cpp
 				Group.cpp
 				RenderVisitor.cpp
 				ShadowMapVisitor.cpp

@@ -17,7 +17,7 @@
 #include "chimera/core/utils.hpp"
 #include "chimera/loader/VisualScene.hpp"
 #include "chimera/node/NodeHUD.hpp"
-#include "chimera/node/ParticleEmitter.hpp"
+#include "chimera/node/NodeParticleEmitter.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
 #include "chimera/physic_loader/PhysicsScene.hpp"
 
@@ -84,7 +84,7 @@ int main(int argn, char** argv) {
         // create and add particle to scene
         Chimera::Group* gParticle = new Chimera::Group(pRoot, "ParticleGroup");
         gParticle->setShader(mapa["particle-default"]);
-        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(gParticle, "testeZ1", 10000);
+        Chimera::NodeParticleEmitter* pParticleEmitter = new Chimera::NodeParticleEmitter(gParticle, "testeZ1", 10000);
         pParticleEmitter->setTransform(
             new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
 

@@ -156,7 +156,7 @@ void Game::start() {
     pCorpoRigido = (Chimera::Solid*)pMesh->getTransform();
 
     // Localiza o Emissor de particula
-    pEmissor = (Chimera::ParticleEmitter*)pRoot->findChild("testeZ1", true);
+    pEmissor = (Chimera::NodeParticleEmitter*)pRoot->findChild("testeZ1", true);
 
     renderV.pVideo = pCanvas;
     renderV.pTransform = (Chimera::Transform*)pCorpoRigido;

@@ -6,7 +6,7 @@
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/NodeParse.hpp"
-#include "chimera/node/ParticleEmitter.hpp"
+#include "chimera/node/NodeParticleEmitter.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -39,7 +39,7 @@ void ShadowMapVisitor::visit(NodeLight* _pLight) {
     pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
-void ShadowMapVisitor::visit(ParticleEmitter* _pParticleEmitter) {}
+void ShadowMapVisitor::visit(NodeParticleEmitter* _pParticleEmitter) {}
 
 void ShadowMapVisitor::visit(Group* _pGroup) {
     // Shader selecionado correto no RenderVisitor via Group

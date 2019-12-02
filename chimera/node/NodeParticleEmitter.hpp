@@ -19,10 +19,10 @@ namespace Chimera {
 
 #define MaxParticles 500
 
-class ParticleEmitter : public Node {
+class NodeParticleEmitter : public Node {
   public:
-    ParticleEmitter(Node* _parent, std::string _name, int _max);
-    virtual ~ParticleEmitter();
+    NodeParticleEmitter(Node* _parent, std::string _name, int _max);
+    virtual ~NodeParticleEmitter();
 
     virtual void init() override;
     virtual void accept(class NodeVisitor* v) override;

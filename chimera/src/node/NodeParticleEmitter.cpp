@@ -1,20 +1,20 @@
-#include "chimera/node/ParticleEmitter.hpp"
+#include "chimera/node/NodeParticleEmitter.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 #include <algorithm>
 
 namespace Chimera {
-ParticleEmitter::ParticleEmitter(Node* _parent, std::string _name, int _max)
+NodeParticleEmitter::NodeParticleEmitter(Node* _parent, std::string _name, int _max)
     : Node(_parent, Kind::PARTICLE_SYSTEM, _name) {
     // MaxParticles = _max;
     LastUsedParticle = 0;
     material = new Material();
 }
 
-ParticleEmitter::~ParticleEmitter() {}
+NodeParticleEmitter::~NodeParticleEmitter() {}
 
-void ParticleEmitter::init() {
+void NodeParticleEmitter::init() {
 
     pTransform->init(glm::vec3());
 
@@ -53,16 +53,16 @@ void ParticleEmitter::init() {
     timer.start();
 }
 
-void ParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string& _arquivo) {
+void NodeParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string& _arquivo) {
     material->addTexture(new TexImg(TEX_KIND::DIFFUSE, _arquivo));
     // material->loadTextureFromFile(_nome, TEX_KIND::DIFFUSE, _arquivo);
 }
 
-void ParticleEmitter::accept(NodeVisitor* v) { v->visit(this); }
+void NodeParticleEmitter::accept(NodeVisitor* v) { v->visit(this); }
 
-void ParticleEmitter::SortParticles() { std::sort(&ParticlesContainer[0], &ParticlesContainer[MaxParticles]); }
+void NodeParticleEmitter::SortParticles() { std::sort(&ParticlesContainer[0], &ParticlesContainer[MaxParticles]); }
 
-int ParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
+int NodeParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
 
     double delta = timer.deltaTimeSecounds();
 
@@ -106,7 +106,7 @@ int ParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
     return ParticlesCount;
 }
 
-void ParticleEmitter::render(Shader* _pShader) {
+void NodeParticleEmitter::render(Shader* _pShader) {
     //// We will need the camera's position in order to sort the particles
     //// w.r.t the camera's distance.
     //// There should be a getCameraPosition() function in common/controls.cpp,
@@ -215,7 +215,7 @@ void ParticleEmitter::render(Shader* _pShader) {
     glPopAttrib();
 }
 
-int ParticleEmitter::FindUnusedParticle() {
+int NodeParticleEmitter::FindUnusedParticle() {
 
     for (int i = LastUsedParticle; i < MaxParticles; i++) {
         if (ParticlesContainer[i].isDead() == true) {

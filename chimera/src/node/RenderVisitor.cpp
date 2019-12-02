@@ -5,7 +5,7 @@
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
-#include "chimera/node/ParticleEmitter.hpp"
+#include "chimera/node/NodeParticleEmitter.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -60,7 +60,7 @@ void RenderVisitor::visit(NodeMesh* _pMesh) {
 
 void RenderVisitor::visit(NodeLight* _pLight) { _pLight->lightData.apply(pShader); }
 
-void RenderVisitor::visit(ParticleEmitter* _pParticleEmitter) {
+void RenderVisitor::visit(NodeParticleEmitter* _pParticleEmitter) {
 
     if (particleOn == true) {
 

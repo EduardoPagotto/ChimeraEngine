@@ -1,4 +1,4 @@
-#include "chimera/node/ShadowMapVisitor.hpp"
+#include "chimera/node/VisitorShadowMap.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeGroup.hpp"
@@ -14,18 +14,18 @@
 
 namespace Chimera {
 
-ShadowMapVisitor::ShadowMapVisitor(Shader* _pShader, const unsigned& _width, const unsigned& _height)
+VisitorShadowMap::VisitorShadowMap(Shader* _pShader, const unsigned& _width, const unsigned& _height)
     : pShader(_pShader), pTransform(nullptr) {
     pTexture = new TexFBO(TEX_KIND::SHADOWMAP, _width, _height);
 }
 
-ShadowMapVisitor::~ShadowMapVisitor() { delete pTexture; }
+VisitorShadowMap::~VisitorShadowMap() { delete pTexture; }
 
-void ShadowMapVisitor::init() { pTexture->init(); }
+void VisitorShadowMap::init() { pTexture->init(); }
 
-void ShadowMapVisitor::visit(NodeCamera* _pCamera) {}
+void VisitorShadowMap::visit(NodeCamera* _pCamera) {}
 
-void ShadowMapVisitor::visit(NodeMesh* _pMesh) {
+void VisitorShadowMap::visit(NodeMesh* _pMesh) {
 
     glm::mat4 model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
 
@@ -33,39 +33,39 @@ void ShadowMapVisitor::visit(NodeMesh* _pMesh) {
     _pMesh->render(nullptr);
 }
 
-void ShadowMapVisitor::visit(NodeLight* _pLight) {
+void VisitorShadowMap::visit(NodeLight* _pLight) {
     // node de luz deve vir anter para funcionar?!
     this->setLightSpaceMatrix(_pLight->lightData.getPosition());
     pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
-void ShadowMapVisitor::visit(NodeParticleEmitter* _pParticleEmitter) {}
+void VisitorShadowMap::visit(NodeParticleEmitter* _pParticleEmitter) {}
 
-void ShadowMapVisitor::visit(NodeGroup* _pGroup) {
+void VisitorShadowMap::visit(NodeGroup* _pGroup) {
     // Shader selecionado correto no RenderVisitor via Group
     pShader->link();
 }
 
-void ShadowMapVisitor::visit(NodeHUD* _pHUD) {}
+void VisitorShadowMap::visit(NodeHUD* _pHUD) {}
 
-void ShadowMapVisitor::render(Node* _pGroup, Transform* _pTransform) {
+void VisitorShadowMap::render(Node* _pGroup, Transform* _pTransform) {
     this->pTransform = _pTransform;
     this->initSceneShadow();
     NodeParse::tree(_pGroup, this);
     this->endSceneShadow();
 }
 
-void ShadowMapVisitor::initSceneShadow() {
+void VisitorShadowMap::initSceneShadow() {
     glViewport(0, 0, pTexture->getWidth(), pTexture->getHeight());
     glBindFramebuffer(GL_FRAMEBUFFER, pTexture->getFrameBufferId());
     glClear(GL_DEPTH_BUFFER_BIT);
 }
 
-void ShadowMapVisitor::endSceneShadow() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+void VisitorShadowMap::endSceneShadow() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
-void ShadowMapVisitor::applyShadow(Shader* _pShader) { pTexture->apply(_pShader); }
+void VisitorShadowMap::applyShadow(Shader* _pShader) { pTexture->apply(_pShader); }
 
-void ShadowMapVisitor::setLightSpaceMatrix(const glm::vec3& _posicaoLight) {
+void VisitorShadowMap::setLightSpaceMatrix(const glm::vec3& _posicaoLight) {
 
     GLfloat near_plane = 1.0f, far_plane = 150.0f;
     glm::mat4 lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, near_plane, far_plane);

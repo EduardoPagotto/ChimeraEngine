@@ -99,7 +99,7 @@ void RenderVisitor::visit(NodeGroup* _pGroup) {
         return;
 
     // Renderiza o Textura de sombra em ShadowMapVisitor
-    pShadowMapVisitor = (ShadowMapVisitor*)_pGroup->getNodeVisitor();
+    pShadowMapVisitor = (VisitorShadowMap*)_pGroup->getNodeVisitor();
     if (pShadowMapVisitor != nullptr)
         pShadowMapVisitor->render(_pGroup, pTransform);
 

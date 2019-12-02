@@ -4,7 +4,7 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
-#include "chimera/node/ShadowMapVisitor.hpp"
+#include "chimera/node/VisitorShadowMap.hpp"
 
 namespace Chimera {
 
@@ -33,7 +33,7 @@ class RenderVisitor : public VisitorInterface {
     glm::mat4 model;
 
     Shader* pShader;
-    ShadowMapVisitor* pShadowMapVisitor;
+    VisitorShadowMap* pShadowMapVisitor;
 };
 } // namespace Chimera
 

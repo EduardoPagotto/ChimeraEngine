@@ -10,10 +10,10 @@
 
 namespace Chimera {
 
-class ShadowMapVisitor : public VisitorInterface {
+class VisitorShadowMap : public VisitorInterface {
   public:
-    ShadowMapVisitor(Shader* _pShader, const unsigned& _width, const unsigned& _height);
-    virtual ~ShadowMapVisitor();
+    VisitorShadowMap(Shader* _pShader, const unsigned& _width, const unsigned& _height);
+    virtual ~VisitorShadowMap();
 
     virtual void init() override;
     virtual void visit(class NodeCamera* _pCamera) override;

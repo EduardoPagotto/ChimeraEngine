@@ -18,7 +18,7 @@
 #include "chimera/loader/VisualScene.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"
-#include "chimera/node/ShadowMapVisitor.hpp"
+#include "chimera/node/VisitorShadowMap.hpp"
 #include "chimera/physic_loader/PhysicsScene.hpp"
 
 #include <yaml-cpp/yaml.h>
@@ -79,7 +79,7 @@ int main(int argn, char** argv) {
 
         // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado
         group1->setShader(mapa["mesh-default"]);
-        group1->setNodeVisitor(new Chimera::ShadowMapVisitor(mapa["simpleDepthShader"], 2048, 2048));
+        group1->setNodeVisitor(new Chimera::VisitorShadowMap(mapa["simpleDepthShader"], 2048, 2048));
 
         // create and add particle to scene
         Chimera::NodeGroup* gParticle = new Chimera::NodeGroup(pRoot, "ParticleGroup");

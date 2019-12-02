@@ -21,7 +21,7 @@ set (SourceNode Node.cpp
 				NodeParticleEmitter.cpp
 				NodeGroup.cpp
 				RenderVisitor.cpp
-				ShadowMapVisitor.cpp
+				VisitorShadowMap.cpp
 				NodeParse.cpp)
 
 #define os includes

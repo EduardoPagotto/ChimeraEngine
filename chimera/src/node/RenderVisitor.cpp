@@ -3,8 +3,8 @@
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/HUD.hpp"
-#include "chimera/node/Mesh.hpp"
 #include "chimera/node/NodeLight.hpp"
+#include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -35,7 +35,7 @@ void RenderVisitor::init() {}
 
 void RenderVisitor::visit(Camera* _pCamera) {}
 
-void RenderVisitor::visit(Mesh* _pMesh) {
+void RenderVisitor::visit(NodeMesh* _pMesh) {
 
     model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
     if (pShader == nullptr)

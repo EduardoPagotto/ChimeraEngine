@@ -3,8 +3,8 @@
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
 #include "chimera/node/HUD.hpp"
-#include "chimera/node/Mesh.hpp"
 #include "chimera/node/NodeLight.hpp"
+#include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/NodeParse.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
@@ -25,7 +25,7 @@ void ShadowMapVisitor::init() { pTexture->init(); }
 
 void ShadowMapVisitor::visit(Camera* _pCamera) {}
 
-void ShadowMapVisitor::visit(Mesh* _pMesh) {
+void ShadowMapVisitor::visit(NodeMesh* _pMesh) {
 
     glm::mat4 model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
 

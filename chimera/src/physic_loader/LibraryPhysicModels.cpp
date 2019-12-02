@@ -4,7 +4,7 @@
 #include "LibraryPhysicsMaterials.hpp"
 
 #include "chimera/node/Group.hpp"
-#include "chimera/node/Mesh.hpp"
+#include "chimera/node/NodeMesh.hpp"
 #include "chimera/physic/Solid.hpp"
 
 namespace ChimeraLoaders {
@@ -149,7 +149,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         const char* idMesh = l_nMesh->Attribute("url");
         std::string l_mesh = &idMesh[1];
 
-        Chimera::Mesh* pMesh = (Chimera::Mesh*)pListNodes->mapMeshNode[l_mesh];
+        Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)pListNodes->mapMeshNode[l_mesh];
         if (pMesh != nullptr) {
             // btTriangleIndexVertexArray* indexVertexArray =
             //     new btTriangleIndexVertexArray(pMesh->meshData->vertexIndex.size(),    // num triangles

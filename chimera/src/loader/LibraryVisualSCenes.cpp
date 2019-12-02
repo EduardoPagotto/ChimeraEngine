@@ -103,7 +103,7 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
             LibraryGeometrys lib(root, l_url);
-            Chimera::Mesh* pMesh = lib.target();
+            Chimera::NodeMesh* pMesh = lib.target();
 
             pListNodes->mapMeshNode[pMesh->getName()] = pMesh;
             pListNodes->mapMesh[std::string(_id)] = pMesh;

@@ -4,7 +4,7 @@
 #include "chimera/core/TrackHead.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
-#include "chimera/node/Mesh.hpp"
+#include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/NodeParse.hpp"
 
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot), isPaused(false) {}
@@ -102,7 +102,7 @@ void Game::start() {
 
     pCanvas->afterStart();
 
-    Chimera::Mesh* pMesh = (Chimera::Mesh*)pRoot->findChild("Cubo-02", true);
+    Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)pRoot->findChild("Cubo-02", true);
     renderV.pTransform = pMesh->getTransform();
     renderV.pVideo = pCanvas;
 }

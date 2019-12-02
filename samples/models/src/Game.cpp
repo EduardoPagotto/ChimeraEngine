@@ -3,7 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/node/Mesh.hpp"
+#include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/NodeParse.hpp"
 
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld)
@@ -152,7 +152,7 @@ void Game::start() {
     pOrbitalCam->getViewPoint()->up = glm::vec3(0, 0, -1);
 
     // Localiza objeto como o primario //EfeitoZoltan-mesh
-    Chimera::Mesh* pMesh = (Chimera::Mesh*)pRoot->findChild("EfeitoZoltan-mesh", true);
+    Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)pRoot->findChild("EfeitoZoltan-mesh", true);
     pCorpoRigido = (Chimera::Solid*)pMesh->getTransform();
 
     // Localiza o Emissor de particula

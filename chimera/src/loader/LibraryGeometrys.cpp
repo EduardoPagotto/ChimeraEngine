@@ -10,7 +10,7 @@ LibraryGeometrys::LibraryGeometrys(tinyxml2::XMLElement* _root, const std::strin
 
 LibraryGeometrys::~LibraryGeometrys() {}
 
-Chimera::Mesh* LibraryGeometrys::target() {
+Chimera::NodeMesh* LibraryGeometrys::target() {
 
     tinyxml2::XMLElement* l_nGeo = root->FirstChildElement("library_geometries")->FirstChildElement("geometry");
     for (l_nGeo; l_nGeo; l_nGeo = l_nGeo->NextSiblingElement()) {
@@ -18,7 +18,7 @@ Chimera::Mesh* LibraryGeometrys::target() {
         std::string l_id = l_nGeo->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            Chimera::Mesh* pMesh = new Chimera::Mesh(nullptr, l_id);
+            Chimera::NodeMesh* pMesh = new Chimera::NodeMesh(nullptr, l_id);
             std::string idMaterial = loadMeshCollada(l_nGeo, pMesh);
 
             LibraryMaterials lm(root, idMaterial);
@@ -45,7 +45,7 @@ int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source, std::vector<float
     return -1;
 }
 
-std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chimera::Mesh* _pMesh) {
+std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chimera::NodeMesh* _pMesh) {
 
     std::string retorno = "";
     tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement("mesh");

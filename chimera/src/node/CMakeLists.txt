@@ -14,7 +14,7 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (SourceNode Node.cpp
 				NodeLight.cpp
 				Camera.cpp
-				Mesh.cpp
+				NodeMesh.cpp
 				Font.cpp
 				HUD.cpp
 				Particle.cpp

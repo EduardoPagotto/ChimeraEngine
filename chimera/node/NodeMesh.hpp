@@ -1,25 +1,24 @@
 #ifndef __CHIMERA_MESH__HPP
 #define __CHIMERA_MESH__HPP
 
-#include <string.h>
-#include <tinyxml2.h>
-#include <vector>
-
 #include "Node.hpp"
 #include "chimera/core/Material.hpp"
 #include "chimera/core/MeshData.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/VertexStatic.hpp"
 #include <glm/glm.hpp>
+#include <string.h>
+#include <tinyxml2.h>
+#include <vector>
 
 namespace Chimera {
 
-class Mesh : public Node {
+class NodeMesh : public Node {
   public:
-    Mesh(Node* _parent, std::string _name);
-    Mesh(const Mesh& _cpy);
+    NodeMesh(Node* _parent, std::string _name);
+    NodeMesh(const NodeMesh& _cpy);
 
-    virtual ~Mesh();
+    virtual ~NodeMesh();
 
     virtual void init() override;
     virtual void accept(class NodeVisitor* v) override;
@@ -45,7 +44,7 @@ class Mesh : public Node {
     Transform* pTransform;
 };
 
-Mesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMaterial);
+NodeMesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMaterial);
 
 } // namespace Chimera
 #endif

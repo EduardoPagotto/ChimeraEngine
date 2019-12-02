@@ -7,8 +7,8 @@
 #include "chimera/core/utils.hpp"
 #include "chimera/node/Camera.hpp"
 #include "chimera/node/Group.hpp"
-#include "chimera/node/Mesh.hpp"
 #include "chimera/node/NodeLight.hpp"
+#include "chimera/node/NodeMesh.hpp"
 #include "chimera/render/LoadObj.hpp"
 
 #include <cstdio>
@@ -83,7 +83,7 @@ void createMeshTexturizade(std::string name, std::string file, float scale, glm:
     using namespace Chimera;
 
     Material* pMap = new Material();
-    Mesh* pMesh = new Mesh(group1, name);
+    NodeMesh* pMesh = new NodeMesh(group1, name);
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(pMap);
 
@@ -95,7 +95,7 @@ void createMesh(std::string name, std::string file, float scale, glm::vec3 _posi
 
     using namespace Chimera;
 
-    Mesh* pMesh = new Mesh(group1, name);
+    NodeMesh* pMesh = new NodeMesh(group1, name);
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(_pMap);
 
@@ -108,7 +108,7 @@ void createTerrain(std::string name, std::string file, float scale, glm::vec3 _p
 
     using namespace Chimera;
 
-    Mesh* pMesh = new Mesh(group1, name);
+    NodeMesh* pMesh = new NodeMesh(group1, name);
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(_pMap);
 

@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_LIGHT_DATA_HPP
-#define __CHIMERA_LIGHT_DATA_HPP
+#ifndef __CHIMERA_LIGHT__HPP
+#define __CHIMERA_LIGHT__HPP
 
 #include "chimera/core/Shader.hpp"
 #include <glm/glm.hpp>

@@ -3,9 +3,9 @@
 
 #include "TerrainData.hpp"
 #include "Triangle.hpp"
-#include "chimera/core/Material.hpp"
 #include "chimera/core/MeshData.hpp"
 #include "chimera/core/VertexData.hpp"
+#include "chimera/render/Material.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

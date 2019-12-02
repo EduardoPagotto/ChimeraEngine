@@ -23,7 +23,6 @@ set (SourcesCore Canvas.cpp
 				 Shader.cpp
 				 Transform.cpp
 				 Tex.cpp
-				 Material.cpp
 				 MeshData.cpp)
 
 # #define os includes

@@ -16,7 +16,7 @@ set (SourceNode Node.cpp
 				NodeCamera.cpp
 				NodeMesh.cpp
 				Font.cpp
-				HUD.cpp
+				NodeHUD.cpp
 				Particle.cpp
 				ParticleEmitter.cpp
 				Group.cpp

@@ -1,18 +1,18 @@
-#include "chimera/node/HUD.hpp"
+#include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeVisitor.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
 
-HUD::HUD(Node* _parent, std::string _name) : on(true), Node(_parent, Kind::HUD, _name) {}
+NodeHUD::NodeHUD(Node* _parent, std::string _name) : on(true), Node(_parent, Kind::HUD, _name) {}
 
-HUD::~HUD() {
+NodeHUD::~NodeHUD() {
     // TODO: implementar release
 }
 
-void HUD::addFont(Font* _pFont) { vFonts.push_back(_pFont); }
+void NodeHUD::addFont(Font* _pFont) { vFonts.push_back(_pFont); }
 
-void HUD::addText(int _fontIndex, int _posX, int _posY, glm::vec4 _colorText, GLfloat _scale, std::string* _txt) {
+void NodeHUD::addText(int _fontIndex, int _posX, int _posY, glm::vec4 _colorText, GLfloat _scale, std::string* _txt) {
 
     HUDTxt* newTxt = new HUDTxt;
     newTxt->indexFonte = _fontIndex;
@@ -25,9 +25,9 @@ void HUD::addText(int _fontIndex, int _posX, int _posY, glm::vec4 _colorText, GL
     vLineText.push_back(newTxt);
 }
 
-void HUD::init() { setOn(true); }
+void NodeHUD::init() { setOn(true); }
 
-void HUD::render(Shader* _pShader) {
+void NodeHUD::render(Shader* _pShader) {
     // salva flags de bit
     glPushAttrib(GL_ENABLE_BIT);
 
@@ -54,5 +54,5 @@ void HUD::render(Shader* _pShader) {
     glPopAttrib();
 }
 
-void HUD::accept(NodeVisitor* v) { v->visit(this); }
+void NodeHUD::accept(NodeVisitor* v) { v->visit(this); }
 } // namespace Chimera

@@ -1,8 +1,8 @@
 #include "chimera/node/RenderVisitor.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/node/Group.hpp"
-#include "chimera/node/HUD.hpp"
 #include "chimera/node/NodeCamera.hpp"
+#include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
@@ -119,7 +119,7 @@ void RenderVisitor::visit(Group* _pGroup) {
     }
 }
 
-void RenderVisitor::visit(HUD* _pHUD) {
+void RenderVisitor::visit(NodeHUD* _pHUD) {
 
     if (HudOn == true) {
         if (_pHUD->isOn() == true) {

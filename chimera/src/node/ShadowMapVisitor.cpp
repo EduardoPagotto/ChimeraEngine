@@ -1,8 +1,8 @@
 #include "chimera/node/ShadowMapVisitor.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/node/Group.hpp"
-#include "chimera/node/HUD.hpp"
 #include "chimera/node/NodeCamera.hpp"
+#include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/NodeParse.hpp"
@@ -46,7 +46,7 @@ void ShadowMapVisitor::visit(Group* _pGroup) {
     pShader->link();
 }
 
-void ShadowMapVisitor::visit(HUD* _pHUD) {}
+void ShadowMapVisitor::visit(NodeHUD* _pHUD) {}
 
 void ShadowMapVisitor::render(Node* _pGroup, Transform* _pTransform) {
     this->pTransform = _pTransform;

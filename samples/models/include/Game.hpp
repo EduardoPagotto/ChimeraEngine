@@ -3,8 +3,8 @@
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/node/HUD.hpp"
 #include "chimera/node/NodeCamera.hpp"
+#include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/RenderVisitor.hpp"
 #include "chimera/physic/PhysicsControl.hpp"
@@ -43,7 +43,7 @@ class Game : public Chimera::IGameClientEvents {
     std::string textoFPS;
 
     Chimera::RenderVisitor renderV;
-    Chimera::HUD* pHUD;
+    Chimera::NodeHUD* pHUD;
     Chimera::NodeCamera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;
     Chimera::ParticleEmitter* pEmissor;

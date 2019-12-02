@@ -16,7 +16,7 @@
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/loader/VisualScene.hpp"
-#include "chimera/node/HUD.hpp"
+#include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/ParticleEmitter.hpp"
 #include "chimera/node/ShadowMapVisitor.hpp"
 #include "chimera/physic_loader/PhysicsScene.hpp"
@@ -93,7 +93,7 @@ int main(int argn, char** argv) {
         // Create and add hud data text
         Chimera::Group* gHud = new Chimera::Group((Chimera::Node*)pRoot, "HUD-Group");
         gHud->setShader(mapa["hud-default"]);
-        Chimera::HUD* pHUD = new Chimera::HUD(gHud, "HUD-Default");
+        Chimera::NodeHUD* pHUD = new Chimera::NodeHUD(gHud, "HUD-Default");
         Chimera::Font* pFont = new Chimera::Font(font, 18); // TODO: carregar size da fonte
         pHUD->addFont(pFont);
 

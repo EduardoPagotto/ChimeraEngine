@@ -8,7 +8,7 @@
 #include "chimera/core/Shader.hpp"
 
 namespace Chimera {
-class HUD : public Node {
+class NodeHUD : public Node {
   public:
     struct HUDTxt {
         int indexFonte;
@@ -20,9 +20,9 @@ class HUD : public Node {
         // Color color;
     };
 
-    HUD(Node* _parent, std::string _name);
+    NodeHUD(Node* _parent, std::string _name);
 
-    virtual ~HUD();
+    virtual ~NodeHUD();
 
     virtual void init() override;
     virtual void accept(class NodeVisitor* v) override;

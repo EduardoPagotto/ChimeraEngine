@@ -3,7 +3,7 @@
 
 #include "Node.hpp"
 #include "chimera/core/LightData.hpp"
-#include "chimera/node/NodeVisitor.hpp"
+#include "chimera/node/VisitorInterface.hpp"
 
 namespace Chimera {
 
@@ -12,7 +12,7 @@ class NodeLight : public Node {
     NodeLight(Node* _parent, std::string _name) : Node(_parent, Kind::LIGHT, _name) {}
     virtual ~NodeLight() {}
     virtual void init(){};
-    virtual void accept(class NodeVisitor* v) { v->visit(this); }
+    virtual void accept(class VisitorInterface* v) { v->visit(this); }
     LightData lightData;
 };
 } // namespace Chimera

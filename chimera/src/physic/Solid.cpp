@@ -82,7 +82,7 @@ void Solid::init(const glm::vec3& _size) {
     initTransform(transform, this);
 }
 
-// void Solid::accept(NodeVisitor* v) { v->visit(this); }
+// void Solid::accept(VisitorInterface* v) { v->visit(this); }
 
 // void Solid::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
 //     btQuaternion l_qtn;

@@ -2,7 +2,7 @@
 #define __CHIMERA_SHADOW_MAP_VISITOR__HPP
 
 #include "Node.hpp"
-#include "NodeVisitor.hpp"
+#include "VisitorInterface.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Tex.hpp"
 #include "chimera/core/Transform.hpp"
@@ -10,7 +10,7 @@
 
 namespace Chimera {
 
-class ShadowMapVisitor : public NodeVisitor {
+class ShadowMapVisitor : public VisitorInterface {
   public:
     ShadowMapVisitor(Shader* _pShader, const unsigned& _width, const unsigned& _height);
     virtual ~ShadowMapVisitor();

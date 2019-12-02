@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-class NodeVisitor {
+class VisitorInterface {
   public:
     virtual void init() = 0;
     virtual void visit(class NodeCamera* _pCamera) = 0;

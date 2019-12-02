@@ -1,5 +1,5 @@
 #include "chimera/node/NodeHUD.hpp"
-#include "chimera/node/NodeVisitor.hpp"
+#include "chimera/node/VisitorInterface.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
@@ -54,5 +54,5 @@ void NodeHUD::render(Shader* _pShader) {
     glPopAttrib();
 }
 
-void NodeHUD::accept(NodeVisitor* v) { v->visit(this); }
+void NodeHUD::accept(VisitorInterface* v) { v->visit(this); }
 } // namespace Chimera

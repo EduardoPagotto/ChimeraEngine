@@ -15,7 +15,7 @@ class Node {
     Node(Node* _parent, const Kind& _type, const std::string& _name);
     virtual ~Node();
 
-    virtual void accept(class NodeVisitor* v) = 0;
+    virtual void accept(class VisitorInterface* v) = 0;
     virtual void init() = 0;
 
     void initializeChilds();

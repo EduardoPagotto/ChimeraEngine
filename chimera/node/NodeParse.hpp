@@ -5,7 +5,7 @@ namespace Chimera {
 
 class NodeParse {
   public:
-    static void tree(class Node* u, class NodeVisitor* pVisit);
+    static void tree(class Node* u, class VisitorInterface* pVisit);
 };
 } // namespace Chimera
 

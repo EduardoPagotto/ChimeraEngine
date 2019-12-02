@@ -8,7 +8,7 @@
 
 namespace Chimera {
 
-class RenderVisitor : public NodeVisitor {
+class RenderVisitor : public VisitorInterface {
   public:
     RenderVisitor();
     virtual ~RenderVisitor();

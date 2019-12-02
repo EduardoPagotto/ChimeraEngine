@@ -13,7 +13,7 @@ NodeGroup::~NodeGroup() {
         delete pShader;
 }
 
-void NodeGroup::accept(NodeVisitor* v) { v->visit(this); }
+void NodeGroup::accept(VisitorInterface* v) { v->visit(this); }
 
 void NodeGroup::init() {
     if (shadoMapVisitor != nullptr) {

@@ -2,7 +2,7 @@
 #define __CHIMERA_GROUP__HPP
 
 #include "Node.hpp"
-#include "NodeVisitor.hpp"
+#include "VisitorInterface.hpp"
 #include "chimera/core/Shader.hpp"
 
 namespace Chimera {
@@ -13,17 +13,17 @@ class NodeGroup : public Node {
     virtual ~NodeGroup();
 
     virtual void init() override;
-    virtual void accept(class NodeVisitor* v) override;
+    virtual void accept(class VisitorInterface* v) override;
 
     void setShader(Shader* _pShader) { pShader = _pShader; }
     Shader* getShader() { return pShader; }
 
-    void setNodeVisitor(NodeVisitor* _shadoMapVisitor) { this->shadoMapVisitor = _shadoMapVisitor; }
-    NodeVisitor* getNodeVisitor() { return shadoMapVisitor; }
+    void setNodeVisitor(VisitorInterface* _shadoMapVisitor) { this->shadoMapVisitor = _shadoMapVisitor; }
+    VisitorInterface* getNodeVisitor() { return shadoMapVisitor; }
 
   private:
     Shader* pShader;
-    NodeVisitor* shadoMapVisitor;
+    VisitorInterface* shadoMapVisitor;
 };
 } // namespace Chimera
 #endif

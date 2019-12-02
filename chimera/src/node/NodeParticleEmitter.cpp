@@ -1,7 +1,7 @@
 #include "chimera/node/NodeParticleEmitter.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/node/NodeCamera.hpp"
-#include "chimera/node/NodeVisitor.hpp"
+#include "chimera/node/VisitorInterface.hpp"
 #include <algorithm>
 
 namespace Chimera {
@@ -58,7 +58,7 @@ void NodeParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::st
     // material->loadTextureFromFile(_nome, TEX_KIND::DIFFUSE, _arquivo);
 }
 
-void NodeParticleEmitter::accept(NodeVisitor* v) { v->visit(this); }
+void NodeParticleEmitter::accept(VisitorInterface* v) { v->visit(this); }
 
 void NodeParticleEmitter::SortParticles() { std::sort(&ParticlesContainer[0], &ParticlesContainer[MaxParticles]); }
 

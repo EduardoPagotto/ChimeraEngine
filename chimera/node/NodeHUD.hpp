@@ -25,7 +25,7 @@ class NodeHUD : public Node {
     virtual ~NodeHUD();
 
     virtual void init() override;
-    virtual void accept(class NodeVisitor* v) override;
+    virtual void accept(class VisitorInterface* v) override;
 
     void render(Shader* _pShader);
 

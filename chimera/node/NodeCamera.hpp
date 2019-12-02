@@ -14,7 +14,7 @@ class NodeCamera : public Node {
     virtual ~NodeCamera();
 
     virtual void init() override;
-    virtual void accept(class NodeVisitor* v) override;
+    virtual void accept(class VisitorInterface* v) override;
     void createTrackBall();
     void createTrackHead();
 

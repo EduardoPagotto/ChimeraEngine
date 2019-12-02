@@ -25,7 +25,7 @@ class NodeParticleEmitter : public Node {
     virtual ~NodeParticleEmitter();
 
     virtual void init() override;
-    virtual void accept(class NodeVisitor* v) override;
+    virtual void accept(class VisitorInterface* v) override;
 
     virtual void render(Shader* _pShader);
 

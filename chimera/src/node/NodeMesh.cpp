@@ -1,6 +1,6 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/core/Singleton.hpp"
-#include "chimera/node/NodeVisitor.hpp"
+#include "chimera/node/VisitorInterface.hpp"
 #include "chimera/render/LoadObj.hpp"
 #include <SDL2/SDL.h>
 #include <iterator>
@@ -35,7 +35,7 @@ void NodeMesh::init() {
     setVertexBuffer();
 }
 
-void NodeMesh::accept(NodeVisitor* v) { v->visit(this); }
+void NodeMesh::accept(VisitorInterface* v) { v->visit(this); }
 
 void NodeMesh::render(Shader* _pShader) { renderStat.render(); }
 

@@ -1,5 +1,5 @@
 #include "chimera/node/NodeCamera.hpp"
-#include "chimera/node/NodeVisitor.hpp"
+#include "chimera/node/VisitorInterface.hpp"
 
 namespace Chimera {
 
@@ -29,5 +29,5 @@ void NodeCamera::createTrackBall() { pTrackBall = new TrackBall(); }
 
 void NodeCamera::createTrackHead() { pTrackHead = new TrackHead(); }
 
-void NodeCamera::accept(NodeVisitor* v) { v->visit(this); }
+void NodeCamera::accept(VisitorInterface* v) { v->visit(this); }
 } // namespace Chimera

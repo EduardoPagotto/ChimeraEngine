@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_SHADOW_MAP_VISITOR__HPP
-#define __CHIMERA_SHADOW_MAP_VISITOR__HPP
+#ifndef __CHIMERA_VISITOR_SHADOW_MAP__HPP
+#define __CHIMERA_VISITOR_SHADOW_MAP__HPP
 
 #include "Node.hpp"
 #include "VisitorInterface.hpp"

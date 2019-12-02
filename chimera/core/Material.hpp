@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_MATERIAL_DATA_HPP
-#define __CHIMERA_MATERIAL_DATA_HPP
+#ifndef __CHIMERA_MATERIAL__HPP
+#define __CHIMERA_MATERIAL__HPP
 
 #include "chimera/core/ShaderValue.hpp"
 #include "chimera/core/Tex.hpp"

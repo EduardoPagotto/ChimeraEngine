@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_LIGHT__HPP
-#define __CHIMERA_LIGHT__HPP
+#ifndef __CHIMERA_NODE_LIGHT__HPP
+#define __CHIMERA_NODE_LIGHT__HPP
 
 #include "Node.hpp"
 #include "chimera/core/LightData.hpp"

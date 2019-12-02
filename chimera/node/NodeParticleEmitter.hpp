@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_PARTICLE_EMITTER__HPP
-#define __CHIMERA_PARTICLE_EMITTER__HPP
+#ifndef __CHIMERA_NODE_PARTICLE_EMITTER__HPP
+#define __CHIMERA_NODE_PARTICLE_EMITTER__HPP
 
 #include "Node.hpp"
 #include "Particle.hpp"

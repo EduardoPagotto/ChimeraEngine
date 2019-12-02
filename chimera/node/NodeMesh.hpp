@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_MESH__HPP
-#define __CHIMERA_MESH__HPP
+#ifndef __CHIMERA_NODE_MESH__HPP
+#define __CHIMERA_NODE_MESH__HPP
 
 #include "Node.hpp"
 #include "chimera/core/Material.hpp"

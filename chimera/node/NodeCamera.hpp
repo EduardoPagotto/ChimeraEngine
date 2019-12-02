@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_CAMERA__HPP
-#define __CHIMERA_CAMERA__HPP
+#ifndef __CHIMERA_NODE_CAMERA__HPP
+#define __CHIMERA_NODE_CAMERA__HPP
 
 #include "Node.hpp"
 #include "chimera/core/TrackBall.hpp"

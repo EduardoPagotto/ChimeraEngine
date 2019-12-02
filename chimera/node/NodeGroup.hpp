@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_GROUP__HPP
-#define __CHIMERA_GROUP__HPP
+#ifndef __CHIMERA_NODE_GROUP__HPP
+#define __CHIMERA_NODE_GROUP__HPP
 
 #include "Node.hpp"
 #include "VisitorInterface.hpp"

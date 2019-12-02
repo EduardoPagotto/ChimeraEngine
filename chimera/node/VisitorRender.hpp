@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_RENDER_VISITOR__HPP
-#define __CHIMERA_RENDER_VISITOR__HPP
+#ifndef __CHIMERA_VISITOR_RENDER__HPP
+#define __CHIMERA_VISITOR_RENDER__HPP
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Shader.hpp"

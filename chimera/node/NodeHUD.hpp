@@ -1,5 +1,5 @@
-#ifndef __CHIMERA__HUD__HPP
-#define __CHIMERA__HUD__HPP
+#ifndef __CHIMERA_NODE_HUD__HPP
+#define __CHIMERA_NODE_HUD__HPP
 
 #include <vector>
 

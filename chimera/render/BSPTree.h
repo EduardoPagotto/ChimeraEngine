@@ -1,5 +1,5 @@
-#ifndef __BSPTREE_HPP
-#define __BSPTREE_HPP
+#ifndef __CHIMERA_BSPTREE_HPP
+#define __CHIMERA_BSPTREE_HPP
 
 // Ref:
 // https://github.com/taylorstine/BSP_Tree

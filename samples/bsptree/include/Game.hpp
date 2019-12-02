@@ -7,7 +7,7 @@
 #include "chimera/core/Tex.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/core/VertexDynamic.hpp"
-#include "chimera/render/BSPTree.h"
+#include "chimera/render/BSPTree.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

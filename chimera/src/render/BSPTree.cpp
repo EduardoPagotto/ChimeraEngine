@@ -1,4 +1,4 @@
-#include "chimera/render/BSPTree.h"
+#include "chimera/render/BSPTree.hpp"
 #include <SDL2/SDL.h>
 
 //-----builder

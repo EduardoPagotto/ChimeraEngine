@@ -1,14 +1,17 @@
 #ifndef __CHIMERA_LIGHT_DATA_HPP
 #define __CHIMERA_LIGHT_DATA_HPP
 
-#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Shader.hpp"
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
-//#include <map>
 
 namespace Chimera {
+
+#define SHADE_LIGHT_POSITION "light.position"
+#define SHADE_LIGHT_AMBIENT "light.ambient"
+#define SHADE_LIGHT_DIFFUSE "light.diffuse"
+#define SHADE_LIGHT_SPECULAR "light.specular"
 
 enum class LightType {
     DIRECTIONAL = 0,

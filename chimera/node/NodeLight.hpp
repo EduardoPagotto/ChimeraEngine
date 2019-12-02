@@ -2,8 +2,8 @@
 #define __CHIMERA_NODE_LIGHT__HPP
 
 #include "Node.hpp"
-#include "chimera/core/LightData.hpp"
 #include "chimera/node/VisitorInterface.hpp"
+#include "chimera/render/Light.hpp"
 
 namespace Chimera {
 
@@ -13,7 +13,7 @@ class NodeLight : public Node {
     virtual ~NodeLight() {}
     virtual void init(){};
     virtual void accept(class VisitorInterface* v) { v->visit(this); }
-    Light light;
+    Light data;
 };
 } // namespace Chimera
 #endif

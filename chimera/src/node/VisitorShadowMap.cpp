@@ -35,7 +35,7 @@ void VisitorShadowMap::visit(NodeMesh* _pMesh) {
 
 void VisitorShadowMap::visit(NodeLight* _pLight) {
     // node de luz deve vir anter para funcionar?!
-    this->setLightSpaceMatrix(_pLight->light.getPosition());
+    this->setLightSpaceMatrix(_pLight->data.getPosition());
     pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 

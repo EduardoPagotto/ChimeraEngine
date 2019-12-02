@@ -1,4 +1,4 @@
-#include "chimera/core/LightData.hpp"
+#include "chimera/render/Light.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {

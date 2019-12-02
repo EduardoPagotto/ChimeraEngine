@@ -19,8 +19,8 @@ Chimera::NodeLight* LibraryLights::target() {
             Chimera::NodeLight* pLight = new Chimera::NodeLight(nullptr, l_id);
 
             auto ret_data = loadDiffuseLightColor(l_nLight);
-            pLight->light.setDiffuse(std::get<0>(ret_data));
-            pLight->light.setType(std::get<1>(ret_data));
+            pLight->data.setDiffuse(std::get<0>(ret_data));
+            pLight->data.setType(std::get<1>(ret_data));
 
             return pLight;
         }

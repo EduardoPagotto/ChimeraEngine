@@ -1,4 +1,4 @@
-#include "chimera/core/MeshData.hpp"
+#include "chimera/render/MeshData.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

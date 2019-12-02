@@ -1,7 +1,6 @@
-#include <SDL2/SDL_image.h>
-
-#include "chimera/core/Exception.hpp"
 #include "chimera/core/Tex.hpp"
+#include "chimera/core/Exception.hpp"
+#include <SDL2/SDL_image.h>
 
 namespace Chimera {
 

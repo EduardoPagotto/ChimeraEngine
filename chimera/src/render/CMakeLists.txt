@@ -17,7 +17,8 @@ set (RenderSource 	Triangle.cpp
 					TerrainData.cpp
 					LoadObj.cpp
 					Light.cpp
-					Material.cpp)
+					Material.cpp
+					MeshData.cpp)
 
 #define os includes
 set (RenderInclude ${CMAKE_SOURCE_DIR}) # Raiz do projeto

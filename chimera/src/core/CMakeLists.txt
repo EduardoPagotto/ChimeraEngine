@@ -22,8 +22,7 @@ set (SourcesCore Canvas.cpp
 				 VertexStatic.cpp
 				 Shader.cpp
 				 Transform.cpp
-				 Tex.cpp
-				 MeshData.cpp)
+				 Tex.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

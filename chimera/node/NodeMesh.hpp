@@ -2,10 +2,10 @@
 #define __CHIMERA_NODE_MESH__HPP
 
 #include "Node.hpp"
-#include "chimera/core/MeshData.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/VertexStatic.hpp"
 #include "chimera/render/Material.hpp"
+#include "chimera/render/MeshData.hpp"
 #include <glm/glm.hpp>
 #include <string.h>
 #include <tinyxml2.h>

@@ -4,15 +4,11 @@
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Shader.hpp"
 
-// #include "chimera/core/Singleton.hpp"
-// #include <map>
-
 namespace Chimera {
 
 #define SHADE_TEXTURE_DIFFUSE "material.tDiffuse"
 #define SHADE_TEXTURE_SPECULA "material.tSpecular"
 #define SHADE_TEXTURE_EMISSIVE "material.tEmissive"
-
 #define SHADE_TEXTURE_SHADOW "shadowMap" // TODO: melhorar este nome no shader
 
 enum class TEX_KIND { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };

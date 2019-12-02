@@ -4,10 +4,10 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Shader.hpp"
-#include "chimera/core/Tex.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/core/VertexStatic.hpp"
 #include "chimera/render/Material.hpp"
+#include "chimera/render/Tex.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

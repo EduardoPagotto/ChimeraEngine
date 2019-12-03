@@ -12,13 +12,18 @@ class Mesh {
     Mesh();
     virtual ~Mesh();
 
-    MeshData* getMeshData() { return pData; }
+    void init(MeshData* _pData3D, Material* _pMaterial);
+    void destroy();
+
+    inline MeshData* getMeshData() { return pData3D; }
+    inline AABB* getAABB() { return pAABB; }
+    inline Transform* getTransform() { return pTrans; }
 
   private:
-    AABB aabb;
-    MeshData* pData;
-    Material* pMat;
+    AABB* pAABB;
+    MeshData* pData3D;
     Transform* pTrans;
+    Material* pMat;
 };
 } // namespace Chimera
 

@@ -1,4 +1,4 @@
-#include "chimera/render/Tex.hpp"
+#include "chimera/render/Texture.hpp"
 #include "chimera/core/Exception.hpp"
 #include <SDL2/SDL_image.h>
 

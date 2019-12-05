@@ -5,7 +5,7 @@
 #include "VisitorInterface.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
-#include "chimera/render/Tex.hpp"
+#include "chimera/render/Texture.hpp"
 #include <string>
 
 namespace Chimera {

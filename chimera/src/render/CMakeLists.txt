@@ -19,7 +19,7 @@ set (RenderSource 	Triangle.cpp
 					Light.cpp
 					Material.cpp
 					MeshData.cpp
-					Tex.cpp
+					Texture.cpp
 					Mesh.cpp)
 
 #define os includes

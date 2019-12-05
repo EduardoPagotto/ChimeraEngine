@@ -2,7 +2,7 @@
 #define __CHIMERA_MATERIAL__HPP
 
 #include "chimera/core/ShaderValue.hpp"
-#include "chimera/render/Tex.hpp"
+#include "chimera/render/Texture.hpp"
 #include <glm/glm.hpp>
 #include <list>
 #include <map>

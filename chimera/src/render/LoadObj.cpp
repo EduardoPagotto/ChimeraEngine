@@ -218,6 +218,26 @@ void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outDat
     }
 }
 
+void convertMeshDataVertexIndexed(MeshData* _pMesh, std::vector<VertexData>& outData) {
+
+    unsigned int B, C;
+    for (unsigned int A = 0; A < _pMesh->vertexList.size(); A += 3) {
+        B = A + 1;
+        C = A + 2;
+        // vertex, normal and texture triangle A
+        outData.push_back({_pMesh->vertexList[A], _pMesh->normalList[A],
+                           (_pMesh->textureList.size() > 0) ? _pMesh->textureList[A] : glm::vec2(0.0, 0.0)});
+
+        // vertex, normal and texture triangle A
+        outData.push_back({_pMesh->vertexList[B], _pMesh->normalList[B],
+                           (_pMesh->textureList.size() > 0) ? _pMesh->textureList[B] : glm::vec2(0.0, 0.0)});
+
+        // vertex, normal and texture triangle A
+        outData.push_back({_pMesh->vertexList[C], _pMesh->normalList[C],
+                           (_pMesh->textureList.size() > 0) ? _pMesh->textureList[C] : glm::vec2(0.0, 0.0)});
+    }
+}
+
 void loadTerrain(const std::string& _fileName, MeshData& _mesh) {
 
     TerrainData t;

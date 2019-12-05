@@ -1,12 +1,6 @@
 #ifndef __CHIMERA_EYE_HDM__HPP
 #define __CHIMERA_EYE_HDM__HPP
 
-//#include <GL/glew.h>
-
-//#include <GL/gl.h>
-//#include <GL/glu.h>
-
-#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/ViewPoint.hpp"
 #include <glm/glm.hpp>

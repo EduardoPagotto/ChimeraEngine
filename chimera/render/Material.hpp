@@ -26,7 +26,7 @@ class Material {
 
     void setDefaultEffect();
 
-    void addTexture(TexImg* _pTex);
+    void addTexture(TextureImg* _pTex);
 
     inline void setAmbient(const glm::vec4& _color) {
         listMaterial.push_back(new ShaderValue4vf(SHADE_MAT_AMBIENTE, _color));
@@ -52,7 +52,7 @@ class Material {
 
   private:
     int tipoTexturasDisponiveis;
-    std::list<TexImg*> listTex;
+    std::list<TextureImg*> listTex;
     std::list<ShaderValue*> listMaterial;
 };
 } // namespace Chimera

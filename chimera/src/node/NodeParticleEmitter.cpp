@@ -54,8 +54,8 @@ void NodeParticleEmitter::init() {
 }
 
 void NodeParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string& _arquivo) {
-    material->addTexture(new TexImg(TEX_KIND::DIFFUSE, _arquivo));
-    // material->loadTextureFromFile(_nome, TEX_KIND::DIFFUSE, _arquivo);
+    material->addTexture(new TextureImg(TEXTURE_KIND::DIFFUSE, _arquivo));
+    // material->loadTextureFromFile(_nome, TEXTURE_KIND::DIFFUSE, _arquivo);
 }
 
 void NodeParticleEmitter::accept(VisitorInterface* v) { v->visit(this); }

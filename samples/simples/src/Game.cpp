@@ -91,7 +91,7 @@ void Game::start() {
         loadMtl(materialFile, &material);
     } else {
         material.setDefaultEffect();
-        material.addTexture(new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, "./data/images/grid2.png"));
+        material.addTexture(new Chimera::TextureImg(Chimera::TEXTURE_KIND::DIFFUSE, "./data/images/grid2.png"));
     }
 
     material.init();

@@ -4,22 +4,22 @@
 
 namespace Chimera {
 
-unsigned Tex::serialMaster = 0;
+unsigned Texture::serialMaster = 0;
 
-Tex::Tex(const TEX_KIND& _kind, const unsigned& _width, const unsigned& _height)
+Texture::Texture(const TEXTURE_KIND& _kind, const unsigned& _width, const unsigned& _height)
     : width(_width), height(_height), serial(++serialMaster), idTexture(0), kind(_kind) {
 
     switch (_kind) {
-        case TEX_KIND::DIFFUSE:
+        case TEXTURE_KIND::DIFFUSE:
             shadePropName = SHADE_TEXTURE_DIFFUSE;
             break;
-        case TEX_KIND::EMISSIVE:
+        case TEXTURE_KIND::EMISSIVE:
             shadePropName = SHADE_TEXTURE_EMISSIVE;
             break;
-        case TEX_KIND::SPECULAR:
+        case TEXTURE_KIND::SPECULAR:
             shadePropName = SHADE_TEXTURE_SPECULA;
             break;
-        case TEX_KIND::SHADOWMAP:
+        case TEXTURE_KIND::SHADOWMAP:
             shadePropName = SHADE_TEXTURE_SHADOW;
             break;
         default:
@@ -27,11 +27,11 @@ Tex::Tex(const TEX_KIND& _kind, const unsigned& _width, const unsigned& _height)
     }
 }
 
-TexFBO::~TexFBO() {}
+TextureFBO::~TextureFBO() {}
 
-bool TexFBO::init() {
+bool TextureFBO::init() {
 
-    if (Tex::init() == true) {
+    if (Texture::init() == true) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -53,9 +53,9 @@ bool TexFBO::init() {
 }
 
 //--------
-TexImg::~TexImg() {}
+TextureImg::~TextureImg() {}
 
-int TexImg::invert_image(int pitch, int height, void* image_pixels) {
+int TextureImg::invert_image(int pitch, int height, void* image_pixels) {
     int index;
     void* temp_row;
     int height_div_2;
@@ -78,8 +78,8 @@ int TexImg::invert_image(int pitch, int height, void* image_pixels) {
     return 0;
 }
 
-bool TexImg::init() {
-    if (Tex::init() == true) {
+bool TextureImg::init() {
+    if (Texture::init() == true) {
         SDL_Surface* pImage = IMG_Load(pathFile.c_str());
         if (pImage == nullptr)
             throw Exception("Falha ao ler arquivo:" + pathFile);
@@ -116,10 +116,10 @@ bool TexImg::init() {
 
 // TexCentral::~TexCentral() {
 
-//     std::map<std::string, TexImg*>::iterator it = mapTex.begin();
+//     std::map<std::string, TextureImg*>::iterator it = mapTex.begin();
 //     while (it != mapTex.end()) {
 
-//         TexImg* pTex = it->second;
+//         TextureImg* pTex = it->second;
 //         mapTex.erase(it);
 
 //         delete pTex;
@@ -130,22 +130,22 @@ bool TexImg::init() {
 // }
 
 // void TexCentral::initAllTex() {
-//     for (std::map<std::string, TexImg*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
-//         TexImg* pTex = iTex->second;
+//     for (std::map<std::string, TextureImg*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
+//         TextureImg* pTex = iTex->second;
 //         pTex->init();
 //     }
 // }
 
-// TexImg* TexCentral::add(const std::string& name, const std::string& _pathFile) {
+// TextureImg* TexCentral::add(const std::string& name, const std::string& _pathFile) {
 
-//     TexImg* pTex;
-//     std::map<std::string, TexImg*>::iterator it = mapTex.find(name);
+//     TextureImg* pTex;
+//     std::map<std::string, TextureImg*>::iterator it = mapTex.find(name);
 //     if (it != mapTex.end()) {
 //         pTex = it->second;
 //         return pTex;
 //     }
 
-//     pTex = new TexImg(_pathFile);
+//     pTex = new TextureImg(_pathFile);
 //     mapTex[name] = pTex;
 
 //     return pTex;

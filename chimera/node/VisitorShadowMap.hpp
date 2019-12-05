@@ -35,7 +35,7 @@ class VisitorShadowMap : public VisitorInterface {
     glm::mat4 lightSpaceMatrix;
     Transform* pTransform;
     Shader* pShader;
-    TexFBO* pTexture;
+    TextureFBO* pTexture;
 };
 } // namespace Chimera
 

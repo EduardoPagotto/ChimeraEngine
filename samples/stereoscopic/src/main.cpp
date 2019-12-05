@@ -151,7 +151,7 @@ int main(int argn, char** argv) {
         pMat->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat->setShine(32.0f);
-        pMat->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./data/images/grid1.png"));
+        pMat->addTexture(new TextureImg(TEXTURE_KIND::DIFFUSE, "./data/images/grid1.png"));
 
         createMesh("Teste1", "./data/models/tela01.obj", 20.0, glm::vec3(0.0, 0.0, 150.0), pMat);
         createMesh("Teste2", "./data/models/tela01.obj", 20.0, glm::vec3(0.0, 0.0, -150.0), pMat);
@@ -161,7 +161,7 @@ int main(int argn, char** argv) {
         pMat1->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setShine(32.0f);
-        // pMat1->addTexture(new TexImg(TEX_KIND::DIFFUSE, "./samples/terrain/data/terrain3.jpg"));
+        // pMat1->addTexture(new TextureImg(TEXTURE_KIND::DIFFUSE, "./samples/terrain/data/terrain3.jpg"));
         createTerrain("terra", "./data/terrain/terrain1.bin", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
 
         // Wrapper do game

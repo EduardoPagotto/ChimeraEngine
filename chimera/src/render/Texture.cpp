@@ -6,25 +6,17 @@ namespace Chimera {
 
 unsigned Texture::serialMaster = 0;
 
-Texture::Texture(const TEXTURE_KIND& _kind, const unsigned& _width, const unsigned& _height)
-    : width(_width), height(_height), serial(++serialMaster), idTexture(0), kind(_kind) {
+Texture::Texture(const std::string& _shadeName, const unsigned& _width, const unsigned& _height)
+    : width(_width), height(_height), serial(++serialMaster), idTexture(0), shadeName(_shadeName) {
 
-    switch (_kind) {
-        case TEXTURE_KIND::DIFFUSE:
-            shadePropName = SHADE_TEXTURE_DIFFUSE;
-            break;
-        case TEXTURE_KIND::EMISSIVE:
-            shadePropName = SHADE_TEXTURE_EMISSIVE;
-            break;
-        case TEXTURE_KIND::SPECULAR:
-            shadePropName = SHADE_TEXTURE_SPECULA;
-            break;
-        case TEXTURE_KIND::SHADOWMAP:
-            shadePropName = SHADE_TEXTURE_SHADOW;
-            break;
-        default:
-            break;
-    }
+    if (_shadeName.compare(SHADE_TEXTURE_DIFFUSE) == 0)
+        index = 0;
+    else if (_shadeName.compare(SHADE_TEXTURE_SHADOW) == 0)
+        index = 1;
+    else if (_shadeName.compare(SHADE_TEXTURE_SPECULA) == 0)
+        index = 2;
+    else if (_shadeName.compare(SHADE_TEXTURE_EMISSIVE) == 0)
+        index = 3;
 }
 
 TextureFBO::~TextureFBO() {}

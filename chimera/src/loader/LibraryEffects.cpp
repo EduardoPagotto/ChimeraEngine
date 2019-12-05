@@ -59,7 +59,7 @@ Chimera::TextureImg* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
             std::string valId = std::get<0>(val);
             std::string valPathFile = std::get<1>(val);
 
-            Chimera::TextureImg* tex = new Chimera::TextureImg(Chimera::TEXTURE_KIND::DIFFUSE, valPathFile);
+            Chimera::TextureImg* tex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, valPathFile);
             return tex;
         }
     }

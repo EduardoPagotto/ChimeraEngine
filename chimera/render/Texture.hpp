@@ -10,11 +10,9 @@ namespace Chimera {
 #define SHADE_TEXTURE_EMISSIVE "material.tEmissive"
 #define SHADE_TEXTURE_SHADOW "shadowMap" // TODO: melhorar este nome no shader
 
-enum class TEXTURE_KIND { DIFFUSE = 0, SHADOWMAP = 1, SPECULAR = 2, EMISSIVE = 3 };
-
 class Texture {
   public:
-    Texture(const TEXTURE_KIND& _kind, const unsigned& _width, const unsigned& _height);
+    Texture(const std::string& _shadeName, const unsigned& _width, const unsigned& _height);
     virtual ~Texture() { glDeleteTextures(1, (GLuint*)&idTexture); }
 
     virtual bool init() {
@@ -28,35 +26,33 @@ class Texture {
     }
 
     void apply(Shader* _pShader) {
-        glActiveTexture(GL_TEXTURE0 + (int)kind);
+        glActiveTexture(GL_TEXTURE0 + index);
         glBindTexture(GL_TEXTURE_2D, idTexture);
         if (_pShader != nullptr)
-            _pShader->setGlUniform1i(shadePropName.c_str(), (int)kind);
+            _pShader->setGlUniform1i(shadeName.c_str(), index);
     }
-
-    inline TEXTURE_KIND getKind() const { return kind; }
 
     inline unsigned getWidth() const { return width; }
     inline unsigned getHeight() const { return height; }
     inline unsigned getSerial() const { return serial; }
+    inline GLuint getIndex() const { return index; }
 
   protected:
     unsigned width;
     unsigned height;
     GLuint idTexture;
 
-    TEXTURE_KIND kind;
-    std::string shadePropName;
-
   private:
+    std::string shadeName;
+    GLuint index;
     unsigned serial;
     static unsigned serialMaster;
 };
 
 class TextureFBO : public Texture {
   public:
-    TextureFBO(const TEXTURE_KIND& _kind, const unsigned& _width, const unsigned& _height)
-        : Texture(_kind, _width, _height), depthMapFBO(0) {}
+    TextureFBO(const std::string& _shadeName, const unsigned& _width, const unsigned& _height)
+        : Texture(_shadeName, _width, _height), depthMapFBO(0) {}
     virtual ~TextureFBO() override;
     virtual bool init() override;
     inline GLuint getFrameBufferId() const { return depthMapFBO; }
@@ -67,7 +63,8 @@ class TextureFBO : public Texture {
 
 class TextureImg : public Texture {
   public:
-    TextureImg(const TEXTURE_KIND& _kind, const std::string& _pathFile) : Texture(_kind, 0, 0), pathFile(_pathFile) {}
+    TextureImg(const std::string& _shadeName, const std::string& _pathFile)
+        : Texture(_shadeName, 0, 0), pathFile(_pathFile) {}
     virtual ~TextureImg() override;
     virtual bool init() override;
 

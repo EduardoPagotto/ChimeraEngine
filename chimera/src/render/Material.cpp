@@ -24,14 +24,14 @@ void Material::init() {
         TextureImg* pTex = *iTex;
 
         pTex->init();
-        switch (pTex->getKind()) {
-            case TEXTURE_KIND::DIFFUSE:
+        switch (pTex->getIndex()) {
+            case 0:
                 hasDifuse = true;
                 break;
-            case TEXTURE_KIND::EMISSIVE:
+            case 3:
                 hasEmissive = true;
                 break;
-            case TEXTURE_KIND::SPECULAR:
+            case 2:
                 hasEspecular = true;
                 break;
             default:

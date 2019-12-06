@@ -27,7 +27,7 @@ class NodeMesh : public Node {
 
     void replaceTransform(Transform* _pTransform);
 
-    void debugDados();
+    void debugDados(bool _showAll);
 
     MeshData meshData;
 

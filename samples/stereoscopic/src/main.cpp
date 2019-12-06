@@ -88,7 +88,7 @@ void createMeshTexturizade(std::string name, std::string file, float scale, glm:
     pMesh->setMaterial(pMap);
 
     loadObjMtl(file, pMesh->meshData, *pMap);
-    meshDataChangeSize(pMesh->meshData, scale, pMap->hasTexture());
+    pMesh->meshData.changeSize(scale, pMap->hasTexture());
 }
 
 void createMesh(std::string name, std::string file, float scale, glm::vec3 _position, Chimera::Material* _pMap) {
@@ -101,7 +101,7 @@ void createMesh(std::string name, std::string file, float scale, glm::vec3 _posi
 
     std::string matfile;
     loadObj(file, pMesh->meshData, matfile);
-    meshDataChangeSize(pMesh->meshData, scale, _pMap->hasTexture());
+    pMesh->meshData.changeSize(scale, _pMap->hasTexture());
 }
 
 void createTerrain(std::string name, std::string file, float scale, glm::vec3 _position, Chimera::Material* _pMap) {
@@ -116,7 +116,7 @@ void createTerrain(std::string name, std::string file, float scale, glm::vec3 _p
     // loadObj(file, pMesh->meshData, matfile);
     loadTerrain(file, pMesh->meshData);
 
-    meshDataChangeSize(pMesh->meshData, scale, _pMap->hasTexture());
+    pMesh->meshData.changeSize(scale, _pMap->hasTexture());
 }
 
 int main(int argn, char** argv) {

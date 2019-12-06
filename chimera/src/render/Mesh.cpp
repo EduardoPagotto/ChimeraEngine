@@ -14,7 +14,6 @@ Mesh::~Mesh() { this->destroy(); }
 void Mesh::destroy() {
 
     if (pData3D != nullptr) {
-        meshDataDestroy(*pData3D);
         delete pData3D;
         pData3D = nullptr;
     }
@@ -47,7 +46,7 @@ void Mesh::init(MeshData* _pData3D, Material* _pMaterial) {
 
     glm::vec3 size, min, max;
 
-    meshDataMinMaxSize(*_pData3D, min, max, size);
+    this->pData3D->getMinMaxSize(min, max, size);
 
     pAABB = new AABB(min, max);
     pTrans = new Transform();

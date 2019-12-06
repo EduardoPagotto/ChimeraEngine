@@ -1,6 +1,6 @@
 #include "chimera/render/LoadObj.hpp"
 #include "chimera/core/Exception.hpp"
-
+#include "chimera/render/TerrainData.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -114,7 +114,7 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
         else if (line[0] == 'v') {
             if (line[1] == ' ') {
                 if (sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
-                    _mesh.vertexList.push_back(glm::vec3(x, y, z));
+                    _mesh.addVertice(glm::vec3(x, y, z));
                     continue;
                 }
                 throw Exception(
@@ -123,11 +123,11 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
             } else if (line[1] == 'n') {
                 normalOn = true;
                 int n = sscanf(line, "vn %f %f %f", &x, &y, &z);
-                _mesh.normalList.push_back(glm::vec3(x, y, z));
+                _mesh.addNormal(glm::vec3(x, y, z));
             } else if (line[1] == 't') {
                 textuaOn = true;
                 int n = sscanf(line, "vt %f %f", &u, &v);
-                _mesh.textureList.push_back(glm::vec2(u, v));
+                _mesh.addUV(glm::vec2(u, v));
             }
         } else if (line[0] == 'f') {
             if (line[1] == ' ') {
@@ -143,13 +143,13 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
                 }
 
                 for (int indice = 0; indice < 3; indice++) {
-                    _mesh.vertexIndex.push_back(A[indice] - 1);
+                    _mesh.addVerticeIndex(A[indice] - 1);
 
                     if (textuaOn == true)
-                        _mesh.textureIndex.push_back(B[indice] - 1);
+                        _mesh.addUVIndex(B[indice] - 1);
 
                     if (normalOn == true)
-                        _mesh.normalIndex.push_back(C[indice] - 1);
+                        _mesh.addNormalIndex(C[indice] - 1);
                 }
             }
         } else {
@@ -163,99 +163,25 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
         free(line);
 }
 
-void convertMeshDataTriangle(MeshData* _pMesh, std::vector<Triangle>& vecTriangle) {
-
-    unsigned int B, C;
-
-    // Load vertex, normal and texture of triangles A,B,C
-    for (unsigned int A = 0; A < _pMesh->vertexIndex.size(); A += 3) {
-        B = A + 1;
-        C = A + 2;
-
-        Triangle t = Triangle(_pMesh->vertexList[_pMesh->vertexIndex[A]],  // vertex triangle A
-                              _pMesh->vertexList[_pMesh->vertexIndex[B]],  // vertex triangle B
-                              _pMesh->vertexList[_pMesh->vertexIndex[C]]); // vertex triangle C
-
-        if (_pMesh->normalList.size() > 0) {
-            t.vertex[0].normal = _pMesh->normalList[_pMesh->normalIndex[A]]; // normal triangle A
-            t.vertex[1].normal = _pMesh->normalList[_pMesh->normalIndex[B]]; // normal triangle B
-            t.vertex[2].normal = _pMesh->normalList[_pMesh->normalIndex[C]]; // normal triangle C
-        }
-
-        if (_pMesh->textureList.size() > 0) {
-            t.vertex[0].texture = _pMesh->textureList[_pMesh->textureIndex[A]]; // texture triangle A
-            t.vertex[1].texture = _pMesh->textureList[_pMesh->textureIndex[B]]; // texture triangle B
-            t.vertex[2].texture = _pMesh->textureList[_pMesh->textureIndex[C]]; // texture triangle C
-        }
-
-        vecTriangle.push_back(t);
-        // t.debugData();
-    }
-}
-
-void convertMeshDataVertexData(MeshData* _pMesh, std::vector<VertexData>& outData) {
-
-    unsigned int B, C;
-    for (unsigned int A = 0; A < _pMesh->vertexIndex.size(); A += 3) {
-
-        B = A + 1;
-        C = A + 2;
-
-        // vertex, normal and texture triangle A
-        outData.push_back(
-            {_pMesh->vertexList[_pMesh->vertexIndex[A]], _pMesh->normalList[_pMesh->normalIndex[A]],
-             (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[A]] : glm::vec2(0.0, 0.0)});
-
-        // vertex, normal and texture triangle A
-        outData.push_back(
-            {_pMesh->vertexList[_pMesh->vertexIndex[B]], _pMesh->normalList[_pMesh->normalIndex[B]],
-             (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[B]] : glm::vec2(0.0, 0.0)});
-
-        // vertex, normal and texture triangle A
-        outData.push_back(
-            {_pMesh->vertexList[_pMesh->vertexIndex[C]], _pMesh->normalList[_pMesh->normalIndex[C]],
-             (_pMesh->textureList.size() > 0) ? _pMesh->textureList[_pMesh->textureIndex[C]] : glm::vec2(0.0, 0.0)});
-    }
-}
-
-void convertMeshDataVertexIndexed(MeshData* _pMesh, std::vector<VertexData>& outData) {
-
-    unsigned int B, C;
-    for (unsigned int A = 0; A < _pMesh->vertexList.size(); A += 3) {
-        B = A + 1;
-        C = A + 2;
-        // vertex, normal and texture triangle A
-        outData.push_back({_pMesh->vertexList[A], _pMesh->normalList[A],
-                           (_pMesh->textureList.size() > 0) ? _pMesh->textureList[A] : glm::vec2(0.0, 0.0)});
-
-        // vertex, normal and texture triangle A
-        outData.push_back({_pMesh->vertexList[B], _pMesh->normalList[B],
-                           (_pMesh->textureList.size() > 0) ? _pMesh->textureList[B] : glm::vec2(0.0, 0.0)});
-
-        // vertex, normal and texture triangle A
-        outData.push_back({_pMesh->vertexList[C], _pMesh->normalList[C],
-                           (_pMesh->textureList.size() > 0) ? _pMesh->textureList[C] : glm::vec2(0.0, 0.0)});
-    }
-}
-
 void loadTerrain(const std::string& _fileName, MeshData& _mesh) {
 
     TerrainData t;
     t.loadBinary((char*)_fileName.c_str());
+    //_mesh.setOneIndex(true);
 
     for (int i = 0; i < t.vertices.size(); i++) {
         glm::vec3 pos = t.vertices[i].position;
         glm::vec3 nor = t.vertices[i].normal;
-        _mesh.vertexList.push_back(pos);
-        _mesh.normalList.push_back(nor);
+        _mesh.addVertice(pos);
+        _mesh.addNormal(nor);
         // TODO: Implementar
         //_mesh.textureList.push_back(XXX);
     }
 
     for (int i = 0; i < t.indices.size(); i++) {
         int val = t.indices[i];
-        _mesh.normalIndex.push_back(val);
-        _mesh.vertexIndex.push_back(val);
+        _mesh.addNormalIndex(val);
+        _mesh.addVerticeIndex(val);
         // TODO: Implementar
         //_mesh.textureIndex.push_back(val);
     }

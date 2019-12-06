@@ -96,11 +96,11 @@ void Game::start() {
 
     material.init();
 
-    meshDataChangeSize(m, 100.0, material.hasTexture());
+    m.changeSize(100.0, material.hasTexture());
     // m.textureFix();
 
     std::vector<Chimera::VertexData> renderData;
-    convertMeshDataVertexData(&m, renderData);
+    m.toVertexData(renderData);
 
     vertexBuffer.create(renderData);
 }

@@ -29,7 +29,7 @@ void NodeMesh::init() {
     material->init();
 
     glm::vec3 min, max, size;
-    meshDataMinMaxSize(meshData, min, max, size);
+    meshData.getMinMaxSize(min, max, size);
     pTransform->init(size);
 
     setVertexBuffer();
@@ -41,14 +41,14 @@ void NodeMesh::render(Shader* _pShader) { renderStat.render(); }
 
 void NodeMesh::setVertexBuffer() {
     std::vector<VertexData> vertexDataIn;
-    convertMeshDataVertexData(&meshData, vertexDataIn);
+    meshData.toVertexData(vertexDataIn);
 
     renderStat.create(vertexDataIn);
 }
 
-void NodeMesh::debugDados() {
+void NodeMesh::debugDados(bool _showAll) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Debug Mess Nome: %s", getName().c_str());
-    meshDataDebugDados(meshData);
+    meshData.debugDados(_showAll);
 }
 
 void NodeMesh::replaceTransform(Transform* _pTransform) {

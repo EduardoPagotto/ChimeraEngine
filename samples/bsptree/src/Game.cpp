@@ -88,13 +88,13 @@ void Game::start() {
     // loadObj("./data/models/square1.obj", m, materialFile);
 
     loadObj("./data/models/cubo_textura_simples.obj", m, materialFile);
-    meshDataChangeSize(m, 30.0, true);
+    m.changeSize(30.0, true);
 
     // loadObj("./data/models/split1.obj", m, materialFile);
     // loadObj((const char*)"./data/models/teste1.obj", m, materialFile);
     // m.textureFix();
 
-    convertMeshDataTriangle(&m, listPolygons);
+    m.toTriangle(listPolygons);
     std::reverse(listPolygons.begin(), listPolygons.end());
 
     // Cria o BSP

@@ -10,7 +10,7 @@ class VertexRenderStatic {
   public:
     VertexRenderStatic();
     virtual ~VertexRenderStatic();
-    void create(std::vector<VertexData>& vertexDataIn); // void setVertexBuffer();
+    void create(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index);
     void render();
 
   private:

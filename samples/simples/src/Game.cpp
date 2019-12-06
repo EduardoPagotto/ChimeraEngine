@@ -102,7 +102,8 @@ void Game::start() {
     std::vector<Chimera::VertexData> renderData;
     m.toVertexData(renderData);
 
-    vertexBuffer.create(renderData);
+    std::vector<unsigned int> index;
+    vertexBuffer.create(renderData, index);
 }
 
 void Game::stop() {}

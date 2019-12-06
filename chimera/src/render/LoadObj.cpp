@@ -167,7 +167,7 @@ void loadTerrain(const std::string& _fileName, MeshData& _mesh) {
 
     TerrainData t;
     t.loadBinary((char*)_fileName.c_str());
-    //_mesh.setOneIndex(true);
+    _mesh.setOneIndex(true);
 
     for (int i = 0; i < t.vertices.size(); i++) {
         glm::vec3 pos = t.vertices[i].position;

@@ -43,7 +43,12 @@ void NodeMesh::setVertexBuffer() {
     std::vector<VertexData> vertexDataIn;
     meshData.toVertexData(vertexDataIn);
 
-    renderStat.create(vertexDataIn);
+    if (meshData.getOneIndex() == false) {
+        std::vector<unsigned int> index;
+        renderStat.create(vertexDataIn, index);
+    } else {
+        renderStat.create(vertexDataIn, meshData.getIndexed());
+    }
 }
 
 void NodeMesh::debugDados(bool _showAll) {

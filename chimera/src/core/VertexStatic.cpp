@@ -33,16 +33,13 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
 
     // percorrer todos os vertices
     for (unsigned int i = 0; i < inData.size(); i++) {
-
         // Procura por similar
         unsigned int index;
         if (getSimilarVertexIndex(inData[i], outData, index) == true) {
-
             // se entrotar usar apenas o indice
             out_indices.push_back(index);
 
         } else {
-
             // se nao adiciona a lista de novo vertex
             outData.push_back(inData[i]);
             out_indices.push_back((unsigned int)outData.size() - 1);
@@ -69,9 +66,14 @@ void VertexRenderStatic::render() {
     glBindVertexArray(0);
 }
 
-// void VertexRenderStatic::setVertexBuffer() {
-void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn) {
-    indexVBO_slow(vertexDataIn, vertexData, indexIBO);
+void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index) {
+
+    if (index.size() == 0) {
+        indexVBO_slow(vertexDataIn, vertexData, indexIBO);
+    } else {
+        vertexData = vertexDataIn;
+        indexIBO = index;
+    }
 
     unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);

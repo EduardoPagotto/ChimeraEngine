@@ -28,15 +28,14 @@ class MeshData {
     inline void addUVIndex(const unsigned int& _indice) { this->textureIndex.push_back(_indice); }
 
     inline void setOneIndex(const bool& _oneIndex) { oneIndex = _oneIndex; }
-    bool getOneIndex() const { return oneIndex; }
+    inline bool getOneIndex() const { return oneIndex; }
+    inline std::vector<unsigned int> getIndexed() { return vertexIndex; }
 
   private:
     void _toVertexDataNotOneIndex(std::vector<VertexData>& outData);
     void _toVertexDataOneIndex(std::vector<VertexData>& outData);
     void _toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle);
     void _toTriangleOneIndex(std::vector<Triangle>& vecTriangle);
-
-    // void toTriangle(std::vector<Triangle>& vecTriangle);
 
     bool oneIndex;
     std::vector<glm::vec3> vertexList;

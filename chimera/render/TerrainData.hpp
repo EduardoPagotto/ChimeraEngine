@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_TERRAIN_DATA__HPP
 #define __CHIMERA_TERRAIN_DATA__HPP
 
-#include "chimera/core/VertexData.hpp"
+#include "chimera/render/MeshData.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -12,33 +12,17 @@ class TerrainData {
     TerrainData();
     virtual ~TerrainData();
     void destroy();
-    bool loadBinary(char* FileName);
-    bool loadTexture2D(char* FileName, float Scale, float Offset);
-    bool saveBinary(char* FileName);
+    bool loadBinary(char* fileName, MeshData& _mesh);
     void setDefaults();
-    void getMinMax(glm::mat4& ViewMatrix, glm::vec3& Min, glm::vec3& Max);
-
-    inline int getSize() const { return sizeHeight; }
-    inline glm::vec3 getMin() const { return Min; }
-    inline glm::vec3 getMax() const { return Max; }
-    inline int getTrianglesCount() const { return indices.size() / 3.0f; }
-    float getHeight(float X, float Z);
-
-    std::vector<VertexData> vertices;
-    std::vector<int> indices;
 
   private:
     int getIndex(int X, int Z);
     float getHeight(int X, int Z);
-    float getHeight(float* Heights, int Size, float X, float Z);
 
     int verticesCount;
     int sizeHeight;
     int sizeP1;
     float sizeD2;
-    glm::vec3 Min;
-    glm::vec3 Max;
-
     float* heights;
 };
 

@@ -10,6 +10,7 @@
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/render/LoadObj.hpp"
+#include "chimera/render/TerrainData.hpp"
 
 #include <cstdio>
 #include <glm/glm.hpp>
@@ -112,9 +113,8 @@ void createTerrain(std::string name, std::string file, float scale, glm::vec3 _p
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(_pMap);
 
-    std::string matfile;
-    // loadObj(file, pMesh->meshData, matfile);
-    loadTerrain(file, pMesh->meshData);
+    TerrainData t;
+    t.loadBinary((char*)file.c_str(), pMesh->meshData);
 
     pMesh->meshData.changeSize(scale, _pMap->hasTexture());
 }

@@ -1,6 +1,5 @@
 #include "chimera/render/LoadObj.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/render/TerrainData.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -163,27 +162,4 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
         free(line);
 }
 
-void loadTerrain(const std::string& _fileName, MeshData& _mesh) {
-
-    TerrainData t;
-    t.loadBinary((char*)_fileName.c_str());
-    _mesh.setOneIndex(true);
-
-    for (int i = 0; i < t.vertices.size(); i++) {
-        glm::vec3 pos = t.vertices[i].position;
-        glm::vec3 nor = t.vertices[i].normal;
-        _mesh.addVertice(pos);
-        _mesh.addNormal(nor);
-        // TODO: Implementar
-        //_mesh.textureList.push_back(XXX);
-    }
-
-    for (int i = 0; i < t.indices.size(); i++) {
-        int val = t.indices[i];
-        _mesh.addNormalIndex(val);
-        _mesh.addVerticeIndex(val);
-        // TODO: Implementar
-        //_mesh.textureIndex.push_back(val);
-    }
-}
 } // namespace Chimera

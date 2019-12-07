@@ -12,8 +12,8 @@ void MeshData::destroy() {
     vertexList.clear();
     normalIndex.clear();
     normalList.clear();
-    textureIndex.clear();
-    textureList.clear();
+    uvIndex.clear();
+    uvList.clear();
 }
 
 void MeshData::getMinMaxSize(glm::vec3& min, glm::vec3& max, glm::vec3& size) {
@@ -36,8 +36,8 @@ void MeshData::getMinMaxSize(glm::vec3& min, glm::vec3& max, glm::vec3& size) {
 void MeshData::changeSize(const float& new_size, const bool& hasTexture) {
 
     if (hasTexture == false) {
-        textureIndex.clear();
-        textureList.clear();
+        uvIndex.clear();
+        uvList.clear();
     }
 
     for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
@@ -70,15 +70,15 @@ void MeshData::_toVertexDataNotOneIndex(std::vector<VertexData>& outData) {
 
         // vertex, normal and texture triangle A
         outData.push_back({vertexList[vertexIndex[A]], normalList[normalIndex[A]],
-                           (textureList.size() > 0) ? textureList[textureIndex[A]] : glm::vec2(0.0, 0.0)});
+                           (uvList.size() > 0) ? uvList[uvIndex[A]] : glm::vec2(0.0, 0.0)});
 
         // vertex, normal and texture triangle A
         outData.push_back({vertexList[vertexIndex[B]], normalList[normalIndex[B]],
-                           (textureList.size() > 0) ? textureList[textureIndex[B]] : glm::vec2(0.0, 0.0)});
+                           (uvList.size() > 0) ? uvList[uvIndex[B]] : glm::vec2(0.0, 0.0)});
 
         // vertex, normal and texture triangle A
         outData.push_back({vertexList[vertexIndex[C]], normalList[normalIndex[C]],
-                           (textureList.size() > 0) ? textureList[textureIndex[C]] : glm::vec2(0.0, 0.0)});
+                           (uvList.size() > 0) ? uvList[uvIndex[C]] : glm::vec2(0.0, 0.0)});
     }
 }
 
@@ -89,16 +89,13 @@ void MeshData::_toVertexDataOneIndex(std::vector<VertexData>& outData) {
         B = A + 1;
         C = A + 2;
         // vertex, normal and texture triangle A
-        outData.push_back(
-            {vertexList[A], normalList[A], (textureList.size() > 0) ? textureList[A] : glm::vec2(0.0, 0.0)});
+        outData.push_back({vertexList[A], normalList[A], (uvList.size() > 0) ? uvList[A] : glm::vec2(0.0, 0.0)});
 
         // vertex, normal and texture triangle A
-        outData.push_back(
-            {vertexList[B], normalList[B], (textureList.size() > 0) ? textureList[B] : glm::vec2(0.0, 0.0)});
+        outData.push_back({vertexList[B], normalList[B], (uvList.size() > 0) ? uvList[B] : glm::vec2(0.0, 0.0)});
 
         // vertex, normal and texture triangle A
-        outData.push_back(
-            {vertexList[C], normalList[C], (textureList.size() > 0) ? textureList[C] : glm::vec2(0.0, 0.0)});
+        outData.push_back({vertexList[C], normalList[C], (uvList.size() > 0) ? uvList[C] : glm::vec2(0.0, 0.0)});
     }
 }
 
@@ -121,10 +118,10 @@ void MeshData::_toTriangleOneIndex(std::vector<Triangle>& vecTriangle) {
             t.vertex[2].normal = normalList[C]; // normal triangle C
         }
 
-        if (textureList.size() > 0) {
-            t.vertex[0].texture = textureList[A]; // texture triangle A
-            t.vertex[1].texture = textureList[B]; // texture triangle B
-            t.vertex[2].texture = textureList[C]; // texture triangle C
+        if (uvList.size() > 0) {
+            t.vertex[0].texture = uvList[A]; // texture triangle A
+            t.vertex[1].texture = uvList[B]; // texture triangle B
+            t.vertex[2].texture = uvList[C]; // texture triangle C
         }
 
         vecTriangle.push_back(t);
@@ -151,10 +148,10 @@ void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle) {
             t.vertex[2].normal = normalList[normalIndex[C]]; // normal triangle C
         }
 
-        if (textureList.size() > 0) {
-            t.vertex[0].texture = textureList[textureIndex[A]]; // texture triangle A
-            t.vertex[1].texture = textureList[textureIndex[B]]; // texture triangle B
-            t.vertex[2].texture = textureList[textureIndex[C]]; // texture triangle C
+        if (uvList.size() > 0) {
+            t.vertex[0].texture = uvList[uvIndex[A]]; // texture triangle A
+            t.vertex[1].texture = uvList[uvIndex[B]]; // texture triangle B
+            t.vertex[2].texture = uvList[uvIndex[C]]; // texture triangle C
         }
 
         vecTriangle.push_back(t);
@@ -165,9 +162,9 @@ void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle) {
 void MeshData::debugDados(bool _showAll) {
 
     int linha = 0;
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertice I: %03d L: %03d", (int)vertexIndex.size(), (int)vertexList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex I: %03d L: %03d", (int)vertexIndex.size(), (int)vertexList.size());
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal  I: %03d L: %03d", (int)normalIndex.size(), (int)normalList.size());
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Textura I: %03d L: %03d", (int)textureIndex.size(), (int)textureList.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture I: %03d L: %03d", (int)uvIndex.size(), (int)uvList.size());
 
     if (_showAll == true) {
         for (unsigned int indice = 0; indice < vertexIndex.size(); indice += 3) {
@@ -198,16 +195,16 @@ void MeshData::debugDados(bool _showAll) {
         }
 
         linha = 0;
-        for (unsigned int indice = 0; indice < textureIndex.size(); indice += 3) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                         textureIndex[indice], textureIndex[indice + 1], textureIndex[indice + 2]);
+        for (unsigned int indice = 0; indice < uvIndex.size(); indice += 3) {
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p:%02d (%02d; %03d; %04d)", linha, indice, uvIndex[indice],
+                         uvIndex[indice + 1], uvIndex[indice + 2]);
             linha++;
         }
 
         linha = 0;
-        for (unsigned int indice = 0; indice < textureList.size(); indice++) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p: %02d (%05.3f; %05.3f)", linha, indice,
-                         textureList[indice].x, textureList[indice].y);
+        for (unsigned int indice = 0; indice < uvList.size(); indice++) {
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p: %02d (%05.3f; %05.3f)", linha, indice, uvList[indice].x,
+                         uvList[indice].y);
             linha++;
         }
     }

@@ -113,7 +113,7 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
         else if (line[0] == 'v') {
             if (line[1] == ' ') {
                 if (sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
-                    _mesh.addVertice(glm::vec3(x, y, z));
+                    _mesh.addVertex(glm::vec3(x, y, z));
                     continue;
                 }
                 throw Exception(
@@ -142,7 +142,7 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
                 }
 
                 for (int indice = 0; indice < 3; indice++) {
-                    _mesh.addVerticeIndex(A[indice] - 1);
+                    _mesh.addVertexIndex(A[indice] - 1);
 
                     if (textuaOn == true)
                         _mesh.addUVIndex(B[indice] - 1);

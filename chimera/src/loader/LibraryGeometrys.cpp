@@ -63,7 +63,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pMesh->meshData.addVertice(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    _pMesh->meshData.addVertex(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-normals") != nullptr) {
 
@@ -127,7 +127,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
 
                 if (strstr(l_source, (char*)"-vertices") != nullptr) { // indices de vetor ponto
 
-                    _pMesh->meshData.addVerticeIndex(l_arrayIndex[l_contador]);
+                    _pMesh->meshData.addVertexIndex(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-normals") != nullptr) { // indice de vetor normal
 

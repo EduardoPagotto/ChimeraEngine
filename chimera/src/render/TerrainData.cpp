@@ -66,7 +66,7 @@ bool TerrainData::loadBinary(char* fileName, MeshData& _mesh) {
                                                      2.0f,                                        // nory
                                                      getHeight(x, z + 1) - getHeight(x, z - 1))); // norz
 
-            _mesh.addVertice(pos);
+            _mesh.addVertex(pos);
             _mesh.addNormal(nor);
             //_mesh.addUV(glm::vec2(0.0, 0.0));
             i++;
@@ -82,13 +82,13 @@ bool TerrainData::loadBinary(char* fileName, MeshData& _mesh) {
             int pc = getIndex(x + 1, z + 1);
             int pd = getIndex(x, z + 1);
             // vertex
-            _mesh.addVerticeIndex(pa); // T1
-            _mesh.addVerticeIndex(pb);
-            _mesh.addVerticeIndex(pc);
+            _mesh.addVertexIndex(pa); // T1
+            _mesh.addVertexIndex(pb);
+            _mesh.addVertexIndex(pc);
 
-            _mesh.addVerticeIndex(pc); // T2
-            _mesh.addVerticeIndex(pd);
-            _mesh.addVerticeIndex(pa);
+            _mesh.addVertexIndex(pc); // T2
+            _mesh.addVertexIndex(pd);
+            _mesh.addVertexIndex(pa);
             // normal
             _mesh.addNormalIndex(pa); // T1
             _mesh.addNormalIndex(pb);

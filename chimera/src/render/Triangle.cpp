@@ -36,7 +36,7 @@ glm::vec3 Triangle::normal() {
 //         else
 //             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "C");
 
-//         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "vertice (%f %f %f)", this->vertex[i].position.x,
+//         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "vertex (%f %f %f)", this->vertex[i].position.x,
 //                      this->vertex[i].position.y, this->vertex[i].position.z);
 
 //         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "normal (%f %f %f)", this->vertex[i].normal.x,

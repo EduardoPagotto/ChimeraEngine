@@ -21,13 +21,13 @@ class AABB {
 
     AABB transformation(const glm::mat4& transformation);
 
-    inline glm::vec3 getMax() const { return vertices[7]; }
-    inline glm::vec3 getMin() const { return vertices[0]; }
+    inline glm::vec3 getMax() const { return vertex[7]; }
+    inline glm::vec3 getMin() const { return vertex[0]; }
     inline glm::vec3 getCenter() const { return center; }
     inline glm::vec3 getSize() const { return size; }
 
   private:
-    glm::vec3 vertices[8];
+    glm::vec3 vertex[8];
     glm::vec3 center;
     glm::vec3 size;
 };

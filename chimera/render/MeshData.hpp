@@ -19,17 +19,18 @@ class MeshData {
     void toVertexData(std::vector<VertexData>& outData);
     void toTriangle(std::vector<Triangle>& vecTriangle);
 
-    inline void addVertice(const glm::vec3& _vertice) { this->vertexList.push_back(_vertice); }
-    inline void addNormal(const glm::vec3& _normal) { this->normalList.push_back(_normal); }
-    inline void addUV(const glm::vec2& _uv) { this->textureList.push_back(_uv); }
+    inline void addVertice(const glm::vec3& _vertice) { vertexList.push_back(_vertice); }
+    inline void addNormal(const glm::vec3& _normal) { normalList.push_back(_normal); }
+    inline void addUV(const glm::vec2& _uv) { textureList.push_back(_uv); }
 
-    inline void addVerticeIndex(const unsigned int& _indice) { this->vertexIndex.push_back(_indice); }
-    inline void addNormalIndex(const unsigned int& _indice) { this->normalIndex.push_back(_indice); }
-    inline void addUVIndex(const unsigned int& _indice) { this->textureIndex.push_back(_indice); }
+    inline void addVerticeIndex(const unsigned int& _indice) { vertexIndex.push_back(_indice); }
+    inline void addNormalIndex(const unsigned int& _indice) { normalIndex.push_back(_indice); }
+    inline void addUVIndex(const unsigned int& _indice) { textureIndex.push_back(_indice); }
 
     inline void setOneIndex(const bool& _oneIndex) { oneIndex = _oneIndex; }
     inline bool getOneIndex() const { return oneIndex; }
-    inline std::vector<unsigned int> getIndexed() { return vertexIndex; }
+    inline std::vector<unsigned int> getVertexIndex() { return vertexIndex; }
+    inline std::vector<glm::vec3> getVertexList() { return vertexList; }
 
   private:
     void _toVertexDataNotOneIndex(std::vector<VertexData>& outData);

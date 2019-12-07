@@ -47,7 +47,7 @@ void NodeMesh::setVertexBuffer() {
         std::vector<unsigned int> index;
         renderStat.create(vertexDataIn, index);
     } else {
-        renderStat.create(vertexDataIn, meshData.getIndexed());
+        renderStat.create(vertexDataIn, meshData.getVertexIndex());
     }
 }
 

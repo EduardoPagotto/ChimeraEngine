@@ -9,7 +9,6 @@ TerrainData::~TerrainData() { destroy(); }
 void TerrainData::setDefaults() {
     sizeHeight = 0;
     sizeP1 = 0;
-    sizeD2 = 0.0f;
     heights = nullptr;
 }
 
@@ -21,44 +20,44 @@ void TerrainData::destroy() {
     setDefaults();
 }
 
-bool TerrainData::loadBinary(char* FileName, MeshData& _mesh) {
+bool TerrainData::loadBinary(char* fileName, MeshData& _mesh) {
 
-    FILE* File = fopen(FileName, (char*)"rb");
-    if (File == nullptr) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", FileName);
+    FILE* file = fopen(fileName, (char*)"rb");
+    if (file == nullptr) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName);
         return false;
     }
 
-    int Size;
-    if (fread(&Size, sizeof(int), 1, File) != 1 || Size <= 0) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", FileName);
-        fclose(File);
+    int size;
+    if (fread(&size, sizeof(int), 1, file) != 1 || size <= 0) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName);
+        fclose(file);
         return false;
     }
 
     destroy();
 
-    this->sizeHeight = Size;
-    sizeP1 = Size + 1;
-    sizeD2 = (float)Size / 2.0f;
+    this->sizeHeight = size;
+    sizeP1 = size + 1;
+    float sizeD2 = (float)size / 2.0f;
 
-    verticesCount = sizeP1 * sizeP1;
+    int verticesCount = sizeP1 * sizeP1;
 
     heights = new float[verticesCount];
 
-    size_t tam = fread(heights, sizeof(float), verticesCount, File);
+    size_t tam = fread(heights, sizeof(float), verticesCount, file);
     if (tam != verticesCount) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", FileName);
-        fclose(File);
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName);
+        fclose(file);
         destroy();
         return false;
     }
 
-    fclose(File);
+    fclose(file);
 
     int i = 0;
-    for (int z = 0; z <= Size; z++) {
-        for (int x = 0; x <= Size; x++) {
+    for (int z = 0; z <= size; z++) {
+        for (int x = 0; x <= size; x++) {
             glm::vec3 pos = glm::vec3((float)x - sizeD2,  // posx
                                       heights[i],         // posx
                                       sizeD2 - (float)z); // posx
@@ -75,8 +74,8 @@ bool TerrainData::loadBinary(char* FileName, MeshData& _mesh) {
     }
 
     i = 0;
-    for (int z = 0; z < Size; z++) {
-        for (int x = 0; x < Size; x++) {
+    for (int z = 0; z < size; z++) {
+        for (int x = 0; x < size; x++) {
             // triangles point
             int pa = getIndex(x, z);
             int pb = getIndex(x + 1, z);

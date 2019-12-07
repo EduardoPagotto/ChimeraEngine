@@ -19,10 +19,8 @@ class TerrainData {
     int getIndex(int X, int Z);
     float getHeight(int X, int Z);
 
-    int verticesCount;
     int sizeHeight;
     int sizeP1;
-    float sizeD2;
     float* heights;
 };
 

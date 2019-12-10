@@ -12,7 +12,7 @@ class Mesh {
     Mesh();
     virtual ~Mesh();
 
-    void init(MeshData* _pData3D, Material* _pMaterial);
+    void init(Transform* _pTrans, MeshData* _pData3D, Material* _pMaterial);
     void destroy();
 
     inline MeshData* getMeshData() { return pData3D; }

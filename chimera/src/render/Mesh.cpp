@@ -34,8 +34,7 @@ void Mesh::destroy() {
     }
 }
 
-void Mesh::init(MeshData* _pData3D, Material* _pMaterial) {
-    this->pData3D = _pData3D;
+void Mesh::init(Transform* _pTrans, MeshData* _pData3D, Material* _pMaterial) {
 
     if (_pMaterial != nullptr) {
         this->pMat = _pMaterial;
@@ -44,13 +43,16 @@ void Mesh::init(MeshData* _pData3D, Material* _pMaterial) {
         this->pMat->setDefaultEffect();
     }
 
-    glm::vec3 size, min, max;
+    glm::vec3 min, max, size;
 
+    this->pData3D = _pData3D;
     this->pData3D->getMinMaxSize(min, max, size);
 
     pAABB = new AABB(min, max);
-    pTrans = new Transform();
-    pTrans->init(size);
+
+    pTrans = _pTrans;
+    if (pTrans != nullptr)
+        pTrans->init(size);
 }
 
 } // namespace Chimera

@@ -18,14 +18,14 @@ void MeshData::destroy() {
 
 void MeshData::getMinMaxSize(glm::vec3& min, glm::vec3& max, glm::vec3& size) {
 
-    for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
-        if (indice != 0) {
-            min = glm::min(min, vertexList[indice]);
-            max = glm::max(max, vertexList[indice]);
-        } else {
-            min = vertexList[indice];
-            max = vertexList[indice];
-        }
+    if (vertexList.size() > 0) {
+        min = vertexList[0];
+        max = vertexList[0];
+    }
+
+    for (unsigned int indice = 1; indice < vertexList.size(); indice++) {
+        min = glm::min(min, vertexList[indice]);
+        max = glm::max(max, vertexList[indice]);
     }
 
     size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;

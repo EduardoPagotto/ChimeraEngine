@@ -4,6 +4,7 @@
 #include "Node.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/VertexStatic.hpp"
+#include "chimera/render/AABB.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/MeshData.hpp"
 #include <glm/glm.hpp>
@@ -40,6 +41,7 @@ class NodeMesh : public Node {
   private:
     void setVertexBuffer();
     VertexRenderStatic renderStat;
+    AABB aabb;
     Material* material;
     Transform* pTransform;
 };

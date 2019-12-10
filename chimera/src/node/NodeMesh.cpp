@@ -30,6 +30,9 @@ void NodeMesh::init() {
 
     glm::vec3 min, max, size;
     meshData.getMinMaxSize(min, max, size);
+
+    aabb.set(min, max);
+
     pTransform->init(size);
 
     setVertexBuffer();

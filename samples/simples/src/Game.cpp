@@ -82,14 +82,13 @@ void Game::start() {
     // glDisable(GL_LIGHTING);
     // glCullFace(GL_BACK);
 
-    std::string materialFile;
     Chimera::MeshData m;
-    loadObj("./data/models/tela01.obj", m, materialFile);
-    // loadObj("./data/models/square1.obj", m, materialFile);
+    Chimera::LoaderObj loader("./data/models/tela01.obj");
+    loader.getMesh(m);
 
-    if (materialFile.size() != 0) {
-        loadMtl(materialFile, &material);
-    } else {
+    if (loader.hasMaterial() == true)
+        loader.getMaterial(material);
+    else {
         material.setDefaultEffect();
         material.addTexture(new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png"));
     }

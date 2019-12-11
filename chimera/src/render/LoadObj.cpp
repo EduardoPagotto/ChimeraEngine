@@ -4,96 +4,17 @@
 
 namespace Chimera {
 
-void eraseAllSubStr(std::string& mainStr, const std::string& toErase) {
-    size_t pos = std::string::npos;
-    while ((pos = mainStr.find(toErase)) != std::string::npos) {
-        mainStr.erase(pos, toErase.length());
+LoaderObj::LoaderObj(const std::string& _fineName) : materialFile(""), fileName(_fineName) {}
+
+LoaderObj::~LoaderObj() {}
+
+bool LoaderObj::getMesh(MeshData& _mesh) {
+
+    FILE* fp = fopen(fileName.c_str(), "r");
+    if (fp == NULL) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName.c_str());
+        return false;
     }
-}
-
-bool getValidData(std::string& nova, const std::string& comando) {
-    std::string fim_linha("\n");
-    std::size_t found = nova.find(comando);
-    if (found != std::string::npos) {
-        eraseAllSubStr(nova, comando);
-        eraseAllSubStr(nova, fim_linha);
-        return true;
-    }
-    return false;
-}
-
-void loadObjMtl(const std::string& _fineNameMtl, MeshData& _mesh, Material& _pMaterial) {
-    std::string matFile;
-    loadObj(_fineNameMtl, _mesh, matFile);
-
-    if (matFile.size() > 0)
-        loadMtl(matFile, &_pMaterial);
-}
-
-void loadMtl(const std::string& _fineNameMtl, Material* _pMaterial) {
-    FILE* fp = fopen(_fineNameMtl.c_str(), "r");
-    if (fp == NULL)
-        throw Exception("Erro ao abrir arquivo: " + _fineNameMtl);
-
-    char* line = NULL;
-    size_t len = 0;
-    unsigned int pos_linha = 0;
-    while ((getline(&line, &len, fp)) != -1) {
-
-        float r, g, b, a;
-        pos_linha++;
-
-        if (line[0] == '#')
-            continue;
-        else if (line[0] == 'K') {
-
-            if (line[1] == 'a') {
-                int n = sscanf(line, "Ka %f %f %f %f", &r, &g, &b, &a);
-                if (n == 3) {
-                    _pMaterial->setAmbient(glm::vec4(r, g, b, 1.0f));
-                } else if (n == 4) {
-                    _pMaterial->setAmbient(glm::vec4(r, g, b, a));
-                } else {
-                    throw Exception("linha " + std::to_string(pos_linha) +
-                                    " material invalido arquivo: " + _fineNameMtl);
-                }
-
-            } else if (line[1] == 'd') {
-                int n = sscanf(line, "Kd %f %f %f %f", &r, &g, &b, &a);
-                if (n == 3) {
-                    _pMaterial->setDiffuse(glm::vec4(r, g, b, 1.0f));
-                } else if (n == 4) {
-                    _pMaterial->setDiffuse(glm::vec4(r, g, b, a));
-                } else {
-                    throw Exception("linha " + std::to_string(pos_linha) +
-                                    " material invalido arquivo: " + _fineNameMtl);
-                }
-            } else if (line[1] == 's') {
-                int n = sscanf(line, "Ks %f %f %f %f", &r, &g, &b, &a);
-                if (n == 3) {
-                    _pMaterial->setSpecular(glm::vec4(r, g, b, 1.0f));
-                } else if (n == 4) {
-                    _pMaterial->setSpecular(glm::vec4(r, g, b, a));
-                } else {
-                    throw Exception("linha " + std::to_string(pos_linha) +
-                                    " material invalido arquivo:" + _fineNameMtl);
-                }
-            }
-        } else {
-            // load texture
-            std::string nova(line);
-            if (getValidData(nova, std::string("map_Kd ")) == true)
-                _pMaterial->addTexture(new TextureImg(SHADE_TEXTURE_DIFFUSE, nova));
-        }
-    }
-}
-
-void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _materialFile) {
-
-    _materialFile = "";
-    FILE* fp = fopen(_fineNameObj.c_str(), "r");
-    if (fp == NULL)
-        throw Exception("Erro ao abrir arquivo: " + _fineNameObj);
 
     bool textuaOn = false;
     bool normalOn = false;
@@ -117,7 +38,7 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
                     continue;
                 }
                 throw Exception(
-                    std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + _fineNameObj));
+                    std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + fileName));
 
             } else if (line[1] == 'n') {
                 normalOn = true;
@@ -154,12 +75,106 @@ void loadObj(const std::string& _fineNameObj, MeshData& _mesh, std::string& _mat
         } else {
             std::string nova(line);
             if (getValidData(nova, std::string("mtllib ")) == true)
-                _materialFile = nova;
+                materialFile = nova;
         }
     }
     fclose(fp);
     if (line)
         free(line);
+
+    return true;
 }
 
+bool LoaderObj::getMaterial(Material& _material) {
+
+    if (materialFile.size() == 0) {
+        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Sem dados de Material em %s", fileName.c_str());
+        return false;
+    }
+
+    FILE* fp = fopen(materialFile.c_str(), "r");
+    if (fp == NULL) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", materialFile.c_str());
+        return false;
+    }
+
+    char* line = NULL;
+    size_t len = 0;
+    unsigned int pos_linha = 0;
+    while ((getline(&line, &len, fp)) != -1) {
+
+        float r, g, b, a;
+        pos_linha++;
+
+        if (line[0] == '#')
+            continue;
+        else if (line[0] == 'K') {
+
+            if (line[1] == 'a') {
+                int n = sscanf(line, "Ka %f %f %f %f", &r, &g, &b, &a);
+                if (n == 3) {
+                    _material.setAmbient(glm::vec4(r, g, b, 1.0f));
+                } else if (n == 4) {
+                    _material.setAmbient(glm::vec4(r, g, b, a));
+                } else {
+                    throw Exception("linha " + std::to_string(pos_linha) +
+                                    " material invalido arquivo: " + materialFile);
+                }
+
+            } else if (line[1] == 'd') {
+                int n = sscanf(line, "Kd %f %f %f %f", &r, &g, &b, &a);
+                if (n == 3) {
+                    _material.setDiffuse(glm::vec4(r, g, b, 1.0f));
+                } else if (n == 4) {
+                    _material.setDiffuse(glm::vec4(r, g, b, a));
+                } else {
+                    throw Exception("linha " + std::to_string(pos_linha) +
+                                    " material invalido arquivo: " + materialFile);
+                }
+            } else if (line[1] == 's') {
+                int n = sscanf(line, "Ks %f %f %f %f", &r, &g, &b, &a);
+                if (n == 3) {
+                    _material.setSpecular(glm::vec4(r, g, b, 1.0f));
+                } else if (n == 4) {
+                    _material.setSpecular(glm::vec4(r, g, b, a));
+                } else {
+                    throw Exception("linha " + std::to_string(pos_linha) +
+                                    " material invalido arquivo:" + materialFile);
+                }
+            }
+        } else {
+            // load texture
+            std::string nova(line);
+            if (getValidData(nova, std::string("map_Kd ")) == true)
+                _material.addTexture(new TextureImg(SHADE_TEXTURE_DIFFUSE, nova));
+        }
+    }
+    return true;
+}
+
+void LoaderObj::eraseAllSubStr(std::string& mainStr, const std::string& toErase) {
+    size_t pos = std::string::npos;
+    while ((pos = mainStr.find(toErase)) != std::string::npos) {
+        mainStr.erase(pos, toErase.length());
+    }
+}
+
+bool LoaderObj::getValidData(std::string& nova, const std::string& comando) {
+    std::string fim_linha("\n");
+    std::size_t found = nova.find(comando);
+    if (found != std::string::npos) {
+        eraseAllSubStr(nova, comando);
+        eraseAllSubStr(nova, fim_linha);
+        return true;
+    }
+    return false;
+}
+
+// void loadObjMtl(const std::string& _fineNameMtl, MeshData& _mesh, Material& _pMaterial) {
+//     std::string matFile;
+//     loadObj(_fineNameMtl, _mesh, matFile);
+
+//     if (matFile.size() > 0)
+//         loadMtl(matFile, &_pMaterial);
+// }
 } // namespace Chimera

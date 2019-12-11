@@ -2,8 +2,6 @@
 #define __CHIMERA_TERRAIN_DATA__HPP
 
 #include "chimera/render/MeshData.hpp"
-#include <glm/glm.hpp>
-#include <vector>
 
 namespace Chimera {
 

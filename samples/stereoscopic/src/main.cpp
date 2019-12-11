@@ -85,11 +85,14 @@ void createMeshTexturizade(std::string name, std::string file, float scale, glm:
 
     Material* pMap = new Material();
     NodeMesh* pMesh = new NodeMesh(group1, name);
+
+    LoaderObj loader(file);
+    loader.getMesh(pMesh->meshData);
+    loader.getMaterial(*pMap);
+
+    pMesh->meshData.changeSize(scale, pMap->hasTexture());
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(pMap);
-
-    loadObjMtl(file, pMesh->meshData, *pMap);
-    pMesh->meshData.changeSize(scale, pMap->hasTexture());
 }
 
 void createMesh(std::string name, std::string file, float scale, glm::vec3 _position, Chimera::Material* _pMap) {
@@ -100,8 +103,9 @@ void createMesh(std::string name, std::string file, float scale, glm::vec3 _posi
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(_pMap);
 
-    std::string matfile;
-    loadObj(file, pMesh->meshData, matfile);
+    LoaderObj loader(file);
+    loader.getMesh(pMesh->meshData);
+
     pMesh->meshData.changeSize(scale, _pMap->hasTexture());
 }
 

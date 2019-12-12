@@ -8,7 +8,7 @@ namespace Chimera {
 
 class LoaderObj {
   public:
-    LoaderObj(const std::string& _fineName);
+    LoaderObj(const std::string& _fileName);
     virtual ~LoaderObj();
     inline bool hasMaterial() { return materialFile.size() > 0 ? true : false; }
     bool getMesh(MeshData& _mesh);

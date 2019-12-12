@@ -3,39 +3,32 @@
 
 namespace Chimera {
 
-TerrainData::TerrainData() { setDefaults(); }
-TerrainData::~TerrainData() { destroy(); }
-
-void TerrainData::setDefaults() {
+LoadHeightMap::LoadHeightMap(const std::string& _fileName) {
+    fileName = _fileName;
     sizeHeight = 0;
     sizeP1 = 0;
     heights = nullptr;
 }
 
-void TerrainData::destroy() {
-
+LoadHeightMap::~LoadHeightMap() {
     if (heights != nullptr)
         delete[] heights;
-
-    setDefaults();
 }
 
-bool TerrainData::loadBinary(char* fileName, MeshData& _mesh) {
+bool LoadHeightMap::getMesh(MeshData& _mesh) {
 
-    FILE* file = fopen(fileName, (char*)"rb");
+    FILE* file = fopen(fileName.c_str(), (char*)"rb");
     if (file == nullptr) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName);
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName.c_str());
         return false;
     }
 
     int size;
     if (fread(&size, sizeof(int), 1, file) != 1 || size <= 0) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName);
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName.c_str());
         fclose(file);
         return false;
     }
-
-    destroy();
 
     this->sizeHeight = size;
     sizeP1 = size + 1;
@@ -47,9 +40,8 @@ bool TerrainData::loadBinary(char* fileName, MeshData& _mesh) {
 
     size_t tam = fread(heights, sizeof(float), verticesCount, file);
     if (tam != verticesCount) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName);
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName.c_str());
         fclose(file);
-        destroy();
         return false;
     }
 
@@ -111,9 +103,9 @@ bool TerrainData::loadBinary(char* fileName, MeshData& _mesh) {
     return true;
 }
 
-int TerrainData::getIndex(int X, int Z) { return sizeP1 * Z + X; }
+int LoadHeightMap::getIndex(int X, int Z) { return sizeP1 * Z + X; }
 
-float TerrainData::getHeight(int X, int Z) {
+float LoadHeightMap::getHeight(int X, int Z) {
 
     int x1 = X < 0 ? 0 : X > sizeHeight ? sizeHeight : X;
     int z1 = Z < 0 ? 0 : Z > sizeHeight ? sizeHeight : Z;

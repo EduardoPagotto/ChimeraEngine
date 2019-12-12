@@ -2,16 +2,16 @@
 #define __CHIMERA_TERRAIN_DATA__HPP
 
 #include "chimera/render/MeshData.hpp"
+#include <string>
 
 namespace Chimera {
 
-class TerrainData {
+class LoadHeightMap {
   public:
-    TerrainData();
-    virtual ~TerrainData();
-    void destroy();
-    bool loadBinary(char* fileName, MeshData& _mesh);
-    void setDefaults();
+    LoadHeightMap(const std::string& _fileName);
+    virtual ~LoadHeightMap();
+
+    bool getMesh(MeshData& _mesh);
 
   private:
     int getIndex(int X, int Z);
@@ -20,6 +20,8 @@ class TerrainData {
     int sizeHeight;
     int sizeP1;
     float* heights;
+
+    std::string fileName;
 };
 
 } // namespace Chimera

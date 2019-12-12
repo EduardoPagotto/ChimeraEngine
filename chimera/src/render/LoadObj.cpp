@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-LoaderObj::LoaderObj(const std::string& _fineName) : materialFile(""), fileName(_fineName) {}
+LoaderObj::LoaderObj(const std::string& _fileName) : materialFile(""), fileName(_fileName) {}
 
 LoaderObj::~LoaderObj() {}
 

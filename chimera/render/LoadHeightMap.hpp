@@ -2,6 +2,7 @@
 #define __CHIMERA_LOAD_HEIGHTMAP__HPP
 
 #include "chimera/render/MeshData.hpp"
+#include <SDL2/SDL_image.h>
 #include <string>
 
 namespace Chimera {
@@ -12,10 +13,17 @@ class LoadHeightMap {
     virtual ~LoadHeightMap();
 
     bool getMesh(MeshData& _mesh);
+    bool getMesh2(MeshData& _mesh);
 
   private:
     int getIndex(int X, int Z);
     float getHeight(int X, int Z);
+
+    float getHeight2(int x, int y);
+    int invert_image(int pitch, int height, void* image_pixels);
+    Uint32 getpixel(int x, int y);
+
+    SDL_Surface* pImage;
 
     int sizeHeight;
     int sizeP1;

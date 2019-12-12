@@ -9,8 +9,8 @@
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
-#include "chimera/render/LoadObj.hpp"
 #include "chimera/render/LoadHeightMap.hpp"
+#include "chimera/render/LoadObj.hpp"
 
 #include <cstdio>
 #include <glm/glm.hpp>
@@ -118,7 +118,7 @@ void createTerrain(std::string name, std::string file, float scale, glm::vec3 _p
     pMesh->setMaterial(_pMap);
 
     LoadHeightMap height((char*)file.c_str());
-    height.getMesh(pMesh->meshData);
+    height.getMesh2(pMesh->meshData);
 
     pMesh->meshData.changeSize(scale, _pMap->hasTexture());
 }
@@ -166,7 +166,8 @@ int main(int argn, char** argv) {
         pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         pMat1->setShine(32.0f);
         // pMat1->addTexture(new TextureImg(SHADE_TEXTURE_DIFFUSE, "./samples/terrain/data/terrain3.jpg"));
-        createTerrain("terra", "./data/terrain/terrain1.bin", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
+        // createTerrain("terra", "./data/terrain/terrain1.bin", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
+        createTerrain("terra", "./data/terrain/heightmap1.tga", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
 
         // Wrapper do game
         Game* game = new Game(video, group1);

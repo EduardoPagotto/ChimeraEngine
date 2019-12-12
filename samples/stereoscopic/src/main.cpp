@@ -10,7 +10,7 @@
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/render/LoadObj.hpp"
-#include "chimera/render/TerrainData.hpp"
+#include "chimera/render/LoadHeightMap.hpp"
 
 #include <cstdio>
 #include <glm/glm.hpp>

@@ -1,4 +1,4 @@
-#include "chimera/render/TerrainData.hpp"
+#include "chimera/render/LoadHeightMap.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

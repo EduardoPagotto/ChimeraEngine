@@ -3,7 +3,7 @@
 
 #include "BSPTree.hpp"
 #include "chimera/render/Frustum.hpp"
-#include "chimera/render/TerrainData.hpp"
+#include "chimera/render/LoadHeightMap.hpp"
 
 namespace Chimera {
 

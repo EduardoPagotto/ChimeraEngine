@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_LOAD_OBJ__HPP
-#define __CHIMERA_LOAD_OBJ__HPP
+#ifndef __CHIMERA_LOADEROBJ__HPP
+#define __CHIMERA_LOADEROBJ__HPP
 
 #include "chimera/render/Material.hpp"
 #include "chimera/render/MeshData.hpp"

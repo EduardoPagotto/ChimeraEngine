@@ -14,7 +14,7 @@ set (RenderSource 	Triangle.cpp
 					Frustum.cpp
 					AABB.cpp
 					BSPTree.cpp
-					TerrainData.cpp
+					LoadHeightMap.cpp
 					LoadObj.cpp
 					Light.cpp
 					Material.cpp

@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_TERRAIN_DATA__HPP
-#define __CHIMERA_TERRAIN_DATA__HPP
+#ifndef __CHIMERA_LOAD_HEIGHTMAP__HPP
+#define __CHIMERA_LOAD_HEIGHTMAP__HPP
 
 #include "chimera/render/MeshData.hpp"
 #include <string>

@@ -84,8 +84,11 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
         }
     }
 
-    for (int z = 0; z < pImage->h; z++) {
-        for (int x = 0; x < pImage->w; x++) {
+    int tot_h = pImage->h - 1;
+    int tot_w = pImage->w - 1;
+
+    for (int z = 0; z < tot_h; z++) {
+        for (int x = 0; x < tot_w; x++) {
             // triangles point
             int pa = getIndex2(x, z);
             int pb = getIndex2(x + 1, z);

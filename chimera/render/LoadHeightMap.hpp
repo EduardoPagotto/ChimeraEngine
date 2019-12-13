@@ -9,10 +9,11 @@ namespace Chimera {
 
 class LoadHeightMap {
   public:
-    LoadHeightMap(const std::string& _fileName);
+    LoadHeightMap();
     virtual ~LoadHeightMap();
-    bool getMesh(MeshData& _mesh);
+    void clean();
 
+    bool getMesh(const std::string& _fileName, MeshData& _mesh);
     inline void setMaxHeight(float _maxHeight) { maxHeight = _maxHeight; }
 
   private:
@@ -21,7 +22,6 @@ class LoadHeightMap {
     Uint32 getpixel(const unsigned int& w, const unsigned int& h);
 
     SDL_Surface* pImage;
-    std::string fileName;
     float maxHeight;
 };
 

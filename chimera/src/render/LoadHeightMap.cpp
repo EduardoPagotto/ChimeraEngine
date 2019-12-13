@@ -3,25 +3,17 @@
 
 namespace Chimera {
 
-LoadHeightMap::LoadHeightMap(const std::string& _fileName) {
-    pImage = nullptr;
-    fileName = _fileName;
-    maxHeight = 80.0f;
-}
+LoadHeightMap::LoadHeightMap() : pImage(nullptr) { clean(); }
 
-LoadHeightMap::~LoadHeightMap() {
+LoadHeightMap::~LoadHeightMap() { clean(); }
+
+void LoadHeightMap::clean() {
+    maxHeight = 80.0f;
     if (pImage != nullptr) {
         SDL_FreeSurface(pImage);
         pImage = nullptr;
     }
 }
-
-// void LoadHeightMap::clean() {
-//     if (pImage != nullptr) {
-//         SDL_FreeSurface(pImage);
-//         pImage = nullptr;
-//     }
-// }
 
 float LoadHeightMap::getHeight(int w, int h) {
 
@@ -62,11 +54,11 @@ Uint32 LoadHeightMap::getpixel(const unsigned int& w, const unsigned int& h) {
     }
 }
 
-bool LoadHeightMap::getMesh(MeshData& _mesh) {
+bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh) {
 
-    pImage = IMG_Load(fileName.c_str());
+    pImage = IMG_Load(_fileName.c_str());
     if (pImage == nullptr) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", _fileName.c_str());
         return false;
     }
 
@@ -133,7 +125,7 @@ bool LoadHeightMap::getMesh(MeshData& _mesh) {
         }
     }
 
-    _mesh.debugDados(true);
+    //_mesh.debugDados(true);
     _mesh.setOneIndex(true);
 
     return true;

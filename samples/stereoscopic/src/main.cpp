@@ -117,8 +117,10 @@ void createTerrain(std::string name, std::string file, float scale, glm::vec3 _p
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(_pMap);
 
-    LoadHeightMap height((char*)file.c_str());
-    height.getMesh(pMesh->meshData);
+    LoadHeightMap* pHeight = new LoadHeightMap();
+    pHeight->getMesh(file, pMesh->meshData);
+
+    delete pHeight;
 
     pMesh->meshData.changeSize(scale, _pMap->hasTexture());
 }

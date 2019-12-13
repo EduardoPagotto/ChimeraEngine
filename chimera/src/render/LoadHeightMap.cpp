@@ -67,6 +67,9 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
         return false;
     }
 
+    float v = 1.0f / pImage->h;
+    float u = 1.0f / pImage->w;
+
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
 
@@ -74,13 +77,16 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
                                       getHeight2(x, z), // posy
                                       (float)z);        // posz
 
-            // glm::vec3 nor = glm::normalize(glm::vec3(getHeight2(x - 1, z) - getHeight2(x + 1, z),   // norx
-            //                                          2.0f,                                          // nory
-            //                                          getHeight2(x, z + 1) - getHeight2(x, z - 1))); // norz
+            glm::vec3 nor = glm::normalize(glm::vec3(getHeight2(x - 1, z) - getHeight2(x + 1, z),   // norx
+                                                     2.0f,                                          // nory
+                                                     getHeight2(x, z + 1) - getHeight2(x, z - 1))); // norz
+
+            float v1 = v * z;
+            float u1 = u * x;
 
             _mesh.addVertex(pos);
-            //_mesh.addNormal(nor);
-            //_mesh.addUV(glm::vec2(0.0, 0.0));
+            _mesh.addNormal(nor);
+            _mesh.addUV(glm::vec2(u1, v1));
         }
     }
 
@@ -102,37 +108,36 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
             _mesh.addVertexIndex(pc);
             _mesh.addVertexIndex(pd);
             _mesh.addVertexIndex(pa);
-
-            // // normal
-            // _mesh.addNormalIndex(pa); // T1
-            // _mesh.addNormalIndex(pb);
-            // _mesh.addNormalIndex(pc);
-
-            // _mesh.addNormalIndex(pc); // T2
-            // _mesh.addNormalIndex(pd);
-            // _mesh.addNormalIndex(pa);
+            // normal T1
+            _mesh.addNormalIndex(pa);
+            _mesh.addNormalIndex(pb);
+            _mesh.addNormalIndex(pc);
+            // normal T2
+            _mesh.addNormalIndex(pc);
+            _mesh.addNormalIndex(pd);
+            _mesh.addNormalIndex(pa);
         }
     }
 
-    std::vector<glm::vec3> vertices = _mesh.getVertexList();
-    std::vector<unsigned int> indices = _mesh.getVertexIndex();
-    for (int a = 0; a < indices.size(); a += 3) {
-        int b = a + 1;
-        int c = b + 1;
+    // std::vector<glm::vec3> vertices = _mesh.getVertexList();
+    // std::vector<unsigned int> indices = _mesh.getVertexIndex();
+    // for (int a = 0; a < indices.size(); a += 3) {
+    //     int b = a + 1;
+    //     int c = b + 1;
 
-        glm::vec3 v1 = vertices[indices[a]];
-        glm::vec3 v2 = vertices[indices[b]];
-        glm::vec3 v3 = vertices[indices[c]];
+    //     glm::vec3 v1 = vertices[indices[a]];
+    //     glm::vec3 v2 = vertices[indices[b]];
+    //     glm::vec3 v3 = vertices[indices[c]];
 
-        glm::vec3 normal = glm::normalize(glm::cross(v3 - v1, v2 - v1));
-        _mesh.addNormal(normal);
-        _mesh.addNormal(normal);
-        _mesh.addNormal(normal);
+    //     glm::vec3 normal = glm::normalize(glm::cross(v3 - v1, v2 - v1));
+    //     _mesh.addNormal(normal);
+    //     //_mesh.addNormal(normal);
+    //     //_mesh.addNormal(normal);
 
-        _mesh.addNormalIndex(a);
-        _mesh.addNormalIndex(b);
-        _mesh.addNormalIndex(c);
-    }
+    //     _mesh.addNormalIndex(a);
+    //     _mesh.addNormalIndex(a);
+    //     _mesh.addNormalIndex(a);
+    // }
 
     _mesh.debugDados(true);
     _mesh.setOneIndex(true);

@@ -67,8 +67,8 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
         return false;
     }
 
-    float v = 1.0f / pImage->h;
-    float u = 1.0f / pImage->w;
+    float v = 1.0f / (pImage->h - 1);
+    float u = 1.0f / (pImage->w - 1);
 
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
@@ -116,6 +116,14 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
             _mesh.addNormalIndex(pc);
             _mesh.addNormalIndex(pd);
             _mesh.addNormalIndex(pa);
+            // UV T1
+            _mesh.addUVIndex(pa);
+            _mesh.addUVIndex(pb);
+            _mesh.addUVIndex(pc);
+            // UV T2
+            _mesh.addUVIndex(pc);
+            _mesh.addUVIndex(pd);
+            _mesh.addUVIndex(pa);
         }
     }
 

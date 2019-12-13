@@ -161,52 +161,34 @@ void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle) {
 
 void MeshData::debugDados(bool _showAll) {
 
-    int linha = 0;
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex I: %03d L: %03d", (int)vertexIndex.size(), (int)vertexList.size());
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal  I: %03d L: %03d", (int)normalIndex.size(), (int)normalList.size());
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture I: %03d L: %03d", (int)uvIndex.size(), (int)uvList.size());
 
     if (_showAll == true) {
-        for (unsigned int indice = 0; indice < vertexIndex.size(); indice += 3) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                         vertexIndex[indice], vertexIndex[indice + 1], vertexIndex[indice + 2]);
-            linha++;
-        }
+        for (unsigned int indice = 0; indice < vertexIndex.size(); indice += 3)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertice Index: %03d (%03d; %03d; %03d)", indice, vertexIndex[indice],
+                         vertexIndex[indice + 1], vertexIndex[indice + 2]);
 
-        linha = 0;
-        for (unsigned int indice = 0; indice < vertexList.size(); indice++) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p:%02d (%05.3f; %05.3f; %05.3f)", linha, indice,
+        for (unsigned int indice = 0; indice < vertexList.size(); indice++)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Verice: p:%03d (%05.3f; %05.3f; %05.3f)", indice,
                          vertexList[indice].x, vertexList[indice].y, vertexList[indice].z);
-            linha++;
-        }
 
-        linha = 0;
-        for (unsigned int indice = 0; indice < normalIndex.size(); indice += 3) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p:%02d (%02d; %03d; %04d)", linha, indice,
-                         normalIndex[indice], normalIndex[indice + 1], normalIndex[indice + 2]);
-            linha++;
-        }
+        for (unsigned int indice = 0; indice < normalIndex.size(); indice += 3)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Index: %03d (%03d; %03d; %03d)", indice, normalIndex[indice],
+                         normalIndex[indice + 1], normalIndex[indice + 2]);
 
-        linha = 0;
-        for (unsigned int indice = 0; indice < normalList.size(); indice++) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p:%02d (%05.3f; %05.3f; %05.3f))", linha, indice,
+        for (unsigned int indice = 0; indice < normalList.size(); indice++)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", indice,
                          normalList[indice].x, normalList[indice].y, normalList[indice].z);
-            linha++;
-        }
 
-        linha = 0;
-        for (unsigned int indice = 0; indice < uvIndex.size(); indice += 3) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p:%02d (%02d; %03d; %04d)", linha, indice, uvIndex[indice],
+        for (unsigned int indice = 0; indice < uvIndex.size(); indice += 3)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Texture Index: %03d (%03d; %03d; %03d)", indice, uvIndex[indice],
                          uvIndex[indice + 1], uvIndex[indice + 2]);
-            linha++;
-        }
 
-        linha = 0;
-        for (unsigned int indice = 0; indice < uvList.size(); indice++) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "L: %02d : p: %02d (%05.3f; %05.3f)", linha, indice, uvList[indice].x,
+        for (unsigned int indice = 0; indice < uvList.size(); indice++)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Textura: %03d (%05.3f; %05.3f)", indice, uvList[indice].x,
                          uvList[indice].y);
-            linha++;
-        }
     }
 }
 } // namespace Chimera

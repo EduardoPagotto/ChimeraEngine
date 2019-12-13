@@ -19,8 +19,7 @@ class LoadHeightMap {
     int getIndex(int X, int Z);
     float getHeight(int X, int Z);
 
-    int invert_image(int pitch, int height, void* image_pixels);
-    inline unsigned int getIndex2(const int& _x, const int& _z) { return pImage->h * _z + _x; }
+    unsigned int getIndex2(const int& _x, const int& _z);
     float getHeight2(int w, int h);
     Uint32 getpixel(const unsigned int& w, const unsigned int& h);
 

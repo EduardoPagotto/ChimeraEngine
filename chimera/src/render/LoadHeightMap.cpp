@@ -15,29 +15,6 @@ LoadHeightMap::~LoadHeightMap() {
         delete[] heights;
 }
 
-int LoadHeightMap::invert_image(int pitch, int height, void* image_pixels) {
-    int index;
-    void* temp_row;
-    int height_div_2;
-
-    temp_row = (void*)malloc(pitch);
-    if (NULL == temp_row) {
-        SDL_SetError("Not enough memory for image inversion");
-        return -1;
-    }
-    // if height is odd, don't need to swap middle row
-    height_div_2 = (int)(height * .5);
-    for (index = 0; index < height_div_2; index++) {
-        // uses string.h
-        memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + pitch * index, pitch);
-
-        memcpy((Uint8*)(image_pixels) + pitch * index, (Uint8*)(image_pixels) + pitch * (height - index - 1), pitch);
-        memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row, pitch);
-    }
-    free(temp_row);
-    return 0;
-}
-
 float LoadHeightMap::getHeight2(int w, int h) {
 
     unsigned int w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
@@ -77,6 +54,11 @@ Uint32 LoadHeightMap::getpixel(const unsigned int& w, const unsigned int& h) {
     }
 }
 
+unsigned int LoadHeightMap::getIndex2(const int& _x, const int& _z) {
+    int base = pImage->w * _z;
+    return base + _x;
+}
+
 bool LoadHeightMap::getMesh2(MeshData& _mesh) {
 
     pImage = IMG_Load(fileName.c_str());
@@ -84,11 +66,6 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName.c_str());
         return false;
     }
-
-    // if (invert_image(pImage->pitch, pImage->h, pImage->pixels) != 0) {
-    //     SDL_SetError("Falha na inversao de pixels");
-    //     return false;
-    // }
 
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
@@ -102,7 +79,7 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
             //                                          getHeight2(x, z + 1) - getHeight2(x, z - 1))); // norz
 
             _mesh.addVertex(pos);
-            // _mesh.addNormal(nor);
+            //_mesh.addNormal(nor);
             //_mesh.addUV(glm::vec2(0.0, 0.0));
         }
     }
@@ -122,6 +99,15 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
             _mesh.addVertexIndex(pc);
             _mesh.addVertexIndex(pd);
             _mesh.addVertexIndex(pa);
+
+            // // normal
+            // _mesh.addNormalIndex(pa); // T1
+            // _mesh.addNormalIndex(pb);
+            // _mesh.addNormalIndex(pc);
+
+            // _mesh.addNormalIndex(pc); // T2
+            // _mesh.addNormalIndex(pd);
+            // _mesh.addNormalIndex(pa);
         }
     }
 
@@ -144,6 +130,9 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
         _mesh.addNormalIndex(b);
         _mesh.addNormalIndex(c);
     }
+
+    _mesh.debugDados(true);
+    _mesh.setOneIndex(true);
 
     return true;
 }

@@ -40,16 +40,14 @@ int LoadHeightMap::invert_image(int pitch, int height, void* image_pixels) {
 
 float LoadHeightMap::getHeight2(int w, int h) {
 
-    int w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
-    int h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
+    unsigned int w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
+    unsigned int h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
 
     Uint32 pixelData = getpixel(w1, h1);
-    float value = (float)(pixelData / 100.0f);
-
-    return value;
+    return (float)(pixelData / 100.0f);
 }
 
-Uint32 LoadHeightMap::getpixel(int w, int h) {
+Uint32 LoadHeightMap::getpixel(const unsigned int& w, const unsigned int& h) {
     int bpp = pImage->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */
     Uint8* p = (Uint8*)pImage->pixels + h * pImage->pitch + w * bpp;
@@ -96,8 +94,8 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
         for (int x = 0; x < pImage->w; x++) {
 
             glm::vec3 pos = glm::vec3((float)x,         // posx
-                                      getHeight2(x, z), // posx
-                                      (float)z);        // posx
+                                      getHeight2(x, z), // posy
+                                      (float)z);        // posz
 
             // glm::vec3 nor = glm::normalize(glm::vec3(getHeight2(x - 1, z) - getHeight2(x + 1, z),   // norx
             //                                          2.0f,                                          // nory
@@ -107,6 +105,44 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
             // _mesh.addNormal(nor);
             //_mesh.addUV(glm::vec2(0.0, 0.0));
         }
+    }
+
+    for (int z = 0; z < pImage->h; z++) {
+        for (int x = 0; x < pImage->w; x++) {
+            // triangles point
+            int pa = getIndex2(x, z);
+            int pb = getIndex2(x + 1, z);
+            int pc = getIndex2(x + 1, z + 1);
+            int pd = getIndex2(x, z + 1);
+            // triamgles T1
+            _mesh.addVertexIndex(pa);
+            _mesh.addVertexIndex(pb);
+            _mesh.addVertexIndex(pc);
+            // triamgles T2
+            _mesh.addVertexIndex(pc);
+            _mesh.addVertexIndex(pd);
+            _mesh.addVertexIndex(pa);
+        }
+    }
+
+    std::vector<glm::vec3> vertices = _mesh.getVertexList();
+    std::vector<unsigned int> indices = _mesh.getVertexIndex();
+    for (int a = 0; a < indices.size(); a += 3) {
+        int b = a + 1;
+        int c = b + 1;
+
+        glm::vec3 v1 = vertices[indices[a]];
+        glm::vec3 v2 = vertices[indices[b]];
+        glm::vec3 v3 = vertices[indices[c]];
+
+        glm::vec3 normal = glm::normalize(glm::cross(v3 - v1, v2 - v1));
+        _mesh.addNormal(normal);
+        _mesh.addNormal(normal);
+        _mesh.addNormal(normal);
+
+        _mesh.addNormalIndex(a);
+        _mesh.addNormalIndex(b);
+        _mesh.addNormalIndex(c);
     }
 
     return true;

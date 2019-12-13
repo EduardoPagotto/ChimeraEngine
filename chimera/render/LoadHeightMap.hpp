@@ -11,25 +11,18 @@ class LoadHeightMap {
   public:
     LoadHeightMap(const std::string& _fileName);
     virtual ~LoadHeightMap();
-
     bool getMesh(MeshData& _mesh);
-    bool getMesh2(MeshData& _mesh);
+
+    inline void setMaxHeight(float _maxHeight) { maxHeight = _maxHeight; }
 
   private:
-    int getIndex(int X, int Z);
-    float getHeight(int X, int Z);
-
-    unsigned int getIndex2(const int& _x, const int& _z);
-    float getHeight2(int w, int h);
+    inline unsigned int getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }
+    float getHeight(int w, int h);
     Uint32 getpixel(const unsigned int& w, const unsigned int& h);
 
     SDL_Surface* pImage;
-
-    int sizeHeight;
-    int sizeP1;
-    float* heights;
-
     std::string fileName;
+    float maxHeight;
 };
 
 } // namespace Chimera

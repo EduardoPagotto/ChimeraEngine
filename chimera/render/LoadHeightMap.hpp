@@ -19,9 +19,9 @@ class LoadHeightMap {
     int getIndex(int X, int Z);
     float getHeight(int X, int Z);
 
-    float getHeight2(int x, int y);
     int invert_image(int pitch, int height, void* image_pixels);
-    Uint32 getpixel(int x, int y);
+    float getHeight2(int w, int h);
+    Uint32 getpixel(int w, int h);
 
     SDL_Surface* pImage;
 

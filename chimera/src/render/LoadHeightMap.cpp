@@ -38,21 +38,21 @@ int LoadHeightMap::invert_image(int pitch, int height, void* image_pixels) {
     return 0;
 }
 
-float LoadHeightMap::getHeight2(int x, int y) {
+float LoadHeightMap::getHeight2(int w, int h) {
 
-    int x1 = x < 0 ? 0 : x > pImage->h ? pImage->h : x;
-    int z1 = y < 0 ? 0 : y > pImage->w ? pImage->w : y;
+    int w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
+    int h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
 
-    Uint32 pixelData = getpixel(x, z1);
+    Uint32 pixelData = getpixel(w1, h1);
     float value = (float)(pixelData / 100.0f);
 
     return value;
 }
 
-Uint32 LoadHeightMap::getpixel(int x, int y) {
+Uint32 LoadHeightMap::getpixel(int w, int h) {
     int bpp = pImage->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */
-    Uint8* p = (Uint8*)pImage->pixels + y * pImage->pitch + x * bpp;
+    Uint8* p = (Uint8*)pImage->pixels + h * pImage->pitch + w * bpp;
 
     switch (bpp) {
         case 1:
@@ -87,24 +87,24 @@ bool LoadHeightMap::getMesh2(MeshData& _mesh) {
         return false;
     }
 
-    if (invert_image(pImage->pitch, pImage->h, pImage->pixels) != 0) {
-        SDL_SetError("Falha na inversao de pixels");
-        return false;
-    }
+    // if (invert_image(pImage->pitch, pImage->h, pImage->pixels) != 0) {
+    //     SDL_SetError("Falha na inversao de pixels");
+    //     return false;
+    // }
 
-    for (int z = 0; z < pImage->w; z++) {
-        for (int x = 0; x < pImage->h; x++) {
+    for (int z = 0; z < pImage->h; z++) {
+        for (int x = 0; x < pImage->w; x++) {
 
             glm::vec3 pos = glm::vec3((float)x,         // posx
                                       getHeight2(x, z), // posx
                                       (float)z);        // posx
 
-            glm::vec3 nor = glm::normalize(glm::vec3(getHeight2(x - 1, z) - getHeight2(x + 1, z),   // norx
-                                                     2.0f,                                          // nory
-                                                     getHeight2(x, z + 1) - getHeight2(x, z - 1))); // norz
+            // glm::vec3 nor = glm::normalize(glm::vec3(getHeight2(x - 1, z) - getHeight2(x + 1, z),   // norx
+            //                                          2.0f,                                          // nory
+            //                                          getHeight2(x, z + 1) - getHeight2(x, z - 1))); // norz
 
             _mesh.addVertex(pos);
-            _mesh.addNormal(nor);
+            // _mesh.addNormal(nor);
             //_mesh.addUV(glm::vec2(0.0, 0.0));
         }
     }

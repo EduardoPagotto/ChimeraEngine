@@ -125,7 +125,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh) {
         }
     }
 
-    //_mesh.debugDados(true);
+    _mesh.debugDados(true);
     _mesh.setOneIndex(true);
 
     return true;

@@ -31,7 +31,7 @@ void NodeMesh::init() {
     glm::vec3 min, max, size;
     meshData.getMinMaxSize(min, max, size);
 
-    aabb.set(min, max);
+    aabb.setBoundary(min, max);
 
     pTransform->init(size);
 

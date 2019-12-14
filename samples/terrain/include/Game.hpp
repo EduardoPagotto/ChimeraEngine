@@ -1,16 +1,14 @@
 #ifndef __GAME_TESTE_TERRAIN__HPP
 #define __GAME_TESTE_TERRAIN__HPP
 
-#include "Camera.hpp"
-#include "Terrain.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Shader.hpp"
+#include "chimera/node/Node.hpp"
+#include "chimera/node/VisitorRender.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
-
+    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot);
     virtual ~Game();
     // Inherited via IGameClientEvents
     virtual void start();
@@ -31,22 +29,10 @@ class Game : public Chimera::IGameClientEvents {
     bool isPaused;
     int botaoIndex;
     int estadoBotao;
-    Chimera::CanvasGL* pCanvas;
-    Chimera::Shader* pShader;
-    void RenderShadowMap();
-    void CheckCameraTerrainPosition(glm::vec3& Movement);
-    int LastX, LastY, LastClickedX, LastClickedY;
-    ChimeraNew::Camera camera;
-    Chimera::Terrain terra;
-    float LightAngle;
-    glm::mat4 LightViewMatrix, LightProjectionMatrix, ShadowMatrix;
-    int ShadowMapSize;
-    GLuint ShadowMap, RotationTexture, FBO;
-    bool Wireframe, DisplayShadowMap, RenderAABB, VisualizeRenderingOrder, SortVisibleGeometryNodes, RenderSlow;
-    int Depth;
-    GLuint *UniformLocations, *AttribLocations;
 
-    // Chimera::TexImg* pTex;
+    Chimera::VisitorRender renderV;
+    Chimera::CanvasGL* pCanvas;
+    Chimera::Node* pRoot;
 };
 
 #endif

@@ -9,7 +9,6 @@
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
-//#include "chimera/render/LoadHeightMap.hpp"
 #include "chimera/render/LoadObj.hpp"
 
 #include <cstdio>
@@ -37,22 +36,6 @@ void createMeshTexturizade(std::string name, std::string file, float scale, glm:
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(pMap);
 }
-
-// void createTerrain(std::string name, std::string file, float scale, glm::vec3 _position, Chimera::Material* _pMap) {
-
-//     using namespace Chimera;
-
-//     NodeMesh* pMesh = new NodeMesh(group1, name);
-//     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
-//     pMesh->setMaterial(_pMap);
-
-//     LoadHeightMap* pHeight = new LoadHeightMap();
-//     pHeight->getMesh(file, pMesh->meshData);
-
-//     delete pHeight;
-
-//     pMesh->meshData.changeSize(scale, _pMap->hasTexture());
-// }
 
 int main(int argn, char** argv) {
 
@@ -121,16 +104,6 @@ int main(int argn, char** argv) {
 
         createMeshTexturizade("Cubo-01", "./data/models/cubo_textura_simples.obj", 5.0, glm::vec3(0.0, 0.0, 0.0));
         createMeshTexturizade("Cubo-02", "./data/models/cubo2.obj", 10.0, glm::vec3(150.0, 0.0, 0.0));
-
-        // Material* pMat1 = new Material();
-        // pMat1->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
-        // pMat1->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-        // pMat1->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-        // pMat1->setShine(32.0f);
-        // pMat1->addTexture(new TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png"));
-
-        // // createTerrain("terra", "./data/terrain/terrain1.bin", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
-        // createTerrain("terra", "./data/terrain/heightmap2.tga", 1.0, glm::vec3(150.0, 0.0, 0.0), pMat1);
 
         // Wrapper do game
         Game* game = new Game(video, group1);

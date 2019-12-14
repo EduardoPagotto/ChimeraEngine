@@ -4,14 +4,17 @@ PROJECT(Terrain)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define os Lib's a serem usados
-set (LibsTerrain ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+set (LibsTerrain ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a 
+				 ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
+				 ${FREETYPE_LIBRARY}
 				 ${SDL2_IBRARIES}
 				 -lGL
 				 -lGLU
@@ -27,17 +30,14 @@ set (IncludesTerrain ${CMAKE_CURRENT_SOURCE_DIR}/include
 					 ${OPENGL_INCLUDE_DIR}
 					 ${SDL2_INCLUDE_DIR})
 
-add_executable (terrain src/Camera.cpp
-						src/BSPTreeNode.cpp
-						src/BSPTree.cpp
-						src/Terrain.cpp
-						src/Game.cpp
+add_executable (terrain src/Game.cpp
 						src/main.cpp)
 
 target_link_libraries(terrain ${LibsTerrain})
 target_include_directories (terrain PRIVATE ${IncludesTerrain})
 
 add_dependencies(terrain ChimeraCore 
-                         ChimeraRender)
+						 ChimeraRender
+						 ChimeraNode)
 
 INSTALL(FILES ${Terrain_BINARY_DIR}/terrain DESTINATION bin)

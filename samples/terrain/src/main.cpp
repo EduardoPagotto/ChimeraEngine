@@ -11,11 +11,11 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("Terrain", 320, 240);
+        Chimera::CanvasGL* video = new Chimera::CanvasGL("HeightMap", 800, 600);
 
         Chimera::Shader* pShader = new Chimera::Shader(
-            "Simples1", Chimera::shadeLoadProg("LegadoShader", "./samples/terrain/shader/glsl120shader.vs",
-                                               "./samples/terrain/shader/glsl120shader.fs"));
+            "mesh-default", Chimera::shadeLoadProg("LegadoShader", "./chimera/shaders/MeshFullShadow.vert",
+                                                   "./chimera/shaders/MeshFullShadow.frag"));
 
         Game* game = new Game(video, pShader);
 

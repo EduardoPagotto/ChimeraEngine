@@ -84,7 +84,39 @@ code --install-extension xaver.clang-format
 
 ```
 
-### Kdevelop still suportted
+### Mesh com material e textura manual
+```cpp
+    // Material Cubo sem textura
+    Material* pMat = new Material();
+    pMat->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
+    pMat->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+    pMat->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+    pMat->setShine(32.0f);
+    pMat->addTexture(new TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid1.png"));
+
+    NodeMesh* pMesh = new NodeMesh(group1, name);
+    pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
+    pMesh->setMaterial(_pMap);
+
+    LoaderObj loader;
+    loader.getMesh(file, pMesh->meshData);
+
+    pMesh->meshData.changeSize(scale, _pMap->hasTexture());
+```
+### Mesh com material e textura loader
+```cpp
+    Material* pMap = new Material();
+    NodeMesh* pMesh = new NodeMesh(group1, name);
+
+    LoaderObj loader;
+    loader.getMesh(file, pMesh->meshData);
+    loader.getMaterial(*pMap);
+
+    pMesh->meshData.changeSize(scale, pMap->hasTexture());
+    pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
+    pMesh->setMaterial(pMap);
+```
+
 
 
 ## Nova versao com desenvolvimento de HMD

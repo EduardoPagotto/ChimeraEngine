@@ -4,15 +4,15 @@
 
 namespace Chimera {
 
-LoaderObj::LoaderObj(const std::string& _fileName) : materialFile(""), fileName(_fileName) {}
+LoaderObj::LoaderObj() { clean(); }
+LoaderObj::~LoaderObj() { clean(); }
+void LoaderObj::clean() { materialFile = ""; }
 
-LoaderObj::~LoaderObj() {}
+bool LoaderObj::getMesh(const std::string& _fileName, MeshData& _mesh) {
 
-bool LoaderObj::getMesh(MeshData& _mesh) {
-
-    FILE* fp = fopen(fileName.c_str(), "r");
+    FILE* fp = fopen(_fileName.c_str(), "r");
     if (fp == NULL) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", fileName.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening file : %s", _fileName.c_str());
         return false;
     }
 
@@ -38,7 +38,7 @@ bool LoaderObj::getMesh(MeshData& _mesh) {
                     continue;
                 }
                 throw Exception(
-                    std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + fileName));
+                    std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + _fileName));
 
             } else if (line[1] == 'n') {
                 normalOn = true;
@@ -85,10 +85,15 @@ bool LoaderObj::getMesh(MeshData& _mesh) {
     return true;
 }
 
+bool LoaderObj::getMaterial(const std::string& _fileName, Material& _pMaterial) {
+    materialFile = _fileName;
+    return this->getMaterial(_pMaterial);
+}
+
 bool LoaderObj::getMaterial(Material& _material) {
 
     if (materialFile.size() == 0) {
-        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Sem dados de Material em %s", fileName.c_str());
+        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Sem arquivo de material");
         return false;
     }
 
@@ -147,6 +152,11 @@ bool LoaderObj::getMaterial(Material& _material) {
             std::string nova(line);
             if (getValidData(nova, std::string("map_Kd ")) == true)
                 _material.addTexture(new TextureImg(SHADE_TEXTURE_DIFFUSE, nova));
+            else if (getValidData(nova, std::string("sharpness ")) == true) {
+                float val;
+                int n = sscanf(nova.c_str(), "%f", &val);
+                _material.setShine(val);
+            }
         }
     }
     return true;
@@ -169,12 +179,4 @@ bool LoaderObj::getValidData(std::string& nova, const std::string& comando) {
     }
     return false;
 }
-
-// void loadObjMtl(const std::string& _fineNameMtl, MeshData& _mesh, Material& _pMaterial) {
-//     std::string matFile;
-//     loadObj(_fineNameMtl, _mesh, matFile);
-
-//     if (matFile.size() > 0)
-//         loadMtl(matFile, &_pMaterial);
-// }
 } // namespace Chimera

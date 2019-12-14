@@ -84,12 +84,13 @@ void Game::start() {
     Chimera::MeshData m;
     std::vector<Chimera::Triangle> listPolygons;
 
-    Chimera::LoaderObj loader("./data/models/cubo_textura_simples.obj");
-    // Chimera::LoaderObj loader("./data/models/cubo_textura_simples.obj");
-    // Chimera::LoaderObj loader("./data/models/square1.obj");
-    // Chimera::LoaderObj loader("./data/models/split1.obj");
-    // Chimera::LoaderObj loader("./data/models/teste1.obj");
-    loader.getMesh(m);
+    Chimera::LoaderObj loader;
+    // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
+    // loader.getMesh("./data/models/square1.obj", m);
+    // loader.getMesh("./data/models/split1.obj", m);
+    // loader.getMesh("./data/models/teste1.obj", m);
+    loader.getMesh("./data/models/cubo_textura_simples.obj", m);
+
     m.changeSize(30.0, true);
 
     m.toTriangle(listPolygons);

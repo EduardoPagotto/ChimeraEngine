@@ -83,8 +83,8 @@ void Game::start() {
     // glCullFace(GL_BACK);
 
     Chimera::MeshData m;
-    Chimera::LoaderObj loader("./data/models/tela01.obj");
-    loader.getMesh(m);
+    Chimera::LoaderObj loader;
+    loader.getMesh("./data/models/tela01.obj", m);
 
     if (loader.hasMaterial() == true)
         loader.getMaterial(material);

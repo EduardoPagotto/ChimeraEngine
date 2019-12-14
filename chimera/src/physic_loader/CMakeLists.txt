@@ -32,12 +32,6 @@ add_library (ChimeraPhysicLoader STATIC ${SourcesLoader})
 target_include_directories (ChimeraPhysicLoader PUBLIC ${IncludeLoader}
 										   PRIVATE ${IncludeLoaderAux})
 
-# Lista os Includes
-# get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-# foreach(dir ${dirs})
-# 	message(STATUS "Include dir='${dir}'")
-# endforeach()
-
 add_dependencies(ChimeraPhysicLoader ChimeraCore
 								     ChimeraRender
 									 ChimeraNode

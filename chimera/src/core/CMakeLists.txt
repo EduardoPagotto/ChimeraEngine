@@ -17,7 +17,11 @@ set (SourcesCore Canvas.cpp
 				 TrackHead.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
-				 FlowControl.cpp)
+				 FlowControl.cpp
+				 VertexDynamic.cpp 
+				 VertexStatic.cpp
+				 Shader.cpp
+				 Transform.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})
@@ -31,6 +35,12 @@ set (IncludeCoreAux ${OPENGL_INCLUDE_DIR}
 # 	set(SourcesCore ${SourcesCore} src/OvrDevice.cpp) #adiciona o cpp
 # 	set(IncludeCore ${IncludeCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
 # endif(OVR_SET_TO_USE)
+
+if (HMD_Z1_SET_TO_USE)
+	message(STATUS "HMD_Z1 Incluido no Projeto")
+	set(SourcesCore ${SourcesCore} CanvasHmd.cpp) #adiciona o cpp
+	set(SourcesCore ${SourcesCore} Eye.cpp) #adiciona o cpp
+endif(HMD_Z1_SET_TO_USE)
 
 # Define o Target
 add_library (ChimeraCore STATIC ${SourcesCore})

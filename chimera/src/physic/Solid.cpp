@@ -20,6 +20,23 @@ Solid::Solid(PhysicsControl* _pWorld) : Transform() {
     pWorld = _pWorld;
 }
 
+Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans) : Transform(_trans) {
+    pRigidBody = nullptr;
+    pShapeCollision = nullptr;
+    pMotionState = nullptr;
+    trimesh = nullptr;
+
+    mass = 0.0f;
+    frictionDynamic = 15.0f;
+    frictionStatic = 10.0f;
+    restitution = 0.0f;
+
+    transform.setIdentity();
+    transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
+
+    pWorld = _pWorld;
+}
+
 // Solid::Solid(const Solid& _solid) : ITransform(_solid) {
 
 //     mass = _solid.mass;
@@ -65,7 +82,7 @@ void Solid::init(const glm::vec3& _size) {
     initTransform(transform, this);
 }
 
-// void Solid::accept(NodeVisitor* v) { v->visit(this); }
+// void Solid::accept(VisitorInterface* v) { v->visit(this); }
 
 // void Solid::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
 //     btQuaternion l_qtn;

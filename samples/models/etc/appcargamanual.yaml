@@ -1,25 +1,25 @@
 screen:
   name: teste
   canvas:
-    w: 400
-    h: 300
-model: ./models/piso2.xml
+    w: 800
+    h: 600
+model: ./data/models/piso2.xml
 shaders:
   - name: mesh-default
-    vertex: ./samples/models/shader/mesh.vert
-    fragment: ./samples/models/shader/mesh.frag
+    vertex: ./chimera/shaders/MeshFullShadow.vert
+    fragment: ./chimera/shaders/MeshFullShadow.frag
   - name: particle-default
-    vertex: ./samples/models/shader/particle.vert
-    fragment: ./samples/models/shader/particle.frag
+    vertex: ./chimera/shaders/ParticleEmitter.vert
+    fragment: ./chimera/shaders/ParticleEmitter.frag
   - name: hud-default
-    vertex: ./samples/models/shader/hud.vert
-    fragment: ./samples/models/shader/hud.frag
+    vertex: ./chimera/shaders/HUD.vert
+    fragment: ./chimera/shaders/HUD.frag
   - name: simpleDepthShader
-    vertex: ./samples/models/shader/shadow_mapping_depth.vert
-    fragment: ./samples/models/shader/shadow_mapping_depth.frag
+    vertex: ./chimera/shaders/ShadowMappingDepth.vert
+    fragment: ./chimera/shaders/ShadowMappingDepth.frag
 font: ./samples/models/fonts/FreeSans.ttf
 size: 18
 
 textures:
   - name: TexParticleEmmiter
-    tex: ./models/Particle2.png
+    tex: ./data/images/Particle2.png

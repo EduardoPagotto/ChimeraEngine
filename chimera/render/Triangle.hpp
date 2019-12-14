@@ -2,7 +2,7 @@
 #ifndef __CHIMERA_TRIANGLE__HPP
 #define __CHIMERA_TRIANGLE__HPP
 
-#include "Vertex.hpp"
+#include "chimera/core/VertexData.hpp"
 
 namespace Chimera {
 

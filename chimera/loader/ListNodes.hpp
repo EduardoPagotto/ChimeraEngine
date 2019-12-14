@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "chimera/core/Singleton.hpp"
-#include "chimera/node/Mesh.hpp"
 #include "chimera/node/Node.hpp"
+#include "chimera/node/NodeMesh.hpp"
 
 namespace ChimeraLoaders {
 
@@ -18,7 +18,7 @@ class ListNodes {
         mapMeshNode.clear();
     }
 
-    std::map<std::string, Chimera::Mesh*> mapMesh;
+    std::map<std::string, Chimera::NodeMesh*> mapMesh;
     std::map<std::string, Chimera::Node*> mapMeshNode;
 
   protected:

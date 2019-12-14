@@ -1,12 +1,13 @@
 #ifndef __GAME_TESTE_BSTREE__HPP
 #define __GAME_TESTE_BSTREE__HPP
 
-#include "BSPTree.h"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
-#include "chimera/render/Shader.hpp"
-#include "chimera/render/Tex.hpp"
+#include "chimera/core/VertexDynamic.hpp"
+#include "chimera/render/BSPTree.hpp"
+#include "chimera/render/Texture.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -42,7 +43,7 @@ class Game : public Chimera::IGameClientEvents {
     glm::mat4 view;
     glm::mat4 model;
 
-    Chimera::TexImg* pTex;
+    Chimera::TextureImg* pTex;
 };
 
 #endif

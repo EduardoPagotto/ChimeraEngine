@@ -9,27 +9,23 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	Vertex.cpp
-					Triangle.cpp
-					MeshData.cpp
+set (RenderSource 	Triangle.cpp
+					Plane.cpp
+					Frustum.cpp
+					AABB.cpp
+					BSPTree.cpp
+					LoadHeightMap.cpp
+					LoadObj.cpp
+					Light.cpp
 					Material.cpp
-					Transform.cpp
-					Shader.cpp
-					Tex.cpp
-					LoadObj.cpp)
+					MeshData.cpp
+					Texture.cpp)
 
 #define os includes
 set (RenderInclude ${CMAKE_SOURCE_DIR}) # Raiz do projeto
 set (RenderIncludeAux ${OPENGL_INCLUDE_DIR}
 				 	${SDL2_INCLUDE_DIR}
 				 	${GLEW_INCLUDE_DIRS})
-
-
-if (HMD_Z1_SET_TO_USE)
-	message(STATUS "HMD_Z1 Incluido no Projeto")
-	set(RenderSource ${RenderSource} CanvasHmd.cpp) #adiciona o cpp
-	set(RenderSource ${RenderSource} Eye.cpp) #adiciona o cpp
-endif(HMD_Z1_SET_TO_USE)
 
 # Define o Target
 add_library (ChimeraRender STATIC ${RenderSource})

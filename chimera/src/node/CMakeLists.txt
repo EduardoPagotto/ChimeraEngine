@@ -12,23 +12,17 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
 set (SourceNode Node.cpp
-				Light.cpp
-				Camera.cpp
-				#Solid.cpp
-				#PhysicsControl.cpp
-				#Constraint.cpp
-				Mesh.cpp
+				NodeLight.cpp
+				NodeCamera.cpp
+				NodeMesh.cpp
 				Font.cpp
-				HUD.cpp
-				SceneMng.cpp
+				NodeHUD.cpp
 				Particle.cpp
-				ParticleEmitter.cpp
-				ShadowMap.cpp
-				Group.cpp
-				InitVisitor.cpp
-				RenderVisitor.cpp
-				ShadowMapVisitor.cpp
-				NodeParse.cpp)
+				NodeParticleEmitter.cpp
+				NodeGroup.cpp
+				VisitorRender.cpp
+				VisitorShadowMap.cpp
+				VisitParser.cpp)
 
 #define os includes
 set (IncludeNode ${CMAKE_SOURCE_DIR}) # Raiz do projeto
@@ -44,12 +38,6 @@ add_library (ChimeraNode STATIC ${SourceNode})
 # Define os includes privados para este target
 target_include_directories (ChimeraNode PUBLIC ${IncludeNode}
 										PRIVATE ${IncludeNodeAux})
-
-# Lista os Includes
-# get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-# foreach(dir ${dirs})
-# 	message(STATUS "Include dir='${dir}'")
-# endforeach()
 
 add_dependencies(ChimeraNode ChimeraCore 
                              ChimeraRender)

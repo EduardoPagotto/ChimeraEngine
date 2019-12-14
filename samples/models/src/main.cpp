@@ -13,13 +13,13 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Singleton.hpp"
+#include "chimera/core/Transform.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/loader/VisualScene.hpp"
-#include "chimera/node/HUD.hpp"
-#include "chimera/node/ParticleEmitter.hpp"
-#include "chimera/node/ShadowMapVisitor.hpp"
+#include "chimera/node/NodeHUD.hpp"
+#include "chimera/node/NodeParticleEmitter.hpp"
+#include "chimera/node/VisitorShadowMap.hpp"
 #include "chimera/physic_loader/PhysicsScene.hpp"
-#include "chimera/render/Transform.hpp"
 
 #include <yaml-cpp/yaml.h>
 
@@ -65,9 +65,9 @@ int main(int argn, char** argv) {
         std::string font = config["font"].as<std::string>();
 
         // Cria grupo shader como filho de scene
-        Chimera::Group* pRoot = new Chimera::Group(nullptr, "root_real");
+        Chimera::NodeGroup* pRoot = new Chimera::NodeGroup(nullptr, "root_real");
 
-        Chimera::Group* group1 = new Chimera::Group(pRoot, "none");
+        Chimera::NodeGroup* group1 = new Chimera::NodeGroup(pRoot, "none");
 
         ChimeraLoaders::VisualScene libV(model, group1);
         libV.target();
@@ -79,30 +79,27 @@ int main(int argn, char** argv) {
 
         // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado
         group1->setShader(mapa["mesh-default"]);
-        group1->setNodeVisitor(new Chimera::ShadowMapVisitor(mapa["simpleDepthShader"]));
-        Chimera::ShadowMap* pShadowMap = new Chimera::ShadowMap(group1, "shadow1", 2048, 2048);
+        group1->setNodeVisitor(new Chimera::VisitorShadowMap(mapa["simpleDepthShader"], 2048, 2048));
 
         // create and add particle to scene
-        Chimera::Group* gParticle = new Chimera::Group(pRoot, "ParticleGroup");
+        Chimera::NodeGroup* gParticle = new Chimera::NodeGroup(pRoot, "ParticleGroup");
         gParticle->setShader(mapa["particle-default"]);
-        Chimera::Transform* posParticle = new Chimera::Transform();
-        posParticle->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-        Chimera::ParticleEmitter* pParticleEmitter = new Chimera::ParticleEmitter(gParticle, "testeZ1", 10000);
-        pParticleEmitter->setTransform(posParticle);
+        Chimera::NodeParticleEmitter* pParticleEmitter = new Chimera::NodeParticleEmitter(gParticle, "testeZ1", 10000);
+        pParticleEmitter->setTransform(
+            new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
 
-        pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./models/Particle2.png"));
+        pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./data/images/Particle2.png"));
 
         // Create and add hud data text
-        Chimera::Group* gHud = new Chimera::Group((Chimera::Node*)pRoot, "HUD-Group");
+        Chimera::NodeGroup* gHud = new Chimera::NodeGroup((Chimera::Node*)pRoot, "HUD-Group");
         gHud->setShader(mapa["hud-default"]);
-        Chimera::HUD* pHUD = new Chimera::HUD(gHud, "HUD-Default");
+        Chimera::NodeHUD* pHUD = new Chimera::NodeHUD(gHud, "HUD-Default");
         Chimera::Font* pFont = new Chimera::Font(font, 18); // TODO: carregar size da fonte
         pHUD->addFont(pFont);
 
         // Gerenciador do grapho de cena
-        Chimera::SceneMng* sceneMng = new Chimera::SceneMng(video, pRoot);
-        // Passa a game a scena, o video e o mundo fisico
-        Game* game = new Game(sceneMng, pPC);
+        // Passa a game a video, node e o mundo fisico
+        Game* game = new Game(video, pRoot, pPC);
 
         // Controle de fluxo do programa
         Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
@@ -112,8 +109,6 @@ int main(int argn, char** argv) {
         SDL_Log("Loop de Game encerrado!!!!");
         delete pControle;
         delete game;
-        delete sceneMng;
-        delete pShadowMap;
         delete video;
 
         SDL_Log("AppShader finalizado com sucesso");

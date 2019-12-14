@@ -3,12 +3,12 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryLights.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/render/Transform.hpp"
+#include "chimera/core/Transform.hpp"
 
 namespace ChimeraLoaders {
 
 LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url,
-                                         Chimera::Group* _pRootNode)
+                                         Chimera::NodeGroup* _pRootNode)
     : Library(_root, _url) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
     pRootNode = _pRootNode;
@@ -25,7 +25,6 @@ void LibraryVisualScenes::target() {
         std::string l_id = l_nScene->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            // pRootNode = new Chimera::Group(nullptr, l_id );
             pRootNode->setName(l_id);
             tinyxml2::XMLElement* l_nNode = l_nScene->FirstChildElement("node");
             for (l_nNode; l_nNode; l_nNode = l_nNode->NextSiblingElement()) {
@@ -83,7 +82,7 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
         } else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
             LibraryCameras lib(root, l_url);
-            Chimera::Camera* pCamera = lib.target();
+            Chimera::NodeCamera* pCamera = lib.target();
 
             pCamera->getViewPoint()->setTransform(l_pTransform);
 
@@ -93,9 +92,9 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
         } else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
             LibraryLights lib(root, l_url);
-            Chimera::Light* pLight = lib.target();
+            Chimera::NodeLight* pLight = lib.target();
 
-            pLight->setTransform(l_pTransform);
+            pLight->data.setTransform(l_pTransform);
 
             _pNodePai->addChild(pLight);
             pLastNodeDone = pLight;
@@ -103,19 +102,14 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
             LibraryGeometrys lib(root, l_url);
-            Chimera::Mesh* pMesh = lib.target();
+            Chimera::NodeMesh* pMesh = lib.target();
 
             pListNodes->mapMeshNode[pMesh->getName()] = pMesh;
-
-            Chimera::Transform* pTrans = new Chimera::Transform();
-
             pListNodes->mapMesh[std::string(_id)] = pMesh;
 
-            pTrans->setMatrix(l_pTransform);
-            pMesh->setTransform(pTrans);
+            pMesh->setTransform(new Chimera::Transform(l_pTransform));
 
             _pNodePai->addChild(pMesh);
-
             pLastNodeDone = _pNodePai; // pTrans;
 
         } else if (strcmp(l_nomeElemento, (const char*)"node") == 0) {

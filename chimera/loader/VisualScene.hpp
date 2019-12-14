@@ -3,20 +3,20 @@
 
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
-#include "chimera/node/Group.hpp"
+#include "chimera/node/NodeGroup.hpp"
 
 namespace ChimeraLoaders {
 
 class VisualScene : public Library {
 
   public:
-    VisualScene(const std::string& _file, Chimera::Group* _pGroup);
+    VisualScene(const std::string& _file, Chimera::NodeGroup* _pGroup);
     virtual ~VisualScene();
     void target();
 
   private:
     ListNodes* pListNodes;
-    Chimera::Group* pGroup;
+    Chimera::NodeGroup* pGroup;
 };
 } // namespace ChimeraLoaders
 

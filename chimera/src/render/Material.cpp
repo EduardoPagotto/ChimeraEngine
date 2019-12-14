@@ -19,19 +19,19 @@ void Material::init() {
     bool hasEspecular = false;
     bool hasEmissive = false;
 
-    for (std::list<TexImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
+    for (std::list<TextureImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
 
-        TexImg* pTex = *iTex;
+        TextureImg* pTex = *iTex;
 
         pTex->init();
-        switch (pTex->getKind()) {
-            case TEX_KIND::DIFFUSE:
+        switch (pTex->getIndex()) {
+            case 0:
                 hasDifuse = true;
                 break;
-            case TEX_KIND::EMISSIVE:
+            case 3:
                 hasEmissive = true;
                 break;
-            case TEX_KIND::SPECULAR:
+            case 2:
                 hasEspecular = true;
                 break;
             default:
@@ -51,7 +51,7 @@ void Material::init() {
         tipoTexturasDisponiveis = 4;
 }
 
-void Material::addTexture(TexImg* _pTex) { listTex.push_back(_pTex); }
+void Material::addTexture(TextureImg* _pTex) { listTex.push_back(_pTex); }
 
 void Material::apply(Shader* _shader) {
 
@@ -63,8 +63,8 @@ void Material::apply(Shader* _shader) {
     _shader->setGlUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
 
     if (listTex.size() > 0) {
-        for (std::list<TexImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
-            TexImg* pTex = *iTex;
+        for (std::list<TextureImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
+            TextureImg* pTex = *iTex;
             pTex->apply(_shader);
         }
     } else {

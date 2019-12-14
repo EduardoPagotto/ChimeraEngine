@@ -82,16 +82,15 @@ void Game::start() {
     // glDisable(GL_LIGHTING);
     // glCullFace(GL_BACK);
 
-    std::string materialFile;
     Chimera::MeshData m;
-    loadObj("./samples/simples/models/tela01.obj", m, materialFile);
-    // loadObj("./samples/bsptree/models/square1.obj", m, materialFile);
+    Chimera::LoaderObj loader;
+    loader.getMesh("./data/models/tela01.obj", m);
 
-    if (materialFile.size() != 0) {
-        loadMtl(materialFile, material);
-    } else {
+    if (loader.hasMaterial() == true)
+        loader.getMaterial(material);
+    else {
         material.setDefaultEffect();
-        material.addTexture(new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, "./models/grid2.png"));
+        material.addTexture(new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png"));
     }
 
     material.init();
@@ -100,9 +99,10 @@ void Game::start() {
     // m.textureFix();
 
     std::vector<Chimera::VertexData> renderData;
-    convertMeshDataVertexData(&m, renderData);
+    m.toVertexData(renderData);
 
-    vertexBuffer.create(renderData);
+    std::vector<unsigned int> index;
+    vertexBuffer.create(renderData, index);
 }
 
 void Game::stop() {}

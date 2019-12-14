@@ -1,6 +1,6 @@
 #include "LibraryCameras.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/node/Camera.hpp"
+#include "chimera/node/NodeCamera.hpp"
 
 namespace ChimeraLoaders {
 
@@ -8,7 +8,7 @@ LibraryCameras::LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _
 
 LibraryCameras::~LibraryCameras() {}
 
-Chimera::Camera* LibraryCameras::target() {
+Chimera::NodeCamera* LibraryCameras::target() {
 
     tinyxml2::XMLElement* l_nCam = root->FirstChildElement("library_cameras")->FirstChildElement("camera");
     for (l_nCam; l_nCam; l_nCam = l_nCam->NextSiblingElement()) {
@@ -16,7 +16,7 @@ Chimera::Camera* LibraryCameras::target() {
         std::string l_id = l_nCam->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            Chimera::Camera* pCameraNew = new Chimera::Camera(nullptr, l_id);
+            Chimera::NodeCamera* pCameraNew = new Chimera::NodeCamera(nullptr, l_id);
             loadbase(l_nCam, pCameraNew);
 
             tinyxml2::XMLElement* l_nExtra = findExtra(l_nCam);
@@ -35,7 +35,7 @@ Chimera::Camera* LibraryCameras::target() {
     throw Chimera::Exception("Camera nao encontrada: " + url);
 }
 
-void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::Camera* _pCamera) {
+void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera* _pCamera) {
     tinyxml2::XMLElement* l_nPerspective =
         _nNode->FirstChildElement("optics")->FirstChildElement("technique_common")->FirstChildElement("perspective");
     if (l_nPerspective != nullptr) {

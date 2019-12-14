@@ -6,7 +6,7 @@
                 "/usr/include/freetype2",
                 "/usr/include",
                 "/usr/include/bullet",
-                "${workspaceFolder}/libs"
+                "${workspaceFolder}/chimera"
             ],
             "defines": [
                 "_DEBUG"
@@ -16,8 +16,8 @@
                     "/usr/include/freetype2",
                     "/usr/include",
                     "/usr/include/bullet",
-                    "${workspaceFolder}/libs",
-                    "${workspaceFolder}/examples/teste_bstree"
+                    "${workspaceFolder}/chimera",
+                    "${workspaceFolder}/samples/models"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/build/browse.vc.db"

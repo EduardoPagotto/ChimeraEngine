@@ -14,7 +14,7 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pTex = new Chimera::TexImg(Chimera::TEX_KIND::DIFFUSE, "./models/grid2.png");
+    pTex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png");
 }
 
 Game::~Game() {}
@@ -84,13 +84,16 @@ void Game::start() {
     Chimera::MeshData m;
     std::vector<Chimera::Triangle> listPolygons;
 
-    std::string materialFile;
-    loadObj("./samples/bsptree/models/square1.obj", m, materialFile);
-    // loadObj((const char*)"./samples/bsptree/models/split1.obj", &m);
-    // loadObj((const char*)"./samples/bsptree/models/teste1.obj", &m);
-    // m.textureFix();
+    Chimera::LoaderObj loader;
+    // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
+    // loader.getMesh("./data/models/square1.obj", m);
+    // loader.getMesh("./data/models/split1.obj", m);
+    // loader.getMesh("./data/models/teste1.obj", m);
+    loader.getMesh("./data/models/cubo_textura_simples.obj", m);
 
-    convertMeshDataTriangle(&m, listPolygons);
+    m.changeSize(30.0, true);
+
+    m.toTriangle(listPolygons);
     std::reverse(listPolygons.begin(), listPolygons.end());
 
     // Cria o BSP
@@ -140,7 +143,7 @@ void Game::render() {
     std::vector<Chimera::VertexData> vVertice;
     bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
 
-    debugParser = false;
+    // debugParser = false;
 
     pShader->link();
 

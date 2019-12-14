@@ -8,14 +8,17 @@
 
 namespace Chimera {
 
-enum class Kind : int8_t { GROUP, CAMERA, LIGHT, SKYBOX, SHADOWMAP, HUD, MESH, PARTICLE_SYSTEM };
+enum class Kind : int8_t { GROUP, CAMERA, LIGHT, SKYBOX, HUD, MESH, PARTICLE_SYSTEM };
 
 class Node {
   public:
     Node(Node* _parent, const Kind& _type, const std::string& _name);
     virtual ~Node();
 
-    virtual void accept(class NodeVisitor* v) = 0;
+    virtual void accept(class VisitorInterface* v) = 0;
+    virtual void init() = 0;
+
+    void initializeChilds();
 
     void addChild(Node* _child);
     void removeChild(Node* _child);

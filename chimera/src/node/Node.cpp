@@ -15,6 +15,13 @@ Node::~Node() {
     vChild.clear();
 }
 
+void Node::initializeChilds() {
+    this->init();
+    for (Node* node : vChild) {
+        node->initializeChilds();
+    }
+}
+
 std::vector<Node*>* Node::getChilds() {
     if (!vChild.empty())
         return &(this->vChild);

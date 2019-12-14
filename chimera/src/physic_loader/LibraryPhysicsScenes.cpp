@@ -1,11 +1,9 @@
-#include "chimera/core/Exception.hpp"
-
-#include "LibraryPhysicModels.hpp"
 #include "LibraryPhysicsScenes.hpp"
-
-#include "chimera/node/Mesh.hpp"
+#include "LibraryPhysicModels.hpp"
+#include "chimera/core/Exception.hpp"
+#include "chimera/core/Transform.hpp"
+#include "chimera/node/NodeMesh.hpp"
 #include "chimera/physic/Solid.hpp"
-#include "chimera/render/Transform.hpp"
 
 namespace ChimeraLoaders {
 
@@ -45,7 +43,7 @@ void LibraryPhysicsScenes::target() {
                     std::string target = l_nRigid->Attribute("target");
 
                     Chimera::Solid* pSolid = mapSolids[body];
-                    Chimera::Mesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
+                    Chimera::NodeMesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
 
                     pMesh->replaceTransform(pSolid);
                 }

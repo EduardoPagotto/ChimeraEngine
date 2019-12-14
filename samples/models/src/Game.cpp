@@ -3,10 +3,11 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
-//#include "chimera/node/Coord.hpp"
-//#include "chimera/node/Transform.hpp"
+#include "chimera/node/NodeMesh.hpp"
+#include "chimera/node/VisitParser.hpp"
 
-Game::Game(Chimera::SceneMng* _pScenMng, Chimera::PhysicsControl* _physicWorld) : pSceneMng(_pScenMng) {
+Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld)
+    : pCanvas(_pCanvas), pRoot(_pRoot), physicWorld(_physicWorld) {
 
     isPaused = false;
     pCorpoRigido = nullptr;
@@ -17,8 +18,6 @@ Game::Game(Chimera::SceneMng* _pScenMng, Chimera::PhysicsControl* _physicWorld) 
     sPosicaoObj = "pos:(,,)";
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
-
-    physicWorld = _physicWorld;
 }
 
 Game::~Game() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game"); }
@@ -142,32 +141,28 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
 void Game::start() {
 
-    pSceneMng->init();
+    pCanvas->initGL();
 
-    // Localiza o Skybox e ajusta iluminacao
-    // Chimera::Transform* pSkyBox = (Chimera::Transform*)pSceneMng->getRoot()->findChild("SkyBox", true);
-    // if (pSkyBox != nullptr) {
-    //     Chimera::Mesh* pMesh = (Chimera::Mesh*)pSkyBox->findChild(Chimera::Kind::MESH, 0, false);
-    // }
+    pRoot->initializeChilds();
+
+    pCanvas->afterStart();
 
     // Localiza a camera
-    pOrbitalCam = (Chimera::Camera*)pSceneMng->getRoot()->findChild("Camera-camera", true);
+    pOrbitalCam = (Chimera::NodeCamera*)pRoot->findChild("Camera-camera", true);
     pOrbitalCam->getViewPoint()->up = glm::vec3(0, 0, -1);
 
     // Localiza objeto como o primario //EfeitoZoltan-mesh
-    Chimera::Mesh* pMesh = (Chimera::Mesh*)pSceneMng->getRoot()->findChild("EfeitoZoltan-mesh", true);
+    Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)pRoot->findChild("EfeitoZoltan-mesh", true);
     pCorpoRigido = (Chimera::Solid*)pMesh->getTransform();
 
-    // Localiza a luz ativa
-    Chimera::Light* pLight = (Chimera::Light*)pSceneMng->getRoot()->findChild("luz01-light", true);
-
     // Localiza o Emissor de particula
-    pEmissor = (Chimera::ParticleEmitter*)pSceneMng->getRoot()->findChild("testeZ1", true);
+    pEmissor = (Chimera::NodeParticleEmitter*)pRoot->findChild("testeZ1", true);
 
-    pSceneMng->origemDesenho((Chimera::Transform*)pCorpoRigido);
+    renderV.pVideo = pCanvas;
+    renderV.pTransform = (Chimera::Transform*)pCorpoRigido;
 
     // Localiza o HUD
-    pHUD = (Chimera::HUD*)pSceneMng->getRoot()->findChild("HUD-Default", true);
+    pHUD = (Chimera::NodeHUD*)pRoot->findChild("HUD-Default", true);
     if (pHUD != nullptr) {
         pHUD->addText(0, 350, 30, glm::vec4(0.0, 0.0, 1.0, 1.0), 1.0, &sPosicaoObj);
         pHUD->addText(0, 10, 30, glm::vec4(1.0, 0.0, 0.0, 1.0), 1.0, &textoFPS);
@@ -188,7 +183,17 @@ void Game::render() {
     physicWorld->stepSim();
     physicWorld->checkCollisions();
 
-    pSceneMng->render();
+    for (int eye = 0; eye < pCanvas->getTotEyes(); eye++) {
+
+        pCanvas->before(eye);
+
+        renderV.eye = eye;
+        Chimera::visitParserTree(pRoot, &renderV); // dfs(root, &rv);//DFS(root);
+
+        pCanvas->after(eye);
+    }
+
+    pCanvas->swapWindow();
 }
 
 void Game::userEvent(const SDL_Event& _event) {
@@ -217,7 +222,7 @@ void Game::userEvent(const SDL_Event& _event) {
                          n2->getName().c_str());
         } break;
         case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
-            pSceneMng->getCanvas()->toggleFullScreen();
+            pCanvas->toggleFullScreen();
             break;
         default:
             break;
@@ -234,7 +239,7 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
             isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
-            pSceneMng->getCanvas()->reshape(_event.data1, _event.data2);
+            pCanvas->reshape(_event.data1, _event.data2);
             break;
         default:
             break;

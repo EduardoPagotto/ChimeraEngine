@@ -3,9 +3,11 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/TrackHead.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/node/Camera.hpp"
+#include "chimera/node/NodeCamera.hpp"
+#include "chimera/node/NodeMesh.hpp"
+#include "chimera/node/VisitParser.hpp"
 
-Game::Game(Chimera::SceneMng* _pScenMng) : pSceneMng(_pScenMng) { isPaused = false; }
+Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot), isPaused(false) {}
 
 Game::~Game() {}
 
@@ -44,7 +46,7 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
 void Game::keyCapture(SDL_Keycode tecla) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::Kind::CAMERA, 0, true);
+    Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 
     switch (tecla) {
         case SDLK_ESCAPE:
@@ -81,7 +83,7 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::Camera* pCamZ = (Chimera::Camera*)pSceneMng->getRoot()->findChild(Chimera::Kind::CAMERA, 0, true);
+    Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1) {
@@ -92,7 +94,18 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     }
 }
 
-void Game::start() { pSceneMng->init(); }
+void Game::start() {
+
+    pCanvas->initGL();
+
+    pRoot->initializeChilds();
+
+    pCanvas->afterStart();
+
+    Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)pRoot->findChild("Cubo-02", true);
+    renderV.pTransform = pMesh->getTransform();
+    renderV.pVideo = pCanvas;
+}
 
 void Game::stop() {}
 
@@ -101,7 +114,7 @@ void Game::newFPS(const unsigned int& fps) {}
 void Game::userEvent(const SDL_Event& _event) {
     Chimera::KindOp op = (Chimera::KindOp)_event.user.code;
     if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
-        pSceneMng->getCanvas()->toggleFullScreen();
+        pCanvas->toggleFullScreen();
     }
 }
 
@@ -114,7 +127,7 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
             isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
-            pSceneMng->getCanvas()->reshape(_event.data1, _event.data2);
+            pCanvas->reshape(_event.data1, _event.data2);
             break;
         default:
             break;
@@ -123,4 +136,16 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
 
 bool Game::paused() { return isPaused; }
 
-void Game::render() { pSceneMng->render(); }
+void Game::render() {
+    for (int eye = 0; eye < pCanvas->getTotEyes(); eye++) {
+
+        pCanvas->before(eye);
+
+        renderV.eye = eye;
+        Chimera::visitParserTree(pRoot, &renderV); // dfs(root, &rv);//DFS(root);
+
+        pCanvas->after(eye);
+    }
+
+    pCanvas->swapWindow();
+}

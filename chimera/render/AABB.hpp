@@ -14,11 +14,10 @@ class AABB {
     virtual ~AABB();
 
     void setPosition(const glm::vec3& _pos, const glm::vec3& _size);
-
     void setBoundary(const glm::vec3& _min, const glm::vec3& _max);
 
-    bool intersects(const AABB& _aabb);
-    bool contains(const glm::vec3& _point);
+    bool intersects(const AABB& _aabb) const;
+    bool contains(const glm::vec3& _point) const;
     bool visible(Frustum& _frustum);
     float distance(Frustum& _frustum);
     void render();

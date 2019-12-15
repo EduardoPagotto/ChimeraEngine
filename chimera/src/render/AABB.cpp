@@ -43,7 +43,7 @@ void AABB::setBoundary(const glm::vec3& _min, const glm::vec3& _max) {
     position = _min + size;
 }
 
-bool AABB::intersects(const AABB& _aabb) {
+bool AABB::intersects(const AABB& _aabb) const {
     return (_aabb.vertex[0].x > this->vertex[7].x || // min x
             _aabb.vertex[7].x < this->vertex[0].x || // max x
             _aabb.vertex[0].y < this->vertex[7].y || // min y
@@ -52,7 +52,7 @@ bool AABB::intersects(const AABB& _aabb) {
             _aabb.vertex[7].z < this->vertex[0].z);  // max z
 }
 
-bool AABB::contains(const glm::vec3& _point) {
+bool AABB::contains(const glm::vec3& _point) const {
     if (_point.x < vertex[0].x)
         return false;
     if (_point.y < vertex[0].y)

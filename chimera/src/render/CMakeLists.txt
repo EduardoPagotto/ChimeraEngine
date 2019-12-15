@@ -13,6 +13,7 @@ set (RenderSource 	Triangle.cpp
 					Plane.cpp
 					Frustum.cpp
 					AABB.cpp
+					Octree.cpp
 					BSPTree.cpp
 					LoadHeightMap.cpp
 					LoadObj.cpp

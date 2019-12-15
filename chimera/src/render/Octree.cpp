@@ -2,17 +2,11 @@
 
 namespace Chimera {
 
-Octree::Octree(const AABB& _boundary, const unsigned int& _capacity) : boundary(boundary), capacity(_capacity) {
+Octree::Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent, unsigned int _deep)
+    : boundary(boundary), capacity(_capacity), pParent(_parent), deep(_deep) {
 
-    top_northwest = nullptr;
-    top_northeast = nullptr;
-    top_southwest = nullptr;
-    top_southeast = nullptr;
-
-    botton_northwest = nullptr;
-    botton_northeast = nullptr;
-    botton_southwest = nullptr;
-    botton_southeast = nullptr;
+    for (short i = 0; i < 8; i++)
+        pChild[i] = nullptr;
 
     divided = false;
 }
@@ -21,32 +15,11 @@ Octree::~Octree() { destroy(); }
 
 void Octree::destroy() {
     if (divided == true) {
-        top_northwest->destroy();
-        top_northeast->destroy();
-        top_southwest->destroy();
-        top_southeast->destroy();
-        botton_northwest->destroy();
-        botton_northeast->destroy();
-        botton_southwest->destroy();
-        botton_southeast->destroy();
-
-        delete top_northwest;
-        delete top_northeast;
-        delete top_southwest;
-        delete top_southeast;
-        delete botton_northwest;
-        delete botton_northeast;
-        delete botton_southwest;
-        delete botton_southeast;
-
-        top_northwest = nullptr;
-        top_northeast = nullptr;
-        top_southwest = nullptr;
-        top_southeast = nullptr;
-        botton_northwest = nullptr;
-        botton_northeast = nullptr;
-        botton_southwest = nullptr;
-        botton_southeast = nullptr;
+        for (short i = 0; i < 8; i++) {
+            pChild[i]->destroy();
+            delete pChild[i];
+            pChild[i] = nullptr;
+        }
     }
 
     points.clear();
@@ -76,15 +49,15 @@ void Octree::subdivide() {
     bsw.setPosition(glm::vec3(xmin, ymin, zmin), s);
     bse.setPosition(glm::vec3(xmax, ymin, zmin), s);
 
-    top_northeast = new Octree(tne, capacity);
-    top_northwest = new Octree(tnw, capacity);
-    top_southwest = new Octree(tsw, capacity);
-    top_southeast = new Octree(tse, capacity);
+    pChild[(int)CHILDOCTREE::top_northeast] = new Octree(tne, capacity, this, deep + 1);
+    pChild[(int)CHILDOCTREE::top_northwest] = new Octree(tnw, capacity, this, deep + 1);
+    pChild[(int)CHILDOCTREE::top_southwest] = new Octree(tsw, capacity, this, deep + 1);
+    pChild[(int)CHILDOCTREE::top_southeast] = new Octree(tse, capacity, this, deep + 1);
 
-    botton_northeast = new Octree(bne, capacity);
-    botton_northwest = new Octree(bnw, capacity);
-    botton_southwest = new Octree(bsw, capacity);
-    botton_southeast = new Octree(bse, capacity);
+    pChild[(int)CHILDOCTREE::botton_northeast] = new Octree(bne, capacity, this, deep + 1);
+    pChild[(int)CHILDOCTREE::botton_northwest] = new Octree(bnw, capacity, this, deep + 1);
+    pChild[(int)CHILDOCTREE::botton_southwest] = new Octree(bsw, capacity, this, deep + 1);
+    pChild[(int)CHILDOCTREE::botton_southeast] = new Octree(bse, capacity, this, deep + 1);
 
     divided = true;
 }
@@ -102,56 +75,28 @@ bool Octree::insert(const glm::vec3& _point) {
     if (divided == false)
         subdivide();
 
-    if (top_northeast->insert(_point))
-        return true;
-
-    if (top_northwest->insert(_point))
-        return true;
-
-    if (top_southeast->insert(_point))
-        return true;
-
-    if (top_southwest->insert(_point))
-        return true;
-
-    if (botton_northeast->insert(_point))
-        return true;
-
-    if (botton_northwest->insert(_point))
-        return true;
-
-    if (botton_southeast->insert(_point))
-        return true;
-
-    if (botton_southwest->insert(_point))
-        return true;
+    for (short i = 0; i < 8; i++) {
+        if (pChild[i]->insert(_point))
+            return true;
+    }
 
     return false;
 }
 
 void Octree::query(const AABB& _aabb, std::vector<glm::vec3>& _found) { // std::vector<glm::vec3> points
-
     // if not _found:
     //     _found = []
-
     if (boundary.intersects(_aabb) == false)
         return;
-    else {
-        for (auto p : points) {
-            if (_aabb.contains(p) == true)
-                _found.push_back(p);
-        }
 
-        if (divided == true) {
-            top_northwest->query(_aabb, _found);
-            top_northeast->query(_aabb, _found);
-            top_southwest->query(_aabb, _found);
-            top_southeast->query(_aabb, _found);
-            botton_northwest->query(_aabb, _found);
-            botton_northeast->query(_aabb, _found);
-            botton_southwest->query(_aabb, _found);
-            botton_southeast->query(_aabb, _found);
-        }
+    for (auto p : points) {
+        if (_aabb.contains(p) == true)
+            _found.push_back(p);
+    }
+
+    if (divided == true) {
+        for (short i = 0; i < 8; i++)
+            pChild[i]->query(_aabb, _found);
     }
     // return _found;
 }

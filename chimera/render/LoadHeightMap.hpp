@@ -17,6 +17,7 @@ class LoadHeightMap {
     inline void setMaxHeight(float _maxHeight) { maxHeight = _maxHeight; }
 
   private:
+    void split(MeshData& _mesh);
     inline unsigned int getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }
     float getHeight(int w, int h);
     Uint32 getpixel(const unsigned int& w, const unsigned int& h);

@@ -14,7 +14,7 @@ void HeightMap::split(MeshData& _mesh) {
     int totalHeight = (height - 1) * 2; // 14
     int totalWidth = (width - 1) * 2;   // 14
 
-    int squareHeight = squareZ * 2;
+    int squareHeight = squareZ; // * 2;
     int squareWidth = squareX * 2;
 
     int startHeight = 0;
@@ -27,6 +27,8 @@ void HeightMap::split(MeshData& _mesh) {
 
     while (!done) {
 
+        int contador = 0;
+
         int endHeight = startHeight + squareHeight;
         int endWidth = startWidth + squareWidth;
 
@@ -35,18 +37,25 @@ void HeightMap::split(MeshData& _mesh) {
         for (int h = startHeight; h < endHeight; h++) {   // z
             for (int w = startWidth; w < endWidth; w++) { // x
 
-                if ((w == totalWidth) || (h == totalHeight))
+                if ((w == totalWidth) || (h == totalHeight)) // ?? contador++
                     continue;
 
                 int indexA = (h * totalHeight) + w;
-                int indexT = indexTriangles[index];
+                unsigned indexT = indexTriangles[indexA];
+                Triangle t = triangles[indexT];
 
-                pNode->triangles.push_back(indexT);
+                pNode->triangles.push_back(t);
+                contador++;
             }
         }
 
-        startHeight = endHeight;
-        startWidth = endWidth;
+        if (contador > totalHeight) {
+            startHeight = endHeight;
+            contador = 0;
+            startWidth = 0;
+        } else {
+            startWidth = endWidth;
+        }
 
         vNodes.push_back(pNode);
 

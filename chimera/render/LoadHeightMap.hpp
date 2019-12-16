@@ -14,13 +14,15 @@ class LoadHeightMap {
     void clean();
 
     bool getMesh(const std::string& _fileName, MeshData& _mesh);
+
     inline void setMaxHeight(float _maxHeight) { maxHeight = _maxHeight; }
+    inline int getHeight() { return pImage->h; }
+    inline int getWidth() { return pImage->w; }
 
   private:
-    void split(MeshData& _mesh);
-    inline unsigned int getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }
+    inline unsigned getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }
     float getHeight(int w, int h);
-    Uint32 getpixel(const unsigned int& w, const unsigned int& h);
+    Uint32 getpixel(const unsigned& w, const unsigned& h);
 
     SDL_Surface* pImage;
     float maxHeight;

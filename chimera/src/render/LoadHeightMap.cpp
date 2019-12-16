@@ -17,14 +17,14 @@ void LoadHeightMap::clean() {
 
 float LoadHeightMap::getHeight(int w, int h) {
 
-    unsigned int w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
-    unsigned int h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
+    unsigned w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
+    unsigned h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
 
     Uint32 pixelData = getpixel(w1, h1);
     return (float)(pixelData / maxHeight);
 }
 
-Uint32 LoadHeightMap::getpixel(const unsigned int& w, const unsigned int& h) {
+Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
     int bpp = pImage->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */
     Uint8* p = (Uint8*)pImage->pixels + h * pImage->pitch + w * bpp;
@@ -128,57 +128,6 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh) {
     _mesh.debugDados(true);
     _mesh.setOneIndex(true);
 
-    split(_mesh);
-
     return true;
 }
-
-void LoadHeightMap::chunkSquare(std::vector<Triangle>& _tris) {}
-
-void LoadHeightMap::split(MeshData& _mesh) {
-
-    std::vector<Triangle> tris;
-
-    unsigned int tot_z = 14; // (pImage->h -1) * 2;
-    unsigned int tot_x = 14; // (pImage->w -1) * 2;
-
-    unsigned int max_z = 2;
-    unsigned int max_x = 2;
-
-    _mesh.toTriangle(tris);
-
-    int sz = 0;
-    int sx = 0;
-    bool done = false;
-
-    while (!done) {
-
-        int fz = sz + max_z;
-        int fx = sx + max_x;
-
-        // TODO: novo chunk com aabb e lista de tris
-
-        for (int z = sz; z < fz; z++;) {
-            for (int x = sx; x < fx; x++;) {
-
-                if ((x == tot_x) || (z == tot_z))
-                    continue;
-
-                int indice = (z * tot_z) + x;
-
-                Triangle t = tris[indice];
-                // TODO: adiciona t ao chunk
-            }
-        }
-
-        // int tot_h = pImage->h - 1;
-        // int tot_w = pImage->w - 1;
-        // for (int z = 0; z < tot_h; z++) {
-        //     for (int x = 0; x < tot_w; x++) {}
-        // }
-
-        done = (x >= tot_x) && (z >= tot_z);
-    }
-}
-
 } // namespace Chimera

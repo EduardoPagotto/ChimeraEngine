@@ -16,6 +16,7 @@ set (RenderSource 	Triangle.cpp
 					Octree.cpp
 					BSPTree.cpp
 					LoadHeightMap.cpp
+					HeightMap.cpp
 					LoadObj.cpp
 					Light.cpp
 					Material.cpp

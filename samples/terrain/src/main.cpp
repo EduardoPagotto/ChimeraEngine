@@ -9,6 +9,7 @@
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
+#include "chimera/render/HeightMap.hpp"
 #include "chimera/render/LoadHeightMap.hpp"
 //#include "chimera/render/LoadObj.hpp"
 
@@ -62,7 +63,8 @@ int main(int argn, char** argv) {
         LoadHeightMap* pHeight = new LoadHeightMap();
         pHeight->getMesh("./data/terrain/heightmap_8x8.png", pMesh->meshData);
 
-        delete pHeight;
+        HeightMap* pHM = new HeightMap(pHeight->getWidth(), pHeight->getHeight(), 2, 2);
+        pHM->split(pMesh->meshData);
 
         pMesh->meshData.changeSize(100.0, pMat1->hasTexture());
 

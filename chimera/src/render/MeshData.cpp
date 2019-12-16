@@ -127,6 +127,26 @@ void MeshData::_toTriangleOneIndex(std::vector<Triangle>& vecTriangle) {
         vecTriangle.push_back(t);
         // t.debugData();
     }
+
+    normalIndex.clear();
+    for (int i = 0; i < vertexIndex.size(); i += 3) {
+        int index = vertexIndex[i];
+        normalIndex.push_back(index);
+    }
+
+    vertexIndex.clear();
+    for (int i = 0; i < normalIndex.size(); i++) {
+        int index = normalIndex[i];
+        vertexIndex.push_back(index);
+    }
+
+    if (uvIndex.size() > 0) {
+        uvIndex.clear();
+        for (int i = 0; i < normalIndex.size(); i++) {
+            int index = normalIndex[i];
+            uvIndex.push_back(index);
+        }
+    }
 }
 
 void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle) {

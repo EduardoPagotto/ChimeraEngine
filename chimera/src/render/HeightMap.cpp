@@ -11,42 +11,41 @@ void HeightMap::chunkSquare(std::vector<Triangle>& _tris) {}
 
 void HeightMap::split(MeshData& _mesh) {
 
-    std::vector<Triangle> tris;
-
     int tot_z = (height - 1) * 2; // 14
     int tot_x = (width - 1) * 2;  // 14
 
-    // int squareZ = 2;
-    // int squareX = 2;
-
-    _mesh.toTriangle(tris);
+    int squareZT = squareZ * 6;
+    int squareXT = squareX * 6;
 
     int sz = 0;
     int sx = 0;
     bool done = false;
 
+    std::vector<glm::vec3> vertexList = _mesh.getVertexList();
     std::vector<unsigned int> vertexIndex = _mesh.getVertexIndex();
 
     while (!done) {
 
-        int fz = sz + squareZ;
-        int fx = sx + squareX;
+        int fz = sz + squareZT;
+        int fx = sx + squareXT;
 
         NodeHeightMap* pNode = new NodeHeightMap;
 
         for (int z = sz; z < fz; z++) {
             for (int x = sx; x < fx; x++) {
 
-                if ((x == tot_x) || (z == tot_z))
-                    continue;
+                // if ((x == tot_x) || (z == tot_z))
+                //     continue;
 
                 int indiceT = (z * tot_z) + x;
                 int index = vertexIndex[indiceT];
-
-                Triangle t = tris[index];
-                pNode->tris.push_back(t);
+                pNode->mesh.addVertexIndex(index);
+                pNode->mesh.addVertex(vertexList[index]);
             }
         }
+
+        sz = fz;
+        sx = fx;
 
         vNodes.push_back(pNode);
 

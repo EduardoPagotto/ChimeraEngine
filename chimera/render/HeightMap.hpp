@@ -8,9 +8,8 @@ namespace Chimera {
 
 struct NodeHeightMap {
     AABB aabb;
-    MeshData mesh;
-    // std::vector<glm::> vertex;
-    // std::vector<unsigned int> index;
+    std::vector<Triangle> triangles;
+    std::vector<unsigned int> index;
 };
 
 class HeightMap {

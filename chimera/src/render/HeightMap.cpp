@@ -11,45 +11,46 @@ void HeightMap::chunkSquare(std::vector<Triangle>& _tris) {}
 
 void HeightMap::split(MeshData& _mesh) {
 
-    int tot_z = (height - 1) * 2; // 14
-    int tot_x = (width - 1) * 2;  // 14
+    int totalHeight = (height - 1) * 2; // 14
+    int totalWidth = (width - 1) * 2;   // 14
 
-    int squareZT = squareZ * 6;
-    int squareXT = squareX * 6;
+    int squareHeight = squareZ * 2;
+    int squareWidth = squareX * 2;
 
-    int sz = 0;
-    int sx = 0;
+    int startHeight = 0;
+    int startWidth = 0;
     bool done = false;
 
-    std::vector<glm::vec3> vertexList = _mesh.getVertexList();
-    std::vector<unsigned int> vertexIndex = _mesh.getVertexIndex();
+    std::vector<Triangle> triangles;
+    _mesh.toTriangle(triangles);
+    std::vector<unsigned int> indexTriangles = _mesh.getVertexIndex();
 
     while (!done) {
 
-        int fz = sz + squareZT;
-        int fx = sx + squareXT;
+        int endHeight = startHeight + squareHeight;
+        int endWidth = startWidth + squareWidth;
 
         NodeHeightMap* pNode = new NodeHeightMap;
 
-        for (int z = sz; z < fz; z++) {
-            for (int x = sx; x < fx; x++) {
+        for (int h = startHeight; h < endHeight; h++) {   // z
+            for (int w = startWidth; w < endWidth; w++) { // x
 
-                // if ((x == tot_x) || (z == tot_z))
-                //     continue;
+                if ((w == totalWidth) || (h == totalHeight))
+                    continue;
 
-                int indiceT = (z * tot_z) + x;
-                int index = vertexIndex[indiceT];
-                pNode->mesh.addVertexIndex(index);
-                pNode->mesh.addVertex(vertexList[index]);
+                int indexA = (h * totalHeight) + w;
+                int indexT = indexTriangles[index];
+
+                pNode->triangles.push_back(indexT);
             }
         }
 
-        sz = fz;
-        sx = fx;
+        startHeight = endHeight;
+        startWidth = endWidth;
 
         vNodes.push_back(pNode);
 
-        done = (fx >= tot_x) && (fz >= tot_z);
+        done = (endWidth >= totalWidth) && (endHeight >= totalHeight);
     }
 }
 

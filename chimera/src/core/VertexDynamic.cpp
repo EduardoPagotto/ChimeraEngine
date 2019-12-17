@@ -7,13 +7,13 @@ namespace Chimera {
 VertexRenderDynamic::VertexRenderDynamic() {}
 
 VertexRenderDynamic::~VertexRenderDynamic() {
-    // FIXME: remover da memoria o VAO/VBO
+    // FIXME: remover da memoria o vao/vbo
 }
 
 void VertexRenderDynamic::render(std::vector<VertexData>& vVertice) {
 
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     int tot = vVertice.size() * sizeof(Chimera::VertexData);
     // glBufferData(GL_ARRAY_BUFFER, 5000, nullptr, GL_STREAM_DRAW);
@@ -31,12 +31,11 @@ void VertexRenderDynamic::create(const unsigned int& max) {
     // http://www.songho.ca/opengl/gl_vbo.html#create
     // https://www.khronos.org/opengl/wiki/Vertex_Rendering
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, max, nullptr, GL_STREAM_DRAW);
 
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);

@@ -51,17 +51,17 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
 }
 
 VertexRenderStatic::VertexRenderStatic() {
-    VertexVBOID = 0;
-    IndexVBOID = 0;
-    VAO = 0;
+    vbo = 0;
+    ibo = 0;
+    vao = 0;
 }
 VertexRenderStatic::~VertexRenderStatic() {
-    glDeleteBuffers(1, &VertexVBOID);
-    glDeleteBuffers(1, &IndexVBOID);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ibo);
 }
 
 void VertexRenderStatic::render() {
-    glBindVertexArray(VAO);
+    glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
     glBindVertexArray(0);
 }
@@ -78,24 +78,24 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
     unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
+    // cria o vao
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
     // Buffer de vertice
-    glGenBuffers(1, &VertexVBOID);
-    glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // Buffer de indice
-    glGenBuffers(1, &IndexVBOID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    // cria o VAO
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    // vincula VBO
-    glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
+    // vincula vbo
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     // Vertice
     GLuint positionID = 0; // glGetAttribLocation(shader.getIdProgram(), "position");
@@ -112,8 +112,8 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
     glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));
     glEnableVertexAttribArray(uvID);
 
-    // vincula IBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
+    // vincula ibo
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
     // limpa dados
     glBindBuffer(GL_ARRAY_BUFFER, 0);

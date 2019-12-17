@@ -14,9 +14,9 @@ class VertexRenderStatic {
     void render();
 
   private:
-    unsigned int VAO;
-    unsigned int VertexVBOID;
-    unsigned int IndexVBOID;
+    unsigned int vao;
+    unsigned int vbo;
+    unsigned int ibo;
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
 };

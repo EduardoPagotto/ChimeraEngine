@@ -14,7 +14,7 @@ class VertexRenderDynamic {
     void render(std::vector<VertexData>& vVertice);
 
   private:
-    unsigned int VBO, VAO;
+    unsigned int vbo, vao;
 };
 } // namespace Chimera
 #endif

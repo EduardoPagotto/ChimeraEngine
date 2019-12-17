@@ -28,7 +28,7 @@ void HeightMap::split(MeshData& _mesh) {
     std::vector<unsigned int> indexTriangles = _mesh.getVertexIndex();
 
     int contador = 0;
-    int thresholdWidht = totalHeight * squareX;
+    int thresholdWidht = totalHeight * squareZ;
 
     while (!done) {
 
@@ -70,6 +70,14 @@ void HeightMap::split(MeshData& _mesh) {
             startWidth = 0;
         } else {
             startWidth = endWidth;
+        }
+
+        if (pNode->index.size() == 0) {
+            delete pNode;
+            pNode = nullptr;
+            done = true;
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "shit!!!");
+            continue;
         }
 
         vNodes.push_back(pNode);

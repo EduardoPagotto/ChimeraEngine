@@ -128,16 +128,12 @@ void MeshData::_toTriangleOneIndex(std::vector<Triangle>& vecTriangle, std::vect
         // t.debugData();
     }
 
-    for (unsigned int i = 0; i < vertexIndex.size(); i += 3) {
-        unsigned int v = vertexIndex[i];
-        _index.push_back(v);
-    }
+    faceIndex(_index);
 }
 
 void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
 
     unsigned int B, C;
-
     // Load vertex, normal and texture of triangles A,B,C
     for (unsigned int A = 0; A < vertexIndex.size(); A += 3) {
         B = A + 1;
@@ -162,6 +158,13 @@ void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle, std::v
         vecTriangle.push_back(t);
         _index.push_back(A);
         // t.debugData();
+    }
+}
+
+void MeshData::faceIndex(std::vector<unsigned int>& _index) {
+    for (unsigned int i = 0; i < vertexIndex.size(); i += 3) {
+        unsigned int v = vertexIndex[i];
+        _index.push_back(v);
     }
 }
 

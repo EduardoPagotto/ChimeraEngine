@@ -30,6 +30,8 @@ class MeshData {
     inline std::vector<unsigned int> getVertexIndex() { return vertexIndex; }
     inline std::vector<glm::vec3> getVertexList() { return vertexList; }
 
+    void faceIndex(std::vector<unsigned int>& _index);
+
   private:
     void _toVertexDataNotOneIndex(std::vector<VertexData>& outData);
     void _toVertexDataOneIndex(std::vector<VertexData>& outData);

@@ -9,8 +9,6 @@ HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
 
 HeightMap::~HeightMap() {}
 
-void HeightMap::chunkSquare(std::vector<Triangle>& _tris) {}
-
 void HeightMap::split(MeshData& _mesh) {
 
     int totalHeight = (height - 1) * 2; // 14
@@ -23,9 +21,8 @@ void HeightMap::split(MeshData& _mesh) {
     int startWidth = 0;
     bool done = false;
 
-    std::vector<Triangle> triangles;
     std::vector<unsigned int> indexTriangles;
-    _mesh.toTriangle(triangles, indexTriangles);
+    _mesh.faceIndex(indexTriangles);
 
     int contador = 0;
     int thresholdWidht = totalHeight * squareZ;
@@ -52,14 +49,8 @@ void HeightMap::split(MeshData& _mesh) {
 
         for (int h = startHeight; h < endHeight; h++) {   // z
             for (int w = startWidth; w < endWidth; w++) { // x
-
-                int indexA = (h * totalHeight) + w;
-                unsigned indexT = indexTriangles[indexA];
-                Triangle t = triangles[indexT];
-
-                pNode->triangles.push_back(t);
+                unsigned int indexA = (h * totalHeight) + w;
                 pNode->index.push_back(indexA);
-
                 contador++;
             }
         }
@@ -83,9 +74,9 @@ void HeightMap::split(MeshData& _mesh) {
         vNodes.push_back(pNode);
 
         std::string val = "Index :";
-        for (int i = 0; i < pNode->index.size(); i++) {
+        for (int i = 0; i < pNode->index.size(); i++)
             val.append(" " + std::to_string(pNode->index[i]));
-        }
+
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "%s", val.c_str());
     }
 }

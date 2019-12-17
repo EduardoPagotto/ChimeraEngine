@@ -18,7 +18,6 @@ class HeightMap {
     ~HeightMap();
 
     void split(MeshData& _mesh);
-    void chunkSquare(std::vector<Triangle>& _tris);
 
   private:
     std::vector<NodeHeightMap*> vNodes;

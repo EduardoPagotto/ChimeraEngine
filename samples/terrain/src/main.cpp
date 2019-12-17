@@ -63,7 +63,7 @@ int main(int argn, char** argv) {
         LoadHeightMap* pHeight = new LoadHeightMap();
         pHeight->getMesh("./data/terrain/heightmap_8x8.png", pMesh->meshData);
 
-        HeightMap* pHM = new HeightMap(pHeight->getWidth(), pHeight->getHeight(), 4, 4);
+        HeightMap* pHM = new HeightMap(pHeight->getWidth(), pHeight->getHeight(), 2, 2);
         pHM->split(pMesh->meshData);
 
         pMesh->meshData.changeSize(100.0, pMat1->hasTexture());

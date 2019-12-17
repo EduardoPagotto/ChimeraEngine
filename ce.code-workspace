@@ -2,9 +2,6 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "/home/pagotto/Projetos/testes/terrain_bsp_tree_frustum_culling_sorting_shadow_mapping"
 		}
 	],
 	"settings": {

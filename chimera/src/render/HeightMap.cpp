@@ -1,4 +1,6 @@
 #include "chimera/render/HeightMap.hpp"
+#include <SDL2/SDL.h>
+#include <string>
 
 namespace Chimera {
 
@@ -25,31 +27,44 @@ void HeightMap::split(MeshData& _mesh) {
     _mesh.toTriangle(triangles);
     std::vector<unsigned int> indexTriangles = _mesh.getVertexIndex();
 
-    while (!done) {
+    int contador = 0;
+    int thresholdWidht = totalHeight * squareX;
 
-        int contador = 0;
+    while (!done) {
 
         int endHeight = startHeight + squareHeight;
         int endWidth = startWidth + squareWidth;
+
+        int testeA = startHeight * totalHeight + startWidth;
+        int testeB = indexTriangles.size();
+        if (testeA >= testeB) {
+            done = true;
+            continue;
+        }
+
+        if (endHeight > (height - 1))
+            endHeight = (height - 1);
+
+        if (endWidth > totalWidth)
+            endWidth = totalWidth;
 
         NodeHeightMap* pNode = new NodeHeightMap;
 
         for (int h = startHeight; h < endHeight; h++) {   // z
             for (int w = startWidth; w < endWidth; w++) { // x
 
-                if ((w == totalWidth) || (h == totalHeight)) // ?? contador++
-                    continue;
-
                 int indexA = (h * totalHeight) + w;
                 unsigned indexT = indexTriangles[indexA];
                 Triangle t = triangles[indexT];
 
                 pNode->triangles.push_back(t);
+                pNode->index.push_back(indexA);
+
                 contador++;
             }
         }
 
-        if (contador > totalHeight) {
+        if (contador >= thresholdWidht) {
             startHeight = endHeight;
             contador = 0;
             startWidth = 0;
@@ -59,7 +74,11 @@ void HeightMap::split(MeshData& _mesh) {
 
         vNodes.push_back(pNode);
 
-        done = (endWidth >= totalWidth) && (endHeight >= totalHeight);
+        std::string val = "Index :";
+        for (int i = 0; i < pNode->index.size(); i++) {
+            val.append(" " + std::to_string(pNode->index[i]));
+        }
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "%s", val.c_str());
     }
 }
 

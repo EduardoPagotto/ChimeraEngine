@@ -7,8 +7,8 @@
 namespace Chimera {
 
 struct NodeHeightMap {
+    int IndexBufferObject;
     AABB aabb;
-    std::vector<Triangle> triangles;
     std::vector<unsigned int> index;
 };
 
@@ -20,6 +20,7 @@ class HeightMap {
     void split(MeshData& _mesh);
 
   private:
+    void initAABB(MeshData& _mesh);
     std::vector<NodeHeightMap*> vNodes;
 
     int width;

@@ -9,6 +9,63 @@ HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
 
 HeightMap::~HeightMap() {}
 
+// void HeightMap::InitIndexBufferObject() {
+
+// 		glGenBuffers(1, &IndexBufferObject);
+// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBufferObject);
+// 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, IndicesCount * sizeof(int), Indices, GL_STATIC_DRAW);
+// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+// 		// delete [] Indices;
+// 		// Indices = NULL;
+// 		// GeometryNodesCount++;
+
+// }
+
+void HeightMap::initAABB(MeshData& _mesh) {
+
+    std::vector<unsigned int> index = _mesh.getVertexIndex();
+    std::vector<glm::vec3> vl = _mesh.getVertexList();
+
+    for (NodeHeightMap* pNode : vNodes) {
+
+        std::vector<glm::vec3> vlt;
+
+        for (unsigned int indexFace : pNode->index) {
+
+            unsigned int A = indexFace * 3;
+            unsigned int B = A + 1;
+            unsigned int C = A + 2;
+
+            unsigned int iA = index[A];
+            unsigned int iB = index[B];
+            unsigned int iC = index[C];
+
+            glm::vec3 pA = vl[iA];
+            glm::vec3 pB = vl[iB];
+            glm::vec3 pC = vl[iC];
+
+            vlt.push_back(pA);
+            vlt.push_back(pB);
+            vlt.push_back(pC);
+        }
+
+        glm::vec3 min, max;
+        if (vlt.size() > 0) {
+            min = vlt[0];
+            max = vlt[0];
+        }
+
+        for (unsigned int i = 1; i < vlt.size(); i++) {
+            min = glm::min(min, vlt[i]);
+            max = glm::max(max, vlt[i]);
+        }
+
+        pNode->aabb.setBoundary(min, max);
+
+        vlt.clear();
+    }
+}
+
 void HeightMap::split(MeshData& _mesh) {
 
     int totalHeight = (height - 1) * 2; // 14
@@ -79,6 +136,8 @@ void HeightMap::split(MeshData& _mesh) {
 
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "%s", val.c_str());
     }
+
+    initAABB(_mesh);
 }
 
 } // namespace Chimera

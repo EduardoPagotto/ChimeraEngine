@@ -4,10 +4,17 @@
 
 namespace Chimera {
 
-VertexRenderDynamic::VertexRenderDynamic() {}
+VertexRenderDynamic::VertexRenderDynamic() {
+    vao = 0;
+    vbo = 0;
+}
 
 VertexRenderDynamic::~VertexRenderDynamic() {
-    // FIXME: remover da memoria o vao/vbo
+    if (vao > 0)
+        glDeleteVertexArrays(1, &vao);
+
+    if (vbo > 0)
+        glDeleteBuffers(1, &vbo);
 }
 
 void VertexRenderDynamic::render(std::vector<VertexData>& vVertice) {

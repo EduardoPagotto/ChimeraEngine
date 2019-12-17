@@ -56,8 +56,21 @@ VertexRenderStatic::VertexRenderStatic() {
     vao = 0;
 }
 VertexRenderStatic::~VertexRenderStatic() {
-    glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ibo);
+
+    if (vertexData.size() > 0)
+        vertexData.clear();
+
+    if (indexIBO.size() > 0)
+        indexIBO.clear();
+
+    if (vao > 0)
+        glDeleteVertexArrays(1, &vao);
+
+    if (vbo > 0)
+        glDeleteBuffers(1, &vbo);
+
+    if (ibo > 0)
+        glDeleteBuffers(1, &ibo);
 }
 
 void VertexRenderStatic::render() {

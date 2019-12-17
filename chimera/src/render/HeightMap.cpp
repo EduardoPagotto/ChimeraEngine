@@ -24,8 +24,8 @@ void HeightMap::split(MeshData& _mesh) {
     bool done = false;
 
     std::vector<Triangle> triangles;
-    _mesh.toTriangle(triangles);
-    std::vector<unsigned int> indexTriangles = _mesh.getVertexIndex();
+    std::vector<unsigned int> indexTriangles;
+    _mesh.toTriangle(triangles, indexTriangles);
 
     int contador = 0;
     int thresholdWidht = totalHeight * squareZ;

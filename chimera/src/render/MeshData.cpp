@@ -53,11 +53,11 @@ void MeshData::toVertexData(std::vector<VertexData>& outData) {
         _toVertexDataOneIndex(outData);
 }
 
-void MeshData::toTriangle(std::vector<Triangle>& vecTriangle) {
+void MeshData::toTriangle(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
     if (oneIndex == false)
-        _toTriangleNotOneIndex(vecTriangle);
+        _toTriangleNotOneIndex(vecTriangle, _index);
     else
-        _toTriangleOneIndex(vecTriangle);
+        _toTriangleOneIndex(vecTriangle, _index);
 }
 
 void MeshData::_toVertexDataNotOneIndex(std::vector<VertexData>& outData) {
@@ -99,7 +99,7 @@ void MeshData::_toVertexDataOneIndex(std::vector<VertexData>& outData) {
     }
 }
 
-void MeshData::_toTriangleOneIndex(std::vector<Triangle>& vecTriangle) {
+void MeshData::_toTriangleOneIndex(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
 
     unsigned int B, C;
 
@@ -128,28 +128,13 @@ void MeshData::_toTriangleOneIndex(std::vector<Triangle>& vecTriangle) {
         // t.debugData();
     }
 
-    normalIndex.clear();
-    for (int i = 0; i < vertexIndex.size(); i += 3) {
-        int index = vertexIndex[i];
-        normalIndex.push_back(index);
-    }
-
-    vertexIndex.clear();
-    for (int i = 0; i < normalIndex.size(); i++) {
-        int index = normalIndex[i];
-        vertexIndex.push_back(index);
-    }
-
-    if (uvIndex.size() > 0) {
-        uvIndex.clear();
-        for (int i = 0; i < normalIndex.size(); i++) {
-            int index = normalIndex[i];
-            uvIndex.push_back(index);
-        }
+    for (unsigned int i = 0; i < vertexIndex.size(); i += 3) {
+        unsigned int v = vertexIndex[i];
+        _index.push_back(v);
     }
 }
 
-void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle) {
+void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
 
     unsigned int B, C;
 
@@ -175,6 +160,7 @@ void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle) {
         }
 
         vecTriangle.push_back(t);
+        _index.push_back(A);
         // t.debugData();
     }
 }

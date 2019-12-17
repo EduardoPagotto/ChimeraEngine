@@ -93,7 +93,10 @@ void Game::start() {
 
     m.changeSize(30.0, true);
 
-    m.toTriangle(listPolygons);
+    std::vector<unsigned int> indexTriangles;
+    m.toTriangle(listPolygons, indexTriangles);
+    indexTriangles.clear(); // is sequential, not used here
+
     std::reverse(listPolygons.begin(), listPolygons.end());
 
     // Cria o BSP

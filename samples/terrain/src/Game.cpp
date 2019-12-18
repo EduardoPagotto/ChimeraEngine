@@ -1,52 +1,43 @@
 #include "Game.hpp"
-#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/TrackHead.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/node/NodeCamera.hpp"
-#include "chimera/node/NodeMesh.hpp"
-#include "chimera/node/VisitParser.hpp"
+#include "chimera/render/HeightMap.hpp"
+#include "chimera/render/LoadHeightMap.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot), isPaused(false) {}
+Game::Game() {
+    isPaused = false;
+    debugParser = false;
 
-Game::~Game() {}
+    projection = glm::mat4(1.0f);
+    view = glm::mat4(1.0f);
+    model = glm::mat4(1.0f);
+
+    pCanvas = new Chimera::CanvasGL("Chimera", 640, 480);
+
+    pShader = new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
+                                                                     "./chimera/shaders/MeshNoMat.frag"));
+
+    // pTex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png");
+
+    Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
+    pVp->position = glm::vec3(0.0, 0.0, 600.0);
+    pVp->front = glm::vec3(0.0, 0.0, 0.0);
+    pVp->up = glm::vec3(0.0, 1.0, 0.0);
+    trackBall.init(pVp);
+    trackBall.setMax(1000.0);
+}
+
+Game::~Game() {
+    delete pShader;
+    delete pCanvas;
+}
 
 void Game::joystickCapture(Chimera::JoystickManager& joy) {}
 
-void Game::joystickStatus(Chimera::JoystickManager& joy) {
-
-    using namespace Chimera;
-    // Captura joystick 0 se existir
-    JoystickState* joystick = joy.getJoystickState(0);
-    if (joystick != nullptr) {
-
-        float deadZone = 0.5f;
-        float propulsaoPrincipal = 3.0f;
-        float propulsaoFrontal = 1.0f;
-
-        float yaw = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_X, deadZone);
-        float pitch = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_Y, deadZone);
-        float roll = joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_X, deadZone);
-
-        double throttle = -propulsaoPrincipal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
-        throttle =
-            throttle - (-propulsaoFrontal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
-
-        if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {}
-        if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {}
-
-        int val = joystick->Hat(0);
-        if (val & (uint8_t)JOY_PAD_COD::UP) {}
-        if (val & (uint8_t)JOY_PAD_COD::DOWN) {}
-        if (val & (uint8_t)JOY_PAD_COD::RIGHT) {}
-        if (val & (uint8_t)JOY_PAD_COD::LEFT) {}
-        if ((roll != 0.0) || (pitch != 0.0) || (yaw != 0.0) || (throttle != 0.0)) {}
-    }
-}
+void Game::joystickStatus(Chimera::JoystickManager& joy) {}
 
 void Game::keyCapture(SDL_Keycode tecla) {
-
-    Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 
     switch (tecla) {
         case SDLK_ESCAPE:
@@ -56,13 +47,9 @@ void Game::keyCapture(SDL_Keycode tecla) {
                 throw Chimera::Exception(std::string(SDL_GetError()));
             }
             break;
-        case SDLK_a:
-            pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::LEFT, 10);
+        case SDLK_1:
+            debugParser = true;
             break;
-        case SDLK_d:
-            pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::RIGHT, 10);
-            break;
-
         case SDLK_F10:
             Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
@@ -83,14 +70,11 @@ void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
 
 void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 
-    Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
-
     if (estadoBotao == SDL_PRESSED) {
-        if (botaoIndex == 1) {
-            pCamZ->getTrackBall()->tracking(mm.xrel, mm.yrel);
-        } else if (botaoIndex == 3) {
-            pCamZ->getTrackBall()->offSet(mm.yrel);
-        }
+        if (botaoIndex == 1)
+            trackBall.tracking(mm.xrel, mm.yrel);
+        else if (botaoIndex == 2)
+            trackBall.offSet(mm.yrel);
     }
 }
 
@@ -98,13 +82,34 @@ void Game::start() {
 
     pCanvas->initGL();
 
-    pRoot->initializeChilds();
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_NORMALIZE);
+    glShadeModel(GL_SMOOTH);
 
-    pCanvas->afterStart();
+    // pTex->init();
 
-    Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)pRoot->findChild("terra", true);
-    renderV.pTransform = pMesh->getTransform();
-    renderV.pVideo = pCanvas;
+    Chimera::MeshData m;
+    // std::vector<Chimera::Triangle> listPolygons;
+
+    // Chimera::LoaderObj loader;
+    // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
+    Chimera::LoadHeightMap loader;
+    loader.getMesh("./data/terrain/heightmap_8x8.png", m);
+
+    Chimera::HeightMap* pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 2, 2);
+    pHeightMap->split(m);
+
+    // m.changeSize(30.0, true);
+
+    // std::vector<unsigned int> indexTriangles;
+    // m.toTriangle(listPolygons, indexTriangles);
+    // indexTriangles.clear(); // is sequential, not used here
+
+    // std::reverse(listPolygons.begin(), listPolygons.end());
+
+    // Cria o BSP
+    // pBSPTRoot = bsptreeBuild(&listPolygons);
+    // vertexBuffer.create(5000);
 }
 
 void Game::stop() {}
@@ -129,23 +134,40 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
         case SDL_WINDOWEVENT_RESIZED:
             pCanvas->reshape(_event.data1, _event.data2);
             break;
-        default:
-            break;
     }
 }
 
 bool Game::paused() { return isPaused; }
 
 void Game::render() {
-    for (int eye = 0; eye < pCanvas->getTotEyes(); eye++) {
+    pCanvas->before();
 
-        pCanvas->before(eye);
-
-        renderV.eye = eye;
-        Chimera::visitParserTree(pRoot, &renderV); // dfs(root, &rv);//DFS(root);
-
-        pCanvas->after(eye);
+    Chimera::ViewPoint* vp = trackBall.getViewPoint();
+    if (debugParser == true) {
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
+                     vp->position.z);
     }
 
+    // constroi vertex dinamico baseado no viewpoint
+    // std::vector<Chimera::VertexData> vVertice;
+    // bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
+
+    //// debugParser = false;
+
+    pShader->link();
+
+    // Calcula view e projection baseado em vp
+    pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
+
+    pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+    pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+    pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+
+    // aplica a textura
+    // pTex->apply(pShader);
+
+    // vertexBuffer.render(vVertice);
+
+    pCanvas->after();
     pCanvas->swapWindow();
 }

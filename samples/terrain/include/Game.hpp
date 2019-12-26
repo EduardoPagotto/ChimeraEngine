@@ -5,6 +5,9 @@
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
+#include "chimera/core/VertexStatic.hpp"
+#include "chimera/render/Light.hpp"
+#include "chimera/render/Material.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -30,12 +33,17 @@ class Game : public Chimera::IGameClientEvents {
     int botaoIndex;
     int estadoBotao;
     bool debugParser;
+
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;
+
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
+    Chimera::Light* pLight;
+    Chimera::Material* pMaterial;
+    Chimera::VertexRenderStatic renderStat;
 };
 
 #endif

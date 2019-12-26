@@ -18,7 +18,9 @@ Game::Game() {
     pShader = new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
                                                                      "./chimera/shaders/MeshNoMat.frag"));
 
-    // pTex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png");
+    pMaterial = new Chimera::Material();
+    pMaterial->setDefaultEffect();
+    pMaterial->addTexture(new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png"));
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
     pVp->position = glm::vec3(0.0, 0.0, 600.0);
@@ -26,6 +28,12 @@ Game::Game() {
     pVp->up = glm::vec3(0.0, 1.0, 0.0);
     trackBall.init(pVp);
     trackBall.setMax(1000.0);
+
+    // Light
+    pLight = new Chimera::Light();
+    pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    pLight->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+    pLight->setPosition(glm::vec3(80, 100, 150));
 }
 
 Game::~Game() {
@@ -87,6 +95,7 @@ void Game::start() {
     glShadeModel(GL_SMOOTH);
 
     // pTex->init();
+    pMaterial->init();
 
     Chimera::MeshData m;
     // std::vector<Chimera::Triangle> listPolygons;
@@ -98,6 +107,16 @@ void Game::start() {
 
     Chimera::HeightMap* pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 2, 2);
     pHeightMap->split(m);
+
+    std::vector<Chimera::VertexData> vertexDataIn;
+    m.toVertexData(vertexDataIn);
+
+    if (m.getOneIndex() == false) {
+        std::vector<unsigned int> index;
+        renderStat.create(vertexDataIn, index);
+    } else {
+        renderStat.create(vertexDataIn, m.getVertexIndex());
+    }
 
     // m.changeSize(30.0, true);
 
@@ -159,14 +178,27 @@ void Game::render() {
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
+    // pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+    // pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+    // pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+
+    pLight->apply(pShader);
+
+    model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
+    if (pShader == nullptr)
+        return;
+
+    // int shadows = 1;
+    // pShader->setGlUniform1i("shadows", shadows);
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
-    // aplica a textura
-    // pTex->apply(pShader);
+    // aplica material ao shader
+    pMaterial->apply(pShader);
 
     // vertexBuffer.render(vVertice);
+    renderStat.render();
 
     pCanvas->after();
     pCanvas->swapWindow();

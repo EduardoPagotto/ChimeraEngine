@@ -90,9 +90,13 @@ void Game::start() {
 
     pCanvas->initGL();
 
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
+    // whitou the z-buffer
+    // glEnable(GL_COLOR_MATERIAL);
+    // glEnable(GL_NORMALIZE);
+    // glShadeModel(GL_SMOOTH);
+
+    // enable z-buffer here
+    pCanvas->afterStart();
 
     // pTex->init();
     pMaterial->init();
@@ -105,9 +109,12 @@ void Game::start() {
     Chimera::LoadHeightMap loader;
     loader.getMesh("./data/terrain/heightmap_8x8.png", m);
 
+    m.changeSize(100.0f, true);
+
     Chimera::HeightMap* pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 2, 2);
     pHeightMap->split(m);
 
+    // TODO: aqui ele usa o index completo, mudar para o node
     std::vector<Chimera::VertexData> vertexDataIn;
     m.toVertexData(vertexDataIn);
 
@@ -184,7 +191,8 @@ void Game::render() {
 
     pLight->apply(pShader);
 
-    model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
+    model = glm::translate(
+        glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0)); //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
     if (pShader == nullptr)
         return;
 

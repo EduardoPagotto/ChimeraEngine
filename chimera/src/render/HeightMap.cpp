@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-NodeHeightMap::NodeHeightMap() {}
+NodeHeightMap::NodeHeightMap() { indexBufferObject = 0; }
 NodeHeightMap::~NodeHeightMap() {}
 
 void NodeHeightMap::debugDados() {

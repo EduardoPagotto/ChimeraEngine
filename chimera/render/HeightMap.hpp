@@ -17,6 +17,9 @@ class NodeHeightMap {
     void initAABB(std::vector<glm::vec3> _vertexListMesh, std::vector<unsigned int> _vertexIndexMesh);
     void debugDados();
 
+    void render();
+    unsigned int getIndexBufferObject() { return indexBufferObject; }
+
   private:
     unsigned int indexBufferObject;
     AABB aabb;
@@ -29,6 +32,9 @@ class HeightMap {
     ~HeightMap();
     void split(MeshData& _mesh);
 
+    void createVertexBuffer(std::vector<VertexData>& _vertexData);
+    void render();
+
   private:
     std::vector<NodeHeightMap*> vNodes;
 
@@ -36,6 +42,9 @@ class HeightMap {
     int height;
     int squareX;
     int squareZ;
+
+    unsigned int vao;
+    unsigned int vbo;
 };
 
 } // namespace Chimera

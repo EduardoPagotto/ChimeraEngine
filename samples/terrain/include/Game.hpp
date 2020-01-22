@@ -6,6 +6,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/core/VertexStatic.hpp"
+#include "chimera/render/HeightMap.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
 
@@ -44,6 +45,8 @@ class Game : public Chimera::IGameClientEvents {
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;
     Chimera::VertexRenderStatic renderStat;
+
+    Chimera::HeightMap* pHeightMap;
 };
 
 #endif

@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/render/HeightMap.hpp"
 #include "chimera/render/LoadHeightMap.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
@@ -34,6 +33,8 @@ Game::Game() {
     pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     pLight->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
     pLight->setPosition(glm::vec3(80, 100, 150));
+
+    pHeightMap = nullptr;
 }
 
 Game::~Game() {
@@ -111,13 +112,17 @@ void Game::start() {
 
     m.changeSize(80.0f, true);
 
-    Chimera::HeightMap* pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 4, 4);
+    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 4, 4);
     pHeightMap->split(m);
 
     // TODO: aqui ele usa o index completo, mudar para o node
     std::vector<Chimera::VertexData> vertexDataIn;
     m.toVertexData(vertexDataIn);
 
+    // NOVO!!!
+    // pHeightMap->createVertexBuffer(vertexDataIn);
+
+    // OLD!!!!
     if (m.getOneIndex() == false) {
         std::vector<unsigned int> index;
         renderStat.create(vertexDataIn, index);
@@ -205,7 +210,10 @@ void Game::render() {
     // aplica material ao shader
     pMaterial->apply(pShader);
 
-    // vertexBuffer.render(vVertice);
+    // NEW
+    // pHeightMap->render();
+
+    // OLD
     renderStat.render();
 
     pCanvas->after();

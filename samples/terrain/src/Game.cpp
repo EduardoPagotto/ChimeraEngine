@@ -13,7 +13,7 @@ Game::Game() {
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pCanvas = new Chimera::CanvasGL("Chimera", 640, 480);
+    pCanvas = new Chimera::CanvasGL("Chimera", 800, 600);
 
     pShader = new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
                                                                      "./chimera/shaders/MeshNoMat.frag"));
@@ -107,11 +107,11 @@ void Game::start() {
     // Chimera::LoaderObj loader;
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     Chimera::LoadHeightMap loader;
-    loader.getMesh("./data/terrain/heightmap_8x8.png", m);
+    loader.getMesh("./data/terrain/heightmap_16x16.png", m);
 
-    m.changeSize(100.0f, true);
+    m.changeSize(80.0f, true);
 
-    Chimera::HeightMap* pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 2, 2);
+    Chimera::HeightMap* pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 4, 4);
     pHeightMap->split(m);
 
     // TODO: aqui ele usa o index completo, mudar para o node

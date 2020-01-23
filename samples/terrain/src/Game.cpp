@@ -112,7 +112,7 @@ void Game::start() {
 
     m.changeSize(100.0f, true);
 
-    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 4, 4);
+    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 2, 2);
     pHeightMap->split(m);
 
     // TODO: aqui ele usa o index completo, mudar para o node
@@ -120,9 +120,9 @@ void Game::start() {
     m.toVertexData(vertexDataIn);
 
     // so teste
-    std::vector<Chimera::Triangle> vecTriangle;
-    std::vector<unsigned int> index;
-    m.toTriangle(vecTriangle, index);
+    // std::vector<Chimera::Triangle> vecTriangle;
+    // std::vector<unsigned int> index;
+    // m.toTriangle(vecTriangle, index);
 
     // NOVO!!!
     // pHeightMap->createVertexBuffer(vertexDataIn);

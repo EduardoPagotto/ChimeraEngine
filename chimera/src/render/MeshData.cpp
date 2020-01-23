@@ -47,78 +47,32 @@ void MeshData::changeSize(const float& new_size, const bool& hasTexture) {
 }
 
 void MeshData::toVertexData(std::vector<VertexData>& outData) {
-    if (oneIndex == false)
-        _toVertexDataNotOneIndex(outData);
-    else
-        _toVertexDataOneIndex(outData);
+
+    if (oneIndex == false) {
+        if (uvList.size() > 0) {
+            for (unsigned int i = 0; i < vertexIndex.size(); i++) {
+                outData.push_back({vertexList[vertexIndex[i]], normalList[normalIndex[i]], uvList[uvIndex[i]]});
+            }
+        } else {
+            for (unsigned int i = 0; i < vertexIndex.size(); i++) {
+                outData.push_back({vertexList[vertexIndex[i]], normalList[normalIndex[i]], glm::vec2(0.0, 0.0)});
+            }
+        }
+    } else {
+        // vertices podem ser != 3 !!! sequencie!!!
+        if (uvList.size() > 0) {
+            for (unsigned int i = 0; i < vertexList.size(); i++) {
+                outData.push_back({vertexList[i], normalList[i], uvList[i]});
+            }
+        } else {
+            for (unsigned int i = 0; i < vertexList.size(); i++) {
+                outData.push_back({vertexList[i], normalList[i], glm::vec2(0.0, 0.0)});
+            }
+        }
+    }
 }
 
 void MeshData::toTriangle(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
-    if (oneIndex == false)
-        _toTriangleNotOneIndex(vecTriangle, _index);
-    else
-        _toTriangleOneIndex(vecTriangle, _index);
-}
-
-void MeshData::_toVertexDataNotOneIndex(std::vector<VertexData>& outData) {
-    if (uvList.size() > 0) {
-        for (unsigned int i = 0; i < vertexIndex.size(); i++) {
-            outData.push_back({vertexList[vertexIndex[i]], normalList[normalIndex[i]], uvList[uvIndex[i]]});
-        }
-    } else {
-        for (unsigned int i = 0; i < vertexIndex.size(); i++) {
-            outData.push_back({vertexList[vertexIndex[i]], normalList[normalIndex[i]], glm::vec2(0.0, 0.0)});
-        }
-    }
-}
-
-void MeshData::_toVertexDataOneIndex(std::vector<VertexData>& outData) {
-
-    // vertices podem ser != 3 !!! sequencie!!!
-    if (uvList.size() > 0) {
-        for (unsigned int i = 0; i < vertexList.size(); i++) {
-            outData.push_back({vertexList[i], normalList[i], uvList[i]});
-        }
-    } else {
-        for (unsigned int i = 0; i < vertexList.size(); i++) {
-            outData.push_back({vertexList[i], normalList[i], glm::vec2(0.0, 0.0)});
-        }
-    }
-}
-
-void MeshData::_toTriangleOneIndex(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
-
-    unsigned int B, C;
-
-    // Load vertex, normal and texture of triangles A,B,C
-    for (unsigned int A = 0; A < vertexList.size(); A += 3) {
-        B = A + 1;
-        C = A + 2;
-
-        Triangle t = Triangle(vertexList[A],  // vertex triangle A
-                              vertexList[B],  // vertex triangle B
-                              vertexList[C]); // vertex triangle C
-
-        if (normalList.size() > 0) {
-            t.vertex[0].normal = normalList[A]; // normal triangle A
-            t.vertex[1].normal = normalList[B]; // normal triangle B
-            t.vertex[2].normal = normalList[C]; // normal triangle C
-        }
-
-        if (uvList.size() > 0) {
-            t.vertex[0].texture = uvList[A]; // texture triangle A
-            t.vertex[1].texture = uvList[B]; // texture triangle B
-            t.vertex[2].texture = uvList[C]; // texture triangle C
-        }
-
-        vecTriangle.push_back(t);
-        // t.debugData();
-    }
-
-    faceIndex(_index);
-}
-
-void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
 
     unsigned int B, C;
     // Load vertex, normal and texture of triangles A,B,C
@@ -145,13 +99,6 @@ void MeshData::_toTriangleNotOneIndex(std::vector<Triangle>& vecTriangle, std::v
         vecTriangle.push_back(t);
         _index.push_back(A);
         // t.debugData();
-    }
-}
-
-void MeshData::faceIndex(std::vector<unsigned int>& _index) {
-    for (unsigned int i = 0; i < vertexIndex.size(); i += 3) {
-        unsigned int v = vertexIndex[i];
-        _index.push_back(v);
     }
 }
 

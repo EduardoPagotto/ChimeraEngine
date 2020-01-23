@@ -103,8 +103,7 @@ void HeightMap::split(MeshData& _mesh) {
     int startWidth = 0;
     bool done = false;
 
-    std::vector<unsigned int> indexTriangles;
-    _mesh.faceIndex(indexTriangles);
+    int totfaces = _mesh.getVertexIndex().size() / 3;
 
     int contador = 0;
     int thresholdWidht = totalHeight * squareZ;
@@ -115,8 +114,7 @@ void HeightMap::split(MeshData& _mesh) {
         int endWidth = startWidth + squareWidth;
 
         int testeA = startHeight * totalHeight + startWidth;
-        int testeB = indexTriangles.size();
-        if (testeA >= testeB) {
+        if (testeA >= totfaces) {
             done = true;
             continue;
         }

@@ -108,9 +108,9 @@ void Game::start() {
     // Chimera::LoaderObj loader;
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     Chimera::LoadHeightMap loader;
-    loader.getMesh("./data/terrain/heightmap_16x16.png", m);
+    loader.getMesh("./data/terrain/heightmap_4x4.png", m);
 
-    m.changeSize(80.0f, true);
+    m.changeSize(100.0f, true);
 
     pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 4, 4);
     pHeightMap->split(m);

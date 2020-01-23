@@ -84,18 +84,15 @@ void MeshData::_toVertexDataNotOneIndex(std::vector<VertexData>& outData) {
 
 void MeshData::_toVertexDataOneIndex(std::vector<VertexData>& outData) {
 
-    unsigned int B, C;
-    for (unsigned int A = 0; A < vertexList.size(); A += 3) {
-        B = A + 1;
-        C = A + 2;
-        // vertex, normal and texture triangle A
-        outData.push_back({vertexList[A], normalList[A], (uvList.size() > 0) ? uvList[A] : glm::vec2(0.0, 0.0)});
-
-        // vertex, normal and texture triangle A
-        outData.push_back({vertexList[B], normalList[B], (uvList.size() > 0) ? uvList[B] : glm::vec2(0.0, 0.0)});
-
-        // vertex, normal and texture triangle A
-        outData.push_back({vertexList[C], normalList[C], (uvList.size() > 0) ? uvList[C] : glm::vec2(0.0, 0.0)});
+    // vertices podem ser != 3 !!! sequencie!!!
+    if (uvList.size() > 0) {
+        for (unsigned int i = 0; i < vertexList.size(); i++) {
+            outData.push_back({vertexList[i], normalList[i], uvList[i]});
+        }
+    } else {
+        for (unsigned int i = 0; i < vertexList.size(); i++) {
+            outData.push_back({vertexList[i], normalList[i], glm::vec2(0.0, 0.0)});
+        }
     }
 }
 

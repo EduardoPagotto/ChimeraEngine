@@ -34,7 +34,7 @@ void VertexBuffer::initialize(std::vector<VertexData>& vertexData) {
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
     } else {
 
-        glBufferData(GL_ARRAY_BUFFER, max, nullptr, GL_STREAM_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, maxBufferSize, nullptr, GL_STREAM_DRAW);
     }
 
     // Vertice

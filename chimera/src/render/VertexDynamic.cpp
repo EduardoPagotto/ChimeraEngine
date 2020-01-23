@@ -25,6 +25,7 @@ void VertexRenderDynamic::render(std::vector<VertexData>& vVertice) {
 
 void VertexRenderDynamic::create(const unsigned int& max) {
 
+    maxBufferSize = max;
     std::vector<VertexData> vVertice;
     VertexBuffer::initialize(vVertice);
 }

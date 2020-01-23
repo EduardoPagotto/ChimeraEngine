@@ -18,7 +18,7 @@ class VertexBuffer {
     unsigned int vao;
     unsigned int vbo;
 
-    unsigned int max;
+    unsigned int maxBufferSize;
 
   private:
     bool bufferDynamic;

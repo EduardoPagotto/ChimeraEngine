@@ -10,11 +10,23 @@ HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
 }
 
 HeightMap::~HeightMap() {
-    if (vao > 0)
-        glDeleteVertexArrays(1, &vao);
+
+    glBindVertexArray(vao);
+    while (vNodes.size() > 0) {
+        std::vector<VertexNode*>::iterator it = vNodes.begin();
+        VertexNode* pNode = (*it);
+        delete pNode;
+        pNode = nullptr;
+        vNodes.erase(it);
+    }
 
     if (vbo > 0)
         glDeleteBuffers(1, &vbo);
+
+    glBindVertexArray(0);
+
+    if (vao > 0)
+        glDeleteVertexArrays(1, &vao);
 }
 
 void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {

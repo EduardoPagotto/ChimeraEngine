@@ -1,7 +1,7 @@
 
 #include "chimera/render/VertexNode.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/core/VertexData.hpp"
+#include "chimera/render/VertexData.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 

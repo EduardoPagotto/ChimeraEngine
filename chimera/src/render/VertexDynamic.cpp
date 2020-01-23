@@ -1,4 +1,4 @@
-#include "chimera/core/VertexDynamic.hpp"
+#include "chimera/render/VertexDynamic.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 

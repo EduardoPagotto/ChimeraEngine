@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_MESH_DATA_HPP
 #define __CHIMERA_MESH_DATA_HPP
 
-#include "chimera/core/VertexData.hpp"
 #include "chimera/render/Triangle.hpp"
+#include "chimera/render/VertexData.hpp"
 #include <vector>
 namespace Chimera {
 class MeshData {

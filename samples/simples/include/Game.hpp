@@ -5,9 +5,9 @@
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
-#include "chimera/core/VertexStatic.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Texture.hpp"
+#include "chimera/render/VertexStatic.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

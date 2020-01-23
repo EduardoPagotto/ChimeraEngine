@@ -1,4 +1,4 @@
-#include "chimera/core/VertexStatic.hpp"
+#include "chimera/render/VertexStatic.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 

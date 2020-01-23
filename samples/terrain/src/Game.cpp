@@ -103,16 +103,13 @@ void Game::start() {
     pMaterial->init();
 
     Chimera::MeshData m;
-    // std::vector<Chimera::Triangle> listPolygons;
 
-    // Chimera::LoaderObj loader;
-    // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     Chimera::LoadHeightMap loader;
-    loader.getMesh("./data/terrain/heightmap_4x4.png", m);
+    loader.getMesh("./data/terrain/heightmap_16x16.png", m);
 
     m.changeSize(100.0f, true);
 
-    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 2, 2);
+    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 4, 4);
     pHeightMap->split(m);
 
     // TODO: aqui ele usa o index completo, mudar para o node
@@ -124,28 +121,7 @@ void Game::start() {
     // std::vector<unsigned int> index;
     // m.toTriangle(vecTriangle, index);
 
-    // NOVO!!!
-    // pHeightMap->createVertexBuffer(vertexDataIn);
-
-    // OLD!!!!
-    if (m.isSingleIndex() == false) {
-        std::vector<unsigned int> index;
-        renderStat.create(vertexDataIn, index);
-    } else {
-        renderStat.create(vertexDataIn, m.getVertexIndex());
-    }
-
-    // m.changeSize(30.0, true);
-
-    // std::vector<unsigned int> indexTriangles;
-    // m.toTriangle(listPolygons, indexTriangles);
-    // indexTriangles.clear(); // is sequential, not used here
-
-    // std::reverse(listPolygons.begin(), listPolygons.end());
-
-    // Cria o BSP
-    // pBSPTRoot = bsptreeBuild(&listPolygons);
-    // vertexBuffer.create(5000);
+    pHeightMap->createVertexBuffer(vertexDataIn);
 }
 
 void Game::stop() {}
@@ -184,20 +160,10 @@ void Game::render() {
                      vp->position.z);
     }
 
-    // constroi vertex dinamico baseado no viewpoint
-    // std::vector<Chimera::VertexData> vVertice;
-    // bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
-
-    //// debugParser = false;
-
     pShader->link();
 
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
-
-    // pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    // pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    // pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     pLight->apply(pShader);
 
@@ -216,10 +182,7 @@ void Game::render() {
     pMaterial->apply(pShader);
 
     // NEW
-    // pHeightMap->render();
-
-    // OLD
-    renderStat.render();
+    pHeightMap->render();
 
     pCanvas->after();
     pCanvas->swapWindow();

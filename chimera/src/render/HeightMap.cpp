@@ -26,22 +26,8 @@ void NodeHeightMap::initAABB(std::vector<glm::vec3> _vertexListMesh, std::vector
     std::vector<glm::vec3> vlt;
 
     for (unsigned int indexFace : index) {
-
-        unsigned int A = indexFace * 3;
-        unsigned int B = A + 1;
-        unsigned int C = A + 2;
-
-        unsigned int iA = _vertexIndexMesh[A];
-        unsigned int iB = _vertexIndexMesh[B];
-        unsigned int iC = _vertexIndexMesh[C];
-
-        glm::vec3 pA = _vertexListMesh[iA];
-        glm::vec3 pB = _vertexListMesh[iB];
-        glm::vec3 pC = _vertexListMesh[iC];
-
+        glm::vec3 pA = _vertexListMesh[indexFace];
         vlt.push_back(pA);
-        vlt.push_back(pB);
-        vlt.push_back(pC);
     }
 
     glm::vec3 min, max;
@@ -127,10 +113,25 @@ void HeightMap::split(MeshData& _mesh) {
 
         NodeHeightMap* pNode = new NodeHeightMap;
 
+        std::vector<unsigned int> vIndex = _mesh.getVertexIndex();
+
         for (int h = startHeight; h < endHeight; h++) {   // z
             for (int w = startWidth; w < endWidth; w++) { // x
                 unsigned int indexA = (h * totalHeight) + w;
-                pNode->addIndex(indexA);
+
+                int A = indexA * 3;
+                int B = A + 1;
+                int C = B + 1;
+
+                int pa = vIndex[A];
+                int pb = vIndex[B];
+                int pc = vIndex[C];
+
+                pNode->addIndex(pa);
+                pNode->addIndex(pb);
+                pNode->addIndex(pc);
+
+                // pNode->addIndex(indexA); indexA é o numero da face
                 contador++;
             }
         }

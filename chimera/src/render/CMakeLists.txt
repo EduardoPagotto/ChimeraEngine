@@ -17,6 +17,7 @@ set (RenderSource 	Triangle.cpp
 					BSPTree.cpp
 					LoadHeightMap.cpp
 					VertexNode.cpp
+					VertexBuffer.cpp
 					VertexDynamic.cpp 
 					VertexStatic.cpp
 					HeightMap.cpp

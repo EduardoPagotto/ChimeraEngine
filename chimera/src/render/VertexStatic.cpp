@@ -50,11 +50,7 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
                  outData.size(), out_indices.size());
 }
 
-VertexRenderStatic::VertexRenderStatic() {
-    vbo = 0;
-    ibo = 0;
-    vao = 0;
-}
+VertexRenderStatic::VertexRenderStatic() : VertexBuffer(false) { ibo = 0; }
 VertexRenderStatic::~VertexRenderStatic() {
 
     if (vertexData.size() > 0)
@@ -63,15 +59,19 @@ VertexRenderStatic::~VertexRenderStatic() {
     if (indexIBO.size() > 0)
         indexIBO.clear();
 
-    if (vao > 0)
-        glDeleteVertexArrays(1, &vao);
-
-    if (vbo > 0)
-        glDeleteBuffers(1, &vbo);
-
     if (ibo > 0)
         glDeleteBuffers(1, &ibo);
 }
+
+void VertexRenderStatic::createIndex() {
+
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void VertexRenderStatic::clearIndex() { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo); }
 
 void VertexRenderStatic::render() {
     glBindVertexArray(vao);
@@ -88,51 +88,8 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
         indexIBO = index;
     }
 
-    unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
-    unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+    sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-    // cria o vao
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    // Buffer de vertice
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // Buffer de indice
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    // vincula vbo
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    // Vertice
-    GLuint positionID = 0; // glGetAttribLocation(shader.getIdProgram(), "position");
-    glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(positionID);
-
-    // Normal
-    GLuint normalID = 1; // glGetAttribLocation(shader.getIdProgram(), "normal");
-    glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));
-    glEnableVertexAttribArray(normalID);
-
-    // Texture
-    GLuint uvID = 2; // glGetAttribLocation(shader.getIdProgram(), "uv1");
-    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));
-    glEnableVertexAttribArray(uvID);
-
-    // vincula ibo
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-    // limpa dados
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glDisableVertexAttribArray(positionID);
-    glDisableVertexAttribArray(normalID);
-    glDisableVertexAttribArray(uvID);
+    VertexBuffer::initialize(vertexData);
 }
 } // namespace Chimera

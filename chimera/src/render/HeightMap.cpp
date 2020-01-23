@@ -4,10 +4,7 @@
 namespace Chimera {
 
 HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
-    : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ) {
-    vao = 0;
-    vbo = 0;
-}
+    : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ), VertexBuffer(false) {}
 
 HeightMap::~HeightMap() {
 
@@ -19,14 +16,6 @@ HeightMap::~HeightMap() {
         pNode = nullptr;
         vNodes.erase(it);
     }
-
-    if (vbo > 0)
-        glDeleteBuffers(1, &vbo);
-
-    glBindVertexArray(0);
-
-    if (vao > 0)
-        glDeleteVertexArrays(1, &vao);
 }
 
 void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
@@ -107,52 +96,28 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
     }
 }
 
-void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
-
-    // cria o vao
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    // Buffer de vertice
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, _vertexData.size() * sizeof(VertexData), &_vertexData[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+void HeightMap::createIndex() {
 
     for (VertexNode* pNode : vNodes) {
-        pNode->initAABB(_vertexData);   // initialize AABB's
         pNode->initIndexBufferObject(); // create IBO's
     }
+}
 
-    // vincula vbo
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    // Vertice
-    GLuint positionID = 0; // glGetAttribLocation(shader.getIdProgram(), "position");
-    glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(positionID);
-
-    // Normal
-    GLuint normalID = 1; // glGetAttribLocation(shader.getIdProgram(), "normal");
-    glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));
-    glEnableVertexAttribArray(normalID);
-
-    // Texture
-    GLuint uvID = 2; // glGetAttribLocation(shader.getIdProgram(), "uv1");
-    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));
-    glEnableVertexAttribArray(uvID);
+void HeightMap::clearIndex() {
 
     // vincula ibo's
     for (VertexNode* pNode : vNodes) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pNode->getIndexBufferObject());
     }
+}
 
-    // limpa dados
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glDisableVertexAttribArray(positionID);
-    glDisableVertexAttribArray(normalID);
-    glDisableVertexAttribArray(uvID);
+void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
+
+    VertexBuffer::initialize(_vertexData);
+
+    for (VertexNode* pNode : vNodes) {
+        pNode->initAABB(_vertexData); // initialize AABB's
+    }
 }
 
 void HeightMap::render() {

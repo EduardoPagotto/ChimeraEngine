@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-MeshData::MeshData() { oneIndex = false; }
+MeshData::MeshData() { singleIndex = false; }
 
 MeshData::~MeshData() { destroy(); }
 
@@ -48,7 +48,7 @@ void MeshData::changeSize(const float& new_size, const bool& hasTexture) {
 
 void MeshData::toVertexData(std::vector<VertexData>& outData) {
 
-    if (oneIndex == false) {
+    if (singleIndex == false) {
         if (uvList.size() > 0) {
             for (unsigned int i = 0; i < vertexIndex.size(); i++) {
                 outData.push_back({vertexList[vertexIndex[i]], normalList[normalIndex[i]], uvList[uvIndex[i]]});

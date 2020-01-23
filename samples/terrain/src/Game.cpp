@@ -128,7 +128,7 @@ void Game::start() {
     // pHeightMap->createVertexBuffer(vertexDataIn);
 
     // OLD!!!!
-    if (m.getOneIndex() == false) {
+    if (m.isSingleIndex() == false) {
         std::vector<unsigned int> index;
         renderStat.create(vertexDataIn, index);
     } else {

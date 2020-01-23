@@ -25,13 +25,13 @@ class MeshData {
     inline void addNormalIndex(const unsigned int& _indice) { normalIndex.push_back(_indice); }
     inline void addUVIndex(const unsigned int& _indice) { uvIndex.push_back(_indice); }
 
-    inline void setOneIndex(const bool& _oneIndex) { oneIndex = _oneIndex; }
-    inline bool getOneIndex() const { return oneIndex; }
+    inline void setSingleIndex(const bool& _oneIndex) { singleIndex = _oneIndex; }
+    inline bool isSingleIndex() const { return singleIndex; }
     inline std::vector<unsigned int> getVertexIndex() { return vertexIndex; }
     inline std::vector<glm::vec3> getVertexList() { return vertexList; }
 
   private:
-    bool oneIndex;
+    bool singleIndex;
     std::vector<glm::vec3> vertexList;
     std::vector<glm::vec3> normalList;
     std::vector<glm::vec2> uvList;

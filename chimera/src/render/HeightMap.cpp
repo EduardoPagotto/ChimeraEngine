@@ -5,64 +5,6 @@
 
 namespace Chimera {
 
-NodeHeightMap::NodeHeightMap() { indexBufferObject = 0; }
-
-NodeHeightMap::~NodeHeightMap() {
-    if (indexBufferObject > 0)
-        glDeleteBuffers(1, &indexBufferObject);
-}
-
-void NodeHeightMap::debugDados() {
-
-    std::string val = "Index :";
-    for (int i = 0; i < index.size(); i++)
-        val.append(" " + std::to_string(index[i]));
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "%s", val.c_str());
-}
-
-void NodeHeightMap::initAABB(std::vector<glm::vec3> _vertexListMesh, std::vector<unsigned int> _vertexIndexMesh) {
-
-    std::vector<glm::vec3> vlt;
-
-    for (unsigned int indexFace : index) {
-        glm::vec3 pA = _vertexListMesh[indexFace];
-        vlt.push_back(pA);
-    }
-
-    glm::vec3 min, max;
-    if (vlt.size() > 0) {
-        min = vlt[0];
-        max = vlt[0];
-    }
-
-    for (unsigned int i = 1; i < vlt.size(); i++) {
-        min = glm::min(min, vlt[i]);
-        max = glm::max(max, vlt[i]);
-    }
-
-    aabb.setBoundary(min, max);
-
-    vlt.clear();
-}
-
-void NodeHeightMap::initIndexBufferObject() {
-
-    glGenBuffers(1, &indexBufferObject);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(int), &index[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    // delete [] Indices;
-    // Indices = NULL;
-    // GeometryNodesCount++;
-}
-
-void NodeHeightMap::render() {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
-    glDrawElements(GL_TRIANGLES, index.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
 HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
     : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ) {
     vao = 0;
@@ -111,7 +53,7 @@ void HeightMap::split(MeshData& _mesh) {
         if (endWidth > totalWidth)
             endWidth = totalWidth;
 
-        NodeHeightMap* pNode = new NodeHeightMap;
+        VertexNode* pNode = new VertexNode;
 
         std::vector<unsigned int> vIndex = _mesh.getVertexIndex();
 
@@ -171,7 +113,7 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
     glBufferData(GL_ARRAY_BUFFER, _vertexData.size() * sizeof(VertexData), &_vertexData[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    for (NodeHeightMap* pNode : vNodes) {
+    for (VertexNode* pNode : vNodes) {
         pNode->initIndexBufferObject();
     }
 
@@ -194,7 +136,7 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
     glEnableVertexAttribArray(uvID);
 
     // vincula ibo's
-    for (NodeHeightMap* pNode : vNodes) {
+    for (VertexNode* pNode : vNodes) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pNode->getIndexBufferObject());
     }
 
@@ -208,7 +150,7 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
 
 void HeightMap::render() {
     glBindVertexArray(vao);
-    for (NodeHeightMap* pNode : vNodes) {
+    for (VertexNode* pNode : vNodes) {
         pNode->render();
     }
     glBindVertexArray(0);

@@ -1,30 +1,10 @@
 #ifndef __CHIMERA_HEIGHTMAP__HPP
 #define __CHIMERA_HEIGHTMAP__HPP
 
-#include "chimera/render/AABB.hpp"
 #include "chimera/render/MeshData.hpp"
+#include "chimera/render/VertexNode.hpp"
 
 namespace Chimera {
-
-class NodeHeightMap {
-  public:
-    NodeHeightMap();
-    ~NodeHeightMap();
-
-    inline void addIndex(unsigned int _val) { index.push_back(_val); }
-    inline bool empty() { return (index.size() == 0); }
-    void initIndexBufferObject();
-    void initAABB(std::vector<glm::vec3> _vertexListMesh, std::vector<unsigned int> _vertexIndexMesh);
-    void debugDados();
-
-    void render();
-    unsigned int getIndexBufferObject() { return indexBufferObject; }
-
-  private:
-    unsigned int indexBufferObject;
-    AABB aabb;
-    std::vector<unsigned int> index;
-};
 
 class HeightMap {
   public:
@@ -36,7 +16,7 @@ class HeightMap {
     void render();
 
   private:
-    std::vector<NodeHeightMap*> vNodes;
+    std::vector<VertexNode*> vNodes;
 
     int width;
     int height;

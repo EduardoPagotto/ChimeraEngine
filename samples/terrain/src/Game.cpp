@@ -12,7 +12,7 @@ Game::Game() {
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pCanvas = new Chimera::CanvasGL("Chimera", 800, 600);
+    pCanvas = new Chimera::CanvasGL("Chimera", 400, 300);
 
     pShader = new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
                                                                      "./chimera/shaders/MeshNoMat.frag"));

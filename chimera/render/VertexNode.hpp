@@ -2,6 +2,7 @@
 #define __CHIMERA_VERTEX_NODE__HPP
 
 #include "chimera/render/AABB.hpp"
+#include "chimera/render/VertexData.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -14,7 +15,7 @@ class VertexNode {
     inline void addIndex(unsigned int _val) { index.push_back(_val); }
     inline bool empty() { return (index.size() == 0); }
     void initIndexBufferObject();
-    void initAABB(std::vector<glm::vec3> _vertexListMesh, std::vector<unsigned int> _vertexIndexMesh);
+    void initAABB(std::vector<VertexData>& vertexDataIn);
     void debugDados();
 
     void render();

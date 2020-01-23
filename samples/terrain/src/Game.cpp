@@ -110,7 +110,7 @@ void Game::start() {
     m.changeSize(100.0f, true);
 
     pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 4, 4);
-    pHeightMap->split(m);
+    pHeightMap->split(m.getVertexIndex());
 
     // TODO: aqui ele usa o index completo, mudar para o node
     std::vector<Chimera::VertexData> vertexDataIn;

@@ -1,7 +1,5 @@
 #include "chimera/render/HeightMap.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include <SDL2/SDL.h>
-#include <string>
 
 namespace Chimera {
 
@@ -19,7 +17,7 @@ HeightMap::~HeightMap() {
         glDeleteBuffers(1, &vbo);
 }
 
-void HeightMap::split(MeshData& _mesh) {
+void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
 
     int totalHeight = (height - 1) * 2; // 14
     int totalWidth = (width - 1) * 2;   // 14
@@ -31,7 +29,7 @@ void HeightMap::split(MeshData& _mesh) {
     int startWidth = 0;
     bool done = false;
 
-    int totfaces = _mesh.getVertexIndex().size() / 3;
+    int totfaces = _vVertexIndex.size() / 3;
 
     int contador = 0;
     int thresholdWidht = totalHeight * squareZ;
@@ -55,8 +53,6 @@ void HeightMap::split(MeshData& _mesh) {
 
         VertexNode* pNode = new VertexNode;
 
-        std::vector<unsigned int> vIndex = _mesh.getVertexIndex();
-
         for (int h = startHeight; h < endHeight; h++) {   // z
             for (int w = startWidth; w < endWidth; w++) { // x
                 unsigned int indexA = (h * totalHeight) + w;
@@ -65,9 +61,9 @@ void HeightMap::split(MeshData& _mesh) {
                 int B = A + 1;
                 int C = B + 1;
 
-                int pa = vIndex[A];
-                int pb = vIndex[B];
-                int pc = vIndex[C];
+                int pa = _vVertexIndex[A];
+                int pb = _vVertexIndex[B];
+                int pc = _vVertexIndex[C];
 
                 pNode->addIndex(pa);
                 pNode->addIndex(pb);
@@ -90,14 +86,12 @@ void HeightMap::split(MeshData& _mesh) {
             delete pNode;
             pNode = nullptr;
             done = true;
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "shit!!!");
+            // SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "shit!!!");
             continue;
         }
 
         vNodes.push_back(pNode);
-
         pNode->debugDados();
-        pNode->initAABB(_mesh.getVertexList(), _mesh.getVertexIndex());
     }
 }
 
@@ -114,7 +108,8 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     for (VertexNode* pNode : vNodes) {
-        pNode->initIndexBufferObject();
+        pNode->initAABB(_vertexData);   // initialize AABB's
+        pNode->initIndexBufferObject(); // create IBO's
     }
 
     // vincula vbo

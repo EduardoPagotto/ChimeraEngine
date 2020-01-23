@@ -1,7 +1,6 @@
 
 #include "chimera/render/VertexNode.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/render/VertexData.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 
@@ -23,13 +22,13 @@ void VertexNode::debugDados() {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "%s", val.c_str());
 }
 
-void VertexNode::initAABB(std::vector<glm::vec3> _vertexListMesh, std::vector<unsigned int> _vertexIndexMesh) {
+void VertexNode::initAABB(std::vector<VertexData>& vertexDataIn) {
 
     std::vector<glm::vec3> vlt;
 
     for (unsigned int indexFace : index) {
-        glm::vec3 pA = _vertexListMesh[indexFace];
-        vlt.push_back(pA);
+        VertexData vertex = vertexDataIn[indexFace];
+        vlt.push_back(vertex.position);
     }
 
     glm::vec3 min, max;

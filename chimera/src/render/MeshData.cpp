@@ -61,24 +61,14 @@ void MeshData::toTriangle(std::vector<Triangle>& vecTriangle, std::vector<unsign
 }
 
 void MeshData::_toVertexDataNotOneIndex(std::vector<VertexData>& outData) {
-
-    unsigned int B, C;
-    for (unsigned int A = 0; A < vertexIndex.size(); A += 3) {
-
-        B = A + 1;
-        C = A + 2;
-
-        // vertex, normal and texture triangle A
-        outData.push_back({vertexList[vertexIndex[A]], normalList[normalIndex[A]],
-                           (uvList.size() > 0) ? uvList[uvIndex[A]] : glm::vec2(0.0, 0.0)});
-
-        // vertex, normal and texture triangle A
-        outData.push_back({vertexList[vertexIndex[B]], normalList[normalIndex[B]],
-                           (uvList.size() > 0) ? uvList[uvIndex[B]] : glm::vec2(0.0, 0.0)});
-
-        // vertex, normal and texture triangle A
-        outData.push_back({vertexList[vertexIndex[C]], normalList[normalIndex[C]],
-                           (uvList.size() > 0) ? uvList[uvIndex[C]] : glm::vec2(0.0, 0.0)});
+    if (uvList.size() > 0) {
+        for (unsigned int i = 0; i < vertexIndex.size(); i++) {
+            outData.push_back({vertexList[vertexIndex[i]], normalList[normalIndex[i]], uvList[uvIndex[i]]});
+        }
+    } else {
+        for (unsigned int i = 0; i < vertexIndex.size(); i++) {
+            outData.push_back({vertexList[vertexIndex[i]], normalList[normalIndex[i]], glm::vec2(0.0, 0.0)});
+        }
     }
 }
 

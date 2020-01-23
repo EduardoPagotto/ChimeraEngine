@@ -119,6 +119,11 @@ void Game::start() {
     std::vector<Chimera::VertexData> vertexDataIn;
     m.toVertexData(vertexDataIn);
 
+    // so teste
+    std::vector<Chimera::Triangle> vecTriangle;
+    std::vector<unsigned int> index;
+    m.toTriangle(vecTriangle, index);
+
     // NOVO!!!
     // pHeightMap->createVertexBuffer(vertexDataIn);
 

@@ -7,7 +7,6 @@ HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
     : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ), VertexBuffer(false) {}
 
 HeightMap::~HeightMap() {
-
     glBindVertexArray(vao);
     while (vNodes.size() > 0) {
         std::vector<VertexNode*>::iterator it = vNodes.begin();
@@ -20,27 +19,23 @@ HeightMap::~HeightMap() {
 
 void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
 
-    int totalHeight = (height - 1) * 2; // 14
-    int totalWidth = (width - 1) * 2;   // 14
-
-    int squareHeight = squareZ; // * 2;
-    int squareWidth = squareX * 2;
-
-    int startHeight = 0;
-    int startWidth = 0;
     bool done = false;
-
-    int totfaces = _vVertexIndex.size() / 3;
-
-    int contador = 0;
-    int thresholdWidht = totalHeight * squareZ;
+    uint32_t startHeight = 0;
+    uint32_t startWidth = 0;
+    uint32_t contador = 0;
+    uint32_t totalHeight = (height - 1) * 2;
+    uint32_t totalWidth = (width - 1) * 2;
+    uint32_t squareHeight = squareZ;
+    uint32_t squareWidth = squareX * 2;
+    uint32_t totfaces = _vVertexIndex.size() / 3;
+    uint32_t thresholdWidht = totalHeight * squareZ;
 
     while (!done) {
 
-        int endHeight = startHeight + squareHeight;
-        int endWidth = startWidth + squareWidth;
+        uint32_t endHeight = startHeight + squareHeight;
+        uint32_t endWidth = startWidth + squareWidth;
+        uint32_t testeA = startHeight * totalHeight + startWidth;
 
-        int testeA = startHeight * totalHeight + startWidth;
         if (testeA >= totfaces) {
             done = true;
             continue;
@@ -54,9 +49,9 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
 
         VertexNode* pNode = new VertexNode;
 
-        unsigned int face, base;
-        for (unsigned int h = startHeight; h < endHeight; h++) {   // z
-            for (unsigned int w = startWidth; w < endWidth; w++) { // x
+        uint32_t face, base;
+        for (uint32_t h = startHeight; h < endHeight; h++) {   // z
+            for (uint32_t w = startWidth; w < endWidth; w++) { // x
                 face = ((h * totalHeight) + w);
                 base = face * 3;
                 pNode->addFace(face, _vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
@@ -86,24 +81,17 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
 }
 
 void HeightMap::createIndex() {
-
-    for (VertexNode* pNode : vNodes) {
+    for (VertexNode* pNode : vNodes)
         pNode->initIndexBufferObject(); // create IBO's
-    }
 }
 
 void HeightMap::clearIndex() {
-
-    // vincula ibo's
-    for (VertexNode* pNode : vNodes) {
+    for (VertexNode* pNode : vNodes) // vincula ibo's
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pNode->getIndexBufferObject());
-    }
 }
 
 void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
-
     VertexBuffer::initialize(_vertexData);
-
     for (VertexNode* pNode : vNodes) {
         pNode->initAABB(_vertexData); // initialize AABB's
     }
@@ -116,5 +104,4 @@ void HeightMap::render() {
     }
     glBindVertexArray(0);
 }
-
 } // namespace Chimera

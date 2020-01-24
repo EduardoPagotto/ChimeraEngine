@@ -15,6 +15,12 @@ void LoadHeightMap::clean() {
     }
 }
 
+uint32_t LoadHeightMap::getRealHeight(int w, int h) {
+    unsigned w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
+    unsigned h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
+    return getpixel(w1, h1);
+}
+
 float LoadHeightMap::getHeight(int w, int h) {
 
     unsigned w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
@@ -54,6 +60,20 @@ Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
     }
 }
 
+void LoadHeightMap::defineMinMax(uint32_t& _min, uint32_t& _max) {
+    _min = _max = getRealHeight(0, 0);
+    for (int z = 0; z < pImage->h; z++) {
+        for (int x = 0; x < pImage->w; x++) {
+            uint32_t val = getRealHeight(x, z);
+
+            if (val > _max)
+                _max = val;
+            if (val < _min)
+                _min = val;
+        }
+    }
+}
+
 bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh) {
 
     pImage = IMG_Load(_fileName.c_str());
@@ -67,6 +87,10 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh) {
 
     float v = 1.0f / (pImage->h - 1);
     float u = 1.0f / (pImage->w - 1);
+
+    uint32_t min = 0;
+    uint32_t max = 0;
+    defineMinMax(min, max);
 
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {

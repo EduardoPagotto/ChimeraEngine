@@ -8,7 +8,6 @@ LoadHeightMap::LoadHeightMap() : pImage(nullptr) { clean(); }
 LoadHeightMap::~LoadHeightMap() { clean(); }
 
 void LoadHeightMap::clean() {
-    maxHeight = 80.0f;
     if (pImage != nullptr) {
         SDL_FreeSurface(pImage);
         pImage = nullptr;
@@ -26,8 +25,9 @@ float LoadHeightMap::getHeight(int w, int h) {
     unsigned w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
     unsigned h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
 
-    Uint32 pixelData = getpixel(w1, h1);
-    return (float)(pixelData / maxHeight);
+    float pixelData = (float)getpixel(w1, h1);
+    float resultado = pixelData * percentHeight;
+    return resultado;
 }
 
 Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
@@ -60,21 +60,25 @@ Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
     }
 }
 
-void LoadHeightMap::defineMinMax(uint32_t& _min, uint32_t& _max) {
-    _min = _max = getRealHeight(0, 0);
+void LoadHeightMap::defineMaxHeight(float _maxHeight) {
+    uint32_t min, max;
+    min = max = getRealHeight(0, 0);
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
             uint32_t val = getRealHeight(x, z);
 
-            if (val > _max)
-                _max = val;
-            if (val < _min)
-                _min = val;
+            if (val > max)
+                max = val;
+            if (val < min)
+                min = val;
         }
     }
+
+    uint32_t sizeCalc = max - min;
+    percentHeight = _maxHeight / (float)sizeCalc;
 }
 
-bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh) {
+bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, float _maxX, float _maxZ, float _maxHeight) {
 
     pImage = IMG_Load(_fileName.c_str());
     if (pImage == nullptr) {
@@ -88,9 +92,9 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh) {
     float v = 1.0f / (pImage->h - 1);
     float u = 1.0f / (pImage->w - 1);
 
-    uint32_t min = 0;
-    uint32_t max = 0;
-    defineMinMax(min, max);
+    float propX = _maxX / (float)pImage->w;
+    float propZ = _maxZ / (float)pImage->h;
+    defineMaxHeight(_maxHeight);
 
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
@@ -106,7 +110,9 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh) {
             float v1 = v * z;
             float u1 = u * x;
 
-            _mesh.addVertex(pos);
+            glm::vec3 posFinal(pos.x * propX, pos.y, pos.z * propZ); // Coord final
+
+            _mesh.addVertex(posFinal);
             _mesh.addNormal(nor);
             _mesh.addUV(glm::vec2(u1, v1));
         }

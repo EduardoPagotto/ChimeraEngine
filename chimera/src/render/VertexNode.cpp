@@ -11,15 +11,16 @@ VertexNode::VertexNode() { indexBufferObject = 0; }
 VertexNode::~VertexNode() {
     if (indexBufferObject > 0)
         glDeleteBuffers(1, &indexBufferObject);
+
+    faces.clear();
 }
 
 void VertexNode::debugDados() {
+    std::string val = "";
+    for (int i = 0; i < faces.size(); i++)
+        val.append(std::to_string(faces[i]) + " ");
 
-    std::string val = "Index :";
-    for (int i = 0; i < index.size(); i++)
-        val.append(" " + std::to_string(index[i]));
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "%s", val.c_str());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Faces (%ld): %s", faces.size(), val.c_str());
 }
 
 void VertexNode::initAABB(std::vector<VertexData>& vertexDataIn) {
@@ -45,6 +46,13 @@ void VertexNode::initAABB(std::vector<VertexData>& vertexDataIn) {
     aabb.setBoundary(min, max);
 
     vlt.clear();
+}
+
+void VertexNode::addFace(unsigned int& _face, unsigned int& _pa, unsigned int& _pb, unsigned int& _pc) {
+    faces.push_back(_face);
+    index.push_back(_pa);
+    index.push_back(_pb);
+    index.push_back(_pc);
 }
 
 void VertexNode::initIndexBufferObject() {

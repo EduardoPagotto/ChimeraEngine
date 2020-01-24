@@ -12,19 +12,19 @@ class VertexNode {
     VertexNode();
     ~VertexNode();
 
-    inline void addIndex(unsigned int _val) { index.push_back(_val); }
     inline bool empty() { return (index.size() == 0); }
+    inline unsigned int getIndexBufferObject() { return indexBufferObject; }
+    void addFace(unsigned int& _face, unsigned int& _pa, unsigned int& _pb, unsigned int& _pc);
     void initIndexBufferObject();
     void initAABB(std::vector<VertexData>& vertexDataIn);
     void debugDados();
-
     void render();
-    unsigned int getIndexBufferObject() { return indexBufferObject; }
 
   private:
     unsigned int indexBufferObject;
     AABB aabb;
     std::vector<unsigned int> index;
+    std::vector<unsigned int> faces;
 };
 } // namespace Chimera
 

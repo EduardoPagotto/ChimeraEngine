@@ -17,6 +17,10 @@ Game::Game() {
     pShader = new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
                                                                      "./chimera/shaders/MeshNoMat.frag"));
 
+    // pShader =
+    //     new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshFull", "./chimera/shaders/MeshFullShadow.vert",
+    //                                                            "./chimera/shaders/MeshFullShadow.frag"));
+
     pMaterial = new Chimera::Material();
     pMaterial->setDefaultEffect();
     pMaterial->addTexture(new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png"));
@@ -29,10 +33,10 @@ Game::Game() {
     trackBall.setMax(1000.0);
 
     // Light
-    pLight = new Chimera::Light();
-    pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    pLight->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-    pLight->setPosition(glm::vec3(80, 100, 150));
+    // pLight = new Chimera::Light();
+    // pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    // pLight->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+    // pLight->setPosition(glm::vec3(0, 150, 0));
 
     pHeightMap = nullptr;
 }
@@ -82,7 +86,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1)
             trackBall.tracking(mm.xrel, mm.yrel);
-        else if (botaoIndex == 2)
+        else if (botaoIndex == 3)
             trackBall.offSet(mm.yrel);
     }
 }
@@ -165,15 +169,16 @@ void Game::render() {
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
-    pLight->apply(pShader);
+    // pLight->apply(pShader);
 
     model = glm::translate(
         glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0)); //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
     if (pShader == nullptr)
         return;
 
-    // int shadows = 1;
+    // int shadows = 0;
     // pShader->setGlUniform1i("shadows", shadows);
+
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));

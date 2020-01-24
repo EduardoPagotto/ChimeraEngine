@@ -54,23 +54,12 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
 
         VertexNode* pNode = new VertexNode;
 
-        for (int h = startHeight; h < endHeight; h++) {   // z
-            for (int w = startWidth; w < endWidth; w++) { // x
-                unsigned int indexA = (h * totalHeight) + w;
-
-                int A = indexA * 3;
-                int B = A + 1;
-                int C = B + 1;
-
-                int pa = _vVertexIndex[A];
-                int pb = _vVertexIndex[B];
-                int pc = _vVertexIndex[C];
-
-                pNode->addIndex(pa);
-                pNode->addIndex(pb);
-                pNode->addIndex(pc);
-
-                // pNode->addIndex(indexA); indexA é o numero da face
+        unsigned int face, base;
+        for (unsigned int h = startHeight; h < endHeight; h++) {   // z
+            for (unsigned int w = startWidth; w < endWidth; w++) { // x
+                face = ((h * totalHeight) + w);
+                base = face * 3;
+                pNode->addFace(face, _vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
                 contador++;
             }
         }

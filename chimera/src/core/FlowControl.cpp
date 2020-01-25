@@ -44,19 +44,16 @@ void FlowControl::processaGame() {
 }
 
 void FlowControl::gameLoop(void) {
-
     SDL_Event l_eventSDL;
     bool l_quit = false;
     bool l_isActive = false;
-
     unsigned int frameTime;
-    unsigned int lastFrameTime = 0;
-    unsigned int deltaTime = 0;
-    // unsigned int fps = 60;
-    // unsigned int minimumFrameTime = 1000 // fps;
-    unsigned int minimumFrameTime = 16; // 1000/16
     unsigned int timeElapsed;
     unsigned int tot_delay;
+    unsigned int lastFrameTime = 0;
+    unsigned int deltaTime = 0;
+    unsigned int fpsMin = 60;
+    unsigned int minimumFrameTime = 1000 / fpsMin;
 
     while (!l_quit) {
 

@@ -12,14 +12,15 @@ Game::Game() {
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pCanvas = new Chimera::CanvasGL("Chimera", 400, 300);
+    pCanvas = new Chimera::CanvasGL("Chimera", 800, 600);
 
-    pShader = new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",
-                                                                     "./chimera/shaders/MeshNoMat.frag"));
+    pShader = Chimera::loadShader("MeshNoMat",                         // nome
+                                  "./chimera/shaders/MeshNoMat.vert",  // vertex
+                                  "./chimera/shaders/MeshNoMat.frag"); // fragment
 
-    // pShader =
-    //     new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshFull", "./chimera/shaders/MeshFullShadow.vert",
-    //                                                            "./chimera/shaders/MeshFullShadow.frag"));
+    // pShader = Chimera::loadShader("MeshFullShadow",                         // nome
+    //                               "./chimera/shaders/MeshFullShadow.vert",  // vertex
+    //                               "./chimera/shaders/MeshFullShadow.frag")); // fragment
 
     pMaterial = new Chimera::Material();
     pMaterial->setDefaultEffect();

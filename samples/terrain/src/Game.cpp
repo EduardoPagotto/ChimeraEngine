@@ -12,18 +12,19 @@ Game::Game() {
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pCanvas = new Chimera::CanvasGL("Chimera", 800, 600);
+    pCanvas = new Chimera::CanvasGL("Chimera", 1440, 900);
 
-    pShader = Chimera::loadShader("MeshNoMat",                         // nome
-                                  "./chimera/shaders/MeshNoMat.vert",  // vertex
-                                  "./chimera/shaders/MeshNoMat.frag"); // fragment
+    // pShader = Chimera::loadShader("MeshNoMat",                         // nome
+    //                               "./chimera/shaders/MeshNoMat.vert",  // vertex
+    //                               "./chimera/shaders/MeshNoMat.frag"); // fragment
 
-    // pShader = Chimera::loadShader("MeshFullShadow",                         // nome
-    //                               "./chimera/shaders/MeshFullShadow.vert",  // vertex
-    //                               "./chimera/shaders/MeshFullShadow.frag")); // fragment
+    pShader = Chimera::loadShader("MeshFullShadow",                         // nome
+                                  "./chimera/shaders/MeshFullShadow.vert",  // vertex
+                                  "./chimera/shaders/MeshFullShadow.frag"); // fragment
 
     pMaterial = new Chimera::Material();
     pMaterial->setDefaultEffect();
+    pMaterial->setShine(50.0f);
     pMaterial->addTexture(new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png"));
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
@@ -34,10 +35,10 @@ Game::Game() {
     trackBall.setMax(1000.0);
 
     // Light
-    // pLight = new Chimera::Light();
-    // pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    // pLight->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-    // pLight->setPosition(glm::vec3(0, 150, 0));
+    pLight = new Chimera::Light();
+    pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    pLight->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
+    pLight->setPosition(glm::vec3(0, 150, 0));
 
     pHeightMap = nullptr;
 }
@@ -110,10 +111,10 @@ void Game::start() {
     Chimera::MeshData m;
 
     Chimera::LoadHeightMap loader;
-    // loader.getMesh("./data/terrain/terrain4.jpg", m, 1000.0, 1000.0, 200.0);
-    loader.getMesh("./data/terrain/heightmap_16x16.png", m, 1000.0, 1000.0, 200.0);
+    // loader.getMesh("./data/terrain/terrain3.jpg", m, 1000.0, 1000.0, 200.0);
+    loader.getMesh("./data/terrain/heightmap_16x16.png", m, 100.0, 100.0, 10.0);
 
-    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 4, 4);
+    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 3, 3);
     pHeightMap->split(m.getVertexIndex());
 
     // TODO: aqui ele usa o index completo, mudar para o node
@@ -169,15 +170,15 @@ void Game::render() {
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
-    // pLight->apply(pShader);
+    pLight->apply(pShader);
 
     model = glm::translate(
         glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0)); //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
     if (pShader == nullptr)
         return;
 
-    // int shadows = 0;
-    // pShader->setGlUniform1i("shadows", shadows);
+    int shadows = 0;
+    pShader->setGlUniform1i("shadows", shadows);
 
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));

@@ -103,9 +103,48 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, float
                                       getHeight(x, z),   // posy
                                       halfH - (float)z); // posz
 
-            glm::vec3 nor = glm::normalize(glm::vec3(getHeight(x - 1, z) - getHeight(x + 1, z),   // norx
-                                                     2.0f,                                        // nory
-                                                     getHeight(x, z + 1) - getHeight(x, z - 1))); // norz
+            // glm::vec3 nor = glm::normalize(glm::vec3(getHeight(x - 1, z) - getHeight(x + 1, z),   // norx
+            //                                          2.0f,                                        // nory
+            //                                          getHeight(x, z + 1) - getHeight(x, z - 1))); // norz
+
+            // [6][7][8] [x-1, y+1] [x,y+1] [x+1, y+1]
+            // [3][4][5] [x-1, y]   [x,y]   [x+1, y]
+            // [0][1][2] [x-1, y-1] [x, y-1][x+1, y-1]
+            // Then,
+
+            // [6][7][8]  getHeight(x-1, y+1)  getHeight(x,y+1)  getHeight(x+1, y+1)
+            // [3][4][5]  getHeight(x-1, y)    getHeight(x,y)    getHeight(x+1, y)
+            // [0][1][2]  getHeight(x-1, y-1)  getHeight(x, y-1) getHeight(x+1, y-1)
+            // Then,
+
+            float s[9];
+            s[0] = getHeight(x - 1, z - 1);
+            s[1] = getHeight(x, z - 1);
+            s[2] = getHeight(x + 1, z - 1);
+            s[3] = getHeight(x - 1, z);
+            s[4] = getHeight(x, z);
+            s[5] = getHeight(x + 1, z);
+            s[6] = getHeight(x - 1, z + 1);
+            s[7] = getHeight(x, z + 1);
+            s[8] = getHeight(x + 1, z + 1);
+
+            glm::vec3 n(-(s[2] - s[0] + 2 * (s[5] - s[3]) + s[8] - s[6]),  // x
+                        1.0f,                                              // y
+                        -(s[6] - s[0] + 2 * (s[7] - s[1]) + s[8] - s[2])); // z
+
+            glm::vec3 nor = glm::normalize(n);
+
+            // n.x = scale * -( s[2] - s[0] + 2 * ( s[5] - s[3]) + s[8] - s[6] );
+            // n.y = 1.0;
+            // n.z = scale * -( s[6] - s[0] + 2 * ( s[7] - s[1]) + s[8] - s[2] );
+
+            // //float s[9] contains above samples
+            // vec3 n;
+            // n.x = scale * -( s[2] - s[0] + 2 * ( s[5] - s[3]) + s[8] - s[6] );
+            // n.y = 1.0;
+            // n.z = scale * -( s[6] - s[0] + 2 * ( s[7] - s[1]) + s[8] - s[2] );
+
+            // n = normalize(n);
 
             float v1 = v * z;
             float u1 = u * x;

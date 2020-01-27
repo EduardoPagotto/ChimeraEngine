@@ -42,7 +42,7 @@ class Game : public Chimera::IGameClientEvents {
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    // Chimera::Light* pLight;
+    Chimera::Light* pLight;
     Chimera::Material* pMaterial;
     Chimera::VertexRenderStatic renderStat;
 

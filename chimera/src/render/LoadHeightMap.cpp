@@ -114,18 +114,9 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
 
-            glm::vec3 pos = glm::vec3(scale.x * ((float)x - haldW),  // posx
-                                      scale.y * getHeight(x, z),     // posy
-                                      scale.z * (halfH - (float)z)); // posz
-
-            glm::vec3 nor = calcNormalHeight(x, z);
-
-            float v1 = v * z;
-            float u1 = u * x;
-
-            _mesh.addVertex(pos);
-            _mesh.addNormal(nor);
-            _mesh.addUV(glm::vec2(u1, v1));
+            _mesh.addVertex(glm::vec3(x - haldW, getHeight(x, z), halfH - z) * scale);
+            _mesh.addNormal(calcNormalHeight(x, z));
+            _mesh.addUV(glm::vec2(u * x, v * z));
         }
     }
 

@@ -8,6 +8,7 @@ LoadHeightMap::LoadHeightMap() : pImage(nullptr) { clean(); }
 LoadHeightMap::~LoadHeightMap() { clean(); }
 
 void LoadHeightMap::clean() {
+    scale = glm::vec3(1.0f);
     if (pImage != nullptr) {
         SDL_FreeSurface(pImage);
         pImage = nullptr;
@@ -26,7 +27,7 @@ float LoadHeightMap::getHeight(int w, int h) {
     unsigned h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
 
     float pixelData = (float)getpixel(w1, h1);
-    float resultado = pixelData * percentHeight;
+    float resultado = pixelData * scale.y;
     return resultado;
 }
 
@@ -60,7 +61,7 @@ Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
     }
 }
 
-void LoadHeightMap::defineMaxHeight(float _maxHeight) {
+void LoadHeightMap::defineScale(const glm::vec3& _size) {
     uint32_t min, max;
     min = max = getRealHeight(0, 0);
     for (int z = 0; z < pImage->h; z++) {
@@ -74,8 +75,9 @@ void LoadHeightMap::defineMaxHeight(float _maxHeight) {
         }
     }
 
-    uint32_t sizeCalc = max - min;
-    percentHeight = _maxHeight / (float)sizeCalc;
+    scale.x = _size.x / (float)pImage->w;
+    scale.y = _size.y / (float)(max - min);
+    scale.z = _size.y / (float)pImage->h;
 }
 
 glm::vec3 LoadHeightMap::calcNormalHeight(int x, int z) {
@@ -98,12 +100,12 @@ glm::vec3 LoadHeightMap::calcNormalHeight(int x, int z) {
     //                                 1.0f,                                               // y
     //                                 -(s[6] - s[0] + 2 * (s[7] - s[1]) + s[8] - s[2]))); // z
 
-    return glm::normalize(glm::vec3(getHeight(x - 1, z) - getHeight(x + 1, z), // norx
-                                    2.0f, // FIXME: tem escala aqui!!          // nory
+    return glm::normalize(glm::vec3(getHeight(x - 1, z) - getHeight(x + 1, z),   // norx
+                                    2.0f,                                        // nory
                                     getHeight(x, z - 1) - getHeight(x, z + 1))); // norz
 }
 
-bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, float _maxX, float _maxZ, float _maxHeight) {
+bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const glm::vec3& _size) {
 
     pImage = IMG_Load(_fileName.c_str());
     if (pImage == nullptr) {
@@ -117,18 +119,14 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, float
     float v = 1.0f / (pImage->h - 1);
     float u = 1.0f / (pImage->w - 1);
 
-    float propX = _maxX / (float)pImage->w;
-    float propZ = _maxZ / (float)pImage->h;
-    defineMaxHeight(_maxHeight);
-
-    // constHeight = (2.0f / pImage->w) + (2.0f / pImage->h);
+    defineScale(_size);
 
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
 
-            glm::vec3 pos = glm::vec3(propX * ((float)x - haldW),  // posx
-                                      getHeight(x, z),             // posy
-                                      propZ * (halfH - (float)z)); // posz
+            glm::vec3 pos = glm::vec3(scale.x * ((float)x - haldW),  // posx
+                                      getHeight(x, z),               // posy
+                                      scale.z * (halfH - (float)z)); // posz
 
             glm::vec3 nor = calcNormalHeight(x, z);
 

@@ -111,7 +111,7 @@ void Game::start() {
     Chimera::MeshData m;
 
     Chimera::LoadHeightMap loader;
-    loader.getMesh("./data/terrain/terrain3.jpg", m, 1000.0, 1000.0, 200.0);
+    loader.getMesh("./data/terrain/terrain3.jpg", m, glm::vec3(1000.0, 200.0, 1000.0));
     // loader.getMesh("./data/terrain/heightmap_16x16.png", m, 100.0, 100.0, 10.0);
 
     pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 3, 3);

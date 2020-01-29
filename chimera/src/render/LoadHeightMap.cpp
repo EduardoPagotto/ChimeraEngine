@@ -15,21 +15,11 @@ void LoadHeightMap::clean() {
     }
 }
 
-uint32_t LoadHeightMap::getRealHeight(int w, int h) {
+uint32_t LoadHeightMap::getHeight(int w, int h) {
     unsigned w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
     unsigned h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
     return getpixel(w1, h1);
 }
-
-// float LoadHeightMap::getHeight(int w, int h) {
-
-//     unsigned w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
-//     unsigned h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
-
-//     float pixelData = (float)getpixel(w1, h1);
-//     float resultado = pixelData * scale.y;
-//     return resultado;
-// }
 
 Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
     int bpp = pImage->format->BytesPerPixel;
@@ -63,10 +53,10 @@ Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
 
 void LoadHeightMap::defineScale(const glm::vec3& _size) {
     uint32_t min, max;
-    min = max = getRealHeight(0, 0);
+    min = max = getHeight(0, 0);
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
-            uint32_t val = getRealHeight(x, z);
+            uint32_t val = getHeight(x, z);
 
             if (val > max)
                 max = val;
@@ -100,9 +90,9 @@ glm::vec3 LoadHeightMap::calcNormalHeight(int x, int z) {
     //                                 1.0f,                                               // y
     //                                 -(s[6] - s[0] + 2 * (s[7] - s[1]) + s[8] - s[2]))); // z
 
-    return glm::normalize(glm::vec3((scale.y * getRealHeight(x - 1, z)) - (scale.y * getRealHeight(x + 1, z)),   // norx
-                                    2.0f,                                                                        // nory
-                                    (scale.y * getRealHeight(x, z - 1)) - (scale.y * getRealHeight(x, z + 1)))); // norz
+    return glm::normalize(glm::vec3((scale.y * getHeight(x - 1, z)) - (scale.y * getHeight(x + 1, z)),   // norx
+                                    2.0f,                                                                // nory
+                                    (scale.y * getHeight(x, z - 1)) - (scale.y * getHeight(x, z + 1)))); // norz
 }
 
 bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const glm::vec3& _size) {
@@ -125,7 +115,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const
         for (int x = 0; x < pImage->w; x++) {
 
             glm::vec3 pos = glm::vec3(scale.x * ((float)x - haldW),  // posx
-                                      scale.y * getRealHeight(x, z), // posy
+                                      scale.y * getHeight(x, z),     // posy
                                       scale.z * (halfH - (float)z)); // posz
 
             glm::vec3 nor = calcNormalHeight(x, z);

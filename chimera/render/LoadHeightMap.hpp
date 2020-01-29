@@ -19,7 +19,7 @@ class LoadHeightMap {
 
   private:
     inline unsigned getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }
-    float getHeight(int w, int h);
+    // float getHeight(int w, int h);
     uint32_t getRealHeight(int w, int h);
     void defineScale(const glm::vec3& _size);
     Uint32 getpixel(const unsigned& w, const unsigned& h);

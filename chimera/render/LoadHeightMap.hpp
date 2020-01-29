@@ -23,6 +23,7 @@ class LoadHeightMap {
     uint32_t getRealHeight(int w, int h);
     void defineMaxHeight(float _maxHeight);
     Uint32 getpixel(const unsigned& w, const unsigned& h);
+    glm::vec3 calcNormalHeight(int x, int z);
 
     SDL_Surface* pImage;
     float percentHeight;

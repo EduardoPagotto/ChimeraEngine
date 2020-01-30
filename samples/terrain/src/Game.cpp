@@ -14,10 +14,6 @@ Game::Game() {
 
     pCanvas = new Chimera::CanvasGL("Chimera", 600, 400);
 
-    // pShader = Chimera::loadShader("MeshNoMat",                         // nome
-    //                               "./chimera/shaders/MeshNoMat.vert",  // vertex
-    //                               "./chimera/shaders/MeshNoMat.frag"); // fragment
-
     pShader = Chimera::loadShader("MeshFullShadow",                         // nome
                                   "./chimera/shaders/MeshFullShadow.vert",  // vertex
                                   "./chimera/shaders/MeshFullShadow.frag"); // fragment
@@ -112,9 +108,10 @@ void Game::start() {
 
     Chimera::LoadHeightMap loader;
     loader.getMesh("./data/terrain/terrain3.jpg", m, glm::vec3(1000.0, 200.0, 1000.0));
-    // loader.getMesh("./data/terrain/heightmap_16x16.png", m, 100.0, 100.0, 10.0);
+    // loader.getMesh("./data/terrain/heightmap_16x16.png", m, glm::vec3(100.0, 30.0, 100.0));
+    // loader.getMesh("./data/terrain/heightmap_4x4.png", m, glm::vec3(1000.0, 10.0, 1000.0));
 
-    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 3, 3);
+    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 32, 32);
     pHeightMap->split(m.getVertexIndex());
 
     // TODO: aqui ele usa o index completo, mudar para o node
@@ -170,6 +167,11 @@ void Game::render() {
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
+    glm::mat4 projectionMatrixInverse = glm::inverse(projection);
+    glm::mat4 viewMatrixInverse = glm::inverse(view);
+    glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
+    frustum.set(viewProjectionMatrixInverse);
+
     pLight->apply(pShader);
 
     model = glm::translate(
@@ -188,7 +190,7 @@ void Game::render() {
     pMaterial->apply(pShader);
 
     // NEW
-    pHeightMap->render();
+    pHeightMap->render(frustum);
 
     pCanvas->after();
     pCanvas->swapWindow();

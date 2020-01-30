@@ -47,6 +47,7 @@ class Game : public Chimera::IGameClientEvents {
     Chimera::VertexRenderStatic renderStat;
 
     Chimera::HeightMap* pHeightMap;
+    Chimera::Frustum frustum;
 };
 
 #endif

@@ -13,7 +13,7 @@ class HeightMap : public VertexBuffer {
 
     void split(std::vector<unsigned int> _vVertexIndex);
     void createVertexBuffer(std::vector<VertexData>& _vertexData);
-    void render();
+    void render(Frustum& _frustrun);
 
   private:
     virtual void createIndex() override;

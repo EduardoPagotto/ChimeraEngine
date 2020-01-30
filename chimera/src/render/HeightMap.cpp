@@ -1,5 +1,6 @@
 #include "chimera/render/HeightMap.hpp"
 #include "chimera/OpenGLDefs.hpp"
+#include <SDL2/SDL.h>
 
 namespace Chimera {
 
@@ -76,7 +77,7 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
         }
 
         vNodes.push_back(pNode);
-        pNode->debugDados();
+        // pNode->debugDados();
     }
 }
 
@@ -97,11 +98,17 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
     }
 }
 
-void HeightMap::render() {
+void HeightMap::render(Frustum& _frustrun) {
     glBindVertexArray(vao);
+    unsigned int tot = 0;
     for (VertexNode* pNode : vNodes) {
-        pNode->render();
+        bool teste = pNode->aabb.visible(_frustrun);
+        if (teste == true) {
+            pNode->render();
+            tot++;
+        }
     }
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "TOT: (%d)", tot);
     glBindVertexArray(0);
 }
 } // namespace Chimera

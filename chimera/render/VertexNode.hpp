@@ -20,9 +20,11 @@ class VertexNode {
     void debugDados();
     void render();
 
+    AABB aabb;
+
   private:
     unsigned int indexBufferObject;
-    AABB aabb;
+
     std::vector<unsigned int> index;
     std::vector<unsigned int> faces;
 };

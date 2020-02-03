@@ -19,7 +19,8 @@ enum class CHILDOCTREE {
 
 class Octree {
   public:
-    Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent = nullptr, unsigned int _deep = 0);
+    Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent = nullptr, bool _leafMode = false,
+           unsigned int _deep = 0);
     virtual ~Octree();
 
     void destroy();
@@ -32,10 +33,12 @@ class Octree {
 
   private:
     void subdivide();
+    bool insertNew(const glm::vec3& _point);
 
+    bool leafMode;
+    bool divided;
     unsigned int deep;
     unsigned int capacity;
-    bool divided;
     AABB boundary;
     Octree* pParent;
     Octree* pChild[8];

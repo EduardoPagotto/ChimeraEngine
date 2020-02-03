@@ -92,12 +92,12 @@ void FlowControl::gameLoop(void) {
             }
         }
 
+        if (pGameClientEvents->paused() == false)
+            processaGame(); // Se nao houver foco na tela pule o render
+
         // inicio contadores
         deltaTime = frameTime - lastFrameTime;
         lastFrameTime = frameTime;
-
-        if (pGameClientEvents->paused() == false)
-            processaGame(); // Se nao houver foco na tela pule o render
 
         timeElapsed = (SDL_GetTicks() - frameTime);
         if (timeElapsed < minimumFrameTime) {

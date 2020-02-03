@@ -2,8 +2,9 @@
 
 namespace Chimera {
 
-Octree::Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent, unsigned int _deep)
-    : boundary(boundary), capacity(_capacity), pParent(_parent), deep(_deep) {
+Octree::Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent, bool _leafMode,
+               unsigned int _deep)
+    : boundary(boundary), capacity(_capacity), pParent(_parent), leafMode(_leafMode), deep(_deep) {
 
     for (short i = 0; i < 8; i++)
         pChild[i] = nullptr;
@@ -29,6 +30,8 @@ void Octree::subdivide() {
 
     glm::vec3 p = boundary.getPosition();
     glm::vec3 s = boundary.getSize() / 2.0f;
+    unsigned int newDeep = deep + 1;
+    divided = true;
 
     float xmax = p.x + s.x;
     float xmin = p.x - s.x;
@@ -49,17 +52,23 @@ void Octree::subdivide() {
     bsw.setPosition(glm::vec3(xmin, ymin, zmin), s);
     bse.setPosition(glm::vec3(xmax, ymin, zmin), s);
 
-    pChild[(int)CHILDOCTREE::top_northeast] = new Octree(tne, capacity, this, deep + 1);
-    pChild[(int)CHILDOCTREE::top_northwest] = new Octree(tnw, capacity, this, deep + 1);
-    pChild[(int)CHILDOCTREE::top_southwest] = new Octree(tsw, capacity, this, deep + 1);
-    pChild[(int)CHILDOCTREE::top_southeast] = new Octree(tse, capacity, this, deep + 1);
+    pChild[(int)CHILDOCTREE::top_northeast] = new Octree(tne, capacity, this, leafMode, newDeep);
+    pChild[(int)CHILDOCTREE::top_northwest] = new Octree(tnw, capacity, this, leafMode, newDeep);
+    pChild[(int)CHILDOCTREE::top_southwest] = new Octree(tsw, capacity, this, leafMode, newDeep);
+    pChild[(int)CHILDOCTREE::top_southeast] = new Octree(tse, capacity, this, leafMode, newDeep);
 
-    pChild[(int)CHILDOCTREE::botton_northeast] = new Octree(bne, capacity, this, deep + 1);
-    pChild[(int)CHILDOCTREE::botton_northwest] = new Octree(bnw, capacity, this, deep + 1);
-    pChild[(int)CHILDOCTREE::botton_southwest] = new Octree(bsw, capacity, this, deep + 1);
-    pChild[(int)CHILDOCTREE::botton_southeast] = new Octree(bse, capacity, this, deep + 1);
+    pChild[(int)CHILDOCTREE::botton_northeast] = new Octree(bne, capacity, this, leafMode, newDeep);
+    pChild[(int)CHILDOCTREE::botton_northwest] = new Octree(bnw, capacity, this, leafMode, newDeep);
+    pChild[(int)CHILDOCTREE::botton_southwest] = new Octree(bsw, capacity, this, leafMode, newDeep);
+    pChild[(int)CHILDOCTREE::botton_southeast] = new Octree(bse, capacity, this, leafMode, newDeep);
+}
 
-    divided = true;
+bool Octree::insertNew(const glm::vec3& _point) {
+    for (short i = 0; i < 8; i++) {
+        if (pChild[i]->insert(_point))
+            return true;
+    }
+    return false;
 }
 
 bool Octree::insert(const glm::vec3& _point) {
@@ -67,25 +76,30 @@ bool Octree::insert(const glm::vec3& _point) {
     if (boundary.contains(_point) == false)
         return false;
 
-    if (points.size() < capacity) {
+    bool a = (points.size() < capacity);
+    bool b = (leafMode == false);
+    bool c = (divided == false);
+
+    if ((a && b) || (a && c)) {
         points.push_back(_point);
         return true;
     }
 
-    if (divided == false)
-        subdivide();
+    if (c)
+        this->subdivide();
 
-    for (short i = 0; i < 8; i++) {
-        if (pChild[i]->insert(_point))
-            return true;
+    if (!b) {
+        for (glm::vec3 p : points)
+            this->insertNew(p);
+
+        points.clear();
     }
 
-    return false;
+    return this->insertNew(_point);
 }
 
 void Octree::query(const AABB& _aabb, std::vector<glm::vec3>& _found) { // std::vector<glm::vec3> points
-    // if not _found:
-    //     _found = []
+
     if (boundary.intersects(_aabb) == false)
         return;
 
@@ -98,6 +112,5 @@ void Octree::query(const AABB& _aabb, std::vector<glm::vec3>& _found) { // std::
         for (short i = 0; i < 8; i++)
             pChild[i]->query(_aabb, _found);
     }
-    // return _found;
 }
 } // namespace Chimera

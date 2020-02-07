@@ -1,12 +1,12 @@
 #ifndef __CHIMERA_HEIGHTMAP__HPP
 #define __CHIMERA_HEIGHTMAP__HPP
 
-#include "chimera/render/VertexBuffer.hpp"
+#include "chimera/render/VBO.hpp"
 #include "chimera/render/VertexNode.hpp"
 
 namespace Chimera {
 
-class HeightMap : public VertexBuffer {
+class HeightMap : public VBO {
   public:
     HeightMap(int _width, int _height, int _squareX, int _squareZ);
     ~HeightMap();

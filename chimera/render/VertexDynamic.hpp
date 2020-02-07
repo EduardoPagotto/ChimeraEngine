@@ -1,11 +1,11 @@
 #ifndef __CHIMERA_VERTEX_DYNAMIC_HPP
 #define __CHIMERA_VERTEX_DYNAMIC_HPP
 
-#include "VertexBuffer.hpp"
+#include "VBO.hpp"
 
 namespace Chimera {
 
-class VertexRenderDynamic : public VertexBuffer {
+class VertexRenderDynamic : public VBO {
   public:
     VertexRenderDynamic();
     void create(const unsigned int& max);

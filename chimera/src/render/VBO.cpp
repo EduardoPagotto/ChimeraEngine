@@ -1,22 +1,21 @@
-#include "chimera/render/VertexBuffer.hpp"
+#include "chimera/render/VBO.hpp"
 #include "chimera/OpenGLDefs.hpp"
 
 namespace Chimera {
 
-VertexBuffer::VertexBuffer(bool _bufferDynamic) : vbo(0), vao(0), bufferDynamic(_bufferDynamic) {}
-VertexBuffer::~VertexBuffer() {
-    if (vao > 0)
-        glDeleteVertexArrays(1, &vao);
-
+VBO::VBO(bool _bufferDynamic) : vbo(0), bufferDynamic(_bufferDynamic) {}
+VBO::~VBO() {
     if (vbo > 0)
         glDeleteBuffers(1, &vbo);
 }
 
-void VertexBuffer::initialize(std::vector<VertexData>& vertexData) {
+void VBO::initialize(std::vector<VertexData>& vertexData) {
 
     // cria o vao
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    vao.create();
+    vao.bind();
+    // glGenVertexArrays(1, &vao);
+    // glBindVertexArray(vao);
 
     // Buffer de vertice
     glGenBuffers(1, &vbo);
@@ -60,7 +59,9 @@ void VertexBuffer::initialize(std::vector<VertexData>& vertexData) {
 
     // limpa dados
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+
+    vao.unbind();
+    // glBindVertexArray(0);
     glDisableVertexAttribArray(positionID);
     glDisableVertexAttribArray(normalID);
     glDisableVertexAttribArray(uvID);

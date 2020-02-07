@@ -50,7 +50,7 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
                  outData.size(), out_indices.size());
 }
 
-VertexRenderStatic::VertexRenderStatic() : VertexBuffer(false) { ibo = 0; }
+VertexRenderStatic::VertexRenderStatic() : VBO(false) { ibo = 0; }
 VertexRenderStatic::~VertexRenderStatic() {
 
     if (vertexData.size() > 0)
@@ -74,9 +74,9 @@ void VertexRenderStatic::createIndex() {
 void VertexRenderStatic::clearIndex() { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo); }
 
 void VertexRenderStatic::render() {
-    glBindVertexArray(vao);
+    vao.bind(); // glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-    glBindVertexArray(0);
+    vao.unbind(); // glBindVertexArray(0);
 }
 
 void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index) {
@@ -90,6 +90,6 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
 
     sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-    VertexBuffer::initialize(vertexData);
+    VBO::initialize(vertexData);
 }
 } // namespace Chimera

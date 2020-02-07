@@ -1,21 +1,23 @@
-#ifndef __CHIMERA_VERTEX_BUFFER__HPP
-#define __CHIMERA_VERTEX_BUFFER__HPP
+#ifndef __CHIMERA_VBO__HPP
+#define __CHIMERA_VBO__HPP
 
+#include "chimera/render/VAO.hpp"
 #include "chimera/render/VertexData.hpp"
 #include <vector>
 
 namespace Chimera {
 
-class VertexBuffer {
+class VBO {
   public:
-    VertexBuffer(bool _bufferDynamic);
-    virtual ~VertexBuffer();
+    VBO(bool _bufferDynamic);
+    virtual ~VBO();
 
   protected:
     void initialize(std::vector<VertexData>& vertexDataIn);
     virtual void createIndex() = 0;
     virtual void clearIndex() = 0;
-    unsigned int vao;
+
+    VAO vao;
     unsigned int vbo;
 
     unsigned int maxBufferSize;

@@ -102,7 +102,7 @@ void Game::start() {
     // Cria o BSP
     pBSPTRoot = bsptreeBuild(&listPolygons);
 
-    vertexBuffer.create(5000);
+    VBO.create(5000);
 }
 
 void Game::stop() {}
@@ -160,7 +160,7 @@ void Game::render() {
     // aplica a textura
     pTex->apply(pShader);
 
-    vertexBuffer.render(vVertice);
+    VBO.render(vVertice);
 
     pCanvas->after();
     pCanvas->swapWindow();

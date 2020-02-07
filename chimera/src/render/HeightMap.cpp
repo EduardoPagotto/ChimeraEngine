@@ -5,10 +5,10 @@
 namespace Chimera {
 
 HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
-    : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ), VertexBuffer(false) {}
+    : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ), VBO(false) {}
 
 HeightMap::~HeightMap() {
-    glBindVertexArray(vao);
+    vao.bind();
     while (vNodes.size() > 0) {
         std::vector<VertexNode*>::iterator it = vNodes.begin();
         VertexNode* pNode = (*it);
@@ -16,6 +16,7 @@ HeightMap::~HeightMap() {
         pNode = nullptr;
         vNodes.erase(it);
     }
+    vao.unbind();
 }
 
 void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
@@ -92,14 +93,14 @@ void HeightMap::clearIndex() {
 }
 
 void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
-    VertexBuffer::initialize(_vertexData);
+    VBO::initialize(_vertexData);
     for (VertexNode* pNode : vNodes) {
         pNode->initAABB(_vertexData); // initialize AABB's
     }
 }
 
 void HeightMap::render(Frustum& _frustrun) {
-    glBindVertexArray(vao);
+    vao.bind();
     unsigned int tot = 0;
     for (VertexNode* pNode : vNodes) {
         bool teste = pNode->aabb.visible(_frustrun);
@@ -109,6 +110,6 @@ void HeightMap::render(Frustum& _frustrun) {
         }
     }
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "TOT: (%d)", tot);
-    glBindVertexArray(0);
+    vao.unbind();
 }
 } // namespace Chimera

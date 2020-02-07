@@ -1,11 +1,11 @@
 #ifndef __CHIMERA_VERTEX_STATIC_HPP
 #define __CHIMERA_VERTEX_STATIC_HPP
 
-#include "VertexBuffer.hpp"
+#include "VBO.hpp"
 
 namespace Chimera {
 
-class VertexRenderStatic : public VertexBuffer {
+class VertexRenderStatic : public VBO {
   public:
     VertexRenderStatic();
     virtual ~VertexRenderStatic();

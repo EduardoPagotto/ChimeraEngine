@@ -102,7 +102,7 @@ void Game::start() {
     m.toVertexData(renderData);
 
     std::vector<unsigned int> index;
-    vertexBuffer.create(renderData, index);
+    VBO.create(renderData, index);
 }
 
 void Game::stop() {}
@@ -150,7 +150,7 @@ void Game::render() {
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 
-    vertexBuffer.render();
+    VBO.render();
 
     pCanvas->after();
     pCanvas->swapWindow();

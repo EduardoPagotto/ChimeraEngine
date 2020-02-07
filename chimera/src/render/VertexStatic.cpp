@@ -50,7 +50,7 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
                  outData.size(), out_indices.size());
 }
 
-VertexRenderStatic::VertexRenderStatic() : VBO(false) { ibo = 0; }
+VertexRenderStatic::VertexRenderStatic() : VBO() { ibo = 0; }
 VertexRenderStatic::~VertexRenderStatic() {
 
     if (vertexData.size() > 0)
@@ -90,6 +90,6 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
 
     sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-    VBO::initialize(vertexData);
+    VBO::initialize(vertexData, false);
 }
 } // namespace Chimera

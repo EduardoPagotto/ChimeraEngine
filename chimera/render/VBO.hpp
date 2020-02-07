@@ -9,21 +9,17 @@ namespace Chimera {
 
 class VBO {
   public:
-    VBO(bool _bufferDynamic);
+    VBO();
     virtual ~VBO();
 
   protected:
-    void initialize(std::vector<VertexData>& vertexDataIn);
+    void initialize(std::vector<VertexData>& vertexDataIn, bool bufferDynamic);
     virtual void createIndex() = 0;
     virtual void clearIndex() = 0;
 
     VAO vao;
     unsigned int vbo;
-
     unsigned int maxBufferSize;
-
-  private:
-    bool bufferDynamic;
 };
 
 } // namespace Chimera

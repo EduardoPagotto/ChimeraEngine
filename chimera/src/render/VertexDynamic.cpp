@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-VertexRenderDynamic::VertexRenderDynamic() : VBO(true) {}
+VertexRenderDynamic::VertexRenderDynamic() : VBO() {}
 
 VertexRenderDynamic::~VertexRenderDynamic() {}
 
@@ -29,6 +29,6 @@ void VertexRenderDynamic::create(const unsigned int& max) {
 
     maxBufferSize = max;
     std::vector<VertexData> vVertice;
-    VBO::initialize(vVertice);
+    VBO::initialize(vVertice, true);
 }
 } // namespace Chimera

@@ -3,19 +3,17 @@
 
 namespace Chimera {
 
-VBO::VBO(bool _bufferDynamic) : vbo(0), bufferDynamic(_bufferDynamic) {}
+VBO::VBO() : vbo(0) {}
 VBO::~VBO() {
     if (vbo > 0)
         glDeleteBuffers(1, &vbo);
 }
 
-void VBO::initialize(std::vector<VertexData>& vertexData) {
+void VBO::initialize(std::vector<VertexData>& vertexData, bool bufferDynamic) {
 
     // cria o vao
     vao.create();
     vao.bind();
-    // glGenVertexArrays(1, &vao);
-    // glBindVertexArray(vao);
 
     // Buffer de vertice
     glGenBuffers(1, &vbo);
@@ -59,9 +57,8 @@ void VBO::initialize(std::vector<VertexData>& vertexData) {
 
     // limpa dados
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     vao.unbind();
-    // glBindVertexArray(0);
+
     glDisableVertexAttribArray(positionID);
     glDisableVertexAttribArray(normalID);
     glDisableVertexAttribArray(uvID);

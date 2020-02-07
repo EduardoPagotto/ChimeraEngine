@@ -5,7 +5,7 @@
 namespace Chimera {
 
 HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
-    : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ), VBO(false) {}
+    : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ), VBO() {}
 
 HeightMap::~HeightMap() {
     vao.bind();
@@ -93,7 +93,7 @@ void HeightMap::clearIndex() {
 }
 
 void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
-    VBO::initialize(_vertexData);
+    VBO::initialize(_vertexData, false);
     for (VertexNode* pNode : vNodes) {
         pNode->initAABB(_vertexData); // initialize AABB's
     }

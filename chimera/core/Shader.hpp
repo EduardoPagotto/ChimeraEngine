@@ -21,7 +21,7 @@ class Shader {
 
     static inline void unlink() { glUseProgram(0); }
 
-    GLint getUniformLocation(const char* _name) const noexcept;
+    GLint getUniformLocation(const char* _varName) const noexcept;
     void setGlUniform1i(const char* _nameVar, const int& _val) const noexcept;
     void setGlUniform1f(const char* _nameVar, const float& _val) const noexcept;
     void setGlUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const noexcept;
@@ -38,7 +38,8 @@ class Shader {
     std::string currentProgram;
 };
 
-GLuint shadeLoadProg(const char* programName, const char* vertex_file_path, const char* fragment_file_path);
+GLuint shadeLoadProg(const char* programName, const char* fileVertex, const char* fileFrag);
+Shader* loadShader(const std::string& programName, const std::string& fileVertex, const std::string& fileFrag);
 
 } // namespace Chimera
 #endif

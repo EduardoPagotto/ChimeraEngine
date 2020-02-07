@@ -13,16 +13,19 @@ class LoadHeightMap {
     virtual ~LoadHeightMap();
     void clean();
 
-    bool getMesh(const std::string& _fileName, MeshData& _mesh);
-    inline void setMaxHeight(float _maxHeight) { maxHeight = _maxHeight; }
+    bool getMesh(const std::string& _fileName, MeshData& _mesh, const glm::vec3& _size);
+    inline int getHeight() { return pImage->h; }
+    inline int getWidth() { return pImage->w; }
 
   private:
-    inline unsigned int getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }
-    float getHeight(int w, int h);
-    Uint32 getpixel(const unsigned int& w, const unsigned int& h);
+    inline unsigned getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }
+    uint32_t getHeight(int w, int h);
+    void defineScale(const glm::vec3& _size);
+    Uint32 getpixel(const unsigned& w, const unsigned& h);
+    glm::vec3 calcNormalHeight(int x, int z);
 
     SDL_Surface* pImage;
-    float maxHeight;
+    glm::vec3 scale;
 };
 
 } // namespace Chimera

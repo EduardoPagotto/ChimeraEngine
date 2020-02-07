@@ -1,14 +1,18 @@
-#ifndef __GAME_TESTE_TERRAIN__HPP
-#define __GAME_TESTE_TERRAIN__HPP
+#ifndef __GAME_TESTE_BSTREE__HPP
+#define __GAME_TESTE_BSTREE__HPP
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/node/Node.hpp"
-#include "chimera/node/VisitorRender.hpp"
+#include "chimera/core/Shader.hpp"
+#include "chimera/core/TrackBall.hpp"
+#include "chimera/render/HeightMap.hpp"
+#include "chimera/render/Light.hpp"
+#include "chimera/render/Material.hpp"
+#include "chimera/render/VertexStatic.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot);
+    Game();
     virtual ~Game();
     // Inherited via IGameClientEvents
     virtual void start();
@@ -29,10 +33,21 @@ class Game : public Chimera::IGameClientEvents {
     bool isPaused;
     int botaoIndex;
     int estadoBotao;
+    bool debugParser;
 
-    Chimera::VisitorRender renderV;
+    glm::mat4 projection;
+    glm::mat4 view;
+    glm::mat4 model;
+
+    Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
-    Chimera::Node* pRoot;
+    Chimera::Shader* pShader;
+    Chimera::Light* pLight;
+    Chimera::Material* pMaterial;
+    Chimera::VertexRenderStatic renderStat;
+
+    Chimera::HeightMap* pHeightMap;
+    Chimera::Frustum frustum;
 };
 
 #endif

@@ -13,8 +13,14 @@ set (RenderSource 	Triangle.cpp
 					Plane.cpp
 					Frustum.cpp
 					AABB.cpp
+					Octree.cpp
 					BSPTree.cpp
 					LoadHeightMap.cpp
+					VertexNode.cpp
+					VertexBuffer.cpp
+					VertexDynamic.cpp 
+					VertexStatic.cpp
+					HeightMap.cpp
 					LoadObj.cpp
 					Light.cpp
 					Material.cpp

@@ -8,19 +8,25 @@ namespace Chimera {
 
 AABB::AABB() {}
 
-AABB::AABB(const glm::vec3& _min, const glm::vec3& _max) { this->set(_min, _max); }
+AABB::AABB(const glm::vec3& _min, const glm::vec3& _max) { this->setBoundary(_min, _max); }
 
 AABB::AABB(const AABB& _cpy) {
     for (short i = 0; i < 8; i++)
         vertex[i] = _cpy.vertex[i];
 
-    center = _cpy.center;
+    position = _cpy.position;
     size = _cpy.size;
 }
 
 AABB::~AABB() {}
 
-void AABB::set(const glm::vec3& _min, const glm::vec3& _max) {
+void AABB::setPosition(const glm::vec3& _pos, const glm::vec3& _size) {
+    glm::vec3 max = _pos + _size;
+    glm::vec3 min = _pos - _size;
+    setBoundary(max, min);
+}
+
+void AABB::setBoundary(const glm::vec3& _min, const glm::vec3& _max) {
     vertex[0] = glm::vec3(_min.x, _min.y, _min.z);
     vertex[1] = glm::vec3(_max.x, _min.y, _min.z);
     vertex[2] = glm::vec3(_min.x, _max.y, _min.z);
@@ -34,10 +40,19 @@ void AABB::set(const glm::vec3& _min, const glm::vec3& _max) {
                      (glm::abs(_max.y) + glm::abs(_min.y)) / 2,  // Y
                      (glm::abs(_max.z) + glm::abs(_min.z)) / 2); // Z
 
-    center = _min + size;
+    position = _min + size;
 }
 
-bool AABB::pointInside(const glm::vec3& _point) {
+bool AABB::intersects(const AABB& _aabb) const {
+    return (_aabb.vertex[0].x > this->vertex[7].x || // min x
+            _aabb.vertex[7].x < this->vertex[0].x || // max x
+            _aabb.vertex[0].y < this->vertex[7].y || // min y
+            _aabb.vertex[7].y < this->vertex[0].y || // max y
+            _aabb.vertex[0].z < this->vertex[7].z || // min z
+            _aabb.vertex[7].z < this->vertex[0].z);  // max z
+}
+
+bool AABB::contains(const glm::vec3& _point) const {
     if (_point.x < vertex[0].x)
         return false;
     if (_point.y < vertex[0].y)

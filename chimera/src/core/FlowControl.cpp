@@ -44,12 +44,20 @@ void FlowControl::processaGame() {
 }
 
 void FlowControl::gameLoop(void) {
-
     SDL_Event l_eventSDL;
     bool l_quit = false;
     bool l_isActive = false;
+    unsigned int frameTime;
+    unsigned int timeElapsed;
+    unsigned int tot_delay;
+    unsigned int lastFrameTime = 0;
+    unsigned int deltaTime = 0;
+    unsigned int fpsMin = 60;
+    unsigned int minimumFrameTime = 1000 / fpsMin;
 
     while (!l_quit) {
+
+        frameTime = SDL_GetTicks();
 
         while (SDL_PollEvent(&l_eventSDL)) {
 
@@ -84,11 +92,20 @@ void FlowControl::gameLoop(void) {
             }
         }
 
-        if (pGameClientEvents->paused() == false) {
-            // Se nao houver foco na tela pule o render
-            processaGame();
+        if (pGameClientEvents->paused() == false)
+            processaGame(); // Se nao houver foco na tela pule o render
+
+        // inicio contadores
+        deltaTime = frameTime - lastFrameTime;
+        lastFrameTime = frameTime;
+
+        timeElapsed = (SDL_GetTicks() - frameTime);
+        if (timeElapsed < minimumFrameTime) {
+            tot_delay = minimumFrameTime - timeElapsed;
+            // SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "DeltaTime: %d  Delay: %d", deltaTime, tot_delay);
+            SDL_Delay(tot_delay);
         } else {
-            SDL_Delay(500);
+            // SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "DeltaTime: %d TimeElapsed: %d", deltaTime, timeElapsed);
         }
     }
 }

@@ -1,4 +1,4 @@
-#include "chimera/core/VertexStatic.hpp"
+#include "chimera/render/VertexStatic.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
@@ -50,18 +50,31 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
                  outData.size(), out_indices.size());
 }
 
-VertexRenderStatic::VertexRenderStatic() {
-    VertexVBOID = 0;
-    IndexVBOID = 0;
-    VAO = 0;
-}
+VertexRenderStatic::VertexRenderStatic() : VertexBuffer(false) { ibo = 0; }
 VertexRenderStatic::~VertexRenderStatic() {
-    glDeleteBuffers(1, &VertexVBOID);
-    glDeleteBuffers(1, &IndexVBOID);
+
+    if (vertexData.size() > 0)
+        vertexData.clear();
+
+    if (indexIBO.size() > 0)
+        indexIBO.clear();
+
+    if (ibo > 0)
+        glDeleteBuffers(1, &ibo);
 }
 
+void VertexRenderStatic::createIndex() {
+
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void VertexRenderStatic::clearIndex() { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo); }
+
 void VertexRenderStatic::render() {
-    glBindVertexArray(VAO);
+    glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
     glBindVertexArray(0);
 }
@@ -75,51 +88,8 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
         indexIBO = index;
     }
 
-    unsigned int sizeBufferVertex = vertexData.size() * sizeof(VertexData);
-    unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+    sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-    // Buffer de vertice
-    glGenBuffers(1, &VertexVBOID);
-    glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-    glBufferData(GL_ARRAY_BUFFER, sizeBufferVertex, &vertexData[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // Buffer de indice
-    glGenBuffers(1, &IndexVBOID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    // cria o VAO
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    // vincula VBO
-    glBindBuffer(GL_ARRAY_BUFFER, VertexVBOID);
-
-    // Vertice
-    GLuint positionID = 0; // glGetAttribLocation(shader.getIdProgram(), "position");
-    glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(positionID);
-
-    // Normal
-    GLuint normalID = 1; // glGetAttribLocation(shader.getIdProgram(), "normal");
-    glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));
-    glEnableVertexAttribArray(normalID);
-
-    // Texture
-    GLuint uvID = 2; // glGetAttribLocation(shader.getIdProgram(), "uv1");
-    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));
-    glEnableVertexAttribArray(uvID);
-
-    // vincula IBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOID);
-
-    // limpa dados
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glDisableVertexAttribArray(positionID);
-    glDisableVertexAttribArray(normalID);
-    glDisableVertexAttribArray(uvID);
+    VertexBuffer::initialize(vertexData);
 }
 } // namespace Chimera

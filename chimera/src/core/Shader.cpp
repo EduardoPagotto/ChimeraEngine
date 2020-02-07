@@ -18,11 +18,11 @@ Shader::Shader(const Shader& _shader) {
 
 Shader::~Shader() { glDeleteProgram(idProgram); }
 
-GLint Shader::getUniformLocation(const char* _name) const noexcept {
+GLint Shader::getUniformLocation(const char* _varName) const noexcept {
     // nasty C lib uses -1 return value for error
-    GLint loc = glGetUniformLocation(idProgram, _name);
+    GLint loc = glGetUniformLocation(idProgram, _varName);
     if (loc == -1)
-        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _name,
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _varName,
                      currentProgram.c_str());
     return loc;
 }
@@ -137,10 +137,10 @@ GLuint linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID) 
     return ProgramID;
 }
 
-GLuint shadeLoadProg(const char* programName, const char* vertex_file_path, const char* fragment_file_path) {
+GLuint shadeLoadProg(const char* progName, const char* fileVertex, const char* fileFrag) {
 
-    GLuint VertexShaderID = compileShader(getShaderCode(vertex_file_path), true);
-    GLuint FragmentShaderID = compileShader(getShaderCode(fragment_file_path), false);
+    GLuint VertexShaderID = compileShader(getShaderCode(fileVertex), true);
+    GLuint FragmentShaderID = compileShader(getShaderCode(fileFrag), false);
 
     // Link o programa
     GLuint idProgram = linkShader(VertexShaderID, FragmentShaderID);
@@ -149,17 +149,16 @@ GLuint shadeLoadProg(const char* programName, const char* vertex_file_path, cons
     glDeleteShader(FragmentShaderID);
 
     if (idProgram != -1)
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", programName, idProgram);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", progName, idProgram);
     else
-        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader %s", programName);
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader %s", progName);
 
     return idProgram;
 }
 
-// Shader* loadShader(const std::string& programName, const std::string& vertex_file_path,
-//                    const std::string& fragment_file_path) {
-//     GLuint id = load(programName, vertex_file_path, fragment_file_path);
-//     return new Shader(programName, id);
-// }
+Shader* loadShader(const std::string& progName, const std::string& fileVertex, const std::string& fileFrag) {
+    GLuint id = shadeLoadProg(progName.c_str(), fileVertex.c_str(), fileFrag.c_str());
+    return new Shader(progName, id);
+}
 
 } // namespace Chimera

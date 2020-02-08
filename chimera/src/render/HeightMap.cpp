@@ -93,7 +93,7 @@ void HeightMap::clearIndex() {
 }
 
 void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
-    VBO::initialize(_vertexData, 0);
+    VBO::buildStatic(_vertexData);
     for (VertexNode* pNode : vNodes) {
         pNode->initAABB(_vertexData); // initialize AABB's
     }

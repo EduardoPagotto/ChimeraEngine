@@ -25,9 +25,5 @@ void VertexRenderDynamic::render(std::vector<VertexData>& vVertice) {
     vao.unbind();
 }
 
-void VertexRenderDynamic::create(const unsigned int& max) {
-
-    std::vector<VertexData> vVertice;
-    VBO::initialize(vVertice, max);
-}
+void VertexRenderDynamic::create(const unsigned int& max) { VBO::buildDynamic(max); }
 } // namespace Chimera

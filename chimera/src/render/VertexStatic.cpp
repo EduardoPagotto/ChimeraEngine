@@ -90,6 +90,6 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
 
     sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-    VBO::initialize(vertexData, 0);
+    VBO::buildStatic(vertexData);
 }
 } // namespace Chimera

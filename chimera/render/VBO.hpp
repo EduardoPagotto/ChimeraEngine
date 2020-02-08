@@ -12,8 +12,13 @@ class VBO {
     VBO();
     virtual ~VBO();
 
+    void bind();
+    void unbind();
+
   protected:
-    void initialize(std::vector<VertexData>& vertexDataIn, const int& maxBufferSize);
+    void buildStatic(std::vector<VertexData>& vertexData);
+    void buildDynamic(const int& maxBufferSize);
+
     virtual void createIndex() = 0;
     virtual void clearIndex() = 0;
 

@@ -64,7 +64,7 @@ VertexRenderStatic::~VertexRenderStatic() {
 }
 
 void VertexRenderStatic::render() {
-    vbo.vao.bind(); // glBindVertexArray(vao);
+    vao.bind(); // glBindVertexArray(vao);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo); // FIXME ao colocar o vao aqui testar sem esta chamada e a 0
 
@@ -72,7 +72,7 @@ void VertexRenderStatic::render() {
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    vbo.vao.unbind(); // glBindVertexArray(0);
+    vao.unbind(); // glBindVertexArray(0);
 }
 
 void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index) {
@@ -86,9 +86,10 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
 
     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-    vbo.buildStatic(vertexData);
+    vao.create();
+    vbo.buildStatic(vertexData, vao);
 
-    vbo.vao.bind();
+    vao.bind();
 
     // Create EBO
     glGenBuffers(1, &ibo);
@@ -96,6 +97,6 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    vbo.vao.unbind();
+    vao.unbind();
 }
 } // namespace Chimera

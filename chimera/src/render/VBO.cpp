@@ -17,10 +17,10 @@ void VBO::setSlot(const unsigned int& slotID, const unsigned int& slotSize, void
 void VBO::bind() { glBindBuffer(GL_ARRAY_BUFFER, vboGL); }
 void VBO::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-void VBO::buildStatic(std::vector<VertexData>& vertexData) {
+void VBO::buildStatic(std::vector<VertexData>& vertexData, VAO& vao) {
 
     // cria o vao
-    vao.create();
+    // vao.create();
     vao.bind();
 
     // Buffer de vertice
@@ -28,10 +28,6 @@ void VBO::buildStatic(std::vector<VertexData>& vertexData) {
     this->bind(); // glBindBuffer(GL_ARRAY_BUFFER, vboGL);
 
     glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(VertexData), &vertexData[0], GL_STATIC_DRAW);
-    this->unbind(); // glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // vincula vboGL
-    this->bind(); // glBindBuffer(GL_ARRAY_BUFFER, vboGL);
 
     this->setSlot(0, 3, BUFFER_OFFSET(0));  // Vertice
     this->setSlot(1, 3, BUFFER_OFFSET(12)); // Normal
@@ -46,9 +42,8 @@ void VBO::buildStatic(std::vector<VertexData>& vertexData) {
     glDisableVertexAttribArray(2); // Slot 2 Textura
 }
 
-void VBO::buildDynamic(const int& maxBufferSize) {
-    // cria o vao
-    vao.create();
+void VBO::buildDynamic(const int& maxBufferSize, VAO& vao) {
+
     vao.bind();
 
     // Buffer de vertice

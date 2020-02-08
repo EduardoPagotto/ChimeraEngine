@@ -3,16 +3,16 @@
 
 namespace Chimera {
 
-VAO::VAO() : vao(0) {}
+VAO::VAO() : vaoGL(0) {}
 
 VAO::~VAO() {
-    if (vao > 0)
-        glDeleteVertexArrays(1, &vao);
+    if (vaoGL > 0)
+        glDeleteVertexArrays(1, &vaoGL);
 }
 
-void VAO::create() { glGenVertexArrays(1, &vao); }
+void VAO::create() { glGenVertexArrays(1, &vaoGL); }
 
-void VAO::bind() { glBindVertexArray(vao); }
+void VAO::bind() { glBindVertexArray(vaoGL); }
 
 void VAO::unbind() { glBindVertexArray(0); }
 

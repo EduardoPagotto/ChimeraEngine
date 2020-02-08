@@ -12,7 +12,7 @@ class VAO {
     void unbind();
 
   private:
-    unsigned int vao;
+    unsigned int vaoGL;
 };
 } // namespace Chimera
 #endif

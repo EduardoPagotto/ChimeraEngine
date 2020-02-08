@@ -1,6 +1,7 @@
 #ifndef __CHIMERA_HEIGHTMAP__HPP
 #define __CHIMERA_HEIGHTMAP__HPP
 
+#include "chimera/render/VAO.hpp"
 #include "chimera/render/VBO.hpp"
 #include "chimera/render/VertexNode.hpp"
 
@@ -17,6 +18,7 @@ class HeightMap {
 
   private:
     VBO vbo;
+    VAO vao;
     std::vector<VertexNode*> vNodes;
 
     int width;

@@ -13,10 +13,10 @@ class VBO {
     virtual ~VBO();
     void bind();
     void unbind();
-    void buildDynamic(const int& maxBufferSize);
-    void buildStatic(std::vector<VertexData>& vertexData);
+    void buildDynamic(const int& maxBufferSize, VAO& vao);
+    void buildStatic(std::vector<VertexData>& vertexData, VAO& vao);
 
-    VAO vao;
+    // VAO vao;
 
   private:
     unsigned int vboGL;

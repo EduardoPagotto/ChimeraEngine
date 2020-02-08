@@ -85,18 +85,17 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
 void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
 
     vao.create();
-    vbo.buildStatic(_vertexData, vao);
+    vao.bind();
+    vbo.buildStatic(_vertexData);
 
     vao.bind();
 
-    for (VertexNode* pNode : vNodes)
+    for (VertexNode* pNode : vNodes) {
         pNode->initIndexBufferObject(); // create IBO's
+        pNode->initAABB(_vertexData);   // initialize AABB's
+    }
 
     vao.unbind();
-
-    for (VertexNode* pNode : vNodes) {
-        pNode->initAABB(_vertexData); // initialize AABB's
-    }
 }
 
 void HeightMap::render(Frustum& _frustrun) {

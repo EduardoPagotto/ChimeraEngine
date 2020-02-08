@@ -87,7 +87,8 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
     unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
     vao.create();
-    vbo.buildStatic(vertexData, vao);
+    vao.bind();
+    vbo.buildStatic(vertexData);
 
     vao.bind();
 

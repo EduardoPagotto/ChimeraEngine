@@ -19,6 +19,9 @@ class VBO {
 
     VAO vao;
     unsigned int vbo;
+
+  private:
+    void setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset);
 };
 
 } // namespace Chimera

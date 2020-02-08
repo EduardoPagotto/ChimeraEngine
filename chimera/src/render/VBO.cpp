@@ -9,6 +9,11 @@ VBO::~VBO() {
         glDeleteBuffers(1, &vbo);
 }
 
+void VBO::setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset) {
+    glVertexAttribPointer(slotID, slotSize, GL_FLOAT, GL_FALSE, sizeof(VertexData), offset);
+    glEnableVertexAttribArray(slotID);
+}
+
 void VBO::initialize(std::vector<VertexData>& vertexData, const int& maxBufferSize) {
 
     // cria o vao
@@ -34,20 +39,9 @@ void VBO::initialize(std::vector<VertexData>& vertexData, const int& maxBufferSi
         glBufferData(GL_ARRAY_BUFFER, maxBufferSize, nullptr, GL_STREAM_DRAW);
     }
 
-    // Vertice
-    GLuint positionID = 0; // glGetAttribLocation(shader.getIdProgram(), "position");
-    glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(positionID);
-
-    // Normal
-    GLuint normalID = 1; // glGetAttribLocation(shader.getIdProgram(), "normal");
-    glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(12));
-    glEnableVertexAttribArray(normalID);
-
-    // Texture
-    GLuint uvID = 2; // glGetAttribLocation(shader.getIdProgram(), "uv1");
-    glVertexAttribPointer(uvID, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), BUFFER_OFFSET(24));
-    glEnableVertexAttribArray(uvID);
+    this->setSlot(0, 3, BUFFER_OFFSET(0));  // Vertice
+    this->setSlot(1, 3, BUFFER_OFFSET(12)); // Normal
+    this->setSlot(2, 2, BUFFER_OFFSET(24)); // Texture
 
     // vincula ibo
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -59,9 +53,9 @@ void VBO::initialize(std::vector<VertexData>& vertexData, const int& maxBufferSi
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     vao.unbind();
 
-    glDisableVertexAttribArray(positionID);
-    glDisableVertexAttribArray(normalID);
-    glDisableVertexAttribArray(uvID);
+    glDisableVertexAttribArray(0); // Slot 0 Vertice
+    glDisableVertexAttribArray(1); // Slot 1 Normal
+    glDisableVertexAttribArray(2); // Slot 2 Textura
 }
 
 } // namespace Chimera

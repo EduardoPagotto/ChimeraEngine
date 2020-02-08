@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-class VertexRenderStatic : public VBO {
+class VertexRenderStatic {
   public:
     VertexRenderStatic();
     virtual ~VertexRenderStatic();
@@ -13,17 +13,10 @@ class VertexRenderStatic : public VBO {
     void render();
 
   private:
-    virtual void createIndex() override;
-    virtual void clearIndex() override;
-
+    VBO vbo;
     unsigned int ibo;
-    unsigned int sizeBufferIndex;
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
 };
-
-// void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& outData,
-//                    std::vector<unsigned int>& out_indices);
-
 } // namespace Chimera
 #endif

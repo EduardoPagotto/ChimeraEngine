@@ -50,7 +50,7 @@ void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& out
                  outData.size(), out_indices.size());
 }
 
-VertexRenderStatic::VertexRenderStatic() : VBO() { ibo = 0; }
+VertexRenderStatic::VertexRenderStatic() { ibo = 0; }
 VertexRenderStatic::~VertexRenderStatic() {
 
     if (vertexData.size() > 0)
@@ -63,20 +63,16 @@ VertexRenderStatic::~VertexRenderStatic() {
         glDeleteBuffers(1, &ibo);
 }
 
-void VertexRenderStatic::createIndex() {
-
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void VertexRenderStatic::clearIndex() { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo); }
-
 void VertexRenderStatic::render() {
-    vao.bind(); // glBindVertexArray(vao);
+    vbo.vao.bind(); // glBindVertexArray(vao);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo); // FIXME ao colocar o vao aqui testar sem esta chamada e a 0
+
     glDrawElements(GL_TRIANGLES, indexIBO.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-    vao.unbind(); // glBindVertexArray(0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    vbo.vao.unbind(); // glBindVertexArray(0);
 }
 
 void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index) {
@@ -88,8 +84,18 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
         indexIBO = index;
     }
 
-    sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
+    unsigned int sizeBufferIndex = indexIBO.size() * sizeof(unsigned int);
 
-    VBO::buildStatic(vertexData);
+    vbo.buildStatic(vertexData);
+
+    vbo.vao.bind();
+
+    // Create EBO
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &indexIBO[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    vbo.vao.unbind();
 }
 } // namespace Chimera

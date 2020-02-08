@@ -9,7 +9,7 @@ VBO::~VBO() {
         glDeleteBuffers(1, &vbo);
 }
 
-void VBO::initialize(std::vector<VertexData>& vertexData, bool bufferDynamic) {
+void VBO::initialize(std::vector<VertexData>& vertexData, const int& maxBufferSize) {
 
     // cria o vao
     vao.create();
@@ -19,7 +19,7 @@ void VBO::initialize(std::vector<VertexData>& vertexData, bool bufferDynamic) {
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    if (bufferDynamic == false) {
+    if (maxBufferSize == 0) {
 
         glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(VertexData), &vertexData[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -51,7 +51,7 @@ void VBO::initialize(std::vector<VertexData>& vertexData, bool bufferDynamic) {
 
     // vincula ibo
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    if (bufferDynamic == false) {
+    if (maxBufferSize == 0) {
         clearIndex();
     }
 

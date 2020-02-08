@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-class VertexRenderDynamic : public VBO {
+class VertexRenderDynamic {
   public:
     VertexRenderDynamic();
     void create(const unsigned int& max);
@@ -13,8 +13,7 @@ class VertexRenderDynamic : public VBO {
     void render(std::vector<VertexData>& vVertice);
 
   private:
-    virtual void createIndex() override{};
-    virtual void clearIndex() override{};
+    VBO vbo;
 };
 } // namespace Chimera
 #endif

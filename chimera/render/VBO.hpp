@@ -15,14 +15,13 @@ class VBO {
     void bind();
     void unbind();
 
-  protected:
-    void buildStatic(std::vector<VertexData>& vertexData);
-    void buildDynamic(const int& maxBufferSize);
-
-    virtual void createIndex() = 0;
-    virtual void clearIndex() = 0;
-
     VAO vao;
+    void buildDynamic(const int& maxBufferSize);
+    void buildStatic(std::vector<VertexData>& vertexData);
+
+  protected:
+    virtual void createIndex(){};
+    virtual void clearIndex(){};
     unsigned int vboGL;
 
   private:

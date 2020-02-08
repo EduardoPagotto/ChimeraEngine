@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-class HeightMap : public VBO {
+class HeightMap {
   public:
     HeightMap(int _width, int _height, int _squareX, int _squareZ);
     ~HeightMap();
@@ -16,10 +16,7 @@ class HeightMap : public VBO {
     void render(Frustum& _frustrun);
 
   private:
-    virtual void createIndex() override;
-    virtual void clearIndex() override;
-
-  private:
+    VBO vbo;
     std::vector<VertexNode*> vNodes;
 
     int width;

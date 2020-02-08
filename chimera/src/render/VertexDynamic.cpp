@@ -12,7 +12,7 @@ void VertexRenderDynamic::render(std::vector<VertexData>& vVertice) {
 
     vao.bind();
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vboGL);
 
     int tot = vVertice.size() * sizeof(Chimera::VertexData);
     // glBufferData(GL_ARRAY_BUFFER, 5000, nullptr, GL_STREAM_DRAW);

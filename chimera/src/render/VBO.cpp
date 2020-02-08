@@ -3,10 +3,10 @@
 
 namespace Chimera {
 
-VBO::VBO() : vbo(0) {}
+VBO::VBO() : vboGL(0) {}
 VBO::~VBO() {
-    if (vbo > 0)
-        glDeleteBuffers(1, &vbo);
+    if (vboGL > 0)
+        glDeleteBuffers(1, &vboGL);
 }
 
 void VBO::setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset) {
@@ -21,8 +21,8 @@ void VBO::initialize(std::vector<VertexData>& vertexData, const int& maxBufferSi
     vao.bind();
 
     // Buffer de vertice
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glGenBuffers(1, &vboGL);
+    glBindBuffer(GL_ARRAY_BUFFER, vboGL);
 
     if (maxBufferSize == 0) {
 
@@ -32,8 +32,8 @@ void VBO::initialize(std::vector<VertexData>& vertexData, const int& maxBufferSi
         // TODO: implementar em herança
         createIndex();
 
-        // vincula vbo
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        // vincula vboGL
+        glBindBuffer(GL_ARRAY_BUFFER, vboGL);
     } else {
 
         glBufferData(GL_ARRAY_BUFFER, maxBufferSize, nullptr, GL_STREAM_DRAW);

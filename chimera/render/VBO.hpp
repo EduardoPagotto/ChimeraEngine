@@ -18,7 +18,7 @@ class VBO {
     virtual void clearIndex() = 0;
 
     VAO vao;
-    unsigned int vbo;
+    unsigned int vboGL;
 
   private:
     void setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset);

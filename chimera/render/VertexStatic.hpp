@@ -1,6 +1,7 @@
 #ifndef __CHIMERA_VERTEX_STATIC_HPP
 #define __CHIMERA_VERTEX_STATIC_HPP
 
+#include "EBO.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
 
@@ -16,7 +17,7 @@ class VertexRenderStatic {
   private:
     VBO vbo;
     VAO vao;
-    unsigned int ibo;
+    EBO ebo;
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
 };

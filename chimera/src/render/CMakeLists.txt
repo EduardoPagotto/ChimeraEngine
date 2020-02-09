@@ -18,6 +18,7 @@ set (RenderSource 	Triangle.cpp
 					LoadHeightMap.cpp
 					VertexNode.cpp
 					VAO.cpp
+					EBO.cpp
 					VBO.cpp
 					VertexDynamic.cpp 
 					VertexStatic.cpp

@@ -35,10 +35,12 @@ class Game : public Chimera::IGameClientEvents {
     int botaoIndex;
     int estadoBotao;
     bool debugParser;
+
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    Chimera::VertexRenderDynamic VBO;
+    Chimera::VertexRenderDynamic renderDynamic;
+
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;

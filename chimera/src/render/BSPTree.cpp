@@ -227,6 +227,24 @@ SIDE classifyPoint(Chimera::Triangle* plane, glm::vec3* eye) {
     return SIDE::CP_ONPLANE;
 }
 
+void drawPolygon(BSPTreeNode* tree, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata, bool frontSide) {
+    // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
+    for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
+        Chimera::Triangle t = (*it);
+        _pOutVertex->push_back(t.vertex[0]);
+        _pOutVertex->push_back(t.vertex[1]);
+        _pOutVertex->push_back(t.vertex[2]);
+
+        // FIXME: remover depois de concluir o algoritmo
+        if (logdata == true) {
+            if (frontSide == true)
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
+            else
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
+        }
+    }
+}
+
 void traverseTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
@@ -236,36 +254,13 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::Vertex
     if (result == SIDE::CP_FRONT) {
 
         traverseTree(tree->back, eye, _pOutVertex, logdata);
-
-        // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
-        for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-            Chimera::Triangle t = (*it);
-            _pOutVertex->push_back(t.vertex[0]);
-            _pOutVertex->push_back(t.vertex[1]);
-            _pOutVertex->push_back(t.vertex[2]);
-
-            // FIXME: remover depois de concluir o algoritmo
-            if (logdata == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
-        }
-
+        drawPolygon(tree, _pOutVertex, logdata, true);
         traverseTree(tree->front, eye, _pOutVertex, logdata);
 
     } else if (result == SIDE::CP_BACK) {
+
         traverseTree(tree->front, eye, _pOutVertex, logdata);
-
-        // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
-        for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-            Chimera::Triangle t = (*it);
-            _pOutVertex->push_back(t.vertex[0]);
-            _pOutVertex->push_back(t.vertex[1]);
-            _pOutVertex->push_back(t.vertex[2]);
-
-            // FIXME: remover depois de concluir o algoritmo
-            if (logdata == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
-        }
-
+        drawPolygon(tree, _pOutVertex, logdata, false);
         traverseTree(tree->back, eye, _pOutVertex, logdata);
 
     } else { // result == SIDE::CP_ONPLANE

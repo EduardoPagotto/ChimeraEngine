@@ -2,10 +2,13 @@
 
 // ref novo: https://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
 
-struct BSPNode {
-    POLYGON* splitter;
-    BSPNode* FrontChild;
-    BSPNode* BackChild;
+struct POLYGON {
+    D3DLVERTEX VertexList[10];
+    D3DVECTOR Normal;
+    WORD NumberOfVertices;
+    WORD NumberOfIndices;
+    WORD Indices[30];
+    POLYGON* Next;
 };
 
 struct NODE {
@@ -83,15 +86,6 @@ void WalkBspTree(NODE* Node, D3DVECTOR* pos) {
         WalkBspTree(Node->Back, pos);
     return;
 }
-
-struct POLYGON {
-    D3DLVERTEX VertexList[10];
-    D3DVECTOR Normal;
-    WORD NumberOfVertices;
-    WORD NumberOfIndices;
-    WORD Indices[30];
-    POLYGON* Next;
-};
 
 BYTE BSPMAP[] = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // marca
                  0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,  // marca
@@ -350,80 +344,6 @@ POLYGON* SelectBestSplitter(POLYGON* PolyList) {
     } // end while splitter == null
     return SelectedPoly;
 }
-
-void BuildBspTree(NODE* CurrentNode, POLYGON* PolyList) {
-    POLYGON* polyTest = NULL;
-    POLYGON* FrontList = NULL;
-    POLYGON* BackList = NULL;
-    POLYGON* NextPolygon = NULL;
-    POLYGON* FrontSplit = NULL;
-    POLYGON* BackSplit = NULL;
-    D3DVECTOR vec1, vec2;
-    CurrentNode->Splitter = SelectBestSplitter(PolyList);
-    polyTest = PolyList;
-
-    while (polyTest != NULL) {
-        NextPolygon = polyTest->Next; // remember because polytest-> Next will be altered
-        if (polyTest != CurrentNode->Splitter) {
-            switch (ClassifyPoly(CurrentNode->Splitter, polyTest)) {
-
-                case CP_FRONT:
-                    polyTest->Next = FrontList;
-                    FrontList = polyTest;
-                    break;
-
-                case CP_BACK:
-                    polyTest->Next = BackList;
-                    BackList = polyTest;
-                    break;
-
-                case CP_SPANNING:
-                    FrontSplit = new POLYGON;
-                    BackSplit = new POLYGON;
-                    ZeroMemory(FrontSplit, sizeof(POLYGON));
-                    ZeroMemory(BackSplit, sizeof(POLYGON));
-                    SplitPolygon(polyTest, CurrentNode->Splitter, FrontSplit, BackSplit);
-                    delete polyTest;
-                    FrontSplit->Next = FrontList;
-                    FrontList = FrontSplit;
-                    BackSplit->Next = BackList;
-                    BackList = BackSplit;
-                    break;
-                default:
-                    break;
-            }
-        } // end if polypoint!=CurrentNodesplitter
-        polyTest = NextPolygon;
-    } // end while loop
-
-    if (FrontList == NULL) {
-        NODE* leafnode = new NODE;
-        ZeroMemory(leafnode, sizeof(leafnode));
-        leafnode->IsLeaf = true;
-        leafnode->IsSolid = false;
-        CurrentNode->Front = leafnode;
-    } else {
-        NODE* newnode = new NODE;
-        ZeroMemory(newnode, sizeof(newnode));
-        newnode->IsLeaf = false;
-        CurrentNode->Front = newnode;
-        BuildBspTree(newnode, FrontList);
-    }
-    if (BackList == NULL) {
-        NODE* leafnode = new NODE;
-        ZeroMemory(leafnode, sizeof(leafnode));
-        leafnode->IsLeaf = true;
-        leafnode->IsSolid = true;
-        CurrentNode->Back = leafnode;
-        ;
-    } else {
-        NODE* newnode = new NODE;
-        ZeroMemory(newnode, sizeof(newnode));
-        newnode->IsLeaf = false;
-        CurrentNode->Back = newnode;
-        BuildBspTree(newnode, BackList);
-    }
-} // end function
 
 void BuildBspTree(NODE* CurrentNode, POLYGON* PolyList) {
     POLYGON* polyTest = NULL;

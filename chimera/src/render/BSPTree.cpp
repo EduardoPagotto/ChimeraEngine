@@ -103,10 +103,6 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
 
     //--
 
-    Chimera::Triangle T2(b, B, A);
-    T2.vertex[0].texture = retTex1(pVertex_a->texture, pVertex_b->texture); // pVertex_b->texture; // b old c
-    // T2.vertex[0].texture = retTex1(pVertex_c->texture, pVertex_b->texture);
-
     // Hipotenusa e cateto oposto para pegar o seno rad1
     float hypo = glm::distance(c, b);  // segmento de reta de c' ate b'
     float catOp = glm::distance(a, b); // segmento a' ate b'
@@ -119,8 +115,10 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     float valxTexTemp = glm::distance(a, b); // tamanho total do Y
     float valxTex = val_final / valxTexTemp; // razao da textura em X ufa!!!
 
-    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
-    T2.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
+    Chimera::Triangle T2(b, B, A);
+    T2.vertex[0].texture = retTex1(pVertex_a->texture, pVertex_b->texture); // pVertex_b->texture; // b old c
+    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);                   // B
+    T2.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y);      // A
 
     // --
 
@@ -232,8 +230,8 @@ void drawPolygon(BSPTreeNode* tree, std::vector<Chimera::VertexData>* _pOutVerte
     for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
         Chimera::Triangle t = (*it);
 
-        if (t.getSerial() == 10) // 8, 9, 10
-            continue;
+        // if (t.getSerial() == 10) // 8, 9, 10
+        //     continue;
 
         _pOutVertex->push_back(t.vertex[0]);
         _pOutVertex->push_back(t.vertex[1]);

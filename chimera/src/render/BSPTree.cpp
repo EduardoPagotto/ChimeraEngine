@@ -94,11 +94,18 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
 
     float propAC = (glm::distance(A, a) / glm::distance(a, c)); // razao da distancia entre a e A
-    float InterTexA = propAC * pVertex_a->texture.x;
+
+    float InterTexA;
+    // testa sentido da textura em x inverte se vem de 1 -> 0
+    float val = _pTriangle->vertex[1].texture.x - _pTriangle->vertex[0].texture.x;
+    if (val > 0)
+        InterTexA = propAC * pVertex_a->texture.x;
+    else
+        InterTexA = propAC * (1 - pVertex_a->texture.x);
 
     Chimera::Triangle T1(a, b, A);
-    T1.vertex[0].texture = retTex1(pVertex_c->texture, pVertex_a->texture);
-    T1.vertex[1].texture = retTex1(pVertex_a->texture, pVertex_b->texture);
+    T1.vertex[0].texture = pVertex_a->texture;                         // a old b
+    T1.vertex[1].texture = pVertex_b->texture;                         // b old c
     T1.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
 
     //--
@@ -116,16 +123,16 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     float valxTex = val_final / valxTexTemp; // razao da textura em X ufa!!!
 
     Chimera::Triangle T2(b, B, A);
-    T2.vertex[0].texture = retTex1(pVertex_a->texture, pVertex_b->texture); // pVertex_b->texture; // b old c
-    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);                   // B
-    T2.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y);      // A
+    T2.vertex[0].texture = pVertex_b->texture;                         // b old c
+    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
+    T2.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
 
     // --
 
     Chimera::Triangle T3(A, B, c);
-    T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y);      // A
-    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);                   // B
-    T3.vertex[2].texture = retTex2(pVertex_b->texture, pVertex_c->texture); // c old a
+    T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
+    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
+    T3.vertex[2].texture = pVertex_c->texture;                         // c old a
 
     for (int i = 0; i < 3; i++) {
         T1.vertex[i].normal = _pTriangle->vertex[i].normal;

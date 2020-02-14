@@ -1,38 +1,10 @@
 #include "chimera/render/BSPTree.hpp"
 #include <SDL2/SDL.h>
 
-//-----builder
-// #define EPSILON 1e-3
-
 template <class T> void swapFace(T& a, T& b) {
     T c = b;
     b = a;
     a = c;
-}
-
-glm::vec2 retTex1(const glm::vec2& _p0, const glm::vec2& _p1) {
-    return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
-}
-
-glm::vec2 retTex2(const glm::vec2& _p0, const glm::vec2& _p1) {
-    // FIXME: horrivel
-    float dx = _p1.x - _p0.x;
-    float dy = _p1.y - _p0.y;
-
-    float vx, vy;
-
-    if (dx < 0)
-        vx = _p1.x;
-    else
-        vx = _p0.x;
-
-    if (dy < 0)
-        vy = _p1.y;
-    else
-        vy = _p0.y;
-
-    return glm::vec2(vx, vy);
-    // return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
 }
 
 glm::vec3 aprox(const glm::vec3& dado) {
@@ -86,10 +58,6 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
         pVertex_c = &_pTriangle->vertex[2]; // old c
     }
 
-    // Testar ideia
-    // Na textura se Xb - Xa > 0 entao Xb e [1,n] do contrario [0,n] para segmento de reta ab
-    // Na textura se Yb - Ya > 0 entao Yb e [n,1] do contrario [n,0] para segmento de reta ab
-
     glm::vec3 A = intersect(_partition->normal(), _partition->vertex[0].position, a, c);
     glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
 
@@ -128,7 +96,6 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     T2.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
 
     // --
-
     Chimera::Triangle T3(A, B, c);
     T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
     T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
@@ -266,11 +233,11 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::Vertex
         drawPolygon(tree, _pOutVertex, logdata, true);
         traverseTree(tree->front, eye, _pOutVertex, logdata);
 
-        // } else if (result == SIDE::CP_BACK) {
+    } else if (result == SIDE::CP_BACK) {
 
-        //     traverseTree(tree->front, eye, _pOutVertex, logdata);
-        //     drawPolygon(tree, _pOutVertex, logdata, false);
-        //     traverseTree(tree->back, eye, _pOutVertex, logdata);
+        traverseTree(tree->front, eye, _pOutVertex, logdata);
+        drawPolygon(tree, _pOutVertex, logdata, false);
+        traverseTree(tree->back, eye, _pOutVertex, logdata);
 
     } else { // result == SIDE::CP_ONPLANE
         // the eye point is on the partition plane...

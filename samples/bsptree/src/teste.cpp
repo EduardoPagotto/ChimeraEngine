@@ -1,5 +1,4 @@
 // ref https://www.cs.utah.edu/~jsnider/SeniorProj/BSP1/default.html
-
 // ref novo: https://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
 
 struct POLYGON {
@@ -18,74 +17,6 @@ struct NODE {
     BOOL IsLeaf;
     BOOL IsSolid;
 };
-
-void RenderBSP(NODE* CurrentNode) {
-    int Result;
-    Result = ClassifyPoint(CameraPosition, CurrentNode->Polygon);
-    if (Result == Front) {
-        if (CurrentNode->BackChild != NULL)
-            RenderBSP(CurrentNode->BackChild);
-
-        DrawPolygon(CurrentNode->Polygon);
-
-        if (CurrentNode->FrontChild != NULL)
-            RenderBSP(CurrentNode->FrontChild);
-
-    } else {
-
-        if (CurrentNode->FrontChild != NULL)
-            RenderBSP(CurrentNode->FrontChild);
-
-        DrawPolygon(CurrentNode->Polygon);
-
-        if (CurrentNode->BackChild != NULL)
-            RenderBSP(CurrentNode->BackChild);
-    }
-}
-
-void WalkBspTree(NODE* Node, D3DVECTOR* pos) {
-    POLYGON* shared;
-    int result = ClassifyPoint(pos, Node->Splitter);
-
-    if (result == CP_FRONT) {
-        shared = Node->Splitter->SameFacingShared;
-
-        if (Node->Back != NULL)
-            WalkBspTree(Node->Back, pos);
-
-        lpDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, D3DFVF_LVERTEX, &Node->Splitter->VertexList[0],
-                                       Node->Splitter->NumberOfVertices, &Node->Splitter->Indices[0],
-                                       Node->Splitter->NumberOfIndices, NULL);
-
-        while (shared != NULL) {
-            lpDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, D3DFVF_LVERTEX, &shared->VertexList[0],
-                                           shared->NumberOfVertices, &shared->Indices[0], shared->NumberOfIndices,
-                                           NULL);
-
-            shared = shared->SameFacingShared;
-        }
-
-        if (Node->Front != NULL)
-            WalkBspTree(Node->Front, pos);
-
-        return;
-    }
-
-    // this means we are at back of node
-    shared = Node->Splitter->OppositeFacingShared;
-    if (Node->Front != NULL)
-        WalkBspTree(Node->Front, pos);
-
-    while (shared != NULL) {
-        lpDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, D3DFVF_LVERTEX, &shared->VertexList[0],
-                                       shared->NumberOfVertices, &shared->Indices[0], shared->NumberOfIndices, NULL);
-        shared = shared->OppositeFacingShared;
-    }
-
-    if (Node->Back != NULL)
-        WalkBspTree(Node->Back, pos);
-    return;
-}
 
 BYTE BSPMAP[] = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // marca
                  0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,  // marca
@@ -419,39 +350,39 @@ void BuildBspTree(NODE* CurrentNode, POLYGON* PolyList) {
     }
 } // end function
 
-bool Get_Intersect(D3DVECTOR* linestart, D3DVECTOR* lineend, D3DVECTOR* vertex, D3DVECTOR* normal,
-                   D3DVECTOR* intersection, float* percentage) {
-    D3DVECTOR direction, L1;
-    float linelength, dist_from_plane;
+// bool Get_Intersect(D3DVECTOR* linestart, D3DVECTOR* lineend, D3DVECTOR* vertex, D3DVECTOR* normal,
+//                    D3DVECTOR* intersection, float* percentage) {
+//     D3DVECTOR direction, L1;
+//     float linelength, dist_from_plane;
 
-    direction.x = lineend->x - linestart->x;
-    direction.y = lineend->y - linestart->y;
-    direction.z = lineend->z - linestart->z;
+//     direction.x = lineend->x - linestart->x;
+//     direction.y = lineend->y - linestart->y;
+//     direction.z = lineend->z - linestart->z;
 
-    linelength = DotProduct(direction, *normal);
+//     linelength = DotProduct(direction, *normal);
 
-    if (fabsf(linelength) < 0.0001) {
-        return false;
-    }
+//     if (fabsf(linelength) < 0.0001) {
+//         return false;
+//     }
 
-    L1.x = vertex->x - linestart->x;
-    L1.y = vertex->y - linestart->y;
-    L1.z = vertex->z - linestart->z;
+//     L1.x = vertex->x - linestart->x;
+//     L1.y = vertex->y - linestart->y;
+//     L1.z = vertex->z - linestart->z;
 
-    dist_from_plane = DotProduct(L1, *normal);
-    *percentage = dist_from_plane / linelength;
+//     dist_from_plane = DotProduct(L1, *normal);
+//     *percentage = dist_from_plane / linelength;
 
-    if (*percentage < 0.0f) {
-        return false;
-    } else if (*percentage > 1.0f) {
-        return false;
-    }
+//     if (*percentage < 0.0f) {
+//         return false;
+//     } else if (*percentage > 1.0f) {
+//         return false;
+//     }
 
-    intersection->x = linestart->x + direction.x * (*percentage);
-    intersection->y = linestart->y + direction.y * (*percentage);
-    intersection->z = linestart->z + direction.z * (*percentage);
-    return true;
-}
+//     intersection->x = linestart->x + direction.x * (*percentage);
+//     intersection->y = linestart->y + direction.y * (*percentage);
+//     intersection->z = linestart->z + direction.z * (*percentage);
+//     return true;
+// }
 
 void SplitPolygon(POLYGON* Poly, POLYGON* Plane, POLYGON* FrontSplit, POLYGON* BackSplit) {
     D3DLVERTEX FrontList[20], BackList[20], FirstVertex;

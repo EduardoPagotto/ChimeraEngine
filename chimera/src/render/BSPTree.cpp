@@ -249,3 +249,37 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::Vertex
 void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
     traverseTree(_pRoot, eye, _pOutVertex, logdata);
 }
+
+bool getIntersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* vertex, glm::vec3* normal,
+                  glm::vec3* intersection, float* percentage) {
+    glm::vec3 direction, L1;
+    float linelength, dist_from_plane;
+
+    direction.x = lineend->x - linestart->x;
+    direction.y = lineend->y - linestart->y;
+    direction.z = lineend->z - linestart->z;
+
+    linelength = glm::dot(direction, *normal);
+
+    if (fabsf(linelength) < 0.0001) {
+        return false;
+    }
+
+    L1.x = vertex->x - linestart->x;
+    L1.y = vertex->y - linestart->y;
+    L1.z = vertex->z - linestart->z;
+
+    dist_from_plane = glm::dot(L1, *normal);
+    *percentage = dist_from_plane / linelength;
+
+    if (*percentage < 0.0f) {
+        return false;
+    } else if (*percentage > 1.0f) {
+        return false;
+    }
+
+    intersection->x = linestart->x + direction.x * (*percentage);
+    intersection->y = linestart->y + direction.y * (*percentage);
+    intersection->z = linestart->z + direction.z * (*percentage);
+    return true;
+}

@@ -12,15 +12,19 @@ glm::vec3 aprox(const glm::vec3& dado) {
                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z);
 }
 
-glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
-    float num = glm::dot(n, a);
-    glm::vec3 cma = c - a;
-    float denom = glm::dot(n, cma);
-    float D = -glm::dot(n, p0); // direção inversa
-    float t = -(num + D) / denom;
+glm::vec3 intersect(const glm::vec3& linestart, const glm::vec3& lineend, const glm::vec3& vertex,
+                    const glm::vec3& normal, float& percentage) {
 
-    glm::vec3 valor = a + t * (c - a);
-    return aprox(valor);
+    float num = glm::dot(normal, linestart);
+    glm::vec3 direction = lineend - linestart;
+
+    float linelength = glm::dot(normal, direction);
+    float D = -glm::dot(normal, vertex); // direção inversa
+
+    percentage = -(num + D) / linelength;
+
+    glm::vec3 intersection = linestart + percentage * direction;
+    return aprox(intersection);
 }
 
 void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::Triangle* _partition,
@@ -58,10 +62,9 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
         pVertex_c = &_pTriangle->vertex[2]; // old c
     }
 
-    glm::vec3 A = intersect(_partition->normal(), _partition->vertex[0].position, a, c);
-    glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
-
-    float propAC = (glm::distance(A, a) / glm::distance(a, c)); // razao da distancia entre a e A
+    float propAC = 0.0;
+    float propBC = 0.0;
+    glm::vec3 A = intersect(a, c, _partition->vertex[0].position, _partition->normal(), propAC);
 
     float InterTexA;
     // testa sentido da textura em x inverte se vem de 1 -> 0
@@ -77,6 +80,7 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     T1.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
 
     //--
+    glm::vec3 B = intersect(b, c, _partition->vertex[0].position, _partition->normal(), propBC);
 
     // Hipotenusa e cateto oposto para pegar o seno rad1
     float hypo = glm::distance(c, b);  // segmento de reta de c' ate b'

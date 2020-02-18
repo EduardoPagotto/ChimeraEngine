@@ -350,39 +350,39 @@ void BuildBspTree(NODE* CurrentNode, POLYGON* PolyList) {
     }
 } // end function
 
-// bool Get_Intersect(D3DVECTOR* linestart, D3DVECTOR* lineend, D3DVECTOR* vertex, D3DVECTOR* normal,
-//                    D3DVECTOR* intersection, float* percentage) {
-//     D3DVECTOR direction, L1;
-//     float linelength, dist_from_plane;
+bool Get_Intersect(D3DVECTOR* linestart, D3DVECTOR* lineend, D3DVECTOR* vertex, D3DVECTOR* normal,
+                   D3DVECTOR* intersection, float* percentage) {
+    D3DVECTOR direction, L1;
+    float linelength, dist_from_plane;
 
-//     direction.x = lineend->x - linestart->x;
-//     direction.y = lineend->y - linestart->y;
-//     direction.z = lineend->z - linestart->z;
+    direction.x = lineend->x - linestart->x;
+    direction.y = lineend->y - linestart->y;
+    direction.z = lineend->z - linestart->z;
 
-//     linelength = DotProduct(direction, *normal);
+    linelength = DotProduct(direction, *normal);
 
-//     if (fabsf(linelength) < 0.0001) {
-//         return false;
-//     }
+    if (fabsf(linelength) < 0.0001) {
+        return false;
+    }
 
-//     L1.x = vertex->x - linestart->x;
-//     L1.y = vertex->y - linestart->y;
-//     L1.z = vertex->z - linestart->z;
+    L1.x = vertex->x - linestart->x;
+    L1.y = vertex->y - linestart->y;
+    L1.z = vertex->z - linestart->z;
 
-//     dist_from_plane = DotProduct(L1, *normal);
-//     *percentage = dist_from_plane / linelength;
+    dist_from_plane = DotProduct(L1, *normal);
+    *percentage = dist_from_plane / linelength;
 
-//     if (*percentage < 0.0f) {
-//         return false;
-//     } else if (*percentage > 1.0f) {
-//         return false;
-//     }
+    if (*percentage < 0.0f) {
+        return false;
+    } else if (*percentage > 1.0f) {
+        return false;
+    }
 
-//     intersection->x = linestart->x + direction.x * (*percentage);
-//     intersection->y = linestart->y + direction.y * (*percentage);
-//     intersection->z = linestart->z + direction.z * (*percentage);
-//     return true;
-// }
+    intersection->x = linestart->x + direction.x * (*percentage);
+    intersection->y = linestart->y + direction.y * (*percentage);
+    intersection->z = linestart->z + direction.z * (*percentage);
+    return true;
+}
 
 void SplitPolygon(POLYGON* Poly, POLYGON* Plane, POLYGON* FrontSplit, POLYGON* BackSplit) {
     D3DLVERTEX FrontList[20], BackList[20], FirstVertex;

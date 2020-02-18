@@ -59,7 +59,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1)
             trackBall.tracking(mm.xrel, mm.yrel);
-        else if (botaoIndex == 2)
+        else if (botaoIndex == 3)
             trackBall.offSet(mm.yrel);
     }
 }
@@ -85,7 +85,8 @@ void Game::start() {
     std::vector<Chimera::Triangle> listPolygons;
 
     Chimera::LoaderObj loader;
-    loader.getMesh("./data/models/square1.obj", m);
+    loader.getMesh("./data/models/square2.obj", m);
+    // loader.getMesh("./data/models/square1.obj", m);
     // loader.getMesh("./data/models/split1.obj", m);
     // loader.getMesh("./data/models/teste1.obj", m);
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);

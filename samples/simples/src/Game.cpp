@@ -55,7 +55,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1)
             trackBall.tracking(mm.xrel, mm.yrel);
-        else if (botaoIndex == 2)
+        else if (botaoIndex == 3)
             trackBall.offSet(mm.yrel);
     }
 }

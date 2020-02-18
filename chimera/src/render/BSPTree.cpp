@@ -65,45 +65,33 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     float propAC = 0.0;
     float propBC = 0.0;
     glm::vec3 A = intersect(a, c, _partition->vertex[0].position, _partition->normal(), propAC);
-
-    float InterTexA;
-    // testa sentido da textura em x inverte se vem de 1 -> 0
-    float val = _pTriangle->vertex[1].texture.x - _pTriangle->vertex[0].texture.x;
-    if (val > 0)
-        InterTexA = propAC * pVertex_a->texture.x;
-    else
-        InterTexA = propAC * (1 - pVertex_a->texture.x);
-
-    Chimera::Triangle T1(a, b, A);
-    T1.vertex[0].texture = pVertex_a->texture;                         // a old b
-    T1.vertex[1].texture = pVertex_b->texture;                         // b old c
-    T1.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
-
-    //--
     glm::vec3 B = intersect(b, c, _partition->vertex[0].position, _partition->normal(), propBC);
 
-    // Hipotenusa e cateto oposto para pegar o seno rad1
-    float hypo = glm::distance(c, b);  // segmento de reta de c' ate b'
-    float catOp = glm::distance(a, b); // segmento a' ate b'
-    float rad1 = catOp / hypo;
+    // PA texture coord
+    glm::vec2 deltaA = (pVertex_c->texture - pVertex_a->texture) * propAC;
+    glm::vec2 texA = pVertex_a->texture + deltaA;
 
-    // Hipotenusa e seno para calcular o valor do cateto opposo (proporcao x da textura)
-    float hypo2 = glm::distance(c, B);
-    float seno1 = rad1;
-    float val_final = seno1 * hypo2;         // valor da imagem do ponto B em Y (cateto oposto)
-    float valxTexTemp = glm::distance(a, b); // tamanho total do Y
-    float valxTex = val_final / valxTexTemp; // razao da textura em X ufa!!!
+    // PB texture coord
+    glm::vec2 deltaB = (pVertex_c->texture - pVertex_b->texture) * propBC;
+    glm::vec2 texB = pVertex_b->texture + deltaB;
 
+    //-- T1
+    Chimera::Triangle T1(a, b, A);
+    T1.vertex[0].texture = pVertex_a->texture; // a old b
+    T1.vertex[1].texture = pVertex_b->texture; // b old c
+    T1.vertex[2].texture = texA;               // A
+
+    //-- T2
     Chimera::Triangle T2(b, B, A);
-    T2.vertex[0].texture = pVertex_b->texture;                         // b old c
-    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
-    T2.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
+    T2.vertex[0].texture = pVertex_b->texture; // b old c
+    T2.vertex[1].texture = texB;               // B
+    T2.vertex[2].texture = texA;               // A
 
-    // --
+    // -- T3
     Chimera::Triangle T3(A, B, c);
-    T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
-    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
-    T3.vertex[2].texture = pVertex_c->texture;                         // c old a
+    T3.vertex[0].texture = texA;               // A
+    T3.vertex[1].texture = texB;               // B
+    T3.vertex[2].texture = pVertex_c->texture; // c old a
 
     for (int i = 0; i < 3; i++) {
         T1.vertex[i].normal = _pTriangle->vertex[i].normal;

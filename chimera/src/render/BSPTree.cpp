@@ -12,19 +12,26 @@ glm::vec3 aprox(const glm::vec3& dado) {
                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z);
 }
 
-glm::vec3 intersect(const glm::vec3& linestart, const glm::vec3& lineend, const glm::vec3& vertex,
-                    const glm::vec3& normal, float& percentage) {
+bool intersect(const glm::vec3& linestart, const glm::vec3& lineend, const glm::vec3& vertex, const glm::vec3& normal,
+               glm::vec3& intersection, float& percentage) {
 
-    float num = glm::dot(normal, linestart);
     glm::vec3 direction = lineend - linestart;
+    float linelength = glm::dot(direction, normal);
+    if (fabsf(linelength) < 0.0001)
+        return false;
 
-    float linelength = glm::dot(normal, direction);
-    float D = -glm::dot(normal, vertex); // direção inversa
+    glm::vec3 L1 = vertex - linestart;
 
-    percentage = -(num + D) / linelength;
+    float dist_from_plane = glm::dot(L1, normal);
+    percentage = dist_from_plane / linelength;
 
-    glm::vec3 intersection = linestart + percentage * direction;
-    return aprox(intersection);
+    if (percentage < 0.0f)
+        return false;
+    else if (percentage > 1.0f)
+        return false;
+
+    intersection = linestart + (direction * percentage);
+    return true;
 }
 
 void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::Triangle* _partition,
@@ -64,8 +71,9 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
 
     float propAC = 0.0;
     float propBC = 0.0;
-    glm::vec3 A = intersect(a, c, _partition->vertex[0].position, _partition->normal(), propAC);
-    glm::vec3 B = intersect(b, c, _partition->vertex[0].position, _partition->normal(), propBC);
+    glm::vec3 A, B;
+    intersect(a, c, _partition->vertex[0].position, _partition->normal(), A, propAC);
+    intersect(b, c, _partition->vertex[0].position, _partition->normal(), B, propBC);
 
     // PA texture coord
     glm::vec2 deltaA = (pVertex_c->texture - pVertex_a->texture) * propAC;
@@ -240,38 +248,4 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::Vertex
 
 void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
     traverseTree(_pRoot, eye, _pOutVertex, logdata);
-}
-
-bool getIntersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* vertex, glm::vec3* normal,
-                  glm::vec3* intersection, float* percentage) {
-    glm::vec3 direction, L1;
-    float linelength, dist_from_plane;
-
-    direction.x = lineend->x - linestart->x;
-    direction.y = lineend->y - linestart->y;
-    direction.z = lineend->z - linestart->z;
-
-    linelength = glm::dot(direction, *normal);
-
-    if (fabsf(linelength) < 0.0001) {
-        return false;
-    }
-
-    L1.x = vertex->x - linestart->x;
-    L1.y = vertex->y - linestart->y;
-    L1.z = vertex->z - linestart->z;
-
-    dist_from_plane = glm::dot(L1, *normal);
-    *percentage = dist_from_plane / linelength;
-
-    if (*percentage < 0.0f) {
-        return false;
-    } else if (*percentage > 1.0f) {
-        return false;
-    }
-
-    intersection->x = linestart->x + direction.x * (*percentage);
-    intersection->y = linestart->y + direction.y * (*percentage);
-    intersection->z = linestart->z + direction.z * (*percentage);
-    return true;
 }

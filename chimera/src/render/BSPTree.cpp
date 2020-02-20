@@ -152,6 +152,7 @@ SIDE classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* poly, glm::vec3& 
 BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
     if (_pListPolygon->empty() == true)
         return nullptr;
+
     // tree->partition
     BSPTreeNode* tree = new BSPTreeNode(_pListPolygon->back());
     _pListPolygon->pop_back();
@@ -176,8 +177,23 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
         else // CP_SPANNING
             splitTriangle(result, &poly, &tree->partition, _pListPolygon);
     }
+
     tree->front = bsptreeBuild(&front_list);
     tree->back = bsptreeBuild(&back_list);
+
+    // leaf sem poligonos apenas para saber se solido ou vazio
+    if (tree->front == nullptr) {
+        tree->front = new BSPTreeNode(tree->partition);
+        tree->front->isLeaf = true;
+        tree->front->isSolid = false;
+    }
+
+    if (tree->back == nullptr) {
+        tree->back = new BSPTreeNode(tree->partition);
+        tree->back->isLeaf = true;
+        tree->back->isSolid = true;
+    }
+
     return tree;
 }
 
@@ -226,9 +242,9 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::Vertex
     if (tree == nullptr)
         return;
 
-    // TODO: Implementar o leaf e solido
-    // if (tree->isLeaf == true)
-    //     return;
+    // no de indicador de final/solido
+    if (tree->isLeaf == true)
+        return;
 
     SIDE result = classifyPoint(pos, &tree->partition);
     if (result == SIDE::CP_FRONT) {
@@ -281,6 +297,63 @@ bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
         return lineOfSight(Start, End, tree->back);
     }
     return true;
+}
+
+unsigned int selectBestSplitter(std::vector<Chimera::Triangle>& _poliyList) {
+
+    if (_poliyList.size() == 0)
+        return 0;
+
+    unsigned int indice_splitter = 0;
+    unsigned int selectedPoly = 0;
+    unsigned int bestScore = 100000; // just set to a very high value to begin
+
+    while (indice_splitter < _poliyList.size()) {
+
+        Chimera::Triangle splitter = _poliyList[indice_splitter];
+
+        long long score, splits, backfaces, frontfaces;
+        score = splits = backfaces = frontfaces = 0;
+
+        unsigned int indice_current = 0;
+        while (indice_current < _poliyList.size()) {
+
+            Chimera::Triangle currentPoly = _poliyList[indice_current];
+
+            if (indice_current != indice_splitter) {
+                glm::vec3 temp;
+                SIDE result = classifyPoly(&splitter, &currentPoly, temp);
+                switch (result) {
+                    case SIDE::CP_ONPLANE:
+                        break;
+                    case SIDE::CP_FRONT:
+                        frontfaces++;
+                        break;
+                    case SIDE::CP_BACK:
+                        backfaces++;
+                        break;
+                    case SIDE::CP_SPANNING:
+                        splits++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            indice_current++;
+
+        } // end while current poly
+
+        score = abs(frontfaces - backfaces) + (splits * 8);
+
+        if (score < bestScore) {
+            bestScore = score;
+            selectedPoly = indice_splitter;
+        }
+
+        indice_splitter++;
+    } // end while splitter == null
+    return selectedPoly;
 }
 
 void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {

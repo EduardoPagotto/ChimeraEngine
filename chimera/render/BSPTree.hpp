@@ -30,4 +30,7 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon);
 //----- parse bsptree to draw
 void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata);
 
+//---- util
+unsigned int selectBestSplitter(std::vector<Chimera::Triangle>& _poliyList);
+
 #endif

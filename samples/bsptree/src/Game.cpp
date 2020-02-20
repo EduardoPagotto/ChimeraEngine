@@ -85,8 +85,8 @@ void Game::start() {
     std::vector<Chimera::Triangle> listPolygons;
 
     Chimera::LoaderObj loader;
-    loader.getMesh("./data/models/square2.obj", m);
-    // loader.getMesh("./data/models/square1.obj", m);
+    // loader.getMesh("./data/models/square2.obj", m);
+    loader.getMesh("./data/models/square1.obj", m);
     // loader.getMesh("./data/models/split1.obj", m);
     // loader.getMesh("./data/models/teste1.obj", m);
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
@@ -97,6 +97,7 @@ void Game::start() {
     indexTriangles.clear(); // is sequential, not used here
 
     std::reverse(listPolygons.begin(), listPolygons.end());
+    // unsigned int val = selectBestSplitter(listPolygons);
 
     // Cria o BSP
     pBSPTRoot = bsptreeBuild(&listPolygons);

@@ -154,9 +154,13 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
         return nullptr;
 
     // tree->partition
-    BSPTreeNode* tree = new BSPTreeNode(_pListPolygon->back());
-    _pListPolygon->pop_back();
-    tree->polygons.push_back(tree->partition);
+    // BSPTreeNode* tree = new BSPTreeNode(_pListPolygon->back());
+    // _pListPolygon->pop_back();
+    // tree->polygons.push_back(tree->partition);
+
+    unsigned int bether_index = selectBestSplitter(*_pListPolygon);
+    Chimera::Triangle better = (*_pListPolygon)[bether_index];
+    BSPTreeNode* tree = new BSPTreeNode(better);
 
     std::vector<Chimera::Triangle> front_list;
     std::vector<Chimera::Triangle> back_list;

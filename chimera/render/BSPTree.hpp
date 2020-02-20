@@ -14,11 +14,14 @@ enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
 // };
 
 struct BSPTreeNode {
-    BSPTreeNode(const Chimera::Triangle& _partition) : partition(_partition), front(nullptr), back(nullptr) {}
+    BSPTreeNode(const Chimera::Triangle& _partition)
+        : partition(_partition), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
     std::vector<Chimera::Triangle> polygons;
     Chimera::Triangle partition; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
+    bool isLeaf;
+    bool isSolid;
 };
 
 //----- Build bsptree

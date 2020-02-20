@@ -183,11 +183,11 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
 
 //------PARSER METODOS------
 
-SIDE classifyPoint(Chimera::Triangle* plane, glm::vec3* eye) {
+SIDE classifyPoint(glm::vec3* pos, Chimera::Triangle* plane) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     float result;
     glm::vec3* vec1 = (glm::vec3*)&plane->vertex[0];
-    glm::vec3 dir = (*vec1) - (*eye);
+    glm::vec3 dir = (*vec1) - (*pos);
     result = glm::dot(dir, plane->normal());
 
     if (result < -EPSILON)
@@ -221,31 +221,68 @@ void drawPolygon(BSPTreeNode* tree, std::vector<Chimera::VertexData>* _pOutVerte
     }
 }
 
-void traverseTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
+void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
 
-    SIDE result = classifyPoint(&tree->partition, eye);
+    // TODO: Implementar o leaf e solido
+    // if (tree->isLeaf == true)
+    //     return;
+
+    SIDE result = classifyPoint(pos, &tree->partition);
     if (result == SIDE::CP_FRONT) {
 
-        traverseTree(tree->back, eye, _pOutVertex, logdata);
+        traverseTree(tree->back, pos, _pOutVertex, logdata);
         drawPolygon(tree, _pOutVertex, logdata, true);
-        traverseTree(tree->front, eye, _pOutVertex, logdata);
+        traverseTree(tree->front, pos, _pOutVertex, logdata);
 
     } else if (result == SIDE::CP_BACK) {
 
-        traverseTree(tree->front, eye, _pOutVertex, logdata);
+        traverseTree(tree->front, pos, _pOutVertex, logdata);
         drawPolygon(tree, _pOutVertex, logdata, false);
-        traverseTree(tree->back, eye, _pOutVertex, logdata);
+        traverseTree(tree->back, pos, _pOutVertex, logdata);
 
     } else { // result == SIDE::CP_ONPLANE
         // the eye point is on the partition plane...
-        traverseTree(tree->front, eye, _pOutVertex, logdata);
-        traverseTree(tree->back, eye, _pOutVertex, logdata);
+        traverseTree(tree->front, pos, _pOutVertex, logdata);
+        traverseTree(tree->back, pos, _pOutVertex, logdata);
     }
 }
 
-void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
-    traverseTree(_pRoot, eye, _pOutVertex, logdata);
+bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
+    float temp;
+    glm::vec3 intersection;
+    if (tree->isLeaf == true) {
+        return !tree->isSolid;
+    }
+
+    SIDE PointA = classifyPoint(Start, &tree->partition);
+    SIDE PointB = classifyPoint(End, &tree->partition);
+
+    if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
+        return lineOfSight(Start, End, tree->front);
+    }
+
+    if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
+        intersect(*Start, *End, tree->partition.vertex[0].position, tree->partition.normal(), intersection, temp);
+        return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
+    }
+
+    if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
+        intersect(*Start, *End, tree->partition.vertex[0].position, tree->partition.normal(), intersection, temp);
+        return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
+    }
+
+    // if we get here one of the points is on the plane
+    if (PointA == SIDE::CP_FRONT || PointB == SIDE::CP_FRONT) {
+        return lineOfSight(Start, End, tree->front);
+    } else {
+        return lineOfSight(Start, End, tree->back);
+    }
+    return true;
+}
+
+void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
+    traverseTree(_pRoot, pos, _pOutVertex, logdata);
 }

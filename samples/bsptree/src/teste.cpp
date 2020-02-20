@@ -193,49 +193,6 @@ POLYGON* AddPolygon(POLYGON* Parent, D3DLVERTEX* Vertices, WORD NOV) {
 BSPTreeRootNode = new NODE;
 BuildBspTree(BSPTreeRootNode, PolygonList);
 
-int ClassifyPoint(D3DVECTOR* pos, POLYGON* Plane) {
-    float result;
-    D3DVECTOR* vec1 = (D3DVECTOR*)&Plane->VertexList[0];
-    D3DVECTOR Direction = (*vec1) - (*pos);
-    result = DotProduct(Direction, Plane->Normal);
-    if (result < -0.001)
-        return CP_FRONT;
-    if (result > 0.001)
-        return CP_BACK;
-    return CP_ONPLANE;
-}
-
-int ClassifyPoly(POLYGON* Plane, POLYGON* Poly) {
-    int Infront = 0;
-    int Behind = 0;
-    int OnPlane = 0;
-    float result;
-    D3DVECTOR* vec1 = (D3DVECTOR*)&Plane->VertexList[0];
-    for (int a = 0; aNumberOfVertices; a++) {
-        D3DVECTOR* vec2 = (D3DVECTOR*)&Poly->VertexList[a];
-        D3DVECTOR Direction = (*vec1) - (*vec2);
-        result = DotProduct(Direction, Plane->Normal);
-        if (result > 0.001) {
-            Behind++;
-        } else if (result < -0.001) {
-            Infront++;
-        } else {
-            OnPlane++;
-            Infront++;
-            Behind++;
-        }
-    }
-    if (OnPlane == Poly->NumberOfVertices)
-        return CP_FRONT; // this would nomrally be CP_ONPLANE
-    if (Behind == Poly->NumberOfVertices)
-        return CP_BACK;
-    if (Infront == Poly->NumberOfVertices)
-        return CP_FRONT;
-    return CP_SPANNING;
-}
-
-void SplitPolygon(POLYGON* Poly, POLYGON* Plane, POLYGON* FrontSplit, POLYGON* BackSplit);
-
 POLYGON* SelectBestSplitter(POLYGON* PolyList) {
     POLYGON* Splitter = PolyList;
     POLYGON* CurrentPoly = NULL;
@@ -334,6 +291,7 @@ void BuildBspTree(NODE* CurrentNode, POLYGON* PolyList) {
         CurrentNode->Front = newnode;
         BuildBspTree(newnode, FrontList);
     }
+
     if (BackList == NULL) {
         NODE* leafnode = new NODE;
         ZeroMemory(leafnode, sizeof(leafnode));
@@ -349,40 +307,6 @@ void BuildBspTree(NODE* CurrentNode, POLYGON* PolyList) {
         BuildBspTree(newnode, BackList);
     }
 } // end function
-
-bool Get_Intersect(D3DVECTOR* linestart, D3DVECTOR* lineend, D3DVECTOR* vertex, D3DVECTOR* normal,
-                   D3DVECTOR* intersection, float* percentage) {
-    D3DVECTOR direction, L1;
-    float linelength, dist_from_plane;
-
-    direction.x = lineend->x - linestart->x;
-    direction.y = lineend->y - linestart->y;
-    direction.z = lineend->z - linestart->z;
-
-    linelength = DotProduct(direction, *normal);
-
-    if (fabsf(linelength) < 0.0001) {
-        return false;
-    }
-
-    L1.x = vertex->x - linestart->x;
-    L1.y = vertex->y - linestart->y;
-    L1.z = vertex->z - linestart->z;
-
-    dist_from_plane = DotProduct(L1, *normal);
-    *percentage = dist_from_plane / linelength;
-
-    if (*percentage < 0.0f) {
-        return false;
-    } else if (*percentage > 1.0f) {
-        return false;
-    }
-
-    intersection->x = linestart->x + direction.x * (*percentage);
-    intersection->y = linestart->y + direction.y * (*percentage);
-    intersection->z = linestart->z + direction.z * (*percentage);
-    return true;
-}
 
 void SplitPolygon(POLYGON* Poly, POLYGON* Plane, POLYGON* FrontSplit, POLYGON* BackSplit) {
     D3DLVERTEX FrontList[20], BackList[20], FirstVertex;
@@ -538,60 +462,4 @@ void SplitPolygon(POLYGON* Poly, POLYGON* Plane, POLYGON* FrontSplit, POLYGON* B
 
     BackSplit->Normal = CrossProduct(edge1, edge2);
     BackSplit->Normal = Normalize(BackSplit->Normal);
-}
-
-void WalkBspTree(NODE* Node, D3DVECTOR* pos) {
-    if (Node->IsLeaf == true)
-        return;
-    int result = ClassifyPoint(pos, Node->Splitter);
-    if (result == CP_FRONT) {
-        if (Node->Back != NULL)
-            WalkBspTree(Node->Back, pos);
-        lpDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, D3DFVF_LVERTEX, &Node->Splitter->VertexList[0],
-                                       Node->Splitter->NumberOfVertices, &Node->Splitter->Indices[0],
-                                       Node->Splitter->NumberOfIndices, NULL);
-        if (Node->Front != NULL)
-            WalkBspTree(Node->Front, pos);
-        return;
-    } // this happens if we are at back or on plane
-    if (Node->Front != NULL)
-        WalkBspTree(Node->Front, pos);
-    if (Node->Back != NULL)
-        WalkBspTree(Node->Back, pos);
-    return;
-}
-
-bool LineOfSight(D3DVECTOR* Start, D3DVECTOR* End, NODE* Node) {
-    float temp;
-    D3DVECTOR intersection;
-    if (Node->IsLeaf == true) {
-        return !Node->IsSolid;
-    }
-
-    int PointA = ClassifyPoint(Start, Node->Splitter);
-    int PointB = ClassifyPoint(End, Node->Splitter);
-
-    if (PointA == CP_ONPLANE && PointB == CP_ONPLANE) {
-        return LineOfSight(Start, End, Node->Front);
-    }
-
-    if (PointA == CP_FRONT && PointB == CP_BACK) {
-        Get_Intersect(Start, End, (D3DVECTOR*)&Node->Splitter->VertexList[0], &Node->Splitter->Normal, &intersection,
-                      &temp);
-        return LineOfSight(Start, &intersection, Node->Front) && LineOfSight(End, &intersection, Node->Back);
-    }
-
-    if (PointA == CP_BACK && PointB == CP_FRONT) {
-        Get_Intersect(Start, End, (D3DVECTOR*)&Node->Splitter->VertexList[0], &Node->Splitter->Normal, &intersection,
-                      &temp);
-        return LineOfSight(End, &intersection, Node->Front) && LineOfSight(Start, &intersection, Node->Back);
-    }
-
-    // if we get here one of the points is on the plane
-    if (PointA == CP_FRONT || PointB == CP_FRONT) {
-        return LineOfSight(Start, End, Node->Front);
-    } else {
-        return LineOfSight(Start, End, Node->Back);
-    }
-    return true;
 }

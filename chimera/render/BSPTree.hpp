@@ -33,4 +33,6 @@ void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::Verte
 //---- util
 unsigned int selectBestSplitter(std::vector<Chimera::Triangle>& _poliyList);
 
+void initPolygons(unsigned char* BSPMAP, std::vector<Chimera::Triangle>* PolygonList);
+
 #endif

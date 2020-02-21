@@ -14,7 +14,7 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("AppEmpty Iniciado");
 
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 640, 480);
+        Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 800, 600);
 
         Chimera::Shader* pShader =
             new Chimera::Shader("Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert",

@@ -8,8 +8,9 @@ template <class T> void swapFace(T& a, T& b) {
 }
 
 glm::vec3 aprox(const glm::vec3& dado) {
-    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x, (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,
-                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z);
+    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
+                     (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y
+                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
 }
 
 bool intersect(const glm::vec3& linestart, const glm::vec3& lineend, const glm::vec3& vertex, const glm::vec3& normal,
@@ -150,14 +151,11 @@ SIDE classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* poly, glm::vec3& 
 }
 
 BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
+
     if (_pListPolygon->empty() == true)
         return nullptr;
 
-    // tree->partition
-    // BSPTreeNode* tree = new BSPTreeNode(_pListPolygon->back());
-    // _pListPolygon->pop_back();
-    // tree->polygons.push_back(tree->partition);
-
+    // balanceador
     unsigned int bether_index = selectBestSplitter(*_pListPolygon);
     Chimera::Triangle better = (*_pListPolygon)[bether_index];
     BSPTreeNode* tree = new BSPTreeNode(better);
@@ -365,132 +363,94 @@ void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* pos, std::vector<Chimera::Verte
 }
 
 void AddPolygon(Chimera::VertexData* Vertices, int NOV, std::vector<Chimera::Triangle>* PolygonList) {
-    // int loop;
-    // POLYGON* Child = new POLYGON;
-    // Child->NumberOfVertices = NOV;
-    // Child->NumberOfIndices = (NOV - 2) * 3;
-    // Child->Next = NULL;
-    // for (loop = 0; loop < NOV; loop++) {
-    //     Child->VertexList[loop] = Vertices[loop];
-    // } // calculate indices
-    // int v0, v1, v2;
-    // for (loop = 0; loop < Child->NumberOfIndices / 3; loop++) {
-    //     if (loop == 0) {
-    //         v0 = 0;
-    //         v1 = 1;
-    //         v2 = 2;
-    //     } else {
-    //         v1 = v2;
-    //         v2++;
-    //     }
-    //     Child->Indices[loop * 3] = v0;
-    //     Child->Indices[(loop * 3) + 1] = v1;
-    //     Child->Indices[(loop * 3) + 2] = v2;
-    // } // generate polygon normal
-    // D3DVECTOR* vec0 = (D3DVECTOR*)&Child->VertexList[0];
-    // D3DVECTOR* vec1 = (D3DVECTOR*)&Child->VertexList[1];
-    // D3DVECTOR* vec2 = (D3DVECTOR*)&Child->VertexList[Child->NumberOfVertices - 1]; // the last vert
-    // D3DVECTOR edge1 = (*vec1) - (*vec0);
-    // D3DVECTOR edge2 = (*vec2) - (*vec0);
-    // Child->Normal = CrossProduct(edge1, edge2);
-    // Child->Normal = Normalize(Child->Normal);
-    // if (Parent != NULL) {
-    //     Parent->Next = Child;
-    // }
-    // return Child;
+    int loop;
+    int v0, v1, v2;
+    int NumberOfIndices = (NOV - 2) * 3;
+    for (loop = 0; loop < NumberOfIndices / 3; loop++) {
+        if (loop == 0) {
+            v0 = 0;
+            v1 = 1;
+            v2 = 2;
+        } else {
+            v1 = v2;
+            v2++;
+        }
+
+        Chimera::Triangle t = Chimera::Triangle(Vertices[v0], Vertices[v1], Vertices[v2]);
+
+        // generate polygon normal
+        t.generateNormal();
+
+        PolygonList->push_back(t);
+    }
 }
 
-void initPolygons(unsigned char* BSPMAP, std::vector<Chimera::Triangle>* PolygonList) {
-    Chimera::VertexData VERTLIST[4][4];
-    // PolygonList = NULL; // this is a GLOBAL pointer
-    Chimera::Triangle* child = nullptr; // POLYGON* child = NULL;
-    int direction[4];
+void initPolygons(unsigned char* map, std::vector<Chimera::Triangle>* PolygonList) {
+    Chimera::VertexData vl[4][4];
+    int direction[4] = {0};
     for (int y = 0; y < 40; y++) {
         for (int x = 0; x < 20; x++) {
-            // ZeroMemory(direction, sizeof(int) * 4); //TODO: zerar
             int offset = (y * 20) + x;
             // check what the digit is in the current map location
-            if (BSPMAP[offset] != 0) {
-                if (BSPMAP[offset] == 2) { // North East Wall
-                    VERTLIST[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
-                    VERTLIST[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
-                    VERTLIST[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
-                    VERTLIST[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+            if (map[offset] != 0) {
+                if (map[offset] == 2) { // North East Wall
+                    vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                    vl[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                    vl[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                    vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
                     direction[0] = 1;
                 }
-                if (BSPMAP[offset] == 3) { // North West Wall
-                    VERTLIST[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
-                    VERTLIST[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
-                    VERTLIST[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
-                    VERTLIST[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+                if (map[offset] == 3) { // North West Wall
+                    vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                    vl[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                    vl[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                    vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
                     direction[0] = 1;
                 }
 
-                if (BSPMAP[offset] == 1) { // Its a Standared wall
+                if (map[offset] == 1) { // Its a Standared wall
                     if (x > 0) {
-                        if (BSPMAP[offset - 1] == 0) { // if theres nothing to the left add a left facingwall
-                            VERTLIST[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0),
-                                              glm::vec2(0, 0)};
-                            VERTLIST[0][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0),
-                                              glm::vec2(1, 0)};
-                            VERTLIST[0][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0),
-                                              glm::vec2(1, 1)};
-                            VERTLIST[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0),
-                                              glm::vec2(0, 1)};
+                        if (map[offset - 1] == 0) { // if theres nothing to the left add a left facingwall
+                            vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                            vl[0][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                            vl[0][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                            vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
                             direction[0] = 1;
                         }
                     }
                     if (x < 19) {
-                        if (BSPMAP[offset + 1] == 0) { // if there is nothing to the right add a right facing wall
-                            VERTLIST[1][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0),
-                                              glm::vec2(0, 0)};
-                            VERTLIST[1][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0),
-                                              glm::vec2(1, 0)};
-                            VERTLIST[1][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0),
-                                              glm::vec2(1, 1)};
-                            VERTLIST[1][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0),
-                                              glm::vec2(0, 1)};
+                        if (map[offset + 1] == 0) { // if there is nothing to the right add a right facing wall
+                            vl[1][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                            vl[1][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                            vl[1][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                            vl[1][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
                             direction[1] = 1;
                         }
                     }
                     if (y > 0) {
-                        if (BSPMAP[offset - 20] == 0) { // if there is nothing south add a south facing wall
-                            VERTLIST[2][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0),
-                                              glm::vec2(0, 0)};
-                            VERTLIST[2][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0),
-                                              glm::vec2(1, 0)};
-                            VERTLIST[2][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0),
-                                              glm::vec2(1, 1)};
-                            VERTLIST[2][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0),
-                                              glm::vec2(0, 1)};
+                        if (map[offset - 20] == 0) { // if there is nothing south add a south facing wall
+                            vl[2][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                            vl[2][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                            vl[2][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                            vl[2][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
                             direction[2] = 1;
-                            ;
                         }
                     }
                     if (y < 39) {
-                        if (BSPMAP[offset + 20] == 0) { // if there is nothing to the north add a north facing wall
-                            VERTLIST[3][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0),
-                                              glm::vec2(0, 0)};
-                            VERTLIST[3][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0),
-                                              glm::vec2(1, 0)};
-                            VERTLIST[3][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0),
-                                              glm::vec2(1, 1)};
-                            VERTLIST[3][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0),
-                                              glm::vec2(0, 1)};
+                        if (map[offset + 20] == 0) { // if there is nothing to the north add a north facing wall
+                            vl[3][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                            vl[3][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                            vl[3][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                            vl[3][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
                             direction[3] = 1;
-                            ;
                         }
                     }
                 } // end for if offset==1
 
                 // build the polygons
                 for (int a = 0; a < 4; a++) {
-                    if (direction[a] != 0) {
-                        if (PolygonList->size() == 0)
-                            AddPolygon(&VERTLIST[a][0], 4, PolygonList);
-                        else
-                            AddPolygon(&VERTLIST[a][0], 4, PolygonList);
-                    }
+                    if (direction[a] != 0)
+                        AddPolygon(&vl[a][0], 4, PolygonList);
                 }
             } // end for if offset!=0
         }

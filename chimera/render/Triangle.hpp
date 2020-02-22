@@ -8,12 +8,13 @@ namespace Chimera {
 
 class Triangle {
   public:
+    Triangle(const VertexData& va, const VertexData& vb, const VertexData& vc);
     Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
     Triangle(const Triangle& _cpy);
 
     inline unsigned getSerial() const { return serial; }
     glm::vec3 normal();
-    // glm::vec3 verticeNormal();
+    void generateNormal();
     // void debugData();
 
     VertexData vertex[3];

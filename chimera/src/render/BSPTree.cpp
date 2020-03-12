@@ -1,6 +1,8 @@
 #include "chimera/render/BSPTree.hpp"
 #include <SDL2/SDL.h>
 
+namespace Chimera {
+
 template <class T> void swapFace(T& a, T& b) {
     T c = b;
     b = a;
@@ -11,28 +13,6 @@ glm::vec3 aprox(const glm::vec3& dado) {
     return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
                      (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y
                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
-}
-
-bool intersect(const glm::vec3& linestart, const glm::vec3& lineend, const glm::vec3& vertex, const glm::vec3& normal,
-               glm::vec3& intersection, float& percentage) {
-
-    glm::vec3 direction = lineend - linestart;
-    float linelength = glm::dot(direction, normal);
-    if (fabsf(linelength) < 0.0001)
-        return false;
-
-    glm::vec3 L1 = vertex - linestart;
-
-    float dist_from_plane = glm::dot(L1, normal);
-    percentage = dist_from_plane / linelength;
-
-    if (percentage < 0.0f)
-        return false;
-    else if (percentage > 1.0f)
-        return false;
-
-    intersection = linestart + (direction * percentage);
-    return true;
 }
 
 void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::Triangle* _partition,
@@ -113,43 +93,6 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     _pListPolygon->push_back(T3);
 }
 
-SIDE classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* poly, glm::vec3& _resultTest) {
-    // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    unsigned short infront = 0;
-    unsigned short behind = 0;
-    unsigned short onPlane = 0;
-    float result[3];
-
-    for (unsigned short a = 0; a < 3; a++) {
-        glm::vec3 direction = plane->vertex[0].position - poly->vertex[a].position;
-        result[a] = glm::dot(direction, plane->normal());
-        if (result[a] > EPSILON) {
-            behind++;
-        } else if (result[a] < -EPSILON) {
-            infront++;
-        } else {
-            onPlane++;
-            infront++;
-            behind++;
-        }
-    }
-
-    _resultTest.x = result[0];
-    _resultTest.y = result[1];
-    _resultTest.z = result[2];
-
-    if (onPlane == 3)
-        return SIDE::CP_ONPLANE;
-
-    if (behind == 3)
-        return SIDE::CP_BACK;
-
-    if (infront == 3)
-        return SIDE::CP_FRONT;
-
-    return SIDE::CP_SPANNING;
-}
-
 BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
 
     if (_pListPolygon->empty() == true)
@@ -168,7 +111,7 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
         Chimera::Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
-        SIDE teste = classifyPoly(&tree->partition, &poly, result);
+        SIDE teste = classifyPoly(&tree->partition, &poly, &result);
 
         if (teste == SIDE::CP_BACK)
             back_list.push_back(poly);
@@ -200,22 +143,6 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
 }
 
 //------PARSER METODOS------
-
-SIDE classifyPoint(glm::vec3* pos, Chimera::Triangle* plane) {
-    // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    float result;
-    glm::vec3* vec1 = (glm::vec3*)&plane->vertex[0];
-    glm::vec3 dir = (*vec1) - (*pos);
-    result = glm::dot(dir, plane->normal());
-
-    if (result < -EPSILON)
-        return SIDE::CP_FRONT;
-
-    if (result > EPSILON)
-        return SIDE::CP_BACK;
-
-    return SIDE::CP_ONPLANE;
-}
 
 void drawPolygon(BSPTreeNode* tree, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata, bool frontSide) {
     // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
@@ -324,7 +251,7 @@ unsigned int selectBestSplitter(std::vector<Chimera::Triangle>& _poliyList) {
 
             if (indice_current != indice_splitter) {
                 glm::vec3 temp;
-                SIDE result = classifyPoly(&splitter, &currentPoly, temp);
+                SIDE result = classifyPoly(&splitter, &currentPoly, &temp);
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;
@@ -458,3 +385,4 @@ void initPolygons(unsigned char* map, std::vector<Chimera::Triangle>* PolygonLis
     // BSPTreeRootNode = new NODE;
     // BuildBspTree(BSPTreeRootNode, PolygonList);
 }
+} // namespace Chimera

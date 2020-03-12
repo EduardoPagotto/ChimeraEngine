@@ -7,11 +7,7 @@
 #include "Triangle.hpp"
 #include <vector>
 
-enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
-
-// struct HyperPlane {
-//     std::vector<float> coefficients;
-// };
+namespace Chimera {
 
 struct BSPTreeNode {
     BSPTreeNode(const Chimera::Triangle& _partition)
@@ -35,4 +31,5 @@ unsigned int selectBestSplitter(std::vector<Chimera::Triangle>& _poliyList);
 
 void initPolygons(unsigned char* map, std::vector<Chimera::Triangle>* PolygonList);
 
+} // namespace Chimera
 #endif

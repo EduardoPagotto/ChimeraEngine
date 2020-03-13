@@ -10,10 +10,10 @@
 namespace Chimera {
 
 struct BSPTreeNode {
-    BSPTreeNode(const Chimera::Triangle& _partition)
-        : partition(_partition), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
+    BSPTreeNode(Triangle* partition)
+        : hyperPlane(new PlanePoint(partition)), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
     std::vector<Chimera::Triangle> polygons;
-    Chimera::Triangle partition; // HyperPlane partition;
+    PlanePoint* hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
     bool isLeaf;

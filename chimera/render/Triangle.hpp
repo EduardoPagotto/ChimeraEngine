@@ -15,7 +15,7 @@ class Triangle {
     Triangle(const Triangle& _cpy);
 
     inline unsigned getSerial() const { return serial; }
-    glm::vec3 normal();
+    glm::vec3 normal() const;
     void generateNormal();
     // void debugData();
 

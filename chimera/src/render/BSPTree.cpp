@@ -101,10 +101,8 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
 
     // balanceador
     unsigned int bether_index = selectBestSplitter(*_pListPolygon);
-    Chimera::Triangle better = (*_pListPolygon)[bether_index];
-    BSPTreeNode* tree = new BSPTreeNode(better);
-
-    PlanePoint hyperPlane(&tree->partition);
+    Chimera::Triangle partition = (*_pListPolygon)[bether_index];
+    BSPTreeNode* tree = new BSPTreeNode(&partition);
 
     std::vector<Chimera::Triangle> front_list;
     std::vector<Chimera::Triangle> back_list;
@@ -114,7 +112,7 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
         Chimera::Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
-        SIDE teste = classifyPoly(&hyperPlane, &poly, &result);
+        SIDE teste = classifyPoly(tree->hyperPlane, &poly, &result);
 
         if (teste == SIDE::CP_BACK)
             back_list.push_back(poly);
@@ -123,7 +121,7 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
         else if (teste == SIDE::CP_ONPLANE)
             tree->polygons.push_back(poly);
         else // CP_SPANNING
-            splitTriangle(result, &poly, &hyperPlane, _pListPolygon);
+            splitTriangle(result, &poly, tree->hyperPlane, _pListPolygon);
     }
 
     tree->front = bsptreeBuild(&front_list);
@@ -131,13 +129,13 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
 
     // leaf sem poligonos apenas para saber se solido ou vazio
     if (tree->front == nullptr) {
-        tree->front = new BSPTreeNode(tree->partition);
+        tree->front = new BSPTreeNode(&partition);
         tree->front->isLeaf = true;
         tree->front->isSolid = false;
     }
 
     if (tree->back == nullptr) {
-        tree->back = new BSPTreeNode(tree->partition);
+        tree->back = new BSPTreeNode(&partition);
         tree->back->isLeaf = true;
         tree->back->isSolid = true;
     }
@@ -178,9 +176,7 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::Vertex
     if (tree->isLeaf == true)
         return;
 
-    PlanePoint hyperPlane(&tree->partition);
-
-    SIDE result = classifyPoint(pos, &hyperPlane);
+    SIDE result = classifyPoint(pos, tree->hyperPlane);
     if (result == SIDE::CP_FRONT) {
 
         traverseTree(tree->back, pos, _pOutVertex, logdata);
@@ -207,22 +203,20 @@ bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
         return !tree->isSolid;
     }
 
-    PlanePoint hyperPlane(&tree->partition);
-
-    SIDE PointA = classifyPoint(Start, &hyperPlane);
-    SIDE PointB = classifyPoint(End, &hyperPlane);
+    SIDE PointA = classifyPoint(Start, tree->hyperPlane);
+    SIDE PointB = classifyPoint(End, tree->hyperPlane);
 
     if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
         return lineOfSight(Start, End, tree->front);
     }
 
     if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
-        intersect(Start, End, &hyperPlane, &intersection, &temp);
+        intersect(Start, End, tree->hyperPlane, &intersection, &temp);
         return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
     }
 
     if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
-        intersect(Start, End, &hyperPlane, &intersection, &temp);
+        intersect(Start, End, tree->hyperPlane, &intersection, &temp);
         return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
     }
 

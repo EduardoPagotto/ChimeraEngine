@@ -25,7 +25,7 @@ Triangle::Triangle(const Triangle& _cpy) {
     }
 }
 
-glm::vec3 Triangle::normal() {
+glm::vec3 Triangle::normal() const {
     glm::vec3 acc = glm::vec3(0, 0, 0);
     for (int i = 0; i < 3; i++)
         acc = acc + this->vertex[i].normal;

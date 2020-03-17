@@ -4,13 +4,13 @@ namespace Chimera {
 
 unsigned Triangle::serialMaster = 0;
 
-Triangle::Triangle(const VertexData& va, const VertexData& vb, const VertexData& vc) : serial(++serialMaster) {
+Triangle::Triangle(const VertexData& va, const VertexData& vb, const VertexData& vc) : serial(serialMaster++) {
     this->vertex[0] = va;
     this->vertex[1] = vb;
     this->vertex[2] = vc;
 }
 
-Triangle::Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) : serial(++serialMaster) {
+Triangle::Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) : serial(serialMaster++) {
     this->vertex[0].position = a;
     this->vertex[1].position = b;
     this->vertex[2].position = c;

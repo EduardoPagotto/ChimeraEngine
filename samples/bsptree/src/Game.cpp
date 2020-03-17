@@ -103,19 +103,20 @@ void Game::start() {
     Chimera::MeshData m;
     std::vector<Chimera::Triangle> listPolygons;
 
-    // initPolygons(map, &listPolygons);
+    initPolygons(map, &listPolygons);
 
-    Chimera::LoaderObj loader;
-    loader.getMesh("./data/models/square2.obj", m);
+    // Chimera::LoaderObj loader;
+    // loader.getMesh("./data/models/square2.obj", m);
     // // loader.getMesh("./data/models/square1.obj", m);
     // // loader.getMesh("./data/models/split1.obj", m);
     // //loader.getMesh("./data/models/teste1.obj", m);
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     // m.changeSize(30.0, true);
-    std::vector<unsigned int> indexTriangles;
-    m.toTriangle(listPolygons, indexTriangles);
-    indexTriangles.clear(); // is sequential, not used here
-    std::reverse(listPolygons.begin(), listPolygons.end());
+
+    // std::vector<unsigned int> indexTriangles;
+    // m.toTriangle(listPolygons, indexTriangles);
+    // indexTriangles.clear(); // is sequential, not used here
+    // std::reverse(listPolygons.begin(), listPolygons.end());
 
     // Cria o BSP
     pBSPTRoot = Chimera::bsptreeBuild(&listPolygons);

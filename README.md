@@ -3,16 +3,16 @@
 Just another simple game engine<p>
 OBS: Code with comments in Portuguese mostly
 
-## Ubuntu 19.04 dependencies
+## Ubuntu 20.04 dependencies
 ```bash
 # Develop:
-apt install htop build-essential git gitk meld cmake g++
+apt install htop build-essential git gitk meld cmake g++ vim
 
 # XML
-apt install tinyxml2*
+apt install libtinyxml2-dev
 
 # OpenGL dev
-apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev libglm-dev libglew-dev libglewmx-dev
+apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev libglm-dev libglew-dev
 
 # SDL2-Dev
 apt install libsdl2-dev libsdl2-doc libsdl2-gfx-dev libsdl2-gfx-doc libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev
@@ -26,9 +26,6 @@ apt install clang-format
 
 # YAML config
 apt install libyaml-cpp-dev
-
-# Logs
-apt-get install libspdlog-dev
 
 # BULLET ENGINE
 apt install libbullet-dev libassimp-dev
@@ -73,12 +70,12 @@ code --install-extension eamodio.gitlens
 code --install-extension euskadi31.json-pretty-printer
 code --install-extension Gruntfuggly.todo-tree
 code --install-extension mohsen1.prettify-json
+code --install-extension ms-vscode.cmake-tools
 code --install-extension ms-vscode.cpptools
 code --install-extension PKief.material-icon-theme
 code --install-extension redhat.vscode-yaml
 code --install-extension slevesque.shader
 code --install-extension twxs.cmake
-code --install-extension vector-of-bool.cmake-tools
 code --install-extension wayou.vscode-todo-highlight
 code --install-extension xaver.clang-format
 

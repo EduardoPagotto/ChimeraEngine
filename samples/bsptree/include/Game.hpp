@@ -30,15 +30,17 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    BSPTreeNode* pBSPTRoot;
+    Chimera::BSPTreeNode* pBSPTRoot;
     bool isPaused;
     int botaoIndex;
     int estadoBotao;
     bool debugParser;
+
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    Chimera::VertexRenderDynamic vertexBuffer;
+    Chimera::VertexRenderDynamic renderDynamic;
+
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;

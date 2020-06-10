@@ -1,8 +1,7 @@
 #include "chimera/render/BSPTree.hpp"
 #include <SDL2/SDL.h>
 
-//-----builder
-// #define EPSILON 1e-3
+namespace Chimera {
 
 template <class T> void swapFace(T& a, T& b) {
     T c = b;
@@ -10,49 +9,13 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
-glm::vec2 retTex1(const glm::vec2& _p0, const glm::vec2& _p1) {
-    return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
-}
-
-glm::vec2 retTex2(const glm::vec2& _p0, const glm::vec2& _p1) {
-    // FIXME: horrivel
-    float dx = _p1.x - _p0.x;
-    float dy = _p1.y - _p0.y;
-
-    float vx, vy;
-
-    if (dx < 0)
-        vx = _p1.x;
-    else
-        vx = _p0.x;
-
-    if (dy < 0)
-        vy = _p1.y;
-    else
-        vy = _p0.y;
-
-    return glm::vec2(vx, vy);
-    // return glm::vec2((_p0.x < _p1.x) ? _p1.x : _p0.x, (_p0.y < _p1.y) ? _p1.y : _p0.y);
-}
-
 glm::vec3 aprox(const glm::vec3& dado) {
-    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x, (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,
-                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z);
+    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
+                     (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y
+                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
 }
 
-glm::vec3 intersect(const glm::vec3& n, const glm::vec3& p0, const glm::vec3& a, const glm::vec3& c) {
-    float num = glm::dot(n, a);
-    glm::vec3 cma = c - a;
-    float denom = glm::dot(n, cma);
-    float D = -glm::dot(n, p0); // direção inversa
-    float t = -(num + D) / denom;
-
-    glm::vec3 valor = a + t * (c - a);
-    return aprox(valor);
-}
-
-void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::Triangle* _partition,
-                   std::vector<Chimera::Triangle>* _pListPolygon) {
+void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, PlanePoint* hyperPlane, std::vector<Triangle>* _pListPolygon) {
     glm::vec3& a = _pTriangle->vertex[0].position;
     glm::vec3& b = _pTriangle->vertex[1].position;
     glm::vec3& c = _pTriangle->vertex[2].position;
@@ -86,48 +49,38 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
         pVertex_c = &_pTriangle->vertex[2]; // old c
     }
 
-    // Testar ideia
-    // Na textura se Xb - Xa > 0 entao Xb e [1,n] do contrario [0,n] para segmento de reta ab
-    // Na textura se Yb - Ya > 0 entao Yb e [n,1] do contrario [n,0] para segmento de reta ab
+    float propAC = 0.0;
+    float propBC = 0.0;
+    glm::vec3 A, B;
 
-    glm::vec3 A = intersect(_partition->normal(), _partition->vertex[0].position, a, c);
-    glm::vec3 B = intersect(_partition->normal(), _partition->vertex[0].position, b, c);
+    intersect(&a, &c, hyperPlane, &A, &propAC);
+    intersect(&b, &c, hyperPlane, &B, &propBC);
 
-    float propAC = (glm::distance(A, a) / glm::distance(a, c)); // razao da distancia entre a e A
-    float InterTexA = propAC * pVertex_a->texture.x;
+    // PA texture coord
+    glm::vec2 deltaA = (pVertex_c->texture - pVertex_a->texture) * propAC;
+    glm::vec2 texA = pVertex_a->texture + deltaA;
 
-    Chimera::Triangle T1(a, b, A);
-    T1.vertex[0].texture = retTex1(pVertex_c->texture, pVertex_a->texture);
-    T1.vertex[1].texture = retTex1(pVertex_a->texture, pVertex_b->texture);
-    T1.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
+    // PB texture coord
+    glm::vec2 deltaB = (pVertex_c->texture - pVertex_b->texture) * propBC;
+    glm::vec2 texB = pVertex_b->texture + deltaB;
 
-    //--
+    //-- T1
+    Triangle T1(a, b, A);
+    T1.vertex[0].texture = pVertex_a->texture; // a old b
+    T1.vertex[1].texture = pVertex_b->texture; // b old c
+    T1.vertex[2].texture = texA;               // A
 
-    Chimera::Triangle T2(b, B, A);
-    T2.vertex[0].texture = retTex1(pVertex_a->texture, pVertex_b->texture); // pVertex_b->texture; // b old c
-    // T2.vertex[0].texture = retTex1(pVertex_c->texture, pVertex_b->texture);
+    //-- T2
+    Triangle T2(b, B, A);
+    T2.vertex[0].texture = pVertex_b->texture; // b old c
+    T2.vertex[1].texture = texB;               // B
+    T2.vertex[2].texture = texA;               // A
 
-    // Hipotenusa e cateto oposto para pegar o seno rad1
-    float hypo = glm::distance(c, b);  // segmento de reta de c' ate b'
-    float catOp = glm::distance(a, b); // segmento a' ate b'
-    float rad1 = catOp / hypo;
-
-    // Hipotenusa e seno para calcular o valor do cateto opposo (proporcao x da textura)
-    float hypo2 = glm::distance(c, B);
-    float seno1 = rad1;
-    float val_final = seno1 * hypo2;         // valor da imagem do ponto B em Y (cateto oposto)
-    float valxTexTemp = glm::distance(a, b); // tamanho total do Y
-    float valxTex = val_final / valxTexTemp; // razao da textura em X ufa!!!
-
-    T2.vertex[1].texture = glm::vec2(InterTexA, valxTex);              // B
-    T2.vertex[2].texture = glm::vec2(InterTexA, pVertex_a->texture.y); // A
-
-    // --
-
-    Chimera::Triangle T3(A, B, c);
-    T3.vertex[0].texture = glm::vec2(InterTexA, pVertex_a->texture.y);      // A
-    T3.vertex[1].texture = glm::vec2(InterTexA, valxTex);                   // B
-    T3.vertex[2].texture = retTex2(pVertex_b->texture, pVertex_c->texture); // c old a
+    // -- T3
+    Triangle T3(A, B, c);
+    T3.vertex[0].texture = texA;               // A
+    T3.vertex[1].texture = texB;               // B
+    T3.vertex[2].texture = pVertex_c->texture; // c old a
 
     for (int i = 0; i < 3; i++) {
         T1.vertex[i].normal = _pTriangle->vertex[i].normal;
@@ -140,60 +93,25 @@ void splitTriangle(const glm::vec3& fx, Chimera::Triangle* _pTriangle, Chimera::
     _pListPolygon->push_back(T3);
 }
 
-SIDE classifyPoly(Chimera::Triangle* plane, Chimera::Triangle* poly, glm::vec3& _resultTest) {
-    // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    unsigned short infront = 0;
-    unsigned short behind = 0;
-    unsigned short onPlane = 0;
-    float result[3];
+BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
 
-    for (unsigned short a = 0; a < 3; a++) {
-        glm::vec3 direction = plane->vertex[0].position - poly->vertex[a].position;
-        result[a] = glm::dot(direction, plane->normal());
-        if (result[a] > EPSILON) {
-            behind++;
-        } else if (result[a] < -EPSILON) {
-            infront++;
-        } else {
-            onPlane++;
-            infront++;
-            behind++;
-        }
-    }
-
-    _resultTest.x = result[0];
-    _resultTest.y = result[1];
-    _resultTest.z = result[2];
-
-    if (onPlane == 3)
-        return SIDE::CP_ONPLANE;
-
-    if (behind == 3)
-        return SIDE::CP_BACK;
-
-    if (infront == 3)
-        return SIDE::CP_FRONT;
-
-    return SIDE::CP_SPANNING;
-}
-
-BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
     if (_pListPolygon->empty() == true)
         return nullptr;
-    // tree->partition
-    BSPTreeNode* tree = new BSPTreeNode(_pListPolygon->back());
-    _pListPolygon->pop_back();
-    tree->polygons.push_back(tree->partition);
 
-    std::vector<Chimera::Triangle> front_list;
-    std::vector<Chimera::Triangle> back_list;
+    // balanceador
+    unsigned int bether_index = selectBestSplitter(*_pListPolygon);
+    Triangle partition = (*_pListPolygon)[bether_index];
+    BSPTreeNode* tree = new BSPTreeNode(&partition);
+
+    std::vector<Triangle> front_list;
+    std::vector<Triangle> back_list;
 
     while (_pListPolygon->empty() == false) {
 
-        Chimera::Triangle poly = _pListPolygon->back();
+        Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
-        SIDE teste = classifyPoly(&tree->partition, &poly, result);
+        SIDE teste = classifyPoly(tree->hyperPlane, &poly, &result);
 
         if (teste == SIDE::CP_BACK)
             back_list.push_back(poly);
@@ -202,79 +120,264 @@ BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon) {
         else if (teste == SIDE::CP_ONPLANE)
             tree->polygons.push_back(poly);
         else // CP_SPANNING
-            splitTriangle(result, &poly, &tree->partition, _pListPolygon);
+            splitTriangle(result, &poly, tree->hyperPlane, _pListPolygon);
     }
+
     tree->front = bsptreeBuild(&front_list);
     tree->back = bsptreeBuild(&back_list);
+
+    // leaf sem poligonos apenas para saber se solido ou vazio
+    if (tree->front == nullptr) {
+        tree->front = new BSPTreeNode(&partition);
+        tree->front->isLeaf = true;
+        tree->front->isSolid = false;
+    }
+
+    if (tree->back == nullptr) {
+        tree->back = new BSPTreeNode(&partition);
+        tree->back->isLeaf = true;
+        tree->back->isSolid = true;
+    }
+
     return tree;
 }
 
 //------PARSER METODOS------
 
-SIDE classifyPoint(Chimera::Triangle* plane, glm::vec3* eye) {
-    // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    float result;
-    glm::vec3* vec1 = (glm::vec3*)&plane->vertex[0];
-    glm::vec3 dir = (*vec1) - (*eye);
-    result = glm::dot(dir, plane->normal());
+void drawPolygon(BSPTreeNode* tree, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata, bool frontSide) {
+    // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
+    for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
+        Triangle t = (*it);
 
-    if (result < -EPSILON)
-        return SIDE::CP_FRONT;
+        // if (t.getSerial() == 10) // 8, 9, 10
+        //     continue;
 
-    if (result > EPSILON)
-        return SIDE::CP_BACK;
+        _pOutVertex->push_back(t.vertex[0]);
+        _pOutVertex->push_back(t.vertex[1]);
+        _pOutVertex->push_back(t.vertex[2]);
 
-    return SIDE::CP_ONPLANE;
+        // FIXME: remover depois de concluir o algoritmo
+        if (logdata == true) {
+            if (frontSide == true)
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
+            else
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
+        }
+    }
 }
 
-void traverseTree(BSPTreeNode* tree, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
+void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
 
-    SIDE result = classifyPoint(&tree->partition, eye);
+    // no de indicador de final/solido
+    if (tree->isLeaf == true)
+        return;
+
+    SIDE result = classifyPoint(pos, tree->hyperPlane);
     if (result == SIDE::CP_FRONT) {
 
-        traverseTree(tree->back, eye, _pOutVertex, logdata);
-
-        // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
-        for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-            Chimera::Triangle t = (*it);
-            _pOutVertex->push_back(t.vertex[0]);
-            _pOutVertex->push_back(t.vertex[1]);
-            _pOutVertex->push_back(t.vertex[2]);
-
-            // FIXME: remover depois de concluir o algoritmo
-            if (logdata == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
-        }
-
-        traverseTree(tree->front, eye, _pOutVertex, logdata);
+        traverseTree(tree->back, pos, _pOutVertex, logdata);
+        drawPolygon(tree, _pOutVertex, logdata, true);
+        traverseTree(tree->front, pos, _pOutVertex, logdata);
 
     } else if (result == SIDE::CP_BACK) {
-        traverseTree(tree->front, eye, _pOutVertex, logdata);
 
-        // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
-        for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-            Chimera::Triangle t = (*it);
-            _pOutVertex->push_back(t.vertex[0]);
-            _pOutVertex->push_back(t.vertex[1]);
-            _pOutVertex->push_back(t.vertex[2]);
-
-            // FIXME: remover depois de concluir o algoritmo
-            if (logdata == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
-        }
-
-        traverseTree(tree->back, eye, _pOutVertex, logdata);
+        traverseTree(tree->front, pos, _pOutVertex, logdata);
+        drawPolygon(tree, _pOutVertex, logdata, false);
+        traverseTree(tree->back, pos, _pOutVertex, logdata);
 
     } else { // result == SIDE::CP_ONPLANE
-        // the eye point is on the partition plane...
-        traverseTree(tree->front, eye, _pOutVertex, logdata);
-        traverseTree(tree->back, eye, _pOutVertex, logdata);
+        // the eye point is on the partition hyperPlane...
+        traverseTree(tree->front, pos, _pOutVertex, logdata);
+        traverseTree(tree->back, pos, _pOutVertex, logdata);
     }
 }
 
-void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
-    traverseTree(_pRoot, eye, _pOutVertex, logdata);
+bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
+    float temp;
+    glm::vec3 intersection;
+    if (tree->isLeaf == true) {
+        return !tree->isSolid;
+    }
+
+    SIDE PointA = classifyPoint(Start, tree->hyperPlane);
+    SIDE PointB = classifyPoint(End, tree->hyperPlane);
+
+    if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
+        return lineOfSight(Start, End, tree->front);
+    }
+
+    if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
+        intersect(Start, End, tree->hyperPlane, &intersection, &temp);
+        return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
+    }
+
+    if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
+        intersect(Start, End, tree->hyperPlane, &intersection, &temp);
+        return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
+    }
+
+    // if we get here one of the points is on the hyperPlane
+    if (PointA == SIDE::CP_FRONT || PointB == SIDE::CP_FRONT) {
+        return lineOfSight(Start, End, tree->front);
+    } else {
+        return lineOfSight(Start, End, tree->back);
+    }
+    return true;
 }
+
+unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList) {
+
+    if (_poliyList.size() == 0)
+        return 0;
+
+    unsigned int selectedPoly = 0;
+    unsigned int bestScore = 100000; // just set to a very high value to begin
+    glm::vec3 temp;                  // inutil
+
+    for (unsigned indice_splitter = 0; indice_splitter < _poliyList.size(); indice_splitter++) {
+
+        PlanePoint hyperPlane(&_poliyList[indice_splitter]);
+
+        long long score, splits, backfaces, frontfaces;
+        score = splits = backfaces = frontfaces = 0;
+
+        for (unsigned indice_current = 0; indice_current < _poliyList.size(); indice_current++) {
+
+            if (indice_current != indice_splitter) {
+
+                Triangle currentPoly = _poliyList[indice_current];
+
+                SIDE result = classifyPoly(&hyperPlane, &currentPoly, &temp);
+                switch (result) {
+                    case SIDE::CP_ONPLANE:
+                        break;
+                    case SIDE::CP_FRONT:
+                        frontfaces++;
+                        break;
+                    case SIDE::CP_BACK:
+                        backfaces++;
+                        break;
+                    case SIDE::CP_SPANNING:
+                        splits++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } // end while current poly
+
+        score = abs(frontfaces - backfaces) + (splits * 8);
+
+        if (score < bestScore) {
+            bestScore = score;
+            selectedPoly = indice_splitter;
+        }
+
+    } // end while splitter == null
+    return selectedPoly;
+}
+
+void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
+    traverseTree(_pRoot, pos, _pOutVertex, logdata);
+}
+
+void AddPolygon(Chimera::VertexData* Vertices, int NOV, std::vector<Triangle>* PolygonList) {
+    int loop;
+    int v0, v1, v2;
+    int NumberOfIndices = (NOV - 2) * 3;
+    for (loop = 0; loop < NumberOfIndices / 3; loop++) {
+        if (loop == 0) {
+            v0 = 0;
+            v1 = 1;
+            v2 = 2;
+        } else {
+            v1 = v2;
+            v2++;
+        }
+
+        Triangle t = Triangle(Vertices[v0], Vertices[v1], Vertices[v2]);
+
+        // generate polygon normal
+        t.generateNormal();
+
+        PolygonList->push_back(t);
+    }
+}
+
+void initPolygons(unsigned char* map, std::vector<Triangle>* PolygonList) {
+    Chimera::VertexData vl[4][4];
+    int direction[4] = {0};
+    for (int y = 0; y < 40; y++) {
+        for (int x = 0; x < 20; x++) {
+            int offset = (y * 20) + x;
+            // check what the digit is in the current map location
+            if (map[offset] != 0) {
+                if (map[offset] == 2) { // North East Wall
+                    vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                    vl[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                    vl[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                    vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+                    direction[0] = 1;
+                }
+                if (map[offset] == 3) { // North West Wall
+                    vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                    vl[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                    vl[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                    vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+                    direction[0] = 1;
+                }
+
+                if (map[offset] == 1) { // Its a Standared wall
+                    if (x > 0) {
+                        if (map[offset - 1] == 0) { // if theres nothing to the left add a left facingwall
+                            vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                            vl[0][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                            vl[0][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                            vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+                            direction[0] = 1;
+                        }
+                    }
+                    if (x < 19) {
+                        if (map[offset + 1] == 0) { // if there is nothing to the right add a right facing wall
+                            vl[1][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                            vl[1][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                            vl[1][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                            vl[1][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+                            direction[1] = 1;
+                        }
+                    }
+                    if (y > 0) {
+                        if (map[offset - 20] == 0) { // if there is nothing south add a south facing wall
+                            vl[2][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                            vl[2][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                            vl[2][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                            vl[2][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+                            direction[2] = 1;
+                        }
+                    }
+                    if (y < 39) {
+                        if (map[offset + 20] == 0) { // if there is nothing to the north add a north facing wall
+                            vl[3][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+                            vl[3][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+                            vl[3][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+                            vl[3][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+                            direction[3] = 1;
+                        }
+                    }
+                } // end for if offset==1
+
+                // build the polygons
+                for (int a = 0; a < 4; a++) {
+                    if (direction[a] != 0)
+                        AddPolygon(&vl[a][0], 4, PolygonList);
+                }
+            } // end for if offset!=0
+        }
+    }
+    // BSPTreeRootNode = new NODE;
+    // BuildBspTree(BSPTreeRootNode, PolygonList);
+}
+} // namespace Chimera

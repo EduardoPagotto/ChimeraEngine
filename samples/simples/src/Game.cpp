@@ -55,7 +55,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1)
             trackBall.tracking(mm.xrel, mm.yrel);
-        else if (botaoIndex == 2)
+        else if (botaoIndex == 3)
             trackBall.offSet(mm.yrel);
     }
 }
@@ -84,7 +84,9 @@ void Game::start() {
 
     Chimera::MeshData m;
     Chimera::LoaderObj loader;
-    loader.getMesh("./data/models/tela01.obj", m);
+    // loader.getMesh("./data/models/tela01.obj", m);
+    // loader.getMesh("./data/models/parede_simples.obj", m);
+    loader.getMesh("./data/models/map02.obj", m);
 
     if (loader.hasMaterial() == true)
         loader.getMaterial(material);
@@ -95,14 +97,14 @@ void Game::start() {
 
     material.init();
 
-    m.changeSize(100.0, material.hasTexture());
+    // m.changeSize(100.0, material.hasTexture());
     // m.textureFix();
 
     std::vector<Chimera::VertexData> renderData;
     m.toVertexData(renderData);
 
     std::vector<unsigned int> index;
-    vertexBuffer.create(renderData, index);
+    VBO.create(renderData, index);
 }
 
 void Game::stop() {}
@@ -150,7 +152,7 @@ void Game::render() {
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 
-    vertexBuffer.render();
+    VBO.render();
 
     pCanvas->after();
     pCanvas->swapWindow();

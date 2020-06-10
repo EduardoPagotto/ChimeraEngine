@@ -6,14 +6,9 @@
 
 namespace Chimera {
 
-VertexNode::VertexNode() { indexBufferObject = 0; }
+VertexNode::VertexNode() {}
 
-VertexNode::~VertexNode() {
-    if (indexBufferObject > 0)
-        glDeleteBuffers(1, &indexBufferObject);
-
-    faces.clear();
-}
+VertexNode::~VertexNode() { faces.clear(); }
 
 void VertexNode::debugDados() {
     std::string val = "";
@@ -57,18 +52,11 @@ void VertexNode::addFace(unsigned int& _face, unsigned int& _pa, unsigned int& _
 
 void VertexNode::initIndexBufferObject() {
 
-    glGenBuffers(1, &indexBufferObject);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(int), &index[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    // delete [] Indices;
+    ebo.create(index);
+    // delete [] Indices; //FIXME: verificar como!!!!
     // Indices = NULL;
     // GeometryNodesCount++;
 }
 
-void VertexNode::render() {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
-    glDrawElements(GL_TRIANGLES, index.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
+void VertexNode::render() { ebo.render(); }
 } // namespace Chimera

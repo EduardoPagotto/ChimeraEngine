@@ -1,12 +1,13 @@
 #ifndef __CHIMERA_HEIGHTMAP__HPP
 #define __CHIMERA_HEIGHTMAP__HPP
 
-#include "chimera/render/VertexBuffer.hpp"
+#include "chimera/render/VAO.hpp"
+#include "chimera/render/VBO.hpp"
 #include "chimera/render/VertexNode.hpp"
 
 namespace Chimera {
 
-class HeightMap : public VertexBuffer {
+class HeightMap {
   public:
     HeightMap(int _width, int _height, int _squareX, int _squareZ);
     ~HeightMap();
@@ -16,10 +17,8 @@ class HeightMap : public VertexBuffer {
     void render(Frustum& _frustrun);
 
   private:
-    virtual void createIndex() override;
-    virtual void clearIndex() override;
-
-  private:
+    VBO vbo;
+    VAO vao;
     std::vector<VertexNode*> vNodes;
 
     int width;

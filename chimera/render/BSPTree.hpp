@@ -7,24 +7,30 @@
 #include "Triangle.hpp"
 #include <vector>
 
-enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
-
-// struct HyperPlane {
-//     std::vector<float> coefficients;
-// };
+namespace Chimera {
 
 struct BSPTreeNode {
-    BSPTreeNode(const Chimera::Triangle& _partition) : partition(_partition), front(nullptr), back(nullptr) {}
-    std::vector<Chimera::Triangle> polygons;
-    Chimera::Triangle partition; // HyperPlane partition;
+    BSPTreeNode(Triangle* partition)
+        : hyperPlane(new PlanePoint(partition)), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
+
+    std::vector<Triangle> polygons;
+    PlanePoint* hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
+    bool isLeaf;
+    bool isSolid;
 };
 
 //----- Build bsptree
-BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon);
+BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon);
 
 //----- parse bsptree to draw
-void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata);
+void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool logdata);
 
+//---- util
+unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList);
+
+void initPolygons(unsigned char* map, std::vector<Triangle>* PolygonList);
+
+} // namespace Chimera
 #endif

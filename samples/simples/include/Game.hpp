@@ -37,7 +37,7 @@ class Game : public Chimera::IGameClientEvents {
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    Chimera::VertexRenderStatic vertexBuffer;
+    Chimera::VertexRenderStatic VBO;
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;

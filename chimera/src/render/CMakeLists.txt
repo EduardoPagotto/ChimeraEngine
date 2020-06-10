@@ -15,9 +15,12 @@ set (RenderSource 	Triangle.cpp
 					AABB.cpp
 					Octree.cpp
 					BSPTree.cpp
+					PVS.cpp
 					LoadHeightMap.cpp
 					VertexNode.cpp
-					VertexBuffer.cpp
+					VAO.cpp
+					EBO.cpp
+					VBO.cpp
 					VertexDynamic.cpp 
 					VertexStatic.cpp
 					HeightMap.cpp

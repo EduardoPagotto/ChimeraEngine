@@ -5,10 +5,10 @@
 namespace Chimera {
 
 HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
-    : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ), VertexBuffer(false) {}
+    : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ) {}
 
 HeightMap::~HeightMap() {
-    glBindVertexArray(vao);
+    vao.bind();
     while (vNodes.size() > 0) {
         std::vector<VertexNode*>::iterator it = vNodes.begin();
         VertexNode* pNode = (*it);
@@ -16,6 +16,7 @@ HeightMap::~HeightMap() {
         pNode = nullptr;
         vNodes.erase(it);
     }
+    vao.unbind();
 }
 
 void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
@@ -81,25 +82,24 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
     }
 }
 
-void HeightMap::createIndex() {
-    for (VertexNode* pNode : vNodes)
-        pNode->initIndexBufferObject(); // create IBO's
-}
-
-void HeightMap::clearIndex() {
-    for (VertexNode* pNode : vNodes) // vincula ibo's
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pNode->getIndexBufferObject());
-}
-
 void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
-    VertexBuffer::initialize(_vertexData);
+
+    vao.create();
+    vao.bind();
+    vbo.buildStatic(_vertexData);
+
+    vao.bind();
+
     for (VertexNode* pNode : vNodes) {
-        pNode->initAABB(_vertexData); // initialize AABB's
+        pNode->initIndexBufferObject(); // create IBO's
+        pNode->initAABB(_vertexData);   // initialize AABB's
     }
+
+    vao.unbind();
 }
 
 void HeightMap::render(Frustum& _frustrun) {
-    glBindVertexArray(vao);
+    vao.bind();
     unsigned int tot = 0;
     for (VertexNode* pNode : vNodes) {
         bool teste = pNode->aabb.visible(_frustrun);
@@ -109,6 +109,6 @@ void HeightMap::render(Frustum& _frustrun) {
         }
     }
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "TOT: (%d)", tot);
-    glBindVertexArray(0);
+    vao.unbind();
 }
 } // namespace Chimera

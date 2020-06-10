@@ -1,11 +1,12 @@
 #ifndef __CHIMERA_VERTEX_DYNAMIC_HPP
 #define __CHIMERA_VERTEX_DYNAMIC_HPP
 
-#include "VertexBuffer.hpp"
+#include "VAO.hpp"
+#include "VBO.hpp"
 
 namespace Chimera {
 
-class VertexRenderDynamic : public VertexBuffer {
+class VertexRenderDynamic {
   public:
     VertexRenderDynamic();
     void create(const unsigned int& max);
@@ -13,8 +14,8 @@ class VertexRenderDynamic : public VertexBuffer {
     void render(std::vector<VertexData>& vVertice);
 
   private:
-    virtual void createIndex() override{};
-    virtual void clearIndex() override{};
+    VAO vao;
+    VBO vbo;
 };
 } // namespace Chimera
 #endif

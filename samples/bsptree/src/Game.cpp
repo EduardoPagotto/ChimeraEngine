@@ -59,7 +59,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
     if (estadoBotao == SDL_PRESSED) {
         if (botaoIndex == 1)
             trackBall.tracking(mm.xrel, mm.yrel);
-        else if (botaoIndex == 2)
+        else if (botaoIndex == 3)
             trackBall.offSet(mm.yrel);
     }
 }
@@ -81,28 +81,49 @@ void Game::start() {
 
     pTex->init();
 
+    // unsigned char map[] = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // marca
+    //                        0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,  // marca
+    //                        0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,  // marca
+    //                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1,  // marca
+    //                        0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,  // marca
+    //                        0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,  // marca
+    //                        0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1,  // marca
+    //                        0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
+    //                        1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
+    //                        0, 1, 0, 0, 0, 0, 1, 2, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
+    //                        0, 1, 0, 0, 0, 1, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1,  // marca
+    //                        0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 1,  // marca
+    //                        0, 1, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1,  // marca
+    //                        1, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1,  // marca
+    //                        1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
+    //                        1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
+    //                        1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
+    //                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // marca
+
     Chimera::MeshData m;
     std::vector<Chimera::Triangle> listPolygons;
 
-    Chimera::LoaderObj loader;
-    // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
-    // loader.getMesh("./data/models/square1.obj", m);
-    // loader.getMesh("./data/models/split1.obj", m);
-    // loader.getMesh("./data/models/teste1.obj", m);
-    loader.getMesh("./data/models/cubo_textura_simples.obj", m);
+    // initPolygons(map, &listPolygons);
 
-    m.changeSize(30.0, true);
+    Chimera::LoaderObj loader;
+    loader.getMesh("./data/models/map02.obj", m);
+    // loader.getMesh("./data/models/parede_simples.obj", m);
+    // loader.getMesh("./data/models/square2.obj", m);
+    // // loader.getMesh("./data/models/square1.obj", m);
+    // // loader.getMesh("./data/models/split1.obj", m);
+    // //loader.getMesh("./data/models/teste1.obj", m);
+    // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
+    // m.changeSize(30.0, true);
 
     std::vector<unsigned int> indexTriangles;
     m.toTriangle(listPolygons, indexTriangles);
     indexTriangles.clear(); // is sequential, not used here
-
-    std::reverse(listPolygons.begin(), listPolygons.end());
+    // std::reverse(listPolygons.begin(), listPolygons.end());
 
     // Cria o BSP
-    pBSPTRoot = bsptreeBuild(&listPolygons);
+    pBSPTRoot = Chimera::bsptreeBuild(&listPolygons);
 
-    vertexBuffer.create(5000);
+    renderDynamic.create(15000000);
 }
 
 void Game::stop() {}
@@ -138,13 +159,12 @@ void Game::render() {
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
     if (debugParser == true) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
-                     vp->position.z);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
     }
 
     // constroi vertex dinamico baseado no viewpoint
     std::vector<Chimera::VertexData> vVertice;
-    bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
+    Chimera::bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
 
     // debugParser = false;
 
@@ -160,7 +180,7 @@ void Game::render() {
     // aplica a textura
     pTex->apply(pShader);
 
-    vertexBuffer.render(vVertice);
+    renderDynamic.render(vVertice);
 
     pCanvas->after();
     pCanvas->swapWindow();

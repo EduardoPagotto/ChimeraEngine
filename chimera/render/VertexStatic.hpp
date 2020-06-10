@@ -1,11 +1,13 @@
 #ifndef __CHIMERA_VERTEX_STATIC_HPP
 #define __CHIMERA_VERTEX_STATIC_HPP
 
-#include "VertexBuffer.hpp"
+#include "EBO.hpp"
+#include "VAO.hpp"
+#include "VBO.hpp"
 
 namespace Chimera {
 
-class VertexRenderStatic : public VertexBuffer {
+class VertexRenderStatic {
   public:
     VertexRenderStatic();
     virtual ~VertexRenderStatic();
@@ -13,17 +15,11 @@ class VertexRenderStatic : public VertexBuffer {
     void render();
 
   private:
-    virtual void createIndex() override;
-    virtual void clearIndex() override;
-
-    unsigned int ibo;
-    unsigned int sizeBufferIndex;
+    VBO vbo;
+    VAO vao;
+    EBO ebo;
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
 };
-
-// void indexVBO_slow(std::vector<VertexData>& inData, std::vector<VertexData>& outData,
-//                    std::vector<unsigned int>& out_indices);
-
 } // namespace Chimera
 #endif

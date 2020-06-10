@@ -4,14 +4,15 @@
 
 namespace Chimera {
 
-VertexRenderDynamic::VertexRenderDynamic() : VertexBuffer(true) {}
+VertexRenderDynamic::VertexRenderDynamic() {}
 
 VertexRenderDynamic::~VertexRenderDynamic() {}
 
 void VertexRenderDynamic::render(std::vector<VertexData>& vVertice) {
 
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    vao.bind();
+
+    vbo.bind(); // glBindBuffer(GL_ARRAY_BUFFER, vboGL);
 
     int tot = vVertice.size() * sizeof(Chimera::VertexData);
     // glBufferData(GL_ARRAY_BUFFER, 5000, nullptr, GL_STREAM_DRAW);
@@ -19,14 +20,15 @@ void VertexRenderDynamic::render(std::vector<VertexData>& vVertice) {
 
     glDrawArrays(GL_TRIANGLES, 0, vVertice.size());
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    vbo.unbind(); // glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    vao.unbind();
 }
 
 void VertexRenderDynamic::create(const unsigned int& max) {
 
-    maxBufferSize = max;
-    std::vector<VertexData> vVertice;
-    VertexBuffer::initialize(vVertice);
+    vao.create();
+    vao.bind();
+    vbo.buildDynamic(max);
 }
 } // namespace Chimera

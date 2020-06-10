@@ -2,6 +2,7 @@
 #define __CHIMERA_VERTEX_NODE__HPP
 
 #include "chimera/render/AABB.hpp"
+#include "chimera/render/EBO.hpp"
 #include "chimera/render/VertexData.hpp"
 #include <vector>
 
@@ -13,7 +14,6 @@ class VertexNode {
     ~VertexNode();
 
     inline bool empty() { return (index.size() == 0); }
-    inline unsigned int getIndexBufferObject() { return indexBufferObject; }
     void addFace(unsigned int& _face, unsigned int& _pa, unsigned int& _pb, unsigned int& _pc);
     void initIndexBufferObject();
     void initAABB(std::vector<VertexData>& vertexDataIn);
@@ -23,8 +23,7 @@ class VertexNode {
     AABB aabb;
 
   private:
-    unsigned int indexBufferObject;
-
+    EBO ebo;
     std::vector<unsigned int> index;
     std::vector<unsigned int> faces;
 };

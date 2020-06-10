@@ -4,13 +4,13 @@ namespace Chimera {
 
 unsigned Triangle::serialMaster = 0;
 
-Triangle::Triangle(const VertexData& va, const VertexData& vb, const VertexData& vc) : serial(++serialMaster) {
+Triangle::Triangle(const VertexData& va, const VertexData& vb, const VertexData& vc) : serial(serialMaster++) {
     this->vertex[0] = va;
     this->vertex[1] = vb;
     this->vertex[2] = vc;
 }
 
-Triangle::Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) : serial(++serialMaster) {
+Triangle::Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) : serial(serialMaster++) {
     this->vertex[0].position = a;
     this->vertex[1].position = b;
     this->vertex[2].position = c;
@@ -25,7 +25,7 @@ Triangle::Triangle(const Triangle& _cpy) {
     }
 }
 
-glm::vec3 Triangle::normal() {
+glm::vec3 Triangle::normal() const {
     glm::vec3 acc = glm::vec3(0, 0, 0);
     for (int i = 0; i < 3; i++)
         acc = acc + this->vertex[i].normal;
@@ -41,12 +41,11 @@ void Triangle::generateNormal() {
         this->vertex[i].normal = normal;
 }
 
-SIDE classifyPoint(glm::vec3* pos, Triangle* plane) {
+SIDE classifyPoint(glm::vec3* pos, PlanePoint* plane) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     float result;
-    glm::vec3* vec1 = (glm::vec3*)&plane->vertex[0];
-    glm::vec3 dir = (*vec1) - (*pos);
-    result = glm::dot(dir, plane->normal());
+    glm::vec3 dir = plane->pointOnPlane - (*pos);
+    result = glm::dot(dir, plane->normal);
 
     if (result < -EPSILON)
         return SIDE::CP_FRONT;
@@ -57,7 +56,7 @@ SIDE classifyPoint(glm::vec3* pos, Triangle* plane) {
     return SIDE::CP_ONPLANE;
 }
 
-SIDE classifyPoly(Triangle* plane, Triangle* poly, glm::vec3* distance) {
+SIDE classifyPoly(PlanePoint* plane, Triangle* poly, glm::vec3* distance) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     unsigned short infront = 0;
     unsigned short behind = 0;
@@ -65,8 +64,8 @@ SIDE classifyPoly(Triangle* plane, Triangle* poly, glm::vec3* distance) {
     float result[3];
 
     for (unsigned short a = 0; a < 3; a++) {
-        glm::vec3 direction = plane->vertex[0].position - poly->vertex[a].position;
-        result[a] = glm::dot(direction, plane->normal());
+        glm::vec3 direction = plane->pointOnPlane - poly->vertex[a].position;
+        result[a] = glm::dot(direction, plane->normal);
         if (result[a] > EPSILON) {
             behind++;
         } else if (result[a] < -EPSILON) {
@@ -94,26 +93,24 @@ SIDE classifyPoly(Triangle* plane, Triangle* poly, glm::vec3* distance) {
     return SIDE::CP_SPANNING;
 }
 
-bool intersect(const glm::vec3& linestart, const glm::vec3& lineend, const glm::vec3& vertex, const glm::vec3& normal,
-               glm::vec3& intersection, float& percentage) {
+bool intersect(glm::vec3* linestart, glm::vec3* lineend, PlanePoint* plane, glm::vec3* intersection, float* percentage) {
 
-    glm::vec3 direction = lineend - linestart;
-    float linelength = glm::dot(direction, normal);
+    glm::vec3 direction = (*lineend) - (*linestart);
+    float linelength = glm::dot(direction, plane->normal);
     if (fabsf(linelength) < 0.0001)
         return false;
 
-    glm::vec3 L1 = vertex - linestart;
+    glm::vec3 L1 = plane->pointOnPlane - (*linestart);
 
-    float dist_from_plane = glm::dot(L1, normal);
-    percentage = dist_from_plane / linelength;
+    float dist_from_plane = glm::dot(L1, plane->normal);
+    *percentage = dist_from_plane / linelength;
 
-    if (percentage < 0.0f)
+    if (*percentage < 0.0f)
         return false;
-    else if (percentage > 1.0f)
+    else if (*percentage > 1.0f)
         return false;
 
-    intersection = linestart + (direction * percentage);
+    *intersection = (*linestart) + (direction * (*percentage));
     return true;
 }
-
 } // namespace Chimera

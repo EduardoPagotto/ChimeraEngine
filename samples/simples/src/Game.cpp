@@ -84,7 +84,9 @@ void Game::start() {
 
     Chimera::MeshData m;
     Chimera::LoaderObj loader;
-    loader.getMesh("./data/models/tela01.obj", m);
+    // loader.getMesh("./data/models/tela01.obj", m);
+    // loader.getMesh("./data/models/parede_simples.obj", m);
+    loader.getMesh("./data/models/map02.obj", m);
 
     if (loader.hasMaterial() == true)
         loader.getMaterial(material);
@@ -95,7 +97,7 @@ void Game::start() {
 
     material.init();
 
-    m.changeSize(100.0, material.hasTexture());
+    // m.changeSize(100.0, material.hasTexture());
     // m.textureFix();
 
     std::vector<Chimera::VertexData> renderData;

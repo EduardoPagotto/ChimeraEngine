@@ -10,10 +10,11 @@
 namespace Chimera {
 
 struct BSPTreeNode {
-    BSPTreeNode(const Chimera::Triangle& _partition)
-        : partition(_partition), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
-    std::vector<Chimera::Triangle> polygons;
-    Chimera::Triangle partition; // HyperPlane partition;
+    BSPTreeNode(Triangle* partition)
+        : hyperPlane(new PlanePoint(partition)), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
+
+    std::vector<Triangle> polygons;
+    PlanePoint* hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
     bool isLeaf;
@@ -21,15 +22,15 @@ struct BSPTreeNode {
 };
 
 //----- Build bsptree
-BSPTreeNode* bsptreeBuild(std::vector<Chimera::Triangle>* _pListPolygon);
+BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon);
 
 //----- parse bsptree to draw
-void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata);
+void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool logdata);
 
 //---- util
-unsigned int selectBestSplitter(std::vector<Chimera::Triangle>& _poliyList);
+unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList);
 
-void initPolygons(unsigned char* map, std::vector<Chimera::Triangle>* PolygonList);
+void initPolygons(unsigned char* map, std::vector<Triangle>* PolygonList);
 
 } // namespace Chimera
 #endif

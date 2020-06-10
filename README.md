@@ -9,7 +9,7 @@ OBS: Code with comments in Portuguese mostly
 apt install htop build-essential git gitk meld cmake g++
 
 # XML
-apt install tinyxml2*
+apt install libtinyxml2-dev
 
 # OpenGL dev
 apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev libglm-dev libglew-dev libglewmx-dev

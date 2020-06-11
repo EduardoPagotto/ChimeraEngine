@@ -53,8 +53,10 @@ void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, PlanePoint* hyperP
     float propBC = 0.0;
     glm::vec3 A, B;
 
-    intersect(&a, &c, hyperPlane, &A, &propAC);
-    intersect(&b, &c, hyperPlane, &B, &propBC);
+    // intersect(&a, &c, hyperPlane, &A, &propAC);
+    hyperPlane->intersect(&a, &c, &A, &propAC);
+    // intersect(&b, &c, hyperPlane, &B, &propBC);
+    hyperPlane->intersect(&b, &c, &B, &propBC);
 
     // PA texture coord
     glm::vec2 deltaA = (pVertex_c->texture - pVertex_a->texture) * propAC;
@@ -111,7 +113,8 @@ BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
         Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
-        SIDE teste = classifyPoly(tree->hyperPlane, &poly, &result);
+        // SIDE teste = classifyPoly(tree->hyperPlane, &poly, &result);
+        SIDE teste = tree->hyperPlane->classifyPoly(&poly, &result);
 
         if (teste == SIDE::CP_BACK)
             back_list.push_back(poly);
@@ -175,7 +178,8 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::Vertex
     if (tree->isLeaf == true)
         return;
 
-    SIDE result = classifyPoint(pos, tree->hyperPlane);
+    // SIDE result = classifyPoint(pos, tree->hyperPlane);
+    SIDE result = tree->hyperPlane->classifyPoint(pos);
     if (result == SIDE::CP_FRONT) {
 
         traverseTree(tree->back, pos, _pOutVertex, logdata);
@@ -202,20 +206,24 @@ bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
         return !tree->isSolid;
     }
 
-    SIDE PointA = classifyPoint(Start, tree->hyperPlane);
-    SIDE PointB = classifyPoint(End, tree->hyperPlane);
+    // SIDE PointA = classifyPoint(Start, tree->hyperPlane);
+    SIDE PointA = tree->hyperPlane->classifyPoint(Start);
+    // SIDE PointB = classifyPoint(End, tree->hyperPlane);
+    SIDE PointB = tree->hyperPlane->classifyPoint(End);
 
     if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
         return lineOfSight(Start, End, tree->front);
     }
 
     if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
-        intersect(Start, End, tree->hyperPlane, &intersection, &temp);
+        // intersect(Start, End, tree->hyperPlane, &intersection, &temp);
+        tree->hyperPlane->intersect(Start, End, &intersection, &temp);
         return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
     }
 
     if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
-        intersect(Start, End, tree->hyperPlane, &intersection, &temp);
+        // intersect(Start, End, tree->hyperPlane, &intersection, &temp);
+        tree->hyperPlane->intersect(Start, End, &intersection, &temp);
         return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
     }
 
@@ -250,7 +258,7 @@ unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList) {
 
                 Triangle currentPoly = _poliyList[indice_current];
 
-                SIDE result = classifyPoly(&hyperPlane, &currentPoly, &temp);
+                SIDE result = hyperPlane.classifyPoly(&currentPoly, &temp);
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;

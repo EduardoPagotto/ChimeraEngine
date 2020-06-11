@@ -27,7 +27,8 @@ unsigned int PVS::selectBestSplitter(std::vector<Tris>& _poliyList) {
 
                 Tris currentPoly = _poliyList[indice_current];
 
-                SIDE result = classifyPoly(&hyperPlane, currentPoly.triangle, &temp);
+                // SIDE result = classifyPoly(&hyperPlane, currentPoly.triangle, &temp);
+                SIDE result = hyperPlane.classifyPoly(currentPoly.triangle, &temp);
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;

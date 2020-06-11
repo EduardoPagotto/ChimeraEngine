@@ -41,11 +41,11 @@ void Triangle::generateNormal() {
         this->vertex[i].normal = normal;
 }
 
-SIDE classifyPoint(glm::vec3* pos, PlanePoint* plane) {
+SIDE PlanePoint::classifyPoint(glm::vec3* point) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     float result;
-    glm::vec3 dir = plane->pointOnPlane - (*pos);
-    result = glm::dot(dir, plane->normal);
+    glm::vec3 dir = this->point - (*point);
+    result = glm::dot(dir, this->normal);
 
     if (result < -EPSILON)
         return SIDE::CP_FRONT;
@@ -56,7 +56,7 @@ SIDE classifyPoint(glm::vec3* pos, PlanePoint* plane) {
     return SIDE::CP_ONPLANE;
 }
 
-SIDE classifyPoly(PlanePoint* plane, Triangle* poly, glm::vec3* distance) {
+SIDE PlanePoint::classifyPoly(Triangle* poly, glm::vec3* distance) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     unsigned short infront = 0;
     unsigned short behind = 0;
@@ -64,8 +64,8 @@ SIDE classifyPoly(PlanePoint* plane, Triangle* poly, glm::vec3* distance) {
     float result[3];
 
     for (unsigned short a = 0; a < 3; a++) {
-        glm::vec3 direction = plane->pointOnPlane - poly->vertex[a].position;
-        result[a] = glm::dot(direction, plane->normal);
+        glm::vec3 direction = this->point - poly->vertex[a].position;
+        result[a] = glm::dot(direction, this->normal);
         if (result[a] > EPSILON) {
             behind++;
         } else if (result[a] < -EPSILON) {
@@ -93,16 +93,16 @@ SIDE classifyPoly(PlanePoint* plane, Triangle* poly, glm::vec3* distance) {
     return SIDE::CP_SPANNING;
 }
 
-bool intersect(glm::vec3* linestart, glm::vec3* lineend, PlanePoint* plane, glm::vec3* intersection, float* percentage) {
+bool PlanePoint::intersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* intersection, float* percentage) {
 
     glm::vec3 direction = (*lineend) - (*linestart);
-    float linelength = glm::dot(direction, plane->normal);
+    float linelength = glm::dot(direction, this->normal);
     if (fabsf(linelength) < 0.0001)
         return false;
 
-    glm::vec3 L1 = plane->pointOnPlane - (*linestart);
+    glm::vec3 L1 = this->point - (*linestart);
 
-    float dist_from_plane = glm::dot(L1, plane->normal);
+    float dist_from_plane = glm::dot(L1, this->normal);
     *percentage = dist_from_plane / linelength;
 
     if (*percentage < 0.0f)

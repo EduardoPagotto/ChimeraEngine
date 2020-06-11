@@ -15,7 +15,8 @@ class Plane {
     float AABBDistance(const glm::vec3* AABBVertices);
 
   private:
-    glm::vec3 N;
+    glm::vec3 point;  // vertice A
+    glm::vec3 normal; // plane calc cross product B and C across A
     float ND;
     int O;
 };

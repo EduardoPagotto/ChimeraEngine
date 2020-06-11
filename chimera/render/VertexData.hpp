@@ -6,7 +6,7 @@
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
 
 #define EPSILON 1e-2
-//#define EPSILON 1e-1 Falhas em calculos de aproximação verificar
+//#define EPSILON 1e-1 // Falhas em calculos de aproximação verificar projeto bsptree
 
 #define BUFFER_OFFSET(i) ((void*)(i))
 

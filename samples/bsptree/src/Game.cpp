@@ -107,10 +107,10 @@ void Game::start() {
 
     Chimera::LoaderObj loader;
     loader.getMesh("./data/models/map02.obj", m);
-    // loader.getMesh("./data/models/parede_simples.obj", m);
+    // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para
     // loader.getMesh("./data/models/square2.obj", m);
-    // // loader.getMesh("./data/models/square1.obj", m);
-    // // loader.getMesh("./data/models/split1.obj", m);
+    // loader.getMesh("./data/models/square1.obj", m);
+    // loader.getMesh("./data/models/split1.obj", m);
     // //loader.getMesh("./data/models/teste1.obj", m);
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     // m.changeSize(30.0, true);

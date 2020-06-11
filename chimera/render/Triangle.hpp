@@ -26,16 +26,18 @@ class Triangle {
     static unsigned serialMaster;
 };
 
-struct PlanePoint {
-    PlanePoint(Triangle* _point) : pointOnPlane(_point->vertex[0].position), normal(_point->normal()) {}
-    glm::vec3 pointOnPlane;
+class PlanePoint {
+  public:
+    PlanePoint(Triangle* _point) : point(_point->vertex[0].position), normal(_point->normal()) {}
+
+    SIDE classifyPoint(glm::vec3* point);
+    SIDE classifyPoly(Triangle* poly, glm::vec3* distance);
+    bool intersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* intersection, float* percentage);
+
+  private:
+    glm::vec3 point;
     glm::vec3 normal;
 };
-
-SIDE classifyPoint(glm::vec3* pos, PlanePoint* plane);
-SIDE classifyPoly(PlanePoint* plane, Triangle* poly, glm::vec3* distance);
-
-bool intersect(glm::vec3* linestart, glm::vec3* lineend, PlanePoint* plane, glm::vec3* intersection, float* percentage);
 
 } // namespace Chimera
 #endif

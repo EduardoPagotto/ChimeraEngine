@@ -53,9 +53,7 @@ void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, PlanePoint* hyperP
     float propBC = 0.0;
     glm::vec3 A, B;
 
-    // intersect(&a, &c, hyperPlane, &A, &propAC);
     hyperPlane->intersect(&a, &c, &A, &propAC);
-    // intersect(&b, &c, hyperPlane, &B, &propBC);
     hyperPlane->intersect(&b, &c, &B, &propBC);
 
     // PA texture coord
@@ -113,15 +111,17 @@ BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
         Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
-        // SIDE teste = classifyPoly(tree->hyperPlane, &poly, &result);
+        // TODO: subistituir por swicht
         SIDE teste = tree->hyperPlane->classifyPoly(&poly, &result);
-
         if (teste == SIDE::CP_BACK)
             back_list.push_back(poly);
+
         else if (teste == SIDE::CP_FRONT)
             front_list.push_back(poly);
+
         else if (teste == SIDE::CP_ONPLANE)
             tree->polygons.push_back(poly);
+
         else // CP_SPANNING
             splitTriangle(result, &poly, tree->hyperPlane, _pListPolygon);
     }
@@ -178,7 +178,6 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::Vertex
     if (tree->isLeaf == true)
         return;
 
-    // SIDE result = classifyPoint(pos, tree->hyperPlane);
     SIDE result = tree->hyperPlane->classifyPoint(pos);
     if (result == SIDE::CP_FRONT) {
 
@@ -206,9 +205,7 @@ bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
         return !tree->isSolid;
     }
 
-    // SIDE PointA = classifyPoint(Start, tree->hyperPlane);
     SIDE PointA = tree->hyperPlane->classifyPoint(Start);
-    // SIDE PointB = classifyPoint(End, tree->hyperPlane);
     SIDE PointB = tree->hyperPlane->classifyPoint(End);
 
     if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
@@ -216,13 +213,11 @@ bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
     }
 
     if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
-        // intersect(Start, End, tree->hyperPlane, &intersection, &temp);
         tree->hyperPlane->intersect(Start, End, &intersection, &temp);
         return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
     }
 
     if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
-        // intersect(Start, End, tree->hyperPlane, &intersection, &temp);
         tree->hyperPlane->intersect(Start, End, &intersection, &temp);
         return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
     }

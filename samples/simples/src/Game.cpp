@@ -85,8 +85,9 @@ void Game::start() {
     Chimera::MeshData m;
     Chimera::LoaderObj loader;
     // loader.getMesh("./data/models/tela01.obj", m);
+    loader.getMesh("./data/models/square2.obj", m);
     // loader.getMesh("./data/models/parede_simples.obj", m);
-    loader.getMesh("./data/models/map02.obj", m);
+    // loader.getMesh("./data/models/map02.obj", m);
 
     if (loader.hasMaterial() == true)
         loader.getMaterial(material);

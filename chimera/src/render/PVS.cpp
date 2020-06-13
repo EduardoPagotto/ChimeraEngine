@@ -16,7 +16,9 @@ unsigned int PVS::selectBestSplitter(std::vector<Tris>& _poliyList) {
         if (_poliyList[indice_splitter].beenUsedAsSplitter == true)
             continue;
 
-        PlanePoint hyperPlane(_poliyList[indice_splitter].triangle);
+        Triangle th = *_poliyList[indice_splitter].triangle;
+        PlanePoint hyperPlane;
+        hyperPlane.set(th.vertex[0].position, th.normal());
 
         long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
@@ -53,7 +55,10 @@ unsigned int PVS::selectBestSplitter(std::vector<Tris>& _poliyList) {
         }
     }
 
-    this->planes.push_back(new PlanePoint(_poliyList[selectedPoly].triangle));
+    Triangle th = *_poliyList[selectedPoly].triangle;
+    PlanePoint* p = new PlanePoint();
+    p->set(th.vertex[0].position, th.normal());
+    this->planes.push_back(p);
 
     return this->planes.size() - 1; //?
 }

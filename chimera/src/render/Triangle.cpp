@@ -41,26 +41,10 @@ void Triangle::generateNormal() {
         this->vertex[i].normal = normal;
 }
 
-// PlanePoint::PlanePoint(glm::vec3* _position, glm::vec3* _normal) {
-//     point = *_position; //_point->vertex[0].position;
-//     normal = *_normal;  //_point->normal();
-//     // d = point.x + point.y + point.z;
-//     // s = glm::length(normal);
-// }
-
-PlanePoint::PlanePoint(Triangle* _point) {
-    point = _point->vertex[0].position;
-    normal = _point->normal();
-    // d = point.x + point.y + point.z;
-    // s = glm::length(normal);
+void PlanePoint::set(const glm::vec3& _position, const glm::vec3& _normal) {
+    point = _position; //_point->vertex[0].position;
+    normal = _normal;  //_point->normal();
 }
-
-// float PlanePoint::distance(glm::vec3* point) {
-
-//     float a = (normal.x * point->x) + (normal.y * point->y) + (normal.z * point->z) - d;
-//     float r = a / s;
-//     return r;
-// }
 
 SIDE PlanePoint::classifyPoint(glm::vec3* point) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm

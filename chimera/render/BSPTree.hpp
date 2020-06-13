@@ -4,6 +4,7 @@
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
 
+#include "Plane.hpp"
 #include "Triangle.hpp"
 #include <vector>
 
@@ -15,7 +16,7 @@ struct BSPTreeNode {
     }
 
     std::vector<Triangle> polygons;
-    PlanePoint hyperPlane; // HyperPlane partition;
+    Plane hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
     bool isLeaf;

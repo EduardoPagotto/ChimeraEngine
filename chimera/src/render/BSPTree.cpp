@@ -15,7 +15,7 @@ glm::vec3 aprox(const glm::vec3& dado) {
                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
 }
 
-void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, PlanePoint* hyperPlane, std::vector<Triangle>* _pListPolygon) {
+void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane* hyperPlane, std::vector<Triangle>* _pListPolygon) {
     glm::vec3& a = _pTriangle->vertex[0].position;
     glm::vec3& b = _pTriangle->vertex[1].position;
     glm::vec3& c = _pTriangle->vertex[2].position;
@@ -248,7 +248,7 @@ unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList) {
     for (unsigned indice_splitter = 0; indice_splitter < _poliyList.size(); indice_splitter++) {
 
         Triangle th = _poliyList[indice_splitter];
-        PlanePoint hyperPlane;
+        Plane hyperPlane;
         hyperPlane.set(th.vertex[0].position, th.normal());
 
         long long score, splits, backfaces, frontfaces;

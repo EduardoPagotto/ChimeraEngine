@@ -6,8 +6,6 @@
 
 namespace Chimera {
 
-enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
-
 // struct TriangleIndex {
 //     uint32 a, b, c;
 // };
@@ -27,19 +25,6 @@ class Triangle {
   private:
     unsigned serial;
     static unsigned serialMaster;
-};
-
-class PlanePoint {
-  public:
-    PlanePoint() {}
-    void set(const glm::vec3& _position, const glm::vec3& _normal);
-    SIDE classifyPoint(glm::vec3* point);
-    SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest);
-    bool intersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* intersection, float* percentage);
-
-  private:
-    glm::vec3 point;
-    glm::vec3 normal;
 };
 
 } // namespace Chimera

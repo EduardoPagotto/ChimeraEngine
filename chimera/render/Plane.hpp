@@ -5,12 +5,19 @@
 
 namespace Chimera {
 
+enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
+
 class Plane {
   public:
     Plane();
     ~Plane();
 
     void set(const glm::vec3& A, const glm::vec3& B, const glm::vec3& C);
+    void set(const glm::vec3& _position, const glm::vec3& _normal);
+    SIDE classifyPoint(glm::vec3* point);
+    SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest);
+    bool intersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* intersection, float* percentage);
+
     bool AABBBehind(const glm::vec3* AABBVertices);
     float AABBDistance(const glm::vec3* AABBVertices);
 

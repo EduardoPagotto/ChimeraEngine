@@ -101,7 +101,7 @@ BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
     // balanceador
     unsigned int bether_index = selectBestSplitter(*_pListPolygon);
     Triangle partition = (*_pListPolygon)[bether_index];
-    BSPTreeNode* tree = new BSPTreeNode(&partition);
+    BSPTreeNode* tree = new BSPTreeNode(partition.vertex[0].position, partition.normal());
 
     std::vector<Triangle> front_list;
     std::vector<Triangle> back_list;
@@ -136,13 +136,13 @@ BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
 
     // leaf sem poligonos apenas para saber se solido ou vazio
     if (tree->front == nullptr) {
-        tree->front = new BSPTreeNode(&partition);
+        tree->front = new BSPTreeNode(partition.vertex[0].position, partition.normal());
         tree->front->isLeaf = true;
         tree->front->isSolid = false;
     }
 
     if (tree->back == nullptr) {
-        tree->back = new BSPTreeNode(&partition);
+        tree->back = new BSPTreeNode(partition.vertex[0].position, partition.normal());
         tree->back->isLeaf = true;
         tree->back->isSolid = true;
     }
@@ -295,6 +295,12 @@ unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList) {
 void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
     traverseTree(_pRoot, pos, _pOutVertex, logdata);
 }
+
+BspTree::BspTree() { root = nullptr; }
+
+void BspTree::create(std::vector<Triangle>* _pListPolygon) {}
+
+void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool logdata) {}
 
 void AddPolygon(Chimera::VertexData* Vertices, int NOV, std::vector<Triangle>* PolygonList) {
     int loop;

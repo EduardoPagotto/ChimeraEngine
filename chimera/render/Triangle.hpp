@@ -3,12 +3,24 @@
 #define __CHIMERA_TRIANGLE__HPP
 
 #include "chimera/render/VertexData.hpp"
+#include <vector>
 
 namespace Chimera {
 
-// struct TriangleIndex {
-//     uint32 a, b, c;
-// };
+class TriangleIndex {
+  public:
+    TriangleIndex(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const std::vector<VertexData>& _vVertexData);
+    inline glm::vec3 getNormal() const { return normal; }
+    inline uint32_t getSerial() const { return serial; }
+    uint32_t p[3]; // PA = 0, PB = 1, PC = 3
+  private:
+    glm::vec3 normal;
+    uint32_t serial;
+    static uint32_t master;
+};
+
+glm::vec3 calcNormalIndexed(const TriangleIndex& _tris, const std::vector<VertexData>& _vVertexData);
+void overWriteNormalIndexed(const TriangleIndex& _tris, std::vector<VertexData>& _vVertexData);
 
 class Triangle {
   public:

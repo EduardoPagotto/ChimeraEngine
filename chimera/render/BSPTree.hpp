@@ -11,8 +11,8 @@
 namespace Chimera {
 
 struct BSPTreeNode {
-    BSPTreeNode(Triangle* partition) : front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {
-        hyperPlane.set(partition->vertex[0].position, partition->normal());
+    BSPTreeNode(const glm::vec3& _point, const glm::vec3& _normal) : front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {
+        hyperPlane.set(_point, _normal);
     }
 
     std::vector<Triangle> polygons;
@@ -21,6 +21,16 @@ struct BSPTreeNode {
     BSPTreeNode* back;
     bool isLeaf;
     bool isSolid;
+};
+
+class BspTree {
+  public:
+    BspTree();
+    void create(std::vector<Triangle>* _pListPolygon);
+    void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool logdata);
+
+  private:
+    BSPTreeNode* root;
 };
 
 //----- Build bsptree

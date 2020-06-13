@@ -121,7 +121,7 @@ void Game::start() {
     // std::reverse(listPolygons.begin(), listPolygons.end());
 
     // Cria o BSP
-    pBSPTRoot = Chimera::bsptreeBuild(&listPolygons);
+    bspTree.create(&listPolygons);
 
     renderDynamic.create(15000000);
 }
@@ -164,7 +164,7 @@ void Game::render() {
 
     // constroi vertex dinamico baseado no viewpoint
     std::vector<Chimera::VertexData> vVertice;
-    Chimera::bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
+    bspTree.render(&vp->position, &vVertice, debugParser);
 
     // debugParser = false;
 

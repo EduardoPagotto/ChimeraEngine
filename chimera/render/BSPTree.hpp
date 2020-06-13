@@ -30,19 +30,17 @@ class BspTree {
     void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool logdata);
 
   private:
+    unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList);
+    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane* hyperPlane, std::vector<Triangle>* _pListPolygon);
+    BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon);
+
+    void drawPolygon(BSPTreeNode* tree, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata, bool frontSide);
+    void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata);
+
+    // TODO: continuar a implementar abaixo
+    bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
+
     BSPTreeNode* root;
 };
-
-//----- Build bsptree
-BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon);
-
-//----- parse bsptree to draw
-void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool logdata);
-
-//---- util
-unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList);
-
-void initPolygons(unsigned char* map, std::vector<Triangle>* PolygonList);
-
 } // namespace Chimera
 #endif

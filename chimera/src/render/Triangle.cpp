@@ -48,29 +48,31 @@ void PlanePoint::set(const glm::vec3& _position, const glm::vec3& _normal) {
 
 SIDE PlanePoint::classifyPoint(glm::vec3* point) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    float result;
+    float clipTest;
     glm::vec3 dir = this->point - (*point);
-    result = glm::dot(dir, this->normal);
+    clipTest = glm::dot(dir, this->normal);
 
-    if (result < -EPSILON)
+    if (clipTest < -EPSILON)
         return SIDE::CP_FRONT;
 
-    if (result > EPSILON)
+    if (clipTest > EPSILON)
         return SIDE::CP_BACK;
 
     return SIDE::CP_ONPLANE;
 }
 
-SIDE PlanePoint::classifyPoly(Triangle* poly, glm::vec3* distance) {
+SIDE PlanePoint::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     unsigned short infront = 0;
     unsigned short behind = 0;
     unsigned short onPlane = 0;
     float result[3];
 
+    result[0] = glm::dot((this->point - pA), this->normal); // Clip Test poin A
+    result[1] = glm::dot((this->point - pB), this->normal); // Clip Test poin B
+    result[2] = glm::dot((this->point - pC), this->normal); // Clip Test poin C
+
     for (unsigned short a = 0; a < 3; a++) {
-        glm::vec3 direction = this->point - poly->vertex[a].position;
-        result[a] = glm::dot(direction, this->normal);
         if (result[a] > EPSILON) {
             behind++;
         } else if (result[a] < -EPSILON) {
@@ -82,9 +84,9 @@ SIDE PlanePoint::classifyPoly(Triangle* poly, glm::vec3* distance) {
         }
     }
 
-    distance->x = result[0];
-    distance->y = result[1];
-    distance->z = result[2];
+    clipTest->x = result[0];
+    clipTest->y = result[1];
+    clipTest->z = result[2];
 
     if (onPlane == 3)
         return SIDE::CP_ONPLANE;

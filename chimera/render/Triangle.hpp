@@ -34,7 +34,7 @@ class PlanePoint {
     PlanePoint() {}
     void set(const glm::vec3& _position, const glm::vec3& _normal);
     SIDE classifyPoint(glm::vec3* point);
-    SIDE classifyPoly(Triangle* poly, glm::vec3* distance);
+    SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest);
     bool intersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* intersection, float* percentage);
 
   private:

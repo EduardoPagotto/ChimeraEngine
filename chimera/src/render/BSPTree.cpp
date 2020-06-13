@@ -111,7 +111,10 @@ BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
         Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
-        SIDE teste = tree->hyperPlane.classifyPoly(&poly, &result);
+        SIDE teste = tree->hyperPlane.classifyPoly(poly.vertex[0].position, // PA
+                                                   poly.vertex[1].position, // PB
+                                                   poly.vertex[2].position, // PC
+                                                   &result);                // Clip Test Result (A,B,C)
         switch (teste) {
             case SIDE::CP_BACK:
                 back_list.push_back(poly);
@@ -256,8 +259,10 @@ unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList) {
             if (indice_current != indice_splitter) {
 
                 Triangle currentPoly = _poliyList[indice_current];
-
-                SIDE result = hyperPlane.classifyPoly(&currentPoly, &temp);
+                SIDE result = hyperPlane.classifyPoly(currentPoly.vertex[0].position, // PA
+                                                      currentPoly.vertex[1].position, // PB
+                                                      currentPoly.vertex[2].position, // PC
+                                                      &temp);                         // Clip Test Result (A,B,C)
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;

@@ -111,19 +111,21 @@ BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
         Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
-        // TODO: subistituir por swicht
         SIDE teste = tree->hyperPlane->classifyPoly(&poly, &result);
-        if (teste == SIDE::CP_BACK)
-            back_list.push_back(poly);
-
-        else if (teste == SIDE::CP_FRONT)
-            front_list.push_back(poly);
-
-        else if (teste == SIDE::CP_ONPLANE)
-            tree->polygons.push_back(poly);
-
-        else // CP_SPANNING
-            splitTriangle(result, &poly, tree->hyperPlane, _pListPolygon);
+        switch (teste) {
+            case SIDE::CP_BACK:
+                back_list.push_back(poly);
+                break;
+            case SIDE::CP_FRONT:
+                front_list.push_back(poly);
+                break;
+            case SIDE::CP_ONPLANE:
+                tree->polygons.push_back(poly);
+                break;
+            default:
+                splitTriangle(result, &poly, tree->hyperPlane, _pListPolygon);
+                break;
+        }
     }
 
     tree->front = bsptreeBuild(&front_list);
@@ -179,22 +181,22 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::Vertex
         return;
 
     SIDE result = tree->hyperPlane->classifyPoint(pos);
-    if (result == SIDE::CP_FRONT) {
-
-        traverseTree(tree->back, pos, _pOutVertex, logdata);
-        drawPolygon(tree, _pOutVertex, logdata, true);
-        traverseTree(tree->front, pos, _pOutVertex, logdata);
-
-    } else if (result == SIDE::CP_BACK) {
-
-        traverseTree(tree->front, pos, _pOutVertex, logdata);
-        drawPolygon(tree, _pOutVertex, logdata, false);
-        traverseTree(tree->back, pos, _pOutVertex, logdata);
-
-    } else { // result == SIDE::CP_ONPLANE
-        // the eye point is on the partition hyperPlane...
-        traverseTree(tree->front, pos, _pOutVertex, logdata);
-        traverseTree(tree->back, pos, _pOutVertex, logdata);
+    switch (result) {
+        case SIDE::CP_FRONT:
+            traverseTree(tree->back, pos, _pOutVertex, logdata);
+            drawPolygon(tree, _pOutVertex, logdata, true);
+            traverseTree(tree->front, pos, _pOutVertex, logdata);
+            break;
+        case SIDE::CP_BACK:
+            traverseTree(tree->front, pos, _pOutVertex, logdata);
+            drawPolygon(tree, _pOutVertex, logdata, false);
+            traverseTree(tree->back, pos, _pOutVertex, logdata);
+            break;
+        default: // SIDE::CP_ONPLANE
+            // the eye point is on the partition hyperPlane...
+            traverseTree(tree->front, pos, _pOutVertex, logdata);
+            traverseTree(tree->back, pos, _pOutVertex, logdata);
+            break;
     }
 }
 

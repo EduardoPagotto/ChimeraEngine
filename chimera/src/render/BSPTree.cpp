@@ -15,33 +15,41 @@ glm::vec3 aprox(const glm::vec3& dado) {
                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
 }
 
-BspTree::BspTree() { root = nullptr; }
+BspTree::BspTree() {
+    root = nullptr;
+    resultVertex = nullptr;
+    logdata = false;
+}
 
 void BspTree::create(std::vector<Triangle>* _pListPolygon) { root = bsptreeBuild(_pListPolygon); }
 
-void BspTree::drawPolygon(BSPTreeNode* tree, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata, bool frontSide) {
+void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
     // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
+
+    if (logdata == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
+
     for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
         Triangle t = (*it);
 
         // if (t.getSerial() == 10) // 8, 9, 10
         //     continue;
 
-        _pOutVertex->push_back(t.vertex[0]);
-        _pOutVertex->push_back(t.vertex[1]);
-        _pOutVertex->push_back(t.vertex[2]);
+        resultVertex->push_back(t.vertex[0]);
+        resultVertex->push_back(t.vertex[1]);
+        resultVertex->push_back(t.vertex[2]);
 
         // FIXME: remover depois de concluir o algoritmo
         if (logdata == true) {
             if (frontSide == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t.getSerial());
             else
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t.getSerial());
         }
     }
 }
 
-void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
+void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
@@ -53,24 +61,28 @@ void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimer
     SIDE result = tree->hyperPlane.classifyPoint(pos);
     switch (result) {
         case SIDE::CP_FRONT:
-            traverseTree(tree->back, pos, _pOutVertex, logdata);
-            drawPolygon(tree, _pOutVertex, logdata, true);
-            traverseTree(tree->front, pos, _pOutVertex, logdata);
+            traverseTree(tree->back, pos);
+            drawPolygon(tree, true);
+            traverseTree(tree->front, pos);
             break;
         case SIDE::CP_BACK:
-            traverseTree(tree->front, pos, _pOutVertex, logdata);
-            drawPolygon(tree, _pOutVertex, logdata, false);
-            traverseTree(tree->back, pos, _pOutVertex, logdata);
+            traverseTree(tree->front, pos);
+            drawPolygon(tree, false);
+            traverseTree(tree->back, pos);
             break;
         default: // SIDE::CP_ONPLANE
             // the eye point is on the partition hyperPlane...
-            traverseTree(tree->front, pos, _pOutVertex, logdata);
-            traverseTree(tree->back, pos, _pOutVertex, logdata);
+            traverseTree(tree->front, pos);
+            traverseTree(tree->back, pos);
             break;
     }
 }
 
-void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool logdata) { traverseTree(root, eye, _pOutVertex, logdata); }
+void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData) {
+    logdata = _logData;
+    resultVertex = _pOutVertex;
+    traverseTree(root, eye);
+}
 
 unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _poliyList) {
 

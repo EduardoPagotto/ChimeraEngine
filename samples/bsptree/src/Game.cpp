@@ -120,8 +120,18 @@ void Game::start() {
     indexTriangles.clear(); // is sequential, not used here
     // std::reverse(listPolygons.begin(), listPolygons.end());
 
+    // Cria lista multiplo Index
+    std::vector<Chimera::VertexData> vMultiIndex;
+    m.toVertexData(vMultiIndex);
+
+    // Cria indice simples
+    std::vector<Chimera::VertexData> vSingleIndex;
+    std::vector<unsigned int> singleIndex;
+    vertexDataIndexCompile(vMultiIndex, vSingleIndex, singleIndex);
+
     // Cria o BSP
-    bspTree.create(&listPolygons);
+    // bspTree.create(&listPolygons);
+    bspTree.create(vSingleIndex, singleIndex);
 
     renderDynamic.create(15000000);
 }

@@ -19,7 +19,7 @@ class Tris {
   public:
     Tris(Triangle* t) {
         triangle = t;
-        normal = triangle->normal();
+        normal = triangle->getNormal();
         beenUsedAsSplitter = false;
     };
 

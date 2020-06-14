@@ -21,67 +21,76 @@ BspTree::BspTree() {
     logdata = false;
 }
 
-void BspTree::create(std::vector<Triangle>* _pListPolygon) { root = bsptreeBuild(_pListPolygon); }
+void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
+
+    std::vector<Triangle> vTris;
+    vVertex = &_vVertex;
+
+    for (unsigned int pa = 0; pa < _vIndex.size(); pa += 3)
+        vTris.push_back(Triangle(pa, (pa + 1), (pa + 2), _vVertex));
+
+    root = bsptreeBuild(&vTris);
+}
 
 void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
-    // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
+    // // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
 
-    if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
+    // if (logdata == true)
+    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
 
-    for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-        Triangle t = (*it);
+    // for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
+    //     Triangle t = (*it);
 
-        // if (t.getSerial() == 10) // 8, 9, 10
-        //     continue;
+    //     // if (t.getSerial() == 10) // 8, 9, 10
+    //     //     continue;
 
-        resultVertex->push_back(t.vertex[0]);
-        resultVertex->push_back(t.vertex[1]);
-        resultVertex->push_back(t.vertex[2]);
+    //     resultVertex->push_back(t.vertex[0]);
+    //     resultVertex->push_back(t.vertex[1]);
+    //     resultVertex->push_back(t.vertex[2]);
 
-        // FIXME: remover depois de concluir o algoritmo
-        if (logdata == true) {
-            if (frontSide == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t.getSerial());
-            else
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t.getSerial());
-        }
-    }
+    //     // FIXME: remover depois de concluir o algoritmo
+    //     if (logdata == true) {
+    //         if (frontSide == true)
+    //             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t.getSerial());
+    //         else
+    //             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t.getSerial());
+    //     }
+    // }
 }
 
 void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
-    // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
-    if (tree == nullptr)
-        return;
+    // // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
+    // if (tree == nullptr)
+    //     return;
 
-    // no de indicador de final/solido
-    if (tree->isLeaf == true)
-        return;
+    // // no de indicador de final/solido
+    // if (tree->isLeaf == true)
+    //     return;
 
-    SIDE result = tree->hyperPlane.classifyPoint(pos);
-    switch (result) {
-        case SIDE::CP_FRONT:
-            traverseTree(tree->back, pos);
-            drawPolygon(tree, true);
-            traverseTree(tree->front, pos);
-            break;
-        case SIDE::CP_BACK:
-            traverseTree(tree->front, pos);
-            drawPolygon(tree, false);
-            traverseTree(tree->back, pos);
-            break;
-        default: // SIDE::CP_ONPLANE
-            // the eye point is on the partition hyperPlane...
-            traverseTree(tree->front, pos);
-            traverseTree(tree->back, pos);
-            break;
-    }
+    // SIDE result = tree->hyperPlane.classifyPoint(pos);
+    // switch (result) {
+    //     case SIDE::CP_FRONT:
+    //         traverseTree(tree->back, pos);
+    //         drawPolygon(tree, true);
+    //         traverseTree(tree->front, pos);
+    //         break;
+    //     case SIDE::CP_BACK:
+    //         traverseTree(tree->front, pos);
+    //         drawPolygon(tree, false);
+    //         traverseTree(tree->back, pos);
+    //         break;
+    //     default: // SIDE::CP_ONPLANE
+    //         // the eye point is on the partition hyperPlane...
+    //         traverseTree(tree->front, pos);
+    //         traverseTree(tree->back, pos);
+    //         break;
+    // }
 }
 
 void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData) {
-    logdata = _logData;
-    resultVertex = _pOutVertex;
-    traverseTree(root, eye);
+    // logdata = _logData;
+    // resultVertex = _pOutVertex;
+    // traverseTree(root, eye);
 }
 
 unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _poliyList) {
@@ -97,7 +106,7 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _poliyList) {
 
         Triangle th = _poliyList[indice_splitter];
         Plane hyperPlane;
-        hyperPlane.set(th.vertex[0].position, th.normal());
+        hyperPlane.set(vPosVal(th, 0), th.getNormal());
 
         long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
@@ -107,10 +116,10 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _poliyList) {
             if (indice_current != indice_splitter) {
 
                 Triangle currentPoly = _poliyList[indice_current];
-                SIDE result = hyperPlane.classifyPoly(currentPoly.vertex[0].position, // PA
-                                                      currentPoly.vertex[1].position, // PB
-                                                      currentPoly.vertex[2].position, // PC
-                                                      &temp);                         // Clip Test Result (A,B,C)
+                SIDE result = hyperPlane.classifyPoly(vPosVal(currentPoly, 0), // PA
+                                                      vPosVal(currentPoly, 1), // PB
+                                                      vPosVal(currentPoly, 2), // PC
+                                                      &temp);                  // Clip Test Result (A,B,C)
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;
@@ -141,6 +150,7 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _poliyList) {
 }
 
 void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane* hyperPlane, std::vector<Triangle>* _pListPolygon) {
+
     glm::vec3& a = _pTriangle->vertex[0].position;
     glm::vec3& b = _pTriangle->vertex[1].position;
     glm::vec3& c = _pTriangle->vertex[2].position;
@@ -226,7 +236,7 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
     // balanceador
     unsigned int bether_index = selectBestSplitter(*_pListPolygon);
     Triangle partition = (*_pListPolygon)[bether_index];
-    BSPTreeNode* tree = new BSPTreeNode(partition.vertex[0].position, partition.normal());
+    BSPTreeNode* tree = new BSPTreeNode(vPosVal(partition, 0), partition.getNormal());
 
     std::vector<Triangle> front_list;
     std::vector<Triangle> back_list;
@@ -236,10 +246,10 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
         Triangle poly = _pListPolygon->back();
         _pListPolygon->pop_back();
         glm::vec3 result;
-        SIDE teste = tree->hyperPlane.classifyPoly(poly.vertex[0].position, // PA
-                                                   poly.vertex[1].position, // PB
-                                                   poly.vertex[2].position, // PC
-                                                   &result);                // Clip Test Result (A,B,C)
+        SIDE teste = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
+                                                   vPosVal(poly, 1), // PB
+                                                   vPosVal(poly, 2), // PC
+                                                   &result);         // Clip Test Result (A,B,C)
         switch (teste) {
             case SIDE::CP_BACK:
                 back_list.push_back(poly);
@@ -261,13 +271,13 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
 
     // leaf sem poligonos apenas para saber se solido ou vazio
     if (tree->front == nullptr) {
-        tree->front = new BSPTreeNode(partition.vertex[0].position, partition.normal());
+        tree->front = new BSPTreeNode(vPosVal(partition, 0), partition.getNormal());
         tree->front->isLeaf = true;
         tree->front->isSolid = false;
     }
 
     if (tree->back == nullptr) {
-        tree->back = new BSPTreeNode(partition.vertex[0].position, partition.normal());
+        tree->back = new BSPTreeNode(vPosVal(partition, 0), partition.getNormal());
         tree->back->isLeaf = true;
         tree->back->isSolid = true;
     }

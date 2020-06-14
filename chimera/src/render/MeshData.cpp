@@ -74,32 +74,32 @@ void MeshData::toVertexData(std::vector<VertexData>& outData) {
 
 void MeshData::toTriangle(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
 
-    unsigned int B, C;
-    // Load vertex, normal and texture of triangles A,B,C
-    for (unsigned int A = 0; A < vertexIndex.size(); A += 3) {
-        B = A + 1;
-        C = A + 2;
+    // unsigned int B, C;
+    // // Load vertex, normal and texture of triangles A,B,C
+    // for (unsigned int A = 0; A < vertexIndex.size(); A += 3) {
+    //     B = A + 1;
+    //     C = A + 2;
 
-        Triangle t = Triangle(vertexList[vertexIndex[A]],  // vertex triangle A
-                              vertexList[vertexIndex[B]],  // vertex triangle B
-                              vertexList[vertexIndex[C]]); // vertex triangle C
+    //     Triangle t = Triangle(vertexList[vertexIndex[A]],  // vertex triangle A
+    //                           vertexList[vertexIndex[B]],  // vertex triangle B
+    //                           vertexList[vertexIndex[C]]); // vertex triangle C
 
-        if (normalList.size() > 0) {
-            t.vertex[0].normal = normalList[normalIndex[A]]; // normal triangle A
-            t.vertex[1].normal = normalList[normalIndex[B]]; // normal triangle B
-            t.vertex[2].normal = normalList[normalIndex[C]]; // normal triangle C
-        }
+    //     if (normalList.size() > 0) {
+    //         t.vertex[0].normal = normalList[normalIndex[A]]; // normal triangle A
+    //         t.vertex[1].normal = normalList[normalIndex[B]]; // normal triangle B
+    //         t.vertex[2].normal = normalList[normalIndex[C]]; // normal triangle C
+    //     }
 
-        if (uvList.size() > 0) {
-            t.vertex[0].texture = uvList[uvIndex[A]]; // texture triangle A
-            t.vertex[1].texture = uvList[uvIndex[B]]; // texture triangle B
-            t.vertex[2].texture = uvList[uvIndex[C]]; // texture triangle C
-        }
+    //     if (uvList.size() > 0) {
+    //         t.vertex[0].texture = uvList[uvIndex[A]]; // texture triangle A
+    //         t.vertex[1].texture = uvList[uvIndex[B]]; // texture triangle B
+    //         t.vertex[2].texture = uvList[uvIndex[C]]; // texture triangle C
+    //     }
 
-        vecTriangle.push_back(t);
-        _index.push_back(A);
-        // t.debugData();
-    }
+    //     vecTriangle.push_back(t);
+    //     _index.push_back(A);
+    //     // t.debugData();
+    // }
 }
 
 void MeshData::debugDados(bool _showAll) {
@@ -110,27 +110,26 @@ void MeshData::debugDados(bool _showAll) {
 
     if (_showAll == true) {
         for (unsigned int i = 0; i < vertexList.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex: %03d (%05.3f; %05.3f; %05.3f)", i, vertexList[i].x,
-                         vertexList[i].y, vertexList[i].z);
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex: %03d (%05.3f; %05.3f; %05.3f)", i, vertexList[i].x, vertexList[i].y,
+                         vertexList[i].z);
 
         for (unsigned int i = 0; i < vertexIndex.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Index: %03d (%03d; %03d; %03d)", i, vertexIndex[i],
-                         vertexIndex[i + 1], vertexIndex[i + 2]);
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Index: %03d (%03d; %03d; %03d)", i, vertexIndex[i], vertexIndex[i + 1],
+                         vertexIndex[i + 2]);
 
         for (unsigned int i = 0; i < normalList.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", i, normalList[i].x,
-                         normalList[i].y, normalList[i].z);
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", i, normalList[i].x, normalList[i].y,
+                         normalList[i].z);
 
         for (unsigned int i = 0; i < normalIndex.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Index: %03d (%03d; %03d; %03d)", i, normalIndex[i],
-                         normalIndex[i + 1], normalIndex[i + 2]);
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Index: %03d (%03d; %03d; %03d)", i, normalIndex[i], normalIndex[i + 1],
+                         normalIndex[i + 2]);
 
         for (unsigned int i = 0; i < uvList.size(); i++)
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV: %03d (%05.3f; %05.3f)", i, uvList[i].x, uvList[i].y);
 
         for (unsigned int i = 0; i < uvIndex.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV Index: %03d (%03d; %03d; %03d)", i, uvIndex[i], uvIndex[i + 1],
-                         uvIndex[i + 2]);
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV Index: %03d (%03d; %03d; %03d)", i, uvIndex[i], uvIndex[i + 1], uvIndex[i + 2]);
     }
 }
 } // namespace Chimera

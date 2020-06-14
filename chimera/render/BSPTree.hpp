@@ -26,7 +26,7 @@ struct BSPTreeNode {
 class BspTree {
   public:
     BspTree();
-    void create(std::vector<Triangle>* _pListPolygon);
+    void create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
     void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
 
   private:
@@ -40,9 +40,11 @@ class BspTree {
     // TODO: continuar a implementar abaixo
     bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
 
+    inline glm::vec3 vPosVal(const Triangle& _t, const unsigned& pos) { return (*vVertex)[_t.p[pos]].position; }
     bool logdata;
     BSPTreeNode* root;
     std::vector<VertexData>* resultVertex;
+    std::vector<Chimera::VertexData>* vVertex;
 };
 } // namespace Chimera
 #endif

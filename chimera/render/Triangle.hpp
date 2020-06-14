@@ -7,9 +7,10 @@
 
 namespace Chimera {
 
-class TriangleIndex {
+class Triangle {
   public:
-    TriangleIndex(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const std::vector<VertexData>& _vVertexData);
+    Triangle(const Triangle& _val);
+    Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const std::vector<VertexData>& _vVertexData);
     inline glm::vec3 getNormal() const { return normal; }
     inline uint32_t getSerial() const { return serial; }
     uint32_t p[3]; // PA = 0, PB = 1, PC = 3
@@ -19,25 +20,25 @@ class TriangleIndex {
     static uint32_t master;
 };
 
-glm::vec3 calcNormalIndexed(const TriangleIndex& _tris, const std::vector<VertexData>& _vVertexData);
-void overWriteNormalIndexed(const TriangleIndex& _tris, std::vector<VertexData>& _vVertexData);
+glm::vec3 calcNormalIndexed(const Triangle& _tris, const std::vector<VertexData>& _vVertexData);
+void overWriteNormalIndexed(const Triangle& _tris, std::vector<VertexData>& _vVertexData);
 
-class Triangle {
-  public:
-    Triangle(const VertexData& va, const VertexData& vb, const VertexData& vc);
-    Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
-    Triangle(const Triangle& _cpy);
+// class Triangle {
+//   public:
+//     Triangle(const VertexData& va, const VertexData& vb, const VertexData& vc);
+//     Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
+//     Triangle(const Triangle& _cpy);
 
-    inline unsigned getSerial() const { return serial; }
-    glm::vec3 normal() const;
-    void generateNormal();
+//     inline unsigned getSerial() const { return serial; }
+//     glm::vec3 normal() const;
+//     void generateNormal();
 
-    VertexData vertex[3];
+//     VertexData vertex[3];
 
-  private:
-    unsigned serial;
-    static unsigned serialMaster;
-};
+//   private:
+//     unsigned serial;
+//     static unsigned master;
+// };
 
 } // namespace Chimera
 #endif

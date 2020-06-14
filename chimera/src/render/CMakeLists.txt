@@ -21,6 +21,7 @@ set (RenderSource 	Triangle.cpp
 					VAO.cpp
 					EBO.cpp
 					VBO.cpp
+					VertexData.cpp
 					VertexDynamic.cpp 
 					VertexStatic.cpp
 					HeightMap.cpp

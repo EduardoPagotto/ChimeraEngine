@@ -31,7 +31,7 @@ class BspTree {
 
   private:
     unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList);
-    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane* hyperPlane, std::vector<Triangle>* _pListPolygon);
+    void splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane* hyperPlane, std::vector<Triangle>* _pListPolygon);
     BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon);
 
     void drawPolygon(BSPTreeNode* tree, bool frontSide);
@@ -41,6 +41,7 @@ class BspTree {
     bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
 
     inline glm::vec3 vPosVal(const Triangle& _t, const unsigned& pos) { return (*vVertex)[_t.p[pos]].position; }
+    inline VertexData vVerVal(const Triangle& _t, const unsigned& pos) { return (*vVertex)[_t.p[pos]]; }
     bool logdata;
     BSPTreeNode* root;
     std::vector<VertexData>* resultVertex;

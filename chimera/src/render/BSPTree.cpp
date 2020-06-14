@@ -149,83 +149,77 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _poliyList) {
     return selectedPoly;
 }
 
-void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane* hyperPlane, std::vector<Triangle>* _pListPolygon) {
+void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane* hyperPlane, std::vector<Triangle>* _pListPolygon) {
 
-    glm::vec3& a = _pTriangle->vertex[0].position;
-    glm::vec3& b = _pTriangle->vertex[1].position;
-    glm::vec3& c = _pTriangle->vertex[2].position;
-
-    // acerto para vertex do tex final igualar a rotacao do triangulo
-    Chimera::VertexData* pVertex_a = nullptr;
-    Chimera::VertexData* pVertex_b = nullptr;
-    Chimera::VertexData* pVertex_c = nullptr;
-
-    // Normaliza Triangulo para que o corte do hiper-plano esteja nos segmentos de reta CA e CB (corte em a e b)
-    if (fx.x * fx.z >= 0) { // corte em a e c
-        swapFace(b, c);
-        swapFace(a, b);
-
-        pVertex_a = &_pTriangle->vertex[2]; // old c
-        pVertex_b = &_pTriangle->vertex[0]; // old a
-        pVertex_c = &_pTriangle->vertex[1]; // old b
-
-    } else if (fx.y * fx.z >= 0) { // corte em b e c
-        swapFace(a, c);
-        swapFace(a, b);
-        //--
-        pVertex_a = &_pTriangle->vertex[1]; // old b
-        pVertex_b = &_pTriangle->vertex[2]; // old c
-        pVertex_c = &_pTriangle->vertex[0]; // old a
-
-    } else { // Cortre em a e b
-
-        pVertex_a = &_pTriangle->vertex[0]; // old a
-        pVertex_b = &_pTriangle->vertex[1]; // old b
-        pVertex_c = &_pTriangle->vertex[2]; // old c
-    }
-
+    // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
     float propBC = 0.0;
+
+    // ultima posicao de indice de vertices
+    unsigned int last = vVertex->size();
+
+    // Vertex dos triangulos a serem normalizados
+    Chimera::VertexData vertA, vertB, vertC;
+
+    // Pega pontos posicao original e inteseccao
     glm::vec3 A, B;
+    glm::vec3 a = vPosVal(_pTriangle, 0);
+    glm::vec3 b = vPosVal(_pTriangle, 1);
+    glm::vec3 c = vPosVal(_pTriangle, 2);
+
+    // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
+    if (fx.x * fx.z >= 0) {             // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
+        swapFace(b, c);                 //   troca b com c
+        swapFace(a, b);                 //   troca a com b
+        vertA = vVerVal(_pTriangle, 2); //   old c
+        vertB = vVerVal(_pTriangle, 0); //   old a
+        vertC = vVerVal(_pTriangle, 1); //   old b
+
+    } else if (fx.y * fx.z >= 0) {      // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
+        swapFace(a, c);                 //   troca A com C
+        swapFace(a, b);                 //   torca a com b
+        vertA = vVerVal(_pTriangle, 1); //   old b
+        vertB = vVerVal(_pTriangle, 2); //   old c
+        vertC = vVerVal(_pTriangle, 0); //   old a
+
+    } else {                            // Cortre em a e b (pontos posicao original)
+        vertA = vVerVal(_pTriangle, 0); //   old a
+        vertB = vVerVal(_pTriangle, 1); //   old b
+        vertC = vVerVal(_pTriangle, 2); //   old c
+    }
 
     hyperPlane->intersect(&a, &c, &A, &propAC);
     hyperPlane->intersect(&b, &c, &B, &propBC);
 
     // PA texture coord
-    glm::vec2 deltaA = (pVertex_c->texture - pVertex_a->texture) * propAC;
-    glm::vec2 texA = pVertex_a->texture + deltaA;
+    glm::vec2 deltaA = (vertC.texture - vertA.texture) * propAC;
+    glm::vec2 texA = vertA.texture + deltaA;
 
     // PB texture coord
-    glm::vec2 deltaB = (pVertex_c->texture - pVertex_b->texture) * propBC;
-    glm::vec2 texB = pVertex_b->texture + deltaB;
+    glm::vec2 deltaB = (vertC.texture - vertB.texture) * propBC;
+    glm::vec2 texB = vertB.texture + deltaB;
 
-    //-- T1
-    Triangle T1(a, b, A);
-    T1.vertex[0].texture = pVertex_a->texture; // a old b
-    T1.vertex[1].texture = pVertex_b->texture; // b old c
-    T1.vertex[2].texture = texA;               // A
+    //-- T1 Triangle T1(a, b, A);
+    vVertex->push_back({a, vVerVal(_pTriangle, 0).normal, vertA.texture}); // T1 PA
+    vVertex->push_back({b, vVerVal(_pTriangle, 1).normal, vertB.texture}); // T1 PB
+    vVertex->push_back({A, vVerVal(_pTriangle, 2).normal, texA});          // T1 PC
+    Triangle T1(last++, last++, last++, *vVertex);
 
-    //-- T2
-    Triangle T2(b, B, A);
-    T2.vertex[0].texture = pVertex_b->texture; // b old c
-    T2.vertex[1].texture = texB;               // B
-    T2.vertex[2].texture = texA;               // A
+    // //-- T2 Triangle T2(b, B, A);
+    vVertex->push_back({b, vVerVal(_pTriangle, 0).normal, vertB.texture}); // T2 PA
+    vVertex->push_back({B, vVerVal(_pTriangle, 1).normal, texB});          // T2 PB
+    vVertex->push_back({A, vVerVal(_pTriangle, 2).normal, texA});          // T2 PC
+    Triangle T2(last++, last++, last++, *vVertex);
 
-    // -- T3
-    Triangle T3(A, B, c);
-    T3.vertex[0].texture = texA;               // A
-    T3.vertex[1].texture = texB;               // B
-    T3.vertex[2].texture = pVertex_c->texture; // c old a
+    // // -- T3 Triangle T3(A, B, c);
+    vVertex->push_back({A, vVerVal(_pTriangle, 0).normal, texA});          // T3 PA
+    vVertex->push_back({B, vVerVal(_pTriangle, 1).normal, texB});          // T3 PB
+    vVertex->push_back({c, vVerVal(_pTriangle, 2).normal, vertC.texture}); // T3 PC
+    Triangle T3(last++, last++, last++, *vVertex);
 
-    for (int i = 0; i < 3; i++) {
-        T1.vertex[i].normal = _pTriangle->vertex[i].normal;
-        T2.vertex[i].normal = _pTriangle->vertex[i].normal;
-        T3.vertex[i].normal = _pTriangle->vertex[i].normal;
-    }
-
-    _pListPolygon->push_back(T1);
-    _pListPolygon->push_back(T2);
-    _pListPolygon->push_back(T3);
+    _pListPolygon->push_back(T1); // Novo Triangulo T1
+    _pListPolygon->push_back(T2); // Novo Triangulo T2
+    _pListPolygon->push_back(T3); // Novo Triangulo T3
 }
 
 BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
@@ -261,7 +255,7 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
                 tree->polygons.push_back(poly);
                 break;
             default:
-                splitTriangle(result, &poly, &tree->hyperPlane, _pListPolygon);
+                splitTriangle(result, poly, &tree->hyperPlane, _pListPolygon);
                 break;
         }
     }

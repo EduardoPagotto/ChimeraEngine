@@ -29,7 +29,7 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
     for (unsigned int pa = 0; pa < _vIndex.size(); pa += 3)
         vTris.push_back(Triangle(pa, (pa + 1), (pa + 2), _vVertex));
 
-    root = bsptreeBuild(&vTris);
+    root = bsptreeBuild(vTris);
 }
 
 void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
@@ -93,29 +93,29 @@ void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool 
     // traverseTree(root, eye);
 }
 
-unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _poliyList) {
+unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _vTriangle) {
 
-    if (_poliyList.size() == 0)
+    if (_vTriangle.size() == 0)
         return 0;
 
     unsigned int selectedPoly = 0;
     unsigned int bestScore = 100000; // just set to a very high value to begin
     glm::vec3 temp;                  // inutil
 
-    for (unsigned indice_splitter = 0; indice_splitter < _poliyList.size(); indice_splitter++) {
+    for (unsigned indice_splitter = 0; indice_splitter < _vTriangle.size(); indice_splitter++) {
 
-        Triangle th = _poliyList[indice_splitter];
+        Triangle th = _vTriangle[indice_splitter];
         Plane hyperPlane;
         hyperPlane.set(vPosVal(th, 0), th.getNormal());
 
         long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
 
-        for (unsigned indice_current = 0; indice_current < _poliyList.size(); indice_current++) {
+        for (unsigned indice_current = 0; indice_current < _vTriangle.size(); indice_current++) {
 
             if (indice_current != indice_splitter) {
 
-                Triangle currentPoly = _poliyList[indice_current];
+                Triangle currentPoly = _vTriangle[indice_current];
                 SIDE result = hyperPlane.classifyPoly(vPosVal(currentPoly, 0), // PA
                                                       vPosVal(currentPoly, 1), // PB
                                                       vPosVal(currentPoly, 2), // PC
@@ -149,7 +149,7 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _poliyList) {
     return selectedPoly;
 }
 
-void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane* hyperPlane, std::vector<Triangle>* _pListPolygon) {
+void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane& hyperPlane, std::vector<Triangle>& _vTriangle) {
 
     // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
@@ -188,8 +188,8 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane* hy
         vertC = vVerVal(_pTriangle, 2); //   old c
     }
 
-    hyperPlane->intersect(&a, &c, &A, &propAC);
-    hyperPlane->intersect(&b, &c, &B, &propBC);
+    hyperPlane.intersect(&a, &c, &A, &propAC);
+    hyperPlane.intersect(&b, &c, &B, &propBC);
 
     // PA texture coord
     glm::vec2 deltaA = (vertC.texture - vertA.texture) * propAC;
@@ -217,28 +217,28 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane* hy
     vVertex->push_back({c, vVerVal(_pTriangle, 2).normal, vertC.texture}); // T3 PC
     Triangle T3(last++, last++, last++, *vVertex);
 
-    _pListPolygon->push_back(T1); // Novo Triangulo T1
-    _pListPolygon->push_back(T2); // Novo Triangulo T2
-    _pListPolygon->push_back(T3); // Novo Triangulo T3
+    _vTriangle.push_back(T1); // Novo Triangulo T1
+    _vTriangle.push_back(T2); // Novo Triangulo T2
+    _vTriangle.push_back(T3); // Novo Triangulo T3
 }
 
-BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
+BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>& _vTriangle) {
 
-    if (_pListPolygon->empty() == true)
+    if (_vTriangle.empty() == true)
         return nullptr;
 
     // balanceador
-    unsigned int bether_index = selectBestSplitter(*_pListPolygon);
-    Triangle partition = (*_pListPolygon)[bether_index];
+    unsigned int bether_index = selectBestSplitter(_vTriangle);
+    Triangle partition = _vTriangle[bether_index];
     BSPTreeNode* tree = new BSPTreeNode(vPosVal(partition, 0), partition.getNormal());
 
     std::vector<Triangle> front_list;
     std::vector<Triangle> back_list;
 
-    while (_pListPolygon->empty() == false) {
+    while (_vTriangle.empty() == false) {
 
-        Triangle poly = _pListPolygon->back();
-        _pListPolygon->pop_back();
+        Triangle poly = _vTriangle.back();
+        _vTriangle.pop_back();
         glm::vec3 result;
         SIDE teste = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
                                                    vPosVal(poly, 1), // PB
@@ -255,13 +255,13 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
                 tree->polygons.push_back(poly);
                 break;
             default:
-                splitTriangle(result, poly, &tree->hyperPlane, _pListPolygon);
+                splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
                 break;
         }
     }
 
-    tree->front = bsptreeBuild(&front_list);
-    tree->back = bsptreeBuild(&back_list);
+    tree->front = bsptreeBuild(front_list);
+    tree->back = bsptreeBuild(back_list);
 
     // leaf sem poligonos apenas para saber se solido ou vazio
     if (tree->front == nullptr) {

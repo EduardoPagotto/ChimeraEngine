@@ -106,6 +106,7 @@ void Game::start() {
     // initPolygons(map, &listPolygons);
 
     Chimera::LoaderObj loader;
+    // loader.getMesh("./data/models/tela01.obj", m);
     loader.getMesh("./data/models/map02.obj", m);
     // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para
     // loader.getMesh("./data/models/square2.obj", m);

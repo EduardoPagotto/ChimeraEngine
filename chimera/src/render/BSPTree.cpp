@@ -24,73 +24,77 @@ BspTree::BspTree() {
 void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
 
     std::vector<Triangle> vTris;
-    vVertex = &_vVertex;
+    vVertex = _vVertex;
 
-    for (unsigned int pa = 0; pa < _vIndex.size(); pa += 3)
-        vTris.push_back(Triangle(pa, (pa + 1), (pa + 2), _vVertex));
+    for (unsigned int indice = 0; indice < _vIndex.size(); indice += 3) {
+        unsigned int pa = _vIndex[indice];
+        unsigned int pb = _vIndex[indice + 1];
+        unsigned int pc = _vIndex[indice + 2];
+
+        // Calcula Normal Face
+        glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(Triangle(pa, pb, pc, normal));
+    }
 
     root = bsptreeBuild(vTris);
 }
 
 void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
-    // // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
 
-    // if (logdata == true)
-    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
+    if (logdata == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
 
-    // for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-    //     Triangle t = (*it);
+    for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
+        Triangle t = (*it);
 
-    //     // if (t.getSerial() == 10) // 8, 9, 10
-    //     //     continue;
+        resultVertex->push_back(vVerVal(t, 0));
+        resultVertex->push_back(vVerVal(t, 1));
+        resultVertex->push_back(vVerVal(t, 2));
 
-    //     resultVertex->push_back(t.vertex[0]);
-    //     resultVertex->push_back(t.vertex[1]);
-    //     resultVertex->push_back(t.vertex[2]);
-
-    //     // FIXME: remover depois de concluir o algoritmo
-    //     if (logdata == true) {
-    //         if (frontSide == true)
-    //             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t.getSerial());
-    //         else
-    //             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t.getSerial());
-    //     }
-    // }
+        // FIXME: remover depois de concluir o algoritmo
+        if (logdata == true) {
+            if (frontSide == true)
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t.getSerial());
+            else
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t.getSerial());
+        }
+    }
 }
 
 void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
-    // // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
-    // if (tree == nullptr)
-    //     return;
+    // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
+    if (tree == nullptr)
+        return;
 
-    // // no de indicador de final/solido
-    // if (tree->isLeaf == true)
-    //     return;
+    // no de indicador de final/solido
+    if (tree->isLeaf == true)
+        return;
 
-    // SIDE result = tree->hyperPlane.classifyPoint(pos);
-    // switch (result) {
-    //     case SIDE::CP_FRONT:
-    //         traverseTree(tree->back, pos);
-    //         drawPolygon(tree, true);
-    //         traverseTree(tree->front, pos);
-    //         break;
-    //     case SIDE::CP_BACK:
-    //         traverseTree(tree->front, pos);
-    //         drawPolygon(tree, false);
-    //         traverseTree(tree->back, pos);
-    //         break;
-    //     default: // SIDE::CP_ONPLANE
-    //         // the eye point is on the partition hyperPlane...
-    //         traverseTree(tree->front, pos);
-    //         traverseTree(tree->back, pos);
-    //         break;
-    // }
+    SIDE result = tree->hyperPlane.classifyPoint(pos);
+    switch (result) {
+        case SIDE::CP_FRONT:
+            traverseTree(tree->back, pos);
+            drawPolygon(tree, true);
+            traverseTree(tree->front, pos);
+            break;
+        case SIDE::CP_BACK:
+            traverseTree(tree->front, pos);
+            drawPolygon(tree, false);
+            traverseTree(tree->back, pos);
+            break;
+        default: // SIDE::CP_ONPLANE
+            // the eye point is on the partition hyperPlane...
+            traverseTree(tree->front, pos);
+            traverseTree(tree->back, pos);
+            break;
+    }
 }
 
 void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData) {
-    // logdata = _logData;
-    // resultVertex = _pOutVertex;
-    // traverseTree(root, eye);
+    logdata = _logData;
+    resultVertex = _pOutVertex;
+    traverseTree(root, eye);
 }
 
 unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _vTriangle) {
@@ -156,7 +160,7 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane& hy
     float propBC = 0.0;
 
     // ultima posicao de indice de vertices
-    unsigned int last = vVertex->size();
+    unsigned int last = vVertex.size();
 
     // Vertex dos triangulos a serem normalizados
     Chimera::VertexData vertA, vertB, vertC;
@@ -199,27 +203,27 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane& hy
     glm::vec2 deltaB = (vertC.texture - vertB.texture) * propBC;
     glm::vec2 texB = vertB.texture + deltaB;
 
+    // Calcula Normal Face
+    glm::vec3 acc = vertA.normal + vertB.normal + vertC.normal;
+    glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+
     //-- T1 Triangle T1(a, b, A);
-    vVertex->push_back({a, vVerVal(_pTriangle, 0).normal, vertA.texture}); // T1 PA
-    vVertex->push_back({b, vVerVal(_pTriangle, 1).normal, vertB.texture}); // T1 PB
-    vVertex->push_back({A, vVerVal(_pTriangle, 2).normal, texA});          // T1 PC
-    Triangle T1(last++, last++, last++, *vVertex);
+    vVertex.push_back({a, vertA.normal, vertA.texture});            // T1 PA
+    vVertex.push_back({b, vertB.normal, vertB.texture});            // T1 PB
+    vVertex.push_back({A, vertA.normal, texA});                     // T1 PC
+    _vTriangle.push_back(Triangle(last++, last++, last++, normal)); // Triangle T1(last++, last++, last++, *vVertex);
 
     // //-- T2 Triangle T2(b, B, A);
-    vVertex->push_back({b, vVerVal(_pTriangle, 0).normal, vertB.texture}); // T2 PA
-    vVertex->push_back({B, vVerVal(_pTriangle, 1).normal, texB});          // T2 PB
-    vVertex->push_back({A, vVerVal(_pTriangle, 2).normal, texA});          // T2 PC
-    Triangle T2(last++, last++, last++, *vVertex);
+    vVertex.push_back({b, vertB.normal, vertB.texture});            // T2 PA
+    vVertex.push_back({B, vertB.normal, texB});                     // T2 PB
+    vVertex.push_back({A, vertA.normal, texA});                     // T2 PC
+    _vTriangle.push_back(Triangle(last++, last++, last++, normal)); // Triangle T2(last++, last++, last++, *vVertex);
 
     // // -- T3 Triangle T3(A, B, c);
-    vVertex->push_back({A, vVerVal(_pTriangle, 0).normal, texA});          // T3 PA
-    vVertex->push_back({B, vVerVal(_pTriangle, 1).normal, texB});          // T3 PB
-    vVertex->push_back({c, vVerVal(_pTriangle, 2).normal, vertC.texture}); // T3 PC
-    Triangle T3(last++, last++, last++, *vVertex);
-
-    _vTriangle.push_back(T1); // Novo Triangulo T1
-    _vTriangle.push_back(T2); // Novo Triangulo T2
-    _vTriangle.push_back(T3); // Novo Triangulo T3
+    vVertex.push_back({A, vertA.normal, texA});                     // T3 PA
+    vVertex.push_back({B, vertB.normal, texB});                     // T3 PB
+    vVertex.push_back({c, vertC.normal, vertC.texture});            // T3 PC
+    _vTriangle.push_back(Triangle(last++, last++, last++, normal)); // Triangle T3(last++, last++, last++, *vVertex);
 }
 
 BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>& _vTriangle) {

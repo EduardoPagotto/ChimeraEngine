@@ -6,6 +6,7 @@
 
 #include "Plane.hpp"
 #include "Triangle.hpp"
+#include "VertexData.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -40,12 +41,12 @@ class BspTree {
     // TODO: continuar a implementar abaixo
     bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
 
-    inline glm::vec3 vPosVal(const Triangle& _t, const unsigned& pos) { return (*vVertex)[_t.p[pos]].position; }
-    inline VertexData vVerVal(const Triangle& _t, const unsigned& pos) { return (*vVertex)[_t.p[pos]]; }
+    inline glm::vec3 vPosVal(const Triangle& _t, const unsigned& pos) { return vVertex[_t.p[pos]].position; }
+    inline VertexData vVerVal(const Triangle& _t, const unsigned& pos) { return vVertex[_t.p[pos]]; }
     bool logdata;
     BSPTreeNode* root;
     std::vector<VertexData>* resultVertex;
-    std::vector<Chimera::VertexData>* vVertex;
+    std::vector<Chimera::VertexData> vVertex;
 };
 } // namespace Chimera
 #endif

@@ -74,32 +74,18 @@ void MeshData::toVertexData(std::vector<VertexData>& outData) {
 
 void MeshData::toTriangle(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
 
-    // unsigned int B, C;
-    // // Load vertex, normal and texture of triangles A,B,C
-    // for (unsigned int A = 0; A < vertexIndex.size(); A += 3) {
-    //     B = A + 1;
-    //     C = A + 2;
+    unsigned int B, C;
+    // Load indices of triangles A,B,C with normal of surface
+    for (unsigned int A = 0; A < vertexIndex.size(); A += 3) {
+        B = A + 1;
+        C = A + 2;
 
-    //     Triangle t = Triangle(vertexList[vertexIndex[A]],  // vertex triangle A
-    //                           vertexList[vertexIndex[B]],  // vertex triangle B
-    //                           vertexList[vertexIndex[C]]); // vertex triangle C
+        glm::vec3 acc = normalList[normalIndex[A]] + normalList[normalIndex[B]] + normalList[normalIndex[C]];
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
 
-    //     if (normalList.size() > 0) {
-    //         t.vertex[0].normal = normalList[normalIndex[A]]; // normal triangle A
-    //         t.vertex[1].normal = normalList[normalIndex[B]]; // normal triangle B
-    //         t.vertex[2].normal = normalList[normalIndex[C]]; // normal triangle C
-    //     }
-
-    //     if (uvList.size() > 0) {
-    //         t.vertex[0].texture = uvList[uvIndex[A]]; // texture triangle A
-    //         t.vertex[1].texture = uvList[uvIndex[B]]; // texture triangle B
-    //         t.vertex[2].texture = uvList[uvIndex[C]]; // texture triangle C
-    //     }
-
-    //     vecTriangle.push_back(t);
-    //     _index.push_back(A);
-    //     // t.debugData();
-    // }
+        vecTriangle.push_back(Triangle(vertexIndex[A], vertexIndex[B], vertexIndex[C], normal));
+        _index.push_back(A);
+    }
 }
 
 void MeshData::debugDados(bool _showAll) {

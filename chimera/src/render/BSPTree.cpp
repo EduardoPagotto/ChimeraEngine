@@ -23,7 +23,7 @@ BspTree::BspTree() {
 
 void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
 
-    std::vector<Triangle> vTris;
+    std::vector<Triangle*> vTris;
     vVertex = _vVertex;
 
     for (unsigned int indice = 0; indice < _vVertex.size(); indice += 3) {
@@ -34,7 +34,7 @@ void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
         // Calcula Normal Face
         glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
         glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-        vTris.push_back(Triangle(pa, pb, pc, normal));
+        vTris.push_back(new Triangle(pa, pb, pc, normal));
     }
 
     root = bsptreeBuild(vTris);
@@ -42,7 +42,7 @@ void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
 
 void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
 
-    std::vector<Triangle> vTris;
+    std::vector<Triangle*> vTris;
     vVertex = _vVertex;
 
     for (unsigned int indice = 0; indice < _vIndex.size(); indice += 3) {
@@ -53,7 +53,7 @@ void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const st
         // Calcula Normal Face
         glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
         glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-        vTris.push_back(Triangle(pa, pb, pc, normal));
+        vTris.push_back(new Triangle(pa, pb, pc, normal));
     }
 
     root = bsptreeBuild(vTris);
@@ -65,7 +65,7 @@ void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
 
     for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-        Triangle t = (*it);
+        Triangle* t = (*it);
 
         resultVertex->push_back(vVerVal(t, 0));
         resultVertex->push_back(vVerVal(t, 1));
@@ -74,10 +74,34 @@ void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
         // FIXME: remover depois de concluir o algoritmo
         if (logdata == true) {
             if (frontSide == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t.getSerial());
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t->getSerial());
             else
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t.getSerial());
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t->getSerial());
         }
+    }
+}
+
+void BspTree::destroy() { collapse(root); }
+
+void BspTree::collapse(BSPTreeNode* tree) {
+
+    while (tree->polygons.empty() == false) {
+        Triangle* poly = tree->polygons.back();
+        tree->polygons.pop_back();
+        delete poly;
+        poly = nullptr;
+    }
+
+    if (tree->front != nullptr) {
+        collapse(tree->front);
+        delete tree->front;
+        tree->front = nullptr;
+    }
+
+    if (tree->back != nullptr) {
+        collapse(tree->back);
+        delete tree->back;
+        tree->back = nullptr;
     }
 }
 
@@ -116,7 +140,7 @@ void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool 
     traverseTree(root, eye);
 }
 
-unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _vTriangle) {
+unsigned int BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
 
     if (_vTriangle.size() == 0)
         return 0;
@@ -127,8 +151,8 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _vTriangle) {
 
     for (unsigned indice_splitter = 0; indice_splitter < _vTriangle.size(); indice_splitter++) {
 
-        Triangle th = _vTriangle[indice_splitter];
-        Plane hyperPlane(vPosVal(th, 0), th.getNormal());
+        Triangle* th = _vTriangle[indice_splitter];
+        Plane hyperPlane(vPosVal(th, 0), th->getNormal());
 
         long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
@@ -137,7 +161,7 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _vTriangle) {
 
             if (indice_current != indice_splitter) {
 
-                Triangle currentPoly = _vTriangle[indice_current];
+                Triangle* currentPoly = _vTriangle[indice_current];
                 SIDE result = hyperPlane.classifyPoly(vPosVal(currentPoly, 0), // PA
                                                       vPosVal(currentPoly, 1), // PB
                                                       vPosVal(currentPoly, 2), // PC
@@ -171,7 +195,7 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _vTriangle) {
     return selectedPoly;
 }
 
-void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane& hyperPlane, std::vector<Triangle>& _vTriangle) {
+void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle) {
 
     // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
@@ -226,41 +250,41 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle& _pTriangle, Plane& hy
     glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
 
     //-- T1 Triangle T1(a, b, A);
-    vVertex.push_back({a, vertA.normal, vertA.texture});            // T1 PA
-    vVertex.push_back({b, vertB.normal, vertB.texture});            // T1 PB
-    vVertex.push_back({A, vertA.normal, texA});                     // T1 PC
-    _vTriangle.push_back(Triangle(last++, last++, last++, normal)); // Triangle T1(last++, last++, last++, *vVertex);
+    vVertex.push_back({a, vertA.normal, vertA.texture}); // T1 PA
+    vVertex.push_back({b, vertB.normal, vertB.texture}); // T1 PB
+    vVertex.push_back({A, vertA.normal, texA});          // T1 PC
+    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
 
     // //-- T2 Triangle T2(b, B, A);
-    vVertex.push_back({b, vertB.normal, vertB.texture});            // T2 PA
-    vVertex.push_back({B, vertB.normal, texB});                     // T2 PB
-    vVertex.push_back({A, vertA.normal, texA});                     // T2 PC
-    _vTriangle.push_back(Triangle(last++, last++, last++, normal)); // Triangle T2(last++, last++, last++, *vVertex);
+    vVertex.push_back({b, vertB.normal, vertB.texture}); // T2 PA
+    vVertex.push_back({B, vertB.normal, texB});          // T2 PB
+    vVertex.push_back({A, vertA.normal, texA});          // T2 PC
+    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
 
     // // -- T3 Triangle T3(A, B, c);
-    vVertex.push_back({A, vertA.normal, texA});                     // T3 PA
-    vVertex.push_back({B, vertB.normal, texB});                     // T3 PB
-    vVertex.push_back({c, vertC.normal, vertC.texture});            // T3 PC
-    _vTriangle.push_back(Triangle(last++, last++, last++, normal)); // Triangle T3(last++, last++, last++, *vVertex);
+    vVertex.push_back({A, vertA.normal, texA});          // T3 PA
+    vVertex.push_back({B, vertB.normal, texB});          // T3 PB
+    vVertex.push_back({c, vertC.normal, vertC.texture}); // T3 PC
+    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
 }
 
-BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>& _vTriangle) {
+BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
 
     if (_vTriangle.empty() == true)
         return nullptr;
 
     // balanceador
     unsigned int bether_index = selectBestSplitter(_vTriangle);
-    Triangle tris = _vTriangle[bether_index];
-    Plane partition(vPosVal(tris, 0), tris.getNormal());
+    Triangle* tris = _vTriangle[bether_index];
+    Plane partition(vPosVal(tris, 0), tris->getNormal());
     BSPTreeNode* tree = new BSPTreeNode(partition);
 
-    std::vector<Triangle> front_list;
-    std::vector<Triangle> back_list;
+    std::vector<Triangle*> front_list;
+    std::vector<Triangle*> back_list;
 
     while (_vTriangle.empty() == false) {
 
-        Triangle poly = _vTriangle.back();
+        Triangle* poly = _vTriangle.back();
         _vTriangle.pop_back();
         glm::vec3 result;
         SIDE teste = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position

@@ -17,7 +17,7 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     pTex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png");
 }
 
-Game::~Game() {}
+Game::~Game() { bspTree.destroy(); }
 
 void Game::joystickCapture(Chimera::JoystickManager& joy) {}
 

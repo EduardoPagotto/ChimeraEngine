@@ -21,7 +21,26 @@ BspTree::BspTree() {
     logdata = false;
 }
 
-void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
+void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
+
+    std::vector<Triangle> vTris;
+    vVertex = _vVertex;
+
+    for (unsigned int indice = 0; indice < _vVertex.size(); indice += 3) {
+        unsigned int pa = indice;
+        unsigned int pb = indice + 1;
+        unsigned int pc = indice + 2;
+
+        // Calcula Normal Face
+        glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(Triangle(pa, pb, pc, normal));
+    }
+
+    root = bsptreeBuild(vTris);
+}
+
+void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
 
     std::vector<Triangle> vTris;
     vVertex = _vVertex;

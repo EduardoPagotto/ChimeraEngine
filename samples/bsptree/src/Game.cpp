@@ -116,23 +116,25 @@ void Game::start() {
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     // m.changeSize(30.0, true);
 
-    std::vector<unsigned int> indexTriangles;
-    m.toTriangle(listPolygons, indexTriangles);
-    indexTriangles.clear(); // is sequential, not used here
+    // std::vector<unsigned int> indexTriangles;
+    // m.toTriangle(listPolygons, indexTriangles);
+    // indexTriangles.clear(); // is sequential, not used here
     // std::reverse(listPolygons.begin(), listPolygons.end());
 
     // Cria lista multiplo Index
-    std::vector<Chimera::VertexData> vMultiIndex;
-    m.toVertexData(vMultiIndex);
+    std::vector<Chimera::VertexData> vVertexSequencial;
+    m.toVertexData(vVertexSequencial);
 
-    // Cria indice simples
-    std::vector<Chimera::VertexData> vSingleIndex;
-    std::vector<unsigned int> singleIndex;
-    vertexDataIndexCompile(vMultiIndex, vSingleIndex, singleIndex);
+    // // Cria BSP usando Vertex indexado
+    // std::vector<Chimera::VertexData> vVertexIndexed;
+    // std::vector<unsigned int> vIndex;
+    // vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
+    // bspTree.createIndexed(vVertexIndexed, vIndex);
+    // // -------
 
-    // Cria o BSP
-    // bspTree.create(&listPolygons);
-    bspTree.create(vSingleIndex, singleIndex);
+    // Cria o BSP Sequencial sem indice
+    bspTree.createSequencial(vVertexSequencial);
+    // -------
 
     renderDynamic.create(15000000);
 }

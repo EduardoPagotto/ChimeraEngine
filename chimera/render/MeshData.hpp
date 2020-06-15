@@ -1,7 +1,6 @@
 #ifndef __CHIMERA_MESH_DATA_HPP
 #define __CHIMERA_MESH_DATA_HPP
 
-#include "chimera/render/Triangle.hpp"
 #include "chimera/render/VertexData.hpp"
 #include <vector>
 namespace Chimera {
@@ -15,7 +14,6 @@ class MeshData {
     void debugDados(bool _showAll);
 
     void toVertexData(std::vector<VertexData>& outData);
-    void toTriangle(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index);
 
     inline void addVertex(const glm::vec3& _vertex) { vertexList.push_back(_vertex); }
     inline void addNormal(const glm::vec3& _normal) { normalList.push_back(_normal); }

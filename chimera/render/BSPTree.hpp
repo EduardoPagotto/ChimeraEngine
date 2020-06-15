@@ -27,7 +27,8 @@ struct BSPTreeNode {
 class BspTree {
   public:
     BspTree();
-    void create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
+    void createSequencial(std::vector<Chimera::VertexData>& _vVertex);
+    void createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
     void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
 
   private:

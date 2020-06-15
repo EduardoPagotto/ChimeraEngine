@@ -72,22 +72,6 @@ void MeshData::toVertexData(std::vector<VertexData>& outData) {
     }
 }
 
-void MeshData::toTriangle(std::vector<Triangle>& vecTriangle, std::vector<unsigned int>& _index) {
-
-    unsigned int B, C;
-    // Load indices of triangles A,B,C with normal of surface
-    for (unsigned int A = 0; A < vertexIndex.size(); A += 3) {
-        B = A + 1;
-        C = A + 2;
-
-        glm::vec3 acc = normalList[normalIndex[A]] + normalList[normalIndex[B]] + normalList[normalIndex[C]];
-        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-
-        vecTriangle.push_back(Triangle(vertexIndex[A], vertexIndex[B], vertexIndex[C], normal));
-        _index.push_back(A);
-    }
-}
-
 void MeshData::debugDados(bool _showAll) {
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex: %03d Index: %03d", (int)vertexList.size(), (int)vertexIndex.size());

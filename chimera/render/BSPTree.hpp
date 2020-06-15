@@ -29,9 +29,6 @@ class BspTree {
     void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
     void destroy();
 
-    // TODO: Testar!!!!!!
-    void initPolygons(unsigned char* map);
-
   private:
     unsigned int selectBestSplitter(std::vector<Triangle*>& _vTriangle);
     void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle);
@@ -43,7 +40,6 @@ class BspTree {
 
     // TODO: Testar!!!!!!
     bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
-    void addPolygon(Chimera::VertexData* pVertexs, int NOV, std::vector<Triangle*>& _vTriangle);
 
     inline glm::vec3 vPosVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]].position; }
     inline VertexData vVerVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]]; }

@@ -106,13 +106,12 @@ void Game::start() {
     // initPolygons(map, &listPolygons);
 
     Chimera::LoaderObj loader;
-    // loader.getMesh("./data/models/tela01.obj", m);
-    loader.getMesh("./data/models/map02.obj", m);
-    // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para
-    // loader.getMesh("./data/models/square2.obj", m);
-    // loader.getMesh("./data/models/square1.obj", m);
-    // loader.getMesh("./data/models/split1.obj", m);
-    // //loader.getMesh("./data/models/teste1.obj", m);
+    // loader.getMesh("./data/models/tela01.obj", m); // quadrado simples pequeno
+    loader.getMesh("./data/models/map02.obj", m); // Sala com 5 espacos em forma de X
+    // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para EPSILON 1e-2
+    // loader.getMesh("./data/models/square2.obj", m); // 2 quadrado teste de split lateral
+    // loader.getMesh("./data/models/square1.obj", m); // 2 quadrado teste de split centro
+    // loader.getMesh("./data/models/split1.obj", m); // 2 triangulos sem textura
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     // m.changeSize(30.0, true);
 
@@ -198,3 +197,118 @@ void Game::render() {
     pCanvas->after();
     pCanvas->swapWindow();
 }
+
+// void Game::addPolygon(Chimera::VertexData* pVertexs, int NOV, std::vector<Triangle*>& _vTriangle) {
+
+//     // TODO: Testar!!!!!!
+//     int loop;
+//     int v0, v1, v2;
+//     int NumberOfIndices = (NOV - 2) * 3;
+
+//     std::vector<unsigned int> vIndex;
+
+//     for (loop = 0; loop < NumberOfIndices / 3; loop++) {
+//         if (loop == 0) {
+//             v0 = 0;
+//             v1 = 1;
+//             v2 = 2;
+//         } else {
+//             v1 = v2;
+//             v2++;
+//         }
+
+//         // Calcula Normal
+//         glm::vec3 u = pVertexs[1].position - pVertexs[0].position;
+//         glm::vec3 v = pVertexs[2].position - pVertexs[0].position;
+//         glm::vec3 normal = glm::normalize(glm::cross(u, v));
+
+//         pVertexs[0].normal = normal;
+//         pVertexs[1].normal = normal;
+//         pVertexs[2].normal = normal;
+
+//         vVertex.push_back(pVertexs[0]);
+//         vVertex.push_back(pVertexs[1]);
+//         vVertex.push_back(pVertexs[2]);
+
+//         _vTriangle.push_back(new Triangle(v0, v1, v2, normal));
+//     }
+// }
+
+// void Game::initPolygons(unsigned char* map) {
+
+//     // TODO: Testar!!!!!!
+//     std::vector<Triangle*> vTriangle;
+
+//     Chimera::VertexData vl[4][4];
+//     int direction[4] = {0};
+//     for (int y = 0; y < 40; y++) {
+//         for (int x = 0; x < 20; x++) {
+//             int offset = (y * 20) + x;
+//             // check what the digit is in the current map location
+//             if (map[offset] != 0) {
+//                 if (map[offset] == 2) { // North East Wall
+//                     vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+//                     vl[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+//                     vl[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+//                     vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+//                     direction[0] = 1;
+//                 }
+//                 if (map[offset] == 3) { // North West Wall
+//                     vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+//                     vl[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+//                     vl[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+//                     vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+//                     direction[0] = 1;
+//                 }
+
+//                 if (map[offset] == 1) { // Its a Standared wall
+//                     if (x > 0) {
+//                         if (map[offset - 1] == 0) { // if theres nothing to the left add a left facingwall
+//                             vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+//                             vl[0][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+//                             vl[0][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+//                             vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+//                             direction[0] = 1;
+//                         }
+//                     }
+//                     if (x < 19) {
+//                         if (map[offset + 1] == 0) { // if there is nothing to the right add a right facing wall
+//                             vl[1][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+//                             vl[1][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+//                             vl[1][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+//                             vl[1][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+//                             direction[1] = 1;
+//                         }
+//                     }
+//                     if (y > 0) {
+//                         if (map[offset - 20] == 0) { // if there is nothing south add a south facing wall
+//                             vl[2][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+//                             vl[2][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+//                             vl[2][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+//                             vl[2][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+//                             direction[2] = 1;
+//                         }
+//                     }
+//                     if (y < 39) {
+//                         if (map[offset + 20] == 0) { // if there is nothing to the north add a north facing wall
+//                             vl[3][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
+//                             vl[3][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
+//                             vl[3][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
+//                             vl[3][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
+//                             direction[3] = 1;
+//                         }
+//                     }
+//                 } // end for if offset==1
+
+//                 // build the polygons
+//                 for (int a = 0; a < 4; a++) {
+//                     if (direction[a] != 0)
+//                         addPolygon(&vl[a][0], 4, vTriangle);
+//                 }
+//             } // end for if offset!=0
+//         }
+//     }
+//     root = bsptreeBuild(vTriangle);
+//     // BSPTreeRootNode = new NODE;
+//     // BuildBspTree(BSPTreeRootNode, PolygonList);
+// }

@@ -33,14 +33,14 @@ void Plane::set(const glm::vec3& pA, const glm::vec3& _normal) {
 
 SIDE Plane::classifyPoint(glm::vec3* point) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    float clipTest;
     glm::vec3 dir = this->point - (*point);
-    clipTest = glm::dot(dir, this->normal);
+    float clipTest = glm::dot(dir, this->normal);
 
-    if (clipTest < -EPSILON)
+    clipTest = fabs(clipTest) < EPSILON ? 0.0f : clipTest;
+
+    if (clipTest < 0.0f)
         return SIDE::CP_FRONT;
-
-    if (clipTest > EPSILON)
+    else if (clipTest > 0.0f)
         return SIDE::CP_BACK;
 
     return SIDE::CP_ONPLANE;
@@ -58,9 +58,10 @@ SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::ve
     result[2] = glm::dot((this->point - pC), this->normal); // Clip Test poin C
 
     for (unsigned short a = 0; a < 3; a++) {
-        if (result[a] > EPSILON) {
+        result[a] = fabs(result[a]) < EPSILON ? 0.0f : result[a];
+        if (result[a] > 0.0f) {
             behind++;
-        } else if (result[a] < -EPSILON) {
+        } else if (result[a] < 0.0f) {
             infront++;
         } else {
             onPlane++;

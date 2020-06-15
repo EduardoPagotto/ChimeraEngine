@@ -30,6 +30,9 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
+    // void addPolygon(Chimera::VertexData* pVertexs, int NOV, std::vector<Triangle*>& _vTriangle);
+    // void initPolygons(unsigned char* map);
+
     Chimera::BspTree bspTree;
     bool isPaused;
     int botaoIndex;

@@ -44,4 +44,11 @@ void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexD
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "VBO Vertex In: %04lu Vertex out: %04lu Index out: %04lu ", inData.size(), outData.size(),
                  out_indices.size());
 }
+
+glm::vec3 aproxEpsilon(const glm::vec3& dado) {
+    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
+                     (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y
+                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
+}
+
 } // namespace Chimera

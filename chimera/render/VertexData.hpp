@@ -20,6 +20,7 @@ struct VertexData {
 };
 
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<unsigned int>& out_indices);
+glm::vec3 aproxEpsilon(const glm::vec3& dado);
 
 } // namespace Chimera
 #endif

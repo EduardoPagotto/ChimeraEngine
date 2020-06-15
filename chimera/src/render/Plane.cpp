@@ -4,6 +4,15 @@
 namespace Chimera {
 Plane::Plane() {}
 
+Plane::Plane(const Plane& _cpy) {
+    this->point = _cpy.point;
+    this->normal = _cpy.normal;
+    this->ND = _cpy.ND;
+    this->O = _cpy.O;
+}
+
+Plane::Plane(const glm::vec3& _position, const glm::vec3& _normal) { this->set(_position, _normal); }
+
 Plane::~Plane() {}
 
 void Plane::set(const glm::vec3& pA, const glm::vec3& B, const glm::vec3& C) {

@@ -12,10 +12,7 @@
 namespace Chimera {
 
 struct BSPTreeNode {
-    BSPTreeNode(const glm::vec3& _point, const glm::vec3& _normal) : front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {
-        hyperPlane.set(_point, _normal);
-    }
-
+    BSPTreeNode(const Plane& _hyperPlane) : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
     std::vector<Triangle> polygons;
     Plane hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;

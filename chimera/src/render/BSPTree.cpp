@@ -128,8 +128,7 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle>& _vTriangle) {
     for (unsigned indice_splitter = 0; indice_splitter < _vTriangle.size(); indice_splitter++) {
 
         Triangle th = _vTriangle[indice_splitter];
-        Plane hyperPlane;
-        hyperPlane.set(vPosVal(th, 0), th.getNormal());
+        Plane hyperPlane(vPosVal(th, 0), th.getNormal());
 
         long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
@@ -252,8 +251,9 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>& _vTriangle) {
 
     // balanceador
     unsigned int bether_index = selectBestSplitter(_vTriangle);
-    Triangle partition = _vTriangle[bether_index];
-    BSPTreeNode* tree = new BSPTreeNode(vPosVal(partition, 0), partition.getNormal());
+    Triangle tris = _vTriangle[bether_index];
+    Plane partition(vPosVal(tris, 0), tris.getNormal());
+    BSPTreeNode* tree = new BSPTreeNode(partition);
 
     std::vector<Triangle> front_list;
     std::vector<Triangle> back_list;
@@ -288,13 +288,13 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle>& _vTriangle) {
 
     // leaf sem poligonos apenas para saber se solido ou vazio
     if (tree->front == nullptr) {
-        tree->front = new BSPTreeNode(vPosVal(partition, 0), partition.getNormal());
+        tree->front = new BSPTreeNode(partition);
         tree->front->isLeaf = true;
         tree->front->isSolid = false;
     }
 
     if (tree->back == nullptr) {
-        tree->back = new BSPTreeNode(vPosVal(partition, 0), partition.getNormal());
+        tree->back = new BSPTreeNode(partition);
         tree->back->isLeaf = true;
         tree->back->isSolid = true;
     }

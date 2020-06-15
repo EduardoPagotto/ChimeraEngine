@@ -17,7 +17,7 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     pTex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png");
 }
 
-Game::~Game() {}
+Game::~Game() { bspTree.destroy(); }
 
 void Game::joystickCapture(Chimera::JoystickManager& joy) {}
 
@@ -106,22 +106,35 @@ void Game::start() {
     // initPolygons(map, &listPolygons);
 
     Chimera::LoaderObj loader;
+    // loader.getMesh("./data/models/tela01.obj", m);
     loader.getMesh("./data/models/map02.obj", m);
-    // loader.getMesh("./data/models/parede_simples.obj", m);
+    // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para
     // loader.getMesh("./data/models/square2.obj", m);
-    // // loader.getMesh("./data/models/square1.obj", m);
-    // // loader.getMesh("./data/models/split1.obj", m);
+    // loader.getMesh("./data/models/square1.obj", m);
+    // loader.getMesh("./data/models/split1.obj", m);
     // //loader.getMesh("./data/models/teste1.obj", m);
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     // m.changeSize(30.0, true);
 
-    std::vector<unsigned int> indexTriangles;
-    m.toTriangle(listPolygons, indexTriangles);
-    indexTriangles.clear(); // is sequential, not used here
+    // std::vector<unsigned int> indexTriangles;
+    // m.toTriangle(listPolygons, indexTriangles);
+    // indexTriangles.clear(); // is sequential, not used here
     // std::reverse(listPolygons.begin(), listPolygons.end());
 
-    // Cria o BSP
-    pBSPTRoot = Chimera::bsptreeBuild(&listPolygons);
+    // Cria lista multiplo Index
+    std::vector<Chimera::VertexData> vVertexSequencial;
+    m.toVertexData(vVertexSequencial);
+
+    // // Cria BSP usando Vertex indexado
+    // std::vector<Chimera::VertexData> vVertexIndexed;
+    // std::vector<unsigned int> vIndex;
+    // vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
+    // bspTree.createIndexed(vVertexIndexed, vIndex);
+    // // -------
+
+    // Cria o BSP Sequencial sem indice
+    bspTree.createSequencial(vVertexSequencial);
+    // -------
 
     renderDynamic.create(15000000);
 }
@@ -164,7 +177,7 @@ void Game::render() {
 
     // constroi vertex dinamico baseado no viewpoint
     std::vector<Chimera::VertexData> vVertice;
-    Chimera::bsptreeDraw(pBSPTRoot, &vp->position, &vVertice, debugParser);
+    bspTree.render(&vp->position, &vVertice, debugParser);
 
     // debugParser = false;
 

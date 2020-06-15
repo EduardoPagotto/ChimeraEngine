@@ -2,40 +2,23 @@
 #ifndef __CHIMERA_TRIANGLE__HPP
 #define __CHIMERA_TRIANGLE__HPP
 
-#include "chimera/render/VertexData.hpp"
+#include <glm/glm.hpp>
 
 namespace Chimera {
 
-enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
-
 class Triangle {
   public:
-    Triangle(const VertexData& va, const VertexData& vb, const VertexData& vc);
-    Triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
-    Triangle(const Triangle& _cpy);
-
-    inline unsigned getSerial() const { return serial; }
-    glm::vec3 normal() const;
-    void generateNormal();
-    // void debugData();
-
-    VertexData vertex[3];
+    Triangle(const Triangle& _val);
+    Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const glm::vec3& _normal);
+    inline glm::vec3 getNormal() const { return normal; }
+    inline uint32_t getSerial() const { return serial; }
+    uint32_t p[3]; // PA = 0, PB = 1, PC = 3
+  private:
+    glm::vec3 normal;
 
   private:
-    unsigned serial;
-    static unsigned serialMaster;
+    uint32_t serial;
+    static uint32_t master;
 };
-
-struct PlanePoint {
-    PlanePoint(Triangle* _point) : pointOnPlane(_point->vertex[0].position), normal(_point->normal()) {}
-    glm::vec3 pointOnPlane;
-    glm::vec3 normal;
-};
-
-SIDE classifyPoint(glm::vec3* pos, PlanePoint* plane);
-SIDE classifyPoly(PlanePoint* plane, Triangle* poly, glm::vec3* distance);
-
-bool intersect(glm::vec3* linestart, glm::vec3* lineend, PlanePoint* plane, glm::vec3* intersection, float* percentage);
-
 } // namespace Chimera
 #endif

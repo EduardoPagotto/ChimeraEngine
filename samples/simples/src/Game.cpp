@@ -85,6 +85,7 @@ void Game::start() {
     Chimera::MeshData m;
     Chimera::LoaderObj loader;
     // loader.getMesh("./data/models/tela01.obj", m);
+    // loader.getMesh("./data/models/square2.obj", m);
     // loader.getMesh("./data/models/parede_simples.obj", m);
     loader.getMesh("./data/models/map02.obj", m);
 
@@ -104,7 +105,7 @@ void Game::start() {
     m.toVertexData(renderData);
 
     std::vector<unsigned int> index;
-    VBO.create(renderData, index);
+    vertexRenderStatic.create(renderData, index);
 }
 
 void Game::stop() {}
@@ -152,7 +153,7 @@ void Game::render() {
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 
-    VBO.render();
+    vertexRenderStatic.render();
 
     pCanvas->after();
     pCanvas->swapWindow();

@@ -1,6 +1,5 @@
 #include "chimera/render/VertexDynamic.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include <SDL2/SDL.h>
 
 namespace Chimera {
 

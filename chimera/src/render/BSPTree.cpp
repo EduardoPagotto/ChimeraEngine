@@ -15,158 +15,97 @@ glm::vec3 aprox(const glm::vec3& dado) {
                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
 }
 
-void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, PlanePoint* hyperPlane, std::vector<Triangle>* _pListPolygon) {
-    glm::vec3& a = _pTriangle->vertex[0].position;
-    glm::vec3& b = _pTriangle->vertex[1].position;
-    glm::vec3& c = _pTriangle->vertex[2].position;
-
-    // acerto para vertex do tex final igualar a rotacao do triangulo
-    Chimera::VertexData* pVertex_a = nullptr;
-    Chimera::VertexData* pVertex_b = nullptr;
-    Chimera::VertexData* pVertex_c = nullptr;
-
-    // Normaliza Triangulo para que o corte do hiper-plano esteja nos segmentos de reta CA e CB (corte em a e b)
-    if (fx.x * fx.z >= 0) { // corte em a e c
-        swapFace(b, c);
-        swapFace(a, b);
-
-        pVertex_a = &_pTriangle->vertex[2]; // old c
-        pVertex_b = &_pTriangle->vertex[0]; // old a
-        pVertex_c = &_pTriangle->vertex[1]; // old b
-
-    } else if (fx.y * fx.z >= 0) { // corte em b e c
-        swapFace(a, c);
-        swapFace(a, b);
-        //--
-        pVertex_a = &_pTriangle->vertex[1]; // old b
-        pVertex_b = &_pTriangle->vertex[2]; // old c
-        pVertex_c = &_pTriangle->vertex[0]; // old a
-
-    } else { // Cortre em a e b
-
-        pVertex_a = &_pTriangle->vertex[0]; // old a
-        pVertex_b = &_pTriangle->vertex[1]; // old b
-        pVertex_c = &_pTriangle->vertex[2]; // old c
-    }
-
-    float propAC = 0.0;
-    float propBC = 0.0;
-    glm::vec3 A, B;
-
-    intersect(&a, &c, hyperPlane, &A, &propAC);
-    intersect(&b, &c, hyperPlane, &B, &propBC);
-
-    // PA texture coord
-    glm::vec2 deltaA = (pVertex_c->texture - pVertex_a->texture) * propAC;
-    glm::vec2 texA = pVertex_a->texture + deltaA;
-
-    // PB texture coord
-    glm::vec2 deltaB = (pVertex_c->texture - pVertex_b->texture) * propBC;
-    glm::vec2 texB = pVertex_b->texture + deltaB;
-
-    //-- T1
-    Triangle T1(a, b, A);
-    T1.vertex[0].texture = pVertex_a->texture; // a old b
-    T1.vertex[1].texture = pVertex_b->texture; // b old c
-    T1.vertex[2].texture = texA;               // A
-
-    //-- T2
-    Triangle T2(b, B, A);
-    T2.vertex[0].texture = pVertex_b->texture; // b old c
-    T2.vertex[1].texture = texB;               // B
-    T2.vertex[2].texture = texA;               // A
-
-    // -- T3
-    Triangle T3(A, B, c);
-    T3.vertex[0].texture = texA;               // A
-    T3.vertex[1].texture = texB;               // B
-    T3.vertex[2].texture = pVertex_c->texture; // c old a
-
-    for (int i = 0; i < 3; i++) {
-        T1.vertex[i].normal = _pTriangle->vertex[i].normal;
-        T2.vertex[i].normal = _pTriangle->vertex[i].normal;
-        T3.vertex[i].normal = _pTriangle->vertex[i].normal;
-    }
-
-    _pListPolygon->push_back(T1);
-    _pListPolygon->push_back(T2);
-    _pListPolygon->push_back(T3);
+BspTree::BspTree() {
+    root = nullptr;
+    resultVertex = nullptr;
+    logdata = false;
 }
 
-BSPTreeNode* bsptreeBuild(std::vector<Triangle>* _pListPolygon) {
+void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
 
-    if (_pListPolygon->empty() == true)
-        return nullptr;
+    std::vector<Triangle*> vTris;
+    vVertex = _vVertex;
 
-    // balanceador
-    unsigned int bether_index = selectBestSplitter(*_pListPolygon);
-    Triangle partition = (*_pListPolygon)[bether_index];
-    BSPTreeNode* tree = new BSPTreeNode(&partition);
+    for (unsigned int indice = 0; indice < _vVertex.size(); indice += 3) {
+        unsigned int pa = indice;
+        unsigned int pb = indice + 1;
+        unsigned int pc = indice + 2;
 
-    std::vector<Triangle> front_list;
-    std::vector<Triangle> back_list;
-
-    while (_pListPolygon->empty() == false) {
-
-        Triangle poly = _pListPolygon->back();
-        _pListPolygon->pop_back();
-        glm::vec3 result;
-        SIDE teste = classifyPoly(tree->hyperPlane, &poly, &result);
-
-        if (teste == SIDE::CP_BACK)
-            back_list.push_back(poly);
-        else if (teste == SIDE::CP_FRONT)
-            front_list.push_back(poly);
-        else if (teste == SIDE::CP_ONPLANE)
-            tree->polygons.push_back(poly);
-        else // CP_SPANNING
-            splitTriangle(result, &poly, tree->hyperPlane, _pListPolygon);
+        // Calcula Normal Face
+        glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal));
     }
 
-    tree->front = bsptreeBuild(&front_list);
-    tree->back = bsptreeBuild(&back_list);
-
-    // leaf sem poligonos apenas para saber se solido ou vazio
-    if (tree->front == nullptr) {
-        tree->front = new BSPTreeNode(&partition);
-        tree->front->isLeaf = true;
-        tree->front->isSolid = false;
-    }
-
-    if (tree->back == nullptr) {
-        tree->back = new BSPTreeNode(&partition);
-        tree->back->isLeaf = true;
-        tree->back->isSolid = true;
-    }
-
-    return tree;
+    root = bsptreeBuild(vTris);
 }
 
-//------PARSER METODOS------
+void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
 
-void drawPolygon(BSPTreeNode* tree, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata, bool frontSide) {
-    // tree->arrayTriangle.DrawPolygons(); // Abaixo equivale a esta linha
+    std::vector<Triangle*> vTris;
+    vVertex = _vVertex;
+
+    for (unsigned int indice = 0; indice < _vIndex.size(); indice += 3) {
+        unsigned int pa = _vIndex[indice];
+        unsigned int pb = _vIndex[indice + 1];
+        unsigned int pc = _vIndex[indice + 2];
+
+        // Calcula Normal Face
+        glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal));
+    }
+
+    root = bsptreeBuild(vTris);
+}
+
+void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
+
+    if (logdata == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
+
     for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-        Triangle t = (*it);
+        Triangle* t = (*it);
 
-        // if (t.getSerial() == 10) // 8, 9, 10
-        //     continue;
-
-        _pOutVertex->push_back(t.vertex[0]);
-        _pOutVertex->push_back(t.vertex[1]);
-        _pOutVertex->push_back(t.vertex[2]);
+        resultVertex->push_back(vVerVal(t, 0));
+        resultVertex->push_back(vVerVal(t, 1));
+        resultVertex->push_back(vVerVal(t, 2));
 
         // FIXME: remover depois de concluir o algoritmo
         if (logdata == true) {
             if (frontSide == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face F: %d", t.getSerial());
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t->getSerial());
             else
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Face B: %d", t.getSerial());
+                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t->getSerial());
         }
     }
 }
 
-void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
+void BspTree::destroy() { collapse(root); }
+
+void BspTree::collapse(BSPTreeNode* tree) {
+
+    while (tree->polygons.empty() == false) {
+        Triangle* poly = tree->polygons.back();
+        tree->polygons.pop_back();
+        delete poly;
+        poly = nullptr;
+    }
+
+    if (tree->front != nullptr) {
+        collapse(tree->front);
+        delete tree->front;
+        tree->front = nullptr;
+    }
+
+    if (tree->back != nullptr) {
+        collapse(tree->back);
+        delete tree->back;
+        tree->back = nullptr;
+    }
+}
+
+void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
@@ -175,82 +114,58 @@ void traverseTree(BSPTreeNode* tree, glm::vec3* pos, std::vector<Chimera::Vertex
     if (tree->isLeaf == true)
         return;
 
-    SIDE result = classifyPoint(pos, tree->hyperPlane);
-    if (result == SIDE::CP_FRONT) {
-
-        traverseTree(tree->back, pos, _pOutVertex, logdata);
-        drawPolygon(tree, _pOutVertex, logdata, true);
-        traverseTree(tree->front, pos, _pOutVertex, logdata);
-
-    } else if (result == SIDE::CP_BACK) {
-
-        traverseTree(tree->front, pos, _pOutVertex, logdata);
-        drawPolygon(tree, _pOutVertex, logdata, false);
-        traverseTree(tree->back, pos, _pOutVertex, logdata);
-
-    } else { // result == SIDE::CP_ONPLANE
-        // the eye point is on the partition hyperPlane...
-        traverseTree(tree->front, pos, _pOutVertex, logdata);
-        traverseTree(tree->back, pos, _pOutVertex, logdata);
+    SIDE result = tree->hyperPlane.classifyPoint(pos);
+    switch (result) {
+        case SIDE::CP_FRONT:
+            traverseTree(tree->back, pos);
+            drawPolygon(tree, true);
+            traverseTree(tree->front, pos);
+            break;
+        case SIDE::CP_BACK:
+            traverseTree(tree->front, pos);
+            drawPolygon(tree, false);
+            traverseTree(tree->back, pos);
+            break;
+        default: // SIDE::CP_ONPLANE
+            // the eye point is on the partition hyperPlane...
+            traverseTree(tree->front, pos);
+            traverseTree(tree->back, pos);
+            break;
     }
 }
 
-bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
-    float temp;
-    glm::vec3 intersection;
-    if (tree->isLeaf == true) {
-        return !tree->isSolid;
-    }
-
-    SIDE PointA = classifyPoint(Start, tree->hyperPlane);
-    SIDE PointB = classifyPoint(End, tree->hyperPlane);
-
-    if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
-        return lineOfSight(Start, End, tree->front);
-    }
-
-    if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
-        intersect(Start, End, tree->hyperPlane, &intersection, &temp);
-        return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
-    }
-
-    if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
-        intersect(Start, End, tree->hyperPlane, &intersection, &temp);
-        return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
-    }
-
-    // if we get here one of the points is on the hyperPlane
-    if (PointA == SIDE::CP_FRONT || PointB == SIDE::CP_FRONT) {
-        return lineOfSight(Start, End, tree->front);
-    } else {
-        return lineOfSight(Start, End, tree->back);
-    }
-    return true;
+void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData) {
+    logdata = _logData;
+    resultVertex = _pOutVertex;
+    traverseTree(root, eye);
 }
 
-unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList) {
+unsigned int BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
 
-    if (_poliyList.size() == 0)
+    if (_vTriangle.size() == 0)
         return 0;
 
     unsigned int selectedPoly = 0;
     unsigned int bestScore = 100000; // just set to a very high value to begin
     glm::vec3 temp;                  // inutil
 
-    for (unsigned indice_splitter = 0; indice_splitter < _poliyList.size(); indice_splitter++) {
+    for (unsigned indice_splitter = 0; indice_splitter < _vTriangle.size(); indice_splitter++) {
 
-        PlanePoint hyperPlane(&_poliyList[indice_splitter]);
+        Triangle* th = _vTriangle[indice_splitter];
+        Plane hyperPlane(vPosVal(th, 0), th->getNormal());
 
         long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
 
-        for (unsigned indice_current = 0; indice_current < _poliyList.size(); indice_current++) {
+        for (unsigned indice_current = 0; indice_current < _vTriangle.size(); indice_current++) {
 
             if (indice_current != indice_splitter) {
 
-                Triangle currentPoly = _poliyList[indice_current];
-
-                SIDE result = classifyPoly(&hyperPlane, &currentPoly, &temp);
+                Triangle* currentPoly = _vTriangle[indice_current];
+                SIDE result = hyperPlane.classifyPoly(vPosVal(currentPoly, 0), // PA
+                                                      vPosVal(currentPoly, 1), // PB
+                                                      vPosVal(currentPoly, 2), // PC
+                                                      &temp);                  // Clip Test Result (A,B,C)
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;
@@ -280,14 +195,179 @@ unsigned int selectBestSplitter(std::vector<Triangle>& _poliyList) {
     return selectedPoly;
 }
 
-void bsptreeDraw(BSPTreeNode* _pRoot, glm::vec3* pos, std::vector<Chimera::VertexData>* _pOutVertex, bool logdata) {
-    traverseTree(_pRoot, pos, _pOutVertex, logdata);
+void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle) {
+
+    // Proporcao de textura (0.0 a 1.0)
+    float propAC = 0.0;
+    float propBC = 0.0;
+
+    // ultima posicao de indice de vertices
+    unsigned int last = vVertex.size();
+
+    // Vertex dos triangulos a serem normalizados
+    Chimera::VertexData vertA, vertB, vertC;
+
+    // Pega pontos posicao original e inteseccao
+    glm::vec3 A, B;
+    glm::vec3 a = vPosVal(_pTriangle, 0);
+    glm::vec3 b = vPosVal(_pTriangle, 1);
+    glm::vec3 c = vPosVal(_pTriangle, 2);
+
+    // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
+    if (fx.x * fx.z >= 0) {             // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
+        swapFace(b, c);                 //   troca b com c
+        swapFace(a, b);                 //   troca a com b
+        vertA = vVerVal(_pTriangle, 2); //   old c
+        vertB = vVerVal(_pTriangle, 0); //   old a
+        vertC = vVerVal(_pTriangle, 1); //   old b
+
+    } else if (fx.y * fx.z >= 0) {      // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
+        swapFace(a, c);                 //   troca A com C
+        swapFace(a, b);                 //   torca a com b
+        vertA = vVerVal(_pTriangle, 1); //   old b
+        vertB = vVerVal(_pTriangle, 2); //   old c
+        vertC = vVerVal(_pTriangle, 0); //   old a
+
+    } else {                            // Cortre em a e b (pontos posicao original)
+        vertA = vVerVal(_pTriangle, 0); //   old a
+        vertB = vVerVal(_pTriangle, 1); //   old b
+        vertC = vVerVal(_pTriangle, 2); //   old c
+    }
+
+    hyperPlane.intersect(&a, &c, &A, &propAC);
+    hyperPlane.intersect(&b, &c, &B, &propBC);
+
+    // PA texture coord
+    glm::vec2 deltaA = (vertC.texture - vertA.texture) * propAC;
+    glm::vec2 texA = vertA.texture + deltaA;
+
+    // PB texture coord
+    glm::vec2 deltaB = (vertC.texture - vertB.texture) * propBC;
+    glm::vec2 texB = vertB.texture + deltaB;
+
+    // Calcula Normal Face
+    glm::vec3 acc = vertA.normal + vertB.normal + vertC.normal;
+    glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+
+    //-- T1 Triangle T1(a, b, A);
+    vVertex.push_back({a, vertA.normal, vertA.texture}); // T1 PA
+    vVertex.push_back({b, vertB.normal, vertB.texture}); // T1 PB
+    vVertex.push_back({A, vertA.normal, texA});          // T1 PC
+    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+
+    // //-- T2 Triangle T2(b, B, A);
+    vVertex.push_back({b, vertB.normal, vertB.texture}); // T2 PA
+    vVertex.push_back({B, vertB.normal, texB});          // T2 PB
+    vVertex.push_back({A, vertA.normal, texA});          // T2 PC
+    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+
+    // // -- T3 Triangle T3(A, B, c);
+    vVertex.push_back({A, vertA.normal, texA});          // T3 PA
+    vVertex.push_back({B, vertB.normal, texB});          // T3 PB
+    vVertex.push_back({c, vertC.normal, vertC.texture}); // T3 PC
+    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
 }
 
-void AddPolygon(Chimera::VertexData* Vertices, int NOV, std::vector<Triangle>* PolygonList) {
+BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
+
+    if (_vTriangle.empty() == true)
+        return nullptr;
+
+    // balanceador
+    unsigned int bether_index = selectBestSplitter(_vTriangle);
+    Triangle* tris = _vTriangle[bether_index];
+    Plane partition(vPosVal(tris, 0), tris->getNormal());
+    BSPTreeNode* tree = new BSPTreeNode(partition);
+
+    std::vector<Triangle*> front_list;
+    std::vector<Triangle*> back_list;
+
+    while (_vTriangle.empty() == false) {
+
+        Triangle* poly = _vTriangle.back();
+        _vTriangle.pop_back();
+        glm::vec3 result;
+        SIDE teste = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
+                                                   vPosVal(poly, 1), // PB
+                                                   vPosVal(poly, 2), // PC
+                                                   &result);         // Clip Test Result (A,B,C)
+        switch (teste) {
+            case SIDE::CP_BACK:
+                back_list.push_back(poly);
+                break;
+            case SIDE::CP_FRONT:
+                front_list.push_back(poly);
+                break;
+            case SIDE::CP_ONPLANE:
+                tree->polygons.push_back(poly);
+                break;
+            default:
+                splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
+                break;
+        }
+    }
+
+    tree->front = bsptreeBuild(front_list);
+    tree->back = bsptreeBuild(back_list);
+
+    // leaf sem poligonos apenas para saber se solido ou vazio
+    if (tree->front == nullptr) {
+        tree->front = new BSPTreeNode(partition);
+        tree->front->isLeaf = true;
+        tree->front->isSolid = false;
+    }
+
+    if (tree->back == nullptr) {
+        tree->back = new BSPTreeNode(partition);
+        tree->back->isLeaf = true;
+        tree->back->isSolid = true;
+    }
+
+    return tree;
+}
+
+bool BspTree::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
+    float temp;
+    glm::vec3 intersection;
+    if (tree->isLeaf == true) {
+        return !tree->isSolid;
+    }
+
+    SIDE PointA = tree->hyperPlane.classifyPoint(Start);
+    SIDE PointB = tree->hyperPlane.classifyPoint(End);
+
+    if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
+        return lineOfSight(Start, End, tree->front);
+    }
+
+    if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
+        tree->hyperPlane.intersect(Start, End, &intersection, &temp);
+        return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
+    }
+
+    if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
+        tree->hyperPlane.intersect(Start, End, &intersection, &temp);
+        return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
+    }
+
+    // if we get here one of the points is on the hyperPlane
+    if (PointA == SIDE::CP_FRONT || PointB == SIDE::CP_FRONT) {
+        return lineOfSight(Start, End, tree->front);
+    } else {
+        return lineOfSight(Start, End, tree->back);
+    }
+    return true;
+}
+
+void BspTree::addPolygon(Chimera::VertexData* pVertexs, int NOV, std::vector<Triangle*>& _vTriangle) {
+
+    // TODO: Testar!!!!!!
     int loop;
     int v0, v1, v2;
     int NumberOfIndices = (NOV - 2) * 3;
+
+    std::vector<unsigned int> vIndex;
+
     for (loop = 0; loop < NumberOfIndices / 3; loop++) {
         if (loop == 0) {
             v0 = 0;
@@ -298,16 +378,28 @@ void AddPolygon(Chimera::VertexData* Vertices, int NOV, std::vector<Triangle>* P
             v2++;
         }
 
-        Triangle t = Triangle(Vertices[v0], Vertices[v1], Vertices[v2]);
+        // Calcula Normal
+        glm::vec3 u = pVertexs[1].position - pVertexs[0].position;
+        glm::vec3 v = pVertexs[2].position - pVertexs[0].position;
+        glm::vec3 normal = glm::normalize(glm::cross(u, v));
 
-        // generate polygon normal
-        t.generateNormal();
+        pVertexs[0].normal = normal;
+        pVertexs[1].normal = normal;
+        pVertexs[2].normal = normal;
 
-        PolygonList->push_back(t);
+        vVertex.push_back(pVertexs[0]);
+        vVertex.push_back(pVertexs[1]);
+        vVertex.push_back(pVertexs[2]);
+
+        _vTriangle.push_back(new Triangle(v0, v1, v2, normal));
     }
 }
 
-void initPolygons(unsigned char* map, std::vector<Triangle>* PolygonList) {
+void BspTree::initPolygons(unsigned char* map) {
+
+    // TODO: Testar!!!!!!
+    std::vector<Triangle*> vTriangle;
+
     Chimera::VertexData vl[4][4];
     int direction[4] = {0};
     for (int y = 0; y < 40; y++) {
@@ -372,11 +464,12 @@ void initPolygons(unsigned char* map, std::vector<Triangle>* PolygonList) {
                 // build the polygons
                 for (int a = 0; a < 4; a++) {
                     if (direction[a] != 0)
-                        AddPolygon(&vl[a][0], 4, PolygonList);
+                        addPolygon(&vl[a][0], 4, vTriangle);
                 }
             } // end for if offset!=0
         }
     }
+    root = bsptreeBuild(vTriangle);
     // BSPTreeRootNode = new NODE;
     // BuildBspTree(BSPTreeRootNode, PolygonList);
 }

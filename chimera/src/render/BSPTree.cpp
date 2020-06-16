@@ -262,6 +262,25 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
 }
 
+bool BspTree::isConvex(std::vector<Triangle*>& _vTriangle) {
+
+    if (_vTriangle.size() == 1)
+        return false;
+
+    for (unsigned i = 0; i < _vTriangle.size(); i++) {
+        Triangle* th1 = _vTriangle[i];
+        for (unsigned j = i; j < _vTriangle.size(); j++) {
+            if (i != j) {
+                Triangle* th2 = _vTriangle[j];
+                if (glm::dot(th1->getNormal(), th2->getNormal()) > 0.0f)
+                    return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
 
     if (_vTriangle.empty() == true)
@@ -275,6 +294,14 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
 
     std::vector<Triangle*> front_list;
     std::vector<Triangle*> back_list;
+
+    if (isConvex(_vTriangle) == true) {
+        while (_vTriangle.empty() == false) {
+            Triangle* poly = _vTriangle.back();
+            _vTriangle.pop_back();
+            tree->polygons.push_back(poly);
+        }
+    }
 
     while (_vTriangle.empty() == false) {
 

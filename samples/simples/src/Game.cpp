@@ -87,6 +87,7 @@ void Game::start() {
     // loader.getMesh("./data/models/tela01.obj", m);
     // loader.getMesh("./data/models/square2.obj", m);
     // loader.getMesh("./data/models/parede_simples.obj", m);
+    // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     loader.getMesh("./data/models/map02.obj", m);
 
     if (loader.hasMaterial() == true)

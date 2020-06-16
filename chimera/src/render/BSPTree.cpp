@@ -347,14 +347,28 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
 
     // Verify if all triangles front are convex
     if (isConvex(front_list, poly) == true) {
+
+        // next front only have conves set
+        BSPTreeNode* convex = new BSPTreeNode(partition);
         while (front_list.empty() == false) {
-            Triangle* poly = front_list.back();
+            Triangle* convPoly = front_list.back();
             front_list.pop_back();
-            tree->polygons.push_back(poly);
+            convex->polygons.push_back(convPoly);
         }
+
+        // ajust leaf and solid
+        convex->front = new BSPTreeNode(partition);
+        convex->front->isLeaf = true;
+        convex->front->isSolid = false;
+        convex->back = new BSPTreeNode(partition);
+        convex->back->isLeaf = true;
+        convex->back->isSolid = true;
+
+        tree->front = convex;
+    } else {
+        tree->front = bsptreeBuild(front_list);
     }
 
-    tree->front = bsptreeBuild(front_list);
     tree->back = bsptreeBuild(back_list);
 
     // leaf sem poligonos apenas para saber se solido ou vazio

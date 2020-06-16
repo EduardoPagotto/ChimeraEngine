@@ -28,6 +28,11 @@ void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
         // Calcula Normal Face
         glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
         glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+
+        // glm::vec3 u = vVertex[pb].position - vVertex[pa].position;
+        // glm::vec3 v = vVertex[pc].position - vVertex[pa].position;
+        // glm::vec3 normal2 = glm::normalize(glm::cross(u, v));
+
         vTris.push_back(new Triangle(pa, pb, pc, normal));
     }
 
@@ -47,6 +52,11 @@ void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const st
         // Calcula Normal Face
         glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
         glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+
+        // glm::vec3 u = vVertex[pb].position - vVertex[pa].position;
+        // glm::vec3 v = vVertex[pc].position - vVertex[pa].position;
+        // glm::vec3 normal2 = glm::normalize(glm::cross(u, v));
+
         vTris.push_back(new Triangle(pa, pb, pc, normal));
     }
 
@@ -117,7 +127,7 @@ void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
             break;
         case SIDE::CP_BACK:
             traverseTree(tree->front, pos);
-            drawPolygon(tree, false);
+            drawPolygon(tree, false); // Elimina o render do back-face
             traverseTree(tree->back, pos);
             break;
         default: // SIDE::CP_ONPLANE
@@ -262,17 +272,30 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
 }
 
-bool BspTree::isConvex(std::vector<Triangle*>& _vTriangle) {
+bool BspTree::isConvex(std::vector<Triangle*>& _vTriangle, Triangle* _poly) {
 
-    if (_vTriangle.size() == 1)
+    if (_vTriangle.size() <= 1)
         return false;
 
+    Triangle* th1 = nullptr;
+    Triangle* th2 = nullptr;
+
     for (unsigned i = 0; i < _vTriangle.size(); i++) {
-        Triangle* th1 = _vTriangle[i];
+
+        th1 = _vTriangle[i];
+
         for (unsigned j = i; j < _vTriangle.size(); j++) {
-            if (i != j) {
-                Triangle* th2 = _vTriangle[j];
-                if (glm::dot(th1->getNormal(), th2->getNormal()) > 0.0f)
+
+            th2 = (i != j) ? _vTriangle[j] : _poly; // Test hyperplane is Convex too in coincident index
+
+            glm::vec3 u = th1->getNormal();
+            glm::vec3 v = th2->getNormal();
+            float val = glm::dot(u, v);
+            if (val > 0.0f) { // if not convex test if is coplanar
+                glm::vec3 result;
+                Plane alpha(vPosVal(th1, 0), th1->getNormal());
+                SIDE clipTest = alpha.classifyPoly(vPosVal(th2, 0), vPosVal(th2, 1), vPosVal(th2, 2), &result);
+                if (clipTest != SIDE::CP_ONPLANE)
                     return false;
             }
         }
@@ -295,24 +318,18 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
     std::vector<Triangle*> front_list;
     std::vector<Triangle*> back_list;
 
-    if (isConvex(_vTriangle) == true) {
-        while (_vTriangle.empty() == false) {
-            Triangle* poly = _vTriangle.back();
-            _vTriangle.pop_back();
-            tree->polygons.push_back(poly);
-        }
-    }
+    Triangle* poly = nullptr;
 
     while (_vTriangle.empty() == false) {
 
-        Triangle* poly = _vTriangle.back();
+        poly = _vTriangle.back();
         _vTriangle.pop_back();
         glm::vec3 result;
-        SIDE teste = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
-                                                   vPosVal(poly, 1), // PB
-                                                   vPosVal(poly, 2), // PC
-                                                   &result);         // Clip Test Result (A,B,C)
-        switch (teste) {
+        SIDE clipTest = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
+                                                      vPosVal(poly, 1), // PB
+                                                      vPosVal(poly, 2), // PC
+                                                      &result);         // Clip Test Result (A,B,C)
+        switch (clipTest) {
             case SIDE::CP_BACK:
                 back_list.push_back(poly);
                 break;
@@ -325,6 +342,15 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
             default:
                 splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
                 break;
+        }
+    }
+
+    // Verify if all triangles front are convex
+    if (isConvex(front_list, poly) == true) {
+        while (front_list.empty() == false) {
+            Triangle* poly = front_list.back();
+            front_list.pop_back();
+            tree->polygons.push_back(poly);
         }
     }
 

@@ -35,7 +35,7 @@ class BspTree {
     BSPTreeNode* bsptreeBuild(std::vector<Triangle*>& _vTriangle);
     void collapse(BSPTreeNode* tree);
 
-    bool isConvex(std::vector<Triangle*>& _vTriangle);
+    bool isConvex(std::vector<Triangle*>& _vTriangle, Triangle* _poly);
 
     void drawPolygon(BSPTreeNode* tree, bool frontSide);
     void traverseTree(BSPTreeNode* tree, glm::vec3* pos);

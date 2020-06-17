@@ -30,7 +30,7 @@ class BspTree {
     void destroy();
 
   private:
-    unsigned int selectBestSplitter(std::vector<Triangle*>& _vTriangle);
+    Plane selectBestSplitter(std::vector<Triangle*>& _vTriangle);
     void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle);
     BSPTreeNode* bsptreeBuild(std::vector<Triangle*>& _vTriangle);
     void collapse(BSPTreeNode* tree);

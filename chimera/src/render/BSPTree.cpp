@@ -144,10 +144,10 @@ void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool 
     traverseTree(root, eye);
 }
 
-unsigned int BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
+Plane BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
 
     if (_vTriangle.size() == 0)
-        return 0;
+        return Plane();
 
     unsigned int selectedPoly = 0;
     unsigned int bestScore = 100000; // just set to a very high value to begin
@@ -196,7 +196,10 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
         }
 
     } // end while splitter == null
-    return selectedPoly;
+
+    Triangle* th = _vTriangle[selectedPoly];
+    th->beenUsedAsSplitter = true;
+    return Plane(vPosVal(th, 0), th->getNormal());
 }
 
 void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle) {
@@ -279,6 +282,7 @@ bool BspTree::isConvex(std::vector<Triangle*>& _vTriangle, Triangle* _poly) {
 
     Triangle* th1 = nullptr;
     Triangle* th2 = nullptr;
+    float sameDir = 0.0;
 
     for (unsigned i = 0; i < _vTriangle.size(); i++) {
 
@@ -297,6 +301,14 @@ bool BspTree::isConvex(std::vector<Triangle*>& _vTriangle, Triangle* _poly) {
                 SIDE clipTest = alpha.classifyPoly(vPosVal(th2, 0), vPosVal(th2, 1), vPosVal(th2, 2), &result);
                 if (clipTest != SIDE::CP_ONPLANE)
                     return false;
+
+                // test if faces has oposites directions
+                glm::vec3 a = alpha.getNormal();
+                glm::vec3 b = th1->getNormal();
+                glm::vec3 sub = a - b;
+                sameDir = (float)fabs(sub.x + sub.y + sub.z);
+                if (sameDir >= EPSILON) // maior e oposto
+                    return false;
             }
         }
     }
@@ -309,10 +321,7 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
     if (_vTriangle.empty() == true)
         return nullptr;
 
-    // balanceador
-    unsigned int bether_index = selectBestSplitter(_vTriangle);
-    Triangle* tris = _vTriangle[bether_index];
-    Plane partition(vPosVal(tris, 0), tris->getNormal());
+    Plane partition = selectBestSplitter(_vTriangle);
     BSPTreeNode* tree = new BSPTreeNode(partition);
 
     std::vector<Triangle*> front_list;

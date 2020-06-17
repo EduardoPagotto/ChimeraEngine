@@ -18,6 +18,7 @@ Triangle::Triangle(const Triangle& _val) : serial(master++) {
     this->p[1] = _val.p[1];
     this->p[2] = _val.p[2];
     this->normal = _val.normal;
+    this->beenUsedAsSplitter = _val.beenUsedAsSplitter;
 }
 
 Triangle::Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const glm::vec3& _normal) : serial(master++) {
@@ -25,5 +26,6 @@ Triangle::Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc
     this->p[1] = _pb;
     this->p[2] = _pc;
     this->normal = _normal;
+    this->beenUsedAsSplitter = false;
 }
 } // namespace Chimera

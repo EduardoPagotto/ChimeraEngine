@@ -2,67 +2,64 @@
 
 namespace Chimera {
 
-unsigned int PVS::selectBestSplitter(std::vector<Tris>& _poliyList) {
+unsigned int PVS::selectBestSplitter(std::vector<Triangle*>& _poliyList) {
 
-    // if (_poliyList.size() == 0)
-    return 0;
+    if (_poliyList.size() == 0)
+        return 0;
 
-    // unsigned int selectedPoly = 0;
-    // unsigned int bestScore = 100000; // just set to a very high value to begin
-    // glm::vec3 temp;                  // inutil
+    unsigned int selectedPoly = 0;
+    unsigned int bestScore = 100000; // just set to a very high value to begin
+    glm::vec3 temp;                  // inutil
 
-    // for (unsigned indice_splitter = 0; indice_splitter < _poliyList.size(); indice_splitter++) {
+    for (unsigned indice_splitter = 0; indice_splitter < _poliyList.size(); indice_splitter++) {
 
-    //     if (_poliyList[indice_splitter].beenUsedAsSplitter == true)
-    //         continue;
+        if (_poliyList[indice_splitter]->beenUsedAsSplitter == true)
+            continue;
 
-    //     Triangle th = *_poliyList[indice_splitter].triangle;
-    //     Plane hyperPlane;
-    //     hyperPlane.set(th.vertex[0].position, th.normal());
+        Triangle* th = _poliyList[indice_splitter];
+        Plane hyperPlane(vPosVal(th, 0), th->getNormal());
 
-    //     long long score, splits, backfaces, frontfaces;
-    //     score = splits = backfaces = frontfaces = 0;
+        long long score, splits, backfaces, frontfaces;
+        score = splits = backfaces = frontfaces = 0;
 
-    //     for (unsigned indice_current = 0; indice_current < _poliyList.size(); indice_current++) {
+        for (unsigned indice_current = 0; indice_current < _poliyList.size(); indice_current++) {
 
-    //         if (indice_current != indice_splitter) {
+            if (indice_current != indice_splitter) {
 
-    //             Triangle* currentPoly = _poliyList[indice_current].triangle;
-    //             SIDE result = hyperPlane.classifyPoly(currentPoly->vertex[0].position, // PA
-    //                                                   currentPoly->vertex[1].position, // PB
-    //                                                   currentPoly->vertex[2].position, // PC
-    //                                                   &temp);                          // clip test result (A,B,C)
-    //             switch (result) {
-    //                 case SIDE::CP_ONPLANE:
-    //                     break;
-    //                 case SIDE::CP_FRONT:
-    //                     frontfaces++;
-    //                     break;
-    //                 case SIDE::CP_BACK:
-    //                     backfaces++;
-    //                     break;
-    //                 case SIDE::CP_SPANNING:
-    //                     splits++;
-    //                     break;
-    //                 default:
-    //                     break;
-    //             }
-    //         }
-    //     } // end while current poly
+                Triangle* currentPoly = _poliyList[indice_current];
+                SIDE result = hyperPlane.classifyPoly(vPosVal(currentPoly, 0), vPosVal(currentPoly, 1), vPosVal(currentPoly, 2), &temp);
+                switch (result) {
+                    case SIDE::CP_ONPLANE:
+                        break;
+                    case SIDE::CP_FRONT:
+                        frontfaces++;
+                        break;
+                    case SIDE::CP_BACK:
+                        backfaces++;
+                        break;
+                    case SIDE::CP_SPANNING:
+                        splits++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } // end while current poly
 
-    //     score = abs(frontfaces - backfaces) + (splits * 8);
+        score = abs(frontfaces - backfaces) + (splits * 8);
 
-    //     if (score < bestScore) {
-    //         bestScore = score;
-    //         selectedPoly = indice_splitter;
-    //     }
-    // }
+        if (score < bestScore) {
+            bestScore = score;
+            selectedPoly = indice_splitter;
+        }
+    }
 
-    // Triangle th = *_poliyList[selectedPoly].triangle;
-    // Plane* p = new Plane();
-    // p->set(th.vertex[0].position, th.normal());
-    // this->planes.push_back(p);
+    Triangle* th = _poliyList[selectedPoly];
+    Plane* p = new Plane();
 
-    // return this->planes.size() - 1; //?
+    p->set(vPosVal(th, 0), th->getNormal());
+    this->planes.push_back(p);
+
+    return this->planes.size() - 1; // the last
 }
 } // namespace Chimera

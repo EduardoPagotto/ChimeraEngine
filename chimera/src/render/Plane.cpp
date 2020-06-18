@@ -35,9 +35,9 @@ bool Plane::collinearNormal(const glm::vec3& _normal) {
     glm::vec3 sub = this->normal - _normal;
     float result = (float)fabs(sub.x + sub.y + sub.z);
     if (result < EPSILON)
-        return true;
+        return false;
 
-    return false;
+    return true;
 }
 
 SIDE Plane::classifyPoint(glm::vec3* point) {

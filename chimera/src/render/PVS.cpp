@@ -96,11 +96,7 @@ void PVS::buildBspTree(long Node, std::vector<Triangle*>& PolyList) {
 
         switch (clipTest) {
             case SIDE::CP_ONPLANE: {
-                glm::vec3 a = planeArray[nodeArray[Node].plane].getNormal();
-                glm::vec3 b = polyTest->getNormal();
-                glm::vec3 sub = a - b;
-                result = fabs(sub.x + sub.y + sub.z); // verificar se e equivalente ao prod escalar!!
-                if (result < EPSILON) {               // 0.1
+                if (planeArray[nodeArray[Node].plane].collinearNormal(polyTest->getNormal()) == false) {
                     // polyTest->Next = FrontList;
                     FrontList.push_back(polyTest);
                 } else {

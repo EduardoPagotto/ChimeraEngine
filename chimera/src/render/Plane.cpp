@@ -31,6 +31,15 @@ void Plane::set(const glm::vec3& pA, const glm::vec3& _normal) {
                         : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
 }
 
+bool Plane::collinearNormal(const glm::vec3& _normal) {
+    glm::vec3 sub = this->normal - _normal;
+    float result = (float)fabs(sub.x + sub.y + sub.z);
+    if (result < EPSILON)
+        return true;
+
+    return false;
+}
+
 SIDE Plane::classifyPoint(glm::vec3* point) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     glm::vec3 dir = this->point - (*point);

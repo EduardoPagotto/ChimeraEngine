@@ -298,16 +298,11 @@ bool BspTree::isConvex(std::vector<Triangle*>& _vTriangle, Triangle* _poly) {
             if (val > 0.0f) { // if not convex test if is coplanar
                 glm::vec3 result;
                 Plane alpha(vPosVal(th1, 0), th1->getNormal());
-                SIDE clipTest = alpha.classifyPoly(vPosVal(th2, 0), vPosVal(th2, 1), vPosVal(th2, 2), &result);
-                if (clipTest != SIDE::CP_ONPLANE)
+                if (alpha.classifyPoly(vPosVal(th2, 0), vPosVal(th2, 1), vPosVal(th2, 2), &result) != SIDE::CP_ONPLANE)
                     return false;
 
-                // test if faces has oposites directions
-                glm::vec3 a = alpha.getNormal();
-                glm::vec3 b = th1->getNormal();
-                glm::vec3 sub = a - b;
-                sameDir = (float)fabs(sub.x + sub.y + sub.z);
-                if (sameDir >= EPSILON) // maior e oposto
+                // test if faces has oposites directions aka: convex
+                if (alpha.collinearNormal(th1->getNormal()) == false)
                     return false;
             }
         }

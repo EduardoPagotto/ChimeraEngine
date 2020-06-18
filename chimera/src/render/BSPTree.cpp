@@ -156,6 +156,9 @@ Plane BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
     for (unsigned indice_splitter = 0; indice_splitter < _vTriangle.size(); indice_splitter++) {
 
         Triangle* th = _vTriangle[indice_splitter];
+        if (th->beenUsedAsSplitter == true)
+            continue;
+
         Plane hyperPlane(vPosVal(th, 0), th->getNormal());
 
         long long score, splits, backfaces, frontfaces;

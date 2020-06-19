@@ -5,8 +5,8 @@
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
-//#include "chimera/render/BSPTree.hpp"
-#include "chimera/render/PVS.hpp"
+#include "chimera/render/BSPTree.hpp"
+//#include "chimera/render/PVS.hpp"
 #include "chimera/render/Texture.hpp"
 #include "chimera/render/VertexDynamic.hpp"
 
@@ -34,8 +34,8 @@ class Game : public Chimera::IGameClientEvents {
     void addPolygon(Chimera::VertexData* pVertexs, int NOV, std::vector<Chimera::VertexData>& vVertex);
     void initPolygons(unsigned char* map, std::vector<Chimera::VertexData>& vVertex);
 
-    // Chimera::BspTree bspTree;
-    Chimera::PVS bspTree;
+    Chimera::BspTree bspTree;
+    // Chimera::PVS bspTree;
     bool isPaused;
     int botaoIndex;
     int estadoBotao;

@@ -132,7 +132,6 @@ void PVS::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
                 return;
             else {
                 traverseTree(tree->back, pos);
-                traverseTree(tree->front, pos);
             }
         } break;
         case SIDE::CP_ONPLANE: {
@@ -181,6 +180,12 @@ void PVS::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _log
 }
 
 Plane PVS::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
+
+    if (_vTriangle.size() == 6) {
+        Triangle* th = _vTriangle[0];
+        th->beenUsedAsSplitter = true;
+        return Plane(vPosVal(th, 0), th->getNormal());
+    }
 
     if (_vTriangle.size() == 0)
         return Plane();
@@ -321,43 +326,10 @@ void PVS::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperP
     Triangle* th3 = new Triangle(last++, last++, last++, normal);
     th3->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
     _vTriangle.push_back(th3); // TODO :Testar se é isto mesmo
+
+    delete _pTriangle;
+    _pTriangle = nullptr;
 }
-
-// bool PVS::isConvex(std::vector<Triangle*>& _vTriangle, Triangle* _poly) {
-
-//     if (_vTriangle.size() <= 1)
-//         return false;
-
-//     Triangle* th1 = nullptr;
-//     Triangle* th2 = nullptr;
-//     float sameDir = 0.0;
-
-//     for (unsigned i = 0; i < _vTriangle.size(); i++) {
-
-//         th1 = _vTriangle[i];
-
-//         for (unsigned j = i; j < _vTriangle.size(); j++) {
-
-//             th2 = (i != j) ? _vTriangle[j] : _poly; // Test hyperplane is Convex too in coincident index
-
-//             glm::vec3 u = th1->getNormal();
-//             glm::vec3 v = th2->getNormal();
-//             float val = glm::dot(u, v);
-//             if (val > 0.0f) { // if not convex test if is coplanar
-//                 glm::vec3 result;
-//                 Plane alpha(vPosVal(th1, 0), th1->getNormal());
-//                 if (alpha.classifyPoly(vPosVal(th2, 0), vPosVal(th2, 1), vPosVal(th2, 2), &result) != SIDE::CP_ONPLANE)
-//                     return false;
-
-//                 // test if faces has oposites directions aka: convex
-//                 if (alpha.collinearNormal(th1->getNormal()) == false)
-//                     return false;
-//             }
-//         }
-//     }
-
-//     return true;
-// }
 
 BSPTreeNode* PVS::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
 
@@ -425,9 +397,8 @@ BSPTreeNode* PVS::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
     }
 
     tree->back = bsptreeBuild(back_list);
-
-    if (back_list.empty() == true) {
-        if (tree->polygons.size() == 0) {
+    if (tree->back == nullptr) {
+        if (tree->isLeaf == false) {
             BSPTreeNode* solid = new BSPTreeNode(partition);
             solid->isLeaf = false;
             solid->isSolid = true;

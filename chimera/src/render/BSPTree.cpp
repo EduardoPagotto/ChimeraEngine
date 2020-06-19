@@ -146,6 +146,12 @@ void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool 
 
 Plane BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
 
+    // if (_vTriangle.size() == 6) {
+    //    Triangle* th = _vTriangle[0];
+    //    th->beenUsedAsSplitter = true;
+    //    return Plane(vPosVal(th, 0), th->getNormal());
+    //}
+
     if (_vTriangle.size() == 0)
         return Plane();
 
@@ -276,6 +282,10 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     vVertex.push_back({B, vertB.normal, texB});          // T3 PB
     vVertex.push_back({c, vertC.normal, vertC.texture}); // T3 PC
     _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+
+    // Remove orininal
+    delete _pTriangle;
+    _pTriangle = nullptr;
 }
 
 bool BspTree::isConvex(std::vector<Triangle*>& _vTriangle, Triangle* _poly) {

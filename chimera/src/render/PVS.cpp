@@ -89,6 +89,9 @@ void PVS::collapse(BSPTreeNode* tree) {
 
 void PVS::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
+    if (tree->isLeaf == false)
+        return;
+
     if (logdata == true)
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
 
@@ -111,6 +114,7 @@ void PVS::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
 void PVS::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
+
     if (tree == nullptr)
         return;
 
@@ -119,37 +123,30 @@ void PVS::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
 
     SIDE result = tree->hyperPlane.classifyPoint(pos);
     switch (result) {
-        case SIDE::CP_FRONT: {
-            if (tree->isLeaf == true) {
-                drawPolygon(tree, true);
-                return;
-            } else {
-                traverseTree(tree->front, pos);
-            }
-        } break;
-        case SIDE::CP_BACK: {
-            if (tree->isSolid == true)
-                return;
-            else {
-                traverseTree(tree->back, pos);
-            }
-        } break;
-        case SIDE::CP_ONPLANE: {
-            if (tree->isLeaf == true) {
-                drawPolygon(tree, true);
-                return;
-            } else {
-                traverseTree(tree->front, pos);
-            }
-        }
-        default:
+        case SIDE::CP_FRONT:
+            traverseTree(tree->back, pos);
+            drawPolygon(tree, true);
+            traverseTree(tree->front, pos);
+            break;
+        case SIDE::CP_BACK:
+            traverseTree(tree->front, pos);
+            drawPolygon(tree, false); // Elimina o render do back-face
+            traverseTree(tree->back, pos);
+            break;
+        default: // SIDE::CP_ONPLANE
+            // the eye point is on the partition hyperPlane...
+            // traverseTree(tree->front, pos);
+            // traverseTree(tree->back, pos);
             break;
     }
 }
+
 // void PVS::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
 //     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
+
 //     if (tree == nullptr)
 //         return;
+
 //     if (tree->isSolid == true)
 //         return;
 
@@ -181,6 +178,7 @@ void PVS::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _log
 
 Plane PVS::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
 
+    // FIXME: remover depois do teste
     if (_vTriangle.size() == 6) {
         Triangle* th = _vTriangle[0];
         th->beenUsedAsSplitter = true;

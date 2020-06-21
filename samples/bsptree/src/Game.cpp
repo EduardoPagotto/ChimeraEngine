@@ -107,8 +107,8 @@ void Game::start() {
 
     Chimera::LoaderObj loader;
     // loader.getMesh("./data/models/tela01.obj", m); // quadrado simples pequeno
-    loader.getMesh("./data/models/salaSplit3.obj", m); // Sala L com Split
-    // loader.getMesh("./data/models/map02.obj", m); // Sala com 5 espacos em forma de X
+    // loader.getMesh("./data/models/salaSplit3.obj", m); // Sala L com Split
+    loader.getMesh("./data/models/map02.obj", m); // Sala com 5 espacos em forma de X
     // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para EPSILON 1e-2
     // loader.getMesh("./data/models/square2.obj", m); // 2 quadrado teste de split lateral
     // loader.getMesh("./data/models/square1.obj", m); // 2 quadrado teste de split centro

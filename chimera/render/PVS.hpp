@@ -4,21 +4,35 @@
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
 
+#include "AABB.hpp"
 #include "Plane.hpp"
 #include "Triangle.hpp"
 #include "VertexData.hpp"
+#include <list>
 #include <vector>
 
 namespace Chimera {
 
 struct Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
     std::vector<Triangle*> polygons;
-    // AABB boundingBox;
+    AABB boundingBox;
 };
 
-struct BSPTreeNode {
-    BSPTreeNode(const Plane& _hyperPlane) : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
-    std::vector<Triangle*> polygons;
+// struct BSPTreeNode {
+//     BSPTreeNode(const Plane& _hyperPlane) : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
+//     std::list<Triangle*> polygons;
+//     Plane hyperPlane; // HyperPlane partition;
+//     BSPTreeNode* front;
+//     BSPTreeNode* back;
+//     bool isLeaf;
+//     bool isSolid;
+// };
+
+class BSPTreeNode {
+  public:
+    BSPTreeNode(const Plane& _hyperPlane);
+    virtual ~BSPTreeNode();
+    std::list<Triangle*> polygons;
     Plane hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
@@ -35,12 +49,12 @@ class PVS {
     void destroy();
 
   private:
-    Plane selectBestSplitter(std::vector<Triangle*>& _vTriangle);
-    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle);
-    BSPTreeNode* bsptreeBuild(std::vector<Triangle*>& _vTriangle);
+    Plane selectBestSplitter(std::list<Triangle*>& _vTriangle);
+    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
+    BSPTreeNode* bsptreeBuild(std::list<Triangle*>& _vTriangle);
     void collapse(BSPTreeNode* tree);
 
-    // bool isConvex(std::vector<Triangle*>& _vTriangle, Triangle* _poly);
+    // bool isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly);
 
     void drawPolygon(BSPTreeNode* tree, bool frontSide);
     void traverseTree(BSPTreeNode* tree, glm::vec3* pos);

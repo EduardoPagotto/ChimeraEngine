@@ -3,6 +3,11 @@
 
 namespace Chimera {
 
+BSPTreeNode::BSPTreeNode(const Plane& _hyperPlane)
+    : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
+
+BSPTreeNode::~BSPTreeNode() {}
+
 template <class T> void swapFace(T& a, T& b) {
     T c = b;
     b = a;
@@ -17,7 +22,7 @@ PVS::PVS() {
 
 void PVS::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
 
-    std::vector<Triangle*> vTris;
+    std::list<Triangle*> vTris;
     vVertex = _vVertex;
 
     for (unsigned int indice = 0; indice < _vVertex.size(); indice += 3) {
@@ -41,7 +46,7 @@ void PVS::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
 
 void PVS::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
 
-    std::vector<Triangle*> vTris;
+    std::list<Triangle*> vTris;
     vVertex = _vVertex;
 
     for (unsigned int indice = 0; indice < _vIndex.size(); indice += 3) {
@@ -177,25 +182,18 @@ void PVS::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _log
     traverseTree(root, eye);
 }
 
-Plane PVS::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
-
-    // FIXME: remover depois do teste
-    if (_vTriangle.size() == 6) {
-        Triangle* th = _vTriangle[0];
-        th->beenUsedAsSplitter = true;
-        return Plane(vPosVal(th, 0), th->getNormal());
-    }
+Plane PVS::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
     if (_vTriangle.size() == 0)
         return Plane();
 
-    unsigned int selectedPoly = 0;
+    std::list<Triangle*>::iterator selectedPoly;
     unsigned int bestScore = 100000; // just set to a very high value to begin
     glm::vec3 temp;                  // inutil
 
-    for (unsigned indice_splitter = 0; indice_splitter < _vTriangle.size(); indice_splitter++) {
+    for (std::list<Triangle*>::iterator indice_splitter = _vTriangle.begin(); indice_splitter != _vTriangle.end(); indice_splitter++) {
 
-        Triangle* th = _vTriangle[indice_splitter];
+        Triangle* th = (*indice_splitter); //_vTriangle[indice_splitter];
         if (th->beenUsedAsSplitter == true)
             continue;
 
@@ -204,11 +202,11 @@ Plane PVS::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
         long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
 
-        for (unsigned indice_current = 0; indice_current < _vTriangle.size(); indice_current++) {
+        for (std::list<Triangle*>::iterator indice_current = _vTriangle.begin(); indice_current != _vTriangle.end(); indice_current++) {
 
             if (indice_current != indice_splitter) {
 
-                Triangle* currentPoly = _vTriangle[indice_current];
+                Triangle* currentPoly = (*indice_current);
                 SIDE result = hyperPlane.classifyPoly(vPosVal(currentPoly, 0), // PA
                                                       vPosVal(currentPoly, 1), // PB
                                                       vPosVal(currentPoly, 2), // PC
@@ -238,14 +236,14 @@ Plane PVS::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
             selectedPoly = indice_splitter;
         }
 
-    } // end while splitter == null
+    } // end while splitter
 
-    Triangle* th = _vTriangle[selectedPoly];
+    Triangle* th = (*selectedPoly);
     th->beenUsedAsSplitter = true;
     return Plane(vPosVal(th, 0), th->getNormal());
 }
 
-void PVS::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle) {
+void PVS::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle) {
 
     // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
@@ -306,7 +304,7 @@ void PVS::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperP
     //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
     Triangle* th1 = new Triangle(last++, last++, last++, normal);
     th1->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_back(th1); // TODO :Testar se é isto mesmo
+    _vTriangle.push_front(th1); // TODO :Testar se é isto mesmo
 
     // //-- T2 Triangle T2(b, B, A);
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T2 PA
@@ -315,7 +313,7 @@ void PVS::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperP
     //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
     Triangle* th2 = new Triangle(last++, last++, last++, normal);
     th2->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_back(th2); // TODO :Testar se é isto mesmo
+    _vTriangle.push_front(th2); // TODO :Testar se é isto mesmo
 
     // // -- T3 Triangle T3(A, B, c);
     vVertex.push_back({A, vertA.normal, texA});          // T3 PA
@@ -324,13 +322,14 @@ void PVS::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperP
     //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
     Triangle* th3 = new Triangle(last++, last++, last++, normal);
     th3->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_back(th3); // TODO :Testar se é isto mesmo
+    _vTriangle.push_front(th3); // TODO :Testar se é isto mesmo
 
+    // Remove orininal
     delete _pTriangle;
     _pTriangle = nullptr;
 }
 
-BSPTreeNode* PVS::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
+BSPTreeNode* PVS::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
 
     if (_vTriangle.empty() == true)
         return nullptr;
@@ -338,8 +337,8 @@ BSPTreeNode* PVS::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
     Plane partition = selectBestSplitter(_vTriangle);
     BSPTreeNode* tree = new BSPTreeNode(partition);
 
-    std::vector<Triangle*> front_list;
-    std::vector<Triangle*> back_list;
+    std::list<Triangle*> front_list;
+    std::list<Triangle*> back_list;
 
     Triangle* poly = nullptr;
 
@@ -354,16 +353,16 @@ BSPTreeNode* PVS::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
                                                       &result);         // Clip Test Result (A,B,C)
         switch (clipTest) {
             case SIDE::CP_BACK:
-                back_list.push_back(poly);
+                back_list.push_front(poly);
                 break;
             case SIDE::CP_FRONT:
-                front_list.push_back(poly);
+                front_list.push_front(poly);
                 break;
             case SIDE::CP_ONPLANE: {
                 if (partition.collinearNormal(poly->getNormal()) == true)
-                    front_list.push_back(poly);
+                    front_list.push_front(poly);
                 else
-                    back_list.push_back(poly);
+                    back_list.push_front(poly);
             } break;
             default:
                 splitTriangle(result, poly, tree->hyperPlane, _vTriangle);

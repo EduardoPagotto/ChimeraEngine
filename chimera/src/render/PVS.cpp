@@ -360,7 +360,7 @@ BSPTreeNode* PVS::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
                 front_list.push_back(poly);
                 break;
             case SIDE::CP_ONPLANE: {
-                if (partition.collinearNormal(poly->getNormal()) == false)
+                if (partition.collinearNormal(poly->getNormal()) == true)
                     front_list.push_back(poly);
                 else
                     back_list.push_back(poly);

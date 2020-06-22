@@ -13,7 +13,7 @@ namespace Chimera {
 
 struct Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
     std::vector<Triangle*> polygons;
-    AABB boundingBox
+    // AABB boundingBox;
 };
 
 struct BSPTreeNode {

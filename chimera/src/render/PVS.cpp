@@ -6,15 +6,16 @@ namespace Chimera {
 Leaf::Leaf() {}
 
 Leaf::~Leaf() {
-    while (indexPolygon.empty() == false) {
-        indexPolygon.clear();
+    while (index.empty() == false) {
+        index.clear();
     }
 }
 
-void Leaf::addIndex(uint32_t _a, uint32_t _b, uint32_t _c, AABB _bBox) {
-    indexPolygon.push_back(_a);
-    indexPolygon.push_back(_b);
-    indexPolygon.push_back(_c);
+void Leaf::addFace(uint32_t face, uint32_t _a, uint32_t _b, uint32_t _c) {
+    index.push_back(_a);
+    index.push_back(_b);
+    index.push_back(_c);
+    faces.push_back(face);
     // TODO: implementar acerto do AABB
 }
 
@@ -29,7 +30,7 @@ void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
     while (_vTriangle.empty() == false) {
         Triangle* convPoly = _vTriangle.back();
         _vTriangle.pop_back();
-        pLeaf->addIndex(convPoly->p[0], convPoly->p[1], convPoly->p[2], AABB());
+        pLeaf->addFace(convPoly->getSerial(), convPoly->p[0], convPoly->p[1], convPoly->p[2]);
 
         delete convPoly;
         convPoly = nullptr;
@@ -127,9 +128,9 @@ void PVS::drawPolygon(BSPTreeNode* tree, bool frontSide) {
         return;
 
     if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->pLeaf->indexPolygon.size());
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->pLeaf->index.size());
 
-    for (auto index : tree->pLeaf->indexPolygon)
+    for (auto index : tree->pLeaf->index)
         resultVertex->push_back(vVertex[index]);
 }
 
@@ -156,8 +157,8 @@ void PVS::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
             break;
         default: // SIDE::CP_ONPLANE
             // the eye point is on the partition hyperPlane...
-            // traverseTree(tree->front, pos);
-            // traverseTree(tree->back, pos);
+            traverseTree(tree->front, pos);
+            traverseTree(tree->back, pos);
             break;
     }
 }

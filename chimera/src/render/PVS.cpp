@@ -6,7 +6,26 @@ namespace Chimera {
 BSPTreeNode::BSPTreeNode(const Plane& _hyperPlane)
     : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
 
-BSPTreeNode::~BSPTreeNode() {}
+BSPTreeNode::~BSPTreeNode() { this->destroy(); }
+
+void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
+    while (_vTriangle.empty() == false) {
+        Triangle* convPoly = _vTriangle.back();
+        _vTriangle.pop_back();
+        indexPolygon.push_back(convPoly->p[0]);
+        indexPolygon.push_back(convPoly->p[1]);
+        indexPolygon.push_back(convPoly->p[2]);
+
+        delete convPoly;
+        convPoly = nullptr;
+    }
+}
+
+void BSPTreeNode::destroy() {
+    while (indexPolygon.empty() == false) {
+        indexPolygon.clear();
+    }
+}
 
 template <class T> void swapFace(T& a, T& b) {
     T c = b;
@@ -72,13 +91,6 @@ void PVS::destroy() { collapse(root); }
 
 void PVS::collapse(BSPTreeNode* tree) {
 
-    while (tree->polygons.empty() == false) {
-        Triangle* poly = tree->polygons.back();
-        tree->polygons.pop_back();
-        delete poly;
-        poly = nullptr;
-    }
-
     if (tree->front != nullptr) {
         collapse(tree->front);
         delete tree->front;
@@ -98,23 +110,10 @@ void PVS::drawPolygon(BSPTreeNode* tree, bool frontSide) {
         return;
 
     if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->indexPolygon.size());
 
-    for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-        Triangle* t = (*it);
-
-        resultVertex->push_back(vVerVal(t, 0));
-        resultVertex->push_back(vVerVal(t, 1));
-        resultVertex->push_back(vVerVal(t, 2));
-
-        // FIXME: remover depois de concluir o algoritmo
-        if (logdata == true) {
-            if (frontSide == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t->getSerial());
-            else
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t->getSerial());
-        }
-    }
+    for (auto index : tree->indexPolygon)
+        resultVertex->push_back(vVertex[index]);
 }
 
 void PVS::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
@@ -381,13 +380,7 @@ BSPTreeNode* PVS::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
         // BSPTreeNode* convex = new BSPTreeNode(partition);
         // convex->isLeaf = true;
         // convex->isSolid = false;
-        while (front_list.empty() == false) {
-            Triangle* convPoly = front_list.back();
-            front_list.pop_back();
-            tree->polygons.push_back(convPoly);
-            // convex->polygons.push_back(convPoly);
-        }
-        // tree->front = convex;
+        tree->addIndexPolygon(front_list);
         tree->isLeaf = true;
         tree->isSolid = false;
     } else {

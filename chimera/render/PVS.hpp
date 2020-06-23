@@ -13,26 +13,20 @@
 
 namespace Chimera {
 
-struct Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
-    std::vector<Triangle*> polygons;
-    AABB boundingBox;
-};
-
-// struct BSPTreeNode {
-//     BSPTreeNode(const Plane& _hyperPlane) : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
-//     std::list<Triangle*> polygons;
-//     Plane hyperPlane; // HyperPlane partition;
-//     BSPTreeNode* front;
-//     BSPTreeNode* back;
-//     bool isLeaf;
-//     bool isSolid;
+// struct Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
+//     std::vector<Triangle*> polygons;
+//     AABB boundingBox;
 // };
 
 class BSPTreeNode {
   public:
     BSPTreeNode(const Plane& _hyperPlane);
     virtual ~BSPTreeNode();
-    std::list<Triangle*> polygons;
+    void destroy();
+    void addIndexPolygon(std::list<Triangle*>& _vTriangle);
+
+    std::list<uint32_t> indexPolygon;
+    // std::list<Triangle*> polygons;
     Plane hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;

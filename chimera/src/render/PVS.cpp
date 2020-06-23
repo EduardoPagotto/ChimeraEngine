@@ -3,6 +3,21 @@
 
 namespace Chimera {
 
+Leaf::Leaf() {}
+
+Leaf::~Leaf() {
+    while (indexPolygon.empty() == false) {
+        indexPolygon.clear();
+    }
+}
+
+void Leaf::addIndex(uint32_t _a, uint32_t _b, uint32_t _c, AABB _bBox) {
+    indexPolygon.push_back(_a);
+    indexPolygon.push_back(_b);
+    indexPolygon.push_back(_c);
+    // TODO: implementar acerto do AABB
+}
+
 BSPTreeNode::BSPTreeNode(const Plane& _hyperPlane)
     : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), pLeaf(nullptr), isSolid(false) {}
 
@@ -14,9 +29,7 @@ void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
     while (_vTriangle.empty() == false) {
         Triangle* convPoly = _vTriangle.back();
         _vTriangle.pop_back();
-        pLeaf->indexPolygon.push_back(convPoly->p[0]);
-        pLeaf->indexPolygon.push_back(convPoly->p[1]);
-        pLeaf->indexPolygon.push_back(convPoly->p[2]);
+        pLeaf->addIndex(convPoly->p[0], convPoly->p[1], convPoly->p[2], AABB());
 
         delete convPoly;
         convPoly = nullptr;
@@ -26,10 +39,6 @@ void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
 void BSPTreeNode::destroy() {
 
     if (pLeaf != nullptr) {
-        while (pLeaf->indexPolygon.empty() == false) {
-            pLeaf->indexPolygon.clear();
-        }
-
         delete pLeaf;
         pLeaf = nullptr;
     }

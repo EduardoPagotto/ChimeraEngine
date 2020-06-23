@@ -13,7 +13,11 @@
 
 namespace Chimera {
 
-struct Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
+class Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
+  public:
+    Leaf();
+    virtual ~Leaf();
+    void addIndex(uint32_t _a, uint32_t _b, uint32_t _c, AABB _bBox);
     std::list<uint32_t> indexPolygon;
     AABB boundingBox;
 };

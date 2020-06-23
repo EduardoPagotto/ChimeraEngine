@@ -5,10 +5,10 @@
 
 namespace Chimera {
 
-class PVS : public BspTreeBase {
+class BspTreeLeaf : public BspTreeBase {
   public:
-    PVS();
-    virtual ~PVS();
+    BspTreeLeaf();
+    virtual ~BspTreeLeaf();
 
   protected:
     BSPTreeNode* bsptreeBuild(std::list<Triangle*>& _vTriangle);

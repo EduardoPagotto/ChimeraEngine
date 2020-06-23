@@ -1,13 +1,13 @@
-#include "chimera/render/PVS.hpp"
+#include "chimera/render/BSPTreeLeaf.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-PVS::PVS() : BspTreeBase() {}
+BspTreeLeaf::BspTreeLeaf() : BspTreeBase() {}
 
-PVS::~PVS() {}
+BspTreeLeaf::~BspTreeLeaf() {}
 
-BSPTreeNode* PVS::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
+BSPTreeNode* BspTreeLeaf::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
 
     if (_vTriangle.empty() == true)
         return nullptr;

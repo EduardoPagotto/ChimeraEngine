@@ -9,13 +9,71 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
-BspTree::BspTree() {
+Leaf::Leaf() {}
+
+Leaf::~Leaf() {
+    while (index.empty() == false) {
+        index.clear();
+    }
+}
+
+void Leaf::addFace(uint32_t face, uint32_t _a, uint32_t _b, uint32_t _c) {
+    index.push_back(_a);
+    index.push_back(_b);
+    index.push_back(_c);
+    faces.push_back(face);
+    // TODO: implementar acerto do AABB
+}
+
+BSPTreeNode::BSPTreeNode(const Plane& _hyperPlane)
+    : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), pLeaf(nullptr), isSolid(false) {}
+
+BSPTreeNode::~BSPTreeNode() { this->destroy(); }
+
+void BSPTreeNode::addPolygon(Triangle* _triangle) {
+
+    if (pLeaf == nullptr)
+        pLeaf = new Leaf;
+
+    pLeaf->addFace(_triangle->getSerial(), _triangle->p[0], _triangle->p[1], _triangle->p[2]);
+
+    delete _triangle;
+    _triangle = nullptr;
+
+} // namespace Chimera
+
+void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
+
+    if (pLeaf == nullptr)
+        pLeaf = new Leaf;
+
+    while (_vTriangle.empty() == false) {
+        Triangle* convPoly = _vTriangle.back();
+        _vTriangle.pop_back();
+        pLeaf->addFace(convPoly->getSerial(), convPoly->p[0], convPoly->p[1], convPoly->p[2]);
+
+        delete convPoly;
+        convPoly = nullptr;
+    }
+}
+
+void BSPTreeNode::destroy() {
+
+    if (pLeaf != nullptr) {
+        delete pLeaf;
+        pLeaf = nullptr;
+    }
+}
+
+BspTreeBase::BspTreeBase() {
     root = nullptr;
     resultVertex = nullptr;
     logdata = false;
 }
 
-void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
+BspTreeBase::~BspTreeBase() { this->destroy(); }
+
+void BspTreeBase::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
 
     std::list<Triangle*> vTris;
     vVertex = _vVertex;
@@ -39,7 +97,7 @@ void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
     root = bsptreeBuild(vTris);
 }
 
-void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
+void BspTreeBase::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
 
     std::list<Triangle*> vTris;
     vVertex = _vVertex;
@@ -63,21 +121,9 @@ void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const st
     root = bsptreeBuild(vTris);
 }
 
-void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
+void BspTreeBase::destroy() { collapse(root); }
 
-    if (tree->pLeaf == nullptr)
-        return;
-
-    if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->pLeaf->index.size());
-
-    for (auto index : tree->pLeaf->index)
-        resultVertex->push_back(vVertex[index]);
-}
-
-void BspTree::destroy() { collapse(root); }
-
-void BspTree::collapse(BSPTreeNode* tree) {
+void BspTreeBase::collapse(BSPTreeNode* tree) {
 
     if (tree->front != nullptr) {
         collapse(tree->front);
@@ -92,14 +138,29 @@ void BspTree::collapse(BSPTreeNode* tree) {
     }
 }
 
-void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
+void BspTreeBase::drawPolygon(BSPTreeNode* tree, bool frontSide) {
+
+    if (tree->pLeaf == nullptr)
+        return;
+
+    if (logdata == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->pLeaf->index.size());
+
+    for (auto index : tree->pLeaf->index)
+        resultVertex->push_back(vVertex[index]);
+}
+
+void BspTreeBase::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
 
-    // no de indicador de final/solido
-    if (tree->isLeaf == true)
+    if (tree->isSolid == true)
         return;
+
+    // no de indicador de final/solido
+    // if (tree->pLeaf == nullptr)
+    //     return;
 
     SIDE result = tree->hyperPlane.classifyPoint(pos);
     switch (result) {
@@ -121,13 +182,13 @@ void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
     }
 }
 
-void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData) {
+void BspTreeBase::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData) {
     logdata = _logData;
     resultVertex = _pOutVertex;
     traverseTree(root, eye);
 }
 
-Plane BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
+Plane BspTreeBase::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
     if (_vTriangle.size() == 0)
         return Plane();
@@ -187,7 +248,7 @@ Plane BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
     return Plane(vPosVal(th, 0), th->getNormal());
 }
 
-void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle) {
+void BspTreeBase::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle) {
 
     // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
@@ -272,6 +333,43 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     delete _pTriangle;
     _pTriangle = nullptr;
 }
+
+bool BspTreeBase::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
+    float temp;
+    glm::vec3 intersection;
+    if (tree->isLeaf == true) {
+        return !tree->isSolid;
+    }
+
+    SIDE PointA = tree->hyperPlane.classifyPoint(Start);
+    SIDE PointB = tree->hyperPlane.classifyPoint(End);
+
+    if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
+        return lineOfSight(Start, End, tree->front);
+    }
+
+    if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
+        tree->hyperPlane.intersect(Start, End, &intersection, &temp);
+        return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
+    }
+
+    if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
+        tree->hyperPlane.intersect(Start, End, &intersection, &temp);
+        return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
+    }
+
+    // if we get here one of the points is on the hyperPlane
+    if (PointA == SIDE::CP_FRONT || PointB == SIDE::CP_FRONT) {
+        return lineOfSight(Start, End, tree->front);
+    } else {
+        return lineOfSight(Start, End, tree->back);
+    }
+    return true;
+}
+
+BspTree::BspTree() : BspTreeBase() {}
+
+BspTree::~BspTree() {}
 
 bool BspTree::isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly) {
 
@@ -380,38 +478,5 @@ BSPTreeNode* BspTree::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
     }
 
     return tree;
-}
-
-bool BspTree::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
-    float temp;
-    glm::vec3 intersection;
-    if (tree->isLeaf == true) {
-        return !tree->isSolid;
-    }
-
-    SIDE PointA = tree->hyperPlane.classifyPoint(Start);
-    SIDE PointB = tree->hyperPlane.classifyPoint(End);
-
-    if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
-        return lineOfSight(Start, End, tree->front);
-    }
-
-    if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
-        tree->hyperPlane.intersect(Start, End, &intersection, &temp);
-        return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
-    }
-
-    if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
-        tree->hyperPlane.intersect(Start, End, &intersection, &temp);
-        return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
-    }
-
-    // if we get here one of the points is on the hyperPlane
-    if (PointA == SIDE::CP_FRONT || PointB == SIDE::CP_FRONT) {
-        return lineOfSight(Start, End, tree->front);
-    } else {
-        return lineOfSight(Start, End, tree->back);
-    }
-    return true;
 }
 } // namespace Chimera

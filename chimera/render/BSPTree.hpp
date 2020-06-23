@@ -39,34 +39,49 @@ class BSPTreeNode {
     bool isLeaf;
 };
 
-class BspTree {
+class BspTreeBase {
   public:
-    BspTree();
+    BspTreeBase();
+    virtual ~BspTreeBase();
     void createSequencial(std::vector<Chimera::VertexData>& _vVertex);
     void createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
-    void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
     void destroy();
 
-  private:
-    Plane selectBestSplitter(std::list<Triangle*>& _vTriangle);
-    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
-    BSPTreeNode* bsptreeBuild(std::list<Triangle*>& _vTriangle);
-    void collapse(BSPTreeNode* tree);
+    void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
 
-    bool isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly);
+  protected:
+    virtual BSPTreeNode* bsptreeBuild(std::list<Triangle*>& _vTriangle) = 0;
 
     void drawPolygon(BSPTreeNode* tree, bool frontSide);
     void traverseTree(BSPTreeNode* tree, glm::vec3* pos);
 
-    // TODO: Testar!!!!!!
-    bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
+    void collapse(BSPTreeNode* tree);
+    Plane selectBestSplitter(std::list<Triangle*>& _vTriangle);
+    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
 
     inline glm::vec3 vPosVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]].position; }
     inline VertexData vVerVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]]; }
+
+    // TODO: Testar!!!!!!
+    bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
+
     bool logdata;
     BSPTreeNode* root;
-    std::vector<VertexData>* resultVertex;
+
     std::vector<Chimera::VertexData> vVertex;
+    std::vector<VertexData>* resultVertex;
+};
+
+class BspTree : public BspTreeBase {
+  public:
+    BspTree();
+    virtual ~BspTree();
+
+  protected:
+    virtual BSPTreeNode* bsptreeBuild(std::list<Triangle*>& _vTriangle);
+
+  private:
+    bool isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly);
 };
 } // namespace Chimera
 #endif

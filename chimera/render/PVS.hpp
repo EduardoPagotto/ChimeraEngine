@@ -1,73 +1,17 @@
 #ifndef __CHIMERA_PVS_HPP
 #define __CHIMERA_PVS_HPP
 
-// Ref:
-// https://github.com/taylorstine/BSP_Tree
-
-#include "AABB.hpp"
-#include "Plane.hpp"
-#include "Triangle.hpp"
-#include "VertexData.hpp"
-#include <list>
-#include <vector>
+#include "BSPTree.hpp"
 
 namespace Chimera {
 
-// TODO: classe sera subistituida por VertexNode (integrada com EBO)
-class Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
-  public:
-    Leaf();
-    virtual ~Leaf();
-    void addFace(uint32_t face, uint32_t _a, uint32_t _b, uint32_t _c);
-    std::list<uint32_t> index;
-    std::list<uint32_t> faces;
-    AABB boundingBox;
-};
-
-class BSPTreeNode {
-  public:
-    BSPTreeNode(const Plane& _hyperPlane);
-    virtual ~BSPTreeNode();
-    void destroy();
-    void addPolygon(Triangle* _triangle);
-    void addIndexPolygon(std::list<Triangle*>& _vTriangle);
-
-    Leaf* pLeaf;
-    Plane hyperPlane; // HyperPlane partition;
-    BSPTreeNode* front;
-    BSPTreeNode* back;
-    bool isSolid;
-    bool isLeaf;
-};
-
-class PVS {
+class PVS : public BspTreeBase {
   public:
     PVS();
-    void createSequencial(std::vector<Chimera::VertexData>& _vVertex);
-    void createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
-    void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
-    void destroy();
+    virtual ~PVS();
 
-  private:
-    Plane selectBestSplitter(std::list<Triangle*>& _vTriangle);
-    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
+  protected:
     BSPTreeNode* bsptreeBuild(std::list<Triangle*>& _vTriangle);
-    void collapse(BSPTreeNode* tree);
-
-    // bool isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly);
-
-    void drawPolygon(BSPTreeNode* tree, bool frontSide);
-    void traverseTree(BSPTreeNode* tree, glm::vec3* pos);
-
-    // TODO: Testar!!!!!!
-    bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
-
-    inline glm::vec3 vPosVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]].position; }
-    inline VertexData vVerVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]]; }
-    bool logdata;
-    BSPTreeNode* root;
-    std::vector<VertexData>* resultVertex;
-    std::vector<Chimera::VertexData> vVertex;
 };
 } // namespace Chimera
 

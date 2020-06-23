@@ -37,6 +37,7 @@ class BSPTreeNode {
     BSPTreeNode* front;
     BSPTreeNode* back;
     bool isSolid;
+    bool isLeaf;
 };
 
 class PVS {

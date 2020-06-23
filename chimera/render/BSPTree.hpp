@@ -12,14 +12,31 @@
 
 namespace Chimera {
 
-struct BSPTreeNode {
-    BSPTreeNode(const Plane& _hyperPlane) : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
-    std::list<Triangle*> polygons;
+// TODO: classe sera subistituida por VertexNode (integrada com EBO)
+class Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
+  public:
+    Leaf();
+    virtual ~Leaf();
+    void addFace(uint32_t face, uint32_t _a, uint32_t _b, uint32_t _c);
+    std::list<uint32_t> index;
+    std::list<uint32_t> faces;
+    // AABB boundingBox;
+};
+
+class BSPTreeNode {
+  public:
+    BSPTreeNode(const Plane& _hyperPlane);
+    virtual ~BSPTreeNode();
+    void destroy();
+    void addPolygon(Triangle* _triangle);
+    void addIndexPolygon(std::list<Triangle*>& _vTriangle);
+
+    Leaf* pLeaf;
     Plane hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
-    bool isLeaf;
     bool isSolid;
+    bool isLeaf;
 };
 
 class BspTree {

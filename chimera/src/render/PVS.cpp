@@ -20,7 +20,7 @@ void Leaf::addFace(uint32_t face, uint32_t _a, uint32_t _b, uint32_t _c) {
 }
 
 BSPTreeNode::BSPTreeNode(const Plane& _hyperPlane)
-    : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), pLeaf(nullptr), isSolid(false) {}
+    : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), pLeaf(nullptr), isSolid(false) {}
 
 BSPTreeNode::~BSPTreeNode() { this->destroy(); }
 
@@ -414,6 +414,7 @@ BSPTreeNode* PVS::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
         // convex->isSolid = false;
         tree->addIndexPolygon(front_list);
         tree->isSolid = false;
+        tree->isLeaf = true;
     } else {
         tree->front = bsptreeBuild(front_list);
     }
@@ -423,6 +424,7 @@ BSPTreeNode* PVS::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
         if (tree->pLeaf == nullptr) {
             BSPTreeNode* solid = new BSPTreeNode(partition);
             solid->isSolid = true;
+            tree->isLeaf = false;
             tree->back = solid;
         }
     }

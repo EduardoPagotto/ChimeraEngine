@@ -65,36 +65,19 @@ void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const st
 
 void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
+    if (tree->pLeaf == nullptr)
+        return;
+
     if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->pLeaf->index.size());
 
-    for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-        Triangle* t = (*it);
-
-        resultVertex->push_back(vVerVal(t, 0));
-        resultVertex->push_back(vVerVal(t, 1));
-        resultVertex->push_back(vVerVal(t, 2));
-
-        // FIXME: remover depois de concluir o algoritmo
-        if (logdata == true) {
-            if (frontSide == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t->getSerial());
-            else
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t->getSerial());
-        }
-    }
+    for (auto index : tree->pLeaf->index)
+        resultVertex->push_back(vVertex[index]);
 }
 
 void BspTree::destroy() { collapse(root); }
 
 void BspTree::collapse(BSPTreeNode* tree) {
-
-    while (tree->polygons.empty() == false) {
-        Triangle* poly = tree->polygons.back();
-        tree->polygons.pop_back();
-        delete poly;
-        poly = nullptr;
-    }
 
     if (tree->front != nullptr) {
         collapse(tree->front);
@@ -356,7 +339,7 @@ BSPTreeNode* BspTree::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
                 front_list.push_front(poly);
                 break;
             case SIDE::CP_ONPLANE:
-                tree->polygons.push_front(poly);
+                tree->addPolygon(poly);
                 break;
             default:
                 splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
@@ -369,20 +352,13 @@ BSPTreeNode* BspTree::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
 
         // next front only have conves set
         BSPTreeNode* convex = new BSPTreeNode(partition);
-        while (front_list.empty() == false) {
-            Triangle* convPoly = front_list.back();
-            front_list.pop_back();
-            convex->polygons.push_front(convPoly);
-        }
-
-        // ajust leaf and solid
+        convex->addIndexPolygon(front_list);
         convex->front = new BSPTreeNode(partition);
         convex->front->isLeaf = true;
         convex->front->isSolid = false;
         convex->back = new BSPTreeNode(partition);
         convex->back->isLeaf = true;
         convex->back->isSolid = true;
-
         tree->front = convex;
     } else {
         tree->front = bsptreeBuild(front_list);

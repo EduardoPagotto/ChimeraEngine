@@ -4,17 +4,19 @@
 namespace Chimera {
 
 BSPTreeNode::BSPTreeNode(const Plane& _hyperPlane)
-    : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
+    : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), pLeaf(nullptr), isSolid(false) {}
 
 BSPTreeNode::~BSPTreeNode() { this->destroy(); }
 
 void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
+
+    pLeaf = new Leaf;
     while (_vTriangle.empty() == false) {
         Triangle* convPoly = _vTriangle.back();
         _vTriangle.pop_back();
-        indexPolygon.push_back(convPoly->p[0]);
-        indexPolygon.push_back(convPoly->p[1]);
-        indexPolygon.push_back(convPoly->p[2]);
+        pLeaf->indexPolygon.push_back(convPoly->p[0]);
+        pLeaf->indexPolygon.push_back(convPoly->p[1]);
+        pLeaf->indexPolygon.push_back(convPoly->p[2]);
 
         delete convPoly;
         convPoly = nullptr;
@@ -22,8 +24,14 @@ void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
 }
 
 void BSPTreeNode::destroy() {
-    while (indexPolygon.empty() == false) {
-        indexPolygon.clear();
+
+    if (pLeaf != nullptr) {
+        while (pLeaf->indexPolygon.empty() == false) {
+            pLeaf->indexPolygon.clear();
+        }
+
+        delete pLeaf;
+        pLeaf = nullptr;
     }
 }
 
@@ -106,13 +114,13 @@ void PVS::collapse(BSPTreeNode* tree) {
 
 void PVS::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
-    if (tree->isLeaf == false)
+    if (tree->pLeaf == nullptr)
         return;
 
     if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->indexPolygon.size());
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->pLeaf->indexPolygon.size());
 
-    for (auto index : tree->indexPolygon)
+    for (auto index : tree->pLeaf->indexPolygon)
         resultVertex->push_back(vVertex[index]);
 }
 
@@ -381,7 +389,6 @@ BSPTreeNode* PVS::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
         // convex->isLeaf = true;
         // convex->isSolid = false;
         tree->addIndexPolygon(front_list);
-        tree->isLeaf = true;
         tree->isSolid = false;
     } else {
         tree->front = bsptreeBuild(front_list);
@@ -389,9 +396,8 @@ BSPTreeNode* PVS::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
 
     tree->back = bsptreeBuild(back_list);
     if (tree->back == nullptr) {
-        if (tree->isLeaf == false) {
+        if (tree->pLeaf == nullptr) {
             BSPTreeNode* solid = new BSPTreeNode(partition);
-            solid->isLeaf = false;
             solid->isSolid = true;
             tree->back = solid;
         }
@@ -403,7 +409,7 @@ BSPTreeNode* PVS::bsptreeBuild(std::list<Triangle*>& _vTriangle) {
 bool PVS::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
     float temp;
     glm::vec3 intersection;
-    if (tree->isLeaf == true) {
+    if (tree->pLeaf != nullptr) {
         return !tree->isSolid;
     }
 

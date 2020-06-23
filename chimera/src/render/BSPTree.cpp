@@ -262,19 +262,28 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     vVertex.push_back({a, vertA.normal, vertA.texture}); // T1 PA
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T1 PB
     vVertex.push_back({A, vertA.normal, texA});          // T1 PC
-    _vTriangle.push_front(new Triangle(last++, last++, last++, normal));
+    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    Triangle* th1 = new Triangle(last++, last++, last++, normal);
+    th1->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
+    _vTriangle.push_front(th1); // TODO :Testar se é isto mesmo
 
     // //-- T2 Triangle T2(b, B, A);
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T2 PA
     vVertex.push_back({B, vertB.normal, texB});          // T2 PB
     vVertex.push_back({A, vertA.normal, texA});          // T2 PC
-    _vTriangle.push_front(new Triangle(last++, last++, last++, normal));
+    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    Triangle* th2 = new Triangle(last++, last++, last++, normal);
+    th2->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
+    _vTriangle.push_front(th2); // TODO :Testar se é isto mesmo
 
     // // -- T3 Triangle T3(A, B, c);
     vVertex.push_back({A, vertA.normal, texA});          // T3 PA
     vVertex.push_back({B, vertB.normal, texB});          // T3 PB
     vVertex.push_back({c, vertC.normal, vertC.texture}); // T3 PC
-    _vTriangle.push_front(new Triangle(last++, last++, last++, normal));
+    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    Triangle* th3 = new Triangle(last++, last++, last++, normal);
+    th3->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
+    _vTriangle.push_front(th3); // TODO :Testar se é isto mesmo
 
     // Remove orininal
     delete _pTriangle;

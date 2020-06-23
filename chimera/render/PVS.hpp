@@ -29,6 +29,7 @@ class BSPTreeNode {
     BSPTreeNode(const Plane& _hyperPlane);
     virtual ~BSPTreeNode();
     void destroy();
+    void addPolygon(Triangle* _triangle);
     void addIndexPolygon(std::list<Triangle*>& _vTriangle);
 
     Leaf* pLeaf;

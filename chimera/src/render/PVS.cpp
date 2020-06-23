@@ -24,9 +24,23 @@ BSPTreeNode::BSPTreeNode(const Plane& _hyperPlane)
 
 BSPTreeNode::~BSPTreeNode() { this->destroy(); }
 
+void BSPTreeNode::addPolygon(Triangle* _triangle) {
+
+    if (pLeaf == nullptr)
+        pLeaf = new Leaf;
+
+    pLeaf->addFace(_triangle->getSerial(), _triangle->p[0], _triangle->p[1], _triangle->p[2]);
+
+    delete _triangle;
+    _triangle = nullptr;
+
+} // namespace Chimera
+
 void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
 
-    pLeaf = new Leaf;
+    if (pLeaf == nullptr)
+        pLeaf = new Leaf;
+
     while (_vTriangle.empty() == false) {
         Triangle* convPoly = _vTriangle.back();
         _vTriangle.pop_back();

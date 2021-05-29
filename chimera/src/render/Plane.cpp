@@ -46,7 +46,7 @@ SIDE Plane::classifyPoint(glm::vec3* point) {
     float clipTest = glm::dot(dir, this->normal);
 
     if (fabs(clipTest) < EPSILON)
-        SIDE::CP_ONPLANE;
+        return SIDE::CP_ONPLANE;
 
     if (clipTest < 0.0f)
         return SIDE::CP_FRONT;

@@ -31,19 +31,27 @@ void Plane::set(const glm::vec3& pA, const glm::vec3& _normal) {
                         : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
 }
 
+bool Plane::collinearNormal(const glm::vec3& _normal) {
+    glm::vec3 sub = this->normal - _normal;
+    float result = (float)fabs(sub.x + sub.y + sub.z);
+    if (result < EPSILON)
+        return true;
+
+    return false;
+}
+
 SIDE Plane::classifyPoint(glm::vec3* point) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    float clipTest;
     glm::vec3 dir = this->point - (*point);
-    clipTest = glm::dot(dir, this->normal);
+    float clipTest = glm::dot(dir, this->normal);
 
-    if (clipTest < -EPSILON)
+    if (fabs(clipTest) < EPSILON)
+        return SIDE::CP_ONPLANE;
+
+    if (clipTest < 0.0f)
         return SIDE::CP_FRONT;
 
-    if (clipTest > EPSILON)
-        return SIDE::CP_BACK;
-
-    return SIDE::CP_ONPLANE;
+    return SIDE::CP_BACK;
 }
 
 SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest) {
@@ -58,14 +66,15 @@ SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::ve
     result[2] = glm::dot((this->point - pC), this->normal); // Clip Test poin C
 
     for (unsigned short a = 0; a < 3; a++) {
-        if (result[a] > EPSILON) {
-            behind++;
-        } else if (result[a] < -EPSILON) {
-            infront++;
-        } else {
+        if (fabs(result[a]) < EPSILON) {
+            result[a] = 0.0f;
             onPlane++;
             infront++;
             behind++;
+        } else if (result[a] > 0.0f) {
+            behind++;
+        } else { // result[a] < 0.0f
+            infront++;
         }
     }
 

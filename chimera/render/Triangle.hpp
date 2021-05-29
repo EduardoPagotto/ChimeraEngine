@@ -13,6 +13,8 @@ class Triangle {
     inline glm::vec3 getNormal() const { return normal; }
     inline uint32_t getSerial() const { return serial; }
     uint32_t p[3]; // PA = 0, PB = 1, PC = 3
+    bool beenUsedAsSplitter;
+
   private:
     glm::vec3 normal;
 

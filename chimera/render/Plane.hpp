@@ -20,6 +20,7 @@ class Plane {
     inline glm::vec3 getPoint() const { return this->point; }
     inline glm::vec3 getNormal() const { return this->normal; }
 
+    bool collinearNormal(const glm::vec3& _normal);
     SIDE classifyPoint(glm::vec3* point);
     SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest);
     bool intersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* intersection, float* percentage);

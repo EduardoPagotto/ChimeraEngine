@@ -7,50 +7,71 @@
 #include "Plane.hpp"
 #include "Triangle.hpp"
 #include "VertexData.hpp"
+#include <list>
 #include <vector>
 
 namespace Chimera {
 
-struct BSPTreeNode {
-    BSPTreeNode(const Plane& _hyperPlane) : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), isSolid(false) {}
-    std::vector<Triangle*> polygons;
+// TODO: classe sera subistituida por VertexNode (integrada com EBO)
+class Leaf { // each leaf to have a maximum of 50 portals which is way to many but lets not
+  public:
+    Leaf();
+    virtual ~Leaf();
+    void addFace(uint32_t face, uint32_t _a, uint32_t _b, uint32_t _c);
+    std::list<uint32_t> index;
+    std::list<uint32_t> faces;
+    // AABB boundingBox;
+};
+
+class BSPTreeNode {
+  public:
+    BSPTreeNode(const Plane& _hyperPlane);
+    virtual ~BSPTreeNode();
+    void destroy();
+    void addPolygon(Triangle* _triangle);
+    void addIndexPolygon(std::list<Triangle*>& _vTriangle);
+
+    Leaf* pLeaf;
     Plane hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
-    bool isLeaf;
     bool isSolid;
+    bool isLeaf;
 };
 
 class BspTree {
   public:
     BspTree();
-    void createSequencial(std::vector<Chimera::VertexData>& _vVertex);
-    void createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
-    void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
+    virtual ~BspTree();
+    void create(bool leafy, std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
     void destroy();
 
-    // TODO: Testar!!!!!!
-    void initPolygons(unsigned char* map);
+    void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
 
   private:
-    unsigned int selectBestSplitter(std::vector<Triangle*>& _vTriangle);
-    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle);
-    BSPTreeNode* bsptreeBuild(std::vector<Triangle*>& _vTriangle);
-    void collapse(BSPTreeNode* tree);
+    BSPTreeNode* build(std::list<Triangle*>& _vTriangle);
+    bool isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly);
+    BSPTreeNode* buildLeafy(std::list<Triangle*>& _vTriangle);
 
     void drawPolygon(BSPTreeNode* tree, bool frontSide);
     void traverseTree(BSPTreeNode* tree, glm::vec3* pos);
 
-    // TODO: Testar!!!!!!
-    bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
-    void addPolygon(Chimera::VertexData* pVertexs, int NOV, std::vector<Triangle*>& _vTriangle);
+    void collapse(BSPTreeNode* tree);
+    Plane selectBestSplitter(std::list<Triangle*>& _vTriangle);
+    void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
 
     inline glm::vec3 vPosVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]].position; }
     inline VertexData vVerVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]]; }
+
+    // TODO: Testar!!!!!!
+    bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
+
     bool logdata;
     BSPTreeNode* root;
-    std::vector<VertexData>* resultVertex;
+
     std::vector<Chimera::VertexData> vVertex;
+    std::vector<VertexData>* resultVertex;
 };
+
 } // namespace Chimera
 #endif

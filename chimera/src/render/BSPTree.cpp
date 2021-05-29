@@ -9,10 +9,60 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
-glm::vec3 aprox(const glm::vec3& dado) {
-    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
-                     (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y
-                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
+Leaf::Leaf() {}
+
+Leaf::~Leaf() {
+    while (index.empty() == false) {
+        index.clear();
+    }
+}
+
+void Leaf::addFace(uint32_t face, uint32_t _a, uint32_t _b, uint32_t _c) {
+    index.push_back(_a);
+    index.push_back(_b);
+    index.push_back(_c);
+    faces.push_back(face);
+    // TODO: implementar acerto do AABB
+}
+
+BSPTreeNode::BSPTreeNode(const Plane& _hyperPlane)
+    : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), isLeaf(false), pLeaf(nullptr), isSolid(false) {}
+
+BSPTreeNode::~BSPTreeNode() { this->destroy(); }
+
+void BSPTreeNode::addPolygon(Triangle* _triangle) {
+
+    if (pLeaf == nullptr)
+        pLeaf = new Leaf;
+
+    pLeaf->addFace(_triangle->getSerial(), _triangle->p[0], _triangle->p[1], _triangle->p[2]);
+
+    delete _triangle;
+    _triangle = nullptr;
+
+} // namespace Chimera
+
+void BSPTreeNode::addIndexPolygon(std::list<Triangle*>& _vTriangle) {
+
+    if (pLeaf == nullptr)
+        pLeaf = new Leaf;
+
+    while (_vTriangle.empty() == false) {
+        Triangle* convPoly = _vTriangle.back();
+        _vTriangle.pop_back();
+        pLeaf->addFace(convPoly->getSerial(), convPoly->p[0], convPoly->p[1], convPoly->p[2]);
+
+        delete convPoly;
+        convPoly = nullptr;
+    }
+}
+
+void BSPTreeNode::destroy() {
+
+    if (pLeaf != nullptr) {
+        delete pLeaf;
+        pLeaf = nullptr;
+    }
 }
 
 BspTree::BspTree() {
@@ -21,76 +71,61 @@ BspTree::BspTree() {
     logdata = false;
 }
 
-void BspTree::createSequencial(std::vector<Chimera::VertexData>& _vVertex) {
+BspTree::~BspTree() { this->destroy(); }
 
-    std::vector<Triangle*> vTris;
+void BspTree::create(bool leafy, std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
+
+    std::list<Triangle*> vTris;
     vVertex = _vVertex;
 
-    for (unsigned int indice = 0; indice < _vVertex.size(); indice += 3) {
-        unsigned int pa = indice;
-        unsigned int pb = indice + 1;
-        unsigned int pc = indice + 2;
+    if (_vIndex.size() > 0) {
 
-        // Calcula Normal Face
-        glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
-        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-        vTris.push_back(new Triangle(pa, pb, pc, normal));
-    }
+        // Usa os indices já pre-calculado
+        for (unsigned int indice = 0; indice < _vIndex.size(); indice += 3) {
+            unsigned int pa = _vIndex[indice];
+            unsigned int pb = _vIndex[indice + 1];
+            unsigned int pc = _vIndex[indice + 2];
 
-    root = bsptreeBuild(vTris);
-}
+            // Calcula Normal Face
+            glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
+            glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
 
-void BspTree::createIndexed(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
+            // glm::vec3 u = vVertex[pb].position - vVertex[pa].position;
+            // glm::vec3 v = vVertex[pc].position - vVertex[pa].position;
+            // glm::vec3 normal2 = glm::normalize(glm::cross(u, v));
 
-    std::vector<Triangle*> vTris;
-    vVertex = _vVertex;
+            vTris.push_back(new Triangle(pa, pb, pc, normal));
+        }
 
-    for (unsigned int indice = 0; indice < _vIndex.size(); indice += 3) {
-        unsigned int pa = _vIndex[indice];
-        unsigned int pb = _vIndex[indice + 1];
-        unsigned int pc = _vIndex[indice + 2];
+    } else {
 
-        // Calcula Normal Face
-        glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
-        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-        vTris.push_back(new Triangle(pa, pb, pc, normal));
-    }
+        // Calcula os indices na sequencia em que os vertices estão
+        for (unsigned int indice = 0; indice < _vVertex.size(); indice += 3) {
+            unsigned int pa = indice;
+            unsigned int pb = indice + 1;
+            unsigned int pc = indice + 2;
 
-    root = bsptreeBuild(vTris);
-}
+            // Calcula Normal Face
+            glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
+            glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
 
-void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
+            // glm::vec3 u = vVertex[pb].position - vVertex[pa].position;
+            // glm::vec3 v = vVertex[pc].position - vVertex[pa].position;
+            // glm::vec3 normal2 = glm::normalize(glm::cross(u, v));
 
-    if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->polygons.size());
-
-    for (auto it = tree->polygons.begin(); it != tree->polygons.end(); it++) {
-        Triangle* t = (*it);
-
-        resultVertex->push_back(vVerVal(t, 0));
-        resultVertex->push_back(vVerVal(t, 1));
-        resultVertex->push_back(vVerVal(t, 2));
-
-        // FIXME: remover depois de concluir o algoritmo
-        if (logdata == true) {
-            if (frontSide == true)
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face F: %d", t->getSerial());
-            else
-                SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "    Face B: %d", t->getSerial());
+            vTris.push_back(new Triangle(pa, pb, pc, normal));
         }
     }
+
+    if (leafy == false)
+        root = build(vTris);
+    else
+        root = buildLeafy(vTris);
 }
 
 void BspTree::destroy() { collapse(root); }
 
 void BspTree::collapse(BSPTreeNode* tree) {
-
-    while (tree->polygons.empty() == false) {
-        Triangle* poly = tree->polygons.back();
-        tree->polygons.pop_back();
-        delete poly;
-        poly = nullptr;
-    }
 
     if (tree->front != nullptr) {
         collapse(tree->front);
@@ -105,14 +140,29 @@ void BspTree::collapse(BSPTreeNode* tree) {
     }
 }
 
+void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
+
+    if (tree->pLeaf == nullptr)
+        return;
+
+    if (logdata == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->pLeaf->index.size());
+
+    for (auto index : tree->pLeaf->index)
+        resultVertex->push_back(vVertex[index]);
+}
+
 void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
 
-    // no de indicador de final/solido
-    if (tree->isLeaf == true)
+    if (tree->isSolid == true)
         return;
+
+    // no de indicador de final/solido
+    // if (tree->pLeaf == nullptr)
+    //     return;
 
     SIDE result = tree->hyperPlane.classifyPoint(pos);
     switch (result) {
@@ -123,7 +173,7 @@ void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
             break;
         case SIDE::CP_BACK:
             traverseTree(tree->front, pos);
-            drawPolygon(tree, false);
+            drawPolygon(tree, false); // Elimina o render do back-face
             traverseTree(tree->back, pos);
             break;
         default: // SIDE::CP_ONPLANE
@@ -140,28 +190,30 @@ void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool 
     traverseTree(root, eye);
 }
 
-unsigned int BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
+Plane BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
     if (_vTriangle.size() == 0)
-        return 0;
+        return Plane();
 
-    unsigned int selectedPoly = 0;
+    std::list<Triangle*>::iterator selectedPoly;
     unsigned int bestScore = 100000; // just set to a very high value to begin
     glm::vec3 temp;                  // inutil
 
-    for (unsigned indice_splitter = 0; indice_splitter < _vTriangle.size(); indice_splitter++) {
+    for (std::list<Triangle*>::iterator indice_splitter = _vTriangle.begin(); indice_splitter != _vTriangle.end(); indice_splitter++) {
 
-        Triangle* th = _vTriangle[indice_splitter];
+        Triangle* th = (*indice_splitter); //_vTriangle[indice_splitter];
+        if (th->beenUsedAsSplitter == true)
+            continue;
+
         Plane hyperPlane(vPosVal(th, 0), th->getNormal());
 
         long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
 
-        for (unsigned indice_current = 0; indice_current < _vTriangle.size(); indice_current++) {
-
+        for (std::list<Triangle*>::iterator indice_current = _vTriangle.begin(); indice_current != _vTriangle.end(); indice_current++) {
             if (indice_current != indice_splitter) {
 
-                Triangle* currentPoly = _vTriangle[indice_current];
+                Triangle* currentPoly = (*indice_current);
                 SIDE result = hyperPlane.classifyPoly(vPosVal(currentPoly, 0), // PA
                                                       vPosVal(currentPoly, 1), // PB
                                                       vPosVal(currentPoly, 2), // PC
@@ -191,11 +243,14 @@ unsigned int BspTree::selectBestSplitter(std::vector<Triangle*>& _vTriangle) {
             selectedPoly = indice_splitter;
         }
 
-    } // end while splitter == null
-    return selectedPoly;
+    } // end while splitter
+
+    Triangle* th = (*selectedPoly);
+    th->beenUsedAsSplitter = true;
+    return Plane(vPosVal(th, 0), th->getNormal());
 }
 
-void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::vector<Triangle*>& _vTriangle) {
+void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle) {
 
     // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
@@ -253,53 +308,101 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     vVertex.push_back({a, vertA.normal, vertA.texture}); // T1 PA
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T1 PB
     vVertex.push_back({A, vertA.normal, texA});          // T1 PC
-    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    Triangle* th1 = new Triangle(last++, last++, last++, normal);
+    th1->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
+    _vTriangle.push_front(th1); // TODO :Testar se é isto mesmo
 
     // //-- T2 Triangle T2(b, B, A);
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T2 PA
     vVertex.push_back({B, vertB.normal, texB});          // T2 PB
     vVertex.push_back({A, vertA.normal, texA});          // T2 PC
-    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    Triangle* th2 = new Triangle(last++, last++, last++, normal);
+    th2->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
+    _vTriangle.push_front(th2); // TODO :Testar se é isto mesmo
 
     // // -- T3 Triangle T3(A, B, c);
     vVertex.push_back({A, vertA.normal, texA});          // T3 PA
     vVertex.push_back({B, vertB.normal, texB});          // T3 PB
     vVertex.push_back({c, vertC.normal, vertC.texture}); // T3 PC
-    _vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+    Triangle* th3 = new Triangle(last++, last++, last++, normal);
+    th3->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
+    _vTriangle.push_front(th3); // TODO :Testar se é isto mesmo
+
+    // Remove orininal
+    delete _pTriangle;
+    _pTriangle = nullptr;
 }
 
-BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
+bool BspTree::isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly) {
+
+    if (_vTriangle.size() <= 1)
+        return false;
+
+    Triangle* th1 = nullptr;
+    Triangle* th2 = nullptr;
+    float sameDir = 0.0;
+
+    for (std::list<Triangle*>::iterator i = _vTriangle.begin(); i != _vTriangle.end(); i++) {
+
+        th1 = (*i);
+
+        for (std::list<Triangle*>::iterator j = i; j != _vTriangle.end(); j++) {
+
+            th2 = (i != j) ? (*j) : _poly; // Test hyperplane is Convex too in coincident index
+
+            glm::vec3 u = th1->getNormal();
+            glm::vec3 v = th2->getNormal();
+            float val = glm::dot(u, v);
+            if (val > 0.0f) { // if not convex test if is coplanar
+                glm::vec3 result;
+                Plane alpha(vPosVal(th1, 0), th1->getNormal());
+                if (alpha.classifyPoly(vPosVal(th2, 0), vPosVal(th2, 1), vPosVal(th2, 2), &result) != SIDE::CP_ONPLANE)
+                    return false;
+
+                // test if faces has oposites directions aka: convex
+                if (alpha.collinearNormal(th1->getNormal()) == false)
+                    return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
     if (_vTriangle.empty() == true)
         return nullptr;
 
-    // balanceador
-    unsigned int bether_index = selectBestSplitter(_vTriangle);
-    Triangle* tris = _vTriangle[bether_index];
-    Plane partition(vPosVal(tris, 0), tris->getNormal());
+    Plane partition = selectBestSplitter(_vTriangle);
     BSPTreeNode* tree = new BSPTreeNode(partition);
 
-    std::vector<Triangle*> front_list;
-    std::vector<Triangle*> back_list;
+    std::list<Triangle*> front_list;
+    std::list<Triangle*> back_list;
+
+    Triangle* poly = nullptr;
 
     while (_vTriangle.empty() == false) {
 
-        Triangle* poly = _vTriangle.back();
+        poly = _vTriangle.back();
         _vTriangle.pop_back();
         glm::vec3 result;
-        SIDE teste = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
-                                                   vPosVal(poly, 1), // PB
-                                                   vPosVal(poly, 2), // PC
-                                                   &result);         // Clip Test Result (A,B,C)
-        switch (teste) {
+        SIDE clipTest = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
+                                                      vPosVal(poly, 1), // PB
+                                                      vPosVal(poly, 2), // PC
+                                                      &result);         // Clip Test Result (A,B,C)
+        switch (clipTest) {
             case SIDE::CP_BACK:
-                back_list.push_back(poly);
+                back_list.push_front(poly);
                 break;
             case SIDE::CP_FRONT:
-                front_list.push_back(poly);
+                front_list.push_front(poly);
                 break;
             case SIDE::CP_ONPLANE:
-                tree->polygons.push_back(poly);
+                tree->addPolygon(poly);
                 break;
             default:
                 splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
@@ -307,8 +410,24 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
         }
     }
 
-    tree->front = bsptreeBuild(front_list);
-    tree->back = bsptreeBuild(back_list);
+    // Verify if all triangles front are convex
+    if (isConvex(front_list, poly) == true) {
+
+        // next front only have conves set
+        BSPTreeNode* convex = new BSPTreeNode(partition);
+        convex->addIndexPolygon(front_list);
+        convex->front = new BSPTreeNode(partition);
+        convex->front->isLeaf = true;
+        convex->front->isSolid = false;
+        convex->back = new BSPTreeNode(partition);
+        convex->back->isLeaf = true;
+        convex->back->isSolid = true;
+        tree->front = convex;
+    } else {
+        tree->front = build(front_list);
+    }
+
+    tree->back = build(back_list);
 
     // leaf sem poligonos apenas para saber se solido ou vazio
     if (tree->front == nullptr) {
@@ -321,6 +440,78 @@ BSPTreeNode* BspTree::bsptreeBuild(std::vector<Triangle*>& _vTriangle) {
         tree->back = new BSPTreeNode(partition);
         tree->back->isLeaf = true;
         tree->back->isSolid = true;
+    }
+
+    return tree;
+}
+
+BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
+
+    if (_vTriangle.empty() == true)
+        return nullptr;
+
+    Plane partition = selectBestSplitter(_vTriangle);
+    BSPTreeNode* tree = new BSPTreeNode(partition);
+
+    std::list<Triangle*> front_list;
+    std::list<Triangle*> back_list;
+
+    Triangle* poly = nullptr;
+
+    while (_vTriangle.empty() == false) {
+
+        poly = _vTriangle.back();
+        _vTriangle.pop_back();
+        glm::vec3 result;
+        SIDE clipTest = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
+                                                      vPosVal(poly, 1), // PB
+                                                      vPosVal(poly, 2), // PC
+                                                      &result);         // Clip Test Result (A,B,C)
+        switch (clipTest) {
+            case SIDE::CP_BACK:
+                back_list.push_front(poly);
+                break;
+            case SIDE::CP_FRONT:
+                front_list.push_front(poly);
+                break;
+            case SIDE::CP_ONPLANE: {
+                if (partition.collinearNormal(poly->getNormal()) == true)
+                    front_list.push_front(poly);
+                else
+                    back_list.push_front(poly);
+            } break;
+            default:
+                splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
+                break;
+        }
+    }
+
+    unsigned int count = 0;
+    for (auto th : front_list) {
+        if (th->beenUsedAsSplitter == false)
+            count++;
+        // break; //TODO: testar se mais eficiente a contar todos
+    }
+
+    if (count == 0) {
+        // BSPTreeNode* convex = new BSPTreeNode(partition);
+        // convex->isLeaf = true;
+        // convex->isSolid = false;
+        tree->addIndexPolygon(front_list);
+        tree->isSolid = false;
+        tree->isLeaf = true;
+    } else {
+        tree->front = buildLeafy(front_list);
+    }
+
+    tree->back = buildLeafy(back_list);
+    if (tree->back == nullptr) {
+        if (tree->pLeaf == nullptr) {
+            BSPTreeNode* solid = new BSPTreeNode(partition);
+            solid->isSolid = true;
+            tree->isLeaf = false;
+            tree->back = solid;
+        }
     }
 
     return tree;
@@ -359,118 +550,4 @@ bool BspTree::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
     return true;
 }
 
-void BspTree::addPolygon(Chimera::VertexData* pVertexs, int NOV, std::vector<Triangle*>& _vTriangle) {
-
-    // TODO: Testar!!!!!!
-    int loop;
-    int v0, v1, v2;
-    int NumberOfIndices = (NOV - 2) * 3;
-
-    std::vector<unsigned int> vIndex;
-
-    for (loop = 0; loop < NumberOfIndices / 3; loop++) {
-        if (loop == 0) {
-            v0 = 0;
-            v1 = 1;
-            v2 = 2;
-        } else {
-            v1 = v2;
-            v2++;
-        }
-
-        // Calcula Normal
-        glm::vec3 u = pVertexs[1].position - pVertexs[0].position;
-        glm::vec3 v = pVertexs[2].position - pVertexs[0].position;
-        glm::vec3 normal = glm::normalize(glm::cross(u, v));
-
-        pVertexs[0].normal = normal;
-        pVertexs[1].normal = normal;
-        pVertexs[2].normal = normal;
-
-        vVertex.push_back(pVertexs[0]);
-        vVertex.push_back(pVertexs[1]);
-        vVertex.push_back(pVertexs[2]);
-
-        _vTriangle.push_back(new Triangle(v0, v1, v2, normal));
-    }
-}
-
-void BspTree::initPolygons(unsigned char* map) {
-
-    // TODO: Testar!!!!!!
-    std::vector<Triangle*> vTriangle;
-
-    Chimera::VertexData vl[4][4];
-    int direction[4] = {0};
-    for (int y = 0; y < 40; y++) {
-        for (int x = 0; x < 20; x++) {
-            int offset = (y * 20) + x;
-            // check what the digit is in the current map location
-            if (map[offset] != 0) {
-                if (map[offset] == 2) { // North East Wall
-                    vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
-                    vl[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
-                    vl[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
-                    vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
-                    direction[0] = 1;
-                }
-                if (map[offset] == 3) { // North West Wall
-                    vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
-                    vl[0][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
-                    vl[0][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
-                    vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
-                    direction[0] = 1;
-                }
-
-                if (map[offset] == 1) { // Its a Standared wall
-                    if (x > 0) {
-                        if (map[offset - 1] == 0) { // if theres nothing to the left add a left facingwall
-                            vl[0][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
-                            vl[0][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
-                            vl[0][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
-                            vl[0][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
-                            direction[0] = 1;
-                        }
-                    }
-                    if (x < 19) {
-                        if (map[offset + 1] == 0) { // if there is nothing to the right add a right facing wall
-                            vl[1][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
-                            vl[1][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
-                            vl[1][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
-                            vl[1][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
-                            direction[1] = 1;
-                        }
-                    }
-                    if (y > 0) {
-                        if (map[offset - 20] == 0) { // if there is nothing south add a south facing wall
-                            vl[2][0] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
-                            vl[2][1] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
-                            vl[2][2] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
-                            vl[2][3] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) + 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
-                            direction[2] = 1;
-                        }
-                    }
-                    if (y < 39) {
-                        if (map[offset + 20] == 0) { // if there is nothing to the north add a north facing wall
-                            vl[3][0] = {glm::vec3(x - 10.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 0)};
-                            vl[3][1] = {glm::vec3(x - 9.5f, 3.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 0)};
-                            vl[3][2] = {glm::vec3(x - 9.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(1, 1)};
-                            vl[3][3] = {glm::vec3(x - 10.5f, 0.0f, (20.0f - y) - 0.5f), glm::vec3(0.0), glm::vec2(0, 1)};
-                            direction[3] = 1;
-                        }
-                    }
-                } // end for if offset==1
-
-                // build the polygons
-                for (int a = 0; a < 4; a++) {
-                    if (direction[a] != 0)
-                        addPolygon(&vl[a][0], 4, vTriangle);
-                }
-            } // end for if offset!=0
-        }
-    }
-    root = bsptreeBuild(vTriangle);
-    // BSPTreeRootNode = new NODE;
-    // BuildBspTree(BSPTreeRootNode, PolygonList);
-}
 } // namespace Chimera

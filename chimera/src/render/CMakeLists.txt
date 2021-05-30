@@ -14,7 +14,9 @@ set (RenderSource 	Triangle.cpp
 					Frustum.cpp
 					AABB.cpp
 					Octree.cpp
-					BSPTree.cpp
+					bsp/Leaf.cpp
+					bsp/BSPTree.cpp
+					bsp/BSPTreeNode.cpp
 					LoadHeightMap.cpp
 					VertexNode.cpp
 					VAO.cpp

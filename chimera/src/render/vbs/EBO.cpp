@@ -1,6 +1,6 @@
-#include "chimera/render/EBO.hpp"
+#include "chimera/render/vbs/EBO.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/render/VertexData.hpp"
+#include "chimera/render/vbs/VertexData.hpp"
 
 namespace Chimera {
 

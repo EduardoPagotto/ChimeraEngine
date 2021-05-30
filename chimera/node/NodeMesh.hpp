@@ -6,7 +6,7 @@
 #include "chimera/render/AABB.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/MeshData.hpp"
-#include "chimera/render/VertexStatic.hpp"
+#include "chimera/render/vbs/VertexStatic.hpp"
 #include <glm/glm.hpp>
 #include <string.h>
 #include <tinyxml2.h>

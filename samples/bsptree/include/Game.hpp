@@ -6,8 +6,8 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/render/Texture.hpp"
-#include "chimera/render/VertexDynamic.hpp"
 #include "chimera/render/bsp/BSPTree.hpp"
+#include "chimera/render/vbs/VertexDynamic.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

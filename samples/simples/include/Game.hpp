@@ -7,7 +7,7 @@
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Texture.hpp"
-#include "chimera/render/VertexStatic.hpp"
+#include "chimera/render/vbs/VertexStatic.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

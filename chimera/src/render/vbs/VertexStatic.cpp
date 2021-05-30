@@ -1,4 +1,4 @@
-#include "chimera/render/VertexStatic.hpp"
+#include "chimera/render/vbs/VertexStatic.hpp"
 
 namespace Chimera {
 

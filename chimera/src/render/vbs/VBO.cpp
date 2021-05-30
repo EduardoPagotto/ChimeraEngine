@@ -1,4 +1,4 @@
-#include "chimera/render/VBO.hpp"
+#include "chimera/render/vbs/VBO.hpp"
 #include "chimera/OpenGLDefs.hpp"
 
 namespace Chimera {

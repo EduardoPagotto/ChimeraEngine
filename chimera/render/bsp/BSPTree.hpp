@@ -4,8 +4,8 @@
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
 
-#include "../VertexData.hpp"
 #include "BSPTreeNode.hpp"
+#include "chimera/render/vbs/VertexData.hpp"
 #include <list>
 #include <vector>
 

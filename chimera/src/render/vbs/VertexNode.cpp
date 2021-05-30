@@ -1,5 +1,5 @@
 
-#include "chimera/render/VertexNode.hpp"
+#include "chimera/render/vbs/VertexNode.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 #include <string>

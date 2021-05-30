@@ -1,4 +1,5 @@
-#include "chimera/render/VertexData.hpp"
+#include "chimera/render/vbs/VertexData.hpp"
+#include "chimera/render/Side.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -45,10 +46,10 @@ void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexD
                  out_indices.size());
 }
 
-glm::vec3 aproxEpsilon(const glm::vec3& dado) {
-    return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
-                     (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y
-                     (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
-}
+// glm::vec3 aproxEpsilon(const glm::vec3& dado) {
+//     return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
+//                      (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y
+//                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
+// }
 
 } // namespace Chimera

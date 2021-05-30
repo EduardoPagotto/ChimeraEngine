@@ -5,10 +5,6 @@
 #include <vector>
 
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
-
-#define EPSILON 1e-2
-//#define EPSILON 1e-1 // Falhas em calculos de aproximação verificar projeto bsptree
-
 #define BUFFER_OFFSET(i) ((void*)(i))
 
 namespace Chimera {
@@ -20,7 +16,7 @@ struct VertexData {
 };
 
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<unsigned int>& out_indices);
-glm::vec3 aproxEpsilon(const glm::vec3& dado);
+// glm::vec3 aproxEpsilon(const glm::vec3& dado);
 
 } // namespace Chimera
 #endif

@@ -101,7 +101,7 @@ void Game::start() {
     //                        1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
     //                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // marca
 
-    Maze maze = Maze("./data/maze0.txt");
+    Maze maze = Maze("./data/maze1.txt");
     maze.createMap();
 
     Chimera::MeshData m;

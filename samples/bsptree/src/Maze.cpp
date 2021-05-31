@@ -53,21 +53,16 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
     float halfSizeX = (this->width * sizeBlock) / 2.0f;
     float halfSizeZ = (this->height * sizeBlock) / 2.0f;
 
-    // float x_max; // para East  (width++)
-    // float x_min; // para Oest  (width++)
-    // float z_max; // para South (height++)
-    // float z_min; // para North (height--)
+    float x_min = (w * sizeBlock) - halfSizeX; // para Oest  (width++)
+    float x_max = x_min + sizeBlock;           // para East  (width++)
+    float z_min = (h * sizeBlock) - halfSizeZ; // para North (height--)
+    float z_max = z_min + sizeBlock;           // para South (height++)
 
     switch (cardinal) {
         case CARDINAL::NORTH:
             if (h != 0) {
                 val_target = this->data[this->getIndexVal(w, h - 1)];
                 if (val_target == 1) {
-
-                    float x_min = (w * sizeBlock) - halfSizeX;
-                    float x_max = x_min + sizeBlock;
-                    float z_min = ((h - 1) * halfSizeX) - halfSizeZ;
-                    float z_max = z_min + sizeBlock;
 
                     glm::vec3 norm = glm::vec3(0.0f, 0.0f, 1.0f);
                     vl.push_back({glm::vec3(x_min, y_min, z_min), norm, glm::vec2(0, 0)}); // np0
@@ -82,11 +77,6 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
                 val_target = this->data[this->getIndexVal(w + 1, h)];
                 if (val_target == 1) {
 
-                    float x_min = ((w + 1) * sizeBlock) - halfSizeX;
-                    float x_max = x_min + sizeBlock;
-                    float z_min = (h * halfSizeX) - halfSizeZ;
-                    float z_max = z_min + sizeBlock;
-
                     glm::vec3 norm = glm::vec3(1.0f, 0.0f, 0.0f);
                     vl.push_back({glm::vec3(x_max, y_min, z_min), norm, glm::vec2(0, 0)}); // ep0
                     vl.push_back({glm::vec3(x_max, y_min, z_max), norm, glm::vec2(1, 0)}); // ep1
@@ -100,11 +90,6 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
                 val_target = this->data[this->getIndexVal(w, h + 1)];
                 if (val_target == 1) {
 
-                    float x_min = (w * sizeBlock) - halfSizeX;
-                    float x_max = x_min + sizeBlock;
-                    float z_min = ((h + 1) * halfSizeX) - halfSizeZ;
-                    float z_max = z_min + sizeBlock;
-
                     glm::vec3 norm = glm::vec3(0.0f, 0.0f, -1.0f);
                     vl.push_back({glm::vec3(x_min, y_min, z_max), norm, glm::vec2(1, 0)}); // np0
                     vl.push_back({glm::vec3(x_max, y_min, z_max), norm, glm::vec2(0, 0)}); // np1
@@ -117,11 +102,6 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
             if (w != 0) {
                 val_target = this->data[this->getIndexVal(w - 1, h)];
                 if (val_target == 1) {
-
-                    float x_min = ((w - 1) * sizeBlock) - halfSizeX;
-                    float x_max = x_min + sizeBlock;
-                    float z_min = (h * halfSizeX) - halfSizeZ;
-                    float z_max = z_min + sizeBlock;
 
                     glm::vec3 norm = glm::vec3(-1.0f, 0.0f, 0.0f);
                     vl.push_back({glm::vec3(x_min, y_min, z_min), norm, glm::vec2(1, 0)}); // ep0

@@ -1,9 +1,9 @@
 26
 7
-MMMMMMMMMMMMMMMMMMMMMMMMMM
-M                        M
-M   MMM      MMMMM   M   M
-M   MMM      M   M   M   M
-M   MMM      M   MMMMM   M
-M                        M
-MMMMMMMMMMMMMMMMMMMMMMMMMM
+11111111111111111111111111
+1                        1
+1   111      11111   1   1
+1   111      1   1   1   1
+1   111      1   11111   1
+1                        1
+11111111111111111111111111

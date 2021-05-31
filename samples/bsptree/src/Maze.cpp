@@ -46,7 +46,7 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
     glm::vec3 norm = glm::vec3(0.0);
     std::vector<Chimera::VertexData> vl;
 
-    float altura_max = 3.0f;
+    float altura_max = 10.0f;
     float altura_min = 0.0f;
 
     // float x = 10.0f;
@@ -124,10 +124,10 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
                     y_max = y_min + 10;
 
                     norm = glm::vec3(-1.0f, 1.0f, 0.0f);
-                    vl.push_back({glm::vec3(x_min, altura_max, y_max), norm, glm::vec2(0, 0)}); // wp0
-                    vl.push_back({glm::vec3(x_min, altura_max, y_min), norm, glm::vec2(1, 0)}); // wp1
-                    vl.push_back({glm::vec3(x_min, altura_min, y_min), norm, glm::vec2(1, 1)}); // wp2
-                    vl.push_back({glm::vec3(x_min, altura_min, y_max), norm, glm::vec2(0, 1)}); // wp3
+                    vl.push_back({glm::vec3(x_min, altura_max, y_max), norm, glm::vec2(0, 1)}); // wp0
+                    vl.push_back({glm::vec3(x_min, altura_max, y_min), norm, glm::vec2(1, 1)}); // wp1
+                    vl.push_back({glm::vec3(x_min, altura_min, y_min), norm, glm::vec2(1, 0)}); // wp2
+                    vl.push_back({glm::vec3(x_min, altura_min, y_max), norm, glm::vec2(0, 0)}); // wp3
                 }
             }
             break;

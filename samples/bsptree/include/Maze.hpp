@@ -15,6 +15,8 @@ class Maze {
 
     void createMap();
 
+    std::vector<Chimera::VertexData> vertexData;
+
   private:
     uint32_t getIndexVal(uint32_t w, uint32_t h);
 
@@ -24,7 +26,7 @@ class Maze {
     uint32_t height; // Altura (linhas)
     std::vector<uint8_t> data;
 
-    std::vector<Chimera::VertexData> vertexData;
+    // std::vector<Chimera::VertexData> vertexData;
 };
 
 #endif

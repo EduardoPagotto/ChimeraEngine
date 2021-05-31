@@ -38,9 +38,9 @@ Maze::Maze(const char filename[]) {
 
 Maze::~Maze() { this->data.clear(); }
 
-uint32_t Maze::getIndexVal(uint8_t w, uint8_t h) { return w + (h * this->width); }
+uint32_t Maze::getIndexVal(uint32_t w, uint32_t h) { return w + (h * this->width); }
 
-uint8_t Maze::newWall(CARDINAL cardinal, uint8_t w, uint8_t h) {
+void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
 
     uint8_t val_target = 0;
     glm::vec3 norm = glm::vec3(0.0);
@@ -49,65 +49,98 @@ uint8_t Maze::newWall(CARDINAL cardinal, uint8_t w, uint8_t h) {
     float altura_max = 3.0f;
     float altura_min = 0.0f;
 
-    float x, y;
-
-    float x_max = x - 9.5f;
-    float x_min = x - 10.5f;
-
-    float y_max = (20.0f - y) + 0.5f;
-    float y_min = (20.0f - y) - 0.5f;
+    // float x = 10.0f;
+    // float y = 10.0f;
+    // float x_max = x - 5.0f;
+    // float x_min = x - 10.0f;
+    // float y_max = (20.0f - y) + 10.0f;
+    // float y_min = (20.0f - y) - 10.0f;
+    float x_max;
+    float x_min;
+    float y_max;
+    float y_min;
 
     switch (cardinal) {
         case CARDINAL::NORTH:
             if (h != 0) {
                 val_target = this->data[this->getIndexVal(w, h - 1)];
-                norm = glm::vec3(0.0f, 1.0f, 0.0f);
-                vl.push_back({glm::vec3(x_min, altura_max, y_min), norm, glm::vec2(0, 0)}); // np0
-                vl.push_back({glm::vec3(x_max, altura_max, y_min), norm, glm::vec2(1, 0)}); // np1
-                vl.push_back({glm::vec3(x_max, altura_min, y_min), norm, glm::vec2(1, 1)}); // np2
-                vl.push_back({glm::vec3(x_min, altura_min, y_min), norm, glm::vec2(0, 1)}); // np3
+                if (val_target == 1) {
+                    x_min = w * 10;
+                    x_max = x_min + 10;
+                    y_min = (h - 1) * 10;
+                    y_max = y_min + 10;
+                    norm = glm::vec3(0.0f, 1.0f, 0.0f);
+                    vl.push_back({glm::vec3(x_min, altura_max, y_min), norm, glm::vec2(0, 0)}); // np0
+                    vl.push_back({glm::vec3(x_max, altura_max, y_min), norm, glm::vec2(1, 0)}); // np1
+                    vl.push_back({glm::vec3(x_max, altura_min, y_min), norm, glm::vec2(1, 1)}); // np2
+                    vl.push_back({glm::vec3(x_min, altura_min, y_min), norm, glm::vec2(0, 1)}); // np3
+                }
             }
             break;
         case CARDINAL::EAST:
             if (w != this->width - 1) {
                 val_target = this->data[this->getIndexVal(w + 1, h)];
-                norm = glm::vec3(1.0f, 0.0f, 0.0f);
-                vl.push_back({glm::vec3(x_max, altura_max, y_min), norm, glm::vec2(0, 0)}); // ep0
-                vl.push_back({glm::vec3(x_max, altura_max, y_max), norm, glm::vec2(1, 0)}); // ep1
-                vl.push_back({glm::vec3(x_max, altura_min, y_max), norm, glm::vec2(1, 1)}); // ep2
-                vl.push_back({glm::vec3(x_max, altura_min, y_min), norm, glm::vec2(0, 1)}); // ep3
+                if (val_target == 1) {
+
+                    x_min = (w + 1) * 10;
+                    x_max = x_min + 10;
+                    y_min = h * 10;
+                    y_max = y_min + 10;
+
+                    norm = glm::vec3(1.0f, 0.0f, 0.0f);
+                    vl.push_back({glm::vec3(x_max, altura_max, y_min), norm, glm::vec2(0, 0)}); // ep0
+                    vl.push_back({glm::vec3(x_max, altura_max, y_max), norm, glm::vec2(1, 0)}); // ep1
+                    vl.push_back({glm::vec3(x_max, altura_min, y_max), norm, glm::vec2(1, 1)}); // ep2
+                    vl.push_back({glm::vec3(x_max, altura_min, y_min), norm, glm::vec2(0, 1)}); // ep3
+                }
             }
             break;
         case CARDINAL::SOUTH:
             if (h != this->height - 1) {
                 val_target = this->data[this->getIndexVal(w, h + 1)];
-                norm = glm::vec3(0.0f, -1.0f, 0.0f);
-                vl.push_back({glm::vec3(x_max, altura_max, y_max), norm, glm::vec2(0, 0)}); // sp0
-                vl.push_back({glm::vec3(x_min, altura_max, y_max), norm, glm::vec2(1, 0)}); // sp1
-                vl.push_back({glm::vec3(x_min, altura_min, y_max), norm, glm::vec2(1, 1)}); // sp2
-                vl.push_back({glm::vec3(x_max, altura_min, y_max), norm, glm::vec2(0, 1)}); // sp3
+                if (val_target == 1) {
+
+                    x_min = w * 10;
+                    x_max = x_min + 10;
+                    y_min = (h + 1) * 10;
+                    y_max = y_min + 10;
+
+                    norm = glm::vec3(0.0f, -1.0f, 0.0f);
+                    vl.push_back({glm::vec3(x_max, altura_max, y_max), norm, glm::vec2(0, 0)}); // sp0
+                    vl.push_back({glm::vec3(x_min, altura_max, y_max), norm, glm::vec2(1, 0)}); // sp1
+                    vl.push_back({glm::vec3(x_min, altura_min, y_max), norm, glm::vec2(1, 1)}); // sp2
+                    vl.push_back({glm::vec3(x_max, altura_min, y_max), norm, glm::vec2(0, 1)}); // sp3
+                }
             }
             break;
         case CARDINAL::WEST:
-            if (w == 0) {
+            if (w != 0) {
                 val_target = this->data[this->getIndexVal(w - 1, h)];
-                norm = glm::vec3(-1.0f, 1.0f, 0.0f);
-                vl.push_back({glm::vec3(x_min, altura_max, y_max), norm, glm::vec2(0, 0)}); // wp0
-                vl.push_back({glm::vec3(x_min, altura_max, y_min), norm, glm::vec2(1, 0)}); // wp1
-                vl.push_back({glm::vec3(x_min, altura_min, y_min), norm, glm::vec2(1, 1)}); // wp2
-                vl.push_back({glm::vec3(x_min, altura_min, y_max), norm, glm::vec2(0, 1)}); // wp3
+                if (val_target == 1) {
+
+                    x_min = (w - 1) * 10;
+                    x_max = x_min + 10;
+                    y_min = h * 10;
+                    y_max = y_min + 10;
+
+                    norm = glm::vec3(-1.0f, 1.0f, 0.0f);
+                    vl.push_back({glm::vec3(x_min, altura_max, y_max), norm, glm::vec2(0, 0)}); // wp0
+                    vl.push_back({glm::vec3(x_min, altura_max, y_min), norm, glm::vec2(1, 0)}); // wp1
+                    vl.push_back({glm::vec3(x_min, altura_min, y_min), norm, glm::vec2(1, 1)}); // wp2
+                    vl.push_back({glm::vec3(x_min, altura_min, y_max), norm, glm::vec2(0, 1)}); // wp3
+                }
             }
             break;
     }
 
-    this->vertexData.push_back(vl[0]);
-    this->vertexData.push_back(vl[1]);
-    this->vertexData.push_back(vl[2]);
-    this->vertexData.push_back(vl[2]);
-    this->vertexData.push_back(vl[3]);
-    this->vertexData.push_back(vl[0]);
-
-    return val_target;
+    if (vl.size() > 0) {
+        this->vertexData.push_back(vl[0]);
+        this->vertexData.push_back(vl[1]);
+        this->vertexData.push_back(vl[2]);
+        this->vertexData.push_back(vl[2]);
+        this->vertexData.push_back(vl[3]);
+        this->vertexData.push_back(vl[0]);
+    }
 }
 
 void Maze::createMap() {
@@ -116,9 +149,8 @@ void Maze::createMap() {
         for (uint32_t w = 0; w < this->width; w++) {
             uint8_t val = this->data[this->getIndexVal(w, h)];
             if (val == 0) {
-
                 for (uint8_t i = (uint8_t)CARDINAL::NORTH; i <= (uint8_t)CARDINAL::WEST; i++) {
-                    uint8_t val = this->newWall((CARDINAL)i, w, h);
+                    this->newWall((CARDINAL)i, w, h);
                 }
             }
         }

@@ -68,7 +68,7 @@ void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
 void Game::start() {
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
-    pVp->position = glm::vec3(0.0, 600.0, 0.0);
+    pVp->position = glm::vec3(0.0, 60.0, 0.0);
     pVp->front = glm::vec3(0.0, 0.0, 0.0);
     pVp->up = glm::vec3(0.0, 1.0, 0.0);
     trackBall.init(pVp);
@@ -130,8 +130,8 @@ void Game::start() {
     // Comentar as tres linhas de baixo para bsp sem indice (sequencial)
     // Cria BSP usando Vertex indexado
     std::vector<Chimera::VertexData> vVertexIndexed;
-    vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
-    // vertexDataIndexCompile(maze.vertexData, vVertexIndexed, vIndex);
+    // vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
+    vertexDataIndexCompile(maze.vertexData, vVertexIndexed, vIndex);
 
     bspTree.create(false, vVertexIndexed, vIndex);
 

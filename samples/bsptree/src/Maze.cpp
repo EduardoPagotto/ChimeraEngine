@@ -43,37 +43,37 @@ uint32_t Maze::getIndexVal(uint32_t w, uint32_t h) { return w + (h * this->width
 void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
 
     uint8_t val_target = 0;
-    glm::vec3 norm = glm::vec3(0.0);
     std::vector<Chimera::VertexData> vl;
 
-    float altura_max = 10.0f;
-    float altura_min = 0.0f;
+    float sizeBlock = 10.0f;
 
-    // float x = 10.0f;
-    // float y = 10.0f;
-    // float x_max = x - 5.0f;
-    // float x_min = x - 10.0f;
-    // float y_max = (20.0f - y) + 10.0f;
-    // float y_min = (20.0f - y) - 10.0f;
-    float x_max;
-    float x_min;
-    float y_max;
-    float y_min;
+    float y_max = sizeBlock / 2; // Altura Maxima
+    float y_min = -y_max;        // Altura Minima
+
+    float halfSizeX = (this->width * sizeBlock) / 2.0f;
+    float halfSizeZ = (this->height * sizeBlock) / 2.0f;
+
+    // float x_max; // para East  (width++)
+    // float x_min; // para Oest  (width++)
+    // float z_max; // para South (height++)
+    // float z_min; // para North (height--)
 
     switch (cardinal) {
         case CARDINAL::NORTH:
             if (h != 0) {
                 val_target = this->data[this->getIndexVal(w, h - 1)];
                 if (val_target == 1) {
-                    x_min = w * 10;
-                    x_max = x_min + 10;
-                    y_min = (h - 1) * 10;
-                    y_max = y_min + 10;
-                    norm = glm::vec3(0.0f, 1.0f, 0.0f);
-                    vl.push_back({glm::vec3(x_min, altura_max, y_min), norm, glm::vec2(0, 0)}); // np0
-                    vl.push_back({glm::vec3(x_max, altura_max, y_min), norm, glm::vec2(1, 0)}); // np1
-                    vl.push_back({glm::vec3(x_max, altura_min, y_min), norm, glm::vec2(1, 1)}); // np2
-                    vl.push_back({glm::vec3(x_min, altura_min, y_min), norm, glm::vec2(0, 1)}); // np3
+
+                    float x_min = (w * sizeBlock) - halfSizeX;
+                    float x_max = x_min + sizeBlock;
+                    float z_min = ((h - 1) * halfSizeX) - halfSizeZ;
+                    float z_max = z_min + sizeBlock;
+
+                    glm::vec3 norm = glm::vec3(0.0f, 0.0f, 1.0f);
+                    vl.push_back({glm::vec3(x_min, y_min, z_min), norm, glm::vec2(0, 0)}); // np0
+                    vl.push_back({glm::vec3(x_max, y_min, z_min), norm, glm::vec2(1, 0)}); // np1
+                    vl.push_back({glm::vec3(x_max, y_max, z_min), norm, glm::vec2(1, 1)}); // np2
+                    vl.push_back({glm::vec3(x_min, y_max, z_min), norm, glm::vec2(0, 1)}); // np3
                 }
             }
             break;
@@ -82,16 +82,16 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
                 val_target = this->data[this->getIndexVal(w + 1, h)];
                 if (val_target == 1) {
 
-                    x_min = (w + 1) * 10;
-                    x_max = x_min + 10;
-                    y_min = h * 10;
-                    y_max = y_min + 10;
+                    float x_min = ((w + 1) * sizeBlock) - halfSizeX;
+                    float x_max = x_min + sizeBlock;
+                    float z_min = (h * halfSizeX) - halfSizeZ;
+                    float z_max = z_min + sizeBlock;
 
-                    norm = glm::vec3(1.0f, 0.0f, 0.0f);
-                    vl.push_back({glm::vec3(x_max, altura_max, y_min), norm, glm::vec2(0, 0)}); // ep0
-                    vl.push_back({glm::vec3(x_max, altura_max, y_max), norm, glm::vec2(1, 0)}); // ep1
-                    vl.push_back({glm::vec3(x_max, altura_min, y_max), norm, glm::vec2(1, 1)}); // ep2
-                    vl.push_back({glm::vec3(x_max, altura_min, y_min), norm, glm::vec2(0, 1)}); // ep3
+                    glm::vec3 norm = glm::vec3(1.0f, 0.0f, 0.0f);
+                    vl.push_back({glm::vec3(x_max, y_min, z_min), norm, glm::vec2(0, 0)}); // ep0
+                    vl.push_back({glm::vec3(x_max, y_min, z_max), norm, glm::vec2(1, 0)}); // ep1
+                    vl.push_back({glm::vec3(x_max, y_max, z_max), norm, glm::vec2(1, 1)}); // ep2
+                    vl.push_back({glm::vec3(x_max, y_max, z_min), norm, glm::vec2(0, 1)}); // ep3
                 }
             }
             break;
@@ -100,16 +100,16 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
                 val_target = this->data[this->getIndexVal(w, h + 1)];
                 if (val_target == 1) {
 
-                    x_min = w * 10;
-                    x_max = x_min + 10;
-                    y_min = (h + 1) * 10;
-                    y_max = y_min + 10;
+                    float x_min = (w * sizeBlock) - halfSizeX;
+                    float x_max = x_min + sizeBlock;
+                    float z_min = ((h + 1) * halfSizeX) - halfSizeZ;
+                    float z_max = z_min + sizeBlock;
 
-                    norm = glm::vec3(0.0f, -1.0f, 0.0f);
-                    vl.push_back({glm::vec3(x_max, altura_max, y_max), norm, glm::vec2(0, 0)}); // sp0
-                    vl.push_back({glm::vec3(x_min, altura_max, y_max), norm, glm::vec2(1, 0)}); // sp1
-                    vl.push_back({glm::vec3(x_min, altura_min, y_max), norm, glm::vec2(1, 1)}); // sp2
-                    vl.push_back({glm::vec3(x_max, altura_min, y_max), norm, glm::vec2(0, 1)}); // sp3
+                    glm::vec3 norm = glm::vec3(0.0f, 0.0f, -1.0f);
+                    vl.push_back({glm::vec3(x_min, y_min, z_max), norm, glm::vec2(0, 0)}); // np0
+                    vl.push_back({glm::vec3(x_max, y_min, z_max), norm, glm::vec2(1, 0)}); // np1
+                    vl.push_back({glm::vec3(x_max, y_max, z_max), norm, glm::vec2(1, 1)}); // np2
+                    vl.push_back({glm::vec3(x_min, y_max, z_max), norm, glm::vec2(0, 1)}); // np3
                 }
             }
             break;
@@ -118,16 +118,16 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
                 val_target = this->data[this->getIndexVal(w - 1, h)];
                 if (val_target == 1) {
 
-                    x_min = (w - 1) * 10;
-                    x_max = x_min + 10;
-                    y_min = h * 10;
-                    y_max = y_min + 10;
+                    float x_min = ((w - 1) * sizeBlock) - halfSizeX;
+                    float x_max = x_min + sizeBlock;
+                    float z_min = (h * halfSizeX) - halfSizeZ;
+                    float z_max = z_min + sizeBlock;
 
-                    norm = glm::vec3(-1.0f, 1.0f, 0.0f);
-                    vl.push_back({glm::vec3(x_min, altura_max, y_max), norm, glm::vec2(0, 1)}); // wp0
-                    vl.push_back({glm::vec3(x_min, altura_max, y_min), norm, glm::vec2(1, 1)}); // wp1
-                    vl.push_back({glm::vec3(x_min, altura_min, y_min), norm, glm::vec2(1, 0)}); // wp2
-                    vl.push_back({glm::vec3(x_min, altura_min, y_max), norm, glm::vec2(0, 0)}); // wp3
+                    glm::vec3 norm = glm::vec3(-1.0f, 0.0f, 0.0f);
+                    vl.push_back({glm::vec3(x_min, y_min, z_min), norm, glm::vec2(0, 0)}); // ep0
+                    vl.push_back({glm::vec3(x_min, y_min, z_max), norm, glm::vec2(1, 0)}); // ep1
+                    vl.push_back({glm::vec3(x_min, y_max, z_max), norm, glm::vec2(1, 1)}); // ep2
+                    vl.push_back({glm::vec3(x_min, y_max, z_min), norm, glm::vec2(0, 1)}); // ep3
                 }
             }
             break;

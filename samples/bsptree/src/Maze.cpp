@@ -106,10 +106,10 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
                     float z_max = z_min + sizeBlock;
 
                     glm::vec3 norm = glm::vec3(0.0f, 0.0f, -1.0f);
-                    vl.push_back({glm::vec3(x_min, y_min, z_max), norm, glm::vec2(0, 0)}); // np0
-                    vl.push_back({glm::vec3(x_max, y_min, z_max), norm, glm::vec2(1, 0)}); // np1
-                    vl.push_back({glm::vec3(x_max, y_max, z_max), norm, glm::vec2(1, 1)}); // np2
-                    vl.push_back({glm::vec3(x_min, y_max, z_max), norm, glm::vec2(0, 1)}); // np3
+                    vl.push_back({glm::vec3(x_min, y_min, z_max), norm, glm::vec2(1, 0)}); // np0
+                    vl.push_back({glm::vec3(x_max, y_min, z_max), norm, glm::vec2(0, 0)}); // np1
+                    vl.push_back({glm::vec3(x_max, y_max, z_max), norm, glm::vec2(0, 1)}); // np2
+                    vl.push_back({glm::vec3(x_min, y_max, z_max), norm, glm::vec2(1, 1)}); // np3
                 }
             }
             break;
@@ -124,10 +124,10 @@ void Maze::newWall(CARDINAL cardinal, uint32_t w, uint32_t h) {
                     float z_max = z_min + sizeBlock;
 
                     glm::vec3 norm = glm::vec3(-1.0f, 0.0f, 0.0f);
-                    vl.push_back({glm::vec3(x_min, y_min, z_min), norm, glm::vec2(0, 0)}); // ep0
-                    vl.push_back({glm::vec3(x_min, y_min, z_max), norm, glm::vec2(1, 0)}); // ep1
-                    vl.push_back({glm::vec3(x_min, y_max, z_max), norm, glm::vec2(1, 1)}); // ep2
-                    vl.push_back({glm::vec3(x_min, y_max, z_min), norm, glm::vec2(0, 1)}); // ep3
+                    vl.push_back({glm::vec3(x_min, y_min, z_min), norm, glm::vec2(1, 0)}); // ep0
+                    vl.push_back({glm::vec3(x_min, y_min, z_max), norm, glm::vec2(0, 0)}); // ep1
+                    vl.push_back({glm::vec3(x_min, y_max, z_max), norm, glm::vec2(0, 1)}); // ep2
+                    vl.push_back({glm::vec3(x_min, y_max, z_min), norm, glm::vec2(1, 1)}); // ep3
                 }
             }
             break;

@@ -82,7 +82,7 @@ void Game::start() {
 
     pTex->init();
 
-    Maze maze = Maze("./data/maze1.txt");
+    Maze maze = Maze("./data/maze0.txt");
     maze.createMap();
 
     Chimera::MeshData m;
@@ -114,7 +114,7 @@ void Game::start() {
     // vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
     vertexDataIndexCompile(maze.vertexData, vVertexIndexed, vIndex);
 
-    bspTree.create(false, vVertexIndexed, vIndex);
+    bspTree.create(true, vVertexIndexed, vIndex);
 
     // -------
     // Cria o BSP usando um vertes sequencial sem indice

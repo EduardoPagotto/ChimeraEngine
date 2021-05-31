@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "Maze.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/utils.hpp"
@@ -99,6 +100,9 @@ void Game::start() {
     //                        1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
     //                        1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,  // marca
     //                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // marca
+
+    Maze maze = Maze("./data/maze0.txt");
+    maze.createMap();
 
     Chimera::MeshData m;
     std::vector<Chimera::Triangle> listPolygons;

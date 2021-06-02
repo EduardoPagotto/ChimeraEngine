@@ -183,7 +183,9 @@ Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
     } // end while splitter
 
-    selectedTriangle->beenUsedAsSplitter = true;
+    if (selectedTriangle != nullptr)
+        selectedTriangle->beenUsedAsSplitter = true;
+
     return selectedTriangle;
 }
 
@@ -273,7 +275,7 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     _pTriangle = nullptr;
 }
 
-bool BspTree::isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly) {
+bool BspTree::isConvex(std::list<Triangle*>& _vTriangle) {
 
     if (_vTriangle.size() <= 1)
         return false;
@@ -288,7 +290,10 @@ bool BspTree::isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly) {
 
         for (std::list<Triangle*>::iterator j = i; j != _vTriangle.end(); j++) {
 
-            th2 = (i != j) ? (*j) : _poly; // Test hyperplane is Convex too in coincident index
+            if (i == j)
+                continue;
+
+            th2 = (*j);
 
             glm::vec3 u = th1->getNormal();
             glm::vec3 v = th2->getNormal();
@@ -349,7 +354,7 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
     }
 
     // Verify if all triangles front are convex
-    if (isConvex(front_list, poly) == true) {
+    if (isConvex(front_list) == true) {
 
         // next front only have conves set
         BSPTreeNode* convex = new BSPTreeNode(tree->hyperPlane);
@@ -388,38 +393,53 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
     if (_vTriangle.empty() == true)
         return nullptr;
 
-    Triangle* poly = nullptr;
     std::list<Triangle*> front_list;
     std::list<Triangle*> back_list;
+    Triangle* poly = nullptr;
+    BSPTreeNode* tree = nullptr;
 
     Triangle* best = selectBestSplitter(_vTriangle);
-    BSPTreeNode* tree = new BSPTreeNode(Plane(best->position(vVertex, 0), best->getNormal()));
+    if (best != nullptr) {
+        tree = new BSPTreeNode(Plane(best->position(vVertex, 0), best->getNormal()));
+        while (_vTriangle.empty() == false) {
 
-    while (_vTriangle.empty() == false) {
-
-        poly = _vTriangle.back();
-        _vTriangle.pop_back();
-        glm::vec3 result;
-        SIDE clipTest = tree->hyperPlane.classifyPoly(poly->position(vVertex, 0), // PA old poly.vertex[0].position
-                                                      poly->position(vVertex, 1), // PB
-                                                      poly->position(vVertex, 2), // PC
-                                                      &result);                   // Clip Test Result (A,B,C)
-        switch (clipTest) {
-            case SIDE::CP_BACK:
-                back_list.push_front(poly);
-                break;
-            case SIDE::CP_FRONT:
-                front_list.push_front(poly);
-                break;
-            case SIDE::CP_ONPLANE: {
-                if (tree->hyperPlane.collinearNormal(poly->getNormal()) == true)
-                    front_list.push_front(poly);
-                else
+            poly = _vTriangle.back();
+            _vTriangle.pop_back();
+            glm::vec3 result;
+            SIDE clipTest = tree->hyperPlane.classifyPoly(poly->position(vVertex, 0), // PA old poly.vertex[0].position
+                                                          poly->position(vVertex, 1), // PB
+                                                          poly->position(vVertex, 2), // PC
+                                                          &result);                   // Clip Test Result (A,B,C)
+            switch (clipTest) {
+                case SIDE::CP_BACK:
                     back_list.push_front(poly);
-            } break;
-            default:
-                splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
-                break;
+                    break;
+                case SIDE::CP_FRONT:
+                    front_list.push_front(poly);
+                    break;
+                case SIDE::CP_ONPLANE: {
+                    if (tree->hyperPlane.collinearNormal(poly->getNormal()) == true)
+                        front_list.push_front(poly);
+                    else
+                        back_list.push_front(poly);
+                } break;
+                default:
+                    splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
+                    break;
+            }
+        }
+    } else {
+        // TOOD funciona ????
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Falha no BackFace");
+        bool primeiro = true;
+        while (_vTriangle.empty() == false) {
+            poly = _vTriangle.back();
+            _vTriangle.pop_back();
+            if (primeiro == true) {
+                tree = new BSPTreeNode(Plane(poly->position(vVertex, 0), poly->getNormal()));
+                primeiro = false;
+            }
+            front_list.push_front(poly);
         }
     }
 

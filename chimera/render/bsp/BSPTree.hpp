@@ -22,7 +22,7 @@ class BspTree {
 
   private:
     BSPTreeNode* build(std::list<Triangle*>& _vTriangle);
-    bool isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly);
+    bool isConvex(std::list<Triangle*>& _vTriangle);
     BSPTreeNode* buildLeafy(std::list<Triangle*>& _vTriangle);
 
     void drawPolygon(BSPTreeNode* tree, bool frontSide);

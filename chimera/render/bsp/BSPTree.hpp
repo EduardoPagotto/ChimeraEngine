@@ -29,11 +29,8 @@ class BspTree {
     void traverseTree(BSPTreeNode* tree, glm::vec3* pos);
 
     void collapse(BSPTreeNode* tree);
-    Plane selectBestSplitter(std::list<Triangle*>& _vTriangle);
+    Triangle* selectBestSplitter(std::list<Triangle*>& _vTriangle);
     void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
-
-    inline glm::vec3 vPosVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]].position; }
-    inline VertexData vVerVal(Triangle* _t, const unsigned& pos) { return vVertex[_t->p[pos]]; }
 
     // TODO: Testar!!!!!!
     bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);

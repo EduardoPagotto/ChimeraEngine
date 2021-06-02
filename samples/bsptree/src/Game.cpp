@@ -90,9 +90,9 @@ void Game::start() {
     Chimera::LoaderObj loader;
     // loader.getMesh("./data/models/tela01.obj", m); // quadrado simples pequeno
     // loader.getMesh("./data/models/salaSplit3.obj", m); // Sala L com Split apenas triangulos
-    // loader.getMesh("./data/models/map02.obj", m); // Sala com 5 espacos em forma de X
+    loader.getMesh("./data/models/map02.obj", m); // Sala com 5 espacos em forma de X
     // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para EPSILON 1e-2
-    loader.getMesh("./data/models/square2.obj", m); // 2 quadrado teste de split lateral
+    // loader.getMesh("./data/models/square2.obj", m); // 2 quadrado teste de split lateral
     // loader.getMesh("./data/models/square1.obj", m); // 2 quadrado teste de split centro
     // loader.getMesh("./data/models/split1.obj", m); // 2 triangulos sem textura
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
@@ -111,7 +111,7 @@ void Game::start() {
     vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
     // vertexDataIndexCompile(maze.vertexData, vVertexIndexed, vIndex);
 
-    bspTree.create(true, vVertexIndexed, vIndex);
+    bspTree.create(false, vVertexIndexed, vIndex);
 
     // -------
     // Cria o BSP usando um vertes sequencial sem indice

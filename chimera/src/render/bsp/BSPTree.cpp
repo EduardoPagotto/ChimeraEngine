@@ -134,34 +134,28 @@ void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool 
     traverseTree(root, eye);
 }
 
-Plane BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
+Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
-    if (_vTriangle.size() == 0)
-        return Plane();
+    unsigned int bestScore = 100000;                // just set to a very high value to begin
+    Triangle* selectedTriangle = nullptr;           // poit to none
+    glm::vec3 temp;                                 // inutil
+    long long score, splits, backfaces, frontfaces; // counts
 
-    std::list<Triangle*>::iterator selectedPoly;
-    unsigned int bestScore = 100000; // just set to a very high value to begin
-    glm::vec3 temp;                  // inutil
+    for (Triangle* th : _vTriangle) {
 
-    for (std::list<Triangle*>::iterator indice_splitter = _vTriangle.begin(); indice_splitter != _vTriangle.end(); indice_splitter++) {
-
-        Triangle* th = (*indice_splitter); //_vTriangle[indice_splitter];
         if (th->beenUsedAsSplitter == true)
             continue;
 
-        Plane hyperPlane(vPosVal(th, 0), th->getNormal());
-
-        long long score, splits, backfaces, frontfaces;
         score = splits = backfaces = frontfaces = 0;
 
-        for (std::list<Triangle*>::iterator indice_current = _vTriangle.begin(); indice_current != _vTriangle.end(); indice_current++) {
-            if (indice_current != indice_splitter) {
+        Plane hyperPlane(th->position(vVertex, 0), th->getNormal());
 
-                Triangle* currentPoly = (*indice_current);
-                SIDE result = hyperPlane.classifyPoly(vPosVal(currentPoly, 0), // PA
-                                                      vPosVal(currentPoly, 1), // PB
-                                                      vPosVal(currentPoly, 2), // PC
-                                                      &temp);                  // Clip Test Result (A,B,C)
+        for (Triangle* currentPoly : _vTriangle) {
+            if (currentPoly != th) {
+                SIDE result = hyperPlane.classifyPoly(currentPoly->position(vVertex, 0), // PA
+                                                      currentPoly->position(vVertex, 1), // PB
+                                                      currentPoly->position(vVertex, 2), // PC
+                                                      &temp);                            // Clip Test Result (A,B,C)
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;
@@ -184,14 +178,13 @@ Plane BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
         if (score < bestScore) {
             bestScore = score;
-            selectedPoly = indice_splitter;
+            selectedTriangle = th;
         }
 
     } // end while splitter
 
-    Triangle* th = (*selectedPoly);
-    th->beenUsedAsSplitter = true;
-    return Plane(vPosVal(th, 0), th->getNormal());
+    selectedTriangle->beenUsedAsSplitter = true;
+    return selectedTriangle;
 }
 
 void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle) {
@@ -208,29 +201,29 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
 
     // Pega pontos posicao original e inteseccao
     glm::vec3 A, B;
-    glm::vec3 a = vPosVal(_pTriangle, 0);
-    glm::vec3 b = vPosVal(_pTriangle, 1);
-    glm::vec3 c = vPosVal(_pTriangle, 2);
+    glm::vec3 a = _pTriangle->position(vVertex, 0);
+    glm::vec3 b = _pTriangle->position(vVertex, 1);
+    glm::vec3 c = _pTriangle->position(vVertex, 2);
 
     // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
-    if (fx.x * fx.z >= 0) {             // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
-        swapFace(b, c);                 //   troca b com c
-        swapFace(a, b);                 //   troca a com b
-        vertA = vVerVal(_pTriangle, 2); //   old c
-        vertB = vVerVal(_pTriangle, 0); //   old a
-        vertC = vVerVal(_pTriangle, 1); //   old b
+    if (fx.x * fx.z >= 0) {                     // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
+        swapFace(b, c);                         //   troca b com c
+        swapFace(a, b);                         //   troca a com b
+        vertA = _pTriangle->vertex(vVertex, 2); //   old c
+        vertB = _pTriangle->vertex(vVertex, 0); //   old a
+        vertC = _pTriangle->vertex(vVertex, 1); //   old b
 
-    } else if (fx.y * fx.z >= 0) {      // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
-        swapFace(a, c);                 //   troca A com C
-        swapFace(a, b);                 //   torca a com b
-        vertA = vVerVal(_pTriangle, 1); //   old b
-        vertB = vVerVal(_pTriangle, 2); //   old c
-        vertC = vVerVal(_pTriangle, 0); //   old a
+    } else if (fx.y * fx.z >= 0) {              // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
+        swapFace(a, c);                         //   troca A com C
+        swapFace(a, b);                         //   torca a com b
+        vertA = _pTriangle->vertex(vVertex, 1); //   old b
+        vertB = _pTriangle->vertex(vVertex, 2); //   old c
+        vertC = _pTriangle->vertex(vVertex, 0); //   old a
 
-    } else {                            // Cortre em a e b (pontos posicao original)
-        vertA = vVerVal(_pTriangle, 0); //   old a
-        vertB = vVerVal(_pTriangle, 1); //   old b
-        vertC = vVerVal(_pTriangle, 2); //   old c
+    } else {                                    // Cortre em a e b (pontos posicao original)
+        vertA = _pTriangle->vertex(vVertex, 0); //   old a
+        vertB = _pTriangle->vertex(vVertex, 1); //   old b
+        vertC = _pTriangle->vertex(vVertex, 2); //   old c
     }
 
     hyperPlane.intersect(&a, &c, &A, &propAC);
@@ -302,8 +295,9 @@ bool BspTree::isConvex(std::list<Triangle*>& _vTriangle, Triangle* _poly) {
             float val = glm::dot(u, v);
             if (val > 0.0f) { // if not convex test if is coplanar
                 glm::vec3 result;
-                Plane alpha(vPosVal(th1, 0), th1->getNormal());
-                if (alpha.classifyPoly(vPosVal(th2, 0), vPosVal(th2, 1), vPosVal(th2, 2), &result) != SIDE::CP_ONPLANE)
+                Plane alpha(th1->position(vVertex, 0), th1->getNormal());
+                if (alpha.classifyPoly(th2->position(vVertex, 0), th2->position(vVertex, 1), th2->position(vVertex, 2), &result) !=
+                    SIDE::CP_ONPLANE)
                     return false;
 
                 // test if faces has oposites directions aka: convex
@@ -321,8 +315,8 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
     if (_vTriangle.empty() == true)
         return nullptr;
 
-    Plane partition = selectBestSplitter(_vTriangle);
-    BSPTreeNode* tree = new BSPTreeNode(partition);
+    Triangle* best = selectBestSplitter(_vTriangle);
+    BSPTreeNode* tree = new BSPTreeNode(Plane(best->position(vVertex, 0), best->getNormal()));
 
     std::list<Triangle*> front_list;
     std::list<Triangle*> back_list;
@@ -334,10 +328,10 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
         poly = _vTriangle.back();
         _vTriangle.pop_back();
         glm::vec3 result;
-        SIDE clipTest = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
-                                                      vPosVal(poly, 1), // PB
-                                                      vPosVal(poly, 2), // PC
-                                                      &result);         // Clip Test Result (A,B,C)
+        SIDE clipTest = tree->hyperPlane.classifyPoly(poly->position(vVertex, 0), // PA old poly.vertex[0].position
+                                                      poly->position(vVertex, 1), // PB
+                                                      poly->position(vVertex, 2), // PC
+                                                      &result);                   // Clip Test Result (A,B,C)
         switch (clipTest) {
             case SIDE::CP_BACK:
                 back_list.push_front(poly);
@@ -358,12 +352,12 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
     if (isConvex(front_list, poly) == true) {
 
         // next front only have conves set
-        BSPTreeNode* convex = new BSPTreeNode(partition);
+        BSPTreeNode* convex = new BSPTreeNode(tree->hyperPlane);
         convex->addIndexPolygon(front_list);
-        convex->front = new BSPTreeNode(partition);
+        convex->front = new BSPTreeNode(tree->hyperPlane);
         convex->front->isLeaf = true;
         convex->front->isSolid = false;
-        convex->back = new BSPTreeNode(partition);
+        convex->back = new BSPTreeNode(tree->hyperPlane);
         convex->back->isLeaf = true;
         convex->back->isSolid = true;
         tree->front = convex;
@@ -375,13 +369,13 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
     // leaf sem poligonos apenas para saber se solido ou vazio
     if (tree->front == nullptr) {
-        tree->front = new BSPTreeNode(partition);
+        tree->front = new BSPTreeNode(tree->hyperPlane);
         tree->front->isLeaf = true;
         tree->front->isSolid = false;
     }
 
     if (tree->back == nullptr) {
-        tree->back = new BSPTreeNode(partition);
+        tree->back = new BSPTreeNode(tree->hyperPlane);
         tree->back->isLeaf = true;
         tree->back->isSolid = true;
     }
@@ -394,23 +388,22 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
     if (_vTriangle.empty() == true)
         return nullptr;
 
-    Plane partition = selectBestSplitter(_vTriangle);
-    BSPTreeNode* tree = new BSPTreeNode(partition);
-
+    Triangle* poly = nullptr;
     std::list<Triangle*> front_list;
     std::list<Triangle*> back_list;
 
-    Triangle* poly = nullptr;
+    Triangle* best = selectBestSplitter(_vTriangle);
+    BSPTreeNode* tree = new BSPTreeNode(Plane(best->position(vVertex, 0), best->getNormal()));
 
     while (_vTriangle.empty() == false) {
 
         poly = _vTriangle.back();
         _vTriangle.pop_back();
         glm::vec3 result;
-        SIDE clipTest = tree->hyperPlane.classifyPoly(vPosVal(poly, 0), // PA old poly.vertex[0].position
-                                                      vPosVal(poly, 1), // PB
-                                                      vPosVal(poly, 2), // PC
-                                                      &result);         // Clip Test Result (A,B,C)
+        SIDE clipTest = tree->hyperPlane.classifyPoly(poly->position(vVertex, 0), // PA old poly.vertex[0].position
+                                                      poly->position(vVertex, 1), // PB
+                                                      poly->position(vVertex, 2), // PC
+                                                      &result);                   // Clip Test Result (A,B,C)
         switch (clipTest) {
             case SIDE::CP_BACK:
                 back_list.push_front(poly);
@@ -419,7 +412,7 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
                 front_list.push_front(poly);
                 break;
             case SIDE::CP_ONPLANE: {
-                if (partition.collinearNormal(poly->getNormal()) == true)
+                if (tree->hyperPlane.collinearNormal(poly->getNormal()) == true)
                     front_list.push_front(poly);
                 else
                     back_list.push_front(poly);
@@ -451,7 +444,7 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
     tree->back = buildLeafy(back_list);
     if (tree->back == nullptr) {
         if (tree->pLeaf == nullptr) {
-            BSPTreeNode* solid = new BSPTreeNode(partition);
+            BSPTreeNode* solid = new BSPTreeNode(tree->hyperPlane);
             solid->isSolid = true;
             tree->isLeaf = false;
             tree->back = solid;

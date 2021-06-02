@@ -4,15 +4,6 @@ namespace Chimera {
 
 u_int32_t Triangle::master = 0;
 
-// void Triangle::generateNormal() {
-//     glm::vec3 u = this->vertex[1].position - this->vertex[0].position;
-//     glm::vec3 v = this->vertex[2].position - this->vertex[0].position;
-//     glm::vec3 normal = glm::normalize(glm::cross(u, v));
-
-//     for (int i = 0; i < 3; i++)
-//         this->vertex[i].normal = normal;
-// }
-
 Triangle::Triangle(const Triangle& _val) : serial(master++) {
     this->p[0] = _val.p[0];
     this->p[1] = _val.p[1];
@@ -28,4 +19,16 @@ Triangle::Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc
     this->normal = _normal;
     this->beenUsedAsSplitter = false;
 }
+
+void Triangle::calcNormal(std::vector<VertexData>& vertexList) {
+
+    glm::vec3 u = vertexList[this->p[1]].position - vertexList[this->p[0]].position;
+    glm::vec3 v = vertexList[this->p[2]].position - vertexList[this->p[0]].position;
+    this->normal = glm::normalize(glm::cross(u, v));
+
+    vertexList[this->p[0]].normal = this->normal;
+    vertexList[this->p[1]].normal = this->normal;
+    vertexList[this->p[2]].normal = this->normal;
+}
+
 } // namespace Chimera

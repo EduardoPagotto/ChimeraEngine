@@ -17,6 +17,7 @@ struct VertexData {
 
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<unsigned int>& out_indices);
 // glm::vec3 aproxEpsilon(const glm::vec3& dado);
+void vertexDataMinMaxSize(std::vector<VertexData>& vertexList, glm::vec3& min, glm::vec3& max, glm::vec3& size);
 
 } // namespace Chimera
 #endif

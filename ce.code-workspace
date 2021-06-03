@@ -67,7 +67,8 @@
 			"numeric": "cpp",
 			"random": "cpp",
 			"set": "cpp",
-			"bit": "cpp"
+			"bit": "cpp",
+			"ranges": "cpp"
 		}
 	}
 }

@@ -1,6 +1,7 @@
 #ifndef __GAME_TESTE_MAZE__HPP
 #define __GAME_TESTE_MAZE__HPP
 
+#include "chimera/render/Triangle.hpp"
 #include "chimera/render/vbs/VertexData.hpp"
 #include <glm/glm.hpp>
 #include <stdint.h>
@@ -16,6 +17,7 @@ class Maze {
     void createMap();
 
     std::vector<Chimera::VertexData> vertexData;
+    std::vector<unsigned int> vIndex;
 
   private:
     uint32_t getIndexVal(uint32_t w, uint32_t h);
@@ -26,7 +28,7 @@ class Maze {
     uint32_t height; // Altura (linhas)
     std::vector<uint8_t> data;
 
-    // std::vector<Chimera::VertexData> vertexData;
+    std::vector<Chimera::Triangle> trisList;
 };
 
 #endif

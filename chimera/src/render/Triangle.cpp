@@ -31,4 +31,44 @@ void Triangle::calcNormal(std::vector<VertexData>& vertexList) {
     vertexList[this->p[2]].normal = this->normal;
 }
 
+// bool tringleListIsConvex(std::vector<VertexData>& vertexList, std::vector<Triangle*>& _vTriangle) {
+
+//     if (_vTriangle.size() <= 1)
+//         return false;
+
+//     Triangle* th1 = nullptr;
+//     Triangle* th2 = nullptr;
+//     float sameDir = 0.0;
+
+//     for (std::vector<Triangle*>::iterator i = _vTriangle.begin(); i != _vTriangle.end(); i++) {
+
+//         th1 = (*i);
+
+//         for (std::vector<Triangle*>::iterator j = i; j != _vTriangle.end(); j++) {
+
+//             if (i == j)
+//                 continue;
+
+//             th2 = (*j);
+
+//             glm::vec3 u = th1->getNormal();
+//             glm::vec3 v = th2->getNormal();
+//             float val = glm::dot(u, v);
+//             if (val > 0.0f) { // if not convex test if is coplanar
+//                 glm::vec3 result;
+//                 Plane alpha(th1->position(vVertex, 0), th1->getNormal());
+//                 if (alpha.classifyPoly(th2->position(vVertex, 0), th2->position(vVertex, 1), th2->position(vVertex, 2), &result) !=
+//                     SIDE::CP_ONPLANE)
+//                     return false;
+
+//                 // test if faces has oposites directions aka: convex
+//                 if (alpha.collinearNormal(th1->getNormal()) == false)
+//                     return false;
+//             }
+//         }
+//     }
+
+//     return true;
+// }
+
 } // namespace Chimera

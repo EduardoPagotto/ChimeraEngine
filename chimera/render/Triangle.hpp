@@ -33,5 +33,8 @@ class Triangle {
     uint32_t serial;
     static uint32_t master;
 };
+
+// bool tringleListIsConvex(std::vector<VertexData>& vertexList, std::vector<Triangle*>& _vTriangle);
+
 } // namespace Chimera
 #endif

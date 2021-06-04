@@ -17,7 +17,7 @@ BspTree::BspTree() {
 
 BspTree::~BspTree() { this->destroy(); }
 
-void BspTree::create(bool leafy, std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
+void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
 
     std::list<Triangle*> vTris;
     vVertex = _vVertex;
@@ -61,10 +61,7 @@ void BspTree::create(bool leafy, std::vector<Chimera::VertexData>& _vVertex, con
         }
     }
 
-    if (leafy == false)
-        root = build(vTris);
-    else
-        root = buildLeafy(vTris);
+    root = buildLeafy(vTris);
 }
 
 void BspTree::destroy() { collapse(root); }
@@ -273,119 +270,6 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     // Remove orininal
     delete _pTriangle;
     _pTriangle = nullptr;
-}
-
-bool BspTree::isConvex(std::list<Triangle*>& _vTriangle) {
-
-    if (_vTriangle.size() <= 1)
-        return false;
-
-    Triangle* th1 = nullptr;
-    Triangle* th2 = nullptr;
-    float sameDir = 0.0;
-
-    for (std::list<Triangle*>::iterator i = _vTriangle.begin(); i != _vTriangle.end(); i++) {
-
-        th1 = (*i);
-
-        for (std::list<Triangle*>::iterator j = i; j != _vTriangle.end(); j++) {
-
-            if (i == j)
-                continue;
-
-            th2 = (*j);
-
-            glm::vec3 u = th1->getNormal();
-            glm::vec3 v = th2->getNormal();
-            float val = glm::dot(u, v);
-            if (val > 0.0f) { // if not convex test if is coplanar
-                glm::vec3 result;
-                Plane alpha(th1->position(vVertex, 0), th1->getNormal());
-                if (alpha.classifyPoly(th2->position(vVertex, 0), th2->position(vVertex, 1), th2->position(vVertex, 2), &result) !=
-                    SIDE::CP_ONPLANE)
-                    return false;
-
-                // test if faces has oposites directions aka: convex
-                if (alpha.collinearNormal(th1->getNormal()) == false)
-                    return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
-
-    if (_vTriangle.empty() == true)
-        return nullptr;
-
-    Triangle* best = selectBestSplitter(_vTriangle);
-    BSPTreeNode* tree = new BSPTreeNode(Plane(best->position(vVertex, 0), best->getNormal()));
-
-    std::list<Triangle*> front_list;
-    std::list<Triangle*> back_list;
-
-    Triangle* poly = nullptr;
-
-    while (_vTriangle.empty() == false) {
-
-        poly = _vTriangle.back();
-        _vTriangle.pop_back();
-        glm::vec3 result;
-        SIDE clipTest = tree->hyperPlane.classifyPoly(poly->position(vVertex, 0), // PA old poly.vertex[0].position
-                                                      poly->position(vVertex, 1), // PB
-                                                      poly->position(vVertex, 2), // PC
-                                                      &result);                   // Clip Test Result (A,B,C)
-        switch (clipTest) {
-            case SIDE::CP_BACK:
-                back_list.push_front(poly);
-                break;
-            case SIDE::CP_FRONT:
-                front_list.push_front(poly);
-                break;
-            case SIDE::CP_ONPLANE:
-                tree->addPolygon(poly);
-                break;
-            default:
-                splitTriangle(result, poly, tree->hyperPlane, _vTriangle);
-                break;
-        }
-    }
-
-    // Verify if all triangles front are convex
-    if (isConvex(front_list) == true) {
-
-        // next front only have conves set
-        BSPTreeNode* convex = new BSPTreeNode(tree->hyperPlane);
-        convex->addIndexPolygon(front_list);
-        convex->front = new BSPTreeNode(tree->hyperPlane);
-        convex->front->isLeaf = true;
-        convex->front->isSolid = false;
-        convex->back = new BSPTreeNode(tree->hyperPlane);
-        convex->back->isLeaf = true;
-        convex->back->isSolid = true;
-        tree->front = convex;
-    } else {
-        tree->front = build(front_list);
-    }
-
-    tree->back = build(back_list);
-
-    // leaf sem poligonos apenas para saber se solido ou vazio
-    if (tree->front == nullptr) {
-        tree->front = new BSPTreeNode(tree->hyperPlane);
-        tree->front->isLeaf = true;
-        tree->front->isSolid = false;
-    }
-
-    if (tree->back == nullptr) {
-        tree->back = new BSPTreeNode(tree->hyperPlane);
-        tree->back->isLeaf = true;
-        tree->back->isSolid = true;
-    }
-
-    return tree;
 }
 
 BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {

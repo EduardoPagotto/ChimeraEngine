@@ -15,14 +15,12 @@ class BspTree {
   public:
     BspTree();
     virtual ~BspTree();
-    void create(bool leafy, std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
+    void create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
     void destroy();
 
     void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
 
   private:
-    BSPTreeNode* build(std::list<Triangle*>& _vTriangle);
-    bool isConvex(std::list<Triangle*>& _vTriangle);
     BSPTreeNode* buildLeafy(std::list<Triangle*>& _vTriangle);
 
     void drawPolygon(BSPTreeNode* tree, bool frontSide);

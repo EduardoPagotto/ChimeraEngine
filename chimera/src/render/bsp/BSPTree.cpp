@@ -52,6 +52,7 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
     }
 
     root = buildLeafy(vTris);
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
 }
 
 void BspTree::destroy() {
@@ -365,8 +366,20 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
     tree->leafIndex = vpLeaf.size();
     vpLeaf.push_back(pLeaf);
 
+    glm::vec3 min, max, size;
+    vertexDataIndexMinMaxSize(vVertex, pLeaf->index, min, max, size);
+    AABB* pAABB = new AABB(min, max);
+    tree->aabbIndex = vpAABB.size();
+    vpAABB.push_back(pAABB);
+
     tree->isSolid = false;
     tree->isLeaf = true;
+}
+
+void BspTree::renderAABB() {
+    for (AABB* pAABB : this->vpAABB) {
+        pAABB->render();
+    }
 }
 
 bool BspTree::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {

@@ -5,6 +5,7 @@
 // https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
 #include "Leaf.hpp"
+#include "chimera/render/AABB.hpp"
 #include "chimera/render/vbs/VertexData.hpp"
 #include <list>
 #include <vector>
@@ -17,8 +18,8 @@ class BspTree {
     virtual ~BspTree();
     void create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
     void destroy();
-
     void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
+    void renderAABB();
 
   private:
     BSPTreeNode* buildLeafy(std::list<Triangle*>& _vTriangle);
@@ -37,10 +38,10 @@ class BspTree {
 
     bool logdata;
     BSPTreeNode* root;
-
     std::vector<Chimera::VertexData> vVertex;
     std::vector<VertexData>* resultVertex;
     std::vector<Leaf*> vpLeaf;
+    std::vector<AABB*> vpAABB;
 };
 
 } // namespace Chimera

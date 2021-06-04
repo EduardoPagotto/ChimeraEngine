@@ -33,11 +33,6 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
             // Calcula Normal Face
             glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
             glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-
-            // glm::vec3 u = vVertex[pb].position - vVertex[pa].position;
-            // glm::vec3 v = vVertex[pc].position - vVertex[pa].position;
-            // glm::vec3 normal2 = glm::normalize(glm::cross(u, v));
-
             vTris.push_back(new Triangle(pa, pb, pc, normal));
         }
 
@@ -52,11 +47,6 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
             // Calcula Normal Face
             glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
             glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-
-            // glm::vec3 u = vVertex[pb].position - vVertex[pa].position;
-            // glm::vec3 v = vVertex[pc].position - vVertex[pa].position;
-            // glm::vec3 normal2 = glm::normalize(glm::cross(u, v));
-
             vTris.push_back(new Triangle(pa, pb, pc, normal));
         }
     }
@@ -112,10 +102,6 @@ void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
 
     if (tree->isSolid == true)
         return;
-
-    // no de indicador de final/solido
-    // if (tree->pLeaf == nullptr)
-    //     return;
 
     SIDE result = tree->hyperPlane.classifyPoint(pos);
     switch (result) {
@@ -256,28 +242,28 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     vVertex.push_back({a, vertA.normal, vertA.texture}); // T1 PA
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T1 PB
     vVertex.push_back({A, vertA.normal, texA});          // T1 PC
-    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+
     Triangle* th1 = new Triangle(last++, last++, last++, normal);
     th1->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_front(th1); // TODO :Testar se é isto mesmo
+    _vTriangle.push_front(th1);
 
-    // //-- T2 Triangle T2(b, B, A);
+    //-- T2 Triangle T2(b, B, A);
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T2 PA
     vVertex.push_back({B, vertB.normal, texB});          // T2 PB
     vVertex.push_back({A, vertA.normal, texA});          // T2 PC
-    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+
     Triangle* th2 = new Triangle(last++, last++, last++, normal);
     th2->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_front(th2); // TODO :Testar se é isto mesmo
+    _vTriangle.push_front(th2);
 
-    // // -- T3 Triangle T3(A, B, c);
+    // -- T3 Triangle T3(A, B, c);
     vVertex.push_back({A, vertA.normal, texA});          // T3 PA
     vVertex.push_back({B, vertB.normal, texB});          // T3 PB
     vVertex.push_back({c, vertC.normal, vertC.texture}); // T3 PC
-    //_vTriangle.push_back(new Triangle(last++, last++, last++, normal));
+
     Triangle* th3 = new Triangle(last++, last++, last++, normal);
     th3->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_front(th3); // TODO :Testar se é isto mesmo
+    _vTriangle.push_front(th3);
 
     // Remove orininal
     delete _pTriangle;
@@ -325,7 +311,7 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
             }
         }
     } else {
-        // TOOD funciona ????
+        // FIXME: used only to test broken vertexdata map
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Falha no BackFace");
         bool primeiro = true;
         while (_vTriangle.empty() == false) {
@@ -343,7 +329,6 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
     for (auto th : front_list) {
         if (th->beenUsedAsSplitter == false)
             count++;
-        // break; //TODO: testar se mais eficiente a contar todos
     }
 
     if (count == 0) {

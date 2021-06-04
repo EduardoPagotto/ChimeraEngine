@@ -16,7 +16,6 @@ set (RenderSource 	Triangle.cpp
 					Octree.cpp
 					bsp/Leaf.cpp
 					bsp/BSPTree.cpp
-					bsp/BSPTreeNode.cpp
 					vbs/VertexNode.cpp
 					vbs/VAO.cpp
 					vbs/EBO.cpp

@@ -3,8 +3,8 @@
 
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
-
 #include "BSPTreeNode.hpp"
+#include "Leaf.hpp"
 #include "chimera/render/vbs/VertexData.hpp"
 #include <list>
 #include <vector>
@@ -30,6 +30,8 @@ class BspTree {
     Triangle* selectBestSplitter(std::list<Triangle*>& _vTriangle);
     void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
 
+    void createLeafy(BSPTreeNode* tree, std::list<Triangle*>& _vTriangle);
+
     // TODO: Testar!!!!!!
     bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
 
@@ -38,6 +40,7 @@ class BspTree {
 
     std::vector<Chimera::VertexData> vVertex;
     std::vector<VertexData>* resultVertex;
+    std::vector<Leaf*> vpLeaf;
 };
 
 } // namespace Chimera

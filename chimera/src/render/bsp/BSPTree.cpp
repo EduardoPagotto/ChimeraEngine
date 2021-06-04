@@ -64,7 +64,19 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
     root = buildLeafy(vTris);
 }
 
-void BspTree::destroy() { collapse(root); }
+void BspTree::destroy() {
+
+    while (!vpLeaf.empty()) {
+
+        Leaf* pLeaf = vpLeaf.back();
+        vpLeaf.pop_back();
+
+        delete pLeaf;
+        pLeaf = nullptr;
+    }
+
+    collapse(root);
+}
 
 void BspTree::collapse(BSPTreeNode* tree) {
 
@@ -83,13 +95,13 @@ void BspTree::collapse(BSPTreeNode* tree) {
 
 void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
-    if (tree->pLeaf == nullptr)
+    if (tree->isLeaf == false)
         return;
 
     if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", tree->pLeaf->index.size());
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", vpLeaf[tree->leafIndex]->index.size()); // tree->pLeaf->index.size());
 
-    for (auto index : tree->pLeaf->index)
+    for (auto index : vpLeaf[tree->leafIndex]->index) // for (auto index : tree->pLeaf->index)
         resultVertex->push_back(vVertex[index]);
 }
 
@@ -335,27 +347,41 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
     }
 
     if (count == 0) {
-        // BSPTreeNode* convex = new BSPTreeNode(partition);
-        // convex->isLeaf = true;
-        // convex->isSolid = false;
-        tree->addIndexPolygon(front_list);
-        tree->isSolid = false;
-        tree->isLeaf = true;
+        createLeafy(tree, front_list);
     } else {
         tree->front = buildLeafy(front_list);
     }
 
     tree->back = buildLeafy(back_list);
     if (tree->back == nullptr) {
-        if (tree->pLeaf == nullptr) {
+        if (tree->isLeaf == false) {
             BSPTreeNode* solid = new BSPTreeNode(tree->hyperPlane);
             solid->isSolid = true;
-            tree->isLeaf = false;
             tree->back = solid;
         }
     }
 
     return tree;
+}
+
+void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTriangle) {
+
+    Leaf* pLeaf = new Leaf();
+
+    while (listConvexTriangle.empty() == false) {
+        Triangle* convPoly = listConvexTriangle.back();
+        listConvexTriangle.pop_back();
+        pLeaf->addFace(convPoly->getSerial(), convPoly->p[0], convPoly->p[1], convPoly->p[2]);
+
+        delete convPoly;
+        convPoly = nullptr;
+    }
+
+    tree->leafIndex = vpLeaf.size();
+    vpLeaf.push_back(pLeaf);
+
+    tree->isSolid = false;
+    tree->isLeaf = true;
 }
 
 bool BspTree::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {

@@ -20,7 +20,7 @@ class Maze {
     std::vector<unsigned int> vIndex;
 
   private:
-    uint32_t getIndexVal(uint32_t w, uint32_t h);
+    uint32_t getIndexVal(uint32_t d, uint32_t w, uint32_t h);
 
     void newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h);
     void newFloor(uint32_t d, uint32_t w, uint32_t h);

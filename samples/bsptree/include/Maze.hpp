@@ -8,6 +8,7 @@
 #include <vector>
 
 enum class CARDINAL { NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3 };
+enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP = 6 };
 
 class Maze {
   public:
@@ -26,7 +27,8 @@ class Maze {
     void newFloor(uint32_t d, uint32_t w, uint32_t h);
     void newCeeling(uint32_t d, uint32_t w, uint32_t h);
     glm::vec3 minimal(uint32_t d, uint32_t w, uint32_t h);
-    void makeFace(bool clockwise, std::vector<Chimera::VertexData>& vl);
+    void makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl);
+    void makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl);
 
     uint32_t width;  // Largura (colunas)
     uint32_t height; // Altura (linhas)
@@ -35,7 +37,7 @@ class Maze {
     float halfSizeX;
     float halfSizeZ;
     float halfSizeY;
-    std::vector<uint8_t> data;
+    std::vector<SPACE> data;
     std::vector<Chimera::Triangle> trisList;
 };
 

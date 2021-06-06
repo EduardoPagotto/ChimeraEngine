@@ -30,14 +30,14 @@ Maze::Maze(const char filename[]) {
 
             for (uint32_t w = 0; w < this->width; w++) {
 
-                int indice = getIndexVal(d, w, h); // w + (h * this->width) + (d * this->width * this->height);
+                int indice = getIndexVal(d, w, h);
                 if (string[w] == 0x20) {
                     // Bloco Vazio
-                    this->data.push_back(0); // this->data[indice] = 0;
+                    this->data.push_back(SPACE::EMPTY);
                 } else {
                     // parede (conversão ASCII completa)
-                    uint8_t val = (uint8_t)(string[w] - 0x30);
-                    this->data.push_back(val); // this->data[indice] = val;
+                    SPACE val = (SPACE)(string[w] - 0x30);
+                    this->data.push_back(val);
                 }
             }
         }
@@ -64,7 +64,7 @@ glm::vec3 Maze::minimal(uint32_t d, uint32_t w, uint32_t h) {
 
 void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
 
-    uint8_t val_target = 0;
+    SPACE val_target;
     bool clockwise = true;
     std::vector<Chimera::VertexData> vl;
 
@@ -75,7 +75,7 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
         case CARDINAL::NORTH:
             if (h != 0) {
                 val_target = this->data[this->getIndexVal(d, w, h - 1)];
-                if (val_target == 1) {
+                if (val_target == SPACE::WALL) {
                     // N
                     clockwise = false;
                     vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // n p0
@@ -88,7 +88,7 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
         case CARDINAL::EAST:
             if (w != this->width - 1) {
                 val_target = this->data[this->getIndexVal(d, w + 1, h)];
-                if (val_target == 1) {
+                if (val_target == SPACE::WALL) {
                     // E
                     clockwise = false;
                     vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep0
@@ -96,13 +96,13 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
                     vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep2
                     vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep3
 
-                } else if (val_target == 2) {
+                } else if (val_target == SPACE::DIAG) {
 
-                    uint8_t north = this->data[this->getIndexVal(d, w + 1, h - 1)];
-                    uint8_t east = this->data[this->getIndexVal(d, w + 2, h)];
-                    uint8_t south = this->data[this->getIndexVal(d, w + 1, h + 1)];
+                    SPACE north = this->data[this->getIndexVal(d, w + 1, h - 1)];
+                    SPACE east = this->data[this->getIndexVal(d, w + 2, h)];
+                    SPACE south = this->data[this->getIndexVal(d, w + 1, h + 1)];
 
-                    if ((north == 1) && (east == 1)) {
+                    if ((north == SPACE::WALL) && (east == SPACE::WALL)) {
 
                         // ne (diag. sup. dir.)
                         max.x += sizeBlock;
@@ -113,7 +113,7 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
                         vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // en2
                         vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // en3
 
-                    } else if ((south == 1) && (east == 1)) {
+                    } else if ((south == SPACE::WALL) && (east == SPACE::WALL)) {
                         // se (diag. inf. dir.)
                         max.x += sizeBlock;
                         min.x += sizeBlock;
@@ -129,7 +129,7 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
         case CARDINAL::SOUTH:
             if (h != this->height - 1) {
                 val_target = this->data[this->getIndexVal(d, w, h + 1)];
-                if (val_target == 1) {
+                if (val_target == SPACE::WALL) {
                     // S
                     vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // np0
                     vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // np1
@@ -141,19 +141,19 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
         case CARDINAL::WEST:
             if (w != 0) {
                 val_target = this->data[this->getIndexVal(d, w - 1, h)];
-                if (val_target == 1) {
+                if (val_target == SPACE::WALL) {
                     // W
                     vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // ep0
                     vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep1
                     vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep2
                     vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep3
-                } else if (val_target == 2) {
+                } else if (val_target == SPACE::DIAG) {
 
-                    uint8_t north = this->data[this->getIndexVal(d, w - 1, h - 1)];
-                    uint8_t west = this->data[this->getIndexVal(d, w - 2, h)];
-                    uint8_t south = this->data[this->getIndexVal(d, w - 1, h + 1)];
+                    SPACE north = this->data[this->getIndexVal(d, w - 1, h - 1)];
+                    SPACE west = this->data[this->getIndexVal(d, w - 2, h)];
+                    SPACE south = this->data[this->getIndexVal(d, w - 1, h + 1)];
 
-                    if ((south == 1) && (west == 1)) {
+                    if ((south == SPACE::WALL) && (west == SPACE::WALL)) {
                         // sw (diag. inf. esq.)
                         max.x -= sizeBlock;
                         min.x -= sizeBlock;
@@ -161,7 +161,7 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
                         vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep1
                         vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep2
                         vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep3
-                    } else if ((north == 1) && (west == 1)) {
+                    } else if ((north == SPACE::WALL) && (west == SPACE::WALL)) {
                         // nw (diag. sup. esq.)
                         max.x -= sizeBlock;
                         min.x -= sizeBlock;
@@ -176,10 +176,31 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
     }
 
     if (vl.size() > 0)
-        this->makeFace(clockwise, vl);
+        this->makeFaceSquare(clockwise, vl);
 }
 
-void Maze::makeFace(bool clockwise, std::vector<Chimera::VertexData>& vl) {
+void Maze::makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl) {
+    int pa, pb, pc, pd;
+    if (!clockwise) {
+        pa = this->trisList.size() * 2;
+        pb = pa + 1;
+        pc = pa + 2;
+    } else {
+        pc = this->trisList.size() * 2;
+        pb = pa + 1;
+        pa = pa + 2;
+    }
+
+    this->vertexData.push_back(vl[0]);
+    this->vertexData.push_back(vl[1]);
+    this->vertexData.push_back(vl[2]);
+
+    Chimera::Triangle t1 = Chimera::Triangle(pa, pb, pc, glm::vec3(0.0f));
+    t1.calcNormal(this->vertexData);
+    this->trisList.push_back(t1);
+}
+
+void Maze::makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl) {
     int pa, pb, pc, pd;
     pa = this->trisList.size() * 2;
     if (!clockwise) {
@@ -218,7 +239,7 @@ void Maze::newFloor(uint32_t d, uint32_t w, uint32_t h) {
     vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p2
     vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p3
 
-    this->makeFace(false, vl);
+    this->makeFaceSquare(false, vl);
 }
 
 void Maze::newCeeling(uint32_t d, uint32_t w, uint32_t h) {
@@ -232,7 +253,7 @@ void Maze::newCeeling(uint32_t d, uint32_t w, uint32_t h) {
     vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p2
     vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p3
 
-    this->makeFace(true, vl);
+    this->makeFaceSquare(true, vl);
 }
 
 void Maze::createMap() {
@@ -240,21 +261,18 @@ void Maze::createMap() {
     for (uint32_t d = 0; d < this->deep; d++) {
         for (uint32_t h = 0; h < this->height; h++) {
             for (uint32_t w = 0; w < this->width; w++) {
-                uint8_t val = this->data[this->getIndexVal(d, w, h)];
-                if ((val == 0) || (val == 22) || (val == 51) || (val == 54)) {
+                SPACE val = this->data[this->getIndexVal(d, w, h)];
+                if ((val == SPACE::EMPTY) || (val == SPACE::FLOOR) || (val == SPACE::CEILING) || (val == SPACE::FC)) {
                     for (uint8_t i = (uint8_t)CARDINAL::NORTH; i <= (uint8_t)CARDINAL::WEST; i++) {
                         this->newWall((CARDINAL)i, d, w, h);
                     }
                 }
 
-                if (val == 54) { // f
-                    // TODO: so piso
+                if (val == SPACE::FLOOR) {
                     this->newFloor(d, w, h);
-                } else if (val == 51) { // c
-                    // TODO: so teto
+                } else if (val == SPACE::CEILING) {
                     this->newCeeling(d, w, h);
-                } else if (val == 22) { // F
-                    // TODO: piso e teto
+                } else if (val == SPACE::FC) {
                     this->newFloor(d, w, h);
                     this->newCeeling(d, w, h);
                 }

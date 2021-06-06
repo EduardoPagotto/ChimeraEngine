@@ -97,23 +97,32 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
                     vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep3
 
                 } else if (val_target == 2) {
-                    // ne (diag. sup. dir.)
-                    max.x += sizeBlock;
-                    min.x += sizeBlock;
-                    clockwise = false;
-                    vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep0
-                    vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // ep1
-                    vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep2
-                    vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep3
-                } else if (val_target == 3) {
-                    // se (diag. inf. dir.)
-                    max.x += sizeBlock;
-                    min.x += sizeBlock;
-                    clockwise = false;
-                    vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep0
-                    vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // ep1
-                    vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep2
-                    vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep3
+
+                    uint8_t north = this->data[this->getIndexVal(d, w + 1, h - 1)];
+                    uint8_t east = this->data[this->getIndexVal(d, w + 2, h)];
+                    uint8_t south = this->data[this->getIndexVal(d, w + 1, h + 1)];
+
+                    if ((north == 1) && (east == 1)) {
+
+                        // ne (diag. sup. dir.)
+                        max.x += sizeBlock;
+                        min.x += sizeBlock;
+                        clockwise = false;
+                        vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // en0
+                        vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // en1
+                        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // en2
+                        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // en3
+
+                    } else if ((south == 1) && (east == 1)) {
+                        // se (diag. inf. dir.)
+                        max.x += sizeBlock;
+                        min.x += sizeBlock;
+                        clockwise = false;
+                        vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep0
+                        vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // ep1
+                        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep2
+                        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep3
+                    }
                 }
             }
             break;
@@ -138,24 +147,29 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
                     vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep1
                     vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep2
                     vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep3
+                } else if (val_target == 2) {
 
-                } else if (val_target == 4) {
-                    // sw (diag. inf. esq.)
-                    max.x -= sizeBlock;
-                    min.x -= sizeBlock;
-                    vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // ep0
-                    vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep1
-                    vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep2
-                    vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep3
+                    uint8_t north = this->data[this->getIndexVal(d, w - 1, h - 1)];
+                    uint8_t west = this->data[this->getIndexVal(d, w - 2, h)];
+                    uint8_t south = this->data[this->getIndexVal(d, w - 1, h + 1)];
 
-                } else if (val_target == 5) {
-                    // nw (diag. sup. esq.)
-                    max.x -= sizeBlock;
-                    min.x -= sizeBlock;
-                    vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // ep0
-                    vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep1
-                    vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep2
-                    vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep3
+                    if ((south == 1) && (west == 1)) {
+                        // sw (diag. inf. esq.)
+                        max.x -= sizeBlock;
+                        min.x -= sizeBlock;
+                        vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // ep0
+                        vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep1
+                        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep2
+                        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep3
+                    } else if ((north == 1) && (west == 1)) {
+                        // nw (diag. sup. esq.)
+                        max.x -= sizeBlock;
+                        min.x -= sizeBlock;
+                        vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // ep0
+                        vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // ep1
+                        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // ep2
+                        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // ep3
+                    }
                 }
             }
             break;

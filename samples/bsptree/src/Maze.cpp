@@ -24,21 +24,24 @@ Maze::Maze(const char filename[]) {
     fgets(string, 1024, file);
     this->deep = atoi(string);
 
+    glm::ivec3 pos(0);
+
     // carregando mapa
-    for (uint32_t d = 0; d < this->deep; d++) {
-        for (uint32_t h = 0; h < this->height; h++) {
+    for (pos.y = 0; pos.y < this->deep; pos.y++) {
+
+        for (pos.z = 0; pos.z < this->height; pos.z++) {
 
             fgets(string, 1024, file);
 
-            for (uint32_t w = 0; w < this->width; w++) {
+            for (pos.x = 0; pos.x < this->width; pos.x++) {
 
-                int indice = getIndexVal(d, w, h);
-                if (string[w] == 0x20) {
+                int indice = getIndexVal(pos.y, pos.x, pos.z);
+                if (string[pos.x] == 0x20) {
                     // Bloco Vazio
                     this->data.push_back(SPACE::EMPTY);
                 } else {
                     // parede (conversão ASCII completa)
-                    SPACE val = (SPACE)(string[w] - 0x30);
+                    SPACE val = (SPACE)(string[pos.x] - 0x30);
                     this->data.push_back(val);
                 }
             }
@@ -62,6 +65,63 @@ glm::vec3 Maze::minimal(uint32_t d, uint32_t w, uint32_t h) {
     float z_min = (h * sizeBlock) - halfSizeZ; // para North (height--)
 
     return glm::vec3(x_min, y_min, z_min);
+}
+
+// // lembrar d = y;  w = x;  h = z;
+SPACE Maze::getCardinalNeighbor(DEEP deep, CARDINAL card, glm::ivec3 dist, glm::ivec3 pos) {
+
+    glm::ivec3 val;
+    switch (deep) {
+        case DEEP::UP:
+            val.y = pos.y + dist.y;
+            break;
+        case DEEP::MIDDLE:
+            val.y = pos.y;
+            break;
+        case DEEP::BOTTOM:
+            val.y = pos.y - dist.y;
+        default:
+            break;
+    }
+
+    switch (card) {
+        case CARDINAL::NORTH:
+            val.z = pos.z + dist.z;
+            break;
+        case CARDINAL::NORTH_EAST:
+            val.z = pos.z + dist.z;
+            val.x = pos.x + dist.x;
+            break;
+        case CARDINAL::EAST:
+            val.x = pos.x + dist.x;
+            break;
+        case CARDINAL::SOUTH_EAST:
+            val.z = pos.z - dist.z;
+            val.x = pos.x + dist.x;
+            break;
+        case CARDINAL::SOUTH:
+            val.z = pos.z - dist.z;
+            break;
+        case CARDINAL::SOUTH_WEST:
+            val.z = pos.z - dist.z;
+            val.x = pos.x - dist.x;
+            break;
+        case CARDINAL::WEST:
+            val.x = pos.x - dist.x;
+            break;
+        case CARDINAL::NORTH_WEST:
+            val.z = pos.z + dist.z;
+            val.x = pos.x + dist.x;
+            break;
+        default:
+            break;
+    }
+
+    if ((val.z > 0) && (val.z < this->deep) && (val.x > 0) && (val.x < this->width) && (val.y > 0) && (val.y < this->height)) {
+        return this->data[this->getIndexVal(val.y, val.x, val.z)];
+    }
+
+    return SPACE::INVALID;
 }
 
 void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {

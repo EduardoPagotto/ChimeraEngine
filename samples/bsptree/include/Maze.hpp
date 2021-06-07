@@ -7,8 +7,25 @@
 #include <stdint.h>
 #include <vector>
 
-enum class CARDINAL { NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3 };
-enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP = 6 };
+// enum class CARDINAL { NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3 };
+enum class CARDINAL {
+    NORTH = 0,      // UP
+    NORTH_EAST = 1, // RIGHT UP
+    EAST = 2,       // RIGHT
+    SOUTH_EAST = 3, // RIGHT DOWN
+    SOUTH = 4,      // DOWN
+    SOUTH_WEST = 5, // LEFT UP
+    WEST = 6,       // LEFT
+    NORTH_WEST = 7  // LEFT DOWN
+};
+
+enum class DEEP {
+    UP = 0,     // ABOVE
+    MIDDLE = 1, // LEVEL
+    BOTTOM = 2  // UNDER
+};
+
+enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP = 6, INVALID = 99 };
 
 class Maze {
   public:
@@ -29,6 +46,8 @@ class Maze {
     glm::vec3 minimal(uint32_t d, uint32_t w, uint32_t h);
     void makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl);
     void makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl);
+
+    SPACE getCardinalNeighbor(DEEP deep, CARDINAL card, glm::ivec3 dist, glm::ivec3 pos);
 
     uint32_t width;  // Largura (colunas)
     uint32_t height; // Altura (linhas)

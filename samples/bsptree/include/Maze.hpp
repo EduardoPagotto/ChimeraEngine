@@ -38,24 +38,27 @@ class Maze {
     std::vector<unsigned int> vIndex;
 
   private:
-    uint32_t getIndexVal(uint32_t d, uint32_t w, uint32_t h);
+    inline uint32_t getIndexArrayPos(const glm::ivec3& pos) const {
+        return pos.x + (pos.z * this->size.x) + (pos.y * this->size.x * this->size.z);
+    }
 
-    void newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h);
-    void newFloor(bool clockwise, uint8_t quad, uint32_t d, uint32_t w, uint32_t h);
-    void newCeeling(bool clockwise, uint8_t quad, uint32_t d, uint32_t w, uint32_t h);
-    glm::vec3 minimal(uint32_t d, uint32_t w, uint32_t h);
+    inline bool valid(const glm::ivec3& val) const {
+        return ((val.z >= 0) && (val.z < this->size.z) && (val.x >= 0) && (val.x < this->size.x) && (val.y >= 0) && (val.y < this->size.y));
+    }
+
+    void newWall(CARDINAL cardinal, const glm::ivec3& pos);
+    void newFloor(bool clockwise, uint8_t quad, const glm::ivec3& pos);
+    void newCeeling(bool clockwise, uint8_t quad, const glm::ivec3& pos);
+    glm::vec3 minimal(const glm::ivec3& pos) const;
     void makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl);
     void makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl);
+    inline SPACE getCardinal(const glm::ivec3& pos) const { return this->data[this->getIndexArrayPos(pos)]; }
+    glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
+    SPACE getCardinalNeighbor(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
 
-    SPACE getCardinalNeighbor(DEEP deep, CARDINAL card, glm::ivec3 dist, glm::ivec3 pos);
-
-    uint32_t width;  // Largura (colunas)
-    uint32_t height; // Altura (linhas)
-    uint32_t deep;   // andar
+    glm::ivec3 size;
     float sizeBlock;
-    float halfSizeX;
-    float halfSizeZ;
-    float halfSizeY;
+    glm::vec3 halfBlock;
     uint32_t indexPointCount;
     std::vector<SPACE> data;
     std::vector<Chimera::Triangle> trisList;

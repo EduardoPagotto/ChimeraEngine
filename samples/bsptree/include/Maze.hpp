@@ -25,7 +25,7 @@ class Maze {
 
     void newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h);
     void newFloor(bool clockwise, uint8_t quad, uint32_t d, uint32_t w, uint32_t h);
-    void newCeeling(uint32_t d, uint32_t w, uint32_t h);
+    void newCeeling(bool clockwise, uint8_t quad, uint32_t d, uint32_t w, uint32_t h);
     glm::vec3 minimal(uint32_t d, uint32_t w, uint32_t h);
     void makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl);
     void makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl);

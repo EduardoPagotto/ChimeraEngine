@@ -117,11 +117,12 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
 
                         SPACE cf = this->data[this->getIndexVal(d, w, h)];
                         if (cf == SPACE::CEILING) {
-                            // celling diagonal
+                            this->newCeeling(false, 0, d, w + 1, h); // celling diagonal
                         } else if (cf == SPACE::FLOOR) {
                             this->newFloor(false, 0, d, w + 1, h);
                         } else if (cf == SPACE::FC) {
-                            // flour
+                            this->newCeeling(false, 0, d, w + 1, h); // celling diagonal
+                            this->newFloor(false, 0, d, w + 1, h);
                         }
 
                     } else if ((south == SPACE::WALL) && (east == SPACE::WALL)) {
@@ -136,11 +137,12 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
 
                         SPACE cf = this->data[this->getIndexVal(d, w, h)];
                         if (cf == SPACE::CEILING) {
-                            // celling diagonal
+                            this->newCeeling(false, 1, d, w + 1, h);
                         } else if (cf == SPACE::FLOOR) {
                             this->newFloor(false, 1, d, w + 1, h);
                         } else if (cf == SPACE::FC) {
-                            // flour
+                            this->newCeeling(false, 1, d, w + 1, h);
+                            this->newFloor(false, 1, d, w + 1, h);
                         }
                     }
                 }
@@ -184,11 +186,12 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
 
                         SPACE cf = this->data[this->getIndexVal(d, w, h)];
                         if (cf == SPACE::CEILING) {
-                            // celling diagonal
+                            this->newCeeling(false, 2, d, w - 1, h);
                         } else if (cf == SPACE::FLOOR) {
                             this->newFloor(false, 2, d, w - 1, h);
                         } else if (cf == SPACE::FC) {
-                            // flour
+                            this->newCeeling(false, 2, d, w - 1, h);
+                            this->newFloor(false, 2, d, w - 1, h);
                         }
 
                     } else if ((north == SPACE::WALL) && (west == SPACE::WALL)) {
@@ -202,11 +205,12 @@ void Maze::newWall(CARDINAL cardinal, uint32_t d, uint32_t w, uint32_t h) {
 
                         SPACE cf = this->data[this->getIndexVal(d, w, h)];
                         if (cf == SPACE::CEILING) {
-                            // celling diagonal
+                            this->newCeeling(false, 3, d, w - 1, h);
                         } else if (cf == SPACE::FLOOR) {
                             this->newFloor(false, 3, d, w - 1, h);
                         } else if (cf == SPACE::FC) {
-                            // flour
+                            this->newCeeling(false, 3, d, w - 1, h);
+                            this->newFloor(false, 3, d, w - 1, h);
                         }
                     }
                 }
@@ -323,18 +327,57 @@ void Maze::newFloor(bool clockwise, uint8_t quad, uint32_t d, uint32_t w, uint32
     }
 }
 
-void Maze::newCeeling(uint32_t d, uint32_t w, uint32_t h) {
+void Maze::newCeeling(bool clockwise, uint8_t quad, uint32_t d, uint32_t w, uint32_t h) {
 
     std::vector<Chimera::VertexData> vl;
     glm::vec3 min = this->minimal(d, w, h);
     glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
 
-    vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // n p0
-    vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // n p1
-    vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p2
-    vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p3
+    if (quad == 0) {
 
-    this->makeFaceSquare(true, vl);
+        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // n p0
+        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // n p1
+        // vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p2
+        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p3
+
+        this->makeFaceTriangle(clockwise, vl);
+
+    } else if (quad == 1) {
+
+        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // n p0
+        // vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // n p1
+        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p2
+        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p3
+
+        this->makeFaceTriangle(clockwise, vl);
+
+    } else if (quad == 2) {
+
+        // vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // n p0
+        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // n p1
+        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p2
+        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p3
+
+        this->makeFaceTriangle(clockwise, vl);
+
+    } else if (quad == 3) {
+
+        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // n p0
+        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // n p1
+        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p2
+        // vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p3
+
+        this->makeFaceTriangle(clockwise, vl);
+
+    } else {
+
+        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // n p0
+        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // n p1
+        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p2
+        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p3
+
+        this->makeFaceSquare(clockwise, vl);
+    }
 }
 
 void Maze::createMap() {
@@ -352,10 +395,10 @@ void Maze::createMap() {
                 if (val == SPACE::FLOOR) {
                     this->newFloor(false, 5, d, w, h);
                 } else if (val == SPACE::CEILING) {
-                    this->newCeeling(d, w, h);
+                    this->newCeeling(true, 5, d, w, h);
                 } else if (val == SPACE::FC) {
                     this->newFloor(false, 5, d, w, h);
-                    this->newCeeling(d, w, h);
+                    this->newCeeling(true, 5, d, w, h);
                 }
             }
         }

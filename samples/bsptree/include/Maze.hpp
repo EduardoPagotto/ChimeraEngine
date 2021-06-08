@@ -46,6 +46,10 @@ class Maze {
         return ((val.z >= 0) && (val.z < this->size.z) && (val.x >= 0) && (val.x < this->size.x) && (val.y >= 0) && (val.y < this->size.y));
     }
 
+    inline bool empty(const SPACE& s) const {
+        return ((s == SPACE::EMPTY) || (s == SPACE::FLOOR) || (s == SPACE::CEILING) || (s == SPACE::FC));
+    }
+
     void newWall(CARDINAL cardinal, const glm::ivec3& pos);
     void newFloor(bool clockwise, uint8_t quad, const glm::ivec3& pos);
     void newCeeling(bool clockwise, uint8_t quad, const glm::ivec3& pos);

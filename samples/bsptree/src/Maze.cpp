@@ -151,51 +151,53 @@ void Maze::newWall(CARDINAL cardinal, const glm::ivec3& pos) {
                 vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // e p3
 
             } else if (val_target == SPACE::DIAG) {
-                SPACE north = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH_EAST, glm::ivec3(1), pos);
-                SPACE east = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(2), pos);
-                SPACE south = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH_EAST, glm::ivec3(1), pos);
+                bool isEmptyLocal = this->empty(this->getCardinal(pos));
+                bool isEmptyNE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH_EAST, glm::ivec3(1), pos));
+                bool isEmptySE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH_EAST, glm::ivec3(1), pos));
 
-                if ((north == SPACE::WALL) && (east == SPACE::WALL)) {
+                if (isEmptyLocal) {
+                    if (isEmptySE) {
 
-                    // ne (diag. sup. dir.)
-                    max.x += sizeBlock;
-                    min.x += sizeBlock;
-                    clockwise = false;
-                    vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // en p0
-                    vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // en p1
-                    vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // en p2
-                    vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // en p3
+                        // ne (diag. sup. dir.)
+                        max.x += sizeBlock;
+                        min.x += sizeBlock;
+                        clockwise = false;
+                        vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // en p0
+                        vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // en p1
+                        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // en p2
+                        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // en p3
 
-                    SPACE cf = this->getCardinal(pos);
-                    glm::ivec3 new_pos = this->getCardinalPos(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
-                    if (cf == SPACE::CEILING) {
-                        this->newCeeling(false, 0, new_pos);
-                    } else if (cf == SPACE::FLOOR) {
-                        this->newFloor(false, 0, new_pos);
-                    } else if (cf == SPACE::FC) {
-                        this->newCeeling(false, 0, new_pos);
-                        this->newFloor(false, 0, new_pos);
-                    }
+                        SPACE cf = this->getCardinal(pos);
+                        glm::ivec3 new_pos = this->getCardinalPos(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
+                        if (cf == SPACE::CEILING) {
+                            this->newCeeling(false, 0, new_pos);
+                        } else if (cf == SPACE::FLOOR) {
+                            this->newFloor(false, 0, new_pos);
+                        } else if (cf == SPACE::FC) {
+                            this->newCeeling(false, 0, new_pos);
+                            this->newFloor(false, 0, new_pos);
+                        }
 
-                } else if ((south == SPACE::WALL) && (east == SPACE::WALL)) {
-                    // se (diag. inf. dir.)
-                    max.x += sizeBlock;
-                    min.x += sizeBlock;
-                    clockwise = false;
-                    vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // se p0
-                    vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // se p1
-                    vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // se p2
-                    vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // se p3
+                    } else if (isEmptyNE) {
+                        // se (diag. inf. dir.)
+                        max.x += sizeBlock;
+                        min.x += sizeBlock;
+                        clockwise = false;
+                        vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // se p0
+                        vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // se p1
+                        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // se p2
+                        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // se p3
 
-                    SPACE cf = this->getCardinal(pos);
-                    glm::ivec3 new_pos = this->getCardinalPos(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
-                    if (cf == SPACE::CEILING) {
-                        this->newCeeling(false, 1, new_pos);
-                    } else if (cf == SPACE::FLOOR) {
-                        this->newFloor(false, 1, new_pos);
-                    } else if (cf == SPACE::FC) {
-                        this->newCeeling(false, 1, new_pos);
-                        this->newFloor(false, 1, new_pos);
+                        SPACE cf = this->getCardinal(pos);
+                        glm::ivec3 new_pos = this->getCardinalPos(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
+                        if (cf == SPACE::CEILING) {
+                            this->newCeeling(false, 1, new_pos);
+                        } else if (cf == SPACE::FLOOR) {
+                            this->newFloor(false, 1, new_pos);
+                        } else if (cf == SPACE::FC) {
+                            this->newCeeling(false, 1, new_pos);
+                            this->newFloor(false, 1, new_pos);
+                        }
                     }
                 }
             }
@@ -219,48 +221,51 @@ void Maze::newWall(CARDINAL cardinal, const glm::ivec3& pos) {
                 vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // w p2
                 vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // w p3
             } else if (val_target == SPACE::DIAG) {
-                SPACE north = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH_WEST, glm::ivec3(1), pos);
-                SPACE west = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(2), pos);
-                SPACE south = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH_WEST, glm::ivec3(1), pos);
 
-                if ((south == SPACE::WALL) && (west == SPACE::WALL)) {
-                    // sw (diag. inf. esq.)
-                    max.x -= sizeBlock;
-                    min.x -= sizeBlock;
-                    vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // sw p0
-                    vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // sw p1
-                    vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // sw p2
-                    vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // sw p3
+                bool isEmptyLocal = this->empty(this->getCardinal(pos));
+                bool isEmptyNW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH_WEST, glm::ivec3(1), pos));
+                bool isEmptySW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH_WEST, glm::ivec3(1), pos));
 
-                    SPACE cf = this->getCardinal(pos);
-                    glm::ivec3 new_pos = this->getCardinalPos(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
-                    if (cf == SPACE::CEILING) {
-                        this->newCeeling(false, 2, new_pos);
-                    } else if (cf == SPACE::FLOOR) {
-                        this->newFloor(false, 2, new_pos);
-                    } else if (cf == SPACE::FC) {
-                        this->newCeeling(false, 2, new_pos);
-                        this->newFloor(false, 2, new_pos);
-                    }
+                if (isEmptyLocal == true) {
+                    if (isEmptyNW) {
+                        // sw (diag. inf. esq.)
+                        max.x -= sizeBlock;
+                        min.x -= sizeBlock;
+                        vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // sw p0
+                        vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // sw p1
+                        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // sw p2
+                        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // sw p3
 
-                } else if ((north == SPACE::WALL) && (west == SPACE::WALL)) {
-                    // nw (diag. sup. esq.)
-                    max.x -= sizeBlock;
-                    min.x -= sizeBlock;
-                    vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // nw p0
-                    vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // nw p1
-                    vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // nw p2
-                    vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // nw p3
+                        SPACE cf = this->getCardinal(pos);
+                        glm::ivec3 new_pos = this->getCardinalPos(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
+                        if (cf == SPACE::CEILING) {
+                            this->newCeeling(false, 2, new_pos);
+                        } else if (cf == SPACE::FLOOR) {
+                            this->newFloor(false, 2, new_pos);
+                        } else if (cf == SPACE::FC) {
+                            this->newCeeling(false, 2, new_pos);
+                            this->newFloor(false, 2, new_pos);
+                        }
 
-                    SPACE cf = this->getCardinal(pos);
-                    glm::ivec3 new_pos = this->getCardinalPos(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
-                    if (cf == SPACE::CEILING) {
-                        this->newCeeling(false, 3, new_pos);
-                    } else if (cf == SPACE::FLOOR) {
-                        this->newFloor(false, 3, new_pos);
-                    } else if (cf == SPACE::FC) {
-                        this->newCeeling(false, 3, new_pos);
-                        this->newFloor(false, 3, new_pos);
+                    } else if (isEmptySW == true) {
+                        // nw (diag. sup. esq.)
+                        max.x -= sizeBlock;
+                        min.x -= sizeBlock;
+                        vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // nw p0
+                        vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // nw p1
+                        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // nw p2
+                        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // nw p3
+
+                        SPACE cf = this->getCardinal(pos);
+                        glm::ivec3 new_pos = this->getCardinalPos(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
+                        if (cf == SPACE::CEILING) {
+                            this->newCeeling(false, 3, new_pos);
+                        } else if (cf == SPACE::FLOOR) {
+                            this->newFloor(false, 3, new_pos);
+                        } else if (cf == SPACE::FC) {
+                            this->newCeeling(false, 3, new_pos);
+                            this->newFloor(false, 3, new_pos);
+                        }
                     }
                 }
             }

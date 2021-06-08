@@ -16,7 +16,8 @@ enum class CARDINAL {
     SOUTH = 4,      // DOWN
     SOUTH_WEST = 5, // LEFT UP
     WEST = 6,       // LEFT
-    NORTH_WEST = 7  // LEFT DOWN
+    NORTH_WEST = 7, // LEFT DOWN
+    NONE = 8
 };
 
 enum class DEEP {

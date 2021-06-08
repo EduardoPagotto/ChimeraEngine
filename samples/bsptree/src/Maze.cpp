@@ -335,6 +335,26 @@ void Maze::newFloor(bool clockwise, uint8_t quad, const glm::ivec3& pos) {
     glm::vec3 min = this->minimal(pos);
     glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
 
+    if (quad == 5) {
+        SPACE bottom = this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos);
+        if (bottom == SPACE::DIAG) {
+            // TODO inverter orientacao da textura
+            bool w = this->empty(this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::WEST, glm::ivec3(1), pos));
+            bool s = this->empty(this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::SOUTH, glm::ivec3(1), pos));
+            bool n = this->empty(this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NORTH, glm::ivec3(1), pos));
+            bool e = this->empty(this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::EAST, glm::ivec3(1), pos));
+
+            if (w && s)
+                quad = 2;
+            else if (n && w)
+                quad = 3;
+            else if (e && n)
+                quad = 0;
+            else if (e && s)
+                quad = 1;
+        }
+    }
+
     if (quad == 0) {
 
         vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
@@ -377,6 +397,31 @@ void Maze::newCeeling(bool clockwise, uint8_t quad, const glm::ivec3& pos) {
     std::vector<Chimera::VertexData> vl;
     glm::vec3 min = this->minimal(pos);
     glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
+
+    if (quad == 5) {
+        SPACE bottom = this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos);
+        if (bottom == SPACE::DIAG) {
+            // TODO inverter orientacao da textura
+            bool w = this->empty(this->getCardinalNeighbor(DEEP::UP, CARDINAL::WEST, glm::ivec3(1), pos));
+            bool s = this->empty(this->getCardinalNeighbor(DEEP::UP, CARDINAL::SOUTH, glm::ivec3(1), pos));
+            bool n = this->empty(this->getCardinalNeighbor(DEEP::UP, CARDINAL::NORTH, glm::ivec3(1), pos));
+            bool e = this->empty(this->getCardinalNeighbor(DEEP::UP, CARDINAL::EAST, glm::ivec3(1), pos));
+
+            if (w && s) {
+                quad = 2;
+                clockwise = !clockwise;
+            } else if (n && w) {
+                quad = 3;
+                clockwise = !clockwise;
+            } else if (e && n) {
+                quad = 0;
+                clockwise = !clockwise;
+            } else if (e && s) {
+                quad = 1;
+                clockwise = !clockwise;
+            }
+        }
+    }
 
     if (quad == 0) {
 

@@ -51,15 +51,19 @@ class Maze {
         return ((s == SPACE::EMPTY) || (s == SPACE::FLOOR) || (s == SPACE::CEILING) || (s == SPACE::FC));
     }
 
-    void newWall(CARDINAL cardinal, const glm::ivec3& pos);
-    void newFloor(bool clockwise, uint8_t quad, const glm::ivec3& pos);
-    void newCeeling(bool clockwise, uint8_t quad, const glm::ivec3& pos);
+    CARDINAL emptyQuadrantDiag(bool invert, const glm::ivec3& pos);
+    void newWall(const glm::ivec3& pos);
+    void newDiag(CARDINAL card, const glm::ivec3& pos);
+    void newFloor(bool clockwise, CARDINAL card, const glm::ivec3& pos);
+    void newCeeling(bool clockwise, CARDINAL card, const glm::ivec3& pos);
     glm::vec3 minimal(const glm::ivec3& pos) const;
     void makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl);
     void makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl);
     inline SPACE getCardinal(const glm::ivec3& pos) const { return this->data[this->getIndexArrayPos(pos)]; }
     glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
     SPACE getCardinalNeighbor(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
+
+    bool hasNeighbor(CARDINAL card, SPACE space, const glm::ivec3& pos);
 
     glm::ivec3 size;
     float sizeBlock;

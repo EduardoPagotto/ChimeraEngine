@@ -54,8 +54,8 @@ class Maze {
     CARDINAL emptyQuadrantDiag(bool invert, const glm::ivec3& pos);
     void newWall(const glm::ivec3& pos);
     void newDiag(CARDINAL card, const glm::ivec3& pos);
-    void newFloor(bool clockwise, CARDINAL card, const glm::ivec3& pos);
-    void newCeeling(bool clockwise, CARDINAL card, const glm::ivec3& pos);
+    void newFloor(CARDINAL card, const glm::ivec3& pos);
+    void newCeeling(CARDINAL card, const glm::ivec3& pos);
     glm::vec3 minimal(const glm::ivec3& pos) const;
     void makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl);
     void makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl);

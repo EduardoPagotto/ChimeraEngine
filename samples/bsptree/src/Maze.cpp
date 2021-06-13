@@ -305,7 +305,7 @@ void Maze::makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl) 
     this->indexPointCount += 4;
 }
 
-void Maze::newFloor(bool clockwise, CARDINAL card, const glm::ivec3& pos) {
+void Maze::newFloor(CARDINAL card, const glm::ivec3& pos) {
 
     std::vector<Chimera::VertexData> vl;
     glm::vec3 min = this->minimal(pos);
@@ -316,28 +316,28 @@ void Maze::newFloor(bool clockwise, CARDINAL card, const glm::ivec3& pos) {
         vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
         vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
         vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
-        this->makeFaceTriangle(clockwise, vl);
+        this->makeFaceTriangle(false, vl);
 
     } else if (card == CARDINAL::NORTH_WEST) { // uad == 1) {
 
         vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
         vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
         vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
-        this->makeFaceTriangle(clockwise, vl);
+        this->makeFaceTriangle(false, vl);
 
     } else if (card == CARDINAL::NORTH_EAST) { // quad == 2) {
 
         vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
         vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
         vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
-        this->makeFaceTriangle(clockwise, vl);
+        this->makeFaceTriangle(false, vl);
 
     } else if (card == CARDINAL::SOUTH_EAST) { // quad == 3) {
 
         vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
         vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
         vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
-        this->makeFaceTriangle(clockwise, vl);
+        this->makeFaceTriangle(false, vl);
 
     } else { // CARDINAL::NONE
 
@@ -345,11 +345,11 @@ void Maze::newFloor(bool clockwise, CARDINAL card, const glm::ivec3& pos) {
         vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
         vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
         vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
-        this->makeFaceSquare(clockwise, vl);
+        this->makeFaceSquare(false, vl);
     }
 }
 
-void Maze::newCeeling(bool clockwise, CARDINAL card, const glm::ivec3& pos) {
+void Maze::newCeeling(CARDINAL card, const glm::ivec3& pos) {
 
     std::vector<Chimera::VertexData> vl;
     glm::vec3 min = this->minimal(pos);
@@ -357,35 +357,31 @@ void Maze::newCeeling(bool clockwise, CARDINAL card, const glm::ivec3& pos) {
 
     if (card == CARDINAL::SOUTH_WEST) { // 0) {
 
-        clockwise = !clockwise;
         vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
         vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
         vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
-        this->makeFaceTriangle(clockwise, vl);
+        this->makeFaceTriangle(true, vl);
 
     } else if (card == CARDINAL::NORTH_WEST) { // quad == 1) {
 
-        clockwise = !clockwise;
         vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
         vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
         vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
-        this->makeFaceTriangle(clockwise, vl);
+        this->makeFaceTriangle(true, vl);
 
     } else if (card == CARDINAL::NORTH_EAST) { // quad == 2) {
 
-        clockwise = !clockwise;
         vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
         vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
         vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
-        this->makeFaceTriangle(clockwise, vl);
+        this->makeFaceTriangle(true, vl);
 
     } else if (card == CARDINAL::SOUTH_EAST) { // quad == 3) {
 
-        clockwise = !clockwise;
         vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
         vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
         vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
-        this->makeFaceTriangle(clockwise, vl);
+        this->makeFaceTriangle(true, vl);
 
     } else { // CARDINAL::NONE
 
@@ -393,7 +389,7 @@ void Maze::newCeeling(bool clockwise, CARDINAL card, const glm::ivec3& pos) {
         vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
         vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
         vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
-        this->makeFaceSquare(clockwise, vl);
+        this->makeFaceSquare(true, vl);
     }
 }
 // // lembrar d = y;  w = x;  h = z;
@@ -413,9 +409,9 @@ void Maze::createMap() {
                         if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos)) {
                             CARDINAL normDiag =
                                 this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
-                            this->newFloor(false, normDiag, pos);
+                            this->newFloor(normDiag, pos);
                         } else {
-                            this->newFloor(false, CARDINAL::NONE, pos);
+                            this->newFloor(CARDINAL::NONE, pos);
                         }
                         break;
                     case SPACE::CEILING:
@@ -424,30 +420,30 @@ void Maze::createMap() {
                         if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos)) {
                             CARDINAL normDiag =
                                 this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
-                            this->newCeeling(true, normDiag, pos);
+                            this->newCeeling(normDiag, pos);
                         } else {
-                            this->newCeeling(true, CARDINAL::NONE, pos);
+                            this->newCeeling(CARDINAL::NONE, pos);
                         }
 
                         break;
                     case SPACE::FC:
                         this->newWall(pos);
-                        this->newFloor(false, CARDINAL::NONE, pos);
-                        this->newCeeling(true, CARDINAL::NONE, pos);
+                        this->newFloor(CARDINAL::NONE, pos);
+                        this->newCeeling(CARDINAL::NONE, pos);
                         break;
                     case SPACE::DIAG: {
                         CARDINAL normDiag = this->emptyQuadrantDiag(false, pos);
                         this->newDiag(normDiag, pos);
 
                         if (this->hasNeighbor(normDiag, SPACE::FLOOR, pos) == true)
-                            this->newFloor(false, normDiag, pos);
+                            this->newFloor(normDiag, pos);
 
                         if (this->hasNeighbor(normDiag, SPACE::CEILING, pos) == true)
-                            this->newCeeling(true, normDiag, pos);
+                            this->newCeeling(normDiag, pos);
 
                         if (this->hasNeighbor(normDiag, SPACE::FC, pos) == true) {
-                            this->newCeeling(true, normDiag, pos);
-                            this->newFloor(false, normDiag, pos);
+                            this->newCeeling(normDiag, pos);
+                            this->newFloor(normDiag, pos);
                         }
 
                         break;

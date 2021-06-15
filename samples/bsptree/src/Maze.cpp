@@ -26,6 +26,11 @@ Maze::Maze(const char filename[]) {
 
     glm::ivec3 pos(0);
 
+    this->sizeBlock = 10.0f;
+    this->halfBlock.x = (this->size.x * sizeBlock) / 2.0f; //(w/2)
+    this->halfBlock.y = (this->size.y * sizeBlock) / 2.0f; //(d/2)
+    this->halfBlock.z = (this->size.z * sizeBlock) / 2.0f; //(h/2)
+
     // carregando mapa
     for (pos.y = 0; pos.y < this->size.y; pos.y++) {
         for (pos.z = 0; pos.z < this->size.z; pos.z++) {
@@ -34,20 +39,25 @@ Maze::Maze(const char filename[]) {
                 if (string[pos.x] == 0x20) {
                     // Bloco Vazio
                     this->data.push_back(SPACE::EMPTY);
+
+                    glm::vec3 min = this->minimal(pos);
+                    glm::vec3 max = min + sizeBlock;
+                    Cube* pCube = new Cube(SPACE::EMPTY, pos, min, max);
+                    this->vpCube.push_back(pCube);
+
                 } else {
                     // parede (conversão ASCII completa)
                     SPACE val = (SPACE)(string[pos.x] - 0x30);
                     this->data.push_back(val);
+
+                    glm::vec3 min = this->minimal(pos);
+                    glm::vec3 max = min + sizeBlock;
+                    Cube* pCube = new Cube(val, pos, min, max);
+                    this->vpCube.push_back(pCube);
                 }
             }
         }
     }
-
-    this->sizeBlock = 10.0f;
-
-    this->halfBlock.x = (this->size.x * sizeBlock) / 2.0f; //(w/2)
-    this->halfBlock.y = (this->size.y * sizeBlock) / 2.0f; //(d/2)
-    this->halfBlock.z = (this->size.z * sizeBlock) / 2.0f; //(h/2)
 }
 
 Maze::~Maze() { this->data.clear(); }
@@ -551,11 +561,11 @@ void Maze::createMap() {
                 }
             }
         }
+    }
 
-        for (Chimera::Triangle t : this->trisList) {
-            vIndex.push_back(t.p[0]);
-            vIndex.push_back(t.p[1]);
-            vIndex.push_back(t.p[2]);
-        }
+    for (Chimera::Triangle t : this->trisList) {
+        vIndex.push_back(t.p[0]);
+        vIndex.push_back(t.p[1]);
+        vIndex.push_back(t.p[2]);
     }
 }

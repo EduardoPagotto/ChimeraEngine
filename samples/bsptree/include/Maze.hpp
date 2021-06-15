@@ -1,32 +1,12 @@
 #ifndef __GAME_TESTE_MAZE__HPP
 #define __GAME_TESTE_MAZE__HPP
 
+#include "Cube.hpp"
 #include "chimera/render/Triangle.hpp"
 #include "chimera/render/vbs/VertexData.hpp"
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <vector>
-
-// enum class CARDINAL { NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3 };
-enum class CARDINAL {
-    NORTH = 0,      // UP
-    NORTH_EAST = 1, // RIGHT UP
-    EAST = 2,       // RIGHT
-    SOUTH_EAST = 3, // RIGHT DOWN
-    SOUTH = 4,      // DOWN
-    SOUTH_WEST = 5, // LEFT UP
-    WEST = 6,       // LEFT
-    NORTH_WEST = 7, // LEFT DOWN
-    NONE = 8
-};
-
-enum class DEEP {
-    UP = 0,     // ABOVE
-    MIDDLE = 1, // LEVEL
-    BOTTOM = 2  // UNDER
-};
-
-enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP = 6, INVALID = 99 };
 
 class Maze {
   public:
@@ -71,6 +51,8 @@ class Maze {
     uint32_t indexPointCount;
     std::vector<SPACE> data;
     std::vector<Chimera::Triangle> trisList;
+
+    std::vector<Cube*> vpCube;
 };
 
 #endif

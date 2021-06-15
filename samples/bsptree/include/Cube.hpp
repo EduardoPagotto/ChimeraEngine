@@ -31,28 +31,27 @@ class Cube {
     Cube(const SPACE& space, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
 
-    void addWall(CARDINAL card);
+    void addFace(bool clockwise, int num);
 
     inline SPACE getSpace() const { return this->space; }
 
-    Cube* pNorth;
-    Cube* pEast;
-    Cube* pSouth;
-    Cube* pWest;
+    // Cube* pNorth;
+    // Cube* pEast;
+    // Cube* pSouth;
+    // Cube* pWest;
 
   private:
-    void addFace(bool clockwise, int num);
-
-    glm::vec3 p[8];
-    glm::vec2 t[4];
-    std::vector<int> faces;
+    uint32_t indexPointCount;
     SPACE space;
     glm::ivec3 position;
+    glm::vec3 p[8];
+    glm::vec2 t[4];
     glm::vec3 max;
     glm::vec3 min;
-    // float sizeBlock;
-    // glm::ivec3 size;
-    // glm::vec3 halfBlock;
+    std::vector<glm::uvec3> tVertIndex;
+    std::vector<glm::uvec3> tTexIndex;
+    std::vector<Chimera::VertexData> vl;
+    std::vector<Chimera::Triangle> trisList;
 };
 
 #endif

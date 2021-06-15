@@ -21,172 +21,91 @@ Cube::Cube(const SPACE& space, const glm::ivec3& pos, const glm::vec3& min, cons
     this->t[2] = glm::vec2(1, 1);
     this->t[3] = glm::vec2(0, 1);
 
-    // f0 N
-    this->faces.push_back(0);
-    this->faces.push_back(1);
-    this->faces.push_back(2);
-    // f1 N
-    this->faces.push_back(2);
-    this->faces.push_back(3);
-    this->faces.push_back(0);
+    this->tVertIndex.push_back(glm::uvec3(0, 1, 2)); // f0 N
+    this->tVertIndex.push_back(glm::uvec3(2, 3, 0)); // f1 N
+    this->tVertIndex.push_back(glm::uvec3(1, 5, 6)); // f2 E
+    this->tVertIndex.push_back(glm::uvec3(6, 2, 1)); // f3 E
+    this->tVertIndex.push_back(glm::uvec3(4, 5, 6)); // f4 S
+    this->tVertIndex.push_back(glm::uvec3(6, 7, 4)); // f5 S
+    this->tVertIndex.push_back(glm::uvec3(0, 4, 7)); // f6 W
+    this->tVertIndex.push_back(glm::uvec3(7, 3, 0)); // f7 W
+    this->tVertIndex.push_back(glm::uvec3(3, 2, 6)); // f8 UP
+    this->tVertIndex.push_back(glm::uvec3(6, 7, 3)); // f9 UP
+    this->tVertIndex.push_back(glm::uvec3(0, 1, 5)); // f10 DOWN
+    this->tVertIndex.push_back(glm::uvec3(5, 4, 0)); // f11 DOWN
+    this->tVertIndex.push_back(glm::uvec3(0, 5, 6)); // f12 DIA1
+    this->tVertIndex.push_back(glm::uvec3(6, 3, 0)); // f13 DIA1
+    this->tVertIndex.push_back(glm::uvec3(4, 1, 2)); // f14 DIA2
+    this->tVertIndex.push_back(glm::uvec3(2, 7, 4)); // f15 DIA2
+    this->tVertIndex.push_back(glm::uvec3(0, 1, 6)); // f16 RP NS
+    this->tVertIndex.push_back(glm::uvec3(6, 7, 0)); // f17 RP NS
+    this->tVertIndex.push_back(glm::uvec3(0, 2, 6)); // f18 RP EW
+    this->tVertIndex.push_back(glm::uvec3(6, 4, 0)); // f19 RP EW
+    this->tVertIndex.push_back(glm::uvec3(5, 4, 3)); // f20 RP SN
+    this->tVertIndex.push_back(glm::uvec3(3, 2, 5)); // f21 RP SN
+    this->tVertIndex.push_back(glm::uvec3(4, 0, 2)); // f22 RP WE
+    this->tVertIndex.push_back(glm::uvec3(2, 6, 4)); // f23 RP WE
 
-    // f2 E
-    this->faces.push_back(1);
-    this->faces.push_back(5);
-    this->faces.push_back(6);
-    // f3 E
-    this->faces.push_back(6);
-    this->faces.push_back(2);
-    this->faces.push_back(1);
-
-    // f4 S
-    this->faces.push_back(4);
-    this->faces.push_back(5);
-    this->faces.push_back(6);
-    // f5 S
-    this->faces.push_back(6);
-    this->faces.push_back(7);
-    this->faces.push_back(4);
-
-    // f6 W
-    this->faces.push_back(0);
-    this->faces.push_back(4);
-    this->faces.push_back(7);
-    // f7 W
-    this->faces.push_back(7);
-    this->faces.push_back(3);
-    this->faces.push_back(0);
-
-    // f8 UP
-    this->faces.push_back(3);
-    this->faces.push_back(2);
-    this->faces.push_back(6);
-    // f9 UP
-    this->faces.push_back(6);
-    this->faces.push_back(7);
-    this->faces.push_back(3);
-
-    // f10 DOWN
-    this->faces.push_back(0);
-    this->faces.push_back(1);
-    this->faces.push_back(5);
-    // f11 DOWN
-    this->faces.push_back(5);
-    this->faces.push_back(4);
-    this->faces.push_back(0);
-
-    // f12 dia1
-    this->faces.push_back(0);
-    this->faces.push_back(5);
-    this->faces.push_back(6);
-    // f13 dia1
-    this->faces.push_back(6);
-    this->faces.push_back(3);
-    this->faces.push_back(0);
-
-    // f14 dia2
-    this->faces.push_back(4);
-    this->faces.push_back(1);
-    this->faces.push_back(2);
-    // f15 dia2
-    this->faces.push_back(2);
-    this->faces.push_back(7);
-    this->faces.push_back(4);
-
-    // f16 rpNS
-    this->faces.push_back(0);
-    this->faces.push_back(1);
-    this->faces.push_back(6);
-    // f17 rpNS
-    this->faces.push_back(6);
-    this->faces.push_back(7);
-    this->faces.push_back(0);
-
-    // f18 rpEW
-    this->faces.push_back(0);
-    this->faces.push_back(2);
-    this->faces.push_back(6);
-    // f19 rpEW
-    this->faces.push_back(6);
-    this->faces.push_back(4);
-    this->faces.push_back(00);
-
-    // f20 rpSN
-    this->faces.push_back(5);
-    this->faces.push_back(4);
-    this->faces.push_back(3);
-    // f21 rpSN
-    this->faces.push_back(3);
-    this->faces.push_back(2);
-    this->faces.push_back(5);
-
-    // f22 rpWE
-    this->faces.push_back(4);
-    this->faces.push_back(0);
-    this->faces.push_back(2);
-    // f23 rpWE
-    this->faces.push_back(2);
-    this->faces.push_back(6);
-    this->faces.push_back(4);
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f0 N
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f1 N
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f2 E
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f3 E
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f4 S
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f5 S
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f6 W
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f7 W
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f8 UP
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f9 UP
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f10 DOWN
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f11 DOWN
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f12 DIA1
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f13 DIA1
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f14 DIA2
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f15 DIA2
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f16 RP NS
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f17 RP NS
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f18 RP EW
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f19 RP EW
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f20 PR SN
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f21 RP SN
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f22 RP WE
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f23 RP WE
 }
 
 Cube::~Cube() {}
 
 void Cube::addFace(bool clockwise, int num) {
 
-    int base = num * 3;
+    glm::uvec3 tri = this->tVertIndex[num];
+    glm::uvec3 tex = this->tTexIndex[num];
 
-    glm::vec3 a = p[faces[base]];
-    glm::vec3 b = p[faces[base + 1]];
-    glm::vec3 c = p[faces[base + 2]];
+    glm::vec3 va = p[tri.x]; // PA
+    glm::vec3 vb = p[tri.y]; // PB
+    glm::vec3 vc = p[tri.z]; // PC
+
+    glm::vec2 ta = t[tex.x]; // TA
+    glm::vec2 tb = t[tex.y]; // TB
+    glm::vec2 tc = t[tex.z]; // TC
+
+    uint32_t ia, ib, ic;
 
     if (!clockwise) {
-        // N
-        std::vector<Chimera::VertexData> vl;
-        vl.push_back({a, glm::vec3(0.0f), t[0]}); // n p0
-        vl.push_back({b, glm::vec3(0.0f), t[1]}); // n p1
-        vl.push_back({c, glm::vec3(0.0f), t[2]}); // n p2
-
-        Chimera::Triangle t1 = Chimera::Triangle(0, 1, 2, glm::vec3(0.0f));
-        t1.calcNormal(vl);
-        // vl.push_back({p[3], glm::vec3(0.0f), t[3]}); // n p3
-        // this->makeFaceSquare(false, vl);
+        ia = this->indexPointCount;
+        ib = ia + 1;
+        ic = ib + 1;
     } else {
-        std::vector<Chimera::VertexData> vl;
-        vl.push_back({c, glm::vec3(0.0f), t[1]}); // n p0
-        vl.push_back({b, glm::vec3(0.0f), t[0]}); // n p1
-        vl.push_back({a, glm::vec3(0.0f), t[3]}); // n p2
-
-        Chimera::Triangle t1 = Chimera::Triangle(0, 1, 2, glm::vec3(0.0f));
-        t1.calcNormal(vl);
-        // vl.push_back({p[3], glm::vec3(0.0f), t[3]}); // n p3
-        // this->makeFaceSquare(false, vl);
+        ic = this->indexPointCount;
+        ib = ic + 1;
+        ia = ib + 1;
     }
-}
 
-void Cube::addWall(CARDINAL card) {
+    this->vl.push_back({va, glm::vec3(0.0f), ta});
+    this->vl.push_back({vb, glm::vec3(0.0f), tb});
+    this->vl.push_back({vc, glm::vec3(0.0f), tc});
 
-    // if (card == CARDINAL::NORTH) {
-    //     // N
-    //     std::vector<Chimera::VertexData> vl;
-    //     vl.push_back({p[0], glm::vec3(0.0f), t[0]}); // n p0
-    //     vl.push_back({p[1], glm::vec3(0.0f), t[1]}); // n p1
-    //     vl.push_back({p[2], glm::vec3(0.0f), t[2]}); // n p2
+    Chimera::Triangle t1 = Chimera::Triangle(ia, ib, ic, glm::vec3(0.0f));
+    t1.calcNormal(this->vl);
+    this->trisList.push_back(t1);
 
-    //     Chimera::Triangle t1 = Chimera::Triangle(0, 1, 2, glm::vec3(0.0f));
-    //     t1.calcNormal(vl);
-    //     // vl.push_back({p[3], glm::vec3(0.0f), t[3]}); // n p3
-    //     // this->makeFaceSquare(false, vl);
-    // } else if (card == CARDINAL::SOUTH) {
-    //     // s
-    //     std::vector<Chimera::VertexData> vl;
-    //     vl.push_back({p[2], glm::vec3(0.0f), t[1]}); // n p0
-    //     vl.push_back({p[1], glm::vec3(0.0f), t[0]}); // n p1
-    //     vl.push_back({p[0], glm::vec3(0.0f), t[3]}); // n p2
-
-    //     Chimera::Triangle t1 = Chimera::Triangle(0, 1, 2, glm::vec3(0.0f));
-    //     t1.calcNormal(vl);
-    //     // vl.push_back({p[3], glm::vec3(0.0f), t[3]}); // n p3
-    //     // this->makeFaceSquare(false, vl);
-    // }
+    this->indexPointCount += 3;
 }

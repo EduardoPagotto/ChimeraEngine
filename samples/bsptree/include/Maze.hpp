@@ -35,11 +35,11 @@ class Maze {
     void newWall(const glm::ivec3& pos);
     void newDiag(CARDINAL card, const glm::ivec3& pos);
     void newFlatFloorCeeling(bool isFloor, CARDINAL card, const glm::ivec3& pos);
-    void newRamp(bool isFloor, CARDINAL card, const glm::ivec3& pos);
+    //void newRamp(bool isFloor, CARDINAL card, const glm::ivec3& pos);
     glm::vec3 minimal(const glm::ivec3& pos) const;
-    void makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl);
-    void makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl);
-    inline SPACE getCardinal(const glm::ivec3& pos) const { return this->data[this->getIndexArrayPos(pos)]; }
+    //void makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl);
+    //void makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl);
+    inline SPACE getCardinal(const glm::ivec3& pos) const { return this->vpCube[this->getIndexArrayPos(pos)]->getSpace(); }
     glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
     SPACE getCardinalNeighbor(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
 
@@ -49,10 +49,8 @@ class Maze {
     float sizeBlock;
     glm::vec3 halfBlock;
     uint32_t indexPointCount;
-    std::vector<SPACE> data;
-    std::vector<Chimera::Triangle> trisList;
-
     std::vector<Cube*> vpCube;
+    std::vector<Chimera::Triangle> trisList;
 };
 
 #endif

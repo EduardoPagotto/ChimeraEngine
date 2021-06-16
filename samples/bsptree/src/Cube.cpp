@@ -1,8 +1,13 @@
 #include "Cube.hpp"
 
 // Cube::Cube(const glm::ivec3& pos, const glm::ivec3& size, const float& sizeBlock) {
-Cube::Cube(const SPACE& space, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max) {
-    this->space = space;
+Cube::Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max) {
+
+    if (caracter == 0x20)
+        this->space = SPACE::EMPTY;
+    else
+        this->space = (SPACE)(caracter - 0x30);
+
     this->position = pos;
     this->min = min;
     this->max = max;
@@ -33,6 +38,7 @@ Cube::Cube(const SPACE& space, const glm::ivec3& pos, const glm::vec3& min, cons
     this->tVertIndex.push_back(glm::uvec3(6, 7, 3)); // f9 UP
     this->tVertIndex.push_back(glm::uvec3(0, 1, 5)); // f10 DOWN
     this->tVertIndex.push_back(glm::uvec3(5, 4, 0)); // f11 DOWN
+
     this->tVertIndex.push_back(glm::uvec3(0, 5, 6)); // f12 DIA1
     this->tVertIndex.push_back(glm::uvec3(6, 3, 0)); // f13 DIA1
     this->tVertIndex.push_back(glm::uvec3(4, 1, 2)); // f14 DIA2
@@ -46,35 +52,37 @@ Cube::Cube(const SPACE& space, const glm::ivec3& pos, const glm::vec3& min, cons
     this->tVertIndex.push_back(glm::uvec3(4, 0, 2)); // f22 RP WE
     this->tVertIndex.push_back(glm::uvec3(2, 6, 4)); // f23 RP WE
 
-    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f0 N
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f1 N
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f0 N // FIXME: Trocar estrutura por indice de rotacao de textura!!!!
+    this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // f1 N
     this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f2 E
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f3 E
-    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f4 S
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f5 S
-    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f6 W
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f7 W
+    this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // f3 E
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f4 S
+    this->tTexIndex.push_back(glm::uvec3(3, 2, 1)); // f5 S
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f6 W
+    this->tTexIndex.push_back(glm::uvec3(3, 2, 1)); // f7 W
     this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f8 UP
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f9 UP
-    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f10 DOWN
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f11 DOWN
+    this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // f9 UP
+    this->tTexIndex.push_back(glm::uvec3(3, 2, 1)); // f10 DOWN 
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f11 DOWN 
+
     this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f12 DIA1
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f13 DIA1
-    this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f14 DIA2
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f15 DIA2
+    this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // f13 DIA1
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f14 DIA2
+    this->tTexIndex.push_back(glm::uvec3(3, 2, 1)); // f15 DIA2
+    
     this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f16 RP NS
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f17 RP NS
+    this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // f17 RP NS
     this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f18 RP EW
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f19 RP EW
+    this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // f19 RP EW
     this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f20 PR SN
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f21 RP SN
+    this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // f21 RP SN
     this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // f22 RP WE
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 3)); // f23 RP WE
+    this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // f23 RP WE
 }
 
 Cube::~Cube() {}
 
-void Cube::addFace(bool clockwise, int num) {
+void Cube::addFace(bool clockwise, int num, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
 
     glm::uvec3 tri = this->tVertIndex[num];
     glm::uvec3 tex = this->tTexIndex[num];
@@ -90,22 +98,21 @@ void Cube::addFace(bool clockwise, int num) {
     uint32_t ia, ib, ic;
 
     if (!clockwise) {
-        ia = this->indexPointCount;
+        ia = tl.size() * 3;
         ib = ia + 1;
         ic = ib + 1;
     } else {
-        ic = this->indexPointCount;
+        ic = tl.size() * 3;
         ib = ic + 1;
         ia = ib + 1;
     }
 
-    this->vl.push_back({va, glm::vec3(0.0f), ta});
-    this->vl.push_back({vb, glm::vec3(0.0f), tb});
-    this->vl.push_back({vc, glm::vec3(0.0f), tc});
+    vl.push_back({va, glm::vec3(0.0f), ta});
+    vl.push_back({vb, glm::vec3(0.0f), tb});
+    vl.push_back({vc, glm::vec3(0.0f), tc});
 
     Chimera::Triangle t1 = Chimera::Triangle(ia, ib, ic, glm::vec3(0.0f));
-    t1.calcNormal(this->vl);
-    this->trisList.push_back(t1);
+    t1.calcNormal(vl);
+    tl.push_back(t1);
 
-    this->indexPointCount += 3;
 }

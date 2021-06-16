@@ -36,31 +36,16 @@ Maze::Maze(const char filename[]) {
         for (pos.z = 0; pos.z < this->size.z; pos.z++) {
             fgets(string, 1024, file);
             for (pos.x = 0; pos.x < this->size.x; pos.x++) {
-                if (string[pos.x] == 0x20) {
-                    // Bloco Vazio
-                    this->data.push_back(SPACE::EMPTY);
-
-                    glm::vec3 min = this->minimal(pos);
-                    glm::vec3 max = min + sizeBlock;
-                    Cube* pCube = new Cube(SPACE::EMPTY, pos, min, max);
-                    this->vpCube.push_back(pCube);
-
-                } else {
-                    // parede (conversão ASCII completa)
-                    SPACE val = (SPACE)(string[pos.x] - 0x30);
-                    this->data.push_back(val);
-
-                    glm::vec3 min = this->minimal(pos);
-                    glm::vec3 max = min + sizeBlock;
-                    Cube* pCube = new Cube(val, pos, min, max);
-                    this->vpCube.push_back(pCube);
-                }
+                glm::vec3 min = this->minimal(pos);
+                glm::vec3 max = min + sizeBlock;
+                Cube* pCube = new Cube(string[pos.x], pos, min, max);
+                this->vpCube.push_back(pCube);
             }
         }
     }
 }
 
-Maze::~Maze() { this->data.clear(); }
+Maze::~Maze() { this->vpCube.clear(); }
 
 glm::vec3 Maze::minimal(const glm::ivec3& pos) const {
     float x_min = (pos.x * sizeBlock) - halfBlock.x; // (width++)
@@ -130,46 +115,26 @@ SPACE Maze::getCardinalNeighbor(DEEP deep, CARDINAL card, const glm::ivec3& dist
 }
 
 void Maze::newWall(const glm::ivec3& pos) {
-
-    glm::vec3 min = this->minimal(pos);
-    glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
+    Cube *pCube = this->vpCube[this->getIndexArrayPos(pos)];
 
     if (SPACE::WALL == this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos)) {
-        // N
-        std::vector<Chimera::VertexData> vl;
-        vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // n p0
-        vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // n p1
-        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // n p2
-        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // n p3
-        this->makeFaceSquare(false, vl);
+        pCube->addFace(false, 0,vertexData,this->trisList);
+        pCube->addFace(false, 1,vertexData,this->trisList);
     }
 
     if (SPACE::WALL == this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos)) {
-        std::vector<Chimera::VertexData> vl;
-        vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // e p0
-        vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // e p1
-        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // e p2
-        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // e p3
-        this->makeFaceSquare(false, vl);
+        pCube->addFace(false, 2, vertexData,this->trisList);
+        pCube->addFace(false, 3, vertexData,this->trisList);
     }
 
     if (SPACE::WALL == this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos)) {
-        // S
-        std::vector<Chimera::VertexData> vl;
-        vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // s p0
-        vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // s p1
-        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // s p2
-        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // s p3
-        this->makeFaceSquare(true, vl);
+        pCube->addFace(true, 4,vertexData,this->trisList);
+        pCube->addFace(true, 5,vertexData,this->trisList);
     }
+
     if (SPACE::WALL == this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos)) {
-        // W
-        std::vector<Chimera::VertexData> vl;
-        vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // w p0
-        vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // w p1
-        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // w p2
-        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // w p3
-        this->makeFaceSquare(true, vl);
+        pCube->addFace(true, 6,vertexData,this->trisList);
+        pCube->addFace(true, 7,vertexData,this->trisList);
     }
 }
 
@@ -219,244 +184,262 @@ CARDINAL Maze::emptyQuadrantDiag(bool invert, const glm::ivec3& pos) {
     return CARDINAL::NONE;
 }
 
-void Maze::newRamp(bool isFloor, CARDINAL card, const glm::ivec3& pos) {
+// void Maze::newRamp(bool isFloor, CARDINAL card, const glm::ivec3& pos) {
 
-    std::vector<Chimera::VertexData> vl;
+//     std::vector<Chimera::VertexData> vl;
 
-    glm::vec3 min = this->minimal(pos);
-    glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
+//     glm::vec3 min = this->minimal(pos);
+//     glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
 
-    if (card == CARDINAL::NORTH) { // normal in SW
+//     if (card == CARDINAL::NORTH) { // normal in SW
 
-        if (isFloor) {
-            vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
-            vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
-            vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
-            vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
-        } else {
-            vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
-            vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
-            vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
-            vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
-        }
+//         if (isFloor) {
+//             vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
+//             vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
+//             vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
+//             vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
+//         } else {
+//             vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
+//             vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
+//             vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
+//             vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
+//         }
 
-    } else if (card == CARDINAL::EAST) { // normal in NW
+//     } else if (card == CARDINAL::EAST) { // normal in NW
 
-        if (isFloor) {
-            vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
-            vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
-            vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
-            vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
-        } else {
-            vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
-            vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
-            vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
-            vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
-        }
+//         if (isFloor) {
+//             vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
+//             vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
+//             vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
+//             vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
+//         } else {
+//             vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
+//             vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
+//             vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
+//             vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
+//         }
 
-    } else if (card == CARDINAL::SOUTH) { // normal in NE
+//     } else if (card == CARDINAL::SOUTH) { // normal in NE
 
-        if (isFloor) {
-            vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
-            vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
-            vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
-            vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
-        } else {
-            vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
-            vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
-            vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
-            vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
-        }
+//         if (isFloor) {
+//             vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
+//             vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
+//             vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
+//             vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
+//         } else {
+//             vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
+//             vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
+//             vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
+//             vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
+//         }
 
-    } else if (card == CARDINAL::WEST) { // normal in SE
+//     } else if (card == CARDINAL::WEST) { // normal in SE
 
-        if (isFloor) {
-            vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
-            vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
-            vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
-            vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
-        } else {
-            vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
-            vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
-            vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
-            vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
-        }
-    }
+//         if (isFloor) {
+//             vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
+//             vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
+//             vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
+//             vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
+//         } else {
+//             vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
+//             vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
+//             vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
+//             vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
+//         }
+//     }
 
-    if (vl.size() > 0)
-        this->makeFaceSquare(!isFloor, vl);
-}
+//     if (vl.size() > 0)
+//         this->makeFaceSquare(!isFloor, vl);
+// }
 
 void Maze::newDiag(CARDINAL card, const glm::ivec3& pos) {
 
     bool clockwise = true;
-    std::vector<Chimera::VertexData> vl;
+    Cube *pCube = this->vpCube[this->getIndexArrayPos(pos)];
+    //std::vector<Chimera::VertexData> vl;
 
-    glm::vec3 min = this->minimal(pos);
-    glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
+    //glm::vec3 min = this->minimal(pos);
+    //glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
 
     if (card == CARDINAL::SOUTH_WEST) { // normal in SW
         // ne (diag. sup. dir.)
-        clockwise = false;
-        vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // en p0
-        vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // en p1
-        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // en p2
-        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // en p3
+        pCube->addFace(false, 12, vertexData,this->trisList);
+        pCube->addFace(false, 13, vertexData,this->trisList);
+        // vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // en p0
+        // vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // en p1
+        // vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // en p2
+        // vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // en p3
 
     } else if (card == CARDINAL::NORTH_WEST) { // normal in NW
         // se (diag. inf. dir.)
-        clockwise = false;
-        vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // se p0
-        vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // se p1
-        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // se p2
-        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // se p3
+        pCube->addFace(false, 14, vertexData,this->trisList);
+        pCube->addFace(false, 15, vertexData,this->trisList);
+        // vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // se p0
+        // vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // se p1
+        // vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // se p2
+        // vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // se p3
 
     } else if (card == CARDINAL::NORTH_EAST) { // normal in NE
         // sw (diag. inf. esq.)
-        vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // sw p0
-        vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // sw p1
-        vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // sw p2
-        vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // sw p3
+        pCube->addFace(true, 12, vertexData,this->trisList);
+        pCube->addFace(true, 13, vertexData,this->trisList);
+        // vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // sw p0
+        // vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // sw p1
+        // vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // sw p2
+        // vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // sw p3
 
     } else if (card == CARDINAL::SOUTH_EAST) { // normal in SE
         // nw (diag. sup. esq.)
-        vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // nw p0
-        vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // nw p1
-        vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // nw p2
-        vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // nw p3
+        pCube->addFace(true, 14, vertexData,this->trisList);
+        pCube->addFace(true, 15, vertexData,this->trisList);
+        // vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // nw p0
+        // vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // nw p1
+        // vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // nw p2
+        // vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // nw p3
     }
 
-    if (vl.size() > 0)
-        this->makeFaceSquare(clockwise, vl);
+    // if (vl.size() > 0)
+    //     this->makeFaceSquare(clockwise, vl);
 }
 
-void Maze::makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl) {
-    int pa, pb, pc, pd;
-    if (clockwise == false) {
-        pa = this->indexPointCount;
-        pb = pa + 1;
-        pc = pa + 2;
-    } else {
-        pc = this->indexPointCount;
-        pb = pc + 1;
-        pa = pc + 2;
-    }
+// void Maze::makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl) {
+//     int pa, pb, pc, pd;
+//     if (clockwise == false) {
+//         pa = this->indexPointCount;
+//         pb = pa + 1;
+//         pc = pa + 2;
+//     } else {
+//         pc = this->indexPointCount;
+//         pb = pc + 1;
+//         pa = pc + 2;
+//     }
 
-    this->vertexData.push_back(vl[0]);
-    this->vertexData.push_back(vl[1]);
-    this->vertexData.push_back(vl[2]);
+//     this->vertexData.push_back(vl[0]);
+//     this->vertexData.push_back(vl[1]);
+//     this->vertexData.push_back(vl[2]);
 
-    Chimera::Triangle t1 = Chimera::Triangle(pa, pb, pc, glm::vec3(0.0f));
-    t1.calcNormal(this->vertexData);
-    this->trisList.push_back(t1);
+//     Chimera::Triangle t1 = Chimera::Triangle(pa, pb, pc, glm::vec3(0.0f));
+//     t1.calcNormal(this->vertexData);
+//     this->trisList.push_back(t1);
 
-    this->indexPointCount += 3;
-}
+//     this->indexPointCount += 3;
+// }
 
-void Maze::makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl) {
-    int pa, pb, pc, pd;
-    pa = this->indexPointCount;
-    if (clockwise == false) {
-        pb = pa + 1;
-        pc = pa + 2;
-        pd = pa + 3;
-    } else {
-        pb = pa + 3;
-        pc = pa + 2;
-        pd = pa + 1;
-    }
+// void Maze::makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl) {
+//     int pa, pb, pc, pd;
+//     pa = this->indexPointCount;
+//     if (clockwise == false) {
+//         pb = pa + 1;
+//         pc = pa + 2;
+//         pd = pa + 3;
+//     } else {
+//         pb = pa + 3;
+//         pc = pa + 2;
+//         pd = pa + 1;
+//     }
 
-    this->vertexData.push_back(vl[0]);
-    this->vertexData.push_back(vl[1]);
-    this->vertexData.push_back(vl[2]);
-    this->vertexData.push_back(vl[3]);
+//     this->vertexData.push_back(vl[0]);
+//     this->vertexData.push_back(vl[1]);
+//     this->vertexData.push_back(vl[2]);
+//     this->vertexData.push_back(vl[3]);
 
-    Chimera::Triangle t1 = Chimera::Triangle(pa, pb, pc, glm::vec3(0.0f));
-    Chimera::Triangle t2 = Chimera::Triangle(pc, pd, pa, glm::vec3(0.0f));
+//     Chimera::Triangle t1 = Chimera::Triangle(pa, pb, pc, glm::vec3(0.0f));
+//     Chimera::Triangle t2 = Chimera::Triangle(pc, pd, pa, glm::vec3(0.0f));
 
-    t1.calcNormal(this->vertexData);
-    t2.calcNormal(this->vertexData);
+//     t1.calcNormal(this->vertexData);
+//     t2.calcNormal(this->vertexData);
 
-    this->trisList.push_back(t1);
-    this->trisList.push_back(t2);
+//     this->trisList.push_back(t1);
+//     this->trisList.push_back(t2);
 
-    this->indexPointCount += 4;
-}
+//     this->indexPointCount += 4;
+// }
 
-void Maze::newFlatFloorCeeling(bool isFloor, CARDINAL card, const glm::ivec3& pos) {
+ void Maze::newFlatFloorCeeling(bool isFloor, CARDINAL card, const glm::ivec3& pos) {
 
-    std::vector<Chimera::VertexData> vl;
-    glm::vec3 min = this->minimal(pos);
-    glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
+    //std::vector<Chimera::VertexData> vl;
+    //glm::vec3 min = this->minimal(pos);
+    //glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
+        
+    Cube *pCube = this->vpCube[this->getIndexArrayPos(pos)];
 
     if (card == CARDINAL::SOUTH_WEST) { // quad == 0) {
 
-        if (isFloor) {                                                                        // floor
-            vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
-            vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
-            vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
-        } else {                                                                              // celling
-            vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
-            vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
-            vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
-        }
+        // if (isFloor) {                                                                        // floor
+        //     vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
+        //     vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
+        //     vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
+        // } else {                                                                              // celling
+        //     vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
+        //     vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
+        //     vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
+        // }
 
-        this->makeFaceTriangle(!isFloor, vl);
+        // this->makeFaceTriangle(!isFloor, vl);
 
     } else if (card == CARDINAL::NORTH_WEST) { // uad == 1) {
 
-        if (isFloor) {
-            vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
-            vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
-            vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
-        } else {
-            vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
-            vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
-            vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
-        }
+        // if (isFloor) {
+        //     vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
+        //     vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
+        //     vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
+        // } else {
+        //     vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
+        //     vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
+        //     vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
+        // }
 
-        this->makeFaceTriangle(!isFloor, vl);
+        // this->makeFaceTriangle(!isFloor, vl);
 
     } else if (card == CARDINAL::NORTH_EAST) { // quad == 2) {
-        if (isFloor) {
-            vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
-            vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
-            vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
-        } else {
-            vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
-            vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
-            vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
-        }
+        // if (isFloor) {
+        //     vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
+        //     vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
+        //     vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
+        // } else {
+        //     vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
+        //     vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
+        //     vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
+        // }
 
-        this->makeFaceTriangle(!isFloor, vl);
+        // this->makeFaceTriangle(!isFloor, vl);
 
     } else if (card == CARDINAL::SOUTH_EAST) { // quad == 3) {
-        if (isFloor) {
-            vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
-            vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
-            vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
-        } else {
-            vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
-            vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
-            vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
-        }
+        // if (isFloor) {
+        //     vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
+        //     vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
+        //     vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
+        // } else {
+        //     vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
+        //     vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
+        //     vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
+        // }
 
-        this->makeFaceTriangle(!isFloor, vl);
+        // this->makeFaceTriangle(!isFloor, vl);
 
     } else { // CARDINAL::NONE
         if (isFloor) {
-            vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
-            vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
-            vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
-            vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
+            // vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // f p0
+            // vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // f p1
+            // vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // f p2
+            // vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // f p3
+            pCube->addFace(isFloor, 10,vertexData,this->trisList);
+            pCube->addFace(isFloor, 11,vertexData,this->trisList);
+    
+
+
         } else {
-            vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
-            vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
-            vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
-            vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
+
+            pCube->addFace(isFloor, 8,vertexData,this->trisList);
+            pCube->addFace(isFloor, 9,vertexData,this->trisList);
+
+            // vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // c p0
+            // vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // c p1
+            // vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // c p2
+            // vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // c p3
         }
 
-        this->makeFaceSquare(!isFloor, vl);
+        //this->makeFaceSquare(!isFloor, vl);
     }
 }
 
@@ -474,24 +457,24 @@ void Maze::createMap() {
                         break;
                     case SPACE::FLOOR:
                         this->newWall(pos);
-                        if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos)) {
-                            CARDINAL normDiag =
-                                this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
-                            this->newFlatFloorCeeling(true, normDiag, pos);
-                        } else {
+                        // if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos)) {
+                        //     CARDINAL normDiag =
+                        //         this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
+                        //     this->newFlatFloorCeeling(true, normDiag, pos);
+                        // } else {
                             this->newFlatFloorCeeling(true, CARDINAL::NONE, pos);
-                        }
+                        //}
                         break;
                     case SPACE::CEILING:
                         this->newWall(pos);
 
-                        if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos)) {
-                            CARDINAL normDiag =
-                                this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
-                            this->newFlatFloorCeeling(false, normDiag, pos);
-                        } else {
-                            this->newFlatFloorCeeling(false, CARDINAL::NONE, pos);
-                        }
+                        // if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos)) {
+                        //     CARDINAL normDiag =
+                        //         this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
+                        //     this->newFlatFloorCeeling(false, normDiag, pos);
+                        // } else {
+                        this->newFlatFloorCeeling(false, CARDINAL::NONE, pos);
+                        // }
 
                         break;
                     case SPACE::FC:
@@ -503,57 +486,58 @@ void Maze::createMap() {
                         CARDINAL normDiag = this->emptyQuadrantDiag(false, pos);
                         this->newDiag(normDiag, pos);
 
-                        if (this->hasNeighbor(normDiag, SPACE::FLOOR, pos) == true)
-                            this->newFlatFloorCeeling(true, normDiag, pos);
+                        // if (this->hasNeighbor(normDiag, SPACE::FLOOR, pos) == true)
+                        //     this->newFlatFloorCeeling(true, normDiag, pos);
 
-                        if (this->hasNeighbor(normDiag, SPACE::CEILING, pos) == true)
-                            this->newFlatFloorCeeling(false, normDiag, pos);
+                        // if (this->hasNeighbor(normDiag, SPACE::CEILING, pos) == true)
+                        //     this->newFlatFloorCeeling(false, normDiag, pos);
 
-                        if (this->hasNeighbor(normDiag, SPACE::FC, pos) == true) {
-                            this->newFlatFloorCeeling(false, normDiag, pos);
-                            this->newFlatFloorCeeling(true, normDiag, pos);
-                        }
+                        // if (this->hasNeighbor(normDiag, SPACE::FC, pos) == true) {
+                        //     this->newFlatFloorCeeling(false, normDiag, pos);
+                        //     this->newFlatFloorCeeling(true, normDiag, pos);
+                        // }
 
-                        break;
+                        
                     }
+                        break;
                     case SPACE::RAMP: {
-                        bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
-                        bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
-                        bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
-                        bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
+                        // bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
+                        // bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
+                        // bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
+                        // bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
 
-                        if (isN && (!isS)) {
+                        // if (isN && (!isS)) {
 
-                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos);
-                            if (vazio == SPACE::FLOOR)
-                                this->newRamp(true, CARDINAL::SOUTH, pos);
-                            else if (vazio == SPACE::CEILING)
-                                this->newRamp(false, CARDINAL::SOUTH, pos);
+                        //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos);
+                        //     if (vazio == SPACE::FLOOR)
+                        //         this->newRamp(true, CARDINAL::SOUTH, pos);
+                        //     else if (vazio == SPACE::CEILING)
+                        //         this->newRamp(false, CARDINAL::SOUTH, pos);
 
-                        } else if (isE && (!isW)) {
+                        // } else if (isE && (!isW)) {
 
-                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
-                            if (vazio == SPACE::FLOOR)
-                                this->newRamp(true, CARDINAL::WEST, pos);
-                            else if (vazio == SPACE::CEILING)
-                                this->newRamp(false, CARDINAL::WEST, pos);
+                        //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
+                        //     if (vazio == SPACE::FLOOR)
+                        //         this->newRamp(true, CARDINAL::WEST, pos);
+                        //     else if (vazio == SPACE::CEILING)
+                        //         this->newRamp(false, CARDINAL::WEST, pos);
 
-                        } else if ((!isN) && isS) {
+                        // } else if ((!isN) && isS) {
 
-                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos);
-                            if (vazio == SPACE::FLOOR)
-                                this->newRamp(true, CARDINAL::NORTH, pos);
-                            else if (vazio == SPACE::CEILING)
-                                this->newRamp(false, CARDINAL::NORTH, pos);
+                        //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos);
+                        //     if (vazio == SPACE::FLOOR)
+                        //         this->newRamp(true, CARDINAL::NORTH, pos);
+                        //     else if (vazio == SPACE::CEILING)
+                        //         this->newRamp(false, CARDINAL::NORTH, pos);
 
-                        } else if ((!isE) && isW) {
+                        // } else if ((!isE) && isW) {
 
-                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
-                            if (vazio == SPACE::FLOOR)
-                                this->newRamp(true, CARDINAL::EAST, pos);
-                            else if (vazio == SPACE::CEILING)
-                                this->newRamp(false, CARDINAL::EAST, pos);
-                        }
+                        //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
+                        //     if (vazio == SPACE::FLOOR)
+                        //         this->newRamp(true, CARDINAL::EAST, pos);
+                        //     else if (vazio == SPACE::CEILING)
+                        //         this->newRamp(false, CARDINAL::EAST, pos);
+                        // }
 
                     } break;
                     default:

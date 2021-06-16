@@ -28,10 +28,10 @@ enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5
 
 class Cube {
   public:
-    Cube(const SPACE& space, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max);
+    Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
 
-    void addFace(bool clockwise, int num);
+    void addFace(bool clockwise, int num, std::vector<Chimera::VertexData> &vl, std::vector<Chimera::Triangle> &tl);
 
     inline SPACE getSpace() const { return this->space; }
 
@@ -41,7 +41,6 @@ class Cube {
     // Cube* pWest;
 
   private:
-    uint32_t indexPointCount;
     SPACE space;
     glm::ivec3 position;
     glm::vec3 p[8];
@@ -50,8 +49,6 @@ class Cube {
     glm::vec3 min;
     std::vector<glm::uvec3> tVertIndex;
     std::vector<glm::uvec3> tTexIndex;
-    std::vector<Chimera::VertexData> vl;
-    std::vector<Chimera::Triangle> trisList;
 };
 
 #endif

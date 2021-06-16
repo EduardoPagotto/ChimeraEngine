@@ -31,8 +31,7 @@ class Cube {
     Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
 
-    void addFace(bool clockwise, int num, std::vector<Chimera::VertexData> &vl, std::vector<Chimera::Triangle> &tl);
-
+    void addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     inline SPACE getSpace() const { return this->space; }
 
     // Cube* pNorth;

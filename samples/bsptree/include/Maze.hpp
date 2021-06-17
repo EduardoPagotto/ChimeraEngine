@@ -31,7 +31,7 @@ class Maze {
         return ((s == SPACE::EMPTY) || (s == SPACE::FLOOR) || (s == SPACE::CEILING) || (s == SPACE::FC));
     }
 
-    CARDINAL emptyQuadrantDiag(bool invert, const glm::ivec3& pos);
+    // CARDINAL emptyQuadrantDiag(bool invert, const glm::ivec3& pos);
     glm::vec3 minimal(const glm::ivec3& pos) const;
     inline SPACE getCardinal(const glm::ivec3& pos) const { return this->vpCube[this->getIndexArrayPos(pos)]->getSpace(); }
     glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);

@@ -39,6 +39,13 @@ class Cube {
     inline SPACE getSpace() const { return this->space; }
 
     void setNeighbor(DEEP deep, CARDINAL card, Cube* pCube);
+    inline bool emptySpace() const {
+        return ((this->space == SPACE::EMPTY) || (this->space == SPACE::FLOOR) || (this->space == SPACE::CEILING) ||
+                (this->space == SPACE::FC));
+    }
+
+    CARDINAL emptyQuadrantDiag(DEEP deep, bool invert);
+    bool hasNeighbor(DEEP deep, CARDINAL card, SPACE space);
 
   private:
     void addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);

@@ -178,27 +178,27 @@ bool Maze::hasNeighbor(CARDINAL card, SPACE space, const glm::ivec3& pos) {
     return val;
 }
 
-CARDINAL Maze::emptyQuadrantDiag(bool invert, const glm::ivec3& pos) {
+// CARDINAL Maze::emptyQuadrantDiag(bool invert, const glm::ivec3& pos) {
 
-    bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
-    bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
-    bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
-    bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
+//     bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
+//     bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
+//     bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
+//     bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
 
-    if (isN && isE)
-        return (!invert) ? CARDINAL::NORTH_EAST : CARDINAL::SOUTH_WEST;
+//     if (isN && isE)
+//         return (!invert) ? CARDINAL::NORTH_EAST : CARDINAL::SOUTH_WEST;
 
-    if (isS && isE)
-        return (!invert) ? CARDINAL::SOUTH_EAST : CARDINAL::NORTH_WEST;
+//     if (isS && isE)
+//         return (!invert) ? CARDINAL::SOUTH_EAST : CARDINAL::NORTH_WEST;
 
-    if (isS && isW)
-        return (!invert) ? CARDINAL::SOUTH_WEST : CARDINAL::NORTH_EAST;
+//     if (isS && isW)
+//         return (!invert) ? CARDINAL::SOUTH_WEST : CARDINAL::NORTH_EAST;
 
-    if (isN && isW)
-        return (!invert) ? CARDINAL::NORTH_WEST : CARDINAL::SOUTH_EAST;
+//     if (isN && isW)
+//         return (!invert) ? CARDINAL::NORTH_WEST : CARDINAL::SOUTH_EAST;
 
-    return CARDINAL::NONE;
-}
+//     return CARDINAL::NONE;
+// }
 
 // // lembrar d = y;  w = x;  h = z;
 void Maze::createMap() {
@@ -216,8 +216,8 @@ void Maze::createMap() {
                     case SPACE::FLOOR: {
                         pCube->newWall(vertexData, this->trisList);
                         if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos)) {
-                            CARDINAL normDiag =
-                                this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
+                            CARDINAL normDiag = pCube->emptyQuadrantDiag(DEEP::BOTTOM, true);
+                            // this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
                             pCube->newFlatFloorCeeling(true, normDiag, vertexData, this->trisList);
                         } else {
                             pCube->newFlatFloorCeeling(true, CARDINAL::NONE, vertexData, this->trisList);
@@ -226,8 +226,8 @@ void Maze::createMap() {
                     case SPACE::CEILING: {
                         pCube->newWall(vertexData, this->trisList);
                         if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos)) {
-                            CARDINAL normDiag =
-                                this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
+                            CARDINAL normDiag = pCube->emptyQuadrantDiag(DEEP::UP, true);
+                            //   this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
                             pCube->newFlatFloorCeeling(false, normDiag, vertexData, this->trisList);
                         } else {
                             pCube->newFlatFloorCeeling(false, CARDINAL::NONE, vertexData, this->trisList);
@@ -239,7 +239,7 @@ void Maze::createMap() {
                         pCube->newFlatFloorCeeling(false, CARDINAL::NONE, vertexData, this->trisList);
                     } break;
                     case SPACE::DIAG: {
-                        CARDINAL normDiag = this->emptyQuadrantDiag(false, pos);
+                        CARDINAL normDiag = pCube->emptyQuadrantDiag(DEEP::MIDDLE, false);
                         pCube->newDiag(normDiag, vertexData, this->trisList);
 
                         if (this->hasNeighbor(normDiag, SPACE::FLOOR, pos) == true)

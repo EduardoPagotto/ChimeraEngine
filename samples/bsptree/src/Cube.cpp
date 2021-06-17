@@ -94,7 +94,6 @@ void Cube::setNeighbor(DEEP deep, CARDINAL card, Cube* pCube) {
         case DEEP::MIDDLE: {
 
             switch (card) {
-
                 case CARDINAL::NORTH:
                     this->pNorth = pCube;
                     break;
@@ -151,6 +150,94 @@ void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera:
     Chimera::Triangle t1 = Chimera::Triangle(ia, ib, ic, glm::vec3(0.0f));
     t1.calcNormal(vl);
     tl.push_back(t1);
+}
+
+CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
+
+    Cube* pVal = nullptr;
+
+    switch (deep) {
+        case DEEP::UP:
+            pVal = this->pUp;
+            break;
+        case DEEP::MIDDLE:
+            pVal = this;
+            break;
+        case DEEP::BOTTOM:
+            pVal = this->pBottom;
+            break;
+    }
+
+    if (pVal != nullptr) {
+
+        bool isN = (pVal->pNorth != nullptr) ? pVal->pNorth->emptySpace() : false;
+        bool isE = (pVal->pEast != nullptr) ? pVal->pEast->emptySpace() : false;
+        bool isS = (pVal->pSouth != nullptr) ? pVal->pSouth->emptySpace() : false;
+        bool isW = (pVal->pWest != nullptr) ? pVal->pWest->emptySpace() : false;
+
+        if (isN && isE)
+            return (!invert) ? CARDINAL::NORTH_EAST : CARDINAL::SOUTH_WEST;
+
+        if (isS && isE)
+            return (!invert) ? CARDINAL::SOUTH_EAST : CARDINAL::NORTH_WEST;
+
+        if (isS && isW)
+            return (!invert) ? CARDINAL::SOUTH_WEST : CARDINAL::NORTH_EAST;
+
+        if (isN && isW)
+            return (!invert) ? CARDINAL::NORTH_WEST : CARDINAL::SOUTH_EAST;
+    }
+
+    return CARDINAL::NONE;
+}
+
+bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
+
+    Cube* pVal = nullptr;
+
+    switch (deep) {
+        case DEEP::UP:
+            pVal = this->pUp;
+            break;
+        case DEEP::MIDDLE:
+            pVal = this;
+            break;
+        case DEEP::BOTTOM:
+            pVal = this->pBottom;
+            break;
+    }
+
+    if (pVal != nullptr) {
+
+        bool vN = (pVal->pNorth != nullptr) ? (pVal->pNorth->getSpace() == space) : false;
+        bool vE = (pVal->pEast != nullptr) ? (pVal->pEast->getSpace() == space) : false;
+        bool vS = (pVal->pSouth != nullptr) ? (pVal->pSouth->getSpace() == space) : false;
+        bool vW = (pVal->pWest != nullptr) ? (pVal->pWest->getSpace() == space) : false;
+        bool cb = (pVal->getSpace() == space);
+
+        switch (card) {
+            case CARDINAL::NORTH:
+                return vN;
+            case CARDINAL::NORTH_EAST:
+                return (vN && vE);
+            case CARDINAL::EAST:
+                return vE;
+            case CARDINAL::SOUTH_EAST:
+                return (vS && vE);
+            case CARDINAL::SOUTH:
+                return vS;
+            case CARDINAL::SOUTH_WEST:
+                return (vS && vW);
+            case CARDINAL::WEST:
+                return vW;
+            case CARDINAL::NONE:
+                return cb;
+            default:
+                break;
+        }
+    }
+
+    return false;
 }
 
 void Cube::newWall(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {

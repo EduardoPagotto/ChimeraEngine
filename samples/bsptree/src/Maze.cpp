@@ -190,41 +190,41 @@ void Maze::newRamp(bool isFloor, CARDINAL card, const glm::ivec3& pos) {
     if (card == CARDINAL::NORTH) { // normal in SW
 
         if (isFloor) {
-            pCube->addFace(isFloor, 20, 2, vertexData, this->trisList); // ok
-            pCube->addFace(isFloor, 21, 3, vertexData, this->trisList); // ok
+            pCube->addFace(true, 20, 2, vertexData, this->trisList); // ok
+            pCube->addFace(true, 21, 3, vertexData, this->trisList); // ok
         } else {
-            pCube->addFace(isFloor, 16, 0, vertexData, this->trisList); // ok
-            pCube->addFace(isFloor, 17, 1, vertexData, this->trisList); // ok
+            pCube->addFace(false, 16, 0, vertexData, this->trisList); // ok
+            pCube->addFace(false, 17, 1, vertexData, this->trisList); // ok
         }
 
     } else if (card == CARDINAL::EAST) { // normal in NW
 
         if (isFloor) {
-            pCube->addFace(isFloor, 18, 4, vertexData, this->trisList); // ok
-            pCube->addFace(isFloor, 19, 5, vertexData, this->trisList); // ok
+            pCube->addFace(true, 18, 4, vertexData, this->trisList); // ok
+            pCube->addFace(true, 19, 5, vertexData, this->trisList); // ok
         } else {
-            pCube->addFace(isFloor, 22, 0, vertexData, this->trisList); // ok
-            pCube->addFace(isFloor, 23, 1, vertexData, this->trisList); // ok
+            pCube->addFace(false, 22, 0, vertexData, this->trisList); // ok
+            pCube->addFace(false, 23, 1, vertexData, this->trisList); // ok
         }
 
     } else if (card == CARDINAL::SOUTH) { // normal in NE
 
         if (isFloor) {
-            pCube->addFace(!isFloor, 16, 2, vertexData, this->trisList); // ok
-            pCube->addFace(!isFloor, 17, 3, vertexData, this->trisList); // ok
+            pCube->addFace(true, 16, 2, vertexData, this->trisList); // ok
+            pCube->addFace(true, 17, 3, vertexData, this->trisList); // ok
         } else {
-            pCube->addFace(!isFloor, 20, 0, vertexData, this->trisList); // ok
-            pCube->addFace(!isFloor, 21, 1, vertexData, this->trisList); // ok
+            pCube->addFace(false, 20, 0, vertexData, this->trisList); // ok
+            pCube->addFace(false, 21, 1, vertexData, this->trisList); // ok
         }
 
     } else if (card == CARDINAL::WEST) { // normal in SE
 
         if (isFloor) {
-            pCube->addFace(!isFloor, 22, 2, vertexData, this->trisList); // ok
-            pCube->addFace(!isFloor, 23, 3, vertexData, this->trisList); // ok
+            pCube->addFace(true, 22, 2, vertexData, this->trisList); // ok
+            pCube->addFace(true, 23, 3, vertexData, this->trisList); // ok
         } else {
-            pCube->addFace(!isFloor, 18, 7, vertexData, this->trisList); // ok
-            pCube->addFace(!isFloor, 19, 6, vertexData, this->trisList); // ok
+            pCube->addFace(false, 18, 7, vertexData, this->trisList); // ok
+            pCube->addFace(false, 19, 6, vertexData, this->trisList); // ok
         }
     }
 }

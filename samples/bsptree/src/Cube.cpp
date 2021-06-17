@@ -3,6 +3,13 @@
 // Cube::Cube(const glm::ivec3& pos, const glm::ivec3& size, const float& sizeBlock) {
 Cube::Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max) {
 
+    pNorth = nullptr;
+    pEast = nullptr;
+    pSouth = nullptr;
+    pWest = nullptr;
+    pUp = nullptr;
+    pBottom = nullptr;
+
     if (caracter == 0x20)
         this->space = SPACE::EMPTY;
     else
@@ -72,6 +79,46 @@ Cube::Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, co
 
 Cube::~Cube() {}
 
+void Cube::setNeighbor(DEEP deep, CARDINAL card, Cube* pCube) {
+
+    switch (deep) {
+        case DEEP::UP: {
+            if (card == CARDINAL::NONE)
+                this->pUp = pCube;
+        } break;
+
+        case DEEP::BOTTOM:
+            this->pBottom = pCube;
+            break;
+
+        case DEEP::MIDDLE: {
+
+            switch (card) {
+
+                case CARDINAL::NORTH:
+                    this->pNorth = pCube;
+                    break;
+
+                case CARDINAL::EAST:
+                    this->pEast = pCube;
+                    break;
+
+                case CARDINAL::SOUTH:
+                    this->pSouth = pCube;
+                    break;
+
+                case CARDINAL::WEST:
+                    this->pWest = pCube;
+                    break;
+                default:
+                    break;
+            }
+        }
+        default:
+            break;
+    }
+}
+
 void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
 
     glm::uvec3 tri = this->tVertIndex[numFace];
@@ -104,6 +151,29 @@ void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera:
     Chimera::Triangle t1 = Chimera::Triangle(ia, ib, ic, glm::vec3(0.0f));
     t1.calcNormal(vl);
     tl.push_back(t1);
+}
+
+void Cube::newWall(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
+
+    if ((this->pNorth != nullptr) && (this->pNorth->getSpace() == SPACE::WALL)) {
+        this->addFace(false, 0, 0, vl, tl);
+        this->addFace(false, 1, 1, vl, tl);
+    }
+
+    if ((this->pEast != nullptr) && (this->pEast->getSpace() == SPACE::WALL)) {
+        this->addFace(false, 2, 0, vl, tl);
+        this->addFace(false, 3, 1, vl, tl);
+    }
+
+    if ((this->pSouth != nullptr) && (this->pSouth->getSpace() == SPACE::WALL)) {
+        this->addFace(true, 4, 2, vl, tl);
+        this->addFace(true, 5, 3, vl, tl);
+    }
+
+    if ((this->pWest != nullptr) && (this->pWest->getSpace() == SPACE::WALL)) {
+        this->addFace(true, 6, 2, vl, tl);
+        this->addFace(true, 7, 3, vl, tl);
+    }
 }
 
 void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {

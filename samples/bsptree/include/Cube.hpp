@@ -31,19 +31,24 @@ class Cube {
     Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
 
+    void newWall(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newDiag(CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
 
-    void addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     inline SPACE getSpace() const { return this->space; }
 
-    // Cube* pNorth;
-    // Cube* pEast;
-    // Cube* pSouth;
-    // Cube* pWest;
+    void setNeighbor(DEEP deep, CARDINAL card, Cube* pCube);
 
   private:
+    void addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+    Cube* pNorth;
+    Cube* pEast;
+    Cube* pSouth;
+    Cube* pWest;
+    Cube* pUp;
+    Cube* pBottom;
+
     SPACE space;
     glm::ivec3 position;
     glm::vec3 p[8];

@@ -43,6 +43,38 @@ Maze::Maze(const char filename[]) {
             }
         }
     }
+
+    for (pos.y = 0; pos.y < this->size.y; pos.y++) {
+        for (pos.z = 0; pos.z < this->size.z; pos.z++) {
+            for (pos.x = 0; pos.x < this->size.x; pos.x++) {
+                Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
+
+                Cube* pBefore = getCubeNeighbor(DEEP::BOTTOM, CARDINAL::NONE, pos);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::BOTTOM, CARDINAL::NONE, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::UP, CARDINAL::NONE, pos);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::UP, CARDINAL::NONE, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, pos);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::EAST, pos);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::MIDDLE, CARDINAL::EAST, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, pos);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::WEST, pos);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::MIDDLE, CARDINAL::WEST, pBefore);
+            }
+        }
+    }
 }
 
 Maze::~Maze() { this->vpCube.clear(); }
@@ -114,28 +146,12 @@ SPACE Maze::getCardinalNeighbor(DEEP deep, CARDINAL card, const glm::ivec3& dist
     return SPACE::INVALID;
 }
 
-void Maze::newWall(const glm::ivec3& pos) {
-    Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
+Cube* Maze::getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos) {
+    glm::ivec3 val = this->getCardinalPos(deep, card, glm::ivec3(1), pos);
+    if (this->valid(val))
+        return this->vpCube[this->getIndexArrayPos(val)];
 
-    if (SPACE::WALL == this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos)) {
-        pCube->addFace(false, 0, 0, vertexData, this->trisList);
-        pCube->addFace(false, 1, 1, vertexData, this->trisList);
-    }
-
-    if (SPACE::WALL == this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos)) {
-        pCube->addFace(false, 2, 0, vertexData, this->trisList);
-        pCube->addFace(false, 3, 1, vertexData, this->trisList);
-    }
-
-    if (SPACE::WALL == this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos)) {
-        pCube->addFace(true, 4, 2, vertexData, this->trisList);
-        pCube->addFace(true, 5, 3, vertexData, this->trisList);
-    }
-
-    if (SPACE::WALL == this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos)) {
-        pCube->addFace(true, 6, 2, vertexData, this->trisList);
-        pCube->addFace(true, 7, 3, vertexData, this->trisList);
-    }
+    return nullptr;
 }
 
 bool Maze::hasNeighbor(CARDINAL card, SPACE space, const glm::ivec3& pos) {
@@ -192,13 +208,13 @@ void Maze::createMap() {
             for (pos.x = 0; pos.x < this->size.x; pos.x++) {
 
                 SPACE val = this->getCardinal(pos);
+                Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
                 switch (val) {
                     case SPACE::EMPTY:
-                        this->newWall(pos);
+                        pCube->newWall(vertexData, this->trisList);
                         break;
                     case SPACE::FLOOR: {
-                        Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
-                        this->newWall(pos);
+                        pCube->newWall(vertexData, this->trisList);
                         if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos)) {
                             CARDINAL normDiag =
                                 this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
@@ -208,8 +224,7 @@ void Maze::createMap() {
                         }
                     } break;
                     case SPACE::CEILING: {
-                        Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
-                        this->newWall(pos);
+                        pCube->newWall(vertexData, this->trisList);
                         if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos)) {
                             CARDINAL normDiag =
                                 this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
@@ -219,14 +234,11 @@ void Maze::createMap() {
                         }
                     } break;
                     case SPACE::FC: {
-                        Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
-                        this->newWall(pos);
+                        pCube->newWall(vertexData, this->trisList);
                         pCube->newFlatFloorCeeling(true, CARDINAL::NONE, vertexData, this->trisList);
                         pCube->newFlatFloorCeeling(false, CARDINAL::NONE, vertexData, this->trisList);
                     } break;
                     case SPACE::DIAG: {
-
-                        Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
                         CARDINAL normDiag = this->emptyQuadrantDiag(false, pos);
                         pCube->newDiag(normDiag, vertexData, this->trisList);
 
@@ -247,7 +259,6 @@ void Maze::createMap() {
                         bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
                         bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
                         bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
-                        Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
 
                         if (isN && (!isS)) {
 

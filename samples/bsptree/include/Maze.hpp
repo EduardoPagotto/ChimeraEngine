@@ -32,13 +32,14 @@ class Maze {
     }
 
     CARDINAL emptyQuadrantDiag(bool invert, const glm::ivec3& pos);
-    void newWall(const glm::ivec3& pos);
     glm::vec3 minimal(const glm::ivec3& pos) const;
     inline SPACE getCardinal(const glm::ivec3& pos) const { return this->vpCube[this->getIndexArrayPos(pos)]->getSpace(); }
     glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
     SPACE getCardinalNeighbor(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
 
     bool hasNeighbor(CARDINAL card, SPACE space, const glm::ivec3& pos);
+
+    Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos);
 
     glm::ivec3 size;
     float sizeBlock;

@@ -184,73 +184,50 @@ CARDINAL Maze::emptyQuadrantDiag(bool invert, const glm::ivec3& pos) {
     return CARDINAL::NONE;
 }
 
-// void Maze::newRamp(bool isFloor, CARDINAL card, const glm::ivec3& pos) {
+void Maze::newRamp(bool isFloor, CARDINAL card, const glm::ivec3& pos) {
 
-//     std::vector<Chimera::VertexData> vl;
+    Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
+    if (card == CARDINAL::NORTH) { // normal in SW
 
-//     glm::vec3 min = this->minimal(pos);
-//     glm::vec3 max = min + sizeBlock; // x->East (width++); //y->Altura Maxima andar //z:>South (height++)
+        if (isFloor) {
+            pCube->addFace(isFloor, 20, 2, vertexData, this->trisList); // ok
+            pCube->addFace(isFloor, 21, 3, vertexData, this->trisList); // ok
+        } else {
+            pCube->addFace(isFloor, 16, 0, vertexData, this->trisList); // ok
+            pCube->addFace(isFloor, 17, 1, vertexData, this->trisList); // ok
+        }
 
-//     if (card == CARDINAL::NORTH) { // normal in SW
+    } else if (card == CARDINAL::EAST) { // normal in NW
 
-//         if (isFloor) {
-//             vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
-//             vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
-//             vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
-//             vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
-//         } else {
-//             vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
-//             vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
-//             vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
-//             vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
-//         }
+        if (isFloor) {
+            pCube->addFace(isFloor, 18, 4, vertexData, this->trisList); // ok
+            pCube->addFace(isFloor, 19, 5, vertexData, this->trisList); // ok
+        } else {
+            pCube->addFace(isFloor, 22, 0, vertexData, this->trisList); // ok
+            pCube->addFace(isFloor, 23, 1, vertexData, this->trisList); // ok
+        }
 
-//     } else if (card == CARDINAL::EAST) { // normal in NW
+    } else if (card == CARDINAL::SOUTH) { // normal in NE
 
-//         if (isFloor) {
-//             vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
-//             vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
-//             vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
-//             vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
-//         } else {
-//             vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
-//             vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
-//             vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
-//             vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
-//         }
+        if (isFloor) {
+            pCube->addFace(!isFloor, 16, 2, vertexData, this->trisList); // ok
+            pCube->addFace(!isFloor, 17, 3, vertexData, this->trisList); // ok
+        } else {
+            pCube->addFace(!isFloor, 20, 0, vertexData, this->trisList); // ok
+            pCube->addFace(!isFloor, 21, 1, vertexData, this->trisList); // ok
+        }
 
-//     } else if (card == CARDINAL::SOUTH) { // normal in NE
+    } else if (card == CARDINAL::WEST) { // normal in SE
 
-//         if (isFloor) {
-//             vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
-//             vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
-//             vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
-//             vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
-//         } else {
-//             vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
-//             vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
-//             vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
-//             vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
-//         }
-
-//     } else if (card == CARDINAL::WEST) { // normal in SE
-
-//         if (isFloor) {
-//             vl.push_back({glm::vec3(min.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rf p0
-//             vl.push_back({glm::vec3(max.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rf p1
-//             vl.push_back({glm::vec3(max.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rf p2
-//             vl.push_back({glm::vec3(min.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rf p3
-//         } else {
-//             vl.push_back({glm::vec3(min.x, min.y, max.z), glm::vec3(0.0f), glm::vec2(1, 0)}); // rc p0
-//             vl.push_back({glm::vec3(max.x, max.y, max.z), glm::vec3(0.0f), glm::vec2(0, 0)}); // rc p1
-//             vl.push_back({glm::vec3(max.x, max.y, min.z), glm::vec3(0.0f), glm::vec2(0, 1)}); // rc p2
-//             vl.push_back({glm::vec3(min.x, min.y, min.z), glm::vec3(0.0f), glm::vec2(1, 1)}); // rc p3
-//         }
-//     }
-
-//     if (vl.size() > 0)
-//         this->makeFaceSquare(!isFloor, vl);
-// }
+        if (isFloor) {
+            pCube->addFace(!isFloor, 22, 2, vertexData, this->trisList); // ok
+            pCube->addFace(!isFloor, 23, 3, vertexData, this->trisList); // ok
+        } else {
+            pCube->addFace(!isFloor, 18, 7, vertexData, this->trisList); // ok
+            pCube->addFace(!isFloor, 19, 6, vertexData, this->trisList); // ok
+        }
+    }
+}
 
 void Maze::newDiag(CARDINAL card, const glm::ivec3& pos) {
 
@@ -274,59 +251,6 @@ void Maze::newDiag(CARDINAL card, const glm::ivec3& pos) {
         pCube->addFace(true, 15, 1, vertexData, this->trisList);
     }
 }
-
-// void Maze::makeFaceTriangle(bool clockwise, std::vector<Chimera::VertexData>& vl) {
-//     int pa, pb, pc, pd;
-//     if (clockwise == false) {
-//         pa = this->indexPointCount;
-//         pb = pa + 1;
-//         pc = pa + 2;
-//     } else {
-//         pc = this->indexPointCount;
-//         pb = pc + 1;
-//         pa = pc + 2;
-//     }
-
-//     this->vertexData.push_back(vl[0]);
-//     this->vertexData.push_back(vl[1]);
-//     this->vertexData.push_back(vl[2]);
-
-//     Chimera::Triangle t1 = Chimera::Triangle(pa, pb, pc, glm::vec3(0.0f));
-//     t1.calcNormal(this->vertexData);
-//     this->trisList.push_back(t1);
-
-//     this->indexPointCount += 3;
-// }
-
-// void Maze::makeFaceSquare(bool clockwise, std::vector<Chimera::VertexData>& vl) {
-//     int pa, pb, pc, pd;
-//     pa = this->indexPointCount;
-//     if (clockwise == false) {
-//         pb = pa + 1;
-//         pc = pa + 2;
-//         pd = pa + 3;
-//     } else {
-//         pb = pa + 3;
-//         pc = pa + 2;
-//         pd = pa + 1;
-//     }
-
-//     this->vertexData.push_back(vl[0]);
-//     this->vertexData.push_back(vl[1]);
-//     this->vertexData.push_back(vl[2]);
-//     this->vertexData.push_back(vl[3]);
-
-//     Chimera::Triangle t1 = Chimera::Triangle(pa, pb, pc, glm::vec3(0.0f));
-//     Chimera::Triangle t2 = Chimera::Triangle(pc, pd, pa, glm::vec3(0.0f));
-
-//     t1.calcNormal(this->vertexData);
-//     t2.calcNormal(this->vertexData);
-
-//     this->trisList.push_back(t1);
-//     this->trisList.push_back(t2);
-
-//     this->indexPointCount += 4;
-// }
 
 void Maze::newFlatFloorCeeling(bool isFloor, CARDINAL card, const glm::ivec3& pos) {
 
@@ -380,24 +304,24 @@ void Maze::createMap() {
                         break;
                     case SPACE::FLOOR:
                         this->newWall(pos);
-                        // if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos)) {
-                        //     CARDINAL normDiag =
-                        //         this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
-                        //     this->newFlatFloorCeeling(true, normDiag, pos);
-                        // } else {
-                        this->newFlatFloorCeeling(true, CARDINAL::NONE, pos);
-                        //}
+                        if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos)) {
+                            CARDINAL normDiag =
+                                this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
+                            this->newFlatFloorCeeling(true, normDiag, pos);
+                        } else {
+                            this->newFlatFloorCeeling(true, CARDINAL::NONE, pos);
+                        }
                         break;
                     case SPACE::CEILING:
                         this->newWall(pos);
 
-                        // if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos)) {
-                        //     CARDINAL normDiag =
-                        //         this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
-                        //     this->newFlatFloorCeeling(false, normDiag, pos);
-                        // } else {
-                        this->newFlatFloorCeeling(false, CARDINAL::NONE, pos);
-                        // }
+                        if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos)) {
+                            CARDINAL normDiag =
+                                this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
+                            this->newFlatFloorCeeling(false, normDiag, pos);
+                        } else {
+                            this->newFlatFloorCeeling(false, CARDINAL::NONE, pos);
+                        }
 
                         break;
                     case SPACE::FC:
@@ -422,43 +346,43 @@ void Maze::createMap() {
 
                     } break;
                     case SPACE::RAMP: {
-                        // bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
-                        // bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
-                        // bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
-                        // bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
+                        bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
+                        bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
+                        bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
+                        bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
 
-                        // if (isN && (!isS)) {
+                        if (isN && (!isS)) {
 
-                        //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos);
-                        //     if (vazio == SPACE::FLOOR)
-                        //         this->newRamp(true, CARDINAL::SOUTH, pos);
-                        //     else if (vazio == SPACE::CEILING)
-                        //         this->newRamp(false, CARDINAL::SOUTH, pos);
+                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos);
+                            if (vazio == SPACE::FLOOR)
+                                this->newRamp(true, CARDINAL::SOUTH, pos);
+                            else if (vazio == SPACE::CEILING)
+                                this->newRamp(false, CARDINAL::SOUTH, pos);
 
-                        // } else if (isE && (!isW)) {
+                        } else if (isE && (!isW)) {
 
-                        //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
-                        //     if (vazio == SPACE::FLOOR)
-                        //         this->newRamp(true, CARDINAL::WEST, pos);
-                        //     else if (vazio == SPACE::CEILING)
-                        //         this->newRamp(false, CARDINAL::WEST, pos);
+                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
+                            if (vazio == SPACE::FLOOR)
+                                this->newRamp(true, CARDINAL::WEST, pos);
+                            else if (vazio == SPACE::CEILING)
+                                this->newRamp(false, CARDINAL::WEST, pos);
 
-                        // } else if ((!isN) && isS) {
+                        } else if ((!isN) && isS) {
 
-                        //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos);
-                        //     if (vazio == SPACE::FLOOR)
-                        //         this->newRamp(true, CARDINAL::NORTH, pos);
-                        //     else if (vazio == SPACE::CEILING)
-                        //         this->newRamp(false, CARDINAL::NORTH, pos);
+                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos);
+                            if (vazio == SPACE::FLOOR)
+                                this->newRamp(true, CARDINAL::NORTH, pos);
+                            else if (vazio == SPACE::CEILING)
+                                this->newRamp(false, CARDINAL::NORTH, pos);
 
-                        // } else if ((!isE) && isW) {
+                        } else if ((!isE) && isW) {
 
-                        //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
-                        //     if (vazio == SPACE::FLOOR)
-                        //         this->newRamp(true, CARDINAL::EAST, pos);
-                        //     else if (vazio == SPACE::CEILING)
-                        //         this->newRamp(false, CARDINAL::EAST, pos);
-                        // }
+                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
+                            if (vazio == SPACE::FLOOR)
+                                this->newRamp(true, CARDINAL::EAST, pos);
+                            else if (vazio == SPACE::CEILING)
+                                this->newRamp(false, CARDINAL::EAST, pos);
+                        }
 
                     } break;
                     default:

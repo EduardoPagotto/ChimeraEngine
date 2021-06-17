@@ -43,14 +43,17 @@ Cube::Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, co
     this->tVertIndex.push_back(glm::uvec3(6, 3, 0)); // f13 DIA1
     this->tVertIndex.push_back(glm::uvec3(4, 1, 2)); // f14 DIA2
     this->tVertIndex.push_back(glm::uvec3(2, 7, 4)); // f15 DIA2
+
     this->tVertIndex.push_back(glm::uvec3(0, 1, 6)); // f16 RP NS
     this->tVertIndex.push_back(glm::uvec3(6, 7, 0)); // f17 RP NS
     this->tVertIndex.push_back(glm::uvec3(0, 2, 6)); // f18 RP EW
     this->tVertIndex.push_back(glm::uvec3(6, 4, 0)); // f19 RP EW
     this->tVertIndex.push_back(glm::uvec3(5, 4, 3)); // f20 RP SN
     this->tVertIndex.push_back(glm::uvec3(3, 2, 5)); // f21 RP SN
-    this->tVertIndex.push_back(glm::uvec3(4, 0, 2)); // f22 RP WE
-    this->tVertIndex.push_back(glm::uvec3(2, 6, 4)); // f23 RP WE
+
+    this->tVertIndex.push_back(glm::uvec3(1, 5, 7)); // f22 RP WE
+    this->tVertIndex.push_back(glm::uvec3(7, 3, 1)); // f23 RP WE
+
     this->tVertIndex.push_back(glm::uvec3(4, 0, 1)); // f24 F Q1(NW)
     this->tVertIndex.push_back(glm::uvec3(1, 5, 4)); // f25 F Q3(SE)
     this->tVertIndex.push_back(glm::uvec3(7, 3, 2)); // F26 C Q1(NW)

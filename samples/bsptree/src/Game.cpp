@@ -113,7 +113,7 @@ void Game::start() {
     // -------
 
     // Usando o Maze
-    Maze maze = Maze("./data/maze4.txt");
+    Maze maze = Maze("./data/maze3.txt");
     maze.createMap();
     bspTree.create(maze.vertexData, maze.vIndex);
     //

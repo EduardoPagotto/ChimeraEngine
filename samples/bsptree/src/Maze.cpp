@@ -154,52 +154,6 @@ Cube* Maze::getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos) {
     return nullptr;
 }
 
-bool Maze::hasNeighbor(CARDINAL card, SPACE space, const glm::ivec3& pos) {
-    bool val = false;
-
-    if (card == CARDINAL::NORTH_EAST) {
-        val = (this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos) == space) &&
-              (this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos) == space);
-
-    } else if (card == CARDINAL::SOUTH_EAST) {
-        val = (this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos) == space) &&
-              (this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos) == space);
-    }
-
-    else if (card == CARDINAL::SOUTH_WEST) {
-        val = (this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos) == space) &&
-              (this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos) == space);
-
-    } else if (card == CARDINAL::NORTH_WEST) {
-        val = (this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos) == space) &&
-              (this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos) == space);
-    }
-
-    return val;
-}
-
-// CARDINAL Maze::emptyQuadrantDiag(bool invert, const glm::ivec3& pos) {
-
-//     bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
-//     bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
-//     bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
-//     bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
-
-//     if (isN && isE)
-//         return (!invert) ? CARDINAL::NORTH_EAST : CARDINAL::SOUTH_WEST;
-
-//     if (isS && isE)
-//         return (!invert) ? CARDINAL::SOUTH_EAST : CARDINAL::NORTH_WEST;
-
-//     if (isS && isW)
-//         return (!invert) ? CARDINAL::SOUTH_WEST : CARDINAL::NORTH_EAST;
-
-//     if (isN && isW)
-//         return (!invert) ? CARDINAL::NORTH_WEST : CARDINAL::SOUTH_EAST;
-
-//     return CARDINAL::NONE;
-// }
-
 // // lembrar d = y;  w = x;  h = z;
 void Maze::createMap() {
     glm::ivec3 pos;
@@ -242,13 +196,13 @@ void Maze::createMap() {
                         CARDINAL normDiag = pCube->emptyQuadrantDiag(DEEP::MIDDLE, false);
                         pCube->newDiag(normDiag, vertexData, this->trisList);
 
-                        if (this->hasNeighbor(normDiag, SPACE::FLOOR, pos) == true)
+                        if (pCube->hasNeighbor(DEEP::MIDDLE, normDiag, SPACE::FLOOR) == true)
                             pCube->newFlatFloorCeeling(true, normDiag, vertexData, this->trisList);
 
-                        if (this->hasNeighbor(normDiag, SPACE::CEILING, pos) == true)
+                        if (pCube->hasNeighbor(DEEP::MIDDLE, normDiag, SPACE::CEILING) == true)
                             pCube->newFlatFloorCeeling(false, normDiag, vertexData, this->trisList);
 
-                        if (this->hasNeighbor(normDiag, SPACE::FC, pos) == true) {
+                        if (pCube->hasNeighbor(DEEP::MIDDLE, normDiag, SPACE::FC) == true) {
                             pCube->newFlatFloorCeeling(true, normDiag, vertexData, this->trisList);
                             pCube->newFlatFloorCeeling(false, normDiag, vertexData, this->trisList);
                         }

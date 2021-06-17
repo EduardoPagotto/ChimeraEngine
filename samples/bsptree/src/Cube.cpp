@@ -230,6 +230,8 @@ bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
                 return (vS && vW);
             case CARDINAL::WEST:
                 return vW;
+            case CARDINAL::NORTH_WEST:
+                return (vN && vW);
             case CARDINAL::NONE:
                 return cb;
             default:

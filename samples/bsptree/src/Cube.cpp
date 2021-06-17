@@ -105,3 +105,107 @@ void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera:
     t1.calcNormal(vl);
     tl.push_back(t1);
 }
+
+void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
+
+    if (card == CARDINAL::NORTH) { // normal in SW
+
+        if (isFloor) {
+            this->addFace(true, 20, 2, vl, tl); // ok
+            this->addFace(true, 21, 3, vl, tl); // ok
+        } else {
+            this->addFace(false, 16, 0, vl, tl); // ok
+            this->addFace(false, 17, 1, vl, tl); // ok
+        }
+
+    } else if (card == CARDINAL::EAST) { // normal in NW
+
+        if (isFloor) {
+            this->addFace(true, 18, 4, vl, tl); // ok
+            this->addFace(true, 19, 5, vl, tl); // ok
+        } else {
+            this->addFace(false, 22, 0, vl, tl); // ok
+            this->addFace(false, 23, 1, vl, tl); // ok
+        }
+
+    } else if (card == CARDINAL::SOUTH) { // normal in NE
+
+        if (isFloor) {
+            this->addFace(true, 16, 2, vl, tl); // ok
+            this->addFace(true, 17, 3, vl, tl); // ok
+        } else {
+            this->addFace(false, 20, 0, vl, tl); // ok
+            this->addFace(false, 21, 1, vl, tl); // ok
+        }
+
+    } else if (card == CARDINAL::WEST) { // normal in SE
+
+        if (isFloor) {
+            this->addFace(true, 22, 2, vl, tl); // ok
+            this->addFace(true, 23, 3, vl, tl); // ok
+        } else {
+            this->addFace(false, 18, 7, vl, tl); // ok
+            this->addFace(false, 19, 6, vl, tl); // ok
+        }
+    }
+}
+
+void Cube::newDiag(CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
+
+    // Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
+    if (card == CARDINAL::SOUTH_WEST) { // normal in SW
+        // ne (diag. sup. dir.)
+        this->addFace(false, 12, 0, vl, tl);
+        this->addFace(false, 13, 1, vl, tl);
+    } else if (card == CARDINAL::NORTH_WEST) { // normal in NW
+        // se (diag. inf. dir.)
+        this->addFace(true, 14, 2, vl, tl);
+        this->addFace(true, 15, 3, vl, tl);
+    } else if (card == CARDINAL::NORTH_EAST) { // normal in NE
+        // sw (diag. inf. esq.)
+        this->addFace(true, 12, 2, vl, tl);
+        this->addFace(true, 13, 3, vl, tl);
+    } else if (card == CARDINAL::SOUTH_EAST) { // normal in SE
+        // nw (diag. sup. esq.)
+        this->addFace(false, 14, 0, vl, tl);
+        this->addFace(false, 15, 1, vl, tl);
+    }
+}
+
+void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
+
+    // Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
+    if (card == CARDINAL::SOUTH_WEST) { // quad == 0) {
+        if (isFloor) {                  // floor
+            this->addFace(true, 11, 2, vl, tl);
+        } else { // celling
+            this->addFace(false, 9, 1, vl, tl);
+        }
+    } else if (card == CARDINAL::NORTH_WEST) { // uad == 1) {
+        if (isFloor) {
+            this->addFace(true, 24, 4, vl, tl);
+        } else {
+            this->addFace(false, 26, 6, vl, tl);
+        }
+    } else if (card == CARDINAL::NORTH_EAST) { // quad == 2) {
+        if (isFloor) {
+            this->addFace(true, 10, 3, vl, tl);
+        } else {
+            this->addFace(false, 8, 0, vl, tl);
+        }
+    } else if (card == CARDINAL::SOUTH_EAST) { // quad == 3) {
+        if (isFloor) {
+            this->addFace(true, 25, 5, vl, tl);
+        } else {
+            this->addFace(false, 27, 7, vl, tl);
+        }
+    } else { // CARDINAL::NONE
+        if (isFloor) {
+            this->addFace(true, 10, 3, vl, tl);
+            this->addFace(true, 11, 2, vl, tl);
+        } else {
+            this->addFace(false, 8, 0, vl, tl);
+            this->addFace(false, 9, 1, vl, tl);
+        }
+    }
+}

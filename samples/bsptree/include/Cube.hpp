@@ -31,6 +31,10 @@ class Cube {
     Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
 
+    void newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+    void newDiag(CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+    void newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+
     void addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     inline SPACE getSpace() const { return this->space; }
 

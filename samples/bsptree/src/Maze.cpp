@@ -239,16 +239,16 @@ void Maze::newDiag(CARDINAL card, const glm::ivec3& pos) {
         pCube->addFace(false, 13, 1, vertexData, this->trisList);
     } else if (card == CARDINAL::NORTH_WEST) { // normal in NW
         // se (diag. inf. dir.)
-        pCube->addFace(false, 14, 2, vertexData, this->trisList);
-        pCube->addFace(false, 15, 3, vertexData, this->trisList);
+        pCube->addFace(true, 14, 2, vertexData, this->trisList);
+        pCube->addFace(true, 15, 3, vertexData, this->trisList);
     } else if (card == CARDINAL::NORTH_EAST) { // normal in NE
         // sw (diag. inf. esq.)
         pCube->addFace(true, 12, 2, vertexData, this->trisList);
         pCube->addFace(true, 13, 3, vertexData, this->trisList);
     } else if (card == CARDINAL::SOUTH_EAST) { // normal in SE
         // nw (diag. sup. esq.)
-        pCube->addFace(true, 14, 0, vertexData, this->trisList);
-        pCube->addFace(true, 15, 1, vertexData, this->trisList);
+        pCube->addFace(false, 14, 0, vertexData, this->trisList);
+        pCube->addFace(false, 15, 1, vertexData, this->trisList);
     }
 }
 
@@ -257,35 +257,35 @@ void Maze::newFlatFloorCeeling(bool isFloor, CARDINAL card, const glm::ivec3& po
     Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
     if (card == CARDINAL::SOUTH_WEST) { // quad == 0) {
         if (isFloor) {                  // floor
-            pCube->addFace(!isFloor, 11, 2, vertexData, this->trisList);
+            pCube->addFace(true, 11, 2, vertexData, this->trisList);
         } else { // celling
-            pCube->addFace(!isFloor, 9, 1, vertexData, this->trisList);
+            pCube->addFace(false, 9, 1, vertexData, this->trisList);
         }
     } else if (card == CARDINAL::NORTH_WEST) { // uad == 1) {
         if (isFloor) {
-            pCube->addFace(!isFloor, 24, 4, vertexData, this->trisList);
+            pCube->addFace(true, 24, 4, vertexData, this->trisList);
         } else {
-            pCube->addFace(!isFloor, 26, 6, vertexData, this->trisList);
+            pCube->addFace(false, 26, 6, vertexData, this->trisList);
         }
     } else if (card == CARDINAL::NORTH_EAST) { // quad == 2) {
         if (isFloor) {
-            pCube->addFace(!isFloor, 10, 3, vertexData, this->trisList);
+            pCube->addFace(true, 10, 3, vertexData, this->trisList);
         } else {
-            pCube->addFace(!isFloor, 8, 0, vertexData, this->trisList);
+            pCube->addFace(false, 8, 0, vertexData, this->trisList);
         }
     } else if (card == CARDINAL::SOUTH_EAST) { // quad == 3) {
         if (isFloor) {
-            pCube->addFace(!isFloor, 25, 5, vertexData, this->trisList);
+            pCube->addFace(true, 25, 5, vertexData, this->trisList);
         } else {
-            pCube->addFace(!isFloor, 27, 7, vertexData, this->trisList);
+            pCube->addFace(false, 27, 7, vertexData, this->trisList);
         }
     } else { // CARDINAL::NONE
         if (isFloor) {
-            pCube->addFace(isFloor, 10, 3, vertexData, this->trisList);
-            pCube->addFace(isFloor, 11, 2, vertexData, this->trisList);
+            pCube->addFace(true, 10, 3, vertexData, this->trisList);
+            pCube->addFace(true, 11, 2, vertexData, this->trisList);
         } else {
-            pCube->addFace(isFloor, 8, 0, vertexData, this->trisList);
-            pCube->addFace(isFloor, 9, 1, vertexData, this->trisList);
+            pCube->addFace(false, 8, 0, vertexData, this->trisList);
+            pCube->addFace(false, 9, 1, vertexData, this->trisList);
         }
     }
 }
@@ -340,8 +340,8 @@ void Maze::createMap() {
                             this->newFlatFloorCeeling(false, normDiag, pos);
 
                         if (this->hasNeighbor(normDiag, SPACE::FC, pos) == true) {
-                            this->newFlatFloorCeeling(false, normDiag, pos);
                             this->newFlatFloorCeeling(true, normDiag, pos);
+                            this->newFlatFloorCeeling(false, normDiag, pos);
                         }
 
                     } break;

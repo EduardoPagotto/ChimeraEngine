@@ -33,8 +33,9 @@ class Cube {
 
     void newWall(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
-    void newDiag(CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
-    void newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+    void newDiag(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+    void newFloor(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+    void newCeeling(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
 
     inline SPACE getSpace() const { return this->space; }
 
@@ -48,6 +49,7 @@ class Cube {
     bool hasNeighbor(DEEP deep, CARDINAL card, SPACE space);
 
   private:
+    void newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     Cube* pNorth;
     Cube* pEast;

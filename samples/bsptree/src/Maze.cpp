@@ -169,44 +169,19 @@ void Maze::createMap() {
                         break;
                     case SPACE::FLOOR: {
                         pCube->newWall(vertexData, this->trisList);
-                        if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos)) {
-                            CARDINAL normDiag = pCube->emptyQuadrantDiag(DEEP::BOTTOM, true);
-                            // this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::BOTTOM, CARDINAL::NONE, glm::ivec3(1), pos));
-                            pCube->newFlatFloorCeeling(true, normDiag, vertexData, this->trisList);
-                        } else {
-                            pCube->newFlatFloorCeeling(true, CARDINAL::NONE, vertexData, this->trisList);
-                        }
+                        pCube->newFloor(vertexData, this->trisList);
                     } break;
                     case SPACE::CEILING: {
                         pCube->newWall(vertexData, this->trisList);
-                        if (SPACE::DIAG == this->getCardinalNeighbor(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos)) {
-                            CARDINAL normDiag = pCube->emptyQuadrantDiag(DEEP::UP, true);
-                            //   this->emptyQuadrantDiag(true, this->getCardinalPos(DEEP::UP, CARDINAL::NONE, glm::ivec3(1), pos));
-                            pCube->newFlatFloorCeeling(false, normDiag, vertexData, this->trisList);
-                        } else {
-                            pCube->newFlatFloorCeeling(false, CARDINAL::NONE, vertexData, this->trisList);
-                        }
+                        pCube->newCeeling(vertexData, this->trisList);
                     } break;
                     case SPACE::FC: {
                         pCube->newWall(vertexData, this->trisList);
-                        pCube->newFlatFloorCeeling(true, CARDINAL::NONE, vertexData, this->trisList);
-                        pCube->newFlatFloorCeeling(false, CARDINAL::NONE, vertexData, this->trisList);
+                        pCube->newFloor(vertexData, this->trisList);
+                        pCube->newCeeling(vertexData, this->trisList);
                     } break;
                     case SPACE::DIAG: {
-                        CARDINAL normDiag = pCube->emptyQuadrantDiag(DEEP::MIDDLE, false);
-                        pCube->newDiag(normDiag, vertexData, this->trisList);
-
-                        if (pCube->hasNeighbor(DEEP::MIDDLE, normDiag, SPACE::FLOOR) == true)
-                            pCube->newFlatFloorCeeling(true, normDiag, vertexData, this->trisList);
-
-                        if (pCube->hasNeighbor(DEEP::MIDDLE, normDiag, SPACE::CEILING) == true)
-                            pCube->newFlatFloorCeeling(false, normDiag, vertexData, this->trisList);
-
-                        if (pCube->hasNeighbor(DEEP::MIDDLE, normDiag, SPACE::FC) == true) {
-                            pCube->newFlatFloorCeeling(true, normDiag, vertexData, this->trisList);
-                            pCube->newFlatFloorCeeling(false, normDiag, vertexData, this->trisList);
-                        }
-
+                        pCube->newDiag(vertexData, this->trisList);
                     } break;
                     case SPACE::RAMP: {
                         bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));

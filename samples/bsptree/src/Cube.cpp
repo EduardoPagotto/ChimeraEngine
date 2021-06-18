@@ -429,11 +429,31 @@ void Cube::newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::
 
     if ((pNorth != nullptr) && (pNorth->emptySpace())) {
 
-        // SPACE vazio = pNorth->getSpace();
-        // if (vazio == SPACE::FLOOR)
-        //     this->newRamp(true, CARDINAL::SOUTH, vl, tl);
-        // else if (vazio == SPACE::CEILING)
-        //     this->newRamp(false, CARDINAL::SOUTH, vl, tl);
+        SPACE vazio = pNorth->getSpace();
+        if (vazio == SPACE::FLOOR)
+            this->newRamp(true, CARDINAL::SOUTH, vl, tl);
+        else if (vazio == SPACE::CEILING) {
+            this->newRamp(false, CARDINAL::SOUTH, vl, tl);
+            // down west
+            if ((pWest != nullptr) && (pWest->emptySpace())) {
+                this->addFace(false, 30, 7, vl, tl);
+            }
+
+            // down east
+            if ((pEast != nullptr) && (pEast->emptySpace())) {
+                this->addFace(true, 31, 10, vl, tl);
+            }
+
+            // up West
+            if ((pWest != nullptr) && (pWest->getSpace() == SPACE::WALL)) {
+                this->addFace(false, 29, 9, vl, tl); // ---
+            }
+
+            // up east
+            if ((pEast != nullptr) && (pEast->getSpace() == SPACE::WALL)) {
+                this->addFace(true, 28, 8, vl, tl);
+            }
+        }
 
     } else if ((pSouth != nullptr) && (pSouth->emptySpace())) {
 
@@ -461,9 +481,9 @@ void Cube::newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::
             if ((pEast != nullptr) && (pEast->getSpace() == SPACE::WALL)) {
                 this->addFace(true, 31, 7, vl, tl);
             }
+        } else if (vazio == SPACE::CEILING) {
+            // this->newRamp(false, CARDINAL::NORTH, vl, tl);
         }
-        // else if (vazio == SPACE::CEILING)
-        //     this->newRamp(false, CARDINAL::NORTH, vl, tl);
     }
 
     // bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));

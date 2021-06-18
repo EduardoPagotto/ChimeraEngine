@@ -24,7 +24,7 @@ enum class DEEP {
     BOTTOM = 2  // UNDER
 };
 
-enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP = 6, INVALID = 99 };
+enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP_NS = 6, RAMP_EW = 7, INVALID = 99 };
 
 class Cube {
   public:
@@ -36,6 +36,8 @@ class Cube {
     void newDiag(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newFloor(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newCeeling(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+
+    void newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
 
     inline SPACE getSpace() const { return this->space; }
 

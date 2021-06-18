@@ -183,45 +183,8 @@ void Maze::createMap() {
                     case SPACE::DIAG: {
                         pCube->newDiag(vertexData, this->trisList);
                     } break;
-                    case SPACE::RAMP: {
-                        bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
-                        bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
-                        bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
-                        bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
-
-                        if (isN && (!isS)) {
-
-                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos);
-                            if (vazio == SPACE::FLOOR)
-                                pCube->newRamp(true, CARDINAL::SOUTH, this->vertexData, this->trisList);
-                            else if (vazio == SPACE::CEILING)
-                                pCube->newRamp(false, CARDINAL::SOUTH, this->vertexData, this->trisList);
-
-                        } else if (isE && (!isW)) {
-
-                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
-                            if (vazio == SPACE::FLOOR)
-                                pCube->newRamp(true, CARDINAL::WEST, this->vertexData, this->trisList);
-                            else if (vazio == SPACE::CEILING)
-                                pCube->newRamp(false, CARDINAL::WEST, this->vertexData, this->trisList);
-
-                        } else if ((!isN) && isS) {
-
-                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos);
-                            if (vazio == SPACE::FLOOR)
-                                pCube->newRamp(true, CARDINAL::NORTH, this->vertexData, this->trisList);
-                            else if (vazio == SPACE::CEILING)
-                                pCube->newRamp(false, CARDINAL::NORTH, this->vertexData, this->trisList);
-
-                        } else if ((!isE) && isW) {
-
-                            SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
-                            if (vazio == SPACE::FLOOR)
-                                pCube->newRamp(true, CARDINAL::EAST, this->vertexData, this->trisList);
-                            else if (vazio == SPACE::CEILING)
-                                pCube->newRamp(false, CARDINAL::EAST, this->vertexData, this->trisList);
-                        }
-
+                    case SPACE::RAMP_NS: {
+                        pCube->newRampNS(vertexData, this->trisList);
                     } break;
                     default:
                         break;

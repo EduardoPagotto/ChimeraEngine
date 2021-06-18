@@ -66,6 +66,11 @@ Cube::Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, co
     this->tVertIndex.push_back(glm::uvec3(7, 3, 2)); // F26 C Q1(NW)
     this->tVertIndex.push_back(glm::uvec3(2, 6, 7)); // F27 C Q3(NW)
 
+    this->tVertIndex.push_back(glm::uvec3(1, 5, 2)); // f28 down ramp ns E
+    this->tVertIndex.push_back(glm::uvec3(0, 4, 3)); // f29 down ramp ns W
+    this->tVertIndex.push_back(glm::uvec3(4, 7, 3)); // f30 up ramp ns W
+    this->tVertIndex.push_back(glm::uvec3(5, 6, 2)); // f31 up ramp ns W
+
     //---
     this->tTexIndex.push_back(glm::uvec3(0, 1, 2)); // T0 Q0 /   N // FIXME: Trocar estrutura por indice de rotacao de textura!!!!
     this->tTexIndex.push_back(glm::uvec3(2, 3, 0)); // T1 Q2 /
@@ -75,6 +80,10 @@ Cube::Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, co
     this->tTexIndex.push_back(glm::uvec3(2, 1, 0)); // T5 F Q3(SE) /
     this->tTexIndex.push_back(glm::uvec3(3, 0, 1)); // T6 c Q1(NW)
     this->tTexIndex.push_back(glm::uvec3(1, 2, 3)); // T7 c
+
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 3)); // T8 f29
+    this->tTexIndex.push_back(glm::uvec3(1, 0, 2)); // T9 f29
+    this->tTexIndex.push_back(glm::uvec3(0, 3, 2)); // T10 f 30
 }
 
 Cube::~Cube() {}
@@ -266,45 +275,47 @@ void Cube::newWall(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Tr
 }
 
 void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
-
-    if (card == CARDINAL::NORTH) { // normal in SW
-
-        if (isFloor) {
-            this->addFace(true, 20, 2, vl, tl); // ok
-            this->addFace(true, 21, 3, vl, tl); // ok
-        } else {
-            this->addFace(false, 16, 0, vl, tl); // ok
-            this->addFace(false, 17, 1, vl, tl); // ok
+    if (isFloor) {
+        switch (card) {
+            case CARDINAL::NORTH:
+                this->addFace(true, 20, 2, vl, tl); // ok
+                this->addFace(true, 21, 3, vl, tl); // ok
+                break;
+            case CARDINAL::EAST:
+                this->addFace(true, 18, 4, vl, tl); // ok
+                this->addFace(true, 19, 5, vl, tl); // ok
+                break;
+            case CARDINAL::SOUTH:
+                this->addFace(true, 16, 2, vl, tl); // ok
+                this->addFace(true, 17, 3, vl, tl); // ok
+                break;
+            case CARDINAL::WEST:
+                this->addFace(true, 22, 2, vl, tl); // ok
+                this->addFace(true, 23, 3, vl, tl); // ok
+                break;
+            default:
+                break;
         }
-
-    } else if (card == CARDINAL::EAST) { // normal in NW
-
-        if (isFloor) {
-            this->addFace(true, 18, 4, vl, tl); // ok
-            this->addFace(true, 19, 5, vl, tl); // ok
-        } else {
-            this->addFace(false, 22, 0, vl, tl); // ok
-            this->addFace(false, 23, 1, vl, tl); // ok
-        }
-
-    } else if (card == CARDINAL::SOUTH) { // normal in NE
-
-        if (isFloor) {
-            this->addFace(true, 16, 2, vl, tl); // ok
-            this->addFace(true, 17, 3, vl, tl); // ok
-        } else {
-            this->addFace(false, 20, 0, vl, tl); // ok
-            this->addFace(false, 21, 1, vl, tl); // ok
-        }
-
-    } else if (card == CARDINAL::WEST) { // normal in SE
-
-        if (isFloor) {
-            this->addFace(true, 22, 2, vl, tl); // ok
-            this->addFace(true, 23, 3, vl, tl); // ok
-        } else {
-            this->addFace(false, 18, 7, vl, tl); // ok
-            this->addFace(false, 19, 6, vl, tl); // ok
+    } else {
+        switch (card) {
+            case CARDINAL::NORTH:
+                this->addFace(false, 16, 0, vl, tl); // ok
+                this->addFace(false, 17, 1, vl, tl); // ok
+                break;
+            case CARDINAL::EAST:
+                this->addFace(false, 22, 0, vl, tl); // ok
+                this->addFace(false, 23, 1, vl, tl); // ok
+                break;
+            case CARDINAL::SOUTH:
+                this->addFace(false, 20, 0, vl, tl); // ok
+                this->addFace(false, 21, 1, vl, tl); // ok
+                break;
+            case CARDINAL::WEST:
+                this->addFace(false, 18, 7, vl, tl); // ok
+                this->addFace(false, 19, 6, vl, tl); // ok
+                break;
+            default:
+                break;
         }
     }
 }
@@ -412,4 +423,84 @@ void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera:
                 break;
         }
     }
+}
+
+void Cube::newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
+
+    if ((pNorth != nullptr) && (pNorth->emptySpace())) {
+
+        // SPACE vazio = pNorth->getSpace();
+        // if (vazio == SPACE::FLOOR)
+        //     this->newRamp(true, CARDINAL::SOUTH, vl, tl);
+        // else if (vazio == SPACE::CEILING)
+        //     this->newRamp(false, CARDINAL::SOUTH, vl, tl);
+
+    } else if ((pSouth != nullptr) && (pSouth->emptySpace())) {
+
+        SPACE vazio = pSouth->getSpace();
+
+        if (vazio == SPACE::FLOOR) {
+            this->newRamp(true, CARDINAL::NORTH, vl, tl);
+
+            // down west
+            if ((pWest != nullptr) && (pWest->emptySpace())) {
+                this->addFace(false, 29, 8, vl, tl);
+            }
+
+            // down east
+            if ((pEast != nullptr) && (pEast->emptySpace())) {
+                this->addFace(true, 28, 9, vl, tl);
+            }
+
+            // up West
+            if ((pWest != nullptr) && (pWest->getSpace() == SPACE::WALL)) {
+                this->addFace(false, 30, 10, vl, tl); // ---
+            }
+
+            // up east
+            if ((pEast != nullptr) && (pEast->getSpace() == SPACE::WALL)) {
+                this->addFace(true, 31, 7, vl, tl);
+            }
+        }
+        // else if (vazio == SPACE::CEILING)
+        //     this->newRamp(false, CARDINAL::NORTH, vl, tl);
+    }
+
+    // bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
+    // bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
+    // bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
+    // bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
+
+    // if (isN && (!isS)) {
+
+    //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos);
+    //     if (vazio == SPACE::FLOOR)
+    //         pCube->newRamp(true, CARDINAL::SOUTH, this->vertexData, this->trisList);
+    //     else if (vazio == SPACE::CEILING)
+    //         pCube->newRamp(false, CARDINAL::SOUTH, this->vertexData, this->trisList);
+
+    // } else if (isE && (!isW)) {
+
+    //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
+    //     if (vazio == SPACE::FLOOR)
+    //         pCube->newRamp(true, CARDINAL::WEST, this->vertexData, this->trisList);
+    //     else if (vazio == SPACE::CEILING)
+    //         pCube->newRamp(false, CARDINAL::WEST, this->vertexData, this->trisList);
+
+    // } else if ((!isN) && isS) {
+
+    //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos);
+    //     if (vazio == SPACE::FLOOR)
+    //         pCube->newRamp(true, CARDINAL::NORTH, this->vertexData, this->trisList);
+    //     else if (vazio == SPACE::CEILING)
+    //         pCube->newRamp(false, CARDINAL::NORTH, this->vertexData, this->trisList);
+
+    // } else if ((!isE) && isW) {
+
+    //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
+    //     if (vazio == SPACE::FLOOR)
+    //         pCube->newRamp(true, CARDINAL::EAST, this->vertexData, this->trisList);
+    //     else if (vazio == SPACE::CEILING)
+    //         pCube->newRamp(false, CARDINAL::EAST, this->vertexData, this->trisList);
+    // }
 }

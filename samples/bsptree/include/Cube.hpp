@@ -1,6 +1,7 @@
 #ifndef __GAME_TESTE_CUBE__HPP
 #define __GAME_TESTE_CUBE__HPP
 
+#include "chimera/render/AABB.hpp"
 #include "chimera/render/Triangle.hpp"
 #include "chimera/render/vbs/VertexData.hpp"
 #include <glm/glm.hpp>
@@ -26,9 +27,9 @@ enum class DEEP {
 
 enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP_NS = 6, RAMP_EW = 7, INVALID = 99 };
 
-class Cube {
+class Cube : public Chimera::AABB {
   public:
-    Cube(const char& caracter, const glm::ivec3& pos, const glm::vec3& min, const glm::vec3& max);
+    Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
 
     void newWall(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
@@ -36,12 +37,13 @@ class Cube {
     void newDiag(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newFloor(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newCeeling(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
-
     void newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
 
     inline SPACE getSpace() const { return this->space; }
 
     void setNeighbor(DEEP deep, CARDINAL card, Cube* pCube);
+
+  private:
     inline bool emptySpace() const {
         return ((this->space == SPACE::EMPTY) || (this->space == SPACE::FLOOR) || (this->space == SPACE::CEILING) ||
                 (this->space == SPACE::FC));
@@ -50,7 +52,6 @@ class Cube {
     CARDINAL emptyQuadrantDiag(DEEP deep, bool invert);
     bool hasNeighbor(DEEP deep, CARDINAL card, SPACE space);
 
-  private:
     void newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     Cube* pNorth;
@@ -61,11 +62,7 @@ class Cube {
     Cube* pBottom;
 
     SPACE space;
-    glm::ivec3 position;
-    glm::vec3 p[8];
     glm::vec2 t[4];
-    glm::vec3 max;
-    glm::vec3 min;
     std::vector<glm::uvec3> tVertIndex;
     std::vector<glm::uvec3> tTexIndex;
 };

@@ -27,15 +27,9 @@ class Maze {
         return ((val.z >= 0) && (val.z < this->size.z) && (val.x >= 0) && (val.x < this->size.x) && (val.y >= 0) && (val.y < this->size.y));
     }
 
-    inline bool empty(const SPACE& s) const {
-        return ((s == SPACE::EMPTY) || (s == SPACE::FLOOR) || (s == SPACE::CEILING) || (s == SPACE::FC));
-    }
-
-    // CARDINAL emptyQuadrantDiag(bool invert, const glm::ivec3& pos);
     glm::vec3 minimal(const glm::ivec3& pos) const;
     inline SPACE getCardinal(const glm::ivec3& pos) const { return this->vpCube[this->getIndexArrayPos(pos)]->getSpace(); }
     glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
-    SPACE getCardinalNeighbor(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
 
     Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos);
 

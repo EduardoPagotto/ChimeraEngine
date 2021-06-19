@@ -38,7 +38,7 @@ Maze::Maze(const char filename[]) {
             for (pos.x = 0; pos.x < this->size.x; pos.x++) {
                 glm::vec3 min = this->minimal(pos);
                 glm::vec3 max = min + sizeBlock;
-                Cube* pCube = new Cube(string[pos.x], pos, min, max);
+                Cube* pCube = new Cube(string[pos.x], min, max);
                 this->vpCube.push_back(pCube);
             }
         }
@@ -86,7 +86,6 @@ glm::vec3 Maze::minimal(const glm::ivec3& pos) const {
     return glm::vec3(x_min, y_min, z_min);
 }
 
-// // lembrar d = y;  w = x;  h = z;
 glm::ivec3 Maze::getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos) {
     glm::ivec3 val = pos;
     switch (deep) {
@@ -137,15 +136,6 @@ glm::ivec3 Maze::getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist
     return val;
 }
 
-// // lembrar d = y;  w = x;  h = z;
-SPACE Maze::getCardinalNeighbor(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos) {
-    glm::ivec3 val = this->getCardinalPos(deep, card, dist, pos);
-    if (this->valid(val))
-        return this->getCardinal(val);
-
-    return SPACE::INVALID;
-}
-
 Cube* Maze::getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos) {
     glm::ivec3 val = this->getCardinalPos(deep, card, glm::ivec3(1), pos);
     if (this->valid(val))
@@ -154,7 +144,6 @@ Cube* Maze::getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos) {
     return nullptr;
 }
 
-// // lembrar d = y;  w = x;  h = z;
 void Maze::createMap() {
     glm::ivec3 pos;
     for (pos.y = 0; pos.y < this->size.y; pos.y++) {

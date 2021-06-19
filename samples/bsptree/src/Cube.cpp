@@ -434,24 +434,23 @@ void Cube::newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::
             this->newRamp(true, CARDINAL::SOUTH, vl, tl);
         else if (vazio == SPACE::CEILING) {
             this->newRamp(false, CARDINAL::SOUTH, vl, tl);
-            // down west
-            if ((pWest != nullptr) && (pWest->emptySpace())) {
-                this->addFace(false, 30, 7, vl, tl);
+
+            if (pWest != nullptr) {
+                // down
+                if (pWest->emptySpace())
+                    this->addFace(false, 30, 7, vl, tl);
+
+                // up
+                if (pWest->getSpace() == SPACE::WALL)
+                    this->addFace(false, 29, 9, vl, tl);
             }
 
-            // down east
-            if ((pEast != nullptr) && (pEast->emptySpace())) {
-                this->addFace(true, 31, 10, vl, tl);
-            }
+            if (pEast != nullptr) {
+                if (pEast->emptySpace())
+                    this->addFace(true, 31, 10, vl, tl);
 
-            // up West
-            if ((pWest != nullptr) && (pWest->getSpace() == SPACE::WALL)) {
-                this->addFace(false, 29, 9, vl, tl); // ---
-            }
-
-            // up east
-            if ((pEast != nullptr) && (pEast->getSpace() == SPACE::WALL)) {
-                this->addFace(true, 28, 8, vl, tl);
+                if (pEast->getSpace() == SPACE::WALL)
+                    this->addFace(true, 28, 8, vl, tl);
             }
         }
 
@@ -462,25 +461,26 @@ void Cube::newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::
         if (vazio == SPACE::FLOOR) {
             this->newRamp(true, CARDINAL::NORTH, vl, tl);
 
-            // down west
-            if ((pWest != nullptr) && (pWest->emptySpace())) {
-                this->addFace(false, 29, 8, vl, tl);
+            if (pWest != nullptr) {
+                // down
+                if (pWest->emptySpace())
+                    this->addFace(false, 29, 8, vl, tl);
+
+                // up
+                if (pWest->getSpace() == SPACE::WALL)
+                    this->addFace(false, 30, 10, vl, tl);
             }
 
-            // down east
-            if ((pEast != nullptr) && (pEast->emptySpace())) {
-                this->addFace(true, 28, 9, vl, tl);
+            if (pEast != nullptr) {
+                // down
+                if (pEast->emptySpace())
+                    this->addFace(true, 28, 9, vl, tl);
+
+                // up
+                if (pEast->getSpace() == SPACE::WALL)
+                    this->addFace(true, 31, 7, vl, tl);
             }
 
-            // up West
-            if ((pWest != nullptr) && (pWest->getSpace() == SPACE::WALL)) {
-                this->addFace(false, 30, 10, vl, tl); // ---
-            }
-
-            // up east
-            if ((pEast != nullptr) && (pEast->getSpace() == SPACE::WALL)) {
-                this->addFace(true, 31, 7, vl, tl);
-            }
         } else if (vazio == SPACE::CEILING) {
             // this->newRamp(false, CARDINAL::NORTH, vl, tl);
         }

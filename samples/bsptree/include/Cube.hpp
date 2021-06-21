@@ -25,7 +25,7 @@ enum class DEEP {
     BOTTOM = 2  // UNDER
 };
 
-enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP_NS = 6, RAMP_EW = 7, INVALID = 99 };
+enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP_FNS = 6, RAMP_FEW = 7, INVALID = 99 };
 
 class Cube : public Chimera::AABB {
   public:

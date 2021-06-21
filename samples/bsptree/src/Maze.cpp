@@ -172,7 +172,7 @@ void Maze::createMap() {
                     case SPACE::DIAG: {
                         pCube->newDiag(vertexData, this->trisList);
                     } break;
-                    case SPACE::RAMP_NS: {
+                    case SPACE::RAMP_FNS: {
                         pCube->newRampNS(vertexData, this->trisList);
                     } break;
                     default:

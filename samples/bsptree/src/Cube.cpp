@@ -38,7 +38,7 @@ Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max) : A
     this->tVertIndex.push_back(glm::uvec3(4, 0, 2)); // f12 W0 RPNWD
     this->tVertIndex.push_back(glm::uvec3(0, 2, 6)); // f13 W1
     this->tVertIndex.push_back(glm::uvec3(2, 6, 4)); // f14 W2 RPWU
-    this->tVertIndex.push_back(glm::uvec3(5, 4, 0)); // f15 W3
+    this->tVertIndex.push_back(glm::uvec3(6, 4, 0)); // f15 W3
 
     this->tVertIndex.push_back(glm::uvec3(7, 6, 2)); // f16 U0
     this->tVertIndex.push_back(glm::uvec3(6, 2, 3)); // f17 U1
@@ -64,25 +64,6 @@ Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max) : A
     this->tVertIndex.push_back(glm::uvec3(5, 1, 2)); // f34 RP WE
     this->tVertIndex.push_back(glm::uvec3(2, 6, 5)); // f35 RP WE
 
-    // this->tVertIndex.push_back(glm::uvec3(0, 1, 6)); // f16 RP NS
-    // this->tVertIndex.push_back(glm::uvec3(6, 7, 0)); // f17 RP NS
-    // this->tVertIndex.push_back(glm::uvec3(0, 2, 6)); // f18 RP EW
-    // this->tVertIndex.push_back(glm::uvec3(6, 4, 0)); // f19 RP EW
-    // this->tVertIndex.push_back(glm::uvec3(5, 4, 3)); // f20 RP SN
-    // this->tVertIndex.push_back(glm::uvec3(3, 2, 5)); // f21 RP SN
-    // this->tVertIndex.push_back(glm::uvec3(1, 5, 7)); // f22 RP WE
-    // this->tVertIndex.push_back(glm::uvec3(7, 3, 1)); // f23 RP WE
-
-    // this->tVertIndex.push_back(glm::uvec3(0, 4, 5)); // f24 F Q1(NW)
-    // this->tVertIndex.push_back(glm::uvec3(5, 1, 0)); // f25 F Q3(SE)
-    // this->tVertIndex.push_back(glm::uvec3(3, 2, 6)); // F26 C Q1(NW)
-    // this->tVertIndex.push_back(glm::uvec3(6, 7, 3)); // F27 C Q3(NW)
-
-    // this->tVertIndex.push_back(glm::uvec3(1, 5, 2)); // f28 down ramp ns E
-    // this->tVertIndex.push_back(glm::uvec3(0, 4, 3)); // f29 down ramp ns W
-    // this->tVertIndex.push_back(glm::uvec3(4, 7, 3)); // f30 up ramp ns W
-    // this->tVertIndex.push_back(glm::uvec3(5, 6, 2)); // f31 up ramp ns W
-
     //---
     this->tTexIndex.push_back(glm::uvec3(0, 2, 3)); // T0 Q0
     this->tTexIndex.push_back(glm::uvec3(3, 1, 0)); // T1 Q2
@@ -95,6 +76,7 @@ Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max) : A
     this->tTexIndex.push_back(glm::uvec3(1, 3, 2)); // T7 c
 
     this->tTexIndex.push_back(glm::uvec3(3, 2, 0)); // T8 c
+    this->tTexIndex.push_back(glm::uvec3(0, 1, 3)); // T9 c
 }
 
 Cube::~Cube() {}
@@ -305,16 +287,16 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
     if (isFloor) {
         switch (card) {
             case CARDINAL::NORTH: {
-                // this->addFace(true, 28, 0, vl, tl); // ok
-                // this->addFace(true, 29, 1, vl, tl); // ok
-                // if (westWallDown)
-                //     this->addFace(false, 12, 2, vl, tl); // ok
-                // if (westWallUp)
-                //     this->addFace(false, 14, 1, vl, tl); // ok
-                // if (eastWallDown)
-                //     this->addFace(false, 7, 8, vl, tl); //  ok
-                // if (eastWallUp)
-                //     this->addFace(true, 5, 8, vl, tl); // v ok
+                this->addFace(false, 28, 0, vl, tl);
+                this->addFace(false, 29, 1, vl, tl);
+                if (westWallDown)
+                    this->addFace(true, 12, 2, vl, tl);
+                if (westWallUp)
+                    this->addFace(false, 14, 1, vl, tl);
+                if (eastWallDown)
+                    this->addFace(true, 7, 8, vl, tl);
+                if (eastWallUp)
+                    this->addFace(false, 5, 5, vl, tl);
             } break;
             // case CARDINAL::EAST:
             //     this->addFace(true, 30, 4, vl, tl); // ok
@@ -324,13 +306,13 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 this->addFace(false, 32, 0, vl, tl); // ok
                 this->addFace(false, 33, 1, vl, tl); // ok
                 if (westWallDown)
-                    this->addFace(false, 30, 7, vl, tl);
+                    this->addFace(true, 15, 8, vl, tl); // ok
                 if (westWallUp)
-                    this->addFace(false, 29, 0, vl, tl);
+                    this->addFace(false, 13, 5, vl, tl); // ok
                 if (eastWallDown)
-                    this->addFace(true, 31, 10, vl, tl);
+                    this->addFace(true, 4, 6, vl, tl); // ok
                 if (eastWallUp)
-                    this->addFace(true, 28, 0, vl, tl);
+                    this->addFace(false, 6, 1, vl, tl); // ok
             } break;
                 // case CARDINAL::WEST:
                 //     this->addFace(true, 22, 2, vl, tl); // ok

@@ -290,13 +290,13 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
     }
 
     if (pNorth != nullptr) {
-        westWallDown = pNorth->emptySpace();
-        westWallUp = (pNorth->getSpace() == SPACE::WALL);
+        northWallDown = pNorth->emptySpace();
+        northWallUp = (pNorth->getSpace() == SPACE::WALL);
     }
 
     if (pSouth != nullptr) {
-        eastWallDown = pSouth->emptySpace();
-        eastWallUp = (pSouth->getSpace() == SPACE::WALL);
+        southWallDown = pSouth->emptySpace();
+        southWallUp = (pSouth->getSpace() == SPACE::WALL);
     }
 
     if (isFloor) {
@@ -313,10 +313,20 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 if (eastWallUp)
                     this->addFace(false, 5, 5, vl, tl);
             } break;
-            // case CARDINAL::EAST:
-            //     this->addFace(true, 30, 4, vl, tl); // ok
-            //     this->addFace(true, 31, 5, vl, tl); // ok
-            //     break;
+            case CARDINAL::EAST:
+                this->addFace(false, 30, 4, vl, tl);
+                this->addFace(false, 31, 5, vl, tl);
+
+                // if (northWallDown)
+                //     this->addFace(true, 3, 8, vl, tl); // <--- aqui
+                if (northWallUp)
+                    this->addFace(false, 2, 1, vl, tl); // ok
+                if (southWallDown)
+                    this->addFace(true, 11, 8, vl, tl); // ok
+                // if (southWallUp)
+                //     this->addFace(false, 10, 1, vl, tl);
+
+                break;
             case CARDINAL::SOUTH: { // OK
                 this->addFace(false, 32, 0, vl, tl);
                 this->addFace(false, 33, 1, vl, tl);
@@ -329,9 +339,19 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 if (eastWallUp)
                     this->addFace(false, 6, 1, vl, tl);
             } break;
-            case CARDINAL::WEST:
-                this->addFace(true, 22, 2, vl, tl); // ok
-                this->addFace(true, 23, 3, vl, tl); // ok
+            case CARDINAL::WEST: // OK
+                this->addFace(false, 34, 0, vl, tl);
+                this->addFace(false, 35, 1, vl, tl);
+
+                if (northWallDown)
+                    this->addFace(true, 3, 8, vl, tl);
+                if (northWallUp)
+                    this->addFace(false, 1, 5, vl, tl);
+                if (southWallDown)
+                    this->addFace(true, 8, 2, vl, tl);
+                if (southWallUp)
+                    this->addFace(false, 10, 1, vl, tl);
+
                 break;
             default:
                 break;

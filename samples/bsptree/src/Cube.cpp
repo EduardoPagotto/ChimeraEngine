@@ -274,6 +274,11 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
     bool eastWallDown = false;
     bool eastWallUp = false;
 
+    bool northWallDown = false;
+    bool northWallUp = false;
+    bool southWallDown = false;
+    bool southWallUp = false;
+
     if (pWest != nullptr) {
         westWallDown = pWest->emptySpace();
         westWallUp = (pWest->getSpace() == SPACE::WALL);
@@ -284,9 +289,19 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
         eastWallUp = (pEast->getSpace() == SPACE::WALL);
     }
 
+    if (pNorth != nullptr) {
+        westWallDown = pNorth->emptySpace();
+        westWallUp = (pNorth->getSpace() == SPACE::WALL);
+    }
+
+    if (pSouth != nullptr) {
+        eastWallDown = pSouth->emptySpace();
+        eastWallUp = (pSouth->getSpace() == SPACE::WALL);
+    }
+
     if (isFloor) {
         switch (card) {
-            case CARDINAL::NORTH: {
+            case CARDINAL::NORTH: { // OK
                 this->addFace(false, 28, 0, vl, tl);
                 this->addFace(false, 29, 1, vl, tl);
                 if (westWallDown)
@@ -302,24 +317,24 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
             //     this->addFace(true, 30, 4, vl, tl); // ok
             //     this->addFace(true, 31, 5, vl, tl); // ok
             //     break;
-            case CARDINAL::SOUTH: {
-                this->addFace(false, 32, 0, vl, tl); // ok
-                this->addFace(false, 33, 1, vl, tl); // ok
+            case CARDINAL::SOUTH: { // OK
+                this->addFace(false, 32, 0, vl, tl);
+                this->addFace(false, 33, 1, vl, tl);
                 if (westWallDown)
-                    this->addFace(true, 15, 8, vl, tl); // ok
+                    this->addFace(true, 15, 8, vl, tl);
                 if (westWallUp)
-                    this->addFace(false, 13, 5, vl, tl); // ok
+                    this->addFace(false, 13, 5, vl, tl);
                 if (eastWallDown)
-                    this->addFace(true, 4, 6, vl, tl); // ok
+                    this->addFace(true, 4, 6, vl, tl);
                 if (eastWallUp)
-                    this->addFace(false, 6, 1, vl, tl); // ok
+                    this->addFace(false, 6, 1, vl, tl);
             } break;
-                // case CARDINAL::WEST:
-                //     this->addFace(true, 22, 2, vl, tl); // ok
-                //     this->addFace(true, 23, 3, vl, tl); // ok
-                //     break;
-                // default:
-                //     break;
+            case CARDINAL::WEST:
+                this->addFace(true, 22, 2, vl, tl); // ok
+                this->addFace(true, 23, 3, vl, tl); // ok
+                break;
+            default:
+                break;
         }
     } else {
         // switch (card) {
@@ -450,12 +465,24 @@ void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera:
     }
 }
 
-void Cube::newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
+void Cube::newRampNSEW(SPACE space, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
 
-    if ((pNorth != nullptr) && (pNorth->emptySpace())) {
-        this->newRamp(true, CARDINAL::SOUTH, vl, tl);
-    } else if ((pSouth != nullptr) && (pSouth->emptySpace())) {
-        this->newRamp(true, CARDINAL::NORTH, vl, tl);
+    if (space == SPACE::RAMP_FNS) {
+
+        // FIXME: verificar se teto ou piso
+        if ((pNorth != nullptr) && (pNorth->emptySpace())) {
+            this->newRamp(true, CARDINAL::SOUTH, vl, tl);
+        } else if ((pSouth != nullptr) && (pSouth->emptySpace())) {
+            this->newRamp(true, CARDINAL::NORTH, vl, tl);
+        }
+
+    } else if (space == SPACE::RAMP_FEW) {
+
+        if ((pEast != nullptr) && (pEast->emptySpace())) {
+            this->newRamp(true, CARDINAL::WEST, vl, tl);
+        } else if ((pWest != nullptr) && (pWest->emptySpace())) {
+            this->newRamp(true, CARDINAL::EAST, vl, tl);
+        }
     }
 
     // bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));

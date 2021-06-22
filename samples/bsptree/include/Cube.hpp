@@ -37,7 +37,7 @@ class Cube : public Chimera::AABB {
     void newDiag(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newFloor(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newCeeling(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
-    void newRampNS(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
+    void newRampNSEW(SPACE space, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
 
     inline SPACE getSpace() const { return this->space; }
 

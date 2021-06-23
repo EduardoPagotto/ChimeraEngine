@@ -388,12 +388,11 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                     this->addFace(true, 5, 9, vl, tl); // ok
                 if (eastWallUp)
                     this->addFace(false, 7, 4, vl, tl);
-
-            //     break;
-            // case CARDINAL::WEST:
-            //     this->addFace(true, 30, 2, vl, tl);
-            //     this->addFace(true, 31, 3, vl, tl);
-            //     break;
+                break;
+            case CARDINAL::WEST:
+                this->addFace(true, 30, 2, vl, tl);
+                this->addFace(true, 31, 3, vl, tl); // <- aqui
+                break;
             default:
                 break;
         }

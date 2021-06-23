@@ -317,14 +317,14 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 this->addFace(false, 30, 0, vl, tl);
                 this->addFace(false, 31, 1, vl, tl);
 
-                if (northWallDown)
-                    this->addFace(true, 0, 2, vl, tl); //  ok
+                if (northWallDown) // OK
+                    this->addFace(true, 0, 2, vl, tl);
                 if (northWallUp)
-                    this->addFace(false, 2, 1, vl, tl); // ok
+                    this->addFace(false, 2, 1, vl, tl);
                 if (southWallDown)
-                    this->addFace(true, 11, 8, vl, tl); // ok
+                    this->addFace(true, 11, 8, vl, tl);
                 if (southWallUp)
-                    this->addFace(false, 9, 5, vl, tl); // ok
+                    this->addFace(false, 9, 5, vl, tl);
 
                 break;
             case CARDINAL::SOUTH: { // OK
@@ -357,26 +357,46 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 break;
         }
     } else {
-        // switch (card) {
-        //     case CARDINAL::NORTH:
-        //         this->addFace(false, 16, 0, vl, tl); // ok
-        //         this->addFace(false, 17, 1, vl, tl); // ok
-        //         break;
-        //     case CARDINAL::EAST:
-        //         this->addFace(false, 22, 0, vl, tl); // ok
-        //         this->addFace(false, 23, 1, vl, tl); // ok
-        //         break;
-        //     case CARDINAL::SOUTH:
-        //         this->addFace(false, 20, 0, vl, tl); // ok
-        //         this->addFace(false, 21, 1, vl, tl); // ok
-        //         break;
-        //     case CARDINAL::WEST:
-        //         this->addFace(false, 18, 7, vl, tl); // ok
-        //         this->addFace(false, 19, 6, vl, tl); // ok
-        //         break;
-        //     default:
-        //         break;
-        // }
+        switch (card) { // OK
+            case CARDINAL::NORTH:
+                this->addFace(true, 32, 2, vl, tl);
+                this->addFace(true, 33, 3, vl, tl);
+
+                if (westWallDown)
+                    this->addFace(true, 13, 9, vl, tl);
+                if (westWallUp)
+                    this->addFace(false, 15, 4, vl, tl);
+                if (eastWallDown)
+                    this->addFace(true, 6, 3, vl, tl);
+                if (eastWallUp)
+                    this->addFace(false, 4, 0, vl, tl);
+
+                break;
+            // case CARDINAL::EAST:
+            //     this->addFace(true, 34, 2, vl, tl);
+            //     this->addFace(true, 35, 3, vl, tl);
+            //     break;
+            case CARDINAL::SOUTH:
+                this->addFace(true, 28, 2, vl, tl);
+                this->addFace(true, 29, 3, vl, tl);
+
+                if (westWallDown)
+                    this->addFace(true, 14, 3, vl, tl); // ok
+                if (westWallUp)
+                    this->addFace(false, 12, 0, vl, tl); // ok
+                if (eastWallDown)
+                    this->addFace(true, 5, 9, vl, tl); // ok
+                if (eastWallUp)
+                    this->addFace(false, 7, 4, vl, tl);
+
+            //     break;
+            // case CARDINAL::WEST:
+            //     this->addFace(true, 30, 2, vl, tl);
+            //     this->addFace(true, 31, 3, vl, tl);
+            //     break;
+            default:
+                break;
+        }
     }
 }
 
@@ -491,17 +511,23 @@ void Cube::newRampNSEW(SPACE space, std::vector<Chimera::VertexData>& vl, std::v
 
         // FIXME: verificar se teto ou piso
         if ((pNorth != nullptr) && (pNorth->emptySpace())) {
-            this->newRamp(true, CARDINAL::SOUTH, vl, tl);
+
+            // bool isFloor = (pNorth->getSpace() == SPACE::FLOOR);
+
+            this->newRamp(false, CARDINAL::SOUTH, vl, tl);
         } else if ((pSouth != nullptr) && (pSouth->emptySpace())) {
-            this->newRamp(true, CARDINAL::NORTH, vl, tl);
+
+            // bool isFloor = (pSouth->getSpace() == SPACE::FLOOR);
+
+            this->newRamp(false, CARDINAL::NORTH, vl, tl);
         }
 
     } else if (space == SPACE::RAMP_FEW) {
 
         if ((pEast != nullptr) && (pEast->emptySpace())) {
-            this->newRamp(true, CARDINAL::WEST, vl, tl);
+            this->newRamp(false, CARDINAL::WEST, vl, tl);
         } else if ((pWest != nullptr) && (pWest->emptySpace())) {
-            this->newRamp(true, CARDINAL::EAST, vl, tl);
+            this->newRamp(false, CARDINAL::EAST, vl, tl);
         }
     }
 

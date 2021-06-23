@@ -313,7 +313,7 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 if (eastWallUp)
                     this->addFace(false, 5, 5, vl, tl);
             } break;
-            case CARDINAL::EAST:
+            case CARDINAL::EAST: {
                 this->addFace(false, 30, 0, vl, tl);
                 this->addFace(false, 31, 1, vl, tl);
 
@@ -326,7 +326,7 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 if (southWallUp)
                     this->addFace(false, 9, 5, vl, tl);
 
-                break;
+            } break;
             case CARDINAL::SOUTH: { // OK
                 this->addFace(false, 32, 0, vl, tl);
                 this->addFace(false, 33, 1, vl, tl);
@@ -339,7 +339,7 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 if (eastWallUp)
                     this->addFace(false, 6, 1, vl, tl);
             } break;
-            case CARDINAL::WEST: // OK
+            case CARDINAL::WEST: { // OK
                 this->addFace(false, 34, 0, vl, tl);
                 this->addFace(false, 35, 1, vl, tl);
 
@@ -352,13 +352,13 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 if (southWallUp)
                     this->addFace(false, 10, 1, vl, tl);
 
-                break;
+            } break;
             default:
                 break;
         }
     } else {
         switch (card) { // OK
-            case CARDINAL::NORTH:
+            case CARDINAL::NORTH: {
                 this->addFace(true, 32, 2, vl, tl);
                 this->addFace(true, 33, 3, vl, tl);
 
@@ -371,12 +371,22 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                 if (eastWallUp)
                     this->addFace(false, 4, 0, vl, tl);
 
+            } break;
+            case CARDINAL::EAST:
+                this->addFace(true, 34, 2, vl, tl);
+                this->addFace(true, 35, 3, vl, tl);
+
+                if (northWallDown)
+                    this->addFace(true, 1, 9, vl, tl); // ok
+                if (northWallUp)
+                    this->addFace(false, 3, 4, vl, tl); // ok
+                if (southWallDown)
+                    this->addFace(true, 10, 3, vl, tl); // ok
+                if (southWallUp)
+                    this->addFace(false, 8, 0, vl, tl); // ok
+
                 break;
-            // case CARDINAL::EAST:
-            //     this->addFace(true, 34, 2, vl, tl);
-            //     this->addFace(true, 35, 3, vl, tl);
-            //     break;
-            case CARDINAL::SOUTH:
+            case CARDINAL::SOUTH: {
                 this->addFace(true, 28, 2, vl, tl);
                 this->addFace(true, 29, 3, vl, tl);
 
@@ -388,11 +398,21 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
                     this->addFace(true, 5, 9, vl, tl); // ok
                 if (eastWallUp)
                     this->addFace(false, 7, 4, vl, tl);
-                break;
-            case CARDINAL::WEST:
+            } break;
+            case CARDINAL::WEST: {
                 this->addFace(true, 30, 2, vl, tl);
-                this->addFace(true, 31, 3, vl, tl); // <- aqui
-                break;
+                this->addFace(true, 31, 3, vl, tl);
+
+                if (northWallDown)
+                    this->addFace(true, 2, 3, vl, tl); // ok
+                if (northWallUp)
+                    this->addFace(false, 0, 0, vl, tl); // ok
+                if (southWallDown)
+                    this->addFace(true, 9, 9, vl, tl); // ok
+                if (southWallUp)
+                    this->addFace(false, 11, 4, vl, tl); // ok
+
+            } break;
             default:
                 break;
         }

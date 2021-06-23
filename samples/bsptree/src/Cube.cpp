@@ -531,22 +531,29 @@ void Cube::newRampNSEW(SPACE space, std::vector<Chimera::VertexData>& vl, std::v
         // FIXME: verificar se teto ou piso
         if ((pNorth != nullptr) && (pNorth->emptySpace())) {
 
-            // bool isFloor = (pNorth->getSpace() == SPACE::FLOOR);
+            bool isFloor = (pNorth->getSpace() == SPACE::FLOOR);
 
-            this->newRamp(false, CARDINAL::SOUTH, vl, tl);
+            this->newRamp(isFloor, CARDINAL::SOUTH, vl, tl);
         } else if ((pSouth != nullptr) && (pSouth->emptySpace())) {
 
-            // bool isFloor = (pSouth->getSpace() == SPACE::FLOOR);
+            bool isFloor = (pSouth->getSpace() == SPACE::FLOOR);
 
-            this->newRamp(false, CARDINAL::NORTH, vl, tl);
+            this->newRamp(isFloor, CARDINAL::NORTH, vl, tl);
         }
 
     } else if (space == SPACE::RAMP_FEW) {
 
         if ((pEast != nullptr) && (pEast->emptySpace())) {
-            this->newRamp(false, CARDINAL::WEST, vl, tl);
+
+            bool isFloor = (pEast->getSpace() == SPACE::FLOOR);
+
+            this->newRamp(isFloor, CARDINAL::WEST, vl, tl);
+
         } else if ((pWest != nullptr) && (pWest->emptySpace())) {
-            this->newRamp(false, CARDINAL::EAST, vl, tl);
+
+            bool isFloor = (pWest->getSpace() == SPACE::FLOOR);
+
+            this->newRamp(isFloor, CARDINAL::EAST, vl, tl);
         }
     }
 

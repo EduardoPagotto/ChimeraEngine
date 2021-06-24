@@ -31,7 +31,10 @@ class Cube : public Chimera::AABB {
   public:
     Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
+    void setNeighbor(DEEP deep, CARDINAL card, Cube* pCube);
+    void create(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
 
+  private:
     void newWall(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
     void newDiag(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl);
@@ -41,9 +44,6 @@ class Cube : public Chimera::AABB {
 
     inline SPACE getSpace() const { return this->space; }
 
-    void setNeighbor(DEEP deep, CARDINAL card, Cube* pCube);
-
-  private:
     inline bool emptySpace() const {
         return ((this->space == SPACE::EMPTY) || (this->space == SPACE::FLOOR) || (this->space == SPACE::CEILING) ||
                 (this->space == SPACE::FC));

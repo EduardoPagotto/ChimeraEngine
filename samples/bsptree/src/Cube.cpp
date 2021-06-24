@@ -556,42 +556,36 @@ void Cube::newRampNSEW(SPACE space, std::vector<Chimera::VertexData>& vl, std::v
             this->newRamp(isFloor, CARDINAL::EAST, vl, tl);
         }
     }
+}
 
-    // bool isN = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos));
-    // bool isE = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos));
-    // bool isS = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos));
-    // bool isW = this->empty(this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos));
+void Cube::create(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Triangle>& tl) {
 
-    // if (isN && (!isS)) {
-
-    //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, glm::ivec3(1), pos);
-    //     if (vazio == SPACE::FLOOR)
-    //         pCube->newRamp(true, CARDINAL::SOUTH, this->vertexData, this->trisList);
-    //     else if (vazio == SPACE::CEILING)
-    //         pCube->newRamp(false, CARDINAL::SOUTH, this->vertexData, this->trisList);
-
-    // } else if (isE && (!isW)) {
-
-    //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::EAST, glm::ivec3(1), pos);
-    //     if (vazio == SPACE::FLOOR)
-    //         pCube->newRamp(true, CARDINAL::WEST, this->vertexData, this->trisList);
-    //     else if (vazio == SPACE::CEILING)
-    //         pCube->newRamp(false, CARDINAL::WEST, this->vertexData, this->trisList);
-
-    // } else if ((!isN) && isS) {
-
-    //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, glm::ivec3(1), pos);
-    //     if (vazio == SPACE::FLOOR)
-    //         pCube->newRamp(true, CARDINAL::NORTH, this->vertexData, this->trisList);
-    //     else if (vazio == SPACE::CEILING)
-    //         pCube->newRamp(false, CARDINAL::NORTH, this->vertexData, this->trisList);
-
-    // } else if ((!isE) && isW) {
-
-    //     SPACE vazio = this->getCardinalNeighbor(DEEP::MIDDLE, CARDINAL::WEST, glm::ivec3(1), pos);
-    //     if (vazio == SPACE::FLOOR)
-    //         pCube->newRamp(true, CARDINAL::EAST, this->vertexData, this->trisList);
-    //     else if (vazio == SPACE::CEILING)
-    //         pCube->newRamp(false, CARDINAL::EAST, this->vertexData, this->trisList);
-    // }
+    SPACE val = this->getSpace();
+    switch (val) {
+        case SPACE::EMPTY:
+            this->newWall(vl, tl);
+            break;
+        case SPACE::FLOOR: {
+            this->newWall(vl, tl);
+            this->newFloor(vl, tl);
+        } break;
+        case SPACE::CEILING: {
+            this->newWall(vl, tl);
+            this->newCeeling(vl, tl);
+        } break;
+        case SPACE::FC: {
+            this->newWall(vl, tl);
+            this->newFloor(vl, tl);
+            this->newCeeling(vl, tl);
+        } break;
+        case SPACE::DIAG: {
+            this->newDiag(vl, tl);
+        } break;
+        case SPACE::RAMP_FNS:
+        case SPACE::RAMP_FEW:
+            this->newRampNSEW(val, vl, tl);
+            break;
+        default:
+            break;
+    }
 }

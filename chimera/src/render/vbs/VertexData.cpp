@@ -25,6 +25,23 @@ bool getSimilarVertexIndex(VertexData& in_vertex, std::vector<VertexData>& out_v
     return false;
 }
 
+void vertexDataReorder(std::vector<VertexData>& inVertexData, std::vector<unsigned int>& inIndex, std::vector<VertexData>& outVertexData,
+                       std::vector<unsigned int>& outIndex) {
+
+    std::vector<VertexData> tempVertexData;
+
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Reorder Vertex In: ( %04lu / %04lu )", inVertexData.size(), inIndex.size());
+    for (unsigned int i : inIndex) {
+        // expand
+        VertexData vd = inVertexData[i];
+        tempVertexData.push_back(vd);
+    }
+
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Reorder Vertex full: %04lu", tempVertexData.size());
+
+    vertexDataIndexCompile(tempVertexData, outVertexData, outIndex);
+}
+
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<unsigned int>& out_indices) {
 
     // percorrer todos os vertices
@@ -42,7 +59,7 @@ void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexD
         }
     }
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "VBO Vertex In: %04lu Vertex out: %04lu Index out: %04lu ", inData.size(), outData.size(),
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compile Vertex In: %04lu Vertex out: %04lu Index out: %04lu ", inData.size(), outData.size(),
                  out_indices.size());
 }
 

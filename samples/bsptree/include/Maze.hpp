@@ -28,7 +28,6 @@ class Maze {
     }
 
     glm::vec3 minimal(const glm::ivec3& pos) const;
-    inline SPACE getCardinal(const glm::ivec3& pos) const { return this->vpCube[this->getIndexArrayPos(pos)]->getSpace(); }
     glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos);
 
     Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos);

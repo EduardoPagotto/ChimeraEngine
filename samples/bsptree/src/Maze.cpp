@@ -145,42 +145,9 @@ Cube* Maze::getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos) {
 }
 
 void Maze::createMap() {
-    glm::ivec3 pos;
-    for (pos.y = 0; pos.y < this->size.y; pos.y++) {
-        for (pos.z = 0; pos.z < this->size.z; pos.z++) {
-            for (pos.x = 0; pos.x < this->size.x; pos.x++) {
 
-                SPACE val = this->getCardinal(pos);
-                Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
-                switch (val) {
-                    case SPACE::EMPTY:
-                        pCube->newWall(vertexData, this->trisList);
-                        break;
-                    case SPACE::FLOOR: {
-                        pCube->newWall(vertexData, this->trisList);
-                        pCube->newFloor(vertexData, this->trisList);
-                    } break;
-                    case SPACE::CEILING: {
-                        pCube->newWall(vertexData, this->trisList);
-                        pCube->newCeeling(vertexData, this->trisList);
-                    } break;
-                    case SPACE::FC: {
-                        pCube->newWall(vertexData, this->trisList);
-                        pCube->newFloor(vertexData, this->trisList);
-                        pCube->newCeeling(vertexData, this->trisList);
-                    } break;
-                    case SPACE::DIAG: {
-                        pCube->newDiag(vertexData, this->trisList);
-                    } break;
-                    case SPACE::RAMP_FNS:
-                    case SPACE::RAMP_FEW:
-                        pCube->newRampNSEW(val, vertexData, this->trisList);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+    for (auto pCube : this->vpCube) {
+        pCube->create(vertexData, this->trisList);
     }
 
     for (Chimera::Triangle t : this->trisList) {

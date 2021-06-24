@@ -98,12 +98,12 @@ void Game::start() {
     // // Cria VertexList sequencial
     // std::vector<Chimera::VertexData> vVertexSequencial;
     // m.toVertexData(vVertexSequencial);
-    // std::vector<unsigned int> vIndex;
+    std::vector<unsigned int> vIndex;
 
     // // -------
     // // Comentar as tres linhas de baixo para bsp sem indice (sequencial)
     // // Cria BSP usando Vertex indexado
-    // std::vector<Chimera::VertexData> vVertexIndexed;
+    std::vector<Chimera::VertexData> vVertexIndexed;
     // vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
     // bspTree.create(vVertexIndexed, vIndex);
 
@@ -113,9 +113,12 @@ void Game::start() {
     // -------
 
     // Usando o Maze
-    Maze maze = Maze("./data/maze7.txt");
+    Maze maze = Maze("./data/maze3.txt");
     maze.createMap();
-    bspTree.create(maze.vertexData, maze.vIndex);
+
+    vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
+
+    bspTree.create(vVertexIndexed, vIndex);
     //
 
     renderDynamic.create(15000000);

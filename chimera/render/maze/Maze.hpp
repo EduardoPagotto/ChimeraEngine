@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <vector>
 
+namespace Chimera {
+
 class Maze {
   public:
     Maze(const char filename[]);
@@ -15,7 +17,7 @@ class Maze {
 
     void createMap();
 
-    std::vector<Chimera::VertexData> vertexData;
+    std::vector<VertexData> vertexData;
     std::vector<unsigned int> vIndex;
 
   private:
@@ -37,7 +39,7 @@ class Maze {
     glm::vec3 halfBlock;
     uint32_t indexPointCount;
     std::vector<Cube*> vpCube;
-    std::vector<Chimera::Triangle> trisList;
+    std::vector<Triangle> trisList;
 };
-
+} // namespace Chimera
 #endif

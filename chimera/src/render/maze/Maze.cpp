@@ -1,6 +1,8 @@
-#include "Maze.hpp"
+#include "chimera/render/maze/Maze.hpp"
 #include "chimera/core/Exception.hpp"
 #include <string>
+
+namespace Chimera {
 
 Maze::Maze(const char filename[]) {
 
@@ -156,3 +158,4 @@ void Maze::createMap() {
         vIndex.push_back(t.p[2]);
     }
 }
+} // namespace Chimera

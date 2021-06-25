@@ -1,4 +1,6 @@
-#include "Cube.hpp"
+#include "chimera/render/maze/Cube.hpp"
+
+namespace Chimera {
 
 // Cube::Cube(const glm::ivec3& pos, const glm::ivec3& size, const float& sizeBlock) {
 Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max) : AABB(min, max) {
@@ -589,3 +591,4 @@ void Cube::create(std::vector<Chimera::VertexData>& vl, std::vector<Chimera::Tri
             break;
     }
 }
+} // namespace Chimera

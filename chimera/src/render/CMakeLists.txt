@@ -29,7 +29,9 @@ set (RenderSource 	Triangle.cpp
 					Texture.cpp
 					LoadObj.cpp
 					HeightMap.cpp
-					LoadHeightMap.cpp)
+					LoadHeightMap.cpp
+					maze/Cube.cpp 
+					maze/Maze.cpp)
 
 #define os includes
 set (RenderInclude ${CMAKE_SOURCE_DIR}) # Raiz do projeto

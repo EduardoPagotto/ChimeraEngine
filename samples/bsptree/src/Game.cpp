@@ -1,10 +1,10 @@
 #include "Game.hpp"
-#include "Maze.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/render/AABB.hpp"
 #include "chimera/render/LoadObj.hpp"
+#include "chimera/render/maze/Maze.hpp"
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -113,7 +113,7 @@ void Game::start() {
     // -------
 
     // Usando o Maze
-    Maze maze = Maze("./data/maze3.txt");
+    Chimera::Maze maze = Chimera::Maze("./data/maze7.txt");
     maze.createMap();
 
     vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);

@@ -99,18 +99,21 @@ void BspTree::collapse(BSPTreeNode* tree) {
     }
 }
 
-void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
+void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _frustrun) {
 
     if (tree->isLeaf == false)
         return;
 
-    if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %ld", tree->leafIndex, vpLeaf[tree->leafIndex]->index.size());
+    auto pVn = vpLeaf[tree->leafIndex];
+    if (pVn->aabb.visible(_frustrun) == true) {
+        if (logdata == true)
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %ld", tree->leafIndex, pVn->index.size());
 
-    vpLeaf[tree->leafIndex]->render();
+        pVn->render();
+    }
 }
 
-void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
+void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos, Frustum& _frustrun) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
@@ -121,29 +124,29 @@ void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
     SIDE result = tree->hyperPlane.classifyPoint(pos);
     switch (result) {
         case SIDE::CP_FRONT:
-            traverseTree(tree->back, pos);
-            drawPolygon(tree, true);
-            traverseTree(tree->front, pos);
+            traverseTree(tree->back, pos, _frustrun);
+            drawPolygon(tree, true, _frustrun);
+            traverseTree(tree->front, pos, _frustrun);
             break;
         case SIDE::CP_BACK:
-            traverseTree(tree->front, pos);
-            drawPolygon(tree, false); // Elimina o render do back-face
-            traverseTree(tree->back, pos);
+            traverseTree(tree->front, pos, _frustrun);
+            drawPolygon(tree, false, _frustrun); // Elimina o render do back-face
+            traverseTree(tree->back, pos, _frustrun);
             break;
         default: // SIDE::CP_ONPLANE
             // the eye point is on the partition hyperPlane...
-            traverseTree(tree->front, pos);
-            traverseTree(tree->back, pos);
+            traverseTree(tree->front, pos, _frustrun);
+            traverseTree(tree->back, pos, _frustrun);
             break;
     }
 }
 
-void BspTree::render(glm::vec3* eye, bool _logData) {
+void BspTree::render(glm::vec3* eye, Frustum& _frustrun, bool _logData) {
 
     vao.bind();
 
     logdata = _logData;
-    traverseTree(root, eye);
+    traverseTree(root, eye, _frustrun);
 
     vao.unbind();
 }

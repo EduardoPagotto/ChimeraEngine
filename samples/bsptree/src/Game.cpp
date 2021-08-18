@@ -162,6 +162,11 @@ void Game::render() {
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
+    glm::mat4 projectionMatrixInverse = glm::inverse(projection);
+    glm::mat4 viewMatrixInverse = glm::inverse(view);
+    glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
+    frustum.set(viewProjectionMatrixInverse);
+
     pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
@@ -169,7 +174,7 @@ void Game::render() {
     // aplica a textura
     pTex->apply(pShader);
 
-    bspTree.render(&vp->position, debugParser);
+    bspTree.render(&vp->position, frustum, debugParser);
 
     // TO debug only
     bspTree.renderAABB();

@@ -18,14 +18,14 @@ class BspTree {
     virtual ~BspTree();
     void create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
     void destroy();
-    void render(glm::vec3* eye, bool _logData);
+    void render(glm::vec3* eye, Frustum& _frustrun, bool _logData);
     void renderAABB();
 
   private:
     BSPTreeNode* buildLeafy(std::list<Triangle*>& _vTriangle);
 
-    void drawPolygon(BSPTreeNode* tree, bool frontSide);
-    void traverseTree(BSPTreeNode* tree, glm::vec3* pos);
+    void drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _frustrun);
+    void traverseTree(BSPTreeNode* tree, glm::vec3* pos, Frustum& _frustrun);
 
     void collapse(BSPTreeNode* tree);
     Triangle* selectBestSplitter(std::list<Triangle*>& _vTriangle);

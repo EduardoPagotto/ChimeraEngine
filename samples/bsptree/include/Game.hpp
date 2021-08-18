@@ -44,6 +44,8 @@ class Game : public Chimera::IGameClientEvents {
     glm::mat4 model;
 
     Chimera::TextureImg* pTex;
+
+    Chimera::Frustum frustum;
 };
 
 #endif

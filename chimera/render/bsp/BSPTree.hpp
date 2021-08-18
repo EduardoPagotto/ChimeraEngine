@@ -4,9 +4,7 @@
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
-#include "Leaf.hpp"
-#include "chimera/render/AABB.hpp"
-#include "chimera/render/vbs/VertexData.hpp"
+#include "chimera/render/vbs/VertexNode.hpp"
 #include <list>
 #include <vector>
 
@@ -40,8 +38,7 @@ class BspTree {
     BSPTreeNode* root;
     std::vector<Chimera::VertexData> vVertex;
     std::vector<VertexData>* resultVertex;
-    std::vector<Leaf*> vpLeaf;
-    std::vector<AABB*> vpAABB;
+    std::vector<VertexNode*> vpLeaf;
 };
 
 } // namespace Chimera

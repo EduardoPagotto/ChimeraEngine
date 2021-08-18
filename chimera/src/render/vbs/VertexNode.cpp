@@ -43,7 +43,7 @@ void VertexNode::initAABB(std::vector<VertexData>& vertexDataIn) {
     vlt.clear();
 }
 
-void VertexNode::addFace(unsigned int& _face, unsigned int& _pa, unsigned int& _pb, unsigned int& _pc) {
+void VertexNode::addFace(const uint32_t& _face, const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc) {
     faces.push_back(_face);
     index.push_back(_pa);
     index.push_back(_pb);

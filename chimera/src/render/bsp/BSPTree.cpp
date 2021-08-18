@@ -59,7 +59,7 @@ void BspTree::destroy() {
 
     while (!vpLeaf.empty()) {
 
-        Leaf* pLeaf = vpLeaf.back();
+        VertexNode* pLeaf = vpLeaf.back();
         vpLeaf.pop_back();
 
         delete pLeaf;
@@ -352,7 +352,7 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
 
 void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTriangle) {
 
-    Leaf* pLeaf = new Leaf();
+    VertexNode* pLeaf = new VertexNode();
 
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();
@@ -363,22 +363,18 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
         convPoly = nullptr;
     }
 
+    pLeaf->initAABB(vVertex);
+
     tree->leafIndex = vpLeaf.size();
     vpLeaf.push_back(pLeaf);
-
-    glm::vec3 min, max, size;
-    vertexDataIndexMinMaxSize(vVertex, pLeaf->index, min, max, size);
-    AABB* pAABB = new AABB(min, max);
-    tree->aabbIndex = vpAABB.size();
-    vpAABB.push_back(pAABB);
 
     tree->isSolid = false;
     tree->isLeaf = true;
 }
 
 void BspTree::renderAABB() {
-    for (AABB* pAABB : this->vpAABB) {
-        pAABB->render();
+    for (auto pLeaf : this->vpLeaf) {
+        pLeaf->aabb.render();
     }
 }
 

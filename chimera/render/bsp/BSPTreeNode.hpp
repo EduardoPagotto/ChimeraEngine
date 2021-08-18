@@ -8,12 +8,11 @@ namespace Chimera {
 
 struct BSPTreeNode {
     BSPTreeNode(const Plane& _hyperPlane)
-        : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), leafIndex(0), aabbIndex(0), isLeaf(false), isSolid(false) {}
+        : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), leafIndex(0), isLeaf(false), isSolid(false) {}
     Plane hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;
     BSPTreeNode* back;
     uint32_t leafIndex;
-    uint32_t aabbIndex;
     bool isSolid;
     bool isLeaf;
 };

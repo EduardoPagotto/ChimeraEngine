@@ -119,9 +119,6 @@ void Game::start() {
     vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
 
     bspTree.create(vVertexIndexed, vIndex);
-    //
-
-    renderDynamic.create(15000000);
 }
 
 void Game::stop() {}
@@ -160,12 +157,6 @@ void Game::render() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
     }
 
-    // constroi vertex dinamico baseado no viewpoint
-    std::vector<Chimera::VertexData> vVertice;
-    bspTree.render(&vp->position, &vVertice, debugParser);
-
-    // debugParser = false;
-
     pShader->link();
 
     // Calcula view e projection baseado em vp
@@ -178,7 +169,7 @@ void Game::render() {
     // aplica a textura
     pTex->apply(pShader);
 
-    renderDynamic.render(vVertice);
+    bspTree.render(&vp->position, debugParser);
 
     // TO debug only
     bspTree.renderAABB();

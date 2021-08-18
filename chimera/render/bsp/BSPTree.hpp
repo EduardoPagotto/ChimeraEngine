@@ -4,6 +4,8 @@
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
+#include "chimera/render/vbs/VAO.hpp"
+#include "chimera/render/vbs/VBO.hpp"
 #include "chimera/render/vbs/VertexNode.hpp"
 #include <list>
 #include <vector>
@@ -16,7 +18,7 @@ class BspTree {
     virtual ~BspTree();
     void create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
     void destroy();
-    void render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData);
+    void render(glm::vec3* eye, bool _logData);
     void renderAABB();
 
   private:
@@ -36,8 +38,9 @@ class BspTree {
 
     bool logdata;
     BSPTreeNode* root;
+    VBO vbo;
+    VAO vao;
     std::vector<Chimera::VertexData> vVertex;
-    std::vector<VertexData>* resultVertex;
     std::vector<VertexNode*> vpLeaf;
 };
 

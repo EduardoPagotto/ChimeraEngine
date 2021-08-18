@@ -7,7 +7,6 @@
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/render/Texture.hpp"
 #include "chimera/render/bsp/BSPTree.hpp"
-#include "chimera/render/vbs/VertexDynamic.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -39,7 +38,6 @@ class Game : public Chimera::IGameClientEvents {
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    Chimera::VertexRenderDynamic renderDynamic;
 
     glm::mat4 projection;
     glm::mat4 view;

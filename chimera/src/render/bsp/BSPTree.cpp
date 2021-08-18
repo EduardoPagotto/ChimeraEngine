@@ -11,7 +11,6 @@ template <class T> void swapFace(T& a, T& b) {
 
 BspTree::BspTree() {
     root = nullptr;
-    resultVertex = nullptr;
     logdata = false;
 }
 
@@ -51,7 +50,23 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
         }
     }
 
+    // create BspTtree leafy
     root = buildLeafy(vTris);
+
+    // create vertex buffers
+    vao.create();
+    vao.bind();
+    vbo.buildStatic(_vVertex);
+
+    vao.bind();
+
+    for (VertexNode* pNode : this->vpLeaf) {
+        pNode->initIndexBufferObject(); // create IBO's
+        pNode->initAABB(_vVertex);      // initialize AABB's
+    }
+
+    vao.unbind();
+
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
 }
 
@@ -90,10 +105,9 @@ void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide) {
         return;
 
     if (logdata == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Convex: %ld", vpLeaf[tree->leafIndex]->index.size()); // tree->pLeaf->index.size());
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %ld", tree->leafIndex, vpLeaf[tree->leafIndex]->index.size());
 
-    for (auto index : vpLeaf[tree->leafIndex]->index) // for (auto index : tree->pLeaf->index)
-        resultVertex->push_back(vVertex[index]);
+    vpLeaf[tree->leafIndex]->render();
 }
 
 void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
@@ -124,10 +138,14 @@ void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos) {
     }
 }
 
-void BspTree::render(glm::vec3* eye, std::vector<VertexData>* _pOutVertex, bool _logData) {
+void BspTree::render(glm::vec3* eye, bool _logData) {
+
+    vao.bind();
+
     logdata = _logData;
-    resultVertex = _pOutVertex;
     traverseTree(root, eye);
+
+    vao.unbind();
 }
 
 Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
@@ -362,8 +380,6 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
         delete convPoly;
         convPoly = nullptr;
     }
-
-    pLeaf->initAABB(vVertex);
 
     tree->leafIndex = vpLeaf.size();
     vpLeaf.push_back(pLeaf);

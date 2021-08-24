@@ -1,6 +1,6 @@
-#include "chimera/render/EBO.hpp"
+#include "chimera/render/vbs/EBO.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/render/VertexData.hpp"
+#include "chimera/render/vbs/VertexData.hpp"
 
 namespace Chimera {
 
@@ -11,9 +11,9 @@ EBO::~EBO() {
         glDeleteBuffers(1, &eboGL);
 }
 
-void EBO::create(std::vector<unsigned int>& index) {
+void EBO::create(std::vector<uint32_t>& index) {
 
-    unsigned int sizeBufferIndex = index.size() * sizeof(unsigned int);
+    uint32_t sizeBufferIndex = index.size() * sizeof(uint32_t);
     sizeIndex = index.size();
 
     // Create EBO

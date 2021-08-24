@@ -1,11 +1,10 @@
 #ifndef __CHIMERA_PLANE__HPP
 #define __CHIMERA_PLANE__HPP
 
+#include "Side.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
-
-enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
 
 class Plane {
   public:

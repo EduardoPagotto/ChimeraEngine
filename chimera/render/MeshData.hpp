@@ -1,8 +1,10 @@
 #ifndef __CHIMERA_MESH_DATA_HPP
 #define __CHIMERA_MESH_DATA_HPP
 
-#include "chimera/render/VertexData.hpp"
+#include "chimera/render/vbs/VertexData.hpp"
+#include <glm/glm.hpp>
 #include <vector>
+
 namespace Chimera {
 class MeshData {
   public:

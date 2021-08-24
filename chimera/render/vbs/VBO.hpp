@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_VBO__HPP
 #define __CHIMERA_VBO__HPP
 
-#include "chimera/render/VertexData.hpp"
+#include "VertexData.hpp"
 #include <vector>
 
 namespace Chimera {

@@ -1,9 +1,9 @@
 #ifndef __CHIMERA_VERTEX_NODE__HPP
 #define __CHIMERA_VERTEX_NODE__HPP
 
+#include "EBO.hpp"
+#include "VertexData.hpp"
 #include "chimera/render/AABB.hpp"
-#include "chimera/render/EBO.hpp"
-#include "chimera/render/VertexData.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -14,7 +14,7 @@ class VertexNode {
     ~VertexNode();
 
     inline bool empty() { return (index.size() == 0); }
-    void addFace(unsigned int& _face, unsigned int& _pa, unsigned int& _pb, unsigned int& _pc);
+    void addFace(const uint32_t& _face, const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);
     void initIndexBufferObject();
     void initAABB(std::vector<VertexData>& vertexDataIn);
     void debugDados();
@@ -22,10 +22,10 @@ class VertexNode {
 
     AABB aabb;
 
-  private:
+    // private:
     EBO ebo;
-    std::vector<unsigned int> index;
-    std::vector<unsigned int> faces;
+    std::vector<uint32_t> index;
+    std::vector<uint32_t> faces;
 };
 } // namespace Chimera
 

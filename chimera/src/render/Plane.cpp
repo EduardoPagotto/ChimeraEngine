@@ -1,5 +1,4 @@
 #include "chimera/render/Plane.hpp"
-#include "chimera/render/VertexData.hpp"
 
 namespace Chimera {
 Plane::Plane() {}

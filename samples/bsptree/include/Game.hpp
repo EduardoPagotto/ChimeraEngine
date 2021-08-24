@@ -5,9 +5,8 @@
 #include "chimera/core/IGameClientEvents.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
-#include "chimera/render/BSPTree.hpp"
 #include "chimera/render/Texture.hpp"
-#include "chimera/render/VertexDynamic.hpp"
+#include "chimera/render/bsp/BSPTree.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:
@@ -30,9 +29,6 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused() override;
 
   private:
-    void addPolygon(Chimera::VertexData* pVertexs, int NOV, std::vector<Chimera::VertexData>& vVertex);
-    void initPolygons(unsigned char* map, std::vector<Chimera::VertexData>& vVertex);
-
     Chimera::BspTree bspTree;
     bool isPaused;
     int botaoIndex;
@@ -42,13 +38,14 @@ class Game : public Chimera::IGameClientEvents {
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    Chimera::VertexRenderDynamic renderDynamic;
 
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;
 
     Chimera::TextureImg* pTex;
+
+    Chimera::Frustum frustum;
 };
 
 #endif

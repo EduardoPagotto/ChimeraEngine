@@ -1,4 +1,4 @@
-#include "chimera/render/VertexDynamic.hpp"
+#include "chimera/render/vbs/VertexDynamic.hpp"
 #include "chimera/OpenGLDefs.hpp"
 
 namespace Chimera {

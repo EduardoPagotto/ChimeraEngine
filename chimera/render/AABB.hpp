@@ -29,8 +29,10 @@ class AABB {
     inline glm::vec3 getPosition() const { return position; }
     inline glm::vec3 getSize() const { return size; }
 
-  private:
+  protected:
     glm::vec3 vertex[8];
+
+  private:
     glm::vec3 position;
     glm::vec3 size;
 };

@@ -8,7 +8,7 @@
 #include "chimera/render/HeightMap.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
-#include "chimera/render/VertexStatic.hpp"
+#include "chimera/render/vbs/VertexStatic.hpp"
 
 class Game : public Chimera::IGameClientEvents {
   public:

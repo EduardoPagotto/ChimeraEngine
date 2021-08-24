@@ -14,21 +14,23 @@ set (RenderSource 	Triangle.cpp
 					Frustum.cpp
 					AABB.cpp
 					Octree.cpp
-					BSPTree.cpp
-					LoadHeightMap.cpp
-					VertexNode.cpp
-					VAO.cpp
-					EBO.cpp
-					VBO.cpp
-					VertexData.cpp
-					VertexDynamic.cpp 
-					VertexStatic.cpp
-					HeightMap.cpp
-					LoadObj.cpp
+					bsp/BSPTree.cpp
+					vbs/VertexNode.cpp
+					vbs/VAO.cpp
+					vbs/EBO.cpp
+					vbs/VBO.cpp
+					vbs/VertexData.cpp
+					vbs/VertexDynamic.cpp 
+					vbs/VertexStatic.cpp
 					Light.cpp
 					Material.cpp
 					MeshData.cpp
-					Texture.cpp)
+					Texture.cpp
+					LoadObj.cpp
+					HeightMap.cpp
+					LoadHeightMap.cpp
+					maze/Cube.cpp 
+					maze/Maze.cpp)
 
 #define os includes
 set (RenderInclude ${CMAKE_SOURCE_DIR}) # Raiz do projeto

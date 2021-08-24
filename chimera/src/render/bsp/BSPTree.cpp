@@ -62,7 +62,7 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
 
     for (VertexNode* pNode : this->vpLeaf) {
         pNode->initIndexBufferObject(); // create IBO's
-        pNode->initAABB(_vVertex);      // initialize AABB's
+        pNode->debugDados();
     }
 
     vao.unbind();
@@ -386,6 +386,8 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
 
     tree->leafIndex = vpLeaf.size();
     vpLeaf.push_back(pLeaf);
+
+    pLeaf->initAABB(vVertex); // initialize AABB's
 
     tree->isSolid = false;
     tree->isLeaf = true;

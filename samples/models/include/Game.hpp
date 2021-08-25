@@ -10,6 +10,14 @@
 #include "chimera/physic/PhysicsControl.hpp"
 #include "chimera/physic/Solid.hpp"
 
+struct Controles {
+    float yaw;
+    float pitch;
+    float roll;
+    float throttle;
+    int hat;
+};
+
 /**
  * Class Game
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
@@ -35,12 +43,15 @@ class Game : public Chimera::IGameClientEvents {
     virtual bool paused();
 
   private:
+    void updatePos();
     bool isPaused;
     int botaoIndex;
     int estadoBotao;
 
     std::string sPosicaoObj;
     std::string textoFPS;
+
+    Controles crt;
 
     Chimera::VisitorRender renderV;
     Chimera::NodeHUD* pHUD;

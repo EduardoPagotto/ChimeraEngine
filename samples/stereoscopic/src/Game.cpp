@@ -24,18 +24,17 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
         float propulsaoPrincipal = 3.0f;
         float propulsaoFrontal = 1.0f;
 
-        float yaw = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_X, deadZone);
-        float pitch = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_Y, deadZone);
-        float roll = joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_X, deadZone);
+        float yaw = joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, deadZone);
+        float pitch = joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, deadZone);
+        float roll = joystick->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, deadZone);
 
-        double throttle = -propulsaoPrincipal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
-        throttle =
-            throttle - (-propulsaoFrontal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
+        double throttle = -propulsaoPrincipal * ((1 + joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
+        throttle = throttle - (-propulsaoFrontal * ((1 + joystick->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
 
-        if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {}
-        if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {}
+        if (joystick->getButton((uint8_t)JOY_BUTTON_COD::X) == true) {}
+        if (joystick->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {}
 
-        int val = joystick->Hat(0);
+        int val = joystick->getHat(0);
         if (val & (uint8_t)JOY_PAD_COD::UP) {}
         if (val & (uint8_t)JOY_PAD_COD::DOWN) {}
         if (val & (uint8_t)JOY_PAD_COD::RIGHT) {}

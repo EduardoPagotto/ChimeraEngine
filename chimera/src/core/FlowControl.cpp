@@ -39,7 +39,6 @@ void FlowControl::processaGame() {
     try {
         countFrame();
         pGameClientEvents->render();
-        pGameClientEvents->joystickStatus(joystickManager);
     } catch (...) { SDL_Quit(); }
 }
 
@@ -86,7 +85,7 @@ void FlowControl::gameLoop(void) {
                     break;
                 default:
                     if (joystickManager.TrackEvent(&l_eventSDL) == true) {
-                        pGameClientEvents->joystickCapture(joystickManager);
+                        pGameClientEvents->joystickStatus(joystickManager);
                     }
                     break;
             }

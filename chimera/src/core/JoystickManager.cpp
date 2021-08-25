@@ -50,8 +50,7 @@ void JoystickManager::ReleaseJoysticks(void) {
     if (!Initialized)
         return;
 
-    for (std::map<Uint8, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end();
-         joy_iter++) {
+    for (std::map<uint8_t, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
 
         if (joy_iter->second.pJoystick)
             SDL_JoystickClose(joy_iter->second.pJoystick);
@@ -64,7 +63,7 @@ void JoystickManager::ReleaseJoysticks(void) {
 }
 
 bool JoystickManager::TrackEvent(SDL_Event* event) {
-    Uint8 id = 255;
+    uint8_t id = 255;
     switch (event->type) {
         case SDL_JOYAXISMOTION:
             id = event->jaxis.which;
@@ -94,7 +93,7 @@ bool JoystickManager::TrackEvent(SDL_Event* event) {
 
 JoystickState* JoystickManager::getJoystickState(const int& joystick_id) {
 
-    std::map<Uint8, JoystickState>::iterator joy_iter = Joysticks.find(joystick_id);
+    std::map<uint8_t, JoystickState>::iterator joy_iter = Joysticks.find(joystick_id);
     if (joy_iter != Joysticks.end()) {
         return &joy_iter->second;
     }
@@ -103,17 +102,15 @@ JoystickState* JoystickManager::getJoystickState(const int& joystick_id) {
 }
 
 void JoystickManager::GetStatusManager(void) {
-    // TODO: Testar!!!!
-    // Create a status string for all joysticks.
+
     std::string return_string = std::string("Joysticks size: ") + std::to_string(Joysticks.size());
-    for (std::map<Uint8, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end();
-         joy_iter++) {
-        joy_iter->second.GetStatusJoy();
+    for (std::map<uint8_t, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
+        joy_iter->second.debug();
     }
 }
 
 void JoystickManager::DebugDadosJoystick() {
-    // TODO: Testar!!!!
+
     SDL_Joystick* joystick;
     for (int i = 0; i < SDL_NumJoysticks(); ++i) {
         const char* name = SDL_JoystickNameForIndex(i);

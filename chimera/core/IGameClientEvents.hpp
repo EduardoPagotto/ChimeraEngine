@@ -14,7 +14,7 @@ class IGameClientEvents {
     virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb) = 0;
     virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb) = 0;
     virtual void mouseMotionCapture(SDL_MouseMotionEvent mm) = 0;
-    virtual void joystickCapture(JoystickManager& joy) = 0;
+
     virtual void joystickStatus(JoystickManager& joy) = 0;
     virtual void userEvent(const SDL_Event& _event) = 0;
     virtual void newFPS(const unsigned int& fps) = 0;

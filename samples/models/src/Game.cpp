@@ -17,12 +17,43 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsC
     textoFPS = "fps: 0";
     sPosicaoObj = "pos:(,,)";
 
+    crt.yaw = 0.0f;
+    crt.pitch = 0.0f;
+    crt.roll = 0.0f;
+    crt.throttle = 0.0;
+    crt.hat = 0;
+
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 }
 
 Game::~Game() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game"); }
 
 void Game::joystickCapture(Chimera::JoystickManager& joy) {}
+
+void Game::updatePos() {
+
+    using namespace Chimera;
+
+    float propulsaoLRUD = 5.0f;
+    float torque = 0.5f;
+
+    if (crt.hat & (uint8_t)JOY_PAD_COD::UP)
+        pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
+
+    if (crt.hat & (uint8_t)JOY_PAD_COD::DOWN)
+        pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
+
+    if (crt.hat & (uint8_t)JOY_PAD_COD::RIGHT)
+        pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
+
+    if (crt.hat & (uint8_t)JOY_PAD_COD::LEFT)
+        pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
+
+    if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {
+        pCorpoRigido->applyForce(glm::vec3(0.0, crt.throttle, 0.0));
+        pCorpoRigido->applyTorc(glm::vec3(-torque * crt.pitch, -torque * crt.roll, -torque * crt.yaw));
+    }
+}
 
 void Game::joystickStatus(Chimera::JoystickManager& joy) {
 
@@ -31,51 +62,32 @@ void Game::joystickStatus(Chimera::JoystickManager& joy) {
     JoystickState* joystick = joy.getJoystickState(0);
     if (joystick != nullptr) {
 
-        float propulsaoLRUD = 1.0f;
+        joystick->debug();
+
         float propulsaoPrincipal = 3.0f;
-        float propulsaoFrontal = 1.0f;
-        float torque = 0.1f;
-        float deadZone = 0.5f;
 
-        float yaw = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_X, deadZone);
-        float pitch = joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_Y, deadZone);
-        float roll = joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_X, deadZone);
+        crt.yaw = JoystickState::scale16(joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, 32));
+        crt.pitch = JoystickState::scale16(joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, 32));
+        crt.roll = JoystickState::scale16(joystick->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, 32));
 
-        double throttle = -propulsaoPrincipal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
-        throttle =
-            throttle - (-propulsaoFrontal * ((1 + joystick->Axis((Uint8)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
+        // double throttle = 0;
+        // crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) / 2);
 
-        if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::X) == true) {
+        if (joystick->getButton((uint8_t)JOY_BUTTON_COD::X) == true) {
 
             // glm::vec3 posicao = pEmissor->getPosSource();
             // posicao.x = posicao.x - 0.1f;
             // pEmissor->setPosSource( posicao );
         }
 
-        if (joystick->ButtonDown((Uint8)JOY_BUTTON_COD::B) == true) {
+        if (joystick->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {
 
             // glm::vec3 posicao = pEmissor->getPosSource();
             // posicao.x = posicao.x + 0.1f;
             // pEmissor->setPosSource(posicao);
         }
 
-        int val = joystick->Hat(0);
-        if (val & (uint8_t)JOY_PAD_COD::UP)
-            pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
-
-        if (val & (uint8_t)JOY_PAD_COD::DOWN)
-            pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
-
-        if (val & (uint8_t)JOY_PAD_COD::RIGHT)
-            pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
-
-        if (val & (uint8_t)JOY_PAD_COD::LEFT)
-            pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
-
-        if ((roll != 0.0) || (pitch != 0.0) || (yaw != 0.0) || (throttle != 0.0)) {
-            pCorpoRigido->applyForce(glm::vec3(0.0, throttle, 0.0));
-            pCorpoRigido->applyTorc(glm::vec3(-torque * pitch, -torque * roll, -torque * yaw));
-        }
+        crt.hat = joystick->getHat(0);
     }
 }
 
@@ -182,6 +194,7 @@ void Game::render() {
 
     physicWorld->stepSim();
     physicWorld->checkCollisions();
+    this->updatePos();
 
     for (int eye = 0; eye < pCanvas->getTotEyes(); eye++) {
 
@@ -206,20 +219,17 @@ void Game::userEvent(const SDL_Event& _event) {
         case Chimera::KindOp::START_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(),
-                         n2->getName().c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::ON_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(),
-                         n2->getName().c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::OFF_COLLIDE: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(),
-                         n2->getName().c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
         case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
             pCanvas->toggleFullScreen();

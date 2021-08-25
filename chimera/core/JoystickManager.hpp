@@ -90,7 +90,7 @@ class JoystickManager {
     void DebugDadosJoystick();
 
   private:
-    std::map<Uint8, JoystickState> Joysticks;
+    std::map<uint8_t, JoystickState> Joysticks;
     bool Initialized;
 };
 } // namespace Chimera

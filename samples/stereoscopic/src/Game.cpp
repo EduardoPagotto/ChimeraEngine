@@ -32,10 +32,10 @@ void Game::joystickEvent(Chimera::JoystickState* pJoy) {
         if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {}
 
         int val = pJoy->getHat(0);
-        if (val & (uint8_t)JOY_PAD_COD::UP) {}
-        if (val & (uint8_t)JOY_PAD_COD::DOWN) {}
-        if (val & (uint8_t)JOY_PAD_COD::RIGHT) {}
-        if (val & (uint8_t)JOY_PAD_COD::LEFT) {}
+        if (val & (uint8_t)SDL_HAT_UP) {}
+        if (val & (uint8_t)SDL_HAT_DOWN) {}
+        if (val & (uint8_t)SDL_HAT_RIGHTUP) {}
+        if (val & (uint8_t)SDL_HAT_LEFT) {}
         if ((roll != 0.0) || (pitch != 0.0) || (yaw != 0.0) || (throttle != 0.0)) {}
     }
 }

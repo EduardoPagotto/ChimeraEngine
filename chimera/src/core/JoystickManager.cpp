@@ -62,36 +62,36 @@ void JoystickManager::ReleaseJoysticks(void) {
     Joysticks.clear();
 }
 
-JoystickState* JoystickManager::setAxisMotion(SDL_Event* event) {
-    JoystickState* pJoy = this->getJoystickState(event->jaxis.which);
-    pJoy->axis[event->jaxis.axis] = event->jaxis.value;
+JoystickState* JoystickManager::setAxisMotion(SDL_JoyAxisEvent* jaxis) {
+    JoystickState* pJoy = this->getJoystickState(jaxis->which);
+    pJoy->axis[jaxis->axis] = jaxis->value;
     return pJoy;
 }
 
-JoystickState* JoystickManager::setButtonStateDown(SDL_Event* event) { // FIXME: melhorar
-    JoystickState* pJoy = this->getJoystickState(event->jbutton.which);
-    pJoy->button[event->jbutton.button] = true;
-    pJoy->buttonState[event->jbutton.button] = event->jbutton.state;
+JoystickState* JoystickManager::setButtonStateDown(SDL_JoyButtonEvent* jbutton) { // FIXME: melhorar
+    JoystickState* pJoy = this->getJoystickState(jbutton->which);
+    pJoy->button[jbutton->button] = true;
+    pJoy->buttonState[jbutton->button] = jbutton->state;
     return pJoy;
 }
 
-JoystickState* JoystickManager::setButtonStateUp(SDL_Event* event) { // FIXME: melhorar
-    JoystickState* pJoy = this->getJoystickState(event->jbutton.which);
-    pJoy->button[event->jbutton.button] = false;
-    pJoy->buttonState[event->jbutton.button] = event->jbutton.state;
+JoystickState* JoystickManager::setButtonStateUp(SDL_JoyButtonEvent* jbutton) { // FIXME: melhorar
+    JoystickState* pJoy = this->getJoystickState(jbutton->which);
+    pJoy->button[jbutton->button] = false;
+    pJoy->buttonState[jbutton->button] = jbutton->state;
     return pJoy;
 }
 
-JoystickState* JoystickManager::setHatMotion(SDL_Event* event) {
-    JoystickState* pJoy = this->getJoystickState(event->jhat.which);
-    pJoy->hats[event->jhat.hat] = event->jhat.value;
+JoystickState* JoystickManager::setHatMotion(SDL_JoyHatEvent* jhat) {
+    JoystickState* pJoy = this->getJoystickState(jhat->which);
+    pJoy->hats[jhat->hat] = jhat->value;
     return pJoy;
 }
 
-JoystickState* JoystickManager::setBallMotion(SDL_Event* event) {
-    JoystickState* pJoy = this->getJoystickState(event->jball.which);
-    pJoy->BallsX[event->jball.ball] += event->jball.xrel;
-    pJoy->BallsY[event->jball.ball] += event->jball.yrel;
+JoystickState* JoystickManager::setBallMotion(SDL_JoyBallEvent* jball) {
+    JoystickState* pJoy = this->getJoystickState(jball->which);
+    pJoy->BallsX[jball->ball] += jball->xrel;
+    pJoy->BallsY[jball->ball] += jball->yrel;
     return pJoy;
 }
 

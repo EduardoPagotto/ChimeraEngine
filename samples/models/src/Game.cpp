@@ -35,16 +35,16 @@ void Game::updatePos() {
     float propulsaoLRUD = 5.0f;
     float torque = 0.5f;
 
-    if (crt.hat & (uint8_t)JOY_PAD_COD::UP)
+    if (crt.hat & (uint8_t)SDL_HAT_UP)
         pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
 
-    if (crt.hat & (uint8_t)JOY_PAD_COD::DOWN)
+    if (crt.hat & (uint8_t)SDL_HAT_DOWN)
         pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
 
-    if (crt.hat & (uint8_t)JOY_PAD_COD::RIGHT)
+    if (crt.hat & (uint8_t)SDL_HAT_RIGHTUP)
         pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
 
-    if (crt.hat & (uint8_t)JOY_PAD_COD::LEFT)
+    if (crt.hat & (uint8_t)SDL_HAT_LEFTUP)
         pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
 
     if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {

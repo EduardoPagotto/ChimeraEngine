@@ -84,23 +84,23 @@ void FlowControl::gameLoop(void) {
                     pGameClientEvents->windowEvent(l_eventSDL.window);
                     break;
                 case SDL_JOYAXISMOTION: {
-                    JoystickState* pJoy = joystickManager.setAxisMotion(&l_eventSDL);
+                    JoystickState* pJoy = joystickManager.setAxisMotion(&l_eventSDL.jaxis);
                     pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYBUTTONDOWN: {
-                    JoystickState* pJoy = joystickManager.setButtonStateDown(&l_eventSDL);
+                    JoystickState* pJoy = joystickManager.setButtonStateDown(&l_eventSDL.jbutton);
                     pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYBUTTONUP: {
-                    JoystickState* pJoy = joystickManager.setButtonStateUp(&l_eventSDL);
+                    JoystickState* pJoy = joystickManager.setButtonStateUp(&l_eventSDL.jbutton);
                     pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYHATMOTION: {
-                    JoystickState* pJoy = joystickManager.setHatMotion(&l_eventSDL);
+                    JoystickState* pJoy = joystickManager.setHatMotion(&l_eventSDL.jhat);
                     pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYBALLMOTION: {
-                    JoystickState* pJoy = joystickManager.setBallMotion(&l_eventSDL);
+                    JoystickState* pJoy = joystickManager.setBallMotion(&l_eventSDL.jball);
                     pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYDEVICEADDED:

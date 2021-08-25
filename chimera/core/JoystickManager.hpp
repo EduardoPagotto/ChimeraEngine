@@ -51,45 +51,20 @@ class JoystickManager {
     JoystickManager(void);
     virtual ~JoystickManager(void);
 
-    /**
-     * Inicializa o SDL para uso de Joystic
-     */
     void Initialize(void);
-
-    /**
-     * Libera Todos os Joysticks detectados
-     */
     void ReleaseJoysticks(void);
-
-    /**
-     * Realiza um rastreamento para localizar todos os Joystics ativos
-     */
     void FindJoysticks(void);
-
-    /**
-     * Retorna o Joystic identificado pelo id que comeca em 0
-     * @param joystick_id identificado do Joystic
-     * @return Retorna o joystic identificado ou null caso ele nao esteja inserido
-     */
-    JoystickState* getJoystickState(const int& joystick_id);
-
-    /**
-     * Executa leitura dos controle
-     * @return true se há modificacao nos Joysticks
-     */
-    bool TrackEvent(SDL_Event* event);
-
-    /**
-     * lista de Joysticks identificado no log
-     */
     void GetStatusManager(void);
-
-    /**
-     * Debug dos status dos Joysticks inseridos
-     */
     void DebugDadosJoystick();
+    JoystickState* getJoystickState(const uint8_t& joystick_id);
+    JoystickState* setAxisMotion(SDL_Event* event);
+    JoystickState* setButtonStateDown(SDL_Event* event);
+    JoystickState* setButtonStateUp(SDL_Event* event);
+    JoystickState* setHatMotion(SDL_Event* event);
+    JoystickState* setBallMotion(SDL_Event* event);
 
   private:
+    // JoystickState* getJoystickState(const uint8_t& joystick_id);
     std::map<uint8_t, JoystickState> Joysticks;
     bool Initialized;
 };

@@ -83,10 +83,31 @@ void FlowControl::gameLoop(void) {
                 case SDL_WINDOWEVENT:
                     pGameClientEvents->windowEvent(l_eventSDL.window);
                     break;
+                case SDL_JOYAXISMOTION: {
+                    JoystickState* pJoy = joystickManager.setAxisMotion(&l_eventSDL);
+                    pGameClientEvents->joystickStatus(joystickManager);
+                } break;
+                case SDL_JOYBUTTONDOWN: {
+                    JoystickState* pJoy = joystickManager.setButtonStateDown(&l_eventSDL);
+                    pGameClientEvents->joystickStatus(joystickManager);
+                } break;
+                case SDL_JOYBUTTONUP: {
+                    JoystickState* pJoy = joystickManager.setButtonStateUp(&l_eventSDL);
+                    pGameClientEvents->joystickStatus(joystickManager);
+                } break;
+                case SDL_JOYHATMOTION: {
+                    JoystickState* pJoy = joystickManager.setHatMotion(&l_eventSDL);
+                    pGameClientEvents->joystickStatus(joystickManager);
+                } break;
+                case SDL_JOYBALLMOTION: {
+                    JoystickState* pJoy = joystickManager.setBallMotion(&l_eventSDL);
+                    pGameClientEvents->joystickStatus(joystickManager);
+
+                } break;
+                case SDL_JOYDEVICEADDED:
+                case SDL_JOYDEVICEREMOVED:
+                    joystickManager.FindJoysticks();
                 default:
-                    if (joystickManager.TrackEvent(&l_eventSDL) == true) {
-                        pGameClientEvents->joystickStatus(joystickManager);
-                    }
                     break;
             }
         }

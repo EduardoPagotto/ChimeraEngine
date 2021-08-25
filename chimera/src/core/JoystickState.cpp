@@ -3,31 +3,7 @@
 
 namespace Chimera {
 
-JoystickState::JoystickState() : id(255), pJoystick(nullptr), name("none") {}
-
-void JoystickState::TrackEvent(SDL_Event* event) {
-    // Update joystick axis and button status.
-    switch (event->type) {
-        case SDL_JOYAXISMOTION:
-            axis[event->jaxis.axis] = event->jaxis.value;
-            break;
-        case SDL_JOYBUTTONDOWN:
-            button[event->jbutton.button] = true;
-            buttonState[event->jbutton.button] = event->jbutton.state;
-            break;
-        case SDL_JOYBUTTONUP:
-            button[event->jbutton.button] = false;
-            buttonState[event->jbutton.button] = event->jbutton.state;
-            break;
-        case SDL_JOYHATMOTION:
-            hats[event->jhat.hat] = event->jhat.value;
-            break;
-        case SDL_JOYBALLMOTION:
-            BallsX[event->jball.ball] += event->jball.xrel;
-            BallsY[event->jball.ball] += event->jball.yrel;
-            break;
-    }
-}
+JoystickState::JoystickState() : id(255), pHandle(nullptr), name("none") {}
 
 int16_t JoystickState::getAxis(const uint8_t& index, const int16_t& deadzone, const int16_t& deadzone_at_ends) {
 

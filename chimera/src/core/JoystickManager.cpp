@@ -31,14 +31,14 @@ void JoystickManager::FindJoysticks(void) {
 
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
 
-        if (!Joysticks[i].pJoystick) {
+        if (((Joysticks.size() == 0)) || (!Joysticks[i].pHandle)) {
 
             Joysticks[i].id = i;
-            Joysticks[i].pJoystick = SDL_JoystickOpen(i);
+            Joysticks[i].pHandle = SDL_JoystickOpen(i);
 
-            if (Joysticks[i].pJoystick) {
+            if (Joysticks[i].pHandle) {
 
-                const char* joystick_name = SDL_JoystickName(Joysticks[i].pJoystick);
+                const char* joystick_name = SDL_JoystickName(Joysticks[i].pHandle);
                 Joysticks[i].name = joystick_name ? joystick_name : "Joystick";
             }
         }
@@ -52,46 +52,50 @@ void JoystickManager::ReleaseJoysticks(void) {
 
     for (std::map<uint8_t, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
 
-        if (joy_iter->second.pJoystick)
-            SDL_JoystickClose(joy_iter->second.pJoystick);
+        if (joy_iter->second.pHandle)
+            SDL_JoystickClose(joy_iter->second.pHandle);
 
-        joy_iter->second.pJoystick = NULL;
+        joy_iter->second.pHandle = NULL;
         joy_iter->second.name = "Disconnected";
     }
 
     Joysticks.clear();
 }
 
-bool JoystickManager::TrackEvent(SDL_Event* event) {
-    uint8_t id = 255;
-    switch (event->type) {
-        case SDL_JOYAXISMOTION:
-            id = event->jaxis.which;
-            break;
-        case SDL_JOYBUTTONDOWN:
-        case SDL_JOYBUTTONUP:
-            id = event->jbutton.which;
-            break;
-        case SDL_JOYHATMOTION:
-            id = event->jhat.which;
-            break;
-        case SDL_JOYBALLMOTION:
-            id = event->jball.which;
-            break;
-        case SDL_JOYDEVICEADDED:
-        case SDL_JOYDEVICEREMOVED:
-            FindJoysticks();
-            break;
-        default:
-            return false;
-    }
-
-    Joysticks[id].id = id;
-    Joysticks[id].TrackEvent(event);
-    return true;
+JoystickState* JoystickManager::setAxisMotion(SDL_Event* event) {
+    JoystickState* pJoy = this->getJoystickState(event->jaxis.which);
+    pJoy->axis[event->jaxis.axis] = event->jaxis.value;
+    return pJoy;
 }
 
-JoystickState* JoystickManager::getJoystickState(const int& joystick_id) {
+JoystickState* JoystickManager::setButtonStateDown(SDL_Event* event) { // FIXME: melhorar
+    JoystickState* pJoy = this->getJoystickState(event->jbutton.which);
+    pJoy->button[event->jbutton.button] = true;
+    pJoy->buttonState[event->jbutton.button] = event->jbutton.state;
+    return pJoy;
+}
+
+JoystickState* JoystickManager::setButtonStateUp(SDL_Event* event) { // FIXME: melhorar
+    JoystickState* pJoy = this->getJoystickState(event->jbutton.which);
+    pJoy->button[event->jbutton.button] = false;
+    pJoy->buttonState[event->jbutton.button] = event->jbutton.state;
+    return pJoy;
+}
+
+JoystickState* JoystickManager::setHatMotion(SDL_Event* event) {
+    JoystickState* pJoy = this->getJoystickState(event->jhat.which);
+    pJoy->hats[event->jhat.hat] = event->jhat.value;
+    return pJoy;
+}
+
+JoystickState* JoystickManager::setBallMotion(SDL_Event* event) {
+    JoystickState* pJoy = this->getJoystickState(event->jball.which);
+    pJoy->BallsX[event->jball.ball] += event->jball.xrel;
+    pJoy->BallsY[event->jball.ball] += event->jball.yrel;
+    return pJoy;
+}
+
+JoystickState* JoystickManager::getJoystickState(const uint8_t& joystick_id) {
 
     std::map<uint8_t, JoystickState>::iterator joy_iter = Joysticks.find(joystick_id);
     if (joy_iter != Joysticks.end()) {

@@ -15,12 +15,11 @@ class JoystickState {
   public:
     JoystickState();
 
-    void TrackEvent(SDL_Event* event);
+    friend class JoystickManager;
 
     inline static double scale16(const int16_t& value) { return value >= 0 ? ((double)value) / 32767.0f : ((double)value) / 32768.0f; }
 
     int16_t getAxis(const uint8_t& index, const int16_t& deadzone = 0, const int16_t& deadzone_at_ends = 0);
-
     bool getButton(const uint8_t& indice);
     uint8_t getButtonState(const uint8_t& indice);
     uint8_t getHat(const uint8_t& indice);
@@ -28,12 +27,13 @@ class JoystickState {
 
     void debug(void);
 
-    // verificar
-    uint8_t id;
-    std::string name;
-    SDL_Joystick* pJoystick;
+    inline uint8_t getId() const { return id; }
+    inline std::string getName() const { return name; }
 
   private:
+    uint8_t id;
+    std::string name;
+    SDL_Joystick* pHandle;
     std::map<uint8_t, bool> button;
     std::map<uint8_t, uint8_t> buttonState;
     std::map<uint8_t, uint8_t> hats;

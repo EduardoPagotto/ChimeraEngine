@@ -28,8 +28,8 @@ void Game::joystickEvent(Chimera::JoystickState* pJoy) {
         double throttle = -propulsaoPrincipal * ((1 + pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
         throttle = throttle - (-propulsaoFrontal * ((1 + pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
 
-        if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::X) == true) {}
-        if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {}
+        if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {}
+        if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_RELEASED) {}
 
         int val = pJoy->getHat(0);
         if (val & (uint8_t)SDL_HAT_UP) {}

@@ -25,8 +25,7 @@ class JoystickManager {
     void DebugDadosJoystick();
     JoystickState* getJoystickState(const uint8_t& joystick_id);
     JoystickState* setAxisMotion(SDL_JoyAxisEvent* jaxis);
-    JoystickState* setButtonStateDown(SDL_JoyButtonEvent* jbutton);
-    JoystickState* setButtonStateUp(SDL_JoyButtonEvent* jbutton);
+    JoystickState* setButtonState(SDL_JoyButtonEvent* jbutton);
     JoystickState* setHatMotion(SDL_JoyHatEvent* jhat);
     JoystickState* setBallMotion(SDL_JoyBallEvent* jball);
 

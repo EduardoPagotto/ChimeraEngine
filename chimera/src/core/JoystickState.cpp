@@ -36,21 +36,12 @@ int16_t JoystickState::getAxis(const uint8_t& index, const int16_t& deadzone, co
     return 0;
 }
 
-bool JoystickState::getButton(const uint8_t& indice) {
-
-    auto button_iter = button.find(indice);
-    if (button_iter != button.end())
-        return button_iter->second;
-
-    return false;
-}
-
 uint8_t JoystickState::getButtonState(const uint8_t& indice) {
     auto button_iter = buttonState.find(indice);
     if (button_iter != buttonState.end())
         return button_iter->second;
 
-    return false;
+    return SDL_RELEASED;
 }
 
 uint8_t JoystickState::getHat(const uint8_t& hat) {
@@ -72,19 +63,26 @@ void JoystickState::debug() {
     for (auto axis_iter = axis.begin(); axis_iter != axis.end(); axis_iter++)
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy axis: %d %d", axis_iter->first, axis_iter->second);
 
-    for (auto button_iter = button.begin(); button_iter != button.end(); button_iter++) {
-        if (button_iter->second)
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons down: %d", button_iter->first);
+    for (auto button_iter = buttonState.begin(); button_iter != buttonState.end(); button_iter++) {
+        auto val = button_iter->second;
+        if (val == SDL_PRESSED)
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: PRESSED", button_iter->first);
+        else if (val == SDL_RELEASED)
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: RELEASE", button_iter->first);
+        else
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d unkwow: %d", button_iter->first, val);
     }
 
     std::string tot = "";
     for (auto hat_iter = hats.begin(); hat_iter != hats.end(); hat_iter++) {
-        if (hat_iter->second) {
-            tot += hat_iter->second & SDL_HAT_UP ? "U" : "";
-            tot += hat_iter->second & SDL_HAT_DOWN ? "D" : "";
-            tot += hat_iter->second & SDL_HAT_LEFT ? "L" : "";
-            tot += hat_iter->second & SDL_HAT_RIGHT ? "R" : "";
-        }
+
+        tot += hat_iter->second & SDL_HAT_UP ? "U" : "";
+        tot += hat_iter->second & SDL_HAT_DOWN ? "D" : "";
+        tot += hat_iter->second & SDL_HAT_LEFT ? "L" : "";
+        tot += hat_iter->second & SDL_HAT_RIGHT ? "R" : "";
+        if (tot.size() == 0)
+            tot += "C";
+
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy hats: %d %d [ %s ]", hat_iter->first, hat_iter->second, tot.c_str());
     }
 }

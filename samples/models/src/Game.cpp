@@ -70,14 +70,14 @@ void Game::joystickEvent(Chimera::JoystickState* pJoy) {
         // double throttle = 0;
         // crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) / 2);
 
-        if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::X) == true) {
+        if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {
 
             // glm::vec3 posicao = pEmissor->getPosSource();
             // posicao.x = posicao.x - 0.1f;
             // pEmissor->setPosSource( posicao );
         }
 
-        if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {
+        if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_PRESSED) { // ( or SDL_RELEASED)
 
             // glm::vec3 posicao = pEmissor->getPosSource();
             // posicao.x = posicao.x + 0.1f;

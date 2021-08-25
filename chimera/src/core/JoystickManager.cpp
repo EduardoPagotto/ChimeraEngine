@@ -68,16 +68,8 @@ JoystickState* JoystickManager::setAxisMotion(SDL_JoyAxisEvent* jaxis) {
     return pJoy;
 }
 
-JoystickState* JoystickManager::setButtonStateDown(SDL_JoyButtonEvent* jbutton) { // FIXME: melhorar
+JoystickState* JoystickManager::setButtonState(SDL_JoyButtonEvent* jbutton) { // FIXME: melhorar
     JoystickState* pJoy = this->getJoystickState(jbutton->which);
-    pJoy->button[jbutton->button] = true;
-    pJoy->buttonState[jbutton->button] = jbutton->state;
-    return pJoy;
-}
-
-JoystickState* JoystickManager::setButtonStateUp(SDL_JoyButtonEvent* jbutton) { // FIXME: melhorar
-    JoystickState* pJoy = this->getJoystickState(jbutton->which);
-    pJoy->button[jbutton->button] = false;
     pJoy->buttonState[jbutton->button] = jbutton->state;
     return pJoy;
 }

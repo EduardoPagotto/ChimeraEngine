@@ -87,12 +87,9 @@ void FlowControl::gameLoop(void) {
                     JoystickState* pJoy = joystickManager.setAxisMotion(&l_eventSDL.jaxis);
                     pGameClientEvents->joystickEvent(pJoy);
                 } break;
-                case SDL_JOYBUTTONDOWN: {
-                    JoystickState* pJoy = joystickManager.setButtonStateDown(&l_eventSDL.jbutton);
-                    pGameClientEvents->joystickEvent(pJoy);
-                } break;
+                case SDL_JOYBUTTONDOWN:
                 case SDL_JOYBUTTONUP: {
-                    JoystickState* pJoy = joystickManager.setButtonStateUp(&l_eventSDL.jbutton);
+                    JoystickState* pJoy = joystickManager.setButtonState(&l_eventSDL.jbutton);
                     pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYHATMOTION: {

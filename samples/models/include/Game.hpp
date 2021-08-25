@@ -31,9 +31,9 @@ class Game : public Chimera::IGameClientEvents {
     virtual void start();
     virtual void stop();
     virtual void render();
-    virtual void keyCapture(SDL_Keycode tecla);
-    virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb);
-    virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb);
+    virtual void keboardEvent(SDL_Keycode tecla);
+    virtual void mouseEventButtonDown(SDL_MouseButtonEvent mb);
+    virtual void mouseEventButtonUp(SDL_MouseButtonEvent mb);
     virtual void mouseMotionCapture(SDL_MouseMotionEvent mm);
     virtual void joystickEvent(Chimera::JoystickState* pJoy);
     virtual void newFPS(const unsigned int& fps);

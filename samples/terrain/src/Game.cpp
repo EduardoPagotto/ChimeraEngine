@@ -46,7 +46,7 @@ Game::~Game() {
 
 void Game::joystickEvent(Chimera::JoystickState* pJoy) {}
 
-void Game::keyCapture(SDL_Keycode tecla) {
+void Game::keboardEvent(SDL_Keycode tecla) {
 
     switch (tecla) {
         case SDLK_ESCAPE:
@@ -67,12 +67,12 @@ void Game::keyCapture(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseButtonUpCapture(SDL_MouseButtonEvent mb) {
+void Game::mouseEventButtonUp(SDL_MouseButtonEvent mb) {
     botaoIndex = mb.button;
     estadoBotao = mb.state;
 }
 
-void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
+void Game::mouseEventButtonDown(SDL_MouseButtonEvent mb) {
     botaoIndex = mb.button;
     estadoBotao = mb.state;
 }

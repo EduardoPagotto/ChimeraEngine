@@ -44,9 +44,7 @@ Game::~Game() {
     delete pCanvas;
 }
 
-void Game::joystickCapture(Chimera::JoystickManager& joy) {}
-
-void Game::joystickStatus(Chimera::JoystickManager& joy) {}
+void Game::joystickEvent(Chimera::JoystickState* pJoy) {}
 
 void Game::keyCapture(SDL_Keycode tecla) {
 
@@ -158,8 +156,7 @@ void Game::render() {
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
     if (debugParser == true) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y,
-                     vp->position.z);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
     }
 
     pShader->link();
@@ -174,8 +171,7 @@ void Game::render() {
 
     pLight->apply(pShader);
 
-    model = glm::translate(
-        glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0)); //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
+    model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0)); //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
     if (pShader == nullptr)
         return;
 

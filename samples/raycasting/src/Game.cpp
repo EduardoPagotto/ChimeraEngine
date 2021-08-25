@@ -7,9 +7,7 @@ Game::Game(Chimera::CanvasFB* _pCanvas) : pCanvas(_pCanvas) { isPaused = false; 
 
 Game::~Game() {}
 
-void Game::joystickCapture(Chimera::JoystickManager& joy) {}
-
-void Game::joystickStatus(Chimera::JoystickManager& joy) {}
+void Game::joystickEvent(Chimera::JoystickState* pJoy) {}
 
 void Game::keyCapture(SDL_Keycode tecla) {
 
@@ -26,8 +24,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
             break;
         case SDLK_w: {
             glm::ivec2 curr(state->pos.x, state->pos.y);
-            glm::ivec2 next((int)(state->pos.x + state->dir.x * moveSpeed * 2),
-                            (int)(state->pos.y + state->dir.y * moveSpeed * 2));
+            glm::ivec2 next((int)(state->pos.x + state->dir.x * moveSpeed * 2), (int)(state->pos.y + state->dir.y * moveSpeed * 2));
 
             if (world->data[next.x + curr.y * world->width] == 0) {
                 state->pos.x += state->dir.x * moveSpeed;
@@ -39,8 +36,7 @@ void Game::keyCapture(SDL_Keycode tecla) {
         } break;
         case SDLK_s: {
             glm::ivec2 curr(state->pos.x, state->pos.y);
-            glm::ivec2 next((int)(state->pos.x - state->dir.x * moveSpeed * 2),
-                            (int)(state->pos.y - state->dir.y * moveSpeed * 2));
+            glm::ivec2 next((int)(state->pos.x - state->dir.x * moveSpeed * 2), (int)(state->pos.y - state->dir.y * moveSpeed * 2));
 
             if (world->data[next.x + curr.y * world->width] == 0) {
                 state->pos.x -= state->dir.x * moveSpeed;

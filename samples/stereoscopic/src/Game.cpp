@@ -11,30 +11,27 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanva
 
 Game::~Game() {}
 
-void Game::joystickCapture(Chimera::JoystickManager& joy) {}
-
-void Game::joystickStatus(Chimera::JoystickManager& joy) {
+void Game::joystickEvent(Chimera::JoystickState* pJoy) {
 
     using namespace Chimera;
     // Captura joystick 0 se existir
-    JoystickState* joystick = joy.getJoystickState(0);
-    if (joystick != nullptr) {
+    if (pJoy != nullptr) {
 
         float deadZone = 0.5f;
         float propulsaoPrincipal = 3.0f;
         float propulsaoFrontal = 1.0f;
 
-        float yaw = joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, deadZone);
-        float pitch = joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, deadZone);
-        float roll = joystick->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, deadZone);
+        float yaw = pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, deadZone);
+        float pitch = pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, deadZone);
+        float roll = pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, deadZone);
 
-        double throttle = -propulsaoPrincipal * ((1 + joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
-        throttle = throttle - (-propulsaoFrontal * ((1 + joystick->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
+        double throttle = -propulsaoPrincipal * ((1 + pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
+        throttle = throttle - (-propulsaoFrontal * ((1 + pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
 
-        if (joystick->getButton((uint8_t)JOY_BUTTON_COD::X) == true) {}
-        if (joystick->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {}
+        if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::X) == true) {}
+        if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {}
 
-        int val = joystick->getHat(0);
+        int val = pJoy->getHat(0);
         if (val & (uint8_t)JOY_PAD_COD::UP) {}
         if (val & (uint8_t)JOY_PAD_COD::DOWN) {}
         if (val & (uint8_t)JOY_PAD_COD::RIGHT) {}

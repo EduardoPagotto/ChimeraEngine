@@ -2,6 +2,7 @@
 #define __CHIMERA_FLOW_CONTROL__HPP
 
 #include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/JoystickManager.hpp"
 #include "chimera/core/Timer.hpp"
 
 namespace Chimera {

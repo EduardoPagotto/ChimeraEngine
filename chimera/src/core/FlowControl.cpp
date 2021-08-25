@@ -85,24 +85,23 @@ void FlowControl::gameLoop(void) {
                     break;
                 case SDL_JOYAXISMOTION: {
                     JoystickState* pJoy = joystickManager.setAxisMotion(&l_eventSDL);
-                    pGameClientEvents->joystickStatus(joystickManager);
+                    pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYBUTTONDOWN: {
                     JoystickState* pJoy = joystickManager.setButtonStateDown(&l_eventSDL);
-                    pGameClientEvents->joystickStatus(joystickManager);
+                    pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYBUTTONUP: {
                     JoystickState* pJoy = joystickManager.setButtonStateUp(&l_eventSDL);
-                    pGameClientEvents->joystickStatus(joystickManager);
+                    pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYHATMOTION: {
                     JoystickState* pJoy = joystickManager.setHatMotion(&l_eventSDL);
-                    pGameClientEvents->joystickStatus(joystickManager);
+                    pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYBALLMOTION: {
                     JoystickState* pJoy = joystickManager.setBallMotion(&l_eventSDL);
-                    pGameClientEvents->joystickStatus(joystickManager);
-
+                    pGameClientEvents->joystickEvent(pJoy);
                 } break;
                 case SDL_JOYDEVICEADDED:
                 case SDL_JOYDEVICEREMOVED:

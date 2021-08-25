@@ -8,9 +8,7 @@ Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) { isPaused = false; }
 
 Game::~Game() {}
 
-void Game::joystickCapture(Chimera::JoystickManager& joy) {}
-
-void Game::joystickStatus(Chimera::JoystickManager& joy) {}
+void Game::joystickEvent(Chimera::JoystickState* pJoy) {}
 
 void Game::keyCapture(SDL_Keycode tecla) {
 

@@ -28,8 +28,6 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsC
 
 Game::~Game() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game"); }
 
-void Game::joystickCapture(Chimera::JoystickManager& joy) {}
-
 void Game::updatePos() {
 
     using namespace Chimera;
@@ -55,39 +53,38 @@ void Game::updatePos() {
     }
 }
 
-void Game::joystickStatus(Chimera::JoystickManager& joy) {
+void Game::joystickEvent(Chimera::JoystickState* pJoy) {
 
     using namespace Chimera;
     // Captura joystick 0 se existir
-    JoystickState* joystick = joy.getJoystickState(0);
-    if (joystick != nullptr) {
+    if (pJoy != nullptr) {
 
-        joystick->debug();
+        pJoy->debug();
 
         float propulsaoPrincipal = 3.0f;
 
-        crt.yaw = JoystickState::scale16(joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, 32));
-        crt.pitch = JoystickState::scale16(joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, 32));
-        crt.roll = JoystickState::scale16(joystick->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, 32));
+        crt.yaw = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, 32));
+        crt.pitch = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, 32));
+        crt.roll = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, 32));
 
         // double throttle = 0;
-        // crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(joystick->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) / 2);
+        // crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) / 2);
 
-        if (joystick->getButton((uint8_t)JOY_BUTTON_COD::X) == true) {
+        if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::X) == true) {
 
             // glm::vec3 posicao = pEmissor->getPosSource();
             // posicao.x = posicao.x - 0.1f;
             // pEmissor->setPosSource( posicao );
         }
 
-        if (joystick->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {
+        if (pJoy->getButton((uint8_t)JOY_BUTTON_COD::B) == true) {
 
             // glm::vec3 posicao = pEmissor->getPosSource();
             // posicao.x = posicao.x + 0.1f;
             // pEmissor->setPosSource(posicao);
         }
 
-        crt.hat = joystick->getHat(0);
+        crt.hat = pJoy->getHat(0);
     }
 }
 

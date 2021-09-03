@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-FlowControl::FlowControl(IGameClientEvents* _pGameClientEvents) : pGameClientEvents(_pGameClientEvents) {
+FlowControl::FlowControl(IEvents* _pGameClientEvents) : pGameClientEvents(_pGameClientEvents) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 }

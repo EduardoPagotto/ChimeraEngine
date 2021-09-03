@@ -2,7 +2,7 @@
 #define __GAME_XX__HPP
 
 #include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/IEvents.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"
@@ -23,7 +23,7 @@ struct Controles {
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class Game : public Chimera::IGameClientEvents {
+class Game : public Chimera::IEvents {
   public:
     Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld);
     virtual ~Game();

@@ -2,7 +2,7 @@
 #define __GAME_TESTE_BSTREE__HPP
 
 #include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/IEvents.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/render/HeightMap.hpp"
@@ -10,11 +10,11 @@
 #include "chimera/render/Material.hpp"
 #include "chimera/render/vbs/VertexStatic.hpp"
 
-class Game : public Chimera::IGameClientEvents {
+class Game : public Chimera::IEvents {
   public:
     Game();
     virtual ~Game();
-    // Inherited via IGameClientEvents
+    // Inherited via IEvents
     virtual void start();
     virtual void stop();
     virtual void render();

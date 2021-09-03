@@ -2,15 +2,15 @@
 #define __GAME_EVENTS_TEST__HPP
 
 #include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/IEvents.hpp"
 #include "chimera/node/Node.hpp"
 
-class Game : public Chimera::IGameClientEvents {
+class Game : public Chimera::IEvents {
   public:
     Game(Chimera::CanvasGL* _pVideo);
 
     virtual ~Game();
-    // Inherited via IGameClientEvents
+    // Inherited via IEvents
     virtual void start();
     virtual void stop();
     virtual void render();

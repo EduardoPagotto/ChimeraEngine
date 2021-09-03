@@ -2,18 +2,18 @@
 #define __GAME_TESTE_BSTREE__HPP
 
 #include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/IEvents.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/render/Texture.hpp"
 #include "chimera/render/bsp/BSPTree.hpp"
 
-class Game : public Chimera::IGameClientEvents {
+class Game : public Chimera::IEvents {
   public:
     Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
 
     virtual ~Game();
-    // Inherited via IGameClientEvents
+    // Inherited via IEvents
     virtual void start();
     virtual void stop();
     virtual void render();

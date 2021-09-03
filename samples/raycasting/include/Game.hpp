@@ -2,15 +2,15 @@
 #define __GAME_SIMPLE_RAYCASTING__HPP
 
 #include "chimera/core/CanvasFB.hpp"
-#include "chimera/core/IGameClientEvents.hpp"
+#include "chimera/core/IEvents.hpp"
 #include "raycasting.hpp"
 
-class Game : public Chimera::IGameClientEvents {
+class Game : public Chimera::IEvents {
   public:
     Game(Chimera::CanvasFB* _pCanvas);
 
     virtual ~Game();
-    // Inherited via IGameClientEvents
+    // Inherited via IEvents
     virtual void start();
     virtual void stop();
     virtual void render();

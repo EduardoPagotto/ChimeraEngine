@@ -53,7 +53,7 @@ void Game::updatePos() {
     }
 }
 
-void Game::joystickEvent(Chimera::JoystickState* pJoy) {
+void Game::joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL) {
 
     using namespace Chimera;
     // Captura joystick 0 se existir

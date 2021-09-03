@@ -44,7 +44,7 @@ Game::~Game() {
     delete pCanvas;
 }
 
-void Game::joystickEvent(Chimera::JoystickState* pJoy) {}
+void Game::joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL) {}
 
 void Game::keboardEvent(SDL_Keycode tecla) {
 

@@ -14,7 +14,7 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
 
 Game::~Game() {}
 
-void Game::joystickEvent(Chimera::JoystickState* pJoy) {}
+void Game::joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL) {}
 
 void Game::keboardEvent(SDL_Keycode tecla) {
 

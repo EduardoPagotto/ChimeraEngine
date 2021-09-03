@@ -68,13 +68,10 @@ void FlowControl::gameLoop(void) {
                     pGameClientEvents->keboardEvent(l_eventSDL.key.keysym.sym);
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    pGameClientEvents->mouseEventButtonDown(l_eventSDL.button);
-                    break;
                 case SDL_MOUSEBUTTONUP:
-                    pGameClientEvents->mouseEventButtonUp(l_eventSDL.button);
-                    break;
+                    mouse.update(&l_eventSDL.button);
                 case SDL_MOUSEMOTION:
-                    pGameClientEvents->mouseMotionCapture(l_eventSDL.motion);
+                    pGameClientEvents->mouseEvent(&mouse, &l_eventSDL);
                     break;
                 case SDL_QUIT:
                     l_quit = true;

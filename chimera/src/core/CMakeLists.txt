@@ -17,6 +17,7 @@ set (SourcesCore Canvas.cpp
 				 TrackHead.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
+				 MouseDevice.cpp
 				 FlowControl.cpp
 				 Shader.cpp
 				 Transform.cpp)

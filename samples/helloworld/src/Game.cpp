@@ -28,11 +28,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseEventButtonUp(SDL_MouseButtonEvent mb) {}
-
-void Game::mouseEventButtonDown(SDL_MouseButtonEvent mb) {}
-
-void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {}
+void Game::mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL) {}
 
 void Game::start() { pVideo->initGL(); }
 

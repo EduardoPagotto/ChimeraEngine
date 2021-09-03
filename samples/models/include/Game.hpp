@@ -32,9 +32,7 @@ class Game : public Chimera::IGameClientEvents {
     virtual void stop();
     virtual void render();
     virtual void keboardEvent(SDL_Keycode tecla);
-    virtual void mouseEventButtonDown(SDL_MouseButtonEvent mb);
-    virtual void mouseEventButtonUp(SDL_MouseButtonEvent mb);
-    virtual void mouseMotionCapture(SDL_MouseMotionEvent mm);
+    virtual void mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL);
     virtual void joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL);
     virtual void newFPS(const unsigned int& fps);
     virtual void windowEvent(const SDL_WindowEvent& _event);
@@ -44,8 +42,6 @@ class Game : public Chimera::IGameClientEvents {
   private:
     void updatePos();
     bool isPaused;
-    int botaoIndex;
-    int estadoBotao;
 
     std::string sPosicaoObj;
     std::string textoFPS;

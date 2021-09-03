@@ -21,6 +21,7 @@ class FlowControl {
 
     IGameClientEvents* pGameClientEvents;
     JoystickManager joystickManager;
+    MouseDevice mouse;
     Timer timerFPS;
 };
 } // namespace Chimera

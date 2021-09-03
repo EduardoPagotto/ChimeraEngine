@@ -67,25 +67,18 @@ void Game::keboardEvent(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseEventButtonUp(SDL_MouseButtonEvent mb) {
-    botaoIndex = mb.button;
-    estadoBotao = mb.state;
-}
-
-void Game::mouseEventButtonDown(SDL_MouseButtonEvent mb) {
-    botaoIndex = mb.button;
-    estadoBotao = mb.state;
-}
-
-void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
+void Game::mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL) {
 
     Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 
-    if (estadoBotao == SDL_PRESSED) {
-        if (botaoIndex == 1) {
-            pCamZ->getTrackBall()->tracking(mm.xrel, mm.yrel);
-        } else if (botaoIndex == 3) {
-            pCamZ->getTrackBall()->offSet(mm.yrel);
+    if (pMouse->getButtonState(1) == SDL_PRESSED) {
+        if (pEventSDL->type == SDL_MOUSEMOTION) {
+            pCamZ->getTrackBall()->tracking(pEventSDL->motion.xrel, pEventSDL->motion.yrel);
+        }
+    } else if (pMouse->getButtonState(3) == SDL_PRESSED) {
+
+        if (pEventSDL->type == SDL_MOUSEMOTION) {
+            pCamZ->getTrackBall()->offSet(pEventSDL->motion.yrel);
         }
     }
 }

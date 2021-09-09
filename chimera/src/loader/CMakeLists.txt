@@ -5,7 +5,6 @@ PROJECT(ChimeraLoaders)
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
-find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
@@ -26,7 +25,6 @@ set (IncludeLoader  ${CMAKE_SOURCE_DIR})
 set (IncludeLoaderAux	${OPENGL_INCLUDE_DIR}
 						${SDL2_INCLUDE_DIR}
 						${BULLET_INCLUDE_DIR}
-						${FREETYPE_INCLUDE_DIRS}
 						${GLEW_INCLUDE_DIRS})
 
 # Define o Target

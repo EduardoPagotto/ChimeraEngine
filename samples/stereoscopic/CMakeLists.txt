@@ -5,7 +5,6 @@ PROJECT(Sterioscopic)
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(Bullet REQUIRED)
-find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
@@ -15,7 +14,6 @@ set (IncludesSterioscopic ${Sterioscopic_SOURCE_DIR}/include/
 						  ${OPENGL_INCLUDE_DIR}
 						  ${SDL2_INCLUDE_DIR}
 						  ${BULLET_INCLUDE_DIR}
-						  ${FREETYPE_INCLUDE_DIRS}
 						  ${GLEW_INCLUDE_DIR})
 
 set (LibsSterioscopic ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a #ordem é importante!!!
@@ -24,7 +22,6 @@ set (LibsSterioscopic ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a #ordem é importa
 					  ${OPENGL_LIBRARIES}
 					  ${SDL2_LIBRARY}
 					  ${BULLET_LIBRARIES}
-					  ${FREETYPE_LIBRARY}
 					  ${GLEW_LIBRARIES}
 					  -lSDL2
 					  -lSDL2_image

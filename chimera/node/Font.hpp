@@ -3,10 +3,6 @@
 
 #include <glm/glm.hpp>
 
-// FreeType
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 #include "chimera/OpenGLDefs.hpp"
 
 #include <map>
@@ -15,7 +11,7 @@
 #include <string>
 
 namespace Chimera {
-/// Holds all state information relevant to a character as loaded using FreeType
+/// Holds all state information relevant to a character as loaded using SDL_TTF
 struct Character {
     GLuint TextureID;   // ID handle of the glyph texture
     glm::ivec2 Size;    // Size of glyph
@@ -31,7 +27,7 @@ class Font {
 
   private:
     GLuint VAO, VBO;
-    std::map<GLchar, Character> Characters;
+    std::map<uint16_t, Character> Characters;
 };
 } // namespace Chimera
 #endif

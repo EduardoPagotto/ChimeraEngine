@@ -44,8 +44,7 @@ int main(int argn, char** argv) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        Chimera::CanvasGL* video =
-            new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
+        Chimera::CanvasGL* video = new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         YAML::Node shaders = config["shaders"];
         SDL_Log("Shaders identificados: %d", (int)shaders.size());
@@ -85,8 +84,7 @@ int main(int argn, char** argv) {
         Chimera::NodeGroup* gParticle = new Chimera::NodeGroup(pRoot, "ParticleGroup");
         gParticle->setShader(mapa["particle-default"]);
         Chimera::NodeParticleEmitter* pParticleEmitter = new Chimera::NodeParticleEmitter(gParticle, "testeZ1", 10000);
-        pParticleEmitter->setTransform(
-            new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
+        pParticleEmitter->setTransform(new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
 
         pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./data/images/Particle2.png"));
 

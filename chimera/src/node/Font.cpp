@@ -1,59 +1,86 @@
 #include "chimera/node/Font.hpp"
 #include "chimera/core/Exception.hpp"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 
 namespace Chimera {
 
 Font::Font(const std::string& _fontFile, const int& _size) {
 
-    // FreeType
-    FT_Library ft;
+    // https://stackoverflow.com/questions/5289447/using-sdl-ttf-with-opengl
+    // https://stackoverflow.com/questions/327642/opengl-and-monochrome-texture
 
-    // All functions return a value different than 0 whenever an error occurred
-    if (FT_Init_FreeType(&ft))
-        throw Exception("Falha ao iniciar o FreeType");
+    if (TTF_Init() == -1) {
+        SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
+        return;
+    }
 
-    // Load font as face
-    FT_Face face;
-    if (FT_New_Face(ft, _fontFile.c_str(), 0, &face))
-        throw Exception("Arquivo de fonte falha ao carregar:" + _fontFile);
+    TTF_Font* sFont = TTF_OpenFont(_fontFile.c_str(), _size);
 
-    // Set size to load glyphs as
-    FT_Set_Pixel_Sizes(face, 0, _size);
+    int style;
+    style = TTF_GetFontStyle(sFont);
+    if (style == TTF_STYLE_NORMAL)
+        SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The font style is: normal");
+    else {
+        if (style & TTF_STYLE_BOLD)
+            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The font style is: bold");
+        if (style & TTF_STYLE_ITALIC)
+            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The font style is: italic");
+        if (style & TTF_STYLE_UNDERLINE)
+            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The font style is: underline");
+    }
 
-    // Disable byte-alignment restriction
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The number of faces in the font is: %ld\n", TTF_FontFaces(sFont));
+
+    char* stylename = TTF_FontFaceStyleName(sFont);
+    if (stylename)
+        SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The name of the face in the font is: %s\n", stylename);
+
+    char* familyname = TTF_FontFaceFamilyName(sFont);
+    if (familyname)
+        SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The family name of the face in the font is: %s\n", familyname);
+
+    SDL_Color fg = {0, 0, 0}, bg = {0xff, 0xff, 0xff};
 
     // Load first 128 characters of ASCII set
-    for (GLubyte c = 0; c < 128; c++) {
+    for (uint16_t c = 1; c < 128; c++) {
         // Load character glyph
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "ERROR::FREETYTPE: Failed to load Glyph");
+
+        int minx, maxx, miny, maxy, advance;
+        if (TTF_GlyphMetrics(sFont, c, &minx, &maxx, &miny, &maxy, &advance) == -1) {
+            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
             continue;
         }
+
+        SDL_Surface* glyph_cache = TTF_RenderGlyph_Shaded(sFont, c, fg, bg);
+        if (glyph_cache == nullptr)
+            continue;
+
         // Generate texture
         GLuint texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_RED,
-                     GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, glyph_cache->w, glyph_cache->h, 0, GL_RED, GL_UNSIGNED_BYTE, glyph_cache->pixels);
         // Set texture options
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        // Now store character for later use
-        Character character = {texture, glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-                               glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top), face->glyph->advance.x};
+        int botton = glyph_cache->h;
 
-        Characters.insert(std::pair<GLchar, Character>(c, character));
+        // Now store character for later use
+        Character character = {texture, glm::ivec2(glyph_cache->w, glyph_cache->h), glm::ivec2(minx, botton), (advance << 6)};
+
+        Characters.insert(std::pair<uint16_t, Character>(c, character));
     }
     glBindTexture(GL_TEXTURE_2D, 0);
-    // Destroy FreeType once we're finished
-    FT_Done_Face(face);
-    FT_Done_FreeType(ft);
+    // Destroy font once we're finished
+
+    if (sFont) {
+        TTF_CloseFont(sFont);
+    }
 
     // Configure VAO/VBO for texture quads
     glGenVertexArrays(1, &VAO);
@@ -69,7 +96,7 @@ Font::Font(const std::string& _fontFile, const int& _size) {
 
 Font::~Font(void) {
 
-    std::map<GLchar, Character>::iterator it = Characters.begin();
+    std::map<uint16_t, Character>::iterator it = Characters.begin();
     while (it != Characters.end()) {
 
         Character c = it->second;
@@ -87,7 +114,7 @@ void Font::RenderText(std::string* pText, GLfloat x, GLfloat y, GLfloat scale) {
     // Iterate through all characters
     std::string::const_iterator c;
     for (c = pText->begin(); c != pText->end(); c++) {
-        Character ch = Characters[*c];
+        Character ch = Characters[(uint16_t)(*c)];
 
         GLfloat xpos = x + ch.Bearing.x * scale;
         GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
@@ -95,10 +122,8 @@ void Font::RenderText(std::string* pText, GLfloat x, GLfloat y, GLfloat scale) {
         GLfloat w = ch.Size.x * scale;
         GLfloat h = ch.Size.y * scale;
         // Update VBO for each character
-        GLfloat vertices[6][4] = {
-            {xpos, ypos + h, 0.0, 0.0}, {xpos, ypos, 0.0, 1.0},     {xpos + w, ypos, 1.0, 1.0},
-
-            {xpos, ypos + h, 0.0, 0.0}, {xpos + w, ypos, 1.0, 1.0}, {xpos + w, ypos + h, 1.0, 0.0}};
+        GLfloat vertices[6][4] = {{xpos, ypos + h, 0.0, 0.0}, {xpos, ypos, 0.0, 1.0},     {xpos + w, ypos, 1.0, 1.0},
+                                  {xpos, ypos + h, 0.0, 0.0}, {xpos + w, ypos, 1.0, 1.0}, {xpos + w, ypos + h, 1.0, 0.0}};
 
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.TextureID);

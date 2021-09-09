@@ -3,7 +3,6 @@
         {
             "name": "chimera_compile",
             "includePath": [
-                "/usr/include/freetype2",
                 "/usr/include",
                 "/usr/include/bullet",
                 "${workspaceFolder}/chimera"
@@ -13,7 +12,6 @@
             ],
             "browse": {
                 "path": [
-                    "/usr/include/freetype2",
                     "/usr/include",
                     "/usr/include/bullet",
                     "${workspaceFolder}/chimera",

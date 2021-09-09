@@ -4,7 +4,6 @@ PROJECT(Terrain)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
@@ -14,7 +13,6 @@ set (LibsTerrain ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
 				 ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
-				 ${FREETYPE_LIBRARY}
 				 ${SDL2_IBRARIES}
 				 -lGL
 				 -lGLU

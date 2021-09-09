@@ -12,12 +12,10 @@ class NodeHUD : public Node {
   public:
     struct HUDTxt {
         int indexFonte;
-        int posX;
-        int posY;
+        glm::ivec2 pos;
         std::string* pText;
         GLfloat scale;
         glm::vec4 color;
-        // Color color;
     };
 
     NodeHUD(Node* _parent, std::string _name);
@@ -35,7 +33,7 @@ class NodeHUD : public Node {
 
     inline bool isOn(void) const { return on; }
 
-    void addText(int _fontIndex, int _posX, int _posY, glm::vec4 _colorText, GLfloat _scale, std::string* _txt);
+    void addText(int _fontIndex, const glm::ivec2& _pos, glm::vec4 _colorText, GLfloat _scale, std::string* _txt);
 
   private:
     bool on;

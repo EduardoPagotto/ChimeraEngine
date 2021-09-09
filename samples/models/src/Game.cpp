@@ -166,8 +166,8 @@ void Game::start() {
     // Localiza o HUD
     pHUD = (Chimera::NodeHUD*)pRoot->findChild("HUD-Default", true);
     if (pHUD != nullptr) {
-        pHUD->addText(0, 350, 30, glm::vec4(0.0, 0.0, 1.0, 1.0), 1.0, &sPosicaoObj);
-        pHUD->addText(0, 10, 30, glm::vec4(1.0, 0.0, 0.0, 1.0), 1.0, &textoFPS);
+        pHUD->addText(0, glm::ivec2(350, 30), glm::vec4(0.0, 0.0, 1.0, 1.0), 1.0, &sPosicaoObj);
+        pHUD->addText(0, glm::ivec2(10, 30), glm::vec4(1.0, 0.0, 0.0, 1.0), 1.0, &textoFPS);
     }
 }
 

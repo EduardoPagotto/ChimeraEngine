@@ -12,12 +12,11 @@ NodeHUD::~NodeHUD() {
 
 void NodeHUD::addFont(Font* _pFont) { vFonts.push_back(_pFont); }
 
-void NodeHUD::addText(int _fontIndex, int _posX, int _posY, glm::vec4 _colorText, GLfloat _scale, std::string* _txt) {
+void NodeHUD::addText(int _fontIndex, const glm::ivec2& _pos, glm::vec4 _colorText, GLfloat _scale, std::string* _txt) {
 
     HUDTxt* newTxt = new HUDTxt;
     newTxt->indexFonte = _fontIndex;
-    newTxt->posX = _posX;
-    newTxt->posY = _posY;
+    newTxt->pos = _pos;
     newTxt->color = _colorText;
     newTxt->scale = _scale;
     newTxt->pText = _txt;
@@ -42,10 +41,8 @@ void NodeHUD::render(Shader* _pShader) {
     glActiveTexture(GL_TEXTURE0);
 
     for (HUDTxt* l_pTxt : vLineText) {
-
         _pShader->setGlUniform4fv("textColor", 1, glm::value_ptr(l_pTxt->color));
-
-        vFonts[l_pTxt->indexFonte]->RenderText(l_pTxt->pText, l_pTxt->posX, l_pTxt->posY, l_pTxt->scale);
+        vFonts[l_pTxt->indexFonte]->renderText(l_pTxt->pText, l_pTxt->pos, l_pTxt->scale);
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);

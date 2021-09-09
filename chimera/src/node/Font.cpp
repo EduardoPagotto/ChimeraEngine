@@ -107,31 +107,35 @@ Font::~Font(void) {
     }
 }
 
-void Font::RenderText(std::string* pText, GLfloat x, GLfloat y, GLfloat scale) {
+void Font::renderText(std::string* pText, const glm::ivec2& pos, GLfloat scale) {
 
     glBindVertexArray(VAO);
+
+    float x = pos.x;
+    float y = pos.y;
 
     // Iterate through all characters
     std::string::const_iterator c;
     for (c = pText->begin(); c != pText->end(); c++) {
         Character ch = Characters[(uint16_t)(*c)];
 
-        GLfloat xpos = x + ch.Bearing.x * scale;
-        GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        GLfloat right = x + ch.Bearing.x * scale;
+        GLfloat left = right + (ch.Size.x * scale); // w
+        GLfloat botton = y - (ch.Size.y - ch.Bearing.y) * scale;
+        GLfloat top = botton + (ch.Size.y * scale); // h
 
-        GLfloat w = ch.Size.x * scale;
-        GLfloat h = ch.Size.y * scale;
         // Update VBO for each character
-        GLfloat vertices[6][4] = {{xpos, ypos + h, 0.0, 0.0}, {xpos, ypos, 0.0, 1.0},     {xpos + w, ypos, 1.0, 1.0},
-                                  {xpos, ypos + h, 0.0, 0.0}, {xpos + w, ypos, 1.0, 1.0}, {xpos + w, ypos + h, 1.0, 0.0}};
+        GLfloat vertices[6][4] = {{right, top, 0.0, 0.0}, {right, botton, 0.0, 1.0}, {left, botton, 1.0, 1.0},
+                                  {right, top, 0.0, 0.0}, {left, botton, 1.0, 1.0},  {left, top, 1.0, 0.0}};
 
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.TextureID);
 
         // Update content of VBO memory
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices),
-                        vertices); // Be sure to use glBufferSubData and not glBufferData
+
+        // Be sure to use glBufferSubData and not glBufferData
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 

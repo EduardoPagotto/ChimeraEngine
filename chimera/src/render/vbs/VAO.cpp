@@ -3,17 +3,37 @@
 
 namespace Chimera {
 
-VAO::VAO() : vaoGL(0) {}
+VAO::VAO() { glGenVertexArrays(1, &arrayID); }
 
 VAO::~VAO() {
-    if (vaoGL > 0)
-        glDeleteVertexArrays(1, &vaoGL);
+
+    for (int i = 0; i < buffers.size(); i++)
+        delete buffers[i];
+
+    glDeleteVertexArrays(1, &arrayID);
 }
 
-void VAO::create() { glGenVertexArrays(1, &vaoGL); }
+void VAO::addBuffer(VBO* buffer, unsigned int index) {
 
-void VAO::bind() { glBindVertexArray(vaoGL); }
+    this->bind();
+    buffer->bind();
 
-void VAO::unbind() { glBindVertexArray(0); }
+    // ----
+    // glEnableVertexAttribArray(index);
+    // glVertexAttribPointer(index, buffer->getComponentCount(), GL_FLOAT, GL_FALSE, 0, 0);
+    // ---- equivale a
+    // buffer->setSlot(index, buffer->getComponentCount(), BUFFER_OFFSET(0));  // Vertice
+    // ----
 
+    buffer->setSlot(0, 3, BUFFER_OFFSET(0));  // Vertice
+    buffer->setSlot(1, 3, BUFFER_OFFSET(12)); // Normal
+    buffer->setSlot(2, 2, BUFFER_OFFSET(24)); // Texture
+
+    buffer->unbind();
+    this->unbind();
+
+    buffer->unsetSlot(0);
+    buffer->unsetSlot(1);
+    buffer->unsetSlot(2);
+}
 } // namespace Chimera

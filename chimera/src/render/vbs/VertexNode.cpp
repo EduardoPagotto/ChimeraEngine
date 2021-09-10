@@ -6,9 +6,15 @@
 
 namespace Chimera {
 
-VertexNode::VertexNode() {}
+VertexNode::VertexNode() : ebo(nullptr) {}
 
-VertexNode::~VertexNode() { faces.clear(); }
+VertexNode::~VertexNode() {
+    faces.clear();
+    if (ebo != nullptr) {
+        delete ebo;
+        ebo = nullptr;
+    }
+}
 
 void VertexNode::debugDados() {
     // std::string val = "";
@@ -57,11 +63,11 @@ void VertexNode::addFace(const uint32_t& _face, const uint32_t& _pa, const uint3
 
 void VertexNode::initIndexBufferObject() {
 
-    ebo.create(index);
+    ebo = new EBO(index);
     // delete [] Indices; //FIXME: verificar como!!!!
     // Indices = NULL;
     // GeometryNodesCount++;
 }
 
-void VertexNode::render() { ebo.render(); }
+void VertexNode::render() { ebo->render(); }
 } // namespace Chimera

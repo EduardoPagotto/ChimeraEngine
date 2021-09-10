@@ -11,23 +11,19 @@ VertexRenderStatic::VertexRenderStatic(std::vector<VertexData>& vertexDataIn, st
         indexIBO = index;
     }
 
-    vao.create();
-    vao.bind();
-    vbo = new VBO(&vertexData, vertexData.size() * sizeof(VertexData));
+    vao = new VAO();
+    vao->addBuffer(new VBO(&vertexData, vertexData.size() * sizeof(VertexData)), 0); // FIXME 0 para compatibilidade
 
-    vao.bind();
-    ebo.create(indexIBO);
-    vao.unbind();
+    vao->bind();
+    ebo = new EBO(indexIBO);
+    vao->unbind();
 }
 
-VertexRenderStatic::~VertexRenderStatic() {
-    delete vbo;
-    vbo = nullptr;
-}
+VertexRenderStatic::~VertexRenderStatic() { delete vao; }
 
 void VertexRenderStatic::render() {
-    vao.bind();
-    ebo.render();
-    vao.unbind();
+    vao->bind();
+    ebo->render();
+    vao->unbind();
 }
 } // namespace Chimera

@@ -12,6 +12,7 @@ template <class T> void swapFace(T& a, T& b) {
 BspTree::BspTree() {
     root = nullptr;
     logdata = false;
+    vao = new VAO();
 }
 
 BspTree::~BspTree() { this->destroy(); }
@@ -54,18 +55,16 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
     root = buildLeafy(vTris);
 
     // create vertex buffers
-    vao.create();
-    vao.bind();
-    vbo = new VBO(&vVertex, vVertex.size() * sizeof(VertexData));
 
-    vao.bind();
+    vao->addBuffer(new VBO(&vVertex, vVertex.size() * sizeof(VertexData)), 0); // FIXME: 0 por comatibilidade
+    vao->bind();
 
     for (VertexNode* pNode : this->vpLeaf) {
         pNode->initIndexBufferObject(); // create IBO's
         pNode->debugDados();
     }
 
-    vao.unbind();
+    vao->unbind();
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
 }
@@ -143,12 +142,12 @@ void BspTree::traverseTree(BSPTreeNode* tree, glm::vec3* pos, Frustum& _frustrun
 
 void BspTree::render(glm::vec3* eye, Frustum& _frustrun, bool _logData) {
 
-    vao.bind();
+    vao->bind();
 
     logdata = _logData;
     traverseTree(root, eye, _frustrun);
 
-    vao.unbind();
+    vao->unbind();
 }
 
 Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {

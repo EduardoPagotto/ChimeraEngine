@@ -1,31 +1,25 @@
 #include "chimera/render/vbs/EBO.hpp"
-#include "chimera/OpenGLDefs.hpp"
 #include "chimera/render/vbs/VertexData.hpp"
 
 namespace Chimera {
 
-EBO::EBO() : eboGL(0) {}
-
-EBO::~EBO() {
-    if (eboGL > 0)
-        glDeleteBuffers(1, &eboGL);
-}
-
-void EBO::create(std::vector<uint32_t>& index) {
+EBO::EBO(std::vector<uint32_t>& index) {
 
     uint32_t sizeBufferIndex = index.size() * sizeof(uint32_t);
     sizeIndex = index.size();
 
     // Create EBO
-    glGenBuffers(1, &eboGL);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboGL);
+    glGenBuffers(1, &bufferID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeBufferIndex, &index[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+EBO::~EBO() { glDeleteBuffers(1, &bufferID); }
+
 void EBO::render() {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboGL);
+    this->bind();
     glDrawElements(GL_TRIANGLES, sizeIndex, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    this->unbind();
 }
 } // namespace Chimera

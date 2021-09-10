@@ -1,18 +1,21 @@
 #ifndef __CHIMERA_VAO__HPP
 #define __CHIMERA_VAO__HPP
 
+#include "VBO.hpp"
+
 namespace Chimera {
 
 class VAO {
   public:
     VAO();
     virtual ~VAO();
-    void create();
-    void bind();
-    void unbind();
+    void addBuffer(VBO* buffer, unsigned int index);
+    inline void bind() const { glBindVertexArray(arrayID); }
+    inline void unbind() const { glBindVertexArray(0); }
 
   private:
-    unsigned int vaoGL;
+    unsigned int arrayID;
+    std::vector<VBO*> buffers;
 };
 } // namespace Chimera
 #endif

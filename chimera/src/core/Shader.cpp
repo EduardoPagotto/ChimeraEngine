@@ -1,32 +1,15 @@
 #include <SDL2/SDL.h>
-#include <fstream>
+//#include <fstream>
 #include <string>
 #include <vector>
 
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Shader.hpp"
+#include "chimera/core/io/utils.hpp"
 
 namespace Chimera {
 
 // --- shade internal func
-std::string getShaderCode(const char* file_path) {
-
-    // Read the Vertex Shader code from the file
-    std::string shaderCode;
-    std::ifstream shaderStream(file_path, std::ios::in);
-    if (shaderStream.is_open()) {
-        std::string Line = "";
-        while (getline(shaderStream, Line)) {
-            shaderCode += "\n" + Line;
-        }
-        shaderStream.close();
-    } else {
-        throw Chimera::Exception("Impossivel abrir arquivo: " + std::string(file_path));
-    }
-
-    return shaderCode;
-}
-
 GLuint compileShader(const std::string& shaderCode, uint16_t kindShade) {
 
     GLint Result = GL_FALSE;
@@ -84,8 +67,8 @@ GLuint linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID) 
 
 GLuint shadeLoadProg(const char* progName, const char* fileVertex, const char* fileFrag) {
 
-    GLuint VertexShaderID = compileShader(getShaderCode(fileVertex), GL_VERTEX_SHADER);
-    GLuint FragmentShaderID = compileShader(getShaderCode(fileFrag), GL_FRAGMENT_SHADER);
+    GLuint VertexShaderID = compileShader(IO::utilReadFile(fileVertex), GL_VERTEX_SHADER);
+    GLuint FragmentShaderID = compileShader(IO::utilReadFile(fileFrag), GL_FRAGMENT_SHADER);
 
     // Link o programa
     GLuint shaderId = linkShader(VertexShaderID, FragmentShaderID);

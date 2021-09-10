@@ -104,7 +104,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             pHUD->setOn(!pHUD->isOn());
             break;
         case SDLK_F10:
-            Chimera::IO::eventsSend(Chimera::IO::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::IO::utilSendEvent(Chimera::IO::TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_UP:
             pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));

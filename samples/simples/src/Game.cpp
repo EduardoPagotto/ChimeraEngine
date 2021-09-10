@@ -31,7 +31,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "iniciado log");
             break;
         case SDLK_F10:
-            Chimera::IO::eventsSend(Chimera::IO::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::IO::utilSendEvent(Chimera::IO::TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         default:
             break;

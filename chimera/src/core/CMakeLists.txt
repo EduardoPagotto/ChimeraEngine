@@ -17,6 +17,7 @@ set (SourcesCore CanvasGL.cpp
 				 Shader.cpp
 				 VertexData.cpp
 				 Transform.cpp
+				 io/utils.cpp
 				 io/Timer.cpp
 				 io/JoystickState.cpp
 				 io/JoystickManager.cpp

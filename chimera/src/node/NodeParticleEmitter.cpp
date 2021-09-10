@@ -5,8 +5,7 @@
 #include <algorithm>
 
 namespace Chimera {
-NodeParticleEmitter::NodeParticleEmitter(Node* _parent, std::string _name, int _max)
-    : Node(_parent, Kind::PARTICLE_SYSTEM, _name) {
+NodeParticleEmitter::NodeParticleEmitter(Node* _parent, std::string _name, int _max) : Node(_parent, Kind::PARTICLE_SYSTEM, _name) {
     // MaxParticles = _max;
     LastUsedParticle = 0;
     material = new Material();
@@ -20,6 +19,8 @@ void NodeParticleEmitter::init() {
 
     material->init();
 
+    // TODO: usar classes novas de buffers
+    // VAO
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
 
@@ -32,6 +33,7 @@ void NodeParticleEmitter::init() {
         -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.0f,
     };
 
+    // VBO square vertex
     glGenBuffers(1, &billboard_vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, billboard_vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);

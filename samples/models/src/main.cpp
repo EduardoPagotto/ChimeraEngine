@@ -5,7 +5,7 @@
 #include "chimera/core/CanvasGL.hpp"
 
 #ifdef OVR_SET_TO_USE
-#include "OvrDevice.hpp"
+#include "CanvasOVR.hpp"
 #endif
 
 #include "Game.hpp"
@@ -14,7 +14,6 @@
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/io/FlowControl.hpp"
-#include "chimera/core/utils.hpp"
 #include "chimera/loader/VisualScene.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"

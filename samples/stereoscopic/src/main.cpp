@@ -4,7 +4,6 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/io/FlowControl.hpp"
-#include "chimera/core/utils.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeLight.hpp"

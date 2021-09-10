@@ -1,5 +1,5 @@
 #include "chimera/physic/PhysicsControl.hpp"
-#include "chimera/core/utils.hpp"
+#include "chimera/core/io/utils.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -135,8 +135,7 @@ void PhysicsControl::checkCollisions() {
 
                     if (l_pNodeB) {
                         if (checkAllowCollision(l_pNodeB) == true) {
-                            new_contacts[objB] =
-                                std::pair<Node*, Node*>(static_cast<Node*>(l_pNodeA), static_cast<Node*>(l_pNodeB));
+                            new_contacts[objB] = std::pair<Node*, Node*>(static_cast<Node*>(l_pNodeA), static_cast<Node*>(l_pNodeB));
                         }
                         // new_contacts[objB] = std::make_pair<Node*,
                         // Node*>(static_cast<Node*> (l_pNodeA), static_cast<Node*>
@@ -151,8 +150,7 @@ void PhysicsControl::checkCollisions() {
 
                     if (l_pNodeA) {
                         if (checkAllowCollision(l_pNodeA) == true) {
-                            new_contacts[objA] =
-                                std::pair<Node*, Node*>(static_cast<Node*>(l_pNodeB), static_cast<Node*>(l_pNodeA));
+                            new_contacts[objA] = std::pair<Node*, Node*>(static_cast<Node*>(l_pNodeB), static_cast<Node*>(l_pNodeA));
                         }
                         // new_contacts[objA] = std::make_pair<Node*, Node*> (
                         // static_cast<Node*> ( l_pNodeB ),static_cast<Node*> ( l_pNodeA )
@@ -170,7 +168,7 @@ void PhysicsControl::checkCollisions() {
             if (contactActives.find((*it).first) == contactActives.end()) {
 
                 if (checkAllowCollision((*it).second.first) == true) {
-                    eventsSend(KindOp::START_COLLIDE, (*it).second.first, (*it).second.second);
+                    IO::eventsSend(COLLIDE_START, (*it).second.first, (*it).second.second);
                 }
 
             } else {
@@ -187,7 +185,7 @@ void PhysicsControl::checkCollisions() {
             if (new_contacts.find((*it).first) == new_contacts.end()) {
 
                 if (checkAllowCollision((*it).second.first) == true) {
-                    eventsSend(KindOp::OFF_COLLIDE, (*it).second.first, (*it).second.second);
+                    IO::eventsSend(COLLIDE_OFF, (*it).second.first, (*it).second.second);
                 }
             }
         }

@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/utils.hpp"
+#include "chimera/core/io/utils.hpp"
 #include "chimera/render/LoadHeightMap.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
@@ -57,7 +57,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             debugParser = true;
             break;
         case SDLK_F10:
-            Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::IO::eventsSend(Chimera::IO::TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         default:
             break;
@@ -120,8 +120,7 @@ void Game::stop() {}
 void Game::newFPS(const unsigned int& fps) {}
 
 void Game::userEvent(const SDL_Event& _event) {
-    Chimera::KindOp op = (Chimera::KindOp)_event.user.code;
-    if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
+    if (_event.user.code == Chimera::IO::TOGGLE_FULL_SCREEN) {
         pCanvas->toggleFullScreen();
     }
 }

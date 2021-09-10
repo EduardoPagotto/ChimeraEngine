@@ -2,7 +2,7 @@
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
-#include "chimera/core/utils.hpp"
+#include "chimera/core/io/utils.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
 
@@ -104,7 +104,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             pHUD->setOn(!pHUD->isOn());
             break;
         case SDLK_F10:
-            Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::IO::eventsSend(Chimera::IO::TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_UP:
             pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
@@ -203,27 +203,26 @@ void Game::render() {
 
 void Game::userEvent(const SDL_Event& _event) {
 
-    Chimera::KindOp op = (Chimera::KindOp)_event.user.code;
     Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
     Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
 
-    switch (op) {
-        case Chimera::KindOp::START_COLLIDE: {
+    switch (_event.user.code) {
+        case Chimera::COLLIDE_START: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::KindOp::ON_COLLIDE: {
+        case Chimera::COLLIDE_ON: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::KindOp::OFF_COLLIDE: {
+        case Chimera::COLLIDE_OFF: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN:
+        case Chimera::IO::TOGGLE_FULL_SCREEN:
             pCanvas->toggleFullScreen();
             break;
         default:

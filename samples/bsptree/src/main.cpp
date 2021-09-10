@@ -3,7 +3,6 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/io/FlowControl.hpp"
-#include "chimera/core/utils.hpp"
 
 #include <iostream>
 

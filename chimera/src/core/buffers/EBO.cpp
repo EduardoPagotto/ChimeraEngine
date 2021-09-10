@@ -1,4 +1,4 @@
-#include "chimera/core/EBO.hpp"
+#include "chimera/core/buffers/EBO.hpp"
 #include "chimera/core/VertexData.hpp"
 
 namespace Chimera {

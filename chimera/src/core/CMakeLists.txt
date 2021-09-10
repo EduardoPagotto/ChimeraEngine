@@ -20,10 +20,10 @@ set (SourcesCore CanvasGL.cpp
 				 FlowControl.cpp
 				 Shader.cpp
 				 VertexData.cpp
-				 VAO.cpp
-				 EBO.cpp
-				 VBO.cpp
-				 Transform.cpp)
+				 Transform.cpp
+				 buffers/VAO.cpp
+				 buffers/EBO.cpp
+				 buffers/VBO.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

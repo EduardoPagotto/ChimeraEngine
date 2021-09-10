@@ -1,9 +1,9 @@
 #ifndef __CHIMERA_VERTEX_STATIC_HPP
 #define __CHIMERA_VERTEX_STATIC_HPP
 
-#include "chimera/core/EBO.hpp"
-#include "chimera/core/VAO.hpp"
-#include "chimera/core/VBO.hpp"
+#include "chimera/core/buffers/EBO.hpp"
+#include "chimera/core/buffers/VAO.hpp"
+#include "chimera/core/buffers/VBO.hpp"
 
 namespace Chimera {
 

@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_VERTEX_DYNAMIC_HPP
 #define __CHIMERA_VERTEX_DYNAMIC_HPP
 
-#include "chimera/core/VAO.hpp"
-#include "chimera/core/VBO.hpp"
+#include "chimera/core/buffers/VAO.hpp"
+#include "chimera/core/buffers/VBO.hpp"
 
 namespace Chimera {
 

@@ -1,4 +1,4 @@
-#include "chimera/core/VAO.hpp"
+#include "chimera/core/buffers/VAO.hpp"
 
 namespace Chimera {
 

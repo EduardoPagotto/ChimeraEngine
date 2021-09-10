@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_VBO__HPP
 #define __CHIMERA_VBO__HPP
 
-#include "VertexData.hpp"
 #include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/VertexData.hpp"
 #include <vector>
 
 namespace Chimera {

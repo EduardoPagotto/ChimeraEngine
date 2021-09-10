@@ -9,13 +9,12 @@ namespace Chimera {
 
 class VertexRenderStatic {
   public:
-    VertexRenderStatic();
+    VertexRenderStatic(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index);
     virtual ~VertexRenderStatic();
-    void create(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index);
     void render();
 
   private:
-    VBO vbo;
+    VBO* vbo;
     VAO vao;
     EBO ebo;
     std::vector<unsigned int> indexIBO;

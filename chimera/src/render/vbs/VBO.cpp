@@ -1,23 +1,20 @@
 #include "chimera/render/vbs/VBO.hpp"
-#include "chimera/OpenGLDefs.hpp"
 
 namespace Chimera {
 
-VBO::VBO() : vboGL(0) {}
-VBO::~VBO() {
-    if (vboGL > 0)
-        glDeleteBuffers(1, &vboGL);
-}
+// https://www.youtube.com/watch?v=qTGMXcFLk2E&t=2063s
 
-void VBO::setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset) {
-    glVertexAttribPointer(slotID, slotSize, GL_FLOAT, GL_FALSE, sizeof(VertexData), offset);
-    glEnableVertexAttribArray(slotID);
-}
+VBO::VBO(std::vector<VertexData>* vertexData, const unsigned int& componentCount) : bufferID(0) {
 
-void VBO::bind() { glBindBuffer(GL_ARRAY_BUFFER, vboGL); }
-void VBO::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+    glGenBuffers(1, &bufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
 
-void VBO::building() {
+    if (vertexData != nullptr) {
+        // glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(VertexData), &vertexData[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, componentCount, &(*vertexData)[0], GL_STATIC_DRAW);
+    } else {
+        glBufferData(GL_ARRAY_BUFFER, componentCount, nullptr, GL_STREAM_DRAW);
+    }
 
     // Vertex fields ids
     this->setSlot(0, 3, BUFFER_OFFSET(0));  // Vertice
@@ -33,21 +30,13 @@ void VBO::building() {
     glDisableVertexAttribArray(2); // Slot 2 Textura
 }
 
-void VBO::buildStatic(std::vector<VertexData>& vertexData) {
-    // Buffer de vertice
-    glGenBuffers(1, &vboGL);
-    glBindBuffer(GL_ARRAY_BUFFER, vboGL);
-    glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(VertexData), &vertexData[0], GL_STATIC_DRAW);
-
-    this->building();
+VBO::~VBO() {
+    if (bufferID > 0)
+        glDeleteBuffers(1, &bufferID);
 }
 
-void VBO::buildDynamic(const int& maxBufferSize) {
-    // Buffer de vertice
-    glGenBuffers(1, &vboGL);
-    glBindBuffer(GL_ARRAY_BUFFER, vboGL);
-    glBufferData(GL_ARRAY_BUFFER, maxBufferSize, nullptr, GL_STREAM_DRAW);
-
-    this->building();
+void VBO::setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset) {
+    glVertexAttribPointer(slotID, slotSize, GL_FLOAT, GL_FALSE, sizeof(VertexData), offset);
+    glEnableVertexAttribArray(slotID);
 }
 } // namespace Chimera

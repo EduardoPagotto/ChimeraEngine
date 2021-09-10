@@ -8,14 +8,13 @@ namespace Chimera {
 
 class VertexRenderDynamic {
   public:
-    VertexRenderDynamic();
-    void create(const unsigned int& max);
+    VertexRenderDynamic(const unsigned int& max);
     virtual ~VertexRenderDynamic();
     void render(std::vector<VertexData>& vVertice);
 
   private:
     VAO vao;
-    VBO vbo;
+    VBO* vbo;
 };
 } // namespace Chimera
 #endif

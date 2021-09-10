@@ -98,7 +98,7 @@ void Game::start() {
     m.toVertexData(renderData);
 
     std::vector<unsigned int> index;
-    vertexRenderStatic.create(renderData, index);
+    this->pVertexRenderStatic = new Chimera::VertexRenderStatic(renderData, index); // vertexRenderStatic.create(renderData, index);
 }
 
 void Game::stop() {}
@@ -146,7 +146,7 @@ void Game::render() {
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 
-    vertexRenderStatic.render();
+    pVertexRenderStatic->render();
 
     pCanvas->after();
     pCanvas->swapWindow();

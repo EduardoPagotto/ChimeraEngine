@@ -2,23 +2,7 @@
 
 namespace Chimera {
 
-VertexRenderStatic::VertexRenderStatic() {}
-VertexRenderStatic::~VertexRenderStatic() {
-
-    if (vertexData.size() > 0)
-        vertexData.clear();
-
-    if (indexIBO.size() > 0)
-        indexIBO.clear();
-}
-
-void VertexRenderStatic::render() {
-    vao.bind();
-    ebo.render();
-    vao.unbind();
-}
-
-void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index) {
+VertexRenderStatic::VertexRenderStatic(std::vector<VertexData>& vertexDataIn, std::vector<unsigned int> index) {
 
     if (index.size() == 0) {
         vertexDataIndexCompile(vertexDataIn, vertexData, indexIBO);
@@ -29,10 +13,21 @@ void VertexRenderStatic::create(std::vector<VertexData>& vertexDataIn, std::vect
 
     vao.create();
     vao.bind();
-    vbo.buildStatic(vertexData);
+    vbo = new VBO(&vertexData, vertexData.size() * sizeof(VertexData));
 
     vao.bind();
     ebo.create(indexIBO);
+    vao.unbind();
+}
+
+VertexRenderStatic::~VertexRenderStatic() {
+    delete vbo;
+    vbo = nullptr;
+}
+
+void VertexRenderStatic::render() {
+    vao.bind();
+    ebo.render();
     vao.unbind();
 }
 } // namespace Chimera

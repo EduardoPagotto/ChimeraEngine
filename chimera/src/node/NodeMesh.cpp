@@ -40,7 +40,7 @@ void NodeMesh::init() {
 
 void NodeMesh::accept(VisitorInterface* v) { v->visit(this); }
 
-void NodeMesh::render(Shader* _pShader) { renderStat.render(); }
+void NodeMesh::render(Shader* _pShader) { pRenderStat->render(); }
 
 void NodeMesh::setVertexBuffer() {
     std::vector<VertexData> vertexDataIn;
@@ -48,9 +48,9 @@ void NodeMesh::setVertexBuffer() {
 
     if (meshData.isSingleIndex() == false) {
         std::vector<unsigned int> index;
-        renderStat.create(vertexDataIn, index);
+        pRenderStat = new VertexRenderStatic(vertexDataIn, index);
     } else {
-        renderStat.create(vertexDataIn, meshData.getVertexIndex());
+        pRenderStat = new VertexRenderStatic(vertexDataIn, meshData.getVertexIndex());
     }
 }
 

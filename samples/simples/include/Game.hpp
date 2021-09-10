@@ -32,7 +32,7 @@ class Game : public Chimera::IEvents {
     Chimera::TrackBall trackBall;
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
-    Chimera::VertexRenderStatic vertexRenderStatic;
+    Chimera::VertexRenderStatic* pVertexRenderStatic;
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;

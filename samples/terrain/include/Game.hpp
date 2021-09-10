@@ -39,7 +39,7 @@ class Game : public Chimera::IEvents {
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;
-    Chimera::VertexRenderStatic renderStat;
+    Chimera::VertexRenderStatic* pRenderStat;
 
     Chimera::HeightMap* pHeightMap;
     Chimera::Frustum frustum;

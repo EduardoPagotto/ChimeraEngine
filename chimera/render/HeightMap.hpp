@@ -17,7 +17,7 @@ class HeightMap {
     void render(Frustum& _frustrun);
 
   private:
-    VBO vbo;
+    VBO* vbo;
     VAO vao;
     std::vector<VertexNode*> vNodes;
 

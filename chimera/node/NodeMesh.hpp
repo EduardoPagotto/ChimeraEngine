@@ -40,7 +40,7 @@ class NodeMesh : public Node {
 
   private:
     void setVertexBuffer();
-    VertexRenderStatic renderStat;
+    VertexRenderStatic* pRenderStat;
     AABB aabb;
     Material* material;
     Transform* pTransform;

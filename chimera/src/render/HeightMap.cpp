@@ -86,7 +86,7 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
 
     vao.create();
     vao.bind();
-    vbo.buildStatic(_vertexData);
+    vbo = new VBO(&_vertexData, _vertexData.size() * sizeof(VertexData));
 
     vao.bind();
 

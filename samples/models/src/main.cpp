@@ -54,10 +54,9 @@ int main(int argn, char** argv) {
             std::string nome = shader_item["name"].as<std::string>();
             std::string vertex = shader_item["vertex"].as<std::string>();
             std::string fragm = shader_item["fragment"].as<std::string>();
-            Chimera::Shader* pShader =
-                new Chimera::Shader(nome.c_str(), Chimera::shadeLoadProg(nome.c_str(), vertex.c_str(), fragm.c_str()));
+            Chimera::Shader* pShader = new Chimera::Shader(nome.c_str(), vertex.c_str(), fragm.c_str());
 
-            mapa[pShader->getCurrentProgram()] = pShader;
+            mapa[pShader->getName()] = pShader;
         }
 
         std::string model = config["model"].as<std::string>();

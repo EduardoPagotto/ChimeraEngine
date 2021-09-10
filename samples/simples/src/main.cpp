@@ -17,8 +17,7 @@ int main(int argn, char** argv) {
         Chimera::CanvasGL* video = new Chimera::CanvasGL("simples", 640, 480);
 
         Chimera::Shader* pShader =
-            new Chimera::Shader("Simples1", Chimera::shadeLoadProg("Simples1", "./samples/simples/shaders/simples.vert",
-                                                                   "./samples/simples/shaders/simples.frag"));
+            new Chimera::Shader("Simples1", "./samples/simples/shaders/simples.vert", "./samples/simples/shaders/simples.frag");
 
         Game* game = new Game(video, pShader);
 

@@ -15,9 +15,7 @@ int main(int argn, char** argv) {
         SDL_Log("AppEmpty Iniciado");
 
         Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 1400, 900);
-
-        Chimera::Shader* pShader = new Chimera::Shader(
-            "Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert", "./chimera/shaders/MeshNoMat.frag"));
+        Chimera::Shader* pShader = new Chimera::Shader("MeshNoMat", "./chimera/shaders/MeshNoMat.vert", "./chimera/shaders/MeshNoMat.frag");
 
         Game* game = new Game(video, pShader);
 

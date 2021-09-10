@@ -8,60 +8,7 @@
 
 namespace Chimera {
 
-Shader::Shader(const std::string& _programName, const GLuint& _idProgram)
-    : currentProgram(_programName), idProgram(_idProgram) {}
-
-Shader::Shader(const Shader& _shader) {
-    idProgram = _shader.idProgram;
-    currentProgram = _shader.currentProgram;
-}
-
-Shader::~Shader() { glDeleteProgram(idProgram); }
-
-GLint Shader::getUniformLocation(const char* _varName) const noexcept {
-    // nasty C lib uses -1 return value for error
-    GLint loc = glGetUniformLocation(idProgram, _varName);
-    if (loc == -1)
-        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _varName,
-                     currentProgram.c_str());
-    return loc;
-}
-
-void Shader::setGlUniform1i(const char* _nameVar, const int& _val) const noexcept {
-    glUniform1i(getUniformLocation(_nameVar), _val);
-}
-
-void Shader::setGlUniform1f(const char* _nameVar, const float& _val) const noexcept {
-    glUniform1f(getUniformLocation(_nameVar), _val);
-}
-
-void Shader::setGlUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const noexcept {
-    glUniform3f(getUniformLocation(_nameVar), _x, _y, _z);
-}
-
-void Shader::setGlUniform3fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
-    glUniform3fv(getUniformLocation(_nameVar), _num, _pointer);
-}
-
-void Shader::setGlUniform4fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
-    glUniform4fv(getUniformLocation(_nameVar), _num, _pointer);
-}
-
-void Shader::setGlUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
-    glUniform1fv(getUniformLocation(_nameVar), _num, _pointer);
-}
-
-void Shader::setGlUniformMatrix4fv(const char* _nameVar, const unsigned& _num, const bool& _normal,
-                                   const float* _pointer) const noexcept {
-    glUniformMatrix4fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
-}
-
-void Shader::setGlUniformMatrix3fv(const char* _nameVar, const unsigned& _num, const bool& _normal,
-                                   const float* _pointer) const noexcept {
-    glUniformMatrix3fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
-}
-
-// --- shade
+// --- shade internal func
 std::string getShaderCode(const char* file_path) {
 
     // Read the Vertex Shader code from the file
@@ -80,16 +27,13 @@ std::string getShaderCode(const char* file_path) {
     return shaderCode;
 }
 
-GLuint compileShader(const std::string& shaderCode, bool _shadeKind) {
+GLuint compileShader(const std::string& shaderCode, uint16_t kindShade) {
 
     GLint Result = GL_FALSE;
     int InfoLogLength;
 
     GLuint shaderID = -1;
-    if (_shadeKind == false)
-        shaderID = glCreateShader(GL_FRAGMENT_SHADER);
-    else
-        shaderID = glCreateShader(GL_VERTEX_SHADER);
+    shaderID = glCreateShader(kindShade);
 
     char const* sourcePointer = shaderCode.c_str();
     glShaderSource(shaderID, 1, &sourcePointer, NULL);
@@ -103,8 +47,8 @@ GLuint compileShader(const std::string& shaderCode, bool _shadeKind) {
         if (InfoLogLength > 0) {
             std::vector<char> shaderErrorMessage(InfoLogLength + 1);
             glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &shaderErrorMessage[0]);
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check Fragment Shader: %s",
-                         std::string(&shaderErrorMessage[0]).c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check Fragment Shader: %s", std::string(&shaderErrorMessage[0]).c_str());
+            throw Exception(std::string("compileShader Fail: ") + shaderCode);
         }
     }
 
@@ -130,35 +74,75 @@ GLuint linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID) 
         if (InfoLogLength > 0) {
             std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
             glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check program: %s",
-                         std::string(&ProgramErrorMessage[0]).c_str());
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check program: %s", std::string(&ProgramErrorMessage[0]).c_str());
         }
+
+        throw Exception(std::string("linkShader Fail"));
     }
     return ProgramID;
 }
 
 GLuint shadeLoadProg(const char* progName, const char* fileVertex, const char* fileFrag) {
 
-    GLuint VertexShaderID = compileShader(getShaderCode(fileVertex), true);
-    GLuint FragmentShaderID = compileShader(getShaderCode(fileFrag), false);
+    GLuint VertexShaderID = compileShader(getShaderCode(fileVertex), GL_VERTEX_SHADER);
+    GLuint FragmentShaderID = compileShader(getShaderCode(fileFrag), GL_FRAGMENT_SHADER);
 
     // Link o programa
-    GLuint idProgram = linkShader(VertexShaderID, FragmentShaderID);
-
+    GLuint shaderId = linkShader(VertexShaderID, FragmentShaderID);
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
 
-    if (idProgram != -1)
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", progName, idProgram);
-    else
+    if (shaderId > 0)
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", progName, shaderId);
+    else {
         SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader %s", progName);
+        throw Exception(std::string("shadeLoadProg Fail"));
+    }
 
-    return idProgram;
+    return shaderId;
 }
 
-Shader* loadShader(const std::string& progName, const std::string& fileVertex, const std::string& fileFrag) {
-    GLuint id = shadeLoadProg(progName.c_str(), fileVertex.c_str(), fileFrag.c_str());
-    return new Shader(progName, id);
+// Shader::Shader(const std::string& _programName, const GLuint& _idProgram) : name(_programName), shaderId(_idProgram) {
+Shader::Shader(const std::string& name, const std::string& vertPath, const std::string& fragPath) : name(name) {
+    this->shaderId = shadeLoadProg(name.c_str(), vertPath.c_str(), fragPath.c_str());
+}
+
+Shader::~Shader() { glDeleteProgram(shaderId); }
+
+GLint Shader::getUniformLocation(const char* _varName) const noexcept {
+    // nasty C lib uses -1 return value for error
+    GLint loc = glGetUniformLocation(shaderId, _varName);
+    if (loc == -1)
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _varName, name.c_str());
+    return loc;
+}
+
+void Shader::setGlUniform1i(const char* _nameVar, const int& _val) const noexcept { glUniform1i(getUniformLocation(_nameVar), _val); }
+
+void Shader::setGlUniform1f(const char* _nameVar, const float& _val) const noexcept { glUniform1f(getUniformLocation(_nameVar), _val); }
+
+void Shader::setGlUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const noexcept {
+    glUniform3f(getUniformLocation(_nameVar), _x, _y, _z);
+}
+
+void Shader::setGlUniform3fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
+    glUniform3fv(getUniformLocation(_nameVar), _num, _pointer);
+}
+
+void Shader::setGlUniform4fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
+    glUniform4fv(getUniformLocation(_nameVar), _num, _pointer);
+}
+
+void Shader::setGlUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
+    glUniform1fv(getUniformLocation(_nameVar), _num, _pointer);
+}
+
+void Shader::setGlUniformMatrix4fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const noexcept {
+    glUniformMatrix4fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
+}
+
+void Shader::setGlUniformMatrix3fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const noexcept {
+    glUniformMatrix3fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
 }
 
 } // namespace Chimera

@@ -103,12 +103,11 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
     if (pShadowMapVisitor != nullptr)
         pShadowMapVisitor->render(_pGroup, pTransform);
 
-    pShader->link();
+    pShader->enable();
 
     if (pShadowMapVisitor != nullptr) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE,
-                                       glm::value_ptr(pShadowMapVisitor->getLightSpaceMatrix()));
+        pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(pShadowMapVisitor->getLightSpaceMatrix()));
     }
 
     NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
@@ -123,8 +122,7 @@ void VisitorRender::visit(NodeHUD* _pHUD) {
 
     if (HudOn == true) {
         if (_pHUD->isOn() == true) {
-            pShader->setGlUniformMatrix4fv("projection", 1, false,
-                                           glm::value_ptr(pVideo->getOrthoProjectionMatrix(eye)));
+            pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(pVideo->getOrthoProjectionMatrix(eye)));
             _pHUD->render(pShader);
         }
     }

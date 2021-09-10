@@ -3,11 +3,9 @@
 
 namespace Chimera {
 
-CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height)
-    : CanvasGL(_title, _width * 2, _height, false) {
+CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : CanvasGL(_title, _width * 2, _height, false) {
 
-    pShader = new Shader("RenderToTex", shadeLoadProg("RenderToTex", "./chimera/shaders/CanvasHMD.vert",
-                                                      "./chimera/shaders/CanvasHMD.frag"));
+    pShader = new Shader("CanvasHMD", "./chimera/shaders/CanvasHMD.vert", "./chimera/shaders/CanvasHMD.frag");
 
     pLeft = new Eye(0, _width, _height, pShader);
     pRight = new Eye(1, _width, _height, pShader);
@@ -49,8 +47,7 @@ void CanvasHmd::after(const unsigned short& _indexEye) {
     // CanvasGL::after(); // SDL_GL_SwapWindow(window);
 }
 
-void CanvasHmd::calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& view,
-                                              glm::mat4& projection) {
+void CanvasHmd::calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& view, glm::mat4& projection) {
 
     if (_indexEye == 0) {
 

@@ -43,7 +43,7 @@ void VisitorShadowMap::visit(NodeParticleEmitter* _pParticleEmitter) {}
 
 void VisitorShadowMap::visit(NodeGroup* _pGroup) {
     // Shader selecionado correto no RenderVisitor via Group
-    pShader->link();
+    pShader->enable();
 }
 
 void VisitorShadowMap::visit(NodeHUD* _pHUD) {}

@@ -113,8 +113,7 @@ void Eye::createSquare() {
 
     // The fullscreen quad's FBO
     static const GLfloat g_quad_vertex_buffer_data[] = {
-        -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-        -1.0f, 1.0f,  0.0f, 1.0f, -1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
     };
 
     glGenBuffers(1, &quad_vertexbuffer);
@@ -134,7 +133,7 @@ void Eye::displayTexture() {
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Use our shader
-    pShader->link();
+    pShader->enable();
     // glUseProgram(quad_programID);
 
     // Bind our texture in Texture Unit 0
@@ -162,7 +161,7 @@ void Eye::displayTexture() {
 
     glDisableVertexAttribArray(0);
 
-    pShader->unlink();
+    pShader->disable();
 }
 
 } // namespace Chimera

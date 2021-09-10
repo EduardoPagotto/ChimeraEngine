@@ -13,10 +13,7 @@ Game::Game() {
     model = glm::mat4(1.0f);
 
     pCanvas = new Chimera::CanvasGL("Chimera", 600, 400);
-
-    pShader = Chimera::loadShader("MeshFullShadow",                         // nome
-                                  "./chimera/shaders/MeshFullShadow.vert",  // vertex
-                                  "./chimera/shaders/MeshFullShadow.frag"); // fragment
+    pShader = new Chimera::Shader("MeshFullShadow", "./chimera/shaders/MeshFullShadow.vert", "./chimera/shaders/MeshFullShadow.frag");
 
     pMaterial = new Chimera::Material();
     pMaterial->setDefaultEffect();
@@ -153,7 +150,7 @@ void Game::render() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
     }
 
-    pShader->link();
+    pShader->enable();
 
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);

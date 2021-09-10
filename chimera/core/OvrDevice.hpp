@@ -3,7 +3,7 @@
 
 #ifdef OVR_SET_TO_USE
 
-#include "chimera/core/Canvas.hpp"
+#include "chimera/core/CanvasGL.hpp"
 
 #include <string>
 
@@ -23,10 +23,10 @@
 
 namespace Chimera {
 
-class OvrDevice : public Video {
+class CanvasOVR : public CanvasGL {
   public:
-    OvrDevice(std::string nomeTela);
-    virtual ~OvrDevice();
+    CanvasOVR(std::string nomeTela);
+    virtual ~CanvasOVR();
 
     virtual void initDraw();
     virtual void endDraw();

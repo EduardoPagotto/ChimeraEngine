@@ -1,4 +1,4 @@
-#include "chimera/core/OvrDevice.hpp"
+#include "chimera/core/CanvasOVR.hpp"
 
 #ifdef OVR_SET_TO_USE
 
@@ -8,7 +8,7 @@
 
 namespace Chimera {
 
-OvrDevice::OvrDevice(std::string nomeTela) : Video(nomeTela, KIND_DEVICE::OVR_OCULUS) {
+CanvasOVR::CanvasOVR(std::string nomeTela) : Video(nomeTela, KIND_DEVICE::OVR_OCULUS) {
 
     fullscreenStatus = false;
 
@@ -25,7 +25,7 @@ OvrDevice::OvrDevice(std::string nomeTela) : Video(nomeTela, KIND_DEVICE::OVR_OC
     initDevice();
 }
 
-void OvrDevice::initDevice() {
+void CanvasOVR::initDevice() {
 
     bool debug = false;
     if ((hmd = ovrHmd_Create(0)) == nullptr) {
@@ -50,8 +50,7 @@ void OvrDevice::initDevice() {
 
     ovrSizei eyeres[2];
     /* enable position and rotation tracking */
-    ovrHmd_ConfigureTracking(hmd,
-                             ovrTrackingCap_Orientation | ovrTrackingCap_MagYawCorrection | ovrTrackingCap_Position, 0);
+    ovrHmd_ConfigureTracking(hmd, ovrTrackingCap_Orientation | ovrTrackingCap_MagYawCorrection | ovrTrackingCap_Position, 0);
     /* retrieve the optimal render target resolution for each eye */
     eyeres[0] = ovrHmd_GetFovTextureSize(hmd, ovrEye_Left, hmd->DefaultEyeFov[0], 1.0);
     eyeres[1] = ovrHmd_GetFovTextureSize(hmd, ovrEye_Right, hmd->DefaultEyeFov[1], 1.0);
@@ -132,7 +131,7 @@ void OvrDevice::initDevice() {
 
 /* update_rtarg creates (and/or resizes) the render target used to draw the two stero
  * views */
-void OvrDevice::update_rtarg(int width, int height) {
+void CanvasOVR::update_rtarg(int width, int height) {
     if (!fbo) {
         /* if fbo does not exist, then nothing does... create every opengl object */
         glGenFramebuffers(1, &fbo);
@@ -169,7 +168,7 @@ void OvrDevice::update_rtarg(int width, int height) {
     printf("created render target: %dx%d (texture size: %dx%d)\n", width, height, fbTexSize.w, fbTexSize.h);
 }
 
-unsigned int OvrDevice::next_pow2(unsigned int x) {
+unsigned int CanvasOVR::next_pow2(unsigned int x) {
     x -= 1;
     x |= x >> 1;
     x |= x >> 2;
@@ -179,7 +178,7 @@ unsigned int OvrDevice::next_pow2(unsigned int x) {
     return x + 1;
 }
 
-OvrDevice::~OvrDevice() {
+CanvasOVR::~CanvasOVR() {
 
     // close frame buffer, render buffer, texture
     glDeleteFramebuffers(1, &fbo);
@@ -189,12 +188,12 @@ OvrDevice::~OvrDevice() {
     ovr_Shutdown();
 }
 
-void OvrDevice::reshape(int _w, int _h) {
+void CanvasOVR::reshape(int _w, int _h) {
     winSizeW = _w;
     winSizeH = _h;
 }
 
-void OvrDevice::toggleFullScreen(void) {
+void CanvasOVR::toggleFullScreen(void) {
 
     if (fullscreenStatus == false) {
         /* going fullscreen on the rift. save current window position, and move it
@@ -231,7 +230,7 @@ void OvrDevice::toggleFullScreen(void) {
     fullscreenStatus = !fullscreenStatus;
 }
 
-void OvrDevice::initDraw() {
+void CanvasOVR::initDraw() {
 
     ovrFrameTiming frameTiming = ovrHmd_BeginFrame(hmd, 0);
 
@@ -239,7 +238,7 @@ void OvrDevice::initDraw() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OvrDevice::endDraw() {
+void CanvasOVR::endDraw() {
 
     /* after drawing both eyes into the texture render target, revert to drawing directly
      * to the display, and we call ovrHmd_EndFrame, to let the Oculus SDK draw both images
@@ -258,7 +257,7 @@ void OvrDevice::endDraw() {
     // assert(glGetError() == GL_NO_ERROR);//FIXME
 }
 
-// void OvrDevice::executeViewOrto(int eyeIndex) {
+// void CanvasOVR::executeViewOrto(int eyeIndex) {
 
 //	float orthomatrix[4][4];
 
@@ -308,7 +307,7 @@ void OvrDevice::endDraw() {
 //	glLoadIdentity();
 //}
 
-// void OvrDevice::executeViewOrto(int eyeIndex) {
+// void CanvasOVR::executeViewOrto(int eyeIndex) {
 
 //	ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
 //	pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
@@ -325,7 +324,7 @@ void OvrDevice::endDraw() {
 //	glLoadIdentity();
 //}
 
-void OvrDevice::executeViewOrto(int eyeIndex) {
+void CanvasOVR::executeViewOrto(int eyeIndex) {
 
     ovrEyeType eye = hmd->EyeRenderOrder[eyeIndex];
     // pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
@@ -335,8 +334,7 @@ void OvrDevice::executeViewOrto(int eyeIndex) {
     glLoadIdentity();
 
     glOrtho(fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.x, fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.w,
-            fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.y, fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.h,
-            -1, 1);
+            fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Pos.y, fb_ovr_tex[eyeIndex].OGL.Header.RenderViewport.Size.h, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -388,7 +386,7 @@ void OvrDevice::executeViewOrto(int eyeIndex) {
 // ovrMatrix4f_OrthoSubProjection(Projection[1], orthoScale1, orthoDistance,
 // 														EyeRenderDesc[1].HmdToEyeViewOffset.x);
 
-//	OVR::Matrix4f OvrDevice::getOrthographic() {
+//	OVR::Matrix4f CanvasOVR::getOrthographic() {
 // 		const ovrEyeRenderDesc & erd = getEyeRenderDesc();
 // 		ovrMatrix4f ovrPerspectiveProjection = ovrMatrix4f_Projection(erd.Fov,
 // 0.01f, 100000.0f, true); 		ovrVector2f scale; scale.x = scaleFactor; scale.y
@@ -397,7 +395,7 @@ void OvrDevice::executeViewOrto(int eyeIndex) {
 // 	}
 //
 //
-// 	void OvrDevice::GetOrthoProjection(const HMDRenderState& RenderState,
+// 	void CanvasOVR::GetOrthoProjection(const HMDRenderState& RenderState,
 // OVR::Matrix4f OrthoProjection[2])
 // 	{
 // 		OVR::Matrix4f perspectiveProjection[2];
@@ -420,7 +418,7 @@ void OvrDevice::executeViewOrto(int eyeIndex) {
 // RenderState.EyeRenderDesc[1].ViewAdjust.x);
 // 	}
 
-void OvrDevice::executeViewPerspective(const float& _fov, const float& _near, const float& _far, int _eye) {
+void CanvasOVR::executeViewPerspective(const float& _fov, const float& _near, const float& _far, int _eye) {
 
     using namespace OVR;
 
@@ -438,8 +436,8 @@ void OvrDevice::executeViewPerspective(const float& _fov, const float& _near, co
     // 1);
     perspectiveProjection = ovrMatrix4f_Projection(eye_rdesc[eye].Fov, 0.1, 1000.0, true);
 
-    orthoProjection[_eye] = ovrMatrix4f_OrthoSubProjection(perspectiveProjection, orthoScale, orthoDistance,
-                                                           eye_rdesc[eye].DistortedViewport.Pos.x);
+    orthoProjection[_eye] =
+        ovrMatrix4f_OrthoSubProjection(perspectiveProjection, orthoScale, orthoDistance, eye_rdesc[eye].DistortedViewport.Pos.x);
 
     // orthoProjection[eye].M[1][1] = -orthoProjection[eye].M[1][1];
     // orthoProjection[eye].M[1][1] = -orthoProjection[eye].M[1][1];
@@ -455,8 +453,7 @@ void OvrDevice::executeViewPerspective(const float& _fov, const float& _near, co
     pose[eye] = ovrHmd_GetHmdPosePerEye(hmd, eye);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(eye_rdesc[eye].HmdToEyeViewOffset.x, eye_rdesc[eye].HmdToEyeViewOffset.y,
-                 eye_rdesc[eye].HmdToEyeViewOffset.z);
+    glTranslatef(eye_rdesc[eye].HmdToEyeViewOffset.x, eye_rdesc[eye].HmdToEyeViewOffset.y, eye_rdesc[eye].HmdToEyeViewOffset.z);
     /* retrieve the orientation quaternion and convert it to a rotation matrix */
     quat_to_matrix(&pose[eye].Orientation.x, rot_mat);
     glMultMatrixf(rot_mat);
@@ -467,7 +464,7 @@ void OvrDevice::executeViewPerspective(const float& _fov, const float& _near, co
 }
 
 /* convert a quaternion to a rotation matrix */
-void OvrDevice::quat_to_matrix(const float* quat, float* mat) {
+void CanvasOVR::quat_to_matrix(const float* quat, float* mat) {
     mat[0] = 1.0 - 2.0 * quat[1] * quat[1] - 2.0 * quat[2] * quat[2];
     mat[4] = 2.0 * quat[0] * quat[1] + 2.0 * quat[3] * quat[2];
     mat[8] = 2.0 * quat[2] * quat[0] - 2.0 * quat[3] * quat[1];

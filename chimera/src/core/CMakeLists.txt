@@ -11,12 +11,13 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 #define objetos a compilar
 set (SourcesCore CanvasGL.cpp
 				 CanvasFB.cpp
-				 Timer.cpp
+				 #CanvasOVR.cpp
 				 TrackBall.cpp
 				 TrackHead.cpp
 				 Shader.cpp
 				 VertexData.cpp
 				 Transform.cpp
+				 io/Timer.cpp
 				 io/JoystickState.cpp
 				 io/JoystickManager.cpp
 				 io/MouseDevice.cpp

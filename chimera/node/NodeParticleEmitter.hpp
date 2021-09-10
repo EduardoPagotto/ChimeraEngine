@@ -4,8 +4,8 @@
 #include "Node.hpp"
 #include "Particle.hpp"
 #include "chimera/core/Shader.hpp"
-#include "chimera/core/Timer.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/core/io/Timer.hpp"
 #include "chimera/render/Material.hpp"
 #include <vector>
 
@@ -55,7 +55,7 @@ class NodeParticleEmitter : public Node {
 
     glm::vec3 sizeBox;
     Particle ParticlesContainer[MaxParticles];
-    Timer timer;
+    IO::Timer timer;
 
     Material* material;
 };

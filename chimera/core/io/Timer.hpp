@@ -1,9 +1,9 @@
-#ifndef __CHIMERA_TIMER__HPP
-#define __CHIMERA_TIMER__HPP
+#ifndef __CHIMERA_CORE_TIMER__HPP
+#define __CHIMERA_CORE_TIMER__HPP
 
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace Chimera::IO {
 
 /**
  * Class Timer
@@ -48,5 +48,5 @@ class Timer {
     Uint32 countStep;
     Uint32 elapsedCount;
 };
-} // namespace Chimera
+} // namespace Chimera::IO
 #endif

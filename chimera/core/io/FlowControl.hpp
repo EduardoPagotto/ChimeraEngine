@@ -3,7 +3,7 @@
 
 #include "IEvents.hpp"
 #include "JoystickManager.hpp"
-#include "chimera/core/Timer.hpp"
+#include "Timer.hpp"
 
 namespace Chimera::IO {
 

@@ -16,14 +16,34 @@ class Shader {
     inline std::string getName() const { return name; }
 
     GLint getUniformLocation(const char* _varName) const noexcept;
-    void setGlUniform1i(const char* _nameVar, const int& _val) const noexcept;
-    void setGlUniform1f(const char* _nameVar, const float& _val) const noexcept;
-    void setGlUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const noexcept;
-    void setGlUniform3fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept;
-    void setGlUniform4fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept;
-    void setGlUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept;
-    void setGlUniformMatrix4fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const noexcept;
-    void setGlUniformMatrix3fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const noexcept;
+
+    inline void setUniform1i(const char* _nameVar, const int& _val) const { glUniform1i(getUniformLocation(_nameVar), _val); }
+
+    inline void setUniform1f(const char* _nameVar, const float& _val) const { glUniform1f(getUniformLocation(_nameVar), _val); }
+
+    inline void setUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const {
+        glUniform3f(getUniformLocation(_nameVar), _x, _y, _z);
+    }
+
+    inline void setUniform3fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
+        glUniform3fv(getUniformLocation(_nameVar), _num, _pointer);
+    }
+
+    inline void setUniform4fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
+        glUniform4fv(getUniformLocation(_nameVar), _num, _pointer);
+    }
+
+    inline void setUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
+        glUniform1fv(getUniformLocation(_nameVar), _num, _pointer);
+    }
+
+    inline void setUniformMatrix4fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const {
+        glUniformMatrix4fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
+    }
+
+    inline void setUniformMatrix3fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const {
+        glUniformMatrix3fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
+    }
 
   private:
     GLuint shaderId;

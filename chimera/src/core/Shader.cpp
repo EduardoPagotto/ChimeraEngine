@@ -102,7 +102,6 @@ GLuint shadeLoadProg(const char* progName, const char* fileVertex, const char* f
     return shaderId;
 }
 
-// Shader::Shader(const std::string& _programName, const GLuint& _idProgram) : name(_programName), shaderId(_idProgram) {
 Shader::Shader(const std::string& name, const std::string& vertPath, const std::string& fragPath) : name(name) {
     this->shaderId = shadeLoadProg(name.c_str(), vertPath.c_str(), fragPath.c_str());
 }
@@ -114,35 +113,7 @@ GLint Shader::getUniformLocation(const char* _varName) const noexcept {
     GLint loc = glGetUniformLocation(shaderId, _varName);
     if (loc == -1)
         SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _varName, name.c_str());
+
     return loc;
 }
-
-void Shader::setGlUniform1i(const char* _nameVar, const int& _val) const noexcept { glUniform1i(getUniformLocation(_nameVar), _val); }
-
-void Shader::setGlUniform1f(const char* _nameVar, const float& _val) const noexcept { glUniform1f(getUniformLocation(_nameVar), _val); }
-
-void Shader::setGlUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const noexcept {
-    glUniform3f(getUniformLocation(_nameVar), _x, _y, _z);
-}
-
-void Shader::setGlUniform3fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
-    glUniform3fv(getUniformLocation(_nameVar), _num, _pointer);
-}
-
-void Shader::setGlUniform4fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
-    glUniform4fv(getUniformLocation(_nameVar), _num, _pointer);
-}
-
-void Shader::setGlUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const noexcept {
-    glUniform1fv(getUniformLocation(_nameVar), _num, _pointer);
-}
-
-void Shader::setGlUniformMatrix4fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const noexcept {
-    glUniformMatrix4fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
-}
-
-void Shader::setGlUniformMatrix3fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const noexcept {
-    glUniformMatrix3fv(getUniformLocation(_nameVar), _num, _normal, _pointer);
-}
-
 } // namespace Chimera

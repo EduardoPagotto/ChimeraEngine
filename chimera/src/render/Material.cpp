@@ -60,7 +60,7 @@ void Material::apply(Shader* _shader) {
         shaderMaterial->apply(_shader);
     }
 
-    _shader->setGlUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
+    _shader->setUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
 
     if (listTex.size() > 0) {
         for (std::list<TextureImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {

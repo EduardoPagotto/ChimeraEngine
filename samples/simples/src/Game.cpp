@@ -138,9 +138,9 @@ void Game::render() {
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
-    pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+    pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     material.apply(pShader);
     // aplica a textura

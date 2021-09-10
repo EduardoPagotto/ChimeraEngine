@@ -167,11 +167,11 @@ void Game::render() {
         return;
 
     int shadows = 0;
-    pShader->setGlUniform1i("shadows", shadows);
+    pShader->setUniform1i("shadows", shadows);
 
-    pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+    pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     // aplica material ao shader
     pMaterial->apply(pShader);

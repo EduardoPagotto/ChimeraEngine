@@ -29,7 +29,7 @@ class Texture {
         glActiveTexture(GL_TEXTURE0 + index);
         glBindTexture(GL_TEXTURE_2D, idTexture);
         if (_pShader != nullptr)
-            _pShader->setGlUniform1i(shadeName.c_str(), index);
+            _pShader->setUniform1i(shadeName.c_str(), index);
     }
 
     inline unsigned getWidth() const { return width; }
@@ -63,8 +63,7 @@ class TextureFBO : public Texture {
 
 class TextureImg : public Texture {
   public:
-    TextureImg(const std::string& _shadeName, const std::string& _pathFile)
-        : Texture(_shadeName, 0, 0), pathFile(_pathFile) {}
+    TextureImg(const std::string& _shadeName, const std::string& _pathFile) : Texture(_shadeName, 0, 0), pathFile(_pathFile) {}
     virtual ~TextureImg() override;
     virtual bool init() override;
 

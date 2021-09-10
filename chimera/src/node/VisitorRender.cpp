@@ -42,10 +42,10 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
         return;
 
     int shadows = 1;
-    pShader->setGlUniform1i("shadows", shadows);
-    pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    pShader->setUniform1i("shadows", shadows);
+    pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+    pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     _pMesh->getMaterial()->apply(pShader);
 
@@ -70,12 +70,12 @@ void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
             return;
 
         // Get the variables from the shader to which data will be passed
-        pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-        pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
+        pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
+        pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
         // shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr(
         // glm::inverseTranspose(glm::mat3(_view))));
 
-        pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+        pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
         // We will need the camera's position in order to sort the particles
         // w.r.t the camera's distance.
@@ -84,8 +84,8 @@ void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
         glm::vec3 CameraPosition(glm::inverse(view)[3]);
 
         // Vertex shader
-        pShader->setGlUniform3f("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
-        pShader->setGlUniform3f("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
+        pShader->setUniform3f("CameraRight_worldspace", view[0][0], view[1][0], view[2][0]);
+        pShader->setUniform3f("CameraUp_worldspace", view[0][1], view[1][1], view[2][1]);
 
         _pParticleEmitter->CameraPosition = CameraPosition;
         _pParticleEmitter->render(pShader);
@@ -107,13 +107,13 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
 
     if (pShadowMapVisitor != nullptr) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(pShadowMapVisitor->getLightSpaceMatrix()));
+        pShader->setUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(pShadowMapVisitor->getLightSpaceMatrix()));
     }
 
     NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
         ViewPoint* vp = pCam->getViewPoint();
-        pShader->setGlUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
+        pShader->setUniform3fv("viewPos", 1, glm::value_ptr(vp->position));
         pVideo->calcPerspectiveProjectionView(eye, vp, view, projection);
     }
 }
@@ -122,7 +122,7 @@ void VisitorRender::visit(NodeHUD* _pHUD) {
 
     if (HudOn == true) {
         if (_pHUD->isOn() == true) {
-            pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(pVideo->getOrthoProjectionMatrix(eye)));
+            pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(pVideo->getOrthoProjectionMatrix(eye)));
             _pHUD->render(pShader);
         }
     }

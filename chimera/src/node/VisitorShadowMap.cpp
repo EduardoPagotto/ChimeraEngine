@@ -29,14 +29,14 @@ void VisitorShadowMap::visit(NodeMesh* _pMesh) {
 
     glm::mat4 model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
 
-    pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
     _pMesh->render(nullptr);
 }
 
 void VisitorShadowMap::visit(NodeLight* _pLight) {
     // node de luz deve vir anter para funcionar?!
     this->setLightSpaceMatrix(_pLight->data.getPosition());
-    pShader->setGlUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+    pShader->setUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
 void VisitorShadowMap::visit(NodeParticleEmitter* _pParticleEmitter) {}

@@ -8,19 +8,18 @@
 
 namespace Chimera {
 
-// enum class KIND_DEVICE { SCREEN = 0, OVR_OCULUS, HMD_Z1 };
-
 /**
  * Class Canvas
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
- *  @update 20181206
+ *  @update 20210910
  */
 class Canvas {
   public:
-    Canvas(const std::string& _title, int _width, int _height, bool _fullScreen = false);
-    virtual ~Canvas();
+    Canvas(const std::string& _title, int _width, int _height, bool _fullScreen = false)
+        : title(_title), width(_width), height(_height), fullScreen(_fullScreen), window(nullptr) {}
 
+    virtual ~Canvas() {}
     virtual void before(const unsigned short& _indexEye = 0) = 0;
     virtual void after(const unsigned short& _indexEye = 0) = 0;
     virtual void toggleFullScreen() = 0;

@@ -5,8 +5,11 @@
 
 namespace Chimera {
 
-CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen)
-    : Canvas(_title, _width, _height, _fullScreen) {
+CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen) : Canvas(_title, _width, _height, _fullScreen) {
+
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+        throw Exception(std::string(std::string("Falha SDL_Init:") + SDL_GetError()));
+    }
 
     // Ajusta o contexto de versao do opengl
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -103,8 +106,7 @@ void CanvasGL::toggleFullScreen() {
     fullScreen = !fullScreen;
 }
 
-void CanvasGL::calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& view,
-                                             glm::mat4& projection) {
+void CanvasGL::calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& view, glm::mat4& projection) {
     glViewport(0, 0, width, height);
     projection = glm::perspective(vp->fov, (GLfloat)(float)width / (float)height, vp->near, vp->far);
     view = glm::lookAt(vp->position, vp->front, vp->up);

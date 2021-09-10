@@ -19,6 +19,10 @@ set (SourcesCore CanvasGL.cpp
 				 MouseDevice.cpp
 				 FlowControl.cpp
 				 Shader.cpp
+				 VertexData.cpp
+				 VAO.cpp
+				 EBO.cpp
+				 VBO.cpp
 				 Transform.cpp)
 
 # #define os includes

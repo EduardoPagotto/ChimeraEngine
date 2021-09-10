@@ -1,5 +1,4 @@
-#include "chimera/render/vbs/VAO.hpp"
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/VAO.hpp"
 
 namespace Chimera {
 

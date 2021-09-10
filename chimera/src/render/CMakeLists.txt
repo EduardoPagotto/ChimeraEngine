@@ -16,10 +16,6 @@ set (RenderSource 	Triangle.cpp
 					Octree.cpp
 					bsp/BSPTree.cpp
 					vbs/VertexNode.cpp
-					vbs/VAO.cpp
-					vbs/EBO.cpp
-					vbs/VBO.cpp
-					vbs/VertexData.cpp
 					vbs/VertexDynamic.cpp 
 					vbs/VertexStatic.cpp
 					Light.cpp

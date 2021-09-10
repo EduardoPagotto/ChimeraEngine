@@ -1,5 +1,5 @@
-#include "chimera/render/vbs/VertexData.hpp"
-#include "chimera/render/Side.hpp"
+#include "chimera/core/VertexData.hpp"
+//#include "chimera/render/Side.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

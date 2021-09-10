@@ -4,8 +4,8 @@
 // Ref:
 // https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
-#include "chimera/render/vbs/VAO.hpp"
-#include "chimera/render/vbs/VBO.hpp"
+#include "chimera/core/VAO.hpp"
+#include "chimera/core/VBO.hpp"
 #include "chimera/render/vbs/VertexNode.hpp"
 #include <list>
 #include <vector>

@@ -1,5 +1,5 @@
-#include "chimera/render/vbs/EBO.hpp"
-#include "chimera/render/vbs/VertexData.hpp"
+#include "chimera/core/EBO.hpp"
+#include "chimera/core/VertexData.hpp"
 
 namespace Chimera {
 

@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_PLANE__HPP
 #define __CHIMERA_PLANE__HPP
 
-#include "Side.hpp"
+#include "chimera/core/VertexData.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {

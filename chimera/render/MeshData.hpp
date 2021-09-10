@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_MESH_DATA_HPP
 #define __CHIMERA_MESH_DATA_HPP
 
-#include "chimera/render/vbs/VertexData.hpp"
+#include "chimera/core/VertexData.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

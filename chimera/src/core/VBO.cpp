@@ -1,4 +1,4 @@
-#include "chimera/render/vbs/VBO.hpp"
+#include "chimera/core/VBO.hpp"
 
 namespace Chimera {
 

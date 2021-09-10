@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_VERTEX_NODE__HPP
 #define __CHIMERA_VERTEX_NODE__HPP
 
-#include "EBO.hpp"
-#include "VertexData.hpp"
+#include "chimera/core/EBO.hpp"
+#include "chimera/core/VertexData.hpp"
 #include "chimera/render/AABB.hpp"
 #include <vector>
 

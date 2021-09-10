@@ -2,7 +2,7 @@
 #define __CHIMERA_VERTEX_NODE__HPP
 
 #include "chimera/core/VertexData.hpp"
-#include "chimera/core/buffers/EBO.hpp"
+#include "chimera/core/buffers/IndexBuffer.hpp"
 #include "chimera/render/AABB.hpp"
 #include <vector>
 

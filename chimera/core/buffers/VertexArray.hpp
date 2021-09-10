@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_VAO__HPP
 #define __CHIMERA_VAO__HPP
 
-#include "VBO.hpp"
+#include "Buffer.hpp"
 
 namespace Chimera {
 

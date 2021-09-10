@@ -1,4 +1,4 @@
-#include "chimera/core/buffers/VAO.hpp"
+#include "chimera/core/buffers/VertexArray.hpp"
 
 namespace Chimera {
 

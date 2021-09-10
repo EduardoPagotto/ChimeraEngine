@@ -21,9 +21,9 @@ set (SourcesCore CanvasGL.cpp
 				 Shader.cpp
 				 VertexData.cpp
 				 Transform.cpp
-				 buffers/VAO.cpp
-				 buffers/EBO.cpp
-				 buffers/VBO.cpp)
+				 buffers/Buffer.cpp
+				 buffers/IndexBuffer.cpp
+				 buffers/VertexArray.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

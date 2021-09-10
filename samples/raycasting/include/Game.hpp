@@ -2,10 +2,10 @@
 #define __GAME_SIMPLE_RAYCASTING__HPP
 
 #include "chimera/core/CanvasFB.hpp"
-#include "chimera/core/IEvents.hpp"
+#include "chimera/core/io/IEvents.hpp"
 #include "raycasting.hpp"
 
-class Game : public Chimera::IEvents {
+class Game : public Chimera::IO::IEvents {
   public:
     Game(Chimera::CanvasFB* _pCanvas);
 
@@ -15,8 +15,8 @@ class Game : public Chimera::IEvents {
     virtual void stop();
     virtual void render();
     virtual void keboardEvent(SDL_Keycode tecla);
-    virtual void mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL);
-    virtual void joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL);
+    virtual void mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL);
+    virtual void joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL);
     virtual void newFPS(const unsigned int& fps);
     virtual void userEvent(const SDL_Event& _event) override;
     virtual void windowEvent(const SDL_WindowEvent& _event) override;

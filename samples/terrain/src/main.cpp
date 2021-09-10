@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/io/FlowControl.hpp"
 
 int main(int argn, char** argv) {
 
@@ -9,7 +9,7 @@ int main(int argn, char** argv) {
         SDL_Log("Iniciado");
 
         Game* game = new Game();
-        Chimera::FlowControl* pControl = new Chimera::FlowControl(game);
+        Chimera::IO::FlowControl* pControl = new Chimera::IO::FlowControl(game);
         pControl->open();
         pControl->gameLoop();
 

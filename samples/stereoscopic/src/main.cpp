@@ -2,8 +2,8 @@
 //#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/CanvasHmd.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeGroup.hpp"
@@ -108,7 +108,7 @@ int main(int argn, char** argv) {
         Game* game = new Game(video, group1);
 
         // Controle do fluxo de programa
-        FlowControl* pControle = new FlowControl(game);
+        IO::FlowControl* pControle = new IO::FlowControl(game);
         pControle->open();
         pControle->gameLoop();
 

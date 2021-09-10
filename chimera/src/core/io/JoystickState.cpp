@@ -1,7 +1,7 @@
-#include "chimera/core/JoystickState.hpp"
+#include "chimera/core/io/JoystickState.hpp"
 #include <cmath>
 
-namespace Chimera {
+namespace Chimera::IO {
 
 JoystickState::JoystickState() : id(255), pHandle(nullptr), name("none") {}
 
@@ -86,4 +86,4 @@ void JoystickState::debug() {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy hats: %d %d [ %s ]", hat_iter->first, hat_iter->second, tot.c_str());
     }
 }
-} // namespace Chimera
+} // namespace Chimera::IO

@@ -7,7 +7,7 @@ Game::Game(Chimera::CanvasFB* _pCanvas) : pCanvas(_pCanvas) { isPaused = false; 
 
 Game::~Game() {}
 
-void Game::joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL) {}
+void Game::joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL) {}
 
 void Game::keboardEvent(SDL_Keycode tecla) {
 
@@ -65,7 +65,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             break;
     }
 }
-void Game::mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL) {}
+void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {}
 
 void Game::start() {
 

@@ -2,15 +2,15 @@
 #define __GAME_TESTE_BSTREE__HPP
 
 #include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/IEvents.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
+#include "chimera/core/io/IEvents.hpp"
 #include "chimera/render/HeightMap.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/vbs/VertexStatic.hpp"
 
-class Game : public Chimera::IEvents {
+class Game : public Chimera::IO::IEvents {
   public:
     Game();
     virtual ~Game();
@@ -19,8 +19,8 @@ class Game : public Chimera::IEvents {
     virtual void stop();
     virtual void render();
     virtual void keboardEvent(SDL_Keycode tecla);
-    virtual void mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL);
-    virtual void joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL);
+    virtual void mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL);
+    virtual void joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL);
     virtual void newFPS(const unsigned int& fps);
     virtual void userEvent(const SDL_Event& _event) override;
     virtual void windowEvent(const SDL_WindowEvent& _event) override;

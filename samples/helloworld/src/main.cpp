@@ -1,6 +1,6 @@
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/io/FlowControl.hpp"
 
 #include "Game.hpp"
 
@@ -24,12 +24,11 @@ int main(int argn, char** argv) {
 
         YAML::Node screen = config["screen"];
         YAML::Node canvas = screen["canvas"];
-        Chimera::CanvasGL* video =
-            new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
+        Chimera::CanvasGL* video = new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         Game* game = new Game(video);
 
-        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
+        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
         pControle->open();
         pControle->gameLoop();
 

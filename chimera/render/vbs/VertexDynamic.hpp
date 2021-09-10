@@ -13,8 +13,8 @@ class VertexRenderDynamic {
     void render(std::vector<VertexData>& vVertice);
 
   private:
-    VAO vao;
-    VBO* vbo;
+    Core::VertexArray vao;
+    Core::Buffer* vbo;
 };
 } // namespace Chimera
 #endif

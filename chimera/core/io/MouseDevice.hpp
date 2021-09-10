@@ -1,10 +1,10 @@
-#ifndef __CHIMERA_MOUSE_DEVICE__HPP
-#define __CHIMERA_MOUSE_DEVICE__HPP
+#ifndef __CHIMERA_CORE_MOUSE_DEVICE__HPP
+#define __CHIMERA_CORE_MOUSE_DEVICE__HPP
 
 #include <SDL2/SDL.h>
 #include <map>
 
-namespace Chimera {
+namespace Chimera::IO {
 
 class MouseDevice {
   public:
@@ -17,6 +17,6 @@ class MouseDevice {
   private:
     std::map<uint8_t, uint8_t> buttonState;
 };
-} // namespace Chimera
+} // namespace Chimera::IO
 
 #endif

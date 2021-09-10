@@ -11,11 +11,11 @@ VertexRenderStatic::VertexRenderStatic(std::vector<VertexData>& vertexDataIn, st
         indexIBO = index;
     }
 
-    vao = new VAO();
-    vao->addBuffer(new VBO(&vertexData, vertexData.size() * sizeof(VertexData)), 0); // FIXME 0 para compatibilidade
+    vao = new Core::VertexArray();
+    vao->addBuffer(new Core::Buffer(&vertexData, vertexData.size() * sizeof(VertexData)), 0); // FIXME 0 para compatibilidade
 
     vao->bind();
-    ebo = new EBO(indexIBO);
+    ebo = new Core::IndexBuffer(indexIBO);
     vao->unbind();
 }
 

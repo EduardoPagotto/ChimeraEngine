@@ -1,15 +1,15 @@
-#ifndef __CHIMERA_EBO__HPP
-#define __CHIMERA_EBO__HPP
+#ifndef __CHIMERA_CORE_INDEXBUFFER__HPP
+#define __CHIMERA_CORE_INDEXBUFFER__HPP
 
 #include "chimera/OpenGLDefs.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace Chimera::Core {
 
-class EBO {
+class IndexBuffer {
   public:
-    EBO(std::vector<uint32_t>& index);
-    virtual ~EBO();
+    IndexBuffer(std::vector<uint32_t>& index);
+    virtual ~IndexBuffer();
     void render();
     inline void bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID); }
     inline void unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
@@ -18,5 +18,5 @@ class EBO {
     unsigned int bufferID;
     unsigned int sizeIndex;
 };
-} // namespace Chimera
+} // namespace Chimera::Core
 #endif

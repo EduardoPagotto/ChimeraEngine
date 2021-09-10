@@ -14,8 +14,8 @@ class VertexRenderStatic {
     void render();
 
   private:
-    VAO* vao;
-    EBO* ebo;
+    Core::VertexArray* vao;
+    Core::IndexBuffer* ebo;
     std::vector<unsigned int> indexIBO;
     std::vector<VertexData> vertexData;
 };

@@ -11,9 +11,9 @@
 #include "Game.hpp"
 
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/loader/VisualScene.hpp"
 #include "chimera/node/NodeHUD.hpp"
@@ -99,7 +99,7 @@ int main(int argn, char** argv) {
         Game* game = new Game(video, pRoot, pPC);
 
         // Controle de fluxo do programa
-        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
+        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
         pControle->open();
         pControle->gameLoop();
 

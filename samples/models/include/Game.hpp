@@ -2,7 +2,7 @@
 #define __GAME_XX__HPP
 
 #include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/IEvents.hpp"
+#include "chimera/core/io/IEvents.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"
@@ -23,7 +23,7 @@ struct Controles {
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class Game : public Chimera::IEvents {
+class Game : public Chimera::IO::IEvents {
   public:
     Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld);
     virtual ~Game();
@@ -32,8 +32,8 @@ class Game : public Chimera::IEvents {
     virtual void stop();
     virtual void render();
     virtual void keboardEvent(SDL_Keycode tecla);
-    virtual void mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL);
-    virtual void joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL);
+    virtual void mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL);
+    virtual void joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL);
     virtual void newFPS(const unsigned int& fps);
     virtual void windowEvent(const SDL_WindowEvent& _event);
     virtual void userEvent(const SDL_Event& _event);

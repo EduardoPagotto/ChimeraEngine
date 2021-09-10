@@ -1,8 +1,8 @@
 #include "Game.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
 #include "chimera/core/Shader.hpp"
+#include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/utils.hpp"
 
 #include <iostream>
@@ -21,7 +21,7 @@ int main(int argn, char** argv) {
 
         Game* game = new Game(video, pShader);
 
-        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
+        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
         pControle->open();
         pControle->gameLoop();
 

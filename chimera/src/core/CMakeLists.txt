@@ -14,13 +14,13 @@ set (SourcesCore CanvasGL.cpp
 				 Timer.cpp
 				 TrackBall.cpp
 				 TrackHead.cpp
-				 JoystickState.cpp
-				 JoystickManager.cpp
-				 MouseDevice.cpp
-				 FlowControl.cpp
 				 Shader.cpp
 				 VertexData.cpp
 				 Transform.cpp
+				 io/JoystickState.cpp
+				 io/JoystickManager.cpp
+				 io/MouseDevice.cpp
+				 io/FlowControl.cpp
 				 buffers/Buffer.cpp
 				 buffers/IndexBuffer.cpp
 				 buffers/VertexArray.cpp)

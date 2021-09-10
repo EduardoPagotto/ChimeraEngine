@@ -38,7 +38,7 @@ class BspTree {
 
     bool logdata;
     BSPTreeNode* root;
-    VAO* vao;
+    Core::VertexArray* vao;
     std::vector<Chimera::VertexData> vVertex;
     std::vector<VertexNode*> vpLeaf;
 };

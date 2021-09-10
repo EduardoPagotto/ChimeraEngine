@@ -1,10 +1,10 @@
 #include "chimera/core/buffers/Buffer.hpp"
 
-namespace Chimera {
+namespace Chimera::Core {
 
 // https://www.youtube.com/watch?v=qTGMXcFLk2E&t=2063s
 
-VBO::VBO(std::vector<VertexData>* vertexData, const unsigned int& componentCount) : bufferID(0) {
+Buffer::Buffer(std::vector<VertexData>* vertexData, const unsigned int& componentCount) : bufferID(0) {
 
     glGenBuffers(1, &bufferID);
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
@@ -17,10 +17,10 @@ VBO::VBO(std::vector<VertexData>* vertexData, const unsigned int& componentCount
     }
 }
 
-VBO::~VBO() { glDeleteBuffers(1, &bufferID); }
+Buffer::~Buffer() { glDeleteBuffers(1, &bufferID); }
 
-void VBO::setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset) {
+void Buffer::setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset) {
     glVertexAttribPointer(slotID, slotSize, GL_FLOAT, GL_FALSE, sizeof(VertexData), offset);
     glEnableVertexAttribArray(slotID);
 }
-} // namespace Chimera
+} // namespace Chimera::Core

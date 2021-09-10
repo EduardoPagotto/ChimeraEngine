@@ -1,7 +1,7 @@
-#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/Exception.hpp"
 
-namespace Chimera {
+namespace Chimera::IO {
 
 FlowControl::FlowControl(IEvents* _pGameClientEvents) : pGameClientEvents(_pGameClientEvents) {
     timerFPS.setElapsedCount(1000);
@@ -122,4 +122,4 @@ void FlowControl::gameLoop(void) {
         }
     }
 }
-} // namespace Chimera
+} // namespace Chimera::IO

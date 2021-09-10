@@ -53,9 +53,11 @@ void Game::updatePos() {
     }
 }
 
-void Game::joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL) {
+void Game::joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL) {
 
     using namespace Chimera;
+    using namespace Chimera::IO;
+
     // Captura joystick 0 se existir
     if (pJoy != nullptr) {
 
@@ -127,7 +129,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL) {
+void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {
 
     if (pMouse->getButtonState(1) == SDL_PRESSED) {
         if (pEventSDL->type == SDL_MOUSEMOTION) {

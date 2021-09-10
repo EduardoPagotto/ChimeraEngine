@@ -1,11 +1,11 @@
-#ifndef __CHIMERA_FLOW_CONTROL__HPP
-#define __CHIMERA_FLOW_CONTROL__HPP
+#ifndef __CHIMERA_CORE_FLOW_CONTROL__HPP
+#define __CHIMERA_CORE_FLOW_CONTROL__HPP
 
-#include "chimera/core/IEvents.hpp"
-#include "chimera/core/JoystickManager.hpp"
+#include "IEvents.hpp"
+#include "JoystickManager.hpp"
 #include "chimera/core/Timer.hpp"
 
-namespace Chimera {
+namespace Chimera::IO {
 
 class FlowControl {
   public:
@@ -24,6 +24,6 @@ class FlowControl {
     MouseDevice mouse;
     Timer timerFPS;
 };
-} // namespace Chimera
+} // namespace Chimera::IO
 
 #endif

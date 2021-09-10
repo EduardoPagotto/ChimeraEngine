@@ -8,7 +8,7 @@ Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) { isPaused = false; }
 
 Game::~Game() {}
 
-void Game::joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL) {}
+void Game::joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL) {}
 
 void Game::keboardEvent(SDL_Keycode tecla) {
 
@@ -28,7 +28,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL) {}
+void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {}
 
 void Game::start() { pVideo->initGL(); }
 

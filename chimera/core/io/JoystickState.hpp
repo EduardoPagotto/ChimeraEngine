@@ -1,12 +1,12 @@
-#ifndef __CHIMERA_JOYSTICK_STATE__HPP
-#define __CHIMERA_JOYSTICK_STATE__HPP
+#ifndef __CHIMERA_CORE_JOYSTICK_STATE__HPP
+#define __CHIMERA_CORE_JOYSTICK_STATE__HPP
 
 #include <map>
 #include <string>
 
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace Chimera::IO {
 
 /**
  * Enumerador dos codigos dos Axis do Joystico do XBOX360
@@ -67,6 +67,6 @@ class JoystickState {
     std::map<uint8_t, int16_t> BallsX;
     std::map<uint8_t, int16_t> BallsY;
 };
-} // namespace Chimera
+} // namespace Chimera::IO
 
 #endif

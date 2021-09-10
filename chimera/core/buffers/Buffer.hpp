@@ -1,16 +1,16 @@
-#ifndef __CHIMERA_VBO__HPP
-#define __CHIMERA_VBO__HPP
+#ifndef __CHIMERA_CORE_BUFFER__HPP
+#define __CHIMERA_CORE_BUFFER__HPP
 
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/VertexData.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace Chimera::Core {
 
-class VBO {
+class Buffer {
   public:
-    VBO(std::vector<VertexData>* vertexData, const unsigned int& componentCount);
-    virtual ~VBO();
+    Buffer(std::vector<VertexData>* vertexData, const unsigned int& componentCount);
+    virtual ~Buffer();
     void setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset);
     inline void bind() const { glBindBuffer(GL_ARRAY_BUFFER, bufferID); }
     inline void unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
@@ -21,5 +21,5 @@ class VBO {
     unsigned int bufferID;
     unsigned int componentCount;
 };
-} // namespace Chimera
+} // namespace Chimera::Core
 #endif

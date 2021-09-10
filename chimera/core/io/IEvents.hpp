@@ -1,11 +1,11 @@
-#ifndef __CHIMERA_IGAME_CLIENT_EVENTS__HPP
-#define __CHIMERA_IGAME_CLIENT_EVENTS__HPP
+#ifndef __CHIMERA_CORE_IEVENTS__HPP
+#define __CHIMERA_CORE_IEVENTS__HPP
 
-#include "chimera/core/JoystickState.hpp"
-#include "chimera/core/MouseDevice.hpp"
+#include "JoystickState.hpp"
+#include "MouseDevice.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace Chimera::IO {
 
 class IEvents {
   public:
@@ -21,5 +21,5 @@ class IEvents {
     virtual bool paused() = 0;
 };
 
-} // namespace Chimera
+} // namespace Chimera::IO
 #endif

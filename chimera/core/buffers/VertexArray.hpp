@@ -1,21 +1,21 @@
-#ifndef __CHIMERA_VAO__HPP
-#define __CHIMERA_VAO__HPP
+#ifndef __CHIMERA_CORE_VERTEXARRAY__HPP
+#define __CHIMERA_CORE_VERTEXARRAY__HPP
 
 #include "Buffer.hpp"
 
-namespace Chimera {
+namespace Chimera::Core {
 
-class VAO {
+class VertexArray {
   public:
-    VAO();
-    virtual ~VAO();
-    void addBuffer(VBO* buffer, unsigned int index);
+    VertexArray();
+    virtual ~VertexArray();
+    void addBuffer(Buffer* buffer, unsigned int index);
     inline void bind() const { glBindVertexArray(arrayID); }
     inline void unbind() const { glBindVertexArray(0); }
 
   private:
     unsigned int arrayID;
-    std::vector<VBO*> buffers;
+    std::vector<Buffer*> buffers;
 };
-} // namespace Chimera
+} // namespace Chimera::Core
 #endif

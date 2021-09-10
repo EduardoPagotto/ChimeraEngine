@@ -12,7 +12,7 @@ template <class T> void swapFace(T& a, T& b) {
 BspTree::BspTree() {
     root = nullptr;
     logdata = false;
-    vao = new VAO();
+    vao = new Core::VertexArray();
 }
 
 BspTree::~BspTree() { this->destroy(); }
@@ -56,7 +56,7 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
 
     // create vertex buffers
 
-    vao->addBuffer(new VBO(&vVertex, vVertex.size() * sizeof(VertexData)), 0); // FIXME: 0 por comatibilidade
+    vao->addBuffer(new Core::Buffer(&vVertex, vVertex.size() * sizeof(VertexData)), 0); // FIXME: 0 por comatibilidade
     vao->bind();
 
     for (VertexNode* pNode : this->vpLeaf) {

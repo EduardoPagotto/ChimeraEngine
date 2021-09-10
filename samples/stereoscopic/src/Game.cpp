@@ -11,9 +11,11 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanva
 
 Game::~Game() {}
 
-void Game::joystickEvent(Chimera::JoystickState* pJoy, SDL_Event* pEventSDL) {
+void Game::joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL) {
 
     using namespace Chimera;
+    using namespace Chimera::IO;
+
     // Captura joystick 0 se existir
     if (pJoy != nullptr) {
 
@@ -67,7 +69,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseEvent(Chimera::MouseDevice* pMouse, SDL_Event* pEventSDL) {
+void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {
 
     Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 

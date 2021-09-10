@@ -1,6 +1,6 @@
 #include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
+#include "chimera/core/io/FlowControl.hpp"
 #include <iostream>
 
 #include "Game.hpp"
@@ -15,7 +15,7 @@ int main(int argn, char** argv) {
         Chimera::CanvasFB* video = new Chimera::CanvasFB("RayCasting", 640, 480);
         Game* game = new Game(video);
 
-        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
+        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
         pControle->open();
         pControle->gameLoop();
 

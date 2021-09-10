@@ -6,7 +6,7 @@ namespace Chimera {
 
 HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
     : width(_width), height(_height), squareX(_squareX), squareZ(_squareZ) {
-    vao = new VAO();
+    vao = new Core::VertexArray();
 }
 
 HeightMap::~HeightMap() {
@@ -89,7 +89,7 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
 
 void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
 
-    vao->addBuffer(new VBO(&_vertexData, _vertexData.size() * sizeof(VertexData)), 0); // FIXME: 0 para compatibilidade
+    vao->addBuffer(new Core::Buffer(&_vertexData, _vertexData.size() * sizeof(VertexData)), 0); // FIXME: 0 para compatibilidade
     vao->bind();
 
     for (VertexNode* pNode : vNodes) {

@@ -1,10 +1,10 @@
 #include "chimera/core/buffers/VertexArray.hpp"
 
-namespace Chimera {
+namespace Chimera::Core {
 
-VAO::VAO() { glGenVertexArrays(1, &arrayID); }
+VertexArray::VertexArray() { glGenVertexArrays(1, &arrayID); }
 
-VAO::~VAO() {
+VertexArray::~VertexArray() {
 
     for (int i = 0; i < buffers.size(); i++)
         delete buffers[i];
@@ -12,7 +12,7 @@ VAO::~VAO() {
     glDeleteVertexArrays(1, &arrayID);
 }
 
-void VAO::addBuffer(VBO* buffer, unsigned int index) {
+void VertexArray::addBuffer(Buffer* buffer, unsigned int index) {
 
     this->bind();
     buffer->bind();
@@ -35,4 +35,4 @@ void VAO::addBuffer(VBO* buffer, unsigned int index) {
     buffer->unsetSlot(1);
     buffer->unsetSlot(2);
 }
-} // namespace Chimera
+} // namespace Chimera::Core

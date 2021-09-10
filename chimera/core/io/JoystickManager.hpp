@@ -1,14 +1,14 @@
-#ifndef __CHIMERA_JOYSTICK_MANAGER__HPP
-#define __CHIMERA_JOYSTICK_MANAGER__HPP
+#ifndef __CHIMERA_CORE_JOYSTICK_MANAGER__HPP
+#define __CHIMERA_CORE_JOYSTICK_MANAGER__HPP
 
 #include <map>
 #include <string>
 
 #include <SDL2/SDL.h>
 
-#include "chimera/core/JoystickState.hpp"
+#include "JoystickState.hpp"
 
-namespace Chimera {
+namespace Chimera::IO {
 
 /**
  * Classe gerenciadora de todos os Joysticks identificados
@@ -34,5 +34,5 @@ class JoystickManager {
     std::map<uint8_t, JoystickState> Joysticks;
     bool Initialized;
 };
-} // namespace Chimera
+} // namespace Chimera::IO
 #endif

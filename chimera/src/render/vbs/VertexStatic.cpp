@@ -20,7 +20,10 @@ VertexRenderStatic::VertexRenderStatic(std::vector<VertexData>& vertexDataIn, st
     vao->unbind();
 }
 
-VertexRenderStatic::~VertexRenderStatic() { delete vao; }
+VertexRenderStatic::~VertexRenderStatic() {
+    delete vao;
+    delete ibo;
+}
 
 void VertexRenderStatic::render() {
     vao->bind();

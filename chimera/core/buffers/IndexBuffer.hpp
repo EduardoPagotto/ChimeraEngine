@@ -12,6 +12,7 @@ class IndexBuffer {
     void render();
     inline void bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID); }
     inline void unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
+    inline unsigned int getCount() const { return size; }
 
   private:
     unsigned int bufferID;

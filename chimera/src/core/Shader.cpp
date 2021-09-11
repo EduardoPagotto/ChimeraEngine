@@ -1,5 +1,4 @@
 #include <SDL2/SDL.h>
-//#include <fstream>
 #include <string>
 #include <vector>
 

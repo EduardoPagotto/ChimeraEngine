@@ -17,6 +17,9 @@ class Buffer {
     inline unsigned int getComponentCount() const { return componentCount; }
     inline void unsetSlot(const unsigned int& slotID) const { glDisableVertexAttribArray(slotID); }
 
+    // se nao existir IBO new rander pelo VAO
+    // inline void render() const { glDrawArrays(GL_TRIANGLES, 0, this->size); }
+
   private:
     unsigned int bufferID;
     unsigned int componentCount;

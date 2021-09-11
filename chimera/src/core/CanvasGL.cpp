@@ -79,7 +79,13 @@ CanvasGL::~CanvasGL() {
 
 void CanvasGL::before(const unsigned short& _indexEye) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
-void CanvasGL::after(const unsigned short& _indexEye) {}
+void CanvasGL::after(const unsigned short& _indexEye) {
+
+    GLenum erro = glGetError();
+    if (erro != GL_NO_ERROR) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "OpenGL Erro: %d", erro);
+    }
+}
 
 void CanvasGL::swapWindow() { SDL_GL_SwapWindow(window); }
 

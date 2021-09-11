@@ -34,13 +34,12 @@ void VertexNode::addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_
     index.push_back(_pc);
 }
 
-void VertexNode::initIndexBufferObject() {
+void VertexNode::initIndexBufferObject() { ibo = new Core::IndexBuffer(&index[0], index.size()); }
 
-    ibo = new Core::IndexBuffer(&index[0], index.size());
-    // delete [] Indices; //FIXME: verificar como!!!!
-    // Indices = NULL;
-    // GeometryNodesCount++;
+void VertexNode::render() {
+    // ibo->render();
+    ibo->bind();
+    glDrawElements(GL_TRIANGLES, ibo->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+    ibo->unbind();
 }
-
-void VertexNode::render() { ibo->render(); }
 } // namespace Chimera

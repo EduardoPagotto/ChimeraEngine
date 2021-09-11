@@ -16,10 +16,4 @@ IndexBuffer::IndexBuffer(uint32_t* data, const uint32_t& size) {
 }
 
 IndexBuffer::~IndexBuffer() { glDeleteBuffers(1, &bufferID); }
-
-void IndexBuffer::render() {
-    this->bind();
-    glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-    this->unbind();
-}
 } // namespace Chimera::Core

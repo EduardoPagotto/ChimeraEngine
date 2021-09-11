@@ -17,16 +17,12 @@ class RenderableStatic3d {
                        Shader* pShader);
     virtual ~RenderableStatic3d();
 
-    // void render();
-
     void debugDados();
-
     uint32_t getSize() const { return size; }
-
     Core::VertexArray* getVao() const { return vao; }
     Core::IndexBuffer* getIBO() const { return ibo; }
-
     Shader* getShader() const { return pShader; }
+    const AABB& getAABB() { return aabb; }
 
     AABB aabb;
 

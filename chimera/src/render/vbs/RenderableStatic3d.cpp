@@ -22,8 +22,6 @@ RenderableStatic3d::~RenderableStatic3d() {
     ibo = nullptr;
 }
 
-// void RenderableStatic3d::render() { ibo->render(); }
-
 void RenderableStatic3d::debugDados() {
     // glm::vec3 pos = this->aabb.getPosition();
     glm::vec3 size = this->aabb.getSize();

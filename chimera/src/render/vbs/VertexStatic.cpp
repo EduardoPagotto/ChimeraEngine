@@ -27,7 +27,11 @@ VertexRenderStatic::~VertexRenderStatic() {
 
 void VertexRenderStatic::render() {
     vao->bind();
-    ibo->render();
+    // ibo->render();
+    ibo->bind();
+    glDrawElements(GL_TRIANGLES, ibo->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+    ibo->unbind();
+    //---
     vao->unbind();
 }
 } // namespace Chimera

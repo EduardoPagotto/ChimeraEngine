@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_HEIGHTMAP__HPP
 #define __CHIMERA_HEIGHTMAP__HPP
 
-#include "chimera/core/buffers/Buffer.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
+#include "chimera/core/buffers/VertexBuffer.hpp"
 #include "chimera/render/vbs/VertexNode.hpp"
 
 namespace Chimera {

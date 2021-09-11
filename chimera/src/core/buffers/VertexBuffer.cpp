@@ -1,4 +1,4 @@
-#include "chimera/core/buffers/Buffer.hpp"
+#include "chimera/core/buffers/VertexBuffer.hpp"
 
 namespace Chimera::Core {
 

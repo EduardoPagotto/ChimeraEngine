@@ -1,9 +1,9 @@
 #ifndef __CHIMERA_VERTEX_STATIC_HPP
 #define __CHIMERA_VERTEX_STATIC_HPP
 
-#include "chimera/core/buffers/Buffer.hpp"
 #include "chimera/core/buffers/IndexBuffer.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
+#include "chimera/core/buffers/VertexBuffer.hpp"
 
 namespace Chimera {
 

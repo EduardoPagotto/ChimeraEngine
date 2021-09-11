@@ -23,7 +23,7 @@ set (SourcesCore CanvasGL.cpp
 				 io/JoystickManager.cpp
 				 io/MouseDevice.cpp
 				 io/FlowControl.cpp
-				 buffers/Buffer.cpp
+				 buffers/VertexBuffer.cpp
 				 buffers/IndexBuffer.cpp
 				 buffers/VertexArray.cpp)
 

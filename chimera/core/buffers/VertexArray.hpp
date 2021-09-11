@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_CORE_VERTEXARRAY__HPP
 #define __CHIMERA_CORE_VERTEXARRAY__HPP
 
-#include "Buffer.hpp"
+#include "VertexBuffer.hpp"
 
 namespace Chimera::Core {
 

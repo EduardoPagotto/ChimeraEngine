@@ -12,7 +12,7 @@ VertexRenderStatic::VertexRenderStatic(std::vector<VertexData>& vertexDataIn, st
     }
 
     vao = new Core::VertexArray();
-    vao->addBuffer(new Core::Buffer(&vertexData, vertexData.size() * sizeof(VertexData)), 0); // FIXME 0 para compatibilidade
+    vao->addBuffer(new Core::Buffer(&vertexData[0], vertexData.size(), 3), 0); // FIXME 0 para compatibilidade
 
     vao->bind();
     ebo = new Core::IndexBuffer(indexIBO);

@@ -89,7 +89,7 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
 
 void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
 
-    vao->addBuffer(new Core::Buffer(&_vertexData, _vertexData.size() * sizeof(VertexData)), 0); // FIXME: 0 para compatibilidade
+    vao->addBuffer(new Core::Buffer(&_vertexData[0], _vertexData.size(), 3), 0); // FIXME: 0 para compatibilidade
     vao->bind();
 
     for (VertexNode* pNode : vNodes) {

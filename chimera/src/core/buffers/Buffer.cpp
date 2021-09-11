@@ -4,16 +4,16 @@ namespace Chimera::Core {
 
 // https://www.youtube.com/watch?v=qTGMXcFLk2E&t=2063s
 
-Buffer::Buffer(std::vector<VertexData>* vertexData, const unsigned int& componentCount) : bufferID(0) {
+Buffer::Buffer(VertexData* vertexData, const unsigned int& size, const unsigned int& componentCount) : componentCount(componentCount) {
 
+    this->size = size;
     glGenBuffers(1, &bufferID);
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
 
     if (vertexData != nullptr) {
-        // glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(VertexData), &vertexData[0], GL_STATIC_DRAW);
-        glBufferData(GL_ARRAY_BUFFER, componentCount, &(*vertexData)[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size * sizeof(VertexData), vertexData, GL_STATIC_DRAW);
     } else {
-        glBufferData(GL_ARRAY_BUFFER, componentCount, nullptr, GL_STREAM_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size * sizeof(VertexData), nullptr, GL_STREAM_DRAW);
     }
 }
 

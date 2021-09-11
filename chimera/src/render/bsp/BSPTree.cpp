@@ -56,7 +56,7 @@ void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vect
 
     // create vertex buffers
 
-    vao->addBuffer(new Core::Buffer(&vVertex, vVertex.size() * sizeof(VertexData)), 0); // FIXME: 0 por comatibilidade
+    vao->addBuffer(new Core::Buffer(&vVertex[0], vVertex.size(), 3), 0); // FIXME: 0 por comatibilidade
     vao->bind();
 
     for (VertexNode* pNode : this->vpLeaf) {

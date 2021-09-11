@@ -9,7 +9,7 @@ namespace Chimera::Core {
 
 class Buffer {
   public:
-    Buffer(std::vector<VertexData>* vertexData, const unsigned int& componentCount);
+    Buffer(VertexData* vertexData, const unsigned int& size, const unsigned int& componentCount);
     virtual ~Buffer();
     void setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset);
     inline void bind() const { glBindBuffer(GL_ARRAY_BUFFER, bufferID); }
@@ -20,6 +20,7 @@ class Buffer {
   private:
     unsigned int bufferID;
     unsigned int componentCount;
+    unsigned int size;
 };
 } // namespace Chimera::Core
 #endif

@@ -7,10 +7,10 @@
 
 namespace Chimera::Core {
 
-class Buffer {
+class VertexBuffer {
   public:
-    Buffer(VertexData* vertexData, const unsigned int& size, const unsigned int& componentCount);
-    virtual ~Buffer();
+    VertexBuffer(VertexData* vertexData, const unsigned int& size, const unsigned int& componentCount);
+    virtual ~VertexBuffer();
     void setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset);
     inline void bind() const { glBindBuffer(GL_ARRAY_BUFFER, bufferID); }
     inline void unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }

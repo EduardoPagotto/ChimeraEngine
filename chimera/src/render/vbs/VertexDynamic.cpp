@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-VertexRenderDynamic::VertexRenderDynamic(const unsigned int& max) { this->vbo = new Core::Buffer(nullptr, max, 3); }
+VertexRenderDynamic::VertexRenderDynamic(const unsigned int& max) { this->vbo = new Core::VertexBuffer(nullptr, max, 3); }
 
 VertexRenderDynamic::~VertexRenderDynamic() {
     delete vbo;

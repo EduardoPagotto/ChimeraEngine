@@ -9,13 +9,13 @@ class VertexArray {
   public:
     VertexArray();
     virtual ~VertexArray();
-    void addBuffer(Buffer* buffer, unsigned int index);
+    void addBuffer(VertexBuffer* buffer, unsigned int index);
     inline void bind() const { glBindVertexArray(arrayID); }
     inline void unbind() const { glBindVertexArray(0); }
 
   private:
     unsigned int arrayID;
-    std::vector<Buffer*> buffers;
+    std::vector<VertexBuffer*> buffers;
 };
 } // namespace Chimera::Core
 #endif

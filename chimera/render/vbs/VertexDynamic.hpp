@@ -14,7 +14,7 @@ class VertexRenderDynamic {
 
   private:
     Core::VertexArray vao;
-    Core::Buffer* vbo;
+    Core::VertexBuffer* vbo;
 };
 } // namespace Chimera
 #endif

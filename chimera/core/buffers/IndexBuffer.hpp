@@ -2,7 +2,6 @@
 #define __CHIMERA_CORE_INDEXBUFFER__HPP
 
 #include "chimera/OpenGLDefs.hpp"
-#include <vector>
 
 namespace Chimera::Core {
 

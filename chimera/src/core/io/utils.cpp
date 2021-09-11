@@ -16,20 +16,20 @@ void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB) {
 
 std::string utilReadFile(const char* file_path) {
 
-    // Read the Vertex Shader code from the file
-    std::string shaderCode;
+    // Read file to string
+    std::string ret;
     std::ifstream file(file_path, std::ios::in);
     if (file.is_open()) {
         std::string Line = "";
         while (getline(file, Line)) {
-            shaderCode += "\n" + Line;
+            ret += "\n" + Line;
         }
         file.close();
     } else {
         throw Chimera::Exception("Impossivel abrir arquivo: " + std::string(file_path));
     }
 
-    return shaderCode;
+    return ret;
 }
 
 } // namespace Chimera::IO

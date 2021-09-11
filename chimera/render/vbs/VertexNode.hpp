@@ -23,7 +23,7 @@ class VertexNode {
     AABB aabb;
 
     // private:
-    Core::IndexBuffer* ebo;
+    Core::IndexBuffer* ibo;
     std::vector<uint32_t> index;
     std::vector<uint32_t> faces;
 };

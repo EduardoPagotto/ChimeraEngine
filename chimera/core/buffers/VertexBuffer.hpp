@@ -3,7 +3,6 @@
 
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/VertexData.hpp"
-#include <vector>
 
 namespace Chimera::Core {
 

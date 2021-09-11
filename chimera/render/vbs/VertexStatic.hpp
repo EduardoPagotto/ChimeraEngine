@@ -15,9 +15,8 @@ class VertexRenderStatic {
 
   private:
     Core::VertexArray* vao;
-    Core::IndexBuffer* ebo;
+    Core::IndexBuffer* ibo;
     std::vector<unsigned int> indexIBO;
-    std::vector<VertexData> vertexData;
 };
 } // namespace Chimera
 #endif

@@ -6,13 +6,13 @@
 
 namespace Chimera {
 
-VertexNode::VertexNode() : ebo(nullptr) {}
+VertexNode::VertexNode() : ibo(nullptr) {}
 
 VertexNode::~VertexNode() {
     faces.clear();
-    if (ebo != nullptr) {
-        delete ebo;
-        ebo = nullptr;
+    if (ibo != nullptr) {
+        delete ibo;
+        ibo = nullptr;
     }
 }
 
@@ -63,11 +63,11 @@ void VertexNode::addFace(const uint32_t& _face, const uint32_t& _pa, const uint3
 
 void VertexNode::initIndexBufferObject() {
 
-    ebo = new Core::IndexBuffer(&index[0], index.size());
+    ibo = new Core::IndexBuffer(&index[0], index.size());
     // delete [] Indices; //FIXME: verificar como!!!!
     // Indices = NULL;
     // GeometryNodesCount++;
 }
 
-void VertexNode::render() { ebo->render(); }
+void VertexNode::render() { ibo->render(); }
 } // namespace Chimera

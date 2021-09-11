@@ -8,7 +8,7 @@ namespace Chimera::Core {
 
 class IndexBuffer {
   public:
-    IndexBuffer(std::vector<uint32_t>& index);
+    IndexBuffer(uint32_t* data, const uint32_t& size);
     virtual ~IndexBuffer();
     void render();
     inline void bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID); }
@@ -16,7 +16,7 @@ class IndexBuffer {
 
   private:
     unsigned int bufferID;
-    unsigned int sizeIndex;
+    unsigned int size;
 };
 } // namespace Chimera::Core
 #endif

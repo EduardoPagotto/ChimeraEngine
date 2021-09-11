@@ -63,7 +63,7 @@ void VertexNode::addFace(const uint32_t& _face, const uint32_t& _pa, const uint3
 
 void VertexNode::initIndexBufferObject() {
 
-    ebo = new Core::IndexBuffer(index);
+    ebo = new Core::IndexBuffer(&index[0], index.size());
     // delete [] Indices; //FIXME: verificar como!!!!
     // Indices = NULL;
     // GeometryNodesCount++;

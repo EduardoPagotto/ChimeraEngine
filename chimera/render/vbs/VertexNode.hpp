@@ -19,10 +19,11 @@ class VertexNode {
     void initAABB(std::vector<VertexData>& vertexDataIn);
     void debugDados();
     void render();
+    uint32_t getSize() const { return index.size(); }
 
     AABB aabb;
 
-    // private:
+  private:
     Core::IndexBuffer* ibo;
     std::vector<uint32_t> index;
 };

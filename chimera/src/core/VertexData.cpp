@@ -63,16 +63,15 @@ void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexD
                  out_indices.size());
 }
 
-void vertexDataMinMaxSize(std::vector<VertexData>& vertexList, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
-
-    if (vertexList.size() > 0) {
-        min = vertexList[0].position;
-        max = vertexList[0].position;
+void vertexDataMinMaxSize(VertexData* pVertexList, const unsigned int& vertexSize, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
+    if (vertexSize > 0) {
+        min = pVertexList[0].position;
+        max = pVertexList[0].position;
     }
 
-    for (unsigned int i = 1; i < vertexList.size(); i++) {
-        min = glm::min(min, vertexList[i].position);
-        max = glm::max(max, vertexList[i].position);
+    for (unsigned int i = 1; i < vertexSize; i++) {
+        min = glm::min(min, pVertexList[i].position);
+        max = glm::max(max, pVertexList[i].position);
     }
 
     size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
@@ -80,20 +79,17 @@ void vertexDataMinMaxSize(std::vector<VertexData>& vertexList, glm::vec3& min, g
     size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
 }
 
-void vertexDataIndexMinMaxSize(std::vector<VertexData>& vertexList, std::vector<uint32_t>& indexList, glm::vec3& min, glm::vec3& max,
-                               glm::vec3& size) {
-
-    if (indexList.size() > 0) {
-        min = vertexList[indexList[0]].position;
-        max = vertexList[indexList[0]].position;
+void vertexDataIndexMinMaxSize(VertexData* pVertexList, const unsigned int vertexSize, uint32_t* pIndexList, const unsigned int indexSize,
+                               glm::vec3& min, glm::vec3& max, glm::vec3& size) {
+    if (indexSize > 0) {
+        min = pVertexList[pIndexList[0]].position;
+        max = pVertexList[pIndexList[0]].position;
     }
 
-    for (unsigned int i = 1; i < indexList.size(); i++) {
-
-        min = glm::min(min, vertexList[indexList[i]].position);
-        max = glm::max(max, vertexList[indexList[i]].position);
+    for (unsigned int i = 1; i < indexSize; i++) {
+        min = glm::min(min, pVertexList[pIndexList[i]].position);
+        max = glm::max(max, pVertexList[pIndexList[i]].position);
     }
-
     size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
     size.y = (glm::abs(max.y) + glm::abs(min.y)) / 2.0f;
     size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;

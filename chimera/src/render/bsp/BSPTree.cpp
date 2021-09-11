@@ -106,7 +106,7 @@ void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _frustrun)
     auto pVn = vpLeaf[tree->leafIndex];
     if (pVn->aabb.visible(_frustrun) == true) {
         if (logdata == true)
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %ld", tree->leafIndex, pVn->index.size());
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %d", tree->leafIndex, pVn->getSize());
 
         pVn->render();
     }

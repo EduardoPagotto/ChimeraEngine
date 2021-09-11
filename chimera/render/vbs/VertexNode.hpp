@@ -14,7 +14,7 @@ class VertexNode {
     ~VertexNode();
 
     inline bool empty() { return (index.size() == 0); }
-    void addFace(const uint32_t& _face, const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);
+    void addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);
     void initIndexBufferObject();
     void initAABB(std::vector<VertexData>& vertexDataIn);
     void debugDados();
@@ -25,7 +25,6 @@ class VertexNode {
     // private:
     Core::IndexBuffer* ibo;
     std::vector<uint32_t> index;
-    std::vector<uint32_t> faces;
 };
 } // namespace Chimera
 

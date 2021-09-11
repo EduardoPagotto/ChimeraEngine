@@ -12,7 +12,6 @@ class Triangle {
     Triangle(const Triangle& _val);
     Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const glm::vec3& _normal);
     inline glm::vec3 getNormal() const { return normal; }
-    inline uint32_t getSerial() const { return serial; }
 
     void calcNormal(std::vector<VertexData>& vertexList);
 
@@ -28,13 +27,7 @@ class Triangle {
 
   private:
     glm::vec3 normal;
-
-  private:
-    uint32_t serial;
-    static uint32_t master;
 };
-
 // bool tringleListIsConvex(std::vector<VertexData>& vertexList, std::vector<Triangle*>& _vTriangle);
-
 } // namespace Chimera
 #endif

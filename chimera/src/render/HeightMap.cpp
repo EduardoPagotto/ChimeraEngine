@@ -61,7 +61,7 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
             for (uint32_t w = startWidth; w < endWidth; w++) { // x
                 face = ((h * totalHeight) + w);
                 base = face * 3;
-                pNode->addFace(face, _vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
+                pNode->addFace(_vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
                 contador++;
             }
         }

@@ -9,7 +9,6 @@ namespace Chimera {
 VertexNode::VertexNode() : ibo(nullptr) {}
 
 VertexNode::~VertexNode() {
-    faces.clear();
     if (ibo != nullptr) {
         delete ibo;
         ibo = nullptr;
@@ -54,8 +53,7 @@ void VertexNode::initAABB(std::vector<VertexData>& vertexDataIn) {
     vlt.clear();
 }
 
-void VertexNode::addFace(const uint32_t& _face, const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc) {
-    faces.push_back(_face);
+void VertexNode::addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc) {
     index.push_back(_pa);
     index.push_back(_pb);
     index.push_back(_pc);

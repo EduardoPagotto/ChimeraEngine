@@ -2,9 +2,7 @@
 
 namespace Chimera {
 
-u_int32_t Triangle::master = 0;
-
-Triangle::Triangle(const Triangle& _val) : serial(master++) {
+Triangle::Triangle(const Triangle& _val) {
     this->p[0] = _val.p[0];
     this->p[1] = _val.p[1];
     this->p[2] = _val.p[2];
@@ -12,7 +10,7 @@ Triangle::Triangle(const Triangle& _val) : serial(master++) {
     this->beenUsedAsSplitter = _val.beenUsedAsSplitter;
 }
 
-Triangle::Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const glm::vec3& _normal) : serial(master++) {
+Triangle::Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const glm::vec3& _normal) {
     this->p[0] = _pa;
     this->p[1] = _pb;
     this->p[2] = _pc;

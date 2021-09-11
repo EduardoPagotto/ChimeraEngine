@@ -10,7 +10,7 @@ class VertexRenderDynamic {
   public:
     VertexRenderDynamic(const unsigned int& max);
     virtual ~VertexRenderDynamic();
-    void render(std::vector<VertexData>& vVertice);
+    void render(VertexData* pVertice, const unsigned int size);
 
   private:
     Core::VertexArray vao;

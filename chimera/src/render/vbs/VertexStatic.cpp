@@ -1,4 +1,5 @@
 #include "chimera/render/vbs/VertexStatic.hpp"
+#include <SDL2/SDL.h>
 
 namespace Chimera {
 
@@ -32,6 +33,9 @@ void VertexRenderStatic::render() {
     vao->unbind();
 }
 
-void VertexRenderStatic::debugDados() {} // TODO: implementar debugdados
-
+void VertexRenderStatic::debugDados() {
+    // glm::vec3 pos = this->aabb.getPosition();
+    glm::vec3 size = this->aabb.getSize();
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
+}
 } // namespace Chimera

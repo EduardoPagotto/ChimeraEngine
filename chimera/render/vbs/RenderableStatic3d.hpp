@@ -1,17 +1,14 @@
 #ifndef __CHIMERA_RENDERABLESTATIC3D__HPP
 #define __CHIMERA_RENDERABLESTATIC3D__HPP
 
-#include "chimera/core/Shader.hpp"
+#include "IRenderable.hpp"
 #include "chimera/core/VertexData.hpp"
-#include "chimera/core/buffers/IndexBuffer.hpp"
-#include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/core/buffers/VertexBuffer.hpp"
-#include "chimera/render/AABB.hpp"
 #include <deque>
 
 namespace Chimera {
 
-class RenderableStatic3d {
+class RenderableStatic3d : public IRenderable {
   public:
     RenderableStatic3d(VertexData* pVertexList, const unsigned int& vertSize, uint32_t* pIndexList, const unsigned int& indexSize,
                        Shader* pShader);
@@ -19,14 +16,13 @@ class RenderableStatic3d {
 
     void debugDados();
     uint32_t getSize() const { return size; }
+    Shader* getShader() const { return pShader; }
     Core::VertexArray* getVao() const { return vao; }
     Core::IndexBuffer* getIBO() const { return ibo; }
-    Shader* getShader() const { return pShader; }
-    const AABB& getAABB() { return aabb; }
-
-    AABB aabb;
+    AABB* getAABB() { return &aabb; }
 
   private:
+    AABB aabb;
     unsigned int size;
     Core::IndexBuffer* ibo;
     Core::VertexBuffer* vbo;
@@ -34,19 +30,13 @@ class RenderableStatic3d {
     Shader* pShader;
 };
 
-class IRender3d {
+class SimpleRender3d : public IRender3d {
   public:
-    virtual void submit(RenderableStatic3d* renderable) = 0;
-    virtual void flush() = 0;
-};
-
-class SimpleRender3d : IRender3d {
-  public:
-    virtual void submit(RenderableStatic3d* renderable) override;
+    virtual void submit(IRenderable* renderable) override;
     virtual void flush() override;
 
   private:
-    std::deque<RenderableStatic3d*> renderQueue;
+    std::deque<IRenderable*> renderQueue;
 };
 
 } // namespace Chimera

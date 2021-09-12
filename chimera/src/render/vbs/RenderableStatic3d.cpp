@@ -28,13 +28,13 @@ void RenderableStatic3d::debugDados() {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
 }
 
-void SimpleRender3d::submit(RenderableStatic3d* renderable) { this->renderQueue.push_back(renderable); }
+void SimpleRender3d::submit(IRenderable* renderable) { this->renderQueue.push_back(renderable); }
 
 void SimpleRender3d::flush() {
 
     while (!renderQueue.empty()) {
 
-        RenderableStatic3d* r = renderQueue.front();
+        IRenderable* r = renderQueue.front();
         r->getVao()->bind();
         r->getIBO()->bind();
 

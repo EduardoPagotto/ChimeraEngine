@@ -104,7 +104,7 @@ void HeightMap::render(Frustum& _frustrun) {
     vao->bind();
     unsigned int tot = 0;
     for (VertexNode* pNode : vNodes) {
-        bool teste = pNode->aabb.visible(_frustrun);
+        bool teste = pNode->getAABB()->visible(_frustrun);
         if (teste == true) {
             pNode->render();
             tot++;

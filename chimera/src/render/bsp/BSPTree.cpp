@@ -104,7 +104,7 @@ void BspTree::drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _frustrun)
         return;
 
     auto pVn = vpLeaf[tree->leafIndex];
-    if (pVn->aabb.visible(_frustrun) == true) {
+    if (pVn->getAABB()->visible(_frustrun) == true) {
         if (logdata == true)
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %d", tree->leafIndex, pVn->getSize());
 
@@ -394,7 +394,7 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
 
 void BspTree::renderAABB() {
     for (auto pLeaf : this->vpLeaf) {
-        pLeaf->aabb.render();
+        pLeaf->getAABB()->render();
     }
 }
 

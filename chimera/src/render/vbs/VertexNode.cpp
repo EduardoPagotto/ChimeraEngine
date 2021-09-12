@@ -22,9 +22,9 @@ void VertexNode::debugDados() {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
 }
 
-void VertexNode::initAABB(std::vector<VertexData>& vertexDataIn) {
+void VertexNode::initAABB(VertexData* vertexData, const uint32_t& vertexSize) {
     glm::vec3 min, max, size;
-    vertexDataIndexMinMaxSize(&vertexDataIn[0], vertexDataIn.size(), &indexTris[0], indexTris.size(), min, max, size);
+    vertexDataIndexMinMaxSize(vertexData, vertexSize, &indexTris[0], indexTris.size(), min, max, size);
     aabb.setBoundary(min, max);
 }
 

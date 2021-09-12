@@ -93,8 +93,8 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
     vao->bind();
 
     for (VertexNode* pNode : vNodes) {
-        pNode->initIndexBufferObject(); // create IBO's
-        pNode->initAABB(_vertexData);   // initialize AABB's
+        pNode->initIndexBufferObject();                       // create IBO's
+        pNode->initAABB(&_vertexData[0], _vertexData.size()); // initialize AABB's
     }
 
     vao->unbind();

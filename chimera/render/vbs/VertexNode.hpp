@@ -17,7 +17,7 @@ class VertexNode : public IRenderable {
     inline bool empty() { return indexTris.empty(); }
     void addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);
     void initIndexBufferObject();
-    void initAABB(std::vector<VertexData>& vertexDataIn);
+    void initAABB(VertexData* vertexData, const uint32_t& vertexSize);
     void render();
 
     virtual void debugDados() override;

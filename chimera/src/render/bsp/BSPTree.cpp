@@ -386,7 +386,7 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
     tree->leafIndex = vpLeaf.size();
     vpLeaf.push_back(pLeaf);
 
-    pLeaf->initAABB(vVertex); // initialize AABB's
+    pLeaf->initAABB(&vVertex[0], vVertex.size()); // initialize AABB's
 
     tree->isSolid = false;
     tree->isLeaf = true;

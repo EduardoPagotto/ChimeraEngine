@@ -40,8 +40,6 @@ void NodeMesh::init() {
 
 void NodeMesh::accept(VisitorInterface* v) { v->visit(this); }
 
-void NodeMesh::render(Shader* _pShader) { pRenderStat->render(); }
-
 void NodeMesh::setVertexBuffer() {
     std::vector<VertexData> vertexDataIn;
     meshData.toVertexData(vertexDataIn);

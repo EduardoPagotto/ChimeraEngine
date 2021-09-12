@@ -14,8 +14,8 @@
 
 namespace Chimera {
 
-VisitorShadowMap::VisitorShadowMap(Shader* _pShader, const unsigned& _width, const unsigned& _height)
-    : pShader(_pShader), pTransform(nullptr) {
+VisitorShadowMap::VisitorShadowMap(SimpleRender3d* _pRender3d, Shader* _pShader, const unsigned& _width, const unsigned& _height)
+    : pShader(_pShader), pTransform(nullptr), pRender3D(_pRender3d) {
     pTexture = new TextureFBO(SHADE_TEXTURE_SHADOW, _width, _height);
 }
 
@@ -30,7 +30,8 @@ void VisitorShadowMap::visit(NodeMesh* _pMesh) {
     glm::mat4 model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
 
     pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
-    _pMesh->render(nullptr);
+    pRender3D->submit(_pMesh->pRenderStat);
+    pRender3D->flush();
 }
 
 void VisitorShadowMap::visit(NodeLight* _pLight) {

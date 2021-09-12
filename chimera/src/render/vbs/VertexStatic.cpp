@@ -23,16 +23,6 @@ VertexRenderStatic::~VertexRenderStatic() {
     delete ibo;
 }
 
-void VertexRenderStatic::render() {
-    vao->bind();
-    // ibo->render();
-    ibo->bind();
-    glDrawElements(GL_TRIANGLES, ibo->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-    ibo->unbind();
-    //---
-    vao->unbind();
-}
-
 void VertexRenderStatic::debugDados() {
     // glm::vec3 pos = this->aabb.getPosition();
     glm::vec3 size = this->aabb.getSize();

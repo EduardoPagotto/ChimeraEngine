@@ -55,7 +55,8 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
     // AABB aabbT = _pMesh->meshData.aabb.transformation(model);
     // aabbT.render();
 
-    _pMesh->render(pShader);
+    render3D.submit(_pMesh->pRenderStat);
+    render3D.flush();
 }
 
 void VisitorRender::visit(NodeLight* _pLight) { _pLight->data.apply(pShader); }

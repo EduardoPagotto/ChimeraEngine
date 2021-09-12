@@ -147,7 +147,8 @@ void Game::render() {
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 
-    pVertexRenderStatic->render();
+    render3D.submit(pVertexRenderStatic);
+    render3D.flush();
 
     pCanvas->after();
     pCanvas->swapWindow();

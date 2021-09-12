@@ -24,8 +24,6 @@ class NodeMesh : public Node {
     virtual void init() override;
     virtual void accept(class VisitorInterface* v) override;
 
-    void render(Shader* _pShader);
-
     void replaceTransform(Transform* _pTransform);
 
     void debugDados(bool _showAll);
@@ -38,9 +36,12 @@ class NodeMesh : public Node {
     inline Transform* getTransform() { return pTransform; }
     inline void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
 
+    // FIXME: NodeMesh virar classe de renderizacao!!!!!
+    VertexRenderStatic* pRenderStat;
+
   private:
     void setVertexBuffer();
-    VertexRenderStatic* pRenderStat;
+
     AABB aabb;
     Material* material;
     Transform* pTransform;

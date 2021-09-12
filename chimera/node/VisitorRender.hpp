@@ -5,6 +5,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/node/VisitorShadowMap.hpp"
+#include "chimera/render/vbs/RenderableStatic3d.hpp"
 
 namespace Chimera {
 
@@ -23,6 +24,8 @@ class VisitorRender : public VisitorInterface {
     Transform* pTransform;
     CanvasGL* pVideo;
     int eye;
+
+    SimpleRender3d render3D;
 
   private:
     bool HudOn;

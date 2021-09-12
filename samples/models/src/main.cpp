@@ -74,9 +74,13 @@ int main(int argn, char** argv) {
         ChimeraLoaders::PhysicsScene libP(model, pPC);
         libP.target();
 
+        // Gerenciador do grapho de cena
+        // Passa a game a video, node e o mundo fisico
+        Game* game = new Game(video, pRoot, pPC);
+
         // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado
         group1->setShader(mapa["mesh-default"]);
-        group1->setNodeVisitor(new Chimera::VisitorShadowMap(mapa["simpleDepthShader"], 2048, 2048));
+        group1->setNodeVisitor(new Chimera::VisitorShadowMap(&game->renderV.render3D, mapa["simpleDepthShader"], 2048, 2048));
 
         // create and add particle to scene
         Chimera::NodeGroup* gParticle = new Chimera::NodeGroup(pRoot, "ParticleGroup");
@@ -92,10 +96,6 @@ int main(int argn, char** argv) {
         Chimera::NodeHUD* pHUD = new Chimera::NodeHUD(gHud, "HUD-Default");
         Chimera::Font* pFont = new Chimera::Font(font, 18); // TODO: carregar size da fonte
         pHUD->addFont(pFont);
-
-        // Gerenciador do grapho de cena
-        // Passa a game a video, node e o mundo fisico
-        Game* game = new Game(video, pRoot, pPC);
 
         // Controle de fluxo do programa
         Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);

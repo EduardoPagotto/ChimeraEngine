@@ -6,13 +6,14 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/render/Texture.hpp"
+#include "chimera/render/vbs/RenderableStatic3d.hpp"
 #include <string>
 
 namespace Chimera {
 
 class VisitorShadowMap : public VisitorInterface {
   public:
-    VisitorShadowMap(Shader* _pShader, const unsigned& _width, const unsigned& _height);
+    VisitorShadowMap(SimpleRender3d* _pRender3d, Shader* _pShader, const unsigned& _width, const unsigned& _height);
     virtual ~VisitorShadowMap();
 
     virtual void init() override;
@@ -36,6 +37,7 @@ class VisitorShadowMap : public VisitorInterface {
     Transform* pTransform;
     Shader* pShader;
     TextureFBO* pTexture;
+    SimpleRender3d* pRender3D;
 };
 } // namespace Chimera
 

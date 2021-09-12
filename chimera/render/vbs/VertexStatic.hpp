@@ -12,7 +12,6 @@ class VertexRenderStatic : public IRenderable {
   public:
     VertexRenderStatic(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize);
     virtual ~VertexRenderStatic();
-    void render();
 
     virtual void debugDados() override;
     virtual uint32_t getSize() const override { return ibo->getCount(); }

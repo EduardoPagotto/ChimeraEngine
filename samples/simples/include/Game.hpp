@@ -7,6 +7,7 @@
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Texture.hpp"
+#include "chimera/render/vbs/RenderableStatic3d.hpp"
 #include "chimera/render/vbs/VertexStatic.hpp"
 
 class Game : public Chimera::IO::IEvents {
@@ -29,15 +30,15 @@ class Game : public Chimera::IO::IEvents {
   private:
     bool isPaused;
     int debug_init;
-    Chimera::TrackBall trackBall;
-    Chimera::CanvasGL* pCanvas;
-    Chimera::Shader* pShader;
-    Chimera::VertexRenderStatic* pVertexRenderStatic;
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;
-
+    Chimera::TrackBall trackBall;
+    Chimera::CanvasGL* pCanvas;
+    Chimera::Shader* pShader;
     Chimera::Material material;
+    Chimera::VertexRenderStatic* pVertexRenderStatic;
+    Chimera::SimpleRender3d render3D;
 };
 
 #endif

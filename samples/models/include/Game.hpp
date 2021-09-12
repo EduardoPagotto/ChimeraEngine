@@ -39,6 +39,8 @@ class Game : public Chimera::IO::IEvents {
     virtual void userEvent(const SDL_Event& _event);
     virtual bool paused();
 
+    Chimera::VisitorRender renderV;
+
   private:
     void updatePos();
     bool isPaused;
@@ -48,7 +50,6 @@ class Game : public Chimera::IO::IEvents {
 
     Controles crt;
 
-    Chimera::VisitorRender renderV;
     Chimera::NodeHUD* pHUD;
     Chimera::NodeCamera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;

@@ -3,9 +3,9 @@
 
 #include "Node.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/core/VertexData.hpp"
 #include "chimera/render/AABB.hpp"
 #include "chimera/render/Material.hpp"
-#include "chimera/render/MeshData.hpp"
 #include "chimera/render/vbs/VertexStatic.hpp"
 #include <glm/glm.hpp>
 #include <string.h>

@@ -95,7 +95,7 @@ void Game::start() {
     // m.textureFix();
 
     std::vector<Chimera::VertexData> renderData;
-    m.toVertexData(renderData);
+    vertexDataFromMesh(&m, renderData);
 
     std::vector<uint32_t> index;
     std::vector<Chimera::VertexData> vertexDataOut;

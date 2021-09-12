@@ -101,11 +101,11 @@ void Game::start() {
     // loader.getMesh("./data/terrain/heightmap_4x4.png", m, glm::vec3(1000.0, 10.0, 1000.0));
 
     pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 32, 32);
-    pHeightMap->split(m.getVertexIndex());
+    pHeightMap->split(m.vertexIndex);
 
     // TODO: aqui ele usa o index completo, mudar para o node
     std::vector<Chimera::VertexData> vertexDataIn;
-    m.toVertexData(vertexDataIn);
+    vertexDataFromMesh(&m, vertexDataIn);
 
     // so teste
     // std::vector<Chimera::Triangle> vecTriangle;

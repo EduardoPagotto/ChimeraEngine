@@ -95,6 +95,102 @@ void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSiz
     size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
 }
 
+void vertexDataMeshDataDebug(MeshData* m, bool _showAll) {
+
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex: %03d Index: %03d", (int)m->vertexList.size(), (int)m->vertexIndex.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d Index: %03d", (int)m->normalList.size(), (int)m->normalIndex.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV:     %03d Index: %03d", (int)m->uvList.size(), (int)m->uvIndex.size());
+
+    if (_showAll == true) {
+        for (unsigned int i = 0; i < m->vertexList.size(); i++)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex: %03d (%05.3f; %05.3f; %05.3f)", i, m->vertexList[i].x, m->vertexList[i].y,
+                         m->vertexList[i].z);
+
+        for (unsigned int i = 0; i < m->vertexIndex.size(); i += 3)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex Index: %03d (%03d; %03d; %03d)", i, m->vertexIndex[i], m->vertexIndex[i + 1],
+                         m->vertexIndex[i + 2]);
+
+        for (unsigned int i = 0; i < m->normalList.size(); i++)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", i, m->normalList[i].x, m->normalList[i].y,
+                         m->normalList[i].z);
+
+        for (unsigned int i = 0; i < m->normalIndex.size(); i += 3)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Index: %03d (%03d; %03d; %03d)", i, m->normalIndex[i], m->normalIndex[i + 1],
+                         m->normalIndex[i + 2]);
+
+        for (unsigned int i = 0; i < m->uvList.size(); i++)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV: %03d (%05.3f; %05.3f)", i, m->uvList[i].x, m->uvList[i].y);
+
+        for (unsigned int i = 0; i < m->uvIndex.size(); i += 3)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV Index: %03d (%03d; %03d; %03d)", i, m->uvIndex[i], m->uvIndex[i + 1],
+                         m->uvIndex[i + 2]);
+    }
+}
+
+void vertexDataMeshMinMaxSize(MeshData* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
+    if (m->vertexList.size() > 0) {
+        min = m->vertexList[0];
+        max = m->vertexList[0];
+    }
+
+    for (unsigned int i = 1; i < m->vertexList.size(); i++) {
+        min = glm::min(min, m->vertexList[i]);
+        max = glm::max(max, m->vertexList[i]);
+    }
+
+    size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
+    size.y = (glm::abs(max.y) + glm::abs(min.y)) / 2.0f;
+    size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
+}
+
+void vertexDataFromMesh(MeshData* m, std::vector<VertexData>& outData) {
+
+    if (m->singleIndex == false) {
+        if (m->uvList.size() > 0) {
+            for (unsigned int i = 0; i < m->vertexIndex.size(); i++) {
+                outData.push_back({m->vertexList[m->vertexIndex[i]], m->normalList[m->normalIndex[i]], m->uvList[m->uvIndex[i]]});
+            }
+        } else {
+            for (unsigned int i = 0; i < m->vertexIndex.size(); i++) {
+                outData.push_back({m->vertexList[m->vertexIndex[i]], m->normalList[m->normalIndex[i]], glm::vec2(0.0, 0.0)});
+            }
+        }
+    } else {
+        // vertices podem ser != 3 !!! sequencie!!!
+        if (m->uvList.size() > 0) {
+            for (unsigned int i = 0; i < m->vertexList.size(); i++) {
+                outData.push_back({m->vertexList[i], m->normalList[i], m->uvList[i]});
+            }
+        } else {
+            for (unsigned int i = 0; i < m->vertexList.size(); i++) {
+                outData.push_back({m->vertexList[i], m->normalList[i], glm::vec2(0.0, 0.0)});
+            }
+        }
+    }
+}
+
+void vertexDataMeshScale(MeshData* m, const float& new_size, const bool& hasTexture) {
+
+    if (hasTexture == false) {
+        m->uvIndex.clear();
+        m->uvList.clear();
+    }
+
+    for (unsigned int i = 0; i < m->vertexList.size(); i++) {
+        glm::vec3 val = m->vertexList[i];
+        m->vertexList[i] = glm::vec3(val.x * new_size, val.y * new_size, val.z * new_size);
+    }
+}
+
+void vertexDataMeshClean(MeshData* m) {
+    m->vertexIndex.clear();
+    m->vertexList.clear();
+    m->normalIndex.clear();
+    m->normalList.clear();
+    m->uvIndex.clear();
+    m->uvList.clear();
+}
+
 // glm::vec3 aproxEpsilon(const glm::vec3& dado) {
 //     return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
 //                      (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y

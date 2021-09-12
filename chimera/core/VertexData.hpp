@@ -20,6 +20,16 @@ struct VertexData {
     glm::vec2 texture;  // 2 * 4 = 08 (24 - 31)
 };
 
+struct MeshData {
+    bool singleIndex;
+    std::vector<glm::vec3> vertexList;
+    std::vector<glm::vec3> normalList;
+    std::vector<glm::vec2> uvList;
+    std::vector<unsigned int> vertexIndex;
+    std::vector<unsigned int> normalIndex;
+    std::vector<unsigned int> uvIndex;
+};
+
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices);
 
 void vertexDataReorder(std::vector<VertexData>& inVertexData, std::vector<uint32_t>& inIndex, std::vector<VertexData>& outVertexData,
@@ -30,5 +40,10 @@ void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, g
 void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
                                glm::vec3& min, glm::vec3& max, glm::vec3& size);
 
+void vertexDataMeshDataDebug(MeshData* pM, bool _showAll);
+void vertexDataMeshMinMaxSize(MeshData* m, glm::vec3& min, glm::vec3& max, glm::vec3& size);
+void vertexDataFromMesh(MeshData* m, std::vector<VertexData>& outData);
+void vertexDataMeshScale(MeshData* m, const float& new_size, const bool& hasTexture);
+void vertexDataMeshClean(MeshData* m);
 } // namespace Chimera
 #endif

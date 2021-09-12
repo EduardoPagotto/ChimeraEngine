@@ -29,7 +29,7 @@ void NodeMesh::init() {
     material->init();
 
     glm::vec3 min, max, size;
-    meshData.getMinMaxSize(min, max, size);
+    vertexDataMeshMinMaxSize(&meshData, min, max, size);
 
     aabb.setBoundary(min, max);
 
@@ -42,22 +42,21 @@ void NodeMesh::accept(VisitorInterface* v) { v->visit(this); }
 
 void NodeMesh::setVertexBuffer() {
     std::vector<VertexData> vertexDataIn;
-    meshData.toVertexData(vertexDataIn);
+    vertexDataFromMesh(&meshData, vertexDataIn);
 
     std::vector<unsigned int> index;
-    if (meshData.isSingleIndex() == false) {
+    if (meshData.singleIndex == false) {
         std::vector<VertexData> vertexDataOut;
         vertexDataIndexCompile(vertexDataIn, vertexDataOut, index);
         pRenderStat = new VertexRenderStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
     } else {
-        index = meshData.getVertexIndex();
-        pRenderStat = new VertexRenderStatic(&vertexDataIn[0], vertexDataIn.size(), &index[0], index.size());
+        pRenderStat = new VertexRenderStatic(&vertexDataIn[0], vertexDataIn.size(), &meshData.vertexIndex[0], meshData.vertexIndex.size());
     }
 }
 
 void NodeMesh::debugDados(bool _showAll) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Debug Mess Nome: %s", getName().c_str());
-    meshData.debugDados(_showAll);
+    vertexDataMeshDataDebug(&meshData, _showAll);
 }
 
 void NodeMesh::replaceTransform(Transform* _pTransform) {

@@ -21,7 +21,6 @@ set (RenderSource 	Triangle.cpp
 					vbs/SimpleRender3d.cpp
 					Light.cpp
 					Material.cpp
-					MeshData.cpp
 					Texture.cpp
 					LoadObj.cpp
 					HeightMap.cpp

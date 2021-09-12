@@ -31,7 +31,7 @@ void createMeshTexturizade(std::string name, std::string file, float scale, glm:
     loader.getMesh(file, pMesh->meshData);
     loader.getMaterial(*pMap);
 
-    pMesh->meshData.changeSize(scale, pMap->hasTexture());
+    vertexDataMeshScale(&pMesh->meshData, scale, pMap->hasTexture());
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
     pMesh->setMaterial(pMap);
 }

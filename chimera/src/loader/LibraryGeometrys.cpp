@@ -50,7 +50,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
     std::string retorno = "";
     tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement("mesh");
     if (l_nMesh != nullptr) {
-
+        _pMesh->meshData.singleIndex = false;
         // Carrega lista de vetores
         tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement("source");
         for (l_nSource; l_nSource; l_nSource = l_nSource->NextSiblingElement("source")) {
@@ -63,7 +63,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pMesh->meshData.addVertex(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    _pMesh->meshData.vertexList.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-normals") != nullptr) {
 
@@ -72,7 +72,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pMesh->meshData.addNormal(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    _pMesh->meshData.normalList.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-map-0") != nullptr) {
 
@@ -80,7 +80,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 std::vector<float> lista;
                 getSource(l_nSource, lista);
                 for (unsigned int indice = 0; indice < lista.size(); indice += 2)
-                    _pMesh->meshData.addUV(glm::vec2(lista[indice], lista[indice + 1]));
+                    _pMesh->meshData.uvList.push_back(glm::vec2(lista[indice], lista[indice + 1]));
             }
         }
 
@@ -127,15 +127,15 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
 
                 if (strstr(l_source, (char*)"-vertices") != nullptr) { // indices de vetor ponto
 
-                    _pMesh->meshData.addVertexIndex(l_arrayIndex[l_contador]);
+                    _pMesh->meshData.vertexIndex.push_back(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-normals") != nullptr) { // indice de vetor normal
 
-                    _pMesh->meshData.addNormalIndex(l_arrayIndex[l_contador]);
+                    _pMesh->meshData.normalIndex.push_back(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-map-0") != nullptr) { // indice de vetor posicao textura
 
-                    _pMesh->meshData.addUVIndex(l_arrayIndex[l_contador]);
+                    _pMesh->meshData.uvIndex.push_back(l_arrayIndex[l_contador]);
                 }
             }
             l_arrayIndex.clear();

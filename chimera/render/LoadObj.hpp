@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_LOADEROBJ__HPP
 #define __CHIMERA_LOADEROBJ__HPP
 
+#include "chimera/core/VertexData.hpp"
 #include "chimera/render/Material.hpp"
-#include "chimera/render/MeshData.hpp"
 
 namespace Chimera {
 

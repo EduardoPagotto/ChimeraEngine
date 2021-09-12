@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_LOAD_HEIGHTMAP__HPP
 #define __CHIMERA_LOAD_HEIGHTMAP__HPP
 
-#include "chimera/render/MeshData.hpp"
+#include "chimera/core/VertexData.hpp"
 #include <SDL2/SDL_image.h>
 #include <string>
 

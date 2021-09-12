@@ -114,9 +114,9 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const
     for (int z = 0; z < pImage->h; z++) {
         for (int x = 0; x < pImage->w; x++) {
 
-            _mesh.addVertex(glm::vec3(x - haldW, getHeight(x, z), halfH - z) * scale);
-            _mesh.addNormal(calcNormalHeight(x, z));
-            _mesh.addUV(glm::vec2(u * x, v * z));
+            _mesh.vertexList.push_back(glm::vec3(x - haldW, getHeight(x, z), halfH - z) * scale);
+            _mesh.normalList.push_back(calcNormalHeight(x, z));
+            _mesh.uvList.push_back(glm::vec2(u * x, v * z));
         }
     }
 
@@ -131,34 +131,34 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const
             int pc = getIndex(x + 1, z + 1);
             int pd = getIndex(x, z + 1);
             // Vertex T1
-            _mesh.addVertexIndex(pa);
-            _mesh.addVertexIndex(pb);
-            _mesh.addVertexIndex(pc);
+            _mesh.vertexIndex.push_back(pa);
+            _mesh.vertexIndex.push_back(pb);
+            _mesh.vertexIndex.push_back(pc);
             // Vertex T2
-            _mesh.addVertexIndex(pc);
-            _mesh.addVertexIndex(pd);
-            _mesh.addVertexIndex(pa);
+            _mesh.vertexIndex.push_back(pc);
+            _mesh.vertexIndex.push_back(pd);
+            _mesh.vertexIndex.push_back(pa);
             // normal T1
-            _mesh.addNormalIndex(pa);
-            _mesh.addNormalIndex(pb);
-            _mesh.addNormalIndex(pc);
+            _mesh.normalIndex.push_back(pa);
+            _mesh.normalIndex.push_back(pb);
+            _mesh.normalIndex.push_back(pc);
             // normal T2
-            _mesh.addNormalIndex(pc);
-            _mesh.addNormalIndex(pd);
-            _mesh.addNormalIndex(pa);
+            _mesh.normalIndex.push_back(pc);
+            _mesh.normalIndex.push_back(pd);
+            _mesh.normalIndex.push_back(pa);
             // UV T1
-            _mesh.addUVIndex(pa);
-            _mesh.addUVIndex(pb);
-            _mesh.addUVIndex(pc);
+            _mesh.uvIndex.push_back(pa);
+            _mesh.uvIndex.push_back(pb);
+            _mesh.uvIndex.push_back(pc);
             // UV T2
-            _mesh.addUVIndex(pc);
-            _mesh.addUVIndex(pd);
-            _mesh.addUVIndex(pa);
+            _mesh.uvIndex.push_back(pc);
+            _mesh.uvIndex.push_back(pd);
+            _mesh.uvIndex.push_back(pa);
         }
     }
 
-    _mesh.debugDados(false);
-    _mesh.setSingleIndex(true);
+    _mesh.singleIndex = true;
+    vertexDataMeshDataDebug(&_mesh, false);
 
     return true;
 }

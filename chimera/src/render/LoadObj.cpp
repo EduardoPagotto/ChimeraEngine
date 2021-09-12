@@ -34,26 +34,24 @@ bool LoaderObj::getMesh(const std::string& _fileName, MeshData& _mesh) {
         else if (line[0] == 'v') {
             if (line[1] == ' ') {
                 if (sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
-                    _mesh.addVertex(glm::vec3(x, y, z));
+                    _mesh.vertexList.push_back(glm::vec3(x, y, z));
                     continue;
                 }
-                throw Exception(
-                    std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + _fileName));
+                throw Exception(std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + _fileName));
 
             } else if (line[1] == 'n') {
                 normalOn = true;
                 int n = sscanf(line, "vn %f %f %f", &x, &y, &z);
-                _mesh.addNormal(glm::vec3(x, y, z));
+                _mesh.normalList.push_back(glm::vec3(x, y, z));
             } else if (line[1] == 't') {
                 textuaOn = true;
                 int n = sscanf(line, "vt %f %f", &u, &v);
-                _mesh.addUV(glm::vec2(u, v));
+                _mesh.uvList.push_back(glm::vec2(u, v));
             }
         } else if (line[0] == 'f') {
             if (line[1] == ' ') {
                 if ((textuaOn == true) && (normalOn == true)) {
-                    int n = sscanf(line, "f %d/%d/%d %d/%d/%d %d/%d/%d", &A[0], &B[0], &C[0], &A[1], &B[1], &C[1],
-                                   &A[2], &B[2], &C[2]);
+                    int n = sscanf(line, "f %d/%d/%d %d/%d/%d %d/%d/%d", &A[0], &B[0], &C[0], &A[1], &B[1], &C[1], &A[2], &B[2], &C[2]);
                 } else if ((textuaOn == false) && (normalOn == true)) {
                     int n = sscanf(line, "f %d//%d %d//%d %d//%d", &A[0], &C[0], &A[1], &C[1], &A[2], &C[2]);
                 } else if ((textuaOn == true) && (normalOn == false)) {
@@ -63,13 +61,13 @@ bool LoaderObj::getMesh(const std::string& _fileName, MeshData& _mesh) {
                 }
 
                 for (int indice = 0; indice < 3; indice++) {
-                    _mesh.addVertexIndex(A[indice] - 1);
+                    _mesh.vertexIndex.push_back(A[indice] - 1);
 
                     if (textuaOn == true)
-                        _mesh.addUVIndex(B[indice] - 1);
+                        _mesh.uvIndex.push_back(B[indice] - 1);
 
                     if (normalOn == true)
-                        _mesh.addNormalIndex(C[indice] - 1);
+                        _mesh.normalIndex.push_back(C[indice] - 1);
                 }
             }
         } else {
@@ -82,6 +80,7 @@ bool LoaderObj::getMesh(const std::string& _fileName, MeshData& _mesh) {
     if (line)
         free(line);
 
+    _mesh.singleIndex = false;
     return true;
 }
 
@@ -122,8 +121,7 @@ bool LoaderObj::getMaterial(Material& _material) {
                 } else if (n == 4) {
                     _material.setAmbient(glm::vec4(r, g, b, a));
                 } else {
-                    throw Exception("linha " + std::to_string(pos_linha) +
-                                    " material invalido arquivo: " + materialFile);
+                    throw Exception("linha " + std::to_string(pos_linha) + " material invalido arquivo: " + materialFile);
                 }
 
             } else if (line[1] == 'd') {
@@ -133,8 +131,7 @@ bool LoaderObj::getMaterial(Material& _material) {
                 } else if (n == 4) {
                     _material.setDiffuse(glm::vec4(r, g, b, a));
                 } else {
-                    throw Exception("linha " + std::to_string(pos_linha) +
-                                    " material invalido arquivo: " + materialFile);
+                    throw Exception("linha " + std::to_string(pos_linha) + " material invalido arquivo: " + materialFile);
                 }
             } else if (line[1] == 's') {
                 int n = sscanf(line, "Ks %f %f %f %f", &r, &g, &b, &a);
@@ -143,8 +140,7 @@ bool LoaderObj::getMaterial(Material& _material) {
                 } else if (n == 4) {
                     _material.setSpecular(glm::vec4(r, g, b, a));
                 } else {
-                    throw Exception("linha " + std::to_string(pos_linha) +
-                                    " material invalido arquivo:" + materialFile);
+                    throw Exception("linha " + std::to_string(pos_linha) + " material invalido arquivo:" + materialFile);
                 }
             }
         } else {

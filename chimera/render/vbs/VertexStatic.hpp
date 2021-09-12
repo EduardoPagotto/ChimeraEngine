@@ -10,7 +10,7 @@ namespace Chimera {
 
 class VertexRenderStatic : public IRenderable {
   public:
-    VertexRenderStatic(std::vector<VertexData>& vertexDataIn, std::vector<uint32_t> index);
+    VertexRenderStatic(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize);
     virtual ~VertexRenderStatic();
     void render();
 
@@ -25,7 +25,6 @@ class VertexRenderStatic : public IRenderable {
     AABB aabb;
     Core::VertexArray* vao;
     Core::IndexBuffer* ibo;
-    std::vector<uint32_t> indexTris;
 };
 } // namespace Chimera
 #endif

@@ -46,11 +46,14 @@ void NodeMesh::setVertexBuffer() {
     std::vector<VertexData> vertexDataIn;
     meshData.toVertexData(vertexDataIn);
 
+    std::vector<unsigned int> index;
     if (meshData.isSingleIndex() == false) {
-        std::vector<unsigned int> index;
-        pRenderStat = new VertexRenderStatic(vertexDataIn, index);
+        std::vector<VertexData> vertexDataOut;
+        vertexDataIndexCompile(vertexDataIn, vertexDataOut, index);
+        pRenderStat = new VertexRenderStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
     } else {
-        pRenderStat = new VertexRenderStatic(vertexDataIn, meshData.getVertexIndex());
+        index = meshData.getVertexIndex();
+        pRenderStat = new VertexRenderStatic(&vertexDataIn[0], vertexDataIn.size(), &index[0], index.size());
     }
 }
 

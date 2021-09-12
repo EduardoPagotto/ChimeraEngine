@@ -79,8 +79,8 @@ void Game::start() {
     // loader.getMesh("./data/models/square2.obj", m);
     // loader.getMesh("./data/models/parede_simples.obj", m);
     // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
-    // loader.getMesh("./data/models/map02.obj", m);
-    loader.getMesh("./data/models/salaSplit3.obj", m); // Sala L com Split
+    loader.getMesh("./data/models/map02.obj", m);
+    // loader.getMesh("./data/models/salaSplit3.obj", m); // Sala L com Split
 
     if (loader.hasMaterial() == true)
         loader.getMaterial(material);
@@ -97,8 +97,10 @@ void Game::start() {
     std::vector<Chimera::VertexData> renderData;
     m.toVertexData(renderData);
 
-    std::vector<unsigned int> index;
-    this->pVertexRenderStatic = new Chimera::VertexRenderStatic(renderData, index); // vertexRenderStatic.create(renderData, index);
+    std::vector<uint32_t> index;
+    std::vector<Chimera::VertexData> vertexDataOut;
+    vertexDataIndexCompile(renderData, vertexDataOut, index);
+    this->pVertexRenderStatic = new Chimera::VertexRenderStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
 }
 
 void Game::stop() {}

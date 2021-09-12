@@ -6,7 +6,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/render/Texture.hpp"
-#include "chimera/render/vbs/RenderableStatic3d.hpp"
+#include "chimera/render/vbs/SimpleRender3d.hpp"
 #include <string>
 
 namespace Chimera {

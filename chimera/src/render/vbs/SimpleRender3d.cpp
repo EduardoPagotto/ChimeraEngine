@@ -1,4 +1,4 @@
-#include "chimera/render/vbs/RenderableStatic3d.hpp"
+#include "chimera/render/vbs/SimpleRender3d.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

@@ -7,7 +7,7 @@
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Texture.hpp"
-#include "chimera/render/vbs/RenderableStatic3d.hpp"
+#include "chimera/render/vbs/SimpleRender3d.hpp"
 #include "chimera/render/vbs/VertexStatic.hpp"
 
 class Game : public Chimera::IO::IEvents {

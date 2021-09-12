@@ -2,14 +2,14 @@
 
 namespace Chimera {
 
-VertexRenderDynamic::VertexRenderDynamic(const unsigned int& max) { this->vbo = new Core::VertexBuffer(nullptr, max, 3); }
+VertexRenderDynamic::VertexRenderDynamic(const uint32_t& max) { this->vbo = new Core::VertexBuffer(nullptr, max, 3); }
 
 VertexRenderDynamic::~VertexRenderDynamic() {
     delete vbo;
     vbo = nullptr;
 }
 
-void VertexRenderDynamic::render(VertexData* pVertice, const unsigned int size) {
+void VertexRenderDynamic::render(VertexData* pVertice, const uint32_t& size) {
 
     vao.bind();
     vbo->bind();

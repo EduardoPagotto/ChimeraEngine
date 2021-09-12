@@ -10,8 +10,7 @@ namespace Chimera {
 
 class RenderableStatic3d : public IRenderable {
   public:
-    RenderableStatic3d(VertexData* pVertexList, const unsigned int& vertSize, uint32_t* pIndexList, const unsigned int& indexSize,
-                       Shader* pShader);
+    RenderableStatic3d(VertexData* pVertexList, const uint32_t& vertSize, uint32_t* pIndexList, const uint32_t& indexSize, Shader* pShader);
     virtual ~RenderableStatic3d();
 
     void debugDados();
@@ -23,7 +22,7 @@ class RenderableStatic3d : public IRenderable {
 
   private:
     AABB aabb;
-    unsigned int size;
+    uint32_t size;
     Core::IndexBuffer* ibo;
     Core::VertexBuffer* vbo;
     Core::VertexArray* vao;

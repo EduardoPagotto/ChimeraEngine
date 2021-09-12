@@ -8,9 +8,9 @@ namespace Chimera {
 
 class VertexRenderDynamic {
   public:
-    VertexRenderDynamic(const unsigned int& max);
+    VertexRenderDynamic(const uint32_t& max);
     virtual ~VertexRenderDynamic();
-    void render(VertexData* pVertice, const unsigned int size);
+    void render(VertexData* pVertice, const uint32_t& size);
 
   private:
     Core::VertexArray vao;

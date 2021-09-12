@@ -12,7 +12,7 @@ VertexArray::~VertexArray() {
     glDeleteVertexArrays(1, &arrayID);
 }
 
-void VertexArray::addBuffer(VertexBuffer* buffer, unsigned int index) {
+void VertexArray::addBuffer(VertexBuffer* buffer, uint32_t index) {
 
     this->bind();
     buffer->bind();

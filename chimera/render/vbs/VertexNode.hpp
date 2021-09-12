@@ -14,14 +14,14 @@ class VertexNode : public IRenderable {
     VertexNode();
     ~VertexNode();
 
-    inline bool empty() { return (index.size() == 0); }
+    inline bool empty() { return indexTris.empty(); }
     void addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);
     void initIndexBufferObject();
     void initAABB(std::vector<VertexData>& vertexDataIn);
     void render();
 
     virtual void debugDados() override;
-    virtual uint32_t getSize() const override { return index.size(); }
+    virtual uint32_t getSize() const override { return indexTris.size(); }
     virtual Shader* getShader() const { return nullptr; };
     virtual Core::VertexArray* getVao() const { return nullptr; };
     virtual Core::IndexBuffer* getIBO() const { return ibo; };
@@ -30,7 +30,7 @@ class VertexNode : public IRenderable {
   private:
     AABB aabb;
     Core::IndexBuffer* ibo;
-    std::vector<uint32_t> index;
+    std::vector<uint32_t> indexTris;
 };
 } // namespace Chimera
 

@@ -20,14 +20,14 @@ struct VertexData {
     glm::vec2 texture;  // 2 * 4 = 08 (24 - 31)
 };
 
-void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<unsigned int>& out_indices);
+void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices);
 
-void vertexDataReorder(std::vector<VertexData>& inVertexData, std::vector<unsigned int>& inIndex, std::vector<VertexData>& outVertexData,
-                       std::vector<unsigned int>& outIndex);
+void vertexDataReorder(std::vector<VertexData>& inVertexData, std::vector<uint32_t>& inIndex, std::vector<VertexData>& outVertexData,
+                       std::vector<uint32_t>& outIndex);
 
 // glm::vec3 aproxEpsilon(const glm::vec3& dado);
-void vertexDataMinMaxSize(VertexData* pVertexList, const unsigned int& vertexSize, glm::vec3& min, glm::vec3& max, glm::vec3& size);
-void vertexDataIndexMinMaxSize(VertexData* pVertexList, const unsigned int vertexSize, uint32_t* pIndexList, const unsigned int indexSize,
+void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, glm::vec3& min, glm::vec3& max, glm::vec3& size);
+void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
                                glm::vec3& min, glm::vec3& max, glm::vec3& size);
 
 } // namespace Chimera

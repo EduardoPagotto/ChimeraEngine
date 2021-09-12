@@ -4,8 +4,7 @@ namespace Chimera::Core {
 
 // https://www.youtube.com/watch?v=qTGMXcFLk2E&t=2063s
 
-VertexBuffer::VertexBuffer(VertexData* vertexData, const unsigned int& size, const unsigned int& componentCount)
-    : componentCount(componentCount) {
+VertexBuffer::VertexBuffer(VertexData* vertexData, const uint32_t& size, const uint32_t& componentCount) : componentCount(componentCount) {
 
     this->size = size;
     glGenBuffers(1, &bufferID);
@@ -20,7 +19,7 @@ VertexBuffer::VertexBuffer(VertexData* vertexData, const unsigned int& size, con
 
 VertexBuffer::~VertexBuffer() { glDeleteBuffers(1, &bufferID); }
 
-void VertexBuffer::setSlot(const unsigned int& slotID, const unsigned int& slotSize, void* offset) {
+void VertexBuffer::setSlot(const uint32_t& slotID, const uint32_t& slotSize, void* offset) {
     glVertexAttribPointer(slotID, slotSize, GL_FLOAT, GL_FALSE, sizeof(VertexData), offset);
     glEnableVertexAttribArray(slotID);
 }

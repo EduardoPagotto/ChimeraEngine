@@ -24,17 +24,17 @@ void VertexNode::debugDados() {
 
 void VertexNode::initAABB(std::vector<VertexData>& vertexDataIn) {
     glm::vec3 min, max, size;
-    vertexDataIndexMinMaxSize(&vertexDataIn[0], vertexDataIn.size(), &index[0], index.size(), min, max, size);
+    vertexDataIndexMinMaxSize(&vertexDataIn[0], vertexDataIn.size(), &indexTris[0], indexTris.size(), min, max, size);
     aabb.setBoundary(min, max);
 }
 
 void VertexNode::addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc) {
-    index.push_back(_pa);
-    index.push_back(_pb);
-    index.push_back(_pc);
+    indexTris.push_back(_pa);
+    indexTris.push_back(_pb);
+    indexTris.push_back(_pc);
 }
 
-void VertexNode::initIndexBufferObject() { ibo = new Core::IndexBuffer(&index[0], index.size()); }
+void VertexNode::initIndexBufferObject() { ibo = new Core::IndexBuffer(&indexTris[0], indexTris.size()); }
 
 void VertexNode::render() {
     // ibo->render();

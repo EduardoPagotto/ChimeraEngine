@@ -3,8 +3,8 @@
 
 namespace Chimera {
 
-RenderableStatic3d::RenderableStatic3d(VertexData* pVertexList, const unsigned int& vertSize, uint32_t* pIndexList,
-                                       const unsigned int& indexSize, Shader* pShader)
+RenderableStatic3d::RenderableStatic3d(VertexData* pVertexList, const uint32_t& vertSize, uint32_t* pIndexList, const uint32_t& indexSize,
+                                       Shader* pShader)
     : size(indexSize), pShader(pShader) {
 
     // create buffers

@@ -10,10 +10,10 @@
 
 namespace Chimera {
 
-class BspTreeRender : public IRenderable {
+class RenderableBsp : public IRenderable {
   public:
-    BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData);
-    virtual ~BspTreeRender();
+    RenderableBsp(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData);
+    virtual ~RenderableBsp();
     virtual void inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue);
     virtual void debugDados() {}
     virtual uint32_t getSize() const { return totIndex; }

@@ -15,7 +15,7 @@ set (RenderSource 	Triangle.cpp
 					AABB.cpp
 					Octree.cpp
 					bsp/BSPTree.cpp
-					bsp/BspTreeRender.cpp
+					bsp/RenderableBsp.cpp
 					vbs/VertexNode.cpp
 					vbs/VertexDynamic.cpp 
 					vbs/VertexStatic.cpp

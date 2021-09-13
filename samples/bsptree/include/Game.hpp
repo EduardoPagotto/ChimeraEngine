@@ -44,7 +44,7 @@ class Game : public Chimera::IO::IEvents {
     Chimera::Frustum frustum;
 
     Chimera::SimpleRender3d render3d;
-    Chimera::BspTreeRender* renderz1;
+    Chimera::RenderableBsp* renderz1;
 };
 
 #endif

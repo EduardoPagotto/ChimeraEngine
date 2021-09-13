@@ -1,9 +1,9 @@
-#include "chimera/render/bsp/BspTreeRender.hpp"
+#include "chimera/render/bsp/RenderableBsp.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-BspTreeRender::BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData)
+RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData)
     : root(root), totIndex(0) {
 
     this->vpLeaf = std::move(vpLeafData);
@@ -30,9 +30,9 @@ BspTreeRender::BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeaf
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
 }
 
-BspTreeRender::~BspTreeRender() { this->destroy(); }
+RenderableBsp::~RenderableBsp() { this->destroy(); }
 
-void BspTreeRender::drawPolygon(BSPTreeNode* tree, bool frontSide) {
+void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
     if (tree->isLeaf == false)
         return;
@@ -41,7 +41,7 @@ void BspTreeRender::drawPolygon(BSPTreeNode* tree, bool frontSide) {
     pLeaf->inject(eye, frustum, logdata, renderQueue);
 }
 
-void BspTreeRender::traverseTree(BSPTreeNode* tree) {
+void RenderableBsp::traverseTree(BSPTreeNode* tree) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
@@ -69,7 +69,7 @@ void BspTreeRender::traverseTree(BSPTreeNode* tree) {
     }
 }
 
-void BspTreeRender::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+void RenderableBsp::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
     this->eye = eye;
     this->frustum = frustum;
     this->renderQueue = renderQueue;
@@ -80,7 +80,7 @@ void BspTreeRender::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::
     traverseTree(root);
 }
 
-void BspTreeRender::destroy() {
+void RenderableBsp::destroy() {
 
     while (!vpLeaf.empty()) {
 
@@ -94,7 +94,7 @@ void BspTreeRender::destroy() {
     collapse(root);
 }
 
-void BspTreeRender::collapse(BSPTreeNode* tree) {
+void RenderableBsp::collapse(BSPTreeNode* tree) {
 
     if (tree->front != nullptr) {
         collapse(tree->front);
@@ -109,7 +109,7 @@ void BspTreeRender::collapse(BSPTreeNode* tree) {
     }
 }
 
-bool BspTreeRender::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
+bool RenderableBsp::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
     float temp;
     glm::vec3 intersection;
     if (tree->isLeaf == true) {

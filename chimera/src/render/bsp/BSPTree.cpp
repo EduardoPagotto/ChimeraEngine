@@ -9,7 +9,7 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
-BspTreeRender* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
+RenderableBsp* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
 
     std::list<Triangle*> vTris;
     vVertex = _vVertex;
@@ -25,7 +25,7 @@ BspTreeRender* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::
 
     vTris.clear();
 
-    BspTreeRender* r = new BspTreeRender(root, this->vpLeaf, this->vVertex);
+    RenderableBsp* r = new RenderableBsp(root, this->vpLeaf, this->vVertex);
     return r;
 }
 

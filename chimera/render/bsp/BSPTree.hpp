@@ -3,7 +3,7 @@
 
 // Ref: https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
-#include "BspTreeRender.hpp"
+#include "RenderableBsp.hpp"
 
 namespace Chimera {
 
@@ -11,7 +11,7 @@ class BspTree {
   public:
     BspTree() : root(nullptr) {}
     virtual ~BspTree() {}
-    BspTreeRender* create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
+    RenderableBsp* create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
 
   private:
     BSPTreeNode* buildLeafy(std::list<Triangle*>& _vTriangle);

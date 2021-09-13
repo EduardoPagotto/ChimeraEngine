@@ -100,7 +100,7 @@ void Game::start() {
     std::vector<uint32_t> index;
     std::vector<Chimera::VertexData> vertexDataOut;
     vertexDataIndexCompile(renderData, vertexDataOut, index);
-    this->pVertexRenderStatic = new Chimera::VertexRenderStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+    this->pVertexRenderStatic = new Chimera::RenderableStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
 }
 
 void Game::stop() {}

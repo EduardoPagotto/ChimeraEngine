@@ -6,7 +6,7 @@
 #include "chimera/core/VertexData.hpp"
 #include "chimera/render/AABB.hpp"
 #include "chimera/render/Material.hpp"
-#include "chimera/render/vbs/VertexStatic.hpp"
+#include "chimera/render/vbs/RenderableStatic.hpp"
 #include <glm/glm.hpp>
 #include <string.h>
 #include <tinyxml2.h>
@@ -37,7 +37,7 @@ class NodeMesh : public Node {
     inline void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
 
     // FIXME: NodeMesh virar classe de renderizacao!!!!!
-    VertexRenderStatic* pRenderStat;
+    RenderableStatic* pRenderStat;
 
   private:
     void setVertexBuffer();

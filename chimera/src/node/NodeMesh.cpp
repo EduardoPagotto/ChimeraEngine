@@ -48,9 +48,9 @@ void NodeMesh::setVertexBuffer() {
     if (meshData.singleIndex == false) {
         std::vector<VertexData> vertexDataOut;
         vertexDataIndexCompile(vertexDataIn, vertexDataOut, index);
-        pRenderStat = new VertexRenderStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+        pRenderStat = new RenderableStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
     } else {
-        pRenderStat = new VertexRenderStatic(&vertexDataIn[0], vertexDataIn.size(), &meshData.vertexIndex[0], meshData.vertexIndex.size());
+        pRenderStat = new RenderableStatic(&vertexDataIn[0], vertexDataIn.size(), &meshData.vertexIndex[0], meshData.vertexIndex.size());
     }
 }
 

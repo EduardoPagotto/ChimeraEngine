@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_VERTEX_STATIC_HPP
-#define __CHIMERA_VERTEX_STATIC_HPP
+#ifndef __CHIMERA_RENDERABLE_STATIC_HPP
+#define __CHIMERA_RENDERABLE_STATIC_HPP
 
 #include "IRenderable.hpp"
 #include "chimera/core/buffers/IndexBuffer.hpp"
@@ -8,10 +8,10 @@
 
 namespace Chimera {
 
-class VertexRenderStatic : public IRenderable {
+class RenderableStatic : public IRenderable {
   public:
-    VertexRenderStatic(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize);
-    virtual ~VertexRenderStatic();
+    RenderableStatic(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize);
+    virtual ~RenderableStatic();
 
     virtual void debugDados() override;
     virtual uint32_t getSize() const override { return ibo->getCount(); }

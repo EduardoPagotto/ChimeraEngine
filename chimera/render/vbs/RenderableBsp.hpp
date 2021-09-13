@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_BSPTREERENDER_HPP
-#define __CHIMERA_BSPTREERENDER_HPP
+#ifndef __CHIMERA_RENDERABLE_BSP_HPP
+#define __CHIMERA_RENDERABLE_BSP_HPP
 
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/render/bsp/BSPTreeNode.hpp"

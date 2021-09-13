@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_RENDERABLESTATIC3D__HPP
-#define __CHIMERA_RENDERABLESTATIC3D__HPP
+#ifndef __CHIMERA_SIMPLE_RENDER_3D_HPP
+#define __CHIMERA_SIMPLE_RENDER_3D_HPP
 
 #include "IRenderable.hpp"
 #include <deque>

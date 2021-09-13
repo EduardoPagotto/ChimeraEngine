@@ -1,9 +1,9 @@
-#include "chimera/render/vbs/VertexStatic.hpp"
+#include "chimera/render/vbs/RenderableStatic.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-VertexRenderStatic::VertexRenderStatic(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize) {
+RenderableStatic::RenderableStatic(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize) {
 
     vao = new Core::VertexArray();
     vao->addBuffer(new Core::VertexBuffer(vertexData, vertexSize, 3), 0); // FIXME 0 para compatibilidade
@@ -18,12 +18,12 @@ VertexRenderStatic::VertexRenderStatic(VertexData* vertexData, const uint32_t& v
     aabb.setBoundary(min, max);
 }
 
-VertexRenderStatic::~VertexRenderStatic() {
+RenderableStatic::~RenderableStatic() {
     delete vao;
     delete ibo;
 }
 
-void VertexRenderStatic::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+void RenderableStatic::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
     // TODO: colocar validacao do frustum
     // if (aabb.visible(*frustum) == true) {
     //     renderQueue->push_back(this);
@@ -32,7 +32,7 @@ void VertexRenderStatic::inject(glm::vec3* eye, Frustum* frustum, bool logData, 
     renderQueue->push_back(this);
 }
 
-void VertexRenderStatic::debugDados() {
+void RenderableStatic::debugDados() {
     glm::vec3 size = this->aabb.getSize();
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
 }

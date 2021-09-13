@@ -8,7 +8,7 @@
 #include "chimera/render/HeightMap.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
-#include "chimera/render/vbs/VertexStatic.hpp"
+#include "chimera/render/vbs/RenderableStatic.hpp"
 
 class Game : public Chimera::IO::IEvents {
   public:
@@ -39,7 +39,7 @@ class Game : public Chimera::IO::IEvents {
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;
-    Chimera::VertexRenderStatic* pRenderStat;
+    Chimera::RenderableStatic* pRenderStat;
 
     Chimera::HeightMap* pHeightMap;
     Chimera::Frustum frustum;

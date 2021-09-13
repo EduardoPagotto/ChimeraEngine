@@ -12,11 +12,32 @@
 
 namespace Chimera {
 
+class BspTreeRender {
+    // public:
+    //   BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData);
+    //   virtual ~BspTreeRender();
+    //   void render(glm::vec3* eye, Frustum& _frustrun, bool _logData);
+    //   void renderAABB();
+
+    // private:
+    //   void destroy();
+    //   void collapse(BSPTreeNode* tree);
+
+    //   void traverseTree(BSPTreeNode* tree, glm::vec3* pos, Frustum& _frustrun);
+    //   void drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _frustrun);
+
+    BSPTreeNode* root;
+    Core::VertexArray* vao;
+    bool logdata;
+    std::vector<VertexNode*> vpLeaf;
+    std::vector<VertexData> vVertex;
+};
+
 class BspTree {
   public:
     BspTree();
     virtual ~BspTree();
-    void create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex);
+    BspTreeRender* create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
     void destroy();
     void render(glm::vec3* eye, Frustum& _frustrun, bool _logData);
     void renderAABB();

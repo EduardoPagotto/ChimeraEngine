@@ -4,6 +4,7 @@
 
 #include "chimera/core/VertexData.hpp"
 #include <glm/glm.hpp>
+#include <list>
 
 namespace Chimera {
 
@@ -28,6 +29,9 @@ class Triangle {
   private:
     glm::vec3 normal;
 };
+
+void triangleFromVertexDataIndex(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris);
+void triangleFromVertexData(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris);
 // bool tringleListIsConvex(std::vector<VertexData>& vertexList, std::vector<Triangle*>& _vTriangle);
 } // namespace Chimera
 #endif

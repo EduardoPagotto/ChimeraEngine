@@ -25,9 +25,9 @@ struct MeshData {
     std::vector<glm::vec3> vertexList;
     std::vector<glm::vec3> normalList;
     std::vector<glm::vec2> uvList;
-    std::vector<unsigned int> vertexIndex;
-    std::vector<unsigned int> normalIndex;
-    std::vector<unsigned int> uvIndex;
+    std::vector<uint32_t> vertexIndex;
+    std::vector<uint32_t> normalIndex;
+    std::vector<uint32_t> uvIndex;
 };
 
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices);

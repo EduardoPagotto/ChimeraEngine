@@ -9,6 +9,115 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
+// BspTreeRender::BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData) : root(root) {
+//     this->vpLeaf = std::move(vpLeafData);
+//     this->vVertex = std::move(vertexData);
+
+//     // create vertex buffers
+//     vao->addBuffer(new Core::VertexBuffer(&this->vVertex[0], this->vVertex.size(), 3), 0); // FIXME: 0 por comatibilidade
+//     vao->bind();
+
+//     for (VertexNode* pLeaf : this->vpLeaf) {
+//         pLeaf->initAABB(&vVertex[0], vVertex.size()); // initialize AABB's
+//         pLeaf->initIndexBufferObject();               // create IBO's
+//         pLeaf->debugDados();
+//     }
+
+//     vao->unbind();
+
+//     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
+// }
+// BspTreeRender::~BspTreeRender() { this->destroy(); }
+
+// void BspTreeRender::drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _frustrun) {
+
+//     if (tree->isLeaf == false)
+//         return;
+
+//     auto pVn = vpLeaf[tree->leafIndex];
+//     if (pVn->getAABB()->visible(_frustrun) == true) {
+//         if (logdata == true)
+//             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %d", tree->leafIndex, pVn->getSize());
+
+//         pVn->render();
+//     }
+// }
+
+// void BspTreeRender::traverseTree(BSPTreeNode* tree, glm::vec3* pos, Frustum& _frustrun) {
+//     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
+//     if (tree == nullptr)
+//         return;
+
+//     if (tree->isSolid == true)
+//         return;
+
+//     SIDE result = tree->hyperPlane.classifyPoint(pos);
+//     switch (result) {
+//         case SIDE::CP_FRONT:
+//             traverseTree(tree->back, pos, _frustrun);
+//             drawPolygon(tree, true, _frustrun);
+//             traverseTree(tree->front, pos, _frustrun);
+//             break;
+//         case SIDE::CP_BACK:
+//             traverseTree(tree->front, pos, _frustrun);
+//             drawPolygon(tree, false, _frustrun); // Elimina o render do back-face
+//             traverseTree(tree->back, pos, _frustrun);
+//             break;
+//         default: // SIDE::CP_ONPLANE
+//             // the eye point is on the partition hyperPlane...
+//             traverseTree(tree->front, pos, _frustrun);
+//             traverseTree(tree->back, pos, _frustrun);
+//             break;
+//     }
+// }
+
+// void BspTreeRender::render(glm::vec3* eye, Frustum& _frustrun, bool _logData) {
+
+//     vao->bind();
+
+//     logdata = _logData;
+//     traverseTree(root, eye, _frustrun);
+
+//     vao->unbind();
+// }
+
+// void BspTreeRender::renderAABB() {
+//     for (auto pLeaf : this->vpLeaf) {
+//         pLeaf->getAABB()->render();
+//     }
+// }
+
+// void BspTreeRender::destroy() {
+
+//     while (!vpLeaf.empty()) {
+
+//         VertexNode* pLeaf = vpLeaf.back();
+//         vpLeaf.pop_back();
+
+//         delete pLeaf;
+//         pLeaf = nullptr;
+//     }
+
+//     collapse(root);
+// }
+
+// void BspTreeRender::collapse(BSPTreeNode* tree) {
+
+//     if (tree->front != nullptr) {
+//         collapse(tree->front);
+//         delete tree->front;
+//         tree->front = nullptr;
+//     }
+
+//     if (tree->back != nullptr) {
+//         collapse(tree->back);
+//         delete tree->back;
+//         tree->back = nullptr;
+//     }
+// }
+
+///--------
+
 BspTree::BspTree() {
     root = nullptr;
     logdata = false;
@@ -17,56 +126,36 @@ BspTree::BspTree() {
 
 BspTree::~BspTree() { this->destroy(); }
 
-void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, const std::vector<unsigned int>& _vIndex) {
+BspTreeRender* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
 
     std::list<Triangle*> vTris;
     vVertex = _vVertex;
 
     if (_vIndex.size() > 0) {
-
-        // Usa os indices já pre-calculado
-        for (unsigned int indice = 0; indice < _vIndex.size(); indice += 3) {
-            unsigned int pa = _vIndex[indice];
-            unsigned int pb = _vIndex[indice + 1];
-            unsigned int pc = _vIndex[indice + 2];
-
-            // Calcula Normal Face
-            glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
-            glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-            vTris.push_back(new Triangle(pa, pb, pc, normal));
-        }
-
+        triangleFromVertexDataIndex(&_vVertex[0], &_vIndex[0], _vIndex.size(), vTris);
     } else {
-
-        // Calcula os indices na sequencia em que os vertices estão
-        for (unsigned int indice = 0; indice < _vVertex.size(); indice += 3) {
-            unsigned int pa = indice;
-            unsigned int pb = indice + 1;
-            unsigned int pc = indice + 2;
-
-            // Calcula Normal Face
-            glm::vec3 acc = vVertex[pa].normal + vVertex[pb].normal + vVertex[pc].normal;
-            glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-            vTris.push_back(new Triangle(pa, pb, pc, normal));
-        }
+        triangleFromVertexData(&_vVertex[0], _vVertex.size(), vTris);
     }
 
     // create BspTtree leafy
     root = buildLeafy(vTris);
 
     // create vertex buffers
-
     vao->addBuffer(new Core::VertexBuffer(&vVertex[0], vVertex.size(), 3), 0); // FIXME: 0 por comatibilidade
     vao->bind();
 
-    for (VertexNode* pNode : this->vpLeaf) {
-        pNode->initIndexBufferObject(); // create IBO's
-        pNode->debugDados();
+    for (VertexNode* pLeaf : this->vpLeaf) {
+        pLeaf->initAABB(&vVertex[0], vVertex.size()); // initialize AABB's
+        pLeaf->initIndexBufferObject();               // create IBO's
+        pLeaf->debugDados();
     }
 
     vao->unbind();
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
+
+    // BspTreeRender* r = new BspTreeRender(root, this->vpLeaf, this->vVertex);
+    return nullptr;
 }
 
 void BspTree::destroy() {
@@ -385,8 +474,6 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
 
     tree->leafIndex = vpLeaf.size();
     vpLeaf.push_back(pLeaf);
-
-    pLeaf->initAABB(&vVertex[0], vVertex.size()); // initialize AABB's
 
     tree->isSolid = false;
     tree->isLeaf = true;

@@ -41,6 +41,8 @@ class Game : public Chimera::IO::IEvents {
     Chimera::TextureImg* pTex;
 
     Chimera::Frustum frustum;
+
+    Chimera::BspTreeRender* renderz1;
 };
 
 #endif

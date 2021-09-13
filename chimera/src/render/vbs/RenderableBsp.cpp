@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData)
+RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<RenderableIBO*>& vpLeafData, std::vector<VertexData>& vertexData)
     : root(root), totIndex(0) {
 
     this->vpLeaf = std::move(vpLeafData);
@@ -15,7 +15,7 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<VertexNode*>& vpLeaf
     vao->bind();
 
     uint32_t totIndex = 0;
-    for (VertexNode* pLeaf : this->vpLeaf) {
+    for (RenderableIBO* pLeaf : this->vpLeaf) {
         pLeaf->initAABB(&vVertex[0], vVertex.size()); // initialize AABB's
         pLeaf->initIndexBufferObject();               // create IBO's
         pLeaf->debugDados();
@@ -84,7 +84,7 @@ void RenderableBsp::destroy() {
 
     while (!vpLeaf.empty()) {
 
-        VertexNode* pLeaf = vpLeaf.back();
+        RenderableIBO* pLeaf = vpLeaf.back();
         vpLeaf.pop_back();
 
         delete pLeaf;

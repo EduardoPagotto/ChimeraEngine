@@ -3,7 +3,7 @@
 
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/core/buffers/VertexBuffer.hpp"
-#include "chimera/render/vbs/VertexNode.hpp"
+#include "chimera/render/vbs/RenderableIBO.hpp"
 
 namespace Chimera {
 
@@ -18,7 +18,7 @@ class HeightMap {
 
   private:
     Core::VertexArray* vao;
-    std::vector<VertexNode*> vNodes;
+    std::vector<RenderableIBO*> vNodes;
 
     int width;
     int height;

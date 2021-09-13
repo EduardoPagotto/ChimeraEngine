@@ -9,10 +9,10 @@
 
 namespace Chimera {
 
-class VertexNode : public IRenderable {
+class RenderableIBO : public IRenderable {
   public:
-    VertexNode();
-    ~VertexNode();
+    RenderableIBO();
+    ~RenderableIBO();
 
     inline bool empty() { return indexTris.empty(); }
     void addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);

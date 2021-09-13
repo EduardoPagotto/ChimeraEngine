@@ -21,7 +21,7 @@ class BspTree {
 
     BSPTreeNode* root;
     std::vector<Chimera::VertexData> vVertex;
-    std::vector<VertexNode*> vpLeaf;
+    std::vector<RenderableIBO*> vpLeaf;
 };
 } // namespace Chimera
 #endif

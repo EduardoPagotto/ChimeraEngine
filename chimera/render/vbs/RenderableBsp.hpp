@@ -3,7 +3,7 @@
 
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/render/bsp/BSPTreeNode.hpp"
-#include "chimera/render/vbs/VertexNode.hpp"
+#include "chimera/render/vbs/RenderableIBO.hpp"
 #include <deque>
 #include <list>
 #include <vector>
@@ -12,7 +12,7 @@ namespace Chimera {
 
 class RenderableBsp : public IRenderable {
   public:
-    RenderableBsp(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData);
+    RenderableBsp(BSPTreeNode* root, std::vector<RenderableIBO*>& vpLeafData, std::vector<VertexData>& vertexData);
     virtual ~RenderableBsp();
     virtual void inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue);
     virtual void debugDados() {}
@@ -35,7 +35,7 @@ class RenderableBsp : public IRenderable {
     BSPTreeNode* root;
     Core::VertexArray* vao;
     bool logdata;
-    std::vector<VertexNode*> vpLeaf;
+    std::vector<RenderableIBO*> vpLeaf;
     std::vector<VertexData> vVertex;
 
     AABB aabb;

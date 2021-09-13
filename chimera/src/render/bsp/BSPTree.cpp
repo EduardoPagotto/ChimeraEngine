@@ -251,7 +251,7 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
 
 void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTriangle) {
 
-    VertexNode* pLeaf = new VertexNode();
+    RenderableIBO* pLeaf = new RenderableIBO();
 
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();

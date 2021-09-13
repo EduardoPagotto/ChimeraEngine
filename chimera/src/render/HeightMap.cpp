@@ -12,8 +12,8 @@ HeightMap::HeightMap(int _width, int _height, int _squareX, int _squareZ)
 HeightMap::~HeightMap() {
     vao->bind();
     while (vNodes.size() > 0) {
-        std::vector<VertexNode*>::iterator it = vNodes.begin();
-        VertexNode* pNode = (*it);
+        std::vector<RenderableIBO*>::iterator it = vNodes.begin();
+        RenderableIBO* pNode = (*it);
         delete pNode;
         pNode = nullptr;
         vNodes.erase(it);
@@ -54,7 +54,7 @@ void HeightMap::split(std::vector<unsigned int> _vVertexIndex) {
         if (endWidth > totalWidth)
             endWidth = totalWidth;
 
-        VertexNode* pNode = new VertexNode;
+        RenderableIBO* pNode = new RenderableIBO;
 
         uint32_t face, base;
         for (uint32_t h = startHeight; h < endHeight; h++) {   // z
@@ -92,7 +92,7 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
     vao->addBuffer(new Core::VertexBuffer(&_vertexData[0], _vertexData.size(), 3), 0); // FIXME: 0 para compatibilidade
     vao->bind();
 
-    for (VertexNode* pNode : vNodes) {
+    for (RenderableIBO* pNode : vNodes) {
         pNode->initIndexBufferObject();                       // create IBO's
         pNode->initAABB(&_vertexData[0], _vertexData.size()); // initialize AABB's
     }
@@ -103,7 +103,7 @@ void HeightMap::createVertexBuffer(std::vector<VertexData>& _vertexData) {
 void HeightMap::render(Frustum& _frustrun) {
     vao->bind();
     unsigned int tot = 0;
-    for (VertexNode* pNode : vNodes) {
+    for (RenderableIBO* pNode : vNodes) {
         bool teste = pNode->getAABB()->visible(_frustrun);
         if (teste == true) {
             pNode->render();

@@ -14,7 +14,6 @@ class BspTreeRender {
     BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData);
     virtual ~BspTreeRender();
     void render(glm::vec3* eye, Frustum& _frustrun, bool _logData);
-    void renderAABB();
 
   private:
     void destroy();

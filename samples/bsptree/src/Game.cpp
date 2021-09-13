@@ -19,7 +19,7 @@ Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pC
     pTex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png");
 }
 
-Game::~Game() { bspTree.destroy(); }
+Game::~Game() { delete renderz1; }
 
 void Game::joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL) {}
 
@@ -166,9 +166,6 @@ void Game::render() {
     pTex->apply(pShader);
 
     renderz1->render(&vp->position, frustum, debugParser);
-
-    // TO debug only
-    renderz1->renderAABB();
 
     pCanvas->after();
     pCanvas->swapWindow();

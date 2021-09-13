@@ -9,10 +9,6 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
-BspTree::BspTree() { root = nullptr; }
-
-BspTree::~BspTree() { this->destroy(); }
-
 BspTreeRender* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
 
     std::list<Triangle*> vTris;
@@ -27,20 +23,10 @@ BspTreeRender* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::
     // create BspTtree leafy
     root = buildLeafy(vTris);
 
+    vTris.clear();
+
     BspTreeRender* r = new BspTreeRender(root, this->vpLeaf, this->vVertex);
     return r;
-}
-
-void BspTree::destroy() {
-
-    while (!vpLeaf.empty()) {
-
-        VertexNode* pLeaf = vpLeaf.back();
-        vpLeaf.pop_back();
-
-        delete pLeaf;
-        pLeaf = nullptr;
-    }
 }
 
 Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {

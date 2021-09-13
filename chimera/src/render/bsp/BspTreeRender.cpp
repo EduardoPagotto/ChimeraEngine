@@ -30,12 +30,13 @@ void BspTreeRender::drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _fru
     if (tree->isLeaf == false)
         return;
 
-    auto pVn = vpLeaf[tree->leafIndex];
-    if (pVn->getAABB()->visible(_frustrun) == true) {
-        if (logdata == true)
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %d", tree->leafIndex, pVn->getSize());
-
-        pVn->render();
+    auto pLeaf = vpLeaf[tree->leafIndex];
+    if (pLeaf->getAABB()->visible(_frustrun) == true) {
+        pLeaf->render();
+        if (logdata == true) {
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %d", tree->leafIndex, pLeaf->getSize());
+            pLeaf->getAABB()->render();
+        }
     }
 }
 
@@ -75,12 +76,6 @@ void BspTreeRender::render(glm::vec3* eye, Frustum& _frustrun, bool _logData) {
     traverseTree(root, eye, _frustrun);
 
     vao->unbind();
-}
-
-void BspTreeRender::renderAABB() {
-    for (auto pLeaf : this->vpLeaf) {
-        pLeaf->getAABB()->render();
-    }
 }
 
 void BspTreeRender::destroy() {

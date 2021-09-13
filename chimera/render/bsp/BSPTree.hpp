@@ -3,7 +3,7 @@
 
 // Ref: https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
-#include "RenderableBsp.hpp"
+#include "chimera/render/vbs/RenderableBsp.hpp"
 
 namespace Chimera {
 

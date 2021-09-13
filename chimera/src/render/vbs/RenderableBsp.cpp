@@ -1,4 +1,4 @@
-#include "chimera/render/bsp/RenderableBsp.hpp"
+#include "chimera/render/vbs/RenderableBsp.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_BSPTREERENDER_HPP
 #define __CHIMERA_BSPTREERENDER_HPP
 
-#include "BSPTreeNode.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
+#include "chimera/render/bsp/BSPTreeNode.hpp"
 #include "chimera/render/vbs/VertexNode.hpp"
 #include <deque>
 #include <list>

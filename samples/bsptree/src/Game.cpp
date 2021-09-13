@@ -165,10 +165,10 @@ void Game::render() {
     // aplica a textura
     pTex->apply(pShader);
 
-    bspTree.render(&vp->position, frustum, debugParser);
+    renderz1->render(&vp->position, frustum, debugParser);
 
     // TO debug only
-    bspTree.renderAABB();
+    renderz1->renderAABB();
 
     pCanvas->after();
     pCanvas->swapWindow();

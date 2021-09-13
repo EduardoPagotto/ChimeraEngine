@@ -23,8 +23,16 @@ VertexRenderStatic::~VertexRenderStatic() {
     delete ibo;
 }
 
+void VertexRenderStatic::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+    // TODO: colocar validacao do frustum
+    // if (aabb.visible(*frustum) == true) {
+    //     renderQueue->push_back(this);
+    // }
+
+    renderQueue->push_back(this);
+}
+
 void VertexRenderStatic::debugDados() {
-    // glm::vec3 pos = this->aabb.getPosition();
     glm::vec3 size = this->aabb.getSize();
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
 }

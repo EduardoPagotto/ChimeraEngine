@@ -16,9 +16,10 @@ class VertexRenderStatic : public IRenderable {
     virtual void debugDados() override;
     virtual uint32_t getSize() const override { return ibo->getCount(); }
     virtual Shader* getShader() const { return nullptr; };
-    virtual Core::VertexArray* getVao() const { return vao; };
-    virtual Core::IndexBuffer* getIBO() const { return ibo; };
+    virtual Core::VertexArray* getVao() const { return vao; }
+    virtual Core::IndexBuffer* getIBO() const { return ibo; }
     virtual AABB* getAABB() override { return &aabb; }
+    virtual void inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) override;
 
   private:
     AABB aabb;

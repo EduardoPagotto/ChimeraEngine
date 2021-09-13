@@ -165,7 +165,10 @@ void Game::render() {
     // aplica a textura
     pTex->apply(pShader);
 
-    renderz1->render(&vp->position, frustum, debugParser);
+    render3d.begin(&vp->position, &frustum, debugParser);
+    render3d.submit(renderz1);
+    render3d.flush();
+    render3d.end();
 
     pCanvas->after();
     pCanvas->swapWindow();

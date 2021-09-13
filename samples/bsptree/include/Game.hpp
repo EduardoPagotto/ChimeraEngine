@@ -7,6 +7,7 @@
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/render/Texture.hpp"
 #include "chimera/render/bsp/BSPTree.hpp"
+#include "chimera/render/vbs/SimpleRender3d.hpp"
 
 class Game : public Chimera::IO::IEvents {
   public:
@@ -42,6 +43,7 @@ class Game : public Chimera::IO::IEvents {
 
     Chimera::Frustum frustum;
 
+    Chimera::SimpleRender3d render3d;
     Chimera::BspTreeRender* renderz1;
 };
 

@@ -16,9 +16,8 @@ VertexNode::~VertexNode() {
 }
 
 void VertexNode::debugDados() {
-    glm::vec3 pos = this->aabb.getPosition();
+    // glm::vec3 pos = this->aabb.getPosition();
     glm::vec3 size = this->aabb.getSize();
-
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
 }
 
@@ -41,5 +40,16 @@ void VertexNode::render() {
     ibo->bind();
     glDrawElements(GL_TRIANGLES, ibo->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
     ibo->unbind();
+}
+
+void VertexNode::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+    if (aabb.visible(*frustum) == true) {
+        renderQueue->push_back(this);
+
+        if (logData == true) {
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBO: %d Faces: %d", this->ibo->getBufferID(), this->getSize());
+            aabb.render();
+        }
+    }
 }
 } // namespace Chimera

@@ -4,23 +4,30 @@
 #include "BSPTreeNode.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/render/vbs/VertexNode.hpp"
+#include <deque>
 #include <list>
 #include <vector>
 
 namespace Chimera {
 
-class BspTreeRender {
+class BspTreeRender : public IRenderable {
   public:
     BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData);
     virtual ~BspTreeRender();
-    void render(glm::vec3* eye, Frustum& _frustrun, bool _logData);
+    virtual void inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue);
+    virtual void debugDados() {}
+    virtual uint32_t getSize() const { return totIndex; }
+    virtual Shader* getShader() const { return nullptr; }
+    virtual Core::VertexArray* getVao() const { return vao; }
+    virtual Core::IndexBuffer* getIBO() const { return 0; }
+    virtual AABB* getAABB() { return &aabb; }
 
   private:
     void destroy();
     void collapse(BSPTreeNode* tree);
 
-    void traverseTree(BSPTreeNode* tree, glm::vec3* pos, Frustum& _frustrun);
-    void drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _frustrun);
+    void traverseTree(BSPTreeNode* tree);
+    void drawPolygon(BSPTreeNode* tree, bool frontSide);
 
     // TODO: Testar!!!!!!
     bool lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree);
@@ -30,6 +37,12 @@ class BspTreeRender {
     bool logdata;
     std::vector<VertexNode*> vpLeaf;
     std::vector<VertexData> vVertex;
+
+    AABB aabb;
+    Frustum* frustum;
+    glm::vec3* eye;
+    uint32_t totIndex;
+    std::deque<IRenderable*>* renderQueue;
 };
 
 } // namespace Chimera

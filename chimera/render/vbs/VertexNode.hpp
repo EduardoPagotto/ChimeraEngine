@@ -26,6 +26,7 @@ class VertexNode : public IRenderable {
     virtual Core::VertexArray* getVao() const { return nullptr; };
     virtual Core::IndexBuffer* getIBO() const { return ibo; };
     virtual AABB* getAABB() override { return &aabb; }
+    virtual void inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) override;
 
   private:
     AABB aabb;

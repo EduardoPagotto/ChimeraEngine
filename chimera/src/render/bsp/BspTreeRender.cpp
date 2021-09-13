@@ -3,7 +3,9 @@
 
 namespace Chimera {
 
-BspTreeRender::BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData) : root(root) {
+BspTreeRender::BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeafData, std::vector<VertexData>& vertexData)
+    : root(root), totIndex(0) {
+
     this->vpLeaf = std::move(vpLeafData);
     this->vVertex = std::move(vertexData);
 
@@ -12,35 +14,34 @@ BspTreeRender::BspTreeRender(BSPTreeNode* root, std::vector<VertexNode*>& vpLeaf
     vao->addBuffer(new Core::VertexBuffer(&this->vVertex[0], this->vVertex.size(), 3), 0); // FIXME: 0 por comatibilidade
     vao->bind();
 
+    uint32_t totIndex = 0;
     for (VertexNode* pLeaf : this->vpLeaf) {
         pLeaf->initAABB(&vVertex[0], vVertex.size()); // initialize AABB's
         pLeaf->initIndexBufferObject();               // create IBO's
         pLeaf->debugDados();
+        totIndex += pLeaf->getSize();
     }
 
     vao->unbind();
 
+    glm::vec3 min, max, size;
+    vertexDataMinMaxSize(&vVertex[0], vVertex.size(), min, max, size);
+    aabb.setBoundary(min, max);
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
 }
 
 BspTreeRender::~BspTreeRender() { this->destroy(); }
 
-void BspTreeRender::drawPolygon(BSPTreeNode* tree, bool frontSide, Frustum& _frustrun) {
+void BspTreeRender::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
     if (tree->isLeaf == false)
         return;
 
     auto pLeaf = vpLeaf[tree->leafIndex];
-    if (pLeaf->getAABB()->visible(_frustrun) == true) {
-        pLeaf->render();
-        if (logdata == true) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Leaf: %d Faces: %d", tree->leafIndex, pLeaf->getSize());
-            pLeaf->getAABB()->render();
-        }
-    }
+    pLeaf->inject(eye, frustum, logdata, renderQueue);
 }
 
-void BspTreeRender::traverseTree(BSPTreeNode* tree, glm::vec3* pos, Frustum& _frustrun) {
+void BspTreeRender::traverseTree(BSPTreeNode* tree) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
@@ -48,34 +49,35 @@ void BspTreeRender::traverseTree(BSPTreeNode* tree, glm::vec3* pos, Frustum& _fr
     if (tree->isSolid == true)
         return;
 
-    SIDE result = tree->hyperPlane.classifyPoint(pos);
+    SIDE result = tree->hyperPlane.classifyPoint(eye);
     switch (result) {
         case SIDE::CP_FRONT:
-            traverseTree(tree->back, pos, _frustrun);
-            drawPolygon(tree, true, _frustrun);
-            traverseTree(tree->front, pos, _frustrun);
+            traverseTree(tree->back);
+            drawPolygon(tree, true);
+            traverseTree(tree->front);
             break;
         case SIDE::CP_BACK:
-            traverseTree(tree->front, pos, _frustrun);
-            drawPolygon(tree, false, _frustrun); // Elimina o render do back-face
-            traverseTree(tree->back, pos, _frustrun);
+            traverseTree(tree->front);
+            drawPolygon(tree, false); // Elimina o render do back-face
+            traverseTree(tree->back);
             break;
         default: // SIDE::CP_ONPLANE
             // the eye point is on the partition hyperPlane...
-            traverseTree(tree->front, pos, _frustrun);
-            traverseTree(tree->back, pos, _frustrun);
+            traverseTree(tree->front);
+            traverseTree(tree->back);
             break;
     }
 }
 
-void BspTreeRender::render(glm::vec3* eye, Frustum& _frustrun, bool _logData) {
+void BspTreeRender::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+    this->eye = eye;
+    this->frustum = frustum;
+    this->renderQueue = renderQueue;
+    this->logdata = logData;
 
-    vao->bind();
+    renderQueue->push_back(this);
 
-    logdata = _logData;
-    traverseTree(root, eye, _frustrun);
-
-    vao->unbind();
+    traverseTree(root);
 }
 
 void BspTreeRender::destroy() {

@@ -1,5 +1,5 @@
+#include "chimera/render/vbs/RenderableIndex.hpp"
 #include "chimera/OpenGLDefs.hpp"
-#include "chimera/render/RenderableIndex.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

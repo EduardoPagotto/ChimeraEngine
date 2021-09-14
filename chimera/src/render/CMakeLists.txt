@@ -20,11 +20,11 @@ set (RenderSource 	Triangle.cpp
 					vbs/RenderableDynamic.cpp 
 					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
+					vbs/RenderableIndex.cpp
 					Light.cpp
 					Material.cpp
 					Texture.cpp
 					LoadObj.cpp
-					RenderableIndex.cpp
 					LoadHeightMap.cpp
 					maze/Cube.cpp 
 					maze/Maze.cpp)

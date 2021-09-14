@@ -18,7 +18,6 @@ class RenderableIBO : public IRenderable {
     void addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);
     void initIndexBufferObject();
     void initAABB(VertexData* vertexData, const uint32_t& vertexSize);
-    void render();
 
     virtual void debugDados() override;
     virtual uint32_t getSize() const override { return indexTris.size(); }

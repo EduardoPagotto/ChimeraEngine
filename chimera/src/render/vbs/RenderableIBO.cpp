@@ -1,6 +1,6 @@
 
-#include "chimera/OpenGLDefs.hpp"
 #include "chimera/render/vbs/RenderableIBO.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 
@@ -34,13 +34,6 @@ void RenderableIBO::addFace(const uint32_t& _pa, const uint32_t& _pb, const uint
 }
 
 void RenderableIBO::initIndexBufferObject() { ibo = new Core::IndexBuffer(&indexTris[0], indexTris.size()); }
-
-void RenderableIBO::render() {
-    // ibo->render();
-    ibo->bind();
-    glDrawElements(GL_TRIANGLES, ibo->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-    ibo->unbind();
-}
 
 void RenderableIBO::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
     if (aabb.visible(*frustum) == true) {

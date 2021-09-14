@@ -1,15 +1,15 @@
-#include "chimera/render/vbs/VertexDynamic.hpp"
+#include "chimera/render/vbs/RenderableDynamic.hpp"
 
 namespace Chimera {
 
-VertexRenderDynamic::VertexRenderDynamic(const uint32_t& max) { this->vbo = new Core::VertexBuffer(nullptr, max, 3); }
+RenderableDynamic::RenderableDynamic(const uint32_t& max) { this->vbo = new Core::VertexBuffer(nullptr, max, 3); }
 
-VertexRenderDynamic::~VertexRenderDynamic() {
+RenderableDynamic::~RenderableDynamic() {
     delete vbo;
     vbo = nullptr;
 }
 
-void VertexRenderDynamic::render(VertexData* pVertice, const uint32_t& size) {
+void RenderableDynamic::render(VertexData* pVertice, const uint32_t& size) {
 
     vao.bind();
     vbo->bind();

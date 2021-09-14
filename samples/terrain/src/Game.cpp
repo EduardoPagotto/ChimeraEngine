@@ -95,24 +95,16 @@ void Game::start() {
 
     Chimera::MeshData m;
 
-    Chimera::LoadHeightMap loader;
+    Chimera::LoadHeightMap loader(32, 32);
     loader.getMesh("./data/terrain/terrain3.jpg", m, glm::vec3(1000.0, 200.0, 1000.0));
     // loader.getMesh("./data/terrain/heightmap_16x16.png", m, glm::vec3(100.0, 30.0, 100.0));
     // loader.getMesh("./data/terrain/heightmap_4x4.png", m, glm::vec3(1000.0, 10.0, 1000.0));
+    loader.split(m.vertexIndex);
 
-    pHeightMap = new Chimera::HeightMap(loader.getWidth(), loader.getHeight(), 32, 32);
-    pHeightMap->split(m.vertexIndex);
-
-    // TODO: aqui ele usa o index completo, mudar para o node
     std::vector<Chimera::VertexData> vertexDataIn;
     vertexDataFromMesh(&m, vertexDataIn);
 
-    // so teste
-    // std::vector<Chimera::Triangle> vecTriangle;
-    // std::vector<unsigned int> index;
-    // m.toTriangle(vecTriangle, index);
-
-    pHeightMap->createVertexBuffer(vertexDataIn);
+    pHeightMap = new Chimera::HeightMap(loader.vNodes, vertexDataIn);
 }
 
 void Game::stop() {}
@@ -176,7 +168,10 @@ void Game::render() {
     pMaterial->apply(pShader);
 
     // NEW
-    pHeightMap->render(frustum);
+    render3d.begin(&vp->position, &frustum, debugParser);
+    render3d.submit(pHeightMap);
+    render3d.flush();
+    render3d.end();
 
     pCanvas->after();
     pCanvas->swapWindow();

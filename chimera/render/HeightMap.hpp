@@ -7,23 +7,25 @@
 
 namespace Chimera {
 
-class HeightMap {
+class HeightMap : public IRenderable {
   public:
-    HeightMap(int _width, int _height, int _squareX, int _squareZ);
+    HeightMap(std::vector<RenderableIBO*>& vpLeafData, std::vector<VertexData>& vertexData);
     ~HeightMap();
 
-    void split(std::vector<unsigned int> _vVertexIndex);
-    void createVertexBuffer(std::vector<VertexData>& _vertexData);
-    void render(Frustum& _frustrun);
+    virtual void inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue);
+    virtual void debugDados() {}
+    virtual uint32_t getSize() const { return totIndex; }
+    virtual Shader* getShader() const { return nullptr; }
+    virtual Core::VertexArray* getVao() const { return vao; }
+    virtual Core::IndexBuffer* getIBO() const { return 0; }
+    virtual AABB* getAABB() { return &aabb; }
 
   private:
     Core::VertexArray* vao;
-    std::vector<RenderableIBO*> vNodes;
-
-    int width;
-    int height;
-    int squareX;
-    int squareZ;
+    std::vector<RenderableIBO*> vpLeaf;
+    std::vector<VertexData> vVertex;
+    AABB aabb;
+    uint32_t totIndex;
 };
 
 } // namespace Chimera

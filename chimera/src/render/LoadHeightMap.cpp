@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-LoadHeightMap::LoadHeightMap() : pImage(nullptr) { clean(); }
+LoadHeightMap::LoadHeightMap(int _squareX, int _squareZ) : pImage(nullptr), squareX(_squareX), squareZ(_squareZ) { clean(); }
 
 LoadHeightMap::~LoadHeightMap() { clean(); }
 
@@ -160,6 +160,73 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const
     _mesh.singleIndex = true;
     vertexDataMeshDataDebug(&_mesh, false);
 
+    this->width = pImage->w;
+    this->height = pImage->h;
+
     return true;
 }
+
+void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
+
+    bool done = false;
+    uint32_t startHeight = 0;
+    uint32_t startWidth = 0;
+    uint32_t contador = 0;
+    uint32_t totalHeight = (height - 1) * 2;
+    uint32_t totalWidth = (width - 1) * 2;
+    uint32_t squareHeight = squareZ;
+    uint32_t squareWidth = squareX * 2;
+    uint32_t totfaces = _vVertexIndex.size() / 3;
+    uint32_t thresholdWidht = totalHeight * squareZ;
+
+    while (!done) {
+
+        uint32_t endHeight = startHeight + squareHeight;
+        uint32_t endWidth = startWidth + squareWidth;
+        uint32_t testeA = startHeight * totalHeight + startWidth;
+
+        if (testeA >= totfaces) {
+            done = true;
+            continue;
+        }
+
+        if (endHeight > (height - 1))
+            endHeight = (height - 1);
+
+        if (endWidth > totalWidth)
+            endWidth = totalWidth;
+
+        RenderableIBO* pNode = new RenderableIBO;
+
+        uint32_t face, base;
+        for (uint32_t h = startHeight; h < endHeight; h++) {   // z
+            for (uint32_t w = startWidth; w < endWidth; w++) { // x
+                face = ((h * totalHeight) + w);
+                base = face * 3;
+                pNode->addFace(_vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
+                contador++;
+            }
+        }
+
+        if (contador >= thresholdWidht) {
+            startHeight = endHeight;
+            contador = 0;
+            startWidth = 0;
+        } else {
+            startWidth = endWidth;
+        }
+
+        if (pNode->empty() == true) {
+            delete pNode;
+            pNode = nullptr;
+            done = true;
+            // SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "shit!!!");
+            continue;
+        }
+
+        vNodes.push_back(pNode);
+        // pNode->debugDados();
+    }
+}
+
 } // namespace Chimera

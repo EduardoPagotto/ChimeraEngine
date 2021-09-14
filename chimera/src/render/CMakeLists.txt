@@ -17,7 +17,7 @@ set (RenderSource 	Triangle.cpp
 					bsp/BSPTree.cpp
 					vbs/RenderableBsp.cpp
 					vbs/RenderableIBO.cpp
-					vbs/VertexDynamic.cpp 
+					vbs/RenderableDynamic.cpp 
 					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
 					Light.cpp

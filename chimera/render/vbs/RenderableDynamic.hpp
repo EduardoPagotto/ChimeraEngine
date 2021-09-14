@@ -1,15 +1,15 @@
-#ifndef __CHIMERA_VERTEX_DYNAMIC_HPP
-#define __CHIMERA_VERTEX_DYNAMIC_HPP
+#ifndef __CHIMERA_RENDERABLE_DYNAMIC_HPP
+#define __CHIMERA_RENDERABLE_DYNAMIC_HPP
 
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/core/buffers/VertexBuffer.hpp"
 
 namespace Chimera {
 
-class VertexRenderDynamic {
+class RenderableDynamic {
   public:
-    VertexRenderDynamic(const uint32_t& max);
-    virtual ~VertexRenderDynamic();
+    RenderableDynamic(const uint32_t& max);
+    virtual ~RenderableDynamic();
     void render(VertexData* pVertice, const uint32_t& size);
 
   private:

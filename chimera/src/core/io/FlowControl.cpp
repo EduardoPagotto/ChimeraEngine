@@ -1,5 +1,6 @@
 #include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/io/utils.hpp"
 
 namespace Chimera::IO {
 
@@ -29,8 +30,8 @@ void FlowControl::close(void) {
 
 void FlowControl::countFrame() {
     if (timerFPS.stepCount() == true) {
-        unsigned int fps = timerFPS.getCountStep();
-        pGameClientEvents->newFPS(fps);
+        fps = timerFPS.getCountStep();
+        utilSendEvent(EVENT_NEW_FPS, (void*)&fps, nullptr);
     }
 }
 

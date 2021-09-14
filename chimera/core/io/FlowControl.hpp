@@ -23,6 +23,7 @@ class FlowControl {
     JoystickManager joystickManager;
     MouseDevice mouse;
     Timer timerFPS;
+    uint32_t fps;
 };
 } // namespace Chimera::IO
 

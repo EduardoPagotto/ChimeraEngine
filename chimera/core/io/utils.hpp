@@ -6,9 +6,12 @@
 
 namespace Chimera::IO {
 
-//#define TOGGLE_FULL_SCREEN 0x0001
-const int32_t TOGGLE_FULL_SCREEN = 0x0001;
-
+const int32_t EVENT_TOGGLE_FULL_SCREEN = 0x0001; // FullScreem
+const int32_t EVENT_NEW_FPS = 0x2001;            // OFF_COLLIDE
+const int32_t EVENT_COLLIDE_IS_ALLOW = 0x1000;   // IS_ALLOW_COLLIDE
+const int32_t EVENT_COLLIDE_START = 0x1001;      // START_COLLIDE
+const int32_t EVENT_COLLIDE_ON = 0x1002;         // ON_COLLIDE
+const int32_t EVENT_COLLIDE_OFF = 0x1003;        // OFF_COLLIDE
 /**
  * Enum KindOp
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>

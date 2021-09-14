@@ -21,7 +21,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             }
             break;
         case SDLK_F10:
-            Chimera::IO::utilSendEvent(Chimera::IO::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         default:
             break;
@@ -37,7 +37,7 @@ void Game::stop() {}
 void Game::newFPS(const unsigned int& fps) {}
 
 void Game::userEvent(const SDL_Event& _event) {
-    if (_event.user.code == Chimera::IO::TOGGLE_FULL_SCREEN) {
+    if (_event.user.code == Chimera::IO::EVENT_TOGGLE_FULL_SCREEN) {
         pVideo->toggleFullScreen();
     }
 }

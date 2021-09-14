@@ -104,7 +104,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             pHUD->setOn(!pHUD->isOn());
             break;
         case SDLK_F10:
-            Chimera::IO::utilSendEvent(Chimera::IO::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_UP:
             pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
@@ -207,24 +207,30 @@ void Game::userEvent(const SDL_Event& _event) {
     Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
 
     switch (_event.user.code) {
-        case Chimera::COLLIDE_START: {
+        case Chimera::IO::EVENT_COLLIDE_START: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::COLLIDE_ON: {
+        case Chimera::IO::EVENT_COLLIDE_ON: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::COLLIDE_OFF: {
+        case Chimera::IO::EVENT_COLLIDE_OFF: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::IO::TOGGLE_FULL_SCREEN:
+        case Chimera::IO::EVENT_TOGGLE_FULL_SCREEN:
             pCanvas->toggleFullScreen();
             break;
+        case Chimera::IO::EVENT_NEW_FPS: {
+            uint32_t* fps = (uint32_t*)_event.user.data1;
+            glm::vec3 val1 = pCorpoRigido->getPosition();
+            sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
+            textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
+        } break;
         default:
             break;
     }

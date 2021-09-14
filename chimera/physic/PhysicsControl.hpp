@@ -13,11 +13,6 @@
 
 namespace Chimera {
 
-const int32_t COLLIDE_IS_ALLOW = 0x1000; // IS_ALLOW_COLLIDE
-const int32_t COLLIDE_START = 0x1001;    // START_COLLIDE
-const int32_t COLLIDE_ON = 0x1002;       // ON_COLLIDE
-const int32_t COLLIDE_OFF = 0x1003;      // OFF_COLLIDE
-
 class PhysicsControl {
   public:
     PhysicsControl(void);

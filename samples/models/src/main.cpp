@@ -99,8 +99,7 @@ int main(int argn, char** argv) {
 
         // Controle de fluxo do programa
         Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
-        pControle->open();
-        pControle->gameLoop();
+        pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");
         delete pControle;

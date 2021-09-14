@@ -11,7 +11,9 @@ void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB) {
     event.user.code = user_event;
     event.user.data1 = _paramA;
     event.user.data2 = _paramB;
-    SDL_PushEvent(&event);
+    if (SDL_PushEvent(&event) == -1) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical PushEvent fail: %s", SDL_GetError());
+    }
 }
 
 std::string utilReadFile(const char* file_path) {

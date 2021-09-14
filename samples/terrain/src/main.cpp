@@ -10,8 +10,7 @@ int main(int argn, char** argv) {
 
         Game* game = new Game();
         Chimera::IO::FlowControl* pControl = new Chimera::IO::FlowControl(game);
-        pControl->open();
-        pControl->gameLoop();
+        pControl->run();
 
         delete pControl;
         delete game;

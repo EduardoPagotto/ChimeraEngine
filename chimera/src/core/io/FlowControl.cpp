@@ -4,49 +4,43 @@
 
 namespace Chimera::IO {
 
-FlowControl::FlowControl(IEvents* _pGameClientEvents) : pGameClientEvents(_pGameClientEvents) {
+FlowControl::FlowControl(IEvents* _pGameClientEvents) : pGameClientEvents(_pGameClientEvents), pause(true) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 }
 
 FlowControl::~FlowControl() {}
 
-void FlowControl::open() {
-    joystickManager.Initialize();
-    joystickManager.FindJoysticks();
-    pGameClientEvents->start();
-}
+bool FlowControl::changeStatusFlow(SDL_Event* pEventSDL) {
 
-void FlowControl::close(void) {
-
-    joystickManager.ReleaseJoysticks();
-
-    SDL_Event l_eventQuit;
-    l_eventQuit.type = SDL_QUIT;
-    if (SDL_PushEvent(&l_eventQuit) == -1) {
-        throw Exception(std::string(SDL_GetError()));
+    switch (pEventSDL->user.code) {
+        case Chimera::IO::EVENT_FLOW_PAUSE: {
+            pause = true;
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
+            return false;
+        } break;
+        case Chimera::IO::EVENT_FLOW_RESUME: {
+            pause = false;
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
+            return false;
+        } break;
+        case Chimera::IO::EVENT_FLOW_STOP: {
+            SDL_Event l_eventQuit;
+            l_eventQuit.type = SDL_QUIT;
+            if (SDL_PushEvent(&l_eventQuit) == -1) {
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical SDL_QUIT PushEvent fail: %s", SDL_GetError());
+            }
+        } break;
+        default:
+            break;
     }
+
+    return true;
 }
 
-void FlowControl::countFrame() {
-    if (timerFPS.stepCount() == true) {
-        fps = timerFPS.getCountStep();
-        utilSendEvent(EVENT_NEW_FPS, (void*)&fps, nullptr);
-    }
-}
-
-void FlowControl::processaGame() {
-
-    try {
-        countFrame();
-        pGameClientEvents->render();
-    } catch (...) { SDL_Quit(); }
-}
-
-void FlowControl::gameLoop(void) {
+void FlowControl::run(void) {
     SDL_Event l_eventSDL;
     bool l_quit = false;
-    bool l_isActive = false;
     unsigned int frameTime;
     unsigned int timeElapsed;
     unsigned int tot_delay;
@@ -55,15 +49,21 @@ void FlowControl::gameLoop(void) {
     unsigned int fpsMin = 60;
     unsigned int minimumFrameTime = 1000 / fpsMin;
 
+    // open devices
+    joystickManager.Initialize();
+    joystickManager.FindJoysticks();
+    // pGameClientEvents->start();
+    utilSendEvent(EVENT_FLOW_START, nullptr, nullptr);
+
     while (!l_quit) {
 
         frameTime = SDL_GetTicks();
-
         while (SDL_PollEvent(&l_eventSDL)) {
 
             switch (l_eventSDL.type) {
                 case SDL_USEREVENT:
-                    pGameClientEvents->userEvent(l_eventSDL);
+                    if (changeStatusFlow(&l_eventSDL))
+                        pGameClientEvents->userEvent(l_eventSDL);
                     break;
                 case SDL_KEYDOWN:
                     pGameClientEvents->keboardEvent(l_eventSDL.key.keysym.sym);
@@ -76,7 +76,7 @@ void FlowControl::gameLoop(void) {
                     break;
                 case SDL_QUIT:
                     l_quit = true;
-                    pGameClientEvents->stop();
+                    // pGameClientEvents->stop();
                     break;
                 case SDL_WINDOWEVENT:
                     pGameClientEvents->windowEvent(l_eventSDL.window);
@@ -105,11 +105,18 @@ void FlowControl::gameLoop(void) {
                     break;
             }
         }
-
-        if (pGameClientEvents->paused() == false)
-            processaGame(); // Se nao houver foco na tela pule o render
-
-        // inicio contadores
+        // update game
+        if (!pause) {
+            try {
+                pGameClientEvents->update();
+            } catch (...) { SDL_Quit(); }
+        }
+        // count frame and FPS
+        if (timerFPS.stepCount() == true) {
+            fps = timerFPS.getCountStep();
+            utilSendEvent(EVENT_NEW_FPS, (void*)&fps, nullptr);
+        }
+        // counters temps
         deltaTime = frameTime - lastFrameTime;
         lastFrameTime = frameTime;
 
@@ -122,5 +129,7 @@ void FlowControl::gameLoop(void) {
             // SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "DeltaTime: %d TimeElapsed: %d", deltaTime, timeElapsed);
         }
     }
+    // Release devices
+    joystickManager.ReleaseJoysticks();
 }
 } // namespace Chimera::IO

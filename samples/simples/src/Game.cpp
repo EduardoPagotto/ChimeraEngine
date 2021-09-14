@@ -5,7 +5,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
-    isPaused = false;
     debug_init = 0;
     projection = glm::mat4(1.0f);
     view = glm::mat4(1.0f);
@@ -20,11 +19,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
 
     switch (tecla) {
         case SDLK_ESCAPE:
-            SDL_Event l_eventQuit;
-            l_eventQuit.type = SDL_QUIT;
-            if (SDL_PushEvent(&l_eventQuit) == -1) {
-                throw Chimera::Exception(std::string(SDL_GetError()));
-            }
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_STOP, nullptr, nullptr);
             break;
         case SDLK_1:
             debug_init = 1;
@@ -103,33 +98,35 @@ void Game::start() {
     this->pVertexRenderStatic = new Chimera::RenderableStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
 }
 
-void Game::stop() {}
-
-void Game::newFPS(const unsigned int& fps) {}
-
 void Game::userEvent(const SDL_Event& _event) {
-    if (_event.user.code == Chimera::IO::EVENT_TOGGLE_FULL_SCREEN) {
-        pCanvas->toggleFullScreen();
+    switch (_event.user.code) {
+        case Chimera::IO::EVENT_TOGGLE_FULL_SCREEN:
+            pCanvas->toggleFullScreen();
+            break;
+        case Chimera::IO::EVENT_FLOW_START:
+            this->start();
+        default:
+            break;
     }
 }
 
 void Game::windowEvent(const SDL_WindowEvent& _event) {
     switch (_event.event) {
         case SDL_WINDOWEVENT_ENTER:
-            isPaused = false;
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
             break;
         case SDL_WINDOWEVENT_LEAVE:
-            isPaused = true;
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
             pCanvas->reshape(_event.data1, _event.data2);
             break;
+        default:
+            break;
     }
 }
 
-bool Game::paused() { return isPaused; }
-
-void Game::render() {
+void Game::update() {
     pCanvas->before();
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();

@@ -9,7 +9,6 @@
 Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld)
     : pCanvas(_pCanvas), pRoot(_pRoot), physicWorld(_physicWorld) {
 
-    isPaused = false;
     pCorpoRigido = nullptr;
     pEmissor = nullptr;
     pOrbitalCam = nullptr;
@@ -94,11 +93,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
 
     switch (tecla) {
         case SDLK_ESCAPE:
-            SDL_Event l_eventQuit;
-            l_eventQuit.type = SDL_QUIT;
-            if (SDL_PushEvent(&l_eventQuit) == -1) {
-                throw Chimera::Exception(std::string(SDL_GetError()));
-            }
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_STOP, nullptr, nullptr);
             break;
         case SDLK_F1:
             pHUD->setOn(!pHUD->isOn());
@@ -173,16 +168,7 @@ void Game::start() {
     }
 }
 
-void Game::stop() {}
-
-void Game::newFPS(const unsigned int& fps) {
-
-    glm::vec3 val1 = pCorpoRigido->getPosition();
-    sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
-    textoFPS = "fps: " + std::to_string(fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
-}
-
-void Game::render() {
+void Game::update() {
 
     physicWorld->stepSim();
     physicWorld->checkCollisions();
@@ -231,19 +217,20 @@ void Game::userEvent(const SDL_Event& _event) {
             sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
             textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
         } break;
+        case Chimera::IO::EVENT_FLOW_START:
+            this->start();
         default:
             break;
     }
 }
 
 void Game::windowEvent(const SDL_WindowEvent& _event) {
-
     switch (_event.event) {
         case SDL_WINDOWEVENT_ENTER:
-            isPaused = false;
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
             break;
         case SDL_WINDOWEVENT_LEAVE:
-            isPaused = true;
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
             pCanvas->reshape(_event.data1, _event.data2);
@@ -252,5 +239,3 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
             break;
     }
 }
-
-bool Game::paused() { return isPaused; }

@@ -29,22 +29,18 @@ class Game : public Chimera::IO::IEvents {
     virtual ~Game();
 
     virtual void start();
-    virtual void stop();
-    virtual void render();
+
+    virtual void update();
     virtual void keboardEvent(SDL_Keycode tecla);
     virtual void mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL);
     virtual void joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL);
-    virtual void newFPS(const unsigned int& fps);
     virtual void windowEvent(const SDL_WindowEvent& _event);
     virtual void userEvent(const SDL_Event& _event);
-    virtual bool paused();
 
     Chimera::VisitorRender renderV;
 
   private:
     void updatePos();
-    bool isPaused;
-
     std::string sPosicaoObj;
     std::string textoFPS;
 

@@ -11,19 +11,17 @@ class FlowControl {
   public:
     FlowControl(IEvents* _pGameClientEvents);
     virtual ~FlowControl();
-    virtual void open();
-    virtual void close();
-    void gameLoop();
+    void run();
 
   private:
-    virtual void processaGame();
-    void countFrame();
+    bool changeStatusFlow(SDL_Event* pEventSDL);
 
     IEvents* pGameClientEvents;
     JoystickManager joystickManager;
     MouseDevice mouse;
     Timer timerFPS;
     uint32_t fps;
+    bool pause;
 };
 } // namespace Chimera::IO
 

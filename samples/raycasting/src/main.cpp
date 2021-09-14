@@ -16,8 +16,7 @@ int main(int argn, char** argv) {
         Game* game = new Game(video);
 
         Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
-        pControle->open();
-        pControle->gameLoop();
+        pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");
 

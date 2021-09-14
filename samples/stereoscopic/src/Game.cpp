@@ -7,7 +7,7 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot), isPaused(false) {}
+Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot) {}
 
 Game::~Game() {}
 
@@ -48,11 +48,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
 
     switch (tecla) {
         case SDLK_ESCAPE:
-            SDL_Event l_eventQuit;
-            l_eventQuit.type = SDL_QUIT;
-            if (SDL_PushEvent(&l_eventQuit) == -1) {
-                throw Chimera::Exception(std::string(SDL_GetError()));
-            }
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_STOP, nullptr, nullptr);
             break;
         case SDLK_a:
             pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::LEFT, 10);
@@ -98,23 +94,25 @@ void Game::start() {
     renderV.pVideo = pCanvas;
 }
 
-void Game::stop() {}
-
-void Game::newFPS(const unsigned int& fps) {}
-
 void Game::userEvent(const SDL_Event& _event) {
-    if (_event.user.code == Chimera::IO::EVENT_TOGGLE_FULL_SCREEN) {
-        pCanvas->toggleFullScreen();
+    switch (_event.user.code) {
+        case Chimera::IO::EVENT_TOGGLE_FULL_SCREEN:
+            pCanvas->toggleFullScreen();
+            break;
+        case Chimera::IO::EVENT_FLOW_START:
+            this->start();
+        default:
+            break;
     }
 }
 
 void Game::windowEvent(const SDL_WindowEvent& _event) {
     switch (_event.event) {
         case SDL_WINDOWEVENT_ENTER:
-            isPaused = false;
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
             break;
         case SDL_WINDOWEVENT_LEAVE:
-            isPaused = true;
+            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
             pCanvas->reshape(_event.data1, _event.data2);
@@ -124,9 +122,7 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
     }
 }
 
-bool Game::paused() { return isPaused; }
-
-void Game::render() {
+void Game::update() {
     for (int eye = 0; eye < pCanvas->getTotEyes(); eye++) {
 
         pCanvas->before(eye);

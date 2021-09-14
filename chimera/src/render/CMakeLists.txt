@@ -24,7 +24,7 @@ set (RenderSource 	Triangle.cpp
 					Material.cpp
 					Texture.cpp
 					LoadObj.cpp
-					HeightMap.cpp
+					RenderableIndex.cpp
 					LoadHeightMap.cpp
 					maze/Cube.cpp 
 					maze/Maze.cpp)

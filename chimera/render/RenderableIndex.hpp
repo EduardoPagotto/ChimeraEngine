@@ -7,10 +7,10 @@
 
 namespace Chimera {
 
-class HeightMap : public IRenderable {
+class RenderableIndex : public IRenderable {
   public:
-    HeightMap(std::vector<RenderableIBO*>& vpLeafData, std::vector<VertexData>& vertexData);
-    ~HeightMap();
+    RenderableIndex(std::vector<RenderableIBO*>& vpLeafData, std::vector<VertexData>& vertexData);
+    ~RenderableIndex();
 
     virtual void inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue);
     virtual void debugDados() {}

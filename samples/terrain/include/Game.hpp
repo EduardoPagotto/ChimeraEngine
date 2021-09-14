@@ -5,9 +5,9 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/core/io/IEvents.hpp"
-#include "chimera/render/HeightMap.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
+#include "chimera/render/RenderableIndex.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
 class Game : public Chimera::IO::IEvents {
@@ -39,7 +39,7 @@ class Game : public Chimera::IO::IEvents {
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;
-    Chimera::HeightMap* pHeightMap;
+    Chimera::RenderableIndex* pHeightMap;
     Chimera::SimpleRender3d render3d;
     Chimera::Frustum frustum;
 };

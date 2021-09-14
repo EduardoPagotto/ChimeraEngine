@@ -1,10 +1,10 @@
-#include "chimera/render/HeightMap.hpp"
 #include "chimera/OpenGLDefs.hpp"
+#include "chimera/render/RenderableIndex.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-HeightMap::HeightMap(std::vector<RenderableIBO*>& vpLeafData, std::vector<VertexData>& vertexData) : totIndex(0) {
+RenderableIndex::RenderableIndex(std::vector<RenderableIBO*>& vpLeafData, std::vector<VertexData>& vertexData) : totIndex(0) {
 
     this->vpLeaf = std::move(vpLeafData);
     this->vVertex = std::move(vertexData);
@@ -29,7 +29,7 @@ HeightMap::HeightMap(std::vector<RenderableIBO*>& vpLeafData, std::vector<Vertex
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
 }
 
-HeightMap::~HeightMap() {
+RenderableIndex::~RenderableIndex() {
     vao->bind();
     // TODO: remover tudo
     // while (vVertex.size() > 0) {
@@ -45,7 +45,7 @@ HeightMap::~HeightMap() {
     vao = nullptr;
 }
 
-void HeightMap::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+void RenderableIndex::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
     renderQueue->push_back(this);
 
     unsigned int tot = 0;

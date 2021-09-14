@@ -104,7 +104,7 @@ void Game::start() {
     std::vector<Chimera::VertexData> vertexDataIn;
     vertexDataFromMesh(&m, vertexDataIn);
 
-    pHeightMap = new Chimera::HeightMap(loader.vNodes, vertexDataIn);
+    pHeightMap = new Chimera::RenderableIndex(loader.vNodes, vertexDataIn);
 }
 
 void Game::stop() {}

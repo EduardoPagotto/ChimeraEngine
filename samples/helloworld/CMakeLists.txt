@@ -14,17 +14,14 @@ set (LibsHelloWorld ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				  ${SDL2_IBRARIES}
 				  -lSDL2
 				  -lGLEW
-				  -lpthread
-				  -lyaml-cpp)
+				  -lpthread)
 
 #define os includes
-set (IncludesHelloWorld ${CMAKE_CURRENT_SOURCE_DIR}/include
-						${CMAKE_SOURCE_DIR}
+set (IncludesHelloWorld ${CMAKE_SOURCE_DIR}
 						${OPENGL_INCLUDE_DIR}
 						${SDL2_INCLUDE_DIR})
 
-add_executable (helloworld src/Game.cpp 
-						   src/main.cpp)
+add_executable (helloworld Game.cpp main.cpp)
 
 target_link_libraries(helloworld ${LibsHelloWorld})
 target_include_directories (helloworld PRIVATE ${IncludesHelloWorld})

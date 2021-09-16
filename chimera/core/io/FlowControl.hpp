@@ -9,14 +9,14 @@ namespace Chimera::IO {
 
 class FlowControl {
   public:
-    FlowControl(IEvents* _pGameClientEvents);
+    FlowControl(IEvents* _gEvent);
     virtual ~FlowControl();
     void run();
 
   private:
     bool changeStatusFlow(SDL_Event* pEventSDL);
 
-    IEvents* pGameClientEvents;
+    IEvents* gEvent;
     JoystickManager joystickManager;
     MouseDevice mouse;
     Timer timerFPS;

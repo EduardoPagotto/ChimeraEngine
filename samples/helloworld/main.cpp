@@ -1,0 +1,41 @@
+#include "Game.hpp"
+#include "chimera/core/CanvasGL.hpp"
+#include "chimera/core/Exception.hpp"
+#include "chimera/core/io/FlowControl.hpp"
+#include <iostream>
+
+int main(int argn, char** argv) {
+
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+    SDL_Log("Hello iniciado");
+
+    for (int i = 0; i < argn; i++)
+        SDL_Log("Parametros %d: %s", i, argv[i]);
+
+    try {
+        Chimera::CanvasGL* video = new Chimera::CanvasGL("Hello", 800, 600);
+        Game* game = new Game(video);
+        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
+        pControle->run();
+
+        SDL_Log("Loop de Game encerrado!!!!");
+
+        delete pControle;
+        delete game;
+        delete video;
+
+        SDL_Log("Hello finalizado");
+        return 0;
+
+    } catch (const Chimera::Exception& ex) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what()); // Exception Chimera
+    } catch (const std::exception& ex) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what()); // Exception generica
+    } catch (const std::string& ex) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.c_str()); // Exception string
+    } catch (...) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro Desconhecida"); // Exception geral
+    }
+
+    return -1;
+}

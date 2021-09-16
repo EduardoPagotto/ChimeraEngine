@@ -1,15 +1,9 @@
 #ifndef __CHIMERA_CANVAS_GL__HPP
 #define __CHIMERA_CANVAS_GL__HPP
 
-#include <GL/glew.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#include <glm/glm.hpp>
-
 #include "chimera/core/Canvas.hpp"
 #include "chimera/core/ViewPoint.hpp"
+#include <glm/glm.hpp>
 
 namespace Chimera {
 

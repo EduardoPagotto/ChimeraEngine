@@ -1,7 +1,7 @@
+#include "Game.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/utils.hpp"
-#include <Game.hpp>
 
 Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) {}
 

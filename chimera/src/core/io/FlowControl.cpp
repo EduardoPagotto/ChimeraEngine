@@ -4,7 +4,7 @@
 
 namespace Chimera::IO {
 
-FlowControl::FlowControl(IEvents* _pGameClientEvents) : pGameClientEvents(_pGameClientEvents), pause(true) {
+FlowControl::FlowControl(IEvents* _gEvent) : gEvent(_gEvent), pause(true) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 }
@@ -58,39 +58,39 @@ void FlowControl::run(void) {
             switch (l_eventSDL.type) {
                 case SDL_USEREVENT:
                     if (changeStatusFlow(&l_eventSDL))
-                        pGameClientEvents->userEvent(l_eventSDL);
+                        gEvent->userEvent(l_eventSDL);
                     break;
                 case SDL_KEYDOWN:
-                    pGameClientEvents->keboardEvent(l_eventSDL.key.keysym.sym);
+                    gEvent->keboardEvent(l_eventSDL.key.keysym.sym);
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
                     mouse.update(&l_eventSDL.button);
                 case SDL_MOUSEMOTION:
-                    pGameClientEvents->mouseEvent(&mouse, &l_eventSDL);
+                    gEvent->mouseEvent(&mouse, &l_eventSDL);
                     break;
                 case SDL_QUIT:
                     l_quit = true;
                     break;
                 case SDL_WINDOWEVENT:
-                    pGameClientEvents->windowEvent(l_eventSDL.window);
+                    gEvent->windowEvent(l_eventSDL.window);
                     break;
                 case SDL_JOYAXISMOTION: {
                     JoystickState* pJoy = joystickManager.setAxisMotion(&l_eventSDL.jaxis);
-                    pGameClientEvents->joystickEvent(pJoy, &l_eventSDL);
+                    gEvent->joystickEvent(pJoy, &l_eventSDL);
                 } break;
                 case SDL_JOYBUTTONDOWN:
                 case SDL_JOYBUTTONUP: {
                     JoystickState* pJoy = joystickManager.setButtonState(&l_eventSDL.jbutton);
-                    pGameClientEvents->joystickEvent(pJoy, &l_eventSDL);
+                    gEvent->joystickEvent(pJoy, &l_eventSDL);
                 } break;
                 case SDL_JOYHATMOTION: {
                     JoystickState* pJoy = joystickManager.setHatMotion(&l_eventSDL.jhat);
-                    pGameClientEvents->joystickEvent(pJoy, &l_eventSDL);
+                    gEvent->joystickEvent(pJoy, &l_eventSDL);
                 } break;
                 case SDL_JOYBALLMOTION: {
                     JoystickState* pJoy = joystickManager.setBallMotion(&l_eventSDL.jball);
-                    pGameClientEvents->joystickEvent(pJoy, &l_eventSDL);
+                    gEvent->joystickEvent(pJoy, &l_eventSDL);
                 } break;
                 case SDL_JOYDEVICEADDED:
                 case SDL_JOYDEVICEREMOVED:
@@ -102,7 +102,7 @@ void FlowControl::run(void) {
         // update game
         if (!pause) {
             try {
-                pGameClientEvents->update();
+                gEvent->update();
             } catch (...) { SDL_Quit(); }
         }
         // count frame and FPS

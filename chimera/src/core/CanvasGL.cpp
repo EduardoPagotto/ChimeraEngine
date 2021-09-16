@@ -1,6 +1,6 @@
 #include "chimera/core/CanvasGL.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
-
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

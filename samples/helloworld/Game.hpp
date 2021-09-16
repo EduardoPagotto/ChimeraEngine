@@ -1,18 +1,14 @@
-#ifndef __GAME_EVENTS_TEST__HPP
-#define __GAME_EVENTS_TEST__HPP
+#ifndef __HELLOWORD_TEST__HPP
+#define __HELLOWORD_TEST__HPP
 
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/io/IEvents.hpp"
-#include "chimera/node/Node.hpp"
 
 class Game : public Chimera::IO::IEvents {
   public:
     Game(Chimera::CanvasGL* _pVideo);
-
     virtual ~Game();
-    // Inherited via IEvents
-    virtual void start();
-
+    void start();
     virtual void update();
     virtual void keboardEvent(SDL_Keycode tecla);
     virtual void mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL);

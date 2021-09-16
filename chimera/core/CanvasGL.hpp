@@ -29,7 +29,6 @@ class CanvasGL : public Canvas {
     virtual int getTotEyes() { return 1; }
 
     virtual void afterStart();
-    virtual void restoreMatrix();
     std::string getVersaoOpenGL();
 
   protected:

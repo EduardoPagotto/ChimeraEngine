@@ -135,14 +135,6 @@ void CanvasGL::afterStart() {
     // glEnable ( GL_LIGHTING );
 }
 
-void CanvasGL::restoreMatrix() {
-
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-}
-
 std::string CanvasGL::getVersaoOpenGL() {
 
     std::string retorno = "";

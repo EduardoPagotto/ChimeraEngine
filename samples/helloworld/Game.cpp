@@ -81,12 +81,12 @@ void Game::update() {
     glm::mat4 orto = glm::ortho(0.0f, 16.f, 0.0f, 9.0f, -1.0f, 1.0f);
     shader->setUniformMatrix4fv("pr_matrix", 1, false, glm::value_ptr(orto));
     shader->setUniform4fv("colour", 1, glm::value_ptr(glm::vec4(0.2f, 0.3f, 0.8f, 1.0f)));
-    shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
+    shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(3.0f, 3.0f)));
 
     glm::mat4 modelMatrix(1.0f);
-    glm::mat4 mm = glm::translate(modelMatrix, glm::vec3(3.0f, 3.0f, 0.0f));
+    glm::mat4 mm = glm::translate(modelMatrix, glm::vec3(2.0f, 2.0f, 0.0f));
     // glm::mat4 mm = glm::rotate(modelMatrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    // shader->setUniformMatrix4fv("ml_matrix", 1, false, glm::value_ptr(mm));
+    shader->setUniformMatrix4fv("ml_matrix", 1, false, glm::value_ptr(mm));
 
     reder3d.submit(renderable);
     reder3d.flush();

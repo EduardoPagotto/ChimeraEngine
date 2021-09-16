@@ -15,7 +15,7 @@ int main(int argn, char** argv) {
         SDL_Log("Parametros %d: %s", i, argv[i]);
 
     try {
-        CanvasGL* video = new CanvasGL("Hello", 800, 600);
+        CanvasGL* video = new CanvasGL("Hello", 960, 540);
 
         Game* game = new Game(video);
         IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);

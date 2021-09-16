@@ -21,8 +21,20 @@ class Shader {
 
     inline void setUniform1f(const char* _nameVar, const float& _val) const { glUniform1f(getUniformLocation(_nameVar), _val); }
 
+    inline void setUniform2f(const char* _nameVar, const float& _x, const float& _y) const {
+        glUniform2f(getUniformLocation(_nameVar), _x, _y);
+    }
+
     inline void setUniform3f(const char* _nameVar, const float& _x, const float& _y, const float& _z) const {
         glUniform3f(getUniformLocation(_nameVar), _x, _y, _z);
+    }
+
+    inline void setUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
+        glUniform1fv(getUniformLocation(_nameVar), _num, _pointer);
+    }
+
+    inline void setUniform2fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
+        glUniform2fv(getUniformLocation(_nameVar), _num, _pointer);
     }
 
     inline void setUniform3fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
@@ -31,10 +43,6 @@ class Shader {
 
     inline void setUniform4fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
         glUniform4fv(getUniformLocation(_nameVar), _num, _pointer);
-    }
-
-    inline void setUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
-        glUniform1fv(getUniformLocation(_nameVar), _num, _pointer);
     }
 
     inline void setUniformMatrix4fv(const char* _nameVar, const unsigned& _num, const bool& _normal, const float* _pointer) const {

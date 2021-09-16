@@ -2,7 +2,10 @@
 #define __HELLOWORD_TEST__HPP
 
 #include "chimera/core/CanvasGL.hpp"
+#include "chimera/core/Shader.hpp"
 #include "chimera/core/io/IEvents.hpp"
+#include "chimera/render/vbs/RenderableStatic.hpp"
+#include "chimera/render/vbs/SimpleRender3d.hpp"
 
 class Game : public Chimera::IO::IEvents {
   public:
@@ -18,6 +21,9 @@ class Game : public Chimera::IO::IEvents {
 
   private:
     Chimera::CanvasGL* pVideo;
+    Chimera::Shader* shader;
+    Chimera::RenderableStatic* renderable;
+    Chimera::SimpleRender3d reder3d;
 };
 
 #endif

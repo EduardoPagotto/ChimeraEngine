@@ -6,6 +6,8 @@
 
 int main(int argn, char** argv) {
 
+    using namespace Chimera;
+
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("Hello iniciado");
 
@@ -13,9 +15,10 @@ int main(int argn, char** argv) {
         SDL_Log("Parametros %d: %s", i, argv[i]);
 
     try {
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("Hello", 800, 600);
+        CanvasGL* video = new CanvasGL("Hello", 800, 600);
+
         Game* game = new Game(video);
-        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
+        IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
         pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");
@@ -27,7 +30,7 @@ int main(int argn, char** argv) {
         SDL_Log("Hello finalizado");
         return 0;
 
-    } catch (const Chimera::Exception& ex) {
+    } catch (const Exception& ex) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what()); // Exception Chimera
     } catch (const std::exception& ex) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what()); // Exception generica

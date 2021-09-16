@@ -1,9 +1,13 @@
 #include "Game.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/VertexData.hpp"
 #include "chimera/core/io/utils.hpp"
 
-Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) {}
+Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) {
+
+    shader = new Chimera::Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
+}
 
 Game::~Game() {}
 
@@ -27,6 +31,17 @@ void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {}
 
 void Game::start() {
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
+
+    Chimera::VertexData v[] = {{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f), glm::vec2(0.0)},
+                               {glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f), glm::vec2(0.0)},
+                               {glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f), glm::vec2(0.0)},
+                               {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f), glm::vec2(0.0)}};
+    const uint32_t sv = 4;
+
+    uint32_t i[] = {0, 1, 2, 2, 3, 0};
+    const uint32_t si = 6;
+
+    renderable = new Chimera::RenderableStatic(v, sv, i, si);
 }
 
 void Game::userEvent(const SDL_Event& _event) {
@@ -59,8 +74,13 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
 
 void Game::update() {
     pVideo->before();
-    // TODO desenhar aqui!!
-    SDL_Delay(5);
+
+    shader->enable();
+
+    reder3d.submit(renderable);
+    reder3d.flush();
+
+    shader->disable();
 
     pVideo->after();
     pVideo->swapWindow();

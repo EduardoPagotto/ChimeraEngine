@@ -1,8 +1,8 @@
 screen:
   name: teste
   canvas:
-    w: 512
-    h: 512
+    w: 900
+    h: 900
 shaders:
   - name: mesh-default
     vertex: ./chimera/shaders/MeshFullShadow.vert

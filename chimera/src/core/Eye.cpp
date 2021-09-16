@@ -2,8 +2,6 @@
 #include "chimera/core/Exception.hpp"
 //#include <glm/gtc/matrix_transform.hpp>
 
-#include <SDL2/SDL.h>
-
 namespace Chimera {
 
 Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* _pShader) {
@@ -12,23 +10,20 @@ Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* 
     this->fb_tex = 0;
     this->fb_depth = 0;
     this->quad_vertexbuffer = 0;
-
-    this->indexEye = _indexEye;
     this->pShader = _pShader;
 
-    this->fbTexSize.w = next_pow2(_w);
-    this->fbTexSize.h = next_pow2(_h);
+    this->fbTexGeo.w = next_pow2(_w);
+    this->fbTexGeo.h = next_pow2(_h);
+    this->fbTexGeo.x = (_indexEye == 0) ? 0 : this->fbTexGeo.w;
+    this->fbTexGeo.y = 0;
+
     this->createFBO();
     this->createSquare();
 
-    // this->posInitW = _indexEye == 0 ? 0 : _w;
-    if (_indexEye == 0) {
-        this->posInitW = 0;
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Left Eye Setup pos:%d size:%d", this->posInitW, this->fbTexSize.w);
-    } else {
-        this->posInitW = this->fbTexSize.w;
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Right Eye Setup pos:%d size:%d", this->posInitW, this->fbTexSize.w);
-    }
+    if (_indexEye == 0)
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Left Eye Setup pos:%d size:%d", this->fbTexGeo.x, this->fbTexGeo.w);
+    else
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Right Eye Setup pos:%d size:%d", this->fbTexGeo.x, this->fbTexGeo.w);
 }
 
 Eye::~Eye() {
@@ -49,17 +44,17 @@ unsigned int Eye::next_pow2(unsigned int x) {
     return x + 1;
 }
 
-void Eye::begin() { glBindFramebuffer(GL_FRAMEBUFFER, fbo); }
+void Eye::bind() { glBindFramebuffer(GL_FRAMEBUFFER, fbo); }
 
-void Eye::end() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+void Eye::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 glm::mat4 Eye::getPerspectiveProjectionMatrix(ViewPoint* vp) {
-    glViewport(0, 0, fbTexSize.w, fbTexSize.h);
-    return glm::perspective(vp->fov, (GLfloat)(float)fbTexSize.w / (float)fbTexSize.h, vp->near, vp->far);
+    glViewport(0, 0, fbTexGeo.w, fbTexGeo.h);
+    return glm::perspective(vp->fov, (GLfloat)(float)fbTexGeo.w / (float)fbTexGeo.h, vp->near, vp->far);
 }
 
 glm::mat4 Eye::getOrthoProjectionMatrix() {
-    return glm::ortho(0.0f, static_cast<GLfloat>(fbTexSize.w), 0.0f, static_cast<GLfloat>(fbTexSize.h));
+    return glm::ortho(0.0f, static_cast<GLfloat>(fbTexGeo.w), 0.0f, static_cast<GLfloat>(fbTexGeo.h));
 }
 
 void Eye::createFBO() {
@@ -77,7 +72,7 @@ void Eye::createFBO() {
         // create and attach the texture
         glGenTextures(1, &fb_tex);
         glBindTexture(GL_TEXTURE_2D, fb_tex);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fbTexSize.w, fbTexSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fbTexGeo.w, fbTexGeo.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
         // Filtro linear
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -88,7 +83,7 @@ void Eye::createFBO() {
         // pass 3  // The depth buffer // depthrenderbuffer => fb_depth
         glGenRenderbuffers(1, &fb_depth);
         glBindRenderbuffer(GL_RENDERBUFFER, fb_depth);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbTexSize.w, fbTexSize.h);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbTexGeo.w, fbTexGeo.h);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fb_depth);
 
         // Pass 4
@@ -105,7 +100,7 @@ void Eye::createFBO() {
             throw Exception(std::string("Falha em instanciar o Frame Buffer"));
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "created render target: %dx%d", fbTexSize.w, fbTexSize.h);
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "created render target: %dx%d", fbTexGeo.w, fbTexGeo.h);
     }
 }
 
@@ -121,13 +116,12 @@ void Eye::createSquare() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 
     GLuint texID = pShader->getUniformLocation("renderedTexture");
-    // GLuint timeID = pShader->getUniformLocation("time");
 }
 
 void Eye::displayTexture() {
 
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
-    glViewport(this->posInitW, 0, fbTexSize.w, fbTexSize.h);
+    glViewport(this->fbTexGeo.x, this->fbTexGeo.y, fbTexGeo.w, fbTexGeo.h);
 
     // Clear the screen
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -141,9 +135,6 @@ void Eye::displayTexture() {
     glBindTexture(GL_TEXTURE_2D, fb_tex);
     // Set our "renderedTexture" sampler to user Texture Unit 0
     glUniform1i(texID, 0);
-
-    // glUniform1f(timeID, (float)(glfwGetTime() * 10.0f));
-    // glUniform1f(timeID, (float)1.0f * 10.0f);
 
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);

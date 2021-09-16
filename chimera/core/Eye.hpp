@@ -3,36 +3,29 @@
 
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/ViewPoint.hpp"
+#include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
 namespace Chimera {
-
-struct EyeSize {
-    unsigned int w;
-    unsigned int h;
-};
 
 class Eye {
   public:
     Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* _pShader);
     virtual ~Eye();
-
     void displayTexture();
-    void begin();
-    void end();
+    void bind();
+    void unbind();
     glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp);
     glm::mat4 getOrthoProjectionMatrix();
 
   private:
-    unsigned short indexEye;
     unsigned int posInitW;
     GLuint fbo;
     GLuint fb_tex;
     GLuint fb_depth;
     GLuint texID;
-    GLuint timeID;
     GLuint quad_vertexbuffer;
-    EyeSize fbTexSize;
+    SDL_Rect fbTexGeo;
     Shader* pShader;
 
     void createFBO();

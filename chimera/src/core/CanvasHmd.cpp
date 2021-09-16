@@ -19,9 +19,9 @@ CanvasHmd::~CanvasHmd() {
 void CanvasHmd::before(const unsigned short& _indexEye) {
 
     if (_indexEye == 0)
-        pLeft->begin(); // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        pLeft->bind(); // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     else
-        pRight->begin();
+        pRight->bind();
 
     CanvasGL::before(_indexEye); // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -38,9 +38,9 @@ void CanvasHmd::swapWindow() {
 void CanvasHmd::after(const unsigned short& _indexEye) {
 
     if (_indexEye == 0) {
-        pLeft->end(); // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        pLeft->unbind(); // glBindFramebuffer(GL_FRAMEBUFFER, 0);
     } else {
-        pRight->end(); // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        pRight->unbind(); // glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     // CanvasGL::after(); // SDL_GL_SwapWindow(window);

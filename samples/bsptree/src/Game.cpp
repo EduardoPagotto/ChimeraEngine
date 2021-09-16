@@ -62,7 +62,7 @@ void Game::start() {
     trackBall.init(pVp);
     trackBall.setMax(1000.0);
 
-    pCanvas->initGL();
+    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_NORMALIZE);

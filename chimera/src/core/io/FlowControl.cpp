@@ -41,25 +41,20 @@ bool FlowControl::changeStatusFlow(SDL_Event* pEventSDL) {
 void FlowControl::run(void) {
     SDL_Event l_eventSDL;
     bool l_quit = false;
-    unsigned int frameTime;
-    unsigned int timeElapsed;
-    unsigned int tot_delay;
-    unsigned int lastFrameTime = 0;
-    unsigned int deltaTime = 0;
-    unsigned int fpsMin = 60;
-    unsigned int minimumFrameTime = 1000 / fpsMin;
+    uint32_t frameTime, timeElapsed, tot_delay;
+    uint32_t lastFrameTime = 0;
+    uint32_t deltaTime = 0;
+    uint32_t fpsMin = 60;
+    uint32_t minimumFrameTime = 1000 / fpsMin;
 
     // open devices
     joystickManager.Initialize();
     joystickManager.FindJoysticks();
-    // pGameClientEvents->start();
     utilSendEvent(EVENT_FLOW_START, nullptr, nullptr);
 
     while (!l_quit) {
-
         frameTime = SDL_GetTicks();
         while (SDL_PollEvent(&l_eventSDL)) {
-
             switch (l_eventSDL.type) {
                 case SDL_USEREVENT:
                     if (changeStatusFlow(&l_eventSDL))
@@ -76,7 +71,6 @@ void FlowControl::run(void) {
                     break;
                 case SDL_QUIT:
                     l_quit = true;
-                    // pGameClientEvents->stop();
                     break;
                 case SDL_WINDOWEVENT:
                     pGameClientEvents->windowEvent(l_eventSDL.window);

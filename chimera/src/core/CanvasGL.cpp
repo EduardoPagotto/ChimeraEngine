@@ -122,43 +122,6 @@ glm::mat4 CanvasGL::getOrthoProjectionMatrix(int eyeIndex) {
     return glm::ortho(0.0f, static_cast<GLfloat>(width), 0.0f, static_cast<GLfloat>(height));
 }
 
-void CanvasGL::initGL() {
-
-    GLenum error = GL_NO_ERROR;
-
-    // Initialize Projection Matrix
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    // Check for error
-    error = glGetError();
-
-    if (error != GL_NO_ERROR) {
-        throw Exception(std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
-    }
-
-    // Initialize Modelview Matrix
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    // Check for error
-    error = glGetError();
-
-    if (error != GL_NO_ERROR) {
-        throw Exception(std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
-    }
-
-    // Initialize clear color
-    glClearColor(0.f, 0.f, 0.f, 1.f);
-
-    // Check for error
-    error = glGetError();
-
-    if (error != GL_NO_ERROR) {
-        throw Exception(std::string("Falha ao Iniciar o OpenGL:" + std::string((const char*)gluErrorString(error))));
-    }
-}
-
 void CanvasGL::afterStart() {
 
     // glEnable ( GL_TEXTURE_2D );

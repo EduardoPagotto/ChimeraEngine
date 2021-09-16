@@ -24,14 +24,10 @@ class CanvasGL : public Canvas {
     virtual void reshape(int _width, int _height) override;
 
     virtual void swapWindow();
-
-    virtual void calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& pView,
-                                               glm::mat4& pProjection);
-
+    virtual void calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& pView, glm::mat4& pProjection);
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
     virtual int getTotEyes() { return 1; }
 
-    virtual void initGL();
     virtual void afterStart();
     virtual void restoreMatrix();
     std::string getVersaoOpenGL();

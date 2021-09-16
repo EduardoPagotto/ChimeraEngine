@@ -25,7 +25,9 @@ void Game::keboardEvent(SDL_Keycode tecla) {
 
 void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {}
 
-void Game::start() { pVideo->initGL(); }
+void Game::start() {
+    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
+}
 
 void Game::userEvent(const SDL_Event& _event) {
     switch (_event.user.code) {
@@ -61,4 +63,5 @@ void Game::update() {
     SDL_Delay(5);
 
     pVideo->after();
+    pVideo->swapWindow();
 }

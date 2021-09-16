@@ -55,7 +55,7 @@ void Game::start() {
     trackBall.init(pVp);
     trackBall.setMax(1000.0);
 
-    pCanvas->initGL();
+    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
     // Habilita o depth buffer/culling face
     pCanvas->afterStart();
     glEnable(GL_COLOR_MATERIAL);
@@ -95,7 +95,7 @@ void Game::start() {
     std::vector<uint32_t> index;
     std::vector<Chimera::VertexData> vertexDataOut;
     vertexDataIndexCompile(renderData, vertexDataOut, index);
-    this->pVertexRenderStatic = new Chimera::RenderableStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+    this->rederable = new Chimera::RenderableStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
 }
 
 void Game::userEvent(const SDL_Event& _event) {
@@ -144,7 +144,7 @@ void Game::update() {
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 
-    render3D.submit(pVertexRenderStatic);
+    render3D.submit(rederable);
     render3D.flush();
 
     pCanvas->after();

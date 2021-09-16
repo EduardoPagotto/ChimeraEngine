@@ -33,7 +33,7 @@ class Game : public Chimera::IO::IEvents {
     Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
     Chimera::Material material;
-    Chimera::RenderableStatic* pVertexRenderStatic;
+    Chimera::RenderableStatic* rederable;
     Chimera::SimpleRender3d render3D;
 };
 

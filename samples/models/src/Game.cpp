@@ -140,7 +140,7 @@ void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {
 
 void Game::start() {
 
-    pCanvas->initGL();
+    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
     pRoot->initializeChilds();
 

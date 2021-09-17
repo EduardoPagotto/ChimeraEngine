@@ -1,8 +1,8 @@
 #ifndef __GAME_EVENTS_TEST__HPP
 #define __GAME_EVENTS_TEST__HPP
 
-#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/io/IEvents.hpp"
+#include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/node/Node.hpp"
 #include "chimera/node/VisitorRender.hpp"
 

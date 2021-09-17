@@ -9,9 +9,9 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (SourcesCore CanvasGL.cpp
-				 CanvasFB.cpp
-				 #CanvasOVR.cpp
+set (SourcesCore windows/CanvasGL.cpp
+				 windows/CanvasFB.cpp
+				 #windows/CanvasOVR.cpp
 				 TrackBall.cpp
 				 TrackHead.cpp
 				 Shader.cpp
@@ -42,8 +42,8 @@ set (IncludeCoreAux ${OPENGL_INCLUDE_DIR}
 
 if (HMD_Z1_SET_TO_USE)
 	message(STATUS "HMD_Z1 Incluido no Projeto")
-	set(SourcesCore ${SourcesCore} CanvasHmd.cpp) #adiciona o cpp
-	set(SourcesCore ${SourcesCore} Eye.cpp) #adiciona o cpp
+	set(SourcesCore ${SourcesCore} windows/CanvasHmd.cpp) #adiciona o cpp
+	set(SourcesCore ${SourcesCore} windows/Eye.cpp) #adiciona o cpp
 endif(HMD_Z1_SET_TO_USE)
 
 # Define o Target

@@ -1,8 +1,8 @@
 #ifndef __GAME_XX__HPP
 #define __GAME_XX__HPP
 
-#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/io/IEvents.hpp"
+#include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"

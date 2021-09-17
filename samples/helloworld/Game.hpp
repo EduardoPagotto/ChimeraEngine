@@ -1,9 +1,9 @@
 #ifndef __HELLOWORD_TEST__HPP
 #define __HELLOWORD_TEST__HPP
 
-#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/io/IEvents.hpp"
+#include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/vbs/RenderableStatic.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 

@@ -1,10 +1,10 @@
 #ifndef __GAME_SIMPLES__HPP
 #define __GAME_SIMPLES__HPP
 
-#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/core/io/IEvents.hpp"
+#include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Texture.hpp"
 #include "chimera/render/vbs/RenderableStatic.hpp"

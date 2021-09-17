@@ -1,8 +1,8 @@
 #ifndef __GAME_SIMPLE_RAYCASTING__HPP
 #define __GAME_SIMPLE_RAYCASTING__HPP
 
-#include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/io/IEvents.hpp"
+#include "chimera/core/windows/CanvasFB.hpp"
 #include "raycasting.hpp"
 
 class Game : public Chimera::Core::IEvents {

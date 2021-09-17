@@ -1,4 +1,4 @@
-#include "chimera/core/CanvasOVR.hpp"
+#include "chimera/core/windows/CanvasOVR.hpp"
 
 #ifdef OVR_SET_TO_USE
 

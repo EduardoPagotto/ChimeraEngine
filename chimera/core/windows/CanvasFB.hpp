@@ -2,7 +2,7 @@
 #ifndef __CHIMERA_CANVAS_FB__HPP
 #define __CHIMERA_CANVAS_FB__HPP
 
-#include "chimera/core/Canvas.hpp"
+#include "Canvas.hpp"
 
 namespace Chimera {
 

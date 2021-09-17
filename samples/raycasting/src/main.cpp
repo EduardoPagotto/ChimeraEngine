@@ -1,6 +1,6 @@
-#include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/FlowControl.hpp"
+#include "chimera/core/windows/CanvasFB.hpp"
 #include <iostream>
 
 #include "Game.hpp"

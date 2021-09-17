@@ -1,9 +1,9 @@
 #ifndef __CHIMERA_VISITOR_RENDER__HPP
 #define __CHIMERA_VISITOR_RENDER__HPP
 
-#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/node/VisitorShadowMap.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 

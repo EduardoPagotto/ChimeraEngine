@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_CANVAS_GL__HPP
 #define __CHIMERA_CANVAS_GL__HPP
 
-#include "chimera/core/Canvas.hpp"
+#include "Canvas.hpp"
 #include "chimera/core/ViewPoint.hpp"
 #include <glm/glm.hpp>
 

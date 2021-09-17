@@ -2,10 +2,10 @@
 #include <iostream>
 #include <map>
 
-#include "chimera/core/CanvasGL.hpp"
+#include "chimera/core/windows/CanvasGL.hpp"
 
 #ifdef OVR_SET_TO_USE
-#include "CanvasOVR.hpp"
+#include "chimera/core/windows/CanvasOVR.hpp"
 #endif
 
 #include "Game.hpp"

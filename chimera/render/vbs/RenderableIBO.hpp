@@ -24,11 +24,11 @@ class RenderableIBO : public IRenderable {
     virtual Shader* getShader() const { return nullptr; };
     virtual Core::VertexArray* getVao() const { return nullptr; };
     virtual Core::IndexBuffer* getIBO() const { return ibo; };
-    virtual AABB* getAABB() override { return &aabb; }
-    virtual void inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) override;
+    virtual Core::AABB* getAABB() override { return &aabb; }
+    virtual void inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) override;
 
   private:
-    AABB aabb;
+    Core::AABB aabb;
     Core::IndexBuffer* ibo;
     std::vector<uint32_t> indexTris;
 };

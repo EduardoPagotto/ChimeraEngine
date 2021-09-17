@@ -39,7 +39,7 @@ class Maze {
     glm::vec3 halfBlock;
     uint32_t indexPointCount;
     std::vector<Cube*> vpCube;
-    std::vector<Triangle> trisList;
+    std::vector<Core::Triangle> trisList;
 };
 } // namespace Chimera
 #endif

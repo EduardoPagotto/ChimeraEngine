@@ -42,7 +42,7 @@ class NodeMesh : public Node {
   private:
     void setVertexBuffer();
 
-    AABB aabb;
+    Core::AABB aabb;
     Material* material;
     Transform* pTransform;
 };

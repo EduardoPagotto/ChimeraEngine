@@ -3,7 +3,7 @@
 
 #include "Plane.hpp"
 
-namespace Chimera {
+namespace Chimera::Core {
 
 class Frustum {
   public:
@@ -20,6 +20,6 @@ class Frustum {
     Plane planes[6];
 };
 
-} // namespace Chimera
+} // namespace Chimera::Core
 
 #endif

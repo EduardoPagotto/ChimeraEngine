@@ -8,7 +8,7 @@ namespace Chimera {
 
 class SimpleRender3d : public IRender3d {
   public:
-    virtual void begin(glm::vec3* eye, Frustum* frustrun, bool logData) override;
+    virtual void begin(glm::vec3* eye, Core::Frustum* frustrun, bool logData) override;
     virtual void end() override;
     virtual void submit(IRenderable* renderable) override;
     virtual void flush() override;
@@ -16,7 +16,7 @@ class SimpleRender3d : public IRender3d {
   private:
     std::deque<IRenderable*> renderQueue;
     bool logData;
-    Frustum* frustrun;
+    Core::Frustum* frustrun;
     glm::vec3* eye;
 };
 

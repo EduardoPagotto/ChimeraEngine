@@ -5,7 +5,7 @@
 #include "BSPTreeNode.hpp"
 #include "chimera/render/vbs/RenderableBsp.hpp"
 
-namespace Chimera {
+namespace Chimera::Core {
 
 class BspTree {
   public:
@@ -28,5 +28,5 @@ class BspTree {
     std::vector<Chimera::VertexData> vVertex;
     std::vector<RenderableIBO*> vpLeaf;
 };
-} // namespace Chimera
+} // namespace Chimera::Core
 #endif

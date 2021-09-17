@@ -23,7 +23,7 @@ RenderableStatic::~RenderableStatic() {
     delete ibo;
 }
 
-void RenderableStatic::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+void RenderableStatic::inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
     // TODO: colocar validacao do frustum
     // if (aabb.visible(*frustum) == true) {
     //     renderQueue->push_back(this);

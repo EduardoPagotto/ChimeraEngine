@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<RenderableIBO*>* vpLeafData, std::vector<VertexData>* vertexData)
+RenderableBsp::RenderableBsp(Core::BSPTreeNode* root, std::vector<RenderableIBO*>* vpLeafData, std::vector<VertexData>* vertexData)
     : root(root), totIndex(0) {
 
     this->vpLeaf = std::move(*vpLeafData);
@@ -32,7 +32,7 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<RenderableIBO*>* vpL
 
 RenderableBsp::~RenderableBsp() { this->destroy(); }
 
-void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
+void RenderableBsp::drawPolygon(Core::BSPTreeNode* tree, bool frontSide) {
 
     if (tree->isLeaf == false)
         return;
@@ -41,7 +41,7 @@ void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
     pLeaf->inject(eye, frustum, logdata, renderQueue);
 }
 
-void RenderableBsp::traverseTree(BSPTreeNode* tree) {
+void RenderableBsp::traverseTree(Core::BSPTreeNode* tree) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
@@ -69,7 +69,7 @@ void RenderableBsp::traverseTree(BSPTreeNode* tree) {
     }
 }
 
-void RenderableBsp::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+void RenderableBsp::inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
     this->eye = eye;
     this->frustum = frustum;
     this->renderQueue = renderQueue;
@@ -94,7 +94,7 @@ void RenderableBsp::destroy() {
     collapse(root);
 }
 
-void RenderableBsp::collapse(BSPTreeNode* tree) {
+void RenderableBsp::collapse(Core::BSPTreeNode* tree) {
 
     if (tree->front != nullptr) {
         collapse(tree->front);
@@ -109,7 +109,7 @@ void RenderableBsp::collapse(BSPTreeNode* tree) {
     }
 }
 
-bool RenderableBsp::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
+bool RenderableBsp::lineOfSight(glm::vec3* Start, glm::vec3* End, Core::BSPTreeNode* tree) {
     float temp;
     glm::vec3 intersection;
     if (tree->isLeaf == true) {

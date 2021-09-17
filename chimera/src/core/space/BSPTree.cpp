@@ -1,7 +1,7 @@
 #include "chimera/core/space/BSPTree.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace Chimera::Core {
 
 template <class T> void swapFace(T& a, T& b) {
     T c = b;
@@ -275,4 +275,4 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
     tree->isSolid = false;
     tree->isLeaf = true;
 }
-} // namespace Chimera
+} // namespace Chimera::Core

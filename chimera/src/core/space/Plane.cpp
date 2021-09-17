@@ -1,6 +1,6 @@
 #include "chimera/core/space/Plane.hpp"
 
-namespace Chimera {
+namespace Chimera::Core {
 Plane::Plane() {}
 
 Plane::Plane(const Plane& _cpy) {
@@ -118,4 +118,4 @@ bool Plane::AABBBehind(const glm::vec3* AABBVertices) { return glm::dot(normal, 
 
 float Plane::AABBDistance(const glm::vec3* AABBVertices) { return glm::dot(normal, AABBVertices[O]); }
 
-} // namespace Chimera
+} // namespace Chimera::Core

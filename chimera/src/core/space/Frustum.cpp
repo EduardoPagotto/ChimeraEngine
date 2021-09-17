@@ -2,7 +2,7 @@
 #include "chimera/OpenGLDefs.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Chimera {
+namespace Chimera::Core {
 
 Frustum::Frustum() {}
 
@@ -81,4 +81,4 @@ void Frustum::render() {
     glEnd();
 }
 
-} // namespace Chimera
+} // namespace Chimera::Core

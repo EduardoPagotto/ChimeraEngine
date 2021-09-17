@@ -1,6 +1,6 @@
 #include "chimera/core/space/Triangle.hpp"
 
-namespace Chimera {
+namespace Chimera::Core {
 
 Triangle::Triangle(const Triangle& _val) {
     this->p[0] = _val.p[0];
@@ -95,4 +95,4 @@ void triangleFromVertexData(VertexData* vertexData, const uint32_t& vertexSize, 
 //     return true;
 // }
 
-} // namespace Chimera
+} // namespace Chimera::Core

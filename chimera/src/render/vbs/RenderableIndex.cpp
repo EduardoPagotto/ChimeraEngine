@@ -45,7 +45,7 @@ RenderableIndex::~RenderableIndex() {
     vao = nullptr;
 }
 
-void RenderableIndex::inject(glm::vec3* eye, Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
+void RenderableIndex::inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
     renderQueue->push_back(this);
 
     unsigned int tot = 0;

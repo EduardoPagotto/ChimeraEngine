@@ -37,7 +37,7 @@ class Game : public Chimera::Core::IEvents {
     Chimera::Material* pMaterial;
     Chimera::RenderableIndex* pHeightMap;
     Chimera::SimpleRender3d render3d;
-    Chimera::Frustum frustum;
+    Chimera::Core::Frustum frustum;
 };
 
 #endif

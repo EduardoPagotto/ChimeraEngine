@@ -152,7 +152,7 @@ void Maze::createMap() {
         pCube->create(vertexData, this->trisList);
     }
 
-    for (Chimera::Triangle t : this->trisList) {
+    for (Core::Triangle t : this->trisList) {
         vIndex.push_back(t.p[0]);
         vIndex.push_back(t.p[1]);
         vIndex.push_back(t.p[2]);

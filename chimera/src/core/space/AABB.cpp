@@ -4,7 +4,7 @@
 
 // ref: http://www.3dcpptutorials.sk/index.php?id=59
 
-namespace Chimera {
+namespace Chimera::Core {
 
 AABB::AABB() {}
 
@@ -125,4 +125,4 @@ void AABB::render() {
 
     glEnd();
 }
-} // namespace Chimera
+} // namespace Chimera::Core

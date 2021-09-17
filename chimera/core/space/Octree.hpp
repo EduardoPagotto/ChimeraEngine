@@ -4,7 +4,7 @@
 #include "AABB.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace Chimera::Core {
 
 enum class CHILDOCTREE {
     top_northwest = 0,
@@ -43,6 +43,6 @@ class Octree {
     Octree* pChild[8];
     std::vector<glm::vec3> points;
 };
-} // namespace Chimera
+} // namespace Chimera::Core
 // namespace Chimera
 #endif

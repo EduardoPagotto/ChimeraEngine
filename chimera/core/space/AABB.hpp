@@ -4,7 +4,7 @@
 #include "Frustum.hpp"
 #include <glm/glm.hpp>
 
-namespace Chimera {
+namespace Chimera::Core {
 
 class AABB {
   public:
@@ -36,6 +36,6 @@ class AABB {
     glm::vec3 position;
     glm::vec3 size;
 };
-} // namespace Chimera
+} // namespace Chimera::Core
 
 #endif

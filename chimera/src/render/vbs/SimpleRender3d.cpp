@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-void SimpleRender3d::begin(glm::vec3* eye, Frustum* frustrun, bool logData) {
+void SimpleRender3d::begin(glm::vec3* eye, Core::Frustum* frustrun, bool logData) {
     this->eye = eye;
     this->frustrun = frustrun;
     this->logData = logData;

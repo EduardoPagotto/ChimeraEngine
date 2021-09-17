@@ -24,7 +24,7 @@ class Game : public Chimera::Core::IEvents {
     virtual void windowEvent(const SDL_WindowEvent& _event) override;
 
   private:
-    Chimera::BspTree bspTree;
+    Chimera::Core::BspTree bspTree;
     bool debugParser;
 
     Chimera::TrackBall trackBall;
@@ -37,7 +37,7 @@ class Game : public Chimera::Core::IEvents {
 
     Chimera::TextureImg* pTex;
 
-    Chimera::Frustum frustum;
+    Chimera::Core::Frustum frustum;
 
     Chimera::SimpleRender3d render3d;
     Chimera::RenderableBsp* renderz1;

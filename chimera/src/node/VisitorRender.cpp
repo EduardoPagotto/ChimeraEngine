@@ -47,7 +47,7 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
     pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
-    _pMesh->getMaterial()->apply(pShader);
+    _pMesh->getMaterial()->setUniform(pShader);
 
     if (pShadowMapVisitor != nullptr)
         pShadowMapVisitor->applyShadow(pShader);
@@ -59,7 +59,7 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
     render3D.flush();
 }
 
-void VisitorRender::visit(NodeLight* _pLight) { _pLight->data.apply(pShader); }
+void VisitorRender::visit(NodeLight* _pLight) { _pLight->data.setUniform(pShader); }
 
 void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
 

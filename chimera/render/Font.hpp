@@ -1,10 +1,8 @@
 #ifndef __CHIMERA_FONT__HPP
 #define __CHIMERA_FONT__HPP
 
-#include <glm/glm.hpp>
-
 #include "chimera/OpenGLDefs.hpp"
-
+#include <glm/glm.hpp>
 #include <map>
 #include <stdlib.h>
 #include <string.h>

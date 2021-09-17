@@ -1,4 +1,4 @@
-#include "chimera/node/Particle.hpp"
+#include "chimera/render/Particle.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
@@ -18,8 +18,8 @@ void Particle::create(const glm::vec3& _maindir, const float& _spread) {
     // http://stackoverflow.com/questions/5408276/python-uniform-spherical-distribution
     // instead, combined with some user-controlled parameters (main direction, spread,
     // etc)
-    glm::vec3 randomdir = glm::vec3((rand() % 2000 - 1000.0f) / 1000.0f, (rand() % 2000 - 1000.0f) / 1000.0f,
-                                    (rand() % 2000 - 1000.0f) / 1000.0f);
+    glm::vec3 randomdir =
+        glm::vec3((rand() % 2000 - 1000.0f) / 1000.0f, (rand() % 2000 - 1000.0f) / 1000.0f, (rand() % 2000 - 1000.0f) / 1000.0f);
 
     speed = _maindir + randomdir * _spread;
 

@@ -53,7 +53,7 @@ void Material::init() {
 
 void Material::addTexture(TextureImg* _pTex) { listTex.push_back(_pTex); }
 
-void Material::apply(Shader* _shader) {
+void Material::setUniform(Shader* _shader) {
 
     // aplica todos os materiais passados
     for (ShaderValue* shaderMaterial : listMaterial) {

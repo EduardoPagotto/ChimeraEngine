@@ -15,9 +15,11 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
 					vbs/RenderableIndex.cpp
+					Font.cpp
 					Light.cpp
 					Material.cpp
 					Texture.cpp
+					Particle.cpp
 					LoadObj.cpp
 					LoadHeightMap.cpp
 					maze/Cube.cpp 

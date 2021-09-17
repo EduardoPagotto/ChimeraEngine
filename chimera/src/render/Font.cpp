@@ -1,4 +1,4 @@
-#include "chimera/node/Font.hpp"
+#include "chimera/render/Font.hpp"
 #include "chimera/core/Exception.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>

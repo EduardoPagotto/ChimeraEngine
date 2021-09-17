@@ -21,33 +21,31 @@ void NodeParticleEmitter::init() {
 
     // TODO: usar classes novas de buffers
     // VAO
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-    g_particule_position_size_data = new GLfloat[MaxParticles * 4];
-    g_particule_color_data = new GLubyte[MaxParticles * 4];
+    vPosSize = new GLfloat[MaxParticles * 4];
+    vColor = new GLubyte[MaxParticles * 4];
 
     // The VBO containing the 4 vertices of the particles.
     // Thanks to instancing, they will be shared by all particles.
-    static const GLfloat g_vertex_buffer_data[] = {
-        -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.0f,
-    };
+    static const GLfloat vVertex[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.0f};
 
     // VBO square vertex
-    glGenBuffers(1, &billboard_vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, billboard_vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    glGenBuffers(1, &vboVertex);
+    glBindBuffer(GL_ARRAY_BUFFER, vboVertex);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vVertex), vVertex, GL_STATIC_DRAW);
 
     // The VBO containing the positions and sizes of the particles
-    glGenBuffers(1, &particles_position_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
+    glGenBuffers(1, &vboPosition);
+    glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
 
     // Initialize with empty (NULL) buffer : it will be updated later, each frame.
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 
     // The VBO containing the colors of the particles
-    glGenBuffers(1, &particles_color_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, particles_color_buffer);
+    glGenBuffers(1, &vboColor);
+    glBindBuffer(GL_ARRAY_BUFFER, vboColor);
 
     // Initialize with empty (NULL) buffer : it will be updated later, each frame.
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
@@ -95,7 +93,7 @@ int NodeParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
 
         if (p.isDead() == false) {
 
-            p.decrease(delta, ParticlesCount, g_particule_position_size_data, g_particule_color_data, _camPosition);
+            p.decrease(delta, ParticlesCount, vPosSize, vColor, _camPosition);
             ParticlesCount++;
         }
     }
@@ -120,19 +118,19 @@ void NodeParticleEmitter::render(Shader* _pShader) {
     // There are much more sophisticated means to stream data from the CPU to the GPU,
     // but this is outside the scope of this tutorial.
     // http://www.opengl.org/wiki/Buffer_Object_Streaming
-    glBindVertexArray(VertexArrayID); // coloquei aqui porque acho que tenho que ligar antes
+    glBindVertexArray(vao); // coloquei aqui porque acho que tenho que ligar antes
 
-    glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLfloat), NULL,
                  GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming
                                   // perf. See above link for details.
-    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLfloat) * 4, g_particule_position_size_data);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLfloat) * 4, vPosSize);
 
-    glBindBuffer(GL_ARRAY_BUFFER, particles_color_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vboColor);
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL,
                  GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming
                                   // perf. See above link for details.
-    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLubyte) * 4, g_particule_color_data);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLubyte) * 4, vColor);
 
     // salva flags de bit
     glPushAttrib(GL_ENABLE_BIT);
@@ -150,11 +148,11 @@ void NodeParticleEmitter::render(Shader* _pShader) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Bind our texture
-    material->apply(_pShader);
+    material->setUniform(_pShader);
 
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, billboard_vertex_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vboVertex);
     glVertexAttribPointer(0,        // attribute. No particular reason for 0, but must match the
                                     // layout in the shader.
                           3,        // size
@@ -166,7 +164,7 @@ void NodeParticleEmitter::render(Shader* _pShader) {
 
     // 2nd attribute buffer : positions of particles' centers
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
     glVertexAttribPointer(1,        // attribute. No particular reason for 1, but must match the
                                     // layout in the shader.
                           4,        // size : x + y + z + size => 4
@@ -178,7 +176,7 @@ void NodeParticleEmitter::render(Shader* _pShader) {
 
     // 3rd attribute buffer : particles' colors
     glEnableVertexAttribArray(2);
-    glBindBuffer(GL_ARRAY_BUFFER, particles_color_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vboColor);
     glVertexAttribPointer(2,                // attribute. No particular reason for 1, but must match the layout in the
                                             // shader.
                           4,                // size : r + g + b + a => 4

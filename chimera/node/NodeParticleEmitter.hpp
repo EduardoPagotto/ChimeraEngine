@@ -2,11 +2,11 @@
 #define __CHIMERA_NODE_PARTICLE_EMITTER__HPP
 
 #include "Node.hpp"
-#include "Particle.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/io/Timer.hpp"
 #include "chimera/render/Material.hpp"
+#include "chimera/render/Particle.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -
@@ -42,16 +42,16 @@ class NodeParticleEmitter : public Node {
     int recycleParticleLife(const glm::vec3& _camPosition);
     int FindUnusedParticle();
 
-    GLfloat* g_particule_position_size_data;
-    GLubyte* g_particule_color_data;
+    GLfloat* vPosSize;
+    GLubyte* vColor;
 
     int LastUsedParticle;
     float lastTime;
 
-    GLuint billboard_vertex_buffer;
-    GLuint particles_position_buffer;
-    GLuint particles_color_buffer;
-    GLuint VertexArrayID;
+    GLuint vboVertex;
+    GLuint vboPosition;
+    GLuint vboColor;
+    GLuint vao;
 
     glm::vec3 sizeBox;
     Particle ParticlesContainer[MaxParticles];

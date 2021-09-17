@@ -140,7 +140,7 @@ void Game::update() {
     pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
-    material.apply(pShader);
+    material.setUniform(pShader);
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 

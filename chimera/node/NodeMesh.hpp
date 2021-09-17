@@ -36,7 +36,6 @@ class NodeMesh : public Node {
     inline Transform* getTransform() { return pTransform; }
     inline void setTransform(Transform* _pTransform) { pTransform = _pTransform; }
 
-    // FIXME: NodeMesh virar classe de renderizacao!!!!!
     RenderableStatic* pRenderStat;
 
   private:

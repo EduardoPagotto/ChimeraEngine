@@ -148,7 +148,7 @@ void Game::update() {
     glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
     frustum.set(viewProjectionMatrixInverse);
 
-    pLight->apply(pShader);
+    pLight->setUniform(pShader);
 
     model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0)); //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
     if (pShader == nullptr)
@@ -162,7 +162,7 @@ void Game::update() {
     pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     // aplica material ao shader
-    pMaterial->apply(pShader);
+    pMaterial->setUniform(pShader);
 
     // NEW
     render3d.begin(&vp->position, &frustum, debugParser);

@@ -51,13 +51,13 @@ class ShaderValue1i : public ShaderValue {
 
 // class ShaderValueTex : public ShaderValue {
 //   public:
-//     ShaderValueTex(const std::string& _name, Tex* _pTex, const unsigned& _indexTextureNumber)
+//     ShaderValueTex(const std::string& _name, Texture* _pTex, const unsigned& _indexTextureNumber)
 //         : ShaderValue(_name), pTex(_pTex), indexTextureNumber(_indexTextureNumber) {}
 //     virtual void setUniform(Shader* _shader) override { pTex->apply(indexTextureNumber, name, _shader); }
 
 //   private:
 //     unsigned indexTextureNumber;
-//     Tex* pTex;
+//     Texture* pTex;
 // };
 
 } // namespace Chimera

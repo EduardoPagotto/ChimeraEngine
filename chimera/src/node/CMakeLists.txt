@@ -14,9 +14,7 @@ set (SourceNode Node.cpp
 				NodeLight.cpp
 				NodeCamera.cpp
 				NodeMesh.cpp
-				Font.cpp
 				NodeHUD.cpp
-				Particle.cpp
 				NodeParticleEmitter.cpp
 				NodeGroup.cpp
 				VisitorRender.cpp

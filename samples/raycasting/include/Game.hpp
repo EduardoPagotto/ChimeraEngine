@@ -7,7 +7,7 @@
 
 class Game : public Chimera::Core::IEvents {
   public:
-    Game(Chimera::CanvasFB* _pCanvas);
+    Game(Chimera::Core::CanvasFB* _pCanvas);
 
     virtual ~Game();
     // Inherited via IEvents
@@ -20,7 +20,7 @@ class Game : public Chimera::Core::IEvents {
     virtual void windowEvent(const SDL_WindowEvent& _event) override;
 
   private:
-    Chimera::CanvasFB* pCanvas;
+    Chimera::Core::CanvasFB* pCanvas;
     // ray
     Frame* frame;
     State* state;

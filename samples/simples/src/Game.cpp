@@ -4,7 +4,7 @@
 #include "chimera/render/LoadObj.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
+Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
     debug_init = 0;
     projection = glm::mat4(1.0f);
     view = glm::mat4(1.0f);

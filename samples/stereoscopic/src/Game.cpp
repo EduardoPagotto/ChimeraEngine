@@ -7,7 +7,7 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot) {}
+Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot) {}
 
 Game::~Game() {}
 

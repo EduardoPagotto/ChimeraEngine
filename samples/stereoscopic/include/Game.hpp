@@ -8,7 +8,7 @@
 
 class Game : public Chimera::Core::IEvents {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot);
+    Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot);
     virtual ~Game();
     // Inherited via IEvents
     virtual void start();
@@ -21,7 +21,7 @@ class Game : public Chimera::Core::IEvents {
 
   private:
     Chimera::VisitorRender renderV;
-    Chimera::CanvasGL* pCanvas;
+    Chimera::Core::CanvasGL* pCanvas;
     Chimera::Node* pRoot;
 };
 

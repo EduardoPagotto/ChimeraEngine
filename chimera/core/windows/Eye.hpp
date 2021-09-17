@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
-namespace Chimera {
+namespace Chimera::Core {
 
 class Eye {
   public:
@@ -33,6 +33,6 @@ class Eye {
     unsigned int next_pow2(unsigned int x);
 };
 
-} // namespace Chimera
+} // namespace Chimera::Core
 
 #endif

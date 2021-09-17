@@ -25,7 +25,7 @@ struct Controles {
  */
 class Game : public Chimera::Core::IEvents {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld);
+    Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld);
     virtual ~Game();
 
     virtual void start();
@@ -50,7 +50,7 @@ class Game : public Chimera::Core::IEvents {
     Chimera::NodeCamera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;
     Chimera::NodeParticleEmitter* pEmissor;
-    Chimera::CanvasGL* pCanvas;
+    Chimera::Core::CanvasGL* pCanvas;
     Chimera::Node* pRoot;
     Chimera::PhysicsControl* physicWorld;
 };

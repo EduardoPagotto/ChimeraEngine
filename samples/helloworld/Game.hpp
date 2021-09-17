@@ -9,7 +9,7 @@
 
 class Game : public Chimera::Core::IEvents {
   public:
-    Game(Chimera::CanvasGL* _pVideo);
+    Game(Chimera::Core::CanvasGL* _pVideo);
     virtual ~Game();
     void start();
     virtual void update();
@@ -20,7 +20,7 @@ class Game : public Chimera::Core::IEvents {
     virtual void windowEvent(const SDL_WindowEvent& _event) override;
 
   private:
-    Chimera::CanvasGL* pVideo;
+    Chimera::Core::CanvasGL* pVideo;
     Chimera::Shader* shader;
     Chimera::RenderableStatic* renderable;
     Chimera::SimpleRender3d reder3d;

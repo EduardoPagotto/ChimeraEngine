@@ -43,7 +43,8 @@ int main(int argn, char** argv) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        Chimera::CanvasGL* video = new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
+        Chimera::Core::CanvasGL* video =
+            new Chimera::Core::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         YAML::Node shaders = config["shaders"];
         SDL_Log("Shaders identificados: %d", (int)shaders.size());

@@ -12,7 +12,7 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simple ray-casting Iniciado");
 
-        Chimera::CanvasFB* video = new Chimera::CanvasFB("RayCasting", 640, 480);
+        Chimera::Core::CanvasFB* video = new Chimera::Core::CanvasFB("RayCasting", 640, 480);
         Game* game = new Game(video);
 
         Chimera::Core::FlowControl* pControle = new Chimera::Core::FlowControl(game);

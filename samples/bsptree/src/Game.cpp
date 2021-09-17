@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
+Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
     debugParser = false;
 
     projection = glm::mat4(1.0f);

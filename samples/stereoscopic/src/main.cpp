@@ -15,7 +15,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
-Chimera::CanvasGL* video;
+Chimera::Core::CanvasGL* video;
 Chimera::NodeGroup* group1;
 
 std::map<std::string, Chimera::Shader*> mapa;
@@ -58,7 +58,7 @@ int main(int argn, char** argv) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        video = new CanvasHmd(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
+        video = new Core::CanvasHmd(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
         // video = new CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         // Carga dos shaders

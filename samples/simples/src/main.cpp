@@ -12,7 +12,7 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("simples", 640, 480);
+        Chimera::Core::CanvasGL* video = new Chimera::Core::CanvasGL("simples", 640, 480);
 
         Chimera::Shader* pShader =
             new Chimera::Shader("Simples1", "./samples/simples/shaders/simples.vert", "./samples/simples/shaders/simples.frag");

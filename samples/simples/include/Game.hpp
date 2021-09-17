@@ -12,7 +12,7 @@
 
 class Game : public Chimera::Core::IEvents {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
+    Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
 
     virtual ~Game();
     // Inherited via IEvents
@@ -30,7 +30,7 @@ class Game : public Chimera::Core::IEvents {
     glm::mat4 view;
     glm::mat4 model;
     Chimera::TrackBall trackBall;
-    Chimera::CanvasGL* pCanvas;
+    Chimera::Core::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
     Chimera::Material material;
     Chimera::RenderableStatic* rederable;

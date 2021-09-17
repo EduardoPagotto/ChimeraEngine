@@ -7,6 +7,7 @@
 int main(int argn, char** argv) {
 
     using namespace Chimera;
+    using namespace Chimera::Core;
 
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("Hello iniciado");
@@ -18,7 +19,7 @@ int main(int argn, char** argv) {
         CanvasGL* video = new CanvasGL("Hello", 960, 540);
 
         Game* game = new Game(video);
-        Core::FlowControl* pControle = new Chimera::Core::FlowControl(game);
+        FlowControl* pControle = new FlowControl(game);
         pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");

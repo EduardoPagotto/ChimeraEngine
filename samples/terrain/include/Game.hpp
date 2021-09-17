@@ -31,7 +31,7 @@ class Game : public Chimera::Core::IEvents {
     glm::mat4 model;
 
     Chimera::TrackBall trackBall;
-    Chimera::CanvasGL* pCanvas;
+    Chimera::Core::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;

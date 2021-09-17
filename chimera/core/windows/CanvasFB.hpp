@@ -4,7 +4,7 @@
 
 #include "Canvas.hpp"
 
-namespace Chimera {
+namespace Chimera::Core {
 
 class CanvasFB : public Canvas {
   public:
@@ -25,6 +25,6 @@ class CanvasFB : public Canvas {
     SDL_Texture* texture;
     SDL_Renderer* renderer;
 };
-} // namespace Chimera
+} // namespace Chimera::Core
 
 #endif

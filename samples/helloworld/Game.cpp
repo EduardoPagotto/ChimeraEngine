@@ -5,7 +5,7 @@
 #include "chimera/core/io/utils.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) {
+Game::Game(Chimera::Core::CanvasGL* _pVideo) : pVideo(_pVideo) {
 
     shader = new Chimera::Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
 }

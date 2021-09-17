@@ -3,7 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/utils.hpp"
 
-Game::Game(Chimera::CanvasFB* _pCanvas) : pCanvas(_pCanvas) {}
+Game::Game(Chimera::Core::CanvasFB* _pCanvas) : pCanvas(_pCanvas) {}
 
 Game::~Game() {}
 

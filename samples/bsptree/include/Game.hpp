@@ -11,7 +11,7 @@
 
 class Game : public Chimera::Core::IEvents {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
+    Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
 
     virtual ~Game();
     // Inherited via IEvents
@@ -28,7 +28,7 @@ class Game : public Chimera::Core::IEvents {
     bool debugParser;
 
     Chimera::TrackBall trackBall;
-    Chimera::CanvasGL* pCanvas;
+    Chimera::Core::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
 
     glm::mat4 projection;

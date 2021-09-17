@@ -6,7 +6,7 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld)
+Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld)
     : pCanvas(_pCanvas), pRoot(_pRoot), physicWorld(_physicWorld) {
 
     pCorpoRigido = nullptr;

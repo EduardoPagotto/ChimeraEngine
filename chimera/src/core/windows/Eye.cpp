@@ -2,7 +2,7 @@
 #include "chimera/core/Exception.hpp"
 //#include <glm/gtc/matrix_transform.hpp>
 
-namespace Chimera {
+namespace Chimera::Core {
 
 Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* _pShader) {
 
@@ -155,4 +155,4 @@ void Eye::displayTexture() {
     pShader->disable();
 }
 
-} // namespace Chimera
+} // namespace Chimera::Core

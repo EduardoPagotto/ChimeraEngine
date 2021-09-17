@@ -4,9 +4,9 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/core/io/IEvents.hpp"
+#include "chimera/core/space/BSPTree.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/Texture.hpp"
-#include "chimera/render/bsp/BSPTree.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
 class Game : public Chimera::Core::IEvents {

@@ -1,9 +1,8 @@
-#include "chimera/render/Octree.hpp"
+#include "chimera/core/space/Octree.hpp"
 
 namespace Chimera {
 
-Octree::Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent, bool _leafMode,
-               unsigned int _deep)
+Octree::Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent, bool _leafMode, unsigned int _deep)
     : boundary(boundary), capacity(_capacity), pParent(_parent), leafMode(_leafMode), deep(_deep) {
 
     for (short i = 0; i < 8; i++)

@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_OCTREE_HPP
 #define __CHIMERA_OCTREE_HPP
 
-#include "chimera/render/AABB.hpp"
+#include "AABB.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -19,8 +19,7 @@ enum class CHILDOCTREE {
 
 class Octree {
   public:
-    Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent = nullptr, bool _leafMode = false,
-           unsigned int _deep = 0);
+    Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent = nullptr, bool _leafMode = false, unsigned int _deep = 0);
     virtual ~Octree();
 
     void destroy();

@@ -2,7 +2,7 @@
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/utils.hpp"
-#include "chimera/render/AABB.hpp"
+#include "chimera/core/space/AABB.hpp"
 #include "chimera/render/LoadObj.hpp"
 #include "chimera/render/maze/Maze.hpp"
 #include <algorithm>
@@ -82,30 +82,17 @@ void Game::start() {
     // // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
     // // m.changeSize(30.0, true);
 
-    // // Cria VertexList sequencial
-    // std::vector<Chimera::VertexData> vVertexSequencial;
-    // m.toVertexData(vVertexSequencial);
     std::vector<uint32_t> vIndex;
-
-    // // -------
-    // // Comentar as tres linhas de baixo para bsp sem indice (sequencial)
-    // // Cria BSP usando Vertex indexado
     std::vector<Chimera::VertexData> vVertexIndexed;
-    // vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
-    // bspTree.create(vVertexIndexed, vIndex);
-
-    // -------
-    // Cria o BSP usando um vertes sequencial sem indice
-    // bspTree.create(true, vVertexSequencial, vIndex);
-    // -------
 
     // Usando o Maze
     Chimera::Maze maze = Chimera::Maze("./data/maze7.txt");
     maze.createMap();
 
     vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
+    bspTree.create(vVertexIndexed, vIndex);
 
-    renderz1 = bspTree.create(vVertexIndexed, vIndex);
+    renderz1 = new Chimera::RenderableBsp(bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
 }
 
 void Game::userEvent(const SDL_Event& _event) {

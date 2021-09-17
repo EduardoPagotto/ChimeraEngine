@@ -3,7 +3,7 @@
 
 #include "Cube.hpp"
 #include "chimera/core/VertexData.hpp"
-#include "chimera/render/Triangle.hpp"
+#include "chimera/core/space/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <vector>

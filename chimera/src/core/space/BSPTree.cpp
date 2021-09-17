@@ -1,4 +1,4 @@
-#include "chimera/render/bsp/BSPTree.hpp"
+#include "chimera/core/space/BSPTree.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -9,24 +9,31 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
-RenderableBsp* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
+// RenderableBsp* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
+// void BspTree::create(std::vector<Chimera::VertexData>& vVertex, std::list<Triangle*>& vTris) {
+void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
 
     std::list<Triangle*> vTris;
-    vVertex = _vVertex;
-
     if (_vIndex.size() > 0) {
         triangleFromVertexDataIndex(&_vVertex[0], &_vIndex[0], _vIndex.size(), vTris);
     } else {
         triangleFromVertexData(&_vVertex[0], _vVertex.size(), vTris);
     }
 
+    this->vVertex = std::move(_vVertex);
+
     // create BspTtree leafy
-    root = buildLeafy(vTris);
+    root = build(vTris);
 
-    vTris.clear();
+    _vIndex.clear();
 
-    RenderableBsp* r = new RenderableBsp(root, this->vpLeaf, this->vVertex);
-    return r;
+    // vTris.clear();
+
+    // RenderableBsp* r = new RenderableBsp(root, this->vpLeaf, this->vVertex);
+
+    // return root;
+
+    // return r;
 }
 
 Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
@@ -170,7 +177,7 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     _pTriangle = nullptr;
 }
 
-BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
+BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
     if (_vTriangle.empty() == true)
         return nullptr;
@@ -234,10 +241,10 @@ BSPTreeNode* BspTree::buildLeafy(std::list<Triangle*>& _vTriangle) {
     if (count == 0) {
         createLeafy(tree, front_list);
     } else {
-        tree->front = buildLeafy(front_list);
+        tree->front = build(front_list);
     }
 
-    tree->back = buildLeafy(back_list);
+    tree->back = build(back_list);
     if (tree->back == nullptr) {
         if (tree->isLeaf == false) {
             BSPTreeNode* solid = new BSPTreeNode(tree->hyperPlane);

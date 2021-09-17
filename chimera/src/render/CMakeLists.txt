@@ -9,13 +9,7 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	Triangle.cpp
-					Plane.cpp
-					Frustum.cpp
-					AABB.cpp
-					Octree.cpp
-					bsp/BSPTree.cpp
-					vbs/RenderableBsp.cpp
+set (RenderSource 	vbs/RenderableBsp.cpp
 					vbs/RenderableIBO.cpp
 					vbs/RenderableDynamic.cpp 
 					vbs/RenderableStatic.cpp

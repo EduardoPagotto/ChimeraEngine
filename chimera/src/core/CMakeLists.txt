@@ -12,6 +12,12 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (SourcesCore windows/CanvasGL.cpp
 				 windows/CanvasFB.cpp
 				 #windows/CanvasOVR.cpp
+				 space/Triangle.cpp
+				 space/Plane.cpp
+				 space/Frustum.cpp
+				 space/AABB.cpp
+				 space/Octree.cpp
+				 space/BSPTree.cpp
 				 TrackBall.cpp
 				 TrackHead.cpp
 				 Shader.cpp

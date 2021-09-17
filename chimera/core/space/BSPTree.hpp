@@ -11,10 +11,15 @@ class BspTree {
   public:
     BspTree() : root(nullptr) {}
     virtual ~BspTree() {}
-    RenderableBsp* create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
+    // RenderableBsp* create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
+    void create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
+
+    BSPTreeNode* getRoot() const { return root; }
+    std::vector<Chimera::VertexData>* getVertex() { return &vVertex; }
+    std::vector<RenderableIBO*>* getLeafs() { return &vpLeaf; }
 
   private:
-    BSPTreeNode* buildLeafy(std::list<Triangle*>& _vTriangle);
+    BSPTreeNode* build(std::list<Triangle*>& _vTriangle);
     Triangle* selectBestSplitter(std::list<Triangle*>& _vTriangle);
     void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
     void createLeafy(BSPTreeNode* tree, std::list<Triangle*>& _vTriangle);

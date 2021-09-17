@@ -1,4 +1,4 @@
-#include "chimera/render/Triangle.hpp"
+#include "chimera/core/space/Triangle.hpp"
 
 namespace Chimera {
 

@@ -4,7 +4,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/buffers/IndexBuffer.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
-#include "chimera/render/AABB.hpp"
+#include "chimera/core/space/AABB.hpp"
 #include <deque>
 
 namespace Chimera {

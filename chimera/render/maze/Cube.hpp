@@ -2,8 +2,8 @@
 #define __GAME_TESTE_CUBE__HPP
 
 #include "chimera/core/VertexData.hpp"
-#include "chimera/render/AABB.hpp"
-#include "chimera/render/Triangle.hpp"
+#include "chimera/core/space/AABB.hpp"
+#include "chimera/core/space/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

@@ -4,7 +4,7 @@
 #include "IRenderable.hpp"
 #include "chimera/core/VertexData.hpp"
 #include "chimera/core/buffers/IndexBuffer.hpp"
-#include "chimera/render/AABB.hpp"
+#include "chimera/core/space/AABB.hpp"
 #include <vector>
 
 namespace Chimera {

@@ -40,26 +40,26 @@ Game::~Game() {
     delete pCanvas;
 }
 
-void Game::joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL) {}
+void Game::joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSDL) {}
 
 void Game::keboardEvent(SDL_Keycode tecla) {
 
     switch (tecla) {
         case SDLK_ESCAPE:
-            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_STOP, nullptr, nullptr);
+            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
             break;
         case SDLK_1:
             debugParser = true;
             break;
         case SDLK_F10:
-            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         default:
             break;
     }
 }
 
-void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {
+void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) {
 
     if (pMouse->getButtonState(1) == SDL_PRESSED) {
         if (pEventSDL->type == SDL_MOUSEMOTION) {
@@ -104,10 +104,10 @@ void Game::start() {
 
 void Game::userEvent(const SDL_Event& _event) {
     switch (_event.user.code) {
-        case Chimera::IO::EVENT_TOGGLE_FULL_SCREEN:
+        case Chimera::Core::EVENT_TOGGLE_FULL_SCREEN:
             pCanvas->toggleFullScreen();
             break;
-        case Chimera::IO::EVENT_FLOW_START:
+        case Chimera::Core::EVENT_FLOW_START:
             this->start();
         default:
             break;
@@ -117,10 +117,10 @@ void Game::userEvent(const SDL_Event& _event) {
 void Game::windowEvent(const SDL_WindowEvent& _event) {
     switch (_event.event) {
         case SDL_WINDOWEVENT_ENTER:
-            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
             break;
         case SDL_WINDOWEVENT_LEAVE:
-            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
             pCanvas->reshape(_event.data1, _event.data2);

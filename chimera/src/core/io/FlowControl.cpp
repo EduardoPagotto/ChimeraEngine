@@ -2,7 +2,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/utils.hpp"
 
-namespace Chimera::IO {
+namespace Chimera::Core {
 
 FlowControl::FlowControl(IEvents* _gEvent) : gEvent(_gEvent), pause(true) {
     timerFPS.setElapsedCount(1000);
@@ -14,17 +14,17 @@ FlowControl::~FlowControl() {}
 bool FlowControl::changeStatusFlow(SDL_Event* pEventSDL) {
 
     switch (pEventSDL->user.code) {
-        case Chimera::IO::EVENT_FLOW_PAUSE: {
+        case Chimera::Core::EVENT_FLOW_PAUSE: {
             pause = true;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
             return false;
         } break;
-        case Chimera::IO::EVENT_FLOW_RESUME: {
+        case Chimera::Core::EVENT_FLOW_RESUME: {
             pause = false;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
             return false;
         } break;
-        case Chimera::IO::EVENT_FLOW_STOP: {
+        case Chimera::Core::EVENT_FLOW_STOP: {
             SDL_Event l_eventQuit;
             l_eventQuit.type = SDL_QUIT;
             if (SDL_PushEvent(&l_eventQuit) == -1) {
@@ -126,4 +126,4 @@ void FlowControl::run(void) {
     // Release devices
     joystickManager.ReleaseJoysticks();
 }
-} // namespace Chimera::IO
+} // namespace Chimera::Core

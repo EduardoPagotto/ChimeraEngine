@@ -9,7 +9,7 @@ int main(int argn, char** argv) {
         SDL_Log("Iniciado");
 
         Game* game = new Game();
-        Chimera::IO::FlowControl* pControl = new Chimera::IO::FlowControl(game);
+        Chimera::Core::FlowControl* pControl = new Chimera::Core::FlowControl(game);
         pControl->run();
 
         delete pControl;

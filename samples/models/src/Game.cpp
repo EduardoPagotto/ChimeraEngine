@@ -52,10 +52,10 @@ void Game::updatePos() {
     }
 }
 
-void Game::joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL) {
+void Game::joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSDL) {
 
     using namespace Chimera;
-    using namespace Chimera::IO;
+    using namespace Chimera::Core;
 
     // Captura joystick 0 se existir
     if (pJoy != nullptr) {
@@ -93,13 +93,13 @@ void Game::keboardEvent(SDL_Keycode tecla) {
 
     switch (tecla) {
         case SDLK_ESCAPE:
-            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_STOP, nullptr, nullptr);
+            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
             break;
         case SDLK_F1:
             pHUD->setOn(!pHUD->isOn());
             break;
         case SDLK_F10:
-            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
         case SDLK_UP:
             pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
@@ -124,7 +124,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL) {
+void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) {
 
     if (pMouse->getButtonState(1) == SDL_PRESSED) {
         if (pEventSDL->type == SDL_MOUSEMOTION) {
@@ -193,31 +193,31 @@ void Game::userEvent(const SDL_Event& _event) {
     Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
 
     switch (_event.user.code) {
-        case Chimera::IO::EVENT_COLLIDE_START: {
+        case Chimera::Core::EVENT_COLLIDE_START: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::IO::EVENT_COLLIDE_ON: {
+        case Chimera::Core::EVENT_COLLIDE_ON: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::IO::EVENT_COLLIDE_OFF: {
+        case Chimera::Core::EVENT_COLLIDE_OFF: {
             Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
         } break;
-        case Chimera::IO::EVENT_TOGGLE_FULL_SCREEN:
+        case Chimera::Core::EVENT_TOGGLE_FULL_SCREEN:
             pCanvas->toggleFullScreen();
             break;
-        case Chimera::IO::EVENT_NEW_FPS: {
+        case Chimera::Core::EVENT_NEW_FPS: {
             uint32_t* fps = (uint32_t*)_event.user.data1;
             glm::vec3 val1 = pCorpoRigido->getPosition();
             sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
             textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
         } break;
-        case Chimera::IO::EVENT_FLOW_START:
+        case Chimera::Core::EVENT_FLOW_START:
             this->start();
         default:
             break;
@@ -227,10 +227,10 @@ void Game::userEvent(const SDL_Event& _event) {
 void Game::windowEvent(const SDL_WindowEvent& _event) {
     switch (_event.event) {
         case SDL_WINDOWEVENT_ENTER:
-            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
             break;
         case SDL_WINDOWEVENT_LEAVE:
-            Chimera::IO::utilSendEvent(Chimera::IO::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
             pCanvas->reshape(_event.data1, _event.data2);

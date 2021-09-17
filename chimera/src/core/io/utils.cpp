@@ -2,7 +2,7 @@
 #include "chimera/core/Exception.hpp"
 #include <fstream>
 
-namespace Chimera::IO {
+namespace Chimera::Core {
 
 void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB) {
     SDL_Event event;
@@ -34,4 +34,4 @@ std::string utilReadFile(const char* file_path) {
     return ret;
 }
 
-} // namespace Chimera::IO
+} // namespace Chimera::Core

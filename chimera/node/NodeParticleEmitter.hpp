@@ -55,7 +55,7 @@ class NodeParticleEmitter : public Node {
 
     glm::vec3 sizeBox;
     Particle ParticlesContainer[MaxParticles];
-    IO::Timer timer;
+    Core::Timer timer;
 
     Material* material;
 };

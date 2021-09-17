@@ -66,8 +66,8 @@ GLuint linkShader(const GLuint& VertexShaderID, const GLuint& FragmentShaderID) 
 
 GLuint shadeLoadProg(const char* progName, const char* fileVertex, const char* fileFrag) {
 
-    GLuint VertexShaderID = compileShader(IO::utilReadFile(fileVertex), GL_VERTEX_SHADER);
-    GLuint FragmentShaderID = compileShader(IO::utilReadFile(fileFrag), GL_FRAGMENT_SHADER);
+    GLuint VertexShaderID = compileShader(Core::utilReadFile(fileVertex), GL_VERTEX_SHADER);
+    GLuint FragmentShaderID = compileShader(Core::utilReadFile(fileFrag), GL_FRAGMENT_SHADER);
 
     // Link o programa
     GLuint shaderId = linkShader(VertexShaderID, FragmentShaderID);

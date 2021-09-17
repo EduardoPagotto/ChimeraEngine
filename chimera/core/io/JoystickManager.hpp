@@ -8,7 +8,7 @@
 
 #include "JoystickState.hpp"
 
-namespace Chimera::IO {
+namespace Chimera::Core {
 
 /**
  * Classe gerenciadora de todos os Joysticks identificados
@@ -34,5 +34,5 @@ class JoystickManager {
     std::map<uint8_t, JoystickState> Joysticks;
     bool Initialized;
 };
-} // namespace Chimera::IO
+} // namespace Chimera::Core
 #endif

@@ -5,7 +5,7 @@
 #include "JoystickManager.hpp"
 #include "Timer.hpp"
 
-namespace Chimera::IO {
+namespace Chimera::Core {
 
 class FlowControl {
   public:
@@ -23,6 +23,6 @@ class FlowControl {
     uint32_t fps;
     bool pause;
 };
-} // namespace Chimera::IO
+} // namespace Chimera::Core
 
 #endif

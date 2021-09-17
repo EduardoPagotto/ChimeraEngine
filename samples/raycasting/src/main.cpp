@@ -15,7 +15,7 @@ int main(int argn, char** argv) {
         Chimera::CanvasFB* video = new Chimera::CanvasFB("RayCasting", 640, 480);
         Game* game = new Game(video);
 
-        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
+        Chimera::Core::FlowControl* pControle = new Chimera::Core::FlowControl(game);
         pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");

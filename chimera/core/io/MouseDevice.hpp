@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <map>
 
-namespace Chimera::IO {
+namespace Chimera::Core {
 
 class MouseDevice {
   public:
@@ -17,6 +17,6 @@ class MouseDevice {
   private:
     std::map<uint8_t, uint8_t> buttonState;
 };
-} // namespace Chimera::IO
+} // namespace Chimera::Core
 
 #endif

@@ -1,6 +1,6 @@
 #include "chimera/core/io/JoystickManager.hpp"
 
-namespace Chimera::IO {
+namespace Chimera::Core {
 
 JoystickManager::JoystickManager(void) { Initialized = false; }
 
@@ -136,4 +136,4 @@ void JoystickManager::DebugDadosJoystick() {
         }
     }
 }
-} // namespace Chimera::IO
+} // namespace Chimera::Core

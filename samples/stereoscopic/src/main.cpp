@@ -107,7 +107,7 @@ int main(int argn, char** argv) {
         Game* game = new Game(video, group1);
 
         // Controle do fluxo de programa
-        IO::FlowControl* pControle = new IO::FlowControl(game);
+        Core::FlowControl* pControle = new Core::FlowControl(game);
         pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");

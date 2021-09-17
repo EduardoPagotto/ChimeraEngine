@@ -10,7 +10,7 @@
 #include "chimera/render/vbs/RenderableStatic.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
-class Game : public Chimera::IO::IEvents {
+class Game : public Chimera::Core::IEvents {
   public:
     Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
 
@@ -19,8 +19,8 @@ class Game : public Chimera::IO::IEvents {
     virtual void start();
     virtual void update();
     virtual void keboardEvent(SDL_Keycode tecla);
-    virtual void mouseEvent(Chimera::IO::MouseDevice* pMouse, SDL_Event* pEventSDL);
-    virtual void joystickEvent(Chimera::IO::JoystickState* pJoy, SDL_Event* pEventSDL);
+    virtual void mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL);
+    virtual void joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSDL);
     virtual void userEvent(const SDL_Event& _event) override;
     virtual void windowEvent(const SDL_WindowEvent& _event) override;
 

@@ -5,7 +5,7 @@
 #include "MouseDevice.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera::IO {
+namespace Chimera::Core {
 
 class IEvents {
   public:
@@ -17,5 +17,5 @@ class IEvents {
     virtual void windowEvent(const SDL_WindowEvent& _event) = 0;
 };
 
-} // namespace Chimera::IO
+} // namespace Chimera::Core
 #endif

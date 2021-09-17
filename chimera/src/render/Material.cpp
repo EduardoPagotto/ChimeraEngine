@@ -57,7 +57,7 @@ void Material::apply(Shader* _shader) {
 
     // aplica todos os materiais passados
     for (ShaderValue* shaderMaterial : listMaterial) {
-        shaderMaterial->apply(_shader);
+        shaderMaterial->setUniform(_shader);
     }
 
     _shader->setUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);

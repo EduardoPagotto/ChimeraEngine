@@ -18,7 +18,7 @@ int main(int argn, char** argv) {
 
         Game* game = new Game(video, pShader);
 
-        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
+        Chimera::Core::FlowControl* pControle = new Chimera::Core::FlowControl(game);
         pControle->run();
 
         delete pControle;

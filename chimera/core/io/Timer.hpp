@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-namespace Chimera::IO {
+namespace Chimera::Core {
 
 /**
  * Class Timer
@@ -48,5 +48,5 @@ class Timer {
     Uint32 countStep;
     Uint32 elapsedCount;
 };
-} // namespace Chimera::IO
+} // namespace Chimera::Core
 #endif

@@ -98,7 +98,7 @@ int main(int argn, char** argv) {
         pHUD->addFont(pFont);
 
         // Controle de fluxo do programa
-        Chimera::IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
+        Chimera::Core::FlowControl* pControle = new Chimera::Core::FlowControl(game);
         pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");

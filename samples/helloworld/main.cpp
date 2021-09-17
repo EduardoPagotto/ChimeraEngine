@@ -18,7 +18,7 @@ int main(int argn, char** argv) {
         CanvasGL* video = new CanvasGL("Hello", 960, 540);
 
         Game* game = new Game(video);
-        IO::FlowControl* pControle = new Chimera::IO::FlowControl(game);
+        Core::FlowControl* pControle = new Chimera::Core::FlowControl(game);
         pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");

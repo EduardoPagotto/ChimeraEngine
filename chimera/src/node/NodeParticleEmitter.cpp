@@ -24,7 +24,7 @@ void NodeParticleEmitter::init() {
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    vPosSize = new GLfloat[MaxParticles * 4];
+    vPosSize = new glm::vec4[MaxParticles];
     vColor = new GLubyte[MaxParticles * 4];
 
     // The VBO containing the 4 vertices of the particles.
@@ -41,7 +41,7 @@ void NodeParticleEmitter::init() {
     glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
 
     // Initialize with empty (NULL) buffer : it will be updated later, each frame.
-    glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, MaxParticles * sizeof(glm::vec4), NULL, GL_STREAM_DRAW);
 
     // The VBO containing the colors of the particles
     glGenBuffers(1, &vboColor);
@@ -121,10 +121,10 @@ void NodeParticleEmitter::render(Shader* _pShader) {
     glBindVertexArray(vao); // coloquei aqui porque acho que tenho que ligar antes
 
     glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
-    glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLfloat), NULL,
+    glBufferData(GL_ARRAY_BUFFER, MaxParticles * sizeof(glm::vec4), NULL,
                  GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming
                                   // perf. See above link for details.
-    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLfloat) * 4, vPosSize);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(glm::vec4), vPosSize);
 
     glBindBuffer(GL_ARRAY_BUFFER, vboColor);
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL,

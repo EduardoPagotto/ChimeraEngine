@@ -33,7 +33,7 @@ void Particle::create(const glm::vec3& _maindir, const float& _spread) {
     size = (rand() % 1000) / 2000.0f + 0.1f;
 }
 
-void Particle::decrease(const float& _delta, int _particlesCount, GLfloat* pPositionSizeData, GLubyte* pColorData,
+void Particle::decrease(const float& _delta, int _particlesCount, glm::vec4* pPositionSizeData, GLubyte* pColorData,
                         const glm::vec3& _cameraPosition) {
     // Decrease life
     life -= _delta;
@@ -46,11 +46,7 @@ void Particle::decrease(const float& _delta, int _particlesCount, GLfloat* pPosi
         // ParticlesContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
 
         // Fill the GPU buffer
-        pPositionSizeData[4 * _particlesCount + 0] = pos.x;
-        pPositionSizeData[4 * _particlesCount + 1] = pos.y;
-        pPositionSizeData[4 * _particlesCount + 2] = pos.z;
-
-        pPositionSizeData[4 * _particlesCount + 3] = size;
+        pPositionSizeData[_particlesCount] = glm::vec4(pos.x, pos.y, pos.z, size);
 
         pColorData[4 * _particlesCount + 0] = color[0]; //.r; // p.r;
         pColorData[4 * _particlesCount + 1] = color[1]; //.g; // p.g;

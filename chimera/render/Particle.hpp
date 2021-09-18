@@ -12,7 +12,7 @@ class Particle {
 
     void create(const glm::vec3& _maindir, const float& _spread);
 
-    void decrease(const float& _delta, int _particlesCount, GLfloat* pPositionSizeData, GLubyte* pColorData,
+    void decrease(const float& _delta, int _particlesCount, glm::vec4* pPositionSizeData, GLubyte* pColorData,
                   const glm::vec3& _cameraPosition);
 
     void reset();

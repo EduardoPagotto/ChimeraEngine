@@ -42,7 +42,7 @@ class NodeParticleEmitter : public Node {
     int recycleParticleLife(const glm::vec3& _camPosition);
     int FindUnusedParticle();
 
-    GLfloat* vPosSize;
+    glm::vec4* vPosSize;
     GLubyte* vColor;
 
     int LastUsedParticle;

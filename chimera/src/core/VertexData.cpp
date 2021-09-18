@@ -1,5 +1,5 @@
 #include "chimera/core/VertexData.hpp"
-//#include "chimera/render/Side.hpp"
+#include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -189,6 +189,22 @@ void vertexDataMeshClean(MeshData* m) {
     m->normalList.clear();
     m->uvIndex.clear();
     m->uvList.clear();
+}
+
+VertexComponents* vertexDataComponentes() {
+    VertexComponents* v = new VertexComponents;
+    v->loc.push_back({0, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
+    v->loc.push_back({1, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(12)});
+    v->loc.push_back({2, 2, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(24)});
+    v->sizeVertex = sizeof(VertexData);
+    return v;
+}
+
+VertexComponents* vertexDataFloatComponentes() {
+    VertexComponents* v = new VertexComponents;
+    v->loc.push_back({0, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
+    v->sizeVertex = sizeof(float) * 3;
+    return v;
 }
 
 // glm::vec3 aproxEpsilon(const glm::vec3& dado) {

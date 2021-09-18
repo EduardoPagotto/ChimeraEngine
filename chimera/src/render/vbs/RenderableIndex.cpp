@@ -11,7 +11,7 @@ RenderableIndex::RenderableIndex(std::vector<RenderableIBO*>& vpLeafData, std::v
 
     // create vertex buffers
     vao = new Core::VertexArray();
-    vao->addBuffer(new Core::VertexBuffer(&this->vVertex[0], this->vVertex.size(), 3), 0); // FIXME: 0 por comatibilidade
+    vao->addBuffer(new Core::VertexBuffer(&this->vVertex[0], this->vVertex.size(), vertexDataComponentes()));
     vao->bind();
 
     for (RenderableIBO* pLeaf : this->vpLeaf) {

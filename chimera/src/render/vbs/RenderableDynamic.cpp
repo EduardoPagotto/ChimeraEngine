@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-RenderableDynamic::RenderableDynamic(const uint32_t& max) { this->vbo = new Core::VertexBuffer(nullptr, max, 3); }
+RenderableDynamic::RenderableDynamic(const uint32_t& max) { this->vbo = new Core::VertexBuffer(nullptr, max, vertexDataComponentes()); }
 
 RenderableDynamic::~RenderableDynamic() {
     delete vbo;

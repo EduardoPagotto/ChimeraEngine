@@ -6,7 +6,7 @@ namespace Chimera {
 RenderableStatic::RenderableStatic(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize) {
 
     vao = new Core::VertexArray();
-    vao->addBuffer(new Core::VertexBuffer(vertexData, vertexSize, 3), 0); // FIXME 0 para compatibilidade
+    vao->addBuffer(new Core::VertexBuffer(vertexData, vertexSize, vertexDataComponentes()));
 
     vao->bind();
     ibo = new Core::IndexBuffer(indexData, indexSize);

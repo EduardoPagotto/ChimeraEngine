@@ -9,7 +9,7 @@ class VertexArray {
   public:
     VertexArray();
     virtual ~VertexArray();
-    void addBuffer(VertexBuffer* buffer, uint32_t index);
+    void addBuffer(VertexBuffer* buffer);
     inline void bind() const { glBindVertexArray(arrayID); }
     inline void unbind() const { glBindVertexArray(0); }
 

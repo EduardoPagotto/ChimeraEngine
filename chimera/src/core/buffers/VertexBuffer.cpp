@@ -25,8 +25,8 @@ VertexBuffer::~VertexBuffer() {
 void VertexBuffer::enableVertexAttribArray() {
 
     for (auto slot : components->loc) {
-        glVertexAttribPointer(slot.id, slot.size, slot.type, slot.normalize, components->sizeVertex, slot.offset);
         glEnableVertexAttribArray(slot.id);
+        glVertexAttribPointer(slot.id, slot.size, slot.type, slot.normalize, components->sizeVertex, slot.offset);
     }
 }
 

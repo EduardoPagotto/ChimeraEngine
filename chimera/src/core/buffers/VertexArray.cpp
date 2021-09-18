@@ -18,8 +18,10 @@ void VertexArray::addBuffer(VertexBuffer* buffer) {
     buffer->bind();
 
     buffer->enableVertexAttribArray();
+
     buffer->unbind();
     this->unbind();
+
     buffer->disableVertexAttribArray();
 }
 } // namespace Chimera::Core

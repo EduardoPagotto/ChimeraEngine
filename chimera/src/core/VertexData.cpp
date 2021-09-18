@@ -203,7 +203,7 @@ VertexComponents* vertexDataComponentes() {
 VertexComponents* vertexDataFloatComponentes() {
     VertexComponents* v = new VertexComponents;
     v->loc.push_back({0, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
-    v->sizeVertex = sizeof(float) * 3;
+    v->sizeVertex = sizeof(float);
     return v;
 }
 

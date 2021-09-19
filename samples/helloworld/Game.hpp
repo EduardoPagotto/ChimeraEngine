@@ -24,6 +24,8 @@ class Game : public Chimera::Core::IEvents {
     Chimera::Shader* shader;
     Chimera::RenderableStatic* renderable;
     Chimera::SimpleRender3d reder3d;
+
+    uint16_t x, y;
 };
 
 #endif

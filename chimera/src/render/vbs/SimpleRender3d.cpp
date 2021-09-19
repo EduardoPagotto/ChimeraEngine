@@ -38,10 +38,6 @@ void SimpleRender3d::flush() {
 
             r->getIBO()->unbind();
         }
-
-        // if (r->getVao() != nullptr)
-        //     r->getVao()->unbind();
-
         renderQueue.pop_front();
     }
     pLastVao->unbind();

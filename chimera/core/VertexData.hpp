@@ -59,5 +59,6 @@ void vertexDataMeshScale(MeshData* m, const float& new_size, const bool& hasText
 void vertexDataMeshClean(MeshData* m);
 VertexComponents* vertexDataComponentes();
 VertexComponents* vertexDataFloatComponentes();
+VertexComponents* vertexDataSingleComponentes(uint8_t id, uint8_t sizeSlot, uint8_t sizeVetex);
 } // namespace Chimera
 #endif

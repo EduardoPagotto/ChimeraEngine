@@ -8,7 +8,7 @@ namespace Chimera::Core {
 
 class VertexBuffer {
   public:
-    VertexBuffer(VertexData* vertexData, const uint32_t& size, VertexComponents* components);
+    VertexBuffer(void* vertexData, const uint32_t& size, VertexComponents* components);
     virtual ~VertexBuffer();
     void enableVertexAttribArray();
     void disableVertexAttribArray();

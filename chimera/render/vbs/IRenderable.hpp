@@ -27,6 +27,5 @@ class IRender3d {
     virtual void submit(IRenderable* renderable) = 0;
     virtual void flush() = 0;
 };
-
 } // namespace Chimera
 #endif

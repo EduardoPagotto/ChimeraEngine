@@ -207,6 +207,13 @@ VertexComponents* vertexDataFloatComponentes() {
     return v;
 }
 
+VertexComponents* vertexDataSingleComponentes(uint8_t id, uint8_t sizeSlot, uint8_t sizeVetex) {
+    VertexComponents* v = new VertexComponents;
+    v->loc.push_back({id, sizeSlot, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
+    v->sizeVertex = sizeVetex;
+    return v;
+}
+
 // glm::vec3 aproxEpsilon(const glm::vec3& dado) {
 //     return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
 //                      (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y

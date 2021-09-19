@@ -15,6 +15,7 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
 					vbs/RenderableIndex.cpp
+					vbs/Renderable2D.cpp
 					Font.cpp
 					Light.cpp
 					Material.cpp

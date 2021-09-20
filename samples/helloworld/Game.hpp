@@ -4,8 +4,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
-#include "chimera/render/vbs/RenderableStatic.hpp"
-#include "chimera/render/vbs/SimpleRender3d.hpp"
+#include "chimera/render/vbs/Renderable2D.hpp"
 
 class Game : public Chimera::Core::IEvents {
   public:
@@ -22,8 +21,8 @@ class Game : public Chimera::Core::IEvents {
   private:
     Chimera::Core::CanvasGL* pVideo;
     Chimera::Shader* shader;
-    Chimera::RenderableStatic* renderable;
-    Chimera::SimpleRender3d reder3d;
+    Chimera::Renderable2D *sprite1, *sprite2;
+    Chimera::SimpleRender2D render2D;
 
     uint16_t x, y;
 };

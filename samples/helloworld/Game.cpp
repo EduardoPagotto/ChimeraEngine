@@ -35,18 +35,9 @@ void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) 
 }
 
 void Game::start() {
-    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
-
-    Chimera::VertexData v[] = {{glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec2(0.0)},
-                               {glm::vec3(8.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec2(0.0)},
-                               {glm::vec3(8.0f, 3.0f, 0.0f), glm::vec3(0.0f), glm::vec2(0.0)},
-                               {glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f), glm::vec2(0.0)}};
-    const uint32_t sv = 4;
-
-    uint32_t i[] = {0, 1, 2, 2, 3, 0};
-    const uint32_t si = 6;
-
-    renderable = new Chimera::RenderableStatic(v, sv, i, si);
+    using namespace Chimera;
+    sprite1 = new Renderable2D(glm::vec3(5, 5, 0), glm::vec2(4, 4), glm::vec4(1, 0, 1, 1), shader);
+    sprite2 = new Renderable2D(glm::vec3(7, 1, 0), glm::vec2(2, 3), glm::vec4(0.2f, 0, 1, 1), shader);
 }
 
 void Game::userEvent(const SDL_Event& _event) {
@@ -85,16 +76,11 @@ void Game::update() {
     glm::mat4 orto = glm::ortho(0.0f, 16.f, 0.0f, 9.0f, -1.0f, 1.0f);
     shader->setUniformMatrix4fv("pr_matrix", 1, false, glm::value_ptr(orto));
 
-    glm::mat4 modelMatrix(1.0f);
-    glm::mat4 mm = glm::translate(modelMatrix, glm::vec3(4.0f, 3.0f, 0.0f));
-    // glm::mat4 mm = glm::rotate(modelMatrix, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    shader->setUniformMatrix4fv("ml_matrix", 1, false, glm::value_ptr(mm));
-
     shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2((float)(x * 16.0f / 960.0f), (float)(9.0f - y * 9.0f / 540.0f))));
-    shader->setUniform4fv("colour", 1, glm::value_ptr(glm::vec4(0.2f, 0.3f, 0.8f, 1.0f)));
 
-    reder3d.submit(renderable);
-    reder3d.flush();
+    render2D.submit(sprite1);
+    render2D.submit(sprite2);
+    render2D.flush();
 
     shader->disable();
 

@@ -36,8 +36,10 @@ void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) 
 
 void Game::start() {
     using namespace Chimera;
-    sprite1 = new Renderable2D(glm::vec3(5, 5, 0), glm::vec2(4, 4), glm::vec4(1, 0, 1, 1), shader);
-    sprite2 = new Renderable2D(glm::vec3(7, 1, 0), glm::vec2(2, 3), glm::vec4(0.2f, 0, 1, 1), shader);
+    // sprite1 = new StaticSprite(5, 5, 4, 4, glm::vec4(1, 0, 1, 1), shader);
+    // sprite2 = new StaticSprite(7, 1, 2, 3, glm::vec4(0.2f, 0, 1, 1), shader);
+    sprite1 = new Sprite(5, 5, 4, 4, glm::vec4(1, 0, 1, 1));
+    sprite2 = new Sprite(7, 1, 2, 3, glm::vec4(0.2f, 0, 1, 1));
 }
 
 void Game::userEvent(const SDL_Event& _event) {
@@ -75,11 +77,12 @@ void Game::update() {
 
     glm::mat4 orto = glm::ortho(0.0f, 16.f, 0.0f, 9.0f, -1.0f, 1.0f);
     shader->setUniformMatrix4fv("pr_matrix", 1, false, glm::value_ptr(orto));
-
     shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2((float)(x * 16.0f / 960.0f), (float)(9.0f - y * 9.0f / 540.0f))));
 
+    render2D.begin();
     render2D.submit(sprite1);
     render2D.submit(sprite2);
+    render2D.end();
     render2D.flush();
 
     shader->disable();

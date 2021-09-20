@@ -1,0 +1,42 @@
+#ifndef __CHIMERA_BATCHRENDERABLE_2D__HPP
+#define __CHIMERA_BATCHRENDERABLE_2D__HPP
+
+#include "Renderable2D.hpp"
+
+namespace Chimera {
+
+struct VertexDataSimple {
+    glm::vec3 vertex;
+    glm::vec4 color;
+};
+
+#define RENDERER_MAX_SPRITES 10000
+#define RENDERER_VERTEX_SIZE sizeof(VertexDataSimple)
+#define RENDERER_SPRITE_SIZE RENDERER_VERTEX_SIZE * 4
+#define RENDERER_BUFFER_SIZE RENDERER_SPRITE_SIZE* RENDERER_MAX_SPRITES
+#define RENDERER_INDICES_SIZE RENDERER_MAX_SPRITES * 6
+
+#define SHADER_VERTEX_INDEX 0
+#define SHADER_COLOR_INDEX 1
+
+class BatchRender2D : public IRenderer2D {
+  public:
+    BatchRender2D();
+    virtual ~BatchRender2D();
+
+    void init();
+    void begin();
+    virtual void submit(IRenderable2D* renderable) override;
+    void end();
+    virtual void flush() override;
+
+  private:
+    Core::IndexBuffer* ibo;
+    GLuint vao;
+    GLuint vbo;
+    GLsizei indexCount;
+    VertexDataSimple* buffer;
+    // std::deque<IRenderable2D*> renderQueue;
+};
+} // namespace Chimera
+#endif

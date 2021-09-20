@@ -70,6 +70,11 @@ void Game::userEvent(const SDL_Event& _event) {
             break;
         case Chimera::Core::EVENT_FLOW_START:
             this->start();
+            break;
+        case Chimera::Core::EVENT_NEW_FPS: {
+            uint32_t* fps = (uint32_t*)_event.user.data1;
+            SDL_Log("FPS: %d", *fps);
+        } break;
         default:
             break;
     }

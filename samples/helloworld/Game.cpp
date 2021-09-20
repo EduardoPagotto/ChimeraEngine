@@ -4,6 +4,9 @@
 #include "chimera/core/VertexData.hpp"
 #include "chimera/core/io/utils.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include <time.h>
+
+#define batch 1
 
 Game::Game(Chimera::Core::CanvasGL* _pVideo) : pVideo(_pVideo) {
 
@@ -36,10 +39,28 @@ void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) 
 
 void Game::start() {
     using namespace Chimera;
-    // sprite1 = new StaticSprite(5, 5, 4, 4, glm::vec4(1, 0, 1, 1), shader);
-    // sprite2 = new StaticSprite(7, 1, 2, 3, glm::vec4(0.2f, 0, 1, 1), shader);
-    sprite1 = new Sprite(5, 5, 4, 4, glm::vec4(1, 0, 1, 1));
-    sprite2 = new Sprite(7, 1, 2, 3, glm::vec4(0.2f, 0, 1, 1));
+
+    srand(time(nullptr));
+
+    for (float y = 0; y < 9.0f; y++) {
+        for (float x = 0; x < 16.0f; x++) {
+#if batch
+            sprites.push_back(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
+#else
+            sprites.push_back(new StaticSprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1), shader));
+#endif
+        }
+    }
+
+    //     for (float y = 0; y < 9.0f; y += 0.1) {
+    //         for (float x = 0; x < 16.0f; x += 0.1) {
+    // #if batch
+    //             sprites.push_back(new Sprite(x, y, 0.09f, 0.09f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
+    // #else
+    //             sprites.push_back(new StaticSprite(x, y, 0.09f, 0.09f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1), shader));
+    // #endif
+    //         }
+    //     }
 }
 
 void Game::userEvent(const SDL_Event& _event) {
@@ -79,11 +100,17 @@ void Game::update() {
     shader->setUniformMatrix4fv("pr_matrix", 1, false, glm::value_ptr(orto));
     shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2((float)(x * 16.0f / 960.0f), (float)(9.0f - y * 9.0f / 540.0f))));
 
-    render2D.begin();
-    render2D.submit(sprite1);
-    render2D.submit(sprite2);
-    render2D.end();
-    render2D.flush();
+#if batch
+    batchRender2D.begin();
+    for (auto sprite : sprites)
+        batchRender2D.submit(sprite);
+    batchRender2D.end();
+    batchRender2D.flush();
+#else
+    for (auto sprite : sprites)
+        simpleRender2D.submit(sprite);
+    simpleRender2D.flush();
+#endif
 
     shader->disable();
 

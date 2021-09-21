@@ -24,13 +24,13 @@ void Layer::add(IRenderable2D* renderable) { renderables.push_back(renderable); 
 void Layer::render() {
 
     shader->enable();
-
     renderer->begin();
-    for (auto renderable : renderables)
-        renderer->submit(renderable);
 
-    renderer->flush();
+    for (auto renderable : renderables)
+        renderable->submit(renderer);
+
     renderer->end();
+    renderer->flush();
 
     shader->disable();
 }

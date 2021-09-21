@@ -4,11 +4,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
-#include "chimera/render/vbs/BatchRender2D.hpp"
 #include "chimera/render/vbs/Layer.hpp"
-//#include "chimera/render/vbs/SimpleRender2D.hpp"
-#include "chimera/render/vbs/Sprite.hpp"
-//#include "chimera/render/vbs/StaticSprite.hpp"
 
 class Game : public Chimera::Core::IEvents {
   public:
@@ -26,7 +22,6 @@ class Game : public Chimera::Core::IEvents {
     Chimera::Core::CanvasGL* pVideo;
     Chimera::Shader *shader, *shader2;
     Chimera::TileLayer *layer, *layer2;
-
     uint16_t x, y;
 };
 

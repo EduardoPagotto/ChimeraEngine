@@ -32,7 +32,9 @@ class Renderable2D : public IRenderable2D {
 
 class IRenderer2D {
   public:
+    virtual void begin() {}
     virtual void submit(IRenderable2D* renderable) = 0;
+    virtual void end() {}
     virtual void flush() = 0;
 };
 } // namespace Chimera

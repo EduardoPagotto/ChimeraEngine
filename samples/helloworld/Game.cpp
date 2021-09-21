@@ -8,10 +8,7 @@
 
 #define batch 1
 
-Game::Game(Chimera::Core::CanvasGL* _pVideo) : pVideo(_pVideo) {
-
-    shader = new Chimera::Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
-}
+Game::Game(Chimera::Core::CanvasGL* _pVideo) : pVideo(_pVideo) {}
 
 Game::~Game() {}
 
@@ -42,25 +39,24 @@ void Game::start() {
 
     srand(time(nullptr));
 
-    for (float y = 0; y < 9.0f; y++) {
-        for (float x = 0; x < 16.0f; x++) {
-#if batch
-            sprites.push_back(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
-#else
-            sprites.push_back(new StaticSprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1), shader));
-#endif
+    shader = new Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
+    shader2 = new Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
+
+    shader->enable();
+    shader2->enable();
+
+    shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
+    shader2->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
+
+    layer = new TileLayer(shader);
+    for (float y = -9.0f; y < 9.0f; y++) {
+        for (float x = -16.0f; x < 16.0f; x++) {
+            layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
         }
     }
 
-    //     for (float y = 0; y < 9.0f; y += 0.1) {
-    //         for (float x = 0; x < 16.0f; x += 0.1) {
-    // #if batch
-    //             sprites.push_back(new Sprite(x, y, 0.09f, 0.09f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
-    // #else
-    //             sprites.push_back(new StaticSprite(x, y, 0.09f, 0.09f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1), shader));
-    // #endif
-    //         }
-    //     }
+    layer2 = new TileLayer(shader2);
+    layer2->add(new Sprite(-2, -2, 4, 4, glm::vec4(1, 0, 1, 1)));
 }
 
 void Game::userEvent(const SDL_Event& _event) {
@@ -97,25 +93,18 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
 }
 
 void Game::update() {
+
     pVideo->before();
-
     shader->enable();
+    shader->setUniform2fv("light_pos", 1,
+                          glm::value_ptr(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f))));
 
-    glm::mat4 orto = glm::ortho(0.0f, 16.f, 0.0f, 9.0f, -1.0f, 1.0f);
-    shader->setUniformMatrix4fv("pr_matrix", 1, false, glm::value_ptr(orto));
-    shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2((float)(x * 16.0f / 960.0f), (float)(9.0f - y * 9.0f / 540.0f))));
+    shader2->enable();
+    shader2->setUniform2fv("light_pos", 1,
+                           glm::value_ptr(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f))));
 
-#if batch
-    batchRender2D.begin();
-    for (auto sprite : sprites)
-        batchRender2D.submit(sprite);
-    batchRender2D.end();
-    batchRender2D.flush();
-#else
-    for (auto sprite : sprites)
-        simpleRender2D.submit(sprite);
-    simpleRender2D.flush();
-#endif
+    layer->render();
+    layer2->render();
 
     shader->disable();
 

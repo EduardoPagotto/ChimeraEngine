@@ -25,9 +25,9 @@ class BatchRender2D : public IRenderer2D {
     virtual ~BatchRender2D();
 
     void init();
-    void begin();
+    virtual void begin() override;
     virtual void submit(IRenderable2D* renderable) override;
-    void end();
+    virtual void end() override;
     virtual void flush() override;
 
   private:

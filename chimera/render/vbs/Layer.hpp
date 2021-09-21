@@ -1,23 +1,28 @@
 #ifndef __CHIMERA_IRENDERABLE__HPP
 #define __CHIMERA_IRENDERABLE__HPP
 
-#include "IRenderable.hpp"
-//#include "SimpleRender3d.hpp"
+#include "Renderable2D.hpp"
 
 namespace Chimera {
 
 class Layer {
   public:
     virtual ~Layer();
-    virtual void add(IRenderable* renderable);
+    virtual void add(IRenderable2D* renderable);
     void render();
 
   protected:
-    Layer(IRender3d* renderer, Shader* shader, glm::mat4* projectionMatrix);
-    IRender3d* renderer;
-    std::vector<IRenderable*> renderables;
+    Layer(IRenderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix);
+    IRenderer2D* renderer;
+    std::vector<IRenderable2D*> renderables;
     Shader* shader;
     glm::mat4 projectionMatrix;
+};
+
+class TileLayer : public Layer {
+  public:
+    TileLayer(Shader* shader);
+    virtual ~TileLayer();
 };
 } // namespace Chimera
 #endif

@@ -20,6 +20,7 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					vbs/StaticSprite.cpp 
 					vbs/Sprite.cpp
 					vbs/BatchRender2D.cpp
+					vbs/Layer.cpp
 					Font.cpp
 					Light.cpp
 					Material.cpp

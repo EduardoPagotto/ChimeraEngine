@@ -29,8 +29,10 @@ class BatchRender2D : public IRenderer2D {
     virtual void submit(IRenderable2D* renderable) override;
     virtual void end() override;
     virtual void flush() override;
+    inline virtual TransformationStack& getStack() override { return stack; };
 
   private:
+    TransformationStack stack;
     Core::IndexBuffer* ibo;
     GLuint vao;
     GLuint vbo;

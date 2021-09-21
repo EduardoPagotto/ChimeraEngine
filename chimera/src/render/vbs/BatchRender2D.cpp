@@ -61,19 +61,19 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
     const glm::vec2& size = renderable->getSize();
     const glm::vec4& color = renderable->getColor();
 
-    buffer->vertex = position;
+    buffer->vertex = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
     buffer->color = color;
     buffer++;
 
-    buffer->vertex = glm::vec3(position.x, position.y + size.y, position.z);
+    buffer->vertex = stack.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
     buffer->color = color;
     buffer++;
 
-    buffer->vertex = glm::vec3(position.x + size.x, position.y + size.y, position.z);
+    buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
     buffer->color = color;
     buffer++;
 
-    buffer->vertex = glm::vec3(position.x + size.x, position.y, position.z);
+    buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
     buffer->color = color;
     buffer++;
 

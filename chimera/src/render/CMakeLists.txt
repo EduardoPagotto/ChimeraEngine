@@ -21,6 +21,7 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					vbs/Sprite.cpp
 					vbs/BatchRender2D.cpp
 					vbs/Layer.cpp
+					vbs/Group.cpp
 					Font.cpp
 					Light.cpp
 					Material.cpp

@@ -26,8 +26,11 @@ void BatchRender2D::init() {
     glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
     glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, BUFFER_OFFSET(0));
 
+    glEnableVertexAttribArray(SHADER_UV_INDEX);
+    glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, BUFFER_OFFSET(12));
+
     glEnableVertexAttribArray(SHADER_COLOR_INDEX);
-    glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, BUFFER_OFFSET(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, BUFFER_OFFSET(20));
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -60,20 +63,25 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
     const glm::vec3& position = renderable->getPosition();
     const glm::vec2& size = renderable->getSize();
     const glm::vec4& color = renderable->getColor();
+    const std::vector<glm::vec2>& uv = renderable->getUV();
 
     buffer->vertex = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
+    buffer->uv = uv[0];
     buffer->color = color;
     buffer++;
 
     buffer->vertex = stack.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
+    buffer->uv = uv[1];
     buffer->color = color;
     buffer++;
 
     buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
+    buffer->uv = uv[2];
     buffer->color = color;
     buffer++;
 
     buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
+    buffer->uv = uv[3];
     buffer->color = color;
     buffer++;
 

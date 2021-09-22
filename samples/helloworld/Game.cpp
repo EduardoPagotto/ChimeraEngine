@@ -48,23 +48,31 @@ void Game::start() {
     shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
 
     layer = new TileLayer(shader);
-    Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-15.0f, 5.0f, 0.0f)));
-    group->add(new Sprite(0.0f, 0.0f, 6.0f, 3.0f, glm::vec4(1, 1, 1, 1)));
+    // Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-15.0f, 5.0f, 0.0f)));
+    // group->add(new Sprite(0.0f, 0.0f, 6.0f, 3.0f, glm::vec4(1, 1, 1, 1)));
 
-    Group* button = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.0f)));
-    button->add(new Sprite(0.0f, 0.0f, 5.0f, 2.0f, glm::vec4(1, 0, 1, 1)));
-    button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
-    group->add(button);
+    // Group* button = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.0f)));
+    // button->add(new Sprite(0.0f, 0.0f, 5.0f, 2.0f, glm::vec4(1, 0, 1, 1)));
+    // button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
+    // group->add(button);
 
-    layer->add(group);
+    // layer->add(group);
 
-    // layer = new TileLayer(shader);
-    // for (float y = -9.0f; y < 9.0f; y++) {
-    //     for (float x = -16.0f; x < 16.0f; x++) {
-    //         layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
-    //     }
-    // }
+    // text https://www.youtube.com/watch?v=9k6Edx_FMys parei em 17:13 carregar minha textura d classe textura
 
+    // glActiveTexture(GL_TEXTURE0);
+    t = new TextureImg("tex", "./data/images/grid2.png");
+    t->init();
+    t->apply(shader);
+    // shader->setUniform1i("tex", 0);
+
+    layer = new TileLayer(shader);
+    for (float y = -9.0f; y < 9.0f; y++) {
+        for (float x = -16.0f; x < 16.0f; x++) {
+            layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
+        }
+    }
+    shader->disable();
     // layer2 = new TileLayer(shader2);
     // layer2->add(new Sprite(-2, -2, 4, 4, glm::vec4(1, 0, 1, 1)));
 }
@@ -109,6 +117,7 @@ void Game::update() {
     shader->setUniform2fv("light_pos", 1,
                           glm::value_ptr(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f))));
 
+    t->apply(shader);
     layer->render();
 
     shader->disable();

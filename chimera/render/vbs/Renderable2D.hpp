@@ -48,6 +48,7 @@ class IRenderable2D {
     virtual glm::vec3 getPosition() const = 0;
     virtual glm::vec2 getSize() const = 0;
     virtual glm::vec4 getColor() const = 0;
+    virtual const std::vector<glm::vec2>& getUV() const = 0;
 };
 
 class IRenderer2D {
@@ -67,11 +68,13 @@ class Renderable2D : public IRenderable2D {
     inline glm::vec3 getPosition() const override { return pos; }
     inline glm::vec2 getSize() const override { return size; }
     inline glm::vec4 getColor() const override { return color; }
+    inline const std::vector<glm::vec2>& getUV() const override { return uv; } // FIXME: passar para os e cima e na classe pai
 
   private:
     glm::vec3 pos;
     glm::vec2 size;
     glm::vec4 color;
+    std::vector<glm::vec2> uv;
 };
 } // namespace Chimera
 #endif

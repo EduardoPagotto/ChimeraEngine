@@ -9,6 +9,7 @@ unsigned Texture::serialMaster = 0;
 Texture::Texture(const std::string& _shadeName, const unsigned& _width, const unsigned& _height)
     : width(_width), height(_height), serial(++serialMaster), idTexture(0), shadeName(_shadeName) {
 
+    index = 0;
     if (_shadeName.compare(SHADE_TEXTURE_DIFFUSE) == 0)
         index = 0;
     else if (_shadeName.compare(SHADE_TEXTURE_SHADOW) == 0)

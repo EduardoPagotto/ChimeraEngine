@@ -7,6 +7,7 @@ namespace Chimera {
 
 struct VertexDataSimple {
     glm::vec3 vertex;
+    glm::vec2 uv;
     glm::vec4 color;
 };
 
@@ -17,7 +18,8 @@ struct VertexDataSimple {
 #define RENDERER_INDICES_SIZE RENDERER_MAX_SPRITES * 6
 
 #define SHADER_VERTEX_INDEX 0
-#define SHADER_COLOR_INDEX 1
+#define SHADER_UV_INDEX 1
+#define SHADER_COLOR_INDEX 2
 
 class BatchRender2D : public IRenderer2D {
   public:

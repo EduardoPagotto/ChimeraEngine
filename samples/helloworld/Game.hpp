@@ -4,7 +4,6 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
-#include "chimera/render/Texture.hpp"
 #include "chimera/render/vbs/Layer.hpp"
 
 class Game : public Chimera::Core::IEvents {
@@ -23,7 +22,6 @@ class Game : public Chimera::Core::IEvents {
     Chimera::Core::CanvasGL* pVideo;
     Chimera::Shader *shader, *shader2;
     Chimera::TileLayer *layer, *layer2;
-    Chimera::TextureImg* t;
     uint16_t x, y;
 };
 

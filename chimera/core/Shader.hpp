@@ -29,6 +29,10 @@ class Shader {
         glUniform3f(getUniformLocation(_nameVar), _x, _y, _z);
     }
 
+    inline void setUniform1iv(const char* _nameVar, const int size, const int* _pointer) const {
+        glUniform1iv(getUniformLocation(_nameVar), size, _pointer);
+    }
+
     inline void setUniform1fv(const char* _nameVar, const unsigned& _num, const float* _pointer) const {
         glUniform1fv(getUniformLocation(_nameVar), _num, _pointer);
     }

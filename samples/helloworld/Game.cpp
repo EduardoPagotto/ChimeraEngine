@@ -3,6 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/VertexData.hpp"
 #include "chimera/core/io/utils.hpp"
+#include "chimera/render/Texture.hpp"
 #include "chimera/render/vbs/Group.hpp"
 #include "chimera/render/vbs/Sprite.hpp"
 #include <glm/gtc/type_ptr.hpp>
@@ -44,7 +45,8 @@ void Game::start() {
     shader = new Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
 
     shader->enable();
-
+    GLint texIDs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    shader->setUniform1iv("textures", 10, texIDs);
     shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
 
     layer = new TileLayer(shader);
@@ -58,18 +60,20 @@ void Game::start() {
 
     // layer->add(group);
 
-    // text https://www.youtube.com/watch?v=9k6Edx_FMys parei em 17:13 carregar minha textura d classe textura
+    Texture* texture[] = {new TextureImg("tex1", "./data/images/grid2.png"), new TextureImg("tex2", "./data/images/grid1.png"),
+                          new TextureImg("tex3", "./data/images/grid3.png")};
 
-    // glActiveTexture(GL_TEXTURE0);
-    t = new TextureImg("tex", "./data/images/grid2.png");
-    t->init();
-    t->apply(shader);
-    // shader->setUniform1i("tex", 0);
+    texture[0]->init();
+    texture[1]->init();
+    texture[2]->init();
 
     layer = new TileLayer(shader);
     for (float y = -9.0f; y < 9.0f; y++) {
         for (float x = -16.0f; x < 16.0f; x++) {
-            layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
+            if (rand() % 4 == 0)
+                layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
+            else
+                layer->add(new Sprite(x, y, 0.9f, 0.9f, texture[rand() % 3]));
         }
     }
     shader->disable();
@@ -117,7 +121,6 @@ void Game::update() {
     shader->setUniform2fv("light_pos", 1,
                           glm::value_ptr(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f))));
 
-    t->apply(shader);
     layer->render();
 
     shader->disable();

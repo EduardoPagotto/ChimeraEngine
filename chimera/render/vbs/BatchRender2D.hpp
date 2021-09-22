@@ -8,6 +8,7 @@ namespace Chimera {
 struct VertexDataSimple {
     glm::vec3 vertex;
     glm::vec2 uv;
+    float tid;
     glm::vec4 color;
 };
 
@@ -19,7 +20,8 @@ struct VertexDataSimple {
 
 #define SHADER_VERTEX_INDEX 0
 #define SHADER_UV_INDEX 1
-#define SHADER_COLOR_INDEX 2
+#define SHADER_TID_INDEX 2
+#define SHADER_COLOR_INDEX 3
 
 class BatchRender2D : public IRenderer2D {
   public:
@@ -40,7 +42,7 @@ class BatchRender2D : public IRenderer2D {
     GLuint vbo;
     GLsizei indexCount;
     VertexDataSimple* buffer;
-    // std::deque<IRenderable2D*> renderQueue;
+    std::vector<GLuint> textureSlots;
 };
 } // namespace Chimera
 #endif

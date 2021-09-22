@@ -37,6 +37,8 @@ class Texture {
     inline unsigned getSerial() const { return serial; }
     inline GLuint getIndex() const { return index; }
 
+    inline const GLuint getID() const { return idTexture; }
+
   protected:
     unsigned width;
     unsigned height;

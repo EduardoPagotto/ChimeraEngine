@@ -1,4 +1,4 @@
-#include "chimera/render/vbs/BatchRender2D.hpp"
+#include "chimera/render/2d/BatchRender2D.hpp"
 
 namespace Chimera {
 

@@ -1,5 +1,5 @@
-#include "chimera/render/vbs/Layer.hpp"
-#include "chimera/render/vbs/BatchRender2D.hpp"
+#include "chimera/render/2d/Layer.hpp"
+#include "chimera/render/2d/BatchRender2D.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {

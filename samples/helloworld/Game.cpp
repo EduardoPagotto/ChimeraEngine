@@ -3,9 +3,9 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/VertexData.hpp"
 #include "chimera/core/io/utils.hpp"
+#include "chimera/render/2d/Group.hpp"
+#include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/Texture.hpp"
-#include "chimera/render/vbs/Group.hpp"
-#include "chimera/render/vbs/Sprite.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
 

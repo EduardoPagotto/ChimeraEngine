@@ -1,4 +1,4 @@
-#include "chimera/render/vbs/Sprite.hpp"
+#include "chimera/render/2d/Sprite.hpp"
 
 namespace Chimera {
 

@@ -4,7 +4,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
-#include "chimera/render/vbs/Layer.hpp"
+#include "chimera/render/2d/Layer.hpp"
 
 class Game : public Chimera::Core::IEvents {
   public:

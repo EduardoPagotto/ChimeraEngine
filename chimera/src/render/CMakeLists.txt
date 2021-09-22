@@ -15,13 +15,13 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
 					vbs/RenderableIndex.cpp
-					vbs/Renderable2D.cpp
-					vbs/SimpleRender2D.cpp
-					vbs/StaticSprite.cpp 
-					vbs/Sprite.cpp
-					vbs/BatchRender2D.cpp
-					vbs/Layer.cpp
-					vbs/Group.cpp
+					2d/Renderable2D.cpp
+					2d/SimpleRender2D.cpp
+					2d/StaticSprite.cpp 
+					2d/Sprite.cpp
+					2d/BatchRender2D.cpp
+					2d/Layer.cpp
+					2d/Group.cpp
 					Font.cpp
 					Light.cpp
 					Material.cpp

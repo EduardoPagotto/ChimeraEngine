@@ -1,4 +1,4 @@
-#include "chimera/render/vbs/Renderable2D.hpp"
+#include "chimera/render/2d/Renderable2D.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {

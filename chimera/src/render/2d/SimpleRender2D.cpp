@@ -1,5 +1,5 @@
-#include "chimera/render/vbs/SimpleRender2D.hpp"
-#include "chimera/render/vbs/StaticSprite.hpp"
+#include "chimera/render/2d/SimpleRender2D.hpp"
+#include "chimera/render/2d/StaticSprite.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {

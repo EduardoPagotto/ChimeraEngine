@@ -1,4 +1,4 @@
-#include "chimera/render/vbs/StaticSprite.hpp"
+#include "chimera/render/2d/StaticSprite.hpp"
 
 namespace Chimera {
 

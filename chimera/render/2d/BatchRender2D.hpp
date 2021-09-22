@@ -2,6 +2,7 @@
 #define __CHIMERA_BATCHRENDERABLE_2D__HPP
 
 #include "Renderable2D.hpp"
+#include "chimera/core/buffers/IndexBuffer.hpp"
 
 namespace Chimera {
 

@@ -2,6 +2,8 @@
 #define __CHIMERA_STATIC_SPRITE__HPP
 
 #include "Renderable2D.hpp"
+#include "chimera/core/buffers/IndexBuffer.hpp"
+#include "chimera/core/buffers/VertexArray.hpp"
 
 namespace Chimera {
 

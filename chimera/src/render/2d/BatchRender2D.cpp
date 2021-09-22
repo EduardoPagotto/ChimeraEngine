@@ -1,4 +1,5 @@
 #include "chimera/render/2d/BatchRender2D.hpp"
+#include "chimera/core/VertexData.hpp"
 
 namespace Chimera {
 

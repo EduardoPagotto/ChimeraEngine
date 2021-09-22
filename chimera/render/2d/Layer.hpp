@@ -6,17 +6,19 @@
 namespace Chimera {
 
 class Layer {
-  public:
-    virtual ~Layer();
-    virtual void add(IRenderable2D* renderable);
-    void render();
-
   protected:
     Layer(IRenderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix);
-    IRenderer2D* renderer;
-    std::vector<IRenderable2D*> renderables;
+
+  public:
+    virtual ~Layer();
+    inline virtual void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
+    void render();
+
+  private:
     Shader* shader;
+    IRenderer2D* renderer;
     glm::mat4 projectionMatrix;
+    std::vector<IRenderable2D*> renderables;
 };
 
 class TileLayer : public Layer {

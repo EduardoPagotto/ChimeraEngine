@@ -19,7 +19,6 @@ Layer::~Layer() {
         delete renderables[i]; // FIXME: nao e assim
     }
 }
-void Layer::add(IRenderable2D* renderable) { renderables.push_back(renderable); }
 
 void Layer::render() {
 
@@ -35,10 +34,9 @@ void Layer::render() {
     shader->disable();
 }
 
-//----
+// //----
 
 TileLayer::TileLayer(Shader* shader) : Layer(new BatchRender2D(), shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f)) {}
-
 TileLayer::~TileLayer() {}
 
 } // namespace Chimera

@@ -1,15 +1,11 @@
 #include "Game.hpp"
-#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/VertexData.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/Texture.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
-
-#define batch 1
 
 Game::Game(Chimera::Core::CanvasGL* _pVideo) : pVideo(_pVideo) {}
 
@@ -52,12 +48,10 @@ void Game::start() {
     layer = new TileLayer(shader);
     // Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-15.0f, 5.0f, 0.0f)));
     // group->add(new Sprite(0.0f, 0.0f, 6.0f, 3.0f, glm::vec4(1, 1, 1, 1)));
-
     // Group* button = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.0f)));
     // button->add(new Sprite(0.0f, 0.0f, 5.0f, 2.0f, glm::vec4(1, 0, 1, 1)));
     // button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
     // group->add(button);
-
     // layer->add(group);
 
     Texture* texture[] = {new TextureImg("tex1", "./data/images/grid2.png"), new TextureImg("tex2", "./data/images/grid1.png"),
@@ -77,8 +71,6 @@ void Game::start() {
         }
     }
     shader->disable();
-    // layer2 = new TileLayer(shader2);
-    // layer2->add(new Sprite(-2, -2, 4, 4, glm::vec4(1, 0, 1, 1)));
 }
 
 void Game::userEvent(const SDL_Event& _event) {

@@ -54,6 +54,8 @@ void Game::start() {
     // group->add(button);
     // layer->add(group);
 
+    // parei em :https://www.youtube.com/watch?v=S_99R9DZF6c&t=23s
+
     Texture* texture[] = {new TextureImg("tex1", "./data/images/grid2.png"), new TextureImg("tex2", "./data/images/grid1.png"),
                           new TextureImg("tex3", "./data/images/grid3.png")};
 

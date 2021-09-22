@@ -34,13 +34,11 @@ class Node {
     Node* findChild(const std::string& _searchName, const bool& _findInChild);
     Node* findChild(const Kind& _type, const int& _index, const bool& _findInChild);
 
-    inline void setKind(const Kind& _kind) { type = _kind; }
     inline Kind getKind() const { return type; }
 
     inline const std::string& getName() const { return name; }
     inline void setName(const std::string& name) { this->name = name; }
 
-    inline unsigned getSerial() const { return serial; }
     static unsigned getNextSerialMaster() { return Node::serialMaster; }
 
     std::vector<Node*>* getChilds();

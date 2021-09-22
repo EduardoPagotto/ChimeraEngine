@@ -11,7 +11,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
 set (SourceNode Node.cpp
-				NodeLight.cpp
 				NodeCamera.cpp
 				NodeMesh.cpp
 				NodeHUD.cpp

@@ -20,12 +20,5 @@ class IRenderable {
     virtual void inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) = 0;
 };
 
-class IRender3d {
-  public:
-    virtual void begin(glm::vec3* eye, Core::Frustum* frustrun, bool logData) = 0;
-    virtual void end() = 0;
-    virtual void submit(IRenderable* renderable) = 0;
-    virtual void flush() = 0;
-};
 } // namespace Chimera
 #endif

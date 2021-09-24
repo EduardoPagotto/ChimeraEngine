@@ -136,6 +136,11 @@ void Game::update() {
     // Calcula view e projection baseado em vp
     pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
+    glm::mat4 projectionMatrixInverse = glm::inverse(projection);
+    glm::mat4 viewMatrixInverse = glm::inverse(view);
+    glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
+    frustum.set(viewProjectionMatrixInverse);
+
     pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
     pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
     pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
@@ -144,7 +149,10 @@ void Game::update() {
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 
-    render3D.submit(rederable);
+    render3D.begin(&vp->position, &frustum, true);
+    rederable->submit(&render3D);
+    render3D.end();
+
     render3D.flush();
 
     pCanvas->after();

@@ -27,11 +27,21 @@ void VisitorShadowMap::visit(NodeCamera* _pCamera) {}
 
 void VisitorShadowMap::visit(NodeMesh* _pMesh) {
 
-    glm::mat4 model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
+    // FIXME !!!!!!!!!
+    // glm::mat4 model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
 
-    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
-    pRender3D->submit(_pMesh->pRenderStat);
-    pRender3D->flush();
+    // glm::mat4 projectionMatrixInverse = glm::inverse(glm::mat4(1.0f));
+    // glm::mat4 viewMatrixInverse = glm::inverse(view);
+    // glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
+    // frustum.set(viewProjectionMatrixInverse);
+
+    // pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+
+    // pRender3D.begin(nullptr, &frustum, true);
+    // _pMesh->pRenderStat->submit(pRender3D); // render3D.submit(_pMesh->pRenderStat);
+    // pRender3D.end();
+
+    // pRender3D->flush();
 }
 
 void VisitorShadowMap::visit(NodeLight* _pLight) {

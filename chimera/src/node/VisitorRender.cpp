@@ -52,10 +52,18 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
     if (pShadowMapVisitor != nullptr)
         pShadowMapVisitor->applyShadow(pShader);
 
+    //
+    glm::mat4 projectionMatrixInverse = glm::inverse(projection);
+    glm::mat4 viewMatrixInverse = glm::inverse(view);
+    glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
+    frustum.set(viewProjectionMatrixInverse);
+
     // AABB aabbT = _pMesh->meshData.aabb.transformation(model);
     // aabbT.render();
+    render3D.begin(nullptr, &frustum, true);
+    _pMesh->pRenderStat->submit(&render3D); // render3D.submit(_pMesh->pRenderStat);
+    render3D.end();
 
-    render3D.submit(_pMesh->pRenderStat);
     render3D.flush();
 }
 

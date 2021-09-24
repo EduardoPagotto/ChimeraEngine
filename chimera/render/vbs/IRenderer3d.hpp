@@ -2,7 +2,6 @@
 #define __CHIMERA_IRENDERER_3D__HPP
 
 #include "chimera/core/space/Frustum.hpp"
-#include <deque>
 #include <glm/glm.hpp>
 
 namespace Chimera {

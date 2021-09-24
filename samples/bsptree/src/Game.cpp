@@ -149,10 +149,13 @@ void Game::update() {
     // aplica a textura
     pTex->apply(pShader);
 
+    renderz1->setEyePosition(&vp->position);
+
     render3d.begin(&vp->position, &frustum, debugParser);
-    render3d.submit(renderz1);
-    render3d.flush();
+    renderz1->submit(&render3d); // render3d.submit(renderz1);
     render3d.end();
+
+    render3d.flush();
 
     pCanvas->after();
     pCanvas->swapWindow();

@@ -23,17 +23,11 @@ RenderableStatic::~RenderableStatic() {
     delete ibo;
 }
 
-void RenderableStatic::inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
-    // TODO: colocar validacao do frustum
-    // if (aabb.visible(*frustum) == true) {
-    //     renderQueue->push_back(this);
-    // }
-
-    renderQueue->push_back(this);
-}
+void RenderableStatic::submit(IRenderer3d* renderer) { renderer->submit(this); }
 
 void RenderableStatic::debugDados() {
     glm::vec3 size = this->aabb.getSize();
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
+    aabb.render();
 }
 } // namespace Chimera

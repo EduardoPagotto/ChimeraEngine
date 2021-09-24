@@ -4,8 +4,6 @@
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/core/space/BSPTreeNode.hpp"
 #include "chimera/render/vbs/RenderableIBO.hpp"
-#include <deque>
-#include <list>
 #include <vector>
 
 namespace Chimera {
@@ -14,13 +12,15 @@ class RenderableBsp : public IRenderable {
   public:
     RenderableBsp(Core::BSPTreeNode* root, std::vector<RenderableIBO*>* vpLeafData, std::vector<VertexData>* vertexData);
     virtual ~RenderableBsp();
-    virtual void inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue);
-    virtual void debugDados() {}
+    virtual void debugDados() override;
     virtual uint32_t getSize() const { return totIndex; }
     virtual Shader* getShader() const { return nullptr; }
     virtual Core::VertexArray* getVao() const { return vao; }
     virtual Core::IndexBuffer* getIBO() const { return 0; }
     virtual Core::AABB* getAABB() { return &aabb; }
+    virtual void submit(IRenderer3d* renderer) override;
+
+    void setEyePosition(glm::vec3* eye) { this->eye = eye; }
 
   private:
     void destroy();
@@ -39,10 +39,9 @@ class RenderableBsp : public IRenderable {
     std::vector<VertexData> vVertex;
 
     Core::AABB aabb;
-    Core::Frustum* frustum;
     glm::vec3* eye;
     uint32_t totIndex;
-    std::deque<IRenderable*>* renderQueue;
+    IRenderer3d* renderer;
 };
 
 } // namespace Chimera

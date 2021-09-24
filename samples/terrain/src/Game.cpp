@@ -166,9 +166,10 @@ void Game::update() {
 
     // NEW
     render3d.begin(&vp->position, &frustum, debugParser);
-    render3d.submit(pHeightMap);
-    render3d.flush();
+    pHeightMap->submit(&render3d); // render3d.submit(pHeightMap);
     render3d.end();
+
+    render3d.flush();
 
     pCanvas->after();
     pCanvas->swapWindow();

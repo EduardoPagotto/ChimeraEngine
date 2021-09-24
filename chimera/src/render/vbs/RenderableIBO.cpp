@@ -1,8 +1,6 @@
 
 #include "chimera/render/vbs/RenderableIBO.hpp"
-#include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
-#include <string>
 
 namespace Chimera {
 
@@ -16,9 +14,11 @@ RenderableIBO::~RenderableIBO() {
 }
 
 void RenderableIBO::debugDados() {
-    // glm::vec3 pos = this->aabb.getPosition();
     glm::vec3 size = this->aabb.getSize();
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "IBO: %d Faces: %d AABB[ %.2f, %.2f, %.2f]", this->ibo->getBufferID(), this->getSize(), size.x,
+                 size.y, size.z);
+
+    aabb.render();
 }
 
 void RenderableIBO::initAABB(VertexData* vertexData, const uint32_t& vertexSize) {
@@ -35,14 +35,5 @@ void RenderableIBO::addFace(const uint32_t& _pa, const uint32_t& _pb, const uint
 
 void RenderableIBO::initIndexBufferObject() { ibo = new Core::IndexBuffer(&indexTris[0], indexTris.size()); }
 
-void RenderableIBO::inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
-    if (aabb.visible(*frustum) == true) {
-        renderQueue->push_back(this);
-
-        if (logData == true) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBO: %d Faces: %d", this->ibo->getBufferID(), this->getSize());
-            aabb.render();
-        }
-    }
-}
+void RenderableIBO::submit(IRenderer3d* renderer) { renderer->submit(this); }
 } // namespace Chimera

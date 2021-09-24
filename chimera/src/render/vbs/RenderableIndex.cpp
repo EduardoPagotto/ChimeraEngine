@@ -1,5 +1,4 @@
 #include "chimera/render/vbs/RenderableIndex.hpp"
-#include "chimera/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -45,18 +44,15 @@ RenderableIndex::~RenderableIndex() {
     vao = nullptr;
 }
 
-void RenderableIndex::inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
-    renderQueue->push_back(this);
+void RenderableIndex::debugDados() {
+    // TODO:
+}
 
-    unsigned int tot = 0;
+void RenderableIndex::submit(IRenderer3d* renderer) {
+    renderer->submit(this);
 
     for (RenderableIBO* pNode : vpLeaf) {
-        bool teste = pNode->getAABB()->visible(*frustum);
-        if (teste == true) {
-            pNode->inject(eye, frustum, false, renderQueue);
-            tot++;
-        }
+        renderer->submit(pNode);
     }
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "TOT: (%d)", tot);
 }
 } // namespace Chimera

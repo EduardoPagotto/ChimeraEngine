@@ -38,7 +38,7 @@ void RenderableBsp::drawPolygon(Core::BSPTreeNode* tree, bool frontSide) {
         return;
 
     auto pLeaf = vpLeaf[tree->leafIndex];
-    pLeaf->inject(eye, frustum, logdata, renderQueue);
+    pLeaf->submit(this->renderer);
 }
 
 void RenderableBsp::traverseTree(Core::BSPTreeNode* tree) {
@@ -69,14 +69,13 @@ void RenderableBsp::traverseTree(Core::BSPTreeNode* tree) {
     }
 }
 
-void RenderableBsp::inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) {
-    this->eye = eye;
-    this->frustum = frustum;
-    this->renderQueue = renderQueue;
-    this->logdata = logData;
+void RenderableBsp::debugDados() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP Submit"); }
 
-    renderQueue->push_back(this);
+void RenderableBsp::submit(IRenderer3d* renderer) {
+    this->renderer = renderer;
+    this->renderer->submit(this);
 
+    // submit tree
     traverseTree(root);
 }
 

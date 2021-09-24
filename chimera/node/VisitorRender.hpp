@@ -37,6 +37,8 @@ class VisitorRender : public VisitorInterface {
 
     Shader* pShader;
     VisitorShadowMap* pShadowMapVisitor;
+
+    Core::Frustum frustum;
 };
 } // namespace Chimera
 

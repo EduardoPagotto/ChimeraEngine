@@ -4,7 +4,6 @@
 #include "IRenderable.hpp"
 #include "chimera/core/buffers/IndexBuffer.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
-#include "chimera/core/buffers/VertexBuffer.hpp"
 
 namespace Chimera {
 
@@ -19,7 +18,7 @@ class RenderableStatic : public IRenderable {
     virtual Core::VertexArray* getVao() const { return vao; }
     virtual Core::IndexBuffer* getIBO() const { return ibo; }
     virtual Core::AABB* getAABB() override { return &aabb; }
-    virtual void inject(glm::vec3* eye, Core::Frustum* frustum, bool logData, std::deque<IRenderable*>* renderQueue) override;
+    virtual void submit(IRenderer3d* renderer) override;
 
   private:
     Core::AABB aabb;

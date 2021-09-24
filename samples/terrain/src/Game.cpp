@@ -5,8 +5,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Game::Game() {
-    debugParser = false;
-
     projection = glm::mat4(1.0f);
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
@@ -49,7 +47,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
             break;
         case SDLK_1:
-            debugParser = true;
+            render3d.logToggle();
             break;
         case SDLK_F10:
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
@@ -134,7 +132,7 @@ void Game::update() {
     pCanvas->before();
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
-    if (debugParser == true) {
+    if (render3d.getLog() == true) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
     }
 
@@ -165,7 +163,7 @@ void Game::update() {
     pMaterial->setUniform(pShader);
 
     // NEW
-    render3d.begin(&vp->position, &frustum, debugParser);
+    render3d.begin(&frustum);
     pHeightMap->submit(&render3d); // render3d.submit(pHeightMap);
     render3d.end();
 

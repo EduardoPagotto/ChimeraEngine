@@ -25,8 +25,6 @@ class Game : public Chimera::Core::IEvents {
 
   private:
     Chimera::Core::BspTree bspTree;
-    bool debugParser;
-
     Chimera::TrackBall trackBall;
     Chimera::Core::CanvasGL* pCanvas;
     Chimera::Shader* pShader;

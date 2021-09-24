@@ -4,21 +4,23 @@
 
 namespace Chimera {
 
-void SimpleRender3d::begin(glm::vec3* eye, Core::Frustum* frustrun, bool logData) {
-    this->eye = eye;
+void SimpleRender3d::begin(Core::Frustum* frustrun) {
     this->frustrun = frustrun;
-    this->logData = logData;
-
     // debug data
     totIBO = 0;
     totFaces = 0;
 }
 void SimpleRender3d::end() {
-    // if (logData == true) //FIXME: tirar quando testar todos
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
+    if (logData == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }
 
 void SimpleRender3d::submit(IRenderable* renderable) {
+
+    if (frustrun == nullptr) {
+        renderQueue.push_back(renderable);
+        return;
+    }
 
     Core::AABB* pAABB = renderable->getAABB();
     if (pAABB == nullptr) {
@@ -61,8 +63,8 @@ void SimpleRender3d::flush() {
             // r->getShader()->setUniform1i("teste", 1);
             glDrawElements(GL_TRIANGLES, r->getIBO()->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 
-            // if (logData == true) //FIXME: tirar quando testar todos
-            r->debugDados();
+            if (logData == true)
+                r->debugDados();
 
             r->getIBO()->unbind();
         }

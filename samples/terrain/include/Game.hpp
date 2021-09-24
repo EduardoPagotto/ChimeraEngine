@@ -24,8 +24,6 @@ class Game : public Chimera::Core::IEvents {
     virtual void windowEvent(const SDL_WindowEvent& _event) override;
 
   private:
-    bool debugParser;
-
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;

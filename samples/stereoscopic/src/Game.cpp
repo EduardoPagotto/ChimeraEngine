@@ -56,7 +56,8 @@ void Game::keboardEvent(SDL_Keycode tecla) {
         case SDLK_d:
             pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::RIGHT, 10);
             break;
-
+        // case SDLK_1:
+        //     render3D.logToggle();
         case SDLK_F10:
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;

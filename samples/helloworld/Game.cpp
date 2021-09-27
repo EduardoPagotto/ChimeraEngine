@@ -36,10 +36,11 @@ void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) 
 void Game::start() {
     using namespace Chimera;
 
+    fa = new Chimera::FontAtlas("./samples/models/fonts/FreeSans.ttf", 18);
+
     srand(time(nullptr));
 
     shader = new Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
-
     shader->enable();
     GLint texIDs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     shader->setUniform1iv("textures", 10, texIDs);

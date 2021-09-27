@@ -24,6 +24,7 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					2d/Group.cpp
 					2d/Label.cpp
 					Font.cpp
+					FontAtlas.cpp
 					Light.cpp
 					Material.cpp
 					Texture.cpp

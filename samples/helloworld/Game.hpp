@@ -5,6 +5,7 @@
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/2d/Layer.hpp"
+#include "chimera/render/FontAtlas.hpp"
 
 class Game : public Chimera::Core::IEvents {
   public:
@@ -23,6 +24,8 @@ class Game : public Chimera::Core::IEvents {
     Chimera::Shader *shader, *shader2;
     Chimera::TileLayer *layer, *layer2;
     uint16_t x, y;
+
+    Chimera::FontAtlas* fa;
 };
 
 #endif

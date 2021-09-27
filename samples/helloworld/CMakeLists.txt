@@ -16,6 +16,7 @@ set (LibsHelloWorld ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 					-lGL
 					-lSDL2
 					-lSDL2_image
+					-lSDL2_ttf
 				    -lGLEW
 				    -lpthread)
 

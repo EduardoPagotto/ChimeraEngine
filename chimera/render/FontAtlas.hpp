@@ -20,7 +20,7 @@ class FontAtlas {
     virtual ~FontAtlas();
 
   private:
-    std::map<uint16_t, CharacterAtlas> Characters;
+    std::map<uint16_t, CharacterAtlas> characters;
     GLuint texture;
 };
 

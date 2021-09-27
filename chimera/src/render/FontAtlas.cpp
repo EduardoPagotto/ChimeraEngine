@@ -71,7 +71,7 @@ FontAtlas::FontAtlas(const std::string& pathFile, const int& size) : texture(0) 
         // Now store character for later use
         CharacterAtlas character = {glm::ivec2(glyph_cache->w, glyph_cache->h), glm::ivec2(minx, glyph_cache->h), (advance << 6)};
 
-        Characters.insert(std::pair<uint16_t, CharacterAtlas>(c, character));
+        characters.insert(std::pair<uint16_t, CharacterAtlas>(c, character));
         mapGlyphCache.insert(std::pair<uint16_t, SDL_Surface*>(c, glyph_cache));
     }
 
@@ -125,13 +125,20 @@ FontAtlas::FontAtlas(const std::string& pathFile, const int& size) : texture(0) 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // TODO: delete all mapGlyphCache
-
     if (sFont) {
         TTF_CloseFont(sFont);
     }
+
+    std::map<uint16_t, SDL_Surface*>::iterator it = mapGlyphCache.begin();
+    while (it != mapGlyphCache.end()) {
+        delete it->second;
+        mapGlyphCache.erase(it);
+        it = mapGlyphCache.begin();
+    }
+
+    delete bigSurface;
 }
 
-FontAtlas::~FontAtlas() {}
+FontAtlas::~FontAtlas() { characters.clear(); }
 
 } // namespace Chimera

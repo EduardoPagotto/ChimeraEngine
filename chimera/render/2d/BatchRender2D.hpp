@@ -35,7 +35,7 @@ class BatchRender2D : public IRenderer2D {
     virtual void end() override;
     virtual void flush() override;
 
-    virtual void drawString(const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
+    virtual void drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
 
     inline virtual TransformationStack& getStack() override { return stack; };
 

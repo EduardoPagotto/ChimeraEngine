@@ -25,5 +25,5 @@ void main() {
         // textColor = vec4(tid / 1.0, 0, 0, 1);
     }
 
-    color = textColor * intensity;
+    color = textColor; //* intensity;
 }

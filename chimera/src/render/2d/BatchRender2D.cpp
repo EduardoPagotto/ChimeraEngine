@@ -122,67 +122,114 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
     indexCount += 6;
 }
 
-void BatchRender2D::drawString(const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
+void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
     // // https://www.youtube.com/watch?v=Rsdc6I80aFQ&t=71s
     // // 32:00
 
-    // const glm::vec3& position = renderable->getPosition();
+    // const glm::vec3& position = pos;
     // const glm::vec2& size = renderable->getSize();
-    // const glm::vec4& color = renderable->getColor();
+    // const glm::vec4& color = color;
     // const std::vector<glm::vec2>& uv = renderable->getUV();
-    // const GLuint tid = renderable->getTID();
+    const GLuint tid = font->getTextureID();
+    // const GLuint tid = 1; // 1font->getTextureID();
 
-    // float ts = 0.0f;
-    // if (tid > 0) {
-    //     bool found = false;
-    //     for (int i = 0; i < textureSlots.size(); i++) {
+    float ts = 0.0f;
+    if (tid > 0) {
+        bool found = false;
+        for (int i = 0; i < textureSlots.size(); i++) {
 
-    //         if (textureSlots[i] == tid) {
-    //             ts = (float)(i + 1);
-    //             found = true;
-    //             break;
-    //         }
-    //     }
+            if (textureSlots[i] == tid) {
+                ts = (float)(i + 1);
+                found = true;
+                break;
+            }
+        }
 
-    //     if (!found) {
+        if (!found) {
 
-    //         if (textureSlots.size() > 32) {
-    //             end();
-    //             flush();
-    //             begin();
-    //         }
+            if (textureSlots.size() > 32) {
+                end();
+                flush();
+                begin();
+            }
 
-    //         textureSlots.push_back(tid);
-    //         ts = (float)(textureSlots.size());
-    //     }
-    // }
+            textureSlots.push_back(tid);
+            ts = (float)(textureSlots.size());
+        }
+    }
 
-    // buffer->vertex = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
-    // buffer->uv = uv[0];
-    // buffer->tid = ts;
-    // buffer->color = color;
-    // buffer++;
+    float scaleX = 3.0; // 960.0f / 32.0f;
+    float scaleY = 3.0; // 540.0f / 18.0f;
+    float x = pos.x;
 
-    // buffer->vertex = stack.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
-    // buffer->uv = uv[1];
-    // buffer->tid = ts;
-    // buffer->color = color;
-    // buffer++;
+    for (int i = 0; i < text.size(); i++) {
 
-    // buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
-    // buffer->uv = uv[2];
-    // buffer->tid = ts;
-    // buffer->color = color;
-    // buffer++;
+        uint16_t c = text[i];
+        GlyphData* glyph = font->glyphs[c];
 
-    // buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
-    // buffer->uv = uv[3];
-    // buffer->tid = ts;
-    // buffer->color = color;
-    // buffer++;
+        if (glyph != nullptr) {
 
-    // indexCount += 6;
+            // FIXME: encontrar o kering!!!!!!
+            // if (i > 0) {
+            //     float kering = texture_glyph_get_kering(glyph, text[1 - 1]);
+            //     x += kering / scaleX;
+            // }
+
+            // float x0 = x + glyph->offset.x / scaleX;                       //  x + glyph.offSet_x / scaleX;
+            // float y0 = pos.y + (glyph->size.y - glyph->offset.y) / scaleY; // pos.y + glyph.offSet_y / scaleY;
+            // float x1 = x0 + glyph->size.x / scaleX;                        // x0 + glyph.with / scaleX;
+            // float y1 = y0 - glyph->size.y / scaleY;                        // y0 - glyph.height / scaleY;
+
+            // float x0 = 0.0f; // x + glyph->offset.x;     // / scaleX; //  x + glyph.offSet_x / scaleX;
+            // float y0 = 0.0f; // pos.y + glyph->offset.y; //  / scaleY; // pos.y + glyph.offSet_y / scaleY;
+            // float x1 = 8.0f; // x0 + glyph->size.x;      //  / scaleX;  // x0 + glyph.with / scaleX;
+            // float y1 = 8.0f; // y0 - glyph->size.y;      //  / scaleY;      // y0 - glyph.height / scaleY;
+
+            float x0 = x + glyph->offset.x / scaleX;     //  x + glyph.offSet_x / scaleX;
+            float y0 = pos.y + glyph->offset.y / scaleY; // pos.y + glyph.offSet_y / scaleY;
+            float x1 = x0 + glyph->size.x / scaleX;      // x0 + glyph.with / scaleX;
+            float y1 = y0 - glyph->size.y / scaleY;      // y0 - glyph.height / scaleY;
+
+            // float u0 = 1; // glyph->u0;
+            // float v0 = 1; // glyph->v0;
+            // float u1 = 0; // glyph->u1;
+            // float v1 = 0; // glyph->v1;
+
+            float u1 = glyph->u0;
+            float v1 = glyph->v0;
+            float u0 = glyph->u1;
+            float v0 = glyph->v1;
+
+            buffer->vertex = stack.multiplVec3(glm::vec3(x0, y0, 0.0f));
+            buffer->uv = glm::vec2(u0, v0);
+            buffer->tid = ts;
+            buffer->color = color;
+            buffer++;
+
+            buffer->vertex = stack.multiplVec3(glm::vec3(x0, y1, 0.0f));
+            buffer->uv = glm::vec2(u0, v1); // glm::vec2(u0, v1);
+            buffer->tid = ts;
+            buffer->color = color;
+            buffer++;
+
+            buffer->vertex = stack.multiplVec3(glm::vec3(x1, y1, 0.0f));
+            buffer->uv = glm::vec2(u1, v1);
+            buffer->tid = ts;
+            buffer->color = color;
+            buffer++;
+
+            buffer->vertex = stack.multiplVec3(glm::vec3(x1, y0, 0.0f));
+            buffer->uv = glm::vec2(u1, v0);
+            buffer->tid = ts;
+            buffer->color = color;
+            buffer++;
+
+            indexCount += 6;
+
+            x += glyph->advance / scaleX;
+        }
+    }
 }
 
 void BatchRender2D::end() {

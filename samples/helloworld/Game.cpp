@@ -2,7 +2,9 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
+#include "chimera/render/2d/Label.hpp"
 #include "chimera/render/2d/Sprite.hpp"
+#include "chimera/render/FontManager.hpp"
 #include "chimera/render/Texture.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
@@ -36,8 +38,6 @@ void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) 
 void Game::start() {
     using namespace Chimera;
 
-    fa = new Chimera::FontAtlas("./samples/models/fonts/FreeSans.ttf", 18);
-
     srand(time(nullptr));
 
     shader = new Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
@@ -64,15 +64,20 @@ void Game::start() {
     texture[1]->init();
     texture[2]->init();
 
-    layer = new TileLayer(shader);
-    for (float y = -9.0f; y < 9.0f; y++) {
-        for (float x = -16.0f; x < 16.0f; x++) {
-            if (rand() % 4 == 0)
-                layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
-            else
-                layer->add(new Sprite(x, y, 0.9f, 0.9f, texture[rand() % 3]));
-        }
-    }
+    // layer = new TileLayer(shader);
+    // for (float y = -9.0f; y < 9.0f; y++) {
+    //     for (float x = -16.0f; x < 16.0f; x++) {
+    //         if (rand() % 4 == 0)
+    //             layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
+    //         else
+    //             layer->add(new Sprite(x, y, 0.9f, 0.9f, texture[rand() % 3]));
+    //     }
+    // }
+
+    FontManager::add(new Chimera::FontAtlas("FreeSans_18", "./samples/models/fonts/FreeSans.ttf", 22));
+    Label* lFPS = new Label("ABCDEF", -15.0f, 0.0f, "FreeSans_18", glm::vec4(1.0, 1.0, 1.0, 1.0));
+    layer->add(lFPS);
+
     shader->disable();
 }
 

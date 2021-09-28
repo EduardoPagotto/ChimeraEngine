@@ -9,7 +9,7 @@
 
 namespace Chimera {
 
-FontAtlas::FontAtlas(const std::string& pathFile, const int& size) : texture(0) {
+FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const int& size) : texture(0), name(name) {
 
     if (TTF_Init() == -1) {
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
@@ -41,6 +41,8 @@ FontAtlas::FontAtlas(const std::string& pathFile, const int& size) : texture(0) 
     if (familyname)
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The family name of the face in the font is: %s\n", familyname);
 
+    int val = TTF_GetFontKerning(sFont);
+
     SDL_Color fg = {0, 0, 0}, bg = {0xff, 0xff, 0xff};
 
     uint16_t totW = 0;
@@ -69,9 +71,16 @@ FontAtlas::FontAtlas(const std::string& pathFile, const int& size) : texture(0) 
             maxH = glyph_cache->h;
 
         // Now store character for later use
-        CharacterAtlas character = {glm::ivec2(glyph_cache->w, glyph_cache->h), glm::ivec2(minx, glyph_cache->h), (advance << 6)};
+        GlyphData* pGlyp = new GlyphData;
+        pGlyp->size = glm::ivec2(glyph_cache->w, glyph_cache->h);
+        pGlyp->offset = glm::ivec2(minx, glyph_cache->h);
+        pGlyp->advance = advance;
+        pGlyp->u0 = 0.0f;
+        pGlyp->u1 = 0.0f;
+        pGlyp->v0 = 0.0f;
+        pGlyp->v1 = 0.0f;
 
-        characters.insert(std::pair<uint16_t, CharacterAtlas>(c, character));
+        glyphs.insert(std::pair<uint16_t, GlyphData*>(c, pGlyp));
         mapGlyphCache.insert(std::pair<uint16_t, SDL_Surface*>(c, glyph_cache));
     }
 
@@ -104,6 +113,12 @@ FontAtlas::FontAtlas(const std::string& pathFile, const int& size) : texture(0) 
         rect.w = nextX + glyph_cache->w;
         rect.h = glyph_cache->h;
 
+        GlyphData* pGlyp = glyphs[characher];
+        pGlyp->u0 = ((float)rect.x) / (float)totW;
+        pGlyp->v0 = 0.0;
+        pGlyp->u1 = ((float)rect.w) / (float)totW;
+        pGlyp->v1 = ((float)rect.h) / (float)maxH;
+
         SDL_BlitSurface(glyph_cache, nullptr, bigSurface, &rect);
 
         // char buff[50];
@@ -114,6 +129,11 @@ FontAtlas::FontAtlas(const std::string& pathFile, const int& size) : texture(0) 
     }
 
     // SDL_SaveBMP(bigSurface, "./tst/atlas.png");
+    // if (invert_image(bigSurface->pitch, bigSurface->h, bigSurface->pixels) != 0) {
+    //     SDL_SetError("Falha na inversao de pixels");
+    // }
+
+    SDL_SaveBMP(bigSurface, "./tst/atlas.png");
 
     // Criar Textura
     glGenTextures(1, &texture);
@@ -139,6 +159,32 @@ FontAtlas::FontAtlas(const std::string& pathFile, const int& size) : texture(0) 
     delete bigSurface;
 }
 
-FontAtlas::~FontAtlas() { characters.clear(); }
+int FontAtlas::invert_image(int pitch, int height, void* image_pixels) {
+    int index;
+    void* temp_row;
+    int height_div_2;
+
+    temp_row = (void*)malloc(pitch);
+    if (NULL == temp_row) {
+        SDL_SetError("Not enough memory for image inversion");
+        return -1;
+    }
+    // if height is odd, don't need to swap middle row
+    height_div_2 = (int)(height * .5);
+    for (index = 0; index < height_div_2; index++) {
+        // uses string.h
+        memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + pitch * index, pitch);
+
+        memcpy((Uint8*)(image_pixels) + pitch * index, (Uint8*)(image_pixels) + pitch * (height - index - 1), pitch);
+        memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row, pitch);
+    }
+    free(temp_row);
+    return 0;
+}
+
+FontAtlas::~FontAtlas() {
+    // TODO: deletar glyph
+    glyphs.clear();
+}
 
 } // namespace Chimera

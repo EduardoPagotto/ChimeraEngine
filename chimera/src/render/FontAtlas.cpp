@@ -38,7 +38,8 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
 
     int val = TTF_GetFontKerning(sFont);
 
-    SDL_Color fg = {0, 0, 0}, bg = {0xff, 0xff, 0xff};
+    SDL_Color fg = {0xff, 0xff, 0xff, 0xff};
+    SDL_Color bg = {0x0, 0x0, 0x0, 0xff};
 
     uint16_t totW = 0;
     uint16_t maxH = 0;
@@ -93,13 +94,8 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
     bmask = 0x00ff0000;
     amask = 0xff000000;
 #endif
-    int valtst = 0;
+
     SDL_Surface* bigSurface = SDL_CreateRGBSurface(0, totW, maxH, 32, rmask, gmask, bmask, amask);
-    // SDL_Surface* bigSurface = SDL_CreateRGBSurface(0, totW, maxH, 8, 0, 0, 0, 0);
-    // int valtst = SDL_SetSurfaceBlendMode(bigSurface, SDL_BLENDMODE_ADD);
-    // valtst = SDL_FillRect(bigSurface, nullptr, 0x000000);
-    // valtst = SDL_FillRect(bigSurface, nullptr, SDL_MapRGB(bigSurface->format, 255, 255, 255));
-    valtst = SDL_FillRect(bigSurface, nullptr, SDL_MapRGBA(bigSurface->format, 255, 255, 255, 255));
 
     uint16_t nextX = 0;
     SDL_Rect rect;
@@ -121,24 +117,28 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
 
         SDL_BlitSurface(glyph_cache, nullptr, bigSurface, &rect);
 
-        char buff[50];
-        snprintf(buff, sizeof(buff), (const char*)"./tst/caracter_%d.png", characher);
-        SDL_SaveBMP(glyph_cache, buff);
+        // char buff[50];
+        // snprintf(buff, sizeof(buff), (const char*)"./tst/caracter_%d.png", characher);
+        // SDL_SaveBMP(glyph_cache, buff);
 
         nextX += glyph_cache->w;
     }
 
-    SDL_SaveBMP(bigSurface, "./tst/atlas.png");
+    // SDL_SaveBMP(bigSurface, "./tst/atlas.png");
     if (invert_image(bigSurface->pitch, bigSurface->h, bigSurface->pixels) != 0) {
         SDL_SetError("Falha na inversao de pixels");
     }
 
-    SDL_SaveBMP(bigSurface, "./tst/atlas.png");
-
     // Criar Textura
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bigSurface->w, bigSurface->h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, bigSurface->pixels);
+
+    if (bigSurface->format->Amask != 0) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bigSurface->w, bigSurface->h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, bigSurface->pixels);
+    } else {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bigSurface->w, bigSurface->h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, bigSurface->pixels);
+    }
+
     // Set texture options
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

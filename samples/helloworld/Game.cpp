@@ -40,6 +40,10 @@ void Game::start() {
 
     srand(time(nullptr));
 
+    // tranparence of fonts
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     shader = new Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
     shader->enable();
     GLint texIDs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -64,18 +68,18 @@ void Game::start() {
     texture[1]->init();
     texture[2]->init();
 
-    // layer = new TileLayer(shader);
-    // for (float y = -9.0f; y < 9.0f; y++) {
-    //     for (float x = -16.0f; x < 16.0f; x++) {
-    //         if (rand() % 4 == 0)
-    //             layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
-    //         else
-    //             layer->add(new Sprite(x, y, 0.9f, 0.9f, texture[rand() % 3]));
-    //     }
-    // }
+    layer = new TileLayer(shader);
+    for (float y = -9.0f; y < 9.0f; y++) {
+        for (float x = -16.0f; x < 16.0f; x++) {
+            if (rand() % 4 == 0)
+                layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
+            else
+                layer->add(new Sprite(x, y, 0.9f, 0.9f, texture[rand() % 3]));
+        }
+    }
 
     FontManager::add(new Chimera::FontAtlas("FreeSans_18", "./samples/models/fonts/FreeSans.ttf", 22));
-    Label* lFPS = new Label("@", 0.0f, 0.0f, "FreeSans_18", glm::vec4(1.0, 1.0, 1.0, 1.0));
+    Label* lFPS = new Label("@", 0.0f, 0.0f, "FreeSans_18", glm::vec4(0.0, 0.0, 1.0, 0.0));
     layer->add(lFPS);
 
     shader->disable();

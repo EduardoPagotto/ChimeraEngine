@@ -159,8 +159,8 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
         }
     }
 
-    float scaleX = 3.0; // 960.0f / 32.0f;
-    float scaleY = 3.0; // 540.0f / 18.0f;
+    float scaleX = 960.0f / 32.0f;
+    float scaleY = 540.0f / 18.0f;
     float x = pos.x;
 
     for (int i = 0; i < text.size(); i++) {

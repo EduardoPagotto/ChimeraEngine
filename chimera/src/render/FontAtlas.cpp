@@ -46,41 +46,37 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
 
     std::map<uint16_t, SDL_Surface*> mapGlyphCache;
 
-    // Load first 128 characters of ASCII set
-    // for (uint16_t c = 32; c < 127; c++) { // 0-256 ??
-    // Load character glyph
+    for (uint16_t c = 32; c < 127; c++) { // 0-256 ??
+        // Load character glyph
+        int minx, maxx, miny, maxy, advance;
+        if (TTF_GlyphMetrics(sFont, c, &minx, &maxx, &miny, &maxy, &advance) == -1) {
+            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
+            continue;
+        }
 
-    uint16_t c = 64;
+        // SDL_Surface* glyph_cache = TTF_RenderGlyph_Shaded(sFont, c, fg, bg);
+        SDL_Surface* glyph_cache = TTF_RenderGlyph_Solid(sFont, c, fg);
+        if (glyph_cache == nullptr)
+            continue;
 
-    int minx, maxx, miny, maxy, advance;
-    if (TTF_GlyphMetrics(sFont, c, &minx, &maxx, &miny, &maxy, &advance) == -1) {
-        SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
-        // continue;
+        totW += glyph_cache->w;
+
+        if (glyph_cache->h > maxH)
+            maxH = glyph_cache->h;
+
+        // Now store character for later use
+        GlyphData* pGlyp = new GlyphData;
+        pGlyp->size = glm::ivec2(glyph_cache->w, glyph_cache->h);
+        pGlyp->offset = glm::ivec2(minx, glyph_cache->h);
+        pGlyp->advance = advance;
+        pGlyp->square.x = 0.0f;
+        pGlyp->square.y = 0.0f;
+        pGlyp->square.w = 0.0f;
+        pGlyp->square.h = 0.0f;
+
+        glyphs.insert(std::pair<uint16_t, GlyphData*>(c, pGlyp));
+        mapGlyphCache.insert(std::pair<uint16_t, SDL_Surface*>(c, glyph_cache));
     }
-
-    // SDL_Surface* glyph_cache = TTF_RenderGlyph_Shaded(sFont, c, fg, bg);
-    SDL_Surface* glyph_cache = TTF_RenderGlyph_Solid(sFont, c, fg);
-    // if (glyph_cache == nullptr)
-    //     continue;
-
-    totW += glyph_cache->w;
-
-    if (glyph_cache->h > maxH)
-        maxH = glyph_cache->h;
-
-    // Now store character for later use
-    GlyphData* pGlyp = new GlyphData;
-    pGlyp->size = glm::ivec2(glyph_cache->w, glyph_cache->h);
-    pGlyp->offset = glm::ivec2(minx, glyph_cache->h);
-    pGlyp->advance = advance;
-    pGlyp->square.x = 0.0f;
-    pGlyp->square.y = 0.0f;
-    pGlyp->square.w = 0.0f;
-    pGlyp->square.h = 0.0f;
-
-    glyphs.insert(std::pair<uint16_t, GlyphData*>(c, pGlyp));
-    mapGlyphCache.insert(std::pair<uint16_t, SDL_Surface*>(c, glyph_cache));
-    //}
 
     Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN

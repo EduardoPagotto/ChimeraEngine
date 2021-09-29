@@ -78,8 +78,8 @@ void Game::start() {
         }
     }
 
-    FontManager::add(new Chimera::FontAtlas("FreeSans_18", "./samples/models/fonts/FreeSans.ttf", 22));
-    Label* lFPS = new Label("@", 0.0f, 0.0f, "FreeSans_18", glm::vec4(0.0, 0.0, 1.0, 0.0));
+    FontManager::add(new Chimera::FontAtlas("FreeSans_18", "./samples/models/fonts/FreeSans.ttf", 32));
+    Label* lFPS = new Label("Ola!!!", 0.0f, 0.0f, "FreeSans_18", glm::vec4(0.0, 0.0, 1.0, 0.0));
     layer->add(lFPS);
 
     shader->disable();

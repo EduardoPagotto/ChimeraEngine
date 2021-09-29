@@ -16,8 +16,6 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					vbs/SimpleRender3d.cpp
 					vbs/RenderableIndex.cpp
 					2d/Renderable2D.cpp
-					2d/SimpleRender2D.cpp
-					2d/StaticSprite.cpp 
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
 					2d/Layer.cpp

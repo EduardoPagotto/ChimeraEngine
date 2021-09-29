@@ -11,6 +11,7 @@ class FontManager {
     static void add(FontAtlas* font);
     static void clean();
     static FontAtlas* get(const std::string& name);
+    static FontAtlas* get() { return fonts[0]; }
 
   private:
     FontManager() {}

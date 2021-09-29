@@ -21,12 +21,8 @@ void main() {
     vec4 textColor = fs_in.color;
     if (fs_in.tid > 0.0) {
         int tid = int(fs_in.tid - 0.5);
-        textColor = texture(textures[tid], fs_in.uv);
-
-        // if (textColor.a < 0.1)
-        //     discard;
-
-        // textColor = vec4(tid / 1.0, 0, 0, 1);
+        // textColor = texture(textures[tid], fs_in.uv);
+        textColor = fs_in.color * texture(textures[tid], fs_in.uv); // color in texture, write didnt change
     }
 
     color = textColor * intensity;

@@ -2,7 +2,6 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
-#include "chimera/render/2d/Label.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/FontManager.hpp"
 #include "chimera/render/Texture.hpp"
@@ -78,8 +77,9 @@ void Game::start() {
         }
     }
 
-    FontManager::add(new Chimera::FontAtlas("FreeSans_18", "./samples/models/fonts/FreeSans.ttf", 32));
-    Label* lFPS = new Label("Ola!!!", 0.0f, 0.0f, "FreeSans_18", glm::vec4(0.0, 0.0, 1.0, 0.0));
+    FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./samples/models/fonts/FreeSans.ttf", 22));
+    FontManager::get()->setScale(glm::vec2(pVideo->getWidth() / 32.0f, pVideo->getHeight() / 18.0f)); // em TileLayer ortho values!!!
+    lFPS = new Label("None", 0.0f, 0.0f, glm::vec4(0.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
 
     shader->disable();
@@ -94,8 +94,9 @@ void Game::userEvent(const SDL_Event& _event) {
             this->start();
             break;
         case Chimera::Core::EVENT_NEW_FPS: {
-            uint32_t* fps = (uint32_t*)_event.user.data1;
-            SDL_Log("FPS: %d", *fps);
+            uint32_t* pFps = (uint32_t*)_event.user.data1;
+            fps = *pFps;
+            SDL_Log("FPS: %d", fps);
         } break;
         default:
             break;
@@ -119,6 +120,8 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
 }
 
 void Game::update() {
+
+    lFPS->setText(std::string("FPS: ") + std::to_string(fps));
 
     pVideo->before();
     shader->enable();

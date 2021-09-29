@@ -6,10 +6,8 @@
 namespace Chimera {
 
 class Layer {
-  protected:
-    Layer(IRenderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix);
-
   public:
+    Layer(IRenderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix);
     virtual ~Layer();
     inline virtual void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
     void render();

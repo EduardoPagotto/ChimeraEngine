@@ -22,11 +22,14 @@ class FontAtlas {
     virtual ~FontAtlas();
     inline const std::string getName() const { return name; }
     inline const GLuint getTextureID() const { return texture; }
+    inline void setScale(const glm::vec2& scale) { this->scale = scale; }
+    inline glm::vec2 getScale() const { return this->scale; }
 
     std::map<uint16_t, GlyphData*> glyphs;
 
   private:
     int invert_image(int pitch, int height, void* image_pixels);
+    glm::vec2 scale;
     GLuint texture;
     std::string name;
 };

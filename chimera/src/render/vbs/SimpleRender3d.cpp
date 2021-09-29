@@ -17,15 +17,18 @@ void SimpleRender3d::end() {
 
 void SimpleRender3d::submit(IRenderable* renderable) {
 
+    // se não há frustrum adicionar tudo
     if (frustrun == nullptr) {
         renderQueue.push_back(renderable);
         return;
     }
 
+    // se nao ha AABB adicionar tudo
     Core::AABB* pAABB = renderable->getAABB();
     if (pAABB == nullptr) {
         renderQueue.push_back(renderable);
     } else {
+        // adicione apenas o que esta no clip-space
         if (pAABB->visible(*frustrun) == true) {
 
             Core::IndexBuffer* ibo = renderable->getIBO();
@@ -61,6 +64,10 @@ void SimpleRender3d::flush() {
             r->getIBO()->bind();
 
             // r->getShader()->setUniform1i("teste", 1);
+            // glm::mat4 modelMatrix(1.0f);
+            // glm::mat4 mm = glm::translate(modelMatrix, r->getPosition());
+            // r->getShader()->setUniformMatrix4fv("ml_matrix", 1, false, glm::value_ptr(mm));
+
             glDrawElements(GL_TRIANGLES, r->getIBO()->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 
             if (logData == true)

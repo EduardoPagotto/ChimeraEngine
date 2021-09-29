@@ -159,8 +159,7 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
         }
     }
 
-    float scaleX = 960.0f / 32.0f;
-    float scaleY = 540.0f / 18.0f;
+    const glm::vec2& scale = font->getScale();
     float x = pos.x;
 
     for (int i = 0; i < text.size(); i++) {
@@ -173,13 +172,13 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
             // FIXME: encontrar o kering!!!!!!
             // if (i > 0) {
             //     float kering = texture_glyph_get_kering(glyph, text[1 - 1]);
-            //     x += kering / scaleX;
+            //     x += kering / scale.x;
             // }
 
-            float x0 = x + glyph->offset.x / scaleX;     //  x + glyph.offSet_x / scaleX;
-            float x1 = x0 + glyph->size.x / scaleX;      // x0 + glyph.with / scaleX;
-            float y1 = pos.y + glyph->offset.y / scaleY; // pos.y + glyph.offSet_y / scaleY;
-            float y0 = y1 - glyph->size.y / scaleY;      // y0 - glyph.height / scaleY;
+            float x0 = x + glyph->offset.x / scale.x;
+            float x1 = x0 + glyph->size.x / scale.x;
+            float y1 = pos.y + glyph->offset.y / scale.y;
+            float y0 = y1 - glyph->size.y / scale.y;
 
             float u0 = glyph->square.x;
             float v0 = glyph->square.y;
@@ -212,7 +211,7 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
 
             indexCount += 6;
 
-            x += glyph->advance / scaleX;
+            x += glyph->advance / scale.x;
         }
     }
 }

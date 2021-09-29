@@ -16,6 +16,7 @@ Renderable2D::Renderable2D(glm::vec3 pos, glm::vec2 size, Texture* texture) : po
     uv.push_back(glm::vec2(0.0f, 1.0f));
     uv.push_back(glm::vec2(1.0f, 1.0f));
     uv.push_back(glm::vec2(1.0f, 0.0f));
+    color = glm::vec4(1, 1, 1, 1);
 }
 
 Renderable2D::~Renderable2D() {}

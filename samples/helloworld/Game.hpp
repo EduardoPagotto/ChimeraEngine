@@ -5,6 +5,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
+#include "chimera/render/2d/Label.hpp"
 #include "chimera/render/2d/Layer.hpp"
 #include "chimera/render/FontAtlas.hpp"
 
@@ -24,8 +25,10 @@ class Game : public Chimera::Core::IEvents {
     Chimera::Core::CanvasGL* pVideo;
     Chimera::Shader *shader, *shader2;
     TileLayer *layer, *layer2;
+    Chimera::Label* lFPS;
     uint16_t x, y;
 
+    int fps;
     Chimera::FontAtlas* fa;
 };
 

@@ -15,6 +15,7 @@ VertexBuffer::VertexBuffer(void* vertexData, const uint32_t& size, VertexCompone
     } else {
         glBufferData(GL_ARRAY_BUFFER, size * components->sizeVertex, nullptr, GL_STREAM_DRAW);
     }
+    // glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, nullptr, GL_DYNAMIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer() {

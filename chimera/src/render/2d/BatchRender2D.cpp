@@ -84,7 +84,7 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
 
         if (!found) {
 
-            if (textureSlots.size() > 32) {
+            if (textureSlots.size() > RENDERER_MAX_TEXTURE) {
                 end();
                 flush();
                 begin();
@@ -124,8 +124,8 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
 
 void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
-    // // https://www.youtube.com/watch?v=Rsdc6I80aFQ&t=71s
-    // // 32:00
+    // // https://www.youtube.com/watch?v=rTG95k0qdqs&t=3047s
+    // // 16:00
 
     // const glm::vec3& position = pos;
     // const glm::vec2& size = renderable->getSize();
@@ -148,7 +148,7 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
 
         if (!found) {
 
-            if (textureSlots.size() > 32) {
+            if (textureSlots.size() > RENDERER_MAX_TEXTURE) {
                 end();
                 flush();
                 begin();
@@ -238,6 +238,7 @@ void BatchRender2D::flush() {
     glBindVertexArray(0);
 
     indexCount = 0;
+    textureSlots.clear();
 }
 
 } // namespace Chimera

@@ -44,7 +44,7 @@ void FlowControl::run(void) {
     uint32_t frameTime, timeElapsed, tot_delay;
     uint32_t lastFrameTime = 0;
     uint32_t deltaTime = 0;
-    uint32_t fpsMin = 60;
+    uint32_t fpsMin = 120;
     uint32_t minimumFrameTime = 1000 / fpsMin;
 
     // open devices

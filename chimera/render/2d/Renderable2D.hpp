@@ -4,7 +4,6 @@
 #include "IRenderable2D.hpp"
 #include "IRenderer2D.hpp"
 #include "chimera/render/Texture.hpp"
-#include <deque>
 
 namespace Chimera {
 
@@ -17,7 +16,7 @@ class Renderable2D : public IRenderable2D {
     inline const glm::vec3 getPosition() const override { return pos; }
     inline const glm::vec2 getSize() const override { return size; }
     inline const glm::vec4 getColor() const override { return color; }
-    inline const std::vector<glm::vec2>& getUV() const override { return uv; } // FIXME: passar para os e cima e na classe pai
+    inline const std::vector<glm::vec2>& getUV() const override { return uv; }
     inline const GLuint getTID() const override { return texture ? texture->getID() : 0; }
 
   protected:

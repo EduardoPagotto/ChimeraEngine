@@ -2,6 +2,7 @@
 #define __CHIMERA_SIMPLERENDERER_2D__HPP
 
 #include "Renderable2D.hpp"
+#include <deque>
 
 namespace Chimera {
 

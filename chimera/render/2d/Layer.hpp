@@ -20,11 +20,5 @@ class Layer {
     glm::mat4 projectionMatrix;
     std::vector<IRenderable2D*> renderables;
 };
-
-class TileLayer : public Layer {
-  public:
-    TileLayer(Shader* shader);
-    virtual ~TileLayer();
-};
 } // namespace Chimera
 #endif

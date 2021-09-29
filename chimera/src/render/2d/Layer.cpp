@@ -1,5 +1,4 @@
 #include "chimera/render/2d/Layer.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
@@ -33,10 +32,4 @@ void Layer::render() {
 
     shader->disable();
 }
-
-// //----
-
-TileLayer::TileLayer(Shader* shader) : Layer(new BatchRender2D(), shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f)) {}
-TileLayer::~TileLayer() {}
-
 } // namespace Chimera

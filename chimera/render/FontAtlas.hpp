@@ -2,6 +2,7 @@
 #define __CHIMERA_FONT_ATLAS__HPP
 
 #include "chimera/OpenGLDefs.hpp"
+#include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #include <map>
 #include <string>
@@ -12,10 +13,7 @@ struct GlyphData {
     glm::ivec2 size;   // Size of glyph
     glm::ivec2 offset; // Offset from baseline to left/top of glyph
     long int advance;  // GLuint Advance;     // Horizontal offset to advance to next glyph
-    float u0;
-    float u1;
-    float v0;
-    float v1;
+    SDL_FRect square;
 };
 
 class FontAtlas {

@@ -2,11 +2,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "chimera/core/Exception.hpp"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <iostream>
-
 namespace Chimera {
 
 FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const int& size) : texture(0), name(name) {
@@ -51,38 +46,40 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
     std::map<uint16_t, SDL_Surface*> mapGlyphCache;
 
     // Load first 128 characters of ASCII set
-    for (uint16_t c = 32; c < 127; c++) { // 0-256 ??
-        // Load character glyph
+    // for (uint16_t c = 32; c < 127; c++) { // 0-256 ??
+    // Load character glyph
 
-        int minx, maxx, miny, maxy, advance;
-        if (TTF_GlyphMetrics(sFont, c, &minx, &maxx, &miny, &maxy, &advance) == -1) {
-            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
-            continue;
-        }
+    uint16_t c = 64;
 
-        // SDL_Surface* glyph_cache = TTF_RenderGlyph_Shaded(sFont, c, fg, bg);
-        SDL_Surface* glyph_cache = TTF_RenderGlyph_Solid(sFont, c, fg);
-        if (glyph_cache == nullptr)
-            continue;
-
-        totW += glyph_cache->w;
-
-        if (glyph_cache->h > maxH)
-            maxH = glyph_cache->h;
-
-        // Now store character for later use
-        GlyphData* pGlyp = new GlyphData;
-        pGlyp->size = glm::ivec2(glyph_cache->w, glyph_cache->h);
-        pGlyp->offset = glm::ivec2(minx, glyph_cache->h);
-        pGlyp->advance = advance;
-        pGlyp->u0 = 0.0f;
-        pGlyp->u1 = 0.0f;
-        pGlyp->v0 = 0.0f;
-        pGlyp->v1 = 0.0f;
-
-        glyphs.insert(std::pair<uint16_t, GlyphData*>(c, pGlyp));
-        mapGlyphCache.insert(std::pair<uint16_t, SDL_Surface*>(c, glyph_cache));
+    int minx, maxx, miny, maxy, advance;
+    if (TTF_GlyphMetrics(sFont, c, &minx, &maxx, &miny, &maxy, &advance) == -1) {
+        SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
+        // continue;
     }
+
+    // SDL_Surface* glyph_cache = TTF_RenderGlyph_Shaded(sFont, c, fg, bg);
+    SDL_Surface* glyph_cache = TTF_RenderGlyph_Solid(sFont, c, fg);
+    // if (glyph_cache == nullptr)
+    //     continue;
+
+    totW += glyph_cache->w;
+
+    if (glyph_cache->h > maxH)
+        maxH = glyph_cache->h;
+
+    // Now store character for later use
+    GlyphData* pGlyp = new GlyphData;
+    pGlyp->size = glm::ivec2(glyph_cache->w, glyph_cache->h);
+    pGlyp->offset = glm::ivec2(minx, glyph_cache->h);
+    pGlyp->advance = advance;
+    pGlyp->square.x = 0.0f;
+    pGlyp->square.y = 0.0f;
+    pGlyp->square.w = 0.0f;
+    pGlyp->square.h = 0.0f;
+
+    glyphs.insert(std::pair<uint16_t, GlyphData*>(c, pGlyp));
+    mapGlyphCache.insert(std::pair<uint16_t, SDL_Surface*>(c, glyph_cache));
+    //}
 
     Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -96,10 +93,13 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
     bmask = 0x00ff0000;
     amask = 0xff000000;
 #endif
+    int valtst = 0;
     SDL_Surface* bigSurface = SDL_CreateRGBSurface(0, totW, maxH, 32, rmask, gmask, bmask, amask);
-    int valtst = SDL_SetSurfaceBlendMode(bigSurface, SDL_BLENDMODE_BLEND);
+    // SDL_Surface* bigSurface = SDL_CreateRGBSurface(0, totW, maxH, 8, 0, 0, 0, 0);
+    // int valtst = SDL_SetSurfaceBlendMode(bigSurface, SDL_BLENDMODE_ADD);
     // valtst = SDL_FillRect(bigSurface, nullptr, 0x000000);
     // valtst = SDL_FillRect(bigSurface, nullptr, SDL_MapRGB(bigSurface->format, 255, 255, 255));
+    valtst = SDL_FillRect(bigSurface, nullptr, SDL_MapRGBA(bigSurface->format, 255, 255, 255, 255));
 
     uint16_t nextX = 0;
     SDL_Rect rect;
@@ -114,31 +114,31 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
         rect.h = glyph_cache->h;
 
         GlyphData* pGlyp = glyphs[characher];
-        pGlyp->u0 = ((float)rect.x) / (float)totW;
-        pGlyp->v0 = 0.0;
-        pGlyp->u1 = ((float)rect.w) / (float)totW;
-        pGlyp->v1 = ((float)rect.h) / (float)maxH;
+        pGlyp->square.x = ((float)rect.x) / (float)totW;
+        pGlyp->square.y = 0.0;
+        pGlyp->square.w = ((float)rect.w) / (float)totW;
+        pGlyp->square.h = ((float)rect.h) / (float)maxH;
 
         SDL_BlitSurface(glyph_cache, nullptr, bigSurface, &rect);
 
-        // char buff[50];
-        // snprintf(buff, sizeof(buff), (const char*)"./tst/caracter_%d.png", characher);
-        // SDL_SaveBMP(glyph_cache, buff);
+        char buff[50];
+        snprintf(buff, sizeof(buff), (const char*)"./tst/caracter_%d.png", characher);
+        SDL_SaveBMP(glyph_cache, buff);
 
         nextX += glyph_cache->w;
     }
 
-    // SDL_SaveBMP(bigSurface, "./tst/atlas.png");
-    // if (invert_image(bigSurface->pitch, bigSurface->h, bigSurface->pixels) != 0) {
-    //     SDL_SetError("Falha na inversao de pixels");
-    // }
+    SDL_SaveBMP(bigSurface, "./tst/atlas.png");
+    if (invert_image(bigSurface->pitch, bigSurface->h, bigSurface->pixels) != 0) {
+        SDL_SetError("Falha na inversao de pixels");
+    }
 
     SDL_SaveBMP(bigSurface, "./tst/atlas.png");
 
     // Criar Textura
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, bigSurface->w, bigSurface->h, 0, GL_RED, GL_UNSIGNED_BYTE, bigSurface->pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bigSurface->w, bigSurface->h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, bigSurface->pixels);
     // Set texture options
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

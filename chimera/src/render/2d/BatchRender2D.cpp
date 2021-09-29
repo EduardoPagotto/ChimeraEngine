@@ -176,30 +176,15 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
             //     x += kering / scaleX;
             // }
 
-            // float x0 = x + glyph->offset.x / scaleX;                       //  x + glyph.offSet_x / scaleX;
-            // float y0 = pos.y + (glyph->size.y - glyph->offset.y) / scaleY; // pos.y + glyph.offSet_y / scaleY;
-            // float x1 = x0 + glyph->size.x / scaleX;                        // x0 + glyph.with / scaleX;
-            // float y1 = y0 - glyph->size.y / scaleY;                        // y0 - glyph.height / scaleY;
-
-            // float x0 = 0.0f; // x + glyph->offset.x;     // / scaleX; //  x + glyph.offSet_x / scaleX;
-            // float y0 = 0.0f; // pos.y + glyph->offset.y; //  / scaleY; // pos.y + glyph.offSet_y / scaleY;
-            // float x1 = 8.0f; // x0 + glyph->size.x;      //  / scaleX;  // x0 + glyph.with / scaleX;
-            // float y1 = 8.0f; // y0 - glyph->size.y;      //  / scaleY;      // y0 - glyph.height / scaleY;
-
             float x0 = x + glyph->offset.x / scaleX;     //  x + glyph.offSet_x / scaleX;
-            float y0 = pos.y + glyph->offset.y / scaleY; // pos.y + glyph.offSet_y / scaleY;
             float x1 = x0 + glyph->size.x / scaleX;      // x0 + glyph.with / scaleX;
-            float y1 = y0 - glyph->size.y / scaleY;      // y0 - glyph.height / scaleY;
+            float y1 = pos.y + glyph->offset.y / scaleY; // pos.y + glyph.offSet_y / scaleY;
+            float y0 = y1 - glyph->size.y / scaleY;      // y0 - glyph.height / scaleY;
 
-            // float u0 = 1; // glyph->u0;
-            // float v0 = 1; // glyph->v0;
-            // float u1 = 0; // glyph->u1;
-            // float v1 = 0; // glyph->v1;
-
-            float u1 = glyph->u0;
-            float v1 = glyph->v0;
-            float u0 = glyph->u1;
-            float v0 = glyph->v1;
+            float u0 = glyph->square.x;
+            float v0 = glyph->square.y;
+            float u1 = glyph->square.w;
+            float v1 = glyph->square.h;
 
             buffer->vertex = stack.multiplVec3(glm::vec3(x0, y0, 0.0f));
             buffer->uv = glm::vec2(u0, v0);

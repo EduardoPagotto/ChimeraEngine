@@ -69,8 +69,7 @@ Chimera::TextureImg* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
 
 void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Material* _pMat) {
 
-    tinyxml2::XMLElement* l_nCor =
-        _nProfile->FirstChildElement("technique")->FirstChildElement("phong")->FirstChildElement();
+    tinyxml2::XMLElement* l_nCor = _nProfile->FirstChildElement("technique")->FirstChildElement("phong")->FirstChildElement();
     for (l_nCor; l_nCor; l_nCor = l_nCor->NextSiblingElement()) {
 
         glm::vec4 l_valCor;
@@ -83,7 +82,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Materi
         tinyxml2::XMLElement* l_nTex = l_nCor->FirstChildElement("texture");
         if (l_nTex != nullptr) {
             Chimera::TextureImg* pTex = getTexture(l_nTex);
-            _pMat->addTexture(pTex);
+            _pMat->addTexture(SHADE_TEXTURE_DIFFUSE, pTex); // FIXME: Textura tipo correta ????
         }
 
         if (strcmp(l_cor, (const char*)"emission") == 0) {

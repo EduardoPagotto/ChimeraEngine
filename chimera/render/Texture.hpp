@@ -5,11 +5,6 @@
 
 namespace Chimera {
 
-#define SHADE_TEXTURE_DIFFUSE "material.tDiffuse"
-#define SHADE_TEXTURE_SPECULA "material.tSpecular"
-#define SHADE_TEXTURE_EMISSIVE "material.tEmissive"
-#define SHADE_TEXTURE_SHADOW "shadowMap" // TODO: melhorar este nome no shader
-
 class Texture {
   public:
     Texture(const std::string& _shadeName, const unsigned& _width, const unsigned& _height);
@@ -57,8 +52,7 @@ class Texture {
 
 class TextureFBO : public Texture {
   public:
-    TextureFBO(const std::string& _shadeName, const unsigned& _width, const unsigned& _height)
-        : Texture(_shadeName, _width, _height), depthMapFBO(0) {}
+    TextureFBO(const unsigned& _width, const unsigned& _height) : Texture("", _width, _height), depthMapFBO(0) {}
     virtual ~TextureFBO() override;
     virtual bool init() override;
     inline GLuint getFrameBufferId() const { return depthMapFBO; }

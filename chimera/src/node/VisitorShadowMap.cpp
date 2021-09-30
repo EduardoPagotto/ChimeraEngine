@@ -16,7 +16,7 @@ namespace Chimera {
 
 VisitorShadowMap::VisitorShadowMap(SimpleRender3d* _pRender3d, Shader* _pShader, const unsigned& _width, const unsigned& _height)
     : pShader(_pShader), pTransform(nullptr), pRender3D(_pRender3d) {
-    pTexture = new TextureFBO(SHADE_TEXTURE_SHADOW, _width, _height);
+    pTexture = new TextureFBO(_width, _height);
 }
 
 VisitorShadowMap::~VisitorShadowMap() { delete pTexture; }
@@ -73,7 +73,14 @@ void VisitorShadowMap::initSceneShadow() {
 
 void VisitorShadowMap::endSceneShadow() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
-void VisitorShadowMap::applyShadow(Shader* _pShader) { pTexture->apply(_pShader); }
+void VisitorShadowMap::applyShadow(Shader* _pShader) {
+    // pTexture->apply(_pShader);
+    glActiveTexture(GL_TEXTURE0 + 1);
+    glBindTexture(GL_TEXTURE_2D, pTexture->getID());
+    if (_pShader != nullptr) {
+        _pShader->setUniform1i("shadowMap", 1);
+    }
+}
 
 void VisitorShadowMap::setLightSpaceMatrix(const glm::vec3& _posicaoLight) {
 

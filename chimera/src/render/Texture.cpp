@@ -8,16 +8,7 @@ unsigned Texture::serialMaster = 0;
 
 Texture::Texture(const std::string& _shadeName, const unsigned& _width, const unsigned& _height)
     : width(_width), height(_height), serial(++serialMaster), idTexture(0), shadeName(_shadeName) {
-
     index = 0;
-    if (_shadeName.compare(SHADE_TEXTURE_DIFFUSE) == 0)
-        index = 0;
-    else if (_shadeName.compare(SHADE_TEXTURE_SHADOW) == 0)
-        index = 1;
-    else if (_shadeName.compare(SHADE_TEXTURE_SPECULA) == 0)
-        index = 2;
-    else if (_shadeName.compare(SHADE_TEXTURE_EMISSIVE) == 0)
-        index = 3;
 }
 
 TextureFBO::~TextureFBO() {}
@@ -101,45 +92,5 @@ bool TextureImg::init() {
     }
     return false;
 }
-
-// -----
-// TexCentral::TexCentral() noexcept {}
-
-// TexCentral::~TexCentral() {
-
-//     std::map<std::string, TextureImg*>::iterator it = mapTex.begin();
-//     while (it != mapTex.end()) {
-
-//         TextureImg* pTex = it->second;
-//         mapTex.erase(it);
-
-//         delete pTex;
-//         pTex = nullptr;
-
-//         it = mapTex.begin();
-//     }
-// }
-
-// void TexCentral::initAllTex() {
-//     for (std::map<std::string, TextureImg*>::iterator iTex = mapTex.begin(); iTex != mapTex.end(); iTex++) {
-//         TextureImg* pTex = iTex->second;
-//         pTex->init();
-//     }
-// }
-
-// TextureImg* TexCentral::add(const std::string& name, const std::string& _pathFile) {
-
-//     TextureImg* pTex;
-//     std::map<std::string, TextureImg*>::iterator it = mapTex.find(name);
-//     if (it != mapTex.end()) {
-//         pTex = it->second;
-//         return pTex;
-//     }
-
-//     pTex = new TextureImg(_pathFile);
-//     mapTex[name] = pTex;
-
-//     return pTex;
-// }
 
 } // namespace Chimera

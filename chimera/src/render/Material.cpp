@@ -19,39 +19,30 @@ void Material::init() {
     bool hasEspecular = false;
     bool hasEmissive = false;
 
-    for (std::list<TextureImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
+    tipoTexturasDisponiveis = 0;
+    for (const auto& kv : mapTex) {
 
-        TextureImg* pTex = *iTex;
-
-        pTex->init();
-        switch (pTex->getIndex()) {
-            case 0:
-                hasDifuse = true;
-                break;
-            case 3:
-                hasEmissive = true;
-                break;
-            case 2:
-                hasEspecular = true;
-                break;
-            default:
-                break;
+        if (kv.first.compare(SHADE_TEXTURE_DIFFUSE) == 0) {
+            hasDifuse = true;
+        } else if (kv.first.compare(SHADE_TEXTURE_SPECULA) == 0) {
+            hasEspecular = true;
+        } else if (kv.first.compare(SHADE_TEXTURE_EMISSIVE) == 0) {
+            hasEmissive = true;
         }
+
+        // int tex
+        kv.second->init();
     }
 
-    if (listTex.size() == 0)
-        tipoTexturasDisponiveis = 0;
-    else if ((hasDifuse == true) && (hasEspecular == false) && (hasEmissive == false))
+    if ((hasDifuse == true) && (hasEspecular == false) && (hasEmissive == false))
         tipoTexturasDisponiveis = 1;
     else if ((hasDifuse == true) && (hasEspecular == true) && (hasEmissive == false))
         tipoTexturasDisponiveis = 2;
     else if ((hasDifuse == true) && (hasEspecular == true) && (hasEmissive == true))
         tipoTexturasDisponiveis = 3;
-    else
-        tipoTexturasDisponiveis = 4;
 }
 
-void Material::addTexture(TextureImg* _pTex) { listTex.push_back(_pTex); }
+void Material::addTexture(const std::string& uniformTexName, TextureImg* texture) { this->mapTex[uniformTexName] = texture; }
 
 void Material::setUniform(Shader* _shader) {
 
@@ -62,11 +53,9 @@ void Material::setUniform(Shader* _shader) {
 
     _shader->setUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
 
-    if (listTex.size() > 0) {
-        for (std::list<TextureImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
-            TextureImg* pTex = *iTex;
-            pTex->apply(_shader);
-        }
+    if (mapTex.size() > 0) {
+        for (const auto& kv : mapTex)
+            kv.second->apply(_shader); // 1Texture!!!
     } else {
         glBindTexture(GL_TEXTURE_2D, 0);
     }

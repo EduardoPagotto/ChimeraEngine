@@ -14,7 +14,7 @@ Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanv
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pTex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png");
+    pTex = new Chimera::TextureImg("./data/images/grid2.png");
 }
 
 Game::~Game() { delete renderz1; }
@@ -146,7 +146,9 @@ void Game::update() {
     pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     // aplica a textura
-    pTex->apply(pShader);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, pTex->getID());
+    pShader->setUniform1i(SHADE_TEXTURE_DIFFUSE, 0);
 
     renderz1->setEyePosition(&vp->position);
     render3d.begin(&frustum);

@@ -6,10 +6,7 @@ namespace Chimera {
 
 unsigned Texture::serialMaster = 0;
 
-Texture::Texture(const std::string& _shadeName, const unsigned& _width, const unsigned& _height)
-    : width(_width), height(_height), serial(++serialMaster), idTexture(0), shadeName(_shadeName) {
-    index = 0;
-}
+Texture::Texture(const unsigned& _width, const unsigned& _height) : width(_width), height(_height), serial(++serialMaster), idTexture(0) {}
 
 TextureFBO::~TextureFBO() {}
 

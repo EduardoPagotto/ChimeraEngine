@@ -79,7 +79,7 @@ void Game::start() {
         loader.getMaterial(material);
     else {
         material.setDefaultEffect();
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png"));
+        material.addTexture(SHADE_TEXTURE_DIFFUSE, new Chimera::TextureImg("./data/images/grid2.png"));
     }
 
     material.init();

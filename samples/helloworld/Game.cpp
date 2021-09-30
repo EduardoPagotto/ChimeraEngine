@@ -60,8 +60,8 @@ void Game::start() {
     // 56:00
 
     // TODOD: texture manager!!!!
-    Texture* texture[] = {new TextureImg("tex1", "./data/images/grid2.png"), new TextureImg("tex2", "./data/images/grid1.png"),
-                          new TextureImg("tex3", "./data/images/grid3.png")};
+    Texture* texture[] = {new TextureImg("./data/images/grid2.png"), new TextureImg("./data/images/grid1.png"),
+                          new TextureImg("./data/images/grid3.png")};
 
     texture[0]->init();
     texture[1]->init();

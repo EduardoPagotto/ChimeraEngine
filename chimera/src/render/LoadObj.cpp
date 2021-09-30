@@ -147,7 +147,7 @@ bool LoaderObj::getMaterial(Material& _material) {
             // load texture
             std::string nova(line);
             if (getValidData(nova, std::string("map_Kd ")) == true)
-                _material.addTexture(SHADE_TEXTURE_DIFFUSE, new TextureImg(SHADE_TEXTURE_DIFFUSE, nova));
+                _material.addTexture(SHADE_TEXTURE_DIFFUSE, new TextureImg(nova));
             else if (getValidData(nova, std::string("sharpness ")) == true) {
                 float val;
                 int n = sscanf(nova.c_str(), "%f", &val);

@@ -16,7 +16,7 @@ namespace Chimera {
 
 VisitorShadowMap::VisitorShadowMap(SimpleRender3d* _pRender3d, Shader* _pShader, const unsigned& _width, const unsigned& _height)
     : pShader(_pShader), pTransform(nullptr), pRender3D(_pRender3d) {
-    pTexture = new TextureFBO(_width, _height);
+    pTexture = new TextureFBO("theShadow", _width, _height);
 }
 
 VisitorShadowMap::~VisitorShadowMap() { delete pTexture; }

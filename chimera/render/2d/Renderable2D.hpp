@@ -3,7 +3,7 @@
 
 #include "IRenderable2D.hpp"
 #include "IRenderer2D.hpp"
-#include "chimera/render/Texture.hpp"
+#include "chimera/core/Texture.hpp"
 
 namespace Chimera {
 

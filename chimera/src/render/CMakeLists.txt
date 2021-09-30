@@ -26,8 +26,6 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					FontManager.cpp
 					Light.cpp
 					Material.cpp
-					Texture.cpp
-					TextureManager.cpp
 					Particle.cpp
 					LoadObj.cpp
 					LoadHeightMap.cpp

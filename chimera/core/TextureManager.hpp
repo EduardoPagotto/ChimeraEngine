@@ -14,6 +14,8 @@ class TextureManager {
     static Texture* get(const std::string& name);
     static Texture* get() { return textures[0]; }
     static Texture* getLast() { return textures.back(); }
+    static Texture* getIndex(const uint16_t& index) { return textures[index]; }
+    static void initAll();
 
   private:
     TextureManager() {}

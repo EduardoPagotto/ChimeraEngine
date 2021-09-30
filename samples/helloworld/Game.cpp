@@ -1,10 +1,10 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/FontManager.hpp"
-#include "chimera/render/Texture.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
 
@@ -58,14 +58,10 @@ void Game::start() {
 
     // parei em :http//www.youtube.com/watch?v=rTG95k0qdqs&t=3047s
     // 56:00
-
-    // TODOD: texture manager!!!!
-    Texture* texture[] = {new TextureImg("./data/images/grid2.png"), new TextureImg("./data/images/grid1.png"),
-                          new TextureImg("./data/images/grid3.png")};
-
-    texture[0]->init();
-    texture[1]->init();
-    texture[2]->init();
+    TextureManager::add(new TextureImg("t01", "./data/images/grid1.png"));
+    TextureManager::add(new TextureImg("t02", "./data/images/grid2.png"));
+    TextureManager::add(new TextureImg("t03", "./data/images/grid3.png"));
+    TextureManager::initAll();
 
     layer = new TileLayer(shader);
     for (float y = -9.0f; y < 9.0f; y++) {
@@ -73,7 +69,7 @@ void Game::start() {
             if (rand() % 4 == 0)
                 layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
             else
-                layer->add(new Sprite(x, y, 0.9f, 0.9f, texture[rand() % 3]));
+                layer->add(new Sprite(x, y, 0.9f, 0.9f, TextureManager::getIndex(rand() % 3)));
         }
     }
 

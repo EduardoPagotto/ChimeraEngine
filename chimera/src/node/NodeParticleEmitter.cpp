@@ -1,5 +1,6 @@
 #include "chimera/node/NodeParticleEmitter.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/TextureManager.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/VisitorInterface.hpp"
 #include <algorithm>
@@ -54,7 +55,8 @@ void NodeParticleEmitter::init() {
 }
 
 void NodeParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string& _arquivo) {
-    material->addTexture(SHADE_TEXTURE_DIFFUSE, new TextureImg(_arquivo));
+    TextureManager::add(new TextureImg(_nome, _arquivo));
+    material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
 }
 
 void NodeParticleEmitter::accept(VisitorInterface* v) { v->visit(this); }

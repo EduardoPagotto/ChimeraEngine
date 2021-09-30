@@ -6,9 +6,12 @@
 namespace Chimera {
 
 class Texture {
+  protected:
+    Texture(const std::string& name, const unsigned& width, const unsigned& height)
+        : name(name), width(width), height(height), idTexture(0) {}
+
   public:
-    Texture(const unsigned& _width, const unsigned& _height);
-    virtual ~Texture() { glDeleteTextures(1, (GLuint*)&idTexture); }
+    virtual ~Texture() { glDeleteTextures(1, (GLuint*)&idTexture); } //???
 
     virtual bool init() {
         if (idTexture == 0) {
@@ -22,7 +25,6 @@ class Texture {
 
     inline unsigned getWidth() const { return width; }
     inline unsigned getHeight() const { return height; }
-    inline unsigned getSerial() const { return serial; }
     inline const GLuint getID() const { return idTexture; }
     inline const std::string getName() const { return name; }
 
@@ -30,17 +32,13 @@ class Texture {
     unsigned width;
     unsigned height;
     GLuint idTexture;
-
-  private:
     std::string name;
-    unsigned serial;
-    static unsigned serialMaster;
 };
 
 class TextureFBO : public Texture {
   public:
-    TextureFBO(const unsigned& _width, const unsigned& _height) : Texture(_width, _height), depthMapFBO(0) {}
-    virtual ~TextureFBO() override;
+    TextureFBO(const std::string& name, const unsigned& width, const unsigned& height) : Texture(name, width, height), depthMapFBO(0) {}
+    virtual ~TextureFBO() {}
     virtual bool init() override;
     inline GLuint getFrameBufferId() const { return depthMapFBO; }
 
@@ -50,8 +48,8 @@ class TextureFBO : public Texture {
 
 class TextureImg : public Texture {
   public:
-    TextureImg(const std::string& _pathFile) : Texture(0, 0), pathFile(_pathFile) {}
-    virtual ~TextureImg() override;
+    TextureImg(const std::string& name, const std::string& _pathFile) : Texture(name, 0, 0), pathFile(_pathFile) {}
+    virtual ~TextureImg() {}
     virtual bool init() override;
 
   private:

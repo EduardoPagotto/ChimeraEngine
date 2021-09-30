@@ -1,14 +1,8 @@
-#include "chimera/render/Texture.hpp"
+#include "chimera/core/Texture.hpp"
 #include "chimera/core/Exception.hpp"
 #include <SDL2/SDL_image.h>
 
 namespace Chimera {
-
-unsigned Texture::serialMaster = 0;
-
-Texture::Texture(const unsigned& _width, const unsigned& _height) : width(_width), height(_height), serial(++serialMaster), idTexture(0) {}
-
-TextureFBO::~TextureFBO() {}
 
 bool TextureFBO::init() {
 
@@ -34,7 +28,6 @@ bool TextureFBO::init() {
 }
 
 //--------
-TextureImg::~TextureImg() {}
 
 int TextureImg::invert_image(int pitch, int height, void* image_pixels) {
     int index;

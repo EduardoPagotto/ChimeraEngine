@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/LoadObj.hpp"
 #include <glm/gtc/type_ptr.hpp>
@@ -79,7 +80,8 @@ void Game::start() {
         loader.getMaterial(material);
     else {
         material.setDefaultEffect();
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, new Chimera::TextureImg("./data/images/grid2.png"));
+        Chimera::TextureManager::add(new Chimera::TextureImg("tex_mapa", "./data/images/grid2.png"));
+        material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
     }
 
     material.init();

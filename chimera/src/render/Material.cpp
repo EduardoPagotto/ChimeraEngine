@@ -42,7 +42,7 @@ void Material::init() {
         tipoTexturasDisponiveis = 3;
 }
 
-void Material::addTexture(const std::string& uniformTexName, TextureImg* texture) { this->mapTex[uniformTexName] = texture; }
+void Material::addTexture(const std::string& uniformTexName, Texture* texture) { this->mapTex[uniformTexName] = texture; }
 
 void Material::setUniform(Shader* _shader) {
 

@@ -31,7 +31,9 @@ set (SourcesCore windows/CanvasGL.cpp
 				 io/FlowControl.cpp
 				 buffers/VertexBuffer.cpp
 				 buffers/IndexBuffer.cpp
-				 buffers/VertexArray.cpp)
+				 buffers/VertexArray.cpp
+				 Texture.cpp
+				 TextureManager.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

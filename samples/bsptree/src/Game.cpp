@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/render/LoadObj.hpp"
@@ -14,7 +15,8 @@ Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanv
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pTex = new Chimera::TextureImg("./data/images/grid2.png");
+    Chimera::TextureManager::add(new Chimera::TextureImg("tex01", "./data/images/grid2.png"));
+    pTex = Chimera::TextureManager::getLast();
 }
 
 Game::~Game() { delete renderz1; }

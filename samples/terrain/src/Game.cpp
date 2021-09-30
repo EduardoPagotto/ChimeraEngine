@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/LoadHeightMap.hpp"
 #include <glm/gtc/type_ptr.hpp>
@@ -15,7 +16,9 @@ Game::Game() {
     pMaterial = new Chimera::Material();
     pMaterial->setDefaultEffect();
     pMaterial->setShine(50.0f);
-    pMaterial->addTexture(SHADE_TEXTURE_DIFFUSE, new Chimera::TextureImg("./data/images/grid2.png"));
+
+    Chimera::TextureManager::add(new Chimera::TextureImg("grid2", "./data/images/grid2.png"));
+    pMaterial->addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
     pVp->position = glm::vec3(0.0, 0.0, 600.0);

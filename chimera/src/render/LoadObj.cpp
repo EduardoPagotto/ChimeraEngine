@@ -1,5 +1,6 @@
 #include "chimera/render/LoadObj.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/TextureManager.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -146,9 +147,10 @@ bool LoaderObj::getMaterial(Material& _material) {
         } else {
             // load texture
             std::string nova(line);
-            if (getValidData(nova, std::string("map_Kd ")) == true)
-                _material.addTexture(SHADE_TEXTURE_DIFFUSE, new TextureImg(nova));
-            else if (getValidData(nova, std::string("sharpness ")) == true) {
+            if (getValidData(nova, std::string("map_Kd ")) == true) {
+                TextureManager::add(new TextureImg(nova, nova));
+                _material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+            } else if (getValidData(nova, std::string("sharpness ")) == true) {
                 float val;
                 int n = sscanf(nova.c_str(), "%f", &val);
                 _material.setShine(val);

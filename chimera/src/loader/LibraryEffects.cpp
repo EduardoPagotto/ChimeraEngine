@@ -2,6 +2,7 @@
 #include "LibraryImages.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
+#include "chimera/core/TextureManager.hpp"
 
 namespace ChimeraLoaders {
 
@@ -39,7 +40,7 @@ glm::vec4 LibraryEffects::getColor(tinyxml2::XMLElement* l_nColorVal) {
     return glm::vec4(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0);
 }
 
-Chimera::TextureImg* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
+Chimera::Texture* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
 
     std::string texture1 = _nTex->Attribute("texture");
 
@@ -59,8 +60,8 @@ Chimera::TextureImg* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
             std::string valId = std::get<0>(val);
             std::string valPathFile = std::get<1>(val);
 
-            Chimera::TextureImg* tex = new Chimera::TextureImg(valPathFile);
-            return tex;
+            Chimera::TextureManager::add(new Chimera::TextureImg(valId, valPathFile));
+            return Chimera::TextureManager::getLast();
         }
     }
 
@@ -81,7 +82,8 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Chimera::Materi
 
         tinyxml2::XMLElement* l_nTex = l_nCor->FirstChildElement("texture");
         if (l_nTex != nullptr) {
-            Chimera::TextureImg* pTex = getTexture(l_nTex);
+
+            Chimera::Texture* pTex = getTexture(l_nTex);
             _pMat->addTexture(SHADE_TEXTURE_DIFFUSE, pTex); // FIXME: Textura tipo correta ????
         }
 

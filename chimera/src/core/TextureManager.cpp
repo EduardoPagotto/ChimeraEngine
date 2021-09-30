@@ -1,4 +1,4 @@
-#include "chimera/render/TextureManager.hpp"
+#include "chimera/core/TextureManager.hpp"
 
 namespace Chimera {
 
@@ -29,6 +29,12 @@ Texture* TextureManager::get(const std::string& name) {
 
     // FIXME: colocar fonte default se elea nao carregar
     return nullptr;
+}
+
+void TextureManager::initAll() {
+    for (Texture* texture : textures) {
+        texture->init();
+    }
 }
 
 } // namespace Chimera

@@ -9,8 +9,6 @@ int main(int argn, char** argv) {
     using namespace Chimera;
     using namespace Chimera::Core;
 
-    // greous https: // www.youtube.com/watch?v=OavqhSDa-oo&t=2s
-
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("Hello iniciado");
 

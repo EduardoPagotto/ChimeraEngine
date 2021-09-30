@@ -6,7 +6,7 @@
 
 namespace Chimera {
 class Shader {
-  public: // https://www.youtube.com/watch?v=qTGMXcFLk2E
+  public:
     Shader(const std::string& name, const std::string& vertPath, const std::string& fragPath);
 
     virtual ~Shader();

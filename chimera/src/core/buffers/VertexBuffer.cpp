@@ -2,8 +2,6 @@
 
 namespace Chimera::Core {
 
-// https://www.youtube.com/watch?v=qTGMXcFLk2E&t=2063s
-
 VertexBuffer::VertexBuffer(void* vertexData, const uint32_t& size, VertexComponents* components) : components(components) {
 
     this->size = size;

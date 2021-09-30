@@ -45,8 +45,6 @@ void Game::start() {
 
     shader = new Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
     shader->enable();
-    GLint texIDs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    shader->setUniform1iv("textures", 10, texIDs);
     shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
 
     layer = new TileLayer(shader);
@@ -58,8 +56,10 @@ void Game::start() {
     // group->add(button);
     // layer->add(group);
 
-    // parei em :https://www.youtube.com/watch?v=S_99R9DZF6c&t=23s
+    // parei em :http//www.youtube.com/watch?v=rTG95k0qdqs&t=3047s
+    // 56:00
 
+    // TODOD: texture manager!!!!
     Texture* texture[] = {new TextureImg("tex1", "./data/images/grid2.png"), new TextureImg("tex2", "./data/images/grid1.png"),
                           new TextureImg("tex3", "./data/images/grid3.png")};
 
@@ -79,7 +79,7 @@ void Game::start() {
 
     FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./samples/models/fonts/FreeSans.ttf", 22));
     FontManager::get()->setScale(glm::vec2(pVideo->getWidth() / 32.0f, pVideo->getHeight() / 18.0f)); // em TileLayer ortho values!!!
-    lFPS = new Label("None", 0.0f, 0.0f, glm::vec4(0.0, 1.0, 1.0, 1.0));
+    lFPS = new Label("None", -15.5f, 7.8f, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
 
     shader->disable();

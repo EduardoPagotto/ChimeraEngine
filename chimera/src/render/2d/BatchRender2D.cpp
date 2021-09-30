@@ -124,9 +124,6 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
 
 void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
-    // // https://www.youtube.com/watch?v=rTG95k0qdqs&t=3047s
-    // // 16:00
-
     // const glm::vec3& position = pos;
     // const glm::vec2& size = renderable->getSize();
     // const glm::vec4& color = color;

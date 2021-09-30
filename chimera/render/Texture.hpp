@@ -39,12 +39,16 @@ class Texture {
 
     inline const GLuint getID() const { return idTexture; }
 
+    // TODO: reimplementar
+    inline const std::string getName() const { return name; }
+
   protected:
     unsigned width;
     unsigned height;
     GLuint idTexture;
 
   private:
+    std::string name;
     std::string shadeName;
     GLuint index;
     unsigned serial;
@@ -75,21 +79,5 @@ class TextureImg : public Texture {
   protected:
     std::string pathFile;
 };
-
-// class TexCentral {
-//     friend class Singleton<TexCentral>;
-
-//   public:
-//     void initAllTex();
-//     TextureImg* add(const std::string& name, const std::string& _pathFile);
-
-//   protected:
-//     TexCentral() noexcept;
-//     ~TexCentral();
-
-//   private:
-//     std::map<std::string, TextureImg*> mapTex;
-// };
-
 } // namespace Chimera
 #endif

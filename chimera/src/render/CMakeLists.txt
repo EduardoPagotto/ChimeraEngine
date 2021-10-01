@@ -18,8 +18,9 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
-					2d/Layer.cpp
-					2d/Group.cpp
+					2d/layer/Layer.cpp
+					2d/layer/Group.cpp
+					2d/layer/LayerStack.cpp
 					2d/Label.cpp
 					Font.cpp
 					FontAtlas.cpp

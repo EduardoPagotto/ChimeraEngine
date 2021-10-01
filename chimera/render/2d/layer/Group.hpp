@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_GROUP_ZZ__HPP
 #define __CHIMERA_GROUP_ZZ__HPP
 
-#include "Renderable2D.hpp"
+#include "../Renderable2D.hpp"
 
 namespace Chimera {
 

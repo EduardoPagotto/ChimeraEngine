@@ -2,7 +2,7 @@
 #define __HELLOWORD_TILELAYER__HPP
 
 #include "chimera/render/2d/BatchRender2D.hpp"
-#include "chimera/render/2d/Layer.hpp"
+#include "chimera/render/2d/layer/Layer.hpp"
 #include <glm/gtx/transform.hpp>
 
 class TileLayer : public Chimera::Layer {

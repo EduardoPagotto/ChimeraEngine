@@ -2,8 +2,8 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/utils.hpp"
-#include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
+#include "chimera/render/2d/layer/Group.hpp"
 #include "chimera/render/FontManager.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>

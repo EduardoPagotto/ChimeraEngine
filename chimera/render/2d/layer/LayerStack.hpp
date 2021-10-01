@@ -14,7 +14,7 @@ class LayerStack {
     void pushLayer(ILayer* layer);
     void pushOverlay(ILayer* overlay);
     void popLayer(ILayer* layer);
-    void popOverlay(ILayer* layer);
+    void popOverlay(ILayer* overlay);
 
     std::vector<ILayer*>::iterator begin() { return layers.begin(); }
     std::vector<ILayer*>::iterator end() { return layers.end(); }

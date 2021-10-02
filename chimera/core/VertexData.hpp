@@ -20,6 +20,13 @@ struct VertexData {
     glm::vec2 texture;  // 2 * 4 = 08 (24 - 31)
 };
 
+struct VertexDataSimple {
+    glm::vec3 vertex; // 3 * 4 = 12 (0 - 11)
+    glm::vec2 uv;     // 2 * 4 = 8  (12 - 19)
+    float tid;        // 1 * 4 = 4  (20 - 23)
+    glm::vec4 color;  // 4 * 4 = 16 (24 - 39)
+};
+
 struct MeshData {
     bool singleIndex;
     std::vector<glm::vec3> vertexList;
@@ -58,6 +65,7 @@ void vertexDataFromMesh(MeshData* m, std::vector<VertexData>& outData);
 void vertexDataMeshScale(MeshData* m, const float& new_size, const bool& hasTexture);
 void vertexDataMeshClean(MeshData* m);
 VertexComponents* vertexDataComponentes();
+VertexComponents* vertexDataSimpleComponentes();
 VertexComponents* vertexDataFloatComponentes();
 VertexComponents* vertexDataSingleComponentes(uint8_t id, uint8_t sizeSlot, uint8_t sizeVetex);
 } // namespace Chimera

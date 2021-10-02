@@ -12,7 +12,8 @@ class VertexArray {
     void push(VertexBuffer* buffer);
     void bind() const;
     void unbind() const;
-    inline VertexBuffer* getBuffer(const uint32_t& index = 0) const { return vbos[index]; }
+    inline VertexBuffer* getBuffer(const uint32_t& index) const { return vbos[index]; }
+    inline VertexBuffer* getLast() const { return vbos.back(); }
 
   private:
     uint32_t arrayID;

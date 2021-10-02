@@ -2,28 +2,17 @@
 #define __CHIMERA_BATCHRENDERABLE_2D__HPP
 
 #include "Renderable2D.hpp"
+#include "chimera/core/VertexData.hpp"
 #include "chimera/core/buffers/IndexBuffer.hpp"
+#include "chimera/core/buffers/VertexArray.hpp"
 
 namespace Chimera {
 
-struct VertexDataSimple {
-    glm::vec3 vertex;
-    glm::vec2 uv;
-    float tid;
-    glm::vec4 color;
-};
-
 #define RENDERER_MAX_SPRITES 60000
-#define RENDERER_VERTEX_SIZE sizeof(VertexDataSimple)
-#define RENDERER_SPRITE_SIZE RENDERER_VERTEX_SIZE * 4
+#define RENDERER_SPRITE_SIZE 4
 #define RENDERER_BUFFER_SIZE RENDERER_SPRITE_SIZE* RENDERER_MAX_SPRITES
 #define RENDERER_INDICES_SIZE RENDERER_MAX_SPRITES * 6
 #define RENDERER_MAX_TEXTURE 32
-
-#define SHADER_VERTEX_INDEX 0
-#define SHADER_UV_INDEX 1
-#define SHADER_TID_INDEX 2
-#define SHADER_COLOR_INDEX 3
 
 class BatchRender2D : public IRenderer2D {
   public:
@@ -43,8 +32,8 @@ class BatchRender2D : public IRenderer2D {
   private:
     TransformationStack stack;
     Core::IndexBuffer* ibo;
-    GLuint vao;
-    GLuint vbo;
+    Core::VertexArray* pVao;
+    Core::VertexBuffer* pVbo;
     GLsizei indexCount;
     VertexDataSimple* buffer;
     std::vector<GLuint> textureSlots;

@@ -191,6 +191,16 @@ void vertexDataMeshClean(MeshData* m) {
     m->uvList.clear();
 }
 
+VertexComponents* vertexDataSimpleComponentes() {
+    VertexComponents* v = new VertexComponents;
+    v->loc.push_back({0, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
+    v->loc.push_back({1, 2, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(12)});
+    v->loc.push_back({2, 1, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(20)});
+    v->loc.push_back({3, 4, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(24)});
+    v->sizeVertex = sizeof(VertexDataSimple);
+    return v;
+}
+
 VertexComponents* vertexDataComponentes() {
     VertexComponents* v = new VertexComponents;
     v->loc.push_back({0, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});

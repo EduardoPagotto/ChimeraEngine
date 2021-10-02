@@ -10,33 +10,23 @@ BatchRender2D::BatchRender2D() {
 
 BatchRender2D::~BatchRender2D() {
     delete ibo;
-
-    glDeleteBuffers(1, &vbo);
+    delete pVao;
+    delete pVbo;
 }
 
 void BatchRender2D::init() {
 
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
+    pVao = new Core::VertexArray();
+    pVbo = new Core::VertexBuffer(Core::BufferType::DYNAMIC);
 
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    pVao->push(pVbo);
 
-    glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, nullptr, GL_DYNAMIC_DRAW);
+    pVao->bind();
+    pVbo->bind();
 
-    glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
-    glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, BUFFER_OFFSET(0));
-
-    glEnableVertexAttribArray(SHADER_UV_INDEX);
-    glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, BUFFER_OFFSET(12));
-
-    glEnableVertexAttribArray(SHADER_TID_INDEX);
-    glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, BUFFER_OFFSET(20));
-
-    glEnableVertexAttribArray(SHADER_COLOR_INDEX);
-    glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, BUFFER_OFFSET(24));
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    pVbo->setLayout(vertexDataSimpleComponentes());
+    pVbo->setData(nullptr, RENDERER_BUFFER_SIZE);
+    pVbo->unbind();
 
     uint32_t indices[RENDERER_INDICES_SIZE];
 
@@ -53,13 +43,13 @@ void BatchRender2D::init() {
 
     ibo = new Core::IndexBuffer(indices, RENDERER_INDICES_SIZE);
 
-    glBindVertexArray(0);
+    pVao->unbind();
 }
 
 void BatchRender2D::begin() {
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    this->buffer = (VertexDataSimple*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+    pVbo->bind();
+    this->buffer = (VertexDataSimple*)pVbo->map();
 }
 
 void BatchRender2D::submit(IRenderable2D* renderable) {
@@ -124,12 +114,7 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
 
 void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
-    // const glm::vec3& position = pos;
-    // const glm::vec2& size = renderable->getSize();
-    // const glm::vec4& color = color;
-    // const std::vector<glm::vec2>& uv = renderable->getUV();
     const GLuint tid = font->getTextureID();
-    // const GLuint tid = 1; // 1font->getTextureID();
 
     float ts = 0.0f;
     if (tid > 0) {
@@ -214,8 +199,8 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
 }
 
 void BatchRender2D::end() {
-    glUnmapBuffer(GL_ARRAY_BUFFER);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    pVbo->unmap();
+    pVbo->unbind();
 }
 
 void BatchRender2D::flush() {
@@ -225,13 +210,13 @@ void BatchRender2D::flush() {
         glBindTexture(GL_TEXTURE_2D, textureSlots[i]);
     }
 
-    glBindVertexArray(vao);
+    pVao->bind();
     ibo->bind();
 
     glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 
     ibo->unbind();
-    glBindVertexArray(0);
+    pVao->unbind();
 
     indexCount = 0;
     textureSlots.clear();

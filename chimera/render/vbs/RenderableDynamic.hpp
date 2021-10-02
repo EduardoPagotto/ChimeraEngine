@@ -13,6 +13,7 @@ class RenderableDynamic {
     void render(VertexData* pVertice, const uint32_t& size);
 
   private:
+    uint32_t max;
     Core::VertexArray vao;
     Core::VertexBuffer* vbo;
 };

@@ -11,8 +11,13 @@ RenderableBsp::RenderableBsp(Core::BSPTreeNode* root, std::vector<RenderableIBO*
 
     // create vertex buffers
     vao = new Core::VertexArray();
-    vao->addBuffer(new Core::VertexBuffer(&this->vVertex[0], this->vVertex.size(), vertexDataComponentes()));
     vao->bind();
+
+    Core::VertexBuffer* vbo = new Core::VertexBuffer(Core::BufferType::STATIC);
+    vbo->bind();
+    vbo->setLayout(vertexDataComponentes());
+    vbo->setData(&this->vVertex[0], this->vVertex.size());
+    vbo->unbind();
 
     uint32_t totIndex = 0;
     for (RenderableIBO* pLeaf : this->vpLeaf) {

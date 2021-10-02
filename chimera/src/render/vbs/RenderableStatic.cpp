@@ -6,11 +6,18 @@ namespace Chimera {
 RenderableStatic::RenderableStatic(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize) {
 
     vao = new Core::VertexArray();
-    vao->addBuffer(new Core::VertexBuffer(vertexData, vertexSize, vertexDataComponentes()));
-
     vao->bind();
-    ibo = new Core::IndexBuffer(indexData, indexSize);
+
+    Core::VertexBuffer* vbo = new Core::VertexBuffer(Core::BufferType::STATIC);
+    vbo->bind();
+    vbo->setLayout(vertexDataComponentes());
+    vbo->setData(vertexData, vertexSize);
+    vbo->unbind();
+    vao->push(vbo);
+
     vao->unbind();
+
+    ibo = new Core::IndexBuffer(indexData, indexSize);
 
     // init AABB
     glm::vec3 min, max, size;

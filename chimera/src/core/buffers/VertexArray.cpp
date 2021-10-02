@@ -1,4 +1,5 @@
 #include "chimera/core/buffers/VertexArray.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 
 namespace Chimera::Core {
 
@@ -6,22 +7,16 @@ VertexArray::VertexArray() { glGenVertexArrays(1, &arrayID); }
 
 VertexArray::~VertexArray() {
 
-    for (int i = 0; i < buffers.size(); i++)
-        delete buffers[i];
+    for (int i = 0; i < vbos.size(); i++)
+        delete vbos[i];
 
     glDeleteVertexArrays(1, &arrayID);
 }
 
-void VertexArray::addBuffer(VertexBuffer* buffer) {
+void VertexArray::push(VertexBuffer* buffer) { this->vbos.push_back(buffer); }
 
-    this->bind();
-    buffer->bind();
+void VertexArray::bind() const { glBindVertexArray(arrayID); }
 
-    buffer->enableVertexAttribArray();
+void VertexArray::unbind() const { glBindVertexArray(0); }
 
-    buffer->unbind();
-    this->unbind();
-
-    buffer->disableVertexAttribArray();
-}
 } // namespace Chimera::Core

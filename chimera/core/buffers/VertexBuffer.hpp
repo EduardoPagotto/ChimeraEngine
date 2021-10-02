@@ -1,26 +1,35 @@
 #ifndef __CHIMERA_CORE_BUFFER__HPP
 #define __CHIMERA_CORE_BUFFER__HPP
 
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/VertexData.hpp"
 
 namespace Chimera::Core {
 
+enum class BufferType // BufferUsage
+{
+    STATIC,
+    DYNAMIC,
+    STREAM
+};
+
 class VertexBuffer {
   public:
-    VertexBuffer(void* vertexData, const uint32_t& size, VertexComponents* components);
+    VertexBuffer(BufferType type);
     virtual ~VertexBuffer();
-    void enableVertexAttribArray();
-    void disableVertexAttribArray();
-    inline void bind() const { glBindBuffer(GL_ARRAY_BUFFER, bufferID); }
-    inline void unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
-    inline uint32_t getSize() const { return size; }
+    void reSize(const uint32_t& size);
+    void setLayout(VertexComponents* layout);
+    void setData(const void* data, const uint32_t& size);
+
+    void* map();
+    void unmap();
+    void bind() const;
+    void unbind() const;
     // se nao existir IBO new rander pelo VAO
     // inline void render() const { glDrawArrays(GL_TRIANGLES, 0, this->size); }
   private:
     uint32_t bufferID;
-    VertexComponents* components;
-    uint32_t size;
+    VertexComponents* layout;
+    BufferType type;
 };
 } // namespace Chimera::Core
 #endif

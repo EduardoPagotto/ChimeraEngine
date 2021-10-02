@@ -1,6 +1,6 @@
 #include "Game.hpp"
-#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/io/utils.hpp"
 
 Game::Game(Chimera::Core::CanvasFB* _pCanvas) : pCanvas(_pCanvas) {}

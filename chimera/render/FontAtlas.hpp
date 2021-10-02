@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_FONT_ATLAS__HPP
 #define __CHIMERA_FONT_ATLAS__HPP
 
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #include <map>

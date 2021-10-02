@@ -15,7 +15,6 @@ set (SourceNode Node.cpp
 				NodeMesh.cpp
 				NodeHUD.cpp
 				NodeParticleEmitter.cpp
-				NodeGroup.cpp
 				VisitorRender.cpp
 				VisitorShadowMap.cpp
 				VisitParser.cpp)

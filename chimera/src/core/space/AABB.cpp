@@ -1,5 +1,5 @@
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 // ref: http://www.3dcpptutorials.sk/index.php?id=59

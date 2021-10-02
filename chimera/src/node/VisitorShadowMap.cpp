@@ -1,5 +1,5 @@
 #include "chimera/node/VisitorShadowMap.hpp"
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeHUD.hpp"

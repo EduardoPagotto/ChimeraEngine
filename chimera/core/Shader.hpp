@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_SHADER__HPP
 #define __CHIMERA_SHADER__HPP
 
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <string>
 
 namespace Chimera {

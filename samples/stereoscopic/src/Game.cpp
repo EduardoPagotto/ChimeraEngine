@@ -1,6 +1,6 @@
 #include "Game.hpp"
-#include "chimera/OpenGLDefs.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/TrackHead.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/node/NodeCamera.hpp"

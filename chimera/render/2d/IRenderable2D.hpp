@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_IRENDERABLE2D__HPP
 #define __CHIMERA_IRENDERABLE2D__HPP
 
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

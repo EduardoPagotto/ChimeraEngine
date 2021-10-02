@@ -9,11 +9,17 @@ namespace Chimera {
 
 class NodeGroup : public Node {
   public:
-    NodeGroup(Node* _parent, std::string _name);
-    virtual ~NodeGroup();
+    NodeGroup(Node* _parent, std::string _name) : Node(_parent, Kind::GROUP, _name), pShader(nullptr), shadoMapVisitor(nullptr) {}
+    virtual ~NodeGroup() {
+        if (pShader != nullptr)
+            delete pShader;
+    }
 
-    virtual void init() override;
-    virtual void accept(class VisitorInterface* v) override;
+    virtual void init() override {
+        if (shadoMapVisitor != nullptr)
+            shadoMapVisitor->init();
+    }
+    virtual void accept(VisitorInterface* v) override { v->visit(this); }
 
     void setShader(Shader* _pShader) { pShader = _pShader; }
     Shader* getShader() { return pShader; }
@@ -25,5 +31,6 @@ class NodeGroup : public Node {
     Shader* pShader;
     VisitorInterface* shadoMapVisitor;
 };
+
 } // namespace Chimera
 #endif

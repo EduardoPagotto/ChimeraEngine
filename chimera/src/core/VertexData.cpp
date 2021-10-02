@@ -1,5 +1,5 @@
 #include "chimera/core/VertexData.hpp"
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

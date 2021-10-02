@@ -1,5 +1,5 @@
 #include "chimera/core/buffers/IndexBuffer.hpp"
-#include "chimera/core/VertexData.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 
 namespace Chimera ::Core {
 
@@ -12,4 +12,9 @@ IndexBuffer::IndexBuffer(uint32_t* data, const uint32_t& size) : size(size) {
 }
 
 IndexBuffer::~IndexBuffer() { glDeleteBuffers(1, &bufferID); }
+
+void IndexBuffer::bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID); }
+
+void IndexBuffer::unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
+
 } // namespace Chimera::Core

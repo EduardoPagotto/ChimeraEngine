@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_CORE_BUFFER__HPP
 #define __CHIMERA_CORE_BUFFER__HPP
 
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/VertexData.hpp"
 
 namespace Chimera::Core {

@@ -1,5 +1,5 @@
 #include "chimera/render/Particle.hpp"
-#include "chimera/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
 #include <stdlib.h>

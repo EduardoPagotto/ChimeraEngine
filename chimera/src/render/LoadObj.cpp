@@ -148,7 +148,7 @@ bool LoaderObj::getMaterial(Material& _material) {
             // load texture
             std::string nova(line);
             if (getValidData(nova, std::string("map_Kd ")) == true) {
-                TextureManager::add(new TextureImg(nova, nova));
+                TextureManager::loadFromFile(nova, nova, TextureParameters());
                 _material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
             } else if (getValidData(nova, std::string("sharpness ")) == true) {
                 float val;

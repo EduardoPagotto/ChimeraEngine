@@ -21,7 +21,7 @@ VisitorShadowMap::VisitorShadowMap(SimpleRender3d* _pRender3d, Shader* _pShader,
 
 VisitorShadowMap::~VisitorShadowMap() { delete pTexture; }
 
-void VisitorShadowMap::init() { pTexture->init(); }
+void VisitorShadowMap::init() {}
 
 void VisitorShadowMap::visit(NodeCamera* _pCamera) {}
 

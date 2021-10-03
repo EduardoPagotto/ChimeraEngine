@@ -80,7 +80,7 @@ void Game::start() {
         loader.getMaterial(material);
     else {
         material.setDefaultEffect();
-        Chimera::TextureManager::add(new Chimera::TextureImg("tex_mapa", "./data/images/grid2.png"));
+        Chimera::TextureManager::loadFromFile("tex_mapa", "./data/images/grid2.png", Chimera::TextureParameters());
         material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
     }
 

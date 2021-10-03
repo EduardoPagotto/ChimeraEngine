@@ -31,7 +31,7 @@ void Material::init() {
         }
 
         // int tex
-        kv.second->init();
+        // kv.second->init();
     }
 
     if ((hasDifuse == true) && (hasEspecular == false) && (hasEmissive == false))

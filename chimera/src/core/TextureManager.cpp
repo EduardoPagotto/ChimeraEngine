@@ -1,4 +1,6 @@
 #include "chimera/core/TextureManager.hpp"
+#include "chimera/core/Exception.hpp"
+#include <SDL2/SDL_image.h>
 
 namespace Chimera {
 
@@ -31,10 +33,44 @@ Texture* TextureManager::get(const std::string& name) {
     return nullptr;
 }
 
-void TextureManager::initAll() {
-    for (Texture* texture : textures) {
-        texture->init();
+int TextureManager::invert_image(int pitch, int height, void* image_pixels) {
+    int index;
+    void* temp_row;
+    int height_div_2;
+
+    temp_row = (void*)malloc(pitch);
+    if (NULL == temp_row) {
+        SDL_SetError("Not enough memory for image inversion");
+        return -1;
     }
+    // if height is odd, don't need to swap middle row
+    height_div_2 = (int)(height * .5);
+    for (index = 0; index < height_div_2; index++) {
+        // uses string.h
+        memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + pitch * index, pitch);
+
+        memcpy((Uint8*)(image_pixels) + pitch * index, (Uint8*)(image_pixels) + pitch * (height - index - 1), pitch);
+        memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row, pitch);
+    }
+    free(temp_row);
+    return 0;
+}
+
+bool TextureManager::loadFromFile(const std::string& name, const std::string& pathfile, TextureParameters textureParameters) {
+
+    SDL_Surface* pImage = IMG_Load(pathfile.c_str());
+    if (pImage == nullptr)
+        throw Exception("Falha ao ler arquivo:" + pathfile);
+
+    if (TextureManager::invert_image(pImage->pitch, pImage->h, pImage->pixels) != 0) {
+        SDL_SetError("Falha na inversao de pixels");
+    }
+
+    TextureManager::add(new TextureSurface(name, pImage, textureParameters));
+
+    SDL_FreeSurface(pImage);
+
+    return true;
 }
 
 } // namespace Chimera

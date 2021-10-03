@@ -58,10 +58,9 @@ void Game::start() {
 
     // parei em :http//www.youtube.com/watch?v=rTG95k0qdqs&t=3047s
     // 56:00
-    TextureManager::add(new TextureImg("t01", "./data/images/grid1.png"));
-    TextureManager::add(new TextureImg("t02", "./data/images/grid2.png"));
-    TextureManager::add(new TextureImg("t03", "./data/images/grid3.png"));
-    TextureManager::initAll();
+    TextureManager::loadFromFile("t01", "./data/images/grid1.png", TextureParameters());
+    TextureManager::loadFromFile("t02", "./data/images/grid2.png", TextureParameters());
+    TextureManager::loadFromFile("t03", "./data/images/grid3.png", TextureParameters());
 
     layer = new TileLayer(shader);
     for (float y = -9.0f; y < 9.0f; y++) {

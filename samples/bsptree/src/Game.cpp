@@ -15,7 +15,7 @@ Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanv
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    Chimera::TextureManager::add(new Chimera::TextureImg("tex01", "./data/images/grid2.png"));
+    Chimera::TextureManager::loadFromFile("tex01", "./data/images/grid2.png", Chimera::TextureParameters());
     pTex = Chimera::TextureManager::getLast();
 }
 
@@ -69,7 +69,7 @@ void Game::start() {
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
 
-    pTex->init();
+    // pTex->init();
 
     // Chimera::MeshData m;
     // Chimera::LoaderObj loader;

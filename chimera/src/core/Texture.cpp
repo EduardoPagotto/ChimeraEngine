@@ -1,86 +1,52 @@
 #include "chimera/core/Texture.hpp"
 #include "chimera/core/Exception.hpp"
-#include <SDL2/SDL_image.h>
 
 namespace Chimera {
 
-bool TextureFBO::init() {
+TextureFBO::TextureFBO(const std::string& name, const unsigned& width, const unsigned& height)
+    : Texture(name, width, height), depthMapFBO(0) {
 
-    if (Texture::init() == true) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glGenTextures(1, &idTexture);
+    glBindTexture(GL_TEXTURE_2D, idTexture);
 
-        GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
-        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
-        glGenFramebuffers(1, &depthMapFBO);
-        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, idTexture, 0);
-        glDrawBuffer(GL_NONE);
-        glReadBuffer(GL_NONE);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        return true;
-    }
-    return false;
+    GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+    glGenFramebuffers(1, &depthMapFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, idTexture, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 //--------
 
-int TextureImg::invert_image(int pitch, int height, void* image_pixels) {
-    int index;
-    void* temp_row;
-    int height_div_2;
+TextureSurface::TextureSurface(const std::string& name, SDL_Surface* surface, const TextureParameters& tp) : Texture(name, 0, 0) {
 
-    temp_row = (void*)malloc(pitch);
-    if (NULL == temp_row) {
-        SDL_SetError("Not enough memory for image inversion");
-        return -1;
-    }
-    // if height is odd, don't need to swap middle row
-    height_div_2 = (int)(height * .5);
-    for (index = 0; index < height_div_2; index++) {
-        // uses string.h
-        memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + pitch * index, pitch);
+    textureParameters = tp;
 
-        memcpy((Uint8*)(image_pixels) + pitch * index, (Uint8*)(image_pixels) + pitch * (height - index - 1), pitch);
-        memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row, pitch);
-    }
-    free(temp_row);
-    return 0;
+    glGenTextures(1, &idTexture);
+    glBindTexture(GL_TEXTURE_2D, idTexture);
+
+    height = surface->h;
+    width = surface->w;
+
+    textureParameters.format = (surface->format->Amask != 0) ? TextureFormat::RGBA : TextureFormat::RGB;
+
+    glTexImage2D(GL_TEXTURE_2D, 0, (GLuint)textureParameters.format, surface->w, surface->h, 0, (GLuint)textureParameters.format,
+                 GL_UNSIGNED_BYTE, surface->pixels);
+
+    // Nearest Filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLuint)textureParameters.filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLuint)textureParameters.filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLuint)textureParameters.wrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLuint)textureParameters.wrap);
 }
-
-bool TextureImg::init() {
-    if (Texture::init() == true) {
-        SDL_Surface* pImage = IMG_Load(pathFile.c_str());
-        if (pImage == nullptr)
-            throw Exception("Falha ao ler arquivo:" + pathFile);
-
-        if (invert_image(pImage->pitch, pImage->h, pImage->pixels) != 0) {
-            SDL_SetError("Falha na inversao de pixels");
-        }
-
-        height = pImage->h;
-        width = pImage->w;
-
-        textureParameters.format = (pImage->format->Amask != 0) ? TextureFormat::RGBA : TextureFormat::RGB;
-
-        glTexImage2D(GL_TEXTURE_2D, 0, (GLuint)textureParameters.format, pImage->w, pImage->h, 0, (GLuint)textureParameters.format,
-                     GL_UNSIGNED_BYTE, pImage->pixels);
-
-        // Nearest Filtering
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLuint)textureParameters.filter);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLuint)textureParameters.filter);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLuint)textureParameters.wrap);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLuint)textureParameters.wrap);
-
-        SDL_FreeSurface(pImage);
-
-        return true;
-    }
-    return false;
-}
-
 } // namespace Chimera

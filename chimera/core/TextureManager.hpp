@@ -15,9 +15,10 @@ class TextureManager {
     static Texture* get() { return textures[0]; }
     static Texture* getLast() { return textures.back(); }
     static Texture* getIndex(const uint16_t& index) { return textures[index]; }
-    static void initAll();
+    static bool loadFromFile(const std::string& name, const std::string& pathfile, TextureParameters textureParameters);
 
   private:
+    static int invert_image(int pitch, int height, void* image_pixels);
     TextureManager() {}
     ~TextureManager() {}
     static std::vector<Texture*> textures;

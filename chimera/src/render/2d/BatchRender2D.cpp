@@ -24,7 +24,13 @@ void BatchRender2D::init() {
     pVao->bind();
     pVbo->bind();
 
-    pVbo->setLayout(vertexDataSimpleComponentes());
+    BufferLayout layout;
+    layout.push(3, GL_FLOAT, sizeof(float), false);
+    layout.push(2, GL_FLOAT, sizeof(float), false);
+    layout.push(1, GL_FLOAT, sizeof(float), false);
+    layout.push(4, GL_FLOAT, sizeof(float), false);
+
+    pVbo->setLayout(layout);
     pVbo->setData(nullptr, RENDERER_BUFFER_SIZE);
     pVbo->unbind();
 

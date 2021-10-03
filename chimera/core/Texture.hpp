@@ -5,6 +5,35 @@
 
 namespace Chimera {
 
+enum class TextureWrap {
+    NONE = 0,
+    REPEAT = GL_REPEAT,
+    CLAMP = GL_CLAMP,
+    MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+    CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+    CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
+};
+
+enum class TextureFilter { NONE = 0, LINEAR = GL_LINEAR, NEAREST = GL_NEAREST };
+
+enum class TextureFormat { NONE = 0, RGB = GL_RGB, RGBA = GL_RGBA, LUMINANCE = GL_LUMINANCE, LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA };
+
+struct TextureParameters {
+    TextureFormat format;
+    TextureFilter filter;
+    TextureWrap wrap;
+
+    TextureParameters() {
+        format = TextureFormat::RGBA;
+        filter = TextureFilter::NEAREST;
+        wrap = TextureWrap::REPEAT;
+    }
+
+    TextureParameters(TextureFormat format, TextureFilter filter, TextureWrap wrap) : format(format), filter(filter), wrap(wrap) {}
+    TextureParameters(TextureFilter filter) : format(TextureFormat::RGBA), filter(filter), wrap(TextureWrap::CLAMP) {}
+    TextureParameters(TextureFilter filter, TextureWrap wrap) : format(TextureFormat::RGBA), filter(filter), wrap(wrap) {}
+};
+
 class Texture {
   protected:
     Texture(const std::string& name, const unsigned& width, const unsigned& height)
@@ -33,6 +62,8 @@ class Texture {
     unsigned height;
     GLuint idTexture;
     std::string name;
+
+    TextureParameters textureParameters;
 };
 
 class TextureFBO : public Texture {

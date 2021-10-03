@@ -14,7 +14,13 @@ RenderableIndex::RenderableIndex(std::vector<RenderableIBO*>& vpLeafData, std::v
 
     Core::VertexBuffer* vbo = new Core::VertexBuffer(Core::BufferType::STATIC);
     vbo->bind();
-    vbo->setLayout(vertexDataComponentes());
+
+    BufferLayout layout;
+    layout.push(3, GL_FLOAT, sizeof(float), false);
+    layout.push(3, GL_FLOAT, sizeof(float), false);
+    layout.push(2, GL_FLOAT, sizeof(float), false);
+
+    vbo->setLayout(layout);
     vbo->setData(&this->vVertex[0], this->vVertex.size());
     vbo->unbind();
 

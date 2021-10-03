@@ -37,18 +37,6 @@ struct MeshData {
     std::vector<uint32_t> uvIndex;
 };
 
-struct VertexComponents {
-    struct __Loc {
-        uint8_t id;
-        uint8_t size;
-        uint16_t type;
-        uint16_t normalize;
-        void* offset;
-    };
-    std::vector<__Loc> loc;
-    uint32_t sizeVertex;
-};
-
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices);
 
 void vertexDataReorder(std::vector<VertexData>& inVertexData, std::vector<uint32_t>& inIndex, std::vector<VertexData>& outVertexData,
@@ -64,9 +52,5 @@ void vertexDataMeshMinMaxSize(MeshData* m, glm::vec3& min, glm::vec3& max, glm::
 void vertexDataFromMesh(MeshData* m, std::vector<VertexData>& outData);
 void vertexDataMeshScale(MeshData* m, const float& new_size, const bool& hasTexture);
 void vertexDataMeshClean(MeshData* m);
-VertexComponents* vertexDataComponentes();
-VertexComponents* vertexDataSimpleComponentes();
-VertexComponents* vertexDataFloatComponentes();
-VertexComponents* vertexDataSingleComponentes(uint8_t id, uint8_t sizeSlot, uint8_t sizeVetex);
 } // namespace Chimera
 #endif

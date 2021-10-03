@@ -191,39 +191,6 @@ void vertexDataMeshClean(MeshData* m) {
     m->uvList.clear();
 }
 
-VertexComponents* vertexDataSimpleComponentes() {
-    VertexComponents* v = new VertexComponents;
-    v->loc.push_back({0, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
-    v->loc.push_back({1, 2, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(12)});
-    v->loc.push_back({2, 1, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(20)});
-    v->loc.push_back({3, 4, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(24)});
-    v->sizeVertex = sizeof(VertexDataSimple);
-    return v;
-}
-
-VertexComponents* vertexDataComponentes() {
-    VertexComponents* v = new VertexComponents;
-    v->loc.push_back({0, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
-    v->loc.push_back({1, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(12)});
-    v->loc.push_back({2, 2, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(24)});
-    v->sizeVertex = sizeof(VertexData);
-    return v;
-}
-
-VertexComponents* vertexDataFloatComponentes() {
-    VertexComponents* v = new VertexComponents;
-    v->loc.push_back({0, 3, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
-    v->sizeVertex = sizeof(float);
-    return v;
-}
-
-VertexComponents* vertexDataSingleComponentes(uint8_t id, uint8_t sizeSlot, uint8_t sizeVetex) {
-    VertexComponents* v = new VertexComponents;
-    v->loc.push_back({id, sizeSlot, GL_FLOAT, GL_FALSE, BUFFER_OFFSET(0)});
-    v->sizeVertex = sizeVetex;
-    return v;
-}
-
 // glm::vec3 aproxEpsilon(const glm::vec3& dado) {
 //     return glm::vec3((fabs(dado.x) < EPSILON) ? 0.0f : dado.x,  // X
 //                      (fabs(dado.y) < EPSILON) ? 0.0f : dado.y,  // Y

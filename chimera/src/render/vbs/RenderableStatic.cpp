@@ -10,7 +10,13 @@ RenderableStatic::RenderableStatic(VertexData* vertexData, const uint32_t& verte
 
     Core::VertexBuffer* vbo = new Core::VertexBuffer(Core::BufferType::STATIC);
     vbo->bind();
-    vbo->setLayout(vertexDataComponentes());
+
+    BufferLayout layout;
+    layout.push(3, GL_FLOAT, sizeof(float), false);
+    layout.push(3, GL_FLOAT, sizeof(float), false);
+    layout.push(2, GL_FLOAT, sizeof(float), false);
+
+    vbo->setLayout(layout);
     vbo->setData(vertexData, vertexSize);
     vbo->unbind();
     vao->push(vbo);

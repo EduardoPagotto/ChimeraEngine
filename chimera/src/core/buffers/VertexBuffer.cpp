@@ -19,34 +19,36 @@ VertexBuffer::VertexBuffer(BufferType type) : type(type) { glGenBuffers(1, &buff
 
 VertexBuffer::~VertexBuffer() { glDeleteBuffers(1, &bufferID); }
 
-void VertexBuffer::reSize(const uint32_t& size) { glBufferData(GL_ARRAY_BUFFER, size * layout->sizeVertex, nullptr, getBufferType(type)); }
+void VertexBuffer::reSize(const uint32_t& size) { glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), nullptr, getBufferType(type)); }
 
-void VertexBuffer::setLayout(VertexComponents* layout) { // bind antes necessario!!! enableVertexAttribArray
+void VertexBuffer::setLayout(const BufferLayout& bufferLayout) { // bind antes necessario!!! enableVertexAttribArray
 
-    this->layout = layout;
-    for (auto slot : layout->loc) {
-        glEnableVertexAttribArray(slot.id); // fixme trocar por array e remover slot.id usando indice do array no lugar
+    layout = bufferLayout;
+    const std::vector<BufferElement>& elements = bufferLayout.getLayout();
+    for (uint8_t i = 0; i < elements.size(); i++) {
 
-        if (layout->loc.size() > 1)
-            glVertexAttribPointer(slot.id, slot.size, slot.type, slot.normalize, layout->sizeVertex, slot.offset);
+        const BufferElement& element = elements[i];
+        glEnableVertexAttribArray(i);
+        if (elements.size() > 1)
+            glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), BUFFER_OFFSET(element.offset));
         else
-            glVertexAttribPointer(slot.id, slot.size, slot.type, slot.normalize, 0, BUFFER_OFFSET(0));
+            glVertexAttribPointer(i, element.count, element.type, element.normalized, 0, BUFFER_OFFSET(0));
     }
+    // for (uint8_t i = 0; i < elements.size(); i++) // TODO: verificar se precisa mesmo
+    //     glDisableVertexAttribArray(i);
 }
 
-// void VertexBuffer::releaseAtributes() { // no lugar de disableVertexAttribArray
-//     for (auto slot : layout->loc)
-//         glDisableVertexAttribArray(slot.id);
-// }
-
 void VertexBuffer::setData(const void* data, const uint32_t& size) {
-    glBufferData(GL_ARRAY_BUFFER, size * layout->sizeVertex, data, getBufferType(type));
+    glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), data, getBufferType(type));
 }
 
 // GetPointerInternal //bind anter necessario
 void* VertexBuffer::map() { return (void*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY); }
 // ReleasePointer
 void VertexBuffer::unmap() { glUnmapBuffer(GL_ARRAY_BUFFER); }
+
 void VertexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, bufferID); }
+
 void VertexBuffer::unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+
 } // namespace Chimera::Core

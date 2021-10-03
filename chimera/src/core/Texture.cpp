@@ -65,16 +65,16 @@ bool TextureImg::init() {
         height = pImage->h;
         width = pImage->w;
 
-        // Generate The Texture
-        if (pImage->format->Amask != 0) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pImage->w, pImage->h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pImage->pixels);
-        } else {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pImage->w, pImage->h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->pixels);
-        }
+        textureParameters.format = (pImage->format->Amask != 0) ? TextureFormat::RGBA : TextureFormat::RGB;
+
+        glTexImage2D(GL_TEXTURE_2D, 0, (GLuint)textureParameters.format, pImage->w, pImage->h, 0, (GLuint)textureParameters.format,
+                     GL_UNSIGNED_BYTE, pImage->pixels);
 
         // Nearest Filtering
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLuint)textureParameters.filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLuint)textureParameters.filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLuint)textureParameters.wrap);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLuint)textureParameters.wrap);
 
         SDL_FreeSurface(pImage);
 

@@ -2,6 +2,7 @@
 #define __CHIMERA_CORE_BUFFER__HPP
 
 #include "chimera/core/VertexData.hpp"
+#include "chimera/core/buffers/BufferLayout.hpp"
 
 namespace Chimera::Core {
 
@@ -17,7 +18,7 @@ class VertexBuffer {
     VertexBuffer(BufferType type);
     virtual ~VertexBuffer();
     void reSize(const uint32_t& size);
-    void setLayout(VertexComponents* layout);
+    void setLayout(const BufferLayout& bufferLayout);
     void setData(const void* data, const uint32_t& size);
 
     void* map();
@@ -28,7 +29,7 @@ class VertexBuffer {
     // inline void render() const { glDrawArrays(GL_TRIANGLES, 0, this->size); }
   private:
     uint32_t bufferID;
-    VertexComponents* layout;
+    BufferLayout layout;
     BufferType type;
 };
 } // namespace Chimera::Core

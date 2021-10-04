@@ -121,26 +121,14 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
         nextX += glyph_cache->w;
     }
 
-    // SDL_SaveBMP(bigSurface, "./tst/atlas.png");
-    if (invert_image(bigSurface->pitch, bigSurface->h, bigSurface->pixels) != 0) {
-        SDL_SetError("Falha na inversao de pixels");
-    }
+    TextureParameters p;
+    p.format = TextureFormat::RGBA;
+    p.wrap = TextureWrap::CLAMP_TO_EDGE;
+    p.filter = TextureFilter::LINEAR;
 
-    // Criar Textura
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    TextureManager::loadFromSurface(name, bigSurface, p);
 
-    if (bigSurface->format->Amask != 0) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bigSurface->w, bigSurface->h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, bigSurface->pixels);
-    } else {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bigSurface->w, bigSurface->h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, bigSurface->pixels);
-    }
-
-    // Set texture options
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    texture = TextureManager::getLast();
 
     if (sFont) {
         TTF_CloseFont(sFont);
@@ -154,29 +142,6 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
     }
 
     delete bigSurface;
-}
-
-int FontAtlas::invert_image(int pitch, int height, void* image_pixels) {
-    int index;
-    void* temp_row;
-    int height_div_2;
-
-    temp_row = (void*)malloc(pitch);
-    if (NULL == temp_row) {
-        SDL_SetError("Not enough memory for image inversion");
-        return -1;
-    }
-    // if height is odd, don't need to swap middle row
-    height_div_2 = (int)(height * .5);
-    for (index = 0; index < height_div_2; index++) {
-        // uses string.h
-        memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + pitch * index, pitch);
-
-        memcpy((Uint8*)(image_pixels) + pitch * index, (Uint8*)(image_pixels) + pitch * (height - index - 1), pitch);
-        memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row, pitch);
-    }
-    free(temp_row);
-    return 0;
 }
 
 FontAtlas::~FontAtlas() {

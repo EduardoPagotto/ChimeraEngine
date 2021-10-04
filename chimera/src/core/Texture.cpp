@@ -27,7 +27,6 @@ TextureFBO::TextureFBO(const std::string& name, const unsigned& width, const uns
 }
 
 //--------
-
 TextureSurface::TextureSurface(const std::string& name, SDL_Surface* surface, const TextureParameters& tp) : Texture(name, 0, 0) {
 
     textureParameters = tp;
@@ -37,13 +36,11 @@ TextureSurface::TextureSurface(const std::string& name, SDL_Surface* surface, co
 
     height = surface->h;
     width = surface->w;
-
     textureParameters.format = (surface->format->Amask != 0) ? TextureFormat::RGBA : TextureFormat::RGB;
 
     glTexImage2D(GL_TEXTURE_2D, 0, (GLuint)textureParameters.format, surface->w, surface->h, 0, (GLuint)textureParameters.format,
                  GL_UNSIGNED_BYTE, surface->pixels);
 
-    // Nearest Filtering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLuint)textureParameters.filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLuint)textureParameters.filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLuint)textureParameters.wrap);

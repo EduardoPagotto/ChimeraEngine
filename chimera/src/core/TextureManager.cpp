@@ -56,21 +56,28 @@ int TextureManager::invert_image(int pitch, int height, void* image_pixels) {
     return 0;
 }
 
+bool TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surface, TextureParameters textureParameters) {
+
+    if (TextureManager::invert_image(surface->pitch, surface->h, surface->pixels) != 0) {
+        SDL_SetError("Falha na inversao de pixels");
+    }
+
+    TextureManager::add(new TextureSurface(name, surface, textureParameters));
+
+    return true;
+}
+
 bool TextureManager::loadFromFile(const std::string& name, const std::string& pathfile, TextureParameters textureParameters) {
 
     SDL_Surface* pImage = IMG_Load(pathfile.c_str());
     if (pImage == nullptr)
         throw Exception("Falha ao ler arquivo:" + pathfile);
 
-    if (TextureManager::invert_image(pImage->pitch, pImage->h, pImage->pixels) != 0) {
-        SDL_SetError("Falha na inversao de pixels");
-    }
-
-    TextureManager::add(new TextureSurface(name, pImage, textureParameters));
+    bool res = TextureManager::loadFromSurface(name, pImage, textureParameters);
 
     SDL_FreeSurface(pImage);
 
-    return true;
+    return res;
 }
 
 } // namespace Chimera

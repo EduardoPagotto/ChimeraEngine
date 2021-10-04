@@ -33,6 +33,7 @@ set (SourcesCore windows/CanvasGL.cpp
 				 buffers/IndexBuffer.cpp
 				 buffers/VertexArray.cpp
 				 buffers/FrameBuffer.cpp
+				 buffers/FrameBufferDepth.cpp
 				 Texture.cpp
 				 TextureManager.cpp)
 

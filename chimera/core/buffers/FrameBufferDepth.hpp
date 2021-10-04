@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_FRAME_BUFFER__HPP
-#define __CHIMERA_FRAME_BUFFER__HPP
+#ifndef __CHIMERA_FRAME_BUFFER_DEPTH_HPP
+#define __CHIMERA_FRAME_BUFFER_DEPTH_HPP
 
 #include "IFrameBuffer.hpp"
 #include "chimera/core/Texture.hpp"
@@ -7,22 +7,21 @@
 
 namespace Chimera {
 
-class FrameBuffer : public IFrameBuffer {
+class FrameBufferDepth : public IFrameBuffer {
   public:
-    FrameBuffer(const uint16_t& width, const uint16_t& height);
-    virtual ~FrameBuffer();
+    FrameBufferDepth(const uint16_t& width, const uint16_t& height);
+    virtual ~FrameBufferDepth();
 
     inline Texture* getTexture() const override { return texture; }
     void bind() const override;
     void unbind() const override;
     void clear() override;
-    inline void setClearColor(const glm::vec4& color) { clearColor = color; }
 
   private:
     uint16_t width, height;
-    uint32_t framBufferID, depthBufferID;
-    Texture* texture;
+    uint32_t framBufferID;
     glm::vec4 clearColor;
+    Texture* texture;
 };
 
 } // namespace Chimera

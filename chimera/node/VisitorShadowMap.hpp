@@ -5,7 +5,7 @@
 #include "VisitorInterface.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
-#include "chimera/core/buffers/FrameBuffer.hpp"
+#include "chimera/core/buffers/FrameBufferDepth.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 #include <string>
 

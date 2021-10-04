@@ -58,60 +58,62 @@ void BatchRender2D::begin() {
     this->buffer = (VertexDataSimple*)pVbo->map();
 }
 
+float BatchRender2D::submitTexture(Texture* texture) {
+    float result = 0.0f;
+    bool found = false;
+    for (uint i = 0; i < textures.size(); i++) {
+        if (textures[i] == texture) {
+            result = (float)(i + 1);
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        if (textures.size() >= RENDERER_MAX_TEXTURE) {
+            end();   // End();
+            flush(); // Present();
+            begin(); // Begin();
+        }
+        textures.push_back(texture);
+        result = (float)(textures.size());
+    }
+    return result;
+}
+
 void BatchRender2D::submit(IRenderable2D* renderable) {
 
     const glm::vec3& position = renderable->getPosition();
     const glm::vec2& size = renderable->getSize();
     const glm::vec4& color = renderable->getColor();
     const std::vector<glm::vec2>& uv = renderable->getUV();
-    const GLuint tid = renderable->getTID();
+    const Texture* texture = renderable->getTexture();
 
-    float ts = 0.0f;
-    if (tid > 0) {
-        bool found = false;
-        for (int i = 0; i < textureSlots.size(); i++) {
-
-            if (textureSlots[i] == tid) {
-                ts = (float)(i + 1);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-
-            if (textureSlots.size() > RENDERER_MAX_TEXTURE) {
-                end();
-                flush();
-                begin();
-            }
-
-            textureSlots.push_back(tid);
-            ts = (float)(textureSlots.size());
-        }
-    }
+    float textureSlot = 0.0f; // float ts = 0.0f;
+    if (texture != nullptr)
+        textureSlot = this->submitTexture(renderable->getTexture());
 
     buffer->vertex = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
     buffer->uv = uv[0];
-    buffer->tid = ts;
+    buffer->tid = textureSlot;
     buffer->color = color;
     buffer++;
 
     buffer->vertex = stack.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
     buffer->uv = uv[1];
-    buffer->tid = ts;
+    buffer->tid = textureSlot;
     buffer->color = color;
     buffer++;
 
     buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
     buffer->uv = uv[2];
-    buffer->tid = ts;
+    buffer->tid = textureSlot;
     buffer->color = color;
     buffer++;
 
     buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
     buffer->uv = uv[3];
-    buffer->tid = ts;
+    buffer->tid = textureSlot;
     buffer->color = color;
     buffer++;
 
@@ -120,32 +122,11 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
 
 void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
-    const GLuint tid = font->getTextureID();
+    const Texture* texture = font->getTexture();
 
-    float ts = 0.0f;
-    if (tid > 0) {
-        bool found = false;
-        for (int i = 0; i < textureSlots.size(); i++) {
-
-            if (textureSlots[i] == tid) {
-                ts = (float)(i + 1);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-
-            if (textureSlots.size() > RENDERER_MAX_TEXTURE) {
-                end();
-                flush();
-                begin();
-            }
-
-            textureSlots.push_back(tid);
-            ts = (float)(textureSlots.size());
-        }
-    }
+    float textureSlot = 0.0f; // float ts = 0.0f;
+    if (texture != nullptr)
+        textureSlot = this->submitTexture(font->getTexture());
 
     const glm::vec2& scale = font->getScale();
     float x = pos.x;
@@ -175,25 +156,25 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
 
             buffer->vertex = stack.multiplVec3(glm::vec3(x0, y0, 0.0f));
             buffer->uv = glm::vec2(u0, v0);
-            buffer->tid = ts;
+            buffer->tid = textureSlot;
             buffer->color = color;
             buffer++;
 
             buffer->vertex = stack.multiplVec3(glm::vec3(x0, y1, 0.0f));
             buffer->uv = glm::vec2(u0, v1); // glm::vec2(u0, v1);
-            buffer->tid = ts;
+            buffer->tid = textureSlot;
             buffer->color = color;
             buffer++;
 
             buffer->vertex = stack.multiplVec3(glm::vec3(x1, y1, 0.0f));
             buffer->uv = glm::vec2(u1, v1);
-            buffer->tid = ts;
+            buffer->tid = textureSlot;
             buffer->color = color;
             buffer++;
 
             buffer->vertex = stack.multiplVec3(glm::vec3(x1, y0, 0.0f));
             buffer->uv = glm::vec2(u1, v0);
-            buffer->tid = ts;
+            buffer->tid = textureSlot;
             buffer->color = color;
             buffer++;
 
@@ -211,10 +192,8 @@ void BatchRender2D::end() {
 
 void BatchRender2D::flush() {
 
-    for (int i = 0; i < textureSlots.size(); i++) {
-        glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, textureSlots[i]);
-    }
+    for (uint8_t i = 0; i < textures.size(); i++)
+        textures[i]->bind(i);
 
     pVao->bind();
     ibo->bind();
@@ -225,7 +204,7 @@ void BatchRender2D::flush() {
     pVao->unbind();
 
     indexCount = 0;
-    textureSlots.clear();
+    textures.clear();
 }
 
 } // namespace Chimera

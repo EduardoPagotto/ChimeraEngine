@@ -55,12 +55,12 @@ void Material::setUniform(Shader* _shader) {
 
     if (mapTex.size() > 0) {
         for (const auto& kv : mapTex) {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, kv.second->getID());
+            kv.second->bind(0);
             _shader->setUniform1i(kv.first.c_str(), 0);
         }
 
     } else {
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 }

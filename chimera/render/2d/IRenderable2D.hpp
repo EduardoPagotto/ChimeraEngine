@@ -14,7 +14,7 @@ class IRenderable2D {
     virtual const glm::vec2 getSize() const = 0;
     virtual const glm::vec4 getColor() const = 0;
     virtual const std::vector<glm::vec2>& getUV() const = 0;
-    virtual const GLuint getTID() const = 0;
+    virtual class Texture* getTexture() const = 0;
 };
 } // namespace Chimera
 #endif

@@ -3,6 +3,16 @@
 
 namespace Chimera {
 
+void Texture::bind(uint8_t slot) const {
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, idTexture);
+}
+
+void Texture::unbind(uint8_t slot) const {
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 TextureFBO::TextureFBO(const std::string& name, const unsigned& width, const unsigned& height)
     : Texture(name, width, height), depthMapFBO(0) {
 

@@ -30,13 +30,15 @@ class BatchRender2D : public IRenderer2D {
     inline virtual TransformationStack& getStack() override { return stack; };
 
   private:
+    float submitTexture(Texture* texture);
+
     TransformationStack stack;
     Core::IndexBuffer* ibo;
     Core::VertexArray* pVao;
     Core::VertexBuffer* pVbo;
     GLsizei indexCount;
     VertexDataSimple* buffer;
-    std::vector<GLuint> textureSlots;
+    std::vector<Texture*> textures;
 };
 } // namespace Chimera
 #endif

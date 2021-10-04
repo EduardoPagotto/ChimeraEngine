@@ -17,7 +17,7 @@ class Renderable2D : public IRenderable2D {
     inline const glm::vec2 getSize() const override { return size; }
     inline const glm::vec4 getColor() const override { return color; }
     inline const std::vector<glm::vec2>& getUV() const override { return uv; }
-    inline const GLuint getTID() const override { return texture ? texture->getID() : 0; }
+    inline Texture* getTexture() const override { return texture; };
 
   protected:
     glm::vec3 pos;

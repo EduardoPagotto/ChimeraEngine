@@ -45,7 +45,8 @@ class Texture {
 
     inline unsigned getWidth() const { return width; }
     inline unsigned getHeight() const { return height; }
-    inline const GLuint getID() const { return idTexture; }
+    void bind(uint8_t slot) const;
+    void unbind(uint8_t slot) const;
     inline const std::string getName() const { return name; }
 
   protected:

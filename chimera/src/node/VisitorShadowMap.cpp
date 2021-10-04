@@ -74,9 +74,8 @@ void VisitorShadowMap::initSceneShadow() {
 void VisitorShadowMap::endSceneShadow() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 void VisitorShadowMap::applyShadow(Shader* _pShader) {
-    // pTexture->apply(_pShader);
-    glActiveTexture(GL_TEXTURE0 + 1);
-    glBindTexture(GL_TEXTURE_2D, pTexture->getID());
+
+    pTexture->bind(1);
     if (_pShader != nullptr) {
         _pShader->setUniform1i("shadowMap", 1);
     }

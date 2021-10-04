@@ -148,8 +148,7 @@ void Game::update() {
     pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
 
     // aplica a textura
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, pTex->getID());
+    pTex->bind(0);
     pShader->setUniform1i(SHADE_TEXTURE_DIFFUSE, 0);
 
     renderz1->setEyePosition(&vp->position);

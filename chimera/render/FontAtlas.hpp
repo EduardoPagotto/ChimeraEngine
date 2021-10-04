@@ -22,7 +22,7 @@ class FontAtlas {
     FontAtlas(const std::string& name, const std::string& pathFile, const int& size);
     virtual ~FontAtlas();
     inline const std::string getName() const { return name; }
-    inline const GLuint getTextureID() const { return texture->getID(); }
+    inline Texture* getTexture() const { return texture; }
     inline void setScale(const glm::vec2& scale) { this->scale = scale; }
     inline glm::vec2 getScale() const { return this->scale; }
 

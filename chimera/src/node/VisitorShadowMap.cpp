@@ -16,10 +16,10 @@ namespace Chimera {
 
 VisitorShadowMap::VisitorShadowMap(SimpleRender3d* _pRender3d, Shader* _pShader, const unsigned& _width, const unsigned& _height)
     : pShader(_pShader), pTransform(nullptr), pRender3D(_pRender3d) {
-    pTexture = new TextureFBO("theShadow", _width, _height);
+    frameBufferDepth = new FrameBufferDepth(_width, _height);
 }
 
-VisitorShadowMap::~VisitorShadowMap() { delete pTexture; }
+VisitorShadowMap::~VisitorShadowMap() { frameBufferDepth; }
 
 void VisitorShadowMap::init() {}
 
@@ -60,22 +60,14 @@ void VisitorShadowMap::visit(NodeHUD* _pHUD) {}
 
 void VisitorShadowMap::render(Node* _pGroup, Transform* _pTransform) {
     this->pTransform = _pTransform;
-    this->initSceneShadow();
+    frameBufferDepth->bind();
     visitParserTree(_pGroup, this);
-    this->endSceneShadow();
+    frameBufferDepth->unbind();
 }
-
-void VisitorShadowMap::initSceneShadow() {
-    glViewport(0, 0, pTexture->getWidth(), pTexture->getHeight());
-    glBindFramebuffer(GL_FRAMEBUFFER, pTexture->getFrameBufferId());
-    glClear(GL_DEPTH_BUFFER_BIT);
-}
-
-void VisitorShadowMap::endSceneShadow() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 void VisitorShadowMap::applyShadow(Shader* _pShader) {
 
-    pTexture->bind(1);
+    frameBufferDepth->getTexture()->bind(1);
     if (_pShader != nullptr) {
         _pShader->setUniform1i("shadowMap", 1);
     }

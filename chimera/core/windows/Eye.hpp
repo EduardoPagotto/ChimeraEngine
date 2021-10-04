@@ -3,6 +3,7 @@
 
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/ViewPoint.hpp"
+#include "chimera/core/buffers/FrameBuffer.hpp"
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
@@ -20,19 +21,14 @@ class Eye {
 
   private:
     unsigned int posInitW;
-    GLuint fbo;
-    GLuint fb_tex;
-    GLuint fb_depth;
     GLuint texID;
     GLuint quad_vertexbuffer;
     SDL_Rect fbTexGeo;
     Shader* pShader;
+    FrameBuffer* frameBuffer;
 
-    void createFBO();
     void createSquare();
     unsigned int next_pow2(unsigned int x);
 };
-
 } // namespace Chimera::Core
-
 #endif

@@ -6,9 +6,8 @@ namespace Chimera::Core {
 
 Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* _pShader) {
 
-    this->fbo = 0;
-    this->fb_tex = 0;
-    this->fb_depth = 0;
+    frameBuffer = nullptr;
+
     this->quad_vertexbuffer = 0;
     this->pShader = _pShader;
 
@@ -17,7 +16,9 @@ Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* 
     this->fbTexGeo.x = (_indexEye == 0) ? 0 : this->fbTexGeo.w;
     this->fbTexGeo.y = 0;
 
-    this->createFBO();
+    frameBuffer = new FrameBuffer(fbTexGeo.w, fbTexGeo.h);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "created frame buffer render target: %dx%d", fbTexGeo.w, fbTexGeo.h);
+
     this->createSquare();
 
     if (_indexEye == 0)
@@ -27,10 +28,7 @@ Eye::Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* 
 }
 
 Eye::~Eye() {
-    glDeleteFramebuffers(1, &fbo);
-    glDeleteTextures(1, &fb_tex);
-    glDeleteRenderbuffers(1, &fb_depth);
-
+    delete frameBuffer;
     glDeleteBuffers(1, &quad_vertexbuffer);
 }
 
@@ -44,9 +42,9 @@ unsigned int Eye::next_pow2(unsigned int x) {
     return x + 1;
 }
 
-void Eye::bind() { glBindFramebuffer(GL_FRAMEBUFFER, fbo); }
+void Eye::bind() { frameBuffer->bind(); } //  ????
 
-void Eye::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+void Eye::unbind() { frameBuffer->unbind(); }
 
 glm::mat4 Eye::getPerspectiveProjectionMatrix(ViewPoint* vp) {
     glViewport(0, 0, fbTexGeo.w, fbTexGeo.h);
@@ -55,53 +53,6 @@ glm::mat4 Eye::getPerspectiveProjectionMatrix(ViewPoint* vp) {
 
 glm::mat4 Eye::getOrthoProjectionMatrix() {
     return glm::ortho(0.0f, static_cast<GLfloat>(fbTexGeo.w), 0.0f, static_cast<GLfloat>(fbTexGeo.h));
-}
-
-void Eye::createFBO() {
-
-    // refs:
-    // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/
-    // https://github.com/andersonfreitas/opengl-tutorial-org/blob/master/tutorial14_render_to_texture/tutorial14.cpp
-
-    if (!fbo) {
-        // pass 1 cria framebuffer // FramebufferName => fbo
-        glGenFramebuffers(1, &fbo);
-        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-        // pass 2 cria textura that will be used as a color buffer // renderedTexture => fb_tex
-        // create and attach the texture
-        glGenTextures(1, &fb_tex);
-        glBindTexture(GL_TEXTURE_2D, fb_tex);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fbTexGeo.w, fbTexGeo.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-
-        // Filtro linear
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        // pass 3  // The depth buffer // depthrenderbuffer => fb_depth
-        glGenRenderbuffers(1, &fb_depth);
-        glBindRenderbuffer(GL_RENDERBUFFER, fb_depth);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbTexGeo.w, fbTexGeo.h);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fb_depth);
-
-        // Pass 4
-        // Set "renderedTexture" as our colour attachement #0
-        // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb_tex, 0);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fb_tex, 0);
-
-        // Set the list of draw buffers.
-        GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-        glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-
-        // Always check that our framebuffer is ok
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            throw Exception(std::string("Falha em instanciar o Frame Buffer"));
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "created render target: %dx%d", fbTexGeo.w, fbTexGeo.h);
-    }
 }
 
 void Eye::createSquare() {
@@ -115,7 +66,7 @@ void Eye::createSquare() {
     glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 
-    GLuint texID = pShader->getUniformLocation("renderedTexture");
+    texID = pShader->getUniformLocation("renderedTexture");
 }
 
 void Eye::displayTexture() {
@@ -126,13 +77,11 @@ void Eye::displayTexture() {
     // Clear the screen
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Use our shader
     pShader->enable();
-    // glUseProgram(quad_programID);
 
     // Bind our texture in Texture Unit 0
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fb_tex);
+    frameBuffer->getTexture()->bind(0);
+
     // Set our "renderedTexture" sampler to user Texture Unit 0
     glUniform1i(texID, 0);
 

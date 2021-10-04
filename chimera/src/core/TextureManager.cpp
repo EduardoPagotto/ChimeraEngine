@@ -62,7 +62,7 @@ bool TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surfa
         SDL_SetError("Falha na inversao de pixels");
     }
 
-    TextureManager::add(new TextureSurface(name, surface, textureParameters));
+    TextureManager::add(new Texture(name, surface, textureParameters));
 
     return true;
 }

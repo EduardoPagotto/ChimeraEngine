@@ -4,8 +4,8 @@
 #include "Node.hpp"
 #include "VisitorInterface.hpp"
 #include "chimera/core/Shader.hpp"
-#include "chimera/core/Texture.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/core/buffers/FrameBuffer.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 #include <string>
 
@@ -29,14 +29,12 @@ class VisitorShadowMap : public VisitorInterface {
     inline glm::mat4 getLightSpaceMatrix() const { return lightSpaceMatrix; }
 
   private:
-    void initSceneShadow();
-    void endSceneShadow();
     void setLightSpaceMatrix(const glm::vec3& _posicaoLight);
 
     glm::mat4 lightSpaceMatrix;
     Transform* pTransform;
     Shader* pShader;
-    TextureFBO* pTexture;
+    FrameBufferDepth* frameBufferDepth;
     SimpleRender3d* pRender3D;
 };
 } // namespace Chimera

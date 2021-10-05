@@ -66,7 +66,7 @@ void Eye::createSquare() {
     vbo->setLayout(b);
     vbo->setData(quad, 6);
     vbo->unbind();
-    texID = pShader->getUniformLocation("renderedTexture");
+    texID = pShader->getUniform("renderedTexture");
 }
 
 void Eye::displayTexture() {

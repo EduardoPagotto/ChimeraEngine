@@ -43,7 +43,7 @@ void Game::start() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    shader = new Shader("basic", "./samples/helloworld/basic.vert", "./samples/helloworld/basic.frag");
+    shader = new Shader("./assets/shaders/Basic2D.glsl");
     shader->enable();
     shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
 

@@ -16,22 +16,22 @@ void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB) {
     }
 }
 
-std::string utilReadFile(const char* file_path) {
+std::string utilReadFile(const std::string& filepath) {
 
-    // Read file to string
-    std::string ret;
-    std::ifstream file(file_path, std::ios::in);
-    if (file.is_open()) {
-        std::string Line = "";
-        while (getline(file, Line)) {
-            ret += "\n" + Line;
-        }
-        file.close();
+    std::string result;
+    std::ifstream in(filepath, std::ios::binary);
+    if (in) {
+        in.seekg(0, std::ios::end);
+        result.resize(in.tellg());
+        in.seekg(0, std::ios::beg);
+        in.read(&result[0], result.size());
+        in.close();
     } else {
-        throw Chimera::Exception("Impossivel abrir arquivo: " + std::string(file_path));
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "File \"%s\" not found.", filepath.c_str());
+        throw Chimera::Exception("File not found: " + std::string(filepath));
     }
 
-    return ret;
+    return result;
 }
 
 } // namespace Chimera::Core

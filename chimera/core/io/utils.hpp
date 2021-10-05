@@ -23,8 +23,7 @@ const int32_t EVENT_COLLIDE_OFF = 0x1003;        // OFF_COLLIDE
  */
 void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB);
 
-// GLuint shadeLoadProg(const char* programName, const char* vertex_file_path, const char* fragment_file_path);
-std::string utilReadFile(const char* file_path);
+std::string utilReadFile(const std::string& filepath);
 
 } // namespace Chimera::Core
 

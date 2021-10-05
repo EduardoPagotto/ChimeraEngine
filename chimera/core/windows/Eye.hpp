@@ -4,6 +4,7 @@
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/ViewPoint.hpp"
 #include "chimera/core/buffers/FrameBuffer.hpp"
+#include "chimera/core/buffers/VertexBuffer.hpp"
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
@@ -22,7 +23,7 @@ class Eye {
   private:
     unsigned int posInitW;
     GLuint texID;
-    GLuint quad_vertexbuffer;
+    VertexBuffer* vbo;
     SDL_Rect fbTexGeo;
     Shader* pShader;
     FrameBuffer* frameBuffer;

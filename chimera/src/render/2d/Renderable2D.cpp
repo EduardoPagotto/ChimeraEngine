@@ -3,22 +3,23 @@
 
 namespace Chimera {
 
-Renderable2D::Renderable2D(glm::vec3 pos, glm::vec2 size, glm::vec4 color) : pos(pos), size(size), color(color) {
-    uv.push_back(glm::vec2(0.0f, 0.0f));
-    uv.push_back(glm::vec2(0.0f, 1.0f));
-    uv.push_back(glm::vec2(1.0f, 1.0f));
-    uv.push_back(glm::vec2(1.0f, 0.0f));
-    texture = nullptr;
+Renderable2D::Renderable2D(glm::vec3 pos, glm::vec2 size, glm::vec4 color) : pos(pos), size(size), color(color), texture(nullptr) {
+    uv = Renderable2D::getDefaultUVs();
 }
 
-Renderable2D::Renderable2D(glm::vec3 pos, glm::vec2 size, Texture* texture) : pos(pos), size(size), texture(texture) {
-    uv.push_back(glm::vec2(0.0f, 0.0f));
-    uv.push_back(glm::vec2(0.0f, 1.0f));
-    uv.push_back(glm::vec2(1.0f, 1.0f));
-    uv.push_back(glm::vec2(1.0f, 0.0f));
-    color = glm::vec4(1, 1, 1, 1);
+Renderable2D::Renderable2D(glm::vec3 pos, glm::vec2 size, Texture* texture)
+    : pos(pos), size(size), texture(texture), color(glm::vec4(1, 1, 1, 1)) {
+    uv = Renderable2D::getDefaultUVs();
 }
 
-Renderable2D::~Renderable2D() {}
-
+const std::vector<glm::vec2>& Renderable2D::getDefaultUVs() {
+    static std::vector<glm::vec2> results;
+    if (!results.size()) {
+        results.push_back(glm::vec2(0, 1));
+        results.push_back(glm::vec2(1, 1));
+        results.push_back(glm::vec2(1, 0));
+        results.push_back(glm::vec2(0, 0));
+    }
+    return results;
+}
 } // namespace Chimera

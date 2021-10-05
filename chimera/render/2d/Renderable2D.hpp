@@ -11,13 +11,14 @@ class Renderable2D : public IRenderable2D {
   public:
     Renderable2D(glm::vec3 pos, glm::vec2 size, glm::vec4 color);
     Renderable2D(glm::vec3 pos, glm::vec2 size, Texture* texture);
-    virtual ~Renderable2D();
+    virtual ~Renderable2D() {}
     virtual void submit(IRenderer2D* renderer) override { renderer->submit(this); }
     inline const glm::vec3 getPosition() const override { return pos; }
     inline const glm::vec2 getSize() const override { return size; }
     inline const glm::vec4 getColor() const override { return color; }
     inline const std::vector<glm::vec2>& getUV() const override { return uv; }
     inline Texture* getTexture() const override { return texture; };
+    static const std::vector<glm::vec2>& getDefaultUVs();
 
   protected:
     glm::vec3 pos;

@@ -3,6 +3,7 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/io/JoystickManager.hpp"
+#include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
@@ -53,110 +54,154 @@ void Game::updatePos() {
     }
 }
 
-void Game::joystickEvent(SDL_Event* pEventSDL) {
-
+bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
     using namespace Chimera::Core;
+    switch (event.type) {
+        case SDL_USEREVENT: {
+            Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
+            Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
 
-    JoystickState* pJoy = nullptr;
-    switch (pEventSDL->type) {
+            switch (event.user.code) {
+                case Chimera::Core::EVENT_COLLIDE_START: {
+                    Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
+                    Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
+                } break;
+                case Chimera::Core::EVENT_COLLIDE_ON: {
+                    Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
+                    Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
+                } break;
+                case Chimera::Core::EVENT_COLLIDE_OFF: {
+                    Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
+                    Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
+                } break;
+                case Chimera::Core::EVENT_TOGGLE_FULL_SCREEN:
+                    pCanvas->toggleFullScreen();
+                    break;
+                case Chimera::Core::EVENT_NEW_FPS: {
+                    uint32_t* fps = (uint32_t*)event.user.data1;
+                    glm::vec3 val1 = pCorpoRigido->getPosition();
+                    sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
+                    textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
+                } break;
+                // case Chimera::Core::EVENT_FLOW_START:
+                //     this->start();
+                default:
+                    break;
+            }
+
+        } break;
+        case SDL_KEYDOWN: {
+            switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
+                    break;
+                case SDLK_F1:
+                    pHUD->setOn(!pHUD->isOn());
+                    break;
+                case SDLK_F10:
+                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    break;
+                case SDLK_UP:
+                    pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
+                    break;
+                case SDLK_DOWN:
+                    pCorpoRigido->applyForce(glm::vec3(-10.0, 0.0, 0.0));
+                    break;
+                case SDLK_LEFT:
+                    pCorpoRigido->applyForce(glm::vec3(0.0, 10.0, 0.0));
+                    break;
+                case SDLK_RIGHT:
+                    pCorpoRigido->applyForce(glm::vec3(0.0, -10.0, 0.0));
+                    break;
+                case SDLK_a:
+                    pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, 10.0));
+                    break;
+                case SDLK_s:
+                    pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, -10.0));
+                    break;
+                default:
+                    break;
+            }
+        } break;
+
         case SDL_JOYAXISMOTION:
-            pJoy = JoystickManager::select(pEventSDL->jaxis.which);
-            break;
         case SDL_JOYBUTTONDOWN:
         case SDL_JOYBUTTONUP:
-            pJoy = JoystickManager::select(pEventSDL->jbutton.which);
-            break;
         case SDL_JOYHATMOTION:
-            pJoy = JoystickManager::select(pEventSDL->jhat.which);
-            break;
-        case SDL_JOYBALLMOTION:
-            pJoy = JoystickManager::select(pEventSDL->jball.which);
-            break;
+        case SDL_JOYBALLMOTION: {
+
+            JoystickState* pJoy = JoystickManager::select(event.jball.which);
+
+            // Captura joystick 0 se existir
+            if (pJoy != nullptr) {
+
+                pJoy->debug();
+
+                float propulsaoPrincipal = 3.0f;
+
+                crt.yaw = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, 32));
+                crt.pitch = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, 32));
+                crt.roll = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, 32));
+
+                // double throttle = 0;
+                // crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) /
+                // 2);
+
+                if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {
+
+                    // glm::vec3 posicao = pEmissor->getPosSource();
+                    // posicao.x = posicao.x - 0.1f;
+                    // pEmissor->setPosSource( posicao );
+                }
+
+                if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_PRESSED) { // ( or SDL_RELEASED)
+
+                    // glm::vec3 posicao = pEmissor->getPosSource();
+                    // posicao.x = posicao.x + 0.1f;
+                    // pEmissor->setPosSource(posicao);
+                }
+
+                crt.hat = pJoy->getHat(0);
+            }
+
+        } break;
+
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEMOTION: {
+            if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
+                if (event.type == SDL_MOUSEMOTION) {
+                    pOrbitalCam->getTrackBall()->tracking(event.motion.xrel, event.motion.yrel);
+                }
+            } else if (MouseDevice::getButtonState(3) == SDL_PRESSED) {
+
+                if (event.type == SDL_MOUSEMOTION) {
+                    pOrbitalCam->getTrackBall()->offSet(event.motion.yrel);
+                }
+            }
+        } break;
+        case SDL_WINDOWEVENT: {
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_ENTER:
+                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    break;
+                case SDL_WINDOWEVENT_LEAVE:
+                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    break;
+                case SDL_WINDOWEVENT_RESIZED:
+                    pCanvas->reshape(event.window.data1, event.window.data2);
+                    break;
+            }
+        } break;
     }
-
-    // Captura joystick 0 se existir
-    if (pJoy != nullptr) {
-
-        pJoy->debug();
-
-        float propulsaoPrincipal = 3.0f;
-
-        crt.yaw = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, 32));
-        crt.pitch = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, 32));
-        crt.roll = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, 32));
-
-        // double throttle = 0;
-        // crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) / 2);
-
-        if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {
-
-            // glm::vec3 posicao = pEmissor->getPosSource();
-            // posicao.x = posicao.x - 0.1f;
-            // pEmissor->setPosSource( posicao );
-        }
-
-        if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_PRESSED) { // ( or SDL_RELEASED)
-
-            // glm::vec3 posicao = pEmissor->getPosSource();
-            // posicao.x = posicao.x + 0.1f;
-            // pEmissor->setPosSource(posicao);
-        }
-
-        crt.hat = pJoy->getHat(0);
-    }
+    return true;
 }
 
-void Game::keboardEvent(SDL_Event* pEventSDL) {
-
-    switch (pEventSDL->key.keysym.sym) {
-        case SDLK_ESCAPE:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
-            break;
-        case SDLK_F1:
-            pHUD->setOn(!pHUD->isOn());
-            break;
-        case SDLK_F10:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
-            break;
-        case SDLK_UP:
-            pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
-            break;
-        case SDLK_DOWN:
-            pCorpoRigido->applyForce(glm::vec3(-10.0, 0.0, 0.0));
-            break;
-        case SDLK_LEFT:
-            pCorpoRigido->applyForce(glm::vec3(0.0, 10.0, 0.0));
-            break;
-        case SDLK_RIGHT:
-            pCorpoRigido->applyForce(glm::vec3(0.0, -10.0, 0.0));
-            break;
-        case SDLK_a:
-            pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, 10.0));
-            break;
-        case SDLK_s:
-            pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, -10.0));
-            break;
-        default:
-            break;
-    }
-}
-
-void Game::mouseEvent(SDL_Event* pEventSDL) {
-
-    if (Chimera::Core::MouseDevice::getButtonState(1) == SDL_PRESSED) {
-        if (pEventSDL->type == SDL_MOUSEMOTION) {
-            pOrbitalCam->getTrackBall()->tracking(pEventSDL->motion.xrel, pEventSDL->motion.yrel);
-        }
-    } else if (Chimera::Core::MouseDevice::getButtonState(3) == SDL_PRESSED) {
-
-        if (pEventSDL->type == SDL_MOUSEMOTION) {
-            pOrbitalCam->getTrackBall()->offSet(pEventSDL->motion.yrel);
-        }
-    }
-}
-
-void Game::start() {
+void Game::onStart() {
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
@@ -186,7 +231,7 @@ void Game::start() {
     }
 }
 
-void Game::update() {
+void Game::onUpdate() {
 
     physicWorld->stepSim();
     physicWorld->checkCollisions();
@@ -203,57 +248,4 @@ void Game::update() {
     }
 
     pCanvas->swapWindow();
-}
-
-void Game::userEvent(const SDL_Event& _event) {
-
-    Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
-    Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-
-    switch (_event.user.code) {
-        case Chimera::Core::EVENT_COLLIDE_START: {
-            Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
-            Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
-        } break;
-        case Chimera::Core::EVENT_COLLIDE_ON: {
-            Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
-            Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
-        } break;
-        case Chimera::Core::EVENT_COLLIDE_OFF: {
-            Chimera::Node* n1 = (Chimera::Node*)_event.user.data1;
-            Chimera::Node* n2 = (Chimera::Node*)_event.user.data2;
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
-        } break;
-        case Chimera::Core::EVENT_TOGGLE_FULL_SCREEN:
-            pCanvas->toggleFullScreen();
-            break;
-        case Chimera::Core::EVENT_NEW_FPS: {
-            uint32_t* fps = (uint32_t*)_event.user.data1;
-            glm::vec3 val1 = pCorpoRigido->getPosition();
-            sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
-            textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
-        } break;
-        case Chimera::Core::EVENT_FLOW_START:
-            this->start();
-        default:
-            break;
-    }
-}
-
-void Game::windowEvent(SDL_Event* pEventSDL) {
-    switch (pEventSDL->window.event) {
-        case SDL_WINDOWEVENT_ENTER:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-            break;
-        case SDL_WINDOWEVENT_LEAVE:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-            break;
-        case SDL_WINDOWEVENT_RESIZED:
-            pCanvas->reshape(pEventSDL->window.data1, pEventSDL->window.data2);
-            break;
-        default:
-            break;
-    }
 }

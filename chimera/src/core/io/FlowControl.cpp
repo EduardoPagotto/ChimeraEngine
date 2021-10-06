@@ -57,7 +57,8 @@ void FlowControl::run(void) {
 
     // open devices
     JoystickManager::find();
-    gEvent->onStart(); // utilSendEvent(EVENT_FLOW_START, &layerStack, nullptr); // FIXME: remover da lista de eventos!!!!!
+    // utilSendEvent(EVENT_FLOW_START, &layerStack, nullptr); // FIXME: remover da lista de eventos!!!!!
+    gEvent->onStart();
 
     while (!l_quit) {
         frameTime = SDL_GetTicks();

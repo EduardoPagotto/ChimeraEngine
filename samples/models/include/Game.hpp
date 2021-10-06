@@ -28,14 +28,9 @@ class Game : public Chimera::Core::IEvents {
     Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld);
     virtual ~Game();
 
-    virtual void start();
-
-    virtual void update();
-    virtual void keboardEvent(SDL_Event* pEventSDL);
-    virtual void mouseEvent(SDL_Event* pEventSDL);
-    virtual void joystickEvent(SDL_Event* pEventSDL);
-    virtual void windowEvent(SDL_Event* pEventSDL);
-    virtual void userEvent(const SDL_Event& _event);
+    virtual void onStart() override;
+    virtual void onUpdate() override;
+    virtual bool onEvent(const SDL_Event& event) override;
 
     Chimera::VisitorRender renderV;
 

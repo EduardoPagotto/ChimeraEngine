@@ -12,31 +12,7 @@ Game::Game(Chimera::Core::CanvasGL* _pVideo) : pVideo(_pVideo) {}
 
 Game::~Game() {}
 
-void Game::joystickEvent(SDL_Event* pEventSDL) {}
-
-void Game::keboardEvent(SDL_Event* pEventSDL) {
-
-    switch (pEventSDL->key.keysym.sym) {
-        case SDLK_ESCAPE: {
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
-            layerStack->popLayer(layer);
-            layer->onDeatach();
-        } break;
-        case SDLK_F10:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
-            break;
-        default:
-            break;
-    }
-}
-
-void Game::mouseEvent(SDL_Event* pEventSDL) {
-
-    x = pEventSDL->motion.x;
-    y = pEventSDL->motion.y;
-}
-
-void Game::start() {
+void Game::onStart() {
     using namespace Chimera;
 
     srand(time(nullptr));
@@ -62,8 +38,8 @@ void Game::start() {
     shader->enable();
 
     layer = new TileLayer(shader);
-
-    layerStack->pushLayer(layer);
+    // FIXME: ver como sera???
+    // layerStack->pushLayer(layer);
     layer->onAttach();
 
     for (float y = -9.0f; y < 9.0f; y++) {
@@ -83,42 +59,66 @@ void Game::start() {
     shader->disable();
 }
 
-void Game::userEvent(const SDL_Event& _event) {
-    switch (_event.user.code) {
-        case Chimera::Core::EVENT_TOGGLE_FULL_SCREEN:
-            pVideo->toggleFullScreen();
-            break;
-        case Chimera::Core::EVENT_FLOW_START: {
-            layerStack = (Chimera::Core::LayerStack*)_event.user.data1;
-            this->start();
+bool Game::onEvent(const SDL_Event& event) {
+    using namespace Chimera;
+    using namespace Chimera::Core;
+    switch (event.type) {
+        case SDL_USEREVENT: {
+            switch (event.user.code) {
+                case EVENT_TOGGLE_FULL_SCREEN:
+                    pVideo->toggleFullScreen();
+                    break;
+
+                case Chimera::Core::EVENT_FLOW_START: {
+                    layerStack = (Chimera::Core::LayerStack*)event.user.data1;
+                    this->onStart();
+                } break;
+
+                case EVENT_NEW_FPS: {
+                    uint32_t* pFps = (uint32_t*)event.user.data1;
+                    fps = *pFps;
+                    SDL_Log("FPS: %d", fps);
+                } break;
+            }
+
         } break;
-        case Chimera::Core::EVENT_NEW_FPS: {
-            uint32_t* pFps = (uint32_t*)_event.user.data1;
-            fps = *pFps;
-            SDL_Log("FPS: %d", fps);
+        case SDL_KEYDOWN: {
+            switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
+                    break;
+                // case SDLK_1:
+                //     render3d.logToggle();
+                //     break;
+                case SDLK_F10:
+                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    break;
+            }
         } break;
-        default:
-            break;
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEMOTION: {
+            x = event.motion.x;
+            y = event.motion.y;
+        } break;
+        case SDL_WINDOWEVENT: {
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_ENTER:
+                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    break;
+                case SDL_WINDOWEVENT_LEAVE:
+                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    break;
+                case SDL_WINDOWEVENT_RESIZED:
+                    pVideo->reshape(event.window.data1, event.window.data2);
+                    break;
+            }
+        } break;
     }
+    return true;
 }
 
-void Game::windowEvent(SDL_Event* pEventSDL) {
-    switch (pEventSDL->window.event) {
-        case SDL_WINDOWEVENT_ENTER:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_RESUME, nullptr, nullptr);
-            break;
-        case SDL_WINDOWEVENT_LEAVE:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_PAUSE, nullptr, nullptr);
-            break;
-        case SDL_WINDOWEVENT_RESIZED:
-            pVideo->reshape(pEventSDL->window.data1, pEventSDL->window.data2);
-            break;
-        default:
-            break;
-    }
-}
-
-void Game::update() {
+void Game::onUpdate() {
 
     lFPS->setText(std::string("FPS: ") + std::to_string(fps));
 

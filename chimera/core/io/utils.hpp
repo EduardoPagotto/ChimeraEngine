@@ -24,7 +24,7 @@ const int32_t EVENT_COLLIDE_OFF = 0x1003;        // OFF_COLLIDE
 void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB);
 
 std::string utilReadFile(const std::string& filepath);
-
+std::string extractNameByFile(const std::string& filepath);
 } // namespace Chimera::Core
 
 #endif

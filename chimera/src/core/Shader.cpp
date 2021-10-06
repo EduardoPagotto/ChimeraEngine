@@ -158,7 +158,10 @@ Shader::Shader(const std::string& name, const std::string& vertPath, const std::
     this->shaderId = shadeLoadProg(name.c_str(), vertPath.c_str(), fragPath.c_str());
 }
 
-Shader::Shader(const std::string& filepath) { this->shaderId = shadeLoadProg(filepath); }
+Shader::Shader(const std::string& filepath) {
+    this->shaderId = shadeLoadProg(filepath);
+    name = Core::extractNameByFile(filepath);
+}
 
 Shader::~Shader() { glDeleteProgram(shaderId); }
 
@@ -169,5 +172,37 @@ GLint Shader::getUniform(const char* _varName) const noexcept {
         SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _varName, name.c_str());
 
     return loc;
+}
+
+//----
+bool ShaderLibrary::add(Shader* shader) {
+    auto it = shaders.find(shader->getName());
+    if (it == shaders.end()) {
+        shaders[shader->getName()] = shader;
+        return true;
+    }
+
+    return false;
+}
+
+Shader* ShaderLibrary::load(const std::string& filepath) {
+
+    Shader* shader = this->get(Core::extractNameByFile(filepath));
+    if (shader != nullptr)
+        return shader;
+
+    shader = new Shader(filepath);
+    shaders[shader->getName()] = shader;
+
+    return shader;
+}
+
+Shader* ShaderLibrary::get(const std::string& name) {
+
+    auto it = shaders.find(name);
+    if (it != shaders.end())
+        return it->second;
+
+    return nullptr;
 }
 } // namespace Chimera

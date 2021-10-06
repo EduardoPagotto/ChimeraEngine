@@ -23,7 +23,8 @@ class Game : public Chimera::Core::IEvents {
 
   private:
     Chimera::Core::CanvasGL* pVideo;
-    Chimera::Shader *shader, *shader2;
+    Chimera::ShaderLibrary sl;
+    Chimera::Shader* shader;
     TileLayer *layer, *layer2;
     Chimera::Label* lFPS;
     uint16_t x, y;

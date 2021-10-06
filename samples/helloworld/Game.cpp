@@ -43,11 +43,6 @@ void Game::start() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    shader = new Shader("./assets/shaders/Basic2D.glsl");
-    shader->enable();
-    shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
-
-    layer = new TileLayer(shader);
     // Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-15.0f, 5.0f, 0.0f)));
     // group->add(new Sprite(0.0f, 0.0f, 6.0f, 3.0f, glm::vec4(1, 1, 1, 1)));
     // Group* button = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.0f)));
@@ -56,11 +51,13 @@ void Game::start() {
     // group->add(button);
     // layer->add(group);
 
-    // parei em :http//www.youtube.com/watch?v=rTG95k0qdqs&t=3047s
-    // 56:00
     TextureManager::loadFromFile("t01", "./data/images/grid1.png", TextureParameters());
     TextureManager::loadFromFile("t02", "./data/images/grid2.png", TextureParameters());
     TextureManager::loadFromFile("t03", "./data/images/grid3.png", TextureParameters());
+
+    sl.load("./assets/shaders/Basic2D.glsl");
+    shader = sl.get("Basic2D");
+    shader->enable();
 
     layer = new TileLayer(shader);
     for (float y = -9.0f; y < 9.0f; y++) {

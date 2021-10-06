@@ -19,7 +19,7 @@ void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB) {
 std::string utilReadFile(const std::string& filepath) {
 
     std::string result;
-    std::ifstream in(filepath, std::ios::binary);
+    std::ifstream in(filepath, std::ios::in | std::ios::binary);
     if (in) {
         in.seekg(0, std::ios::end);
         result.resize(in.tellg());
@@ -34,4 +34,12 @@ std::string utilReadFile(const std::string& filepath) {
     return result;
 }
 
+std::string extractNameByFile(const std::string& filepath) {
+    auto lastSlash = filepath.find_last_of("/\\");
+    lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+
+    auto lastDot = filepath.rfind('.');
+    auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+    return filepath.substr(lastSlash, count);
+}
 } // namespace Chimera::Core

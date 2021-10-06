@@ -1,5 +1,6 @@
 #include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/io/Keyboard.hpp"
 #include "chimera/core/io/utils.hpp"
 
 namespace Chimera::Core {
@@ -7,9 +8,14 @@ namespace Chimera::Core {
 FlowControl::FlowControl(IEvents* _gEvent) : gEvent(_gEvent), pause(true) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
+    JoystickManager::init();
 }
 
-FlowControl::~FlowControl() {}
+FlowControl::~FlowControl() {
+    JoystickManager::release();
+    SDL_JoystickEventState(SDL_DISABLE);
+    SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
+}
 
 bool FlowControl::changeStatusFlow(SDL_Event* pEventSDL) {
 
@@ -48,8 +54,7 @@ void FlowControl::run(void) {
     uint32_t minimumFrameTime = 1000 / maxFPS;
 
     // open devices
-    joystickManager.Initialize();
-    joystickManager.FindJoysticks();
+    JoystickManager::find();
     utilSendEvent(EVENT_FLOW_START, &layerStack, nullptr);
 
     while (!l_quit) {
@@ -61,8 +66,15 @@ void FlowControl::run(void) {
                         gEvent->userEvent(l_eventSDL);
                     break;
                 case SDL_KEYDOWN:
-                    gEvent->keboardEvent(l_eventSDL.key.keysym.sym);
+                    Keyboard::setDown(l_eventSDL.key);
+                    gEvent->keboardEvent(&l_eventSDL);
                     break;
+
+                case SDL_KEYUP:
+                    Keyboard::setUp(l_eventSDL.key);
+                    gEvent->keboardEvent(&l_eventSDL);
+                    break;
+
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
                     MouseDevice::update(&l_eventSDL.button);
@@ -76,25 +88,25 @@ void FlowControl::run(void) {
                     gEvent->windowEvent(l_eventSDL.window);
                     break;
                 case SDL_JOYAXISMOTION: {
-                    JoystickState* pJoy = joystickManager.setAxisMotion(&l_eventSDL.jaxis);
-                    gEvent->joystickEvent(pJoy, &l_eventSDL);
+                    joystickManager.setAxisMotion(&l_eventSDL.jaxis);
+                    gEvent->joystickEvent(&l_eventSDL);
                 } break;
                 case SDL_JOYBUTTONDOWN:
                 case SDL_JOYBUTTONUP: {
-                    JoystickState* pJoy = joystickManager.setButtonState(&l_eventSDL.jbutton);
-                    gEvent->joystickEvent(pJoy, &l_eventSDL);
+                    joystickManager.setButtonState(&l_eventSDL.jbutton);
+                    gEvent->joystickEvent(&l_eventSDL);
                 } break;
                 case SDL_JOYHATMOTION: {
-                    JoystickState* pJoy = joystickManager.setHatMotion(&l_eventSDL.jhat);
-                    gEvent->joystickEvent(pJoy, &l_eventSDL);
+                    joystickManager.setHatMotion(&l_eventSDL.jhat);
+                    gEvent->joystickEvent(&l_eventSDL);
                 } break;
                 case SDL_JOYBALLMOTION: {
-                    JoystickState* pJoy = joystickManager.setBallMotion(&l_eventSDL.jball);
-                    gEvent->joystickEvent(pJoy, &l_eventSDL);
+                    joystickManager.setBallMotion(&l_eventSDL.jball);
+                    gEvent->joystickEvent(&l_eventSDL);
                 } break;
                 case SDL_JOYDEVICEADDED:
                 case SDL_JOYDEVICEREMOVED:
-                    joystickManager.FindJoysticks();
+                    joystickManager.find();
                 default:
                     break;
             }
@@ -134,6 +146,6 @@ void FlowControl::run(void) {
         }
     }
     // Release devices
-    joystickManager.ReleaseJoysticks();
+    JoystickManager::release();
 }
 } // namespace Chimera::Core

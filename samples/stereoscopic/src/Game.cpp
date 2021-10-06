@@ -11,42 +11,13 @@ Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_
 
 Game::~Game() {}
 
-void Game::joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSDL) {
+void Game::joystickEvent(SDL_Event* pEventSDL) {}
 
-    using namespace Chimera;
-    using namespace Chimera::Core;
-
-    // Captura joystick 0 se existir
-    if (pJoy != nullptr) {
-
-        float deadZone = 0.5f;
-        float propulsaoPrincipal = 3.0f;
-        float propulsaoFrontal = 1.0f;
-
-        float yaw = pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, deadZone);
-        float pitch = pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, deadZone);
-        float roll = pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, deadZone);
-
-        double throttle = -propulsaoPrincipal * ((1 + pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER, deadZone)) / 2);
-        throttle = throttle - (-propulsaoFrontal * ((1 + pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_TRIGGER, deadZone)) / 2));
-
-        if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {}
-        if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_RELEASED) {}
-
-        int val = pJoy->getHat(0);
-        if (val & (uint8_t)SDL_HAT_UP) {}
-        if (val & (uint8_t)SDL_HAT_DOWN) {}
-        if (val & (uint8_t)SDL_HAT_RIGHTUP) {}
-        if (val & (uint8_t)SDL_HAT_LEFT) {}
-        if ((roll != 0.0) || (pitch != 0.0) || (yaw != 0.0) || (throttle != 0.0)) {}
-    }
-}
-
-void Game::keboardEvent(SDL_Keycode tecla) {
+void Game::keboardEvent(SDL_Event* pEventSDL) {
 
     Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 
-    switch (tecla) {
+    switch (pEventSDL->key.keysym.sym) {
         case SDLK_ESCAPE:
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
             break;

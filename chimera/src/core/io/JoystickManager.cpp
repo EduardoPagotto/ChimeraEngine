@@ -2,32 +2,14 @@
 
 namespace Chimera::Core {
 
-JoystickManager::JoystickManager(void) { Initialized = false; }
+std::map<SDL_JoystickID, JoystickState> JoystickManager::Joysticks;
 
-JoystickManager::~JoystickManager(void) {
-
-    if (Initialized) {
-        ReleaseJoysticks();
-        SDL_JoystickEventState(SDL_DISABLE);
-        SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-    }
-
-    Initialized = false;
-}
-
-void JoystickManager::Initialize(void) {
-
-    if (!Initialized)
-        SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-
+void JoystickManager::init(void) {
+    SDL_InitSubSystem(SDL_INIT_JOYSTICK);
     SDL_JoystickEventState(SDL_ENABLE);
-    Initialized = true;
 }
 
-void JoystickManager::FindJoysticks(void) {
-
-    if (!Initialized)
-        return;
+void JoystickManager::find(void) {
 
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
 
@@ -45,12 +27,9 @@ void JoystickManager::FindJoysticks(void) {
     }
 }
 
-void JoystickManager::ReleaseJoysticks(void) {
+void JoystickManager::release(void) {
 
-    if (!Initialized)
-        return;
-
-    for (std::map<uint8_t, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
+    for (auto joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
 
         if (joy_iter->second.pHandle)
             SDL_JoystickClose(joy_iter->second.pHandle);
@@ -62,34 +41,30 @@ void JoystickManager::ReleaseJoysticks(void) {
     Joysticks.clear();
 }
 
-JoystickState* JoystickManager::setAxisMotion(SDL_JoyAxisEvent* jaxis) {
-    JoystickState* pJoy = this->getJoystickState(jaxis->which);
+void JoystickManager::setAxisMotion(SDL_JoyAxisEvent* jaxis) {
+    JoystickState* pJoy = JoystickManager::select(jaxis->which);
     pJoy->axis[jaxis->axis] = jaxis->value;
-    return pJoy;
 }
 
-JoystickState* JoystickManager::setButtonState(SDL_JoyButtonEvent* jbutton) { // FIXME: melhorar
-    JoystickState* pJoy = this->getJoystickState(jbutton->which);
+void JoystickManager::setButtonState(SDL_JoyButtonEvent* jbutton) {
+    JoystickState* pJoy = JoystickManager::select(jbutton->which);
     pJoy->buttonState[jbutton->button] = jbutton->state;
-    return pJoy;
 }
 
-JoystickState* JoystickManager::setHatMotion(SDL_JoyHatEvent* jhat) {
-    JoystickState* pJoy = this->getJoystickState(jhat->which);
+void JoystickManager::setHatMotion(SDL_JoyHatEvent* jhat) {
+    JoystickState* pJoy = JoystickManager::select(jhat->which);
     pJoy->hats[jhat->hat] = jhat->value;
-    return pJoy;
 }
 
-JoystickState* JoystickManager::setBallMotion(SDL_JoyBallEvent* jball) {
-    JoystickState* pJoy = this->getJoystickState(jball->which);
+void JoystickManager::setBallMotion(SDL_JoyBallEvent* jball) {
+    JoystickState* pJoy = JoystickManager::select(jball->which);
     pJoy->BallsX[jball->ball] += jball->xrel;
     pJoy->BallsY[jball->ball] += jball->yrel;
-    return pJoy;
 }
 
-JoystickState* JoystickManager::getJoystickState(const uint8_t& joystick_id) {
+JoystickState* JoystickManager::select(const SDL_JoystickID& joystick_id) {
 
-    std::map<uint8_t, JoystickState>::iterator joy_iter = Joysticks.find(joystick_id);
+    auto joy_iter = Joysticks.find(joystick_id);
     if (joy_iter != Joysticks.end()) {
         return &joy_iter->second;
     }
@@ -97,15 +72,15 @@ JoystickState* JoystickManager::getJoystickState(const uint8_t& joystick_id) {
     return nullptr;
 }
 
-void JoystickManager::GetStatusManager(void) {
+void JoystickManager::getStatusManager(void) {
 
     std::string return_string = std::string("Joysticks size: ") + std::to_string(Joysticks.size());
-    for (std::map<uint8_t, JoystickState>::iterator joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
+    for (auto joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
         joy_iter->second.debug();
     }
 }
 
-void JoystickManager::DebugDadosJoystick() {
+void JoystickManager::debug() {
 
     SDL_Joystick* joystick;
     for (int i = 0; i < SDL_NumJoysticks(); ++i) {

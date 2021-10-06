@@ -21,22 +21,25 @@ Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanv
 
 Game::~Game() { delete renderz1; }
 
-void Game::joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSDL) {}
+void Game::joystickEvent(SDL_Event* pEventSDL) {}
 
-void Game::keboardEvent(SDL_Keycode tecla) {
+void Game::keboardEvent(SDL_Event* pEventSDL) {
 
-    switch (tecla) {
-        case SDLK_ESCAPE:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
-            break;
-        case SDLK_1:
-            render3d.logToggle();
-            break;
-        case SDLK_F10:
-            Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
-            break;
-        default:
-            break;
+    if (pEventSDL->type == SDL_KEYDOWN) {
+        // Keyboard::isPressed(SDLK_ESCAPE)
+        switch (pEventSDL->key.keysym.sym) {
+            case SDLK_ESCAPE:
+                Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
+                break;
+            case SDLK_1:
+                render3d.logToggle();
+                break;
+            case SDLK_F10:
+                Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                break;
+            default:
+                break;
+        }
     }
 }
 

@@ -2,6 +2,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Singleton.hpp"
+#include "chimera/core/io/JoystickManager.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
@@ -52,10 +53,27 @@ void Game::updatePos() {
     }
 }
 
-void Game::joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSDL) {
+void Game::joystickEvent(SDL_Event* pEventSDL) {
 
     using namespace Chimera;
     using namespace Chimera::Core;
+
+    JoystickState* pJoy = nullptr;
+    switch (pEventSDL->type) {
+        case SDL_JOYAXISMOTION:
+            pJoy = JoystickManager::select(pEventSDL->jaxis.which);
+            break;
+        case SDL_JOYBUTTONDOWN:
+        case SDL_JOYBUTTONUP:
+            pJoy = JoystickManager::select(pEventSDL->jbutton.which);
+            break;
+        case SDL_JOYHATMOTION:
+            pJoy = JoystickManager::select(pEventSDL->jhat.which);
+            break;
+        case SDL_JOYBALLMOTION:
+            pJoy = JoystickManager::select(pEventSDL->jball.which);
+            break;
+    }
 
     // Captura joystick 0 se existir
     if (pJoy != nullptr) {
@@ -89,9 +107,9 @@ void Game::joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSD
     }
 }
 
-void Game::keboardEvent(SDL_Keycode tecla) {
+void Game::keboardEvent(SDL_Event* pEventSDL) {
 
-    switch (tecla) {
+    switch (pEventSDL->key.keysym.sym) {
         case SDLK_ESCAPE:
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
             break;

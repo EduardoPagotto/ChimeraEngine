@@ -25,6 +25,7 @@ set (SourcesCore windows/CanvasGL.cpp
 				 Transform.cpp
 				 io/utils.cpp
 				 io/Timer.cpp
+				 io/Keyboard.cpp
 				 io/JoystickState.cpp
 				 io/JoystickManager.cpp
 				 io/MouseDevice.cpp

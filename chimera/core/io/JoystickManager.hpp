@@ -1,38 +1,30 @@
 #ifndef __CHIMERA_CORE_JOYSTICK_MANAGER__HPP
 #define __CHIMERA_CORE_JOYSTICK_MANAGER__HPP
 
-#include <map>
-#include <string>
-
-#include <SDL2/SDL.h>
-
 #include "JoystickState.hpp"
+#include <SDL2/SDL.h>
+#include <map>
 
 namespace Chimera::Core {
 
-/**
- * Classe gerenciadora de todos os Joysticks identificados
- */
 class JoystickManager {
   public:
-    JoystickManager(void);
-    virtual ~JoystickManager(void);
+    static void init(void);
+    static void release(void);
+    static void find(void);
+    static void getStatusManager(void);
+    static void debug();
 
-    void Initialize(void);
-    void ReleaseJoysticks(void);
-    void FindJoysticks(void);
-    void GetStatusManager(void);
-    void DebugDadosJoystick();
-    JoystickState* getJoystickState(const uint8_t& joystick_id);
-    JoystickState* setAxisMotion(SDL_JoyAxisEvent* jaxis);
-    JoystickState* setButtonState(SDL_JoyButtonEvent* jbutton);
-    JoystickState* setHatMotion(SDL_JoyHatEvent* jhat);
-    JoystickState* setBallMotion(SDL_JoyBallEvent* jball);
+    static void setAxisMotion(SDL_JoyAxisEvent* jaxis);
+    static void setButtonState(SDL_JoyButtonEvent* jbutton);
+    static void setHatMotion(SDL_JoyHatEvent* jhat);
+    static void setBallMotion(SDL_JoyBallEvent* jball);
+
+    static JoystickState* select(const SDL_JoystickID& joystick_id);
 
   private:
-    // JoystickState* getJoystickState(const uint8_t& joystick_id);
-    std::map<uint8_t, JoystickState> Joysticks;
-    bool Initialized;
+    static std::map<SDL_JoystickID, JoystickState> Joysticks;
+    static bool Initialized;
 };
 } // namespace Chimera::Core
 #endif

@@ -13,11 +13,11 @@ Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanv
 
 Game::~Game() {}
 
-void Game::joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSDL) {}
+void Game::joystickEvent(SDL_Event* pEventSDL) {}
 
-void Game::keboardEvent(SDL_Keycode tecla) {
+void Game::keboardEvent(SDL_Event* pEventSDL) {
 
-    switch (tecla) {
+    switch (pEventSDL->key.keysym.sym) {
         case SDLK_ESCAPE:
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
             break;

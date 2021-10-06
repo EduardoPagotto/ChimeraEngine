@@ -11,7 +11,7 @@ class IEvents {
   public:
     virtual void update() = 0;
     virtual void keboardEvent(SDL_Keycode tecla) = 0;
-    virtual void mouseEvent(MouseDevice* pMouse, SDL_Event* pEventSDL) = 0;
+    virtual void mouseEvent(SDL_Event* pEventSDL) = 0;
     virtual void joystickEvent(JoystickState* pJoy, SDL_Event* pEventSDL) = 0;
     virtual void userEvent(const SDL_Event& _event) = 0;
     virtual void windowEvent(const SDL_WindowEvent& _event) = 0;

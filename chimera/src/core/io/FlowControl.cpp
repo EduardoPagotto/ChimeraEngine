@@ -65,9 +65,9 @@ void FlowControl::run(void) {
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
-                    mouse.update(&l_eventSDL.button);
+                    MouseDevice::update(&l_eventSDL.button);
                 case SDL_MOUSEMOTION:
-                    gEvent->mouseEvent(&mouse, &l_eventSDL);
+                    gEvent->mouseEvent(&l_eventSDL);
                     break;
                 case SDL_QUIT:
                     l_quit = true;

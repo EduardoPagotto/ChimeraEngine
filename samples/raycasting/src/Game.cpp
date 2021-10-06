@@ -61,7 +61,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
             break;
     }
 }
-void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) {}
+void Game::mouseEvent(SDL_Event* pEventSDL) {}
 
 void Game::start() {
 

@@ -40,13 +40,13 @@ void Game::keboardEvent(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) {
+void Game::mouseEvent(SDL_Event* pEventSDL) {
 
-    if (pMouse->getButtonState(1) == SDL_PRESSED) {
+    if (Chimera::Core::MouseDevice::getButtonState(1) == SDL_PRESSED) {
         if (pEventSDL->type == SDL_MOUSEMOTION) {
             trackBall.tracking(pEventSDL->motion.xrel, pEventSDL->motion.yrel);
         }
-    } else if (pMouse->getButtonState(3) == SDL_PRESSED) {
+    } else if (Chimera::Core::MouseDevice::getButtonState(3) == SDL_PRESSED) {
 
         if (pEventSDL->type == SDL_MOUSEMOTION) {
             trackBall.offSet(pEventSDL->motion.yrel);

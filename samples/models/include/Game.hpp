@@ -32,7 +32,7 @@ class Game : public Chimera::Core::IEvents {
 
     virtual void update();
     virtual void keboardEvent(SDL_Keycode tecla);
-    virtual void mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL);
+    virtual void mouseEvent(SDL_Event* pEventSDL);
     virtual void joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSDL);
     virtual void windowEvent(const SDL_WindowEvent& _event);
     virtual void userEvent(const SDL_Event& _event);

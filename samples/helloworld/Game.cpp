@@ -30,7 +30,7 @@ void Game::keboardEvent(SDL_Keycode tecla) {
     }
 }
 
-void Game::mouseEvent(Chimera::Core::MouseDevice* pMouse, SDL_Event* pEventSDL) {
+void Game::mouseEvent(SDL_Event* pEventSDL) {
 
     x = pEventSDL->motion.x;
     y = pEventSDL->motion.y;

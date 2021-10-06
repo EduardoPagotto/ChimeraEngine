@@ -19,7 +19,7 @@ class FlowControl {
     LayerStack layerStack;
     IEvents* gEvent;
     JoystickManager joystickManager;
-    MouseDevice mouse;
+    // MouseDevice mouse;
     Timer timerFPS;
     uint32_t fps;
     bool pause;

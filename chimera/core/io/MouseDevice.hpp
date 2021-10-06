@@ -8,14 +8,11 @@ namespace Chimera::Core {
 
 class MouseDevice {
   public:
-    MouseDevice();
-    virtual ~MouseDevice();
-    uint8_t getButtonState(const uint8_t& indice);
-
-    void update(SDL_MouseButtonEvent* pMb);
+    static uint8_t getButtonState(const uint8_t& indice);
+    static void update(SDL_MouseButtonEvent* pMb);
 
   private:
-    std::map<uint8_t, uint8_t> buttonState;
+    static std::map<uint8_t, uint8_t> buttonState;
 };
 } // namespace Chimera::Core
 

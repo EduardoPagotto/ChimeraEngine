@@ -4,6 +4,7 @@
 #include "TileLayer.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/io/IEvents.hpp"
+#include "chimera/core/io/LayerStack.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/2d/Label.hpp"
 #include "chimera/render/2d/layer/Layer.hpp"
@@ -31,6 +32,7 @@ class Game : public Chimera::Core::IEvents {
 
     int fps;
     Chimera::FontAtlas* fa;
+    Chimera::Core::LayerStack* layerStack;
 };
 
 #endif

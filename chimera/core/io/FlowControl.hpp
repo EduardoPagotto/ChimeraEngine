@@ -3,6 +3,7 @@
 
 #include "IEvents.hpp"
 #include "JoystickManager.hpp"
+#include "LayerStack.hpp"
 #include "Timer.hpp"
 
 namespace Chimera::Core {
@@ -15,7 +16,7 @@ class FlowControl {
 
   private:
     bool changeStatusFlow(SDL_Event* pEventSDL);
-
+    LayerStack layerStack;
     IEvents* gEvent;
     JoystickManager joystickManager;
     MouseDevice mouse;

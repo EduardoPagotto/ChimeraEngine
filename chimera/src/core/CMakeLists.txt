@@ -28,6 +28,7 @@ set (SourcesCore windows/CanvasGL.cpp
 				 io/JoystickState.cpp
 				 io/JoystickManager.cpp
 				 io/MouseDevice.cpp
+				 io/LayerStack.cpp
 				 io/FlowControl.cpp
 				 buffers/VertexBuffer.cpp
 				 buffers/IndexBuffer.cpp

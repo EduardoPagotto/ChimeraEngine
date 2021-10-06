@@ -2,10 +2,11 @@
 #define __CHIMERA_IRENDERABLE__HPP
 
 #include "../Renderable2D.hpp"
+#include "chimera/core/io/LayerStack.hpp"
 
 namespace Chimera {
 
-class Layer {
+class Layer : public ILayer {
   public:
     Layer(IRenderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix);
     virtual ~Layer();

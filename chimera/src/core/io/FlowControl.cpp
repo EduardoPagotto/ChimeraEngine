@@ -50,7 +50,7 @@ void FlowControl::run(void) {
     // open devices
     joystickManager.Initialize();
     joystickManager.FindJoysticks();
-    utilSendEvent(EVENT_FLOW_START, nullptr, nullptr);
+    utilSendEvent(EVENT_FLOW_START, &layerStack, nullptr);
 
     while (!l_quit) {
         frameTime = SDL_GetTicks();
@@ -98,10 +98,20 @@ void FlowControl::run(void) {
                 default:
                     break;
             }
+
+            for (std::vector<ILayer*>::iterator it = layerStack.begin(); it != layerStack.end(); it++) {
+                if ((*it)->onEvent(l_eventSDL) == true)
+                    break;
+            }
         }
         // update game
         if (!pause) {
             try {
+
+                for (std::vector<ILayer*>::iterator it = layerStack.begin(); it != layerStack.end(); it++) {
+                    (*it)->onUpdate();
+                }
+
                 gEvent->update();
             } catch (...) { SDL_Quit(); }
         }

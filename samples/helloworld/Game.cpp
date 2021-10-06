@@ -17,9 +17,11 @@ void Game::joystickEvent(Chimera::Core::JoystickState* pJoy, SDL_Event* pEventSD
 void Game::keboardEvent(SDL_Keycode tecla) {
 
     switch (tecla) {
-        case SDLK_ESCAPE:
+        case SDLK_ESCAPE: {
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
-            break;
+            layerStack->popLayer(layer);
+            layer->onDeatach();
+        } break;
         case SDLK_F10:
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
             break;
@@ -60,6 +62,10 @@ void Game::start() {
     shader->enable();
 
     layer = new TileLayer(shader);
+
+    layerStack->pushLayer(layer);
+    layer->onAttach();
+
     for (float y = -9.0f; y < 9.0f; y++) {
         for (float x = -16.0f; x < 16.0f; x++) {
             if (rand() % 4 == 0)
@@ -82,9 +88,10 @@ void Game::userEvent(const SDL_Event& _event) {
         case Chimera::Core::EVENT_TOGGLE_FULL_SCREEN:
             pVideo->toggleFullScreen();
             break;
-        case Chimera::Core::EVENT_FLOW_START:
+        case Chimera::Core::EVENT_FLOW_START: {
+            layerStack = (Chimera::Core::LayerStack*)_event.user.data1;
             this->start();
-            break;
+        } break;
         case Chimera::Core::EVENT_NEW_FPS: {
             uint32_t* pFps = (uint32_t*)_event.user.data1;
             fps = *pFps;

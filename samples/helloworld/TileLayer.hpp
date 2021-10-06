@@ -10,5 +10,11 @@ class TileLayer : public Chimera::Layer {
     TileLayer(Chimera::Shader* shader)
         : Chimera::Layer(new Chimera::BatchRender2D(), shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f)) {}
     virtual ~TileLayer() {}
+
+    virtual void onAttach() override{};
+    virtual void onDeatach() override{};
+    virtual void onUpdate() override{};
+    virtual bool onEvent(const SDL_Event& _event) override { return false; }
+    virtual std::string getName() const { return "TileLayer"; }
 };
 #endif

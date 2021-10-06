@@ -4,7 +4,7 @@
 #include "Ilayer.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace Chimera::Core {
 
 class LayerStack {
   public:
@@ -23,5 +23,5 @@ class LayerStack {
     std::vector<ILayer*> layers;
     std::vector<ILayer*>::iterator layerInsert;
 };
-} // namespace Chimera
+} // namespace Chimera::Core
 #endif

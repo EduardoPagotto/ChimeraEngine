@@ -2,7 +2,6 @@
 #define __CHIMERA_CORE_FLOW_CONTROL__HPP
 
 #include "IEvents.hpp"
-#include "JoystickManager.hpp"
 #include "LayerStack.hpp"
 #include "Timer.hpp"
 
@@ -18,8 +17,6 @@ class FlowControl {
     bool changeStatusFlow(SDL_Event* pEventSDL);
     LayerStack layerStack;
     IEvents* gEvent;
-    JoystickManager joystickManager;
-    // MouseDevice mouse;
     Timer timerFPS;
     uint32_t fps;
     bool pause;

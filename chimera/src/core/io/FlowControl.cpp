@@ -1,6 +1,8 @@
 #include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/io/JoystickManager.hpp"
 #include "chimera/core/io/Keyboard.hpp"
+#include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 
 namespace Chimera::Core {
@@ -55,63 +57,53 @@ void FlowControl::run(void) {
 
     // open devices
     JoystickManager::find();
-    utilSendEvent(EVENT_FLOW_START, &layerStack, nullptr);
+    gEvent->onStart(); // utilSendEvent(EVENT_FLOW_START, &layerStack, nullptr); // FIXME: remover da lista de eventos!!!!!
 
     while (!l_quit) {
         frameTime = SDL_GetTicks();
         while (SDL_PollEvent(&l_eventSDL)) {
             switch (l_eventSDL.type) {
                 case SDL_USEREVENT:
-                    if (changeStatusFlow(&l_eventSDL))
-                        gEvent->userEvent(l_eventSDL);
+                    if (!changeStatusFlow(&l_eventSDL))
+                        continue;
                     break;
                 case SDL_KEYDOWN:
                     Keyboard::setDown(l_eventSDL.key);
-                    gEvent->keboardEvent(&l_eventSDL);
                     break;
-
                 case SDL_KEYUP:
                     Keyboard::setUp(l_eventSDL.key);
-                    gEvent->keboardEvent(&l_eventSDL);
                     break;
-
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
                     MouseDevice::update(&l_eventSDL.button);
                 case SDL_MOUSEMOTION:
-                    gEvent->mouseEvent(&l_eventSDL);
                     break;
                 case SDL_QUIT:
                     l_quit = true;
                     break;
                 case SDL_WINDOWEVENT:
-                    gEvent->windowEvent(&l_eventSDL);
-                    // gEvent->windowEvent(l_eventSDL.window);
                     break;
-                case SDL_JOYAXISMOTION: {
-                    joystickManager.setAxisMotion(&l_eventSDL.jaxis);
-                    gEvent->joystickEvent(&l_eventSDL);
-                } break;
+                case SDL_JOYAXISMOTION:
+                    JoystickManager::setAxisMotion(&l_eventSDL.jaxis);
+                    break;
                 case SDL_JOYBUTTONDOWN:
-                case SDL_JOYBUTTONUP: {
-                    joystickManager.setButtonState(&l_eventSDL.jbutton);
-                    gEvent->joystickEvent(&l_eventSDL);
-                } break;
-                case SDL_JOYHATMOTION: {
-                    joystickManager.setHatMotion(&l_eventSDL.jhat);
-                    gEvent->joystickEvent(&l_eventSDL);
-                } break;
-                case SDL_JOYBALLMOTION: {
-                    joystickManager.setBallMotion(&l_eventSDL.jball);
-                    gEvent->joystickEvent(&l_eventSDL);
-                } break;
+                case SDL_JOYBUTTONUP:
+                    JoystickManager::setButtonState(&l_eventSDL.jbutton);
+                    break;
+                case SDL_JOYHATMOTION:
+                    JoystickManager::setHatMotion(&l_eventSDL.jhat);
+                    break;
+                case SDL_JOYBALLMOTION:
+                    JoystickManager::setBallMotion(&l_eventSDL.jball);
+                    break;
                 case SDL_JOYDEVICEADDED:
                 case SDL_JOYDEVICEREMOVED:
-                    joystickManager.find();
+                    JoystickManager::find();
                 default:
                     break;
             }
 
+            gEvent->onEvent(l_eventSDL);
             for (std::vector<ILayer*>::iterator it = layerStack.begin(); it != layerStack.end(); it++) {
                 if ((*it)->onEvent(l_eventSDL) == true)
                     break;
@@ -125,7 +117,7 @@ void FlowControl::run(void) {
                     (*it)->onUpdate();
                 }
 
-                gEvent->update();
+                gEvent->onUpdate();
             } catch (...) { SDL_Quit(); }
         }
         // count frame and FPS

@@ -15,7 +15,7 @@ class IEvents {
     virtual void joystickEvent(SDL_Event* pEventSDL) = 0;
 
     virtual void userEvent(const SDL_Event& _event) = 0;
-    virtual void windowEvent(const SDL_WindowEvent& _event) = 0;
+    virtual void windowEvent(SDL_Event* pEventSDL) = 0;
 };
 
 } // namespace Chimera::Core

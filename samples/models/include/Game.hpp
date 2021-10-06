@@ -34,7 +34,7 @@ class Game : public Chimera::Core::IEvents {
     virtual void keboardEvent(SDL_Event* pEventSDL);
     virtual void mouseEvent(SDL_Event* pEventSDL);
     virtual void joystickEvent(SDL_Event* pEventSDL);
-    virtual void windowEvent(const SDL_WindowEvent& _event);
+    virtual void windowEvent(SDL_Event* pEventSDL);
     virtual void userEvent(const SDL_Event& _event);
 
     Chimera::VisitorRender renderV;

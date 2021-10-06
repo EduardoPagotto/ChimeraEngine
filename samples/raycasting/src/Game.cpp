@@ -100,8 +100,8 @@ void Game::userEvent(const SDL_Event& _event) {
     }
 }
 
-void Game::windowEvent(const SDL_WindowEvent& _event) {
-    switch (_event.event) {
+void Game::windowEvent(SDL_Event* pEventSDL) {
+    switch (pEventSDL->window.event) {
         case SDL_WINDOWEVENT_ENTER:
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
             break;
@@ -109,7 +109,7 @@ void Game::windowEvent(const SDL_WindowEvent& _event) {
             Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
             break;
         case SDL_WINDOWEVENT_RESIZED:
-            pCanvas->reshape(_event.data1, _event.data2);
+            pCanvas->reshape(pEventSDL->window.data1, pEventSDL->window.data2);
             break;
         default:
             break;

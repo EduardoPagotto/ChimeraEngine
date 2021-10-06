@@ -17,7 +17,7 @@ class Game : public Chimera::Core::IEvents {
     virtual void mouseEvent(SDL_Event* pEventSDL);
     virtual void joystickEvent(SDL_Event* pEventSDL);
     virtual void userEvent(const SDL_Event& _event) override;
-    virtual void windowEvent(const SDL_WindowEvent& _event) override;
+    virtual void windowEvent(SDL_Event* pEventSDL) override;
 
   private:
     Chimera::VisitorRender renderV;

@@ -85,7 +85,8 @@ void FlowControl::run(void) {
                     l_quit = true;
                     break;
                 case SDL_WINDOWEVENT:
-                    gEvent->windowEvent(l_eventSDL.window);
+                    gEvent->windowEvent(&l_eventSDL);
+                    // gEvent->windowEvent(l_eventSDL.window);
                     break;
                 case SDL_JOYAXISMOTION: {
                     joystickManager.setAxisMotion(&l_eventSDL.jaxis);

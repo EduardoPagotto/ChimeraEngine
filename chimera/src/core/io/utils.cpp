@@ -2,7 +2,7 @@
 #include "chimera/core/Exception.hpp"
 #include <fstream>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB) {
     SDL_Event event;
@@ -42,4 +42,4 @@ std::string extractNameByFile(const std::string& filepath) {
     auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
     return filepath.substr(lastSlash, count);
 }
-} // namespace Chimera::Core
+} // namespace Chimera

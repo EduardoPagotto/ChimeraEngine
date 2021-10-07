@@ -14,8 +14,8 @@ class RenderableDynamic {
 
   private:
     uint32_t max;
-    Core::VertexArray vao;
-    Core::VertexBuffer* vbo;
+    VertexArray vao;
+    VertexBuffer* vbo;
 };
 } // namespace Chimera
 #endif

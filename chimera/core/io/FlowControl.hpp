@@ -5,7 +5,7 @@
 #include "LayerStack.hpp"
 #include "Timer.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class FlowControl {
   public:
@@ -21,6 +21,6 @@ class FlowControl {
     uint32_t fps;
     bool pause;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 
 #endif

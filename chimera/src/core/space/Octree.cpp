@@ -1,6 +1,6 @@
 #include "chimera/core/space/Octree.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 Octree::Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent, bool _leafMode, unsigned int _deep)
     : boundary(boundary), capacity(_capacity), pParent(_parent), leafMode(_leafMode), deep(_deep) {
@@ -112,4 +112,4 @@ void Octree::query(const AABB& _aabb, std::vector<glm::vec3>& _found) { // std::
             pChild[i]->query(_aabb, _found);
     }
 }
-} // namespace Chimera::Core
+} // namespace Chimera

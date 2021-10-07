@@ -7,7 +7,6 @@
 int main(int argn, char** argv) {
 
     using namespace Chimera;
-    using namespace Chimera::Core;
 
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("Hello iniciado");

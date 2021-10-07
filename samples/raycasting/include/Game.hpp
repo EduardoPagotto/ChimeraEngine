@@ -5,9 +5,9 @@
 #include "chimera/core/windows/CanvasFB.hpp"
 #include "raycasting.hpp"
 
-class Game : public Chimera::Core::IEvents {
+class Game : public Chimera::IEvents {
   public:
-    Game(Chimera::Core::CanvasFB* _pCanvas);
+    Game(Chimera::CanvasFB* _pCanvas);
 
     virtual ~Game();
     // Inherited via IEvents
@@ -16,7 +16,7 @@ class Game : public Chimera::Core::IEvents {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    Chimera::Core::CanvasFB* pCanvas;
+    Chimera::CanvasFB* pCanvas;
     // ray
     Frame* frame;
     State* state;

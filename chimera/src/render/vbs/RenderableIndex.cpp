@@ -9,10 +9,10 @@ RenderableIndex::RenderableIndex(std::vector<RenderableIBO*>& vpLeafData, std::v
     this->vVertex = std::move(vertexData);
 
     // create vertex buffers
-    vao = new Core::VertexArray();
+    vao = new VertexArray();
     vao->bind();
 
-    Core::VertexBuffer* vbo = new Core::VertexBuffer(Core::BufferType::STATIC);
+    VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
     vbo->bind();
 
     BufferLayout layout;

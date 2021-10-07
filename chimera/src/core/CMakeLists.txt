@@ -37,7 +37,8 @@ set (SourcesCore windows/CanvasGL.cpp
 				 buffers/FrameBuffer.cpp
 				 buffers/FrameBufferDepth.cpp
 				 Texture.cpp
-				 TextureManager.cpp)
+				 TextureManager.cpp
+				 Application.cpp)
 
 # #define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR})

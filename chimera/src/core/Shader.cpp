@@ -120,8 +120,8 @@ static std::unordered_map<GLenum, std::string> preProcess(const std::string sour
 static GLuint shadeLoadProg(const char* progName, const char* fileVertex, const char* fileFrag) {
 
     std::vector<GLuint> vecShaderID;
-    vecShaderID.push_back(compileShader(Core::utilReadFile(fileVertex), GL_VERTEX_SHADER));
-    vecShaderID.push_back(compileShader(Core::utilReadFile(fileFrag), GL_FRAGMENT_SHADER));
+    vecShaderID.push_back(compileShader(utilReadFile(fileVertex), GL_VERTEX_SHADER));
+    vecShaderID.push_back(compileShader(utilReadFile(fileFrag), GL_FRAGMENT_SHADER));
 
     GLuint shaderId = linkShader(vecShaderID); // Link o programa
 
@@ -134,7 +134,7 @@ static GLuint shadeLoadProg(const char* progName, const char* fileVertex, const 
 static GLuint shadeLoadProg(const std::string& filepath) {
 
     std::vector<GLuint> vecShaderID;
-    std::string fileData = Core::utilReadFile(filepath);
+    std::string fileData = utilReadFile(filepath);
     if (fileData.size() == 0)
         return 0;
 
@@ -160,7 +160,7 @@ Shader::Shader(const std::string& name, const std::string& vertPath, const std::
 
 Shader::Shader(const std::string& filepath) {
     this->shaderId = shadeLoadProg(filepath);
-    name = Core::extractNameByFile(filepath);
+    name = extractNameByFile(filepath);
 }
 
 Shader::~Shader() { glDeleteProgram(shaderId); }
@@ -187,7 +187,7 @@ bool ShaderLibrary::add(Shader* shader) {
 
 Shader* ShaderLibrary::load(const std::string& filepath) {
 
-    Shader* shader = this->get(Core::extractNameByFile(filepath));
+    Shader* shader = this->get(extractNameByFile(filepath));
     if (shader != nullptr)
         return shader;
 

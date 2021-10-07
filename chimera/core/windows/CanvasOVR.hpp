@@ -21,7 +21,7 @@
 #include <algorithm>
 #endif
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class CanvasOVR : public CanvasGL {
   public:
@@ -62,6 +62,6 @@ class CanvasOVR : public CanvasGL {
 
     ovrMatrix4f orthoProjection[2];
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif //  OVR_SET_TO_USE
 #endif

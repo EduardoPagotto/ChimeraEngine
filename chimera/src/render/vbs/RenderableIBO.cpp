@@ -33,7 +33,7 @@ void RenderableIBO::addFace(const uint32_t& _pa, const uint32_t& _pb, const uint
     indexTris.push_back(_pc);
 }
 
-void RenderableIBO::initIndexBufferObject() { ibo = new Core::IndexBuffer(&indexTris[0], indexTris.size()); }
+void RenderableIBO::initIndexBufferObject() { ibo = new IndexBuffer(&indexTris[0], indexTris.size()); }
 
 void RenderableIBO::submit(IRenderer3d* renderer) { renderer->submit(this); }
 } // namespace Chimera

@@ -17,9 +17,9 @@ class RenderableIBO : public IRenderable {
     virtual void debugDados() override;
     virtual uint32_t getSize() const override { return indexTris.size(); }
     virtual Shader* getShader() const override { return nullptr; };
-    virtual Core::VertexArray* getVao() const override { return nullptr; };
-    virtual Core::IndexBuffer* getIBO() const override { return ibo; };
-    virtual Core::AABB* getAABB() override { return &aabb; }
+    virtual VertexArray* getVao() const override { return nullptr; };
+    virtual IndexBuffer* getIBO() const override { return ibo; };
+    virtual AABB* getAABB() override { return &aabb; }
     virtual void submit(IRenderer3d* renderer) override;
 
     inline bool empty() { return indexTris.empty(); }
@@ -28,8 +28,8 @@ class RenderableIBO : public IRenderable {
     void initAABB(VertexData* vertexData, const uint32_t& vertexSize);
 
   private:
-    Core::AABB aabb;
-    Core::IndexBuffer* ibo;
+    AABB aabb;
+    IndexBuffer* ibo;
     std::vector<uint32_t> indexTris;
 };
 } // namespace Chimera

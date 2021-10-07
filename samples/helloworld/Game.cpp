@@ -8,7 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
 
-Game::Game(Chimera::Core::CanvasGL* _pVideo) : pVideo(_pVideo) {}
+Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) {}
 
 Game::~Game() {}
 
@@ -61,7 +61,7 @@ void Game::onStart() {
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
-    using namespace Chimera::Core;
+
     switch (event.type) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
@@ -69,8 +69,8 @@ bool Game::onEvent(const SDL_Event& event) {
                     pVideo->toggleFullScreen();
                     break;
 
-                case Chimera::Core::EVENT_FLOW_START: {
-                    layerStack = (Chimera::Core::LayerStack*)event.user.data1;
+                case Chimera::EVENT_FLOW_START: {
+                    layerStack = (Chimera::LayerStack*)event.user.data1;
                     this->onStart();
                 } break;
 

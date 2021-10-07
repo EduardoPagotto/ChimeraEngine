@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <map>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class Keyboard {
   public:
@@ -17,5 +17,5 @@ class Keyboard {
     static std::map<SDL_Keycode, uint8_t> mapKey;
     static uint16_t mod;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

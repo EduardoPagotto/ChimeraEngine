@@ -8,7 +8,7 @@
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class Eye {
   public:
@@ -31,5 +31,5 @@ class Eye {
     void createSquare();
     unsigned int next_pow2(unsigned int x);
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

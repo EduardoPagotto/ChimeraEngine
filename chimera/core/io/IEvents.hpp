@@ -2,8 +2,8 @@
 #define __CHIMERA_CORE_IEVENTS__HPP
 
 #include <SDL2/SDL.h>
-
-namespace Chimera::Core {
+// https://github.com/Ershany/Arcane-Engine/tree/master/Arcane
+namespace Chimera {
 
 class IEvents {
   public:
@@ -12,5 +12,5 @@ class IEvents {
     virtual bool onEvent(const SDL_Event& event) = 0;
 };
 
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

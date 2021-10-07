@@ -43,8 +43,7 @@ int main(int argn, char** argv) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        Chimera::Core::CanvasGL* video =
-            new Chimera::Core::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
+        Chimera::CanvasGL* video = new Chimera::CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         YAML::Node shaders = config["shaders"];
         SDL_Log("Shaders identificados: %d", (int)shaders.size());
@@ -99,7 +98,7 @@ int main(int argn, char** argv) {
         pHUD->addFont(pFont);
 
         // Controle de fluxo do programa
-        Chimera::Core::FlowControl* pControle = new Chimera::Core::FlowControl(game);
+        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
         pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");

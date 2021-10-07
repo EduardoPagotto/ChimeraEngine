@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-void SimpleRender3d::begin(Core::Frustum* frustrun) {
+void SimpleRender3d::begin(Frustum* frustrun) {
     this->frustrun = frustrun;
     // debug data
     totIBO = 0;
@@ -24,14 +24,14 @@ void SimpleRender3d::submit(IRenderable* renderable) {
     }
 
     // se nao ha AABB adicionar tudo
-    Core::AABB* pAABB = renderable->getAABB();
+    AABB* pAABB = renderable->getAABB();
     if (pAABB == nullptr) {
         renderQueue.push_back(renderable);
     } else {
         // adicione apenas o que esta no clip-space
         if (pAABB->visible(*frustrun) == true) {
 
-            Core::IndexBuffer* ibo = renderable->getIBO();
+            IndexBuffer* ibo = renderable->getIBO();
             if (ibo != nullptr) {
                 totIBO++;
                 totFaces += ibo->getCount();
@@ -44,7 +44,7 @@ void SimpleRender3d::submit(IRenderable* renderable) {
 
 void SimpleRender3d::flush() {
 
-    Core::VertexArray* pLastVao = nullptr;
+    VertexArray* pLastVao = nullptr;
     while (!renderQueue.empty()) {
 
         IRenderable* r = renderQueue.front();

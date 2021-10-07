@@ -10,9 +10,9 @@
 #include "chimera/render/vbs/RenderableStatic.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
-class Game : public Chimera::Core::IEvents {
+class Game : public Chimera::IEvents {
   public:
-    Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
+    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
 
     virtual ~Game();
     // Inherited via IEvents
@@ -25,12 +25,12 @@ class Game : public Chimera::Core::IEvents {
     glm::mat4 view;
     glm::mat4 model;
     Chimera::TrackBall trackBall;
-    Chimera::Core::CanvasGL* pCanvas;
+    Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
     Chimera::Material material;
     Chimera::RenderableStatic* rederable;
     Chimera::SimpleRender3d render3D;
-    Chimera::Core::Frustum frustum;
+    Chimera::Frustum frustum;
 };
 
 #endif

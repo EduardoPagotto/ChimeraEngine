@@ -4,7 +4,7 @@
 #include "Plane.hpp"
 #include "Triangle.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 struct BSPTreeNode {
     BSPTreeNode(const Plane& _hyperPlane)
@@ -16,5 +16,5 @@ struct BSPTreeNode {
     bool isSolid;
     bool isLeaf;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

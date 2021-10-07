@@ -8,7 +8,7 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
 
-Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot) {}
+Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot) : pCanvas(_pCanvas), pRoot(_pRoot) {}
 
 Game::~Game() {}
 
@@ -27,11 +27,11 @@ void Game::onStart() {
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
-    using namespace Chimera::Core;
+
     switch (event.type) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
-                case Chimera::Core::EVENT_TOGGLE_FULL_SCREEN:
+                case Chimera::EVENT_TOGGLE_FULL_SCREEN:
                     pCanvas->toggleFullScreen();
                     break;
             }
@@ -42,7 +42,7 @@ bool Game::onEvent(const SDL_Event& event) {
 
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_STOP, nullptr, nullptr);
+                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_a:
                     pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::LEFT, 10);
@@ -53,7 +53,7 @@ bool Game::onEvent(const SDL_Event& event) {
                 // case SDLK_1:
                 //     render3D.logToggle();
                 case SDLK_F10:
-                    Chimera::Core::utilSendEvent(Chimera::Core::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    Chimera::utilSendEvent(Chimera::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
                 default:
                     break;
@@ -64,11 +64,11 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_MOUSEMOTION: {
             Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
 
-            if (Chimera::Core::MouseDevice::getButtonState(1) == SDL_PRESSED) {
+            if (Chimera::MouseDevice::getButtonState(1) == SDL_PRESSED) {
                 if (event.type == SDL_MOUSEMOTION) {
                     pCamZ->getTrackBall()->tracking(event.motion.xrel, event.motion.yrel);
                 }
-            } else if (Chimera::Core::MouseDevice::getButtonState(3) == SDL_PRESSED) {
+            } else if (Chimera::MouseDevice::getButtonState(3) == SDL_PRESSED) {
 
                 if (event.type == SDL_MOUSEMOTION) {
                     pCamZ->getTrackBall()->offSet(event.motion.yrel);
@@ -78,10 +78,10 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
                 case SDL_WINDOWEVENT_ENTER:
-                    Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
                     break;
                 case SDL_WINDOWEVENT_LEAVE:
-                    Chimera::Core::utilSendEvent(Chimera::Core::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
                     pCanvas->reshape(event.window.data1, event.window.data2);

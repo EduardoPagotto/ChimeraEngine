@@ -1,6 +1,6 @@
 #include "chimera/core/windows/CanvasHmd.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : CanvasGL(_title, _width * 2, _height, false) {
 
@@ -105,4 +105,4 @@ glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {
 //
 // }
 
-} // namespace Chimera::Core
+} // namespace Chimera

@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 const int32_t EVENT_TOGGLE_FULL_SCREEN = 0x0001; // FullScreem
 const int32_t EVENT_FLOW_PAUSE = 0x0002;         // set to pause game
@@ -25,6 +25,6 @@ void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB);
 
 std::string utilReadFile(const std::string& filepath);
 std::string extractNameByFile(const std::string& filepath);
-} // namespace Chimera::Core
+} // namespace Chimera
 
 #endif

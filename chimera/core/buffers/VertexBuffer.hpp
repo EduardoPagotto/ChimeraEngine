@@ -4,7 +4,7 @@
 #include "chimera/core/VertexData.hpp"
 #include "chimera/core/buffers/BufferLayout.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 enum class BufferType // BufferUsage
 {
@@ -32,5 +32,5 @@ class VertexBuffer {
     BufferLayout layout;
     BufferType type;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

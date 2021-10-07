@@ -23,9 +23,9 @@ struct Controles {
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  */
-class Game : public Chimera::Core::IEvents {
+class Game : public Chimera::IEvents {
   public:
-    Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld);
+    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld);
     virtual ~Game();
 
     virtual void onStart() override;
@@ -45,7 +45,7 @@ class Game : public Chimera::Core::IEvents {
     Chimera::NodeCamera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;
     Chimera::NodeParticleEmitter* pEmissor;
-    Chimera::Core::CanvasGL* pCanvas;
+    Chimera::CanvasGL* pCanvas;
     Chimera::Node* pRoot;
     Chimera::PhysicsControl* physicWorld;
 };

@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include <map>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class JoystickManager {
   public:
@@ -26,5 +26,5 @@ class JoystickManager {
     static std::map<SDL_JoystickID, JoystickState> Joysticks;
     static bool Initialized;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

@@ -3,7 +3,7 @@
 
 #include "VertexBuffer.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class VertexArray {
   public:
@@ -19,5 +19,5 @@ class VertexArray {
     uint32_t arrayID;
     std::vector<VertexBuffer*> vbos;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

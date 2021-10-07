@@ -16,8 +16,8 @@ BatchRender2D::~BatchRender2D() {
 
 void BatchRender2D::init() {
 
-    pVao = new Core::VertexArray();
-    pVbo = new Core::VertexBuffer(Core::BufferType::DYNAMIC);
+    pVao = new VertexArray();
+    pVbo = new VertexBuffer(BufferType::DYNAMIC);
 
     pVao->push(pVbo);
 
@@ -47,7 +47,7 @@ void BatchRender2D::init() {
         offset += 4;
     }
 
-    ibo = new Core::IndexBuffer(indices, RENDERER_INDICES_SIZE);
+    ibo = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
 
     pVao->unbind();
 }

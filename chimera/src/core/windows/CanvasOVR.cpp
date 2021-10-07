@@ -6,7 +6,7 @@
 #include <SDL_opengl.h>
 #include <SDL_syswm.h>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 CanvasOVR::CanvasOVR(std::string nomeTela) : Video(nomeTela, KIND_DEVICE::OVR_OCULUS) {
 
@@ -483,6 +483,6 @@ void CanvasOVR::quat_to_matrix(const float* quat, float* mat) {
     mat[3] = mat[7] = mat[11] = 0.0f;
     mat[15] = 1.0f;
 }
-} // namespace Chimera::Core
+} // namespace Chimera
 
 #endif //  OVR_SET_TO_USE

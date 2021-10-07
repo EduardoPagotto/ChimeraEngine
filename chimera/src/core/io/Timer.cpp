@@ -1,6 +1,6 @@
 #include "chimera/core/io/Timer.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 Timer::Timer() : startTicks(0), pausedTicks(0), started(false), paused(false), step(0), countStep(0), elapsedCount(0), lastTicks(0) {}
 
@@ -65,4 +65,4 @@ bool Timer::stepCount() {
 
     return false;
 }
-} // namespace Chimera::Core
+} // namespace Chimera

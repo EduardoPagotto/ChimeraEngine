@@ -33,9 +33,9 @@ class BatchRender2D : public IRenderer2D {
     float submitTexture(Texture* texture);
 
     TransformationStack stack;
-    Core::IndexBuffer* ibo;
-    Core::VertexArray* pVao;
-    Core::VertexBuffer* pVbo;
+    IndexBuffer* ibo;
+    VertexArray* pVao;
+    VertexBuffer* pVbo;
     GLsizei indexCount;
     VertexDataSimple* buffer;
     std::vector<Texture*> textures;

@@ -6,9 +6,9 @@
 #include "chimera/node/Node.hpp"
 #include "chimera/node/VisitorRender.hpp"
 
-class Game : public Chimera::Core::IEvents {
+class Game : public Chimera::IEvents {
   public:
-    Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot);
+    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot);
     virtual ~Game();
     // Inherited via IEvents
     virtual void onStart() override;
@@ -17,7 +17,7 @@ class Game : public Chimera::Core::IEvents {
 
   private:
     Chimera::VisitorRender renderV;
-    Chimera::Core::CanvasGL* pCanvas;
+    Chimera::CanvasGL* pCanvas;
     Chimera::Node* pRoot;
 };
 

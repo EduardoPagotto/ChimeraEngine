@@ -5,7 +5,7 @@
 #include "chimera/core/ViewPoint.hpp"
 #include <glm/glm.hpp>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class CanvasGL : public Canvas {
   public:
@@ -28,6 +28,6 @@ class CanvasGL : public Canvas {
   protected:
     SDL_GLContext context;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 
 #endif

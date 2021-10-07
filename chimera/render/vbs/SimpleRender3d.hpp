@@ -11,7 +11,7 @@ class SimpleRender3d : public IRenderer3d {
     SimpleRender3d() : logData(false), frustrun(nullptr), totIBO(0), totFaces(0) {}
     virtual ~SimpleRender3d() {}
 
-    virtual void begin(Core::Frustum* frustrun) override;
+    virtual void begin(Frustum* frustrun) override;
     virtual void submit(IRenderable* renderable) override;
     virtual void end() override;
     virtual void flush() override;
@@ -21,7 +21,7 @@ class SimpleRender3d : public IRenderer3d {
 
   private:
     std::deque<IRenderable*> renderQueue;
-    Core::Frustum* frustrun;
+    Frustum* frustrun;
 
     bool logData;
     uint32_t totIBO;

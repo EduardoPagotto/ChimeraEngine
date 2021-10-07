@@ -12,14 +12,14 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Chimera::Core::CanvasGL* video = new Chimera::Core::CanvasGL("simples", 640, 480);
+        Chimera::CanvasGL* video = new Chimera::CanvasGL("simples", 640, 480);
 
         Chimera::Shader* pShader =
             new Chimera::Shader("Simples1", "./samples/simples/shaders/simples.vert", "./samples/simples/shaders/simples.frag");
 
         Game* game = new Game(video, pShader);
 
-        Chimera::Core::FlowControl* pControle = new Chimera::Core::FlowControl(game);
+        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
         pControle->run();
 
         delete pControle;

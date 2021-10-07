@@ -15,15 +15,15 @@ class RenderableIndex : public IRenderable {
     virtual void debugDados() override;
     virtual uint32_t getSize() const { return totIndex; }
     virtual Shader* getShader() const { return nullptr; }
-    virtual Core::VertexArray* getVao() const { return vao; }
-    virtual Core::IndexBuffer* getIBO() const { return nullptr; }
-    virtual Core::AABB* getAABB() { return &aabb; }
+    virtual VertexArray* getVao() const { return vao; }
+    virtual IndexBuffer* getIBO() const { return nullptr; }
+    virtual AABB* getAABB() { return &aabb; }
 
   private:
-    Core::VertexArray* vao;
+    VertexArray* vao;
     std::vector<RenderableIBO*> vpLeaf;
     std::vector<VertexData> vVertex;
-    Core::AABB aabb;
+    AABB aabb;
     uint32_t totIndex;
 };
 

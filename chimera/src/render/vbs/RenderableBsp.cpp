@@ -3,17 +3,17 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(Core::BSPTreeNode* root, std::vector<RenderableIBO*>* vpLeafData, std::vector<VertexData>* vertexData)
+RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<RenderableIBO*>* vpLeafData, std::vector<VertexData>* vertexData)
     : root(root), totIndex(0) {
 
     this->vpLeaf = std::move(*vpLeafData);
     this->vVertex = std::move(*vertexData);
 
     // create vertex buffers
-    vao = new Core::VertexArray();
+    vao = new VertexArray();
     vao->bind();
 
-    Core::VertexBuffer* vbo = new Core::VertexBuffer(Core::BufferType::STATIC);
+    VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
     vbo->bind();
 
     BufferLayout layout;
@@ -43,7 +43,7 @@ RenderableBsp::RenderableBsp(Core::BSPTreeNode* root, std::vector<RenderableIBO*
 
 RenderableBsp::~RenderableBsp() { this->destroy(); }
 
-void RenderableBsp::drawPolygon(Core::BSPTreeNode* tree, bool frontSide) {
+void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
     if (tree->isLeaf == false)
         return;
@@ -52,7 +52,7 @@ void RenderableBsp::drawPolygon(Core::BSPTreeNode* tree, bool frontSide) {
     pLeaf->submit(this->renderer);
 }
 
-void RenderableBsp::traverseTree(Core::BSPTreeNode* tree) {
+void RenderableBsp::traverseTree(BSPTreeNode* tree) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if (tree == nullptr)
         return;
@@ -104,7 +104,7 @@ void RenderableBsp::destroy() {
     collapse(root);
 }
 
-void RenderableBsp::collapse(Core::BSPTreeNode* tree) {
+void RenderableBsp::collapse(BSPTreeNode* tree) {
 
     if (tree->front != nullptr) {
         collapse(tree->front);
@@ -119,7 +119,7 @@ void RenderableBsp::collapse(Core::BSPTreeNode* tree) {
     }
 }
 
-bool RenderableBsp::lineOfSight(glm::vec3* Start, glm::vec3* End, Core::BSPTreeNode* tree) {
+bool RenderableBsp::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
     float temp;
     glm::vec3 intersection;
     if (tree->isLeaf == true) {

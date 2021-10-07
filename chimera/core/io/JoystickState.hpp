@@ -6,7 +6,7 @@
 
 #include <SDL2/SDL.h>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 /**
  * Enumerador dos codigos dos Axis do Joystico do XBOX360
@@ -67,6 +67,6 @@ class JoystickState {
     std::map<uint8_t, int16_t> BallsX;
     std::map<uint8_t, int16_t> BallsY;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 
 #endif

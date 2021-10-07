@@ -1,6 +1,6 @@
 #include "chimera/core/io/Keyboard.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 std::map<SDL_Keycode, uint8_t> Keyboard::mapKey;
 uint16_t Keyboard::mod;
@@ -26,4 +26,4 @@ bool Keyboard::isPressed(SDL_Keycode key) {
     return false;
 }
 
-} // namespace Chimera::Core
+} // namespace Chimera

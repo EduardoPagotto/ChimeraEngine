@@ -1,7 +1,7 @@
 #include "chimera/core/io/LayerStack.hpp"
 #include <algorithm>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 LayerStack::LayerStack() { layerInsert = layers.begin(); }
 
@@ -32,4 +32,4 @@ void LayerStack::popOverlay(ILayer* overlay) {
         layers.erase(it);
 }
 
-} // namespace Chimera::Core
+} // namespace Chimera

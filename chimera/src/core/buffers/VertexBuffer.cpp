@@ -1,7 +1,7 @@
 #include "chimera/core/buffers/VertexBuffer.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 static uint getBufferType(BufferType type) { // SPBufferUsageToOpenGL
     switch (type) {
@@ -51,4 +51,4 @@ void VertexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, bufferID); }
 
 void VertexBuffer::unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-} // namespace Chimera::Core
+} // namespace Chimera

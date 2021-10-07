@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class IndexBuffer {
   public:
@@ -18,5 +18,5 @@ class IndexBuffer {
     uint32_t bufferID;
     uint32_t size;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

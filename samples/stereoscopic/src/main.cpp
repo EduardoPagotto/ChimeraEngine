@@ -15,7 +15,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
-Chimera::Core::CanvasGL* video;
+Chimera::CanvasGL* video;
 Chimera::NodeGroup* group1;
 
 std::map<std::string, Chimera::Shader*> mapa;
@@ -58,7 +58,7 @@ int main(int argn, char** argv) {
         YAML::Node canvas = screen["canvas"];
 
         // Controlador de video
-        video = new Core::CanvasHmd(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
+        video = new CanvasHmd(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
         // video = new CanvasGL(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>());
 
         // Carga dos shaders
@@ -107,7 +107,7 @@ int main(int argn, char** argv) {
         Game* game = new Game(video, group1);
 
         // Controle do fluxo de programa
-        Core::FlowControl* pControle = new Core::FlowControl(game);
+        FlowControl* pControle = new FlowControl(game);
         pControle->run();
 
         SDL_Log("Loop de Game encerrado!!!!");

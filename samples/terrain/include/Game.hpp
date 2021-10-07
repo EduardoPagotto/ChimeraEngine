@@ -10,7 +10,7 @@
 #include "chimera/render/vbs/RenderableIndex.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
-class Game : public Chimera::Core::IEvents {
+class Game : public Chimera::IEvents {
   public:
     Game();
     virtual ~Game();
@@ -25,13 +25,13 @@ class Game : public Chimera::Core::IEvents {
     glm::mat4 model;
 
     Chimera::TrackBall trackBall;
-    Chimera::Core::CanvasGL* pCanvas;
+    Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;
     Chimera::RenderableIndex* pHeightMap;
     Chimera::SimpleRender3d render3d;
-    Chimera::Core::Frustum frustum;
+    Chimera::Frustum frustum;
 };
 
 #endif

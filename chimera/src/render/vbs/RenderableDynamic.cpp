@@ -4,7 +4,7 @@
 namespace Chimera {
 
 RenderableDynamic::RenderableDynamic(const uint32_t& max) : max(max) {
-    vbo = new Core::VertexBuffer(Core::BufferType::STREAM); //????
+    vbo = new VertexBuffer(BufferType::STREAM); //????
     vbo->bind();
 
     BufferLayout layout;

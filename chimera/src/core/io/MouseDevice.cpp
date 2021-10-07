@@ -1,6 +1,6 @@
 #include "chimera/core/io/MouseDevice.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 std::map<uint8_t, uint8_t> MouseDevice::buttonState;
 
@@ -13,4 +13,4 @@ uint8_t MouseDevice::getButtonState(const uint8_t& indice) {
 }
 
 void MouseDevice::update(SDL_MouseButtonEvent* pMb) { MouseDevice::buttonState[pMb->button] = pMb->state; }
-} // namespace Chimera::Core
+} // namespace Chimera

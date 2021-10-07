@@ -22,7 +22,7 @@ class VisitorRender : public VisitorInterface {
     virtual void visit(class NodeHUD* _pHUD) override;
 
     Transform* pTransform;
-    Core::CanvasGL* pVideo;
+    CanvasGL* pVideo;
     int eye;
 
     SimpleRender3d render3D;

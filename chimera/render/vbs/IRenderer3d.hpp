@@ -7,7 +7,7 @@ namespace Chimera {
 
 class IRenderer3d {
   public:
-    virtual void begin(Core::Frustum* frustrun) = 0;
+    virtual void begin(Frustum* frustrun) = 0;
     virtual void submit(class IRenderable* renderable) = 0;
     virtual void end() = 0;
     virtual void flush() = 0;

@@ -10,16 +10,16 @@
 #include "chimera/render/2d/layer/Layer.hpp"
 #include "chimera/render/FontAtlas.hpp"
 
-class Game : public Chimera::Core::IEvents {
+class Game : public Chimera::IEvents {
   public:
-    Game(Chimera::Core::CanvasGL* _pVideo);
+    Game(Chimera::CanvasGL* _pVideo);
     virtual ~Game();
     virtual void onStart() override;
     virtual void onUpdate() override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    Chimera::Core::CanvasGL* pVideo;
+    Chimera::CanvasGL* pVideo;
     Chimera::ShaderLibrary sl;
     Chimera::Shader* shader;
     TileLayer *layer, *layer2;
@@ -28,7 +28,7 @@ class Game : public Chimera::Core::IEvents {
 
     int fps;
     Chimera::FontAtlas* fa;
-    Chimera::Core::LayerStack* layerStack;
+    Chimera::LayerStack* layerStack;
 };
 
 #endif

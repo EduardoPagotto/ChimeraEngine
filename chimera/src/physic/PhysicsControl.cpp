@@ -168,7 +168,7 @@ void PhysicsControl::checkCollisions() {
             if (contactActives.find((*it).first) == contactActives.end()) {
 
                 if (checkAllowCollision((*it).second.first) == true) {
-                    Core::utilSendEvent(Core::EVENT_COLLIDE_START, (*it).second.first, (*it).second.second);
+                    utilSendEvent(EVENT_COLLIDE_START, (*it).second.first, (*it).second.second);
                 }
 
             } else {
@@ -185,7 +185,7 @@ void PhysicsControl::checkCollisions() {
             if (new_contacts.find((*it).first) == new_contacts.end()) {
 
                 if (checkAllowCollision((*it).second.first) == true) {
-                    Core::utilSendEvent(Core::EVENT_COLLIDE_OFF, (*it).second.first, (*it).second.second);
+                    utilSendEvent(EVENT_COLLIDE_OFF, (*it).second.first, (*it).second.second);
                 }
             }
         }

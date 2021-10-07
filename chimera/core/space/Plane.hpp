@@ -4,7 +4,7 @@
 #include "chimera/core/VertexData.hpp"
 #include <glm/glm.hpp>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class Plane {
   public:
@@ -34,5 +34,5 @@ class Plane {
     int O;
 };
 
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

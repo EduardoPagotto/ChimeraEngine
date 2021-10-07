@@ -4,7 +4,7 @@
 #include "CanvasGL.hpp"
 #include "Eye.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 class CanvasHmd : public CanvasGL {
   public:
@@ -25,6 +25,6 @@ class CanvasHmd : public CanvasGL {
     Eye* pRight;
     Shader* pShader;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 
 #endif

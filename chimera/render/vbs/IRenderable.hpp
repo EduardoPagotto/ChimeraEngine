@@ -14,9 +14,9 @@ class IRenderable {
     virtual void debugDados() = 0;
     virtual uint32_t getSize() const = 0;
     virtual Shader* getShader() const = 0;
-    virtual Core::VertexArray* getVao() const = 0;
-    virtual Core::IndexBuffer* getIBO() const = 0;
-    virtual Core::AABB* getAABB() = 0;
+    virtual VertexArray* getVao() const = 0;
+    virtual IndexBuffer* getIBO() const = 0;
+    virtual AABB* getAABB() = 0;
     virtual void submit(class IRenderer3d* renderer) = 0;
 };
 

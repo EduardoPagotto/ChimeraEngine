@@ -15,15 +15,15 @@ class RenderableStatic : public IRenderable {
     virtual void debugDados() override;
     virtual uint32_t getSize() const override { return ibo->getCount(); }
     virtual Shader* getShader() const { return nullptr; };
-    virtual Core::VertexArray* getVao() const { return vao; }
-    virtual Core::IndexBuffer* getIBO() const { return ibo; }
-    virtual Core::AABB* getAABB() override { return &aabb; }
+    virtual VertexArray* getVao() const { return vao; }
+    virtual IndexBuffer* getIBO() const { return ibo; }
+    virtual AABB* getAABB() override { return &aabb; }
     virtual void submit(IRenderer3d* renderer) override;
 
   private:
-    Core::AABB aabb;
-    Core::VertexArray* vao;
-    Core::IndexBuffer* ibo;
+    AABB aabb;
+    VertexArray* vao;
+    IndexBuffer* ibo;
 };
 } // namespace Chimera
 #endif

@@ -1,7 +1,7 @@
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 VertexArray::VertexArray() { glGenVertexArrays(1, &arrayID); }
 
@@ -19,4 +19,4 @@ void VertexArray::bind() const { glBindVertexArray(arrayID); }
 
 void VertexArray::unbind() const { glBindVertexArray(0); }
 
-} // namespace Chimera::Core
+} // namespace Chimera

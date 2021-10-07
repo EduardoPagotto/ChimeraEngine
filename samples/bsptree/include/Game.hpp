@@ -9,18 +9,18 @@
 #include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
-class Game : public Chimera::Core::IEvents {
+class Game : public Chimera::IEvents {
   public:
-    Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
+    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
     virtual ~Game();
     virtual void onStart() override;
     virtual void onUpdate() override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    Chimera::Core::BspTree bspTree;
+    Chimera::BspTree bspTree;
     Chimera::TrackBall trackBall;
-    Chimera::Core::CanvasGL* pCanvas;
+    Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
 
     glm::mat4 projection;
@@ -28,7 +28,7 @@ class Game : public Chimera::Core::IEvents {
     glm::mat4 model;
 
     Chimera::Texture* pTex;
-    Chimera::Core::Frustum frustum;
+    Chimera::Frustum frustum;
     Chimera::SimpleRender3d render3d;
     Chimera::RenderableBsp* renderz1;
 };

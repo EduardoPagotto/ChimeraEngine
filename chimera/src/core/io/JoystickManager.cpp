@@ -1,6 +1,6 @@
 #include "chimera/core/io/JoystickManager.hpp"
 
-namespace Chimera::Core {
+namespace Chimera {
 
 std::map<SDL_JoystickID, JoystickState> JoystickManager::Joysticks;
 
@@ -111,4 +111,4 @@ void JoystickManager::debug() {
         }
     }
 }
-} // namespace Chimera::Core
+} // namespace Chimera

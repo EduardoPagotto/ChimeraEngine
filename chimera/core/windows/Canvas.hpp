@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 /**
  * Class Canvas
@@ -37,5 +37,5 @@ class Canvas {
     SDL_Window* window;
     SDL_Point winPosPrev;
 };
-} // namespace Chimera::Core
+} // namespace Chimera
 #endif

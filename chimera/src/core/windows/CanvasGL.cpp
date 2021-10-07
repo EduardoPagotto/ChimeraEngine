@@ -3,7 +3,7 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Chimera::Core {
+namespace Chimera {
 
 CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen) : Canvas(_title, _width, _height, _fullScreen) {
 
@@ -151,4 +151,4 @@ std::string CanvasGL::getVersaoOpenGL() {
     return retorno;
 }
 
-} // namespace Chimera::Core
+} // namespace Chimera

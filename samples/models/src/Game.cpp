@@ -8,7 +8,7 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
 
-Game::Game(Chimera::Core::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld)
+Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld)
     : pCanvas(_pCanvas), pRoot(_pRoot), physicWorld(_physicWorld) {
 
     pCorpoRigido = nullptr;
@@ -56,38 +56,38 @@ void Game::updatePos() {
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
-    using namespace Chimera::Core;
+
     switch (event.type) {
         case SDL_USEREVENT: {
             Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
             Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
 
             switch (event.user.code) {
-                case Chimera::Core::EVENT_COLLIDE_START: {
+                case Chimera::EVENT_COLLIDE_START: {
                     Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
                     Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
                 } break;
-                case Chimera::Core::EVENT_COLLIDE_ON: {
+                case Chimera::EVENT_COLLIDE_ON: {
                     Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
                     Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
                 } break;
-                case Chimera::Core::EVENT_COLLIDE_OFF: {
+                case Chimera::EVENT_COLLIDE_OFF: {
                     Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
                     Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
                 } break;
-                case Chimera::Core::EVENT_TOGGLE_FULL_SCREEN:
+                case Chimera::EVENT_TOGGLE_FULL_SCREEN:
                     pCanvas->toggleFullScreen();
                     break;
-                case Chimera::Core::EVENT_NEW_FPS: {
+                case Chimera::EVENT_NEW_FPS: {
                     uint32_t* fps = (uint32_t*)event.user.data1;
                     glm::vec3 val1 = pCorpoRigido->getPosition();
                     sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
                     textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
                 } break;
-                // case Chimera::Core::EVENT_FLOW_START:
+                // case Chimera::EVENT_FLOW_START:
                 //     this->start();
                 default:
                     break;

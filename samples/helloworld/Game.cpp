@@ -8,11 +8,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
 
-Game::Game(Chimera::CanvasGL* _pVideo) : pVideo(_pVideo) {}
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
-Game::~Game() {}
-
-void Game::onStart() {
     using namespace Chimera;
 
     srand(time(nullptr));
@@ -29,12 +26,17 @@ void Game::onStart() {
     // group->add(button);
     // layer->add(group);
 
-    TextureManager::loadFromFile("t01", "./data/images/grid1.png", TextureParameters());
-    TextureManager::loadFromFile("t02", "./data/images/grid2.png", TextureParameters());
-    TextureManager::loadFromFile("t03", "./data/images/grid3.png", TextureParameters());
+    TextureManager::loadFromFile("t01", "./assets/textures/grid1.png", TextureParameters());
+    TextureManager::loadFromFile("t02", "./assets/textures/grid2.png", TextureParameters());
+    TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TextureParameters());
 
-    sl.load("./assets/shaders/Basic2D.glsl");
-    shader = sl.get("Basic2D");
+    shader = shaderLibrary.load("./assets/shaders/Basic2D.glsl");
+}
+
+Game::~Game() {}
+
+void Game::onStart() {
+    using namespace Chimera;
     shader->enable();
 
     layer = new TileLayer(shader);
@@ -52,7 +54,7 @@ void Game::onStart() {
     }
 
     FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./samples/models/fonts/FreeSans.ttf", 22));
-    FontManager::get()->setScale(glm::vec2(pVideo->getWidth() / 32.0f, pVideo->getHeight() / 18.0f)); // em TileLayer ortho values!!!
+    FontManager::get()->setScale(glm::vec2(canvas->getWidth() / 32.0f, canvas->getHeight() / 18.0f)); // em TileLayer ortho values!!!
     lFPS = new Label("None", -15.5f, 7.8f, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
 
@@ -66,14 +68,8 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case EVENT_TOGGLE_FULL_SCREEN:
-                    pVideo->toggleFullScreen();
+                    canvas->toggleFullScreen();
                     break;
-
-                case Chimera::EVENT_FLOW_START: {
-                    layerStack = (Chimera::LayerStack*)event.user.data1;
-                    this->onStart();
-                } break;
-
                 case EVENT_NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
@@ -87,9 +83,6 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDLK_ESCAPE:
                     utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
                     break;
-                // case SDLK_1:
-                //     render3d.logToggle();
-                //     break;
                 case SDLK_F10:
                     utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
@@ -110,7 +103,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    pVideo->reshape(event.window.data1, event.window.data2);
+                    canvas->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -122,7 +115,7 @@ void Game::onUpdate() {
 
     lFPS->setText(std::string("FPS: ") + std::to_string(fps));
 
-    pVideo->before();
+    canvas->before();
     shader->enable();
     shader->setUniform2fv("light_pos", 1,
                           glm::value_ptr(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f))));
@@ -131,6 +124,6 @@ void Game::onUpdate() {
 
     shader->disable();
 
-    pVideo->after();
-    pVideo->swapWindow();
+    canvas->after();
+    canvas->swapWindow();
 }

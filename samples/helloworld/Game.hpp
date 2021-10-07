@@ -2,33 +2,26 @@
 #define __HELLOWORD_TEST__HPP
 
 #include "TileLayer.hpp"
-#include "chimera/core/ShaderLibrary.hpp"
-#include "chimera/core/io/IEvents.hpp"
-#include "chimera/core/io/LayerStack.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
+#include "chimera/core/Application.hpp"
 #include "chimera/render/2d/Label.hpp"
-#include "chimera/render/2d/layer/Layer.hpp"
 #include "chimera/render/FontAtlas.hpp"
 
-class Game : public Chimera::IEvents {
+class Game : public Chimera::Application {
   public:
-    Game(Chimera::CanvasGL* _pVideo);
+    Game(Chimera::Canvas* canvas);
     virtual ~Game();
     virtual void onStart() override;
     virtual void onUpdate() override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    Chimera::CanvasGL* pVideo;
-    Chimera::ShaderLibrary sl;
     Chimera::Shader* shader;
-    TileLayer *layer, *layer2;
     Chimera::Label* lFPS;
+    TileLayer *layer, *layer2;
     uint16_t x, y;
 
     int fps;
     Chimera::FontAtlas* fa;
-    Chimera::LayerStack* layerStack;
 };
 
 #endif

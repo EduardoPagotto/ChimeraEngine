@@ -1,6 +1,5 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
 #include <iostream>
 
@@ -15,17 +14,11 @@ int main(int argn, char** argv) {
         SDL_Log("Parametros %d: %s", i, argv[i]);
 
     try {
-        CanvasGL* video = new CanvasGL("Hello", 960, 540);
-
-        Game* game = new Game(video);
-        FlowControl* pControle = new FlowControl(game);
-        pControle->run();
+        Game* game = new Game(new CanvasGL("Hello", 960, 540));
+        game->run();
 
         SDL_Log("Loop de Game encerrado!!!!");
-
-        delete pControle;
         delete game;
-        delete video;
 
         SDL_Log("Hello finalizado");
         return 0;

@@ -1,18 +1,16 @@
-#ifndef __GAME_TESTE_BSTREE__HPP
-#define __GAME_TESTE_BSTREE__HPP
+#ifndef __GAME_TESTE_TERRAIN__HPP
+#define __GAME_TESTE_TERRAIN__HPP
 
-#include "chimera/core/Shader.hpp"
+#include "chimera/core/Application.hpp"
 #include "chimera/core/TrackBall.hpp"
-#include "chimera/core/io/IEvents.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/vbs/RenderableIndex.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
-class Game : public Chimera::IEvents {
+class Game : public Chimera::Application {
   public:
-    Game();
+    Game(Chimera::Canvas* canvas);
     virtual ~Game();
     // Inherited via IEvents
     virtual void onStart() override;
@@ -25,7 +23,6 @@ class Game : public Chimera::IEvents {
     glm::mat4 model;
 
     Chimera::TrackBall trackBall;
-    Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;

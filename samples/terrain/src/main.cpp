@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/io/FlowControl.hpp"
+#include "chimera/core/windows/CanvasGL.hpp"
 
 int main(int argn, char** argv) {
 
@@ -8,11 +8,8 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Game* game = new Game();
-        Chimera::FlowControl* pControl = new Chimera::FlowControl(game);
-        pControl->run();
-
-        delete pControl;
+        Game* game = new Game(new Chimera::CanvasGL("Chimera", 600, 400));
+        game->run();
         delete game;
 
         SDL_Log("Finalizado com sucesso");

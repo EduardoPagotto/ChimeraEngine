@@ -6,13 +6,12 @@
 #include "chimera/render/LoadHeightMap.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-Game::Game() {
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     projection = glm::mat4(1.0f);
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    pCanvas = new Chimera::CanvasGL("Chimera", 600, 400);
-    pShader = new Chimera::Shader("MeshFullShadow", "./chimera/shaders/MeshFullShadow.vert", "./chimera/shaders/MeshFullShadow.frag");
+    pShader = shaderLibrary.load("./assets/shaders/MeshFullShadow.glsl");
 
     pMaterial = new Chimera::Material();
     pMaterial->setDefaultEffect();
@@ -37,10 +36,7 @@ Game::Game() {
     pHeightMap = nullptr;
 }
 
-Game::~Game() {
-    delete pShader;
-    delete pCanvas;
-}
+Game::~Game() { delete pShader; }
 
 void Game::onStart() {
 
@@ -52,7 +48,7 @@ void Game::onStart() {
     // glShadeModel(GL_SMOOTH);
 
     // enable z-buffer here
-    pCanvas->afterStart();
+    canvas->afterStart();
 
     // pTex->init();
     pMaterial->init();
@@ -78,7 +74,7 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    pCanvas->toggleFullScreen();
+                    canvas->toggleFullScreen();
                     break;
             }
 
@@ -121,7 +117,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    pCanvas->reshape(event.window.data1, event.window.data2);
+                    canvas->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -130,7 +126,7 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onUpdate() {
-    pCanvas->before();
+    canvas->before();
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
     if (render3d.getLog() == true) {
@@ -140,7 +136,7 @@ void Game::onUpdate() {
     pShader->enable();
 
     // Calcula view e projection baseado em vp
-    pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
+    canvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projection);
     glm::mat4 viewMatrixInverse = glm::inverse(view);
@@ -170,6 +166,6 @@ void Game::onUpdate() {
 
     render3d.flush();
 
-    pCanvas->after();
-    pCanvas->swapWindow();
+    canvas->after();
+    canvas->swapWindow();
 }

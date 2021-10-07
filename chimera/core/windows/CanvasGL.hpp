@@ -22,7 +22,7 @@ class CanvasGL : public Canvas {
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
     virtual int getTotEyes() { return 1; }
 
-    virtual void afterStart();
+    virtual void afterStart() override;
     std::string getVersaoOpenGL();
 
   protected:

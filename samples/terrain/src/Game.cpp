@@ -18,7 +18,7 @@ Game::Game() {
     pMaterial->setDefaultEffect();
     pMaterial->setShine(50.0f);
 
-    Chimera::TextureManager::loadFromFile("grid2", "./data/images/grid2.png", Chimera::TextureParameters());
+    Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
     pMaterial->addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
 
     Chimera::ViewPoint* pVp = new Chimera::ViewPoint();

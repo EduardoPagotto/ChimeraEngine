@@ -89,7 +89,7 @@ code --install-extension xaver.clang-format
     pMat->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
     pMat->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
     pMat->setShine(32.0f);
-    pMat->addTexture(new TextureSurface(SHADE_TEXTURE_DIFFUSE, "./data/images/grid1.png"));
+    pMat->addTexture(new TextureSurface(SHADE_TEXTURE_DIFFUSE, "./assets/textures/grid1.png"));
 
     NodeMesh* pMesh = new NodeMesh(group1, name);
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));

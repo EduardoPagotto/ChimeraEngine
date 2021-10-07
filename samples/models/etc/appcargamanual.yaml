@@ -22,4 +22,4 @@ size: 18
 
 textures:
   - name: TexParticleEmmiter
-    tex: ./data/images/Particle2.png
+    tex: ./assets/textures/Particle2.png

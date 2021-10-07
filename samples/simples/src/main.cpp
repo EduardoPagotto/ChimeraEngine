@@ -1,7 +1,5 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
 #include <iostream>
 
@@ -12,19 +10,10 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("simples", 640, 480);
+        Game* game = new Game(new Chimera::CanvasGL("simples", 640, 480));
+        game->run();
 
-        Chimera::Shader* pShader =
-            new Chimera::Shader("Simples1", "./samples/simples/shaders/simples.vert", "./samples/simples/shaders/simples.frag");
-
-        Game* game = new Game(video, pShader);
-
-        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
-        pControle->run();
-
-        delete pControle;
         delete game;
-        delete video;
 
         SDL_Log("Sucesso");
         return 0;

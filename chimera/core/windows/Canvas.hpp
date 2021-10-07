@@ -31,6 +31,7 @@ class Canvas {
                                                glm::mat4& pProjection) = 0;
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) = 0;
     virtual int getTotEyes() = 0;
+    virtual void afterStart() = 0;
 
     inline int getWidth() const { return width; }
     inline int getHeight() const { return height; }

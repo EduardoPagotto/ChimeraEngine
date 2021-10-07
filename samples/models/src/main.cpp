@@ -88,7 +88,7 @@ int main(int argn, char** argv) {
         Chimera::NodeParticleEmitter* pParticleEmitter = new Chimera::NodeParticleEmitter(gParticle, "testeZ1", 10000);
         pParticleEmitter->setTransform(new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
 
-        pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./data/images/Particle2.png"));
+        pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./assets/textures/Particle2.png"));
 
         // Create and add hud data text
         Chimera::NodeGroup* gHud = new Chimera::NodeGroup((Chimera::Node*)pRoot, "HUD-Group");

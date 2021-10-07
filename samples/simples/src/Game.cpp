@@ -6,7 +6,9 @@
 #include "chimera/render/LoadObj.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
+
+    pShader = shaderLibrary.load("./assets/shaders/Simples.glsl");
     projection = glm::mat4(1.0f);
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
@@ -25,7 +27,7 @@ void Game::onStart() {
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
     // Habilita o depth buffer/culling face
-    pCanvas->afterStart();
+    canvas->afterStart();
     glEnable(GL_COLOR_MATERIAL);
 
     // glEnable(GL_LIGHTING);
@@ -49,7 +51,7 @@ void Game::onStart() {
         loader.getMaterial(material);
     else {
         material.setDefaultEffect();
-        Chimera::TextureManager::loadFromFile("tex_mapa", "./data/images/grid2.png", Chimera::TextureParameters());
+        Chimera::TextureManager::loadFromFile("tex_mapa", "./assets/textures/grid2.png", Chimera::TextureParameters());
         material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
     }
 
@@ -74,7 +76,7 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    pCanvas->toggleFullScreen();
+                    canvas->toggleFullScreen();
                     break;
             }
 
@@ -116,7 +118,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    pCanvas->reshape(event.window.data1, event.window.data2);
+                    canvas->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -125,14 +127,14 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onUpdate() {
-    pCanvas->before();
+    canvas->before();
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
     pShader->enable();
 
     // Calcula view e projection baseado em vp
-    pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
+    canvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projection);
     glm::mat4 viewMatrixInverse = glm::inverse(view);
@@ -153,6 +155,6 @@ void Game::onUpdate() {
 
     render3D.flush();
 
-    pCanvas->after();
-    pCanvas->swapWindow();
+    canvas->after();
+    canvas->swapWindow();
 }

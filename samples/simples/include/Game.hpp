@@ -1,19 +1,17 @@
 #ifndef __GAME_SIMPLES__HPP
 #define __GAME_SIMPLES__HPP
 
-#include "chimera/core/Shader.hpp"
+#include "chimera/core/Application.hpp"
 #include "chimera/core/Texture.hpp"
 #include "chimera/core/TrackBall.hpp"
-#include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/vbs/RenderableStatic.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
-class Game : public Chimera::IEvents {
+class Game : public Chimera::Application {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
-
+    Game(Chimera::Canvas* canvas);
     virtual ~Game();
     // Inherited via IEvents
     virtual void onStart() override;
@@ -25,7 +23,6 @@ class Game : public Chimera::IEvents {
     glm::mat4 view;
     glm::mat4 model;
     Chimera::TrackBall trackBall;
-    Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
     Chimera::Material material;
     Chimera::RenderableStatic* rederable;

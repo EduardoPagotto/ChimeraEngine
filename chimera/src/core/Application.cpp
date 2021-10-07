@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-Application::Application() : pause(true) {
+Application::Application(Canvas* canvas) : canvas(canvas), pause(true) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
@@ -17,6 +17,8 @@ Application::~Application() {
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
+
+    delete canvas;
 }
 
 bool Application::changeStatusFlow(SDL_Event* pEventSDL) {

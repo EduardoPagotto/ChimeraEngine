@@ -1,16 +1,22 @@
 #ifndef __CHIMERA_APPLICATION_CONTROLLER__HPP
 #define __CHIMERA_APPLICATION_CONTROLLER__HPP
 
-#include "chimera/core/io/LayerStack.hpp"
-#include "chimera/core/io/Timer.hpp"
+#include "ShaderLibrary.hpp"
+#include "io/LayerStack.hpp"
+#include "io/Timer.hpp"
+#include "windows/Canvas.hpp"
 
 namespace Chimera {
 
 class Application {
   public:
-    Application();
+    Application(Canvas* canvas);
     virtual ~Application();
     void run();
+
+  protected:
+    Canvas* canvas;
+    ShaderLibrary shaderLibrary;
 
   private:
     virtual void onStart() = 0;

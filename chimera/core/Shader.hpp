@@ -50,16 +50,5 @@ class Shader {
     GLuint shaderId;
     std::string name;
 };
-
-class ShaderLibrary {
-  public:
-    bool add(Shader* shader);
-    Shader* load(const std::string& filepath);
-    Shader* get(const std::string& name);
-
-  private:
-    std::unordered_map<std::string, Shader*> shaders;
-};
-
 } // namespace Chimera
 #endif

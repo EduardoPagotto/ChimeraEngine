@@ -2,7 +2,7 @@
 #define __HELLOWORD_TEST__HPP
 
 #include "TileLayer.hpp"
-#include "chimera/core/Shader.hpp"
+#include "chimera/core/ShaderLibrary.hpp"
 #include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/io/LayerStack.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"

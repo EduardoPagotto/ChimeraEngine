@@ -21,6 +21,7 @@ set (SourcesCore windows/CanvasGL.cpp
 				 TrackBall.cpp
 				 TrackHead.cpp
 				 Shader.cpp
+				 ShaderLibrary.cpp
 				 VertexData.cpp
 				 Transform.cpp
 				 io/utils.cpp

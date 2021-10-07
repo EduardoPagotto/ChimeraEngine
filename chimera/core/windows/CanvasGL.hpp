@@ -21,6 +21,7 @@ class CanvasGL : public Canvas {
     virtual void calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& pView, glm::mat4& pProjection);
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
     virtual int getTotEyes() { return 1; }
+    virtual uint32_t* getPixels() override { return nullptr; }
 
     virtual void afterStart() override;
     std::string getVersaoOpenGL();

@@ -3,7 +3,7 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/io/utils.hpp"
 
-Game::Game(Chimera::CanvasFB* _pCanvas) : pCanvas(_pCanvas) {}
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
 
 Game::~Game() {}
 
@@ -14,9 +14,9 @@ void Game::onStart() {
 
     // init framebuffer
     frame = new Frame;
-    frame->data = pCanvas->getPixels();
-    frame->width = pCanvas->getWidth();
-    frame->height = pCanvas->getHeight();
+    frame->data = canvas->getPixels();
+    frame->width = canvas->getWidth();
+    frame->height = canvas->getHeight();
 
     // estado de inicialização
     state = new State;
@@ -26,7 +26,7 @@ void Game::onStart() {
 
     world = new World;
 
-    if (!LoadWorld("./samples/raycasting/world.txt", world)) {
+    if (!LoadWorld("assets/maps/raycasting_world.txt", world)) {
         printf("\nError loading world file!");
         exit(0);
     }
@@ -39,7 +39,7 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    pCanvas->toggleFullScreen();
+                    canvas->toggleFullScreen();
                     break;
             }
 
@@ -104,7 +104,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    pCanvas->reshape(event.window.data1, event.window.data2);
+                    canvas->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -113,9 +113,9 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onUpdate() {
-    pCanvas->before();
+    canvas->before();
 
     RenderScene(*state, *world, *frame);
 
-    pCanvas->after();
+    canvas->after();
 }

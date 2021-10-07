@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib ./data/models/tela01.mtl
+mtllib ./assets/models/tela01.mtl
 o Plane.001_Plane.002
 
 v -1.0 0.0  1.0

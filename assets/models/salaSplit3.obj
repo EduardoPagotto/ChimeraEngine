@@ -1,6 +1,6 @@
 # salaSplit1.obj
 #
-mtllib ./data/models/parede_simples.mtl
+mtllib ./assets/models/parede_simples.mtl
 # g salaSplit1
 
 # Point Down

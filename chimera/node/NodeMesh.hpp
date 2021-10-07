@@ -47,6 +47,7 @@ class NodeMesh : public Node {
 };
 
 NodeMesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMaterial);
+void createMeshTexturizade(Node* parent, std::string name, std::string file, float scale, glm::vec3 _position);
 
 } // namespace Chimera
 #endif

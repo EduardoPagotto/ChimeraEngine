@@ -1,14 +1,13 @@
 #ifndef __GAME_EVENTS_TEST__HPP
 #define __GAME_EVENTS_TEST__HPP
 
-#include "chimera/core/io/IEvents.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
+#include "chimera/core/Application.hpp"
 #include "chimera/node/Node.hpp"
 #include "chimera/node/VisitorRender.hpp"
 
-class Game : public Chimera::IEvents {
+class Game : public Chimera::Application {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot);
+    Game(Chimera::Canvas* canvas, const std::vector<std::string>& shadesFile);
     virtual ~Game();
     // Inherited via IEvents
     virtual void onStart() override;
@@ -20,5 +19,4 @@ class Game : public Chimera::IEvents {
     Chimera::CanvasGL* pCanvas;
     Chimera::Node* pRoot;
 };
-
 #endif

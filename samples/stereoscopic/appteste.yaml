@@ -4,6 +4,4 @@ screen:
     w: 900
     h: 900
 shaders:
-  - name: mesh-default
-    vertex: ./chimera/shaders/MeshFullShadow.vert
-    fragment: ./chimera/shaders/MeshFullShadow.frag
+  - "./assets/shaders/MeshFullShadow.glsl"

@@ -3,6 +3,7 @@
 #include "chimera/node/VisitorInterface.hpp"
 #include "chimera/render/LoadObj.hpp"
 #include <SDL2/SDL.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include <iterator>
 
 namespace Chimera {
@@ -80,6 +81,20 @@ NodeMesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMate
 
     pMesh->setMaterial(_pMaterial);
     return pMesh;
+}
+
+void createMeshTexturizade(Node* parent, std::string name, std::string file, float scale, glm::vec3 _position) {
+
+    Material* pMap = new Material();
+    NodeMesh* pMesh = new NodeMesh(parent, name);
+
+    LoaderObj loader;
+    loader.getMesh(file, pMesh->meshData);
+    loader.getMaterial(*pMap);
+
+    vertexDataMeshScale(&pMesh->meshData, scale, pMap->hasTexture());
+    pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
+    pMesh->setMaterial(pMap);
 }
 
 } // namespace Chimera

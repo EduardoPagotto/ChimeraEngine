@@ -56,9 +56,9 @@ void Game::onStart() {
     Chimera::MeshData m;
 
     Chimera::LoadHeightMap loader(32, 32);
-    loader.getMesh("./data/terrain/terrain3.jpg", m, glm::vec3(1000.0, 200.0, 1000.0));
-    // loader.getMesh("./data/terrain/heightmap_16x16.png", m, glm::vec3(100.0, 30.0, 100.0));
-    // loader.getMesh("./data/terrain/heightmap_4x4.png", m, glm::vec3(1000.0, 10.0, 1000.0));
+    loader.getMesh("./assets/heightmaps/terrain3.jpg", m, glm::vec3(1000.0, 200.0, 1000.0));
+    // loader.getMesh("./assets/heightmaps/heightmap_16x16.png", m, glm::vec3(100.0, 30.0, 100.0));
+    // loader.getMesh("./assets/heightmaps/heightmap_4x4.png", m, glm::vec3(1000.0, 10.0, 1000.0));
     loader.split(m.vertexIndex);
 
     std::vector<Chimera::VertexData> vertexDataIn;

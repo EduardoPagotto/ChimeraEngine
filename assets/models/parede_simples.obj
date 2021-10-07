@@ -1,6 +1,6 @@
 # Blender v2.80 (sub 75) OBJ File: 'parede_simples.blend'
 # www.blender.org
-mtllib ./data/models/parede_simples.mtl
+mtllib ./assets/models/parede_simples.mtl
 o Plane.002_Plane.003
 v -100.000000 -10.000000 -100.000000
 v -100.000000  10.000000 -100.000000

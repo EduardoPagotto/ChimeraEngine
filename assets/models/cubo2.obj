@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'cubo.blend'
 # www.blender.org
-mtllib ./data/models/cubo2.mtl
+mtllib ./assets/models/cubo2.mtl
 o Cube
 v 1.000000 -1.000000 -1.000000
 v 1.000000 -1.000000 1.000000

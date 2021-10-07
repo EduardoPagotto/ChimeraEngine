@@ -3,7 +3,7 @@ screen:
   canvas:
     w: 800
     h: 600
-model: ./data/models/piso2.xml
+model: ./assets/models/piso2.xml
 shaders:
   - name: mesh-default
     vertex: ./chimera/shaders/MeshFullShadow.vert

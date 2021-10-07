@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib ./data/models/cubo_textura_simples.mtl
+mtllib ./assets/models/cubo_textura_simples.mtl
 o Cube
 v  5.0 -5.0 -5.0
 v  5.0 -5.0  5.0

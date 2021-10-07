@@ -40,12 +40,12 @@ void Game::onStart() {
 
     Chimera::MeshData m;
     Chimera::LoaderObj loader;
-    // loader.getMesh("./data/models/tela01.obj", m);
-    // loader.getMesh("./data/models/square2.obj", m);
-    // loader.getMesh("./data/models/parede_simples.obj", m);
-    // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
-    loader.getMesh("./data/models/map02.obj", m);
-    // loader.getMesh("./data/models/salaSplit3.obj", m); // Sala L com Split
+    // loader.getMesh("./assets/models/tela01.obj", m);
+    // loader.getMesh("./assets/models/square2.obj", m);
+    // loader.getMesh("./assets/models/parede_simples.obj", m);
+    // loader.getMesh("./assets/models/cubo_textura_simples.obj", m);
+    loader.getMesh("./assets/models/map02.obj", m);
+    // loader.getMesh("./assets/models/salaSplit3.obj", m); // Sala L com Split
 
     if (loader.hasMaterial() == true)
         loader.getMaterial(material);

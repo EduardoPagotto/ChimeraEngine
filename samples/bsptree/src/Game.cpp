@@ -43,21 +43,21 @@ void Game::onStart() {
     // pTex->init();
     // Chimera::MeshData m;
     // Chimera::LoaderObj loader;
-    // // loader.getMesh("./data/models/tela01.obj", m); // quadrado simples pequeno
-    // // loader.getMesh("./data/models/salaSplit3.obj", m); // Sala L com Split apenas triangulos
-    // loader.getMesh("./data/models/map02.obj", m); // Sala com 5 espacos em forma de X
-    // // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para EPSILON 1e-2
-    // // loader.getMesh("./data/models/square2.obj", m); // 2 quadrado teste de split lateral
-    // // loader.getMesh("./data/models/square1.obj", m); // 2 quadrado teste de split centro
-    // // loader.getMesh("./data/models/split1.obj", m); // 2 triangulos sem textura
-    // // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
+    // // loader.getMesh("./assets/models/tela01.obj", m); // quadrado simples pequeno
+    // // loader.getMesh("./assets/models/salaSplit3.obj", m); // Sala L com Split apenas triangulos
+    // loader.getMesh("./assets/models/map02.obj", m); // Sala com 5 espacos em forma de X
+    // // loader.getMesh("./assets/models/parede_simples.obj", m); // FIXME Falha para EPSILON 1e-2
+    // // loader.getMesh("./assets/models/square2.obj", m); // 2 quadrado teste de split lateral
+    // // loader.getMesh("./assets/models/square1.obj", m); // 2 quadrado teste de split centro
+    // // loader.getMesh("./assets/models/split1.obj", m); // 2 triangulos sem textura
+    // // loader.getMesh("./assets/models/cubo_textura_simples.obj", m);
     // // m.changeSize(30.0, true);
 
     std::vector<uint32_t> vIndex;
     std::vector<Chimera::VertexData> vVertexIndexed;
 
     // Usando o Maze
-    Chimera::Maze maze = Chimera::Maze("./data/maze7.txt");
+    Chimera::Maze maze = Chimera::Maze("./assets/maps/maze7.txt");
     maze.createMap();
 
     vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);

@@ -15,6 +15,13 @@ class CanvasFB : public Canvas {
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
 
+    // FIXME:  ver depois!!!!
+    virtual void swapWindow() override{};
+    virtual void calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& pView,
+                                               glm::mat4& pProjection) override{};
+    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override { return glm::mat4(1.0f); }
+    virtual int getTotEyes() override { return 1; }
+
     uint32_t* getPixels() { return pixels; }
 
     uint32_t getPixelFormat() { return pixelFormat; }

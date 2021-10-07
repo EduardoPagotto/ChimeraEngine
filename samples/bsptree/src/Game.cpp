@@ -10,13 +10,16 @@
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
+
+    pShader = shaderLibrary.load("./assets/shaders/MeshNoMat.glsl");
 
     projection = glm::mat4(1.0f);
     view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
-    Chimera::TextureManager::loadFromFile("tex01", "./data/images/grid2.png", Chimera::TextureParameters());
+    // FIXME: no load retornar a textura ou null se nao existir
+    Chimera::TextureManager::loadFromFile("tex01", "./assets/textures/grid2.png", Chimera::TextureParameters());
     pTex = Chimera::TextureManager::getLast();
 }
 
@@ -70,7 +73,7 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    pCanvas->toggleFullScreen();
+                    canvas->toggleFullScreen();
                     break;
             }
 
@@ -111,7 +114,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    pCanvas->reshape(event.window.data1, event.window.data2);
+                    canvas->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -120,7 +123,7 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onUpdate() {
-    pCanvas->before();
+    canvas->before();
 
     Chimera::ViewPoint* vp = trackBall.getViewPoint();
 
@@ -131,7 +134,7 @@ void Game::onUpdate() {
     pShader->enable();
 
     // Calcula view e projection baseado em vp
-    pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
+    canvas->calcPerspectiveProjectionView(0, vp, view, projection);
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projection);
     glm::mat4 viewMatrixInverse = glm::inverse(view);
@@ -153,6 +156,6 @@ void Game::onUpdate() {
 
     render3d.flush();
 
-    pCanvas->after();
-    pCanvas->swapWindow();
+    canvas->after();
+    canvas->swapWindow();
 }

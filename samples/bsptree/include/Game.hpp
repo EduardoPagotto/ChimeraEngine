@@ -1,17 +1,15 @@
 #ifndef __GAME_TESTE_BSTREE__HPP
 #define __GAME_TESTE_BSTREE__HPP
 
-#include "chimera/core/Shader.hpp"
+#include "chimera/core/Application.hpp"
 #include "chimera/core/Texture.hpp"
 #include "chimera/core/TrackBall.hpp"
-#include "chimera/core/io/IEvents.hpp"
 #include "chimera/core/space/BSPTree.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
-class Game : public Chimera::IEvents {
+class Game : public Chimera::Application {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
+    Game(Chimera::Canvas* canvas);
     virtual ~Game();
     virtual void onStart() override;
     virtual void onUpdate() override;
@@ -20,7 +18,6 @@ class Game : public Chimera::IEvents {
   private:
     Chimera::BspTree bspTree;
     Chimera::TrackBall trackBall;
-    Chimera::CanvasGL* pCanvas;
     Chimera::Shader* pShader;
 
     glm::mat4 projection;

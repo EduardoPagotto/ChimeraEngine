@@ -1,9 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/io/FlowControl.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
-
 #include <iostream>
 
 int main(int argn, char** argv) {
@@ -13,17 +10,10 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("AppEmpty Iniciado");
 
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 1400, 900);
-        Chimera::Shader* pShader = new Chimera::Shader("MeshNoMat", "./chimera/shaders/MeshNoMat.vert", "./chimera/shaders/MeshNoMat.frag");
+        Game* game = new Game(new Chimera::CanvasGL("TesteBSTree", 1400, 900));
+        game->run();
 
-        Game* game = new Game(video, pShader);
-
-        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
-        pControle->run();
-
-        delete pControle;
         delete game;
-        delete video;
 
         SDL_Log("TesteBSTree finalizado com sucesso");
         return 0;

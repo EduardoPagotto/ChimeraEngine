@@ -3,6 +3,7 @@
 
 #define GLEW_STATIC
 
+#include "chimera/core/ViewPoint.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 
@@ -24,6 +25,12 @@ class Canvas {
     virtual void after(const unsigned short& _indexEye = 0) = 0;
     virtual void toggleFullScreen() = 0;
     virtual void reshape(int _width, int _height) = 0;
+
+    virtual void swapWindow() = 0;
+    virtual void calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& pView,
+                                               glm::mat4& pProjection) = 0;
+    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) = 0;
+    virtual int getTotEyes() = 0;
 
     inline int getWidth() const { return width; }
     inline int getHeight() const { return height; }

@@ -16,13 +16,9 @@ class Game : public Chimera::Core::IEvents {
 
     virtual ~Game();
     // Inherited via IEvents
-    virtual void start();
-    virtual void update();
-    virtual void keboardEvent(SDL_Event* pEventSDL);
-    virtual void mouseEvent(SDL_Event* pEventSDL);
-    virtual void joystickEvent(SDL_Event* pEventSDL);
-    virtual void userEvent(const SDL_Event& _event) override;
-    virtual void windowEvent(SDL_Event* pEventSDL) override;
+    virtual void onStart() override;
+    virtual void onUpdate() override;
+    virtual bool onEvent(const SDL_Event& event) override;
 
   private:
     glm::mat4 projection;

@@ -5,19 +5,24 @@ screen:
     h: 600
 model: ./assets/models/piso2.xml
 shaders:
-  - name: mesh-default
-    vertex: ./chimera/shaders/MeshFullShadow.vert
-    fragment: ./chimera/shaders/MeshFullShadow.frag
-  - name: particle-default
-    vertex: ./chimera/shaders/ParticleEmitter.vert
-    fragment: ./chimera/shaders/ParticleEmitter.frag
-  - name: hud-default
-    vertex: ./chimera/shaders/HUD.vert
-    fragment: ./chimera/shaders/HUD.frag
-  - name: simpleDepthShader
-    vertex: ./chimera/shaders/ShadowMappingDepth.vert
-    fragment: ./chimera/shaders/ShadowMappingDepth.frag
-font: ./samples/models/fonts/FreeSans.ttf
+  - "./chimera/shaders/MeshFullShadow.glsl"
+  - "./chimera/shaders/ParticleEmitter.glsl"
+  - "./chimera/shaders/HUD.glsl"
+  - "./chimera/shaders/ShadowMappingDepth.glsl"
+
+  # - name: mesh-default
+  #   vertex: ./chimera/shaders/MeshFullShadow.vert
+  #   fragment: ./chimera/shaders/MeshFullShadow.frag
+  # - name: particle-default
+  #   vertex: ./chimera/shaders/ParticleEmitter.vert
+  #   fragment: ./chimera/shaders/ParticleEmitter.frag
+  # - name: hud-default
+  #   vertex: ./chimera/shaders/HUD.vert
+  #   fragment: ./chimera/shaders/HUD.frag
+  # - name: simpleDepthShader
+  #   vertex: ./chimera/shaders/ShadowMappingDepth.vert
+  #   fragment: ./chimera/shaders/ShadowMappingDepth.frag
+font: ./assets/fonts/FreeSans.ttf
 size: 18
 
 textures:

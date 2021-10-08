@@ -1,3 +1,4 @@
+#type vertex
 #version 300 es
 
 // set: ParticleEmitter.frag and ParticleEmitter.vert
@@ -27,8 +28,7 @@ void main() {
     float particleSize = xyzs.w; // because we encoded it this way.
     vec3 particleCenter_wordspace = xyzs.xyz;
 
-    vec3 vertexPosition_worldspace = particleCenter_wordspace +
-                                     CameraRight_worldspace * squareVertices.x * particleSize +
+    vec3 vertexPosition_worldspace = particleCenter_wordspace + CameraRight_worldspace * squareVertices.x * particleSize +
                                      CameraUp_worldspace * squareVertices.y * particleSize;
 
     // Output position of the vertex
@@ -37,4 +37,42 @@ void main() {
     // UV of the vertex. No special space for this one.
     UV = squareVertices.xy + vec2(0.5, 0.5);
     particlecolor = color;
+}
+//---
+#type fragment
+#version 300 es
+
+// set: ParticleEmitter.frag and ParticleEmitter.vert
+// used: Class ParticleEmitter to app models
+// Render Particle emitter
+
+precision mediump float;
+
+struct Material {
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+    sampler2D tDiffuse;
+    sampler2D tSpecular;
+    sampler2D tEmission;
+    float shininess;
+};
+
+uniform Material material;
+uniform int tipo;
+
+// Interpolated values from the vertex shaders
+in vec2 UV;
+in vec4 particlecolor;
+
+// Ouput data
+out vec4 color;
+
+uniform sampler2D myTextureSampler;
+
+void main() {
+    if (tipo == 1)
+        color = texture(material.tDiffuse, UV) * particlecolor;
+    else
+        color = texture(material.tDiffuse, UV) * particlecolor;
 }

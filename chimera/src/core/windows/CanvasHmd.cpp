@@ -3,12 +3,10 @@
 namespace Chimera {
 
 CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : CanvasGL(_title, _width * 2, _height, false) {
-
-    pShader = new Shader("CanvasHMD", "./chimera/shaders/CanvasHMD.vert", "./chimera/shaders/CanvasHMD.frag");
-
+    pShader = new Shader("./assets/shaders/CanvasHMD.glsl");
     pLeft = new Eye(0, _width, _height, pShader);
     pRight = new Eye(1, _width, _height, pShader);
-} // namespace Chimera
+}
 
 CanvasHmd::~CanvasHmd() {
     delete pLeft;
@@ -19,17 +17,16 @@ CanvasHmd::~CanvasHmd() {
 void CanvasHmd::before(const unsigned short& _indexEye) {
 
     if (_indexEye == 0)
-        pLeft->bind(); // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        pLeft->bind();
     else
         pRight->bind();
 
-    CanvasGL::before(_indexEye); // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    CanvasGL::before(_indexEye);
 }
 
 void CanvasHmd::swapWindow() {
 
     CanvasGL::before();
-
     pLeft->displayTexture();
     pRight->displayTexture();
     CanvasGL::swapWindow();
@@ -38,11 +35,10 @@ void CanvasHmd::swapWindow() {
 void CanvasHmd::after(const unsigned short& _indexEye) {
 
     if (_indexEye == 0) {
-        pLeft->unbind(); // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        pLeft->unbind();
     } else {
-        pRight->unbind(); // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        pRight->unbind();
     }
-
     // CanvasGL::after(); // SDL_GL_SwapWindow(window);
 }
 
@@ -92,17 +88,4 @@ glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {
 //
 //    glFrustum( -fW, fW, -fH, fH, zNear, zFar );
 //}
-
-// void VideoDevice::executeViewOrto ( int eye ) {
-//
-//     glMatrixMode ( GL_PROJECTION );
-//     glPushMatrix();
-//     glLoadIdentity();
-//     glOrtho ( 0, winSizeW, 0, winSizeH, -1, 1 );
-//     glMatrixMode ( GL_MODELVIEW );
-//     glPushMatrix();
-//     glLoadIdentity();
-//
-// }
-
 } // namespace Chimera

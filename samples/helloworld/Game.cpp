@@ -53,7 +53,7 @@ void Game::onStart() {
         }
     }
 
-    FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./samples/models/fonts/FreeSans.ttf", 22));
+    FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
     FontManager::get()->setScale(glm::vec2(canvas->getWidth() / 32.0f, canvas->getHeight() / 18.0f)); // em TileLayer ortho values!!!
     lFPS = new Label("None", -15.5f, 7.8f, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);

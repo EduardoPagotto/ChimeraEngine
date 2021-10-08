@@ -51,12 +51,12 @@ void Material::setUniform(Shader* _shader) {
         shaderMaterial->setUniform(_shader);
     }
 
-    _shader->setUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
+    _shader->setUniform(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
 
     if (mapTex.size() > 0) {
         for (const auto& kv : mapTex) {
             kv.second->bind(0);
-            _shader->setUniform1i(kv.first.c_str(), 0);
+            _shader->setUniform(kv.first.c_str(), 0);
         }
 
     } else {

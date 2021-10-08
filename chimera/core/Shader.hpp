@@ -2,6 +2,8 @@
 #define __CHIMERA_SHADER__HPP
 
 #include "chimera/core/OpenGLDefs.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <string>
 #include <unordered_map>
 
@@ -18,33 +20,25 @@ class Shader {
 
     GLint getUniform(const char* _varName) const noexcept;
 
-    inline void setUniform1i(const char* name, const int& _val) const { glUniform1i(getUniform(name), _val); }
-    inline void setUniform1f(const char* name, const float& _val) const { glUniform1f(getUniform(name), _val); }
-    inline void setUniform2f(const char* name, const float& _x, const float& _y) const { glUniform2f(getUniform(name), _x, _y); }
-    inline void setUniform3f(const char* name, const float& _x, const float& _y, const float& _z) const {
-        glUniform3f(getUniform(name), _x, _y, _z);
-    }
-    inline void setUniform1iv(const char* name, const int size, const int* _pointer) const {
-        glUniform1iv(getUniform(name), size, _pointer);
-    }
-    inline void setUniform1fv(const char* name, const unsigned& _num, const float* _pointer) const {
-        glUniform1fv(getUniform(name), _num, _pointer);
-    }
-    inline void setUniform2fv(const char* name, const unsigned& _num, const float* _pointer) const {
-        glUniform2fv(getUniform(name), _num, _pointer);
-    }
-    inline void setUniform3fv(const char* name, const unsigned& _num, const float* _pointer) const {
-        glUniform3fv(getUniform(name), _num, _pointer);
-    }
-    inline void setUniform4fv(const char* name, const unsigned& _num, const float* _pointer) const {
-        glUniform4fv(getUniform(name), _num, _pointer);
-    }
-    inline void setUniformMatrix4fv(const char* name, const unsigned& _num, const bool& _normal, const float* _pointer) const {
-        glUniformMatrix4fv(getUniform(name), _num, _normal, _pointer);
-    }
-    inline void setUniformMatrix3fv(const char* name, const unsigned& _num, const bool& _normal, const float* _pointer) const {
-        glUniformMatrix3fv(getUniform(name), _num, _normal, _pointer);
-    }
+    void setUniform(const char* name, float val) { glUniform1f(getUniform(name), val); }
+    void setUniform(const char* name, int val) { glUniform1i(getUniform(name), val); }
+    void setUniform(const char* name, const glm::vec2& vec) { glUniform2f(getUniform(name), vec.x, vec.y); }
+    void setUniform(const char* name, const glm::ivec2& vec) { glUniform2i(getUniform(name), vec.x, vec.y); }
+    void setUniform(const char* name, const glm::vec3& vec) { glUniform3f(getUniform(name), vec.x, vec.y, vec.z); }
+    void setUniform(const char* name, const glm::ivec3& vec) { glUniform3i(getUniform(name), vec.x, vec.y, vec.z); }
+    void setUniform(const char* name, const glm::vec4& vec) { glUniform4f(getUniform(name), vec.x, vec.y, vec.z, vec.w); }
+    void setUniform(const char* name, const glm::ivec4& vec) { glUniform4i(getUniform(name), vec.x, vec.y, vec.z, vec.w); }
+    void setUniform(const char* name, const glm::mat3& mat) { glUniformMatrix3fv(getUniform(name), 1, GL_FALSE, glm::value_ptr(mat)); }
+    void setUniform(const char* name, const glm::mat4& mat) { glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, glm::value_ptr(mat)); }
+
+    void setUniformArray(const char* name, int size, float* val) { glUniform1fv(getUniform(name), size, val); }
+    void setUniformArray(const char* name, int size, int* val) { glUniform1iv(getUniform(name), size, val); }
+    void setUniformArray(const char* name, int size, glm::vec2* val) { glUniform2fv(getUniform(name), size, glm::value_ptr(*val)); }
+    void setUniformArray(const char* name, int size, glm::ivec2* val) { glUniform2iv(getUniform(name), size, glm::value_ptr(*val)); }
+    void setUniformArray(const char* name, int size, glm::vec3* val) { glUniform3fv(getUniform(name), size, glm::value_ptr(*val)); }
+    void setUniformArray(const char* name, int size, glm::ivec3* val) { glUniform3iv(getUniform(name), size, glm::value_ptr(*val)); }
+    void setUniformArray(const char* name, int size, glm::vec4* val) { glUniform4fv(getUniform(name), size, glm::value_ptr(*val)); }
+    void setUniformArray(const char* name, int size, glm::ivec4* val) { glUniform4iv(getUniform(name), size, glm::value_ptr(*val)); }
 
   private:
     GLuint shaderId;

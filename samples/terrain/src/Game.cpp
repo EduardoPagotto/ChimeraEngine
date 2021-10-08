@@ -4,7 +4,6 @@
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/LoadHeightMap.hpp"
-#include <glm/gtc/type_ptr.hpp>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     projection = glm::mat4(1.0f);
@@ -150,11 +149,11 @@ void Game::onUpdate() {
         return;
 
     int shadows = 0;
-    pShader->setUniform1i("shadows", shadows);
+    pShader->setUniform("shadows", shadows);
 
-    pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    pShader->setUniform("projection", projection);
+    pShader->setUniform("view", view);
+    pShader->setUniform("model", model);
 
     // aplica material ao shader
     pMaterial->setUniform(pShader);

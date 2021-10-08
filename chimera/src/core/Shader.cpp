@@ -165,7 +165,6 @@ Shader::Shader(const std::string& filepath) {
 Shader::~Shader() { glDeleteProgram(shaderId); }
 
 GLint Shader::getUniform(const char* _varName) const noexcept {
-    // nasty C lib uses -1 return value for error
     GLint loc = glGetUniformLocation(shaderId, _varName);
     if (loc == -1)
         SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _varName, name.c_str());

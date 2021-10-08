@@ -1,6 +1,5 @@
 #include "TileLayer.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
 
 TileLayer::TileLayer(Chimera::Shader* shader)
@@ -9,9 +8,9 @@ TileLayer::TileLayer(Chimera::Shader* shader)
     GLint texIDs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
 
     shader->enable();
-    shader->setUniformMatrix4fv("pr_matrix", 1, false, glm::value_ptr(projectionMatrix));
-    shader->setUniform2fv("light_pos", 1, glm::value_ptr(glm::vec2(4.0f, 1.5f)));
-    shader->setUniform1iv("textures", 32, texIDs);
+    shader->setUniform("pr_matrix", projectionMatrix);
+    shader->setUniform("light_pos", glm::vec2(4.0f, 1.5f));
+    shader->setUniformArray("textures", 32, texIDs);
     shader->disable();
 }
 
@@ -33,8 +32,7 @@ bool TileLayer::onEvent(const SDL_Event& event) {
 void TileLayer::render() {
 
     shader->enable();
-    shader->setUniform2fv("light_pos", 1,
-                          glm::value_ptr(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f))));
+    shader->setUniform("light_pos", glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f)));
 
     Layer::render();
     shader->disable();

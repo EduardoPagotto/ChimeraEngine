@@ -4,7 +4,6 @@
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/LoadObj.hpp"
-#include <glm/gtc/type_ptr.hpp>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
@@ -141,9 +140,9 @@ void Game::onUpdate() {
     glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
     frustum.set(viewProjectionMatrixInverse);
 
-    pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    pShader->setUniform("projection", projection);
+    pShader->setUniform("view", view);
+    pShader->setUniform("model", model);
 
     material.setUniform(pShader);
     // aplica a textura

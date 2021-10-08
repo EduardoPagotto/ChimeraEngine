@@ -8,7 +8,6 @@
 #include "chimera/render/LoadObj.hpp"
 #include "chimera/render/maze/Maze.hpp"
 #include <algorithm>
-#include <glm/gtc/type_ptr.hpp>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
@@ -141,13 +140,13 @@ void Game::onUpdate() {
     glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
     frustum.set(viewProjectionMatrixInverse);
 
-    pShader->setUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    pShader->setUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    pShader->setUniform("projection", projection);
+    pShader->setUniform("view", view);
+    pShader->setUniform("model", model);
 
     // aplica a textura
     pTex->bind(0);
-    pShader->setUniform1i(SHADE_TEXTURE_DIFFUSE, 0);
+    pShader->setUniform(SHADE_TEXTURE_DIFFUSE, 0);
 
     renderz1->setEyePosition(&vp->position);
     render3d.begin(&frustum);

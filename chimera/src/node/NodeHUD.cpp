@@ -1,6 +1,5 @@
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/VisitorInterface.hpp"
-#include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
 
@@ -41,7 +40,7 @@ void NodeHUD::render(Shader* _pShader) {
     glActiveTexture(GL_TEXTURE0);
 
     for (HUDTxt* l_pTxt : vLineText) {
-        _pShader->setUniform4fv("textColor", 1, glm::value_ptr(l_pTxt->color));
+        _pShader->setUniform("textColor", l_pTxt->color);
         vFonts[l_pTxt->indexFonte]->renderText(l_pTxt->pText, l_pTxt->pos, l_pTxt->scale);
     }
 

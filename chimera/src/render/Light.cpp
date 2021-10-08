@@ -1,5 +1,4 @@
 #include "chimera/render/Light.hpp"
-#include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
 
@@ -15,9 +14,9 @@ Light::~Light() {}
 
 void Light::setUniform(Shader* _pShader) {
     glm::vec3 val = glm::vec3(transform[3]); // pega posicao
-    _pShader->setUniform3fv(SHADE_LIGHT_POSITION, 1, glm::value_ptr(val));
-    _pShader->setUniform4fv(SHADE_LIGHT_AMBIENT, 1, glm::value_ptr(ambient));
-    _pShader->setUniform4fv(SHADE_LIGHT_DIFFUSE, 1, glm::value_ptr(diffuse));
-    _pShader->setUniform4fv(SHADE_LIGHT_SPECULAR, 1, glm::value_ptr(specular));
+    _pShader->setUniform(SHADE_LIGHT_POSITION, val);
+    _pShader->setUniform(SHADE_LIGHT_AMBIENT, ambient);
+    _pShader->setUniform(SHADE_LIGHT_DIFFUSE, diffuse);
+    _pShader->setUniform(SHADE_LIGHT_SPECULAR, specular);
 }
 } // namespace Chimera

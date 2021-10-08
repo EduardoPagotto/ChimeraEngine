@@ -9,7 +9,6 @@
 #include "chimera/node/VisitParser.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 namespace Chimera {
@@ -34,7 +33,7 @@ void VisitorShadowMap::visit(NodeMesh* _pMesh) {
     // glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
     // frustum.set(viewProjectionMatrixInverse);
 
-    pShader->setUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
+    pShader->setUniform("model", model);
 
     pRender3D->begin(nullptr);
     _pMesh->pRenderStat->submit(pRender3D); // render3D.submit(_pMesh->pRenderStat);
@@ -46,7 +45,7 @@ void VisitorShadowMap::visit(NodeMesh* _pMesh) {
 void VisitorShadowMap::visit(NodeLight* _pLight) {
     // node de luz deve vir anter para funcionar?!
     this->setLightSpaceMatrix(_pLight->data.getPosition());
-    pShader->setUniformMatrix4fv("lightSpaceMatrix", 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+    pShader->setUniform("lightSpaceMatrix", lightSpaceMatrix);
 }
 
 void VisitorShadowMap::visit(NodeParticleEmitter* _pParticleEmitter) {}
@@ -69,7 +68,7 @@ void VisitorShadowMap::applyShadow(Shader* _pShader) {
 
     frameBufferDepth->getTexture()->bind(1);
     if (_pShader != nullptr) {
-        _pShader->setUniform1i("shadowMap", 1);
+        _pShader->setUniform("shadowMap", 1);
     }
 }
 

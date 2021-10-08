@@ -1,8 +1,7 @@
 #ifndef __GAME_XX__HPP
 #define __GAME_XX__HPP
 
-#include "chimera/core/io/IEvents.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
+#include "chimera/core/Application.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"
@@ -18,14 +17,9 @@ struct Controles {
     int hat;
 };
 
-/**
- * Class Game
- *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
- *  @since 20130925
- */
-class Game : public Chimera::IEvents {
+class Game : public Chimera::Application {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Node* _pRoot, Chimera::PhysicsControl* _physicWorld);
+    Game(Chimera::Canvas* canvas);
     virtual ~Game();
 
     virtual void onStart() override;
@@ -45,8 +39,7 @@ class Game : public Chimera::IEvents {
     Chimera::NodeCamera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;
     Chimera::NodeParticleEmitter* pEmissor;
-    Chimera::CanvasGL* pCanvas;
-    Chimera::Node* pRoot;
+    Chimera::Node* root;
     Chimera::PhysicsControl* physicWorld;
 };
 

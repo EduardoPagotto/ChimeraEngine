@@ -40,10 +40,6 @@ void Game::onStart() {
     shader->enable();
 
     layer = new TileLayer(shader);
-    // FIXME: ver como sera???
-    // layerStack->pushLayer(layer);
-    layer->onAttach();
-
     for (float y = -9.0f; y < 9.0f; y++) {
         for (float x = -16.0f; x < 16.0f; x++) {
             if (rand() % 4 == 0)
@@ -57,6 +53,7 @@ void Game::onStart() {
     FontManager::get()->setScale(glm::vec2(canvas->getWidth() / 32.0f, canvas->getHeight() / 18.0f)); // em TileLayer ortho values!!!
     lFPS = new Label("None", -15.5f, 7.8f, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
+    this->pushLayer(layer);
 
     shader->disable();
 }

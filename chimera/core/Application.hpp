@@ -15,6 +15,9 @@ class Application {
     void run();
 
   protected:
+    void pushLayer(ILayer* layer);
+    void pushOverlay(ILayer* overlay);
+
     Canvas* canvas;
     ShaderLibrary shaderLibrary;
 

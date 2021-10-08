@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_LAYER_STACK__HPP
 #define __CHIMERA_LAYER_STACK__HPP
 
-#include "Ilayer.hpp"
+#include "ILayer.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -10,6 +10,7 @@ class LayerStack {
   public:
     LayerStack();
     ~LayerStack();
+    inline void clear() { layers.clear(); }
 
     void pushLayer(ILayer* layer);
     void pushOverlay(ILayer* overlay);

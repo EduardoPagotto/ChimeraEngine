@@ -14,6 +14,11 @@ Application::Application(Canvas* canvas) : canvas(canvas), pause(true) {
 }
 
 Application::~Application() {
+    for (ILayer* l : layerStack) { // TODO: melhorar remover apenas os existentes (fazer o deatach!!)
+        l->onDeatach();
+        delete l;
+    }
+    layerStack.clear();
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
@@ -48,6 +53,16 @@ bool Application::changeStatusFlow(SDL_Event* pEventSDL) {
     return true;
 }
 
+void Application::pushLayer(ILayer* layer) {
+    layerStack.pushLayer(layer);
+    layer->onAttach();
+}
+
+void Application::pushOverlay(ILayer* overlay) {
+    layerStack.pushOverlay(overlay);
+    overlay->onAttach();
+}
+
 void Application::run(void) {
     SDL_Event l_eventSDL;
     bool l_quit = false;
@@ -59,7 +74,6 @@ void Application::run(void) {
 
     // open devices
     JoystickManager::find();
-    // utilSendEvent(EVENT_FLOW_START, &layerStack, nullptr); // FIXME: remover da lista de eventos!!!!!
     this->onStart();
 
     while (!l_quit) {
@@ -107,8 +121,8 @@ void Application::run(void) {
             }
 
             this->onEvent(l_eventSDL);
-            for (std::vector<ILayer*>::iterator it = layerStack.begin(); it != layerStack.end(); it++) {
-                if ((*it)->onEvent(l_eventSDL) == true)
+            for (auto it = layerStack.end(); it != layerStack.begin();) {
+                if ((*--it)->onEvent(l_eventSDL) == true)
                     break;
             }
         }
@@ -116,7 +130,7 @@ void Application::run(void) {
         if (!pause) {
             try {
 
-                for (std::vector<ILayer*>::iterator it = layerStack.begin(); it != layerStack.end(); it++) {
+                for (auto it = layerStack.begin(); it != layerStack.end(); it++) {
                     (*it)->onUpdate();
                 }
 

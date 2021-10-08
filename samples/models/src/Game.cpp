@@ -130,8 +130,6 @@ bool Game::onEvent(const SDL_Event& event) {
                     sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
                     textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
                 } break;
-                // case Chimera::EVENT_FLOW_START:
-                //     this->start();
                 default:
                     break;
             }

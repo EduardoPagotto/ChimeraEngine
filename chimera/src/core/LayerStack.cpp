@@ -1,4 +1,4 @@
-#include "chimera/core/io/LayerStack.hpp"
+#include "chimera/core/LayerStack.hpp"
 #include <algorithm>
 
 namespace Chimera {

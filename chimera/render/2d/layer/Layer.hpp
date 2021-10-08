@@ -2,7 +2,7 @@
 #define __CHIMERA_IRENDERABLE__HPP
 
 #include "../Renderable2D.hpp"
-#include "chimera/core/io/LayerStack.hpp"
+#include "chimera/core/LayerStack.hpp"
 
 namespace Chimera {
 

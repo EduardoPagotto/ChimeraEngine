@@ -30,7 +30,7 @@ set (SourcesCore windows/CanvasGL.cpp
 				 io/JoystickState.cpp
 				 io/JoystickManager.cpp
 				 io/MouseDevice.cpp
-				 io/LayerStack.cpp
+				 LayerStack.cpp
 				 buffers/VertexBuffer.cpp
 				 buffers/IndexBuffer.cpp
 				 buffers/VertexArray.cpp

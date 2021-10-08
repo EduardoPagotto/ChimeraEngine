@@ -2,6 +2,7 @@
 #define __CHIMERA_SHADER_LIBRARY__HPP
 
 #include "Shader.hpp"
+#include <unordered_map>
 
 namespace Chimera {
 

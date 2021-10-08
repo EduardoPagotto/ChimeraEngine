@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
-#include <unordered_map>
 
 namespace Chimera {
 class Shader {
@@ -44,5 +43,25 @@ class Shader {
     GLuint shaderId;
     std::string name;
 };
+
+class ShaderValue {
+  public:
+    ShaderValue(const std::string& name, const float& value) : name(name), value(glm::vec4(value)), isFloat(true) {}
+    ShaderValue(const std::string& name, const glm::vec4& value) : name(name), value(value), isFloat(false) {}
+    ShaderValue(const ShaderValue& cpy) : name(cpy.name), value(cpy.value), isFloat(cpy.isFloat) {}
+
+    void setUniform(Shader* _shader) {
+        if (isFloat)
+            _shader->setUniform(name.c_str(), value[0]);
+        else
+            _shader->setUniform(name.c_str(), value);
+    }
+
+  private:
+    bool isFloat;
+    std::string name;
+    glm::vec4 value;
+};
+
 } // namespace Chimera
 #endif

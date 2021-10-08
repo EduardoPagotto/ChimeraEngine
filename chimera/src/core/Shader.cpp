@@ -3,6 +3,7 @@
 #include "chimera/core/io/utils.hpp"
 #include <SDL2/SDL.h>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace Chimera {

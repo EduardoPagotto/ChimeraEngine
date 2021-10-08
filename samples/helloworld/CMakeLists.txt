@@ -25,7 +25,7 @@ set (IncludesHelloWorld ${CMAKE_SOURCE_DIR}
 						${OPENGL_INCLUDE_DIR}
 						${SDL2_INCLUDE_DIR})
 
-add_executable (helloworld Game.cpp main.cpp)
+add_executable (helloworld TileLayer.cpp Game.cpp main.cpp)
 
 target_link_libraries(helloworld ${LibsHelloWorld})
 target_include_directories (helloworld PRIVATE ${IncludesHelloWorld})

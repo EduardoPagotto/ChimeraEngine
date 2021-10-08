@@ -130,9 +130,8 @@ void Application::run(void) {
         if (!pause) {
             try {
 
-                for (auto it = layerStack.begin(); it != layerStack.end(); it++) {
+                for (auto it = layerStack.begin(); it != layerStack.end(); it++)
                     (*it)->onUpdate();
-                }
 
                 this->onUpdate();
             } catch (...) { SDL_Quit(); }

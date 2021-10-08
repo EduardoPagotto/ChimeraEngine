@@ -4,7 +4,6 @@
 #include "TileLayer.hpp"
 #include "chimera/core/Application.hpp"
 #include "chimera/render/2d/Label.hpp"
-#include "chimera/render/FontAtlas.hpp"
 
 class Game : public Chimera::Application {
   public:
@@ -15,13 +14,9 @@ class Game : public Chimera::Application {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    Chimera::Shader* shader;
     Chimera::Label* lFPS;
-    TileLayer *layer, *layer2;
-    uint16_t x, y;
-
+    TileLayer* layer;
     int fps;
-    Chimera::FontAtlas* fa;
 };
 
 #endif

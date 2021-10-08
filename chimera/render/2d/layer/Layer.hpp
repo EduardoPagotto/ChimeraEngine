@@ -11,12 +11,14 @@ class Layer : public ILayer {
     Layer(IRenderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix);
     virtual ~Layer();
     inline virtual void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
-    void render();
+    virtual void render();
+
+  protected:
+    Shader* shader;
+    glm::mat4 projectionMatrix;
 
   private:
-    Shader* shader;
     IRenderer2D* renderer;
-    glm::mat4 projectionMatrix;
     std::vector<IRenderable2D*> renderables;
 };
 } // namespace Chimera

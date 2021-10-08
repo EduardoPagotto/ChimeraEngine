@@ -1,11 +1,9 @@
 #include "Game.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/2d/layer/Group.hpp"
 #include "chimera/render/FontManager.hpp"
-#include <glm/gtc/type_ptr.hpp>
 #include <time.h>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
@@ -29,17 +27,13 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     TextureManager::loadFromFile("t01", "./assets/textures/grid1.png", TextureParameters());
     TextureManager::loadFromFile("t02", "./assets/textures/grid2.png", TextureParameters());
     TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TextureParameters());
-
-    shader = shaderLibrary.load("./assets/shaders/Basic2D.glsl");
 }
 
 Game::~Game() {}
 
 void Game::onStart() {
     using namespace Chimera;
-    shader->enable();
-
-    layer = new TileLayer(shader);
+    layer = new TileLayer(shaderLibrary.load("./assets/shaders/Basic2D.glsl"));
     for (float y = -9.0f; y < 9.0f; y++) {
         for (float x = -16.0f; x < 16.0f; x++) {
             if (rand() % 4 == 0)
@@ -54,8 +48,6 @@ void Game::onStart() {
     lFPS = new Label("None", -15.5f, 7.8f, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
     this->pushLayer(layer);
-
-    shader->disable();
 }
 
 bool Game::onEvent(const SDL_Event& event) {
@@ -85,12 +77,6 @@ bool Game::onEvent(const SDL_Event& event) {
                     break;
             }
         } break;
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEMOTION: {
-            x = event.motion.x;
-            y = event.motion.y;
-        } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
                 case SDL_WINDOWEVENT_ENTER:
@@ -113,14 +99,7 @@ void Game::onUpdate() {
     lFPS->setText(std::string("FPS: ") + std::to_string(fps));
 
     canvas->before();
-    shader->enable();
-    shader->setUniform2fv("light_pos", 1,
-                          glm::value_ptr(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f))));
-
     layer->render();
-
-    shader->disable();
-
     canvas->after();
     canvas->swapWindow();
 }

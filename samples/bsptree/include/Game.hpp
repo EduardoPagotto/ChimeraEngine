@@ -2,7 +2,7 @@
 #define __GAME_TESTE_BSTREE__HPP
 
 #include "chimera/core/Application.hpp"
-#include "chimera/core/Camera.hpp"
+#include "chimera/core/CameraFPS.hpp"
 #include "chimera/core/Texture.hpp"
 #include "chimera/core/TrackBall.hpp"
 #include "chimera/core/space/BSPTree.hpp"

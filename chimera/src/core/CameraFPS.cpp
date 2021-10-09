@@ -1,4 +1,4 @@
-#include "chimera/core/Camera.hpp"
+#include "chimera/core/CameraFPS.hpp"
 #include "chimera/core/io/Keyboard.hpp"
 #include "chimera/core/io/MouseDevice.hpp"
 #include <glm/gtc/matrix_transform.hpp>

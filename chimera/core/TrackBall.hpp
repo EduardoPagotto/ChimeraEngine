@@ -18,7 +18,7 @@ class TrackBall {
     inline void setMax(const float& _max) { max = _max; }
     inline void setMin(const float& _min) { min = _min; }
     inline ViewPoint* getViewPoint() { return pVp; }
-    inline glm::mat4 getViewMatrix() { return glm::lookAt(pVp->position, pVp->front, pVp->up); }
+    inline glm::mat4 getViewMatrix() { return glm::lookAt(pVp->position, pVp->position + pVp->front, pVp->up); }
 
   private:
     void updateVectors();

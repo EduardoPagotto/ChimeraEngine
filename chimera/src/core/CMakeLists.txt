@@ -38,6 +38,7 @@ set (SourcesCore windows/CanvasGL.cpp
 				 buffers/FrameBufferDepth.cpp
 				 Texture.cpp
 				 TextureManager.cpp
+				 Camera.cpp
 				 Application.cpp)
 
 # #define os includes

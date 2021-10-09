@@ -32,7 +32,7 @@ void Game::onStart() {
     // pVp->up = glm::vec3(0.0, 1.0, 0.0);
     // trackBall.init(pVp);
     // trackBall.setMax(1000.0);
-    camera = new Chimera::Camera(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    camera = new Chimera::CameraFPS(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 

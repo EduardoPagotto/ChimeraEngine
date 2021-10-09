@@ -19,7 +19,7 @@ class Game : public Chimera::Application {
   private:
     Chimera::BspTree bspTree;
     // Chimera::TrackBall trackBall;
-    Chimera::Camera* camera;
+    Chimera::CameraFPS* camera;
     Chimera::Shader* pShader;
 
     glm::mat4 projection;

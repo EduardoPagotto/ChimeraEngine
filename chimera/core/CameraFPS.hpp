@@ -9,11 +9,11 @@ namespace Chimera {
 #define FPSCAMERA_MAX_SPEED 40.0f
 #define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
 
-class Camera : public ICamera {
+class CameraFPS : public ICamera {
 
   public:
-    Camera(const glm::vec3& pos, const glm::vec3& up, float yaw = -90.0f, float pitch = 0.0f);
-    virtual ~Camera();
+    CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw = -90.0f, float pitch = 0.0f);
+    virtual ~CameraFPS();
 
     void processCameraFOV(double yOffset);
     void processCameraRotation(double xOffset, double yOffset, bool constrainPitch = true);

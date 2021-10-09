@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-Camera::Camera(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch)
+CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch)
     : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(FPSCAMERA_MAX_SPEED), fov(FPSCAMERA_MAX_FOV) {
     this->position = pos;
     this->worldUp = up;
@@ -19,20 +19,20 @@ Camera::Camera(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch
     updateVectors();
 }
 
-Camera::~Camera() {}
+CameraFPS::~CameraFPS() {}
 
-glm::mat4 Camera::getViewMatrix() { return glm::lookAt(position, position + front, up); }
+glm::mat4 CameraFPS::getViewMatrix() { return glm::lookAt(position, position + front, up); }
 
-glm::mat4 Camera::getProjectionMatrix(const glm::ivec2& res) { // windows x->width; y -> height
+glm::mat4 CameraFPS::getProjectionMatrix(const glm::ivec2& res) { // windows x->width; y -> height
     return glm::perspective(glm::radians(fov), (float)res.x / (float)res.y, nearPlane, farPlane);
 }
 
-void Camera::invertPitch() {
+void CameraFPS::invertPitch() {
     pitch = -pitch;
     updateVectors();
 }
 
-void Camera::updateVectors() {
+void CameraFPS::updateVectors() {
 
     front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     front.y = sin(glm::radians(pitch));
@@ -43,7 +43,7 @@ void Camera::updateVectors() {
     up = glm::normalize(glm::cross(right, front));
 }
 
-void Camera::processInput(float deltaTime) {
+void CameraFPS::processInput(float deltaTime) {
     // Movement speed
     if (Keyboard::isPressed(SDLK_LSHIFT)) // GLFW_KEY_LEFT_SHIFT
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;
@@ -52,7 +52,7 @@ void Camera::processInput(float deltaTime) {
     else
         movementSpeed = FPSCAMERA_MAX_SPEED;
 
-    // Camera movement
+    // CameraFPS movement
     glm::vec3 direction = glm::vec3(0.0f);
     if (Keyboard::isPressed(SDLK_w)) // GLFW_KEY_W
         direction += front;
@@ -74,14 +74,14 @@ void Camera::processInput(float deltaTime) {
     // #endif
     processCameraMovement(direction, deltaTime);
 
-    // Camera FOV
+    // CameraFPS FOV
     // float scrollDelta = glm::clamp((float)(InputManager::GetScrollYDelta() * 4.0 + (JoystickManager::GetButton(0, ARCANE_GAMEPAD_A) -
     //                                                                                 JoystickManager::GetButton(0, ARCANE_GAMEPAD_B)
     //                                                                                 * 2.0)),
     //                                -4.0f, 4.0f);
     // ProcessCameraFOV(scrollDelta);
 
-    // Camera rotation
+    // CameraFPS rotation
     // float mouseXDelta =
     //     (float)InputManager::GetMouseXDelta() /*+ ((float)JoystickManager::GetRightStick(0).x * 20.0)*/ * FPSCAMERA_ROTATION_SENSITIVITY;
     // float mouseYDelta =
@@ -95,12 +95,12 @@ void Camera::processInput(float deltaTime) {
     processCameraRotation(mouseXDelta, mouseYDelta, true);
 }
 
-void Camera::processCameraMovement(glm::vec3& direction, float deltaTime) {
+void CameraFPS::processCameraMovement(glm::vec3& direction, float deltaTime) {
     float velocity = movementSpeed * deltaTime;
     position += direction * velocity;
 }
 
-void Camera::processCameraRotation(double xOffset, double yOffset, bool constrainPitch) {
+void CameraFPS::processCameraRotation(double xOffset, double yOffset, bool constrainPitch) {
     // Make sure the user isn't interacting with the UI
     // if (!Window::GetHideCursor())
     //    return;
@@ -120,7 +120,7 @@ void Camera::processCameraRotation(double xOffset, double yOffset, bool constrai
     updateVectors();
 }
 
-void Camera::processCameraFOV(double offset) {
+void CameraFPS::processCameraFOV(double offset) {
 
     if (offset != 0.0 && fov >= 1.0 && fov <= FPSCAMERA_MAX_FOV) {
         fov -= (float)offset;

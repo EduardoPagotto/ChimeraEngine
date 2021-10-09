@@ -5,14 +5,13 @@
 
 namespace Chimera {
 
-#define FPSCAMERA_MAX_FOV 90.0f
+#define FPSCAMERA_MAX_FOV 45.0f
 #define FPSCAMERA_MAX_SPEED 40.0f
-#define FPSCAMERA_ROTATION_SENSITIVITY 0.1f
+#define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
 
 class Camera : public ICamera {
 
   public:
-    // Camera();
     Camera(const glm::vec3& pos, const glm::vec3& up, float yaw = -90.0f, float pitch = 0.0f);
     virtual ~Camera();
 
@@ -34,13 +33,10 @@ class Camera : public ICamera {
   private:
     void updateVectors();
 
-    // glm::vec3 m_Position, m_Front, m_Up, m_Right, m_WorldUp;
     glm::vec3 position, front, up, right, worldUp;
     float pitch, yaw, fov;
-    // Frustum Options
     float nearPlane, farPlane;
-
-    float movementSpeed; // m_CurrentMovementSpeed;
+    float movementSpeed;
 };
 } // namespace Chimera
 #endif

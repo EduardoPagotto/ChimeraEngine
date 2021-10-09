@@ -54,18 +54,5 @@ class ViewPoint {
     float far;
     float fov;
 };
-
-class Camera {
-
-    inline glm::mat4 getViewMatrix() { return glm::lookAt(position, position + front, up); }
-
-    void ProcessCameraFOV(double yOffset);
-
-  private:
-    // glm::vec3 m_Position, m_Front, m_Up, m_Right, m_WorldUp;
-    glm::vec3 position, front, up, right, worldUp;
-    float pitch, yaw;
-};
-
 } // namespace Chimera
 #endif

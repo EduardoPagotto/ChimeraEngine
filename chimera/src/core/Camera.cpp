@@ -89,7 +89,7 @@ void Camera::processInput(float deltaTime) {
     //     FPSCAMERA_ROTATION_SENSITIVITY;
 
     glm::ivec2 mouseMove = MouseDevice::getMoveRel(); // FIXME: mudar metodo para vec2
-    float mouseXDelta = (float)mouseMove.x * FPSCAMERA_ROTATION_SENSITIVITY;
+    float mouseXDelta = -(float)mouseMove.x * FPSCAMERA_ROTATION_SENSITIVITY;
     float mouseYDelta = (float)mouseMove.y * FPSCAMERA_ROTATION_SENSITIVITY;
 
     processCameraRotation(mouseXDelta, mouseYDelta, true);

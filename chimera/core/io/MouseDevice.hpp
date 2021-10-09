@@ -18,9 +18,8 @@ class MouseDevice {
 
   private:
     static std::map<uint8_t, uint8_t> buttonState;
-    static glm::ivec2 pos;
-    static glm::ivec2 rel;
-    static glm::ivec2 wheel;
+    static glm::ivec2 pos, rel, wheel;
+    static uint32_t flag1, flag2;
 };
 } // namespace Chimera
 

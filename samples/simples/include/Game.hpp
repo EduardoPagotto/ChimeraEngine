@@ -2,8 +2,8 @@
 #define __GAME_SIMPLES__HPP
 
 #include "chimera/core/Application.hpp"
+#include "chimera/core/ICamera.hpp"
 #include "chimera/core/Texture.hpp"
-#include "chimera/core/TrackBall.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/vbs/RenderableStatic.hpp"
@@ -22,7 +22,7 @@ class Game : public Chimera::Application {
     glm::mat4 projection;
     glm::mat4 view;
     glm::mat4 model;
-    Chimera::TrackBall trackBall;
+    Chimera::ICamera* camera;
     Chimera::Shader* pShader;
     Chimera::Material material;
     Chimera::RenderableStatic* rederable;

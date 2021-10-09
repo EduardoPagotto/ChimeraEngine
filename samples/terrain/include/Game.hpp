@@ -2,7 +2,7 @@
 #define __GAME_TESTE_TERRAIN__HPP
 
 #include "chimera/core/Application.hpp"
-#include "chimera/core/TrackBall.hpp"
+#include "chimera/core/ICamera.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/vbs/RenderableIndex.hpp"
@@ -22,7 +22,7 @@ class Game : public Chimera::Application {
     glm::mat4 view;
     glm::mat4 model;
 
-    Chimera::TrackBall trackBall;
+    Chimera::ICamera* camera;
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;

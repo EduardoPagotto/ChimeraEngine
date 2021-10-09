@@ -1,4 +1,6 @@
 #include "Game.hpp"
+#include "chimera/core/CameraFPS.hpp"
+//#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/MouseDevice.hpp"
@@ -19,12 +21,8 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
     pMaterial->addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
 
-    Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
-    pVp->position = glm::vec3(0.0, 0.0, 600.0);
-    pVp->front = glm::vec3(0.0, 0.0, 0.0);
-    pVp->up = glm::vec3(0.0, 1.0, 0.0);
-    trackBall.init(pVp);
-    trackBall.setMax(1000.0);
+    // camera = new Chimera::CameraOrbit(glm::vec3(0.0, 0.0, 600.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    camera = new Chimera::CameraFPS(glm::vec3(0.0, 0.0, 600.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
 
     // Light
     pLight = new Chimera::Light();
@@ -96,16 +94,6 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEMOTION: {
-            if (Chimera::MouseDevice::getButtonState(1) == SDL_PRESSED) {
-                if (event.type == SDL_MOUSEMOTION) {
-                    trackBall.tracking(event.motion.xrel, event.motion.yrel);
-                }
-            } else if (Chimera::MouseDevice::getButtonState(3) == SDL_PRESSED) {
-
-                if (event.type == SDL_MOUSEMOTION) {
-                    trackBall.offSet(event.motion.yrel);
-                }
-            }
         } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
@@ -127,15 +115,18 @@ bool Game::onEvent(const SDL_Event& event) {
 void Game::onUpdate() {
     canvas->before();
 
-    Chimera::ViewPoint* vp = trackBall.getViewPoint();
     if (render3d.getLog() == true) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
+        glm::vec3 pos = camera->getPosition();
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
     pShader->enable();
 
-    // Calcula view e projection baseado em vp
-    canvas->calcPerspectiveProjectionView(0, vp, view, projection);
+    camera->processInput(0.01);
+    // Calcula view e projection pela Camera
+    glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
+    view = camera->getViewMatrix();
+    projection = camera->getProjectionMatrix(glm::ivec2(canvas->getWidth(), canvas->getHeight()));
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projection);
     glm::mat4 viewMatrixInverse = glm::inverse(view);

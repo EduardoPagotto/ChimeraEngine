@@ -17,7 +17,7 @@ CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, f
     this->farPlane = 5000.0f;
 
     min = 1.0f;
-    max = 500.0f;
+    max = 1500.0f;
 
     distance = glm::distance(this->position, this->front);
     // this->yaw = asin((glm::abs(this->position.z) - glm::abs(this->front.z)) / distance) / 0.017453293f;

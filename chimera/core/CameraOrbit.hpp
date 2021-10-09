@@ -1,22 +1,21 @@
-#ifndef __CHIMERA_CAMERA_FPS_HPP
-#define __CHIMERA_CAMERA_FPS_HPP
+#ifndef __CHIMERA_CAMERA_ORBIT_HPP
+#define __CHIMERA_CAMERA_ORBIT_HPP
 
 #include "ICamera.hpp"
 
 namespace Chimera {
 
-#define FPSCAMERA_MAX_SPEED 40.0f
-#define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
-
-class CameraFPS : public ICamera {
+class CameraOrbit : public ICamera {
 
   public:
-    CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw = -90.0f, float pitch = 0.0f);
-    virtual ~CameraFPS();
+    CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw = -90.0f, float pitch = 0.0f);
+    virtual ~CameraOrbit();
 
     void processCameraFOV(double yOffset);
-    void processCameraRotation(double xOffset, double yOffset, bool constrainPitch = true);
-    void processCameraMovement(glm::vec3& direction, float deltaTime);
+    void processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch = true);
+    // void processCameraMovement(glm::vec3& direction, float deltaTime);
+    void processDistance(const int& _mz);
+
     virtual void processInput(float deltaTime) override;
 
     // herdado
@@ -35,7 +34,8 @@ class CameraFPS : public ICamera {
     glm::vec3 position, front, up, right, worldUp;
     float pitch, yaw, fov;
     float nearPlane, farPlane;
-    float movementSpeed;
+    float distance;
+    float min, max;
 };
 } // namespace Chimera
 #endif

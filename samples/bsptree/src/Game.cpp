@@ -1,4 +1,6 @@
 #include "Game.hpp"
+//#include "chimera/core/CameraFPS.hpp"
+#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/TextureManager.hpp"
@@ -32,7 +34,8 @@ void Game::onStart() {
     // pVp->up = glm::vec3(0.0, 1.0, 0.0);
     // trackBall.init(pVp);
     // trackBall.setMax(1000.0);
-    camera = new Chimera::CameraFPS(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    // camera = new Chimera::CameraFPS(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    camera = new Chimera::CameraOrbit(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
@@ -94,6 +97,16 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEMOTION: {
+            // if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
+            //     if (event.type == SDL_MOUSEMOTION) {
+            //         ((CameraOrbit*)camera)->processCameraRotation(event.motion.xrel, event.motion.yrel);
+            //     }
+            // } else if (MouseDevice::getButtonState(3) == SDL_PRESSED) {
+
+            //     if (event.type == SDL_MOUSEMOTION) {
+            //         ((CameraOrbit*)camera)->processDistance(event.motion.yrel);
+            //     }
+            // }
         } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
@@ -119,10 +132,6 @@ void Game::onUpdate() {
         glm::vec3 pos = camera->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
-    // Chimera::ViewPoint* vp = trackBall.getViewPoint();
-    // if (render3d.getLog() == true) {
-    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
-    // }
     camera->processInput(0.01);
 
     pShader->enable();

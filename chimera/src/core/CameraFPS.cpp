@@ -6,7 +6,7 @@
 namespace Chimera {
 
 CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch)
-    : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(FPSCAMERA_MAX_SPEED), fov(FPSCAMERA_MAX_FOV) {
+    : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(FPSCAMERA_MAX_SPEED), fov(CAMERA_MAX_FOV) {
     this->position = pos;
     this->worldUp = up;
     this->up = up; // ???
@@ -122,13 +122,13 @@ void CameraFPS::processCameraRotation(double xOffset, double yOffset, bool const
 
 void CameraFPS::processCameraFOV(double offset) {
 
-    if (offset != 0.0 && fov >= 1.0 && fov <= FPSCAMERA_MAX_FOV) {
+    if (offset != 0.0 && fov >= 1.0 && fov <= CAMERA_MAX_FOV) {
         fov -= (float)offset;
     }
     if (fov < 1.0f) {
         fov = 1.0f;
-    } else if (fov > FPSCAMERA_MAX_FOV) {
-        fov = FPSCAMERA_MAX_FOV;
+    } else if (fov > CAMERA_MAX_FOV) {
+        fov = CAMERA_MAX_FOV;
     }
 }
 } // namespace Chimera

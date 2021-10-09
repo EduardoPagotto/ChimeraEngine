@@ -93,6 +93,7 @@ void Application::run(void) {
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
                     MouseDevice::updateBt(&l_eventSDL.button);
+                    break;
                 case SDL_MOUSEMOTION:
                     MouseDevice::updateMv(&l_eventSDL.motion);
                     break;

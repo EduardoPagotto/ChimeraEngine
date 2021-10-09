@@ -39,6 +39,7 @@ set (SourcesCore windows/CanvasGL.cpp
 				 Texture.cpp
 				 TextureManager.cpp
 				 CameraFPS.cpp
+				 CameraOrbit.cpp
 				 Application.cpp)
 
 # #define os includes

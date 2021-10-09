@@ -5,6 +5,8 @@
 
 namespace Chimera {
 
+#define CAMERA_MAX_FOV 45.0f
+
 class ICamera {
   public:
     virtual ~ICamera() {}
@@ -13,6 +15,7 @@ class ICamera {
     virtual const glm::vec3& getPosition() const = 0;
     virtual const glm::vec3& getFront() const = 0;
     virtual const glm::vec3& getUp() const = 0;
+    virtual void processInput(float deltaTime) = 0; // FIXME: achar outra saida!!
 
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void invertPitch() = 0;

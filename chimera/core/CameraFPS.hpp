@@ -25,6 +25,8 @@ class CameraFPS : public ICamera {
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }
+    virtual void setParams(const float& fov, const float& near, const float& far) override;
+    virtual float calcDistance() override { return glm::distance(this->position, this->front); }
 
     virtual void setPosition(const glm::vec3& position) { this->position = position; }
     virtual void invertPitch();

@@ -214,16 +214,6 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEMOTION: {
-            if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
-                if (event.type == SDL_MOUSEMOTION) {
-                    pOrbitalCam->getTrackBall()->tracking(event.motion.xrel, event.motion.yrel);
-                }
-            } else if (MouseDevice::getButtonState(3) == SDL_PRESSED) {
-
-                if (event.type == SDL_MOUSEMOTION) {
-                    pOrbitalCam->getTrackBall()->offSet(event.motion.yrel);
-                }
-            }
         } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
@@ -252,7 +242,6 @@ void Game::onStart() {
 
     // Localiza a camera
     pOrbitalCam = (Chimera::NodeCamera*)root->findChild("Camera-camera", true);
-    pOrbitalCam->getViewPoint()->up = glm::vec3(0, 0, -1);
 
     // Localiza objeto como o primario //EfeitoZoltan-mesh
     Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)root->findChild("EfeitoZoltan-mesh", true);

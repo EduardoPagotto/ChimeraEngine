@@ -7,8 +7,7 @@
 
 namespace ChimeraLoaders {
 
-LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url,
-                                         Chimera::NodeGroup* _pRootNode)
+LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::NodeGroup* _pRootNode)
     : Library(_root, _url) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
     pRootNode = _pRootNode;
@@ -18,8 +17,7 @@ LibraryVisualScenes::~LibraryVisualScenes() { Chimera::Singleton<ListNodes>::rel
 
 void LibraryVisualScenes::target() {
 
-    tinyxml2::XMLElement* l_nScene =
-        root->FirstChildElement("library_visual_scenes")->FirstChildElement("visual_scene");
+    tinyxml2::XMLElement* l_nScene = root->FirstChildElement("library_visual_scenes")->FirstChildElement("visual_scene");
     for (l_nScene; l_nScene; l_nScene = l_nScene->NextSiblingElement()) {
 
         std::string l_id = l_nScene->Attribute("id");
@@ -61,8 +59,8 @@ glm::mat4 LibraryVisualScenes::getTransformation(tinyxml2::XMLElement* _nNode) {
     return l_pTransform;
 }
 
-void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id,
-                                      const char* _name, const char* type) {
+void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name,
+                                      const char* type) {
 
     glm::mat4 l_pTransform;
     Chimera::Node* pLastNodeDone = nullptr;
@@ -84,8 +82,8 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
             LibraryCameras lib(root, l_url);
             Chimera::NodeCamera* pCamera = lib.target();
 
-            pCamera->getViewPoint()->setTransform(l_pTransform);
-
+            pCamera->getCamera()->setPosition(l_pTransform[3]);
+            pCamera->getCamera()->calcDistance();
             _pNodePai->addChild(pCamera);
             pLastNodeDone = pCamera;
 

@@ -2,8 +2,6 @@
 #define __CHIMERA_CANVAS_GL__HPP
 
 #include "Canvas.hpp"
-#include "chimera/core/ViewPoint.hpp"
-#include <glm/glm.hpp>
 
 namespace Chimera {
 
@@ -18,7 +16,6 @@ class CanvasGL : public Canvas {
     virtual void reshape(int _width, int _height) override;
 
     virtual void swapWindow();
-    virtual void calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& pView, glm::mat4& pProjection);
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
     virtual int getTotEyes() { return 1; }
     virtual uint32_t* getPixels() override { return nullptr; }

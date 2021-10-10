@@ -2,7 +2,6 @@
 #define __CHIMERA_EYE_HDM__HPP
 
 #include "chimera/core/Shader.hpp"
-#include "chimera/core/ViewPoint.hpp"
 #include "chimera/core/buffers/FrameBuffer.hpp"
 #include "chimera/core/buffers/VertexBuffer.hpp"
 #include <SDL2/SDL.h>
@@ -17,14 +16,14 @@ class Eye {
     void displayTexture();
     void bind();
     void unbind();
-    glm::mat4 getPerspectiveProjectionMatrix(ViewPoint* vp);
     glm::mat4 getOrthoProjectionMatrix();
+
+    SDL_Rect fbTexGeo;
 
   private:
     unsigned int posInitW;
     GLuint texID;
     VertexBuffer* vbo;
-    SDL_Rect fbTexGeo;
     Shader* pShader;
     FrameBuffer* frameBuffer;
 

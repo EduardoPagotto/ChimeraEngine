@@ -1,5 +1,6 @@
 #include "chimera/node/VisitorRender.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/windows/CanvasHmd.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeHUD.hpp"
@@ -120,9 +121,37 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
 
     NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
-        ViewPoint* vp = pCam->getViewPoint();
-        pShader->setUniform("viewPos", vp->position);
-        pVideo->calcPerspectiveProjectionView(eye, vp, view, projection);
+        ICamera* cam = pCam->getCamera();
+        cam->processInput(0.01);
+
+        pShader->setUniform("viewPos", cam->getPosition());
+        if (pVideo->getTotEyes() == 1) {
+            glViewport(0, 0, pVideo->getWidth(), pVideo->getHeight());
+            view = cam->getViewMatrix();
+            projection = cam->getProjectionMatrix(glm::ivec2(pVideo->getWidth(), pVideo->getHeight()));
+
+        } else {
+            // TODO: melhorar para dentro da propria camera !!
+            Eye* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
+            glViewport(0, 0, pEye->fbTexGeo.w, pEye->fbTexGeo.h);
+            if (eye == 0) { // left
+                view = cam->getViewMatrix();
+            } else {
+                // ViewPoint nova = ViewPoint(*vp);
+                glm::vec3 novaPosition = cam->getPosition();
+                glm::vec3 novaFront = cam->getFront();
+                glm::vec3 left_p = novaFront - novaPosition;
+                glm::vec3 cross1 = glm::cross(cam->getUp(), left_p);
+                glm::vec3 norm1 = glm::normalize(cross1);
+                glm::vec3 final_norm1 = norm1 * 5.0f;
+
+                novaPosition = cam->getPosition() - final_norm1;
+                novaFront = cam->getFront() - final_norm1;
+                view = glm::lookAt(novaPosition, novaFront, cam->getUp());
+            }
+
+            projection = cam->getProjectionMatrix(glm::ivec2(pEye->fbTexGeo.w, pEye->fbTexGeo.h));
+        }
     }
 }
 

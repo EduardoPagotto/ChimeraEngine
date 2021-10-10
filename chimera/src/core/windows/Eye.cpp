@@ -44,11 +44,6 @@ void Eye::bind() { frameBuffer->bind(); }
 
 void Eye::unbind() { frameBuffer->unbind(); }
 
-glm::mat4 Eye::getPerspectiveProjectionMatrix(ViewPoint* vp) {
-    glViewport(0, 0, fbTexGeo.w, fbTexGeo.h);
-    return glm::perspective(vp->fov, (GLfloat)(float)fbTexGeo.w / (float)fbTexGeo.h, vp->near, vp->far);
-}
-
 glm::mat4 Eye::getOrthoProjectionMatrix() {
     return glm::ortho(0.0f, static_cast<GLfloat>(fbTexGeo.w), 0.0f, static_cast<GLfloat>(fbTexGeo.h));
 }

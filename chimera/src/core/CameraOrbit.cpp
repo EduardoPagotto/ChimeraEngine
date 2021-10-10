@@ -28,6 +28,12 @@ CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, f
 
 CameraOrbit::~CameraOrbit() {}
 
+void CameraOrbit::setParams(const float& fov, const float& near, const float& far) {
+    this->fov = fov;
+    this->nearPlane = near;
+    this->farPlane = far;
+}
+
 glm::mat4 CameraOrbit::getViewMatrix() { return glm::lookAt(position, front, up); }
 
 glm::mat4 CameraOrbit::getProjectionMatrix(const glm::ivec2& res) { // windows x->width; y -> height
@@ -86,8 +92,8 @@ void CameraOrbit::processCameraRotation(const int& xOffset, const int& yOffset, 
     // if (!Window::GetHideCursor())
     //    return;
     if (this->up.y == 1) {
-        yaw += (float)xOffset;
-        pitch += (float)yOffset;
+        yaw -= (float)xOffset;
+        pitch -= (float)yOffset;
 
         // Constrain the pitch
         if (constrainPitch) {

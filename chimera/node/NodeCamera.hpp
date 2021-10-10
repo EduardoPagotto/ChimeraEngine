@@ -2,8 +2,7 @@
 #define __CHIMERA_NODE_CAMERA__HPP
 
 #include "Node.hpp"
-#include "chimera/core/TrackBall.hpp"
-#include "chimera/core/TrackHead.hpp"
+#include "chimera/core/ICamera.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
@@ -15,17 +14,11 @@ class NodeCamera : public Node {
 
     virtual void init() override;
     virtual void accept(class VisitorInterface* v) override;
-    void createTrackBall();
-    void createTrackHead();
-
-    inline ViewPoint* getViewPoint() { return &viewPoint; }
-    inline TrackBall* getTrackBall() { return pTrackBall; }
-    inline TrackHead* getTrackWalk() { return pTrackHead; }
+    inline ICamera* getCamera() { return camera; }
+    inline void setCamera(ICamera* cam) { this->camera = cam; }
 
   protected:
-    ViewPoint viewPoint;
-    TrackBall* pTrackBall;
-    TrackHead* pTrackHead;
+    ICamera* camera;
 };
 } // namespace Chimera
 #endif

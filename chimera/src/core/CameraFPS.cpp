@@ -21,6 +21,12 @@ CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float
 
 CameraFPS::~CameraFPS() {}
 
+void CameraFPS::setParams(const float& fov, const float& near, const float& far) {
+    this->fov = fov;
+    this->nearPlane = near;
+    this->farPlane = far;
+}
+
 glm::mat4 CameraFPS::getViewMatrix() { return glm::lookAt(position, position + front, up); }
 
 glm::mat4 CameraFPS::getProjectionMatrix(const glm::ivec2& res) { // windows x->width; y -> height

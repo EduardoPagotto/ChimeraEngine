@@ -16,7 +16,15 @@ class CameraOrbit : public ICamera {
     // void processCameraMovement(glm::vec3& direction, float deltaTime);
     void processDistance(const int& _mz);
 
-    virtual void processInput(float deltaTime) override;
+    void setLimits(const float& min, const float& max) {
+        this->min = min;
+        this->max = max;
+    }
+
+    float calcDistance() override {
+        distance = glm::distance(this->position, this->front);
+        return distance;
+    }
 
     // herdado
     virtual glm::mat4 getViewMatrix() override;
@@ -24,6 +32,8 @@ class CameraOrbit : public ICamera {
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }
+    virtual void setParams(const float& fov, const float& near, const float& far) override;
+    virtual void processInput(float deltaTime) override;
 
     virtual void setPosition(const glm::vec3& position) { this->position = position; }
     virtual void invertPitch();

@@ -18,8 +18,6 @@ set (SourcesCore windows/CanvasGL.cpp
 				 space/AABB.cpp
 				 space/Octree.cpp
 				 space/BSPTree.cpp
-				 TrackBall.cpp
-				 TrackHead.cpp
 				 Shader.cpp
 				 ShaderLibrary.cpp
 				 VertexData.cpp

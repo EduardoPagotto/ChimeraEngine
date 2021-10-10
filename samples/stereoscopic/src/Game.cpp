@@ -1,4 +1,6 @@
 #include "Game.hpp"
+//#include "chimera/core/CameraFPS.hpp"
+#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
@@ -21,17 +23,7 @@ Game::Game(Chimera::Canvas* canvas, const std::vector<std::string>& shadesFile) 
 
     // Propriedades da camera
     NodeCamera* pCam = new Chimera::NodeCamera(groupRoot, "Observador-01");
-    pCam->createTrackBall();
-    pCam->createTrackHead();
-    pCam->getTrackBall()->setMax(1000.0);
-    pCam->getTrackBall()->setMin(0.5);
-    pCam->getViewPoint()->far = 10000.0;
-    pCam->getViewPoint()->near = 0.1;
-    pCam->getViewPoint()->fov = 45.0;
-    pCam->getViewPoint()->position = glm::vec3(0, 0, 300);
-    pCam->getViewPoint()->front = glm::vec3(0, 0, 0);
-    pCam->getViewPoint()->up = glm::vec3(0, 1, 0);
-    pCam->init();
+    pCam->setCamera(new CameraOrbit(glm::vec3(0, 0, 300), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0));
 
     // Propriedades da luz
     NodeLight* pLight = new Chimera::NodeLight(groupRoot, "Luz1");
@@ -80,10 +72,10 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_a:
-                    pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::LEFT, 10);
+                    // pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::LEFT, 10);
                     break;
                 case SDLK_d:
-                    pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::RIGHT, 10);
+                    // pCamZ->getTrackWalk()->move(Chimera::Camera_Movement::RIGHT, 10);
                     break;
                 // case SDLK_1:
                 //     render3D.logToggle();
@@ -97,18 +89,6 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEMOTION: {
-            Chimera::NodeCamera* pCamZ = (Chimera::NodeCamera*)pRoot->findChild(Chimera::Kind::CAMERA, 0, true);
-
-            if (Chimera::MouseDevice::getButtonState(1) == SDL_PRESSED) {
-                if (event.type == SDL_MOUSEMOTION) {
-                    pCamZ->getTrackBall()->tracking(event.motion.xrel, event.motion.yrel);
-                }
-            } else if (Chimera::MouseDevice::getButtonState(3) == SDL_PRESSED) {
-
-                if (event.type == SDL_MOUSEMOTION) {
-                    pCamZ->getTrackBall()->offSet(event.motion.yrel);
-                }
-            }
         } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {

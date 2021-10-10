@@ -4,7 +4,6 @@
 #include "chimera/core/Application.hpp"
 #include "chimera/core/ICamera.hpp"
 #include "chimera/core/Texture.hpp"
-#include "chimera/core/TrackBall.hpp"
 #include "chimera/core/space/BSPTree.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 

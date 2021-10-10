@@ -42,33 +42,6 @@ void CanvasHmd::after(const unsigned short& _indexEye) {
     // CanvasGL::after(); // SDL_GL_SwapWindow(window);
 }
 
-void CanvasHmd::calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& view, glm::mat4& projection) {
-
-    if (_indexEye == 0) {
-
-        projection = pLeft->getPerspectiveProjectionMatrix(vp);
-        view = glm::lookAt(vp->position, vp->front, vp->up);
-
-    } else {
-
-        ViewPoint nova = ViewPoint(*vp);
-
-        glm::vec3 left_p = nova.front - nova.position;
-        glm::vec3 cross1 = glm::cross(nova.up, left_p);
-        glm::vec3 norm1 = glm::normalize(cross1);
-
-        glm::vec3 final_norm1 = norm1 * 50.0f;
-
-        nova.position = vp->position - final_norm1;
-        nova.front = vp->front - final_norm1;
-
-        projection = pRight->getPerspectiveProjectionMatrix(&nova);
-        view = glm::lookAt(nova.position, nova.front, nova.up);
-    }
-
-    // CanvasGL::calcPerspectiveProjectionView(_eye, vp, view, projection);
-}
-
 glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {
     if (eyeIndex == 0)
         return pLeft->getOrthoProjectionMatrix();
@@ -76,16 +49,4 @@ glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {
     return pRight->getOrthoProjectionMatrix();
 }
 
-// void VideoDevice::perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear,
-// GLdouble zFar )//TODO subistituir o executeViewPerspective
-//{
-//    const GLdouble pi = 3.1415926535897932384626433832795;
-//    GLdouble fW, fH;
-//
-//    //fH = tan( (fovY / 2) / 180 * pi ) * zNear;
-//    fH = tan( fovY / 360 * pi ) * zNear;
-//    fW = fH * aspect;
-//
-//    glFrustum( -fW, fW, -fH, fH, zNear, zFar );
-//}
 } // namespace Chimera

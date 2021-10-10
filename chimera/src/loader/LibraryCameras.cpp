@@ -1,4 +1,6 @@
 #include "LibraryCameras.hpp"
+//#include "chimera/core/CameraFPS.hpp"
+#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/node/NodeCamera.hpp"
 
@@ -17,16 +19,18 @@ Chimera::NodeCamera* LibraryCameras::target() {
         if (url.compare(l_id) == 0) {
 
             Chimera::NodeCamera* pCameraNew = new Chimera::NodeCamera(nullptr, l_id);
-            loadbase(l_nCam, pCameraNew);
-
+            // loadbase(l_nCam, pCameraNew);
             tinyxml2::XMLElement* l_nExtra = findExtra(l_nCam);
             if (l_nExtra) {
                 tinyxml2::XMLElement* l_nMin = l_nExtra->FirstChildElement("orbital")->FirstChildElement("min");
                 tinyxml2::XMLElement* l_nMax = l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
 
-                pCameraNew->createTrackBall();
-                pCameraNew->getTrackBall()->setMin(atof(l_nMin->GetText()));
-                pCameraNew->getTrackBall()->setMax(atof(l_nMax->GetText()));
+                // posicao da camera desconhecida
+                Chimera::CameraOrbit* cam = new Chimera::CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
+                // Chimera::CameraFPS* cam = new Chimera::CameraFPS(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
+                cam->setLimits(atof(l_nMin->GetText()), atof(l_nMax->GetText()));
+                pCameraNew->setCamera(cam);
+                loadbase(l_nCam, pCameraNew);
             }
 
             return pCameraNew;
@@ -40,10 +44,11 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera*
         _nNode->FirstChildElement("optics")->FirstChildElement("technique_common")->FirstChildElement("perspective");
     if (l_nPerspective != nullptr) {
         //_pCamera->setPerspective(true);
-        Chimera::ViewPoint* vp = _pCamera->getViewPoint();
-        vp->fov = atof(l_nPerspective->FirstChildElement("xfov")->GetText());
-        vp->near = atof(l_nPerspective->FirstChildElement("znear")->GetText());
-        vp->far = atof(l_nPerspective->FirstChildElement("zfar")->GetText());
+        // Chimera::ViewPoint* vp = _pCamera->getViewPoint();
+        float fov = atof(l_nPerspective->FirstChildElement("xfov")->GetText());
+        float near = atof(l_nPerspective->FirstChildElement("znear")->GetText());
+        float far = atof(l_nPerspective->FirstChildElement("zfar")->GetText());
+        _pCamera->getCamera()->setParams(fov, near, far);
 
     } else {
         // TODO testar ecarregar ortogonal aqui

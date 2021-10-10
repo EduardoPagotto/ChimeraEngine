@@ -3,8 +3,8 @@
 
 #define GLEW_STATIC
 
-#include "chimera/core/ViewPoint.hpp"
 #include <SDL2/SDL.h>
+#include <glm/glm.hpp>
 #include <string>
 
 namespace Chimera {
@@ -27,8 +27,6 @@ class Canvas {
     virtual void reshape(int _width, int _height) = 0;
 
     virtual void swapWindow() = 0;
-    virtual void calcPerspectiveProjectionView(const unsigned short& _indexEye, ViewPoint* vp, glm::mat4& pView,
-                                               glm::mat4& pProjection) = 0;
     virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) = 0;
     virtual int getTotEyes() = 0;
     virtual void afterStart() = 0;

@@ -44,10 +44,6 @@ void Eye::bind() { frameBuffer->bind(); }
 
 void Eye::unbind() { frameBuffer->unbind(); }
 
-glm::mat4 Eye::getOrthoProjectionMatrix() {
-    return glm::ortho(0.0f, static_cast<GLfloat>(fbTexGeo.w), 0.0f, static_cast<GLfloat>(fbTexGeo.h));
-}
-
 void Eye::createSquare() {
 
     // The fullscreen quad's FBO

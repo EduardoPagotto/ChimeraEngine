@@ -41,12 +41,4 @@ void CanvasHmd::after(const unsigned short& _indexEye) {
     }
     // CanvasGL::after(); // SDL_GL_SwapWindow(window);
 }
-
-glm::mat4 CanvasHmd::getOrthoProjectionMatrix(int eyeIndex) {
-    if (eyeIndex == 0)
-        return pLeft->getOrthoProjectionMatrix();
-
-    return pRight->getOrthoProjectionMatrix();
-}
-
 } // namespace Chimera

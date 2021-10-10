@@ -16,7 +16,6 @@ class CanvasGL : public Canvas {
     virtual void reshape(int _width, int _height) override;
 
     virtual void swapWindow();
-    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex);
     virtual int getTotEyes() { return 1; }
     virtual uint32_t* getPixels() override { return nullptr; }
 

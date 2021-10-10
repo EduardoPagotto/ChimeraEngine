@@ -17,7 +17,6 @@ class CanvasFB : public Canvas {
 
     // FIXME:  ver depois!!!!
     virtual void swapWindow() override{};
-    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) override { return glm::mat4(1.0f); }
     virtual int getTotEyes() override { return 1; }
     virtual void afterStart() override {}
     uint32_t* getPixels() override { return pixels; }

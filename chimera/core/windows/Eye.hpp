@@ -16,7 +16,6 @@ class Eye {
     void displayTexture();
     void bind();
     void unbind();
-    glm::mat4 getOrthoProjectionMatrix();
 
     SDL_Rect fbTexGeo;
 

@@ -112,10 +112,6 @@ void CanvasGL::toggleFullScreen() {
     fullScreen = !fullScreen;
 }
 
-glm::mat4 CanvasGL::getOrthoProjectionMatrix(int eyeIndex) {
-    return glm::ortho(0.0f, static_cast<GLfloat>(width), 0.0f, static_cast<GLfloat>(height));
-}
-
 void CanvasGL::afterStart() {
 
     // glEnable ( GL_TEXTURE_2D );

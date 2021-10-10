@@ -159,7 +159,8 @@ void VisitorRender::visit(NodeHUD* _pHUD) {
 
     if (HudOn == true) {
         if (_pHUD->isOn() == true) {
-            pShader->setUniform("projection", pVideo->getOrthoProjectionMatrix(eye));
+            glm::mat4 proj = glm::ortho(0.0f, static_cast<GLfloat>(pVideo->getWidth()), 0.0f, static_cast<GLfloat>(pVideo->getHeight()));
+            pShader->setUniform("projection", proj);
             _pHUD->render(pShader);
         }
     }

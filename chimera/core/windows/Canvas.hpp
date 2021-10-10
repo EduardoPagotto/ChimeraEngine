@@ -27,7 +27,6 @@ class Canvas {
     virtual void reshape(int _width, int _height) = 0;
 
     virtual void swapWindow() = 0;
-    virtual glm::mat4 getOrthoProjectionMatrix(int eyeIndex) = 0;
     virtual int getTotEyes() = 0;
     virtual void afterStart() = 0;
     virtual uint32_t* getPixels() = 0;

@@ -134,7 +134,7 @@ void Game::onUpdate() {
     pShader->setUniform("view", view);
     pShader->setUniform("model", model);
 
-    material.setUniform(pShader);
+    material.bindMaterialInformation(pShader);
     // aplica a textura
     // pTex->apply(0, "material.tDiffuse", pShader);
 

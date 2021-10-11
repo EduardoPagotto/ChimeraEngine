@@ -1,14 +1,14 @@
 #include "TileLayer.hpp"
+#include "chimera/core/CameraOrthographic.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include <glm/gtx/transform.hpp>
 
 TileLayer::TileLayer(Chimera::Shader* shader)
-    : Chimera::Layer(new Chimera::BatchRender2D(), shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f)) {
+    : Chimera::Layer(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(-16.0f, 16.0f, -9.0f, 9.0f)) {
 
     GLint texIDs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
 
     shader->enable();
-    shader->setUniform("pr_matrix", projectionMatrix);
     shader->setUniform("light_pos", glm::vec2(4.0f, 1.5f));
     shader->setUniformArray("textures", 32, texIDs);
     shader->disable();

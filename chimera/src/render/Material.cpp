@@ -44,7 +44,7 @@ void Material::init() {
 
 void Material::addTexture(const std::string& uniformTexName, Texture* texture) { this->mapTex[uniformTexName] = texture; }
 
-void Material::setUniform(Shader* _shader) {
+void Material::bindMaterialInformation(Shader* _shader) {
 
     // aplica todos os materiais passados
     for (ShaderValue* shaderMaterial : listMaterial) {

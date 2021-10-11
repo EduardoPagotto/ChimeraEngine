@@ -47,7 +47,7 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
     pShader->setUniform("view", view);
     pShader->setUniform("model", model);
 
-    _pMesh->getMaterial()->setUniform(pShader);
+    _pMesh->getMaterial()->bindMaterialInformation(pShader);
 
     if (pShadowMapVisitor != nullptr)
         pShadowMapVisitor->applyShadow(pShader);

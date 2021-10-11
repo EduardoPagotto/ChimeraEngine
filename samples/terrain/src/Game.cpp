@@ -22,13 +22,13 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     pMaterial->addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
 
     // camera = new Chimera::CameraOrbit(glm::vec3(0.0, 0.0, 600.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
-    camera = new Chimera::CameraFPS(glm::vec3(0.0, 0.0, 600.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    camera = new Chimera::CameraFPS(glm::vec3(0.0, 300.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
 
     // Light
     pLight = new Chimera::Light();
     pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     pLight->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
-    pLight->setPosition(glm::vec3(0, 150, 0));
+    pLight->setPosition(glm::vec3(0, 400, 0));
 
     pHeightMap = nullptr;
 }
@@ -147,7 +147,7 @@ void Game::onUpdate() {
     pShader->setUniform("model", model);
 
     // aplica material ao shader
-    pMaterial->setUniform(pShader);
+    pMaterial->bindMaterialInformation(pShader);
 
     // NEW
     render3d.begin(&frustum);

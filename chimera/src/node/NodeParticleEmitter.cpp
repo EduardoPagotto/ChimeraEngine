@@ -150,7 +150,7 @@ void NodeParticleEmitter::render(Shader* _pShader) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Bind our texture
-    material->setUniform(_pShader);
+    material->bindMaterialInformation(_pShader);
 
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);

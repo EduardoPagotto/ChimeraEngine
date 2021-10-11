@@ -3,8 +3,7 @@
 
 namespace Chimera {
 
-Layer::Layer(IRenderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix)
-    : renderer(renderer), shader(shader), projectionMatrix(projectionMatrix) {}
+Layer::Layer(IRenderer2D* renderer, Shader* shader, CameraOrthographic* camera) : renderer(renderer), shader(shader), camera(camera) {}
 
 Layer::~Layer() {
 
@@ -18,7 +17,8 @@ Layer::~Layer() {
 void Layer::render() {
 
     shader->enable();
-    renderer->begin();
+    shader->setUniform("pr_matrix", camera->getProjectionMatrix()); // passar para o renderer o shade
+    renderer->begin(camera);
 
     for (auto renderable : renderables)
         renderable->submit(renderer);

@@ -5,11 +5,11 @@
 
 namespace Chimera {
 
-class CameraOthograpic {
+class CameraOrthographic {
 
   public:
-    CameraOthograpic(const float& left, const float& right, const float& botton, const float& top);
-    virtual ~CameraOthograpic() {}
+    CameraOrthographic(const float& left, const float& right, const float& botton, const float& top);
+    virtual ~CameraOrthographic() {}
 
     void setPosition(const glm::vec3& position) {
         this->position = position;

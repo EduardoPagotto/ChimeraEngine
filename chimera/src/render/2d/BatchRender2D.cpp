@@ -52,7 +52,9 @@ void BatchRender2D::init() {
     pVao->unbind();
 }
 
-void BatchRender2D::begin() {
+void BatchRender2D::begin(CameraOrthographic* camera) {
+
+    this->camera = camera;
 
     pVbo->bind();
     this->buffer = (VertexDataSimple*)pVbo->map();
@@ -71,9 +73,9 @@ float BatchRender2D::submitTexture(Texture* texture) {
 
     if (!found) {
         if (textures.size() >= RENDERER_MAX_TEXTURE) {
-            end();   // End();
-            flush(); // Present();
-            begin(); // Begin();
+            end();         // End();
+            flush();       // Present();
+            begin(camera); // Begin();
         }
         textures.push_back(texture);
         result = (float)(textures.size());

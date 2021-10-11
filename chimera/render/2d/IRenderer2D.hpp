@@ -8,7 +8,7 @@
 namespace Chimera {
 class IRenderer2D {
   public:
-    virtual void begin() = 0;
+    virtual void begin(class CameraOrthographic* camera) = 0;
     virtual void submit(class IRenderable2D* renderable) = 0;
     virtual void end() = 0;
     virtual void flush() = 0;

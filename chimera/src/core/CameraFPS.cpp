@@ -9,7 +9,7 @@ CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float
     : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(FPSCAMERA_MAX_SPEED), fov(CAMERA_MAX_FOV) {
     this->position = pos;
     this->worldUp = up;
-    this->up = up; // ???
+    this->up = up;
     this->yaw = yaw;
     this->pitch = pitch;
 

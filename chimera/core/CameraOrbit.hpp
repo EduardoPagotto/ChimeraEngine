@@ -21,7 +21,7 @@ class CameraOrbit : public ICamera {
         this->max = max;
     }
 
-    float calcDistance() override {
+    float updateDistanceFront() override {
         distance = glm::distance(this->position, this->front);
         return distance;
     }
@@ -41,7 +41,7 @@ class CameraOrbit : public ICamera {
   private:
     void updateVectors();
 
-    glm::vec3 position, front, up, right, worldUp;
+    glm::vec3 position, front, up;
     float pitch, yaw, fov;
     float nearPlane, farPlane;
     float distance;

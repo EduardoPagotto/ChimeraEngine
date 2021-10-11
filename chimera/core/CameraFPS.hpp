@@ -17,6 +17,7 @@ class CameraFPS : public ICamera {
     void processCameraFOV(double yOffset);
     void processCameraRotation(double xOffset, double yOffset, bool constrainPitch = true);
     void processCameraMovement(glm::vec3& direction, float deltaTime);
+
     virtual void processInput(float deltaTime) override;
 
     // herdado
@@ -26,10 +27,9 @@ class CameraFPS : public ICamera {
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }
     virtual void setParams(const float& fov, const float& near, const float& far) override;
-    virtual float calcDistance() override { return glm::distance(this->position, this->front); }
-
-    virtual void setPosition(const glm::vec3& position) { this->position = position; }
-    virtual void invertPitch();
+    virtual float updateDistanceFront() override { return glm::distance(this->position, this->front); }
+    virtual void setPosition(const glm::vec3& position) override { this->position = position; }
+    virtual void invertPitch() override;
 
   private:
     void updateVectors();

@@ -8,8 +8,7 @@ namespace Chimera {
 CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch)
     : front(glm::vec3(0.0f, 0.0f, 0.0f)), fov(CAMERA_MAX_FOV) {
     this->position = pos;
-    this->worldUp = up;
-    this->up = up; // ???
+    this->up = up;
     this->yaw = yaw;
     this->pitch = pitch;
 

@@ -15,12 +15,12 @@ class ICamera {
     virtual const glm::vec3& getPosition() const = 0;
     virtual const glm::vec3& getFront() const = 0;
     virtual const glm::vec3& getUp() const = 0;
-    virtual void processInput(float deltaTime) = 0; // FIXME: achar outra saida!!
-    virtual void setParams(const float& fov, const float& near, const float& far) = 0;
-    virtual float calcDistance() = 0;
-
+    virtual float updateDistanceFront() = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void invertPitch() = 0;
+    virtual void setParams(const float& fov, const float& near, const float& far) = 0;
+
+    virtual void processInput(float deltaTime) = 0; // FIXME: achar outra saida!!
 };
 } // namespace Chimera
 #endif

@@ -27,8 +27,9 @@ class CameraOrbit : public ICamera {
     }
 
     // herdado
-    virtual glm::mat4 getViewMatrix() override;
-    glm::mat4 getProjectionMatrix(const glm::ivec2& res) override;
+    virtual glm::mat4 getViewMatrix() const override { return viewMatrix; };
+    virtual glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
+    virtual glm::mat4 recalcMatrix(const float& canvasRatio) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }
@@ -46,6 +47,10 @@ class CameraOrbit : public ICamera {
     float nearPlane, farPlane;
     float distance;
     float min, max;
+    glm::mat4 viewMatrix;
+    glm::mat4 projectionMatrix;
+    glm::mat4 viewProjectionMatrix;
+    glm::mat4 viewProjectionMatrixInverse;
 };
 } // namespace Chimera
 #endif

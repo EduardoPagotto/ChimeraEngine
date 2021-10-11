@@ -136,16 +136,10 @@ void Game::onUpdate() {
 
     pShader->enable();
 
-    // Calcula view e projection baseado em vp
-    // canvas->calcPerspectiveProjectionView(0, vp, view, projection);
-    glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
+    glViewport(0, 0, canvas->getWidth(), canvas->getHeight()); // FIXME: ver se da para irar de todos!!!!
+    frustum.set(camera->recalcMatrix(canvas->getRatio()));
     view = camera->getViewMatrix();
-    projection = camera->getProjectionMatrix(glm::ivec2(canvas->getWidth(), canvas->getHeight()));
-
-    glm::mat4 projectionMatrixInverse = glm::inverse(projection);
-    glm::mat4 viewMatrixInverse = glm::inverse(view);
-    glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
-    frustum.set(viewProjectionMatrixInverse);
+    projection = camera->getProjectionMatrix();
 
     pShader->setUniform("projection", projection);
     pShader->setUniform("view", view);

@@ -125,13 +125,9 @@ void Game::onUpdate() {
     camera->processInput(0.01);
     // Calcula view e projection pela Camera
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
+    frustum.set(camera->recalcMatrix(canvas->getRatio()));
     view = camera->getViewMatrix();
-    projection = camera->getProjectionMatrix(glm::ivec2(canvas->getWidth(), canvas->getHeight()));
-
-    glm::mat4 projectionMatrixInverse = glm::inverse(projection);
-    glm::mat4 viewMatrixInverse = glm::inverse(view);
-    glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
-    frustum.set(viewProjectionMatrixInverse);
+    projection = camera->getProjectionMatrix();
 
     pLight->setUniform(pShader);
 

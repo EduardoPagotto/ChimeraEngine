@@ -34,6 +34,7 @@ class Canvas {
     inline int getWidth() const { return width; }
     inline int getHeight() const { return height; }
     inline bool getFullScreen() const { return fullScreen; }
+    inline float getRatio() const { return (float(width)) / ((float)height); }
 
   protected:
     bool fullScreen;

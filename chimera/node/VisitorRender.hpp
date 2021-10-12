@@ -1,6 +1,7 @@
 #ifndef __CHIMERA_VISITOR_RENDER__HPP
 #define __CHIMERA_VISITOR_RENDER__HPP
 
+#include "chimera/core/ICamera.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/windows/CanvasGL.hpp"
@@ -31,8 +32,7 @@ class VisitorRender : public VisitorInterface {
     bool HudOn;
     bool particleOn;
 
-    glm::mat4 projection;
-    glm::mat4 view;
+    ICamera* cameraScene;
     glm::mat4 model;
 
     Shader* pShader;

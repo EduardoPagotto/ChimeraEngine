@@ -21,8 +21,6 @@ VisitorRender::VisitorRender() {
     particleOn = true;
     eye = 0;
 
-    projection = glm::mat4(1.0f);
-    view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
     pShadowMapVisitor = nullptr;
@@ -43,8 +41,8 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
 
     int shadows = 1;
     pShader->setUniform("shadows", shadows);
-    pShader->setUniform("projection", projection);
-    pShader->setUniform("view", view);
+    pShader->setUniform("projection", cameraScene->getProjectionMatrix());
+    pShader->setUniform("view", cameraScene->getViewMatrix());
     pShader->setUniform("model", model);
 
     _pMesh->getMaterial()->bindMaterialInformation(pShader);
@@ -78,8 +76,8 @@ void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
         if (pShader == nullptr)
             return;
 
-        // Get the variables from the shader to which data will be passed
-        pShader->setUniform("projection", projection);
+        const glm::mat4 view = cameraScene->getViewMatrix();
+        pShader->setUniform("projection", cameraScene->getProjectionMatrix());
         pShader->setUniform("view", view);
         // shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr(
         // glm::inverseTranspose(glm::mat3(_view))));
@@ -121,28 +119,21 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
 
     NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
-        ICamera* cam = pCam->getCamera();
-        cam->processInput(0.01);
+        cameraScene = pCam->getCamera();
+        cameraScene->processInput(0.01);
 
-        pShader->setUniform("viewPos", cam->getPosition());
+        pShader->setUniform("viewPos", cameraScene->getPosition());
         if (pVideo->getTotEyes() == 1) {
             glViewport(0, 0, pVideo->getWidth(), pVideo->getHeight());
-            cam->recalculateMatrix(pVideo->getRatio());
-            view = cam->getViewMatrix();
-            projection = cam->getProjectionMatrix();
-
+            cameraScene->recalculateMatrix(pVideo->getRatio());
         } else {
             Eye* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
             glViewport(0, 0, pEye->fbTexGeo.w, pEye->fbTexGeo.h);
-
             if (eye == 0) { // right
-                cam->recalculateMatrix(1.0f, false);
+                cameraScene->recalculateMatrix(1.0f, false);
             } else { // left
-                cam->recalculateMatrix(1.0f, true);
+                cameraScene->recalculateMatrix(1.0f, true);
             }
-
-            view = cam->getViewMatrix();
-            projection = cam->getProjectionMatrix();
         }
     }
 }

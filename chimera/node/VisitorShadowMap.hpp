@@ -29,8 +29,6 @@ class VisitorShadowMap : public VisitorInterface {
     inline glm::mat4 getLightSpaceMatrix() const { return lightSpaceMatrix; }
 
   private:
-    void setLightSpaceMatrix(const glm::vec3& _posicaoLight);
-
     glm::mat4 lightSpaceMatrix;
     Transform* pTransform;
     Shader* pShader;

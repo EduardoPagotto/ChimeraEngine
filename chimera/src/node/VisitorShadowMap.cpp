@@ -43,8 +43,19 @@ void VisitorShadowMap::visit(NodeMesh* _pMesh) {
 }
 
 void VisitorShadowMap::visit(NodeLight* _pLight) {
-    // node de luz deve vir anter para funcionar?!
-    this->setLightSpaceMatrix(_pLight->data.getPosition());
+
+    glm::mat4 lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f);
+    // Note that if you use a
+    // glm::mat4 lightProjection = glm::perspective(45.0f,
+    //                                              (GLfloat)pTexture->getWidth() /(GLfloat)pTexture->getHeight(),
+    //                                              near_plane,
+    //                                              far_plane);
+    // perspective projection matrix you'll have to change the light position as the
+    // current light position isn't enough to reflect the whole scene.
+
+    glm::mat4 lightView = glm::lookAt(_pLight->data.getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
+    this->lightSpaceMatrix = lightProjection * lightView;
+
     pShader->setUniform("lightSpaceMatrix", lightSpaceMatrix);
 }
 
@@ -70,22 +81,5 @@ void VisitorShadowMap::applyShadow(Shader* _pShader) {
     if (_pShader != nullptr) {
         _pShader->setUniform("shadowMap", 1);
     }
-}
-
-void VisitorShadowMap::setLightSpaceMatrix(const glm::vec3& _posicaoLight) {
-
-    GLfloat near_plane = 1.0f, far_plane = 150.0f;
-    glm::mat4 lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, near_plane, far_plane);
-
-    // Note that if you use a
-    // glm::mat4 lightProjection = glm::perspective(45.0f,
-    //                                              (GLfloat)pTexture->getWidth() /(GLfloat)pTexture->getHeight(),
-    //                                              near_plane,
-    //                                              far_plane);
-    // perspective projection matrix you'll have to change the light position as the
-    // current light position isn't enough to reflect the whole scene.
-
-    glm::mat4 lightView = glm::lookAt(_posicaoLight, glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
-    this->lightSpaceMatrix = lightProjection * lightView;
 }
 } // namespace Chimera

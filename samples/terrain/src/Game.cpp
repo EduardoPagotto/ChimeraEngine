@@ -8,8 +8,6 @@
 #include "chimera/render/LoadHeightMap.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
-    projection = glm::mat4(1.0f);
-    view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
     pShader = shaderLibrary.load("./assets/shaders/MeshFullShadow.glsl");
@@ -125,9 +123,7 @@ void Game::onUpdate() {
     camera->processInput(0.01);
     // Calcula view e projection pela Camera
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
-    frustum.set(camera->recalculateMatrix(canvas->getRatio()));
-    view = camera->getViewMatrix();
-    projection = camera->getProjectionMatrix();
+    camera->recalculateMatrix(canvas->getRatio());
 
     pLight->setUniform(pShader);
 
@@ -138,15 +134,15 @@ void Game::onUpdate() {
     int shadows = 0;
     pShader->setUniform("shadows", shadows);
 
-    pShader->setUniform("projection", projection);
-    pShader->setUniform("view", view);
+    pShader->setUniform("projection", camera->getProjectionMatrix());
+    pShader->setUniform("view", camera->getViewMatrix());
     pShader->setUniform("model", model);
 
     // aplica material ao shader
     pMaterial->bindMaterialInformation(pShader);
 
     // NEW
-    render3d.begin(&frustum);
+    render3d.begin(camera);
     pHeightMap->submit(&render3d); // render3d.submit(pHeightMap);
     render3d.end();
 

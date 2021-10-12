@@ -19,15 +19,12 @@ class Game : public Chimera::Application {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    glm::mat4 projection;
-    glm::mat4 view;
     glm::mat4 model;
     Chimera::ICamera* camera;
     Chimera::Shader* pShader;
     Chimera::Material material;
     Chimera::RenderableStatic* rederable;
     Chimera::SimpleRender3d render3D;
-    Chimera::Frustum frustum;
 };
 
 #endif

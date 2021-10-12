@@ -10,8 +10,6 @@
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     pShader = shaderLibrary.load("./assets/shaders/Simples.glsl");
-    projection = glm::mat4(1.0f);
-    view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 }
 
@@ -122,19 +120,15 @@ void Game::onUpdate() {
     camera->processInput(0.01); // FIXME: ver onde fica melhor
 
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
-    frustum.set(camera->recalculateMatrix(canvas->getRatio()));
-    view = camera->getViewMatrix();
-    projection = camera->getProjectionMatrix();
+    camera->recalculateMatrix(canvas->getRatio());
 
-    pShader->setUniform("projection", projection);
-    pShader->setUniform("view", view);
+    pShader->setUniform("projection", camera->getProjectionMatrix());
+    pShader->setUniform("view", camera->getViewMatrix());
     pShader->setUniform("model", model);
 
     material.bindMaterialInformation(pShader);
-    // aplica a textura
-    // pTex->apply(0, "material.tDiffuse", pShader);
 
-    render3D.begin(&frustum);
+    render3D.begin(camera);
     rederable->submit(&render3D);
     render3D.end();
 

@@ -14,9 +14,6 @@
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     pShader = shaderLibrary.load("./assets/shaders/MeshNoMat.glsl");
-
-    projection = glm::mat4(1.0f);
-    view = glm::mat4(1.0f);
     model = glm::mat4(1.0f);
 
     // FIXME: no load retornar a textura ou null se nao existir
@@ -137,12 +134,10 @@ void Game::onUpdate() {
     pShader->enable();
 
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight()); // FIXME: ver se da para irar de todos!!!!
-    frustum.set(camera->recalculateMatrix(canvas->getRatio()));
-    view = camera->getViewMatrix();
-    projection = camera->getProjectionMatrix();
+    camera->recalculateMatrix(canvas->getRatio());
 
-    pShader->setUniform("projection", projection);
-    pShader->setUniform("view", view);
+    pShader->setUniform("projection", camera->getProjectionMatrix());
+    pShader->setUniform("view", camera->getViewMatrix());
     pShader->setUniform("model", model);
 
     // aplica a textura
@@ -152,7 +147,7 @@ void Game::onUpdate() {
     // renderz1->setEyePosition(&vp->position);
     glm::vec3 poseye = camera->getPosition();
     renderz1->setEyePosition(&poseye);
-    render3d.begin(&frustum);
+    render3d.begin(camera);
     renderz1->submit(&render3d); // render3d.submit(renderz1);
     render3d.end();
 

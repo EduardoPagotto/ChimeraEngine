@@ -18,8 +18,6 @@ class Game : public Chimera::Application {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    glm::mat4 projection;
-    glm::mat4 view;
     glm::mat4 model;
 
     Chimera::ICamera* camera;
@@ -28,7 +26,6 @@ class Game : public Chimera::Application {
     Chimera::Material* pMaterial;
     Chimera::RenderableIndex* pHeightMap;
     Chimera::SimpleRender3d render3d;
-    Chimera::Frustum frustum;
 };
 
 #endif

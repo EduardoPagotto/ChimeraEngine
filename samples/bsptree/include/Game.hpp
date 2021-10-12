@@ -20,12 +20,9 @@ class Game : public Chimera::Application {
     Chimera::ICamera* camera;
     Chimera::Shader* pShader;
 
-    glm::mat4 projection;
-    glm::mat4 view;
     glm::mat4 model;
 
     Chimera::Texture* pTex;
-    Chimera::Frustum frustum;
     Chimera::SimpleRender3d render3d;
     Chimera::RenderableBsp* renderz1;
 };

@@ -2,16 +2,19 @@
 #define __CHIMERA_SIMPLE_RENDER_3D_HPP
 
 #include "IRenderer3d.hpp"
+#include "chimera/core/ICamera.hpp"
+#include "chimera/core/space/Frustum.hpp"
+#include <cstdint>
 #include <deque>
 
 namespace Chimera {
 
 class SimpleRender3d : public IRenderer3d {
   public:
-    SimpleRender3d() : logData(false), frustrun(nullptr), totIBO(0), totFaces(0) {}
+    SimpleRender3d() : logData(false), camera(nullptr), totIBO(0), totFaces(0) {}
     virtual ~SimpleRender3d() {}
 
-    virtual void begin(Frustum* frustrun) override;
+    virtual void begin(ICamera* camera) override;
     virtual void submit(IRenderable* renderable) override;
     virtual void end() override;
     virtual void flush() override;
@@ -21,7 +24,8 @@ class SimpleRender3d : public IRenderer3d {
 
   private:
     std::deque<IRenderable*> renderQueue;
-    Frustum* frustrun;
+    ICamera* camera;
+    Frustum frustum;
 
     bool logData;
     uint32_t totIBO;

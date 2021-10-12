@@ -1,13 +1,11 @@
 #ifndef __CHIMERA_IRENDERER_3D__HPP
 #define __CHIMERA_IRENDERER_3D__HPP
 
-#include "chimera/core/space/Frustum.hpp"
-
 namespace Chimera {
 
 class IRenderer3d {
   public:
-    virtual void begin(Frustum* frustrun) = 0;
+    virtual void begin(class ICamera* camera) = 0;
     virtual void submit(class IRenderable* renderable) = 0;
     virtual void end() = 0;
     virtual void flush() = 0;

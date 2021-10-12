@@ -4,8 +4,12 @@
 
 namespace Chimera {
 
-void SimpleRender3d::begin(Frustum* frustrun) {
-    this->frustrun = frustrun;
+void SimpleRender3d::begin(ICamera* camera) {
+    this->camera = camera;
+    if (this->camera != nullptr) {
+        frustum.set(camera->getViewProjectionMatrixInverse());
+    }
+
     // debug data
     totIBO = 0;
     totFaces = 0;
@@ -18,7 +22,7 @@ void SimpleRender3d::end() {
 void SimpleRender3d::submit(IRenderable* renderable) {
 
     // se não há frustrum adicionar tudo
-    if (frustrun == nullptr) {
+    if (this->camera == nullptr) {
         renderQueue.push_back(renderable);
         return;
     }
@@ -29,7 +33,7 @@ void SimpleRender3d::submit(IRenderable* renderable) {
         renderQueue.push_back(renderable);
     } else {
         // adicione apenas o que esta no clip-space
-        if (pAABB->visible(*frustrun) == true) {
+        if (pAABB->visible(frustum) == true) {
 
             IndexBuffer* ibo = renderable->getIBO();
             if (ibo != nullptr) {

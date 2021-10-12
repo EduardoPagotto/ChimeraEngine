@@ -10,9 +10,11 @@ namespace Chimera {
 class ICamera {
   public:
     virtual ~ICamera() {}
-    virtual glm::mat4 getViewMatrix() const = 0;
-    virtual glm::mat4 getProjectionMatrix() const = 0;
-    virtual glm::mat4 recalcMatrix(const float& canvasRatio) = 0;
+    virtual const glm::mat4 getViewMatrix() const = 0;
+    virtual const glm::mat4 getProjectionMatrix() const = 0;
+    virtual const glm::mat4 getViewProjectionMatrix() const = 0;
+    virtual const glm::mat4 getViewProjectionMatrixInverse() const = 0;
+    virtual glm::mat4 recalculateMatrix(const float& canvasRatio = 1.0f, bool left = false) = 0;
     virtual const glm::vec3& getPosition() const = 0;
     virtual const glm::vec3& getFront() const = 0;
     virtual const glm::vec3& getUp() const = 0;

@@ -127,32 +127,21 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
         pShader->setUniform("viewPos", cam->getPosition());
         if (pVideo->getTotEyes() == 1) {
             glViewport(0, 0, pVideo->getWidth(), pVideo->getHeight());
-            // frustum.set(cam->recalcMatrix(pVideo->getRatio()));
-            cam->recalcMatrix(pVideo->getRatio());
+            cam->recalculateMatrix(pVideo->getRatio());
             view = cam->getViewMatrix();
             projection = cam->getProjectionMatrix();
 
         } else {
-            // TODO: melhorar para dentro da propria camera !!
             Eye* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
             glViewport(0, 0, pEye->fbTexGeo.w, pEye->fbTexGeo.h);
-            cam->recalcMatrix(1.0f); // FIXME: 1 porque o radio nao e do video mas do eye!!!!
-            if (eye == 0) {          // left
-                view = cam->getViewMatrix();
-            } else {
-                // ViewPoint nova = ViewPoint(*vp);
-                glm::vec3 novaPosition = cam->getPosition();
-                glm::vec3 novaFront = cam->getFront();
-                glm::vec3 left_p = novaFront - novaPosition;
-                glm::vec3 cross1 = glm::cross(cam->getUp(), left_p);
-                glm::vec3 norm1 = glm::normalize(cross1);
-                glm::vec3 final_norm1 = norm1 * 5.0f;
 
-                novaPosition = cam->getPosition() - final_norm1;
-                novaFront = cam->getFront() - final_norm1;
-                view = glm::lookAt(novaPosition, novaFront, cam->getUp());
+            if (eye == 0) { // right
+                cam->recalculateMatrix(1.0f, false);
+            } else { // left
+                cam->recalculateMatrix(1.0f, true);
             }
 
+            view = cam->getViewMatrix();
             projection = cam->getProjectionMatrix();
         }
     }

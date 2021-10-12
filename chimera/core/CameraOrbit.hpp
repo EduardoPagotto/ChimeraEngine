@@ -27,9 +27,11 @@ class CameraOrbit : public ICamera {
     }
 
     // herdado
-    virtual glm::mat4 getViewMatrix() const override { return viewMatrix; };
-    virtual glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
-    virtual glm::mat4 recalcMatrix(const float& canvasRatio) override;
+    virtual const glm::mat4 getViewMatrix() const override { return viewMatrix; };
+    virtual const glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
+    virtual const glm::mat4 getViewProjectionMatrix() const { return viewProjectionMatrix; };
+    virtual const glm::mat4 getViewProjectionMatrixInverse() const { return viewProjectionMatrixInverse; };
+    virtual glm::mat4 recalculateMatrix(const float& canvasRatio = 1.0f, bool left = false) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }

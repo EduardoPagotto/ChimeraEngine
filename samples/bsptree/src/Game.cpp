@@ -137,7 +137,7 @@ void Game::onUpdate() {
     pShader->enable();
 
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight()); // FIXME: ver se da para irar de todos!!!!
-    frustum.set(camera->recalcMatrix(canvas->getRatio()));
+    frustum.set(camera->recalculateMatrix(canvas->getRatio()));
     view = camera->getViewMatrix();
     projection = camera->getProjectionMatrix();
 

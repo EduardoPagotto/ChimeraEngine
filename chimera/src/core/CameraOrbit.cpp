@@ -33,9 +33,27 @@ void CameraOrbit::setParams(const float& fov, const float& near, const float& fa
     this->farPlane = far;
 }
 
-glm::mat4 CameraOrbit::recalcMatrix(const float& canvasRatio) { // windows x->width; y -> height
-    viewMatrix = glm::lookAt(position, front, up);
+glm::mat4 CameraOrbit::recalculateMatrix(const float& canvasRatio, bool left) { // windows x->width; y -> height
+
+    if (left == false) {
+        viewMatrix = glm::lookAt(position, front, up);
+    } else {
+        // TODO: olho esquerdo para dual
+        glm::vec3 novaPosition = this->getPosition();
+        glm::vec3 novaFront = this->getFront();
+
+        glm::vec3 left_p = novaFront - novaPosition;
+        glm::vec3 cross1 = glm::cross(this->getUp(), left_p);
+        glm::vec3 norm1 = glm::normalize(cross1);
+        glm::vec3 final_norm1 = norm1 * 5.0f;
+
+        novaPosition = this->getPosition() - final_norm1;
+        novaFront = this->getFront() - final_norm1;
+        viewMatrix = glm::lookAt(novaPosition, novaFront, this->getUp());
+    }
+
     projectionMatrix = glm::perspective(glm::radians(fov), canvasRatio, nearPlane, farPlane);
+    viewProjectionMatrix = projectionMatrix * viewMatrix;
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);
     glm::mat4 viewMatrixInverse = glm::inverse(viewMatrix);

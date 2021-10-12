@@ -122,7 +122,7 @@ void Game::onUpdate() {
     camera->processInput(0.01); // FIXME: ver onde fica melhor
 
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
-    frustum.set(camera->recalcMatrix(canvas->getRatio()));
+    frustum.set(camera->recalculateMatrix(canvas->getRatio()));
     view = camera->getViewMatrix();
     projection = camera->getProjectionMatrix();
 

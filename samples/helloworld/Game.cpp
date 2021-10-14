@@ -4,6 +4,7 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/2d/layer/Group.hpp"
 #include "chimera/render/FontManager.hpp"
+#include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include "chimera/render/scene/Scene.hpp"
@@ -18,9 +19,15 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     Entity cameraEntity;
     cameraEntity = activeScene.createEntity("Camera Entity");
-    cameraEntity.addComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+    CameraComponent& cameraComponent = cameraEntity.addComponent<CameraComponent>();
+    cameraComponent.camera.setViewportSize(640, 480);
+    cameraComponent.camera.setOrthographic(100, -1, 1);
+
+    // adiciona um controller a camera
+    cameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
 
     square.addComponent<SpriteComponent>(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
+    activeScene.onUpdate(1.0);
 
     if (square) {
 

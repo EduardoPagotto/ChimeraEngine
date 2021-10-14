@@ -49,6 +49,21 @@ Scene::~Scene() {}
 
 void Scene::onUpdate(float ts) {
 
+    // update scripts
+
+    eRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+        if (!nsc.instance) {
+
+            nsc.instantiateFunction();
+
+            nsc.instance->entity = Entity{entity, this}; // set de enity to native script
+
+            nsc.onCreateFunction(nsc.instance);
+        }
+
+        nsc.onUpdateFuncion(nsc.instance, ts);
+    });
+
     Camera* mainCamera = nullptr;
     glm::mat4* cameraTransform = nullptr;
 
@@ -64,6 +79,8 @@ void Scene::onUpdate(float ts) {
     }
 
     if (mainCamera) {
+
+        // proximo scene camera  https://www.youtube.com/watch?v=UKVFRRufKzo
 
         // Renderer2D::begin(*mainCamera, *cameraTransform); // inver transform depois
 
@@ -85,6 +102,22 @@ Entity Scene::createEntity(const std::string& name) {
     tag.tag = name.empty() ? "Entity" : name;
 
     return entity;
+}
+
+void Scene::onViewportResize(uint32_t width, uint32_t height) {
+
+    viewportWidth = width;
+    viewportHeight = height;
+
+    auto view = eRegistry.view<CameraComponent>();
+    for (auto entity : view) {
+
+        auto& cameraComponent = view.get<CameraComponent>(entity);
+        if (!cameraComponent.fixedAspectRatio) {
+
+            cameraComponent.camera.setViewportSize(width, height);
+        }
+    }
 }
 
 } // namespace Chimera

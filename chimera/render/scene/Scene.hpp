@@ -13,8 +13,10 @@ class Scene {
 
     Entity createEntity(const std::string& name = std::string());
     void onUpdate(float ts);
+    void onViewportResize(uint32_t width, uint32_t height);
 
   private:
+    uint32_t viewportWidth, viewportHeight;
     entt::registry eRegistry;
 
     friend class Entity;

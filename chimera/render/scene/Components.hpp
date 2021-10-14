@@ -1,7 +1,8 @@
 #ifndef __CHIMERA_COMPONENTS__HPP
 #define __CHIMERA_COMPONENTS__HPP
 
-#include "chimera/core/Camera.hpp"
+#include "SceneCamera.hpp"
+#include "ScriptableEntity.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
@@ -29,11 +30,39 @@ struct TransformComponent {
 };
 
 struct CameraComponent {
-    Camera camera;
+    SceneCamera camera;
     bool primary = true;
+    bool fixedAspectRatio = false;
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
-    CameraComponent(glm::mat4 projection) : camera(projection) {}
+    // CameraComponent(glm::mat4 projection) : camera(projection) {}
 };
+
+struct NativeScriptComponent {
+
+    ScriptableEntity* instance = nullptr;
+
+    std::function<void()> instantiateFunction;
+    std::function<void()> destroyInstanceFunction;
+
+    std::function<void(ScriptableEntity*)> onCreateFunction;
+    std::function<void(ScriptableEntity*)> onDestroyFuncion;
+    std::function<void(ScriptableEntity*, float)> onUpdateFuncion;
+
+    template <typename T> void bind() {
+
+        instantiateFunction = [&]() { instance = new T(); };
+
+        destroyInstanceFunction = [&]() {
+            delete (T*)instance;
+            instance = nullptr;
+        };
+
+        onCreateFunction = [](ScriptableEntity* instance) { ((T*)instance)->onCreate(); };
+        onDestroyFuncion = [](ScriptableEntity* instance) { ((T*)instance)->onDestroy(); };
+        onUpdateFuncion = [](ScriptableEntity* instance, float ts) { ((T*)instance)->onUpdate(ts); };
+    }
+};
+
 } // namespace Chimera
 #endif

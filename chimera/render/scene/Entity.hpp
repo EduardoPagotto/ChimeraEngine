@@ -14,19 +14,15 @@ class Entity {
     Entity(const Entity& other) = default;
 
     template <typename T> bool hasComponent() { return scene->eRegistry.all_of<T>(entityHandle); }
-
     template <typename T, typename... Args> T& addComponent(Args&&... args) {
         return scene->eRegistry.emplace<T>(entityHandle, std::forward<Args>(args)...);
     }
-
     template <typename T> T& getComponent() { return scene->eRegistry.get<T>(entityHandle); }
-
     template <typename T> void removeComponent() { scene->eRegistry.remove<T>(entityHandle); }
-
-    operator bool() const { return scene != nullptr; }
+    operator bool() const { return entityHandle != entt::null; }
 
   private:
-    entt::entity entityHandle{0};
+    entt::entity entityHandle{entt::null};
     Scene* scene = nullptr;
 };
 } // namespace Chimera

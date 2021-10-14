@@ -1,6 +1,7 @@
 #ifndef __CHIMERA_COMPONENTS__HPP
 #define __CHIMERA_COMPONENTS__HPP
 
+#include "chimera/core/Camera.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
@@ -25,6 +26,14 @@ struct TransformComponent {
     TransformComponent(glm::mat4 transform) : transform(transform) {}
     operator glm::mat4() { return transform; }
     operator const glm::mat4() const { return transform; }
+};
+
+struct CameraComponent {
+    Camera camera;
+    bool primary = true;
+    CameraComponent() = default;
+    CameraComponent(const CameraComponent&) = default;
+    CameraComponent(glm::mat4 projection) : camera(projection) {}
 };
 } // namespace Chimera
 #endif

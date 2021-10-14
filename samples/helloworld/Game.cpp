@@ -15,6 +15,11 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     Scene activeScene;
     auto square = activeScene.createEntity("Square");
+
+    Entity cameraEntity;
+    cameraEntity = activeScene.createEntity("Camera Entity");
+    cameraEntity.addComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+
     square.addComponent<SpriteComponent>(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
     if (square) {

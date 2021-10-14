@@ -48,15 +48,33 @@ Scene::Scene() {
 Scene::~Scene() {}
 
 void Scene::onUpdate(float ts) {
-    auto group = eRegistry.group<TransformComponent>(entt::get<SpriteComponent>);
-    for (auto entity : group) {
 
-        auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+    Camera* mainCamera = nullptr;
+    glm::mat4* cameraTransform = nullptr;
+
+    auto group1 = eRegistry.group<TransformComponent, CameraComponent>();
+    for (auto entity : group1) {
+
+        auto [transform, camera] = group1.get<TransformComponent, CameraComponent>(entity);
+        if (camera.primary) {
+            mainCamera = &camera.camera;
+            cameraTransform = &transform.transform;
+            break;
+        }
+    }
+
+    if (mainCamera) {
+
+        // Renderer2D::begin(*mainCamera, *cameraTransform); // inver transform depois
+
+        auto group = eRegistry.group<TransformComponent>(entt::get<SpriteComponent>);
+        for (auto entity : group) {
+
+            auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+            // Renderer2D::DrawQuad(transform, sprite);
+        }
     }
 }
-
-// Entity createEntity() { return Entity(eRegistry.create(), this); } // return {eRegistry.create(), this}; }
-// entt::entity Scene::createEntity() { return eRegistry.create(); }
 
 Entity Scene::createEntity(const std::string& name) {
 
@@ -66,7 +84,7 @@ Entity Scene::createEntity(const std::string& name) {
     auto& tag = entity.addComponent<TagComponent>();
     tag.tag = name.empty() ? "Entity" : name;
 
-    return entity; // 26:53 ref: https://www.youtube.com/watch?v=GfSzeAcsBb0
+    return entity;
 }
 
 } // namespace Chimera

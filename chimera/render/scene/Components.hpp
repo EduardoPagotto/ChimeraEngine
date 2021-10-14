@@ -42,25 +42,17 @@ struct NativeScriptComponent {
 
     ScriptableEntity* instance = nullptr;
 
-    std::function<void()> instantiateFunction;
-    std::function<void()> destroyInstanceFunction;
-
-    std::function<void(ScriptableEntity*)> onCreateFunction;
-    std::function<void(ScriptableEntity*)> onDestroyFuncion;
-    std::function<void(ScriptableEntity*, float)> onUpdateFuncion;
+    ScriptableEntity* (*instantiateScript)();
+    void (*destroyScript)(NativeScriptComponent*);
 
     template <typename T> void bind() {
 
-        instantiateFunction = [&]() { instance = new T(); };
+        instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
 
-        destroyInstanceFunction = [&]() {
-            delete (T*)instance;
-            instance = nullptr;
+        destroyScript = [](NativeScriptComponent* nsc) {
+            delete nsc->instance;
+            nsc->instance = nullptr;
         };
-
-        onCreateFunction = [](ScriptableEntity* instance) { ((T*)instance)->onCreate(); };
-        onDestroyFuncion = [](ScriptableEntity* instance) { ((T*)instance)->onDestroy(); };
-        onUpdateFuncion = [](ScriptableEntity* instance, float ts) { ((T*)instance)->onUpdate(ts); };
     }
 };
 

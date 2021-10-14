@@ -4,47 +4,7 @@
 
 namespace Chimera {
 
-static void doMath(const glm::mat4& transform) {}
-
-Scene::Scene() {
-
-    // struct Mesh {
-    //     float test;
-    //     Mesh() = default;
-    // };
-    // struct TransformComponent {
-    //     glm::mat4 transform;
-
-    //     TransformComponent() = default;
-    //     TransformComponent(const TransformComponent& transform) = default;
-    //     TransformComponent(glm::mat4 transform) : transform(transform) {}
-
-    //     operator glm::mat4() { return transform; }
-    //     operator const glm::mat4() const { return transform; }
-    // };
-
-    // TransformComponent transform;
-    // doMath(transform);
-
-    // entt::entity entity = eRegistry.create();
-    // bool vv = eRegistry.all_of<TransformComponent>(entity);
-
-    // auto& trans = eRegistry.emplace<TransformComponent>(entity, glm::mat4(1.0f));
-
-    // auto view = eRegistry.view<TransformComponent>();
-
-    // for (auto entity : view) {
-
-    //     TransformComponent tr = eRegistry.get<TransformComponent>(entity);
-    // }
-
-    // auto group = eRegistry.group<TransformComponent>(entt::get<Mesh>);
-    // for (auto entity : group) {
-
-    //     auto& [transform, mesh] = group.get<TransformComponent, Mesh>(entity);
-    //     // renderer::subimit(mesh, transform);
-    // }
-}
+Scene::Scene() {}
 Scene::~Scene() {}
 
 void Scene::onUpdate(float ts) {
@@ -54,14 +14,12 @@ void Scene::onUpdate(float ts) {
     eRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (!nsc.instance) {
 
-            nsc.instantiateFunction();
-
+            nsc.instance = nsc.instantiateScript();
             nsc.instance->entity = Entity{entity, this}; // set de enity to native script
-
-            nsc.onCreateFunction(nsc.instance);
+            nsc.instance->onCreate();
         }
 
-        nsc.onUpdateFuncion(nsc.instance, ts);
+        nsc.instance->onUpdate(ts);
     });
 
     Camera* mainCamera = nullptr;
@@ -84,12 +42,12 @@ void Scene::onUpdate(float ts) {
 
         // Renderer2D::begin(*mainCamera, *cameraTransform); // inver transform depois
 
-        auto group = eRegistry.group<TransformComponent>(entt::get<SpriteComponent>);
-        for (auto entity : group) {
+        // auto group = eRegistry.group<TransformComponent>(entt::get<SpriteComponent>);
+        // for (auto entity : group) {
 
-            auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
-            // Renderer2D::DrawQuad(transform, sprite);
-        }
+        //     auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+        //     // Renderer2D::DrawQuad(transform, sprite);
+        // }
     }
 }
 

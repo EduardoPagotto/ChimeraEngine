@@ -5,6 +5,7 @@
             "includePath": [
                 "/usr/include",
                 "/usr/include/bullet",
+                "/usr/local/include/entt",
                 "${workspaceFolder}/chimera"
             ],
             "defines": [
@@ -14,6 +15,7 @@
                 "path": [
                     "/usr/include",
                     "/usr/include/bullet",
+                    "/usr/local/include/entt",
                     "${workspaceFolder}/chimera",
                     "${workspaceFolder}/samples/models"
                 ],

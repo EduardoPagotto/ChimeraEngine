@@ -30,10 +30,14 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					LoadObj.cpp
 					LoadHeightMap.cpp
 					maze/Cube.cpp 
-					maze/Maze.cpp)
+					maze/Maze.cpp
+					scene/Scene.cpp
+					scene/Entity.cpp)
 
 #define os includes
-set (RenderInclude ${CMAKE_SOURCE_DIR}) # Raiz do projeto
+set (RenderInclude ${CMAKE_SOURCE_DIR}
+					/usr/local/include/) # Raiz do projeto
+					
 set (RenderIncludeAux ${OPENGL_INCLUDE_DIR}
 				 	${SDL2_INCLUDE_DIR}
 				 	${GLEW_INCLUDE_DIRS})

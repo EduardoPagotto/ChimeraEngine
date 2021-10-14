@@ -4,11 +4,31 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/2d/layer/Group.hpp"
 #include "chimera/render/FontManager.hpp"
+#include "chimera/render/scene/Components.hpp"
+#include "chimera/render/scene/Entity.hpp"
+#include "chimera/render/scene/Scene.hpp"
 #include <time.h>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     using namespace Chimera;
+
+    Scene activeScene;
+    auto square = activeScene.createEntity("Square");
+    square.addComponent<SpriteComponent>(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
+
+    if (square) {
+
+        // auto tc = square.addComponent<TransformComponent>(glm::mat4(1.0f));
+        bool teste1 = square.hasComponent<TransformComponent>();
+        bool teste2 = square.hasComponent<TagComponent>();
+        bool teste3 = square.hasComponent<SpriteComponent>();
+
+        square.removeComponent<TransformComponent>();
+
+        teste1 = square.hasComponent<TransformComponent>();
+        teste2 = square.hasComponent<TagComponent>();
+    }
 
     srand(time(nullptr));
 

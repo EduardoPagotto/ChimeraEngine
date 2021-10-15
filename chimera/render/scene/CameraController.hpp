@@ -15,7 +15,7 @@ class CameraController : public ScriptableEntity {
     void onDestroy() {}
     void onUpdate(float time) {
 
-        auto& transform = getComponent<TransformComponent>().transform;
+        auto transform = getComponent<TransformComponent>().getTransform();
 
         // modificar para FPSCamera e orbit camera!!!!!
 

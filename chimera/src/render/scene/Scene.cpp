@@ -1,6 +1,7 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
+#include <SDL2/SDL.h>
 
 namespace Chimera {
 
@@ -9,8 +10,16 @@ Scene::~Scene() {}
 
 void Scene::onUpdate(float ts) {
 
-    // update scripts
+    // lista as tags nas entidades registradas
+    eRegistry.each([&](auto entityID) {
+        Entity entity{entityID, this};
 
+        auto& tc = entity.getComponent<TagComponent>();
+
+        SDL_Log("Tag: %s", tc.tag.c_str());
+    });
+
+    // update scripts
     eRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (!nsc.instance) {
 
@@ -23,15 +32,16 @@ void Scene::onUpdate(float ts) {
     });
 
     Camera* mainCamera = nullptr;
-    glm::mat4* cameraTransform = nullptr;
+    glm::mat4 cameraTransform; // = nullptr;
 
+    // pega varioas componented da entidade
     auto group1 = eRegistry.group<TransformComponent, CameraComponent>();
     for (auto entity : group1) {
 
         auto [transform, camera] = group1.get<TransformComponent, CameraComponent>(entity);
         if (camera.primary) {
             mainCamera = &camera.camera;
-            cameraTransform = &transform.transform;
+            cameraTransform = transform.getTransform();
             break;
         }
     }
@@ -61,6 +71,8 @@ Entity Scene::createEntity(const std::string& name) {
 
     return entity;
 }
+
+void Scene::destroyEntity(Entity entity) { eRegistry.destroy(entity); }
 
 void Scene::onViewportResize(uint32_t width, uint32_t height) {
 

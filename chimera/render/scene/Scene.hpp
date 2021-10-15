@@ -12,6 +12,7 @@ class Scene {
     virtual ~Scene();
 
     Entity createEntity(const std::string& name = std::string());
+    void destroyEntity(Entity entity);
     void onUpdate(float ts);
     void onViewportResize(uint32_t width, uint32_t height);
 

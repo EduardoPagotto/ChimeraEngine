@@ -5,9 +5,6 @@
 
 namespace Chimera {
 
-#define FPSCAMERA_MAX_SPEED 40.0f
-#define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
-
 class CameraFPS : public ICamera {
 
   public:

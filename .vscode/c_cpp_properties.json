@@ -6,7 +6,7 @@
                 "/usr/include",
                 "/usr/include/bullet",
                 "/usr/local/include/entt",
-                "${workspaceFolder}/chimera"
+                "${workspaceFolder}"
             ],
             "defines": [
                 "_DEBUG"
@@ -16,8 +16,7 @@
                     "/usr/include",
                     "/usr/include/bullet",
                     "/usr/local/include/entt",
-                    "${workspaceFolder}/chimera",
-                    "${workspaceFolder}/samples/models"
+                    "${workspaceFolder}"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/build/browse.vc.db"

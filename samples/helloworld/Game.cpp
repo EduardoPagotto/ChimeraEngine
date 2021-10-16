@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/TextureManager.hpp"
+#include "chimera/core/Transform.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/2d/layer/Group.hpp"
@@ -25,15 +26,14 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     cc.camera.setViewportSize(640, 480);
     cc.camera.setPosition(glm::vec3(-80.0, 0.0, 0.0));
 
+    // parametros de controller de camera (parametros DEFAULT!!!)
+    ce.addComponent<CameraControlerFPSParams>();
+
     // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
     ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
     auto nsc = ce.getComponent<NativeScriptComponent>();
     nsc.instance = nsc.instantiateScript();
     nsc.instance->setEntity(Entity{ce, &activeScene});
-
-    // Carrega parametors do controller de camera
-    CameraControllerFPS* ccrt = (CameraControllerFPS*)nsc.instance;
-    ccrt->setParams();
 
     // Vincula dados de camera com controller
     nsc.instance->onCreate();
@@ -47,13 +47,13 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     if (square) {
 
         // auto tc = square.addComponent<TransformComponent>(glm::mat4(1.0f));
-        bool teste1 = square.hasComponent<TransformComponent>();
+        bool teste1 = square.hasComponent<Transform>();
         bool teste2 = square.hasComponent<TagComponent>();
         bool teste3 = square.hasComponent<SpriteComponent>();
 
-        square.removeComponent<TransformComponent>();
+        square.removeComponent<Transform>();
 
-        teste1 = square.hasComponent<TransformComponent>();
+        teste1 = square.hasComponent<Transform>();
         teste2 = square.hasComponent<TagComponent>();
     }
 

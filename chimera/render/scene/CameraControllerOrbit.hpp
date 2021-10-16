@@ -1,5 +1,5 @@
-#ifndef __CHIMERA_CAMERA_CONTROLLER_FPS_ZZ1__HPP
-#define __CHIMERA_CAMERA_CONTROLLER_FPS_ZZ1__HPP
+#ifndef __CHIMERA_CAMERA_CONTROLLER_ORBIT_ZZ1__HPP
+#define __CHIMERA_CAMERA_CONTROLLER_ORBIT_ZZ1__HPP
 
 #include "Components.hpp"
 #include "ScriptableEntity.hpp"
@@ -12,9 +12,9 @@ namespace Chimera {
 #define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
 #define CAMERA_MAX_FOV 45.0f
 
-class CameraControllerFPS : public ScriptableEntity {
+class CameraControllerOrbit : public ScriptableEntity {
   public:
-    CameraControllerFPS() = default;
+    CameraControllerOrbit() = default;
     void onCreate();
     void onDestroy();
     void onUpdate(float time);
@@ -23,14 +23,14 @@ class CameraControllerFPS : public ScriptableEntity {
     void updateVectors();
     void recalculateMatrix(bool left);
     void invertPitch();
+
+    void processDistance(const int& _mz);
+    void processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch = true);
     void processCameraFOV(double offset);
-    void processCameraRotation(double xOffset, double yOffset, bool constrainPitch);
-    void processCameraMovement(glm::vec3& direction, float deltaTime);
 
     Camera* camera = nullptr;
-    CameraControlerFPSParams* cp = nullptr;
-    glm::vec3 right = glm::vec3(0.0f), worldUp = glm::vec3(0.0f);
-    float movementSpeed = FPSCAMERA_MAX_SPEED;
+    CameraControlerOrbitParams* cp = nullptr;
+    float distance = 0.0f;
 };
 
 } // namespace Chimera

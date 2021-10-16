@@ -14,6 +14,10 @@ class Scene {
     Entity createEntity(const std::string& name = std::string());
     void destroyEntity(Entity entity);
     void onUpdate(float ts);
+
+    void onCreate();
+    void onDestroy();
+
     void onViewportResize(uint32_t width, uint32_t height);
 
   private:

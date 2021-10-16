@@ -1,4 +1,4 @@
-#include "chimera/render/scene/SceneCamera.hpp"
+#include "chimera/render/scene/CameraControllerFPS.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

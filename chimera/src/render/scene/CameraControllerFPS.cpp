@@ -5,7 +5,10 @@
 namespace Chimera {
 
 void CameraControllerFPS::onCreate() {
-    this->worldUp = up;
+
+    cp = &getComponent<CameraControlerFPSParams>();
+
+    this->worldUp = cp->up;
     this->movementSpeed = FPSCAMERA_MAX_SPEED;
 
     auto& cc = getComponent<CameraComponent>();
@@ -22,41 +25,41 @@ void CameraControllerFPS::recalculateMatrix(bool left) { // windows x->width; y 
     glm::mat4 viewMatrix;
 
     if (left == false) {
-        viewMatrix = glm::lookAt(camera->getPosition(), camera->getPosition() + front, up);
+        viewMatrix = glm::lookAt(camera->getPosition(), camera->getPosition() + cp->front, cp->up);
 
     } else {
         glm::vec3 novaPosition = camera->getPosition();
-        glm::vec3 novaFront = front;
+        glm::vec3 novaFront = cp->front;
         glm::vec3 left_p = novaFront - novaPosition;
-        glm::vec3 cross1 = glm::cross(up, left_p);
+        glm::vec3 cross1 = glm::cross(cp->up, left_p);
         glm::vec3 norm1 = glm::normalize(cross1);
         glm::vec3 final_norm1 = norm1 * 5.0f;
 
         novaPosition = camera->getPosition() - final_norm1;
-        novaFront = front - final_norm1;
+        novaFront = cp->front - final_norm1;
 
-        viewMatrix = glm::lookAt(novaPosition, novaPosition + novaFront, up);
+        viewMatrix = glm::lookAt(novaPosition, novaPosition + novaFront, cp->up);
     }
 
-    glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), camera->getAspectRatio(), camera->getNear(), camera->getFar());
+    glm::mat4 projectionMatrix = glm::perspective(glm::radians(cp->fov), camera->getAspectRatio(), camera->getNear(), camera->getFar());
 
     camera->updateAllMatrix(projectionMatrix, viewMatrix);
 }
 
 void CameraControllerFPS::invertPitch() {
-    pitch = -pitch;
+    cp->pitch = -cp->pitch;
     updateVectors();
 }
 
 void CameraControllerFPS::updateVectors() {
 
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front = glm::normalize(front);
+    cp->front.x = cos(glm::radians(cp->yaw)) * cos(glm::radians(cp->pitch));
+    cp->front.y = sin(glm::radians(cp->pitch));
+    cp->front.z = sin(glm::radians(cp->yaw)) * cos(glm::radians(cp->pitch));
+    cp->front = glm::normalize(cp->front);
 
-    right = glm::normalize(glm::cross(front, worldUp));
-    up = glm::normalize(glm::cross(right, front));
+    right = glm::normalize(glm::cross(cp->front, worldUp));
+    cp->up = glm::normalize(glm::cross(right, cp->front));
 }
 
 void CameraControllerFPS::onUpdate(float deltaTime) {
@@ -71,9 +74,9 @@ void CameraControllerFPS::onUpdate(float deltaTime) {
     // CameraFPS movement
     glm::vec3 direction = glm::vec3(0.0f);
     if (Keyboard::isPressed(SDLK_w)) // GLFW_KEY_W
-        direction += front;
+        direction += cp->front;
     if (Keyboard::isPressed(SDLK_s)) // GLFW_KEY_S
-        direction -= front;
+        direction -= cp->front;
     if (Keyboard::isPressed(SDLK_a)) // GLFW_KEY_A
         direction -= right;
     if (Keyboard::isPressed(SDLK_d)) //  GLFW_KEY_D
@@ -127,28 +130,28 @@ void CameraControllerFPS::processCameraRotation(double xOffset, double yOffset, 
     // if (!Window::GetHideCursor())
     //    return;
 
-    yaw += (float)xOffset;
-    pitch += (float)yOffset;
+    cp->yaw += (float)xOffset;
+    cp->pitch += (float)yOffset;
 
     // Constrain the pitch
     if (constrainPitch) {
-        if (pitch > 89.0f) {
-            pitch = 89.0f;
-        } else if (pitch < -89.0f) {
-            pitch = -89.0f;
+        if (cp->pitch > 89.0f) {
+            cp->pitch = 89.0f;
+        } else if (cp->pitch < -89.0f) {
+            cp->pitch = -89.0f;
         }
     }
 }
 
 void CameraControllerFPS::processCameraFOV(double offset) {
 
-    if (offset != 0.0 && fov >= 1.0 && fov <= CAMERA_MAX_FOV) {
-        fov -= (float)offset;
+    if (offset != 0.0 && cp->fov >= 1.0 && cp->fov <= CAMERA_MAX_FOV) {
+        cp->fov -= (float)offset;
     }
-    if (fov < 1.0f) {
-        fov = 1.0f;
-    } else if (fov > CAMERA_MAX_FOV) {
-        fov = CAMERA_MAX_FOV;
+    if (cp->fov < 1.0f) {
+        cp->fov = 1.0f;
+    } else if (cp->fov > CAMERA_MAX_FOV) {
+        cp->fov = CAMERA_MAX_FOV;
     }
 }
 

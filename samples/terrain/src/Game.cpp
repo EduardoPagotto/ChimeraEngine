@@ -6,6 +6,9 @@
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/LoadHeightMap.hpp"
+#include "chimera/render/scene/CameraControllerFPS.hpp"
+#include "chimera/render/scene/Components.hpp"
+#include "chimera/render/scene/Entity.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     model = glm::mat4(1.0f);
@@ -20,7 +23,7 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     pMaterial->addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
 
     // camera = new Chimera::CameraOrbit(glm::vec3(0.0, 0.0, 600.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
-    camera = new Chimera::CameraFPS(glm::vec3(0.0, 300.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    // camera = new Chimera::CameraFPS(glm::vec3(0.0, 300.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
 
     // Light
     pLight = new Chimera::Light();
@@ -34,6 +37,30 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 Game::~Game() { delete pShader; }
 
 void Game::onStart() {
+
+    using namespace Chimera;
+    Entity ce = activeScene.createEntity("Camera Entity");
+    { // Cria entidade de camera
+        // Cria camera e carrega parametros
+        CameraComponent& cc = ce.addComponent<CameraComponent>();
+        cc.camera.setViewportSize(canvas->getWidth(), canvas->getHeight());
+        cc.camera.setPosition(glm::vec3(0.0, 300.0, 0.0));
+
+        this->camera = &cc.camera;
+
+        // parametros de controller de camera (parametros DEFAULT!!!)
+        auto cp = ce.addComponent<CameraControlerFPSParams>();
+        cp.yaw = 0;
+        cp.pitch = 0;
+
+        // auto cp = ce.addComponent<CameraControlerOrbitParams>();
+        // cp.yaw = 0;
+        // cp.pitch = 0;
+
+        // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
+        ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
+        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
+    }
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
@@ -59,7 +86,9 @@ void Game::onStart() {
     std::vector<Chimera::VertexData> vertexDataIn;
     vertexDataFromMesh(&m, vertexDataIn);
 
-    pHeightMap = new Chimera::RenderableIndex(loader.vNodes, vertexDataIn);
+    pHeightMap = new RenderableChunk(loader.vNodes, vertexDataIn);
+
+    activeScene.onCreate();
 }
 
 bool Game::onEvent(const SDL_Event& event) {
@@ -120,10 +149,11 @@ void Game::onUpdate() {
 
     pShader->enable();
 
-    camera->processInput(0.01);
+    activeScene.onUpdate(0.01);
+    // camera->processInput(0.01);
     // Calcula view e projection pela Camera
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
-    camera->recalculateMatrix(canvas->getRatio());
+    // camera->recalculateMatrix(canvas->getRatio());
 
     pLight->setUniform(pShader);
 

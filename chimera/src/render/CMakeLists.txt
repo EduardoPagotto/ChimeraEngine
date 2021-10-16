@@ -23,6 +23,8 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					2d/Label.cpp
 					3d/Renderer3d.cpp
 					3d/RenderableSimple.cpp
+					3d/RenderableFace.cpp
+					3d/RenderableChunk.cpp
 					Font.cpp
 					FontAtlas.cpp
 					FontManager.cpp

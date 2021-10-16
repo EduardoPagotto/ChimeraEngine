@@ -196,7 +196,7 @@ void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
         if (endWidth > totalWidth)
             endWidth = totalWidth;
 
-        RenderableIBO* pNode = new RenderableIBO;
+        RenderableFace* pNode = new RenderableFace;
 
         uint32_t face, base;
         for (uint32_t h = startHeight; h < endHeight; h++) {   // z

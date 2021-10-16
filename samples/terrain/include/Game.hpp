@@ -2,11 +2,12 @@
 #define __GAME_TESTE_TERRAIN__HPP
 
 #include "chimera/core/Application.hpp"
-#include "chimera/core/ICamera.hpp"
+#include "chimera/core/Camera.hpp"
+#include "chimera/render/3d/RenderableChunk.hpp"
+#include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
-#include "chimera/render/vbs/RenderableIndex.hpp"
-#include "chimera/render/vbs/SimpleRender3d.hpp"
+#include "chimera/render/scene/Scene.hpp"
 
 class Game : public Chimera::Application {
   public:
@@ -19,13 +20,13 @@ class Game : public Chimera::Application {
 
   private:
     glm::mat4 model;
-
-    Chimera::ICamera* camera;
+    Chimera::Scene activeScene;
+    Chimera::Camera* camera;
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
     Chimera::Material* pMaterial;
-    Chimera::RenderableIndex* pHeightMap;
-    Chimera::SimpleRender3d render3d;
+    Chimera::RenderableChunk* pHeightMap;
+    Chimera::Renderer3d render3d;
 };
 
 #endif

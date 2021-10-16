@@ -2,7 +2,7 @@
 #define __CHIMERA_LOAD_HEIGHTMAP__HPP
 
 #include "chimera/core/VertexData.hpp"
-#include "chimera/render/vbs/RenderableIBO.hpp"
+#include "chimera/render/3d/RenderableFace.hpp"
 #include <SDL2/SDL_image.h>
 #include <string>
 
@@ -16,7 +16,7 @@ class LoadHeightMap {
 
     bool getMesh(const std::string& _fileName, MeshData& _mesh, const glm::vec3& _size);
     void split(std::vector<unsigned int> _vVertexIndex);
-    std::vector<RenderableIBO*> vNodes;
+    std::vector<RenderableFace*> vNodes;
 
   private:
     inline unsigned getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }

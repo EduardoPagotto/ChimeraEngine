@@ -6,6 +6,9 @@
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/LoadObj.hpp"
+#include "chimera/render/scene/CameraControllerFPS.hpp"
+#include "chimera/render/scene/Components.hpp"
+#include "chimera/render/scene/Entity.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
@@ -17,8 +20,30 @@ Game::~Game() {}
 
 void Game::onStart() {
 
-    camera = new Chimera::CameraFPS(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
-    // camera = new Chimera::CameraOrbit(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    using namespace Chimera;
+    Entity ce = activeScene.createEntity("Camera Entity");
+    { // Cria entidade de camera
+        // Cria camera e carrega parametros
+        CameraComponent& cc = ce.addComponent<CameraComponent>();
+        cc.camera.setViewportSize(canvas->getWidth(), canvas->getHeight());
+        cc.camera.setPosition(glm::vec3(0.0f, 0.0f, 80.0f));
+
+        this->camera = &cc.camera;
+
+        // parametros de controller de camera (parametros DEFAULT!!!)
+        auto cp = ce.addComponent<CameraControlerFPSParams>();
+        cp.yaw = 0;
+        cp.pitch = 0;
+
+        // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
+        ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
+        auto nsc = ce.getComponent<NativeScriptComponent>();
+        nsc.instance = nsc.instantiateScript();
+        nsc.instance->setEntity(Entity{ce, &activeScene});
+
+        // camera = new Chimera::CameraFPS(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+        // camera = new Chimera::CameraOrbit(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    }
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
     // Habilita o depth buffer/culling face
@@ -61,7 +86,13 @@ void Game::onStart() {
     std::vector<uint32_t> index;
     std::vector<Chimera::VertexData> vertexDataOut;
     vertexDataIndexCompile(renderData, vertexDataOut, index);
-    this->rederable = new Chimera::RenderableStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+    // this->rederable = new Chimera::RenderableStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+    this->renderable = new Chimera::RenderableSimple(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+
+    activeScene.onCreate();
+
+    // auto zz = ce.getComponent<NativeScriptComponent>();
+    // camControl = (CameraControllerFPS*)&zz.instance;
 }
 
 bool Game::onEvent(const SDL_Event& event) {
@@ -109,6 +140,9 @@ bool Game::onEvent(const SDL_Event& event) {
             }
         } break;
     }
+
+    // activeScene.onUpdate(0.01);
+
     return true;
 }
 
@@ -117,10 +151,12 @@ void Game::onUpdate() {
 
     pShader->enable();
 
-    camera->processInput(0.01); // FIXME: ver onde fica melhor
+    activeScene.onUpdate(0.01);
+    // camera->processInput(0.01); // FIXME: ver onde fica melhor
 
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
-    camera->recalculateMatrix(canvas->getRatio());
+    // camControl->recalculateMatrix(false);
+    // camera->recalculateMatrix(canvas->getRatio());
 
     pShader->setUniform("projection", camera->getProjectionMatrix());
     pShader->setUniform("view", camera->getViewMatrix());
@@ -129,7 +165,7 @@ void Game::onUpdate() {
     material.bindMaterialInformation(pShader);
 
     render3D.begin(camera);
-    rederable->submit(&render3D);
+    renderable->submit(&render3D);
     render3D.end();
 
     render3D.flush();

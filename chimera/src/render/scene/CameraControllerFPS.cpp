@@ -9,13 +9,12 @@ void CameraControllerFPS::onCreate() {
     cp = &getComponent<CameraControlerFPSParams>();
 
     this->worldUp = cp->up;
-    this->movementSpeed = FPSCAMERA_MAX_SPEED;
+    // this->movementSpeed = FPSCAMERA_MAX_SPEED;
 
     auto& cc = getComponent<CameraComponent>();
     camera = &cc.camera;
 
     this->updateVectors();
-    this->recalculateMatrix(false);
 }
 
 void CameraControllerFPS::onDestroy() {}
@@ -115,7 +114,6 @@ void CameraControllerFPS::onUpdate(float deltaTime) {
     processCameraRotation(mouseXDelta, mouseYDelta, true);
 
     // TODO: testar se direction e mouseMove != 0 para executar updates
-
     updateVectors();
     recalculateMatrix(false);
 }
@@ -126,9 +124,6 @@ void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float delt
 }
 
 void CameraControllerFPS::processCameraRotation(double xOffset, double yOffset, bool constrainPitch) {
-    // Make sure the user isn't interacting with the UI
-    // if (!Window::GetHideCursor())
-    //    return;
 
     cp->yaw += (float)xOffset;
     cp->pitch += (float)yOffset;

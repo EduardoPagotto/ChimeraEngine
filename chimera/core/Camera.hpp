@@ -42,7 +42,7 @@ class Camera {
     }
 
   protected:
-    float nearPlane = 0.1, farPlane = 2000.0f, aspectRatio = 1.0f;
+    float nearPlane = 0.3, farPlane = 5000.0f, aspectRatio = 1.0f;
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 
     glm::mat4 viewMatrix = glm::mat4(1.0f);

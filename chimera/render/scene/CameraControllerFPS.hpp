@@ -19,11 +19,13 @@ class CameraControllerFPS : public ScriptableEntity {
     void onDestroy();
     void onUpdate(float time);
 
-  private:
-    void updateVectors();
     void recalculateMatrix(bool left);
     void invertPitch();
     void processCameraFOV(double offset);
+
+  private:
+    void updateVectors();
+
     void processCameraRotation(double xOffset, double yOffset, bool constrainPitch);
     void processCameraMovement(glm::vec3& direction, float deltaTime);
 

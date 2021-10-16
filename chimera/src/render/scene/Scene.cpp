@@ -40,13 +40,6 @@ void Scene::onCreate() {
 
 void Scene::onUpdate(float ts) {
 
-    // lista as tags nas entidades registradas
-    eRegistry.each([&](auto entityID) {
-        Entity entity{entityID, this};
-        auto& tc = entity.getComponent<TagComponent>();
-        SDL_Log("Tag: %s", tc.tag.c_str());
-    });
-
     // update scripts
     eRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (nsc.instance) {

@@ -21,6 +21,8 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					2d/layer/Layer.cpp
 					2d/layer/Group.cpp
 					2d/Label.cpp
+					3d/Renderer3d.cpp
+					3d/RenderableSimple.cpp
 					Font.cpp
 					FontAtlas.cpp
 					FontManager.cpp

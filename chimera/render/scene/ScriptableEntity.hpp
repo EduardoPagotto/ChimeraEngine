@@ -11,10 +11,11 @@ class ScriptableEntity {
 
     template <typename T> T& getComponent() { return entity.getComponent<T>(); }
 
-  protected:
     virtual void onCreate() {}
     virtual void onDestroy() {}
     virtual void onUpdate(float ts) {}
+
+    void setEntity(const Entity& entity) { this->entity = entity; }
 
   private:
     Entity entity;

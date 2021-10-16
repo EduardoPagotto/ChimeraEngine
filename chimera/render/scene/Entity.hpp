@@ -10,7 +10,7 @@ class Scene;
 class Entity {
   public:
     Entity() = default;
-    Entity(entt::entity handle, Scene* scene);
+    Entity(entt::entity handle, Scene* scene) : entityHandle(handle), scene(scene) {}
     Entity(const Entity& other) = default;
 
     template <typename T> bool hasComponent() { return scene->eRegistry.all_of<T>(entityHandle); }

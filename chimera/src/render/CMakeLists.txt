@@ -32,8 +32,9 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					maze/Cube.cpp 
 					maze/Maze.cpp
 					scene/Scene.cpp
-					scene/Entity.cpp
-					scene/SceneCamera.cpp)
+					#scene/Entity.cpp
+					#scene/SceneCamera.cpp
+					scene/CameraControllerFPS.cpp)
 
 #define os includes
 set (RenderInclude ${CMAKE_SOURCE_DIR}

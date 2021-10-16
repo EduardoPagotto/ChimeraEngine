@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_COMPONENTS__HPP
 #define __CHIMERA_COMPONENTS__HPP
 
-#include "SceneCamera.hpp"
 #include "ScriptableEntity.hpp"
+#include "chimera/core/Camera.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -51,7 +51,7 @@ struct TransformComponent {
 };
 
 struct CameraComponent {
-    SceneCamera camera;
+    Camera camera;
     bool primary = true;
     bool fixedAspectRatio = false;
     CameraComponent() = default;
@@ -61,12 +61,15 @@ struct CameraComponent {
 
 struct NativeScriptComponent {
 
+    std::string name;
     ScriptableEntity* instance = nullptr;
 
     ScriptableEntity* (*instantiateScript)();
     void (*destroyScript)(NativeScriptComponent*);
 
-    template <typename T> void bind() {
+    template <typename T> void bind(const std::string& nameBind) {
+
+        name = nameBind;
 
         instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
 

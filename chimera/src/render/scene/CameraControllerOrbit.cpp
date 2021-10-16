@@ -16,7 +16,6 @@ void CameraControllerOrbit::onCreate() {
     // this->pitch = asin((glm::abs(this->position.y) - glm::abs(this->front.y)) / distance) / 0.017453293f;
 
     updateVectors();
-    this->recalculateMatrix(false);
 }
 
 void CameraControllerOrbit::onDestroy() {}
@@ -82,6 +81,7 @@ void CameraControllerOrbit::onUpdate(float deltaTime) {
     }
 
     this->updateVectors();
+    this->recalculateMatrix(false);
 }
 
 void CameraControllerOrbit::processDistance(const int& _mz) {

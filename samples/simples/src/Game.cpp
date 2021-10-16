@@ -1,12 +1,12 @@
 #include "Game.hpp"
 #include "chimera/core/CameraFPS.hpp"
-//#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/LoadObj.hpp"
 #include "chimera/render/scene/CameraControllerFPS.hpp"
+#include "chimera/render/scene/CameraControllerOrbit.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 
@@ -35,14 +35,13 @@ void Game::onStart() {
         cp.yaw = 0;
         cp.pitch = 0;
 
+        // auto cp = ce.addComponent<CameraControlerOrbitParams>();
+        // cp.yaw = 0;
+        // cp.pitch = 0;
+
         // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
         ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
-        auto nsc = ce.getComponent<NativeScriptComponent>();
-        nsc.instance = nsc.instantiateScript();
-        nsc.instance->setEntity(Entity{ce, &activeScene});
-
-        // camera = new Chimera::CameraFPS(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
-        // camera = new Chimera::CameraOrbit(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
     }
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color

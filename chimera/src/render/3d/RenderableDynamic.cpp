@@ -1,4 +1,4 @@
-#include "chimera/render/vbs/RenderableDynamic.hpp"
+#include "chimera/render/3d/RenderableDynamic.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
 namespace Chimera {

@@ -10,7 +10,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
 set (RenderSource 	vbs/RenderableIBO.cpp
-					vbs/RenderableDynamic.cpp 
 					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
 					vbs/RenderableIndex.cpp
@@ -25,6 +24,7 @@ set (RenderSource 	vbs/RenderableIBO.cpp
 					3d/RenderableFace.cpp
 					3d/RenderableChunk.cpp
 					3d/RenderableBsp.cpp
+					3d/RenderableDynamic.cpp
 					Font.cpp
 					FontAtlas.cpp
 					FontManager.cpp

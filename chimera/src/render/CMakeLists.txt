@@ -9,8 +9,7 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	vbs/RenderableBsp.cpp
-					vbs/RenderableIBO.cpp
+set (RenderSource 	vbs/RenderableIBO.cpp
 					vbs/RenderableDynamic.cpp 
 					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
@@ -25,6 +24,7 @@ set (RenderSource 	vbs/RenderableBsp.cpp
 					3d/RenderableSimple.cpp
 					3d/RenderableFace.cpp
 					3d/RenderableChunk.cpp
+					3d/RenderableBsp.cpp
 					Font.cpp
 					FontAtlas.cpp
 					FontManager.cpp

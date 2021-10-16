@@ -9,6 +9,9 @@
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/render/LoadObj.hpp"
 #include "chimera/render/maze/Maze.hpp"
+#include "chimera/render/scene/CameraControllerFPS.hpp"
+#include "chimera/render/scene/Components.hpp"
+#include "chimera/render/scene/Entity.hpp"
 #include <algorithm>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
@@ -25,6 +28,30 @@ Game::~Game() { delete renderz1; }
 
 void Game::onStart() {
 
+    using namespace Chimera;
+    Entity ce = activeScene.createEntity("Camera Entity");
+    { // Cria entidade de camera
+        // Cria camera e carrega parametros
+        CameraComponent& cc = ce.addComponent<CameraComponent>();
+        cc.camera.setViewportSize(canvas->getWidth(), canvas->getHeight());
+        cc.camera.setPosition(glm::vec3(0.0f, 0.0f, 80.0f));
+
+        this->camera = &cc.camera;
+
+        // parametros de controller de camera (parametros DEFAULT!!!)
+        auto cp = ce.addComponent<CameraControlerFPSParams>();
+        cp.yaw = 0;
+        cp.pitch = 0;
+
+        // auto cp = ce.addComponent<CameraControlerOrbitParams>();
+        // cp.yaw = 0;
+        // cp.pitch = 0;
+
+        // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
+        ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
+        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
+    }
+
     // Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
     // pVp->position = glm::vec3(0.0, 60.0, 0.0);
     // pVp->front = glm::vec3(0.0, 0.0, 0.0);
@@ -32,7 +59,7 @@ void Game::onStart() {
     // trackBall.init(pVp);
     // trackBall.setMax(1000.0);
     // camera = new Chimera::CameraFPS(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
-    camera = new Chimera::CameraOrbit(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    // camera = new Chimera::CameraOrbit(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
@@ -64,6 +91,8 @@ void Game::onStart() {
     bspTree.create(vVertexIndexed, vIndex);
 
     renderz1 = new Chimera::RenderableBsp(bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+
+    activeScene.onCreate();
 }
 
 bool Game::onEvent(const SDL_Event& event) {
@@ -129,12 +158,14 @@ void Game::onUpdate() {
         glm::vec3 pos = camera->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
-    camera->processInput(0.01);
+
+    activeScene.onUpdate(0.01);
+    // camera->processInput(0.01);
 
     pShader->enable();
 
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight()); // FIXME: ver se da para irar de todos!!!!
-    camera->recalculateMatrix(canvas->getRatio());
+    // camera->recalculateMatrix(canvas->getRatio());
 
     pShader->setUniform("projection", camera->getProjectionMatrix());
     pShader->setUniform("view", camera->getViewMatrix());

@@ -9,10 +9,8 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	vbs/RenderableIBO.cpp
-					vbs/RenderableStatic.cpp
+set (RenderSource 	vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
-					vbs/RenderableIndex.cpp
 					2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp

@@ -1,4 +1,4 @@
-#include "chimera/render/maze/Maze.hpp"
+#include "chimera/render/partition/Maze.hpp"
 #include "chimera/core/Exception.hpp"
 #include <string>
 

@@ -21,9 +21,6 @@ class Game : public Chimera::Application {
     Chimera::Camera* camera;
     Chimera::Shader* pShader;
 
-    glm::mat4 model;
-
-    Chimera::Texture* pTex;
     Chimera::Renderer3d render3d;
     Chimera::RenderableBsp* renderz1;
     Chimera::Scene activeScene;

@@ -1,6 +1,4 @@
 #include "Game.hpp"
-//#include "chimera/core/CameraFPS.hpp"
-#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/TextureManager.hpp"
@@ -10,19 +8,12 @@
 #include "chimera/render/LoadObj.hpp"
 #include "chimera/render/maze/Maze.hpp"
 #include "chimera/render/scene/CameraControllerFPS.hpp"
+#include "chimera/render/scene/CameraControllerOrbit.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <algorithm>
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
-
-    pShader = shaderLibrary.load("./assets/shaders/MeshNoMat.glsl");
-    model = glm::mat4(1.0f);
-
-    // FIXME: no load retornar a textura ou null se nao existir
-    Chimera::TextureManager::loadFromFile("tex01", "./assets/textures/grid2.png", Chimera::TextureParameters());
-    pTex = Chimera::TextureManager::getLast();
-}
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) { pShader = shaderLibrary.load("./assets/shaders/MeshNoMat.glsl"); }
 
 Game::~Game() { delete renderz1; }
 
@@ -39,27 +30,28 @@ void Game::onStart() {
         this->camera = &cc.camera;
 
         // parametros de controller de camera (parametros DEFAULT!!!)
-        auto cp = ce.addComponent<CameraControlerFPSParams>();
-        cp.yaw = 0;
-        cp.pitch = 0;
-
-        // auto cp = ce.addComponent<CameraControlerOrbitParams>();
+        // auto cp = ce.addComponent<CameraControlerFPSParams>();
         // cp.yaw = 0;
         // cp.pitch = 0;
 
+        auto cp = ce.addComponent<CameraControlerOrbitParams>();
+        cp.yaw = 0;
+        cp.pitch = 0;
+
         // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
-        ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
-        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
+        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
+        ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
     }
 
-    // Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
-    // pVp->position = glm::vec3(0.0, 60.0, 0.0);
-    // pVp->front = glm::vec3(0.0, 0.0, 0.0);
-    // pVp->up = glm::vec3(0.0, 1.0, 0.0);
-    // trackBall.init(pVp);
-    // trackBall.setMax(1000.0);
-    // camera = new Chimera::CameraFPS(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
-    // camera = new Chimera::CameraOrbit(glm::vec3(-80.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
+    Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+
+    Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
+    material.setDefaultEffect();
+    material.setShine(50.0f);
+
+    Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
+    material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
+    material.init();
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
@@ -90,7 +82,7 @@ void Game::onStart() {
     vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
     bspTree.create(vVertexIndexed, vIndex);
 
-    renderz1 = new Chimera::RenderableBsp(bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+    renderz1 = new Chimera::RenderableBsp(renderableEntity, bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
 
     activeScene.onCreate();
 }
@@ -123,16 +115,6 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEMOTION: {
-            // if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
-            //     if (event.type == SDL_MOUSEMOTION) {
-            //         ((CameraOrbit*)camera)->processCameraRotation(event.motion.xrel, event.motion.yrel);
-            //     }
-            // } else if (MouseDevice::getButtonState(3) == SDL_PRESSED) {
-
-            //     if (event.type == SDL_MOUSEMOTION) {
-            //         ((CameraOrbit*)camera)->processDistance(event.motion.yrel);
-            //     }
-            // }
         } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
@@ -167,15 +149,6 @@ void Game::onUpdate() {
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight()); // FIXME: ver se da para irar de todos!!!!
     // camera->recalculateMatrix(canvas->getRatio());
 
-    pShader->setUniform("projection", camera->getProjectionMatrix());
-    pShader->setUniform("view", camera->getViewMatrix());
-    pShader->setUniform("model", model);
-
-    // aplica a textura
-    pTex->bind(0);
-    pShader->setUniform(SHADE_TEXTURE_DIFFUSE, 0);
-
-    // renderz1->setEyePosition(&vp->position);
     glm::vec3 poseye = camera->getPosition();
     renderz1->setEyePosition(&poseye);
     render3d.begin(camera, pShader);

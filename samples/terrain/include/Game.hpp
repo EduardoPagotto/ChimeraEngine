@@ -19,12 +19,10 @@ class Game : public Chimera::Application {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    glm::mat4 model;
     Chimera::Scene activeScene;
     Chimera::Camera* camera;
     Chimera::Shader* pShader;
     Chimera::Light* pLight;
-    // Chimera::Material* pMaterial;
     Chimera::RenderableChunk* pHeightMap;
     Chimera::Renderer3d render3d;
 };

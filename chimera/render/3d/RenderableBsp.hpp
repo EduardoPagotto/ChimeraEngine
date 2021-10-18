@@ -10,7 +10,7 @@ namespace Chimera {
 
 class RenderableBsp : public IRenderable3d {
   public:
-    RenderableBsp(BSPTreeNode* root, std::vector<RenderableFace*>* vpLeafData, std::vector<VertexData>* vertexData);
+    RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<RenderableFace*>* vpLeafData, std::vector<VertexData>* vertexData);
     virtual ~RenderableBsp();
     virtual void debugDados() override;
     virtual uint32_t getSize() const { return totIndex; }

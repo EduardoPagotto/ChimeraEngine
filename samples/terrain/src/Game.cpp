@@ -11,12 +11,8 @@
 #include "chimera/render/scene/Entity.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
-    model = glm::mat4(1.0f);
 
     pShader = shaderLibrary.load("./assets/shaders/MeshFullShadow.glsl");
-
-    // camera = new Chimera::CameraOrbit(glm::vec3(0.0, 0.0, 600.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
-    // camera = new Chimera::CameraFPS(glm::vec3(0.0, 300.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
 
     // Light
     pLight = new Chimera::Light();

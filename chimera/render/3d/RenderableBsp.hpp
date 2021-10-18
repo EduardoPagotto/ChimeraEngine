@@ -2,8 +2,8 @@
 #define __CHIMERA_RENDERABLE_BSP_HPP
 
 #include "chimera/core/buffers/VertexArray.hpp"
-#include "chimera/core/space/BSPTreeNode.hpp"
 #include "chimera/render/3d/RenderableFace.hpp"
+#include "chimera/render/partition/BSPTreeNode.hpp"
 #include <vector>
 
 namespace Chimera {

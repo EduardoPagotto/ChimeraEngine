@@ -4,8 +4,8 @@
 #include "chimera/core/Application.hpp"
 #include "chimera/core/Camera.hpp"
 #include "chimera/core/Texture.hpp"
-#include "chimera/core/space/BSPTree.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
+#include "chimera/render/partition/BSPTree.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 class Game : public Chimera::Application {

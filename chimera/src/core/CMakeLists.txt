@@ -17,7 +17,6 @@ set (SourcesCore windows/CanvasGL.cpp
 				 space/Frustum.cpp
 				 space/AABB.cpp
 				 space/Octree.cpp
-				 space/BSPTree.cpp
 				 Shader.cpp
 				 ShaderLibrary.cpp
 				 VertexData.cpp

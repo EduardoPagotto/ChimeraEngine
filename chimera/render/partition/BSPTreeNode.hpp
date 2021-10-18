@@ -1,8 +1,8 @@
 #ifndef __CHIMERA_BSPTREE_NODE_HPP
 #define __CHIMERA_BSPTREE_NODE_HPP
 
-#include "Plane.hpp"
-#include "Triangle.hpp"
+#include "chimera/core/space/Plane.hpp"
+#include "chimera/core/space/Triangle.hpp"
 
 namespace Chimera {
 

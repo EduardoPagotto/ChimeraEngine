@@ -21,6 +21,7 @@ class RenderableFace : public IRenderable3d {
     virtual IndexBuffer* getIBO() const override { return ibo; };
     virtual AABB* getAABB() override { return &aabb; }
     virtual void submit(Renderer3d* renderer) override;
+    virtual Entity getEntity() const override { return entity; }
 
     inline bool empty() { return indexTris.empty(); }
     void addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);
@@ -28,6 +29,7 @@ class RenderableFace : public IRenderable3d {
     void initAABB(VertexData* vertexData, const uint32_t& vertexSize);
 
   private:
+    Entity entity;
     AABB aabb;
     IndexBuffer* ibo;
     std::vector<uint32_t> indexTris;

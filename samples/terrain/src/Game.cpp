@@ -15,13 +15,6 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     pShader = shaderLibrary.load("./assets/shaders/MeshFullShadow.glsl");
 
-    pMaterial = new Chimera::Material();
-    pMaterial->setDefaultEffect();
-    pMaterial->setShine(50.0f);
-
-    Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
-    pMaterial->addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
-
     // camera = new Chimera::CameraOrbit(glm::vec3(0.0, 0.0, 600.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
     // camera = new Chimera::CameraFPS(glm::vec3(0.0, 300.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 0.0, 0.0);
 
@@ -44,7 +37,7 @@ void Game::onStart() {
         // Cria camera e carrega parametros
         CameraComponent& cc = ce.addComponent<CameraComponent>();
         cc.camera.setViewportSize(canvas->getWidth(), canvas->getHeight());
-        cc.camera.setPosition(glm::vec3(0.0, 300.0, 0.0));
+        cc.camera.setPosition(glm::vec3(0.0, 200.0, 0.0));
 
         this->camera = &cc.camera;
 
@@ -62,6 +55,16 @@ void Game::onStart() {
         // ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
     }
 
+    Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+
+    Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
+    material.setDefaultEffect();
+    material.setShine(50.0f);
+
+    Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
+    material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
+    material.init();
+
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
     // whitou the z-buffer
@@ -72,21 +75,18 @@ void Game::onStart() {
     // enable z-buffer here
     canvas->afterStart();
 
-    // pTex->init();
-    pMaterial->init();
-
-    Chimera::MeshData m;
+    Chimera::MeshData& mesh = renderableEntity.addComponent<Chimera::MeshData>();
 
     Chimera::LoadHeightMap loader(32, 32);
-    loader.getMesh("./assets/heightmaps/terrain3.jpg", m, glm::vec3(1000.0, 200.0, 1000.0));
-    // loader.getMesh("./assets/heightmaps/heightmap_16x16.png", m, glm::vec3(100.0, 30.0, 100.0));
-    // loader.getMesh("./assets/heightmaps/heightmap_4x4.png", m, glm::vec3(1000.0, 10.0, 1000.0));
-    loader.split(m.vertexIndex);
+    loader.getMesh("./assets/heightmaps/terrain3.jpg", mesh, glm::vec3(1000.0, 200.0, 1000.0));
+    // loader.getMesh("./assets/heightmaps/heightmap_16x16.png", mesh, glm::vec3(100.0, 30.0, 100.0));
+    // loader.getMesh("./assets/heightmaps/heightmap_4x4.png", mesh, glm::vec3(1000.0, 10.0, 1000.0));
+    loader.split(mesh.vertexIndex);
 
     std::vector<Chimera::VertexData> vertexDataIn;
-    vertexDataFromMesh(&m, vertexDataIn);
+    vertexDataFromMesh(&mesh, vertexDataIn);
 
-    pHeightMap = new RenderableChunk(loader.vNodes, vertexDataIn);
+    this->pHeightMap = new RenderableChunk(renderableEntity, loader.vNodes, vertexDataIn);
 
     activeScene.onCreate();
 }
@@ -157,26 +157,26 @@ void Game::onUpdate() {
 
     pLight->setUniform(pShader);
 
-    model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0)); //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
-    if (pShader == nullptr)
-        return;
+    // model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
+    // //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); if (pShader == nullptr)
+    //     return;
 
     int shadows = 0;
     pShader->setUniform("shadows", shadows);
 
-    pShader->setUniform("projection", camera->getProjectionMatrix());
-    pShader->setUniform("view", camera->getViewMatrix());
-    pShader->setUniform("model", model);
+    // pShader->setUniform("projection", camera->getProjectionMatrix());
+    // pShader->setUniform("view", camera->getViewMatrix());
+    // pShader->setUniform("model", model);
 
     // aplica material ao shader
-    pMaterial->bindMaterialInformation(pShader);
+    // pMaterial->bindMaterialInformation(pShader);
 
     // NEW
-    render3d.begin(camera);
+    render3d.begin(camera, pShader);
     pHeightMap->submit(&render3d); // render3d.submit(pHeightMap);
     render3d.end();
 
-    render3d.flush();
+    render3d.flush(true);
 
     canvas->after();
     canvas->swapWindow();

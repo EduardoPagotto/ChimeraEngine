@@ -6,6 +6,7 @@
 #include "chimera/core/buffers/IndexBuffer.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
+#include "chimera/render/scene/Entity.hpp"
 
 namespace Chimera {
 
@@ -18,6 +19,7 @@ class IRenderable3d {
     virtual VertexArray* getVao() const = 0;
     virtual IndexBuffer* getIBO() const = 0;
     virtual AABB* getAABB() = 0;
+    virtual Entity getEntity() const = 0;
     virtual void submit(Renderer3d* renderer) = 0;
 };
 

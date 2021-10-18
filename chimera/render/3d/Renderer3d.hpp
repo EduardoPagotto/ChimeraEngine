@@ -2,6 +2,7 @@
 #define __CHIMERA_RENDER_3D___ZZ1_HPP
 
 #include "chimera/core/Camera.hpp"
+#include "chimera/core/Shader.hpp"
 #include "chimera/core/space/Frustum.hpp"
 #include <cstdint>
 #include <deque>
@@ -13,10 +14,10 @@ class Renderer3d {
     Renderer3d() = default;
     virtual ~Renderer3d() = default;
 
-    virtual void begin(Camera* camera);
+    virtual void begin(Camera* camera, Shader* shader);
     virtual void submit(IRenderable3d* renderable);
     virtual void end();
-    virtual void flush();
+    virtual void flush(bool useMaterial);
 
     void logToggle() { logData = !logData; }
     bool getLog() const { return logData; }
@@ -24,6 +25,7 @@ class Renderer3d {
   private:
     std::deque<IRenderable3d*> renderQueue;
     Camera* camera = nullptr;
+    Shader* shader = nullptr;
     Frustum frustum;
 
     bool logData = false;

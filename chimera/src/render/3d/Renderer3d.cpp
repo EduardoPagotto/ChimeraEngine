@@ -1,14 +1,23 @@
 #include "chimera/render/3d/Renderer3d.hpp"
+#include "chimera/core/Transform.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
+#include "chimera/render/Material.hpp"
+#include "chimera/render/scene/Entity.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-void Renderer3d::begin(Camera* camera) {
+void Renderer3d::begin(Camera* camera, Shader* shader) {
     this->camera = camera;
     if (this->camera != nullptr) {
+
+        shader->setUniform("projection", camera->getProjectionMatrix());
+        shader->setUniform("view", camera->getViewMatrix());
+
         frustum.set(camera->getViewProjectionMatrixInverse());
     }
+
+    this->shader = shader;
 
     // debug data
     totIBO = 0;
@@ -46,7 +55,7 @@ void Renderer3d::submit(IRenderable3d* renderable) {
     }
 }
 
-void Renderer3d::flush() {
+void Renderer3d::flush(bool useMaterial) {
 
     VertexArray* pLastVao = nullptr;
     while (!renderQueue.empty()) {
@@ -58,8 +67,29 @@ void Renderer3d::flush() {
                 if (pLastVao != nullptr) {
                     pLastVao->unbind();
                 }
+
+                // novo renderable bind material
                 r->getVao()->bind();
                 pLastVao = r->getVao();
+
+                if (shader) {
+                    Entity entity = r->getEntity();
+                    if (entity) {
+
+                        Transform& model = entity.getComponent<Transform>();
+
+                        shader->setUniform("model", model.getMatrix());
+
+                        if (useMaterial) {
+
+                            if (entity.hasComponent<Material>()) {
+                                Material& material = entity.getComponent<Material>();
+
+                                material.bindMaterialInformation(shader);
+                            }
+                        }
+                    }
+                }
             }
         }
 

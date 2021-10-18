@@ -3,7 +3,22 @@
 
 namespace Chimera {
 
-RenderableSimple::RenderableSimple(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize) {
+RenderableSimple::RenderableSimple(Entity entity) {
+
+    this->entity = entity;
+    MeshData& mesh = entity.getComponent<MeshData>();
+
+    std::vector<Chimera::VertexData> renderData;
+    vertexDataFromMesh(&mesh, renderData);
+
+    std::vector<uint32_t> index;
+    std::vector<Chimera::VertexData> vertexDataOut;
+    vertexDataIndexCompile(renderData, vertexDataOut, index);
+
+    createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+}
+
+void RenderableSimple::createBuffers(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize) {
 
     vao = new VertexArray();
     vao->bind();

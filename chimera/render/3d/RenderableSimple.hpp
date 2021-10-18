@@ -9,7 +9,7 @@ namespace Chimera {
 
 class RenderableSimple : public IRenderable3d {
   public:
-    RenderableSimple(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize);
+    RenderableSimple(Entity entity);
     virtual ~RenderableSimple();
 
     virtual void debugDados() override;
@@ -19,11 +19,15 @@ class RenderableSimple : public IRenderable3d {
     virtual IndexBuffer* getIBO() const { return ibo; }
     virtual AABB* getAABB() override { return &aabb; }
     virtual void submit(Renderer3d* renderer) override;
+    virtual Entity getEntity() const override { return entity; }
 
   private:
+    void createBuffers(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize);
+
     AABB aabb;
     VertexArray* vao;
     IndexBuffer* ibo;
+    Entity entity;
 };
 } // namespace Chimera
 #endif

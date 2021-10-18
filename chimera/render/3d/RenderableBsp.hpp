@@ -19,6 +19,7 @@ class RenderableBsp : public IRenderable3d {
     virtual IndexBuffer* getIBO() const { return 0; }
     virtual AABB* getAABB() { return &aabb; }
     virtual void submit(Renderer3d* renderer) override;
+    virtual Entity getEntity() const override { return entity; }
 
     void setEyePosition(glm::vec3* eye) { this->eye = eye; }
 
@@ -42,6 +43,7 @@ class RenderableBsp : public IRenderable3d {
     glm::vec3* eye;
     uint32_t totIndex;
     Renderer3d* renderer;
+    Entity entity;
 };
 
 } // namespace Chimera

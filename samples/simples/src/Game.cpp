@@ -10,11 +10,7 @@
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
-
-    pShader = shaderLibrary.load("./assets/shaders/Simples.glsl");
-    model = glm::mat4(1.0f);
-}
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) { pShader = shaderLibrary.load("./assets/shaders/Simples.glsl"); }
 
 Game::~Game() {}
 
@@ -57,14 +53,19 @@ void Game::onStart() {
     // glDisable(GL_LIGHTING);
     // glCullFace(GL_BACK);
 
-    Chimera::MeshData m;
+    Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+
+    Chimera::MeshData& mesh = renderableEntity.addComponent<Chimera::MeshData>();
+    Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
+
+    // Chimera::MeshData mesh;
     Chimera::LoaderObj loader;
-    // loader.getMesh("./assets/models/tela01.obj", m);
-    // loader.getMesh("./assets/models/square2.obj", m);
-    // loader.getMesh("./assets/models/parede_simples.obj", m);
-    // loader.getMesh("./assets/models/cubo_textura_simples.obj", m);
-    loader.getMesh("./assets/models/map02.obj", m);
-    // loader.getMesh("./assets/models/salaSplit3.obj", m); // Sala L com Split
+    // loader.getMesh("./assets/models/tela01.obj", mesh);
+    // loader.getMesh("./assets/models/square2.obj", mesh);
+    // loader.getMesh("./assets/models/parede_simples.obj", mesh);
+    // loader.getMesh("./assets/models/cubo_textura_simples.obj", mesh);
+    loader.getMesh("./assets/models/map02.obj", mesh);
+    // loader.getMesh("./assets/models/salaSplit3.obj", mesh); // Sala L com Split
 
     if (loader.hasMaterial() == true)
         loader.getMaterial(material);
@@ -76,22 +77,9 @@ void Game::onStart() {
 
     material.init();
 
-    // m.changeSize(100.0, material.hasTexture());
-    // m.textureFix();
-
-    std::vector<Chimera::VertexData> renderData;
-    vertexDataFromMesh(&m, renderData);
-
-    std::vector<uint32_t> index;
-    std::vector<Chimera::VertexData> vertexDataOut;
-    vertexDataIndexCompile(renderData, vertexDataOut, index);
-    // this->rederable = new Chimera::RenderableStatic(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
-    this->renderable = new Chimera::RenderableSimple(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+    this->renderable = new Chimera::RenderableSimple(renderableEntity);
 
     activeScene.onCreate();
-
-    // auto zz = ce.getComponent<NativeScriptComponent>();
-    // camControl = (CameraControllerFPS*)&zz.instance;
 }
 
 bool Game::onEvent(const SDL_Event& event) {
@@ -151,23 +139,15 @@ void Game::onUpdate() {
     pShader->enable();
 
     activeScene.onUpdate(0.01);
-    // camera->processInput(0.01); // FIXME: ver onde fica melhor
 
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
     // camControl->recalculateMatrix(false);
-    // camera->recalculateMatrix(canvas->getRatio());
 
-    pShader->setUniform("projection", camera->getProjectionMatrix());
-    pShader->setUniform("view", camera->getViewMatrix());
-    pShader->setUniform("model", model);
-
-    material.bindMaterialInformation(pShader);
-
-    render3D.begin(camera);
+    render3D.begin(camera, pShader);
     renderable->submit(&render3D);
     render3D.end();
 
-    render3D.flush();
+    render3D.flush(true);
 
     canvas->after();
     canvas->swapWindow();

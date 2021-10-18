@@ -3,7 +3,10 @@
 
 namespace Chimera {
 
-RenderableChunk::RenderableChunk(std::vector<RenderableFace*>& vpLeafData, std::vector<VertexData>& vertexData) : totIndex(0) {
+RenderableChunk::RenderableChunk(Entity entity, std::vector<RenderableFace*>& vpLeafData, std::vector<VertexData>& vertexData)
+    : totIndex(0) {
+
+    this->entity = entity;
 
     this->vpLeaf = std::move(vpLeafData);
     this->vVertex = std::move(vertexData);

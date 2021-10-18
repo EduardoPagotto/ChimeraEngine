@@ -178,11 +178,11 @@ void Game::onUpdate() {
     // renderz1->setEyePosition(&vp->position);
     glm::vec3 poseye = camera->getPosition();
     renderz1->setEyePosition(&poseye);
-    render3d.begin(camera);
+    render3d.begin(camera, pShader);
     renderz1->submit(&render3d); // render3d.submit(renderz1);
     render3d.end();
 
-    render3d.flush();
+    render3d.flush(true);
 
     canvas->after();
     canvas->swapWindow();

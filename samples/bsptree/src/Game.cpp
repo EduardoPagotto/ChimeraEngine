@@ -5,7 +5,7 @@
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/render/LoadObj.hpp"
+#include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/partition/Maze.hpp"
 #include "chimera/render/scene/CameraControllerFPS.hpp"
 #include "chimera/render/scene/CameraControllerOrbit.hpp"

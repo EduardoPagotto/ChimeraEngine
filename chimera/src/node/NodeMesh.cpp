@@ -1,7 +1,7 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/VisitorInterface.hpp"
-#include "chimera/render/LoadObj.hpp"
+#include "chimera/render/partition/LoadObj.hpp"
 #include <SDL2/SDL.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iterator>

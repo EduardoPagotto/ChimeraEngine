@@ -11,9 +11,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 #define objetos a compilar
 set (RenderSource 	vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
-					partition/BSPTree.cpp
-					partition/Cube.cpp 
-					partition/Maze.cpp
 					2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
@@ -32,8 +29,11 @@ set (RenderSource 	vbs/RenderableStatic.cpp
 					Light.cpp
 					Material.cpp
 					Particle.cpp
-					LoadObj.cpp
-					LoadHeightMap.cpp
+					partition/BSPTree.cpp
+					partition/Cube.cpp 
+					partition/Maze.cpp
+					partition/LoadObj.cpp
+					partition/LoadHeightMap.cpp
 					scene/Scene.cpp
 					scene/CameraControllerFPS.cpp
 					scene/CameraControllerOrbit.cpp)

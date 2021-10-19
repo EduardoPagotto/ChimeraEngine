@@ -14,10 +14,10 @@ class Renderer3d {
     Renderer3d() = default;
     virtual ~Renderer3d() = default;
 
-    virtual void begin(Camera* camera, Shader* shader);
+    virtual void begin(Camera* camera);
     virtual void submit(IRenderable3d* renderable);
     virtual void end();
-    virtual void flush(bool useMaterial);
+    virtual void flush(bool useMaterial, Shader* alternativeShader);
 
     void logToggle() { logData = !logData; }
     bool getLog() const { return logData; }
@@ -25,7 +25,7 @@ class Renderer3d {
   private:
     std::deque<IRenderable3d*> renderQueue;
     Camera* camera = nullptr;
-    Shader* shader = nullptr;
+    Shader* activeShader = nullptr;
     Frustum frustum;
 
     bool logData = false;

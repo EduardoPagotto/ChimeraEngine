@@ -144,18 +144,16 @@ void Game::onUpdate() {
     activeScene.onUpdate(0.01);
     // camera->processInput(0.01);
 
-    pShader->enable();
-
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight()); // FIXME: ver se da para irar de todos!!!!
     // camera->recalculateMatrix(canvas->getRatio());
 
     glm::vec3 poseye = camera->getPosition();
     renderz1->setEyePosition(&poseye);
-    render3d.begin(camera, pShader);
+    render3d.begin(camera);
     renderz1->submit(&render3d); // render3d.submit(renderz1);
     render3d.end();
 
-    render3d.flush(true);
+    render3d.flush(true, pShader);
 
     canvas->after();
     canvas->swapWindow();

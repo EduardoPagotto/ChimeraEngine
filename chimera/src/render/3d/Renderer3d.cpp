@@ -7,17 +7,10 @@
 
 namespace Chimera {
 
-void Renderer3d::begin(Camera* camera, Shader* shader) {
+void Renderer3d::begin(Camera* camera) {
     this->camera = camera;
-    if (this->camera != nullptr) {
-
-        shader->setUniform("projection", camera->getProjectionMatrix());
-        shader->setUniform("view", camera->getViewMatrix());
-
+    if (this->camera != nullptr)
         frustum.set(camera->getViewProjectionMatrixInverse());
-    }
-
-    this->shader = shader;
 
     // debug data
     totIBO = 0;
@@ -55,7 +48,7 @@ void Renderer3d::submit(IRenderable3d* renderable) {
     }
 }
 
-void Renderer3d::flush(bool useMaterial) {
+void Renderer3d::flush(bool useMaterial, Shader* alternativeShader) {
 
     VertexArray* pLastVao = nullptr;
     while (!renderQueue.empty()) {
@@ -69,28 +62,66 @@ void Renderer3d::flush(bool useMaterial) {
                 }
 
                 // novo renderable bind material
+
                 r->getVao()->bind();
                 pLastVao = r->getVao();
 
-                if (shader) {
-                    Entity entity = r->getEntity();
-                    if (entity) {
+                Entity entity = r->getEntity();
+                if (entity) {
 
-                        Transform& model = entity.getComponent<Transform>();
+                    Transform& model = entity.getComponent<Transform>();
 
-                        shader->setUniform("model", model.getMatrix());
+                    if (activeShader == nullptr) { // primeira passada!!!!
+                        if (entity.hasComponent<Shader>()) {
+                            activeShader = &entity.getComponent<Shader>();
+                        } else {
+                            activeShader = alternativeShader;
+                        }
 
-                        if (useMaterial) {
+                        activeShader->enable();
 
-                            if (entity.hasComponent<Material>()) {
-                                Material& material = entity.getComponent<Material>();
+                    } else { // demais passadas
+                        Shader* newShader = nullptr;
+                        if (entity.hasComponent<Shader>()) {
+                            newShader = &entity.getComponent<Shader>();
+                        } else {
+                            newShader = alternativeShader;
+                        }
 
-                                material.bindMaterialInformation(shader);
-                            }
+                        if (newShader != activeShader) {
+                            activeShader->disable();
+                            activeShader = newShader;
+                            activeShader->enable();
+                        }
+                    }
+
+                    if (useMaterial) {
+                        if (entity.hasComponent<Material>()) {
+                            Material& material = entity.getComponent<Material>();
+                            material.bindMaterialInformation(activeShader);
+                        }
+                    }
+
+                    activeShader->setUniform("model", model.getMatrix());
+
+                } else {
+
+                    if (activeShader == nullptr) { // primeira passada!!!!
+                        activeShader = alternativeShader;
+                        activeShader->enable();
+                    } else {
+
+                        if (alternativeShader != activeShader) {
+                            activeShader->disable();
+                            activeShader = alternativeShader;
+                            activeShader->enable();
                         }
                     }
                 }
             }
+
+            activeShader->setUniform("projection", camera->getProjectionMatrix());
+            activeShader->setUniform("view", camera->getViewMatrix());
         }
 
         if (r->getIBO() != nullptr) {

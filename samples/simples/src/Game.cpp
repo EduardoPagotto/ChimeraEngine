@@ -140,11 +140,11 @@ void Game::onUpdate() {
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
     // camControl->recalculateMatrix(false);
 
-    render3D.begin(camera, pShader);
+    render3D.begin(camera);
     renderable->submit(&render3D);
     render3D.end();
 
-    render3D.flush(true);
+    render3D.flush(true, pShader);
 
     canvas->after();
     canvas->swapWindow();

@@ -2,7 +2,7 @@
 #define __CHIMERA_APPLICATION_CONTROLLER__HPP
 
 #include "LayerStack.hpp"
-#include "ShaderLibrary.hpp"
+#include "Shader.hpp"
 #include "io/Timer.hpp"
 #include "windows/Canvas.hpp"
 

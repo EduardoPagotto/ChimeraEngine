@@ -17,7 +17,8 @@ set (SourceNode Node.cpp
 				NodeParticleEmitter.cpp
 				VisitorRender.cpp
 				VisitorShadowMap.cpp
-				VisitParser.cpp)
+				VisitParser.cpp
+				SceneNode.cpp)
 
 #define os includes
 set (IncludeNode ${CMAKE_SOURCE_DIR}) # Raiz do projeto

@@ -18,7 +18,6 @@ set (SourcesCore windows/CanvasGL.cpp
 				 space/AABB.cpp
 				 space/Octree.cpp
 				 Shader.cpp
-				 ShaderLibrary.cpp
 				 VertexData.cpp
 				 Transform.cpp
 				 io/utils.cpp

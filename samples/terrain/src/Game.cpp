@@ -168,11 +168,11 @@ void Game::onUpdate() {
     // pMaterial->bindMaterialInformation(pShader);
 
     // NEW
-    render3d.begin(camera, pShader);
+    render3d.begin(camera);
     pHeightMap->submit(&render3d); // render3d.submit(pHeightMap);
     render3d.end();
 
-    render3d.flush(true);
+    render3d.flush(true, pShader);
 
     canvas->after();
     canvas->swapWindow();

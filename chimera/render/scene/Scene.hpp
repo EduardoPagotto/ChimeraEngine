@@ -20,7 +20,7 @@ class Scene {
 
     void onViewportResize(uint32_t width, uint32_t height);
 
-  private:
+  protected:
     uint32_t viewportWidth, viewportHeight;
     entt::registry eRegistry;
 

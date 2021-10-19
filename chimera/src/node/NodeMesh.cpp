@@ -88,9 +88,8 @@ void createMeshTexturizade(Node* parent, std::string name, std::string file, flo
     Material* pMap = new Material();
     NodeMesh* pMesh = new NodeMesh(parent, name);
 
-    LoaderObj loader;
-    loader.getMesh(file, pMesh->meshData);
-    loader.getMaterial(*pMap);
+    int ret = loadObjFile(file, &pMesh->meshData, pMap);
+    // TODO: validar erro!!!
 
     vertexDataMeshScale(&pMesh->meshData, scale, pMap->hasTexture());
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));

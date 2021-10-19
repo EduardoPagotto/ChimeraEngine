@@ -6,22 +6,8 @@
 
 namespace Chimera {
 
-class LoaderObj {
-  public:
-    LoaderObj();
-    virtual ~LoaderObj();
-    void clean();
-    inline bool hasMaterial() { return materialFile.size() > 0 ? true : false; }
-    bool getMesh(const std::string& _fileName, MeshData& _mesh);
-    bool getMaterial(Material& _pMaterial);
-    bool getMaterial(const std::string& _fileName, Material& _pMaterial);
+int loadObjFile(const std::string& pathFile, MeshData* mesh, Material* material);
 
-  private:
-    void eraseAllSubStr(std::string& mainStr, const std::string& toErase);
-    bool getValidData(std::string& nova, const std::string& comando);
-
-    std::string materialFile;
-};
 } // namespace Chimera
 
 #endif

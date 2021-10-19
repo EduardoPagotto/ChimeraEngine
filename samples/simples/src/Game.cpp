@@ -58,18 +58,15 @@ void Game::onStart() {
     Chimera::MeshData& mesh = renderableEntity.addComponent<Chimera::MeshData>();
     Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
 
-    // Chimera::MeshData mesh;
-    Chimera::LoaderObj loader;
-    // loader.getMesh("./assets/models/tela01.obj", mesh);
-    // loader.getMesh("./assets/models/square2.obj", mesh);
-    // loader.getMesh("./assets/models/parede_simples.obj", mesh);
-    // loader.getMesh("./assets/models/cubo_textura_simples.obj", mesh);
-    loader.getMesh("./assets/models/map02.obj", mesh);
-    // loader.getMesh("./assets/models/salaSplit3.obj", mesh); // Sala L com Split
+    int ret = 0;
+    // ret = loadObjFile("./assets/models/tela01.obj", &mesh, &material);
+    // ret = loadObjFile("./assets/models/salaSplit3.obj", &mesh, &material);
+    // ret = loadObjFile("./assets/models/square2.obj", &mesh, &material);
+    // ret = loadObjFile("./assets/models/parede_simples.obj", &mesh, &material);
+    // ret = loadObjFile("./assets/models/cubo_textura_simples.obj", &mesh, &material);
+    ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
 
-    if (loader.hasMaterial() == true)
-        loader.getMaterial(material);
-    else {
+    if (ret == 1) {
         material.setDefaultEffect();
         Chimera::TextureManager::loadFromFile("tex_mapa", "./assets/textures/grid2.png", Chimera::TextureParameters());
         material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());

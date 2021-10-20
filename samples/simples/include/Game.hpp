@@ -22,7 +22,6 @@ class Game : public Chimera::Application {
   private:
     Chimera::Scene activeScene;
     Chimera::Camera* camera;
-    Chimera::Shader* pShader;
     Chimera::RenderableSimple* renderable; // Chimera::RenderableStatic* rederable;
     Chimera::Renderer3d render3D;          // Chimera::SimpleRender3d render3D;
 

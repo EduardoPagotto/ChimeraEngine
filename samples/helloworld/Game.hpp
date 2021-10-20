@@ -14,6 +14,7 @@ class Game : public Chimera::Application {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
+    Chimera::Shader shader;
     Chimera::Label* lFPS;
     TileLayer* layer;
     int fps;

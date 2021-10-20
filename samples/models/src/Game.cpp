@@ -13,6 +13,7 @@
 #include "chimera/physic_loader/PhysicsScene.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
+    using namespace Chimera;
     pCorpoRigido = nullptr;
     pEmissor = nullptr;
     pOrbitalCam = nullptr;
@@ -26,10 +27,10 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     crt.throttle = 0.0;
     crt.hat = 0;
 
-    shaderLibrary.load("./assets/shaders/MeshFullShadow.glsl");
-    shaderLibrary.load("./assets/shaders/ParticleEmitter.glsl");
-    shaderLibrary.load("./assets/shaders/HUD.glsl");
-    shaderLibrary.load("./assets/shaders/ShadowMappingDepth.glsl");
+    ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader[0]);
+    ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader[1]);
+    ShaderManager::load("./assets/shaders/HUD.glsl", shader[2]);
+    ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shader[3]);
     std::string model = "./assets/models/piso2.xml";
 
     // Cria grupo shader como filho de scene
@@ -45,12 +46,12 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     libP.target();
 
     // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado
-    group1->setShader(shaderLibrary.get("MeshFullShadow"));
-    group1->setNodeVisitor(new Chimera::VisitorShadowMap(&this->renderV.render3D, shaderLibrary.get("ShadowMappingDepth"), 2048, 2048));
+    group1->setShader(&shader[0]);
+    group1->setNodeVisitor(new Chimera::VisitorShadowMap(&this->renderV.render3D, &shader[3], 2048, 2048));
 
     // create and add particle to scene
     Chimera::NodeGroup* gParticle = new Chimera::NodeGroup(pRoot, "ParticleGroup");
-    gParticle->setShader(shaderLibrary.get("ParticleEmitter"));
+    gParticle->setShader(&shader[1]);
     Chimera::NodeParticleEmitter* pParticleEmitter = new Chimera::NodeParticleEmitter(gParticle, "testeZ1", 10000);
     pParticleEmitter->setTransform(new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
 
@@ -58,7 +59,7 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     // Create and add hud data text
     Chimera::NodeGroup* gHud = new Chimera::NodeGroup((Chimera::Node*)pRoot, "HUD-Group");
-    gHud->setShader(shaderLibrary.get("HUD"));
+    gHud->setShader(&shader[2]);
     Chimera::NodeHUD* pHUD = new Chimera::NodeHUD(gHud, "HUD-Default");
 
     Chimera::Font* pFont = new Chimera::Font("./assets/fonts/FreeSans.ttf", 18);

@@ -41,6 +41,7 @@ class Game : public Chimera::Application {
     Chimera::NodeParticleEmitter* pEmissor;
     Chimera::Node* root;
     Chimera::PhysicsControl* physicWorld;
+    Chimera::Shader shader[5];
 };
 
 #endif

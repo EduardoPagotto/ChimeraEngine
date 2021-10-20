@@ -5,21 +5,21 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 namespace Chimera {
 class Shader {
+    friend class ShaderManager;
+
   public:
-    Shader(const std::string& filepath);
-    Shader(const std::string& name, const std::string& vertPath, const std::string& fragPath);
-    virtual ~Shader();
+    Shader() = default;
+    Shader(const Shader& other) : shaderId(other.shaderId), name(other.name) {}
+    virtual ~Shader() = default;
 
     inline void enable() const { glUseProgram(this->shaderId); }
     inline void disable() const { glUseProgram(0); }
-    inline std::string getName() const { return name; }
-
+    inline const std::string getName() const { return name; }
     GLint getUniform(const char* _varName) const noexcept;
-
     void setUniform(const char* name, float val) { glUniform1f(getUniform(name), val); }
     void setUniform(const char* name, int val) { glUniform1i(getUniform(name), val); }
     void setUniform(const char* name, const glm::vec2& vec) { glUniform2f(getUniform(name), vec.x, vec.y); }
@@ -41,8 +41,8 @@ class Shader {
     void setUniformArray(const char* name, int size, glm::ivec4* val) { glUniform4iv(getUniform(name), size, glm::value_ptr(*val)); }
 
   private:
-    GLuint shaderId;
-    std::string name;
+    GLuint shaderId = 0;
+    std::string name = "invalid";
 };
 //---
 class ShaderValue {
@@ -64,15 +64,15 @@ class ShaderValue {
     glm::vec4 value;
 };
 //---
-class ShaderLibrary {
+class ShaderManager {
   public:
-    bool add(Shader* shader);
-    Shader* load(const std::string& filepath);
-    Shader* get(const std::string& name);
+    static void load(const std::string& filepath, Shader& shader);
+    static bool get(const std::string& name, Shader& shader);
+    static bool remove(Shader& shader);
+    static void clear();
 
   private:
-    std::unordered_map<std::string, Shader*> shaders;
+    static std::vector<Shader> shaders;
 };
-
 } // namespace Chimera
 #endif

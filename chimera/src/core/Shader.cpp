@@ -2,9 +2,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/utils.hpp"
 #include <SDL2/SDL.h>
-#include <string>
 #include <unordered_map>
-#include <vector>
 
 namespace Chimera {
 
@@ -117,20 +115,6 @@ static std::unordered_map<GLenum, std::string> preProcess(const std::string sour
     return shaderSource;
 }
 
-static GLuint shadeLoadProg(const char* progName, const char* fileVertex, const char* fileFrag) {
-
-    std::vector<GLuint> vecShaderID;
-    vecShaderID.push_back(compileShader(utilReadFile(fileVertex), GL_VERTEX_SHADER));
-    vecShaderID.push_back(compileShader(utilReadFile(fileFrag), GL_FRAGMENT_SHADER));
-
-    GLuint shaderId = linkShader(vecShaderID); // Link o programa
-
-    vecShaderID.clear();
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", progName, shaderId);
-    return shaderId;
-}
-
 static GLuint shadeLoadProg(const std::string& filepath) {
 
     std::vector<GLuint> vecShaderID;
@@ -153,18 +137,6 @@ static GLuint shadeLoadProg(const std::string& filepath) {
     return shaderId;
 }
 
-//----
-Shader::Shader(const std::string& name, const std::string& vertPath, const std::string& fragPath) : name(name) {
-    this->shaderId = shadeLoadProg(name.c_str(), vertPath.c_str(), fragPath.c_str());
-}
-
-Shader::Shader(const std::string& filepath) {
-    this->shaderId = shadeLoadProg(filepath);
-    name = extractNameByFile(filepath);
-}
-
-Shader::~Shader() { glDeleteProgram(shaderId); }
-
 GLint Shader::getUniform(const char* _varName) const noexcept {
     GLint loc = glGetUniformLocation(shaderId, _varName);
     if (loc == -1)
@@ -174,35 +146,51 @@ GLint Shader::getUniform(const char* _varName) const noexcept {
 }
 
 //---
+std::vector<Shader> ShaderManager::shaders;
 
-bool ShaderLibrary::add(Shader* shader) {
-    auto it = shaders.find(shader->getName());
-    if (it == shaders.end()) {
-        shaders[shader->getName()] = shader;
-        return true;
+void ShaderManager::load(const std::string& filepath, Shader& shader) {
+
+    if (ShaderManager::get(extractNameByFile(filepath), shader))
+        return;
+
+    shader.shaderId = shadeLoadProg(filepath);
+    shader.name = extractNameByFile(filepath);
+
+    ShaderManager::shaders.push_back(shader);
+}
+
+bool ShaderManager::get(const std::string& name, Shader& shader) {
+
+    for (auto it = shaders.begin(); it != shaders.end(); it++) {
+        if (it->name == name) {
+            shader.shaderId = it->shaderId;
+            shader.name = it->name;
+            return true;
+        }
     }
 
     return false;
 }
 
-Shader* ShaderLibrary::load(const std::string& filepath) {
+bool ShaderManager::remove(Shader& shader) {
 
-    Shader* shader = this->get(extractNameByFile(filepath));
-    if (shader != nullptr)
-        return shader;
-
-    shader = new Shader(filepath);
-    shaders[shader->getName()] = shader;
-
-    return shader;
+    for (auto it = shaders.begin(); it != shaders.end(); it++) {
+        if (it->name == shader.name) {
+            glDeleteProgram(shader.shaderId);
+            shader.shaderId = 0;
+            return true;
+        }
+    }
+    return false;
 }
 
-Shader* ShaderLibrary::get(const std::string& name) {
+void ShaderManager::clear() {
+    for (auto it = shaders.begin(); it != shaders.end(); it++) {
+        glDeleteProgram(it->shaderId);
+        it->shaderId = 0;
+    }
 
-    auto it = shaders.find(name);
-    if (it != shaders.end())
-        return it->second;
-
-    return nullptr;
+    shaders.clear();
 }
+
 } // namespace Chimera

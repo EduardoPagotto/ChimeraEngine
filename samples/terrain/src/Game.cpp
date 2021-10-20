@@ -11,9 +11,6 @@
 #include "chimera/render/scene/Entity.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
-
-    pShader = shaderLibrary.load("./assets/shaders/MeshFullShadow.glsl");
-
     // Light
     pLight = new Chimera::Light();
     pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -23,7 +20,7 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     pHeightMap = nullptr;
 }
 
-Game::~Game() { delete pShader; }
+Game::~Game() {}
 
 void Game::onStart() {
 
@@ -52,6 +49,9 @@ void Game::onStart() {
     }
 
     Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+
+    Chimera::Shader& shader = renderableEntity.addComponent<Chimera::Shader>();
+    ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
 
     Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
     material.setDefaultEffect();
@@ -143,36 +143,27 @@ void Game::onUpdate() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
-    pShader->enable();
-
     activeScene.onUpdate(0.01);
     // camera->processInput(0.01);
     // Calcula view e projection pela Camera
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
     // camera->recalculateMatrix(canvas->getRatio());
 
-    pLight->setUniform(pShader);
+    // pLight->setUniform(pShader);  // FIXME: AQUI!!!!
 
     // model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
     // //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); if (pShader == nullptr)
     //     return;
 
     int shadows = 0;
-    pShader->setUniform("shadows", shadows);
-
-    // pShader->setUniform("projection", camera->getProjectionMatrix());
-    // pShader->setUniform("view", camera->getViewMatrix());
-    // pShader->setUniform("model", model);
-
-    // aplica material ao shader
-    // pMaterial->bindMaterialInformation(pShader);
+    // pShader->setUniform("shadows", shadows);
 
     // NEW
     render3d.begin(camera);
     pHeightMap->submit(&render3d); // render3d.submit(pHeightMap);
     render3d.end();
 
-    render3d.flush(true, pShader);
+    render3d.flush(true, nullptr);
 
     canvas->after();
     canvas->swapWindow();

@@ -3,15 +3,14 @@
 namespace Chimera {
 
 CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : CanvasGL(_title, _width * 2, _height, false) {
-    pShader = new Shader("./assets/shaders/CanvasHMD.glsl");
-    pLeft = new Eye(0, _width, _height, pShader);
-    pRight = new Eye(1, _width, _height, pShader);
+    ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
+    pLeft = new Eye(0, _width, _height, &shader);
+    pRight = new Eye(1, _width, _height, &shader);
 }
 
 CanvasHmd::~CanvasHmd() {
     delete pLeft;
     delete pRight;
-    delete pShader;
 }
 
 void CanvasHmd::before(const unsigned short& _indexEye) {

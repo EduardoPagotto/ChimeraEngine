@@ -13,7 +13,7 @@
 #include "chimera/render/scene/Entity.hpp"
 #include <algorithm>
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) { pShader = shaderLibrary.load("./assets/shaders/MeshNoMat.glsl"); }
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
 
 Game::~Game() { delete renderz1; }
 
@@ -44,6 +44,9 @@ void Game::onStart() {
     }
 
     Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+
+    Chimera::Shader& shader = renderableEntity.addComponent<Chimera::Shader>();
+    ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
 
     Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
     material.setDefaultEffect();
@@ -153,7 +156,7 @@ void Game::onUpdate() {
     renderz1->submit(&render3d); // render3d.submit(renderz1);
     render3d.end();
 
-    render3d.flush(true, pShader);
+    render3d.flush(true, nullptr);
 
     canvas->after();
     canvas->swapWindow();

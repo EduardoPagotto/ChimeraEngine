@@ -10,7 +10,7 @@
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) { pShader = shaderLibrary.load("./assets/shaders/Simples.glsl"); }
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
 
 Game::~Game() {}
 
@@ -57,6 +57,8 @@ void Game::onStart() {
 
     Chimera::MeshData& mesh = renderableEntity.addComponent<Chimera::MeshData>();
     Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
+    Chimera::Shader& shader = renderableEntity.addComponent<Chimera::Shader>();
+    ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
 
     int ret = 0;
     // ret = loadObjFile("./assets/models/tela01.obj", &mesh, &material);
@@ -133,8 +135,6 @@ bool Game::onEvent(const SDL_Event& event) {
 void Game::onUpdate() {
     canvas->before();
 
-    pShader->enable();
-
     activeScene.onUpdate(0.01);
 
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
@@ -144,7 +144,7 @@ void Game::onUpdate() {
     renderable->submit(&render3D);
     render3D.end();
 
-    render3D.flush(true, pShader);
+    render3D.flush(true, nullptr);
 
     canvas->after();
     canvas->swapWindow();

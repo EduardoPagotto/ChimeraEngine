@@ -15,6 +15,7 @@ class Game : public Chimera::Application {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
+    Chimera::Shader shader;
     Chimera::VisitorRender renderV;
     Chimera::CanvasGL* pCanvas;
     Chimera::Node* pRoot;

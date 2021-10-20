@@ -2,7 +2,6 @@
 #define __CHIMERA_APPLICATION_CONTROLLER__HPP
 
 #include "LayerStack.hpp"
-#include "Shader.hpp"
 #include "io/Timer.hpp"
 #include "windows/Canvas.hpp"
 
@@ -19,7 +18,6 @@ class Application {
     void pushOverlay(ILayer* overlay);
 
     Canvas* canvas;
-    ShaderLibrary shaderLibrary;
 
   private:
     virtual void onStart() = 0;

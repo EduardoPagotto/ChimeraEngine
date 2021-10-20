@@ -14,12 +14,11 @@ Game::Game(Chimera::Canvas* canvas, const std::vector<std::string>& shadesFile) 
 
     using namespace Chimera;
 
-    Shader* pShader = nullptr;
     for (auto shaderFile : shadesFile)
-        pShader = shaderLibrary.load(shaderFile); // so tem 1 mesmo!!!
+        ShaderManager::load(shaderFile, shader); // so tem 1 mesmo!!!
 
     NodeGroup* groupRoot = new NodeGroup(nullptr, "modelos");
-    groupRoot->setShader(pShader);
+    groupRoot->setShader(&shader);
 
     // Propriedades da camera
     NodeCamera* pCam = new Chimera::NodeCamera(groupRoot, "Observador-01");

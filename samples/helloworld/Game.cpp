@@ -80,7 +80,10 @@ Game::~Game() {}
 
 void Game::onStart() {
     using namespace Chimera;
-    layer = new TileLayer(shaderLibrary.load("./assets/shaders/Basic2D.glsl"));
+
+    ShaderManager::load("./assets/shaders/Basic2D.glsl", shader);
+
+    layer = new TileLayer(&shader);
     for (float y = -9.0f; y < 9.0f; y++) {
         for (float x = -16.0f; x < 16.0f; x++) {
             if (rand() % 4 == 0)

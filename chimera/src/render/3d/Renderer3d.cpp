@@ -49,6 +49,22 @@ void Renderer3d::submit(IRenderable3d* renderable) {
     }
 }
 
+void Renderer3d::reloadShader(Entity entity) {
+
+    activeShader->enable();
+    activeShader->setUniform("projection", camera->getProjectionMatrix());
+    // activeShader->setUniform("view", camera->getViewMatrix());
+
+    if (entity.hasComponent<Light>()) {
+        Light& light = entity.getComponent<Light>();
+        light.bindLightInformation(activeShader);
+    }
+
+    // FIXME: preciso disto aqui ??
+    // int shadows = 0;
+    // activeShader->setUniform("shadows", shadows);
+}
+
 void Renderer3d::flush(bool useMaterial, Shader* alternativeShader) {
 
     VertexArray* pLastVao = nullptr;
@@ -56,15 +72,13 @@ void Renderer3d::flush(bool useMaterial, Shader* alternativeShader) {
 
         IRenderable3d* r = renderQueue.front();
 
-        if (r->getVao() != nullptr) {
-            if (r->getVao() != pLastVao) {
-                if (pLastVao != nullptr) {
+        if (r->getVao() != nullptr) {      // Possui um novo modelo
+            if (r->getVao() != pLastVao) { // Diferente  do anterior
+                if (pLastVao != nullptr) { // desvincula o anterior
                     pLastVao->unbind();
                 }
 
-                // novo renderable bind material
-
-                r->getVao()->bind();
+                r->getVao()->bind(); // vincula novo modelo
                 pLastVao = r->getVao();
 
                 Entity entity = r->getEntity();
@@ -72,29 +86,51 @@ void Renderer3d::flush(bool useMaterial, Shader* alternativeShader) {
 
                     Transform& model = entity.getComponent<Transform>();
 
-                    if (activeShader == nullptr) { // primeira passada!!!!
-                        if (entity.hasComponent<Shader>()) {
-                            activeShader = &entity.getComponent<Shader>();
-                        } else {
+                    if (activeShader == nullptr) { // primeira passada, sem shader algum habilitado aqui!!!!
+
+                        if (alternativeShader != nullptr) { // shader passado tem prioridade
                             activeShader = alternativeShader;
+                        } else {
+
+                            if (entity.hasComponent<Shader>()) // sem shader prioritario pegar da entidade
+                                activeShader = &entity.getComponent<Shader>();
+                            else {
+                                // TODO: finalizar erro!!!
+                            }
                         }
 
-                        activeShader->enable();
+                        this->reloadShader(entity);
 
                     } else { // demais passadas
-                        Shader* newShader = nullptr;
-                        if (entity.hasComponent<Shader>()) {
-                            newShader = &entity.getComponent<Shader>();
-                        } else {
-                            newShader = alternativeShader;
-                        }
 
-                        if (newShader != activeShader) {
-                            activeShader->disable();
-                            activeShader = newShader;
-                            activeShader->enable();
+                        if (alternativeShader != nullptr) { // alternative tem prioridade
+
+                            if (alternativeShader != activeShader) {
+                                activeShader->disable(); // demais passadas sempre tera activeShader nao e necessario testar
+                                activeShader = alternativeShader;
+                                this->reloadShader(entity);
+                            }
+
+                        } else {
+
+                            Shader* newShader = nullptr;
+                            if (entity.hasComponent<Shader>()) {
+                                newShader = &entity.getComponent<Shader>();
+                            } else {
+                                // TODO: finalizar
+                            }
+
+                            if (newShader != activeShader) {
+                                activeShader->disable();
+                                activeShader = newShader;
+                                this->reloadShader(entity);
+                            }
                         }
                     }
+
+                    activeShader->setUniform("model", model.getMatrix());
+                    // activeShader->setUniform("projection", camera->getProjectionMatrix());
+                    activeShader->setUniform("view", camera->getViewMatrix());
 
                     if (useMaterial) {
                         if (entity.hasComponent<Material>()) {
@@ -102,17 +138,6 @@ void Renderer3d::flush(bool useMaterial, Shader* alternativeShader) {
                             material.bindMaterialInformation(activeShader);
                         }
                     }
-
-                    // if (entity.hasComponent<Light>()) {
-                    //     Light& light = entity.getComponent<Light>();
-                    //     light.bindLightInformation(activeShader);
-                    // }
-
-                    // FIXME: preciso disto aqui ??
-                    // int shadows = 0;
-                    // activeShader->setUniform("shadows", shadows);
-
-                    activeShader->setUniform("model", model.getMatrix());
 
                 } else {
 
@@ -129,11 +154,9 @@ void Renderer3d::flush(bool useMaterial, Shader* alternativeShader) {
                     }
                 }
             }
-
-            activeShader->setUniform("projection", camera->getProjectionMatrix());
-            activeShader->setUniform("view", camera->getViewMatrix());
         }
 
+        // Desenhar o IBO
         if (r->getIBO() != nullptr) {
 
             r->getIBO()->bind();

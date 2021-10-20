@@ -4,6 +4,7 @@
 #include "chimera/core/Camera.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/space/Frustum.hpp"
+#include "chimera/render/scene/Entity.hpp"
 #include <cstdint>
 #include <deque>
 
@@ -23,6 +24,8 @@ class Renderer3d {
     bool getLog() const { return logData; }
 
   private:
+    void reloadShader(Entity entity);
+
     std::deque<IRenderable3d*> renderQueue;
     Camera* camera = nullptr;
     Shader* activeShader = nullptr;

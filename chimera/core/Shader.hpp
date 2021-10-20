@@ -17,7 +17,7 @@ class Shader {
     virtual ~Shader() = default;
 
     inline void enable() const { glUseProgram(this->shaderId); }
-    inline void disable() const { glUseProgram(0); }
+    static void disable() { glUseProgram(0); }
     inline const std::string getName() const { return name; }
     GLint getUniform(const char* _varName) const noexcept;
     void setUniform(const char* name, float val) { glUniform1f(getUniform(name), val); }
@@ -39,6 +39,9 @@ class Shader {
     void setUniformArray(const char* name, int size, glm::ivec3* val) { glUniform3iv(getUniform(name), size, glm::value_ptr(*val)); }
     void setUniformArray(const char* name, int size, glm::vec4* val) { glUniform4fv(getUniform(name), size, glm::value_ptr(*val)); }
     void setUniformArray(const char* name, int size, glm::ivec4* val) { glUniform4iv(getUniform(name), size, glm::value_ptr(*val)); }
+    inline const bool isInvalid() const { return shaderId == 0; }
+    bool operator==(const Shader& other) const { return shaderId == other.shaderId; } //&& name == other.name; }
+    bool operator!=(const Shader& other) const { return !(*this == other); }
 
   private:
     GLuint shaderId = 0;

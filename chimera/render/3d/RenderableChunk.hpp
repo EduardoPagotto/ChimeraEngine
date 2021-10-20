@@ -11,7 +11,7 @@ class RenderableChunk : public IRenderable3d {
     RenderableChunk(Entity entity, std::vector<RenderableFace*>& vpLeafData, std::vector<VertexData>& vertexData);
     ~RenderableChunk();
 
-    virtual void submit(Renderer3d* renderer) override;
+    virtual void submit(Camera* camera, Renderer3d* renderer) override;
     virtual void debugDados() override;
     virtual uint32_t getSize() const { return totIndex; }
     virtual Shader* getShader() const { return nullptr; }

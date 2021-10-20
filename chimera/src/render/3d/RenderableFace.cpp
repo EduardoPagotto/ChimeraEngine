@@ -35,5 +35,5 @@ void RenderableFace::addFace(const uint32_t& _pa, const uint32_t& _pb, const uin
 
 void RenderableFace::initIndexBufferObject() { ibo = new IndexBuffer(&indexTris[0], indexTris.size()); }
 
-void RenderableFace::submit(Renderer3d* renderer) { renderer->submit(this); }
+void RenderableFace::submit(Camera* camera, Renderer3d* renderer) { renderer->submit(this); }
 } // namespace Chimera

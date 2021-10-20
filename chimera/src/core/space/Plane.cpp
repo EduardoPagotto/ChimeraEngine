@@ -39,9 +39,9 @@ bool Plane::collinearNormal(const glm::vec3& _normal) {
     return false;
 }
 
-SIDE Plane::classifyPoint(glm::vec3* point) {
+SIDE Plane::classifyPoint(const glm::vec3& point) {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
-    glm::vec3 dir = this->point - (*point);
+    glm::vec3 dir = this->point - point;
     float clipTest = glm::dot(dir, this->normal);
 
     if (fabs(clipTest) < EPSILON)
@@ -93,14 +93,14 @@ SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::ve
     return SIDE::CP_SPANNING;
 }
 
-bool Plane::intersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* intersection, float* percentage) {
+bool Plane::intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm::vec3* intersection, float* percentage) {
 
-    glm::vec3 direction = (*lineend) - (*linestart);
+    glm::vec3 direction = lineend - linestart;
     float linelength = glm::dot(direction, this->normal);
     if (fabsf(linelength) < 0.0001)
         return false;
 
-    glm::vec3 L1 = this->point - (*linestart);
+    glm::vec3 L1 = this->point - linestart;
 
     float dist_from_plane = glm::dot(L1, this->normal);
     *percentage = dist_from_plane / linelength;
@@ -110,7 +110,7 @@ bool Plane::intersect(glm::vec3* linestart, glm::vec3* lineend, glm::vec3* inter
     else if (*percentage > 1.0f)
         return false;
 
-    *intersection = (*linestart) + (direction * (*percentage));
+    *intersection = linestart + (direction * (*percentage));
     return true;
 }
 

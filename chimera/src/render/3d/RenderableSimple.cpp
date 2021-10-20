@@ -51,7 +51,7 @@ RenderableSimple::~RenderableSimple() {
     delete ibo;
 }
 
-void RenderableSimple::submit(Renderer3d* renderer) { renderer->submit(this); }
+void RenderableSimple::submit(Camera* camera, Renderer3d* renderer) { renderer->submit(this); }
 
 void RenderableSimple::debugDados() {
     glm::vec3 size = this->aabb.getSize();

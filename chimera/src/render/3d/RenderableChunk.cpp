@@ -64,7 +64,7 @@ void RenderableChunk::debugDados() {
     // TODO:
 }
 
-void RenderableChunk::submit(Renderer3d* renderer) {
+void RenderableChunk::submit(Camera* camera, Renderer3d* renderer) {
     renderer->submit(this);
 
     for (RenderableFace* pNode : vpLeaf) {

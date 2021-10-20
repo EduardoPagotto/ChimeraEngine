@@ -52,7 +52,7 @@ void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
         return;
 
     auto pLeaf = vpLeaf[tree->leafIndex];
-    pLeaf->submit(this->renderer);
+    pLeaf->submit(camera, this->renderer);
 }
 
 void RenderableBsp::traverseTree(BSPTreeNode* tree) {
@@ -63,7 +63,7 @@ void RenderableBsp::traverseTree(BSPTreeNode* tree) {
     if (tree->isSolid == true)
         return;
 
-    SIDE result = tree->hyperPlane.classifyPoint(eye);
+    SIDE result = tree->hyperPlane.classifyPoint(camera->getPosition());
     switch (result) {
         case SIDE::CP_FRONT:
             traverseTree(tree->back);
@@ -85,7 +85,8 @@ void RenderableBsp::traverseTree(BSPTreeNode* tree) {
 
 void RenderableBsp::debugDados() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP Submit"); }
 
-void RenderableBsp::submit(Renderer3d* renderer) {
+void RenderableBsp::submit(Camera* camera, Renderer3d* renderer) {
+    this->camera = camera;
     this->renderer = renderer;
     this->renderer->submit(this);
 
@@ -122,7 +123,7 @@ void RenderableBsp::collapse(BSPTreeNode* tree) {
     }
 }
 
-bool RenderableBsp::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* tree) {
+bool RenderableBsp::lineOfSight(const glm::vec3& Start, const glm::vec3& End, BSPTreeNode* tree) {
     float temp;
     glm::vec3 intersection;
     if (tree->isLeaf == true) {
@@ -138,12 +139,12 @@ bool RenderableBsp::lineOfSight(glm::vec3* Start, glm::vec3* End, BSPTreeNode* t
 
     if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
         tree->hyperPlane.intersect(Start, End, &intersection, &temp);
-        return lineOfSight(Start, &intersection, tree->front) && lineOfSight(End, &intersection, tree->back);
+        return lineOfSight(Start, intersection, tree->front) && lineOfSight(End, intersection, tree->back);
     }
 
     if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
         tree->hyperPlane.intersect(Start, End, &intersection, &temp);
-        return lineOfSight(End, &intersection, tree->front) && lineOfSight(Start, &intersection, tree->back);
+        return lineOfSight(End, intersection, tree->front) && lineOfSight(Start, intersection, tree->back);
     }
 
     // if we get here one of the points is on the hyperPlane

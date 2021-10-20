@@ -141,7 +141,7 @@ void Game::onUpdate() {
     // camControl->recalculateMatrix(false);
 
     render3D.begin(camera);
-    renderable->submit(&render3D);
+    renderable->submit(camera, &render3D);
     render3D.end();
 
     render3D.flush(true, nullptr);

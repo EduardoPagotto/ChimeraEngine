@@ -2,6 +2,7 @@
 #define __CHIMERA_IRENDERABLE_3D_Z1__HPP
 
 #include "Renderer3d.hpp"
+#include "chimera/core/Camera.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/buffers/IndexBuffer.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
@@ -20,7 +21,7 @@ class IRenderable3d {
     virtual IndexBuffer* getIBO() const = 0;
     virtual AABB* getAABB() = 0;
     virtual Entity getEntity() const = 0;
-    virtual void submit(Renderer3d* renderer) = 0;
+    virtual void submit(Camera* camera, Renderer3d* renderer) = 0;
 };
 
 } // namespace Chimera

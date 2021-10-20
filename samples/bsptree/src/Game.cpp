@@ -62,19 +62,6 @@ void Game::onStart() {
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);
 
-    // pTex->init();
-    // Chimera::MeshData m;
-    // Chimera::LoaderObj loader;
-    // // loader.getMesh("./assets/models/tela01.obj", m); // quadrado simples pequeno
-    // // loader.getMesh("./assets/models/salaSplit3.obj", m); // Sala L com Split apenas triangulos
-    // loader.getMesh("./assets/models/map02.obj", m); // Sala com 5 espacos em forma de X
-    // // loader.getMesh("./assets/models/parede_simples.obj", m); // FIXME Falha para EPSILON 1e-2
-    // // loader.getMesh("./assets/models/square2.obj", m); // 2 quadrado teste de split lateral
-    // // loader.getMesh("./assets/models/square1.obj", m); // 2 quadrado teste de split centro
-    // // loader.getMesh("./assets/models/split1.obj", m); // 2 triangulos sem textura
-    // // loader.getMesh("./assets/models/cubo_textura_simples.obj", m);
-    // // m.changeSize(30.0, true);
-
     std::vector<uint32_t> vIndex;
     std::vector<Chimera::VertexData> vVertexIndexed;
 
@@ -150,10 +137,8 @@ void Game::onUpdate() {
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight()); // FIXME: ver se da para irar de todos!!!!
     // camera->recalculateMatrix(canvas->getRatio());
 
-    glm::vec3 poseye = camera->getPosition();
-    renderz1->setEyePosition(&poseye);
     render3d.begin(camera);
-    renderz1->submit(&render3d); // render3d.submit(renderz1);
+    renderz1->submit(camera, &render3d);
     render3d.end();
 
     render3d.flush(true, nullptr);

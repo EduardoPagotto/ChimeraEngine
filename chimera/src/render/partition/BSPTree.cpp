@@ -130,8 +130,8 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
         vertC = _pTriangle->vertex(vVertex, 2); //   old c
     }
 
-    hyperPlane.intersect(&a, &c, &A, &propAC);
-    hyperPlane.intersect(&b, &c, &B, &propBC);
+    hyperPlane.intersect(a, c, &A, &propAC);
+    hyperPlane.intersect(b, c, &B, &propBC);
 
     // PA texture coord
     glm::vec2 deltaA = (vertC.texture - vertA.texture) * propAC;

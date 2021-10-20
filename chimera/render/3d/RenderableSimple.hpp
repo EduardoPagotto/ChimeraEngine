@@ -18,7 +18,7 @@ class RenderableSimple : public IRenderable3d {
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return ibo; }
     virtual AABB* getAABB() override { return &aabb; }
-    virtual void submit(Renderer3d* renderer) override;
+    virtual void submit(Camera* camera, Renderer3d* renderer) override;
     virtual Entity getEntity() const override { return entity; }
 
   private:

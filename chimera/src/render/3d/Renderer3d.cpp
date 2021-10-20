@@ -61,8 +61,8 @@ void Renderer3d::reloadShader(Entity entity) {
     }
 
     // FIXME: preciso disto aqui ??
-    // int shadows = 0;
-    // activeShader->setUniform("shadows", shadows);
+    int shadows = 0;
+    activeShader->setUniform("shadows", shadows);
 }
 
 void Renderer3d::flush(bool useMaterial, Shader* alternativeShader) {

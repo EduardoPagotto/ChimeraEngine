@@ -49,8 +49,8 @@ void Game::onStart() {
     ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
 
     Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
-    material.setDefaultEffect();
-    material.setShine(50.0f);
+    // material.setDefaultEffect();
+    // material.setShine(50.0f);
 
     Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
     material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());

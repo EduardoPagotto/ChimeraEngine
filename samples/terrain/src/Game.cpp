@@ -49,12 +49,12 @@ void Game::onStart() {
     light.setPosition(glm::vec3(0, 400, 0));
 
     Chimera::Shader& shader = renderableEntity.addComponent<Chimera::Shader>();
-    ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
-    //./assets/shaders/MeshFullShadow.glsl
+    // ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
+    ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
 
     Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
-    // material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
-    // material.setShine(50.0f);
+    material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
+    material.setShine(50.0f);
 
     Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
     material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
@@ -142,14 +142,11 @@ void Game::onUpdate() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
-    activeScene.onUpdate(0.01);
-    // camera->processInput(0.01);
-    // Calcula view e projection pela Camera
+    activeScene.onUpdate(0.01); // atualiza camera e script de camera
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
-    // camera->recalculateMatrix(canvas->getRatio());
+    // camera->recalculateMatrix(canvas->getRatio());// ainda nao sei o que fazer aqui
 
     // pLight->bindLightInformation(pShader); // FIXME: AQUI!!!!
-
     // model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
     // //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); if (pShader == nullptr)
     //     return;

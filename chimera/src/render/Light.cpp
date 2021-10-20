@@ -12,7 +12,7 @@ Light::Light() {
 
 Light::~Light() {}
 
-void Light::setUniform(Shader* _pShader) {
+void Light::bindLightInformation(Shader* _pShader) {
     glm::vec3 val = glm::vec3(transform[3]); // pega posicao
     _pShader->setUniform(SHADE_LIGHT_POSITION, val);
     _pShader->setUniform(SHADE_LIGHT_AMBIENT, ambient);

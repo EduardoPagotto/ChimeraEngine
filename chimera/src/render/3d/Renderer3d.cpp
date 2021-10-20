@@ -1,6 +1,7 @@
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
+#include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <SDL2/SDL.h>
@@ -101,6 +102,15 @@ void Renderer3d::flush(bool useMaterial, Shader* alternativeShader) {
                             material.bindMaterialInformation(activeShader);
                         }
                     }
+
+                    // if (entity.hasComponent<Light>()) {
+                    //     Light& light = entity.getComponent<Light>();
+                    //     light.bindLightInformation(activeShader);
+                    // }
+
+                    // FIXME: preciso disto aqui ??
+                    // int shadows = 0;
+                    // activeShader->setUniform("shadows", shadows);
 
                     activeShader->setUniform("model", model.getMatrix());
 

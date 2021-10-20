@@ -65,7 +65,7 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
     render3D.flush();
 }
 
-void VisitorRender::visit(NodeLight* _pLight) { _pLight->data.setUniform(pShader); }
+void VisitorRender::visit(NodeLight* _pLight) { _pLight->data.bindLightInformation(pShader); }
 
 void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
 

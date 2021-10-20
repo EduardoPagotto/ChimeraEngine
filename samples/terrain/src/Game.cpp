@@ -5,20 +5,13 @@
 #include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
+#include "chimera/render/Light.hpp"
 #include "chimera/render/partition/LoadHeightMap.hpp"
 #include "chimera/render/scene/CameraControllerFPS.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
-    // Light
-    pLight = new Chimera::Light();
-    pLight->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    pLight->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
-    pLight->setPosition(glm::vec3(0, 400, 0));
-
-    pHeightMap = nullptr;
-}
+Game::Game(Chimera::Canvas* canvas) : Application(canvas) { pHeightMap = nullptr; }
 
 Game::~Game() {}
 
@@ -50,12 +43,18 @@ void Game::onStart() {
 
     Entity renderableEntity = activeScene.createEntity("Renderable Entity");
 
+    Light& light = renderableEntity.addComponent<Light>();
+    light.setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    light.setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
+    light.setPosition(glm::vec3(0, 400, 0));
+
     Chimera::Shader& shader = renderableEntity.addComponent<Chimera::Shader>();
     ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
+    //./assets/shaders/MeshFullShadow.glsl
 
     Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
-    material.setDefaultEffect();
-    material.setShine(50.0f);
+    // material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
+    // material.setShine(50.0f);
 
     Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
     material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
@@ -149,13 +148,14 @@ void Game::onUpdate() {
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
     // camera->recalculateMatrix(canvas->getRatio());
 
-    // pLight->setUniform(pShader);  // FIXME: AQUI!!!!
+    // pLight->bindLightInformation(pShader); // FIXME: AQUI!!!!
 
     // model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
     // //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); if (pShader == nullptr)
     //     return;
 
-    int shadows = 0;
+    // FIXME: preciso disto aqui ??
+    // int shadows = 0;
     // pShader->setUniform("shadows", shadows);
 
     // NEW

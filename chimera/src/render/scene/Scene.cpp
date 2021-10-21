@@ -6,8 +6,16 @@
 
 namespace Chimera {
 
-Scene::Scene() {}
-Scene::~Scene() {}
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640) {}
+Scene::~Scene() {
+
+    for (uint i = 0; i < entities.size(); i++)
+        this->destroyEntity(entities[i]);
+
+    entities.clear();
+}
+
+void Scene::addEntity(Entity entity) { entities.push_back(entity); }
 
 void Scene::onDestroy() {
     // destroy scripts
@@ -104,5 +112,7 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         }
     }
 }
+
+void Scene::render(IRenderer3d& renderer) {}
 
 } // namespace Chimera

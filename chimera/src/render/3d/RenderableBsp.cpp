@@ -1,4 +1,5 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -85,7 +86,7 @@ void RenderableBsp::traverseTree(BSPTreeNode* tree) {
 
 void RenderableBsp::debugDados() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP Submit"); }
 
-void RenderableBsp::submit(Camera* camera, Renderer3d* renderer) {
+void RenderableBsp::submit(Camera* camera, IRenderer3d* renderer) {
     this->camera = camera;
     this->renderer = renderer;
     this->renderer->submit(this);

@@ -1,4 +1,5 @@
 #include "chimera/render/3d/RenderableChunk.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -64,7 +65,7 @@ void RenderableChunk::debugDados() {
     // TODO:
 }
 
-void RenderableChunk::submit(Camera* camera, Renderer3d* renderer) {
+void RenderableChunk::submit(Camera* camera, IRenderer3d* renderer) {
     renderer->submit(this);
 
     for (RenderableFace* pNode : vpLeaf) {

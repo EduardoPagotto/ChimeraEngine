@@ -1,22 +1,10 @@
 #include "chimera/render/3d/RenderableSimple.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-RenderableSimple::RenderableSimple(Entity entity) {
-
-    this->entity = entity;
-    MeshData& mesh = entity.getComponent<MeshData>();
-
-    std::vector<Chimera::VertexData> renderData;
-    vertexDataFromMesh(&mesh, renderData);
-
-    std::vector<uint32_t> index;
-    std::vector<Chimera::VertexData> vertexDataOut;
-    vertexDataIndexCompile(renderData, vertexDataOut, index);
-
-    createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
-}
+RenderableSimple::RenderableSimple() {}
 
 void RenderableSimple::createBuffers(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize) {
 
@@ -51,7 +39,7 @@ RenderableSimple::~RenderableSimple() {
     delete ibo;
 }
 
-void RenderableSimple::submit(Camera* camera, Renderer3d* renderer) { renderer->submit(this); }
+void RenderableSimple::submit(Camera* camera, IRenderer3d* renderer) { renderer->submit(this); }
 
 void RenderableSimple::debugDados() {
     glm::vec3 size = this->aabb.getSize();

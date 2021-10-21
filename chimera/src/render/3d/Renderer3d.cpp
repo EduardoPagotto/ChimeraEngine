@@ -1,5 +1,8 @@
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/core/buffers/IndexBuffer.hpp"
+#include "chimera/core/buffers/VertexArray.hpp"
+#include "chimera/core/space/AABB.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"

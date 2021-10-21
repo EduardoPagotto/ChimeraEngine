@@ -27,17 +27,17 @@ void Game::onStart() {
         this->camera = &cc.camera;
 
         // parametros de controller de camera (parametros DEFAULT!!!)
-        auto cp = ce.addComponent<CameraControlerFPSParams>();
-        cp.yaw = 0;
-        cp.pitch = 0;
-
-        // auto cp = ce.addComponent<CameraControlerOrbitParams>();
+        // auto cp = ce.addComponent<CameraControlerFPSParams>();
         // cp.yaw = 0;
         // cp.pitch = 0;
 
+        auto cp = ce.addComponent<CameraControlerOrbitParams>();
+        cp.yaw = 0;
+        cp.pitch = 0;
+
         // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
-        ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
-        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
+        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
+        ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
     }
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
@@ -66,13 +66,15 @@ void Game::onStart() {
     // ret = loadObjFile("./assets/models/square2.obj", &mesh, &material);
     // ret = loadObjFile("./assets/models/parede_simples.obj", &mesh, &material);
     // ret = loadObjFile("./assets/models/cubo_textura_simples.obj", &mesh, &material);
-    ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
+    // ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
+    ret = loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
+    // ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
 
-    if (ret == 1) {
-        material.setDefaultEffect();
-        Chimera::TextureManager::loadFromFile("tex_mapa", "./assets/textures/grid2.png", Chimera::TextureParameters());
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
-    }
+    // if (ret == 1) {
+    //     material.setDefaultEffect();
+    //     Chimera::TextureManager::loadFromFile("tex_mapa", "./assets/textures/grid2.png", Chimera::TextureParameters());
+    //     material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
+    // }
 
     material.init();
 

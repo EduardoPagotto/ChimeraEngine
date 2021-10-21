@@ -168,8 +168,7 @@ int loadObjFile(const std::string& pathFile, MeshData* mesh, Material* material)
             std::string nova(line);
             if (getValidData(nova, std::string("mtllib ")) == true) {
                 resultOpp = getMaterialFile(nova, material);
-            } else
-                resultOpp = 1;
+            }
         }
     }
     fclose(fp);
@@ -177,6 +176,6 @@ int loadObjFile(const std::string& pathFile, MeshData* mesh, Material* material)
         free(line);
 
     mesh->singleIndex = false;
-    return true;
+    return resultOpp;
 }
 } // namespace Chimera

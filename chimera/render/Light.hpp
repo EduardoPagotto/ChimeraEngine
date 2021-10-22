@@ -33,7 +33,10 @@ class Light {
         transform = glm::translate(transform, pos); // FIXME: ver se da para remover e passar para shader
     }
     inline void setType(const LightType& type) { this->type = type; }
-    inline void setTransform(const glm::mat4& trans) { transform = trans; }
+    inline void setTransform(const glm::mat4& trans) {
+        transform = trans;
+        listProp.push_back(UniformVal(SHADE_LIGHT_POSITION, glm::vec3(transform[3])));
+    }
     inline glm::vec3 getPosition() const { return glm::vec3(transform[3]); }
     inline void setRotation(const glm::vec3& rotation) { transform = glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z); }
 

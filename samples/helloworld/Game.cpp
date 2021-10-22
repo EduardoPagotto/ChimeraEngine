@@ -23,7 +23,7 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     // Cria camera e carrega parametros
     CameraComponent& cc = ce.addComponent<CameraComponent>();
-    cc.camera.setViewportSize(640, 480);
+    cc.camera.setAspectRatio(640, 480);
     cc.camera.setPosition(glm::vec3(-80.0, 0.0, 0.0));
 
     // parametros de controller de camera (parametros DEFAULT!!!)

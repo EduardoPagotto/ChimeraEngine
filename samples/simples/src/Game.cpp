@@ -33,7 +33,7 @@ void Game::onStart() {
         // Cria entidade de camera
         // Cria camera e carrega parametros
         CameraComponent& cc = ce.addComponent<CameraComponent>();
-        cc.camera.setViewportSize(canvas->getWidth(), canvas->getHeight());
+        cc.camera.setAspectRatio(canvas->getWidth(), canvas->getHeight());
         cc.camera.setPosition(glm::vec3(0.0f, 0.0f, 80.0f));
 
         this->camera = &cc.camera;

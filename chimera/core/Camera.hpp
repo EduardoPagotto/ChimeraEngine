@@ -21,7 +21,7 @@ class Camera {
     const glm::mat4 getViewProjectionMatrix() const { return viewProjectionMatrix; }
     const glm::mat4 getViewProjectionMatrixInverse() const { return viewProjectionMatrixInverse; }
 
-    void setViewportSize(const uint32_t& width, const uint32_t& height) { aspectRatio = (float)width / (float)height; }
+    void setAspectRatio(const uint32_t& width, const uint32_t& height) { aspectRatio = (float)width / (float)height; }
 
     void setNear(const float& near) { this->nearPlane = near; }
     void setFar(const float& far) { this->farPlane = far; }

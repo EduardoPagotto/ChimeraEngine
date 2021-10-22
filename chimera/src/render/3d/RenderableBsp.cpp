@@ -57,7 +57,7 @@ void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
         return;
 
     auto pLeaf = vpLeaf[tree->leafIndex];
-    pLeaf->submit(camera, this->renderer);
+    pLeaf->submit(camera, *command, this->renderer);
 }
 
 void RenderableBsp::traverseTree(BSPTreeNode* tree) {
@@ -90,16 +90,10 @@ void RenderableBsp::traverseTree(BSPTreeNode* tree) {
 
 void RenderableBsp::debugDados() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP Submit"); }
 
-void RenderableBsp::submit(Camera* camera, IRenderer3d* renderer) {
+void RenderableBsp::submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) {
     this->camera = camera;
     this->renderer = renderer;
-
-    RenderCommand command;
-    command.renderable = this;
-    command.transform = model->getMatrix();
-    command.shader = shader;
-    if (material != nullptr) // FIXME algum teste se devo usar o material!!!
-        material->bindMaterialInformation(command.uniforms);
+    this->command = &command;
 
     renderer->submit(command);
 

@@ -36,13 +36,10 @@ void RenderableFace::addFace(const uint32_t& _pa, const uint32_t& _pb, const uin
 
 void RenderableFace::initIndexBufferObject() { ibo = new IndexBuffer(&indexTris[0], indexTris.size()); }
 
-void RenderableFace::submit(Camera* camera, IRenderer3d* renderer) {
+void RenderableFace::submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) {
 
-    RenderCommand command;
     command.renderable = this;
-    command.transform = glm::mat4(1.0f);
     command.shader = Shader();
-    // material->bindMaterialInformation(command.uniforms);
 
     renderer->submit(command);
 }

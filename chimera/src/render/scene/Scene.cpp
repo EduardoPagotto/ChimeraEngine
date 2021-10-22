@@ -1,5 +1,7 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/render/3d/RenderCommand.hpp"
+#include "chimera/render/Material.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <SDL2/SDL.h>
@@ -134,8 +136,21 @@ void Scene::render(IRenderer3d& renderer) {
 
     auto view = eRegistry.view<Renderable3dComponent>();
     for (auto entity : view) {
-        auto& rc = view.get<Renderable3dComponent>(entity);
-        rc.renderable->submit(camera, &renderer);
+
+        Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
+        IRenderable3d* renderable = rc.renderable;
+
+        Transform& tc = renderable->getEntity().getComponent<Transform>();
+        Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
+        Material& mc = rc.renderable->getEntity().getComponent<Material>();
+
+        RenderCommand command;
+        command.renderable = renderable;
+        command.transform = tc.getMatrix();
+        command.shader = sc;
+        mc.bindMaterialInformation(command.uniforms);
+
+        rc.renderable->submit(camera, command, &renderer);
     }
 
     renderer.end();

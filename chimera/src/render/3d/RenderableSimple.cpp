@@ -48,16 +48,7 @@ void RenderableSimple::setEntity(Entity entity) {
     model = &entity.getComponent<Transform>();
 }
 
-void RenderableSimple::submit(Camera* camera, IRenderer3d* renderer) {
-
-    RenderCommand command;
-    command.renderable = this;
-    command.transform = model->getMatrix();
-    command.shader = shader;
-    material->bindMaterialInformation(command.uniforms);
-
-    renderer->submit(command);
-}
+void RenderableSimple::submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) { renderer->submit(command); }
 
 void RenderableSimple::debugDados() {
     glm::vec3 size = this->aabb.getSize();

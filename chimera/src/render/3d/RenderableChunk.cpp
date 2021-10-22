@@ -69,14 +69,7 @@ void RenderableChunk::debugDados() {
     // TODO:
 }
 
-void RenderableChunk::submit(Camera* camera, IRenderer3d* renderer) {
-
-    RenderCommand command;
-    command.renderable = this;
-    command.transform = model->getMatrix();
-    command.shader = shader;
-    if (material != nullptr) // FIXME algum teste se devo usar o material!!!
-        material->bindMaterialInformation(command.uniforms);
+void RenderableChunk::submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) {
 
     renderer->submit(command);
 

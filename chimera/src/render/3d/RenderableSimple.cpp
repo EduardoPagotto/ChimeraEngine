@@ -40,13 +40,7 @@ RenderableSimple::~RenderableSimple() {
     delete ibo;
 }
 
-void RenderableSimple::setEntity(Entity entity) {
-    this->entity = entity;
-
-    material = &entity.getComponent<Material>();
-    shader = entity.getComponent<Shader>();
-    model = &entity.getComponent<Transform>();
-}
+void RenderableSimple::setEntity(Entity entity) { this->entity = entity; }
 
 void RenderableSimple::submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) { renderer->submit(command); }
 

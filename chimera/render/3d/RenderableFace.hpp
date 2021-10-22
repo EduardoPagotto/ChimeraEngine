@@ -5,7 +5,6 @@
 #include "chimera/core/VertexData.hpp"
 #include "chimera/core/buffers/IndexBuffer.hpp"
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/render/Material.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <vector>
 
@@ -28,10 +27,8 @@ class RenderableFace : public IRenderable3d {
     void addFace(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc);
     void initIndexBufferObject();
     void initAABB(VertexData* vertexData, const uint32_t& vertexSize);
-    virtual Material* getMaterial() override { return &material; }
 
   private:
-    Material material;
     Entity entity;
     AABB aabb;
     IndexBuffer* ibo;

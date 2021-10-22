@@ -10,10 +10,6 @@ RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<Rende
     : root(root), totIndex(0) {
 
     this->entity = entity;
-    material = &entity.getComponent<Material>();
-    shader = entity.getComponent<Shader>();
-    model = &entity.getComponent<Transform>();
-
     this->vpLeaf = std::move(*vpLeafData);
     this->vVertex = std::move(*vertexData);
 

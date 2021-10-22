@@ -1,11 +1,9 @@
 #ifndef __CHIMERA_RENDERABLE_BSP_HPP
 #define __CHIMERA_RENDERABLE_BSP_HPP
 
-#include "chimera/core/Transform.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/RenderableFace.hpp"
-#include "chimera/render/Material.hpp"
 #include "chimera/render/partition/BSPTreeNode.hpp"
 #include <vector>
 
@@ -22,7 +20,6 @@ class RenderableBsp : public IRenderable3d {
     virtual AABB* getAABB() { return &aabb; }
     virtual void submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual Entity getEntity() const override { return entity; }
-    virtual Material* getMaterial() override { return material; }
 
   private:
     void destroy();
@@ -39,15 +36,11 @@ class RenderableBsp : public IRenderable3d {
     bool logdata;
     std::vector<RenderableFace*> vpLeaf;
     std::vector<VertexData> vVertex;
-
     AABB aabb;
     Camera* camera;
     uint32_t totIndex;
     IRenderer3d* renderer;
     Entity entity;
-    Material* material;
-    Shader shader;
-    Transform* model;
     RenderCommand* command;
 };
 

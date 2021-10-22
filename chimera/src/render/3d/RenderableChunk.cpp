@@ -9,10 +9,6 @@ RenderableChunk::RenderableChunk(Entity entity, std::vector<RenderableFace*>& vp
     : totIndex(0) {
 
     this->entity = entity;
-    material = &entity.getComponent<Material>();
-    shader = entity.getComponent<Shader>();
-    model = &entity.getComponent<Transform>();
-
     this->vpLeaf = std::move(vpLeafData);
     this->vVertex = std::move(vertexData);
 

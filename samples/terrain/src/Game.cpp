@@ -4,6 +4,7 @@
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/3d/RenderableChunk.hpp"
+#include "chimera/render/Material.hpp"
 #include "chimera/render/partition/LoadHeightMap.hpp"
 #include "chimera/render/scene/CameraControllerFPS.hpp"
 #include "chimera/render/scene/Components.hpp"

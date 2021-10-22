@@ -1,5 +1,6 @@
 #include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/render/3d/RenderCommand.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -39,7 +40,24 @@ RenderableSimple::~RenderableSimple() {
     delete ibo;
 }
 
-void RenderableSimple::submit(Camera* camera, IRenderer3d* renderer) { renderer->submit(this); }
+void RenderableSimple::setEntity(Entity entity) {
+    this->entity = entity;
+
+    material = &entity.getComponent<Material>();
+    shader = entity.getComponent<Shader>();
+    model = &entity.getComponent<Transform>();
+}
+
+void RenderableSimple::submit(Camera* camera, IRenderer3d* renderer) {
+
+    RenderCommand command;
+    command.renderable = this;
+    command.transform = model->getMatrix();
+    command.shader = shader;
+    material->bindMaterialInformation(command.uniforms);
+
+    renderer->submit(command);
+}
 
 void RenderableSimple::debugDados() {
     glm::vec3 size = this->aabb.getSize();

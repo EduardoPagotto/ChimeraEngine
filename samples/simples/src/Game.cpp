@@ -1,17 +1,14 @@
 #include "Game.hpp"
-#include "chimera/core/CameraFPS.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
+#include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/scene/CameraControllerFPS.hpp"
 #include "chimera/render/scene/CameraControllerOrbit.hpp"
 #include "chimera/render/scene/Components.hpp"
-#include "chimera/render/scene/Entity.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
-
 Game::~Game() {}
 
 void Game::onStart() {
@@ -55,13 +52,10 @@ void Game::onStart() {
         ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
 
         activeScene.setCamera(&cc.camera);
-        activeScene.addEntity(ce);
     }
 
     {
         Entity renderableEntity = activeScene.createEntity("Renderable Entity");
-        activeScene.addEntity(renderableEntity);
-
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
@@ -85,9 +79,11 @@ void Game::onStart() {
             std::vector<Chimera::VertexData> vertexDataOut;
             vertexDataIndexCompile(renderData, vertexDataOut, index);
 
-            this->renderable = new RenderableSimple();
-            this->renderable->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
-            this->renderable->setEntity(renderableEntity);
+            Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
+            RenderableSimple* r = new RenderableSimple();
+            r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+            r->setEntity(renderableEntity);
+            rc.renderable = r;
         }
 
         material.init();
@@ -142,24 +138,16 @@ bool Game::onEvent(const SDL_Event& event) {
         } break;
     }
 
-    // activeScene.onUpdate(0.01);
-
     return true;
 }
 
 void Game::onUpdate() {
     canvas->before();
 
-    activeScene.onUpdate(0.01);
-
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
     // camControl->recalculateMatrix(false);
 
-    render3D.begin(camera);
-    renderable->submit(camera, &render3D);
-    render3D.end();
-
-    render3D.flush(true, nullptr);
+    activeScene.render(render3D);
 
     canvas->after();
     canvas->swapWindow();

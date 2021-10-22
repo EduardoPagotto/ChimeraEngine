@@ -7,15 +7,7 @@
 namespace Chimera {
 
 Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640) {}
-Scene::~Scene() {
-
-    for (uint i = 0; i < entities.size(); i++)
-        this->destroyEntity(entities[i]);
-
-    entities.clear();
-}
-
-void Scene::addEntity(Entity entity) { entities.push_back(entity); }
+Scene::~Scene() {}
 
 void Scene::onDestroy() {
     // destroy scripts
@@ -113,6 +105,41 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
     }
 }
 
-void Scene::render(IRenderer3d& renderer) {}
+void Scene::render(IRenderer3d& renderer) {
+
+    this->onUpdate(0.01); // atualiza camera e script de camera
+
+    if (renderer.getLog() == true) {
+        glm::vec3 pos = camera->getPosition();
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
+    }
+
+    // camera->recalculateMatrix(canvas->getRatio());// ainda nao sei o que fazer aqui
+
+    // pLight->bindLightInformation(pShader); // FIXME: AQUI!!!!
+    // model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
+    // //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); if (pShader == nullptr)
+    //     return;
+
+    // FIXME: preciso disto aqui ??
+    // int shadows = 0;
+    // pShader->setUniform("shadows", shadows);
+
+    // NEW
+    renderer.begin(camera);
+
+    for (Light* l : lightSetupStack) {
+        renderer.submitLight(l);
+    }
+
+    auto view = eRegistry.view<Renderable3dComponent>();
+    for (auto entity : view) {
+        auto& rc = view.get<Renderable3dComponent>(entity);
+        rc.renderable->submit(camera, &renderer);
+    }
+
+    renderer.end();
+    renderer.flush();
+}
 
 } // namespace Chimera

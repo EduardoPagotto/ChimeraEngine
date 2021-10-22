@@ -20,7 +20,6 @@ class Game : public Chimera::Application {
     Chimera::BspTree bspTree;
     Chimera::Camera* camera;
     Chimera::Renderer3d render3d;
-    Chimera::RenderableBsp* renderz1;
     Chimera::Scene activeScene;
 };
 

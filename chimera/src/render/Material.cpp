@@ -47,8 +47,8 @@ void Material::addTexture(const std::string& uniformTexName, Texture* texture) {
 void Material::bindMaterialInformation(Shader* _shader) {
 
     // aplica todos os materiais passados
-    for (ShaderValue* shaderMaterial : listMaterial) {
-        shaderMaterial->setUniform(_shader);
+    for (const UniformVal& uniformMat : listMaterial) {
+        uniformMat.setUniform(_shader);
     }
 
     _shader->setUniform(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
@@ -65,4 +65,24 @@ void Material::bindMaterialInformation(Shader* _shader) {
     }
 }
 
+void Material::bindMaterialInformation(std::vector<UniformVal>& uniforms) {
+
+    // aplica todos os materiais passados
+    for (const UniformVal& uniformMat : listMaterial) {
+        uniforms.push_back(uniformMat);
+    }
+
+    // seletorr de tipo ???
+    uniforms.push_back(UniformVal(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis));
+
+    // indice de textura
+    int indexTex = 0;
+    if (mapTex.size() > 0) {
+        for (const auto& kv : mapTex) {
+            kv.second->bind(indexTex); // FIXME:  contador de textura ativa apena o zero agora!!!
+            uniforms.push_back(UniformVal(kv.first, indexTex));
+            indexTex++;
+        }
+    }
+}
 } // namespace Chimera

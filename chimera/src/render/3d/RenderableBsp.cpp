@@ -1,5 +1,6 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/render/3d/RenderCommand.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -9,6 +10,9 @@ RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<Rende
     : root(root), totIndex(0) {
 
     this->entity = entity;
+    material = &entity.getComponent<Material>();
+    shader = entity.getComponent<Shader>();
+    model = &entity.getComponent<Transform>();
 
     this->vpLeaf = std::move(*vpLeafData);
     this->vVertex = std::move(*vertexData);
@@ -89,7 +93,15 @@ void RenderableBsp::debugDados() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "B
 void RenderableBsp::submit(Camera* camera, IRenderer3d* renderer) {
     this->camera = camera;
     this->renderer = renderer;
-    this->renderer->submit(this);
+
+    RenderCommand command;
+    command.renderable = this;
+    command.transform = model->getMatrix();
+    command.shader = shader;
+    if (material != nullptr) // FIXME algum teste se devo usar o material!!!
+        material->bindMaterialInformation(command.uniforms);
+
+    renderer->submit(command);
 
     // submit tree
     traverseTree(root);

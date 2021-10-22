@@ -3,6 +3,7 @@
 
 #include "chimera/core/Camera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
+#include "chimera/render/Light.hpp"
 #include <entt/entt.hpp>
 
 namespace Chimera {
@@ -13,7 +14,7 @@ class Scene {
     Scene();
     virtual ~Scene();
 
-    void addEntity(Entity entity);
+    void addLight(Light* light) { lightSetupStack.push_back(light); }
     void setCamera(Camera* camera) { this->camera = camera; }
 
     Entity createEntity(const std::string& name = std::string());
@@ -34,7 +35,7 @@ class Scene {
     friend class Entity;
 
   private:
-    std::vector<Entity> entities;
+    std::vector<Light*> lightSetupStack;
     Camera* camera;
 };
 

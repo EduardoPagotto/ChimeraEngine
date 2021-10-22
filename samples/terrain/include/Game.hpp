@@ -2,10 +2,7 @@
 #define __GAME_TESTE_TERRAIN__HPP
 
 #include "chimera/core/Application.hpp"
-#include "chimera/core/Camera.hpp"
-#include "chimera/render/3d/RenderableChunk.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/render/Material.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 class Game : public Chimera::Application {
@@ -20,7 +17,6 @@ class Game : public Chimera::Application {
   private:
     Chimera::Scene activeScene;
     Chimera::Camera* camera;
-    Chimera::RenderableChunk* pHeightMap;
     Chimera::Renderer3d render3d;
 };
 

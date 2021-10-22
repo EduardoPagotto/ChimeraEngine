@@ -3,6 +3,7 @@
 
 #include "ScriptableEntity.hpp"
 #include "chimera/core/Camera.hpp"
+#include "chimera/render/3d/IRenderable3d.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -46,6 +47,10 @@ struct CameraComponent {
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
     // CameraComponent(glm::mat4 projection) : camera(projection) {}
+};
+
+struct Renderable3dComponent {
+    IRenderable3d* renderable;
 };
 
 struct NativeScriptComponent {

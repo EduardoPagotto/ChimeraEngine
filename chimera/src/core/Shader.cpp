@@ -146,6 +146,43 @@ GLint Shader::getUniform(const char* _varName) const noexcept {
 }
 
 //---
+
+void UniformVal::setUniform(Shader* _shader) const {
+    switch (typeVal) {
+        case 0:
+            _shader->setUniform(name.c_str(), val_int);
+            break;
+        case 1:
+            _shader->setUniform(name.c_str(), val_float);
+            break;
+        case 2:
+            _shader->setUniform(name.c_str(), val_vec2);
+            break;
+        case 3:
+            _shader->setUniform(name.c_str(), val_ivec2);
+            break;
+        case 4:
+            _shader->setUniform(name.c_str(), val_vec3);
+            break;
+        case 5:
+            _shader->setUniform(name.c_str(), val_ivec3);
+            break;
+        case 6:
+            _shader->setUniform(name.c_str(), val_vec4);
+            break;
+        case 7:
+            _shader->setUniform(name.c_str(), val_ivec4);
+            break;
+        case 8:
+            _shader->setUniform(name.c_str(), val_mat3);
+            break;
+        case 9:
+            _shader->setUniform(name.c_str(), val_mat4);
+            break;
+    }
+}
+
+//---
 std::vector<Shader> ShaderManager::shaders;
 
 void ShaderManager::load(const std::string& filepath, Shader& shader) {

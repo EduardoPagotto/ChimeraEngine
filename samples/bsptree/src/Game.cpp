@@ -14,10 +14,15 @@
 #include <algorithm>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
-
-Game::~Game() { delete renderz1; }
+Game::~Game() {}
 
 void Game::onStart() {
+
+    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
+
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_NORMALIZE);
+    glShadeModel(GL_SMOOTH);
 
     using namespace Chimera;
     Entity ce = activeScene.createEntity("Camera Entity");
@@ -41,38 +46,35 @@ void Game::onStart() {
         // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
         // ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
         ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
+
+        activeScene.setCamera(&cc.camera);
     }
 
     Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+    Shader& shader = renderableEntity.addComponent<Shader>();
+    Material& material = renderableEntity.addComponent<Material>();
+    Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
-    Chimera::Shader& shader = renderableEntity.addComponent<Chimera::Shader>();
     ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
 
-    Chimera::Material& material = renderableEntity.addComponent<Chimera::Material>();
     // material.setDefaultEffect();
     // material.setShine(50.0f);
-
-    Chimera::TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", Chimera::TextureParameters());
-    material.addTexture(SHADE_TEXTURE_DIFFUSE, Chimera::TextureManager::getLast());
+    TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TextureParameters());
+    material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
     material.init();
 
-    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
-
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
-
     std::vector<uint32_t> vIndex;
-    std::vector<Chimera::VertexData> vVertexIndexed;
+    std::vector<VertexData> vVertexIndexed;
 
     // Usando o Maze
-    Chimera::Maze maze = Chimera::Maze("./assets/maps/maze7.txt");
+    Maze maze = Maze("./assets/maps/maze7.txt");
     maze.createMap();
 
     vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
     bspTree.create(vVertexIndexed, vIndex);
 
-    renderz1 = new Chimera::RenderableBsp(renderableEntity, bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+    RenderableBsp* r = new RenderableBsp(renderableEntity, bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+    rc.renderable = r;
 
     activeScene.onCreate();
 }
@@ -83,7 +85,7 @@ bool Game::onEvent(const SDL_Event& event) {
     switch (event.type) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
-                case Chimera::EVENT_TOGGLE_FULL_SCREEN:
+                case EVENT_TOGGLE_FULL_SCREEN:
                     canvas->toggleFullScreen();
                     break;
             }
@@ -92,13 +94,13 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_KEYDOWN: {
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_STOP, nullptr, nullptr);
+                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_1:
                     render3d.logToggle();
                     break;
                 case SDLK_F10:
-                    Chimera::utilSendEvent(Chimera::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
             }
         } break;
@@ -109,10 +111,10 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
                 case SDL_WINDOWEVENT_ENTER:
-                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
                     break;
                 case SDL_WINDOWEVENT_LEAVE:
-                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
                     canvas->reshape(event.window.data1, event.window.data2);
@@ -126,22 +128,10 @@ bool Game::onEvent(const SDL_Event& event) {
 void Game::onUpdate() {
     canvas->before();
 
-    if (render3d.getLog() == true) {
-        glm::vec3 pos = camera->getPosition();
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
-    }
-
-    activeScene.onUpdate(0.01);
-    // camera->processInput(0.01);
-
     glViewport(0, 0, canvas->getWidth(), canvas->getHeight()); // FIXME: ver se da para irar de todos!!!!
-    // camera->recalculateMatrix(canvas->getRatio());
+                                                               // camera->recalculateMatrix(canvas->getRatio());
 
-    render3d.begin(camera);
-    renderz1->submit(camera, &render3d);
-    render3d.end();
-
-    render3d.flush(true, nullptr);
+    activeScene.render(render3d);
 
     canvas->after();
     canvas->swapWindow();

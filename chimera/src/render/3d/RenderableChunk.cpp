@@ -1,5 +1,6 @@
 #include "chimera/render/3d/RenderableChunk.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/render/3d/RenderCommand.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -8,6 +9,9 @@ RenderableChunk::RenderableChunk(Entity entity, std::vector<RenderableFace*>& vp
     : totIndex(0) {
 
     this->entity = entity;
+    material = &entity.getComponent<Material>();
+    shader = entity.getComponent<Shader>();
+    model = &entity.getComponent<Transform>();
 
     this->vpLeaf = std::move(vpLeafData);
     this->vVertex = std::move(vertexData);
@@ -66,10 +70,19 @@ void RenderableChunk::debugDados() {
 }
 
 void RenderableChunk::submit(Camera* camera, IRenderer3d* renderer) {
-    renderer->submit(this);
+
+    RenderCommand command;
+    command.renderable = this;
+    command.transform = model->getMatrix();
+    command.shader = shader;
+    if (material != nullptr) // FIXME algum teste se devo usar o material!!!
+        material->bindMaterialInformation(command.uniforms);
+
+    renderer->submit(command);
 
     for (RenderableFace* pNode : vpLeaf) {
-        renderer->submit(pNode);
+        command.renderable = pNode;
+        renderer->submit(command);
     }
 }
 } // namespace Chimera

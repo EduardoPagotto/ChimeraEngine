@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/TextureManager.hpp"
@@ -7,8 +8,7 @@
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/partition/Maze.hpp"
-#include "chimera/render/scene/CameraControllerFPS.hpp"
-#include "chimera/render/scene/CameraControllerOrbit.hpp"
+#include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <algorithm>
@@ -34,7 +34,7 @@ void Game::onStart() {
 
         cc.camera->setAspectRatio(canvas->getWidth(), canvas->getHeight());
 
-        ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraController");
+        ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
 
         activeScene.setCamera(cc.camera);
     }

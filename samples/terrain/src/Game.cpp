@@ -8,7 +8,7 @@
 #include "chimera/render/3d/RenderableChunk.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/partition/LoadHeightMap.hpp"
-#include "chimera/render/scene/CameraControllerFPS.hpp"
+#include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 
@@ -39,7 +39,7 @@ void Game::onStart() {
         cc.camera->setAspectRatio(canvas->getWidth(), canvas->getHeight());
 
         // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
-        ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
+        ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
         // ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
 
         activeScene.setCamera(cc.camera);

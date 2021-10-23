@@ -8,9 +8,9 @@
 
 namespace Chimera {
 
-class CameraControllerFPS : public ScriptableEntity {
+class CameraController : public ScriptableEntity {
   public:
-    CameraControllerFPS() = default;
+    CameraController() = default;
     void onCreate();
     void onDestroy();
     void onUpdate(float time);

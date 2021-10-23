@@ -1,11 +1,11 @@
 #include "Game.hpp"
+#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
-#include "chimera/render/scene/CameraControllerFPS.hpp"
-#include "chimera/render/scene/CameraControllerOrbit.hpp"
+#include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
@@ -40,7 +40,7 @@ void Game::onStart() {
 
         // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
         // ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
-        ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
+        ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraConroller");
 
         activeScene.setCamera(cc.camera);
     }

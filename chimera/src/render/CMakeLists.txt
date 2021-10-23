@@ -35,8 +35,7 @@ set (RenderSource 	vbs/RenderableStatic.cpp
 					partition/LoadObj.cpp
 					partition/LoadHeightMap.cpp
 					scene/Scene.cpp
-					scene/CameraControllerFPS.cpp
-					scene/CameraControllerOrbit.cpp)
+					scene/CameraController.cpp)
 
 #define os includes
 set (RenderInclude ${CMAKE_SOURCE_DIR}

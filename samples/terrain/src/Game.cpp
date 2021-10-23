@@ -40,7 +40,6 @@ void Game::onStart() {
 
         // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
         ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
 
         activeScene.setCamera(cc.camera);
     }
@@ -66,7 +65,7 @@ void Game::onStart() {
     material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
     material.init();
 
-    MeshData mesh; // = renderableEntity.addComponent<MeshData>();
+    MeshData mesh;
 
     LoadHeightMap loader(32, 32);
     loader.getMesh("./assets/heightmaps/terrain3.jpg", mesh, glm::vec3(1000.0, 200.0, 1000.0));

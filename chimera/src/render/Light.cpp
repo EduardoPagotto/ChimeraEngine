@@ -6,9 +6,9 @@ Light::Light() { type = LightType::POSITIONAL; }
 
 Light::~Light() {}
 
-void Light::bindLightInformation(Shader* _pShader) {
+void Light::bindLightInformation(const Shader& shader) {
     for (const UniformVal& uniformLight : listProp)
-        uniformLight.setUniform(_pShader);
+        uniformLight.setUniform(shader);
 }
 
 void Light::bindLightInformation(std::vector<UniformVal>& uniforms) {

@@ -23,7 +23,7 @@ class Light {
     Light();
     virtual ~Light();
 
-    void bindLightInformation(Shader* _pShader);
+    void bindLightInformation(const Shader& shader);
     void bindLightInformation(std::vector<UniformVal>& uniforms);
     inline void setAmbient(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_AMBIENT, color)); }
     inline void setSpecular(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_SPECULAR, color)); }

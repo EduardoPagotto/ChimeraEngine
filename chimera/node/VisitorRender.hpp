@@ -35,7 +35,7 @@ class VisitorRender : public VisitorInterface {
     ICamera* cameraScene;
     glm::mat4 model;
 
-    Shader* pShader;
+    Shader shader;
     VisitorShadowMap* pShadowMapVisitor;
 };
 } // namespace Chimera

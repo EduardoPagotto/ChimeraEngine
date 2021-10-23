@@ -24,7 +24,6 @@ VisitorRender::VisitorRender() {
     model = glm::mat4(1.0f);
 
     pShadowMapVisitor = nullptr;
-    pShader = nullptr;
 }
 
 VisitorRender::~VisitorRender() {}
@@ -36,19 +35,19 @@ void VisitorRender::visit(NodeCamera* _pCamera) {}
 void VisitorRender::visit(NodeMesh* _pMesh) {
 
     model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
-    if (pShader == nullptr)
+    if (shader.isInvalid())
         return;
 
     int shadows = 1;
-    pShader->setUniform("shadows", shadows);
-    pShader->setUniform("projection", cameraScene->getProjectionMatrix());
-    pShader->setUniform("view", cameraScene->getViewMatrix());
-    pShader->setUniform("model", model);
+    shader.setUniform("shadows", shadows);
+    shader.setUniform("projection", cameraScene->getProjectionMatrix());
+    shader.setUniform("view", cameraScene->getViewMatrix());
+    shader.setUniform("model", model);
 
-    _pMesh->getMaterial()->bindMaterialInformation(pShader);
+    _pMesh->getMaterial()->bindMaterialInformation(shader);
 
     if (pShadowMapVisitor != nullptr)
-        pShadowMapVisitor->applyShadow(pShader);
+        pShadowMapVisitor->applyShadow(&shader);
 
     //
     // glm::mat4 projectionMatrixInverse = glm::inverse(projection);
@@ -65,7 +64,7 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
     render3D.flush();
 }
 
-void VisitorRender::visit(NodeLight* _pLight) { _pLight->data.bindLightInformation(pShader); }
+void VisitorRender::visit(NodeLight* _pLight) { _pLight->data.bindLightInformation(shader); }
 
 void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
 
@@ -73,16 +72,16 @@ void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
 
         model = _pParticleEmitter->getTransform()->getModelMatrix(pTransform->getPosition());
 
-        if (pShader == nullptr)
+        if (shader.isInvalid())
             return;
 
         const glm::mat4 view = cameraScene->getViewMatrix();
-        pShader->setUniform("projection", cameraScene->getProjectionMatrix());
-        pShader->setUniform("view", view);
+        shader.setUniform("projection", cameraScene->getProjectionMatrix());
+        shader.setUniform("view", view);
         // shader->setGlUniformMatrix3fv("noMat", 1, false, glm::value_ptr(
         // glm::inverseTranspose(glm::mat3(_view))));
 
-        pShader->setUniform("model", model);
+        shader.setUniform("model", model);
 
         // We will need the camera's position in order to sort the particles
         // w.r.t the camera's distance.
@@ -91,30 +90,33 @@ void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
         glm::vec3 CameraPosition(glm::inverse(view)[3]);
 
         // Vertex shader
-        pShader->setUniform("CameraRight_worldspace", glm::vec3(view[0][0], view[1][0], view[2][0]));
-        pShader->setUniform("CameraUp_worldspace", glm::vec3(view[0][1], view[1][1], view[2][1]));
+        shader.setUniform("CameraRight_worldspace", glm::vec3(view[0][0], view[1][0], view[2][0]));
+        shader.setUniform("CameraUp_worldspace", glm::vec3(view[0][1], view[1][1], view[2][1]));
 
         _pParticleEmitter->CameraPosition = CameraPosition;
-        _pParticleEmitter->render(pShader);
+        _pParticleEmitter->render(shader);
     }
 }
 
 void VisitorRender::visit(NodeGroup* _pGroup) {
 
-    pShader = _pGroup->getShader();
-    if (pShader == nullptr)
+    if (_pGroup->getShader() == nullptr) {
+        shader = Shader();
         return;
+    }
+
+    shader = *_pGroup->getShader();
 
     // Renderiza o Textura de sombra em ShadowMapVisitor
     pShadowMapVisitor = (VisitorShadowMap*)_pGroup->getNodeVisitor();
     if (pShadowMapVisitor != nullptr)
         pShadowMapVisitor->render(_pGroup, pTransform);
 
-    pShader->enable();
+    shader.enable();
 
     if (pShadowMapVisitor != nullptr) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        pShader->setUniform("lightSpaceMatrix", pShadowMapVisitor->getLightSpaceMatrix());
+        shader.setUniform("lightSpaceMatrix", pShadowMapVisitor->getLightSpaceMatrix());
     }
 
     NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
@@ -122,7 +124,7 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
         cameraScene = pCam->getCamera();
         cameraScene->processInput(0.01);
 
-        pShader->setUniform("viewPos", cameraScene->getPosition());
+        shader.setUniform("viewPos", cameraScene->getPosition());
         if (pVideo->getTotEyes() == 1) {
             glViewport(0, 0, pVideo->getWidth(), pVideo->getHeight());
             cameraScene->setAspectRatio(pVideo->getWidth(), pVideo->getHeight());
@@ -145,8 +147,8 @@ void VisitorRender::visit(NodeHUD* _pHUD) {
     if (HudOn == true) {
         if (_pHUD->isOn() == true) {
             glm::mat4 proj = glm::ortho(0.0f, static_cast<GLfloat>(pVideo->getWidth()), 0.0f, static_cast<GLfloat>(pVideo->getHeight()));
-            pShader->setUniform("projection", proj);
-            _pHUD->render(pShader);
+            shader.setUniform("projection", proj);
+            _pHUD->render(&shader);
         }
     }
 }

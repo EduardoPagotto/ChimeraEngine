@@ -119,16 +119,6 @@ void Scene::render(IRenderer3d& renderer) {
 
     // camera->recalculateMatrix(canvas->getRatio());// ainda nao sei o que fazer aqui
 
-    // pLight->bindLightInformation(pShader); // FIXME: AQUI!!!!
-    // model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
-    // //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); if (pShader == nullptr)
-    //     return;
-
-    // FIXME: preciso disto aqui ??
-    // int shadows = 0;
-    // pShader->setUniform("shadows", shadows);
-
-    // NEW
     renderer.begin(camera);
 
     for (Light* l : lightSetupStack) {
@@ -150,6 +140,9 @@ void Scene::render(IRenderer3d& renderer) {
         command.transform = tc.getMatrix();
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms);
+
+        // FIXME: preciso disto aqui ??
+        command.uniforms.push_back(UniformVal("shadows", (int)0));
 
         rc.renderable->submit(camera, command, &renderer);
     }

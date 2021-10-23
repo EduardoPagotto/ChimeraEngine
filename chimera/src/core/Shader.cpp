@@ -2,7 +2,6 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/io/utils.hpp"
 #include <SDL2/SDL.h>
-#include <unordered_map>
 
 namespace Chimera {
 
@@ -147,40 +146,48 @@ GLint Shader::getUniform(const char* _varName) const noexcept {
 
 //---
 
-void UniformVal::setUniform(Shader* _shader) const {
+void UniformVal::setUniform(const Shader& shader) const {
     switch (typeVal) {
         case 0:
-            _shader->setUniform(name.c_str(), val_int);
+            shader.setUniform(name.c_str(), val_int);
             break;
         case 1:
-            _shader->setUniform(name.c_str(), val_float);
+            shader.setUniform(name.c_str(), val_float);
             break;
         case 2:
-            _shader->setUniform(name.c_str(), val_vec2);
+            shader.setUniform(name.c_str(), val_vec2);
             break;
         case 3:
-            _shader->setUniform(name.c_str(), val_ivec2);
+            shader.setUniform(name.c_str(), val_ivec2);
             break;
         case 4:
-            _shader->setUniform(name.c_str(), val_vec3);
+            shader.setUniform(name.c_str(), val_vec3);
             break;
         case 5:
-            _shader->setUniform(name.c_str(), val_ivec3);
+            shader.setUniform(name.c_str(), val_ivec3);
             break;
         case 6:
-            _shader->setUniform(name.c_str(), val_vec4);
+            shader.setUniform(name.c_str(), val_vec4);
             break;
         case 7:
-            _shader->setUniform(name.c_str(), val_ivec4);
+            shader.setUniform(name.c_str(), val_ivec4);
             break;
         case 8:
-            _shader->setUniform(name.c_str(), val_mat3);
+            shader.setUniform(name.c_str(), val_mat3);
             break;
         case 9:
-            _shader->setUniform(name.c_str(), val_mat4);
+            shader.setUniform(name.c_str(), val_mat4);
             break;
     }
 }
+
+//---
+void UniformMapped::set(const UniformVal& value) { uniformMap[value.getName()] = value; }
+void UniformMapped::bindAll(const Shader& shader) const {
+    for (auto& kv : uniformMap)
+        kv.second.setUniform(shader);
+}
+void UniformMapped::clear() { uniformMap.clear(); }
 
 //---
 std::vector<Shader> ShaderManager::shaders;

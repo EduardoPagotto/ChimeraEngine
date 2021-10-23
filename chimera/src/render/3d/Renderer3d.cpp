@@ -91,21 +91,15 @@ void Renderer3d::flush() {
                 activeShader.setUniform("projection", camera->getProjectionMatrix());
                 activeShader.setUniform("view", camera->getViewMatrix());
 
-                // TODO: falta encaixar estes aqui!!!!
-                // if (entity.hasComponent<Light>()) {
-                //     Light& light = entity.getComponent<Light>();
-                //     light.bindLightInformation(activeShader);
-                // }
-
                 // // FIXME: preciso disto aqui ??
                 // int shadows = 0;
                 // activeShader->setUniform("shadows", shadows);
 
                 for (const UniformVal& uniformLight : lightQueue)
-                    uniformLight.setUniform(&activeShader);
+                    uniformLight.setUniform(activeShader);
 
                 for (const UniformVal& uniformMat : command.uniforms)
-                    uniformMat.setUniform(&activeShader);
+                    uniformMat.setUniform(activeShader);
             }
         }
 

@@ -107,7 +107,7 @@ int NodeParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
     return ParticlesCount;
 }
 
-void NodeParticleEmitter::render(Shader* _pShader) {
+void NodeParticleEmitter::render(const Shader& shader) {
     //// We will need the camera's position in order to sort the particles
     //// w.r.t the camera's distance.
     //// There should be a getCameraPosition() function in common/controls.cpp,
@@ -150,7 +150,7 @@ void NodeParticleEmitter::render(Shader* _pShader) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Bind our texture
-    material->bindMaterialInformation(_pShader);
+    material->bindMaterialInformation(shader);
 
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);

@@ -27,7 +27,7 @@ class NodeParticleEmitter : public Node {
     virtual void init() override;
     virtual void accept(class VisitorInterface* v) override;
 
-    virtual void render(Shader* _pShader);
+    virtual void render(const Shader& shader);
 
     glm::vec3 CameraPosition;
 

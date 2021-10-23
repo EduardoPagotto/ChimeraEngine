@@ -31,7 +31,7 @@ class CameraOrbit : public ICamera {
     virtual const glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
     virtual const glm::mat4 getViewProjectionMatrix() const { return viewProjectionMatrix; };
     virtual const glm::mat4 getViewProjectionMatrixInverse() const { return viewProjectionMatrixInverse; };
-    virtual glm::mat4 recalculateMatrix(bool left) override;
+    virtual const glm::mat4 recalculateMatrix(bool left) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }

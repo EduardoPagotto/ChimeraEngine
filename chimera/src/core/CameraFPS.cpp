@@ -33,7 +33,7 @@ void CameraFPS::setParams(const float& fov, const float& near, const float& far)
     this->farPlane = far;
 }
 
-glm::mat4 CameraFPS::recalculateMatrix(bool left) { // windows x->width; y -> height
+const glm::mat4 CameraFPS::recalculateMatrix(bool left) { // windows x->width; y -> height
 
     if (left == false) {
         viewMatrix = glm::lookAt(position, position + front, up);

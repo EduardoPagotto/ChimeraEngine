@@ -35,7 +35,7 @@ void CameraOrbit::setParams(const float& fov, const float& near, const float& fa
     this->farPlane = far;
 }
 
-glm::mat4 CameraOrbit::recalculateMatrix(bool left) { // windows x->width; y -> height
+const glm::mat4 CameraOrbit::recalculateMatrix(bool left) { // windows x->width; y -> height
 
     if (left == false) {
         viewMatrix = glm::lookAt(position, front, up);

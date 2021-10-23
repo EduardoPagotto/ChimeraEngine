@@ -1,4 +1,6 @@
 #include "Game.hpp"
+#include "chimera/core/CameraFPS.hpp"
+#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/TextureManager.hpp"
 #include "chimera/core/io/MouseDevice.hpp"

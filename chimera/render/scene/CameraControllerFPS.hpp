@@ -2,7 +2,7 @@
 #define __CHIMERA_CAMERA_CONTROLLER_FPS_ZZ1__HPP
 
 #include "ScriptableEntity.hpp"
-#include "chimera/core/CameraFPS.hpp"
+#include "chimera/core/ICamera.hpp"
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ class CameraControllerFPS : public ScriptableEntity {
     void onUpdate(float time);
 
   private:
-    CameraFPS* camera = nullptr;
+    ICamera* camera = nullptr;
 };
 
 } // namespace Chimera

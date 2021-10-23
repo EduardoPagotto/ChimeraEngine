@@ -15,13 +15,12 @@ class CameraFPS : public ICamera {
     void processCameraRotation(double xOffset, double yOffset, bool constrainPitch = true);
     void processCameraMovement(glm::vec3& direction, float deltaTime);
 
-    virtual void processInput(float deltaTime) override;
-
     // herdado
+    virtual void processInput(float deltaTime) override;
     virtual const glm::mat4 getViewMatrix() const override { return viewMatrix; };
     virtual const glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
-    virtual const glm::mat4 getViewProjectionMatrix() const { return viewProjectionMatrix; };
-    virtual const glm::mat4 getViewProjectionMatrixInverse() const { return viewProjectionMatrixInverse; };
+    virtual const glm::mat4 getViewProjectionMatrix() const override { return viewProjectionMatrix; };
+    virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return viewProjectionMatrixInverse; };
     virtual const glm::mat4 recalculateMatrix(bool left) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
@@ -33,10 +32,9 @@ class CameraFPS : public ICamera {
     virtual void setPosition(const glm::vec3& position) override { this->position = position; }
     virtual void invertPitch() override;
     virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) override { aspectRatio = (float)width / (float)height; }
+    virtual void updateVectors() override;
 
   private:
-    void updateVectors();
-
     glm::vec3 position, front, up, right, worldUp;
     float pitch, yaw, fov;
     float nearPlane, farPlane;

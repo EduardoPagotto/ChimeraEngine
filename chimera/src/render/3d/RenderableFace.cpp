@@ -36,7 +36,7 @@ void RenderableFace::addFace(const uint32_t& _pa, const uint32_t& _pb, const uin
 
 void RenderableFace::initIndexBufferObject() { ibo = new IndexBuffer(&indexTris[0], indexTris.size()); }
 
-void RenderableFace::submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) {
+void RenderableFace::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
 
     command.renderable = this;
     command.shader = Shader();

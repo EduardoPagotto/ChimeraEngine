@@ -18,7 +18,7 @@ class RenderableBsp : public IRenderable3d {
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return 0; }
     virtual AABB* getAABB() { return &aabb; }
-    virtual void submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) override;
+    virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual Entity getEntity() const override { return entity; }
 
   private:
@@ -37,7 +37,7 @@ class RenderableBsp : public IRenderable3d {
     std::vector<RenderableFace*> vpLeaf;
     std::vector<VertexData> vVertex;
     AABB aabb;
-    Camera* camera;
+    ICamera* camera;
     uint32_t totIndex;
     IRenderer3d* renderer;
     Entity entity;

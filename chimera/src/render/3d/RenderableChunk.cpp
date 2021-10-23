@@ -65,7 +65,7 @@ void RenderableChunk::debugDados() {
     // TODO:
 }
 
-void RenderableChunk::submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) {
+void RenderableChunk::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
 
     renderer->submit(command);
 

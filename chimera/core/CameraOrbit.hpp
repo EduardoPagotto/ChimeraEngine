@@ -13,24 +13,17 @@ class CameraOrbit : public ICamera {
 
     void processCameraFOV(double yOffset);
     void processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch = true);
-    // void processCameraMovement(glm::vec3& direction, float deltaTime);
     void processDistance(const int& _mz);
-
     void setLimits(const float& min, const float& max) {
         this->min = min;
         this->max = max;
     }
 
-    float updateDistanceFront() override {
-        distance = glm::distance(this->position, this->front);
-        return distance;
-    }
-
     // herdado
     virtual const glm::mat4 getViewMatrix() const override { return viewMatrix; };
     virtual const glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
-    virtual const glm::mat4 getViewProjectionMatrix() const { return viewProjectionMatrix; };
-    virtual const glm::mat4 getViewProjectionMatrixInverse() const { return viewProjectionMatrixInverse; };
+    virtual const glm::mat4 getViewProjectionMatrix() const override { return viewProjectionMatrix; };
+    virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return viewProjectionMatrixInverse; };
     virtual const glm::mat4 recalculateMatrix(bool left) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
@@ -39,14 +32,16 @@ class CameraOrbit : public ICamera {
     virtual void setNear(const float& value) override { this->nearPlane = value; }
     virtual void setFar(const float& value) override { this->farPlane = value; }
     virtual void processInput(float deltaTime) override;
-
-    virtual void setPosition(const glm::vec3& position) { this->position = position; }
-    virtual void invertPitch();
+    virtual void setPosition(const glm::vec3& position) override { this->position = position; }
+    virtual void invertPitch() override;
     virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) override { aspectRatio = (float)width / (float)height; }
+    virtual void updateVectors() override;
+    virtual float updateDistanceFront() override {
+        distance = glm::distance(this->position, this->front);
+        return distance;
+    }
 
   private:
-    void updateVectors();
-
     glm::vec3 position, front, up;
     float pitch, yaw, fov;
     float nearPlane, farPlane;

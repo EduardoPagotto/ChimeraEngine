@@ -2,8 +2,6 @@
 #define __GAME_TESTE_BSTREE__HPP
 
 #include "chimera/core/Application.hpp"
-#include "chimera/core/Camera.hpp"
-#include "chimera/core/Texture.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/partition/BSPTree.hpp"
 #include "chimera/render/scene/Scene.hpp"
@@ -18,7 +16,6 @@ class Game : public Chimera::Application {
 
   private:
     Chimera::BspTree bspTree;
-    Chimera::Camera* camera;
     Chimera::Renderer3d render3d;
     Chimera::Scene activeScene;
 };

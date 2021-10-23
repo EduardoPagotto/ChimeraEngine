@@ -29,25 +29,14 @@ void Game::onStart() {
     { // Cria entidade de camera
         // Cria camera e carrega parametros
         CameraComponent& cc = ce.addComponent<CameraComponent>();
-        cc.camera.setAspectRatio(canvas->getWidth(), canvas->getHeight());
-        cc.camera.setPosition(glm::vec3(0.0f, 0.0f, 80.0f));
+        cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+        // cc.camera = new CameraFPS(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
-        this->camera = &cc.camera;
+        cc.camera->setAspectRatio(canvas->getWidth(), canvas->getHeight());
 
-        // parametros de controller de camera (parametros DEFAULT!!!)
-        // auto cp = ce.addComponent<CameraControlerFPSParams>();
-        // cp.yaw = 0;
-        // cp.pitch = 0;
+        ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraController");
 
-        auto cp = ce.addComponent<CameraControlerOrbitParams>();
-        cp.yaw = 0;
-        cp.pitch = 0;
-
-        // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
-        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
-        ce.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("cameraOrbit");
-
-        activeScene.setCamera(&cc.camera);
+        activeScene.setCamera(cc.camera);
     }
 
     Entity renderableEntity = activeScene.createEntity("Renderable Entity");

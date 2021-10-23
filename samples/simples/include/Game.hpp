@@ -16,7 +16,6 @@ class Game : public Chimera::Application {
 
   private:
     Chimera::Scene activeScene;
-    Chimera::Camera* camera;
     Chimera::Renderer3d render3D;
 };
 

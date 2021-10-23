@@ -3,7 +3,7 @@
 
 #include "IRenderer3d.hpp"
 #include "RenderCommand.hpp"
-#include "chimera/core/Camera.hpp"
+#include "chimera/core/ICamera.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/space/Frustum.hpp"
 #include "chimera/render/Light.hpp"
@@ -18,7 +18,7 @@ class Renderer3d : public IRenderer3d {
     Renderer3d() = default;
     virtual ~Renderer3d() = default;
 
-    virtual void begin(Camera* camera) override;
+    virtual void begin(ICamera* camera) override;
     virtual void submit(const RenderCommand& command) override;
 
     virtual void submitLight(Light* light) override;
@@ -32,7 +32,7 @@ class Renderer3d : public IRenderer3d {
   private:
     std::deque<RenderCommand> commandQueue;
     std::vector<UniformVal> lightQueue;
-    Camera* camera = nullptr;
+    ICamera* camera = nullptr;
     Shader activeShader;
     Frustum frustum;
 

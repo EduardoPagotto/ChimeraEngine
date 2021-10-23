@@ -5,10 +5,6 @@
 
 namespace Chimera {
 
-#define FPSCAMERA_MAX_SPEED 40.0f
-#define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
-#define CAMERA_MAX_FOV 45.0f
-
 CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch)
     : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(FPSCAMERA_MAX_SPEED), fov(CAMERA_MAX_FOV) {
     this->position = pos;

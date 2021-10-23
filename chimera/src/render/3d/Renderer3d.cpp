@@ -11,7 +11,7 @@
 
 namespace Chimera {
 
-void Renderer3d::begin(Camera* camera) {
+void Renderer3d::begin(ICamera* camera) {
     this->camera = camera;
     if (this->camera != nullptr)
         frustum.set(camera->getViewProjectionMatrixInverse());

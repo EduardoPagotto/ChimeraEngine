@@ -20,7 +20,7 @@ class RenderableFace : public IRenderable3d {
     virtual VertexArray* getVao() const override { return nullptr; };
     virtual IndexBuffer* getIBO() const override { return ibo; };
     virtual AABB* getAABB() override { return &aabb; }
-    virtual void submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) override;
+    virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual Entity getEntity() const override { return entity; }
 
     inline bool empty() { return indexTris.empty(); }

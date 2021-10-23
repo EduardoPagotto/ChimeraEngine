@@ -5,6 +5,8 @@
 
 namespace Chimera {
 
+#define FPSCAMERA_MAX_SPEED 40.0f
+#define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
 #define CAMERA_MAX_FOV 45.0f
 
 class ICamera {
@@ -26,6 +28,7 @@ class ICamera {
     virtual void setFar(const float& value) = 0;
     virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) = 0;
     virtual void processInput(float deltaTime) = 0; // FIXME: achar outra saida!!
+    virtual void updateVectors() = 0;
 };
 } // namespace Chimera
 #endif

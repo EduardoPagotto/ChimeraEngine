@@ -5,57 +5,11 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/2d/layer/Group.hpp"
 #include "chimera/render/FontManager.hpp"
-#include "chimera/render/scene/CameraControllerFPS.hpp"
-#include "chimera/render/scene/Components.hpp"
-#include "chimera/render/scene/Entity.hpp"
-#include "chimera/render/scene/Scene.hpp"
 #include <time.h>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     using namespace Chimera;
-
-    Scene activeScene;
-    auto square = activeScene.createEntity("Square");
-
-    // Cria entidade de camera
-    Entity ce = activeScene.createEntity("Camera Entity");
-
-    // Cria camera e carrega parametros
-    CameraComponent& cc = ce.addComponent<CameraComponent>();
-    cc.camera.setAspectRatio(640, 480);
-    cc.camera.setPosition(glm::vec3(-80.0, 0.0, 0.0));
-
-    // parametros de controller de camera (parametros DEFAULT!!!)
-    ce.addComponent<CameraControlerFPSParams>();
-
-    // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
-    ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
-    auto nsc = ce.getComponent<NativeScriptComponent>();
-    nsc.instance = nsc.instantiateScript();
-    nsc.instance->setEntity(Entity{ce, &activeScene});
-
-    // Vincula dados de camera com controller
-    nsc.instance->onCreate();
-
-    // nsc.instance->onDestroy();
-    // nsc.destroyScript(&nsc);
-
-    square.addComponent<SpriteComponent>(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
-    activeScene.onUpdate(1.0);
-
-    if (square) {
-
-        // auto tc = square.addComponent<TransformComponent>(glm::mat4(1.0f));
-        bool teste1 = square.hasComponent<Transform>();
-        bool teste2 = square.hasComponent<TagComponent>();
-        bool teste3 = square.hasComponent<SpriteComponent>();
-
-        square.removeComponent<Transform>();
-
-        teste1 = square.hasComponent<Transform>();
-        teste2 = square.hasComponent<TagComponent>();
-    }
 
     srand(time(nullptr));
 

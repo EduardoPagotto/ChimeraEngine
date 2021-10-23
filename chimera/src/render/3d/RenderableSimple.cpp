@@ -42,7 +42,7 @@ RenderableSimple::~RenderableSimple() {
 
 void RenderableSimple::setEntity(Entity entity) { this->entity = entity; }
 
-void RenderableSimple::submit(Camera* camera, RenderCommand& command, IRenderer3d* renderer) { renderer->submit(command); }
+void RenderableSimple::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) { renderer->submit(command); }
 
 void RenderableSimple::debugDados() {
     glm::vec3 size = this->aabb.getSize();

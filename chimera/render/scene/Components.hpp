@@ -2,7 +2,7 @@
 #define __CHIMERA_COMPONENTS__HPP
 
 #include "ScriptableEntity.hpp"
-#include "chimera/core/Camera.hpp"
+#include "chimera/core/ICamera.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,23 +25,8 @@ struct SpriteComponent {
     SpriteComponent(const SpriteComponent& other) = default;
 };
 
-struct CameraControlerFPSParams {
-    glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    float pitch = 0.0f, yaw = -90.0f, fov = 45.0f;
-    CameraControlerFPSParams() = default;
-};
-
-struct CameraControlerOrbitParams {
-    glm::vec3 front = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    float pitch = 0.0f, yaw = -90.0f, fov = 45.0f;
-    float min = 1.0f, max = 500.0f;
-    CameraControlerOrbitParams() = default;
-};
-
 struct CameraComponent {
-    Camera camera; // TODO trocar por ponteiro criado na classe Game!!!!!!!!!!!
+    ICamera* camera; // TODO trocar por ponteiro criado na classe Game!!!!!!!!!!!
     bool primary = true;
     bool fixedAspectRatio = false;
     CameraComponent() = default;

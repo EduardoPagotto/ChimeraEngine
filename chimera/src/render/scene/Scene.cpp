@@ -49,6 +49,7 @@ void Scene::onUpdate(float ts) {
         }
     });
 
+    camera->recalculateMatrix(false);
     // Camera* mainCamera = nullptr;
     // glm::mat4 cameraTransform; // = nullptr;
 
@@ -102,7 +103,7 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
 
         auto& cameraComponent = view.get<CameraComponent>(entity);
         if (!cameraComponent.fixedAspectRatio) {
-            cameraComponent.camera.setAspectRatio(width, height);
+            cameraComponent.camera->setAspectRatio(width, height);
         }
     }
 }

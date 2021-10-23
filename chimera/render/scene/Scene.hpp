@@ -1,7 +1,7 @@
 #ifndef __CHIMERA_SCENE_ZZ1__HPP
 #define __CHIMERA_SCENE_ZZ1__HPP
 
-#include "chimera/core/Camera.hpp"
+#include "chimera/core/ICamera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/Light.hpp"
 #include <entt/entt.hpp>
@@ -15,7 +15,7 @@ class Scene {
     virtual ~Scene();
 
     void addLight(Light* light) { lightSetupStack.push_back(light); }
-    void setCamera(Camera* camera) { this->camera = camera; }
+    void setCamera(ICamera* camera) { this->camera = camera; }
 
     Entity createEntity(const std::string& name = std::string());
     void destroyEntity(Entity entity);
@@ -36,7 +36,7 @@ class Scene {
 
   private:
     std::vector<Light*> lightSetupStack;
-    Camera* camera;
+    ICamera* camera;
 };
 
 } // namespace Chimera

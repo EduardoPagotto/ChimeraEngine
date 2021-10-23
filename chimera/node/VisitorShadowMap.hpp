@@ -25,13 +25,13 @@ class VisitorShadowMap : public VisitorInterface {
     virtual void visit(class NodeHUD* _pHUD) override;
 
     void render(Node* _pGroup, Transform* _pTransform);
-    void applyShadow(Shader* _pShader);
+    void bindDepthBuffer();
     inline glm::mat4 getLightSpaceMatrix() const { return lightSpaceMatrix; }
 
   private:
     glm::mat4 lightSpaceMatrix;
     Transform* pTransform;
-    Shader* pShader;
+    Shader shader;
     FrameBufferDepth* frameBufferDepth;
     SimpleRender3d* pRender3D;
 };

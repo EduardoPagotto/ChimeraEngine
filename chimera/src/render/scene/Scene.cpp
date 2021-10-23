@@ -36,7 +36,6 @@ void Scene::onCreate() {
             nsc.instance->entity = Entity{entity, this};
             nsc.instance->onCreate();
         }
-        // nsc.instance->onUpdate(ts);
     });
 }
 
@@ -50,34 +49,6 @@ void Scene::onUpdate(float ts) {
     });
 
     camera->recalculateMatrix(false);
-    // Camera* mainCamera = nullptr;
-    // glm::mat4 cameraTransform; // = nullptr;
-
-    // // pega varioas componented da entidade
-    // auto group1 = eRegistry.group<Transform, CameraComponent>();
-    // for (auto entity : group1) {
-
-    //     auto [transform, camera] = group1.get<Transform, CameraComponent>(entity);
-    //     if (camera.primary) {
-    //         mainCamera = &camera.camera;
-    //         cameraTransform = transform.getMatrix();
-    //         break;
-    //     }
-    // }
-
-    // if (mainCamera) {
-
-    //     // proximo scene camera  https://www.youtube.com/watch?v=UKVFRRufKzo
-
-    //     // Renderer2D::begin(*mainCamera, *cameraTransform); // inver transform depois
-
-    //     // auto group = eRegistry.group<TransformComponent>(entt::get<SpriteComponent>);
-    //     // for (auto entity : group) {
-
-    //     //     auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
-    //     //     // Renderer2D::DrawQuad(transform, sprite);
-    //     // }
-    // }
 }
 
 Entity Scene::createEntity(const std::string& name) {
@@ -125,16 +96,11 @@ void Scene::render(IRenderer3d& renderer) {
         renderer.submitLight(l);
     }
 
-    auto view = eRegistry.view<Renderable3dComponent>();
-    for (auto entity : view) {
+    auto group1 = eRegistry.group<Renderable3dComponent, Transform, Shader, Material>();
+    for (auto entity : group1) {
+        auto [rc, tc, sc, mc] = group1.get<Renderable3dComponent, Transform, Shader, Material>(entity);
 
-        Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
-
-        Transform& tc = renderable->getEntity().getComponent<Transform>();
-        Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
-        Material& mc = rc.renderable->getEntity().getComponent<Material>();
-
         RenderCommand command;
         command.renderable = renderable;
         command.transform = tc.getMatrix();

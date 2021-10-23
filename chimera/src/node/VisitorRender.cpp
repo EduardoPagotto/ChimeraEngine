@@ -46,17 +46,12 @@ void VisitorRender::visit(NodeMesh* _pMesh) {
 
     _pMesh->getMaterial()->bindMaterialInformation(shader);
 
-    if (pShadowMapVisitor != nullptr)
-        pShadowMapVisitor->applyShadow(&shader);
+    if (pShadowMapVisitor != nullptr) {
+        if (!shader.isInvalid())
+            shader.setUniform("shadowMap", 1);
 
-    //
-    // glm::mat4 projectionMatrixInverse = glm::inverse(projection);
-    // glm::mat4 viewMatrixInverse = glm::inverse(view);
-    // glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
-    // frustum.set(viewProjectionMatrixInverse);
-
-    // AABB aabbT = _pMesh->meshData.aabb.transformation(model);
-    // aabbT.render();
+        pShadowMapVisitor->bindDepthBuffer();
+    }
     render3D.begin(nullptr);
     _pMesh->pRenderStat->submit(&render3D); // render3D.submit(_pMesh->pRenderStat);
     render3D.end();

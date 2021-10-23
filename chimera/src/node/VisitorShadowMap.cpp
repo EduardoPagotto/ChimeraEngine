@@ -14,7 +14,7 @@
 namespace Chimera {
 
 VisitorShadowMap::VisitorShadowMap(SimpleRender3d* _pRender3d, Shader* _pShader, const unsigned& _width, const unsigned& _height)
-    : pShader(_pShader), pTransform(nullptr), pRender3D(_pRender3d) {
+    : shader(*_pShader), pTransform(nullptr), pRender3D(_pRender3d) {
     frameBufferDepth = new FrameBufferDepth(_width, _height);
 }
 
@@ -33,7 +33,7 @@ void VisitorShadowMap::visit(NodeMesh* _pMesh) {
     // glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
     // frustum.set(viewProjectionMatrixInverse);
 
-    pShader->setUniform("model", model);
+    shader.setUniform("model", model);
 
     pRender3D->begin(nullptr);
     _pMesh->pRenderStat->submit(pRender3D); // render3D.submit(_pMesh->pRenderStat);
@@ -56,14 +56,14 @@ void VisitorShadowMap::visit(NodeLight* _pLight) {
     glm::mat4 lightView = glm::lookAt(_pLight->data.getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
     this->lightSpaceMatrix = lightProjection * lightView;
 
-    pShader->setUniform("lightSpaceMatrix", lightSpaceMatrix);
+    shader.setUniform("lightSpaceMatrix", lightSpaceMatrix);
 }
 
 void VisitorShadowMap::visit(NodeParticleEmitter* _pParticleEmitter) {}
 
 void VisitorShadowMap::visit(NodeGroup* _pGroup) {
     // Shader selecionado correto no RenderVisitor via Group
-    pShader->enable();
+    shader.enable();
 }
 
 void VisitorShadowMap::visit(NodeHUD* _pHUD) {}
@@ -75,11 +75,5 @@ void VisitorShadowMap::render(Node* _pGroup, Transform* _pTransform) {
     frameBufferDepth->unbind();
 }
 
-void VisitorShadowMap::applyShadow(Shader* _pShader) {
-
-    frameBufferDepth->getTexture()->bind(1);
-    if (_pShader != nullptr) {
-        _pShader->setUniform("shadowMap", 1);
-    }
-}
+void VisitorShadowMap::bindDepthBuffer() { frameBufferDepth->getTexture()->bind(1); }
 } // namespace Chimera

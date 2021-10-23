@@ -15,6 +15,8 @@ CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, f
     this->nearPlane = 0.3f;
     this->farPlane = 5000.0f;
 
+    this->aspectRatio = 1.0f;
+
     min = 1.0f;
     max = 1500.0f;
 
@@ -33,7 +35,7 @@ void CameraOrbit::setParams(const float& fov, const float& near, const float& fa
     this->farPlane = far;
 }
 
-glm::mat4 CameraOrbit::recalculateMatrix(const float& canvasRatio, bool left) { // windows x->width; y -> height
+glm::mat4 CameraOrbit::recalculateMatrix(bool left) { // windows x->width; y -> height
 
     if (left == false) {
         viewMatrix = glm::lookAt(position, front, up);
@@ -52,7 +54,7 @@ glm::mat4 CameraOrbit::recalculateMatrix(const float& canvasRatio, bool left) { 
         viewMatrix = glm::lookAt(novaPosition, novaFront, this->getUp());
     }
 
-    projectionMatrix = glm::perspective(glm::radians(fov), canvasRatio, nearPlane, farPlane);
+    projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
     viewProjectionMatrix = projectionMatrix * viewMatrix;
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);

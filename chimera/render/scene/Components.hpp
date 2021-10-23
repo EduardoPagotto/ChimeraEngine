@@ -41,7 +41,7 @@ struct CameraControlerOrbitParams {
 };
 
 struct CameraComponent {
-    Camera camera;
+    Camera camera; // TODO trocar por ponteiro criado na classe Game!!!!!!!!!!!
     bool primary = true;
     bool fixedAspectRatio = false;
     CameraComponent() = default;

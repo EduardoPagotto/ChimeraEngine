@@ -17,6 +17,8 @@ CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float
     this->yaw = yaw;
     this->pitch = pitch;
 
+    this->aspectRatio = 1.0f;
+
     this->nearPlane = 0.3f;
     this->farPlane = 5000.0f;
 
@@ -31,7 +33,7 @@ void CameraFPS::setParams(const float& fov, const float& near, const float& far)
     this->farPlane = far;
 }
 
-glm::mat4 CameraFPS::recalculateMatrix(const float& canvasRatio, bool left) { // windows x->width; y -> height
+glm::mat4 CameraFPS::recalculateMatrix(bool left) { // windows x->width; y -> height
 
     if (left == false) {
         viewMatrix = glm::lookAt(position, position + front, up);
@@ -50,7 +52,7 @@ glm::mat4 CameraFPS::recalculateMatrix(const float& canvasRatio, bool left) { //
         viewMatrix = glm::lookAt(novaPosition, novaPosition + novaFront, this->getUp());
     }
 
-    projectionMatrix = glm::perspective(glm::radians(fov), canvasRatio, nearPlane, farPlane);
+    projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
     viewProjectionMatrix = projectionMatrix * viewMatrix;
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);

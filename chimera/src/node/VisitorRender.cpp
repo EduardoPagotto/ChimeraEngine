@@ -125,14 +125,16 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
         pShader->setUniform("viewPos", cameraScene->getPosition());
         if (pVideo->getTotEyes() == 1) {
             glViewport(0, 0, pVideo->getWidth(), pVideo->getHeight());
-            cameraScene->recalculateMatrix(pVideo->getRatio());
+            cameraScene->setAspectRatio(pVideo->getWidth(), pVideo->getHeight());
+            cameraScene->recalculateMatrix(false);
         } else {
             Eye* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
             glViewport(0, 0, pEye->fbTexGeo.w, pEye->fbTexGeo.h);
+            cameraScene->setAspectRatio(pEye->fbTexGeo.w, pEye->fbTexGeo.h);
             if (eye == 0) { // right
-                cameraScene->recalculateMatrix(1.0f, false);
+                cameraScene->recalculateMatrix(false);
             } else { // left
-                cameraScene->recalculateMatrix(1.0f, true);
+                cameraScene->recalculateMatrix(true);
             }
         }
     }

@@ -48,7 +48,9 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera*
         float fov = atof(l_nPerspective->FirstChildElement("xfov")->GetText());
         float near = atof(l_nPerspective->FirstChildElement("znear")->GetText());
         float far = atof(l_nPerspective->FirstChildElement("zfar")->GetText());
-        _pCamera->getCamera()->setParams(fov, near, far);
+        _pCamera->getCamera()->setFov(fov);
+        _pCamera->getCamera()->setNear(near);
+        _pCamera->getCamera()->setFar(far);
 
     } else {
         // TODO testar ecarregar ortogonal aqui

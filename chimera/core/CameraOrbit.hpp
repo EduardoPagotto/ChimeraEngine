@@ -35,7 +35,9 @@ class CameraOrbit : public ICamera {
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }
-    virtual void setParams(const float& fov, const float& near, const float& far) override;
+    virtual void setFov(const float& value) override { this->fov = value; }
+    virtual void setNear(const float& value) override { this->nearPlane = value; }
+    virtual void setFar(const float& value) override { this->farPlane = value; }
     virtual void processInput(float deltaTime) override;
 
     virtual void setPosition(const glm::vec3& position) { this->position = position; }

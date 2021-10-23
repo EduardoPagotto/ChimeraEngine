@@ -21,12 +21,9 @@ class ICamera {
     virtual float updateDistanceFront() = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void invertPitch() = 0;
-    virtual void setParams(const float& fov, const float& near, const float& far) = 0;
-
-    // virtual void setFov(const float& value) = 0;
-    // virtual void setNear(const float& value) = 0;
-    // virtual void setFar(const float& value) = 0;
-
+    virtual void setFov(const float& value) = 0;
+    virtual void setNear(const float& value) = 0;
+    virtual void setFar(const float& value) = 0;
     virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) = 0;
     virtual void processInput(float deltaTime) = 0; // FIXME: achar outra saida!!
 };

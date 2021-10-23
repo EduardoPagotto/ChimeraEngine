@@ -29,12 +29,6 @@ CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, f
 
 CameraOrbit::~CameraOrbit() {}
 
-void CameraOrbit::setParams(const float& fov, const float& near, const float& far) {
-    this->fov = fov;
-    this->nearPlane = near;
-    this->farPlane = far;
-}
-
 const glm::mat4 CameraOrbit::recalculateMatrix(bool left) { // windows x->width; y -> height
 
     if (left == false) {

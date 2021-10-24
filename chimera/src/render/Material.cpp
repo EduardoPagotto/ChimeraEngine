@@ -65,7 +65,7 @@ void Material::bindMaterialInformation(const Shader& shader) {
     }
 }
 
-void Material::bindMaterialInformation(std::vector<UniformVal>& uniforms) {
+void Material::bindMaterialInformation(std::vector<UniformVal>& uniforms, std::vector<Texture*>& vTex) {
 
     // aplica todos os materiais passados
     for (const UniformVal& uniformMat : listMaterial) {
@@ -79,7 +79,7 @@ void Material::bindMaterialInformation(std::vector<UniformVal>& uniforms) {
     int indexTex = 0;
     if (mapTex.size() > 0) {
         for (const auto& kv : mapTex) {
-            kv.second->bind(indexTex); // FIXME:  contador de textura ativa apena o zero agora!!!
+            vTex.push_back(kv.second);
             uniforms.push_back(UniformVal(kv.first, indexTex));
             indexTex++;
         }

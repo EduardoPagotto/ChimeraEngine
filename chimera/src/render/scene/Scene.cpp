@@ -96,16 +96,21 @@ void Scene::render(IRenderer3d& renderer) {
         renderer.submitLight(l);
     }
 
-    auto group1 = eRegistry.group<Renderable3dComponent, Transform, Shader, Material>();
-    for (auto entity : group1) {
-        auto [rc, tc, sc, mc] = group1.get<Renderable3dComponent, Transform, Shader, Material>(entity);
+    auto view = eRegistry.view<Renderable3dComponent>();
+    for (auto entity : view) {
 
+        Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
+
+        Transform& tc = renderable->getEntity().getComponent<Transform>();
+        Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
+        Material& mc = rc.renderable->getEntity().getComponent<Material>();
+
         RenderCommand command;
         command.renderable = renderable;
         command.transform = tc.getMatrix();
         command.shader = sc;
-        mc.bindMaterialInformation(command.uniforms);
+        mc.bindMaterialInformation(command.uniforms, command.vTex);
 
         // FIXME: preciso disto aqui ??
         command.uniforms.push_back(UniformVal("shadows", (int)0));
@@ -115,6 +120,41 @@ void Scene::render(IRenderer3d& renderer) {
 
     renderer.end();
     renderer.flush();
+
+    // this->onUpdate(0.01); // atualiza camera e script de camera
+
+    // if (renderer.getLog() == true) {
+    //     glm::vec3 pos = camera->getPosition();
+    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
+    // }
+
+    // // camera->recalculateMatrix(canvas->getRatio());// ainda nao sei o que fazer aqui
+
+    // renderer.begin(camera);
+
+    // for (Light* l : lightSetupStack) {
+    //     renderer.submitLight(l);
+    // }
+
+    // auto group1 = eRegistry.group<Renderable3dComponent, Transform, Shader, Material>();
+    // for (auto entity : group1) {
+    //     auto [rc, tc, sc, mc] = group1.get<Renderable3dComponent, Transform, Shader, Material>(entity);
+
+    //     IRenderable3d* renderable = rc.renderable;
+    //     RenderCommand command;
+    //     command.renderable = renderable;
+    //     command.transform = tc.getMatrix();
+    //     command.shader = sc;
+    //     mc.bindMaterialInformation(command.uniforms);
+
+    //     // FIXME: preciso disto aqui ??
+    //     command.uniforms.push_back(UniformVal("shadows", (int)0));
+
+    //     rc.renderable->submit(camera, command, &renderer);
+    // }
+
+    // renderer.end();
+    // renderer.flush();
 }
 
 } // namespace Chimera

@@ -51,36 +51,34 @@ void Game::onStart() {
         Shader& shader = renderableEntity.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
 
-        {
-            MeshData mesh;
-            int ret = 0;
-            // ret = loadObjFile("./assets/models/tela01.obj", &mesh, &material);
-            // ret = loadObjFile("./assets/models/salaSplit3.obj", &mesh, &material);
-            // ret = loadObjFile("./assets/models/square2.obj", &mesh, &material);
-            // ret = loadObjFile("./assets/models/parede_simples.obj", &mesh, &material);
-            // ret = loadObjFile("./assets/models/cubo_textura_simples.obj", &mesh, &material);
-            // ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
-            ret = loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
-            // ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
+        MeshData mesh;
+        int ret = 0;
+        // ret = loadObjFile("./assets/models/tela01.obj", &mesh, &material);
+        // ret = loadObjFile("./assets/models/salaSplit3.obj", &mesh, &material);
+        // ret = loadObjFile("./assets/models/square2.obj", &mesh, &material);
+        // ret = loadObjFile("./assets/models/parede_simples.obj", &mesh, &material);
+        // ret = loadObjFile("./assets/models/cubo_textura_simples.obj", &mesh, &material);
+        // ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
+        ret = loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
+        // ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
 
-            std::vector<Chimera::VertexData> renderData;
-            vertexDataFromMesh(&mesh, renderData);
+        std::vector<Chimera::VertexData> renderData;
+        vertexDataFromMesh(&mesh, renderData);
 
-            std::vector<uint32_t> index;
-            std::vector<Chimera::VertexData> vertexDataOut;
-            vertexDataIndexCompile(renderData, vertexDataOut, index);
+        std::vector<uint32_t> index;
+        std::vector<Chimera::VertexData> vertexDataOut;
+        vertexDataIndexCompile(renderData, vertexDataOut, index);
 
-            Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
-            RenderableSimple* r = new RenderableSimple();
-            r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
-            r->setEntity(renderableEntity);
-            rc.renderable = r;
-        }
+        Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
+        RenderableSimple* r = new RenderableSimple();
+        r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+        r->setEntity(renderableEntity);
+        rc.renderable = r;
 
         material.init();
-
-        activeScene.onCreate();
     }
+
+    activeScene.onCreate();
 }
 
 bool Game::onEvent(const SDL_Event& event) {

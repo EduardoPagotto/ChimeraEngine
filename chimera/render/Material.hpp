@@ -34,7 +34,7 @@ class Material {
 
     bool hasTexture() { return !mapTex.empty(); }
     void bindMaterialInformation(const Shader& shader);
-    void bindMaterialInformation(std::vector<UniformVal>& uniforms);
+    void bindMaterialInformation(std::vector<UniformVal>& uniforms, std::vector<Texture*>& vTex);
 
   private:
     int tipoTexturasDisponiveis;

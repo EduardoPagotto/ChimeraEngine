@@ -95,11 +95,18 @@ void Renderer3d::flush() {
                 // int shadows = 0;
                 // activeShader->setUniform("shadows", shadows);
 
+                // light bind
                 for (const UniformVal& uniformLight : lightQueue)
                     uniformLight.setUniform(activeShader);
 
+                // bind dos uniforms
                 for (const UniformVal& uniformMat : command.uniforms)
                     uniformMat.setUniform(activeShader);
+
+                // bind de texturas
+                for (uint8_t i = 0; i < command.vTex.size(); i++) {
+                    command.vTex[i]->bind(i);
+                }
             }
         }
 

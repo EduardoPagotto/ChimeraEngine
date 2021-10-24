@@ -15,30 +15,24 @@ namespace Chimera {
 
 class Renderer3d : public IRenderer3d {
   public:
-    Renderer3d() = default;
-    virtual ~Renderer3d() = default;
-
+    Renderer3d();
+    virtual ~Renderer3d();
     virtual void begin(ICamera* camera) override;
     virtual void submit(const RenderCommand& command) override;
-
     virtual void submitLight(Light* light) override;
-
     virtual void end() override;
     virtual void flush() override;
-
     virtual void logToggle() override { logData = !logData; }
     virtual bool getLog() const override { return logData; }
 
   private:
     std::deque<RenderCommand> commandQueue;
     std::vector<UniformVal> lightQueue;
-    ICamera* camera = nullptr;
+    ICamera* camera;
     Shader activeShader;
     Frustum frustum;
-
-    bool logData = false;
-    uint32_t totIBO = 0;
-    uint32_t totFaces = 0;
+    bool logData;
+    uint32_t totIBO, totFaces;
 };
 
 } // namespace Chimera

@@ -57,7 +57,7 @@ class Texture {
     inline unsigned getWidth() const { return width; }
     inline unsigned getHeight() const { return height; }
     void bind(uint8_t slot) const;
-    void unbind(uint8_t slot) const;
+    static void unbind(uint8_t slot);
     inline const std::string getName() const { return name; }
     inline const uint32_t getTextureID() const { return idTexture; }
 

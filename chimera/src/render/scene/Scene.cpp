@@ -89,6 +89,7 @@ void Scene::render(IRenderer3d& renderer) {
     }
 
     // camera->recalculateMatrix(canvas->getRatio());// ainda nao sei o que fazer aqui
+    glViewport(0, 0, viewportWidth, viewportHeight);
 
     renderer.begin(camera);
 

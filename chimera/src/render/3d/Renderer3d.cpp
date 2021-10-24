@@ -11,10 +11,19 @@
 
 namespace Chimera {
 
+Renderer3d::Renderer3d() : camera(nullptr), logData(false), totIBO(0), totFaces(0) {
+    // commandQueue.reserve(1000);
+    lightQueue.reserve(300);
+}
+
+Renderer3d::~Renderer3d() {}
+
 void Renderer3d::begin(ICamera* camera) {
+
     this->camera = camera;
-    if (this->camera != nullptr)
+    if (this->camera != nullptr) {
         frustum.set(camera->getViewProjectionMatrixInverse());
+    }
 
     lightQueue.clear();
 
@@ -102,6 +111,10 @@ void Renderer3d::flush() {
                 // bind dos uniforms
                 for (const UniformVal& uniformMat : command.uniforms)
                     uniformMat.setUniform(activeShader);
+
+                // TODO: ver se é assim mesmo!!!!
+                if (command.vTex.size() == 0)
+                    Texture::unbind(0);
 
                 // bind de texturas
                 for (uint8_t i = 0; i < command.vTex.size(); i++) {

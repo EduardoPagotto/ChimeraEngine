@@ -36,12 +36,8 @@ void Game::onStart() {
         cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         // cc.camera = new CameraFPS(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
-        cc.camera->setAspectRatio(canvas->getWidth(), canvas->getHeight());
-
-        // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
-        // ce.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("cameraFPS");
-        ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraConroller");
-
+        // Adiciona um controller (Compostamento) a camera e vincula entidades ao mesmo
+        ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
         activeScene.setCamera(cc.camera);
     }
 
@@ -78,6 +74,7 @@ void Game::onStart() {
         material.init();
     }
 
+    activeScene.onViewportResize(canvas->getWidth(), canvas->getHeight());
     activeScene.onCreate();
 }
 
@@ -132,9 +129,6 @@ bool Game::onEvent(const SDL_Event& event) {
 
 void Game::onUpdate() {
     canvas->before();
-
-    glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
-    // camControl->recalculateMatrix(false);
 
     activeScene.render(render3D);
 

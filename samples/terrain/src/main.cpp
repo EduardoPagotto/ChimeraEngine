@@ -8,7 +8,7 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Game* game = new Game(new Chimera::CanvasGL("Chimera", 600, 400));
+        Game* game = new Game(new Chimera::CanvasGL("Chimera", 800, 600));
         game->run();
         delete game;
 

@@ -3,6 +3,7 @@
 #include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/TextureManager.hpp"
+#include "chimera/core/Transform.hpp"
 #include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/3d/RenderableChunk.hpp"
@@ -37,12 +38,10 @@ void Game::onStart() {
         // Cria camera e carrega parametros
         CameraComponent& cc = ce.addComponent<CameraComponent>();
         // cc.camera = new CameraOrbit(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-        cc.camera = new CameraFPS(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-        cc.camera->setAspectRatio(canvas->getWidth(), canvas->getHeight());
+        cc.camera = new CameraFPS(glm::vec3(20.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
-        // Adiciona um controller (Compostamento de FPS) a camera e vincula entidades ao mesmo
+        // Adiciona um controller (Compostamento) a camera e vincula entidades ao mesmo
         ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-
         activeScene.setCamera(cc.camera);
     }
     {
@@ -84,6 +83,10 @@ void Game::onStart() {
 
     {
         Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+
+        // Transform& tc = renderableEntity.getComponent<Transform>();
+        // tc.setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
+
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
@@ -115,6 +118,7 @@ void Game::onStart() {
         material.init();
     }
 
+    activeScene.onViewportResize(canvas->getWidth(), canvas->getHeight());
     activeScene.onCreate();
 }
 
@@ -169,15 +173,9 @@ bool Game::onEvent(const SDL_Event& event) {
 void Game::onUpdate() {
     canvas->before();
 
-    glViewport(0, 0, canvas->getWidth(), canvas->getHeight());
-    // camera->recalculateMatrix(canvas->getRatio());// ainda nao sei o que fazer aqui
-
-    // pLight->bindLightInformation(pShader); // FIXME: AQUI!!!!
     // model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
     // //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); if (pShader == nullptr)
     //     return;
-
-    // NEW
     activeScene.render(render3d);
 
     canvas->after();

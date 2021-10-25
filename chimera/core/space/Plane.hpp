@@ -19,13 +19,13 @@ class Plane {
     inline glm::vec3 getPoint() const { return this->point; }
     inline glm::vec3 getNormal() const { return this->normal; }
 
-    bool collinearNormal(const glm::vec3& _normal);
-    SIDE classifyPoint(const glm::vec3& point);
-    SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest);
-    bool intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm::vec3* intersection, float* percentage);
+    bool collinearNormal(const glm::vec3& _normal) const;
+    SIDE classifyPoint(const glm::vec3& point) const;
+    SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest) const;
+    bool intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm::vec3* intersection, float* percentage) const;
 
-    bool AABBBehind(const glm::vec3* AABBVertices);
-    float AABBDistance(const glm::vec3* AABBVertices);
+    bool AABBBehind(const glm::vec3* AABBVertices) const;
+    float AABBDistance(const glm::vec3* AABBVertices) const;
 
   private:
     glm::vec3 point;  // vertice A

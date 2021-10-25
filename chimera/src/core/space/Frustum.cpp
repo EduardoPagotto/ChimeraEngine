@@ -36,7 +36,7 @@ void Frustum::set(const glm::mat4& ViewProjectionMatrixInverse) {
     planes[5].set(vertices[5], vertices[4], vertices[6]);
 }
 
-bool Frustum::AABBVisible(const glm::vec3* AABBVertices) {
+bool Frustum::AABBVisible(const glm::vec3* AABBVertices) const {
     for (int i = 0; i < 6; i++) {
         if (planes[i].AABBBehind(AABBVertices)) {
             return false;
@@ -46,9 +46,9 @@ bool Frustum::AABBVisible(const glm::vec3* AABBVertices) {
     return true;
 }
 
-float Frustum::AABBDistance(const glm::vec3* AABBVertices) { return planes[5].AABBDistance(AABBVertices); }
+float Frustum::AABBDistance(const glm::vec3* AABBVertices) const { return planes[5].AABBDistance(AABBVertices); }
 
-void Frustum::render() {
+void Frustum::render() const {
     glBegin(GL_LINES);
 
     glVertex3fv(glm::value_ptr(vertices[0]));

@@ -70,30 +70,30 @@ bool AABB::contains(const glm::vec3& _point) const {
     return true;
 }
 
-bool AABB::visible(Frustum& _frustum) { return _frustum.AABBVisible(vertex); }
+bool AABB::visible(const Frustum& _frustum) const { return _frustum.AABBVisible(vertex); }
 
-float AABB::distance(Frustum& _frustum) { return _frustum.AABBDistance(vertex); }
+float AABB::distance(const Frustum& _frustum) const { return _frustum.AABBDistance(vertex); }
 
 // TODO: TESTAR!!!!!
 // ref: https://www.gamedev.net/forums/topic/673361-axis-aligned-boxes-and-rotations/
-AABB AABB::transformation(const glm::mat4& transformation) {
+AABB AABB::transformation(const glm::mat4& transformation) const {
 
     glm::vec3 val, min, max;
-    for (short i = 0; i < 8; i++) {
+
+    val = glm::vec3(transformation * glm::vec4(vertex[0], 1.0f));
+    min = val;
+    max = val;
+
+    for (short i = 1; i < 8; i++) {
         val = glm::vec3(transformation * glm::vec4(vertex[i], 1.0f));
-        if (i != 0) {
-            min = glm::min(min, val);
-            max = glm::max(max, val);
-        } else {
-            min = val;
-            max = val;
-        }
+        min = glm::min(min, val);
+        max = glm::max(max, val);
     }
 
     return AABB(min, max);
 }
 
-void AABB::render() {
+void AABB::render() const {
     glBegin(GL_LINES);
 
     glVertex3fv(glm::value_ptr(vertex[0]));

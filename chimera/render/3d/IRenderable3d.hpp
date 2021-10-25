@@ -12,7 +12,7 @@ class IRenderable3d {
     virtual uint32_t getSize() const = 0;
     virtual class VertexArray* getVao() const = 0;
     virtual class IndexBuffer* getIBO() const = 0;
-    virtual class AABB* getAABB() = 0;
+    virtual const class AABB& getAABB() const = 0;
     virtual class Entity getEntity() const = 0;
     virtual void submit(class ICamera* camera, class RenderCommand& command, class IRenderer3d* renderer) = 0;
 };

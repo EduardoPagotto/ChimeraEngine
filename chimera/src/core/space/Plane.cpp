@@ -30,7 +30,7 @@ void Plane::set(const glm::vec3& pA, const glm::vec3& _normal) {
                         : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
 }
 
-bool Plane::collinearNormal(const glm::vec3& _normal) {
+bool Plane::collinearNormal(const glm::vec3& _normal) const {
     glm::vec3 sub = this->normal - _normal;
     float result = (float)fabs(sub.x + sub.y + sub.z);
     if (result < EPSILON)
@@ -39,7 +39,7 @@ bool Plane::collinearNormal(const glm::vec3& _normal) {
     return false;
 }
 
-SIDE Plane::classifyPoint(const glm::vec3& point) {
+SIDE Plane::classifyPoint(const glm::vec3& point) const {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     glm::vec3 dir = this->point - point;
     float clipTest = glm::dot(dir, this->normal);
@@ -53,7 +53,7 @@ SIDE Plane::classifyPoint(const glm::vec3& point) {
     return SIDE::CP_BACK;
 }
 
-SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest) {
+SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest) const {
     // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     unsigned short infront = 0;
     unsigned short behind = 0;
@@ -93,7 +93,7 @@ SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::ve
     return SIDE::CP_SPANNING;
 }
 
-bool Plane::intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm::vec3* intersection, float* percentage) {
+bool Plane::intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm::vec3* intersection, float* percentage) const {
 
     glm::vec3 direction = lineend - linestart;
     float linelength = glm::dot(direction, this->normal);
@@ -114,8 +114,8 @@ bool Plane::intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm:
     return true;
 }
 
-bool Plane::AABBBehind(const glm::vec3* AABBVertices) { return glm::dot(normal, AABBVertices[O]) < ND; }
+bool Plane::AABBBehind(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]) < ND; }
 
-float Plane::AABBDistance(const glm::vec3* AABBVertices) { return glm::dot(normal, AABBVertices[O]); }
+float Plane::AABBDistance(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]); }
 
 } // namespace Chimera

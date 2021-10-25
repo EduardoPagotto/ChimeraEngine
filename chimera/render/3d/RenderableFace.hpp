@@ -19,7 +19,7 @@ class RenderableFace : public IRenderable3d {
     virtual uint32_t getSize() const override { return indexTris.size(); }
     virtual VertexArray* getVao() const override { return nullptr; };
     virtual IndexBuffer* getIBO() const override { return ibo; };
-    virtual AABB* getAABB() override { return &aabb; }
+    virtual const AABB& getAABB() const override { return aabb; }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual Entity getEntity() const override { return entity; }
 

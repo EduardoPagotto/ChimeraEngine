@@ -47,39 +47,34 @@ void Renderer3d::submit(const RenderCommand& command) {
     }
 
     // se nao ha AABB adicionar tudo
-    AABB* pAABB = command.renderable->getAABB();
-    if (pAABB == nullptr) {
-        commandQueue.push_back(command);
+    const AABB& aabb = command.renderable->getAABB();
+    Entity e = command.renderable->getEntity();
+    if (e) {
+        Transform& t = e.getComponent<Transform>();
+        AABB nova = aabb.transformation(t.getMatrix());
+
+        // adicione apenas o que esta no clip-space
+        if (nova.visible(frustum) == true) {
+
+            IndexBuffer* ibo = command.renderable->getIBO();
+            if (ibo != nullptr) {
+                totIBO++;
+                totFaces += ibo->getCount();
+            }
+
+            commandQueue.push_back(command);
+        }
     } else {
+        // adicione apenas o que esta no clip-space
+        if (aabb.visible(frustum) == true) {
 
-        Entity e = command.renderable->getEntity();
-        if (e) {
-            Transform& t = e.getComponent<Transform>();
-            AABB nova = pAABB->transformation(t.getMatrix());
-
-            // adicione apenas o que esta no clip-space
-            if (nova.visible(frustum) == true) {
-
-                IndexBuffer* ibo = command.renderable->getIBO();
-                if (ibo != nullptr) {
-                    totIBO++;
-                    totFaces += ibo->getCount();
-                }
-
-                commandQueue.push_back(command);
+            IndexBuffer* ibo = command.renderable->getIBO();
+            if (ibo != nullptr) {
+                totIBO++;
+                totFaces += ibo->getCount();
             }
-        } else {
-            // adicione apenas o que esta no clip-space
-            if (pAABB->visible(frustum) == true) {
 
-                IndexBuffer* ibo = command.renderable->getIBO();
-                if (ibo != nullptr) {
-                    totIBO++;
-                    totFaces += ibo->getCount();
-                }
-
-                commandQueue.push_back(command);
-            }
+            commandQueue.push_back(command);
         }
     }
 }

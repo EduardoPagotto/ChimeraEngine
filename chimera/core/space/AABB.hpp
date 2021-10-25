@@ -18,11 +18,11 @@ class AABB {
 
     bool intersects(const AABB& _aabb) const;
     bool contains(const glm::vec3& _point) const;
-    bool visible(Frustum& _frustum);
-    float distance(Frustum& _frustum);
-    void render();
+    bool visible(const Frustum& _frustum) const;
+    float distance(const Frustum& _frustum) const;
+    void render() const;
 
-    AABB transformation(const glm::mat4& transformation);
+    AABB transformation(const glm::mat4& transformation) const;
 
     inline glm::vec3 getMax() const { return vertex[7]; }
     inline glm::vec3 getMin() const { return vertex[0]; }

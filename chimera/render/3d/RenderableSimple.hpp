@@ -18,7 +18,7 @@ class RenderableSimple : public IRenderable3d {
     virtual uint32_t getSize() const override { return ibo->getCount(); }
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return ibo; }
-    virtual AABB* getAABB() override { return &aabb; }
+    virtual const AABB& getAABB() const override { return aabb; }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual Entity getEntity() const override { return entity; }
 

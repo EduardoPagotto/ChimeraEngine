@@ -1,19 +1,14 @@
 #include "Game.hpp"
 #include "chimera/core/CameraFPS.hpp"
-#include "chimera/core/CameraOrbit.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/core/TextureManager.hpp"
 #include "chimera/core/Transform.hpp"
-#include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/3d/RenderableChunk.hpp"
-#include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/partition/LoadHeightMap.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
-#include "chimera/render/scene/Entity.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
 

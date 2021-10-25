@@ -3,7 +3,6 @@
 
 #include "chimera/core/Application.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/render/partition/BSPTree.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 class Game : public Chimera::Application {
@@ -15,7 +14,6 @@ class Game : public Chimera::Application {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    Chimera::BspTree bspTree;
     Chimera::Renderer3d render3d;
     Chimera::Scene activeScene;
 };

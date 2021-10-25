@@ -1,7 +1,5 @@
 #include "Game.hpp"
 #include "chimera/core/CameraOrbit.hpp"
-#include "chimera/core/Exception.hpp"
-#include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
 #include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/partition/LoadObj.hpp"

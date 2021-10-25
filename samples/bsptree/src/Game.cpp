@@ -1,18 +1,13 @@
 #include "Game.hpp"
 #include "chimera/core/CameraOrbit.hpp"
-#include "chimera/core/Exception.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/TextureManager.hpp"
-#include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/core/io/utils.hpp"
-#include "chimera/core/space/AABB.hpp"
-#include "chimera/render/3d/RenderableSimple.hpp"
+#include "chimera/render/partition/BSPTree.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/partition/Maze.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
-#include <algorithm>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
 Game::~Game() {}
@@ -92,6 +87,8 @@ void Game::onStart() {
         maze.createMap();
 
         vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
+
+        BspTree bspTree;
         bspTree.create(vVertexIndexed, vIndex);
 
         RenderableBsp* r = new RenderableBsp(renderableEntity, bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());

@@ -2,13 +2,13 @@
 #define __CHIMERA_RENDERABLE_CHUNK__HPP
 
 #include "chimera/core/buffers/VertexArray.hpp"
-#include "chimera/render/3d/RenderableFace.hpp"
+#include "chimera/render/3d/RenderableSimple.hpp"
 
 namespace Chimera {
 
 class RenderableChunk : public IRenderable3d {
   public:
-    RenderableChunk(Entity entity, std::vector<RenderableFace*>& vpLeafData, std::vector<VertexData>& vertexData);
+    RenderableChunk(Entity entity, std::vector<RenderableSimple*>& vpLeafData, std::vector<VertexData>& vertexData);
     ~RenderableChunk();
 
     virtual void submit(ICamera* Icamera, RenderCommand& command, IRenderer3d* renderer) override;
@@ -21,7 +21,7 @@ class RenderableChunk : public IRenderable3d {
 
   private:
     VertexArray* vao;
-    std::vector<RenderableFace*> vpLeaf;
+    std::vector<RenderableSimple*> vpLeaf;
     std::vector<VertexData> vVertex;
     AABB aabb;
     uint32_t totIndex;

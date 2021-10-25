@@ -16,7 +16,7 @@ class BspTree {
 
     BSPTreeNode* getRoot() const { return root; }
     std::vector<Chimera::VertexData>* getVertex() { return &vVertex; }
-    std::vector<RenderableFace*>* getLeafs() { return &vpLeaf; }
+    std::vector<RenderableSimple*>* getLeafs() { return &vpLeaf; }
 
   private:
     BSPTreeNode* build(std::list<Triangle*>& _vTriangle);
@@ -26,7 +26,7 @@ class BspTree {
 
     BSPTreeNode* root;
     std::vector<Chimera::VertexData> vVertex;
-    std::vector<RenderableFace*> vpLeaf;
+    std::vector<RenderableSimple*> vpLeaf;
 };
 } // namespace Chimera
 #endif

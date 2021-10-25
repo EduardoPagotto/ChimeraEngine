@@ -1,11 +1,23 @@
 #include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
-#include <SDL2/SDL.h>
 
 namespace Chimera {
 
-RenderableSimple::RenderableSimple() {}
+RenderableSimple::RenderableSimple() : vao(nullptr), entity(Entity()) {}
+
+RenderableSimple::~RenderableSimple() {
+    if (vao) {
+        delete vao;
+        vao = nullptr;
+    }
+}
+
+void RenderableSimple::addTris(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc) { poligonIndex.addTris(_pa, _pb, _pc); }
+
+void RenderableSimple::initializeBuffer(VertexData* vertexData, const uint32_t& vertexSize) {
+    poligonIndex.initializeBuffer(vertexData, vertexSize);
+}
 
 void RenderableSimple::createBuffers(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize) {
 
@@ -27,26 +39,13 @@ void RenderableSimple::createBuffers(VertexData* vertexData, const uint32_t& ver
 
     vao->unbind();
 
-    ibo = new IndexBuffer(indexData, indexSize);
-
-    // init AABB
-    glm::vec3 min, max, size;
-    vertexDataIndexMinMaxSize(vertexData, vertexSize, indexData, indexSize, min, max, size);
-    aabb.setBoundary(min, max);
-}
-
-RenderableSimple::~RenderableSimple() {
-    delete vao;
-    delete ibo;
+    poligonIndex.addTrisEntire(indexData, indexSize);
+    poligonIndex.initializeBuffer(vertexData, vertexSize);
 }
 
 void RenderableSimple::setEntity(Entity entity) { this->entity = entity; }
 
 void RenderableSimple::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) { renderer->submit(command); }
 
-void RenderableSimple::debugDados() {
-    glm::vec3 size = this->aabb.getSize();
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "P[ %.2f, %.2f, %.2f]", size.x, size.y, size.z);
-    aabb.render();
-}
+void RenderableSimple::debugDados() { poligonIndex.debugDados(); }
 } // namespace Chimera

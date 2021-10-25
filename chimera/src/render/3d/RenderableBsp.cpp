@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<RenderableFace*>* vpLeafData,
+RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<RenderableSimple*>* vpLeafData,
                              std::vector<VertexData>* vertexData)
     : root(root), totIndex(0) {
 
@@ -30,9 +30,9 @@ RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<Rende
     vbo->unbind();
 
     uint32_t totIndex = 0;
-    for (RenderableFace* pLeaf : this->vpLeaf) {
-        pLeaf->initAABB(&vVertex[0], vVertex.size()); // initialize AABB's
-        pLeaf->initIndexBufferObject();               // create IBO's
+    for (RenderableSimple* pLeaf : this->vpLeaf) {
+
+        pLeaf->initializeBuffer(&vVertex[0], vVertex.size());
         pLeaf->debugDados();
         totIndex += pLeaf->getSize();
     }
@@ -53,6 +53,7 @@ void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
         return;
 
     auto pLeaf = vpLeaf[tree->leafIndex];
+    command->renderable = pLeaf;
     pLeaf->submit(camera, *command, this->renderer);
 }
 
@@ -101,7 +102,7 @@ void RenderableBsp::destroy() {
 
     while (!vpLeaf.empty()) {
 
-        RenderableFace* pLeaf = vpLeaf.back();
+        RenderableSimple* pLeaf = vpLeaf.back();
         vpLeaf.pop_back();
 
         delete pLeaf;

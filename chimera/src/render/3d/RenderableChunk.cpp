@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-RenderableChunk::RenderableChunk(Entity entity, std::vector<RenderableFace*>& vpLeafData, std::vector<VertexData>& vertexData)
+RenderableChunk::RenderableChunk(Entity entity, std::vector<RenderableSimple*>& vpLeafData, std::vector<VertexData>& vertexData)
     : totIndex(0) {
 
     this->entity = entity;
@@ -30,9 +30,8 @@ RenderableChunk::RenderableChunk(Entity entity, std::vector<RenderableFace*>& vp
 
     vao->push(vbo);
 
-    for (RenderableFace* pLeaf : this->vpLeaf) {
-        pLeaf->initAABB(&vVertex[0], vVertex.size()); // initialize AABB's
-        pLeaf->initIndexBufferObject();               // create IBO's
+    for (RenderableSimple* pLeaf : this->vpLeaf) {
+        pLeaf->initializeBuffer(&vVertex[0], vVertex.size());
         pLeaf->debugDados();
         totIndex += pLeaf->getSize();
     }
@@ -69,7 +68,7 @@ void RenderableChunk::submit(ICamera* camera, RenderCommand& command, IRenderer3
 
     renderer->submit(command);
 
-    for (RenderableFace* pNode : vpLeaf) {
+    for (RenderableSimple* pNode : vpLeaf) {
         command.renderable = pNode;
         renderer->submit(command);
     }

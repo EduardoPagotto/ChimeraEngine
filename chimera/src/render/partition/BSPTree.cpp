@@ -258,12 +258,12 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
 void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTriangle) {
 
-    RenderableFace* pLeaf = new RenderableFace();
+    RenderableSimple* pLeaf = new RenderableSimple();
 
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();
         listConvexTriangle.pop_back();
-        pLeaf->addFace(convPoly->p[0], convPoly->p[1], convPoly->p[2]);
+        pLeaf->addTris(convPoly->p[0], convPoly->p[1], convPoly->p[2]);
 
         delete convPoly;
         convPoly = nullptr;

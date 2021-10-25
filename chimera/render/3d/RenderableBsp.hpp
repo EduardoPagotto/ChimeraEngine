@@ -3,7 +3,7 @@
 
 #include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
-#include "chimera/render/3d/RenderableFace.hpp"
+#include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/partition/BSPTreeNode.hpp"
 #include <vector>
 
@@ -11,7 +11,7 @@ namespace Chimera {
 
 class RenderableBsp : public IRenderable3d {
   public:
-    RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<RenderableFace*>* vpLeafData, std::vector<VertexData>* vertexData);
+    RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<RenderableSimple*>* vpLeafData, std::vector<VertexData>* vertexData);
     virtual ~RenderableBsp();
     virtual void debugDados() override;
     virtual uint32_t getSize() const { return totIndex; }
@@ -34,7 +34,7 @@ class RenderableBsp : public IRenderable3d {
     BSPTreeNode* root;
     VertexArray* vao;
     bool logdata;
-    std::vector<RenderableFace*> vpLeaf;
+    std::vector<RenderableSimple*> vpLeaf;
     std::vector<VertexData> vVertex;
     AABB aabb;
     ICamera* camera;

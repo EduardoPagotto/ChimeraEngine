@@ -17,9 +17,9 @@ set (RenderSource 	vbs/RenderableStatic.cpp
 					2d/layer/Layer.cpp
 					2d/layer/Group.cpp
 					2d/Label.cpp
+					3d/PolygonIndex.cpp
 					3d/Renderer3d.cpp
 					3d/RenderableSimple.cpp
-					3d/RenderableFace.cpp
 					3d/RenderableChunk.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp

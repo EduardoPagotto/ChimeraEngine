@@ -13,20 +13,15 @@ class Scene {
   public:
     Scene();
     virtual ~Scene();
-
-    void addLight(Light* light) { lightSetupStack.push_back(light); }
-    void setCamera(ICamera* camera) { this->camera = camera; }
-
     Entity createEntity(const std::string& name = std::string());
     void destroyEntity(Entity entity);
+    void addLight(Light* light) { lightSetupStack.push_back(light); }
+    void setCamera(ICamera* camera) { this->camera = camera; }
+    void onViewportResize(uint32_t width, uint32_t height);
+    void render(IRenderer3d& renderer);
     void onUpdate(float ts);
-
     void onCreate();
     void onDestroy();
-
-    void onViewportResize(uint32_t width, uint32_t height);
-
-    void render(IRenderer3d& renderer);
 
   protected:
     uint32_t viewportWidth, viewportHeight;

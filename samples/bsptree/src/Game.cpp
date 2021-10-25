@@ -39,34 +39,6 @@ void Game::onStart() {
 
     {
         Entity renderableEntity = activeScene.createEntity("Renderable Entity");
-        Shader& shader = renderableEntity.addComponent<Shader>();
-        Material& material = renderableEntity.addComponent<Material>();
-        Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
-
-        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
-
-        // material.setDefaultEffect();
-        // material.setShine(50.0f);
-        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TextureParameters());
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
-        material.init();
-
-        std::vector<uint32_t> vIndex;
-        std::vector<VertexData> vVertexIndexed;
-
-        // Usando o Maze
-        Maze maze = Maze("./assets/maps/maze7.txt");
-        maze.createMap();
-
-        vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
-        bspTree.create(vVertexIndexed, vIndex);
-
-        RenderableBsp* r = new RenderableBsp(renderableEntity, bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
-        rc.renderable = r;
-    }
-
-    {
-        Entity renderableEntity = activeScene.createEntity("Renderable Entity");
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
@@ -96,6 +68,34 @@ void Game::onStart() {
         rc.renderable = r;
 
         material.init();
+    }
+
+    {
+        Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+        Shader& shader = renderableEntity.addComponent<Shader>();
+        Material& material = renderableEntity.addComponent<Material>();
+        Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
+
+        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
+
+        // material.setDefaultEffect();
+        // material.setShine(50.0f);
+        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TextureParameters());
+        material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        material.init();
+
+        std::vector<uint32_t> vIndex;
+        std::vector<VertexData> vVertexIndexed;
+
+        // Usando o Maze
+        Maze maze = Maze("./assets/maps/maze7.txt");
+        maze.createMap();
+
+        vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
+        bspTree.create(vVertexIndexed, vIndex);
+
+        RenderableBsp* r = new RenderableBsp(renderableEntity, bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+        rc.renderable = r;
     }
 
     activeScene.onViewportResize(canvas->getWidth(), canvas->getHeight());

@@ -14,7 +14,7 @@ class Eye {
     Eye(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader);
     virtual ~Eye();
     inline float getAspectRatio() const { return (float(width)) / ((float)height); }
-    void displayTexture();
+    void renderText();
     void bind();
     void unbind();
 

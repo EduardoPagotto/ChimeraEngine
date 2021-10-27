@@ -39,8 +39,8 @@ void CanvasHmd::before(const unsigned short& _indexEye) {
 void CanvasHmd::swapWindow() {
 
     CanvasGL::before();
-    pLeft->displayTexture();
-    pRight->displayTexture();
+    pLeft->renderText();
+    pRight->renderText();
     CanvasGL::swapWindow();
 }
 

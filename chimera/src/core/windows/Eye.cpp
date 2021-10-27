@@ -31,7 +31,7 @@ void Eye::bind() { frameBuffer->bind(); }
 
 void Eye::unbind() { frameBuffer->unbind(); }
 
-void Eye::displayTexture() {
+void Eye::renderText() {
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
     glViewport(posX, posY, width, height);
 

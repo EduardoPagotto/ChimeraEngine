@@ -81,6 +81,7 @@ void Renderer3d::submit(const RenderCommand& command) {
 
 void Renderer3d::flush() {
 
+    Shader activeShader;
     VertexArray* pLastVao = nullptr;
     while (!commandQueue.empty()) {
 

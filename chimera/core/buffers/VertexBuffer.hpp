@@ -24,7 +24,7 @@ class VertexBuffer {
     void* map();
     void unmap();
     void bind() const;
-    void unbind() const;
+    static void unbind();
     // se nao existir IBO new rander pelo VAO
     // inline void render() const { glDrawArrays(GL_TRIANGLES, 0, this->size); }
   private:

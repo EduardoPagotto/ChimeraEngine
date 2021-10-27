@@ -49,6 +49,6 @@ void VertexBuffer::unmap() { glUnmapBuffer(GL_ARRAY_BUFFER); }
 
 void VertexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, bufferID); }
 
-void VertexBuffer::unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+void VertexBuffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 } // namespace Chimera

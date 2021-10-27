@@ -11,7 +11,7 @@ class VertexArray {
     virtual ~VertexArray();
     void push(VertexBuffer* buffer);
     void bind() const;
-    void unbind() const;
+    static void unbind();
     inline VertexBuffer* getBuffer(const uint32_t& index) const { return vbos[index]; }
     inline VertexBuffer* getLast() const { return vbos.back(); }
 

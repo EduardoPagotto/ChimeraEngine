@@ -1,5 +1,6 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/Transform.hpp"
+#include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -8,7 +9,7 @@
 
 namespace Chimera {
 
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640) {}
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), renderBuffer(nullptr) {}
 Scene::~Scene() {}
 
 void Scene::onDestroy() {
@@ -77,6 +78,15 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
             cameraComponent.camera->setAspectRatio(width, height);
         }
     }
+
+    if (renderBuffer) {
+        delete renderBuffer;
+        renderBuffer = nullptr;
+    }
+
+    Shader shader;
+    ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
+    renderBuffer = new RenderBuffer(0, 0, width, height, shader);
 }
 
 void Scene::render(IRenderer3d& renderer) {
@@ -88,8 +98,8 @@ void Scene::render(IRenderer3d& renderer) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
-    // camera->recalculateMatrix(canvas->getRatio());// ainda nao sei o que fazer aqui
-    glViewport(0, 0, viewportWidth, viewportHeight);
+    renderBuffer->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
 
     renderer.begin(camera);
 
@@ -121,6 +131,14 @@ void Scene::render(IRenderer3d& renderer) {
 
     renderer.end();
     renderer.flush();
+
+    renderBuffer->unbind();
+
+    // VertexArray::unbind();
+    // VertexBuffer::unbind();
+    // Shader::disable();
+
+    renderBuffer->renderText();
 
     // this->onUpdate(0.01); // atualiza camera e script de camera
 

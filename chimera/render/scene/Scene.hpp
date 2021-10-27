@@ -2,6 +2,7 @@
 #define __CHIMERA_SCENE_ZZ1__HPP
 
 #include "chimera/core/ICamera.hpp"
+#include "chimera/core/buffers/RenderBuffer.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/Light.hpp"
 #include <entt/entt.hpp>
@@ -30,8 +31,10 @@ class Scene {
     friend class Entity;
 
   private:
+    // Shader shader;
     std::vector<Light*> lightSetupStack;
     ICamera* camera;
+    RenderBuffer* renderBuffer;
 };
 
 } // namespace Chimera

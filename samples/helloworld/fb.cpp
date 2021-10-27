@@ -25,13 +25,13 @@ static void CreateTextures(bool multisampled, uint32_t* outID, uint32_t count) {
 
 static void bindTexture(bool multisampled, uint32_t id) { glBindTexture(TextureTarget(multisampled), id); }
 
-static void AttachColorTexture(uint32_t id, int samples, GLenum format, uint32_t width, uint32_t height, int index) {
+static void AttachColorTexture(uint32_t id, int samples, GLenum internalFormat, GLenum format, uint32_t width, uint32_t height, int index) {
 
     bool multisampled = samples > 1;
     if (multisampled) {
-        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, internalFormat, width, height, GL_FALSE);
     } else {
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -60,6 +60,18 @@ static void AttachDepthTexture(uint32_t id, int samples, GLenum format, GLenum a
     }
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, attachementType, TextureTarget(multisampled), id, 0);
+}
+
+static GLenum ChimeraTextureFormatToGL(FramebufferTextureFormat format) {
+    switch (format) {
+        case FramebufferTextureFormat::RGBA8:
+            return GL_RGBA8;
+        case FramebufferTextureFormat::RED_INTEGER:
+            return GL_RED_INTEGER;
+        default:
+            break;
+    }
+    return GL_NONE; // TODO: colocar indicacao de erro
 }
 
 } // namespace Utils
@@ -118,9 +130,11 @@ void Framebuffer::invalidade() {
 
             switch (colorAttachmentSpecifications[i].textureFormat) {
                 case FramebufferTextureFormat::RGBA8:
-                    Utils::AttachColorTexture(colorAttachments[i], spec.samples, GL_RGBA8, spec.width, spec.heigh, i);
+                    Utils::AttachColorTexture(colorAttachments[i], spec.samples, GL_RGBA8, GL_RGBA, spec.width, spec.heigh, i);
                     break;
-
+                case FramebufferTextureFormat::RED_INTEGER: // criado para mapear no canal RED o valot do entt id
+                    Utils::AttachColorTexture(colorAttachments[i], spec.samples, GL_R32I, GL_RED_INTEGER, spec.width, spec.heigh, i);
+                    break;
                 default:
                     break;
             }
@@ -182,6 +196,9 @@ void Framebuffer::invalidade() {
 void Framebuffer::bind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, renderID);
     glViewport(0, 0, spec.width, spec.heigh);
+
+    int value = -1; // vazio ja que entt comeca com 0
+    glClearTexImage(colorAttachments[1], 0, GL_RED_INTEGER, GL_INT, &value);
 }
 
 void Framebuffer::unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
@@ -196,4 +213,19 @@ void Framebuffer::resize(const uint32_t& width, const uint32_t& heigh) {
     spec.width = width;
     spec.heigh = heigh;
     this->invalidade();
+}
+
+int Framebuffer::readPixel(uint32_t attachmentIndex, int x, int y) {
+
+    int pixelData = 0;
+    glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+    glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+
+    return pixelData;
+}
+
+void Framebuffer::clearAttachment(uint32_t attachmentIndex, const int value) {
+
+    auto& spec = colorAttachmentSpecifications[attachmentIndex];
+    glClearTexImage(colorAttachments[attachmentIndex], 0, Utils::ChimeraTextureFormatToGL(spec.textureFormat), GL_INT, &value);
 }

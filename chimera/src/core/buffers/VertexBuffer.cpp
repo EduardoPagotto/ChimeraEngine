@@ -29,7 +29,7 @@ void VertexBuffer::setLayout(const BufferLayout& bufferLayout) { // bind antes n
 
         const BufferElement& element = elements[i];
         glEnableVertexAttribArray(i);
-        if (elements.size() > 1)
+        if (elements.size() > 1) // FIXME: se componente for diferente de floatprecisa usar outro (ex: glVertexAttribIPointer, para int)
             glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), BUFFER_OFFSET(element.offset));
         else
             glVertexAttribPointer(i, element.count, element.type, element.normalized, 0, BUFFER_OFFSET(0));

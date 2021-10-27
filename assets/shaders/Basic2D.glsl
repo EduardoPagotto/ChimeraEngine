@@ -32,6 +32,8 @@ void main() {
 #version 440 core
 
 layout(location = 0) out vec4 color;
+layout(location = 1) out int color2; // cor que sera o entity (este é o segundo buffer o 0 é o screem)
+                                     // ou passar pelo uniform no calldraw
 
 uniform vec4 colour;
 uniform vec2 light_pos;
@@ -57,4 +59,5 @@ void main() {
     }
 
     color = textColor * intensity;
+    color2 = 50;
 }

@@ -5,9 +5,8 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/2d/layer/Group.hpp"
 #include "chimera/render/FontManager.hpp"
-#include <time.h>
-
 #include "fb.hpp"
+#include <time.h>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
@@ -35,10 +34,13 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 Game::~Game() {}
 
 void Game::onStart() {
-    using namespace Chimera; // 56:04 -> https://www.youtube.com/watch?v=f-GbHye1VFQ&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=95
+    using namespace Chimera; // 26:10 -> https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96 (video
+                             // 96)
+                             // video 103 finaliza o pick mouse
+                             // colocar para rodar o scene como renderbuffer!!!!!!!!!
 
     FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth};
+    fbSpec.attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth};
     fbSpec.width = 1280;
     fbSpec.heigh = 720;
 

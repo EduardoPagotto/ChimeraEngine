@@ -7,6 +7,8 @@
 #include "chimera/render/FontManager.hpp"
 #include <time.h>
 
+#include "fb.hpp"
+
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     using namespace Chimera;
@@ -33,7 +35,14 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 Game::~Game() {}
 
 void Game::onStart() {
-    using namespace Chimera;
+    using namespace Chimera; // 56:04 -> https://www.youtube.com/watch?v=f-GbHye1VFQ&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=95
+
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth};
+    fbSpec.width = 1280;
+    fbSpec.heigh = 720;
+
+    Framebuffer* fb = new Framebuffer(fbSpec);
 
     ShaderManager::load("./assets/shaders/Basic2D.glsl", shader);
 

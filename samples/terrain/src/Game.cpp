@@ -84,7 +84,7 @@ void Game::onStart() {
 
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
+        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader); // colocar shader em material
 
         MeshData mesh;
         int ret = 0;

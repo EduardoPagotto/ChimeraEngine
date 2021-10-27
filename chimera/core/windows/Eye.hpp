@@ -11,23 +11,18 @@ namespace Chimera {
 
 class Eye {
   public:
-    Eye(const unsigned short& _indexEye, const int& _w, const int& _h, Shader* _pShader);
+    Eye(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader);
     virtual ~Eye();
+    inline float getAspectRatio() const { return (float(width)) / ((float)height); }
     void displayTexture();
     void bind();
     void unbind();
 
-    SDL_Rect fbTexGeo;
-
   private:
-    unsigned int posInitW;
-    GLuint texID;
+    uint32_t posX, posY, width, height;
+    Shader shader;
     VertexBuffer* vbo;
-    Shader* pShader;
     FrameBuffer* frameBuffer;
-
-    void createSquare();
-    unsigned int next_pow2(unsigned int x);
 };
 } // namespace Chimera
 #endif

@@ -15,7 +15,8 @@ FrameBuffer::FrameBuffer(const uint16_t& width, const uint16_t& height) : width(
     glBindFramebuffer(GL_FRAMEBUFFER, framBufferID);
 
     // pass 2 create textura that will be used as a color buffer // renderedTexture => texture
-    TextureParameters params(TextureFormat::RGBA, TextureFilter::LINEAR, TextureWrap::CLAMP, TextureDataType::UNSIGNED_BYTE);
+    TextureParameters params(TextureFormat::RGBA, TextureFormat::RGBA, TextureFilter::LINEAR, TextureWrap::CLAMP,
+                             TextureDataType::UNSIGNED_BYTE);
     texture = new Texture("", width, height, params);
 
     // pass 3  // The depth buffer // depthrenderbuffer => fb_depth

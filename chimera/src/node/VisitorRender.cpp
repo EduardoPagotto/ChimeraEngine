@@ -126,8 +126,7 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
             cameraScene->recalculateMatrix(false);
         } else {
             Eye* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
-            glViewport(0, 0, pEye->fbTexGeo.w, pEye->fbTexGeo.h);
-            cameraScene->setAspectRatio(pEye->fbTexGeo.w, pEye->fbTexGeo.h);
+            cameraScene->setAspectRatio(pEye->getAspectRatio());
             if (eye == 0) { // right
                 cameraScene->recalculateMatrix(false);
             } else { // left

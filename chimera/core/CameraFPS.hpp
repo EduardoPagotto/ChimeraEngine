@@ -32,6 +32,7 @@ class CameraFPS : public ICamera {
     virtual void setPosition(const glm::vec3& position) override { this->position = position; }
     virtual void invertPitch() override;
     virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) override { aspectRatio = (float)width / (float)height; }
+    virtual void setAspectRatio(const float& value) override { aspectRatio = value; }
     virtual void updateVectors() override;
 
   private:

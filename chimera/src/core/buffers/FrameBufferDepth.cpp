@@ -5,7 +5,8 @@ namespace Chimera {
 
 FrameBufferDepth::FrameBufferDepth(const uint16_t& width, const uint16_t& height) : width(width), height(height) {
 
-    TextureParameters td(TextureFormat::DEPTH_COMPONENT, TextureFilter::NEAREST, TextureWrap::CLAMP_TO_BORDER, TextureDataType::FLOAT);
+    TextureParameters td(TextureFormat::DEPTH_COMPONENT, TextureFormat::DEPTH_COMPONENT, TextureFilter::NEAREST,
+                         TextureWrap::CLAMP_TO_BORDER, TextureDataType::FLOAT);
     texture = new Texture("", width, height, td);
 
     GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};

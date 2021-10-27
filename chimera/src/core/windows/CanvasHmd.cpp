@@ -2,10 +2,23 @@
 
 namespace Chimera {
 
+static unsigned int next_pow2(unsigned int x) {
+    x -= 1;
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    return x + 1;
+}
+
 CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : CanvasGL(_title, _width * 2, _height, false) {
     ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
-    pLeft = new Eye(0, _width, _height, &shader);
-    pRight = new Eye(1, _width, _height, &shader);
+
+    unsigned int w1 = next_pow2(_width);
+    unsigned int h1 = next_pow2(_height);
+    pLeft = new Eye(0, 0, w1, h1, shader);
+    pRight = new Eye(w1, 0, w1, h1, shader);
 }
 
 CanvasHmd::~CanvasHmd() {

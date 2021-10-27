@@ -27,6 +27,7 @@ class ICamera {
     virtual void setNear(const float& value) = 0;
     virtual void setFar(const float& value) = 0;
     virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) = 0;
+    virtual void setAspectRatio(const float& value) = 0;
     virtual void processInput(float deltaTime) = 0; // FIXME: achar outra saida!!
     virtual void updateVectors() = 0;
 };

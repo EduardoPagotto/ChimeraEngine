@@ -196,9 +196,6 @@ void Framebuffer::invalidade() {
 void Framebuffer::bind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, renderID);
     glViewport(0, 0, spec.width, spec.heigh);
-
-    int value = -1; // vazio ja que entt comeca com 0
-    glClearTexImage(colorAttachments[1], 0, GL_RED_INTEGER, GL_INT, &value);
 }
 
 void Framebuffer::unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); }

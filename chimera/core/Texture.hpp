@@ -23,26 +23,34 @@ enum class TextureFormat {
     RGBA = GL_RGBA,
     LUMINANCE = GL_LUMINANCE,
     LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA,
-    DEPTH_COMPONENT = GL_DEPTH_COMPONENT
+    DEPTH_COMPONENT = GL_DEPTH_COMPONENT,
+    // novos
+    RGBA8 = GL_RGBA8,
+    DEPTH24STENCIL8 = GL_DEPTH24_STENCIL8,
+    RED_INTEGER = GL_RED_INTEGER
 };
 
 enum class TextureDataType { UNSIGNED_BYTE = GL_UNSIGNED_BYTE, UNSIGNED_SHORT = GL_UNSIGNED_SHORT, FLOAT = GL_FLOAT };
 
 struct TextureParameters {
     TextureFormat format;
+    TextureFormat internalFormat;
     TextureFilter filter;
     TextureWrap wrap;
     TextureDataType type;
+    int samples;
 
     TextureParameters() {
         format = TextureFormat::RGBA;
+        internalFormat = TextureFormat::RGBA;
         filter = TextureFilter::NEAREST;
         wrap = TextureWrap::REPEAT;
         type = TextureDataType::UNSIGNED_BYTE;
+        samples = 1;
     }
 
-    TextureParameters(TextureFormat format, TextureFilter filter, TextureWrap wrap, TextureDataType type)
-        : format(format), filter(filter), wrap(wrap), type(type) {}
+    TextureParameters(TextureFormat format, TextureFormat internalFormat, TextureFilter filter, TextureWrap wrap, TextureDataType type)
+        : format(format), internalFormat(internalFormat), filter(filter), wrap(wrap), type(type), samples(1) {}
 
     // TextureParameters(TextureFilter filter) : format(TextureFormat::RGBA), filter(filter), wrap(TextureWrap::CLAMP) {}
     // TextureParameters(TextureFilter filter, TextureWrap wrap) : format(TextureFormat::RGBA), filter(filter), wrap(wrap) {}

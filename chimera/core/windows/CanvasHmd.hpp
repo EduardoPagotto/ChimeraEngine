@@ -2,7 +2,7 @@
 #define __CHIMERA_CANVAS_HDM__HPP
 
 #include "CanvasGL.hpp"
-#include "Eye.hpp"
+#include "chimera/core/buffers/RenderBuffer.hpp"
 
 namespace Chimera {
 
@@ -15,11 +15,11 @@ class CanvasHmd : public CanvasGL {
     virtual void after(const unsigned short& _indexEye = 0);
     virtual void swapWindow();
     virtual int getTotEyes() { return 2; }
-    Eye* getEye(const unsigned short& _indexEye = 0) { return (_indexEye == 0) ? pLeft : pRight; }
+    // RenderBuffer* getEye(const unsigned short& _indexEye = 0) { return (_indexEye == 0) ? pLeft : pRight; }
 
   private:
-    Eye* pLeft;
-    Eye* pRight;
+    RenderBuffer* pLeft;
+    RenderBuffer* pRight;
     Shader shader;
 };
 } // namespace Chimera

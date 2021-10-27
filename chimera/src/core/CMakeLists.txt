@@ -32,6 +32,7 @@ set (SourcesCore windows/CanvasGL.cpp
 				 buffers/VertexArray.cpp
 				 buffers/FrameBuffer.cpp
 				 buffers/FrameBufferDepth.cpp
+				 buffers/RenderBuffer.cpp
 				 Texture.cpp
 				 TextureManager.cpp
 				 CameraFPS.cpp
@@ -55,7 +56,7 @@ set (IncludeCoreAux ${OPENGL_INCLUDE_DIR}
 if (HMD_Z1_SET_TO_USE)
 	message(STATUS "HMD_Z1 Incluido no Projeto")
 	set(SourcesCore ${SourcesCore} windows/CanvasHmd.cpp) #adiciona o cpp
-	set(SourcesCore ${SourcesCore} windows/Eye.cpp) #adiciona o cpp
+	#set(SourcesCore ${SourcesCore} buffers/RenderBuffer.cpp) #adiciona o cpp
 endif(HMD_Z1_SET_TO_USE)
 
 # Define o Target

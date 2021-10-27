@@ -125,8 +125,8 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
             cameraScene->setAspectRatio(pVideo->getWidth(), pVideo->getHeight());
             cameraScene->recalculateMatrix(false);
         } else {
-            Eye* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
-            cameraScene->setAspectRatio(pEye->getAspectRatio());
+            // RenderBuffer* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
+            // cameraScene->setAspectRatio(pEye->getAspectRatio());
             if (eye == 0) { // right
                 cameraScene->recalculateMatrix(false);
             } else { // left

@@ -1,9 +1,9 @@
-#include "chimera/core/windows/Eye.hpp"
+#include "chimera/core/buffers/RenderBuffer.hpp"
 #include "chimera/core/Exception.hpp"
 
 namespace Chimera {
 
-Eye::Eye(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader)
+RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader)
     : posX(posX), posY(posY), width(width), height(height), shader(shader), frameBuffer(nullptr), vbo(nullptr) {
 
     frameBuffer = new FrameBuffer(width, height);
@@ -22,16 +22,16 @@ Eye::Eye(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint
     vbo->unbind();
 }
 
-Eye::~Eye() {
+RenderBuffer::~RenderBuffer() {
     delete frameBuffer;
     delete vbo;
 }
 
-void Eye::bind() { frameBuffer->bind(); }
+void RenderBuffer::bind() { frameBuffer->bind(); }
 
-void Eye::unbind() { frameBuffer->unbind(); }
+void RenderBuffer::unbind() { frameBuffer->unbind(); }
 
-void Eye::renderText() {
+void RenderBuffer::renderText() {
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
     glViewport(posX, posY, width, height);
 

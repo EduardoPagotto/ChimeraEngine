@@ -17,8 +17,8 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : Canva
 
     unsigned int w1 = next_pow2(_width);
     unsigned int h1 = next_pow2(_height);
-    pLeft = new Eye(0, 0, w1, h1, shader);
-    pRight = new Eye(w1, 0, w1, h1, shader);
+    pLeft = new RenderBuffer(0, 0, w1, h1, shader);
+    pRight = new RenderBuffer(w1, 0, w1, h1, shader);
 }
 
 CanvasHmd::~CanvasHmd() {

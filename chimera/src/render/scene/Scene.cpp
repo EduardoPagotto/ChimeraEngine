@@ -84,6 +84,27 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         renderBuffer = nullptr;
     }
 
+    // {
+    //     // TODO: Testar
+    //     FrameBufferSpecification fbSpec;
+    //     fbSpec.attachments = {TextureParameters(TextureFormat::RGBA, TextureFormat::RGBA, TextureFilter::LINEAR,
+    //     TextureWrap::CLAMP_TO_EDGE,
+    //                                             TextureDataType::UNSIGNED_BYTE),
+    //                           TextureParameters(TextureFormat::RED_INTEGER, TextureFormat::R32I, TextureFilter::LINEAR,
+    //                                             TextureWrap::CLAMP_TO_EDGE, // usado para pegar o mouse
+    //                                             TextureDataType::UNSIGNED_BYTE),
+    //                           TextureParameters(TextureFormat::DEPTH_COMPONENT, TextureFormat::NONE, TextureFilter::NONE,
+    //                           TextureWrap::NONE,
+    //                                             TextureDataType::UNSIGNED_BYTE)};
+    //     fbSpec.width = 800;
+    //     fbSpec.height = 600;
+    //     fbSpec.swapChainTarget = false;
+    //     fbSpec.samples = 1;
+
+    //     FrameBufferZ* fbz = new FrameBufferZ(fbSpec);
+    //     fbz->invalidade();
+    // }
+
     Shader shader;
     ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
     renderBuffer = new RenderBuffer(0, 0, width, height, shader);

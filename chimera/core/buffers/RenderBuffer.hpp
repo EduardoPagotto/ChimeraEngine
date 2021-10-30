@@ -13,13 +13,12 @@ class RenderBuffer {
   public:
     RenderBuffer(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader);
     virtual ~RenderBuffer();
-    inline float getAspectRatio() const { return (float(width)) / ((float)height); }
     void renderText();
     void bind();
     void unbind();
 
   private:
-    uint32_t posX, posY, width, height;
+    uint32_t posX, posY;
     Shader shader;
     VertexBuffer* vbo;
     FrameBuffer* frameBuffer;

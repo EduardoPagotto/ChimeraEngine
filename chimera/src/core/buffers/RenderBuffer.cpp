@@ -4,7 +4,7 @@
 namespace Chimera {
 
 RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader)
-    : posX(posX), posY(posY), width(width), height(height), shader(shader), frameBuffer(nullptr), vbo(nullptr) {
+    : posX(posX), posY(posY), shader(shader), frameBuffer(nullptr), vbo(nullptr) {
 
     FrameBufferSpecification fbSpec;
     fbSpec.attachments = {
@@ -43,7 +43,7 @@ void RenderBuffer::unbind() { frameBuffer->unbind(); }
 
 void RenderBuffer::renderText() {
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
-    glViewport(posX, posY, width, height);
+    glViewport(posX, posY, frameBuffer->getWidth(), frameBuffer->getHeight());
 
     // Clear the screen
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

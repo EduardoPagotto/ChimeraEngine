@@ -10,24 +10,23 @@ namespace Chimera {
 
 class Entity;
 class Scene {
+    friend class Entity;
+
   public:
     Scene();
     virtual ~Scene();
     Entity createEntity(const std::string& name = std::string());
     void destroyEntity(Entity entity);
-    void onViewportResize(uint32_t width, uint32_t height);
     void render(IRenderer3d& renderer);
     void onUpdate(float ts);
     void onCreate();
     void onDestroy();
 
-  protected:
-    uint32_t viewportWidth, viewportHeight;
-    entt::registry eRegistry;
-
-    friend class Entity;
+    void onViewportResize(uint32_t width, uint32_t height);
 
   private:
+    uint32_t viewportWidth, viewportHeight;
+    entt::registry eRegistry;
     // Shader shader;
     ICamera* camera;
     RenderBuffer* renderBuffer;

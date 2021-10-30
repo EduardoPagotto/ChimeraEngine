@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-enum class TextureWrap {
+enum class TexWrap {
     NONE = 0,
     REPEAT = GL_REPEAT,
     CLAMP = GL_CLAMP,
@@ -15,9 +15,9 @@ enum class TextureWrap {
     CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
 };
 
-enum class TextureFilter { NONE = 0, LINEAR = GL_LINEAR, NEAREST = GL_NEAREST };
+enum class TexFilter { NONE = 0, LINEAR = GL_LINEAR, NEAREST = GL_NEAREST };
 
-enum class TextureFormat {
+enum class TexFormat {
     NONE = 0,
     RGB = GL_RGB,
     RGBA = GL_RGBA,
@@ -32,51 +32,51 @@ enum class TextureFormat {
     R32I = GL_R32I
 };
 
-enum class TextureDataType { NONE = GL_NONE, UNSIGNED_BYTE = GL_UNSIGNED_BYTE, UNSIGNED_SHORT = GL_UNSIGNED_SHORT, FLOAT = GL_FLOAT };
+enum class TexDType { NONE = GL_NONE, UNSIGNED_BYTE = GL_UNSIGNED_BYTE, UNSIGNED_SHORT = GL_UNSIGNED_SHORT, FLOAT = GL_FLOAT };
 
-struct TextureParameters {
-    TextureFormat format;
-    TextureFormat internalFormat;
-    TextureFilter filter;
-    TextureWrap wrap;
-    TextureDataType type;
+struct TexParam {
+    TexFormat format;
+    TexFormat internalFormat;
+    TexFilter filter;
+    TexWrap wrap;
+    TexDType type;
     int samples;
 
-    TextureParameters() {
-        format = TextureFormat::RGBA;
-        internalFormat = TextureFormat::RGBA;
-        filter = TextureFilter::NEAREST;
-        wrap = TextureWrap::REPEAT;
-        type = TextureDataType::UNSIGNED_BYTE;
+    TexParam() {
+        format = TexFormat::RGBA;
+        internalFormat = TexFormat::RGBA;
+        filter = TexFilter::NEAREST;
+        wrap = TexWrap::REPEAT;
+        type = TexDType::UNSIGNED_BYTE;
         samples = 1;
     }
 
-    TextureParameters(TextureFormat format, TextureFormat internalFormat, TextureFilter filter, TextureWrap wrap, TextureDataType type)
+    TexParam(TexFormat format, TexFormat internalFormat, TexFilter filter, TexWrap wrap, TexDType type)
         : format(format), internalFormat(internalFormat), filter(filter), wrap(wrap), type(type), samples(1) {}
 
-    // TextureParameters(TextureFilter filter) : format(TextureFormat::RGBA), filter(filter), wrap(TextureWrap::CLAMP) {}
-    // TextureParameters(TextureFilter filter, TextureWrap wrap) : format(TextureFormat::RGBA), filter(filter), wrap(wrap) {}
+    // TexParam(TexFilter filter) : format(TexFormat::RGBA), filter(filter), wrap(TexWrap::CLAMP) {}
+    // TexParam(TexFilter filter, TexWrap wrap) : format(TexFormat::RGBA), filter(filter), wrap(wrap) {}
 };
 
 namespace Aux {
-static void textureParameterSetUndefined(TextureParameters& val) {
-    val.format = TextureFormat::NONE;
-    val.internalFormat = TextureFormat::NONE;
-    val.filter = TextureFilter::NONE;
-    val.wrap = TextureWrap::NONE;
-    val.type = TextureDataType::NONE;
+static void textureParameterSetUndefined(TexParam& val) {
+    val.format = TexFormat::NONE;
+    val.internalFormat = TexFormat::NONE;
+    val.filter = TexFilter::NONE;
+    val.wrap = TexWrap::NONE;
+    val.type = TexDType::NONE;
 }
 
-static bool textureParameterIsUndefined(const TextureParameters& val) {
-    return (val.format == TextureFormat::NONE && val.internalFormat == TextureFormat::NONE);
+static bool textureParameterIsUndefined(const TexParam& val) {
+    return (val.format == TexFormat::NONE && val.internalFormat == TexFormat::NONE);
 }
 
 } // namespace Aux
 
 class Texture {
   public:
-    Texture(const std::string& name, const unsigned& width, const unsigned& height, const TextureParameters& tp);
-    Texture(const std::string& name, SDL_Surface* surface, const TextureParameters& tp);
+    Texture(const std::string& name, const unsigned& width, const unsigned& height, const TexParam& tp);
+    Texture(const std::string& name, SDL_Surface* surface, const TexParam& tp);
     virtual ~Texture() { glDeleteTextures(1, (GLuint*)&idTexture); }
 
     inline unsigned getWidth() const { return width; }
@@ -91,7 +91,7 @@ class Texture {
     unsigned width, height;
     GLuint idTexture;
     std::string name;
-    TextureParameters textureParameters;
+    TexParam textureParameters;
 };
 
 } // namespace Chimera

@@ -26,9 +26,9 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     // group->add(button);
     // layer->add(group);
 
-    TextureManager::loadFromFile("t01", "./assets/textures/grid1.png", TextureParameters());
-    TextureManager::loadFromFile("t02", "./assets/textures/grid2.png", TextureParameters());
-    TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TextureParameters());
+    TextureManager::loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
+    TextureManager::loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
+    TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
 }
 
 Game::~Game() {}

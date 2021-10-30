@@ -6,10 +6,10 @@ namespace Chimera {
 
 namespace Aux {
 
-static bool isDepthFormat(TextureFormat format) {
+static bool isDepthFormat(TexFormat format) {
     switch (format) {
-        case TextureFormat::DEPTH_COMPONENT:
-        case TextureFormat::DEPTH24STENCIL8:
+        case TexFormat::DEPTH_COMPONENT:
+        case TexFormat::DEPTH24STENCIL8:
             return true;
         default:
             break;
@@ -27,15 +27,15 @@ FrameBufferZ::FrameBufferZ(const FrameBufferSpecification& spec) : spec(spec), f
     Aux::textureParameterSetUndefined(rboSpec);
     Aux::textureParameterSetUndefined(depthTexSpec);
 
-    for (const TextureParameters& texParm : spec.attachments) {
+    for (const TexParam& texParm : spec.attachments) {
 
         if (!Aux::isDepthFormat(texParm.format))
             colorTexSpecs.emplace_back(texParm); // color only
         else {
-            if (texParm.filter != TextureFilter::NONE) { // if has filter parameters them is a texture
-                depthTexSpec = texParm;                  // depth texture
-            } else                                       // else
-                rboSpec = texParm;                       // is a rbo
+            if (texParm.filter != TexFilter::NONE) { // if has filter parameters them is a texture
+                depthTexSpec = texParm;              // depth texture
+            } else                                   // else
+                rboSpec = texParm;                   // is a rbo
         }
     }
 
@@ -80,8 +80,8 @@ void FrameBufferZ::invalidade() {
         colorAttachments.reserve(colorTexSpecs.size());
 
         int index = 0;
-        for (const TextureParameters& textureParam : colorTexSpecs) {
-            // const TextureParameters& textureParam = cas.textureParameters;
+        for (const TexParam& textureParam : colorTexSpecs) {
+            // const TexParam& textureParam = cas.textureParameters;
 
             Texture* texture = new Texture("", spec.width, spec.height, textureParam);
             colorAttachments.emplace_back(texture);
@@ -119,14 +119,13 @@ void FrameBufferZ::invalidade() {
     // depth R.B.O.
     if (!Aux::textureParameterIsUndefined(rboSpec)) {
 
-        TextureFormat tf = rboSpec.format;          // GL_DEPTH_COMPONENT
-        TextureFormat tfi = rboSpec.internalFormat; // GL_DEPTH_ATTACHMENT
+        TexFormat tf = rboSpec.format;          // GL_DEPTH_COMPONENT
+        TexFormat tfi = rboSpec.internalFormat; // GL_DEPTH_ATTACHMENT
 
         glGenRenderbuffers(1, &rbo);
         glBindRenderbuffer(GL_RENDERBUFFER, rbo);
         glRenderbufferStorage(GL_RENDERBUFFER, (GLenum)tf, spec.width, spec.height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, (GLenum)tfi, GL_RENDERBUFFER,
-                                  rbo); // TODO conferir site outras possibilidades
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, (GLenum)tfi, GL_RENDERBUFFER, rbo);
     }
 
     // Always check that our framebuffer is ok
@@ -175,8 +174,8 @@ int FrameBufferZ::readPixel(uint32_t attachmentIndex, int x, int y) {
 
 void FrameBufferZ::clearAttachment(uint32_t attachmentIndex, const int value) {
 
-    const TextureParameters& tp = colorTexSpecs[attachmentIndex];
-    const TextureFormat& tf = tp.format;
+    const TexParam& tp = colorTexSpecs[attachmentIndex];
+    const TexFormat& tf = tp.format;
 
     glClearTexImage(colorAttachments[attachmentIndex]->getTextureID(), 0, (GLenum)tf, GL_INT, &value);
 }
@@ -190,8 +189,7 @@ FrameBuffer::FrameBuffer(const uint16_t& width, const uint16_t& height) : width(
     glBindFramebuffer(GL_FRAMEBUFFER, framBufferID);
 
     // pass 2 create textura that will be used as a color buffer // renderedTexture => texture
-    TextureParameters params(TextureFormat::RGBA, TextureFormat::RGBA, TextureFilter::LINEAR, TextureWrap::CLAMP,
-                             TextureDataType::UNSIGNED_BYTE);
+    TexParam params(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE);
     texture = new Texture("", width, height, params);
 
     // Pass 4 //Set "renderedTexture" as our colour attachement #0

@@ -121,10 +121,10 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
         nextX += glyph_cache->w;
     }
 
-    TextureParameters p;
-    p.format = TextureFormat::RGBA;
-    p.wrap = TextureWrap::CLAMP_TO_EDGE;
-    p.filter = TextureFilter::LINEAR;
+    TexParam p;
+    p.format = TexFormat::RGBA;
+    p.wrap = TexWrap::CLAMP_TO_EDGE;
+    p.filter = TexFilter::LINEAR;
 
     TextureManager::loadFromSurface(name, bigSurface, p);
 

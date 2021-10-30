@@ -75,7 +75,7 @@ void Game::onStart() {
 
         // material.setDefaultEffect();
         // material.setShine(50.0f);
-        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TextureParameters());
+        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam());
         material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
         material.init();
 

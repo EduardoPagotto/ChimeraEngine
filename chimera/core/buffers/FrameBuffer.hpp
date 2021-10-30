@@ -10,7 +10,7 @@ namespace Chimera {
 struct FrameBufferSpecification {
     FrameBufferSpecification() = default;
     uint32_t width = 800, height = 600;
-    std::vector<TextureParameters> attachments;
+    std::vector<TexParam> attachments;
     bool swapChainTarget = false;
     int samples = 1;
 };
@@ -39,9 +39,9 @@ class FrameBufferZ { // TODO: continuar daqui!!!!
 
     Texture* depthAttachment;
     std::vector<Texture*> colorAttachments;
-    std::vector<TextureParameters> colorTexSpecs;
-    TextureParameters rboSpec;
-    TextureParameters depthTexSpec;
+    std::vector<TexParam> colorTexSpecs;
+    TexParam rboSpec;
+    TexParam depthTexSpec;
 };
 
 class FrameBuffer : public IFrameBuffer {

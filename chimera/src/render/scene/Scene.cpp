@@ -87,12 +87,11 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
     {
         // TODO: Testar
         FrameBufferSpecification fbSpec;
-        fbSpec.attachments = {TextureParameters(TextureFormat::RGBA, TextureFormat::RGBA, TextureFilter::LINEAR, TextureWrap::CLAMP,
-                                                TextureDataType::UNSIGNED_BYTE),
-                              TextureParameters(TextureFormat::RED_INTEGER, TextureFormat::R32I, TextureFilter::LINEAR,
-                                                TextureWrap::CLAMP_TO_EDGE, TextureDataType::UNSIGNED_BYTE),
-                              TextureParameters(TextureFormat::DEPTH_COMPONENT, TextureFormat::DEPTH_ATTACHMENT, TextureFilter::NONE,
-                                                TextureWrap::NONE, TextureDataType::UNSIGNED_BYTE)};
+        fbSpec.attachments = {
+            TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+            TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+            TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+
         fbSpec.width = width;
         fbSpec.height = height;
         fbSpec.swapChainTarget = false;

@@ -60,7 +60,7 @@ Chimera::Texture* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
             std::string valId = std::get<0>(val);
             std::string valPathFile = std::get<1>(val);
 
-            Chimera::TextureManager::loadFromFile(valId, valPathFile, Chimera::TextureParameters());
+            Chimera::TextureManager::loadFromFile(valId, valPathFile, Chimera::TexParam());
             return Chimera::TextureManager::getLast();
         }
     }

@@ -56,7 +56,7 @@ int TextureManager::invert_image(int pitch, int height, void* image_pixels) {
     return 0;
 }
 
-bool TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surface, TextureParameters textureParameters) {
+bool TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surface, TexParam textureParameters) {
 
     if (TextureManager::invert_image(surface->pitch, surface->h, surface->pixels) != 0) {
         SDL_SetError("Falha na inversao de pixels");
@@ -67,7 +67,7 @@ bool TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surfa
     return true;
 }
 
-bool TextureManager::loadFromFile(const std::string& name, const std::string& pathfile, TextureParameters textureParameters) {
+bool TextureManager::loadFromFile(const std::string& name, const std::string& pathfile, TexParam textureParameters) {
 
     SDL_Surface* pImage = IMG_Load(pathfile.c_str());
     if (pImage == nullptr)

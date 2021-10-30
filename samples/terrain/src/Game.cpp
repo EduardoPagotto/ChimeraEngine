@@ -57,7 +57,7 @@ void Game::onStart() {
         material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
         material.setShine(50.0f);
 
-        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TextureParameters());
+        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam());
         material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
         material.init();
 

@@ -55,7 +55,7 @@ void NodeParticleEmitter::init() {
 }
 
 void NodeParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::string& _arquivo) {
-    TextureManager::loadFromFile(_nome, _arquivo, TextureParameters());
+    TextureManager::loadFromFile(_nome, _arquivo, TexParam());
     material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
 }
 

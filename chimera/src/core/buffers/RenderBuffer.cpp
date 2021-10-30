@@ -6,7 +6,17 @@ namespace Chimera {
 RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader)
     : posX(posX), posY(posY), width(width), height(height), shader(shader), frameBuffer(nullptr), vbo(nullptr) {
 
-    frameBuffer = new FrameBuffer(width, height);
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {
+        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+
+    fbSpec.width = width;
+    fbSpec.height = height;
+    fbSpec.swapChainTarget = false;
+    fbSpec.samples = 1;
+
+    frameBuffer = new FrameBuffer(fbSpec);
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Render Framebuffer position(%d x %d) size(%d x %d)", posX, posY, width, height);
 
     // The fullscreen quad's FBO
@@ -40,7 +50,7 @@ void RenderBuffer::renderText() {
     shader.enable();
 
     // Bind our texture in Texture Unit 0
-    frameBuffer->getTexture()->bind(0);
+    frameBuffer->getColorAttachemnt(0)->bind(0); // getTexture()->bind(0);
 
     // Set our "renderedTexture" sampler to user Texture Unit 0
     shader.setUniform("renderedTexture", 0);

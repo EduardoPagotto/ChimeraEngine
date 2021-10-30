@@ -15,7 +15,17 @@ namespace Chimera {
 
 VisitorShadowMap::VisitorShadowMap(SimpleRender3d* _pRender3d, Shader* _pShader, const unsigned& _width, const unsigned& _height)
     : shader(*_pShader), pTransform(nullptr), pRender3D(_pRender3d) {
-    frameBufferDepth = new FrameBufferDepth(_width, _height);
+
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
+
+    fbSpec.width = _width;
+    fbSpec.height = _height;
+    fbSpec.swapChainTarget = false;
+    fbSpec.samples = 1;
+
+    frameBufferDepth = new FrameBuffer(fbSpec);
 }
 
 VisitorShadowMap::~VisitorShadowMap() { frameBufferDepth; }
@@ -75,5 +85,5 @@ void VisitorShadowMap::render(Node* _pGroup, Transform* _pTransform) {
     frameBufferDepth->unbind();
 }
 
-void VisitorShadowMap::bindDepthBuffer() { frameBufferDepth->getTexture()->bind(1); }
+void VisitorShadowMap::bindDepthBuffer() { frameBufferDepth->getDepthAttachemnt()->bind(1); } // getTexture()->bind(1); }
 } // namespace Chimera

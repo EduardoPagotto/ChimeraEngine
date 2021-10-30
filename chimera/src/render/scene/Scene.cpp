@@ -84,21 +84,21 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         renderBuffer = nullptr;
     }
 
-    {
-        // TODO: Testar
-        FrameBufferSpecification fbSpec;
-        fbSpec.attachments = {
-            TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-            TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-            TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+    // {
+    //     // TODO: Testar
+    //     FrameBufferSpecification fbSpec;
+    //     fbSpec.attachments = {
+    //         TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+    //         TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+    //         TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
 
-        fbSpec.width = width;
-        fbSpec.height = height;
-        fbSpec.swapChainTarget = false;
-        fbSpec.samples = 1;
+    //     fbSpec.width = width;
+    //     fbSpec.height = height;
+    //     fbSpec.swapChainTarget = false;
+    //     fbSpec.samples = 1;
 
-        FrameBufferZ* fbz = new FrameBufferZ(fbSpec);
-    }
+    //     FrameBufferZ* fbz = new FrameBufferZ(fbSpec);
+    // }
 
     Shader shader;
     ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);

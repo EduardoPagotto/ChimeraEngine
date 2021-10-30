@@ -5,7 +5,7 @@
 #include "VisitorInterface.hpp"
 #include "chimera/core/Shader.hpp"
 #include "chimera/core/Transform.hpp"
-#include "chimera/core/buffers/FrameBufferDepth.hpp"
+#include "chimera/core/buffers/FrameBuffer.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 #include <string>
 
@@ -32,7 +32,7 @@ class VisitorShadowMap : public VisitorInterface {
     glm::mat4 lightSpaceMatrix;
     Transform* pTransform;
     Shader shader;
-    FrameBufferDepth* frameBufferDepth;
+    FrameBuffer* frameBufferDepth;
     SimpleRender3d* pRender3D;
 };
 } // namespace Chimera

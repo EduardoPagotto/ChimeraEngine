@@ -24,6 +24,7 @@ enum class TextureFormat {
     LUMINANCE = GL_LUMINANCE,
     LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA,
     DEPTH_COMPONENT = GL_DEPTH_COMPONENT,
+    DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT,
     // novos
     RGBA8 = GL_RGBA8,
     DEPTH24STENCIL8 = GL_DEPTH24_STENCIL8,
@@ -31,7 +32,7 @@ enum class TextureFormat {
     R32I = GL_R32I
 };
 
-enum class TextureDataType { UNSIGNED_BYTE = GL_UNSIGNED_BYTE, UNSIGNED_SHORT = GL_UNSIGNED_SHORT, FLOAT = GL_FLOAT };
+enum class TextureDataType { NONE = GL_NONE, UNSIGNED_BYTE = GL_UNSIGNED_BYTE, UNSIGNED_SHORT = GL_UNSIGNED_SHORT, FLOAT = GL_FLOAT };
 
 struct TextureParameters {
     TextureFormat format;
@@ -56,6 +57,21 @@ struct TextureParameters {
     // TextureParameters(TextureFilter filter) : format(TextureFormat::RGBA), filter(filter), wrap(TextureWrap::CLAMP) {}
     // TextureParameters(TextureFilter filter, TextureWrap wrap) : format(TextureFormat::RGBA), filter(filter), wrap(wrap) {}
 };
+
+namespace Aux {
+static void textureParameterSetUndefined(TextureParameters& val) {
+    val.format = TextureFormat::NONE;
+    val.internalFormat = TextureFormat::NONE;
+    val.filter = TextureFilter::NONE;
+    val.wrap = TextureWrap::NONE;
+    val.type = TextureDataType::NONE;
+}
+
+static bool textureParameterIsUndefined(const TextureParameters& val) {
+    return (val.format == TextureFormat::NONE && val.internalFormat == TextureFormat::NONE);
+}
+
+} // namespace Aux
 
 class Texture {
   public:

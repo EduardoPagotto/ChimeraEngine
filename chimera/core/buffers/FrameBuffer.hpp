@@ -7,23 +7,10 @@
 
 namespace Chimera {
 
-// Contem todos os parmetros com propriedades de textura
-struct FramebufferTextureSpecification {
-    FramebufferTextureSpecification() = default;
-    FramebufferTextureSpecification(TextureParameters params) : textureParameters(params) {}
-    TextureParameters textureParameters = TextureParameters();
-};
-
-struct FramebufferAttachmentSpecification {
-    FramebufferAttachmentSpecification() = default;
-    FramebufferAttachmentSpecification(std::initializer_list<FramebufferTextureSpecification> _attachments) : attachments(_attachments) {}
-    std::vector<FramebufferTextureSpecification> attachments;
-};
-
 struct FrameBufferSpecification {
     FrameBufferSpecification() = default;
     uint32_t width = 800, height = 600;
-    FramebufferAttachmentSpecification attachments;
+    std::vector<TextureParameters> attachments;
     bool swapChainTarget = false;
     int samples = 1;
 };
@@ -32,8 +19,7 @@ class FrameBufferZ { // TODO: continuar daqui!!!!
   public:
     FrameBufferZ(const FrameBufferSpecification& spec);
     ~FrameBufferZ();
-    void destroy();
-    void invalidade();
+
     void bind() const;
     static void unbind();
     void clearAttachment(uint32_t attachmentIndex, const int value);
@@ -41,14 +27,21 @@ class FrameBufferZ { // TODO: continuar daqui!!!!
     int readPixel(uint32_t attachmentIndex, int x, int y);
     inline Texture* getColorAttachemnt(uint32_t index) const { return colorAttachments[index]; } //
 
+    inline Texture* getDepthAttachemnt() { return depthAttachment; }
+    void clearDepth(const glm::vec4& value) const;
+
   private:
+    void destroy();
+    void invalidade();
     // uint16_t width, height;
-    uint32_t framBufferID, depthAttachment;
+    uint32_t framBufferID, rbo;
     FrameBufferSpecification spec;
 
+    Texture* depthAttachment;
     std::vector<Texture*> colorAttachments;
-    std::vector<FramebufferTextureSpecification> colorAttachmentSpecifications;
-    FramebufferTextureSpecification depthAttachmentSpecification;
+    std::vector<TextureParameters> colorTexSpecs;
+    TextureParameters rboSpec;
+    TextureParameters depthTexSpec;
 };
 
 class FrameBuffer : public IFrameBuffer {

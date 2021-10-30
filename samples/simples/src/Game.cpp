@@ -36,7 +36,6 @@ void Game::onStart() {
 
         // Adiciona um controller (Compostamento) a camera e vincula entidades ao mesmo
         ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-        activeScene.setCamera(cc.camera);
     }
 
     {

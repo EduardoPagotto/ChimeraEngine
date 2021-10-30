@@ -38,6 +38,15 @@ void Scene::onCreate() {
             nsc.instance->onCreate();
         }
     });
+
+    // load default camera
+    auto view = eRegistry.view<CameraComponent>();
+    for (auto entity : view) {
+
+        auto& cameraComponent = view.get<CameraComponent>(entity);
+        if (cameraComponent.primary)
+            camera = cameraComponent.camera;
+    }
 }
 
 void Scene::onUpdate(float ts) {
@@ -49,7 +58,8 @@ void Scene::onUpdate(float ts) {
         }
     });
 
-    camera->recalculateMatrix(false);
+    if (camera)
+        camera->recalculateMatrix(false);
 }
 
 Entity Scene::createEntity(const std::string& name) {
@@ -119,8 +129,13 @@ void Scene::render(IRenderer3d& renderer) {
 
     renderer.begin(camera);
 
-    for (Light* l : lightSetupStack) {
-        renderer.submitLight(l);
+    // load lights after begin (clear previos lights)
+    auto lightView = eRegistry.view<LightComponent>();
+    for (auto entity : lightView) {
+        auto& lc = lightView.get<LightComponent>(entity);
+        if (lc.global) {
+            renderer.submitLight(lc.light);
+        }
     }
 
     auto view = eRegistry.view<Renderable3dComponent>();

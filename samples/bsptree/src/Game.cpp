@@ -29,7 +29,6 @@ void Game::onStart() {
         // cc.camera = new CameraFPS(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
         ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-        activeScene.setCamera(cc.camera);
     }
 
     {

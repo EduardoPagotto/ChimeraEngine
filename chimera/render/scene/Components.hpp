@@ -26,12 +26,18 @@ struct SpriteComponent {
 };
 
 struct CameraComponent {
-    ICamera* camera; // TODO trocar por ponteiro criado na classe Game!!!!!!!!!!!
+    ICamera* camera = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
     // CameraComponent(glm::mat4 projection) : camera(projection) {}
+};
+
+struct LightComponent {
+    Light* light = nullptr;
+    bool global = true;
+    LightComponent() = default;
 };
 
 struct Renderable3dComponent {

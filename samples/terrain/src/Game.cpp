@@ -28,31 +28,36 @@ void Game::onStart() {
 
     using namespace Chimera;
 
-    Entity ce = activeScene.createEntity("Camera Entity");
-    { // Cria entidade de camera
-        // Cria camera e carrega parametros
+    {
+        // Cria entidade de camera
+        Entity ce = activeScene.createEntity("Camera Entity");
         CameraComponent& cc = ce.addComponent<CameraComponent>();
         // cc.camera = new CameraOrbit(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         cc.camera = new CameraFPS(glm::vec3(20.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
         // Adiciona um controller (Compostamento) a camera e vincula entidades ao mesmo
         ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-        activeScene.setCamera(cc.camera);
     }
     {
+        // Cria entidade de luz unica global!
+        Entity le = activeScene.createEntity("Light Entity");
+        LightComponent& lc = le.addComponent<LightComponent>();
+        Light* light = new Light();
+        light->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
+        light->setPosition(glm::vec3(0, 400, 0));
+        lc.light = light;
+    }
+    {
+        // entidade heightmap
         Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+
         Shader& shader = renderableEntity.addComponent<Shader>();
         Material& material = renderableEntity.addComponent<Material>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
         // ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
         ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
-
-        Light* light = new Light();
-        light->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
-        light->setPosition(glm::vec3(0, 400, 0));
-        activeScene.addLight(light);
 
         material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
         material.setShine(50.0f);
@@ -77,6 +82,7 @@ void Game::onStart() {
     }
 
     {
+        // Entidade mesh
         Entity renderableEntity = activeScene.createEntity("Renderable Entity");
 
         // Transform& tc = renderableEntity.getComponent<Transform>();

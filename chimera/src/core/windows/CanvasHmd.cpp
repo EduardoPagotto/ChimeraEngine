@@ -17,8 +17,19 @@ CanvasHmd::CanvasHmd(const std::string& _title, int _width, int _height) : Canva
 
     unsigned int w1 = next_pow2(_width);
     unsigned int h1 = next_pow2(_height);
-    pLeft = new RenderBuffer(0, 0, w1, h1, shader);
-    pRight = new RenderBuffer(w1, 0, w1, h1, shader);
+
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {
+        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+
+    fbSpec.width = w1;
+    fbSpec.height = h1;
+    fbSpec.swapChainTarget = false;
+    fbSpec.samples = 1;
+
+    pLeft = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
+    pRight = new RenderBuffer(w1, 0, new FrameBuffer(fbSpec), shader);
 }
 
 CanvasHmd::~CanvasHmd() {

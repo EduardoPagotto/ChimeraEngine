@@ -1,6 +1,7 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/Transform.hpp"
 #include "chimera/core/buffers/VertexArray.hpp"
+#include "chimera/core/io/MouseDevice.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -94,25 +95,23 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         renderBuffer = nullptr;
     }
 
-    // {
-    //     // TODO: Testar
-    //     FrameBufferSpecification fbSpec;
-    //     fbSpec.attachments = {
-    //         TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-    //         TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-    //         TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
-
-    //     fbSpec.width = width;
-    //     fbSpec.height = height;
-    //     fbSpec.swapChainTarget = false;
-    //     fbSpec.samples = 1;
-
-    //     FrameBufferZ* fbz = new FrameBufferZ(fbSpec);
-    // }
-
     Shader shader;
     ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
-    renderBuffer = new RenderBuffer(0, 0, width, height, shader);
+
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {
+        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+        TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+
+    fbSpec.width = width;
+    fbSpec.height = height;
+    fbSpec.swapChainTarget = false;
+    fbSpec.samples = 1;
+
+    fb = new FrameBuffer(fbSpec);
+
+    renderBuffer = new RenderBuffer(0, 0, fb, shader);
 }
 
 void Scene::render(IRenderer3d& renderer) {
@@ -163,6 +162,12 @@ void Scene::render(IRenderer3d& renderer) {
     renderer.end();
     renderer.flush();
 
+    // get val from color buffer (must be inside framebuffer renderer
+    glm::ivec2 pos = MouseDevice::getMove();
+    pos.y = viewportHeight - pos.y;
+    int val = fb->readPixel(1, pos.x, pos.y);
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
+
     renderBuffer->unbind();
 
     // VertexArray::unbind();
@@ -206,5 +211,4 @@ void Scene::render(IRenderer3d& renderer) {
     // renderer.end();
     // renderer.flush();
 }
-
 } // namespace Chimera

@@ -1,5 +1,5 @@
 #type vertex
-#version 330 core
+#version 440 core
 //#version 300 es
 
 // set: MeshNoMat.frag and MeshNoMat.vert
@@ -40,6 +40,9 @@ void main() {
 
 precision mediump float;
 
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out int color2;
+
 struct Material {
     sampler2D tDiffuse;
 };
@@ -48,8 +51,7 @@ in vec3 FragPos;
 in vec3 Normal;
 in vec2 TexCoords;
 // in vec3 ourColor;
-
-out vec4 FragColor;
+// out vec4 FragColor;
 
 uniform vec3 viewPos;
 uniform Material material;
@@ -63,4 +65,5 @@ void main() {
 
     // only texture
     FragColor = vec4(texture(material.tDiffuse, TexCoords));
+    color2 = 50;
 }

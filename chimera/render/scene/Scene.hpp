@@ -30,6 +30,7 @@ class Scene {
     // Shader shader;
     ICamera* camera;
     RenderBuffer* renderBuffer;
+    FrameBuffer* fb;
 };
 
 } // namespace Chimera

@@ -32,7 +32,13 @@ enum class TexFormat {
     R32I = GL_R32I
 };
 
-enum class TexDType { NONE = GL_NONE, UNSIGNED_BYTE = GL_UNSIGNED_BYTE, UNSIGNED_SHORT = GL_UNSIGNED_SHORT, FLOAT = GL_FLOAT };
+enum class TexDType {
+    NONE = GL_NONE,
+    UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
+    UNSIGNED_SHORT = GL_UNSIGNED_SHORT,
+    FLOAT = GL_FLOAT,
+    INT = GL_INT
+};
 
 struct TexParam {
     TexFormat format;

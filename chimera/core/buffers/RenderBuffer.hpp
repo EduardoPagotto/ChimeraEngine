@@ -11,7 +11,7 @@ namespace Chimera {
 
 class RenderBuffer {
   public:
-    RenderBuffer(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader);
+    RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, const Shader& shader);
     virtual ~RenderBuffer();
     void renderText();
     void bind();

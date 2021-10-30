@@ -3,21 +3,11 @@
 
 namespace Chimera {
 
-RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, const uint32_t& width, uint32_t height, const Shader& shader)
-    : posX(posX), posY(posY), shader(shader), frameBuffer(nullptr), vbo(nullptr) {
+RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, const Shader& shader)
+    : posX(posX), posY(posY), shader(shader), frameBuffer(fb), vbo(nullptr) {
 
-    FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {
-        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
-
-    fbSpec.width = width;
-    fbSpec.height = height;
-    fbSpec.swapChainTarget = false;
-    fbSpec.samples = 1;
-
-    frameBuffer = new FrameBuffer(fbSpec);
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Render Framebuffer position(%d x %d) size(%d x %d)", posX, posY, width, height);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Render Framebuffer position(%d x %d) size(%d x %d)", posX, posY, fb->getWidth(),
+                 fb->getHeight());
 
     // The fullscreen quad's FBO
     const glm::vec3 quad[] = {glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(-1.0f, 1.0f, 0.0f),

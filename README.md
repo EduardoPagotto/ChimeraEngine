@@ -131,3 +131,13 @@ https://gamedev.stackexchange.com/questions/60313/implementing-a-skybox-with-gls
 https://learnopengl.com/Advanced-OpenGL/Cubemaps​
 http://antongerdelan.net/opengl/cubemaps.html
 https://www.khronos.org/opengl/wiki/Example_Code
+
+## FrameBuffer cfg's
+- Renderizae tela: <p>
+    <i>TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE)</i>
+- Captura de dados para uniform: <p>
+    <i>TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE)</i>
+- RBO: <p>
+    <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)</i>
+- SwadowMap: <p>
+    <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)</i>

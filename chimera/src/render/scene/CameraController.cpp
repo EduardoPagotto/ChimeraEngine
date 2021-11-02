@@ -6,8 +6,12 @@ namespace Chimera {
 void CameraController::onCreate() {
     auto& cc = getComponent<CameraComponent>();
     camera = cc.camera;
-    camera->updateDistanceFront();
-    camera->updateVectors();
+
+    if (camera->is3D()) {
+        ICamera3D* pc = (ICamera3D*)camera;
+        pc->updateDistanceFront();
+        pc->updateVectors();
+    }
 }
 
 void CameraController::onDestroy() {}

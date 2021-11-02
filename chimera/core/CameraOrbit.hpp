@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-class CameraOrbit : public ICamera {
+class CameraOrbit : public ICamera3D {
 
   public:
     CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw = -90.0f, float pitch = 0.0f);
@@ -41,6 +41,7 @@ class CameraOrbit : public ICamera {
         distance = glm::distance(this->position, this->front);
         return distance;
     }
+    virtual const bool is3D() const { return true; };
 
   private:
     glm::vec3 position, front, up;

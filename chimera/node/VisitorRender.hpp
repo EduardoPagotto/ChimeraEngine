@@ -32,7 +32,7 @@ class VisitorRender : public VisitorInterface {
     bool HudOn;
     bool particleOn;
 
-    ICamera* cameraScene;
+    ICamera3D* cameraScene;
     glm::mat4 model;
 
     Shader shader;

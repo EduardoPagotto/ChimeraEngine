@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-class CameraFPS : public ICamera {
+class CameraFPS : public ICamera3D {
 
   public:
     CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw = -90.0f, float pitch = 0.0f);
@@ -34,6 +34,7 @@ class CameraFPS : public ICamera {
     virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) override { aspectRatio = (float)width / (float)height; }
     virtual void setAspectRatio(const float& value) override { aspectRatio = value; }
     virtual void updateVectors() override;
+    virtual const bool is3D() const { return true; };
 
   private:
     glm::vec3 position, front, up, right, worldUp;

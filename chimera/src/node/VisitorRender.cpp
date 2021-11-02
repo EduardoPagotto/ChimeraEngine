@@ -116,7 +116,7 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
 
     NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
-        cameraScene = pCam->getCamera();
+        cameraScene = (ICamera3D*)pCam->getCamera();
         cameraScene->processInput(0.01);
 
         shader.setUniform("viewPos", cameraScene->getPosition());

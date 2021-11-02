@@ -22,6 +22,7 @@ class CameraOrthographic {
         recalculateMatrix();
     }
     const float getRotation() const { return rotation; }
+
     const glm::mat4 getViewMatrix() const { return viewMatrix; };
     const glm::mat4 getProjectionMatrix() const { return projectionMatrix; }
     const glm::mat4 getViewProjectionMatrix() const { return viewProjectionMatrix; }

@@ -18,7 +18,6 @@ class CanvasFB : public Canvas {
     // FIXME:  ver depois!!!!
     virtual void swapWindow() override{};
     virtual int getTotEyes() override { return 1; }
-    virtual void afterStart() override {}
     uint32_t* getPixels() override { return pixels; }
     uint32_t getPixelFormat() { return pixelFormat; }
 

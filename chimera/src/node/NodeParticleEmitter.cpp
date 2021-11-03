@@ -134,19 +134,9 @@ void NodeParticleEmitter::render(const Shader& shader) {
                                   // perf. See above link for details.
     glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLubyte) * 4, vColor);
 
-    // salva flags de bit
-    glPushAttrib(GL_ENABLE_BIT);
-
-    // preserva a cor original
-    glPushAttrib(GL_CURRENT_BIT);
-
-    // Enable depth test
-    glEnable(GL_DEPTH_TEST);
-
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
-
-    glEnable(GL_BLEND);
+    BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test
+    BinaryStateEnable blender(GL_BLEND);    // glEnable(GL_BLEND);
+    DepthFuncSetter depthFunc(GL_LESS);     // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Bind our texture
@@ -208,12 +198,6 @@ void NodeParticleEmitter::render(const Shader& shader) {
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
-
-    // retorna paleta
-    glPopAttrib();
-
-    // retorna paleta
-    glPopAttrib();
 }
 
 int NodeParticleEmitter::FindUnusedParticle() {

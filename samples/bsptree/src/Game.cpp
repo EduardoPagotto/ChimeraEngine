@@ -16,9 +16,13 @@ void Game::onStart() {
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
+    // canvas->afterStart();
+    // glEnable(GL_DEPTH_TEST);
+    // glEnable(GL_CULL_FACE);
+
+    // glClearDepth(1.0f);
+    // glDepthFunc(GL_LEQUAL);
+    // glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     using namespace Chimera;
     Entity ce = activeScene.createEntity("Camera Entity");

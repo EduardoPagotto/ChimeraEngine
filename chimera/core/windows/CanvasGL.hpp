@@ -19,7 +19,6 @@ class CanvasGL : public Canvas {
     virtual int getTotEyes() { return 1; }
     virtual uint32_t* getPixels() override { return nullptr; }
 
-    virtual void afterStart() override;
     std::string getVersaoOpenGL();
 
   protected:

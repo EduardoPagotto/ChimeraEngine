@@ -112,19 +112,6 @@ void CanvasGL::toggleFullScreen() {
     fullScreen = !fullScreen;
 }
 
-void CanvasGL::afterStart() {
-
-    // glEnable ( GL_TEXTURE_2D );
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-
-    glClearDepth(1.0f);
-    glDepthFunc(GL_LEQUAL);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    // glEnable ( GL_LIGHTING );
-}
-
 std::string CanvasGL::getVersaoOpenGL() {
 
     std::string retorno = "";

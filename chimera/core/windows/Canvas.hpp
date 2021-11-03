@@ -28,7 +28,6 @@ class Canvas {
 
     virtual void swapWindow() = 0;
     virtual int getTotEyes() = 0;
-    virtual void afterStart() = 0;
     virtual uint32_t* getPixels() = 0;
 
     inline int getWidth() const { return width; }

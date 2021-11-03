@@ -44,7 +44,12 @@ void Game::onStart() {
 
     pRoot->initializeChilds();
 
-    canvas->afterStart();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)pRoot->findChild("Cubo-02", true);
     renderV.pTransform = pMesh->getTransform();

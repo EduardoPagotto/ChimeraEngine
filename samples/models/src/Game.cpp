@@ -239,7 +239,12 @@ void Game::onStart() {
 
     root->initializeChilds();
 
-    canvas->afterStart();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     // Localiza a camera
     pOrbitalCam = (Chimera::NodeCamera*)root->findChild("Camera-camera", true);

@@ -18,13 +18,12 @@ void Game::onStart() {
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color //FIXME: colocar so scene
 
-    // whitou the z-buffer
-    // glEnable(GL_COLOR_MATERIAL);
-    // glEnable(GL_NORMALIZE);
-    // glShadeModel(GL_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
-    // enable z-buffer here
-    canvas->afterStart();
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     using namespace Chimera;
 

@@ -26,15 +26,9 @@ void NodeHUD::addText(int _fontIndex, const glm::ivec2& _pos, glm::vec4 _colorTe
 void NodeHUD::init() { setOn(true); }
 
 void NodeHUD::render(Shader* _pShader) {
-    // salva flags de bit
-    glPushAttrib(GL_ENABLE_BIT);
 
-    // preserva a cor original
-    glPushAttrib(GL_CURRENT_BIT);
-
-    // Set OpenGL options
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
+    BinaryStateEnable blender(GL_BLEND);      // glEnable(GL_BLEND);
+    BinaryStateEnable cullFace(GL_CULL_FACE); // glEnable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glActiveTexture(GL_TEXTURE0);
@@ -45,9 +39,6 @@ void NodeHUD::render(Shader* _pShader) {
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
-
-    glPopAttrib();
-    glPopAttrib();
 }
 
 void NodeHUD::accept(VisitorInterface* v) { v->visit(this); }

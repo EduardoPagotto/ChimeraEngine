@@ -4,7 +4,7 @@
 #include <glm/gtx/transform.hpp>
 
 TileLayer::TileLayer(Chimera::Shader* shader)
-    : Chimera::Layer(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(-16.0f, 16.0f, -9.0f, 9.0f)) {
+    : Chimera::Layer(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(16.0, -1.0f, 1.0f)) {
 
     GLint texIDs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
 
@@ -32,7 +32,9 @@ bool TileLayer::onEvent(const SDL_Event& event) {
 void TileLayer::render() {
 
     shader->enable();
-    shader->setUniform("light_pos", glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(9.0f - y * 18.0f / 540.0f)));
+
+    // Formula                                (float)(x * sizeW / witdh - (sizeW/2), (float)((sizeH /2) - y * sizeH / height)
+    shader->setUniform("light_pos", glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(16.0f - y * 32.0f / 540.0f)));
 
     Layer::render();
     shader->disable();

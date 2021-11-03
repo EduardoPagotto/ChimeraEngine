@@ -86,11 +86,7 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
 
         auto& cameraComponent = view.get<CameraComponent>(entity);
         if (!cameraComponent.fixedAspectRatio) {
-
-            if (cameraComponent.camera->is3D()) {
-                ICamera3D* pc = (ICamera3D*)cameraComponent.camera;
-                pc->setAspectRatio(width, height);
-            }
+            cameraComponent.camera->setViewportSize(width, height);
         }
     }
 

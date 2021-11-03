@@ -122,11 +122,11 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
         shader.setUniform("viewPos", cameraScene->getPosition());
         if (pVideo->getTotEyes() == 1) {
             glViewport(0, 0, pVideo->getWidth(), pVideo->getHeight());
-            cameraScene->setAspectRatio(pVideo->getWidth(), pVideo->getHeight());
+            cameraScene->setViewportSize(pVideo->getWidth(), pVideo->getHeight());
             cameraScene->recalculateMatrix(false);
         } else {
-            // RenderBuffer* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
-            // cameraScene->setAspectRatio(pEye->getAspectRatio());
+            RenderBuffer* pEye = ((CanvasHmd*)pVideo)->getEye(eye);
+            cameraScene->setViewportSize(pEye->getWidth(), pEye->getHeight());
             if (eye == 0) { // right
                 cameraScene->recalculateMatrix(false);
             } else { // left

@@ -31,8 +31,7 @@ class CameraFPS : public ICamera3D {
     virtual float updateDistanceFront() override { return glm::distance(this->position, this->front); }
     virtual void setPosition(const glm::vec3& position) override { this->position = position; }
     virtual void invertPitch() override;
-    virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) override { aspectRatio = (float)width / (float)height; }
-    virtual void setAspectRatio(const float& value) override { aspectRatio = value; }
+    virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
     virtual void updateVectors() override;
     virtual const bool is3D() const { return true; };
 

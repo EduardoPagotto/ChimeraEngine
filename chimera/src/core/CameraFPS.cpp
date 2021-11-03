@@ -23,6 +23,12 @@ CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float
 
 CameraFPS::~CameraFPS() {}
 
+void CameraFPS::setViewportSize(const uint32_t& width, const uint32_t& height) {
+    aspectRatio = (float)width / (float)height;
+    // TODO: criar funcao de recalc de projection para usar a variacao de FOV
+    projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+}
+
 const glm::mat4 CameraFPS::recalculateMatrix(bool left) { // windows x->width; y -> height
 
     if (left == false) {
@@ -41,8 +47,8 @@ const glm::mat4 CameraFPS::recalculateMatrix(bool left) { // windows x->width; y
 
         viewMatrix = glm::lookAt(novaPosition, novaPosition + novaFront, this->getUp());
     }
-
-    projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+    // calc no set AspectRatio
+    // projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
     viewProjectionMatrix = projectionMatrix * viewMatrix;
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);

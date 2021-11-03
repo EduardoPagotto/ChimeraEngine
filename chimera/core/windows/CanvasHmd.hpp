@@ -15,7 +15,7 @@ class CanvasHmd : public CanvasGL {
     virtual void after(const unsigned short& _indexEye = 0);
     virtual void swapWindow();
     virtual int getTotEyes() { return 2; }
-    // RenderBuffer* getEye(const unsigned short& _indexEye = 0) { return (_indexEye == 0) ? pLeft : pRight; }
+    RenderBuffer* getEye(const unsigned short& _indexEye = 0) { return (_indexEye == 0) ? pLeft : pRight; }
 
   private:
     RenderBuffer* pLeft;

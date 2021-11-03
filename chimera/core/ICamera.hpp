@@ -20,6 +20,7 @@ class ICamera {
     virtual const glm::vec3& getPosition() const = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void processInput(float deltaTime) = 0; // FIXME: achar outra saida!!
+    virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
     virtual const bool is3D() const = 0;
 };
 
@@ -33,8 +34,6 @@ class ICamera3D : public ICamera {
     virtual void setFov(const float& value) = 0;
     virtual void setNear(const float& value) = 0;
     virtual void setFar(const float& value) = 0;
-    virtual void setAspectRatio(const uint32_t& width, const uint32_t& height) = 0;
-    virtual void setAspectRatio(const float& value) = 0;
     virtual void updateVectors() = 0;
 };
 } // namespace Chimera

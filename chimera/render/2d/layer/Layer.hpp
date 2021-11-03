@@ -14,6 +14,8 @@ class Layer : public ILayer {
     inline virtual void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
     virtual void render();
 
+    CameraOrthographic* getCamera() const { return camera; };
+
   protected:
     Shader* shader;
     CameraOrthographic* camera;

@@ -16,12 +16,12 @@ void Game::onStart() {
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
     // Habilita o depth buffer/culling face
     canvas->afterStart();
-    glEnable(GL_COLOR_MATERIAL);
+    // glEnable(GL_COLOR_MATERIAL);
 
     // glEnable(GL_LIGHTING);
     // glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
+    // glEnable(GL_NORMALIZE);
+    // glShadeModel(GL_SMOOTH);
 
     // glDisable(GL_LIGHTING);
     // glCullFace(GL_BACK);

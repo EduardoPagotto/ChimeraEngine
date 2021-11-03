@@ -41,18 +41,20 @@ void Game::onStart() {
     ShaderManager::load("./assets/shaders/Basic2D.glsl", shader);
 
     layer = new TileLayer(&shader);
-    for (float y = -9.0f; y < 9.0f; y++) {
-        for (float x = -16.0f; x < 16.0f; x++) {
+    layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
+
+    for (float y = -8.0f; y < 8.0f; y++) {
+        for (float x = -14.0f; x < 14.0f; x++) {
             if (rand() % 4 == 0)
-                layer->add(new Sprite(x, y, 0.9f, 0.9f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
+                layer->add(new Sprite(x, y, 1.0f, 1.0f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
             else
-                layer->add(new Sprite(x, y, 0.9f, 0.9f, TextureManager::getIndex(rand() % 3)));
+                layer->add(new Sprite(x, y, 1.0f, 1.0f, TextureManager::getIndex(rand() % 3)));
         }
     }
 
     FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
-    FontManager::get()->setScale(glm::vec2(canvas->getWidth() / 32.0f, canvas->getHeight() / 18.0f)); // em TileLayer ortho values!!!
-    lFPS = new Label("None", -15.5f, 7.8f, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    FontManager::get()->setScale(glm::vec2(30, 30)); // em TileLayer ortho values!!!
+    lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
     this->pushLayer(layer);
 }

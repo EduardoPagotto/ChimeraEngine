@@ -16,6 +16,8 @@ class RenderBuffer {
     void renderText();
     void bind();
     void unbind();
+    const uint32_t getWidth() const { return frameBuffer->getWidth(); }
+    const uint32_t getHeight() const { return frameBuffer->getHeight(); }
 
   private:
     uint32_t posX, posY;

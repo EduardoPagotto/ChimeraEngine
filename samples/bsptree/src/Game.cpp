@@ -23,6 +23,7 @@ void Game::onStart() {
     // glClearDepth(1.0f);
     // glDepthFunc(GL_LEQUAL);
     // glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     using namespace Chimera;
     Entity ce = activeScene.createEntity("Camera Entity");

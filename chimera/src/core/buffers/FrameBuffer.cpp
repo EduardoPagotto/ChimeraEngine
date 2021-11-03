@@ -136,18 +136,18 @@ void FrameBuffer::invalidade() {
 }
 
 void FrameBuffer::bind() const {
-    glBindFramebuffer(GL_FRAMEBUFFER, framBufferID);
     glViewport(0, 0, spec.width, spec.height);
+    glBindFramebuffer(GL_FRAMEBUFFER, framBufferID);
 
-    if (!Aux::textureParameterIsUndefined(depthTexSpec)) {
-        glClear(GL_DEPTH_BUFFER_BIT);
-    }
+    GLbitfield mask = 0;
+    if (!Aux::textureParameterIsUndefined(rboSpec) || !Aux::textureParameterIsUndefined(depthTexSpec))
+        mask |= GL_DEPTH_BUFFER_BIT;
+
+    if (colorAttachments.size() > 1)
+        mask |= GL_COLOR_BUFFER_BIT;
+
+    glClear(mask);
 }
-
-// void FrameBuffer::clearDepth(const glm::vec4& value) const {
-//     glClearColor(value.x, value.y, value.z, value.w);
-//     glClear(GL_DEPTH_BUFFER_BIT);
-// }
 
 void FrameBuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 

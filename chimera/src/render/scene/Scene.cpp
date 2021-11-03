@@ -90,11 +90,6 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         }
     }
 
-    if (renderBuffer) {
-        delete renderBuffer;
-        renderBuffer = nullptr;
-    }
-
     Shader shader;
     ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
 
@@ -109,9 +104,12 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
     fbSpec.swapChainTarget = false;
     fbSpec.samples = 1;
 
-    fb = new FrameBuffer(fbSpec);
+    if (renderBuffer) {
+        delete renderBuffer;
+        renderBuffer = nullptr;
+    }
 
-    renderBuffer = new RenderBuffer(0, 0, fb, shader);
+    renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
 }
 
 void Scene::render(IRenderer3d& renderer) {
@@ -122,10 +120,8 @@ void Scene::render(IRenderer3d& renderer) {
         glm::vec3 pos = camera->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
-
+    // we're not using the stencil buffer now
     renderBuffer->bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
-
     renderer.begin(camera);
 
     // load lights after begin (clear previos lights)

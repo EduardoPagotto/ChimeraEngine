@@ -269,19 +269,12 @@ void Game::onStart() {
 
 void Game::onUpdate() {
 
-    physicWorld->stepSim();
-    physicWorld->checkCollisions();
-    this->updatePos();
-
-    for (int eye = 0; eye < canvas->getTotEyes(); eye++) {
-
-        canvas->before(eye);
-
-        renderV.eye = eye;
-        Chimera::visitParserTree(root, &renderV); // dfs(root, &rv);//DFS(root);
-
-        canvas->after(eye);
+    if (eyeIndice == 0) {
+        physicWorld->stepSim();
+        physicWorld->checkCollisions();
+        this->updatePos();
     }
 
-    canvas->swapWindow();
+    renderV.eye = eyeIndice;
+    Chimera::visitParserTree(root, &renderV);
 }

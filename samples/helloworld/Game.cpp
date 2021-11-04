@@ -13,10 +13,6 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 
     srand(time(nullptr));
 
-    // tranparence of fonts
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     // Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-15.0f, 5.0f, 0.0f)));
     // group->add(new Sprite(0.0f, 0.0f, 6.0f, 3.0f, glm::vec4(1, 1, 1, 1)));
     // Group* button = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.0f)));
@@ -103,12 +99,4 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() {
-
-    lFPS->setText(std::string("FPS: ") + std::to_string(fps));
-
-    canvas->before();
-    layer->render();
-    canvas->after();
-    canvas->swapWindow();
-}
+void Game::onUpdate() { lFPS->setText(std::string("FPS: ") + std::to_string(fps)); }

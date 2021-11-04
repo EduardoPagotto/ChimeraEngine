@@ -12,7 +12,7 @@ class Layer : public ILayer {
     Layer(IRenderer2D* renderer, Shader* shader, CameraOrthographic* camera);
     virtual ~Layer();
     inline virtual void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
-    virtual void render();
+    virtual void render() override;
 
     CameraOrthographic* getCamera() const { return camera; };
 

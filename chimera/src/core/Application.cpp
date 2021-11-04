@@ -8,6 +8,9 @@
 namespace Chimera {
 
 Application::Application(Canvas* canvas) : canvas(canvas), pause(true) {
+
+    eyeIndice = 0;
+
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
@@ -135,10 +138,21 @@ void Application::run(void) {
         if (!pause) {
             try {
 
-                for (auto it = layerStack.begin(); it != layerStack.end(); it++)
-                    (*it)->onUpdate();
+                for (int eye = 0; eye < canvas->getTotEyes(); eye++) {
 
-                this->onUpdate();
+                    canvas->before(eye);
+                    eyeIndice = eye;
+
+                    this->onUpdate();
+
+                    for (auto it = layerStack.begin(); it != layerStack.end(); it++) {
+                        (*it)->onUpdate();
+                        (*it)->render();
+                    }
+                    canvas->after(eye);
+                }
+                canvas->swapWindow();
+
             } catch (...) { SDL_Quit(); }
         }
         // count frame and FPS

@@ -113,15 +113,6 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onUpdate() {
-    for (int eye = 0; eye < canvas->getTotEyes(); eye++) {
-
-        canvas->before(eye);
-
-        renderV.eye = eye;
-        Chimera::visitParserTree(pRoot, &renderV); // dfs(root, &rv);//DFS(root);
-
-        canvas->after(eye);
-    }
-
-    canvas->swapWindow();
+    renderV.eye = eyeIndice;
+    Chimera::visitParserTree(pRoot, &renderV);
 }

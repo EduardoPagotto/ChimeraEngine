@@ -194,6 +194,10 @@ void BatchRender2D::end() {
 
 void BatchRender2D::flush() {
 
+    BinaryStateEnable blend(GL_BLEND); // glEnable(GL_BLEND);
+    // BinaryStateDisable depth(GL_DEPTH_TEST); // glDisable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     for (uint8_t i = 0; i < textures.size(); i++)
         textures[i]->bind(i);
 

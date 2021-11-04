@@ -13,6 +13,8 @@ class Application {
     virtual ~Application();
     void run();
 
+    int eyeIndice;
+
   protected:
     void pushLayer(ILayer* layer);
     void pushOverlay(ILayer* overlay);

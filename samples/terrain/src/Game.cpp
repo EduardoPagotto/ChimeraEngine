@@ -171,14 +171,4 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() {
-    canvas->before();
-
-    // model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
-    // //_pMesh->getTransform()->getModelMatrix(pTransform->getPosition()); if (pShader == nullptr)
-    //     return;
-    activeScene.render(render3d);
-
-    canvas->after();
-    canvas->swapWindow();
-}
+void Game::onUpdate() { activeScene.render(render3d); }

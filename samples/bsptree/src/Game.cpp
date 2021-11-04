@@ -149,11 +149,4 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() {
-    canvas->before();
-
-    activeScene.render(render3d);
-
-    canvas->after();
-    canvas->swapWindow();
-}
+void Game::onUpdate() { activeScene.render(render3d); }

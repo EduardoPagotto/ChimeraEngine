@@ -47,7 +47,7 @@ CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _ful
     SDL_GetWindowSize(window, &width, &height);
 
     // TODO: Testar
-    // SDL_GetWindowPosition(window, &winPosPrev.x, &winPosPrev.y);
+    // SDL_GetWindowPosition(window, &posX, &posY);
 
     // iniciala GLEW
     glewExperimental = GL_TRUE;
@@ -101,7 +101,7 @@ void CanvasGL::toggleFullScreen() {
 
     if (fullScreen == false) {
 
-        SDL_GetWindowPosition(window, &winPosPrev.x, &winPosPrev.y);
+        SDL_GetWindowPosition(window, &posX, &posY);
 
         SDL_SetWindowPosition(window, 0, 0);
         SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -109,7 +109,7 @@ void CanvasGL::toggleFullScreen() {
     } else {
 
         SDL_SetWindowFullscreen(window, 0);
-        SDL_SetWindowPosition(window, winPosPrev.x, winPosPrev.y);
+        SDL_SetWindowPosition(window, posX, posY);
     }
 
     fullScreen = !fullScreen;

@@ -53,7 +53,7 @@ void CanvasFB::toggleFullScreen() {
 
     if (fullScreen == false) {
 
-        SDL_GetWindowPosition(window, &winPosPrev.x, &winPosPrev.y);
+        SDL_GetWindowPosition(window, &posX, &posY);
 
         SDL_SetWindowPosition(window, 0, 0);
         SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -61,7 +61,7 @@ void CanvasFB::toggleFullScreen() {
     } else {
 
         SDL_SetWindowFullscreen(window, 0);
-        SDL_SetWindowPosition(window, winPosPrev.x, winPosPrev.y);
+        SDL_SetWindowPosition(window, posX, posY);
     }
 
     fullScreen = !fullScreen;

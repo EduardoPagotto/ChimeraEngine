@@ -112,10 +112,4 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() {
-    canvas->before();
-
-    RenderScene(*state, *world, *frame);
-
-    canvas->after();
-}
+void Game::onUpdate() { RenderScene(*state, *world, *frame); }

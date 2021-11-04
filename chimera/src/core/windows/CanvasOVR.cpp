@@ -199,7 +199,7 @@ void CanvasOVR::toggleFullScreen(void) {
         /* going fullscreen on the rift. save current window position, and move it
          * to the rift's part of the desktop before going fullscreen
          */
-        SDL_GetWindowPosition(window, &winPosPrev.x, &winPosPrev.y);
+        SDL_GetWindowPosition(window, &posX, &posY);
         SDL_SetWindowPosition(window, hmd->WindowsPos.x, hmd->WindowsPos.y);
         SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
@@ -217,7 +217,7 @@ void CanvasOVR::toggleFullScreen(void) {
     } else {
         /* return to windowed mode and move the window back to its original position */
         SDL_SetWindowFullscreen(window, 0);
-        SDL_SetWindowPosition(window, winPosPrev.x, winPosPrev.y);
+        SDL_SetWindowPosition(window, posX, posY);
 
 #ifdef OVR_OS_LINUX
         glcfg.OGL.Header.BackBufferSize = hmd->Resolution;

@@ -4,7 +4,6 @@
 #define GLEW_STATIC
 
 #include <SDL2/SDL.h>
-#include <glm/glm.hpp>
 #include <string>
 
 namespace Chimera {
@@ -25,7 +24,6 @@ class Canvas {
     virtual void after(const unsigned short& _indexEye = 0) = 0;
     virtual void toggleFullScreen() = 0;
     virtual void reshape(int _width, int _height) = 0;
-
     virtual void swapWindow() = 0;
     virtual int getTotEyes() = 0;
     virtual uint32_t* getPixels() = 0;
@@ -37,11 +35,10 @@ class Canvas {
 
   protected:
     bool fullScreen;
-    int width;
-    int height;
+    int width, height;
+    int posX, posY;
     std::string title;
     SDL_Window* window;
-    SDL_Point winPosPrev;
 };
 } // namespace Chimera
 #endif

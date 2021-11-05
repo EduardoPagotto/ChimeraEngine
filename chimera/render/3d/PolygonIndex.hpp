@@ -1,8 +1,7 @@
-#ifndef __CHIMERA_POLYGONINDEX2__HPP
-#define __CHIMERA_POLYGONINDEX2__HPP
+#pragma once
 
-#include "chimera/core/buffers/IndexBuffer.hpp"
-#include "chimera/core/space/AABB.hpp"
+#include "chimera/render/buffer/IndexBuffer.hpp"
+#include "chimera/render/partition/AABB.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -29,5 +28,3 @@ class PolygonIndex {
     std::vector<uint32_t> polygons;
 };
 } // namespace Chimera
-
-#endif

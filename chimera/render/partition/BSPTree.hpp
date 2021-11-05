@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_BSPTREE_HPP
-#define __CHIMERA_BSPTREE_HPP
+#pragma once
 
 // Ref: https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
@@ -29,4 +28,3 @@ class BspTree {
     std::vector<RenderableSimple*> vpLeaf;
 };
 } // namespace Chimera
-#endif

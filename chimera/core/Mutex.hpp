@@ -1,15 +1,10 @@
-#ifndef __CHIMERA_MUTEX__HPP
-#define __CHIMERA_MUTEX__HPP
+#pragma once
 
 #include <cstdarg>
 #include <iterator>
 #include <pthread.h>
 #include <sys/errno.h>
 #include <sys/time.h>
-
-//#include <ctime>
-//#include <queue>
-//#include <map>
 
 namespace Chimera {
 
@@ -102,6 +97,4 @@ class Lock {
     /// <summary> Ponteiro do Mutex </summary>
     Mutex* m_pMutex;
 };
-
 } // namespace Chimera
-#endif

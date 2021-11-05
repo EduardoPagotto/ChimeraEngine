@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_IRENDER3D__ZZ1_HPP
-#define __CHIMERA_IRENDER3D__ZZ1_HPP
+#pragma once
 
 namespace Chimera {
 class IRenderer3d {
@@ -12,6 +11,4 @@ class IRenderer3d {
     virtual void logToggle() = 0;
     virtual bool getLog() const = 0;
 };
-
 } // namespace Chimera
-#endif

@@ -1,7 +1,6 @@
-#ifndef __CHIMERA_IRENDERABLE2D__HPP
-#define __CHIMERA_IRENDERABLE2D__HPP
+#pragma once
 
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/render/OpenGLDefs.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -17,4 +16,3 @@ class IRenderable2D {
     virtual class Texture* getTexture() const = 0;
 };
 } // namespace Chimera
-#endif

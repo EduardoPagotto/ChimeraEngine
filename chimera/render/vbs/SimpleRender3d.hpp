@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_SIMPLE_RENDER_3D_HPP
-#define __CHIMERA_SIMPLE_RENDER_3D_HPP
+#pragma once
 
 #include "IRenderer3d.hpp"
-#include "chimera/core/ICamera.hpp"
-#include "chimera/core/space/Frustum.hpp"
+#include "chimera/render/ICamera.hpp"
+#include "chimera/render/partition/Frustum.hpp"
 #include <cstdint>
 #include <deque>
 
@@ -31,6 +30,4 @@ class SimpleRender3d : public IRenderer3d {
     uint32_t totIBO;
     uint32_t totFaces;
 };
-
 } // namespace Chimera
-#endif

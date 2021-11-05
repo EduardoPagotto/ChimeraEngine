@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_GROUP_ZZ__HPP
-#define __CHIMERA_GROUP_ZZ__HPP
+#pragma once
 
 #include "../Renderable2D.hpp"
 
@@ -17,4 +16,3 @@ class Group : public IRenderable2D {
     glm::mat4 transformationMatrix;
 };
 } // namespace Chimera
-#endif

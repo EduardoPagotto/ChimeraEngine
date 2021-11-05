@@ -1,9 +1,9 @@
 #include "chimera/render/scene/Scene.hpp"
-#include "chimera/core/Transform.hpp"
-#include "chimera/core/buffers/VertexArray.hpp"
-#include "chimera/core/io/MouseDevice.hpp"
+#include "chimera/core/MouseDevice.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/Material.hpp"
+#include "chimera/render/Transform.hpp"
+#include "chimera/render/buffers/VertexArray.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <SDL2/SDL.h>

@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_RENDERCOMMAND__HPP
-#define __CHIMERA_RENDERCOMMAND__HPP
+#pragma once
 
 #include "IRenderable3d.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/Texture.hpp"
+#include "chimera/render/Shader.hpp"
+#include "chimera/render/Texture.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -16,4 +15,3 @@ struct RenderCommand {
     std::vector<Texture*> vTex;
 };
 } // namespace Chimera
-#endif

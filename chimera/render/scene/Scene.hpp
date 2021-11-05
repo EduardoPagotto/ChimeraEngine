@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_SCENE_ZZ1__HPP
-#define __CHIMERA_SCENE_ZZ1__HPP
+#pragma once
 
-#include "chimera/core/ICamera.hpp"
-#include "chimera/core/buffers/RenderBuffer.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
+#include "chimera/render/ICamera.hpp"
+#include "chimera/render/buffers/RenderBuffer.hpp"
 #include <entt/entt.hpp>
 
 namespace Chimera {
@@ -32,7 +31,4 @@ class Scene {
     RenderBuffer* renderBuffer;
     FrameBuffer* fb;
 };
-
 } // namespace Chimera
-
-#endif

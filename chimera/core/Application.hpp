@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_APPLICATION_CONTROLLER__HPP
-#define __CHIMERA_APPLICATION_CONTROLLER__HPP
+#pragma once
 
-#include "LayerStack.hpp"
-#include "io/Timer.hpp"
-#include "windows/Canvas.hpp"
+//#include "LayerStack.hpp"
+#include "Canvas.hpp"
+#include "Timer.hpp"
 
 namespace Chimera {
 
@@ -16,8 +15,8 @@ class Application {
     int eyeIndice;
 
   protected:
-    void pushLayer(ILayer* layer);
-    void pushOverlay(ILayer* overlay);
+    // void pushLayer(ILayer* layer);
+    // void pushOverlay(ILayer* overlay);
 
     Canvas* canvas;
 
@@ -27,11 +26,9 @@ class Application {
     virtual bool onEvent(const SDL_Event& event) = 0;
 
     bool changeStatusFlow(SDL_Event* pEventSDL);
-    LayerStack layerStack;
+    // LayerStack layerStack;
     Timer timerFPS;
     uint32_t fps;
     bool pause;
 };
 } // namespace Chimera
-
-#endif

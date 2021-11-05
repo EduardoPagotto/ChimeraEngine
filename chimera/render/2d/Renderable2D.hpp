@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_RENDERABLE_2D__HPP
-#define __CHIMERA_RENDERABLE_2D__HPP
+#pragma once
 
 #include "IRenderable2D.hpp"
 #include "IRenderer2D.hpp"
-#include "chimera/core/Texture.hpp"
+#include "chimera/render/Texture.hpp"
 
 namespace Chimera {
 
@@ -28,4 +27,3 @@ class Renderable2D : public IRenderable2D {
     Texture* texture;
 };
 } // namespace Chimera
-#endif

@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_IRENDERER_3D__HPP
-#define __CHIMERA_IRENDERER_3D__HPP
+#pragma once
 
 namespace Chimera {
 
@@ -10,6 +9,4 @@ class IRenderer3d {
     virtual void end() = 0;
     virtual void flush() = 0;
 };
-
 } // namespace Chimera
-#endif

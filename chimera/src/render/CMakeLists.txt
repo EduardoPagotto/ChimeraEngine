@@ -9,12 +9,39 @@ find_package(GLEW REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	vbs/RenderableStatic.cpp
+set (RenderSource 	CanvasGL.cpp
+					CanvasOVR.cpp
+					Shader.cpp
+					VertexData.cpp
+					Transform.cpp
+					Texture.cpp
+					TextureManager.cpp
+					CameraFPS.cpp
+					CameraOrbit.cpp
+					CameraOrthographic.cpp
+					Font.cpp
+					FontAtlas.cpp
+					FontManager.cpp
+					Light.cpp
+					Material.cpp
+					Particle.cpp
+					partition/Triangle.cpp
+					partition/Plane.cpp
+					partition/Frustum.cpp
+					partition/AABB.cpp
+					partition/Octree.cpp
+					buffers/VertexBuffer.cpp
+					buffers/IndexBuffer.cpp
+					buffers/VertexArray.cpp
+					buffers/FrameBuffer.cpp
+					buffers/RenderBuffer.cpp
+					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
 					2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
 					2d/layer/Layer.cpp
+					2d/layer/LayerStack.cpp
 					2d/layer/Group.cpp
 					2d/Label.cpp
 					3d/PolygonIndex.cpp
@@ -23,12 +50,6 @@ set (RenderSource 	vbs/RenderableStatic.cpp
 					3d/RenderableChunk.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
-					Font.cpp
-					FontAtlas.cpp
-					FontManager.cpp
-					Light.cpp
-					Material.cpp
-					Particle.cpp
 					partition/BSPTree.cpp
 					partition/Cube.cpp 
 					partition/Maze.cpp
@@ -38,12 +59,12 @@ set (RenderSource 	vbs/RenderableStatic.cpp
 					scene/CameraController.cpp)
 
 #define os includes
-set (RenderInclude ${CMAKE_SOURCE_DIR}
+set (RenderInclude 	${CMAKE_SOURCE_DIR}
+					${SDL2_INCLUDE_DIR}
 					/usr/local/include/) # Raiz do projeto
 					
 set (RenderIncludeAux ${OPENGL_INCLUDE_DIR}
-				 	${SDL2_INCLUDE_DIR}
-				 	${GLEW_INCLUDE_DIRS})
+				 	  ${GLEW_INCLUDE_DIRS})
 
 # Define o Target
 add_library (ChimeraRender STATIC ${RenderSource})

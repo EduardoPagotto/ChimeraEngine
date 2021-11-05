@@ -1,8 +1,6 @@
-#ifndef __CHIMERA_FONT_ATLAS__HPP
-#define __CHIMERA_FONT_ATLAS__HPP
-
-#include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/TextureManager.hpp"
+#pragma once
+#include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/render/TextureManager.hpp"
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #include <map>
@@ -33,7 +31,4 @@ class FontAtlas {
     std::string name;
     Texture* texture;
 };
-
 } // namespace Chimera
-
-#endif

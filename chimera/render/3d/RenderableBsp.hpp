@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_RENDERABLE_BSP_HPP
-#define __CHIMERA_RENDERABLE_BSP_HPP
+#pragma once
 
-#include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/RenderableSimple.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/BSPTreeNode.hpp"
 #include <vector>
 
@@ -43,6 +42,4 @@ class RenderableBsp : public IRenderable3d {
     Entity entity;
     RenderCommand* command;
 };
-
 } // namespace Chimera
-#endif

@@ -1,7 +1,5 @@
-#ifndef __CHIMERA_PARTICLE__HPP
-#define __CHIMERA_PARTICLE__HPP
-
-#include "chimera/core/OpenGLDefs.hpp"
+#pragma once
+#include "chimera/render/OpenGLDefs.hpp"
 #include "glm/glm.hpp"
 
 namespace Chimera {
@@ -32,4 +30,3 @@ class Particle {
     float cameradistance;
 };
 } // namespace Chimera
-#endif

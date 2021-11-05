@@ -1,9 +1,8 @@
-#ifndef __GAME_TESTE_MAZE__HPP
-#define __GAME_TESTE_MAZE__HPP
+#pragma once
 
 #include "Cube.hpp"
-#include "chimera/core/VertexData.hpp"
-#include "chimera/core/space/Triangle.hpp"
+#include "chimera/render/VertexData.hpp"
+#include "chimera/render/partition/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <vector>
@@ -42,4 +41,3 @@ class Maze {
     std::vector<Triangle> trisList;
 };
 } // namespace Chimera
-#endif

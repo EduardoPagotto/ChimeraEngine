@@ -1,6 +1,6 @@
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/TextureManager.hpp"
+#include "chimera/render/TextureManager.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

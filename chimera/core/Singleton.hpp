@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_SINGLETON__HPP
-#define __CHIMERA_SINGLETON__HPP
+#pragma once
 
 #include "chimera/core/Mutex.hpp"
 
@@ -92,4 +91,3 @@ template <class C> C* Singleton<C>::m_CurrentInstance = nullptr;
 template <class C> long Singleton<C>::m_refCount = 0;
 template <class C> Mutex Singleton<C>::m_travaSingleton;
 } // namespace Chimera
-#endif

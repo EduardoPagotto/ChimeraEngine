@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_RENDERABLE_STATIC_HPP
-#define __CHIMERA_RENDERABLE_STATIC_HPP
+#pragma once
 
 #include "IRenderable.hpp"
-#include "chimera/core/buffers/IndexBuffer.hpp"
-#include "chimera/core/buffers/VertexArray.hpp"
+#include "chimera/render/buffers/IndexBuffer.hpp"
+#include "chimera/render/buffers/VertexArray.hpp"
 
 namespace Chimera {
 
@@ -26,4 +25,3 @@ class RenderableStatic : public IRenderable {
     IndexBuffer* ibo;
 };
 } // namespace Chimera
-#endif

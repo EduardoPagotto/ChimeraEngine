@@ -1,8 +1,7 @@
-#ifndef __CHIMERA_RENDERABLE_DYNAMIC_HPP
-#define __CHIMERA_RENDERABLE_DYNAMIC_HPP
+#pragma once
 
-#include "chimera/core/buffers/VertexArray.hpp"
-#include "chimera/core/buffers/VertexBuffer.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
+#include "chimera/render/buffer/VertexBuffer.hpp"
 
 namespace Chimera {
 
@@ -18,4 +17,3 @@ class RenderableDynamic {
     VertexBuffer* vbo;
 };
 } // namespace Chimera
-#endif

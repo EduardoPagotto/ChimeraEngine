@@ -1,8 +1,7 @@
-#ifndef __CHIMERA_RENDERABLE_CHUNK__HPP
-#define __CHIMERA_RENDERABLE_CHUNK__HPP
+#pragma once
 
-#include "chimera/core/buffers/VertexArray.hpp"
 #include "chimera/render/3d/RenderableSimple.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
 
@@ -27,6 +26,4 @@ class RenderableChunk : public IRenderable3d {
     uint32_t totIndex;
     Entity entity;
 };
-
 } // namespace Chimera
-#endif

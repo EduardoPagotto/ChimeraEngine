@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_IRENDERABLE_3D_Z1__HPP
-#define __CHIMERA_IRENDERABLE_3D_Z1__HPP
+#pragma once
 
 #include <stdint.h>
 
@@ -16,6 +15,4 @@ class IRenderable3d {
     virtual class Entity getEntity() const = 0;
     virtual void submit(class ICamera* camera, class RenderCommand& command, class IRenderer3d* renderer) = 0;
 };
-
 } // namespace Chimera
-#endif

@@ -1,12 +1,11 @@
-#ifndef __CHIMERA_RENDER_3D___ZZ1_HPP
-#define __CHIMERA_RENDER_3D___ZZ1_HPP
+#pragma once
 
 #include "IRenderer3d.hpp"
 #include "RenderCommand.hpp"
-#include "chimera/core/ICamera.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/space/Frustum.hpp"
+#include "chimera/render/ICamera.hpp"
 #include "chimera/render/Light.hpp"
+#include "chimera/render/Shader.hpp"
+#include "chimera/render/partition/Frustum.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <cstdint>
 #include <deque>
@@ -33,6 +32,4 @@ class Renderer3d : public IRenderer3d {
     bool logData;
     uint32_t totIBO, totFaces;
 };
-
 } // namespace Chimera
-#endif

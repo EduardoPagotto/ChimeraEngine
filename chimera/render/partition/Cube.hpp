@@ -1,9 +1,8 @@
-#ifndef __GAME_TESTE_CUBE__HPP
-#define __GAME_TESTE_CUBE__HPP
+#pragma once
 
-#include "chimera/core/VertexData.hpp"
-#include "chimera/core/space/AABB.hpp"
-#include "chimera/core/space/Triangle.hpp"
+#include "chimera/render/VertexData.hpp"
+#include "chimera/render/partition/AABB.hpp"
+#include "chimera/render/partition/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -69,4 +68,3 @@ class Cube : public AABB {
     std::vector<glm::uvec3> tTexIndex;
 };
 } // namespace Chimera
-#endif

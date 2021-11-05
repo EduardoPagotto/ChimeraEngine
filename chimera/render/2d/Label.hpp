@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_LABEL_2D__HPP
-#define __CHIMERA_LABEL_2D__HPP
+#pragma once
 
 #include "Renderable2D.hpp"
 #include "chimera/render/FontAtlas.hpp"
@@ -19,7 +18,4 @@ class Label : public Renderable2D {
     std::string text;
     FontAtlas* font;
 };
-
 } // namespace Chimera
-
-#endif

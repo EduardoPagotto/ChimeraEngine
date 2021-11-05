@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_SCENE_SCRIPTABLE_ENTITY__HPP
-#define __CHIMERA_SCENE_SCRIPTABLE_ENTITY__HPP
+#pragma once
 
 #include "Entity.hpp"
 
@@ -21,7 +20,4 @@ class ScriptableEntity {
     Entity entity;
     friend class Scene;
 };
-
 } // namespace Chimera
-
-#endif

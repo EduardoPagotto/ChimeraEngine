@@ -1,9 +1,9 @@
 #include "chimera/core/Application.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/io/JoystickManager.hpp"
-#include "chimera/core/io/Keyboard.hpp"
-#include "chimera/core/io/MouseDevice.hpp"
-#include "chimera/core/io/utils.hpp"
+#include "chimera/core/JoystickManager.hpp"
+#include "chimera/core/Keyboard.hpp"
+#include "chimera/core/MouseDevice.hpp"
+#include "chimera/core/utils.hpp"
 
 namespace Chimera {
 
@@ -17,11 +17,11 @@ Application::Application(Canvas* canvas) : canvas(canvas), pause(true) {
 }
 
 Application::~Application() {
-    for (ILayer* l : layerStack) { // TODO: melhorar remover apenas os existentes (fazer o deatach!!)
-        l->onDeatach();
-        delete l;
-    }
-    layerStack.clear();
+    // for (ILayer* l : layerStack) { // TODO: melhorar remover apenas os existentes (fazer o deatach!!)
+    //     l->onDeatach();
+    //     delete l;
+    // }
+    // layerStack.clear();
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
@@ -56,15 +56,15 @@ bool Application::changeStatusFlow(SDL_Event* pEventSDL) {
     return true;
 }
 
-void Application::pushLayer(ILayer* layer) {
-    layerStack.pushLayer(layer);
-    layer->onAttach();
-}
+// void Application::pushLayer(ILayer* layer) {
+//     layerStack.pushLayer(layer);
+//     layer->onAttach();
+// }
 
-void Application::pushOverlay(ILayer* overlay) {
-    layerStack.pushOverlay(overlay);
-    overlay->onAttach();
-}
+// void Application::pushOverlay(ILayer* overlay) {
+//     layerStack.pushOverlay(overlay);
+//     overlay->onAttach();
+// }
 
 void Application::run(void) {
     SDL_Event l_eventSDL;
@@ -129,10 +129,10 @@ void Application::run(void) {
             }
 
             this->onEvent(l_eventSDL);
-            for (auto it = layerStack.end(); it != layerStack.begin();) {
-                if ((*--it)->onEvent(l_eventSDL) == true)
-                    break;
-            }
+            // for (auto it = layerStack.end(); it != layerStack.begin();) {
+            //     if ((*--it)->onEvent(l_eventSDL) == true)
+            //         break;
+            // }
         }
         // update game
         if (!pause) {
@@ -145,10 +145,10 @@ void Application::run(void) {
 
                     this->onUpdate();
 
-                    for (auto it = layerStack.begin(); it != layerStack.end(); it++) {
-                        (*it)->onUpdate();
-                        (*it)->render();
-                    }
+                    // for (auto it = layerStack.begin(); it != layerStack.end(); it++) {
+                    //     (*it)->onUpdate();
+                    //     (*it)->render();
+                    // }
                     canvas->after(eye);
                 }
                 canvas->swapWindow();

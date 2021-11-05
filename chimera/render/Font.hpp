@@ -1,7 +1,6 @@
-#ifndef __CHIMERA_FONT__HPP
-#define __CHIMERA_FONT__HPP
+#pragma once
 
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/render/OpenGLDefs.hpp"
 #include <glm/glm.hpp>
 #include <map>
 #include <stdlib.h>
@@ -28,4 +27,3 @@ class Font {
     std::map<uint16_t, Character> Characters;
 };
 } // namespace Chimera
-#endif

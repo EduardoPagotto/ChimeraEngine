@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_EXCEPTION__HPP
-#define __CHIMERA_EXCEPTION__HPP
+#pragma once
 
 #include <exception>
 #include <sstream>
@@ -54,6 +53,4 @@ class Exception : public std::exception {
   private:
     std::string message;
 };
-
 } // namespace Chimera
-#endif

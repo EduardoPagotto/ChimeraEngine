@@ -1,8 +1,7 @@
-#ifndef __CHIMERA_IRENDERER2D__HPP
-#define __CHIMERA_IRENDERER2D__HPP
+#pragma once
 
-#include "chimera/core/TransformationStack.hpp"
 #include "chimera/render/FontAtlas.hpp"
+#include "chimera/render/TransformationStack.hpp"
 #include <string>
 
 namespace Chimera {
@@ -16,4 +15,3 @@ class IRenderer2D {
     virtual void drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) = 0;
 };
 } // namespace Chimera
-#endif

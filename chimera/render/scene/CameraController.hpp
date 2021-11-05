@@ -1,9 +1,7 @@
-#ifndef __CHIMERA_CAMERA_CONTROLLER_FPS_ZZ1__HPP
-#define __CHIMERA_CAMERA_CONTROLLER_FPS_ZZ1__HPP
+#pragma once
 
 #include "ScriptableEntity.hpp"
-#include "chimera/core/ICamera.hpp"
-
+#include "chimera/render/ICamera.hpp"
 #include <iostream>
 
 namespace Chimera {
@@ -18,7 +16,4 @@ class CameraController : public ScriptableEntity {
   private:
     ICamera* camera = nullptr;
 };
-
 } // namespace Chimera
-
-#endif

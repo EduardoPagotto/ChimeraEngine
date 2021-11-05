@@ -1,7 +1,5 @@
-#ifndef __CHIMERA_MATERIAL__HPP
-#define __CHIMERA_MATERIAL__HPP
-
-#include "chimera/core/Texture.hpp"
+#pragma once
+#include "chimera/render/Texture.hpp"
 #include <glm/glm.hpp>
 #include <list>
 #include <map>
@@ -42,4 +40,3 @@ class Material {
     std::list<UniformVal> listMaterial;
 };
 } // namespace Chimera
-#endif

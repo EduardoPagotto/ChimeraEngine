@@ -1,11 +1,10 @@
-#ifndef __CHIMERA_IRENDERABLE__HPP
-#define __CHIMERA_IRENDERABLE__HPP
+#pragma once
 
 #include "IRenderer3d.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/buffers/IndexBuffer.hpp"
-#include "chimera/core/buffers/VertexArray.hpp"
-#include "chimera/core/space/AABB.hpp"
+#include "chimera/render/Shader.hpp"
+#include "chimera/render/buffers/IndexBuffer.hpp"
+#include "chimera/render/buffers/VertexArray.hpp"
+#include "chimera/render/partition/AABB.hpp"
 
 namespace Chimera {
 
@@ -19,6 +18,4 @@ class IRenderable {
     virtual AABB* getAABB() = 0;
     virtual void submit(class IRenderer3d* renderer) = 0;
 };
-
 } // namespace Chimera
-#endif

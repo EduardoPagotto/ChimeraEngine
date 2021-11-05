@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_ENTITY_ZZ__HPP
-#define __CHIMERA_ENTITY_ZZ__HPP
+#pregma once
 
 #include "Entity.hpp"
 #include "Scene.hpp"
@@ -31,4 +30,3 @@ class Entity {
     Scene* scene = nullptr;
 };
 } // namespace Chimera
-#endif

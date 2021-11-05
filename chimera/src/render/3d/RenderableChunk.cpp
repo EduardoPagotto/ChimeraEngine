@@ -1,6 +1,6 @@
 #include "chimera/render/3d/RenderableChunk.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
+#include "chimera/render/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

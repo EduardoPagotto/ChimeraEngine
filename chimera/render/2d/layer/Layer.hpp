@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_IRENDERABLE__HPP
-#define __CHIMERA_IRENDERABLE__HPP
+#pragma once
 
 #include "../Renderable2D.hpp"
-#include "chimera/core/CameraOrthographic.hpp"
-#include "chimera/core/LayerStack.hpp"
+#include "chimera/render/2d/layer/LayerStack.hpp"
+#include "chimera/render/CameraOrthographic.hpp"
 
 namespace Chimera {
 
@@ -25,4 +24,3 @@ class Layer : public ILayer {
     std::vector<IRenderable2D*> renderables;
 };
 } // namespace Chimera
-#endif

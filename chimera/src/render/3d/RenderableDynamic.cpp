@@ -1,5 +1,5 @@
 #include "chimera/render/3d/RenderableDynamic.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/render/OpenGLDefs.hpp"
 
 namespace Chimera {
 

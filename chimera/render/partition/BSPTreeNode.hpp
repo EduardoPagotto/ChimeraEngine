@@ -1,8 +1,7 @@
-#ifndef __CHIMERA_BSPTREE_NODE_HPP
-#define __CHIMERA_BSPTREE_NODE_HPP
+#pragma once
 
-#include "chimera/core/space/Plane.hpp"
-#include "chimera/core/space/Triangle.hpp"
+#include "chimera/render/partition/Plane.hpp"
+#include "chimera/render/partition/Triangle.hpp"
 
 namespace Chimera {
 
@@ -17,4 +16,3 @@ struct BSPTreeNode {
     bool isLeaf;
 };
 } // namespace Chimera
-#endif

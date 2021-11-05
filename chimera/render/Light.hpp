@@ -1,7 +1,6 @@
-#ifndef __CHIMERA_LIGHT__HPP
-#define __CHIMERA_LIGHT__HPP
+#pragma once
 
-#include "chimera/core/Shader.hpp"
+#include "chimera/render/Shader.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -47,4 +46,3 @@ class Light {
     std::vector<UniformVal> listProp;
 };
 } // namespace Chimera
-#endif

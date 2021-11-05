@@ -1,11 +1,10 @@
-#ifndef __CHIMERA_RENDERABLE_SIMPLE_HPP
-#define __CHIMERA_RENDERABLE_SIMPLE_HPP
+#pragma once
 
 #include "IRenderable3d.hpp"
-#include "chimera/core/buffers/IndexBuffer.hpp"
-#include "chimera/core/buffers/VertexArray.hpp"
-#include "chimera/core/space/AABB.hpp"
 #include "chimera/render/3d/PolygonIndex.hpp"
+#include "chimera/render/buffer/IndexBuffer.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
+#include "chimera/render/partition/AABB.hpp"
 #include "chimera/render/scene/Entity.hpp"
 
 namespace Chimera {
@@ -40,4 +39,3 @@ class RenderableSimple : public IRenderable3d {
     Entity entity;
 };
 } // namespace Chimera
-#endif

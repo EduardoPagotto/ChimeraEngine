@@ -1,9 +1,8 @@
-#ifndef __CHIMERA_COMPONENTS__HPP
-#define __CHIMERA_COMPONENTS__HPP
+#pragma once
 
 #include "ScriptableEntity.hpp"
-#include "chimera/core/ICamera.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
+#include "chimera/render/ICamera.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -64,6 +63,4 @@ struct NativeScriptComponent {
         };
     }
 };
-
 } // namespace Chimera
-#endif

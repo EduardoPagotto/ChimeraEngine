@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_FONT_MANAGER__HPP
-#define __CHIMERA_FONT_MANAGER__HPP
-
+#pragma once
 #include "FontAtlas.hpp"
 #include <vector>
 
@@ -18,7 +16,4 @@ class FontManager {
     ~FontManager() {}
     static std::vector<FontAtlas*> fonts;
 };
-
 } // namespace Chimera
-
-#endif

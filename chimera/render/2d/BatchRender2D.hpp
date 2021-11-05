@@ -1,10 +1,9 @@
-#ifndef __CHIMERA_BATCHRENDERABLE_2D__HPP
-#define __CHIMERA_BATCHRENDERABLE_2D__HPP
+#pragma once
 
 #include "Renderable2D.hpp"
-#include "chimera/core/VertexData.hpp"
-#include "chimera/core/buffers/IndexBuffer.hpp"
-#include "chimera/core/buffers/VertexArray.hpp"
+#include "chimera/remder/VertexData.hpp"
+#include "chimera/render/buffer/IndexBuffer.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
 
@@ -42,4 +41,3 @@ class BatchRender2D : public IRenderer2D {
     CameraOrthographic* camera;
 };
 } // namespace Chimera
-#endif

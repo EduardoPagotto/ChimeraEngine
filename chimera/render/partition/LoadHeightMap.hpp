@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_LOAD_HEIGHTMAP__HPP
-#define __CHIMERA_LOAD_HEIGHTMAP__HPP
+#pragam once
 
 #include "chimera/core/VertexData.hpp"
 #include "chimera/render/3d/RenderableSimple.hpp"
@@ -32,7 +31,4 @@ class LoadHeightMap {
     int squareX;
     int squareZ;
 };
-
 } // namespace Chimera
-
-#endif

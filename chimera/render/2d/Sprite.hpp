@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_SPRITE__HPP
-#define __CHIMERA_SPRITE__HPP
+#pragma once
 
 #include "Renderable2D.hpp"
 
@@ -11,6 +10,4 @@ class Sprite : public Renderable2D {
     Sprite(float x, float y, float width, float height, Texture* texture);
     virtual ~Sprite() {}
 };
-
 } // namespace Chimera
-#endif

@@ -2,7 +2,7 @@
 #define __CHIMERA_NODE_CAMERA__HPP
 
 #include "Node.hpp"
-#include "chimera/core/ICamera.hpp"
+#include "chimera/render/ICamera.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {

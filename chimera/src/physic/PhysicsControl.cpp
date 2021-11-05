@@ -1,5 +1,5 @@
 #include "chimera/physic/PhysicsControl.hpp"
-#include "chimera/core/io/utils.hpp"
+#include "chimera/core/utils.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

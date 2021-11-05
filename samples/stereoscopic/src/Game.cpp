@@ -1,14 +1,14 @@
 #include "Game.hpp"
 //#include "chimera/core/CameraFPS.hpp"
-#include "chimera/core/CameraOrbit.hpp"
-#include "chimera/core/io/MouseDevice.hpp"
-#include "chimera/core/io/utils.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
+#include "chimera/core/MouseDevice.hpp"
+#include "chimera/core/utils.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeLight.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
+#include "chimera/render/CameraOrbit.hpp"
+#include "chimera/render/CanvasGL.hpp"
 
 Game::Game(Chimera::Canvas* canvas, const std::vector<std::string>& shadesFile) : Application(canvas) {
 

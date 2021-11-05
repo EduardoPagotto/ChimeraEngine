@@ -2,7 +2,7 @@
 #include "LibraryImages.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/Singleton.hpp"
-#include "chimera/core/TextureManager.hpp"
+#include "chimera/render/TextureManager.hpp"
 
 namespace ChimeraLoaders {
 

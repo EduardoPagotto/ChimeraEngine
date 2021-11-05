@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CanvasGL.hpp"
-#include "chimera/render/buffers/RenderBuffer.hpp"
+#include "chimera/render/buffer/RenderBuffer.hpp"
 
 namespace Chimera {
 
@@ -22,5 +22,3 @@ class CanvasHmd : public CanvasGL {
     Shader shader;
 };
 } // namespace Chimera
-
-#endif

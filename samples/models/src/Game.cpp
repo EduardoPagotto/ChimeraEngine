@@ -1,16 +1,16 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/JoystickManager.hpp"
+#include "chimera/core/MouseDevice.hpp"
 #include "chimera/core/Singleton.hpp"
-#include "chimera/core/io/JoystickManager.hpp"
-#include "chimera/core/io/MouseDevice.hpp"
-#include "chimera/core/io/utils.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
+#include "chimera/core/utils.hpp"
 #include "chimera/loader/VisualScene.hpp"
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
 #include "chimera/physic_loader/PhysicsScene.hpp"
+#include "chimera/render/CanvasGL.hpp"
+#include "chimera/render/OpenGLDefs.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     using namespace Chimera;

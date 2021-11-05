@@ -1,14 +1,13 @@
 #include "LibraryPhysicsScenes.hpp"
 #include "LibraryPhysicModels.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/Transform.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/physic/Solid.hpp"
+#include "chimera/render/Transform.hpp"
 
 namespace ChimeraLoaders {
 
-LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url,
-                                           Chimera::PhysicsControl* _pPhysicsControl)
+LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::PhysicsControl* _pPhysicsControl)
     : Library(_root, _url) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
     pPhysicsControl = _pPhysicsControl;
@@ -18,8 +17,7 @@ LibraryPhysicsScenes::~LibraryPhysicsScenes() { Chimera::Singleton<ListNodes>::r
 
 void LibraryPhysicsScenes::target() {
 
-    tinyxml2::XMLElement* l_nPhyScene =
-        root->FirstChildElement("library_physics_scenes")->FirstChildElement("physics_scene");
+    tinyxml2::XMLElement* l_nPhyScene = root->FirstChildElement("library_physics_scenes")->FirstChildElement("physics_scene");
     for (l_nPhyScene; l_nPhyScene; l_nPhyScene = l_nPhyScene->NextSiblingElement()) {
 
         std::string l_id = l_nPhyScene->Attribute("id");

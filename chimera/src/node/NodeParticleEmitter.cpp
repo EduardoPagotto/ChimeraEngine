@@ -1,8 +1,8 @@
 #include "chimera/node/NodeParticleEmitter.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/TextureManager.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/VisitorInterface.hpp"
+#include "chimera/render/TextureManager.hpp"
 #include <algorithm>
 
 namespace Chimera {

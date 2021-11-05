@@ -1,8 +1,8 @@
 #include "LibraryCameras.hpp"
 //#include "chimera/core/CameraFPS.hpp"
-#include "chimera/core/CameraOrbit.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/node/NodeCamera.hpp"
+#include "chimera/render/CameraOrbit.hpp"
 
 namespace ChimeraLoaders {
 

@@ -1,6 +1,6 @@
 #include "Game.hpp"
+#include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/windows/CanvasFB.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {

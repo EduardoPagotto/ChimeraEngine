@@ -10,7 +10,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
 set (RenderSource 	CanvasGL.cpp
-					CanvasOVR.cpp
 					Shader.cpp
 					VertexData.cpp
 					Transform.cpp
@@ -30,6 +29,11 @@ set (RenderSource 	CanvasGL.cpp
 					partition/Frustum.cpp
 					partition/AABB.cpp
 					partition/Octree.cpp
+					partition/BSPTree.cpp
+					partition/Cube.cpp 
+					partition/Maze.cpp
+					partition/LoadObj.cpp
+					partition/LoadHeightMap.cpp
 					buffer/VertexBuffer.cpp
 					buffer/IndexBuffer.cpp
 					buffer/VertexArray.cpp
@@ -50,13 +54,21 @@ set (RenderSource 	CanvasGL.cpp
 					3d/RenderableChunk.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
-					partition/BSPTree.cpp
-					partition/Cube.cpp 
-					partition/Maze.cpp
-					partition/LoadObj.cpp
-					partition/LoadHeightMap.cpp
 					scene/Scene.cpp
 					scene/CameraController.cpp)
+
+#Adiciona objetos e includes do OVR ao RenderSource e IncludeCore
+if (OVR_SET_TO_USE)
+	message(STATUS "OVR Incluido no Projeto")
+	set(RenderSource ${RenderSource} src/OvrDevice.cpp) #adiciona o cpp
+	set(IncludeCore ${IncludeCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
+endif(OVR_SET_TO_USE)
+
+if (HMD_Z1_SET_TO_USE)
+	message(STATUS "HMD_Z1 Incluido no Projeto")
+	set(RenderSource ${RenderSource} CanvasHmd.cpp) #adiciona o cpp
+	#set(RenderSource ${RenderSource} buffers/RenderBuffer.cpp) #adiciona o cpp
+endif(HMD_Z1_SET_TO_USE)
 
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}

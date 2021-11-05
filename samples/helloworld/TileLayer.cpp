@@ -1,6 +1,6 @@
 #include "TileLayer.hpp"
-#include "chimera/core/CameraOrthographic.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
+#include "chimera/render/CameraOrthographic.hpp"
 #include <glm/gtx/transform.hpp>
 
 TileLayer::TileLayer(Chimera::Shader* shader)

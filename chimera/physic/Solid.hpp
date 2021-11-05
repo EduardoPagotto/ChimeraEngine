@@ -2,7 +2,7 @@
 #define __CHIMERA_SOLID__HPP
 
 #include "PhysicsControl.hpp"
-#include "chimera/core/Transform.hpp"
+#include "chimera/render/Transform.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>
@@ -29,13 +29,9 @@ class Solid : public Transform {
 
     inline void setMass(const float& _mass) { mass = _mass; }
 
-    inline void setShapeBox(const glm::vec3& _size) {
-        pShapeCollision = new btBoxShape(btVector3(_size.x, _size.y, _size.z));
-    }
+    inline void setShapeBox(const glm::vec3& _size) { pShapeCollision = new btBoxShape(btVector3(_size.x, _size.y, _size.z)); }
 
-    inline void setShapeCilinder(const glm::vec3& _val) {
-        pShapeCollision = new btCylinderShape(btVector3(_val.x, _val.y, _val.z));
-    }
+    inline void setShapeCilinder(const glm::vec3& _val) { pShapeCollision = new btCylinderShape(btVector3(_val.x, _val.y, _val.z)); }
 
     inline void setShapePlane(const glm::vec3& _val, const float& _constant) {
         pShapeCollision = new btStaticPlaneShape(btVector3(_val.x, _val.y, _val.z), _constant);

@@ -2,11 +2,11 @@
 #define __CHIMERA_NODE_PARTICLE_EMITTER__HPP
 
 #include "Node.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/Transform.hpp"
-#include "chimera/core/io/Timer.hpp"
+#include "chimera/core/Timer.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Particle.hpp"
+#include "chimera/render/Shader.hpp"
+#include "chimera/render/Transform.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -

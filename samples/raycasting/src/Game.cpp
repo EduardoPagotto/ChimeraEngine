@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/io/utils.hpp"
+#include "chimera/core/utils.hpp"
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
 

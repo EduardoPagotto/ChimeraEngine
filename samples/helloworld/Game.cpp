@@ -1,10 +1,10 @@
 #include "Game.hpp"
-#include "chimera/core/TextureManager.hpp"
-#include "chimera/core/Transform.hpp"
-#include "chimera/core/io/utils.hpp"
+#include "chimera/core/utils.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/2d/layer/Group.hpp"
 #include "chimera/render/FontManager.hpp"
+#include "chimera/render/TextureManager.hpp"
+#include "chimera/render/Transform.hpp"
 #include <time.h>
 
 Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
@@ -52,7 +52,8 @@ void Game::onStart() {
     FontManager::get()->setScale(glm::vec2(30, 30)); // em TileLayer ortho values!!!
     lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
-    this->pushLayer(layer);
+    // this->pushLayer(layer);
+    // FIXME: recolocar na nova classe
 }
 
 bool Game::onEvent(const SDL_Event& event) {

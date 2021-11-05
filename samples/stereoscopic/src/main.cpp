@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/windows/CanvasHmd.hpp"
+#include "chimera/render/CanvasHmd.hpp"
 #include <yaml-cpp/yaml.h>
 
 int main(int argn, char** argv) {

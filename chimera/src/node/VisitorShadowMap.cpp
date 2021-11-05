@@ -1,5 +1,4 @@
 #include "chimera/node/VisitorShadowMap.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeHUD.hpp"
@@ -7,6 +6,7 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"
 #include "chimera/node/VisitParser.hpp"
+#include "chimera/render/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>

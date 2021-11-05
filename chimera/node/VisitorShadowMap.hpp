@@ -3,9 +3,9 @@
 
 #include "Node.hpp"
 #include "VisitorInterface.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/Transform.hpp"
-#include "chimera/core/buffers/FrameBuffer.hpp"
+#include "chimera/render/Shader.hpp"
+#include "chimera/render/Transform.hpp"
+#include "chimera/render/buffer/FrameBuffer.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 #include <string>
 

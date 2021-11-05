@@ -1,11 +1,11 @@
 #ifndef __CHIMERA_VISITOR_RENDER__HPP
 #define __CHIMERA_VISITOR_RENDER__HPP
 
-#include "chimera/core/ICamera.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/Transform.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
 #include "chimera/node/VisitorShadowMap.hpp"
+#include "chimera/render/CanvasGL.hpp"
+#include "chimera/render/ICamera.hpp"
+#include "chimera/render/Shader.hpp"
+#include "chimera/render/Transform.hpp"
 #include "chimera/render/vbs/SimpleRender3d.hpp"
 
 namespace Chimera {

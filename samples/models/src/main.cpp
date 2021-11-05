@@ -3,9 +3,9 @@
 #include <map>
 
 #ifdef OVR_SET_TO_USE
-#include "chimera/core/windows/CanvasOVR.hpp"
+#include "chimera/render/CanvasOVR.hpp"
 #else
-#include "chimera/core/windows/CanvasGL.hpp"
+#include "chimera/render/CanvasGL.hpp"
 #endif
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"

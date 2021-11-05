@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "Node.hpp"
-#include "chimera/core/Shader.hpp"
 #include "chimera/render/Font.hpp"
+#include "chimera/render/Shader.hpp"
 
 namespace Chimera {
 class NodeHUD : public Node {

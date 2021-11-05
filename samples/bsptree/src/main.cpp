@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/windows/CanvasGL.hpp"
+#include "chimera/render/CanvasGL.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {

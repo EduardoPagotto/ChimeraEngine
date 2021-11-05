@@ -1,4 +1,4 @@
-#include "chimera/render/buffers/FrameBuffer.hpp"
+#include "chimera/render/buffer/FrameBuffer.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 

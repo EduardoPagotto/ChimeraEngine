@@ -1,6 +1,6 @@
 #pragma once
 
-#include "chimera/core/VertexData.hpp"
+#include "chimera/render/VertexData.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {

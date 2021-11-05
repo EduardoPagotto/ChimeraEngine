@@ -1,8 +1,8 @@
 #pragma once
 
 #include "IRenderable.hpp"
-#include "chimera/render/buffers/IndexBuffer.hpp"
-#include "chimera/render/buffers/VertexArray.hpp"
+#include "chimera/render/buffer/IndexBuffer.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
 

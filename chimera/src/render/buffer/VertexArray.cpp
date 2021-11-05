@@ -1,4 +1,4 @@
-#include "chimera/render/buffers/VertexArray.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 
 namespace Chimera {

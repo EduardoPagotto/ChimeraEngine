@@ -2,8 +2,8 @@
 
 #include "IRenderer3d.hpp"
 #include "chimera/render/Shader.hpp"
-#include "chimera/render/buffers/IndexBuffer.hpp"
-#include "chimera/render/buffers/VertexArray.hpp"
+#include "chimera/render/buffer/IndexBuffer.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/AABB.hpp"
 
 namespace Chimera {

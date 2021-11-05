@@ -30,11 +30,11 @@ set (RenderSource 	CanvasGL.cpp
 					partition/Frustum.cpp
 					partition/AABB.cpp
 					partition/Octree.cpp
-					buffers/VertexBuffer.cpp
-					buffers/IndexBuffer.cpp
-					buffers/VertexArray.cpp
-					buffers/FrameBuffer.cpp
-					buffers/RenderBuffer.cpp
+					buffer/VertexBuffer.cpp
+					buffer/IndexBuffer.cpp
+					buffer/VertexArray.cpp
+					buffer/FrameBuffer.cpp
+					buffer/RenderBuffer.cpp
 					vbs/RenderableStatic.cpp
 					vbs/SimpleRender3d.cpp
 					2d/Renderable2D.cpp

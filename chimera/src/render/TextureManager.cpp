@@ -1,5 +1,5 @@
 #include "chimera/render/TextureManager.hpp"
-#include "chimera/render/Exception.hpp"
+#include "chimera/core/Exception.hpp"
 #include <SDL2/SDL_image.h>
 
 namespace Chimera {

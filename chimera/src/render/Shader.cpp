@@ -1,6 +1,6 @@
 #include "chimera/render/Shader.hpp"
-#include "chimera/render/Exception.hpp"
-#include "chimera/render/io/utils.hpp"
+#include "chimera/core/Exception.hpp"
+#include "chimera/core/utils.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

@@ -1,5 +1,4 @@
-#pregma once
-
+#pragma once
 #include "Entity.hpp"
 #include "Scene.hpp"
 #include <entt/entt.hpp>

@@ -2,7 +2,7 @@
 
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/ICamera.hpp"
-#include "chimera/render/buffers/RenderBuffer.hpp"
+#include "chimera/render/buffer/RenderBuffer.hpp"
 #include <entt/entt.hpp>
 
 namespace Chimera {

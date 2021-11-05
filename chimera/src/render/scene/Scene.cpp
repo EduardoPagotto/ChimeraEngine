@@ -3,7 +3,7 @@
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Transform.hpp"
-#include "chimera/render/buffers/VertexArray.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <SDL2/SDL.h>

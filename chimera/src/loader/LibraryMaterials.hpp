@@ -11,7 +11,7 @@ class LibraryMaterials : public Library {
   public:
     LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url);
     virtual ~LibraryMaterials();
-    Chimera::Material* target();
+    Material* target();
 
   private:
 };

@@ -11,11 +11,11 @@ class LibraryGeometrys : public Library {
   public:
     LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url);
     virtual ~LibraryGeometrys();
-    Chimera::NodeMesh* target();
+    NodeMesh* target();
 
   private:
     int getSource(tinyxml2::XMLElement* _source, std::vector<float>& _arrayValores);
-    std::string loadMeshCollada(tinyxml2::XMLElement* _nNode, Chimera::NodeMesh* _pMesh);
+    std::string loadMeshCollada(tinyxml2::XMLElement* _nNode, NodeMesh* _pMesh);
 };
 } // namespace Chimera
 

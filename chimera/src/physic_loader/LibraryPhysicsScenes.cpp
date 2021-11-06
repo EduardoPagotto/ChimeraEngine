@@ -7,13 +7,13 @@
 
 namespace Chimera {
 
-LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::PhysicsControl* _pPhysicsControl)
+LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, PhysicsControl* _pPhysicsControl)
     : Library(_root, _url) {
-    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
+    pListNodes = Singleton<ListNodes>::getRefSingleton();
     pPhysicsControl = _pPhysicsControl;
 }
 
-LibraryPhysicsScenes::~LibraryPhysicsScenes() { Chimera::Singleton<ListNodes>::releaseRefSingleton(); }
+LibraryPhysicsScenes::~LibraryPhysicsScenes() { Singleton<ListNodes>::releaseRefSingleton(); }
 
 void LibraryPhysicsScenes::target() {
 
@@ -31,7 +31,7 @@ void LibraryPhysicsScenes::target() {
                 std::string l_url = l_nPyModel->Attribute("url");
 
                 LibraryPhysicModels lib(root, l_url, pPhysicsControl);
-                std::map<std::string, Chimera::Solid*> mapSolids;
+                std::map<std::string, Solid*> mapSolids;
                 lib.target(mapSolids);
 
                 tinyxml2::XMLElement* l_nRigid = l_nPyModel->FirstChildElement("instance_rigid_body");
@@ -40,8 +40,8 @@ void LibraryPhysicsScenes::target() {
                     std::string body = l_nRigid->Attribute("body");
                     std::string target = l_nRigid->Attribute("target");
 
-                    Chimera::Solid* pSolid = mapSolids[body];
-                    Chimera::NodeMesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
+                    Solid* pSolid = mapSolids[body];
+                    NodeMesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
 
                     pMesh->replaceTransform(pSolid);
                 }
@@ -50,7 +50,7 @@ void LibraryPhysicsScenes::target() {
             return;
         }
     }
-    throw Chimera::Exception("Physics scene nao encontrado: " + url);
+    throw Exception("Physics scene nao encontrado: " + url);
 }
 
 void LibraryPhysicsScenes::loadPhysicControlCollada(tinyxml2::XMLElement* _nNode) {

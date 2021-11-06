@@ -10,11 +10,11 @@ class BspTree {
   public:
     BspTree() : root(nullptr) {}
     virtual ~BspTree() {}
-    // RenderableBsp* create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
-    void create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
+    // RenderableBsp* create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
+    void create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
 
     BSPTreeNode* getRoot() const { return root; }
-    std::vector<Chimera::VertexData>* getVertex() { return &vVertex; }
+    std::vector<VertexData>* getVertex() { return &vVertex; }
     std::vector<RenderableSimple*>* getLeafs() { return &vpLeaf; }
 
   private:
@@ -24,7 +24,7 @@ class BspTree {
     void createLeafy(BSPTreeNode* tree, std::list<Triangle*>& _vTriangle);
 
     BSPTreeNode* root;
-    std::vector<Chimera::VertexData> vVertex;
+    std::vector<VertexData> vVertex;
     std::vector<RenderableSimple*> vpLeaf;
 };
 } // namespace Chimera

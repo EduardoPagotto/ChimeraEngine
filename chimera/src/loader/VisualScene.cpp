@@ -5,12 +5,12 @@
 
 namespace Chimera {
 
-VisualScene::VisualScene(const std::string& _file, Chimera::NodeGroup* _pGroup) : Library(nullptr, "!" + _file) {
-    pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
+VisualScene::VisualScene(const std::string& _file, NodeGroup* _pGroup) : Library(nullptr, "!" + _file) {
+    pListNodes = Singleton<ListNodes>::getRefSingleton();
     pGroup = _pGroup;
 }
 
-VisualScene::~VisualScene() { Chimera::Singleton<ListNodes>::releaseRefSingleton(); }
+VisualScene::~VisualScene() { Singleton<ListNodes>::releaseRefSingleton(); }
 
 void VisualScene::target() {
     tinyxml2::XMLElement* l_nVisual = root->FirstChildElement("scene")->FirstChildElement("instance_visual_scene");

@@ -32,17 +32,17 @@ Application::~Application() {
 bool Application::changeStatusFlow(SDL_Event* pEventSDL) {
 
     switch (pEventSDL->user.code) {
-        case Chimera::EVENT_FLOW_PAUSE: {
+        case EVENT_FLOW_PAUSE: {
             pause = true;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
             return false;
         } break;
-        case Chimera::EVENT_FLOW_RESUME: {
+        case EVENT_FLOW_RESUME: {
             pause = false;
             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
             return false;
         } break;
-        case Chimera::EVENT_FLOW_STOP: {
+        case EVENT_FLOW_STOP: {
             SDL_Event l_eventQuit;
             l_eventQuit.type = SDL_QUIT;
             if (SDL_PushEvent(&l_eventQuit) == -1) {

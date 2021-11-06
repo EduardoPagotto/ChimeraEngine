@@ -122,7 +122,7 @@ void Cube::setNeighbor(DEEP deep, CARDINAL card, Cube* pCube) {
     }
 }
 
-void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     glm::uvec3 tri = this->tVertIndex[numFace];
     glm::uvec3 tex = this->tTexIndex[numTex];
@@ -246,7 +246,7 @@ bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
     return false;
 }
 
-void Cube::newWall(std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newWall(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     if ((this->pNorth != nullptr) && (this->pNorth->getSpace() == SPACE::WALL)) {
         this->addFace(false, 0, 0, vl, tl);
@@ -269,7 +269,7 @@ void Cube::newWall(std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& 
     }
 }
 
-void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     bool westWallDown = false;
     bool westWallUp = false;
@@ -421,7 +421,7 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>
     }
 }
 
-void Cube::newDiag(std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newDiag(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     // get side
     CARDINAL card = this->emptyQuadrantDiag(DEEP::MIDDLE, false);
@@ -465,7 +465,7 @@ void Cube::newDiag(std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& 
     }
 }
 
-void Cube::newFloor(std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newFloor(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     CARDINAL card = CARDINAL::NONE;
     if ((this->pBottom != nullptr) && (this->pBottom->getSpace() == SPACE::DIAG))
@@ -474,7 +474,7 @@ void Cube::newFloor(std::vector<Chimera::VertexData>& vl, std::vector<Triangle>&
     this->newFlatFloorCeeling(true, card, vl, tl);
 }
 
-void Cube::newCeeling(std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newCeeling(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     CARDINAL card = CARDINAL::NONE;
     if ((this->pUp != nullptr) && (this->pUp->getSpace() == SPACE::DIAG))
@@ -483,7 +483,7 @@ void Cube::newCeeling(std::vector<Chimera::VertexData>& vl, std::vector<Triangle
     this->newFlatFloorCeeling(false, card, vl, tl);
 }
 
-void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     if (isFloor) {
         switch (card) {
@@ -526,7 +526,7 @@ void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<Chimera:
     }
 }
 
-void Cube::newRampNSEW(SPACE space, std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newRampNSEW(SPACE space, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     if (space == SPACE::RAMP_FNS) {
 
@@ -560,7 +560,7 @@ void Cube::newRampNSEW(SPACE space, std::vector<Chimera::VertexData>& vl, std::v
     }
 }
 
-void Cube::create(std::vector<Chimera::VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::create(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     SPACE val = this->getSpace();
     switch (val) {

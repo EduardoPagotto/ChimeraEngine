@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-PhysicsScene::PhysicsScene(const std::string& _file, Chimera::PhysicsControl* _pPhysicsControl) : Library(nullptr, "!" + _file) {
+PhysicsScene::PhysicsScene(const std::string& _file, PhysicsControl* _pPhysicsControl) : Library(nullptr, "!" + _file) {
     pPhysicsControl = _pPhysicsControl;
 }
 

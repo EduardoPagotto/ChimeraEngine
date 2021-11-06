@@ -114,7 +114,7 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
         shader.setUniform("lightSpaceMatrix", pShadowMapVisitor->getLightSpaceMatrix());
     }
 
-    NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Chimera::Kind::CAMERA, 0, false);
+    NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
         cameraScene = (ICamera3D*)pCam->getCamera();
         cameraScene->processInput(0.01);

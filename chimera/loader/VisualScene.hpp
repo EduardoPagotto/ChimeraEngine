@@ -10,13 +10,13 @@ namespace Chimera {
 class VisualScene : public Library {
 
   public:
-    VisualScene(const std::string& _file, Chimera::NodeGroup* _pGroup);
+    VisualScene(const std::string& _file, NodeGroup* _pGroup);
     virtual ~VisualScene();
     void target();
 
   private:
     ListNodes* pListNodes;
-    Chimera::NodeGroup* pGroup;
+    NodeGroup* pGroup;
 };
 } // namespace Chimera
 

@@ -10,7 +10,7 @@ LibraryCameras::LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _
 
 LibraryCameras::~LibraryCameras() {}
 
-Chimera::NodeCamera* LibraryCameras::target() {
+NodeCamera* LibraryCameras::target() {
 
     tinyxml2::XMLElement* l_nCam = root->FirstChildElement("library_cameras")->FirstChildElement("camera");
     for (l_nCam; l_nCam; l_nCam = l_nCam->NextSiblingElement()) {
@@ -18,7 +18,7 @@ Chimera::NodeCamera* LibraryCameras::target() {
         std::string l_id = l_nCam->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            Chimera::NodeCamera* pCameraNew = new Chimera::NodeCamera(nullptr, l_id);
+            NodeCamera* pCameraNew = new NodeCamera(nullptr, l_id);
             // loadbase(l_nCam, pCameraNew);
             tinyxml2::XMLElement* l_nExtra = findExtra(l_nCam);
             if (l_nExtra) {
@@ -26,8 +26,8 @@ Chimera::NodeCamera* LibraryCameras::target() {
                 tinyxml2::XMLElement* l_nMax = l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
 
                 // posicao da camera desconhecida
-                Chimera::CameraOrbit* cam = new Chimera::CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
-                // Chimera::CameraFPS* cam = new Chimera::CameraFPS(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
+                CameraOrbit* cam = new CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
+                // CameraFPS* cam = new CameraFPS(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
                 cam->setLimits(atof(l_nMin->GetText()), atof(l_nMax->GetText()));
                 pCameraNew->setCamera(cam);
                 loadbase(l_nCam, pCameraNew);
@@ -36,27 +36,27 @@ Chimera::NodeCamera* LibraryCameras::target() {
             return pCameraNew;
         }
     }
-    throw Chimera::Exception("Camera nao encontrada: " + url);
+    throw Exception("Camera nao encontrada: " + url);
 }
 
-void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera* _pCamera) {
+void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, NodeCamera* _pCamera) {
     tinyxml2::XMLElement* l_nPerspective =
         _nNode->FirstChildElement("optics")->FirstChildElement("technique_common")->FirstChildElement("perspective");
     if (l_nPerspective != nullptr) {
         //_pCamera->setPerspective(true);
-        // Chimera::ViewPoint* vp = _pCamera->getViewPoint();
+        // ViewPoint* vp = _pCamera->getViewPoint();
         float fov = atof(l_nPerspective->FirstChildElement("xfov")->GetText());
         float near = atof(l_nPerspective->FirstChildElement("znear")->GetText());
         float far = atof(l_nPerspective->FirstChildElement("zfar")->GetText());
 
-        Chimera::ICamera3D* pc = (Chimera::ICamera3D*)_pCamera->getCamera();
+        ICamera3D* pc = (ICamera3D*)_pCamera->getCamera();
         pc->setFov(fov);
         pc->setNear(near);
         pc->setFar(far);
 
     } else {
         // TODO testar ecarregar ortogonal aqui
-        throw Chimera::Exception("Camera, Ortogonal nao implementada: " + url);
+        throw Exception("Camera, Ortogonal nao implementada: " + url);
     }
 }
 } // namespace Chimera

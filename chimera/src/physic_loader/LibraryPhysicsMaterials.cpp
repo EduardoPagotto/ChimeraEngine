@@ -7,7 +7,7 @@ LibraryPhysicsMaterials::LibraryPhysicsMaterials(tinyxml2::XMLElement* _root, co
 
 LibraryPhysicsMaterials::~LibraryPhysicsMaterials() {}
 
-Chimera::PhysicMaterial* LibraryPhysicsMaterials::target() {
+PhysicMaterial* LibraryPhysicsMaterials::target() {
 
     tinyxml2::XMLElement* l_nPyMat = root->FirstChildElement("library_physics_materials")->FirstChildElement("physics_material");
     for (l_nPyMat; l_nPyMat; l_nPyMat = l_nPyMat->NextSiblingElement()) {
@@ -17,7 +17,7 @@ Chimera::PhysicMaterial* LibraryPhysicsMaterials::target() {
             tinyxml2::XMLElement* l_nTecDyn = l_nPyMat->FirstChildElement("technique_common")->FirstChildElement("dynamic_friction");
             tinyxml2::XMLElement* l_nTecRes = l_nPyMat->FirstChildElement("technique_common")->FirstChildElement("restitution");
 
-            Chimera::PhysicMaterial* pMaterial = new Chimera::PhysicMaterial();
+            PhysicMaterial* pMaterial = new PhysicMaterial();
             if (l_nTecDyn)
                 pMaterial->setFrictionDynamic(atof(l_nTecDyn->GetText()));
 
@@ -27,6 +27,6 @@ Chimera::PhysicMaterial* LibraryPhysicsMaterials::target() {
             return pMaterial;
         }
     }
-    throw Chimera::Exception("Physics material nao encontrado: " + std::string(url));
+    throw Exception("Physics material nao encontrado: " + std::string(url));
 }
 } // namespace Chimera

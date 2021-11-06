@@ -28,7 +28,7 @@ std::string utilReadFile(const std::string& filepath) {
         in.close();
     } else {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "File \"%s\" not found.", filepath.c_str());
-        throw Chimera::Exception("File not found: " + std::string(filepath));
+        throw Exception("File not found: " + std::string(filepath));
     }
 
     return result;

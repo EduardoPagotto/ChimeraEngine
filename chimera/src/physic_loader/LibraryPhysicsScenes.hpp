@@ -9,7 +9,7 @@ namespace Chimera {
 
 class LibraryPhysicsScenes : public Library {
   public:
-    LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::PhysicsControl* _pPhysicsControl);
+    LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, PhysicsControl* _pPhysicsControl);
     virtual ~LibraryPhysicsScenes();
     void target();
 
@@ -17,7 +17,7 @@ class LibraryPhysicsScenes : public Library {
     void loadPhysicControlCollada(tinyxml2::XMLElement* _nNode);
 
     ListNodes* pListNodes;
-    Chimera::PhysicsControl* pPhysicsControl;
+    PhysicsControl* pPhysicsControl;
 };
 } // namespace Chimera
 

@@ -10,14 +10,14 @@ namespace Chimera {
 class LibraryPhysicModels : public Library {
 
   public:
-    LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::PhysicsControl* _pWorld);
+    LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url, PhysicsControl* _pWorld);
     virtual ~LibraryPhysicModels();
-    void target(std::map<std::string, Chimera::Solid*>& _mapSolids);
+    void target(std::map<std::string, Solid*>& _mapSolids);
 
   private:
-    void loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, Chimera::Solid* _pPhysic);
+    void loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, Solid* _pPhysic);
     ListNodes* pListNodes;
-    Chimera::PhysicsControl* pWorld;
+    PhysicsControl* pWorld;
 };
 } // namespace Chimera
 

@@ -11,11 +11,11 @@ class LibraryLights : public Library {
   public:
     LibraryLights(tinyxml2::XMLElement* _root, const std::string& _url);
     virtual ~LibraryLights();
-    Chimera::NodeLight* target();
+    NodeLight* target();
 
   private:
     glm::vec4 getColor(tinyxml2::XMLElement* l_nColorVal);
-    std::tuple<glm::vec4, Chimera::LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
+    std::tuple<glm::vec4, LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
 };
 } // namespace Chimera
 

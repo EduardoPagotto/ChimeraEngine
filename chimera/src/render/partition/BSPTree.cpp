@@ -9,9 +9,9 @@ template <class T> void swapFace(T& a, T& b) {
     a = c;
 }
 
-// RenderableBsp* BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
-// void BspTree::create(std::vector<Chimera::VertexData>& vVertex, std::list<Triangle*>& vTris) {
-void BspTree::create(std::vector<Chimera::VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
+// RenderableBsp* BspTree::create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
+// void BspTree::create(std::vector<VertexData>& vVertex, std::list<Triangle*>& vTris) {
+void BspTree::create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
 
     std::list<Triangle*> vTris;
     if (_vIndex.size() > 0) {
@@ -101,7 +101,7 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     unsigned int last = vVertex.size();
 
     // Vertex dos triangulos a serem normalizados
-    Chimera::VertexData vertA, vertB, vertC;
+    VertexData vertA, vertB, vertC;
 
     // Pega pontos posicao original e inteseccao
     glm::vec3 A, B;

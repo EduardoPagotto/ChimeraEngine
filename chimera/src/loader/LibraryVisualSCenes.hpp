@@ -10,15 +10,15 @@ namespace Chimera {
 class LibraryVisualScenes : public Library {
 
   public:
-    LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::NodeGroup* _pRootNode);
+    LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, NodeGroup* _pRootNode);
     virtual ~LibraryVisualScenes();
     void target();
 
   private:
     glm::mat4 getTransformation(tinyxml2::XMLElement* _nNode);
-    void carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type);
+    void carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type);
     ListNodes* pListNodes;
-    Chimera::NodeGroup* pRootNode;
+    NodeGroup* pRootNode;
 };
 } // namespace Chimera
 

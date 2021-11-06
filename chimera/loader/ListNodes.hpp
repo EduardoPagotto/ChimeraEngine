@@ -10,7 +10,7 @@
 namespace Chimera {
 
 class ListNodes {
-    friend class Chimera::Singleton<ListNodes>;
+    friend class Singleton<ListNodes>;
 
   public:
     void reset() noexcept {
@@ -18,8 +18,8 @@ class ListNodes {
         mapMeshNode.clear();
     }
 
-    std::map<std::string, Chimera::NodeMesh*> mapMesh;
-    std::map<std::string, Chimera::Node*> mapMeshNode;
+    std::map<std::string, NodeMesh*> mapMesh;
+    std::map<std::string, Node*> mapMeshNode;
 
   protected:
     ListNodes(){};

@@ -11,7 +11,7 @@ class LibraryPhysicsMaterials : public Library {
   public:
     LibraryPhysicsMaterials(tinyxml2::XMLElement* _root, const std::string& _url);
     virtual ~LibraryPhysicsMaterials();
-    Chimera::PhysicMaterial* target();
+    PhysicMaterial* target();
 };
 } // namespace Chimera
 

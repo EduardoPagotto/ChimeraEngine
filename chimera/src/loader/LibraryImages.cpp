@@ -25,6 +25,6 @@ std::tuple<std::string, std::string> LibraryImages::target() {
         }
     }
 
-    throw Chimera::Exception("Imagen não encontrada:" + url);
+    throw Exception("Imagen não encontrada:" + url);
 }
 } // namespace Chimera

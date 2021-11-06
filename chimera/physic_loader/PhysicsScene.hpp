@@ -8,12 +8,12 @@ namespace Chimera {
 
 class PhysicsScene : public Library {
   public:
-    PhysicsScene(const std::string& _file, Chimera::PhysicsControl* _pPhysicsControl);
+    PhysicsScene(const std::string& _file, PhysicsControl* _pPhysicsControl);
     virtual ~PhysicsScene();
     void target();
 
   private:
-    Chimera::PhysicsControl* pPhysicsControl;
+    PhysicsControl* pPhysicsControl;
 };
 } // namespace Chimera
 

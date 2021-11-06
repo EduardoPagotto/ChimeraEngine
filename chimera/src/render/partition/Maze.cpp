@@ -13,7 +13,7 @@ Maze::Maze(const char filename[]) {
 
     file = fopen(filename, "rb");
     if (!file) {
-        throw Chimera::Exception(std::string("Arguivo nao localizado"));
+        throw Exception(std::string("Arguivo nao localizado"));
     }
 
     // tamanho do mapa

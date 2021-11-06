@@ -26,7 +26,7 @@ bool TileLayer::onEvent(const SDL_Event& event) {
             y = event.motion.y;
         } break;
     }
-    return false;
+    return true;
 }
 
 void TileLayer::render() {

@@ -2,10 +2,10 @@
 #define __HELLOWORD_TEST__HPP
 
 #include "TileLayer.hpp"
-#include "chimera/core/Application.hpp"
 #include "chimera/render/2d/Label.hpp"
+#include "chimera/render/ApplicationGL.hpp"
 
-class Game : public Chimera::Application {
+class Game : public Chimera::ApplicationGL {
   public:
     Game(Chimera::Canvas* canvas);
     virtual ~Game();

@@ -7,25 +7,16 @@
 
 namespace Chimera {
 
-Application::Application(Canvas* canvas) : canvas(canvas), pause(true) {
-
-    eyeIndice = 0;
-
+Application::Application(Canvas* canvas) : canvas(canvas), pause(true), eyeIndice(0) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
 }
 
 Application::~Application() {
-    // for (ILayer* l : layerStack) { // TODO: melhorar remover apenas os existentes (fazer o deatach!!)
-    //     l->onDeatach();
-    //     delete l;
-    // }
-    // layerStack.clear();
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-
     delete canvas;
 }
 
@@ -55,16 +46,6 @@ bool Application::changeStatusFlow(SDL_Event* pEventSDL) {
 
     return true;
 }
-
-// void Application::pushLayer(ILayer* layer) {
-//     layerStack.pushLayer(layer);
-//     layer->onAttach();
-// }
-
-// void Application::pushOverlay(ILayer* overlay) {
-//     layerStack.pushOverlay(overlay);
-//     overlay->onAttach();
-// }
 
 void Application::run(void) {
     SDL_Event l_eventSDL;
@@ -129,27 +110,14 @@ void Application::run(void) {
             }
 
             this->onEvent(l_eventSDL);
-            // for (auto it = layerStack.end(); it != layerStack.begin();) {
-            //     if ((*--it)->onEvent(l_eventSDL) == true)
-            //         break;
-            // }
         }
         // update game
         if (!pause) {
             try {
-
-                for (int eye = 0; eye < canvas->getTotEyes(); eye++) {
-
-                    canvas->before(eye);
-                    eyeIndice = eye;
-
+                for (eyeIndice = 0; eyeIndice < canvas->getTotEyes(); eyeIndice++) {
+                    canvas->before(eyeIndice);
                     this->onUpdate();
-
-                    // for (auto it = layerStack.begin(); it != layerStack.end(); it++) {
-                    //     (*it)->onUpdate();
-                    //     (*it)->render();
-                    // }
-                    canvas->after(eye);
+                    canvas->after(eyeIndice);
                 }
                 canvas->swapWindow();
 

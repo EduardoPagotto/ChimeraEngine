@@ -55,7 +55,8 @@ set (RenderSource 	CanvasGL.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
 					scene/Scene.cpp
-					scene/CameraController.cpp)
+					scene/CameraController.cpp
+					ApplicationGL.cpp)
 
 #Adiciona objetos e includes do OVR ao RenderSource e IncludeCore
 if (OVR_SET_TO_USE)
@@ -73,17 +74,15 @@ endif(HMD_Z1_SET_TO_USE)
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}
 					${SDL2_INCLUDE_DIR}
+					${OPENGL_INCLUDE_DIR}
+					${GLEW_INCLUDE_DIRS}
 					/usr/local/include/) # Raiz do projeto
 					
-set (RenderIncludeAux ${OPENGL_INCLUDE_DIR}
-				 	  ${GLEW_INCLUDE_DIRS})
-
 # Define o Target
 add_library (ChimeraRender STATIC ${RenderSource})
 
 # Define os includes privados para este target
-target_include_directories (ChimeraRender PUBLIC ${RenderInclude}
-										  PRIVATE ${RenderIncludeAux})
+target_include_directories (ChimeraRender PUBLIC ${RenderInclude})
 
 add_dependencies(ChimeraRender ChimeraCore)
 

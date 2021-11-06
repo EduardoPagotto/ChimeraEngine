@@ -7,7 +7,7 @@
 #include "chimera/render/Transform.hpp"
 #include <time.h>
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
+Game::Game(Chimera::Canvas* canvas) : ApplicationGL(canvas) {
 
     using namespace Chimera;
 
@@ -29,6 +29,9 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
 Game::~Game() {}
 
 void Game::onStart() {
+
+    ApplicationGL::onStart();
+
     using namespace Chimera; // 26:10 -> https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96 (video
                              // 96)
                              // video 103 finaliza o pick mouse
@@ -52,12 +55,14 @@ void Game::onStart() {
     FontManager::get()->setScale(glm::vec2(30, 30)); // em TileLayer ortho values!!!
     lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
-    // this->pushLayer(layer);
-    // FIXME: recolocar na nova classe
+    this->pushLayer(layer);
 }
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
+
+    if (ApplicationGL::onEvent(event) == false)
+        return false;
 
     switch (event.type) {
         case SDL_USEREVENT: {
@@ -100,4 +105,9 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() { lFPS->setText(std::string("FPS: ") + std::to_string(fps)); }
+void Game::onUpdate() {
+
+    ApplicationGL::onUpdate();
+
+    lFPS->setText(std::string("FPS: ") + std::to_string(fps));
+}

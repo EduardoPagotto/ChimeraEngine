@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 struct ParamCollada {
     std::string name;
@@ -43,6 +43,6 @@ class Library {
     std::string url;
     tinyxml2::XMLElement* root;
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

@@ -3,7 +3,7 @@
 #include "LibraryVisualSCenes.hpp"
 #include "chimera/loader/VisualScene.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 VisualScene::VisualScene(const std::string& _file, Chimera::NodeGroup* _pGroup) : Library(nullptr, "!" + _file) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
@@ -20,4 +20,4 @@ void VisualScene::target() {
         lib.target();
     }
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

@@ -4,7 +4,7 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/render/Material.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryMaterials : public Library {
 
@@ -15,6 +15,6 @@ class LibraryMaterials : public Library {
 
   private:
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

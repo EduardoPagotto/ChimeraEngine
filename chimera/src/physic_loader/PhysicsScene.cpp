@@ -1,10 +1,9 @@
 #include "chimera/physic_loader/PhysicsScene.hpp"
 #include "LibraryPhysicsScenes.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
-PhysicsScene::PhysicsScene(const std::string& _file, Chimera::PhysicsControl* _pPhysicsControl)
-    : Library(nullptr, "!" + _file) {
+PhysicsScene::PhysicsScene(const std::string& _file, Chimera::PhysicsControl* _pPhysicsControl) : Library(nullptr, "!" + _file) {
     pPhysicsControl = _pPhysicsControl;
 }
 
@@ -19,4 +18,4 @@ void PhysicsScene::target() {
         lib.target();
     }
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

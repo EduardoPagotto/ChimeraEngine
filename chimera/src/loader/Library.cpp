@@ -3,7 +3,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 Library::Library(tinyxml2::XMLElement* _root, const std::string& _url) {
 
@@ -190,4 +190,4 @@ glm::mat4 Library::loadTransformMatrix(const char* _matrix) {
     loadArrayBtScalar(_matrix, l_arrayValores);
     return carregaMatrix(l_arrayValores);
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

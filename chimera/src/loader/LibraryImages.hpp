@@ -3,7 +3,7 @@
 
 #include "chimera/loader/Library.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryImages : public Library {
 
@@ -12,5 +12,5 @@ class LibraryImages : public Library {
     virtual ~LibraryImages();
     std::tuple<std::string, std::string> target();
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 #endif

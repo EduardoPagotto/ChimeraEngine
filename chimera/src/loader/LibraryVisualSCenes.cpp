@@ -5,7 +5,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/render/Transform.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::NodeGroup* _pRootNode)
     : Library(_root, _url) {
@@ -131,4 +131,4 @@ void LibraryVisualScenes::carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLEle
     }
 }
 
-} // namespace ChimeraLoaders
+} // namespace Chimera

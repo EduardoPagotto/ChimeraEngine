@@ -4,7 +4,7 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/render/Material.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryEffects : public Library {
 
@@ -21,5 +21,5 @@ class LibraryEffects : public Library {
 
     std::map<std::string, std::string> mapaEfeito;
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 #endif

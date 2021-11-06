@@ -2,7 +2,7 @@
 #include "chimera/core/Exception.hpp"
 #include <tuple>
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 LibraryLights::LibraryLights(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
@@ -52,4 +52,4 @@ std::tuple<glm::vec4, Chimera::LightType> LibraryLights::loadDiffuseLightColor(t
 
     return std::make_tuple(glm::vec4(), Chimera::LightType::POSITIONAL);
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

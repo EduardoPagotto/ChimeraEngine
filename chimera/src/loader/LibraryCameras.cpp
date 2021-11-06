@@ -4,7 +4,7 @@
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/render/CameraOrbit.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 LibraryCameras::LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
@@ -59,4 +59,4 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera*
         throw Chimera::Exception("Camera, Ortogonal nao implementada: " + url);
     }
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

@@ -4,7 +4,7 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/physic/PhysicsControl.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class PhysicsScene : public Library {
   public:
@@ -15,6 +15,6 @@ class PhysicsScene : public Library {
   private:
     Chimera::PhysicsControl* pPhysicsControl;
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

@@ -4,7 +4,7 @@
 
 #include <SDL2/SDL.h>
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 LibraryGeometrys::LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
@@ -150,4 +150,4 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
     _pMesh->debugDados(false);
     return retorno;
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

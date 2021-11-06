@@ -5,7 +5,7 @@
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/physic/Solid.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryPhysicModels : public Library {
 
@@ -19,6 +19,6 @@ class LibraryPhysicModels : public Library {
     ListNodes* pListNodes;
     Chimera::PhysicsControl* pWorld;
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

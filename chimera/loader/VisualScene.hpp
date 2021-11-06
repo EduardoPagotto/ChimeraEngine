@@ -5,7 +5,7 @@
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/node/NodeGroup.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class VisualScene : public Library {
 
@@ -18,6 +18,6 @@ class VisualScene : public Library {
     ListNodes* pListNodes;
     Chimera::NodeGroup* pGroup;
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

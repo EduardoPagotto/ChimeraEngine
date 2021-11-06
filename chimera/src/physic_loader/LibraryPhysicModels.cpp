@@ -5,10 +5,9 @@
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/physic/Solid.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
-LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url,
-                                         Chimera::PhysicsControl* _pWorld)
+LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::PhysicsControl* _pWorld)
     : Library(_root, _url) {
     pListNodes = Chimera::Singleton<ListNodes>::getRefSingleton();
     pWorld = _pWorld;
@@ -18,8 +17,7 @@ LibraryPhysicModels::~LibraryPhysicModels() { Chimera::Singleton<ListNodes>::rel
 
 void LibraryPhysicModels::target(std::map<std::string, Chimera::Solid*>& _mapSolids) {
 
-    tinyxml2::XMLElement* l_nPhyModel =
-        root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");
+    tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");
     for (l_nPhyModel; l_nPhyModel; l_nPhyModel = l_nPhyModel->NextSiblingElement()) {
 
         std::string l_id = l_nPhyModel->Attribute("id");
@@ -32,8 +30,7 @@ void LibraryPhysicModels::target(std::map<std::string, Chimera::Solid*>& _mapSol
 
                 Chimera::Solid* pPhysic = new Chimera::Solid(pWorld); //(nullptr, l_nNameRb, pWorld);
 
-                tinyxml2::XMLElement* l_nMass =
-                    l_nRigid->FirstChildElement("technique_common")->FirstChildElement("mass");
+                tinyxml2::XMLElement* l_nMass = l_nRigid->FirstChildElement("technique_common")->FirstChildElement("mass");
                 if (l_nMass != nullptr) {
                     const char* l_mass = l_nMass->GetText();
                     pPhysic->setMass(atof(l_mass));
@@ -52,8 +49,7 @@ void LibraryPhysicModels::target(std::map<std::string, Chimera::Solid*>& _mapSol
                     pPhysic->setFrictionStatic(pPm->getFrictionStatic());
                 }
 
-                tinyxml2::XMLElement* l_nShape =
-                    l_nRigid->FirstChildElement("technique_common")->FirstChildElement("shape");
+                tinyxml2::XMLElement* l_nShape = l_nRigid->FirstChildElement("technique_common")->FirstChildElement("shape");
                 if (l_nShape != nullptr) {
                     loadColladaShape(root, l_nShape, pPhysic);
                     // const char* l_mass = l_nShape->GetText();
@@ -68,8 +64,7 @@ void LibraryPhysicModels::target(std::map<std::string, Chimera::Solid*>& _mapSol
     throw Chimera::Exception("Physics model nao encontrado: " + url);
 }
 
-void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape,
-                                           Chimera::Solid* _pPhysic) {
+void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, Chimera::Solid* _pPhysic) {
 
     _nShape = _nShape->FirstChildElement();
     const char* l_tipoShape = _nShape->Value();
@@ -100,11 +95,9 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         loadArrayBtScalar(l_size, l_arrayValores);
 
         if (l_arrayValores.size() == 1) {
-            _pPhysic->setShapePlane(glm::vec3(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]),
-                                    l_arrayValores[0]);
+            _pPhysic->setShapePlane(glm::vec3(l_arrayValores[0], l_arrayValores[0], l_arrayValores[0]), l_arrayValores[0]);
         } else if (l_arrayValores.size() == 4) {
-            _pPhysic->setShapePlane(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]),
-                                    l_arrayValores[3]);
+            _pPhysic->setShapePlane(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]), l_arrayValores[3]);
         } else {
             throw Chimera::Exception("Shape Plane Array valores invalidos: " + url);
         }
@@ -174,4 +167,4 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         }
     }
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

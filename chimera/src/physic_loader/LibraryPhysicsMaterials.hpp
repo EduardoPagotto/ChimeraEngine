@@ -4,7 +4,7 @@
 #include "PhysicMaterial.hpp"
 #include "chimera/loader/Library.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryPhysicsMaterials : public Library {
 
@@ -13,6 +13,6 @@ class LibraryPhysicsMaterials : public Library {
     virtual ~LibraryPhysicsMaterials();
     Chimera::PhysicMaterial* target();
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

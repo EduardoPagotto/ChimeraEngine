@@ -4,7 +4,7 @@
 #include "chimera/core/Singleton.hpp"
 #include "chimera/render/TextureManager.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
@@ -155,4 +155,4 @@ void LibraryEffects::loadNewParam(tinyxml2::XMLElement* _nProfile) {
         }
     }
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

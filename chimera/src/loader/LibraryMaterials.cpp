@@ -2,7 +2,7 @@
 #include "LibraryEffects.hpp"
 #include "chimera/core/Exception.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 LibraryMaterials::LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
 
@@ -24,4 +24,4 @@ Chimera::Material* LibraryMaterials::target() {
     throw Chimera::Exception("Material nao encontrado Node: " + url);
 }
 
-} // namespace ChimeraLoaders
+} // namespace Chimera

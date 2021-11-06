@@ -4,7 +4,7 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/node/NodeLight.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryLights : public Library {
 
@@ -17,6 +17,6 @@ class LibraryLights : public Library {
     glm::vec4 getColor(tinyxml2::XMLElement* l_nColorVal);
     std::tuple<glm::vec4, Chimera::LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

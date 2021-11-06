@@ -7,7 +7,7 @@
 #include "chimera/node/Node.hpp"
 #include "chimera/node/NodeMesh.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class ListNodes {
     friend class Chimera::Singleton<ListNodes>;
@@ -26,5 +26,5 @@ class ListNodes {
     virtual ~ListNodes() { reset(); }
     ListNodes(const ListNodes&) = delete;
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 #endif

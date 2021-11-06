@@ -4,7 +4,7 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/node/NodeCamera.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryCameras : public Library {
 
@@ -17,6 +17,6 @@ class LibraryCameras : public Library {
     void loadbase(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera* _pCamera);
     void extra(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera* _pCamera);
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

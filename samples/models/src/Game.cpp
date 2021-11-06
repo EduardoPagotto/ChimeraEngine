@@ -37,12 +37,12 @@ Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
     Chimera::NodeGroup* pRoot = new Chimera::NodeGroup(nullptr, "root_real");
     Chimera::NodeGroup* group1 = new Chimera::NodeGroup(pRoot, "none");
 
-    ChimeraLoaders::VisualScene libV(model, group1);
+    Chimera::VisualScene libV(model, group1);
     libV.target();
 
     // Cria mundo fisico e o vincula a scena
     Chimera::PhysicsControl* pPC = new Chimera::PhysicsControl(); // ddddddddddddd onde sesta ver no main anterir
-    ChimeraLoaders::PhysicsScene libP(model, pPC);
+    Chimera::PhysicsScene libP(model, pPC);
     libP.target();
 
     // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado

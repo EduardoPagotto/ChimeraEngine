@@ -4,7 +4,7 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/node/NodeMesh.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryGeometrys : public Library {
 
@@ -17,6 +17,6 @@ class LibraryGeometrys : public Library {
     int getSource(tinyxml2::XMLElement* _source, std::vector<float>& _arrayValores);
     std::string loadMeshCollada(tinyxml2::XMLElement* _nNode, Chimera::NodeMesh* _pMesh);
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

@@ -5,7 +5,7 @@
 #include "chimera/physic/Solid.hpp"
 #include "chimera/render/Transform.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, Chimera::PhysicsControl* _pPhysicsControl)
     : Library(_root, _url) {
@@ -71,4 +71,4 @@ void LibraryPhysicsScenes::loadPhysicControlCollada(tinyxml2::XMLElement* _nNode
         pPhysicsControl->setStep(atof(vetor));
     }
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

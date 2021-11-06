@@ -5,7 +5,7 @@
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/node/NodeGroup.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryVisualScenes : public Library {
 
@@ -16,11 +16,10 @@ class LibraryVisualScenes : public Library {
 
   private:
     glm::mat4 getTransformation(tinyxml2::XMLElement* _nNode);
-    void carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name,
-                     const char* type);
+    void carregaNode(Chimera::Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type);
     ListNodes* pListNodes;
     Chimera::NodeGroup* pRootNode;
 };
-} // namespace ChimeraLoaders
+} // namespace Chimera
 
 #endif

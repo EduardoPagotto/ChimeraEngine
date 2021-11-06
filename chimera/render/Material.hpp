@@ -1,6 +1,5 @@
 #pragma once
 #include "chimera/render/Texture.hpp"
-#include <glm/glm.hpp>
 #include <list>
 #include <map>
 

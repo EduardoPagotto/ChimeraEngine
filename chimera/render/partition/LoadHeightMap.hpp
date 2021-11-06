@@ -1,7 +1,6 @@
 #pragma once
 
 #include "chimera/render/3d/RenderableSimple.hpp"
-#include "chimera/render/VertexData.hpp"
 #include <SDL2/SDL_image.h>
 #include <string>
 

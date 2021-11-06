@@ -4,7 +4,9 @@
 
 #include <GL/gl.h>
 //#include <GL/glu.h>
-// FIXME: colocar o namespace
+
+namespace Chimera {
+
 class DepthFuncSetter {
   public:
     DepthFuncSetter(GLenum f) : changed(false) {
@@ -104,3 +106,4 @@ class BinaryStateDisable {
 //   public:
 //     GLint swapbytes, lsbfirst, rowlength, skiprows, skippixels, alignment;
 // };
+} // namespace Chimera

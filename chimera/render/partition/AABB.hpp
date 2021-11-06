@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Frustum.hpp"
-#include <glm/glm.hpp>
 
 namespace Chimera {
 

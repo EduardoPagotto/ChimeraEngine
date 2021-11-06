@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Renderable2D.hpp"
-#include "chimera/render/2d/layer/LayerStack.hpp"
+#include "LayerStack.hpp"
 #include "chimera/render/CameraOrthographic.hpp"
 
 namespace Chimera {

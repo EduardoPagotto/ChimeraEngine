@@ -12,10 +12,10 @@ class IRenderable {
   public:
     virtual void debugDados() = 0;
     virtual uint32_t getSize() const = 0;
-    virtual Shader* getShader() const = 0;
-    virtual VertexArray* getVao() const = 0;
-    virtual IndexBuffer* getIBO() const = 0;
-    virtual AABB* getAABB() = 0;
+    virtual class Shader* getShader() const = 0;
+    virtual class VertexArray* getVao() const = 0;
+    virtual class IndexBuffer* getIBO() const = 0;
+    virtual class AABB* getAABB() = 0;
     virtual void submit(class IRenderer3d* renderer) = 0;
 };
 } // namespace Chimera

@@ -2,7 +2,6 @@
 
 #include "ScriptableEntity.hpp"
 #include "chimera/render/ICamera.hpp"
-#include <iostream>
 
 namespace Chimera {
 

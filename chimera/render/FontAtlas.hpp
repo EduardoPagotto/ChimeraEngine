@@ -1,8 +1,5 @@
 #pragma once
-#include "chimera/render/OpenGLDefs.hpp"
 #include "chimera/render/TextureManager.hpp"
-#include <SDL2/SDL.h>
-#include <glm/glm.hpp>
 #include <map>
 #include <string>
 

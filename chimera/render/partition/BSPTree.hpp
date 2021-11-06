@@ -2,7 +2,8 @@
 
 // Ref: https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
-#include "chimera/render/3d/RenderableBsp.hpp"
+#include "chimera/render/3d/RenderableSimple.hpp"
+#include "chimera/render/partition/Triangle.hpp"
 
 namespace Chimera {
 
@@ -10,9 +11,7 @@ class BspTree {
   public:
     BspTree() : root(nullptr) {}
     virtual ~BspTree() {}
-    // RenderableBsp* create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
     void create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
-
     BSPTreeNode* getRoot() const { return root; }
     std::vector<VertexData>* getVertex() { return &vVertex; }
     std::vector<RenderableSimple*>* getLeafs() { return &vpLeaf; }

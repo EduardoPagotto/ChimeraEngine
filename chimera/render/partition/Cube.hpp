@@ -1,9 +1,7 @@
 #pragma once
 
-#include "chimera/render/VertexData.hpp"
 #include "chimera/render/partition/AABB.hpp"
 #include "chimera/render/partition/Triangle.hpp"
-#include <glm/glm.hpp>
 #include <vector>
 
 namespace Chimera {

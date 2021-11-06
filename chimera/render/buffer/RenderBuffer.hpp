@@ -2,9 +2,6 @@
 
 #include "FrameBuffer.hpp"
 #include "VertexBuffer.hpp"
-#include "chimera/render/Shader.hpp"
-#include <SDL2/SDL.h>
-#include <glm/glm.hpp>
 
 namespace Chimera {
 

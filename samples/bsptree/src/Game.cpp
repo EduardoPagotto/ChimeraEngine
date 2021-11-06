@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/render/CameraOrbit.hpp"
 #include "chimera/render/TextureManager.hpp"
 #include "chimera/render/partition/BSPTree.hpp"

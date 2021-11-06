@@ -1,7 +1,7 @@
 #pragma once
 
-#include "chimera/render/3d/RenderCommand.hpp"
-#include "chimera/render/3d/RenderableSimple.hpp"
+#include "RenderCommand.hpp"
+#include "RenderableSimple.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/BSPTreeNode.hpp"
 #include <vector>

@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Cube.hpp"
-#include "chimera/render/VertexData.hpp"
-#include "chimera/render/partition/Triangle.hpp"
-#include <glm/glm.hpp>
 #include <stdint.h>
 #include <vector>
 

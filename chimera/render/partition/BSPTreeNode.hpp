@@ -1,7 +1,6 @@
 #pragma once
 
 #include "chimera/render/partition/Plane.hpp"
-#include "chimera/render/partition/Triangle.hpp"
 
 namespace Chimera {
 

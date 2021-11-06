@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IRenderable3d.hpp"
-#include "chimera/render/3d/PolygonIndex.hpp"
+#include "PolygonIndex.hpp"
 #include "chimera/render/buffer/IndexBuffer.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/AABB.hpp"

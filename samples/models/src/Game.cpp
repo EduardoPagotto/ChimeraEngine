@@ -12,7 +12,7 @@
 #include "chimera/render/CanvasGL.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) {
+Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
     pCorpoRigido = nullptr;
     pEmissor = nullptr;
@@ -123,7 +123,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
                 } break;
                 case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    canvas->toggleFullScreen();
+                    engine->getCanvas()->toggleFullScreen();
                     break;
                 case Chimera::EVENT_NEW_FPS: {
                     uint32_t* fps = (uint32_t*)event.user.data1;
@@ -225,7 +225,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    canvas->reshape(event.window.data1, event.window.data2);
+                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -233,7 +233,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onStart() {
+void Game::onAttach() {
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
@@ -256,7 +256,7 @@ void Game::onStart() {
     // Localiza o Emissor de particula
     pEmissor = (Chimera::NodeParticleEmitter*)root->findChild("testeZ1", true);
 
-    renderV.pVideo = (Chimera::CanvasGL*)canvas;
+    renderV.pVideo = (Chimera::CanvasGL*)engine->getCanvas();
     renderV.pTransform = (Chimera::Transform*)pCorpoRigido;
 
     // Localiza o HUD
@@ -267,14 +267,18 @@ void Game::onStart() {
     }
 }
 
-void Game::onUpdate() {
+void Game::onDeatach() {}
 
-    if (eyeIndice == 0) {
+void Game::onUpdate() {}
+
+void Game::onRender() {
+
+    if (engine->getEye() == 0) {
         physicWorld->stepSim();
         physicWorld->checkCollisions();
         this->updatePos();
     }
 
-    renderV.eye = eyeIndice;
+    renderV.eye = engine->getEye();
     Chimera::visitParserTree(root, &renderV);
 }

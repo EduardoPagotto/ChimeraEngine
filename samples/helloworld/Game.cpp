@@ -7,7 +7,7 @@
 #include "chimera/render/Transform.hpp"
 #include <time.h>
 
-Game::Game(Chimera::Canvas* canvas) : ApplicationGL(canvas) {
+Game::Game(Chimera::Engine* engine) : ApplicationGL(engine) {
 
     using namespace Chimera;
 
@@ -28,9 +28,9 @@ Game::Game(Chimera::Canvas* canvas) : ApplicationGL(canvas) {
 
 Game::~Game() {}
 
-void Game::onStart() {
+void Game::onAttach() {
 
-    ApplicationGL::onStart();
+    ApplicationGL::onAttach();
 
     using namespace Chimera; // 26:10 -> https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96 (video
                              // 96)
@@ -40,7 +40,7 @@ void Game::onStart() {
     ShaderManager::load("./assets/shaders/Basic2D.glsl", shader);
 
     layer = new TileLayer(&shader);
-    layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
+    layer->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
 
     for (float y = -8.0f; y < 8.0f; y++) {
         for (float x = -14.0f; x < 14.0f; x++) {
@@ -58,6 +58,10 @@ void Game::onStart() {
     this->pushLayer(layer);
 }
 
+void Game::onDeatach() { ApplicationGL::onDeatach(); }
+
+void Game::onRender() { ApplicationGL::onRender(); }
+
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
@@ -68,7 +72,7 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case EVENT_TOGGLE_FULL_SCREEN:
-                    canvas->toggleFullScreen();
+                    engine->getCanvas()->toggleFullScreen();
                     break;
                 case EVENT_NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
@@ -97,7 +101,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    canvas->reshape(event.window.data1, event.window.data2);
+                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;

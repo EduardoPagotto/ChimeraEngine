@@ -3,13 +3,16 @@
 #include "chimera/render/CanvasGL.hpp"
 
 int main(int argn, char** argv) {
-
+    using namespace Chimera;
     try {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Game* game = new Game(new Chimera::CanvasGL("Chimera", 800, 600));
-        game->run();
+        Engine engine(new CanvasGL("Chimera", 800, 600));
+        Game* game = new Game(&engine);
+
+        engine.pushLayer(game);
+        engine.run();
         delete game;
 
         SDL_Log("Finalizado com sucesso");

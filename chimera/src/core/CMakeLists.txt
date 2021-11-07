@@ -12,7 +12,8 @@ set (SourcesCore CanvasFB.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
 				 MouseDevice.cpp
-				 Application.cpp)
+				 StateStack.cpp
+				 Engine.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}

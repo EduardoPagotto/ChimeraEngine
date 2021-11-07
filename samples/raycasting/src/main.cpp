@@ -4,14 +4,19 @@
 #include <iostream>
 
 int main(int argn, char** argv) {
-
+    using namespace Chimera;
     try {
 
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simple ray-casting Iniciado");
 
-        Game* game = new Game(new Chimera::CanvasFB("RayCasting", 640, 480));
-        game->run();
+        Engine engine(new CanvasFB("RayCasting", 640, 480));
+
+        Game* game = new Game(&engine);
+
+        engine.pushLayer(game);
+        engine.run();
+
         SDL_Log("Loop de Game encerrado!!!!");
         delete game;
         SDL_Log("raycasting finalizado com sucesso");

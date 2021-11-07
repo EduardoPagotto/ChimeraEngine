@@ -4,14 +4,17 @@
 #include <iostream>
 
 int main(int argn, char** argv) {
-
+    using namespace Chimera;
     try {
 
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Game* game = new Game(new Chimera::CanvasGL("simples", 640, 480));
-        game->run();
+        Engine engine(new CanvasGL("simples", 640, 480));
+        Game* game = new Game(&engine);
+
+        engine.pushLayer(game);
+        engine.run();
 
         delete game;
 

@@ -2,8 +2,6 @@
 
 namespace Chimera {
 
-ApplicationGL::ApplicationGL(Canvas* canvas) : Application(canvas) {}
-
 ApplicationGL::~ApplicationGL() {
     for (ILayer* l : layerStack) { // TODO: melhorar remover apenas os existentes (fazer o deatach!!)
         l->onDeatach();
@@ -22,14 +20,18 @@ void ApplicationGL::pushOverlay(ILayer* overlay) {
     overlay->onAttach();
 }
 
-void ApplicationGL::onStart() {}
+void ApplicationGL::onAttach() {}
+
+void ApplicationGL::onDeatach() {}
 
 void ApplicationGL::onUpdate() {
-
-    for (auto it = layerStack.begin(); it != layerStack.end(); it++) {
+    for (auto it = layerStack.begin(); it != layerStack.end(); it++)
         (*it)->onUpdate();
+}
+
+void ApplicationGL::onRender() {
+    for (auto it = layerStack.begin(); it != layerStack.end(); it++)
         (*it)->render();
-    }
 }
 
 bool ApplicationGL::onEvent(const SDL_Event& event) {

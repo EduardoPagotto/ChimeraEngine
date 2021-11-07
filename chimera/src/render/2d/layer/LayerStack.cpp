@@ -10,7 +10,7 @@ LayerStack::~LayerStack() {
         delete layer;
     }
 }
-// https://github.com/Ershany/Arcane-Engine/blob/master/Arcane/src/Arcane/Core/Application.cpp ver!!!!!
+
 void LayerStack::pushLayer(ILayer* layer) { layerInsert = layers.emplace(layerInsert, layer); }
 
 void LayerStack::pushOverlay(ILayer* overlay) { layers.emplace_back(overlay); }

@@ -10,11 +10,9 @@
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
-
 Game::~Game() {}
 
-void Game::onStart() {
+void Game::onAttach() {
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color //FIXME: colocar so scene
 
@@ -119,9 +117,11 @@ void Game::onStart() {
         material.init();
     }
 
-    activeScene.onViewportResize(canvas->getWidth(), canvas->getHeight());
+    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     activeScene.onCreate();
 }
+
+void Game::onDeatach() {}
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
@@ -130,7 +130,7 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case EVENT_TOGGLE_FULL_SCREEN:
-                    canvas->toggleFullScreen();
+                    engine->getCanvas()->toggleFullScreen();
                     break;
             }
 
@@ -163,7 +163,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    canvas->reshape(event.window.data1, event.window.data2);
+                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -171,4 +171,6 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() { activeScene.render(render3d); }
+void Game::onUpdate() {}
+
+void Game::onRender() { activeScene.render(render3d); }

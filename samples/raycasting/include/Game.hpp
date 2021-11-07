@@ -1,17 +1,20 @@
 #ifndef __GAME_SIMPLE_RAYCASTING__HPP
 #define __GAME_SIMPLE_RAYCASTING__HPP
 
-#include "chimera/core/Application.hpp"
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/IStateMachine.hpp"
 #include "raycasting.hpp"
 
-class Game : public Chimera::Application {
+class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Canvas* canvas);
+    Game(Chimera::Engine* engine) : engine(engine){};
 
     virtual ~Game();
     // Inherited via IEvents
-    virtual void onStart() override;
+    virtual void onAttach() override;
+    virtual void onDeatach() override;
     virtual void onUpdate() override;
+    virtual void onRender() override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
@@ -21,6 +24,7 @@ class Game : public Chimera::Application {
     World* world;
     double moveSpeed;
     double rotSpeed;
+    Chimera::Engine* engine;
 };
 
 #endif

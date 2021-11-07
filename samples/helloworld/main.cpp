@@ -14,8 +14,12 @@ int main(int argn, char** argv) {
         SDL_Log("Parametros %d: %s", i, argv[i]);
 
     try {
-        Game* game = new Game(new CanvasGL("Hello", 960, 540));
-        game->run();
+
+        Engine engine(new CanvasGL("Hello", 960, 540));
+        Game* game = new Game(&engine);
+
+        engine.pushLayer(game);
+        engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");
         delete game;

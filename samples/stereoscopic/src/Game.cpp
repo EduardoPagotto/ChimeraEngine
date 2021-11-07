@@ -10,7 +10,7 @@
 #include "chimera/render/CameraOrbit.hpp"
 #include "chimera/render/CanvasGL.hpp"
 
-Game::Game(Chimera::Canvas* canvas, const std::vector<std::string>& shadesFile) : Application(canvas) {
+Game::Game(Chimera::Engine* engine, const std::vector<std::string>& shadesFile) : engine(engine) {
 
     using namespace Chimera;
 
@@ -38,7 +38,7 @@ Game::Game(Chimera::Canvas* canvas, const std::vector<std::string>& shadesFile) 
 
 Game::~Game() {}
 
-void Game::onStart() {
+void Game::onAttach() {
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
 
@@ -54,7 +54,7 @@ void Game::onStart() {
 
     Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)pRoot->findChild("Cubo-02", true);
     renderV.pTransform = pMesh->getTransform();
-    renderV.pVideo = (Chimera::CanvasGL*)canvas;
+    renderV.pVideo = (Chimera::CanvasGL*)engine->getCanvas();
 }
 
 bool Game::onEvent(const SDL_Event& event) {
@@ -64,7 +64,7 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    canvas->toggleFullScreen();
+                    engine->getCanvas()->toggleFullScreen();
                     break;
             }
 
@@ -104,7 +104,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    canvas->reshape(event.window.data1, event.window.data2);
+                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -112,7 +112,11 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() {
-    renderV.eye = eyeIndice;
+void Game::onDeatach() {}
+
+void Game::onUpdate() {}
+
+void Game::onRender() {
+    renderV.eye = engine->getEye();
     Chimera::visitParserTree(pRoot, &renderV);
 }

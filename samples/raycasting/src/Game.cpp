@@ -2,20 +2,18 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Canvas* canvas) : Application(canvas) {}
-
 Game::~Game() {}
 
-void Game::onStart() {
+void Game::onAttach() {
 
     moveSpeed = MOVSPEED;
     rotSpeed = ROTSPEED;
 
     // init framebuffer
     frame = new Frame;
-    frame->data = canvas->getPixels();
-    frame->width = canvas->getWidth();
-    frame->height = canvas->getHeight();
+    frame->data = engine->getCanvas()->getPixels();
+    frame->width = engine->getCanvas()->getWidth();
+    frame->height = engine->getCanvas()->getHeight();
 
     // estado de inicialização
     state = new State;
@@ -31,6 +29,8 @@ void Game::onStart() {
     }
 }
 
+void Game::onDeatach() {}
+
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
@@ -38,7 +38,7 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
                 case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    canvas->toggleFullScreen();
+                    engine->getCanvas()->toggleFullScreen();
                     break;
             }
 
@@ -103,7 +103,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    canvas->reshape(event.window.data1, event.window.data2);
+                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;
@@ -111,4 +111,6 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() { RenderScene(*state, *world, *frame); }
+void Game::onUpdate() {}
+
+void Game::onRender() { RenderScene(*state, *world, *frame); }

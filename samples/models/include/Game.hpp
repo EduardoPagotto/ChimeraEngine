@@ -1,7 +1,7 @@
 #ifndef __GAME_XX__HPP
 #define __GAME_XX__HPP
 
-#include "chimera/core/Application.hpp"
+#include "chimera/core/Engine.hpp"
 #include "chimera/node/NodeCamera.hpp"
 #include "chimera/node/NodeHUD.hpp"
 #include "chimera/node/NodeParticleEmitter.hpp"
@@ -17,13 +17,15 @@ struct Controles {
     int hat;
 };
 
-class Game : public Chimera::Application {
+class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Canvas* canvas);
+    Game(Chimera::Engine* engine);
     virtual ~Game();
 
-    virtual void onStart() override;
+    virtual void onAttach() override;
+    virtual void onDeatach() override;
     virtual void onUpdate() override;
+    virtual void onRender() override;
     virtual bool onEvent(const SDL_Event& event) override;
 
     Chimera::VisitorRender renderV;
@@ -42,6 +44,7 @@ class Game : public Chimera::Application {
     Chimera::Node* root;
     Chimera::PhysicsControl* physicWorld;
     Chimera::Shader shader[5];
+    Chimera::Engine* engine;
 };
 
 #endif

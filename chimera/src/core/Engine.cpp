@@ -1,4 +1,4 @@
-#include "chimera/core/Application.hpp"
+#include "chimera/core/Engine.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/JoystickManager.hpp"
 #include "chimera/core/Keyboard.hpp"
@@ -7,20 +7,30 @@
 
 namespace Chimera {
 
-Application::Application(Canvas* canvas) : canvas(canvas), pause(true), eyeIndice(0) {
+Engine::Engine(Canvas* canvas) : canvas(canvas), pause(true), eyeIndice(0) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
 }
 
-Application::~Application() {
+Engine::~Engine() {
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
     delete canvas;
 }
 
-bool Application::changeStatusFlow(SDL_Event* pEventSDL) {
+void Engine::pushLayer(IStateMachine* state) {
+    stack.pushLayer(state);
+    state->onAttach();
+}
+
+void Engine::pushOverlay(IStateMachine* state) {
+    stack.pushOverlay(state);
+    state->onAttach();
+}
+
+bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {
 
     switch (pEventSDL->user.code) {
         case EVENT_FLOW_PAUSE: {
@@ -47,7 +57,7 @@ bool Application::changeStatusFlow(SDL_Event* pEventSDL) {
     return true;
 }
 
-void Application::run(void) {
+void Engine::run(void) {
     SDL_Event l_eventSDL;
     bool l_quit = false;
     uint32_t frameTime, timeElapsed, tot_delay;
@@ -58,7 +68,6 @@ void Application::run(void) {
 
     // open devices
     JoystickManager::find();
-    this->onStart();
 
     while (!l_quit) {
         frameTime = SDL_GetTicks();
@@ -109,14 +118,25 @@ void Application::run(void) {
                     break;
             }
 
-            this->onEvent(l_eventSDL);
+            for (auto it = stack.end(); it != stack.begin();) {
+                if ((*--it)->onEvent(l_eventSDL) == false)
+                    break;
+            }
         }
         // update game
         if (!pause) {
             try {
+                // update all
+                for (auto it = stack.begin(); it != stack.end(); it++)
+                    (*it)->onUpdate();
+
                 for (eyeIndice = 0; eyeIndice < canvas->getTotEyes(); eyeIndice++) {
                     canvas->before(eyeIndice);
-                    this->onUpdate();
+                    // render all
+                    for (auto it = stack.begin(); it != stack.end(); it++) {
+                        (*it)->onRender();
+                    }
+
                     canvas->after(eyeIndice);
                 }
                 canvas->swapWindow();

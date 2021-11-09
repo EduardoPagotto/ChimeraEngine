@@ -28,4 +28,12 @@ void StateStack::popOverlay(IStateMachine* overlay) {
         states.erase(it);
 }
 
+IStateMachine* StateStack::getState(const std::string& name) const {
+    for (IStateMachine* state : states) {
+        if (state->getName() == name)
+            return state;
+    }
+    return nullptr;
+}
+
 } // namespace Chimera

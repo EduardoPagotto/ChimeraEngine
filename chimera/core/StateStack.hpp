@@ -15,6 +15,7 @@ class StateStack {
     void popState(IStateMachine* state);
     void popOverlay(IStateMachine* overlay);
 
+    IStateMachine* getState(const std::string& name) const;
     std::vector<IStateMachine*>::iterator begin() { return states.begin(); }
     std::vector<IStateMachine*>::iterator end() { return states.end(); }
 

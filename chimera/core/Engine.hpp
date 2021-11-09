@@ -16,6 +16,7 @@ class Engine {
     Canvas* getCanvas() const { return canvas; }
     const uint32_t getFPS() const { return fps; }
     const int getEye() const { return eyeIndice; }
+    IStateMachine* getState(const std::string& name) const { return stack.getState(name); }
 
   protected:
     bool changeStatusFlow(SDL_Event* pEventSDL);

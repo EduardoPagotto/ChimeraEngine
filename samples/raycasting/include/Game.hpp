@@ -16,6 +16,7 @@ class Game : public Chimera::IStateMachine {
     virtual void onRender() override;
     virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
+    virtual std::string getName() const { return "Game"; }
 
   private:
     // ray

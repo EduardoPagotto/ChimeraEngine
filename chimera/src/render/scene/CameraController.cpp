@@ -16,5 +16,5 @@ void CameraController::onCreate() {
 
 void CameraController::onDestroy() {}
 
-void CameraController::onUpdate(float deltaTime) { camera->processInput(deltaTime); }
+void CameraController::onUpdate(const uint32_t& count) { camera->onUpdate(count); }
 } // namespace Chimera

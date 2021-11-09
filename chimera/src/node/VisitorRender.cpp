@@ -117,7 +117,7 @@ void VisitorRender::visit(NodeGroup* _pGroup) {
     NodeCamera* pCam = (NodeCamera*)_pGroup->findChild(Kind::CAMERA, 0, false);
     if (pCam != nullptr) {
         cameraScene = (ICamera3D*)pCam->getCamera();
-        cameraScene->processInput(0.01);
+        cameraScene->onUpdate(100); // FIXME: descobri o tickcount!!!
 
         shader.setUniform("viewPos", cameraScene->getPosition());
         if (pVideo->getTotEyes() == 1) {

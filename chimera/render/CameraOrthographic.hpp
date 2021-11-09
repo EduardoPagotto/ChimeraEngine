@@ -24,7 +24,7 @@ class CameraOrthographic : public ICamera {
     virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return viewProjectionMatrixInverse; };
     virtual const bool is3D() const override { return false; }
     virtual const glm::mat4 recalculateMatrix(bool left) override;
-    virtual void processInput(float deltaTime) override;
+    virtual void onUpdate(const uint32_t& count) override;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
 
   private:

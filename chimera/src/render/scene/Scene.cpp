@@ -50,17 +50,17 @@ void Scene::onCreate() {
     }
 }
 
-void Scene::onUpdate(float ts) {
+void Scene::onUpdate(const uint32_t& count) {
 
     // update scripts
     eRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (nsc.instance) {
-            nsc.instance->onUpdate(ts);
+            nsc.instance->onUpdate(count);
         }
     });
 
     if (camera)
-        camera->recalculateMatrix(false);
+        camera->recalculateMatrix(false); // FIXME: remover daqui!!!!
 }
 
 Entity Scene::createEntity(const std::string& name) {
@@ -114,7 +114,7 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
 
 void Scene::render(IRenderer3d& renderer) {
 
-    this->onUpdate(0.01); // atualiza camera e script de camera
+    // this->onUpdate(0.01); // atualiza camera e script de camera
 
     if (renderer.getLog() == true) {
         glm::vec3 pos = camera->getPosition();

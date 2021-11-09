@@ -15,7 +15,7 @@ class CameraFPS : public ICamera3D {
     void processCameraMovement(glm::vec3& direction, float deltaTime);
 
     // herdado
-    virtual void processInput(float deltaTime) override;
+    virtual void onUpdate(const uint32_t& count) override;
     virtual const glm::mat4 getViewMatrix() const override { return viewMatrix; };
     virtual const glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
     virtual const glm::mat4 getViewProjectionMatrix() const override { return viewProjectionMatrix; };

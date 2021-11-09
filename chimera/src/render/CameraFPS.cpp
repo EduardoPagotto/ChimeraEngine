@@ -73,7 +73,7 @@ void CameraFPS::updateVectors() {
     up = glm::normalize(glm::cross(right, front));
 }
 
-void CameraFPS::processInput(float deltaTime) {
+void CameraFPS::onUpdate(const uint32_t& count) {
     // Movement speed
     if (Keyboard::isPressed(SDLK_LSHIFT)) // GLFW_KEY_LEFT_SHIFT
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;
@@ -102,6 +102,7 @@ void CameraFPS::processInput(float deltaTime) {
     // 		direction += worldUp * JoystickManager::GetTriggers(0).y;
     // 		direction -= worldUp * JoystickManager::GetTriggers(0).x;
     // #endif
+    float deltaTime = 1.0f / count;
     processCameraMovement(direction, deltaTime);
 
     // CameraFPS FOV

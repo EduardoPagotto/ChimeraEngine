@@ -122,6 +122,8 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(const uint32_t& count) {}
+void Game::onUpdate(const uint32_t& count) {
+    activeScene.onUpdate(count); // atualiza camera e script de camera
+}
 
 void Game::onRender() { activeScene.render(render3D); }

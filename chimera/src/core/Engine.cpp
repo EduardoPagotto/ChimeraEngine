@@ -128,7 +128,7 @@ void Engine::run(void) {
             try {
                 // update all
                 for (auto it = stack.begin(); it != stack.end(); it++) {
-                    uint32_t ts = 0; // TODO: colocat contador
+                    uint32_t ts = 100; // TODO: colocat contador
                     (*it)->onUpdate(ts);
                 }
 

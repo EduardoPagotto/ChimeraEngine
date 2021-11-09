@@ -30,7 +30,7 @@ class CameraOrbit : public ICamera3D {
     virtual void setFov(const float& value) override { this->fov = value; }
     virtual void setNear(const float& value) override { this->nearPlane = value; }
     virtual void setFar(const float& value) override { this->farPlane = value; }
-    virtual void processInput(float deltaTime) override;
+    virtual void onUpdate(const uint32_t& count) override;
     virtual void setPosition(const glm::vec3& position) override { this->position = position; }
     virtual void invertPitch() override;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;

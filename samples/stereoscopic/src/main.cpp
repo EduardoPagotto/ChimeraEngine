@@ -36,7 +36,7 @@ int main(int argn, char** argv) {
         Engine engine(new CanvasHmd(screen["name"].as<std::string>(), canvas["w"].as<int>(), canvas["h"].as<int>()));
         Game* game = new Game(&engine, listShades);
 
-        engine.pushLayer(game);
+        engine.pushState(game);
         engine.run();
         SDL_Log("Loop de Game encerrado!!!!");
 

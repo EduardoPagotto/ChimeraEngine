@@ -20,8 +20,8 @@ Engine::~Engine() {
     delete canvas;
 }
 
-void Engine::pushLayer(IStateMachine* state) {
-    stack.pushLayer(state);
+void Engine::pushState(IStateMachine* state) {
+    stack.pushState(state);
     state->onAttach();
 }
 

@@ -11,7 +11,7 @@ int main(int argn, char** argv) {
         Engine engine(new CanvasGL("Chimera", 800, 600));
         Game* game = new Game(&engine);
 
-        engine.pushLayer(game);
+        engine.pushState(game);
         engine.run();
         delete game;
 

@@ -12,7 +12,7 @@ class TileLayer : public Chimera::Layer {
     virtual void onUpdate() override{};
     virtual bool onEvent(const SDL_Event& event) override;
     virtual std::string getName() const { return "TileLayer"; }
-    virtual void render() override;
+    virtual void onRender() override;
 
   private:
     uint16_t x, y;

@@ -13,7 +13,7 @@ int main(int argn, char** argv) {
         Engine engine(new CanvasGL("TesteBSTree", 1400, 900));
         Game* game = new Game(&engine);
 
-        engine.pushLayer(game);
+        engine.pushState(game);
         engine.run();
 
         delete game;

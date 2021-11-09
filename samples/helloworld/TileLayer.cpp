@@ -29,13 +29,13 @@ bool TileLayer::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void TileLayer::render() {
+void TileLayer::onRender() {
 
     shader->enable();
 
     // Formula                                (float)(x * sizeW / witdh - (sizeW/2), (float)((sizeH /2) - y * sizeH / height)
     shader->setUniform("light_pos", glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(16.0f - y * 32.0f / 540.0f)));
 
-    Layer::render();
+    Layer::onRender();
     shader->disable();
 }

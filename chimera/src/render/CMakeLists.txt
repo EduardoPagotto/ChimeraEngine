@@ -45,7 +45,6 @@ set (RenderSource 	CanvasGL.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
 					2d/layer/Layer.cpp
-					2d/layer/LayerStack.cpp
 					2d/layer/Group.cpp
 					2d/Label.cpp
 					3d/PolygonIndex.cpp
@@ -55,8 +54,7 @@ set (RenderSource 	CanvasGL.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
 					scene/Scene.cpp
-					scene/CameraController.cpp
-					ApplicationGL.cpp)
+					scene/CameraController.cpp)
 
 #Adiciona objetos e includes do OVR ao RenderSource e IncludeCore
 if (OVR_SET_TO_USE)

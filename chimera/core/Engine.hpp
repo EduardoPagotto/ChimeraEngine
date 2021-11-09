@@ -10,7 +10,7 @@ class Engine {
     Engine(Canvas* canvas);
     virtual ~Engine();
     void run();
-    void pushLayer(IStateMachine* state);
+    void pushState(IStateMachine* state);
     void pushOverlay(IStateMachine* state);
 
     Canvas* getCanvas() const { return canvas; }

@@ -8,18 +8,18 @@ class StateStack {
   public:
     StateStack();
     ~StateStack();
-    inline void clear() { layers.clear(); }
+    inline void clear() { states.clear(); }
 
-    void pushLayer(IStateMachine* layer);
+    void pushState(IStateMachine* state);
     void pushOverlay(IStateMachine* overlay);
-    void popLayer(IStateMachine* layer);
+    void popState(IStateMachine* state);
     void popOverlay(IStateMachine* overlay);
 
-    std::vector<IStateMachine*>::iterator begin() { return layers.begin(); }
-    std::vector<IStateMachine*>::iterator end() { return layers.end(); }
+    std::vector<IStateMachine*>::iterator begin() { return states.begin(); }
+    std::vector<IStateMachine*>::iterator end() { return states.end(); }
 
   private:
-    std::vector<IStateMachine*> layers;
-    std::vector<IStateMachine*>::iterator layerInsert;
+    std::vector<IStateMachine*> states;
+    std::vector<IStateMachine*>::iterator stateInsert;
 };
 } // namespace Chimera

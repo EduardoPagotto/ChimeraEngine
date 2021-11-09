@@ -3,10 +3,10 @@
 
 #include "TileLayer.hpp"
 #include "chimera/core/Engine.hpp"
+#include "chimera/core/IStateMachine.hpp"
 #include "chimera/render/2d/Label.hpp"
-#include "chimera/render/ApplicationGL.hpp"
 
-class Game : public Chimera::ApplicationGL {
+class Game : public Chimera::IStateMachine {
   public:
     Game(Chimera::Engine* engine);
     virtual ~Game();
@@ -17,6 +17,7 @@ class Game : public Chimera::ApplicationGL {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
+    Chimera::Engine* engine;
     Chimera::Shader shader;
     Chimera::Label* lFPS;
     TileLayer* layer;

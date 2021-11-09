@@ -21,7 +21,7 @@ class PhysicsControl {
     void clearAllShapes(void);
     void removeAllObjs(void);
 
-    void stepSim(void);
+    void stepSim(const double& ts);
 
     void checkCollisions();
     bool checkAllowCollision(Node* pNode);
@@ -37,10 +37,6 @@ class PhysicsControl {
     inline btScalar getLastPeriod() { return period; }
 
     inline btDiscreteDynamicsWorld* getWorld() { return discretDynamicsWorld; }
-
-    inline void setStep(const float& _step) { step = _step; }
-
-    inline btScalar getStep() const { return step; }
 
   private:
     static void doTickCallBack(btDynamicsWorld* world, btScalar timeStep);
@@ -58,11 +54,8 @@ class PhysicsControl {
     /// </summary>
     // SDL_Event s_event;
     std::map<btCollisionObject*, std::pair<Node*, Node*>> contactActives;
-
     btClock clockCounter;
     btScalar period;
-
-    btScalar step;
 };
 } // namespace Chimera
 #endif

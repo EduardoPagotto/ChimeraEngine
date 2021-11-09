@@ -5,12 +5,7 @@ namespace Chimera {
 
 StateStack::StateStack() { stateInsert = states.begin(); }
 
-StateStack::~StateStack() {
-    for (IStateMachine* state : states) {
-        delete state;
-    }
-    states.clear();
-}
+StateStack::~StateStack() { states.clear(); }
 
 void StateStack::pushState(IStateMachine* state) { stateInsert = states.emplace(stateInsert, state); }
 

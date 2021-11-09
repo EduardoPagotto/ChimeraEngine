@@ -114,7 +114,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(const uint32_t& count) {
+void Game::onUpdate(const double& ts) {
 
     // ApplicationGL::onUpdate();
 

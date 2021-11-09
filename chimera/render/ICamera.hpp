@@ -17,7 +17,7 @@ class ICamera {
     virtual const glm::mat4 recalculateMatrix(bool left) = 0;
     virtual const glm::vec3& getPosition() const = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
-    virtual void onUpdate(const uint32_t& count) = 0;
+    virtual void onUpdate(const double& ts) = 0;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
     virtual const bool is3D() const = 0;
 };

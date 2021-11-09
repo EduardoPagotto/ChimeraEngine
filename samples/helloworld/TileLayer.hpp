@@ -9,9 +9,8 @@ class TileLayer : public Chimera::Layer {
     virtual ~TileLayer();
     virtual void onAttach() override{};
     virtual void onDeatach() override{};
-    virtual void onUpdate(const uint32_t& count) override{};
+    virtual void onUpdate(const double& ts) override{};
     virtual bool onEvent(const SDL_Event& event) override;
-    virtual std::string getName() const { return "TileLayer"; }
     virtual void onRender() override;
 
   private:

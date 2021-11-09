@@ -73,7 +73,7 @@ void CameraFPS::updateVectors() {
     up = glm::normalize(glm::cross(right, front));
 }
 
-void CameraFPS::onUpdate(const uint32_t& count) {
+void CameraFPS::onUpdate(const double& ts) {
     // Movement speed
     if (Keyboard::isPressed(SDLK_LSHIFT)) // GLFW_KEY_LEFT_SHIFT
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;
@@ -102,8 +102,7 @@ void CameraFPS::onUpdate(const uint32_t& count) {
     // 		direction += worldUp * JoystickManager::GetTriggers(0).y;
     // 		direction -= worldUp * JoystickManager::GetTriggers(0).x;
     // #endif
-    float deltaTime = 1.0f / count;
-    processCameraMovement(direction, deltaTime);
+    processCameraMovement(direction, ts);
 
     // CameraFPS FOV
     // float scrollDelta = glm::clamp((float)(InputManager::GetScrollYDelta() * 4.0 + (JoystickManager::GetButton(0, ARCANE_GAMEPAD_A) -

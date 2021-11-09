@@ -25,7 +25,7 @@ void CameraOrthographic::setPosition(const glm::vec3& position) {
     recalculateMatrix(false);
 }
 
-void CameraOrthographic::onUpdate(const uint32_t& count) {
+void CameraOrthographic::onUpdate(const double& ts) {
 
     // if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
     //     glm::ivec2 mouseMove = MouseDevice::getMoveRel();

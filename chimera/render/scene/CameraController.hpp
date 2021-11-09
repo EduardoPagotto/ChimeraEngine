@@ -10,7 +10,7 @@ class CameraController : public ScriptableEntity {
     CameraController() = default;
     void onCreate();
     void onDestroy();
-    void onUpdate(const uint32_t& count) override;
+    void onUpdate(const double& ts) override;
 
   private:
     ICamera* camera = nullptr;

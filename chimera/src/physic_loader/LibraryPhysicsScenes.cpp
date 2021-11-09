@@ -64,11 +64,10 @@ void LibraryPhysicsScenes::loadPhysicControlCollada(tinyxml2::XMLElement* _nNode
         pPhysicsControl->setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
     }
 
-    tinyxml2::XMLElement* l_nNodeStep = _nNode->FirstChildElement("technique_common")->FirstChildElement("time_step");
-    if (l_nNodeStep != nullptr) {
-
-        const char* vetor = l_nNodeStep->GetText();
-        pPhysicsControl->setStep(atof(vetor));
-    }
+    // tinyxml2::XMLElement* l_nNodeStep = _nNode->FirstChildElement("technique_common")->FirstChildElement("time_step");
+    // if (l_nNodeStep != nullptr) {
+    //     const char* vetor = l_nNodeStep->GetText();
+    //     pPhysicsControl->setStep(atof(vetor));
+    // }
 }
 } // namespace Chimera

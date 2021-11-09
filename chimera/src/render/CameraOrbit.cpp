@@ -84,7 +84,7 @@ void CameraOrbit::updateVectors() {
     }
 }
 
-void CameraOrbit::onUpdate(const uint32_t& count) {
+void CameraOrbit::onUpdate(const double& ts) {
 
     if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
         glm::ivec2 mouseMove = MouseDevice::getMoveRel();

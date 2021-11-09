@@ -16,5 +16,5 @@ void CameraController::onCreate() {
 
 void CameraController::onDestroy() {}
 
-void CameraController::onUpdate(const uint32_t& count) { camera->onUpdate(count); }
+void CameraController::onUpdate(const double& ts) { camera->onUpdate(ts); }
 } // namespace Chimera

@@ -269,16 +269,13 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-void Game::onUpdate(const uint32_t& count) {}
+void Game::onUpdate(const double& ts) {
+    physicWorld->stepSim(ts);
+    physicWorld->checkCollisions();
+    this->updatePos();
+}
 
 void Game::onRender() {
-
-    if (engine->getEye() == 0) {
-        physicWorld->stepSim();
-        physicWorld->checkCollisions();
-        this->updatePos();
-    }
-
     renderV.eye = engine->getEye();
     Chimera::visitParserTree(root, &renderV);
 }

@@ -17,7 +17,7 @@ class Scene {
     Entity createEntity(const std::string& name = std::string());
     void destroyEntity(Entity entity);
     void render(IRenderer3d& renderer);
-    void onUpdate(const uint32_t& count);
+    void onUpdate(const double& ts);
     void onCreate();
     void onDestroy();
 

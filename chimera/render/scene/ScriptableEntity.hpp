@@ -12,7 +12,7 @@ class ScriptableEntity {
 
     virtual void onCreate() {}
     virtual void onDestroy() {}
-    virtual void onUpdate(const uint32_t& count) {}
+    virtual void onUpdate(const double& ts) {}
 
     void setEntity(const Entity& entity) { this->entity = entity; }
 

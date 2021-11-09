@@ -17,8 +17,6 @@ PhysicsControl::PhysicsControl() {
 
     // true para forca aplicada apenas dentro docallback
     discretDynamicsWorld->setInternalTickCallback(PhysicsControl::doTickCallBack, static_cast<void*>(this), false);
-
-    step = 0.016667f;
 }
 
 PhysicsControl::~PhysicsControl() {
@@ -32,12 +30,11 @@ PhysicsControl::~PhysicsControl() {
     delete broadPhase;
 }
 
-void PhysicsControl::stepSim(void) {
+void PhysicsControl::stepSim(const double& ts) {
 
     static bool s_primeiro = true;
-
+    btScalar step = ts;
     if (s_primeiro == false) {
-
         countPeriod();
         // discretDynamicsWorld->stepSimulation ( countPeriod(), 50 );
         discretDynamicsWorld->stepSimulation(step);

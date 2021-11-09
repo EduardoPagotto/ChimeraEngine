@@ -61,8 +61,8 @@ void Engine::run(void) {
     SDL_Event l_eventSDL;
     bool l_quit = false;
     uint32_t frameTime, timeElapsed, tot_delay;
-    uint32_t lastFrameTime = 0;
-    uint32_t deltaTime = 0;
+    // uint32_t lastFrameTime = 0;
+    // uint32_t deltaTime = 0;
     uint32_t maxFPS = 120;
     uint32_t minimumFrameTime = 1000 / maxFPS;
 
@@ -128,7 +128,7 @@ void Engine::run(void) {
             try {
                 // update all
                 for (auto it = stack.begin(); it != stack.end(); it++) {
-                    uint32_t ts = 100; // TODO: colocat contador
+                    double ts = 1.0f / (double)fps;
                     (*it)->onUpdate(ts);
                 }
 
@@ -151,8 +151,8 @@ void Engine::run(void) {
             utilSendEvent(EVENT_NEW_FPS, (void*)&fps, nullptr);
         }
         // counters temps
-        deltaTime = frameTime - lastFrameTime;
-        lastFrameTime = frameTime;
+        // deltaTime = frameTime - lastFrameTime;
+        // lastFrameTime = frameTime;
 
         timeElapsed = (SDL_GetTicks() - frameTime);
         if (timeElapsed < minimumFrameTime) {

@@ -50,12 +50,12 @@ void Scene::onCreate() {
     }
 }
 
-void Scene::onUpdate(const uint32_t& count) {
+void Scene::onUpdate(const double& ts) {
 
     // update scripts
     eRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (nsc.instance) {
-            nsc.instance->onUpdate(count);
+            nsc.instance->onUpdate(ts);
         }
     });
 

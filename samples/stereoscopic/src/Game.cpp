@@ -114,7 +114,7 @@ bool Game::onEvent(const SDL_Event& event) {
 
 void Game::onDeatach() {}
 
-void Game::onUpdate() {}
+void Game::onUpdate(const uint32_t& count) {}
 
 void Game::onRender() {
     renderV.eye = engine->getEye();

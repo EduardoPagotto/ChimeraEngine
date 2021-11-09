@@ -24,8 +24,8 @@ class Game : public Chimera::IStateMachine {
 
     virtual void onAttach() override;
     virtual void onDeatach() override;
-    virtual void onUpdate() override;
     virtual void onRender() override;
+    virtual void onUpdate(const uint32_t& count) override;
     virtual bool onEvent(const SDL_Event& event) override;
 
     Chimera::VisitorRender renderV;

@@ -127,8 +127,10 @@ void Engine::run(void) {
         if (!pause) {
             try {
                 // update all
-                for (auto it = stack.begin(); it != stack.end(); it++)
-                    (*it)->onUpdate();
+                for (auto it = stack.begin(); it != stack.end(); it++) {
+                    uint32_t ts = 0; // TODO: colocat contador
+                    (*it)->onUpdate(ts);
+                }
 
                 for (eyeIndice = 0; eyeIndice < canvas->getTotEyes(); eyeIndice++) {
                     canvas->before(eyeIndice);

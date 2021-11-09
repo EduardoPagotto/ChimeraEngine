@@ -111,6 +111,6 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate() {}
+void Game::onUpdate(const uint32_t& count) {}
 
 void Game::onRender() { RenderScene(*state, *world, *frame); }

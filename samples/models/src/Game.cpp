@@ -269,7 +269,7 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-void Game::onUpdate() {}
+void Game::onUpdate(const uint32_t& count) {}
 
 void Game::onRender() {
 

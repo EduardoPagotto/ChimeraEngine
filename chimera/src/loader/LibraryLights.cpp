@@ -1,10 +1,13 @@
 #include "LibraryLights.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/render/scene/Components.hpp"
 #include <tuple>
 
 namespace Chimera {
 
-LibraryLights::LibraryLights(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
+LibraryLights::LibraryLights(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url) {
+    this->entity = entity;
+}
 
 LibraryLights::~LibraryLights() {}
 
@@ -21,6 +24,14 @@ NodeLight* LibraryLights::target() {
             auto ret_data = loadDiffuseLightColor(l_nLight);
             pLight->data.setDiffuse(std::get<0>(ret_data));
             pLight->data.setType(std::get<1>(ret_data));
+
+            LightComponent& lc = entity.addComponent<LightComponent>();
+            Light* light = new Light();
+            light->setDiffuse(std::get<0>(ret_data));
+            light->setType(std::get<1>(ret_data));
+            // light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
+            // light->setPosition(glm::vec3(0, 400, 0));
+            lc.light = light;
 
             return pLight;
         }

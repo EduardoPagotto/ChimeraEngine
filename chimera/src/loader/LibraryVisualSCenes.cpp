@@ -4,6 +4,7 @@
 #include "LibraryLights.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/render/Transform.hpp"
+#include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 
 namespace Chimera {
@@ -94,8 +95,16 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
-            LibraryLights lib(root, l_url);
+            Entity re = scene->createEntity("Light Entity");
+            Transform& tc = re.getComponent<Transform>();
+            tc.setMatrix(l_pTransform);
+
+            LibraryLights lib(root, l_url, re);
             NodeLight* pLight = lib.target();
+
+            // FIXME: Remover transformacao de light e remover este codigo!!!!
+            LightComponent& lc = re.getComponent<LightComponent>();
+            lc.light->setTransform(l_pTransform);
 
             pLight->data.setTransform(l_pTransform);
 

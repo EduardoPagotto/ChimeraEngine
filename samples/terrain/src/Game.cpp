@@ -83,8 +83,8 @@ void Game::onAttach() {
         // Entidade mesh
         Entity renderableEntity = activeScene.createEntity("Renderable Entity");
 
-        // Transform& tc = renderableEntity.getComponent<Transform>();
-        // tc.setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
+        Transform& tc = renderableEntity.getComponent<Transform>();
+        tc.setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
 
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();

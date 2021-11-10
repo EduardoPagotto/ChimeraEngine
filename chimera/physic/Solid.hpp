@@ -20,11 +20,11 @@ class Solid : public Transform {
     // Inherited via Transform
     virtual glm::vec3 getPosition() override;
     virtual void setPosition(const glm::vec3& _pos) override;
-    virtual glm::vec3 getRotation() override;
+    // virtual glm::vec3 getRotation() override;
     virtual void setRotation(const glm::vec3& _rotation) override;
     virtual glm::mat4 getMatrix() override;
     virtual void setMatrix(const glm::mat4& _trans) override;
-    virtual glm::mat4 getModelMatrix(const glm::vec3& _pos) override;
+    virtual glm::mat4 translate(const glm::vec3& _pos) override;
     virtual void init(const glm::vec3& _size) override;
 
     inline void setMass(const float& _mass) { mass = _mass; }

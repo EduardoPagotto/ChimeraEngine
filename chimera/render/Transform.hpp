@@ -11,24 +11,23 @@ class Transform {
     virtual ~Transform() = default;
 
     virtual glm::vec3 getPosition() { return glm::vec3(this->transform[3]); }
-    virtual glm::vec3 getRotation() { return glm::vec3(0.0, 0.0, 0.0); } // TODO: Implementar
+    // virtual glm::vec3 getRotation() { return glm::vec3(0.0, 0.0, 0.0); } // TODO: Implementar
     virtual glm::mat4 getMatrix() { return this->transform; }
-    virtual glm::mat4 getModelMatrix(const glm::vec3& _position); // TODO: SINISTRO!!!!!
+
+    // virtual glm::mat4 getModelMatrix(const glm::vec3& _position) { return glm::translate(transform, _position); }
+    virtual glm::mat4 translate(const glm::vec3& _position) { return glm::translate(transform, _position); }
+
+    // void setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
+    //     glm::quat myQuat(_rotation);                                    // trocar (pitch, yaw, roll) por (yaw, pitch, roll) ?????
+    //     glm::mat4 matRot = glm::toMat4(myQuat);                         // matriz rotacao
+    //     glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), _posicao); // matriz translacao
+    //     transform = matRot * matTrans;                                  // primeiro translada depois rotaciona, ordem é importante!!!
+    // }
 
     virtual void setPosition(const glm::vec3& pos) { this->transform = glm::translate(this->transform, pos); }
     virtual void setRotation(const glm::vec3& rot) { transform = glm::eulerAngleYXZ(rot.y, rot.x, rot.z); }
     virtual void setMatrix(const glm::mat4& transform) { this->transform = transform; }
     virtual void init(const glm::vec3& size) {} // TODO: Implementar
-
-    glm::vec3 translation = {0.0f, 0.0f, 0.0f};
-    glm::vec3 rotation = {0.0f, 0.0f, 0.0f};
-    glm::vec3 scale = {1.0f, 1.0f, 1.0f};
-
-    glm::mat4 getNewTransform() const {
-        glm::mat4 rot = glm::rotate(glm::mat4(1.0f), rotation.x, {1, 0, 0}) * glm::rotate(glm::mat4(1.0f), rotation.y, {0, 1, 0}) *
-                        glm::rotate(glm::mat4(1.0f), rotation.z, {0, 0, 1});
-        return glm::translate(glm::mat4(1.0f), translation) * rot * glm::scale(glm::mat4(1.0f), scale);
-    }
 
   private:
     glm::mat4 transform = glm::mat4(1.0f);

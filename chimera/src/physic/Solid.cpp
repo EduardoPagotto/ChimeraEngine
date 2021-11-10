@@ -135,8 +135,7 @@ void Solid::setIndexVertexArray(btTriangleIndexVertexArray* _indexVertexArray) {
     // pShapeCollision = new pShapeCollision(trimesh);
 }
 
-glm::mat4 Solid::getModelMatrix(const glm::vec3& _pos) { // ajuste matricial
-
+glm::mat4 Solid::translate(const glm::vec3& _pos) { // translate model matrix
     btTransform transLocal;
     btScalar matrix[16];
 
@@ -180,13 +179,13 @@ void Solid::setRotation(const glm::vec3& _rotation) {
     pRigidBody->setCenterOfMassTransform(transform);
 }
 
-glm::vec3 Solid::getRotation() {
+// glm::vec3 Solid::getRotation() {
 
-    btScalar rotZ, rotY, rotX;
-    pRigidBody->getWorldTransform().getBasis().getEulerZYX(rotZ, rotY, rotX);
+//     btScalar rotZ, rotY, rotX;
+//     pRigidBody->getWorldTransform().getBasis().getEulerZYX(rotZ, rotY, rotX);
 
-    return glm::vec3(rotX, rotY, rotZ);
-}
+//     return glm::vec3(rotX, rotY, rotZ);
+// }
 
 glm::mat4 Solid::getMatrix() {
 

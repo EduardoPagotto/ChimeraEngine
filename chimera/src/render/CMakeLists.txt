@@ -12,7 +12,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set (RenderSource 	CanvasGL.cpp
 					Shader.cpp
 					VertexData.cpp
-					Transform.cpp
 					Texture.cpp
 					TextureManager.cpp
 					CameraFPS.cpp

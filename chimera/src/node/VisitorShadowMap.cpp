@@ -36,7 +36,7 @@ void VisitorShadowMap::visit(NodeCamera* _pCamera) {}
 
 void VisitorShadowMap::visit(NodeMesh* _pMesh) {
 
-    glm::mat4 model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
+    glm::mat4 model = _pMesh->getTransform()->translate(pTransform->getPosition());
 
     // glm::mat4 projectionMatrixInverse = glm::inverse(glm::mat4(1.0f));
     // glm::mat4 viewMatrixInverse = glm::inverse(view);

@@ -34,7 +34,7 @@ void VisitorRender::visit(NodeCamera* _pCamera) {}
 
 void VisitorRender::visit(NodeMesh* _pMesh) {
 
-    model = _pMesh->getTransform()->getModelMatrix(pTransform->getPosition());
+    model = _pMesh->getTransform()->translate(pTransform->getPosition());
     if (shader.isInvalid())
         return;
 
@@ -65,7 +65,7 @@ void VisitorRender::visit(NodeParticleEmitter* _pParticleEmitter) {
 
     if (particleOn == true) {
 
-        model = _pParticleEmitter->getTransform()->getModelMatrix(pTransform->getPosition());
+        model = _pParticleEmitter->getTransform()->translate(pTransform->getPosition());
 
         if (shader.isInvalid())
             return;

@@ -17,7 +17,7 @@ class RenderableStatic : public IRenderable {
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return ibo; }
     virtual AABB* getAABB() override { return &aabb; }
-    virtual void submit(IRenderer3d* renderer) override;
+    virtual void submit(IRenderer3dOld* renderer) override;
 
   private:
     AABB aabb;

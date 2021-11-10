@@ -15,6 +15,6 @@ class IRenderable {
     virtual class VertexArray* getVao() const = 0;
     virtual class IndexBuffer* getIBO() const = 0;
     virtual class AABB* getAABB() = 0;
-    virtual void submit(class IRenderer3d* renderer) = 0;
+    virtual void submit(class IRenderer3dOld* renderer) = 0;
 };
 } // namespace Chimera

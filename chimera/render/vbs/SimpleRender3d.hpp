@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-class SimpleRender3d : public IRenderer3d {
+class SimpleRender3d : public IRenderer3dOld {
   public:
     SimpleRender3d() : logData(false), camera(nullptr), totIBO(0), totFaces(0) {}
     virtual ~SimpleRender3d() {}

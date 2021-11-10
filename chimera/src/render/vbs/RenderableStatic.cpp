@@ -36,7 +36,7 @@ RenderableStatic::~RenderableStatic() {
     delete ibo;
 }
 
-void RenderableStatic::submit(IRenderer3d* renderer) { renderer->submit(this); }
+void RenderableStatic::submit(IRenderer3dOld* renderer) { renderer->submit(this); }
 
 void RenderableStatic::debugDados() {
     glm::vec3 size = this->aabb.getSize();

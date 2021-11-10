@@ -1,7 +1,7 @@
 #pragma once
 namespace Chimera {
 
-class IRenderer3d {
+class IRenderer3dOld {
   public:
     virtual void begin(class ICamera* camera) = 0;
     virtual void submit(class IRenderable* renderable) = 0;

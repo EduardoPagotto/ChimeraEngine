@@ -2,6 +2,7 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/node/NodeGroup.hpp"
+//#include "chimera/render/scene/Scene.hpp"
 
 namespace Chimera {
 

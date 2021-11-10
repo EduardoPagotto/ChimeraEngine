@@ -1,7 +1,6 @@
-#include "chimera/core/Exception.hpp"
-
-#include "LibraryVisualSCenes.hpp"
 #include "chimera/loader/VisualScene.hpp"
+#include "LibraryVisualSCenes.hpp"
+#include "chimera/core/Exception.hpp"
 
 namespace Chimera {
 

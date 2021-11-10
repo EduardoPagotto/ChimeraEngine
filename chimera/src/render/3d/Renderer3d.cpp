@@ -40,42 +40,24 @@ void Renderer3d::submitLight(Light* light) { light->bindLightInformation(lightQu
 
 void Renderer3d::submit(const RenderCommand& command) {
 
-    // se não há frustrum adicionar tudo
+    // se não há frustrum adicionar tudo // TODO: remover quando model estiver no fluxo principal
     if (this->camera == nullptr) {
         commandQueue.push_back(command);
         return;
     }
-
-    // se nao ha AABB adicionar tudo
+    // Transformation model matrix AABB to know if in frustrum Camera
     const AABB& aabb = command.renderable->getAABB();
-    Entity e = command.renderable->getEntity();
-    if (e) {
-        Transform& t = e.getComponent<Transform>();
-        AABB nova = aabb.transformation(t.getMatrix());
-
-        // adicione apenas o que esta no clip-space
-        if (nova.visible(frustum) == true) {
-
-            IndexBuffer* ibo = command.renderable->getIBO();
-            if (ibo != nullptr) {
-                totIBO++;
-                totFaces += ibo->getCount();
-            }
-
-            commandQueue.push_back(command);
+    AABB nova = aabb.transformation(command.transform);
+    // adicione apenas o que esta no clip-space
+    if (nova.visible(frustum) == true) {
+        // Debug info only
+        IndexBuffer* ibo = command.renderable->getIBO();
+        if (ibo != nullptr) {
+            totIBO++;
+            totFaces += ibo->getCount();
         }
-    } else {
-        // adicione apenas o que esta no clip-space
-        if (aabb.visible(frustum) == true) {
 
-            IndexBuffer* ibo = command.renderable->getIBO();
-            if (ibo != nullptr) {
-                totIBO++;
-                totFaces += ibo->getCount();
-            }
-
-            commandQueue.push_back(command);
-        }
+        commandQueue.push_back(command);
     }
 }
 

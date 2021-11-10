@@ -82,9 +82,18 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
-            LibraryCameras lib(root, l_url);
+            Entity re = scene->createEntity("Camera Entity");
+            Transform& tc = re.getComponent<Transform>();
+            tc.setMatrix(l_pTransform);
+
+            LibraryCameras lib(root, l_url, re);
             NodeCamera* pCamera = lib.target();
 
+            // FIXME: Remover transformacao da camera e reposicionar na entidade
+            CameraComponent& cc = re.getComponent<CameraComponent>();
+            cc.camera->setPosition(l_pTransform[3]);
+
+            // FIXME: remover proximas versoes
             pCamera->getCamera()->setPosition(l_pTransform[3]);
 
             ICamera3D* pc = (ICamera3D*)pCamera->getCamera();

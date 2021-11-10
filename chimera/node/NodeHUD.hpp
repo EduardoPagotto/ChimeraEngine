@@ -1,11 +1,8 @@
-#ifndef __CHIMERA_NODE_HUD__HPP
-#define __CHIMERA_NODE_HUD__HPP
-
-#include <vector>
-
+#pragma once
 #include "Node.hpp"
 #include "chimera/render/Font.hpp"
 #include "chimera/render/Shader.hpp"
+#include <vector>
 
 namespace Chimera {
 class NodeHUD : public Node {
@@ -41,4 +38,3 @@ class NodeHUD : public Node {
     std::vector<Font*> vFonts;
 };
 } // namespace Chimera
-#endif

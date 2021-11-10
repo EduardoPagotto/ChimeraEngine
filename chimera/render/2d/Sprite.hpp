@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Renderable2D.hpp"
 
 namespace Chimera {

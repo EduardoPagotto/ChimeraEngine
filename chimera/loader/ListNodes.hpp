@@ -1,11 +1,8 @@
-#ifndef __CHIMERA_LOADER_LIST_NODES__HPP
-#define __CHIMERA_LOADER_LIST_NODES__HPP
-
-#include <vector>
-
+#pragma once
 #include "chimera/core/Singleton.hpp"
 #include "chimera/node/Node.hpp"
 #include "chimera/node/NodeMesh.hpp"
+#include <vector>
 
 namespace Chimera {
 
@@ -27,4 +24,3 @@ class ListNodes {
     ListNodes(const ListNodes&) = delete;
 };
 } // namespace Chimera
-#endif

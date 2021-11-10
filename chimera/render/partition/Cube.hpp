@@ -1,5 +1,4 @@
 #pragma once
-
 #include "chimera/render/partition/AABB.hpp"
 #include "chimera/render/partition/Triangle.hpp"
 #include <vector>

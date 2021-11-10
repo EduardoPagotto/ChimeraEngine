@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_EFFECTS__HPP
-#define __CHIMERA_LOADER_LIBRARY_EFFECTS__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/render/Material.hpp"
 
@@ -22,4 +20,3 @@ class LibraryEffects : public Library {
     std::map<std::string, std::string> mapaEfeito;
 };
 } // namespace Chimera
-#endif

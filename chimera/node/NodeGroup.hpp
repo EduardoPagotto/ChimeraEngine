@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_NODE_GROUP__HPP
-#define __CHIMERA_NODE_GROUP__HPP
-
+#pragma once
 #include "Node.hpp"
 #include "VisitorInterface.hpp"
 #include "chimera/render/Shader.hpp"
@@ -31,6 +29,4 @@ class NodeGroup : public Node {
     Shader* pShader;
     VisitorInterface* shadoMapVisitor;
 };
-
 } // namespace Chimera
-#endif

@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_CAMERAS__HPP
-#define __CHIMERA_LOADER_LIBRARY_CAMERAS__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/node/NodeCamera.hpp"
 
@@ -18,5 +16,3 @@ class LibraryCameras : public Library {
     void extra(tinyxml2::XMLElement* _nNode, NodeCamera* _pCamera);
 };
 } // namespace Chimera
-
-#endif

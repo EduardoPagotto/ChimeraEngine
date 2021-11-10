@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_IMAGES__HPP
-#define __CHIMERA_LOADER_LIBRARY_IMAGES__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 
 namespace Chimera {
@@ -13,4 +11,3 @@ class LibraryImages : public Library {
     std::tuple<std::string, std::string> target();
 };
 } // namespace Chimera
-#endif

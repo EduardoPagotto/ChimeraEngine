@@ -1,5 +1,4 @@
 #pragma once
-
 #include "IRenderable3d.hpp"
 #include "PolygonIndex.hpp"
 #include "chimera/render/buffer/IndexBuffer.hpp"

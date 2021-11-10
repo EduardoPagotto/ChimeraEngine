@@ -1,11 +1,8 @@
-#ifndef __CHIMERA_LOADER_LIBRARY__HPP
-#define __CHIMERA_LOADER_LIBRARY__HPP
-
+#pragma once
+#include <glm/glm.hpp> // FIXME ???????
 #include <string>
 #include <tinyxml2.h>
 #include <vector>
-
-#include <glm/glm.hpp>
 
 namespace Chimera {
 
@@ -44,5 +41,3 @@ class Library {
     tinyxml2::XMLElement* root;
 };
 } // namespace Chimera
-
-#endif

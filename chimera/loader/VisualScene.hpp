@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_VISUAL_SCENE__HPP
-#define __CHIMERA_LOADER_VISUAL_SCENE__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/node/NodeGroup.hpp"
@@ -19,5 +17,3 @@ class VisualScene : public Library {
     NodeGroup* pGroup;
 };
 } // namespace Chimera
-
-#endif

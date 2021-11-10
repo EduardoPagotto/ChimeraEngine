@@ -1,5 +1,4 @@
 #pragma once
-
 #include "chimera/render/partition/Plane.hpp"
 
 namespace Chimera {

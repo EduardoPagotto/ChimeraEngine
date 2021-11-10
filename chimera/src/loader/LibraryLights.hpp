@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_LIGHTS__HPP
-#define __CHIMERA_LOADER_LIBRARY_LIGHTS__HPP
+#pragma once
 
 #include "chimera/loader/Library.hpp"
 #include "chimera/node/NodeLight.hpp"
@@ -18,5 +17,3 @@ class LibraryLights : public Library {
     std::tuple<glm::vec4, LightType> loadDiffuseLightColor(tinyxml2::XMLElement* _nNode);
 };
 } // namespace Chimera
-
-#endif

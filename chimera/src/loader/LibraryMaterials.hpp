@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_MATERIALS__HPP
-#define __CHIMERA_LOADER_LIBRARY_MATERIALS__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/render/Material.hpp"
 
@@ -16,5 +14,3 @@ class LibraryMaterials : public Library {
   private:
 };
 } // namespace Chimera
-
-#endif

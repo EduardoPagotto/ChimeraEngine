@@ -1,5 +1,4 @@
 #pragma once
-
 #include "ScriptableEntity.hpp"
 #include "chimera/render/ICamera.hpp"
 

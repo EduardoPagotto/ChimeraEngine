@@ -1,12 +1,10 @@
 #pragma once
-
-// Ref: https://github.com/taylorstine/BSP_Tree
 #include "BSPTreeNode.hpp"
 #include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/partition/Triangle.hpp"
 
 namespace Chimera {
-
+// Ref: https://github.com/taylorstine/BSP_Tree
 class BspTree {
   public:
     BspTree() : root(nullptr) {}

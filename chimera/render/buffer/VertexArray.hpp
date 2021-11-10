@@ -1,5 +1,4 @@
 #pragma once
-
 #include "VertexBuffer.hpp"
 
 namespace Chimera {

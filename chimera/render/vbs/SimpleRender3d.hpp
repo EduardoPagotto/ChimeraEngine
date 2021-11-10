@@ -1,5 +1,4 @@
 #pragma once
-
 #include "IRenderer3d.hpp"
 #include "chimera/render/ICamera.hpp"
 #include "chimera/render/partition/Frustum.hpp"

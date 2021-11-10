@@ -1,5 +1,4 @@
 #pragma once
-
 namespace Chimera {
 class IRenderer3d {
   public:

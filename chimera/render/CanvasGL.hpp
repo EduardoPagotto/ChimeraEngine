@@ -1,5 +1,4 @@
 #pragma once
-
 #include "chimera/core/Canvas.hpp"
 
 #define GLEW_STATIC

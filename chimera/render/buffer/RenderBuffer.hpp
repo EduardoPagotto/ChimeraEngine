@@ -1,5 +1,4 @@
 #pragma once
-
 #include "FrameBuffer.hpp"
 #include "VertexBuffer.hpp"
 

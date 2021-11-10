@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_GEOMETRYS__HPP
-#define __CHIMERA_LOADER_LIBRARY_GEOMETRYS__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/node/NodeMesh.hpp"
 
@@ -18,5 +16,3 @@ class LibraryGeometrys : public Library {
     std::string loadMeshCollada(tinyxml2::XMLElement* _nNode, NodeMesh* _pMesh);
 };
 } // namespace Chimera
-
-#endif

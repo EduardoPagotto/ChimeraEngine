@@ -1,15 +1,10 @@
-#ifndef __CHIMERA_PHYSICSWORLD__HPP
-#define __CHIMERA_PHYSICSWORLD__HPP
-
-#include <map>
-
+#pragma once
+#include "chimera/node/Node.hpp"
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include <LinearMath/btVector3.h>
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
-
-#include <LinearMath/btVector3.h>
-
-#include "chimera/node/Node.hpp"
+#include <map>
 
 namespace Chimera {
 
@@ -58,4 +53,3 @@ class PhysicsControl {
     btScalar period;
 };
 } // namespace Chimera
-#endif

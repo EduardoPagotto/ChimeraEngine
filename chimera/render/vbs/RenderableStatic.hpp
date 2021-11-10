@@ -1,5 +1,4 @@
 #pragma once
-
 #include "IRenderable.hpp"
 #include "chimera/render/buffer/IndexBuffer.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"

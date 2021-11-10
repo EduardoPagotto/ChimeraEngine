@@ -1,11 +1,7 @@
 #pragma once
 
 #ifdef OVR_SET_TO_USE
-
-#include "chimera/rencer/CanvasGL.hpp"
-
-#include <string>
-
+#include "chimera/render/CanvasGL.hpp"
 #ifdef WIN32
 #define OVR_OS_WIN32
 //#include "../Src/OVR_CAPI_GL.hpp"
@@ -19,6 +15,7 @@
 #include <X11/Xlib.h>
 #include <algorithm>
 #endif
+#include <string>
 
 namespace Chimera {
 

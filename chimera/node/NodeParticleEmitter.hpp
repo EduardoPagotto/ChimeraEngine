@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_NODE_PARTICLE_EMITTER__HPP
-#define __CHIMERA_NODE_PARTICLE_EMITTER__HPP
-
+#pragma once
 #include "Node.hpp"
 #include "chimera/core/Timer.hpp"
 #include "chimera/render/Material.hpp"
@@ -60,4 +58,3 @@ class NodeParticleEmitter : public Node {
     Material* material;
 };
 } // namespace Chimera
-#endif

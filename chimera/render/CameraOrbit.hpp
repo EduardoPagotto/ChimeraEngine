@@ -1,5 +1,4 @@
 #pragma once
-
 #include "ICamera.hpp"
 
 namespace Chimera {

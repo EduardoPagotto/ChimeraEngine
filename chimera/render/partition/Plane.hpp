@@ -1,5 +1,4 @@
 #pragma once
-
 #include "chimera/render/VertexData.hpp"
 
 namespace Chimera {

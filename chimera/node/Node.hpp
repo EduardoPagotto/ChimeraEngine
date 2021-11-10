@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_NODE__HPP
-#define __CHIMERA_NODE__HPP
-
+#pragma once
 #include <cstdint>
 #include <list>
 #include <string>
@@ -55,4 +53,3 @@ class Node {
     std::string name;
 };
 } // namespace Chimera
-#endif

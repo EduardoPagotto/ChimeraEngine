@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_NODE_LIGHT__HPP
-#define __CHIMERA_NODE_LIGHT__HPP
-
+#pragma once
 #include "Node.hpp"
 #include "chimera/node/VisitorInterface.hpp"
 #include "chimera/render/Light.hpp"
@@ -16,4 +14,3 @@ class NodeLight : public Node {
     Light data;
 };
 } // namespace Chimera
-#endif

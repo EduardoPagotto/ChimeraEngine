@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_SOLID__HPP
-#define __CHIMERA_SOLID__HPP
-
+#pragma once
 #include "PhysicsControl.hpp"
 #include "chimera/render/Transform.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
@@ -75,4 +73,3 @@ class Solid : public Transform {
     btTransform transform;
 };
 } // namespace Chimera
-#endif

@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_SCENE_NODE__HPP
-#define __CHIMERA_SCENE_NODE__HPP
-
+#pragma once
 #include "Node.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
@@ -30,7 +28,4 @@ class SceneNode : public Scene {
   private:
     Node root;
 };
-
 } // namespace Chimera
-
-#endif

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Frustum.hpp"
 
 namespace Chimera {

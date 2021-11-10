@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_VISITOR_INTERFACE_HPP
-#define __CHIMERA_VISITOR_INTERFACE_HPP
+#pragma once
 
 namespace Chimera {
 
@@ -14,5 +13,3 @@ class VisitorInterface {
     virtual void visit(class NodeHUD* _pHUD) = 0;
 };
 } // namespace Chimera
-
-#endif

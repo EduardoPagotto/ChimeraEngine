@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../Renderable2D.hpp"
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/render/CameraOrthographic.hpp"

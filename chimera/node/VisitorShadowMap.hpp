@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_VISITOR_SHADOW_MAP__HPP
-#define __CHIMERA_VISITOR_SHADOW_MAP__HPP
-
+#pragma once
 #include "Node.hpp"
 #include "VisitorInterface.hpp"
 #include "chimera/render/Shader.hpp"
@@ -36,5 +34,3 @@ class VisitorShadowMap : public VisitorInterface {
     SimpleRender3d* pRender3D;
 };
 } // namespace Chimera
-
-#endif

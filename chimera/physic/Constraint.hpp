@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_CONSTRAINT__HPP
-#define __CHIMERA_CONSTRAINT__HPP
-
+#pragma once
 #include "Solid.hpp"
 #include <LinearMath/btTransform.h>
 
@@ -19,4 +17,3 @@ class Constraint {
     btTransform transformB;
 };
 } // namespace Chimera
-#endif

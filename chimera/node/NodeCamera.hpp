@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_NODE_CAMERA__HPP
-#define __CHIMERA_NODE_CAMERA__HPP
-
+#pragma once
 #include "Node.hpp"
 #include "chimera/render/ICamera.hpp"
 #include <glm/glm.hpp>
@@ -21,4 +19,3 @@ class NodeCamera : public Node {
     ICamera* camera;
 };
 } // namespace Chimera
-#endif

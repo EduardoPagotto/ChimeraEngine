@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_NODE_MESH__HPP
-#define __CHIMERA_NODE_MESH__HPP
-
+#pragma once
 #include "Node.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Transform.hpp"
@@ -50,4 +48,3 @@ NodeMesh* createEmpty(Node* _pParent, const std::string& _name, Material* _pMate
 void createMeshTexturizade(Node* parent, std::string name, std::string file, float scale, glm::vec3 _position);
 
 } // namespace Chimera
-#endif

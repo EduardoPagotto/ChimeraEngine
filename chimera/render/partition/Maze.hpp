@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Cube.hpp"
 #include <stdint.h>
 #include <vector>

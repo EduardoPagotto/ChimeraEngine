@@ -1,5 +1,4 @@
 #pragma once
-
 #include "RenderCommand.hpp"
 #include "RenderableSimple.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"

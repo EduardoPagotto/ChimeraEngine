@@ -1,5 +1,4 @@
 #pragma once
-
 #include "chimera/render/FontAtlas.hpp"
 #include "chimera/render/TransformationStack.hpp"
 #include <string>

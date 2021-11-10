@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CanvasGL.hpp"
 #include "chimera/render/buffer/RenderBuffer.hpp"
 

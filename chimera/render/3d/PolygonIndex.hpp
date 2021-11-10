@@ -1,5 +1,4 @@
 #pragma once
-
 #include "chimera/render/buffer/IndexBuffer.hpp"
 #include "chimera/render/partition/AABB.hpp"
 #include <vector>

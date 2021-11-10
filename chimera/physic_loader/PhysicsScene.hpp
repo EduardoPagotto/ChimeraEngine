@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_PHYSICS_SCENE__HPP
-#define __CHIMERA_LOADER_PHYSICS_SCENE__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/physic/PhysicsControl.hpp"
 
@@ -16,5 +14,3 @@ class PhysicsScene : public Library {
     PhysicsControl* pPhysicsControl;
 };
 } // namespace Chimera
-
-#endif

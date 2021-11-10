@@ -1,5 +1,4 @@
 #pragma once
-
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/ICamera.hpp"
 #include "chimera/render/buffer/RenderBuffer.hpp"

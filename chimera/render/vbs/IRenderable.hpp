@@ -1,5 +1,4 @@
 #pragma once
-
 #include "IRenderer3d.hpp"
 #include "chimera/render/Shader.hpp"
 #include "chimera/render/buffer/IndexBuffer.hpp"

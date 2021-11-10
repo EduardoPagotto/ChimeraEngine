@@ -6,7 +6,9 @@
 
 namespace Chimera {
 
-LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
+LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url) {
+    this->entity = entity;
+}
 
 LibraryEffects::~LibraryEffects() {}
 
@@ -23,7 +25,12 @@ Material* LibraryEffects::target() {
                 Material* pMaterial = new Material();
 
                 loadNewParam(l_nProfile);
-                loadColors(l_nProfile, pMaterial);
+
+                loadColors(l_nProfile, pMaterial); // TODO: REMOVER proxima versao
+
+                Material& eMaterial = entity.addComponent<Material>();
+                loadColors(l_nProfile, &eMaterial);
+
                 return pMaterial;
             }
         }

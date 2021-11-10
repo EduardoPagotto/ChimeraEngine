@@ -4,7 +4,9 @@
 
 namespace Chimera {
 
-LibraryMaterials::LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
+LibraryMaterials::LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url) {
+    this->entity = entity;
+}
 
 LibraryMaterials::~LibraryMaterials() {}
 
@@ -16,7 +18,7 @@ Material* LibraryMaterials::target() {
         std::string l_id = l_nMat->Attribute("id");
         if (url.compare(l_id) == 0) {
             std::string url = l_nMat->FirstChildElement("instance_effect")->Attribute("url");
-            LibraryEffects le(root, url);
+            LibraryEffects le(root, url, entity);
             Material* retorno = le.target();
             return retorno;
         }

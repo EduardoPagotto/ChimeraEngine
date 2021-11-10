@@ -37,7 +37,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     Chimera::NodeGroup* pRoot = new Chimera::NodeGroup(nullptr, "root_real");
     Chimera::NodeGroup* group1 = new Chimera::NodeGroup(pRoot, "none");
 
-    Chimera::VisualScene libV(model, group1);
+    Scene sceneZ;
+
+    Chimera::VisualScene libV(model, group1, &sceneZ);
     libV.target();
 
     // Cria mundo fisico e o vincula a scena

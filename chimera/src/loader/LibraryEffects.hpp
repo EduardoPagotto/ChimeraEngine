@@ -1,13 +1,14 @@
 #pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/render/Material.hpp"
+#include "chimera/render/scene/Entity.hpp"
 
 namespace Chimera {
 
 class LibraryEffects : public Library {
 
   public:
-    LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url);
+    LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url, Entity entiy);
     virtual ~LibraryEffects();
     Material* target();
 
@@ -18,5 +19,7 @@ class LibraryEffects : public Library {
     Texture* getTexture(tinyxml2::XMLElement* _nTex);
 
     std::map<std::string, std::string> mapaEfeito;
+
+    Entity entity;
 };
 } // namespace Chimera

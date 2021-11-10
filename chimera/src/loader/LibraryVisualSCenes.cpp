@@ -4,13 +4,16 @@
 #include "LibraryLights.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/render/Transform.hpp"
+#include "chimera/render/scene/Entity.hpp"
 
 namespace Chimera {
 
-LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, NodeGroup* _pRootNode)
+LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, NodeGroup* _pRootNode, Scene* scene)
     : Library(_root, _url) {
     pListNodes = Singleton<ListNodes>::getRefSingleton();
     pRootNode = _pRootNode;
+
+    this->scene = scene;
 }
 
 LibraryVisualScenes::~LibraryVisualScenes() { Singleton<ListNodes>::releaseRefSingleton(); }
@@ -101,7 +104,11 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
-            LibraryGeometrys lib(root, l_url);
+            Entity re = scene->createEntity("Renderable Entity");
+            Transform& tc = re.getComponent<Transform>();
+            tc.setMatrix(l_pTransform);
+
+            LibraryGeometrys lib(root, l_url, re);
             NodeMesh* pMesh = lib.target();
 
             pListNodes->mapMeshNode[pMesh->getName()] = pMesh;

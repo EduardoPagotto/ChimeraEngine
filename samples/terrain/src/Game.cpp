@@ -90,7 +90,7 @@ void Game::onAttach() {
         Shader& shader = renderableEntity.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader); // colocar shader em material
 
-        MeshData mesh;
+        MeshData& mesh = renderableEntity.addComponent<MeshData>();
         int ret = 0;
         // ret = loadObjFile("./assets/models/tela01.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/salaSplit3.obj", &mesh, &material);

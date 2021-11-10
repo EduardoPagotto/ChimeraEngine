@@ -2,13 +2,14 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/node/NodeGroup.hpp"
+#include "chimera/render/scene/Scene.hpp"
 
 namespace Chimera {
 
 class LibraryVisualScenes : public Library {
 
   public:
-    LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, NodeGroup* _pRootNode);
+    LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, NodeGroup* _pRootNode, Scene* scene);
     virtual ~LibraryVisualScenes();
     void target();
 
@@ -17,5 +18,7 @@ class LibraryVisualScenes : public Library {
     void carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type);
     ListNodes* pListNodes;
     NodeGroup* pRootNode;
+
+    Scene* scene;
 };
 } // namespace Chimera

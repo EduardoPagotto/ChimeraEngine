@@ -3,7 +3,7 @@
 
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
-#include "chimera/physic/PhysicsControl.hpp"
+#include "chimera/render/bullet/PhysicsControl.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include "chimera/render/scene/Scene.hpp"
 

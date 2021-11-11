@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/node/Node.hpp"
+//#include "chimera/node/Node.hpp" // FIXME: FODEU!!!!
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <LinearMath/btVector3.h>
 #include <btBulletCollisionCommon.h>
@@ -19,7 +19,7 @@ class PhysicsControl {
     void stepSim(const double& ts);
 
     void checkCollisions();
-    bool checkAllowCollision(Node* pNode);
+    // bool checkAllowCollision(Node* pNode);
 
     inline void setGravity(const btVector3& _vet) { discretDynamicsWorld->setGravity(_vet); }
 
@@ -48,7 +48,10 @@ class PhysicsControl {
     /// <summary> evento usando na colisao de corpos se s_dealCollision for false
     /// </summary>
     // SDL_Event s_event;
-    std::map<btCollisionObject*, std::pair<Node*, Node*>> contactActives;
+
+    // DO FODEU!!!
+    // std::map<btCollisionObject*, std::pair<Node*, Node*>> contactActives;
+
     btClock clockCounter;
     btScalar period;
 };

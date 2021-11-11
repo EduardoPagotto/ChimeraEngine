@@ -6,6 +6,10 @@ find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 
+if (BULLET_SET_TO_USE)
+	find_package(Bullet REQUIRED)
+endif(BULLET_SET_TO_USE)
+
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
@@ -55,26 +59,32 @@ set (RenderSource 	CanvasGL.cpp
 					scene/Scene.cpp
 					scene/CameraController.cpp)
 
-#Adiciona objetos e includes do OVR ao RenderSource e IncludeCore
-if (OVR_SET_TO_USE)
-	message(STATUS "OVR Incluido no Projeto")
-	set(RenderSource ${RenderSource} src/OvrDevice.cpp) #adiciona o cpp
-	set(IncludeCore ${IncludeCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
-endif(OVR_SET_TO_USE)
-
-if (HMD_Z1_SET_TO_USE)
-	message(STATUS "HMD_Z1 Incluido no Projeto")
-	set(RenderSource ${RenderSource} CanvasHmd.cpp) #adiciona o cpp
-	#set(RenderSource ${RenderSource} buffers/RenderBuffer.cpp) #adiciona o cpp
-endif(HMD_Z1_SET_TO_USE)
-
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}
 					${SDL2_INCLUDE_DIR}
 					${OPENGL_INCLUDE_DIR}
 					${GLEW_INCLUDE_DIRS}
 					/usr/local/include/) # Raiz do projeto
-					
+
+# Adiciona objetos e includes do OVR ao RenderSource e RenderInclude
+if (OVR_SET_TO_USE)
+	message(STATUS "OVR incluido no build")
+	set(RenderSource ${RenderSource} src/OvrDevice.cpp) #adiciona o cpp
+	set(RenderInclude ${RenderInclude} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
+endif(OVR_SET_TO_USE)
+
+if (BULLET_SET_TO_USE) # TODO: Remover para o Core depois de estrair o Transform	message(STATUS "Bullet incluido no build")
+	set(RenderSource ${RenderSource} bullet/PhysicsControl.cpp
+									 bullet/Solid.cpp
+									 bullet/Constraint.cpp) #adiciona o cpp
+	set(RenderInclude ${RenderInclude} ${BULLET_INCLUDE_DIR} ) #adiciona o h
+endif(BULLET_SET_TO_USE)
+
+if (HMD_Z1_SET_TO_USE)
+	message(STATUS "HMD_Z1 incluido no build")
+	set(RenderSource ${RenderSource} CanvasHmd.cpp) #adiciona o cpp
+endif(HMD_Z1_SET_TO_USE)
+				
 # Define o Target
 add_library (ChimeraRender STATIC ${RenderSource})
 

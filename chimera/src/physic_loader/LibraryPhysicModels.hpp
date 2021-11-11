@@ -3,7 +3,7 @@
 
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
-#include "chimera/physic/Solid.hpp"
+#include "chimera/render/bullet/Solid.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 namespace Chimera {

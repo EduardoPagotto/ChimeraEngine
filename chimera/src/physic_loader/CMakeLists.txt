@@ -33,7 +33,6 @@ target_include_directories (ChimeraPhysicLoader PUBLIC ${IncludeLoader}
 add_dependencies(ChimeraPhysicLoader ChimeraCore
 								     ChimeraRender
 									 ChimeraNode
-									 ChimeraPhysic
 									 ChimeraLoaders)
 
 INSTALL(FILES ${ChimeraPhysicLoader_BINARY_DIR}/libChimeraPhysicLoader.a DESTINATION lib)

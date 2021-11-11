@@ -1,6 +1,6 @@
 #pragma once
 #include "chimera/loader/Library.hpp"
-#include "chimera/physic/PhysicsControl.hpp"
+#include "chimera/render/bullet/PhysicsControl.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 namespace Chimera {

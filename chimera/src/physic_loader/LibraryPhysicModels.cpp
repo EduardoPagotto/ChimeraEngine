@@ -3,7 +3,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeMesh.hpp"
-#include "chimera/physic/Solid.hpp"
+#include "chimera/render/bullet/Solid.hpp"
 #include "chimera/render/scene/Components.hpp"
 
 namespace Chimera {

@@ -2,8 +2,8 @@
 #include "LibraryPhysicModels.hpp"
 #include "chimera/core/Exception.hpp"
 #include "chimera/node/NodeMesh.hpp"
-#include "chimera/physic/Solid.hpp"
 #include "chimera/render/Transform.hpp"
+#include "chimera/render/bullet/Solid.hpp"
 
 namespace Chimera {
 

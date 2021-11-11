@@ -1,4 +1,4 @@
-#include "chimera/physic/Constraint.hpp"
+#include "chimera/render/bullet/Constraint.hpp"
 namespace Chimera {
 Constraint::Constraint() {}
 Constraint::~Constraint() {}

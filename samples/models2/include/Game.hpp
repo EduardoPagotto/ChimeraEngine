@@ -2,12 +2,15 @@
 #define __GAME_XX__HPP
 
 #include "chimera/core/Engine.hpp"
-#include "chimera/node/NodeCamera.hpp"
-#include "chimera/node/NodeHUD.hpp"
-#include "chimera/node/NodeParticleEmitter.hpp"
-#include "chimera/node/VisitorRender.hpp"
-#include "chimera/physic/PhysicsControl.hpp"
-#include "chimera/physic/Solid.hpp"
+#include "chimera/core/IStateMachine.hpp"
+#include "chimera/render/3d/Renderer3d.hpp"
+#include "chimera/render/scene/Scene.hpp"
+//#include "chimera/node/NodeCamera.hpp"
+//#include "chimera/node/NodeHUD.hpp"
+//#include "chimera/node/NodeParticleEmitter.hpp"
+//#include "chimera/node/VisitorRender.hpp"
+//#include "chimera/physic/PhysicsControl.hpp"
+//#include "chimera/physic/Solid.hpp"
 
 struct Controles {
     float yaw;
@@ -29,23 +32,28 @@ class Game : public Chimera::IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
     virtual std::string getName() const { return "Game"; }
 
-    Chimera::VisitorRender renderV;
+    // Chimera::VisitorRender renderV;
 
   private:
     void updatePos();
-    std::string sPosicaoObj;
-    std::string textoFPS;
 
-    Controles crt;
-
-    Chimera::NodeHUD* pHUD;
-    Chimera::NodeCamera* pOrbitalCam;
-    Chimera::Solid* pCorpoRigido;
-    Chimera::NodeParticleEmitter* pEmissor;
-    Chimera::Node* root;
-    Chimera::PhysicsControl* physicWorld;
-    Chimera::Shader shader[5];
+    Chimera::Scene activeScene;
+    Chimera::Renderer3d render3d;
     Chimera::Engine* engine;
+
+    // std::string sPosicaoObj;
+    // std::string textoFPS;
+
+    // Controles crt;
+
+    // Chimera::NodeHUD* pHUD;
+    // Chimera::NodeCamera* pOrbitalCam;
+    // Chimera::Solid* pCorpoRigido;
+    // Chimera::NodeParticleEmitter* pEmissor;
+    // Chimera::Node* root;
+    // Chimera::PhysicsControl* physicWorld;
+    // Chimera::Shader shader[5];
+    // Chimera::Engine* engine;
 };
 
 #endif

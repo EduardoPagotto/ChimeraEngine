@@ -28,6 +28,9 @@ NodeCamera* LibraryCameras::target() {
                 tinyxml2::XMLElement* l_nMin = l_nExtra->FirstChildElement("orbital")->FirstChildElement("min");
                 tinyxml2::XMLElement* l_nMax = l_nExtra->FirstChildElement("orbital")->FirstChildElement("max");
 
+                auto& tag = entity.getComponent<TagComponent>();
+                tag.tag = l_id;
+
                 CameraComponent& cc = entity.addComponent<CameraComponent>();
                 // cc.camera = new CameraOrbit(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
                 CameraOrbit* camZ = new CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);

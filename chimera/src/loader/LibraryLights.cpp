@@ -26,6 +26,9 @@ NodeLight* LibraryLights::target() {
             pLight->data.setType(std::get<1>(ret_data));
 
             LightComponent& lc = entity.addComponent<LightComponent>();
+            auto& tag = entity.getComponent<TagComponent>();
+            tag.tag = l_id;
+
             Light* light = new Light();
             light->setDiffuse(std::get<0>(ret_data));
             light->setType(std::get<1>(ret_data));

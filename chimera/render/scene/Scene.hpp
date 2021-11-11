@@ -21,6 +21,7 @@ class Scene {
     void onDestroy();
 
     void onViewportResize(uint32_t width, uint32_t height);
+    entt::registry& getRegistry() { return eRegistry; }
 
   private:
     uint32_t viewportWidth, viewportHeight;

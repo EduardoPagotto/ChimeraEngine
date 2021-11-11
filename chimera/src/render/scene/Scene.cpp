@@ -28,7 +28,7 @@ void Scene::onCreate() {
     eRegistry.each([&](auto entityID) {
         Entity entity{entityID, this};
         auto& tc = entity.getComponent<TagComponent>();
-        SDL_Log("Tag: %s", tc.tag.c_str());
+        SDL_Log("Tag: %s Id:: %s", tc.tag.c_str(), tc.id.c_str());
     });
 
     // initialize scripts

@@ -82,15 +82,18 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
-            Entity re = scene->createEntity("Camera Entity");
-            Transform& tc = re.getComponent<Transform>();
+            Entity entity = scene->createEntity("Camera Entity");
+            Transform& tc = entity.getComponent<Transform>();
             tc.setMatrix(l_pTransform);
 
-            LibraryCameras lib(root, l_url, re);
+            auto& tag = entity.getComponent<TagComponent>();
+            tag.id = std::string(_id);
+
+            LibraryCameras lib(root, l_url, entity);
             NodeCamera* pCamera = lib.target();
 
             // FIXME: Remover transformacao da camera e reposicionar na entidade
-            CameraComponent& cc = re.getComponent<CameraComponent>();
+            CameraComponent& cc = entity.getComponent<CameraComponent>();
             cc.camera->setPosition(l_pTransform[3]);
 
             // FIXME: remover proximas versoes
@@ -104,15 +107,18 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
-            Entity re = scene->createEntity("Light Entity");
-            Transform& tc = re.getComponent<Transform>();
+            Entity entity = scene->createEntity("Light Entity");
+            Transform& tc = entity.getComponent<Transform>();
             tc.setMatrix(l_pTransform);
 
-            LibraryLights lib(root, l_url, re);
+            auto& tag = entity.getComponent<TagComponent>();
+            tag.id = std::string(_id);
+
+            LibraryLights lib(root, l_url, entity);
             NodeLight* pLight = lib.target();
 
             // FIXME: Remover transformacao de light e remover este codigo!!!!
-            LightComponent& lc = re.getComponent<LightComponent>();
+            LightComponent& lc = entity.getComponent<LightComponent>();
             lc.light->setTransform(l_pTransform);
 
             pLight->data.setTransform(l_pTransform);
@@ -122,11 +128,14 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
-            Entity re = scene->createEntity("Renderable Entity");
-            Transform& tc = re.getComponent<Transform>();
+            Entity entity = scene->createEntity("Renderable Entity");
+            Transform& tc = entity.getComponent<Transform>();
             tc.setMatrix(l_pTransform);
 
-            LibraryGeometrys lib(root, l_url, re);
+            auto& tag = entity.getComponent<TagComponent>();
+            tag.id = std::string(_id);
+
+            LibraryGeometrys lib(root, l_url, entity);
             NodeMesh* pMesh = lib.target();
 
             pListNodes->mapMeshNode[pMesh->getName()] = pMesh;

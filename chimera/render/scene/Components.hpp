@@ -12,9 +12,9 @@ namespace Chimera {
 
 struct TagComponent {
     std::string tag;
+    std::string id;
     TagComponent() = default;
-    TagComponent(const TagComponent& tag) = default;
-    TagComponent(const std::string& tag) : tag(tag) {}
+    TagComponent(const std::string& tag, const std::string& id) : tag(tag), id(id) {}
 };
 
 struct SpriteComponent {

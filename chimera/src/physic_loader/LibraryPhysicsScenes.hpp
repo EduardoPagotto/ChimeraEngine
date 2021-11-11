@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_PHYSICS_SCENES__HPP
-#define __CHIMERA_LOADER_LIBRARY_PHYSICS_SCENES__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
@@ -24,5 +22,3 @@ class LibraryPhysicsScenes : public Library {
     Entity entity;
 };
 } // namespace Chimera
-
-#endif

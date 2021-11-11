@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_PHYSICS_MATERIALS__HPP
-#define __CHIMERA_LOADER_LIBRARY_PHYSICS_MATERIALS__HPP
+#pragma once
 
 #include "PhysicMaterial.hpp"
 #include "chimera/loader/Library.hpp"
@@ -14,5 +13,3 @@ class LibraryPhysicsMaterials : public Library {
     PhysicMaterial* target();
 };
 } // namespace Chimera
-
-#endif

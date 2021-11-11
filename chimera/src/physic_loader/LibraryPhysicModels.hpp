@@ -1,6 +1,4 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_PHYSIC_MODELS__HPP
-#define __CHIMERA_LOADER_LIBRARY_PHYSIC_MODELS__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/render/bullet/Solid.hpp"
@@ -22,5 +20,3 @@ class LibraryPhysicModels : public Library {
     PhysicsControl* pWorld;
 };
 } // namespace Chimera
-
-#endif

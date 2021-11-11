@@ -1,6 +1,4 @@
-#ifndef _PHYSIC_MATERIAL__HPP
-#define _PHYSIC_MATERIAL__HPP
-
+#pragma once
 #include <LinearMath/btScalar.h>
 
 namespace Chimera {
@@ -23,4 +21,3 @@ struct PhysicMaterial {
     btScalar restitution;
 };
 } // namespace Chimera
-#endif

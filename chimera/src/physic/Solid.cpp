@@ -3,6 +3,21 @@
 
 namespace Chimera {
 
+Solid::Solid() : Transform() {
+    pRigidBody = nullptr;
+    pShapeCollision = nullptr;
+    pMotionState = nullptr;
+    trimesh = nullptr;
+
+    mass = 0.0f;
+    frictionDynamic = 15.0f;
+    frictionStatic = 10.0f;
+    restitution = 0.0f;
+
+    transform.setIdentity();
+    pWorld = nullptr;
+}
+
 Solid::Solid(PhysicsControl* _pWorld) : Transform() {
 
     pRigidBody = nullptr;
@@ -33,6 +48,25 @@ Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans) : Transform(_tran
 
     transform.setIdentity();
     transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
+
+    pWorld = _pWorld;
+}
+
+void Solid::setInitParams(PhysicsControl* _pWorld, const glm::mat4& _trans) {
+    pRigidBody = nullptr;
+    pShapeCollision = nullptr;
+    pMotionState = nullptr;
+    trimesh = nullptr;
+
+    mass = 0.0f;
+    frictionDynamic = 15.0f;
+    frictionStatic = 10.0f;
+    restitution = 0.0f;
+
+    transform.setIdentity();
+    transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
+
+    Transform::setMatrix(_trans);
 
     pWorld = _pWorld;
 }

@@ -44,7 +44,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     // Cria mundo fisico e o vincula a scena
     Chimera::PhysicsControl* pPC = new Chimera::PhysicsControl(); // ddddddddddddd onde sesta ver no main anterir
-    Chimera::PhysicsScene libP(model, pPC);
+    Chimera::PhysicsScene libP(model, pPC, &sceneZ);
     libP.target();
 
     // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado

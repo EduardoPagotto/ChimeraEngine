@@ -11,6 +11,7 @@ namespace Chimera {
 
 class Solid : public Transform {
   public:
+    Solid();
     Solid(PhysicsControl* _pWorld);
     Solid(PhysicsControl* _pWorld, const glm::mat4& _trans);
     virtual ~Solid();
@@ -53,6 +54,8 @@ class Solid : public Transform {
     // 	void setTransform(const glm::mat4 &_trans) {
     //         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
     // 	}
+
+    void setInitParams(PhysicsControl* _pWorld, const glm::mat4& _trans);
 
   private:
     void initTransform(const btTransform& _tTrans, void* pObj);

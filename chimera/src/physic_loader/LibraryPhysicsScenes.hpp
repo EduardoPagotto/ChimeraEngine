@@ -4,12 +4,14 @@
 #include "chimera/loader/Library.hpp"
 #include "chimera/loader/ListNodes.hpp"
 #include "chimera/physic/PhysicsControl.hpp"
+#include "chimera/render/scene/Entity.hpp"
+#include "chimera/render/scene/Scene.hpp"
 
 namespace Chimera {
 
 class LibraryPhysicsScenes : public Library {
   public:
-    LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, PhysicsControl* _pPhysicsControl);
+    LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, PhysicsControl* _pPhysicsControl, Scene* scene);
     virtual ~LibraryPhysicsScenes();
     void target();
 
@@ -18,6 +20,8 @@ class LibraryPhysicsScenes : public Library {
 
     ListNodes* pListNodes;
     PhysicsControl* pPhysicsControl;
+    Scene* scene;
+    Entity entity;
 };
 } // namespace Chimera
 

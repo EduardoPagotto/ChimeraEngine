@@ -19,10 +19,10 @@ PhysicMaterial* LibraryPhysicsMaterials::target() {
 
             PhysicMaterial* pMaterial = new PhysicMaterial();
             if (l_nTecDyn)
-                pMaterial->setFrictionDynamic(atof(l_nTecDyn->GetText()));
+                pMaterial->frictionDynamic = atof(l_nTecDyn->GetText());
 
             if (l_nTecRes)
-                pMaterial->setRestitution(atof(l_nTecRes->GetText()));
+                pMaterial->restitution = atof(l_nTecRes->GetText());
 
             return pMaterial;
         }

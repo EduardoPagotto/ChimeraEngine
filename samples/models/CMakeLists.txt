@@ -16,8 +16,7 @@ set (IncludesModels ${Models_SOURCE_DIR}/include/
 					${BULLET_INCLUDE_DIR})
 
 #ordem é importante!!!
-set (LibsModels ${CMAKE_SOURCE_DIR}/bin/libChimeraPhysicLoader.a
-				${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a
+set (LibsModels ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
@@ -47,7 +46,6 @@ target_link_libraries(models ${LibsModels})
 add_dependencies(models ChimeraCore
 						ChimeraRender
 						ChimeraNode
-						ChimeraLoaders
-						ChimeraPhysicLoader)
+						ChimeraLoaders)
 
 INSTALL(FILES ${Models_BINARY_DIR}/models DESTINATION bin)

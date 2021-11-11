@@ -4,8 +4,11 @@ PROJECT(ChimeraLoaders)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(Bullet REQUIRED)
 find_package(GLEW REQUIRED)
+
+if (BULLET_SET_TO_USE)
+	find_package(Bullet REQUIRED)
+endif(BULLET_SET_TO_USE)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
@@ -24,8 +27,17 @@ set (SourcesLoader Library.cpp
 set (IncludeLoader  ${CMAKE_SOURCE_DIR})
 set (IncludeLoaderAux	${OPENGL_INCLUDE_DIR}
 						${SDL2_INCLUDE_DIR}
-						${BULLET_INCLUDE_DIR}
 						${GLEW_INCLUDE_DIRS})
+
+if (BULLET_SET_TO_USE)
+message(STATUS "Bullet incluido no build")
+set(SourcesLoader ${SourcesLoader} LibraryPhysicsMaterials.cpp
+				   				   LibraryPhysicModels.cpp
+								   LibraryPhysicsScenes.cpp
+								   PhysicsScene.cpp) #adiciona o cpp
+set(IncludeLoader ${IncludeLoader} ${BULLET_INCLUDE_DIR} ) #adiciona o h
+endif(BULLET_SET_TO_USE)
+
 
 # Define o Target
 add_library (ChimeraLoaders STATIC ${SourcesLoader})

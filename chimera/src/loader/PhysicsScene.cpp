@@ -1,4 +1,4 @@
-#include "chimera/physic_loader/PhysicsScene.hpp"
+#include "chimera/loader/PhysicsScene.hpp"
 #include "LibraryPhysicsScenes.hpp"
 
 namespace Chimera {

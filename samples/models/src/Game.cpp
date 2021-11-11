@@ -4,11 +4,11 @@
 #include "chimera/core/MouseDevice.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"
 #include "chimera/node/NodeGroup.hpp"
 #include "chimera/node/NodeMesh.hpp"
 #include "chimera/node/VisitParser.hpp"
-#include "chimera/physic_loader/PhysicsScene.hpp"
 #include "chimera/render/CanvasGL.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 

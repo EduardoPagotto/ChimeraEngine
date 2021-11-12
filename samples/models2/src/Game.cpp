@@ -19,7 +19,7 @@
 // #include "chimera/node/NodeGroup.hpp"
 // #include "chimera/node/NodeMesh.hpp"
 // #include "chimera/node/VisitParser.hpp"
-// #include "chimera/physic_loader/PhysicsScene.hpp"
+#include "chimera/loader/PhysicsScene.hpp"
 // #include "chimera/render/CanvasGL.hpp"
 // #include "chimera/render/OpenGLDefs.hpp"
 
@@ -263,8 +263,11 @@ void Game::onAttach() {
 
     NodeGroup* pRoot = new NodeGroup(nullptr, "root_real");
     NodeGroup* group1 = new NodeGroup(pRoot, "none");
-    Chimera::VisualScene libV("./assets/models/piso2.xml", group1, &activeScene);
+    VisualScene libV("./assets/models/piso2.xml", group1, &activeScene);
     libV.target();
+
+    PhysicsScene libP("./assets/models/piso2.xml", nullptr, &activeScene);
+    libP.target();
 
     // injeta controlador de camera
     auto view1 = activeScene.getRegistry().view<CameraComponent>();

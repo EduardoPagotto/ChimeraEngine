@@ -12,7 +12,7 @@
 
 namespace Chimera {
 
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), renderBuffer(nullptr) {}
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), renderBuffer(nullptr), physicsControl(nullptr) {}
 Scene::~Scene() {}
 
 void Scene::onDestroy() {
@@ -31,6 +31,12 @@ void Scene::onCreate() {
         Entity entity{entityID, this};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
+
+        // TODO: passar para um NativeScriptComponent
+        if (entity.hasComponent<PhysicsControl>()) {
+            PhysicsControl& p = entity.getComponent<PhysicsControl>();
+            physicsControl = &p;
+        }
 
         // Se for um mesh inicializar componente (já que nao tenho classe de Mesh)
         if (entity.hasComponent<MeshData>()) {
@@ -105,6 +111,11 @@ void Scene::onUpdate(const double& ts) {
 
     if (camera)
         camera->recalculateMatrix(false); // FIXME: remover daqui!!!!
+
+    if (physicsControl) {
+        physicsControl->stepSim(ts);
+        physicsControl->checkCollisions();
+    }
 }
 
 Entity Scene::createEntity(const std::string& name) {

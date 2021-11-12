@@ -2,6 +2,7 @@
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/ICamera.hpp"
 #include "chimera/render/buffer/RenderBuffer.hpp"
+#include "chimera/render/bullet/PhysicsControl.hpp"
 #include <entt/entt.hpp>
 
 namespace Chimera {
@@ -30,5 +31,6 @@ class Scene {
     ICamera* camera;
     RenderBuffer* renderBuffer;
     FrameBuffer* fb;
+    PhysicsControl* physicsControl;
 };
 } // namespace Chimera

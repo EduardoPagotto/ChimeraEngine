@@ -11,7 +11,7 @@
 #include "chimera/render/scene/Components.hpp"
 // #include "Game.hpp"
 // #include "chimera/core/Exception.hpp"
-// #include "chimera/core/JoystickManager.hpp"
+#include "chimera/core/JoystickManager.hpp"
 // #include "chimera/core/MouseDevice.hpp"
 // #include "chimera/core/Singleton.hpp"
 // #include "chimera/core/utils.hpp"
@@ -25,18 +25,18 @@
 
 Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
-    // pCorpoRigido = nullptr;
+    pCorpoRigido = nullptr;
     // pEmissor = nullptr;
     // pOrbitalCam = nullptr;
 
     // textoFPS = "fps: 0";
     // sPosicaoObj = "pos:(,,)";
 
-    // crt.yaw = 0.0f;
-    // crt.pitch = 0.0f;
-    // crt.roll = 0.0f;
-    // crt.throttle = 0.0;
-    // crt.hat = 0;
+    crt.yaw = 0.0f;
+    crt.pitch = 0.0f;
+    crt.roll = 0.0f;
+    crt.throttle = 0.0;
+    crt.hat = 0;
 
     // ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader[0]);
     // ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader[1]);
@@ -84,31 +84,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
 Game::~Game() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game"); }
 
-void Game::updatePos() {
-
-    using namespace Chimera;
-
-    float propulsaoLRUD = 5.0f;
-    float torque = 0.5f;
-
-    // if (crt.hat & (uint8_t)SDL_HAT_UP)
-    //     pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
-
-    // if (crt.hat & (uint8_t)SDL_HAT_DOWN)
-    //     pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
-
-    // if (crt.hat & (uint8_t)SDL_HAT_RIGHTUP)
-    //     pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
-
-    // if (crt.hat & (uint8_t)SDL_HAT_LEFTUP)
-    //     pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
-
-    // if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {
-    //     pCorpoRigido->applyForce(glm::vec3(0.0, crt.throttle, 0.0));
-    //     pCorpoRigido->applyTorc(glm::vec3(-torque * crt.pitch, -torque * crt.roll, -torque * crt.yaw));
-    // }
-}
-
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
@@ -137,8 +112,8 @@ bool Game::onEvent(const SDL_Event& event) {
                     engine->getCanvas()->toggleFullScreen();
                     break;
                 case Chimera::EVENT_NEW_FPS: {
-                    // uint32_t* fps = (uint32_t*)event.user.data1;
-                    // glm::vec3 val1 = pCorpoRigido->getPosition();
+                    uint32_t* fps = (uint32_t*)event.user.data1;
+                    glm::vec3 val1 = pCorpoRigido->getPosition();
                     // sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
                     // textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
                 } break;
@@ -158,24 +133,24 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDLK_F10:
                     utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
-                    // case SDLK_UP:
-                    //     pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
-                    //     break;
-                    // case SDLK_DOWN:
-                    //     pCorpoRigido->applyForce(glm::vec3(-10.0, 0.0, 0.0));
-                    //     break;
-                    // case SDLK_LEFT:
-                    //     pCorpoRigido->applyForce(glm::vec3(0.0, 10.0, 0.0));
-                    //     break;
-                    // case SDLK_RIGHT:
-                    //     pCorpoRigido->applyForce(glm::vec3(0.0, -10.0, 0.0));
-                    //     break;
-                    // case SDLK_a:
-                    //     pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, 10.0));
-                    //     break;
-                    // case SDLK_s:
-                    //     pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, -10.0));
-                    // break;
+                case SDLK_UP:
+                    pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
+                    break;
+                case SDLK_DOWN:
+                    pCorpoRigido->applyForce(glm::vec3(-10.0, 0.0, 0.0));
+                    break;
+                case SDLK_LEFT:
+                    pCorpoRigido->applyForce(glm::vec3(0.0, 10.0, 0.0));
+                    break;
+                case SDLK_RIGHT:
+                    pCorpoRigido->applyForce(glm::vec3(0.0, -10.0, 0.0));
+                    break;
+                case SDLK_a:
+                    pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, 10.0));
+                    break;
+                case SDLK_s:
+                    pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, -10.0));
+                    break;
                 default:
                     break;
             }
@@ -187,40 +162,38 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_JOYHATMOTION:
         case SDL_JOYBALLMOTION: {
 
-            // JoystickState* pJoy = JoystickManager::select(event.jball.which);
+            JoystickState* pJoy = JoystickManager::select(event.jball.which);
 
-            // // Captura joystick 0 se existir
-            // if (pJoy != nullptr) {
+            // Captura joystick 0 se existir
+            if (pJoy != nullptr) {
 
-            //     pJoy->debug();
+                pJoy->debug();
 
-            //     float propulsaoPrincipal = 3.0f;
+                float propulsaoPrincipal = 3.0f;
 
-            //     crt.yaw = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, 32));
-            //     crt.pitch = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, 32));
-            //     crt.roll = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, 32));
+                crt.yaw = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, 32));
+                crt.pitch = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, 32));
+                crt.roll = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, 32));
 
-            //     // double throttle = 0;
-            //     // crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER)))
-            //     /
-            //     // 2);
+                double throttle = 0;
+                crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) / 2);
 
-            //     if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {
+                if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {
 
-            //         // glm::vec3 posicao = pEmissor->getPosSource();
-            //         // posicao.x = posicao.x - 0.1f;
-            //         // pEmissor->setPosSource( posicao );
-            //     }
+                    // glm::vec3 posicao = pEmissor->getPosSource();
+                    // posicao.x = posicao.x - 0.1f;
+                    // pEmissor->setPosSource( posicao );
+                }
 
-            //     if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_PRESSED) { // ( or SDL_RELEASED)
+                if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_PRESSED) { // ( or SDL_RELEASED)
 
-            //         // glm::vec3 posicao = pEmissor->getPosSource();
-            //         // posicao.x = posicao.x + 0.1f;
-            //         // pEmissor->setPosSource(posicao);
-            //     }
+                    // glm::vec3 posicao = pEmissor->getPosSource();
+                    // posicao.x = posicao.x + 0.1f;
+                    // pEmissor->setPosSource(posicao);
+                }
 
-            //     crt.hat = pJoy->getHat(0);
-            // }
+                crt.hat = pJoy->getHat(0);
+            }
 
         } break;
 
@@ -297,6 +270,18 @@ void Game::onAttach() {
     // Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)root->findChild("EfeitoZoltan-mesh", true);
     // pCorpoRigido = (Chimera::Solid*)pMesh->getTransform();
 
+    // TODO: implementar melhor
+    auto solidView = activeScene.getRegistry().view<Solid>();
+    for (auto ent : solidView) {
+        Entity entity = {ent, &activeScene};
+        auto& tc = entity.getComponent<TagComponent>();
+        if (tc.tag == "EfeitoZoltan-mesh") {
+            Solid& solid = entity.getComponent<Solid>();
+            pCorpoRigido = &solid;
+            break;
+        }
+    }
+
     // // Localiza o Emissor de particula
     // pEmissor = (Chimera::NodeParticleEmitter*)root->findChild("testeZ1", true);
 
@@ -313,19 +298,30 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-// void Game::onUpdate(const double& ts) {
-//     // physicWorld->stepSim(ts);
-//     // physicWorld->checkCollisions();
-//     // this->updatePos();
-// }
-
-// void Game::onRender() {
-//     // renderV.eye = engine->getEye();
-//     // Chimera::visitParserTree(root, &renderV);
-// }
-
 void Game::onUpdate(const double& ts) {
     activeScene.onUpdate(ts); // atualiza camera e script de camera
+
+    using namespace Chimera;
+
+    float propulsaoLRUD = 5.0f;
+    float torque = 0.5f;
+
+    if (crt.hat & (uint8_t)SDL_HAT_UP)
+        pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
+
+    if (crt.hat & (uint8_t)SDL_HAT_DOWN)
+        pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
+
+    if (crt.hat & (uint8_t)SDL_HAT_RIGHTUP)
+        pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
+
+    if (crt.hat & (uint8_t)SDL_HAT_LEFTUP)
+        pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
+
+    if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {
+        pCorpoRigido->applyForce(glm::vec3(0.0, crt.throttle, 0.0));
+        pCorpoRigido->applyTorc(glm::vec3(-torque * crt.pitch, -torque * crt.roll, -torque * crt.yaw));
+    }
 }
 
 void Game::onRender() { activeScene.render(render3d); }

@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Material::Material() { tipoTexturasDisponiveis = -1; }
+Material::Material() : valid(false), tipoTexturasDisponiveis(-1) {}
 Material::~Material() {}
 
 void Material::setDefaultEffect() {
@@ -15,6 +15,10 @@ void Material::setDefaultEffect() {
 
 void Material::init() {
 
+    if (valid)
+        return;
+
+    valid = true;
     bool hasDifuse = false;
     bool hasEspecular = false;
     bool hasEmissive = false;

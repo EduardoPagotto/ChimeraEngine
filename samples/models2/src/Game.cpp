@@ -279,34 +279,12 @@ void Game::onAttach() {
     // A cada mesh
     auto view = activeScene.getRegistry().view<MeshData>();
     for (auto entity : view) {
-
-        // Pega a chave (mesh)
-        MeshData& mesh = view.get<MeshData>(entity);
-
         // Ajusta metodo de entidades
         Entity e = Entity{entity, &activeScene};
-
-        // Inicializa Materiais
-        Material& material = e.getComponent<Material>();
-        material.init();
 
         // Adiciona o shader
         Shader& shader = e.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
-
-        // Transforma MeshData em VertexData comprimindo-o
-        std::vector<Chimera::VertexData> renderData;
-        vertexDataFromMesh(&mesh, renderData);
-        std::vector<uint32_t> index;
-        std::vector<Chimera::VertexData> vertexDataOut;
-        vertexDataIndexCompile(renderData, vertexDataOut, index);
-
-        // Cria o renderable object com o VertexData
-        Renderable3dComponent& rc = e.addComponent<Renderable3dComponent>();
-        RenderableSimple* r = new RenderableSimple();
-        r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
-        r->setEntity(e);
-        rc.renderable = r;
     }
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

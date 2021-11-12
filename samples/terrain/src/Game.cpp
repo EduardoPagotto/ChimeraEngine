@@ -48,8 +48,7 @@ void Game::onAttach() {
     }
     {
         // entidade heightmap
-        Entity renderableEntity = activeScene.createEntity("Renderable Entity");
-
+        Entity renderableEntity = activeScene.createEntity("Heightmap Entity");
         Shader& shader = renderableEntity.addComponent<Shader>();
         Material& material = renderableEntity.addComponent<Material>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
@@ -81,7 +80,7 @@ void Game::onAttach() {
 
     {
         // Entidade mesh
-        Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+        Entity renderableEntity = activeScene.createEntity("Zoltam Entity");
 
         Transform& tc = renderableEntity.getComponent<Transform>();
         tc.setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
@@ -91,30 +90,14 @@ void Game::onAttach() {
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader); // colocar shader em material
 
         MeshData& mesh = renderableEntity.addComponent<MeshData>();
-        int ret = 0;
         // ret = loadObjFile("./assets/models/tela01.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/salaSplit3.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/square2.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/parede_simples.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/cubo_textura_simples.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
-        ret = loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
+        loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
-
-        std::vector<Chimera::VertexData> renderData;
-        vertexDataFromMesh(&mesh, renderData);
-
-        std::vector<uint32_t> index;
-        std::vector<Chimera::VertexData> vertexDataOut;
-        vertexDataIndexCompile(renderData, vertexDataOut, index);
-
-        Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
-        RenderableSimple* r = new RenderableSimple();
-        r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
-        r->setEntity(renderableEntity);
-        rc.renderable = r;
-
-        material.init();
     }
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

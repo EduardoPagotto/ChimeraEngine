@@ -32,8 +32,10 @@ class Material {
     bool hasTexture() { return !mapTex.empty(); }
     void bindMaterialInformation(const Shader& shader);
     void bindMaterialInformation(std::vector<UniformVal>& uniforms, std::vector<Texture*>& vTex);
+    bool const isValid() const { return valid; }
 
   private:
+    bool valid;
     int tipoTexturasDisponiveis;
     std::map<std::string, Texture*> mapTex;
     std::list<UniformVal> listMaterial;

@@ -1,9 +1,11 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/MouseDevice.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
+#include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Transform.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
+#include "chimera/render/bullet/Solid.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include "chimera/render/scene/Entity.hpp"
 #include <SDL2/SDL.h>
@@ -28,7 +30,49 @@ void Scene::onCreate() {
     eRegistry.each([&](auto entityID) {
         Entity entity{entityID, this};
         auto& tc = entity.getComponent<TagComponent>();
-        SDL_Log("Tag: %s Id:: %s", tc.tag.c_str(), tc.id.c_str());
+        SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
+
+        // Se for um mesh inicializar componente (já que nao tenho classe de Mesh)
+        if (entity.hasComponent<MeshData>()) {
+            MeshData& mesh = entity.getComponent<MeshData>();
+
+            // Inicializa Materiais
+            if (entity.hasComponent<Material>()) {
+                Material& material = entity.getComponent<Material>();
+                if (!material.isValid())
+                    material.init();
+            } else {
+                Material& material = entity.addComponent<Material>();
+                material.setDefaultEffect();
+                material.init();
+            }
+
+            // Se nja nao foi inicializado um Renderable3dComponent ao mesh
+            if (!entity.hasComponent<Renderable3dComponent>()) {
+
+                // Transforma MeshData em VertexData comprimindo-o
+                std::vector<Chimera::VertexData> renderData;
+                vertexDataFromMesh(&mesh, renderData);
+                std::vector<uint32_t> index;
+                std::vector<Chimera::VertexData> vertexDataOut;
+                vertexDataIndexCompile(renderData, vertexDataOut, index);
+
+                // Cria o renderable object com o VertexData
+                Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
+                RenderableSimple* r = new RenderableSimple();
+                r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
+                r->setEntity(entity);
+                rc.renderable = r;
+            }
+
+            if (entity.hasComponent<Solid>()) {
+                glm::vec3 min, max, size;
+                vertexDataMeshMinMaxSize(&mesh, min, max, size);
+
+                Solid& solid = entity.getComponent<Solid>();
+                solid.init(size); // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
+            }
+        }
     });
 
     // initialize scripts
@@ -139,13 +183,22 @@ void Scene::render(IRenderer3d& renderer) {
         Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
-        Transform& tc = renderable->getEntity().getComponent<Transform>();
+        RenderCommand command;
+
+        if (renderable->getEntity().hasComponent<Solid>()) {
+            Solid& sl = renderable->getEntity().getComponent<Solid>();
+            command.transform = sl.getMatrix();
+        } else {
+            Transform& tc = renderable->getEntity().getComponent<Transform>();
+            command.transform = tc.getMatrix();
+        }
+
+        // Transform& tc = renderable->getEntity().getComponent<Transform>();
         Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
         Material& mc = rc.renderable->getEntity().getComponent<Material>();
 
-        RenderCommand command;
         command.renderable = renderable;
-        command.transform = tc.getMatrix();
+        // command.transform = tc.getMatrix();
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms, command.vTex);
 

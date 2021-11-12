@@ -5,7 +5,8 @@ PROJECT(ChimeraCore)
 find_package(SDL2 REQUIRED)
 
 # define objetos a compilar
-set (SourcesCore CanvasFB.cpp
+set (SourcesCore Registry.cpp
+				 CanvasFB.cpp
 				 utils.cpp
 				 Timer.cpp
 				 Keyboard.cpp

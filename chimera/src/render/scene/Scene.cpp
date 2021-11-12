@@ -169,14 +169,12 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
 
 void Scene::render(IRenderer3d& renderer) {
 
-    // this->onUpdate(0.01); // atualiza camera e script de camera
-
     if (renderer.getLog() == true) {
         glm::vec3 pos = camera->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
-    // we're not using the stencil buffer now
-    renderBuffer->bind();
+
+    renderBuffer->bind(); // we're not using the stencil buffer now
     renderer.begin(camera);
 
     // load lights after begin (clear previos lights)

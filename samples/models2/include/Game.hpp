@@ -8,8 +8,6 @@
 //#include "chimera/node/NodeCamera.hpp"
 //#include "chimera/node/NodeHUD.hpp"
 //#include "chimera/node/NodeParticleEmitter.hpp"
-//#include "chimera/node/VisitorRender.hpp"
-//#include "chimera/physic/PhysicsControl.hpp"
 #include "chimera/render/bullet/Solid.hpp"
 
 struct Controles {

@@ -1,27 +1,15 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/render/3d/RenderableChunk.hpp"
-#include "chimera/render/CameraFPS.hpp"
-#include "chimera/render/Material.hpp"
 #include "chimera/render/TextureManager.hpp"
-#include "chimera/render/Transform.hpp"
-#include "chimera/render/partition/LoadHeightMap.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
-// #include "Game.hpp"
 // #include "chimera/core/Exception.hpp"
 #include "chimera/core/JoystickManager.hpp"
 // #include "chimera/core/MouseDevice.hpp"
-// #include "chimera/core/Singleton.hpp"
 // #include "chimera/core/utils.hpp"
-#include "chimera/loader/VisualScene.hpp"
-// #include "chimera/node/NodeGroup.hpp"
-// #include "chimera/node/NodeMesh.hpp"
-// #include "chimera/node/VisitParser.hpp"
 #include "chimera/loader/PhysicsScene.hpp"
-// #include "chimera/render/CanvasGL.hpp"
-// #include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/loader/VisualScene.hpp"
 
 Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
@@ -263,13 +251,7 @@ void Game::onAttach() {
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     activeScene.onCreate();
 
-    // // Localiza a camera
-    // pOrbitalCam = (Chimera::NodeCamera*)root->findChild("Camera-camera", true);
-
     // // Localiza objeto como o primario //EfeitoZoltan-mesh
-    // Chimera::NodeMesh* pMesh = (Chimera::NodeMesh*)root->findChild("EfeitoZoltan-mesh", true);
-    // pCorpoRigido = (Chimera::Solid*)pMesh->getTransform();
-
     // TODO: implementar melhor
     auto solidView = activeScene.getRegistry().view<Solid>();
     for (auto ent : solidView) {

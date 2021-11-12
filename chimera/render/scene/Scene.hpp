@@ -30,7 +30,8 @@ class Scene {
     // Shader shader;
     ICamera* camera;
     RenderBuffer* renderBuffer;
-    FrameBuffer* fb;
+    // FrameBuffer* shadowBuffer;
+    FrameBuffer* fb; // buffer do mousepick
     PhysicsControl* physicsControl;
 };
 } // namespace Chimera

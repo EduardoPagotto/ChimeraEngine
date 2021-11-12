@@ -145,26 +145,49 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         }
     }
 
-    Shader shader;
-    ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
+    {
+        // Define o framebuffer de desenho
+        Shader shader;
+        ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
 
-    FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {
-        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-        TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+        FrameBufferSpecification fbSpec;
+        fbSpec.attachments = {
+            TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+            TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+            TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
 
-    fbSpec.width = width;
-    fbSpec.height = height;
-    fbSpec.swapChainTarget = false;
-    fbSpec.samples = 1;
+        fbSpec.width = width;
+        fbSpec.height = height;
+        fbSpec.swapChainTarget = false;
+        fbSpec.samples = 1;
 
-    if (renderBuffer) {
-        delete renderBuffer;
-        renderBuffer = nullptr;
+        if (renderBuffer) {
+            delete renderBuffer;
+            renderBuffer = nullptr;
+        }
+
+        renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
     }
 
-    renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
+    // {
+    //     // Define o framebuffer de Shadow
+    //     Shader shader;
+    //     ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shader);
+
+    //     FrameBufferSpecification fbSpec;
+    //     fbSpec.attachments = {TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST,
+    //     TexWrap::CLAMP_TO_BORDER,
+    //                                    TexDType::FLOAT)};
+
+    //     fbSpec.width = 2048;
+    //     fbSpec.height = 2048;
+    //     fbSpec.swapChainTarget = false;
+    //     fbSpec.samples = 1;
+
+    //     shadowBuffer = new FrameBuffer(fbSpec);
+    //     // renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
+    //     // group1->setNodeVisitor(new Chimera::VisitorShadowMap(&this->renderV.render3D, &shader[3], 2048, 2048));
+    // }
 }
 
 void Scene::render(IRenderer3d& renderer) {
@@ -174,7 +197,6 @@ void Scene::render(IRenderer3d& renderer) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
-    renderBuffer->bind(); // we're not using the stencil buffer now
     renderer.begin(camera);
 
     // load lights after begin (clear previos lights)
@@ -218,6 +240,7 @@ void Scene::render(IRenderer3d& renderer) {
     }
 
     renderer.end();
+    renderBuffer->bind(); // we're not using the stencil buffer now
     renderer.flush();
 
     // get val from color buffer (must be inside framebuffer renderer
@@ -232,7 +255,7 @@ void Scene::render(IRenderer3d& renderer) {
     // VertexBuffer::unbind();
     // Shader::disable();
 
-    renderBuffer->renderText();
+    renderBuffer->render();
 
     // this->onUpdate(0.01); // atualiza camera e script de camera
 

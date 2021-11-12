@@ -8,7 +8,7 @@ class RenderBuffer {
   public:
     RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, const Shader& shader);
     virtual ~RenderBuffer();
-    void renderText();
+    void render();
     void bind();
     void unbind();
     const uint32_t getWidth() const { return frameBuffer->getWidth(); }

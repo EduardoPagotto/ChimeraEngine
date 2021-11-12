@@ -31,7 +31,7 @@ void RenderBuffer::bind() { frameBuffer->bind(); }
 
 void RenderBuffer::unbind() { frameBuffer->unbind(); }
 
-void RenderBuffer::renderText() {
+void RenderBuffer::render() {
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
     glViewport(posX, posY, frameBuffer->getWidth(), frameBuffer->getHeight());
 

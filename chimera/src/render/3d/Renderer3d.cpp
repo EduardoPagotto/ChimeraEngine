@@ -13,7 +13,7 @@ namespace Chimera {
 
 Renderer3d::Renderer3d() : camera(nullptr), logData(false), totIBO(0), totFaces(0) {
     // commandQueue.reserve(1000);
-    lightQueue.reserve(300);
+    uniformsQueue.reserve(300);
 }
 
 Renderer3d::~Renderer3d() {}
@@ -25,7 +25,7 @@ void Renderer3d::begin(ICamera* camera) {
         frustum.set(camera->getViewProjectionMatrixInverse());
     }
 
-    lightQueue.clear();
+    uniformsQueue.clear();
 
     // debug data
     totIBO = 0;
@@ -36,7 +36,7 @@ void Renderer3d::end() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }
 
-void Renderer3d::submitLight(Light* light) { light->bindLightInformation(lightQueue); }
+void Renderer3d::submitLight(Light* light) { light->bindLightInformation(uniformsQueue); }
 
 void Renderer3d::submit(const RenderCommand& command) {
 
@@ -93,19 +93,11 @@ void Renderer3d::flush() {
                     }
                 }
 
-                activeShader.setUniform("model", command.transform);
-                activeShader.setUniform("projection", camera->getProjectionMatrix());
-                activeShader.setUniform("view", camera->getViewMatrix());
+                // generic bind in each draw call
+                for (const UniformVal& uniform : uniformsQueue)
+                    uniform.setUniform(activeShader);
 
-                // // FIXME: preciso disto aqui ??
-                // int shadows = 0;
-                // activeShader->setUniform("shadows", shadows);
-
-                // light bind
-                for (const UniformVal& uniformLight : lightQueue)
-                    uniformLight.setUniform(activeShader);
-
-                // bind dos uniforms
+                // bind dos uniforms from model, camera
                 for (const UniformVal& uniformMat : command.uniforms)
                     uniformMat.setUniform(activeShader);
 

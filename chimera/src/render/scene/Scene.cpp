@@ -208,6 +208,10 @@ void Scene::render(IRenderer3d& renderer) {
         }
     }
 
+    renderer.submitUniform(UniformVal("projection", camera->getProjectionMatrix()));
+    renderer.submitUniform(UniformVal("view", camera->getViewMatrix()));
+    renderer.submitUniform(UniformVal("shadows", (int)0)); // FIXME: preciso disto aqui ??
+
     auto view = eRegistry.view<Renderable3dComponent>();
     for (auto entity : view) {
 
@@ -233,8 +237,7 @@ void Scene::render(IRenderer3d& renderer) {
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms, command.vTex);
 
-        // FIXME: preciso disto aqui ??
-        command.uniforms.push_back(UniformVal("shadows", (int)0));
+        command.uniforms.push_back(UniformVal("model", command.transform));
 
         rc.renderable->submit(camera, command, &renderer);
     }

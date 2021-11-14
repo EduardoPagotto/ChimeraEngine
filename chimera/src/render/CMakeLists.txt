@@ -57,7 +57,9 @@ set (RenderSource 	CanvasGL.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
 					scene/Scene.cpp
-					scene/CameraController.cpp)
+					scene/CameraController.cpp
+					scene/RenderPass.cpp
+					scene/RenderPassShadow.cpp)
 
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}

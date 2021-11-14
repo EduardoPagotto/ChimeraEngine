@@ -27,11 +27,8 @@ class Scene {
   private:
     uint32_t viewportWidth, viewportHeight;
     entt::registry eRegistry;
-    // Shader shader;
     ICamera* camera;
     RenderBuffer* renderBuffer;
-    // FrameBuffer* shadowBuffer;
-    FrameBuffer* fb; // buffer do mousepick
     PhysicsControl* physicsControl;
 };
 } // namespace Chimera

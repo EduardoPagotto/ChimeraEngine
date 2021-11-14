@@ -56,7 +56,7 @@ void Renderer3d::submit(const RenderCommand& command) {
             totIBO++;
             totFaces += ibo->getCount();
         }
-
+        // adicionado ao proximo render
         commandQueue.push_back(command);
     }
 }
@@ -93,13 +93,13 @@ void Renderer3d::flush() {
                     }
                 }
 
-                // generic bind in each draw call
+                // generic bind in each draw call camera, light, etc
                 for (const UniformVal& uniform : uniformsQueue)
                     uniform.setUniform(activeShader);
 
-                // bind dos uniforms from model, camera
-                for (const UniformVal& uniformMat : command.uniforms)
-                    uniformMat.setUniform(activeShader);
+                // bind dos uniforms from model
+                for (const UniformVal& uniform : command.uniforms)
+                    uniform.setUniform(activeShader);
 
                 // TODO: ver se é assim mesmo!!!!
                 if (command.vTex.size() == 0)

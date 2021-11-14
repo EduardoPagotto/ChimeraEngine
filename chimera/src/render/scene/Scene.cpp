@@ -168,26 +168,6 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
 
         renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
     }
-
-    // {
-    //     // Define o framebuffer de Shadow
-    //     Shader shader;
-    //     ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shader);
-
-    //     FrameBufferSpecification fbSpec;
-    //     fbSpec.attachments = {TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST,
-    //     TexWrap::CLAMP_TO_BORDER,
-    //                                    TexDType::FLOAT)};
-
-    //     fbSpec.width = 2048;
-    //     fbSpec.height = 2048;
-    //     fbSpec.swapChainTarget = false;
-    //     fbSpec.samples = 1;
-
-    //     shadowBuffer = new FrameBuffer(fbSpec);
-    //     // renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
-    //     // group1->setNodeVisitor(new Chimera::VisitorShadowMap(&this->renderV.render3D, &shader[3], 2048, 2048));
-    // }
 }
 
 void Scene::render(IRenderer3d& renderer) {
@@ -243,56 +223,19 @@ void Scene::render(IRenderer3d& renderer) {
     }
 
     renderer.end();
+
     renderBuffer->bind(); // we're not using the stencil buffer now
+
     renderer.flush();
 
     // get val from color buffer (must be inside framebuffer renderer
     glm::ivec2 pos = MouseDevice::getMove();
     pos.y = viewportHeight - pos.y;
-    int val = fb->readPixel(1, pos.x, pos.y);
+    int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
 
     renderBuffer->unbind();
 
-    // VertexArray::unbind();
-    // VertexBuffer::unbind();
-    // Shader::disable();
-
     renderBuffer->render();
-
-    // this->onUpdate(0.01); // atualiza camera e script de camera
-
-    // if (renderer.getLog() == true) {
-    //     glm::vec3 pos = camera->getPosition();
-    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
-    // }
-
-    // // camera->recalculateMatrix(canvas->getRatio());// ainda nao sei o que fazer aqui
-
-    // renderer.begin(camera);
-
-    // for (Light* l : lightSetupStack) {
-    //     renderer.submitLight(l);
-    // }
-
-    // auto group1 = eRegistry.group<Renderable3dComponent, Transform, Shader, Material>();
-    // for (auto entity : group1) {
-    //     auto [rc, tc, sc, mc] = group1.get<Renderable3dComponent, Transform, Shader, Material>(entity);
-
-    //     IRenderable3d* renderable = rc.renderable;
-    //     RenderCommand command;
-    //     command.renderable = renderable;
-    //     command.transform = tc.getMatrix();
-    //     command.shader = sc;
-    //     mc.bindMaterialInformation(command.uniforms);
-
-    //     // FIXME: preciso disto aqui ??
-    //     command.uniforms.push_back(UniformVal("shadows", (int)0));
-
-    //     rc.renderable->submit(camera, command, &renderer);
-    // }
-
-    // renderer.end();
-    // renderer.flush();
 }
 } // namespace Chimera

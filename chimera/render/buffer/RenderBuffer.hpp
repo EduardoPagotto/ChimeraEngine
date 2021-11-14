@@ -13,6 +13,7 @@ class RenderBuffer {
     void unbind();
     const uint32_t getWidth() const { return frameBuffer->getWidth(); }
     const uint32_t getHeight() const { return frameBuffer->getHeight(); }
+    FrameBuffer* getFramBuffer() const { return frameBuffer; }
 
   private:
     uint32_t posX, posY;

@@ -39,11 +39,6 @@ RenderPass::RenderPass(uint32_t width, uint32_t height) {
 
 void RenderPass::execute(ICamera* camera, IRenderer3d& renderer, entt::registry& eRegistry) {
 
-    // if (renderer.getLog() == true) {
-    //     glm::vec3 pos = camera->getPosition();
-    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
-    // }
-
     renderer.begin(camera);
 
     // load lights after begin (clear previos lights)
@@ -54,10 +49,6 @@ void RenderPass::execute(ICamera* camera, IRenderer3d& renderer, entt::registry&
             renderer.submitLight(lc.light);
         }
     }
-
-    renderer.submitUniform(UniformVal("projection", camera->getProjectionMatrix()));
-    renderer.submitUniform(UniformVal("view", camera->getViewMatrix()));
-    renderer.submitUniform(UniformVal("shadows", (int)0)); // FIXME: preciso disto aqui ?? quanto ativar a sombra passar para 1
 
     auto view = eRegistry.view<Renderable3dComponent>();
     for (auto entity : view) {
@@ -75,12 +66,10 @@ void RenderPass::execute(ICamera* camera, IRenderer3d& renderer, entt::registry&
             command.transform = tc.getMatrix();
         }
 
-        // Transform& tc = renderable->getEntity().getComponent<Transform>();
         Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
         Material& mc = rc.renderable->getEntity().getComponent<Material>();
 
         command.renderable = renderable;
-        // command.transform = tc.getMatrix();
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms, command.vTex);
 
@@ -102,18 +91,6 @@ void RenderPass::execute(ICamera* camera, IRenderer3d& renderer, entt::registry&
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
 
     renderBuffer->unbind();
-
-    // // get val from color buffer (must be inside framebuffer renderer
-    // glm::ivec2 pos = MouseDevice::getMove();
-    // pos.y = viewportHeight - pos.y;
-    // int val = fb->readPixel(1, pos.x, pos.y);
-    // SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
-
-    // VertexArray::unbind();
-    // VertexBuffer::unbind();
-    // Shader::disable();
-
-    // renderBuffer->render();
 }
 
 } // namespace Chimera

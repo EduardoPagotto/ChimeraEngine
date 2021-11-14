@@ -1,8 +1,9 @@
 #pragma once
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/ICamera.hpp"
-#include "chimera/render/buffer/RenderBuffer.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
+#include "chimera/render/scene/RenderPass.hpp"
+#include "chimera/render/scene/RenderPassShadow.hpp"
 #include <entt/entt.hpp>
 
 namespace Chimera {
@@ -28,7 +29,8 @@ class Scene {
     uint32_t viewportWidth, viewportHeight;
     entt::registry eRegistry;
     ICamera* camera;
-    RenderBuffer* renderBuffer;
+    RenderPass* renderPass;
+    RenderPassShadow* renderPassShadow;
     PhysicsControl* physicsControl;
 };
 } // namespace Chimera

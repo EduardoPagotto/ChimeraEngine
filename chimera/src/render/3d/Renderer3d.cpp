@@ -11,10 +11,7 @@
 
 namespace Chimera {
 
-Renderer3d::Renderer3d() : camera(nullptr), logData(false), totIBO(0), totFaces(0) {
-    // commandQueue.reserve(1000);
-    uniformsQueue.reserve(300);
-}
+Renderer3d::Renderer3d() : camera(nullptr), logData(false), totIBO(0), totFaces(0) { uniformsQueue.reserve(300); }
 
 Renderer3d::~Renderer3d() {}
 
@@ -24,8 +21,6 @@ void Renderer3d::begin(ICamera* camera) {
     if (this->camera != nullptr) {
         frustum.set(camera->getViewProjectionMatrixInverse());
     }
-
-    uniformsQueue.clear();
 
     // debug data
     totIBO = 0;
@@ -127,6 +122,9 @@ void Renderer3d::flush() {
         commandQueue.pop_front();
     }
     pLastVao->unbind();
+
+    // Limpa buffer de uniforms ao terminar todos os draws calls
+    uniformsQueue.clear();
 }
 
 } // namespace Chimera

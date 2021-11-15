@@ -37,8 +37,9 @@ if (OVR_SET_TO_USE)
     set(LibsModels2 ${LibsModels2} /usr/local/ovr_sdk_linux_0.4.4/LibOVR/Lib/Linux/Release/x86_64/libovr.a)
 endif(OVR_SET_TO_USE)
 
-add_executable(models2 src/Game.cpp
-					  src/main.cpp)
+add_executable(models2 	src/Tile.cpp
+						src/Game.cpp
+					  	src/main.cpp)
 
 target_include_directories(models2 PRIVATE ${IncludesModels})
 target_link_libraries(models2 ${LibsModels2})

@@ -39,7 +39,7 @@ void Game::onAttach() {
 
     ShaderManager::load("./assets/shaders/Basic2D.glsl", shader);
 
-    layer = new TileLayer(&shader);
+    layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
 
     for (float y = -8.0f; y < 8.0f; y++) {

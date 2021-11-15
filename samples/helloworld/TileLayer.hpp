@@ -5,7 +5,7 @@
 
 class TileLayer : public Chimera::Layer {
   public:
-    TileLayer(Chimera::Shader* shader);
+    TileLayer(Chimera::Shader shader);
     virtual ~TileLayer();
     virtual void onAttach() override{};
     virtual void onDeatach() override{};

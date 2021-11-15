@@ -52,7 +52,7 @@ void BatchRender2D::init() {
     pVao->unbind();
 }
 
-void BatchRender2D::begin(CameraOrthographic* camera) {
+void BatchRender2D::begin(ICamera* camera) {
 
     this->camera = camera;
 

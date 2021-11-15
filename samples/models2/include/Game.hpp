@@ -5,8 +5,6 @@
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/scene/Scene.hpp"
-//#include "chimera/node/NodeCamera.hpp"
-//#include "chimera/node/NodeHUD.hpp"
 //#include "chimera/node/NodeParticleEmitter.hpp"
 #include "chimera/render/bullet/Solid.hpp"
 
@@ -43,7 +41,6 @@ class Game : public Chimera::IStateMachine {
     Chimera::Solid* pCorpoRigido;
     // Chimera::NodeParticleEmitter* pEmissor;
     // Chimera::Node* root;
-    // Chimera::PhysicsControl* physicWorld;
     // Chimera::Shader shader[5];
 };
 

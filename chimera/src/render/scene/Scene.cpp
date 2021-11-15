@@ -157,15 +157,27 @@ void Scene::render(IRenderer3d& renderer) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
+    // render a shadows in framebuffer
     renderPassShadow->execute(camera, renderer, eRegistry);
 
-    renderer.submitUniform(UniformVal("lightSpaceMatrix", renderPassShadow->getLightSpaceMatrix()));
+    // used by all
     renderer.submitUniform(UniformVal("projection", camera->getProjectionMatrix()));
     renderer.submitUniform(UniformVal("view", camera->getViewMatrix()));
+
+    // udes by shadows
+    renderer.submitUniform(UniformVal("lightSpaceMatrix", renderPassShadow->getLightSpaceMatrix()));
     renderer.submitUniform(UniformVal("viewPos", camera->getPosition()));
     renderer.submitUniform(UniformVal("shadows", 1));   // Ativa a sombra com 1
     renderer.submitUniform(UniformVal("shadowMap", 1)); // id da textura de shadow
     renderPassShadow->bindDepthBuffer();
+
+    auto lightView = eRegistry.view<LightComponent>();
+    for (auto entity : lightView) {
+        auto& lc = lightView.get<LightComponent>(entity);
+        if (lc.global) {
+            renderer.submitLight(lc.light);
+        }
+    }
 
     renderPass->execute(camera, renderer, eRegistry);
 

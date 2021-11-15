@@ -41,15 +41,6 @@ void RenderPass::execute(ICamera* camera, IRenderer3d& renderer, entt::registry&
 
     renderer.begin(camera);
 
-    // load lights after begin (clear previos lights)
-    auto lightView = eRegistry.view<LightComponent>();
-    for (auto entity : lightView) {
-        auto& lc = lightView.get<LightComponent>(entity);
-        if (lc.global) {
-            renderer.submitLight(lc.light);
-        }
-    }
-
     auto view = eRegistry.view<Renderable3dComponent>();
     for (auto entity : view) {
 

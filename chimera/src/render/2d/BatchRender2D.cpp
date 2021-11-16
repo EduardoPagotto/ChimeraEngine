@@ -143,13 +143,13 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
             // FIXME: encontrar o kering!!!!!!
             // if (i > 0) {
             //     float kering = texture_glyph_get_kering(glyph, text[1 - 1]);
-            //     x += kering / scale.x;
+            //     x += kering * scale.x;
             // }
 
-            float x0 = x + glyph->offset.x / scale.x;
-            float x1 = x0 + glyph->size.x / scale.x;
-            float y1 = pos.y + glyph->offset.y / scale.y;
-            float y0 = y1 - glyph->size.y / scale.y;
+            float x0 = x + glyph->offset.x * scale.x;
+            float x1 = x0 + glyph->size.x * scale.x;
+            float y1 = pos.y + glyph->offset.y * scale.y;
+            float y0 = y1 - glyph->size.y * scale.y;
 
             float u0 = glyph->square.x;
             float v0 = glyph->square.y;
@@ -182,7 +182,7 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
 
             indexCount += 6;
 
-            x += glyph->advance / scale.x;
+            x += glyph->advance * scale.x;
         }
     }
 }

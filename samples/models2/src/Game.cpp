@@ -37,11 +37,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         // FPS
         Shader shader;
         ShaderManager::load("./assets/shaders/Text2D.glsl", shader);
-        tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(16.0, -1.0f, 1.0f));
+        tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(512.0, -1.0f, 1.0f));
 
         FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
-        FontManager::get()->setScale(glm::vec2(30, 30)); // em TileLayer ortho values!!!
-        lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+        FontManager::get()->setScale(glm::vec2(1.0, 1.0)); // em TileLayer ortho values!!!
+        lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
         tile->add(lFPS);
 
         tile->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

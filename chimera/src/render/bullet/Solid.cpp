@@ -92,11 +92,11 @@ void Solid::setInitParams(PhysicsControl* _pWorld, const glm::mat4& _trans) {
 Solid::~Solid() {
 
     if (pRigidBody) {
-
+        // FIXME: esta falhando aqui!!!
         // pWorld->discretDynamicsWorld->removeRigidBody ( pRigidBody );
-        pWorld->getWorld()->removeRigidBody(pRigidBody);
-        delete pRigidBody->getMotionState();
-        delete pRigidBody;
+        // pWorld->getWorld()->removeRigidBody(pRigidBody);
+        // delete pRigidBody->getMotionState();
+        // delete pRigidBody;
     }
 
     if (pShapeCollision) {

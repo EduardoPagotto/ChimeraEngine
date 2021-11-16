@@ -7,6 +7,7 @@ namespace Chimera {
 class RenderPass {
   public:
     RenderPass(uint32_t width, uint32_t height);
+    virtual ~RenderPass();
     void execute(ICamera* camera, IRenderer3d& renderer, entt::registry& eRegistry);
 
     void render() { renderBuffer->render(); }

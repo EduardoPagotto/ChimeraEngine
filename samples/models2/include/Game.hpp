@@ -3,7 +3,6 @@
 
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
-#include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/scene/Scene.hpp"
 //#include "chimera/node/NodeParticleEmitter.hpp"
 #include "chimera/render/bullet/Solid.hpp"
@@ -31,7 +30,7 @@ class Game : public Chimera::IStateMachine {
 
   private:
     Chimera::Scene activeScene;
-    Chimera::Renderer3d render3d;
+    // Chimera::Renderer3d render3d;
     Chimera::Engine* engine;
     // std::string sPosicaoObj;
     // std::string textoFPS;

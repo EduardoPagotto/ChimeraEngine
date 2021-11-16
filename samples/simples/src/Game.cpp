@@ -6,22 +6,8 @@
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::~Game() {}
-
-void Game::onAttach() {
-
+Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
-
-    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
-    // Habilita o depth buffer/culling face
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-
-    glClearDepth(1.0f);
-    glDepthFunc(GL_LEQUAL);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     {
         Entity ce = activeScene.createEntity("Camera Entity");
         // Cria entidade de camera
@@ -54,7 +40,22 @@ void Game::onAttach() {
     }
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-    activeScene.onCreate();
+    engine->pushState(&activeScene);
+}
+
+Game::~Game() {}
+
+void Game::onAttach() {
+
+    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
+    // Habilita o depth buffer/culling face
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Game::onDeatach() {}
@@ -77,7 +78,7 @@ bool Game::onEvent(const SDL_Event& event) {
                     utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_1:
-                    render3D.logToggle();
+                    activeScene.getRender()->logToggle();
                     break;
                 case SDLK_F10:
                     utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
@@ -108,8 +109,6 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(const double& ts) {
-    activeScene.onUpdate(ts); // atualiza camera e script de camera
-}
+void Game::onUpdate(const double& ts) {}
 
-void Game::onRender() { activeScene.render(render3D); }
+void Game::onRender() {}

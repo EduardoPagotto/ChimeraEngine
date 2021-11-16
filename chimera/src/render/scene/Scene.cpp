@@ -17,7 +17,7 @@ Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), rende
 }
 Scene::~Scene() {}
 
-void Scene::onDestroy() {
+void Scene::onDeatach() {
     // destroy scripts
     eRegistry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (!nsc.instance) {
@@ -27,7 +27,7 @@ void Scene::onDestroy() {
     });
 }
 
-void Scene::onCreate() {
+void Scene::onAttach() {
     // lista as tags nas entidades registradas
     eRegistry.each([&](auto entityID) {
         Entity entity{entityID, this};
@@ -147,7 +147,27 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         }
     }
 
+    if (renderPass) {
+        delete renderPass;
+        renderPass = nullptr;
+    }
+
     renderPass = new RenderPass(width, height);
+}
+
+void Scene::onRender() { this->render(renderBatch); }
+
+bool Scene::onEvent(const SDL_Event& event) {
+    switch (event.type) {
+        case SDL_WINDOWEVENT: {
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_RESIZED:
+                    onViewportResize(event.window.data1, event.window.data2);
+                    break;
+            }
+        } break;
+    }
+    return true;
 }
 
 void Scene::render(IRenderer3d& renderer) {

@@ -5,7 +5,6 @@
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Shader.hpp"
 #include "chimera/render/partition/Frustum.hpp"
-#include "chimera/render/scene/Entity.hpp"
 #include <cstdint>
 #include <deque>
 

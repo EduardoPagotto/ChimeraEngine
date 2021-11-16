@@ -29,12 +29,12 @@ RenderPass::RenderPass(uint32_t width, uint32_t height) {
     fbSpec.swapChainTarget = false;
     fbSpec.samples = 1;
 
-    if (renderBuffer) {
-        delete renderBuffer;
-        renderBuffer = nullptr;
-    }
-
     renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
+}
+
+RenderPass::~RenderPass() {
+    delete renderBuffer;
+    renderBuffer = nullptr;
 }
 
 void RenderPass::execute(ICamera* camera, IRenderer3d& renderer, entt::registry& eRegistry) {

@@ -1,5 +1,6 @@
 #pragma once
-#include "chimera/render/3d/IRenderer3d.hpp"
+#include "chimera/core/IStateMachine.hpp"
+#include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/ICamera.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
 #include "chimera/render/scene/RenderPass.hpp"
@@ -9,7 +10,7 @@
 namespace Chimera {
 
 class Entity;
-class Scene {
+class Scene : public IStateMachine {
     friend class Entity;
 
   public:
@@ -17,15 +18,20 @@ class Scene {
     virtual ~Scene();
     Entity createEntity(const std::string& name = std::string());
     void destroyEntity(Entity entity);
-    void render(IRenderer3d& renderer);
-    void onUpdate(const double& ts);
-    void onCreate();
-    void onDestroy();
-
     void onViewportResize(uint32_t width, uint32_t height);
+    IRenderer3d* getRender() { return &renderBatch; }
     entt::registry& getRegistry() { return eRegistry; }
+    // Herdados
+    virtual void onAttach() override;
+    virtual void onDeatach() override;
+    virtual void onRender() override;
+    virtual void onUpdate(const double& ts) override;
+    virtual bool onEvent(const SDL_Event& event) override;
+    virtual std::string getName() const { return "Scene"; }
 
   private:
+    void render(IRenderer3d& renderer);
+    Renderer3d renderBatch;
     uint32_t viewportWidth, viewportHeight;
     entt::registry eRegistry;
     ICamera* camera;

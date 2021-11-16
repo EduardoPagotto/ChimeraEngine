@@ -15,8 +15,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
     pCorpoRigido = nullptr;
     // pEmissor = nullptr;
-    // pOrbitalCam = nullptr;
-
     // textoFPS = "fps: 0";
     // sPosicaoObj = "pos:(,,)";
 
@@ -30,23 +28,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     // ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader[1]);
     // ShaderManager::load("./assets/shaders/HUD.glsl", shader[2]);
     // ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shader[3]);
-    // std::string model = "./assets/models/piso2.xml";
-
-    // // Cria grupo shader como filho de scene
-    // NodeGroup* pRoot = new NodeGroup(nullptr, "root_real");
-    // NodeGroup* group1 = new NodeGroup(pRoot, "none");
-
-    // Chimera::VisualScene libV("./assets/models/piso2.xml", group1, &activeScene);
-    // libV.target();
-
-    // // Cria mundo fisico e o vincula a scena
-    // Chimera::PhysicsControl* pPC = new Chimera::PhysicsControl(); // ddddddddddddd onde sesta ver no main anterir
-    // Chimera::PhysicsScene libP(model, pPC);
-    // libP.target();
-
-    // // Vincula o shader de calculo de sobra e ShadowMap com textura de resultado
-    // group1->setShader(&shader[0]);
-    // group1->setNodeVisitor(new Chimera::VisitorShadowMap(&this->renderV.render3D, &shader[3], 2048, 2048));
 
     // // create and add particle to scene
     // Chimera::NodeGroup* gParticle = new Chimera::NodeGroup(pRoot, "ParticleGroup");
@@ -64,8 +45,47 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     // Chimera::Font* pFont = new Chimera::Font("./assets/fonts/FreeSans.ttf", 18);
     // pHUD->addFont(pFont);
 
-    // root = pRoot;
-    // physicWorld = pPC;
+    NodeGroup* pRoot = new NodeGroup(nullptr, "root_real");
+    NodeGroup* group1 = new NodeGroup(pRoot, "none");
+    VisualScene libV("./assets/models/piso2.xml", group1, &activeScene);
+    libV.target();
+
+    PhysicsScene libP("./assets/models/piso2.xml", nullptr, &activeScene);
+    libP.target();
+
+    // injeta controlador de camera
+    auto view1 = activeScene.getRegistry().view<CameraComponent>();
+    for (auto entity : view1) {
+        Entity e = Entity{entity, &activeScene};
+        e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+    }
+
+    // A cada mesh
+    auto view = activeScene.getRegistry().view<MeshData>();
+    for (auto entity : view) {
+        // Ajusta metodo de entidades
+        Entity e = Entity{entity, &activeScene};
+
+        // Adiciona o shader
+        Shader& shader = e.addComponent<Shader>();
+        ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
+    }
+
+    // // Localiza objeto como o primario //EfeitoZoltan-mesh
+    // TODO: implementar melhor
+    auto solidView = activeScene.getRegistry().view<Solid>();
+    for (auto ent : solidView) {
+        Entity entity = {ent, &activeScene};
+        auto& tc = entity.getComponent<TagComponent>();
+        if (tc.tag == "EfeitoZoltan-mesh") {
+            Solid& solid = entity.getComponent<Solid>();
+            pCorpoRigido = &solid;
+            break;
+        }
+    }
+
+    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
+    engine->pushState(&activeScene);
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 }
@@ -118,6 +138,9 @@ bool Game::onEvent(const SDL_Event& event) {
                     // case SDLK_F1:
                     //     pHUD->setOn(!pHUD->isOn());
                     // break;
+                case SDLK_1:
+                    activeScene.getRender()->logToggle();
+                    break;
                 case SDLK_F10:
                     utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
@@ -207,13 +230,7 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onAttach() {
-
-    using namespace Chimera;
-
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
-
-    // root->initializeChilds();
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
@@ -222,51 +239,8 @@ void Game::onAttach() {
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    NodeGroup* pRoot = new NodeGroup(nullptr, "root_real");
-    NodeGroup* group1 = new NodeGroup(pRoot, "none");
-    VisualScene libV("./assets/models/piso2.xml", group1, &activeScene);
-    libV.target();
-
-    PhysicsScene libP("./assets/models/piso2.xml", nullptr, &activeScene);
-    libP.target();
-
-    // injeta controlador de camera
-    auto view1 = activeScene.getRegistry().view<CameraComponent>();
-    for (auto entity : view1) {
-        Entity e = Entity{entity, &activeScene};
-        e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-    }
-
-    // A cada mesh
-    auto view = activeScene.getRegistry().view<MeshData>();
-    for (auto entity : view) {
-        // Ajusta metodo de entidades
-        Entity e = Entity{entity, &activeScene};
-
-        // Adiciona o shader
-        Shader& shader = e.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
-    }
-
-    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-    activeScene.onCreate();
-
-    // // Localiza objeto como o primario //EfeitoZoltan-mesh
-    // TODO: implementar melhor
-    auto solidView = activeScene.getRegistry().view<Solid>();
-    for (auto ent : solidView) {
-        Entity entity = {ent, &activeScene};
-        auto& tc = entity.getComponent<TagComponent>();
-        if (tc.tag == "EfeitoZoltan-mesh") {
-            Solid& solid = entity.getComponent<Solid>();
-            pCorpoRigido = &solid;
-            break;
-        }
-    }
-
     // // Localiza o Emissor de particula
     // pEmissor = (Chimera::NodeParticleEmitter*)root->findChild("testeZ1", true);
-
     // renderV.pVideo = (Chimera::CanvasGL*)engine->getCanvas();
     // renderV.pTransform = (Chimera::Transform*)pCorpoRigido;
 
@@ -306,4 +280,4 @@ void Game::onUpdate(const double& ts) {
     }
 }
 
-void Game::onRender() { activeScene.render(render3d); }
+void Game::onRender() {}

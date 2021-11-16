@@ -10,10 +10,13 @@ enum class BufferType { STATIC = GL_STATIC_DRAW, DYNAMIC = GL_DYNAMIC_DRAW, STRE
 class VertexBuffer {
   public:
     VertexBuffer(BufferType type);
+    VertexBuffer(BufferType type, const uint32_t& size, void* data);
+
     virtual ~VertexBuffer();
     void reSize(const uint32_t& size);
     void setLayout(const BufferLayout& bufferLayout);
     void setData(const void* data, const uint32_t& size);
+    void setSubData(const void* data, const uint32_t& offset, const uint32_t& size);
 
     void* map();
     void unmap();
@@ -23,6 +26,7 @@ class VertexBuffer {
     // inline void render() const { glDrawArrays(GL_TRIANGLES, 0, this->size); }
   private:
     uint32_t bufferID;
+    uint32_t sizeTotal;
     BufferLayout layout;
     BufferType type;
 };

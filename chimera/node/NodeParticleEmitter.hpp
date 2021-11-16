@@ -5,6 +5,8 @@
 #include "chimera/render/Particle.hpp"
 #include "chimera/render/Shader.hpp"
 #include "chimera/render/Transform.hpp"
+#include "chimera/render/buffer/VertexArray.hpp"
+#include "chimera/render/buffer/VertexBuffer.hpp"
 #include <vector>
 
 // Verificar para implementar usando GLSL -
@@ -46,10 +48,10 @@ class NodeParticleEmitter : public Node {
     int LastUsedParticle;
     float lastTime;
 
-    GLuint vboVertex;
-    GLuint vboPosition;
-    GLuint vboColor;
-    GLuint vao;
+    VertexBuffer* vboVex; // GLuint vboVertex;
+    VertexBuffer* vboPos; // GLuint vboPosition;
+    VertexBuffer* vboCor; // GLuint vboColor;
+    VertexArray vao;
 
     glm::vec3 sizeBox;
     Particle ParticlesContainer[MaxParticles];

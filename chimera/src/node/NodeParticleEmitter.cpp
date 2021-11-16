@@ -20,10 +20,7 @@ void NodeParticleEmitter::init() {
 
     material->init();
 
-    // TODO: usar classes novas de buffers
-    // VAO
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    vao.bind();
 
     vPosSize = new glm::vec4[MaxParticles]; // buffer de posicoes de cada particula
     vColor = new GLubyte[MaxParticles * 4]; // buffer de cor de cada particula
@@ -33,21 +30,11 @@ void NodeParticleEmitter::init() {
                                         glm::vec3(0.5f, 0.5f, 0.0f)};
 
     // VBO square vertex
-    glGenBuffers(1, &vboVertex);
-    glBindBuffer(GL_ARRAY_BUFFER, vboVertex);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 4, vVertex, GL_STATIC_DRAW);
-
-    // The VBO containing the positions and sizes of the particles
-    // Initialize with empty (NULL) buffer : it will be updated later, each frame.
-    glGenBuffers(1, &vboPosition);
-    glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
-    glBufferData(GL_ARRAY_BUFFER, MaxParticles * sizeof(glm::vec4), NULL, GL_STREAM_DRAW);
-
-    // The VBO containing the colors of the particles
-    // Initialize with empty (NULL) buffer : it will be updated later, each frame.
-    glGenBuffers(1, &vboColor);
-    glBindBuffer(GL_ARRAY_BUFFER, vboColor);
-    glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
+    vboVex = new VertexBuffer(BufferType::STATIC, sizeof(glm::vec3) * 4, (void*)vVertex);
+    // The VBO containing the positions and sizes of the particles, is empty (NULL) buffer and it will be updated later, each frame.
+    vboPos = new VertexBuffer(BufferType::STREAM, MaxParticles * sizeof(glm::vec4), nullptr); // set max val
+    // The VBO containing the colors of the particles, is empty (NULL) buffer and it will be updated later, each frame.
+    vboCor = new VertexBuffer(BufferType::STREAM, MaxParticles * 4 * sizeof(GLubyte), nullptr); // set max val
 
     timer.start();
 }
@@ -108,23 +95,20 @@ void NodeParticleEmitter::render(const Shader& shader) {
     //// There should be a getCameraPosition() function in common/controls.cpp,
     //// but this works too.
     // glm::vec3 CameraPosition(glm::inverse(_view)[3]);
-
     int ParticlesCount = recycleParticleLife(CameraPosition);
 
     // Update the buffers that OpenGL uses for rendering.
     // There are much more sophisticated means to stream data from the CPU to the GPU,
     // http://www.opengl.org/wiki/Buffer_Object_Streaming
-    glBindVertexArray(vao);
+    vao.bind();
 
     // Buffer orphaning, a common way to improve streaming, perf. See above link for details.
-    glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
-    glBufferData(GL_ARRAY_BUFFER, MaxParticles * sizeof(glm::vec4), NULL, GL_STREAM_DRAW);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(glm::vec4), vPosSize); // vPosSize contem todas posicoes
+    vboPos->bind();
+    vboPos->setSubData(vPosSize, 0, ParticlesCount * sizeof(glm::vec4));
 
     // Buffer orphaning, a common way to improve streaming, // perf. See above link for details.
-    glBindBuffer(GL_ARRAY_BUFFER, vboColor);
-    glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLubyte) * 4, vColor); // vColor contem todas as cores
+    vboCor->bind();
+    vboCor->setSubData(vColor, 0, ParticlesCount * sizeof(GLubyte) * 4);
 
     BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test
     BinaryStateEnable blender(GL_BLEND);    // glEnable(GL_BLEND);
@@ -135,46 +119,23 @@ void NodeParticleEmitter::render(const Shader& shader) {
     material->bindMaterialInformation(shader);
 
     // 1rst attribute buffer : vertices
+    vboVex->bind();
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vboVertex);
-    glVertexAttribPointer(0,        // attribute. No particular reason for 0, but must match the
-                                    // layout in the shader.
-                          3,        // size
-                          GL_FLOAT, // type
-                          GL_FALSE, // normalized?
-                          0,        // stride
-                          (void*)0  // array buffer offset
-    );
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
     // 2nd attribute buffer : positions of particles' centers
+    vboPos->bind();
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
-    glVertexAttribPointer(1,        // attribute. No particular reason for 1, but must match the
-                                    // layout in the shader.
-                          4,        // size : x + y + z + size => 4
-                          GL_FLOAT, // type
-                          GL_FALSE, // normalized?
-                          0,        // stride
-                          (void*)0  // array buffer offset
-    );
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
     // 3rd attribute buffer : particles' colors
+    vboCor->bind();
     glEnableVertexAttribArray(2);
-    glBindBuffer(GL_ARRAY_BUFFER, vboColor);
-    glVertexAttribPointer(2,                // attribute. No particular reason for 1, but must match the layout in the
-                                            // shader.
-                          4,                // size : r + g + b + a => 4
-                          GL_UNSIGNED_BYTE, // type
-                          GL_TRUE,          // normalized?    *** YES, this means that the unsigned char[4] will be
-                                            // accessible with a vec4 (floats) in the ShadersManager ***
-                          0,                // stride
-                          (void*)0          // array buffer offset
-    );
+    glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (void*)0); // normalized to float
 
     // These functions are specific to glDrawArrays*Instanced*.
     // The first parameter is the attribute buffer we're talking about.
-    // The second parameter is the "rate at which generic vertex attributes advance when
-    // rendering multiple instances"
+    // The second parameter is the "rate at which generic vertex attributes advance when rendering multiple instances"
     // http://www.opengl.org/sdk/docs/man/xhtml/glVertexAttribDivisor.xml
     glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices -> 0
     glVertexAttribDivisor(1, 1); // positions : one per quad (its center) -> 1
@@ -182,8 +143,7 @@ void NodeParticleEmitter::render(const Shader& shader) {
 
     // Draw the particules !
     // This draws many times a small triangle_strip (which looks like a quad).
-    // This is equivalent to :
-    // for(i in ParticlesCount) : glDrawArrays(GL_TRIANGLE_STRIP, 0, 4),
+    // This is equivalent to : for(i in ParticlesCount) : glDrawArrays(GL_TRIANGLE_STRIP, 0, 4),
     // but faster.
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, ParticlesCount);
 

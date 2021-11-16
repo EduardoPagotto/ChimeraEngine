@@ -4,6 +4,13 @@ namespace Chimera {
 
 VertexBuffer::VertexBuffer(BufferType type) : type(type) { glGenBuffers(1, &bufferID); }
 
+VertexBuffer::VertexBuffer(BufferType type, const uint32_t& size, void* data) {
+    glGenBuffers(1, &bufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+    glBufferData(GL_ARRAY_BUFFER, size, data, (GLuint)type);
+    sizeTotal = size;
+}
+
 VertexBuffer::~VertexBuffer() { glDeleteBuffers(1, &bufferID); }
 
 void VertexBuffer::reSize(const uint32_t& size) { glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), nullptr, (GLuint)type); }
@@ -27,6 +34,10 @@ void VertexBuffer::setLayout(const BufferLayout& bufferLayout) { // bind antes n
 
 void VertexBuffer::setData(const void* data, const uint32_t& size) {
     glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), data, (GLuint)type);
+}
+
+void VertexBuffer::setSubData(const void* data, const uint32_t& offset, const uint32_t& size) {
+    glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 }
 
 // GetPointerInternal //bind anter necessario

@@ -1,23 +1,20 @@
 #include "Game.hpp"
+#include "chimera/core/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/loader/PhysicsScene.hpp"
+#include "chimera/loader/VisualScene.hpp"
+#include "chimera/render/2d/BatchRender2D.hpp"
+#include "chimera/render/CameraOrthographic.hpp"
+#include "chimera/render/FontManager.hpp"
 #include "chimera/render/TextureManager.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
-// #include "chimera/core/Exception.hpp"
-#include "chimera/core/JoystickManager.hpp"
-// #include "chimera/core/MouseDevice.hpp"
-// #include "chimera/core/utils.hpp"
-#include "chimera/loader/PhysicsScene.hpp"
-#include "chimera/loader/VisualScene.hpp"
 
 Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
     pCorpoRigido = nullptr;
     // pEmissor = nullptr;
-    // textoFPS = "fps: 0";
-    // sPosicaoObj = "pos:(,,)";
-
     crt.yaw = 0.0f;
     crt.pitch = 0.0f;
     crt.roll = 0.0f;
@@ -34,58 +31,66 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     // gParticle->setShader(&shader[1]);
     // Chimera::NodeParticleEmitter* pParticleEmitter = new Chimera::NodeParticleEmitter(gParticle, "testeZ1", 10000);
     // pParticleEmitter->setTransform(new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
-
     // pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./assets/textures/Particle2.png"));
 
-    // // Create and add hud data text
-    // Chimera::NodeGroup* gHud = new Chimera::NodeGroup((Chimera::Node*)pRoot, "HUD-Group");
-    // gHud->setShader(&shader[2]);
-    // Chimera::NodeHUD* pHUD = new Chimera::NodeHUD(gHud, "HUD-Default");
+    {
+        // FPS
+        Shader shader;
+        ShaderManager::load("./assets/shaders/Text2D.glsl", shader);
+        tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(16.0, -1.0f, 1.0f));
 
-    // Chimera::Font* pFont = new Chimera::Font("./assets/fonts/FreeSans.ttf", 18);
-    // pHUD->addFont(pFont);
+        FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
+        FontManager::get()->setScale(glm::vec2(30, 30)); // em TileLayer ortho values!!!
+        lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+        tile->add(lFPS);
 
-    NodeGroup* pRoot = new NodeGroup(nullptr, "root_real");
-    NodeGroup* group1 = new NodeGroup(pRoot, "none");
-    VisualScene libV("./assets/models/piso2.xml", group1, &activeScene);
-    libV.target();
-
-    PhysicsScene libP("./assets/models/piso2.xml", nullptr, &activeScene);
-    libP.target();
-
-    // injeta controlador de camera
-    auto view1 = activeScene.getRegistry().view<CameraComponent>();
-    for (auto entity : view1) {
-        Entity e = Entity{entity, &activeScene};
-        e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+        tile->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
+        engine->pushState(tile);
     }
 
-    // A cada mesh
-    auto view = activeScene.getRegistry().view<MeshData>();
-    for (auto entity : view) {
-        // Ajusta metodo de entidades
-        Entity e = Entity{entity, &activeScene};
+    {
+        NodeGroup* pRoot = new NodeGroup(nullptr, "root_real");
+        NodeGroup* group1 = new NodeGroup(pRoot, "none");
+        VisualScene libV("./assets/models/piso2.xml", group1, &activeScene);
+        libV.target();
 
-        // Adiciona o shader
-        Shader& shader = e.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
-    }
+        PhysicsScene libP("./assets/models/piso2.xml", nullptr, &activeScene);
+        libP.target();
 
-    // // Localiza objeto como o primario //EfeitoZoltan-mesh
-    // TODO: implementar melhor
-    auto solidView = activeScene.getRegistry().view<Solid>();
-    for (auto ent : solidView) {
-        Entity entity = {ent, &activeScene};
-        auto& tc = entity.getComponent<TagComponent>();
-        if (tc.tag == "EfeitoZoltan-mesh") {
-            Solid& solid = entity.getComponent<Solid>();
-            pCorpoRigido = &solid;
-            break;
+        // injeta controlador de camera
+        auto view1 = activeScene.getRegistry().view<CameraComponent>();
+        for (auto entity : view1) {
+            Entity e = Entity{entity, &activeScene};
+            e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
         }
-    }
 
-    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-    engine->pushState(&activeScene);
+        // A cada mesh
+        auto view = activeScene.getRegistry().view<MeshData>();
+        for (auto entity : view) {
+            // Ajusta metodo de entidades
+            Entity e = Entity{entity, &activeScene};
+
+            // Adiciona o shader
+            Shader& shader = e.addComponent<Shader>();
+            ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
+        }
+
+        // // Localiza objeto como o primario //EfeitoZoltan-mesh
+        // TODO: implementar melhor
+        auto solidView = activeScene.getRegistry().view<Solid>();
+        for (auto ent : solidView) {
+            Entity entity = {ent, &activeScene};
+            auto& tc = entity.getComponent<TagComponent>();
+            if (tc.tag == "EfeitoZoltan-mesh") {
+                Solid& solid = entity.getComponent<Solid>();
+                pCorpoRigido = &solid;
+                break;
+            }
+        }
+
+        activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
+        engine->pushState(&activeScene);
+    }
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 }
@@ -120,10 +125,10 @@ bool Game::onEvent(const SDL_Event& event) {
                     engine->getCanvas()->toggleFullScreen();
                     break;
                 case Chimera::EVENT_NEW_FPS: {
-                    uint32_t* fps = (uint32_t*)event.user.data1;
-                    glm::vec3 val1 = pCorpoRigido->getPosition();
+                    uint32_t* pFps = (uint32_t*)event.user.data1;
+                    fps = *pFps;
+                    // glm::vec3 val1 = pCorpoRigido->getPosition();
                     // sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
-                    // textoFPS = "fps: " + std::to_string(*fps) + std::string(" Periodo: ") + std::to_string(physicWorld->getLastPeriod());
                 } break;
                 default:
                     break;
@@ -190,14 +195,12 @@ bool Game::onEvent(const SDL_Event& event) {
                 crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) / 2);
 
                 if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {
-
                     // glm::vec3 posicao = pEmissor->getPosSource();
                     // posicao.x = posicao.x - 0.1f;
                     // pEmissor->setPosSource( posicao );
                 }
 
                 if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_PRESSED) { // ( or SDL_RELEASED)
-
                     // glm::vec3 posicao = pEmissor->getPosSource();
                     // posicao.x = posicao.x + 0.1f;
                     // pEmissor->setPosSource(posicao);
@@ -230,6 +233,7 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onAttach() {
+
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -243,13 +247,6 @@ void Game::onAttach() {
     // pEmissor = (Chimera::NodeParticleEmitter*)root->findChild("testeZ1", true);
     // renderV.pVideo = (Chimera::CanvasGL*)engine->getCanvas();
     // renderV.pTransform = (Chimera::Transform*)pCorpoRigido;
-
-    // // Localiza o HUD
-    // pHUD = (Chimera::NodeHUD*)root->findChild("HUD-Default", true);
-    // if (pHUD != nullptr) {
-    //     pHUD->addText(0, glm::ivec2(350, 30), glm::vec4(0.0, 0.0, 1.0, 1.0), 1.0, &sPosicaoObj);
-    //     pHUD->addText(0, glm::ivec2(10, 30), glm::vec4(1.0, 0.0, 0.0, 1.0), 1.0, &textoFPS);
-    // }
 }
 
 void Game::onDeatach() {}
@@ -262,22 +259,26 @@ void Game::onUpdate(const double& ts) {
     float propulsaoLRUD = 5.0f;
     float torque = 0.5f;
 
-    if (crt.hat & (uint8_t)SDL_HAT_UP)
-        pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
+    if (pCorpoRigido) {
+        if (crt.hat & (uint8_t)SDL_HAT_UP)
+            pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
 
-    if (crt.hat & (uint8_t)SDL_HAT_DOWN)
-        pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
+        if (crt.hat & (uint8_t)SDL_HAT_DOWN)
+            pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
 
-    if (crt.hat & (uint8_t)SDL_HAT_RIGHTUP)
-        pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
+        if (crt.hat & (uint8_t)SDL_HAT_RIGHTUP)
+            pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
 
-    if (crt.hat & (uint8_t)SDL_HAT_LEFTUP)
-        pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
+        if (crt.hat & (uint8_t)SDL_HAT_LEFTUP)
+            pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
 
-    if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {
-        pCorpoRigido->applyForce(glm::vec3(0.0, crt.throttle, 0.0));
-        pCorpoRigido->applyTorc(glm::vec3(-torque * crt.pitch, -torque * crt.roll, -torque * crt.yaw));
+        if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {
+            pCorpoRigido->applyForce(glm::vec3(0.0, crt.throttle, 0.0));
+            pCorpoRigido->applyTorc(glm::vec3(-torque * crt.pitch, -torque * crt.roll, -torque * crt.yaw));
+        }
     }
+
+    lFPS->setText(std::string("FPS: ") + std::to_string(fps));
 }
 
 void Game::onRender() {}

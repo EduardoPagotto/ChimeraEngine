@@ -1,11 +1,12 @@
 #ifndef __GAME_XX__HPP
 #define __GAME_XX__HPP
 
+#include "Tile.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
-#include "chimera/render/scene/Scene.hpp"
-//#include "chimera/node/NodeParticleEmitter.hpp"
+#include "chimera/render/2d/Label.hpp"
 #include "chimera/render/bullet/Solid.hpp"
+#include "chimera/render/scene/Scene.hpp"
 
 struct Controles {
     float yaw;
@@ -41,6 +42,9 @@ class Game : public Chimera::IStateMachine {
     // Chimera::NodeParticleEmitter* pEmissor;
     // Chimera::Node* root;
     // Chimera::Shader shader[5];
+    Tile* tile;
+    Chimera::Label* lFPS;
+    int fps;
 };
 
 #endif

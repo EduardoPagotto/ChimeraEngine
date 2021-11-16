@@ -1,15 +1,11 @@
 #pragma once
+#include "chimera/render/OpenGLDefs.hpp"
 #include "chimera/render/VertexData.hpp"
 #include "chimera/render/buffer/BufferLayout.hpp"
 
 namespace Chimera {
 
-enum class BufferType // BufferUsage
-{
-    STATIC,
-    DYNAMIC,
-    STREAM
-};
+enum class BufferType { STATIC = GL_STATIC_DRAW, DYNAMIC = GL_DYNAMIC_DRAW, STREAM = GL_STREAM_DRAW };
 
 class VertexBuffer {
   public:

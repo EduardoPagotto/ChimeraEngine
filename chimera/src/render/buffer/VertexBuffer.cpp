@@ -1,25 +1,12 @@
 #include "chimera/render/buffer/VertexBuffer.hpp"
-#include "chimera/render/OpenGLDefs.hpp"
 
 namespace Chimera {
-
-static uint getBufferType(BufferType type) { // SPBufferUsageToOpenGL
-    switch (type) {
-        case BufferType::STATIC:
-            return GL_STATIC_DRAW;
-        case BufferType::DYNAMIC:
-            return GL_DYNAMIC_DRAW;
-        case BufferType::STREAM:
-            return GL_STREAM_DRAW;
-    }
-    return 0;
-}
 
 VertexBuffer::VertexBuffer(BufferType type) : type(type) { glGenBuffers(1, &bufferID); }
 
 VertexBuffer::~VertexBuffer() { glDeleteBuffers(1, &bufferID); }
 
-void VertexBuffer::reSize(const uint32_t& size) { glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), nullptr, getBufferType(type)); }
+void VertexBuffer::reSize(const uint32_t& size) { glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), nullptr, (GLuint)type); }
 
 void VertexBuffer::setLayout(const BufferLayout& bufferLayout) { // bind antes necessario!!! enableVertexAttribArray
 
@@ -39,7 +26,7 @@ void VertexBuffer::setLayout(const BufferLayout& bufferLayout) { // bind antes n
 }
 
 void VertexBuffer::setData(const void* data, const uint32_t& size) {
-    glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), data, getBufferType(type));
+    glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), data, (GLuint)type);
 }
 
 // GetPointerInternal //bind anter necessario

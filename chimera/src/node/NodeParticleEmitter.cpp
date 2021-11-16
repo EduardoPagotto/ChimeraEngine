@@ -28,27 +28,25 @@ void NodeParticleEmitter::init() {
     vPosSize = new glm::vec4[MaxParticles]; // buffer de posicoes de cada particula
     vColor = new GLubyte[MaxParticles * 4]; // buffer de cor de cada particula
 
-    // The VBO containing the 4 vertices of the particles.
-    // Thanks to instancing, they will be shared by all particles.
-    static const GLfloat vVertex[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.0f};
+    // The VBO containing the 4 vertices of the particles. Thanks to instancing, they will be shared by all particles.
+    static const glm::vec3 vVertex[] = {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(-0.5f, 0.5f, 0.0f),
+                                        glm::vec3(0.5f, 0.5f, 0.0f)};
 
     // VBO square vertex
     glGenBuffers(1, &vboVertex);
     glBindBuffer(GL_ARRAY_BUFFER, vboVertex);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vVertex), vVertex, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 4, vVertex, GL_STATIC_DRAW);
 
     // The VBO containing the positions and sizes of the particles
+    // Initialize with empty (NULL) buffer : it will be updated later, each frame.
     glGenBuffers(1, &vboPosition);
     glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
-
-    // Initialize with empty (NULL) buffer : it will be updated later, each frame.
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * sizeof(glm::vec4), NULL, GL_STREAM_DRAW);
 
     // The VBO containing the colors of the particles
+    // Initialize with empty (NULL) buffer : it will be updated later, each frame.
     glGenBuffers(1, &vboColor);
     glBindBuffer(GL_ARRAY_BUFFER, vboColor);
-
-    // Initialize with empty (NULL) buffer : it will be updated later, each frame.
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
 
     timer.start();
@@ -115,20 +113,17 @@ void NodeParticleEmitter::render(const Shader& shader) {
 
     // Update the buffers that OpenGL uses for rendering.
     // There are much more sophisticated means to stream data from the CPU to the GPU,
-    // but this is outside the scope of this tutorial.
     // http://www.opengl.org/wiki/Buffer_Object_Streaming
     glBindVertexArray(vao);
 
+    // Buffer orphaning, a common way to improve streaming, perf. See above link for details.
     glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
-    glBufferData(GL_ARRAY_BUFFER, MaxParticles * sizeof(glm::vec4), NULL,
-                 GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming
-                                  // perf. See above link for details.
+    glBufferData(GL_ARRAY_BUFFER, MaxParticles * sizeof(glm::vec4), NULL, GL_STREAM_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(glm::vec4), vPosSize); // vPosSize contem todas posicoes
 
+    // Buffer orphaning, a common way to improve streaming, // perf. See above link for details.
     glBindBuffer(GL_ARRAY_BUFFER, vboColor);
-    glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL,
-                 GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming
-                                  // perf. See above link for details.
+    glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLubyte) * 4, vColor); // vColor contem todas as cores
 
     BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test

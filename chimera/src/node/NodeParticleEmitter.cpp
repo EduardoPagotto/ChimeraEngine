@@ -25,8 +25,8 @@ void NodeParticleEmitter::init() {
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    vPosSize = new glm::vec4[MaxParticles];
-    vColor = new GLubyte[MaxParticles * 4];
+    vPosSize = new glm::vec4[MaxParticles]; // buffer de posicoes de cada particula
+    vColor = new GLubyte[MaxParticles * 4]; // buffer de cor de cada particula
 
     // The VBO containing the 4 vertices of the particles.
     // Thanks to instancing, they will be shared by all particles.
@@ -91,19 +91,16 @@ int NodeParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
 
     for (int i = 0; i < MaxParticles; i++) {
 
-        Particle& p = ParticlesContainer[i]; // shortcut
+        Particle& particle = ParticlesContainer[i]; // shortcut
+        if (particle.isDead() == false) {
 
-        if (p.isDead() == false) {
-
-            p.decrease(delta, ParticlesCount, vPosSize, vColor, _camPosition);
+            particle.decrease(delta, ParticlesCount, vPosSize, vColor, _camPosition);
             ParticlesCount++;
         }
     }
 
     SortParticles();
-
     // printf("%d \n",ParticlesCount);
-
     return ParticlesCount;
 }
 
@@ -120,19 +117,19 @@ void NodeParticleEmitter::render(const Shader& shader) {
     // There are much more sophisticated means to stream data from the CPU to the GPU,
     // but this is outside the scope of this tutorial.
     // http://www.opengl.org/wiki/Buffer_Object_Streaming
-    glBindVertexArray(vao); // coloquei aqui porque acho que tenho que ligar antes
+    glBindVertexArray(vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * sizeof(glm::vec4), NULL,
                  GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming
                                   // perf. See above link for details.
-    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(glm::vec4), vPosSize);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(glm::vec4), vPosSize); // vPosSize contem todas posicoes
 
     glBindBuffer(GL_ARRAY_BUFFER, vboColor);
     glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL,
                  GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming
                                   // perf. See above link for details.
-    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLubyte) * 4, vColor);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, ParticlesCount * sizeof(GLubyte) * 4, vColor); // vColor contem todas as cores
 
     BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test
     BinaryStateEnable blender(GL_BLEND);    // glEnable(GL_BLEND);

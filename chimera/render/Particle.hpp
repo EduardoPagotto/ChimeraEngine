@@ -25,8 +25,6 @@ class Particle {
   private:
     glm::vec3 pos, speed;
     glm::vec4 color;
-    float size, angle, weight;
-    float life;
-    float cameradistance;
+    float size, angle, life, cameradistance;
 };
 } // namespace Chimera

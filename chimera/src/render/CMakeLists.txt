@@ -27,6 +27,7 @@ set (RenderSource 	CanvasGL.cpp
 					Light.cpp
 					Material.cpp
 					Particle.cpp
+					ParticleEmitter.cpp
 					partition/Triangle.cpp
 					partition/Plane.cpp
 					partition/Frustum.cpp

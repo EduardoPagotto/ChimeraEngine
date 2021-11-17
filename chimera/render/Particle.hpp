@@ -7,24 +7,18 @@ class Particle {
   public:
     Particle();
     virtual ~Particle();
-
     void create(const glm::vec3& _maindir, const float& _spread);
-
     void decrease(const float& _delta, int _particlesCount, glm::vec4* pPositionSizeData, GLubyte* pColorData,
                   const glm::vec3& _cameraPosition);
-
     void reset();
-
     bool isDead() { return (life < 0); }
-
     bool operator<(const Particle& that) const {
-        // Sort in reverse order : far particles drawn first.
-        return this->cameradistance > that.cameradistance;
+        return this->cameradistance > that.cameradistance; // Sort in reverse order : far particles drawn first.
     }
 
   private:
     glm::vec3 pos, speed;
     glm::vec4 color;
-    float size, angle, life, cameradistance;
+    float size, life, cameradistance;
 };
 } // namespace Chimera

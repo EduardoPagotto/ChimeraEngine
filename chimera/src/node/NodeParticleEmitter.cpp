@@ -7,9 +7,12 @@
 
 namespace Chimera {
 NodeParticleEmitter::NodeParticleEmitter(Node* _parent, std::string _name, int _max) : Node(_parent, Kind::PARTICLE_SYSTEM, _name) {
-    // MaxParticles = _max;
     LastUsedParticle = 0;
     material = new Material();
+    particlesContainer.reserve(MaxParticles);
+    for (int i = 0; i < MaxParticles; i++) {
+        particlesContainer.push_back(Particle());
+    }
 }
 
 NodeParticleEmitter::~NodeParticleEmitter() {}
@@ -46,7 +49,7 @@ void NodeParticleEmitter::loadTexDiffuse(const std::string& _nome, const std::st
 
 void NodeParticleEmitter::accept(VisitorInterface* v) { v->visit(this); }
 
-void NodeParticleEmitter::SortParticles() { std::sort(&ParticlesContainer[0], &ParticlesContainer[MaxParticles]); }
+void NodeParticleEmitter::SortParticles() { std::sort(particlesContainer.begin(), particlesContainer.end()); }
 
 int NodeParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
 
@@ -63,12 +66,12 @@ int NodeParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
     for (int i = 0; i < newparticles; i++) {
 
         int particleIndex = FindUnusedParticle();
-        ParticlesContainer[particleIndex].reset();
+        particlesContainer[particleIndex].reset();
 
         float spread = 1.5f;
         glm::vec3 maindir = glm::vec3(0.0f, 0.0f, 10.0f);
 
-        ParticlesContainer[particleIndex].create(maindir, spread);
+        particlesContainer[particleIndex].create(maindir, spread);
     }
 
     // Simulate all particles
@@ -76,16 +79,15 @@ int NodeParticleEmitter::recycleParticleLife(const glm::vec3& _camPosition) {
 
     for (int i = 0; i < MaxParticles; i++) {
 
-        Particle& particle = ParticlesContainer[i]; // shortcut
+        Particle& particle = particlesContainer[i]; // shortcut
         if (particle.isDead() == false) {
-
             particle.decrease(delta, ParticlesCount, vPosSize, vColor, _camPosition);
             ParticlesCount++;
         }
     }
 
     SortParticles();
-    // printf("%d \n",ParticlesCount);
+    // printf("%d \n", ParticlesCount);
     return ParticlesCount;
 }
 
@@ -155,14 +157,14 @@ void NodeParticleEmitter::render(const Shader& shader) {
 int NodeParticleEmitter::FindUnusedParticle() {
 
     for (int i = LastUsedParticle; i < MaxParticles; i++) {
-        if (ParticlesContainer[i].isDead() == true) {
+        if (particlesContainer[i].isDead() == true) {
             LastUsedParticle = i;
             return i;
         }
     }
 
     for (int i = 0; i < LastUsedParticle; i++) {
-        if (ParticlesContainer[i].isDead() == true) {
+        if (particlesContainer[i].isDead() == true) {
             LastUsedParticle = i;
             return i;
         }

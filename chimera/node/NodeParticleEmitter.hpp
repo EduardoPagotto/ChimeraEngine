@@ -52,9 +52,7 @@ class NodeParticleEmitter : public Node {
     VertexBuffer* vboPos; // GLuint vboPosition;
     VertexBuffer* vboCor; // GLuint vboColor;
     VertexArray vao;
-
-    glm::vec3 sizeBox;
-    Particle ParticlesContainer[MaxParticles];
+    std::vector<Particle> particlesContainer;
     Timer timer;
 
     Material* material;

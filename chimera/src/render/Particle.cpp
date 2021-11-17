@@ -6,7 +6,10 @@
 
 namespace Chimera {
 Particle::Particle() {
-
+    pos = glm::vec3(0.0f);
+    speed = glm::vec3(0.0f);
+    color = glm::vec4(0.0f);
+    size = 1.0f;
     life = -1.0f;
     cameradistance = -1.0f;
 }

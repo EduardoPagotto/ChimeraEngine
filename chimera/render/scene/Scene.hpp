@@ -40,14 +40,15 @@ class Scene : public IStateMachine {
     void createRenderBuffer();
     void execRenderPass(ICamera* camera, IRenderer3d& renderer);
     void execShadowPass(ICamera* camera, IRenderer3d& renderer);
+    void execEmitterPass(ICamera* camera, IRenderer3d& renderer);
     void render(IRenderer3d& renderer);
-    Renderer3d renderBatch;
     uint32_t viewportWidth, viewportHeight;
     entt::registry eRegistry;
     ICamera* camera;
     RenderBuffer* renderBuffer;
     ShadowPass shadowPass;
     PhysicsControl* physicsControl;
+    Renderer3d renderBatch;
     RendererParticleEmitter renderParticleEmitter;
     IEmitter* emissor;
 };

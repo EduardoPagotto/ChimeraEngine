@@ -204,14 +204,24 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
     createRenderBuffer();
 }
 
-void Scene::onRender() {
-    this->render(renderBatch);
+void Scene::onRender() { this->render(renderBatch); }
 
-    // renderParticleEmitter.begin(camera);
-    //---------
+bool Scene::onEvent(const SDL_Event& event) {
+    switch (event.type) {
+        case SDL_WINDOWEVENT: {
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_RESIZED:
+                    onViewportResize(event.window.data1, event.window.data2);
+                    break;
+            }
+        } break;
+    }
+    return true;
+}
 
+void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
     // TODO: melhorar!!!!
-    renderParticleEmitter.begin(camera);
+    renderer.begin(camera);
 
     auto view = eRegistry.view<RenderableParticle>();
     for (auto entity : view) {
@@ -238,27 +248,11 @@ void Scene::onRender() {
 
         command.uniforms.push_back(UniformVal("model", command.transform));
 
-        rc.renderable->submit(camera, command, &renderParticleEmitter);
+        rc.renderable->submit(camera, command, &renderer);
     }
 
-    renderParticleEmitter.end();
-
-    // renderBuffer->bind(); // we're not using the stencil buffer now
-
-    renderParticleEmitter.flush();
-}
-
-bool Scene::onEvent(const SDL_Event& event) {
-    switch (event.type) {
-        case SDL_WINDOWEVENT: {
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_RESIZED:
-                    onViewportResize(event.window.data1, event.window.data2);
-                    break;
-            }
-        } break;
-    }
-    return true;
+    renderer.end();
+    renderer.flush();
 }
 
 void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
@@ -347,7 +341,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
     int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
 
-    renderBuffer->unbind();
+    // renderBuffer->unbind();
 }
 
 void Scene::render(IRenderer3d& renderer) {
@@ -383,7 +377,10 @@ void Scene::render(IRenderer3d& renderer) {
     this->execRenderPass(camera, renderer);
 
     // AQUI
+    if (emissor)
+        this->execEmitterPass(camera, renderParticleEmitter);
 
+    renderBuffer->unbind();
     renderBuffer->render();
 }
 } // namespace Chimera

@@ -220,8 +220,6 @@ bool Scene::onEvent(const SDL_Event& event) {
 }
 
 void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
-    // TODO: melhorar!!!!
-    renderer.begin(camera);
 
     auto view = eRegistry.view<RenderableParticle>();
     for (auto entity : view) {
@@ -231,13 +229,13 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         RenderCommand command;
 
-        // if (renderable->getEntity().hasComponent<Solid>()) {
-        //     Solid& sl = renderable->getEntity().getComponent<Solid>();
-        //     command.transform = sl.getMatrix();
-        // } else {
-        Transform& tc = renderable->getEntity().getComponent<Transform>();
-        command.transform = tc.getMatrix();
-        // }
+        if (renderable->getEntity().hasComponent<Solid>()) {
+            Solid& sl = renderable->getEntity().getComponent<Solid>();
+            command.transform = sl.getMatrix();
+        } else {
+            Transform& tc = renderable->getEntity().getComponent<Transform>();
+            command.transform = tc.getMatrix();
+        }
 
         Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
         Material& mc = rc.renderable->getEntity().getComponent<Material>();
@@ -250,14 +248,9 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         rc.renderable->submit(camera, command, &renderer);
     }
-
-    renderer.end();
-    renderer.flush();
 }
 
 void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
-
-    renderer.begin(camera);
 
     // load lights after begin (clear previos lights)
     auto lightViewEnt = eRegistry.view<LightComponent>();
@@ -292,17 +285,9 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
         command.uniforms.push_back(UniformVal("model", command.transform));
         rc.renderable->submit(camera, command, &renderer);
     }
-
-    renderer.end();
-    shadowPass.shadowBuffer->bind(); // we're not using the stencil buffer now
-    renderer.flush();
-    shadowPass.shadowBuffer->unbind();
 }
 
 void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
-
-    renderer.begin(camera);
-
     auto view = eRegistry.view<Renderable3dComponent>();
     for (auto entity : view) {
 
@@ -330,18 +315,6 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
 
         rc.renderable->submit(camera, command, &renderer);
     }
-
-    renderer.end();
-    renderBuffer->bind(); // we're not using the stencil buffer now
-    renderer.flush();
-
-    // get val from color buffer (must be inside framebuffer renderer
-    glm::ivec2 pos = MouseDevice::getMove();
-    pos.y = viewportHeight - pos.y;
-    int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
-
-    // renderBuffer->unbind();
 }
 
 void Scene::render(IRenderer3d& renderer) {
@@ -351,8 +324,16 @@ void Scene::render(IRenderer3d& renderer) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
-    // render a shadows in framebuffer
-    this->execShadowPass(camera, renderer);
+    { // render a shadows in framebuffer
+        renderer.begin(camera);
+        this->execShadowPass(camera, renderer);
+
+        renderer.end();
+        shadowPass.shadowBuffer->bind(); // we're not using the stencil buffer now
+
+        renderer.flush();
+        shadowPass.shadowBuffer->unbind();
+    }
 
     // used by all
     renderer.submitUniform(UniformVal("projection", camera->getProjectionMatrix()));
@@ -374,11 +355,31 @@ void Scene::render(IRenderer3d& renderer) {
         }
     }
 
-    this->execRenderPass(camera, renderer);
+    { // Render mesh
+        renderer.begin(camera);
+        this->execRenderPass(camera, renderer);
 
-    // AQUI
-    if (emissor)
+        renderer.end();
+        renderBuffer->bind(); // we're not using the stencil buffer now
+
+        renderer.flush();
+    }
+
+    if (emissor) { // Render emissores
+        renderParticleEmitter.begin(camera);
         this->execEmitterPass(camera, renderParticleEmitter);
+
+        renderParticleEmitter.end();
+        renderParticleEmitter.flush();
+    }
+
+    {
+        // get val from color buffer (must be inside framebuffer renderer
+        glm::ivec2 pos = MouseDevice::getMove();
+        pos.y = viewportHeight - pos.y;
+        int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
+    }
 
     renderBuffer->unbind();
     renderBuffer->render();

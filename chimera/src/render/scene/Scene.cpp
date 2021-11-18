@@ -33,7 +33,6 @@ Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), rende
     // current light position isn't enough to reflect the whole scene.
 
     this->createRenderBuffer();
-    emissor = nullptr;
 }
 Scene::~Scene() {}
 
@@ -128,7 +127,7 @@ void Scene::onAttach() {
         // TODO: melhorar!!!!
         if (entity.hasComponent<EmiterComponent>()) {
             EmiterComponent& ec = entity.getComponent<EmiterComponent>();
-            emissor = ec.emitter;
+            emitters.push_back(ec.emitter);
         }
     });
 
@@ -168,10 +167,8 @@ void Scene::onUpdate(const double& ts) {
         physicsControl->checkCollisions();
     }
 
-    // TODO: melhorar!!!!
-    if (emissor) {
-        emissor->recycleLife(ts); // TODO: passar para array e melhorar onde guardar o relacionamento!!
-    }
+    for (auto emissor : emitters)
+        emissor->recycleLife(ts);
 }
 
 Entity Scene::createEntity(const std::string& name) {
@@ -221,10 +218,10 @@ bool Scene::onEvent(const SDL_Event& event) {
 
 void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
-    auto view = eRegistry.view<RenderableParticle>();
+    auto view = eRegistry.view<RenderableParticleComponent>();
     for (auto entity : view) {
 
-        RenderableParticle& rc = view.get<RenderableParticle>(entity);
+        RenderableParticleComponent& rc = view.get<RenderableParticleComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
         RenderCommand command;
@@ -365,7 +362,7 @@ void Scene::render(IRenderer3d& renderer) {
         renderer.flush();
     }
 
-    if (emissor) { // Render emissores
+    if (emitters.size() > 0) {
         renderParticleEmitter.begin(camera);
         this->execEmitterPass(camera, renderParticleEmitter);
 

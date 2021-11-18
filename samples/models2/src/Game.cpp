@@ -107,7 +107,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         Shader& shader = re.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader);
 
-        RenderableParticle& particleSys = re.addComponent<RenderableParticle>();
+        RenderableParticleComponent& particleSys = re.addComponent<RenderableParticleComponent>();
         particleSys.enable = true;
 
         RenderableParticleEmitter* p = new RenderableParticleEmitter();

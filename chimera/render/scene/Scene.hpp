@@ -50,6 +50,6 @@ class Scene : public IStateMachine {
     PhysicsControl* physicsControl;
     Renderer3d renderBatch;
     RendererParticleEmitter renderParticleEmitter;
-    IEmitter* emissor;
+    std::vector<IEmitter*> emitters;
 };
 } // namespace Chimera

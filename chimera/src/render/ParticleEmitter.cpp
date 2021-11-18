@@ -6,12 +6,16 @@
 namespace Chimera {
 
 void EmitterFont::recycleLife(const double& ts) {
-    int newparticles = (int)(ts * 10000.0); // TODO: conferir esta estranho!!!
-    if (newparticles > (int)(0.016f * 10000.0))
-        newparticles = (int)(0.016f * 10000.0);
+    int newparticles = (int)(ts * 10000.0); // 160 particulas a 60 FPS
+    if (newparticles > 160)
+        newparticles = 160;
 
+    int particleIndex = 0;
     for (int i = 0; i < newparticles; i++) {
-        uint32_t particleIndex = findUnusedParticle();
+        particleIndex = findUnusedParticle();
+        if (particleIndex < 0)
+            break;
+
         ParticleZ& p = pc->container[particleIndex];
         this->reset(p);
     }
@@ -46,7 +50,7 @@ int EmitterFont::findUnusedParticle() {
             return i;
         }
     }
-    return 0; // All particles are taken, override the first one
+    return -1; // All particles are taken, wait new cicle
 }
 
 void EmitterFont::reset(ParticleZ& p) {

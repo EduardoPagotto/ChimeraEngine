@@ -5,12 +5,10 @@
 
 namespace Chimera {
 
-//#define MaxParticles 500
-
 struct ParticleZ {
     glm::vec3 pos = glm::vec3(0.0f), speed = glm::vec3(0.0f);
     glm::vec4 color = glm::vec4(0.0f);
-    float size = 0.0f, life = 0.0f, distance = 0.0f;
+    float size = 0.0f, life = -1.0f, distance = 0.0f;
 
     ParticleZ() = default;
     ParticleZ(const ParticleZ& o) : pos(o.pos), speed(o.speed), color(o.color), size(o.size), life(o.life), distance(o.distance) {}
@@ -53,20 +51,4 @@ class EmitterFont : public IEmitter {
     glm::vec3 maindir = glm::vec3(0.0f, 0.0f, 10.0f); // TODO: setar
     float spread = 1.5f;                              // TODO: setar
 };
-
-// class ParticleEmitter {
-//   public:
-//     ParticleEmitter();
-//     virtual ~ParticleEmitter();
-//     int recycleParticleLife(const double& ts);
-
-//   private:
-//     int findUnusedParticle();
-
-//     glm::vec4* vPosSize;
-//     GLubyte* vColor;
-//     glm::vec3 CameraPosition;
-//     int lastUsed;
-//     std::vector<Particle> particlesContainer;
-// };
 } // namespace Chimera

@@ -12,17 +12,15 @@ class Engine {
     void run();
     void pushState(IStateMachine* state);
     void pushOverlay(IStateMachine* state);
-
     Canvas* getCanvas() const { return canvas; }
-    const uint32_t getFPS() const { return fps; }
     const int getEye() const { return eyeIndice; }
     IStateMachine* getState(const std::string& name) const { return stack.getState(name); }
 
   protected:
     bool changeStatusFlow(SDL_Event* pEventSDL);
     int eyeIndice;
-    uint32_t fps;
     bool pause;
+    uint32_t fps, countDelta;
     Canvas* canvas;
     Timer timerFPS;
     StateStack stack;

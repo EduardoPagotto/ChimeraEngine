@@ -60,8 +60,7 @@ set (RenderSource 	CanvasGL.cpp
 					3d/RenderableParticleEmitter.cpp
 					3d/RendererParticleEmitter.cpp
 					scene/Scene.cpp
-					scene/CameraController.cpp
-					scene/RenderPass.cpp)
+					scene/CameraController.cpp)
 
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}

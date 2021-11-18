@@ -4,8 +4,8 @@
 #include "chimera/render/3d/RendererParticleEmitter.hpp"
 #include "chimera/render/ICamera.hpp"
 #include "chimera/render/ParticleEmitter.hpp"
+#include "chimera/render/buffer/RenderBuffer.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
-#include "chimera/render/scene/RenderPass.hpp"
 #include <entt/entt.hpp>
 
 namespace Chimera {
@@ -37,17 +37,17 @@ class Scene : public IStateMachine {
     virtual std::string getName() const { return "Scene"; }
 
   private:
+    void createRenderBuffer();
+    void execRenderPass(ICamera* camera, IRenderer3d& renderer);
     void execShadowPass(ICamera* camera, IRenderer3d& renderer);
     void render(IRenderer3d& renderer);
     Renderer3d renderBatch;
     uint32_t viewportWidth, viewportHeight;
     entt::registry eRegistry;
     ICamera* camera;
-    RenderPass* renderPass;
-    // RenderPassShadow* renderPassShadow;
+    RenderBuffer* renderBuffer;
     ShadowPass shadowPass;
     PhysicsControl* physicsControl;
-
     RendererParticleEmitter renderParticleEmitter;
     IEmitter* emissor;
 };

@@ -12,7 +12,7 @@
 
 namespace Chimera {
 
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), renderPass(nullptr), physicsControl(nullptr) {
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), renderBuffer(nullptr), physicsControl(nullptr) {
     // Create ShadowPass
     ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shadowPass.shader);
     // Define o framebuffer de Shadow
@@ -32,9 +32,33 @@ Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), rende
     // perspective projection matrix you'll have to change the light position as the
     // current light position isn't enough to reflect the whole scene.
 
+    this->createRenderBuffer();
     emissor = nullptr;
 }
 Scene::~Scene() {}
+
+void Scene::createRenderBuffer() {
+    if (renderBuffer) {
+        delete renderBuffer;
+        renderBuffer = nullptr;
+    }
+    // Create RenderPass
+    // Define o framebuffer de desenho
+    Shader shader;
+    ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {
+        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+        TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+
+    fbSpec.width = viewportWidth;
+    fbSpec.height = viewportHeight;
+    fbSpec.swapChainTarget = false;
+    fbSpec.samples = 1;
+
+    renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
+}
 
 void Scene::onDeatach() {
     // destroy scripts
@@ -177,12 +201,7 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         }
     }
 
-    if (renderPass) {
-        delete renderPass;
-        renderPass = nullptr;
-    }
-
-    renderPass = new RenderPass(width, height);
+    createRenderBuffer();
 }
 
 void Scene::onRender() {
@@ -286,6 +305,51 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
     shadowPass.shadowBuffer->unbind();
 }
 
+void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
+
+    renderer.begin(camera);
+
+    auto view = eRegistry.view<Renderable3dComponent>();
+    for (auto entity : view) {
+
+        Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
+        IRenderable3d* renderable = rc.renderable;
+
+        RenderCommand command;
+
+        if (renderable->getEntity().hasComponent<Solid>()) {
+            Solid& sl = renderable->getEntity().getComponent<Solid>();
+            command.transform = sl.getMatrix();
+        } else {
+            Transform& tc = renderable->getEntity().getComponent<Transform>();
+            command.transform = tc.getMatrix();
+        }
+
+        Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
+        Material& mc = rc.renderable->getEntity().getComponent<Material>();
+
+        command.renderable = renderable;
+        command.shader = sc;
+        mc.bindMaterialInformation(command.uniforms, command.vTex);
+
+        command.uniforms.push_back(UniformVal("model", command.transform));
+
+        rc.renderable->submit(camera, command, &renderer);
+    }
+
+    renderer.end();
+    renderBuffer->bind(); // we're not using the stencil buffer now
+    renderer.flush();
+
+    // get val from color buffer (must be inside framebuffer renderer
+    glm::ivec2 pos = MouseDevice::getMove();
+    pos.y = viewportHeight - pos.y;
+    int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
+
+    renderBuffer->unbind();
+}
+
 void Scene::render(IRenderer3d& renderer) {
 
     if (renderer.getLog() == true) {
@@ -294,7 +358,7 @@ void Scene::render(IRenderer3d& renderer) {
     }
 
     // render a shadows in framebuffer
-    execShadowPass(camera, renderer);
+    this->execShadowPass(camera, renderer);
 
     // used by all
     renderer.submitUniform(UniformVal("projection", camera->getProjectionMatrix()));
@@ -316,8 +380,10 @@ void Scene::render(IRenderer3d& renderer) {
         }
     }
 
-    renderPass->execute(camera, renderer, eRegistry);
+    this->execRenderPass(camera, renderer);
 
-    renderPass->render();
+    // AQUI
+
+    renderBuffer->render();
 }
 } // namespace Chimera

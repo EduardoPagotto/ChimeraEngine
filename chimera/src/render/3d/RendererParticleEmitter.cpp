@@ -6,16 +6,7 @@ namespace Chimera {
 RendererParticleEmitter::RendererParticleEmitter() {}
 RendererParticleEmitter::~RendererParticleEmitter() {}
 
-void RendererParticleEmitter::begin(ICamera* camera) {
-
-    // inicializa state machine do opengl
-    BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test
-    BinaryStateEnable blender(GL_BLEND);    // glEnable(GL_BLEND);
-    DepthFuncSetter depthFunc(GL_LESS);     // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    this->camera = camera;
-}
+void RendererParticleEmitter::begin(ICamera* camera) { this->camera = camera; }
 void RendererParticleEmitter::end() {}
 void RendererParticleEmitter::submitLight(Light* light) {}
 void RendererParticleEmitter::submit(const RenderCommand& command) {
@@ -23,6 +14,13 @@ void RendererParticleEmitter::submit(const RenderCommand& command) {
     commandQueue.push_back(command);
 }
 void RendererParticleEmitter::flush() {
+
+    // inicializa state machine do opengl
+    BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test
+    BinaryStateEnable blender(GL_BLEND);    // glEnable(GL_BLEND);
+    DepthFuncSetter depthFunc(GL_LESS);     // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     Shader activeShader;
     VertexArray* pLastVao = nullptr;
     while (!commandQueue.empty()) {

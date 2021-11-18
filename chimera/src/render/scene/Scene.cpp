@@ -14,6 +14,8 @@ namespace Chimera {
 
 Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), renderPass(nullptr), physicsControl(nullptr) {
     renderPassShadow = new RenderPassShadow(2048, 2048);
+
+    emissor = nullptr;
 }
 Scene::~Scene() {}
 
@@ -81,6 +83,12 @@ void Scene::onAttach() {
                 solid.init(size); // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
             }
         }
+
+        // TODO: melhorar!!!!
+        if (entity.hasComponent<EmiterComponent>()) {
+            EmiterComponent& ec = entity.getComponent<EmiterComponent>();
+            emissor = ec.emitter;
+        }
     });
 
     // initialize scripts
@@ -117,6 +125,11 @@ void Scene::onUpdate(const double& ts) {
     if (physicsControl) {
         physicsControl->stepSim(ts);
         physicsControl->checkCollisions();
+    }
+
+    // TODO: melhorar!!!!
+    if (emissor) {
+        emissor->recycleLife(ts); // TODO: passar para array e melhorar onde guardar o relacionamento!!
     }
 }
 
@@ -155,7 +168,49 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
     renderPass = new RenderPass(width, height);
 }
 
-void Scene::onRender() { this->render(renderBatch); }
+void Scene::onRender() {
+    this->render(renderBatch);
+
+    // renderParticleEmitter.begin(camera);
+    //---------
+
+    // TODO: melhorar!!!!
+    renderParticleEmitter.begin(camera);
+
+    auto view = eRegistry.view<RenderableParticle>();
+    for (auto entity : view) {
+
+        RenderableParticle& rc = view.get<RenderableParticle>(entity);
+        IRenderable3d* renderable = rc.renderable;
+
+        RenderCommand command;
+
+        // if (renderable->getEntity().hasComponent<Solid>()) {
+        //     Solid& sl = renderable->getEntity().getComponent<Solid>();
+        //     command.transform = sl.getMatrix();
+        // } else {
+        Transform& tc = renderable->getEntity().getComponent<Transform>();
+        command.transform = tc.getMatrix();
+        // }
+
+        Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
+        Material& mc = rc.renderable->getEntity().getComponent<Material>();
+
+        command.renderable = renderable;
+        command.shader = sc;
+        mc.bindMaterialInformation(command.uniforms, command.vTex);
+
+        command.uniforms.push_back(UniformVal("model", command.transform));
+
+        rc.renderable->submit(camera, command, &renderParticleEmitter);
+    }
+
+    renderParticleEmitter.end();
+
+    // renderBuffer->bind(); // we're not using the stencil buffer now
+
+    renderParticleEmitter.flush();
+}
 
 bool Scene::onEvent(const SDL_Event& event) {
     switch (event.type) {

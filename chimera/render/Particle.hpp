@@ -13,12 +13,12 @@ class Particle {
     void reset();
     bool isDead() { return (life < 0); }
     bool operator<(const Particle& that) const {
-        return this->cameradistance > that.cameradistance; // Sort in reverse order : far particles drawn first.
+        return this->distance > that.distance; // Sort in reverse order : far particles drawn first.
     }
 
   private:
     glm::vec3 pos, speed;
     glm::vec4 color;
-    float size, life, cameradistance;
+    float size, life, distance;
 };
 } // namespace Chimera

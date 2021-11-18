@@ -42,6 +42,15 @@ struct Renderable3dComponent {
     IRenderable3d* renderable;
 };
 
+struct RenderableParticle { // FIXME: colocar componente no nome
+    IRenderable3d* renderable;
+    bool enable;
+};
+
+struct EmiterComponent {
+    IEmitter* emitter;
+};
+
 struct NativeScriptComponent {
 
     std::string name;

@@ -9,6 +9,10 @@ namespace Chimera {
 NodeParticleEmitter::NodeParticleEmitter(Node* _parent, std::string _name, int _max) : Node(_parent, Kind::PARTICLE_SYSTEM, _name) {
     LastUsedParticle = 0;
     material = new Material();
+
+    vPosSize = new glm::vec4[MaxParticles]; // buffer de posicoes de cada particula
+    vColor = new GLubyte[MaxParticles * 4]; // buffer de cor de cada particula
+
     particlesContainer.reserve(MaxParticles);
     for (int i = 0; i < MaxParticles; i++) {
         particlesContainer.push_back(Particle());
@@ -24,9 +28,6 @@ void NodeParticleEmitter::init() {
     material->init();
 
     vao.bind();
-
-    vPosSize = new glm::vec4[MaxParticles]; // buffer de posicoes de cada particula
-    vColor = new GLubyte[MaxParticles * 4]; // buffer de cor de cada particula
 
     // The VBO containing the 4 vertices of the particles. Thanks to instancing, they will be shared by all particles.
     static const glm::vec3 vVertex[] = {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(-0.5f, 0.5f, 0.0f),

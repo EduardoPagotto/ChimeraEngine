@@ -1,7 +1,9 @@
 #pragma once
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
+#include "chimera/render/3d/RendererParticleEmitter.hpp"
 #include "chimera/render/ICamera.hpp"
+#include "chimera/render/ParticleEmitter.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
 #include "chimera/render/scene/RenderPass.hpp"
 #include "chimera/render/scene/RenderPassShadow.hpp"
@@ -38,5 +40,8 @@ class Scene : public IStateMachine {
     RenderPass* renderPass;
     RenderPassShadow* renderPassShadow;
     PhysicsControl* physicsControl;
+
+    RendererParticleEmitter renderParticleEmitter;
+    IEmitter* emissor;
 };
 } // namespace Chimera

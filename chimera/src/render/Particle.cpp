@@ -11,7 +11,7 @@ Particle::Particle() {
     color = glm::vec4(0.0f);
     size = 1.0f;
     life = -1.0f;
-    cameradistance = -1.0f;
+    distance = -1.0f;
 }
 Particle::~Particle() {}
 
@@ -45,7 +45,7 @@ void Particle::decrease(const float& _delta, int _particlesCount, glm::vec4* pPo
         // Simulate simple physics : gravity only, no collisions
         speed += glm::vec3(0.0f, 0.0f, -9.8f) * (float)_delta * 0.5f;
         pos += speed * (float)_delta; // *0.01f;
-        cameradistance = glm::length2(pos - _cameraPosition);
+        distance = glm::length2(pos - _cameraPosition);
         // ParticlesContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
 
         // Fill the GPU buffer
@@ -59,7 +59,7 @@ void Particle::decrease(const float& _delta, int _particlesCount, glm::vec4* pPo
     } else {
         // Particles that just died will be put at the end of the buffer in
         // SortParticles();
-        cameradistance = -1.0f;
+        distance = -1.0f;
     }
 }
 

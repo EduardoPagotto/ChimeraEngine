@@ -4,6 +4,7 @@
 #include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
+#include "chimera/render/3d/RenderableParticleEmitter.hpp"
 #include "chimera/render/CameraOrthographic.hpp"
 #include "chimera/render/FontManager.hpp"
 #include "chimera/render/TextureManager.hpp"
@@ -88,9 +89,43 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
             }
         }
 
-        activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-        engine->pushState(&activeScene);
+        // activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
+        // engine->pushState(&activeScene);
     }
+
+    // {
+    //     // TODO: melhorar!!!!
+    //     Entity re = activeScene.createEntity("Renderable Particle System");
+    //     Transform& tc = re.getComponent<Transform>();
+    //     tc.setPosition(glm::vec3(20.0f, 20.0f, 0.0f));
+
+    //     Material& material = re.addComponent<Material>();
+    //     TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
+    //     material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+    //     material.init();
+
+    //     Shader& shader = re.addComponent<Shader>();
+    //     ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader);
+
+    //     RenderableParticle& particleSys = re.addComponent<RenderableParticle>();
+    //     particleSys.enable = true;
+
+    //     RenderableParticleEmitter* p = new RenderableParticleEmitter();
+    //     p->create(500);
+    //     p->setEntity(re);
+
+    //     particleSys.renderable = p;
+
+    //     Entity ee = activeScene.createEntity("emitters");
+    //     EmiterComponent& e = ee.addComponent<EmiterComponent>();
+
+    //     EmitterFont* ef = new EmitterFont();
+    //     ef->setParticleContainer(p->getParticleContainer());
+    //     e.emitter = ef;
+    // }
+
+    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
+    engine->pushState(&activeScene);
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 }

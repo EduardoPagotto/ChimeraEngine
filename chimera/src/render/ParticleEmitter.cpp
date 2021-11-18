@@ -24,7 +24,7 @@ void EmitterFont::recycleLife(const double& ts) {
     int ParticlesCount = 0;
     for (uint32_t i = 0; i < pc->container.size(); i++) {
         ParticleZ& p = pc->container[i];
-        if (p.isDead() == false) {
+        if (p.life > 0) { // stil alive
             this->decrease(p, ts, ParticlesCount);
             ParticlesCount++;
         }
@@ -38,19 +38,19 @@ void EmitterFont::recycleLife(const double& ts) {
 }
 int EmitterFont::findUnusedParticle() {
     for (int i = pc->lastUsed; i < pc->container.size(); i++) {
-        if (pc->container[i].isDead() == true) {
+        if (pc->container[i].life < 0) { // is dead
             pc->lastUsed = i;
             return i;
         }
     }
 
     for (int i = 0; i < pc->lastUsed; i++) {
-        if (pc->container[i].isDead() == true) {
+        if (pc->container[i].life < 0) { // is dead
             pc->lastUsed = i;
             return i;
         }
     }
-    return -1; // All particles are taken, wait new cicle
+    return 0; // All particles are taken, wait new cicle
 }
 
 void EmitterFont::reset(ParticleZ& p) {
@@ -71,16 +71,15 @@ void EmitterFont::reset(ParticleZ& p) {
     p.size = (rand() % 1000) / 2000.0f + 0.1f;
 }
 
-void EmitterFont::decrease(ParticleZ& p, const float& tsDelta, const uint32_t& index) {
+void EmitterFont::decrease(ParticleZ& p, const double& ts, const uint32_t& index) {
     // Decrease life
-    p.life -= tsDelta;
+    p.life -= ts;
     if (p.life > 0.0f) {
 
         // Simulate simple physics : gravity only, no collisions
-        p.speed += glm::vec3(0.0f, 0.0f, -9.8f) * (float)tsDelta * 0.5f;
-        p.pos += p.speed * (float)tsDelta; // *0.01f;
+        p.speed += glm::vec3(0.0f, 0.0f, -9.8f) * (float)ts * 0.5f;
+        p.pos += p.speed * (float)ts; // *0.01f;
         p.distance = glm::length2(p.pos - pc->cameraPos);
-        // ParticlesContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
 
         // Fill the GPU buffer
         pc->posData[index] = glm::vec4(p.pos.x, p.pos.y, p.pos.z, p.size);

@@ -12,7 +12,6 @@ struct ParticleZ {
 
     ParticleZ() = default;
     ParticleZ(const ParticleZ& o) : pos(o.pos), speed(o.speed), color(o.color), size(o.size), life(o.life), distance(o.distance) {}
-    bool isDead() { return life < 0; }
     bool operator<(const ParticleZ& that) const {
         return this->distance > that.distance; // Sort in reverse order : far particles drawn first.
     }
@@ -33,7 +32,7 @@ class IEmitter {
     virtual int findUnusedParticle() = 0;
     virtual void reset(ParticleZ& p) = 0;
     virtual void recycleLife(const double& ts) = 0;
-    virtual void decrease(ParticleZ& p, const float& tsDelta, const uint32_t& index) = 0;
+    virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) = 0;
     virtual void setParticleContainer(ParticleContainer* pc) = 0;
 };
 
@@ -43,7 +42,7 @@ class EmitterFont : public IEmitter {
     virtual int findUnusedParticle() override;
     virtual void reset(ParticleZ& p) override;
     virtual void recycleLife(const double& ts) override;
-    virtual void decrease(ParticleZ& p, const float& tsDelta, const uint32_t& index) override;
+    virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) override;
     virtual void setParticleContainer(ParticleContainer* pc) override { this->pc = pc; }
 
   private:

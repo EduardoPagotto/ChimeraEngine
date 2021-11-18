@@ -13,7 +13,24 @@
 namespace Chimera {
 
 Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), renderPass(nullptr), physicsControl(nullptr) {
-    renderPassShadow = new RenderPassShadow(2048, 2048);
+    // Create ShadowPass
+    ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shadowPass.shader);
+    // Define o framebuffer de Shadow
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
+
+    fbSpec.width = 2048;
+    fbSpec.height = 2048;
+    fbSpec.swapChainTarget = false;
+    fbSpec.samples = 1;
+
+    shadowPass.shadowBuffer = new FrameBuffer(fbSpec);
+    shadowPass.lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f);
+    // Note that if you use a
+    // glm::mat4 lightProjection = glm::perspective(45.0f, (float)width / (float)height, near_plane, far_plane);
+    // perspective projection matrix you'll have to change the light position as the
+    // current light position isn't enough to reflect the whole scene.
 
     emissor = nullptr;
 }
@@ -225,6 +242,50 @@ bool Scene::onEvent(const SDL_Event& event) {
     return true;
 }
 
+void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
+
+    renderer.begin(camera);
+
+    // load lights after begin (clear previos lights)
+    auto lightViewEnt = eRegistry.view<LightComponent>();
+    for (auto entity : lightViewEnt) {
+        auto& lc = lightViewEnt.get<LightComponent>(entity);
+        if (lc.global) {
+            // TODO: usar o direcionm depois no segundo parametro
+            glm::mat4 lightView = glm::lookAt(lc.light->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
+            shadowPass.lightSpaceMatrix = shadowPass.lightProjection * lightView;
+            renderer.submitUniform(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
+        }
+    }
+
+    auto view = eRegistry.view<Renderable3dComponent>();
+    for (auto entity : view) {
+
+        Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
+        IRenderable3d* renderable = rc.renderable;
+
+        RenderCommand command;
+
+        if (renderable->getEntity().hasComponent<Solid>()) {
+            Solid& sl = renderable->getEntity().getComponent<Solid>();
+            command.transform = sl.getMatrix();
+        } else {
+            Transform& tc = renderable->getEntity().getComponent<Transform>();
+            command.transform = tc.getMatrix();
+        }
+
+        command.renderable = renderable;
+        command.shader = shadowPass.shader;
+        command.uniforms.push_back(UniformVal("model", command.transform));
+        rc.renderable->submit(camera, command, &renderer);
+    }
+
+    renderer.end();
+    shadowPass.shadowBuffer->bind(); // we're not using the stencil buffer now
+    renderer.flush();
+    shadowPass.shadowBuffer->unbind();
+}
+
 void Scene::render(IRenderer3d& renderer) {
 
     if (renderer.getLog() == true) {
@@ -233,18 +294,19 @@ void Scene::render(IRenderer3d& renderer) {
     }
 
     // render a shadows in framebuffer
-    renderPassShadow->execute(camera, renderer, eRegistry);
+    execShadowPass(camera, renderer);
 
     // used by all
     renderer.submitUniform(UniformVal("projection", camera->getProjectionMatrix()));
     renderer.submitUniform(UniformVal("view", camera->getViewMatrix()));
 
-    // udes by shadows
-    renderer.submitUniform(UniformVal("lightSpaceMatrix", renderPassShadow->getLightSpaceMatrix()));
+    // data from shadowPass
+    renderer.submitUniform(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
     renderer.submitUniform(UniformVal("viewPos", camera->getPosition()));
     renderer.submitUniform(UniformVal("shadows", 1));   // Ativa a sombra com 1
     renderer.submitUniform(UniformVal("shadowMap", 1)); // id da textura de shadow
-    renderPassShadow->bindDepthBuffer();
+
+    shadowPass.shadowBuffer->getDepthAttachemnt()->bind(1);
 
     auto lightView = eRegistry.view<LightComponent>();
     for (auto entity : lightView) {

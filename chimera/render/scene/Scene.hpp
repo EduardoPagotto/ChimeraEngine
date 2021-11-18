@@ -6,10 +6,15 @@
 #include "chimera/render/ParticleEmitter.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
 #include "chimera/render/scene/RenderPass.hpp"
-#include "chimera/render/scene/RenderPassShadow.hpp"
 #include <entt/entt.hpp>
 
 namespace Chimera {
+
+struct ShadowPass {
+    Shader shader;
+    FrameBuffer* shadowBuffer;
+    glm::mat4 lightSpaceMatrix, lightProjection;
+};
 
 class Entity;
 class Scene : public IStateMachine {
@@ -32,13 +37,15 @@ class Scene : public IStateMachine {
     virtual std::string getName() const { return "Scene"; }
 
   private:
+    void execShadowPass(ICamera* camera, IRenderer3d& renderer);
     void render(IRenderer3d& renderer);
     Renderer3d renderBatch;
     uint32_t viewportWidth, viewportHeight;
     entt::registry eRegistry;
     ICamera* camera;
     RenderPass* renderPass;
-    RenderPassShadow* renderPassShadow;
+    // RenderPassShadow* renderPassShadow;
+    ShadowPass shadowPass;
     PhysicsControl* physicsControl;
 
     RendererParticleEmitter renderParticleEmitter;

@@ -93,36 +93,36 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         // engine->pushState(&activeScene);
     }
 
-    {
-        // TODO: melhorar!!!!
-        Entity re = activeScene.createEntity("Renderable Particle System");
-        Transform& tc = re.getComponent<Transform>();
-        tc.setPosition(glm::vec3(20.0f, 20.0f, 0.0f));
+    // {
+    //     // TODO: melhorar!!!!
+    //     Entity re = activeScene.createEntity("Renderable Particle System");
+    //     Transform& tc = re.getComponent<Transform>();
+    //     tc.setPosition(glm::vec3(20.0f, 20.0f, 0.0f));
 
-        Material& material = re.addComponent<Material>();
-        TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
-        material.init();
+    //     Material& material = re.addComponent<Material>();
+    //     TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
+    //     material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+    //     material.init();
 
-        Shader& shader = re.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader);
+    //     Shader& shader = re.addComponent<Shader>();
+    //     ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader);
 
-        RenderableParticle& particleSys = re.addComponent<RenderableParticle>();
-        particleSys.enable = true;
+    //     RenderableParticle& particleSys = re.addComponent<RenderableParticle>();
+    //     particleSys.enable = true;
 
-        RenderableParticleEmitter* p = new RenderableParticleEmitter();
-        p->create(500);
-        p->setEntity(re);
+    //     RenderableParticleEmitter* p = new RenderableParticleEmitter();
+    //     p->create(500);
+    //     p->setEntity(re);
 
-        particleSys.renderable = p;
+    //     particleSys.renderable = p;
 
-        Entity ee = activeScene.createEntity("emitters");
-        EmiterComponent& e = ee.addComponent<EmiterComponent>();
+    //     Entity ee = activeScene.createEntity("emitters");
+    //     EmiterComponent& e = ee.addComponent<EmiterComponent>();
 
-        EmitterFont* ef = new EmitterFont();
-        ef->setParticleContainer(p->getParticleContainer());
-        e.emitter = ef;
-    }
+    //     EmitterFont* ef = new EmitterFont();
+    //     ef->setParticleContainer(p->getParticleContainer());
+    //     e.emitter = ef;
+    // }
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     engine->pushState(&activeScene);

@@ -1,7 +1,6 @@
 #include "LibraryCameras.hpp"
 //#include "chimera/core/CameraFPS.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/node/NodeCamera.hpp"
 #include "chimera/render/CameraOrbit.hpp"
 #include "chimera/render/scene/Components.hpp"
 
@@ -13,16 +12,13 @@ LibraryCameras::LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _
 
 LibraryCameras::~LibraryCameras() {}
 
-NodeCamera* LibraryCameras::target() {
+void LibraryCameras::target() {
 
     tinyxml2::XMLElement* l_nCam = root->FirstChildElement("library_cameras")->FirstChildElement("camera");
     for (l_nCam; l_nCam; l_nCam = l_nCam->NextSiblingElement()) {
 
         std::string l_id = l_nCam->Attribute("id");
         if (url.compare(l_id) == 0) {
-
-            NodeCamera* pCameraNew = new NodeCamera(nullptr, l_id);
-            // loadbase(l_nCam, pCameraNew);
             tinyxml2::XMLElement* l_nExtra = findExtra(l_nCam);
             if (l_nExtra) {
                 tinyxml2::XMLElement* l_nMin = l_nExtra->FirstChildElement("orbital")->FirstChildElement("min");
@@ -43,11 +39,9 @@ NodeCamera* LibraryCameras::target() {
                 CameraOrbit* cam = new CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
                 // CameraFPS* cam = new CameraFPS(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
                 cam->setLimits(atof(l_nMin->GetText()), atof(l_nMax->GetText()));
-                pCameraNew->setCamera(cam);
                 loadbase(l_nCam, cam);
             }
-
-            return pCameraNew;
+            return;
         }
     }
     throw Exception("Camera nao encontrada: " + url);

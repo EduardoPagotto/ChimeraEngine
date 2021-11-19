@@ -17,7 +17,6 @@ set (IncludesModels ${Models_SOURCE_DIR}/include/
 
 #ordem é importante!!!
 set (LibsModels ${CMAKE_SOURCE_DIR}/bin/libChimeraLoaders.a
-				${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				${OPENGL_LIBRARIES}

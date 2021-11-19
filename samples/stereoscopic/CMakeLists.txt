@@ -16,8 +16,7 @@ set (IncludesSterioscopic ${Sterioscopic_SOURCE_DIR}/include/
 						  ${BULLET_INCLUDE_DIR}
 						  ${GLEW_INCLUDE_DIR})
 
-set (LibsSterioscopic ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a #ordem é importante!!!
-					  ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+set (LibsSterioscopic ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a #ordem é importante!!!
 					  ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 					  ${OPENGL_LIBRARIES}
 					  ${SDL2_LIBRARY}

@@ -1,5 +1,5 @@
 #pragma once
-#include <glm/glm.hpp> // FIXME ???????
+#include <glm/glm.hpp>
 #include <string>
 #include <tinyxml2.h>
 #include <vector>

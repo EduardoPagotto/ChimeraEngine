@@ -9,11 +9,7 @@
 
 namespace Chimera {
 
-LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, NodeGroup* _pRootNode, Scene* scene)
-    : Library(_root, _url) {
-    pListNodes = Singleton<ListNodes>::getRefSingleton();
-    pRootNode = _pRootNode;
-
+LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, Scene* scene) : Library(_root, _url) {
     this->scene = scene;
 }
 
@@ -27,7 +23,6 @@ void LibraryVisualScenes::target() {
         std::string l_id = l_nScene->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            pRootNode->setName(l_id);
             tinyxml2::XMLElement* l_nNode = l_nScene->FirstChildElement("node");
             for (l_nNode; l_nNode; l_nNode = l_nNode->NextSiblingElement()) {
 
@@ -37,7 +32,8 @@ void LibraryVisualScenes::target() {
 
                 tinyxml2::XMLElement* l_nDadoNode = l_nNode->FirstChildElement();
                 if (l_nDadoNode != nullptr) {
-                    carregaNode((Node*)pRootNode, l_nDadoNode, l_idR, l_name, l_type);
+                    // carregaNode(nullptr, l_nDadoNode, l_idR, l_name, l_type);
+                    carregaNode(l_nDadoNode, l_idR, l_name, l_type);
                 }
             }
             return; // pRootNode;
@@ -63,10 +59,12 @@ glm::mat4 LibraryVisualScenes::getTransformation(tinyxml2::XMLElement* _nNode) {
     return l_pTransform;
 }
 
-void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type) {
+// void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char*
+// type) {
+void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type) {
 
     glm::mat4 l_pTransform;
-    Node* pLastNodeDone = nullptr;
+    // Node* pLastNodeDone = nullptr;
 
     for (_nNode; _nNode; _nNode = _nNode->NextSiblingElement()) {
 
@@ -90,20 +88,18 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
             tag.id = std::string(_id);
 
             LibraryCameras lib(root, l_url, entity);
-            NodeCamera* pCamera = lib.target();
+            lib.target();
 
             // FIXME: Remover transformacao da camera e reposicionar na entidade
             CameraComponent& cc = entity.getComponent<CameraComponent>();
             cc.camera->setPosition(l_pTransform[3]);
 
             // FIXME: remover proximas versoes
-            pCamera->getCamera()->setPosition(l_pTransform[3]);
-
-            ICamera3D* pc = (ICamera3D*)pCamera->getCamera();
-            pc->updateDistanceFront();
-
-            _pNodePai->addChild(pCamera);
-            pLastNodeDone = pCamera;
+            // pCamera->getCamera()->setPosition(l_pTransform[3]);
+            // ICamera3D* pc = (ICamera3D*)pCamera->getCamera();
+            // pc->updateDistanceFront();
+            // _pNodePai->addChild(pCamera);
+            // pLastNodeDone = pCamera;
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
@@ -115,16 +111,15 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
             tag.id = std::string(_id);
 
             LibraryLights lib(root, l_url, entity);
-            NodeLight* pLight = lib.target();
+            lib.target();
 
             // FIXME: Remover transformacao de light e remover este codigo!!!!
             LightComponent& lc = entity.getComponent<LightComponent>();
             lc.light->setTransform(l_pTransform);
 
-            pLight->data.setTransform(l_pTransform);
-
-            _pNodePai->addChild(pLight);
-            pLastNodeDone = pLight;
+            // pLight->data.setTransform(l_pTransform);
+            //_pNodePai->addChild(pLight);
+            // pLastNodeDone = pLight;
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
@@ -136,27 +131,24 @@ void LibraryVisualScenes::carregaNode(Node* _pNodePai, tinyxml2::XMLElement* _nN
             tag.id = std::string(_id);
 
             LibraryGeometrys lib(root, l_url, entity);
-            NodeMesh* pMesh = lib.target();
+            lib.target();
 
-            pListNodes->mapMeshNode[pMesh->getName()] = pMesh;
-            pListNodes->mapMesh[std::string(_id)] = pMesh;
-
-            pMesh->setTransform(new Transform(l_pTransform));
-
-            _pNodePai->addChild(pMesh);
-            pLastNodeDone = _pNodePai; // pTrans;
+            // pListNodes->mapMeshNode[pMesh->getName()] = pMesh;
+            // pListNodes->mapMesh[std::string(_id)] = pMesh;
+            // pMesh->setTransform(new Transform(l_pTransform));
+            //_pNodePai->addChild(pMesh);
+            // pLastNodeDone = _pNodePai; // pTrans;
 
         } else if (strcmp(l_nomeElemento, (const char*)"node") == 0) {
 
-            const char* l_id = _nNode->Attribute("id");
-            const char* l_name = _nNode->Attribute("name");
-            const char* l_type = _nNode->Attribute("type");
-
-            if (pLastNodeDone != nullptr) {
-                carregaNode(pLastNodeDone, _nNode->FirstChildElement(), l_id, l_name, l_type);
-            } else {
-                throw Exception("Falha, objeto hierarquia: " + std::string(l_id));
-            }
+            // const char* l_id = _nNode->Attribute("id");
+            // const char* l_name = _nNode->Attribute("name");
+            // const char* l_type = _nNode->Attribute("type");
+            // if (pLastNodeDone != nullptr) {
+            //     carregaNode(pLastNodeDone, _nNode->FirstChildElement(), l_id, l_name, l_type);
+            // } else {
+            //     throw Exception("Falha, objeto hierarquia: " + std::string(l_id));
+            // }
 
         } else {
             throw Exception("Falha, objeto desconhecido: " + std::string(l_nomeElemento));

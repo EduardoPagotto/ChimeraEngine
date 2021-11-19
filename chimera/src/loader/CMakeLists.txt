@@ -47,8 +47,7 @@ target_include_directories (ChimeraLoaders PUBLIC ${IncludeLoader}
 										   PRIVATE ${IncludeLoaderAux})
 
 add_dependencies(ChimeraLoaders ChimeraCore
-								ChimeraRender
-                                ChimeraNode)
+								ChimeraRender)
 
 INSTALL(FILES ${ChimeraLoaders_BINARY_DIR}/libChimeraLoaders.a DESTINATION lib)
 INSTALL(DIRECTORY ${IncludeLoader}/chimera/loader DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

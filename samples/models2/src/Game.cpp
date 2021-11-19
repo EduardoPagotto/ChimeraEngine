@@ -50,9 +50,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
 
     {
-        NodeGroup* pRoot = new NodeGroup(nullptr, "root_real");
-        NodeGroup* group1 = new NodeGroup(pRoot, "none");
-        VisualScene libV("./assets/models/piso2.xml", group1, &activeScene);
+        VisualScene libV("./assets/models/piso2.xml", &activeScene);
         libV.target();
 
         PhysicsScene libP("./assets/models/piso2.xml", nullptr, &activeScene);

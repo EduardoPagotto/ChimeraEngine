@@ -13,7 +13,7 @@ LibraryGeometrys::LibraryGeometrys(tinyxml2::XMLElement* _root, const std::strin
 
 LibraryGeometrys::~LibraryGeometrys() {}
 
-NodeMesh* LibraryGeometrys::target() {
+void LibraryGeometrys::target() {
 
     tinyxml2::XMLElement* l_nGeo = root->FirstChildElement("library_geometries")->FirstChildElement("geometry");
     for (l_nGeo; l_nGeo; l_nGeo = l_nGeo->NextSiblingElement()) {
@@ -24,19 +24,15 @@ NodeMesh* LibraryGeometrys::target() {
             MeshData& eMesh = entity.addComponent<MeshData>();
             auto& tag = entity.getComponent<TagComponent>();
             tag.tag = l_id;
+            std::string idMaterial = loadMeshCollada(l_nGeo, &eMesh);
 
-            NodeMesh* pMesh = new NodeMesh(nullptr, l_id);
-            std::string idMaterial = loadMeshCollada(l_nGeo, &pMesh->meshData); // TODO: remover proxima versao
-            loadMeshCollada(l_nGeo, &eMesh);                                    // TODO: NOVO
-
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Nome: %s", pMesh->getName().c_str());
-            pMesh->debugDados(false);
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Nome: %s", l_id.c_str());
+            // eMesh.debugDados(false);
 
             LibraryMaterials lm(root, idMaterial, entity);
             Material* pMaterial = lm.target();
 
-            pMesh->setMaterial(pMaterial);
-            return pMesh;
+            return;
         }
     }
     throw Exception("Geometry nao encontrado: " + url);

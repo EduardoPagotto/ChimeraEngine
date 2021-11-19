@@ -1,7 +1,6 @@
 #include "LibraryPhysicsScenes.hpp"
 #include "LibraryPhysicModels.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/node/NodeMesh.hpp"
 #include "chimera/render/Transform.hpp"
 #include "chimera/render/bullet/Solid.hpp"
 
@@ -48,9 +47,9 @@ void LibraryPhysicsScenes::target() {
                         LibraryPhysicModels lib(root, l_url, pPhysicsControl);
                         lib.target2(body, getIdFromUrl(target), scene);
                     } else { // TODO: remover depois
-                        Solid* pSolid = mapSolids[body];
-                        NodeMesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
-                        pMesh->replaceTransform(pSolid);
+                        // Solid* pSolid = mapSolids[body];
+                        // NodeMesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
+                        // pMesh->replaceTransform(pSolid);
                     }
                 }
                 mapSolids.clear();

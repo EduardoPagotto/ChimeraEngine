@@ -1,8 +1,6 @@
 #include "LibraryPhysicModels.hpp"
 #include "LibraryPhysicsMaterials.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/node/NodeGroup.hpp"
-#include "chimera/node/NodeMesh.hpp"
 #include "chimera/render/bullet/Solid.hpp"
 #include "chimera/render/scene/Components.hpp"
 
@@ -214,31 +212,31 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         const char* idMesh = l_nMesh->Attribute("url");
         std::string l_mesh = &idMesh[1];
 
-        NodeMesh* pMesh = (NodeMesh*)pListNodes->mapMeshNode[l_mesh];
-        if (pMesh != nullptr) {
-            // btTriangleIndexVertexArray* indexVertexArray =
-            //     new btTriangleIndexVertexArray(pMesh->meshData->vertexIndex.size(),    // num triangles
-            //                                    (int*)&pMesh->meshData->vertexIndex[0], // lista de indice
-            //                                    3 * sizeof(int),                    // tamanho do indice por  elemento
-            //                                    pMesh->meshData->vertexList.size(), // num Vertices
-            //                                    (float*)&pMeshmeshData->->vertexList[0], //
-            //                                    vList.ptrVal(),                          //
-            //                                    3 * sizeof(float));                      //
+        // NodeMesh* pMesh = (NodeMesh*)pListNodes->mapMeshNode[l_mesh];
+        // if (pMesh != nullptr) {
+        //     // btTriangleIndexVertexArray* indexVertexArray =
+        //     //     new btTriangleIndexVertexArray(pMesh->meshData->vertexIndex.size(),    // num triangles
+        //     //                                    (int*)&pMesh->meshData->vertexIndex[0], // lista de indice
+        //     //                                    3 * sizeof(int),                    // tamanho do indice por  elemento
+        //     //                                    pMesh->meshData->vertexList.size(), // num Vertices
+        //     //                                    (float*)&pMeshmeshData->->vertexList[0], //
+        //     //                                    vList.ptrVal(),                          //
+        //     //                                    3 * sizeof(float));                      //
 
-            // // btTriangleIndexVertexArray *indexVertexArray = new
-            // btTriangleIndexVertexArray (
-            // //     pMesh->vIndex.getSize() / 3,  //num triangles
-            // //     pMesh->vIndex.ptrVal(),		//lista de indice
-            // //     3 * sizeof ( int ),					//tamanho do indice
-            // por elemento
-            // //     pMesh->vList.getSize() / 3,	//num Vertices
-            // //     pMesh->vList.ptrVal(),		//lista de vertice
-            // //     3 * sizeof ( float )				    //tamanho do vertice
-            // por elemento
-            // // );
+        //     // // btTriangleIndexVertexArray *indexVertexArray = new
+        //     // btTriangleIndexVertexArray (
+        //     // //     pMesh->vIndex.getSize() / 3,  //num triangles
+        //     // //     pMesh->vIndex.ptrVal(),		//lista de indice
+        //     // //     3 * sizeof ( int ),					//tamanho do indice
+        //     // por elemento
+        //     // //     pMesh->vList.getSize() / 3,	//num Vertices
+        //     // //     pMesh->vList.ptrVal(),		//lista de vertice
+        //     // //     3 * sizeof ( float )				    //tamanho do vertice
+        //     // por elemento
+        //     // // );
 
-            // _pPhysic->setIndexVertexArray ( indexVertexArray );
-        }
+        //     // _pPhysic->setIndexVertexArray ( indexVertexArray );
+        // }
     }
 }
 } // namespace Chimera

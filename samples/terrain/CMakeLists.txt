@@ -17,8 +17,7 @@ set (IncludesTerrain ${CMAKE_CURRENT_SOURCE_DIR}/include
 					 ${BULLET_INCLUDE_DIR})
 
 #define os Lib's a serem usados
-set (LibsTerrain ${CMAKE_SOURCE_DIR}/bin/libChimeraNode.a 
-				 ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+set (LibsTerrain ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_IBRARIES}
@@ -38,7 +37,6 @@ target_link_libraries(terrain ${LibsTerrain})
 target_include_directories (terrain PRIVATE ${IncludesTerrain})
 
 add_dependencies(terrain ChimeraCore 
-						 ChimeraRender
-						 ChimeraNode)
+						 ChimeraRender)
 
 INSTALL(FILES ${Terrain_BINARY_DIR}/terrain DESTINATION bin)

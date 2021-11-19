@@ -1,19 +1,19 @@
-#include "chimera/render/3d/RendererParticleEmitter.hpp"
+#include "chimera/render/3d/RendererParticles.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
-RendererParticleEmitter::RendererParticleEmitter() {}
-RendererParticleEmitter::~RendererParticleEmitter() {}
+RendererParticles::RendererParticles() {}
+RendererParticles::~RendererParticles() {}
 
-void RendererParticleEmitter::begin(ICamera* camera) { this->camera = camera; }
-void RendererParticleEmitter::end() {}
-void RendererParticleEmitter::submitLight(Light* light) {}
-void RendererParticleEmitter::submit(const RenderCommand& command) {
+void RendererParticles::begin(ICamera* camera) { this->camera = camera; }
+void RendererParticles::end() {}
+void RendererParticles::submitLight(Light* light) {}
+void RendererParticles::submit(const RenderCommand& command) {
     // adicionado ao proximo render
     commandQueue.push_back(command);
 }
-void RendererParticleEmitter::flush() {
+void RendererParticles::flush() {
 
     // inicializa state machine do opengl
     BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test

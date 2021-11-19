@@ -4,10 +4,10 @@
 #include <deque>
 
 namespace Chimera {
-class RendererParticleEmitter : public IRenderer3d {
+class RendererParticles : public IRenderer3d {
   public:
-    RendererParticleEmitter();
-    virtual ~RendererParticleEmitter();
+    RendererParticles();
+    virtual ~RendererParticles();
 
     virtual void begin(ICamera* camera) override;
     virtual void submit(const RenderCommand& command) override;

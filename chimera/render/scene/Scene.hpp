@@ -4,6 +4,7 @@
 #include "chimera/render/3d/RendererParticles.hpp"
 #include "chimera/render/ICamera.hpp"
 #include "chimera/render/ParticleEmitter.hpp"
+#include "chimera/render/Transform.hpp"
 #include "chimera/render/buffer/RenderBuffer.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
 #include <entt/entt.hpp>
@@ -36,6 +37,7 @@ class Scene : public IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
     virtual std::string getName() const { return "Scene"; }
     void pushEmitters(IEmitter* e) { emitters.push_back(e); }
+    void setOrigem(Transform* o) { origem = o; }
 
   private:
     void createRenderBuffer();
@@ -52,5 +54,6 @@ class Scene : public IStateMachine {
     Renderer3d renderBatch;
     RendererParticles renderParticleEmitter;
     std::vector<IEmitter*> emitters;
+    Transform* origem;
 };
 } // namespace Chimera

@@ -14,8 +14,16 @@ class Transform {
     // virtual glm::vec3 getRotation() { return glm::vec3(0.0, 0.0, 0.0); } // TODO: Implementar
     virtual glm::mat4 getMatrix() { return this->transform; }
 
-    // virtual glm::mat4 getModelMatrix(const glm::vec3& _position) { return glm::translate(transform, _position); }
-    virtual glm::mat4 translate(const glm::vec3& _position) { return glm::translate(transform, _position); }
+    virtual glm::mat4 translate(const glm::vec3& pos) {
+        glm::mat4 matrixCoord = transform;
+        float* matrix = glm::value_ptr(matrixCoord);
+        // pega posicao do objeto horigem de desenho (viewpoint fixo)
+        // desloca desenha para o pbjeto horigem
+        matrix[12] -= pos.x;
+        matrix[13] -= pos.y;
+        matrix[14] -= pos.z;
+        return glm::make_mat4(matrix);
+    }
 
     // void setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
     //     glm::quat myQuat(_rotation);                                    // trocar (pitch, yaw, roll) por (yaw, pitch, roll) ?????

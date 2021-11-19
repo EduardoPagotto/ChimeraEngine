@@ -277,6 +277,10 @@ void Game::onAttach() {
 void Game::onDeatach() {}
 
 void Game::onUpdate(const double& ts) {
+
+    if (pCorpoRigido)
+        activeScene.setOrigem(pCorpoRigido);
+
     activeScene.onUpdate(ts); // atualiza camera e script de camera
 
     using namespace Chimera;

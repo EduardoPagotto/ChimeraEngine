@@ -1,4 +1,3 @@
-- [] Implementar carga de dados ortogonal
-- [] Implementar Fontes e texto
-- [] Implementar grade de teste
-- [] Implementar Teste com CameraMan
+- [] Otimizar RendereParticles como unico drawcall
+- [] Remover Nodes
+- [] HMD direto no Renderer do Scene

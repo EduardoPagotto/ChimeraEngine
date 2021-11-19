@@ -34,6 +34,9 @@ Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), rende
     // current light position isn't enough to reflect the whole scene.
 
     this->createRenderBuffer();
+
+    // FIXME: coisa feia!!!!
+    origem = new Transform();
 }
 Scene::~Scene() {}
 
@@ -238,10 +241,10 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         if (renderable->getEntity().hasComponent<Solid>()) {
             Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.getMatrix();
+            command.transform = sl.translate(origem->getPosition()); // sl.getMatrix();
         } else {
             Transform& tc = renderable->getEntity().getComponent<Transform>();
-            command.transform = tc.getMatrix();
+            command.transform = tc.translate(origem->getPosition()); // tc.getMatrix();
         }
 
         Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
@@ -281,10 +284,10 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
 
         if (renderable->getEntity().hasComponent<Solid>()) {
             Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.getMatrix();
+            command.transform = sl.translate(origem->getPosition()); // sl.getMatrix();
         } else {
             Transform& tc = renderable->getEntity().getComponent<Transform>();
-            command.transform = tc.getMatrix();
+            command.transform = tc.translate(origem->getPosition()); // tc.getMatrix();
         }
 
         command.renderable = renderable;
@@ -305,10 +308,10 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
 
         if (renderable->getEntity().hasComponent<Solid>()) {
             Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.getMatrix();
+            command.transform = sl.translate(origem->getPosition()); // sl.getMatrix();
         } else {
             Transform& tc = renderable->getEntity().getComponent<Transform>();
-            command.transform = tc.getMatrix();
+            command.transform = tc.translate(origem->getPosition()); // tc.getMatrix();
         }
 
         Shader& sc = rc.renderable->getEntity().getComponent<Shader>();

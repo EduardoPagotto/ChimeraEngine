@@ -25,11 +25,11 @@ struct ParticleContainer {
     glm::vec3 cameraPos = glm::vec3(0.0f);
     std::vector<ParticleZ> container;
     ParticleContainer() = default;
-    uint32_t stop = -1; // TODO: Implementar uso onde parar
-    uint32_t count = 0; // TODO: implementar uso contagem atual
-    uint32_t max = 500; // TODO: implementar maximo de particulas
-    bool respaw = true; // TODO: resetar particula zero quando todas as particulas prontas
-    float life = 2.0;   // TODO: inicial do life
+    uint32_t stop = -1; // Onde parar
+    uint32_t count = 0; // Contagem atual
+    uint32_t max = 500; // Maximo de particulas
+    bool respaw = true; // Resetar particula zero quando todas as particulas prontas
+    float life = 2.0;   // Inicial do life
 };
 
 class IEmitter {
@@ -38,7 +38,7 @@ class IEmitter {
     virtual void reset(ParticleZ& p) = 0;
     virtual void recycleLife(const double& ts) = 0;
     virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) = 0;
-    virtual void setParticleContainer(ParticleContainer* pc) = 0;
+    virtual void pushParticleContainer(ParticleContainer* pc) = 0;
 };
 
 class EmitterFont : public IEmitter {
@@ -48,9 +48,10 @@ class EmitterFont : public IEmitter {
     virtual void reset(ParticleZ& p) override;
     virtual void recycleLife(const double& ts) override;
     virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) override;
-    virtual void setParticleContainer(ParticleContainer* pc) override { this->pc = pc; }
+    virtual void pushParticleContainer(ParticleContainer* pc) override { containers.push_back(pc); }
 
   private:
+    std::vector<ParticleContainer*> containers;
     ParticleContainer* pc = nullptr;
     glm::vec3 maindir = glm::vec3(0.0f, 0.0f, 10.0f); // TODO: setar
     float spread = 1.5f;                              // TODO: setar

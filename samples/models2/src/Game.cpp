@@ -88,16 +88,14 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
                 break;
             }
         }
-
-        // activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-        // engine->pushState(&activeScene);
     }
 
+    EmitterFont* ef = new EmitterFont();
+
     {
-        // TODO: melhorar!!!!
         Entity re = activeScene.createEntity("Renderable Particle System");
         Transform& tc = re.getComponent<Transform>();
-        tc.setPosition(glm::vec3(20.0f, 20.0f, 0.0f));
+        tc.setPosition(glm::vec3(0.0f, 10.0f, 2.0f));
 
         Material& material = re.addComponent<Material>();
         TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
@@ -111,10 +109,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         pc.life = 4.0f;
         pc.max = 2000;
 
-        EmitterFont* ef = new EmitterFont();
-        ef->setParticleContainer(&pc);
-        activeScene.pushEmitters(ef);
+        ef->pushParticleContainer(&pc);
     }
+
+    activeScene.pushEmitters(ef);
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     engine->pushState(&activeScene);

@@ -7,42 +7,46 @@ namespace Chimera {
 
 void EmitterFont::recycleLife(const double& ts) {
 
-    if (pc->count < pc->stop) {
-        int newparticles = (int)(ts * 10000.0); // 160 particulas a 60 FPS
-        if (newparticles > 160)
-            newparticles = 160;
+    for (int ci = 0; ci < containers.size(); ci++) {
+        pc = containers[ci];
 
-        int particleIndex = 0;
-        for (int i = 0; i < newparticles; i++) {
-            particleIndex = findUnusedParticle();
-            if (particleIndex < 0) {
-                pc->count++;
-                if (pc->respaw)
-                    particleIndex = 0;
-                else
-                    break;
+        if (pc->count < pc->stop) {
+            int newparticles = (int)(ts * 10000.0); // 160 particulas a 60 FPS
+            if (newparticles > 160)
+                newparticles = 160;
+
+            int particleIndex = 0;
+            for (int i = 0; i < newparticles; i++) {
+                particleIndex = findUnusedParticle();
+                if (particleIndex < 0) {
+                    pc->count++;
+                    if (pc->respaw)
+                        particleIndex = 0;
+                    else
+                        break;
+                }
+
+                ParticleZ& p = pc->container[particleIndex];
+                this->reset(p);
             }
-
-            ParticleZ& p = pc->container[particleIndex];
-            this->reset(p);
         }
-    }
 
-    // Simulate all particles
-    int ParticlesCount = 0;
-    for (uint32_t i = 0; i < pc->container.size(); i++) {
-        ParticleZ& p = pc->container[i];
-        if (p.life > 0) { // stil alive
-            this->decrease(p, ts, ParticlesCount);
-            ParticlesCount++;
+        // Simulate all particles
+        int ParticlesCount = 0;
+        for (uint32_t i = 0; i < pc->container.size(); i++) {
+            ParticleZ& p = pc->container[i];
+            if (p.life > 0) { // stil alive
+                this->decrease(p, ts, ParticlesCount);
+                ParticlesCount++;
+            }
         }
+
+        // Ordenar em relacao a posicao da camera, back to front
+        std::sort(pc->container.begin(), pc->container.end());
+
+        // printf("%d \n",ParticlesCount);
+        pc->particlesCount = ParticlesCount;
     }
-
-    // Ordenar em relacao a posicao da camera, back to front
-    std::sort(pc->container.begin(), pc->container.end());
-
-    // printf("%d \n",ParticlesCount);
-    pc->particlesCount = ParticlesCount;
 }
 int EmitterFont::findUnusedParticle() {
     for (int i = pc->lastUsed; i < pc->container.size(); i++) {

@@ -35,6 +35,7 @@ class Scene : public IStateMachine {
     virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
     virtual std::string getName() const { return "Scene"; }
+    void pushEmitters(IEmitter* e) { emitters.push_back(e); }
 
   private:
     void createRenderBuffer();

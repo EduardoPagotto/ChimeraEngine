@@ -1,6 +1,7 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/MouseDevice.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
+#include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Transform.hpp"
@@ -124,10 +125,19 @@ void Scene::onAttach() {
             }
         }
 
-        // TODO: melhorar!!!!
-        if (entity.hasComponent<EmiterComponent>()) {
-            EmiterComponent& ec = entity.getComponent<EmiterComponent>();
-            emitters.push_back(ec.emitter);
+        if (entity.hasComponent<ParticleContainer>()) {
+            ParticleContainer& pc = entity.getComponent<ParticleContainer>();
+
+            if (!entity.hasComponent<RenderableParticlesComponent>()) {
+
+                RenderableParticlesComponent& particleSys = entity.addComponent<RenderableParticlesComponent>();
+                particleSys.enable = true;
+                RenderableParticles* p = new RenderableParticles();
+                p->setParticleContainer(&pc);
+                p->create();
+                p->setEntity(entity);
+                particleSys.renderable = p;
+            }
         }
     });
 

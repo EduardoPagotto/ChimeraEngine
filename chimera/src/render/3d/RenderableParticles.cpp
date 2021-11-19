@@ -2,10 +2,10 @@
 
 namespace Chimera {
 
-RenderableParticles::~RenderableParticles() {}
+RenderableParticles::~RenderableParticles() { this->destroy(); }
 
-void RenderableParticles::create(uint32_t max) {
-
+void RenderableParticles::create() {
+    uint32_t max = pc->max;
     vao = new VertexArray();
     vao->bind();
     // The VBO containing the 4 vertices of the particles. Thanks to instancing, they will be shared by all particles.
@@ -17,12 +17,12 @@ void RenderableParticles::create(uint32_t max) {
     vboPos = new VertexBuffer(BufferType::STREAM, max * sizeof(glm::vec4), nullptr);
     vboCor = new VertexBuffer(BufferType::STREAM, max * 4 * sizeof(GLubyte), nullptr);
 
-    pc.posData = new glm::vec4[max];     // buffer memoria de posicoes de cada particula
-    pc.colorData = new GLubyte[max * 4]; // buffer memoria de cor de cada particula
+    pc->posData = new glm::vec4[max];     // buffer memoria de posicoes de cada particula
+    pc->colorData = new GLubyte[max * 4]; // buffer memoria de cor de cada particula
 
-    pc.container.reserve(max);
+    pc->container.reserve(max);
     for (int i = 0; i < max; i++) {
-        pc.container.push_back(ParticleZ());
+        pc->container.push_back(ParticleZ());
     }
 }
 
@@ -43,17 +43,22 @@ void RenderableParticles::destroy() {
         vboVex = nullptr;
     }
 
-    if (pc.posData) {
-        delete[] pc.posData;
-        pc.posData = nullptr;
+    if (pc->posData) {
+        delete[] pc->posData;
+        pc->posData = nullptr;
     }
 
-    if (pc.colorData) {
-        delete[] pc.colorData;
-        pc.colorData = nullptr;
+    if (pc->colorData) {
+        delete[] pc->colorData;
+        pc->colorData = nullptr;
     }
 
-    pc.container.clear();
+    pc->container.clear();
+
+    if (vao) {
+        delete vao;
+        vao = nullptr;
+    }
 }
 
 void RenderableParticles::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
@@ -64,7 +69,7 @@ void RenderableParticles::submit(ICamera* camera, RenderCommand& command, IRende
     renderer->submitUniform(UniformVal("CameraRight_worldspace", glm::vec3(view[0][0], view[1][0], view[2][0])));
     renderer->submitUniform(UniformVal("CameraUp_worldspace", glm::vec3(view[0][1], view[1][1], view[2][1])));
 
-    pc.cameraPos = glm::inverse(view)[3]; // depois mover para o statemachine!!!
+    pc->cameraPos = glm::inverse(view)[3]; // depois mover para o statemachine!!!
 
     renderer->submit(command);
 }
@@ -75,11 +80,11 @@ void RenderableParticles::draw() {
 
     // Buffer orphaning, a common way to improve streaming, perf. See above link for details.
     vboPos->bind();
-    vboPos->setSubData(pc.posData, 0, pc.particlesCount * sizeof(glm::vec4));
+    vboPos->setSubData(pc->posData, 0, pc->particlesCount * sizeof(glm::vec4));
 
     // Buffer orphaning, a common way to improve streaming, // perf. See above link for details.
     vboCor->bind();
-    vboCor->setSubData(pc.colorData, 0, pc.particlesCount * sizeof(GLubyte) * 4);
+    vboCor->setSubData(pc->colorData, 0, pc->particlesCount * sizeof(GLubyte) * 4);
 
     // Bind our texture
     // material->bindMaterialInformation(shader);
@@ -106,7 +111,7 @@ void RenderableParticles::draw() {
     // This draws many times a small triangle_strip (which looks like a quad).
     // This is equivalent to : for(i in particlesCount) : glDrawArrays(GL_TRIANGLE_STRIP, 0, 4),
     // but faster.
-    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, pc.particlesCount);
+    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, pc->particlesCount);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);

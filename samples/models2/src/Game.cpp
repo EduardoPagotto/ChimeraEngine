@@ -107,21 +107,13 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         Shader& shader = re.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader);
 
-        RenderableParticlesComponent& particleSys = re.addComponent<RenderableParticlesComponent>();
-        particleSys.enable = true;
-
-        RenderableParticles* p = new RenderableParticles();
-        p->create(500);
-        p->setEntity(re);
-
-        particleSys.renderable = p;
-
-        Entity ee = activeScene.createEntity("emitters");
-        EmiterComponent& e = ee.addComponent<EmiterComponent>();
+        ParticleContainer& pc = re.addComponent<ParticleContainer>();
+        pc.life = 4.0f;
+        pc.max = 2000;
 
         EmitterFont* ef = new EmitterFont();
-        ef->setParticleContainer(p->getParticleContainer());
-        e.emitter = ef;
+        ef->setParticleContainer(&pc);
+        activeScene.pushEmitters(ef);
     }
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

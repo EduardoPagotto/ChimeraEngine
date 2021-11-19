@@ -19,10 +19,10 @@ class RenderableParticles : public IRenderable3d {
     virtual Entity getEntity() const override { return entity; }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     void draw();
-    void create(uint32_t max);
+    void create();
     void destroy();
     void setEntity(Entity entity) { this->entity = entity; }
-    ParticleContainer* getParticleContainer() { return &pc; }
+    void setParticleContainer(ParticleContainer* pc) { this->pc = pc; }
 
   private:
     AABB aabb;
@@ -31,6 +31,6 @@ class RenderableParticles : public IRenderable3d {
     VertexBuffer* vboPos = nullptr; // GLuint vboPosition;
     VertexBuffer* vboCor = nullptr; // GLuint vboColor;
     Entity entity;
-    ParticleContainer pc;
+    ParticleContainer* pc;
 };
 } // namespace Chimera

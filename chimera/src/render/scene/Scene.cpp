@@ -218,10 +218,10 @@ bool Scene::onEvent(const SDL_Event& event) {
 
 void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
-    auto view = eRegistry.view<RenderableParticleComponent>();
+    auto view = eRegistry.view<RenderableParticlesComponent>();
     for (auto entity : view) {
 
-        RenderableParticleComponent& rc = view.get<RenderableParticleComponent>(entity);
+        RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
         RenderCommand command;

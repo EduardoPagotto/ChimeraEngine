@@ -42,7 +42,7 @@ struct Renderable3dComponent {
     IRenderable3d* renderable;
 };
 
-struct RenderableParticleComponent {
+struct RenderableParticlesComponent {
     IRenderable3d* renderable;
     bool enable;
 };

@@ -6,18 +6,26 @@
 namespace Chimera {
 
 void EmitterFont::recycleLife(const double& ts) {
-    int newparticles = (int)(ts * 10000.0); // 160 particulas a 60 FPS
-    if (newparticles > 160)
-        newparticles = 160;
 
-    int particleIndex = 0;
-    for (int i = 0; i < newparticles; i++) {
-        particleIndex = findUnusedParticle();
-        if (particleIndex < 0)
-            break;
+    if (pc->count < pc->stop) {
+        int newparticles = (int)(ts * 10000.0); // 160 particulas a 60 FPS
+        if (newparticles > 160)
+            newparticles = 160;
 
-        ParticleZ& p = pc->container[particleIndex];
-        this->reset(p);
+        int particleIndex = 0;
+        for (int i = 0; i < newparticles; i++) {
+            particleIndex = findUnusedParticle();
+            if (particleIndex < 0) {
+                pc->count++;
+                if (pc->respaw)
+                    particleIndex = 0;
+                else
+                    break;
+            }
+
+            ParticleZ& p = pc->container[particleIndex];
+            this->reset(p);
+        }
     }
 
     // Simulate all particles
@@ -50,7 +58,7 @@ int EmitterFont::findUnusedParticle() {
             return i;
         }
     }
-    return 0; // All particles are taken, wait new cicle
+    return -1; // All particles are taken, wait new cicle
 }
 
 void EmitterFont::reset(ParticleZ& p) {
@@ -58,7 +66,7 @@ void EmitterFont::reset(ParticleZ& p) {
     glm::vec3 randomdir =
         glm::vec3((rand() % 2000 - 1000.0f) / 1000.0f, (rand() % 2000 - 1000.0f) / 1000.0f, (rand() % 2000 - 1000.0f) / 1000.0f);
 
-    p.life = 5.0;
+    p.life = pc->life;
     p.pos = glm::vec3(0.0f, 0.0f, 0.0f);
     p.speed = maindir + randomdir * spread;
 

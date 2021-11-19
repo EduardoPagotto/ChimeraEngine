@@ -25,6 +25,8 @@ struct ParticleContainer {
     glm::vec3 cameraPos = glm::vec3(0.0f);
     std::vector<ParticleZ> container;
     ParticleContainer() = default;
+    uint32_t stop = 0;  // TODO: Implementar uso onde parar
+    uint32_t count = 0; // TODO: implementar uso contagem atual
 };
 
 class IEmitter {

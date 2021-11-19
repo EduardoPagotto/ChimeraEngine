@@ -57,7 +57,7 @@ set (RenderSource 	CanvasGL.cpp
 					3d/RenderableChunk.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
-					3d/RenderableParticleEmitter.cpp
+					3d/RenderableParticles.cpp
 					3d/RendererParticleEmitter.cpp
 					scene/Scene.cpp
 					scene/CameraController.cpp)

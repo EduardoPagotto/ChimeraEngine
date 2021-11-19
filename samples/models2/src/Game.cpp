@@ -4,7 +4,7 @@
 #include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
-#include "chimera/render/3d/RenderableParticleEmitter.hpp"
+#include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/CameraOrthographic.hpp"
 #include "chimera/render/FontManager.hpp"
 #include "chimera/render/TextureManager.hpp"
@@ -110,7 +110,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         RenderableParticleComponent& particleSys = re.addComponent<RenderableParticleComponent>();
         particleSys.enable = true;
 
-        RenderableParticleEmitter* p = new RenderableParticleEmitter();
+        RenderableParticles* p = new RenderableParticles();
         p->create(500);
         p->setEntity(re);
 

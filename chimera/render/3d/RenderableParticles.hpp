@@ -6,10 +6,10 @@
 #include "chimera/render/scene/Entity.hpp"
 
 namespace Chimera {
-class RenderableParticleEmitter : public IRenderable3d {
+class RenderableParticles : public IRenderable3d {
   public:
-    RenderableParticleEmitter() = default;
-    virtual ~RenderableParticleEmitter();
+    RenderableParticles() = default;
+    virtual ~RenderableParticles();
 
     virtual void debugDados() override {}                   // TODO: Implementar
     virtual uint32_t getSize() const override { return 0; } // TODO: Implementar

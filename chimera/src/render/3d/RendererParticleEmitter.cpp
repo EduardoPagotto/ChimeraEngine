@@ -1,5 +1,5 @@
 #include "chimera/render/3d/RendererParticleEmitter.hpp"
-#include "chimera/render/3d/RenderableParticleEmitter.hpp"
+#include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
@@ -26,7 +26,7 @@ void RendererParticleEmitter::flush() {
     while (!commandQueue.empty()) {
 
         const RenderCommand& command = commandQueue.front();
-        RenderableParticleEmitter* r = (RenderableParticleEmitter*)command.renderable;
+        RenderableParticles* r = (RenderableParticles*)command.renderable;
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior

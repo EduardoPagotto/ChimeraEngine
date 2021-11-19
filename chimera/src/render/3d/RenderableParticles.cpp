@@ -1,10 +1,10 @@
-#include "chimera/render/3d/RenderableParticleEmitter.hpp"
+#include "chimera/render/3d/RenderableParticles.hpp"
 
 namespace Chimera {
 
-RenderableParticleEmitter::~RenderableParticleEmitter() {}
+RenderableParticles::~RenderableParticles() {}
 
-void RenderableParticleEmitter::create(uint32_t max) {
+void RenderableParticles::create(uint32_t max) {
 
     vao = new VertexArray();
     vao->bind();
@@ -26,7 +26,7 @@ void RenderableParticleEmitter::create(uint32_t max) {
     }
 }
 
-void RenderableParticleEmitter::destroy() {
+void RenderableParticles::destroy() {
 
     if (vboCor) {
         delete vboCor;
@@ -56,7 +56,7 @@ void RenderableParticleEmitter::destroy() {
     pc.container.clear();
 }
 
-void RenderableParticleEmitter::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
+void RenderableParticles::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
 
     const glm::mat4 view = camera->getViewMatrix();
     renderer->submitUniform(UniformVal("projection", camera->getProjectionMatrix()));
@@ -69,7 +69,7 @@ void RenderableParticleEmitter::submit(ICamera* camera, RenderCommand& command, 
     renderer->submit(command);
 }
 
-void RenderableParticleEmitter::draw() {
+void RenderableParticles::draw() {
 
     // particlesCount = recycleParticleLife();
 

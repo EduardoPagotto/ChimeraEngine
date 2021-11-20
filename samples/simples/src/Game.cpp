@@ -37,8 +37,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         // ret = loadObjFile("./assets/models/parede_simples.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/cubo_textura_simples.obj", &mesh, &material);
         // ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
-        ret = loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
+        // ret = loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
+        ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
     }
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-void LibraryPhysicModels::target2(const std::string& body, const std::string target, Scene* scene) {
+void LibraryPhysicModels::target2(const std::string& body, const std::string target, Registry* reg) {
 
     tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");
     for (l_nPhyModel; l_nPhyModel; l_nPhyModel = l_nPhyModel->NextSiblingElement()) {
@@ -20,17 +20,17 @@ void LibraryPhysicModels::target2(const std::string& body, const std::string tar
                 std::string l_nNameRb = l_nRigid->Attribute("name");
                 if (l_nNameRb == body) {
 
-                    auto view1 = scene->getRegistry().view<PhysicsControl>();
+                    auto view1 = reg->get().view<PhysicsControl>();
                     for (auto entity1 : view1) {
-                        Entity ent1 = {entity1, scene};
+                        Entity ent1 = {entity1, reg};
                         PhysicsControl& pc = ent1.getComponent<PhysicsControl>();
 
-                        auto view = scene->getRegistry().view<TagComponent>();
+                        auto view = reg->get().view<TagComponent>();
                         for (auto entity : view) {
                             // Pega a chave (mesh)
                             TagComponent& tag = view.get<TagComponent>(entity);
                             if (tag.id == target) {
-                                Entity ent2 = {entity, scene};
+                                Entity ent2 = {entity, reg};
                                 Transform& trans = ent2.getComponent<Transform>();
                                 Solid& solid = ent2.addComponent<Solid>();
                                 solid.setInitParams(&pc, trans.getMatrix());

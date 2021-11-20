@@ -1,4 +1,5 @@
 #include "chimera/render/3d/RenderableSimple.hpp"
+#include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 

@@ -50,24 +50,24 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
 
     {
-        VisualScene libV("./assets/models/piso2.xml", &activeScene);
+        VisualScene libV("./assets/models/piso2.xml", &activeScene.getRegistry());
         libV.target();
 
-        PhysicsScene libP("./assets/models/piso2.xml", &activeScene);
+        PhysicsScene libP("./assets/models/piso2.xml", &activeScene.getRegistry());
         libP.target();
 
         // injeta controlador de camera
-        auto view1 = activeScene.getRegistry().view<CameraComponent>();
+        auto view1 = activeScene.getRegistry().get().view<CameraComponent>();
         for (auto entity : view1) {
-            Entity e = Entity{entity, &activeScene};
+            Entity e = Entity{entity, &activeScene.getRegistry()};
             e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
         }
 
         // A cada mesh
-        auto view = activeScene.getRegistry().view<MeshData>();
+        auto view = activeScene.getRegistry().get().view<MeshData>();
         for (auto entity : view) {
             // Ajusta metodo de entidades
-            Entity e = Entity{entity, &activeScene};
+            Entity e = Entity{entity, &activeScene.getRegistry()};
 
             // Adiciona o shader
             Shader& shader = e.addComponent<Shader>();
@@ -76,9 +76,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
         // // Localiza objeto como o primario //EfeitoZoltan-mesh
         // TODO: implementar melhor
-        auto solidView = activeScene.getRegistry().view<Solid>();
+        auto solidView = activeScene.getRegistry().get().view<Solid>();
         for (auto ent : solidView) {
-            Entity entity = {ent, &activeScene};
+            Entity entity = {ent, &activeScene.getRegistry()};
             auto& tc = entity.getComponent<TagComponent>();
             if (tc.tag == "EfeitoZoltan-mesh") {
                 Solid& solid = entity.getComponent<Solid>();
@@ -91,8 +91,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     EmitterFont* ef = new EmitterFont();
 
     {
-        Entity re = activeScene.createEntity("Renderable Particle System");
-        Transform& tc = re.getComponent<Transform>();
+        Entity re = activeScene.getRegistry().createEntity("Renderable Particle System");
+        Transform& tc = re.addComponent<Transform>();
         tc.setPosition(glm::vec3(0.0f, 10.0f, 2.0f));
 
         Material& material = re.addComponent<Material>();

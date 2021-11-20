@@ -3,9 +3,9 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryLights.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/render/Transform.hpp"
 #include "chimera/render/scene/Components.hpp"
-#include "chimera/render/scene/Entity.hpp"
 
 namespace Chimera {
 
@@ -74,8 +74,8 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
-            Entity entity = scene->createEntity("Camera Entity");
-            Transform& tc = entity.getComponent<Transform>();
+            Entity entity = reg->createEntity("Camera Entity");
+            Transform& tc = entity.addComponent<Transform>();
             tc.setMatrix(l_pTransform);
 
             auto& tag = entity.getComponent<TagComponent>();
@@ -97,8 +97,8 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
-            Entity entity = scene->createEntity("Light Entity");
-            Transform& tc = entity.getComponent<Transform>();
+            Entity entity = reg->createEntity("Light Entity");
+            Transform& tc = entity.addComponent<Transform>();
             tc.setMatrix(l_pTransform);
 
             auto& tag = entity.getComponent<TagComponent>();
@@ -117,8 +117,8 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
-            Entity entity = scene->createEntity("Renderable Entity");
-            Transform& tc = entity.getComponent<Transform>();
+            Entity entity = reg->createEntity("Renderable Entity");
+            Transform& tc = entity.addComponent<Transform>();
             tc.setMatrix(l_pTransform);
 
             auto& tag = entity.getComponent<TagComponent>();

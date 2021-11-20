@@ -9,7 +9,8 @@
 Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
     {
-        Entity ce = activeScene.createEntity("Camera Entity");
+        Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
+        ce.addComponent<Transform>();
         // Cria entidade de camera
         // Cria camera e carrega parametros
         CameraComponent& cc = ce.addComponent<CameraComponent>();
@@ -21,7 +22,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
 
     {
-        Entity renderableEntity = activeScene.createEntity("Renderable Entity");
+        Entity renderableEntity = activeScene.getRegistry().createEntity("Renderable Entity");
+        renderableEntity.addComponent<Transform>();
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);

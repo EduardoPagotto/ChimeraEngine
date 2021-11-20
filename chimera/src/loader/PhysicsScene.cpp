@@ -7,7 +7,7 @@ void PhysicsScene::target() {
     tinyxml2::XMLElement* l_nPhysic = root->FirstChildElement("scene")->FirstChildElement("instance_physics_scene");
     if (l_nPhysic) {
         std::string l_url = l_nPhysic->Attribute("url");
-        LibraryPhysicsScenes lib(root, l_url, scene);
+        LibraryPhysicsScenes lib(root, l_url, reg);
         lib.target();
     }
 }

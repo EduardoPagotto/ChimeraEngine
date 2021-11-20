@@ -2,17 +2,11 @@
 #include "ScriptableEntity.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include "chimera/render/ICamera.hpp"
+#include "chimera/render/Light.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {
-
-struct TagComponent {
-    std::string tag;
-    std::string id;
-    TagComponent() = default;
-    TagComponent(const std::string& tag, const std::string& id) : tag(tag), id(id) {}
-};
 
 struct SpriteComponent {
     glm::vec4 color;

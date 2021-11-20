@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/render/CameraOrbit.hpp"
@@ -9,15 +10,15 @@
 #include "chimera/render/partition/Maze.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
-#include "chimera/render/scene/Entity.hpp"
 
 Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     using namespace Chimera;
-    Entity ce = activeScene.createEntity("Camera Entity");
+    Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
     { // Cria entidade de camera
         // Cria camera e carrega parametros
         CameraComponent& cc = ce.addComponent<CameraComponent>();
+        ce.addComponent<Transform>();
         cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         // cc.camera = new CameraFPS(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
@@ -25,7 +26,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
 
     {
-        Entity renderableEntity = activeScene.createEntity("Maze Entity");
+        Entity renderableEntity = activeScene.getRegistry().createEntity("Maze Entity");
+        renderableEntity.addComponent<Transform>();
         Shader& shader = renderableEntity.addComponent<Shader>();
         Material& material = renderableEntity.addComponent<Material>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
@@ -55,9 +57,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
 
     {
-        Entity renderableEntity = activeScene.createEntity("Zoltam Entity");
-
-        Transform& tc = renderableEntity.getComponent<Transform>();
+        Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
+        Transform& tc = renderableEntity.addComponent<Transform>();
         tc.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
         Material& material = renderableEntity.addComponent<Material>();

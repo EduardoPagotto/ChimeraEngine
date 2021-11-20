@@ -1,10 +1,10 @@
 #pragma once
 #include "IRenderable3d.hpp"
 #include "PolygonIndex.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/render/buffer/IndexBuffer.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/AABB.hpp"
-#include "chimera/render/scene/Entity.hpp"
 
 namespace Chimera {
 

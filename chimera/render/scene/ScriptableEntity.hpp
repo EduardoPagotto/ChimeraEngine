@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.hpp"
+#include "chimera/core/Registry.hpp"
 
 namespace Chimera {
 

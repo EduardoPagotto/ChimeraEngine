@@ -28,7 +28,7 @@ void LibraryPhysicsScenes::target() {
                     std::string body = l_nRigid->Attribute("body");
                     std::string target = l_nRigid->Attribute("target");
                     LibraryPhysicModels lib(root, l_url);
-                    lib.target2(body, getIdFromUrl(target), scene);
+                    lib.target2(body, getIdFromUrl(target), reg);
                 }
                 mapSolids.clear();
             }
@@ -47,7 +47,7 @@ void LibraryPhysicsScenes::loadPhysicControlCollada(tinyxml2::XMLElement* _nNode
         const char* vetor = l_nNodeGravity->GetText();
         loadArrayBtScalar(vetor, l_arrayF);
 
-        entity = scene->createEntity("physic_master");
+        entity = reg->createEntity("physic_master");
         PhysicsControl& pc = entity.addComponent<PhysicsControl>();
         pc.setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
     }

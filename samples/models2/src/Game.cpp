@@ -15,27 +15,13 @@
 Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
     pCorpoRigido = nullptr;
-    // pEmissor = nullptr;
     crt.yaw = 0.0f;
     crt.pitch = 0.0f;
     crt.roll = 0.0f;
     crt.throttle = 0.0;
     crt.hat = 0;
 
-    // ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader[0]);
-    // ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader[1]);
-    // ShaderManager::load("./assets/shaders/HUD.glsl", shader[2]);
-    // ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shader[3]);
-
-    // // create and add particle to scene
-    // Chimera::NodeGroup* gParticle = new Chimera::NodeGroup(pRoot, "ParticleGroup");
-    // gParticle->setShader(&shader[1]);
-    // Chimera::NodeParticleEmitter* pParticleEmitter = new Chimera::NodeParticleEmitter(gParticle, "testeZ1", 10000);
-    // pParticleEmitter->setTransform(new Chimera::Transform(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0, 5.0, 4.0))));
-    // pParticleEmitter->loadTexDiffuse("TexParticleEmmiter", std::string("./assets/textures/Particle2.png"));
-
-    {
-        // FPS
+    { // FPS
         Shader shader;
         ShaderManager::load("./assets/shaders/Text2D.glsl", shader);
         tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(512.0, -1.0f, 1.0f));
@@ -49,7 +35,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         engine->pushState(tile);
     }
 
-    {
+    { // Cargadados arquivo collada
         VisualScene libV("./assets/models/piso2.xml", &activeScene.getRegistry());
         libV.target();
 
@@ -68,32 +54,20 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         for (auto entity : view) {
             // Ajusta metodo de entidades
             Entity e = Entity{entity, &activeScene.getRegistry()};
-
             // Adiciona o shader
             Shader& shader = e.addComponent<Shader>();
             ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
         }
 
-        // // Localiza objeto como o primario //EfeitoZoltan-mesh
-        // TODO: implementar melhor
-        auto solidView = activeScene.getRegistry().get().view<Solid>();
-        for (auto ent : solidView) {
-            Entity entity = {ent, &activeScene.getRegistry()};
-            auto& tc = entity.getComponent<TagComponent>();
-            if (tc.tag == "EfeitoZoltan-mesh") {
-                Solid& solid = entity.getComponent<Solid>();
-                pCorpoRigido = &solid;
-                break;
-            }
-        }
+        // Localiza objeto como o primario //EfeitoZoltan-mesh
+        pCorpoRigido = &activeScene.getRegistry().findComponent<Solid>("EfeitoZoltan-mesh");
     }
 
     EmitterFont* ef = new EmitterFont();
-
-    {
+    { // Cria emissor de particula
         Entity re = activeScene.getRegistry().createEntity("Renderable Particle System");
         Transform& tc = re.addComponent<Transform>();
-        tc.setPosition(glm::vec3(0.0f, 10.0f, 2.0f));
+        tc.setPosition(glm::vec3(-5.0, 5.0, 4.0));
 
         Material& material = re.addComponent<Material>();
         TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
@@ -265,11 +239,6 @@ void Game::onAttach() {
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // // Localiza o Emissor de particula
-    // pEmissor = (Chimera::NodeParticleEmitter*)root->findChild("testeZ1", true);
-    // renderV.pVideo = (Chimera::CanvasGL*)engine->getCanvas();
-    // renderV.pTransform = (Chimera::Transform*)pCorpoRigido;
 }
 
 void Game::onDeatach() {}

@@ -5,12 +5,6 @@
 
 namespace Chimera {
 
-LibraryLights::LibraryLights(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url) {
-    this->entity = entity;
-}
-
-LibraryLights::~LibraryLights() {}
-
 void LibraryLights::target() {
 
     tinyxml2::XMLElement* l_nLight = root->FirstChildElement("library_lights")->FirstChildElement("light");

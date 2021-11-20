@@ -7,8 +7,8 @@ namespace Chimera {
 class LibraryGeometrys : public Library {
 
   public:
-    LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity);
-    virtual ~LibraryGeometrys();
+    LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url), entity(entity) {}
+    virtual ~LibraryGeometrys() {}
     void target();
 
   private:

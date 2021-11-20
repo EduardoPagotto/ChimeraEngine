@@ -4,12 +4,6 @@
 
 namespace Chimera {
 
-LibraryMaterials::LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url) {
-    this->entity = entity;
-}
-
-LibraryMaterials::~LibraryMaterials() {}
-
 Material* LibraryMaterials::target() {
 
     tinyxml2::XMLElement* l_nMat = root->FirstChildElement("library_materials")->FirstChildElement("material");

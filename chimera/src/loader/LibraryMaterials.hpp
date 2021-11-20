@@ -8,8 +8,8 @@ namespace Chimera {
 class LibraryMaterials : public Library {
 
   public:
-    LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity);
-    virtual ~LibraryMaterials();
+    LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url), entity(entity) {}
+    virtual ~LibraryMaterials() {}
     Material* target();
 
   private:

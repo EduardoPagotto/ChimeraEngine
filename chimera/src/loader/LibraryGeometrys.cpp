@@ -7,12 +7,6 @@
 
 namespace Chimera {
 
-LibraryGeometrys::LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url) {
-    this->entity = entity;
-}
-
-LibraryGeometrys::~LibraryGeometrys() {}
-
 void LibraryGeometrys::target() {
 
     tinyxml2::XMLElement* l_nGeo = root->FirstChildElement("library_geometries")->FirstChildElement("geometry");
@@ -42,8 +36,6 @@ int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source, std::vector<float
 
     const char* l_numCount = _source->FirstChildElement("float_array")->Attribute("count");
     if (l_numCount != nullptr) {
-
-        // std::vector<float> l_array;
         const char* l_vals = _source->FirstChildElement("float_array")->GetText();
         loadArrayBtScalar(l_vals, _arrayValores);
         return _arrayValores.size();

@@ -6,12 +6,6 @@
 
 namespace Chimera {
 
-LibraryCameras::LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url) {
-    this->entity = entity;
-}
-
-LibraryCameras::~LibraryCameras() {}
-
 void LibraryCameras::target() {
 
     tinyxml2::XMLElement* l_nCam = root->FirstChildElement("library_cameras")->FirstChildElement("camera");
@@ -33,13 +27,6 @@ void LibraryCameras::target() {
                 cc.camera = camZ;
                 camZ->setLimits(atof(l_nMin->GetText()), atof(l_nMax->GetText()));
                 loadbase(l_nCam, camZ);
-
-                // TODO: SEra removido na proxima versao
-                // posicao da camera desconhecida
-                CameraOrbit* cam = new CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
-                // CameraFPS* cam = new CameraFPS(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
-                cam->setLimits(atof(l_nMin->GetText()), atof(l_nMax->GetText()));
-                loadbase(l_nCam, cam);
             }
             return;
         }
@@ -51,13 +38,10 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, ICamera3D* cam) {
     tinyxml2::XMLElement* l_nPerspective =
         _nNode->FirstChildElement("optics")->FirstChildElement("technique_common")->FirstChildElement("perspective");
     if (l_nPerspective != nullptr) {
-        //_pCamera->setPerspective(true);
-        // ViewPoint* vp = _pCamera->getViewPoint();
         float fov = atof(l_nPerspective->FirstChildElement("xfov")->GetText());
         float near = atof(l_nPerspective->FirstChildElement("znear")->GetText());
         float far = atof(l_nPerspective->FirstChildElement("zfar")->GetText());
 
-        // ICamera3D* pc = (ICamera3D*)_pCamera->getCamera();
         cam->setFov(fov);
         cam->setNear(near);
         cam->setFar(far);

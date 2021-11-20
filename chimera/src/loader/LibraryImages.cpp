@@ -5,10 +5,6 @@
 
 namespace Chimera {
 
-LibraryImages::LibraryImages(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
-
-LibraryImages::~LibraryImages() {}
-
 std::tuple<std::string, std::string> LibraryImages::target() {
 
     tinyxml2::XMLElement* l_nImgs = root->FirstChildElement("library_images")->FirstChildElement("image");

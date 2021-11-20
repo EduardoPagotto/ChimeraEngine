@@ -9,12 +9,6 @@
 
 namespace Chimera {
 
-LibraryVisualScenes::LibraryVisualScenes(tinyxml2::XMLElement* _root, const std::string& _url, Scene* scene) : Library(_root, _url) {
-    this->scene = scene;
-}
-
-LibraryVisualScenes::~LibraryVisualScenes() { Singleton<ListNodes>::releaseRefSingleton(); }
-
 void LibraryVisualScenes::target() {
 
     tinyxml2::XMLElement* l_nScene = root->FirstChildElement("library_visual_scenes")->FirstChildElement("visual_scene");

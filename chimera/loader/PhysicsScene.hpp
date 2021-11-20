@@ -6,8 +6,8 @@ namespace Chimera {
 
 class PhysicsScene : public Library {
   public:
-    PhysicsScene(const std::string& _file, Scene* scene);
-    virtual ~PhysicsScene();
+    PhysicsScene(const std::string& _file, Scene* scene) : Library(nullptr, "!" + _file), scene(scene) {}
+    virtual ~PhysicsScene() {}
     void target();
 
   private:

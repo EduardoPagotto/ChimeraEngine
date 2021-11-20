@@ -6,12 +6,6 @@
 
 namespace Chimera {
 
-LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {
-    pListNodes = Singleton<ListNodes>::getRefSingleton();
-}
-
-LibraryPhysicModels::~LibraryPhysicModels() { Singleton<ListNodes>::releaseRefSingleton(); }
-
 void LibraryPhysicModels::target2(const std::string& body, const std::string target, Scene* scene) {
 
     tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");

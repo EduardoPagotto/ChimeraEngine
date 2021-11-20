@@ -6,13 +6,6 @@
 
 namespace Chimera {
 
-LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, Scene* scene) : Library(_root, _url) {
-    pListNodes = Singleton<ListNodes>::getRefSingleton();
-    this->scene = scene;
-}
-
-LibraryPhysicsScenes::~LibraryPhysicsScenes() { Singleton<ListNodes>::releaseRefSingleton(); }
-
 void LibraryPhysicsScenes::target() {
 
     tinyxml2::XMLElement* l_nPhyScene = root->FirstChildElement("library_physics_scenes")->FirstChildElement("physics_scene");

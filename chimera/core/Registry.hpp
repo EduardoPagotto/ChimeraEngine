@@ -1,49 +1,62 @@
 // #pragma once
+// #include "Exception.hpp"
 // #include <entt/entt.hpp>
 
 // namespace Chimera {
-
 // struct TagComponent {
-//     std::string tag;
-//     std::string id;
+//     std::string tag = "";
+//     std::string id = "";
+//     uint32_t serial = 0;
 //     TagComponent() = default;
-//     TagComponent(const std::string& tag, const std::string& id) : tag(tag), id(id) {}
 // };
 
 // class Entity;
 // class Registry {
 //   public:
-//     static Entity CreateEntity(const std::string& name = std::string());
-//     static void DestroyEntity(Entity entity);
-//     static entt::registry& GetRegistry() { return eRegistry; }
-
-//   protected:
 //     Registry() = default;
+//     Entity createEntity(const std::string& tag = std::string(), const std::string& id = std::string());
+//     void destroyEntity(Entity entity);
+//     entt::registry& getRegistry() { return eRegistry; }
+
+//     Entity findEntityTag(const std::string& tag);
+//     Entity findEntityId(const std::string& id);
+//     Entity findEntitySerial(const uint32_t& serial);
+
+//     template <typename T> T& findComponent(const std::string& tagName) {
+//         auto view = eRegistry.view<T>();
+//         for (auto ent : view) {
+//             TagComponent& ee = eRegistry.get<TagComponent>(ent);
+//             if (ee.tag == tagName)
+//                 return eRegistry.get<T>(ent);
+//         }
+//         throw Exception(std::string(std::string("Tag name nao encontrado:") + tagName));
+//     }
 
 //   private:
-//     static entt::registry eRegistry;
+//     friend Entity;
+//     entt::registry eRegistry;
+//     static uint32_t masterSerial;
 // };
 
 // class Entity {
 //   public:
 //     Entity() = default;
-//     Entity(entt::entity handle) : handle(handle) {}
-//     Entity(const Entity& other) { handle = other.handle; }
-
-//     template <typename T> bool hasComponent() { return Registry::GetRegistry().all_of<T>(handle); }
+//     Entity(entt::entity handle, Registry* reg) : handle(handle), reg(reg) {}
+//     Entity(const Entity& other) : handle(other.handle), reg(other.reg) {}
+//     template <typename T> bool hasComponent() { return reg->eRegistry.all_of<T>(handle); }
 //     template <typename T, typename... Args> T& addComponent(Args&&... args) {
-//         return Registry::GetRegistry().emplace<T>(handle, std::forward<Args>(args)...);
+//         return reg->eRegistry.emplace<T>(handle, std::forward<Args>(args)...);
 //     }
-//     template <typename T> T& getComponent() { return Registry::GetRegistry().get<T>(handle); }
-//     template <typename T> void removeComponent() { Registry::GetRegistry().remove<T>(handle); }
+//     template <typename T> T& getComponent() { return reg->eRegistry.get<T>(handle); }
+//     template <typename T> void removeComponent() { reg->eRegistry.remove<T>(handle); }
 //     operator bool() const { return handle != entt::null; }
-
 //     operator uint32_t() const { return (uint32_t)handle; }
 //     operator entt::entity() const { return handle; }
-//     bool operator==(const Entity& other) const { return handle == other.handle; }
+//     bool operator==(const Entity& other) const { return handle == other.handle && reg == other.reg; }
 //     bool operator!=(const Entity& other) const { return !(*this == other); }
 
 //   private:
 //     entt::entity handle{entt::null};
+//     Registry* reg = nullptr;
 // };
 // } // namespace Chimera

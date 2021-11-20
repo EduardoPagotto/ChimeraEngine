@@ -7,9 +7,6 @@
 
 namespace Chimera {
 
-#define FPSCAMERA_MAX_SPEED 40.0f
-#define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
-
 struct TagComponent {
     std::string tag;
     std::string id;
@@ -47,10 +44,6 @@ struct RenderableParticlesComponent {
     bool enable;
 };
 
-struct EmiterComponent {
-    IEmitter* emitter;
-};
-
 struct NativeScriptComponent {
 
     std::string name;
@@ -60,11 +53,8 @@ struct NativeScriptComponent {
     void (*destroyScript)(NativeScriptComponent*);
 
     template <typename T> void bind(const std::string& nameBind) {
-
         name = nameBind;
-
         instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
-
         destroyScript = [](NativeScriptComponent* nsc) {
             delete nsc->instance;
             nsc->instance = nullptr;

@@ -3,10 +3,6 @@
 
 namespace Chimera {
 
-LibraryPhysicsMaterials::LibraryPhysicsMaterials(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
-
-LibraryPhysicsMaterials::~LibraryPhysicsMaterials() {}
-
 PhysicMaterial* LibraryPhysicsMaterials::target() {
 
     tinyxml2::XMLElement* l_nPyMat = root->FirstChildElement("library_physics_materials")->FirstChildElement("physics_material");

@@ -6,62 +6,11 @@
 
 namespace Chimera {
 
-LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url, PhysicsControl* _pWorld)
-    : Library(_root, _url) {
+LibraryPhysicModels::LibraryPhysicModels(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {
     pListNodes = Singleton<ListNodes>::getRefSingleton();
-    pWorld = _pWorld;
 }
 
 LibraryPhysicModels::~LibraryPhysicModels() { Singleton<ListNodes>::releaseRefSingleton(); }
-
-void LibraryPhysicModels::target(std::map<std::string, Solid*>& _mapSolids) {
-
-    tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");
-    for (l_nPhyModel; l_nPhyModel; l_nPhyModel = l_nPhyModel->NextSiblingElement()) {
-
-        std::string l_id = l_nPhyModel->Attribute("id");
-        if (url.compare(l_id) == 0) {
-
-            tinyxml2::XMLElement* l_nRigid = l_nPhyModel->FirstChildElement("rigid_body");
-            for (l_nRigid; l_nRigid; l_nRigid = l_nRigid->NextSiblingElement()) {
-
-                std::string l_nNameRb = l_nRigid->Attribute("name");
-
-                Solid* pPhysic = new Solid(pWorld); //(nullptr, l_nNameRb, pWorld);
-
-                tinyxml2::XMLElement* l_nMass = l_nRigid->FirstChildElement("technique_common")->FirstChildElement("mass");
-                if (l_nMass != nullptr) {
-                    const char* l_mass = l_nMass->GetText();
-                    pPhysic->setMass(atof(l_mass));
-                }
-
-                tinyxml2::XMLElement* l_npm =
-                    l_nRigid->FirstChildElement("technique_common")->FirstChildElement("instance_physics_material");
-                if (l_npm != nullptr) {
-                    const char* l_url = l_npm->Attribute("url");
-
-                    LibraryPhysicsMaterials lib(root, l_url);
-                    PhysicMaterial* pPm = lib.target();
-
-                    pPhysic->setRestitution(pPm->restitution);
-                    pPhysic->setFrictionDynamic(pPm->frictionDynamic);
-                    pPhysic->setFrictionStatic(pPm->frictionStatic);
-                }
-
-                tinyxml2::XMLElement* l_nShape = l_nRigid->FirstChildElement("technique_common")->FirstChildElement("shape");
-                if (l_nShape != nullptr) {
-                    loadColladaShape(root, l_nShape, pPhysic);
-                    // const char* l_mass = l_nShape->GetText();
-                    //_pPhysic->setMass ( atof ( l_mass ) );
-                }
-                _mapSolids[l_nNameRb] = pPhysic;
-            }
-            return;
-        }
-    }
-
-    throw Exception("Physics model nao encontrado: " + url);
-}
 
 void LibraryPhysicModels::target2(const std::string& body, const std::string target, Scene* scene) {
 
@@ -117,11 +66,7 @@ void LibraryPhysicModels::target2(const std::string& body, const std::string tar
                                     l_nRigid->FirstChildElement("technique_common")->FirstChildElement("shape");
                                 if (l_nShape != nullptr) {
                                     loadColladaShape(root, l_nShape, &solid);
-                                    // const char* l_mass = l_nShape->GetText();
-                                    //_pPhysic->setMass ( atof ( l_mass ) );
                                 }
-                                //_mapSolids[l_nNameRb] = pPhysic;
-
                                 break;
                             }
                         }

@@ -1,18 +1,16 @@
 #pragma once
 #include "chimera/loader/Library.hpp"
-#include "chimera/render/bullet/PhysicsControl.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 namespace Chimera {
 
 class PhysicsScene : public Library {
   public:
-    PhysicsScene(const std::string& _file, PhysicsControl* _pPhysicsControl, Scene* scene);
+    PhysicsScene(const std::string& _file, Scene* scene);
     virtual ~PhysicsScene();
     void target();
 
   private:
-    PhysicsControl* pPhysicsControl;
     Scene* scene;
 };
 } // namespace Chimera

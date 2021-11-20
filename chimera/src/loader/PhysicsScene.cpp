@@ -3,10 +3,7 @@
 
 namespace Chimera {
 
-PhysicsScene::PhysicsScene(const std::string& _file, PhysicsControl* _pPhysicsControl, Scene* scene) : Library(nullptr, "!" + _file) {
-    pPhysicsControl = _pPhysicsControl;
-    this->scene = scene;
-}
+PhysicsScene::PhysicsScene(const std::string& _file, Scene* scene) : Library(nullptr, "!" + _file) { this->scene = scene; }
 
 PhysicsScene::~PhysicsScene() {}
 
@@ -15,7 +12,7 @@ void PhysicsScene::target() {
     if (l_nPhysic) {
         std::string l_url = l_nPhysic->Attribute("url");
 
-        LibraryPhysicsScenes lib(root, l_url, pPhysicsControl, scene);
+        LibraryPhysicsScenes lib(root, l_url, scene);
         lib.target();
     }
 }

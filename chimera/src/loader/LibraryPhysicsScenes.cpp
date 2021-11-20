@@ -6,11 +6,8 @@
 
 namespace Chimera {
 
-LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, PhysicsControl* _pPhysicsControl,
-                                           Scene* scene)
-    : Library(_root, _url) {
+LibraryPhysicsScenes::LibraryPhysicsScenes(tinyxml2::XMLElement* _root, const std::string& _url, Scene* scene) : Library(_root, _url) {
     pListNodes = Singleton<ListNodes>::getRefSingleton();
-    pPhysicsControl = _pPhysicsControl;
     this->scene = scene;
 }
 
@@ -32,25 +29,13 @@ void LibraryPhysicsScenes::target() {
                 std::string l_url = l_nPyModel->Attribute("url");
 
                 std::map<std::string, Solid*> mapSolids;
-                if (pPhysicsControl) { // TODO: remover depois
-                    LibraryPhysicModels lib(root, l_url, pPhysicsControl);
-                    lib.target(mapSolids);
-                }
-
                 tinyxml2::XMLElement* l_nRigid = l_nPyModel->FirstChildElement("instance_rigid_body");
                 for (l_nRigid; l_nRigid; l_nRigid = l_nRigid->NextSiblingElement()) {
 
                     std::string body = l_nRigid->Attribute("body");
                     std::string target = l_nRigid->Attribute("target");
-
-                    if (pPhysicsControl == nullptr) {
-                        LibraryPhysicModels lib(root, l_url, pPhysicsControl);
-                        lib.target2(body, getIdFromUrl(target), scene);
-                    } else { // TODO: remover depois
-                        // Solid* pSolid = mapSolids[body];
-                        // NodeMesh* pMesh = pListNodes->mapMesh[getIdFromUrl(target)];
-                        // pMesh->replaceTransform(pSolid);
-                    }
+                    LibraryPhysicModels lib(root, l_url);
+                    lib.target2(body, getIdFromUrl(target), scene);
                 }
                 mapSolids.clear();
             }
@@ -69,13 +54,9 @@ void LibraryPhysicsScenes::loadPhysicControlCollada(tinyxml2::XMLElement* _nNode
         const char* vetor = l_nNodeGravity->GetText();
         loadArrayBtScalar(vetor, l_arrayF);
 
-        if (pPhysicsControl)
-            pPhysicsControl->setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
-        else {
-            entity = scene->createEntity("physic_master");
-            PhysicsControl& pc = entity.addComponent<PhysicsControl>();
-            pc.setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
-        }
+        entity = scene->createEntity("physic_master");
+        PhysicsControl& pc = entity.addComponent<PhysicsControl>();
+        pc.setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
     }
 
     // tinyxml2::XMLElement* l_nNodeStep = _nNode->FirstChildElement("technique_common")->FirstChildElement("time_step");

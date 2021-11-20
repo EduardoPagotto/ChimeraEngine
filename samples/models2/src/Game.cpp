@@ -53,7 +53,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         VisualScene libV("./assets/models/piso2.xml", &activeScene);
         libV.target();
 
-        PhysicsScene libP("./assets/models/piso2.xml", nullptr, &activeScene);
+        PhysicsScene libP("./assets/models/piso2.xml", &activeScene);
         libP.target();
 
         // injeta controlador de camera

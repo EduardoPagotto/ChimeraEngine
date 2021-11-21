@@ -77,14 +77,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader); // colocar shader em material
 
         MeshData& mesh = renderableEntity.addComponent<MeshData>();
-        // ret = loadObjFile("./assets/models/tela01.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/salaSplit3.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/square2.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/parede_simples.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/cubo_textura_simples.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
-        loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
+        loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
     }
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     engine->pushState(&activeScene);

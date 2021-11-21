@@ -43,13 +43,11 @@ set (RenderSource 	CanvasGL.cpp
 					buffer/VertexArray.cpp
 					buffer/FrameBuffer.cpp
 					buffer/RenderBuffer.cpp
-					vbs/RenderableStatic.cpp
-					vbs/SimpleRender3d.cpp
 					2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
-					2d/layer/Layer.cpp
-					2d/layer/Group.cpp
+					2d/Layer.cpp
+					2d/Group.cpp
 					2d/Label.cpp
 					3d/PolygonIndex.cpp
 					3d/Renderer3d.cpp

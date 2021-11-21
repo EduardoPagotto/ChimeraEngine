@@ -1,5 +1,5 @@
 #pragma once
-#include "../Renderable2D.hpp"
+#include "Renderable2D.hpp"
 
 namespace Chimera {
 

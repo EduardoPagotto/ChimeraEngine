@@ -1,7 +1,7 @@
 #ifndef __HELLOWORD_TILELAYER__HPP
 #define __HELLOWORD_TILELAYER__HPP
 
-#include "chimera/render/2d/layer/Layer.hpp"
+#include "chimera/render/2d/Layer.hpp"
 
 class TileLayer : public Chimera::Layer {
   public:

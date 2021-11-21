@@ -1,4 +1,4 @@
-#include "chimera/render/2d/layer/Layer.hpp"
+#include "chimera/render/2d/Layer.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {

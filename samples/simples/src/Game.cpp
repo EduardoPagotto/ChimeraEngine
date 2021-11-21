@@ -31,13 +31,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         MeshData& mesh = renderableEntity.addComponent<MeshData>();
 
         int ret = 0;
-        // ret = loadObjFile("./assets/models/tela01.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/salaSplit3.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/square2.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/parede_simples.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/cubo_textura_simples.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/map02.obj", &mesh, &material);
-        // ret = loadObjFile("./assets/models/zoltanObj.obj", &mesh, &material);
         ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
     }
 

@@ -1,4 +1,4 @@
-#include "chimera/render/2d/layer/Group.hpp"
+#include "chimera/render/2d/Group.hpp"
 
 namespace Chimera {
 

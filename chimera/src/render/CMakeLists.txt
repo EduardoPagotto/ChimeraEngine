@@ -21,7 +21,6 @@ set (RenderSource 	CanvasGL.cpp
 					CameraFPS.cpp
 					CameraOrbit.cpp
 					CameraOrthographic.cpp
-					Font.cpp
 					FontAtlas.cpp
 					FontManager.cpp
 					Light.cpp

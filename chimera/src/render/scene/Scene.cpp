@@ -184,19 +184,6 @@ void Scene::onUpdate(const double& ts) {
         emissor->recycleLife(ts);
 }
 
-// Entity Scene::createEntity(const std::string& name) {
-
-//     // toda entidade tem um transform
-//     Entity entity = {eRegistry.create(), this};
-//     entity.addComponent<Transform>();
-//     auto& tag = entity.addComponent<TagComponent>();
-//     tag.tag = name.empty() ? "Entity" : name;
-
-//     return entity;
-// }
-
-// void Scene::destroyEntity(Entity entity) { eRegistry.destroy(entity); }
-
 void Scene::onViewportResize(uint32_t width, uint32_t height) {
 
     viewportWidth = width;
@@ -298,24 +285,19 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
 }
 
 void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
-    auto view = registry.get().view<Renderable3dComponent>();
-    for (auto entity : view) {
 
-        Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
+    auto group = registry.get().group<Shader, Material, Transform, Renderable3dComponent>();
+    for (auto entity : group) {
+        auto [sc, mc, tc, rc] = group.get<Shader, Material, Transform, Renderable3dComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
         RenderCommand command;
-
         if (renderable->getEntity().hasComponent<Solid>()) {
             Solid& sl = renderable->getEntity().getComponent<Solid>();
             command.transform = sl.translate(origem->getPosition()); // sl.getMatrix();
         } else {
-            Transform& tc = renderable->getEntity().getComponent<Transform>();
             command.transform = tc.translate(origem->getPosition()); // tc.getMatrix();
         }
-
-        Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
-        Material& mc = rc.renderable->getEntity().getComponent<Material>();
 
         command.renderable = renderable;
         command.shader = sc;

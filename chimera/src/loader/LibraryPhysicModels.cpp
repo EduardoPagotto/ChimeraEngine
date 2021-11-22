@@ -31,16 +31,18 @@ void LibraryPhysicModels::target2(const std::string& body, const std::string tar
                             TagComponent& tag = view.get<TagComponent>(entity);
                             if (tag.id == target) {
                                 Entity ent2 = {entity, reg};
-                                Transform& trans = ent2.getComponent<Transform>();
-                                Solid& solid = ent2.addComponent<Solid>();
-                                solid.setInitParams(&pc, trans.getMatrix());
-
-                                // Solid* pPhysic = new Solid(pWorld); //(nullptr, l_nNameRb, pWorld);
+                                TransComponent& tc = ent2.getComponent<TransComponent>();
+                                Solid* solid = new Solid();                       // nova transformacao
+                                solid->setInitParams(&pc, tc.trans->getMatrix()); // inicializa fisica
+                                delete tc.trans;                                  // deleta objeto de transformacao
+                                tc.trans = nullptr;                               // limpa ponteiro
+                                tc.solid = true;                                  // muda tipos de dado
+                                tc.trans = solid;                                 // carrega novo objeto de transformacao
 
                                 tinyxml2::XMLElement* l_nMass = l_nRigid->FirstChildElement("technique_common")->FirstChildElement("mass");
                                 if (l_nMass != nullptr) {
                                     const char* l_mass = l_nMass->GetText();
-                                    solid.setMass(atof(l_mass));
+                                    solid->setMass(atof(l_mass));
                                 }
 
                                 tinyxml2::XMLElement* l_npm =
@@ -51,15 +53,15 @@ void LibraryPhysicModels::target2(const std::string& body, const std::string tar
                                     LibraryPhysicsMaterials lib(root, l_url);
                                     PhysicMaterial* pPm = lib.target();
 
-                                    solid.setRestitution(pPm->restitution);
-                                    solid.setFrictionDynamic(pPm->frictionDynamic);
-                                    solid.setFrictionStatic(pPm->frictionStatic);
+                                    solid->setRestitution(pPm->restitution);
+                                    solid->setFrictionDynamic(pPm->frictionDynamic);
+                                    solid->setFrictionStatic(pPm->frictionStatic);
                                 }
 
                                 tinyxml2::XMLElement* l_nShape =
                                     l_nRigid->FirstChildElement("technique_common")->FirstChildElement("shape");
                                 if (l_nShape != nullptr) {
-                                    loadColladaShape(root, l_nShape, &solid);
+                                    loadColladaShape(root, l_nShape, solid);
                                 }
                                 break;
                             }

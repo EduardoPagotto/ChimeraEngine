@@ -60,14 +60,16 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         }
 
         // Localiza objeto como o primario //EfeitoZoltan-mesh
-        pCorpoRigido = &activeScene.getRegistry().findComponent<Solid>("EfeitoZoltan-mesh");
+        TransComponent& tc = activeScene.getRegistry().findComponent<TransComponent>("EfeitoZoltan-mesh");
+        pCorpoRigido = (Solid*)tc.trans;
     }
 
     EmitterFont* ef = new EmitterFont();
     { // Cria emissor de particula
         Entity re = activeScene.getRegistry().createEntity("Renderable Particle System");
-        Transform& tc = re.addComponent<Transform>();
-        tc.setPosition(glm::vec3(-5.0, 5.0, 4.0));
+        TransComponent& tc = re.addComponent<TransComponent>();
+        tc.trans = new Transform();
+        tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 
         Material& material = re.addComponent<Material>();
         TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());

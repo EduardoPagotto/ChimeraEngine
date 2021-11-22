@@ -15,7 +15,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     {
         // Cria entidade de camera
         Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
-        ce.addComponent<Transform>();
+        TransComponent& tc = ce.addComponent<TransComponent>();
+        tc.trans = new Transform();
+
         CameraComponent& cc = ce.addComponent<CameraComponent>();
         // cc.camera = new CameraOrbit(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         cc.camera = new CameraFPS(glm::vec3(20.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
@@ -26,7 +28,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     {
         // Cria entidade de luz unica global!
         Entity le = activeScene.getRegistry().createEntity("Light Entity");
-        le.addComponent<Transform>();
+        TransComponent& tc = le.addComponent<TransComponent>();
+        tc.trans = new Transform();
+
         LightComponent& lc = le.addComponent<LightComponent>();
         Light* light = new Light();
         light->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -37,7 +41,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     {
         // entidade heightmap
         Entity renderableEntity = activeScene.getRegistry().createEntity("Heightmap Entity");
-        renderableEntity.addComponent<Transform>();
+
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        tc.trans = new Transform();
+
         Shader& shader = renderableEntity.addComponent<Shader>();
         Material& material = renderableEntity.addComponent<Material>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
@@ -69,8 +76,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     {
         // Entidade mesh
         Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
-        Transform& tc = renderableEntity.addComponent<Transform>();
-        tc.setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        tc.trans = new Transform();
+        tc.trans->setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
 
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();

@@ -2,8 +2,8 @@
 #include "ScriptableEntity.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include "chimera/render/ICamera.hpp"
+#include "chimera/render/ITrans.hpp"
 #include "chimera/render/Light.hpp"
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {
@@ -21,6 +21,12 @@ struct CameraComponent {
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
     // CameraComponent(glm::mat4 projection) : camera(projection) {}
+};
+
+struct TransComponent {
+    ITrans* trans;
+    bool solid;
+    TransComponent() : trans(nullptr), solid(false) {}
 };
 
 struct LightComponent {

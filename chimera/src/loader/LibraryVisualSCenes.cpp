@@ -75,8 +75,10 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
             Entity entity = reg->createEntity("Camera Entity");
-            Transform& tc = entity.addComponent<Transform>();
-            tc.setMatrix(l_pTransform);
+            TransComponent& tc = entity.addComponent<TransComponent>();
+            tc.trans = new Transform();
+            tc.solid = false;
+            tc.trans->setMatrix(l_pTransform);
 
             auto& tag = entity.getComponent<TagComponent>();
             tag.id = std::string(_id);
@@ -98,8 +100,10 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
             Entity entity = reg->createEntity("Light Entity");
-            Transform& tc = entity.addComponent<Transform>();
-            tc.setMatrix(l_pTransform);
+            TransComponent& tc = entity.addComponent<TransComponent>();
+            tc.trans = new Transform();
+            tc.solid = false;
+            tc.trans->setMatrix(l_pTransform);
 
             auto& tag = entity.getComponent<TagComponent>();
             tag.id = std::string(_id);
@@ -118,8 +122,10 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
             Entity entity = reg->createEntity("Renderable Entity");
-            Transform& tc = entity.addComponent<Transform>();
-            tc.setMatrix(l_pTransform);
+            TransComponent& tc = entity.addComponent<TransComponent>();
+            tc.trans = new Transform();
+            tc.solid = false;
+            tc.trans->setMatrix(l_pTransform);
 
             auto& tag = entity.getComponent<TagComponent>();
             tag.id = std::string(_id);

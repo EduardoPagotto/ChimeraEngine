@@ -119,12 +119,15 @@ void Scene::onAttach() {
                 rc.renderable = r;
             }
 
-            if (entity.hasComponent<Solid>()) {
+            if (entity.hasComponent<TransComponent>()) {
                 glm::vec3 min, max, size;
                 vertexDataMeshMinMaxSize(&mesh, min, max, size);
 
-                Solid& solid = entity.getComponent<Solid>();
-                solid.init(size); // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
+                TransComponent& tc = entity.getComponent<TransComponent>();
+                if (tc.solid) {
+                    Solid* solid = (Solid*)tc.trans;
+                    solid->init(size); // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
+                }
             }
         }
 
@@ -223,16 +226,10 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
+        TransComponent& tc = renderable->getEntity().getComponent<TransComponent>(); // FIXME: group this!!!
 
         RenderCommand command;
-
-        if (renderable->getEntity().hasComponent<Solid>()) {
-            Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.translateSrc(origem->getPosition()); // sl.getMatrix();
-        } else {
-            Transform& tc = renderable->getEntity().getComponent<Transform>();
-            command.transform = tc.translateSrc(origem->getPosition()); // tc.getMatrix();
-        }
+        command.transform = tc.trans->translateSrc(origem->getPosition());
 
         Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
         Material& mc = rc.renderable->getEntity().getComponent<Material>();
@@ -266,17 +263,10 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
 
         Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
+        TransComponent& tc = renderable->getEntity().getComponent<TransComponent>(); // FIXME: group this!!!
 
         RenderCommand command;
-
-        if (renderable->getEntity().hasComponent<Solid>()) {
-            Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.translateSrc(origem->getPosition()); // sl.getMatrix();
-        } else {
-            Transform& tc = renderable->getEntity().getComponent<Transform>();
-            command.transform = tc.translateSrc(origem->getPosition()); // tc.getMatrix();
-        }
-
+        command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = renderable;
         command.shader = shadowPass.shader;
         command.uniforms.push_back(UniformVal("model", command.transform));
@@ -286,20 +276,13 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
 
 void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
 
-    auto group = registry.get().group<Shader, Material, Transform, Renderable3dComponent>();
+    auto group = registry.get().group<Shader, Material, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
-        auto [sc, mc, tc, rc] = group.get<Shader, Material, Transform, Renderable3dComponent>(entity);
-        IRenderable3d* renderable = rc.renderable;
+        auto [sc, mc, tc, rc] = group.get<Shader, Material, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
-        if (renderable->getEntity().hasComponent<Solid>()) {
-            Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.translateSrc(origem->getPosition()); // sl.getMatrix();
-        } else {
-            command.transform = tc.translateSrc(origem->getPosition()); // tc.getMatrix();
-        }
-
-        command.renderable = renderable;
+        command.transform = tc.trans->translateSrc(origem->getPosition());
+        command.renderable = rc.renderable;
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms, command.vTex);
 

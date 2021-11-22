@@ -18,7 +18,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     { // Cria entidade de camera
         // Cria camera e carrega parametros
         CameraComponent& cc = ce.addComponent<CameraComponent>();
-        ce.addComponent<Transform>();
+        TransComponent& tc = ce.addComponent<TransComponent>();
+        tc.trans = new Transform();
+
         cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         // cc.camera = new CameraFPS(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
@@ -27,7 +29,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Maze Entity");
-        renderableEntity.addComponent<Transform>();
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        tc.trans = new Transform();
+
         Shader& shader = renderableEntity.addComponent<Shader>();
         Material& material = renderableEntity.addComponent<Material>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
@@ -58,8 +62,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
-        Transform& tc = renderableEntity.addComponent<Transform>();
-        tc.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        tc.trans = new Transform();
+        tc.trans->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();

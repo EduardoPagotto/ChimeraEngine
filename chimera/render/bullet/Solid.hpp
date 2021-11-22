@@ -11,8 +11,6 @@ namespace Chimera {
 
 class Solid : public ITrans {
   public:
-    Solid();
-    Solid(PhysicsControl* _pWorld);
     Solid(PhysicsControl* _pWorld, const glm::mat4& _trans);
     virtual ~Solid();
 
@@ -26,8 +24,7 @@ class Solid : public ITrans {
     virtual void setMatrix(const glm::mat4& _trans) override;
 
     // prop init FIXME: melhorar!!! ainda confuso
-    void init(const glm::vec3& _size);                                    // usado no scene no final da inicializacao
-    void setInitParams(PhysicsControl* _pWorld, const glm::mat4& _trans); // usado no loader:LibraryPhysicModels
+    void init(const glm::vec3& _size); // usado no scene no final da inicializacao
     // prop shape
     inline void setShapeBox(const glm::vec3& _size) { pShapeCollision = new btBoxShape(btVector3(_size.x, _size.y, _size.z)); }
     inline void setShapeCilinder(const glm::vec3& _val) { pShapeCollision = new btCylinderShape(btVector3(_val.x, _val.y, _val.z)); }
@@ -62,6 +59,5 @@ class Solid : public ITrans {
     // btTriangleIndexVertexArray *indexVertexArray;
     PhysicsControl* pWorld;
     // btTriangleIndexVertexArray *m_pIndexVertexArrays;
-    btTransform transform;
 };
 } // namespace Chimera

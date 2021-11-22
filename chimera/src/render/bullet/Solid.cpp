@@ -3,42 +3,9 @@
 
 namespace Chimera {
 
-Solid::Solid() {
-    pRigidBody = nullptr;
-    pShapeCollision = nullptr;
-    pMotionState = nullptr;
-    trimesh = nullptr;
-
-    mass = 0.0f;
-    frictionDynamic = 15.0f;
-    frictionStatic = 10.0f;
-    restitution = 0.0f;
-
-    transform.setIdentity();
-    pWorld = nullptr;
-}
-
-Solid::Solid(PhysicsControl* _pWorld) {
-
-    pRigidBody = nullptr;
-    pShapeCollision = nullptr;
-    pMotionState = nullptr;
-    trimesh = nullptr;
-
-    mass = 0.0f;
-    frictionDynamic = 15.0f;
-    frictionStatic = 10.0f;
-    restitution = 0.0f;
-
-    transform.setIdentity();
-
-    pWorld = _pWorld;
-}
-
 Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans) {
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
-    pMotionState = nullptr;
     trimesh = nullptr;
 
     mass = 0.0f;
@@ -46,26 +13,7 @@ Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans) {
     frictionStatic = 10.0f;
     restitution = 0.0f;
 
-    transform.setIdentity();
-    transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
-
-    pWorld = _pWorld;
-}
-
-void Solid::setInitParams(PhysicsControl* _pWorld, const glm::mat4& _trans) {
-    pRigidBody = nullptr;
-    pShapeCollision = nullptr;
-    pMotionState = nullptr;
-    trimesh = nullptr;
-
-    mass = 0.0f;
-    frictionDynamic = 15.0f;
-    frictionStatic = 10.0f;
-    restitution = 0.0f;
-
-    transform.setIdentity();
-    transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
-
+    this->setMatrix(_trans); // pMotionState carregado aqui!
     pWorld = _pWorld;
 }
 
@@ -93,6 +41,7 @@ void Solid::init(const glm::vec3& _size) {
         setShapeBox(_size);
     // setShapeBox(pMesh->getSizeBox());
 
+    btTransform transform; // FIXME: remover na proxima versao
     initTransform(transform, this);
 }
 
@@ -108,17 +57,12 @@ void Solid::init(const glm::vec3& _size) {
 
 void Solid::initTransform(const btTransform& _tTrans, void* pObj) {
 
-    // btTransform trans;
-    // trans.getOpenGLMatrix( glm::value_ptr( _tTrans )  );
-
-    pMotionState = new btDefaultMotionState(_tTrans);
-
     btVector3 localInertia(0.0, 0.0, 0.0);
     if (mass != 0.0f) {
         pShapeCollision->calculateLocalInertia(mass, localInertia);
     }
 
-    // pShapeCollision->setUserPointer((void*)this);
+    pShapeCollision->setUserPointer((void*)this);
 
     btRigidBody::btRigidBodyConstructionInfo rBodyInfo(mass, pMotionState, pShapeCollision, localInertia);
     pRigidBody = new btRigidBody(rBodyInfo);
@@ -192,10 +136,8 @@ void Solid::setRotation(const glm::vec3& _rotation) {
 }
 
 // glm::vec3 Solid::getRotation() {
-
 //     btScalar rotZ, rotY, rotX;
 //     pRigidBody->getWorldTransform().getBasis().getEulerZYX(rotZ, rotY, rotX);
-
 //     return glm::vec3(rotX, rotY, rotZ);
 // }
 
@@ -203,19 +145,18 @@ const glm::mat4 Solid::getMatrix() const {
 
     btTransform transLocal;
     btScalar matrix[16];
-
     // Pega posicao do corpo atual e ajusta sua matrix (posicao e rotacao)
     pRigidBody->getMotionState()->getWorldTransform(transLocal);
     transLocal.getOpenGLMatrix(&matrix[0]);
 
-    // glMultMatrixf (glm::value_ptr(tempMat));
-    // glMultMatrixf(matrix);
-
     return glm::make_mat4(matrix);
-    ;
 }
 
-void Solid::setMatrix(const glm::mat4& _trans) { transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans)); }
+void Solid::setMatrix(const glm::mat4& _trans) {
+    btTransform transform;
+    transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
+    pMotionState = new btDefaultMotionState(transform);
+}
 
 void Solid::applyTorc(const glm::vec3& _torque) {
     // pRigidBody->applyTorque(_torque);

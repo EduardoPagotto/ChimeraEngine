@@ -349,11 +349,12 @@ void Scene::render(IRenderer3d& renderer) {
     }
 
     {
-        // get val from color buffer (must be inside framebuffer renderer
-        glm::ivec2 pos = MouseDevice::getMove();
-        pos.y = viewportHeight - pos.y;
-        int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
+        // TODO: captura do entity no framebuffer da tela
+        // // get val from color buffer (must be inside framebuffer renderer
+        // glm::ivec2 pos = MouseDevice::getMove();
+        // pos.y = viewportHeight - pos.y;
+        // int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
+        // SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
     }
 
     renderBuffer->unbind();

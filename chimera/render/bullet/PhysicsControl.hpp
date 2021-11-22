@@ -1,5 +1,4 @@
 #pragma once
-//#include "chimera/node/Node.hpp" // FIXME: FODEU!!!!
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <LinearMath/btVector3.h>
 #include <btBulletCollisionCommon.h>
@@ -12,28 +11,15 @@ class PhysicsControl {
   public:
     PhysicsControl(void);
     virtual ~PhysicsControl(void);
-
     void clearAllShapes(void);
     void removeAllObjs(void);
-
     void stepSim(const double& ts);
-
     void checkCollisions();
-    // bool checkAllowCollision(Node* pNode);
-
     inline void setGravity(const btVector3& _vet) { discretDynamicsWorld->setGravity(_vet); }
-
-    inline btScalar countPeriod() {
-        period = (btScalar)(clockCounter.getTimeMicroseconds() / 1000000.f);
-        clockCounter.reset();
-        return period;
-    }
-
-    inline btScalar getLastPeriod() { return period; }
-
     inline btDiscreteDynamicsWorld* getWorld() { return discretDynamicsWorld; }
 
   private:
+    bool checkAllowCollision(uint32_t* entity);
     static void doTickCallBack(btDynamicsWorld* world, btScalar timeStep);
     void processTickCallBack(btScalar timeStep);
 
@@ -45,14 +31,6 @@ class PhysicsControl {
     btSequentialImpulseConstraintSolver* solver;
     btDiscreteDynamicsWorld* discretDynamicsWorld;
 
-    /// <summary> evento usando na colisao de corpos se s_dealCollision for false
-    /// </summary>
-    // SDL_Event s_event;
-
-    // DO FODEU!!!
-    // std::map<btCollisionObject*, std::pair<Node*, Node*>> contactActives;
-
-    btClock clockCounter;
-    btScalar period;
+    std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> contactActives;
 };
 } // namespace Chimera

@@ -102,25 +102,22 @@ bool Game::onEvent(const SDL_Event& event) {
 
     switch (event.type) {
         case SDL_USEREVENT: {
-            // Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
-            // Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
-
             switch (event.user.code) {
-                // case Chimera::EVENT_COLLIDE_START: {
-                //     Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
-                //     Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
-                //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
-                // } break;
-                // case Chimera::EVENT_COLLIDE_ON: {
-                //     Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
-                //     Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
-                //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao on: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
-                // } break;
-                // case Chimera::EVENT_COLLIDE_OFF: {
-                //     Chimera::Node* n1 = (Chimera::Node*)event.user.data1;
-                //     Chimera::Node* n2 = (Chimera::Node*)event.user.data2;
-                //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao off: %s -> %s", n1->getName().c_str(), n2->getName().c_str());
-                // } break;
+                case Chimera::EVENT_COLLIDE_START: {
+                    uint32_t* n1 = (uint32_t*)event.user.data1;
+                    uint32_t* n2 = (uint32_t*)event.user.data2;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %d -> %d", *n1, *n2);
+                } break;
+                case Chimera::EVENT_COLLIDE_ON: {
+                    uint32_t* n1 = (uint32_t*)event.user.data1;
+                    uint32_t* n2 = (uint32_t*)event.user.data2;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao ON: %d -> %d", *n1, *n2);
+                } break;
+                case Chimera::EVENT_COLLIDE_OFF: {
+                    uint32_t* n1 = (uint32_t*)event.user.data1;
+                    uint32_t* n2 = (uint32_t*)event.user.data2;
+                    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao OFF: %d -> %d", *n1, *n2);
+                } break;
                 case Chimera::EVENT_TOGGLE_FULL_SCREEN:
                     engine->getCanvas()->toggleFullScreen();
                     break;

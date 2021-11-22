@@ -258,16 +258,13 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
         }
     }
 
-    auto view = registry.get().view<Renderable3dComponent>();
-    for (auto entity : view) {
-
-        Renderable3dComponent& rc = view.get<Renderable3dComponent>(entity);
-        IRenderable3d* renderable = rc.renderable;
-        TransComponent& tc = renderable->getEntity().getComponent<TransComponent>(); // FIXME: group this!!!
+    auto group = registry.get().group<TransComponent, Renderable3dComponent>();
+    for (auto entity : group) {
+        auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.renderable = renderable;
+        command.renderable = rc.renderable;
         command.shader = shadowPass.shader;
         command.uniforms.push_back(UniformVal("model", command.transform));
         rc.renderable->submit(camera, command, &renderer);
@@ -285,9 +282,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
         command.renderable = rc.renderable;
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms, command.vTex);
-
         command.uniforms.push_back(UniformVal("model", command.transform));
-
         rc.renderable->submit(camera, command, &renderer);
     }
 }

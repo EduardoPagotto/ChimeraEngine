@@ -228,10 +228,10 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         if (renderable->getEntity().hasComponent<Solid>()) {
             Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.translate(origem->getPosition()); // sl.getMatrix();
+            command.transform = sl.translateSrc(origem->getPosition()); // sl.getMatrix();
         } else {
             Transform& tc = renderable->getEntity().getComponent<Transform>();
-            command.transform = tc.translate(origem->getPosition()); // tc.getMatrix();
+            command.transform = tc.translateSrc(origem->getPosition()); // tc.getMatrix();
         }
 
         Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
@@ -271,10 +271,10 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
 
         if (renderable->getEntity().hasComponent<Solid>()) {
             Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.translate(origem->getPosition()); // sl.getMatrix();
+            command.transform = sl.translateSrc(origem->getPosition()); // sl.getMatrix();
         } else {
             Transform& tc = renderable->getEntity().getComponent<Transform>();
-            command.transform = tc.translate(origem->getPosition()); // tc.getMatrix();
+            command.transform = tc.translateSrc(origem->getPosition()); // tc.getMatrix();
         }
 
         command.renderable = renderable;
@@ -294,9 +294,9 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
         RenderCommand command;
         if (renderable->getEntity().hasComponent<Solid>()) {
             Solid& sl = renderable->getEntity().getComponent<Solid>();
-            command.transform = sl.translate(origem->getPosition()); // sl.getMatrix();
+            command.transform = sl.translateSrc(origem->getPosition()); // sl.getMatrix();
         } else {
-            command.transform = tc.translate(origem->getPosition()); // tc.getMatrix();
+            command.transform = tc.translateSrc(origem->getPosition()); // tc.getMatrix();
         }
 
         command.renderable = renderable;

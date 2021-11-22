@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-Solid::Solid() : Transform() {
+Solid::Solid() {
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
     pMotionState = nullptr;
@@ -18,7 +18,7 @@ Solid::Solid() : Transform() {
     pWorld = nullptr;
 }
 
-Solid::Solid(PhysicsControl* _pWorld) : Transform() {
+Solid::Solid(PhysicsControl* _pWorld) {
 
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
@@ -35,7 +35,7 @@ Solid::Solid(PhysicsControl* _pWorld) : Transform() {
     pWorld = _pWorld;
 }
 
-Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans) : Transform(_trans) {
+Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans) {
     pRigidBody = nullptr;
     pShapeCollision = nullptr;
     pMotionState = nullptr;
@@ -66,28 +66,8 @@ void Solid::setInitParams(PhysicsControl* _pWorld, const glm::mat4& _trans) {
     transform.setIdentity();
     transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
 
-    Transform::setMatrix(_trans);
-
     pWorld = _pWorld;
 }
-
-// Solid::Solid(const Solid& _solid) : ITransform(_solid) {
-
-//     mass = _solid.mass;
-
-//     frictionDynamic = _solid.frictionDynamic;
-//     frictionStatic = _solid.frictionStatic;
-//     restitution = _solid.restitution;
-
-//     pRigidBody = nullptr;
-//     pShapeCollision = _solid.pShapeCollision;
-//     pMotionState = nullptr;
-//     trimesh = nullptr;
-
-//     transform = _solid.transform;
-
-//     pWorld = _solid.pWorld;
-// }
 
 Solid::~Solid() {
 
@@ -104,7 +84,7 @@ Solid::~Solid() {
     }
 }
 
-// TODO: implementar
+// TODO: implementar ////////// FIXME: agora!!!!!!
 void Solid::init(const glm::vec3& _size) {
 
     // Mesh* pMesh = (Mesh*)Node::findChild(Kind::MESH, 0, false); // FIXME melhorar
@@ -115,8 +95,6 @@ void Solid::init(const glm::vec3& _size) {
 
     initTransform(transform, this);
 }
-
-// void Solid::accept(VisitorInterface* v) { v->visit(this); }
 
 // void Solid::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
 //     btQuaternion l_qtn;
@@ -169,7 +147,7 @@ void Solid::setIndexVertexArray(btTriangleIndexVertexArray* _indexVertexArray) {
     // pShapeCollision = new pShapeCollision(trimesh);
 }
 
-glm::mat4 Solid::translate(const glm::vec3& _pos) { // translate model matrix
+const glm::mat4 Solid::translateSrc(const glm::vec3& _pos) const { // translate model matrix
     btTransform transLocal;
     btScalar matrix[16];
 
@@ -193,7 +171,7 @@ glm::mat4 Solid::translate(const glm::vec3& _pos) { // translate model matrix
     return tempMat;
 }
 
-glm::vec3 Solid::getPosition() {
+const glm::vec3 Solid::getPosition() const {
     btVector3 pos = pRigidBody->getWorldTransform().getOrigin();
     return glm::vec3(pos.getX(), pos.getY(), pos.getZ());
 }
@@ -221,7 +199,7 @@ void Solid::setRotation(const glm::vec3& _rotation) {
 //     return glm::vec3(rotX, rotY, rotZ);
 // }
 
-glm::mat4 Solid::getMatrix() {
+const glm::mat4 Solid::getMatrix() const {
 
     btTransform transLocal;
     btScalar matrix[16];

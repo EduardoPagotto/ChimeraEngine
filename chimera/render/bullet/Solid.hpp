@@ -9,53 +9,42 @@
 
 namespace Chimera {
 
-class Solid : public Transform {
+class Solid : public ITrans {
   public:
     Solid();
     Solid(PhysicsControl* _pWorld);
     Solid(PhysicsControl* _pWorld, const glm::mat4& _trans);
     virtual ~Solid();
 
-    // Inherited via Transform
-    virtual glm::vec3 getPosition() override;
+    // Inherited
+    virtual const glm::vec3 getPosition() const override;
+    virtual const glm::mat4 getMatrix() const override;
+    virtual const glm::mat4 translateSrc(const glm::vec3& _pos) const override;
+    // virtual const glm::vec3 getRotation() const override;
     virtual void setPosition(const glm::vec3& _pos) override;
-    // virtual glm::vec3 getRotation() override;
     virtual void setRotation(const glm::vec3& _rotation) override;
-    virtual glm::mat4 getMatrix() override;
     virtual void setMatrix(const glm::mat4& _trans) override;
-    virtual glm::mat4 translate(const glm::vec3& _pos) override;
-    virtual void init(const glm::vec3& _size) override;
 
-    inline void setMass(const float& _mass) { mass = _mass; }
-
+    // prop init FIXME: melhorar!!! ainda confuso
+    void init(const glm::vec3& _size);                                    // usado no scene no final da inicializacao
+    void setInitParams(PhysicsControl* _pWorld, const glm::mat4& _trans); // usado no loader:LibraryPhysicModels
+    // prop shape
     inline void setShapeBox(const glm::vec3& _size) { pShapeCollision = new btBoxShape(btVector3(_size.x, _size.y, _size.z)); }
-
     inline void setShapeCilinder(const glm::vec3& _val) { pShapeCollision = new btCylinderShape(btVector3(_val.x, _val.y, _val.z)); }
-
     inline void setShapePlane(const glm::vec3& _val, const float& _constant) {
         pShapeCollision = new btStaticPlaneShape(btVector3(_val.x, _val.y, _val.z), _constant);
     }
-
     inline void setShapeSphere(float _raio) { pShapeCollision = new btSphereShape((btScalar)_raio); }
+    void setIndexVertexArray(btTriangleIndexVertexArray* _indexVertexArray);
+    bool isShapeDefine() { return (pShapeCollision != nullptr ? true : false); }
+
+    inline void setMass(const float& _mass) { mass = _mass; }
 
     void applyForce(const glm::vec3& _prop);
     void applyTorc(const glm::vec3& _torque);
-
-    void setIndexVertexArray(btTriangleIndexVertexArray* _indexVertexArray);
-
-    bool isShapeDefine() { return (pShapeCollision != nullptr ? true : false); }
-
     inline void setFrictionDynamic(const float& _friction) { frictionDynamic = _friction; }
-
     inline void setFrictionStatic(const float& _friction) { frictionStatic = _friction; }
-
     inline void setRestitution(const float& _restitution) { restitution = _restitution; }
-
-    // 	void setTransform(const glm::mat4 &_trans) {
-    //         transform.setFromOpenGLMatrix((btScalar*)glm::value_ptr(_trans));
-    // 	}
-
-    void setInitParams(PhysicsControl* _pWorld, const glm::mat4& _trans);
 
   private:
     void initTransform(const btTransform& _tTrans, void* pObj);

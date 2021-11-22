@@ -3,18 +3,11 @@
 
 namespace Chimera {
 
-Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans) {
-    pRigidBody = nullptr;
-    pShapeCollision = nullptr;
-    trimesh = nullptr;
-
-    mass = 0.0f;
-    frictionDynamic = 15.0f;
-    frictionStatic = 10.0f;
-    restitution = 0.0f;
+Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans, uint32_t entity)
+    : pWorld(_pWorld), pRigidBody(nullptr), pShapeCollision(nullptr), trimesh(nullptr), mass(0.0f), frictionDynamic(15.0f),
+      frictionStatic(10.0f), restitution(0.0f), entity(entity) {
 
     this->setMatrix(_trans); // pMotionState carregado aqui!
-    pWorld = _pWorld;
 }
 
 Solid::~Solid() {
@@ -32,19 +25,7 @@ Solid::~Solid() {
     }
 }
 
-// TODO: implementar ////////// FIXME: agora!!!!!!
-void Solid::init(const glm::vec3& _size) {
-
-    // Mesh* pMesh = (Mesh*)Node::findChild(Kind::MESH, 0, false); // FIXME melhorar
-
-    if (isShapeDefine() == false)
-        setShapeBox(_size);
-    // setShapeBox(pMesh->getSizeBox());
-
-    btTransform transform; // FIXME: remover na proxima versao
-    initTransform(transform, this);
-}
-
+// TODO: verificar depois
 // void Solid::setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
 //     btQuaternion l_qtn;
 //     transform.setIdentity();
@@ -55,21 +36,24 @@ void Solid::init(const glm::vec3& _size) {
 //     // l_posicao));
 // }
 
-void Solid::initTransform(const btTransform& _tTrans, void* pObj) {
+void Solid::init(const glm::vec3& _size) {
+
+    if (isShapeDefine() == false)
+        setShapeBox(_size);
 
     btVector3 localInertia(0.0, 0.0, 0.0);
     if (mass != 0.0f) {
         pShapeCollision->calculateLocalInertia(mass, localInertia);
     }
 
-    pShapeCollision->setUserPointer((void*)this);
+    pShapeCollision->setUserPointer((void*)&entity);
 
     btRigidBody::btRigidBodyConstructionInfo rBodyInfo(mass, pMotionState, pShapeCollision, localInertia);
     pRigidBody = new btRigidBody(rBodyInfo);
 
     pRigidBody->setActivationState(DISABLE_DEACTIVATION);
 
-    pRigidBody->setUserPointer((void*)pObj);
+    pRigidBody->setUserPointer((void*)&entity);
 
     // TODO: implementar o atrito estatico
     pRigidBody->setFriction(frictionDynamic);
@@ -99,20 +83,12 @@ const glm::mat4 Solid::translateSrc(const glm::vec3& _pos) const { // translate 
     pRigidBody->getMotionState()->getWorldTransform(transLocal);
     transLocal.getOpenGLMatrix(&matrix[0]);
 
-    // pega posicao do objeto horigem de desenho (camera travada)
-    // glm::vec3 l_vec = _pITransform->getPosition();
-
     // desloca desenha para o pbjeto horigem
     matrix[12] -= _pos.x;
     matrix[13] -= _pos.y;
     matrix[14] -= _pos.z;
 
-    glm::mat4 tempMat = glm::make_mat4(matrix);
-
-    // glMultMatrixf (glm::value_ptr(tempMat));
-    // glMultMatrixf(matrix);
-
-    return tempMat;
+    return glm::make_mat4(matrix);
 }
 
 const glm::vec3 Solid::getPosition() const {

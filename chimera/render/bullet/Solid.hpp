@@ -1,6 +1,6 @@
 #pragma once
 #include "PhysicsControl.hpp"
-#include "chimera/render/Transform.hpp"
+#include "chimera/render/ITrans.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>
@@ -11,7 +11,7 @@ namespace Chimera {
 
 class Solid : public ITrans {
   public:
-    Solid(PhysicsControl* _pWorld, const glm::mat4& _trans);
+    Solid(PhysicsControl* _pWorld, const glm::mat4& _trans, uint32_t entity);
     virtual ~Solid();
 
     // Inherited
@@ -44,10 +44,7 @@ class Solid : public ITrans {
     inline void setRestitution(const float& _restitution) { restitution = _restitution; }
 
   private:
-    void initTransform(const btTransform& _tTrans, void* pObj);
-
     btScalar mass;
-
     btScalar frictionDynamic;
     btScalar frictionStatic;
     btScalar restitution;
@@ -56,8 +53,9 @@ class Solid : public ITrans {
     btCollisionShape* pShapeCollision;
     btGImpactMeshShape* trimesh;
     btDefaultMotionState* pMotionState;
-    // btTriangleIndexVertexArray *indexVertexArray;
     PhysicsControl* pWorld;
+    // btTriangleIndexVertexArray *indexVertexArray;
     // btTriangleIndexVertexArray *m_pIndexVertexArrays;
+    uint32_t entity;
 };
 } // namespace Chimera

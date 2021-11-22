@@ -32,11 +32,11 @@ void LibraryPhysicModels::target2(const std::string& body, const std::string tar
                             if (tag.id == target) {
                                 Entity ent2 = {entity, reg};
                                 TransComponent& tc = ent2.getComponent<TransComponent>();
-                                Solid* solid = new Solid(&pc, tc.trans->getMatrix()); // nova transformacao
-                                delete tc.trans;                                      // deleta objeto de transformacao
-                                tc.trans = nullptr;                                   // limpa ponteiro
-                                tc.solid = true;                                      // muda tipos de dado
-                                tc.trans = solid;                                     // carrega novo objeto de transformacao
+                                Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao
+                                delete tc.trans;                                            // deleta objeto de transformacao
+                                tc.trans = nullptr;                                         // limpa ponteiro
+                                tc.solid = true;                                            // muda tipos de dado
+                                tc.trans = solid;                                           // carrega novo objeto de transformacao
 
                                 tinyxml2::XMLElement* l_nMass = l_nRigid->FirstChildElement("technique_common")->FirstChildElement("mass");
                                 if (l_nMass != nullptr) {

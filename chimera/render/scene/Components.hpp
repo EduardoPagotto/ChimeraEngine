@@ -24,9 +24,9 @@ struct CameraComponent {
 };
 
 struct TransComponent {
-    ITrans* trans;
-    bool solid;
-    TransComponent() : trans(nullptr), solid(false) {}
+    ITrans* trans = nullptr;
+    bool solid = false;
+    TransComponent() = default;
 };
 
 struct LightComponent {

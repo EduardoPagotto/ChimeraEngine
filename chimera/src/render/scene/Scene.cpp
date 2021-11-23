@@ -321,7 +321,7 @@ void Scene::render(IRenderer3d& renderer) {
     for (auto entity : lightView) {
         auto& lc = lightView.get<LightComponent>(entity);
         if (lc.global) // biding light prop
-            copy(lc.light->uProp().begin(), lc.light->uProp().end(), back_inserter(renderer.uQueue()));
+            lc.light->bindLight(renderer.uQueue());
     }
 
     { // Render mesh

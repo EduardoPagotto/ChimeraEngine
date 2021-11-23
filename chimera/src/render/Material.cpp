@@ -70,23 +70,18 @@ void Material::bindMaterialInformation(const Shader& shader) {
 }
 
 void Material::bindMaterialInformation(std::vector<UniformVal>& uniforms, std::vector<Texture*>& vTex) {
-
-    // aplica todos os materiais passados
-    for (const UniformVal& uniformMat : listMaterial) {
-        uniforms.push_back(uniformMat);
-    }
+    // copy prop material
+    copy(listMaterial.begin(), listMaterial.end(), back_inserter(uniforms));
 
     // seletorr de tipo ???
     uniforms.push_back(UniformVal(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis));
 
     // indice de textura
     int indexTex = 0;
-    if (mapTex.size() > 0) {
-        for (const auto& kv : mapTex) {
-            vTex.push_back(kv.second);
-            uniforms.push_back(UniformVal(kv.first, indexTex));
-            indexTex++;
-        }
+    for (const auto& kv : mapTex) {
+        vTex.push_back(kv.second);
+        uniforms.push_back(UniformVal(kv.first, indexTex));
+        indexTex++;
     }
 }
 } // namespace Chimera

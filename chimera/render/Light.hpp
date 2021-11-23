@@ -33,7 +33,7 @@ class Light {
     }
     inline glm::vec3 getPosition() const { return glm::vec3(transform[3]); }
     inline void setRotation(const glm::vec3& rotation) { transform = glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z); }
-    inline std::vector<UniformVal>& uProp() { return listProp; }
+    inline void bindLight(std::vector<UniformVal>& uniforms) { copy(listProp.begin(), listProp.end(), back_inserter(uniforms)); }
 
   private:
     int number;

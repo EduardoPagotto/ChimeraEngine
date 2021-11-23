@@ -110,11 +110,6 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
 
             LibraryLights lib(root, l_url, entity);
             lib.target();
-
-            // FIXME: Remover transformacao de light e remover este codigo!!!!
-            LightComponent& lc = entity.getComponent<LightComponent>();
-            lc.light->setTransform(l_pTransform);
-
             // pLight->data.setTransform(l_pTransform);
             //_pNodePai->addChild(pLight);
             // pLastNodeDone = pLight;

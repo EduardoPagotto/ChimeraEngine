@@ -250,9 +250,10 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
     auto lightViewEnt = registry.get().view<LightComponent>();
     for (auto entity : lightViewEnt) {
         auto& lc = lightViewEnt.get<LightComponent>(entity);
+        auto& tc = registry.get().get<TransComponent>(entity); // Lento
         if (lc.global) {
             // TODO: usar o direcionm depois no segundo parametro
-            glm::mat4 lightView = glm::lookAt(lc.light->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
+            glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
             shadowPass.lightSpaceMatrix = shadowPass.lightProjection * lightView;
             renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
         }
@@ -320,8 +321,9 @@ void Scene::render(IRenderer3d& renderer) {
     auto lightView = registry.get().view<LightComponent>();
     for (auto entity : lightView) {
         auto& lc = lightView.get<LightComponent>(entity);
-        if (lc.global) // biding light prop
-            lc.light->bindLight(renderer.uQueue());
+        auto& tc = registry.get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
+        if (lc.global)                                         // biding light prop
+            lc.light->bindLight(renderer.uQueue(), tc.trans->getMatrix());
     }
 
     { // Render mesh

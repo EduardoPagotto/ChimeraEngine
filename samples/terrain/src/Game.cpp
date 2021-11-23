@@ -30,12 +30,12 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         Entity le = activeScene.getRegistry().createEntity("Light Entity");
         TransComponent& tc = le.addComponent<TransComponent>();
         tc.trans = new Transform();
+        tc.trans->setPosition(glm::vec3(0, 400, 0));
 
         LightComponent& lc = le.addComponent<LightComponent>();
         Light* light = new Light();
         light->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
         light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
-        light->setPosition(glm::vec3(0, 400, 0));
         lc.light = light;
     }
     {

@@ -1,7 +1,5 @@
 #pragma once
 #include "chimera/render/Shader.hpp"
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/euler_angles.hpp>
 
 namespace Chimera {
 
@@ -22,23 +20,15 @@ class Light {
     inline void setAmbient(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_AMBIENT, color)); }
     inline void setSpecular(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_SPECULAR, color)); }
     inline void setDiffuse(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_DIFFUSE, color)); }
-    inline void setPosition(const glm::vec3& pos) {
-        listProp.push_back(UniformVal(SHADE_LIGHT_POSITION, pos));
-        transform = glm::translate(transform, pos); // FIXME: ver se da para remover e passar para shader
-    }
     inline void setType(const LightType& type) { this->type = type; }
-    inline void setTransform(const glm::mat4& trans) {
-        transform = trans;
-        listProp.push_back(UniformVal(SHADE_LIGHT_POSITION, glm::vec3(transform[3])));
+    inline void bindLight(std::vector<UniformVal>& uniforms, const glm::mat4& mat) {
+        uniforms.push_back(UniformVal(SHADE_LIGHT_POSITION, glm::vec3(mat[3])));
+        copy(listProp.begin(), listProp.end(), back_inserter(uniforms));
     }
-    inline glm::vec3 getPosition() const { return glm::vec3(transform[3]); }
-    inline void setRotation(const glm::vec3& rotation) { transform = glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z); }
-    inline void bindLight(std::vector<UniformVal>& uniforms) { copy(listProp.begin(), listProp.end(), back_inserter(uniforms)); }
 
   private:
-    int number;
+    // int number;
     LightType type;
-    glm::mat4 transform;
     std::vector<UniformVal> listProp;
 };
 } // namespace Chimera

@@ -31,8 +31,6 @@ void Renderer3d::end() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }
 
-void Renderer3d::submitLight(Light* light) { light->bindLightInformation(uniformsQueue); }
-
 void Renderer3d::submit(const RenderCommand& command) {
 
     // se não há frustrum adicionar tudo // TODO: remover quando model estiver no fluxo principal

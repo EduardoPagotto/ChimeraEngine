@@ -8,7 +8,6 @@ RendererParticles::~RendererParticles() {}
 
 void RendererParticles::begin(ICamera* camera) { this->camera = camera; }
 void RendererParticles::end() {}
-void RendererParticles::submitLight(Light* light) {}
 void RendererParticles::submit(const RenderCommand& command) {
     // adicionado ao proximo render
     commandQueue.push_back(command);

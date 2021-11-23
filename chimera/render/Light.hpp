@@ -17,11 +17,8 @@ enum class LightType {
 
 class Light {
   public:
-    Light();
-    virtual ~Light();
-
-    void bindLightInformation(const Shader& shader);
-    void bindLightInformation(std::vector<UniformVal>& uniforms);
+    Light() : type(LightType::POSITIONAL) {} // TODO: muito a fazer!!!! indice e luz necessario para o shader
+    virtual ~Light() {}
     inline void setAmbient(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_AMBIENT, color)); }
     inline void setSpecular(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_SPECULAR, color)); }
     inline void setDiffuse(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_DIFFUSE, color)); }
@@ -36,6 +33,7 @@ class Light {
     }
     inline glm::vec3 getPosition() const { return glm::vec3(transform[3]); }
     inline void setRotation(const glm::vec3& rotation) { transform = glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z); }
+    inline std::vector<UniformVal>& uProp() { return listProp; }
 
   private:
     int number;

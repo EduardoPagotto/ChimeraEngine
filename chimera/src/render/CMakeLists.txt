@@ -23,7 +23,6 @@ set (RenderSource 	CanvasGL.cpp
 					CameraOrthographic.cpp
 					FontAtlas.cpp
 					FontManager.cpp
-					Light.cpp
 					Material.cpp
 					ParticleEmitter.cpp
 					partition/Triangle.cpp

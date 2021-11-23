@@ -254,7 +254,7 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
             // TODO: usar o direcionm depois no segundo parametro
             glm::mat4 lightView = glm::lookAt(lc.light->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
             shadowPass.lightSpaceMatrix = shadowPass.lightProjection * lightView;
-            renderer.submitUniform(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
+            renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
         }
     }
 
@@ -306,23 +306,22 @@ void Scene::render(IRenderer3d& renderer) {
     }
 
     // used by all
-    renderer.submitUniform(UniformVal("projection", camera->getProjectionMatrix()));
-    renderer.submitUniform(UniformVal("view", camera->getViewMatrix()));
+    renderer.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));
+    renderer.uQueue().push_back(UniformVal("view", camera->getViewMatrix()));
 
     // data from shadowPass
-    renderer.submitUniform(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
-    renderer.submitUniform(UniformVal("viewPos", camera->getPosition()));
-    renderer.submitUniform(UniformVal("shadows", 1));   // Ativa a sombra com 1
-    renderer.submitUniform(UniformVal("shadowMap", 1)); // id da textura de shadow
+    renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
+    renderer.uQueue().push_back(UniformVal("viewPos", camera->getPosition()));
+    renderer.uQueue().push_back(UniformVal("shadows", 1));   // Ativa a sombra com 1
+    renderer.uQueue().push_back(UniformVal("shadowMap", 1)); // id da textura de shadow
 
     shadowPass.shadowBuffer->getDepthAttachemnt()->bind(1);
 
     auto lightView = registry.get().view<LightComponent>();
     for (auto entity : lightView) {
         auto& lc = lightView.get<LightComponent>(entity);
-        if (lc.global) {
-            renderer.submitLight(lc.light);
-        }
+        if (lc.global) // biding light prop
+            copy(lc.light->uProp().begin(), lc.light->uProp().end(), back_inserter(renderer.uQueue()));
     }
 
     { // Render mesh

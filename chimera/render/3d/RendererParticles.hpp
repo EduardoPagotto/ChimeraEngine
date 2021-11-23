@@ -11,12 +11,11 @@ class RendererParticles : public IRenderer3d {
 
     virtual void begin(ICamera* camera) override;
     virtual void submit(const RenderCommand& command) override;
-    virtual void submitLight(Light* light) override;
-    virtual void submitUniform(const UniformVal& uniform) override { uniformsQueue.push_back(uniform); }
     virtual void end() override;
     virtual void flush() override;
     virtual void logToggle() override { logData = !logData; }
     virtual bool getLog() const override { return logData; }
+    virtual inline std::vector<UniformVal>& uQueue() override { return uniformsQueue; }
 
   private:
     ICamera* camera;

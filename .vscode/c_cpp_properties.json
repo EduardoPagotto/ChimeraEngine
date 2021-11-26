@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "chimera_compile",
+            "name": "Linux",
             "includePath": [
                 "/usr/include",
                 "/usr/include/bullet",
@@ -21,11 +21,11 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/build/browse.vc.db"
             },
-            "intelliSenseMode": "gcc-x64",
+            "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "vector-of-bool.cmake-tools",
             "compileCommands": "${workspaceFolder}/build/compile_commands.json",
-            "cStandard": "c11",
-            "cppStandard": "c++14"
+            "cStandard": "c17",
+            "cppStandard": "c++17"
         }
     ],
     "version": 4

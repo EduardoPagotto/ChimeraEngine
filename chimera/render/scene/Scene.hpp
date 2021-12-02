@@ -40,7 +40,6 @@ class Scene : public IStateMachine {
     void execRenderPass(ICamera* camera, IRenderer3d& renderer);
     void execShadowPass(ICamera* camera, IRenderer3d& renderer);
     void execEmitterPass(ICamera* camera, IRenderer3d& renderer);
-    void render(IRenderer3d& renderer);
     uint32_t viewportWidth, viewportHeight;
     Registry registry;
     ICamera* camera;

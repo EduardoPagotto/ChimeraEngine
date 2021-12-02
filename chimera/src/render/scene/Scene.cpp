@@ -204,8 +204,6 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
     createRenderBuffer();
 }
 
-void Scene::onRender() { this->render(renderBatch); }
-
 bool Scene::onEvent(const SDL_Event& event) {
     switch (event.type) {
         case SDL_WINDOWEVENT: {
@@ -288,33 +286,32 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
     }
 }
 
-void Scene::render(IRenderer3d& renderer) {
-
-    if (renderer.getLog() == true) {
+void Scene::onRender() {
+    if (renderBatch.getLog() == true) {
         glm::vec3 pos = camera->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
     { // render a shadows in framebuffer
-        renderer.begin(camera);
-        this->execShadowPass(camera, renderer);
+        renderBatch.begin(camera);
+        this->execShadowPass(camera, renderBatch);
 
-        renderer.end();
+        renderBatch.end();
         shadowPass.shadowBuffer->bind(); // we're not using the stencil buffer now
 
-        renderer.flush();
+        renderBatch.flush();
         shadowPass.shadowBuffer->unbind();
     }
 
     // used by all
-    renderer.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));
-    renderer.uQueue().push_back(UniformVal("view", camera->getViewMatrix()));
+    renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));
+    renderBatch.uQueue().push_back(UniformVal("view", camera->getViewMatrix()));
 
     // data from shadowPass
-    renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
-    renderer.uQueue().push_back(UniformVal("viewPos", camera->getPosition()));
-    renderer.uQueue().push_back(UniformVal("shadows", 1));   // Ativa a sombra com 1
-    renderer.uQueue().push_back(UniformVal("shadowMap", 1)); // id da textura de shadow
+    renderBatch.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
+    renderBatch.uQueue().push_back(UniformVal("viewPos", camera->getPosition()));
+    renderBatch.uQueue().push_back(UniformVal("shadows", 1));   // Ativa a sombra com 1
+    renderBatch.uQueue().push_back(UniformVal("shadowMap", 1)); // id da textura de shadow
 
     shadowPass.shadowBuffer->getDepthAttachemnt()->bind(1);
 
@@ -323,17 +320,17 @@ void Scene::render(IRenderer3d& renderer) {
         auto& lc = lightView.get<LightComponent>(entity);
         auto& tc = registry.get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
         if (lc.global)                                         // biding light prop
-            lc.light->bindLight(renderer.uQueue(), tc.trans->getMatrix());
+            lc.light->bindLight(renderBatch.uQueue(), tc.trans->getMatrix());
     }
 
     { // Render mesh
-        renderer.begin(camera);
-        this->execRenderPass(camera, renderer);
+        renderBatch.begin(camera);
+        this->execRenderPass(camera, renderBatch);
 
-        renderer.end();
+        renderBatch.end();
         renderBuffer->bind(); // we're not using the stencil buffer now
 
-        renderer.flush();
+        renderBatch.flush();
     }
 
     if (emitters.size() > 0) {

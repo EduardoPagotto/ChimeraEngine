@@ -27,7 +27,10 @@ RenderBuffer::~RenderBuffer() {
     delete vbo;
 }
 
-void RenderBuffer::bind() { frameBuffer->bind(); }
+void RenderBuffer::bind() {
+    frameBuffer->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the screen
+}
 
 void RenderBuffer::unbind() { frameBuffer->unbind(); }
 
@@ -35,8 +38,6 @@ void RenderBuffer::render() {
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
     glViewport(posX, posY, frameBuffer->getWidth(), frameBuffer->getHeight());
 
-    // Clear the screen
-    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader.enable();
 
     // Bind our texture in Texture Unit 0

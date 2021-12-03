@@ -8,7 +8,7 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Engine engine(new CanvasGL("Chimera", 800, 600));
+        Engine engine(new CanvasGL("Chimera", 1200, 600));
         Game* game = new Game(&engine);
 
         engine.pushState(game);

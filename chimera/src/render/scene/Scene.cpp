@@ -13,7 +13,17 @@
 
 namespace Chimera {
 
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), renderBuffer(nullptr), physicsControl(nullptr) {
+static unsigned int next_pow2(unsigned int x) {
+    x -= 1;
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    return x + 1;
+}
+
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), rbLeft(nullptr), rbRight(nullptr), physicsControl(nullptr) {
     // Create ShadowPass
     ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shadowPass.shader);
     // Define o framebuffer de Shadow
@@ -41,26 +51,49 @@ Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), rende
 Scene::~Scene() {}
 
 void Scene::createRenderBuffer() {
-    if (renderBuffer) {
-        delete renderBuffer;
-        renderBuffer = nullptr;
-    }
+
     // Create RenderPass
     // Define o framebuffer de desenho
     Shader shader;
     ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
-    FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {
-        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-        TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
 
-    fbSpec.width = viewportWidth;
-    fbSpec.height = viewportHeight;
-    fbSpec.swapChainTarget = false;
-    fbSpec.samples = 1;
+    {
+        if (rbLeft) {
+            delete rbLeft;
+            rbLeft = nullptr;
+        }
+        FrameBufferSpecification fbSpec;
+        fbSpec.attachments = {
+            TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+            // TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+            TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
 
-    renderBuffer = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
+        fbSpec.width = viewportWidth / 2;
+        fbSpec.height = viewportHeight;
+        fbSpec.swapChainTarget = false;
+        fbSpec.samples = 1;
+
+        rbLeft = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
+    }
+
+    {
+        if (rbRight) {
+            delete rbRight;
+            rbRight = nullptr;
+        }
+        FrameBufferSpecification fbSpec;
+        fbSpec.attachments = {
+            TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+            // TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+            TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+
+        fbSpec.width = viewportWidth / 2;
+        fbSpec.height = viewportHeight;
+        fbSpec.swapChainTarget = false;
+        fbSpec.samples = 1;
+
+        rbRight = new RenderBuffer(viewportWidth / 2, 0, new FrameBuffer(fbSpec), shader);
+    }
 }
 
 void Scene::onDeatach() {
@@ -300,56 +333,68 @@ void Scene::onRender() {
         shadowPass.shadowBuffer->unbind();
     }
 
-    camera->recalculateMatrix(2);
+    RenderBuffer* renderBuffer = nullptr;
+    for (uint8_t eyeIndex = 0; eyeIndex < 2; eyeIndex++) {
 
-    // used by all
-    renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));
-    renderBatch.uQueue().push_back(UniformVal("view", camera->getViewMatrix()));
+        if (eyeIndex == 0) {
+            renderBuffer = rbLeft;
+            camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
+            camera->recalculateMatrix(1);
+        } else {
+            renderBuffer = rbRight;
+            camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
+            camera->recalculateMatrix(2);
+        }
 
-    // data from shadowPass
-    renderBatch.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
-    renderBatch.uQueue().push_back(UniformVal("viewPos", camera->getPosition()));
-    renderBatch.uQueue().push_back(UniformVal("shadows", 1));   // Ativa a sombra com 1
-    renderBatch.uQueue().push_back(UniformVal("shadowMap", 1)); // id da textura de shadow
+        // used by all
+        renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));
+        renderBatch.uQueue().push_back(UniformVal("view", camera->getViewMatrix()));
 
-    shadowPass.shadowBuffer->getDepthAttachemnt()->bind(1);
+        // data from shadowPass
+        renderBatch.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
+        renderBatch.uQueue().push_back(UniformVal("viewPos", camera->getPosition()));
+        renderBatch.uQueue().push_back(UniformVal("shadows", 1));   // Ativa a sombra com 1
+        renderBatch.uQueue().push_back(UniformVal("shadowMap", 1)); // id da textura de shadow
 
-    auto lightView = registry.get().view<LightComponent>();
-    for (auto entity : lightView) {
-        auto& lc = lightView.get<LightComponent>(entity);
-        auto& tc = registry.get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
-        if (lc.global)                                         // biding light prop
-            lc.light->bindLight(renderBatch.uQueue(), tc.trans->getMatrix());
+        shadowPass.shadowBuffer->getDepthAttachemnt()->bind(1);
+
+        auto lightView = registry.get().view<LightComponent>();
+        for (auto entity : lightView) {
+            auto& lc = lightView.get<LightComponent>(entity);
+            auto& tc = registry.get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
+            if (lc.global)                                         // biding light prop
+                lc.light->bindLight(renderBatch.uQueue(), tc.trans->getMatrix());
+        }
+
+        { // Render mesh
+            renderBatch.begin(camera);
+            this->execRenderPass(camera, renderBatch);
+
+            renderBatch.end();
+            renderBuffer->bind(); // we're not using the stencil buffer now
+
+            renderBatch.flush();
+        }
+
+        if (emitters.size() > 0) {
+            renderParticleEmitter.begin(camera);
+            this->execEmitterPass(camera, renderParticleEmitter);
+
+            renderParticleEmitter.end();
+            renderParticleEmitter.flush();
+        }
+
+        {
+            // TODO: captura do entity no framebuffer da tela
+            // // get val from color buffer (must be inside framebuffer renderer
+            // glm::ivec2 pos = MouseDevice::getMove();
+            // pos.y = viewportHeight - pos.y;
+            // int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
+            // SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
+        }
+
+        renderBuffer->unbind();
+        renderBuffer->render();
     }
-
-    { // Render mesh
-        renderBatch.begin(camera);
-        this->execRenderPass(camera, renderBatch);
-
-        renderBatch.end();
-        renderBuffer->bind(); // we're not using the stencil buffer now
-
-        renderBatch.flush();
-    }
-
-    if (emitters.size() > 0) {
-        renderParticleEmitter.begin(camera);
-        this->execEmitterPass(camera, renderParticleEmitter);
-
-        renderParticleEmitter.end();
-        renderParticleEmitter.flush();
-    }
-
-    {
-        // TODO: captura do entity no framebuffer da tela
-        // // get val from color buffer (must be inside framebuffer renderer
-        // glm::ivec2 pos = MouseDevice::getMove();
-        // pos.y = viewportHeight - pos.y;
-        // int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
-        // SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
-    }
-
-    renderBuffer->unbind();
-    renderBuffer->render();
 }
 } // namespace Chimera

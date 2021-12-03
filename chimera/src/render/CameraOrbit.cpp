@@ -41,9 +41,9 @@ const glm::mat4 CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
         eyeMat[eyeIndex].viewMatrix = glm::lookAt(position, front, up);
     } else {
 
-        float distEye = 5.0; // right
+        float distEye = 0.5; // right
         if (eyeIndex == 1)   // Left
-            distEye = -5.0;
+            distEye = -0.5;
 
         glm::vec3 left_p = front - position; // front and position as points
         glm::vec3 cross1 = glm::cross(up, left_p);

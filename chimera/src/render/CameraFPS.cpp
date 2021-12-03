@@ -35,7 +35,7 @@ const glm::mat4 CameraFPS::recalculateMatrix(const uint8_t& eyeIndex) {
         eyeMat[eyeIndex].viewMatrix = glm::lookAt(position, position + front, up);
     } else {
 
-        float distEye = 5.0;
+        float distEye = 1.0f;
         glm::vec3 cross1 = glm::cross(up, front); // up and front already are  vectors!!!!
         glm::vec3 norm1 = glm::normalize(cross1); // vector side (would be left or right)
         glm::vec3 final_norm1 = norm1 * distEye;  // point of eye

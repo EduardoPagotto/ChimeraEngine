@@ -43,7 +43,8 @@ class Scene : public IStateMachine {
     uint32_t viewportWidth, viewportHeight;
     Registry registry;
     ICamera* camera;
-    RenderBuffer* renderBuffer;
+    RenderBuffer* rbLeft;
+    RenderBuffer* rbRight;
     ShadowPass shadowPass;
     PhysicsControl* physicsControl;
     Renderer3d renderBatch;

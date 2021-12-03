@@ -175,9 +175,6 @@ void Scene::onUpdate(const double& ts) {
         }
     });
 
-    if (camera)
-        camera->recalculateMatrix(false); // FIXME: remover daqui!!!!
-
     if (physicsControl) {
         physicsControl->stepSim(ts);
         physicsControl->checkCollisions();
@@ -302,6 +299,8 @@ void Scene::onRender() {
         renderBatch.flush();
         shadowPass.shadowBuffer->unbind();
     }
+
+    camera->recalculateMatrix(false);
 
     // used by all
     renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));

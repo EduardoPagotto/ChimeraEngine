@@ -11,7 +11,7 @@ class CameraOrthographic : public ICamera {
 
     void setRotation(float rot) {
         rotation = rot;
-        recalculateMatrix(false);
+        recalculateMatrix(0);
     }
     const float getRotation() const { return rotation; }
 
@@ -22,7 +22,7 @@ class CameraOrthographic : public ICamera {
     virtual const glm::mat4 getViewProjectionMatrix() const override { return viewProjectionMatrix; }
     virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return viewProjectionMatrixInverse; };
     virtual const bool is3D() const override { return false; }
-    virtual const glm::mat4 recalculateMatrix(bool left) override;
+    virtual const glm::mat4 recalculateMatrix(const uint8_t& eyeIndex) override;
     virtual void onUpdate(const double& ts) override;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
 

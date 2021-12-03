@@ -21,6 +21,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         CameraComponent& cc = ce.addComponent<CameraComponent>();
         // cc.camera = new CameraOrbit(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         cc.camera = new CameraFPS(glm::vec3(20.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+        cam = (ICamera3D*)cc.camera;
 
         // Adiciona um controller (Compostamento) a camera e vincula entidades ao mesmo
         ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
@@ -155,6 +156,14 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(const double& ts) {}
+void Game::onUpdate(const double& ts) {
+    glm::vec3 pos = cam->getPosition();
+    glm::vec3 front = cam->getFront();
+    glm::vec3 up = cam->getUp();
+
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "pos(%.2f; %.2f; %.2f)", pos.x, pos.y, pos.z);
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "front(%.2f; %.2f; %.2f)", front.x, front.y, front.z);
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "up(%.2f; %.2f; %.2f)", up.x, up.y, up.z);
+}
 
 void Game::onRender() {}

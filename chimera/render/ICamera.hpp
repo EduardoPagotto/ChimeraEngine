@@ -7,6 +7,12 @@ namespace Chimera {
 #define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
 #define CAMERA_MAX_FOV 45.0f
 
+struct EyeViewMatrix { // 0=centro; 1=left; 2=right;
+    glm::mat4 viewMatrix;
+    glm::mat4 viewProjectionMatrix;
+    glm::mat4 viewProjectionMatrixInverse;
+};
+
 class ICamera {
   public:
     virtual ~ICamera() {}
@@ -14,7 +20,7 @@ class ICamera {
     virtual const glm::mat4 getProjectionMatrix() const = 0;
     virtual const glm::mat4 getViewProjectionMatrix() const = 0;
     virtual const glm::mat4 getViewProjectionMatrixInverse() const = 0;
-    virtual const glm::mat4 recalculateMatrix(bool left) = 0;
+    virtual const glm::mat4 recalculateMatrix(const uint8_t& eyeIndex) = 0;
     virtual const glm::vec3& getPosition() const = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void onUpdate(const double& ts) = 0;

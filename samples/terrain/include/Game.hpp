@@ -20,6 +20,7 @@ class Game : public Chimera::IStateMachine {
   private:
     Chimera::Scene activeScene;
     Chimera::Engine* engine;
+    Chimera::ICamera3D* cam;
 };
 
 #endif

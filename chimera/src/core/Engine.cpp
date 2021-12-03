@@ -59,7 +59,7 @@ void Engine::run(void) {
     SDL_Event l_eventSDL;
     bool l_quit = false;
     uint32_t beginCount;
-    uint32_t miniumCountDelta = 1000 / 120; // 16.66667.3 ms
+    uint32_t miniumCountDelta = 1000 / 140; // 16.66667.3 ms
     double ts;
     // open devices
     JoystickManager::find();

@@ -6,7 +6,7 @@
 namespace Chimera {
 
 CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch)
-    : front(glm::vec3(0.0f, 0.0f, 0.0f)), fov(CAMERA_MAX_FOV) {
+    : front(glm::vec3(0.0f, 0.0f, 0.0f)), fov(CAMERA_MAX_FOV), eyeIndex(0) {
     this->position = pos;
     this->up = up;
     this->yaw = yaw;
@@ -35,33 +35,33 @@ void CameraOrbit::setViewportSize(const uint32_t& width, const uint32_t& height)
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
-const glm::mat4 CameraOrbit::recalculateMatrix(bool left) { // windows x->width; y -> height
-
-    if (left == false) {
-        viewMatrix = glm::lookAt(position, front, up);
+const glm::mat4 CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
+    this->eyeIndex = eyeIndex;
+    if (eyeIndex == 0) {
+        eyeMat[eyeIndex].viewMatrix = glm::lookAt(position, front, up);
     } else {
-        // TODO: olho esquerdo para dual
-        glm::vec3 novaPosition = this->getPosition();
-        glm::vec3 novaFront = this->getFront();
 
-        glm::vec3 left_p = novaFront - novaPosition;
-        glm::vec3 cross1 = glm::cross(this->getUp(), left_p);
+        float distEye = 5.0; // right
+        if (eyeIndex == 1)   // Left
+            distEye = -5.0;
+
+        glm::vec3 left_p = front - position; // front and position as points
+        glm::vec3 cross1 = glm::cross(up, left_p);
         glm::vec3 norm1 = glm::normalize(cross1);
-        glm::vec3 final_norm1 = norm1 * 5.0f;
+        glm::vec3 final_norm1 = norm1 * distEye;
 
-        novaPosition = this->getPosition() - final_norm1;
-        novaFront = this->getFront() - final_norm1;
-        viewMatrix = glm::lookAt(novaPosition, novaFront, this->getUp());
+        glm::vec3 novaPosition = position - final_norm1;
+        glm::vec3 novaFront = front - final_norm1;
+        eyeMat[eyeIndex].viewMatrix = glm::lookAt(novaPosition, novaFront, up);
     }
-
-    // projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
-    viewProjectionMatrix = projectionMatrix * viewMatrix;
+    // projectionMatrix so e calculado no dimencionamento do viewport ou alteracao do FOV
+    eyeMat[eyeIndex].viewProjectionMatrix = projectionMatrix * eyeMat[eyeIndex].viewMatrix;
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);
-    glm::mat4 viewMatrixInverse = glm::inverse(viewMatrix);
-    viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
+    glm::mat4 viewMatrixInverse = glm::inverse(eyeMat[eyeIndex].viewMatrix);
+    eyeMat[eyeIndex].viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
 
-    return viewProjectionMatrixInverse;
+    return eyeMat[eyeIndex].viewProjectionMatrixInverse;
 }
 
 void CameraOrbit::invertPitch() {

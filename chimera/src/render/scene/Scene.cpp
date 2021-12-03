@@ -300,7 +300,7 @@ void Scene::onRender() {
         shadowPass.shadowBuffer->unbind();
     }
 
-    camera->recalculateMatrix(false);
+    camera->recalculateMatrix(2);
 
     // used by all
     renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));

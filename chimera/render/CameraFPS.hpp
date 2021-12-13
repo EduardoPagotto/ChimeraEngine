@@ -33,6 +33,8 @@ class CameraFPS : public ICamera3D {
     virtual void updateVectors() override;
     virtual const bool is3D() const { return true; };
 
+    // friend void recalculateMatrixFPS(const uint8_t& iEye, const float& distEye, CameraFPS& cam);
+
   private:
     glm::vec3 position, front, up, right, worldUp;
     float pitch, yaw, fov;
@@ -40,6 +42,6 @@ class CameraFPS : public ICamera3D {
     float movementSpeed, aspectRatio;
     glm::mat4 projectionMatrix;
     uint8_t eyeIndex;
-    EyeViewMatrix eyeMat[3];
+    EyeViewMatrix eyeMat[3]; // center; left; right;
 };
 } // namespace Chimera

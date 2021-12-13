@@ -48,6 +48,6 @@ class CameraOrbit : public ICamera3D {
     float min, max, aspectRatio;
     glm::mat4 projectionMatrix;
     uint8_t eyeIndex;
-    EyeViewMatrix eyeMat[3];
+    EyeViewMatrix eyeMat[3]; // center; left; right;
 };
 } // namespace Chimera

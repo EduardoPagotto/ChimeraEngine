@@ -156,4 +156,28 @@ void CameraFPS::processCameraFOV(double offset) {
         fov = CAMERA_MAX_FOV;
     }
 }
+
+// void recalculateMatrixFPS(const uint8_t& iEye, const float& distEye, CameraFPS& cam) {
+
+//     EyeViewMatrix& em = cam.eyeMat[iEye];
+
+//     if (iEye == 0) {
+//         cam.eyeMat[iEye].viewMatrix = glm::lookAt(cam.position, cam.position + cam.front, cam.up);
+//     } else {
+
+//         glm::vec3 cross1 = glm::cross(cam.up, cam.front); // up and front already are  vectors!!!!
+//         glm::vec3 norm1 = glm::normalize(cross1);         // vector side (would be left or right)
+//         glm::vec3 final_norm1 = norm1 * distEye;          // point of eye
+//         glm::vec3 novaPosition = (iEye == 1) ? (cam.position + final_norm1) : (cam.position - final_norm1); // 1 is left
+
+//         cam.eyeMat[iEye].viewMatrix = glm::lookAt(novaPosition, novaPosition + cam.front, cam.up);
+//     }
+//     // projectionMatrix so e calculado no dimencionamento do viewport ou alteracao do FOV
+//     cam.eyeMat[iEye].viewProjectionMatrix = cam.projectionMatrix * cam.eyeMat[iEye].viewMatrix;
+
+//     glm::mat4 projectionMatrixInverse = glm::inverse(cam.projectionMatrix);
+//     glm::mat4 viewMatrixInverse = glm::inverse(cam.eyeMat[iEye].viewMatrix);
+//     cam.eyeMat[iEye].viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
+// }
+
 } // namespace Chimera

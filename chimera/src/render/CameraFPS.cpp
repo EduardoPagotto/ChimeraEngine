@@ -32,7 +32,7 @@ void CameraFPS::setViewportSize(const uint32_t& width, const uint32_t& height) {
 const glm::mat4 CameraFPS::recalculateMatrix(const uint8_t& eyeIndex) {
     this->eyeIndex = eyeIndex;
     if (eyeIndex == 0) {
-        eyeMat[eyeIndex].viewMatrix = glm::lookAt(position, position + front, up);
+        eyeMat[eyeIndex].view = glm::lookAt(position, position + front, up);
     } else {
 
         float distEye = 1.0f;
@@ -41,15 +41,15 @@ const glm::mat4 CameraFPS::recalculateMatrix(const uint8_t& eyeIndex) {
         glm::vec3 final_norm1 = norm1 * distEye;  // point of eye
         glm::vec3 novaPosition = (eyeIndex == 1) ? (position + final_norm1) : (position - final_norm1); // 1 is left
 
-        eyeMat[eyeIndex].viewMatrix = glm::lookAt(novaPosition, novaPosition + front, up);
+        eyeMat[eyeIndex].view = glm::lookAt(novaPosition, novaPosition + front, up);
     }
     // projectionMatrix so e calculado no dimencionamento do viewport ou alteracao do FOV
-    eyeMat[eyeIndex].viewProjectionMatrix = projectionMatrix * eyeMat[eyeIndex].viewMatrix;
+    eyeMat[eyeIndex].viewProjection = projectionMatrix * eyeMat[eyeIndex].view;
 
     glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);
-    glm::mat4 viewMatrixInverse = glm::inverse(eyeMat[eyeIndex].viewMatrix);
-    eyeMat[eyeIndex].viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
-    return eyeMat[eyeIndex].viewProjectionMatrixInverse;
+    glm::mat4 viewMatrixInverse = glm::inverse(eyeMat[eyeIndex].view);
+    eyeMat[eyeIndex].viewProjectionInverse = viewMatrixInverse * projectionMatrixInverse;
+    return eyeMat[eyeIndex].viewProjectionInverse;
 }
 
 void CameraFPS::invertPitch() {

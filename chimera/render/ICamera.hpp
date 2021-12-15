@@ -7,10 +7,10 @@ namespace Chimera {
 #define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
 #define CAMERA_MAX_FOV 45.0f
 
-struct EyeViewMatrix { // 0=centro; 1=left; 2=right;
-    glm::mat4 viewMatrix;
-    glm::mat4 viewProjectionMatrix;
-    glm::mat4 viewProjectionMatrixInverse;
+struct EyeMatrix { // 0=centro; 1=left; 2=right;
+    glm::mat4 view;
+    glm::mat4 viewProjection;
+    glm::mat4 viewProjectionInverse;
 };
 
 class ICamera {

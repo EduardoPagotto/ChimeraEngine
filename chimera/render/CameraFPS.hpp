@@ -15,10 +15,10 @@ class CameraFPS : public ICamera3D {
 
     // herdado
     virtual void onUpdate(const double& ts) override;
-    virtual const glm::mat4 getViewMatrix() const override { return eyeMat[eyeIndex].viewMatrix; };
+    virtual const glm::mat4 getViewMatrix() const override { return eyeMat[eyeIndex].view; };
     virtual const glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
-    virtual const glm::mat4 getViewProjectionMatrix() const override { return eyeMat[eyeIndex].viewProjectionMatrix; };
-    virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return eyeMat[eyeIndex].viewProjectionMatrixInverse; };
+    virtual const glm::mat4 getViewProjectionMatrix() const override { return eyeMat[eyeIndex].viewProjection; };
+    virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return eyeMat[eyeIndex].viewProjectionInverse; };
     virtual const glm::mat4 recalculateMatrix(const uint8_t& eyeIndex) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
@@ -42,6 +42,6 @@ class CameraFPS : public ICamera3D {
     float movementSpeed, aspectRatio;
     glm::mat4 projectionMatrix;
     uint8_t eyeIndex;
-    EyeViewMatrix eyeMat[3]; // center; left; right;
+    EyeMatrix eyeMat[3]; // center; left; right;
 };
 } // namespace Chimera

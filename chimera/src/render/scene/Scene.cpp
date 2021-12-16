@@ -23,7 +23,7 @@ static unsigned int next_pow2(unsigned int x) {
     return x + 1;
 }
 
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), rbLeft(nullptr), rbRight(nullptr), physicsControl(nullptr) {
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr) {
     // Create ShadowPass
     ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shadowPass.shader);
     // Define o framebuffer de Shadow
@@ -43,56 +43,48 @@ Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), rbLef
     // perspective projection matrix you'll have to change the light position as the
     // current light position isn't enough to reflect the whole scene.
 
+    single = false;
     this->createRenderBuffer();
 
     // FIXME: coisa feia!!!!
     origem = new Transform();
 }
+
 Scene::~Scene() {}
 
-void Scene::createRenderBuffer() {
-
-    // Create RenderPass
+RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
     // Define o framebuffer de desenho
     Shader shader;
     ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
 
-    {
-        if (rbLeft) {
-            delete rbLeft;
-            rbLeft = nullptr;
-        }
-        FrameBufferSpecification fbSpec;
-        fbSpec.attachments = {
-            TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-            // TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-            TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {
+        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
+        // TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
 
-        fbSpec.width = viewportWidth / 2;
-        fbSpec.height = viewportHeight;
-        fbSpec.swapChainTarget = false;
-        fbSpec.samples = 1;
+    fbSpec.width = width;
+    fbSpec.height = height;
+    fbSpec.swapChainTarget = false;
+    fbSpec.samples = 1;
 
-        rbLeft = new RenderBuffer(0, 0, new FrameBuffer(fbSpec), shader);
+    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), shader);
+}
+
+void Scene::createRenderBuffer() {
+
+    for (auto rb : vRB) {
+        delete rb;
+        rb = nullptr;
     }
 
-    {
-        if (rbRight) {
-            delete rbRight;
-            rbRight = nullptr;
-        }
-        FrameBufferSpecification fbSpec;
-        fbSpec.attachments = {
-            TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-            // TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-            TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+    vRB.clear();
 
-        fbSpec.width = viewportWidth / 2;
-        fbSpec.height = viewportHeight;
-        fbSpec.swapChainTarget = false;
-        fbSpec.samples = 1;
-
-        rbRight = new RenderBuffer(viewportWidth / 2, 0, new FrameBuffer(fbSpec), shader);
+    if (single == false) {
+        vRB.push_back(initRB(0, 0, viewportWidth / 2, viewportHeight));                 // left
+        vRB.push_back(initRB(viewportWidth / 2, 0, viewportWidth / 2, viewportHeight)); // right
+    } else {
+        vRB.push_back(initRB(0, 0, viewportWidth, viewportHeight)); // full only
     }
 }
 
@@ -200,7 +192,6 @@ void Scene::onAttach() {
 }
 
 void Scene::onUpdate(const double& ts) {
-
     // update scripts
     registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (nsc.instance) {
@@ -218,7 +209,6 @@ void Scene::onUpdate(const double& ts) {
 }
 
 void Scene::onViewportResize(uint32_t width, uint32_t height) {
-
     viewportWidth = width;
     viewportHeight = height;
 
@@ -248,7 +238,6 @@ bool Scene::onEvent(const SDL_Event& event) {
 }
 
 void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
-
     auto view = registry.get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
 
@@ -273,7 +262,6 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 }
 
 void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
-
     // load lights after begin (clear previos lights)
     auto lightViewEnt = registry.get().view<LightComponent>();
     for (auto entity : lightViewEnt) {
@@ -301,7 +289,6 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
 }
 
 void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
-
     auto group = registry.get().group<Shader, Material, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
         auto [sc, mc, tc, rc] = group.get<Shader, Material, TransComponent, Renderable3dComponent>(entity);
@@ -333,17 +320,15 @@ void Scene::onRender() {
         shadowPass.shadowBuffer->unbind();
     }
 
-    RenderBuffer* renderBuffer = nullptr;
-    for (uint8_t eyeIndex = 0; eyeIndex < 2; eyeIndex++) {
+    uint8_t count = 1;
+    for (auto renderBuffer : vRB) {
+        camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
 
-        if (eyeIndex == 0) {
-            renderBuffer = rbLeft;
-            camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
-            camera->recalculateMatrix(1);
+        if (vRB.size() == 1) {
+            camera->recalculateMatrix(0);
         } else {
-            renderBuffer = rbRight;
-            camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
-            camera->recalculateMatrix(2);
+            camera->recalculateMatrix(count);
+            count++;
         }
 
         // used by all
@@ -373,7 +358,7 @@ void Scene::onRender() {
             renderBatch.end();
             renderBuffer->bind(); // we're not using the stencil buffer now
 
-            renderBatch.flush();
+            renderBatch.flush(); // desenha aqui!!!!
         }
 
         if (emitters.size() > 0) {

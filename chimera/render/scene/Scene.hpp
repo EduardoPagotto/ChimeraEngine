@@ -36,6 +36,7 @@ class Scene : public IStateMachine {
     void setOrigem(ITrans* o) { origem = o; }
 
   private:
+    RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
     void createRenderBuffer();
     void execRenderPass(ICamera* camera, IRenderer3d& renderer);
     void execShadowPass(ICamera* camera, IRenderer3d& renderer);
@@ -43,13 +44,13 @@ class Scene : public IStateMachine {
     uint32_t viewportWidth, viewportHeight;
     Registry registry;
     ICamera* camera;
-    RenderBuffer* rbLeft;
-    RenderBuffer* rbRight;
+    std::vector<RenderBuffer*> vRB;
     ShadowPass shadowPass;
     PhysicsControl* physicsControl;
     Renderer3d renderBatch;
     RendererParticles renderParticleEmitter;
     std::vector<IEmitter*> emitters;
     ITrans* origem;
+    bool single;
 };
 } // namespace Chimera

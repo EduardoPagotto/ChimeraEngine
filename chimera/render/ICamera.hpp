@@ -13,6 +13,28 @@ struct EyeMatrix { // 0=centro; 1=left; 2=right;
     glm::mat4 viewProjectionInverse;
 };
 
+enum class EyeIndex { center = 0, left = 1, right = 2 };
+
+class EyeView {
+  public:
+    EyeView() : index(0) {}
+    void setIndex(const EyeIndex& index) { this->index = (uint8_t)index; }
+    const EyeIndex getIndex() const { return (EyeIndex)index; }
+    const glm::mat4& getView() const { return matrix[index].view; }
+    const glm::mat4& getViewProjection() const { return matrix[index].viewProjection; };
+    const glm::mat4& getViewProjectionInverse() const { return matrix[index].viewProjectionInverse; }
+
+    void update(const glm::mat4& view, const glm::mat4& projection) {
+        matrix[index].view = view;
+        matrix[index].viewProjection = projection * view;
+        matrix[index].viewProjectionInverse = glm::inverse(view) * glm::inverse(projection);
+    }
+
+  private:
+    uint8_t index;
+    EyeMatrix matrix[3]; // center; left; right;
+};
+
 class ICamera {
   public:
     virtual ~ICamera() {}

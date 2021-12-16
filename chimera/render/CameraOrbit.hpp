@@ -18,10 +18,10 @@ class CameraOrbit : public ICamera3D {
     }
 
     // herdado
-    virtual const glm::mat4 getViewMatrix() const override { return eyeMat[eyeIndex].view; };
+    virtual const glm::mat4 getViewMatrix() const override { return eye.getView(); } // FIXME: alterar para &
     virtual const glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
-    virtual const glm::mat4 getViewProjectionMatrix() const override { return eyeMat[eyeIndex].viewProjection; };
-    virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return eyeMat[eyeIndex].viewProjectionInverse; };
+    virtual const glm::mat4 getViewProjectionMatrix() const override { return eye.getViewProjection(); }
+    virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return eye.getViewProjectionInverse(); }
     virtual const glm::mat4 recalculateMatrix(const uint8_t& eyeIndex) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
@@ -47,7 +47,6 @@ class CameraOrbit : public ICamera3D {
     float distance;
     float min, max, aspectRatio;
     glm::mat4 projectionMatrix;
-    uint8_t eyeIndex;
-    EyeMatrix eyeMat[3]; // center; left; right;
+    EyeView eye;
 };
 } // namespace Chimera

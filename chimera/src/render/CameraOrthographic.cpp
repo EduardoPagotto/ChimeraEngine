@@ -7,17 +7,13 @@ CameraOrthographic::CameraOrthographic(const float& size, const float& nearClip,
     : size(size), nearClip(nearClip), farClip(farClip), rotation(0.0f), position(glm::vec3(0.0f)) {}
 
 const glm::mat4 CameraOrthographic::recalculateMatrix(const uint8_t& eyeIndex) {
+    eye.setIndex((EyeIndex)eyeIndex);
     glm::mat4 transform =
         glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
 
-    viewMatrix = glm::inverse(transform);
-    viewProjectionMatrix = projectionMatrix * viewMatrix;
+    eye.update(glm::inverse(transform), projectionMatrix);
 
-    glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);
-    glm::mat4 viewMatrixInverse = glm::inverse(viewMatrix);
-    viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
-
-    return viewProjectionMatrixInverse;
+    return eye.getViewProjectionInverse();
 }
 
 void CameraOrthographic::setPosition(const glm::vec3& position) {

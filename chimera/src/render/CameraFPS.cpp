@@ -6,15 +6,13 @@
 namespace Chimera {
 
 CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch)
-    : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(FPSCAMERA_MAX_SPEED), fov(CAMERA_MAX_FOV), eyeIndex(0) {
+    : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(FPSCAMERA_MAX_SPEED), fov(CAMERA_MAX_FOV) {
     this->position = pos;
     this->worldUp = up;
     this->up = up;
     this->yaw = yaw;
     this->pitch = pitch;
-
     this->aspectRatio = 1.0f;
-
     this->nearPlane = 0.3f;
     this->farPlane = 5000.0f;
 
@@ -30,9 +28,9 @@ void CameraFPS::setViewportSize(const uint32_t& width, const uint32_t& height) {
 }
 
 const glm::mat4 CameraFPS::recalculateMatrix(const uint8_t& eyeIndex) {
-    this->eyeIndex = eyeIndex;
+    eye.setIndex((EyeIndex)eyeIndex);
     if (eyeIndex == 0) {
-        eyeMat[eyeIndex].view = glm::lookAt(position, position + front, up);
+        eye.update(glm::lookAt(position, position + front, up), projectionMatrix);
     } else {
 
         float distEye = 1.0f;
@@ -41,15 +39,10 @@ const glm::mat4 CameraFPS::recalculateMatrix(const uint8_t& eyeIndex) {
         glm::vec3 final_norm1 = norm1 * distEye;  // point of eye
         glm::vec3 novaPosition = (eyeIndex == 1) ? (position + final_norm1) : (position - final_norm1); // 1 is left
 
-        eyeMat[eyeIndex].view = glm::lookAt(novaPosition, novaPosition + front, up);
+        eye.update(glm::lookAt(novaPosition, novaPosition + front, up), projectionMatrix);
     }
-    // projectionMatrix so e calculado no dimencionamento do viewport ou alteracao do FOV
-    eyeMat[eyeIndex].viewProjection = projectionMatrix * eyeMat[eyeIndex].view;
 
-    glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);
-    glm::mat4 viewMatrixInverse = glm::inverse(eyeMat[eyeIndex].view);
-    eyeMat[eyeIndex].viewProjectionInverse = viewMatrixInverse * projectionMatrixInverse;
-    return eyeMat[eyeIndex].viewProjectionInverse;
+    return eye.getViewProjectionInverse();
 }
 
 void CameraFPS::invertPitch() {

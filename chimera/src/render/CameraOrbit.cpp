@@ -6,7 +6,7 @@
 namespace Chimera {
 
 CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, float pitch)
-    : front(glm::vec3(0.0f, 0.0f, 0.0f)), fov(CAMERA_MAX_FOV), eyeIndex(0) {
+    : front(glm::vec3(0.0f, 0.0f, 0.0f)), fov(CAMERA_MAX_FOV) {
     this->position = pos;
     this->up = up;
     this->yaw = yaw;
@@ -36,9 +36,9 @@ void CameraOrbit::setViewportSize(const uint32_t& width, const uint32_t& height)
 }
 
 const glm::mat4 CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
-    this->eyeIndex = eyeIndex;
+    eye.setIndex((EyeIndex)eyeIndex);
     if (eyeIndex == 0) {
-        eyeMat[eyeIndex].view = glm::lookAt(position, front, up);
+        eye.update(glm::lookAt(position, front, up), projectionMatrix);
     } else {
 
         float distEye = 0.5;
@@ -57,16 +57,9 @@ const glm::mat4 CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
             novaFront = front - final_norm1;
         }
 
-        eyeMat[eyeIndex].view = glm::lookAt(novaPosition, novaFront, up);
+        eye.update(glm::lookAt(novaPosition, novaFront, up), projectionMatrix);
     }
-    // projectionMatrix so e calculado no dimencionamento do viewport ou alteracao do FOV
-    eyeMat[eyeIndex].viewProjection = projectionMatrix * eyeMat[eyeIndex].view;
-
-    glm::mat4 projectionMatrixInverse = glm::inverse(projectionMatrix);
-    glm::mat4 viewMatrixInverse = glm::inverse(eyeMat[eyeIndex].view);
-    eyeMat[eyeIndex].viewProjectionInverse = viewMatrixInverse * projectionMatrixInverse;
-
-    return eyeMat[eyeIndex].viewProjectionInverse;
+    return eye.getViewProjectionInverse();
 }
 
 void CameraOrbit::invertPitch() {

@@ -17,10 +17,10 @@ class CameraOrthographic : public ICamera {
 
     virtual void setPosition(const glm::vec3& position) override;
     virtual const glm::vec3& getPosition() const override { return position; }
-    virtual const glm::mat4 getViewMatrix() const override { return viewMatrix; };
+    virtual const glm::mat4 getViewMatrix() const override { return eye.getView(); }
     virtual const glm::mat4 getProjectionMatrix() const override { return projectionMatrix; }
-    virtual const glm::mat4 getViewProjectionMatrix() const override { return viewProjectionMatrix; }
-    virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return viewProjectionMatrixInverse; };
+    virtual const glm::mat4 getViewProjectionMatrix() const override { return eye.getViewProjection(); }
+    virtual const glm::mat4 getViewProjectionMatrixInverse() const override { return eye.getViewProjectionInverse(); }
     virtual const bool is3D() const override { return false; }
     virtual const glm::mat4 recalculateMatrix(const uint8_t& eyeIndex) override;
     virtual void onUpdate(const double& ts) override;
@@ -29,9 +29,7 @@ class CameraOrthographic : public ICamera {
   private:
     float rotation, aspectRatio, size, nearClip, farClip;
     glm::vec3 position;
-    glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
-    glm::mat4 viewProjectionMatrix;
-    glm::mat4 viewProjectionMatrixInverse;
+    EyeView eye;
 };
 } // namespace Chimera

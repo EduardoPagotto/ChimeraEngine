@@ -40,14 +40,11 @@ const glm::mat4& CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
     if (eyeIndex == 0) {
         eye.update(glm::lookAt(position, front, up), projectionMatrix);
     } else {
-
-        float distEye = 0.5;
         glm::vec3 novaPosition, novaFront;
-
         glm::vec3 left_p = front - position; // front and position as points
         glm::vec3 cross1 = glm::cross(up, left_p);
         glm::vec3 norm1 = glm::normalize(cross1);
-        glm::vec3 final_norm1 = norm1 * distEye;
+        glm::vec3 final_norm1 = norm1 * eye.getNoseDist();
 
         if (eyeIndex == 1) { // left
             novaPosition = position + final_norm1;

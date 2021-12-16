@@ -17,12 +17,13 @@ enum class EyeIndex { center = 0, left = 1, right = 2 };
 
 class EyeView {
   public:
-    EyeView() : index(0) {}
+    EyeView() : index(0), noseDist(0.4f) {}
     void setIndex(const EyeIndex& index) { this->index = (uint8_t)index; }
     const EyeIndex getIndex() const { return (EyeIndex)index; }
     const glm::mat4& getView() const { return matrix[index].view; }
     const glm::mat4& getViewProjection() const { return matrix[index].viewProjection; };
     const glm::mat4& getViewProjectionInverse() const { return matrix[index].viewProjectionInverse; }
+    const float& getNoseDist() const { return noseDist; }
 
     void update(const glm::mat4& view, const glm::mat4& projection) {
         matrix[index].view = view;
@@ -32,6 +33,7 @@ class EyeView {
 
   private:
     uint8_t index;
+    float noseDist;
     EyeMatrix matrix[3]; // center; left; right;
 };
 

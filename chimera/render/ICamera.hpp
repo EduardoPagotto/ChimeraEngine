@@ -38,11 +38,11 @@ class EyeView {
 class ICamera {
   public:
     virtual ~ICamera() {}
-    virtual const glm::mat4 getViewMatrix() const = 0;
-    virtual const glm::mat4 getProjectionMatrix() const = 0;
-    virtual const glm::mat4 getViewProjectionMatrix() const = 0;
-    virtual const glm::mat4 getViewProjectionMatrixInverse() const = 0;
-    virtual const glm::mat4 recalculateMatrix(const uint8_t& eyeIndex) = 0;
+    virtual const glm::mat4& getViewMatrix() const = 0;
+    virtual const glm::mat4& getProjectionMatrix() const = 0;
+    virtual const glm::mat4& getViewProjectionMatrix() const = 0;
+    virtual const glm::mat4& getViewProjectionMatrixInverse() const = 0;
+    virtual const glm::mat4& recalculateMatrix(const uint8_t& eyeIndex) = 0;
     virtual const glm::vec3& getPosition() const = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void onUpdate(const double& ts) = 0;

@@ -27,7 +27,7 @@ void CameraFPS::setViewportSize(const uint32_t& width, const uint32_t& height) {
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
-const glm::mat4 CameraFPS::recalculateMatrix(const uint8_t& eyeIndex) {
+const glm::mat4& CameraFPS::recalculateMatrix(const uint8_t& eyeIndex) {
     eye.setIndex((EyeIndex)eyeIndex);
     if (eyeIndex == 0) {
         eye.update(glm::lookAt(position, position + front, up), projectionMatrix);

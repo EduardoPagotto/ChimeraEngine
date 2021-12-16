@@ -77,12 +77,7 @@ if (BULLET_SET_TO_USE) # TODO: Remover para o Core depois de estrair o Transform
 									 bullet/Constraint.cpp) #adiciona o cpp
 	set(RenderInclude ${RenderInclude} ${BULLET_INCLUDE_DIR} ) #adiciona o h
 endif(BULLET_SET_TO_USE)
-
-if (HMD_Z1_SET_TO_USE)
-	message(STATUS "HMD_Z1 incluido no build")
-	set(RenderSource ${RenderSource} CanvasHmd.cpp) #adiciona o cpp
-endif(HMD_Z1_SET_TO_USE)
-				
+			
 # Define o Target
 add_library (ChimeraRender STATIC ${RenderSource})
 

@@ -17,7 +17,6 @@ class CameraOrbit : public ICamera3D {
         this->max = max;
     }
 
-    // herdado
     virtual const glm::mat4& getViewMatrix() const override { return eye.getView(); }
     virtual const glm::mat4& getProjectionMatrix() const override { return projectionMatrix; }
     virtual const glm::mat4& getViewProjectionMatrix() const override { return eye.getViewProjection(); }
@@ -45,7 +44,7 @@ class CameraOrbit : public ICamera3D {
     float pitch, yaw, fov;
     float nearPlane, farPlane;
     float distance;
-    float min, max, aspectRatio;
+    float min, max;
     glm::mat4 projectionMatrix;
     EyeView eye;
 };

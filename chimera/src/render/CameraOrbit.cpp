@@ -15,8 +15,6 @@ CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, f
     this->nearPlane = 0.3f;
     this->farPlane = 5000.0f;
 
-    this->aspectRatio = 1.0f;
-
     min = 1.0f;
     max = 1500.0f;
 
@@ -30,13 +28,13 @@ CameraOrbit::CameraOrbit(const glm::vec3& pos, const glm::vec3& up, float yaw, f
 CameraOrbit::~CameraOrbit() {}
 
 void CameraOrbit::setViewportSize(const uint32_t& width, const uint32_t& height) {
-    aspectRatio = (float)width / (float)height;
+    float aspectRatio = (float)width / (float)height;
     // TODO: criar funcao de recalc de projection para usar a variacao de FOV
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
 const glm::mat4& CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
-    eye.setIndex((EyeIndex)eyeIndex);
+    eye.setIndex(eyeIndex);
     if (eyeIndex == 0) {
         eye.update(glm::lookAt(position, front, up), projectionMatrix);
     } else {
@@ -101,15 +99,8 @@ void CameraOrbit::processDistance(const int& _mz) {
     this->updateVectors();
 }
 
-// void CameraOrbit::processCameraMovement(glm::vec3& direction, float deltaTime) {
-//     // float velocity = movementSpeed * deltaTime;
-//     // position += direction * velocity;
-// }
-
 void CameraOrbit::processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch) {
-    // Make sure the user isn't interacting with the UI
-    // if (!Window::GetHideCursor())
-    //    return;
+
     if (this->up.y == 1) {
         yaw -= (float)xOffset;
         pitch -= (float)yOffset;

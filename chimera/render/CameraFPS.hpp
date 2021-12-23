@@ -13,7 +13,6 @@ class CameraFPS : public ICamera3D {
     void processCameraRotation(double xOffset, double yOffset, bool constrainPitch = true);
     void processCameraMovement(glm::vec3& direction, float deltaTime);
 
-    // herdado
     virtual void onUpdate(const double& ts) override;
     virtual const glm::mat4& getViewMatrix() const override { return eye.getView(); };
     virtual const glm::mat4& getProjectionMatrix() const override { return projectionMatrix; }
@@ -32,13 +31,12 @@ class CameraFPS : public ICamera3D {
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
     virtual void updateVectors() override;
     virtual const bool is3D() const { return true; };
-    // friend void recalculateMatrixFPS(const uint8_t& iEye, const float& distEye, CameraFPS& cam);
 
   private:
     glm::vec3 position, front, up, right, worldUp;
     float pitch, yaw, fov;
     float nearPlane, farPlane;
-    float movementSpeed, aspectRatio;
+    float movementSpeed;
     glm::mat4 projectionMatrix;
     EyeView eye;
 };

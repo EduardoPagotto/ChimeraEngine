@@ -12,7 +12,6 @@ CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float
     this->up = up;
     this->yaw = yaw;
     this->pitch = pitch;
-    this->aspectRatio = 1.0f;
     this->nearPlane = 0.3f;
     this->farPlane = 5000.0f;
 
@@ -22,13 +21,13 @@ CameraFPS::CameraFPS(const glm::vec3& pos, const glm::vec3& up, float yaw, float
 CameraFPS::~CameraFPS() {}
 
 void CameraFPS::setViewportSize(const uint32_t& width, const uint32_t& height) {
-    aspectRatio = (float)width / (float)height;
+    float aspectRatio = (float)width / (float)height;
     // TODO: criar funcao de recalc de projection para usar a variacao de FOV
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
 const glm::mat4& CameraFPS::recalculateMatrix(const uint8_t& eyeIndex) {
-    eye.setIndex((EyeIndex)eyeIndex);
+    eye.setIndex(eyeIndex);
     if (eyeIndex == 0) {
         eye.update(glm::lookAt(position, position + front, up), projectionMatrix);
     } else {
@@ -90,7 +89,7 @@ void CameraFPS::onUpdate(const double& ts) {
     // #endif
     processCameraMovement(direction, ts);
 
-    // CameraFPS FOV
+    // CameraFPS FOV : TODO: Alterar o FOV aqui!!!!!
     // float scrollDelta = glm::clamp((float)(InputManager::GetScrollYDelta() * 4.0 + (JoystickManager::GetButton(0, ARCANE_GAMEPAD_A) -
     //                                                                                 JoystickManager::GetButton(0, ARCANE_GAMEPAD_B)
     //                                                                                 * 2.0)),
@@ -98,12 +97,6 @@ void CameraFPS::onUpdate(const double& ts) {
     // ProcessCameraFOV(scrollDelta);
 
     // CameraFPS rotation
-    // float mouseXDelta =
-    //     (float)InputManager::GetMouseXDelta() /*+ ((float)JoystickManager::GetRightStick(0).x * 20.0)*/ * FPSCAMERA_ROTATION_SENSITIVITY;
-    // float mouseYDelta =
-    //     (float)-InputManager::GetMouseYDelta() /*+ ((float)JoystickManager::GetRightStick(0).y * 20.0)*/ *
-    //     FPSCAMERA_ROTATION_SENSITIVITY;
-
     glm::ivec2 mouseMove = MouseDevice::getMoveRel(); // FIXME: mudar metodo para vec2
     float mouseXDelta = -(float)mouseMove.x * FPSCAMERA_ROTATION_SENSITIVITY;
     float mouseYDelta = (float)mouseMove.y * FPSCAMERA_ROTATION_SENSITIVITY;
@@ -147,28 +140,5 @@ void CameraFPS::processCameraFOV(double offset) {
         fov = CAMERA_MAX_FOV;
     }
 }
-
-// void recalculateMatrixFPS(const uint8_t& iEye, const float& distEye, CameraFPS& cam) {
-
-//     EyeViewMatrix& em = cam.eyeMat[iEye];
-
-//     if (iEye == 0) {
-//         cam.eyeMat[iEye].viewMatrix = glm::lookAt(cam.position, cam.position + cam.front, cam.up);
-//     } else {
-
-//         glm::vec3 cross1 = glm::cross(cam.up, cam.front); // up and front already are  vectors!!!!
-//         glm::vec3 norm1 = glm::normalize(cross1);         // vector side (would be left or right)
-//         glm::vec3 final_norm1 = norm1 * distEye;          // point of eye
-//         glm::vec3 novaPosition = (iEye == 1) ? (cam.position + final_norm1) : (cam.position - final_norm1); // 1 is left
-
-//         cam.eyeMat[iEye].viewMatrix = glm::lookAt(novaPosition, novaPosition + cam.front, cam.up);
-//     }
-//     // projectionMatrix so e calculado no dimencionamento do viewport ou alteracao do FOV
-//     cam.eyeMat[iEye].viewProjectionMatrix = cam.projectionMatrix * cam.eyeMat[iEye].viewMatrix;
-
-//     glm::mat4 projectionMatrixInverse = glm::inverse(cam.projectionMatrix);
-//     glm::mat4 viewMatrixInverse = glm::inverse(cam.eyeMat[iEye].viewMatrix);
-//     cam.eyeMat[iEye].viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
-// }
 
 } // namespace Chimera

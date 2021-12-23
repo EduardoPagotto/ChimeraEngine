@@ -320,12 +320,12 @@ void Scene::onRender() {
         shadowPass.shadowBuffer->unbind();
     }
 
-    uint8_t count = 1;
+    uint8_t count = EYE_LEFT;
     for (auto renderBuffer : vRB) {
         camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
 
         if (vRB.size() == 1) {
-            camera->recalculateMatrix(0);
+            camera->recalculateMatrix(EYE_CENTER);
         } else {
             camera->recalculateMatrix(count);
             count++;

@@ -27,7 +27,7 @@ class CameraOrthographic : public ICamera {
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
 
   private:
-    float rotation, aspectRatio, size, nearClip, farClip;
+    float rotation, size, nearClip, farClip;
     glm::vec3 position;
     glm::mat4 projectionMatrix;
     EyeView eye;

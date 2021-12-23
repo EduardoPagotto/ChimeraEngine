@@ -58,7 +58,6 @@ void RendererParticles::flush() {
                 for (const UniformVal& uniform : command.uniforms)
                     uniform.setUniform(activeShader);
 
-                // TODO: ver se é assim mesmo!!!!
                 if (command.vTex.size() == 0)
                     Texture::unbind(0);
 
@@ -70,7 +69,6 @@ void RendererParticles::flush() {
         }
 
         r->draw();
-        // int ParticlesCount = recycleParticleLife(CameraPosition);
 
         commandQueue.pop_front();
     }

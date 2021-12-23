@@ -18,7 +18,7 @@ class CameraOrbit : public ICamera3D {
     }
 
     // herdado
-    virtual const glm::mat4& getViewMatrix() const override { return eye.getView(); } // FIXME: alterar para &
+    virtual const glm::mat4& getViewMatrix() const override { return eye.getView(); }
     virtual const glm::mat4& getProjectionMatrix() const override { return projectionMatrix; }
     virtual const glm::mat4& getViewProjectionMatrix() const override { return eye.getViewProjection(); }
     virtual const glm::mat4& getViewProjectionMatrixInverse() const override { return eye.getViewProjectionInverse(); }

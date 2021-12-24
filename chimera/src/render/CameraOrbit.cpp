@@ -33,9 +33,8 @@ void CameraOrbit::setViewportSize(const uint32_t& width, const uint32_t& height)
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
-const glm::mat4& CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
-    eye.setIndex(eyeIndex);
-    if (eyeIndex == 0) {
+void CameraOrbit::update() {
+    if (eye.getIndex() == 0) {
         eye.update(glm::lookAt(position, front, up), projectionMatrix);
     } else {
         glm::vec3 novaPosition, novaFront;
@@ -44,7 +43,7 @@ const glm::mat4& CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
         glm::vec3 norm1 = glm::normalize(cross1);
         glm::vec3 final_norm1 = norm1 * eye.getNoseDist();
 
-        if (eyeIndex == 1) { // left
+        if (eye.getIndex() == 1) { // left
             novaPosition = position + final_norm1;
             novaFront = front + final_norm1;
         } else { // right
@@ -54,7 +53,6 @@ const glm::mat4& CameraOrbit::recalculateMatrix(const uint8_t& eyeIndex) {
 
         eye.update(glm::lookAt(novaPosition, novaFront, up), projectionMatrix);
     }
-    return eye.getViewProjectionInverse();
 }
 
 void CameraOrbit::invertPitch() {

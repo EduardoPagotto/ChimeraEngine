@@ -43,7 +43,7 @@ Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physi
     // perspective projection matrix you'll have to change the light position as the
     // current light position isn't enough to reflect the whole scene.
 
-    single = false;
+    single = true;
     this->createRenderBuffer();
 
     // FIXME: coisa feia!!!!
@@ -325,11 +325,13 @@ void Scene::onRender() {
         camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
 
         if (vRB.size() == 1) {
-            camera->recalculateMatrix(EYE_CENTER);
+            camera->view()->setIndex(EYE_CENTER);
         } else {
-            camera->recalculateMatrix(count);
+            camera->view()->setIndex(count);
             count++;
         }
+
+        camera->update();
 
         // used by all
         renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));

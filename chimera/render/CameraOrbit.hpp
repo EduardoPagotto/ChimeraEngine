@@ -18,10 +18,10 @@ class CameraOrbit : public ICamera3D {
     }
 
     virtual const glm::mat4& getProjectionMatrix() const override { return projectionMatrix; }
-    virtual const glm::mat4& recalculateMatrix(const uint8_t& eyeIndex) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }
+    virtual void update() override;
     virtual void setFov(const float& value) override { this->fov = value; }
     virtual void setNear(const float& value) override { this->nearPlane = value; }
     virtual void setFar(const float& value) override { this->farPlane = value; }

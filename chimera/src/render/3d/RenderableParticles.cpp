@@ -65,7 +65,7 @@ void RenderableParticles::destroy() {
 
 void RenderableParticles::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
 
-    const glm::mat4 view = camera->getViewMatrix();
+    const glm::mat4& view = camera->view()->getView();
     renderer->uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));
     renderer->uQueue().push_back(UniformVal("view", view));
     renderer->uQueue().push_back(UniformVal("CameraRight_worldspace", glm::vec3(view[0][0], view[1][0], view[2][0])));

@@ -19,7 +19,7 @@ void Renderer3d::begin(ICamera* camera) {
 
     this->camera = camera;
     if (this->camera != nullptr) {
-        frustum.set(camera->getViewProjectionMatrixInverse());
+        frustum.set(camera->view()->getViewProjectionInverse());
     }
 
     // debug data

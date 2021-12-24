@@ -17,10 +17,7 @@ class CameraOrbit : public ICamera3D {
         this->max = max;
     }
 
-    virtual const glm::mat4& getViewMatrix() const override { return eye.getView(); }
     virtual const glm::mat4& getProjectionMatrix() const override { return projectionMatrix; }
-    virtual const glm::mat4& getViewProjectionMatrix() const override { return eye.getViewProjection(); }
-    virtual const glm::mat4& getViewProjectionMatrixInverse() const override { return eye.getViewProjectionInverse(); }
     virtual const glm::mat4& recalculateMatrix(const uint8_t& eyeIndex) override;
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
@@ -38,6 +35,7 @@ class CameraOrbit : public ICamera3D {
         return distance;
     }
     virtual const bool is3D() const { return true; };
+    virtual EyeView* view() override { return &eye; }
 
   private:
     glm::vec3 position, front, up;

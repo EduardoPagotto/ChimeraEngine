@@ -10,45 +10,39 @@ namespace Chimera {
 #define EYE_LEFT 1
 #define EYE_RIGHT 2
 
-struct EyeMatrix {
-    glm::mat4 view, viewProjection, viewProjectionInverse;
-};
-
 class EyeView {
   public:
     EyeView() : index(0), noseDist(0.4f) {}
     void setIndex(const uint8_t& index) { this->index = index; }
     const uint8_t getIndex() const { return index; }
-    const glm::mat4& getView() const { return matrix[index].view; }
-    const glm::mat4& getViewProjection() const { return matrix[index].viewProjection; };
-    const glm::mat4& getViewProjectionInverse() const { return matrix[index].viewProjectionInverse; }
+    const glm::mat4& getView() const { return view[index]; }
+    const glm::mat4& getViewProjection() const { return viewProjection[index]; }
+    const glm::mat4& getViewProjectionInverse() const { return viewProjectionInverse[index]; }
     const float& getNoseDist() const { return noseDist; }
 
     void update(const glm::mat4& view, const glm::mat4& projection) {
-        matrix[index].view = view;
-        matrix[index].viewProjection = projection * view;
-        matrix[index].viewProjectionInverse = glm::inverse(view) * glm::inverse(projection);
+        this->view[index] = view;
+        this->viewProjection[index] = projection * view;
+        this->viewProjectionInverse[index] = glm::inverse(view) * glm::inverse(projection);
     }
 
   private:
     uint8_t index;
     float noseDist;
-    EyeMatrix matrix[3]; // 0=centro; 1=left; 2=right;
+    glm::mat4 view[3], viewProjection[3], viewProjectionInverse[3]; // 0=centro; 1=left; 2=right;
 };
 
 class ICamera {
   public:
     virtual ~ICamera() {}
-    virtual const glm::mat4& getViewMatrix() const = 0;
     virtual const glm::mat4& getProjectionMatrix() const = 0;
-    virtual const glm::mat4& getViewProjectionMatrix() const = 0;
-    virtual const glm::mat4& getViewProjectionMatrixInverse() const = 0;
     virtual const glm::mat4& recalculateMatrix(const uint8_t& eyeIndex) = 0;
     virtual const glm::vec3& getPosition() const = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void onUpdate(const double& ts) = 0;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
     virtual const bool is3D() const = 0;
+    virtual EyeView* view() = 0;
 };
 
 class ICamera3D : public ICamera {

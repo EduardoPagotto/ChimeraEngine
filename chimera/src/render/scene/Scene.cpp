@@ -305,7 +305,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
 
 void Scene::onRender() {
     if (renderBatch.getLog() == true) {
-        glm::vec3 pos = camera->getPosition();
+        const glm::vec3& pos = camera->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
@@ -333,7 +333,7 @@ void Scene::onRender() {
 
         // used by all
         renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));
-        renderBatch.uQueue().push_back(UniformVal("view", camera->getViewMatrix()));
+        renderBatch.uQueue().push_back(UniformVal("view", camera->view()->getView()));
 
         // data from shadowPass
         renderBatch.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));

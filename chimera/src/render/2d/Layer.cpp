@@ -17,7 +17,7 @@ Layer::~Layer() {
 
 void Layer::onRender() {
     shader.enable();
-    shader.setUniform("pr_matrix", camera->getProjectionMatrix()); // passar para o renderer o shade
+    shader.setUniform("pr_matrix", camera->getProjection()); // passar para o renderer o shade
     renderer->begin(camera);
 
     for (auto renderable : renderables)

@@ -17,7 +17,7 @@ class CameraOrthographic : public ICamera {
 
     virtual void setPosition(const glm::vec3& position) override;
     virtual const glm::vec3& getPosition() const override { return position; }
-    virtual const glm::mat4& getProjectionMatrix() const override { return projectionMatrix; }
+    virtual const glm::mat4& getProjection() const override { return projectionMatrix; }
     virtual const bool is3D() const override { return false; }
     virtual void update() override;
     virtual void onUpdate(const double& ts) override;

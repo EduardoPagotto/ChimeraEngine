@@ -1,41 +1,45 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <vector>
 
 namespace Chimera {
 
 #define FPSCAMERA_MAX_SPEED 40.0f
 #define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
 #define CAMERA_MAX_FOV 45.0f
-#define EYE_CENTER 0
-#define EYE_LEFT 1
-#define EYE_RIGHT 2
+
+struct EyeMat {
+    glm::mat4 view, viewProjection, viewProjectionInverse;
+    void update(const glm::mat4& _view, const glm::mat4& _projection) {
+        view = _view;
+        viewProjection = _projection * _view;
+        viewProjectionInverse = glm::inverse(_view) * glm::inverse(_projection);
+    }
+};
 
 class EyeView {
   public:
     EyeView() : index(0), noseDist(0.4f) {}
     void setIndex(const uint8_t& index) { this->index = index; }
     const uint8_t getIndex() const { return index; }
-    const glm::mat4& getView() const { return view[index]; }
-    const glm::mat4& getViewProjection() const { return viewProjection[index]; }
-    const glm::mat4& getViewProjectionInverse() const { return viewProjectionInverse[index]; }
+    const glm::mat4& getView() const { return head[index].view; }
+    const glm::mat4& getViewProjection() const { return head[index].viewProjection; }
+    const glm::mat4& getViewProjectionInverse() const { return head[index].viewProjectionInverse; }
     const float& getNoseDist() const { return noseDist; }
-
-    void update(const glm::mat4& view, const glm::mat4& projection) {
-        this->view[index] = view;
-        this->viewProjection[index] = projection * view;
-        this->viewProjectionInverse[index] = glm::inverse(view) * glm::inverse(projection);
-    }
+    void update(const glm::mat4& view, const glm::mat4& projection) { head[index].update(view, projection); }
+    void create() { head.push_back(EyeMat()); }
+    const uint32_t size() const { return head.size(); }
 
   private:
     uint8_t index;
     float noseDist;
-    glm::mat4 view[3], viewProjection[3], viewProjectionInverse[3]; // 0=centro; 1=left; 2=right;
+    std::vector<EyeMat> head;
 };
 
 class ICamera {
   public:
     virtual ~ICamera() {}
-    virtual const glm::mat4& getProjectionMatrix() const = 0;
+    virtual const glm::mat4& getProjection() const = 0;
     virtual const glm::vec3& getPosition() const = 0;
     virtual void update() = 0;
     virtual void setPosition(const glm::vec3& position) = 0;

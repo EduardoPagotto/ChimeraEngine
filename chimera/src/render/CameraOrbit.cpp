@@ -34,7 +34,7 @@ void CameraOrbit::setViewportSize(const uint32_t& width, const uint32_t& height)
 }
 
 void CameraOrbit::update() {
-    if (eye.getIndex() == 0) {
+    if (eye.size() == 1) {
         eye.update(glm::lookAt(position, front, up), projectionMatrix);
     } else {
         glm::vec3 novaPosition, novaFront;
@@ -43,7 +43,7 @@ void CameraOrbit::update() {
         glm::vec3 norm1 = glm::normalize(cross1);
         glm::vec3 final_norm1 = norm1 * eye.getNoseDist();
 
-        if (eye.getIndex() == 1) { // left
+        if (eye.getIndex() == 0) { // left
             novaPosition = position + final_norm1;
             novaFront = front + final_norm1;
         } else { // right

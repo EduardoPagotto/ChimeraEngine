@@ -13,7 +13,7 @@
 
 namespace Chimera {
 
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), single(true), origem(nullptr) {}
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr) {}
 
 Scene::~Scene() {}
 
@@ -57,7 +57,7 @@ void Scene::createShadowBuffer() {
     // current light position isn't enough to reflect the whole scene.
 }
 
-void Scene::createRenderBuffer() {
+void Scene::createRenderBuffer(EyeView* eyeView) {
 
     for (auto rb : vRB) {
         delete rb;
@@ -66,7 +66,7 @@ void Scene::createRenderBuffer() {
 
     vRB.clear();
 
-    if (single == false) {
+    if (eyeView->size() == 2) {
         vRB.push_back(initRB(0, 0, viewportWidth / 2, viewportHeight));                 // left
         vRB.push_back(initRB(viewportWidth / 2, 0, viewportWidth / 2, viewportHeight)); // right
     } else {
@@ -167,18 +167,6 @@ void Scene::onAttach() {
         }
     });
 
-    // load default camera
-    auto view = registry.get().view<CameraComponent>();
-    for (auto entity : view) {
-
-        auto& cameraComponent = view.get<CameraComponent>(entity);
-        if (cameraComponent.primary) {
-            camera = cameraComponent.camera;
-            single = cameraComponent.single;
-        }
-    }
-
-    this->createRenderBuffer();
     this->createShadowBuffer();
     origem = new Transform(); // FIXME: coisa feia!!!!
 }
@@ -210,10 +198,21 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         auto& cameraComponent = view.get<CameraComponent>(entity);
         if (!cameraComponent.fixedAspectRatio) {
             cameraComponent.camera->setViewportSize(width, height);
+
+            // se primeira passada inicializar views
+            if (cameraComponent.camera->view()->size() == 0) {
+                cameraComponent.camera->view()->create();
+                if (cameraComponent.single == false)
+                    cameraComponent.camera->view()->create();
+            }
+
+            // carrega camera defalt da cena
+            if (cameraComponent.primary == true) {
+                createRenderBuffer(cameraComponent.camera->view());
+                camera = cameraComponent.camera;
+            }
         }
     }
-
-    createRenderBuffer();
 }
 
 bool Scene::onEvent(const SDL_Event& event) {
@@ -312,21 +311,16 @@ void Scene::onRender() {
         shadowPass.shadowBuffer->unbind();
     }
 
-    uint8_t count = EYE_LEFT;
+    uint8_t count = 0;
     for (auto renderBuffer : vRB) {
         camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
+        camera->view()->setIndex(count);
+        count++;
 
-        if (vRB.size() == 1) {
-            camera->view()->setIndex(EYE_CENTER);
-        } else {
-            camera->view()->setIndex(count);
-            count++;
-        }
-
-        camera->update();
+        camera->update(); // FIXME: mover para onUpdate!!!!
 
         // used by all
-        renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjectionMatrix()));
+        renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjection()));
         renderBatch.uQueue().push_back(UniformVal("view", camera->view()->getView()));
 
         // data from shadowPass

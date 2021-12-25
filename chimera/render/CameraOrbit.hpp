@@ -17,7 +17,7 @@ class CameraOrbit : public ICamera3D {
         this->max = max;
     }
 
-    virtual const glm::mat4& getProjectionMatrix() const override { return projectionMatrix; }
+    virtual const glm::mat4& getProjection() const override { return projectionMatrix; }
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }

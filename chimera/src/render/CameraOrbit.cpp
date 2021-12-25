@@ -84,6 +84,8 @@ void CameraOrbit::onUpdate(const double& ts) {
         processDistance(mouseMove.y);
     }
 
+    updateVectors();
+
     this->updateEye();
 }
 
@@ -93,8 +95,6 @@ void CameraOrbit::processDistance(const int& _mz) {
         distance = min;
     if (distance > max)
         distance = max;
-
-    this->updateVectors();
 }
 
 void CameraOrbit::processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch) {
@@ -120,8 +120,6 @@ void CameraOrbit::processCameraRotation(const int& xOffset, const int& yOffset, 
         // if (yaw > 179.0f)
         //     yaw = 179.0f;
     }
-
-    updateVectors();
 }
 
 void CameraOrbit::processCameraFOV(double offset) {

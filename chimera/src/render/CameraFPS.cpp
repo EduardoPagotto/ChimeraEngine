@@ -100,7 +100,7 @@ void CameraFPS::onUpdate(const double& ts) {
     float mouseYDelta = (float)mouseMove.y * FPSCAMERA_ROTATION_SENSITIVITY;
 
     processCameraRotation(mouseXDelta, mouseYDelta, true);
-
+    updateVectors();
     this->updateEye();
 }
 
@@ -110,10 +110,6 @@ void CameraFPS::processCameraMovement(glm::vec3& direction, float deltaTime) {
 }
 
 void CameraFPS::processCameraRotation(double xOffset, double yOffset, bool constrainPitch) {
-    // Make sure the user isn't interacting with the UI
-    // if (!Window::GetHideCursor())
-    //    return;
-
     yaw += (float)xOffset;
     pitch += (float)yOffset;
 
@@ -125,8 +121,6 @@ void CameraFPS::processCameraRotation(double xOffset, double yOffset, bool const
             pitch = -89.0f;
         }
     }
-
-    updateVectors();
 }
 
 void CameraFPS::processCameraFOV(double offset) {

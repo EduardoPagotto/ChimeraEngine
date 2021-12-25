@@ -317,8 +317,6 @@ void Scene::onRender() {
         camera->view()->setIndex(count);
         count++;
 
-        camera->update(); // FIXME: mover para onUpdate!!!!
-
         // used by all
         renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjection()));
         renderBatch.uQueue().push_back(UniformVal("view", camera->view()->getView()));

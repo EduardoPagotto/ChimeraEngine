@@ -33,25 +33,23 @@ void CameraOrbit::setViewportSize(const uint32_t& width, const uint32_t& height)
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
-void CameraOrbit::update() {
+void CameraOrbit::updateEye() {
     if (eye.size() == 1) {
         eye.update(glm::lookAt(position, front, up), projectionMatrix);
     } else {
-        glm::vec3 novaPosition, novaFront;
+        glm::vec3 novaPositionL, novaFrontL, novaPositionR, novaFrontR;
         glm::vec3 left_p = front - position; // front and position as points
         glm::vec3 cross1 = glm::cross(up, left_p);
         glm::vec3 norm1 = glm::normalize(cross1);
         glm::vec3 final_norm1 = norm1 * eye.getNoseDist();
 
-        if (eye.getIndex() == 0) { // left
-            novaPosition = position + final_norm1;
-            novaFront = front + final_norm1;
-        } else { // right
-            novaPosition = position - final_norm1;
-            novaFront = front - final_norm1;
-        }
+        novaPositionL = position + final_norm1;
+        novaFrontL = front + final_norm1;
+        eye.getHead()[0].update(glm::lookAt(novaPositionL, novaFrontL, up), projectionMatrix); // Left
 
-        eye.update(glm::lookAt(novaPosition, novaFront, up), projectionMatrix);
+        novaPositionR = position - final_norm1;
+        novaFrontR = front - final_norm1;
+        eye.getHead()[1].update(glm::lookAt(novaPositionR, novaFrontR, up), projectionMatrix); // Right
     }
 }
 
@@ -85,6 +83,8 @@ void CameraOrbit::onUpdate(const double& ts) {
         glm::ivec2 mouseMove = MouseDevice::getMoveRel();
         processDistance(mouseMove.y);
     }
+
+    this->updateEye();
 }
 
 void CameraOrbit::processDistance(const int& _mz) {

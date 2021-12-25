@@ -29,6 +29,7 @@ class EyeView {
     void update(const glm::mat4& view, const glm::mat4& projection) { head[index].update(view, projection); }
     void create() { head.push_back(EyeMat()); }
     const uint32_t size() const { return head.size(); }
+    std::vector<EyeMat>& getHead() { return head; }
 
   private:
     uint8_t index;
@@ -41,7 +42,6 @@ class ICamera {
     virtual ~ICamera() {}
     virtual const glm::mat4& getProjection() const = 0;
     virtual const glm::vec3& getPosition() const = 0;
-    virtual void update() = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void onUpdate(const double& ts) = 0;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;

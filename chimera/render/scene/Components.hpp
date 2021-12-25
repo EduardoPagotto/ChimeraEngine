@@ -18,7 +18,7 @@ struct CameraComponent {
     ICamera* camera = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;
-    bool single = false;
+    bool single = true;
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
     // CameraComponent(glm::mat4 projection) : camera(projection) {}

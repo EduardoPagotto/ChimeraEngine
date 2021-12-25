@@ -26,16 +26,17 @@ void CameraFPS::setViewportSize(const uint32_t& width, const uint32_t& height) {
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
-void CameraFPS::update() { // FIXME: e se ficar no onUpdate!!!!!!!!!! com com um loop para cada eye!!!
+void CameraFPS::updateEye() {
     if (eye.size() == 1) {
         eye.update(glm::lookAt(position, position + front, up), projectionMatrix);
     } else {
         glm::vec3 cross1 = glm::cross(up, front);          // up and front already are  vectors!!!!
         glm::vec3 norm1 = glm::normalize(cross1);          // vector side (would be left or right)
         glm::vec3 final_norm1 = norm1 * eye.getNoseDist(); // point of eye
-        glm::vec3 novaPosition = (eye.getIndex() == 0) ? (position + final_norm1) : (position - final_norm1); // 0 is left
-
-        eye.update(glm::lookAt(novaPosition, novaPosition + front, up), projectionMatrix);
+        glm::vec3 novaPositionL = position + final_norm1;
+        glm::vec3 novaPositionR = position - final_norm1;
+        eye.getHead()[0].update(glm::lookAt(novaPositionL, novaPositionL + front, up), projectionMatrix); // Left
+        eye.getHead()[1].update(glm::lookAt(novaPositionR, novaPositionR + front, up), projectionMatrix); // Right
     }
 }
 
@@ -99,6 +100,8 @@ void CameraFPS::onUpdate(const double& ts) {
     float mouseYDelta = (float)mouseMove.y * FPSCAMERA_ROTATION_SENSITIVITY;
 
     processCameraRotation(mouseXDelta, mouseYDelta, true);
+
+    this->updateEye();
 }
 
 void CameraFPS::processCameraMovement(glm::vec3& direction, float deltaTime) {

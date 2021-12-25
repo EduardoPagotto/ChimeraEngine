@@ -21,7 +21,6 @@ class CameraOrbit : public ICamera3D {
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
     virtual const glm::vec3& getUp() const override { return up; }
-    virtual void update() override;
     virtual void setFov(const float& value) override { this->fov = value; }
     virtual void setNear(const float& value) override { this->nearPlane = value; }
     virtual void setFar(const float& value) override { this->farPlane = value; }
@@ -38,6 +37,7 @@ class CameraOrbit : public ICamera3D {
     virtual EyeView* view() override { return &eye; }
 
   private:
+    void updateEye();
     glm::vec3 position, front, up;
     float pitch, yaw, fov;
     float nearPlane, farPlane;

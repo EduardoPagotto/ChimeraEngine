@@ -18,6 +18,7 @@ struct CameraComponent {
     ICamera* camera = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;
+    bool single = false;
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
     // CameraComponent(glm::mat4 projection) : camera(projection) {}
@@ -52,7 +53,8 @@ struct NativeScriptComponent {
     ScriptableEntity* (*instantiateScript)();
     void (*destroyScript)(NativeScriptComponent*);
 
-    template <typename T> void bind(const std::string& nameBind) {
+    template <typename T>
+    void bind(const std::string& nameBind) {
         name = nameBind;
         instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
         destroyScript = [](NativeScriptComponent* nsc) {

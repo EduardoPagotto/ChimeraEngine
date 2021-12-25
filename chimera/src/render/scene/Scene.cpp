@@ -13,42 +13,7 @@
 
 namespace Chimera {
 
-static unsigned int next_pow2(unsigned int x) {
-    x -= 1;
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x |= x >> 8;
-    x |= x >> 16;
-    return x + 1;
-}
-
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr) {
-    // Create ShadowPass
-    ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shadowPass.shader);
-    // Define o framebuffer de Shadow
-    FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
-
-    fbSpec.width = 2048;
-    fbSpec.height = 2048;
-    fbSpec.swapChainTarget = false;
-    fbSpec.samples = 1;
-
-    shadowPass.shadowBuffer = new FrameBuffer(fbSpec);
-    shadowPass.lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f);
-    // Note that if you use a
-    // glm::mat4 lightProjection = glm::perspective(45.0f, (float)width / (float)height, near_plane, far_plane);
-    // perspective projection matrix you'll have to change the light position as the
-    // current light position isn't enough to reflect the whole scene.
-
-    single = true;
-    this->createRenderBuffer();
-
-    // FIXME: coisa feia!!!!
-    origem = new Transform();
-}
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), single(true), origem(nullptr) {}
 
 Scene::~Scene() {}
 
@@ -69,6 +34,27 @@ RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const 
     fbSpec.samples = 1;
 
     return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), shader);
+}
+
+void Scene::createShadowBuffer() {
+    // Create ShadowPass
+    ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shadowPass.shader);
+    // Define o framebuffer de Shadow
+    FrameBufferSpecification fbSpec;
+    fbSpec.attachments = {
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
+
+    fbSpec.width = 2048;
+    fbSpec.height = 2048;
+    fbSpec.swapChainTarget = false;
+    fbSpec.samples = 1;
+
+    shadowPass.shadowBuffer = new FrameBuffer(fbSpec);
+    shadowPass.lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f);
+    // Note that if you use a
+    // glm::mat4 lightProjection = glm::perspective(45.0f, (float)width / (float)height, near_plane, far_plane);
+    // perspective projection matrix you'll have to change the light position as the
+    // current light position isn't enough to reflect the whole scene.
 }
 
 void Scene::createRenderBuffer() {
@@ -186,9 +172,15 @@ void Scene::onAttach() {
     for (auto entity : view) {
 
         auto& cameraComponent = view.get<CameraComponent>(entity);
-        if (cameraComponent.primary)
+        if (cameraComponent.primary) {
             camera = cameraComponent.camera;
+            single = cameraComponent.single;
+        }
     }
+
+    this->createRenderBuffer();
+    this->createShadowBuffer();
+    origem = new Transform(); // FIXME: coisa feia!!!!
 }
 
 void Scene::onUpdate(const double& ts) {

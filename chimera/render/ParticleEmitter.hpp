@@ -1,6 +1,7 @@
 #pragma once
 #include "chimera/render/ICamera.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/render/partition/AABB.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -30,6 +31,7 @@ struct ParticleContainer {
     uint32_t max = 500; // Maximo de particulas
     bool respaw = true; // Resetar particula zero quando todas as particulas prontas
     float life = 2.0;   // Inicial do life
+    AABB aabb;
 };
 
 class IEmitter {

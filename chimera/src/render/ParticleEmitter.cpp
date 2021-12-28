@@ -33,13 +33,21 @@ void EmitterFont::recycleLife(const double& ts) {
 
         // Simulate all particles
         int ParticlesCount = 0;
+        glm::vec3 min = glm::vec3(0.0f);
+        glm::vec3 max = glm::vec3(0.0f);
         for (uint32_t i = 0; i < pc->container.size(); i++) {
             ParticleZ& p = pc->container[i];
             if (p.life > 0) { // stil alive
                 this->decrease(p, ts, ParticlesCount);
                 ParticlesCount++;
+
+                // computa os bonderys
+                min = glm::min(min, p.pos);
+                max = glm::max(max, p.pos);
             }
         }
+        // TODO: continuar o AABB sem necessidade de emisor
+        pc->aabb.setBoundary(min, max);
 
         // Ordenar em relacao a posicao da camera, back to front
         std::sort(pc->container.begin(), pc->container.end());

@@ -28,7 +28,7 @@ void VertexBuffer::setLayout(const BufferLayout& bufferLayout) { // bind antes n
         else
             glVertexAttribPointer(i, element.count, element.type, element.normalized, 0, BUFFER_OFFSET(0));
     }
-    // for (uint8_t i = 0; i < elements.size(); i++) // TODO: verificar se precisa mesmo
+    // for (uint8_t i = 0; i < elements.size(); i++)
     //     glDisableVertexAttribArray(i);
 }
 

@@ -11,16 +11,13 @@
 
 namespace Chimera {
 
-Renderer3d::Renderer3d() : camera(nullptr), logData(false), totIBO(0), totFaces(0) { uniformsQueue.reserve(300); }
+Renderer3d::Renderer3d() : logData(false), totIBO(0), totFaces(0) { uniformsQueue.reserve(300); }
 
 Renderer3d::~Renderer3d() {}
 
 void Renderer3d::begin(ICamera* camera) {
 
-    this->camera = camera;
-    if (this->camera != nullptr) {
-        frustum.set(camera->view()->getViewProjectionInverse());
-    }
+    frustum.set(camera->view()->getViewProjectionInverse());
 
     // debug data
     totIBO = 0;
@@ -32,12 +29,6 @@ void Renderer3d::end() {
 }
 
 void Renderer3d::submit(const RenderCommand& command) {
-
-    // se não há frustrum adicionar tudo // TODO: remover quando model estiver no fluxo principal
-    if (this->camera == nullptr) {
-        commandQueue.push_back(command);
-        return;
-    }
     // Transformation model matrix AABB to know if in frustrum Camera
     const AABB& aabb = command.renderable->getAABB();
     AABB nova = aabb.transformation(command.transform);
@@ -94,7 +85,7 @@ void Renderer3d::flush() {
                 for (const UniformVal& uniform : command.uniforms)
                     uniform.setUniform(activeShader);
 
-                // TODO: ver se é assim mesmo!!!!
+                // libera textura antes de passar as novas
                 if (command.vTex.size() == 0)
                     Texture::unbind(0);
 

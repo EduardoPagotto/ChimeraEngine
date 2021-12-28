@@ -3,11 +3,16 @@
 #include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
-RendererParticles::RendererParticles() {}
+RendererParticles::RendererParticles() : logData(false) {}
 RendererParticles::~RendererParticles() {}
 
-void RendererParticles::begin(ICamera* camera) { this->camera = camera; }
-void RendererParticles::end() {}
+void RendererParticles::begin(ICamera* camera) { frustum.set(camera->view()->getViewProjectionInverse()); }
+
+void RendererParticles::end() {
+    if (logData == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Particulas rodando");
+}
+
 void RendererParticles::submit(const RenderCommand& command) {
     // adicionado ao proximo render
     commandQueue.push_back(command);
@@ -69,6 +74,8 @@ void RendererParticles::flush() {
         }
 
         r->draw();
+        if (logData == true)
+            r->debugDados();
 
         commandQueue.pop_front();
     }

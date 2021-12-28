@@ -25,7 +25,6 @@ class Renderer3d : public IRenderer3d {
   private:
     std::deque<RenderCommand> commandQueue;
     std::vector<UniformVal> uniformsQueue;
-    ICamera* camera;
     Frustum frustum;
     bool logData;
     uint32_t totIBO, totFaces;

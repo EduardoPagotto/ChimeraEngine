@@ -60,7 +60,7 @@ void FrameBuffer::destroy() {
 
         colorAttachments.clear();
 
-        if (rbo != 0) { // TODO renomera para rbo
+        if (rbo != 0) {
             glDeleteRenderbuffers(1, &rbo);
             rbo = 0;
         }

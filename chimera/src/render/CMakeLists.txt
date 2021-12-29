@@ -46,7 +46,6 @@ set (RenderSource 	CanvasGL.cpp
 					2d/Layer.cpp
 					2d/Group.cpp
 					2d/Label.cpp
-					3d/PolygonIndex.cpp
 					3d/Renderer3d.cpp
 					3d/Renderable3D.cpp
 					3d/RenderableChunk.cpp

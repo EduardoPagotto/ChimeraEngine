@@ -15,8 +15,20 @@ void RendererParticles::end() {
 }
 
 void RendererParticles::submit(const RenderCommand& command) {
-    // adicionado ao proximo render
-    commandQueue.push_back(command);
+    // Transformation model matrix AABB to know if in frustrum Camera
+    const AABB& aabb = command.renderable->getAABB();
+    AABB nova = aabb.transformation(command.transform);
+    // adicione apenas o que esta no clip-space
+    if (nova.visible(frustum) == true) {
+        // Debug info only
+        // IndexBuffer* ibo = command.renderable->getIBO();
+        // if (ibo != nullptr) {
+        //     totIBO++;
+        //     totFaces += ibo->getCount();
+        // }
+        // adicionado ao proximo render
+        commandQueue.push_back(command);
+    }
 }
 void RendererParticles::flush() {
 
@@ -31,7 +43,8 @@ void RendererParticles::flush() {
     while (!commandQueue.empty()) {
 
         const RenderCommand& command = commandQueue.front();
-        RenderableParticles* r = (RenderableParticles*)command.renderable;
+        // RenderableParticles* r = (RenderableParticles*)command.renderable;
+        IRenderable3d* r = command.renderable;
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior
@@ -74,10 +87,7 @@ void RendererParticles::flush() {
             }
         }
 
-        r->draw();
-        if (logData == true)
-            r->debugDados();
-
+        r->draw(logData);
         commandQueue.pop_front();
     }
 

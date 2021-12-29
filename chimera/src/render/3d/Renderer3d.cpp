@@ -96,18 +96,7 @@ void Renderer3d::flush() {
             }
         }
 
-        // Desenhar o IBO
-        if (r->getIBO() != nullptr) {
-
-            r->getIBO()->bind();
-
-            glDrawElements(GL_TRIANGLES, r->getIBO()->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-
-            if (logData == true)
-                r->debugDados();
-
-            r->getIBO()->unbind();
-        }
+        r->draw(logData);
         commandQueue.pop_front();
     }
     pLastVao->unbind();

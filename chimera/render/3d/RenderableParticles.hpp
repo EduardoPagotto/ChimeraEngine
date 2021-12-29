@@ -18,7 +18,7 @@ class RenderableParticles : public IRenderable3d {
     virtual const AABB& getAABB() const override { return pc->aabb; } // FIXME: vem de container
     virtual Entity getEntity() const override { return entity; }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
-    void draw();
+    virtual void draw(const bool& logData) override;
     void create();
     void destroy();
     void setEntity(Entity entity) { this->entity = entity; }

@@ -348,11 +348,17 @@ void Scene::onRender() {
         }
 
         if (emitters.size() > 0) {
-            renderParticleEmitter.begin(camera);
-            this->execEmitterPass(camera, renderParticleEmitter);
+            // inicializa state machine do opengl
+            BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test
+            BinaryStateEnable blender(GL_BLEND);    // glEnable(GL_BLEND);
+            DepthFuncSetter depthFunc(GL_LESS); // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderParticleEmitter.end();
-            renderParticleEmitter.flush();
+            renderBatch.begin(camera);
+            this->execEmitterPass(camera, renderBatch);
+
+            renderBatch.end();
+            renderBatch.flush();
         }
 
         {

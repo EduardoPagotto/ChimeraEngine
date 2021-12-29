@@ -16,6 +16,7 @@ class RenderableChunk : public IRenderable3d {
     virtual IndexBuffer* getIBO() const { return nullptr; }
     virtual const AABB& getAABB() const override { return aabb; }
     virtual Entity getEntity() const override { return entity; }
+    virtual void draw(const bool& logData) override{}; // TODO: ver o que fazer!!!
 
   private:
     VertexArray* vao;

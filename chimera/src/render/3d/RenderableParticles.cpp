@@ -76,7 +76,7 @@ void RenderableParticles::submit(ICamera* camera, RenderCommand& command, IRende
     renderer->submit(command);
 }
 
-void RenderableParticles::draw() {
+void RenderableParticles::draw(const bool& logData) {
 
     // particlesCount = recycleParticleLife();
 
@@ -118,5 +118,8 @@ void RenderableParticles::draw() {
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
+
+    if (logData == true)
+        debugDados();
 }
 } // namespace Chimera

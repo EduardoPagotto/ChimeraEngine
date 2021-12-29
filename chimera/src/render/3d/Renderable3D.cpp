@@ -49,4 +49,18 @@ void Renderable3D::setEntity(Entity entity) { this->entity = entity; }
 void Renderable3D::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) { renderer->submit(command); }
 
 void Renderable3D::debugDados() { poligonIndex.debugDados(); }
+
+void Renderable3D::draw(const bool& logData) {
+    IndexBuffer* i = poligonIndex.getIBO();
+    if (i != nullptr) { // Desenhar o IBO
+        i->bind();
+        glDrawElements(GL_TRIANGLES, i->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+        if (logData == true)
+            debugDados();
+
+        i->unbind();
+    }
+}
+
 } // namespace Chimera

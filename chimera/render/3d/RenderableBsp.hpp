@@ -18,6 +18,7 @@ class RenderableBsp : public IRenderable3d {
     virtual const AABB& getAABB() const override { return aabb; }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual Entity getEntity() const override { return entity; }
+    virtual void draw(const bool& logData) override{}; // TODO: ver o que fazer!!!
 
   private:
     void destroy();

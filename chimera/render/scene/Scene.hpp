@@ -2,7 +2,6 @@
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/render/3d/RendererParticles.hpp"
 #include "chimera/render/ICamera.hpp"
 #include "chimera/render/ITrans.hpp"
 #include "chimera/render/ParticleEmitter.hpp"
@@ -49,7 +48,6 @@ class Scene : public IStateMachine {
     ShadowPass shadowPass;
     PhysicsControl* physicsControl;
     Renderer3d renderBatch;
-    RendererParticles renderParticleEmitter;
     std::vector<IEmitter*> emitters;
     ITrans* origem;
 };

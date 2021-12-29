@@ -19,6 +19,7 @@ class Renderable3D : public IRenderable3d {
     virtual IndexBuffer* getIBO() const { return poligonIndex.getIBO(); }
     virtual const AABB& getAABB() const override { return poligonIndex.getAABB(); }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
+    virtual void draw(const bool& logData) override;
     virtual Entity getEntity() const override { return entity; }
 
     inline bool empty() const { return poligonIndex.empty(); }

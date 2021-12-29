@@ -11,7 +11,7 @@ class RenderableBsp : public IRenderable3d {
   public:
     RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<Renderable3D*>* vpLeafData, std::vector<VertexData>* vertexData);
     virtual ~RenderableBsp();
-    virtual void debugDados() override;
+    virtual void debugDados() const override;
     virtual uint32_t getSize() const { return totIndex; }
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return nullptr; }

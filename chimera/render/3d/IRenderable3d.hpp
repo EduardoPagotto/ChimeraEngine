@@ -6,7 +6,7 @@ namespace Chimera {
 class IRenderer3d;
 class IRenderable3d {
   public:
-    virtual void debugDados() = 0; // FIXME: colocar const aqui
+    virtual void debugDados() const = 0;
     virtual uint32_t getSize() const = 0;
     virtual class VertexArray* getVao() const = 0;
     virtual class IndexBuffer* getIBO() const = 0;

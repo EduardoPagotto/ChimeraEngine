@@ -13,7 +13,7 @@ class Renderable3D : public IRenderable3d {
     Renderable3D();
     virtual ~Renderable3D();
 
-    virtual void debugDados() override;
+    virtual void debugDados() const override;
     virtual uint32_t getSize() const override { return poligonIndex.getSize(); }
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return poligonIndex.getIBO(); }

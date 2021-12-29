@@ -60,7 +60,7 @@ RenderableChunk::~RenderableChunk() {
     vao = nullptr;
 }
 
-void RenderableChunk::debugDados() {
+void RenderableChunk::debugDados() const {
     // TODO:
 }
 

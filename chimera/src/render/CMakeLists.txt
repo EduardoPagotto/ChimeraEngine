@@ -53,7 +53,6 @@ set (RenderSource 	CanvasGL.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
 					3d/RenderableParticles.cpp
-					3d/RendererParticles.cpp
 					scene/Scene.cpp
 					scene/CameraController.cpp)
 

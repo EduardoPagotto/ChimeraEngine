@@ -15,7 +15,7 @@ class RenderableParticles : public IRenderable3d {
     virtual uint32_t getSize() const override { return 0; } // TODO: Implementar
     virtual VertexArray* getVao() const override { return vao; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }
-    virtual const AABB& getAABB() const override { return aabb; }
+    virtual const AABB& getAABB() const override { return pc->aabb; } // FIXME: vem de container
     virtual Entity getEntity() const override { return entity; }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     void draw();
@@ -25,7 +25,6 @@ class RenderableParticles : public IRenderable3d {
     void setParticleContainer(ParticleContainer* pc) { this->pc = pc; }
 
   private:
-    AABB aabb;
     VertexArray* vao = nullptr;
     VertexBuffer* vboVex = nullptr; // GLuint vboVertex;
     VertexBuffer* vboPos = nullptr; // GLuint vboPosition;

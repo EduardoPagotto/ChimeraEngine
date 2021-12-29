@@ -4,6 +4,7 @@
 
 namespace Chimera {
 RendererParticles::RendererParticles() : logData(false) {}
+
 RendererParticles::~RendererParticles() {}
 
 void RendererParticles::begin(ICamera* camera) { frustum.set(camera->view()->getViewProjectionInverse()); }

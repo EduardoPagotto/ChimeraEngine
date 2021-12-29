@@ -83,7 +83,10 @@ void RenderableBsp::traverseTree(BSPTreeNode* tree) {
     }
 }
 
-void RenderableBsp::debugDados() const { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP Submit"); }
+void RenderableBsp::draw(const bool& logData) {
+    if (logData)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP draw"); // TODO: ver o que fazer
+}
 
 void RenderableBsp::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
     this->camera = camera;

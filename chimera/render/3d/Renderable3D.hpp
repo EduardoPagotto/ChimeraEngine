@@ -11,7 +11,6 @@ class Renderable3D : public IRenderable3d {
     Renderable3D();
     virtual ~Renderable3D();
 
-    virtual void debugDados() const override;
     virtual uint32_t getSize() const override { return vIndex.size(); }
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return ibo; }

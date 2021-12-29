@@ -119,7 +119,8 @@ void RenderableParticles::draw(const bool& logData) {
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
 
-    if (logData == true)
-        debugDados();
+    if (logData == true) {
+        pc->aabb.render();
+    }
 }
 } // namespace Chimera

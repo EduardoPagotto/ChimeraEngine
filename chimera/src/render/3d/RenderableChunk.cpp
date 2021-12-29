@@ -54,8 +54,9 @@ RenderableChunk::~RenderableChunk() {
     vao = nullptr;
 }
 
-void RenderableChunk::debugDados() const {
-    // TODO:
+void RenderableChunk::draw(const bool& logData) {
+    if (logData)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "RenderableChunk draw"); // TODO: ver o que fazer
 }
 
 void RenderableChunk::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {

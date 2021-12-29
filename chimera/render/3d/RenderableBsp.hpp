@@ -11,13 +11,12 @@ class RenderableBsp : public IRenderable3d {
   public:
     RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vChild, std::vector<VertexData>* vertexData);
     virtual ~RenderableBsp();
-    virtual void debugDados() const override;
     virtual uint32_t getSize() const { return totIndex; }
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return nullptr; }
     virtual const AABB& getAABB() const override { return aabb; }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
-    virtual void draw(const bool& logData) override{}; // TODO: ver o que fazer!!!
+    virtual void draw(const bool& logData) override;
 
   private:
     void destroy();

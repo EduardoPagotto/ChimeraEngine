@@ -10,7 +10,6 @@ class RenderableParticles : public IRenderable3d {
     RenderableParticles() = default;
     virtual ~RenderableParticles();
 
-    virtual void debugDados() const override { pc->aabb.render(); }
     virtual uint32_t getSize() const override { return pc->particlesCount; }
     virtual VertexArray* getVao() const override { return vao; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }

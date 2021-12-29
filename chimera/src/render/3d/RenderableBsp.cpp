@@ -7,10 +7,10 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vpLeafData, std::vector<VertexData>* vertexData)
+RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vChild, std::vector<VertexData>* vertexData)
     : root(root), totIndex(0) {
 
-    this->vpLeaf = std::move(*vpLeafData);
+    this->vChild = std::move(*vChild);
     this->vVertex = std::move(*vertexData);
 
     // create vertex buffers
@@ -30,11 +30,11 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vpLe
     vbo->unbind();
 
     uint32_t totIndex = 0;
-    for (Renderable3D* pLeaf : this->vpLeaf) {
+    for (Renderable3D* child : this->vChild) {
 
-        pLeaf->initializeBuffer(&vVertex[0], vVertex.size());
-        pLeaf->debugDados();
-        totIndex += pLeaf->getSize();
+        child->initializeBuffer(&vVertex[0], vVertex.size());
+        child->debugDados();
+        totIndex += child->getSize();
     }
 
     vao->unbind();
@@ -42,7 +42,7 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vpLe
     glm::vec3 min, max, size;
     vertexDataMinMaxSize(&vVertex[0], vVertex.size(), min, max, size);
     aabb.setBoundary(min, max);
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", this->vChild.size());
 }
 
 RenderableBsp::~RenderableBsp() { this->destroy(); }
@@ -52,9 +52,9 @@ void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
     if (tree->isLeaf == false)
         return;
 
-    auto pLeaf = vpLeaf[tree->leafIndex];
-    command->renderable = pLeaf;
-    pLeaf->submit(camera, *command, this->renderer);
+    auto child = vChild[tree->leafIndex];
+    command->renderable = child;
+    child->submit(camera, *command, this->renderer);
 }
 
 void RenderableBsp::traverseTree(BSPTreeNode* tree) {
@@ -100,13 +100,13 @@ void RenderableBsp::submit(ICamera* camera, RenderCommand& command, IRenderer3d*
 
 void RenderableBsp::destroy() {
 
-    while (!vpLeaf.empty()) {
+    while (!vChild.empty()) {
 
-        Renderable3D* pLeaf = vpLeaf.back();
-        vpLeaf.pop_back();
+        Renderable3D* child = vChild.back();
+        vChild.pop_back();
 
-        delete pLeaf;
-        pLeaf = nullptr;
+        delete child;
+        child = nullptr;
     }
 
     collapse(root);

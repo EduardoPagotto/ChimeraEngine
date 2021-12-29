@@ -6,8 +6,8 @@
 
 namespace Chimera {
 
-RenderableChunk::RenderableChunk(std::vector<Renderable3D*>& vpLeafData, std::vector<VertexData>& vertexData) : totIndex(0) {
-    this->vpLeaf = std::move(vpLeafData);
+RenderableChunk::RenderableChunk(std::vector<Renderable3D*>& vChild, std::vector<VertexData>& vertexData) : totIndex(0) {
+    this->vChild = std::move(vChild);
     this->vVertex = std::move(vertexData);
 
     // create vertex buffers
@@ -28,10 +28,10 @@ RenderableChunk::RenderableChunk(std::vector<Renderable3D*>& vpLeafData, std::ve
 
     vao->push(vbo);
 
-    for (Renderable3D* pLeaf : this->vpLeaf) {
-        pLeaf->initializeBuffer(&vVertex[0], vVertex.size());
-        pLeaf->debugDados();
-        totIndex += pLeaf->getSize();
+    for (Renderable3D* child : this->vChild) {
+        child->initializeBuffer(&vVertex[0], vVertex.size());
+        child->debugDados();
+        totIndex += child->getSize();
     }
 
     vao->unbind();
@@ -39,7 +39,7 @@ RenderableChunk::RenderableChunk(std::vector<Renderable3D*>& vpLeafData, std::ve
     glm::vec3 min, max, size;
     vertexDataMinMaxSize(&vVertex[0], vVertex.size(), min, max, size);
     aabb.setBoundary(min, max);
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vpLeaf.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vChild.size());
 }
 
 RenderableChunk::~RenderableChunk() {
@@ -47,9 +47,9 @@ RenderableChunk::~RenderableChunk() {
     // TODO: remover tudo
     // while (vVertex.size() > 0) {
     //     std::vector<RenderableFace*>::iterator it = vVertex.begin();
-    //     RenderableFace* pNode = (*it);
-    //     delete pNode;
-    //     pNode = nullptr;
+    //     RenderableFace* child = (*it);
+    //     delete child;
+    //     child = nullptr;
     //     vVertex.erase(it);
     // }
     vao->unbind();
@@ -66,8 +66,8 @@ void RenderableChunk::submit(ICamera* camera, RenderCommand& command, IRenderer3
 
     renderer->submit(command);
 
-    for (Renderable3D* pNode : vpLeaf) {
-        command.renderable = pNode;
+    for (Renderable3D* child : vChild) {
+        command.renderable = child;
         renderer->submit(command);
     }
 }

@@ -9,7 +9,7 @@ namespace Chimera {
 
 class RenderableBsp : public IRenderable3d {
   public:
-    RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vpLeafData, std::vector<VertexData>* vertexData);
+    RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vChild, std::vector<VertexData>* vertexData);
     virtual ~RenderableBsp();
     virtual void debugDados() const override;
     virtual uint32_t getSize() const { return totIndex; }
@@ -32,7 +32,7 @@ class RenderableBsp : public IRenderable3d {
     BSPTreeNode* root;
     VertexArray* vao;
     bool logdata;
-    std::vector<Renderable3D*> vpLeaf;
+    std::vector<Renderable3D*> vChild;
     std::vector<VertexData> vVertex;
     AABB aabb;
     ICamera* camera;

@@ -1,4 +1,4 @@
-#include "chimera/render/3d/RenderableChunk.hpp"
+#include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-RenderableChunk::RenderableChunk(std::vector<Renderable3D*>& vChild, std::vector<VertexData>& vertexData) : totIndex(0) {
+RenderableArray::RenderableArray(std::vector<Renderable3D*>& vChild, std::vector<VertexData>& vertexData) : totIndex(0) {
     this->vChild = std::move(vChild);
     this->vVertex = std::move(vertexData);
 
@@ -41,7 +41,7 @@ RenderableChunk::RenderableChunk(std::vector<Renderable3D*>& vChild, std::vector
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", vChild.size());
 }
 
-RenderableChunk::~RenderableChunk() {
+RenderableArray::~RenderableArray() {
 
     while (!vChild.empty()) {
         Renderable3D* child = vChild.back();
@@ -54,12 +54,12 @@ RenderableChunk::~RenderableChunk() {
     vao = nullptr;
 }
 
-void RenderableChunk::draw(const bool& logData) {
+void RenderableArray::draw(const bool& logData) {
     if (logData)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "RenderableChunk draw"); // TODO: ver o que fazer
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "RenderableArray draw"); // TODO: ver o que fazer
 }
 
-void RenderableChunk::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
+void RenderableArray::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
 
     renderer->submit(command);
 

@@ -4,10 +4,10 @@
 
 namespace Chimera {
 
-class RenderableChunk : public IRenderable3d {
+class RenderableArray : public IRenderable3d {
   public:
-    RenderableChunk(std::vector<Renderable3D*>& vChild, std::vector<VertexData>& vertexData);
-    ~RenderableChunk();
+    RenderableArray(std::vector<Renderable3D*>& vChild, std::vector<VertexData>& vertexData);
+    ~RenderableArray();
 
     virtual void submit(ICamera* Icamera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual uint32_t getSize() const { return totIndex; }

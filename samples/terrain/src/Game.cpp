@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/render/3d/RenderableChunk.hpp"
+#include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/CameraFPS.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/TextureManager.hpp"
@@ -71,7 +71,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         std::vector<VertexData> vertexDataIn;
         vertexDataFromMesh(&mesh, vertexDataIn);
 
-        RenderableChunk* r = new RenderableChunk(loader.vNodes, vertexDataIn);
+        RenderableArray* r = new RenderableArray(loader.vNodes, vertexDataIn);
         rc.renderable = r;
     }
     {

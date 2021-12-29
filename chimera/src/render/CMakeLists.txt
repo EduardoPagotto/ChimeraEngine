@@ -48,7 +48,7 @@ set (RenderSource 	CanvasGL.cpp
 					2d/Label.cpp
 					3d/Renderer3d.cpp
 					3d/Renderable3D.cpp
-					3d/RenderableChunk.cpp
+					3d/RenderableArray.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
 					3d/RenderableParticles.cpp

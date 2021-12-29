@@ -30,7 +30,6 @@ RenderableChunk::RenderableChunk(std::vector<Renderable3D*>& vChild, std::vector
 
     for (Renderable3D* child : this->vChild) {
         child->initializeBuffer(&vVertex[0], vVertex.size());
-        child->debugDados();
         totIndex += child->getSize();
     }
 
@@ -39,20 +38,17 @@ RenderableChunk::RenderableChunk(std::vector<Renderable3D*>& vChild, std::vector
     glm::vec3 min, max, size;
     vertexDataMinMaxSize(&vVertex[0], vVertex.size(), min, max, size);
     aabb.setBoundary(min, max);
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", vChild.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", vChild.size());
 }
 
 RenderableChunk::~RenderableChunk() {
-    vao->bind();
-    // TODO: remover tudo
-    // while (vVertex.size() > 0) {
-    //     std::vector<RenderableFace*>::iterator it = vVertex.begin();
-    //     RenderableFace* child = (*it);
-    //     delete child;
-    //     child = nullptr;
-    //     vVertex.erase(it);
-    // }
-    vao->unbind();
+
+    while (!vChild.empty()) {
+        Renderable3D* child = vChild.back();
+        vChild.pop_back();
+        delete child;
+        child = nullptr;
+    }
 
     delete vao;
     vao = nullptr;

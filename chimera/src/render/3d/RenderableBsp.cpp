@@ -29,11 +29,9 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vChi
     vbo->setData(&this->vVertex[0], this->vVertex.size());
     vbo->unbind();
 
-    uint32_t totIndex = 0;
+    vao->push(vbo);
     for (Renderable3D* child : this->vChild) {
-
         child->initializeBuffer(&vVertex[0], vVertex.size());
-        child->debugDados();
         totIndex += child->getSize();
     }
 
@@ -42,7 +40,7 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vChi
     glm::vec3 min, max, size;
     vertexDataMinMaxSize(&vVertex[0], vVertex.size(), min, max, size);
     aabb.setBoundary(min, max);
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Total Leaf: %ld", this->vChild.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", this->vChild.size());
 }
 
 RenderableBsp::~RenderableBsp() { this->destroy(); }
@@ -101,10 +99,8 @@ void RenderableBsp::submit(ICamera* camera, RenderCommand& command, IRenderer3d*
 void RenderableBsp::destroy() {
 
     while (!vChild.empty()) {
-
         Renderable3D* child = vChild.back();
         vChild.pop_back();
-
         delete child;
         child = nullptr;
     }

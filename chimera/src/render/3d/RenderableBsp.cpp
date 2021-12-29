@@ -7,10 +7,9 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<Renderable3D*>* vpLeafData, std::vector<VertexData>* vertexData)
+RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vpLeafData, std::vector<VertexData>* vertexData)
     : root(root), totIndex(0) {
 
-    this->entity = entity;
     this->vpLeaf = std::move(*vpLeafData);
     this->vVertex = std::move(*vertexData);
 

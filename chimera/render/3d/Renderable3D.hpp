@@ -1,7 +1,6 @@
 #pragma once
 #include "IRenderable3d.hpp"
 #include "PolygonIndex.hpp"
-#include "chimera/core/Registry.hpp"
 #include "chimera/render/buffer/IndexBuffer.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/AABB.hpp"
@@ -20,11 +19,7 @@ class Renderable3D : public IRenderable3d {
     virtual const AABB& getAABB() const override { return poligonIndex.getAABB(); }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual void draw(const bool& logData) override;
-    virtual Entity getEntity() const override { return entity; }
-
     inline bool empty() const { return poligonIndex.empty(); }
-
-    void setEntity(Entity entity);
 
     // inicializa criando vao e ibo
     void createBuffers(VertexData* vertexData, const uint32_t& vertexSize, uint32_t* indexData, const uint32_t& indexSize);
@@ -36,6 +31,5 @@ class Renderable3D : public IRenderable3d {
   private:
     PolygonIndex poligonIndex;
     VertexArray* vao;
-    Entity entity;
 };
 } // namespace Chimera

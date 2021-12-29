@@ -6,7 +6,7 @@ namespace Chimera {
 
 class RenderableChunk : public IRenderable3d {
   public:
-    RenderableChunk(Entity entity, std::vector<Renderable3D*>& vpLeafData, std::vector<VertexData>& vertexData);
+    RenderableChunk(std::vector<Renderable3D*>& vpLeafData, std::vector<VertexData>& vertexData);
     ~RenderableChunk();
 
     virtual void submit(ICamera* Icamera, RenderCommand& command, IRenderer3d* renderer) override;
@@ -15,7 +15,6 @@ class RenderableChunk : public IRenderable3d {
     virtual VertexArray* getVao() const { return vao; }
     virtual IndexBuffer* getIBO() const { return nullptr; }
     virtual const AABB& getAABB() const override { return aabb; }
-    virtual Entity getEntity() const override { return entity; }
     virtual void draw(const bool& logData) override{}; // TODO: ver o que fazer!!!
 
   private:
@@ -24,6 +23,5 @@ class RenderableChunk : public IRenderable3d {
     std::vector<VertexData> vVertex;
     AABB aabb;
     uint32_t totIndex;
-    Entity entity;
 };
 } // namespace Chimera

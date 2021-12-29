@@ -71,7 +71,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         std::vector<VertexData> vertexDataIn;
         vertexDataFromMesh(&mesh, vertexDataIn);
 
-        RenderableChunk* r = new RenderableChunk(renderableEntity, loader.vNodes, vertexDataIn);
+        RenderableChunk* r = new RenderableChunk(loader.vNodes, vertexDataIn);
         rc.renderable = r;
     }
     {

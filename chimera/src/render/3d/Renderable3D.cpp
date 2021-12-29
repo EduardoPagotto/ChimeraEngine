@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-Renderable3D::Renderable3D() : vao(nullptr), entity(Entity()) {}
+Renderable3D::Renderable3D() : vao(nullptr) {}
 
 Renderable3D::~Renderable3D() {
     if (vao) {
@@ -43,8 +43,6 @@ void Renderable3D::createBuffers(VertexData* vertexData, const uint32_t& vertexS
     poligonIndex.addTrisEntire(indexData, indexSize);
     poligonIndex.initializeBuffer(vertexData, vertexSize);
 }
-
-void Renderable3D::setEntity(Entity entity) { this->entity = entity; }
 
 void Renderable3D::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) { renderer->submit(command); }
 

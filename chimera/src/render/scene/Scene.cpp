@@ -126,7 +126,6 @@ void Scene::onAttach() {
                 Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
                 Renderable3D* r = new Renderable3D();
                 r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
-                r->setEntity(entity);
                 rc.renderable = r;
             }
 
@@ -152,7 +151,6 @@ void Scene::onAttach() {
                 RenderableParticles* p = new RenderableParticles();
                 p->setParticleContainer(&pc);
                 p->create();
-                p->setEntity(entity);
                 particleSys.renderable = p;
             }
         }

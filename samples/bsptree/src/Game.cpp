@@ -56,7 +56,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         BspTree bspTree;
         bspTree.create(vVertexIndexed, vIndex);
 
-        RenderableBsp* r = new RenderableBsp(renderableEntity, bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+        RenderableBsp* r = new RenderableBsp(bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
         rc.renderable = r;
     }
 

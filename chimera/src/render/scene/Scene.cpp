@@ -234,21 +234,21 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
-        TransComponent& tc = renderable->getEntity().getComponent<TransComponent>(); // FIXME: group this!!!
+
+        Entity e = {entity, &registry};
+        TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
+        Shader& sc = e.getComponent<Shader>();
+        Material& mc = e.getComponent<Material>();
 
         RenderCommand command;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-
-        Shader& sc = rc.renderable->getEntity().getComponent<Shader>();
-        Material& mc = rc.renderable->getEntity().getComponent<Material>();
-
         command.renderable = renderable;
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms, command.vTex);
 
         command.uniforms.push_back(UniformVal("model", command.transform));
 
-        rc.renderable->submit(camera, command, &renderer);
+        renderable->submit(camera, command, &renderer);
     }
 }
 

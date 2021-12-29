@@ -17,8 +17,7 @@ class PolygonIndex {
     inline bool empty() const { return polygons.empty(); }
     inline const uint32_t getSize() const { return polygons.size(); }
     inline const AABB& getAABB() const { return aabb; }
-    inline IndexBuffer* getIBO() const { return ibo; } // FIXME: passar para const depois
-
+    inline IndexBuffer* getIBO() const { return ibo; }
     void debugDados() const;
 
   private:

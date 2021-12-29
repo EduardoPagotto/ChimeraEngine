@@ -1,6 +1,4 @@
-#ifndef __HELLOWORD_TILELAYER__HPP
-#define __HELLOWORD_TILELAYER__HPP
-
+#pragma once
 #include "chimera/render/2d/Layer.hpp"
 
 class TileLayer : public Chimera::Layer {
@@ -17,4 +15,3 @@ class TileLayer : public Chimera::Layer {
   private:
     uint16_t x, y;
 };
-#endif

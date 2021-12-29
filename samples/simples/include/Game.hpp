@@ -1,6 +1,4 @@
-#ifndef __GAME_SIMPLES__HPP
-#define __GAME_SIMPLES__HPP
-
+#pragma once
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/render/scene/Scene.hpp"
@@ -21,5 +19,3 @@ class Game : public Chimera::IStateMachine {
     Chimera::Scene activeScene;
     Chimera::Engine* engine;
 };
-
-#endif

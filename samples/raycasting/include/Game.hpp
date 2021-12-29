@@ -1,6 +1,4 @@
-#ifndef __GAME_SIMPLE_RAYCASTING__HPP
-#define __GAME_SIMPLE_RAYCASTING__HPP
-
+#pragma once
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
 #include "raycasting.hpp"
@@ -27,5 +25,3 @@ class Game : public Chimera::IStateMachine {
     double rotSpeed;
     Chimera::Engine* engine;
 };
-
-#endif

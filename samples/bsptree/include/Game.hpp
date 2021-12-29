@@ -1,6 +1,4 @@
-#ifndef __GAME_TESTE_BSTREE__HPP
-#define __GAME_TESTE_BSTREE__HPP
-
+#pragma once
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/render/scene/Scene.hpp"
@@ -20,5 +18,3 @@ class Game : public Chimera::IStateMachine {
     Chimera::Scene activeScene;
     Chimera::Engine* engine;
 };
-
-#endif

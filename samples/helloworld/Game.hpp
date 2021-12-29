@@ -1,6 +1,4 @@
-#ifndef __HELLOWORD_TEST__HPP
-#define __HELLOWORD_TEST__HPP
-
+#pragma once
 #include "TileLayer.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
@@ -24,5 +22,3 @@ class Game : public Chimera::IStateMachine {
     TileLayer* layer;
     int fps;
 };
-
-#endif

@@ -1,6 +1,4 @@
-#ifndef __GAME_XX__HPP
-#define __GAME_XX__HPP
-
+#pragma once
 #include "Tile.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
@@ -46,5 +44,3 @@ class Game : public Chimera::IStateMachine {
     Chimera::Label* lFPS;
     int fps;
 };
-
-#endif

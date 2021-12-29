@@ -1,12 +1,12 @@
 #pragma once
-#include "RenderableSimple.hpp"
+#include "Renderable3D.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
 
 class RenderableChunk : public IRenderable3d {
   public:
-    RenderableChunk(Entity entity, std::vector<RenderableSimple*>& vpLeafData, std::vector<VertexData>& vertexData);
+    RenderableChunk(Entity entity, std::vector<Renderable3D*>& vpLeafData, std::vector<VertexData>& vertexData);
     ~RenderableChunk();
 
     virtual void submit(ICamera* Icamera, RenderCommand& command, IRenderer3d* renderer) override;
@@ -19,7 +19,7 @@ class RenderableChunk : public IRenderable3d {
 
   private:
     VertexArray* vao;
-    std::vector<RenderableSimple*> vpLeaf;
+    std::vector<Renderable3D*> vpLeaf;
     std::vector<VertexData> vVertex;
     AABB aabb;
     uint32_t totIndex;

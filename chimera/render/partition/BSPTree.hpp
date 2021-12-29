@@ -1,6 +1,6 @@
 #pragma once
 #include "BSPTreeNode.hpp"
-#include "chimera/render/3d/RenderableSimple.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/partition/Triangle.hpp"
 
 namespace Chimera {
@@ -12,7 +12,7 @@ class BspTree {
     void create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
     BSPTreeNode* getRoot() const { return root; }
     std::vector<VertexData>* getVertex() { return &vVertex; }
-    std::vector<RenderableSimple*>* getLeafs() { return &vpLeaf; }
+    std::vector<Renderable3D*>* getLeafs() { return &vpLeaf; }
 
   private:
     BSPTreeNode* build(std::list<Triangle*>& _vTriangle);
@@ -22,6 +22,6 @@ class BspTree {
 
     BSPTreeNode* root;
     std::vector<VertexData> vVertex;
-    std::vector<RenderableSimple*> vpLeaf;
+    std::vector<Renderable3D*> vpLeaf;
 };
 } // namespace Chimera

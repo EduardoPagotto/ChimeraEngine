@@ -2,8 +2,8 @@
 #include "chimera/core/MouseDevice.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
-#include "chimera/render/3d/RenderableSimple.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Transform.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
@@ -124,7 +124,7 @@ void Scene::onAttach() {
 
                 // Cria o renderable object com o VertexData
                 Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
-                RenderableSimple* r = new RenderableSimple();
+                Renderable3D* r = new Renderable3D();
                 r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
                 r->setEntity(entity);
                 rc.renderable = r;

@@ -8,10 +8,10 @@
 
 namespace Chimera {
 
-class RenderableSimple : public IRenderable3d {
+class Renderable3D : public IRenderable3d {
   public:
-    RenderableSimple();
-    virtual ~RenderableSimple();
+    Renderable3D();
+    virtual ~Renderable3D();
 
     virtual void debugDados() override;
     virtual uint32_t getSize() const override { return poligonIndex.getSize(); }

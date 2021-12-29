@@ -3,7 +3,8 @@
 
 namespace Chimera {
 
-template <class T> void swapFace(T& a, T& b) {
+template <class T>
+void swapFace(T& a, T& b) {
     T c = b;
     b = a;
     a = c;
@@ -258,7 +259,7 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
 void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTriangle) {
 
-    RenderableSimple* pLeaf = new RenderableSimple();
+    Renderable3D* pLeaf = new Renderable3D();
 
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();

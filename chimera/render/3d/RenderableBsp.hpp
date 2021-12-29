@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderCommand.hpp"
-#include "RenderableSimple.hpp"
+#include "Renderable3D.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/BSPTreeNode.hpp"
 #include <vector>
@@ -9,7 +9,7 @@ namespace Chimera {
 
 class RenderableBsp : public IRenderable3d {
   public:
-    RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<RenderableSimple*>* vpLeafData, std::vector<VertexData>* vertexData);
+    RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<Renderable3D*>* vpLeafData, std::vector<VertexData>* vertexData);
     virtual ~RenderableBsp();
     virtual void debugDados() override;
     virtual uint32_t getSize() const { return totIndex; }
@@ -32,7 +32,7 @@ class RenderableBsp : public IRenderable3d {
     BSPTreeNode* root;
     VertexArray* vao;
     bool logdata;
-    std::vector<RenderableSimple*> vpLeaf;
+    std::vector<Renderable3D*> vpLeaf;
     std::vector<VertexData> vVertex;
     AABB aabb;
     ICamera* camera;

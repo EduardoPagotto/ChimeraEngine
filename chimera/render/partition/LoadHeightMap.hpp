@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/render/3d/RenderableSimple.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include <SDL2/SDL_image.h>
 #include <string>
 
@@ -13,7 +13,7 @@ class LoadHeightMap {
 
     bool getMesh(const std::string& _fileName, MeshData& _mesh, const glm::vec3& _size);
     void split(std::vector<unsigned int> _vVertexIndex);
-    std::vector<RenderableSimple*> vNodes;
+    std::vector<Renderable3D*> vNodes;
 
   private:
     inline unsigned getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }

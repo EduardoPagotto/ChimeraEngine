@@ -6,8 +6,7 @@
 
 namespace Chimera {
 
-RenderableChunk::RenderableChunk(Entity entity, std::vector<RenderableSimple*>& vpLeafData, std::vector<VertexData>& vertexData)
-    : totIndex(0) {
+RenderableChunk::RenderableChunk(Entity entity, std::vector<Renderable3D*>& vpLeafData, std::vector<VertexData>& vertexData) : totIndex(0) {
 
     this->entity = entity;
     this->vpLeaf = std::move(vpLeafData);
@@ -31,7 +30,7 @@ RenderableChunk::RenderableChunk(Entity entity, std::vector<RenderableSimple*>& 
 
     vao->push(vbo);
 
-    for (RenderableSimple* pLeaf : this->vpLeaf) {
+    for (Renderable3D* pLeaf : this->vpLeaf) {
         pLeaf->initializeBuffer(&vVertex[0], vVertex.size());
         pLeaf->debugDados();
         totIndex += pLeaf->getSize();
@@ -69,7 +68,7 @@ void RenderableChunk::submit(ICamera* camera, RenderCommand& command, IRenderer3
 
     renderer->submit(command);
 
-    for (RenderableSimple* pNode : vpLeaf) {
+    for (Renderable3D* pNode : vpLeaf) {
         command.renderable = pNode;
         renderer->submit(command);
     }

@@ -7,8 +7,7 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<RenderableSimple*>* vpLeafData,
-                             std::vector<VertexData>* vertexData)
+RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<Renderable3D*>* vpLeafData, std::vector<VertexData>* vertexData)
     : root(root), totIndex(0) {
 
     this->entity = entity;
@@ -32,7 +31,7 @@ RenderableBsp::RenderableBsp(Entity entity, BSPTreeNode* root, std::vector<Rende
     vbo->unbind();
 
     uint32_t totIndex = 0;
-    for (RenderableSimple* pLeaf : this->vpLeaf) {
+    for (Renderable3D* pLeaf : this->vpLeaf) {
 
         pLeaf->initializeBuffer(&vVertex[0], vVertex.size());
         pLeaf->debugDados();
@@ -104,7 +103,7 @@ void RenderableBsp::destroy() {
 
     while (!vpLeaf.empty()) {
 
-        RenderableSimple* pLeaf = vpLeaf.back();
+        Renderable3D* pLeaf = vpLeaf.back();
         vpLeaf.pop_back();
 
         delete pLeaf;

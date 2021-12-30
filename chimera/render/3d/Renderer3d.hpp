@@ -18,15 +18,12 @@ class Renderer3d : public IRenderer3d {
     virtual void submit(const RenderCommand& command) override;
     virtual void end() override;
     virtual void flush() override;
-    virtual void logToggle() override { logData = !logData; }
-    virtual bool getLog() const override { return logData; }
     virtual inline std::vector<UniformVal>& uQueue() override { return uniformsQueue; }
 
   private:
     std::deque<RenderCommand> commandQueue;
     std::vector<UniformVal> uniformsQueue;
     Frustum frustum;
-    bool logData;
     uint32_t totIBO, totFaces;
 };
 } // namespace Chimera

@@ -11,22 +11,17 @@
 
 namespace Chimera {
 
-Renderer3d::Renderer3d() : logData(false), totIBO(0), totFaces(0) { uniformsQueue.reserve(300); }
+Renderer3d::Renderer3d() : totIBO(0), totFaces(0) { uniformsQueue.reserve(300); }
 
 Renderer3d::~Renderer3d() {}
 
 void Renderer3d::begin(ICamera* camera) {
-
     frustum.set(camera->view()->getViewProjectionInverse());
-
     // debug data
     totIBO = 0;
     totFaces = 0;
 }
-void Renderer3d::end() {
-    if (logData == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
-}
+void Renderer3d::end() {}
 
 void Renderer3d::submit(const RenderCommand& command) {
     // Transformation model matrix AABB to know if in frustrum Camera
@@ -38,7 +33,7 @@ void Renderer3d::submit(const RenderCommand& command) {
         IndexBuffer* ibo = command.renderable->getIBO();
         if (ibo != nullptr) {
             totIBO++;
-            totFaces += ibo->getCount();
+            totFaces += ibo->getCount() / 3;
         }
         // adicionado ao proximo render
         commandQueue.push_back(command);
@@ -49,10 +44,12 @@ void Renderer3d::flush() {
 
     Shader activeShader;
     VertexArray* pLastVao = nullptr;
+    bool logData = false;
     while (!commandQueue.empty()) {
 
         const RenderCommand& command = commandQueue.front();
         IRenderable3d* r = command.renderable;
+        logData = command.logRender;
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior
@@ -96,13 +93,16 @@ void Renderer3d::flush() {
             }
         }
 
-        r->draw(logData);
+        r->draw(command.logRender);
         commandQueue.pop_front();
     }
     pLastVao->unbind();
 
     // Limpa buffer de uniforms ao terminar todos os draws calls
     uniformsQueue.clear();
+
+    if (logData == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }
 
 } // namespace Chimera

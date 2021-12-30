@@ -13,7 +13,7 @@
 
 namespace Chimera {
 
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr) {}
+Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr), logRender(false) {}
 
 Scene::~Scene() {}
 
@@ -239,6 +239,7 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
         Material& mc = e.getComponent<Material>();
 
         RenderCommand command;
+        command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = renderable;
         command.shader = sc;
@@ -269,6 +270,7 @@ void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
         auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
+        command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = rc.renderable;
         command.shader = shadowPass.shader;
@@ -283,6 +285,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
         auto [sc, mc, tc, rc] = group.get<Shader, Material, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
+        command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = rc.renderable;
         command.shader = sc;
@@ -293,7 +296,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
 }
 
 void Scene::onRender() {
-    if (renderBatch.getLog() == true) {
+    if (logRender == true) {
         const glm::vec3& pos = camera->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }

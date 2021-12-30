@@ -22,7 +22,7 @@ class Scene : public IStateMachine {
     Scene();
     virtual ~Scene();
     void onViewportResize(uint32_t width, uint32_t height);
-    IRenderer3d* getRender() { return &renderBatch; }
+    void logToggle() { logRender = !logRender; }
     Registry& getRegistry() { return registry; }
     // Herdados
     virtual void onAttach() override;
@@ -50,5 +50,6 @@ class Scene : public IStateMachine {
     Renderer3d renderBatch;
     std::vector<IEmitter*> emitters;
     ITrans* origem;
+    bool logRender;
 };
 } // namespace Chimera

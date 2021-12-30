@@ -11,6 +11,6 @@ class IRenderable3d {
     virtual class IndexBuffer* getIBO() const = 0;
     virtual const class AABB& getAABB() const = 0;
     virtual void submit(class ICamera* camera, class RenderCommand& command, class IRenderer3d* renderer) = 0;
-    virtual void draw(const bool& logData) = 0; // FIXME: colocar const aqui
+    virtual void draw(const bool& logData) = 0;
 };
 } // namespace Chimera

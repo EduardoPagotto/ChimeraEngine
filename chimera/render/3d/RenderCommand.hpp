@@ -7,10 +7,12 @@
 namespace Chimera {
 
 struct RenderCommand {
-    IRenderable3d* renderable;
-    glm::mat4 transform;
+    RenderCommand() = default;
+    IRenderable3d* renderable = nullptr;
+    glm::mat4 transform = glm::mat4(1.0f);
     Shader shader;
     std::vector<UniformVal> uniforms;
     std::vector<Texture*> vTex;
+    bool logRender = false; // TODO: remover depois
 };
 } // namespace Chimera

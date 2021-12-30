@@ -7,8 +7,6 @@ class IRenderer3d {
     virtual void submit(const class RenderCommand& command) = 0;
     virtual void end() = 0;
     virtual void flush() = 0;
-    virtual void logToggle() = 0;
-    virtual bool getLog() const = 0;
     virtual std::vector<class UniformVal>& uQueue() = 0;
 };
 } // namespace Chimera

@@ -2,83 +2,86 @@
 
 namespace Chimera {
 
-// Cube::Cube(const glm::ivec3& pos, const glm::ivec3& size, const float& sizeBlock) {
-Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max) : AABB(min, max) {
+static std::vector<glm::uvec3> tVertIndex;
+static std::vector<glm::uvec3> tTexIndex;
+static std::vector<glm::vec2> tTexSeq;
 
-    pNorth = nullptr;
-    pEast = nullptr;
-    pSouth = nullptr;
-    pWest = nullptr;
-    pUp = nullptr;
-    pBottom = nullptr;
+void initCubeBase() {
+    tVertIndex.push_back(glm::uvec3(0, 1, 3)); // f00 N0
+    tVertIndex.push_back(glm::uvec3(1, 3, 2)); // f01 N1
+    tVertIndex.push_back(glm::uvec3(3, 2, 0)); // f02 N2
+    tVertIndex.push_back(glm::uvec3(2, 0, 1)); // f03 N3
 
-    if (caracter == 0x20)
-        this->space = SPACE::EMPTY;
-    else
-        this->space = (SPACE)(caracter - 0x30);
+    tVertIndex.push_back(glm::uvec3(1, 5, 7)); // f04 E0
+    tVertIndex.push_back(glm::uvec3(5, 7, 3)); // f05 E1 RPNEU
+    tVertIndex.push_back(glm::uvec3(7, 3, 1)); // f06 E2
+    tVertIndex.push_back(glm::uvec3(3, 1, 5)); // f07 E3 RPNED
 
-    this->t[0] = glm::vec2(0, 0);
-    this->t[1] = glm::vec2(0, 1);
-    this->t[2] = glm::vec2(1, 0);
-    this->t[3] = glm::vec2(1, 1);
+    tVertIndex.push_back(glm::uvec3(5, 4, 6)); // f08 S0
+    tVertIndex.push_back(glm::uvec3(4, 6, 7)); // f09 S1
+    tVertIndex.push_back(glm::uvec3(6, 7, 5)); // f10 S2
+    tVertIndex.push_back(glm::uvec3(7, 5, 4)); // f11 S3
 
-    this->tVertIndex.push_back(glm::uvec3(0, 1, 3)); // f00 N0
-    this->tVertIndex.push_back(glm::uvec3(1, 3, 2)); // f01 N1
-    this->tVertIndex.push_back(glm::uvec3(3, 2, 0)); // f02 N2
-    this->tVertIndex.push_back(glm::uvec3(2, 0, 1)); // f03 N3
+    tVertIndex.push_back(glm::uvec3(4, 0, 2)); // f12 W0 RPNWD
+    tVertIndex.push_back(glm::uvec3(0, 2, 6)); // f13 W1
+    tVertIndex.push_back(glm::uvec3(2, 6, 4)); // f14 W2 RPWU
+    tVertIndex.push_back(glm::uvec3(6, 4, 0)); // f15 W3
 
-    this->tVertIndex.push_back(glm::uvec3(1, 5, 7)); // f04 E0
-    this->tVertIndex.push_back(glm::uvec3(5, 7, 3)); // f05 E1 RPNEU
-    this->tVertIndex.push_back(glm::uvec3(7, 3, 1)); // f06 E2
-    this->tVertIndex.push_back(glm::uvec3(3, 1, 5)); // f07 E3 RPNED
+    tVertIndex.push_back(glm::uvec3(7, 6, 2)); // f16 U0
+    tVertIndex.push_back(glm::uvec3(6, 2, 3)); // f17 U1
+    tVertIndex.push_back(glm::uvec3(2, 3, 7)); // f18 U2
+    tVertIndex.push_back(glm::uvec3(3, 7, 6)); // f19 U3
 
-    this->tVertIndex.push_back(glm::uvec3(5, 4, 6)); // f08 S0
-    this->tVertIndex.push_back(glm::uvec3(4, 6, 7)); // f09 S1
-    this->tVertIndex.push_back(glm::uvec3(6, 7, 5)); // f10 S2
-    this->tVertIndex.push_back(glm::uvec3(7, 5, 4)); // f11 S3
+    tVertIndex.push_back(glm::uvec3(4, 5, 1)); // f20 D0
+    tVertIndex.push_back(glm::uvec3(5, 1, 0)); // f21 D1
+    tVertIndex.push_back(glm::uvec3(1, 0, 4)); // f22 D2
+    tVertIndex.push_back(glm::uvec3(0, 4, 5)); // f23 D3
 
-    this->tVertIndex.push_back(glm::uvec3(4, 0, 2)); // f12 W0 RPNWD
-    this->tVertIndex.push_back(glm::uvec3(0, 2, 6)); // f13 W1
-    this->tVertIndex.push_back(glm::uvec3(2, 6, 4)); // f14 W2 RPWU
-    this->tVertIndex.push_back(glm::uvec3(6, 4, 0)); // f15 W3
+    tVertIndex.push_back(glm::uvec3(0, 5, 7)); // f24 DIA1
+    tVertIndex.push_back(glm::uvec3(7, 2, 0)); // f25 DIA1
+    tVertIndex.push_back(glm::uvec3(4, 1, 3)); // f26 DIA2
+    tVertIndex.push_back(glm::uvec3(3, 6, 4)); // f27 DIA2
 
-    this->tVertIndex.push_back(glm::uvec3(7, 6, 2)); // f16 U0
-    this->tVertIndex.push_back(glm::uvec3(6, 2, 3)); // f17 U1
-    this->tVertIndex.push_back(glm::uvec3(2, 3, 7)); // f18 U2
-    this->tVertIndex.push_back(glm::uvec3(3, 7, 6)); // f19 U3
-
-    this->tVertIndex.push_back(glm::uvec3(4, 5, 1)); // f20 D0
-    this->tVertIndex.push_back(glm::uvec3(5, 1, 0)); // f21 D1
-    this->tVertIndex.push_back(glm::uvec3(1, 0, 4)); // f22 D2
-    this->tVertIndex.push_back(glm::uvec3(0, 4, 5)); // f23 D3
-
-    this->tVertIndex.push_back(glm::uvec3(0, 5, 7)); // f24 DIA1
-    this->tVertIndex.push_back(glm::uvec3(7, 2, 0)); // f25 DIA1
-    this->tVertIndex.push_back(glm::uvec3(4, 1, 3)); // f26 DIA2
-    this->tVertIndex.push_back(glm::uvec3(3, 6, 4)); // f27 DIA2
-
-    this->tVertIndex.push_back(glm::uvec3(4, 5, 3)); // f28 RP NS
-    this->tVertIndex.push_back(glm::uvec3(3, 2, 4)); // f29 RP NS
-    this->tVertIndex.push_back(glm::uvec3(0, 4, 7)); // f30 RP EW
-    this->tVertIndex.push_back(glm::uvec3(7, 3, 0)); // f31 RP EW
-    this->tVertIndex.push_back(glm::uvec3(1, 0, 6)); // f32 RP SN
-    this->tVertIndex.push_back(glm::uvec3(6, 7, 1)); // f33 RP SN
-    this->tVertIndex.push_back(glm::uvec3(5, 1, 2)); // f34 RP WE
-    this->tVertIndex.push_back(glm::uvec3(2, 6, 5)); // f35 RP WE
+    tVertIndex.push_back(glm::uvec3(4, 5, 3)); // f28 RP NS
+    tVertIndex.push_back(glm::uvec3(3, 2, 4)); // f29 RP NS
+    tVertIndex.push_back(glm::uvec3(0, 4, 7)); // f30 RP EW
+    tVertIndex.push_back(glm::uvec3(7, 3, 0)); // f31 RP EW
+    tVertIndex.push_back(glm::uvec3(1, 0, 6)); // f32 RP SN
+    tVertIndex.push_back(glm::uvec3(6, 7, 1)); // f33 RP SN
+    tVertIndex.push_back(glm::uvec3(5, 1, 2)); // f34 RP WE
+    tVertIndex.push_back(glm::uvec3(2, 6, 5)); // f35 RP WE
 
     //---
-    this->tTexIndex.push_back(glm::uvec3(0, 2, 3)); // T0 Q0
-    this->tTexIndex.push_back(glm::uvec3(3, 1, 0)); // T1 Q2
-    this->tTexIndex.push_back(glm::uvec3(2, 0, 1)); // T2 !Q0
-    this->tTexIndex.push_back(glm::uvec3(1, 3, 2)); // T3 !Q2
+    tTexIndex.push_back(glm::uvec3(0, 2, 3)); // T0 Q0
+    tTexIndex.push_back(glm::uvec3(3, 1, 0)); // T1 Q2
+    tTexIndex.push_back(glm::uvec3(2, 0, 1)); // T2 !Q0
+    tTexIndex.push_back(glm::uvec3(1, 3, 2)); // T3 !Q2
 
-    this->tTexIndex.push_back(glm::uvec3(1, 0, 2)); // T4 F Q1(NW)
-    this->tTexIndex.push_back(glm::uvec3(2, 3, 1)); // T5 F Q3(SE)
-    this->tTexIndex.push_back(glm::uvec3(2, 0, 1)); // T6 c Q1(NW)
-    this->tTexIndex.push_back(glm::uvec3(1, 3, 2)); // T7 c
+    tTexIndex.push_back(glm::uvec3(1, 0, 2)); // T4 F Q1(NW)
+    tTexIndex.push_back(glm::uvec3(2, 3, 1)); // T5 F Q3(SE)
+    tTexIndex.push_back(glm::uvec3(2, 0, 1)); // T6 c Q1(NW)
+    tTexIndex.push_back(glm::uvec3(1, 3, 2)); // T7 c
 
-    this->tTexIndex.push_back(glm::uvec3(3, 2, 0)); // T8 c
-    this->tTexIndex.push_back(glm::uvec3(0, 1, 3)); // T9 c
+    tTexIndex.push_back(glm::uvec3(3, 2, 0)); // T8 c
+    tTexIndex.push_back(glm::uvec3(0, 1, 3)); // T9 c
+
+    // ---
+    tTexSeq.push_back(glm::vec2(0, 0)); // 0
+    tTexSeq.push_back(glm::vec2(0, 1)); // 1
+    tTexSeq.push_back(glm::vec2(1, 0)); // 2
+    tTexSeq.push_back(glm::vec2(1, 1)); // 3
+}
+
+void cleanupCubeBase() {
+    tVertIndex.clear();
+    tTexIndex.clear();
+    tTexSeq.clear();
+}
+
+Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max)
+    : AABB(min, max), pNorth(nullptr), pEast(nullptr), pSouth(nullptr), pWest(nullptr), pUp(nullptr), pBottom(nullptr) {
+
+    space = (caracter == 0x20) ? SPACE::EMPTY : (SPACE)(caracter - 0x30);
 }
 
 Cube::~Cube() {}
@@ -124,16 +127,16 @@ void Cube::setNeighbor(DEEP deep, CARDINAL card, Cube* pCube) {
 
 void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
-    glm::uvec3 tri = this->tVertIndex[numFace];
-    glm::uvec3 tex = this->tTexIndex[numTex];
+    glm::uvec3 tri = tVertIndex[numFace];
+    glm::uvec3 tex = tTexIndex[numTex];
 
     glm::vec3 va = vertex[tri.x]; // PA
     glm::vec3 vb = vertex[tri.y]; // PB
     glm::vec3 vc = vertex[tri.z]; // PC
 
-    glm::vec2 ta = t[tex.x]; // TA
-    glm::vec2 tb = t[tex.y]; // TB
-    glm::vec2 tc = t[tex.z]; // TC
+    glm::vec2 ta = tTexSeq[tex.x]; // TA
+    glm::vec2 tb = tTexSeq[tex.y]; // TB
+    glm::vec2 tc = tTexSeq[tex.z]; // TC
 
     uint32_t ia, ib, ic;
 
@@ -147,9 +150,9 @@ void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<VertexDa
         ia = ib + 1;
     }
 
-    vl.push_back({va, glm::vec3(0.0f), ta});
-    vl.push_back({vb, glm::vec3(0.0f), tb});
-    vl.push_back({vc, glm::vec3(0.0f), tc});
+    vl.push_back({va, glm::vec3(0.0f), ta}); // normal PA calc below
+    vl.push_back({vb, glm::vec3(0.0f), tb}); // normal PB calc below
+    vl.push_back({vc, glm::vec3(0.0f), tc}); // normal PC calc below
 
     Triangle t1 = Triangle(ia, ib, ic, glm::vec3(0.0f));
     t1.calcNormal(vl);
@@ -529,32 +532,26 @@ void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<VertexDa
 void Cube::newRampNSEW(SPACE space, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     if (space == SPACE::RAMP_FNS) {
-
-        // FIXME: verificar se teto ou piso
         if ((pNorth != nullptr) && (pNorth->emptySpace())) {
 
             bool isFloor = (pNorth->getSpace() == SPACE::FLOOR);
-
             this->newRamp(isFloor, CARDINAL::SOUTH, vl, tl);
+
         } else if ((pSouth != nullptr) && (pSouth->emptySpace())) {
 
             bool isFloor = (pSouth->getSpace() == SPACE::FLOOR);
-
             this->newRamp(isFloor, CARDINAL::NORTH, vl, tl);
         }
 
     } else if (space == SPACE::RAMP_FEW) {
-
         if ((pEast != nullptr) && (pEast->emptySpace())) {
 
             bool isFloor = (pEast->getSpace() == SPACE::FLOOR);
-
             this->newRamp(isFloor, CARDINAL::WEST, vl, tl);
 
         } else if ((pWest != nullptr) && (pWest->emptySpace())) {
 
             bool isFloor = (pWest->getSpace() == SPACE::FLOOR);
-
             this->newRamp(isFloor, CARDINAL::EAST, vl, tl);
         }
     }

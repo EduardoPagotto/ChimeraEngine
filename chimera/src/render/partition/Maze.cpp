@@ -147,7 +147,8 @@ Cube* Maze::getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos) {
 }
 
 void Maze::createMap() {
-
+    // carrega posicoes, texturas, e seq textura defaults do cubo
+    initCubeBase();
     for (auto pCube : this->vpCube) {
         pCube->create(vertexData, this->trisList);
     }
@@ -157,5 +158,13 @@ void Maze::createMap() {
         vIndex.push_back(t.p[1]);
         vIndex.push_back(t.p[2]);
     }
+    // limpa dados de criacao do cubo base
+    cleanupCubeBase();
+    // limpas cubos de contrucao e vetor de cubos
+    for (auto pCube : this->vpCube) {
+        delete pCube;
+        pCube = nullptr;
+    }
+    vpCube.clear();
 }
 } // namespace Chimera

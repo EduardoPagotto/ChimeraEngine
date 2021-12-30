@@ -25,6 +25,9 @@ enum class DEEP {
 
 enum class SPACE { EMPTY = 0, WALL = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP_FNS = 6, RAMP_FEW = 7, INVALID = 99 };
 
+void initCubeBase();
+void cleanupCubeBase();
+
 class Cube : public AABB {
   public:
     Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
@@ -58,10 +61,6 @@ class Cube : public AABB {
     Cube* pWest;
     Cube* pUp;
     Cube* pBottom;
-
     SPACE space;
-    glm::vec2 t[4];
-    std::vector<glm::uvec3> tVertIndex;
-    std::vector<glm::uvec3> tTexIndex;
 };
 } // namespace Chimera

@@ -4,25 +4,30 @@
 
 namespace Chimera {
 
-class Triangle {
-  public:
-    Triangle(const Triangle& _val);
-    Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const glm::vec3& _normal);
-    inline glm::vec3 getNormal() const { return normal; }
+#define TRI_PA 0
+#define TRI_PB 1
+#define TRI_PC 2
 
-    void calcNormal(std::vector<VertexData>& vertexList);
+struct Triangle {
+    Triangle(const Triangle& t) : normal(t.normal), splitter(t.splitter) {
+        this->p[TRI_PA] = t.p[TRI_PA];
+        this->p[TRI_PB] = t.p[TRI_PB];
+        this->p[TRI_PC] = t.p[TRI_PC];
+    }
 
-    inline glm::vec3 position(std::vector<VertexData>& vertexList, const unsigned& indexTriangle) const {
+    Triangle(const uint32_t& _pa, const uint32_t& _pb, const uint32_t& _pc, const glm::vec3& _normal, const bool& split)
+        : normal(_normal), splitter(split) {
+        this->p[TRI_PA] = _pa;
+        this->p[TRI_PB] = _pb;
+        this->p[TRI_PC] = _pc;
+    }
+
+    inline const glm::vec3& position(std::vector<VertexData>& vertexList, const unsigned& indexTriangle) const {
         return vertexList[this->p[indexTriangle]].position;
     }
-    inline VertexData vertex(std::vector<VertexData>& vertexList, const unsigned& indexTriangle) const {
-        return vertexList[this->p[indexTriangle]];
-    }
 
-    uint32_t p[3]; // PA = 0, PB = 1, PC = 3
-    bool beenUsedAsSplitter;
-
-  private:
+    uint32_t p[3]; // TRI_PA = 0, TRI_PB = 1, TRI_PC = 3
+    bool splitter;
     glm::vec3 normal;
 };
 

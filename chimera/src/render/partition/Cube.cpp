@@ -150,13 +150,12 @@ void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<VertexDa
         ia = ib + 1;
     }
 
-    vl.push_back({va, glm::vec3(0.0f), ta}); // normal PA calc below
-    vl.push_back({vb, glm::vec3(0.0f), tb}); // normal PB calc below
-    vl.push_back({vc, glm::vec3(0.0f), tc}); // normal PC calc below
+    glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
 
-    Triangle t1 = Triangle(ia, ib, ic, glm::vec3(0.0f));
-    t1.calcNormal(vl);
-    tl.push_back(t1);
+    vl.push_back({va, vn, ta}); // normal PA calc below
+    vl.push_back({vb, vn, tb}); // normal PB calc below
+    vl.push_back({vc, vn, tc}); // normal PC calc below
+    tl.push_back(Triangle(ia, ib, ic, vn, false));
 }
 
 CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {

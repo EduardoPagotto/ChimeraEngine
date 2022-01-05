@@ -10,8 +10,6 @@ void swapFace(T& a, T& b) {
     a = c;
 }
 
-// RenderableBsp* BspTree::create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
-// void BspTree::create(std::vector<VertexData>& vVertex, std::list<Triangle*>& vTris) {
 void BspTree::create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
 
     std::list<Triangle*> vTris;
@@ -29,11 +27,8 @@ void BspTree::create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _
     _vIndex.clear();
 
     // vTris.clear();
-
     // RenderableBsp* r = new RenderableBsp(root, this->vpLeaf, this->vVertex);
-
     // return root;
-
     // return r;
 }
 
@@ -46,12 +41,12 @@ Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
     for (Triangle* th : _vTriangle) {
 
-        if (th->beenUsedAsSplitter == true)
+        if (th->splitter == true)
             continue;
 
         score = splits = backfaces = frontfaces = 0;
 
-        Plane hyperPlane(th->position(vVertex, 0), th->getNormal());
+        Plane hyperPlane(th->position(vVertex, 0), th->normal);
 
         for (Triangle* currentPoly : _vTriangle) {
             if (currentPoly != th) {
@@ -87,7 +82,7 @@ Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
     } // end while splitter
 
     if (selectedTriangle != nullptr)
-        selectedTriangle->beenUsedAsSplitter = true;
+        selectedTriangle->splitter = true;
 
     return selectedTriangle;
 }
@@ -112,23 +107,23 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
 
     // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
     if (fx.x * fx.z >= 0) {                     // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
-        swapFace(b, c);                         //   troca b com c
-        swapFace(a, b);                         //   troca a com b
-        vertA = _pTriangle->vertex(vVertex, 2); //   old c
-        vertB = _pTriangle->vertex(vVertex, 0); //   old a
-        vertC = _pTriangle->vertex(vVertex, 1); //   old b
+        swapFace(b, c);                         // troca b com c
+        swapFace(a, b);                         // troca a com b
+        vertA = vVertex[_pTriangle->p[TRI_PC]]; // old c
+        vertB = vVertex[_pTriangle->p[TRI_PA]]; // old a
+        vertC = vVertex[_pTriangle->p[TRI_PB]]; // old b
 
     } else if (fx.y * fx.z >= 0) {              // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
-        swapFace(a, c);                         //   troca A com C
-        swapFace(a, b);                         //   torca a com b
-        vertA = _pTriangle->vertex(vVertex, 1); //   old b
-        vertB = _pTriangle->vertex(vVertex, 2); //   old c
-        vertC = _pTriangle->vertex(vVertex, 0); //   old a
+        swapFace(a, c);                         // troca A com C
+        swapFace(a, b);                         // troca a com b
+        vertA = vVertex[_pTriangle->p[TRI_PB]]; // old b
+        vertB = vVertex[_pTriangle->p[TRI_PC]]; // old c
+        vertC = vVertex[_pTriangle->p[TRI_PA]]; // old a
 
     } else {                                    // Cortre em a e b (pontos posicao original)
-        vertA = _pTriangle->vertex(vVertex, 0); //   old a
-        vertB = _pTriangle->vertex(vVertex, 1); //   old b
-        vertC = _pTriangle->vertex(vVertex, 2); //   old c
+        vertA = vVertex[_pTriangle->p[TRI_PA]]; // old a
+        vertB = vVertex[_pTriangle->p[TRI_PB]]; // old b
+        vertC = vVertex[_pTriangle->p[TRI_PC]]; // old c
     }
 
     hyperPlane.intersect(a, c, &A, &propAC);
@@ -150,28 +145,19 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     vVertex.push_back({a, vertA.normal, vertA.texture}); // T1 PA
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T1 PB
     vVertex.push_back({A, vertA.normal, texA});          // T1 PC
-
-    Triangle* th1 = new Triangle(last++, last++, last++, normal);
-    th1->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_front(th1);
+    _vTriangle.push_front(new Triangle(last++, last++, last++, normal, _pTriangle->splitter));
 
     //-- T2 Triangle T2(b, B, A);
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T2 PA
     vVertex.push_back({B, vertB.normal, texB});          // T2 PB
     vVertex.push_back({A, vertA.normal, texA});          // T2 PC
-
-    Triangle* th2 = new Triangle(last++, last++, last++, normal);
-    th2->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_front(th2);
+    _vTriangle.push_front(new Triangle(last++, last++, last++, normal, _pTriangle->splitter));
 
     // -- T3 Triangle T3(A, B, c);
     vVertex.push_back({A, vertA.normal, texA});          // T3 PA
     vVertex.push_back({B, vertB.normal, texB});          // T3 PB
     vVertex.push_back({c, vertC.normal, vertC.texture}); // T3 PC
-
-    Triangle* th3 = new Triangle(last++, last++, last++, normal);
-    th3->beenUsedAsSplitter = _pTriangle->beenUsedAsSplitter;
-    _vTriangle.push_front(th3);
+    _vTriangle.push_front(new Triangle(last++, last++, last++, normal, _pTriangle->splitter));
 
     // Remove orininal
     delete _pTriangle;
@@ -190,7 +176,7 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
     Triangle* best = selectBestSplitter(_vTriangle);
     if (best != nullptr) {
-        tree = new BSPTreeNode(Plane(best->position(vVertex, 0), best->getNormal()));
+        tree = new BSPTreeNode(Plane(best->position(vVertex, 0), best->normal));
         while (_vTriangle.empty() == false) {
 
             poly = _vTriangle.back();
@@ -208,7 +194,7 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
                     front_list.push_front(poly);
                     break;
                 case SIDE::CP_ONPLANE: {
-                    if (tree->hyperPlane.collinearNormal(poly->getNormal()) == true)
+                    if (tree->hyperPlane.collinearNormal(poly->normal) == true)
                         front_list.push_front(poly);
                     else
                         back_list.push_front(poly);
@@ -226,7 +212,7 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
             poly = _vTriangle.back();
             _vTriangle.pop_back();
             if (primeiro == true) {
-                tree = new BSPTreeNode(Plane(poly->position(vVertex, 0), poly->getNormal()));
+                tree = new BSPTreeNode(Plane(poly->position(vVertex, 0), poly->normal));
                 primeiro = false;
             }
             front_list.push_front(poly);
@@ -235,7 +221,7 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
     unsigned int count = 0;
     for (auto th : front_list) {
-        if (th->beenUsedAsSplitter == false)
+        if (th->splitter == false)
             count++;
     }
 
@@ -264,7 +250,7 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();
         listConvexTriangle.pop_back();
-        pLeaf->addTris(convPoly->p[0], convPoly->p[1], convPoly->p[2]);
+        pLeaf->addTris(convPoly->p[TRI_PA], convPoly->p[TRI_PB], convPoly->p[TRI_PC]);
 
         delete convPoly;
         convPoly = nullptr;

@@ -27,9 +27,6 @@ void BspTree::create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _
     _vIndex.clear();
 
     // vTris.clear();
-    // RenderableBsp* r = new RenderableBsp(root, this->vpLeaf, this->vVertex);
-    // return root;
-    // return r;
 }
 
 Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
@@ -46,14 +43,14 @@ Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
         score = splits = backfaces = frontfaces = 0;
 
-        Plane hyperPlane(th->position(vVertex, 0), th->normal);
+        Plane hyperPlane(vVertex[th->p[TRI_PA]].position, th->normal);
 
         for (Triangle* currentPoly : _vTriangle) {
             if (currentPoly != th) {
-                SIDE result = hyperPlane.classifyPoly(currentPoly->position(vVertex, 0), // PA
-                                                      currentPoly->position(vVertex, 1), // PB
-                                                      currentPoly->position(vVertex, 2), // PC
-                                                      &temp);                            // Clip Test Result (A,B,C)
+                SIDE result = hyperPlane.classifyPoly(vVertex[currentPoly->p[TRI_PA]].position, // PA
+                                                      vVertex[currentPoly->p[TRI_PB]].position, // PB
+                                                      vVertex[currentPoly->p[TRI_PC]].position, // PC
+                                                      &temp);                                   // Clip Test Result (A,B,C)
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;
@@ -101,9 +98,9 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
 
     // Pega pontos posicao original e inteseccao
     glm::vec3 A, B;
-    glm::vec3 a = _pTriangle->position(vVertex, 0);
-    glm::vec3 b = _pTriangle->position(vVertex, 1);
-    glm::vec3 c = _pTriangle->position(vVertex, 2);
+    glm::vec3 a = vVertex[_pTriangle->p[TRI_PA]].position;
+    glm::vec3 b = vVertex[_pTriangle->p[TRI_PB]].position;
+    glm::vec3 c = vVertex[_pTriangle->p[TRI_PC]].position;
 
     // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
     if (fx.x * fx.z >= 0) {                     // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
@@ -176,16 +173,16 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
     Triangle* best = selectBestSplitter(_vTriangle);
     if (best != nullptr) {
-        tree = new BSPTreeNode(Plane(best->position(vVertex, 0), best->normal));
+        tree = new BSPTreeNode(Plane(vVertex[best->p[TRI_PA]].position, best->normal));
         while (_vTriangle.empty() == false) {
 
             poly = _vTriangle.back();
             _vTriangle.pop_back();
             glm::vec3 result;
-            SIDE clipTest = tree->hyperPlane.classifyPoly(poly->position(vVertex, 0), // PA old poly.vertex[0].position
-                                                          poly->position(vVertex, 1), // PB
-                                                          poly->position(vVertex, 2), // PC
-                                                          &result);                   // Clip Test Result (A,B,C)
+            SIDE clipTest = tree->hyperPlane.classifyPoly(vVertex[poly->p[TRI_PA]].position, // PA old poly.vertex[0].position
+                                                          vVertex[poly->p[TRI_PB]].position, // PB
+                                                          vVertex[poly->p[TRI_PC]].position, // PC
+                                                          &result);                          // Clip Test Result (A,B,C)
             switch (clipTest) {
                 case SIDE::CP_BACK:
                     back_list.push_front(poly);
@@ -212,7 +209,7 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
             poly = _vTriangle.back();
             _vTriangle.pop_back();
             if (primeiro == true) {
-                tree = new BSPTreeNode(Plane(poly->position(vVertex, 0), poly->normal));
+                tree = new BSPTreeNode(Plane(vVertex[poly->p[TRI_PA]].position, poly->normal));
                 primeiro = false;
             }
             front_list.push_front(poly);

@@ -22,10 +22,6 @@ struct Triangle {
         this->p[TRI_PC] = _pc;
     }
 
-    inline const glm::vec3& position(std::vector<VertexData>& vertexList, const unsigned& indexTriangle) const {
-        return vertexList[this->p[indexTriangle]].position;
-    }
-
     uint32_t p[3]; // TRI_PA = 0, TRI_PB = 1, TRI_PC = 3
     bool splitter;
     glm::vec3 normal;

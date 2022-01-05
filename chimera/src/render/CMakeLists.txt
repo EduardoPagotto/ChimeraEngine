@@ -25,7 +25,6 @@ set (RenderSource 	CanvasGL.cpp
 					FontManager.cpp
 					Material.cpp
 					ParticleEmitter.cpp
-					partition/Triangle.cpp
 					partition/Plane.cpp
 					partition/Frustum.cpp
 					partition/AABB.cpp

@@ -2,6 +2,7 @@
 #include "BSPTreeNode.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/partition/Triangle.hpp"
+#include <list>
 
 namespace Chimera {
 // Ref: https://github.com/taylorstine/BSP_Tree

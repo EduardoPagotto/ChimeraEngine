@@ -10,6 +10,66 @@ void swapFace(T& a, T& b) {
     a = c;
 }
 
+void triangleFromVertexDataIndex(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris) {
+    // Usa os indices já pre-calculado
+    for (uint32_t indice = 0; indice < indexSize; indice += 3) {
+        uint32_t pa = indexData[indice];
+        uint32_t pb = indexData[indice + 1];
+        uint32_t pc = indexData[indice + 2];
+        // Calcula Normal Face
+        glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
+    }
+}
+
+void triangleFromVertexData(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris) {
+    // Calcula os indices na sequencia em que os vertices estão
+    for (uint32_t indice = 0; indice < vertexSize; indice += 3) {
+        uint32_t pa = indice;
+        uint32_t pb = indice + 1;
+        uint32_t pc = indice + 2;
+        // Calcula Normal Face
+        glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
+    }
+}
+
+// bool tringleListIsConvex(std::vector<VertexData>& vertexList, std::vector<Triangle*>& _vTriangle) {
+
+//     if (_vTriangle.size() <= 1)
+//         return false;
+
+//     glm::vec3 result;
+//     Triangle* th1 = nullptr;
+//     Triangle* th2 = nullptr;
+//     for (std::vector<Triangle*>::iterator i = _vTriangle.begin(); i != _vTriangle.end(); i++) {
+
+//         th1 = (*i);
+//         for (std::vector<Triangle*>::iterator j = i; j != _vTriangle.end(); j++) {
+
+//             if (i == j)
+//                 continue;
+
+//             th2 = (*j);
+//             float val = glm::dot(th1->normal, th2->normal); // DOT(U,V)
+//             if (val > 0.0f) {                               // if not convex test if is coplanar
+//                 Plane alpha(vertexList[th1->p[TRI_PA]].position, th1->normal);
+//                 if (alpha.classifyPoly(vertexList[th2->p[TRI_PA]].position, vertexList[th2->p[TRI_PB]].position,
+//                                        vertexList[th2->p[TRI_PC]].position, &result) != SIDE::CP_ONPLANE)
+//                     return false;
+
+//                 // test if faces has oposites directions aka: convex
+//                 if (alpha.collinearNormal(th1->normal) == false)
+//                     return false;
+//             }
+//         }
+//     }
+
+//     return true;
+// }
+
 void BspTree::create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
 
     std::list<Triangle*> vTris;

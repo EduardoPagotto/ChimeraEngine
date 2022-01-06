@@ -6,6 +6,17 @@ static std::vector<glm::uvec3> tVertIndex;
 static std::vector<glm::uvec3> tTexIndex;
 static std::vector<glm::vec2> tTexSeq;
 
+void triangleCalcNormal(std::vector<VertexData>& vertexList, Triangle& t) {
+
+    glm::vec3 u = vertexList[t.p[TRI_PB]].position - vertexList[t.p[TRI_PA]].position;
+    glm::vec3 v = vertexList[t.p[TRI_PC]].position - vertexList[t.p[TRI_PA]].position;
+    t.normal = glm::normalize(glm::cross(u, v));
+
+    vertexList[t.p[TRI_PA]].normal = t.normal;
+    vertexList[t.p[TRI_PB]].normal = t.normal;
+    vertexList[t.p[TRI_PC]].normal = t.normal;
+}
+
 void initCubeBase() {
     tVertIndex.push_back(glm::uvec3(0, 1, 3)); // f00 N0
     tVertIndex.push_back(glm::uvec3(1, 3, 2)); // f01 N1
@@ -139,7 +150,6 @@ void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<VertexDa
     glm::vec2 tc = tTexSeq[tex.z]; // TC
 
     uint32_t ia, ib, ic;
-
     if (!clockwise) {
         ia = tl.size() * 3;
         ib = ia + 1;
@@ -149,13 +159,15 @@ void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<VertexDa
         ib = ic + 1;
         ia = ib + 1;
     }
+    // FIXME: tem algo errado aqui !!!!
+    // glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
+    vl.push_back({va, glm::vec3(0.0f), ta}); // normal PA calc below
+    vl.push_back({vb, glm::vec3(0.0f), tb}); // normal PB calc below
+    vl.push_back({vc, glm::vec3(0.0f), tc}); // normal PC calc below
 
-    glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
-
-    vl.push_back({va, vn, ta}); // normal PA calc below
-    vl.push_back({vb, vn, tb}); // normal PB calc below
-    vl.push_back({vc, vn, tc}); // normal PC calc below
-    tl.push_back(Triangle(ia, ib, ic, vn, false));
+    Triangle t1 = Triangle(ia, ib, ic, glm::vec3(0.0f), false);
+    triangleCalcNormal(vl, t1);
+    tl.push_back(t1);
 }
 
 CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {

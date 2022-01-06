@@ -26,13 +26,14 @@ struct VertexDataSimple {
 };
 
 struct MeshData {
-    bool singleIndex;
-    std::vector<glm::vec3> vertexList;
-    std::vector<glm::vec3> normalList;
-    std::vector<glm::vec2> uvList;
-    std::vector<uint32_t> vertexIndex;
-    std::vector<uint32_t> normalIndex;
-    std::vector<uint32_t> uvIndex;
+    MeshData() = default;
+    bool singleIndex = false;
+    std::vector<glm::vec3> point;
+    std::vector<glm::vec3> normal;
+    std::vector<glm::vec2> uv;
+    std::vector<uint32_t> iPoint;
+    std::vector<uint32_t> iNormal;
+    std::vector<uint32_t> iUv;
 };
 
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices);

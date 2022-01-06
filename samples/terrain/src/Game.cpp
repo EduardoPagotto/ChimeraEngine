@@ -66,7 +66,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         loader.getMesh("./assets/heightmaps/terrain3.jpg", mesh, glm::vec3(1000.0, 200.0, 1000.0));
         // loader.getMesh("./assets/heightmaps/heightmap_16x16.png", mesh, glm::vec3(100.0, 30.0, 100.0));
         // loader.getMesh("./assets/heightmaps/heightmap_4x4.png", mesh, glm::vec3(1000.0, 10.0, 1000.0));
-        loader.split(mesh.vertexIndex);
+        loader.split(mesh.iPoint);
 
         std::vector<VertexData> vertexDataIn;
         vertexDataFromMesh(&mesh, vertexDataIn);

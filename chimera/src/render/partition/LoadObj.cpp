@@ -128,7 +128,7 @@ int loadObjFile(const std::string& pathFile, MeshData* mesh, Material* material)
         else if (line[0] == 'v') {
             if (line[1] == ' ') {
                 if (sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
-                    mesh->vertexList.push_back(glm::vec3(x, y, z));
+                    mesh->point.push_back(glm::vec3(x, y, z));
                     continue;
                 }
                 throw Exception(std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + pathFile));
@@ -136,11 +136,11 @@ int loadObjFile(const std::string& pathFile, MeshData* mesh, Material* material)
             } else if (line[1] == 'n') {
                 normalOn = true;
                 int n = sscanf(line, "vn %f %f %f", &x, &y, &z);
-                mesh->normalList.push_back(glm::vec3(x, y, z));
+                mesh->normal.push_back(glm::vec3(x, y, z));
             } else if (line[1] == 't') {
                 textuaOn = true;
                 int n = sscanf(line, "vt %f %f", &u, &v);
-                mesh->uvList.push_back(glm::vec2(u, v));
+                mesh->uv.push_back(glm::vec2(u, v));
             }
         } else if (line[0] == 'f') {
             if (line[1] == ' ') {
@@ -155,13 +155,13 @@ int loadObjFile(const std::string& pathFile, MeshData* mesh, Material* material)
                 }
 
                 for (int indice = 0; indice < 3; indice++) {
-                    mesh->vertexIndex.push_back(A[indice] - 1);
+                    mesh->iPoint.push_back(A[indice] - 1);
 
                     if (textuaOn == true)
-                        mesh->uvIndex.push_back(B[indice] - 1);
+                        mesh->iUv.push_back(B[indice] - 1);
 
                     if (normalOn == true)
-                        mesh->normalIndex.push_back(C[indice] - 1);
+                        mesh->iNormal.push_back(C[indice] - 1);
                 }
             }
         } else {

@@ -62,7 +62,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    meshData->vertexList.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    meshData->point.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-normals") != nullptr) {
 
@@ -71,7 +71,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    meshData->normalList.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    meshData->normal.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-map-0") != nullptr) {
 
@@ -79,7 +79,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh
                 std::vector<float> lista;
                 getSource(l_nSource, lista);
                 for (unsigned int indice = 0; indice < lista.size(); indice += 2)
-                    meshData->uvList.push_back(glm::vec2(lista[indice], lista[indice + 1]));
+                    meshData->uv.push_back(glm::vec2(lista[indice], lista[indice + 1]));
             }
         }
 
@@ -126,15 +126,15 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh
 
                 if (strstr(l_source, (char*)"-vertices") != nullptr) { // indices de vetor ponto
 
-                    meshData->vertexIndex.push_back(l_arrayIndex[l_contador]);
+                    meshData->iPoint.push_back(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-normals") != nullptr) { // indice de vetor normal
 
-                    meshData->normalIndex.push_back(l_arrayIndex[l_contador]);
+                    meshData->iNormal.push_back(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-map-0") != nullptr) { // indice de vetor posicao textura
 
-                    meshData->uvIndex.push_back(l_arrayIndex[l_contador]);
+                    meshData->iUv.push_back(l_arrayIndex[l_contador]);
                 }
             }
             l_arrayIndex.clear();

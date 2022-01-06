@@ -100,7 +100,7 @@ int getMaterialFile(const std::string materialFile, Material* material) {
  * @param material ponteiro do material a ser carregado com dados
  * @return int 0: ok; 1: Sem material; -1: arquivo nao existe; -2 arquivo de material existe mas nao encontrado
  */
-int loadObjFile(const std::string& pathFile, MeshData* mesh, Material* material) {
+int loadObjFile(const std::string& pathFile, Mesh* mesh, Material* material) {
 
     int resultOpp = 0;
 

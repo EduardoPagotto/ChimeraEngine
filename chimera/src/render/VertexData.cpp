@@ -95,7 +95,7 @@ void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSiz
     size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
 }
 
-void vertexDataMeshDataDebug(MeshData* m, bool _showAll) {
+void vertexDataMeshDebug(Mesh* m, bool _showAll) {
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Points: %03d Index: %03d", (int)m->point.size(), (int)m->iPoint.size());
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normals: %03d Index: %03d", (int)m->normal.size(), (int)m->iNormal.size());
@@ -125,7 +125,7 @@ void vertexDataMeshDataDebug(MeshData* m, bool _showAll) {
     }
 }
 
-void vertexDataMeshMinMaxSize(MeshData* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
+void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
     if (m->point.size() > 0) {
         min = m->point[0];
         max = m->point[0];
@@ -141,7 +141,7 @@ void vertexDataMeshMinMaxSize(MeshData* m, glm::vec3& min, glm::vec3& max, glm::
     size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
 }
 
-void vertexDataFromMesh(MeshData* m, std::vector<VertexData>& outData) {
+void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {
 
     if (m->singleIndex == false) {
         if (m->uv.size() > 0) {
@@ -167,7 +167,7 @@ void vertexDataFromMesh(MeshData* m, std::vector<VertexData>& outData) {
     }
 }
 
-void vertexDataMeshScale(MeshData* m, const float& new_size, const bool& hasTexture) {
+void vertexDataMeshScale(Mesh* m, const float& new_size, const bool& hasTexture) {
 
     if (hasTexture == false) {
         m->iUv.clear();
@@ -180,7 +180,7 @@ void vertexDataMeshScale(MeshData* m, const float& new_size, const bool& hasText
     }
 }
 
-void vertexDataMeshClean(MeshData* m) {
+void vertexDataMeshClean(Mesh* m) {
     m->iPoint.clear();
     m->point.clear();
     m->iNormal.clear();

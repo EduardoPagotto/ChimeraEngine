@@ -3,5 +3,5 @@
 #include "chimera/render/VertexData.hpp"
 
 namespace Chimera {
-int loadObjFile(const std::string& pathFile, MeshData* mesh, Material* material);
+int loadObjFile(const std::string& pathFile, Mesh* mesh, Material* material);
 } // namespace Chimera

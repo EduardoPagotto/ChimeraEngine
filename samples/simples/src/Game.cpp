@@ -33,7 +33,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         Shader& shader = renderableEntity.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
 
-        MeshData& mesh = renderableEntity.addComponent<MeshData>();
+        Mesh& mesh = renderableEntity.addComponent<Mesh>();
 
         int ret = 0;
         ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);

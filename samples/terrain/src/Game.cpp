@@ -60,7 +60,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
         material.init();
 
-        MeshData mesh;
+        Mesh mesh;
 
         LoadHeightMap loader(32, 32);
         loader.getMesh("./assets/heightmaps/terrain3.jpg", mesh, glm::vec3(1000.0, 200.0, 1000.0));
@@ -85,7 +85,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         Shader& shader = renderableEntity.addComponent<Shader>();
         ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader); // colocar shader em material
 
-        MeshData& mesh = renderableEntity.addComponent<MeshData>();
+        Mesh& mesh = renderableEntity.addComponent<Mesh>();
         loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
     }
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

@@ -98,8 +98,8 @@ void Scene::onAttach() {
         }
 
         // Se for um mesh inicializar componente (já que nao tenho classe de Mesh)
-        if (entity.hasComponent<MeshData>()) {
-            MeshData& mesh = entity.getComponent<MeshData>();
+        if (entity.hasComponent<Mesh>()) {
+            Mesh& mesh = entity.getComponent<Mesh>();
 
             // Inicializa Materiais
             if (entity.hasComponent<Material>()) {
@@ -115,7 +115,7 @@ void Scene::onAttach() {
             // Se nja nao foi inicializado um Renderable3dComponent ao mesh
             if (!entity.hasComponent<Renderable3dComponent>()) {
 
-                // Transforma MeshData em VertexData comprimindo-o
+                // Transforma Mesh em VertexData comprimindo-o
                 std::vector<Chimera::VertexData> renderData;
                 vertexDataFromMesh(&mesh, renderData);
                 std::vector<uint32_t> index;

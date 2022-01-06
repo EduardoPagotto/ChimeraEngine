@@ -51,7 +51,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         }
 
         // A cada mesh
-        auto view = activeScene.getRegistry().get().view<MeshData>();
+        auto view = activeScene.getRegistry().get().view<Mesh>();
         for (auto entity : view) {
             // Ajusta metodo de entidades
             Entity e = Entity{entity, &activeScene.getRegistry()};

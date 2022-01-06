@@ -95,7 +95,7 @@ glm::vec3 LoadHeightMap::calcNormalHeight(int x, int z) {
                                     (scale.y * getHeight(x, z - 1)) - (scale.y * getHeight(x, z + 1)))); // norz
 }
 
-bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const glm::vec3& _size) {
+bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm::vec3& _size) {
 
     pImage = IMG_Load(_fileName.c_str());
     if (pImage == nullptr) {
@@ -158,7 +158,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, MeshData& _mesh, const
     }
 
     _mesh.singleIndex = true;
-    vertexDataMeshDataDebug(&_mesh, false);
+    vertexDataMeshDebug(&_mesh, false);
 
     this->width = pImage->w;
     this->height = pImage->h;

@@ -15,7 +15,7 @@ void LibraryGeometrys::target() {
         std::string l_id = l_nGeo->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            MeshData& eMesh = entity.addComponent<MeshData>();
+            Mesh& eMesh = entity.addComponent<Mesh>();
             auto& tag = entity.getComponent<TagComponent>();
             tag.tag = l_id;
             std::string idMaterial = loadMeshCollada(l_nGeo, &eMesh);
@@ -44,7 +44,7 @@ int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source, std::vector<float
     return -1;
 }
 
-std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, MeshData* meshData) {
+std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh* meshData) {
 
     std::string retorno = "";
     tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement("mesh");

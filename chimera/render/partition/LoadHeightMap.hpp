@@ -11,7 +11,7 @@ class LoadHeightMap {
     virtual ~LoadHeightMap();
     void clean();
 
-    bool getMesh(const std::string& _fileName, MeshData& _mesh, const glm::vec3& _size);
+    bool getMesh(const std::string& _fileName, Mesh& _mesh, const glm::vec3& _size);
     void split(std::vector<unsigned int> _vVertexIndex);
     std::vector<Renderable3D*> vNodes;
 

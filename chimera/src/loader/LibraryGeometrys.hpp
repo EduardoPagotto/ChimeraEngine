@@ -14,7 +14,7 @@ class LibraryGeometrys : public Library {
 
   private:
     int getSource(tinyxml2::XMLElement* _source, std::vector<float>& _arrayValores);
-    std::string loadMeshCollada(tinyxml2::XMLElement* _nNode, MeshData* meshData);
+    std::string loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh* meshData);
 
     Entity entity;
 };

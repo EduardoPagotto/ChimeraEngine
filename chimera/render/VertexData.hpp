@@ -25,8 +25,8 @@ struct VertexDataSimple {
     glm::vec4 color;  // 4 * 4 = 16 (24 - 39)
 };
 
-struct MeshData {
-    MeshData() = default;
+struct Mesh {
+    Mesh() = default;
     bool singleIndex = false;
     std::vector<glm::vec3> point;
     std::vector<glm::vec3> normal;
@@ -46,9 +46,9 @@ void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, g
 void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
                                glm::vec3& min, glm::vec3& max, glm::vec3& size);
 
-void vertexDataMeshDataDebug(MeshData* pM, bool _showAll);
-void vertexDataMeshMinMaxSize(MeshData* m, glm::vec3& min, glm::vec3& max, glm::vec3& size);
-void vertexDataFromMesh(MeshData* m, std::vector<VertexData>& outData);
-void vertexDataMeshScale(MeshData* m, const float& new_size, const bool& hasTexture);
-void vertexDataMeshClean(MeshData* m);
+void vertexDataMeshDebug(Mesh* pM, bool _showAll);
+void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size);
+void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData);
+void vertexDataMeshScale(Mesh* m, const float& new_size, const bool& hasTexture);
+void vertexDataMeshClean(Mesh* m);
 } // namespace Chimera

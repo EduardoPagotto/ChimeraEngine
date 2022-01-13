@@ -117,7 +117,7 @@ static std::unordered_map<GLenum, std::string> preProcess(const std::string sour
 static GLuint shadeLoadProg(const std::string& filepath) {
 
     std::vector<GLuint> vecShaderID;
-    std::string fileData = utilReadFile(filepath);
+    std::string fileData = ShadeInclude::load(filepath); // utilReadFile(filepath);
     if (fileData.size() == 0)
         return 0;
 

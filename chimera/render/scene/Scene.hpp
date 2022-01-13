@@ -1,20 +1,12 @@
 #pragma once
+#include "ShadowPass.hpp"
 #include "chimera/core/IStateMachine.hpp"
-#include "chimera/core/Registry.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/render/ICamera.hpp"
-#include "chimera/render/ITrans.hpp"
 #include "chimera/render/ParticleEmitter.hpp"
 #include "chimera/render/buffer/RenderBuffer.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
 
 namespace Chimera {
-
-struct ShadowPass {
-    Shader shader;
-    FrameBuffer* shadowBuffer;
-    glm::mat4 lightSpaceMatrix, lightProjection;
-};
 
 class Entity;
 class Scene : public IStateMachine {
@@ -33,10 +25,10 @@ class Scene : public IStateMachine {
     virtual std::string getName() const { return "Scene"; }
     void pushEmitters(IEmitter* e) { emitters.push_back(e); }
     void setOrigem(ITrans* o) { origem = o; }
+    void setShadowPass(ShadowPass* shadowPass) { this->shadowPass = shadowPass; }
 
   private:
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
-    void createShadowBuffer();
     void createRenderBuffer(EyeView* eyeView);
     void execRenderPass(ICamera* camera, IRenderer3d& renderer);
     void execShadowPass(ICamera* camera, IRenderer3d& renderer);
@@ -45,7 +37,7 @@ class Scene : public IStateMachine {
     Registry registry;
     ICamera* camera;
     std::vector<RenderBuffer*> vRB;
-    ShadowPass shadowPass;
+    ShadowPass* shadowPass;
     PhysicsControl* physicsControl;
     Renderer3d renderBatch;
     std::vector<IEmitter*> emitters;

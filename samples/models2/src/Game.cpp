@@ -87,6 +87,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         ef->pushParticleContainer(&pc);
     }
 
+    activeScene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
     activeScene.pushEmitters(ef);
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

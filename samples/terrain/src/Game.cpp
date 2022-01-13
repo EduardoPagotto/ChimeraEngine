@@ -82,8 +82,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         tc.trans->setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
 
         Material& material = renderableEntity.addComponent<Material>();
+        material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
+        material.setShine(50.0f);
+
         Shader& shader = renderableEntity.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader); // colocar shader em material
+        ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader); // colocar shader em material
 
         Mesh& mesh = renderableEntity.addComponent<Mesh>();
         loadObjFile("./assets/models/cubo2.obj", &mesh, &material);

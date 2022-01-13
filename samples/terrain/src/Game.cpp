@@ -50,7 +50,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         Material& material = renderableEntity.addComponent<Material>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
-        // ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
         ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
 
         material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!

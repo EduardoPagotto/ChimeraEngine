@@ -1,6 +1,5 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/MouseDevice.hpp"
-#include "chimera/core/Registry.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
@@ -13,9 +12,16 @@
 
 namespace Chimera {
 
-Scene::Scene() : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr), logRender(false) {}
+Scene::Scene()
+    : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr), shadowPass(nullptr),
+      logRender(false) {}
 
-Scene::~Scene() {}
+Scene::~Scene() {
+    if (shadowPass) {
+        delete shadowPass;
+        shadowPass = nullptr;
+    }
+}
 
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
     // Define o framebuffer de desenho
@@ -34,27 +40,6 @@ RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const 
     fbSpec.samples = 1;
 
     return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), shader);
-}
-
-void Scene::createShadowBuffer() {
-    // Create ShadowPass
-    ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", shadowPass.shader);
-    // Define o framebuffer de Shadow
-    FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
-
-    fbSpec.width = 2048;
-    fbSpec.height = 2048;
-    fbSpec.swapChainTarget = false;
-    fbSpec.samples = 1;
-
-    shadowPass.shadowBuffer = new FrameBuffer(fbSpec);
-    shadowPass.lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f);
-    // Note that if you use a
-    // glm::mat4 lightProjection = glm::perspective(45.0f, (float)width / (float)height, near_plane, far_plane);
-    // perspective projection matrix you'll have to change the light position as the
-    // current light position isn't enough to reflect the whole scene.
 }
 
 void Scene::createRenderBuffer(EyeView* eyeView) {
@@ -165,7 +150,6 @@ void Scene::onAttach() {
         }
     });
 
-    this->createShadowBuffer();
     origem = new Transform(); // FIXME: coisa feia!!!!
 }
 
@@ -251,34 +235,6 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
     }
 }
 
-void Scene::execShadowPass(ICamera* camera, IRenderer3d& renderer) {
-    // load lights after begin (clear previos lights)
-    auto lightViewEnt = registry.get().view<LightComponent>();
-    for (auto entity : lightViewEnt) {
-        auto& lc = lightViewEnt.get<LightComponent>(entity);
-        auto& tc = registry.get().get<TransComponent>(entity); // Lento
-        if (lc.global) {
-            // TODO: usar o direcionm depois no segundo parametro
-            glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
-            shadowPass.lightSpaceMatrix = shadowPass.lightProjection * lightView;
-            renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
-        }
-    }
-
-    auto group = registry.get().group<TransComponent, Renderable3dComponent>();
-    for (auto entity : group) {
-        auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
-
-        RenderCommand command;
-        command.logRender = logRender;
-        command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.renderable = rc.renderable;
-        command.shader = shadowPass.shader;
-        command.uniforms.push_back(UniformVal("model", command.transform));
-        rc.renderable->submit(camera, command, &renderer);
-    }
-}
-
 void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
     auto group = registry.get().group<Shader, Material, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
@@ -301,16 +257,9 @@ void Scene::onRender() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
-    { // render a shadows in framebuffer
-        renderBatch.begin(camera);
-        this->execShadowPass(camera, renderBatch);
-
-        renderBatch.end();
-        shadowPass.shadowBuffer->bind(); // we're not using the stencil buffer now
-
-        renderBatch.flush();
-        shadowPass.shadowBuffer->unbind();
-    }
+    // render a shadows in framebuffer
+    if (shadowPass)
+        shadowPass->exec(registry, camera, renderBatch, origem, logRender);
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
@@ -322,13 +271,9 @@ void Scene::onRender() {
         renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjection()));
         renderBatch.uQueue().push_back(UniformVal("view", camera->view()->getView()));
 
-        // data from shadowPass
-        renderBatch.uQueue().push_back(UniformVal("lightSpaceMatrix", shadowPass.lightSpaceMatrix));
-        renderBatch.uQueue().push_back(UniformVal("viewPos", camera->getPosition()));
-        renderBatch.uQueue().push_back(UniformVal("shadows", 1));   // Ativa a sombra com 1
-        renderBatch.uQueue().push_back(UniformVal("shadowMap", 1)); // id da textura de shadow
-
-        shadowPass.shadowBuffer->getDepthAttachemnt()->bind(1);
+        // load shadows props to renderBatch
+        if (shadowPass)
+            shadowPass->appy(camera, renderBatch);
 
         auto lightView = registry.get().view<LightComponent>();
         for (auto entity : lightView) {

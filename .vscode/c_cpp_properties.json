@@ -1,32 +1,31 @@
 {
     "configurations": [
         {
-            "name": "chimera_compile",
+            "name": "Linux",
             "includePath": [
-                "/usr/include/freetype2",
                 "/usr/include",
                 "/usr/include/bullet",
-                "${workspaceFolder}/chimera"
+                "/usr/local/include/entt",
+                "${workspaceFolder}"
             ],
             "defines": [
                 "_DEBUG"
             ],
             "browse": {
                 "path": [
-                    "/usr/include/freetype2",
                     "/usr/include",
                     "/usr/include/bullet",
-                    "${workspaceFolder}/chimera",
-                    "${workspaceFolder}/samples/models"
+                    "/usr/local/include/entt",
+                    "${workspaceFolder}"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/build/browse.vc.db"
             },
-            "intelliSenseMode": "gcc-x64",
+            "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "vector-of-bool.cmake-tools",
             "compileCommands": "${workspaceFolder}/build/compile_commands.json",
-            "cStandard": "c11",
-            "cppStandard": "c++14"
+            "cStandard": "c17",
+            "cppStandard": "c++17"
         }
     ],
     "version": 4

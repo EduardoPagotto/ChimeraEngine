@@ -1,33 +1,22 @@
 #include "Game.hpp"
-#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/utils.hpp"
-
+#include "chimera/render/CanvasGL.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
-
+    using namespace Chimera;
     try {
 
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("AppEmpty Iniciado");
 
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("TesteBSTree", 1400, 900);
+        Engine engine(new CanvasGL("TesteBSTree", 1400, 900));
+        Game* game = new Game(&engine);
 
-        Chimera::Shader* pShader = new Chimera::Shader(
-            "Simples1", Chimera::shadeLoadProg("MeshNoMat", "./chimera/shaders/MeshNoMat.vert", "./chimera/shaders/MeshNoMat.frag"));
+        engine.pushState(game);
+        engine.run();
 
-        Game* game = new Game(video, pShader);
-
-        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
-        pControle->open();
-        pControle->gameLoop();
-
-        delete pControle;
         delete game;
-        delete video;
 
         SDL_Log("TesteBSTree finalizado com sucesso");
         return 0;

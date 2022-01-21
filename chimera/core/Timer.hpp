@@ -1,5 +1,4 @@
-#ifndef __CHIMERA_TIMER__HPP
-#define __CHIMERA_TIMER__HPP
+#pragma once
 
 #include <SDL2/SDL.h>
 
@@ -49,4 +48,3 @@ class Timer {
     Uint32 elapsedCount;
 };
 } // namespace Chimera
-#endif

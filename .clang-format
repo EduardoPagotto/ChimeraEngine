@@ -5,3 +5,4 @@ AllowShortBlocksOnASingleLine: true
 ColumnLimit: 140
 PointerAlignment: Left
 DerivePointerAlignment: false
+AlwaysBreakTemplateDeclarations: true

@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-Material::Material() { tipoTexturasDisponiveis = -1; }
+Material::Material() : valid(false), tipoTexturasDisponiveis(-1) {}
 Material::~Material() {}
 
 void Material::setDefaultEffect() {
@@ -15,61 +15,73 @@ void Material::setDefaultEffect() {
 
 void Material::init() {
 
+    if (valid)
+        return;
+
+    valid = true;
     bool hasDifuse = false;
     bool hasEspecular = false;
     bool hasEmissive = false;
 
-    for (std::list<TextureImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
+    tipoTexturasDisponiveis = 0;
+    for (const auto& kv : mapTex) {
 
-        TextureImg* pTex = *iTex;
-
-        pTex->init();
-        switch (pTex->getIndex()) {
-            case 0:
-                hasDifuse = true;
-                break;
-            case 3:
-                hasEmissive = true;
-                break;
-            case 2:
-                hasEspecular = true;
-                break;
-            default:
-                break;
+        if (kv.first.compare(SHADE_TEXTURE_DIFFUSE) == 0) {
+            hasDifuse = true;
+        } else if (kv.first.compare(SHADE_TEXTURE_SPECULA) == 0) {
+            hasEspecular = true;
+        } else if (kv.first.compare(SHADE_TEXTURE_EMISSIVE) == 0) {
+            hasEmissive = true;
         }
+
+        // int tex
+        // kv.second->init();
     }
 
-    if (listTex.size() == 0)
-        tipoTexturasDisponiveis = 0;
-    else if ((hasDifuse == true) && (hasEspecular == false) && (hasEmissive == false))
+    if ((hasDifuse == true) && (hasEspecular == false) && (hasEmissive == false))
         tipoTexturasDisponiveis = 1;
     else if ((hasDifuse == true) && (hasEspecular == true) && (hasEmissive == false))
         tipoTexturasDisponiveis = 2;
     else if ((hasDifuse == true) && (hasEspecular == true) && (hasEmissive == true))
         tipoTexturasDisponiveis = 3;
-    else
-        tipoTexturasDisponiveis = 4;
 }
 
-void Material::addTexture(TextureImg* _pTex) { listTex.push_back(_pTex); }
+void Material::addTexture(const std::string& uniformTexName, Texture* texture) { this->mapTex[uniformTexName] = texture; }
 
-void Material::apply(Shader* _shader) {
+void Material::bindMaterialInformation(const Shader& shader) {
 
     // aplica todos os materiais passados
-    for (ShaderValue* shaderMaterial : listMaterial) {
-        shaderMaterial->apply(_shader);
+    for (const UniformVal& uniformMat : listMaterial) {
+        uniformMat.setUniform(shader);
     }
 
-    _shader->setGlUniform1i(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
+    shader.setUniform(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
 
-    if (listTex.size() > 0) {
-        for (std::list<TextureImg*>::iterator iTex = listTex.begin(); iTex != listTex.end(); iTex++) {
-            TextureImg* pTex = *iTex;
-            pTex->apply(_shader);
+    if (mapTex.size() > 0) {
+        for (const auto& kv : mapTex) {
+            kv.second->bind(0);
+            shader.setUniform(kv.first.c_str(), 0);
         }
+
     } else {
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 }
 
+void Material::bindMaterialInformation(std::vector<UniformVal>& uniforms, std::vector<Texture*>& vTex) {
+    // copy prop material
+    copy(listMaterial.begin(), listMaterial.end(), back_inserter(uniforms));
+
+    // seletorr de tipo ???
+    uniforms.push_back(UniformVal(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis));
+
+    // indice de textura
+    int indexTex = 0;
+    for (const auto& kv : mapTex) {
+        vTex.push_back(kv.second);
+        uniforms.push_back(UniformVal(kv.first, indexTex));
+        indexTex++;
+    }
+}
 } // namespace Chimera

@@ -1,13 +1,10 @@
-#ifndef __CHIMERA_LOADER_LIBRARY__HPP
-#define __CHIMERA_LOADER_LIBRARY__HPP
-
+#pragma once
+#include <glm/glm.hpp>
 #include <string>
 #include <tinyxml2.h>
 #include <vector>
 
-#include <glm/glm.hpp>
-
-namespace ChimeraLoaders {
+namespace Chimera {
 
 struct ParamCollada {
     std::string name;
@@ -43,6 +40,4 @@ class Library {
     std::string url;
     tinyxml2::XMLElement* root;
 };
-} // namespace ChimeraLoaders
-
-#endif
+} // namespace Chimera

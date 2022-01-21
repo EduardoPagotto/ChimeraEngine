@@ -1,16 +1,13 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryMaterials.hpp"
 #include "chimera/core/Exception.hpp"
+#include "chimera/render/scene/Components.hpp"
 
 #include <SDL2/SDL.h>
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
-LibraryGeometrys::LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
-
-LibraryGeometrys::~LibraryGeometrys() {}
-
-Chimera::NodeMesh* LibraryGeometrys::target() {
+void LibraryGeometrys::target() {
 
     tinyxml2::XMLElement* l_nGeo = root->FirstChildElement("library_geometries")->FirstChildElement("geometry");
     for (l_nGeo; l_nGeo; l_nGeo = l_nGeo->NextSiblingElement()) {
@@ -18,25 +15,27 @@ Chimera::NodeMesh* LibraryGeometrys::target() {
         std::string l_id = l_nGeo->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            Chimera::NodeMesh* pMesh = new Chimera::NodeMesh(nullptr, l_id);
-            std::string idMaterial = loadMeshCollada(l_nGeo, pMesh);
+            Mesh& eMesh = entity.addComponent<Mesh>();
+            auto& tag = entity.getComponent<TagComponent>();
+            tag.tag = l_id;
+            std::string idMaterial = loadMeshCollada(l_nGeo, &eMesh);
 
-            LibraryMaterials lm(root, idMaterial);
-            Chimera::Material* pMaterial = lm.target();
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Nome: %s", l_id.c_str());
+            // eMesh.debugDados(false);
 
-            pMesh->setMaterial(pMaterial);
-            return pMesh;
+            LibraryMaterials lm(root, idMaterial, entity);
+            Material* pMaterial = lm.target();
+
+            return;
         }
     }
-    throw Chimera::Exception("Geometry nao encontrado: " + url);
+    throw Exception("Geometry nao encontrado: " + url);
 }
 
 int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source, std::vector<float>& _arrayValores) {
 
     const char* l_numCount = _source->FirstChildElement("float_array")->Attribute("count");
     if (l_numCount != nullptr) {
-
-        // std::vector<float> l_array;
         const char* l_vals = _source->FirstChildElement("float_array")->GetText();
         loadArrayBtScalar(l_vals, _arrayValores);
         return _arrayValores.size();
@@ -45,12 +44,12 @@ int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source, std::vector<float
     return -1;
 }
 
-std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chimera::NodeMesh* _pMesh) {
+std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh* meshData) {
 
     std::string retorno = "";
     tinyxml2::XMLElement* l_nMesh = _nNode->FirstChildElement("mesh");
     if (l_nMesh != nullptr) {
-
+        meshData->singleIndex = false;
         // Carrega lista de vetores
         tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement("source");
         for (l_nSource; l_nSource; l_nSource = l_nSource->NextSiblingElement("source")) {
@@ -63,7 +62,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pMesh->meshData.addVertex(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    meshData->point.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-normals") != nullptr) {
 
@@ -72,7 +71,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 getSource(l_nSource, lista);
 
                 for (unsigned int indice = 0; indice < lista.size(); indice += 3)
-                    _pMesh->meshData.addNormal(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
+                    meshData->normal.push_back(glm::vec3(lista[indice], lista[indice + 1], lista[indice + 2]));
 
             } else if (strstr(l_id, (char*)"-map-0") != nullptr) {
 
@@ -80,7 +79,7 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
                 std::vector<float> lista;
                 getSource(l_nSource, lista);
                 for (unsigned int indice = 0; indice < lista.size(); indice += 2)
-                    _pMesh->meshData.addUV(glm::vec2(lista[indice], lista[indice + 1]));
+                    meshData->uv.push_back(glm::vec2(lista[indice], lista[indice + 1]));
             }
         }
 
@@ -127,15 +126,15 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
 
                 if (strstr(l_source, (char*)"-vertices") != nullptr) { // indices de vetor ponto
 
-                    _pMesh->meshData.addVertexIndex(l_arrayIndex[l_contador]);
+                    meshData->iPoint.push_back(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-normals") != nullptr) { // indice de vetor normal
 
-                    _pMesh->meshData.addNormalIndex(l_arrayIndex[l_contador]);
+                    meshData->iNormal.push_back(l_arrayIndex[l_contador]);
 
                 } else if (strstr(l_source, (char*)"-map-0") != nullptr) { // indice de vetor posicao textura
 
-                    _pMesh->meshData.addUVIndex(l_arrayIndex[l_contador]);
+                    meshData->iUv.push_back(l_arrayIndex[l_contador]);
                 }
             }
             l_arrayIndex.clear();
@@ -145,9 +144,6 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Chim
             l_vSource.clear();
         }
     }
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Nome: %s", _pMesh->getName().c_str());
-    _pMesh->debugDados(false);
     return retorno;
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

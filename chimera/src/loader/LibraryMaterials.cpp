@@ -2,13 +2,9 @@
 #include "LibraryEffects.hpp"
 #include "chimera/core/Exception.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
-LibraryMaterials::LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
-
-LibraryMaterials::~LibraryMaterials() {}
-
-Chimera::Material* LibraryMaterials::target() {
+Material* LibraryMaterials::target() {
 
     tinyxml2::XMLElement* l_nMat = root->FirstChildElement("library_materials")->FirstChildElement("material");
     for (l_nMat; l_nMat; l_nMat = l_nMat->NextSiblingElement()) {
@@ -16,12 +12,12 @@ Chimera::Material* LibraryMaterials::target() {
         std::string l_id = l_nMat->Attribute("id");
         if (url.compare(l_id) == 0) {
             std::string url = l_nMat->FirstChildElement("instance_effect")->Attribute("url");
-            LibraryEffects le(root, url);
-            Chimera::Material* retorno = le.target();
+            LibraryEffects le(root, url, entity);
+            Material* retorno = le.target();
             return retorno;
         }
     }
-    throw Chimera::Exception("Material nao encontrado Node: " + url);
+    throw Exception("Material nao encontrado Node: " + url);
 }
 
-} // namespace ChimeraLoaders
+} // namespace Chimera

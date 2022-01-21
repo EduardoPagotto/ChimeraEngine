@@ -1,16 +1,13 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_IMAGES__HPP
-#define __CHIMERA_LOADER_LIBRARY_IMAGES__HPP
-
+#pragma once
 #include "chimera/loader/Library.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryImages : public Library {
 
   public:
-    LibraryImages(tinyxml2::XMLElement* _root, const std::string& _url);
-    virtual ~LibraryImages();
+    LibraryImages(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
+    virtual ~LibraryImages() {}
     std::tuple<std::string, std::string> target();
 };
-} // namespace ChimeraLoaders
-#endif
+} // namespace Chimera

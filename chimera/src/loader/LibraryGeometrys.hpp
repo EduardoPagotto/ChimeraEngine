@@ -1,22 +1,21 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_GEOMETRYS__HPP
-#define __CHIMERA_LOADER_LIBRARY_GEOMETRYS__HPP
-
+#pragma once
+#include "chimera/core/Registry.hpp"
 #include "chimera/loader/Library.hpp"
-#include "chimera/node/NodeMesh.hpp"
+#include "chimera/render/VertexData.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryGeometrys : public Library {
 
   public:
-    LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url);
-    virtual ~LibraryGeometrys();
-    Chimera::NodeMesh* target();
+    LibraryGeometrys(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url), entity(entity) {}
+    virtual ~LibraryGeometrys() {}
+    void target();
 
   private:
     int getSource(tinyxml2::XMLElement* _source, std::vector<float>& _arrayValores);
-    std::string loadMeshCollada(tinyxml2::XMLElement* _nNode, Chimera::NodeMesh* _pMesh);
-};
-} // namespace ChimeraLoaders
+    std::string loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh* meshData);
 
-#endif
+    Entity entity;
+};
+} // namespace Chimera

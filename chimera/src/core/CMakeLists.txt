@@ -2,50 +2,29 @@ cmake_minimum_required(VERSION 3.10.2)
 
 PROJECT(ChimeraCore)
 
-find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(GLEW REQUIRED)
 
-add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
-
-#define objetos a compilar
-set (SourcesCore Canvas.cpp
-				 CanvasGL.cpp
+# define objetos a compilar
+set (SourcesCore Registry.cpp
 				 CanvasFB.cpp
+				 utils.cpp
 				 Timer.cpp
-				 TrackBall.cpp
-				 TrackHead.cpp
+				 Keyboard.cpp
 				 JoystickState.cpp
 				 JoystickManager.cpp
-				 FlowControl.cpp
-				 Shader.cpp
-				 Transform.cpp)
+				 MouseDevice.cpp
+				 StateStack.cpp
+				 Engine.cpp)
 
-# #define os includes
-set (IncludeCore ${CMAKE_SOURCE_DIR})
-set (IncludeCoreAux ${OPENGL_INCLUDE_DIR}
-				 	${SDL2_INCLUDE_DIR}
-				 	${GLEW_INCLUDE_DIRS})
-
-#Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
-# if (OVR_SET_TO_USE)
-# 	message(STATUS "OVR Incluido no Projeto")
-# 	set(SourcesCore ${SourcesCore} src/OvrDevice.cpp) #adiciona o cpp
-# 	set(IncludeCore ${IncludeCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
-# endif(OVR_SET_TO_USE)
-
-if (HMD_Z1_SET_TO_USE)
-	message(STATUS "HMD_Z1 Incluido no Projeto")
-	set(SourcesCore ${SourcesCore} CanvasHmd.cpp) #adiciona o cpp
-	set(SourcesCore ${SourcesCore} Eye.cpp) #adiciona o cpp
-endif(HMD_Z1_SET_TO_USE)
+# define os includes
+set (IncludeCore ${CMAKE_SOURCE_DIR}
+				 ${SDL2_INCLUDE_DIR})
 
 # Define o Target
 add_library (ChimeraCore STATIC ${SourcesCore})
 
-# Define os includes privados para este target
-target_include_directories (ChimeraCore PUBLIC ${IncludeCore} 
-										PRIVATE ${IncludeCoreAux})
+# Define os includes 
+target_include_directories (ChimeraCore PUBLIC ${IncludeCore})
 
 # Lista os Includes
 # get_property(dirs DIRECTORY ${IncludeCore}/chimera/core PROPERTY INCLUDE_DIRECTORIES)

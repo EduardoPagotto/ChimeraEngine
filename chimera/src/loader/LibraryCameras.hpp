@@ -1,22 +1,19 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_CAMERAS__HPP
-#define __CHIMERA_LOADER_LIBRARY_CAMERAS__HPP
-
+#pragma once
+#include "chimera/core/Registry.hpp"
 #include "chimera/loader/Library.hpp"
-#include "chimera/node/NodeCamera.hpp"
+#include "chimera/render/ICamera.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryCameras : public Library {
 
   public:
-    LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _url);
-    virtual ~LibraryCameras();
-    Chimera::NodeCamera* target();
+    LibraryCameras(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url), entity(entity) {}
+    virtual ~LibraryCameras() {}
+    void target();
 
   private:
-    void loadbase(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera* _pCamera);
-    void extra(tinyxml2::XMLElement* _nNode, Chimera::NodeCamera* _pCamera);
+    void loadbase(tinyxml2::XMLElement* _nNode, ICamera3D* cam);
+    Entity entity;
 };
-} // namespace ChimeraLoaders
-
-#endif
+} // namespace Chimera

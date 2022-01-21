@@ -1,23 +1,17 @@
-#ifndef __CHIMERA_LOADER_VISUAL_SCENE__HPP
-#define __CHIMERA_LOADER_VISUAL_SCENE__HPP
-
+#pragma once
+#include "chimera/core/Registry.hpp"
 #include "chimera/loader/Library.hpp"
-#include "chimera/loader/ListNodes.hpp"
-#include "chimera/node/NodeGroup.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class VisualScene : public Library {
 
   public:
-    VisualScene(const std::string& _file, Chimera::NodeGroup* _pGroup);
-    virtual ~VisualScene();
+    VisualScene(const std::string& _file, Registry* reg) : Library(nullptr, "!" + _file), reg(reg) {}
+    virtual ~VisualScene(){};
     void target();
 
   private:
-    ListNodes* pListNodes;
-    Chimera::NodeGroup* pGroup;
+    Registry* reg;
 };
-} // namespace ChimeraLoaders
-
-#endif
+} // namespace Chimera

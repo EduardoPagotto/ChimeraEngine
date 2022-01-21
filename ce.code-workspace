@@ -70,7 +70,14 @@
 			"bit": "cpp",
 			"ranges": "cpp",
 			"compare": "cpp",
-			"concepts": "cpp"
+			"concepts": "cpp",
+			"unordered_set": "cpp",
+			"cassert": "cpp",
+			"cerrno": "cpp",
+			"cfloat": "cpp",
+			"climits": "cpp",
+			"ios": "cpp",
+			"queue": "cpp"
 		}
 	}
 }

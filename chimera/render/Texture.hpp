@@ -1,94 +1,100 @@
-#ifndef __CHIMERA_TEX__HPP
-#define __CHIMERA_TEX__HPP
-
-#include "chimera/core/Shader.hpp"
+#pragma once
+#include "chimera/render/Shader.hpp"
+#include <SDL2/SDL.h>
 
 namespace Chimera {
 
-#define SHADE_TEXTURE_DIFFUSE "material.tDiffuse"
-#define SHADE_TEXTURE_SPECULA "material.tSpecular"
-#define SHADE_TEXTURE_EMISSIVE "material.tEmissive"
-#define SHADE_TEXTURE_SHADOW "shadowMap" // TODO: melhorar este nome no shader
+enum class TexWrap {
+    NONE = 0,
+    REPEAT = GL_REPEAT,
+    CLAMP = GL_CLAMP,
+    MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+    CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+    CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
+};
+
+enum class TexFilter { NONE = 0, LINEAR = GL_LINEAR, NEAREST = GL_NEAREST };
+
+enum class TexFormat {
+    NONE = 0,
+    RGB = GL_RGB,
+    RGBA = GL_RGBA,
+    LUMINANCE = GL_LUMINANCE,
+    LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA,
+    DEPTH_COMPONENT = GL_DEPTH_COMPONENT,
+    DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT,
+    // novos
+    RGBA8 = GL_RGBA8,
+    DEPTH24STENCIL8 = GL_DEPTH24_STENCIL8,
+    RED_INTEGER = GL_RED_INTEGER,
+    R32I = GL_R32I
+};
+
+enum class TexDType {
+    NONE = GL_NONE,
+    UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
+    UNSIGNED_SHORT = GL_UNSIGNED_SHORT,
+    FLOAT = GL_FLOAT,
+    INT = GL_INT
+};
+
+struct TexParam {
+    TexFormat format;
+    TexFormat internalFormat;
+    TexFilter filter;
+    TexWrap wrap;
+    TexDType type;
+    int samples;
+
+    TexParam() {
+        format = TexFormat::RGBA;
+        internalFormat = TexFormat::RGBA;
+        filter = TexFilter::NEAREST;
+        wrap = TexWrap::REPEAT;
+        type = TexDType::UNSIGNED_BYTE;
+        samples = 1;
+    }
+
+    TexParam(TexFormat format, TexFormat internalFormat, TexFilter filter, TexWrap wrap, TexDType type)
+        : format(format), internalFormat(internalFormat), filter(filter), wrap(wrap), type(type), samples(1) {}
+
+    // TexParam(TexFilter filter) : format(TexFormat::RGBA), filter(filter), wrap(TexWrap::CLAMP) {}
+    // TexParam(TexFilter filter, TexWrap wrap) : format(TexFormat::RGBA), filter(filter), wrap(wrap) {}
+};
+
+namespace Aux {
+static void textureParameterSetUndefined(TexParam& val) {
+    val.format = TexFormat::NONE;
+    val.internalFormat = TexFormat::NONE;
+    val.filter = TexFilter::NONE;
+    val.wrap = TexWrap::NONE;
+    val.type = TexDType::NONE;
+}
+
+static bool textureParameterIsUndefined(const TexParam& val) {
+    return (val.format == TexFormat::NONE && val.internalFormat == TexFormat::NONE);
+}
+
+} // namespace Aux
 
 class Texture {
   public:
-    Texture(const std::string& _shadeName, const unsigned& _width, const unsigned& _height);
+    Texture(const std::string& name, const unsigned& width, const unsigned& height, const TexParam& tp);
+    Texture(const std::string& name, SDL_Surface* surface, const TexParam& tp);
     virtual ~Texture() { glDeleteTextures(1, (GLuint*)&idTexture); }
-
-    virtual bool init() {
-        if (idTexture == 0) {
-            glGenTextures(1, &idTexture);
-            glBindTexture(GL_TEXTURE_2D, idTexture);
-            return true;
-        }
-
-        return false;
-    }
-
-    void apply(Shader* _pShader) {
-        glActiveTexture(GL_TEXTURE0 + index);
-        glBindTexture(GL_TEXTURE_2D, idTexture);
-        if (_pShader != nullptr)
-            _pShader->setGlUniform1i(shadeName.c_str(), index);
-    }
 
     inline unsigned getWidth() const { return width; }
     inline unsigned getHeight() const { return height; }
-    inline unsigned getSerial() const { return serial; }
-    inline GLuint getIndex() const { return index; }
+    void bind(uint8_t slot) const;
+    static void unbind(uint8_t slot);
+    inline const std::string getName() const { return name; }
+    inline const uint32_t getTextureID() const { return idTexture; }
 
-  protected:
-    unsigned width;
-    unsigned height;
+  private:
+    void init();
+    unsigned width, height;
     GLuint idTexture;
-
-  private:
-    std::string shadeName;
-    GLuint index;
-    unsigned serial;
-    static unsigned serialMaster;
+    std::string name;
+    TexParam textureParameters;
 };
-
-class TextureFBO : public Texture {
-  public:
-    TextureFBO(const std::string& _shadeName, const unsigned& _width, const unsigned& _height)
-        : Texture(_shadeName, _width, _height), depthMapFBO(0) {}
-    virtual ~TextureFBO() override;
-    virtual bool init() override;
-    inline GLuint getFrameBufferId() const { return depthMapFBO; }
-
-  protected:
-    GLuint depthMapFBO;
-};
-
-class TextureImg : public Texture {
-  public:
-    TextureImg(const std::string& _shadeName, const std::string& _pathFile)
-        : Texture(_shadeName, 0, 0), pathFile(_pathFile) {}
-    virtual ~TextureImg() override;
-    virtual bool init() override;
-
-  private:
-    int invert_image(int pitch, int height, void* image_pixels);
-
-  protected:
-    std::string pathFile;
-};
-
-// class TexCentral {
-//     friend class Singleton<TexCentral>;
-
-//   public:
-//     void initAllTex();
-//     TextureImg* add(const std::string& name, const std::string& _pathFile);
-
-//   protected:
-//     TexCentral() noexcept;
-//     ~TexCentral();
-
-//   private:
-//     std::map<std::string, TextureImg*> mapTex;
-// };
-
 } // namespace Chimera
-#endif

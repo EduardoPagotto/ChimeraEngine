@@ -1,10 +1,5 @@
-#ifndef __CHIMERA_LIGHT__HPP
-#define __CHIMERA_LIGHT__HPP
-
-#include "chimera/core/Shader.hpp"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/euler_angles.hpp>
+#pragma once
+#include "chimera/render/Shader.hpp"
 
 namespace Chimera {
 
@@ -20,31 +15,20 @@ enum class LightType {
 
 class Light {
   public:
-    Light();
-    virtual ~Light();
-
-    void apply(Shader* _pShader);
-
-    inline void setAmbient(const glm::vec4& _color) { ambient = _color; }
-    inline void setSpecular(const glm::vec4& _color) { specular = _color; }
-    inline void setDiffuse(const glm::vec4& _color) { diffuse = _color; }
-    inline void setType(const LightType& _type) { type = _type; }
-    inline void setTransform(const glm::mat4& _trans) { transform = _trans; }
-
-    inline glm::vec3 getPosition() const { return glm::vec3(transform[3]); }
-    inline void setPosition(const glm::vec3& _pos) { transform = glm::translate(transform, _pos); }
-
-    inline void setRotation(const glm::vec3& _rotation) {
-        transform = glm::eulerAngleYXZ(_rotation.y, _rotation.x, _rotation.z);
+    Light() : type(LightType::POSITIONAL) {} // TODO: muito a fazer!!!! indice e luz necessario para o shader
+    virtual ~Light() {}
+    inline void setAmbient(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_AMBIENT, color)); }
+    inline void setSpecular(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_SPECULAR, color)); }
+    inline void setDiffuse(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_DIFFUSE, color)); }
+    inline void setType(const LightType& type) { this->type = type; }
+    inline void bindLight(std::vector<UniformVal>& uniforms, const glm::mat4& mat) {
+        uniforms.push_back(UniformVal(SHADE_LIGHT_POSITION, glm::vec3(mat[3])));
+        copy(listProp.begin(), listProp.end(), back_inserter(uniforms));
     }
 
   private:
-    int number;
+    // int number;
     LightType type;
-    glm::mat4 transform;
-    glm::vec4 ambient;
-    glm::vec4 specular;
-    glm::vec4 diffuse;
+    std::vector<UniformVal> listProp;
 };
 } // namespace Chimera
-#endif

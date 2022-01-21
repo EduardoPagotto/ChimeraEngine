@@ -1,20 +1,18 @@
-#ifndef __CHIMERA_LOADER_LIBRARY_MATERIALS__HPP
-#define __CHIMERA_LOADER_LIBRARY_MATERIALS__HPP
-
+#pragma once
+#include "chimera/core/Registry.hpp"
 #include "chimera/loader/Library.hpp"
 #include "chimera/render/Material.hpp"
 
-namespace ChimeraLoaders {
+namespace Chimera {
 
 class LibraryMaterials : public Library {
 
   public:
-    LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url);
-    virtual ~LibraryMaterials();
-    Chimera::Material* target();
+    LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url), entity(entity) {}
+    virtual ~LibraryMaterials() {}
+    Material* target();
 
   private:
+    Entity entity;
 };
-} // namespace ChimeraLoaders
-
-#endif
+} // namespace Chimera

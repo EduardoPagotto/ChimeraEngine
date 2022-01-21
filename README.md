@@ -89,7 +89,7 @@ code --install-extension xaver.clang-format
     pMat->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
     pMat->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
     pMat->setShine(32.0f);
-    pMat->addTexture(new TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid1.png"));
+    pMat->addTexture(new TextureSurface(SHADE_TEXTURE_DIFFUSE, "./assets/textures/grid1.png"));
 
     NodeMesh* pMesh = new NodeMesh(group1, name);
     pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
@@ -131,3 +131,13 @@ https://gamedev.stackexchange.com/questions/60313/implementing-a-skybox-with-gls
 https://learnopengl.com/Advanced-OpenGL/Cubemaps​
 http://antongerdelan.net/opengl/cubemaps.html
 https://www.khronos.org/opengl/wiki/Example_Code
+
+## FrameBuffer cfg's
+- Renderizae tela: <p>
+    <i>TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE)</i>
+- Captura de dados para uniform: <p>
+    <i>TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE)</i>
+- RBO: <p>
+    <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)</i>
+- SwadowMap: <p>
+    <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)</i>

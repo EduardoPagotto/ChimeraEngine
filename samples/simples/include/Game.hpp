@@ -1,48 +1,21 @@
-#ifndef __GAME_SIMPLES__HPP
-#define __GAME_SIMPLES__HPP
+#pragma once
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/IStateMachine.hpp"
+#include "chimera/render/scene/Scene.hpp"
 
-#include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/IGameClientEvents.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/TrackBall.hpp"
-#include "chimera/render/Material.hpp"
-#include "chimera/render/Texture.hpp"
-#include "chimera/render/vbs/VertexStatic.hpp"
-
-class Game : public Chimera::IGameClientEvents {
+class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader);
-
+    Game(Chimera::Engine* engine);
     virtual ~Game();
-    // Inherited via IGameClientEvents
-    virtual void start();
-    virtual void stop();
-    virtual void render();
-    virtual void keyCapture(SDL_Keycode tecla);
-    virtual void mouseButtonDownCapture(SDL_MouseButtonEvent mb);
-    virtual void mouseButtonUpCapture(SDL_MouseButtonEvent mb);
-    virtual void mouseMotionCapture(SDL_MouseMotionEvent mm);
-    virtual void joystickCapture(Chimera::JoystickManager& joy);
-    virtual void joystickStatus(Chimera::JoystickManager& joy);
-    virtual void newFPS(const unsigned int& fps);
-    virtual void userEvent(const SDL_Event& _event) override;
-    virtual void windowEvent(const SDL_WindowEvent& _event) override;
-    virtual bool paused() override;
+    // Inherited via IEvents
+    virtual void onAttach() override;
+    virtual void onDeatach() override;
+    virtual void onRender() override;
+    virtual void onUpdate(const double& ts) override;
+    virtual bool onEvent(const SDL_Event& event) override;
+    virtual std::string getName() const { return "Game"; }
 
   private:
-    bool isPaused;
-    int botaoIndex;
-    int estadoBotao;
-    int debug_init;
-    Chimera::TrackBall trackBall;
-    Chimera::CanvasGL* pCanvas;
-    Chimera::Shader* pShader;
-    Chimera::VertexRenderStatic vertexRenderStatic;
-    glm::mat4 projection;
-    glm::mat4 view;
-    glm::mat4 model;
-
-    Chimera::Material material;
+    Chimera::Scene activeScene;
+    Chimera::Engine* engine;
 };
-
-#endif

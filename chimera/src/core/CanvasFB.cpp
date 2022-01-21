@@ -7,8 +7,11 @@ namespace Chimera {
 // https://forums.libsdl.org/viewtopic.php?p=51664
 // https://jeux.developpez.com/tutoriels/sdl-2/guide-migration/
 
-CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen)
-    : Canvas(_title, _width, _height, _fullScreen) {
+CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen) : Canvas(_title, _width, _height, _fullScreen) {
+
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+        throw Exception(std::string(std::string("Falha SDL_Init:") + SDL_GetError()));
+    }
 
     if (SDL_CreateWindowAndRenderer(_width, _height, 0, &window, &renderer) != 0)
         throw Exception(std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
@@ -50,7 +53,7 @@ void CanvasFB::toggleFullScreen() {
 
     if (fullScreen == false) {
 
-        SDL_GetWindowPosition(window, &winPosPrev.x, &winPosPrev.y);
+        SDL_GetWindowPosition(window, &posX, &posY);
 
         SDL_SetWindowPosition(window, 0, 0);
         SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -58,7 +61,7 @@ void CanvasFB::toggleFullScreen() {
     } else {
 
         SDL_SetWindowFullscreen(window, 0);
-        SDL_SetWindowPosition(window, winPosPrev.x, winPosPrev.y);
+        SDL_SetWindowPosition(window, posX, posY);
     }
 
     fullScreen = !fullScreen;

@@ -1,184 +1,146 @@
 #include "Game.hpp"
-#include "chimera/OpenGLDefs.hpp"
-#include "chimera/core/Exception.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/render/AABB.hpp"
-#include "chimera/render/LoadObj.hpp"
-#include "chimera/render/maze/Maze.hpp"
-#include <algorithm>
-#include <glm/gtc/type_ptr.hpp>
+#include "chimera/render/3d/RenderableBsp.hpp"
+#include "chimera/render/CameraOrbit.hpp"
+#include "chimera/render/TextureManager.hpp"
+#include "chimera/render/Transform.hpp"
+#include "chimera/render/partition/BSPTree.hpp"
+#include "chimera/render/partition/LoadObj.hpp"
+#include "chimera/render/partition/Maze.hpp"
+#include "chimera/render/scene/CameraController.hpp"
+#include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::CanvasGL* _pCanvas, Chimera::Shader* _pShader) : pCanvas(_pCanvas), pShader(_pShader) {
-    isPaused = false;
-    debugParser = false;
+Game::Game(Chimera::Engine* engine) : engine(engine) {
 
-    projection = glm::mat4(1.0f);
-    view = glm::mat4(1.0f);
-    model = glm::mat4(1.0f);
+    using namespace Chimera;
+    Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
+    { // Cria entidade de camera
+        // Cria camera e carrega parametros
+        CameraComponent& cc = ce.addComponent<CameraComponent>();
+        TransComponent& tc = ce.addComponent<TransComponent>();
+        tc.trans = new Transform();
 
-    pTex = new Chimera::TextureImg(SHADE_TEXTURE_DIFFUSE, "./data/images/grid2.png");
+        cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+        // cc.camera = new CameraFPS(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+
+        ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+    }
+
+    {
+        Entity renderableEntity = activeScene.getRegistry().createEntity("Maze Entity");
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        tc.trans = new Transform();
+
+        Shader& shader = renderableEntity.addComponent<Shader>();
+        Material& material = renderableEntity.addComponent<Material>();
+        Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
+
+        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
+
+        // material.setDefaultEffect();
+        // material.setShine(50.0f);
+        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam());
+        material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        material.init();
+
+        std::vector<uint32_t> vIndex;
+        std::vector<VertexData> vVertexIndexed;
+
+        // Usando o Maze
+        Maze maze = Maze("./assets/maps/maze7.txt");
+        maze.createMap();
+
+        vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
+
+        BspTree bspTree;
+        bspTree.create(vVertexIndexed, vIndex);
+
+        RenderableBsp* r = new RenderableBsp(bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+        rc.renderable = r;
+    }
+
+    {
+        Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        tc.trans = new Transform();
+        tc.trans->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+        Material& material = renderableEntity.addComponent<Material>();
+        Shader& shader = renderableEntity.addComponent<Shader>();
+        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
+
+        Mesh& mesh = renderableEntity.addComponent<Mesh>();
+        loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
+    }
+
+    // mudar para o event
+    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
+    engine->pushState(&activeScene);
 }
 
-Game::~Game() { bspTree.destroy(); }
+Game::~Game() {}
 
-void Game::joystickCapture(Chimera::JoystickManager& joy) {}
+void Game::onAttach() {
 
-void Game::joystickStatus(Chimera::JoystickManager& joy) {}
+    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
-void Game::keyCapture(SDL_Keycode tecla) {
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
-    switch (tecla) {
-        case SDLK_ESCAPE:
-            SDL_Event l_eventQuit;
-            l_eventQuit.type = SDL_QUIT;
-            if (SDL_PushEvent(&l_eventQuit) == -1) {
-                throw Chimera::Exception(std::string(SDL_GetError()));
+void Game::onDeatach() {}
+
+bool Game::onEvent(const SDL_Event& event) {
+    using namespace Chimera;
+
+    switch (event.type) {
+        case SDL_USEREVENT: {
+            switch (event.user.code) {
+                case EVENT_TOGGLE_FULL_SCREEN:
+                    engine->getCanvas()->toggleFullScreen();
+                    break;
             }
-            break;
-        case SDLK_1:
-            debugParser = true;
-            break;
-        case SDLK_F10:
-            Chimera::eventsSend(Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN, nullptr, nullptr);
-            break;
-        default:
-            break;
+
+        } break;
+        case SDL_KEYDOWN: {
+            switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
+                    break;
+                case SDLK_1:
+                    activeScene.logToggle();
+                    break;
+                case SDLK_F10:
+                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    break;
+            }
+        } break;
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEMOTION: {
+        } break;
+        case SDL_WINDOWEVENT: {
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_ENTER:
+                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    break;
+                case SDL_WINDOWEVENT_LEAVE:
+                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    break;
+                case SDL_WINDOWEVENT_RESIZED:
+                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
+                    break;
+            }
+        } break;
     }
+    return true;
 }
 
-void Game::mouseButtonUpCapture(SDL_MouseButtonEvent mb) {
-    botaoIndex = mb.button;
-    estadoBotao = mb.state;
-}
+void Game::onUpdate(const double& ts) {}
 
-void Game::mouseButtonDownCapture(SDL_MouseButtonEvent mb) {
-    botaoIndex = mb.button;
-    estadoBotao = mb.state;
-}
-
-void Game::mouseMotionCapture(SDL_MouseMotionEvent mm) {
-
-    if (estadoBotao == SDL_PRESSED) {
-        if (botaoIndex == 1)
-            trackBall.tracking(mm.xrel, mm.yrel);
-        else if (botaoIndex == 3)
-            trackBall.offSet(mm.yrel);
-    }
-}
-
-void Game::start() {
-
-    Chimera::ViewPoint* pVp = new Chimera::ViewPoint();
-    pVp->position = glm::vec3(0.0, 60.0, 0.0);
-    pVp->front = glm::vec3(0.0, 0.0, 0.0);
-    pVp->up = glm::vec3(0.0, 1.0, 0.0);
-    trackBall.init(pVp);
-    trackBall.setMax(1000.0);
-
-    pCanvas->initGL();
-
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
-
-    pTex->init();
-
-    // Chimera::MeshData m;
-    // Chimera::LoaderObj loader;
-    // // loader.getMesh("./data/models/tela01.obj", m); // quadrado simples pequeno
-    // // loader.getMesh("./data/models/salaSplit3.obj", m); // Sala L com Split apenas triangulos
-    // loader.getMesh("./data/models/map02.obj", m); // Sala com 5 espacos em forma de X
-    // // loader.getMesh("./data/models/parede_simples.obj", m); // FIXME Falha para EPSILON 1e-2
-    // // loader.getMesh("./data/models/square2.obj", m); // 2 quadrado teste de split lateral
-    // // loader.getMesh("./data/models/square1.obj", m); // 2 quadrado teste de split centro
-    // // loader.getMesh("./data/models/split1.obj", m); // 2 triangulos sem textura
-    // // loader.getMesh("./data/models/cubo_textura_simples.obj", m);
-    // // m.changeSize(30.0, true);
-
-    // // Cria VertexList sequencial
-    // std::vector<Chimera::VertexData> vVertexSequencial;
-    // m.toVertexData(vVertexSequencial);
-    std::vector<unsigned int> vIndex;
-
-    // // -------
-    // // Comentar as tres linhas de baixo para bsp sem indice (sequencial)
-    // // Cria BSP usando Vertex indexado
-    std::vector<Chimera::VertexData> vVertexIndexed;
-    // vertexDataIndexCompile(vVertexSequencial, vVertexIndexed, vIndex);
-    // bspTree.create(vVertexIndexed, vIndex);
-
-    // -------
-    // Cria o BSP usando um vertes sequencial sem indice
-    // bspTree.create(true, vVertexSequencial, vIndex);
-    // -------
-
-    // Usando o Maze
-    Chimera::Maze maze = Chimera::Maze("./data/maze7.txt");
-    maze.createMap();
-
-    vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
-
-    bspTree.create(vVertexIndexed, vIndex);
-}
-
-void Game::stop() {}
-
-void Game::newFPS(const unsigned int& fps) {}
-
-void Game::userEvent(const SDL_Event& _event) {
-    Chimera::KindOp op = (Chimera::KindOp)_event.user.code;
-    if (op == Chimera::KindOp::VIDEO_TOGGLE_FULL_SCREEN) {
-        pCanvas->toggleFullScreen();
-    }
-}
-
-void Game::windowEvent(const SDL_WindowEvent& _event) {
-    switch (_event.event) {
-        case SDL_WINDOWEVENT_ENTER:
-            isPaused = false;
-            break;
-        case SDL_WINDOWEVENT_LEAVE:
-            isPaused = true;
-            break;
-        case SDL_WINDOWEVENT_RESIZED:
-            pCanvas->reshape(_event.data1, _event.data2);
-            break;
-    }
-}
-
-bool Game::paused() { return isPaused; }
-
-void Game::render() {
-    pCanvas->before();
-
-    Chimera::ViewPoint* vp = trackBall.getViewPoint();
-
-    if (debugParser == true) {
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", vp->position.x, vp->position.y, vp->position.z);
-    }
-
-    pShader->link();
-
-    // Calcula view e projection baseado em vp
-    pCanvas->calcPerspectiveProjectionView(0, vp, view, projection);
-
-    glm::mat4 projectionMatrixInverse = glm::inverse(projection);
-    glm::mat4 viewMatrixInverse = glm::inverse(view);
-    glm::mat4 viewProjectionMatrixInverse = viewMatrixInverse * projectionMatrixInverse;
-    frustum.set(viewProjectionMatrixInverse);
-
-    pShader->setGlUniformMatrix4fv("projection", 1, false, glm::value_ptr(projection));
-    pShader->setGlUniformMatrix4fv("view", 1, false, glm::value_ptr(view));
-    pShader->setGlUniformMatrix4fv("model", 1, false, glm::value_ptr(model));
-
-    // aplica a textura
-    pTex->apply(pShader);
-
-    bspTree.render(&vp->position, frustum, debugParser);
-
-    // TO debug only
-    bspTree.renderAABB();
-
-    pCanvas->after();
-    pCanvas->swapWindow();
-}
+void Game::onRender() {}

@@ -1,34 +1,22 @@
 #include "Game.hpp"
-#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/utils.hpp"
-
+#include "chimera/render/CanvasGL.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
-
+    using namespace Chimera;
     try {
 
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Chimera::CanvasGL* video = new Chimera::CanvasGL("simples", 640, 480);
+        Engine engine(new CanvasGL("simples", 640, 480));
+        Game* game = new Game(&engine);
 
-        Chimera::Shader* pShader =
-            new Chimera::Shader("Simples1", Chimera::shadeLoadProg("Simples1", "./samples/simples/shaders/simples.vert",
-                                                                   "./samples/simples/shaders/simples.frag"));
+        engine.pushState(game);
+        engine.run();
 
-        Game* game = new Game(video, pShader);
-
-        Chimera::FlowControl* pControle = new Chimera::FlowControl(game);
-        pControle->open();
-        pControle->gameLoop();
-
-        delete pControle;
         delete game;
-        delete video;
 
         SDL_Log("Sucesso");
         return 0;

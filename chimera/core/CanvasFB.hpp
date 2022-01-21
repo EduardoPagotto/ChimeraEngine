@@ -1,8 +1,6 @@
+#pragma once
 
-#ifndef __CHIMERA_CANVAS_FB__HPP
-#define __CHIMERA_CANVAS_FB__HPP
-
-#include "chimera/core/Canvas.hpp"
+#include "Canvas.hpp"
 
 namespace Chimera {
 
@@ -10,13 +8,15 @@ class CanvasFB : public Canvas {
   public:
     CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen = false);
     virtual ~CanvasFB();
-    virtual void before(const unsigned short& _indexEye = 0);
-    virtual void after(const unsigned short& _indexEye = 0);
+    virtual void before(const unsigned short& _indexEye = 0) override;
+    virtual void after(const unsigned short& _indexEye = 0) override;
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
 
-    uint32_t* getPixels() { return pixels; }
-
+    // FIXME:  ver depois!!!!
+    virtual void swapWindow() override{};
+    virtual int getTotEyes() override { return 1; }
+    uint32_t* getPixels() override { return pixels; }
     uint32_t getPixelFormat() { return pixelFormat; }
 
   private:
@@ -26,5 +26,3 @@ class CanvasFB : public Canvas {
     SDL_Renderer* renderer;
 };
 } // namespace Chimera
-
-#endif

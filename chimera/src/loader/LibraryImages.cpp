@@ -3,11 +3,7 @@
 
 #include <tuple>
 
-namespace ChimeraLoaders {
-
-LibraryImages::LibraryImages(tinyxml2::XMLElement* _root, const std::string& _url) : Library(_root, _url) {}
-
-LibraryImages::~LibraryImages() {}
+namespace Chimera {
 
 std::tuple<std::string, std::string> LibraryImages::target() {
 
@@ -25,6 +21,6 @@ std::tuple<std::string, std::string> LibraryImages::target() {
         }
     }
 
-    throw Chimera::Exception("Imagen não encontrada:" + url);
+    throw Exception("Imagen não encontrada:" + url);
 }
-} // namespace ChimeraLoaders
+} // namespace Chimera

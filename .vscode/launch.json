@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Models",
+            "name": "Models2",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/models",
+            "program": "${workspaceRoot}/bin/models2",
             "args": [
                 "-p",
                 "${workspaceRoot}"
@@ -46,50 +46,6 @@
             ]
         },
         {
-            "name": "Shader",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/bin/shader",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "Sterioscopic",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/bin/sterioscopic",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
             "name": "Simples",
             "type": "cppdbg",
             "request": "launch",
@@ -116,28 +72,6 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/bin/bsptree",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "Loader",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/bin/loader",
             "args": [
                 "-p",
                 "${workspaceRoot}"

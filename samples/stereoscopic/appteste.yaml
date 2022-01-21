@@ -1,9 +1,0 @@
-screen:
-  name: teste
-  canvas:
-    w: 512
-    h: 512
-shaders:
-  - name: mesh-default
-    vertex: ./chimera/shaders/MeshFullShadow.vert
-    fragment: ./chimera/shaders/MeshFullShadow.frag

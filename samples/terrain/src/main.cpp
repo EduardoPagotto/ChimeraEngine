@@ -1,19 +1,18 @@
 #include "Game.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/FlowControl.hpp"
+#include "chimera/render/CanvasGL.hpp"
 
 int main(int argn, char** argv) {
-
+    using namespace Chimera;
     try {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Game* game = new Game();
-        Chimera::FlowControl* pControl = new Chimera::FlowControl(game);
-        pControl->open();
-        pControl->gameLoop();
+        Engine engine(new CanvasGL("Chimera", 1200, 600));
+        Game* game = new Game(&engine);
 
-        delete pControl;
+        engine.pushState(game);
+        engine.run();
         delete game;
 
         SDL_Log("Finalizado com sucesso");

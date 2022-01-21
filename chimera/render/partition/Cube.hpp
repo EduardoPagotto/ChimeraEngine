@@ -33,15 +33,15 @@ class Cube : public AABB {
     Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
     void setNeighbor(DEEP deep, CARDINAL card, Cube* pCube);
-    void create(std::vector<VertexData>& vl, std::vector<Triangle>& tl);
+    void create(std::vector<VertexData>* vl, std::vector<Triangle>* tl);
 
   private:
-    void newWall(std::vector<VertexData>& vl, std::vector<Triangle>& tl);
-    void newRamp(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std::vector<Triangle>& tl);
-    void newDiag(std::vector<VertexData>& vl, std::vector<Triangle>& tl);
-    void newFloor(std::vector<VertexData>& vl, std::vector<Triangle>& tl);
-    void newCeeling(std::vector<VertexData>& vl, std::vector<Triangle>& tl);
-    void newRampNSEW(SPACE space, std::vector<VertexData>& vl, std::vector<Triangle>& tl);
+    void newWall();
+    void newRamp(bool isFloor, CARDINAL card);
+    void newDiag();
+    void newFloor();
+    void newCeeling();
+    void newRampNSEW(SPACE space);
 
     inline SPACE getSpace() const { return this->space; }
 
@@ -53,8 +53,8 @@ class Cube : public AABB {
     CARDINAL emptyQuadrantDiag(DEEP deep, bool invert);
     bool hasNeighbor(DEEP deep, CARDINAL card, SPACE space);
 
-    void newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std::vector<Triangle>& tl);
-    void addFace(bool clockwise, int numFace, int numTex, std::vector<VertexData>& vl, std::vector<Triangle>& tl);
+    void newFlatFloorCeeling(bool isFloor, CARDINAL card);
+    void addFace(bool clockwise, int numFace, int numTex);
     Cube* pNorth;
     Cube* pEast;
     Cube* pSouth;
@@ -62,5 +62,7 @@ class Cube : public AABB {
     Cube* pUp;
     Cube* pBottom;
     SPACE space;
+    std::vector<VertexData>* vl;
+    std::vector<Triangle>* tl;
 };
 } // namespace Chimera

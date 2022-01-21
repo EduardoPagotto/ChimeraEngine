@@ -150,7 +150,7 @@ void Maze::createMap() {
     // carrega posicoes, texturas, e seq textura defaults do cubo
     initCubeBase();
     for (auto pCube : this->vpCube) {
-        pCube->create(vertexData, this->trisList);
+        pCube->create(&vertexData, &this->trisList);
     }
 
     for (Triangle t : this->trisList) {

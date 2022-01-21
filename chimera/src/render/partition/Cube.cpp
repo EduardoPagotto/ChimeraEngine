@@ -136,7 +136,7 @@ void Cube::setNeighbor(DEEP deep, CARDINAL card, Cube* pCube) {
     }
 }
 
-void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::addFace(bool clockwise, int numFace, int numTex) {
 
     glm::uvec3 tri = tVertIndex[numFace];
     glm::uvec3 tex = tTexIndex[numTex];
@@ -151,23 +151,23 @@ void Cube::addFace(bool clockwise, int numFace, int numTex, std::vector<VertexDa
 
     uint32_t ia, ib, ic;
     if (!clockwise) {
-        ia = tl.size() * 3;
+        ia = tl->size() * 3;
         ib = ia + 1;
         ic = ib + 1;
     } else {
-        ic = tl.size() * 3;
+        ic = tl->size() * 3;
         ib = ic + 1;
         ia = ib + 1;
     }
     // FIXME: tem algo errado aqui !!!!
     // glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
-    vl.push_back({va, glm::vec3(0.0f), ta}); // normal PA calc below
-    vl.push_back({vb, glm::vec3(0.0f), tb}); // normal PB calc below
-    vl.push_back({vc, glm::vec3(0.0f), tc}); // normal PC calc below
+    vl->push_back({va, glm::vec3(0.0f), ta}); // normal PA calc below
+    vl->push_back({vb, glm::vec3(0.0f), tb}); // normal PB calc below
+    vl->push_back({vc, glm::vec3(0.0f), tc}); // normal PC calc below
 
     Triangle t1 = Triangle(ia, ib, ic, glm::vec3(0.0f), false);
-    triangleCalcNormal(vl, t1);
-    tl.push_back(t1);
+    triangleCalcNormal(*vl, t1);
+    tl->push_back(t1);
 }
 
 CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
@@ -260,30 +260,30 @@ bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
     return false;
 }
 
-void Cube::newWall(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newWall() {
 
     if ((this->pNorth != nullptr) && (this->pNorth->getSpace() == SPACE::WALL)) {
-        this->addFace(false, 0, 0, vl, tl);
-        this->addFace(false, 2, 1, vl, tl);
+        this->addFace(false, 0, 0);
+        this->addFace(false, 2, 1);
     }
 
     if ((this->pEast != nullptr) && (this->pEast->getSpace() == SPACE::WALL)) {
-        this->addFace(false, 4, 0, vl, tl);
-        this->addFace(false, 6, 1, vl, tl);
+        this->addFace(false, 4, 0);
+        this->addFace(false, 6, 1);
     }
 
     if ((this->pSouth != nullptr) && (this->pSouth->getSpace() == SPACE::WALL)) {
-        this->addFace(false, 8, 0, vl, tl);
-        this->addFace(false, 10, 1, vl, tl);
+        this->addFace(false, 8, 0);
+        this->addFace(false, 10, 1);
     }
 
     if ((this->pWest != nullptr) && (this->pWest->getSpace() == SPACE::WALL)) {
-        this->addFace(false, 12, 0, vl, tl);
-        this->addFace(false, 14, 1, vl, tl);
+        this->addFace(false, 12, 0);
+        this->addFace(false, 14, 1);
     }
 }
 
-void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newRamp(bool isFloor, CARDINAL card) {
 
     bool westWallDown = false;
     bool westWallUp = false;
@@ -318,55 +318,55 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std
     if (isFloor) {
         switch (card) {
             case CARDINAL::NORTH: { // OK
-                this->addFace(false, 28, 0, vl, tl);
-                this->addFace(false, 29, 1, vl, tl);
+                this->addFace(false, 28, 0);
+                this->addFace(false, 29, 1);
                 if (westWallDown)
-                    this->addFace(true, 12, 2, vl, tl);
+                    this->addFace(true, 12, 2);
                 if (westWallUp)
-                    this->addFace(false, 14, 1, vl, tl);
+                    this->addFace(false, 14, 1);
                 if (eastWallDown)
-                    this->addFace(true, 7, 8, vl, tl);
+                    this->addFace(true, 7, 8);
                 if (eastWallUp)
-                    this->addFace(false, 5, 5, vl, tl);
+                    this->addFace(false, 5, 5);
             } break;
             case CARDINAL::EAST: {
-                this->addFace(false, 30, 0, vl, tl);
-                this->addFace(false, 31, 1, vl, tl);
+                this->addFace(false, 30, 0);
+                this->addFace(false, 31, 1);
 
                 if (northWallDown) // OK
-                    this->addFace(true, 0, 2, vl, tl);
+                    this->addFace(true, 0, 2);
                 if (northWallUp)
-                    this->addFace(false, 2, 1, vl, tl);
+                    this->addFace(false, 2, 1);
                 if (southWallDown)
-                    this->addFace(true, 11, 8, vl, tl);
+                    this->addFace(true, 11, 8);
                 if (southWallUp)
-                    this->addFace(false, 9, 5, vl, tl);
+                    this->addFace(false, 9, 5);
 
             } break;
             case CARDINAL::SOUTH: { // OK
-                this->addFace(false, 32, 0, vl, tl);
-                this->addFace(false, 33, 1, vl, tl);
+                this->addFace(false, 32, 0);
+                this->addFace(false, 33, 1);
                 if (westWallDown)
-                    this->addFace(true, 15, 8, vl, tl);
+                    this->addFace(true, 15, 8);
                 if (westWallUp)
-                    this->addFace(false, 13, 5, vl, tl);
+                    this->addFace(false, 13, 5);
                 if (eastWallDown)
-                    this->addFace(true, 4, 6, vl, tl);
+                    this->addFace(true, 4, 6);
                 if (eastWallUp)
-                    this->addFace(false, 6, 1, vl, tl);
+                    this->addFace(false, 6, 1);
             } break;
             case CARDINAL::WEST: { // OK
-                this->addFace(false, 34, 0, vl, tl);
-                this->addFace(false, 35, 1, vl, tl);
+                this->addFace(false, 34, 0);
+                this->addFace(false, 35, 1);
 
                 if (northWallDown)
-                    this->addFace(true, 3, 8, vl, tl);
+                    this->addFace(true, 3, 8);
                 if (northWallUp)
-                    this->addFace(false, 1, 5, vl, tl);
+                    this->addFace(false, 1, 5);
                 if (southWallDown)
-                    this->addFace(true, 8, 2, vl, tl);
+                    this->addFace(true, 8, 2);
                 if (southWallUp)
-                    this->addFace(false, 10, 1, vl, tl);
+                    this->addFace(false, 10, 1);
 
             } break;
             default:
@@ -375,58 +375,58 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std
     } else {
         switch (card) { // OK
             case CARDINAL::NORTH: {
-                this->addFace(true, 32, 2, vl, tl);
-                this->addFace(true, 33, 3, vl, tl);
+                this->addFace(true, 32, 2);
+                this->addFace(true, 33, 3);
 
                 if (westWallDown)
-                    this->addFace(true, 13, 9, vl, tl);
+                    this->addFace(true, 13, 9);
                 if (westWallUp)
-                    this->addFace(false, 15, 4, vl, tl);
+                    this->addFace(false, 15, 4);
                 if (eastWallDown)
-                    this->addFace(true, 6, 3, vl, tl);
+                    this->addFace(true, 6, 3);
                 if (eastWallUp)
-                    this->addFace(false, 4, 0, vl, tl);
+                    this->addFace(false, 4, 0);
 
             } break;
             case CARDINAL::EAST:
-                this->addFace(true, 34, 2, vl, tl);
-                this->addFace(true, 35, 3, vl, tl);
+                this->addFace(true, 34, 2);
+                this->addFace(true, 35, 3);
 
                 if (northWallDown)
-                    this->addFace(true, 1, 9, vl, tl); // ok
+                    this->addFace(true, 1, 9);
                 if (northWallUp)
-                    this->addFace(false, 3, 4, vl, tl); // ok
+                    this->addFace(false, 3, 4);
                 if (southWallDown)
-                    this->addFace(true, 10, 3, vl, tl); // ok
+                    this->addFace(true, 10, 3);
                 if (southWallUp)
-                    this->addFace(false, 8, 0, vl, tl); // ok
+                    this->addFace(false, 8, 0);
 
                 break;
             case CARDINAL::SOUTH: {
-                this->addFace(true, 28, 2, vl, tl);
-                this->addFace(true, 29, 3, vl, tl);
+                this->addFace(true, 28, 2);
+                this->addFace(true, 29, 3);
 
                 if (westWallDown)
-                    this->addFace(true, 14, 3, vl, tl); // ok
+                    this->addFace(true, 14, 3);
                 if (westWallUp)
-                    this->addFace(false, 12, 0, vl, tl); // ok
+                    this->addFace(false, 12, 0);
                 if (eastWallDown)
-                    this->addFace(true, 5, 9, vl, tl); // ok
+                    this->addFace(true, 5, 9);
                 if (eastWallUp)
-                    this->addFace(false, 7, 4, vl, tl);
+                    this->addFace(false, 7, 4);
             } break;
             case CARDINAL::WEST: {
-                this->addFace(true, 30, 2, vl, tl);
-                this->addFace(true, 31, 3, vl, tl);
+                this->addFace(true, 30, 2);
+                this->addFace(true, 31, 3);
 
                 if (northWallDown)
-                    this->addFace(true, 2, 3, vl, tl); // ok
+                    this->addFace(true, 2, 3);
                 if (northWallUp)
-                    this->addFace(false, 0, 0, vl, tl); // ok
+                    this->addFace(false, 0, 0);
                 if (southWallDown)
-                    this->addFace(true, 9, 9, vl, tl); // ok
+                    this->addFace(true, 9, 9);
                 if (southWallUp)
-                    this->addFace(false, 11, 4, vl, tl); // ok
+                    this->addFace(false, 11, 4);
 
             } break;
             default:
@@ -435,7 +435,7 @@ void Cube::newRamp(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std
     }
 }
 
-void Cube::newDiag(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newDiag() {
 
     // get side
     CARDINAL card = this->emptyQuadrantDiag(DEEP::MIDDLE, false);
@@ -443,23 +443,23 @@ void Cube::newDiag(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
     switch (card) {
         case CARDINAL::SOUTH_WEST:
             // ne (diag. sup. dir.)
-            this->addFace(false, 24, 0, vl, tl);
-            this->addFace(false, 25, 1, vl, tl);
+            this->addFace(false, 24, 0);
+            this->addFace(false, 25, 1);
             break;
         case CARDINAL::NORTH_WEST:
             // se (diag. inf. dir.)
-            this->addFace(true, 26, 2, vl, tl);
-            this->addFace(true, 27, 3, vl, tl);
+            this->addFace(true, 26, 2);
+            this->addFace(true, 27, 3);
             break;
         case CARDINAL::NORTH_EAST:
             // sw (diag. inf. esq.)
-            this->addFace(true, 24, 2, vl, tl);
-            this->addFace(true, 25, 3, vl, tl);
+            this->addFace(true, 24, 2);
+            this->addFace(true, 25, 3);
             break;
         case CARDINAL::SOUTH_EAST:
             // nw (diag. sup. esq.)
-            this->addFace(false, 26, 0, vl, tl);
-            this->addFace(false, 27, 1, vl, tl);
+            this->addFace(false, 26, 0);
+            this->addFace(false, 27, 1);
             break;
         default:
             break;
@@ -467,133 +467,135 @@ void Cube::newDiag(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
 
     // floor of wall diag
     if (this->hasNeighbor(DEEP::MIDDLE, card, SPACE::FLOOR) == true)
-        newFlatFloorCeeling(true, card, vl, tl);
+        newFlatFloorCeeling(true, card);
 
     // ceeling of wall diag
     if (this->hasNeighbor(DEEP::MIDDLE, card, SPACE::CEILING) == true)
-        newFlatFloorCeeling(false, card, vl, tl);
+        newFlatFloorCeeling(false, card);
 
     if (this->hasNeighbor(DEEP::MIDDLE, card, SPACE::FC) == true) {
-        newFlatFloorCeeling(true, card, vl, tl);
-        newFlatFloorCeeling(false, card, vl, tl);
+        newFlatFloorCeeling(true, card);
+        newFlatFloorCeeling(false, card);
     }
 }
 
-void Cube::newFloor(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newFloor() {
 
     CARDINAL card = CARDINAL::NONE;
     if ((this->pBottom != nullptr) && (this->pBottom->getSpace() == SPACE::DIAG))
         card = this->emptyQuadrantDiag(DEEP::BOTTOM, true);
 
-    this->newFlatFloorCeeling(true, card, vl, tl);
+    this->newFlatFloorCeeling(true, card);
 }
 
-void Cube::newCeeling(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newCeeling() {
 
     CARDINAL card = CARDINAL::NONE;
     if ((this->pUp != nullptr) && (this->pUp->getSpace() == SPACE::DIAG))
         card = this->emptyQuadrantDiag(DEEP::UP, true);
 
-    this->newFlatFloorCeeling(false, card, vl, tl);
+    this->newFlatFloorCeeling(false, card);
 }
 
-void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card) {
 
     if (isFloor) {
         switch (card) {
             case CARDINAL::SOUTH_WEST:
-                this->addFace(false, 23, 4, vl, tl);
+                this->addFace(false, 23, 4);
                 break;
             case CARDINAL::NORTH_WEST:
-                this->addFace(false, 22, 1, vl, tl);
+                this->addFace(false, 22, 1);
                 break;
             case CARDINAL::NORTH_EAST:
-                this->addFace(false, 21, 5, vl, tl);
+                this->addFace(false, 21, 5);
                 break;
             case CARDINAL::SOUTH_EAST:
-                this->addFace(false, 20, 0, vl, tl);
+                this->addFace(false, 20, 0);
                 break;
             default:
-                this->addFace(false, 20, 0, vl, tl);
-                this->addFace(false, 22, 1, vl, tl);
+                this->addFace(false, 20, 0);
+                this->addFace(false, 22, 1);
                 break;
         }
     } else {
         switch (card) {
             case CARDINAL::SOUTH_WEST:
-                this->addFace(false, 16, 0, vl, tl); // ok
+                this->addFace(false, 16, 0);
                 break;
             case CARDINAL::NORTH_WEST:
-                this->addFace(false, 17, 5, vl, tl); // ok
+                this->addFace(false, 17, 5);
                 break;
             case CARDINAL::NORTH_EAST:
-                this->addFace(false, 18, 1, vl, tl);
+                this->addFace(false, 18, 1);
                 break;
             case CARDINAL::SOUTH_EAST:
-                this->addFace(false, 19, 4, vl, tl);
+                this->addFace(false, 19, 4);
                 break;
             default:
-                this->addFace(false, 16, 0, vl, tl);
-                this->addFace(false, 18, 1, vl, tl);
+                this->addFace(false, 16, 0);
+                this->addFace(false, 18, 1);
                 break;
         }
     }
 }
 
-void Cube::newRampNSEW(SPACE space, std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::newRampNSEW(SPACE space) {
 
     if (space == SPACE::RAMP_FNS) {
         if ((pNorth != nullptr) && (pNorth->emptySpace())) {
 
             bool isFloor = (pNorth->getSpace() == SPACE::FLOOR);
-            this->newRamp(isFloor, CARDINAL::SOUTH, vl, tl);
+            this->newRamp(isFloor, CARDINAL::SOUTH);
 
         } else if ((pSouth != nullptr) && (pSouth->emptySpace())) {
 
             bool isFloor = (pSouth->getSpace() == SPACE::FLOOR);
-            this->newRamp(isFloor, CARDINAL::NORTH, vl, tl);
+            this->newRamp(isFloor, CARDINAL::NORTH);
         }
 
     } else if (space == SPACE::RAMP_FEW) {
         if ((pEast != nullptr) && (pEast->emptySpace())) {
 
             bool isFloor = (pEast->getSpace() == SPACE::FLOOR);
-            this->newRamp(isFloor, CARDINAL::WEST, vl, tl);
+            this->newRamp(isFloor, CARDINAL::WEST);
 
         } else if ((pWest != nullptr) && (pWest->emptySpace())) {
 
             bool isFloor = (pWest->getSpace() == SPACE::FLOOR);
-            this->newRamp(isFloor, CARDINAL::EAST, vl, tl);
+            this->newRamp(isFloor, CARDINAL::EAST);
         }
     }
 }
 
-void Cube::create(std::vector<VertexData>& vl, std::vector<Triangle>& tl) {
+void Cube::create(std::vector<VertexData>* vl, std::vector<Triangle>* tl) {
+    this->vl = vl;
+    this->tl = tl;
 
     SPACE val = this->getSpace();
     switch (val) {
         case SPACE::EMPTY:
-            this->newWall(vl, tl);
+            this->newWall();
             break;
         case SPACE::FLOOR: {
-            this->newWall(vl, tl);
-            this->newFloor(vl, tl);
+            this->newWall();
+            this->newFloor();
         } break;
         case SPACE::CEILING: {
-            this->newWall(vl, tl);
-            this->newCeeling(vl, tl);
+            this->newWall();
+            this->newCeeling();
         } break;
         case SPACE::FC: {
-            this->newWall(vl, tl);
-            this->newFloor(vl, tl);
-            this->newCeeling(vl, tl);
+            this->newWall();
+            this->newFloor();
+            this->newCeeling();
         } break;
         case SPACE::DIAG: {
-            this->newDiag(vl, tl);
+            this->newDiag();
         } break;
         case SPACE::RAMP_FNS:
         case SPACE::RAMP_FEW:
-            this->newRampNSEW(val, vl, tl);
+            this->newRampNSEW(val);
             break;
         default:
             break;

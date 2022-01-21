@@ -1,5 +1,5 @@
 #type vertex
-#version 300 es
+#version 440 core
 
 // set: ShadowMappingDepth.frag and ShadowMappingDepth.vert
 // Render Shadowmap
@@ -13,7 +13,7 @@ void main() { gl_Position = lightSpaceMatrix * model * vec4(position, 1.0f); }
 
 //----
 #type fragment
-#version 300 es
+#version 440 core
 
 // set: ShadowMappingDepth.frag and ShadowMappingDepth.vert
 // Render Shadowmap

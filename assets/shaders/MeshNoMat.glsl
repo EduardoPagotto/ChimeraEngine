@@ -1,5 +1,5 @@
 #type vertex
-#version 300 es
+#version 440 core
 // set: MeshNoMat.frag and MeshNoMat.vert
 // Render Mesh with texture and without material set
 
@@ -28,7 +28,7 @@ void main() {
 //---
 
 #type fragment
-#version 300 es
+#version 440 core
 // set: MeshNoMat.frag and MeshNoMat.vert
 // Render Mesh with texture and without material set
 

@@ -1,5 +1,5 @@
 #type vertex
-#version 330 core
+#version 440 core
 
 // set: CanvasHMD.frag and CanvasHMD.vert
 // used: Class CanvasHMD
@@ -17,7 +17,7 @@ void main() {
 }
 //----
 #type fragment
-#version 330 core
+#version 440 core
 
 // set: CanvasHMD.frag and CanvasHMD.vert
 // used: Class CanvasHMD

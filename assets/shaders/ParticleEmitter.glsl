@@ -1,5 +1,5 @@
 #type vertex
-#version 300 es
+#version 440 core
 
 // set: ParticleEmitter.frag and ParticleEmitter.vert
 // used: Class ParticleEmitter to app models
@@ -40,7 +40,7 @@ void main() {
 }
 //---
 #type fragment
-#version 300 es
+#version 440 core
 
 // set: ParticleEmitter.frag and ParticleEmitter.vert
 // used: Class ParticleEmitter to app models

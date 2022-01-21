@@ -1,5 +1,5 @@
 #type vertex
-#version 300 es
+#version 440 core
 // set: MeshFullShadow.frag and MeshFullShadow.vert
 // Render Texture, material shadows
 
@@ -31,7 +31,7 @@ void main() {
 //---
 
 #type fragment
-#version 300 es
+#version 440 core
 // set: MeshFullShadow.frag and MeshFullShadow.vert
 // Render Texture, material shadows
 

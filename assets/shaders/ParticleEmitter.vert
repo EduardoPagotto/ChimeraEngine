@@ -1,4 +1,3 @@
-#type vertex
 #version 440 core
 
 // set: ParticleEmitter.frag and ParticleEmitter.vert
@@ -37,34 +36,4 @@ void main() {
     // UV of the vertex. No special space for this one.
     UV = squareVertices.xy + vec2(0.5, 0.5);
     particlecolor = color;
-}
-//---
-#type fragment
-#version 440 core
-
-// set: ParticleEmitter.frag and ParticleEmitter.vert
-// used: Class ParticleEmitter to app models
-// Render Particle emitter
-
-precision mediump float;
-
-#include MaterialDef.glsl
-
-uniform Material material;
-uniform int tipo;
-
-// Interpolated values from the vertex shaders
-in vec2 UV;
-in vec4 particlecolor;
-
-// Ouput data
-out vec4 color;
-
-uniform sampler2D myTextureSampler;
-
-void main() {
-    if (tipo == 1)
-        color = texture(material.tDiffuse, UV) * particlecolor;
-    else
-        color = texture(material.tDiffuse, UV) * particlecolor;
 }

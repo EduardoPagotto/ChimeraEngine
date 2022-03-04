@@ -50,7 +50,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         Material& material = renderableEntity.addComponent<Material>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
-        ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
+        std::unordered_map<GLenum, std::string> shadeData;
+        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshFullShadow.frag";
+        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
+        ShaderManager::load("MeshFullShadow", shadeData, shader);
 
         material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
         material.setShine(50.0f);
@@ -85,7 +88,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         material.setShine(50.0f);
 
         Shader& shader = renderableEntity.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader); // colocar shader em material
+        std::unordered_map<GLenum, std::string> shadeData;
+        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshFullShadow.frag";
+        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
+        ShaderManager::load("MeshFullShadow", shadeData, shader); // colocar shader em material
 
         Mesh& mesh = renderableEntity.addComponent<Mesh>();
         loadObjFile("./assets/models/cubo2.obj", &mesh, &material);

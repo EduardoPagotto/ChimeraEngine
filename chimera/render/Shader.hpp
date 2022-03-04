@@ -73,13 +73,16 @@ class Shader {
 
   public:
     Shader() = default;
+    // Shader(const std::string& name, const GLuint& id) : name(name), shaderId(id) {}
     Shader(const Shader& other) : shaderId(other.shaderId), name(other.name) {}
     virtual ~Shader() = default;
 
-    inline void enable() const { glUseProgram(this->shaderId); }
-    static void disable() { glUseProgram(0); }
-    inline const std::string getName() const { return name; }
-    GLint getUniform(const char* _varName) const noexcept;
+    inline void enable() const { glUseProgram(this->shaderId); } // TODO: const GLuint apply() const {return this->shaderId} ;
+    static void disable() { glUseProgram(0); }                   // TODO: remover metodo
+    // TODO: criar inline invalidade() {}
+    // inline const std::string getName() const { return name; }
+
+    const GLint getUniform(const char* _varName) const noexcept;
     void setUniform(const char* name, float val) const { glUniform1f(getUniform(name), val); }
     void setUniform(const char* name, int val) const { glUniform1i(getUniform(name), val); }
     void setUniform(const char* name, const glm::vec2& vec) const { glUniform2f(getUniform(name), vec.x, vec.y); }
@@ -104,12 +107,12 @@ class Shader {
     void setUniformArray(const char* name, int size, glm::vec4* val) const { glUniform4fv(getUniform(name), size, glm::value_ptr(*val)); }
     void setUniformArray(const char* name, int size, glm::ivec4* val) const { glUniform4iv(getUniform(name), size, glm::value_ptr(*val)); }
     inline const bool isInvalid() const { return shaderId == 0; }
-    bool operator==(const Shader& other) const { return shaderId == other.shaderId; } //&& name == other.name; }
+    bool operator==(const Shader& other) const { return shaderId == other.shaderId; }
     bool operator!=(const Shader& other) const { return !(*this == other); }
 
   private:
     GLuint shaderId = 0;
-    std::string name = "invalid";
+    std::string name = "invalid"; // TODO: remover!!!!!
 };
 //---
 class UniformVal {
@@ -164,8 +167,8 @@ class UniformMapped {
 //---
 class ShaderManager {
   public:
-    static void load(const std::string& filepath, Shader& shader);
-    static bool get(const std::string& name, Shader& shader);
+    static void load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader);
+    static const Shader get(const std::string& name);
     static bool remove(Shader& shader);
     static void clear();
 

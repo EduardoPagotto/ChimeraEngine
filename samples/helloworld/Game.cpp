@@ -37,7 +37,10 @@ void Game::onAttach() {
                              // video 103 finaliza o pick mouse
                              // colocar para rodar o scene como renderbuffer!!!!!!!!!
 
-    ShaderManager::load("./assets/shaders/Basic2D.glsl", shader);
+    std::unordered_map<GLenum, std::string> shadeData;
+    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
+    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
+    ShaderManager::load("Basic2D", shadeData, shader);
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

@@ -16,9 +16,7 @@ void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB) {
     }
 }
 
-std::string utilReadFile(const std::string& filepath) {
-
-    std::string result;
+void utilsReadFile(const std::string& filepath, std::string& result) {
     std::ifstream in(filepath, std::ios::in | std::ios::binary);
     if (in) {
         in.seekg(0, std::ios::end);
@@ -30,8 +28,6 @@ std::string utilReadFile(const std::string& filepath) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "File \"%s\" not found.", filepath.c_str());
         throw Exception("File not found: " + std::string(filepath));
     }
-
-    return result;
 }
 
 std::string extractNameByFile(const std::string& filepath) {

@@ -24,7 +24,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     { // FPS
         Shader shader;
-        ShaderManager::load("./assets/shaders/Text2D.glsl", shader);
+        std::unordered_map<GLenum, std::string> shadeData;
+        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Text2D.frag";
+        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Text2D.vert";
+        ShaderManager::load("Text2D", shadeData, shader);
+
         tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(512.0, -1.0f, 1.0f));
 
         FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
@@ -57,7 +61,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
             Entity e = Entity{entity, &activeScene.getRegistry()};
             // Adiciona o shader
             Shader& shader = e.addComponent<Shader>();
-            ShaderManager::load("./assets/shaders/MeshFullShadow.glsl", shader);
+            std::unordered_map<GLenum, std::string> shadeData;
+            shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshFullShadow.frag";
+            shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
+            ShaderManager::load("MeshFullShadow", shadeData, shader);
         }
 
         // Localiza objeto como o primario //EfeitoZoltan-mesh
@@ -78,7 +85,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         material.init();
 
         Shader& shader = re.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/ParticleEmitter.glsl", shader);
+        std::unordered_map<GLenum, std::string> shadeData;
+        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ParticleEmitter.frag";
+        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ParticleEmitter.vert";
+        ShaderManager::load("ParticleEmitter", shadeData, shader);
 
         ParticleContainer& pc = re.addComponent<ParticleContainer>();
         pc.life = 4.0f;

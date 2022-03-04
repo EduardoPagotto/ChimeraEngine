@@ -17,12 +17,12 @@ static GLenum shaderTypeFromString(const std::string type) {
     return 0;
 }
 
-static GLuint compileShader(const std::string& shaderCode, uint16_t kindShade) {
+static GLuint compileShader(const std::string& fileName, const std::string& shaderCode, uint16_t kindShade) {
 
     GLint Result = GL_FALSE;
     int InfoLogLength;
 
-    GLuint shaderID = -1;
+    GLuint shaderID = 0;
     shaderID = glCreateShader(kindShade);
 
     char const* sourcePointer = shaderCode.c_str();
@@ -37,8 +37,10 @@ static GLuint compileShader(const std::string& shaderCode, uint16_t kindShade) {
         if (InfoLogLength > 0) {
             std::vector<char> shaderErrorMessage(InfoLogLength + 1);
             glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &shaderErrorMessage[0]);
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check Fragment Shader: %s", std::string(&shaderErrorMessage[0]).c_str());
-            throw Exception(std::string("compileShader Fail: ") + shaderCode);
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s compile error: %s", fileName.c_str(),
+                         std::string(&shaderErrorMessage[0]).c_str());
+
+            throw Exception(std::string("Shader compile fail: ") + shaderCode);
         }
     }
 
@@ -125,7 +127,7 @@ static GLuint shadeLoadProg(const std::string& filepath) {
     for (auto& kv : shaderSources) {
         GLenum type = kv.first;
         const std::string source = kv.second;
-        vecShaderID.push_back(compileShader(source, type)); // compile chade
+        vecShaderID.push_back(compileShader(filepath, source, type)); // compile chade
     }
 
     GLuint shaderId = linkShader(vecShaderID); // Link o programa
@@ -136,7 +138,9 @@ static GLuint shadeLoadProg(const std::string& filepath) {
     return shaderId;
 }
 
-GLint Shader::getUniform(const char* _varName) const noexcept {
+//----
+
+const GLint Shader::getUniform(const char* _varName) const noexcept {
     GLint loc = glGetUniformLocation(shaderId, _varName);
     if (loc == -1)
         SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _varName, name.c_str());
@@ -192,28 +196,41 @@ void UniformMapped::clear() { uniformMap.clear(); }
 //---
 std::vector<Shader> ShaderManager::shaders;
 
-void ShaderManager::load(const std::string& filepath, Shader& shader) {
+void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) {
 
-    if (ShaderManager::get(extractNameByFile(filepath), shader))
-        return;
+    Shader s = ShaderManager::get(name);
+    if (s.isInvalid()) {
 
-    shader.shaderId = shadeLoadProg(filepath);
-    shader.name = extractNameByFile(filepath);
+        std::vector<GLuint> vecShaderID;
+        for (auto& kv : mFiles) {
+            std::string source;
+            utilsReadFile(kv.second, source);
 
-    ShaderManager::shaders.push_back(shader);
+            vecShaderID.push_back(compileShader(name, source, kv.first)); // compile chade
+        }
+
+        shader.name = name;
+        shader.shaderId = linkShader(vecShaderID); // Link o programa
+
+        vecShaderID.clear();
+
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", name.c_str(), (int)shader.shaderId);
+
+        ShaderManager::shaders.push_back(shader);
+    } else {
+        shader = s;
+    }
 }
 
-bool ShaderManager::get(const std::string& name, Shader& shader) {
+const Shader ShaderManager::get(const std::string& name) {
 
     for (auto it = shaders.begin(); it != shaders.end(); it++) {
         if (it->name == name) {
-            shader.shaderId = it->shaderId;
-            shader.name = it->name;
-            return true;
+            return *it;
         }
     }
 
-    return false;
+    return Shader();
 }
 
 bool ShaderManager::remove(Shader& shader) {
@@ -236,5 +253,4 @@ void ShaderManager::clear() {
 
     shaders.clear();
 }
-
 } // namespace Chimera

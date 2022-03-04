@@ -31,7 +31,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
         Material& material = renderableEntity.addComponent<Material>();
         Shader& shader = renderableEntity.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
+
+        std::unordered_map<GLenum, std::string> shadeData;
+        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshNoMat.frag";
+        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
+        ShaderManager::load("MeshNoMat", shadeData, shader);
 
         Mesh& mesh = renderableEntity.addComponent<Mesh>();
 

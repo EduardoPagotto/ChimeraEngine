@@ -26,7 +26,10 @@ Scene::~Scene() {
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
     // Define o framebuffer de desenho
     Shader shader;
-    ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
+    std::unordered_map<GLenum, std::string> shadeData;
+    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/CanvasHMD.frag";
+    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/CanvasHMD.vert";
+    ShaderManager::load("CanvasHMD", shadeData, shader);
 
     FrameBufferSpecification fbSpec;
     fbSpec.attachments = {

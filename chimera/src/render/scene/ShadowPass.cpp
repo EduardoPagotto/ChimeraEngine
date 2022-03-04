@@ -6,7 +6,11 @@ namespace Chimera {
 
 ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm::mat4& projection) {
     // Create ShadowPass
-    ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", this->shader);
+    std::unordered_map<GLenum, std::string> shadeData;
+    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ShadowMappingDepth.frag";
+    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ShadowMappingDepth.vert";
+    ShaderManager::load("ShadowMappingDepth", shadeData, this->shader);
+
     // Define o framebuffer de Shadow
     FrameBufferSpecification fbSpec;
     fbSpec.attachments = {

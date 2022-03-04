@@ -62,14 +62,14 @@ void Renderer3d::flush() {
 
                 if (activeShader.isInvalid()) { // primeira passada
                     activeShader = command.shader;
-                    activeShader.enable();
+                    glUseProgram(activeShader.getID());
                 } else {
                     // demais passadas
                     if (activeShader != command.shader) {  // se diferente
                         if (!command.shader.isInvalid()) { // se valido trocar
-                            activeShader.disable();
+                            glUseProgram(0);
                             activeShader = command.shader;
-                            activeShader.enable();
+                            glUseProgram(activeShader.getID());
                         }
                     }
                 }

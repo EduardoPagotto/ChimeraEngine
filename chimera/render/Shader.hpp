@@ -15,11 +15,9 @@ class Shader {
 
   public:
     Shader() = default;
-    Shader(const Shader& other) : shaderId(other.shaderId), name(other.name) {}
+    Shader(const Shader& other) : pgmId(other.pgmId) {}
     virtual ~Shader() = default;
-
-    inline void enable() const { glUseProgram(this->shaderId); } // TODO: const GLuint apply() const {return this->shaderId} ;
-    static void disable() { glUseProgram(0); }                   // TODO: remover metodo
+    inline const GLuint getID() const { return this->pgmId; }
     inline void invalidade();
     const GLint getUniform(const char* _varName) const noexcept;
     void setUniform(const char* name, float val) const { glUniform1f(getUniform(name), val); }
@@ -36,7 +34,6 @@ class Shader {
     void setUniform(const char* name, const glm::mat4& mat) const {
         glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, glm::value_ptr(mat));
     }
-
     void setUniformArray(const char* name, int size, float* val) const { glUniform1fv(getUniform(name), size, val); }
     void setUniformArray(const char* name, int size, int* val) const { glUniform1iv(getUniform(name), size, val); }
     void setUniformArray(const char* name, int size, glm::vec2* val) const { glUniform2fv(getUniform(name), size, glm::value_ptr(*val)); }
@@ -45,13 +42,12 @@ class Shader {
     void setUniformArray(const char* name, int size, glm::ivec3* val) const { glUniform3iv(getUniform(name), size, glm::value_ptr(*val)); }
     void setUniformArray(const char* name, int size, glm::vec4* val) const { glUniform4fv(getUniform(name), size, glm::value_ptr(*val)); }
     void setUniformArray(const char* name, int size, glm::ivec4* val) const { glUniform4iv(getUniform(name), size, glm::value_ptr(*val)); }
-    inline const bool isInvalid() const { return shaderId == 0; }
-    bool operator==(const Shader& other) const { return shaderId == other.shaderId; }
+    inline const bool isInvalid() const { return pgmId == 0; }
+    bool operator==(const Shader& other) const { return pgmId == other.pgmId; }
     bool operator!=(const Shader& other) const { return !(*this == other); }
 
   private:
-    GLuint shaderId = 0;
-    std::string name = "invalid"; // TODO: remover!!!!!
+    GLuint pgmId = 0;
 };
 //---
 class UniformVal {

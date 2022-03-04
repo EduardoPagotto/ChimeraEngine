@@ -74,15 +74,14 @@ static GLuint linkShader(const std::vector<GLuint>& vecShaderID) {
 //----
 
 void Shader::invalidade() {
-    glDeleteProgram(shaderId);
-    shaderId = 0;
-    name = "invalid";
+    glDeleteProgram(pgmId);
+    pgmId = 0;
 }
 
 const GLint Shader::getUniform(const char* _varName) const noexcept {
-    GLint loc = glGetUniformLocation(shaderId, _varName);
+    GLint loc = glGetUniformLocation(pgmId, _varName);
     if (loc == -1)
-        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%s\"", _varName, name.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", _varName, pgmId);
 
     return loc;
 }
@@ -144,20 +143,17 @@ void ShaderManager::load(const std::string& name, const std::unordered_map<GLenu
         for (auto& kv : mFiles) {
             std::string source;
             utilsReadFile(kv.second, source);
-
             vecShaderID.push_back(compileShader(name, source, kv.first)); // compile chade
         }
 
-        shader.name = name;
-        shader.shaderId = linkShader(vecShaderID); // Link o programa
-
+        shader.pgmId = linkShader(vecShaderID); // Link o programa
         vecShaderID.clear();
-
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", name.c_str(), (int)shader.shaderId);
-
         ShaderManager::mShaders[name] = shader;
+
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "New Shader %s id: %d", name.c_str(), (int)shader.pgmId);
     } else {
         shader = s;
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dup Shader %s id: %d", name.c_str(), (int)shader.pgmId);
     }
 }
 

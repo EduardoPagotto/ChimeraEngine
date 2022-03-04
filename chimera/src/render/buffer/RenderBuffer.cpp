@@ -38,7 +38,7 @@ void RenderBuffer::render() {
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
     glViewport(posX, posY, frameBuffer->getWidth(), frameBuffer->getHeight());
 
-    shader.enable();
+    glUseProgram(shader.getID());
 
     // Bind our texture in Texture Unit 0
     frameBuffer->getColorAttachemnt(0)->bind(0); // getTexture()->bind(0);
@@ -50,6 +50,6 @@ void RenderBuffer::render() {
     // Draw the triangles !
     glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
     vbo->unbind();
-    shader.disable();
+    glUseProgram(0);
 }
 } // namespace Chimera

@@ -73,6 +73,12 @@ static GLuint linkShader(const std::vector<GLuint>& vecShaderID) {
 
 //----
 
+void Shader::invalidade() {
+    glDeleteProgram(shaderId);
+    shaderId = 0;
+    name = "invalid";
+}
+
 const GLint Shader::getUniform(const char* _varName) const noexcept {
     GLint loc = glGetUniformLocation(shaderId, _varName);
     if (loc == -1)
@@ -127,7 +133,7 @@ void UniformMapped::bindAll(const Shader& shader) const {
 void UniformMapped::clear() { uniformMap.clear(); }
 
 //---
-std::vector<Shader> ShaderManager::shaders;
+std::unordered_map<std::string, Shader> ShaderManager::mShaders;
 
 void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) {
 
@@ -149,7 +155,7 @@ void ShaderManager::load(const std::string& name, const std::unordered_map<GLenu
 
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s id: %d", name.c_str(), (int)shader.shaderId);
 
-        ShaderManager::shaders.push_back(shader);
+        ShaderManager::mShaders[name] = shader;
     } else {
         shader = s;
     }
@@ -157,33 +163,30 @@ void ShaderManager::load(const std::string& name, const std::unordered_map<GLenu
 
 const Shader ShaderManager::get(const std::string& name) {
 
-    for (auto it = shaders.begin(); it != shaders.end(); it++) {
-        if (it->name == name) {
-            return *it;
-        }
-    }
+    std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
+    if (got != ShaderManager::mShaders.end())
+        return got->second;
 
     return Shader();
 }
 
-bool ShaderManager::remove(Shader& shader) {
+bool ShaderManager::remove(const std::string& name) {
 
-    for (auto it = shaders.begin(); it != shaders.end(); it++) {
-        if (it->name == shader.name) {
-            glDeleteProgram(shader.shaderId);
-            shader.shaderId = 0;
-            return true;
-        }
+    std::unordered_map<std::string, Shader>::iterator got = ShaderManager::mShaders.find(name);
+    if (got != ShaderManager::mShaders.end()) {
+
+        got->second.invalidade();
+        ShaderManager::mShaders.erase(got);
+        return true;
     }
+
     return false;
 }
 
 void ShaderManager::clear() {
-    for (auto it = shaders.begin(); it != shaders.end(); it++) {
-        glDeleteProgram(it->shaderId);
-        it->shaderId = 0;
-    }
+    for (auto it = ShaderManager::mShaders.begin(); it != ShaderManager::mShaders.end(); it++)
+        it->second.invalidade();
 
-    shaders.clear();
+    ShaderManager::mShaders.clear();
 }
 } // namespace Chimera

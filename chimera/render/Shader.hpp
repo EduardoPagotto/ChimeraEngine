@@ -15,15 +15,12 @@ class Shader {
 
   public:
     Shader() = default;
-    // Shader(const std::string& name, const GLuint& id) : name(name), shaderId(id) {}
     Shader(const Shader& other) : shaderId(other.shaderId), name(other.name) {}
     virtual ~Shader() = default;
 
     inline void enable() const { glUseProgram(this->shaderId); } // TODO: const GLuint apply() const {return this->shaderId} ;
     static void disable() { glUseProgram(0); }                   // TODO: remover metodo
-    // TODO: criar inline invalidade() {}
-    // inline const std::string getName() const { return name; }
-
+    inline void invalidade();
     const GLint getUniform(const char* _varName) const noexcept;
     void setUniform(const char* name, float val) const { glUniform1f(getUniform(name), val); }
     void setUniform(const char* name, int val) const { glUniform1i(getUniform(name), val); }
@@ -111,10 +108,10 @@ class ShaderManager {
   public:
     static void load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader);
     static const Shader get(const std::string& name);
-    static bool remove(Shader& shader);
+    static bool remove(const std::string& name);
     static void clear();
 
   private:
-    static std::vector<Shader> shaders;
+    static std::unordered_map<std::string, Shader> mShaders;
 };
 } // namespace Chimera

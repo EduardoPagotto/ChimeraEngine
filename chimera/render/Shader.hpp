@@ -15,9 +15,9 @@ class Shader {
 
   public:
     Shader() = default;
-    Shader(const Shader& other) : pgmId(other.pgmId) {}
+    Shader(const Shader& other) : progID(other.progID) {}
     virtual ~Shader() = default;
-    inline const GLuint getID() const { return this->pgmId; }
+    inline const GLuint getID() const { return this->progID; }
     inline void invalidade();
     const GLint getUniform(const char* _varName) const noexcept;
     void setUniform(const char* name, float val) const { glUniform1f(getUniform(name), val); }
@@ -42,12 +42,12 @@ class Shader {
     void setUniformArray(const char* name, int size, glm::ivec3* val) const { glUniform3iv(getUniform(name), size, glm::value_ptr(*val)); }
     void setUniformArray(const char* name, int size, glm::vec4* val) const { glUniform4fv(getUniform(name), size, glm::value_ptr(*val)); }
     void setUniformArray(const char* name, int size, glm::ivec4* val) const { glUniform4iv(getUniform(name), size, glm::value_ptr(*val)); }
-    inline const bool isInvalid() const { return pgmId == 0; }
-    bool operator==(const Shader& other) const { return pgmId == other.pgmId; }
+    inline const bool isInvalid() const { return progID == 0; }
+    bool operator==(const Shader& other) const { return progID == other.progID; }
     bool operator!=(const Shader& other) const { return !(*this == other); }
 
   private:
-    GLuint pgmId = 0;
+    GLuint progID = 0;
 };
 //---
 class UniformVal {

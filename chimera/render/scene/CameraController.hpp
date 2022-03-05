@@ -7,8 +7,8 @@ namespace Chimera {
 class CameraController : public ScriptableEntity {
   public:
     CameraController() = default;
-    void onCreate();
-    void onDestroy();
+    void onCreate() override;
+    void onDestroy() override;
     void onUpdate(const double& ts) override;
 
   private:

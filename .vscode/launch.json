@@ -3,129 +3,51 @@
     "configurations": [
         {
             "name": "Models2",
-            "type": "cppdbg",
+            "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/models2",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "program": "${workspaceFolder}/bin/models2",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         },
         {
             "name": "HelloWorld",
-            "type": "cppdbg",
+            "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/helloworld",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "program": "${workspaceFolder}/bin/helloworld",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         },
         {
             "name": "Simples",
-            "type": "cppdbg",
+            "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/simples",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "program": "${workspaceFolder}/bin/simples",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         },
         {
             "name": "BSPTree",
-            "type": "cppdbg",
+            "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/bsptree",
-            "args": [
-                "-p",
-                "${workspaceRoot}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "program": "${workspaceFolder}/bin/bsptree",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         },
         {
             "name": "Raycasting",
-            "type": "cppdbg",
+            "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/raycasting",
+            "program": "${workspaceFolder}/bin/raycasting",
             "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "cwd": "${workspaceFolder}"
         },
         {
             "name": "Terrain",
-            "type": "cppdbg",
+            "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/terrain",
+            "program": "${workspaceFolder}/bin/terrain",
             "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

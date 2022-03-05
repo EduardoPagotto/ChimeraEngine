@@ -15,8 +15,8 @@ class CanvasGL : public Canvas {
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
 
-    virtual void swapWindow();
-    virtual int getTotEyes() { return 1; }
+    virtual void swapWindow() override;
+    virtual int getTotEyes() override { return 1; }
     virtual uint32_t* getPixels() override { return nullptr; }
 
     std::string getVersaoOpenGL();

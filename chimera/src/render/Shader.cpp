@@ -124,12 +124,11 @@ void UniformVal::setUniform(const Shader& shader) const {
 }
 
 //---
-void UniformMapped::set(const UniformVal& value) { uniformMap[value.getName()] = value; }
+
 void UniformMapped::bindAll(const Shader& shader) const {
     for (auto& kv : uniformMap)
         kv.second.setUniform(shader);
 }
-void UniformMapped::clear() { uniformMap.clear(); }
 
 //---
 std::unordered_map<std::string, Shader> ShaderManager::mShaders;

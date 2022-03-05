@@ -90,10 +90,10 @@ class UniformVal {
 
 class UniformMapped {
     UniformMapped() = default;
-    virtual ~UniformMapped() = default;
-    void set(const UniformVal& value);
+    virtual ~UniformMapped() { this->clear(); }
+    void set(const UniformVal& value) { uniformMap[value.getName()] = value; }
     void bindAll(const Shader& shader) const;
-    void clear();
+    void clear() { uniformMap.clear(); }
 
   private:
     std::unordered_map<std::string, UniformVal> uniformMap;

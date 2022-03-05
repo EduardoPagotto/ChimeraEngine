@@ -33,7 +33,7 @@ class CameraOrbit : public ICamera3D {
         distance = glm::distance(this->position, this->front);
         return distance;
     }
-    virtual const bool is3D() const { return true; };
+    virtual const bool is3D() const override { return true; };
     virtual EyeView* view() override { return &eye; }
 
   private:

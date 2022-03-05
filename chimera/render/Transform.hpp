@@ -27,9 +27,9 @@ class Transform : public ITrans {
     //     glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), _posicao); // matriz translacao
     //     transform = matRot * matTrans;                                  // primeiro translada depois rotaciona, ordem é importante!!!
     // }
-    virtual void setPosition(const glm::vec3& pos) { this->transform = glm::translate(this->transform, pos); }
-    virtual void setRotation(const glm::vec3& rot) { transform = glm::eulerAngleYXZ(rot.y, rot.x, rot.z); }
-    virtual void setMatrix(const glm::mat4& transform) { this->transform = transform; }
+    virtual void setPosition(const glm::vec3& pos) override { this->transform = glm::translate(this->transform, pos); }
+    virtual void setRotation(const glm::vec3& rot) override { transform = glm::eulerAngleYXZ(rot.y, rot.x, rot.z); }
+    virtual void setMatrix(const glm::mat4& transform) override { this->transform = transform; }
 
   private:
     glm::mat4 transform = glm::mat4(1.0f);

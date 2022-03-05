@@ -12,8 +12,8 @@ class Renderable3D : public IRenderable3d {
     virtual ~Renderable3D();
 
     virtual uint32_t getSize() const override { return vIndex.size(); }
-    virtual VertexArray* getVao() const { return vao; }
-    virtual IndexBuffer* getIBO() const { return ibo; }
+    virtual VertexArray* getVao() const override { return vao; }
+    virtual IndexBuffer* getIBO() const override { return ibo; }
     virtual const AABB& getAABB() const override { return aabb; }
     virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
     virtual void draw(const bool& logData) override;

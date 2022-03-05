@@ -22,7 +22,7 @@ class Scene : public IStateMachine {
     virtual void onRender() override;
     virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
-    virtual std::string getName() const { return "Scene"; }
+    virtual std::string getName() const override { return "Scene"; }
     void pushEmitters(IEmitter* e) { emitters.push_back(e); }
     void setOrigem(ITrans* o) { origem = o; }
     void setShadowPass(ShadowPass* shadowPass) { this->shadowPass = shadowPass; }

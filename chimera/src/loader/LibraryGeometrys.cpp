@@ -9,8 +9,8 @@ namespace Chimera {
 
 void LibraryGeometrys::target() {
 
-    tinyxml2::XMLElement* l_nGeo = root->FirstChildElement("library_geometries")->FirstChildElement("geometry");
-    for (l_nGeo; l_nGeo; l_nGeo = l_nGeo->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nGeo = root->FirstChildElement("library_geometries")->FirstChildElement("geometry"); l_nGeo != nullptr;
+         l_nGeo = l_nGeo->NextSiblingElement()) {
 
         std::string l_id = l_nGeo->Attribute("id");
         if (url.compare(l_id) == 0) {
@@ -51,8 +51,8 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh
     if (l_nMesh != nullptr) {
         meshData->singleIndex = false;
         // Carrega lista de vetores
-        tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement("source");
-        for (l_nSource; l_nSource; l_nSource = l_nSource->NextSiblingElement("source")) {
+        for (tinyxml2::XMLElement* l_nSource = l_nMesh->FirstChildElement("source"); l_nSource;
+             l_nSource = l_nSource->NextSiblingElement("source")) {
 
             const char* l_id = l_nSource->Attribute("id");
             if (strstr(l_id, (char*)"-positions") != nullptr) {
@@ -92,13 +92,12 @@ std::string LibraryGeometrys::loadMeshCollada(tinyxml2::XMLElement* _nNode, Mesh
 
             retorno.assign(l_mat);
 
-            tinyxml2::XMLElement* l_nInput = l_nPoly->FirstChildElement("input");
-
             std::vector<const char*> l_vOffset;
             std::vector<const char*> l_vSemantic;
             std::vector<const char*> l_vSource;
 
-            for (l_nInput; l_nInput; l_nInput = l_nInput->NextSiblingElement("input")) {
+            for (tinyxml2::XMLElement* l_nInput = l_nPoly->FirstChildElement("input"); l_nInput;
+                 l_nInput = l_nInput->NextSiblingElement("input")) {
 
                 const char* l_offSet = l_nInput->Attribute("offset");
                 const char* l_semantic = l_nInput->Attribute("semantic");

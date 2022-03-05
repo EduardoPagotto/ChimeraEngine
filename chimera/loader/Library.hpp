@@ -6,15 +6,6 @@
 
 namespace Chimera {
 
-struct ParamCollada {
-    std::string name;
-    std::string sid;
-    std::string type;
-    std::string value;
-};
-
-typedef std::vector<ParamCollada> VectorParam;
-
 class Library {
 
   public:
@@ -27,9 +18,6 @@ class Library {
   protected:
     static std::string getIdFromUrl(const std::string& _url);
     static tinyxml2::XMLElement* findExtra(tinyxml2::XMLElement* _nNode);
-
-    static int findParams(tinyxml2::XMLElement* _nNode, VectorParam* _pVectorParam);
-
     static void loadArrayBtScalar(const char* _val, std::vector<float>& _arrayF);
     static void loadArrayI(const char* _val, std::vector<int>& _arrayI);
 

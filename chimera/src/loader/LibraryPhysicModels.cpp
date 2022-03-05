@@ -8,14 +8,14 @@ namespace Chimera {
 
 void LibraryPhysicModels::target2(const std::string& body, const std::string target, Registry* reg) {
 
-    tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");
-    for (l_nPhyModel; l_nPhyModel; l_nPhyModel = l_nPhyModel->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nPhyModel = root->FirstChildElement("library_physics_models")->FirstChildElement("physics_model");
+         l_nPhyModel; l_nPhyModel = l_nPhyModel->NextSiblingElement()) {
 
         std::string l_id = l_nPhyModel->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            tinyxml2::XMLElement* l_nRigid = l_nPhyModel->FirstChildElement("rigid_body");
-            for (l_nRigid; l_nRigid; l_nRigid = l_nRigid->NextSiblingElement()) {
+            for (tinyxml2::XMLElement* l_nRigid = l_nPhyModel->FirstChildElement("rigid_body"); l_nRigid;
+                 l_nRigid = l_nRigid->NextSiblingElement()) {
 
                 std::string l_nNameRb = l_nRigid->Attribute("name");
                 if (l_nNameRb == body) {

@@ -5,8 +5,8 @@ namespace Chimera {
 
 PhysicMaterial* LibraryPhysicsMaterials::target() {
 
-    tinyxml2::XMLElement* l_nPyMat = root->FirstChildElement("library_physics_materials")->FirstChildElement("physics_material");
-    for (l_nPyMat; l_nPyMat; l_nPyMat = l_nPyMat->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nPyMat = root->FirstChildElement("library_physics_materials")->FirstChildElement("physics_material");
+         l_nPyMat; l_nPyMat = l_nPyMat->NextSiblingElement()) {
 
         std::string l_id = l_nPyMat->Attribute("id");
         if (url.compare(l_id) == 0) {

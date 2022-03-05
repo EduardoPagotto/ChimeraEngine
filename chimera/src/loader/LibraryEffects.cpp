@@ -13,8 +13,8 @@ LibraryEffects::~LibraryEffects() {}
 
 Material* LibraryEffects::target() {
 
-    tinyxml2::XMLElement* l_nEffect = root->FirstChildElement("library_effects")->FirstChildElement("effect");
-    for (l_nEffect; l_nEffect; l_nEffect = l_nEffect->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nEffect = root->FirstChildElement("library_effects")->FirstChildElement("effect"); l_nEffect != nullptr;
+         l_nEffect = l_nEffect->NextSiblingElement()) {
         std::string l_id = l_nEffect->Attribute("id");
         if (url.compare(l_id) == 0) {
 
@@ -74,8 +74,8 @@ Texture* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
 
 void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Material* _pMat) {
 
-    tinyxml2::XMLElement* l_nCor = _nProfile->FirstChildElement("technique")->FirstChildElement("phong")->FirstChildElement();
-    for (l_nCor; l_nCor; l_nCor = l_nCor->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nCor = _nProfile->FirstChildElement("technique")->FirstChildElement("phong")->FirstChildElement();
+         l_nCor != nullptr; l_nCor = l_nCor->NextSiblingElement()) {
 
         glm::vec4 l_valCor;
         const char* l_cor = l_nCor->Value();
@@ -140,8 +140,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Material* _pMat
 
 void LibraryEffects::loadNewParam(tinyxml2::XMLElement* _nProfile) {
 
-    tinyxml2::XMLElement* l_nParam = _nProfile->FirstChildElement("newparam");
-    for (l_nParam; l_nParam; l_nParam = l_nParam->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nParam = _nProfile->FirstChildElement("newparam"); l_nParam; l_nParam = l_nParam->NextSiblingElement()) {
         std::string sid = l_nParam->Attribute("sid");
 
         tinyxml2::XMLElement* l_nSurface = l_nParam->FirstChildElement("surface");

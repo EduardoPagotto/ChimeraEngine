@@ -7,8 +7,8 @@ namespace Chimera {
 
 void LibraryLights::target() {
 
-    tinyxml2::XMLElement* l_nLight = root->FirstChildElement("library_lights")->FirstChildElement("light");
-    for (l_nLight; l_nLight; l_nLight = l_nLight->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nLight = root->FirstChildElement("library_lights")->FirstChildElement("light"); l_nLight;
+         l_nLight = l_nLight->NextSiblingElement()) {
 
         std::string l_id = l_nLight->Attribute("id");
         if (url.compare(l_id) == 0) {

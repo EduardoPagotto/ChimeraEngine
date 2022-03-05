@@ -8,8 +8,8 @@ namespace Chimera {
 
 void LibraryPhysicsScenes::target() {
 
-    tinyxml2::XMLElement* l_nPhyScene = root->FirstChildElement("library_physics_scenes")->FirstChildElement("physics_scene");
-    for (l_nPhyScene; l_nPhyScene; l_nPhyScene = l_nPhyScene->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nPhyScene = root->FirstChildElement("library_physics_scenes")->FirstChildElement("physics_scene");
+         l_nPhyScene; l_nPhyScene = l_nPhyScene->NextSiblingElement()) {
 
         std::string l_id = l_nPhyScene->Attribute("id");
         if (url.compare(l_id) == 0) {
@@ -22,8 +22,8 @@ void LibraryPhysicsScenes::target() {
                 std::string l_url = l_nPyModel->Attribute("url");
 
                 std::map<std::string, Solid*> mapSolids;
-                tinyxml2::XMLElement* l_nRigid = l_nPyModel->FirstChildElement("instance_rigid_body");
-                for (l_nRigid; l_nRigid; l_nRigid = l_nRigid->NextSiblingElement()) {
+                for (tinyxml2::XMLElement* l_nRigid = l_nPyModel->FirstChildElement("instance_rigid_body"); l_nRigid;
+                     l_nRigid = l_nRigid->NextSiblingElement()) {
 
                     std::string body = l_nRigid->Attribute("body");
                     std::string target = l_nRigid->Attribute("target");

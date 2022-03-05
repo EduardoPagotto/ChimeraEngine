@@ -8,8 +8,8 @@ namespace Chimera {
 
 void LibraryCameras::target() {
 
-    tinyxml2::XMLElement* l_nCam = root->FirstChildElement("library_cameras")->FirstChildElement("camera");
-    for (l_nCam; l_nCam; l_nCam = l_nCam->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nCam = root->FirstChildElement("library_cameras")->FirstChildElement("camera"); l_nCam;
+         l_nCam = l_nCam->NextSiblingElement()) {
 
         std::string l_id = l_nCam->Attribute("id");
         if (url.compare(l_id) == 0) {

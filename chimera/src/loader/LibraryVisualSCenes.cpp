@@ -11,14 +11,13 @@ namespace Chimera {
 
 void LibraryVisualScenes::target() {
 
-    tinyxml2::XMLElement* l_nScene = root->FirstChildElement("library_visual_scenes")->FirstChildElement("visual_scene");
-    for (l_nScene; l_nScene; l_nScene = l_nScene->NextSiblingElement()) {
+    for (tinyxml2::XMLElement* l_nScene = root->FirstChildElement("library_visual_scenes")->FirstChildElement("visual_scene"); l_nScene;
+         l_nScene = l_nScene->NextSiblingElement()) {
 
         std::string l_id = l_nScene->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            tinyxml2::XMLElement* l_nNode = l_nScene->FirstChildElement("node");
-            for (l_nNode; l_nNode; l_nNode = l_nNode->NextSiblingElement()) {
+            for (tinyxml2::XMLElement* l_nNode = l_nScene->FirstChildElement("node"); l_nNode; l_nNode = l_nNode->NextSiblingElement()) {
 
                 const char* l_idR = l_nNode->Attribute("id");
                 const char* l_name = l_nNode->Attribute("name");
@@ -58,7 +57,7 @@ glm::mat4 LibraryVisualScenes::getTransformation(tinyxml2::XMLElement* _nNode) {
 void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* _id, const char* _name, const char* type) {
 
     glm::mat4 l_pTransform;
-    // Node* pLastNodeDone = nullptr;
+    // Node* pLastNodeDone = nullptr; // FIXME: quando for fazer o node
 
     for (_nNode; _nNode; _nNode = _nNode->NextSiblingElement()) {
 

@@ -149,9 +149,10 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
     float propBC = 0.0;
-
-    // ultima posicao de indice de vertices
-    unsigned int last = vVertex.size();
+    // indices de triangulos novos
+    uint32_t p[9];
+    for (uint8_t i = 0; i < 9; i++)
+        p[i] = vVertex.size() + i;
 
     // Vertex dos triangulos a serem normalizados
     VertexData vertA, vertB, vertC;
@@ -202,24 +203,24 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     vVertex.push_back({a, vertA.normal, vertA.texture}); // T1 PA
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T1 PB
     vVertex.push_back({A, vertA.normal, texA});          // T1 PC
-    _vTriangle.push_front(new Triangle(last++, last++, last++, normal, _pTriangle->splitter));
+    _vTriangle.push_front(new Triangle(p[0], p[1], p[2], normal, _pTriangle->splitter));
 
     //-- T2 Triangle T2(b, B, A);
     vVertex.push_back({b, vertB.normal, vertB.texture}); // T2 PA
     vVertex.push_back({B, vertB.normal, texB});          // T2 PB
     vVertex.push_back({A, vertA.normal, texA});          // T2 PC
-    _vTriangle.push_front(new Triangle(last++, last++, last++, normal, _pTriangle->splitter));
+    _vTriangle.push_front(new Triangle(p[3], p[4], p[5], normal, _pTriangle->splitter));
 
     // -- T3 Triangle T3(A, B, c);
     vVertex.push_back({A, vertA.normal, texA});          // T3 PA
     vVertex.push_back({B, vertB.normal, texB});          // T3 PB
     vVertex.push_back({c, vertC.normal, vertC.texture}); // T3 PC
-    _vTriangle.push_front(new Triangle(last++, last++, last++, normal, _pTriangle->splitter));
+    _vTriangle.push_front(new Triangle(p[6], p[7], p[8], normal, _pTriangle->splitter));
 
     // Remove orininal
     delete _pTriangle;
     _pTriangle = nullptr;
-}
+} // namespace Chimera
 
 BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 

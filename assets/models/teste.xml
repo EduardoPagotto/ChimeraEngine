@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+
+    <library_materials>
+        <material id="Textured_Bump_E0_MP_MAT" name="Textured_Bump_E0_MP_MAT">
+            <instance_effect url="#Textured_Bump_E0_MP_FX">
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="Textured_Bump_E0_MP_TECH"/>
+            </instance_effect>
+        </material>
+    </library_materials>
+
+    <library_effects>
+        <effect id="Textured_Bump_E0_MP_FX">
+            <profile_COMMON>
+                <technique sid="common">
+                    <phong>
+                        <emission>
+                            <color sid="emission">0 0 0 1</color>
+                        </emission>
+                        <ambient>
+                            <color sid="ambient">0 0 0 1</color>
+                        </ambient>
+                        <diffuse>
+                            <color sid="diffuse">0.8 0 0 1</color>
+                        </diffuse>
+                        <specular>
+                            <color sid="specular">0.5 0.5 0.5 1</color>
+                        </specular>
+                        <shininess>
+                            <float sid="shininess">50</float>
+                        </shininess>
+                        <index_of_refraction>
+                            <float sid="index_of_refraction">1</float>
+                        </index_of_refraction>
+                    </phong>
+                </technique>
+            </profile_COMMON>
+
+            <profile_GLSL>
+                <technique sid="Textured_Bump_E0_MP_TECH">
+                    <include sid="Vertex_Program_E0_P0_VP" url="file://./assets/shaders/MeshNoMat.vert"/>
+                    <include sid="Fragment_Program_E0_P0_FP" url="file://./assets/shaders/MeshNoMat.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="Vertex_Program_E0_P0_VP">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="Fragment_Program_E0_P0_FP">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+
+        </effect>
+    </library_effects>
+</COLLADA>

@@ -5,7 +5,7 @@ PROJECT(ColladaDB)
 find_package(SDL2 REQUIRED)
 
 # objetos a compilar
-set (SourceColladaDB	load.cpp)
+set (SourceColladaDB	loader.cpp)
 
 # Includes
 set (IncludeColladaDB	${CMAKE_SOURCE_DIR}

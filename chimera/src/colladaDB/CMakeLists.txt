@@ -3,13 +3,15 @@ cmake_minimum_required(VERSION 3.18.4)
 PROJECT(ColladaDB)
 
 find_package(SDL2 REQUIRED)
+find_package(PUGIXML REQUIRED) #PUGIXML
 
 # objetos a compilar
 set (SourceColladaDB	loader.cpp)
 
 # Includes
 set (IncludeColladaDB	${CMAKE_SOURCE_DIR}
-				 		${SDL2_INCLUDE_DIR})
+				 		${SDL2_INCLUDE_DIR}
+						${PUGIXML_DIR})
 
 # Target
 add_library (ColladaDB STATIC ${SourceColladaDB})

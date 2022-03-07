@@ -3,11 +3,15 @@ cmake_minimum_required(VERSION 3.18.4)
 PROJECT(LoadTest)
 
 find_package(SDL2 REQUIRED)
+find_package(PUGIXML REQUIRED) #PUGIXML
 
 set (IncludesLoad	${CMAKE_SOURCE_DIR}
+					${PUGIXML_DIR}
 					${SDL2_INCLUDE_DIR})
 
-set (LibsLoad 		-lSDL2
+set (LibsLoad 		${CMAKE_SOURCE_DIR}/bin/libColladaDB.a
+					-lpugixml
+					-lSDL2
 					-lpthread)
 
 add_executable(loadtest main.cpp)
@@ -15,7 +19,7 @@ add_executable(loadtest main.cpp)
 target_include_directories(loadtest PRIVATE ${IncludesLoad})
 target_link_libraries(loadtest ${LibsLoad})
 
-# add_dependencies(loadtest ChimeraCore
+add_dependencies(loadtest ColladaDB)
 # 						ChimeraRender
 # 						ChimeraLoaders)
 

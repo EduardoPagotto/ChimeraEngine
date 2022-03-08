@@ -39,7 +39,7 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
                 // FIXME: usar o direcionm depois no segundo parametro
                 glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
                 this->lightSpaceMatrix = this->lightProjection * lightView;
-                renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", this->lightSpaceMatrix));
+                renderer.uQueue().push_back(UValue("lightSpaceMatrix", this->lightSpaceMatrix));
             }
         }
 
@@ -52,7 +52,7 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
             command.transform = tc.trans->translateSrc(origem->getPosition());
             command.renderable = rc.renderable;
             command.shader = this->shader;
-            command.uniforms.push_back(UniformVal("model", command.transform));
+            command.uniforms.push_back(UValue("model", command.transform));
             rc.renderable->submit(camera, command, &renderer);
         }
     }
@@ -65,10 +65,10 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
 }
 
 void ShadowPass::appy(ICamera* camera, IRenderer3d& renderer) {
-    renderer.uQueue().push_back(UniformVal("viewPos", camera->getPosition()));
-    renderer.uQueue().push_back(UniformVal("shadows", 1));   // Ativa a sombra com 1
-    renderer.uQueue().push_back(UniformVal("shadowMap", 1)); // id da textura de shadow
-    renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", this->lightSpaceMatrix));
+    renderer.uQueue().push_back(UValue("viewPos", camera->getPosition()));
+    renderer.uQueue().push_back(UValue("shadows", 1));   // Ativa a sombra com 1
+    renderer.uQueue().push_back(UValue("shadowMap", 1)); // id da textura de shadow
+    renderer.uQueue().push_back(UValue("lightSpaceMatrix", this->lightSpaceMatrix));
     this->shadowBuffer->getDepthAttachemnt()->bind(1); // FIXME: ver como melhorar depois
 }
 

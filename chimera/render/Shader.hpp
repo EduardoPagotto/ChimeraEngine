@@ -52,44 +52,6 @@ class Shader {
     GLuint progID = 0;
 };
 //---
-class UniformVal {
-  public:
-    UniformVal(const std::string& name, const int& value) : name(name), typeVal(0), val_int(value) {}
-    UniformVal(const std::string& name, const float& value) : name(name), typeVal(1), val_float(value) {}
-    UniformVal(const std::string& name, const glm::vec2& value) : name(name), typeVal(2), val_vec2(value) {}
-    UniformVal(const std::string& name, const glm::ivec2& value) : name(name), typeVal(3), val_ivec2(value) {}
-    UniformVal(const std::string& name, const glm::vec3& value) : name(name), typeVal(4), val_vec3(value) {}
-    UniformVal(const std::string& name, const glm::ivec3& value) : name(name), typeVal(5), val_ivec3(value) {}
-    UniformVal(const std::string& name, const glm::vec4& value) : name(name), typeVal(6), val_vec4(value) {}
-    UniformVal(const std::string& name, const glm::ivec4& value) : name(name), typeVal(7), val_ivec4(value) {}
-    UniformVal(const std::string& name, const glm::mat3& value) : name(name), typeVal(8), val_mat3(value) {}
-    UniformVal(const std::string& name, const glm::mat4& value) : name(name), typeVal(9), val_mat4(value) {}
-
-    UniformVal(const UniformVal& cpy) : name(cpy.name), typeVal(cpy.typeVal), val_mat4(cpy.val_mat4) {}
-
-    void setUniform(const Shader& shader) const;
-
-    inline const std::string getName() const { return this->name; }
-    inline const int8_t getTypeVal() const { return this->typeVal; }
-
-  private:
-    UniformVal() : name("invalid"), typeVal(-1) {}
-    std::string name;
-    int8_t typeVal;
-
-    union {
-        int val_int;
-        float val_float;
-        glm::vec2 val_vec2;
-        glm::ivec2 val_ivec2;
-        glm::vec3 val_vec3;
-        glm::ivec3 val_ivec3;
-        glm::vec4 val_vec4;
-        glm::ivec4 val_ivec4;
-        glm::mat3 val_mat3;
-        glm::mat4 val_mat4;
-    };
-};
 
 //---
 class ShaderManager {

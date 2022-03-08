@@ -22,16 +22,16 @@ union UniVariant {
 
 struct UValue {
     UValue(const UValue& o) : name(o.name), type(o.type), u(o.u) {}
-    UValue(std::string& _name, const int& _val) : name(_name), type(UniformType::t_int) { u.v_int = _val; }
-    UValue(std::string& _name, const float& _val) : name(_name), type(UniformType::t_float) { u.v_float = _val; }
-    UValue(std::string& _name, const glm::vec2& _val) : name(_name), type(UniformType::t_vec2) { u.v_vec2 = _val; }
-    UValue(std::string& _name, const glm::ivec2& _val) : name(_name), type(UniformType::t_ivec2) { u.v_ivec2 = _val; }
-    UValue(std::string& _name, const glm::vec3& _val) : name(_name), type(UniformType::t_vec3) { u.v_vec3 = _val; }
-    UValue(std::string& _name, const glm::ivec3& _val) : name(_name), type(UniformType::t_ivec3) { u.v_ivec3 = _val; }
-    UValue(std::string& _name, const glm::vec4 _val) : name(_name), type(UniformType::t_vec4) { u.v_vec4 = _val; }
-    UValue(std::string& _name, const glm::ivec4 _val) : name(_name), type(UniformType::t_ivec4) { u.v_ivec4 = _val; }
-    UValue(std::string& _name, const glm::mat3& _val) : name(_name), type(UniformType::t_mat3) { u.v_mat3 = _val; }
-    UValue(std::string& _name, const glm::mat4& _val) : name(_name), type(UniformType::t_mat4) { u.v_mat4 = _val; }
+    UValue(const std::string& _name, const int& _val) : name(_name), type(UniformType::t_int) { u.v_int = _val; }
+    UValue(const std::string& _name, const float& _val) : name(_name), type(UniformType::t_float) { u.v_float = _val; }
+    UValue(const std::string& _name, const glm::vec2& _val) : name(_name), type(UniformType::t_vec2) { u.v_vec2 = _val; }
+    UValue(const std::string& _name, const glm::ivec2& _val) : name(_name), type(UniformType::t_ivec2) { u.v_ivec2 = _val; }
+    UValue(const std::string& _name, const glm::vec3& _val) : name(_name), type(UniformType::t_vec3) { u.v_vec3 = _val; }
+    UValue(const std::string& _name, const glm::ivec3& _val) : name(_name), type(UniformType::t_ivec3) { u.v_ivec3 = _val; }
+    UValue(const std::string& _name, const glm::vec4 _val) : name(_name), type(UniformType::t_vec4) { u.v_vec4 = _val; }
+    UValue(const std::string& _name, const glm::ivec4 _val) : name(_name), type(UniformType::t_ivec4) { u.v_ivec4 = _val; }
+    UValue(const std::string& _name, const glm::mat3& _val) : name(_name), type(UniformType::t_mat3) { u.v_mat3 = _val; }
+    UValue(const std::string& _name, const glm::mat4& _val) : name(_name), type(UniformType::t_mat4) { u.v_mat4 = _val; }
     std::string name;
     UniformType type;
     UniVariant u;
@@ -39,17 +39,6 @@ struct UValue {
   private:
     UValue();
 };
-
-// class UniformMapped {
-//     UniformMapped() = default;
-//     virtual ~UniformMapped() { this->clear(); }
-//     void set(const UniformVal& value) { uniformMap[value.getName()] = value; }
-//     // void bindAll(const Shader& shader) const;
-//     void clear() { uniformMap.clear(); }
-
-//   private:
-//     std::unordered_map<std::string, UValue> uniformMap;
-// };
 
 // void UniformMapped::bindAll(const Shader& shader) const {
 //     for (auto& kv : uniformMap)

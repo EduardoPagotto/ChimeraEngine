@@ -48,18 +48,18 @@ void Material::init() {
 
 void Material::addTexture(const std::string& uniformTexName, Texture* texture) { this->mapTex[uniformTexName] = texture; }
 
-void Material::bindMaterialInformation(std::vector<UniformVal>& uniforms, std::vector<Texture*>& vTex) {
+void Material::bindMaterialInformation(std::vector<UValue>& uniforms, std::vector<Texture*>& vTex) {
     // copy prop material
     copy(listMaterial.begin(), listMaterial.end(), back_inserter(uniforms));
 
     // seletorr de tipo ???
-    uniforms.push_back(UniformVal(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis));
+    uniforms.push_back(UValue(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis));
 
     // indice de textura
     int indexTex = 0;
     for (const auto& kv : mapTex) {
         vTex.push_back(kv.second);
-        uniforms.push_back(UniformVal(kv.first, indexTex));
+        uniforms.push_back(UValue(kv.first, indexTex));
         indexTex++;
     }
 }

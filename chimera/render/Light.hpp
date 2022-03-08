@@ -17,18 +17,18 @@ class Light {
   public:
     Light() : type(LightType::POSITIONAL) {} // TODO: muito a fazer!!!! indice e luz necessario para o shader
     virtual ~Light() {}
-    inline void setAmbient(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_AMBIENT, color)); }
-    inline void setSpecular(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_SPECULAR, color)); }
-    inline void setDiffuse(const glm::vec4& color) { listProp.push_back(UniformVal(SHADE_LIGHT_DIFFUSE, color)); }
+    inline void setAmbient(const glm::vec4& color) { listProp.push_back(UValue(SHADE_LIGHT_AMBIENT, color)); }
+    inline void setSpecular(const glm::vec4& color) { listProp.push_back(UValue(SHADE_LIGHT_SPECULAR, color)); }
+    inline void setDiffuse(const glm::vec4& color) { listProp.push_back(UValue(SHADE_LIGHT_DIFFUSE, color)); }
     inline void setType(const LightType& type) { this->type = type; }
-    inline void bindLight(std::vector<UniformVal>& uniforms, const glm::mat4& mat) {
-        uniforms.push_back(UniformVal(SHADE_LIGHT_POSITION, glm::vec3(mat[3])));
+    inline void bindLight(std::vector<UValue>& uniforms, const glm::mat4& mat) {
+        uniforms.push_back(UValue(SHADE_LIGHT_POSITION, glm::vec3(mat[3])));
         copy(listProp.begin(), listProp.end(), back_inserter(uniforms));
     }
 
   private:
     // int number;
     LightType type;
-    std::vector<UniformVal> listProp;
+    std::vector<UValue> listProp;
 };
 } // namespace Chimera

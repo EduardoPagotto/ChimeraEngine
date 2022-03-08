@@ -129,43 +129,6 @@ void Shader::setUniform(const UValue& uv) {
 }
 
 //---
-
-void UniformVal::setUniform(const Shader& shader) const {
-    switch (typeVal) {
-        case 0:
-            shader.setUniform(name.c_str(), val_int);
-            break;
-        case 1:
-            shader.setUniform(name.c_str(), val_float);
-            break;
-        case 2:
-            shader.setUniform(name.c_str(), val_vec2);
-            break;
-        case 3:
-            shader.setUniform(name.c_str(), val_ivec2);
-            break;
-        case 4:
-            shader.setUniform(name.c_str(), val_vec3);
-            break;
-        case 5:
-            shader.setUniform(name.c_str(), val_ivec3);
-            break;
-        case 6:
-            shader.setUniform(name.c_str(), val_vec4);
-            break;
-        case 7:
-            shader.setUniform(name.c_str(), val_ivec4);
-            break;
-        case 8:
-            shader.setUniform(name.c_str(), val_mat3);
-            break;
-        case 9:
-            shader.setUniform(name.c_str(), val_mat4);
-            break;
-    }
-}
-
-//---
 std::unordered_map<std::string, Shader> ShaderManager::mShaders;
 
 void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) {

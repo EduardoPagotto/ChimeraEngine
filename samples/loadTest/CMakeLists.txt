@@ -10,6 +10,7 @@ set (IncludesLoad	${CMAKE_SOURCE_DIR}
 					${SDL2_INCLUDE_DIR})
 
 set (LibsLoad 		${CMAKE_SOURCE_DIR}/bin/libColladaDB.a
+					${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 					-lpugixml
 					-lSDL2
 					-lpthread)

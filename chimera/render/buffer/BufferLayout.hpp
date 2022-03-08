@@ -21,8 +21,12 @@ class BufferLayout {
         this->size += sizeOfType * count;
     }
 
-    // template <typename T> void Push(uint count = 1, bool normalized = false) {}
-    // template <> void Push<glm::vec3>(uint count, bool normalized) { Push(3, GL_FLOAT, sizeof(float),normalized); }
+    // template <typename T> void Push(const uint& count, const uint& size, const bool& normalized) {}
+    // template <> void Push<float>(bool normalized) { Push(1, sizeof(float), normalized); }
+    // template <typename T> struct type_traits;
+    // template <> struct type_traits<int> { static const size_t id = 0; };
+    // template <> struct type_traits<std::string> { static const size_t id = 1; };
+    // template <> struct type_traits<float> { static const size_t id = 2; };
 
     inline const std::vector<BufferElement>& getLayout() const { return layout; }
     inline uint getStride() const { return size; }

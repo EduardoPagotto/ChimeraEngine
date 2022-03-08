@@ -86,6 +86,48 @@ const GLint Shader::getUniform(const char* _varName) const noexcept {
     return loc;
 }
 
+void Shader::setUniform(const UValue& uv) {
+
+    GLint loc = glGetUniformLocation(progID, uv.name.c_str());
+    if (loc == -1) {
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", uv.name.c_str(), progID);
+        return;
+    }
+
+    switch (uv.type) {
+        case UniformType::t_int:
+            glUniform1i(loc, uv.u.v_int);
+            break;
+        case UniformType::t_float:
+            glUniform1f(loc, uv.u.v_float);
+            break;
+        case UniformType::t_vec2:
+            glUniform2fv(loc, 1, glm::value_ptr(uv.u.v_vec2));
+            break;
+        case UniformType::t_ivec2:
+            glUniform2iv(loc, 1, glm::value_ptr(uv.u.v_ivec2));
+            break;
+        case UniformType::t_vec3:
+            glUniform3fv(loc, 1, glm::value_ptr(uv.u.v_vec3));
+            break;
+        case UniformType::t_ivec3:
+            glUniform3iv(loc, 1, glm::value_ptr(uv.u.v_ivec3));
+            break;
+        case UniformType::t_vec4:
+            glUniform4fv(loc, 1, glm::value_ptr(uv.u.v_vec4)); // TODO: Testar!!
+            break;
+        case UniformType::t_ivec4:
+            glUniform4iv(loc, 1, glm::value_ptr(uv.u.v_ivec4)); // TODO: Testar!!
+            break;
+        case UniformType::t_mat3:
+            glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.v_mat3));
+            break;
+        case UniformType::t_mat4:
+            glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.v_mat4));
+            break;
+    }
+}
+
 //---
 
 void UniformVal::setUniform(const Shader& shader) const {
@@ -121,13 +163,6 @@ void UniformVal::setUniform(const Shader& shader) const {
             shader.setUniform(name.c_str(), val_mat4);
             break;
     }
-}
-
-//---
-
-void UniformMapped::bindAll(const Shader& shader) const {
-    for (auto& kv : uniformMap)
-        kv.second.setUniform(shader);
 }
 
 //---

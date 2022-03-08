@@ -30,7 +30,6 @@ class Material {
     inline void setShine(const float& _val) { listMaterial.push_back(UniformVal(SHADE_MAT_SHININESS, _val)); }
 
     bool hasTexture() { return !mapTex.empty(); }
-    void bindMaterialInformation(const Shader& shader);
     void bindMaterialInformation(std::vector<UniformVal>& uniforms, std::vector<Texture*>& vTex);
     bool const isValid() const { return valid; }
 

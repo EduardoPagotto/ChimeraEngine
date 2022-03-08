@@ -48,27 +48,6 @@ void Material::init() {
 
 void Material::addTexture(const std::string& uniformTexName, Texture* texture) { this->mapTex[uniformTexName] = texture; }
 
-void Material::bindMaterialInformation(const Shader& shader) {
-
-    // aplica todos os materiais passados
-    for (const UniformVal& uniformMat : listMaterial) {
-        uniformMat.setUniform(shader);
-    }
-
-    shader.setUniform(SHADE_TEXTURE_SELETOR_TIPO_VALIDO, tipoTexturasDisponiveis);
-
-    if (mapTex.size() > 0) {
-        for (const auto& kv : mapTex) {
-            kv.second->bind(0);
-            shader.setUniform(kv.first.c_str(), 0);
-        }
-
-    } else {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-}
-
 void Material::bindMaterialInformation(std::vector<UniformVal>& uniforms, std::vector<Texture*>& vTex) {
     // copy prop material
     copy(listMaterial.begin(), listMaterial.end(), back_inserter(uniforms));

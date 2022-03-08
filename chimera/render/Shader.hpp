@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/core/UValue.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 #include <fstream>
 #include <glm/glm.hpp>
@@ -34,6 +35,7 @@ class Shader {
     void setUniform(const char* name, const glm::mat4& mat) const {
         glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, glm::value_ptr(mat));
     }
+    void setUniform(const UValue& uv);
     void setUniformArray(const char* name, int size, float* val) const { glUniform1fv(getUniform(name), size, val); }
     void setUniformArray(const char* name, int size, int* val) const { glUniform1iv(getUniform(name), size, val); }
     void setUniformArray(const char* name, int size, glm::vec2* val) const { glUniform2fv(getUniform(name), size, glm::value_ptr(*val)); }
@@ -52,7 +54,6 @@ class Shader {
 //---
 class UniformVal {
   public:
-    UniformVal() : name("invalid"), typeVal(-1) {}
     UniformVal(const std::string& name, const int& value) : name(name), typeVal(0), val_int(value) {}
     UniformVal(const std::string& name, const float& value) : name(name), typeVal(1), val_float(value) {}
     UniformVal(const std::string& name, const glm::vec2& value) : name(name), typeVal(2), val_vec2(value) {}
@@ -68,9 +69,11 @@ class UniformVal {
 
     void setUniform(const Shader& shader) const;
 
-    const std::string getName() const { return this->name; }
+    inline const std::string getName() const { return this->name; }
+    inline const int8_t getTypeVal() const { return this->typeVal; }
 
   private:
+    UniformVal() : name("invalid"), typeVal(-1) {}
     std::string name;
     int8_t typeVal;
 
@@ -86,17 +89,6 @@ class UniformVal {
         glm::mat3 val_mat3;
         glm::mat4 val_mat4;
     };
-};
-
-class UniformMapped {
-    UniformMapped() = default;
-    virtual ~UniformMapped() { this->clear(); }
-    void set(const UniformVal& value) { uniformMap[value.getName()] = value; }
-    void bindAll(const Shader& shader) const;
-    void clear() { uniformMap.clear(); }
-
-  private:
-    std::unordered_map<std::string, UniformVal> uniformMap;
 };
 
 //---

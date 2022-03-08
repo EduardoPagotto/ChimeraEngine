@@ -19,6 +19,8 @@ add_library (ColladaDB STATIC ${SourceColladaDB})
 # adiciona os Includes 
 target_include_directories (ColladaDB PUBLIC ${IncludeColladaDB})
 
+add_dependencies(ColladaDB ChimeraCore)
+
 # Lista os Includes
 # get_property(dirs DIRECTORY ${IncludeColladaDB}/chimera/core PROPERTY INCLUDE_DIRECTORIES)
 # foreach(dir ${dirs})

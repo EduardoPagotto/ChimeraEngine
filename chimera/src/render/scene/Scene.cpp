@@ -232,7 +232,7 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms, command.vTex);
 
-        command.uniforms.push_back(UValue("model", command.transform));
+        command.uniforms["model"] = UValue(command.transform);
 
         renderable->submit(camera, command, &renderer);
     }
@@ -249,7 +249,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
         command.renderable = rc.renderable;
         command.shader = sc;
         mc.bindMaterialInformation(command.uniforms, command.vTex);
-        command.uniforms.push_back(UValue("model", command.transform));
+        command.uniforms["model"] = UValue(command.transform);
         rc.renderable->submit(camera, command, &renderer);
     }
 }
@@ -271,8 +271,8 @@ void Scene::onRender() {
         count++;
 
         // used by all
-        renderBatch.uQueue().push_back(UValue("projection", camera->getProjection()));
-        renderBatch.uQueue().push_back(UValue("view", camera->view()->getView()));
+        renderBatch.uQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
+        renderBatch.uQueue().insert(std::make_pair("view", UValue(camera->view()->getView())));
 
         // load shadows props to renderBatch
         if (shadowPass)

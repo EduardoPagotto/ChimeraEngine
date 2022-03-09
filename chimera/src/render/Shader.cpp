@@ -2,6 +2,7 @@
 #include "chimera/core/Exception.hpp"
 #include "chimera/core/utils.hpp"
 #include <SDL2/SDL.h>
+#include <vector>
 
 namespace Chimera {
 
@@ -86,11 +87,11 @@ const GLint Shader::getUniform(const char* _varName) const noexcept {
     return loc;
 }
 
-void Shader::setUniform(const UValue& uv) {
+void Shader::setUniformU(const char* name, const UValue& uv) {
 
-    GLint loc = glGetUniformLocation(progID, uv.name.c_str());
+    GLint loc = glGetUniformLocation(progID, name);
     if (loc == -1) {
-        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", uv.name.c_str(), progID);
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, progID);
         return;
     }
 
@@ -114,16 +115,19 @@ void Shader::setUniform(const UValue& uv) {
             glUniform3iv(loc, 1, glm::value_ptr(uv.u.v_ivec3));
             break;
         case UniformType::t_vec4:
-            glUniform4fv(loc, 1, glm::value_ptr(uv.u.v_vec4)); // TODO: Testar!!
+            glUniform4fv(loc, 1, glm::value_ptr(uv.u.v_vec4));
             break;
         case UniformType::t_ivec4:
-            glUniform4iv(loc, 1, glm::value_ptr(uv.u.v_ivec4)); // TODO: Testar!!
+            glUniform4iv(loc, 1, glm::value_ptr(uv.u.v_ivec4));
             break;
         case UniformType::t_mat3:
             glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.v_mat3));
             break;
         case UniformType::t_mat4:
             glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.v_mat4));
+            break;
+        case UniformType::t_invalid:
+            SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, progID);
             break;
     }
 }

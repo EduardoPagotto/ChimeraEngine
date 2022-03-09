@@ -75,12 +75,12 @@ void Renderer3d::flush() {
                 }
 
                 // generic bind in each draw call camera, light, etc
-                for (const UValue& uniform : uniformsQueue)
-                    activeShader.setUniform(uniform);
+                for (const auto& kv : uniformsQueue)
+                    activeShader.setUniformU(kv.first.c_str(), kv.second);
 
                 // bind dos uniforms from model
-                for (const UValue& uniform : command.uniforms)
-                    activeShader.setUniform(uniform);
+                for (const auto& kv : command.uniforms)
+                    activeShader.setUniformU(kv.first.c_str(), kv.second);
 
                 // libera textura antes de passar as novas
                 if (command.vTex.size() == 0)

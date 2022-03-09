@@ -5,9 +5,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
 
 namespace Chimera {
 
@@ -21,21 +18,21 @@ class Shader {
     inline const GLuint getID() const { return this->progID; }
     inline void invalidade();
     const GLint getUniform(const char* _varName) const noexcept;
-    void setUniform(const char* name, float val) const { glUniform1f(getUniform(name), val); }
-    void setUniform(const char* name, int val) const { glUniform1i(getUniform(name), val); }
-    void setUniform(const char* name, const glm::vec2& vec) const { glUniform2f(getUniform(name), vec.x, vec.y); }
-    void setUniform(const char* name, const glm::ivec2& vec) const { glUniform2i(getUniform(name), vec.x, vec.y); }
-    void setUniform(const char* name, const glm::vec3& vec) const { glUniform3f(getUniform(name), vec.x, vec.y, vec.z); }
-    void setUniform(const char* name, const glm::ivec3& vec) const { glUniform3i(getUniform(name), vec.x, vec.y, vec.z); }
-    void setUniform(const char* name, const glm::vec4& vec) const { glUniform4f(getUniform(name), vec.x, vec.y, vec.z, vec.w); }
-    void setUniform(const char* name, const glm::ivec4& vec) const { glUniform4i(getUniform(name), vec.x, vec.y, vec.z, vec.w); }
-    void setUniform(const char* name, const glm::mat3& mat) const {
+    void setUniform1f(const char* name, const float& val) const { glUniform1f(getUniform(name), val); }
+    void setUniform1i(const char* name, const int& val) const { glUniform1i(getUniform(name), val); }
+    void setUniform2f(const char* name, const glm::vec2& vec) const { glUniform2f(getUniform(name), vec.x, vec.y); }
+    void setUniform2i(const char* name, const glm::ivec2& vec) const { glUniform2i(getUniform(name), vec.x, vec.y); }
+    void setUniform3f(const char* name, const glm::vec3& vec) const { glUniform3f(getUniform(name), vec.x, vec.y, vec.z); }
+    void setUniform3i(const char* name, const glm::ivec3& vec) const { glUniform3i(getUniform(name), vec.x, vec.y, vec.z); }
+    void setUniform4f(const char* name, const glm::vec4& vec) const { glUniform4f(getUniform(name), vec.x, vec.y, vec.z, vec.w); }
+    void setUniform4i(const char* name, const glm::ivec4& vec) const { glUniform4i(getUniform(name), vec.x, vec.y, vec.z, vec.w); }
+    void setUniformM3(const char* name, const glm::mat3& mat) const {
         glUniformMatrix3fv(getUniform(name), 1, GL_FALSE, glm::value_ptr(mat));
     }
-    void setUniform(const char* name, const glm::mat4& mat) const {
+    void setUniformM4(const char* name, const glm::mat4& mat) const {
         glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, glm::value_ptr(mat));
     }
-    void setUniform(const UValue& uv);
+    void setUniformU(const char* name, const UValue& uv);
     void setUniformArray(const char* name, int size, float* val) const { glUniform1fv(getUniform(name), size, val); }
     void setUniformArray(const char* name, int size, int* val) const { glUniform1iv(getUniform(name), size, val); }
     void setUniformArray(const char* name, int size, glm::vec2* val) const { glUniform2fv(getUniform(name), size, glm::value_ptr(*val)); }
@@ -53,7 +50,6 @@ class Shader {
 };
 //---
 
-//---
 class ShaderManager {
   public:
     static void load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader);

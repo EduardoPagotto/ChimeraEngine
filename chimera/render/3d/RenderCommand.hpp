@@ -11,7 +11,7 @@ struct RenderCommand {
     IRenderable3d* renderable = nullptr;
     glm::mat4 transform = glm::mat4(1.0f);
     Shader shader;
-    std::vector<UValue> uniforms;
+    std::unordered_map<std::string, UValue> uniforms;
     std::vector<Texture*> vTex;
     bool logRender = false; // TODO: remover depois
 };

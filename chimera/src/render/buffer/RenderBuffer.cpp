@@ -44,7 +44,7 @@ void RenderBuffer::render() {
     frameBuffer->getColorAttachemnt(0)->bind(0); // getTexture()->bind(0);
 
     // Set our "renderedTexture" sampler to user Texture Unit 0
-    shader.setUniform("renderedTexture", 0);
+    shader.setUniform1i("renderedTexture", 0);
 
     vbo->bind();
     // Draw the triangles !

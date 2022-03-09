@@ -46,9 +46,7 @@ void Material::init() {
         tipoTexturasDisponiveis = 3;
 }
 
-void Material::addTexture(const std::string& uniformTexName, Texture* texture) { this->mapTex[uniformTexName] = texture; }
-
-void Material::bindMaterialInformation(std::unordered_map<std::string, UValue>& uniforms, std::vector<Texture*>& vTex) {
+void Material::bindMaterialInformation(MapUniform& uniforms, std::vector<Texture*>& vTex) {
     // copy prop material
     uniforms.insert(listMaterial.begin(), listMaterial.end());
 

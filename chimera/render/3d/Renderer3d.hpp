@@ -18,11 +18,11 @@ class Renderer3d : public IRenderer3d {
     virtual void submit(const RenderCommand& command) override;
     virtual void end() override;
     virtual void flush() override;
-    virtual inline std::unordered_map<std::string, UValue>& uQueue() override { return uniformsQueue; }
+    virtual inline MapUniform& uQueue() override { return uniformsQueue; }
 
   private:
     std::deque<RenderCommand> commandQueue;
-    std::unordered_map<std::string, UValue> uniformsQueue;
+    MapUniform uniformsQueue;
     Frustum frustum;
     uint32_t totIBO, totFaces;
 };

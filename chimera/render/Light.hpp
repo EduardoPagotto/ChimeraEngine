@@ -21,7 +21,7 @@ class Light {
     inline void setSpecular(const glm::vec4& color) { listProp[SHADE_LIGHT_SPECULAR] = UValue(color); }
     inline void setDiffuse(const glm::vec4& color) { listProp[SHADE_LIGHT_DIFFUSE] = UValue(color); }
     inline void setType(const LightType& type) { this->type = type; }
-    inline void bindLight(std::unordered_map<std::string, UValue>& uniforms, const glm::mat4& mat) {
+    inline void bindLight(MapUniform& uniforms, const glm::mat4& mat) {
         uniforms[SHADE_LIGHT_POSITION] = UValue(glm::vec3(mat[3]));
         uniforms.insert(listProp.begin(), listProp.end());
     }
@@ -29,6 +29,6 @@ class Light {
   private:
     // int number;
     LightType type;
-    std::unordered_map<std::string, UValue> listProp;
+    MapUniform listProp;
 };
 } // namespace Chimera

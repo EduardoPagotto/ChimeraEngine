@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/core/UValue.hpp"
 #include "chimera/render/Texture.hpp"
 #include <vector>
 

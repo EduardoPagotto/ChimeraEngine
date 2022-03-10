@@ -1,6 +1,7 @@
 #pragma once
-#include "chimera/render/Shader.hpp"
+#include "chimera/render/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
+#include <string>
 
 namespace Chimera {
 

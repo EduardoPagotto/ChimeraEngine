@@ -2,6 +2,7 @@
 #include "Renderable2D.hpp"
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/render/ICamera.hpp"
+#include "chimera/render/Shader.hpp"
 
 namespace Chimera {
 

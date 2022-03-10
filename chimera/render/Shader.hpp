@@ -2,7 +2,6 @@
 #include "chimera/core/UValue.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 #include <fstream>
-#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 

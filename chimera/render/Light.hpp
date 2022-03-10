@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/render/Shader.hpp"
+#include "chimera/core/UValue.hpp"
 
 namespace Chimera {
 

@@ -3,10 +3,10 @@
 Just another simple game engine<p>
 OBS: Code with comments in Portuguese mostly
 
-## Ubuntu 20.04 dependencies
+## Ubuntu 21.10 dependencies
 ```bash
 # Develop:
-apt install htop build-essential git gitk meld cmake g++ vim libtinyxml2-dev libyaml-cpp-dev
+apt install htop build-essential git gitk meld cmake g++ vim libtinyxml2-dev libyaml-cpp-dev libpugixml-dev pugixml-doc
 
 # OpenGL dev
 apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev libglm-dev libglew-dev libftgl-dev

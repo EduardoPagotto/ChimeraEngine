@@ -2,9 +2,9 @@
 #include "IRenderer3d.hpp"
 #include "RenderCommand.hpp"
 #include "chimera/core/ICamera.hpp"
+#include "chimera/core/space/Frustum.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Shader.hpp"
-#include "chimera/render/partition/Frustum.hpp"
 #include <cstdint>
 #include <deque>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "BSPTreeNode.hpp"
+#include "chimera/core/space/Triangle.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
-#include "chimera/render/partition/Triangle.hpp"
 #include <list>
 
 namespace Chimera {

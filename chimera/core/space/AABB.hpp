@@ -17,7 +17,7 @@ class AABB {
     bool contains(const glm::vec3& _point) const;
     bool visible(const Frustum& _frustum) const;
     float distance(const Frustum& _frustum) const;
-    void render() const;
+    inline const glm::vec3* getVertexs() const { return vertex; }
 
     AABB transformation(const glm::mat4& transformation) const;
 

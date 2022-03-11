@@ -14,7 +14,11 @@ set (SourcesCore Registry.cpp
 				 JoystickManager.cpp
 				 MouseDevice.cpp
 				 StateStack.cpp
-				 Engine.cpp)
+				 Engine.cpp
+				 space/Plane.cpp
+				 space/Frustum.cpp
+				 space/AABB.cpp
+				 space/Octree.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}

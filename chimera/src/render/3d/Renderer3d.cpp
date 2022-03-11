@@ -1,12 +1,12 @@
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/space/AABB.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Material.hpp"
 #include "chimera/render/Transform.hpp"
 #include "chimera/render/buffer/IndexBuffer.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
-#include "chimera/render/partition/AABB.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

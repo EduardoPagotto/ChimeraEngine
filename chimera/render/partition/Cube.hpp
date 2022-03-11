@@ -1,7 +1,7 @@
 #pragma once
+#include "chimera/core/space/AABB.hpp"
+#include "chimera/core/space/Triangle.hpp"
 #include "chimera/render/VertexData.hpp"
-#include "chimera/render/partition/AABB.hpp"
-#include "chimera/render/partition/Triangle.hpp"
 #include <vector>
 
 namespace Chimera {

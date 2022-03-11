@@ -2,6 +2,7 @@
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/render/partition/space.hpp"
 
 namespace Chimera {
 
@@ -72,7 +73,7 @@ void Renderable3D::draw(const bool& logData) {
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "IBO: %d Faces: %ld AABB[%.2f, %.2f, %.2f]", ibo->getBufferID(), vIndex.size() / 3,
                          size.x, size.y, size.z);
 
-            aabb.render();
+            spaceRenderAABB(aabb);
         }
 
         ibo->unbind();

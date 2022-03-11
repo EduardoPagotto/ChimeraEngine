@@ -1,4 +1,4 @@
-#include "chimera/render/partition/Octree.hpp"
+#include "chimera/core/space/Octree.hpp"
 
 namespace Chimera {
 

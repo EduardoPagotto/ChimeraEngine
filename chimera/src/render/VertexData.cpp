@@ -1,6 +1,6 @@
 #include "chimera/render/VertexData.hpp"
+#include "chimera/core/space/Plane.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
-#include "chimera/render/partition/Plane.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

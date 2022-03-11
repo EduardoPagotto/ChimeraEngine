@@ -25,10 +25,7 @@ set (RenderSource 	CanvasGL.cpp
 					FontManager.cpp
 					Material.cpp
 					ParticleEmitter.cpp
-					partition/Plane.cpp
-					partition/Frustum.cpp
-					partition/AABB.cpp
-					partition/Octree.cpp
+					partition/space.cpp
 					partition/BSPTree.cpp
 					partition/Cube.cpp 
 					partition/Maze.cpp

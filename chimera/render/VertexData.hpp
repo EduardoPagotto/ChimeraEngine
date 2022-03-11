@@ -5,11 +5,6 @@
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
 #define BUFFER_OFFSET(i) ((void*)(i))
 
-#define EPSILON 1e-2
-//#define EPSILON 1e-1 // Falhas em calculos de aproximação verificar projeto bsptree
-
-enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
-
 namespace Chimera {
 
 struct VertexData {

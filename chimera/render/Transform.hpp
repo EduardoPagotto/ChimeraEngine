@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ITrans.hpp"
+#include "chimera/core/ITrans.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/euler_angles.hpp>
 

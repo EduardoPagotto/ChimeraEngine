@@ -1,5 +1,9 @@
 #pragma once
-#include "chimera/render/VertexData.hpp"
+#include <glm/glm.hpp>
+
+#define EPSILON 1e-2 // FIXME: para 1e-1 Falhas em calculos de aproximação verificar projeto bsptree
+
+enum class SIDE { CP_ONPLANE, CP_FRONT, CP_BACK, CP_SPANNING };
 
 namespace Chimera {
 

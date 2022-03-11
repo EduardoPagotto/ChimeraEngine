@@ -1,7 +1,7 @@
 #pragma once
+#include "chimera/core/ICamera.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/loader/Library.hpp"
-#include "chimera/render/ICamera.hpp"
 
 namespace Chimera {
 

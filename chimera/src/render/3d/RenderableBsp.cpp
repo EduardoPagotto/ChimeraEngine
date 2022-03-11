@@ -1,7 +1,7 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
+#include "chimera/core/ICamera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
-#include "chimera/render/ICamera.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 

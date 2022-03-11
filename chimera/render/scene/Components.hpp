@@ -1,8 +1,8 @@
 #pragma once
 #include "ScriptableEntity.hpp"
+#include "chimera/core/ICamera.hpp"
+#include "chimera/core/ITrans.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
-#include "chimera/render/ICamera.hpp"
-#include "chimera/render/ITrans.hpp"
 #include "chimera/render/Light.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -53,8 +53,7 @@ struct NativeScriptComponent {
     ScriptableEntity* (*instantiateScript)();
     void (*destroyScript)(NativeScriptComponent*);
 
-    template <typename T>
-    void bind(const std::string& nameBind) {
+    template <typename T> void bind(const std::string& nameBind) {
         name = nameBind;
         instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
         destroyScript = [](NativeScriptComponent* nsc) {

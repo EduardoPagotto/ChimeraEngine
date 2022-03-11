@@ -1,7 +1,7 @@
+#include "chimera/core/ICamera.hpp"
+#include "chimera/core/ITrans.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/ICamera.hpp"
-#include "chimera/render/ITrans.hpp"
 #include "chimera/render/Shader.hpp"
 #include "chimera/render/buffer/FrameBuffer.hpp"
 

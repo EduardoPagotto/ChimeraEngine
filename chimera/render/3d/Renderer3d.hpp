@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderer3d.hpp"
 #include "RenderCommand.hpp"
-#include "chimera/render/ICamera.hpp"
+#include "chimera/core/ICamera.hpp"
 #include "chimera/render/Light.hpp"
 #include "chimera/render/Shader.hpp"
 #include "chimera/render/partition/Frustum.hpp"

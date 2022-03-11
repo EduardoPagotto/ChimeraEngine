@@ -1,7 +1,6 @@
 #include "chimera/core/space/Plane.hpp"
 
 namespace Chimera {
-Plane::Plane() {}
 
 Plane::Plane(const Plane& _cpy) {
     this->point = _cpy.point;
@@ -9,10 +8,6 @@ Plane::Plane(const Plane& _cpy) {
     this->ND = _cpy.ND;
     this->O = _cpy.O;
 }
-
-Plane::Plane(const glm::vec3& _position, const glm::vec3& _normal) { this->set(_position, _normal); }
-
-Plane::~Plane() {}
 
 void Plane::set(const glm::vec3& pA, const glm::vec3& B, const glm::vec3& C) {
     point = pA;
@@ -40,7 +35,6 @@ bool Plane::collinearNormal(const glm::vec3& _normal) const {
 }
 
 SIDE Plane::classifyPoint(const glm::vec3& point) const {
-    // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     glm::vec3 dir = this->point - point;
     float clipTest = glm::dot(dir, this->normal);
 
@@ -54,7 +48,6 @@ SIDE Plane::classifyPoint(const glm::vec3& point) const {
 }
 
 SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest) const {
-    // ref: http://www.cs.utah.edu/~jsnider/SeniorProj/BSP/default.htm
     unsigned short infront = 0;
     unsigned short behind = 0;
     unsigned short onPlane = 0;
@@ -113,9 +106,4 @@ bool Plane::intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm:
     *intersection = linestart + (direction * (*percentage));
     return true;
 }
-
-bool Plane::AABBBehind(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]) < ND; }
-
-float Plane::AABBDistance(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]); }
-
 } // namespace Chimera

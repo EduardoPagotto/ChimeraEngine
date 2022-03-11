@@ -3,28 +3,26 @@
 
 namespace Chimera {
 
-class AABB {
+class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
   public:
-    AABB();
+    AABB() = default;
     AABB(const AABB& _cpy);
     AABB(const glm::vec3& _min, const glm::vec3& _max);
-    virtual ~AABB();
+    virtual ~AABB() = default;
 
-    void setPosition(const glm::vec3& _pos, const glm::vec3& _size);
-    void setBoundary(const glm::vec3& _min, const glm::vec3& _max);
-
-    bool intersects(const AABB& _aabb) const;
-    bool contains(const glm::vec3& _point) const;
-    bool visible(const Frustum& _frustum) const;
-    float distance(const Frustum& _frustum) const;
+    inline const bool visible(const Frustum& _frustum) const { return _frustum.AABBVisible(vertex); }
+    inline const float distance(const Frustum& _frustum) const { return _frustum.AABBDistance(vertex); }
     inline const glm::vec3* getVertexs() const { return vertex; }
-
-    AABB transformation(const glm::mat4& transformation) const;
-
     inline glm::vec3 getMax() const { return vertex[7]; }
     inline glm::vec3 getMin() const { return vertex[0]; }
     inline glm::vec3 getPosition() const { return position; }
     inline glm::vec3 getSize() const { return size; }
+
+    void setPosition(const glm::vec3& _pos, const glm::vec3& _size);
+    void setBoundary(const glm::vec3& _min, const glm::vec3& _max);
+    bool intersects(const AABB& _aabb) const;
+    bool contains(const glm::vec3& _point) const;
+    AABB transformation(const glm::mat4& transformation) const;
 
   protected:
     glm::vec3 vertex[8];

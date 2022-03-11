@@ -2,10 +2,6 @@
 
 namespace Chimera {
 
-Frustum::Frustum() {}
-
-Frustum::~Frustum() {}
-
 void Frustum::set(const glm::mat4& ViewProjectionMatrixInverse) {
 
     glm::vec4 A = ViewProjectionMatrixInverse * glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
@@ -34,7 +30,7 @@ void Frustum::set(const glm::mat4& ViewProjectionMatrixInverse) {
     planes[5].set(vertices[5], vertices[4], vertices[6]);
 }
 
-bool Frustum::AABBVisible(const glm::vec3* AABBVertices) const {
+const bool Frustum::AABBVisible(const glm::vec3* AABBVertices) const {
     for (int i = 0; i < 6; i++) {
         if (planes[i].AABBBehind(AABBVertices)) {
             return false;
@@ -43,7 +39,4 @@ bool Frustum::AABBVisible(const glm::vec3* AABBVertices) const {
 
     return true;
 }
-
-float Frustum::AABBDistance(const glm::vec3* AABBVertices) const { return planes[5].AABBDistance(AABBVertices); }
-
 } // namespace Chimera

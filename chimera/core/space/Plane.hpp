@@ -1,18 +1,17 @@
 #pragma once
 #include <glm/glm.hpp>
 
-#define EPSILON 1e-2 // FIXME: para 1e-1 Falhas em calculos de aproximação verificar projeto bsptree
-
-enum class SIDE { CP_ONPLANE, CP_FRONT, CP_BACK, CP_SPANNING };
-
 namespace Chimera {
+
+#define EPSILON 1e-2 // FIXME: para 1e-1 Falhas em calculos de aproximação verificar projeto bsptree
+enum class SIDE { CP_ONPLANE, CP_FRONT, CP_BACK, CP_SPANNING };
 
 class Plane {
   public:
-    Plane();
+    Plane() = default;
     Plane(const Plane& _cpy);
-    Plane(const glm::vec3& _position, const glm::vec3& _normal);
-    ~Plane();
+    Plane(const glm::vec3& _position, const glm::vec3& _normal) { this->set(_position, _normal); }
+    virtual ~Plane() = default;
 
     void set(const glm::vec3& A, const glm::vec3& B, const glm::vec3& C);
     void set(const glm::vec3& _position, const glm::vec3& _normal);
@@ -25,8 +24,8 @@ class Plane {
     SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest) const;
     bool intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm::vec3* intersection, float* percentage) const;
 
-    bool AABBBehind(const glm::vec3* AABBVertices) const;
-    float AABBDistance(const glm::vec3* AABBVertices) const;
+    inline const bool AABBBehind(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]) < ND; }
+    inline const float AABBDistance(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]); }
 
   private:
     glm::vec3 point;  // vertice A

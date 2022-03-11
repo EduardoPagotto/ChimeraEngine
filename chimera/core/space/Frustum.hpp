@@ -5,12 +5,12 @@ namespace Chimera {
 
 class Frustum {
   public:
-    Frustum();
-    ~Frustum();
+    Frustum() = default;
+    virtual ~Frustum() = default;
 
     void set(const glm::mat4& ViewProjectionMatrixInverse);
-    bool AABBVisible(const glm::vec3* AABBVertices) const;
-    float AABBDistance(const glm::vec3* AABBVertices) const;
+    const bool AABBVisible(const glm::vec3* AABBVertices) const;
+    inline const float AABBDistance(const glm::vec3* AABBVertices) const { return planes[5].AABBDistance(AABBVertices); }
     inline const glm::vec3* getVertexs() const { return vertices; }
 
   private:

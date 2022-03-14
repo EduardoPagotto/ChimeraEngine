@@ -3,37 +3,10 @@
 
 namespace Chimera {
 
-template <class T>
-void swapFace(T& a, T& b) {
+template <class T> void swapFace(T& a, T& b) {
     T c = b;
     b = a;
     a = c;
-}
-
-void triangleFromVertexDataIndex(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris) {
-    // Usa os indices já pre-calculado
-    for (uint32_t indice = 0; indice < indexSize; indice += 3) {
-        uint32_t pa = indexData[indice];
-        uint32_t pb = indexData[indice + 1];
-        uint32_t pc = indexData[indice + 2];
-        // Calcula Normal Face
-        glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
-        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
-    }
-}
-
-void triangleFromVertexData(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris) {
-    // Calcula os indices na sequencia em que os vertices estão
-    for (uint32_t indice = 0; indice < vertexSize; indice += 3) {
-        uint32_t pa = indice;
-        uint32_t pb = indice + 1;
-        uint32_t pc = indice + 2;
-        // Calcula Normal Face
-        glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
-        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
-    }
 }
 
 // bool tringleListIsConvex(std::vector<VertexData>& vertexList, std::vector<Triangle*>& _vTriangle) {
@@ -70,23 +43,21 @@ void triangleFromVertexData(VertexData* vertexData, const uint32_t& vertexSize, 
 //     return true;
 // }
 
-void BspTree::create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex) {
+BSPTreeNode* BspTree::create(std::vector<VertexData>& _vVertexIn, std::list<Triangle*>& _vTriangleIn, std::vector<VertexData>& _vVertexOut,
+                             VecPrtTrisIndex& vpLeafOut) {
 
-    std::list<Triangle*> vTris;
-    if (_vIndex.size() > 0) {
-        triangleFromVertexDataIndex(&_vVertex[0], &_vIndex[0], _vIndex.size(), vTris);
-    } else {
-        triangleFromVertexData(&_vVertex[0], _vVertex.size(), vTris);
-    }
-
-    this->vVertex = std::move(_vVertex);
+    this->vVertex = std::move(_vVertexIn);
 
     // create BspTtree leafy
-    root = build(vTris);
+    BSPTreeNode* root = build(_vTriangleIn);
 
-    _vIndex.clear();
+    _vVertexOut.assign(this->vVertex.begin(), this->vVertex.end());
+    vpLeafOut.assign(this->vpLeaf.begin(), this->vpLeaf.end());
 
-    // vTris.clear();
+    this->vpLeaf.clear();
+    this->vVertex.clear();
+
+    return root;
 }
 
 Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
@@ -303,12 +274,12 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
 void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTriangle) {
 
-    Renderable3D* pLeaf = new Renderable3D();
+    TrisIndex* pLeaf = new TrisIndex(); // Renderable3D* pLeaf = new Renderable3D();
 
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();
         listConvexTriangle.pop_back();
-        pLeaf->addTris(convPoly->p[TRI_PA], convPoly->p[TRI_PB], convPoly->p[TRI_PC]);
+        pLeaf->add(convPoly->p[TRI_PA], convPoly->p[TRI_PB], convPoly->p[TRI_PC]);
 
         delete convPoly;
         convPoly = nullptr;

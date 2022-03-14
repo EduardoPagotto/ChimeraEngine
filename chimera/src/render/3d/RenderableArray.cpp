@@ -6,8 +6,8 @@
 
 namespace Chimera {
 
-RenderableArray::RenderableArray(std::vector<Renderable3D*>& vChild, std::vector<VertexData>& vertexData) : totIndex(0) {
-    this->vChild = std::move(vChild);
+RenderableArray::RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<VertexData>& vertexData) : totIndex(0) {
+
     this->vVertex = std::move(vertexData);
 
     // create vertex buffers
@@ -28,9 +28,17 @@ RenderableArray::RenderableArray(std::vector<Renderable3D*>& vChild, std::vector
 
     vao->push(vbo);
 
-    for (Renderable3D* child : this->vChild) {
-        child->initializeBuffer(&vVertex[0], vVertex.size());
-        totIndex += child->getSize();
+    for (auto ptrTrisIndex : vPtrTrisIndex) {
+
+        glm::vec3 min, max, size;
+        vertexDataIndexMinMaxSize(&this->vVertex[0], this->vVertex.size(), &ptrTrisIndex->vIndex[0], ptrTrisIndex->size(), min, max, size);
+
+        IndexBuffer* ibo = new IndexBuffer(&ptrTrisIndex->vIndex[0], ptrTrisIndex->size());
+        Renderable3D* r = new Renderable3D(nullptr, ibo, ptrTrisIndex->size(), AABB(min, max));
+
+        vChild.push_back(r);
+
+        totIndex += ptrTrisIndex->size();
     }
 
     vao->unbind();

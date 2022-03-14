@@ -196,14 +196,14 @@ void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
         if (endWidth > totalWidth)
             endWidth = totalWidth;
 
-        Renderable3D* pNode = new Renderable3D;
+        TrisIndex* pNode = new TrisIndex;
 
         uint32_t face, base;
         for (uint32_t h = startHeight; h < endHeight; h++) {   // z
             for (uint32_t w = startWidth; w < endWidth; w++) { // x
                 face = ((h * totalHeight) + w);
                 base = face * 3;
-                pNode->addTris(_vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
+                pNode->add(_vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
                 contador++;
             }
         }
@@ -216,7 +216,7 @@ void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
             startWidth = endWidth;
         }
 
-        if (pNode->empty() == true) {
+        if (pNode->size() == 0) {
             delete pNode;
             pNode = nullptr;
             done = true;

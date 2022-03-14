@@ -110,10 +110,32 @@ void Scene::onAttach() {
                 std::vector<Chimera::VertexData> vertexDataOut;
                 vertexDataIndexCompile(renderData, vertexDataOut, index);
 
-                // Cria o renderable object com o VertexData
+                // Create VAO, VBO and IBO
+                VertexArray* vao = new VertexArray();
+                vao->bind();
+
+                VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
+                vbo->bind();
+
+                BufferLayout layout;
+                layout.push(3, GL_FLOAT, sizeof(float), false);
+                layout.push(3, GL_FLOAT, sizeof(float), false);
+                layout.push(2, GL_FLOAT, sizeof(float), false);
+
+                vbo->setLayout(layout);
+                vbo->setData(&vertexDataOut[0], vertexDataOut.size());
+                vbo->unbind();
+                vao->push(vbo);
+
+                vao->unbind();
+
+                glm::vec3 min, max, size;
+                vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
+
+                IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
+                Renderable3D* r = new Renderable3D(vao, ibo, index.size(), AABB(min, max));
+
                 Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
-                Renderable3D* r = new Renderable3D();
-                r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
                 rc.renderable = r;
             }
 

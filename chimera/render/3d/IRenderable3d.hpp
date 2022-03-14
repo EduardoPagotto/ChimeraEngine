@@ -3,7 +3,6 @@
 
 namespace Chimera {
 
-class IRenderer3d;
 class IRenderable3d {
   public:
     virtual uint32_t getSize() const = 0;

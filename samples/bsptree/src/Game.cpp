@@ -47,19 +47,29 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
         material.init();
 
-        std::vector<uint32_t> vIndex;
-        std::vector<VertexData> vVertexIndexed;
-
-        // Usando o Maze
+        // processa o Maze
         Maze maze = Maze("./assets/maps/maze7.txt");
         maze.createMap();
 
+        // resultado da compressao do maze
+        std::vector<uint32_t> vIndex;
+        std::vector<VertexData> vVertexIndexed;
         vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
 
-        BspTree bspTree;
-        bspTree.create(vVertexIndexed, vIndex);
+        // indexador triangular
+        std::list<Triangle*> vTris;
+        if (vIndex.size() > 0)
+            vertexDataIndexToTriangle(&vVertexIndexed[0], &vIndex[0], vIndex.size(), vTris);
+        else
+            vertexDataToTriangle(&vVertexIndexed[0], vVertexIndexed.size(), vTris);
 
-        RenderableBsp* r = new RenderableBsp(bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+        // btree root, leafs, vertex
+        BspTree bspTree;
+        std::vector<VertexData> vVertexFinal;
+        VecPrtTrisIndex vTrisFinal;
+        BSPTreeNode* root = bspTree.create(vVertexIndexed, vTris, vVertexFinal, vTrisFinal);
+
+        RenderableBsp* r = new RenderableBsp(root, vTrisFinal, vVertexFinal);
         rc.renderable = r;
     }
 

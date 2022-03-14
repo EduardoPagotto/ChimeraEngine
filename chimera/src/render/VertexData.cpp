@@ -196,4 +196,29 @@ void vertexDataMeshClean(Mesh* m) {
 //                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
 // }
 
+void vertexDataIndexToTriangle(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris) {
+    // Usa os indices já pre-calculado
+    for (uint32_t indice = 0; indice < indexSize; indice += 3) {
+        uint32_t pa = indexData[indice];
+        uint32_t pb = indexData[indice + 1];
+        uint32_t pc = indexData[indice + 2];
+        // Calcula Normal Face
+        glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
+    }
+}
+
+void vertexDataToTriangle(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris) {
+    // Calcula os indices na sequencia em que os vertices estão
+    for (uint32_t indice = 0; indice < vertexSize; indice += 3) {
+        uint32_t pa = indice;
+        uint32_t pb = indice + 1;
+        uint32_t pc = indice + 2;
+        // Calcula Normal Face
+        glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
+    }
+}
 } // namespace Chimera

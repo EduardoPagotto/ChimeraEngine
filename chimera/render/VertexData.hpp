@@ -1,5 +1,7 @@
 #pragma once
+#include "chimera/core/space/Triangle.hpp"
 #include <glm/glm.hpp>
+#include <list>
 #include <vector>
 
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
@@ -46,4 +48,7 @@ void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3
 void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData);
 void vertexDataMeshScale(Mesh* m, const float& new_size, const bool& hasTexture);
 void vertexDataMeshClean(Mesh* m);
+
+void vertexDataIndexToTriangle(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris);
+void vertexDataToTriangle(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris);
 } // namespace Chimera

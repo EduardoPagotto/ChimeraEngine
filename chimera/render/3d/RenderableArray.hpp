@@ -1,12 +1,13 @@
 #pragma once
 #include "Renderable3D.hpp"
+#include "chimera/core/space/TrisIndex.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
 
 class RenderableArray : public IRenderable3d {
   public:
-    RenderableArray(std::vector<Renderable3D*>& vChild, std::vector<VertexData>& vertexData);
+    RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<VertexData>& vertexData);
     ~RenderableArray();
 
     virtual void submit(ICamera* Icamera, RenderCommand& command, IRenderer3d* renderer) override;

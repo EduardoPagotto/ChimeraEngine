@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderCommand.hpp"
 #include "Renderable3D.hpp"
+#include "chimera/core/space/TrisIndex.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/BSPTreeNode.hpp"
 #include <vector>
@@ -9,7 +10,7 @@ namespace Chimera {
 
 class RenderableBsp : public IRenderable3d {
   public:
-    RenderableBsp(BSPTreeNode* root, std::vector<Renderable3D*>* vChild, std::vector<VertexData>* vertexData);
+    RenderableBsp(BSPTreeNode* root, VecPrtTrisIndex& vTris, std::vector<VertexData>& vertexData);
     virtual ~RenderableBsp();
     virtual uint32_t getSize() const override { return totIndex; }
     virtual VertexArray* getVao() const override { return vao; }

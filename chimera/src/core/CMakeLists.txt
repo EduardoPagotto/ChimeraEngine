@@ -18,7 +18,8 @@ set (SourcesCore Registry.cpp
 				 space/Plane.cpp
 				 space/Frustum.cpp
 				 space/AABB.cpp
-				 space/Octree.cpp)
+				 space/Octree.cpp
+				 Mesh.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}

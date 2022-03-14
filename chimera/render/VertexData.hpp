@@ -1,8 +1,7 @@
 #pragma once
+#include "chimera/core/Mesh.hpp"
 #include "chimera/core/space/Triangle.hpp"
-#include <glm/glm.hpp>
 #include <list>
-#include <vector>
 
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
 #define BUFFER_OFFSET(i) ((void*)(i))
@@ -20,17 +19,6 @@ struct VertexDataSimple {
     glm::vec2 uv;    // 2 * 4 = 8  (12 - 19)
     float tid;       // 1 * 4 = 4  (20 - 23)
     glm::vec4 color; // 4 * 4 = 16 (24 - 39)
-};
-
-struct Mesh {
-    Mesh() = default;
-    bool singleIndex = false;
-    std::vector<glm::vec3> point;
-    std::vector<glm::vec3> normal;
-    std::vector<glm::vec2> uv;
-    std::vector<uint32_t> iPoint;
-    std::vector<uint32_t> iNormal;
-    std::vector<uint32_t> iUv;
 };
 
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices);

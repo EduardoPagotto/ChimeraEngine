@@ -12,13 +12,13 @@ bool getSimilarVertexIndex(VertexData& in_vertex, std::vector<VertexData>& out_v
     // Percorrer todos os vertex ja existentes na lista
     for (uint32_t i = 0; i < out_vertex.size(); i++) {
 
-        if (is_near(in_vertex.position.x, out_vertex[i].position.x) && is_near(in_vertex.position.y, out_vertex[i].position.y) &&
-            is_near(in_vertex.position.z, out_vertex[i].position.z) &&
+        if (is_near(in_vertex.point.x, out_vertex[i].point.x) && is_near(in_vertex.point.y, out_vertex[i].point.y) &&
+            is_near(in_vertex.point.z, out_vertex[i].point.z) &&
 
             is_near(in_vertex.normal.x, out_vertex[i].normal.x) && is_near(in_vertex.normal.y, out_vertex[i].normal.y) &&
             is_near(in_vertex.normal.z, out_vertex[i].normal.z) &&
 
-            is_near(in_vertex.texture.x, out_vertex[i].texture.x) && is_near(in_vertex.texture.y, out_vertex[i].texture.y)) {
+            is_near(in_vertex.uv.x, out_vertex[i].uv.x) && is_near(in_vertex.uv.y, out_vertex[i].uv.y)) {
             result = i;
             return true;
         }
@@ -66,13 +66,13 @@ void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexD
 
 void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
     if (vertexSize > 0) {
-        min = pVertexList[0].position;
-        max = pVertexList[0].position;
+        min = pVertexList[0].point;
+        max = pVertexList[0].point;
     }
 
     for (uint32_t i = 1; i < vertexSize; i++) {
-        min = glm::min(min, pVertexList[i].position);
-        max = glm::max(max, pVertexList[i].position);
+        min = glm::min(min, pVertexList[i].point);
+        max = glm::max(max, pVertexList[i].point);
     }
 
     size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
@@ -83,13 +83,13 @@ void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, g
 void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
                                glm::vec3& min, glm::vec3& max, glm::vec3& size) {
     if (indexSize > 0) {
-        min = pVertexList[pIndexList[0]].position;
-        max = pVertexList[pIndexList[0]].position;
+        min = pVertexList[pIndexList[0]].point;
+        max = pVertexList[pIndexList[0]].point;
     }
 
     for (uint32_t i = 1; i < indexSize; i++) {
-        min = glm::min(min, pVertexList[pIndexList[i]].position);
-        max = glm::max(max, pVertexList[pIndexList[i]].position);
+        min = glm::min(min, pVertexList[pIndexList[i]].point);
+        max = glm::max(max, pVertexList[pIndexList[i]].point);
     }
     size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
     size.y = (glm::abs(max.y) + glm::abs(min.y)) / 2.0f;

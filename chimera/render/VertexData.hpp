@@ -10,16 +10,16 @@
 namespace Chimera {
 
 struct VertexData {
-    glm::vec3 position; // 3 * 4 = 12 ( 0 - 11)
-    glm::vec3 normal;   // 3 * 4 = 12 (12 - 23)
-    glm::vec2 texture;  // 2 * 4 = 08 (24 - 31)
+    glm::vec3 point;  // 3 * 4 = 12 ( 0 - 11)
+    glm::vec3 normal; // 3 * 4 = 12 (12 - 23)
+    glm::vec2 uv;     // 2 * 4 = 08 (24 - 31)
 };
 
 struct VertexDataSimple {
-    glm::vec3 vertex; // 3 * 4 = 12 (0 - 11)
-    glm::vec2 uv;     // 2 * 4 = 8  (12 - 19)
-    float tid;        // 1 * 4 = 4  (20 - 23)
-    glm::vec4 color;  // 4 * 4 = 16 (24 - 39)
+    glm::vec3 point; // 3 * 4 = 12 (0 - 11)
+    glm::vec2 uv;    // 2 * 4 = 8  (12 - 19)
+    float tid;       // 1 * 4 = 4  (20 - 23)
+    glm::vec4 color; // 4 * 4 = 16 (24 - 39)
 };
 
 struct Mesh {

@@ -8,8 +8,8 @@ static std::vector<glm::vec2> tTexSeq;
 
 void triangleCalcNormal(std::vector<VertexData>& vertexList, Triangle& t) {
 
-    glm::vec3 u = vertexList[t.p[TRI_PB]].position - vertexList[t.p[TRI_PA]].position;
-    glm::vec3 v = vertexList[t.p[TRI_PC]].position - vertexList[t.p[TRI_PA]].position;
+    glm::vec3 u = vertexList[t.p[TRI_PB]].point - vertexList[t.p[TRI_PA]].point;
+    glm::vec3 v = vertexList[t.p[TRI_PC]].point - vertexList[t.p[TRI_PA]].point;
     t.normal = glm::normalize(glm::cross(u, v));
 
     vertexList[t.p[TRI_PA]].normal = t.normal;

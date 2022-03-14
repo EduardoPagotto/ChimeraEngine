@@ -9,8 +9,8 @@ class IndexBuffer {
     virtual ~IndexBuffer();
     void bind() const;
     void unbind() const;
-    inline uint32_t getCount() const { return size; }
-    inline uint32_t getBufferID() const { return bufferID; }
+    inline const uint32_t getSize() const { return size; }
+    inline const uint32_t getBufferID() const { return bufferID; }
 
   private:
     uint32_t bufferID;

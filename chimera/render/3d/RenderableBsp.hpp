@@ -12,7 +12,7 @@ class RenderableBsp : public IRenderable3d {
   public:
     RenderableBsp(BSPTreeNode* root, VecPrtTrisIndex& vTris, std::vector<VertexData>& vertexData);
     virtual ~RenderableBsp();
-    virtual uint32_t getSize() const override { return totIndex; }
+    virtual const uint32_t getSize() const override { return totIndex; }
     virtual VertexArray* getVao() const override { return vao; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }
     virtual const AABB& getAABB() const override { return aabb; }

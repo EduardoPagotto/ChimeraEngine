@@ -33,7 +33,7 @@ void Renderer3d::submit(const RenderCommand& command) {
         IndexBuffer* ibo = command.renderable->getIBO();
         if (ibo != nullptr) {
             totIBO++;
-            totFaces += ibo->getCount() / 3;
+            totFaces += ibo->getSize() / 3;
         }
         // adicionado ao proximo render
         commandQueue.push_back(command);

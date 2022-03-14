@@ -23,11 +23,11 @@ void Renderable3D::submit(ICamera* camera, RenderCommand& command, IRenderer3d* 
 void Renderable3D::draw(const bool& logData) {
     if (ibo != nullptr) { // Desenhar o IBO
         ibo->bind();
-        glDrawElements(GL_TRIANGLES, ibo->getCount(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+        glDrawElements(GL_TRIANGLES, ibo->getSize(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 
         if (logData == true) {
             glm::vec3 size = aabb.getSize();
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "IBO ID: %d Faces: %d AABB[%.2f, %.2f, %.2f]", ibo->getBufferID(), ibo->getCount() / 3,
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "IBO ID: %d Faces: %d AABB[%.2f, %.2f, %.2f]", ibo->getBufferID(), ibo->getSize() / 3,
                          size.x, size.y, size.z);
 
             spaceRenderAABB(aabb);

@@ -38,7 +38,7 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, VecPrtTrisIndex& vTris, std::vec
         vertexDataIndexMinMaxSize(&vertexData[0], vertexData.size(), &trisIndex->vIndex[0], trisIndex->size(), min, max, size);
 
         IndexBuffer* ibo = new IndexBuffer(&trisIndex->vIndex[0], trisIndex->size());
-        Renderable3D* r = new Renderable3D(nullptr, ibo, trisIndex->size(), AABB(min, max));
+        Renderable3D* r = new Renderable3D(nullptr, ibo, AABB(min, max));
 
         vChild.push_back(r);
     }

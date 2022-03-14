@@ -133,7 +133,7 @@ void Scene::onAttach() {
                 vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
 
                 IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
-                Renderable3D* r = new Renderable3D(vao, ibo, index.size(), AABB(min, max));
+                Renderable3D* r = new Renderable3D(vao, ibo, AABB(min, max));
 
                 Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
                 rc.renderable = r;

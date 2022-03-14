@@ -1,5 +1,5 @@
 #pragma once
-#include "Renderable3D.hpp"
+#include "IRenderable3d.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 
@@ -19,7 +19,7 @@ class RenderableArray : public IRenderable3d {
 
   private:
     VertexArray* vao;
-    std::vector<Renderable3D*> vChild;
+    std::vector<IRenderable3d*> vChild;
     std::vector<VertexData> vVertex;
     AABB aabb;
     uint32_t totIndex;

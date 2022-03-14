@@ -1,7 +1,7 @@
 #include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
-#include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -34,7 +34,7 @@ RenderableArray::RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<Ver
         vertexDataIndexMinMaxSize(&this->vVertex[0], this->vVertex.size(), &ptrTrisIndex->vIndex[0], ptrTrisIndex->size(), min, max, size);
 
         IndexBuffer* ibo = new IndexBuffer(&ptrTrisIndex->vIndex[0], ptrTrisIndex->size());
-        Renderable3D* r = new Renderable3D(nullptr, ibo, ptrTrisIndex->size(), AABB(min, max));
+        IRenderable3d* r = new Renderable3D(nullptr, ibo, AABB(min, max));
 
         vChild.push_back(r);
 
@@ -52,7 +52,7 @@ RenderableArray::RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<Ver
 RenderableArray::~RenderableArray() {
 
     while (!vChild.empty()) {
-        Renderable3D* child = vChild.back();
+        IRenderable3d* child = vChild.back();
         vChild.pop_back();
         delete child;
         child = nullptr;
@@ -71,7 +71,7 @@ void RenderableArray::submit(ICamera* camera, RenderCommand& command, IRenderer3
 
     renderer->submit(command);
 
-    for (Renderable3D* child : vChild) {
+    for (IRenderable3d* child : vChild) {
         command.renderable = child;
         renderer->submit(command);
     }

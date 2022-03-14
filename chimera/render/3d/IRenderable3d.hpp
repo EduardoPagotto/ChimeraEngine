@@ -5,6 +5,7 @@ namespace Chimera {
 
 class IRenderable3d {
   public:
+    virtual ~IRenderable3d() = default;
     virtual uint32_t getSize() const = 0;
     virtual class VertexArray* getVao() const = 0;
     virtual class IndexBuffer* getIBO() const = 0;

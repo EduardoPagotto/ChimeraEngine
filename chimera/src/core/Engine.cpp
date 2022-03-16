@@ -1,8 +1,8 @@
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/Exception.hpp"
-#include "chimera/core/JoystickManager.hpp"
-#include "chimera/core/Keyboard.hpp"
-#include "chimera/core/MouseDevice.hpp"
+#include "chimera/core/device/JoystickManager.hpp"
+#include "chimera/core/device/Keyboard.hpp"
+#include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {

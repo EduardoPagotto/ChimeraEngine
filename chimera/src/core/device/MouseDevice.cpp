@@ -1,4 +1,4 @@
-#include "chimera/core/MouseDevice.hpp"
+#include "chimera/core/device/MouseDevice.hpp"
 
 namespace Chimera {
 

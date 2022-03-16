@@ -1,4 +1,4 @@
-#include "chimera/core/CanvasFB.hpp"
+#include "chimera/core/device/CanvasFB.hpp"
 #include "chimera/core/Exception.hpp"
 
 namespace Chimera {

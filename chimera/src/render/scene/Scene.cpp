@@ -1,5 +1,5 @@
 #include "chimera/render/scene/Scene.hpp"
-#include "chimera/core/MouseDevice.hpp"
+#include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"

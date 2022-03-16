@@ -1,4 +1,4 @@
-#include "chimera/core/Keyboard.hpp"
+#include "chimera/core/device/Keyboard.hpp"
 
 namespace Chimera {
 

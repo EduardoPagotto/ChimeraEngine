@@ -6,20 +6,20 @@ find_package(SDL2 REQUIRED)
 
 # define objetos a compilar
 set (SourcesCore Registry.cpp
-				 CanvasFB.cpp
 				 utils.cpp
 				 Timer.cpp
-				 Keyboard.cpp
-				 JoystickState.cpp
-				 JoystickManager.cpp
-				 MouseDevice.cpp
 				 StateStack.cpp
 				 Engine.cpp
+				 Mesh.cpp
+				 device/CanvasFB.cpp
+				 device/Keyboard.cpp
+				 device/JoystickState.cpp
+				 device/JoystickManager.cpp
+				 device/MouseDevice.cpp
 				 space/Plane.cpp
 				 space/Frustum.cpp
 				 space/AABB.cpp
-				 space/Octree.cpp
-				 Mesh.cpp)
+				 space/Octree.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}

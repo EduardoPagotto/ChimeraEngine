@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "chimera/core/JoystickManager.hpp"
+#include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/loader/PhysicsScene.hpp"
 #include "chimera/loader/VisualScene.hpp"

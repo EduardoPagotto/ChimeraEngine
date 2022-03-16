@@ -1,4 +1,4 @@
-#include "chimera/core/JoystickManager.hpp"
+#include "chimera/core/device/JoystickManager.hpp"
 
 namespace Chimera {
 

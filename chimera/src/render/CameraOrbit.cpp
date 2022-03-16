@@ -1,6 +1,6 @@
 #include "chimera/render/CameraOrbit.hpp"
-#include "chimera/core/Keyboard.hpp"
-#include "chimera/core/MouseDevice.hpp"
+#include "chimera/core/device/Keyboard.hpp"
+#include "chimera/core/device/MouseDevice.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

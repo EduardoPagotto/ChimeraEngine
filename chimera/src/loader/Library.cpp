@@ -1,5 +1,4 @@
 #include "chimera/loader/Library.hpp"
-#include "chimera/core/Exception.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -18,13 +17,13 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string& _url) {
         // Verifica se arquivo existe
         tinyxml2::XMLError a_eResult = doc->LoadFile(file.c_str());
         if (a_eResult != 0) {
-            throw Exception("Falha ao ler arquivo erro: " + std::to_string(a_eResult));
+            throw std::string("Falha ao ler arquivo erro: " + std::to_string(a_eResult));
         }
 
         // vefifica se ele � uma estrutura compativel com collada
         root = doc->FirstChildElement("COLLADA");
         if (root == nullptr) {
-            throw Exception("Nao é um arquivo colada: " + file);
+            throw std::string("Nao é um arquivo colada: " + file);
         }
 
         file_atual = file;
@@ -60,13 +59,13 @@ Library::Library(tinyxml2::XMLElement* _root, const std::string& _url) {
         // Verifica se arquivo existe
         tinyxml2::XMLError a_eResult = doc->LoadFile(file.c_str());
         if (a_eResult != 0) {
-            throw Exception("Falha ao ler arquivo erro: " + std::to_string(a_eResult));
+            throw std::string("Falha ao ler arquivo erro: " + std::to_string(a_eResult));
         }
 
         // vefifica se ele � uma estrutura compativel com collada
         root = doc->FirstChildElement("COLLADA");
         if (root == nullptr) {
-            throw Exception("Nao é um arquivo colada: " + file);
+            throw std::string("Nao é um arquivo colada: " + file);
         }
 
     } else {
@@ -150,7 +149,7 @@ void Library::loadArrayI(const char* _val, std::vector<int>& _arrayI) {
 glm::mat4 Library::carregaMatrix(const std::vector<float>& listaMatrix) {
 
     if (listaMatrix.size() != 16) {
-        throw Exception("Tamanho da Matrix invalido" + std::to_string(listaMatrix.size()));
+        throw std::string("Tamanho da Matrix invalido" + std::to_string(listaMatrix.size()));
     }
 
     float ponteiroFloat[16];

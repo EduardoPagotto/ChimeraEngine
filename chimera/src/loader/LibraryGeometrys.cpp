@@ -1,6 +1,5 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryMaterials.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/scene/Components.hpp"
 
 #include <SDL2/SDL.h>
@@ -29,7 +28,7 @@ void LibraryGeometrys::target() {
             return;
         }
     }
-    throw Exception("Geometry nao encontrado: " + url);
+    throw std::string("Geometry nao encontrado: " + url);
 }
 
 int LibraryGeometrys::getSource(tinyxml2::XMLElement* _source, std::vector<float>& _arrayValores) {

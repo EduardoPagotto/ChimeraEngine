@@ -2,7 +2,6 @@
 #include "LibraryCameras.hpp"
 #include "LibraryGeometrys.hpp"
 #include "LibraryLights.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/render/Transform.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -33,7 +32,7 @@ void LibraryVisualScenes::target() {
         }
     }
 
-    throw Exception("Visual scenes nao encontrado: " + url);
+    throw std::string("Visual scenes nao encontrado: " + url);
 }
 
 glm::mat4 LibraryVisualScenes::getTransformation(tinyxml2::XMLElement* _nNode) {
@@ -44,7 +43,7 @@ glm::mat4 LibraryVisualScenes::getTransformation(tinyxml2::XMLElement* _nNode) {
     if (strcmp(l_tipoTransform, (const char*)"transform") == 0) {
         l_pTransform = loadTransformMatrix(_nNode->GetText());
     } else {
-        throw Exception("Matrix de transformacao invalida");
+        throw std::string("Matrix de transformacao invalida");
         // TODO: implementar carga de posicao, rotacao e transformar em matricial em
         // l_pTransform
     }
@@ -141,11 +140,11 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
             // if (pLastNodeDone != nullptr) {
             //     carregaNode(pLastNodeDone, _nNode->FirstChildElement(), l_id, l_name, l_type);
             // } else {
-            //     throw Exception("Falha, objeto hierarquia: " + std::string(l_id));
+            //     throw std::string("Falha, objeto hierarquia: " + std::string(l_id));
             // }
 
         } else {
-            throw Exception("Falha, objeto desconhecido: " + std::string(l_nomeElemento));
+            throw std::string("Falha, objeto desconhecido: " + std::string(l_nomeElemento));
         }
     }
 }

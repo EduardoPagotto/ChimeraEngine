@@ -1,5 +1,4 @@
 #include "chimera/render/Shader.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/core/utils.hpp"
 #include <SDL2/SDL.h>
 #include <vector>
@@ -29,7 +28,7 @@ static GLuint compileShader(const std::string& fileName, const std::string& shad
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s compile error: %s", fileName.c_str(),
                          std::string(&shaderErrorMessage[0]).c_str());
 
-            throw Exception(std::string("Shader compile fail: ") + shaderCode);
+            throw std::string("Shader compile fail: " + shaderCode);
         }
     }
 
@@ -59,7 +58,7 @@ static GLuint linkShader(const std::vector<GLuint>& vecShaderID) {
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check program: %s", std::string(&ProgramErrorMessage[0]).c_str());
         }
 
-        throw Exception(std::string("link Shader Fail"));
+        throw std::string("link Shader Fail");
     }
 
     for (auto id : vecShaderID)

@@ -1,6 +1,5 @@
 #include "LibraryPhysicsScenes.hpp"
 #include "LibraryPhysicModels.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/Transform.hpp"
 #include "chimera/render/bullet/Solid.hpp"
 
@@ -35,7 +34,7 @@ void LibraryPhysicsScenes::target() {
             return;
         }
     }
-    throw Exception("Physics scene nao encontrado: " + url);
+    throw std::string("Physics scene nao encontrado: " + url);
 }
 
 void LibraryPhysicsScenes::loadPhysicControlCollada(tinyxml2::XMLElement* _nNode) {

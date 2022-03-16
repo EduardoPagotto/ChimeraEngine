@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
 #include <iostream>
 
@@ -22,8 +21,6 @@ int main(int argn, char** argv) {
         SDL_Log("raycasting finalizado com sucesso");
         return 0;
 
-    } catch (const Chimera::Exception& ex) { SDL_Log("Falha grave: %s", ex.what()); } catch (const std::exception& ex) {
-        SDL_Log("Falha grave: %s", ex.what());
     } catch (const std::string& ex) { SDL_Log("Falha grave: %s", ex.c_str()); } catch (...) {
         SDL_Log("Falha Desconhecida");
     }

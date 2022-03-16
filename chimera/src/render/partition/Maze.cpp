@@ -1,5 +1,4 @@
 #include "chimera/render/partition/Maze.hpp"
-#include "chimera/core/Exception.hpp"
 #include <string>
 
 namespace Chimera {
@@ -10,7 +9,7 @@ Maze::Maze(const char filename[]) : sizeBlock(10.0f), indexPointCount(0) {
 
     FILE* file = fopen(filename, "rb");
     if (!file)
-        throw Exception(std::string("Arguivo nao localizado"));
+        throw std::string("Arguivo nao localizado");
 
     // tamanho do mapa
     fgets(buffer, 1024, file);

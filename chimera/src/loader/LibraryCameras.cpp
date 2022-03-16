@@ -1,6 +1,5 @@
 #include "LibraryCameras.hpp"
 //#include "chimera/core/CameraFPS.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/CameraOrbit.hpp"
 #include "chimera/render/scene/Components.hpp"
 
@@ -31,7 +30,7 @@ void LibraryCameras::target() {
             return;
         }
     }
-    throw Exception("Camera nao encontrada: " + url);
+    throw std::string("Camera nao encontrada: " + url);
 }
 
 void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, ICamera3D* cam) {
@@ -48,7 +47,7 @@ void LibraryCameras::loadbase(tinyxml2::XMLElement* _nNode, ICamera3D* cam) {
 
     } else {
         // TODO testar ecarregar ortogonal aqui
-        throw Exception("Camera, Ortogonal nao implementada: " + url);
+        throw std::string("Camera, Ortogonal nao implementada: " + url);
     }
 }
 } // namespace Chimera

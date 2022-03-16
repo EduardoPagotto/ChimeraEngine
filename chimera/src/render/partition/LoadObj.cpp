@@ -1,5 +1,4 @@
 #include "chimera/render/partition/LoadObj.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/TextureManager.hpp"
 #include <SDL2/SDL.h>
 
@@ -54,7 +53,7 @@ int getMaterialFile(const std::string materialFile, Material* material) {
                 } else if (n == 4) {
                     material->setAmbient(glm::vec4(r, g, b, a));
                 } else {
-                    throw Exception("linha " + std::to_string(pos_linha) + " material invalido arquivo: " + materialFile);
+                    throw std::string("linha " + std::to_string(pos_linha) + " material invalido arquivo: " + materialFile);
                 }
 
             } else if (line[1] == 'd') {
@@ -64,7 +63,7 @@ int getMaterialFile(const std::string materialFile, Material* material) {
                 } else if (n == 4) {
                     material->setDiffuse(glm::vec4(r, g, b, a));
                 } else {
-                    throw Exception("linha " + std::to_string(pos_linha) + " material invalido arquivo: " + materialFile);
+                    throw std::string("linha " + std::to_string(pos_linha) + " material invalido arquivo: " + materialFile);
                 }
             } else if (line[1] == 's') {
                 int n = sscanf(line, "Ks %f %f %f %f", &r, &g, &b, &a);
@@ -73,7 +72,7 @@ int getMaterialFile(const std::string materialFile, Material* material) {
                 } else if (n == 4) {
                     material->setSpecular(glm::vec4(r, g, b, a));
                 } else {
-                    throw Exception("linha " + std::to_string(pos_linha) + " material invalido arquivo:" + materialFile);
+                    throw std::string("linha " + std::to_string(pos_linha) + " material invalido arquivo:" + materialFile);
                 }
             }
         } else {
@@ -131,7 +130,7 @@ int loadObjFile(const std::string& pathFile, Mesh* mesh, Material* material) {
                     mesh->point.push_back(glm::vec3(x, y, z));
                     continue;
                 }
-                throw Exception(std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + pathFile));
+                throw std::string("linha " + std::to_string(pos_linha) + " parse invalido arquivo: " + pathFile);
 
             } else if (line[1] == 'n') {
                 normalOn = true;

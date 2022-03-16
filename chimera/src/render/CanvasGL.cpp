@@ -1,5 +1,4 @@
 #include "chimera/render/CanvasGL.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -8,7 +7,7 @@ namespace Chimera {
 CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen) : Canvas(_title, _width, _height, _fullScreen) {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        throw Exception(std::string(std::string("Falha SDL_Init:") + SDL_GetError()));
+        throw std::string("Falha SDL_Init:" + std::string(SDL_GetError()));
     }
 
     // Ajusta o contexto de versao do opengl
@@ -29,18 +28,18 @@ CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _ful
                                    height,                  // height, in pixels
                                    flags)) == nullptr) {
 
-        throw Exception(std::string(std::string("Falha Criar Janela SDL:") + SDL_GetError()));
+        throw std::string("Falha Criar Janela SDL:" + std::string(SDL_GetError()));
     }
 
     // Contexto do SDL do GL
     if ((context = SDL_GL_CreateContext(window)) == nullptr) {
-        throw Exception(std::string(std::string("Falha Criar contexto SDL:") + SDL_GetError()));
+        throw std::string("Falha Criar contexto SDL:" + std::string(SDL_GetError()));
     }
 
     // Swap buffer interval
     int interval = SDL_GL_SetSwapInterval(1);
     if (interval < 0) {
-        throw Exception(std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError())));
+        throw std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError()));
     }
 
     // SDL_GetWindowPosition(window, &winGeometry.x, &winGeometry.y);
@@ -125,7 +124,7 @@ std::string CanvasGL::getVersaoOpenGL() {
     } else {
         // Check for error
         GLenum error = glGetError();
-        throw Exception(std::string((const char*)gluErrorString(error)));
+        throw std::string((const char*)gluErrorString(error));
     }
 
     return retorno;

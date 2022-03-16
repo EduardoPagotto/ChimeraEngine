@@ -1,5 +1,4 @@
 #include "chimera/render/TextureManager.hpp"
-#include "chimera/core/Exception.hpp"
 #include <SDL2/SDL_image.h>
 
 namespace Chimera {
@@ -71,7 +70,7 @@ bool TextureManager::loadFromFile(const std::string& name, const std::string& pa
 
     SDL_Surface* pImage = IMG_Load(pathfile.c_str());
     if (pImage == nullptr)
-        throw Exception("Falha ao ler arquivo:" + pathfile);
+        throw std::string("Falha ao ler arquivo:" + pathfile);
 
     bool res = TextureManager::loadFromSurface(name, pImage, textureParameters);
 

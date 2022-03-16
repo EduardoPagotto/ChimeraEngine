@@ -1,5 +1,4 @@
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"

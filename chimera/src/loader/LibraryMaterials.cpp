@@ -1,6 +1,5 @@
 #include "LibraryMaterials.hpp"
 #include "LibraryEffects.hpp"
-#include "chimera/core/Exception.hpp"
 
 namespace Chimera {
 
@@ -17,7 +16,7 @@ Material* LibraryMaterials::target() {
             return retorno;
         }
     }
-    throw Exception("Material nao encontrado Node: " + url);
+    throw std::string("Material nao encontrado Node: " + url);
 }
 
 } // namespace Chimera

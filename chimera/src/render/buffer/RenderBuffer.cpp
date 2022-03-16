@@ -1,5 +1,4 @@
 #include "chimera/render/buffer/RenderBuffer.hpp"
-#include "chimera/core/Exception.hpp"
 
 namespace Chimera {
 

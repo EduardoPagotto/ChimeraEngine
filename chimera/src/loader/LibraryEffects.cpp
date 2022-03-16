@@ -1,6 +1,5 @@
 #include "LibraryEffects.hpp"
 #include "LibraryImages.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/TextureManager.hpp"
 
 namespace Chimera {
@@ -32,7 +31,7 @@ Material* LibraryEffects::target() {
         }
     }
 
-    throw Exception("Effect nao encontrado: " + url);
+    throw std::string("Effect nao encontrado: " + url);
 }
 
 glm::vec4 LibraryEffects::getColor(tinyxml2::XMLElement* l_nColorVal) {
@@ -68,7 +67,7 @@ Texture* LibraryEffects::getTexture(tinyxml2::XMLElement* _nTex) {
         }
     }
 
-    throw Exception("Texture definido mas nao encontrado");
+    throw std::string("Texture definido mas nao encontrado");
 }
 
 void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Material* _pMat) {
@@ -97,7 +96,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Material* _pMat
             else if (l_nTex != nullptr)
                 _pMat->setEmission(glm::vec4(1.0, 1.0, 1.0, 1.0));
             else
-                throw Exception("Tipo de cor emission indefinida");
+                throw std::string("Tipo de cor emission indefinida");
 
         } else if (strcmp(l_cor, (const char*)"ambient") == 0) {
 
@@ -106,7 +105,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Material* _pMat
             else if (l_nTex != nullptr)
                 _pMat->setAmbient(glm::vec4(1.0, 1.0, 1.0, 1.0));
             else
-                throw Exception("Tipo de cor ambient indefinida");
+                throw std::string("Tipo de cor ambient indefinida");
 
         } else if (strcmp(l_cor, (const char*)"diffuse") == 0) {
 
@@ -115,7 +114,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Material* _pMat
             else if (l_nTex != nullptr)
                 _pMat->setDiffuse(glm::vec4(1.0, 1.0, 1.0, 1.0));
             else
-                throw Exception("Tipo de cor diffuse indefinida");
+                throw std::string("Tipo de cor diffuse indefinida");
 
         } else if (strcmp(l_cor, (const char*)"specular") == 0) {
 
@@ -124,7 +123,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Material* _pMat
             else if (l_nTex != nullptr)
                 _pMat->setSpecular(glm::vec4(1.0, 1.0, 1.0, 1.0));
             else
-                throw Exception("Tipo de cor specular indefinida");
+                throw std::string("Tipo de cor specular indefinida");
 
         } else if (strcmp(l_cor, (const char*)"shininess") == 0) {
 
@@ -132,7 +131,7 @@ void LibraryEffects::loadColors(tinyxml2::XMLElement* _nProfile, Material* _pMat
             if (l_val != nullptr)
                 _pMat->setShine(atof(l_val));
             else
-                throw Exception("Tipo de cor shininess indefinida");
+                throw std::string("Tipo de cor shininess indefinida");
         }
     }
 }

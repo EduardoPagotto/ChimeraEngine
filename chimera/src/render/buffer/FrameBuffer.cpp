@@ -1,5 +1,4 @@
 #include "chimera/render/buffer/FrameBuffer.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/OpenGLDefs.hpp"
 
 namespace Chimera {
@@ -130,7 +129,7 @@ void FrameBuffer::invalidade() {
 
     // Always check that our framebuffer is ok
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        throw Exception(std::string("Falha em instanciar o Frame Buffer"));
+        throw std::string("Falha em instanciar o Frame Buffer");
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

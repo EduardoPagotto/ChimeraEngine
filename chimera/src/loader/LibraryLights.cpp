@@ -1,5 +1,4 @@
 #include "LibraryLights.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include <tuple>
 
@@ -28,7 +27,7 @@ void LibraryLights::target() {
         }
     }
 
-    throw Exception("NodeLight nao encontrada: " + url);
+    throw std::string("NodeLight nao encontrada: " + url);
 }
 
 glm::vec4 LibraryLights::getColor(tinyxml2::XMLElement* l_nColorVal) {

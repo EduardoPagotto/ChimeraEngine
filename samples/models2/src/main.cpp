@@ -8,7 +8,6 @@
 #include "chimera/render/CanvasGL.hpp"
 #endif
 #include "Game.hpp"
-#include "chimera/core/Exception.hpp"
 
 int main(int argn, char** argv) {
     using namespace Chimera;
@@ -29,9 +28,6 @@ int main(int argn, char** argv) {
         SDL_Log("AppShader finalizado com sucesso");
         return 0;
 
-    } catch (const Chimera::Exception& ex) {
-        // Fail 1
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
     } catch (const std::exception& ex) {
         // Fail 2
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());

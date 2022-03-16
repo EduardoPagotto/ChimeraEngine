@@ -1,5 +1,4 @@
 #include "chimera/core/utils.hpp"
-#include "chimera/core/Exception.hpp"
 #include <fstream>
 
 namespace Chimera {
@@ -26,7 +25,7 @@ void utilsReadFile(const std::string& filepath, std::string& result) {
         in.close();
     } else {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "File \"%s\" not found.", filepath.c_str());
-        throw Exception("File not found: " + std::string(filepath));
+        throw std::string("File not found: " + filepath);
     }
 }
 

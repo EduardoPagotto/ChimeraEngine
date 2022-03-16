@@ -1,5 +1,4 @@
 #include "LibraryPhysicsMaterials.hpp"
-#include "chimera/core/Exception.hpp"
 
 namespace Chimera {
 
@@ -23,6 +22,6 @@ PhysicMaterial* LibraryPhysicsMaterials::target() {
             return pMaterial;
         }
     }
-    throw Exception("Physics material nao encontrado: " + std::string(url));
+    throw std::string("Physics material nao encontrado: " + url);
 }
 } // namespace Chimera

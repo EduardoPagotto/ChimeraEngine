@@ -1,6 +1,5 @@
 #include "LibraryPhysicModels.hpp"
 #include "LibraryPhysicsMaterials.hpp"
-#include "chimera/core/Exception.hpp"
 #include "chimera/render/bullet/Solid.hpp"
 #include "chimera/render/scene/Components.hpp"
 
@@ -73,7 +72,7 @@ void LibraryPhysicModels::target2(const std::string& body, const std::string tar
         }
     }
 
-    throw Exception("Physics model nao encontrado: " + url);
+    throw std::string("Physics model nao encontrado: " + url);
 }
 
 void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2::XMLElement* _nShape, Solid* _pPhysic) {
@@ -93,7 +92,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         } else if (l_arrayValores.size() == 3) {
             _pPhysic->setShapeSphere(l_arrayValores[0]);
         } else {
-            throw Exception("Shape Sphere Array valores invalidos: " + url);
+            throw std::string("Shape Sphere Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "plane") == 0) {
@@ -111,7 +110,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         } else if (l_arrayValores.size() == 4) {
             _pPhysic->setShapePlane(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]), l_arrayValores[3]);
         } else {
-            throw Exception("Shape Plane Array valores invalidos: " + url);
+            throw std::string("Shape Plane Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "box") == 0) {
@@ -127,7 +126,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         } else if (l_arrayValores.size() == 3) {
             _pPhysic->setShapeBox(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]));
         } else {
-            throw Exception("Shape Box Array valores invalidos: " + url);
+            throw std::string("Shape Box Array valores invalidos: " + url);
         }
 
     } else if (strcmp(l_tipoShape, "cylinder") == 0) {
@@ -143,7 +142,7 @@ void LibraryPhysicModels::loadColladaShape(tinyxml2::XMLElement* _root, tinyxml2
         } else if (l_arrayValores.size() == 3) {
             _pPhysic->setShapeCilinder(glm::vec3(l_arrayValores[0], l_arrayValores[1], l_arrayValores[2]));
         } else {
-            throw Exception("Shape Cylinder Array valores invalidos: " + url);
+            throw std::string("Shape Cylinder Array valores invalidos: " + url);
         }
     } else if (strcmp(l_tipoShape, "mesh") == 0) {
 

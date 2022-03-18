@@ -1,9 +1,10 @@
 #pragma once
 #include "chimera/render/OpenGLDefs.hpp"
-#include "chimera/render/VertexData.hpp"
 #include "chimera/render/buffer/BufferLayout.hpp"
 
 namespace Chimera {
+
+#define BUFFER_OFFSET(i) ((void*)(i))
 
 enum class BufferType { STATIC = GL_STATIC_DRAW, DYNAMIC = GL_DYNAMIC_DRAW, STREAM = GL_STREAM_DRAW };
 

@@ -2,6 +2,7 @@
 #include "RenderCommand.hpp"
 #include "Renderable3D.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
+#include "chimera/render/VertexData.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 #include "chimera/render/partition/BSPTreeNode.hpp"
 #include <vector>

@@ -4,8 +4,6 @@
 #include <list>
 
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
-#define BUFFER_OFFSET(i) ((void*)(i))
-
 namespace Chimera {
 
 struct VertexData {

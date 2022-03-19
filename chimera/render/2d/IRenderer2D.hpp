@@ -1,6 +1,6 @@
 #pragma once
+#include "chimera/core/TransformationStack.hpp"
 #include "chimera/core/visible/FontAtlas.hpp"
-#include "chimera/core/visible/TransformationStack.hpp"
 #include <string>
 
 namespace Chimera {

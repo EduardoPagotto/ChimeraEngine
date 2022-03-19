@@ -1,5 +1,5 @@
 #pragma once
-#include "BSPTreeNode.hpp"
+#include "chimera/core/space/BSPTreeNode.hpp"
 #include "chimera/core/space/Triangle.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
 #include "chimera/render/VertexData.hpp"

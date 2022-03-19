@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/space/Plane.hpp"
+#include "Plane.hpp"
 
 namespace Chimera {
 

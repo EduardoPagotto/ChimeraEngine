@@ -20,11 +20,6 @@ set (RenderSource 	VertexData.cpp
 					partition/Maze.cpp
 					partition/LoadObj.cpp
 					partition/LoadHeightMap.cpp
-					buffer/VertexBuffer.cpp
-					buffer/IndexBuffer.cpp
-					buffer/VertexArray.cpp
-					buffer/FrameBuffer.cpp
-					buffer/RenderBuffer.cpp
 					2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp

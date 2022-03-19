@@ -1,8 +1,8 @@
 #pragma once
 #include "IRenderable3d.hpp"
+#include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
 #include "chimera/render/VertexData.hpp"
-#include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {
 

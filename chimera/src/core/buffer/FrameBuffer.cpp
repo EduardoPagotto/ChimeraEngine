@@ -1,4 +1,4 @@
-#include "chimera/render/buffer/FrameBuffer.hpp"
+#include "chimera/core/buffer/FrameBuffer.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
 namespace Chimera {

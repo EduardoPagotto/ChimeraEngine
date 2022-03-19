@@ -1,4 +1,4 @@
-#include "chimera/render/buffer/VertexBuffer.hpp"
+#include "chimera/core/buffer/VertexBuffer.hpp"
 
 namespace Chimera {
 

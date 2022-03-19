@@ -1,8 +1,8 @@
-#include "chimera/core/ICamera.hpp"
-#include "chimera/core/ITrans.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/visible/ICamera.hpp"
+#include "chimera/core/visible/ITrans.hpp"
+#include "chimera/core/visible/Shader.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/Shader.hpp"
 #include "chimera/render/buffer/FrameBuffer.hpp"
 
 namespace Chimera {

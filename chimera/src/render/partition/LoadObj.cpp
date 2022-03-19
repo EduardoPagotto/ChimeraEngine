@@ -1,5 +1,5 @@
 #include "chimera/render/partition/LoadObj.hpp"
-#include "chimera/render/TextureManager.hpp"
+#include "chimera/core/visible/TextureManager.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

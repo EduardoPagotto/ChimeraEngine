@@ -1,5 +1,5 @@
 #include "chimera/render/partition/space.hpp"
-#include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {

@@ -1,4 +1,4 @@
-#include "chimera/render/CameraOrthographic.hpp"
+#include "chimera/core/visible/CameraOrthographic.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

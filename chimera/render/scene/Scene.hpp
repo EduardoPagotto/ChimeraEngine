@@ -1,8 +1,8 @@
 #pragma once
 #include "ShadowPass.hpp"
 #include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/render/ParticleEmitter.hpp"
 #include "chimera/render/buffer/RenderBuffer.hpp"
 #include "chimera/render/bullet/PhysicsControl.hpp"
 

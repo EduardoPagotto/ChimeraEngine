@@ -10,8 +10,8 @@ set (SourcesCore Registry.cpp
 				 Timer.cpp
 				 StateStack.cpp
 				 Engine.cpp
-				 Mesh.cpp
 				 device/CanvasFB.cpp
+				 device/CanvasGL.cpp
 				 device/Keyboard.cpp
 				 device/JoystickState.cpp
 				 device/JoystickManager.cpp
@@ -19,7 +19,18 @@ set (SourcesCore Registry.cpp
 				 space/Plane.cpp
 				 space/Frustum.cpp
 				 space/AABB.cpp
-				 space/Octree.cpp)
+				 space/Octree.cpp
+				 visible/Mesh.cpp
+				 visible/Shader.cpp
+				 visible/Texture.cpp
+				 visible/TextureManager.cpp
+				 visible/CameraFPS.cpp
+				 visible/CameraOrbit.cpp
+				 visible/CameraOrthographic.cpp
+				 visible/FontAtlas.cpp
+				 visible/FontManager.cpp
+				 visible/Material.cpp
+				 visible/ParticleEmitter.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}

@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "chimera/render/CanvasGL.hpp"
+#include "chimera/core/device/CanvasGL.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {

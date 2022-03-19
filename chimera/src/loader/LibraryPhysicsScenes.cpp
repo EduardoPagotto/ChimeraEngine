@@ -1,6 +1,6 @@
 #include "LibraryPhysicsScenes.hpp"
 #include "LibraryPhysicModels.hpp"
-#include "chimera/render/Transform.hpp"
+#include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/bullet/Solid.hpp"
 
 namespace Chimera {

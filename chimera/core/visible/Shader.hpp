@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/UValue.hpp"
-#include "chimera/render/OpenGLDefs.hpp"
+#include "UValue.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>

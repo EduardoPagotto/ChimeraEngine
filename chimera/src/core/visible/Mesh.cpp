@@ -1,4 +1,4 @@
-#include "chimera/core/Mesh.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

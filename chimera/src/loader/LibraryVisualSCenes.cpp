@@ -3,7 +3,7 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryLights.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/render/Transform.hpp"
+#include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/scene/Components.hpp"
 
 namespace Chimera {

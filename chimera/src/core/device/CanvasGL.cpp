@@ -1,5 +1,5 @@
-#include "chimera/render/CanvasGL.hpp"
-#include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

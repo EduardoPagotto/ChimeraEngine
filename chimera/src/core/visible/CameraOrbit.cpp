@@ -1,4 +1,4 @@
-#include "chimera/render/CameraOrbit.hpp"
+#include "chimera/core/visible/CameraOrbit.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include <glm/gtc/matrix_transform.hpp>

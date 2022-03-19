@@ -1,9 +1,9 @@
 #pragma once
 #include "ScriptableEntity.hpp"
-#include "chimera/core/ICamera.hpp"
-#include "chimera/core/ITrans.hpp"
+#include "chimera/core/visible/ICamera.hpp"
+#include "chimera/core/visible/ITrans.hpp"
+#include "chimera/core/visible/Light.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
-#include "chimera/render/Light.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

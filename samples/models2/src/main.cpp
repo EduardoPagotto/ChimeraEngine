@@ -5,7 +5,7 @@
 #ifdef OVR_SET_TO_USE
 #include "chimera/render/CanvasOVR.hpp"
 #else
-#include "chimera/render/CanvasGL.hpp"
+#include "chimera/core/device/CanvasGL.hpp"
 #endif
 #include "Game.hpp"
 

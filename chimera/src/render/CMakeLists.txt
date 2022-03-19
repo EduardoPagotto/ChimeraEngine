@@ -13,18 +13,7 @@ endif(BULLET_SET_TO_USE)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	CanvasGL.cpp
-					Shader.cpp
-					VertexData.cpp
-					Texture.cpp
-					TextureManager.cpp
-					CameraFPS.cpp
-					CameraOrbit.cpp
-					CameraOrthographic.cpp
-					FontAtlas.cpp
-					FontManager.cpp
-					Material.cpp
-					ParticleEmitter.cpp
+set (RenderSource 	VertexData.cpp
 					partition/space.cpp
 					partition/BSPTree.cpp
 					partition/Cube.cpp 

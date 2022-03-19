@@ -1,4 +1,4 @@
-#include "chimera/render/FontManager.hpp"
+#include "chimera/core/visible/FontManager.hpp"
 
 namespace Chimera {
 std::vector<FontAtlas*> FontManager::fonts;

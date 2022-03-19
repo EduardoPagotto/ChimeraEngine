@@ -1,4 +1,4 @@
-#include "chimera/render/TextureManager.hpp"
+#include "chimera/core/visible/TextureManager.hpp"
 #include <SDL2/SDL_image.h>
 
 namespace Chimera {

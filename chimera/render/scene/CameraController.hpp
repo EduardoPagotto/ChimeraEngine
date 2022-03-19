@@ -1,6 +1,6 @@
 #pragma once
 #include "ScriptableEntity.hpp"
-#include "chimera/core/ICamera.hpp"
+#include "chimera/core/visible/ICamera.hpp"
 
 namespace Chimera {
 

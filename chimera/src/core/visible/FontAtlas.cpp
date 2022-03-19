@@ -1,4 +1,4 @@
-#include "chimera/render/FontAtlas.hpp"
+#include "chimera/core/visible/FontAtlas.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/render/Material.hpp"
+#include "chimera/core/visible/Material.hpp"
 #include "chimera/render/VertexData.hpp"
 
 namespace Chimera {

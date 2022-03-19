@@ -1,4 +1,4 @@
-#include "chimera/render/Shader.hpp"
+#include "chimera/core/visible/Shader.hpp"
 #include "chimera/core/utils.hpp"
 #include <SDL2/SDL.h>
 #include <vector>

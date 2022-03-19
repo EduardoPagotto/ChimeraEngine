@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/UValue.hpp"
-#include "chimera/render/Texture.hpp"
+#include "Texture.hpp"
+#include "UValue.hpp"
 #include <vector>
 
 namespace Chimera {

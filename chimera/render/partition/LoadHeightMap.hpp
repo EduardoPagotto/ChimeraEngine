@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/Mesh.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 #include <SDL2/SDL_image.h>
 #include <string>
 

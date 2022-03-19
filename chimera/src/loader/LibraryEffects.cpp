@@ -1,6 +1,6 @@
 #include "LibraryEffects.hpp"
 #include "LibraryImages.hpp"
-#include "chimera/render/TextureManager.hpp"
+#include "chimera/core/visible/TextureManager.hpp"
 
 namespace Chimera {
 

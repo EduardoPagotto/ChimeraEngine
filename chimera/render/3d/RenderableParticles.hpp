@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderable3d.hpp"
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/render/ParticleEmitter.hpp"
+#include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/render/buffer/VertexArray.hpp"
 
 namespace Chimera {

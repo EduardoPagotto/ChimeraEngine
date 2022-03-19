@@ -1,5 +1,5 @@
-#include "chimera/render/ParticleEmitter.hpp"
-#include "chimera/render/TextureManager.hpp"
+#include "chimera/core/visible/ParticleEmitter.hpp"
+#include "chimera/core/visible/TextureManager.hpp"
 #include <algorithm>
 #include <glm/gtx/norm.hpp>
 

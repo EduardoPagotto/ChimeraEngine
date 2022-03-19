@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/Mesh.hpp"
 #include "chimera/core/space/Triangle.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 #include <list>
 
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders

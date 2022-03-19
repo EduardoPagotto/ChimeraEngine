@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderable3d.hpp"
-#include "chimera/render/Shader.hpp"
-#include "chimera/render/Texture.hpp"
+#include "chimera/core/visible/Shader.hpp"
+#include "chimera/core/visible/Texture.hpp"
 #include <vector>
 
 namespace Chimera {

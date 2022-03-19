@@ -1,8 +1,8 @@
 #pragma once
 
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/visible/Light.hpp"
 #include "chimera/loader/Library.hpp"
-#include "chimera/render/Light.hpp"
 
 namespace Chimera {
 

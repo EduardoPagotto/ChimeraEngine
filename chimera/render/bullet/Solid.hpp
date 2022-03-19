@@ -1,6 +1,6 @@
 #pragma once
 #include "PhysicsControl.hpp"
-#include "chimera/core/ITrans.hpp"
+#include "chimera/core/visible/ITrans.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>

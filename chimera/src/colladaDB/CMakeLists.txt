@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.18.4)
 
 PROJECT(ColladaDB)
 
+find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(PUGIXML REQUIRED) #PUGIXML
+find_package(GLEW REQUIRED)
 
 # objetos a compilar
 set (SourceColladaDB	loader.cpp)
@@ -11,6 +13,7 @@ set (SourceColladaDB	loader.cpp)
 # Includes
 set (IncludeColladaDB	${CMAKE_SOURCE_DIR}
 				 		${SDL2_INCLUDE_DIR}
+						${OPENGL_INCLUDE_DIR}
 						${PUGIXML_DIR})
 
 # Target

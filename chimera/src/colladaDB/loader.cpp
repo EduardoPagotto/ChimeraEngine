@@ -1,6 +1,8 @@
 #include "chimera/colladaDB/loader.hpp"
 #include "SDL2/SDL.h"
 #include "chimera/core/visible/Components.hpp"
+#include "chimera/core/visible/Material.hpp"
+#include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -78,7 +80,7 @@ InstanceCollada* colladaURL(InstanceCollada* handle, const std::string& libraryN
     }
 }
 
-void loadImage(InstanceCollada* handle, const std::string& id) {
+Texture* loadImage(InstanceCollada* handle, const std::string& id) {
 
     InstanceCollada* i = colladaURL(handle, "library_images", id);
     pugi::xml_node node = (i == nullptr) ? handle->node : i->node;
@@ -88,8 +90,13 @@ void loadImage(InstanceCollada* handle, const std::string& id) {
         if (pathFile != nullptr) {
             std::string f = pathFile.as_string();
             SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
+
+            TextureManager::loadFromFile(id, f, TexParam());
+            return TextureManager::getLast();
         }
     }
+
+    return nullptr;
 }
 //---
 void textSplit(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) { // TODO: ler como matrix!!!!!!
@@ -143,9 +150,69 @@ void loadNode(InstanceCollada* handle, Registry* reg) {
             }
         } else if (val == "instance_geometry") {
 
-            InstanceCollada* novo = colladaURL(handle, "library_geometries", n.attribute("url").value());
+            pugi::xml_node nodeGeo = n;
+            // InstanceCollada* novo = colladaURL(handle, "library_geometries", nodeGeo.attribute("url").value());
+            // if (novo != nullptr)
+            //     handle = novo;
+
+            pugi::xml_node instanceMaterial = nodeGeo.child("bind_material").child("technique_common").child("instance_material");
+            handle->node = instanceMaterial;
+            InstanceCollada* novo = colladaURL(handle, "library_materials", instanceMaterial.attribute("symbol").value());
             if (novo != nullptr)
                 handle = novo;
+
+            Material& eMaterial = entity.addComponent<Material>();
+
+            pugi::xml_node nodeMat = handle->node;
+            pugi::xml_node effect = nodeMat.child("instance_effect");
+
+            InstanceCollada* novo2 = colladaURL(handle, "library_effects", effect.attribute("url").value());
+            if (novo2 != nullptr)
+                handle = novo2;
+
+            pugi::xml_node profile = handle->node.first_child();
+
+            std::unordered_map<std::string, Texture*> mapaTex;
+            std::unordered_map<std::string, std::string> mapa2D;
+
+            // pugi::xml_node profile = handle->node;
+            for (pugi::xml_node param = profile.first_child(); param; param = param.next_sibling()) {
+
+                std::string sProf = param.name();
+                std::string sid = param.attribute("sid").value();
+                if (sProf == "newparam") {
+
+                    pugi::xml_node val1 = param.first_child();
+                    std::string sVal1 = val1.name();
+
+                    if (sVal1 == "surface") {
+
+                        std::string keyImage = val1.child("init_from").text().as_string();
+                        Texture* tex = loadImage(handle, keyImage);
+                        mapaTex[sid] = tex;
+
+                    } else if (sVal1 == "sampler2D") {
+
+                        std::string keyMap = val1.child("source").text().as_string();
+                        mapa2D[sid] = keyMap;
+                    }
+
+                } else if (sProf == "technique") {
+
+                    pugi::xml_node phong = param.child("phong");
+                    for (pugi::xml_node prop = phong.first_child(); prop; prop = prop.next_sibling()) {
+
+                        std::string p = prop.name();
+                        if (p == "emission") {
+                        } else if (p == "ambient") {
+                        } else if (p == "diffuse") {
+                        } else if (p == "specular") {
+                        } else if (p == "shininess") {
+                        } else if (p == "index_of_refraction") {
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
 #include "chimera/core/space/Frustum.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
 
@@ -38,5 +40,38 @@ const bool Frustum::AABBVisible(const glm::vec3* AABBVertices) const {
     }
 
     return true;
+}
+
+void Frustum::render_debug() const {
+    glBegin(GL_LINES);
+
+    glVertex3fv(glm::value_ptr(vertices[0]));
+    glVertex3fv(glm::value_ptr(vertices[1]));
+    glVertex3fv(glm::value_ptr(vertices[2]));
+    glVertex3fv(glm::value_ptr(vertices[3]));
+    glVertex3fv(glm::value_ptr(vertices[4]));
+    glVertex3fv(glm::value_ptr(vertices[5]));
+    glVertex3fv(glm::value_ptr(vertices[6]));
+    glVertex3fv(glm::value_ptr(vertices[7]));
+
+    glVertex3fv(glm::value_ptr(vertices[0]));
+    glVertex3fv(glm::value_ptr(vertices[2]));
+    glVertex3fv(glm::value_ptr(vertices[1]));
+    glVertex3fv(glm::value_ptr(vertices[3]));
+    glVertex3fv(glm::value_ptr(vertices[4]));
+    glVertex3fv(glm::value_ptr(vertices[6]));
+    glVertex3fv(glm::value_ptr(vertices[5]));
+    glVertex3fv(glm::value_ptr(vertices[7]));
+
+    glVertex3fv(glm::value_ptr(vertices[0]));
+    glVertex3fv(glm::value_ptr(vertices[4]));
+    glVertex3fv(glm::value_ptr(vertices[1]));
+    glVertex3fv(glm::value_ptr(vertices[5]));
+    glVertex3fv(glm::value_ptr(vertices[2]));
+    glVertex3fv(glm::value_ptr(vertices[6]));
+    glVertex3fv(glm::value_ptr(vertices[3]));
+    glVertex3fv(glm::value_ptr(vertices[7]));
+
+    glEnd();
 }
 } // namespace Chimera

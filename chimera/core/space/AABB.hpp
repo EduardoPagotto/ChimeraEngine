@@ -12,7 +12,6 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
 
     inline const bool visible(const Frustum& _frustum) const { return _frustum.AABBVisible(vertex); }
     inline const float distance(const Frustum& _frustum) const { return _frustum.AABBDistance(vertex); }
-    inline const glm::vec3* getVertexs() const { return vertex; }
     inline glm::vec3 getMax() const { return vertex[7]; }
     inline glm::vec3 getMin() const { return vertex[0]; }
     inline glm::vec3 getPosition() const { return position; }
@@ -23,6 +22,7 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
     bool intersects(const AABB& _aabb) const;
     bool contains(const glm::vec3& _point) const;
     AABB transformation(const glm::mat4& transformation) const;
+    void debug_render() const;
 
   protected:
     glm::vec3 vertex[8];

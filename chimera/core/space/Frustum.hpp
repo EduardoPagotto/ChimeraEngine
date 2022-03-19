@@ -11,7 +11,7 @@ class Frustum {
     void set(const glm::mat4& ViewProjectionMatrixInverse);
     const bool AABBVisible(const glm::vec3* AABBVertices) const;
     inline const float AABBDistance(const glm::vec3* AABBVertices) const { return planes[5].AABBDistance(AABBVertices); }
-    inline const glm::vec3* getVertexs() const { return vertices; }
+    void render_debug() const;
 
   private:
     glm::vec3 vertices[8];

@@ -1,7 +1,6 @@
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/core/visible/Shader.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/partition/space.hpp"
 
 namespace Chimera {
 
@@ -121,7 +120,7 @@ void RenderableParticles::draw(const bool& logData) {
     glDisableVertexAttribArray(2);
 
     if (logData == true) {
-        spaceRenderAABB(pc->aabb);
+        pc->aabb.debug_render();
     }
 }
 } // namespace Chimera

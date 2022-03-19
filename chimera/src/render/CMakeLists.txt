@@ -14,7 +14,6 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
 set (RenderSource 	VertexData.cpp
-					partition/space.cpp
 					partition/BSPTree.cpp
 					partition/Cube.cpp 
 					partition/Maze.cpp

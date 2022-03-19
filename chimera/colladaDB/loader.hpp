@@ -12,8 +12,8 @@ struct InstanceCollada {
     pugi::xml_node node;
 };
 
-const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::string& instance, const std::string key);
-InstanceCollada* colladaURL(InstanceCollada* handle, const std::string& instance, const std::string& url);
+const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::string& libraryName, const std::string key);
+InstanceCollada* colladaURL(InstanceCollada* handle, const std::string& libraryName, const std::string& url);
 
 void loadImage(InstanceCollada* handle, const std::string& id);
 

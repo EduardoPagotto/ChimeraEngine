@@ -8,13 +8,12 @@
 
 namespace Chimera {
 
-const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::string& instance, const std::string key) {
+const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::string& libraryName, const std::string key) {
 
-    std::string test = std::string("library_" + instance + "s");
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling()) {
         std::string name = n.name();
-        if (name == test) {
-            SDL_Log("%s encontrado", test.c_str());
+        if (name == libraryName) {
+            SDL_Log("%s encontrado", libraryName.c_str());
             for (pugi::xml_node t = n.first_child(); t; t = t.next_sibling()) {
 
                 pugi::xml_attribute attr = t.attribute("id");
@@ -26,18 +25,18 @@ const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::st
 
                 std::string id = attr.value();
                 if (id == key) {
-                    SDL_Log("Elemento %s", t.name());
+                    SDL_Log("%s item %s id %s", libraryName.c_str(), t.name(), attr.value());
                     return t;
                 }
             }
         }
     }
 
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s não encontrado key: %s", test.c_str(), key.c_str());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s não encontrado key: %s", libraryName.c_str(), key.c_str());
     return pugi::xml_node();
 }
 
-InstanceCollada* colladaURL(InstanceCollada* handle, const std::string& instance, const std::string& url) {
+InstanceCollada* colladaURL(InstanceCollada* handle, const std::string& libraryName, const std::string& url) {
 
     const char* urlFile = "file://";
     size_t urlFileLen = strlen(urlFile);
@@ -66,14 +65,14 @@ InstanceCollada* colladaURL(InstanceCollada* handle, const std::string& instance
 
         SDL_Log("Novo Arquivo carregado %s, Key: %s, Status: %s", target.c_str(), key.c_str(), result.description());
         ret->root = ret->doc.child("COLLADA");
-        ret->node = colladaGetLibrary(ret->root, instance, key);
+        ret->node = colladaGetLibrary(ret->root, libraryName, key);
         return ret;
 
     } else {
 
         std::size_t found = url.rfind("#");
         std::string key = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
-        handle->node = colladaGetLibrary(handle->root, instance, key);
+        handle->node = colladaGetLibrary(handle->root, libraryName, key);
 
         return nullptr;
     }
@@ -81,7 +80,7 @@ InstanceCollada* colladaURL(InstanceCollada* handle, const std::string& instance
 
 void loadImage(InstanceCollada* handle, const std::string& id) {
 
-    InstanceCollada* i = colladaURL(handle, "image", id);
+    InstanceCollada* i = colladaURL(handle, "library_images", id);
     pugi::xml_node node = (i == nullptr) ? handle->node : i->node;
     pugi::xml_node init = node.child("init_from");
     if (init != nullptr) {
@@ -144,7 +143,7 @@ void loadNode(InstanceCollada* handle, Registry* reg) {
             }
         } else if (val == "instance_geometry") {
 
-            InstanceCollada* novo = colladaURL(handle, "geometrie", n.attribute("url").value());
+            InstanceCollada* novo = colladaURL(handle, "library_geometries", n.attribute("url").value());
             if (novo != nullptr)
                 handle = novo;
         }

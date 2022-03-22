@@ -19,6 +19,13 @@ void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat) {
         arrayFloat.push_back(std::stod(val));
 }
 
+void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI) {
+    std::vector<std::string> textData;
+    textToStringArray(text, textData, ' ');
+    for (const std::string& val : textData)
+        arrayI.push_back(std::stod(val));
+}
+
 const glm::vec4 textToVec4(const std::string& text) {
     std::vector<float> arrayFloat;
     textToFloatArray(text, arrayFloat);

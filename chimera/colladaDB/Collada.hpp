@@ -19,6 +19,7 @@ class Collada {
 
 void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter);
 void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat);
+void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI);
 const glm::vec4 textToVec4(const std::string& text);
 const glm::mat4 textToMat4(const std::string& text);
 

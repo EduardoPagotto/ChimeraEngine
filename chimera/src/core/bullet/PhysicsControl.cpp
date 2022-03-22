@@ -1,4 +1,4 @@
-#include "chimera/render/bullet/PhysicsControl.hpp"
+#include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/utils.hpp"
 #include <SDL2/SDL.h>
 

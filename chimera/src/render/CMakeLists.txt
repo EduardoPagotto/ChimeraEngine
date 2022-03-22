@@ -45,17 +45,14 @@ set (RenderInclude 	${CMAKE_SOURCE_DIR}
 # Adiciona objetos e includes do OVR ao RenderSource e RenderInclude
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR incluido no build")
-	set(RenderSource ${RenderSource} src/OvrDevice.cpp) #adiciona o cpp
-	set(RenderInclude ${RenderInclude} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
+	set(RenderInclude ${RenderInclude} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
 endif(OVR_SET_TO_USE)
 
-if (BULLET_SET_TO_USE) # TODO: Remover para o Core depois de estrair o Transform	message(STATUS "Bullet incluido no build")
-	set(RenderSource ${RenderSource} bullet/PhysicsControl.cpp
-									 bullet/Solid.cpp
-									 bullet/Constraint.cpp) #adiciona o cpp
-	set(RenderInclude ${RenderInclude} ${BULLET_INCLUDE_DIR} ) #adiciona o h
+if (BULLET_SET_TO_USE)
+	message(STATUS "Bullet incluido no build")
+	set(RenderInclude ${RenderInclude} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
-			
+
 # Define o Target
 add_library (ChimeraRender STATIC ${RenderSource})
 

@@ -1,5 +1,6 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Transform.hpp"
@@ -7,7 +8,6 @@
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/VertexData.hpp"
-#include "chimera/render/bullet/Solid.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include <SDL2/SDL.h>
 

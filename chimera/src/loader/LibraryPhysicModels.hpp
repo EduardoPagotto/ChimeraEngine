@@ -1,7 +1,7 @@
 #pragma once
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/bullet/Solid.hpp"
 #include "chimera/loader/Library.hpp"
-#include "chimera/render/bullet/Solid.hpp"
 
 namespace Chimera {
 

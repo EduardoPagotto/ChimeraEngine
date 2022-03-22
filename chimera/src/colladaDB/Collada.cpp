@@ -60,6 +60,8 @@ const glm::mat4 textToMat4(const std::string& text) {
 
 //--
 
+uint32_t Collada::serial = 0;
+
 const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::string& libraryName, const std::string key) {
 
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling()) {

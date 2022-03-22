@@ -40,6 +40,8 @@ void ColladaNode::loadNode(pugi::xml_node node, Registry* reg) {
 
             ColladaCam cc;
             cc.create(entity, n);
+        } else if (val == "node") {
+            // TODO: implementar hierarquia
         }
     }
 }

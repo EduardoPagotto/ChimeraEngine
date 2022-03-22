@@ -12,9 +12,13 @@ class Collada {
     virtual ~Collada();
     const pugi::xml_node urlRoot(const pugi::xml_node& nodeParent, const std::string& libraryName, const std::string& url);
 
+    static uint32_t getNewSerial() { return ++serial; }
+
   protected:
     pugi::xml_document doc;
     pugi::xml_node root;
+
+    static uint32_t serial;
 };
 
 void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter);

@@ -21,6 +21,12 @@ set (IncludeColladaDB	${CMAKE_SOURCE_DIR}
 						${OPENGL_INCLUDE_DIR}
 						${PUGIXML_DIR})
 
+if (BULLET_SET_TO_USE)
+message(STATUS "Bullet incluido no build")
+set(SourceColladaDB ${SourceColladaDB} ColladaPhysicScene.cpp) #adiciona o cpp
+set(IncludeColladaDB ${IncludeColladaDB} ${BULLET_INCLUDE_DIR} ) #adiciona o h
+endif(BULLET_SET_TO_USE)
+
 # Target
 add_library (ColladaDB STATIC ${SourceColladaDB})
 

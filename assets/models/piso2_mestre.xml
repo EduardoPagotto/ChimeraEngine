@@ -794,13 +794,11 @@
   <library_physics_scenes>
     <physics_scene id="Scene-Physics" name="Scene-Physics">
       <instance_physics_model url="#Scene-PhysicsModel">
-
         <instance_rigid_body body="zoltan-RigidBody" target="#Zoltan"/>
         <instance_rigid_body body="plane-RigidBody" target="#Plane"/>
         <instance_rigid_body body="cubo-RigidBody" target="#cubo01"/>
         <instance_rigid_body body="ico01-RigidBody" target="#Icosphere01"/>
         <instance_rigid_body body="ico02-RigidBody" target="#Icosphere02"/>
-
       </instance_physics_model>
       <technique_common>
         <gravity>0 0 0</gravity>

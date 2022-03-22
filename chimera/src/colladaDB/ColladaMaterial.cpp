@@ -23,7 +23,7 @@ Texture* ColladaMaterial::loadImage(pugi::xml_node nodeParent, const std::string
     return nullptr;
 }
 
-Material& ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
+void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
 
     std::unordered_map<std::string, Texture*> mapaTex;
     std::unordered_map<std::string, std::string> mapa2D;
@@ -111,7 +111,5 @@ Material& ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
             }
         }
     }
-
-    return eMaterial;
 }
 } // namespace Chimera

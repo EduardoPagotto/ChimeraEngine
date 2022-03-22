@@ -10,7 +10,8 @@ find_package(GLEW REQUIRED)
 # objetos a compilar
 set (SourceColladaDB	Collada.cpp
 						ColladaNode.cpp
-						ColladaMaterial.cpp)
+						ColladaMaterial.cpp
+						ColladaLight.cpp)
 
 # Includes
 set (IncludeColladaDB	${CMAKE_SOURCE_DIR}

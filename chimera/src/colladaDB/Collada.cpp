@@ -22,7 +22,12 @@ void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat) {
 const glm::vec4 textToVec4(const std::string& text) {
     std::vector<float> arrayFloat;
     textToFloatArray(text, arrayFloat);
-    return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], arrayFloat[3]);
+
+    // return glm::vec4(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
+    if (arrayFloat.size() == 4)
+        return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], arrayFloat[3]);
+
+    return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], 1.0f); // FIXME: melhorar !!!!
 }
 
 const glm::mat4 textToMat4(const std::string& text) {

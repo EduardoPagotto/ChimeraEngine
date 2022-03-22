@@ -8,7 +8,7 @@ class ColladaMaterial : public Collada {
   public:
     ColladaMaterial() : Collada(){};
     virtual ~ColladaMaterial();
-    Material& create(Entity& entity, pugi::xml_node nodeParent);
+    void create(Entity& entity, pugi::xml_node nodeParent);
 
   private:
     Texture* loadImage(pugi::xml_node nodeParent, const std::string& url);

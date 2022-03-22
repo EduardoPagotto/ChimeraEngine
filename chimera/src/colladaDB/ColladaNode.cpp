@@ -1,4 +1,5 @@
 #include "chimera/colladaDB/ColladaNode.hpp"
+#include "chimera/colladaDB/ColladaLight.hpp"
 #include "chimera/colladaDB/ColladaMaterial.hpp"
 #include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/Transform.hpp"
@@ -21,14 +22,21 @@ void ColladaNode::loadNode(pugi::xml_node node, Registry* reg) {
             }
         } else if (val == "instance_geometry") {
 
-            pugi::xml_node nodeGeo = n;
-            // TODO: continuar depois aqui!!
-            // InstanceCollada* novo = colladaURL(handle, "library_geometries", nodeGeo.attribute("url").value());
-            // if (novo != nullptr)
-            //     handle = novo;
+            // pugi::xml_node nodeGeo = n;
+            //  TODO: continuar depois aqui!!
+            //  InstanceCollada* novo = colladaURL(handle, "library_geometries", nodeGeo.attribute("url").value());
+            //  if (novo != nullptr)
+            //      handle = novo;
 
             ColladaMaterial cm;
-            Material& eMaterial = cm.create(entity, nodeGeo);
+            cm.create(entity, n);
+
+        } else if (val == "instance_light") {
+
+            ColladaLight cl;
+            cl.create(entity, n);
+
+        } else if (val == "instance_camera") {
         }
     }
 }

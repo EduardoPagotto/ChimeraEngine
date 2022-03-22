@@ -1,25 +1,23 @@
 #include "chimera/colladaDB/ColladaPhysicScene.hpp"
-//#include "chimera/"
+#include "chimera/core/bullet/PhysicsControl.hpp"
+#include "chimera/core/bullet/Solid.hpp"
+#include "chimera/core/visible/Components.hpp"
+#include <SDL2/SDL.h>
 
 namespace Chimera {
 
 ColladaPhysicScene::~ColladaPhysicScene() {}
 
-void ColladaPhysicScene::loadNode(pugi::xml_node node, Registry* reg, const std::string& body, const std::string& target) {
+const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const std::string& body) {
 
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling()) {
 
         std::string val = n.name();
-
-        if (val == "matrix") {
-
-            std::string sid = n.attribute("sid").value();
-            if (sid == "transform") {
-                // ComponentTrans tc = entity.addComponent<ComponentTrans>(new Transform(textToMat4(n.text().as_string())));
-                //  tc.trans = new Transform(transLocal);
-            }
-        }
+        std::string name = n.attribute("name").value();
+        if (name == body)
+            return n.child("technique_common");
     }
+    return pugi::xml_node();
 }
 
 void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
@@ -27,18 +25,22 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
     std::string id = node.attribute("id").value();
     std::string name = node.attribute("name").value();
 
-    // Entity entity = reg->createEntity(name, id);
-    // PhysicsControl& pc = entity.addComponent<PhysicsControl>();
-    // pc.setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
+    Entity entityPc = reg->createEntity(name, id);
+    PhysicsControl& pc = entityPc.addComponent<PhysicsControl>();
 
     pugi::xml_node nTec = node.child("technique_common");
     std::string sGrav = nTec.child("gravity").text().as_string();
     float ts = nTec.child("time_step").text().as_float();
 
-    pugi::xml_node nInstace = node.child("instance_physics_model");
+    std::vector<float> l_arrayF;
+    textToFloatArray(sGrav, l_arrayF);
+    pc.setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
+    // pc.stepSim(ts); FIXME: remover e ver se funciona!!!!!!
 
+    pugi::xml_node nInstace = node.child("instance_physics_model");
     std::string val = nInstace.name();
     std::string url = nInstace.attribute("url").value();
+    pugi::xml_node models = urlRoot(nInstace, "library_physics_models", url);
 
     for (pugi::xml_node nRb = nInstace.first_child(); nRb; nRb = nRb.next_sibling()) {
 
@@ -46,9 +48,55 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
         std::string body = nRb.attribute("body").value();
         std::string target = nRb.attribute("target").value();
 
-        pugi::xml_node models = urlRoot(nInstace, "library_physics_models", url);
-        loadNode(models, reg, body, target);
+        pugi::xml_node nTec = findModel(models, body);
+        if (nTec == nullptr) {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s não encontrado target: %s", body.c_str(), target.c_str());
+            continue;
+        }
+
+        target.erase(0, 1); // remove #
+        auto view = reg->get().view<TagComponent>();
+        for (auto entity : view) {
+            // Pega a chave (mesh)
+            TagComponent& tag = view.get<TagComponent>(entity);
+            if (tag.id == target) {
+                Entity ent2 = {entity, reg};
+                ComponentTrans& tc = ent2.getComponent<ComponentTrans>();
+                Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao
+                delete tc.trans;                                            // deleta objeto de transformacao
+                tc.trans = nullptr;                                         // limpa ponteiro
+                tc.solid = true;                                            // muda tipos de dado
+                tc.trans = solid;                                           // carrega novo objeto de transformacao
+
+                bool dynamic = nTec.child("dynamic").text().as_bool();
+                float mass = nTec.child("mass").text().as_float();
+
+                solid->setMass(mass);
+
+                // Material
+                std::string url = nTec.child("instance_physics_material").attribute("url").value();
+
+                pugi::xml_node nPm = urlRoot(nTec, "library_physics_materials", url);
+                pugi::xml_node nTc = nPm.child("technique_common");
+
+                solid->setRestitution(nTc.child("restitution").text().as_float());
+                solid->setFrictionDynamic(nTc.child("dynamic_friction").text().as_float());
+                solid->setFrictionStatic(nTc.child("static_friction").text().as_float());
+
+                // Shape
+                pugi::xml_node nShape = nTec.child("shape");
+                std::string sShape = nShape.first_child().name();
+                if (sShape == "plane") {
+
+                } else if (sShape == "sphere") {
+                } else if (sShape == "cylinder") {
+                } else if (sShape == "box") {
+                } else if (sShape == "mesh") {
+                }
+
+                break;
+            }
+        }
     }
 }
-
 } // namespace Chimera

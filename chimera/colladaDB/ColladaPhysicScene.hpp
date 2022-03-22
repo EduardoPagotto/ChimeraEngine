@@ -8,7 +8,7 @@ class ColladaPhysicScene : public Collada {
     ColladaPhysicScene() : Collada(){};
     virtual ~ColladaPhysicScene();
 
-    void loadNode(pugi::xml_node node, Registry* reg, const std::string& body, const std::string& target);
+    const pugi::xml_node findModel(pugi::xml_node node, const std::string& body);
     void loadAll(pugi::xml_node node, Registry* reg);
 
   private:

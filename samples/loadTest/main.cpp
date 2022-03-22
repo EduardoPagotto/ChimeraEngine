@@ -1,4 +1,5 @@
-#include "chimera/colladaDB/loader.hpp"
+#include "chimera/colladaDB/Collada.hpp"
+#include "chimera/colladaDB/ColladaNode.hpp"
 #include <SDL2/SDL.h>
 #include <cstdio>
 
@@ -10,12 +11,11 @@ int main(int argn, char** argv) {
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("LoadTest Iniciado");
 
-    InstanceCollada* handle = colladaURL(nullptr, "library_visual_scenes", "file://./assets/models/piso2_mestre.xml#Scene");
-    // InstanceCollada* handle = colladaURL(nullptr, "image", "file://./assets/models/piso2_mestre.xml#teste1_png");
-    // InstanceCollada* i = colladaURL(handle, "image", "teste1_png");
-    // loadImage(handle, "teste1_png");
+    Collada cl;
+    pugi::xml_node vs = cl.urlRoot(pugi::xml_node(), "library_visual_scenes", "file://./assets/models/piso2_mestre.xml#Scene");
 
-    loadAll(handle, &r);
+    ColladaNode cn;
+    cn.loadAll(vs, &r);
 
     SDL_Log("LoadTest finalizado com sucesso");
     return 0;

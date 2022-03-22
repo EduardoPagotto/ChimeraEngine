@@ -8,7 +8,9 @@ find_package(PUGIXML REQUIRED) #PUGIXML
 find_package(GLEW REQUIRED)
 
 # objetos a compilar
-set (SourceColladaDB	loader.cpp)
+set (SourceColladaDB	Collada.cpp
+						ColladaNode.cpp
+						ColladaMaterial.cpp)
 
 # Includes
 set (IncludeColladaDB	${CMAKE_SOURCE_DIR}

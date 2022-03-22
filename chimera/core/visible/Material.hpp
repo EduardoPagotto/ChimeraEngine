@@ -25,8 +25,7 @@ class Material {
     inline void setAmbient(const glm::vec4& _color) { listMaterial[SHADE_MAT_AMBIENTE] = UValue(_color); }
     inline void setSpecular(const glm::vec4& _color) { listMaterial[SHADE_MAT_SPECULA] = UValue(_color); }
     inline void setDiffuse(const glm::vec4& _color) { listMaterial[SHADE_MAT_DIFFUSE] = UValue(_color); }
-    inline void setEmission(const glm::vec4& _color) { // listMaterial[SHADE_MAT_EMISSIVE] = UValue(_color);
-    }
+    inline void setEmission(const glm::vec4& _color) { listMaterial[SHADE_MAT_EMISSIVE] = UValue(_color); }
     inline void setShine(const float& _val) { listMaterial[SHADE_MAT_SHININESS] = UValue(_val); }
 
     bool hasTexture() { return !mapTex.empty(); }

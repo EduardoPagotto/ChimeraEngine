@@ -1,4 +1,5 @@
 #include "chimera/colladaDB/ColladaMaterial.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 
 namespace Chimera {
@@ -27,12 +28,19 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
 
     std::unordered_map<std::string, Texture*> mapaTex;
     std::unordered_map<std::string, std::string> mapa2D;
-    Material& eMaterial = entity.addComponent<Material>();
 
     pugi::xml_node instanceMaterial = nodeParent.child("bind_material").child("technique_common").child("instance_material");
+
     pugi::xml_node nodeMat = urlRoot(instanceMaterial, "library_materials", instanceMaterial.attribute("symbol").value());
     pugi::xml_node effect = nodeMat.child("instance_effect");
     pugi::xml_node novo2 = urlRoot(effect, "library_effects", effect.attribute("url").value());
+
+    ComponentMaterial& eMaterial = entity.addComponent<ComponentMaterial>();
+    eMaterial.material = new Material();
+    eMaterial.tag.id = nodeMat.attribute("id").value();
+    eMaterial.tag.tag = nodeMat.attribute("name").value();
+    eMaterial.tag.serial = Collada::getNewSerial();
+
     pugi::xml_node profile = novo2.first_child();
 
     for (pugi::xml_node param = profile.first_child(); param; param = param.next_sibling()) {
@@ -66,7 +74,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
 
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "color")
-                        eMaterial.setEmission(textToVec4(first.text().as_string()));
+                        eMaterial.material->setEmission(textToVec4(first.text().as_string()));
                     else if (std::string(first.name()) == "texture") {
                         // TODO: implementar
                     }
@@ -74,25 +82,25 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
                 } else if (p == "ambient") {
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "color")
-                        eMaterial.setAmbient(textToVec4(first.text().as_string()));
+                        eMaterial.material->setAmbient(textToVec4(first.text().as_string()));
                     else if (std::string(first.name()) == "texture") {
                         // TODO: implementar
                     }
                 } else if (p == "diffuse") {
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "color")
-                        eMaterial.setDiffuse(textToVec4(first.text().as_string()));
+                        eMaterial.material->setDiffuse(textToVec4(first.text().as_string()));
                     else if (std::string(first.name()) == "texture") {
                         std::string sAddr = first.attribute("texture").value();
                         std::string sAddr2 = mapa2D[sAddr];
                         Texture* tex = mapaTex[sAddr2];
 
-                        eMaterial.addTexture(SHADE_TEXTURE_DIFFUSE, tex);
+                        eMaterial.material->addTexture(SHADE_TEXTURE_DIFFUSE, tex);
                     }
                 } else if (p == "specular") {
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "color")
-                        eMaterial.setSpecular(textToVec4(first.text().as_string()));
+                        eMaterial.material->setSpecular(textToVec4(first.text().as_string()));
                     else if (std::string(first.name()) == "texture") {
                         // TODO: implementar
                     }
@@ -102,7 +110,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "float") {
                         float aa = first.text().as_float();
-                        eMaterial.setShine(aa);
+                        eMaterial.material->setShine(aa);
                     }
 
                 } else if (p == "index_of_refraction") {

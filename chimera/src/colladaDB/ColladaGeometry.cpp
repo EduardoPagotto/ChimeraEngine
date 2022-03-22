@@ -7,9 +7,13 @@ ColladaGeometry::~ColladaGeometry() {}
 
 void ColladaGeometry::create(Entity& entity, pugi::xml_node nodeParent) {
 
-    Mesh& eMesh = entity.addComponent<Mesh>();
-
     pugi::xml_node geo = urlRoot(nodeParent, "library_geometries", nodeParent.attribute("url").value());
+    ComponentMesh& eMesh = entity.addComponent<ComponentMesh>();
+    eMesh.mesh = new Mesh();
+    eMesh.tag.id = geo.attribute("id").value();
+    eMesh.tag.tag = geo.attribute("name").value();
+    eMesh.tag.serial = Collada::getNewSerial();
+
     pugi::xml_node mesh = geo.child("mesh");
     for (pugi::xml_node source = mesh.first_child(); source; source = source.next_sibling()) {
 
@@ -25,17 +29,17 @@ void ColladaGeometry::create(Entity& entity, pugi::xml_node nodeParent) {
             if (id.find("-positions") != std::string::npos) {
 
                 for (size_t indice = 0; indice < v.size(); indice += 3)
-                    eMesh.point.push_back(glm::vec3(v[indice], v[indice + 1], v[indice + 2]));
+                    eMesh.mesh->point.push_back(glm::vec3(v[indice], v[indice + 1], v[indice + 2]));
 
             } else if (id.find("-normals") != std::string::npos) {
 
                 for (size_t indice = 0; indice < v.size(); indice += 3)
-                    eMesh.normal.push_back(glm::vec3(v[indice], v[indice + 1], v[indice + 2]));
+                    eMesh.mesh->normal.push_back(glm::vec3(v[indice], v[indice + 1], v[indice + 2]));
 
             } else if (id.find("-map-0") != std::string::npos) {
 
                 for (size_t indice = 0; indice < v.size(); indice += 2)
-                    eMesh.uv.push_back(glm::vec2(v[indice], v[indice + 1]));
+                    eMesh.mesh->uv.push_back(glm::vec2(v[indice], v[indice + 1]));
             }
 
         } else if (name == "vertices") {
@@ -61,11 +65,11 @@ void ColladaGeometry::create(Entity& entity, pugi::xml_node nodeParent) {
                         const std::string& semantic = semantics[index];
 
                         if (semantic == "VERTEX") {
-                            eMesh.iPoint.push_back(arrayIndex[l_contador]);
+                            eMesh.mesh->iPoint.push_back(arrayIndex[l_contador]);
                         } else if (semantic == "NORMAL") {
-                            eMesh.iNormal.push_back(arrayIndex[l_contador]);
+                            eMesh.mesh->iNormal.push_back(arrayIndex[l_contador]);
                         } else if (semantic == "TEXCOORD") {
-                            eMesh.iUv.push_back(arrayIndex[l_contador]);
+                            eMesh.mesh->iUv.push_back(arrayIndex[l_contador]);
                         }
                     }
                     arrayIndex.clear();

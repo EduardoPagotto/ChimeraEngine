@@ -2,6 +2,8 @@
 #include "ICamera.hpp"
 #include "ITrans.hpp"
 #include "Light.hpp"
+#include "Material.hpp"
+#include "Mesh.hpp"
 
 namespace Chimera {
 
@@ -27,6 +29,18 @@ struct ComponentCamera {
     ComponentCamera() = default;
     ComponentCamera(const ComponentCamera&) = default;
     // CameraComponent(glm::mat4 projection) : camera(projection) {}
+};
+
+struct ComponentMesh {
+    TagComponent tag;
+    Mesh* mesh = nullptr;
+    ComponentMesh() = default;
+};
+
+struct ComponentMaterial {
+    TagComponent tag;
+    Material* material = nullptr;
+    ComponentMaterial() = default;
 };
 
 } // namespace Chimera

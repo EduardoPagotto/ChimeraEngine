@@ -15,7 +15,6 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeParent) { // FIXME: p
     cc.tag.serial = Collada::getNewSerial();
 
     float fov, ratio, near, far, min, max;
-    ICamera3D* pCam;
 
     for (pugi::xml_node node = nodeCam.first_child(); node; node = node.next_sibling()) {
         if (std::string("optics") == node.name()) {
@@ -40,18 +39,18 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeParent) { // FIXME: p
 
                         ComponentTrans& trans = entity.getComponent<ComponentTrans>();
                         glm::vec3 pos = trans.trans->getPosition();
-                        pCam = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0); // FIXME!!!!!
+                        cc.camera = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0); // FIXME!!!!!
                         // pCam = new CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0); // FIXME!!!!!
-                        ((CameraOrbit*)pCam)->setLimits(min, max);
+                        ((CameraOrbit*)cc.camera)->setLimits(min, max);
                     }
                 }
             }
         }
     }
 
-    pCam->setFov(fov);
-    pCam->setNear(near);
-    pCam->setFar(far);
+    ((ICamera3D*)cc.camera)->setFov(fov);
+    ((ICamera3D*)cc.camera)->setNear(near);
+    ((ICamera3D*)cc.camera)->setFar(far);
 }
 
 } // namespace Chimera

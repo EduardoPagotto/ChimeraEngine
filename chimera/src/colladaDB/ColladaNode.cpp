@@ -1,7 +1,8 @@
 #include "chimera/colladaDB/ColladaNode.hpp"
+#include "chimera/colladaDB/ColladaCam.hpp"
+#include "chimera/colladaDB/ColladaGeometry.hpp"
 #include "chimera/colladaDB/ColladaLight.hpp"
 #include "chimera/colladaDB/ColladaMaterial.hpp"
-#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/Transform.hpp"
 
 namespace Chimera {
@@ -15,18 +16,17 @@ void ColladaNode::loadNode(pugi::xml_node node, Registry* reg) {
 
         std::string val = n.name();
         if (val == "matrix") {
+
             std::string sid = n.attribute("sid").value();
             if (sid == "transform") {
                 ComponentTrans tc = entity.addComponent<ComponentTrans>(new Transform(textToMat4(n.text().as_string())));
                 // tc.trans = new Transform(transLocal);
             }
+
         } else if (val == "instance_geometry") {
 
-            // pugi::xml_node nodeGeo = n;
-            //  TODO: continuar depois aqui!!
-            //  InstanceCollada* novo = colladaURL(handle, "library_geometries", nodeGeo.attribute("url").value());
-            //  if (novo != nullptr)
-            //      handle = novo;
+            ColladaGeometry cg;
+            cg.create(entity, n);
 
             ColladaMaterial cm;
             cm.create(entity, n);
@@ -37,6 +37,9 @@ void ColladaNode::loadNode(pugi::xml_node node, Registry* reg) {
             cl.create(entity, n);
 
         } else if (val == "instance_camera") {
+
+            ColladaCam cc;
+            cc.create(entity, n);
         }
     }
 }

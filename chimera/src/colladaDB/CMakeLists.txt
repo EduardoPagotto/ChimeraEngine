@@ -11,7 +11,9 @@ find_package(GLEW REQUIRED)
 set (SourceColladaDB	Collada.cpp
 						ColladaNode.cpp
 						ColladaMaterial.cpp
-						ColladaLight.cpp)
+						ColladaLight.cpp
+						ColladaCam.cpp
+						ColladaGeometry.cpp)
 
 # Includes
 set (IncludeColladaDB	${CMAKE_SOURCE_DIR}

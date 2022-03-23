@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) { // TODO: ler como matrix!!!!!!
+void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) {
     std::string token;
     std::istringstream tokenStream(sIn);
     while (std::getline(tokenStream, token, delimiter))
@@ -23,18 +23,16 @@ void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI) {
     std::vector<std::string> textData;
     textToStringArray(text, textData, ' ');
     for (const std::string& val : textData)
-        arrayI.push_back(std::stod(val));
+        arrayI.push_back(static_cast<uint32_t>(std::stoul(val)));
 }
 
 const glm::vec4 textToVec4(const std::string& text) {
     std::vector<float> arrayFloat;
     textToFloatArray(text, arrayFloat);
-
-    // return glm::vec4(l_arrayF[0], l_arrayF[1], l_arrayF[2], 1.0f);
     if (arrayFloat.size() == 4)
         return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], arrayFloat[3]);
 
-    return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], 1.0f); // FIXME: melhorar !!!!
+    return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], 1.0f);
 }
 
 const glm::mat4 textToMat4(const std::string& text) {

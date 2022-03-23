@@ -17,7 +17,7 @@ const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const st
         if (name == body)
             return n.child("technique_common");
     }
-    return pugi::xml_node();
+    throw std::string("%s nao encontrado nos modelos fisicos");
 }
 
 void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
@@ -44,7 +44,6 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
 
     for (pugi::xml_node nRb = nInstace.first_child(); nRb; nRb = nRb.next_sibling()) {
 
-        val = nRb.name();
         std::string body = nRb.attribute("body").value();
         std::string target = nRb.attribute("target").value();
 

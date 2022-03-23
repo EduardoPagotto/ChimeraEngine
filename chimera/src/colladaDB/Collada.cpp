@@ -65,27 +65,21 @@ const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::st
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling()) {
         std::string name = n.name();
         if (name == libraryName) {
-            SDL_Log("%s encontrado", libraryName.c_str());
+
             for (pugi::xml_node t = n.first_child(); t; t = t.next_sibling()) {
 
                 pugi::xml_attribute attr = t.attribute("id");
-
-                // for (pugi::xml_attribute attr = person.first_attribute(); attr; attr = attr.next_attribute())
-                // {
-                //     std::cout << " " << attr.name() << "=" << attr.value() << std::endl;
-                // }
-
                 std::string id = attr.value();
                 if (id == key) {
-                    SDL_Log("%s item %s id %s", libraryName.c_str(), t.name(), attr.value());
+                    SDL_Log("%s: %s url: %s", libraryName.c_str(), t.name(), attr.value());
                     return t;
                 }
             }
         }
     }
 
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s não encontrado key: %s", libraryName.c_str(), key.c_str());
-    return pugi::xml_node();
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s não encontrado url: %s", libraryName.c_str(), key.c_str());
+    throw std::string("Falha na localização da biblioteca");
 }
 
 Collada::~Collada() {
@@ -106,8 +100,8 @@ const pugi::xml_node Collada::urlRoot(const pugi::xml_node& nodeParent, const st
 
         std::size_t mark1 = temp.rfind("#"); // FIXME: criar erro se nao achar!!!!
         if (mark1 == std::string::npos) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "URL %s não encontrado: #", temp.c_str());
-            return pugi::xml_node();
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "URL %s não encontrado: ", url.c_str());
+            throw std::string("Falha na carga do arquivo");
         }
 
         std::string key = temp.substr(mark1 + 1, std::string::npos);
@@ -117,10 +111,10 @@ const pugi::xml_node Collada::urlRoot(const pugi::xml_node& nodeParent, const st
 
         if (result.status != pugi::status_ok) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo %s não encontrado", target.c_str());
-            return pugi::xml_node();
+            throw std::string("Falha na carga do arquivo");
         }
 
-        SDL_Log("Novo Arquivo carregado %s, Key: %s, Status: %s", target.c_str(), key.c_str(), result.description());
+        SDL_Log("Novo Arquivo: %s url: %s Status: %s", target.c_str(), key.c_str(), result.description());
         root = doc.child("COLLADA");
         return colladaGetLibrary(root, libraryName, key);
 

@@ -62,6 +62,7 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
             if (tag.id == target) {
                 Entity ent2 = {entity, reg};
                 ComponentTrans& tc = ent2.getComponent<ComponentTrans>();
+                ComponentMesh& mc = ent2.getComponent<ComponentMesh>();
                 Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao
                 delete tc.trans;                                            // deleta objeto de transformacao
                 tc.trans = nullptr;                                         // limpa ponteiro
@@ -84,16 +85,48 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
                 solid->setFrictionStatic(nTc.child("static_friction").text().as_float());
 
                 // Shape
-                pugi::xml_node nShape = nTec.child("shape");
-                std::string sShape = nShape.first_child().name();
-                if (sShape == "plane") {
+                pugi::xml_node nShape = nTec.child("shape").first_child();
+                std::string sShape = nShape.name();
 
-                } else if (sShape == "sphere") {
+                std::vector<float> arrayFloat;
+
+                if (sShape == "sphere") {
+
+                    std::string rad = nShape.child("radius").text().as_string();
+                    textToFloatArray(rad, arrayFloat);
+                    solid->setShapeSphere(arrayFloat[0]);
+
+                } else if (sShape == "plane") {
+
+                    std::string rad = nShape.child("equation").text().as_string();
+                    textToFloatArray(rad, arrayFloat);
+                    solid->setShapePlane(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]), arrayFloat[3]);
+
+                } else if (sShape == "box") { // FIXME: ver no colada para usar o parametro correto
+
+                    std::string sBox = nShape.first_child().text().as_string();
+                    textToFloatArray(sBox, arrayFloat);
+                    solid->setShapeBox(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]));
+
                 } else if (sShape == "cylinder") {
-                } else if (sShape == "box") {
-                } else if (sShape == "mesh") {
-                }
 
+                    std::string sCi = nShape.first_child().text().as_string();
+                    textToFloatArray(sCi, arrayFloat);
+                    solid->setShapeCilinder(glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]));
+
+                } else if (sShape == "mesh") {
+
+                    // if (mc.mesh != nullptr) {
+                    //     btTriangleIndexVertexArray* indexVertexArray =
+                    //         new btTriangleIndexVertexArray(mc.mesh->iPoint.size(),        // indice tot
+                    //                                        (uint32_t)&mc.mesh->iPoint[0], // indice prt
+                    //                                        3 * sizeof(uint32_t),          // indice stride
+                    //                                        mc.mesh->point.size(),         // point tot
+                    //                                        (float*)&mc.mesh->point[0],    // point ptr
+                    //                                        3 * sizeof(float));            // point stride
+
+                    //     solid->setIndexVertexArray(indexVertexArray);
+                }
                 break;
             }
         }

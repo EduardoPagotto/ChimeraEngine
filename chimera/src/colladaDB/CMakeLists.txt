@@ -9,7 +9,7 @@ find_package(GLEW REQUIRED)
 
 # objetos a compilar
 set (SourceColladaDB	Collada.cpp
-						ColladaNode.cpp
+						ColladaVisualScene.cpp
 						ColladaMaterial.cpp
 						ColladaLight.cpp
 						ColladaCam.cpp

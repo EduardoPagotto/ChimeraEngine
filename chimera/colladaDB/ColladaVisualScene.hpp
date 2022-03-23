@@ -3,10 +3,10 @@
 #include "chimera/core/Registry.hpp"
 
 namespace Chimera {
-class ColladaNode : public Collada {
+class ColladaVisualScene : public Collada {
   public:
-    ColladaNode() : Collada(){};
-    virtual ~ColladaNode();
+    ColladaVisualScene() : Collada(){};
+    virtual ~ColladaVisualScene();
 
     void loadNode(pugi::xml_node node, Registry* reg);
     void loadAll(pugi::xml_node node, Registry* reg);

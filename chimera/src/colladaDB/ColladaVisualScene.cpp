@@ -1,4 +1,4 @@
-#include "chimera/colladaDB/ColladaNode.hpp"
+#include "chimera/colladaDB/ColladaVisualScene.hpp"
 #include "chimera/colladaDB/ColladaCam.hpp"
 #include "chimera/colladaDB/ColladaGeometry.hpp"
 #include "chimera/colladaDB/ColladaLight.hpp"
@@ -7,9 +7,9 @@
 
 namespace Chimera {
 
-ColladaNode::~ColladaNode() {}
+ColladaVisualScene::~ColladaVisualScene() {}
 
-void ColladaNode::loadNode(pugi::xml_node node, Registry* reg) {
+void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
 
     Entity entity = reg->createEntity(node.attribute("name").value(), node.attribute("id").value());
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling()) {
@@ -46,7 +46,7 @@ void ColladaNode::loadNode(pugi::xml_node node, Registry* reg) {
     }
 }
 
-void ColladaNode::loadAll(pugi::xml_node node, Registry* reg) {
+void ColladaVisualScene::loadAll(pugi::xml_node node, Registry* reg) {
 
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling())
         loadNode(n, reg);

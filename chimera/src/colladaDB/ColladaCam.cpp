@@ -14,13 +14,13 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeParent) { // FIXME: p
     cc.tag.tag = nodeCam.attribute("name").value();
     cc.tag.serial = Collada::getNewSerial();
 
-    float fov, ratio, near, far, min, max;
+    float fov, near, far, min, max;
 
     for (pugi::xml_node node = nodeCam.first_child(); node; node = node.next_sibling()) {
         if (std::string("optics") == node.name()) {
             pugi::xml_node perspective = node.child("technique_common").child("perspective");
             fov = perspective.child("xfov").text().as_float();
-            ratio = perspective.child("aspect_ratio").text().as_float();
+            // ratio = perspective.child("aspect_ratio").text().as_float();
             near = perspective.child("znear").text().as_float();
             far = perspective.child("zfar").text().as_float();
 
@@ -39,8 +39,7 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeParent) { // FIXME: p
 
                         ComponentTrans& trans = entity.getComponent<ComponentTrans>();
                         glm::vec3 pos = trans.trans->getPosition();
-                        cc.camera = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0); // FIXME!!!!!
-                        // pCam = new CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0); // FIXME!!!!!
+                        cc.camera = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
                         ((CameraOrbit*)cc.camera)->setLimits(min, max);
                     }
                 }

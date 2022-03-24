@@ -13,7 +13,8 @@ set (SourceColladaDB	Collada.cpp
 						ColladaMaterial.cpp
 						ColladaLight.cpp
 						ColladaCam.cpp
-						ColladaGeometry.cpp)
+						ColladaGeometry.cpp
+						colladaLoad.cpp)
 
 # Includes
 set (IncludeColladaDB	${CMAKE_SOURCE_DIR}

@@ -21,7 +21,7 @@ Texture* ColladaMaterial::loadImage(pugi::xml_node nodeParent, const std::string
         }
     }
 
-    return nullptr;
+    throw std::string("Textura nao encontrada: " + url);
 }
 
 void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
@@ -36,7 +36,6 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
     pugi::xml_node novo2 = urlRoot(effect, "library_effects", effect.attribute("url").value());
 
     ComponentMaterial& eMaterial = entity.addComponent<ComponentMaterial>();
-    eMaterial.material = new Material();
     eMaterial.tag.id = nodeMat.attribute("id").value();
     eMaterial.tag.tag = nodeMat.attribute("name").value();
     eMaterial.tag.serial = Collada::getNewSerial();

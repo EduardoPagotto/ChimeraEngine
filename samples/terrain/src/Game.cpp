@@ -47,7 +47,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         tc.trans = new Transform();
 
         Shader& shader = renderableEntity.addComponent<Shader>();
-        Material& material = renderableEntity.addComponent<Material>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -55,12 +55,12 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
         ShaderManager::load("MeshFullShadow", shadeData, shader);
 
-        material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
-        material.setShine(50.0f);
+        material.material->setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
+        material.material->setShine(50.0f);
 
         TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam());
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
-        material.init();
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        material.material->init();
 
         Mesh mesh;
 
@@ -83,9 +83,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
 
-        Material& material = renderableEntity.addComponent<Material>();
-        material.setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
-        material.setShine(50.0f);
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
+        material.material->setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
+        material.material->setShine(50.0f);
 
         Shader& shader = renderableEntity.addComponent<Shader>();
         std::unordered_map<GLenum, std::string> shadeData;
@@ -94,7 +94,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         ShaderManager::load("MeshFullShadow", shadeData, shader); // colocar shader em material
 
         Mesh& mesh = renderableEntity.addComponent<Mesh>();
-        loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
+        loadObjFile("./assets/models/cubo2.obj", &mesh, material.material);
     }
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     engine->pushState(&activeScene);

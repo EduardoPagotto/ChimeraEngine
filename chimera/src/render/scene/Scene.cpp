@@ -91,14 +91,14 @@ void Scene::onAttach() {
             Mesh& mesh = entity.getComponent<Mesh>();
 
             // Inicializa Materiais
-            if (entity.hasComponent<Material>()) {
-                Material& material = entity.getComponent<Material>();
-                if (!material.isValid())
-                    material.init();
+            if (entity.hasComponent<MaterialComponent>()) {
+                MaterialComponent& material = entity.getComponent<MaterialComponent>();
+                if (!material.material->isValid())
+                    material.material->init();
             } else {
-                Material& material = entity.addComponent<Material>();
-                material.setDefaultEffect();
-                material.init();
+                MaterialComponent& material = entity.addComponent<MaterialComponent>();
+                material.material->setDefaultEffect();
+                material.material->init();
             }
 
             // Se nja nao foi inicializado um Renderable3dComponent ao mesh
@@ -246,14 +246,14 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
         Entity e = {entity, &registry};
         TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
         Shader& sc = e.getComponent<Shader>();
-        Material& mc = e.getComponent<Material>();
+        MaterialComponent& mc = e.getComponent<MaterialComponent>();
 
         RenderCommand command;
         command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = renderable;
         command.shader = sc;
-        mc.bindMaterialInformation(command.uniforms, command.vTex);
+        mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
         command.uniforms["model"] = UValue(command.transform);
 
@@ -262,16 +262,16 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 }
 
 void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
-    auto group = registry.get().group<Shader, Material, TransComponent, Renderable3dComponent>();
+    auto group = registry.get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
-        auto [sc, mc, tc, rc] = group.get<Shader, Material, TransComponent, Renderable3dComponent>(entity);
+        auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
         command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = rc.renderable;
         command.shader = sc;
-        mc.bindMaterialInformation(command.uniforms, command.vTex);
+        mc.material->bindMaterialInformation(command.uniforms, command.vTex);
         command.uniforms["model"] = UValue(command.transform);
         rc.renderable->submit(camera, command, &renderer);
     }

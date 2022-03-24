@@ -1,6 +1,7 @@
 #include "LibraryEffects.hpp"
 #include "LibraryImages.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
+#include "chimera/render/scene/Components.hpp"
 
 namespace Chimera {
 
@@ -21,8 +22,9 @@ void LibraryEffects::target() {
 
                 loadNewParam(l_nProfile);
 
-                Material& eMaterial = entity.addComponent<Material>();
-                loadColors(l_nProfile, &eMaterial);
+                MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();
+                // eMaterial.material = new material;
+                loadColors(l_nProfile, eMaterial.material);
                 return;
             }
         }

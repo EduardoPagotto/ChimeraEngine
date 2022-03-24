@@ -33,7 +33,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         tc.trans = new Transform();
 
         Shader& shader = renderableEntity.addComponent<Shader>();
-        Material& material = renderableEntity.addComponent<Material>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -44,8 +44,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         // material.setDefaultEffect();
         // material.setShine(50.0f);
         TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam());
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
-        material.init();
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        material.material->init();
 
         // processa o Maze
         Maze maze = Maze("./assets/maps/maze7.txt");
@@ -79,7 +79,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-        Material& material = renderableEntity.addComponent<Material>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         Shader& shader = renderableEntity.addComponent<Shader>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -88,7 +88,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
         Mesh& mesh = renderableEntity.addComponent<Mesh>();
-        loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
+        loadObjFile("./assets/models/cubo2.obj", &mesh, material.material);
     }
 
     // mudar para o event

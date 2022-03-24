@@ -46,7 +46,7 @@ struct MeshComponent {
 
 struct MaterialComponent {
     TagComponent tag;
-    Material* material = nullptr;
+    Material* material = new Material();
     MaterialComponent() = default;
 };
 

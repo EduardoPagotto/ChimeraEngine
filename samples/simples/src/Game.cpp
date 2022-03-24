@@ -29,7 +29,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
 
-        Material& material = renderableEntity.addComponent<Material>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         Shader& shader = renderableEntity.addComponent<Shader>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -40,7 +40,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         Mesh& mesh = renderableEntity.addComponent<Mesh>();
 
         int ret = 0;
-        ret = loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
+        ret = loadObjFile("./assets/models/cubo2.obj", &mesh, material.material);
     }
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

@@ -79,10 +79,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 
-        Material& material = re.addComponent<Material>();
+        MaterialComponent& material = re.addComponent<MaterialComponent>();
         TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
-        material.init();
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        material.material->init();
 
         Shader& shader = re.addComponent<Shader>();
         std::unordered_map<GLenum, std::string> shadeData;

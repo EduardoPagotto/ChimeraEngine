@@ -7,40 +7,76 @@
 
 namespace Chimera {
 
-struct ComponentTrans {
-    ITrans* trans = nullptr;
-    bool solid = false;
-    ComponentTrans() = default;
-};
+// struct TransComponent {
+//     ITrans* trans = nullptr;
+//     bool solid = false;
+//     TransComponent() = default;
+// };
 
-struct ComponentLight {
-    TagComponent tag;
-    Light* light = nullptr;
-    bool global = true;
-    ComponentLight() = default;
-};
+// struct LightComponent {
+//     TagComponent tag;
+//     Light* light = nullptr;
+//     bool global = true;
+//     LightComponent() = default;
+// };
 
-struct ComponentCamera {
+// struct CameraComponent {
+//     TagComponent tag;
+//     ICamera* camera = nullptr;
+//     bool primary = true;
+//     bool fixedAspectRatio = false;
+//     bool single = true; // FIXME: Camera simples ou dupla aqui, melhorar para o arquivo .DAE
+//     CameraComponent() = default;
+//     CameraComponent(const CameraComponent&) = default;
+//     // CameraComponent(glm::mat4 projection) : camera(projection) {}
+// };
+
+// struct MeshComponent {
+//     TagComponent tag;
+//     Mesh* mesh = nullptr;
+//     MeshComponent() = default;
+// };
+
+// struct MaterialComponent {
+//     TagComponent tag;
+//     Material* material = nullptr;
+//     MaterialComponent() = default;
+// };
+
+struct CameraComponent {
     TagComponent tag;
     ICamera* camera = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;
     bool single = true; // FIXME: Camera simples ou dupla aqui, melhorar para o arquivo .DAE
-    ComponentCamera() = default;
-    ComponentCamera(const ComponentCamera&) = default;
+    CameraComponent() = default;
+    CameraComponent(const CameraComponent&) = default;
     // CameraComponent(glm::mat4 projection) : camera(projection) {}
 };
 
-struct ComponentMesh {
-    TagComponent tag;
-    Mesh* mesh = nullptr;
-    ComponentMesh() = default;
+struct TransComponent {
+    ITrans* trans = nullptr;
+    bool solid = false;
+    TransComponent() = default;
 };
 
-struct ComponentMaterial {
+struct LightComponent {
     TagComponent tag;
-    Material* material = nullptr;
-    ComponentMaterial() = default;
+    Light* light = nullptr;
+    bool global = true;
+    LightComponent() = default;
+};
+
+struct MeshComponent {
+    TagComponent tag;
+    Mesh* mesh = new Mesh();
+    MeshComponent() = default;
+};
+
+struct MaterialComponent {
+    TagComponent tag;
+    Material* material = new Material();
+    MaterialComponent() = default;
 };
 
 } // namespace Chimera

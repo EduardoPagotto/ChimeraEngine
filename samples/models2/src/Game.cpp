@@ -2,6 +2,7 @@
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraOrthographic.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/FontManager.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"

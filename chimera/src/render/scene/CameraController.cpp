@@ -1,5 +1,5 @@
 #include "chimera/render/scene/CameraController.hpp"
-#include "chimera/render/scene/Components.hpp"
+#include "chimera/core/visible/Components.hpp"
 
 namespace Chimera {
 

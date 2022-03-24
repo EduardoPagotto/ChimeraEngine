@@ -1,7 +1,7 @@
 #include "LibraryCameras.hpp"
 //#include "chimera/core/CameraFPS.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
-#include "chimera/render/scene/Components.hpp"
+#include "chimera/core/visible/Components.hpp"
 
 namespace Chimera {
 

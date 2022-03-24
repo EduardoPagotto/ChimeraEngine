@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/partition/LoadObj.hpp"

@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraFPS.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"

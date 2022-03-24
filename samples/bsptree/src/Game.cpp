@@ -2,6 +2,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"

@@ -1,7 +1,7 @@
 #include "LibraryPhysicModels.hpp"
 #include "LibraryPhysicsMaterials.hpp"
 #include "chimera/core/bullet/Solid.hpp"
-#include "chimera/render/scene/Components.hpp"
+#include "chimera/core/visible/Components.hpp"
 
 namespace Chimera {
 

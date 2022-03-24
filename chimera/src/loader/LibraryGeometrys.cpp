@@ -1,6 +1,6 @@
 #include "LibraryGeometrys.hpp"
 #include "LibraryMaterials.hpp"
-#include "chimera/render/scene/Components.hpp"
+#include "chimera/core/visible/Components.hpp"
 
 #include <SDL2/SDL.h>
 

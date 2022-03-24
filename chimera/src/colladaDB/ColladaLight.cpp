@@ -7,7 +7,7 @@ void ColladaLight::create(Entity& entity, pugi::xml_node nodeParent) { // FIXME:
 
     pugi::xml_node nodeLight = urlRoot(nodeParent, "library_lights", nodeParent.attribute("url").value());
 
-    ComponentLight& lc = entity.addComponent<ComponentLight>();
+    LightComponent& lc = entity.addComponent<LightComponent>();
     lc.tag.id = nodeLight.attribute("id").value();
     lc.tag.tag = nodeLight.attribute("name").value();
     lc.tag.serial = Collada::getNewSerial();

@@ -1,5 +1,5 @@
 #include "LibraryLights.hpp"
-#include "chimera/render/scene/Components.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include <tuple>
 
 namespace Chimera {

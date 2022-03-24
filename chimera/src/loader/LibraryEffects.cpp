@@ -1,7 +1,7 @@
 #include "LibraryEffects.hpp"
 #include "LibraryImages.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
-#include "chimera/render/scene/Components.hpp"
 
 namespace Chimera {
 

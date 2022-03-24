@@ -1,4 +1,5 @@
 #include "chimera/render/scene/ShadowPass.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/scene/Components.hpp"
 

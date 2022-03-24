@@ -10,7 +10,7 @@ class LibraryEffects : public Library {
   public:
     LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _url, Entity entiy);
     virtual ~LibraryEffects();
-    Material* target();
+    void target();
 
   private:
     void loadNewParam(tinyxml2::XMLElement* _nProfile);

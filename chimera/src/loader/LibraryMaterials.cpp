@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-Material* LibraryMaterials::target() {
+void LibraryMaterials::target() {
 
     for (tinyxml2::XMLElement* l_nMat = root->FirstChildElement("library_materials")->FirstChildElement("material"); l_nMat;
          l_nMat = l_nMat->NextSiblingElement()) {
@@ -12,8 +12,8 @@ Material* LibraryMaterials::target() {
         if (url.compare(l_id) == 0) {
             std::string url = l_nMat->FirstChildElement("instance_effect")->Attribute("url");
             LibraryEffects le(root, url, entity);
-            Material* retorno = le.target();
-            return retorno;
+            le.target();
+            return;
         }
     }
     throw std::string("Material nao encontrado Node: " + url);

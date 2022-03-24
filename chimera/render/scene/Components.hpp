@@ -3,6 +3,8 @@
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/ITrans.hpp"
 #include "chimera/core/visible/Light.hpp"
+#include "chimera/core/visible/Material.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -34,6 +36,18 @@ struct LightComponent {
     Light* light = nullptr;
     bool global = true;
     LightComponent() = default;
+};
+
+struct MeshComponent {
+    TagComponent tag;
+    Mesh* mesh = nullptr;
+    MeshComponent() = default;
+};
+
+struct MaterialComponent {
+    TagComponent tag;
+    Material* material = nullptr;
+    MaterialComponent() = default;
 };
 
 struct Renderable3dComponent {

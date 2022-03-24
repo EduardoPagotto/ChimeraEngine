@@ -23,7 +23,7 @@ void LibraryGeometrys::target() {
             // eMesh.debugDados(false);
 
             LibraryMaterials lm(root, idMaterial, entity);
-            Material* pMaterial = lm.target();
+            lm.target();
 
             return;
         }

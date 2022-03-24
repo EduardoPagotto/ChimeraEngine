@@ -10,7 +10,7 @@ class LibraryMaterials : public Library {
   public:
     LibraryMaterials(tinyxml2::XMLElement* _root, const std::string& _url, Entity entity) : Library(_root, _url), entity(entity) {}
     virtual ~LibraryMaterials() {}
-    Material* target();
+    void target();
 
   private:
     Entity entity;

@@ -9,7 +9,7 @@ LibraryEffects::LibraryEffects(tinyxml2::XMLElement* _root, const std::string& _
 
 LibraryEffects::~LibraryEffects() {}
 
-Material* LibraryEffects::target() {
+void LibraryEffects::target() {
 
     for (tinyxml2::XMLElement* l_nEffect = root->FirstChildElement("library_effects")->FirstChildElement("effect"); l_nEffect != nullptr;
          l_nEffect = l_nEffect->NextSiblingElement()) {
@@ -19,14 +19,11 @@ Material* LibraryEffects::target() {
             tinyxml2::XMLElement* l_nProfile = l_nEffect->FirstChildElement("profile_COMMON");
             if (l_nProfile != nullptr) {
 
-                Material* pMaterial = new Material();
-
                 loadNewParam(l_nProfile);
 
                 Material& eMaterial = entity.addComponent<Material>();
                 loadColors(l_nProfile, &eMaterial);
-
-                return pMaterial;
+                return;
             }
         }
     }

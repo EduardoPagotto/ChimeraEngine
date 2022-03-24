@@ -87,8 +87,8 @@ void Scene::onAttach() {
         }
 
         // Se for um mesh inicializar componente (já que nao tenho classe de Mesh)
-        if (entity.hasComponent<Mesh>()) {
-            Mesh& mesh = entity.getComponent<Mesh>();
+        if (entity.hasComponent<MeshComponent>()) {
+            MeshComponent& mesh = entity.getComponent<MeshComponent>();
 
             // Inicializa Materiais
             if (entity.hasComponent<MaterialComponent>()) {
@@ -106,7 +106,7 @@ void Scene::onAttach() {
 
                 // Transforma Mesh em VertexData comprimindo-o
                 std::vector<Chimera::VertexData> renderData;
-                vertexDataFromMesh(&mesh, renderData);
+                vertexDataFromMesh(mesh.mesh, renderData);
                 std::vector<uint32_t> index;
                 std::vector<Chimera::VertexData> vertexDataOut;
                 vertexDataIndexCompile(renderData, vertexDataOut, index);
@@ -142,7 +142,7 @@ void Scene::onAttach() {
 
             if (entity.hasComponent<TransComponent>()) {
                 glm::vec3 min, max, size;
-                vertexDataMeshMinMaxSize(&mesh, min, max, size);
+                vertexDataMeshMinMaxSize(mesh.mesh, min, max, size);
 
                 TransComponent& tc = entity.getComponent<TransComponent>();
                 if (tc.solid) {

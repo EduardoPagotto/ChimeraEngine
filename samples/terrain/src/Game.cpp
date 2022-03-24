@@ -93,8 +93,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
         ShaderManager::load("MeshFullShadow", shadeData, shader); // colocar shader em material
 
-        Mesh& mesh = renderableEntity.addComponent<Mesh>();
-        loadObjFile("./assets/models/cubo2.obj", &mesh, material.material);
+        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
+        loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
     }
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     engine->pushState(&activeScene);

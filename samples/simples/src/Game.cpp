@@ -37,10 +37,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
-        Mesh& mesh = renderableEntity.addComponent<Mesh>();
+        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
 
         int ret = 0;
-        ret = loadObjFile("./assets/models/cubo2.obj", &mesh, material.material);
+        ret = loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
     }
 
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

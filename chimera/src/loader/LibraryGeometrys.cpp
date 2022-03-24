@@ -14,10 +14,10 @@ void LibraryGeometrys::target() {
         std::string l_id = l_nGeo->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            Mesh& eMesh = entity.addComponent<Mesh>();
+            MeshComponent& eMesh = entity.addComponent<MeshComponent>();
             auto& tag = entity.getComponent<TagComponent>();
             tag.tag = l_id;
-            std::string idMaterial = loadMeshCollada(l_nGeo, &eMesh);
+            std::string idMaterial = loadMeshCollada(l_nGeo, eMesh.mesh);
 
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Nome: %s", l_id.c_str());
             // eMesh.debugDados(false);

@@ -87,8 +87,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
-        Mesh& mesh = renderableEntity.addComponent<Mesh>();
-        loadObjFile("./assets/models/cubo2.obj", &mesh, material.material);
+        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
+        loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
     }
 
     // mudar para o event

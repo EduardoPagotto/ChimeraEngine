@@ -40,7 +40,7 @@ struct LightComponent {
 
 struct MeshComponent {
     TagComponent tag;
-    Mesh* mesh = nullptr;
+    Mesh* mesh = new Mesh();
     MeshComponent() = default;
 };
 

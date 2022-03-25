@@ -73,7 +73,7 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_camera") == 0) {
 
             Entity entity = reg->createEntity("Camera Entity");
-            TransComponent& tc = entity.addComponent<TransComponent>();
+            ComponentTrans& tc = entity.addComponent<ComponentTrans>();
             tc.trans = new Transform();
             tc.solid = false;
             tc.trans->setMatrix(l_pTransform);
@@ -85,7 +85,7 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
             lib.target();
 
             // FIXME: Remover transformacao da camera e reposicionar na entidade
-            CameraComponent& cc = entity.getComponent<CameraComponent>();
+            ComponentCamera& cc = entity.getComponent<ComponentCamera>();
             cc.camera->setPosition(l_pTransform[3]);
 
             // FIXME: remover proximas versoes
@@ -98,7 +98,7 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_light") == 0) {
 
             Entity entity = reg->createEntity("Light Entity");
-            TransComponent& tc = entity.addComponent<TransComponent>();
+            ComponentTrans& tc = entity.addComponent<ComponentTrans>();
             tc.trans = new Transform();
             tc.solid = false;
             tc.trans->setMatrix(l_pTransform);
@@ -115,7 +115,7 @@ void LibraryVisualScenes::carregaNode(tinyxml2::XMLElement* _nNode, const char* 
         } else if (strcmp(l_nomeElemento, (const char*)"instance_geometry") == 0) {
 
             Entity entity = reg->createEntity("Renderable Entity");
-            TransComponent& tc = entity.addComponent<TransComponent>();
+            ComponentTrans& tc = entity.addComponent<ComponentTrans>();
             tc.trans = new Transform();
             tc.solid = false;
             tc.trans->setMatrix(l_pTransform);

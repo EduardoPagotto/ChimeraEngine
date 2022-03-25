@@ -18,8 +18,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
     { // Cria entidade de camera
         // Cria camera e carrega parametros
-        CameraComponent& cc = ce.addComponent<CameraComponent>();
-        TransComponent& tc = ce.addComponent<TransComponent>();
+        ComponentCamera& cc = ce.addComponent<ComponentCamera>();
+        ComponentTrans& tc = ce.addComponent<ComponentTrans>();
         tc.trans = new Transform();
 
         cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
@@ -30,11 +30,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Maze Entity");
-        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
         tc.trans = new Transform();
 
         Shader& shader = renderableEntity.addComponent<Shader>();
-        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
+        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -76,11 +76,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
-        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
+        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
         Shader& shader = renderableEntity.addComponent<Shader>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -88,7 +88,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
-        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
+        ComponentMesh& mesh = renderableEntity.addComponent<ComponentMesh>();
         loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
     }
 

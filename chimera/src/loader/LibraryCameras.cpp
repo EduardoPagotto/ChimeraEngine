@@ -20,7 +20,7 @@ void LibraryCameras::target() {
                 auto& tag = entity.getComponent<TagComponent>();
                 tag.tag = l_id;
 
-                CameraComponent& cc = entity.addComponent<CameraComponent>();
+                ComponentCamera& cc = entity.addComponent<ComponentCamera>();
                 // cc.camera = new CameraOrbit(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
                 CameraOrbit* camZ = new CameraOrbit(glm::vec3(100.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
                 cc.camera = camZ;

@@ -22,7 +22,7 @@ void LibraryEffects::target() {
 
                 loadNewParam(l_nProfile);
 
-                MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();
+                ComponentMaterial& eMaterial = entity.addComponent<ComponentMaterial>();
                 // eMaterial.material = new material;
                 loadColors(l_nProfile, eMaterial.material);
                 return;

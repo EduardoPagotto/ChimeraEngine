@@ -4,7 +4,7 @@
 namespace Chimera {
 
 void CameraController::onCreate() {
-    auto& cc = getComponent<CameraComponent>();
+    auto& cc = getComponent<ComponentCamera>();
     camera = cc.camera;
 
     if (camera->is3D()) {

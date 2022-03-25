@@ -30,7 +30,7 @@ void LibraryPhysicModels::target2(const std::string& body, const std::string tar
                             TagComponent& tag = view.get<TagComponent>(entity);
                             if (tag.id == target) {
                                 Entity ent2 = {entity, reg};
-                                TransComponent& tc = ent2.getComponent<TransComponent>();
+                                ComponentTrans& tc = ent2.getComponent<ComponentTrans>();
                                 Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao
                                 delete tc.trans;                                            // deleta objeto de transformacao
                                 tc.trans = nullptr;                                         // limpa ponteiro

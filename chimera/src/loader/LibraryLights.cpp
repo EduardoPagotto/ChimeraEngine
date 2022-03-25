@@ -13,7 +13,7 @@ void LibraryLights::target() {
         if (url.compare(l_id) == 0) {
 
             auto ret_data = loadDiffuseLightColor(l_nLight);
-            LightComponent& lc = entity.addComponent<LightComponent>();
+            ComponentLight& lc = entity.addComponent<ComponentLight>();
             auto& tag = entity.getComponent<TagComponent>();
             tag.tag = l_id;
 

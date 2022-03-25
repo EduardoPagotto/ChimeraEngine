@@ -8,7 +8,7 @@ ColladaGeometry::~ColladaGeometry() {}
 void ColladaGeometry::create(Entity& entity, pugi::xml_node nodeParent) {
 
     pugi::xml_node geo = urlRoot(nodeParent, "library_geometries", nodeParent.attribute("url").value());
-    MeshComponent& eMesh = entity.addComponent<MeshComponent>();
+    ComponentMesh& eMesh = entity.addComponent<ComponentMesh>();
     eMesh.mesh = new Mesh();
     eMesh.tag.id = geo.attribute("id").value();
     eMesh.tag.tag = geo.attribute("name").value();

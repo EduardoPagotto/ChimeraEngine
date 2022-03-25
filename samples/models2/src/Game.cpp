@@ -49,14 +49,14 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         libP.target();
 
         // injeta controlador de camera
-        auto view1 = activeScene.getRegistry().get().view<CameraComponent>();
+        auto view1 = activeScene.getRegistry().get().view<ComponentCamera>();
         for (auto entity : view1) {
             Entity e = Entity{entity, &activeScene.getRegistry()};
             e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
         }
 
         // A cada mesh
-        auto view = activeScene.getRegistry().get().view<MeshComponent>();
+        auto view = activeScene.getRegistry().get().view<ComponentMesh>();
         for (auto entity : view) {
             // Ajusta metodo de entidades
             Entity e = Entity{entity, &activeScene.getRegistry()};
@@ -69,18 +69,18 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         }
 
         // Localiza objeto como o primario //EfeitoZoltan-mesh
-        TransComponent& tc = activeScene.getRegistry().findComponent<TransComponent>("EfeitoZoltan-mesh");
+        ComponentTrans& tc = activeScene.getRegistry().findComponent<ComponentTrans>("EfeitoZoltan-mesh");
         pCorpoRigido = (Solid*)tc.trans;
     }
 
     EmitterFont* ef = new EmitterFont();
     { // Cria emissor de particula
         Entity re = activeScene.getRegistry().createEntity("Renderable Particle System");
-        TransComponent& tc = re.addComponent<TransComponent>();
+        ComponentTrans& tc = re.addComponent<ComponentTrans>();
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 
-        MaterialComponent& material = re.addComponent<MaterialComponent>();
+        ComponentMaterial& material = re.addComponent<ComponentMaterial>();
         TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
         material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
         material.material->init();

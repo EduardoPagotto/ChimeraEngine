@@ -14,7 +14,7 @@ void LibraryGeometrys::target() {
         std::string l_id = l_nGeo->Attribute("id");
         if (url.compare(l_id) == 0) {
 
-            MeshComponent& eMesh = entity.addComponent<MeshComponent>();
+            ComponentMesh& eMesh = entity.addComponent<ComponentMesh>();
             auto& tag = entity.getComponent<TagComponent>();
             tag.tag = l_id;
             std::string idMaterial = loadMeshCollada(l_nGeo, eMesh.mesh);

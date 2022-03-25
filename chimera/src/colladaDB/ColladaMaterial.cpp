@@ -35,7 +35,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
     pugi::xml_node effect = nodeMat.child("instance_effect");
     pugi::xml_node novo2 = urlRoot(effect, "library_effects", effect.attribute("url").value());
 
-    MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();
+    ComponentMaterial& eMaterial = entity.addComponent<ComponentMaterial>();
     eMaterial.tag.id = nodeMat.attribute("id").value();
     eMaterial.tag.tag = nodeMat.attribute("name").value();
     eMaterial.tag.serial = Collada::getNewSerial();

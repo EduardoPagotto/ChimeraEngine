@@ -7,40 +7,40 @@
 
 namespace Chimera {
 
-struct CameraComponent {
+struct ComponentCamera {
     TagComponent tag;
     ICamera* camera = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;
     bool single = true; // FIXME: Camera simples ou dupla aqui, melhorar para o arquivo .DAE
-    CameraComponent() = default;
-    CameraComponent(const CameraComponent&) = default;
-    // CameraComponent(glm::mat4 projection) : camera(projection) {}
+    ComponentCamera() = default;
+    ComponentCamera(const ComponentCamera&) = default;
+    // ComponentCamera(glm::mat4 projection) : camera(projection) {}
 };
 
-struct TransComponent {
+struct ComponentTrans {
     ITrans* trans = nullptr;
     bool solid = false;
-    TransComponent() = default;
+    ComponentTrans() = default;
 };
 
-struct LightComponent {
+struct ComponentLight {
     TagComponent tag;
     Light* light = new Light();
     bool global = true;
-    LightComponent() = default;
+    ComponentLight() = default;
 };
 
-struct MeshComponent {
+struct ComponentMesh {
     TagComponent tag;
     Mesh* mesh = new Mesh();
-    MeshComponent() = default;
+    ComponentMesh() = default;
 };
 
-struct MaterialComponent {
+struct ComponentMaterial {
     TagComponent tag;
     Material* material = new Material();
-    MaterialComponent() = default;
+    ComponentMaterial() = default;
 };
 
 } // namespace Chimera

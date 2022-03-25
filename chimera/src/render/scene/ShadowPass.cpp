@@ -32,10 +32,10 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
 
     renderer.begin(camera);
     {
-        auto lightViewEnt = registry.get().view<LightComponent>();
+        auto lightViewEnt = registry.get().view<ComponentLight>();
         for (auto entity : lightViewEnt) {
-            auto& lc = lightViewEnt.get<LightComponent>(entity);
-            auto& tc = registry.get().get<TransComponent>(entity); // Lento
+            auto& lc = lightViewEnt.get<ComponentLight>(entity);
+            auto& tc = registry.get().get<ComponentTrans>(entity); // Lento
             if (lc.global) {
                 // FIXME: usar o direcionm depois no segundo parametro
                 glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
@@ -44,9 +44,9 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
             }
         }
 
-        auto group = registry.get().group<TransComponent, Renderable3dComponent>();
+        auto group = registry.get().group<ComponentTrans, Renderable3dComponent>();
         for (auto entity : group) {
-            auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
+            auto [tc, rc] = group.get<ComponentTrans, Renderable3dComponent>(entity);
 
             RenderCommand command;
             command.logRender = logRender;

@@ -19,7 +19,8 @@ void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
 
             std::string sid = n.attribute("sid").value();
             if (sid == "transform") {
-                TransComponent& tc = entity.addComponent<TransComponent>(new Transform(textToMat4(n.text().as_string())));
+                TransComponent& tc = entity.addComponent<TransComponent>();
+                tc.trans = new Transform(textToMat4(n.text().as_string()));
             }
 
         } else if (val == "instance_geometry") {

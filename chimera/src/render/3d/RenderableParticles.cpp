@@ -1,6 +1,6 @@
 #include "chimera/render/3d/RenderableParticles.hpp"
+#include "chimera/core/visible/Shader.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/Shader.hpp"
 
 namespace Chimera {
 
@@ -66,10 +66,10 @@ void RenderableParticles::destroy() {
 void RenderableParticles::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
 
     const glm::mat4& view = camera->view()->getView();
-    renderer->uQueue().push_back(UniformVal("projection", camera->getProjection()));
-    renderer->uQueue().push_back(UniformVal("view", view));
-    renderer->uQueue().push_back(UniformVal("CameraRight_worldspace", glm::vec3(view[0][0], view[1][0], view[2][0])));
-    renderer->uQueue().push_back(UniformVal("CameraUp_worldspace", glm::vec3(view[0][1], view[1][1], view[2][1])));
+    renderer->uQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
+    renderer->uQueue().insert(std::make_pair("view", UValue(view)));
+    renderer->uQueue().insert(std::make_pair("CameraRight_worldspace", UValue(glm::vec3(view[0][0], view[1][0], view[2][0]))));
+    renderer->uQueue().insert(std::make_pair("CameraUp_worldspace", UValue(glm::vec3(view[0][1], view[1][1], view[2][1]))));
 
     pc->cameraPos = glm::inverse(view)[3]; // depois mover para o statemachine!!!
 
@@ -120,7 +120,7 @@ void RenderableParticles::draw(const bool& logData) {
     glDisableVertexAttribArray(2);
 
     if (logData == true) {
-        pc->aabb.render();
+        pc->aabb.debug_render();
     }
 }
 } // namespace Chimera

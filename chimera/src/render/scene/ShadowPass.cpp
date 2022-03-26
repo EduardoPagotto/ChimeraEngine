@@ -1,4 +1,5 @@
 #include "chimera/render/scene/ShadowPass.hpp"
+#include "chimera/core/visible/Components.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/scene/Components.hpp"
 
@@ -6,7 +7,11 @@ namespace Chimera {
 
 ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm::mat4& projection) {
     // Create ShadowPass
-    ShaderManager::load("./assets/shaders/ShadowMappingDepth.glsl", this->shader);
+    std::unordered_map<GLenum, std::string> shadeData;
+    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ShadowMappingDepth.frag";
+    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ShadowMappingDepth.vert";
+    ShaderManager::load("ShadowMappingDepth", shadeData, this->shader);
+
     // Define o framebuffer de Shadow
     FrameBufferSpecification fbSpec;
     fbSpec.attachments = {
@@ -27,28 +32,28 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
 
     renderer.begin(camera);
     {
-        auto lightViewEnt = registry.get().view<LightComponent>();
+        auto lightViewEnt = registry.get().view<ComponentLight>();
         for (auto entity : lightViewEnt) {
-            auto& lc = lightViewEnt.get<LightComponent>(entity);
-            auto& tc = registry.get().get<TransComponent>(entity); // Lento
+            auto& lc = lightViewEnt.get<ComponentLight>(entity);
+            auto& tc = registry.get().get<ComponentTrans>(entity); // Lento
             if (lc.global) {
                 // FIXME: usar o direcionm depois no segundo parametro
                 glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
                 this->lightSpaceMatrix = this->lightProjection * lightView;
-                renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", this->lightSpaceMatrix));
+                renderer.uQueue().insert(std::make_pair("lightSpaceMatrix", UValue(this->lightSpaceMatrix)));
             }
         }
 
-        auto group = registry.get().group<TransComponent, Renderable3dComponent>();
+        auto group = registry.get().group<ComponentTrans, Renderable3dComponent>();
         for (auto entity : group) {
-            auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
+            auto [tc, rc] = group.get<ComponentTrans, Renderable3dComponent>(entity);
 
             RenderCommand command;
             command.logRender = logRender;
             command.transform = tc.trans->translateSrc(origem->getPosition());
             command.renderable = rc.renderable;
             command.shader = this->shader;
-            command.uniforms.push_back(UniformVal("model", command.transform));
+            command.uniforms["model"] = UValue(command.transform);
             rc.renderable->submit(camera, command, &renderer);
         }
     }
@@ -61,10 +66,10 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
 }
 
 void ShadowPass::appy(ICamera* camera, IRenderer3d& renderer) {
-    renderer.uQueue().push_back(UniformVal("viewPos", camera->getPosition()));
-    renderer.uQueue().push_back(UniformVal("shadows", 1));   // Ativa a sombra com 1
-    renderer.uQueue().push_back(UniformVal("shadowMap", 1)); // id da textura de shadow
-    renderer.uQueue().push_back(UniformVal("lightSpaceMatrix", this->lightSpaceMatrix));
+    renderer.uQueue().insert(std::make_pair("viewPos", UValue(camera->getPosition())));
+    renderer.uQueue().insert(std::make_pair("shadows", UValue(1)));
+    renderer.uQueue().insert(std::make_pair("shadowMap", UValue(1)));
+    renderer.uQueue().insert(std::make_pair("lightSpaceMatrix", UValue(this->lightSpaceMatrix)));
     this->shadowBuffer->getDepthAttachemnt()->bind(1); // FIXME: ver como melhorar depois
 }
 

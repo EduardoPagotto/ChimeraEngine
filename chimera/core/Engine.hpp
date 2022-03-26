@@ -1,7 +1,7 @@
 #pragma once
-#include "Canvas.hpp"
 #include "StateStack.hpp"
 #include "Timer.hpp"
+#include "chimera/core/device/Canvas.hpp"
 
 namespace Chimera {
 

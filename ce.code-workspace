@@ -77,7 +77,8 @@
 			"cfloat": "cpp",
 			"climits": "cpp",
 			"ios": "cpp",
-			"queue": "cpp"
+			"queue": "cpp",
+			"numbers": "cpp"
 		}
 	}
 }

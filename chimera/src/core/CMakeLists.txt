@@ -1,24 +1,69 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.18.2)
 
 PROJECT(ChimeraCore)
 
+find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(GLEW REQUIRED)
+
+if (BULLET_SET_TO_USE)
+	find_package(Bullet REQUIRED)
+endif(BULLET_SET_TO_USE)
 
 # define objetos a compilar
 set (SourcesCore Registry.cpp
-				 CanvasFB.cpp
 				 utils.cpp
 				 Timer.cpp
-				 Keyboard.cpp
-				 JoystickState.cpp
-				 JoystickManager.cpp
-				 MouseDevice.cpp
 				 StateStack.cpp
-				 Engine.cpp)
+				 Engine.cpp
+				 device/CanvasFB.cpp
+				 device/CanvasGL.cpp
+				 device/Keyboard.cpp
+				 device/JoystickState.cpp
+				 device/JoystickManager.cpp
+				 device/MouseDevice.cpp
+				 buffer/VertexBuffer.cpp
+				 buffer/IndexBuffer.cpp
+				 buffer/VertexArray.cpp
+				 buffer/FrameBuffer.cpp
+				 buffer/RenderBuffer.cpp
+				 space/Plane.cpp
+				 space/Frustum.cpp
+				 space/AABB.cpp
+				 space/Octree.cpp
+				 visible/Mesh.cpp
+				 visible/Shader.cpp
+				 visible/Texture.cpp
+				 visible/TextureManager.cpp
+				 visible/CameraFPS.cpp
+				 visible/CameraOrbit.cpp
+				 visible/CameraOrthographic.cpp
+				 visible/FontAtlas.cpp
+				 visible/FontManager.cpp
+				 visible/Material.cpp
+				 visible/ParticleEmitter.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}
-				 ${SDL2_INCLUDE_DIR})
+				 ${SDL2_INCLUDE_DIR}
+				 ${OPENGL_INCLUDE_DIR}
+				 ${GLEW_INCLUDE_DIRS})
+
+# Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
+if (OVR_SET_TO_USE)
+	message(STATUS "OVR incluido no build ChimeraCore")
+	set(SourcesCore ${SourcesCore} device/CanvasOVR) 
+	set(SourcesCore ${SourcesCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) 
+endif(OVR_SET_TO_USE)
+
+if (BULLET_SET_TO_USE)	
+	message(STATUS "Bullet incluido no build ChimeraCore")
+	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
+								   bullet/Solid.cpp
+								   bullet/Constraint.cpp) 
+	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
+endif(BULLET_SET_TO_USE)
+
 
 # Define o Target
 add_library (ChimeraCore STATIC ${SourcesCore})

@@ -1,39 +1,22 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <vector>
+#include "chimera/core/space/Triangle.hpp"
+#include "chimera/core/visible/Mesh.hpp"
+#include <list>
 
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
-#define BUFFER_OFFSET(i) ((void*)(i))
-
-#define EPSILON 1e-2
-//#define EPSILON 1e-1 // Falhas em calculos de aproximação verificar projeto bsptree
-
-enum class SIDE { CP_ONPLANE = 0, CP_FRONT, CP_BACK, CP_SPANNING };
-
 namespace Chimera {
 
 struct VertexData {
-    glm::vec3 position; // 3 * 4 = 12 ( 0 - 11)
-    glm::vec3 normal;   // 3 * 4 = 12 (12 - 23)
-    glm::vec2 texture;  // 2 * 4 = 08 (24 - 31)
+    glm::vec3 point;  // 3 * 4 = 12 ( 0 - 11)
+    glm::vec3 normal; // 3 * 4 = 12 (12 - 23)
+    glm::vec2 uv;     // 2 * 4 = 08 (24 - 31)
 };
 
 struct VertexDataSimple {
-    glm::vec3 vertex; // 3 * 4 = 12 (0 - 11)
-    glm::vec2 uv;     // 2 * 4 = 8  (12 - 19)
-    float tid;        // 1 * 4 = 4  (20 - 23)
-    glm::vec4 color;  // 4 * 4 = 16 (24 - 39)
-};
-
-struct Mesh {
-    Mesh() = default;
-    bool singleIndex = false;
-    std::vector<glm::vec3> point;
-    std::vector<glm::vec3> normal;
-    std::vector<glm::vec2> uv;
-    std::vector<uint32_t> iPoint;
-    std::vector<uint32_t> iNormal;
-    std::vector<uint32_t> iUv;
+    glm::vec3 point; // 3 * 4 = 12 (0 - 11)
+    glm::vec2 uv;    // 2 * 4 = 8  (12 - 19)
+    float tid;       // 1 * 4 = 4  (20 - 23)
+    glm::vec4 color; // 4 * 4 = 16 (24 - 39)
 };
 
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices);
@@ -51,4 +34,7 @@ void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3
 void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData);
 void vertexDataMeshScale(Mesh* m, const float& new_size, const bool& hasTexture);
 void vertexDataMeshClean(Mesh* m);
+
+void vertexDataIndexToTriangle(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris);
+void vertexDataToTriangle(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris);
 } // namespace Chimera

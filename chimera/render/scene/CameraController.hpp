@@ -1,14 +1,14 @@
 #pragma once
 #include "ScriptableEntity.hpp"
-#include "chimera/render/ICamera.hpp"
+#include "chimera/core/visible/ICamera.hpp"
 
 namespace Chimera {
 
 class CameraController : public ScriptableEntity {
   public:
     CameraController() = default;
-    void onCreate();
-    void onDestroy();
+    void onCreate() override;
+    void onDestroy() override;
     void onUpdate(const double& ts) override;
 
   private:

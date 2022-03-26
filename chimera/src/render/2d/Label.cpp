@@ -1,5 +1,5 @@
 #include "chimera/render/2d/Label.hpp"
-#include "chimera/render/FontManager.hpp"
+#include "chimera/core/visible/FontManager.hpp"
 
 namespace Chimera {
 

@@ -1,6 +1,5 @@
 #include "Game.hpp"
-#include "chimera/core/Exception.hpp"
-#include "chimera/render/CanvasGL.hpp"
+#include "chimera/core/device/CanvasGL.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
@@ -27,8 +26,6 @@ int main(int argn, char** argv) {
         SDL_Log("Hello finalizado");
         return 0;
 
-    } catch (const Exception& ex) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what()); // Exception Chimera
     } catch (const std::exception& ex) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Erro: %s", ex.what()); // Exception generica
     } catch (const std::string& ex) {

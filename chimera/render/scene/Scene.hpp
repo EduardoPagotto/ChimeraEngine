@@ -1,10 +1,10 @@
 #pragma once
 #include "ShadowPass.hpp"
 #include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/buffer/RenderBuffer.hpp"
+#include "chimera/core/bullet/PhysicsControl.hpp"
+#include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/render/ParticleEmitter.hpp"
-#include "chimera/render/buffer/RenderBuffer.hpp"
-#include "chimera/render/bullet/PhysicsControl.hpp"
 
 namespace Chimera {
 
@@ -22,7 +22,7 @@ class Scene : public IStateMachine {
     virtual void onRender() override;
     virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
-    virtual std::string getName() const { return "Scene"; }
+    virtual std::string getName() const override { return "Scene"; }
     void pushEmitters(IEmitter* e) { emitters.push_back(e); }
     void setOrigem(ITrans* o) { origem = o; }
     void setShadowPass(ShadowPass* shadowPass) { this->shadowPass = shadowPass; }

@@ -1,34 +1,28 @@
 #include "chimera/render/partition/Maze.hpp"
-#include "chimera/core/Exception.hpp"
 #include <string>
 
 namespace Chimera {
 
-Maze::Maze(const char filename[]) {
+Maze::Maze(const char filename[]) : sizeBlock(10.0f), indexPointCount(0) {
 
-    FILE* file;
-    char string[1024];
+    char buffer[1024] = {0};
 
-    indexPointCount = 0;
-
-    file = fopen(filename, "rb");
-    if (!file) {
-        throw Exception(std::string("Arguivo nao localizado"));
-    }
+    FILE* file = fopen(filename, "rb");
+    if (!file)
+        throw std::string("Arguivo nao localizado");
 
     // tamanho do mapa
-    fgets(string, 1024, file);
-    this->size.x = atoi(string);
+    fgets(buffer, 1024, file);
+    this->size.x = atoi(buffer);
 
-    fgets(string, 1024, file);
-    this->size.z = atoi(string);
+    fgets(buffer, 1024, file);
+    this->size.z = atoi(buffer);
 
-    fgets(string, 1024, file);
-    this->size.y = atoi(string);
+    fgets(buffer, 1024, file);
+    this->size.y = atoi(buffer);
 
     glm::ivec3 pos(0);
 
-    this->sizeBlock = 10.0f;
     this->halfBlock.x = (this->size.x * sizeBlock) / 2.0f; //(w/2)
     this->halfBlock.y = (this->size.y * sizeBlock) / 2.0f; //(d/2)
     this->halfBlock.z = (this->size.z * sizeBlock) / 2.0f; //(h/2)
@@ -36,11 +30,11 @@ Maze::Maze(const char filename[]) {
     // carregando mapa
     for (pos.y = 0; pos.y < this->size.y; pos.y++) {
         for (pos.z = 0; pos.z < this->size.z; pos.z++) {
-            fgets(string, 1024, file);
+            fgets(buffer, 1024, file);
             for (pos.x = 0; pos.x < this->size.x; pos.x++) {
                 glm::vec3 min = this->minimal(pos);
                 glm::vec3 max = min + sizeBlock;
-                Cube* pCube = new Cube(string[pos.x], min, max);
+                Cube* pCube = new Cube(buffer[pos.x], min, max);
                 this->vpCube.push_back(pCube);
             }
         }

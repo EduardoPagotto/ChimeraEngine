@@ -5,9 +5,9 @@ namespace Chimera {
 
 Layer::Layer(IRenderer2D* renderer, Shader shader, ICamera* camera) : renderer(renderer), shader(shader), camera(camera) {
     GLint texIDs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
-    shader.enable();
+    glUseProgram(shader.getID());
     shader.setUniformArray("textures", 32, texIDs);
-    shader.disable();
+    glUseProgram(0);
 }
 
 Layer::~Layer() {
@@ -16,8 +16,8 @@ Layer::~Layer() {
 }
 
 void Layer::onRender() {
-    shader.enable();
-    shader.setUniform("pr_matrix", camera->getProjection()); // passar para o renderer o shade
+    glUseProgram(shader.getID());
+    shader.setUniformM4("pr_matrix", camera->getProjection()); // passar para o renderer o shade
     renderer->begin(camera);
 
     for (auto renderable : renderables)
@@ -26,6 +26,6 @@ void Layer::onRender() {
     renderer->end();
     renderer->flush();
 
-    shader.disable();
+    glUseProgram(0);
 }
 } // namespace Chimera

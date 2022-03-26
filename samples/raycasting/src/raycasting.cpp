@@ -129,8 +129,8 @@ void RenderScene(State state, World world, Frame frame) {
         }
 
         // vamos lançar o raio
-        int side; // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
-        while ((world.data[map.x + map.y * world.width] == 0)) // até nos encontrarmos com uma parede ...
+        int side;                                            // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
+        while (world.data[map.x + map.y * world.width] == 0) // até nos encontrarmos com uma parede ...
         {
             // vamos para o próximo bloco no mapa
             if (sideDist.x < sideDist.y) {

@@ -1,12 +1,14 @@
 #include "chimera/render/scene/Scene.hpp"
-#include "chimera/core/MouseDevice.hpp"
+#include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/bullet/Solid.hpp"
+#include "chimera/core/device/MouseDevice.hpp"
+#include "chimera/core/visible/Components.hpp"
+#include "chimera/core/visible/Material.hpp"
+#include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
-#include "chimera/render/Material.hpp"
-#include "chimera/render/Transform.hpp"
-#include "chimera/render/buffer/VertexArray.hpp"
-#include "chimera/render/bullet/Solid.hpp"
+#include "chimera/render/VertexData.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include <SDL2/SDL.h>
 
@@ -26,7 +28,10 @@ Scene::~Scene() {
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
     // Define o framebuffer de desenho
     Shader shader;
-    ShaderManager::load("./assets/shaders/CanvasHMD.glsl", shader);
+    std::unordered_map<GLenum, std::string> shadeData;
+    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/CanvasHMD.frag";
+    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/CanvasHMD.vert";
+    ShaderManager::load("CanvasHMD", shadeData, shader);
 
     FrameBufferSpecification fbSpec;
     fbSpec.attachments = {
@@ -83,18 +88,18 @@ void Scene::onAttach() {
         }
 
         // Se for um mesh inicializar componente (já que nao tenho classe de Mesh)
-        if (entity.hasComponent<Mesh>()) {
-            Mesh& mesh = entity.getComponent<Mesh>();
+        if (entity.hasComponent<ComponentMesh>()) {
+            ComponentMesh& mesh = entity.getComponent<ComponentMesh>();
 
             // Inicializa Materiais
-            if (entity.hasComponent<Material>()) {
-                Material& material = entity.getComponent<Material>();
-                if (!material.isValid())
-                    material.init();
+            if (entity.hasComponent<ComponentMaterial>()) {
+                ComponentMaterial& material = entity.getComponent<ComponentMaterial>();
+                if (!material.material->isValid())
+                    material.material->init();
             } else {
-                Material& material = entity.addComponent<Material>();
-                material.setDefaultEffect();
-                material.init();
+                ComponentMaterial& material = entity.addComponent<ComponentMaterial>();
+                material.material->setDefaultEffect();
+                material.material->init();
             }
 
             // Se nja nao foi inicializado um Renderable3dComponent ao mesh
@@ -102,23 +107,45 @@ void Scene::onAttach() {
 
                 // Transforma Mesh em VertexData comprimindo-o
                 std::vector<Chimera::VertexData> renderData;
-                vertexDataFromMesh(&mesh, renderData);
+                vertexDataFromMesh(mesh.mesh, renderData);
                 std::vector<uint32_t> index;
                 std::vector<Chimera::VertexData> vertexDataOut;
                 vertexDataIndexCompile(renderData, vertexDataOut, index);
 
-                // Cria o renderable object com o VertexData
+                // Create VAO, VBO and IBO
+                VertexArray* vao = new VertexArray();
+                vao->bind();
+
+                VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
+                vbo->bind();
+
+                BufferLayout layout;
+                layout.push(3, GL_FLOAT, sizeof(float), false);
+                layout.push(3, GL_FLOAT, sizeof(float), false);
+                layout.push(2, GL_FLOAT, sizeof(float), false);
+
+                vbo->setLayout(layout);
+                vbo->setData(&vertexDataOut[0], vertexDataOut.size());
+                vbo->unbind();
+                vao->push(vbo);
+
+                vao->unbind();
+
+                glm::vec3 min, max, size;
+                vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
+
+                IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
+                Renderable3D* r = new Renderable3D(vao, ibo, AABB(min, max));
+
                 Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
-                Renderable3D* r = new Renderable3D();
-                r->createBuffers(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size());
                 rc.renderable = r;
             }
 
-            if (entity.hasComponent<TransComponent>()) {
+            if (entity.hasComponent<ComponentTrans>()) {
                 glm::vec3 min, max, size;
-                vertexDataMeshMinMaxSize(&mesh, min, max, size);
+                vertexDataMeshMinMaxSize(mesh.mesh, min, max, size);
 
-                TransComponent& tc = entity.getComponent<TransComponent>();
+                ComponentTrans& tc = entity.getComponent<ComponentTrans>();
                 if (tc.solid) {
                     Solid* solid = (Solid*)tc.trans;
                     solid->init(size); // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
@@ -174,10 +201,10 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
     viewportWidth = width;
     viewportHeight = height;
 
-    auto view = registry.get().view<CameraComponent>();
+    auto view = registry.get().view<ComponentCamera>();
     for (auto entity : view) {
 
-        auto& cameraComponent = view.get<CameraComponent>(entity);
+        auto& cameraComponent = view.get<ComponentCamera>(entity);
         if (!cameraComponent.fixedAspectRatio) {
             cameraComponent.camera->setViewportSize(width, height);
 
@@ -218,35 +245,35 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
         IRenderable3d* renderable = rc.renderable;
 
         Entity e = {entity, &registry};
-        TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
+        ComponentTrans& tc = e.getComponent<ComponentTrans>(); // FIXME: group this!!!
         Shader& sc = e.getComponent<Shader>();
-        Material& mc = e.getComponent<Material>();
+        ComponentMaterial& mc = e.getComponent<ComponentMaterial>();
 
         RenderCommand command;
         command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = renderable;
         command.shader = sc;
-        mc.bindMaterialInformation(command.uniforms, command.vTex);
+        mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
-        command.uniforms.push_back(UniformVal("model", command.transform));
+        command.uniforms["model"] = UValue(command.transform);
 
         renderable->submit(camera, command, &renderer);
     }
 }
 
 void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
-    auto group = registry.get().group<Shader, Material, TransComponent, Renderable3dComponent>();
+    auto group = registry.get().group<Shader, ComponentMaterial, ComponentTrans, Renderable3dComponent>();
     for (auto entity : group) {
-        auto [sc, mc, tc, rc] = group.get<Shader, Material, TransComponent, Renderable3dComponent>(entity);
+        auto [sc, mc, tc, rc] = group.get<Shader, ComponentMaterial, ComponentTrans, Renderable3dComponent>(entity);
 
         RenderCommand command;
         command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = rc.renderable;
         command.shader = sc;
-        mc.bindMaterialInformation(command.uniforms, command.vTex);
-        command.uniforms.push_back(UniformVal("model", command.transform));
+        mc.material->bindMaterialInformation(command.uniforms, command.vTex);
+        command.uniforms["model"] = UValue(command.transform);
         rc.renderable->submit(camera, command, &renderer);
     }
 }
@@ -268,17 +295,17 @@ void Scene::onRender() {
         count++;
 
         // used by all
-        renderBatch.uQueue().push_back(UniformVal("projection", camera->getProjection()));
-        renderBatch.uQueue().push_back(UniformVal("view", camera->view()->getView()));
+        renderBatch.uQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
+        renderBatch.uQueue().insert(std::make_pair("view", UValue(camera->view()->getView())));
 
         // load shadows props to renderBatch
         if (shadowPass)
             shadowPass->appy(camera, renderBatch);
 
-        auto lightView = registry.get().view<LightComponent>();
+        auto lightView = registry.get().view<ComponentLight>();
         for (auto entity : lightView) {
-            auto& lc = lightView.get<LightComponent>(entity);
-            auto& tc = registry.get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
+            auto& lc = lightView.get<ComponentLight>(entity);
+            auto& tc = registry.get().get<ComponentTrans>(entity); // lightView.get<ComponentLight>(entity);
             if (lc.global)                                         // biding light prop
                 lc.light->bindLight(renderBatch.uQueue(), tc.trans->getMatrix());
         }

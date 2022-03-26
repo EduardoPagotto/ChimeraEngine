@@ -1,19 +1,17 @@
 #pragma once
-#include "BSPTreeNode.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
-#include "chimera/render/partition/Triangle.hpp"
+#include "chimera/core/space/BSPTreeNode.hpp"
+#include "chimera/core/space/Triangle.hpp"
+#include "chimera/core/space/TrisIndex.hpp"
+#include "chimera/render/VertexData.hpp"
 #include <list>
 
 namespace Chimera {
-// Ref: https://github.com/taylorstine/BSP_Tree
-class BspTree {
+class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
   public:
-    BspTree() : root(nullptr) {}
+    BspTree() {}
     virtual ~BspTree() {}
-    void create(std::vector<VertexData>& _vVertex, std::vector<uint32_t>& _vIndex);
-    BSPTreeNode* getRoot() const { return root; }
-    std::vector<VertexData>* getVertex() { return &vVertex; }
-    std::vector<Renderable3D*>* getLeafs() { return &vpLeaf; }
+    BSPTreeNode* create(std::vector<VertexData>& _vVertexIn, std::list<Triangle*>& _vTriangleIn, std::vector<VertexData>& _vVertexOut,
+                        VecPrtTrisIndex& vpLeafOut);
 
   private:
     BSPTreeNode* build(std::list<Triangle*>& _vTriangle);
@@ -21,8 +19,7 @@ class BspTree {
     void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
     void createLeafy(BSPTreeNode* tree, std::list<Triangle*>& _vTriangle);
 
-    BSPTreeNode* root;
     std::vector<VertexData> vVertex;
-    std::vector<Renderable3D*> vpLeaf;
+    VecPrtTrisIndex vpLeaf;
 };
 } // namespace Chimera

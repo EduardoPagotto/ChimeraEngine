@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.18.2)
 
 PROJECT(ChimeraRender)
 
@@ -13,32 +13,12 @@ endif(BULLET_SET_TO_USE)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	CanvasGL.cpp
-					Shader.cpp
-					VertexData.cpp
-					Texture.cpp
-					TextureManager.cpp
-					CameraFPS.cpp
-					CameraOrbit.cpp
-					CameraOrthographic.cpp
-					FontAtlas.cpp
-					FontManager.cpp
-					Material.cpp
-					ParticleEmitter.cpp
-					partition/Plane.cpp
-					partition/Frustum.cpp
-					partition/AABB.cpp
-					partition/Octree.cpp
+set (RenderSource 	VertexData.cpp
 					partition/BSPTree.cpp
 					partition/Cube.cpp 
 					partition/Maze.cpp
 					partition/LoadObj.cpp
 					partition/LoadHeightMap.cpp
-					buffer/VertexBuffer.cpp
-					buffer/IndexBuffer.cpp
-					buffer/VertexArray.cpp
-					buffer/FrameBuffer.cpp
-					buffer/RenderBuffer.cpp
 					2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
@@ -64,18 +44,15 @@ set (RenderInclude 	${CMAKE_SOURCE_DIR}
 
 # Adiciona objetos e includes do OVR ao RenderSource e RenderInclude
 if (OVR_SET_TO_USE)
-	message(STATUS "OVR incluido no build")
-	set(RenderSource ${RenderSource} src/OvrDevice.cpp) #adiciona o cpp
-	set(RenderInclude ${RenderInclude} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) #adiciona o h
+	message(STATUS "OVR incluido no build ChimeraRender")
+	set(RenderInclude ${RenderInclude} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
 endif(OVR_SET_TO_USE)
 
-if (BULLET_SET_TO_USE) # TODO: Remover para o Core depois de estrair o Transform	message(STATUS "Bullet incluido no build")
-	set(RenderSource ${RenderSource} bullet/PhysicsControl.cpp
-									 bullet/Solid.cpp
-									 bullet/Constraint.cpp) #adiciona o cpp
-	set(RenderInclude ${RenderInclude} ${BULLET_INCLUDE_DIR} ) #adiciona o h
+if (BULLET_SET_TO_USE)
+	message(STATUS "Bullet incluido no build ChimeraRender")
+	set(RenderInclude ${RenderInclude} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
-			
+
 # Define o Target
 add_library (ChimeraRender STATIC ${RenderSource})
 

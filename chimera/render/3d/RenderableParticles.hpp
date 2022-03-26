@@ -1,8 +1,8 @@
 #pragma once
 #include "IRenderable3d.hpp"
-#include "chimera/render/ParticleEmitter.hpp"
-#include "chimera/render/buffer/VertexArray.hpp"
-#include "chimera/render/partition/AABB.hpp"
+#include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/space/AABB.hpp"
+#include "chimera/core/visible/ParticleEmitter.hpp"
 
 namespace Chimera {
 class RenderableParticles : public IRenderable3d {
@@ -10,7 +10,7 @@ class RenderableParticles : public IRenderable3d {
     RenderableParticles() = default;
     virtual ~RenderableParticles();
 
-    virtual uint32_t getSize() const override { return pc->particlesCount; }
+    virtual const uint32_t getSize() const override { return pc->particlesCount; }
     virtual VertexArray* getVao() const override { return vao; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }
     virtual const AABB& getAABB() const override { return pc->aabb; }

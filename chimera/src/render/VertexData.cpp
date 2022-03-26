@@ -1,5 +1,6 @@
 #include "chimera/render/VertexData.hpp"
-#include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/space/Plane.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -11,13 +12,13 @@ bool getSimilarVertexIndex(VertexData& in_vertex, std::vector<VertexData>& out_v
     // Percorrer todos os vertex ja existentes na lista
     for (uint32_t i = 0; i < out_vertex.size(); i++) {
 
-        if (is_near(in_vertex.position.x, out_vertex[i].position.x) && is_near(in_vertex.position.y, out_vertex[i].position.y) &&
-            is_near(in_vertex.position.z, out_vertex[i].position.z) &&
+        if (is_near(in_vertex.point.x, out_vertex[i].point.x) && is_near(in_vertex.point.y, out_vertex[i].point.y) &&
+            is_near(in_vertex.point.z, out_vertex[i].point.z) &&
 
             is_near(in_vertex.normal.x, out_vertex[i].normal.x) && is_near(in_vertex.normal.y, out_vertex[i].normal.y) &&
             is_near(in_vertex.normal.z, out_vertex[i].normal.z) &&
 
-            is_near(in_vertex.texture.x, out_vertex[i].texture.x) && is_near(in_vertex.texture.y, out_vertex[i].texture.y)) {
+            is_near(in_vertex.uv.x, out_vertex[i].uv.x) && is_near(in_vertex.uv.y, out_vertex[i].uv.y)) {
             result = i;
             return true;
         }
@@ -65,13 +66,13 @@ void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexD
 
 void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
     if (vertexSize > 0) {
-        min = pVertexList[0].position;
-        max = pVertexList[0].position;
+        min = pVertexList[0].point;
+        max = pVertexList[0].point;
     }
 
     for (uint32_t i = 1; i < vertexSize; i++) {
-        min = glm::min(min, pVertexList[i].position);
-        max = glm::max(max, pVertexList[i].position);
+        min = glm::min(min, pVertexList[i].point);
+        max = glm::max(max, pVertexList[i].point);
     }
 
     size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
@@ -82,47 +83,17 @@ void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, g
 void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
                                glm::vec3& min, glm::vec3& max, glm::vec3& size) {
     if (indexSize > 0) {
-        min = pVertexList[pIndexList[0]].position;
-        max = pVertexList[pIndexList[0]].position;
+        min = pVertexList[pIndexList[0]].point;
+        max = pVertexList[pIndexList[0]].point;
     }
 
     for (uint32_t i = 1; i < indexSize; i++) {
-        min = glm::min(min, pVertexList[pIndexList[i]].position);
-        max = glm::max(max, pVertexList[pIndexList[i]].position);
+        min = glm::min(min, pVertexList[pIndexList[i]].point);
+        max = glm::max(max, pVertexList[pIndexList[i]].point);
     }
     size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
     size.y = (glm::abs(max.y) + glm::abs(min.y)) / 2.0f;
     size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
-}
-
-void vertexDataMeshDebug(Mesh* m, bool _showAll) {
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Points: %03d Index: %03d", (int)m->point.size(), (int)m->iPoint.size());
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normals: %03d Index: %03d", (int)m->normal.size(), (int)m->iNormal.size());
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UVs:     %03d Index: %03d", (int)m->uv.size(), (int)m->iUv.size());
-
-    if (_showAll == true) {
-        for (uint32_t i = 0; i < m->point.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point: %03d (%05.3f; %05.3f; %05.3f)", i, m->point[i].x, m->point[i].y, m->point[i].z);
-
-        for (uint32_t i = 0; i < m->iPoint.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point Index: %03d (%03d; %03d; %03d)", i, m->iPoint[i], m->iPoint[i + 1],
-                         m->iPoint[i + 2]);
-
-        for (uint32_t i = 0; i < m->normal.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", i, m->normal[i].x, m->normal[i].y,
-                         m->normal[i].z);
-
-        for (uint32_t i = 0; i < m->iNormal.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Index: %03d (%03d; %03d; %03d)", i, m->iNormal[i], m->iNormal[i + 1],
-                         m->iNormal[i + 2]);
-
-        for (uint32_t i = 0; i < m->uv.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV: %03d (%05.3f; %05.3f)", i, m->uv[i].x, m->uv[i].y);
-
-        for (uint32_t i = 0; i < m->iUv.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV Index: %03d (%03d; %03d; %03d)", i, m->iUv[i], m->iUv[i + 1], m->iUv[i + 2]);
-    }
 }
 
 void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
@@ -195,4 +166,29 @@ void vertexDataMeshClean(Mesh* m) {
 //                      (fabs(dado.z) < EPSILON) ? 0.0f : dado.z); // Z
 // }
 
+void vertexDataIndexToTriangle(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris) {
+    // Usa os indices já pre-calculado
+    for (uint32_t indice = 0; indice < indexSize; indice += 3) {
+        uint32_t pa = indexData[indice];
+        uint32_t pb = indexData[indice + 1];
+        uint32_t pc = indexData[indice + 2];
+        // Calcula Normal Face
+        glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
+    }
+}
+
+void vertexDataToTriangle(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris) {
+    // Calcula os indices na sequencia em que os vertices estão
+    for (uint32_t indice = 0; indice < vertexSize; indice += 3) {
+        uint32_t pa = indice;
+        uint32_t pb = indice + 1;
+        uint32_t pc = indice + 2;
+        // Calcula Normal Face
+        glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
+    }
+}
 } // namespace Chimera

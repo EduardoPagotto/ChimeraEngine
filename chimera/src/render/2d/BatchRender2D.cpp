@@ -95,25 +95,25 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
     if (texture != nullptr)
         textureSlot = this->submitTexture(renderable->getTexture());
 
-    buffer->vertex = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
+    buffer->point = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
     buffer->uv = uv[0];
     buffer->tid = textureSlot;
     buffer->color = color;
     buffer++;
 
-    buffer->vertex = stack.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
+    buffer->point = stack.multiplVec3(glm::vec3(position.x, position.y + size.y, position.z));
     buffer->uv = uv[1];
     buffer->tid = textureSlot;
     buffer->color = color;
     buffer++;
 
-    buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
+    buffer->point = stack.multiplVec3(glm::vec3(position.x + size.x, position.y + size.y, position.z));
     buffer->uv = uv[2];
     buffer->tid = textureSlot;
     buffer->color = color;
     buffer++;
 
-    buffer->vertex = stack.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
+    buffer->point = stack.multiplVec3(glm::vec3(position.x + size.x, position.y, position.z));
     buffer->uv = uv[3];
     buffer->tid = textureSlot;
     buffer->color = color;
@@ -156,25 +156,25 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
             float u1 = glyph->square.w;
             float v1 = glyph->square.h;
 
-            buffer->vertex = stack.multiplVec3(glm::vec3(x0, y0, 0.0f));
+            buffer->point = stack.multiplVec3(glm::vec3(x0, y0, 0.0f));
             buffer->uv = glm::vec2(u0, v0);
             buffer->tid = textureSlot;
             buffer->color = color;
             buffer++;
 
-            buffer->vertex = stack.multiplVec3(glm::vec3(x0, y1, 0.0f));
+            buffer->point = stack.multiplVec3(glm::vec3(x0, y1, 0.0f));
             buffer->uv = glm::vec2(u0, v1); // glm::vec2(u0, v1);
             buffer->tid = textureSlot;
             buffer->color = color;
             buffer++;
 
-            buffer->vertex = stack.multiplVec3(glm::vec3(x1, y1, 0.0f));
+            buffer->point = stack.multiplVec3(glm::vec3(x1, y1, 0.0f));
             buffer->uv = glm::vec2(u1, v1);
             buffer->tid = textureSlot;
             buffer->color = color;
             buffer++;
 
-            buffer->vertex = stack.multiplVec3(glm::vec3(x1, y0, 0.0f));
+            buffer->point = stack.multiplVec3(glm::vec3(x1, y0, 0.0f));
             buffer->uv = glm::vec2(u1, v0);
             buffer->tid = textureSlot;
             buffer->color = color;

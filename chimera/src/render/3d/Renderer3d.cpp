@@ -1,12 +1,12 @@
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/buffer/IndexBuffer.hpp"
+#include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/space/AABB.hpp"
+#include "chimera/core/visible/Light.hpp"
+#include "chimera/core/visible/Material.hpp"
+#include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
-#include "chimera/render/Light.hpp"
-#include "chimera/render/Material.hpp"
-#include "chimera/render/Transform.hpp"
-#include "chimera/render/buffer/IndexBuffer.hpp"
-#include "chimera/render/buffer/VertexArray.hpp"
-#include "chimera/render/partition/AABB.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -33,7 +33,7 @@ void Renderer3d::submit(const RenderCommand& command) {
         IndexBuffer* ibo = command.renderable->getIBO();
         if (ibo != nullptr) {
             totIBO++;
-            totFaces += ibo->getCount() / 3;
+            totFaces += ibo->getSize() / 3;
         }
         // adicionado ao proximo render
         commandQueue.push_back(command);
@@ -62,25 +62,25 @@ void Renderer3d::flush() {
 
                 if (activeShader.isInvalid()) { // primeira passada
                     activeShader = command.shader;
-                    activeShader.enable();
+                    glUseProgram(activeShader.getID());
                 } else {
                     // demais passadas
                     if (activeShader != command.shader) {  // se diferente
                         if (!command.shader.isInvalid()) { // se valido trocar
-                            activeShader.disable();
+                            glUseProgram(0);
                             activeShader = command.shader;
-                            activeShader.enable();
+                            glUseProgram(activeShader.getID());
                         }
                     }
                 }
 
                 // generic bind in each draw call camera, light, etc
-                for (const UniformVal& uniform : uniformsQueue)
-                    uniform.setUniform(activeShader);
+                for (const auto& kv : uniformsQueue)
+                    activeShader.setUniformU(kv.first.c_str(), kv.second);
 
                 // bind dos uniforms from model
-                for (const UniformVal& uniform : command.uniforms)
-                    uniform.setUniform(activeShader);
+                for (const auto& kv : command.uniforms)
+                    activeShader.setUniformU(kv.first.c_str(), kv.second);
 
                 // libera textura antes de passar as novas
                 if (command.vTex.size() == 0)

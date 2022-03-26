@@ -1,6 +1,7 @@
 #pragma once
-#include "chimera/render/buffer/VertexArray.hpp"
-#include "chimera/render/buffer/VertexBuffer.hpp"
+#include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/buffer/VertexBuffer.hpp"
+#include "chimera/render/VertexData.hpp"
 
 namespace Chimera {
 

@@ -1,10 +1,11 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/core/visible/CameraOrbit.hpp"
+#include "chimera/core/visible/Components.hpp"
+#include "chimera/core/visible/TextureManager.hpp"
+#include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"
-#include "chimera/render/CameraOrbit.hpp"
-#include "chimera/render/TextureManager.hpp"
-#include "chimera/render/Transform.hpp"
 #include "chimera/render/partition/BSPTree.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/partition/Maze.hpp"
@@ -17,8 +18,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
     { // Cria entidade de camera
         // Cria camera e carrega parametros
-        CameraComponent& cc = ce.addComponent<CameraComponent>();
-        TransComponent& tc = ce.addComponent<TransComponent>();
+        ComponentCamera& cc = ce.addComponent<ComponentCamera>();
+        ComponentTrans& tc = ce.addComponent<ComponentTrans>();
         tc.trans = new Transform();
 
         cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
@@ -29,49 +30,66 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Maze Entity");
-        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
         tc.trans = new Transform();
 
         Shader& shader = renderableEntity.addComponent<Shader>();
-        Material& material = renderableEntity.addComponent<Material>();
+        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
-        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
+        std::unordered_map<GLenum, std::string> shadeData;
+        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshNoMat.frag";
+        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
+        ShaderManager::load("MeshNoMat", shadeData, shader);
 
         // material.setDefaultEffect();
         // material.setShine(50.0f);
         TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam());
-        material.addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
-        material.init();
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        material.material->init();
 
-        std::vector<uint32_t> vIndex;
-        std::vector<VertexData> vVertexIndexed;
-
-        // Usando o Maze
+        // processa o Maze
         Maze maze = Maze("./assets/maps/maze7.txt");
         maze.createMap();
 
+        // resultado da compressao do maze
+        std::vector<uint32_t> vIndex;
+        std::vector<VertexData> vVertexIndexed;
         vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
 
-        BspTree bspTree;
-        bspTree.create(vVertexIndexed, vIndex);
+        // indexador triangular
+        std::list<Triangle*> vTris;
+        if (vIndex.size() > 0)
+            vertexDataIndexToTriangle(&vVertexIndexed[0], &vIndex[0], vIndex.size(), vTris);
+        else
+            vertexDataToTriangle(&vVertexIndexed[0], vVertexIndexed.size(), vTris);
 
-        RenderableBsp* r = new RenderableBsp(bspTree.getRoot(), bspTree.getLeafs(), bspTree.getVertex());
+        // btree root, leafs, vertex
+        BspTree bspTree;
+        std::vector<VertexData> vVertexFinal;
+        VecPrtTrisIndex vTrisFinal;
+        BSPTreeNode* root = bspTree.create(vVertexIndexed, vTris, vVertexFinal, vTrisFinal);
+
+        RenderableBsp* r = new RenderableBsp(root, vTrisFinal, vVertexFinal);
         rc.renderable = r;
     }
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
-        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
+        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-        Material& material = renderableEntity.addComponent<Material>();
+        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
         Shader& shader = renderableEntity.addComponent<Shader>();
-        ShaderManager::load("./assets/shaders/MeshNoMat.glsl", shader);
 
-        Mesh& mesh = renderableEntity.addComponent<Mesh>();
-        loadObjFile("./assets/models/cubo2.obj", &mesh, &material);
+        std::unordered_map<GLenum, std::string> shadeData;
+        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshNoMat.frag";
+        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
+        ShaderManager::load("MeshNoMat", shadeData, shader);
+
+        ComponentMesh& mesh = renderableEntity.addComponent<ComponentMesh>();
+        loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
     }
 
     // mudar para o event

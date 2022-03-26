@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.18.2)
 
 PROJECT(ChimeraEngine)
 
-set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs")
+set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs -fstandalone-debug")
 
 set(OVR_SET_TO_USE OFF)
 set(BULLET_SET_TO_USE ON)

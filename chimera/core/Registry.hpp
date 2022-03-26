@@ -1,6 +1,6 @@
 #pragma once
-#include "Exception.hpp"
 #include <entt/entt.hpp>
+#include <stdexcept>
 
 namespace Chimera {
 struct TagComponent {
@@ -22,15 +22,14 @@ class Registry {
     Entity findEntityId(const std::string& id);
     Entity findEntitySerial(const uint32_t& serial);
 
-    template <typename T>
-    T& findComponent(const std::string& tagName) {
+    template <typename T> T& findComponent(const std::string& tagName) {
         auto view = eRegistry.view<T>();
         for (auto ent : view) {
             TagComponent& ee = eRegistry.get<TagComponent>(ent);
             if (ee.tag == tagName)
                 return eRegistry.get<T>(ent);
         }
-        throw Exception(std::string(std::string("Tag name nao encontrado:") + tagName));
+        throw std::invalid_argument(std::string("Tag name nao encontrado: ") + tagName);
     }
 
   private:
@@ -44,22 +43,12 @@ class Entity {
     Entity() = default;
     Entity(entt::entity handle, Registry* reg) : handle(handle), reg(reg) {}
     Entity(const Entity& other) : handle(other.handle), reg(other.reg) {}
-    template <typename T>
-    bool hasComponent() {
-        return reg->eRegistry.all_of<T>(handle);
-    }
-    template <typename T, typename... Args>
-    T& addComponent(Args&&... args) {
+    template <typename T> bool hasComponent() { return reg->eRegistry.all_of<T>(handle); }
+    template <typename T, typename... Args> T& addComponent(Args&&... args) {
         return reg->eRegistry.emplace<T>(handle, std::forward<Args>(args)...);
     }
-    template <typename T>
-    T& getComponent() {
-        return reg->eRegistry.get<T>(handle);
-    }
-    template <typename T>
-    void removeComponent() {
-        reg->eRegistry.remove<T>(handle);
-    }
+    template <typename T> T& getComponent() { return reg->eRegistry.get<T>(handle); }
+    template <typename T> void removeComponent() { reg->eRegistry.remove<T>(handle); }
     operator bool() const { return handle != entt::null; }
     operator uint32_t() const { return (uint32_t)handle; }
     operator entt::entity() const { return handle; }

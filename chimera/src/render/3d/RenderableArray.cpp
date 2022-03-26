@@ -1,13 +1,13 @@
 #include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
-#include "chimera/render/OpenGLDefs.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-RenderableArray::RenderableArray(std::vector<Renderable3D*>& vChild, std::vector<VertexData>& vertexData) : totIndex(0) {
-    this->vChild = std::move(vChild);
+RenderableArray::RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<VertexData>& vertexData) : totIndex(0) {
+
     this->vVertex = std::move(vertexData);
 
     // create vertex buffers
@@ -28,9 +28,17 @@ RenderableArray::RenderableArray(std::vector<Renderable3D*>& vChild, std::vector
 
     vao->push(vbo);
 
-    for (Renderable3D* child : this->vChild) {
-        child->initializeBuffer(&vVertex[0], vVertex.size());
-        totIndex += child->getSize();
+    for (auto ptrTrisIndex : vPtrTrisIndex) {
+
+        glm::vec3 min, max, size;
+        vertexDataIndexMinMaxSize(&this->vVertex[0], this->vVertex.size(), &ptrTrisIndex->vIndex[0], ptrTrisIndex->size(), min, max, size);
+
+        IndexBuffer* ibo = new IndexBuffer(&ptrTrisIndex->vIndex[0], ptrTrisIndex->size());
+        IRenderable3d* r = new Renderable3D(nullptr, ibo, AABB(min, max));
+
+        vChild.push_back(r);
+
+        totIndex += ptrTrisIndex->size();
     }
 
     vao->unbind();
@@ -44,7 +52,7 @@ RenderableArray::RenderableArray(std::vector<Renderable3D*>& vChild, std::vector
 RenderableArray::~RenderableArray() {
 
     while (!vChild.empty()) {
-        Renderable3D* child = vChild.back();
+        IRenderable3d* child = vChild.back();
         vChild.pop_back();
         delete child;
         child = nullptr;
@@ -63,7 +71,7 @@ void RenderableArray::submit(ICamera* camera, RenderCommand& command, IRenderer3
 
     renderer->submit(command);
 
-    for (Renderable3D* child : vChild) {
+    for (IRenderable3d* child : vChild) {
         command.renderable = child;
         renderer->submit(command);
     }

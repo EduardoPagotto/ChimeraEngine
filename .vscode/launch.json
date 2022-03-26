@@ -2,22 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "LoadTest",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/loadtest",
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "Models2",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/models2",
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
             "name": "Models3",
             "type": "lldb",
             "request": "launch",

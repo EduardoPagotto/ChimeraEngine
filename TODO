@@ -1,3 +1,4 @@
-- [] Otimizar RendereParticles como unico drawcall
-- [] Remover Nodes
-- [] HMD direto no Renderer do Scene
+- [] Carga de shades pelo arqquivo formato collada
+- [] ColladaDB para dentro do Core
+- [] Separação das classes de Bullet
+- [] carga de dados de Node em hierarquia do Collada

@@ -3,7 +3,7 @@
 Just another simple game engine<p>
 OBS: Code with comments in Portuguese mostly
 
-## Ubuntu 21.10 dependencies
+## Ubuntu 22.04 dependencies
 ```bash
 # Develop:
 apt install htop build-essential git gitk meld cmake g++ vim libtinyxml2-dev libyaml-cpp-dev libpugixml-dev pugixml-doc
@@ -68,6 +68,7 @@ user@host:~/.vscode/extensions/code --list-extensions | xargs -L 1 echo code --i
 code --install-extension cschlosser.doxdocgen
 code --install-extension DotJoshJohnson.xml
 code --install-extension dtoplak.vscode-glsllint
+code --install-extension eamodio.gitlens
 code --install-extension Gruntfuggly.todo-tree
 code --install-extension jeff-hykin.better-cpp-syntax
 code --install-extension ms-vscode.cmake-tools
@@ -81,42 +82,6 @@ code --install-extension vadimcn.vscode-lldb
 code --install-extension xaver.clang-format
 
 ```
-
-### Mesh com material e textura manual
-```cpp
-    // Material Cubo sem textura
-    Material* pMat = new Material();
-    pMat->setAmbient(glm::vec4(0.5f, 0.5f, 0.31f, 1.0f));
-    pMat->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    pMat->setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    pMat->setShine(32.0f);
-    pMat->addTexture(new TextureSurface(SHADE_TEXTURE_DIFFUSE, "./assets/textures/grid1.png"));
-
-    NodeMesh* pMesh = new NodeMesh(group1, name);
-    pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
-    pMesh->setMaterial(_pMap);
-
-    LoaderObj loader;
-    loader.getMesh(file, pMesh->meshData);
-
-    pMesh->meshData.changeSize(scale, _pMap->hasTexture());
-```
-### Mesh com material e textura loader
-```cpp
-    Material* pMap = new Material();
-    NodeMesh* pMesh = new NodeMesh(group1, name);
-
-    LoaderObj loader;
-    loader.getMesh(file, pMesh->meshData);
-    loader.getMaterial(*pMap);
-
-    pMesh->meshData.changeSize(scale, pMap->hasTexture());
-    pMesh->setTransform(new Transform(glm::translate(glm::mat4(1.0f), _position)));
-    pMesh->setMaterial(pMap);
-```
-
-
-
 ## Nova versao com desenvolvimento de HMD
 
 Iniciado tentativa de criar um HMD e posteriormente integrar suporte ao OpenHMD
@@ -134,11 +99,14 @@ http://antongerdelan.net/opengl/cubemaps.html
 https://www.khronos.org/opengl/wiki/Example_Code
 
 ## FrameBuffer cfg's
-- Renderizae tela: <p>
+- Renderizar tela: <p>
     <i>TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE)</i>
+
 - Captura de dados para uniform: <p>
     <i>TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE)</i>
+
 - RBO: <p>
     <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)</i>
+    
 - SwadowMap: <p>
     <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)</i>

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.18.2)
 
 PROJECT(ChimeraLoaders)
 
@@ -30,7 +30,7 @@ set (IncludeLoaderAux	${OPENGL_INCLUDE_DIR}
 						${GLEW_INCLUDE_DIRS})
 
 if (BULLET_SET_TO_USE)
-message(STATUS "Bullet incluido no build")
+message(STATUS "Bullet incluido no build ChimeraLoaders")
 set(SourcesLoader ${SourcesLoader} LibraryPhysicsMaterials.cpp
 				   				   LibraryPhysicModels.cpp
 								   LibraryPhysicsScenes.cpp

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.18.2)
 
 PROJECT(ChimeraCore)
 
@@ -51,13 +51,13 @@ set (IncludeCore ${CMAKE_SOURCE_DIR}
 
 # Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
 if (OVR_SET_TO_USE)
-	message(STATUS "OVR incluido no build")
+	message(STATUS "OVR incluido no build ChimeraCore")
 	set(SourcesCore ${SourcesCore} device/CanvasOVR) 
 	set(SourcesCore ${SourcesCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) 
 endif(OVR_SET_TO_USE)
 
 if (BULLET_SET_TO_USE)	
-	message(STATUS "Bullet incluido no build")
+	message(STATUS "Bullet incluido no build ChimeraCore")
 	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
 								   bullet/Solid.cpp
 								   bullet/Constraint.cpp) 

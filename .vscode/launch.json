@@ -18,6 +18,14 @@
             "cwd": "${workspaceFolder}"
         },
         {
+            "name": "Models3",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/models3",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
             "name": "HelloWorld",
             "type": "lldb",
             "request": "launch",

@@ -95,6 +95,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
                         Texture* tex = mapaTex[sAddr2];
 
                         eMaterial.material->addTexture(SHADE_TEXTURE_DIFFUSE, tex);
+                        eMaterial.material->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
                     }
                 } else if (p == "specular") {
                     pugi::xml_node first = prop.first_child();

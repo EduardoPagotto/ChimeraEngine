@@ -46,7 +46,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
         // PhysicsScene libP("./assets/models/piso2.xml", &activeScene.getRegistry());
         // libP.target();
-        colladaLoad(activeScene.getRegistry(), "./assets/models/piso2.xml");
+        colladaLoad(activeScene.getRegistry(), "./assets/models/nivel1.xml");
 
         // injeta controlador de camera
         auto view1 = activeScene.getRegistry().get().view<ComponentCamera>();

@@ -11,6 +11,7 @@ class ColladaMaterial : public Collada {
     void create(Entity& entity, pugi::xml_node nodeParent);
 
   private:
+    void createShader(const std::string& techName, Entity& entity, pugi::xml_node nodeParent);
     Texture* loadImage(pugi::xml_node nodeParent, const std::string& url);
 };
 } // namespace Chimera

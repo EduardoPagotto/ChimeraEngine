@@ -28,8 +28,11 @@ void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
             ColladaGeometry cg;
             cg.create(entity, n);
 
-            ColladaMaterial cm;
-            cm.create(entity, n);
+            pugi::xml_node instanceMaterial = n.child("bind_material").child("technique_common").child("instance_material");
+            if (instanceMaterial != nullptr) {
+                ColladaMaterial cm;
+                cm.create(entity, instanceMaterial);
+            }
 
         } else if (val == "instance_light") {
 

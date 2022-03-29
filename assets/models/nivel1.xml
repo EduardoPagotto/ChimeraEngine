@@ -127,6 +127,22 @@
     </library_images>
 
     <library_effects>
+        <effect id="Shade01-effect">
+            <profile_GLSL>
+                <technique sid="MeshFullShadow">
+                    <include sid="Vertex_Program_Shade01_VP" url="file://./assets/shaders/MeshFullShadow.vert"/>
+                    <include sid="Fragment_Program_Shade01_FP" url="file://./assets/shaders/MeshFullShadow.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="Vertex_Program_Shade01_VP">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="Fragment_Program_Shade01_FP">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+        </effect>
         <effect id="MaterialSkyBox-effect">
             <profile_COMMON>
                 <newparam sid="spacebox_png-surface">
@@ -162,20 +178,9 @@
                     </phong>
                 </technique>
             </profile_COMMON>
-            <profile_GLSL>
-                <technique sid="MaterialSkyBox-tech">
-                    <include sid="Vertex_Program_MaterialSkyBox_VP" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="Fragment_Program_MaterialSkyBox_FP" url="file://./assets/shaders/MeshNoMat.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="Vertex_Program_MaterialSkyBox_VP">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="Fragment_Program_MaterialSkyBox_FP">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
+            <extra>
+                <instance_effect url="#Shade01-effect"/>
+            </extra>
         </effect>
         <effect id="MaterialZoltan-effect">
             <profile_COMMON>
@@ -212,20 +217,9 @@
                     </phong>
                 </technique>
             </profile_COMMON>
-            <profile_GLSL>
-                <technique sid="MaterialZoltan-tech">
-                    <include sid="Vertex_Program_MaterialZoltan_VP" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="Fragment_Program_MaterialZoltan_FP" url="file://./assets/shaders/MeshNoMat.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="Vertex_Program_MaterialZoltan_VP">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="Fragment_Program_MaterialZoltan_FP">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
+            <extra>
+                <instance_effect url="#Shade01-effect"/>
+            </extra>
         </effect>
         <effect id="Material_Plano-effect">
             <profile_COMMON>
@@ -262,20 +256,9 @@
                     </phong>
                 </technique>
             </profile_COMMON>
-            <profile_GLSL>
-                <technique sid="Material_Plano-tech">
-                    <include sid="Vertex_Program_Material_Plano_VP" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="Fragment_Program_Material_Plano_FP" url="file://./assets/shaders/MeshNoMat.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="Vertex_Program_Material_Plano_VP">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="Fragment_Program_Material_Plano_FP">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
+            <extra>
+                <instance_effect url="#Shade01-effect"/>
+            </extra>
         </effect>
         <effect id="MaterialCubo01-effect">
             <profile_COMMON>
@@ -312,20 +295,9 @@
                     </phong>
                 </technique>
             </profile_COMMON>
-            <profile_GLSL>
-                <technique sid="MaterialCubo01-tech">
-                    <include sid="Vertex_Program_MaterialCubo01_VP" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="Fragment_Program_MaterialCubo01_FP" url="file://./assets/shaders/MeshNoMat.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="Vertex_Program_MaterialCubo01_VP">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="Fragment_Program_MaterialCubo01_FP">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
+            <extra>
+                <instance_effect url="#Shade01-effect"/>
+            </extra>
         </effect>
         <effect id="MateriaIcosphere01-effect">
             <profile_COMMON>
@@ -352,20 +324,9 @@
                     </phong>
                 </technique>
             </profile_COMMON>
-            <profile_GLSL>
-                <technique sid="MateriaIcosphere01-tech">
-                    <include sid="Vertex_Program_MateriaIcosphere01_VP" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="Fragment_Program_MateriaIcosphere01_FP" url="file://./assets/shaders/MeshNoMat.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="Vertex_Program_MateriaIcosphere01_VP">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="Fragment_Program_MateriaIcosphere01_FP">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
+            <extra>
+                <instance_effect url="#Shade01-effect"/>
+            </extra>
         </effect>
         <effect id="MaterialIcosphere02-effect">
             <profile_COMMON>
@@ -392,52 +353,41 @@
                     </phong>
                 </technique>
             </profile_COMMON>
-            <profile_GLSL>
-                <technique sid="MaterialIcosphere02-tech">
-                    <include sid="Vertex_Program_MaterialIcosphere02_VP" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="Fragment_Program_MaterialIcosphere02_FP" url="file://./assets/shaders/MeshNoMat.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="Vertex_Program_MaterialIcosphere02_VP">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="Fragment_Program_MaterialIcosphere02_FP">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
+            <extra>
+                <instance_effect url="#Shade01-effect"/>
+            </extra>
         </effect>
     </library_effects>
 
     <library_materials>
         <material id="MaterialSkyBox-material" name="MaterialSkyBox">
             <instance_effect url="#MaterialSkyBox-effect">
-                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MaterialSkyBox-tech"/>
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
             </instance_effect>
         </material>
         <material id="MaterialZoltan-material" name="MaterialZoltan">
             <instance_effect url="#MaterialZoltan-effect">
-                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MaterialZoltan-tech"/>
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
             </instance_effect>
         </material>
         <material id="Material_Plano-material" name="Material_Plano">
             <instance_effect url="#Material_Plano-effect">
-                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="Material_Plano-tech"/>
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
             </instance_effect>
         </material>
         <material id="MaterialCubo01-material" name="MaterialCubo01">
             <instance_effect url="#MaterialCubo01-effect">
-                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MaterialCubo01-tech"/>
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
             </instance_effect>
         </material>
         <material id="MateriaIcosphere01-material" name="MateriaIcosphere01">
             <instance_effect url="#MateriaIcosphere01-effect">
-                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MateriaIcosphere01-tech"/>
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
             </instance_effect>
         </material>
         <material id="MaterialIcosphere02-material" name="MaterialIcosphere02">
             <instance_effect url="#MaterialIcosphere02-effect">
-                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MaterialIcosphere02-tech"/>
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
             </instance_effect>
         </material>
     </library_materials>

@@ -41,11 +41,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
 
     { // Cargadados arquivo collada
-        // VisualScene libV("./assets/models/piso2.xml", &activeScene.getRegistry());
-        // libV.target();
-
-        // PhysicsScene libP("./assets/models/piso2.xml", &activeScene.getRegistry());
-        // libP.target();
         colladaLoad(activeScene.getRegistry(), "./assets/models/nivel1.xml");
 
         // injeta controlador de camera
@@ -53,19 +48,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         for (auto entity : view1) {
             Entity e = Entity{entity, &activeScene.getRegistry()};
             e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-        }
-
-        // A cada mesh
-        auto view = activeScene.getRegistry().get().view<ComponentMesh>();
-        for (auto entity : view) {
-            // Ajusta metodo de entidades
-            Entity e = Entity{entity, &activeScene.getRegistry()};
-            // Adiciona o shader
-            Shader& shader = e.addComponent<Shader>();
-            std::unordered_map<GLenum, std::string> shadeData;
-            shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshFullShadow.frag";
-            shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
-            ShaderManager::load("MeshFullShadow", shadeData, shader);
         }
 
         // Localiza objeto como o primario //EfeitoZoltan-mesh

@@ -25,87 +25,65 @@ Texture* ColladaMaterial::loadImage(pugi::xml_node nodeParent, const std::string
     throw std::string("Textura nao encontrada: " + url);
 }
 
-void ColladaMaterial::createShader(const std::string& techName, Entity& entity, pugi::xml_node nodeParent) {
+void ColladaMaterial::createShader(const std::string& refName, Entity& entity, pugi::xml_node nodeParent) {
 
-    // pugi::xml_node tech = nodeParent.child("technique");
+    pugi::xml_node tech = nodeParent.child("technique");
 
-    // if (std::string(tech.attribute("sid").value()) == techName) {
+    if (std::string(tech.attribute("sid").value()) == refName) {
 
-    //     std::unordered_map<std::string, std::string> mapaShaderFiles;
-    //     std::unordered_map<GLenum, std::string> shadeData;
+        std::unordered_map<std::string, std::string> mapaShaderFiles;
+        std::unordered_map<GLenum, std::string> shadeData;
 
-    //     for (pugi::xml_node item = tech.first_child(); item; item = item.next_sibling()) {
+        for (pugi::xml_node item = tech.first_child(); item; item = item.next_sibling()) {
 
-    //         std::string name = item.name();
-    //         if (name == "include") {
+            std::string name = item.name();
+            if (name == "include") {
 
-    //             std::string url = std::string(item.attribute("url").value());
-    //             const char* urlFile = "file://";
-    //             size_t urlFileLen = strlen(urlFile);
-    //             std::size_t found = url.find(urlFile, 0, urlFileLen);
-    //             if (found != std::string::npos) {
-    //                 std::string file = url.substr(urlFileLen, std::string::npos);
-    //                 mapaShaderFiles[std::string(item.attribute("sid").value())] = file;
-    //             } else {
-    //                 throw std::string("Url de arquivo Shader invalido: %s", url.c_str());
-    //             }
+                std::string url = std::string(item.attribute("url").value());
+                const char* urlFile = "file://";
+                size_t urlFileLen = strlen(urlFile);
+                std::size_t found = url.find(urlFile, 0, urlFileLen);
+                if (found != std::string::npos) {
+                    std::string file = url.substr(urlFileLen, std::string::npos);
+                    mapaShaderFiles[std::string(item.attribute("sid").value())] = file;
+                } else {
+                    throw std::string("Url de arquivo Shader invalido: %s", url.c_str());
+                }
 
-    //         } else if (name == "pass") {
-    //             std::string sid = item.attribute("sid").value();
+            } else if (name == "pass") {
+                std::string sid = item.attribute("sid").value();
 
-    //             for (pugi::xml_node pass = item.first_child(); pass; pass = pass.next_sibling()) {
-    //                 if (std::string(pass.name()) == "shader") {
+                for (pugi::xml_node pass = item.first_child(); pass; pass = pass.next_sibling()) {
+                    if (std::string(pass.name()) == "shader") {
 
-    //                     std::string stage = pass.attribute("stage").value();
-    //                     std::string source = pass.child("name").attribute("source").value();
+                        std::string stage = pass.attribute("stage").value();
+                        std::string source = pass.child("name").attribute("source").value();
 
-    //                     if ((stage.size() > 0) && (source.size() > 0)) {
-    //                         if (stage == "VERTEXPROGRAM") {
-    //                             shadeData[GL_VERTEX_SHADER] = mapaShaderFiles[source];
-    //                         } else if (stage == "FRAGMENTPROGRAM") {
-    //                             shadeData[GL_FRAGMENT_SHADER] = mapaShaderFiles[source];
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
+                        if ((stage.size() > 0) && (source.size() > 0)) {
+                            if (stage == "VERTEXPROGRAM") {
+                                shadeData[GL_VERTEX_SHADER] = mapaShaderFiles[source];
+                            } else if (stage == "FRAGMENTPROGRAM") {
+                                shadeData[GL_FRAGMENT_SHADER] = mapaShaderFiles[source];
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-    //     if (shadeData.size() > 1) {
-    //         Shader& shader = entity.addComponent<Shader>();
-    //         ShaderManager::load(techName, shadeData, shader);
-    //     }
-    // }
+        if (shadeData.size() > 1) {
+            Shader& shader = entity.addComponent<Shader>();
+            ShaderManager::load(refName, shadeData, shader);
+        }
+    }
 }
 
-void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
+void ColladaMaterial::createEffect(Material* pMat, pugi::xml_node nodeParent) {
 
-    std::string techName = "";
     std::unordered_map<std::string, Texture*> mapaTex;
     std::unordered_map<std::string, std::string> mapa2D;
 
-    pugi::xml_node nodeMat = urlRoot(nodeParent, "library_materials", nodeParent.attribute("symbol").value());
-    pugi::xml_node effect = nodeMat.child("instance_effect");
-
-    pugi::xml_node technique_hint = effect.child("technique_hint");
-    if (technique_hint != nullptr) {
-        if (std::string(technique_hint.attribute("profile").value()) == "GLSL")
-            techName = technique_hint.attribute("ref").value();
-    }
-
-    pugi::xml_node novo2 = urlRoot(effect, "library_effects", effect.attribute("url").value());
-
-    ComponentMaterial& eMaterial = entity.addComponent<ComponentMaterial>();
-    eMaterial.tag.id = nodeMat.attribute("id").value();
-    eMaterial.tag.tag = nodeMat.attribute("name").value();
-    eMaterial.tag.serial = Collada::getNewSerial();
-
-    pugi::xml_node profileGLSL = novo2.child("profile_GLSL");
-    if (profileGLSL != nullptr)
-        createShader(techName, entity, profileGLSL);
-
-    pugi::xml_node profile = novo2.child("profile_COMMON");
-    for (pugi::xml_node param = profile.first_child(); param; param = param.next_sibling()) {
+    for (pugi::xml_node param = nodeParent.first_child(); param; param = param.next_sibling()) {
 
         std::string sProf = param.name();
         std::string sid = param.attribute("sid").value();
@@ -136,7 +114,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
 
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "color")
-                        eMaterial.material->setEmission(textToVec4(first.text().as_string()));
+                        pMat->setEmission(textToVec4(first.text().as_string()));
                     else if (std::string(first.name()) == "texture") {
                         // TODO: implementar
                     }
@@ -144,26 +122,26 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
                 } else if (p == "ambient") {
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "color")
-                        eMaterial.material->setAmbient(textToVec4(first.text().as_string()));
+                        pMat->setAmbient(textToVec4(first.text().as_string()));
                     else if (std::string(first.name()) == "texture") {
                         // TODO: implementar
                     }
                 } else if (p == "diffuse") {
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "color")
-                        eMaterial.material->setDiffuse(textToVec4(first.text().as_string()));
+                        pMat->setDiffuse(textToVec4(first.text().as_string()));
                     else if (std::string(first.name()) == "texture") {
                         std::string sAddr = first.attribute("texture").value();
                         std::string sAddr2 = mapa2D[sAddr];
                         Texture* tex = mapaTex[sAddr2];
 
-                        eMaterial.material->addTexture(SHADE_TEXTURE_DIFFUSE, tex);
-                        eMaterial.material->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
+                        pMat->addTexture(SHADE_TEXTURE_DIFFUSE, tex);
+                        pMat->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
                     }
                 } else if (p == "specular") {
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "color")
-                        eMaterial.material->setSpecular(textToVec4(first.text().as_string()));
+                        pMat->setSpecular(textToVec4(first.text().as_string()));
                     else if (std::string(first.name()) == "texture") {
                         // TODO: implementar
                     }
@@ -173,7 +151,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
                     pugi::xml_node first = prop.first_child();
                     if (std::string(first.name()) == "float") {
                         float aa = first.text().as_float();
-                        eMaterial.material->setShine(aa);
+                        pMat->setShine(aa);
                     }
 
                 } else if (p == "index_of_refraction") {
@@ -181,6 +159,42 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
                 }
             }
         }
+    }
+}
+
+void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
+
+    std::string refName = "";
+
+    pugi::xml_node material = urlRoot(nodeParent, "library_materials", nodeParent.attribute("symbol").value());
+    pugi::xml_node instanceEffect = material.child("instance_effect");
+    pugi::xml_node technique_hint = instanceEffect.child("technique_hint");
+
+    if (technique_hint != nullptr) {
+        if (std::string(technique_hint.attribute("profile").value()) == "GLSL")
+            refName = technique_hint.attribute("ref").value();
+    }
+
+    pugi::xml_node effect = urlRoot(instanceEffect, "library_effects", instanceEffect.attribute("url").value());
+
+    ComponentMaterial& eMaterial = entity.addComponent<ComponentMaterial>();
+    eMaterial.tag.id = material.attribute("id").value();
+    eMaterial.tag.tag = material.attribute("name").value();
+    eMaterial.tag.serial = Collada::getNewSerial();
+
+    pugi::xml_node profile = effect.child("profile_COMMON");
+    if (profile != nullptr)
+        createEffect(eMaterial.material, profile);
+
+    pugi::xml_node extra = effect.child("extra");
+    if (extra != nullptr) {
+
+        pugi::xml_node instanceEffectShade = extra.child("instance_effect");
+        pugi::xml_node effectShade = urlRoot(instanceEffectShade, "library_effects", instanceEffectShade.attribute("url").value());
+
+        pugi::xml_node profileGLSL = effectShade.child("profile_GLSL");
+        if (profileGLSL != nullptr)
+            createShader(refName, entity, profileGLSL);
     }
 }
 } // namespace Chimera

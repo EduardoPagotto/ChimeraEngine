@@ -5,17 +5,23 @@
 namespace Chimera {
 void colladaLoad(Registry& r, const std::string& pathFile) {
 
-    std::string final1 = "file://" + pathFile + "#Scene";
-    std::string final2 = "file://" + pathFile + "#Scene-Physics";
-
-    Collada cl;
-    pugi::xml_node vs = cl.urlRoot(pugi::xml_node(), "library_visual_scenes", final1);
-
     ColladaVisualScene cn;
-    cn.loadAll(vs, &r);
+    pugi::xml_node vs = cn.loadScene(pathFile);
+    for (pugi::xml_node n = vs.first_child(); n; n = n.next_sibling()) {
 
-    pugi::xml_node fs = cl.urlRoot(pugi::xml_node(), "library_physics_scenes", final2);
-    ColladaPhysicScene cs;
-    cs.loadAll(fs, &r);
+        std::string instance = n.name();
+        std::string url = n.attribute("url").value();
+        if (instance == "instance_visual_scene") {
+
+            pugi::xml_node nodeScene = cn.urlRoot(vs, "library_visual_scenes", url);
+            cn.loadAll(nodeScene, &r);
+
+        } else if (instance == "instance_physics_scene") {
+
+            pugi::xml_node fs = cn.urlRoot(vs, "library_physics_scenes", url);
+            ColladaPhysicScene cs;
+            cs.loadAll(fs, &r);
+        }
+    }
 }
 } // namespace Chimera

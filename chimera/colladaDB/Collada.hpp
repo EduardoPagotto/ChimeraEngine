@@ -11,7 +11,7 @@ class Collada {
     Collada() = default;
     virtual ~Collada();
     const pugi::xml_node urlRoot(const pugi::xml_node& nodeParent, const std::string& libraryName, const std::string& url);
-
+    const pugi::xml_node loadScene(const std::string& file);
     static uint32_t getNewSerial() { return ++serial; }
 
   protected:

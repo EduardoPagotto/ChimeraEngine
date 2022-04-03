@@ -88,6 +88,20 @@ Collada::~Collada() {
     }
 }
 
+const pugi::xml_node Collada::loadScene(const std::string& file) {
+
+    pugi::xml_parse_result result = doc.load_file(file.c_str());
+    if (result.status != pugi::status_ok) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo %s não encontrado", file.c_str());
+        throw std::string("Falha na carga do arquivo");
+    }
+
+    SDL_Log("Load arquivo: %s Status: %s", file.c_str(), result.description());
+    root = doc.child("COLLADA");
+
+    return root.child("scene");
+}
+
 const pugi::xml_node Collada::urlRoot(const pugi::xml_node& nodeParent, const std::string& libraryName, const std::string& url) {
 
     const char* urlFile = "file://";

@@ -1,6 +1,7 @@
 #pragma once
 #include "IRenderer3d.hpp"
 #include "RenderCommand.hpp"
+#include "chimera/core/TransformationStack.hpp"
 #include "chimera/core/space/Frustum.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/Light.hpp"
@@ -19,11 +20,13 @@ class Renderer3d : public IRenderer3d {
     virtual void end() override;
     virtual void flush() override;
     virtual inline MapUniform& uQueue() override { return uniformsQueue; }
+    inline virtual TransformationStack& getStack() override { return stack; };
 
   private:
     std::deque<RenderCommand> commandQueue;
     MapUniform uniformsQueue;
     Frustum frustum;
     uint32_t totIBO, totFaces;
+    TransformationStack stack; // TODO: implementar a hierarquia de modelos direta (sem fisica)
 };
 } // namespace Chimera

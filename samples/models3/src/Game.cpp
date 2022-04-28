@@ -55,6 +55,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         pCorpoRigido = (Solid*)tc.trans;
     }
 
+    // TODO: TESTAR no ARQUIVO!!!!!
     EmitterFont* ef = new EmitterFont();
     { // Cria emissor de particula
         Entity re = activeScene.getRegistry().createEntity("Renderable Particle System");

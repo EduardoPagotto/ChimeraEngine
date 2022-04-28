@@ -39,6 +39,9 @@ void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
             ColladaLight cl;
             cl.create(entity, n);
 
+        } else if (val == 'instance_node') {
+            // TODO: implementear para node externo para nodes (particula no teste)
+
         } else if (val == "instance_camera") {
 
             ColladaCam cc;

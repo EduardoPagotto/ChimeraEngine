@@ -59,12 +59,29 @@ const glm::mat4 textToMat4(const std::string& text) {
 //--
 
 uint32_t Collada::serial = 0;
+std::vector<ColladaDom> Collada::vColladaDom;
 
-// std::vector<ColladaDom> Collada::vColladaDom;
+Collada::Collada(ColladaDom& dom, const std::string& url) {
 
-const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::string& libraryName, const std::string key) {
+    if (Collada::isLocalURL(url) == true)
+        colladaDom = dom;
+    else
+        colladaDom = Collada::urlLib(url);
+}
 
-    for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling()) {
+Collada::~Collada() {
+    // FIXME: ver como fazer
+    // if (doc != nullptr) {
+    //     doc.reset();
+    // }
+}
+
+const pugi::xml_node Collada::getLibrary(const std::string& libraryName, const std::string& url) {
+
+    std::size_t found = url.find("#");
+    std::string key = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
+
+    for (pugi::xml_node n = colladaDom.root.first_child(); n; n = n.next_sibling()) {
         std::string name = n.name();
         if (name == libraryName) {
 
@@ -84,79 +101,18 @@ const pugi::xml_node colladaGetLibrary(const pugi::xml_node& node, const std::st
     throw std::string("Falha na localização da biblioteca");
 }
 
-Collada::~Collada() {
-    if (doc != nullptr) {
-        doc.reset();
-    }
+bool Collada::isLocalURL(const std::string& url) {
+    const char* urlFile = "file://";
+    size_t urlFileLen = strlen(urlFile);
+    std::size_t found = url.find(urlFile, 0, urlFileLen);
+    if (found != std::string::npos)
+        return false;
+
+    return true;
 }
 
-const pugi::xml_node Collada::loadScene(const std::string& file) {
-
-    pugi::xml_parse_result result = doc.load_file(file.c_str());
-    if (result.status != pugi::status_ok) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo %s não encontrado", file.c_str());
-        throw std::string("Falha na carga do arquivo");
-    }
-
-    SDL_Log("Load arquivo: %s Status: %s", file.c_str(), result.description());
-    root = doc.child("COLLADA");
-
-    return root.child("scene");
-}
-
-// ColladaDom Collada::urlLib(const std::string& libraryName, const std::string& url) {
-//     ColladaDom dom;
-
-//     const char* urlFile = "file://";
-//     size_t urlFileLen = strlen(urlFile);
-//     std::size_t found = url.find(urlFile, 0, urlFileLen);
-
-//     if (found != std::string::npos) {
-
-//         std::string temp = url.substr(urlFileLen, std::string::npos); //"file://./assets/models/piso2_mestre.xml#Scene"
-//         std::size_t mark1 = temp.rfind("#");
-//         if (mark1 == std::string::npos) {
-//             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "URL %s não encontrado: ", url.c_str());
-//             throw std::string("Falha na carga do arquivo");
-//         }
-
-//         std::string key = temp.substr(mark1 + 1, std::string::npos);
-
-//         std::string target = url.substr(urlFileLen, mark1);
-//         for (auto domCache : vColladaDom) {
-//             if (domCache.file == target)
-//                 return domCache;
-//         }
-
-//         dom.file = url.substr(urlFileLen, mark1);
-//         dom.pDoc = new pugi::xml_document();
-
-//         pugi::xml_parse_result result = dom.pDoc->load_file(dom.file.c_str());
-//         if (result.status != pugi::status_ok) {
-//             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo %s não encontrado", dom.file.c_str());
-//             throw std::string("Falha na carga do arquivo");
-//         }
-
-//         SDL_Log("Novo Arquivo: %s url: %s Status: %s", dom.file.c_str(), key.c_str(), result.description());
-//         dom.root = dom.pDoc->child("COLLADA"); // root = doc.child("COLLADA");
-
-//         Collada::vColladaDom.push_back(dom);
-
-//         return dom;
-//         // return colladaGetLibrary(root, libraryName, key);
-//     }
-//     // else {
-
-//     //     root = nodeParent.root().child("COLLADA");
-//     //     std::size_t found = url.rfind("#");
-//     //     std::string key = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
-//     //     return colladaGetLibrary(root, libraryName, key);
-//     // }
-
-//     return dom;
-// }
-
-const pugi::xml_node Collada::urlRoot(const pugi::xml_node& nodeParent, const std::string& libraryName, const std::string& url) {
+ColladaDom Collada::urlLib(const std::string& url) {
+    ColladaDom dom;
 
     const char* urlFile = "file://";
     size_t urlFileLen = strlen(urlFile);
@@ -165,33 +121,34 @@ const pugi::xml_node Collada::urlRoot(const pugi::xml_node& nodeParent, const st
     if (found != std::string::npos) {
 
         std::string temp = url.substr(urlFileLen, std::string::npos); //"file://./assets/models/piso2_mestre.xml#Scene"
-
-        std::size_t mark1 = temp.rfind("#"); // FIXME: criar erro se nao achar!!!!
+        std::size_t mark1 = temp.rfind("#");
         if (mark1 == std::string::npos) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "URL %s não encontrado: ", url.c_str());
             throw std::string("Falha na carga do arquivo");
         }
 
         std::string key = temp.substr(mark1 + 1, std::string::npos);
+
         std::string target = url.substr(urlFileLen, mark1);
+        for (auto domCache : Collada::vColladaDom) {
+            if (domCache.file == target)
+                return domCache;
+        }
 
-        pugi::xml_parse_result result = doc.load_file(target.c_str());
+        dom.file = url.substr(urlFileLen, mark1);
+        dom.pDoc = new pugi::xml_document();
 
+        pugi::xml_parse_result result = dom.pDoc->load_file(dom.file.c_str());
         if (result.status != pugi::status_ok) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo %s não encontrado", target.c_str());
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo %s não encontrado", dom.file.c_str());
             throw std::string("Falha na carga do arquivo");
         }
 
-        SDL_Log("Novo Arquivo: %s url: %s Status: %s", target.c_str(), key.c_str(), result.description());
-        root = doc.child("COLLADA");
-        return colladaGetLibrary(root, libraryName, key);
-
-    } else {
-
-        root = nodeParent.root().child("COLLADA");
-        std::size_t found = url.rfind("#");
-        std::string key = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
-        return colladaGetLibrary(root, libraryName, key);
+        SDL_Log("Novo Arquivo: %s url: %s Status: %s", dom.file.c_str(), key.c_str(), result.description());
+        dom.root = dom.pDoc->child("COLLADA");
+        Collada::vColladaDom.push_back(dom);
     }
+
+    return dom;
 }
 } // namespace Chimera

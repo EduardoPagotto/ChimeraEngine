@@ -14,8 +14,9 @@ void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
     Entity entity = reg->createEntity(node.attribute("name").value(), node.attribute("id").value());
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling()) {
 
-        std::string val = n.name();
-        if (val == "matrix") {
+        std::string name = n.name();
+        std::string url = n.attribute("url").value();
+        if (name == "matrix") {
 
             std::string sid = n.attribute("sid").value();
             if (sid == "transform") {
@@ -23,32 +24,30 @@ void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
                 tc.trans = new Transform(textToMat4(n.text().as_string()));
             }
 
-        } else if (val == "instance_geometry") {
+        } else if (name == "instance_geometry") {
 
-            ColladaGeometry cg;
-            cg.create(entity, n);
+            ColladaGeometry cg(colladaDom, url);
+            cg.create(entity, cg.getLibrary("library_geometries", url));
 
             pugi::xml_node instanceMaterial = n.child("bind_material").child("technique_common").child("instance_material");
             if (instanceMaterial != nullptr) {
-                ColladaMaterial cm;
+                ColladaMaterial cm(colladaDom, url);
                 cm.create(entity, instanceMaterial);
             }
 
-        } else if (val == "instance_light") {
+        } else if (name == "instance_light") {
 
-            ColladaLight cl;
-            cl.create(entity, n);
+            ColladaLight cl(colladaDom, url);
+            cl.create(entity, cl.getLibrary("library_lights", url));
 
-        } else if (val == "instance_node") {
-
+        } else if (name == "instance_node") {
             // pugi::xml_node geo = urlRoot(nodeParent, "library_nodes", nodeParent.attribute("url").value());
             // TODO: implementear para node externo para nodes (particula no teste)
+        } else if (name == "instance_camera") {
 
-        } else if (val == "instance_camera") {
-
-            ColladaCam cc;
-            cc.create(entity, n);
-        } else if (val == "node") {
+            ColladaCam cc(colladaDom, url);
+            cc.create(entity, cc.getLibrary("library_cameras", url));
+        } else if (name == "node") {
             // TODO: implementar hierarquia
         }
     }

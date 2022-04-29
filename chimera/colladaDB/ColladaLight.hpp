@@ -6,9 +6,9 @@
 namespace Chimera {
 class ColladaLight : public Collada {
   public:
-    ColladaLight() : Collada(){};
+    ColladaLight(ColladaDom& dom, const std::string& url) : Collada(dom, url){};
     virtual ~ColladaLight();
-    void create(Entity& entity, pugi::xml_node nodeParent);
+    void create(Entity& entity, pugi::xml_node nodeLight);
 
   private:
 };

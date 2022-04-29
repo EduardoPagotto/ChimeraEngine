@@ -6,7 +6,7 @@
 namespace Chimera {
 class ColladaMaterial : public Collada {
   public:
-    ColladaMaterial() : Collada(){};
+    ColladaMaterial(ColladaDom& dom, const std::string& url) : Collada(dom, url){};
     virtual ~ColladaMaterial();
     void create(Entity& entity, pugi::xml_node nodeParent);
 

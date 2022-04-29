@@ -5,7 +5,7 @@
 namespace Chimera {
 class ColladaVisualScene : public Collada {
   public:
-    ColladaVisualScene() : Collada(){};
+    ColladaVisualScene(ColladaDom& dom, const std::string& url) : Collada(dom, url){};
     virtual ~ColladaVisualScene();
 
     void loadNode(pugi::xml_node node, Registry* reg);

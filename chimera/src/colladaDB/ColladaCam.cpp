@@ -5,9 +5,7 @@
 namespace Chimera {
 ColladaCam::~ColladaCam() {}
 
-void ColladaCam::create(Entity& entity, pugi::xml_node nodeParent) { // FIXME: preciso mesmo da entidade ???
-
-    pugi::xml_node nodeCam = urlRoot(nodeParent, "library_cameras", nodeParent.attribute("url").value());
+void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: preciso mesmo da entidade ???
 
     ComponentCamera& cc = entity.addComponent<ComponentCamera>();
     cc.tag.id = nodeCam.attribute("id").value();

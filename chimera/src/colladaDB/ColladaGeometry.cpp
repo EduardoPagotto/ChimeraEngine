@@ -5,9 +5,7 @@ namespace Chimera {
 
 ColladaGeometry::~ColladaGeometry() {}
 
-void ColladaGeometry::create(Entity& entity, pugi::xml_node nodeParent) {
-
-    pugi::xml_node geo = urlRoot(nodeParent, "library_geometries", nodeParent.attribute("url").value());
+void ColladaGeometry::create(Entity& entity, pugi::xml_node geo) {
     ComponentMesh& eMesh = entity.addComponent<ComponentMesh>();
     eMesh.mesh = new Mesh();
     eMesh.tag.id = geo.attribute("id").value();

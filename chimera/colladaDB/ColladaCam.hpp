@@ -5,9 +5,9 @@
 namespace Chimera {
 class ColladaCam : public Collada {
   public:
-    ColladaCam() : Collada(){};
+    ColladaCam(ColladaDom& dom, const std::string& url) : Collada(dom, url){};
     virtual ~ColladaCam();
-    void create(Entity& entity, pugi::xml_node nodeParent);
+    void create(Entity& entity, pugi::xml_node nodeCam);
 
   private:
 };

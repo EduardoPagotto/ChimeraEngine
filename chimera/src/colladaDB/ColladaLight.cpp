@@ -3,10 +3,7 @@
 namespace Chimera {
 ColladaLight::~ColladaLight() {}
 
-void ColladaLight::create(Entity& entity, pugi::xml_node nodeParent) { // FIXME: preciso mesmo da entidade ???
-
-    pugi::xml_node nodeLight = urlRoot(nodeParent, "library_lights", nodeParent.attribute("url").value());
-
+void ColladaLight::create(Entity& entity, pugi::xml_node nodeLight) { // FIXME: preciso mesmo da entidade ???
     ComponentLight& lc = entity.addComponent<ComponentLight>();
     lc.tag.id = nodeLight.attribute("id").value();
     lc.tag.tag = nodeLight.attribute("name").value();

@@ -721,10 +721,10 @@
                     </bind_material>
                 </instance_geometry>
             </node>
-            <!-- <node id="Particle01" name="Particle01" type="NODE">
+            <node id="Particle01" name="Particle01" type="NODE">
                 <matrix sid="transform">1 0 0 -5 0 1 0 5 0 0 1 4 0 0 0 1</matrix>
                 <instance_node url="file://assets/models/extra.xml#ParticleA"/>
-            </node> -->
+            </node>
         </visual_scene>
     </library_visual_scenes>
     <scene>

@@ -63,17 +63,17 @@
     <library_nodes>
         <node id="ParticleA" name="ParticleA" type="NODE">
             <extra>
-                <bind_material>
-                    <technique_common>
-                        <instance_material symbol="MaterialParticle01-material" target="#MaterialParticle01-material"/>
-                    </technique_common>
-                </bind_material>
                 <technique profile="chimera_particle">
                     <particle>
                         <life>4.0</life>
                         <max>2000.0</max>
                     </particle>
                 </technique>
+                <bind_material>
+                    <technique_common>
+                        <instance_material symbol="MaterialParticle01-material" target="#MaterialParticle01-material"/>
+                    </technique_common>
+                </bind_material>
             </extra>
         </node>
     </library_nodes>

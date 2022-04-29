@@ -69,12 +69,7 @@ Collada::Collada(ColladaDom& dom, const std::string& url) {
         colladaDom = Collada::urlLib(url);
 }
 
-Collada::~Collada() {
-    // FIXME: ver como fazer
-    // if (doc != nullptr) {
-    //     doc.reset();
-    // }
-}
+Collada::~Collada() {}
 
 const pugi::xml_node Collada::getLibrary(const std::string& libraryName, const std::string& url) {
 

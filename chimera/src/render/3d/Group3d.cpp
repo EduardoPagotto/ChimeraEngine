@@ -5,13 +5,13 @@
 
 namespace Chimera {
 
-void Group3d::submit(RenderCommand& command, IRenderer3d* renderer) {
+void Group3d::submit(RenderCommand& command, IRenderer3d& renderer) {
 
-    renderer->getStack().push(transformationMatrix);
+    renderer.getStack().push(transformationMatrix);
 
     for (auto renderable : renderables)
         renderable->submit(command, renderer);
 
-    renderer->getStack().pop();
+    renderer.getStack().pop();
 }
 } // namespace Chimera

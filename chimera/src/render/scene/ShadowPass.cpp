@@ -55,7 +55,7 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
             command.renderable = rc.renderable;
             command.shader = this->shader;
             command.uniforms["model"] = UValue(command.transform);
-            rc.renderable->submit(command, &renderer);
+            rc.renderable->submit(command, renderer);
         }
     }
 

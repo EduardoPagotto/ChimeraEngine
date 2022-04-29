@@ -17,7 +17,7 @@ Renderable3D::~Renderable3D() {
     }
 }
 
-void Renderable3D::submit(RenderCommand& command, IRenderer3d* renderer) { renderer->submit(command); }
+void Renderable3D::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command); }
 
 void Renderable3D::draw(const bool& logData) {
     if (ibo != nullptr) { // Desenhar o IBO

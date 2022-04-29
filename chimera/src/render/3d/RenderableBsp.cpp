@@ -60,7 +60,7 @@ void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
 
     auto child = vChild[tree->leafIndex];
     command->renderable = child;
-    child->submit(*command, this->renderer);
+    child->submit(*command, *this->renderer);
 }
 
 void RenderableBsp::traverseTree(BSPTreeNode* tree) {
@@ -96,11 +96,11 @@ void RenderableBsp::draw(const bool& logData) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP draw"); // TODO: ver o que fazer
 }
 
-void RenderableBsp::submit(RenderCommand& command, IRenderer3d* renderer) {
-    this->renderer = renderer;
+void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
+    this->renderer = &renderer;
     this->command = &command;
 
-    renderer->submit(command);
+    renderer.submit(command);
 
     // submit tree
     traverseTree(root);

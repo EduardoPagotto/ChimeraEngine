@@ -259,7 +259,7 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         command.uniforms["model"] = UValue(command.transform);
 
-        renderable->submit(command, &renderer);
+        renderable->submit(command, renderer);
     }
 }
 
@@ -276,7 +276,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
         command.uniforms["model"] = UValue(command.transform);
-        rc.renderable->submit(command, &renderer);
+        rc.renderable->submit(command, renderer);
     }
 }
 

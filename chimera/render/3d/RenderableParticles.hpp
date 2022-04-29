@@ -14,7 +14,7 @@ class RenderableParticles : public IRenderable3d {
     virtual VertexArray* getVao() const override { return vao; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }
     virtual const AABB& getAABB() const override { return pc->aabb; }
-    virtual void submit(RenderCommand& command, IRenderer3d* renderer) override;
+    virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
     virtual void draw(const bool& logData) override;
     void create();
     void destroy();

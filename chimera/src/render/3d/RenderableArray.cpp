@@ -67,13 +67,13 @@ void RenderableArray::draw(const bool& logData) {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "RenderableArray draw"); // TODO: ver o que fazer
 }
 
-void RenderableArray::submit(RenderCommand& command, IRenderer3d* renderer) {
+void RenderableArray::submit(RenderCommand& command, IRenderer3d& renderer) {
 
-    renderer->submit(command);
+    renderer.submit(command);
 
     for (IRenderable3d* child : vChild) {
         command.renderable = child;
-        renderer->submit(command);
+        renderer.submit(command);
     }
 }
 } // namespace Chimera

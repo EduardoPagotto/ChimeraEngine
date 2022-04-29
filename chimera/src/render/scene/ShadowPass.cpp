@@ -49,12 +49,13 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer
             auto [tc, rc] = group.get<ComponentTrans, Renderable3dComponent>(entity);
 
             RenderCommand command;
+            command.camera = camera;
             command.logRender = logRender;
             command.transform = tc.trans->translateSrc(origem->getPosition());
             command.renderable = rc.renderable;
             command.shader = this->shader;
             command.uniforms["model"] = UValue(command.transform);
-            rc.renderable->submit(camera, command, &renderer);
+            rc.renderable->submit(command, &renderer);
         }
     }
 

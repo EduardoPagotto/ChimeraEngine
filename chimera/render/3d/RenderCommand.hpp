@@ -1,5 +1,6 @@
 #pragma once
 #include "IRenderable3d.hpp"
+#include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/Shader.hpp"
 #include "chimera/core/visible/Texture.hpp"
 #include <vector>
@@ -9,6 +10,7 @@ namespace Chimera {
 struct RenderCommand {
     RenderCommand() = default;
     IRenderable3d* renderable = nullptr;
+    ICamera* camera = nullptr;
     glm::mat4 transform = glm::mat4(1.0f);
     Shader shader;
     MapUniform uniforms;

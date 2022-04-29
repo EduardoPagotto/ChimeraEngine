@@ -5,12 +5,12 @@
 
 namespace Chimera {
 
-void Group3d::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
+void Group3d::submit(RenderCommand& command, IRenderer3d* renderer) {
 
     renderer->getStack().push(transformationMatrix);
 
     for (auto renderable : renderables)
-        renderable->submit(camera, command, renderer);
+        renderable->submit(command, renderer);
 
     renderer->getStack().pop();
 }

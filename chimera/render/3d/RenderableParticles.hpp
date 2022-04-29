@@ -1,8 +1,8 @@
 #pragma once
-#include "IRenderable3d.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
+#include "chimera/render/3d/RenderCommand.hpp"
 
 namespace Chimera {
 class RenderableParticles : public IRenderable3d {
@@ -14,7 +14,7 @@ class RenderableParticles : public IRenderable3d {
     virtual VertexArray* getVao() const override { return vao; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }
     virtual const AABB& getAABB() const override { return pc->aabb; }
-    virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
+    virtual void submit(RenderCommand& command, IRenderer3d* renderer) override;
     virtual void draw(const bool& logData) override;
     void create();
     void destroy();

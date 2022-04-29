@@ -11,7 +11,7 @@ class RenderableArray : public IRenderable3d {
     RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<VertexData>& vertexData);
     ~RenderableArray();
 
-    virtual void submit(ICamera* Icamera, RenderCommand& command, IRenderer3d* renderer) override;
+    virtual void submit(RenderCommand& command, IRenderer3d* renderer) override;
     virtual const uint32_t getSize() const override { return totIndex; }
     virtual VertexArray* getVao() const override { return vao; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }

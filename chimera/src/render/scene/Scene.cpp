@@ -250,6 +250,7 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
         ComponentMaterial& mc = e.getComponent<ComponentMaterial>();
 
         RenderCommand command;
+        command.camera = camera;
         command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = renderable;
@@ -258,7 +259,7 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         command.uniforms["model"] = UValue(command.transform);
 
-        renderable->submit(camera, command, &renderer);
+        renderable->submit(command, &renderer);
     }
 }
 
@@ -268,13 +269,14 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
         auto [sc, mc, tc, rc] = group.get<Shader, ComponentMaterial, ComponentTrans, Renderable3dComponent>(entity);
 
         RenderCommand command;
+        command.camera = camera;
         command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = rc.renderable;
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
         command.uniforms["model"] = UValue(command.transform);
-        rc.renderable->submit(camera, command, &renderer);
+        rc.renderable->submit(command, &renderer);
     }
 }
 

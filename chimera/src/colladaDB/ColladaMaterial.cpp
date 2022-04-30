@@ -148,7 +148,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
         if (profileGLSL != nullptr) {
 
             ColladaShader cs(colladaDom, refName);
-            cs.create(refName, entity, profileGLSL);
+            cs.create(refName, entity, effect); // get profileGLSL inside here
         }
     }
 }

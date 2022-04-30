@@ -67,6 +67,9 @@ Collada::Collada(ColladaDom& dom, const std::string& url) {
         colladaDom = dom;
     else
         colladaDom = Collada::urlLib(url);
+
+    std::size_t found = url.find("#");
+    this->urlLocal = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
 }
 
 Collada::~Collada() {}

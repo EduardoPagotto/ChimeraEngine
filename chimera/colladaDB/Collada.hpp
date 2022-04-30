@@ -26,6 +26,7 @@ class Collada {
     static std::vector<ColladaDom> vColladaDom;
 
   protected:
+    std::string urlLocal;
     ColladaDom colladaDom;
     static uint32_t serial;
 };

@@ -723,12 +723,12 @@
             </node>
             <node id="Particle01" name="Particle01" type="NODE">
                 <matrix sid="transform">1 0 0 -5 0 1 0 5 0 0 1 4 0 0 0 1</matrix>
-                <instance_node url="file://assets/models/extra.xml#ParticleA"/>
+                <instance_node url="file://assets/models/nivel1_extra.xml#ParticleA"/>
             </node>
         </visual_scene>
     </library_visual_scenes>
     <scene>
         <instance_visual_scene url="#Scene"/>
-        <instance_physics_scene url="file://assets/models/extra.xml#Scene-Physics"/>
+        <instance_physics_scene url="file://assets/models/nivel1_extra.xml#Scene-Physics"/>
     </scene>
 </COLLADA>

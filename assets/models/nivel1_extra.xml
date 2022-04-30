@@ -48,25 +48,43 @@
                     </phong>
                 </technique>
             </profile_COMMON>
-            <extra>
-                <instance_effect url="#Shade01-effect"/>
-            </extra>
+            <profile_GLSL>
+                <technique sid="ParticleEmitter">
+                    <include sid="VP_Shade_Particle01" url="file://./assets/shaders/ParticleEmitter.vert"/>
+                    <include sid="FP_Shade_Particle01" url="file://./assets/shaders/ParticleEmitter.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="VP_Shade_Particle01">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="FP_Shade_Particle01">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
         </effect>
     </library_effects>
     <library_materials>
         <material id="MaterialParticle01-material" name="MaterialParticle01">
             <instance_effect url="#MaterialParticle01-effect">
-                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="ParticleEmitter"/>
             </instance_effect>
         </material>
     </library_materials>
     <library_nodes>
         <node id="ParticleA" name="ParticleA" type="NODE">
             <extra>
-                <technique profile="chimera_particle">
+                <technique profile="chimera">
                     <particle>
-                        <life>4.0</life>
-                        <max>2000.0</max>
+                        <emmiter_font>
+                            <maindir>0.0f, 0.0f, 10.0f</maindir>
+                            <spread>1.5f</spread>
+                        </emmiter_font>
+                        <container>
+                            <life>2.0</life>
+                            <max>500</max>
+                            <respaw>true</respaw>
+                        </container>
                     </particle>
                 </technique>
                 <bind_material>

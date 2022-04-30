@@ -74,6 +74,20 @@ Collada::Collada(ColladaDom& dom, const std::string& url) {
 
 Collada::~Collada() {}
 
+void Collada::destroy() {
+
+    for (ColladaDom dom : vColladaDom)
+        dom.pDoc->reset();
+
+    while (vColladaDom.size() != 0) {
+        std::vector<ColladaDom>::iterator it = vColladaDom.begin();
+        delete (*it).pDoc;
+        (*it).pDoc = nullptr;
+
+        vColladaDom.erase(it);
+    }
+}
+
 const pugi::xml_node Collada::getLibrary(const std::string& libraryName, const std::string& url) {
 
     std::size_t found = url.find("#");
@@ -144,9 +158,12 @@ ColladaDom Collada::urlLib(const std::string& url) {
 
         SDL_Log("Novo Arquivo: %s url: %s Status: %s", dom.file.c_str(), key.c_str(), result.description());
         dom.root = dom.pDoc->child("COLLADA");
+
         Collada::vColladaDom.push_back(dom);
+
+        return dom;
     }
 
-    return dom;
+    throw std::string("URL vazia: " + url);
 }
 } // namespace Chimera

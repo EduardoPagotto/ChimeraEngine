@@ -19,8 +19,9 @@ class Collada {
     Collada(ColladaDom& dom, const std::string& url);
     virtual ~Collada();
     const pugi::xml_node getLibrary(const std::string& libraryName, const std::string& url);
-
     static uint32_t getNewSerial() { return ++serial; }
+    static void destroy();
+
     static std::vector<ColladaDom> vColladaDom;
 
   protected:

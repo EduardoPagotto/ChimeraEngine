@@ -21,14 +21,14 @@ ColladaDom loadScene(const std::string& file) {
     SDL_Log("Load arquivo: %s Status: %s", file.c_str(), result.description());
     dom.root = dom.pDoc->child("COLLADA");
 
+    Collada::vColladaDom.push_back(dom); // arquivo inicial
+
     return dom;
 }
 
 void colladaLoad(Registry& r, const std::string& pathFile) {
 
     ColladaDom dom = loadScene(pathFile);
-    Collada::vColladaDom.push_back(dom); // arquivo inicial
-
     pugi::xml_node vs = dom.root.child("scene");
     for (pugi::xml_node n = vs.first_child(); n; n = n.next_sibling()) {
 
@@ -45,5 +45,7 @@ void colladaLoad(Registry& r, const std::string& pathFile) {
             ps.loadAll(ps.getLibrary("library_physics_scenes", url), &r);
         }
     }
+
+    Collada::destroy();
 }
 } // namespace Chimera

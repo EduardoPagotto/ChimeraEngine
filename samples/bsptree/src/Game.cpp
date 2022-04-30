@@ -44,8 +44,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
         // material.setDefaultEffect();
         // material.setShine(50.0f);
-        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam());
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
+                                      TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
         material.material->init();
 
         // processa o Maze

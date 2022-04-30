@@ -125,10 +125,7 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
     p.format = TexFormat::RGBA;
     p.wrap = TexWrap::CLAMP_TO_EDGE;
     p.filter = TexFilter::LINEAR;
-
-    TextureManager::loadFromSurface(name, bigSurface, p);
-
-    texture = TextureManager::getLast();
+    texture = TextureManager::loadFromSurface(name, bigSurface, p);
 
     if (sFont) {
         TTF_CloseFont(sFont);

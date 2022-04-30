@@ -64,8 +64,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 
         ComponentMaterial& material = re.addComponent<ComponentMaterial>();
-        TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        ;
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
+                                      TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam()));
         material.material->init();
 
         Shader& shader = re.addComponent<Shader>();

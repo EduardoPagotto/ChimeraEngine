@@ -11,6 +11,7 @@ find_package(GLEW REQUIRED)
 set (SourceColladaDB	Collada.cpp
 						ColladaVisualScene.cpp
 						ColladaShader.cpp
+						ColladaImage.cpp
 						ColladaMaterial.cpp
 						ColladaLight.cpp
 						ColladaCam.cpp

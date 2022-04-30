@@ -13,11 +13,11 @@ class TextureManager {
     static Texture* get() { return textures[0]; }
     static Texture* getLast() { return textures.back(); }
     static Texture* getIndex(const uint16_t& index) { return textures[index]; }
-    static bool loadFromSurface(const std::string& name, SDL_Surface* surface, TexParam textureParameters);
-    static bool loadFromFile(const std::string& name, const std::string& pathfile, TexParam textureParameters);
+    static Texture* loadFromSurface(const std::string& name, SDL_Surface* surface, TexParam textureParameters);
+    static Texture* loadFromFile(const std::string& name, const std::string& pathfile, TexParam textureParameters);
 
   private:
-    static int invert_image(int pitch, int height, void* image_pixels);
+    static void invert_image(int pitch, int height, void* image_pixels);
     TextureManager() {}
     ~TextureManager() {}
     static std::vector<Texture*> textures;

@@ -59,8 +59,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         material.material->setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
         material.material->setShine(50.0f);
 
-        TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam());
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
+                                      TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
         material.material->init();
 
         Mesh mesh;

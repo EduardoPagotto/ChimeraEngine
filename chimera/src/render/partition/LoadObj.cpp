@@ -79,8 +79,7 @@ int getMaterialFile(const std::string materialFile, Material* material) {
             // load texture
             std::string nova(line);
             if (getValidData(nova, std::string("map_Kd ")) == true) {
-                TextureManager::loadFromFile(nova, nova, TexParam());
-                material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
+                material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::loadFromFile(nova, nova, TexParam()));
             } else if (getValidData(nova, std::string("sharpness ")) == true) {
                 float val;
                 int n = sscanf(nova.c_str(), "%f", &val);

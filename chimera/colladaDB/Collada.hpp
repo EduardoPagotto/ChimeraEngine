@@ -20,8 +20,6 @@ class Collada {
     virtual ~Collada();
     const pugi::xml_node getLibrary(const std::string& libraryName, const std::string& url);
 
-    static bool isLocalURL(const std::string& url);
-    static ColladaDom urlLib(const std::string& url);
     static uint32_t getNewSerial() { return ++serial; }
     static std::vector<ColladaDom> vColladaDom;
 
@@ -29,6 +27,10 @@ class Collada {
     std::string urlLocal;
     ColladaDom colladaDom;
     static uint32_t serial;
+
+  private:
+    static bool isLocalURL(const std::string& url);
+    static ColladaDom urlLib(const std::string& url);
 };
 
 void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter);

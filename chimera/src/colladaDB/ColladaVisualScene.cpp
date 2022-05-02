@@ -55,7 +55,7 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
             std::string technique = n.name();
             if (technique == "technique") {
                 std::string partt = n.attribute("profile").value();
-                if (partt == "chimera_particle")
+                if (partt == "chimera")
                     return; // FIXME: continuar a carga de dados criando uma classe de particula!!!
             }
         }

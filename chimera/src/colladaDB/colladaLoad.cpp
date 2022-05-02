@@ -1,12 +1,11 @@
 #include "chimera/colladaDB/colladaLoad.hpp"
-#include "chimera/colladaDB/Collada.hpp"
 #include "chimera/colladaDB/ColladaPhysicScene.hpp"
 #include "chimera/colladaDB/ColladaVisualScene.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-ColladaDom loadScene(const std::string& file) {
+ColladaDom loadFileCollada(const std::string& file) {
 
     ColladaDom dom;
     dom.file = file.c_str();
@@ -28,7 +27,7 @@ ColladaDom loadScene(const std::string& file) {
 
 void colladaLoad(Registry& r, const std::string& pathFile) {
 
-    ColladaDom dom = loadScene(pathFile);
+    ColladaDom dom = loadFileCollada(pathFile);
     pugi::xml_node vs = dom.root.child("scene");
     for (pugi::xml_node n = vs.first_child(); n; n = n.next_sibling()) {
 

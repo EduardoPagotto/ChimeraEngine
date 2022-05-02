@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "chimera/colladaDB/colladaLoad.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraOrthographic.hpp"

@@ -1,4 +1,4 @@
-#include "chimera/colladaDB/ColladaImage.hpp"
+#include "chimera/core/collada/ColladaImage.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 
 namespace Chimera {

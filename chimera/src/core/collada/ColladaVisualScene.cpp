@@ -1,8 +1,8 @@
-#include "chimera/colladaDB/ColladaVisualScene.hpp"
-#include "chimera/colladaDB/ColladaCam.hpp"
-#include "chimera/colladaDB/ColladaGeometry.hpp"
-#include "chimera/colladaDB/ColladaLight.hpp"
-#include "chimera/colladaDB/ColladaMaterial.hpp"
+#include "chimera/core/collada/ColladaVisualScene.hpp"
+#include "chimera/core/collada/ColladaCam.hpp"
+#include "chimera/core/collada/ColladaGeometry.hpp"
+#include "chimera/core/collada/ColladaLight.hpp"
+#include "chimera/core/collada/ColladaMaterial.hpp"
 #include "chimera/core/visible/Transform.hpp"
 
 namespace Chimera {

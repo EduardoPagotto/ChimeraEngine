@@ -19,7 +19,6 @@ set (IncludesModels3 ${Models3_SOURCE_DIR}/include/
 
 #ordem é importante!!!
 set (LibsModels3 ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
-				 ${CMAKE_SOURCE_DIR}/bin/libColladaDB.a
 				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_LIBRARY}
@@ -46,7 +45,6 @@ target_include_directories(models3 PRIVATE ${IncludesModels3})
 target_link_libraries(models3 ${LibsModels3})
 
 add_dependencies(models3 ChimeraCore
-						 ColladaDB
 						 ChimeraRender)
 
 INSTALL(FILES ${Models3_BINARY_DIR}/models3 DESTINATION bin)

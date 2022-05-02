@@ -1,4 +1,4 @@
-#include "chimera/colladaDB/Collada.hpp"
+#include "chimera/core/collada/Collada.hpp"
 #include <SDL2/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>

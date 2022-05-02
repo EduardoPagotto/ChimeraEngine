@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/colladaDB/Collada.hpp"
+#include "Collada.hpp"
 #include "chimera/core/visible/Texture.hpp"
 #include <unordered_map>
 

@@ -1,4 +1,4 @@
-#include "chimera/colladaDB/ColladaShader.hpp"
+#include "chimera/core/collada/ColladaShader.hpp"
 #include "chimera/core/visible/Shader.hpp"
 
 namespace Chimera {

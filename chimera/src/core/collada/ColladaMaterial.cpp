@@ -1,6 +1,6 @@
-#include "chimera/colladaDB/ColladaMaterial.hpp"
-#include "chimera/colladaDB/ColladaImage.hpp"
-#include "chimera/colladaDB/ColladaShader.hpp"
+#include "chimera/core/collada/ColladaMaterial.hpp"
+#include "chimera/core/collada/ColladaImage.hpp"
+#include "chimera/core/collada/ColladaShader.hpp"
 #include "chimera/core/visible/Components.hpp"
 
 namespace Chimera {

@@ -1,4 +1,4 @@
-#include "chimera/colladaDB/ColladaGeometry.hpp"
+#include "chimera/core/collada/ColladaGeometry.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 
 namespace Chimera {

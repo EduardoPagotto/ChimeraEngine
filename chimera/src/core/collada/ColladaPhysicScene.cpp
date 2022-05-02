@@ -1,4 +1,4 @@
-#include "chimera/colladaDB/ColladaPhysicScene.hpp"
+#include "chimera/core/collada/ColladaPhysicScene.hpp"
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/visible/Components.hpp"

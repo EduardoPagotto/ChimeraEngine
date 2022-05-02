@@ -4,6 +4,7 @@ PROJECT(ChimeraCore)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(PUGIXML REQUIRED)
 find_package(GLEW REQUIRED)
 
 if (BULLET_SET_TO_USE)
@@ -41,12 +42,22 @@ set (SourcesCore Registry.cpp
 				 visible/FontAtlas.cpp
 				 visible/FontManager.cpp
 				 visible/Material.cpp
-				 visible/ParticleEmitter.cpp)
+				 visible/ParticleEmitter.cpp
+				 collada/Collada.cpp
+				 collada/ColladaVisualScene.cpp
+				 collada/ColladaShader.cpp
+				 collada/ColladaImage.cpp
+				 collada/ColladaMaterial.cpp
+				 collada/ColladaLight.cpp
+				 collada/ColladaCam.cpp
+				 collada/ColladaGeometry.cpp
+				 collada/colladaLoad.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}
 				 ${SDL2_INCLUDE_DIR}
 				 ${OPENGL_INCLUDE_DIR}
+				 ${PUGIXML_DIR}
 				 ${GLEW_INCLUDE_DIRS})
 
 # Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
@@ -60,7 +71,8 @@ if (BULLET_SET_TO_USE)
 	message(STATUS "Bullet incluido no build ChimeraCore")
 	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
 								   bullet/Solid.cpp
-								   bullet/Constraint.cpp) 
+								   bullet/Constraint.cpp
+								   collada/ColladaPhysicScene.cpp) 
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 

@@ -1,4 +1,4 @@
-#include "chimera/colladaDB/ColladaLight.hpp"
+#include "chimera/core/collada/ColladaLight.hpp"
 
 namespace Chimera {
 ColladaLight::~ColladaLight() {}

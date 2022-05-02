@@ -1,4 +1,4 @@
-#include "chimera/colladaDB/ColladaCam.hpp"
+#include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
 #include "chimera/core/visible/Components.hpp"
 

@@ -14,7 +14,6 @@ class Scene : public IStateMachine {
     Scene();
     virtual ~Scene();
     void onViewportResize(uint32_t width, uint32_t height);
-    void logToggle() { logRender = !logRender; }
     Registry& getRegistry() { return registry; }
     // Herdados
     virtual void onAttach() override;

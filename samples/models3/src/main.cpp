@@ -16,6 +16,9 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("AppShader Iniciado");
 
+        // Canvas* canvas = new CanvasGL("models", 800, 600);
+        // Scene scene;
+
         Engine engine(new CanvasGL("models", 800, 600));
         Game* game = new Game(&engine);
 

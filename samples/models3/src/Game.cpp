@@ -64,7 +64,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 
         ComponentMaterial& material = re.addComponent<ComponentMaterial>();
-        ;
         material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
                                       TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam()));
         material.material->init();
@@ -84,7 +83,6 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     activeScene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
     activeScene.pushEmitters(ef);
-
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     engine->pushState(&activeScene);
 

@@ -1,18 +1,21 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::~Game() {}
-
-void Game::onAttach() {
-
-    moveSpeed = MOVSPEED;
-    rotSpeed = ROTSPEED;
+Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     // init framebuffer
     frame = new Frame;
     frame->data = engine->getCanvas()->getPixels();
     frame->width = engine->getCanvas()->getWidth();
     frame->height = engine->getCanvas()->getHeight();
+}
+
+Game::~Game() {}
+
+void Game::onAttach() {
+
+    moveSpeed = MOVSPEED;
+    rotSpeed = ROTSPEED;
 
     // estado de inicialização
     state = new State;

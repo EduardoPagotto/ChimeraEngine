@@ -5,7 +5,7 @@
 
 class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Engine* engine) : engine(engine){};
+    Game(Chimera::Engine* engine);
 
     virtual ~Game();
     // Inherited via IEvents

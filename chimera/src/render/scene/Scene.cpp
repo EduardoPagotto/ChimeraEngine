@@ -236,7 +236,7 @@ bool Scene::onEvent(const SDL_Event& event) {
         case SDL_KEYDOWN: {
             switch (event.key.keysym.sym) {
                 case SDLK_F9:
-                    this->logToggle();
+                    logRender = !logRender;
                     break;
             }
         } break;

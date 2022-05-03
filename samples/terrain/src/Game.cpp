@@ -134,9 +134,6 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDLK_ESCAPE:
                     utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
                     break;
-                case SDLK_1:
-                    activeScene.logToggle();
-                    break;
                 case SDLK_F10:
                     utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;

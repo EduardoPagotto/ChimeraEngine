@@ -731,6 +731,13 @@
                 <matrix sid="transform">1 0 0 -5 0 1 0 5 0 0 1 4 0 0 0 1</matrix>
                 <instance_node url="file://assets/models/nivel1_extra.xml#ParticleA"/>
             </node>
+
+            <extra>
+                <technique profile="chimera">
+                    <canvas title="models" with="800" height="640" full="0"/>
+                </technique>
+            </extra>
+
         </visual_scene>
     </library_visual_scenes>
     <scene>

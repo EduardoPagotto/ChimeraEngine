@@ -233,6 +233,13 @@ bool Scene::onEvent(const SDL_Event& event) {
                     break;
             }
         } break;
+        case SDL_KEYDOWN: {
+            switch (event.key.keysym.sym) {
+                case SDLK_F9:
+                    this->logToggle();
+                    break;
+            }
+        } break;
     }
     return true;
 }

@@ -25,21 +25,12 @@ class Game : public Chimera::IStateMachine {
     virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
     virtual std::string getName() const override { return "Game"; }
-    // Chimera::VisitorRender renderV;
 
   private:
     Chimera::Scene activeScene;
-    // Chimera::Renderer3d render3d;
     Chimera::Engine* engine;
-    // std::string sPosicaoObj;
-    // std::string textoFPS;
     Controles crt;
-    // Chimera::NodeHUD* pHUD;
-    // Chimera::NodeCamera* pOrbitalCam;
     Chimera::Solid* pCorpoRigido;
-    // Chimera::NodeParticleEmitter* pEmissor;
-    // Chimera::Node* root;
-    // Chimera::Shader shader[5];
     Tile* tile;
     Chimera::Label* lFPS;
     int fps;

@@ -24,23 +24,16 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
 
         } else if (std::string("extra") == node.name()) {
 
-            for (pugi::xml_node nTec = node.first_child(); nTec; nTec = nTec.next_sibling()) {
+            pugi::xml_node orbital = getExtra(node, "orbital");
+            if (orbital != nullptr) {
 
-                std::string name = nTec.name();
-                std::string profile = nTec.attribute("profile").value();
-                if ((name == "technique") and (profile == "chimera")) {
+                min = orbital.child("min").text().as_float();
+                max = orbital.child("max").text().as_float();
 
-                    pugi::xml_node orbital = nTec.child("orbital");
-                    if (orbital != nullptr) {
-                        min = orbital.child("min").text().as_float();
-                        max = orbital.child("max").text().as_float();
-
-                        ComponentTrans& trans = entity.getComponent<ComponentTrans>();
-                        glm::vec3 pos = trans.trans->getPosition();
-                        cc.camera = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
-                        ((CameraOrbit*)cc.camera)->setLimits(min, max);
-                    }
-                }
+                ComponentTrans& trans = entity.getComponent<ComponentTrans>();
+                glm::vec3 pos = trans.trans->getPosition();
+                cc.camera = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
+                ((CameraOrbit*)cc.camera)->setLimits(min, max);
             }
         }
     }

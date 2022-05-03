@@ -25,9 +25,8 @@ ColladaDom loadFileCollada(const std::string& file) {
     return dom;
 }
 
-void colladaLoad(Registry& r, const std::string& pathFile) {
+void colladaRegistryLoad(ColladaDom& dom, Registry& r) {
 
-    ColladaDom dom = loadFileCollada(pathFile);
     pugi::xml_node vs = dom.root.child("scene");
     for (pugi::xml_node n = vs.first_child(); n; n = n.next_sibling()) {
 
@@ -44,7 +43,5 @@ void colladaLoad(Registry& r, const std::string& pathFile) {
             ps.loadAll(ps.getLibrary("library_physics_scenes", url), &r);
         }
     }
-
-    Collada::destroy();
 }
 } // namespace Chimera

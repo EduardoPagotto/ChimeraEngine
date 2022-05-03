@@ -1,5 +1,6 @@
 #include "Tile.hpp"
 #include "chimera/core/Engine.hpp"
+#include "chimera/core/collada/ColladaCanvas.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/visible/CameraOrthographic.hpp"
 #include "chimera/core/visible/Components.hpp"
@@ -24,17 +25,15 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("AppShader Iniciado");
 
-        // Carrega fontes antes antes ??
-        // FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
-        // FontManager::get()->setScale(glm::vec2(1.0, 1.0)); // em TileLayer ortho values!!!
         Chimera::Label* lFPS = nullptr;
         Scene scene;
 
-        CanvasGL canvas("models", 800, 600);
+        ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
+        CanvasGL* pCanvas = colladaCanvasGL(dom);
 
-        Engine engine(&canvas);
+        Engine engine(pCanvas);
 
-        colladaLoad(scene.getRegistry(), "./assets/models/nivel1.xml");
+        colladaRegistryLoad(dom, scene.getRegistry());
 
         { // FPS
             Shader shader;
@@ -50,7 +49,7 @@ int main(int argn, char** argv) {
             FontManager::get()->setScale(glm::vec2(1.0, 1.0)); // em TileLayer ortho values!!!
             lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
             tile->add(lFPS);
-            tile->getCamera()->setViewportSize(canvas.getWidth(), canvas.getHeight());
+            tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
             engine.pushState(tile);
         }
 
@@ -82,17 +81,22 @@ int main(int argn, char** argv) {
 
         scene.pushEmitters(ef);
         scene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
-        scene.onViewportResize(canvas.getWidth(), canvas.getHeight()); // so depois
+        scene.onViewportResize(pCanvas->getWidth(), pCanvas->getHeight()); // so depois
 
         Game* game = new Game(&scene);
         game->lFPS = lFPS;
 
         engine.pushState(game);
         engine.pushState(&scene);
+
+        Collada::destroy(); // clean loader
+
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");
         delete game;
+
+        delete pCanvas;
 
         SDL_Log("AppShader finalizado com sucesso");
         return 0;

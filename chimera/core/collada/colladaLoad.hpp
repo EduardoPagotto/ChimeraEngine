@@ -4,5 +4,5 @@
 
 namespace Chimera {
 ColladaDom loadFileCollada(const std::string& file);
-void colladaLoad(Registry& r, const std::string& pathFile);
+void colladaRegistryLoad(ColladaDom& dom, Registry& r);
 } // namespace Chimera

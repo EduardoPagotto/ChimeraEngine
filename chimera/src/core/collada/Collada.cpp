@@ -166,4 +166,15 @@ ColladaDom Collada::urlLib(const std::string& url) {
 
     throw std::string("URL vazia: " + url);
 }
+
+const pugi::xml_node getExtra(const pugi::xml_node node, const std::string& name) {
+
+    for (pugi::xml_node nTec = node.first_child(); nTec; nTec = nTec.next_sibling()) {
+        if ((strcmp(nTec.name(), "technique") == 0) and (strcmp(nTec.attribute("profile").value(), "chimera") == 0))
+            return nTec.child(name.c_str());
+    }
+
+    return pugi::xml_node();
+}
+
 } // namespace Chimera

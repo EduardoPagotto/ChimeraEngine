@@ -47,6 +47,9 @@ bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {
                 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical SDL_QUIT PushEvent fail: %s", SDL_GetError());
             }
         } break;
+        case EVENT_TOGGLE_FULL_SCREEN:
+            canvas->toggleFullScreen();
+            break;
         default:
             break;
     }
@@ -90,8 +93,13 @@ void Engine::run(void) {
                 case SDL_QUIT:
                     l_quit = true;
                     break;
-                case SDL_WINDOWEVENT:
-                    break;
+                case SDL_WINDOWEVENT: {
+                    switch (l_eventSDL.window.event) {
+                        case SDL_WINDOWEVENT_RESIZED: // set windows size
+                            canvas->reshape(l_eventSDL.window.data1, l_eventSDL.window.data2);
+                            break;
+                    }
+                } break;
                 case SDL_JOYAXISMOTION:
                     JoystickManager::setAxisMotion(&l_eventSDL.jaxis);
                     break;

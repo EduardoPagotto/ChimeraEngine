@@ -114,9 +114,6 @@ bool Game::onEvent(const SDL_Event& event) {
                     uint32_t* n2 = (uint32_t*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao OFF: %d -> %d", *n1, *n2);
                 } break;
-                case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    engine->getCanvas()->toggleFullScreen();
-                    break;
                 case Chimera::EVENT_NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
@@ -213,9 +210,6 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDL_WINDOWEVENT_LEAVE:
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
-                    break;
             }
         } break;
     }
@@ -240,8 +234,6 @@ void Game::onUpdate(const double& ts) {
 
     if (pCorpoRigido)
         activeScene.setOrigem(pCorpoRigido);
-
-    // activeScene.onUpdate(ts); // atualiza camera e script de camera
 
     using namespace Chimera;
 

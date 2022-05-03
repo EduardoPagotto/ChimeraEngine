@@ -228,7 +228,7 @@ bool Scene::onEvent(const SDL_Event& event) {
     switch (event.type) {
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
-                case SDL_WINDOWEVENT_RESIZED:
+                case SDL_WINDOWEVENT_RESIZED: // aqui para camera e engine acerta a janela
                     onViewportResize(event.window.data1, event.window.data2);
                     break;
             }

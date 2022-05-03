@@ -121,14 +121,6 @@ bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
     switch (event.type) {
-        case SDL_USEREVENT: {
-            switch (event.user.code) {
-                case EVENT_TOGGLE_FULL_SCREEN:
-                    engine->getCanvas()->toggleFullScreen();
-                    break;
-            }
-
-        } break;
         case SDL_KEYDOWN: {
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
@@ -152,9 +144,6 @@ bool Game::onEvent(const SDL_Event& event) {
                     break;
                 case SDL_WINDOWEVENT_LEAVE:
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;

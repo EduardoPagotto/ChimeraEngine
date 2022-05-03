@@ -79,9 +79,6 @@ bool Game::onEvent(const SDL_Event& event) {
     switch (event.type) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
-                case EVENT_TOGGLE_FULL_SCREEN:
-                    engine->getCanvas()->toggleFullScreen();
-                    break;
                 case EVENT_NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
@@ -107,9 +104,6 @@ bool Game::onEvent(const SDL_Event& event) {
                     break;
                 case SDL_WINDOWEVENT_LEAVE:
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
                     break;
             }
         } break;

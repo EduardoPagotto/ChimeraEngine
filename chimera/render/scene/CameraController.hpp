@@ -1,5 +1,5 @@
 #pragma once
-#include "ScriptableEntity.hpp"
+#include "chimera/core/ScriptableEntity.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
 namespace Chimera {

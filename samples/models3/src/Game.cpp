@@ -1,19 +1,13 @@
 #include "Game.hpp"
-#include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/CameraOrthographic.hpp"
 #include "chimera/core/visible/Components.hpp"
-#include "chimera/core/visible/FontManager.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
-#include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/scene/CameraController.hpp"
-#include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Engine* engine) : engine(engine) {
+Game::Game(Chimera::Scene* scene) : scene(scene) {
     using namespace Chimera;
     pCorpoRigido = nullptr;
     crt.yaw = 0.0f;
@@ -22,69 +16,17 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     crt.throttle = 0.0;
     crt.hat = 0;
 
-    { // FPS
-        Shader shader;
-        std::unordered_map<GLenum, std::string> shadeData;
-        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Text2D.frag";
-        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Text2D.vert";
-        ShaderManager::load("Text2D", shadeData, shader);
-
-        tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(512.0, -1.0f, 1.0f));
-
-        FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
-        FontManager::get()->setScale(glm::vec2(1.0, 1.0)); // em TileLayer ortho values!!!
-        lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
-        tile->add(lFPS);
-
-        tile->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-        engine->pushState(tile);
-    }
-
-    { // Cargadados arquivo collada
-        colladaLoad(activeScene.getRegistry(), "./assets/models/nivel1.xml");
-
-        // injeta controlador de camera
-        auto view1 = activeScene.getRegistry().get().view<ComponentCamera>();
+    { // injeta controlador de camera
+        auto view1 = scene->getRegistry().get().view<ComponentCamera>();
         for (auto entity : view1) {
-            Entity e = Entity{entity, &activeScene.getRegistry()};
+            Entity e = Entity{entity, &scene->getRegistry()};
             e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
         }
 
         // Localiza objeto como o primario //EfeitoZoltan-mesh
-        ComponentTrans& tc = activeScene.getRegistry().findComponent<ComponentTrans>("Zoltan");
+        ComponentTrans& tc = scene->getRegistry().findComponent<ComponentTrans>("Zoltan");
         pCorpoRigido = (Solid*)tc.trans;
     }
-
-    // TODO: TESTAR no ARQUIVO!!!!!
-    EmitterFont* ef = new EmitterFont();
-    { // Cria emissor de particula
-        Entity re = activeScene.getRegistry().createEntity("Renderable Particle System");
-        ComponentTrans& tc = re.addComponent<ComponentTrans>();
-        tc.trans = new Transform();
-        tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-
-        ComponentMaterial& material = re.addComponent<ComponentMaterial>();
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
-                                      TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam()));
-        material.material->init();
-
-        Shader& shader = re.addComponent<Shader>();
-        std::unordered_map<GLenum, std::string> shadeData;
-        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ParticleEmitter.frag";
-        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ParticleEmitter.vert";
-        ShaderManager::load("ParticleEmitter", shadeData, shader);
-
-        ParticleContainer& pc = re.addComponent<ParticleContainer>();
-        pc.life = 4.0f;
-        pc.max = 2000;
-
-        ef->pushParticleContainer(&pc);
-    }
-
-    activeScene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
-    activeScene.pushEmitters(ef);
-    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-    engine->pushState(&activeScene);
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 }
@@ -231,7 +173,7 @@ void Game::onDeatach() {}
 void Game::onUpdate(const double& ts) {
 
     if (pCorpoRigido)
-        activeScene.setOrigem(pCorpoRigido);
+        scene->setOrigem(pCorpoRigido);
 
     using namespace Chimera;
 

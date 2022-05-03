@@ -1,5 +1,4 @@
 #pragma once
-#include "ScriptableEntity.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -18,23 +17,5 @@ struct Renderable3dComponent {
 struct RenderableParticlesComponent {
     IRenderable3d* renderable;
     bool enable;
-};
-
-struct NativeScriptComponent {
-
-    std::string name;
-    ScriptableEntity* instance = nullptr;
-
-    ScriptableEntity* (*instantiateScript)();
-    void (*destroyScript)(NativeScriptComponent*);
-
-    template <typename T> void bind(const std::string& nameBind) {
-        name = nameBind;
-        instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
-        destroyScript = [](NativeScriptComponent* nsc) {
-            delete nsc->instance;
-            nsc->instance = nullptr;
-        };
-    }
 };
 } // namespace Chimera

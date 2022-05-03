@@ -4,6 +4,7 @@
 #include "Light.hpp"
 #include "Material.hpp"
 #include "Mesh.hpp"
+#include "chimera/core/ScriptableEntity.hpp"
 
 namespace Chimera {
 
@@ -41,6 +42,24 @@ struct ComponentMaterial {
     TagComponent tag;
     Material* material = new Material();
     ComponentMaterial() = default;
+};
+
+struct NativeScriptComponent {
+
+    std::string name;
+    ScriptableEntity* instance = nullptr;
+
+    ScriptableEntity* (*instantiateScript)();
+    void (*destroyScript)(NativeScriptComponent*);
+
+    template <typename T> void bind(const std::string& nameBind) {
+        name = nameBind;
+        instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+        destroyScript = [](NativeScriptComponent* nsc) {
+            delete nsc->instance;
+            nsc->instance = nullptr;
+        };
+    }
 };
 
 } // namespace Chimera

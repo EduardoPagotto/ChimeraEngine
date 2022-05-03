@@ -1,3 +1,11 @@
+#include "Tile.hpp"
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
+#include "chimera/core/visible/CameraOrthographic.hpp"
+#include "chimera/core/visible/Components.hpp"
+#include "chimera/core/visible/FontManager.hpp"
+#include "chimera/core/visible/Transform.hpp"
+#include "chimera/render/2d/BatchRender2D.hpp"
 #include <cstdio>
 #include <iostream>
 #include <map>
@@ -16,13 +24,71 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("AppShader Iniciado");
 
-        // Canvas* canvas = new CanvasGL("models", 800, 600);
-        // Scene scene;
+        // Carrega fontes antes antes ??
+        // FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
+        // FontManager::get()->setScale(glm::vec2(1.0, 1.0)); // em TileLayer ortho values!!!
+        Chimera::Label* lFPS = nullptr;
+        Scene scene;
 
-        Engine engine(new CanvasGL("models", 800, 600));
-        Game* game = new Game(&engine);
+        CanvasGL canvas("models", 800, 600);
+
+        Engine engine(&canvas);
+
+        colladaLoad(scene.getRegistry(), "./assets/models/nivel1.xml");
+
+        { // FPS
+            Shader shader;
+            std::unordered_map<GLenum, std::string> shadeData;
+            shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Text2D.frag";
+            shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Text2D.vert";
+            ShaderManager::load("Text2D", shadeData, shader);
+
+            // State interface
+            Tile* tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(512.0, -1.0f, 1.0f));
+
+            FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
+            FontManager::get()->setScale(glm::vec2(1.0, 1.0)); // em TileLayer ortho values!!!
+            lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+            tile->add(lFPS);
+            tile->getCamera()->setViewportSize(canvas.getWidth(), canvas.getHeight());
+            engine.pushState(tile);
+        }
+
+        // TODO: TESTAR no ARQUIVO!!!!!
+        EmitterFont* ef = new EmitterFont();
+        { // Cria emissor de particula
+            Entity re = scene.getRegistry().createEntity("Renderable Particle System");
+            ComponentTrans& tc = re.addComponent<ComponentTrans>();
+            tc.trans = new Transform();
+            tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
+
+            ComponentMaterial& material = re.addComponent<ComponentMaterial>();
+            material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
+                                          TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam()));
+            material.material->init();
+
+            Shader& shader = re.addComponent<Shader>();
+            std::unordered_map<GLenum, std::string> shadeData;
+            shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ParticleEmitter.frag";
+            shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ParticleEmitter.vert";
+            ShaderManager::load("ParticleEmitter", shadeData, shader);
+
+            ParticleContainer& pc = re.addComponent<ParticleContainer>();
+            pc.life = 4.0f;
+            pc.max = 2000;
+
+            ef->pushParticleContainer(&pc);
+        }
+
+        scene.pushEmitters(ef);
+        scene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
+        scene.onViewportResize(canvas.getWidth(), canvas.getHeight()); // so depois
+
+        Game* game = new Game(&scene);
+        game->lFPS = lFPS;
 
         engine.pushState(game);
+        engine.pushState(&scene);
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");

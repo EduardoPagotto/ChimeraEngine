@@ -16,7 +16,6 @@ Engine::~Engine() {
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-    delete canvas;
 }
 
 void Engine::pushState(IStateMachine* state) {

@@ -63,36 +63,30 @@ std::vector<ColladaDom> Collada::vColladaDom;
 
 Collada::Collada(ColladaDom& dom, const std::string& url) {
 
-    if (Collada::isLocalURL(url) == true)
+    RFC3986 rfc(url);
+    if (rfc.isInvalid() == true)
+        throw std::string("URL " + url + " invalida");
+
+    if (rfc.getScheme() == RFC3986_SCHEME::LOCAL)
         colladaDom = dom;
-    else
-        colladaDom = Collada::urlLib(url);
+    else {
 
-    std::size_t found = url.find("#");
-    this->urlLocal = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
-}
-
-RFC3986::RFC3986(const std::string& url) { //"file://./assets/models/piso2_mestre.xml#Scene"
-
-    const char* urlFile = "file://";
-    size_t urlFileLen = 7;
-    std::size_t mark1 = url.rfind("#");
-
-    if (url.find(urlFile, 0, urlFileLen) != std::string::npos) {
-        if (mark1 == std::string::npos) {
-            scheme = RFC3986_SCHEME::INVALID;
-            path = url.substr(urlFileLen, std::string::npos);
-            fragment = "";
-        } else {
-            scheme = RFC3986_SCHEME::FILE;
-            path = url.substr(urlFileLen, mark1 - urlFileLen);
-            fragment = url.substr(mark1 + 1, std::string::npos);
+        for (auto domCache : Collada::vColladaDom) {
+            if (domCache.file == rfc.getPath())
+                colladaDom = domCache;
         }
-    } else {
-        scheme = RFC3986_SCHEME::LOCAL;
-        path = "";
-        std::size_t mark1 = url.find("#");
-        fragment = (mark1 != std::string::npos) ? url.substr(mark1 + 1, std::string::npos) : url;
+
+        colladaDom.file = rfc.getPath();
+        colladaDom.pDoc = new pugi::xml_document();
+
+        pugi::xml_parse_result result = colladaDom.pDoc->load_file(colladaDom.file.c_str());
+        if (result.status != pugi::status_ok)
+            throw std::string("Arquivo " + colladaDom.file + " não encontrado");
+
+        SDL_Log("Novo Arquivo: %s url: %s Status: %s", colladaDom.file.c_str(), rfc.getFragment().c_str(), result.description());
+        colladaDom.root = colladaDom.pDoc->child("COLLADA");
+
+        Collada::vColladaDom.push_back(colladaDom);
     }
 }
 
@@ -135,60 +129,6 @@ const pugi::xml_node Collada::getLibrary(const std::string& libraryName, const s
 
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s não encontrado url: %s", libraryName.c_str(), key.c_str());
     throw std::string("Falha na localização da biblioteca");
-}
-
-bool Collada::isLocalURL(const std::string& url) {
-    const char* urlFile = "file://";
-    size_t urlFileLen = strlen(urlFile);
-    std::size_t found = url.find(urlFile, 0, urlFileLen);
-    if (found != std::string::npos)
-        return false;
-
-    return true;
-}
-
-ColladaDom Collada::urlLib(const std::string& url) {
-    ColladaDom dom;
-
-    const char* urlFile = "file://";
-    size_t urlFileLen = strlen(urlFile);
-    std::size_t found = url.find(urlFile, 0, urlFileLen);
-
-    if (found != std::string::npos) {
-
-        std::string temp = url.substr(urlFileLen, std::string::npos); //"file://./assets/models/piso2_mestre.xml#Scene"
-        std::size_t mark1 = temp.rfind("#");
-        if (mark1 == std::string::npos) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "URL %s não encontrado: ", url.c_str());
-            throw std::string("Falha na carga do arquivo");
-        }
-
-        std::string key = temp.substr(mark1 + 1, std::string::npos);
-
-        std::string target = url.substr(urlFileLen, mark1);
-        for (auto domCache : Collada::vColladaDom) {
-            if (domCache.file == target)
-                return domCache;
-        }
-
-        dom.file = url.substr(urlFileLen, mark1);
-        dom.pDoc = new pugi::xml_document();
-
-        pugi::xml_parse_result result = dom.pDoc->load_file(dom.file.c_str());
-        if (result.status != pugi::status_ok) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo %s não encontrado", dom.file.c_str());
-            throw std::string("Falha na carga do arquivo");
-        }
-
-        SDL_Log("Novo Arquivo: %s url: %s Status: %s", dom.file.c_str(), key.c_str(), result.description());
-        dom.root = dom.pDoc->child("COLLADA");
-
-        Collada::vColladaDom.push_back(dom);
-
-        return dom;
-    }
-
-    throw std::string("URL vazia: " + url);
 }
 
 const pugi::xml_node getExtra(const pugi::xml_node node, const std::string& name) {

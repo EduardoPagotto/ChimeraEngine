@@ -1,5 +1,6 @@
 #pragma once
 #include "ColladaDom.hpp"
+#include "RFC3986.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -12,33 +13,11 @@ class Collada {
     const pugi::xml_node getLibrary(const std::string& libraryName, const std::string& url);
     static uint32_t getNewSerial() { return ++serial; }
     static void destroy();
-
     static std::vector<ColladaDom> vColladaDom;
 
   protected:
-    std::string urlLocal;
     ColladaDom colladaDom;
     static uint32_t serial;
-
-  private:
-    static bool isLocalURL(const std::string& url);
-    static ColladaDom urlLib(const std::string& url);
-};
-
-enum class RFC3986_SCHEME { FILE = 0, LOCAL = 1, HTTP = 2, INVALID = 3 };
-
-class RFC3986 {
-  public:
-    RFC3986(const std::string& url);
-    inline const RFC3986_SCHEME getScheme() const { return scheme; }
-    inline const std::string& getPath() const { return path; }
-    inline const std::string& getFragment() const { return fragment; }
-    inline const bool isInvalid() const { return scheme == RFC3986_SCHEME::INVALID; }
-
-  private:
-    RFC3986_SCHEME scheme;
-    std::string path;
-    std::string fragment;
 };
 
 void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter);

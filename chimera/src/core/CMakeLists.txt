@@ -43,6 +43,7 @@ set (SourcesCore Registry.cpp
 				 visible/FontManager.cpp
 				 visible/Material.cpp
 				 visible/ParticleEmitter.cpp
+				 collada/RFC3986.cpp
 				 collada/Collada.cpp
 				 collada/ColladaVisualScene.cpp
 				 collada/ColladaShader.cpp

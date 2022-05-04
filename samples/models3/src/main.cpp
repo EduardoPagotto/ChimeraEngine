@@ -44,9 +44,6 @@ int main(int argn, char** argv) {
 
             // State interface
             Tile* tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(512.0, -1.0f, 1.0f));
-
-            FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
-            FontManager::get()->setScale(glm::vec2(1.0, 1.0)); // em TileLayer ortho values!!!
             lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
             tile->add(lFPS);
             tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());

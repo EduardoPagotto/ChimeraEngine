@@ -13,7 +13,7 @@ ColladaDom loadFileCollada(const std::string& file) {
 
     pugi::xml_parse_result result = dom.pDoc->load_file(file.c_str());
     if (result.status != pugi::status_ok) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo %s não encontrado", file.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Arquivo: %s erro: %s", file.c_str(), result.description());
         throw std::string("Falha na carga do arquivo");
     }
 

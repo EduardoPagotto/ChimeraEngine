@@ -1,5 +1,6 @@
 #include "chimera/core/collada/ColladaCanvas.hpp"
 #include "chimera/core/collada/ColladaVisualScene.hpp"
+#include "chimera/core/visible/FontManager.hpp"
 
 namespace Chimera {
 
@@ -25,7 +26,20 @@ CanvasGL* colladaCanvasGL(ColladaDom& dom) {
                     if (nCanvas.attribute("full").value() == std::string("1"))
                         full = true;
 
-                    return new CanvasGL(title, width, height, full);
+                    pCanvas = new CanvasGL(title, width, height, full);
+                }
+
+                const pugi::xml_node nFonts = getExtra(extra, "fonts");
+                if (nFonts != nullptr) {
+                    for (pugi::xml_node nFont = nFonts.first_child(); nFont; nFont = nFont.next_sibling()) {
+
+                        RFC3986 rfc(nFont.attribute("url").value());
+                        int size = static_cast<int>(std::stoul(nFont.attribute("size").value()));
+                        float scaleX = std::stod(nFont.attribute("scaleX").value());
+                        float scaleY = std::stod(nFont.attribute("scaleY").value());
+                        FontManager::add(new FontAtlas(rfc.getFragment(), rfc.getPath(), size));
+                        FontManager::get()->setScale(glm::vec2(scaleX, scaleY));
+                    }
                 }
             }
         }

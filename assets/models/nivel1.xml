@@ -126,6 +126,22 @@
     </library_images>
 
     <library_effects>
+        <effect id="ShadeText-effect">
+            <profile_GLSL>
+                <technique sid="Text2D">
+                    <include sid="VP_ShadeText" url="file://./assets/shaders/Text2D.vert"/>
+                    <include sid="FP_ShadeText" url="file://./assets/shaders/Text2D.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="VP_ShadeText">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="FP_ShadeText">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+        </effect>
         <effect id="Shade01-effect">
             <profile_GLSL>
                 <technique sid="MeshFullShadow">
@@ -735,6 +751,16 @@
             <extra>
                 <technique profile="chimera">
                     <canvas title="models" with="800" height="640" full="0"/>
+                    <fonts>
+                        <font url="file://assets/fonts/FreeSans.ttf#FreeSans_22" size="22" scaleX="1.0" scaleY="1.0"/>
+                    </fonts>
+                    <tiles>
+                        <tile>
+                            <instance_effect url="#ShadeText-effect">
+                                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="Text2D"/>
+                            </instance_effect>
+                        </tile>
+                    </tiles>
                 </technique>
             </extra>
 

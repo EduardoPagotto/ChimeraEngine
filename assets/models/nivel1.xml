@@ -158,6 +158,25 @@
                 </technique>
             </profile_GLSL>
         </effect>
+
+        <effect id="ShadowTexture-effect">
+            <profile_COMMON>
+                <newparam sid="ShadowTexture_Sampler">
+                    <samplerDEPTH>
+                        <minfilter>NEAREST</minfilter>
+                        <magfilter>NEAREST</magfilter>
+                        <mipfilter>NEAREST</mipfilter>
+                        <wrap_s>WRAP</wrap_s>
+                        <wrap_t>WRAP</wrap_t>
+                        <setparam ref="size">
+                            <int2> 2048 2048 </int2>
+                        </setparam>
+                    </samplerDEPTH>
+                </newparam>
+            </profile_COMMON>
+        </effect>
+
+
         <effect id="MaterialSkyBox-effect">
             <profile_COMMON>
                 <newparam sid="spacebox_png-surface">

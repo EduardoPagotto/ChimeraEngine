@@ -12,7 +12,22 @@
     </asset>
 
     <library_cameras>
-        <camera id="Camera-camera" name="Camera.002">
+
+        <camera id="Camera-Tile" name="Camera.002">
+            <optics>
+                <technique_common>
+                    <orthographic>
+                        <xmag>1.0</xmag>
+                        <ymag>1.0</ymag>
+                        <aspect_ratio>0.1</aspect_ratio>
+                        <znear>-1.0</znear>
+                        <zfar>1.0</zfar>
+                    </orthographic>
+                </technique_common>
+            </optics>
+        </camera>
+
+        <camera id="Camera-camera" name="Camera.001">
             <optics>
                 <technique_common>
                     <perspective>
@@ -775,6 +790,7 @@
                     </fonts>
                     <tiles>
                         <tile>
+                            <instance_camera url="#Camera-Tile"/>
                             <instance_effect url="#ShadeText-effect">
                                 <technique_hint platform="OpenGL|ES" profile="GLSL" ref="Text2D"/>
                             </instance_effect>

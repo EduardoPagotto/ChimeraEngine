@@ -1,4 +1,4 @@
-#include "Tile.hpp"
+#include "chimera/render/2d/Tile.hpp"
 
 Tile::Tile(Chimera::IRenderer2D* renderer, Chimera::Shader shader, Chimera::ICamera* camera) : Chimera::Layer(renderer, shader, camera) {}
 Tile::~Tile() {}

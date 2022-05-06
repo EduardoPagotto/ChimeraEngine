@@ -25,6 +25,7 @@ set (RenderSource 	VertexData.cpp
 					2d/Layer.cpp
 					2d/Group.cpp
 					2d/Label.cpp
+					2d/Tile.cpp
 					3d/Renderer3d.cpp
 					3d/Group3d.cpp
 					3d/Renderable3D.cpp

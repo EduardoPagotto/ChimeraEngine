@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/render/2d/Layer.hpp"
+#include "Layer.hpp"
 
 class Tile : public Chimera::Layer {
   public:

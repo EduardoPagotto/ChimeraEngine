@@ -1,4 +1,3 @@
-#include "Tile.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/ColladaCanvas.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
@@ -7,6 +6,7 @@
 #include "chimera/core/visible/FontManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
+#include "chimera/render/2d/Tile.hpp"
 #include <cstdio>
 #include <iostream>
 #include <map>

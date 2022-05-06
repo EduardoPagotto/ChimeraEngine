@@ -789,7 +789,7 @@
                         <font url="file://assets/fonts/FreeSans.ttf#FreeSans_22" size="22" scaleX="1.0" scaleY="1.0"/>
                     </fonts>
                     <tiles>
-                        <tile>
+                        <tile id="TileText" name="TileText">
                             <instance_camera url="#Camera-Tile"/>
                             <instance_effect url="#ShadeText-effect">
                                 <technique_hint platform="OpenGL|ES" profile="GLSL" ref="Text2D"/>

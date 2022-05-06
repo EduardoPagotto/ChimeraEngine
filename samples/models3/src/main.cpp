@@ -7,6 +7,7 @@
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/2d/Tile.hpp"
+#include "chimera/render/scene/Components.hpp"
 #include <cstdio>
 #include <iostream>
 #include <map>
@@ -29,13 +30,14 @@ int main(int argn, char** argv) {
         Scene scene;
 
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
-        CanvasGL* pCanvas = colladaCanvasGL(dom);
+        CanvasGL* pCanvas = colladaCanvasGL(dom, scene.getRegistry());
 
         Engine engine(pCanvas);
 
         colladaRegistryLoad(dom, scene.getRegistry());
 
         { // FPS
+          // ComponentTile& tc = scene.getRegistry().findComponent<ComponentTile>("TileText");
             Shader shader;
             std::unordered_map<GLenum, std::string> shadeData;
             shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Text2D.frag";

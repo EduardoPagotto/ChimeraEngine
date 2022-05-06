@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -18,4 +19,11 @@ struct RenderableParticlesComponent {
     IRenderable3d* renderable;
     bool enable;
 };
+
+struct ComponentTile {
+    TagComponent tag;
+    Tile* tile = nullptr;
+    ComponentTile() = default;
+};
+
 } // namespace Chimera

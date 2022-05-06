@@ -25,6 +25,6 @@ void CameraOrthographic::setViewportSize(const uint32_t& width, const uint32_t& 
     float bottom = -size * 0.5;
     float top = size * 0.5f;
 
-    projectionMatrix = glm::ortho(left, right, bottom, top, nearClip, farClip);
+    projectionMatrix = glm::ortho(left, right, bottom, top, nearClip, farClip); //-xmag, xmag, -ymag, ymag ,znear ,zfar
 }
 } // namespace Chimera

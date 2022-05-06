@@ -35,12 +35,12 @@ void colladaRegistryLoad(ColladaDom& dom, Registry& r) {
         if (instance == "instance_visual_scene") {
 
             ColladaVisualScene vs(dom, url);
-            vs.loadAll(vs.getLibrary("library_visual_scenes", url), &r);
+            vs.loadAll(vs.getLibrary("library_visual_scenes"), &r);
 
         } else if (instance == "instance_physics_scene") {
 
             ColladaPhysicScene ps(dom, url);
-            ps.loadAll(ps.getLibrary("library_physics_scenes", url), &r);
+            ps.loadAll(ps.getLibrary("library_physics_scenes"), &r);
         }
     }
 }

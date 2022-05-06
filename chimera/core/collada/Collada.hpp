@@ -10,7 +10,8 @@ class Collada {
   public:
     Collada(ColladaDom& dom, const std::string& url);
     virtual ~Collada();
-    const pugi::xml_node getLibrary(const std::string& libraryName, const std::string& url);
+    const pugi::xml_node getLibraryUrl(const std::string& libraryName, const std::string& url);
+    const pugi::xml_node getLibrary(const std::string& libraryName);
     static uint32_t getNewSerial() { return ++serial; }
     static void destroy();
     static std::vector<ColladaDom> vColladaDom;
@@ -18,6 +19,10 @@ class Collada {
   protected:
     ColladaDom colladaDom;
     static uint32_t serial;
+    std::string fragment;
+
+  private:
+    const pugi::xml_node getLibraryKey(const std::string& libraryName, const std::string& key);
 };
 
 void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter);

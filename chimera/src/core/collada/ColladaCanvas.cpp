@@ -15,7 +15,7 @@ CanvasGL* colladaCanvasGL(ColladaDom& dom) {
         if (instance == "instance_visual_scene") {
 
             ColladaVisualScene vs(dom, url);
-            const pugi::xml_node extra = vs.getLibrary("library_visual_scenes", url).child("extra");
+            const pugi::xml_node extra = vs.getLibrary("library_visual_scenes").child("extra");
             if (extra != nullptr) {
                 const pugi::xml_node nCanvas = getExtra(extra, "canvas");
                 if (nCanvas != nullptr) {

@@ -72,22 +72,27 @@ Collada::Collada(ColladaDom& dom, const std::string& url) {
     else {
 
         for (auto domCache : Collada::vColladaDom) {
-            if (domCache.file == rfc.getPath())
+            if (domCache.file == rfc.getPath()) {
                 colladaDom = domCache;
+                fragment = rfc.getFragment();
+                SDL_Log("Arquivo %s cache, id: %s", colladaDom.file.c_str(), rfc.getFragment().c_str());
+                return;
+            }
         }
 
         colladaDom.file = rfc.getPath();
         colladaDom.pDoc = new pugi::xml_document();
-
         pugi::xml_parse_result result = colladaDom.pDoc->load_file(colladaDom.file.c_str());
         if (result.status != pugi::status_ok)
-            throw std::string("Arquivo " + colladaDom.file + " não encontrado");
+            throw std::string("Arquivo " + colladaDom.file + " erro: %s" + std::string(result.description()));
 
-        SDL_Log("Novo Arquivo: %s url: %s Status: %s", colladaDom.file.c_str(), rfc.getFragment().c_str(), result.description());
+        SDL_Log("Arquivo %s novo, id: %s Status: %s", colladaDom.file.c_str(), rfc.getFragment().c_str(), result.description());
         colladaDom.root = colladaDom.pDoc->child("COLLADA");
 
         Collada::vColladaDom.push_back(colladaDom);
     }
+
+    fragment = rfc.getFragment();
 }
 
 Collada::~Collada() {}
@@ -106,11 +111,9 @@ void Collada::destroy() {
     }
 }
 
-const pugi::xml_node Collada::getLibrary(const std::string& libraryName, const std::string& url) {
+const pugi::xml_node Collada::getLibrary(const std::string& libraryName) { return getLibraryKey(libraryName, fragment); }
 
-    std::size_t found = url.find("#");
-    std::string key = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
-
+const pugi::xml_node Collada::getLibraryKey(const std::string& libraryName, const std::string& key) {
     for (pugi::xml_node n = colladaDom.root.first_child(); n; n = n.next_sibling()) {
         std::string name = n.name();
         if (name == libraryName) {
@@ -120,15 +123,20 @@ const pugi::xml_node Collada::getLibrary(const std::string& libraryName, const s
                 pugi::xml_attribute attr = t.attribute("id");
                 std::string id = attr.value();
                 if (id == key) {
-                    SDL_Log("%s: %s url: %s", libraryName.c_str(), t.name(), attr.value());
+                    SDL_Log("%s: %s id: %s", libraryName.c_str(), t.name(), attr.value());
                     return t;
                 }
             }
         }
     }
 
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s não encontrado url: %s", libraryName.c_str(), key.c_str());
-    throw std::string("Falha na localização da biblioteca");
+    throw std::string(libraryName + " não encontrado id: " + key);
+}
+
+const pugi::xml_node Collada::getLibraryUrl(const std::string& libraryName, const std::string& url) {
+    std::size_t found = url.find('#');
+    std::string key = (found != std::string::npos) ? url.substr(found + 1, std::string::npos) : url;
+    return getLibraryKey(libraryName, key);
 }
 
 const pugi::xml_node getExtra(const pugi::xml_node node, const std::string& name) {

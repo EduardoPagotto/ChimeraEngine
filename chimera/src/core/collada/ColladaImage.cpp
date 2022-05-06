@@ -10,7 +10,7 @@ ColladaImage::~ColladaImage() {
 
 void ColladaImage::loadImage(const std::string& id) {
 
-    pugi::xml_node node = getLibrary("library_images", id);
+    pugi::xml_node node = getLibraryUrl("library_images", id);
     pugi::xml_node init = node.child("init_from");
     if (init != nullptr) {
         pugi::xml_text pathFile = init.text();

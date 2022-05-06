@@ -40,7 +40,7 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
     pugi::xml_node nInstace = node.child("instance_physics_model");
     std::string val = nInstace.name();
     std::string url = nInstace.attribute("url").value();
-    pugi::xml_node models = getLibrary("library_physics_models", url);
+    pugi::xml_node models = getLibraryUrl("library_physics_models", url);
 
     for (pugi::xml_node nRb = nInstace.first_child(); nRb; nRb = nRb.next_sibling()) {
 
@@ -76,7 +76,7 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
                 // Material
                 std::string url = nTec.child("instance_physics_material").attribute("url").value();
 
-                pugi::xml_node nPm = getLibrary("library_physics_materials", url);
+                pugi::xml_node nPm = getLibraryUrl("library_physics_materials", url);
                 pugi::xml_node nTc = nPm.child("technique_common");
 
                 solid->setRestitution(nTc.child("restitution").text().as_float());

@@ -74,7 +74,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
 
     std::string refName = "";
 
-    pugi::xml_node material = getLibrary("library_materials", nodeParent.attribute("symbol").value());
+    pugi::xml_node material = getLibraryUrl("library_materials", nodeParent.attribute("symbol").value());
     pugi::xml_node instanceEffect = material.child("instance_effect");
     pugi::xml_node technique_hint = instanceEffect.child("technique_hint");
 
@@ -83,7 +83,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
             refName = technique_hint.attribute("ref").value();
     }
 
-    pugi::xml_node effect = getLibrary("library_effects", instanceEffect.attribute("url").value());
+    pugi::xml_node effect = getLibraryUrl("library_effects", instanceEffect.attribute("url").value());
 
     ComponentMaterial& eMaterial = entity.addComponent<ComponentMaterial>();
     eMaterial.tag.id = material.attribute("id").value();
@@ -101,7 +101,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
         std::string url = instanceEffectShade.attribute("url").value();
 
         ColladaShader cs(colladaDom, url);
-        cs.create(refName, entity, cs.getLibrary("library_effects", url));
+        cs.create(refName, entity, cs.getLibrary("library_effects"));
 
     } else {
 

@@ -1,8 +1,9 @@
 #include "chimera/core/collada/RFC3986.hpp"
 
 namespace Chimera {
-RFC3986::RFC3986(const std::string& url) { //"file://./assets/models/piso2_mestre.xml#Scene"
+RFC3986::RFC3986(const std::string& url) { this->setUrl(url); }
 
+const RFC3986_SCHEME& RFC3986::setUrl(const std::string& url) { //"file://./assets/models/piso2_mestre.xml#Scene"
     const char* urlFile = "file://";
     size_t urlFileLen = 7;
     std::size_t mark1 = url.rfind("#");
@@ -23,5 +24,8 @@ RFC3986::RFC3986(const std::string& url) { //"file://./assets/models/piso2_mestr
         std::size_t mark1 = url.find("#");
         fragment = (mark1 != std::string::npos) ? url.substr(mark1 + 1, std::string::npos) : url;
     }
+
+    return scheme;
 }
+
 } // namespace Chimera

@@ -8,6 +8,7 @@
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/scene/Components.hpp"
+#include "chimera/render/collada/ColladaRender.hpp"
 #include <cstdio>
 #include <iostream>
 #include <map>
@@ -34,10 +35,11 @@ int main(int argn, char** argv) {
 
         Engine engine(pCanvas);
 
+        //colladaRenderLoad(dom, scene.getRegistry());
+
         colladaRegistryLoad(dom, scene.getRegistry());
 
         { // FPS
-          // ComponentTile& tc = scene.getRegistry().findComponent<ComponentTile>("TileText");
             Shader shader;
             std::unordered_map<GLenum, std::string> shadeData;
             shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Text2D.frag";
@@ -50,6 +52,12 @@ int main(int argn, char** argv) {
             tile->add(lFPS);
             tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
             engine.pushState(tile);
+
+            // ComponentTile& tc = scene.getRegistry().findComponent<ComponentTile>("TileText");
+            // lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+            // tc.tile->add(lFPS);
+            // tc.tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
+            // engine.pushState(tc.tile);
         }
 
         // TODO: TESTAR no ARQUIVO!!!!!

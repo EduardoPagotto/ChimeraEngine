@@ -35,7 +35,8 @@ set (RenderSource 	VertexData.cpp
 					3d/RenderableParticles.cpp
 					scene/ShadowPass.cpp
 					scene/Scene.cpp
-					scene/CameraController.cpp)
+					scene/CameraController.cpp
+					collada/ColladaRender.cpp)
 
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}

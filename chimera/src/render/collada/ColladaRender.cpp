@@ -28,7 +28,7 @@ void colladaRenderLoad(ColladaDom& dom, Registry& r) {
 
                         Entity entity = r.createEntity(nTile.attribute("name").value(), nTile.attribute("id").value());
                         const pugi::xml_node nCam = nTile.child("instance_camera");
-                        std::string url = nCam.attribute("url").value();
+                        url = nCam.attribute("url").value();
 
                         ColladaCam cc(dom, url);
                         cc.create(entity, cc.getLibrary("library_cameras"));
@@ -36,10 +36,10 @@ void colladaRenderLoad(ColladaDom& dom, Registry& r) {
                         ComponentCamera& cCam = entity.getComponent<ComponentCamera>();
 
                         const pugi::xml_node nEffect = nTile.child("instance_effect");
-                        std::string url2 = nEffect.attribute("url").value();
+                        url = nEffect.attribute("url").value();
                         std::string refName = nEffect.child("technique_hint").attribute("ref").value();
 
-                        ColladaShader cs(dom, url2);
+                        ColladaShader cs(dom, url);
                         cs.create(refName, entity, cs.getLibrary("library_effects"));
 
                         Shader& shader = entity.getComponent<Shader>();

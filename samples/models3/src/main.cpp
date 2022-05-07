@@ -35,29 +35,16 @@ int main(int argn, char** argv) {
 
         Engine engine(pCanvas);
 
-        //colladaRenderLoad(dom, scene.getRegistry());
-
         colladaRegistryLoad(dom, scene.getRegistry());
 
+        colladaRenderLoad(dom, scene.getRegistry());
+
         { // FPS
-            Shader shader;
-            std::unordered_map<GLenum, std::string> shadeData;
-            shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Text2D.frag";
-            shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Text2D.vert";
-            ShaderManager::load("Text2D", shadeData, shader);
-
-            // State interface
-            Tile* tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(512.0, -1.0f, 1.0f));
+            ComponentTile& tc = scene.getRegistry().findComponent<ComponentTile>("TileText");
             lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
-            tile->add(lFPS);
-            tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
-            engine.pushState(tile);
-
-            // ComponentTile& tc = scene.getRegistry().findComponent<ComponentTile>("TileText");
-            // lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
-            // tc.tile->add(lFPS);
-            // tc.tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
-            // engine.pushState(tc.tile);
+            tc.tile->add(lFPS);
+            tc.tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
+            engine.pushState(tc.tile);
         }
 
         // TODO: TESTAR no ARQUIVO!!!!!

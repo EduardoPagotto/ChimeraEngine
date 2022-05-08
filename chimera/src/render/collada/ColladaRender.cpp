@@ -2,7 +2,6 @@
 #include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/collada/ColladaShader.hpp"
 #include "chimera/core/collada/ColladaVisualScene.hpp"
-#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/Shader.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -33,7 +32,7 @@ void colladaRenderLoad(ColladaDom& dom, Registry& r) {
                         ColladaCam cc(dom, url);
                         cc.create(entity, cc.getLibrary("library_cameras"));
 
-                        ComponentCamera& cCam = entity.getComponent<ComponentCamera>();
+                        CameraComponent& cCam = entity.getComponent<CameraComponent>();
 
                         const pugi::xml_node nEffect = nTile.child("instance_effect");
                         url = nEffect.attribute("url").value();

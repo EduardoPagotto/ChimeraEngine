@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/core/TagComponent.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -47,6 +48,17 @@ class ICamera {
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
     virtual const bool is3D() const = 0;
     virtual EyeView* view() = 0;
+};
+
+struct CameraComponent {
+    TagComponent tag;
+    ICamera* camera = nullptr;
+    bool primary = true;
+    bool fixedAspectRatio = false;
+    bool single = true; // FIXME: Camera simples ou dupla aqui, melhorar para o arquivo .DAE
+    CameraComponent() = default;
+    CameraComponent(const CameraComponent&) = default;
+    // CameraComponent(glm::mat4 projection) : camera(projection) {}
 };
 
 class ICamera3D : public ICamera {

@@ -1,7 +1,6 @@
 #include "chimera/core/collada/ColladaCanvas.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/collada/ColladaVisualScene.hpp"
-#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/FontManager.hpp"
 
 namespace Chimera {

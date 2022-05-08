@@ -1,7 +1,7 @@
 #include "chimera/core/collada/ColladaPhysicScene.hpp"
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/bullet/Solid.hpp"
-#include "chimera/core/visible/Components.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -60,8 +60,8 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
             TagComponent& tag = view.get<TagComponent>(entity);
             if (tag.id == target) {
                 Entity ent2 = {entity, reg};
-                ComponentTrans& tc = ent2.getComponent<ComponentTrans>();
-                ComponentMesh& mc = ent2.getComponent<ComponentMesh>();
+                TransComponent& tc = ent2.getComponent<TransComponent>();
+                MeshComponent& mc = ent2.getComponent<MeshComponent>();
                 Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao
                 delete tc.trans;                                            // deleta objeto de transformacao
                 tc.trans = nullptr;                                         // limpa ponteiro

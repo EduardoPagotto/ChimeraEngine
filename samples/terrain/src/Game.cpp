@@ -16,7 +16,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     {
         // Cria entidade de camera
         Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
-        ComponentTrans& tc = ce.addComponent<ComponentTrans>();
+        TransComponent& tc = ce.addComponent<TransComponent>();
         tc.trans = new Transform();
 
         ComponentCamera& cc = ce.addComponent<ComponentCamera>();
@@ -30,11 +30,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     {
         // Cria entidade de luz unica global!
         Entity le = activeScene.getRegistry().createEntity("Light Entity");
-        ComponentTrans& tc = le.addComponent<ComponentTrans>();
+        TransComponent& tc = le.addComponent<TransComponent>();
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0, 400, 0));
 
-        ComponentLight& lc = le.addComponent<ComponentLight>();
+        LightComponent& lc = le.addComponent<LightComponent>();
         Light* light = new Light();
         light->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
         light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
@@ -44,11 +44,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         // entidade heightmap
         Entity renderableEntity = activeScene.getRegistry().createEntity("Heightmap Entity");
 
-        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
 
         Shader& shader = renderableEntity.addComponent<Shader>();
-        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -80,11 +80,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     {
         // Entidade mesh
         Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
-        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
 
-        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         material.material->setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
         material.material->setShine(50.0f);
 
@@ -94,7 +94,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
         ShaderManager::load("MeshFullShadow", shadeData, shader); // colocar shader em material
 
-        ComponentMesh& mesh = renderableEntity.addComponent<ComponentMesh>();
+        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
         loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
     }
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());

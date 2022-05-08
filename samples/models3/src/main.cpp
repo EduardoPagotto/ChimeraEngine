@@ -2,13 +2,13 @@
 #include "chimera/core/collada/ColladaCanvas.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/visible/CameraOrthographic.hpp"
-#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/FontManager.hpp"
+#include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/2d/Tile.hpp"
-#include "chimera/render/scene/Components.hpp"
 #include "chimera/render/collada/ColladaRender.hpp"
+#include "chimera/render/scene/Components.hpp"
 #include <cstdio>
 #include <iostream>
 #include <map>
@@ -51,11 +51,11 @@ int main(int argn, char** argv) {
         EmitterFont* ef = new EmitterFont();
         { // Cria emissor de particula
             Entity re = scene.getRegistry().createEntity("Renderable Particle System");
-            ComponentTrans& tc = re.addComponent<ComponentTrans>();
+            TransComponent& tc = re.addComponent<TransComponent>();
             tc.trans = new Transform();
             tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
 
-            ComponentMaterial& material = re.addComponent<ComponentMaterial>();
+            MaterialComponent& material = re.addComponent<MaterialComponent>();
             material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
                                           TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam()));
             material.material->init();

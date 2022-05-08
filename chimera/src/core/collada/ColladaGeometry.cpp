@@ -6,7 +6,7 @@ namespace Chimera {
 ColladaGeometry::~ColladaGeometry() {}
 
 void ColladaGeometry::create(Entity& entity, pugi::xml_node geo) {
-    ComponentMesh& eMesh = entity.addComponent<ComponentMesh>();
+    MeshComponent& eMesh = entity.addComponent<MeshComponent>();
     eMesh.mesh = new Mesh();
     eMesh.tag.id = geo.attribute("id").value();
     eMesh.tag.tag = geo.attribute("name").value();

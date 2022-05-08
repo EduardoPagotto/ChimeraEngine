@@ -19,4 +19,23 @@ class ScriptableEntity {
     Entity entity;
     friend class Scene;
 };
+
+struct NativeScriptComponent {
+
+    std::string name;
+    ScriptableEntity* instance = nullptr;
+
+    ScriptableEntity* (*instantiateScript)();
+    void (*destroyScript)(NativeScriptComponent*);
+
+    template <typename T> void bind(const std::string& nameBind) {
+        name = nameBind;
+        instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+        destroyScript = [](NativeScriptComponent* nsc) {
+            delete nsc->instance;
+            nsc->instance = nullptr;
+        };
+    }
+};
+
 } // namespace Chimera

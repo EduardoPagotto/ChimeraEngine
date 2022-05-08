@@ -1,6 +1,7 @@
 #pragma once
 #include "Texture.hpp"
 #include "UValue.hpp"
+#include "chimera/core/TagComponent.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -38,4 +39,11 @@ class Material {
     std::unordered_map<std::string, Texture*> mapTex;
     MapUniform listMaterial;
 };
+
+struct MaterialComponent {
+    TagComponent tag;
+    Material* material = new Material();
+    MaterialComponent() = default;
+};
+
 } // namespace Chimera

@@ -1,7 +1,6 @@
 #include "chimera/core/collada/ColladaMaterial.hpp"
 #include "chimera/core/collada/ColladaImage.hpp"
 #include "chimera/core/collada/ColladaShader.hpp"
-#include "chimera/core/visible/Components.hpp"
 
 namespace Chimera {
 
@@ -85,7 +84,7 @@ void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
 
     pugi::xml_node effect = getLibraryUrl("library_effects", instanceEffect.attribute("url").value());
 
-    ComponentMaterial& eMaterial = entity.addComponent<ComponentMaterial>();
+    MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();
     eMaterial.tag.id = material.attribute("id").value();
     eMaterial.tag.tag = material.attribute("name").value();
     eMaterial.tag.serial = Collada::getNewSerial();

@@ -12,7 +12,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     using namespace Chimera;
     {
         Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
-        ComponentTrans& tc = ce.addComponent<ComponentTrans>();
+        TransComponent& tc = ce.addComponent<TransComponent>();
         tc.trans = new Transform();
 
         // Cria entidade de camera
@@ -27,10 +27,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Renderable Entity");
-        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
 
-        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         Shader& shader = renderableEntity.addComponent<Shader>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -38,7 +38,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
-        ComponentMesh& mesh = renderableEntity.addComponent<ComponentMesh>();
+        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
 
         int ret = 0;
         ret = loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);

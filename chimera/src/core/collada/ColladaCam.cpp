@@ -1,14 +1,14 @@
 #include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
 #include "chimera/core/visible/CameraOrthographic.hpp"
-#include "chimera/core/visible/Components.hpp"
+#include "chimera/core/visible/ITrans.hpp"
 
 namespace Chimera {
 ColladaCam::~ColladaCam() {}
 
 void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: preciso mesmo da entidade ???
 
-    ComponentCamera& cc = entity.addComponent<ComponentCamera>();
+    CameraComponent& cc = entity.addComponent<CameraComponent>();
     cc.tag.id = nodeCam.attribute("id").value();
     cc.tag.tag = nodeCam.attribute("name").value();
     cc.tag.serial = Collada::getNewSerial();
@@ -45,7 +45,7 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 min = orbital.child("min").text().as_float();
                 max = orbital.child("max").text().as_float();
 
-                ComponentTrans& trans = entity.getComponent<ComponentTrans>();
+                TransComponent& trans = entity.getComponent<TransComponent>();
                 glm::vec3 pos = trans.trans->getPosition();
 
                 cc.camera = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);

@@ -26,7 +26,7 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
         std::string sid = n.attribute("sid").value();
         if (sid == "transform") {
-            ComponentTrans& tc = entity.addComponent<ComponentTrans>();
+            TransComponent& tc = entity.addComponent<TransComponent>();
             tc.trans = new Transform(textToMat4(n.text().as_string()));
         }
 

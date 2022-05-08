@@ -31,4 +31,12 @@ class Light {
     LightType type;
     MapUniform listProp;
 };
+
+struct LightComponent {
+    TagComponent tag;
+    Light* light = new Light();
+    bool global = true;
+    LightComponent() = default;
+};
+
 } // namespace Chimera

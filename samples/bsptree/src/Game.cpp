@@ -19,7 +19,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     { // Cria entidade de camera
         // Cria camera e carrega parametros
         ComponentCamera& cc = ce.addComponent<ComponentCamera>();
-        ComponentTrans& tc = ce.addComponent<ComponentTrans>();
+        TransComponent& tc = ce.addComponent<TransComponent>();
         tc.trans = new Transform();
 
         cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
@@ -30,11 +30,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Maze Entity");
-        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
 
         Shader& shader = renderableEntity.addComponent<Shader>();
-        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -76,11 +76,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
     {
         Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
-        ComponentTrans& tc = renderableEntity.addComponent<ComponentTrans>();
+        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-        ComponentMaterial& material = renderableEntity.addComponent<ComponentMaterial>();
+        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
         Shader& shader = renderableEntity.addComponent<Shader>();
 
         std::unordered_map<GLenum, std::string> shadeData;
@@ -88,7 +88,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
-        ComponentMesh& mesh = renderableEntity.addComponent<ComponentMesh>();
+        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
         loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
     }
 

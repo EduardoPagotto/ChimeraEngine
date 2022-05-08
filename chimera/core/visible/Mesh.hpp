@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/core/TagComponent.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -12,6 +13,12 @@ struct Mesh {
     std::vector<uint32_t> iPoint;
     std::vector<uint32_t> iNormal;
     std::vector<uint32_t> iUv;
+};
+
+struct MeshComponent {
+    TagComponent tag;
+    Mesh* mesh = new Mesh();
+    MeshComponent() = default;
 };
 
 void meshDebug(Mesh* m, bool _showAll);

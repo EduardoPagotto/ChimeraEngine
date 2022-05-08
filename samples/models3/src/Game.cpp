@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
@@ -16,15 +15,23 @@ Game::Game(Chimera::Scene* scene) : scene(scene) {
     crt.throttle = 0.0;
     crt.hat = 0;
 
+    // { // FPS
+    //     ComponentTile& tc = scene->getRegistry().findComponent<ComponentTile>("TileText");
+    //     lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    //     tc.tile->add(lFPS);
+    //     tc.tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
+    //     engine.pushState(tc.tile);
+    // }
+
     { // injeta controlador de camera
-        auto view1 = scene->getRegistry().get().view<ComponentCamera>();
+        auto view1 = scene->getRegistry().get().view<CameraComponent>();
         for (auto entity : view1) {
             Entity e = Entity{entity, &scene->getRegistry()};
             e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
         }
 
         // Localiza objeto como o primario //EfeitoZoltan-mesh
-        ComponentTrans& tc = scene->getRegistry().findComponent<ComponentTrans>("Zoltan");
+        TransComponent& tc = scene->getRegistry().findComponent<TransComponent>("Zoltan");
         pCorpoRigido = (Solid*)tc.trans;
     }
 

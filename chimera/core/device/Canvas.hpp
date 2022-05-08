@@ -1,5 +1,5 @@
 #pragma once
-
+#include "chimera/core/TagComponent.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 
@@ -37,4 +37,11 @@ class Canvas {
     std::string title;
     SDL_Window* window;
 };
+
+struct CanvasComponent {
+    TagComponent tag;
+    Canvas* canvas = nullptr;
+    CanvasComponent() = default;
+};
+
 } // namespace Chimera

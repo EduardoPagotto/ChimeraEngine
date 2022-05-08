@@ -1,5 +1,4 @@
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/collada/ColladaCanvas.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/visible/CameraOrthographic.hpp"
 #include "chimera/core/visible/FontManager.hpp"
@@ -31,13 +30,13 @@ int main(int argn, char** argv) {
         Scene scene;
 
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
-        CanvasGL* pCanvas = colladaCanvasGL(dom, scene.getRegistry());
+        colladaRegistryLoad(dom, scene.getRegistry());
+        colladaRenderLoad(dom, scene.getRegistry());
+
+        CanvasComponent& tc = scene.getRegistry().findComponent<CanvasComponent>("main_canvas");
+        CanvasGL* pCanvas = (CanvasGL*)tc.canvas;
 
         Engine engine(pCanvas);
-
-        colladaRegistryLoad(dom, scene.getRegistry());
-
-        colladaRenderLoad(dom, scene.getRegistry());
 
         { // FPS
             ComponentTile& tc = scene.getRegistry().findComponent<ComponentTile>("TileText");

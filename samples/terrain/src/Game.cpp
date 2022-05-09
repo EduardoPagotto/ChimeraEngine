@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraFPS.hpp"
-#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
@@ -19,7 +18,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         TransComponent& tc = ce.addComponent<TransComponent>();
         tc.trans = new Transform();
 
-        ComponentCamera& cc = ce.addComponent<ComponentCamera>();
+        CameraComponent& cc = ce.addComponent<CameraComponent>();
         // cc.camera = new CameraOrbit(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         cc.camera = new CameraFPS(glm::vec3(20.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         cam = (ICamera3D*)cc.camera;

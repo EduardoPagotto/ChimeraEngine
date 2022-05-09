@@ -27,8 +27,10 @@ class Scene : public IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
     virtual std::string getName() const override { return "Scene"; }
 
-  private:
+    // FIXME: colocar como privado depois de ajustar
     void onViewportResize(uint32_t width, uint32_t height);
+
+  private:
     void createRenderBuffer(EyeView* eyeView);
     void execRenderPass(ICamera* camera, IRenderer3d& renderer);
     void execShadowPass(ICamera* camera, IRenderer3d& renderer);

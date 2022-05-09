@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
-#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
@@ -17,7 +16,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
         // Cria entidade de camera
         // Cria camera e carrega parametros
-        ComponentCamera& cc = ce.addComponent<ComponentCamera>();
+        CameraComponent& cc = ce.addComponent<CameraComponent>();
         cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
         // cc.camera = new CameraFPS(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 

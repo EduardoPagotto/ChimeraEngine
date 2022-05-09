@@ -2,7 +2,6 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
-#include "chimera/core/visible/Components.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"
@@ -18,7 +17,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
     { // Cria entidade de camera
         // Cria camera e carrega parametros
-        ComponentCamera& cc = ce.addComponent<ComponentCamera>();
+        CameraComponent& cc = ce.addComponent<CameraComponent>();
         TransComponent& tc = ce.addComponent<TransComponent>();
         tc.trans = new Transform();
 

@@ -9,6 +9,7 @@ class Entity;
 class Registry {
   public:
     Registry() = default;
+    ~Registry() { eRegistry.clear(); }
     Entity createEntity(const std::string& tag = std::string(), const std::string& id = std::string());
     void destroyEntity(Entity entity);
     entt::registry& get() { return eRegistry; }

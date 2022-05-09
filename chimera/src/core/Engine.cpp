@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-Engine::Engine(Canvas* canvas) : canvas(canvas), pause(true), eyeIndice(0), fps(60), countDelta(0) {
+Engine::Engine(Canvas* canvas) : canvas(canvas), pause(true), fps(60), countDelta(0) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
@@ -132,7 +132,7 @@ void Engine::run(void) {
                 for (auto it = stack.begin(); it != stack.end(); it++)
                     (*it)->onUpdate(ts);
 
-                for (eyeIndice = 0; eyeIndice < canvas->getTotEyes(); eyeIndice++) {
+                for (int eyeIndice = 0; eyeIndice < canvas->getTotEyes(); eyeIndice++) {
                     canvas->before(eyeIndice);
                     // render all
                     for (auto it = stack.begin(); it != stack.end(); it++) {

@@ -1,10 +1,7 @@
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/visible/CameraOrthographic.hpp"
-#include "chimera/core/visible/FontManager.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/collada/ColladaRender.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -32,7 +29,6 @@ int main(int argn, char** argv) {
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
         colladaRegistryLoad(dom, scene.getRegistry());
         colladaRenderLoad(dom, scene.getRegistry());
-
         CanvasComponent& tc = scene.getRegistry().findComponent<CanvasComponent>("main_canvas");
         CanvasGL* pCanvas = (CanvasGL*)tc.canvas;
 
@@ -88,8 +84,6 @@ int main(int argn, char** argv) {
 
         SDL_Log("Loop de Game encerrado!!!!");
         delete game;
-
-        delete pCanvas;
 
         SDL_Log("AppShader finalizado com sucesso");
         return 0;

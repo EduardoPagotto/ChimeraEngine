@@ -29,16 +29,13 @@ int main(int argn, char** argv) {
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
         colladaRegistryLoad(dom, scene.getRegistry());
         colladaRenderLoad(dom, scene.getRegistry());
-        CanvasComponent& tc = scene.getRegistry().findComponent<CanvasComponent>("main_canvas");
-        CanvasGL* pCanvas = (CanvasGL*)tc.canvas;
 
-        Engine engine(pCanvas);
+        Engine engine(scene.getCanvas());
 
         { // FPS
             ComponentTile& tc = scene.getRegistry().findComponent<ComponentTile>("TileText");
             lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
             tc.tile->add(lFPS);
-            tc.tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
             engine.pushState(tc.tile);
         }
 
@@ -70,7 +67,6 @@ int main(int argn, char** argv) {
 
         scene.pushEmitters(ef);
         scene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
-        scene.onViewportResize(pCanvas->getWidth(), pCanvas->getHeight()); // so depois
 
         Game* game = new Game(&scene);
         game->lFPS = lFPS;

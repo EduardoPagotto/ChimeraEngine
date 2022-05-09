@@ -3,6 +3,7 @@
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/core/buffer/RenderBuffer.hpp"
 #include "chimera/core/bullet/PhysicsControl.hpp"
+#include "chimera/core/device/Canvas.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
 
@@ -13,8 +14,11 @@ class Scene : public IStateMachine {
   public:
     Scene();
     virtual ~Scene();
-    void onViewportResize(uint32_t width, uint32_t height);
     Registry& getRegistry() { return registry; }
+    void pushEmitters(IEmitter* e) { emitters.push_back(e); }
+    void setOrigem(ITrans* o) { origem = o; }
+    void setShadowPass(ShadowPass* shadowPass) { this->shadowPass = shadowPass; }
+    Canvas* getCanvas();
     // Herdados
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -22,16 +26,14 @@ class Scene : public IStateMachine {
     virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
     virtual std::string getName() const override { return "Scene"; }
-    void pushEmitters(IEmitter* e) { emitters.push_back(e); }
-    void setOrigem(ITrans* o) { origem = o; }
-    void setShadowPass(ShadowPass* shadowPass) { this->shadowPass = shadowPass; }
 
   private:
-    RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
+    void onViewportResize(uint32_t width, uint32_t height);
     void createRenderBuffer(EyeView* eyeView);
     void execRenderPass(ICamera* camera, IRenderer3d& renderer);
     void execShadowPass(ICamera* camera, IRenderer3d& renderer);
     void execEmitterPass(ICamera* camera, IRenderer3d& renderer);
+    RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
     uint32_t viewportWidth, viewportHeight;
     Registry registry;
     ICamera* camera;

@@ -166,6 +166,11 @@ void Scene::onAttach() {
                 particleSys.renderable = p;
             }
         }
+
+        if (entity.hasComponent<CanvasComponent>()) {
+            CanvasComponent& cc = entity.getComponent<CanvasComponent>();
+            this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());
+        }
     });
 
     // initialize scripts
@@ -178,6 +183,11 @@ void Scene::onAttach() {
     });
 
     origem = new Transform(); // FIXME: coisa feia!!!!
+}
+
+Canvas* Scene::getCanvas() {
+    CanvasComponent& cc = registry.findComponent<CanvasComponent>("main_canvas");
+    return cc.canvas;
 }
 
 void Scene::onUpdate(const double& ts) {

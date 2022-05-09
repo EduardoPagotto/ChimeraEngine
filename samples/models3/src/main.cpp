@@ -1,8 +1,5 @@
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/visible/Material.hpp"
-#include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/collada/ColladaRender.hpp"
 #include <cstdio>
 #include <iostream>
@@ -30,33 +27,6 @@ int main(int argn, char** argv) {
 
         Engine engine(scene.getCanvas());
 
-        // TODO: TESTAR no ARQUIVO!!!!!
-        EmitterFont* ef = new EmitterFont(glm::vec3(0.0f, 0.0f, 10.0f), 1.5f);
-        { // Cria emissor de particula
-            Entity re = scene.getRegistry().createEntity("Renderable Particle System");
-            TransComponent& tc = re.addComponent<TransComponent>();
-            tc.trans = new Transform();
-            tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-
-            MaterialComponent& material = re.addComponent<MaterialComponent>();
-            material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
-                                          TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam()));
-            material.material->init();
-
-            Shader& shader = re.addComponent<Shader>();
-            std::unordered_map<GLenum, std::string> shadeData;
-            shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ParticleEmitter.frag";
-            shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ParticleEmitter.vert";
-            ShaderManager::load("ParticleEmitter", shadeData, shader);
-
-            ParticleContainer& pc = re.addComponent<ParticleContainer>();
-            pc.life = 4.0f;
-            pc.max = 2000;
-
-            ef->pushParticleContainer(&pc);
-        }
-
-        scene.pushEmitters(ef);
         scene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
 
         Game* game = new Game(&scene, &engine);

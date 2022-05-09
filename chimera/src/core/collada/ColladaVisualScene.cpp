@@ -75,14 +75,14 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
             glm::vec3 dir = textToVec3(nParticle.child("emmiter_font").child("maindir").text().as_string());
             float spread = nParticle.child("emmiter_font").child("spread").text().as_float();
 
-            EmitterFont* ef = new EmitterFont(dir, spread); // EF to R
+            EmitterComponent& ec = entity.addComponent<EmitterComponent>();
+            ec.emitter = new EmitterFont(dir, spread); // EF to R
 
-            ParticleContainer& pc = entity.addComponent<ParticleContainer>();
-            pc.life = nParticle.child("container").child("life").text().as_float();
-            pc.max = nParticle.child("container").child("max").text().as_int();
-            pc.respaw = nParticle.child("container").child("respaw").text().as_bool();
-
-            ef->pushParticleContainer(&pc);
+            ParticleContainer* pc = new ParticleContainer();
+            pc->life = nParticle.child("container").child("life").text().as_float();
+            pc->max = nParticle.child("container").child("max").text().as_int();
+            pc->respaw = nParticle.child("container").child("respaw").text().as_bool();
+            ec.emitter->pushParticleContainer(pc);
         }
     }
 }

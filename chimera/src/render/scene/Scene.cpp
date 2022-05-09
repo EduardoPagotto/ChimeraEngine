@@ -153,17 +153,19 @@ void Scene::onAttach() {
             }
         }
 
-        if (entity.hasComponent<ParticleContainer>()) {
-            ParticleContainer& pc = entity.getComponent<ParticleContainer>();
+        if (entity.hasComponent<EmitterComponent>()) {
+            EmitterComponent& ec = entity.getComponent<EmitterComponent>();
 
             if (!entity.hasComponent<RenderableParticlesComponent>()) {
 
                 RenderableParticlesComponent& particleSys = entity.addComponent<RenderableParticlesComponent>();
                 particleSys.enable = true;
                 RenderableParticles* p = new RenderableParticles();
-                p->setParticleContainer(&pc);
+                ParticleContainer* pc = ec.emitter->getContainer(0); // FIXME: melhorar!!!!
+                p->setParticleContainer(pc);
                 p->create();
                 particleSys.renderable = p;
+                this->pushEmitters(ec.emitter);
             }
         }
 

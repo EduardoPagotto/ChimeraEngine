@@ -3,6 +3,7 @@
 #include "chimera/core/collada/ColladaGeometry.hpp"
 #include "chimera/core/collada/ColladaLight.hpp"
 #include "chimera/core/collada/ColladaMaterial.hpp"
+#include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/core/visible/Transform.hpp"
 
 namespace Chimera {
@@ -49,15 +50,9 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
     } else if (name == "instance_node") {
 
         ColladaVisualScene vs(colladaDom, url);
-
-        pugi::xml_node extra = vs.getLibrary("library_nodes").first_child();
-        for (pugi::xml_node n = extra.first_child(); n; n = n.next_sibling()) {
-            std::string technique = n.name();
-            if (technique == "technique") {
-                std::string partt = n.attribute("profile").value();
-                if (partt == "chimera")
-                    return; // FIXME: continuar a carga de dados criando uma classe de particula!!!
-            }
+        const pugi::xml_node nNodes = vs.getLibrary("library_nodes");
+        for (pugi::xml_node n = nNodes.first_child(); n; n = n.next_sibling()) {
+            vs.nodeData(n, entity);
         }
 
     } else if (name == "instance_camera") {
@@ -66,6 +61,29 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
         cc.create(entity, cc.getLibrary("library_cameras"));
     } else if (name == "node") {
         // TODO: implementar hierarquia
+    } else if (name == "extra") {
+
+        const pugi::xml_node nParticle = getExtra(n, "particle");
+        if (nParticle) {
+
+            pugi::xml_node instanceMaterial = nParticle.child("bind_material").child("technique_common").child("instance_material");
+            if (instanceMaterial != nullptr) {
+                ColladaMaterial cm(colladaDom, "#vazio");
+                cm.create(entity, instanceMaterial);
+            }
+
+            glm::vec3 dir = textToVec3(nParticle.child("emmiter_font").child("maindir").text().as_string());
+            float spread = nParticle.child("emmiter_font").child("spread").text().as_float();
+
+            EmitterFont* ef = new EmitterFont(dir, spread); // EF to R
+
+            ParticleContainer& pc = entity.addComponent<ParticleContainer>();
+            pc.life = nParticle.child("container").child("life").text().as_float();
+            pc.max = nParticle.child("container").child("max").text().as_int();
+            pc.respaw = nParticle.child("container").child("respaw").text().as_bool();
+
+            ef->pushParticleContainer(&pc);
+        }
     }
 }
 

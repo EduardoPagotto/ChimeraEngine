@@ -31,7 +31,7 @@ int main(int argn, char** argv) {
         Engine engine(scene.getCanvas());
 
         // TODO: TESTAR no ARQUIVO!!!!!
-        EmitterFont* ef = new EmitterFont();
+        EmitterFont* ef = new EmitterFont(glm::vec3(0.0f, 0.0f, 10.0f), 1.5f);
         { // Cria emissor de particula
             Entity re = scene.getRegistry().createEntity("Renderable Particle System");
             TransComponent& tc = re.addComponent<TransComponent>();

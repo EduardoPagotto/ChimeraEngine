@@ -35,6 +35,13 @@ const glm::vec4 textToVec4(const std::string& text) {
     return glm::vec4(arrayFloat[0], arrayFloat[1], arrayFloat[2], 1.0f);
 }
 
+const glm::vec3 textToVec3(const std::string& text) {
+    std::vector<float> arrayFloat;
+    textToFloatArray(text, arrayFloat);
+
+    return glm::vec3(arrayFloat[0], arrayFloat[1], arrayFloat[2]);
+}
+
 const glm::mat4 textToMat4(const std::string& text) {
 
     std::vector<float> arrayFloat;

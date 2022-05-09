@@ -81,17 +81,17 @@
                             <spread>1.5f</spread>
                         </emmiter_font>
                         <container>
-                            <life>2.0</life>
-                            <max>500</max>
+                            <life>4.0</life>
+                            <max>2000</max>
                             <respaw>true</respaw>
                         </container>
+                        <bind_material>
+                            <technique_common>
+                                <instance_material symbol="MaterialParticle01-material" target="#MaterialParticle01-material"/>
+                            </technique_common>
+                        </bind_material>
                     </particle>
                 </technique>
-                <bind_material>
-                    <technique_common>
-                        <instance_material symbol="MaterialParticle01-material" target="#MaterialParticle01-material"/>
-                    </technique_common>
-                </bind_material>
             </extra>
         </node>
     </library_nodes>

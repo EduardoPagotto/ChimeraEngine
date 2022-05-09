@@ -5,8 +5,9 @@
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/scene/CameraController.hpp"
+#include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Scene* scene) : scene(scene) {
+Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
     using namespace Chimera;
     pCorpoRigido = nullptr;
     crt.yaw = 0.0f;
@@ -15,13 +16,12 @@ Game::Game(Chimera::Scene* scene) : scene(scene) {
     crt.throttle = 0.0;
     crt.hat = 0;
 
-    // { // FPS
-    //     ComponentTile& tc = scene->getRegistry().findComponent<ComponentTile>("TileText");
-    //     lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
-    //     tc.tile->add(lFPS);
-    //     tc.tile->getCamera()->setViewportSize(pCanvas->getWidth(), pCanvas->getHeight());
-    //     engine.pushState(tc.tile);
-    // }
+    { // FPS
+        ComponentTile& tc = scene->getRegistry().findComponent<ComponentTile>("TileText");
+        lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+        tc.tile->add(lFPS);
+        engine->pushState(tc.tile);
+    }
 
     { // injeta controlador de camera
         auto view1 = scene->getRegistry().get().view<CameraComponent>();

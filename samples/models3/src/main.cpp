@@ -4,7 +4,6 @@
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/collada/ColladaRender.hpp"
-#include "chimera/render/scene/Components.hpp"
 #include <cstdio>
 #include <iostream>
 #include <map>
@@ -23,7 +22,6 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("AppShader Iniciado");
 
-        Chimera::Label* lFPS = nullptr;
         Scene scene;
 
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
@@ -31,13 +29,6 @@ int main(int argn, char** argv) {
         colladaRenderLoad(dom, scene.getRegistry());
 
         Engine engine(scene.getCanvas());
-
-        { // FPS
-            ComponentTile& tc = scene.getRegistry().findComponent<ComponentTile>("TileText");
-            lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
-            tc.tile->add(lFPS);
-            engine.pushState(tc.tile);
-        }
 
         // TODO: TESTAR no ARQUIVO!!!!!
         EmitterFont* ef = new EmitterFont();
@@ -68,8 +59,7 @@ int main(int argn, char** argv) {
         scene.pushEmitters(ef);
         scene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
 
-        Game* game = new Game(&scene);
-        game->lFPS = lFPS;
+        Game* game = new Game(&scene, &engine);
 
         engine.pushState(game);
         engine.pushState(&scene);

@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/render/2d/Label.hpp"
@@ -14,7 +15,7 @@ struct Controles {
 
 class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Scene* scene);
+    Game(Chimera::Scene* scene, Chimera::Engine* engine);
     virtual ~Game();
 
     virtual void onAttach() override;
@@ -24,11 +25,10 @@ class Game : public Chimera::IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
     virtual std::string getName() const override { return "Game"; }
 
-    Chimera::Label* lFPS;
-
   private:
     Chimera::Scene* scene;
     Chimera::Solid* pCorpoRigido;
+    Chimera::Label* lFPS;
     Controles crt;
     int fps;
 };

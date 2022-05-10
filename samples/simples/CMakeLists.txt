@@ -36,8 +36,7 @@ set (LibsSimples ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 
 
 
-add_executable (simples src/Game.cpp 
-						src/main.cpp)
+add_executable (simples src/main.cpp)
 
 target_link_libraries(simples ${LibsSimples})
 target_include_directories (simples PRIVATE ${IncludesSimples})

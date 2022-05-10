@@ -53,6 +53,7 @@ set (SourcesCore Registry.cpp
 				 collada/ColladaCam.cpp
 				 collada/ColladaGeometry.cpp
 				 collada/colladaLoad.cpp
+				 collada/ColladaWaveFront.cpp
 				 Wavefront.cpp)
 
 # define os includes

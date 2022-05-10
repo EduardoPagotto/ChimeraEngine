@@ -1,11 +1,10 @@
 #pragma once
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/IStateMachine.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Engine* engine);
+    Game(Chimera::Scene* scene, Chimera::Engine* engine);
     virtual ~Game();
     // Inherited via IEvents
     virtual void onAttach() override;
@@ -16,6 +15,5 @@ class Game : public Chimera::IStateMachine {
     virtual std::string getName() const override { return "Game"; }
 
   private:
-    Chimera::Scene activeScene;
-    Chimera::Engine* engine;
+    Chimera::Scene* scene;
 };

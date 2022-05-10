@@ -1,18 +1,26 @@
 #include "Game.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
+//#include "chimera/render/collada/ColladaRender.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
     using namespace Chimera;
     try {
-
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        Engine engine(new CanvasGL("simples", 640, 480));
-        Game* game = new Game(&engine);
+        Scene scene;
 
-        engine.pushState(game);
+        ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
+        colladaRegistryLoad(dom, scene.getRegistry());
+        // colladaRenderLoad(dom, scene.getRegistry());
+
+        Engine engine(scene.getCanvas());
+
+        Game* game = new Game(&scene, &engine);
+
+        Collada::destroy(); // clean loader
+
         engine.run();
 
         delete game;

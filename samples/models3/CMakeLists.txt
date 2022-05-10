@@ -28,8 +28,7 @@ set (LibsModels3 ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				 -lSDL2_image
 				 -lSDL2_ttf
 				 -lpugixml
-				 -lpthread
-				 -lyaml-cpp)
+				 -lpthread)
 
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR Incluido no Projeto")

@@ -3,6 +3,7 @@
 #include "chimera/core/collada/ColladaGeometry.hpp"
 #include "chimera/core/collada/ColladaLight.hpp"
 #include "chimera/core/collada/ColladaMaterial.hpp"
+#include "chimera/core/collada/ColladaWaveFront.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/core/visible/Transform.hpp"
 
@@ -83,6 +84,12 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
             pc->max = nParticle.child("container").child("max").text().as_int();
             pc->respaw = nParticle.child("container").child("respaw").text().as_bool();
             ec.emitter->pushParticleContainer(pc);
+        }
+
+        const pugi::xml_node nObj = getExtra(n, "external_obj");
+        if (nObj) {
+            ColladaWaveFront cf(colladaDom, "#vazio");
+            cf.create(entity, nObj);
         }
     }
 }

@@ -15,37 +15,25 @@
             <extra>
                 <technique profile="chimera">
                     <orbital>
-                        <min>1.5</min>
-                        <max>80.0</max>
+                        <min>1.0</min>
+                        <max>1500.0</max>
                     </orbital>
                 </technique>
             </extra>
         </camera>
     </library_cameras>
-    <library_lights>
-        <light id="Light-Test" name="Lamp.001">
-            <technique_common>
-                <point>
-                    <color sid="color">1 1 1</color>
-                    <constant_attenuation>1</constant_attenuation>
-                    <linear_attenuation>0</linear_attenuation>
-                    <quadratic_attenuation>5.91716e-5</quadratic_attenuation>
-                </point>
-            </technique_common>
-        </light>
-    </library_lights>
     <library_effects>
         <effect id="Shade01-effect">
             <profile_GLSL>
                 <technique sid="MeshNoMat">
-                    <include sid="Vertex_Program_Shade01_VP" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="Fragment_Program_Shade01_FP" url="file://./assets/shaders/MeshNoMat.frag"/>
+                    <include sid="VP_Shade01" url="file://./assets/shaders/MeshNoMat.vert"/>
+                    <include sid="FP_Shade01" url="file://./assets/shaders/MeshNoMat.frag"/>
                     <pass sid="Pass_0">
                         <shader stage="VERTEXPROGRAM">
-                            <name source="Vertex_Program_Shade01_VP">main</name>
+                            <name source="VP_Shade01">main</name>
                         </shader>
                         <shader stage="FRAGMENTPROGRAM">
-                            <name source="Fragment_Program_Shade01_FP">main</name>
+                            <name source="FP_Shade01">main</name>
                         </shader>
                     </pass>
                 </technique>
@@ -55,10 +43,10 @@
     <library_visual_scenes>
         <visual_scene id="Scene" name="Scene">
             <node id="Cubo" name="Cubo" type="NODE">
-                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 4 0 0 0 1</matrix>
+                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                 <extra>
                     <technique profile="chimera">
-                        <external_obj target="./assets/models/cubo2.obj"/>
+                        <external_obj id="Cubo_obj" name="Cubo_obj" target="./assets/models/cubo2.obj"/>
                         <instance_effect url="#Shade01-effect">
                             <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
                         </instance_effect>
@@ -78,17 +66,13 @@
                     </extra>
                 </instance_camera>
             </node>
-            <node id="luz01" name="luz01" type="NODE">
-                <matrix sid="transform">-0.1733842 -0.7895962 0.5886219 3.166558 0.9833067 -0.1052982 0.1483921 -3.557333 -0.05518902 0.6045247 0.7946723 8.628012 0 0 0 1</matrix>
-                <instance_light url="#Light-Test"/>
-            </node>
         </visual_scene>
     </library_visual_scenes>
     <scene>
         <instance_visual_scene url="#Scene"/>
         <extra>
             <technique profile="chimera">
-                <canvas id="main_canvas" name="main_canvas" title="models" with="800" height="640" full="0"/>
+                <canvas id="main_canvas" name="main_canvas" title="simples" with="800" height="640" full="0"/>
             </technique>
         </extra>
     </scene>

@@ -29,6 +29,7 @@ set (LibsSimples ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				 -lglut
 				 -lSDL2
 				 -lSDL2_image
+				 -lSDL2_ttf
 				 -lGLEW
 				 -lpugixml
 				 -lpthread)

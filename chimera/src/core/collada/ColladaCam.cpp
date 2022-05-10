@@ -1,4 +1,5 @@
 #include "chimera/core/collada/ColladaCam.hpp"
+#include "chimera/core/visible/CameraFPS.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
 #include "chimera/core/visible/CameraOrthographic.hpp"
 #include "chimera/core/visible/ITrans.hpp"
@@ -51,6 +52,22 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 cc.camera = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
                 ((CameraOrbit*)cc.camera)->setLimits(min, max);
 
+                ((ICamera3D*)cc.camera)->setFov(fov);
+                ((ICamera3D*)cc.camera)->setNear(znear);
+                ((ICamera3D*)cc.camera)->setFar(zfar);
+            }
+
+            pugi::xml_node nFPS = getExtra(node, "FPS");
+            if (nFPS != nullptr) {
+
+                // nFPS.child("pos").text().as_float();
+                // nFPS.child("up").text().as_float();
+                glm::vec3 pos;
+                glm::vec3 up;
+                float yaw = nFPS.child("yaw").text().as_float();
+                float pitch = nFPS.child("pitch").text().as_float();
+
+                cc.camera = new CameraFPS(pos, up, yaw, pitch);
                 ((ICamera3D*)cc.camera)->setFov(fov);
                 ((ICamera3D*)cc.camera)->setNear(znear);
                 ((ICamera3D*)cc.camera)->setFar(zfar);

@@ -1,12 +1,12 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/Wavefront.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/render/partition/BSPTree.hpp"
-#include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/partition/Maze.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -88,7 +88,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
         MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
-        loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
+
+        std::string matFile;
+        wavefrontObjLoad("./assets/models/cubo2.obj", mesh.mesh, matFile);
+        if (matFile.size() > 0)
+            wavefrontMtlLoad(matFile, material.material);
     }
 
     // mudar para o event

@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/core/Wavefront.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraFPS.hpp"
 #include "chimera/core/visible/Material.hpp"
@@ -6,7 +7,6 @@
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/partition/LoadHeightMap.hpp"
-#include "chimera/render/partition/LoadObj.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 
@@ -94,7 +94,10 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         ShaderManager::load("MeshFullShadow", shadeData, shader); // colocar shader em material
 
         MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
-        loadObjFile("./assets/models/cubo2.obj", mesh.mesh, material.material);
+        std::string matFile;
+        wavefrontObjLoad("./assets/models/cubo2.obj", mesh.mesh, matFile);
+        if (matFile.size() > 0)
+            wavefrontMtlLoad(matFile, material.material);
     }
     activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
     engine->pushState(&activeScene);

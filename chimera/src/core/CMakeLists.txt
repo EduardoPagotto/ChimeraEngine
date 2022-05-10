@@ -52,7 +52,8 @@ set (SourcesCore Registry.cpp
 				 collada/ColladaLight.cpp
 				 collada/ColladaCam.cpp
 				 collada/ColladaGeometry.cpp
-				 collada/colladaLoad.cpp)
+				 collada/colladaLoad.cpp
+				 Wavefront.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}

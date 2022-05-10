@@ -15,8 +15,10 @@ void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, c
 void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat) {
     std::vector<std::string> textData;
     textToStringArray(text, textData, ' ');
-    for (const std::string& val : textData)
-        arrayFloat.push_back(std::stod(val));
+    for (const std::string& val : textData) {
+        if (val.size() != 0)
+            arrayFloat.push_back(std::stod(val));
+    }
 }
 
 void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI) {

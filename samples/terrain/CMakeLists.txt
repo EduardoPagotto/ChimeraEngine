@@ -28,6 +28,7 @@ set (LibsTerrain ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 				 -lSDL2
 				 -lSDL2_image
 				 -lGLEW
+				 -lpugixml
 				 -lpthread)
 
 add_executable (terrain src/Game.cpp

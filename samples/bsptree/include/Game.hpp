@@ -5,7 +5,7 @@
 
 class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Engine* engine);
+    Game(Chimera::Scene* scene, Chimera::Engine* engine);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -15,6 +15,5 @@ class Game : public Chimera::IStateMachine {
     virtual std::string getName() const override { return "Game"; }
 
   private:
-    Chimera::Scene activeScene;
-    Chimera::Engine* engine;
+    Chimera::Scene* scene;
 };

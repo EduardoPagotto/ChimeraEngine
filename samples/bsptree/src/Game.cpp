@@ -11,24 +11,22 @@
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Engine* engine) : engine(engine) {
+Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 
     using namespace Chimera;
-    Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
-    { // Cria entidade de camera
-        // Cria camera e carrega parametros
-        CameraComponent& cc = ce.addComponent<CameraComponent>();
-        TransComponent& tc = ce.addComponent<TransComponent>();
-        tc.trans = new Transform();
+    Entity ce = scene->getRegistry().createEntity("Camera Entity");
 
-        cc.camera = new CameraOrbit(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-        // cc.camera = new CameraFPS(glm::vec3(0.0f, 0.0f, 80.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-
-        ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+    {
+        // injeta controlador de camera
+        auto view1 = scene->getRegistry().get().view<CameraComponent>();
+        for (auto entity : view1) {
+            Entity e = Entity{entity, &scene->getRegistry()};
+            e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+        }
     }
 
     {
-        Entity renderableEntity = activeScene.getRegistry().createEntity("Maze Entity");
+        Entity renderableEntity = scene->getRegistry().createEntity("Maze Entity");
         TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
 
@@ -73,31 +71,8 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         rc.renderable = r;
     }
 
-    {
-        Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
-        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
-        tc.trans = new Transform();
-        tc.trans->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-
-        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
-        Shader& shader = renderableEntity.addComponent<Shader>();
-
-        std::unordered_map<GLenum, std::string> shadeData;
-        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshNoMat.frag";
-        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
-        ShaderManager::load("MeshNoMat", shadeData, shader);
-
-        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
-
-        std::string matFile;
-        wavefrontObjLoad("./assets/models/cubo2.obj", mesh.mesh, matFile);
-        if (matFile.size() > 0)
-            wavefrontMtlLoad(matFile, material.material);
-    }
-
-    // mudar para o event
-    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-    engine->pushState(&activeScene);
+    engine->pushState(this);
+    engine->pushState(scene);
 }
 
 Game::~Game() {}

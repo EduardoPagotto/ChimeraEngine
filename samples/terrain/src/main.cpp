@@ -1,6 +1,5 @@
 #include "Game.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
 
 int main(int argn, char** argv) {
     using namespace Chimera;

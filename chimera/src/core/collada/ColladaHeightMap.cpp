@@ -6,6 +6,11 @@ namespace Chimera {
 ColladaHeightMap::~ColladaHeightMap() {}
 
 void ColladaHeightMap::create(Entity& entity, pugi::xml_node geo) {
+
+    // Shader& shader = renderableEntity.addComponent<Shader>();
+    // MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
+    // Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
+
     // MeshComponent& eMesh = entity.addComponent<MeshComponent>();
     // eMesh.mesh = new Mesh();
     // eMesh.tag.id = geo.attribute("id").value();

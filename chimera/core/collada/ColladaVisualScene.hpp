@@ -12,6 +12,7 @@ class ColladaVisualScene : public Collada {
     void loadAll(pugi::xml_node node, Registry* reg);
 
   private:
+    void loadMaterial(Entity entity, const std::string& url, const pugi::xml_node& node);
     void nodeData(pugi::xml_node node, Entity entity);
 };
 

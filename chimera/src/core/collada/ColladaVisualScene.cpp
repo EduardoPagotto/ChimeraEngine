@@ -1,6 +1,7 @@
 #include "chimera/core/collada/ColladaVisualScene.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/collada/ColladaGeometry.hpp"
+#include "chimera/core/collada/ColladaHeightMap.hpp"
 #include "chimera/core/collada/ColladaLight.hpp"
 #include "chimera/core/collada/ColladaMaterial.hpp"
 #include "chimera/core/collada/ColladaWaveFront.hpp"
@@ -10,6 +11,14 @@
 namespace Chimera {
 
 ColladaVisualScene::~ColladaVisualScene() {}
+
+void ColladaVisualScene::loadMaterial(Entity entity, const std::string& url, const pugi::xml_node& node) {
+    const pugi::xml_node instanceMaterial = node.child("bind_material").child("technique_common").child("instance_material");
+    if (instanceMaterial != nullptr) {
+        ColladaMaterial cm(colladaDom, url);
+        cm.create(entity, instanceMaterial);
+    }
+}
 
 void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
 
@@ -36,12 +45,7 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
         ColladaGeometry cg(colladaDom, url);
         cg.create(entity, cg.getLibrary("library_geometries"));
-
-        pugi::xml_node instanceMaterial = n.child("bind_material").child("technique_common").child("instance_material");
-        if (instanceMaterial != nullptr) {
-            ColladaMaterial cm(colladaDom, url);
-            cm.create(entity, instanceMaterial);
-        }
+        loadMaterial(entity, url, n);
 
     } else if (name == "instance_light") {
 
@@ -67,11 +71,7 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
         const pugi::xml_node nParticle = getExtra(n, "particle");
         if (nParticle) {
 
-            pugi::xml_node instanceMaterial = nParticle.child("bind_material").child("technique_common").child("instance_material");
-            if (instanceMaterial != nullptr) {
-                ColladaMaterial cm(colladaDom, "#vazio");
-                cm.create(entity, instanceMaterial);
-            }
+            loadMaterial(entity, "#vazio", nParticle);
 
             glm::vec3 dir = textToVec3(nParticle.child("emmiter_font").child("maindir").text().as_string());
             float spread = nParticle.child("emmiter_font").child("spread").text().as_float();
@@ -94,7 +94,12 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
         const pugi::xml_node nHeight = getExtra(n, "external_height");
         if (nHeight) {
-            // TODO: continuar aqui
+
+            ColladaHeightMap ch(colladaDom, "#vazio");
+            ch.create(entity, nHeight);
+
+            const pugi::xml_node technique = nHeight.parent();
+            loadMaterial(entity, "#vazio", technique);
         }
     }
 }

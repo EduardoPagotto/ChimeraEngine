@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-RenderableArray::RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<VertexData>& vertexData) : totIndex(0) {
+RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vector<VertexData>& vertexData) : totIndex(0) {
 
     this->vVertex = std::move(vertexData);
 
@@ -31,14 +31,14 @@ RenderableArray::RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<Ver
     for (auto ptrTrisIndex : vPtrTrisIndex) {
 
         glm::vec3 min, max, size;
-        vertexDataIndexMinMaxSize(&this->vVertex[0], this->vVertex.size(), &ptrTrisIndex->vIndex[0], ptrTrisIndex->size(), min, max, size);
+        vertexDataIndexMinMaxSize(&this->vVertex[0], this->vVertex.size(), &ptrTrisIndex.vIndex[0], ptrTrisIndex.size(), min, max, size);
 
-        IndexBuffer* ibo = new IndexBuffer(&ptrTrisIndex->vIndex[0], ptrTrisIndex->size());
+        IndexBuffer* ibo = new IndexBuffer(&ptrTrisIndex.vIndex[0], ptrTrisIndex.size());
         IRenderable3d* r = new Renderable3D(nullptr, ibo, AABB(min, max));
 
         vChild.push_back(r);
 
-        totIndex += ptrTrisIndex->size();
+        totIndex += ptrTrisIndex.size();
     }
 
     vao->unbind();

@@ -66,7 +66,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         // btree root, leafs, vertex
         BspTree bspTree;
         std::vector<VertexData> vVertexFinal;
-        VecPrtTrisIndex vTrisFinal;
+        std::vector<TrisIndex> vTrisFinal;
         BSPTreeNode* root = bspTree.create(vVertexIndexed, vTris, vVertexFinal, vTrisFinal);
 
         RenderableBsp* r = new RenderableBsp(root, vTrisFinal, vVertexFinal);

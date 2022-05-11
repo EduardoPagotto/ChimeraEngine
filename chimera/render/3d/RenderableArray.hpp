@@ -1,6 +1,7 @@
 #pragma once
 #include "IRenderable3d.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/space/AABB.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
 #include "chimera/render/VertexData.hpp"
 
@@ -8,8 +9,8 @@ namespace Chimera {
 
 class RenderableArray : public IRenderable3d {
   public:
-    RenderableArray(VecPrtTrisIndex& vPtrTrisIndex, std::vector<VertexData>& vertexData);
-    ~RenderableArray();
+    RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vector<VertexData>& vertexData);
+    virtual ~RenderableArray();
 
     virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
     virtual const uint32_t getSize() const override { return totIndex; }

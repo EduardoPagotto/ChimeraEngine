@@ -1,5 +1,6 @@
 #pragma once
 #include "chimera/core/TagComponent.hpp"
+#include "chimera/core/space/TrisIndex.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -15,9 +16,13 @@ struct Mesh {
     std::vector<uint32_t> iUv;
 };
 
+enum class MeshType { SIMPLE = 0, ARRAY = 1 };
+
 struct MeshComponent {
     TagComponent tag;
+    MeshType type = MeshType::SIMPLE;
     Mesh* mesh = new Mesh();
+    std::vector<TrisIndex> vTrisIndex;
     MeshComponent() = default;
 };
 

@@ -11,7 +11,7 @@ class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
     BspTree() {}
     virtual ~BspTree() {}
     BSPTreeNode* create(std::vector<VertexData>& _vVertexIn, std::list<Triangle*>& _vTriangleIn, std::vector<VertexData>& _vVertexOut,
-                        VecPrtTrisIndex& vpLeafOut);
+                        std::vector<TrisIndex>& vpLeafOut);
 
   private:
     BSPTreeNode* build(std::list<Triangle*>& _vTriangle);
@@ -20,6 +20,6 @@ class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
     void createLeafy(BSPTreeNode* tree, std::list<Triangle*>& _vTriangle);
 
     std::vector<VertexData> vVertex;
-    VecPrtTrisIndex vpLeaf;
+    std::vector<TrisIndex> vpLeaf;
 };
 } // namespace Chimera

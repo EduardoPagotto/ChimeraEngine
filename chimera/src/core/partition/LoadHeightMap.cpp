@@ -196,14 +196,14 @@ void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
         if (endWidth > totalWidth)
             endWidth = totalWidth;
 
-        TrisIndex* pNode = new TrisIndex;
+        TrisIndex node;
 
         uint32_t face, base;
         for (uint32_t h = startHeight; h < endHeight; h++) {   // z
             for (uint32_t w = startWidth; w < endWidth; w++) { // x
                 face = ((h * totalHeight) + w);
                 base = face * 3;
-                pNode->add(_vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
+                node.add(_vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
                 contador++;
             }
         }
@@ -216,16 +216,12 @@ void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
             startWidth = endWidth;
         }
 
-        if (pNode->size() == 0) {
-            delete pNode;
-            pNode = nullptr;
+        if (node.size() != 0)
+            vNodes.push_back(node);
+        else
             done = true;
-            // SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "shit!!!");
-            continue;
-        }
 
-        vNodes.push_back(pNode);
-        // pNode->debugDados();
+        // node.debugDados();
     }
 }
 

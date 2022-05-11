@@ -44,7 +44,7 @@ template <class T> void swapFace(T& a, T& b) {
 // }
 
 BSPTreeNode* BspTree::create(std::vector<VertexData>& _vVertexIn, std::list<Triangle*>& _vTriangleIn, std::vector<VertexData>& _vVertexOut,
-                             VecPrtTrisIndex& vpLeafOut) {
+                             std::vector<TrisIndex>& vpLeafOut) {
 
     this->vVertex = std::move(_vVertexIn);
 
@@ -274,19 +274,18 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
 void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTriangle) {
 
-    TrisIndex* pLeaf = new TrisIndex(); // Renderable3D* pLeaf = new Renderable3D();
-
+    TrisIndex leaf;
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();
         listConvexTriangle.pop_back();
-        pLeaf->add(convPoly->p[TRI_PA], convPoly->p[TRI_PB], convPoly->p[TRI_PC]);
+        leaf.add(convPoly->p[TRI_PA], convPoly->p[TRI_PB], convPoly->p[TRI_PC]);
 
         delete convPoly;
         convPoly = nullptr;
     }
 
     tree->leafIndex = vpLeaf.size();
-    vpLeaf.push_back(pLeaf);
+    vpLeaf.push_back(leaf);
 
     tree->isSolid = false;
     tree->isLeaf = true;

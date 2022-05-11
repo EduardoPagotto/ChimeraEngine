@@ -60,10 +60,8 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
             pugi::xml_node nFPS = getExtra(node, "FPS");
             if (nFPS != nullptr) {
 
-                // nFPS.child("pos").text().as_float();
-                // nFPS.child("up").text().as_float();
-                glm::vec3 pos;
-                glm::vec3 up;
+                glm::vec3 pos = textToVec3(nFPS.child("pos").text().as_string());
+                glm::vec3 up = textToVec3(nFPS.child("up").text().as_string());
                 float yaw = nFPS.child("yaw").text().as_float();
                 float pitch = nFPS.child("pitch").text().as_float();
 

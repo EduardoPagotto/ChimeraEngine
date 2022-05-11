@@ -17,12 +17,14 @@ void ColladaLight::create(Entity& entity, pugi::xml_node nodeLight) { // FIXME: 
         if (name == "point") {
             std::string color = lTec.child("color").text().as_string();
             lc.light->setDiffuse(textToVec4(color));
+            lc.light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)); // FIXME: remover depois
             lc.light->setType(LightType::POSITIONAL);
 
         } else if (name == "directional") {
             // TODO: implementar
             std::string color = lTec.child("color").text().as_string();
             lc.light->setDiffuse(textToVec4(color));
+            lc.light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)); // FIXME: remover depois
             lc.light->setType(LightType::DIRECTIONAL);
         }
     }

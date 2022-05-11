@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
 
 int main(int argn, char** argv) {
@@ -6,6 +7,11 @@ int main(int argn, char** argv) {
     try {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
+
+        // Scene scene;
+
+        // ColladaDom dom = loadFileCollada("./samples/terrain/terrain_level.xml");
+        // colladaRegistryLoad(dom, scene.getRegistry());
 
         Engine engine(new CanvasGL("Chimera", 1200, 600));
         Game* game = new Game(&engine);

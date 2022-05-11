@@ -1,5 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_images>
+        <image id="grid2_png" name="grid2_png">
+            <init_from>./assets/textures/grid2.png</init_from>
+        </image>
+    </library_images>
+    <library_effects>
+        <effect id="Shade01-effect">
+            <profile_GLSL>
+                <technique sid="MeshNoMat">
+                    <include sid="VP_Shade01" url="file://./assets/shaders/MeshNoMat.vert"/>
+                    <include sid="FP_Shade01" url="file://./assets/shaders/MeshNoMat.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="VP_Shade01">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="FP_Shade01">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+        </effect>
+        <effect id="MaterialHeightMap-effect">
+            <profile_COMMON>
+                <newparam sid="grid2_png-surface">
+                    <surface type="2D">
+                        <init_from>grid2_png</init_from>
+                    </surface>
+                </newparam>
+                <newparam sid="grid2_png-sampler">
+                    <sampler2D>
+                        <source>grid2_png-surface</source>
+                    </sampler2D>
+                </newparam>
+                <technique sid="common">
+                    <phong>
+                        <emission>
+                            <color sid="emission">0 0 0 1</color>
+                        </emission>
+                        <ambient>
+                            <color sid="ambient">0 0 0 1</color>
+                        </ambient>
+                        <diffuse>
+                            <texture texture="grid2_png-sampler"/>
+                        </diffuse>
+                        <specular>
+                            <color sid="specular">0.125 0.125 0.125 1</color>
+                        </specular>
+                        <shininess>
+                            <float sid="shininess">50</float>
+                        </shininess>
+                        <index_of_refraction>
+                            <float sid="index_of_refraction">1</float>
+                        </index_of_refraction>
+                    </phong>
+                </technique>
+            </profile_COMMON>
+            <profile_GLSL>
+                <technique sid="MeshFullShadow">
+                    <include sid="VP_Shade02" url="file://./assets/shaders/MeshFullShadow.vert"/>
+                    <include sid="FP_Shade02" url="file://./assets/shaders/MeshFullShadow.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="VP_Shade02">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="FP_Shade02">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+        </effect>
+    </library_effects>
+    <library_materials>
+        <material id="MaterialHeightMap" name="MaterialHeightMap">
+            <instance_effect url="#MaterialHeightMap-effect">
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
+            </instance_effect>
+        </material>
+    </library_materials>
     <library_cameras>
         <camera id="Camera-Test" name="Camera.001">
             <optics>
@@ -24,24 +104,18 @@
             </extra>
         </camera>
     </library_cameras>
-    <library_effects>
-        <effect id="Shade01-effect">
-            <profile_GLSL>
-                <technique sid="MeshNoMat">
-                    <include sid="VP_Shade01" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="FP_Shade01" url="file://./assets/shaders/MeshNoMat.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="VP_Shade01">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="FP_Shade01">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
-        </effect>
-    </library_effects>
+    <library_lights>
+        <light id="luz01-light" name="Lamp.001">
+            <technique_common>
+                <point>
+                    <color sid="color">1 1 1</color>
+                    <constant_attenuation>1</constant_attenuation>
+                    <linear_attenuation>0</linear_attenuation>
+                    <quadratic_attenuation>5.91716e-5</quadratic_attenuation>
+                </point>
+            </technique_common>
+        </light>
+    </library_lights>
     <library_visual_scenes>
         <visual_scene id="Scene" name="Scene">
             <node id="Cubo" name="Cubo" type="NODE">
@@ -55,18 +129,27 @@
                     </technique>
                 </extra>
             </node>
+            <node id="HeighMap" name="HeighMap.001" type="NODE">
+                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+                <extra>
+                    <technique profile="chimera">
+                        <external_height target="./assets/heightmaps/terrain3.jpg" square_x="32" square_y="32"/>
+                        <size>1000.0 200.0 1000.0</size>
+                        <bind_material>
+                            <technique_common>
+                                <instance_material symbol="MaterialHeightMap" target="#MaterialHeightMap"/>
+                            </technique_common>
+                        </bind_material>
+                    </technique>
+                </extra>
+            </node>
             <node id="Camera" name="Camera" type="NODE">
                 <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>
-                <instance_camera url="#Camera-Test">
-                    <extra>
-                        <technique profile="chimera">
-                            <orbital>
-                                <min>1.5</min>
-                                <max>80.0</max>
-                            </orbital>
-                        </technique>
-                    </extra>
-                </instance_camera>
+                <instance_camera url="#Camera-Test"/>
+            </node>
+            <node id="luz01" name="luz01" type="NODE">
+                <matrix sid="transform">-0.1733842 -0.7895962 0.5886219 3.166558 0.9833067 -0.1052982 0.1483921 -3.557333 -0.05518902 0.6045247 0.7946723 8.628012 0 0 0 1</matrix>
+                <instance_light url="#luz01-light"/>
             </node>
         </visual_scene>
     </library_visual_scenes>
@@ -74,7 +157,7 @@
         <instance_visual_scene url="#Scene"/>
         <extra>
             <technique profile="chimera">
-                <canvas id="main_canvas" name="main_canvas" title="simples" with="800" height="640" full="0"/>
+                <canvas id="main_canvas" name="main_canvas" title="terrain" with="800" height="640" full="0"/>
             </technique>
         </extra>
     </scene>

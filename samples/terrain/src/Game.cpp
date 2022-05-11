@@ -48,7 +48,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
 
         Shader& shader = renderableEntity.addComponent<Shader>();
         MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
-        Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
+        MeshComponent& mc = renderableEntity.addComponent<MeshComponent>();
 
         std::unordered_map<GLenum, std::string> shadeData;
         shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshFullShadow.frag";
@@ -62,19 +62,13 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
                                       TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
         material.material->init();
 
-        Mesh mesh;
-
         LoadHeightMap loader(32, 32);
-        loader.getMesh("./assets/heightmaps/terrain3.jpg", mesh, glm::vec3(1000.0, 200.0, 1000.0));
+        loader.getMesh("./assets/heightmaps/terrain3.jpg", *mc.mesh, glm::vec3(1000.0, 200.0, 1000.0));
         // loader.getMesh("./assets/heightmaps/heightmap_16x16.png", mesh, glm::vec3(100.0, 30.0, 100.0));
         // loader.getMesh("./assets/heightmaps/heightmap_4x4.png", mesh, glm::vec3(1000.0, 10.0, 1000.0));
-        loader.split(mesh.iPoint);
-
-        std::vector<VertexData> vertexDataIn;
-        vertexDataFromMesh(&mesh, vertexDataIn);
-
-        RenderableArray* r = new RenderableArray(loader.vNodes, vertexDataIn);
-        rc.renderable = r;
+        loader.split(mc.mesh->iPoint);
+        mc.vTrisIndex = loader.vNodes;
+        mc.type = MeshType::ARRAY;
     }
     {
         // Entidade mesh

@@ -7,6 +7,7 @@
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/VertexData.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -103,42 +104,50 @@ void Scene::onAttach() {
             }
 
             // Se nja nao foi inicializado um Renderable3dComponent ao mesh
-            if (!entity.hasComponent<Renderable3dComponent>()) {
-
-                // Transforma Mesh em VertexData comprimindo-o
-                std::vector<Chimera::VertexData> renderData;
-                vertexDataFromMesh(mesh.mesh, renderData);
-                std::vector<uint32_t> index;
-                std::vector<Chimera::VertexData> vertexDataOut;
-                vertexDataIndexCompile(renderData, vertexDataOut, index);
-
-                // Create VAO, VBO and IBO
-                VertexArray* vao = new VertexArray();
-                vao->bind();
-
-                VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
-                vbo->bind();
-
-                BufferLayout layout;
-                layout.push(3, GL_FLOAT, sizeof(float), false);
-                layout.push(3, GL_FLOAT, sizeof(float), false);
-                layout.push(2, GL_FLOAT, sizeof(float), false);
-
-                vbo->setLayout(layout);
-                vbo->setData(&vertexDataOut[0], vertexDataOut.size());
-                vbo->unbind();
-                vao->push(vbo);
-
-                vao->unbind();
-
-                glm::vec3 min, max, size;
-                vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
-
-                IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
-                Renderable3D* r = new Renderable3D(vao, ibo, AABB(min, max));
+            if (!entity.hasComponent<Renderable3dComponent>()) { // FIXME: Depoin do BSP mudar o teste ja que todos serao criados aqui!!!
 
                 Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
-                rc.renderable = r;
+
+                // Transforma Mesh em VertexData comprimindo-o
+                std::vector<VertexData> renderData;
+                vertexDataFromMesh(mesh.mesh, renderData);
+
+                if (mesh.type == MeshType::SIMPLE) {
+
+                    std::vector<uint32_t> index;
+                    std::vector<VertexData> vertexDataOut;
+                    vertexDataIndexCompile(renderData, vertexDataOut, index);
+
+                    // Create VAO, VBO and IBO
+                    VertexArray* vao = new VertexArray();
+                    vao->bind();
+
+                    VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
+                    vbo->bind();
+
+                    BufferLayout layout;
+                    layout.push(3, GL_FLOAT, sizeof(float), false);
+                    layout.push(3, GL_FLOAT, sizeof(float), false);
+                    layout.push(2, GL_FLOAT, sizeof(float), false);
+
+                    vbo->setLayout(layout);
+                    vbo->setData(&vertexDataOut[0], vertexDataOut.size());
+                    vbo->unbind();
+                    vao->push(vbo);
+
+                    vao->unbind();
+
+                    glm::vec3 min, max, size;
+                    vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
+
+                    IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
+                    Renderable3D* r = new Renderable3D(vao, ibo, AABB(min, max));
+
+                    rc.renderable = r;
+                } else if (mesh.type == MeshType::ARRAY) {
+
+                    rc.renderable = new RenderableArray(mesh.vTrisIndex, renderData);
+                }
             }
 
             if (entity.hasComponent<TransComponent>()) {

@@ -22,6 +22,7 @@ void ColladaHeightMap::create(Entity& entity, pugi::xml_node geo) {
     LoadHeightMap loader(32, 32);
     loader.getMesh(target, *mc.mesh, size);
     loader.split(mc.mesh->iPoint);
+    mc.vTrisIndex = loader.vNodes;
     mc.type = MeshType::ARRAY;
 }
 } // namespace Chimera

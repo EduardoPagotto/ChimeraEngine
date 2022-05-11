@@ -12,8 +12,6 @@
 
 Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
     using namespace Chimera;
-
-    // using namespace Chimera;
     {
         // injeta controlador de camera
         auto view1 = scene->getRegistry().get().view<CameraComponent>();
@@ -25,38 +23,6 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 
     CameraComponent& cc = scene->getRegistry().findComponent<CameraComponent>("Camera");
     cam = (ICamera3D*)cc.camera;
-
-    {
-        // entidade heightmap
-        Entity renderableEntity = scene->getRegistry().createEntity("Heightmap Entity");
-
-        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
-        tc.trans = new Transform();
-
-        Shader& shader = renderableEntity.addComponent<Shader>();
-        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
-        MeshComponent& mc = renderableEntity.addComponent<MeshComponent>();
-
-        std::unordered_map<GLenum, std::string> shadeData;
-        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshFullShadow.frag";
-        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
-        ShaderManager::load("MeshFullShadow", shadeData, shader);
-
-        material.material->setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
-        material.material->setShine(50.0f);
-
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
-                                      TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
-        material.material->init();
-
-        LoadHeightMap loader(32, 32);
-        loader.getMesh("./assets/heightmaps/terrain3.jpg", *mc.mesh, glm::vec3(1000.0, 200.0, 1000.0));
-        // loader.getMesh("./assets/heightmaps/heightmap_16x16.png", mesh, glm::vec3(100.0, 30.0, 100.0));
-        // loader.getMesh("./assets/heightmaps/heightmap_4x4.png", mesh, glm::vec3(1000.0, 10.0, 1000.0));
-        loader.split(mc.mesh->iPoint);
-        mc.vTrisIndex = loader.vNodes;
-        mc.type = MeshType::ARRAY;
-    }
 
     engine->pushState(this);
     engine->pushState(scene);

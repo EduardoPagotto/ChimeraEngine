@@ -10,11 +10,25 @@
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Engine* engine) : engine(engine) {
+Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
     using namespace Chimera;
+
+    // using namespace Chimera;
+    // {
+    //     // injeta controlador de camera
+    //     auto view1 = scene->getRegistry().get().view<CameraComponent>();
+    //     for (auto entity : view1) {
+    //         Entity e = Entity{entity, &scene->getRegistry()};
+    //         e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+    //     }
+    // }
+
+    // CameraComponent& cc = scene->getRegistry().findComponent<CameraComponent>("Camera");
+    // cam = (ICamera3D*)cc.camera;
+
     {
         // Cria entidade de camera
-        Entity ce = activeScene.getRegistry().createEntity("Camera Entity");
+        Entity ce = scene->getRegistry().createEntity("Camera Entity");
         TransComponent& tc = ce.addComponent<TransComponent>();
         tc.trans = new Transform();
 
@@ -28,7 +42,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
     {
         // Cria entidade de luz unica global!
-        Entity le = activeScene.getRegistry().createEntity("Light Entity");
+        Entity le = scene->getRegistry().createEntity("Light Entity");
         TransComponent& tc = le.addComponent<TransComponent>();
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0, 400, 0));
@@ -41,7 +55,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
     {
         // entidade heightmap
-        Entity renderableEntity = activeScene.getRegistry().createEntity("Heightmap Entity");
+        Entity renderableEntity = scene->getRegistry().createEntity("Heightmap Entity");
 
         TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
@@ -72,7 +86,7 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     }
     {
         // Entidade mesh
-        Entity renderableEntity = activeScene.getRegistry().createEntity("Zoltam Entity");
+        Entity renderableEntity = scene->getRegistry().createEntity("Zoltam Entity");
         TransComponent& tc = renderableEntity.addComponent<TransComponent>();
         tc.trans = new Transform();
         tc.trans->setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
@@ -93,8 +107,9 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
         if (matFile.size() > 0)
             wavefrontMtlLoad(matFile, material.material);
     }
-    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-    engine->pushState(&activeScene);
+
+    engine->pushState(this);
+    engine->pushState(scene);
 }
 
 Game::~Game() {}

@@ -118,8 +118,9 @@
     </library_lights>
     <library_visual_scenes>
         <visual_scene id="Scene" name="Scene">
+            <!--
             <node id="Cubo" name="Cubo" type="NODE">
-                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+                <matrix sid="transform">1 0 0 0 0 1 0 200.0 0 0 1 0 0 0 0 1</matrix>
                 <extra>
                     <technique profile="chimera">
                         <external_obj target="./assets/models/cubo2.obj"/>
@@ -148,16 +149,16 @@
                 <instance_camera url="#Camera-Test"/>
             </node>
             <node id="luz01" name="luz01" type="NODE">
-                <matrix sid="transform">-0.1733842 -0.7895962 0.5886219 3.166558 0.9833067 -0.1052982 0.1483921 -3.557333 -0.05518902 0.6045247 0.7946723 8.628012 0 0 0 1</matrix>
+                <matrix sid="transform">1 0 0 0 0 1 0 400.0 0 0 1 0 0 0 0 1</matrix>
                 <instance_light url="#luz01-light"/>
-            </node>
+            </node>-->
         </visual_scene>
     </library_visual_scenes>
     <scene>
         <instance_visual_scene url="#Scene"/>
         <extra>
             <technique profile="chimera">
-                <canvas id="main_canvas" name="main_canvas" title="terrain" with="800" height="640" full="0"/>
+                <canvas id="main_canvas" name="main_canvas" title="terrain" with="1200" height="600" full="0"/>
             </technique>
         </extra>
     </scene>

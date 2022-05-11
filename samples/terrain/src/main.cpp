@@ -8,15 +8,18 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Iniciado");
 
-        // Scene scene;
+        Scene scene;
 
-        // ColladaDom dom = loadFileCollada("./samples/terrain/terrain_level.xml");
-        // colladaRegistryLoad(dom, scene.getRegistry());
+        ColladaDom dom = loadFileCollada("./samples/terrain/terrain_level.xml");
+        colladaRegistryLoad(dom, scene.getRegistry());
+        // colladaRenderLoad(dom, scene.getRegistry());
 
-        Engine engine(new CanvasGL("Chimera", 1200, 600));
-        Game* game = new Game(&engine);
+        Engine engine(scene.getCanvas());
 
-        engine.pushState(game);
+        Game* game = new Game(&scene, &engine);
+
+        Collada::destroy(); // clean loader
+
         engine.run();
         delete game;
 

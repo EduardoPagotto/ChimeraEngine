@@ -12,9 +12,11 @@ void ColladaWaveFront::create(Entity& entity, pugi::xml_node geo) {
 
     MeshComponent& eMesh = entity.addComponent<MeshComponent>();
 
+    TagComponent& tag = entity.getComponent<TagComponent>();
+
     eMesh.mesh = new Mesh();
-    eMesh.tag.id = geo.attribute("id").value();
-    eMesh.tag.tag = geo.attribute("name").value();
+    eMesh.tag.id = tag.id + "_obj";
+    eMesh.tag.tag = tag.tag + "_obj";
     eMesh.tag.serial = Collada::getNewSerial();
 
     std::string target = geo.attribute("target").value();

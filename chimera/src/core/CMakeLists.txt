@@ -54,6 +54,7 @@ set (SourcesCore Registry.cpp
 				 collada/ColladaGeometry.cpp
 				 collada/colladaLoad.cpp
 				 collada/ColladaWaveFront.cpp
+				 partition/LoadHeightMap.cpp
 				 Wavefront.cpp)
 
 # define os includes

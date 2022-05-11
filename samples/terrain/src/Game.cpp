@@ -1,12 +1,12 @@
 #include "Game.hpp"
 #include "chimera/core/Wavefront.hpp"
+#include "chimera/core/partition/LoadHeightMap.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraFPS.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderableArray.hpp"
-#include "chimera/render/partition/LoadHeightMap.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 

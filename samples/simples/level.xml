@@ -46,7 +46,7 @@
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                 <extra>
                     <technique profile="chimera">
-                        <external_obj id="Cubo_obj" name="Cubo_obj" target="./assets/models/cubo2.obj"/>
+                        <external_obj target="./assets/models/cubo2.obj"/>
                         <instance_effect url="#Shade01-effect">
                             <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
                         </instance_effect>

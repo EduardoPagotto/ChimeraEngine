@@ -45,11 +45,14 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
 
                 min = orbital.child("min").text().as_float();
                 max = orbital.child("max").text().as_float();
+                float yaw = orbital.child("yaw").text().as_float();
+                float pitch = orbital.child("pitch").text().as_float();
+                glm::vec3 up = textToVec3(orbital.child("up").text().as_string());
 
                 TransComponent& trans = entity.getComponent<TransComponent>();
                 glm::vec3 pos = trans.trans->getPosition();
 
-                cc.camera = new CameraOrbit(pos, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.0);
+                cc.camera = new CameraOrbit(pos, up, yaw, pitch);
                 ((CameraOrbit*)cc.camera)->setLimits(min, max);
 
                 ((ICamera3D*)cc.camera)->setFov(fov);

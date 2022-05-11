@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/core/Wavefront.hpp"
+#include "chimera/core/partition/Wavefront.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraOrbit.hpp"
 #include "chimera/core/visible/TextureManager.hpp"

@@ -1,6 +1,6 @@
 #include "Game.hpp"
-#include "chimera/core/Wavefront.hpp"
 #include "chimera/core/partition/LoadHeightMap.hpp"
+#include "chimera/core/partition/Wavefront.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/CameraFPS.hpp"
 #include "chimera/core/visible/Material.hpp"

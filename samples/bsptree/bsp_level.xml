@@ -22,7 +22,7 @@
                 </technique>
             </profile_GLSL>
         </effect>
-        <effect id="MaterialHeightMap-effect">
+        <effect id="Material_VoxelC-effect">
             <profile_COMMON>
                 <newparam sid="grid2_png-surface">
                     <surface type="2D">
@@ -74,8 +74,8 @@
         </effect>
     </library_effects>
     <library_materials>
-        <material id="MaterialHeightMap" name="MaterialHeightMap">
-            <instance_effect url="#MaterialHeightMap-effect">
+        <material id="Material_VoxelC" name="Material_VoxelC">
+            <instance_effect url="#Material_VoxelC-effect">
                 <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
             </instance_effect>
         </material>
@@ -119,21 +119,57 @@
                     </technique>
                 </extra>
             </node>
-            <!--
-            <node id="HeighMap" name="HeighMap.001" type="NODE">
+
+            <node id="Voxel_cube" name="Voxel_cube.001" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                 <extra>
                     <technique profile="chimera">
-                        <external_height target="./assets/heightmaps/terrain3.jpg" square_x="32" square_y="32"/>
-                        <size>1000.0 200.0 1000.0</size>
+                        <external_cube width="7" height="7">
+                            <floor>
+                                <p>1111111</p>
+                                <p>1173711</p>
+                                <p>1633361</p>
+                                <p>1336331</p>
+                                <p>1371731</p>
+                                <p>1371731</p>
+                                <p>1111111</p>
+                            </floor>
+                            <floor>
+                                <p>1111111</p>
+                                <p>11   11</p>
+                                <p>1     1</p>
+                                <p>1     1</p>
+                                <p>1  1  1</p>
+                                <p>1  3  1</p>
+                                <p>1111111</p>
+                            </floor>
+                            <floor>
+                                <p>1111111</p>
+                                <p>13   31</p>
+                                <p>1    41</p>
+                                <p>1     1</p>
+                                <p>1  3  1</p>
+                                <p>1     1</p>
+                                <p>1111111</p>
+                            </floor>
+                            <floor>
+                                <p>1111111</p>
+                                <p>1746471</p>
+                                <p>1444411</p>
+                                <p>1744471</p>
+                                <p>1444441</p>
+                                <p>1746471</p>
+                                <p>1111111</p>
+                            </floor>
+                        </external_cube>
                         <bind_material>
                             <technique_common>
-                                <instance_material symbol="MaterialHeightMap" target="#MaterialHeightMap"/>
+                                <instance_material symbol="Material_VoxelC" target="#Material_VoxelC"/>
                             </technique_common>
                         </bind_material>
                     </technique>
                 </extra>
-            </node> -->
+            </node>
             <node id="Camera" name="Camera" type="NODE">
                 <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>
                 <instance_camera url="#Camera-Test"/>

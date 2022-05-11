@@ -14,45 +14,18 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
     using namespace Chimera;
 
     // using namespace Chimera;
-    // {
-    //     // injeta controlador de camera
-    //     auto view1 = scene->getRegistry().get().view<CameraComponent>();
-    //     for (auto entity : view1) {
-    //         Entity e = Entity{entity, &scene->getRegistry()};
-    //         e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-    //     }
-    // }
-
-    // CameraComponent& cc = scene->getRegistry().findComponent<CameraComponent>("Camera");
-    // cam = (ICamera3D*)cc.camera;
-
     {
-        // Cria entidade de camera
-        Entity ce = scene->getRegistry().createEntity("Camera Entity");
-        TransComponent& tc = ce.addComponent<TransComponent>();
-        tc.trans = new Transform();
-
-        CameraComponent& cc = ce.addComponent<CameraComponent>();
-        // cc.camera = new CameraOrbit(glm::vec3(0.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-        cc.camera = new CameraFPS(glm::vec3(20.0, 200.0, 0.0), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-        cam = (ICamera3D*)cc.camera;
-
-        // Adiciona um controller (Compostamento) a camera e vincula entidades ao mesmo
-        ce.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+        // injeta controlador de camera
+        auto view1 = scene->getRegistry().get().view<CameraComponent>();
+        for (auto entity : view1) {
+            Entity e = Entity{entity, &scene->getRegistry()};
+            e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+        }
     }
-    {
-        // Cria entidade de luz unica global!
-        Entity le = scene->getRegistry().createEntity("Light Entity");
-        TransComponent& tc = le.addComponent<TransComponent>();
-        tc.trans = new Transform();
-        tc.trans->setPosition(glm::vec3(0, 400, 0));
 
-        LightComponent& lc = le.addComponent<LightComponent>();
-        Light* light = new Light();
-        light->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
-        lc.light = light;
-    }
+    CameraComponent& cc = scene->getRegistry().findComponent<CameraComponent>("Camera");
+    cam = (ICamera3D*)cc.camera;
+
     {
         // entidade heightmap
         Entity renderableEntity = scene->getRegistry().createEntity("Heightmap Entity");
@@ -83,29 +56,6 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         loader.split(mc.mesh->iPoint);
         mc.vTrisIndex = loader.vNodes;
         mc.type = MeshType::ARRAY;
-    }
-    {
-        // Entidade mesh
-        Entity renderableEntity = scene->getRegistry().createEntity("Zoltam Entity");
-        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
-        tc.trans = new Transform();
-        tc.trans->setPosition(glm::vec3(0.0f, 200.0f, 0.0f));
-
-        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
-        material.material->setDefaultEffect(); // FIXME: removido para evitar msg de erro, ja que shader nao tem variavel!!!
-        material.material->setShine(50.0f);
-
-        Shader& shader = renderableEntity.addComponent<Shader>();
-        std::unordered_map<GLenum, std::string> shadeData;
-        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshFullShadow.frag";
-        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
-        ShaderManager::load("MeshFullShadow", shadeData, shader); // colocar shader em material
-
-        MeshComponent& mesh = renderableEntity.addComponent<MeshComponent>();
-        std::string matFile;
-        wavefrontObjLoad("./assets/models/cubo2.obj", mesh.mesh, matFile);
-        if (matFile.size() > 0)
-            wavefrontMtlLoad(matFile, material.material);
     }
 
     engine->pushState(this);

@@ -91,6 +91,11 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
             ColladaWaveFront cf(colladaDom, "#vazio");
             cf.create(entity, nObj);
         }
+
+        const pugi::xml_node nHeight = getExtra(n, "external_height");
+        if (nHeight) {
+            // TODO: continuar aqui
+        }
     }
 }
 

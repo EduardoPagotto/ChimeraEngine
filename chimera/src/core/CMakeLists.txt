@@ -56,7 +56,9 @@ set (SourcesCore Registry.cpp
 				 collada/ColladaWaveFront.cpp
 				 collada/ColladaHeightMap.cpp
 				 partition/LoadHeightMap.cpp
-				 partition/Wavefront.cpp)
+				 partition/Wavefront.cpp
+				 partition/Cube.cpp 
+				 partition/Maze.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}

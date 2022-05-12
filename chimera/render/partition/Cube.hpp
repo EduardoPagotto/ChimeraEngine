@@ -1,7 +1,7 @@
 #pragma once
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/core/space/Triangle.hpp"
-#include "chimera/render/VertexData.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -34,7 +34,7 @@ class Cube : public AABB {
     Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
     void setNeighbor(DEEP deep, CARDINAL card, Cube* pCube);
-    void create(std::vector<VertexData>* vl, std::vector<Triangle>* tl);
+    void create(Mesh* mesh);
 
   private:
     void newWall();
@@ -63,7 +63,6 @@ class Cube : public AABB {
     Cube* pUp;
     Cube* pDown;
     SPACE space;
-    std::vector<VertexData>* vl;
-    std::vector<Triangle>* tl;
+    Mesh* mesh;
 };
 } // namespace Chimera

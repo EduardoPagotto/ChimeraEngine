@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-Maze::Maze(const char filename[]) : sizeBlock(10.0f), indexPointCount(0) {
+Maze::Maze(const char filename[], Mesh* mesh) : sizeBlock(10.0f), mesh(mesh) {
 
     char buffer[1024] = {0};
 
@@ -143,15 +143,9 @@ Cube* Maze::getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos) {
 void Maze::createMap() {
     // carrega posicoes, texturas, e seq textura defaults do cubo
     initCubeBase();
-    for (auto pCube : this->vpCube) {
-        pCube->create(&vertexData, &this->trisList);
-    }
+    for (auto pCube : this->vpCube)
+        pCube->create(mesh);
 
-    for (Triangle t : this->trisList) {
-        vIndex.push_back(t.p[0]);
-        vIndex.push_back(t.p[1]);
-        vIndex.push_back(t.p[2]);
-    }
     // limpa dados de criacao do cubo base
     cleanupCubeBase();
     // limpas cubos de contrucao e vetor de cubos

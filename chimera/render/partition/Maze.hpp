@@ -7,13 +7,9 @@ namespace Chimera {
 
 class Maze {
   public:
-    Maze(const char filename[]);
+    Maze(const char filename[], Mesh* mesh);
     virtual ~Maze();
-
     void createMap();
-
-    std::vector<VertexData> vertexData;
-    std::vector<unsigned int> vIndex;
 
   private:
     inline uint32_t getIndexArrayPos(const glm::ivec3& pos) const {
@@ -29,11 +25,10 @@ class Maze {
 
     Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos);
 
-    glm::ivec3 size;
     float sizeBlock;
+    glm::ivec3 size;
     glm::vec3 halfBlock;
-    uint32_t indexPointCount;
     std::vector<Cube*> vpCube;
-    std::vector<Triangle> trisList;
+    Mesh* mesh;
 };
 } // namespace Chimera

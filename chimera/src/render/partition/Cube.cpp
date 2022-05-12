@@ -6,17 +6,6 @@ static std::vector<glm::uvec3> tVertIndex;
 static std::vector<glm::uvec3> tTexIndex;
 static std::vector<glm::vec2> tTexSeq;
 
-void triangleCalcNormal(std::vector<VertexData>& vertexList, Triangle& t) {
-
-    glm::vec3 u = vertexList[t.p[TRI_PB]].point - vertexList[t.p[TRI_PA]].point;
-    glm::vec3 v = vertexList[t.p[TRI_PC]].point - vertexList[t.p[TRI_PA]].point;
-    t.normal = glm::normalize(glm::cross(u, v));
-
-    vertexList[t.p[TRI_PA]].normal = t.normal;
-    vertexList[t.p[TRI_PB]].normal = t.normal;
-    vertexList[t.p[TRI_PC]].normal = t.normal;
-}
-
 void initCubeBase() {
     tVertIndex.push_back(glm::uvec3(0, 1, 3)); // f00 N0
     tVertIndex.push_back(glm::uvec3(1, 3, 2)); // f01 N1
@@ -152,23 +141,41 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
 
     uint32_t ia, ib, ic;
     if (!clockwise) {
-        ia = tl->size() * 3;
+        ia = mesh->iPoint.size(); // tl->size() * 3;
         ib = ia + 1;
         ic = ib + 1;
     } else {
-        ic = tl->size() * 3;
+        ic = mesh->iPoint.size(); // tl->size() * 3;
         ib = ic + 1;
         ia = ib + 1;
     }
     // FIXME: tem algo errado aqui !!!!
-    // glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
-    vl->push_back({va, glm::vec3(0.0f), ta}); // normal PA calc below
-    vl->push_back({vb, glm::vec3(0.0f), tb}); // normal PB calc below
-    vl->push_back({vc, glm::vec3(0.0f), tc}); // normal PC calc below
+    // // glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
+    glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
 
-    Triangle t1 = Triangle(ia, ib, ic, glm::vec3(0.0f), false);
-    triangleCalcNormal(*vl, t1);
-    tl->push_back(t1);
+    mesh->point.push_back(va);
+    mesh->point.push_back(vb);
+    mesh->point.push_back(vc);
+
+    mesh->uv.push_back(ta);
+    mesh->uv.push_back(tb);
+    mesh->uv.push_back(tc);
+
+    mesh->normal.push_back(vn);
+    mesh->normal.push_back(vn);
+    mesh->normal.push_back(vn);
+
+    mesh->iPoint.push_back(ia);
+    mesh->iPoint.push_back(ib);
+    mesh->iPoint.push_back(ic);
+
+    mesh->iNormal.push_back(ia);
+    mesh->iNormal.push_back(ib);
+    mesh->iNormal.push_back(ic);
+
+    mesh->iUv.push_back(ia);
+    mesh->iUv.push_back(ib);
+    mesh->iUv.push_back(ic);
 }
 
 CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
@@ -569,9 +576,8 @@ void Cube::newRampNSEW(SPACE space) {
     }
 }
 
-void Cube::create(std::vector<VertexData>* vl, std::vector<Triangle>* tl) {
-    this->vl = vl;
-    this->tl = tl;
+void Cube::create(Mesh* mesh) {
+    this->mesh = mesh;
 
     SPACE val = this->getSpace();
     switch (val) {

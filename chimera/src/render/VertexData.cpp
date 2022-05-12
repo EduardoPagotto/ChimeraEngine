@@ -114,24 +114,24 @@ void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3
 
 void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {
 
-    if (m->singleIndex == false) {
+    if (m->serialized == false) {
         if (m->uv.size() > 0) {
-            for (uint32_t i = 0; i < m->iPoint.size(); i++) {
+            for (uint32_t i = 0; i < m->iPoint.size(); i++) { // Todos os indices tem mesmo tamanho mas diferentes
                 outData.push_back({m->point[m->iPoint[i]], m->normal[m->iNormal[i]], m->uv[m->iUv[i]]});
             }
         } else {
-            for (uint32_t i = 0; i < m->iPoint.size(); i++) {
+            for (uint32_t i = 0; i < m->iPoint.size(); i++) { // Todos os indices tem mesmo tamanho mas diferentes
                 outData.push_back({m->point[m->iPoint[i]], m->normal[m->iNormal[i]], glm::vec2(0.0, 0.0)});
             }
         }
     } else {
         // vertices podem ser != 3 !!! sequencie!!!
         if (m->uv.size() > 0) {
-            for (uint32_t i = 0; i < m->point.size(); i++) {
+            for (uint32_t i = 0; i < m->point.size(); i++) { // point, normal e UV sao sequenciais sem indice
                 outData.push_back({m->point[i], m->normal[i], m->uv[i]});
             }
         } else {
-            for (uint32_t i = 0; i < m->point.size(); i++) {
+            for (uint32_t i = 0; i < m->point.size(); i++) { // point, normal e UV sao sequenciais sem indice
                 outData.push_back({m->point[i], m->normal[i], glm::vec2(0.0, 0.0)});
             }
         }

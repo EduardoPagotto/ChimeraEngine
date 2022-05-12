@@ -137,7 +137,7 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
             mesh->iUv.push_back(indicesComp[l_contador]);
     }
 
-    mesh->singleIndex = false;
+    mesh->serialized = false;
 
     file.close();
 }

@@ -46,13 +46,16 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         material.material->init();
 
         // processa o Maze
-        Maze maze = Maze("./assets/maps/maze7.txt");
+        Mesh mesh;
+        Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
         maze.createMap();
 
         // resultado da compressao do maze
         std::vector<uint32_t> vIndex;
         std::vector<VertexData> vVertexIndexed;
-        vertexDataReorder(maze.vertexData, maze.vIndex, vVertexIndexed, vIndex);
+        std::vector<VertexData> vVertexSerialized;
+        vertexDataFromMesh(&mesh, vVertexSerialized);
+        vertexDataIndexCompile(vVertexSerialized, vVertexIndexed, vIndex);
 
         // indexador triangular
         std::list<Triangle*> vTris;

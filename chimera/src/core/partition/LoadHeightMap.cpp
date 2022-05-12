@@ -157,7 +157,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
         }
     }
 
-    _mesh.singleIndex = true;
+    _mesh.serialized = true;
     meshDebug(&_mesh, false);
 
     this->width = pImage->w;

@@ -45,9 +45,9 @@ Maze::Maze(const char filename[]) : sizeBlock(10.0f), indexPointCount(0) {
             for (pos.x = 0; pos.x < this->size.x; pos.x++) {
                 Cube* pCube = this->vpCube[this->getIndexArrayPos(pos)];
 
-                Cube* pBefore = getCubeNeighbor(DEEP::BOTTOM, CARDINAL::NONE, pos);
+                Cube* pBefore = getCubeNeighbor(DEEP::DOWN, CARDINAL::NONE, pos);
                 if (pBefore != nullptr)
-                    pCube->setNeighbor(DEEP::BOTTOM, CARDINAL::NONE, pBefore);
+                    pCube->setNeighbor(DEEP::DOWN, CARDINAL::NONE, pBefore);
 
                 pBefore = getCubeNeighbor(DEEP::UP, CARDINAL::NONE, pos);
                 if (pBefore != nullptr)
@@ -91,7 +91,7 @@ glm::ivec3 Maze::getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist
         case DEEP::MIDDLE:
             val.y = pos.y;
             break;
-        case DEEP::BOTTOM:
+        case DEEP::DOWN:
             val.y = pos.y - dist.y;
         default:
             break;

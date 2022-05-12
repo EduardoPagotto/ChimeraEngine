@@ -47,7 +47,7 @@ void initCubeBase() {
     tVertIndex.push_back(glm::uvec3(5, 1, 0)); // f21 D1
     tVertIndex.push_back(glm::uvec3(1, 0, 4)); // f22 D2
     tVertIndex.push_back(glm::uvec3(0, 4, 5)); // f23 D3
-
+                                               //--
     tVertIndex.push_back(glm::uvec3(0, 5, 7)); // f24 DIA1
     tVertIndex.push_back(glm::uvec3(7, 2, 0)); // f25 DIA1
     tVertIndex.push_back(glm::uvec3(4, 1, 3)); // f26 DIA2
@@ -57,6 +57,7 @@ void initCubeBase() {
     tVertIndex.push_back(glm::uvec3(3, 2, 4)); // f29 RP NS
     tVertIndex.push_back(glm::uvec3(0, 4, 7)); // f30 RP EW
     tVertIndex.push_back(glm::uvec3(7, 3, 0)); // f31 RP EW
+
     tVertIndex.push_back(glm::uvec3(1, 0, 6)); // f32 RP SN
     tVertIndex.push_back(glm::uvec3(6, 7, 1)); // f33 RP SN
     tVertIndex.push_back(glm::uvec3(5, 1, 2)); // f34 RP WE
@@ -90,7 +91,7 @@ void cleanupCubeBase() {
 }
 
 Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max)
-    : AABB(min, max), pNorth(nullptr), pEast(nullptr), pSouth(nullptr), pWest(nullptr), pUp(nullptr), pBottom(nullptr) {
+    : AABB(min, max), pNorth(nullptr), pEast(nullptr), pSouth(nullptr), pWest(nullptr), pUp(nullptr), pDown(nullptr) {
 
     space = (caracter == 0x20) ? SPACE::EMPTY : (SPACE)(caracter - 0x30);
 }
@@ -105,8 +106,8 @@ void Cube::setNeighbor(DEEP deep, CARDINAL card, Cube* pCube) {
                 this->pUp = pCube;
         } break;
 
-        case DEEP::BOTTOM:
-            this->pBottom = pCube;
+        case DEEP::DOWN:
+            this->pDown = pCube;
             break;
 
         case DEEP::MIDDLE: {
@@ -181,8 +182,8 @@ CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
         case DEEP::MIDDLE:
             pVal = this;
             break;
-        case DEEP::BOTTOM:
-            pVal = this->pBottom;
+        case DEEP::DOWN:
+            pVal = this->pDown;
             break;
     }
 
@@ -220,8 +221,8 @@ bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
         case DEEP::MIDDLE:
             pVal = this;
             break;
-        case DEEP::BOTTOM:
-            pVal = this->pBottom;
+        case DEEP::DOWN:
+            pVal = this->pDown;
             break;
     }
 
@@ -262,22 +263,22 @@ bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
 
 void Cube::newWall() {
 
-    if ((this->pNorth != nullptr) && (this->pNorth->getSpace() == SPACE::WALL)) {
+    if ((this->pNorth != nullptr) && (this->pNorth->getSpace() == SPACE::SOLID)) {
         this->addFace(false, 0, 0);
         this->addFace(false, 2, 1);
     }
 
-    if ((this->pEast != nullptr) && (this->pEast->getSpace() == SPACE::WALL)) {
+    if ((this->pEast != nullptr) && (this->pEast->getSpace() == SPACE::SOLID)) {
         this->addFace(false, 4, 0);
         this->addFace(false, 6, 1);
     }
 
-    if ((this->pSouth != nullptr) && (this->pSouth->getSpace() == SPACE::WALL)) {
+    if ((this->pSouth != nullptr) && (this->pSouth->getSpace() == SPACE::SOLID)) {
         this->addFace(false, 8, 0);
         this->addFace(false, 10, 1);
     }
 
-    if ((this->pWest != nullptr) && (this->pWest->getSpace() == SPACE::WALL)) {
+    if ((this->pWest != nullptr) && (this->pWest->getSpace() == SPACE::SOLID)) {
         this->addFace(false, 12, 0);
         this->addFace(false, 14, 1);
     }
@@ -297,22 +298,22 @@ void Cube::newRamp(bool isFloor, CARDINAL card) {
 
     if (pWest != nullptr) {
         westWallDown = pWest->emptySpace();
-        westWallUp = (pWest->getSpace() == SPACE::WALL);
+        westWallUp = (pWest->getSpace() == SPACE::SOLID);
     }
 
     if (pEast != nullptr) {
         eastWallDown = pEast->emptySpace();
-        eastWallUp = (pEast->getSpace() == SPACE::WALL);
+        eastWallUp = (pEast->getSpace() == SPACE::SOLID);
     }
 
     if (pNorth != nullptr) {
         northWallDown = pNorth->emptySpace();
-        northWallUp = (pNorth->getSpace() == SPACE::WALL);
+        northWallUp = (pNorth->getSpace() == SPACE::SOLID);
     }
 
     if (pSouth != nullptr) {
         southWallDown = pSouth->emptySpace();
-        southWallUp = (pSouth->getSpace() == SPACE::WALL);
+        southWallUp = (pSouth->getSpace() == SPACE::SOLID);
     }
 
     if (isFloor) {
@@ -482,8 +483,8 @@ void Cube::newDiag() {
 void Cube::newFloor() {
 
     CARDINAL card = CARDINAL::NONE;
-    if ((this->pBottom != nullptr) && (this->pBottom->getSpace() == SPACE::DIAG))
-        card = this->emptyQuadrantDiag(DEEP::BOTTOM, true);
+    if ((this->pDown != nullptr) && (this->pDown->getSpace() == SPACE::DIAG))
+        card = this->emptyQuadrantDiag(DEEP::DOWN, true);
 
     this->newFlatFloorCeeling(true, card);
 }

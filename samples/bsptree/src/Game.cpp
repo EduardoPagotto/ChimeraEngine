@@ -39,23 +39,31 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
+        Mesh mesh;
+
+        std::string matFile;
+        wavefrontObjLoad("./assets/models/map02.obj", &mesh, matFile);
+        if (matFile.size() > 0) {
+            wavefrontMtlLoad(matFile, material.material);
+        }
+
         // material.setDefaultEffect();
         // material.setShine(50.0f);
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
-                                      TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
-        material.material->init();
+        // material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
+        //                               TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
+        // material.material->init();
 
         // processa o Maze
-        Mesh mesh;
-        Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
-        maze.createMap();
+        // Mesh mesh;
+        // Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
+        // maze.createMap();
 
-        // resultado da compressao do maze
+        // resultado da compressao do maze render!!
         std::vector<uint32_t> vIndex;
         std::vector<VertexData> vVertexIndexed;
         std::vector<VertexData> vVertexSerialized;
-        vertexDataFromMesh(&mesh, vVertexSerialized);
-        vertexDataIndexCompile(vVertexSerialized, vVertexIndexed, vIndex);
+        vertexDataFromMesh(&mesh, vVertexSerialized);                      // serializa o mesh para o vertexData
+        vertexDataIndexCompile(vVertexSerialized, vVertexIndexed, vIndex); // cria indices e comprime os poins/normal/uv
 
         // indexador triangular
         std::list<Triangle*> vTris;

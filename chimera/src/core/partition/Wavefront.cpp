@@ -101,14 +101,19 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
         else if (textData[0] == "vn")
             mesh->normal.push_back(tokensToVec3(1, 3, textData));
         else if (textData[0] == "f") {
+            int face = 0;
             for (int indice = 1; indice < textData.size(); indice++) {
                 if (textData[indice].size() > 0) {
-
                     std::vector<std::string> ss;
+                    if (face > 8)
+                        break;
+
                     textToStringArray(textData[indice], ss, '/');
                     for (std::string cc : ss) {
-                        if (cc.size() > 0)
+                        if (cc.size() > 0) {
                             indicesComp.push_back(std::stod(cc) - 1);
+                            face++;
+                        }
                     }
                 }
             }

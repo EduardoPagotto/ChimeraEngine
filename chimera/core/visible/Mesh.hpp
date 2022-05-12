@@ -16,7 +16,7 @@ struct Mesh {
     std::vector<uint32_t> iUv;
 };
 
-enum class MeshType { SIMPLE = 0, ARRAY = 1 };
+enum class MeshType { SIMPLE = 0, ARRAY = 1, BSTREE = 2 };
 
 struct MeshComponent {
     TagComponent tag;

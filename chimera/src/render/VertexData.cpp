@@ -6,19 +6,61 @@
 namespace Chimera {
 
 // Returns true if v1 can be considered equal to v2
-bool is_near(float v1, float v2) { return fabs(v1 - v2) < EPSILON; } // 0.01f
+bool is_near(const float& v1, const float& v2) { return fabs(v1 - v2) < EPSILON; } // 0.01f
+bool is_nearVec3(const glm::vec3& v1, const glm::vec3& v2) { return is_near(v1.x, v2.x) && is_near(v1.y, v2.y) && is_near(v1.z, v2.z); }
+bool is_nearVec2(const glm::vec2& v1, const glm::vec2& v2) { return is_near(v1.x, v2.x) && is_near(v1.y, v2.y); }
+
+bool similarMesh(const glm::vec3& pos, const glm::vec3& nor, const glm::vec2& uv, Mesh& mo, uint32_t& r) {
+    for (uint32_t i = 0; mo.iPoint.size(); i++) {
+        if (is_nearVec3(pos, mo.point[i]) && is_nearVec3(nor, mo.normal[i]) && is_nearVec2(uv, mo.uv[i])) {
+            r = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+void meshReCompile(Mesh& inData, Mesh& outData) {
+
+    // percorrer todos os vertices
+    for (uint32_t i = 0; i < inData.iPoint.size(); i++) {
+        // Procura por similar
+        uint32_t index;
+
+        glm::vec3 point = inData.point[inData.iPoint[i]];
+        glm::vec3 norma = inData.normal[inData.iNormal[i]];
+        glm::vec2 uv = inData.uv[inData.iUv[i]];
+
+        if (similarMesh(point, norma, uv, outData, index)) {
+            // se entrotar usar apenas o indice
+            // out_indices.push_back(index);
+
+            outData.iPoint.push_back(index);  // FIXME: colocar no getSimilarMesh
+            outData.iNormal.push_back(index); // FIXME: usar copia rapida
+            outData.iUv.push_back(index);
+
+        } else {
+            // se nao adiciona a lista de novo vertex
+            outData.point.push_back(point);
+            outData.normal.push_back(norma);
+            outData.uv.push_back(uv);
+
+            uint32_t n = outData.point.size() - 1;
+            outData.iPoint.push_back(n); // FIXME: usar copia rapida
+            outData.iNormal.push_back(n);
+            outData.iUv.push_back(n);
+        }
+    }
+
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compile Mesh In: %04lu Mesh out: %04lu Index out: %04lu ", inData.point.size(),
+                 outData.point.size(), outData.iPoint.size());
+}
 
 bool getSimilarVertexIndex(VertexData& in_vertex, std::vector<VertexData>& out_vertex, uint32_t& result) {
     // Percorrer todos os vertex ja existentes na lista
     for (uint32_t i = 0; i < out_vertex.size(); i++) {
-
-        if (is_near(in_vertex.point.x, out_vertex[i].point.x) && is_near(in_vertex.point.y, out_vertex[i].point.y) &&
-            is_near(in_vertex.point.z, out_vertex[i].point.z) &&
-
-            is_near(in_vertex.normal.x, out_vertex[i].normal.x) && is_near(in_vertex.normal.y, out_vertex[i].normal.y) &&
-            is_near(in_vertex.normal.z, out_vertex[i].normal.z) &&
-
-            is_near(in_vertex.uv.x, out_vertex[i].uv.x) && is_near(in_vertex.uv.y, out_vertex[i].uv.y)) {
+        if (is_nearVec3(in_vertex.point, out_vertex[i].point) && is_nearVec3(in_vertex.normal, out_vertex[i].normal) &&
+            is_nearVec2(in_vertex.uv, out_vertex[i].uv)) {
             result = i;
             return true;
         }
@@ -191,4 +233,19 @@ void vertexDataToTriangle(VertexData* vertexData, const uint32_t& vertexSize, st
         vTris.push_back(new Triangle(pa, pb, pc, normal, false));
     }
 }
+
+void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris) {
+
+    for (uint32_t indice = 0; indice < m->iPoint.size(); indice += 3) {
+        uint32_t pa = m->iPoint[indice];
+        uint32_t pb = m->iPoint[indice + 1];
+        uint32_t pc = m->iPoint[indice + 2];
+        // Calcula Normal Face
+        glm::vec3 acc = m->normal[pa] + m->normal[pb] + m->normal[pc]; // vertexData[pa].normal + vertexData[pb].normal +
+                                                                       // vertexData[pc].normal;
+        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
+        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
+    }
+}
+
 } // namespace Chimera

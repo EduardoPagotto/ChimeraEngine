@@ -37,4 +37,6 @@ void vertexDataMeshClean(Mesh* m);
 
 void vertexDataIndexToTriangle(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris);
 void vertexDataToTriangle(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris);
+
+void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris);
 } // namespace Chimera

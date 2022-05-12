@@ -41,22 +41,19 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 
         Mesh mesh;
 
-        std::string matFile;
-        wavefrontObjLoad("./assets/models/map02.obj", &mesh, matFile);
-        if (matFile.size() > 0) {
-            wavefrontMtlLoad(matFile, material.material);
-        }
+        // std::string matFile;
+        // wavefrontObjLoad("./assets/models/map02.obj", &mesh, matFile);
+        // if (matFile.size() > 0) {
+        //     wavefrontMtlLoad(matFile, material.material);
+        // }
 
-        // material.setDefaultEffect();
-        // material.setShine(50.0f);
-        // material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
-        //                               TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
-        // material.material->init();
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
+                                      TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
+        material.material->init();
 
         // processa o Maze
-        // Mesh mesh;
-        // Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
-        // maze.createMap();
+        Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
+        maze.createMap();
 
         // resultado da compressao do maze render!!
         std::vector<uint32_t> vIndex;
@@ -71,6 +68,7 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
             vertexDataIndexToTriangle(&vVertexIndexed[0], &vIndex[0], vIndex.size(), vTris);
         else
             vertexDataToTriangle(&vVertexIndexed[0], vVertexIndexed.size(), vTris);
+        // meshToTriangle(&mesh, vTris);
 
         // btree root, leafs, vertex
         BspTree bspTree;

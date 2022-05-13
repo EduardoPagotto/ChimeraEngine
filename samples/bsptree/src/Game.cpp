@@ -55,6 +55,9 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
         maze.createMap();
 
+        // Mesh mesh2;
+        // meshReCompile(mesh, mesh2);
+
         // resultado da compressao do maze render!!
         std::vector<uint32_t> vIndex;
         std::vector<VertexData> vVertexIndexed;
@@ -68,7 +71,9 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
             vertexDataIndexToTriangle(&vVertexIndexed[0], &vIndex[0], vIndex.size(), vTris);
         else
             vertexDataToTriangle(&vVertexIndexed[0], vVertexIndexed.size(), vTris);
-        // meshToTriangle(&mesh, vTris);
+
+        // std::list<Triangle*> vTris2;
+        // meshToTriangle(&mesh2, vTris2);
 
         // btree root, leafs, vertex
         BspTree bspTree;

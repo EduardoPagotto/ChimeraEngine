@@ -11,7 +11,7 @@ bool is_nearVec3(const glm::vec3& v1, const glm::vec3& v2) { return is_near(v1.x
 bool is_nearVec2(const glm::vec2& v1, const glm::vec2& v2) { return is_near(v1.x, v2.x) && is_near(v1.y, v2.y); }
 
 bool similarMesh(const glm::vec3& pos, const glm::vec3& nor, const glm::vec2& uv, Mesh& mo, uint32_t& r) {
-    for (uint32_t i = 0; mo.iPoint.size(); i++) {
+    for (uint32_t i = 0; i < mo.iPoint.size(); i++) {
         if (is_nearVec3(pos, mo.point[i]) && is_nearVec3(nor, mo.normal[i]) && is_nearVec2(uv, mo.uv[i])) {
             r = i;
             return true;
@@ -32,25 +32,22 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
         glm::vec2 uv = inData.uv[inData.iUv[i]];
 
         if (similarMesh(point, norma, uv, outData, index)) {
-            // se entrotar usar apenas o indice
-            // out_indices.push_back(index);
-
-            outData.iPoint.push_back(index);  // FIXME: colocar no getSimilarMesh
-            outData.iNormal.push_back(index); // FIXME: usar copia rapida
-            outData.iUv.push_back(index);
+            // se igual so adiciona o indice
+            outData.iPoint.push_back(index); // FIXME: colocar no getSimilarMesh
 
         } else {
-            // se nao adiciona a lista de novo vertex
+            // se diferente adiciona vertice e cria novo indice
             outData.point.push_back(point);
             outData.normal.push_back(norma);
             outData.uv.push_back(uv);
 
             uint32_t n = outData.point.size() - 1;
             outData.iPoint.push_back(n); // FIXME: usar copia rapida
-            outData.iNormal.push_back(n);
-            outData.iUv.push_back(n);
         }
     }
+
+    outData.iNormal.assign(outData.iPoint.begin(), outData.iPoint.end());
+    outData.iUv.assign(outData.iPoint.begin(), outData.iPoint.end());
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compile Mesh In: %04lu Mesh out: %04lu Index out: %04lu ", inData.point.size(),
                  outData.point.size(), outData.iPoint.size());

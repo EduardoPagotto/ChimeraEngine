@@ -1,8 +1,9 @@
 #pragma once
 #include "chimera/core/TagComponent.hpp"
+#include "chimera/core/space/Triangle.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
 #include <glm/glm.hpp>
-#include <vector>
+#include <list>
 
 namespace Chimera {
 struct Mesh {
@@ -26,6 +27,11 @@ struct MeshComponent {
     MeshComponent() = default;
 };
 
+void vertexDataMeshClean(Mesh* m);
+void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size);
+void vertexDataMeshScale(Mesh* m, const float& new_size, const bool& hasTexture);
+void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris);
+void meshReCompile(Mesh& inData, Mesh& outData);
 void meshDebug(Mesh* m, bool _showAll);
 
 } // namespace Chimera

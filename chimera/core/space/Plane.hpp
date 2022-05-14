@@ -1,9 +1,8 @@
 #pragma once
-#include <glm/glm.hpp>
+#include "chimera/core/mathGL.hpp"
 
 namespace Chimera {
 
-#define EPSILON 1e-2 // FIXME: para 1e-1 Falhas em calculos de aproximação verificar projeto bsptree
 enum class SIDE { CP_ONPLANE, CP_FRONT, CP_BACK, CP_SPANNING };
 
 class Plane {

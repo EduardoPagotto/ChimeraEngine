@@ -41,19 +41,19 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 
         Mesh mesh;
 
-        std::string matFile;
-        wavefrontObjLoad("./assets/models/map02.obj", &mesh, matFile);
-        if (matFile.size() > 0) {
-            wavefrontMtlLoad(matFile, material.material);
-        }
+        // std::string matFile;
+        // wavefrontObjLoad("./assets/models/map02.obj", &mesh, matFile);
+        // if (matFile.size() > 0) {
+        //     wavefrontMtlLoad(matFile, material.material);
+        // }
 
-        // material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
-        //                               TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
-        // material.material->init();
+        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
+                                      TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
+        material.material->init();
 
         // processa o Maze
-        // Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
-        // maze.createMap();
+        Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
+        maze.createMap();
 
         Mesh mesh2;
         meshReCompile(mesh, mesh2);

@@ -11,7 +11,7 @@ namespace Chimera {
 
 class RenderableBsp : public IRenderable3d {
   public:
-    RenderableBsp(BSPTreeNode* root, std::vector<TrisIndex>& vTris, std::vector<VertexData>& vertexData);
+    RenderableBsp(BSPTreeNode* root, std::vector<TrisIndex>& vTris, Mesh* mesh);
     virtual ~RenderableBsp();
     virtual const uint32_t getSize() const override { return totIndex; }
     virtual VertexArray* getVao() const override { return vao; }
@@ -34,7 +34,7 @@ class RenderableBsp : public IRenderable3d {
     VertexArray* vao;
     bool logdata;
     std::vector<Renderable3D*> vChild;
-    std::vector<VertexData> vVertex;
+    std::vector<VertexData> vVertex; // FIXME: Remover ????
     AABB aabb;
     uint32_t totIndex;
     IRenderer3d* renderer;

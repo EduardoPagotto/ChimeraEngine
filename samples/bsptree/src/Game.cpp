@@ -41,47 +41,28 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 
         Mesh mesh;
 
-        // std::string matFile;
-        // wavefrontObjLoad("./assets/models/map02.obj", &mesh, matFile);
-        // if (matFile.size() > 0) {
-        //     wavefrontMtlLoad(matFile, material.material);
-        // }
+        std::string matFile;
+        wavefrontObjLoad("./assets/models/map02.obj", &mesh, matFile);
+        if (matFile.size() > 0) {
+            wavefrontMtlLoad(matFile, material.material);
+        }
 
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
-                                      TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
-        material.material->init();
+        // material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
+        //                               TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
+        // material.material->init();
 
         // processa o Maze
-        Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
-        maze.createMap();
+        // Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
+        // maze.createMap();
 
-        // Mesh mesh2;
-        // meshReCompile(mesh, mesh2);
-
-        // resultado da compressao do maze render!!
-        std::vector<uint32_t> vIndex;
-        std::vector<VertexData> vVertexIndexed;
-        std::vector<VertexData> vVertexSerialized;
-        vertexDataFromMesh(&mesh, vVertexSerialized);                      // serializa o mesh para o vertexData
-        vertexDataIndexCompile(vVertexSerialized, vVertexIndexed, vIndex); // cria indices e comprime os poins/normal/uv
-
-        // indexador triangular
-        std::list<Triangle*> vTris;
-        if (vIndex.size() > 0)
-            vertexDataIndexToTriangle(&vVertexIndexed[0], &vIndex[0], vIndex.size(), vTris);
-        else
-            vertexDataToTriangle(&vVertexIndexed[0], vVertexIndexed.size(), vTris);
-
-        // std::list<Triangle*> vTris2;
-        // meshToTriangle(&mesh2, vTris2);
+        Mesh mesh2;
+        meshReCompile(mesh, mesh2);
 
         // btree root, leafs, vertex
         BspTree bspTree;
-        std::vector<VertexData> vVertexFinal;
         std::vector<TrisIndex> vTrisFinal;
-        BSPTreeNode* root = bspTree.create(vVertexIndexed, vTris, vVertexFinal, vTrisFinal);
-
-        RenderableBsp* r = new RenderableBsp(root, vTrisFinal, vVertexFinal);
+        BSPTreeNode* root = bspTree.create(&mesh2, vTrisFinal);
+        RenderableBsp* r = new RenderableBsp(root, vTrisFinal, &mesh2);
         rc.renderable = r;
     }
 

@@ -120,31 +120,13 @@ void BspTree::addVertexMesh(const glm::vec3& point, const glm::vec3& normal, con
     mesh->uv.push_back(uv);
 }
 
-void BspTree::addIndexMesh(const uint32_t& p) {
-    mesh->iPoint.push_back(p);
-    mesh->iNormal.push_back(p);
-    mesh->iUv.push_back(p);
-}
-
-void BspTree::addIndex(const glm::ivec3& i, const glm::vec3& normal, bool splitter, std::list<Triangle*>* _vTriangle) {
-    _vTriangle->push_front(new Triangle(i, normal, splitter));
-    addIndexMesh(i.x);
-    addIndexMesh(i.y);
-    addIndexMesh(i.z);
-}
-
 void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle) {
 
     // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
     float propBC = 0.0;
-    // indices de triangulos novos
-    uint32_t p[9]; // FIXME : Nao vai funcionar se nao resolver!!!! mesh->point.size() ou mesh->iPoint.size()
-    for (uint8_t i = 0; i < 9; i++)
-        p[i] = mesh->point.size() + i;
 
     // Vertex dos triangulos a serem normalizados
-    // VertexData vertA, vertB, vertC;
     glm::vec2 vertA_uv, vertB_uv, vertC_uv;
     glm::vec3 vertA_normal, vertB_normal, vertC_normal;
 
@@ -199,28 +181,31 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     glm::vec3 acc = vertA_normal + vertB_normal + vertC_normal;
     glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
 
+    // indices de triangulos novos
+    unsigned int last = mesh->point.size();
+
     //-- T1 Triangle T1(a, b, A);
     addVertexMesh(a, vertA_normal, vertA_uv); // T1 PA
     addVertexMesh(b, vertB_normal, vertB_uv); // T1 PB
     addVertexMesh(A, vertA_normal, texA);     // T1 PC
-    addIndex(glm::ivec3(p[0], p[1], p[2]), normal, _pTriangle->splitter, &_vTriangle);
+    _vTriangle.push_front(new Triangle(last, last + 1, last + 2, normal, _pTriangle->splitter));
 
     //-- T2 Triangle T2(b, B, A);
     addVertexMesh(b, vertB_normal, vertB_uv); // T2 PA
     addVertexMesh(B, vertB_normal, texB);     // T2 PB
     addVertexMesh(A, vertA_normal, texA);     // T2 PC
-    addIndex(glm::ivec3(p[3], p[4], p[5]), normal, _pTriangle->splitter, &_vTriangle);
+    _vTriangle.push_front(new Triangle(last + 3, last + 4, last + 5, normal, _pTriangle->splitter));
 
     // -- T3 Triangle T3(A, B, c);
     addVertexMesh(A, vertA_normal, texA);     // T3 PA
     addVertexMesh(B, vertB_normal, texB);     // T3 PB
     addVertexMesh(c, vertC_normal, vertC_uv); // T3 PC
-    addIndex(glm::ivec3(p[6], p[7], p[8]), normal, _pTriangle->splitter, &_vTriangle);
+    _vTriangle.push_front(new Triangle(last + 6, last + 7, last + 8, normal, _pTriangle->splitter));
 
     // Remove orininal
     delete _pTriangle;
     _pTriangle = nullptr;
-} // namespace Chimera
+}
 
 BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 

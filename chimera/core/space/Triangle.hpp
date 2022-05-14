@@ -14,7 +14,7 @@ struct Triangle {
         this->p[TRI_PC] = t.p[TRI_PC];
     }
 
-    Triangle(const glm::ivec3& t, const glm::vec3& _normal, const bool& split) : normal(_normal), splitter(split) {
+    Triangle(const glm::uvec3& t, const glm::vec3& _normal, const bool& split) : normal(_normal), splitter(split) {
         this->p[TRI_PA] = t.x;
         this->p[TRI_PB] = t.y;
         this->p[TRI_PC] = t.z;

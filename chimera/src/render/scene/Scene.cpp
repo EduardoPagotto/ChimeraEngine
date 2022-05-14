@@ -3,11 +3,13 @@
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
+#include "chimera/core/partition/BSPTree.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/3d/RenderableArray.hpp"
+#include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/VertexData.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -150,9 +152,18 @@ void Scene::onAttach() {
                     vertexDataFromMesh(mesh.mesh, renderData);
 
                     rc.renderable = new RenderableArray(mesh.vTrisIndex, renderData);
+
+                } else if (mesh.type == MeshType::BSTREE) {
+
+                    Mesh meshFinal;
+                    meshReCompile(*mesh.mesh, meshFinal);
+
+                    // btree root, leafs, vertex
+                    BspTree bspTree;
+                    mesh.root = bspTree.create(&meshFinal, mesh.vTrisIndex);
+
+                    rc.renderable = new RenderableBsp(mesh.root, mesh.vTrisIndex, &meshFinal);
                 }
-                // else if (mesh.type == MeshType::BSTREE) {
-                // }
             }
 
             if (entity.hasComponent<TransComponent>()) {

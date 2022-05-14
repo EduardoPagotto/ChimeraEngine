@@ -1,6 +1,5 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/core/partition/BSPTree.hpp"
 #include "chimera/core/partition/Maze.hpp"
 #include "chimera/core/partition/Wavefront.hpp"
 #include "chimera/core/utils.hpp"
@@ -32,17 +31,16 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 
         Shader& shader = renderableEntity.addComponent<Shader>();
         MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
-        Renderable3dComponent& rc = renderableEntity.addComponent<Renderable3dComponent>();
+        MeshComponent& mc = renderableEntity.addComponent<MeshComponent>();
+        mc.type = MeshType::BSTREE;
 
         std::unordered_map<GLenum, std::string> shadeData;
         shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshNoMat.frag";
         shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
         ShaderManager::load("MeshNoMat", shadeData, shader);
 
-        Mesh mesh;
-
         // std::string matFile;
-        // wavefrontObjLoad("./assets/models/map02.obj", &mesh, matFile);
+        // wavefrontObjLoad("./assets/models/map02.obj", mc.mesh, matFile);
         // if (matFile.size() > 0) {
         //     wavefrontMtlLoad(matFile, material.material);
         // }
@@ -52,18 +50,8 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         material.material->init();
 
         // processa o Maze
-        Maze maze = Maze("./assets/maps/maze7.txt", &mesh);
+        Maze maze = Maze("./assets/maps/maze7.txt", mc.mesh);
         maze.createMap();
-
-        Mesh mesh2;
-        meshReCompile(mesh, mesh2);
-
-        // btree root, leafs, vertex
-        BspTree bspTree;
-        std::vector<TrisIndex> vTrisFinal;
-        BSPTreeNode* root = bspTree.create(&mesh2, vTrisFinal);
-        RenderableBsp* r = new RenderableBsp(root, vTrisFinal, &mesh2);
-        rc.renderable = r;
     }
 
     engine->pushState(this);

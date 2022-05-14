@@ -1,4 +1,4 @@
-#include "chimera/render/partition/BSPTree.hpp"
+#include "chimera/core/partition/BSPTree.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

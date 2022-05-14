@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-Maze::Maze(const char filename[], Mesh* mesh) : sizeBlock(10.0f), mesh(mesh) {
+Maze::Maze(const char filename[], Mesh* mesh, float sizeBlock) : sizeBlock(sizeBlock), mesh(mesh) {
 
     char buffer[1024] = {0};
 

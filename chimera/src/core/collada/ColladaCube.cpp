@@ -16,8 +16,10 @@ void ColladaCube::create(Entity& entity, pugi::xml_node geo) {
     mc.type = MeshType::BSTREE; // FIXME: Aqui mesmo ?????
 
     std::string target = geo.attribute("target").value();
+    float size = geo.text().as_float();
+
     // processa o Maze
-    Maze maze = Maze(target.c_str(), mc.mesh);
+    Maze maze = Maze(target.c_str(), mc.mesh, size);
     maze.createMap();
 }
 } // namespace Chimera

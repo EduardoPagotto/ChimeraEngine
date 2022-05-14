@@ -7,7 +7,7 @@ namespace Chimera {
 
 class Maze {
   public:
-    Maze(const char filename[], Mesh* mesh);
+    Maze(const char filename[], Mesh* mesh, float sizeBlock);
     virtual ~Maze();
     void createMap();
 

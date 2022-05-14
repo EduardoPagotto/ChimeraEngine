@@ -112,7 +112,7 @@
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                 <extra>
                     <technique profile="chimera">
-                        <external_cube target="./assets/maps/maze7.txt"/>
+                        <external_cube target="./assets/maps/maze7.txt">10.0</external_cube>
                         <bind_material>
                             <technique_common>
                                 <instance_material symbol="Material_VoxelC" target="#Material_VoxelC"/>

@@ -1,14 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/core/partition/Maze.hpp"
-#include "chimera/core/partition/Wavefront.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/CameraOrbit.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
-#include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/render/scene/CameraController.hpp"
-#include "chimera/render/scene/Components.hpp"
 
 Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 

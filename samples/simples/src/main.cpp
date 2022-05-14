@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/utils.hpp"
-//#include "chimera/render/collada/ColladaRender.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 
 Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {

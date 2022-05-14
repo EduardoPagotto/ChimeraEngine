@@ -1,8 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
-#include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 

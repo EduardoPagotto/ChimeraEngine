@@ -1,14 +1,6 @@
 #include "Game.hpp"
-#include "chimera/core/partition/LoadHeightMap.hpp"
-#include "chimera/core/partition/Wavefront.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/CameraFPS.hpp"
-#include "chimera/core/visible/Material.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
-#include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/scene/CameraController.hpp"
-#include "chimera/render/scene/Components.hpp"
 
 Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
     using namespace Chimera;

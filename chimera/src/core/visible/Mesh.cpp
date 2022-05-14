@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-void vertexDataMeshScale(Mesh* m, const float& new_size, const bool& hasTexture) {
+void meshDataScale(Mesh* m, const float& new_size, const bool& hasTexture) {
 
     if (hasTexture == false) {
         m->iUv.clear();
@@ -67,7 +67,7 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
                  outData.point.size(), outData.iPoint.size());
 }
 
-void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
+void meshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
     if (m->point.size() > 0) {
         min = m->point[0];
         max = m->point[0];
@@ -83,7 +83,7 @@ void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3
     size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
 }
 
-void vertexDataMeshClean(Mesh* m) { //??
+void meshDataClean(Mesh* m) { //??
     m->iPoint.clear();
     m->point.clear();
     m->iNormal.clear();

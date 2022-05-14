@@ -27,9 +27,9 @@ struct MeshComponent {
     MeshComponent() = default;
 };
 
-void vertexDataMeshClean(Mesh* m);
-void vertexDataMeshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size);
-void vertexDataMeshScale(Mesh* m, const float& new_size, const bool& hasTexture);
+void meshDataClean(Mesh* m);
+void meshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size);
+void meshDataScale(Mesh* m, const float& new_size, const bool& hasTexture);
 void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris);
 void meshReCompile(Mesh& inData, Mesh& outData);
 void meshDebug(Mesh* m, bool _showAll);

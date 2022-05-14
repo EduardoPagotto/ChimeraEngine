@@ -152,7 +152,7 @@ void Scene::onAttach() {
 
             if (entity.hasComponent<TransComponent>()) {
                 glm::vec3 min, max, size;
-                vertexDataMeshMinMaxSize(mesh.mesh, min, max, size);
+                meshMinMaxSize(mesh.mesh, min, max, size);
 
                 TransComponent& tc = entity.getComponent<TransComponent>();
                 if (tc.solid) {

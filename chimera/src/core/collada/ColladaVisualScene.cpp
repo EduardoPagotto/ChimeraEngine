@@ -1,5 +1,6 @@
 #include "chimera/core/collada/ColladaVisualScene.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
+#include "chimera/core/collada/ColladaCube.hpp"
 #include "chimera/core/collada/ColladaGeometry.hpp"
 #include "chimera/core/collada/ColladaHeightMap.hpp"
 #include "chimera/core/collada/ColladaLight.hpp"
@@ -90,6 +91,15 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
         if (nObj) {
             ColladaWaveFront cf(colladaDom, "#vazio");
             cf.create(entity, nObj);
+        }
+
+        const pugi::xml_node nCube = getExtra(n, "external_cube");
+        if (nCube) {
+            ColladaCube cc(colladaDom, "#vazio");
+            cc.create(entity, nCube);
+
+            const pugi::xml_node technique = nCube.parent();
+            loadMaterial(entity, "#vazio", technique);
         }
 
         const pugi::xml_node nHeight = getExtra(n, "external_height");

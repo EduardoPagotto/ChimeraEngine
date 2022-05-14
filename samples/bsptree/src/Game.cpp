@@ -24,36 +24,6 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         }
     }
 
-    {
-        Entity renderableEntity = scene->getRegistry().createEntity("Maze Entity");
-        TransComponent& tc = renderableEntity.addComponent<TransComponent>();
-        tc.trans = new Transform();
-
-        Shader& shader = renderableEntity.addComponent<Shader>();
-        MaterialComponent& material = renderableEntity.addComponent<MaterialComponent>();
-        MeshComponent& mc = renderableEntity.addComponent<MeshComponent>();
-        mc.type = MeshType::BSTREE;
-
-        std::unordered_map<GLenum, std::string> shadeData;
-        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshNoMat.frag";
-        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshNoMat.vert";
-        ShaderManager::load("MeshNoMat", shadeData, shader);
-
-        // std::string matFile;
-        // wavefrontObjLoad("./assets/models/map02.obj", mc.mesh, matFile);
-        // if (matFile.size() > 0) {
-        //     wavefrontMtlLoad(matFile, material.material);
-        // }
-
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE,
-                                      TextureManager::loadFromFile("grid2", "./assets/textures/grid2.png", TexParam()));
-        material.material->init();
-
-        // processa o Maze
-        Maze maze = Maze("./assets/maps/maze7.txt", mc.mesh);
-        maze.createMap();
-    }
-
     engine->pushState(this);
     engine->pushState(scene);
 }

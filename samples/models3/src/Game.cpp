@@ -32,6 +32,8 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         pCorpoRigido = (Solid*)tc.trans;
     }
 
+    scene->setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
+
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 }
 

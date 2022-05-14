@@ -27,8 +27,6 @@ int main(int argn, char** argv) {
 
         Engine engine(scene.getCanvas());
 
-        scene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
-
         Game* game = new Game(&scene, &engine);
 
         engine.pushState(game);

@@ -108,11 +108,11 @@ void Scene::onAttach() {
 
                 Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
 
-                // Transforma Mesh em VertexData comprimindo-o
-                std::vector<VertexData> renderData;
-                vertexDataFromMesh(mesh.mesh, renderData);
-
                 if (mesh.type == MeshType::SIMPLE) {
+
+                    // Transforma Mesh em VertexData comprimindo-o
+                    std::vector<VertexData> renderData;
+                    vertexDataFromMesh(mesh.mesh, renderData);
 
                     std::vector<uint32_t> index;
                     std::vector<VertexData> vertexDataOut;
@@ -146,8 +146,13 @@ void Scene::onAttach() {
                     rc.renderable = r;
                 } else if (mesh.type == MeshType::ARRAY) {
 
+                    std::vector<VertexData> renderData;
+                    vertexDataFromMesh(mesh.mesh, renderData);
+
                     rc.renderable = new RenderableArray(mesh.vTrisIndex, renderData);
                 }
+                // else if (mesh.type == MeshType::BSTREE) {
+                // }
             }
 
             if (entity.hasComponent<TransComponent>()) {

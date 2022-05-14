@@ -2,8 +2,7 @@
 #include "chimera/core/space/BSPTreeNode.hpp"
 #include "chimera/core/space/Triangle.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
-#include "chimera/render/VertexData.hpp"
-#include <list>
+#include "chimera/core/visible/Mesh.hpp"
 
 namespace Chimera {
 class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree

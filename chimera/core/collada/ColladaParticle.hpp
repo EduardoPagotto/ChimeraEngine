@@ -11,5 +11,4 @@ class ColladaParticle : public Collada {
 
   private:
 };
-
 } // namespace Chimera

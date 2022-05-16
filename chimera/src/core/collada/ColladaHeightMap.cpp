@@ -6,12 +6,11 @@ namespace Chimera {
 
 ColladaHeightMap::~ColladaHeightMap() {}
 
-void ColladaHeightMap::create(Entity& entity, pugi::xml_node geo) {
+void ColladaHeightMap::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
-    TagComponent& tag = entity.getComponent<TagComponent>();
     MeshComponent& mc = entity.addComponent<MeshComponent>();
-    mc.tag.id = tag.id + "_heightmap";
-    mc.tag.tag = tag.tag + "_heightmap";
+    mc.tag.id = id;
+    mc.tag.tag = name;
     mc.tag.serial = Collada::getNewSerial();
 
     std::string target = geo.attribute("target").value();

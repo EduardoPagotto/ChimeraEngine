@@ -71,8 +71,8 @@
             </instance_effect>
         </material>
     </library_materials>
-    <library_nodes>
-        <node id="ParticleA" name="ParticleA" type="NODE">
+    <library_geometries>
+        <geometry id="ParticleA" name="ParticleA" type="NODE">
             <extra>
                 <technique profile="chimera">
                     <particle>
@@ -85,17 +85,11 @@
                             <max>2000</max>
                             <respaw>true</respaw>
                         </container>
-                        <bind_material>
-                            <technique_common>
-                                <instance_material symbol="MaterialParticle01-material" target="#MaterialParticle01-material"/>
-                            </technique_common>
-                        </bind_material>
                     </particle>
                 </technique>
             </extra>
-        </node>
-    </library_nodes>
-
+        </geometry>
+    </library_geometries>
     <library_physics_materials>
         <physics_material id="zoltan-PhysicsMaterial" name="zoltan-PhysicsMaterial">
             <technique_common>
@@ -133,7 +127,6 @@
             </technique_common>
         </physics_material>
     </library_physics_materials>
-
     <library_physics_models>
         <physics_model id="Scene-PhysicsModel" name="Scene-PhysicsModel">
             <rigid_body name="zoltan-RigidBody" sid="zoltan-RigidBody">
@@ -198,7 +191,6 @@
             </rigid_body>
         </physics_model>
     </library_physics_models>
-
     <library_physics_scenes>
         <physics_scene id="Scene-Physics" name="Scene-Physics">
             <instance_physics_model url="#Scene-PhysicsModel">
@@ -214,7 +206,6 @@
             </technique_common>
         </physics_scene>
     </library_physics_scenes>
-
     <extra type="libraries">
         <technique profile="chimera">
             <library_node_kind>

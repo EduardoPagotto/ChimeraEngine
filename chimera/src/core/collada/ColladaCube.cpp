@@ -6,12 +6,11 @@ namespace Chimera {
 
 ColladaCube::~ColladaCube() {}
 
-void ColladaCube::create(Entity& entity, pugi::xml_node geo) {
+void ColladaCube::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
-    TagComponent& tag = entity.getComponent<TagComponent>();
     MeshComponent& mc = entity.addComponent<MeshComponent>();
-    mc.tag.id = tag.id + "_cube";
-    mc.tag.tag = tag.tag + "_cube";
+    mc.tag.id = id;
+    mc.tag.tag = name;
     mc.tag.serial = Collada::getNewSerial();
     mc.type = MeshType::BSTREE; // FIXME: Aqui mesmo ?????
 

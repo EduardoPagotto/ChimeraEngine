@@ -622,11 +622,6 @@
             <node id="SkyBox" name="SkyBox" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                 <instance_geometry url="#MeshSkyBox-mesh">
-                    <extra>
-                        <technique profile="chimera">
-                            <param name="TypeNode" sid="" type="string">SKYBOX</param>
-                        </technique>
-                    </extra>
                     <bind_material>
                         <technique_common>
                             <instance_material symbol="MaterialSkyBox-material" target="#MaterialSkyBox-material">
@@ -702,7 +697,13 @@
             </node>
             <node id="Particle01" name="Particle01" type="NODE">
                 <matrix sid="transform">1 0 0 -5 0 1 0 5 0 0 1 4 0 0 0 1</matrix>
-                <instance_node url="file://assets/models/nivel1_extra.xml#ParticleA"/>
+                <instance_geometry url="file://assets/models/nivel1_extra.xml#ParticleA">
+                    <bind_material>
+                        <technique_common>
+                            <instance_material symbol="MaterialParticle01-material" target="#MaterialParticle01-material"/>
+                        </technique_common>
+                    </bind_material>
+                </instance_geometry>
             </node>
         </visual_scene>
     </library_visual_scenes>

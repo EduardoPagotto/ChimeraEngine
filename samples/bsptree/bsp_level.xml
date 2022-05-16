@@ -94,32 +94,40 @@
             </extra>
         </camera>
     </library_cameras>
+    <library_geometries>
+        <geometry id="Cubo-mesh" name="Cubo-mesh">
+            <extra>
+                <technique profile="chimera">
+                    <external_obj target="./assets/models/cubo2.obj"/>
+                    <instance_effect url="#Shade01-effect">
+                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
+                    </instance_effect>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_cube-mesh" name="Voxel_cube-mesh">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube target="./assets/maps/maze7.txt">10.0</external_cube>
+                </technique>
+            </extra>
+        </geometry>
+    </library_geometries>
     <library_visual_scenes>
         <visual_scene id="Scene" name="Scene">
-
             <node id="Cubo" name="Cubo" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-                <extra>
-                    <technique profile="chimera">
-                        <external_obj target="./assets/models/cubo2.obj"/>
-                        <instance_effect url="#Shade01-effect">
-                            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
-                        </instance_effect>
-                    </technique>
-                </extra>
+                <instance_geometry url="#Cubo-mesh"/>
             </node>
             <node id="Voxel_cube" name="Voxel_cube.001" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-                <extra>
-                    <technique profile="chimera">
-                        <external_cube target="./assets/maps/maze7.txt">10.0</external_cube>
-                        <bind_material>
-                            <technique_common>
-                                <instance_material symbol="Material_VoxelC" target="#Material_VoxelC"/>
-                            </technique_common>
-                        </bind_material>
-                    </technique>
-                </extra>
+                <instance_geometry url="#Voxel_cube-mesh">
+                    <bind_material>
+                        <technique_common>
+                            <instance_material symbol="Material_VoxelC" target="#Material_VoxelC"/>
+                        </technique_common>
+                    </bind_material>
+                </instance_geometry>
             </node>
             <node id="Camera" name="Camera" type="NODE">
                 <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>

@@ -1,12 +1,8 @@
 #include "chimera/core/collada/ColladaVisualScene.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaCube.hpp"
 #include "chimera/core/collada/ColladaGeometry.hpp"
-#include "chimera/core/collada/ColladaHeightMap.hpp"
 #include "chimera/core/collada/ColladaLight.hpp"
 #include "chimera/core/collada/ColladaMaterial.hpp"
-#include "chimera/core/collada/ColladaWaveFront.hpp"
-#include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/core/visible/Transform.hpp"
 
 namespace Chimera {
@@ -67,50 +63,6 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
         cc.create(entity, cc.getLibrary("library_cameras"));
     } else if (name == "node") {
         // TODO: implementar hierarquia
-    } else if (name == "extra") {
-
-        const pugi::xml_node nParticle = getExtra(n, "particle");
-        if (nParticle) {
-
-            loadMaterial(entity, "#vazio", nParticle);
-
-            glm::vec3 dir = textToVec3(nParticle.child("emmiter_font").child("maindir").text().as_string());
-            float spread = nParticle.child("emmiter_font").child("spread").text().as_float();
-
-            EmitterComponent& ec = entity.addComponent<EmitterComponent>();
-            ec.emitter = new EmitterFont(dir, spread); // EF to R
-
-            ParticleContainer* pc = new ParticleContainer();
-            pc->life = nParticle.child("container").child("life").text().as_float();
-            pc->max = nParticle.child("container").child("max").text().as_int();
-            pc->respaw = nParticle.child("container").child("respaw").text().as_bool();
-            ec.emitter->pushParticleContainer(pc);
-        }
-
-        const pugi::xml_node nObj = getExtra(n, "external_obj");
-        if (nObj) {
-            ColladaWaveFront cf(colladaDom, "#vazio");
-            cf.create(entity, nObj);
-        }
-
-        const pugi::xml_node nCube = getExtra(n, "external_cube");
-        if (nCube) {
-            ColladaCube cc(colladaDom, "#vazio");
-            cc.create(entity, nCube);
-
-            const pugi::xml_node technique = nCube.parent();
-            loadMaterial(entity, "#vazio", technique);
-        }
-
-        const pugi::xml_node nHeight = getExtra(n, "external_height");
-        if (nHeight) {
-
-            ColladaHeightMap ch(colladaDom, "#vazio");
-            ch.create(entity, nHeight);
-
-            const pugi::xml_node technique = nHeight.parent();
-            loadMaterial(entity, "#vazio", technique);
-        }
     }
 }
 

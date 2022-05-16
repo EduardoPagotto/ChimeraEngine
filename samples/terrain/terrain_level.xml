@@ -116,34 +116,42 @@
             </technique_common>
         </light>
     </library_lights>
+    <library_geometries>
+        <geometry id="Cubo-mesh" name="Cubo-mesh">
+            <extra>
+                <technique profile="chimera">
+                    <external_obj target="./assets/models/cubo2.obj"/>
+                    <instance_effect url="#Shade01-effect">
+                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
+                    </instance_effect>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="HeighMap-mesh" name="HeighMap-mesh">
+            <extra>
+                <technique profile="chimera">
+                    <external_height target="./assets/heightmaps/terrain3.jpg" square_x="32" square_y="32"/>
+                    <size>1000.0 200.0 1000.0</size>
+                </technique>
+            </extra>
+        </geometry>
+    </library_geometries>
     <library_visual_scenes>
         <visual_scene id="Scene" name="Scene">
             <node id="Cubo" name="Cubo" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 200.0 0 0 1 0 0 0 0 1</matrix>
-                <extra>
-                    <technique profile="chimera">
-                        <external_obj target="./assets/models/cubo2.obj"/>
-                        <instance_effect url="#Shade01-effect">
-                            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
-                        </instance_effect>
-                    </technique>
-                </extra>
+                <instance_geometry url="#Cubo-mesh"/>
             </node>
             <node id="HeighMap" name="HeighMap.001" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-                <extra>
-                    <technique profile="chimera">
-                        <external_height target="./assets/heightmaps/terrain3.jpg" square_x="32" square_y="32"/>
-                        <size>1000.0 200.0 1000.0</size>
-                        <bind_material>
-                            <technique_common>
-                                <instance_material symbol="MaterialHeightMap" target="#MaterialHeightMap"/>
-                            </technique_common>
-                        </bind_material>
-                    </technique>
-                </extra>
+                <instance_geometry url="#HeighMap-mesh">
+                    <bind_material>
+                        <technique_common>
+                            <instance_material symbol="MaterialHeightMap" target="#MaterialHeightMap"/>
+                        </technique_common>
+                    </bind_material>
+                </instance_geometry>
             </node>
-
             <node id="Camera" name="Camera" type="NODE">
                 <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>
                 <instance_camera url="#Camera-Test"/>

@@ -8,17 +8,13 @@ namespace Chimera {
 
 ColladaWaveFront::~ColladaWaveFront() {}
 
-void ColladaWaveFront::create(Entity& entity, pugi::xml_node geo) {
+void ColladaWaveFront::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
     MeshComponent& eMesh = entity.addComponent<MeshComponent>();
-
-    TagComponent& tag = entity.getComponent<TagComponent>();
-
     eMesh.mesh = new Mesh();
-    eMesh.tag.id = tag.id + "_obj";
-    eMesh.tag.tag = tag.tag + "_obj";
+    eMesh.tag.id = id;
+    eMesh.tag.tag = name;
     eMesh.tag.serial = Collada::getNewSerial();
-
     std::string target = geo.attribute("target").value();
 
     MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();

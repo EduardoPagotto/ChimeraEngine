@@ -11,5 +11,4 @@ class ColladaHeightMap : public Collada {
 
   private:
 };
-
 } // namespace Chimera

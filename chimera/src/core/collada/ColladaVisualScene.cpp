@@ -51,11 +51,12 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
     } else if (name == "instance_node") {
 
-        ColladaVisualScene vs(colladaDom, url);
-        const pugi::xml_node nNodes = vs.getLibrary("library_nodes");
-        for (pugi::xml_node n = nNodes.first_child(); n; n = n.next_sibling()) {
-            vs.nodeData(n, entity);
-        }
+        // TODO: refazer para uso de hierarquia
+        // ColladaVisualScene vs(colladaDom, url);
+        // const pugi::xml_node nNodes = vs.getLibrary("library_nodes");
+        // for (pugi::xml_node n = nNodes.first_child(); n; n = n.next_sibling()) {
+        //     vs.nodeData(n, entity);
+        // }
 
     } else if (name == "instance_camera") {
 

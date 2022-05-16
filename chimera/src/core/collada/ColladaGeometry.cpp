@@ -1,9 +1,9 @@
 #include "chimera/core/collada/ColladaGeometry.hpp"
 #include "chimera/core/collada/ColladaCube.hpp"
 #include "chimera/core/collada/ColladaHeightMap.hpp"
+#include "chimera/core/collada/ColladaParticle.hpp"
 #include "chimera/core/collada/ColladaWaveFront.hpp"
 #include "chimera/core/visible/Mesh.hpp"
-#include "chimera/core/visible/ParticleEmitter.hpp"
 
 namespace Chimera {
 
@@ -109,20 +109,8 @@ void ColladaGeometry::create(Entity& entity, pugi::xml_node geo) {
         const pugi::xml_node nParticle = getExtra(nExtra, "particle");
         if (nParticle) {
 
-            // loadMaterial(entity, "#vazio", nParticle);
-            glm::vec3 dir = textToVec3(nParticle.child("emmiter_font").child("maindir").text().as_string());
-            float spread = nParticle.child("emmiter_font").child("spread").text().as_float();
-
-            EmitterComponent& ec = entity.addComponent<EmitterComponent>();
-            ec.tag.id = id;
-            ec.tag.tag = name;
-            ec.emitter = new EmitterFont(dir, spread); // EF to R
-
-            ParticleContainer* pc = new ParticleContainer();
-            pc->life = nParticle.child("container").child("life").text().as_float();
-            pc->max = nParticle.child("container").child("max").text().as_int();
-            pc->respaw = nParticle.child("container").child("respaw").text().as_bool();
-            ec.emitter->pushParticleContainer(pc);
+            ColladaParticle cp(colladaDom, "#vazio");
+            cp.create(id, name, entity, nParticle);
         }
     }
 }

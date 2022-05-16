@@ -29,5 +29,15 @@
                 </technique>
             </extra>
         </geometry>
+        <geometry id="CuboZ-mesh" name="CuboZ-mesh">
+            <extra>
+                <technique profile="chimera">
+                    <external_obj target="./assets/models/cubo_textura_simples.obj"/>
+                    <instance_effect url="#Shade01-effect">
+                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
+                    </instance_effect>
+                </technique>
+            </extra>
+        </geometry>
     </library_geometries>
 </COLLADA>

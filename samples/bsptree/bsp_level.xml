@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_cameras>
+        <camera id="Camera-Test" name="Camera.001">
+            <optics>
+                <technique_common>
+                    <perspective>
+                        <xfov sid="xfov">49.13434</xfov>
+                        <aspect_ratio>1.777778</aspect_ratio>
+                        <znear sid="znear">0.1</znear>
+                        <zfar sid="zfar">1000</zfar>
+                    </perspective>
+                </technique_common>
+            </optics>
+            <extra>
+                <technique profile="chimera">
+                    <orbital>
+                        <up>0.0, 1.0, 0.0</up>
+                        <min>1.0</min>
+                        <max>1500.0</max>
+                        <yaw>0</yaw>
+                        <pitch>0</pitch>
+                    </orbital>
+                </technique>
+            </extra>
+        </camera>
+    </library_cameras>
     <library_images>
         <image id="grid2_png" name="grid2_png">
             <init_from>./assets/textures/grid2.png</init_from>
@@ -69,42 +94,7 @@
             </instance_effect>
         </material>
     </library_materials>
-    <library_cameras>
-        <camera id="Camera-Test" name="Camera.001">
-            <optics>
-                <technique_common>
-                    <perspective>
-                        <xfov sid="xfov">49.13434</xfov>
-                        <aspect_ratio>1.777778</aspect_ratio>
-                        <znear sid="znear">0.1</znear>
-                        <zfar sid="zfar">1000</zfar>
-                    </perspective>
-                </technique_common>
-            </optics>
-            <extra>
-                <technique profile="chimera">
-                    <orbital>
-                        <up>0.0, 1.0, 0.0</up>
-                        <min>1.0</min>
-                        <max>1500.0</max>
-                        <yaw>0</yaw>
-                        <pitch>0</pitch>
-                    </orbital>
-                </technique>
-            </extra>
-        </camera>
-    </library_cameras>
     <library_geometries>
-        <geometry id="Cubo-mesh" name="Cubo-mesh">
-            <extra>
-                <technique profile="chimera">
-                    <external_obj target="./assets/models/cubo2.obj"/>
-                    <instance_effect url="#Shade01-effect">
-                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
-                    </instance_effect>
-                </technique>
-            </extra>
-        </geometry>
         <geometry id="Voxel_cube-mesh" name="Voxel_cube-mesh">
             <extra>
                 <technique profile="chimera">
@@ -117,7 +107,7 @@
         <visual_scene id="Scene" name="Scene">
             <node id="Cubo" name="Cubo" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-                <instance_geometry url="#Cubo-mesh"/>
+                <instance_geometry url="file://assets/models/cubo2.xml#Cubo-mesh"/>
             </node>
             <node id="Voxel_cube" name="Voxel_cube.001" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>

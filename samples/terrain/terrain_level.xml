@@ -6,22 +6,6 @@
         </image>
     </library_images>
     <library_effects>
-        <effect id="Shade01-effect">
-            <profile_GLSL>
-                <technique sid="MeshNoMat">
-                    <include sid="VP_Shade01" url="file://./assets/shaders/MeshNoMat.vert"/>
-                    <include sid="FP_Shade01" url="file://./assets/shaders/MeshNoMat.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="VP_Shade01">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="FP_Shade01">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
-        </effect>
         <effect id="MaterialHeightMap-effect">
             <profile_COMMON>
                 <newparam sid="grid2_png-surface">
@@ -117,16 +101,6 @@
         </light>
     </library_lights>
     <library_geometries>
-        <geometry id="Cubo-mesh" name="Cubo-mesh">
-            <extra>
-                <technique profile="chimera">
-                    <external_obj target="./assets/models/cubo2.obj"/>
-                    <instance_effect url="#Shade01-effect">
-                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
-                    </instance_effect>
-                </technique>
-            </extra>
-        </geometry>
         <geometry id="HeighMap-mesh" name="HeighMap-mesh">
             <extra>
                 <technique profile="chimera">
@@ -140,7 +114,7 @@
         <visual_scene id="Scene" name="Scene">
             <node id="Cubo" name="Cubo" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 200.0 0 0 1 0 0 0 0 1</matrix>
-                <instance_geometry url="#Cubo-mesh"/>
+                <instance_geometry url="file://assets/models/cubo2.xml#Cubo-mesh"/>
             </node>
             <node id="HeighMap" name="HeighMap.001" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>

@@ -34,7 +34,7 @@ class CameraOrbit : public ICamera3D {
         return distance;
     }
     virtual const bool is3D() const override { return true; };
-    virtual EyeView* view() override { return &eye; }
+    virtual EyeView* getEyeView() override { return &eye; }
 
   private:
     void updateEye();

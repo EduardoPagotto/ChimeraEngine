@@ -246,15 +246,15 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
             cameraComponent.camera->setViewportSize(width, height);
 
             // se primeira passada inicializar views
-            if (cameraComponent.camera->view()->size() == 0) {
-                cameraComponent.camera->view()->create();
+            if (cameraComponent.camera->getEyeView()->size() == 0) {
+                cameraComponent.camera->getEyeView()->create();
                 if (cameraComponent.single == false)
-                    cameraComponent.camera->view()->create();
+                    cameraComponent.camera->getEyeView()->create();
             }
 
             // carrega camera defalt da cena
             if (cameraComponent.primary == true) {
-                createRenderBuffer(cameraComponent.camera->view());
+                createRenderBuffer(cameraComponent.camera->getEyeView());
                 camera = cameraComponent.camera;
             }
         }
@@ -337,12 +337,12 @@ void Scene::onRender() {
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
         camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
-        camera->view()->setIndex(count);
+        camera->getEyeView()->setIndex(count);
         count++;
 
         // used by all
         renderBatch.uQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
-        renderBatch.uQueue().insert(std::make_pair("view", UValue(camera->view()->getView())));
+        renderBatch.uQueue().insert(std::make_pair("view", UValue(camera->getEyeView()->getView())));
 
         // load shadows props to renderBatch
         if (shadowPass)

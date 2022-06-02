@@ -17,7 +17,7 @@ class CameraOrthographic : public ICamera {
     virtual const bool is3D() const override { return false; }
     virtual void onUpdate(const double& ts) override;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
-    virtual EyeView* view() override { return &eye; }
+    virtual EyeView* getEyeView() override { return &eye; }
 
   private:
     void updateEye();

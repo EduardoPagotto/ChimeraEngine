@@ -47,7 +47,7 @@ class ICamera {
     virtual void onUpdate(const double& ts) = 0;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
     virtual const bool is3D() const = 0;
-    virtual EyeView* view() = 0;
+    virtual EyeView* getEyeView() = 0;
 };
 
 struct CameraComponent {

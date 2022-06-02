@@ -26,7 +26,7 @@ class CameraFPS : public ICamera3D {
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
     virtual void updateVectors() override;
     virtual const bool is3D() const override { return true; }
-    virtual EyeView* view() override { return &eye; }
+    virtual EyeView* getEyeView() override { return &eye; }
 
   private:
     void updateEye();

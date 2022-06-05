@@ -1,4 +1,5 @@
 #include "chimera/core/collada/ColladaPhysicScene.hpp"
+#include "chimera/core/PhysicController.hpp"
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/visible/Mesh.hpp"
@@ -26,7 +27,8 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
     std::string name = node.attribute("name").value();
 
     Entity entityPc = reg->createEntity(name, id);
-    PhysicsControl& pc = entityPc.addComponent<PhysicsControl>();
+    PhysicsControl& pc = entityPc.addComponent<PhysicsControl>(); // FIXME: juntar tudo dentro do controller!!!!!
+    entityPc.addComponent<NativeScriptComponent>().bind<PhysicController>("PhysicController01");
 
     pugi::xml_node nTec = node.child("technique_common");
     std::string sGrav = nTec.child("gravity").text().as_string();

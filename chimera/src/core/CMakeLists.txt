@@ -84,7 +84,8 @@ if (BULLET_SET_TO_USE)
 	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
 								   bullet/Solid.cpp
 								   bullet/Constraint.cpp
-								   collada/ColladaPhysicScene.cpp) 
+								   collada/ColladaPhysicScene.cpp
+								   PhysicController.cpp) 
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 

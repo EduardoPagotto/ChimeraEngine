@@ -84,12 +84,6 @@ void Scene::onAttach() {
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
 
-        // TODO: passar para um NativeScriptComponent
-        if (entity.hasComponent<PhysicsControl>()) {
-            PhysicsControl& p = entity.getComponent<PhysicsControl>();
-            physicsControl = &p;
-        }
-
         // Se for um mesh inicializar componente (já que nao tenho classe de Mesh)
         if (entity.hasComponent<MeshComponent>()) {
             MeshComponent& mesh = entity.getComponent<MeshComponent>();
@@ -218,17 +212,11 @@ Canvas* Scene::getCanvas() {
 }
 
 void Scene::onUpdate(const double& ts) {
-    // update scripts
+    // update scripts (PhysicController aqui dentro!!!)
     registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-        if (nsc.instance) {
+        if (nsc.instance)
             nsc.instance->onUpdate(ts);
-        }
     });
-
-    if (physicsControl) {
-        physicsControl->stepSim(ts);
-        physicsControl->checkCollisions();
-    }
 
     for (auto emissor : emitters)
         emissor->recycleLife(ts);

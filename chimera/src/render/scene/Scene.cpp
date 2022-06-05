@@ -79,14 +79,6 @@ void Scene::onDeatach() {
 }
 
 void Scene::onAttach() {
-
-    // Registra Camera controllers
-    auto view1 = this->getRegistry().get().view<CameraComponent>();
-    for (auto entity : view1) {
-        Entity e = Entity{entity, &this->getRegistry()};
-        e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-    }
-
     // lista as tags nas entidades registradas
     registry.get().each([&](auto entityID) {
         Entity entity{entityID, &registry};
@@ -201,7 +193,19 @@ void Scene::onAttach() {
             CanvasComponent& cc = entity.getComponent<CanvasComponent>();
             this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());
         }
+
+        if (entity.hasComponent<EyeView>()) {
+            EyeView& ev = entity.getComponent<EyeView>();
+            eyeView = &ev;
+        }
     });
+
+    // Registra Camera controllers
+    auto view1 = this->getRegistry().get().view<CameraComponent>();
+    for (auto entity : view1) {
+        Entity e = Entity{entity, &this->getRegistry()};
+        e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+    }
 
     // initialize scripts
     registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {

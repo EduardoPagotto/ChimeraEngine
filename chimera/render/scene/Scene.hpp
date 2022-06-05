@@ -46,5 +46,7 @@ class Scene : public IStateMachine {
     std::vector<IEmitter*> emitters;
     ITrans* origem;
     bool logRender;
+
+    EyeView* eyeView;
 };
 } // namespace Chimera

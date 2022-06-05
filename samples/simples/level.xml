@@ -42,6 +42,7 @@
         <extra>
             <technique profile="chimera">
                 <canvas id="main_canvas" name="main_canvas" title="simples" with="800" height="640" full="0"/>
+                <eyeview id="main_eye_view" name="EyeView01" size="1" dist="0.4"/>
             </technique>
         </extra>
     </scene>

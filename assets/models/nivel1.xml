@@ -713,6 +713,7 @@
         <extra>
             <technique profile="chimera">
                 <canvas id="main_canvas" name="main_canvas" title="models" with="800" height="640" full="0"/>
+                <eyeview id="main_eye_view" name="EyeView01" size="2" dist="0.4"/>
                 <fonts>
                     <font url="file://assets/fonts/FreeSans.ttf#FreeSans_22" size="22" scaleX="1.0" scaleY="1.0"/>
                 </fonts>

@@ -244,9 +244,9 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
 
             // se primeira passada inicializar views
             if (cameraComponent.camera->getEyeView()->size() == 0) {
-                cameraComponent.camera->getEyeView()->create();
+                cameraComponent.camera->getEyeView()->add("right");
                 if (cameraComponent.single == false)
-                    cameraComponent.camera->getEyeView()->create();
+                    cameraComponent.camera->getEyeView()->add("left");
             }
 
             // carrega camera defalt da cena

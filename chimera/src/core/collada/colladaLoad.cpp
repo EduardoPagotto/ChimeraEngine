@@ -2,6 +2,7 @@
 #include "chimera/core/collada/ColladaPhysicScene.hpp"
 #include "chimera/core/collada/ColladaVisualScene.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/visible/EyeView.hpp"
 #include "chimera/core/visible/FontManager.hpp"
 #include <SDL2/SDL.h>
 
@@ -60,6 +61,24 @@ void colladaRegistryLoad(ColladaDom& dom, Registry& r) {
                 float scaleY = std::stod(nFont.attribute("scaleY").value());
                 FontManager::add(new FontAtlas(rfc.getFragment(), rfc.getPath(), size));
                 FontManager::get()->setScale(glm::vec2(scaleX, scaleY));
+            }
+        }
+
+        const pugi::xml_node nEveView = getExtra(extra, "eyeview");
+        if (nEveView != nullptr) {
+            std::string entName = nEveView.attribute("name").value();
+            std::string entId = nEveView.attribute("id").value();
+            Entity entity = r.createEntity(entName, entId);
+
+            EyeView& ev = entity.addComponent<EyeView>();
+            int size = static_cast<int>(std::stoul(nEveView.attribute("size").value()));
+            if (size == 1) {
+                ev.add("unique");
+            } else if (size == 2) {
+                ev.add("right");
+                ev.add("left");
+                float dist = std::stod(nEveView.attribute("dist").value());
+                ev.setDist(dist);
             }
         }
     }

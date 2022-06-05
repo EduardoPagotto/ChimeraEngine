@@ -20,12 +20,7 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         engine->pushState(tc.tile);
     }
 
-    { // injeta controlador de camera
-        auto view1 = scene->getRegistry().get().view<CameraComponent>();
-        for (auto entity : view1) {
-            Entity e = Entity{entity, &scene->getRegistry()};
-            e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-        }
+    {
 
         // Localiza objeto como o primario //EfeitoZoltan-mesh
         TransComponent& tc = scene->getRegistry().findComponent<TransComponent>("Zoltan");

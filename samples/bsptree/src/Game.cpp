@@ -1,21 +1,10 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/render/scene/CameraController.hpp"
 
 Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 
     using namespace Chimera;
-    Entity ce = scene->getRegistry().createEntity("Camera Entity");
-
-    {
-        // injeta controlador de camera
-        auto view1 = scene->getRegistry().get().view<CameraComponent>();
-        for (auto entity : view1) {
-            Entity e = Entity{entity, &scene->getRegistry()};
-            e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-        }
-    }
 
     engine->pushState(this);
     engine->pushState(scene);

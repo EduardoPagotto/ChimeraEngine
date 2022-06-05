@@ -12,6 +12,7 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/VertexData.hpp"
+#include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include <SDL2/SDL.h>
 
@@ -78,6 +79,14 @@ void Scene::onDeatach() {
 }
 
 void Scene::onAttach() {
+
+    // Registra Camera controllers
+    auto view1 = this->getRegistry().get().view<CameraComponent>();
+    for (auto entity : view1) {
+        Entity e = Entity{entity, &this->getRegistry()};
+        e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+    }
+
     // lista as tags nas entidades registradas
     registry.get().each([&](auto entityID) {
         Entity entity{entityID, &registry};

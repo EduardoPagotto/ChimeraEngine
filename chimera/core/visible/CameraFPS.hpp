@@ -12,7 +12,7 @@ class CameraFPS : public ICamera3D {
     void processCameraFOV(double yOffset);
     void processCameraRotation(double xOffset, double yOffset, bool constrainPitch = true);
     void processCameraMovement(glm::vec3& direction, float deltaTime);
-    virtual void onUpdate(const double& ts) override;
+    virtual void update(const double& ts, EyeView* eyeView) override;
     virtual const glm::mat4& getProjection() const override { return projectionMatrix; }
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::vec3& getFront() const override { return front; }
@@ -26,15 +26,13 @@ class CameraFPS : public ICamera3D {
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
     virtual void updateVectors() override;
     virtual const bool is3D() const override { return true; }
-    virtual EyeView* getEyeView() override { return &eye; }
 
   private:
-    void updateEye();
+    void updateEye(EyeView& eye);
     glm::vec3 position, front, up, right, worldUp;
     float pitch, yaw, fov;
     float nearPlane, farPlane;
     float movementSpeed;
     glm::mat4 projectionMatrix;
-    EyeView eye;
 };
 } // namespace Chimera

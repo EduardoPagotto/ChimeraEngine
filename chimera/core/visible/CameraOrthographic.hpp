@@ -15,15 +15,13 @@ class CameraOrthographic : public ICamera {
     virtual const glm::vec3& getPosition() const override { return position; }
     virtual const glm::mat4& getProjection() const override { return projectionMatrix; }
     virtual const bool is3D() const override { return false; }
-    virtual void onUpdate(const double& ts) override;
+    virtual void update(const double& ts, EyeView* eyeView) override;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
-    virtual EyeView* getEyeView() override { return &eye; }
 
   private:
-    void updateEye();
+    void updateEye(EyeView& eye);
     float rotation, size, nearClip, farClip;
     glm::vec3 position;
     glm::mat4 projectionMatrix;
-    EyeView eye;
 };
 } // namespace Chimera

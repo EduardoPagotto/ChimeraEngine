@@ -11,6 +11,7 @@ struct RenderCommand {
     RenderCommand() = default;
     IRenderable3d* renderable = nullptr;
     ICamera* camera = nullptr;
+    EyeView* eyeView = nullptr;
     glm::mat4 transform = glm::mat4(1.0f);
     Shader shader;
     MapUniform uniforms;

@@ -28,9 +28,9 @@ ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm:
 
 ShadowPass::~ShadowPass() { delete shadowBuffer; }
 
-void ShadowPass::exec(Registry& registry, ICamera* camera, IRenderer3d& renderer, ITrans* origem, const bool& logRender) {
+void ShadowPass::exec(Registry& registry, ICamera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem, const bool& logRender) {
 
-    renderer.begin(camera);
+    renderer.begin(camera, eyeView);
     {
         auto lightViewEnt = registry.get().view<LightComponent>();
         for (auto entity : lightViewEnt) {

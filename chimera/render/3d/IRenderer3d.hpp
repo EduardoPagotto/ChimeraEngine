@@ -4,7 +4,7 @@
 namespace Chimera {
 class IRenderer3d {
   public:
-    virtual void begin(class ICamera* camera) = 0;
+    virtual void begin(class ICamera* camera, class EyeView* eyeView) = 0;
     virtual void submit(const class RenderCommand& command) = 0;
     virtual void end() = 0;
     virtual void flush() = 0;

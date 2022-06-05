@@ -14,15 +14,15 @@ class ICamera {
     virtual const glm::mat4& getProjection() const = 0;
     virtual const glm::vec3& getPosition() const = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
-    virtual void onUpdate(const double& ts) = 0;
+    virtual void update(const double& ts, EyeView* eyeView) = 0;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
     virtual const bool is3D() const = 0;
-    virtual EyeView* getEyeView() = 0;
 };
 
 struct CameraComponent {
     TagComponent tag;
     ICamera* camera = nullptr;
+    EyeView* eyeView = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;
     bool single = true; // FIXME: Camera simples ou dupla aqui, melhorar para o arquivo .DAE

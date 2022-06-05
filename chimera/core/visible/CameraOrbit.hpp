@@ -24,7 +24,7 @@ class CameraOrbit : public ICamera3D {
     virtual void setFov(const float& value) override { this->fov = value; }
     virtual void setNear(const float& value) override { this->nearPlane = value; }
     virtual void setFar(const float& value) override { this->farPlane = value; }
-    virtual void onUpdate(const double& ts) override;
+    virtual void update(const double& ts, EyeView* eyeView) override;
     virtual void setPosition(const glm::vec3& position) override { this->position = position; }
     virtual void invertPitch() override;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
@@ -34,16 +34,14 @@ class CameraOrbit : public ICamera3D {
         return distance;
     }
     virtual const bool is3D() const override { return true; };
-    virtual EyeView* getEyeView() override { return &eye; }
 
   private:
-    void updateEye();
+    void updateEye(EyeView& eye);
     glm::vec3 position, front, up;
     float pitch, yaw, fov;
     float nearPlane, farPlane;
     float distance;
     float min, max;
     glm::mat4 projectionMatrix;
-    EyeView eye;
 };
 } // namespace Chimera

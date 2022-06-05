@@ -26,7 +26,7 @@ void CameraFPS::setViewportSize(const uint32_t& width, const uint32_t& height) {
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
-void CameraFPS::updateEye() {
+void CameraFPS::updateEye(EyeView& eye) {
     if (eye.size() == 1) {
         eye.update(glm::lookAt(position, position + front, up), projectionMatrix);
     } else {
@@ -56,7 +56,7 @@ void CameraFPS::updateVectors() {
     up = glm::normalize(glm::cross(right, front));
 }
 
-void CameraFPS::onUpdate(const double& ts) {
+void CameraFPS::update(const double& ts, EyeView* eyeView) {
     // Movement speed
     if (Keyboard::isPressed(SDLK_LSHIFT)) // GLFW_KEY_LEFT_SHIFT
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;
@@ -101,7 +101,7 @@ void CameraFPS::onUpdate(const double& ts) {
 
     processCameraRotation(mouseXDelta, mouseYDelta, true);
     updateVectors();
-    this->updateEye();
+    this->updateEye(*eyeView);
 }
 
 void CameraFPS::processCameraMovement(glm::vec3& direction, float deltaTime) {

@@ -79,6 +79,7 @@ void Scene::onDeatach() {
 }
 
 void Scene::onAttach() {
+
     // lista as tags nas entidades registradas
     registry.get().each([&](auto entityID) {
         Entity entity{entityID, &registry};
@@ -200,21 +201,30 @@ void Scene::onAttach() {
         }
     });
 
-    // Registra Camera controllers
-    auto view1 = this->getRegistry().get().view<CameraComponent>();
-    for (auto entity : view1) {
-        Entity e = Entity{entity, &this->getRegistry()};
-        e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+    {
+        // Registra Camera controllers EyeView deve ser localizado acima
+        auto view1 = this->getRegistry().get().view<CameraComponent>();
+        for (auto entity : view1) {
+            Entity e = Entity{entity, &this->getRegistry()};
+
+            auto& cc = e.getComponent<CameraComponent>();
+            cc.eyeView = eyeView;
+
+            if (cc.camera->is3D() == true)
+                e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+        }
     }
 
-    // initialize scripts
-    registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-        if (!nsc.instance) {
-            nsc.instance = nsc.instantiateScript();
-            nsc.instance->entity = Entity{entity, &registry};
-            nsc.instance->onCreate();
-        }
-    });
+    {
+        // initialize scripts
+        registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+            if (!nsc.instance) {
+                nsc.instance = nsc.instantiateScript();
+                nsc.instance->entity = Entity{entity, &registry};
+                nsc.instance->onCreate();
+            }
+        });
+    }
 
     origem = new Transform(); // FIXME: coisa feia!!!!
 }
@@ -246,16 +256,9 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
         if (!cameraComponent.fixedAspectRatio) {
             cameraComponent.camera->setViewportSize(width, height);
 
-            // se primeira passada inicializar views
-            if (cameraComponent.camera->getEyeView()->size() == 0) {
-                cameraComponent.camera->getEyeView()->add("right");
-                if (cameraComponent.single == false)
-                    cameraComponent.camera->getEyeView()->add("left");
-            }
-
             // carrega camera defalt da cena
             if (cameraComponent.primary == true) {
-                createRenderBuffer(cameraComponent.camera->getEyeView());
+                createRenderBuffer(eyeView);
                 activeCam = cameraComponent.camera;
             }
         }
@@ -296,6 +299,7 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 
         RenderCommand command;
         command.camera = camera;
+        command.eyeView = eyeView;
         command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = renderable;
@@ -315,6 +319,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
 
         RenderCommand command;
         command.camera = camera;
+        command.eyeView = eyeView;
         command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = rc.renderable;
@@ -336,17 +341,17 @@ void Scene::onRender() {
 
     // render a shadows in framebuffer
     if (shadowPass)
-        shadowPass->exec(registry, camera, renderBatch, origem, logRender);
+        shadowPass->exec(registry, camera, eyeView, renderBatch, origem, logRender);
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
         camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
-        camera->getEyeView()->setIndex(count);
+        eyeView->setIndex(count);
         count++;
 
         // used by all
         renderBatch.uQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
-        renderBatch.uQueue().insert(std::make_pair("view", UValue(camera->getEyeView()->getView())));
+        renderBatch.uQueue().insert(std::make_pair("view", UValue(eyeView->getView())));
 
         // load shadows props to renderBatch
         if (shadowPass)
@@ -361,7 +366,7 @@ void Scene::onRender() {
         }
 
         { // Render mesh
-            renderBatch.begin(camera);
+            renderBatch.begin(camera, eyeView);
             this->execRenderPass(camera, renderBatch);
 
             renderBatch.end();
@@ -377,7 +382,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderBatch.begin(camera);
+            renderBatch.begin(camera, eyeView);
             this->execEmitterPass(camera, renderBatch);
 
             renderBatch.end();

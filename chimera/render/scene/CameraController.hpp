@@ -13,5 +13,6 @@ class CameraController : public ScriptableEntity {
 
   private:
     ICamera* camera = nullptr;
+    EyeView* eyeView = nullptr;
 };
 } // namespace Chimera

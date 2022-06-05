@@ -33,7 +33,7 @@ void CameraOrbit::setViewportSize(const uint32_t& width, const uint32_t& height)
     projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 }
 
-void CameraOrbit::updateEye() {
+void CameraOrbit::updateEye(EyeView& eye) {
     if (eye.size() == 1) {
         eye.update(glm::lookAt(position, front, up), projectionMatrix);
     } else {
@@ -73,7 +73,7 @@ void CameraOrbit::updateVectors() {
     }
 }
 
-void CameraOrbit::onUpdate(const double& ts) {
+void CameraOrbit::update(const double& ts, EyeView* eyeView) {
 
     if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
         glm::ivec2 mouseMove = MouseDevice::getMoveRel();
@@ -86,7 +86,7 @@ void CameraOrbit::onUpdate(const double& ts) {
 
     updateVectors();
 
-    this->updateEye();
+    this->updateEye(*eyeView);
 }
 
 void CameraOrbit::processDistance(const int& _mz) {

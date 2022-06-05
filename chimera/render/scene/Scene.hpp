@@ -38,7 +38,7 @@ class Scene : public IStateMachine {
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
     uint32_t viewportWidth, viewportHeight;
     Registry registry;
-    ICamera* camera;
+    ICamera* activeCam;
     std::vector<RenderBuffer*> vRB;
     ShadowPass* shadowPass;
     PhysicsControl* physicsControl;

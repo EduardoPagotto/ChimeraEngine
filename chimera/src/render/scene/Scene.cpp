@@ -18,7 +18,7 @@
 namespace Chimera {
 
 Scene::Scene()
-    : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr), shadowPass(nullptr),
+    : activeCam(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr), shadowPass(nullptr),
       logRender(false) {}
 
 Scene::~Scene() {
@@ -255,7 +255,7 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
             // carrega camera defalt da cena
             if (cameraComponent.primary == true) {
                 createRenderBuffer(cameraComponent.camera->getEyeView());
-                camera = cameraComponent.camera;
+                activeCam = cameraComponent.camera;
             }
         }
     }
@@ -325,6 +325,9 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
 }
 
 void Scene::onRender() {
+
+    ICamera* camera = activeCam;
+
     if (logRender == true) {
         const glm::vec3& pos = camera->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);

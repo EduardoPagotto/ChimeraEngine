@@ -4,6 +4,7 @@
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/partition/BSPTree.hpp"
+#include "chimera/core/visible/CameraControllerFPS.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"

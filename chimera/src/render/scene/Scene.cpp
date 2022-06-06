@@ -208,9 +208,9 @@ void Scene::onAttach() {
 
             auto& cc = e.getComponent<CameraComponent>();
             cc.eyeView = eyeView;
-            if (cc.d.camKind == CamKind::FPS) {
+            if (cc.camKind == CamKind::FPS) {
                 e.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("CameraController");
-            } else if (cc.d.camKind == CamKind::ORBIT) {
+            } else if (cc.camKind == CamKind::ORBIT) {
                 e.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("CameraController");
             }
             // if (cc.camera->is3D() == true)

@@ -10,11 +10,11 @@ void CameraControllerOrbit::onCreate() {
     auto& cc = getComponent<CameraComponent>();
     camera = cc.camera; // FIXME: na criacao de camera se define se Perspective ou OrthogonaleyeView->
     eyeView = cc.eyeView;
-    up = cc.d.up;
-    pitch = cc.d.pitch;
-    yaw = cc.d.yaw;
-    min = cc.d.min;
-    max = cc.d.max;
+    up = cc.up;
+    pitch = cc.pitch;
+    yaw = cc.yaw;
+    min = cc.min;
+    max = cc.max;
     front = glm::vec3(0, 0, 0);
     distance = glm::distance(camera->getPosition(), this->front);
 

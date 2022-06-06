@@ -10,18 +10,6 @@ namespace Chimera {
 
 enum class CamKind { FPS = 0, ORBIT = 1, STATIC = 3 };
 
-struct CameraControllerData {
-    CameraControllerData() = default;
-    CameraControllerData(const CameraControllerData& o) = default;
-    CamKind camKind = CamKind::STATIC;
-    bool perspectiove = false;
-    float pitch = 0.0f, yaw = 90.0f, movementSpeed = 1.0f, distance = 1.0f, min = 0.5f, max = 1000.0f;
-    // glm::vec3 position = glm::vec3(1, 0, 0)
-    glm::vec3 front = glm::vec3(0, 0, 0);
-    glm::vec3 up = glm::vec3(0, 1, 0), right = glm::vec3(1, 0, 0);
-    glm::vec3 worldUp = glm::vec3(0, 1, 0); // FIXME: Remover ???
-};
-
 class Projection {
   public:
     virtual void setViewportProjection(const uint32_t& width, const uint32_t& height) = 0;

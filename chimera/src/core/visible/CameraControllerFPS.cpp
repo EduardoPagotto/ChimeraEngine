@@ -9,11 +9,10 @@ void CameraControllerFPS::onCreate() {
     auto& cc = getComponent<CameraComponent>();
     camera = cc.camera;
     eyeView = cc.eyeView;
-    up = cc.d.up;
-    worldUp = cc.d.up;
-    front = cc.d.front;
-    pitch = cc.d.pitch;
-    yaw = cc.d.yaw;
+    up = cc.up;
+    worldUp = cc.up;
+    pitch = cc.pitch;
+    yaw = cc.yaw;
     movementSpeed = FPSCAMERA_MAX_SPEED;
 
     this->updateVectors();

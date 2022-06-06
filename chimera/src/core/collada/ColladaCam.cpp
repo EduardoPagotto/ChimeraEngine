@@ -45,12 +45,12 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
 
                 cc.camera = new Camera(new Perspective(fov, znear, zfar));
                 cc.camera->setPosition(trans.trans->getPosition()); // Assim mesmo ou do campo como abaixo ???
-                cc.d.camKind = CamKind::ORBIT;
-                cc.d.up = textToVec3(orbital.child("up").text().as_string());
-                cc.d.yaw = orbital.child("yaw").text().as_float();
-                cc.d.pitch = orbital.child("pitch").text().as_float();
-                cc.d.min = orbital.child("min").text().as_float();
-                cc.d.max = orbital.child("max").text().as_float();
+                cc.camKind = CamKind::ORBIT;
+                cc.up = textToVec3(orbital.child("up").text().as_string());
+                cc.yaw = orbital.child("yaw").text().as_float();
+                cc.pitch = orbital.child("pitch").text().as_float();
+                cc.min = orbital.child("min").text().as_float();
+                cc.max = orbital.child("max").text().as_float();
             }
 
             pugi::xml_node nFPS = getExtra(node, "FPS");
@@ -58,10 +58,10 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
 
                 cc.camera = new Camera(new Perspective(fov, znear, zfar));
                 cc.camera->setPosition(textToVec3(nFPS.child("pos").text().as_string()));
-                cc.d.camKind = CamKind::FPS;
-                cc.d.up = textToVec3(nFPS.child("up").text().as_string());
-                cc.d.yaw = nFPS.child("yaw").text().as_float();
-                cc.d.pitch = nFPS.child("pitch").text().as_float();
+                cc.camKind = CamKind::FPS;
+                cc.up = textToVec3(nFPS.child("up").text().as_string());
+                cc.yaw = nFPS.child("yaw").text().as_float();
+                cc.pitch = nFPS.child("pitch").text().as_float();
             }
         }
     }

@@ -2,7 +2,6 @@
 #include "ShadowPass.hpp"
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/core/buffer/RenderBuffer.hpp"
-#include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/device/Canvas.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
@@ -28,25 +27,23 @@ class Scene : public IStateMachine {
     virtual std::string getName() const override { return "Scene"; }
 
     // FIXME: colocar como privado depois de ajustar
-    void onViewportResize(uint32_t width, uint32_t height);
+    void onViewportResize(const uint32_t& width, const uint32_t& height);
 
   private:
-    void createRenderBuffer(EyeView* eyeView);
+    void createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height);
     void execRenderPass(ICamera* camera, IRenderer3d& renderer);
     void execShadowPass(ICamera* camera, IRenderer3d& renderer);
     void execEmitterPass(ICamera* camera, IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
-    uint32_t viewportWidth, viewportHeight;
-    Registry registry;
-    ICamera* activeCam;
-    std::vector<RenderBuffer*> vRB;
-    ShadowPass* shadowPass;
-    PhysicsControl* physicsControl;
-    Renderer3d renderBatch;
-    std::vector<IEmitter*> emitters;
-    ITrans* origem;
-    bool logRender;
 
+    ITrans* origem;
+    ICamera* activeCam;
     EyeView* eyeView;
+    ShadowPass* shadowPass;
+    bool logRender;
+    Registry registry;
+    Renderer3d renderBatch;
+    std::vector<RenderBuffer*> vRB;
+    std::vector<IEmitter*> emitters;
 };
 } // namespace Chimera

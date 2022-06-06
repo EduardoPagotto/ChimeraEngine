@@ -18,9 +18,7 @@
 
 namespace Chimera {
 
-Scene::Scene()
-    : activeCam(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr), shadowPass(nullptr),
-      logRender(false) {}
+Scene::Scene() : activeCam(nullptr), origem(nullptr), shadowPass(nullptr), logRender(false) {}
 
 Scene::~Scene() {
     if (shadowPass) {
@@ -51,7 +49,7 @@ RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const 
     return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), shader);
 }
 
-void Scene::createRenderBuffer(EyeView* eyeView) {
+void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
 
     for (auto rb : vRB) {
         delete rb;
@@ -59,12 +57,12 @@ void Scene::createRenderBuffer(EyeView* eyeView) {
     }
 
     vRB.clear();
-
-    if (eyeView->size() == 2) {
-        vRB.push_back(initRB(0, 0, viewportWidth / 2, viewportHeight));                 // left
-        vRB.push_back(initRB(viewportWidth / 2, 0, viewportWidth / 2, viewportHeight)); // right
+    uint32_t halfHidth = width / 2;
+    if (size == 2) {
+        vRB.push_back(initRB(0, 0, halfHidth, height));         // left
+        vRB.push_back(initRB(halfHidth, 0, halfHidth, height)); // right
     } else {
-        vRB.push_back(initRB(0, 0, viewportWidth, viewportHeight)); // full only
+        vRB.push_back(initRB(0, 0, width, height)); // full only
     }
 }
 
@@ -245,9 +243,7 @@ void Scene::onUpdate(const double& ts) {
         emissor->recycleLife(ts);
 }
 
-void Scene::onViewportResize(uint32_t width, uint32_t height) {
-    viewportWidth = width;
-    viewportHeight = height;
+void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
     auto view = registry.get().view<CameraComponent>();
     for (auto entity : view) {
@@ -258,7 +254,7 @@ void Scene::onViewportResize(uint32_t width, uint32_t height) {
 
             // carrega camera defalt da cena
             if (cameraComponent.primary == true) {
-                createRenderBuffer(eyeView);
+                createRenderBuffer(eyeView->size(), width, height);
                 activeCam = cameraComponent.camera;
             }
         }

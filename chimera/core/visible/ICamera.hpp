@@ -25,10 +25,8 @@ struct CameraComponent {
     EyeView* eyeView = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;
-    bool single = true; // FIXME: Camera simples ou dupla aqui, melhorar para o arquivo .DAE
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
-    // CameraComponent(glm::mat4 projection) : camera(projection) {}
 };
 
 class ICamera3D : public ICamera {

@@ -18,13 +18,9 @@ void CameraOrthographic::setPosition(const glm::vec3& position) { this->position
 void CameraOrthographic::update(const double& ts, EyeView* eyeView) { this->updateEye(*eyeView); }
 
 void CameraOrthographic::setViewportSize(const uint32_t& width, const uint32_t& height) {
-
-    float aspectRatio = (float)width / (float)height;
-    float left = -size * aspectRatio * 0.5f;
-    float right = size * aspectRatio * 0.5f;
-    float bottom = -size * 0.5;
-    float top = size * 0.5f;
-
-    projectionMatrix = glm::ortho(left, right, bottom, top, nearClip, farClip); //-xmag, xmag, -ymag, ymag ,znear ,zfar
+    float halfAspectRatio = (float)width / (float)height * 0.5f;
+    float xsize = size * halfAspectRatio;
+    float ysize = size * 0.5f;
+    projectionMatrix = glm::ortho(-xsize, xsize, -ysize, ysize, nearClip, farClip);
 }
 } // namespace Chimera

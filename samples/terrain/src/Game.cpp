@@ -5,9 +5,6 @@
 Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
     using namespace Chimera;
 
-    CameraComponent& cc = scene->getRegistry().findComponent<CameraComponent>("Camera");
-    cam = (ICamera3D*)cc.camera;
-
     engine->pushState(this);
     engine->pushState(scene);
 }
@@ -63,13 +60,21 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onUpdate(const double& ts) {
-    glm::vec3 pos = cam->getPosition();
-    glm::vec3 front = cam->getFront();
-    glm::vec3 up = cam->getUp();
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "pos(%.2f; %.2f; %.2f)", pos.x, pos.y, pos.z);
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "front(%.2f; %.2f; %.2f)", front.x, front.y, front.z);
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "up(%.2f; %.2f; %.2f)", up.x, up.y, up.z);
+    using namespace Chimera;
+
+    // if (scene->isReady()) {
+    //     NativeScriptComponent& cc = scene->getRegistry().findComponent<NativeScriptComponent>("CameraController");
+    //     // cam = (ICamera3D*)cc.camera;
+
+    //     glm::vec3 pos = cc.getPosition();
+    //     glm::vec3 front = cc.getFront();
+    //     glm::vec3 up = cc.getUp();
+
+    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "pos(%.2f; %.2f; %.2f)", pos.x, pos.y, pos.z);
+    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "front(%.2f; %.2f; %.2f)", front.x, front.y, front.z);
+    //     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "up(%.2f; %.2f; %.2f)", up.x, up.y, up.z);
+    // }
 }
 
 void Game::onRender() {}

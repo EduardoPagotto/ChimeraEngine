@@ -43,35 +43,27 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
             pugi::xml_node orbital = getExtra(node, "orbital");
             if (orbital != nullptr) {
 
-                min = orbital.child("min").text().as_float();
-                max = orbital.child("max").text().as_float();
-                float yaw = orbital.child("yaw").text().as_float();
-                float pitch = orbital.child("pitch").text().as_float();
-                glm::vec3 up = textToVec3(orbital.child("up").text().as_string());
-
                 TransComponent& trans = entity.getComponent<TransComponent>();
-                glm::vec3 pos = trans.trans->getPosition();
 
-                cc.camera = new CameraOrbit(pos, up, yaw, pitch);
-                ((CameraOrbit*)cc.camera)->setLimits(min, max);
-
-                ((ICamera3D*)cc.camera)->setFov(fov);
-                ((ICamera3D*)cc.camera)->setNear(znear);
-                ((ICamera3D*)cc.camera)->setFar(zfar);
+                cc.camera = new Camera(new Perspective(fov, znear, zfar));
+                cc.camera->setPosition(trans.trans->getPosition()); // Assim mesmo ou do campo como abaixo ???
+                cc.d.camKind = CamKind::ORBIT;
+                cc.d.up = textToVec3(orbital.child("up").text().as_string());
+                cc.d.yaw = orbital.child("yaw").text().as_float();
+                cc.d.pitch = orbital.child("pitch").text().as_float();
+                cc.d.min = orbital.child("min").text().as_float();
+                cc.d.max = orbital.child("max").text().as_float();
             }
 
             pugi::xml_node nFPS = getExtra(node, "FPS");
             if (nFPS != nullptr) {
 
-                glm::vec3 pos = textToVec3(nFPS.child("pos").text().as_string());
-                glm::vec3 up = textToVec3(nFPS.child("up").text().as_string());
-                float yaw = nFPS.child("yaw").text().as_float();
-                float pitch = nFPS.child("pitch").text().as_float();
-
-                cc.camera = new CameraFPS(pos, up, yaw, pitch);
-                ((ICamera3D*)cc.camera)->setFov(fov);
-                ((ICamera3D*)cc.camera)->setNear(znear);
-                ((ICamera3D*)cc.camera)->setFar(zfar);
+                cc.camera = new Camera(new Perspective(fov, znear, zfar));
+                cc.camera->setPosition(textToVec3(nFPS.child("pos").text().as_string()));
+                cc.d.camKind = CamKind::FPS;
+                cc.d.up = textToVec3(nFPS.child("up").text().as_string());
+                cc.d.yaw = nFPS.child("yaw").text().as_float();
+                cc.d.pitch = nFPS.child("pitch").text().as_float();
             }
         }
     }

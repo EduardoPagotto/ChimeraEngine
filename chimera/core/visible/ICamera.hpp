@@ -45,17 +45,4 @@ struct CameraComponent {
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
 };
-
-class ICamera3D : public ICamera {
-  public:
-    virtual ~ICamera3D() {}
-    virtual const glm::vec3& getFront() const = 0;
-    virtual const glm::vec3& getUp() const = 0;
-    virtual float updateDistanceFront() = 0;
-    virtual void invertPitch() = 0;
-    virtual void setFov(const float& value) = 0;
-    virtual void setNear(const float& value) = 0;
-    virtual void setFar(const float& value) = 0;
-    virtual void updateVectors() = 0;
-};
 } // namespace Chimera

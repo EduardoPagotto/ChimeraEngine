@@ -4,24 +4,6 @@
 
 namespace Chimera {
 
-void CameraController::onCreate() {
-    auto& cc = getComponent<CameraComponent>();
-    camera = cc.camera;
-    eyeView = cc.eyeView;
-
-    if (camera->is3D()) {
-        ICamera3D* pc = (ICamera3D*)camera;
-        pc->updateDistanceFront();
-        pc->updateVectors();
-    }
-}
-
-void CameraController::onDestroy() {}
-
-void CameraController::onUpdate(const double& ts) { camera->update(ts, eyeView); }
-
-//--
-
 void CameraControllerFPS::onCreate() {
 
     // if (cc.d.camKind==CamKind::FPS) // FIXME: Fazer antes acima

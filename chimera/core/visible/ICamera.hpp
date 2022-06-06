@@ -11,7 +11,6 @@ class ICamera {
     virtual const glm::vec3& getPosition() const = 0;
     virtual void setPosition(const glm::vec3& position) = 0;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
-    virtual const bool is3D() const = 0;
 };
 
 class Camera : public ICamera {
@@ -23,7 +22,6 @@ class Camera : public ICamera {
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override {
         projection->setViewportProjection(width, height);
     }
-    virtual const bool is3D() const override { return true; };
 
   private:
     Projection* projection;

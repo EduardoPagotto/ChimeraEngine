@@ -15,8 +15,8 @@
             <optics>
                 <technique_common>
                     <orthographic>
-                        <xmag>1.0</xmag>
-                        <ymag>1.0</ymag>
+                        <xmag>512.0</xmag>
+                        <ymag>512.0</ymag>
                         <aspect_ratio>0.1</aspect_ratio>
                         <znear>-1.0</znear>
                         <zfar>1.0</zfar>

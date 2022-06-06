@@ -6,20 +6,19 @@ namespace Chimera {
 class CameraOrthographic : public ICamera {
 
   public:
-    CameraOrthographic(const float& size, const float& nearClip, const float& farClip);
-    virtual ~CameraOrthographic() {}
+    CameraOrthographic(const float& xmag, const float& ymag, const float& near, const float& far);
+    virtual ~CameraOrthographic();
 
     void setRotation(float rot) { rotation = rot; }
     const float getRotation() const { return rotation; }
-    virtual void setPosition(const glm::vec3& position) override;
+    virtual void setPosition(const glm::vec3& position) override { this->position = position; };
     virtual const glm::vec3& getPosition() const override { return position; }
-    virtual const glm::mat4& getProjection() const override { return projectionMatrix; }
-    virtual const bool is3D() const override { return false; }
+    virtual const glm::mat4& getProjection() const override { return projection->getProjection(); }
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override;
 
   private:
-    float rotation, size, nearClip, farClip;
+    Orthogonal* projection;
+    float rotation;
     glm::vec3 position;
-    glm::mat4 projectionMatrix;
 };
 } // namespace Chimera

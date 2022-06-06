@@ -33,7 +33,7 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 znear = nCamType.child("znear").text().as_float();
                 zfar = nCamType.child("zfar").text().as_float();
 
-                cc.camera = new CameraOrthographic(512.0, znear, zfar); // FIXME: 512 ????
+                cc.camera = new CameraOrthographic(xmag, ymag, znear, zfar); // FIXME: 512 ????
             }
 
         } else if (std::string("extra") == node.name()) {

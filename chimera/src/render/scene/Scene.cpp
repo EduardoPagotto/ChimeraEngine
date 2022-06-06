@@ -5,6 +5,7 @@
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/partition/BSPTree.hpp"
 #include "chimera/core/visible/CameraControllerFPS.hpp"
+#include "chimera/core/visible/CameraControllerOrbit.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
@@ -13,7 +14,6 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/VertexData.hpp"
-#include "chimera/render/scene/CameraController.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include <SDL2/SDL.h>
 

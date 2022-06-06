@@ -39,6 +39,7 @@ set (SourcesCore Registry.cpp
 				 visible/TextureManager.cpp
 				 visible/CameraOrthographic.cpp
 				 visible/CameraControllerFPS.cpp
+				 visible/CameraControllerOrbit.cpp
 				 visible/FontAtlas.cpp
 				 visible/FontManager.cpp
 				 visible/Material.cpp

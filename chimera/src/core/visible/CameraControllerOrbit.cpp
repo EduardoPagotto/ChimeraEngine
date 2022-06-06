@@ -1,4 +1,4 @@
-#include "chimera/render/scene/CameraController.hpp"
+#include "chimera/core/visible/CameraControllerOrbit.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 

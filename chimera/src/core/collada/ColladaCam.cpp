@@ -1,6 +1,4 @@
 #include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/visible/CameraFPS.hpp"
-#include "chimera/core/visible/CameraOrbit.hpp"
 #include "chimera/core/visible/CameraOrthographic.hpp"
 #include "chimera/core/visible/ITrans.hpp"
 

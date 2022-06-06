@@ -15,7 +15,7 @@ Renderer3d::Renderer3d() : totIBO(0), totFaces(0) { uniformsQueue.reserve(300); 
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(ICamera* camera, EyeView* eyeView) {
+void Renderer3d::begin(EyeView* eyeView) {
     frustum.set(eyeView->getViewProjectionInverse());
     // debug data
     totIBO = 0;

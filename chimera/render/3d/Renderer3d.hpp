@@ -3,7 +3,6 @@
 #include "RenderCommand.hpp"
 #include "chimera/core/TransformationStack.hpp"
 #include "chimera/core/space/Frustum.hpp"
-#include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/Light.hpp"
 #include "chimera/core/visible/Shader.hpp"
 #include <cstdint>
@@ -15,7 +14,7 @@ class Renderer3d : public IRenderer3d {
   public:
     Renderer3d();
     virtual ~Renderer3d();
-    virtual void begin(ICamera* camera, EyeView* eyeView) override;
+    virtual void begin(EyeView* eyeView) override;
     virtual void submit(const RenderCommand& command) override;
     virtual void end() override;
     virtual void flush() override;

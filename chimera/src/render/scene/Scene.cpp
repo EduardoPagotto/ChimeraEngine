@@ -367,7 +367,7 @@ void Scene::onRender() {
         }
 
         { // Render mesh
-            renderBatch.begin(camera, eyeView);
+            renderBatch.begin(eyeView);
             this->execRenderPass(camera, renderBatch);
 
             renderBatch.end();
@@ -383,7 +383,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderBatch.begin(camera, eyeView);
+            renderBatch.begin(eyeView);
             this->execEmitterPass(camera, renderBatch);
 
             renderBatch.end();

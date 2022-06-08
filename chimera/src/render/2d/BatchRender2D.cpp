@@ -25,10 +25,10 @@ void BatchRender2D::init() {
     pVbo->bind();
 
     BufferLayout layout;
-    layout.push(3, GL_FLOAT, sizeof(float), false);
-    layout.push(2, GL_FLOAT, sizeof(float), false);
-    layout.push(1, GL_FLOAT, sizeof(float), false);
-    layout.push(4, GL_FLOAT, sizeof(float), false);
+    layout.Push<float>(3, false);
+    layout.Push<float>(2, false);
+    layout.Push<float>(1, false);
+    layout.Push<float>(4, false);
 
     pVbo->setLayout(layout);
     pVbo->setData(nullptr, RENDERER_BUFFER_SIZE);

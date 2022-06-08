@@ -48,6 +48,8 @@
                         <max>80.0</max>
                         <yaw>0</yaw>
                         <pitch>0</pitch>
+                        <primary>true</primary>
+                        <fixedAspectRatio>false</fixedAspectRatio>
                     </orbital>
                 </technique>
             </extra>

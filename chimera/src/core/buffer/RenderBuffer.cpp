@@ -12,7 +12,7 @@ RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuff
     const glm::vec3 quad[] = {glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(-1.0f, 1.0f, 0.0f),
                               glm::vec3(-1.0f, 1.0f, 0.0f),  glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)};
     BufferLayout b;
-    b.push(3, GL_FLOAT, sizeof(float), false);
+    b.Push<float>(3, false);
 
     vbo = new VertexBuffer(BufferType::STATIC);
     vbo->bind();

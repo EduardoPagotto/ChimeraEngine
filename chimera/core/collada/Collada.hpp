@@ -32,4 +32,31 @@ const glm::vec3 textToVec3(const std::string& text);
 const glm::vec4 textToVec4(const std::string& text);
 const glm::mat4 textToMat4(const std::string& text);
 const pugi::xml_node getExtra(const pugi::xml_node node, const std::string& name);
+
+template <typename T>
+inline void setChildParam(const pugi::xml_node& node, const char* paramName, T& value) {
+    // ... necessario pos c++ precisa de um escape generico se tipo nao definido
+}
+
+template <>
+inline void setChildParam<bool>(const pugi::xml_node& node, const char* paramName, bool& value) {
+    pugi::xml_node n = node.child(paramName);
+    if (n != nullptr)
+        value = n.text().as_bool();
+}
+
+template <>
+inline void setChildParam<float>(const pugi::xml_node& node, const char* paramName, float& value) {
+    pugi::xml_node n = node.child(paramName);
+    if (n != nullptr)
+        value = n.text().as_float();
+}
+
+template <>
+inline void setChildParam<glm::vec3>(const pugi::xml_node& node, const char* paramName, glm::vec3& value) {
+    pugi::xml_node n = node.child(paramName);
+    if (n != nullptr)
+        value = textToVec3(n.text().as_string());
+}
+
 } // namespace Chimera

@@ -8,9 +8,9 @@ RenderableDynamic::RenderableDynamic(const uint32_t& max) : max(max) {
     vbo->bind();
 
     BufferLayout layout;
-    layout.push(3, GL_FLOAT, sizeof(float), false);
-    layout.push(3, GL_FLOAT, sizeof(float), false);
-    layout.push(2, GL_FLOAT, sizeof(float), false);
+    layout.Push<float>(3, false);
+    layout.Push<float>(3, false);
+    layout.Push<float>(2, false);
     vbo->setLayout(layout);
     vbo->reSize(max);
     // vbo->setData(vertexData, vertexSize);

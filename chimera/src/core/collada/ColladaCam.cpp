@@ -21,7 +21,6 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
             if (std::string("perspective") == nCamType.name()) {
 
                 fov = nCamType.child("xfov").text().as_float();
-                // ratio = nCamType.child("aspect_ratio").text().as_float();
                 znear = nCamType.child("znear").text().as_float();
                 zfar = nCamType.child("zfar").text().as_float();
 
@@ -29,7 +28,6 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
 
                 xmag = nCamType.child("xmag").text().as_float();
                 ymag = nCamType.child("ymag").text().as_float();
-                // ratio = nCamType.child("aspect_ratio").text().as_float();
                 znear = nCamType.child("znear").text().as_float();
                 zfar = nCamType.child("zfar").text().as_float();
 
@@ -46,11 +44,13 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 cc.camera = new Camera(new Perspective(fov, znear, zfar));
                 cc.camera->setPosition(trans.trans->getPosition()); // Assim mesmo ou do campo como abaixo ???
                 cc.camKind = CamKind::ORBIT;
-                cc.up = textToVec3(orbital.child("up").text().as_string());
-                cc.yaw = orbital.child("yaw").text().as_float();
-                cc.pitch = orbital.child("pitch").text().as_float();
-                cc.min = orbital.child("min").text().as_float();
-                cc.max = orbital.child("max").text().as_float();
+                setChildParam(orbital, "up", cc.up);
+                setChildParam(orbital, "yaw", cc.yaw);
+                setChildParam(orbital, "pitch", cc.pitch);
+                setChildParam(orbital, "min", cc.min);
+                setChildParam(orbital, "max", cc.max);
+                setChildParam(orbital, "primary", cc.primary);
+                setChildParam(orbital, "fixedAspectRatio", cc.fixedAspectRatio);
             }
 
             pugi::xml_node nFPS = getExtra(node, "FPS");
@@ -59,9 +59,11 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 cc.camera = new Camera(new Perspective(fov, znear, zfar));
                 cc.camera->setPosition(textToVec3(nFPS.child("pos").text().as_string()));
                 cc.camKind = CamKind::FPS;
-                cc.up = textToVec3(nFPS.child("up").text().as_string());
-                cc.yaw = nFPS.child("yaw").text().as_float();
-                cc.pitch = nFPS.child("pitch").text().as_float();
+                setChildParam(nFPS, "up", cc.up);
+                setChildParam(nFPS, "yaw", cc.yaw);
+                setChildParam(nFPS, "pitch", cc.pitch);
+                setChildParam(nFPS, "primary", cc.primary);
+                setChildParam(nFPS, "fixedAspectRatio", cc.fixedAspectRatio);
             }
         }
     }

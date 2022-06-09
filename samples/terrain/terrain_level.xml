@@ -127,7 +127,7 @@
                 </instance_geometry>
             </node>
             <node id="Camera" name="Camera" type="NODE">
-                <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>
+                <matrix sid="transform">1 0 0 20 0 1 0 200 0 0 1 0 0 0 0 1</matrix>
                 <instance_camera url="#Camera-Test"/>
             </node>
             <node id="luz01" name="luz01" type="NODE">

@@ -31,7 +31,9 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 setChildParam(nCamType, "znear", znear);
                 setChildParam(nCamType, "zfar", zfar);
 
-                cc.camera = new CameraOrthographic(xmag, ymag, znear, zfar); // FIXME: 512 ????
+                cc.camera = new CameraOrthographic(xmag, ymag, znear, zfar); // FIXME: tudo errado!!!!
+                cc.primary = false;
+                cc.fixedAspectRatio = false; // tem que ser false para texto!!!!
             }
 
         } else if (std::string("extra") == node.name()) {

@@ -60,6 +60,13 @@ inline void setChildParam<float>(const pugi::xml_node& node, const char* paramNa
 }
 
 template <>
+inline void setChildParam<std::string>(const pugi::xml_node& node, const char* paramName, std::string& value) {
+    pugi::xml_node n = node.child(paramName);
+    if (n != nullptr)
+        value = n.text().as_string();
+}
+
+template <>
 inline void setChildParam<glm::vec3>(const pugi::xml_node& node, const char* paramName, glm::vec3& value) {
     pugi::xml_node n = node.child(paramName);
     if (n != nullptr)

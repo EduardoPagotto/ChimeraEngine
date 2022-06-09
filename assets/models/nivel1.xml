@@ -621,6 +621,25 @@
     </library_controllers>
     <library_visual_scenes>
         <visual_scene id="Scene" name="Scene">
+            <node id="main_screem" name="main_screem">
+                <extra>
+                    <technique profile="chimera">
+                        <canvas>
+                            <title>models</title>
+                            <width>800</width>
+                            <height>640</height>
+                            <fullscreen>false</fullscreen>
+                        </canvas>
+                        <eyeview>
+                            <size>1</size>
+                            <distance>0.4</distance>
+                        </eyeview>
+                        <fonts>
+                            <font url="file://assets/fonts/FreeSans.ttf#FreeSans_22" size="22" scaleX="1.0" scaleY="1.0"/>
+                        </fonts>
+                    </technique>
+                </extra>
+            </node>
             <node id="SkyBox" name="SkyBox" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                 <instance_geometry url="#MeshSkyBox-mesh">
@@ -714,11 +733,6 @@
         <instance_physics_scene url="file://assets/models/nivel1_extra.xml#Scene-Physics"/>
         <extra>
             <technique profile="chimera">
-                <canvas id="main_canvas" name="main_canvas" title="models" with="800" height="640" full="0"/>
-                <eyeview id="main_eye_view" name="EyeView01" size="1" dist="0.4"/>
-                <fonts>
-                    <font url="file://assets/fonts/FreeSans.ttf#FreeSans_22" size="22" scaleX="1.0" scaleY="1.0"/>
-                </fonts>
                 <tiles>
                     <tile id="TileText" name="TileText">
                         <instance_camera url="#Camera-Tile"/>

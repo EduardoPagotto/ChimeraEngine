@@ -189,14 +189,14 @@ void Scene::onAttach() {
             }
         }
 
-        if (entity.hasComponent<CanvasComponent>()) {
-            CanvasComponent& cc = entity.getComponent<CanvasComponent>();
-            this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());
-        }
-
         if (entity.hasComponent<EyeView>()) {
             EyeView& ev = entity.getComponent<EyeView>();
             eyeView = &ev;
+        }
+
+        if (entity.hasComponent<CanvasComponent>()) {
+            CanvasComponent& cc = entity.getComponent<CanvasComponent>();
+            this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());
         }
     });
 
@@ -212,9 +212,9 @@ void Scene::onAttach() {
                 e.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("CameraController");
             } else if (cc.camKind == CamKind::ORBIT) {
                 e.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("CameraController");
+            } else if (cc.camKind == CamKind::STATIC) {
+                //     e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
             }
-            // if (cc.camera->is3D() == true)
-            //     e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
         }
     }
 
@@ -233,7 +233,7 @@ void Scene::onAttach() {
 }
 
 Canvas* Scene::getCanvas() {
-    CanvasComponent& cc = registry.findComponent<CanvasComponent>("main_canvas");
+    CanvasComponent& cc = registry.findComponent<CanvasComponent>("main_screem");
     return cc.canvas;
 }
 

@@ -1,5 +1,6 @@
 #include "chimera/core/collada/ColladaVisualScene.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
+#include "chimera/core/collada/ColladaExtra.hpp"
 #include "chimera/core/collada/ColladaGeometry.hpp"
 #include "chimera/core/collada/ColladaLight.hpp"
 #include "chimera/core/collada/ColladaMaterial.hpp"
@@ -64,6 +65,10 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
         cc.create(entity, cc.getLibrary("library_cameras"));
     } else if (name == "node") {
         // TODO: implementar hierarquia
+    } else if (name == "extra") {
+
+        ColladaExtra ce(colladaDom, "#vazio");
+        ce.create(entity, n);
     }
 }
 

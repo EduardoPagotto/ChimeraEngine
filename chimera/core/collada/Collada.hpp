@@ -46,6 +46,13 @@ inline void setChildParam<bool>(const pugi::xml_node& node, const char* paramNam
 }
 
 template <>
+inline void setChildParam<uint32_t>(const pugi::xml_node& node, const char* paramName, uint32_t& value) {
+    pugi::xml_node n = node.child(paramName);
+    if (n != nullptr)
+        value = n.text().as_int();
+}
+
+template <>
 inline void setChildParam<float>(const pugi::xml_node& node, const char* paramName, float& value) {
     pugi::xml_node n = node.child(paramName);
     if (n != nullptr)

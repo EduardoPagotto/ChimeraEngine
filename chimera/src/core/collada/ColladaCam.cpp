@@ -20,16 +20,16 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
             const pugi::xml_node nCamType = node.child("technique_common").first_child();
             if (std::string("perspective") == nCamType.name()) {
 
-                fov = nCamType.child("xfov").text().as_float();
-                znear = nCamType.child("znear").text().as_float();
-                zfar = nCamType.child("zfar").text().as_float();
+                setChildParam(nCamType, "xfov", fov);
+                setChildParam(nCamType, "znear", znear);
+                setChildParam(nCamType, "zfar", zfar);
 
             } else if (std::string("orthographic") == nCamType.name()) {
 
-                xmag = nCamType.child("xmag").text().as_float();
-                ymag = nCamType.child("ymag").text().as_float();
-                znear = nCamType.child("znear").text().as_float();
-                zfar = nCamType.child("zfar").text().as_float();
+                setChildParam(nCamType, "xmag", xmag);
+                setChildParam(nCamType, "ymag", ymag);
+                setChildParam(nCamType, "znear", znear);
+                setChildParam(nCamType, "zfar", zfar);
 
                 cc.camera = new CameraOrthographic(xmag, ymag, znear, zfar); // FIXME: 512 ????
             }

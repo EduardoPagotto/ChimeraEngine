@@ -7,9 +7,11 @@ ColladaParticle::~ColladaParticle() {}
 
 void ColladaParticle::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nParticle) {
 
-    // loadMaterial(entity, "#vazio", nParticle);
-    glm::vec3 dir = textToVec3(nParticle.child("emmiter_font").child("maindir").text().as_string());
-    float spread = nParticle.child("emmiter_font").child("spread").text().as_float();
+    glm::vec dir = glm::vec3(0, 0, 10);
+    float spread = 1.5f;
+    const pugi::xml_node& nEmiter = nParticle.child("emmiter_font");
+    setChildParam(nEmiter, "maindir", dir);
+    setChildParam(nEmiter, "spread", spread);
 
     EmitterComponent& ec = entity.addComponent<EmitterComponent>();
     ec.tag.id = id;
@@ -17,9 +19,10 @@ void ColladaParticle::create(const std::string& id, const std::string& name, Ent
     ec.emitter = new EmitterFont(dir, spread); // EF to R
 
     ParticleContainer* pc = new ParticleContainer();
-    pc->life = nParticle.child("container").child("life").text().as_float();
-    pc->max = nParticle.child("container").child("max").text().as_int();
-    pc->respaw = nParticle.child("container").child("respaw").text().as_bool();
+    const pugi::xml_node& nContainer = nParticle.child("container");
+    setChildParam(nContainer, "life", pc->life);
+    setChildParam(nContainer, "max", pc->max);
+    setChildParam(nContainer, "respaw", pc->respaw);
     ec.emitter->pushParticleContainer(pc);
 }
 } // namespace Chimera

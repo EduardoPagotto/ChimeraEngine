@@ -132,16 +132,11 @@ void Engine::run(void) {
                 for (auto it = stack.begin(); it != stack.end(); it++)
                     (*it)->onUpdate(ts);
 
-                for (int eyeIndice = 0; eyeIndice < canvas->getTotEyes(); eyeIndice++) {
-                    canvas->before(eyeIndice);
-                    // render all
-                    for (auto it = stack.begin(); it != stack.end(); it++) {
-                        (*it)->onRender();
-                    }
+                canvas->before();
+                for (auto it = stack.begin(); it != stack.end(); it++)
+                    (*it)->onRender();
 
-                    canvas->after(eyeIndice);
-                }
-                canvas->swapWindow();
+                canvas->after();
 
             } catch (...) { SDL_Quit(); }
         }

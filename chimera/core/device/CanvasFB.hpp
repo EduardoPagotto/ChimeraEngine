@@ -8,14 +8,11 @@ class CanvasFB : public Canvas {
   public:
     CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen = false);
     virtual ~CanvasFB();
-    virtual void before(const unsigned short& _indexEye = 0) override;
-    virtual void after(const unsigned short& _indexEye = 0) override;
+    virtual void before() override;
+    virtual void after() override;
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
 
-    // FIXME:  ver depois!!!!
-    virtual void swapWindow() override{};
-    virtual int getTotEyes() override { return 1; }
     uint32_t* getPixels() override { return pixels; }
     uint32_t getPixelFormat() { return pixelFormat; }
 

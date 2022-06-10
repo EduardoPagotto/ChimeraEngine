@@ -63,6 +63,8 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
         ColladaCam cc(colladaDom, url);
         cc.create(entity, cc.getLibrary("library_cameras"));
+        cc.createExtra(entity, n.first_child());
+
     } else if (name == "node") {
         // TODO: implementar hierarquia
     } else if (name == "extra") {

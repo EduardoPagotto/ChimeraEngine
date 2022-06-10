@@ -11,7 +11,7 @@
         <up_axis>Z_UP</up_axis>
     </asset>
     <library_cameras>
-        <camera id="Camera-Tile" name="Camera.002">
+        <camera id="Camera-Tile" name="Camera-Tile">
             <optics>
                 <technique_common>
                     <orthographic>
@@ -24,7 +24,7 @@
                 </technique_common>
             </optics>
         </camera>
-        <camera id="Camera-camera" name="Camera.001">
+        <camera id="Camera-camera" name="Camera-camera">
             <optics>
                 <technique_common>
                     <perspective>
@@ -35,24 +35,6 @@
                     </perspective>
                 </technique_common>
             </optics>
-            <extra>
-                <technique profile="blender">
-                    <YF_dofdist>0</YF_dofdist>
-                    <shiftx>0</shiftx>
-                    <shifty>0</shifty>
-                </technique>
-                <technique profile="chimera">
-                    <orbital>
-                        <up>0.0, 0.0, 1.0</up>
-                        <min>1.5</min>
-                        <max>80.0</max>
-                        <yaw>0</yaw>
-                        <pitch>0</pitch>
-                        <primary>true</primary>
-                        <fixedAspectRatio>false</fixedAspectRatio>
-                    </orbital>
-                </technique>
-            </extra>
         </camera>
     </library_cameras>
     <library_lights>
@@ -678,7 +660,34 @@
             </node>
             <node id="Camera" name="Camera" type="NODE">
                 <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>
-                <instance_camera url="#Camera-camera"/>
+                <instance_camera url="#Camera-camera">
+                    <extra>
+                        <technique profile="chimera">
+                            <orbital>
+                                <up>0.0, 0.0, 1.0</up>
+                                <min>1.5</min>
+                                <max>80.0</max>
+                                <yaw>0</yaw>
+                                <pitch>0</pitch>
+                                <primary>true</primary>
+                                <fixedAspectRatio>false</fixedAspectRatio>
+                            </orbital>
+                        </technique>
+                    </extra>
+                </instance_camera>
+            </node>
+            <node id="Camera-title01" name="Camera-title01" type="NODE">
+                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+                <instance_camera url="#Camera-Tile">
+                    <extra>
+                        <technique profile="chimera">
+                            <static>
+                                <primary>false</primary>
+                                <fixedAspectRatio>false</fixedAspectRatio>
+                            </static>
+                        </technique>
+                    </extra>
+                </instance_camera>
             </node>
             <node id="luz01" name="luz01" type="NODE">
                 <matrix sid="transform">-0.1733842 -0.7895962 0.5886219 3.166558 0.9833067 -0.1052982 0.1483921 -3.557333 -0.05518902 0.6045247 0.7946723 8.628012 0 0 0 1</matrix>
@@ -735,7 +744,7 @@
             <technique profile="chimera">
                 <tiles>
                     <tile id="TileText" name="TileText">
-                        <instance_camera url="#Camera-Tile"/>
+                        <camera_node ref="Camera-title01"/>
                         <instance_effect url="#ShadeText-effect">
                             <technique_hint platform="OpenGL|ES" profile="GLSL" ref="Text2D"/>
                         </instance_effect>

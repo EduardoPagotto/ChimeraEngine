@@ -20,8 +20,6 @@ void CameraControllerFPS::onCreate() {
 
 void CameraControllerFPS::onDestroy() {}
 
-void CameraControllerFPS::onUpdate(const double& ts) { this->update(ts); }
-
 void CameraControllerFPS::updateEye() {
     if (eyeView->size() == 1) {
         eyeView->update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
@@ -68,7 +66,7 @@ void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float delt
     camera->setPosition(camera->getPosition() + direction * deltaTime); // FIXME: mover para camera???
 }
 
-void CameraControllerFPS::update(const double& ts) {
+void CameraControllerFPS::onUpdate(const double& ts) {
     // Movement speed
     if (Keyboard::isPressed(SDLK_LSHIFT)) // GLFW_KEY_LEFT_SHIFT
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;

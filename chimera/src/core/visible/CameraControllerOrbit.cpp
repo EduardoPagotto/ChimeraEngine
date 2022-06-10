@@ -5,10 +5,8 @@
 namespace Chimera {
 
 void CameraControllerOrbit::onCreate() {
-
-    // if (cc.d.camKind==CamKind::FPS) // FIXME: Fazer antes acima
     auto& cc = getComponent<CameraComponent>();
-    camera = cc.camera; // FIXME: na criacao de camera se define se Perspective ou OrthogonaleyeView->
+    camera = cc.camera;
     eyeView = cc.eyeView;
     up = cc.up;
     pitch = cc.pitch;
@@ -22,8 +20,6 @@ void CameraControllerOrbit::onCreate() {
 }
 
 void CameraControllerOrbit::onDestroy() {}
-
-void CameraControllerOrbit::onUpdate(const double& ts) { this->update(ts); }
 
 void CameraControllerOrbit::updateEye() {
     if (eyeView->size() == 1) {
@@ -96,7 +92,7 @@ void CameraControllerOrbit::processCameraRotation(const int& xOffset, const int&
     }
 }
 
-void CameraControllerOrbit::update(const double& ts) {
+void CameraControllerOrbit::onUpdate(const double& ts) {
     if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
         glm::ivec2 mouseMove = MouseDevice::getMoveRel();
         this->processCameraRotation(mouseMove.x, mouseMove.y);
@@ -106,14 +102,13 @@ void CameraControllerOrbit::update(const double& ts) {
         this->processDistance(mouseMove.y);
     }
 
-    updateVectors();
-
+    this->updateVectors();
     this->updateEye();
 }
 
 void CameraControllerOrbit::invertPitch() {
     pitch = -pitch;
-    updateVectors();
+    this->updateVectors();
 }
 
 } // namespace Chimera

@@ -16,7 +16,7 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
         ComponentTile& tc = scene->getRegistry().findComponent<ComponentTile>("TileText");
         lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
         tc.tile->add(lFPS);
-        engine->pushState(tc.tile);
+        engine->getStack().pushState(tc.tile);
     }
 
     {

@@ -13,7 +13,7 @@ int main(int argn, char** argv) {
 
         Game* game = new Game(&engine);
 
-        engine.pushState(game);
+        engine.getStack().pushState(game);
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");

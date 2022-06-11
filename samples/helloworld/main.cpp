@@ -17,7 +17,7 @@ int main(int argn, char** argv) {
         Engine engine(new CanvasGL("Hello", 960, 540));
         Game* game = new Game(&engine);
 
-        engine.pushState(game);
+        engine.getStack().pushState(game);
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");

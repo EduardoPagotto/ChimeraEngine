@@ -6,8 +6,8 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
 
     using namespace Chimera;
 
-    engine->pushState(this);
-    engine->pushState(scene);
+    engine->getStack().pushState(this);
+    engine->getStack().pushState(scene);
 }
 
 Game::~Game() {}

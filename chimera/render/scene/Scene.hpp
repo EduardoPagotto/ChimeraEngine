@@ -1,5 +1,6 @@
 #pragma once
 #include "ShadowPass.hpp"
+//#include "chimera/core/StateStack.hpp"
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/core/buffer/RenderBuffer.hpp"
 #include "chimera/core/device/Canvas.hpp"
@@ -18,6 +19,8 @@ class Scene : public IStateMachine {
     void setOrigem(ITrans* o) { origem = o; }
     void setShadowPass(ShadowPass* shadowPass) { this->shadowPass = shadowPass; }
     Canvas* getCanvas();
+    // void setStack(StateStack& stack) { this->stack = &stack; }
+    // StateStack* getStack() const { return this->stack; }
     // Herdados
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -34,6 +37,7 @@ class Scene : public IStateMachine {
     void execEmitterPass(ICamera* camera, IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
 
+    // StateStack* stack;
     ITrans* origem;
     ICamera* activeCam;
     EyeView* eyeView;

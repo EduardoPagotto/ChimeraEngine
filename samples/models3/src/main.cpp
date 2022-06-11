@@ -29,8 +29,8 @@ int main(int argn, char** argv) {
 
         Game* game = new Game(&scene, &engine);
 
-        engine.pushState(game);
-        engine.pushState(&scene);
+        engine.getStack().pushState(game);
+        engine.getStack().pushState(&scene);
 
         Collada::destroy(); // clean loader
 

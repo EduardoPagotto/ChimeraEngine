@@ -7,6 +7,8 @@
 namespace Chimera {
 
 Engine::Engine(Canvas* canvas) : canvas(canvas), pause(true), fps(60), countDelta(0) {
+    // CanvasComponent& cc = registry.findComponent<CanvasComponent>("main_screem");
+    // canvas = cc.canvas;
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
@@ -16,16 +18,6 @@ Engine::~Engine() {
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-}
-
-void Engine::pushState(IStateMachine* state) {
-    stack.pushState(state);
-    state->onAttach();
-}
-
-void Engine::pushOverlay(IStateMachine* state) {
-    stack.pushOverlay(state);
-    state->onAttach();
 }
 
 bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {
@@ -62,8 +54,7 @@ void Engine::run(void) {
     uint32_t beginCount;
     uint32_t miniumCountDelta = 1000 / 140; // 16.66667.3 ms
     double ts;
-    // open devices
-    JoystickManager::find();
+    JoystickManager::find(); // open devices
 
     while (!l_quit) {
         beginCount = SDL_GetTicks();
@@ -124,10 +115,9 @@ void Engine::run(void) {
                     break;
             }
         }
-        // update game
-        if (!pause) {
+
+        if (!pause) { // update game
             try {
-                // update all
                 ts = (double)countDelta / 1000.0f;
                 for (auto it = stack.begin(); it != stack.end(); it++)
                     (*it)->onUpdate(ts);
@@ -140,19 +130,18 @@ void Engine::run(void) {
 
             } catch (...) { SDL_Quit(); }
         }
-        // count FPS each second
-        if (timerFPS.stepCount() == true) {
+
+        if (timerFPS.stepCount() == true) { // count FPS each second
             fps = timerFPS.getCountStep();
             utilSendEvent(EVENT_NEW_FPS, (void*)&fps, nullptr);
         }
-        // frame count limit
-        countDelta = SDL_GetTicks() - beginCount;
+
+        countDelta = SDL_GetTicks() - beginCount; // frame count limit
         if (countDelta < miniumCountDelta) {
             SDL_Delay(miniumCountDelta - countDelta);
             countDelta = miniumCountDelta;
         }
     }
-    // Release devices
-    JoystickManager::release();
+    JoystickManager::release(); // Release devices
 }
 } // namespace Chimera

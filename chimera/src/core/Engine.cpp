@@ -7,8 +7,6 @@
 namespace Chimera {
 
 Engine::Engine(Canvas* canvas) : canvas(canvas), pause(true), fps(60), countDelta(0) {
-    // CanvasComponent& cc = registry.findComponent<CanvasComponent>("main_screem");
-    // canvas = cc.canvas;
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
@@ -18,6 +16,11 @@ Engine::~Engine() {
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
+}
+
+void Engine::init() {
+    CanvasComponent& cc = registry.findComponent<CanvasComponent>("main_screem");
+    canvas = cc.canvas;
 }
 
 bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {

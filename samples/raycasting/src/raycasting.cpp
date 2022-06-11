@@ -1,8 +1,6 @@
-#include <cmath>
-
-#include <SDL2/SDL.h>
-
 #include "raycasting.hpp"
+#include <SDL2/SDL.h>
+#include <cmath>
 
 bool LoadWorld(const char filename[], World* world) {
     FILE* file;

@@ -1,10 +1,10 @@
 #include "chimera/core/collada/ColladaExtra.hpp"
+#include "chimera/core/device/CanvasFB.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
 #include "chimera/core/visible/EyeView.hpp"
 #include "chimera/core/visible/FontManager.hpp"
 
 namespace Chimera {
-ColladaExtra::~ColladaExtra() {}
 
 void ColladaExtra::create(Entity& entity, pugi::xml_node nodeExtra) {
 
@@ -20,8 +20,12 @@ void ColladaExtra::create(Entity& entity, pugi::xml_node nodeExtra) {
         setChildParam(nCanvas, "height", height);
         setChildParam(nCanvas, "fullscreen", fullscreen);
 
+        std::string type = nCanvas.attribute("type").value();
         CanvasComponent& cc = entity.addComponent<CanvasComponent>();
-        cc.canvas = new CanvasGL(title, width, height, fullscreen);
+        if (type == "FB")
+            cc.canvas = new CanvasFB(title, width, height, fullscreen);
+        else
+            cc.canvas = new CanvasGL(title, width, height, fullscreen);
     }
 
     const pugi::xml_node nEveView = getExtra(nodeExtra, "eyeview");

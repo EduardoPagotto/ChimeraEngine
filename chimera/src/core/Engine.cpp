@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-Engine::Engine(Canvas* canvas) : canvas(canvas), pause(true), fps(60), countDelta(0) {
+Engine::Engine() : canvas(nullptr), pause(true), fps(60), countDelta(0) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();

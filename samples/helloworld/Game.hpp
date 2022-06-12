@@ -6,7 +6,7 @@
 
 class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Engine* engine);
+    Game(Chimera::Engine& engine);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;

@@ -19,7 +19,8 @@
 
 namespace Chimera {
 
-Scene::Scene() : activeCam(nullptr), origem(nullptr), shadowPass(nullptr), logRender(false) {}
+Scene::Scene(Registry& r, StateStack& s)
+    : stack(&s), registry(&r), activeCam(nullptr), origem(nullptr), shadowPass(nullptr), logRender(false) {}
 
 Scene::~Scene() {
     if (shadowPass) {
@@ -69,7 +70,7 @@ void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const
 
 void Scene::onDeatach() {
     // destroy scripts
-    registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+    registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (!nsc.instance) {
             nsc.instance->onDestroy();
             nsc.destroyScript(&nsc);
@@ -80,8 +81,8 @@ void Scene::onDeatach() {
 void Scene::onAttach() {
 
     // lista as tags nas entidades registradas
-    registry.get().each([&](auto entityID) {
-        Entity entity{entityID, &registry};
+    registry->get().each([&](auto entityID) {
+        Entity entity{entityID, registry};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
 
@@ -202,9 +203,9 @@ void Scene::onAttach() {
 
     {
         // Registra Camera controllers EyeView deve ser localizado acima
-        auto view1 = this->getRegistry().get().view<CameraComponent>();
+        auto view1 = registry->get().view<CameraComponent>();
         for (auto entity : view1) {
-            Entity e = Entity{entity, &this->getRegistry()};
+            Entity e = Entity{entity, registry};
 
             auto& cc = e.getComponent<CameraComponent>();
             cc.eyeView = eyeView;
@@ -220,10 +221,10 @@ void Scene::onAttach() {
 
     {
         // initialize scripts
-        registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+        registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
             if (!nsc.instance) {
                 nsc.instance = nsc.instantiateScript();
-                nsc.instance->entity = Entity{entity, &registry};
+                nsc.instance->entity = Entity{entity, registry};
                 nsc.instance->onCreate();
             }
         });
@@ -233,13 +234,13 @@ void Scene::onAttach() {
 }
 
 Canvas* Scene::getCanvas() {
-    CanvasComponent& cc = registry.findComponent<CanvasComponent>("main_screem");
+    CanvasComponent& cc = registry->findComponent<CanvasComponent>("main_screem");
     return cc.canvas;
 }
 
 void Scene::onUpdate(const double& ts) {
     // update scripts (PhysicController aqui dentro!!!)
-    registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+    registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (nsc.instance)
             nsc.instance->onUpdate(ts);
     });
@@ -250,7 +251,7 @@ void Scene::onUpdate(const double& ts) {
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
-    auto view = registry.get().view<CameraComponent>();
+    auto view = registry->get().view<CameraComponent>();
     for (auto entity : view) {
 
         auto& cameraComponent = view.get<CameraComponent>(entity);
@@ -287,13 +288,13 @@ bool Scene::onEvent(const SDL_Event& event) {
 }
 
 void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
-    auto view = registry.get().view<RenderableParticlesComponent>();
+    auto view = registry->get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
 
         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
-        Entity e = {entity, &registry};
+        Entity e = {entity, registry};
         TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
         Shader& sc = e.getComponent<Shader>();
         MaterialComponent& mc = e.getComponent<MaterialComponent>();
@@ -314,7 +315,7 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
 }
 
 void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
-    auto group = registry.get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
+    auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
         auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
@@ -358,11 +359,11 @@ void Scene::onRender() {
         if (shadowPass)
             shadowPass->appy(camera, renderBatch);
 
-        auto lightView = registry.get().view<LightComponent>();
+        auto lightView = registry->get().view<LightComponent>();
         for (auto entity : lightView) {
             auto& lc = lightView.get<LightComponent>(entity);
-            auto& tc = registry.get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
-            if (lc.global)                                         // biding light prop
+            auto& tc = registry->get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
+            if (lc.global)                                          // biding light prop
                 lc.light->bindLight(renderBatch.uQueue(), tc.trans->getMatrix());
         }
 

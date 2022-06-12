@@ -1,29 +1,32 @@
 #include "Game.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
 
     using namespace Chimera;
-
-    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
-    SDL_Log("Hello iniciado");
-
-    for (int i = 0; i < argn; i++)
-        SDL_Log("Parametros %d: %s", i, argv[i]);
-
     try {
+        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+        SDL_Log("Models3 Iniciado");
 
-        Engine engine(new CanvasGL("Hello", 960, 540));
-        Game* game = new Game(&engine);
+        Engine engine;
 
-        engine.getStack().pushState(game);
+        ColladaDom dom = loadFileCollada("./samples/helloworld/level.xml");
+        colladaRegistryLoad(dom, engine.getRegistry());
+
+        engine.init();
+
+        Game* game = new Game(engine);
+
+        Collada::destroy(); // clean loader
+
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");
         delete game;
 
-        SDL_Log("Hello finalizado");
+        SDL_Log("AppShader finalizado com sucesso");
         return 0;
 
     } catch (const std::exception& ex) {

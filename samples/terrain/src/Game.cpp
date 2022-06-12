@@ -1,11 +1,11 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
+Game::Game(Chimera::Scene& scene) : scene(&scene) {
     using namespace Chimera;
 
-    engine->getStack().pushState(this);
-    engine->getStack().pushState(scene);
+    scene.getStack()->pushState(this);
+    scene.getStack()->pushState(&scene);
 }
 
 Game::~Game() {}

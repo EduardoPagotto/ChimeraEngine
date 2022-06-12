@@ -3,7 +3,7 @@
 #include "chimera/core/utils.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
+Game::Game(Chimera::Scene& scene) : scene(&scene) {
     using namespace Chimera;
     pCorpoRigido = nullptr;
     crt.yaw = 0.0f;
@@ -13,20 +13,20 @@ Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
     crt.hat = 0;
 
     { // FPS
-        ComponentTile& tc = scene->getRegistry().findComponent<ComponentTile>("TileText");
+        ComponentTile& tc = scene.getRegistry()->findComponent<ComponentTile>("TileText");
         lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
         tc.tile->add(lFPS);
-        engine->getStack().pushState(tc.tile);
+        scene.getStack()->pushState(tc.tile);
     }
 
-    {
-
-        // Localiza objeto como o primario //EfeitoZoltan-mesh
-        TransComponent& tc = scene->getRegistry().findComponent<TransComponent>("Zoltan");
+    { // Localiza objeto como o primario //EfeitoZoltan-mesh
+        TransComponent& tc = scene.getRegistry()->findComponent<TransComponent>("Zoltan");
         pCorpoRigido = (Solid*)tc.trans;
     }
 
-    scene->setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
+    scene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
+    scene.getStack()->pushState(this);
+    scene.getStack()->pushState(&scene);
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 }

@@ -1,3 +1,4 @@
+#include "Game.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/render/collada/ColladaRender.hpp"
@@ -5,32 +6,24 @@
 #include <iostream>
 #include <map>
 
-#ifdef OVR_SET_TO_USE
-#include "chimera/render/CanvasOVR.hpp"
-#else
-#include "chimera/core/device/CanvasGL.hpp"
-#endif
-#include "Game.hpp"
-
 int main(int argn, char** argv) {
     using namespace Chimera;
     try {
         // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
-        SDL_Log("AppShader Iniciado");
+        SDL_Log("Models3 Iniciado");
 
-        Scene scene;
+        Engine engine;
 
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
-        colladaRegistryLoad(dom, scene.getRegistry());
-        colladaRenderLoad(dom, scene.getRegistry());
+        colladaRegistryLoad(dom, engine.getRegistry());
+        colladaRenderLoad(dom, engine.getRegistry());
 
-        Engine engine(scene.getCanvas());
+        engine.init();
 
-        Game* game = new Game(&scene, &engine);
+        Scene scene(engine.getRegistry(), engine.getStack());
 
-        engine.getStack().pushState(game);
-        engine.getStack().pushState(&scene);
+        Game* game = new Game(scene);
 
         Collada::destroy(); // clean loader
 

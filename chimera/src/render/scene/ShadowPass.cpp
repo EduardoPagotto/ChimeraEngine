@@ -28,14 +28,14 @@ ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm:
 
 ShadowPass::~ShadowPass() { delete shadowBuffer; }
 
-void ShadowPass::exec(Registry& registry, ICamera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem, const bool& logRender) {
+void ShadowPass::exec(Registry* registry, ICamera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem, const bool& logRender) {
 
     renderer.begin(eyeView);
     {
-        auto lightViewEnt = registry.get().view<LightComponent>();
+        auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
             auto& lc = lightViewEnt.get<LightComponent>(entity);
-            auto& tc = registry.get().get<TransComponent>(entity); // Lento
+            auto& tc = registry->get().get<TransComponent>(entity); // Lento
             if (lc.global) {
                 // FIXME: usar o direcionm depois no segundo parametro
                 glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
@@ -44,7 +44,7 @@ void ShadowPass::exec(Registry& registry, ICamera* camera, EyeView* eyeView, IRe
             }
         }
 
-        auto group = registry.get().group<TransComponent, Renderable3dComponent>();
+        auto group = registry->get().group<TransComponent, Renderable3dComponent>();
         for (auto entity : group) {
             auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 

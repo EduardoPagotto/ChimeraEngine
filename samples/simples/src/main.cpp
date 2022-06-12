@@ -1,12 +1,13 @@
 #include "Game.hpp"
+#include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Scene* scene, Chimera::Engine* engine) : scene(scene) {
+Game::Game(Chimera::Scene& scene) : scene(&scene) {
     using namespace Chimera;
 
-    engine->getStack().pushState(this);
-    engine->getStack().pushState(scene);
+    scene.getStack()->pushState(this);
+    scene.getStack()->pushState(&scene);
 }
 
 Game::~Game() {}
@@ -69,25 +70,27 @@ int main(int argn, char** argv) {
     using namespace Chimera;
     try {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
-        SDL_Log("Iniciado");
+        SDL_Log("Simnples Iniciado");
 
-        Scene scene;
+        Engine engine;
 
         ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
-        colladaRegistryLoad(dom, scene.getRegistry());
-        // colladaRenderLoad(dom, scene.getRegistry());
+        colladaRegistryLoad(dom, engine.getRegistry());
 
-        Engine engine(scene.getCanvas());
+        engine.init();
 
-        Game* game = new Game(&scene, &engine);
+        Scene scene(engine.getRegistry(), engine.getStack());
+
+        Game* game = new Game(scene);
 
         Collada::destroy(); // clean loader
 
         engine.run();
 
+        SDL_Log("Loop de Game encerrado!!!!");
         delete game;
 
-        SDL_Log("Sucesso");
+        SDL_Log("AppShader finalizado com sucesso");
         return 0;
 
     } catch (const std::string& ex) {

@@ -9,7 +9,7 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simple ray-casting Iniciado");
 
-        Engine engine(nullptr);
+        Engine engine;
 
         ColladaDom dom = loadFileCollada("./samples/raycasting/level.xml");
         colladaRegistryLoad(dom, engine.getRegistry());

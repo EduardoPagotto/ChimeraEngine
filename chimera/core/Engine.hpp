@@ -8,7 +8,7 @@ namespace Chimera {
 
 class Engine {
   public:
-    Engine(Canvas* canvas);
+    Engine();
     virtual ~Engine();
     void init();
     void run();

@@ -1,7 +1,7 @@
 #pragma once
 #include "ShadowPass.hpp"
-//#include "chimera/core/StateStack.hpp"
 #include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/StateStack.hpp"
 #include "chimera/core/buffer/RenderBuffer.hpp"
 #include "chimera/core/device/Canvas.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
@@ -12,15 +12,14 @@ namespace Chimera {
 class Entity;
 class Scene : public IStateMachine {
   public:
-    Scene();
+    Scene(Registry& r, StateStack& s);
     virtual ~Scene();
-    Registry& getRegistry() { return registry; }
     void pushEmitters(IEmitter* e) { emitters.push_back(e); }
     void setOrigem(ITrans* o) { origem = o; }
     void setShadowPass(ShadowPass* shadowPass) { this->shadowPass = shadowPass; }
     Canvas* getCanvas();
-    // void setStack(StateStack& stack) { this->stack = &stack; }
-    // StateStack* getStack() const { return this->stack; }
+    Registry* getRegistry() { return registry; }
+    StateStack* getStack() const { return this->stack; }
     // Herdados
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -37,13 +36,13 @@ class Scene : public IStateMachine {
     void execEmitterPass(ICamera* camera, IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
 
-    // StateStack* stack;
+    StateStack* stack;
+    Registry* registry;
     ITrans* origem;
     ICamera* activeCam;
     EyeView* eyeView;
     ShadowPass* shadowPass;
     bool logRender;
-    Registry registry;
     Renderer3d renderBatch;
     std::vector<RenderBuffer*> vRB;
     std::vector<IEmitter*> emitters;

@@ -1,5 +1,4 @@
 #pragma once
-#include "chimera/core/Engine.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/render/2d/Label.hpp"
 #include "chimera/render/scene/Scene.hpp"
@@ -14,7 +13,7 @@ struct Controles {
 
 class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Scene* scene, Chimera::Engine* engine);
+    Game(Chimera::Scene& scene);
     virtual ~Game();
 
     virtual void onAttach() override;

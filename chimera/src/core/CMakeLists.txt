@@ -15,7 +15,6 @@ endif(BULLET_SET_TO_USE)
 set (SourcesCore Registry.cpp
 				 utils.cpp
 				 Timer.cpp
-				 StateStack.cpp
 				 Engine.cpp
 				 mathGL.cpp
 				 device/CanvasFB.cpp

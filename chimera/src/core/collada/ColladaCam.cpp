@@ -1,5 +1,5 @@
 #include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/visible/CameraOrthographic.hpp"
+#include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/ITrans.hpp"
 
 namespace Chimera {
@@ -71,7 +71,7 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 setChildParam(nCamType, "ymag", ymag);
                 setChildParam(nCamType, "znear", znear);
                 setChildParam(nCamType, "zfar", zfar);
-                cc.camera = new CameraOrthographic(xmag, ymag, znear, zfar);
+                cc.camera = new Camera(new Orthogonal(xmag, ymag, znear, zfar));
             }
             cc.camera->setPosition(trans.trans->getPosition());
         }

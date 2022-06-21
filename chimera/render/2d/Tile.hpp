@@ -3,7 +3,7 @@
 
 class Tile : public Chimera::Layer {
   public:
-    Tile(Chimera::IRenderer2D* renderer, Chimera::Shader shader, Chimera::ICamera* camera);
+    Tile(Chimera::IRenderer2D* renderer, Chimera::Shader shader, Chimera::Camera* camera);
     virtual ~Tile();
     virtual void onAttach() override;
     virtual void onDeatach() override;

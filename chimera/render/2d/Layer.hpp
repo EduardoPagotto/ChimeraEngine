@@ -8,16 +8,16 @@ namespace Chimera {
 
 class Layer : public IStateMachine {
   public:
-    Layer(IRenderer2D* renderer, Shader shader, ICamera* camera);
+    Layer(IRenderer2D* renderer, Shader shader, Camera* camera);
     virtual ~Layer();
     inline virtual void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
     virtual void onRender() override;
 
-    ICamera* getCamera() const { return camera; };
+    Camera* getCamera() const { return camera; };
 
   protected:
     Shader shader;
-    ICamera* camera;
+    Camera* camera;
 
   private:
     IRenderer2D* renderer;

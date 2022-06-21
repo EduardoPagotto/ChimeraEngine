@@ -31,15 +31,15 @@ class Scene : public IStateMachine {
   private:
     void onViewportResize(const uint32_t& width, const uint32_t& height);
     void createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height);
-    void execRenderPass(ICamera* camera, IRenderer3d& renderer);
-    void execShadowPass(ICamera* camera, IRenderer3d& renderer);
-    void execEmitterPass(ICamera* camera, IRenderer3d& renderer);
+    void execRenderPass(Camera* camera, IRenderer3d& renderer);
+    void execShadowPass(Camera* camera, IRenderer3d& renderer);
+    void execEmitterPass(Camera* camera, IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
 
     StateStack* stack;
     Registry* registry;
     ITrans* origem;
-    ICamera* activeCam;
+    Camera* activeCam;
     EyeView* eyeView;
     ShadowPass* shadowPass;
     bool logRender;

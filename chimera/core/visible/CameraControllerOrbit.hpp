@@ -20,7 +20,7 @@ class CameraControllerOrbit : public ScriptableEntity {
 
     float pitch, yaw, distance, min, max;
     glm::vec3 up, front;
-    ICamera* camera = nullptr;
+    Camera* camera = nullptr;
     EyeView* eyeView = nullptr;
 };
 

@@ -52,7 +52,7 @@ void BatchRender2D::init() {
     pVao->unbind();
 }
 
-void BatchRender2D::begin(ICamera* camera) {
+void BatchRender2D::begin(Camera* camera) {
 
     this->camera = camera;
 

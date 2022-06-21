@@ -18,7 +18,7 @@ class BatchRender2D : public IRenderer2D {
     virtual ~BatchRender2D();
 
     void init();
-    virtual void begin(ICamera* camera) override;
+    virtual void begin(Camera* camera) override;
     virtual void submit(IRenderable2D* renderable) override;
     virtual void end() override;
     virtual void flush() override;
@@ -37,6 +37,6 @@ class BatchRender2D : public IRenderer2D {
     GLsizei indexCount;
     VertexDataSimple* buffer;
     std::vector<Texture*> textures;
-    ICamera* camera;
+    Camera* camera;
 };
 } // namespace Chimera

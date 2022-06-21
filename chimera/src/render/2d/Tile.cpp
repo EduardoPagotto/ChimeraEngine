@@ -1,6 +1,6 @@
 #include "chimera/render/2d/Tile.hpp"
 
-Tile::Tile(Chimera::IRenderer2D* renderer, Chimera::Shader shader, Chimera::ICamera* camera) : Chimera::Layer(renderer, shader, camera) {}
+Tile::Tile(Chimera::IRenderer2D* renderer, Chimera::Shader shader, Chimera::Camera* camera) : Chimera::Layer(renderer, shader, camera) {}
 Tile::~Tile() {}
 void Tile::onAttach(){};
 void Tile::onDeatach(){};

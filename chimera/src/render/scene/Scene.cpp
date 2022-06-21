@@ -287,7 +287,7 @@ bool Scene::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
+void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
     auto view = registry->get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
 
@@ -314,7 +314,7 @@ void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
     }
 }
 
-void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
+void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
     auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
         auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
@@ -334,7 +334,7 @@ void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
 
 void Scene::onRender() {
 
-    ICamera* camera = activeCam;
+    Camera* camera = activeCam;
 
     if (logRender == true) {
         const glm::vec3& pos = camera->getPosition();

@@ -20,7 +20,7 @@ class CameraControllerFPS : public ScriptableEntity {
 
     float pitch, yaw, movementSpeed;
     glm::vec3 up, front, worldUp, right;
-    ICamera* camera = nullptr;
+    Camera* camera = nullptr;
     EyeView* eyeView = nullptr;
 };
 } // namespace Chimera

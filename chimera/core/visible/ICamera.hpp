@@ -11,23 +11,17 @@ namespace Chimera {
 
 enum class CamKind { FPS = 0, ORBIT = 1, STATIC = 3 };
 
-class ICamera {
+class Camera {
   public:
-    virtual const glm::mat4& getProjection() const = 0;
-    virtual const glm::vec3& getPosition() const = 0;
-    virtual void setPosition(const glm::vec3& position) = 0;
-    virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
-};
-
-class Camera : public ICamera {
-  public:
+    Camera(const Camera& o)
+        : xmag(o.xmag), ymag(o.ymag), near(o.near), far(o.far), isOrtho(o.isOrtho), fov(o.fov), projection(o.projection) {}
     Camera(const float& xmag, const float& ymag, const float& near, const float& far)
         : xmag(xmag), ymag(ymag), near(near), far(far), isOrtho(true), fov(0.0f) {}
     Camera(const float& fov, const float& near, const float& far) : fov(fov), near(near), far(far), isOrtho(false) {}
-    virtual const glm::mat4& getProjection() const override { return projection; }
-    virtual const glm::vec3& getPosition() const override { return position; }
-    virtual void setPosition(const glm::vec3& position) override { this->position = position; }
-    virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override {
+    const glm::mat4& getProjection() const { return projection; }
+    const glm::vec3& getPosition() const { return position; }
+    void setPosition(const glm::vec3& position) { this->position = position; }
+    void setViewportSize(const uint32_t& width, const uint32_t& height) {
         if (isOrtho) {
             float halfAspectRatio = (float)width / (float)height * 0.5f;
             float xsize = xmag * halfAspectRatio;
@@ -47,7 +41,7 @@ class Camera : public ICamera {
 
 struct CameraComponent {
     TagComponent tag;
-    ICamera* camera = nullptr;
+    Camera* camera = nullptr;
     EyeView* eyeView = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;

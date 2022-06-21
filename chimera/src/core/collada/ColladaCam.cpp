@@ -62,7 +62,7 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 setChildParam(nCamType, "xfov", xfov);
                 setChildParam(nCamType, "znear", znear);
                 setChildParam(nCamType, "zfar", zfar);
-                cc.camera = new Camera(new Perspective(xfov, znear, zfar));
+                cc.camera = new Camera(xfov, znear, zfar);
 
             } else if (std::string("orthographic") == nCamType.name()) {
 
@@ -71,7 +71,7 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 setChildParam(nCamType, "ymag", ymag);
                 setChildParam(nCamType, "znear", znear);
                 setChildParam(nCamType, "zfar", zfar);
-                cc.camera = new Camera(new Orthogonal(xmag, ymag, znear, zfar));
+                cc.camera = new Camera(xmag, ymag, znear, zfar);
             }
             cc.camera->setPosition(trans.trans->getPosition());
         }

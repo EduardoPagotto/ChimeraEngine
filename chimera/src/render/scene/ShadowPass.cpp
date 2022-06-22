@@ -28,7 +28,8 @@ ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm:
 
 ShadowPass::~ShadowPass() { delete shadowBuffer; }
 
-void ShadowPass::exec(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem, const bool& logRender) {
+void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem,
+                        const bool& logRender) {
 
     renderer.begin(eyeView);
     {
@@ -67,8 +68,8 @@ void ShadowPass::exec(Registry* registry, Camera* camera, EyeView* eyeView, IRen
     this->shadowBuffer->unbind();
 }
 
-void ShadowPass::appy(Camera* camera, IRenderer3d& renderer) {
-    renderer.uQueue().insert(std::make_pair("viewPos", UValue(camera->getPosition())));
+void ShadowPass::setProp(const glm::vec3& positionCam, IRenderer3d& renderer) {
+    renderer.uQueue().insert(std::make_pair("viewPos", UValue(positionCam))); // camera->getPosition()
     renderer.uQueue().insert(std::make_pair("shadows", UValue(1)));
     renderer.uQueue().insert(std::make_pair("shadowMap", UValue(1)));
     renderer.uQueue().insert(std::make_pair("lightSpaceMatrix", UValue(this->lightSpaceMatrix)));

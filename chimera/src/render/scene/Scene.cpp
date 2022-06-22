@@ -343,7 +343,7 @@ void Scene::onRender() {
 
     // render a shadows in framebuffer
     if (shadowPass)
-        shadowPass->exec(registry, camera, eyeView, renderBatch, origem, logRender);
+        shadowPass->render(registry, camera, eyeView, renderBatch, origem, logRender);
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
@@ -357,7 +357,7 @@ void Scene::onRender() {
 
         // load shadows props to renderBatch
         if (shadowPass)
-            shadowPass->appy(camera, renderBatch);
+            shadowPass->setProp(camera->getPosition(), renderBatch);
 
         auto lightView = registry->get().view<LightComponent>();
         for (auto entity : lightView) {

@@ -17,7 +17,7 @@ Layer::~Layer() {
 
 void Layer::onRender() {
     glUseProgram(shader.getID());
-    shader.setUniformM4("pr_matrix", camera->getProjection()); // passar para o renderer o shade
+    shader.setUniformU("pr_matrix", Chimera::UValue(camera->getProjection())); // passar para o renderer o shade
     renderer->begin(camera);
 
     for (auto renderable : renderables)

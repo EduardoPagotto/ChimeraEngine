@@ -6,7 +6,7 @@
 TileLayer::TileLayer(Chimera::Shader shader)
     : Chimera::Layer(new Chimera::BatchRender2D(), shader, new Chimera::Camera(16.0, 16.0, -1.0f, 1.0f)) {
     glUseProgram(shader.getID());
-    shader.setUniform2f("light_pos", glm::vec2(4.0f, 1.5f));
+    shader.setUniformU("light_pos", Chimera::UValue(glm::vec2(4.0f, 1.5f))); //  setUniform2f("light_pos", glm::vec2(4.0f, 1.5f));
     glUseProgram(0);
 }
 
@@ -36,7 +36,7 @@ void TileLayer::onRender() {
     glUseProgram(shader.getID());
 
     // Formula                                (float)(x * sizeW / witdh - (sizeW/2), (float)((sizeH /2) - y * sizeH / height)
-    shader.setUniform2f("light_pos", glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(16.0f - y * 32.0f / 540.0f)));
+    shader.setUniformU("light_pos", Chimera::UValue(glm::vec2((float)(x * 32.0f / 960.0f - 16.0f), (float)(16.0f - y * 32.0f / 540.0f))));
 
     Layer::onRender();
     glUseProgram(0);

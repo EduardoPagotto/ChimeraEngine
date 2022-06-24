@@ -20,14 +20,6 @@ class Shader {
     inline void invalidade();
     const GLint getUniform(const std::string& name) const noexcept;
     void setUniformU(const char* name, const UValue& uv);
-    void setUniformArray(const char* name, int size, float* val) const { glUniform1fv(getUniform(name), size, val); }
-    void setUniformArray(const char* name, int size, int* val) const { glUniform1iv(getUniform(name), size, val); }
-    void setUniformArray(const char* name, int size, glm::vec2* val) const { glUniform2fv(getUniform(name), size, glm::value_ptr(*val)); }
-    void setUniformArray(const char* name, int size, glm::ivec2* val) const { glUniform2iv(getUniform(name), size, glm::value_ptr(*val)); }
-    void setUniformArray(const char* name, int size, glm::vec3* val) const { glUniform3fv(getUniform(name), size, glm::value_ptr(*val)); }
-    void setUniformArray(const char* name, int size, glm::ivec3* val) const { glUniform3iv(getUniform(name), size, glm::value_ptr(*val)); }
-    void setUniformArray(const char* name, int size, glm::vec4* val) const { glUniform4fv(getUniform(name), size, glm::value_ptr(*val)); }
-    void setUniformArray(const char* name, int size, glm::ivec4* val) const { glUniform4iv(getUniform(name), size, glm::value_ptr(*val)); }
     inline const bool isInvalid() const { return progID == 0; }
     bool operator==(const Shader& other) const { return progID == other.progID; }
     bool operator!=(const Shader& other) const { return !(*this == other); }

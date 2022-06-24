@@ -76,19 +76,23 @@ static GLuint linkShader(const std::vector<GLuint>& vecShaderID) {
 void Shader::invalidade() {
     glDeleteProgram(progID);
     progID = 0;
+    uniformLocationCache.clear();
 }
 
-const GLint Shader::getUniform(const char* _varName) const noexcept {
-    GLint loc = glGetUniformLocation(progID, _varName);
-    if (loc == -1)
-        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", _varName, progID);
+const GLint Shader::getUniform(const std::string& name) const noexcept {
+
+    if (uniformLocationCache.find(name) != uniformLocationCache.end())
+        return uniformLocationCache[name];
+
+    GLint loc = glGetUniformLocation(progID, name.c_str());
+    uniformLocationCache[name] = loc;
 
     return loc;
 }
 
 void Shader::setUniformU(const char* name, const UValue& uv) {
 
-    GLint loc = glGetUniformLocation(progID, name);
+    GLint loc = getUniform(name);
     if (loc == -1) {
         SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, progID);
         return;

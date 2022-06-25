@@ -171,8 +171,8 @@ std::unordered_map<std::string, Shader> ShaderManager::mShaders;
 
 void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) {
 
-    Shader s = ShaderManager::get(name);
-    if (s.isInvalid()) {
+    std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
+    if (got == ShaderManager::mShaders.end()) {
 
         std::vector<GLuint> vecShaderID;
         for (auto& kv : mFiles) {
@@ -187,18 +187,18 @@ void ShaderManager::load(const std::string& name, const std::unordered_map<GLenu
 
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "New Shader %s id: %d", name.c_str(), (int)shader.progID);
     } else {
-        shader.progID = s.progID;
+        shader = got->second;
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dup Shader %s id: %d", name.c_str(), (int)shader.progID);
     }
 }
 
-const Shader ShaderManager::get(const std::string& name) {
+const Shader& ShaderManager::get(const std::string& name) {
 
     std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
     if (got != ShaderManager::mShaders.end())
         return got->second;
 
-    return Shader();
+    throw std::string("Shader nao existe: " + name);
 }
 
 bool ShaderManager::remove(const std::string& name) {

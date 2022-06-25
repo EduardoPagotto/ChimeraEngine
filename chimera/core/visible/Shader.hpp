@@ -33,7 +33,7 @@ class Shader {
 class ShaderManager {
   public:
     static void load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader);
-    static const Shader get(const std::string& name);
+    static const Shader& get(const std::string& name);
     static bool remove(const std::string& name);
     static void clear();
 

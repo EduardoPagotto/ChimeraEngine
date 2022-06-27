@@ -14,7 +14,7 @@ class Renderer3d : public IRenderer3d {
   public:
     Renderer3d();
     virtual ~Renderer3d();
-    virtual void begin(const glm::mat4& inverseViewProjection) override;
+    virtual void begin(const glm::mat4& inverseViewProjection, const bool& logData) override;
     virtual void submit(const RenderCommand& command) override;
     virtual void end() override;
     virtual void flush() override;
@@ -26,6 +26,7 @@ class Renderer3d : public IRenderer3d {
     MapUniform uniformsQueue;
     Frustum frustum;
     uint32_t totIBO, totFaces;
+    bool logData;
     TransformationStack stack; // TODO: implementar a hierarquia de modelos direta (sem fisica)
 };
 } // namespace Chimera

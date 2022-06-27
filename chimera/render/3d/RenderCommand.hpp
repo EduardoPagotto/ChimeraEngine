@@ -16,6 +16,5 @@ struct RenderCommand {
     Shader shader;
     MapUniform uniforms;
     std::vector<Texture*> vTex;
-    bool logRender = false; // TODO: remover depois
 };
 } // namespace Chimera

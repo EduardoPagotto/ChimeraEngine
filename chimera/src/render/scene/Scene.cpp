@@ -294,7 +294,7 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
     DepthFuncSetter depthFunc(GL_LESS);     // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    renderer.begin(eyeView->getViewProjectionInverse());
+    renderer.begin(eyeView->getViewProjectionInverse(), logRender);
     auto view = registry->get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
 
@@ -309,7 +309,6 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
         RenderCommand command;
         command.camera = camera;
         command.eyeView = eyeView;
-        command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = renderable;
         command.shader = sc;
@@ -326,7 +325,7 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
 
 void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
 
-    renderer.begin(eyeView->getViewProjectionInverse());
+    renderer.begin(eyeView->getViewProjectionInverse(), logRender);
     auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
         auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
@@ -334,7 +333,6 @@ void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
         RenderCommand command;
         command.camera = camera;
         command.eyeView = eyeView;
-        command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.renderable = rc.renderable;
         command.shader = sc;

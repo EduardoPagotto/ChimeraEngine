@@ -31,7 +31,7 @@ ShadowPass::~ShadowPass() { delete shadowBuffer; }
 void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem,
                         const bool& logRender) {
 
-    renderer.begin(eyeView->getViewProjectionInverse());
+    renderer.begin(eyeView->getViewProjectionInverse(), logRender);
     {
         auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
@@ -52,7 +52,6 @@ void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IR
             RenderCommand command;
             command.camera = camera;
             command.eyeView = eyeView;
-            command.logRender = logRender;
             command.transform = tc.trans->translateSrc(origem->getPosition());
             command.renderable = rc.renderable;
             command.shader = this->shader;

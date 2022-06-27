@@ -1,12 +1,7 @@
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/core/Registry.hpp"
 #include "chimera/core/buffer/IndexBuffer.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/core/visible/Light.hpp"
-#include "chimera/core/visible/Material.hpp"
-#include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/3d/IRenderable3d.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -15,8 +10,8 @@ Renderer3d::Renderer3d() : totIBO(0), totFaces(0) { uniformsQueue.reserve(300); 
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(EyeView* eyeView) {
-    frustum.set(eyeView->getViewProjectionInverse());
+void Renderer3d::begin(const glm::mat4& inverseViewProjection) {
+    frustum.set(inverseViewProjection);
     // debug data
     totIBO = 0;
     totFaces = 0;

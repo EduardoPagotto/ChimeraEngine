@@ -294,7 +294,7 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
     DepthFuncSetter depthFunc(GL_LESS);     // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    renderer.begin(eyeView);
+    renderer.begin(eyeView->getViewProjectionInverse());
     auto view = registry->get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
 
@@ -326,7 +326,7 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
 
 void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
 
-    renderer.begin(eyeView);
+    renderer.begin(eyeView->getViewProjectionInverse());
     auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
         auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);

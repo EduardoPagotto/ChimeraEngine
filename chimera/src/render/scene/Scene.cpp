@@ -108,40 +108,8 @@ void Scene::onAttach() {
 
                 if (mesh.type == MeshType::SIMPLE) {
 
-                    // Transforma Mesh em VertexData comprimindo-o
-                    std::vector<VertexData> renderData;
-                    vertexDataFromMesh(mesh.mesh, renderData);
+                    rc.renderable = new Renderable3D(mesh.mesh);
 
-                    std::vector<uint32_t> index;
-                    std::vector<VertexData> vertexDataOut;
-                    vertexDataIndexCompile(renderData, vertexDataOut, index);
-
-                    // Create VAO, VBO and IBO
-                    VertexArray* vao = new VertexArray();
-                    vao->bind();
-
-                    VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
-                    vbo->bind();
-
-                    BufferLayout layout;
-                    layout.Push<float>(3, false);
-                    layout.Push<float>(3, false);
-                    layout.Push<float>(2, false);
-
-                    vbo->setLayout(layout);
-                    vbo->setData(&vertexDataOut[0], vertexDataOut.size());
-                    vbo->unbind();
-                    vao->push(vbo);
-
-                    vao->unbind();
-
-                    glm::vec3 min, max, size;
-                    vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
-
-                    IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
-                    Renderable3D* r = new Renderable3D(vao, ibo, AABB(min, max));
-
-                    rc.renderable = r;
                 } else if (mesh.type == MeshType::ARRAY) {
 
                     std::vector<VertexData> renderData;

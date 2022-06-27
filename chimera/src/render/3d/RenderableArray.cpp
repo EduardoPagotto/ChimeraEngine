@@ -1,15 +1,12 @@
 #include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/RenderableIBO.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
 RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vector<VertexData>& vertexData) : totIndex(0) {
-
-    this->vVertex = std::move(vertexData);
-
     // create vertex buffers
     vao = new VertexArray();
     vao->bind();
@@ -23,7 +20,7 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vec
     layout.Push<float>(2, false);
 
     vbo->setLayout(layout);
-    vbo->setData(&this->vVertex[0], this->vVertex.size());
+    vbo->setData(&vertexData[0], vertexData.size());
     vbo->unbind();
 
     vao->push(vbo);
@@ -31,10 +28,10 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vec
     for (auto ptrTrisIndex : vPtrTrisIndex) {
 
         glm::vec3 min, max, size;
-        vertexDataIndexMinMaxSize(&this->vVertex[0], this->vVertex.size(), &ptrTrisIndex.vIndex[0], ptrTrisIndex.size(), min, max, size);
+        vertexDataIndexMinMaxSize(&vertexData[0], vertexData.size(), &ptrTrisIndex.vIndex[0], ptrTrisIndex.size(), min, max, size);
 
         IndexBuffer* ibo = new IndexBuffer(&ptrTrisIndex.vIndex[0], ptrTrisIndex.size());
-        IRenderable3d* r = new Renderable3D(nullptr, ibo, AABB(min, max));
+        IRenderable3d* r = new RenderableIBO(ibo, AABB(min, max));
 
         vChild.push_back(r);
 
@@ -44,7 +41,7 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vec
     vao->unbind();
 
     glm::vec3 min, max, size;
-    vertexDataMinMaxSize(&vVertex[0], vVertex.size(), min, max, size);
+    vertexDataMinMaxSize(&vertexData[0], vertexData.size(), min, max, size);
     aabb.setBoundary(min, max);
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", vChild.size());
 }

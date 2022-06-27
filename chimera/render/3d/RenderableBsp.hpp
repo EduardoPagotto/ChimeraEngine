@@ -1,10 +1,11 @@
 #pragma once
+#include "IRenderable3d.hpp"
 #include "RenderCommand.hpp"
-#include "Renderable3D.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/space/AABB.hpp"
 #include "chimera/core/space/BSPTreeNode.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
-#include "chimera/render/VertexData.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 #include <vector>
 
 namespace Chimera {
@@ -33,8 +34,7 @@ class RenderableBsp : public IRenderable3d {
     BSPTreeNode* root;
     VertexArray* vao;
     bool logdata;
-    std::vector<Renderable3D*> vChild;
-    std::vector<VertexData> vVertex; // FIXME: Remover ????
+    std::vector<IRenderable3d*> vChild;
     AABB aabb;
     uint32_t totIndex;
     IRenderer3d* renderer;

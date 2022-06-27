@@ -3,24 +3,22 @@
 #include "chimera/core/buffer/IndexBuffer.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/core/visible/Mesh.hpp"
 
 namespace Chimera {
 
-class Renderable3D : public IRenderable3d {
+class RenderableIBO : public IRenderable3d {
   public:
-    Renderable3D(Mesh* mesh);
-    virtual ~Renderable3D();
+    RenderableIBO(IndexBuffer* ibo, const AABB& aabb) : ibo(ibo), aabb(aabb) {}
+    virtual ~RenderableIBO();
 
     virtual const uint32_t getSize() const override { return ibo->getSize(); }
-    virtual VertexArray* getVao() const override { return vao; }
+    virtual VertexArray* getVao() const override { return nullptr; }
     virtual IndexBuffer* getIBO() const override { return ibo; }
     virtual const AABB& getAABB() const override { return aabb; }
     virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
     virtual void draw(const bool& logData) override;
 
   private:
-    VertexArray* vao;
     IndexBuffer* ibo;
     AABB aabb;
 };

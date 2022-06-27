@@ -1,14 +1,16 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
+#include "chimera/render/3d/RenderableIBO.hpp"
+#include "chimera/render/VertexData.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
 RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<TrisIndex>& vTris, Mesh* mesh) : root(root), totIndex(0) {
 
+    std::vector<VertexData> vVertex;
     mesh->serialized = true; // ?????? sera ?????
     vertexDataFromMesh(mesh, vVertex);
 
@@ -38,8 +40,7 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<TrisIndex>& vTris, M
         vertexDataIndexMinMaxSize(&vVertex[0], vVertex.size(), &trisIndex.vIndex[0], trisIndex.size(), min, max, size);
 
         IndexBuffer* ibo = new IndexBuffer(&trisIndex.vIndex[0], trisIndex.size());
-        Renderable3D* r = new Renderable3D(nullptr, ibo, AABB(min, max));
-
+        IRenderable3d* r = new RenderableIBO(ibo, AABB(min, max));
         vChild.push_back(r);
     }
 
@@ -109,7 +110,7 @@ void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
 void RenderableBsp::destroy() {
 
     while (!vChild.empty()) {
-        Renderable3D* child = vChild.back();
+        IRenderable3d* child = vChild.back();
         vChild.pop_back();
         delete child;
         child = nullptr;

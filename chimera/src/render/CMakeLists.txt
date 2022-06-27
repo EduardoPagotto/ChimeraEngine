@@ -24,6 +24,7 @@ set (RenderSource 	VertexData.cpp
 					3d/Renderer3d.cpp
 					3d/Group3d.cpp
 					3d/Renderable3D.cpp
+					3d/RenderableIBO.cpp
 					3d/RenderableArray.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp

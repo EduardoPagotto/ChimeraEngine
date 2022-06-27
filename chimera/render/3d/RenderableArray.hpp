@@ -22,7 +22,6 @@ class RenderableArray : public IRenderable3d {
   private:
     VertexArray* vao;
     std::vector<IRenderable3d*> vChild;
-    std::vector<VertexData> vVertex;
     AABB aabb;
     uint32_t totIndex;
 };

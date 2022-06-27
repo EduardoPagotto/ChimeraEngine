@@ -22,7 +22,7 @@ void Renderer3d::end() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }
 
-void Renderer3d::submit(const RenderCommand& command) {
+void Renderer3d::submit(const RenderCommand& command) { // TODO: retorno true se visivel, teste filhos desnecessario se pai invisivel!!!!
     // Transformation model matrix AABB to know if in frustrum Camera
     const AABB& aabb = command.renderable->getAABB();
     AABB nova = aabb.transformation(command.transform);

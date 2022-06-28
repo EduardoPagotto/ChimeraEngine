@@ -73,7 +73,7 @@ void RenderableParticles::submit(RenderCommand& command, IRenderer3d& renderer) 
 
     pc->cameraPos = glm::inverse(view)[3]; // depois mover para o statemachine!!!
 
-    renderer.submit(command);
+    renderer.submit(command, this);
 }
 
 void RenderableParticles::draw(const bool& logData) {

@@ -278,7 +278,6 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
         command.camera = camera;
         command.eyeView = eyeView;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.renderable = renderable;
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
@@ -302,7 +301,6 @@ void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
         command.camera = camera;
         command.eyeView = eyeView;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.renderable = rc.renderable;
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
         command.uniforms["model"] = UValue(command.transform);

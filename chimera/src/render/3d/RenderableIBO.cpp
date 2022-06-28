@@ -10,7 +10,7 @@ RenderableIBO::~RenderableIBO() {
     ibo = nullptr;
 }
 
-void RenderableIBO::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command); }
+void RenderableIBO::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command, this); }
 
 void RenderableIBO::draw(const bool& logData) {
 

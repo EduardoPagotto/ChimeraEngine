@@ -1,4 +1,5 @@
 #pragma once
+#include "IRenderable3d.hpp"
 #include "IRenderer3d.hpp"
 #include "RenderCommand.hpp"
 #include "chimera/core/TransformationStack.hpp"
@@ -15,7 +16,7 @@ class Renderer3d : public IRenderer3d {
     Renderer3d();
     virtual ~Renderer3d();
     virtual void begin(const glm::mat4& inverseViewProjection, const bool& logData) override;
-    virtual void submit(const RenderCommand& command) override;
+    virtual void submit(const RenderCommand& command, IRenderable3d* renderable) override;
     virtual void end() override;
     virtual void flush() override;
     virtual inline MapUniform& uQueue() override { return uniformsQueue; }
@@ -23,6 +24,7 @@ class Renderer3d : public IRenderer3d {
 
   private:
     std::deque<RenderCommand> commandQueue;
+    std::deque<IRenderable3d*> renderableQueue;
     MapUniform uniformsQueue;
     Frustum frustum;
     uint32_t totIBO, totFaces;

@@ -22,20 +22,22 @@ void Renderer3d::end() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }
 
-void Renderer3d::submit(const RenderCommand& command) { // TODO: retorno true se visivel, teste filhos desnecessario se pai invisivel!!!!
+// TODO: retorno true se visivel, teste filhos desnecessario se pai invisivel!!!!
+void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
     // Transformation model matrix AABB to know if in frustrum Camera
-    const AABB& aabb = command.renderable->getAABB();
+    const AABB& aabb = renderable->getAABB();
     AABB nova = aabb.transformation(command.transform);
     // adicione apenas o que esta no clip-space
     if (nova.visible(frustum) == true) {
         // Debug info only
-        IndexBuffer* ibo = command.renderable->getIBO();
+        IndexBuffer* ibo = renderable->getIBO();
         if (ibo != nullptr) {
             totIBO++;
             totFaces += ibo->getSize() / 3;
         }
         // adicionado ao proximo render
         commandQueue.push_back(command);
+        renderableQueue.push_back(renderable);
     }
 }
 
@@ -47,7 +49,7 @@ void Renderer3d::flush() {
     while (!commandQueue.empty()) {
 
         const RenderCommand& command = commandQueue.front();
-        IRenderable3d* r = command.renderable;
+        IRenderable3d* r = renderableQueue.front(); // command.renderable;
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior
@@ -93,6 +95,7 @@ void Renderer3d::flush() {
 
         r->draw(logData);
         commandQueue.pop_front();
+        renderableQueue.pop_front();
     }
     pLastVao->unbind();
 

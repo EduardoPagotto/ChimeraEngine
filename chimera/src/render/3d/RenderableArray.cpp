@@ -66,8 +66,9 @@ void RenderableArray::draw(const bool& logData) {
 
 void RenderableArray::submit(RenderCommand& command, IRenderer3d& renderer) {
 
-    renderer.submit(command, this);
-    for (IRenderable3d* child : vChild)
-        renderer.submit(command, child);
+    if (renderer.submit(command, this) == true) {
+        for (IRenderable3d* child : vChild)
+            renderer.submit(command, child);
+    }
 }
 } // namespace Chimera

@@ -53,8 +53,8 @@ Renderable3D::~Renderable3D() {
 }
 
 void Renderable3D::submit(RenderCommand& command, IRenderer3d& renderer) {
-    renderer.submit(command, this);
-    renderer.submit(command, child);
+    if (renderer.submit(command, this) == true)
+        renderer.submit(command, child);
 }
 
 void Renderable3D::draw(const bool& logData) {

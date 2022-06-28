@@ -98,10 +98,9 @@ void RenderableBsp::draw(const bool& logData) {
 void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
     this->renderer = &renderer;
     this->command = &command;
-    renderer.submit(command, this);
-
-    // submit tree
-    traverseTree(root);
+    if (renderer.submit(command, this) == true) {
+        traverseTree(root);
+    }
 }
 
 void RenderableBsp::destroy() {

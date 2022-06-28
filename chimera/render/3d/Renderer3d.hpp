@@ -16,7 +16,7 @@ class Renderer3d : public IRenderer3d {
     Renderer3d();
     virtual ~Renderer3d();
     virtual void begin(const glm::mat4& inverseViewProjection, const bool& logData) override;
-    virtual void submit(const RenderCommand& command, IRenderable3d* renderable) override;
+    virtual bool submit(const RenderCommand& command, IRenderable3d* renderable) override;
     virtual void end() override;
     virtual void flush() override;
     virtual inline MapUniform& uQueue() override { return uniformsQueue; }

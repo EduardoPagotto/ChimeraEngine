@@ -22,8 +22,7 @@ void Renderer3d::end() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }
 
-// TODO: retorno true se visivel, teste filhos desnecessario se pai invisivel!!!!
-void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
+bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
     // Transformation model matrix AABB to know if in frustrum Camera
     const AABB& aabb = renderable->getAABB();
     AABB nova = aabb.transformation(command.transform);
@@ -38,7 +37,10 @@ void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
         // adicionado ao proximo render
         commandQueue.push_back(command);
         renderableQueue.push_back(renderable);
+        return true;
     }
+
+    return false;
 }
 
 void Renderer3d::flush() {

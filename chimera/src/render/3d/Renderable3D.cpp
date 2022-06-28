@@ -2,6 +2,7 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
+#include "chimera/render/3d/RenderableIBO.hpp"
 #include "chimera/render/VertexData.hpp"
 
 namespace Chimera {
@@ -37,7 +38,9 @@ Renderable3D::Renderable3D(Mesh* mesh) {
     vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
 
     aabb.setBoundary(min, max);
-    ibo = new IndexBuffer(&index[0], index.size());
+    IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
+    totIndex = ibo->getSize();
+    child = new RenderableIBO(ibo, AABB(min, max));
 }
 
 Renderable3D::~Renderable3D() {
@@ -45,27 +48,20 @@ Renderable3D::~Renderable3D() {
     delete vao;
     vao = nullptr;
 
-    delete ibo;
-    ibo = nullptr;
+    delete child;
+    child = nullptr;
 }
 
-void Renderable3D::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command); }
+void Renderable3D::submit(RenderCommand& command, IRenderer3d& renderer) {
+    renderer.submit(command);
+    command.renderable = child;
+    renderer.submit(command);
+}
 
 void Renderable3D::draw(const bool& logData) {
-    if (ibo != nullptr) { // Desenhar o IBO
-        ibo->bind();
-        glDrawElements(GL_TRIANGLES, ibo->getSize(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 
-        if (logData == true) {
-            glm::vec3 size = aabb.getSize();
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "IBO ID: %d Faces: %d AABB[%.2f, %.2f, %.2f]", ibo->getBufferID(), ibo->getSize() / 3,
-                         size.x, size.y, size.z);
-
-            aabb.debug_render();
-        }
-
-        ibo->unbind();
-    }
+    if (logData)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Renderable3D draw"); // TODO: ver o que fazer
 }
 
 } // namespace Chimera

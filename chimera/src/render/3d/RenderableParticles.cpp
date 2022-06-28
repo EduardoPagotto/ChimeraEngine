@@ -6,7 +6,7 @@ namespace Chimera {
 
 RenderableParticles::~RenderableParticles() { this->destroy(); }
 
-void RenderableParticles::create() {
+void RenderableParticles::create() { // TODO: colocar os VBOs na extrutura vao!!!! usar AABB no local correto
     uint32_t max = pc->max;
     vao = new VertexArray();
     vao->bind();

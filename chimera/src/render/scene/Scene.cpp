@@ -13,6 +13,7 @@
 #include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
+#include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/VertexData.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include <SDL2/SDL.h>
@@ -20,7 +21,9 @@
 namespace Chimera {
 
 Scene::Scene(Registry& r, StateStack& s)
-    : stack(&s), registry(&r), activeCam(nullptr), origem(nullptr), shadowPass(nullptr), logRender(false) {}
+    : stack(&s), registry(&r), activeCam(nullptr), origem(nullptr), shadowPass(nullptr), logRender(false) {
+    ubo.reserve(300);
+}
 
 Scene::~Scene() {
     if (shadowPass) {
@@ -252,7 +255,7 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
     DepthFuncSetter depthFunc(GL_LESS);     // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    renderer.begin(eyeView->getViewProjectionInverse(), logRender);
+    renderer.begin(eyeView->getViewProjectionInverse());
     auto view = registry->get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
 
@@ -273,6 +276,12 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
 
         command.uniforms["model"] = UValue(command.transform);
 
+        const glm::mat4& view = command.eyeView->getView();
+        ubo.insert(std::make_pair("projection", UValue(command.camera->getProjection())));
+        ubo.insert(std::make_pair("view", UValue(view)));
+        ubo.insert(std::make_pair("CameraRight_worldspace", UValue(glm::vec3(view[0][0], view[1][0], view[2][0]))));
+        ubo.insert(std::make_pair("CameraUp_worldspace", UValue(glm::vec3(view[0][1], view[1][1], view[2][1]))));
+
         renderable->submit(command, renderer);
     }
 
@@ -282,7 +291,7 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
 
 void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
 
-    renderer.begin(eyeView->getViewProjectionInverse(), logRender);
+    renderer.begin(eyeView->getViewProjectionInverse());
     auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
         auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
@@ -304,6 +313,7 @@ void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
 void Scene::onRender() {
 
     Camera* camera = activeCam;
+    Renderer3d renderBatch(&ubo, logRender);
 
     if (logRender == true) {
         const glm::vec3& pos = camera->getPosition();
@@ -312,7 +322,7 @@ void Scene::onRender() {
 
     // render a shadows in framebuffer
     if (shadowPass)
-        shadowPass->render(registry, camera, eyeView, renderBatch, origem, logRender);
+        shadowPass->render(registry, camera, eyeView, renderBatch, origem);
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
@@ -321,19 +331,24 @@ void Scene::onRender() {
         count++;
 
         // used by all
-        renderBatch.uQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
-        renderBatch.uQueue().insert(std::make_pair("view", UValue(eyeView->getView())));
+        ubo.insert(std::make_pair("projection", UValue(camera->getProjection())));
+        ubo.insert(std::make_pair("view", UValue(eyeView->getView())));
 
         // load shadows props to renderBatch
-        if (shadowPass)
-            shadowPass->setProp(camera->getPosition(), renderBatch);
+        if (shadowPass) {
+            ubo.insert(std::make_pair("viewPos", UValue(camera->getPosition()))); // camera->getPosition()
+            ubo.insert(std::make_pair("shadows", UValue(1)));
+            ubo.insert(std::make_pair("shadowMap", UValue(1)));
+            ubo.insert(std::make_pair("lightSpaceMatrix", UValue(shadowPass->getLightSpaceMatrix())));
+            shadowPass->bindShadow();
+        }
 
         auto lightView = registry->get().view<LightComponent>();
         for (auto entity : lightView) {
             auto& lc = lightView.get<LightComponent>(entity);
             auto& tc = registry->get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
             if (lc.global)                                          // biding light prop
-                lc.light->bindLight(renderBatch.uQueue(), tc.trans->getMatrix());
+                lc.light->bindLight(ubo, tc.trans->getMatrix());
         }
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now

@@ -5,7 +5,7 @@
 #include "chimera/core/buffer/RenderBuffer.hpp"
 #include "chimera/core/device/Canvas.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
-#include "chimera/render/3d/Renderer3d.hpp"
+#include "chimera/render/3d/IRenderable3d.hpp"
 
 namespace Chimera {
 
@@ -43,7 +43,7 @@ class Scene : public IStateMachine {
     EyeView* eyeView;
     ShadowPass* shadowPass;
     bool logRender;
-    Renderer3d renderBatch;
+    MapUniform ubo;
     std::vector<RenderBuffer*> vRB;
     std::vector<IEmitter*> emitters;
 };

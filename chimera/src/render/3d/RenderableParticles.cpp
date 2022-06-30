@@ -65,14 +65,7 @@ void RenderableParticles::destroy() {
 
 void RenderableParticles::submit(RenderCommand& command, IRenderer3d& renderer) {
 
-    const glm::mat4& view = command.eyeView->getView();
-    renderer.uQueue().insert(std::make_pair("projection", UValue(command.camera->getProjection())));
-    renderer.uQueue().insert(std::make_pair("view", UValue(view)));
-    renderer.uQueue().insert(std::make_pair("CameraRight_worldspace", UValue(glm::vec3(view[0][0], view[1][0], view[2][0]))));
-    renderer.uQueue().insert(std::make_pair("CameraUp_worldspace", UValue(glm::vec3(view[0][1], view[1][1], view[2][1]))));
-
-    pc->cameraPos = glm::inverse(view)[3]; // depois mover para o statemachine!!!
-
+    pc->cameraPos = glm::inverse(command.eyeView->getView())[3]; // depois mover para o statemachine!!!
     renderer.submit(command, this);
 }
 

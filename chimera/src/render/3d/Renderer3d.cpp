@@ -6,17 +6,17 @@
 
 namespace Chimera {
 
-Renderer3d::Renderer3d() : totIBO(0), totFaces(0), logData(false) { uniformsQueue.reserve(300); }
+Renderer3d::Renderer3d(MapUniform* ubo, const bool& logData) : ubo(ubo), totIBO(0), totFaces(0), logData(logData) {}
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(const glm::mat4& inverseViewProjection, const bool& logData) {
+void Renderer3d::begin(const glm::mat4& inverseViewProjection) {
     frustum.set(inverseViewProjection);
     // debug data
     totIBO = 0;
     totFaces = 0;
-    this->logData = logData;
 }
+
 void Renderer3d::end() {
     if (logData == true)
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
@@ -77,7 +77,7 @@ void Renderer3d::flush() {
                 }
 
                 // generic bind in each draw call camera, light, etc
-                for (const auto& kv : uniformsQueue)
+                for (const auto& kv : *ubo)
                     activeShader.setUniformU(kv.first.c_str(), kv.second);
 
                 // bind dos uniforms from model
@@ -102,7 +102,7 @@ void Renderer3d::flush() {
     pLastVao->unbind();
 
     // Limpa buffer de uniforms ao terminar todos os draws calls
-    uniformsQueue.clear();
+    ubo->clear();
 }
 
 } // namespace Chimera

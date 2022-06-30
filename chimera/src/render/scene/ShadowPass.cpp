@@ -28,10 +28,9 @@ ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm:
 
 ShadowPass::~ShadowPass() { delete shadowBuffer; }
 
-void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem,
-                        const bool& logRender) {
+void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem) {
 
-    renderer.begin(eyeView->getViewProjectionInverse(), logRender);
+    renderer.begin(eyeView->getViewProjectionInverse());
     {
         auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
@@ -41,7 +40,6 @@ void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IR
                 // FIXME: usar o direcionm depois no segundo parametro
                 glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
                 this->lightSpaceMatrix = this->lightProjection * lightView;
-                renderer.uQueue().insert(std::make_pair("lightSpaceMatrix", UValue(this->lightSpaceMatrix)));
             }
         }
 
@@ -55,6 +53,7 @@ void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IR
             command.transform = tc.trans->translateSrc(origem->getPosition());
             command.shader = this->shader;
             command.uniforms["model"] = UValue(command.transform);
+            command.uniforms["lightSpaceMatrix"] = UValue(this->lightSpaceMatrix);
             rc.renderable->submit(command, renderer);
         }
     }
@@ -66,12 +65,7 @@ void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IR
     this->shadowBuffer->unbind();
 }
 
-void ShadowPass::setProp(const glm::vec3& positionCam, IRenderer3d& renderer) {
-    renderer.uQueue().insert(std::make_pair("viewPos", UValue(positionCam))); // camera->getPosition()
-    renderer.uQueue().insert(std::make_pair("shadows", UValue(1)));
-    renderer.uQueue().insert(std::make_pair("shadowMap", UValue(1)));
-    renderer.uQueue().insert(std::make_pair("lightSpaceMatrix", UValue(this->lightSpaceMatrix)));
+void ShadowPass::bindShadow() {
     this->shadowBuffer->getDepthAttachemnt()->bind(1); // FIXME: ver como melhorar depois
 }
-
 } // namespace Chimera

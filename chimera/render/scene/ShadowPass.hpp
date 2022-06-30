@@ -11,8 +11,9 @@ class ShadowPass {
   public:
     ShadowPass(const uint32_t& width, const uint32_t& height, const glm::mat4& projection);
     virtual ~ShadowPass();
-    void render(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem, const bool& logRender);
-    void setProp(const glm::vec3& positionCam, IRenderer3d& renderer);
+    void render(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem);
+    void bindShadow();
+    inline const glm::mat4& getLightSpaceMatrix() const { return lightSpaceMatrix; }
 
   private:
     Shader shader;

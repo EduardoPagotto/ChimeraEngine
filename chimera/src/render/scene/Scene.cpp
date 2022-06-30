@@ -79,14 +79,13 @@ void Scene::onDeatach() {
 }
 
 void Scene::onAttach() {
-
     // lista as tags nas entidades registradas
     registry->get().each([&](auto entityID) {
         Entity entity{entityID, registry};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
 
-        // Se for um mesh inicializar componente (já que nao tenho classe de Mesh)
+        // Se for um mesh inicializar componente
         if (entity.hasComponent<MeshComponent>()) {
             MeshComponent& mesh = entity.getComponent<MeshComponent>();
 
@@ -101,39 +100,29 @@ void Scene::onAttach() {
                 material.material->init();
             }
 
-            // Se nja nao foi inicializado um Renderable3dComponent ao mesh
-            if (!entity.hasComponent<Renderable3dComponent>()) { // FIXME: Depoin do BSP mudar o teste ja que todos serao criados aqui!!!
+            // Cria componentes renderizaveis
+            Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
+            if (mesh.type == MeshType::SIMPLE) {
+                rc.renderable = new Renderable3D(mesh.mesh);
 
-                Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
+            } else if (mesh.type == MeshType::ARRAY) {
+                std::vector<VertexData> renderData;
+                vertexDataFromMesh(mesh.mesh, renderData);
+                rc.renderable = new RenderableArray(mesh.vTrisIndex, renderData);
 
-                if (mesh.type == MeshType::SIMPLE) {
-
-                    rc.renderable = new Renderable3D(mesh.mesh);
-
-                } else if (mesh.type == MeshType::ARRAY) {
-
-                    std::vector<VertexData> renderData;
-                    vertexDataFromMesh(mesh.mesh, renderData);
-
-                    rc.renderable = new RenderableArray(mesh.vTrisIndex, renderData);
-
-                } else if (mesh.type == MeshType::BSTREE) {
-
-                    Mesh meshFinal;
-                    meshReCompile(*mesh.mesh, meshFinal);
-
-                    // btree root, leafs, vertex
-                    BspTree bspTree;
-                    mesh.root = bspTree.create(&meshFinal, mesh.vTrisIndex);
-
-                    rc.renderable = new RenderableBsp(mesh.root, mesh.vTrisIndex, &meshFinal);
-                }
+            } else if (mesh.type == MeshType::BSTREE) {
+                Mesh meshFinal;
+                meshReCompile(*mesh.mesh, meshFinal);
+                // btree root, leafs, vertex
+                BspTree bspTree;
+                mesh.root = bspTree.create(&meshFinal, mesh.vTrisIndex);
+                rc.renderable = new RenderableBsp(mesh.root, mesh.vTrisIndex, &meshFinal);
             }
 
+            // Ajuste de fisica se existir
             if (entity.hasComponent<TransComponent>()) {
                 glm::vec3 min, max, size;
                 meshMinMaxSize(mesh.mesh, min, max, size);
-
                 TransComponent& tc = entity.getComponent<TransComponent>();
                 if (tc.solid) {
                     Solid* solid = (Solid*)tc.trans;
@@ -142,11 +131,10 @@ void Scene::onAttach() {
             }
         }
 
+        // Se existir particulas
         if (entity.hasComponent<EmitterComponent>()) {
             EmitterComponent& ec = entity.getComponent<EmitterComponent>();
-
             if (!entity.hasComponent<RenderableParticlesComponent>()) {
-
                 RenderableParticlesComponent& particleSys = entity.addComponent<RenderableParticlesComponent>();
                 particleSys.enable = true;
                 RenderableParticles* p = new RenderableParticles();
@@ -158,11 +146,13 @@ void Scene::onAttach() {
             }
         }
 
+        // Pega o EyeView do ECS
         if (entity.hasComponent<EyeView>()) {
             EyeView& ev = entity.getComponent<EyeView>();
             eyeView = &ev;
         }
 
+        // Pega o Canvas do ECS
         if (entity.hasComponent<CanvasComponent>()) {
             CanvasComponent& cc = entity.getComponent<CanvasComponent>();
             this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());

@@ -274,13 +274,12 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
-        command.uniforms["model"] = UValue(command.transform);
-
         const glm::mat4& view = command.eyeView->getView();
-        ubo.insert(std::make_pair("projection", UValue(command.camera->getProjection())));
-        ubo.insert(std::make_pair("view", UValue(view)));
-        ubo.insert(std::make_pair("CameraRight_worldspace", UValue(glm::vec3(view[0][0], view[1][0], view[2][0]))));
-        ubo.insert(std::make_pair("CameraUp_worldspace", UValue(glm::vec3(view[0][1], view[1][1], view[2][1]))));
+        command.uniforms["projection"] = UValue(command.camera->getProjection());
+        command.uniforms["view"] = UValue(view);
+        command.uniforms["CameraRight_worldspace"] = UValue(glm::vec3(view[0][0], view[1][0], view[2][0]));
+        command.uniforms["CameraUp_worldspace"] = UValue(glm::vec3(view[0][1], view[1][1], view[2][1]));
+        command.uniforms["model"] = UValue(command.transform);
 
         renderable->submit(command, renderer);
     }
@@ -334,7 +333,7 @@ void Scene::onRender() {
         ubo.insert(std::make_pair("projection", UValue(camera->getProjection())));
         ubo.insert(std::make_pair("view", UValue(eyeView->getView())));
 
-        // load shadows props to renderBatch
+        // load shadows props to renderBatch in shade of models!!!!
         if (shadowPass) {
             ubo.insert(std::make_pair("viewPos", UValue(camera->getPosition()))); // camera->getPosition()
             ubo.insert(std::make_pair("shadows", UValue(1)));

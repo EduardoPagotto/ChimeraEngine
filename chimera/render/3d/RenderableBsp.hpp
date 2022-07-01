@@ -4,15 +4,13 @@
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/core/space/BSPTreeNode.hpp"
-#include "chimera/core/space/TrisIndex.hpp"
 #include "chimera/core/visible/Mesh.hpp"
-#include <vector>
 
 namespace Chimera {
 
 class RenderableBsp : public IRenderable3d {
   public:
-    RenderableBsp(BSPTreeNode* root, std::vector<TrisIndex>& vTris, Mesh* mesh);
+    RenderableBsp(std::vector<TrisIndex>& vTris, Mesh* mesh);
     virtual ~RenderableBsp();
     virtual const uint32_t getSize() const override { return totIndex; }
     virtual VertexArray* getVao() const override { return vao; }

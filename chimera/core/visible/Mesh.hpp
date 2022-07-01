@@ -1,6 +1,5 @@
 #pragma once
 #include "chimera/core/TagComponent.hpp"
-#include "chimera/core/space/BSPTreeNode.hpp"
 #include "chimera/core/space/Triangle.hpp"
 #include "chimera/core/space/TrisIndex.hpp"
 #include <glm/glm.hpp>
@@ -25,7 +24,6 @@ struct MeshComponent {
     MeshType type = MeshType::SIMPLE;
     Mesh* mesh = new Mesh();
     std::vector<TrisIndex> vTrisIndex;
-    BSPTreeNode* root = nullptr; // FIXME: precisi mesmo ????
     MeshComponent() = default;
 };
 

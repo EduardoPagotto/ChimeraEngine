@@ -1,4 +1,5 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
+#include "chimera/core/partition/BSPTree.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
@@ -6,11 +7,17 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<TrisIndex>& vTris, Mesh* mesh) : root(root), totIndex(0) {
+RenderableBsp::RenderableBsp(std::vector<TrisIndex>& vTris, Mesh* mesh) : totIndex(0) {
+
+    Mesh meshFinal;
+    meshReCompile(*mesh, meshFinal);
+
+    BspTree bspTree;
+    root = bspTree.create(&meshFinal, vTris);
 
     std::vector<VertexData> vVertex;
-    mesh->serialized = true; // ?????? sera ?????
-    vertexDataFromMesh(mesh, vVertex);
+    meshFinal.serialized = true; // FIXME: sera ?????
+    vertexDataFromMesh(&meshFinal, vVertex);
 
     // create VAO and VBO
     vao = new VertexArray();

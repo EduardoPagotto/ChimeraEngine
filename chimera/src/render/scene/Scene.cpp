@@ -3,7 +3,6 @@
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
-#include "chimera/core/partition/BSPTree.hpp"
 #include "chimera/core/visible/CameraControllerFPS.hpp"
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
 #include "chimera/core/visible/Material.hpp"
@@ -105,20 +104,12 @@ void Scene::onAttach() {
 
             // Cria componentes renderizaveis
             Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
-            if (mesh.type == MeshType::SIMPLE) {
+            if (mesh.type == MeshType::SIMPLE)
                 rc.renderable = new Renderable3D(mesh.mesh);
-
-            } else if (mesh.type == MeshType::ARRAY) {
+            else if (mesh.type == MeshType::ARRAY)
                 rc.renderable = new RenderableArray(mesh.vTrisIndex, mesh.mesh);
-
-            } else if (mesh.type == MeshType::BSTREE) {
-                Mesh meshFinal;
-                meshReCompile(*mesh.mesh, meshFinal);
-                // btree root, leafs, vertex
-                BspTree bspTree;
-                mesh.root = bspTree.create(&meshFinal, mesh.vTrisIndex);
-                rc.renderable = new RenderableBsp(mesh.root, mesh.vTrisIndex, &meshFinal);
-            }
+            else if (mesh.type == MeshType::BSTREE)
+                rc.renderable = new RenderableBsp(mesh.vTrisIndex, mesh.mesh);
 
             // Ajuste de fisica se existir
             if (entity.hasComponent<TransComponent>()) {

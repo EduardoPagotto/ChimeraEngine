@@ -20,8 +20,7 @@ void ColladaHeightMap::create(const std::string& id, const std::string& name, En
 
     LoadHeightMap loader(32, 32);
     loader.getMesh(target, *mc.mesh, size);
-    loader.split(mc.mesh->iPoint);
-    mc.vTrisIndex = loader.vNodes;
+    loader.split(mc.mesh->iPoint, mc.vTrisIndex);
     mc.type = MeshType::ARRAY;
 }
 } // namespace Chimera

@@ -166,7 +166,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     return true;
 }
 
-void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
+void LoadHeightMap::split(std::vector<unsigned int> vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
 
     bool done = false;
     uint32_t startHeight = 0;
@@ -176,7 +176,7 @@ void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
     uint32_t totalWidth = (width - 1) * 2;
     uint32_t squareHeight = squareZ;
     uint32_t squareWidth = squareX * 2;
-    uint32_t totfaces = _vVertexIndex.size() / 3;
+    uint32_t totfaces = vertexIndexIn.size() / 3;
     uint32_t thresholdWidht = totalHeight * squareZ;
 
     while (!done) {
@@ -203,7 +203,7 @@ void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
             for (uint32_t w = startWidth; w < endWidth; w++) { // x
                 face = ((h * totalHeight) + w);
                 base = face * 3;
-                node.add(_vVertexIndex[base], _vVertexIndex[base + 1], _vVertexIndex[base + 2]);
+                node.add(vertexIndexIn[base], vertexIndexIn[base + 1], vertexIndexIn[base + 2]);
                 contador++;
             }
         }
@@ -217,7 +217,7 @@ void LoadHeightMap::split(std::vector<unsigned int> _vVertexIndex) {
         }
 
         if (node.size() != 0)
-            vNodes.push_back(node);
+            vTrisIndexOut.push_back(node);
         else
             done = true;
 

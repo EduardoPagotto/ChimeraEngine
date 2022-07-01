@@ -1,10 +1,8 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
 #include "chimera/render/VertexData.hpp"
-#include <SDL2/SDL.h>
 
 namespace Chimera {
 
@@ -54,39 +52,30 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, std::vector<TrisIndex>& vTris, M
 
 RenderableBsp::~RenderableBsp() { this->destroy(); }
 
-void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
-
-    if (tree->isLeaf == false)
-        return;
-
-    renderer->submit(*command, vChild[tree->leafIndex]);
-}
-
-void RenderableBsp::traverseTree(BSPTreeNode* tree) {
+void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<IRenderable3d*>& childDraw) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
-    if (tree == nullptr)
-        return;
+    if ((tree != nullptr) && (tree->isSolid == false)) {
+        SIDE result = tree->hyperPlane.classifyPoint(cameraPos);
+        switch (result) {
+            case SIDE::CP_FRONT: {
+                traverseTree(cameraPos, tree->back, childDraw);
+                if (tree->isLeaf == true) // set to draw Polygon
+                    childDraw.push_back(vChild[tree->leafIndex]);
 
-    if (tree->isSolid == true)
-        return;
+                traverseTree(cameraPos, tree->front, childDraw);
+            } break;
+            case SIDE::CP_BACK: {
+                traverseTree(cameraPos, tree->front, childDraw);
+                if (tree->isLeaf == true) // set to draw Polygon
+                    childDraw.push_back(vChild[tree->leafIndex]);
 
-    SIDE result = tree->hyperPlane.classifyPoint(command->camera->getPosition());
-    switch (result) {
-        case SIDE::CP_FRONT:
-            traverseTree(tree->back);
-            drawPolygon(tree, true);
-            traverseTree(tree->front);
-            break;
-        case SIDE::CP_BACK:
-            traverseTree(tree->front);
-            drawPolygon(tree, false); // Elimina o render do back-face
-            traverseTree(tree->back);
-            break;
-        default: // SIDE::CP_ONPLANE
-            // the eye point is on the partition hyperPlane...
-            traverseTree(tree->front);
-            traverseTree(tree->back);
-            break;
+                traverseTree(cameraPos, tree->back, childDraw);
+            } break;
+            default: { // SIDE::CP_ONPLANE  // the eye point is on the partition hyperPlane...
+                traverseTree(cameraPos, tree->front, childDraw);
+                traverseTree(cameraPos, tree->back, childDraw);
+            } break;
+        }
     }
 }
 
@@ -96,11 +85,15 @@ void RenderableBsp::draw(const bool& logData) {
 }
 
 void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
-    this->renderer = &renderer;
-    this->command = &command;
-    if (renderer.submit(command, this) == true) {
-        traverseTree(root);
-    }
+    std::vector<IRenderable3d*> childDraw;
+    const glm::vec3 cameraPos = command.camera->getPosition();
+    if (renderer.submit(command, this) == true)
+        traverseTree(cameraPos, root, childDraw);
+
+    for (IRenderable3d* child : childDraw)
+        renderer.submit(command, child);
+
+    childDraw.clear();
 }
 
 void RenderableBsp::destroy() {

@@ -24,20 +24,14 @@ class RenderableBsp : public IRenderable3d {
   private:
     void destroy();
     void collapse(BSPTreeNode* tree);
-
-    void traverseTree(BSPTreeNode* tree);
-    void drawPolygon(BSPTreeNode* tree, bool frontSide);
-
+    void traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<IRenderable3d*>& childDraw);
     // TODO: Testar!!!!!!
     bool lineOfSight(const glm::vec3& Start, const glm::vec3& End, BSPTreeNode* tree);
 
-    BSPTreeNode* root;
     VertexArray* vao;
-    bool logdata;
     std::vector<IRenderable3d*> vChild;
     AABB aabb;
     uint32_t totIndex;
-    IRenderer3d* renderer;
-    RenderCommand* command;
+    BSPTreeNode* root;
 };
 } // namespace Chimera

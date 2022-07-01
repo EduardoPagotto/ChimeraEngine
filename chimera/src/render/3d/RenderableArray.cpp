@@ -2,11 +2,12 @@
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderCommand.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
+#include "chimera/render/VertexData.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vector<VertexData>& vertexData) : totIndex(0) {
+RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh) : totIndex(0) {
     // create vertex buffers
     vao = new VertexArray();
     vao->bind();
@@ -18,6 +19,9 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vec
     layout.Push<float>(3, false);
     layout.Push<float>(3, false);
     layout.Push<float>(2, false);
+
+    std::vector<VertexData> vertexData;
+    vertexDataFromMesh(mesh, vertexData);
 
     vbo->setLayout(layout);
     vbo->setData(&vertexData[0], vertexData.size());

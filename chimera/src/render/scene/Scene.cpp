@@ -109,9 +109,7 @@ void Scene::onAttach() {
                 rc.renderable = new Renderable3D(mesh.mesh);
 
             } else if (mesh.type == MeshType::ARRAY) {
-                std::vector<VertexData> renderData;
-                vertexDataFromMesh(mesh.mesh, renderData);
-                rc.renderable = new RenderableArray(mesh.vTrisIndex, renderData);
+                rc.renderable = new RenderableArray(mesh.vTrisIndex, mesh.mesh);
 
             } else if (mesh.type == MeshType::BSTREE) {
                 Mesh meshFinal;

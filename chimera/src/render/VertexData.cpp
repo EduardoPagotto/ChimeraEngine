@@ -1,6 +1,5 @@
 #include "chimera/render/VertexData.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/space/Plane.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -16,23 +15,6 @@ bool getSimilarVertexIndex(VertexData& in_vertex, std::vector<VertexData>& out_v
     }
     return false;
 }
-
-// void vertexDataReorder(std::vector<VertexData>& inVertexData, std::vector<uint32_t>& inIndex, std::vector<VertexData>& outVertexData,
-//                        std::vector<uint32_t>& outIndex) {
-
-//     std::vector<VertexData> tempVertexData;
-
-//     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Reorder Vertex In: ( %04lu / %04lu )", inVertexData.size(), inIndex.size());
-//     for (uint32_t i : inIndex) {
-//         // expand
-//         VertexData vd = inVertexData[i];
-//         tempVertexData.push_back(vd);
-//     }
-
-//     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Reorder Vertex full: %04lu", tempVertexData.size());
-
-//     vertexDataIndexCompile(tempVertexData, outVertexData, outIndex);
-// }
 
 void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices) {
 
@@ -90,6 +72,7 @@ void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSiz
 void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {
 
     if (m->serialized == false) {
+        // Indices (point, normal e UV) tem valores diferentes, e mesmo tamanho
         if (m->uv.size() > 0) {
             for (uint32_t i = 0; i < m->iPoint.size(); i++) { // Todos os indices tem mesmo tamanho mas diferentes
                 outData.push_back({m->point[m->iPoint[i]], m->normal[m->iNormal[i]], m->uv[m->iUv[i]]});
@@ -100,7 +83,7 @@ void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {
             }
         }
     } else {
-        // vertices podem ser != 3 !!! sequencie!!!
+        // Indice (point, normal e UV) tem vales identicos e sequenciados
         if (m->uv.size() > 0) {
             for (uint32_t i = 0; i < m->point.size(); i++) { // point, normal e UV sao sequenciais sem indice
                 outData.push_back({m->point[i], m->normal[i], m->uv[i]});
@@ -112,30 +95,4 @@ void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {
         }
     }
 }
-
-// void vertexDataIndexToTriangle(VertexData* vertexData, uint32_t* indexData, const uint32_t& indexSize, std::list<Triangle*>& vTris) {
-//     // Usa os indices já pre-calculado
-//     for (uint32_t indice = 0; indice < indexSize; indice += 3) {
-//         uint32_t pa = indexData[indice];
-//         uint32_t pb = indexData[indice + 1];
-//         uint32_t pc = indexData[indice + 2];
-//         // Calcula Normal Face
-//         glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
-//         glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-//         vTris.push_back(new Triangle(pa, pb, pc, normal, false));
-//     }
-// }
-
-// void vertexDataToTriangle(VertexData* vertexData, const uint32_t& vertexSize, std::list<Triangle*>& vTris) {
-//     // Calcula os indices na sequencia em que os vertices estão
-//     for (uint32_t indice = 0; indice < vertexSize; indice += 3) {
-//         uint32_t pa = indice;
-//         uint32_t pb = indice + 1;
-//         uint32_t pc = indice + 2;
-//         // Calcula Normal Face
-//         glm::vec3 acc = vertexData[pa].normal + vertexData[pb].normal + vertexData[pc].normal;
-//         glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-//         vTris.push_back(new Triangle(pa, pb, pc, normal, false));
-//     }
-// }
 } // namespace Chimera

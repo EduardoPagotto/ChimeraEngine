@@ -2,14 +2,13 @@
 #include "IRenderable3d.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/core/space/TrisIndex.hpp"
-#include "chimera/render/VertexData.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 
 namespace Chimera {
 
 class RenderableArray : public IRenderable3d {
   public:
-    RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, std::vector<VertexData>& vertexData);
+    RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh);
     virtual ~RenderableArray();
 
     virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;

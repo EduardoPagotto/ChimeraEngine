@@ -7,12 +7,13 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(std::vector<TrisIndex>& vTris, Mesh* mesh) : totIndex(0) {
+RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0) {
 
     Mesh meshFinal;
     meshReCompile(*mesh, meshFinal);
 
     BspTree bspTree;
+    std::vector<TrisIndex> vTris; // FIXME: limpar ??
     root = bspTree.create(&meshFinal, vTris);
 
     std::vector<VertexData> vVertex;

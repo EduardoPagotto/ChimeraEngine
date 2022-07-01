@@ -109,7 +109,7 @@ void Scene::onAttach() {
             else if (mesh.type == MeshType::ARRAY)
                 rc.renderable = new RenderableArray(mesh.vTrisIndex, mesh.mesh);
             else if (mesh.type == MeshType::BSTREE)
-                rc.renderable = new RenderableBsp(mesh.vTrisIndex, mesh.mesh);
+                rc.renderable = new RenderableBsp(mesh.mesh);
 
             // Ajuste de fisica se existir
             if (entity.hasComponent<TransComponent>()) {

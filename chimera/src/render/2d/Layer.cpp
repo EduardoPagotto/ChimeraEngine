@@ -18,11 +18,17 @@ Layer::~Layer() {
 
 void Layer::onRender() {
     glUseProgram(shader.getID());
-    shader.setUniformU("pr_matrix", Chimera::UValue(camera->getProjection())); // passar para o renderer o shade
+    shader.setUniformU("pr_matrix", UValue(camera->getProjection())); // passar para o renderer o shade
     renderer->begin(camera);
 
     // TODO: implementar normalizacao 2d 3d, nasce aqui
     RenderCommand rc;
+    rc.camera = camera;
+    // rc..eyeView = eyeView;
+    // rc.transform = tc.trans->translateSrc(origem->getPosition());
+    rc.shader = shader;
+    rc.uniforms["pr_matrix"] = UValue(camera->getProjection());
+    // rc.uniforms["textures"] = UValue(32, texIDs);
 
     for (auto renderable : renderables)
         renderable->submit(rc, *renderer);

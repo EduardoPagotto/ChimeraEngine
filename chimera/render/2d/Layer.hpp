@@ -10,8 +10,8 @@ class Layer : public IStateMachine {
   public:
     Layer(IRenderer2D* renderer, Shader shader, Camera* camera);
     virtual ~Layer();
-    inline virtual void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
     virtual void onRender() override;
+    inline void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
 
     Camera* getCamera() const { return camera; };
 

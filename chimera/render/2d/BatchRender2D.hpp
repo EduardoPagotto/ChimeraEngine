@@ -3,6 +3,7 @@
 #include "chimera/core/buffer/IndexBuffer.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/render/VertexData.hpp"
+#include <deque>
 
 namespace Chimera {
 
@@ -19,16 +20,17 @@ class BatchRender2D : public IRenderer2D {
 
     void init();
     virtual void begin(Camera* camera) override;
-    virtual void submit(const RenderCommand& command, IRenderable2D* renderable) override;
+    virtual void submit(RenderCommand& command, IRenderable2D* renderable) override;
     virtual void end() override;
     virtual void flush() override;
 
-    virtual void drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
+    virtual void drawString(RenderCommand& command, FontAtlas* font, const std::string& text, const glm::vec3& pos,
+                            const glm::vec4& color) override;
 
     inline virtual TransformationStack& getStack() override { return stack; };
 
   private:
-    float submitTexture(Texture* texture);
+    float submitTexture(RenderCommand& command, Texture* texture);
 
     TransformationStack stack;
     IndexBuffer* ibo;
@@ -36,7 +38,7 @@ class BatchRender2D : public IRenderer2D {
     VertexBuffer* pVbo;
     GLsizei indexCount;
     VertexDataSimple* buffer;
-    std::vector<Texture*> textures;
+    std::deque<RenderCommand> commandQueue;
     Camera* camera;
 };
 } // namespace Chimera

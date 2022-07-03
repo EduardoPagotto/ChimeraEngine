@@ -83,7 +83,9 @@ float BatchRender2D::submitTexture(Texture* texture) {
     return result;
 }
 
-void BatchRender2D::submit(IRenderable2D* renderable) {
+void BatchRender2D::submit(const RenderCommand& command, IRenderable2D* renderable) {
+
+    // TODO: implementar normalizacao 2d 3d submit
 
     const glm::vec3& position = renderable->getPosition();
     const glm::vec2& size = renderable->getSize();

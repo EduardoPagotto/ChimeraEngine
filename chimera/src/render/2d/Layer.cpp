@@ -1,4 +1,5 @@
 #include "chimera/render/2d/Layer.hpp"
+#include "chimera/core/visible/RenderCommand.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
@@ -20,8 +21,11 @@ void Layer::onRender() {
     shader.setUniformU("pr_matrix", Chimera::UValue(camera->getProjection())); // passar para o renderer o shade
     renderer->begin(camera);
 
+    // TODO: implementar normalizacao 2d 3d, nasce aqui
+    RenderCommand rc;
+
     for (auto renderable : renderables)
-        renderable->submit(*renderer);
+        renderable->submit(rc, *renderer);
 
     renderer->end();
     renderer->flush();

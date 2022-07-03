@@ -21,7 +21,7 @@ void Layer::onRender() {
     renderer->begin(camera);
 
     for (auto renderable : renderables)
-        renderable->submit(renderer);
+        renderable->submit(*renderer);
 
     renderer->end();
     renderer->flush();

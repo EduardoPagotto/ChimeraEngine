@@ -2,12 +2,12 @@
 
 namespace Chimera {
 
-void Group::submit(IRenderer2D* renderer) {
+void Group::submit(IRenderer2D& renderer) {
 
-    renderer->getStack().push(transformationMatrix);
+    renderer.getStack().push(transformationMatrix);
     for (auto renderable : renderables)
         renderable->submit(renderer);
 
-    renderer->getStack().pop();
+    renderer.getStack().pop();
 }
 } // namespace Chimera

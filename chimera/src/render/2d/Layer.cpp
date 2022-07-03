@@ -21,7 +21,7 @@ void Layer::onRender() {
     shader.setUniformU("pr_matrix", UValue(camera->getProjection())); // passar para o renderer o shade
     renderer->begin(camera);
 
-    // TODO: implementar normalizacao 2d 3d, nasce aqui
+    // TODO: implementar normalizacao 2d 3d, nasce aqui //FIXME:::: errado !!!! um commando por LAYER!!!!!!!!!!!!!!
     RenderCommand rc;
     rc.camera = camera;
     // rc..eyeView = eyeView;

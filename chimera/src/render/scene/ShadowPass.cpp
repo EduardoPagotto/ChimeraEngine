@@ -1,6 +1,6 @@
 #include "chimera/render/scene/ShadowPass.hpp"
 #include "chimera/core/visible/Light.hpp"
-#include "chimera/render/3d/RenderCommand.hpp"
+#include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/scene/Components.hpp"
 
 namespace Chimera {

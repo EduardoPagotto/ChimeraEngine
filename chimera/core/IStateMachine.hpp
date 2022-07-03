@@ -6,7 +6,6 @@ namespace Chimera {
 
 class IStateMachine {
   public:
-    virtual ~IStateMachine() {}
     virtual void onAttach() = 0;
     virtual void onDeatach() = 0;
     virtual void onRender() = 0;

@@ -2,8 +2,8 @@
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
+#include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
-#include "chimera/render/3d/RenderCommand.hpp"
 
 namespace Chimera {
 class RenderableParticles : public IRenderable3d {

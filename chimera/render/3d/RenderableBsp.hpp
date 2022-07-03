@@ -1,10 +1,10 @@
 #pragma once
 #include "IRenderable3d.hpp"
-#include "RenderCommand.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/core/space/BSPTreeNode.hpp"
 #include "chimera/core/visible/Mesh.hpp"
+#include "chimera/core/visible/RenderCommand.hpp"
 
 namespace Chimera {
 

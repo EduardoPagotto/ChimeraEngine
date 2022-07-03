@@ -1,5 +1,6 @@
 #pragma once
 #include "UValue.hpp"
+#include "chimera/core/TagComponent.hpp"
 
 namespace Chimera {
 

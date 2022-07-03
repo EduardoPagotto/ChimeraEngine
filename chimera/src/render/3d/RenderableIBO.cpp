@@ -1,7 +1,7 @@
 #include "chimera/render/3d/RenderableIBO.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/3d/RenderCommand.hpp"
 
 namespace Chimera {
 

@@ -8,7 +8,7 @@ namespace Chimera {
 class IRenderable2D {
   public:
     virtual ~IRenderable2D() {}
-    virtual void submit(class RenderCommand& command, class IRenderer2D& renderer) = 0;
+    virtual void submit(class IRenderer2D& renderer) = 0;
     virtual const glm::vec3 getPosition() const = 0;
     virtual const glm::vec2 getSize() const = 0;
     virtual const glm::vec4 getColor() const = 0;

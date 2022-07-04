@@ -60,11 +60,11 @@ void BatchRender2D::begin(Camera* camera) {
     this->buffer = (VertexDataSimple*)pVbo->map();
 }
 
-float BatchRender2D::submitTexture(RenderCommand& command, Texture* texture) {
+float BatchRender2D::submitTexture(Texture* texture) {
     float result = 0.0f;
     bool found = false;
-    for (uint i = 0; i < command.vTex.size(); i++) {
-        if (command.vTex[i] == texture) {
+    for (uint i = 0; i < textures.size(); i++) {
+        if (textures[i] == texture) {
             result = (float)(i + 1);
             found = true;
             break;
@@ -72,18 +72,18 @@ float BatchRender2D::submitTexture(RenderCommand& command, Texture* texture) {
     }
 
     if (!found) {
-        if (command.vTex.size() >= RENDERER_MAX_TEXTURE) {
+        if (textures.size() >= RENDERER_MAX_TEXTURE) {
             end();         // End();
             flush();       // Present();
             begin(camera); // Begin();
         }
-        command.vTex.push_back(texture);
-        result = (float)(command.vTex.size());
+        textures.push_back(texture);
+        result = (float)(textures.size());
     }
     return result;
 }
 
-void BatchRender2D::submit(RenderCommand& command, IRenderable2D* renderable) {
+void BatchRender2D::submit(IRenderable2D* renderable) {
 
     // TODO: implementar normalizacao 2d 3d submit
 
@@ -95,7 +95,7 @@ void BatchRender2D::submit(RenderCommand& command, IRenderable2D* renderable) {
 
     float textureSlot = 0.0f; // float ts = 0.0f;
     if (texture != nullptr)
-        textureSlot = this->submitTexture(command, renderable->getTexture());
+        textureSlot = this->submitTexture(renderable->getTexture());
 
     buffer->point = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
     buffer->uv = uv[0];
@@ -122,17 +122,15 @@ void BatchRender2D::submit(RenderCommand& command, IRenderable2D* renderable) {
     buffer++;
 
     indexCount += 6;
-    commandQueue.push_back(command);
 }
 
-void BatchRender2D::drawString(RenderCommand& command, FontAtlas* font, const std::string& text, const glm::vec3& pos,
-                               const glm::vec4& color) {
+void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
     const Texture* texture = font->getTexture();
 
     float textureSlot = 0.0f; // float ts = 0.0f;
     if (texture != nullptr)
-        textureSlot = this->submitTexture(command, font->getTexture());
+        textureSlot = this->submitTexture(font->getTexture());
 
     const glm::vec2& scale = font->getScale();
     float x = pos.x;
@@ -189,7 +187,6 @@ void BatchRender2D::drawString(RenderCommand& command, FontAtlas* font, const st
             x += glyph->advance * scale.x;
         }
     }
-    commandQueue.push_back(command);
 }
 
 void BatchRender2D::end() {
@@ -205,23 +202,19 @@ void BatchRender2D::flush() {
 
     BinaryStateDisable cull(GL_CULL_FACE); // glEnable(GL_CULL_FACE);
 
-    while (!commandQueue.empty()) {
-        RenderCommand& command = commandQueue.front();
-        for (uint8_t i = 0; i < command.vTex.size(); i++)
-            command.vTex[i]->bind(i);
+    for (uint8_t i = 0; i < textures.size(); i++)
+        textures[i]->bind(i);
 
-        pVao->bind();
-        ibo->bind();
+    pVao->bind();
+    ibo->bind();
 
-        glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 
-        ibo->unbind();
-        pVao->unbind();
+    ibo->unbind();
+    pVao->unbind();
 
-        indexCount = 0;
-        command.vTex.clear();
-        commandQueue.pop_front();
-    }
+    indexCount = 0;
+    textures.clear();
 }
 
 } // namespace Chimera

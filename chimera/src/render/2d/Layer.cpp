@@ -30,8 +30,10 @@ void Layer::onRender() {
     rc.uniforms["pr_matrix"] = UValue(camera->getProjection());
     // rc.uniforms["textures"] = UValue(32, texIDs);
 
+    renderer->setCommandRender(&rc);
+
     for (auto renderable : renderables)
-        renderable->submit(rc, *renderer);
+        renderable->submit(*renderer);
 
     renderer->end();
     renderer->flush();

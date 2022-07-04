@@ -2,6 +2,7 @@
 #include "Renderable2D.hpp"
 #include "chimera/core/buffer/IndexBuffer.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/VertexData.hpp"
 #include <deque>
 
@@ -20,17 +21,15 @@ class BatchRender2D : public IRenderer2D {
 
     void init();
     virtual void begin(Camera* camera) override;
-    virtual void submit(RenderCommand& command, IRenderable2D* renderable) override;
+    virtual void submit(IRenderable2D* renderable) override;
     virtual void end() override;
     virtual void flush() override;
-
-    virtual void drawString(RenderCommand& command, FontAtlas* font, const std::string& text, const glm::vec3& pos,
-                            const glm::vec4& color) override;
-
+    virtual void drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
     inline virtual TransformationStack& getStack() override { return stack; };
+    inline virtual void setCommandRender(class RenderCommand* command) override { renderComando = command; }
 
   private:
-    float submitTexture(RenderCommand& command, Texture* texture);
+    float submitTexture(Texture* texture);
 
     TransformationStack stack;
     IndexBuffer* ibo;
@@ -38,7 +37,8 @@ class BatchRender2D : public IRenderer2D {
     VertexBuffer* pVbo;
     GLsizei indexCount;
     VertexDataSimple* buffer;
-    std::deque<RenderCommand> commandQueue;
+    RenderCommand* renderComando;
+    std::vector<Texture*> textures;
     Camera* camera;
 };
 } // namespace Chimera

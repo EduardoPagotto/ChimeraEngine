@@ -2,11 +2,11 @@
 
 namespace Chimera {
 
-void Group::submit(RenderCommand& command, IRenderer2D& renderer) {
+void Group::submit(IRenderer2D& renderer) {
 
     renderer.getStack().push(transformationMatrix);
     for (auto renderable : renderables)
-        renderable->submit(command, renderer);
+        renderable->submit(renderer);
 
     renderer.getStack().pop();
 }

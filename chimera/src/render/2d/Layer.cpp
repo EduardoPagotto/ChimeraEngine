@@ -17,19 +17,15 @@ Layer::~Layer() {
 }
 
 void Layer::onRender() {
-    glUseProgram(shader.getID());
-    shader.setUniformU("pr_matrix", UValue(camera->getProjection())); // passar para o renderer o shade
+
     renderer->begin(camera);
 
-    // TODO: implementar normalizacao 2d 3d, nasce aqui //FIXME:::: errado !!!! um commando por LAYER!!!!!!!!!!!!!!
     RenderCommand rc;
     rc.camera = camera;
-    // rc..eyeView = eyeView;
-    // rc.transform = tc.trans->translateSrc(origem->getPosition());
     rc.shader = shader;
     rc.uniforms["pr_matrix"] = UValue(camera->getProjection());
-    // rc.uniforms["textures"] = UValue(32, texIDs);
-
+    // rc.eyeView =
+    //  rc.uniforms["textures"] = UValue(32, texIDs);
     renderer->setCommandRender(&rc);
 
     for (auto renderable : renderables)
@@ -37,7 +33,5 @@ void Layer::onRender() {
 
     renderer->end();
     renderer->flush();
-
-    glUseProgram(0);
 }
 } // namespace Chimera

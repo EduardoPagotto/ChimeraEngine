@@ -199,8 +199,11 @@ void BatchRender2D::flush() {
     BinaryStateEnable blend(GL_BLEND); // glEnable(GL_BLEND);
     // BinaryStateDisable depth(GL_DEPTH_TEST); // glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     BinaryStateDisable cull(GL_CULL_FACE); // glEnable(GL_CULL_FACE);
+    // bind shader and uniforms from model
+    glUseProgram(renderComando->shader.getID());
+    for (const auto& kv : renderComando->uniforms)
+        renderComando->shader.setUniformU(kv.first.c_str(), kv.second);
 
     for (uint8_t i = 0; i < textures.size(); i++)
         textures[i]->bind(i);
@@ -212,9 +215,9 @@ void BatchRender2D::flush() {
 
     ibo->unbind();
     pVao->unbind();
-
     indexCount = 0;
     textures.clear();
+    glUseProgram(0);
 }
 
 } // namespace Chimera

@@ -6,11 +6,12 @@
 
 namespace Chimera {
 
-void ColladaExtra::create(Entity& entity, pugi::xml_node nodeExtra) {
+void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
 
+    Entity entity;
     const pugi::xml_node nCanvas = getExtra(nodeExtra, "canvas");
     if (nCanvas != nullptr) {
-
+        entity = r.createEntity("main_screem", "main_screem");
         std::string title = "Game";
         uint32_t width = 1024;
         uint32_t height = 800;
@@ -59,5 +60,4 @@ void ColladaExtra::create(Entity& entity, pugi::xml_node nodeExtra) {
         }
     }
 }
-
 } // namespace Chimera

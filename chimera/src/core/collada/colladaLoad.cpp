@@ -1,4 +1,5 @@
 #include "chimera/core/collada/colladaLoad.hpp"
+#include "chimera/core/collada/ColladaExtra.hpp"
 #include "chimera/core/collada/ColladaPhysicScene.hpp"
 #include "chimera/core/collada/ColladaVisualScene.hpp"
 #include <SDL2/SDL.h>
@@ -31,7 +32,13 @@ void colladaRegistryLoad(ColladaDom& dom, Registry& r) {
     for (pugi::xml_node n = vs.first_child(); n; n = n.next_sibling()) {
         std::string instance = n.name();
         std::string url = n.attribute("url").value();
-        if (instance == "instance_visual_scene") {
+
+        if (instance == "extra") {
+
+            ColladaExtra ce(dom, "#vazio");
+            ce.create(r, n);
+
+        } else if (instance == "instance_visual_scene") {
 
             ColladaVisualScene vs(dom, url);
             vs.loadAll(vs.getLibrary("library_visual_scenes"), &r);

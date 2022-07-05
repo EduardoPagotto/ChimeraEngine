@@ -16,22 +16,6 @@
     </library_cameras>
     <library_visual_scenes>
         <visual_scene id="Scene" name="Scene">
-            <node id="main_screem" name="main_screem">
-                <extra>
-                    <technique profile="chimera">
-                        <canvas>
-                            <title>simples</title>
-                            <width>800</width>
-                            <height>640</height>
-                            <fullscreen>false</fullscreen>
-                        </canvas>
-                        <eyeview>
-                            <size>1</size>
-                            <distance>0.4</distance>
-                        </eyeview>
-                    </technique>
-                </extra>
-            </node>
             <node id="Cubo" name="Cubo" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
                 <instance_geometry url="file://assets/models/cubo2.xml#Cubo-mesh"/>
@@ -55,6 +39,20 @@
         </visual_scene>
     </library_visual_scenes>
     <scene>
+        <extra>
+            <technique profile="chimera">
+                <canvas>
+                    <title>simples</title>
+                    <width>800</width>
+                    <height>640</height>
+                    <fullscreen>false</fullscreen>
+                </canvas>
+                <eyeview>
+                    <size>1</size>
+                    <distance>0.4</distance>
+                </eyeview>
+            </technique>
+        </extra>
         <instance_visual_scene url="#Scene"/>
     </scene>
 </COLLADA>

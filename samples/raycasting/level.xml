@@ -2,21 +2,19 @@
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
     <library_visual_scenes>
         <visual_scene id="Scene" name="Scene">
-            <node id="main_screem" name="main_screem">
-                <extra>
-                    <technique profile="chimera">
-                        <canvas type="FB">
-                            <title>raycast</title>
-                            <width>800</width>
-                            <height>640</height>
-                            <fullscreen>false</fullscreen>
-                        </canvas>
-                    </technique>
-                </extra>
-            </node>
         </visual_scene>
     </library_visual_scenes>
     <scene>
+        <extra>
+            <technique profile="chimera">
+                <canvas type="FB">
+                    <title>raycast</title>
+                    <width>800</width>
+                    <height>640</height>
+                    <fullscreen>false</fullscreen>
+                </canvas>
+            </technique>
+        </extra>
         <instance_visual_scene url="#Scene"/>
     </scene>
 </COLLADA>

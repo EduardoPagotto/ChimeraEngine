@@ -20,7 +20,7 @@ class Engine {
     Registry registry;
     bool changeStatusFlow(SDL_Event* pEventSDL);
     bool pause;
-    uint32_t fps, countDelta;
+    uint32_t fps;
     Canvas* canvas;
     Timer timerFPS;
     StateStack stack;

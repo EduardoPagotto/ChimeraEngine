@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-Engine::Engine() : canvas(nullptr), pause(true), fps(60), countDelta(0) {
+Engine::Engine() : canvas(nullptr), pause(true), fps(140) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
@@ -54,9 +54,8 @@ bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {
 void Engine::run(void) {
     SDL_Event l_eventSDL;
     bool l_quit = false;
-    uint32_t beginCount;
-    uint32_t miniumCountDelta = 1000 / 140; // 16.66667.3 ms
-    double ts;
+    uint32_t beginCount = 0, countDelta = 7, miniumCountDelta = 1000 / 140; // 140 frames em 1000 ms
+    double ts = (double)countDelta / 1000.0f;
     JoystickManager::find(); // open devices
 
     while (!l_quit) {
@@ -119,19 +118,16 @@ void Engine::run(void) {
             }
         }
 
+        ts = (double)countDelta / 1000.0f;
         if (!pause) { // update game
-            try {
-                ts = (double)countDelta / 1000.0f;
-                for (auto it = stack.begin(); it != stack.end(); it++)
-                    (*it)->onUpdate(ts);
+            for (auto it = stack.begin(); it != stack.end(); it++)
+                (*it)->onUpdate(ts);
 
-                canvas->before();
-                for (auto it = stack.begin(); it != stack.end(); it++)
-                    (*it)->onRender();
+            canvas->before();
+            for (auto it = stack.begin(); it != stack.end(); it++)
+                (*it)->onRender();
 
-                canvas->after();
-
-            } catch (...) { SDL_Quit(); }
+            canvas->after();
         }
 
         if (timerFPS.stepCount() == true) { // count FPS each second

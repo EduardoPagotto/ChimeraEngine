@@ -14,7 +14,7 @@ class Renderer3d : public IRenderer3d {
   public:
     Renderer3d(const bool& logData);
     virtual ~Renderer3d();
-    virtual void begin(const glm::mat4& inverseViewProjection) override;
+    virtual void begin(Camera* camera, EyeView* eyeView) override;
     virtual bool submit(const RenderCommand& command, IRenderable3d* renderable) override;
     virtual void end() override;
     virtual void flush() override;

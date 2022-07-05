@@ -3,7 +3,7 @@
 namespace Chimera {
 class IRenderer3d {
   public:
-    virtual void begin(const glm::mat4& inverseViewProjection) = 0;
+    virtual void begin(class Camera* camera, class EyeView* eyeView) = 0;
     virtual bool submit(const class RenderCommand& command, class IRenderable3d* renderable) = 0;
     virtual void end() = 0;
     virtual void flush() = 0;

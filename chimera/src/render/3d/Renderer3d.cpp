@@ -10,8 +10,8 @@ Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(lo
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(const glm::mat4& inverseViewProjection) {
-    frustum.set(inverseViewProjection);
+void Renderer3d::begin(Camera* camera, EyeView* eyeView) {
+    frustum.set(eyeView->getViewProjectionInverse());
     // debug data
     totIBO = 0;
     totFaces = 0;

@@ -6,7 +6,7 @@
 
 namespace Chimera {
 
-Renderer3d::Renderer3d(MapUniform* ubo, const bool& logData) : ubo(ubo), totIBO(0), totFaces(0), logData(logData) {}
+Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(logData) { uniformsQueue.reserve(300); }
 
 Renderer3d::~Renderer3d() {}
 
@@ -77,7 +77,7 @@ void Renderer3d::flush() {
                 }
 
                 // generic bind in each draw call camera, light, etc
-                for (const auto& kv : *ubo)
+                for (const auto& kv : uniformsQueue)
                     activeShader.setUniformU(kv.first.c_str(), kv.second);
 
                 // bind dos uniforms from model
@@ -102,7 +102,7 @@ void Renderer3d::flush() {
     pLastVao->unbind();
 
     // Limpa buffer de uniforms ao terminar todos os draws calls
-    ubo->clear();
+    uniformsQueue.clear();
 }
 
 } // namespace Chimera

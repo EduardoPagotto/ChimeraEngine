@@ -43,7 +43,6 @@ class Scene : public IStateMachine {
     EyeView* eyeView;
     ShadowPass* shadowPass;
     bool logRender;
-    MapUniform ubo;
     std::vector<RenderBuffer*> vRB;
     std::vector<IEmitter*> emitters;
 };

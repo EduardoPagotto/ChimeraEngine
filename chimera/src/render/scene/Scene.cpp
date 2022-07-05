@@ -21,9 +21,7 @@
 namespace Chimera {
 
 Scene::Scene(Registry& r, StateStack& s)
-    : stack(&s), registry(&r), activeCam(nullptr), origem(nullptr), shadowPass(nullptr), logRender(false) {
-    ubo.reserve(300);
-}
+    : stack(&s), registry(&r), activeCam(nullptr), origem(nullptr), shadowPass(nullptr), logRender(false) {}
 
 Scene::~Scene() {
     if (shadowPass) {
@@ -264,8 +262,8 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
-        const glm::mat4& view = command.eyeView->getView();
-        command.uniforms["projection"] = UValue(command.camera->getProjection());
+        const glm::mat4& view = eyeView->getView();
+        command.uniforms["projection"] = UValue(camera->getProjection());
         command.uniforms["view"] = UValue(view);
         command.uniforms["CameraRight_worldspace"] = UValue(glm::vec3(view[0][0], view[1][0], view[2][0]));
         command.uniforms["CameraUp_worldspace"] = UValue(glm::vec3(view[0][1], view[1][1], view[2][1]));
@@ -302,7 +300,7 @@ void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
 void Scene::onRender() {
 
     Camera* camera = activeCam;
-    Renderer3d renderBatch(&ubo, logRender);
+    Renderer3d renderBatch(logRender);
 
     if (logRender == true) {
         const glm::vec3& pos = camera->getPosition();
@@ -320,15 +318,15 @@ void Scene::onRender() {
         count++;
 
         // used by all
-        ubo.insert(std::make_pair("projection", UValue(camera->getProjection())));
-        ubo.insert(std::make_pair("view", UValue(eyeView->getView())));
+        renderBatch.uboQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
+        renderBatch.uboQueue().insert(std::make_pair("view", UValue(eyeView->getView())));
 
         // load shadows props to renderBatch in shade of models!!!!
         if (shadowPass) {
-            ubo.insert(std::make_pair("viewPos", UValue(camera->getPosition()))); // camera->getPosition()
-            ubo.insert(std::make_pair("shadows", UValue(1)));
-            ubo.insert(std::make_pair("shadowMap", UValue(1)));
-            ubo.insert(std::make_pair("lightSpaceMatrix", UValue(shadowPass->getLightSpaceMatrix())));
+            renderBatch.uboQueue().insert(std::make_pair("viewPos", UValue(camera->getPosition())));
+            renderBatch.uboQueue().insert(std::make_pair("shadows", UValue(1)));
+            renderBatch.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
+            renderBatch.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowPass->getLightSpaceMatrix())));
             shadowPass->bindShadow();
         }
 
@@ -337,7 +335,7 @@ void Scene::onRender() {
             auto& lc = lightView.get<LightComponent>(entity);
             auto& tc = registry->get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
             if (lc.global)                                          // biding light prop
-                lc.light->bindLight(ubo, tc.trans->getMatrix());
+                lc.light->bindLight(renderBatch.uboQueue(), tc.trans->getMatrix());
         }
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now

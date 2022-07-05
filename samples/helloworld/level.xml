@@ -7,12 +7,7 @@
     <scene>
         <extra>
             <technique profile="chimera">
-                <canvas>
-                    <title>hello2d</title>
-                    <width>960</width>
-                    <height>540</height>
-                    <fullscreen>false</fullscreen>
-                </canvas>
+                <canvas title="hello2d" width="960" height="540" fullscreen="0"/>
             </technique>
         </extra>
         <instance_visual_scene url="#Scene"/>

@@ -12,16 +12,14 @@ void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
     const pugi::xml_node nCanvas = getExtra(nodeExtra, "canvas");
     if (nCanvas != nullptr) {
         entity = r.createEntity("main_screem", "main_screem");
-        std::string title = "Game";
-        uint32_t width = 1024;
-        uint32_t height = 800;
-        bool fullscreen = true;
-        setChildParam(nCanvas, "title", title);
-        setChildParam(nCanvas, "width", width);
-        setChildParam(nCanvas, "height", height);
-        setChildParam(nCanvas, "fullscreen", fullscreen);
 
+        std::string title = nCanvas.attribute("title").value();
+        uint32_t width = static_cast<uint32_t>(std::stoul(nCanvas.attribute("width").value()));   // 1024;
+        uint32_t height = static_cast<uint32_t>(std::stoul(nCanvas.attribute("height").value())); // 800;
+        uint32_t f = static_cast<uint32_t>(std::stoul(nCanvas.attribute("fullscreen").value()));
+        bool fullscreen = f;
         std::string type = nCanvas.attribute("type").value();
+
         CanvasComponent& cc = entity.addComponent<CanvasComponent>();
         if (type == "FB")
             cc.canvas = new CanvasFB(title, width, height, fullscreen);
@@ -32,11 +30,8 @@ void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
     const pugi::xml_node nEveView = getExtra(nodeExtra, "eyeview");
     if (nEveView != nullptr) {
 
-        uint32_t size = 2;
-        float distance = 0.4f;
-        setChildParam(nEveView, "size", size);
-        setChildParam(nEveView, "distance", distance);
-
+        uint32_t size = static_cast<uint32_t>(std::stoul(nEveView.attribute("size").value()));
+        float distance = std::stod(nEveView.attribute("distance").value());
         EyeView& ev = entity.addComponent<EyeView>();
         if (size == 1) {
             ev.add("unique");

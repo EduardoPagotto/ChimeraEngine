@@ -721,16 +721,8 @@
     <scene>
         <extra>
             <technique profile="chimera">
-                <canvas>
-                    <title>models</title>
-                    <width>800</width>
-                    <height>640</height>
-                    <fullscreen>false</fullscreen>
-                </canvas>
-                <eyeview>
-                    <size>1</size>
-                    <distance>0.4</distance>
-                </eyeview>
+                <canvas title="models" width="800" height="640" fullscreen="0"/>
+                <eyeview size="1" distance="0.4"/>
                 <fonts>
                     <font url="file://assets/fonts/FreeSans.ttf#FreeSans_22" size="22" scaleX="1.0" scaleY="1.0"/>
                 </fonts>

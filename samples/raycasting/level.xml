@@ -7,12 +7,7 @@
     <scene>
         <extra>
             <technique profile="chimera">
-                <canvas type="FB">
-                    <title>raycast</title>
-                    <width>800</width>
-                    <height>640</height>
-                    <fullscreen>false</fullscreen>
-                </canvas>
+                <canvas type="FB" title="raycast" width="800" height="640" fullscreen="0"/>
             </technique>
         </extra>
         <instance_visual_scene url="#Scene"/>

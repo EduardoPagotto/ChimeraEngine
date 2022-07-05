@@ -129,16 +129,8 @@
     <scene>
         <extra>
             <technique profile="chimera">
-                <canvas>
-                    <title>BSP</title>
-                    <width>800</width>
-                    <height>640</height>
-                    <fullscreen>false</fullscreen>
-                </canvas>
-                <eyeview>
-                    <size>2</size>
-                    <distance>0.4</distance>
-                </eyeview>
+                <canvas title="BSP" width="800" height="640" fullscreen="0"/>
+                <eyeview size="2" distance="0.4"/>
             </technique>
         </extra>
         <instance_visual_scene url="#Scene"/>

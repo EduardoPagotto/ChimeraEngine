@@ -140,16 +140,8 @@
     <scene>
         <extra>
             <technique profile="chimera">
-                <canvas>
-                    <title>Terrain</title>
-                    <width>1200</width>
-                    <height>600</height>
-                    <fullscreen>false</fullscreen>
-                </canvas>
-                <eyeview>
-                    <size>1</size>
-                    <distance>0.4</distance>
-                </eyeview>
+                <canvas title="Terrain" width="1200" height="600" fullscreen="0"/>
+                <eyeview size="1" distance="0.4"/>
             </technique>
         </extra>
         <instance_visual_scene url="#Scene"/>

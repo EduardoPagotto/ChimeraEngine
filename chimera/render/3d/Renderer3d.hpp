@@ -3,7 +3,6 @@
 #include "IRenderer3d.hpp"
 #include "chimera/core/TransformationStack.hpp"
 #include "chimera/core/space/Frustum.hpp"
-#include "chimera/core/visible/Light.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/core/visible/Shader.hpp"
 #include <cstdint>

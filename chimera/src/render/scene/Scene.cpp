@@ -5,6 +5,7 @@
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/visible/CameraControllerFPS.hpp"
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
+#include "chimera/core/visible/Light.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/core/visible/Transform.hpp"

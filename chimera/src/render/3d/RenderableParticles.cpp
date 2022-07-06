@@ -65,7 +65,7 @@ void RenderableParticles::destroy() {
 
 void RenderableParticles::submit(RenderCommand& command, IRenderer3d& renderer) {
 
-    pc->cameraPos = glm::inverse(command.eyeView->getView())[3]; // depois mover para o statemachine!!!
+    pc->cameraPos = glm::inverse(renderer.getEyeView()->getView())[3]; // depois mover para o statemachine!!!
     renderer.submit(command, this);
 }
 

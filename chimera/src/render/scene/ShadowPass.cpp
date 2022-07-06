@@ -48,8 +48,6 @@ void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IR
             auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
             RenderCommand command;
-            command.camera = camera;
-            command.eyeView = eyeView;
             command.transform = tc.trans->translateSrc(origem->getPosition());
             command.shader = this->shader;
             command.uniforms["model"] = UValue(command.transform);

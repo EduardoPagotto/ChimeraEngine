@@ -9,5 +9,7 @@ class IRenderer3d {
     virtual void flush() = 0;
     virtual MapUniform& uboQueue() = 0;
     virtual class TransformationStack& getStack() = 0;
+    virtual class Camera* getCamera() const = 0;
+    virtual class EyeView* getEyeView() const = 0;
 };
 } // namespace Chimera

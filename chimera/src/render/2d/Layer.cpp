@@ -21,10 +21,8 @@ void Layer::onRender() {
     renderer->begin(camera);
 
     RenderCommand rc;
-    rc.camera = camera;
     rc.shader = shader;
     rc.uniforms["pr_matrix"] = UValue(camera->getProjection());
-    // rc.eyeView =
     //  rc.uniforms["textures"] = UValue(32, texIDs);
     renderer->setCommandRender(&rc);
 

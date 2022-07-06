@@ -256,8 +256,6 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
         MaterialComponent& mc = e.getComponent<MaterialComponent>();
 
         RenderCommand command;
-        command.camera = camera;
-        command.eyeView = eyeView;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
@@ -284,8 +282,6 @@ void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
         auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
-        command.camera = camera;
-        command.eyeView = eyeView;
         command.transform = tc.trans->translateSrc(origem->getPosition());
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);

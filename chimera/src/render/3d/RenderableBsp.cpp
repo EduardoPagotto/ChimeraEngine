@@ -94,7 +94,7 @@ void RenderableBsp::draw(const bool& logData) {
 
 void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
     std::vector<IRenderable3d*> childDraw;
-    const glm::vec3 cameraPos = command.camera->getPosition();
+    const glm::vec3 cameraPos = renderer.getCamera()->getPosition();
     if (renderer.submit(command, this) == true)
         traverseTree(cameraPos, root, childDraw);
 

@@ -236,17 +236,9 @@ bool Scene::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
-    // inicializa state machine do opengl
-    BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test
-    BinaryStateEnable blender(GL_BLEND);    // glEnable(GL_BLEND);
-    DepthFuncSetter depthFunc(GL_LESS);     // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    renderer.begin(camera, eyeView); // AQUI!!!!!
+void Scene::execEmitterPass(IRenderer3d& renderer) {
     auto view = registry->get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
-
         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
@@ -261,22 +253,16 @@ void Scene::execEmitterPass(Camera* camera, IRenderer3d& renderer) {
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
         const glm::mat4& view = eyeView->getView();
-        command.uniforms["projection"] = UValue(camera->getProjection());
+        command.uniforms["projection"] = UValue(renderer.getCamera()->getProjection());
         command.uniforms["view"] = UValue(view);
         command.uniforms["CameraRight_worldspace"] = UValue(glm::vec3(view[0][0], view[1][0], view[2][0]));
         command.uniforms["CameraUp_worldspace"] = UValue(glm::vec3(view[0][1], view[1][1], view[2][1]));
         command.uniforms["model"] = UValue(command.transform);
-
         renderable->submit(command, renderer);
     }
-
-    renderer.end();
-    renderer.flush();
 }
 
-void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
-
-    renderer.begin(camera, eyeView);
+void Scene::execRenderPass(IRenderer3d& renderer) {
     auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
         auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
@@ -288,9 +274,6 @@ void Scene::execRenderPass(Camera* camera, IRenderer3d& renderer) {
         command.uniforms["model"] = UValue(command.transform);
         rc.renderable->submit(command, renderer);
     }
-
-    renderer.end();
-    renderer.flush();
 }
 
 void Scene::onRender() {
@@ -313,19 +296,20 @@ void Scene::onRender() {
         eyeView->setIndex(count);
         count++;
 
-        // used by all
+        // data load used by all
         renderBatch.uboQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
         renderBatch.uboQueue().insert(std::make_pair("view", UValue(eyeView->getView())));
 
-        // load shadows props to renderBatch in shade of models!!!!
+        // data load shadows props to renderBatch in shade of models!!!!
         if (shadowPass) {
             renderBatch.uboQueue().insert(std::make_pair("viewPos", UValue(camera->getPosition())));
             renderBatch.uboQueue().insert(std::make_pair("shadows", UValue(1)));
             renderBatch.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
             renderBatch.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowPass->getLightSpaceMatrix())));
-            shadowPass->bindShadow();
+            shadowPass->bindShadow(); // TODO: colocar o bind no command.vTex!!!
         }
 
+        // data load lights
         auto lightView = registry->get().view<LightComponent>();
         for (auto entity : lightView) {
             auto& lc = lightView.get<LightComponent>(entity);
@@ -336,10 +320,23 @@ void Scene::onRender() {
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-        this->execRenderPass(camera, renderBatch);
+        renderBatch.begin(camera, eyeView);
+        this->execRenderPass(renderBatch);
+        renderBatch.end();
+        renderBatch.flush();
 
-        if (emitters.size() > 0)
-            this->execEmitterPass(camera, renderBatch);
+        if (emitters.size() > 0) {
+            // inicializa state machine do opengl
+            BinaryStateEnable depth(GL_DEPTH_TEST);
+            BinaryStateEnable blender(GL_BLEND);
+            DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            renderBatch.begin(camera, eyeView);
+            this->execEmitterPass(renderBatch);
+            renderBatch.end();
+            renderBatch.flush();
+        }
 
         {
             // TODO: captura do entity no framebuffer da tela

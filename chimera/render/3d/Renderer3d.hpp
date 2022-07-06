@@ -5,7 +5,6 @@
 #include "chimera/core/space/Frustum.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
-#include "chimera/core/visible/Shader.hpp"
 #include <cstdint>
 #include <deque>
 

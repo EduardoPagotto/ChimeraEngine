@@ -40,9 +40,12 @@ RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const 
 
     FrameBufferSpecification fbSpec;
     fbSpec.attachments = {
-        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-        // TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
+        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexFilter::LINEAR, TexWrap::CLAMP, TexWrap::CLAMP, TexWrap::CLAMP,
+                 TexDType::UNSIGNED_BYTE),
+        //   TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE,
+        //            TexWrap::CLAMP_TO_EDGE, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
+        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexFilter::NONE, TexWrap::NONE, TexWrap::NONE,
+                 TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
 
     fbSpec.width = width;
     fbSpec.height = height;

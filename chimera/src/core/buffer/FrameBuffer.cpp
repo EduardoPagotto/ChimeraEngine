@@ -31,10 +31,11 @@ FrameBuffer::FrameBuffer(const FrameBufferSpecification& spec) : spec(spec), fra
         if (!Aux::isDepthFormat(texParm.format))
             colorTexSpecs.emplace_back(texParm); // color only
         else {
-            if (texParm.filter != TexFilter::NONE) { // if has filter parameters them is a texture
-                depthTexSpec = texParm;              // depth texture
-            } else                                   // else
-                rboSpec = texParm;                   // is a rbo
+            // if has filter parameters them is a texture
+            if ((texParm.minFilter != TexFilter::NONE) && (texParm.magFilter != TexFilter::NONE)) {
+                depthTexSpec = texParm; // depth texture
+            } else                      // else
+                rboSpec = texParm;      // is a rbo
         }
     }
 

@@ -14,8 +14,8 @@ ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm:
 
     // Define o framebuffer de Shadow
     FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
+    fbSpec.attachments = {TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexFilter::NEAREST,
+                                   TexWrap::CLAMP_TO_BORDER, TexWrap::CLAMP_TO_BORDER, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
 
     fbSpec.width = 2048;
     fbSpec.height = 2048;

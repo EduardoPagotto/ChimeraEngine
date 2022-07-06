@@ -123,8 +123,11 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
 
     TexParam p;
     p.format = TexFormat::RGBA;
-    p.wrap = TexWrap::CLAMP_TO_EDGE;
-    p.filter = TexFilter::LINEAR;
+    p.wrap_r = TexWrap::CLAMP_TO_EDGE;
+    p.wrap_s = TexWrap::CLAMP_TO_EDGE;
+    p.wrap_t = TexWrap::CLAMP_TO_EDGE;
+    p.minFilter = TexFilter::LINEAR;
+    p.magFilter = TexFilter::LINEAR;
     texture = TextureManager::loadFromSurface(name, bigSurface, p);
 
     if (sFont) {

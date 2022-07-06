@@ -19,8 +19,6 @@ ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm:
 
     fbSpec.width = 2048;
     fbSpec.height = 2048;
-    fbSpec.swapChainTarget = false;
-    fbSpec.samples = 1;
 
     this->shadowBuffer = new FrameBuffer(fbSpec);
     this->lightProjection = projection;

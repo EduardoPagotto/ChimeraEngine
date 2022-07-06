@@ -49,8 +49,6 @@ RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const 
 
     fbSpec.width = width;
     fbSpec.height = height;
-    fbSpec.swapChainTarget = false;
-    fbSpec.samples = 1;
 
     return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), shader);
 }

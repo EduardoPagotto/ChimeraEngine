@@ -102,15 +102,28 @@
                     <samplerDEPTH>
                         <minfilter>NEAREST</minfilter>
                         <magfilter>NEAREST</magfilter>
-                        <mipfilter>NEAREST</mipfilter>
-                        <wrap_s>WRAP</wrap_s>
-                        <wrap_t>WRAP</wrap_t>
+                        <wrap_s>BORDER</wrap_s>
+                        <wrap_t>BORDER</wrap_t>
                         <setparam ref="size">
                             <int2> 2048 2048 </int2>
                         </setparam>
                     </samplerDEPTH>
                 </newparam>
             </profile_COMMON>
+            <profile_GLSL>
+                <technique sid="ShadowMappingDepth">
+                    <include sid="vps_depth" url="file://./assets/shaders/ShadowMappingDepth.vert"/>
+                    <include sid="fps_depth" url="file://./assets/shaders/ShadowMappingDepth.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="vps_depth">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="fps_depth">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
         </effect>
         <effect id="MaterialSkyBox-effect">
             <profile_COMMON>

@@ -24,11 +24,20 @@ void Texture::init() {
     glGenTextures(1, &idTexture);
     glBindTexture(GL_TEXTURE_2D, idTexture);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLuint)textureParameters.minFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLuint)textureParameters.magFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, (GLuint)textureParameters.wrap_r);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLuint)textureParameters.wrap_s);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLuint)textureParameters.wrap_t);
+    if (textureParameters.minFilter != TexFilter::NONE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLuint)textureParameters.minFilter);
+
+    if (textureParameters.magFilter != TexFilter::NONE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLuint)textureParameters.magFilter);
+
+    if (textureParameters.wrap_r != TexWrap::NONE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, (GLuint)textureParameters.wrap_r);
+
+    if (textureParameters.wrap_s != TexWrap::NONE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLuint)textureParameters.wrap_s);
+
+    if (textureParameters.wrap_t != TexWrap::NONE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLuint)textureParameters.wrap_t);
 }
 
 void Texture::bind(uint8_t slot) const {

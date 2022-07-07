@@ -12,5 +12,6 @@ class ColladaMaterial : public Collada {
 
   private:
     void createEffect(Material* pMat, pugi::xml_node nodeParent);
+    Entity entity;
 };
 } // namespace Chimera

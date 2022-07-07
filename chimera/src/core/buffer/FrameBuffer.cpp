@@ -167,7 +167,7 @@ int FrameBuffer::readPixel(uint32_t attachmentIndex, int x, int y) {
 
     int pixelData = 0;
     glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
-    glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+    glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData); // FIXME: ver com o TexDType!!!!!!
 
     return pixelData;
 }

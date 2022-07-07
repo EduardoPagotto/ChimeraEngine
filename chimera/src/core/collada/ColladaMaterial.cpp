@@ -9,7 +9,7 @@ ColladaMaterial::~ColladaMaterial() {}
 void ColladaMaterial::createEffect(Material* pMat, pugi::xml_node nodeParent) {
 
     ColladaImage ci(colladaDom, "#local");
-    ci.create(nodeParent);
+    ci.create(entity, nodeParent);
 
     for (pugi::xml_node param = nodeParent.first_child(); param; param = param.next_sibling()) {
 
@@ -71,6 +71,7 @@ void ColladaMaterial::createEffect(Material* pMat, pugi::xml_node nodeParent) {
 
 void ColladaMaterial::create(Entity& entity, pugi::xml_node nodeParent) {
 
+    this->entity = entity;
     std::string refName = "";
 
     pugi::xml_node material = getLibraryUrl("library_materials", nodeParent.attribute("symbol").value());

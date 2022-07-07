@@ -96,35 +96,6 @@
                 </technique>
             </profile_GLSL>
         </effect>
-        <effect id="ShadowTexture-effect">
-            <profile_COMMON>
-                <newparam sid="ShadowTexture_Sampler">
-                    <samplerDEPTH>
-                        <minfilter>NEAREST</minfilter>
-                        <magfilter>NEAREST</magfilter>
-                        <wrap_s>BORDER</wrap_s>
-                        <wrap_t>BORDER</wrap_t>
-                        <setparam ref="size">
-                            <int2> 2048 2048 </int2>
-                        </setparam>
-                    </samplerDEPTH>
-                </newparam>
-            </profile_COMMON>
-            <profile_GLSL>
-                <technique sid="ShadowMappingDepth">
-                    <include sid="vps_depth" url="file://./assets/shaders/ShadowMappingDepth.vert"/>
-                    <include sid="fps_depth" url="file://./assets/shaders/ShadowMappingDepth.frag"/>
-                    <pass sid="Pass_0">
-                        <shader stage="VERTEXPROGRAM">
-                            <name source="vps_depth">main</name>
-                        </shader>
-                        <shader stage="FRAGMENTPROGRAM">
-                            <name source="fps_depth">main</name>
-                        </shader>
-                    </pass>
-                </technique>
-            </profile_GLSL>
-        </effect>
         <effect id="MaterialSkyBox-effect">
             <profile_COMMON>
                 <newparam sid="spacebox_png-surface">
@@ -739,6 +710,12 @@
                 <fonts>
                     <font url="file://assets/fonts/FreeSans.ttf#FreeSans_22" size="22" scaleX="1.0" scaleY="1.0"/>
                 </fonts>
+                <framebuffer id="shadow01" name="shadow01">
+                    <instance_effect url="file://assets/models/nivel1_fb.xml#ShadowTexture-effect">
+                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="ShadowMappingDepth"/>
+                    </instance_effect>
+                    <!--instance_camera url="file://assets/models/nivel1_fb.xml#Camera-Shadow"/-->
+                </framebuffer>
                 <tiles>
                     <tile id="TileText" name="TileText">
                         <camera_node ref="Camera-title01"/>

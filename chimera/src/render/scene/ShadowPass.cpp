@@ -10,7 +10,7 @@ ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm:
     std::unordered_map<GLenum, std::string> shadeData;
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ShadowMappingDepth.frag";
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ShadowMappingDepth.vert";
-    ShaderManager::load("ShadowMappingDepth", shadeData, this->shader);
+    ShaderManager::load("ShadowMappingDepth", shadeData, this->shader); // TODO: criar no collada esta entrada!!!
 
     // Define o framebuffer de Shadow
     FrameBufferSpecification fbSpec;

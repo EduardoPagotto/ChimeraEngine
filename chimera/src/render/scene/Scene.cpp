@@ -20,13 +20,12 @@
 
 namespace Chimera {
 
-Scene::Scene(Registry& r, StateStack& s)
-    : stack(&s), registry(&r), activeCam(nullptr), origem(nullptr), shadowPass(nullptr), logRender(false) {}
+Scene::Scene(Registry& r, StateStack& s) : stack(&s), registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) {}
 
 Scene::~Scene() {
-    if (shadowPass) {
-        delete shadowPass;
-        shadowPass = nullptr;
+    if (shadowData.shadowBuffer) {
+        delete shadowData.shadowBuffer;
+        shadowData.shadowBuffer = nullptr;
     }
 }
 
@@ -134,17 +133,18 @@ void Scene::onAttach() {
                 p->setParticleContainer(pc);
                 p->create();
                 particleSys.renderable = p;
-                this->pushEmitters(ec.emitter);
+                emitters.push_back(ec.emitter);
             }
         }
 
         if (entity.hasComponent<FrameBufferSpecification>()) {
-            if (tc.tag == "shadow01") {
+            if (tc.tag == "shadow01") { // init shadow data
                 FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>();
                 CameraComponent& cc = entity.getComponent<CameraComponent>();
                 cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
-                Shader& shader = entity.getComponent<Shader>();
-                shadowPass = new ShadowPass(shader, cc.camera->getProjection(), new FrameBuffer(fbSpec));
+                shadowData.shader = entity.getComponent<Shader>();
+                shadowData.lightProjection = cc.camera->getProjection();
+                shadowData.shadowBuffer = new FrameBuffer(fbSpec);
             }
         }
 
@@ -247,6 +247,41 @@ bool Scene::onEvent(const SDL_Event& event) {
     return true;
 }
 
+void Scene::renderShadow(Camera* camera, IRenderer3d& renderer, ITrans* origem) {
+
+    renderer.begin(camera, eyeView);
+    {
+        auto lightViewEnt = registry->get().view<LightComponent>();
+        for (auto entity : lightViewEnt) {
+            auto& lc = lightViewEnt.get<LightComponent>(entity);
+            auto& tc = registry->get().get<TransComponent>(entity); // Lento
+            if (lc.global) {
+                // FIXME: usar o direcionm depois no segundo parametro
+                glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
+                shadowData.lightSpaceMatrix = shadowData.lightProjection * lightView;
+            }
+        }
+
+        auto group = registry->get().group<TransComponent, Renderable3dComponent>();
+        for (auto entity : group) {
+            auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
+
+            RenderCommand command;
+            command.transform = tc.trans->translateSrc(origem->getPosition());
+            command.shader = shadowData.shader;
+            command.uniforms["model"] = UValue(command.transform);
+            command.uniforms["lightSpaceMatrix"] = UValue(shadowData.lightSpaceMatrix);
+            rc.renderable->submit(command, renderer);
+        }
+    }
+
+    renderer.end();
+    shadowData.shadowBuffer->bind(); // we're not using the stencil buffer now
+
+    renderer.flush();
+    shadowData.shadowBuffer->unbind();
+}
+
 void Scene::execEmitterPass(IRenderer3d& renderer) {
     auto view = registry->get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
@@ -298,8 +333,8 @@ void Scene::onRender() {
     }
 
     // render a shadows in framebuffer
-    if (shadowPass)
-        shadowPass->render(registry, camera, eyeView, renderBatch, origem);
+    if (shadowData.shadowBuffer)
+        renderShadow(camera, renderBatch, origem);
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
@@ -312,12 +347,12 @@ void Scene::onRender() {
         renderBatch.uboQueue().insert(std::make_pair("view", UValue(eyeView->getView())));
 
         // data load shadows props to renderBatch in shade of models!!!!
-        if (shadowPass) {
+        if (shadowData.shadowBuffer) {
             renderBatch.uboQueue().insert(std::make_pair("viewPos", UValue(camera->getPosition())));
             renderBatch.uboQueue().insert(std::make_pair("shadows", UValue(1)));
             renderBatch.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
-            renderBatch.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowPass->getLightSpaceMatrix())));
-            shadowPass->bindShadow(); // TODO: colocar o bind no command.vTex!!!
+            renderBatch.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowData.lightSpaceMatrix)));
+            shadowData.shadowBuffer->getDepthAttachemnt()->bind(1);
         }
 
         // data load lights

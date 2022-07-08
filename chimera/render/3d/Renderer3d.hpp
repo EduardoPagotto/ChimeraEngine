@@ -20,6 +20,7 @@ class Renderer3d : public IRenderer3d {
     virtual void flush() override;
     virtual inline TransformationStack& getStack() override { return stack; };
     virtual inline MapUniform& uboQueue() override { return uniformsQueue; }
+    virtual inline std::vector<Texture*>& texQueue() override { return textureQueue; }
     virtual inline Camera* getCamera() const override { return camera; }
     virtual inline EyeView* getEyeView() const override { return eyeView; }
 
@@ -28,6 +29,7 @@ class Renderer3d : public IRenderer3d {
     EyeView* eyeView;
     std::deque<RenderCommand> commandQueue;
     std::deque<IRenderable3d*> renderableQueue;
+    std::vector<Texture*> textureQueue;
     MapUniform uniformsQueue;
     Frustum frustum;
     uint32_t totIBO, totFaces;

@@ -1,5 +1,6 @@
 #pragma once
 #include "chimera/core/visible/UValue.hpp"
+#include <vector>
 namespace Chimera {
 class IRenderer3d {
   public:
@@ -8,6 +9,7 @@ class IRenderer3d {
     virtual void end() = 0;
     virtual void flush() = 0;
     virtual MapUniform& uboQueue() = 0;
+    virtual std::vector<class Texture*>& texQueue() = 0;
     virtual class TransformationStack& getStack() = 0;
     virtual class Camera* getCamera() const = 0;
     virtual class EyeView* getEyeView() const = 0;

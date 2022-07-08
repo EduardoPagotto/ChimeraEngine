@@ -352,7 +352,7 @@ void Scene::onRender() {
             renderBatch.uboQueue().insert(std::make_pair("shadows", UValue(1)));
             renderBatch.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
             renderBatch.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowData.lightSpaceMatrix)));
-            shadowData.shadowBuffer->getDepthAttachemnt()->bind(1);
+            renderBatch.texQueue().push_back(shadowData.shadowBuffer->getDepthAttachemnt());
         }
 
         // data load lights

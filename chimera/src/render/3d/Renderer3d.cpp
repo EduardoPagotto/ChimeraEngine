@@ -94,6 +94,12 @@ void Renderer3d::flush() {
                 for (uint8_t i = 0; i < command.vTex.size(); i++) {
                     command.vTex[i]->bind(i);
                 }
+
+                // bind de texturas globais
+                for (uint8_t i = 0; i < textureQueue.size(); i++) {
+                    uint8_t tSlot = command.vTex.size() + i;
+                    textureQueue[i]->bind(tSlot);
+                }
             }
         }
 
@@ -105,6 +111,7 @@ void Renderer3d::flush() {
 
     // Limpa buffer de uniforms ao terminar todos os draws calls
     uniformsQueue.clear();
+    textureQueue.clear();
 }
 
 } // namespace Chimera

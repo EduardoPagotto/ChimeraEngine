@@ -16,7 +16,6 @@ class Scene : public IStateMachine {
     virtual ~Scene();
     void pushEmitters(IEmitter* e) { emitters.push_back(e); }
     void setOrigem(ITrans* o) { origem = o; }
-    void setShadowPass(ShadowPass* shadowPass) { this->shadowPass = shadowPass; }
     Canvas* getCanvas();
     Registry* getRegistry() { return registry; }
     StateStack* getStack() const { return this->stack; }
@@ -44,7 +43,5 @@ class Scene : public IStateMachine {
     bool logRender;
     std::vector<RenderBuffer*> vRB;
     std::vector<IEmitter*> emitters;
-
-    Entity eShadow;
 };
 } // namespace Chimera

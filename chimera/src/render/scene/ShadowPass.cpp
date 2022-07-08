@@ -4,27 +4,7 @@
 #include "chimera/render/scene/Components.hpp"
 
 namespace Chimera {
-
-ShadowPass::ShadowPass(Entity eShadow, const uint32_t& width, const uint32_t& height, const glm::mat4& projection) {
-    // Create ShadowPass
-    std::unordered_map<GLenum, std::string> shadeData;
-    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ShadowMappingDepth.frag";
-    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ShadowMappingDepth.vert";
-    ShaderManager::load("ShadowMappingDepth", shadeData, this->shader); // TODO: criar no collada esta entrada!!!
-
-    // Define o framebuffer de Shadow
-    FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexFilter::NEAREST,
-                                   TexWrap::NONE, TexWrap::CLAMP_TO_BORDER, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
-
-    fbSpec.width = 2048;
-    fbSpec.height = 2048;
-
-    this->shadowBuffer = new FrameBuffer(fbSpec);
-    this->lightProjection = projection;
-}
-
-ShadowPass::~ShadowPass() { delete shadowBuffer; }
+ShadowPass::~ShadowPass() { delete shadowBuffer; } // TODO: Mover tudo para o scene
 
 void ShadowPass::render(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem) {
 

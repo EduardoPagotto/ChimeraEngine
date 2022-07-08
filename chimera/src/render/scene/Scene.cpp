@@ -139,8 +139,13 @@ void Scene::onAttach() {
         }
 
         if (entity.hasComponent<FrameBufferSpecification>()) {
-            if (tc.tag == "shadow01")
-                eShadow = entity;
+            if (tc.tag == "shadow01") {
+                FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>();
+                CameraComponent& cc = entity.getComponent<CameraComponent>();
+                cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
+                Shader& shader = entity.getComponent<Shader>();
+                shadowPass = new ShadowPass(shader, cc.camera->getProjection(), new FrameBuffer(fbSpec));
+            }
         }
 
         // Pega o EyeView do ECS

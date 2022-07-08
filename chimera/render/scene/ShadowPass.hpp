@@ -9,7 +9,8 @@ namespace Chimera {
 
 class ShadowPass {
   public:
-    ShadowPass(Entity eShadow, const uint32_t& width, const uint32_t& height, const glm::mat4& projection);
+    ShadowPass(const Shader& shader, const glm::mat4& projection, FrameBuffer* fb)
+        : shader(shader), lightProjection(projection), shadowBuffer(fb) {}
     virtual ~ShadowPass();
     void render(Registry* registry, Camera* camera, EyeView* eyeView, IRenderer3d& renderer, ITrans* origem);
     void bindShadow();

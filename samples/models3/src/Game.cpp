@@ -24,7 +24,7 @@ Game::Game(Chimera::Scene& scene) : scene(&scene) {
         pCorpoRigido = (Solid*)tc.trans;
     }
 
-    scene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
+    scene.setShadowPass(new ShadowPass(Entity(), 2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
     scene.getStack()->pushState(this);
     scene.getStack()->pushState(&scene);
 

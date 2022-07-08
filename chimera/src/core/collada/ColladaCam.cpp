@@ -54,7 +54,6 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
         if (std::string("optics") == node.name()) {
 
             float znear = 0.5f, zfar = 1000.0f;
-            TransComponent& trans = entity.getComponent<TransComponent>();
             const pugi::xml_node nCamType = node.child("technique_common").first_child();
             if (std::string("perspective") == nCamType.name()) {
 
@@ -73,7 +72,11 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: prec
                 setChildParam(nCamType, "zfar", zfar);
                 cc.camera = new Camera(xmag, ymag, znear, zfar);
             }
-            cc.camera->setPosition(trans.trans->getPosition());
+
+            if (entity.hasComponent<TransComponent>()) {
+                TransComponent& trans = entity.getComponent<TransComponent>();
+                cc.camera->setPosition(trans.trans->getPosition());
+            }
         }
     }
 }

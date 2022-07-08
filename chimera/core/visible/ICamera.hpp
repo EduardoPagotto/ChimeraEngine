@@ -23,7 +23,7 @@ class Camera {
     void setPosition(const glm::vec3& position) { this->position = position; }
     void setViewportSize(const uint32_t& width, const uint32_t& height) {
         if (isOrtho) {
-            float halfAspectRatio = (float)width / (float)height * 0.5f;
+            float halfAspectRatio = ((float)width / (float)height) * 0.5f;
             float xsize = xmag * halfAspectRatio;
             float ysize = ymag * 0.5f;
             projection = glm::ortho(-xsize, xsize, -ysize, ysize, near, far);

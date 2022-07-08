@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm::mat4& projection) {
+ShadowPass::ShadowPass(Entity eShadow, const uint32_t& width, const uint32_t& height, const glm::mat4& projection) {
     // Create ShadowPass
     std::unordered_map<GLenum, std::string> shadeData;
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ShadowMappingDepth.frag";
@@ -15,7 +15,7 @@ ShadowPass::ShadowPass(const uint32_t& width, const uint32_t& height, const glm:
     // Define o framebuffer de Shadow
     FrameBufferSpecification fbSpec;
     fbSpec.attachments = {TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexFilter::NEAREST,
-                                   TexWrap::CLAMP_TO_BORDER, TexWrap::CLAMP_TO_BORDER, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
+                                   TexWrap::NONE, TexWrap::CLAMP_TO_BORDER, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)};
 
     fbSpec.width = 2048;
     fbSpec.height = 2048;

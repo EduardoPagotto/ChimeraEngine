@@ -1,5 +1,6 @@
 #include "chimera/core/collada/ColladaExtra.hpp"
 #include "chimera/core/buffer/FrameBuffer.hpp"
+#include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/collada/ColladaMaterial.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
@@ -73,6 +74,11 @@ void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
                     // const pugi::xml_node nEffect = nFb.child("instance_effect");
                     ColladaMaterial cm(colladaDom, target);
                     cm.create(entity, next);
+                } else if (name == "instance_camera") {
+                    std::string url = next.attribute("url").value();
+                    ColladaCam cc(colladaDom, url);
+                    cc.create(entity, cc.getLibrary("library_cameras"));
+                    cc.createExtra(entity, next.first_child());
                 }
             }
         }

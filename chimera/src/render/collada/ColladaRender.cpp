@@ -11,32 +11,39 @@ namespace Chimera {
 void colladaRenderLoad(ColladaDom& dom, Registry& r) {
 
     pugi::xml_node vs = dom.root.child("scene");
-
     const pugi::xml_node extra = vs.child("extra");
     if (extra != nullptr) {
+
         const pugi::xml_node nTiles = getExtra(extra, "tiles");
         if (nTiles != nullptr) {
             for (pugi::xml_node nTile = nTiles.first_child(); nTile; nTile = nTile.next_sibling()) {
 
                 Entity entity = r.createEntity(nTile.attribute("name").value(), nTile.attribute("id").value());
-                const pugi::xml_node nCam = nTile.child("camera_node");
-                std::string ref = nCam.attribute("ref").value();
-                CameraComponent& cCam = r.findComponent<CameraComponent>(ref); // entity.getComponent<CameraComponent>();
+                for (pugi::xml_node node = nTile.first_child(); node; node = node.next_sibling()) {
 
-                const pugi::xml_node nEffect = nTile.child("instance_effect");
-                std::string url = nEffect.attribute("url").value();
-                std::string refName = nEffect.child("technique_hint").attribute("ref").value();
+                    std::string name = node.name();
+                    std::string url = node.attribute("url").value();
 
-                ColladaShader cs(dom, url);
-                cs.create(refName, entity, cs.getLibrary("library_effects"));
+                    if (name == "instance_camera") {
 
+                        ColladaCam cc(dom, url);
+                        cc.create(entity, cc.getLibrary("library_cameras"));
+                        cc.createExtra(entity, node.first_child());
+
+                    } else if (name == "instance_effect") {
+
+                        std::string refName = node.child("technique_hint").attribute("ref").value();
+                        ColladaShader cs(dom, url);
+                        cs.create(refName, entity, cs.getLibrary("library_effects"));
+                    }
+                }
+
+                CameraComponent& cCam = entity.getComponent<CameraComponent>();
                 Shader& shader = entity.getComponent<Shader>();
-
                 ComponentTile& tc = entity.addComponent<ComponentTile>();
                 tc.tile = new Tile(new BatchRender2D(), shader, cCam.camera);
             }
         }
     }
 }
-
 } // namespace Chimera

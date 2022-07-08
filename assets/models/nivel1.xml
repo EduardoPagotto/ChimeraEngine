@@ -641,19 +641,6 @@
                     </extra>
                 </instance_camera>
             </node>
-            <node id="Camera-title01" name="Camera-title01" type="NODE">
-                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-                <instance_camera url="#Camera-Tile">
-                    <extra>
-                        <technique profile="chimera">
-                            <static>
-                                <primary>false</primary>
-                                <fixedAspectRatio>false</fixedAspectRatio>
-                            </static>
-                        </technique>
-                    </extra>
-                </instance_camera>
-            </node>
             <node id="luz01" name="luz01" type="NODE">
                 <matrix sid="transform">-0.1733842 -0.7895962 0.5886219 3.166558 0.9833067 -0.1052982 0.1483921 -3.557333 -0.05518902 0.6045247 0.7946723 8.628012 0 0 0 1</matrix>
                 <instance_light url="#luz01-light"/>
@@ -713,12 +700,30 @@
                 <framebuffers>
                     <framebuffer id="shadow01" name="shadow01">
                         <instance_material symbol="Shadow-material" target="file://assets/models/nivel1_fb.xml#Shadow-material"/>
-                        <!--instance_camera url="file://assets/models/nivel1_fb.xml#Camera-Shadow"/-->
+                        <instance_camera url="file://assets/models/nivel1_fb.xml#Camera-Shadow">
+                            <extra>
+                                <technique profile="chimera">
+                                    <static>
+                                        <primary>false</primary>
+                                        <fixedAspectRatio>true</fixedAspectRatio>
+                                    </static>
+                                </technique>
+                            </extra>
+                        </instance_camera>
                     </framebuffer>
                 </framebuffers>
                 <tiles>
                     <tile id="TileText" name="TileText">
-                        <camera_node ref="Camera-title01"/>
+                        <instance_camera url="#Camera-Tile">
+                            <extra>
+                                <technique profile="chimera">
+                                    <static>
+                                        <primary>false</primary>
+                                        <fixedAspectRatio>false</fixedAspectRatio>
+                                    </static>
+                                </technique>
+                            </extra>
+                        </instance_camera>
                         <instance_effect url="#ShadeText-effect">
                             <technique_hint platform="OpenGL|ES" profile="GLSL" ref="Text2D"/>
                         </instance_effect>

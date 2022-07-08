@@ -138,6 +138,11 @@ void Scene::onAttach() {
             }
         }
 
+        if (entity.hasComponent<FrameBufferSpecification>()) {
+            if (tc.tag == "shadow01")
+                eShadow = entity;
+        }
+
         // Pega o EyeView do ECS
         if (entity.hasComponent<EyeView>()) {
             EyeView& ev = entity.getComponent<EyeView>();

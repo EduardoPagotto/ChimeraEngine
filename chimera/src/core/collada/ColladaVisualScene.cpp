@@ -9,14 +9,6 @@ namespace Chimera {
 
 ColladaVisualScene::~ColladaVisualScene() {}
 
-void ColladaVisualScene::loadMaterial(Entity entity, const std::string& url, const pugi::xml_node& node) {
-    const pugi::xml_node instanceMaterial = node.child("bind_material").child("technique_common").child("instance_material");
-    if (instanceMaterial != nullptr) {
-        ColladaMaterial cm(colladaDom, url);
-        cm.create(entity, instanceMaterial);
-    }
-}
-
 void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
 
     std::string entName = node.attribute("name").value();
@@ -42,7 +34,16 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
         ColladaGeometry cg(colladaDom, url);
         cg.create(entity, cg.getLibrary("library_geometries"));
-        loadMaterial(entity, url, n);
+
+        const pugi::xml_node nMat = n.child("bind_material");
+        if (nMat) {
+            const pugi::xml_node instanceMaterial = nMat.child("technique_common").child("instance_material");
+            if (instanceMaterial != nullptr) {
+                std::string target = instanceMaterial.attribute("target").value();
+                ColladaMaterial cm(colladaDom, target);
+                cm.create(entity, cm.getLibrary("library_materials"));
+            }
+        }
 
     } else if (name == "instance_light") {
 

@@ -1,6 +1,6 @@
 #include "chimera/render/collada/ColladaRender.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaShader.hpp"
+#include "chimera/core/collada/ColladaEffect.hpp"
 #include "chimera/core/collada/ColladaVisualScene.hpp"
 #include "chimera/core/visible/Shader.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
@@ -33,7 +33,7 @@ void colladaRenderLoad(ColladaDom& dom, Registry& r) {
                     } else if (name == "instance_effect") {
 
                         std::string refName = node.child("technique_hint").attribute("ref").value();
-                        ColladaShader cs(dom, url);
+                        ColladaEffect cs(dom, url);
                         cs.create(refName, entity, cs.getLibrary("library_effects"));
                     }
                 }

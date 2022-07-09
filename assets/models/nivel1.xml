@@ -132,7 +132,9 @@
                 </technique>
             </profile_COMMON>
             <extra>
-                <instance_effect url="#Shade01-effect"/>
+                <technique profile="chimera">
+                    <instance_effect url="#Shade01-effect"/>
+                </technique>
             </extra>
         </effect>
         <effect id="MaterialZoltan-effect">
@@ -171,7 +173,9 @@
                 </technique>
             </profile_COMMON>
             <extra>
-                <instance_effect url="#Shade01-effect"/>
+                <technique profile="chimera">
+                    <instance_effect url="#Shade01-effect"/>
+                </technique>
             </extra>
         </effect>
         <effect id="Material_Plano-effect">
@@ -210,7 +214,9 @@
                 </technique>
             </profile_COMMON>
             <extra>
-                <instance_effect url="#Shade01-effect"/>
+                <technique profile="chimera">
+                    <instance_effect url="#Shade01-effect"/>
+                </technique>
             </extra>
         </effect>
         <effect id="MaterialCubo01-effect">
@@ -249,7 +255,9 @@
                 </technique>
             </profile_COMMON>
             <extra>
-                <instance_effect url="#Shade01-effect"/>
+                <technique profile="chimera">
+                    <instance_effect url="#Shade01-effect"/>
+                </technique>
             </extra>
         </effect>
         <effect id="MateriaIcosphere01-effect">
@@ -278,7 +286,9 @@
                 </technique>
             </profile_COMMON>
             <extra>
-                <instance_effect url="#Shade01-effect"/>
+                <technique profile="chimera">
+                    <instance_effect url="#Shade01-effect"/>
+                </technique>
             </extra>
         </effect>
         <effect id="MaterialIcosphere02-effect">
@@ -307,7 +317,9 @@
                 </technique>
             </profile_COMMON>
             <extra>
-                <instance_effect url="#Shade01-effect"/>
+                <technique profile="chimera">
+                    <instance_effect url="#Shade01-effect"/>
+                </technique>
             </extra>
         </effect>
     </library_effects>
@@ -682,7 +694,7 @@
                 <instance_geometry url="file://assets/models/nivel1_extra.xml#ParticleA">
                     <bind_material>
                         <technique_common>
-                            <instance_material symbol="MaterialParticle01-material" target="#MaterialParticle01-material"/>
+                            <instance_material symbol="MaterialParticle01-material" target="file://assets/models/nivel1_extra.xml#MaterialParticle01-material"/>
                         </technique_common>
                     </bind_material>
                 </instance_geometry>
@@ -699,7 +711,9 @@
                 </fonts>
                 <framebuffers>
                     <framebuffer id="shadow01" name="shadow01">
-                        <instance_material symbol="Shadow-material" target="file://assets/models/nivel1_fb.xml#Shadow-material"/>
+                        <instance_effect url="file://assets/models/nivel1_fb.xml#ShadowTexture-effect">
+                            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="ShadowMappingDepth"/>
+                        </instance_effect>
                         <instance_camera url="file://assets/models/nivel1_fb.xml#Camera-Shadow">
                             <extra>
                                 <technique profile="chimera">

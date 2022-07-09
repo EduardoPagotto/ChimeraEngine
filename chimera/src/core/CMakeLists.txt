@@ -45,9 +45,9 @@ set (SourcesCore Registry.cpp
 				 collada/RFC3986.cpp
 				 collada/Collada.cpp
 				 collada/ColladaVisualScene.cpp
-				 collada/ColladaShader.cpp
 				 collada/ColladaImage.cpp
 				 collada/ColladaMaterial.cpp
+				 collada/ColladaEffect.cpp
 				 collada/ColladaLight.cpp
 				 collada/ColladaCam.cpp
 				 collada/ColladaGeometry.cpp

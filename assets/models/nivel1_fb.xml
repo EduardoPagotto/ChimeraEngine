@@ -54,11 +54,4 @@
             </profile_GLSL>
         </effect>
     </library_effects>
-    <library_materials>
-        <material id="Shadow-material" name="Shadow-material">
-            <instance_effect url="#ShadowTexture-effect">
-                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="ShadowMappingDepth"/>
-            </instance_effect>
-        </material>
-    </library_materials>
 </COLLADA>

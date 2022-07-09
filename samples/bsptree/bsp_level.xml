@@ -72,7 +72,9 @@
                 </technique>
             </profile_COMMON>
             <extra>
-                <instance_effect url="#Shade01-effect"/>
+                <technique profile="chimera">
+                    <instance_effect url="#Shade01-effect"/>
+                </technique>
             </extra>
         </effect>
     </library_effects>

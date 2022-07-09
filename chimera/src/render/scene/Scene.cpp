@@ -338,7 +338,7 @@ void Scene::onRender() {
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
-        camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
+        camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight()); // TODO: se camera nao muda projecao rodar apenas 1
         eyeView->setIndex(count);
         count++;
 
@@ -386,7 +386,7 @@ void Scene::onRender() {
 
         {
             // TODO: captura do entity no framebuffer da tela
-            // // get val from color buffer (must be inside framebuffer renderer
+            // get val from color buffer (must be inside framebuffer renderer
             // glm::ivec2 pos = MouseDevice::getMove();
             // pos.y = viewportHeight - pos.y;
             // int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);

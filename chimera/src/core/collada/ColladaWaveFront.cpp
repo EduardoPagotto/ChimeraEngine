@@ -1,5 +1,5 @@
 #include "chimera/core/collada/ColladaWaveFront.hpp"
-#include "chimera/core/collada/ColladaShader.hpp"
+#include "chimera/core/collada/ColladaEffect.hpp"
 #include "chimera/core/partition/Wavefront.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Mesh.hpp"
@@ -37,9 +37,9 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
             if (std::string(technique_hint.attribute("profile").value()) == "GLSL") {
                 std::string refName = technique_hint.attribute("ref").value();
                 std::string url = nShade.attribute("url").value();
-                ColladaShader cs(colladaDom, url);
+                ColladaEffect cf(colladaDom, url);
 
-                cs.create(refName, entity, cs.getLibrary("library_effects"));
+                cf.create(refName, entity, cf.getLibrary("library_effects"));
             }
         }
     }

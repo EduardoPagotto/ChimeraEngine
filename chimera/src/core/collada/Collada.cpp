@@ -128,11 +128,9 @@ const pugi::xml_node Collada::getLibraryKey(const std::string& libraryName, cons
         if (name == libraryName) {
 
             for (pugi::xml_node t = n.first_child(); t; t = t.next_sibling()) {
-
-                pugi::xml_attribute attr = t.attribute("id");
-                std::string id = attr.value();
+                std::string id = t.attribute("id").value();
                 if (id == key) {
-                    SDL_Log("%s: %s id: %s", libraryName.c_str(), t.name(), attr.value());
+                    SDL_Log("%s: %s id: %s", libraryName.c_str(), t.name(), id.c_str());
                     return t;
                 }
             }

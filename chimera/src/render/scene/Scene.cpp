@@ -30,26 +30,14 @@ Scene::~Scene() {
 }
 
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
+    if (!eRenderBuferSpec)
+        throw std::string("RenderBuffer nao encontrado");
+
     // Define o framebuffer de desenho
-    Shader shader;
-    std::unordered_map<GLenum, std::string> shadeData;
-    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/CanvasHMD.frag";
-    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/CanvasHMD.vert";
-    ShaderManager::load("CanvasHMD", shadeData, shader);
-
-    FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {
-        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexFilter::LINEAR, TexWrap::CLAMP, TexWrap::CLAMP, TexWrap::CLAMP,
-                 TexDType::UNSIGNED_BYTE),
-        //   TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE,
-        //            TexWrap::CLAMP_TO_EDGE, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexFilter::NONE, TexWrap::NONE, TexWrap::NONE,
-                 TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
-
+    FrameBufferSpecification& fbSpec = eRenderBuferSpec.getComponent<FrameBufferSpecification>();
     fbSpec.width = width;
     fbSpec.height = height;
-
-    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), shader);
+    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), eRenderBuferSpec.getComponent<Shader>());
 }
 
 void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
@@ -138,13 +126,15 @@ void Scene::onAttach() {
         }
 
         if (entity.hasComponent<FrameBufferSpecification>()) {
+            FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>();
             if (tc.tag == "shadow01") { // init shadow data
-                FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>();
                 CameraComponent& cc = entity.getComponent<CameraComponent>();
                 cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
                 shadowData.shader = entity.getComponent<Shader>();
                 shadowData.lightProjection = cc.camera->getProjection();
                 shadowData.shadowBuffer = new FrameBuffer(fbSpec);
+            } else if (tc.tag == "RenderBufferMaster") {
+                eRenderBuferSpec = entity;
             }
         }
 

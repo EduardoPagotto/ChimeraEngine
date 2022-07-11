@@ -725,6 +725,11 @@
                             </extra>
                         </instance_camera>
                     </framebuffer>
+                    <framebuffer id="RenderBufferMaster" name="RenderBufferMaster">
+                        <instance_effect url="file://assets/models/nivel1_rb.xml#RenderBuffer-effect">
+                            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="CanvasHMD"/>
+                        </instance_effect>
+                    </framebuffer>
                 </framebuffers>
                 <tiles>
                     <tile id="TileText" name="TileText">

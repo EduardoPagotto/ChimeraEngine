@@ -19,7 +19,7 @@
             <create_2d>
                 <size_exact width="2048" height="2048"/>
                 <format>
-                    <hint channels="D" range="FLOAT" precision="DEFAULT"/>
+                    <hint channels="D" channelsInternal="D" range="FLOAT" precision="DEFAULT"/>
                 </format>
             </create_2d>
         </image>

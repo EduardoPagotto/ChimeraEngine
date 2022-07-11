@@ -52,5 +52,6 @@ class Scene : public IStateMachine {
     bool logRender;
     std::vector<RenderBuffer*> vRB;
     std::vector<IEmitter*> emitters;
+    Entity eRenderBuferSpec;
 };
 } // namespace Chimera

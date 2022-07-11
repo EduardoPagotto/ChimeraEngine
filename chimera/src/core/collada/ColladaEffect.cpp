@@ -21,6 +21,8 @@ static TexWrap setWrap(const std::string& sParamVal) {
         return TexWrap::MIRRORED;
     else if (sParamVal == "CLAMP")
         return TexWrap::CLAMP_TO_EDGE;
+    else if (sParamVal == "CLAMP2")
+        return TexWrap::CLAMP;
     else if (sParamVal == "BORDER")
         return TexWrap::CLAMP_TO_BORDER;
 

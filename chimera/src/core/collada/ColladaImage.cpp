@@ -64,6 +64,7 @@ void ColladaImage::create(Entity entity, TexParam& tp, const pugi::xml_node& nod
                 pugi::xml_node nHint = nFormat.child("hint");
                 if (nHint != nullptr) {
                     setChannelTexFormat(nHint.attribute("channels").value(), tp.format);
+                    setChannelTexFormat(nHint.attribute("channelsInternal").value(), tp.internalFormat);
                     setRange(nHint.attribute("range").value(), tp.type);
                 }
             }

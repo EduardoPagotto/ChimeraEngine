@@ -142,6 +142,13 @@
             <technique profile="chimera">
                 <canvas title="Terrain" width="1200" height="600" fullscreen="0"/>
                 <eyeview size="1" distance="0.4"/>
+                <framebuffers>
+                    <framebuffer id="RenderBufferMaster" name="RenderBufferMaster">
+                        <instance_effect url="file://assets/models/nivel1_rb.xml#RenderBuffer-effect">
+                            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="CanvasHMD"/>
+                        </instance_effect>
+                    </framebuffer>
+                </framebuffers>
             </technique>
         </extra>
         <instance_visual_scene url="#Scene"/>

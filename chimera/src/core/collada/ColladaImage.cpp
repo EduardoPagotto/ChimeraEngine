@@ -48,43 +48,44 @@ void ColladaImage::create(Entity entity, TexParam& tp, const pugi::xml_node& nod
         fb = &frames;
     }
 
-    const pugi::xml_node& nImg = node.first_child();
-    std::string field = nImg.name();
-    if (field == "create_2d") {
+    for (pugi::xml_node nImg = node.first_child(); nImg; nImg = nImg.next_sibling()) {
+        std::string field = nImg.name();
+        if (field == "create_2d") {
 
-        uint32_t width = 128, height = 128;
-        pugi::xml_node nSize = nImg.child("size_exact");
-        if (nSize != nullptr) {
-            width = static_cast<uint32_t>(std::stoul(nSize.attribute("width").value()));
-            height = static_cast<uint32_t>(std::stoul(nSize.attribute("height").value()));
-        }
-
-        pugi::xml_node nFormat = nImg.child("format");
-        if (nFormat != nullptr) {
-            pugi::xml_node nHint = nFormat.child("hint");
-            if (nHint != nullptr) {
-                setChannelTexFormat(nHint.attribute("channels").value(), tp.format);
-                setRange(nHint.attribute("range").value(), tp.type);
-            }
-        }
-
-        if (fb != nullptr) {
+            uint32_t width = 128, height = 128;
+            pugi::xml_node nSize = nImg.child("size_exact");
             if (nSize != nullptr) {
-                fb->width = width;
-                fb->height = height;
+                width = static_cast<uint32_t>(std::stoul(nSize.attribute("width").value()));
+                height = static_cast<uint32_t>(std::stoul(nSize.attribute("height").value()));
             }
-            fb->attachments.push_back(tp);
-        }
 
-    } else if (field == "init_from") {
-        pugi::xml_text pathFile = nImg.text();
-        if (pathFile != nullptr) {
-            std::string f = pathFile.as_string();
-            SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
-            TextureManager::loadFromFile(id, f, tp);
-            return;
+            pugi::xml_node nFormat = nImg.child("format");
+            if (nFormat != nullptr) {
+                pugi::xml_node nHint = nFormat.child("hint");
+                if (nHint != nullptr) {
+                    setChannelTexFormat(nHint.attribute("channels").value(), tp.format);
+                    setRange(nHint.attribute("range").value(), tp.type);
+                }
+            }
+
+            if (fb != nullptr) {
+                if (nSize != nullptr) {
+                    fb->width = width;
+                    fb->height = height;
+                }
+                fb->attachments.push_back(tp);
+            }
+
+        } else if (field == "init_from") {
+            pugi::xml_text pathFile = nImg.text();
+            if (pathFile != nullptr) {
+                std::string f = pathFile.as_string();
+                SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
+                TextureManager::loadFromFile(id, f, tp);
+                return;
+            }
+            throw std::string("Textura nao encontrada: " + id);
         }
-        throw std::string("Textura nao encontrada: " + id);
     }
 }
 } // namespace Chimera

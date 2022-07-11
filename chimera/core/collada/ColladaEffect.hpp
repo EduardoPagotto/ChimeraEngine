@@ -14,7 +14,7 @@ class ColladaEffect : public Collada {
     void setShader(const std::string& refName, const pugi::xml_node& node);
     bool setTextureParam(const pugi::xml_node& n, TexParam& tp);
     void setImageParms(const pugi::xml_node& node);
-    void setMaterial(const pugi::xml_node& node);
+    void setMaterial(const pugi::xml_node& node, TexParam& tp);
     Entity entity;
 
     std::unordered_map<std::string, std::string> mapaTex;

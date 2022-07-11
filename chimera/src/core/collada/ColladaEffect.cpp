@@ -102,14 +102,14 @@ bool ColladaEffect::setTextureParam(const pugi::xml_node& n, TexParam& tp) {
 
             std::string url = ntPara.attribute("url").value();
             ColladaImage ci(colladaDom, url);
-            ci.create(entity, tp, ci.getLibrary("library_images")); // loadImage(url, tp); //TODO:
+            ci.create(entity, tp, ci.getLibrary("library_images"));
             return true;
         }
     }
     return false;
 }
 
-void ColladaEffect::setMaterial(const pugi::xml_node& node) {
+void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
 
     Material* pMat = nullptr;
     if (entity.hasComponent<MaterialComponent>()) {
@@ -148,7 +148,6 @@ void ColladaEffect::setMaterial(const pugi::xml_node& node) {
                 std::string idTex = mapaTex[mapa2D[texId]];
 
                 ColladaImage ci(colladaDom, idTex);
-                TexParam tp;                                            // FIXME: paegar o TP anterior!!!
                 ci.create(entity, tp, ci.getLibrary("library_images")); // loadImage(url, tp); //TODO:
 
                 pMat->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::get(idTex));
@@ -206,7 +205,7 @@ void ColladaEffect::setImageParms(const pugi::xml_node& node) {
                 setTextureParam(val1, tp);
             }
         } else if (sProf == "technique") {
-            setMaterial(param);
+            setMaterial(param, tp);
         }
     }
 }

@@ -237,9 +237,9 @@ bool Scene::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Scene::renderShadow(Camera* camera, IRenderer3d& renderer, ITrans* origem) {
+void Scene::renderShadow(IRenderer3d& renderer) {
 
-    renderer.begin(camera, eyeView);
+    renderer.begin(activeCam, eyeView);
     {
         auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
@@ -313,32 +313,30 @@ void Scene::execRenderPass(IRenderer3d& renderer) {
 }
 
 void Scene::onRender() {
-
-    Camera* camera = activeCam;
     Renderer3d renderBatch(logRender);
 
     if (logRender == true) {
-        const glm::vec3& pos = camera->getPosition();
+        const glm::vec3& pos = activeCam->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
     // render a shadows in framebuffer
     if (shadowData.shadowBuffer)
-        renderShadow(camera, renderBatch, origem);
+        renderShadow(renderBatch);
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
-        camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight()); // TODO: se camera nao muda projecao rodar apenas 1
+        activeCam->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight()); // TODO: se camera nao muda projecao rodar apenas 1
         eyeView->setIndex(count);
         count++;
 
         // data load used by all
-        renderBatch.uboQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
+        renderBatch.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
         renderBatch.uboQueue().insert(std::make_pair("view", UValue(eyeView->getView())));
 
         // data load shadows props to renderBatch in shade of models!!!!
         if (shadowData.shadowBuffer) {
-            renderBatch.uboQueue().insert(std::make_pair("viewPos", UValue(camera->getPosition())));
+            renderBatch.uboQueue().insert(std::make_pair("viewPos", UValue(activeCam->getPosition())));
             renderBatch.uboQueue().insert(std::make_pair("shadows", UValue(1)));
             renderBatch.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
             renderBatch.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowData.lightSpaceMatrix)));
@@ -356,7 +354,7 @@ void Scene::onRender() {
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-        renderBatch.begin(camera, eyeView);
+        renderBatch.begin(activeCam, eyeView);
         this->execRenderPass(renderBatch);
         renderBatch.end();
         renderBatch.flush();
@@ -368,7 +366,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderBatch.begin(camera, eyeView);
+            renderBatch.begin(activeCam, eyeView);
             this->execEmitterPass(renderBatch);
             renderBatch.end();
             renderBatch.flush();

@@ -40,7 +40,7 @@ class Scene : public IStateMachine {
     void createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height);
     void execRenderPass(IRenderer3d& renderer);
     void execEmitterPass(IRenderer3d& renderer);
-    void renderShadow(Camera* camera, IRenderer3d& renderer, ITrans* origem);
+    void renderShadow(IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
 
     StateStack* stack;

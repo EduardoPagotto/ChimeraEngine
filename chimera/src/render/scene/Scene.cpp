@@ -21,7 +21,7 @@
 
 namespace Chimera {
 
-Scene::Scene(Registry& r, StateStack& s) : stack(&s), registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) {}
+Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) {}
 
 Scene::~Scene() {
     if (shadowData.shadowBuffer) {

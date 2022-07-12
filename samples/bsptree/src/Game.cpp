@@ -2,13 +2,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Scene& scene) : scene(&scene) {
-
-    using namespace Chimera;
-
-    scene.getStack()->pushState(this);
-    scene.getStack()->pushState(&scene);
-}
+Game::Game(Chimera::Scene& scene) : scene(&scene) {}
 
 Game::~Game() {}
 

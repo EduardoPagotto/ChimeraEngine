@@ -3,29 +3,7 @@
 #include "chimera/core/utils.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Scene& scene) : scene(&scene) {
-    using namespace Chimera;
-    pCorpoRigido = nullptr;
-    crt.yaw = 0.0f;
-    crt.pitch = 0.0f;
-    crt.roll = 0.0f;
-    crt.throttle = 0.0;
-    crt.hat = 0;
-
-    { // Localiza objeto como o primario //EfeitoZoltan-mesh
-        TransComponent& tc = scene.getRegistry()->findComponent<TransComponent>("Zoltan");
-        pCorpoRigido = (Solid*)tc.trans;
-    }
-
-    scene.getStack()->pushState(this);
-    scene.getStack()->pushState(&scene); // Label depois ja que preciso do onAttach do scene!!
-
-    lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
-    Tile* tile = (Tile*)scene.getLayes().getState("TileText");
-    tile->add(lFPS);
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
-}
+Game::Game(Chimera::Scene& scene) : pCorpoRigido(nullptr), scene(&scene) { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game"); }
 
 Game::~Game() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game"); }
 
@@ -153,6 +131,15 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onAttach() {
+
+    using namespace Chimera;
+    // Localiza objeto como o primario
+    TransComponent& tc = scene->getRegistry()->findComponent<TransComponent>("Zoltan");
+    pCorpoRigido = (Solid*)tc.trans;
+
+    lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    Tile* tile = (Tile*)scene->getLayes().getState("TileText");
+    tile->add(lFPS);
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
     glEnable(GL_DEPTH_TEST);

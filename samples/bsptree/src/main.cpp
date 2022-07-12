@@ -16,9 +16,12 @@ int main(int argn, char** argv) {
 
         engine.init();
 
-        Scene scene(engine.getRegistry(), engine.getStack());
+        Scene scene(engine.getRegistry());
 
         Game* game = new Game(scene);
+
+        engine.getStack().pushState(&scene);
+        engine.getStack().pushState(game);
 
         Collada::destroy(); // clean loader
 

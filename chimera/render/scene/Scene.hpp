@@ -22,12 +22,11 @@ struct ShadowData {
 class Entity;
 class Scene : public IStateMachine {
   public:
-    Scene(Registry& r, StateStack& s);
+    Scene(Registry& r);
     virtual ~Scene();
     void setOrigem(ITrans* o) { origem = o; }
     Canvas* getCanvas();
     Registry* getRegistry() { return registry; }
-    StateStack* getStack() const { return this->stack; } // FIXME: Preciso??
     StateStack& getLayes() { return this->layers; }
     // Herdados
     virtual void onAttach() override;
@@ -45,7 +44,6 @@ class Scene : public IStateMachine {
     void renderShadow(IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
 
-    StateStack* stack;
     StateStack layers;
     Registry* registry;
     ITrans* origem;

@@ -3,12 +3,7 @@
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Scene& scene) : scene(&scene) {
-    using namespace Chimera;
-
-    scene.getStack()->pushState(this);
-    scene.getStack()->pushState(&scene);
-}
+Game::Game(Chimera::Scene& scene) : scene(&scene) {}
 
 Game::~Game() {}
 
@@ -79,9 +74,12 @@ int main(int argn, char** argv) {
 
         engine.init();
 
-        Scene scene(engine.getRegistry(), engine.getStack());
+        Scene scene(engine.getRegistry());
 
         Game* game = new Game(scene);
+
+        engine.getStack().pushState(&scene);
+        engine.getStack().pushState(game);
 
         Collada::destroy(); // clean loader
 

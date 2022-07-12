@@ -4,11 +4,9 @@
 #include "chimera/render/scene/Scene.hpp"
 
 struct Controles {
-    float yaw;
-    float pitch;
-    float roll;
-    float throttle;
-    int hat;
+    Controles() = default;
+    float yaw = 0.0, pitch = 0.0, roll = 0.0, throttle = 0.0;
+    int hat = 0;
 };
 
 class Game : public Chimera::IStateMachine {

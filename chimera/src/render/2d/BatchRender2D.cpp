@@ -10,8 +10,7 @@ BatchRender2D::BatchRender2D() {
 
 BatchRender2D::~BatchRender2D() {
     delete ibo;
-    delete pVao;
-    delete pVbo;
+    delete pVao; // VBO's deted here!!!
 }
 
 void BatchRender2D::init() {

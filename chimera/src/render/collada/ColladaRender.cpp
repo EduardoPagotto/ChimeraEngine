@@ -40,8 +40,6 @@ void colladaRenderLoad(ColladaDom& dom, Registry& r) {
 
                 CameraComponent& cCam = entity.getComponent<CameraComponent>();
                 Shader& shader = entity.getComponent<Shader>();
-                ComponentTile& tc = entity.addComponent<ComponentTile>();
-                tc.tile = new Tile(new BatchRender2D(), shader, cCam.camera);
             }
         }
     }

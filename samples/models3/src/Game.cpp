@@ -12,20 +12,17 @@ Game::Game(Chimera::Scene& scene) : scene(&scene) {
     crt.throttle = 0.0;
     crt.hat = 0;
 
-    { // FPS
-        ComponentTile& tc = scene.getRegistry()->findComponent<ComponentTile>("TileText");
-        lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
-        tc.tile->add(lFPS);
-        scene.getStack()->pushState(tc.tile);
-    }
-
     { // Localiza objeto como o primario //EfeitoZoltan-mesh
         TransComponent& tc = scene.getRegistry()->findComponent<TransComponent>("Zoltan");
         pCorpoRigido = (Solid*)tc.trans;
     }
 
     scene.getStack()->pushState(this);
-    scene.getStack()->pushState(&scene);
+    scene.getStack()->pushState(&scene); // Label depois ja que preciso do onAttach do scene!!
+
+    lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    Tile* tile = (Tile*)scene.getLayes().getState("TileText");
+    tile->add(lFPS);
 
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 }

@@ -7,6 +7,7 @@
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/ITrans.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
+#include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 
 namespace Chimera {
@@ -26,7 +27,8 @@ class Scene : public IStateMachine {
     void setOrigem(ITrans* o) { origem = o; }
     Canvas* getCanvas();
     Registry* getRegistry() { return registry; }
-    StateStack* getStack() const { return this->stack; }
+    StateStack* getStack() const { return this->stack; } // FIXME: Preciso??
+    StateStack& getLayes() { return this->layers; }
     // Herdados
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -44,6 +46,7 @@ class Scene : public IStateMachine {
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
 
     StateStack* stack;
+    StateStack layers;
     Registry* registry;
     ITrans* origem;
     Camera* activeCam;
@@ -53,5 +56,6 @@ class Scene : public IStateMachine {
     std::vector<RenderBuffer*> vRB;
     std::vector<IEmitter*> emitters;
     Entity eRenderBuferSpec;
+    BatchRender2D batchRender2D;
 };
 } // namespace Chimera

@@ -9,6 +9,7 @@
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/core/visible/Transform.hpp"
+#include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"
@@ -73,6 +74,14 @@ void Scene::onAttach() {
         Entity entity{entityID, registry};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
+
+        if (tc.tag == "TileText") {
+            CameraComponent& cCam = entity.getComponent<CameraComponent>();
+            Shader& shader = entity.getComponent<Shader>();
+            // ComponentTile& tc = entity.addComponent<ComponentTile>();
+            Tile* tile = new Tile("TileText", &batchRender2D, shader, cCam.camera);
+            layers.pushState(tile);
+        }
 
         // Se for um mesh inicializar componente
         if (entity.hasComponent<MeshComponent>()) {
@@ -197,6 +206,9 @@ void Scene::onUpdate(const double& ts) {
 
     for (auto emissor : emitters)
         emissor->recycleLife(ts);
+
+    for (auto it = layers.begin(); it != layers.end(); it++)
+        (*it)->onUpdate(ts);
 }
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
@@ -234,6 +246,10 @@ bool Scene::onEvent(const SDL_Event& event) {
             }
         } break;
     }
+
+    for (auto it = layers.begin(); it != layers.end(); it++)
+        (*it)->onEvent(event);
+
     return true;
 }
 
@@ -371,6 +387,9 @@ void Scene::onRender() {
             renderBatch.end();
             renderBatch.flush();
         }
+
+        for (auto it = layers.begin(); it != layers.end(); it++)
+            (*it)->onRender();
 
         {
             // TODO: captura do entity no framebuffer da tela

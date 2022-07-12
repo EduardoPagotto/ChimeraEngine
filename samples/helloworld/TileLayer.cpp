@@ -4,7 +4,7 @@
 #include <glm/gtx/transform.hpp>
 
 TileLayer::TileLayer(Chimera::Shader shader)
-    : Chimera::Layer(new Chimera::BatchRender2D(), shader, new Chimera::Camera(16.0, 16.0, -1.0f, 1.0f)) {
+    : Chimera::Layer(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrtho(16.0, 16.0, -1.0f, 1.0f)) {
     glUseProgram(shader.getID());
     shader.setUniformU("light_pos", Chimera::UValue(glm::vec2(4.0f, 1.5f))); //  setUniform2f("light_pos", glm::vec2(4.0f, 1.5f));
     glUseProgram(0);

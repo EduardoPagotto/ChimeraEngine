@@ -85,16 +85,17 @@ float BatchRender2D::submitTexture(Texture* texture) {
 void BatchRender2D::submit(IRenderable2D* renderable) {
 
     // TODO: implementar normalizacao 2d 3d submit
+    const Prop2D& prop = renderable->getProp();
 
-    const glm::vec3& position = renderable->getPosition();
-    const glm::vec2& size = renderable->getSize();
-    const glm::vec4& color = renderable->getColor();
-    const std::vector<glm::vec2>& uv = renderable->getUV();
-    const Texture* texture = renderable->getTexture();
+    const glm::vec3& position = prop.position;
+    const glm::vec2& size = prop.size;
+    const glm::vec4& color = prop.color;
+    const std::vector<glm::vec2>& uv = prop.uv;
+    const Texture* texture = prop.texture;
 
     float textureSlot = 0.0f; // float ts = 0.0f;
     if (texture != nullptr)
-        textureSlot = this->submitTexture(renderable->getTexture());
+        textureSlot = this->submitTexture(prop.texture);
 
     buffer->point = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
     buffer->uv = uv[0];

@@ -15,8 +15,8 @@
             <optics>
                 <technique_common>
                     <orthographic>
-                        <xmag>512.0</xmag>
-                        <ymag>512.0</ymag>
+                        <xmag>800.0</xmag>
+                        <ymag>640.0</ymag>
                         <aspect_ratio>0.1</aspect_ratio>
                         <znear>-1.0</znear>
                         <zfar>1.0</zfar>
@@ -707,7 +707,7 @@
                 <canvas title="models" width="800" height="640" fullscreen="0"/>
                 <eyeview size="1" distance="0.4"/>
                 <fonts>
-                    <font url="file://assets/fonts/FreeSans.ttf#FreeSans_22" size="22" scaleX="1.0" scaleY="1.0"/>
+                    <font url="file://assets/fonts/FreeSans.ttf#FreeSansMainFont" size="42" scaleX="1.0" scaleY="1.0"/>
                 </fonts>
                 <framebuffers>
                     <framebuffer id="shadow01" name="shadow01">

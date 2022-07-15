@@ -13,7 +13,7 @@ Label::~Label() {}
 
 void Label::submit(IRenderer2D& renderer) {
     // TODO: implementar normalizacao 2d 3d chamada de desenho
-    renderer.drawString(font, text, pos, color);
+    renderer.drawString(font, text, prop2d.position, prop2d.color); // passar o obj Prop2D
 }
 
 } // namespace Chimera

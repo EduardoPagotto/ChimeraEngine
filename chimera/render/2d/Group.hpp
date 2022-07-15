@@ -10,8 +10,10 @@ class Group : public IRenderable2D {
     virtual ~Group() {}
     inline void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
     virtual void submit(IRenderer2D& renderer) override;
+    virtual const Prop2D& getProp() override { return prop2d; }
 
   private:
+    Prop2D prop2d;
     std::vector<IRenderable2D*> renderables;
     glm::mat4 transformationMatrix;
 };

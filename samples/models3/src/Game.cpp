@@ -137,7 +137,7 @@ void Game::onAttach() {
     TransComponent& tc = scene->getRegistry()->findComponent<TransComponent>("Zoltan");
     pCorpoRigido = (Solid*)tc.trans;
 
-    lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    lFPS = new Label("None", -500, 280, glm::vec4(1.0, 1.0, 1.0, 1.0));
     Tile* tile = (Tile*)scene->getLayes().getState("TileText");
     tile->add(lFPS);
 

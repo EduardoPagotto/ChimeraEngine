@@ -1,6 +1,8 @@
 #include "Game.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/render/2d/Group.hpp"
+#include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
 
 Game::Game(Chimera::Scene& scene) : pCorpoRigido(nullptr), scene(&scene) { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game"); }
@@ -137,9 +139,14 @@ void Game::onAttach() {
     TransComponent& tc = scene->getRegistry()->findComponent<TransComponent>("Zoltan");
     pCorpoRigido = (Solid*)tc.trans;
 
-    lFPS = new Label("None", -500, 280, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
     Tile* tile = (Tile*)scene->getLayes().getState("TileText");
-    tile->add(lFPS);
+
+    Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-500.0f, 270.0f, 0.0f)));
+    group->add(new Sprite(0.0f, 0.0f, 200.0f, 50.0f, glm::vec4(0, 0, 1, 1)));
+    group->add(lFPS);
+    tile->add(group);
+    // tile->add(lFPS);
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
     glEnable(GL_DEPTH_TEST);

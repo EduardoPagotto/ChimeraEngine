@@ -21,7 +21,7 @@ class BatchRender2D : public IRenderer2D {
 
     void init();
     virtual void begin(Camera* camera) override;
-    virtual void submit(IRenderable2D* renderable) override;
+    virtual void submit(IRenderable2D* renderable, const Prop2D& prop) override;
     virtual void end() override;
     virtual void flush() override;
     virtual void drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;

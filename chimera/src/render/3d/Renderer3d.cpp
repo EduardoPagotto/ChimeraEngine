@@ -2,6 +2,7 @@
 #include "chimera/core/buffer/IndexBuffer.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -26,19 +27,20 @@ void Renderer3d::end() {
 
 bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
     // Transformation model matrix AABB to know if in frustrum Camera
-    const AABB& aabb = renderable->getAABB();
+    Renderable3D* r = (Renderable3D*)renderable;
+    const AABB& aabb = r->getAABB();
     AABB nova = aabb.transformation(command.transform);
     // adicione apenas o que esta no clip-space
     if (nova.visible(frustum) == true) {
         // Debug info only
-        IndexBuffer* ibo = renderable->getIBO();
+        IndexBuffer* ibo = r->getIBO();
         if (ibo != nullptr) {
             totIBO++;
             totFaces += ibo->getSize() / 3;
         }
         // adicionado ao proximo render
         commandQueue.push_back(command);
-        renderableQueue.push_back(renderable);
+        renderableQueue.push_back(r);
         return true;
     }
 
@@ -53,7 +55,7 @@ void Renderer3d::flush() {
     while (!commandQueue.empty()) {
 
         const RenderCommand& command = commandQueue.front();
-        IRenderable3d* r = renderableQueue.front(); // command.renderable;
+        Renderable3D* r = renderableQueue.front(); // command.renderable;
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior

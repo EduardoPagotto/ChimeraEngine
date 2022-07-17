@@ -10,9 +10,9 @@
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/Tile.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"
+#include "chimera/render/3d/RenderableMesh.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/VertexData.hpp"
@@ -101,7 +101,7 @@ void Scene::onAttach() {
             // Cria componentes renderizaveis
             Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
             if (mesh.type == MeshType::SIMPLE)
-                rc.renderable = new Renderable3D(mesh.mesh);
+                rc.renderable = new RenderableMesh(mesh.mesh);
             else if (mesh.type == MeshType::ARRAY)
                 rc.renderable = new RenderableArray(mesh.vTrisIndex, mesh.mesh);
             else if (mesh.type == MeshType::BSTREE)

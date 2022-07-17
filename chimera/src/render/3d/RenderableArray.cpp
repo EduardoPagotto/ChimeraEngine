@@ -51,25 +51,15 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* me
 }
 
 RenderableArray::~RenderableArray() {
-
     while (!vChild.empty()) {
         IRenderable3d* child = vChild.back();
         vChild.pop_back();
         delete child;
         child = nullptr;
     }
-
-    delete vao;
-    vao = nullptr;
-}
-
-void RenderableArray::draw(const bool& logData) {
-    if (logData)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "RenderableArray draw"); // TODO: ver o que fazer
 }
 
 void RenderableArray::submit(RenderCommand& command, IRenderer3d& renderer) {
-
     if (renderer.submit(command, this) == true) {
         for (IRenderable3d* child : vChild)
             renderer.submit(command, child);

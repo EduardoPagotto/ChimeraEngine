@@ -87,11 +87,6 @@ void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, 
     }
 }
 
-void RenderableBsp::draw(const bool& logData) {
-    if (logData)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP draw"); // TODO: ver o que fazer
-}
-
 void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
     std::vector<IRenderable3d*> childDraw;
     const glm::vec3 cameraPos = renderer.getCamera()->getPosition();

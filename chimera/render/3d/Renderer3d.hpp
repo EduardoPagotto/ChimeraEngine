@@ -1,10 +1,10 @@
 #pragma once
-#include "IRenderable3d.hpp"
 #include "IRenderer3d.hpp"
 #include "chimera/core/TransformationStack.hpp"
 #include "chimera/core/space/Frustum.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include <cstdint>
 #include <deque>
 
@@ -28,7 +28,7 @@ class Renderer3d : public IRenderer3d {
     Camera* camera;
     EyeView* eyeView;
     std::deque<RenderCommand> commandQueue;
-    std::deque<IRenderable3d*> renderableQueue;
+    std::deque<Renderable3D*> renderableQueue;
     std::vector<Texture*> textureQueue;
     MapUniform uniformsQueue;
     Frustum frustum;

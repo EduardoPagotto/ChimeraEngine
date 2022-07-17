@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-RenderableMesh::RenderableMesh(Mesh* mesh) {
+RenderableMesh::RenderableMesh(Mesh* mesh) : Renderable3D() {
     // Transforma Mesh em VertexData comprimindo-o
     std::vector<VertexData> renderData;
     vertexDataFromMesh(mesh, renderData);

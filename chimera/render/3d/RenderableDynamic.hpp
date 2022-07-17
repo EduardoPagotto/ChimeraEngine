@@ -1,11 +1,11 @@
 #pragma once
-#include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/buffer/VertexBuffer.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/render/VertexData.hpp"
 
 namespace Chimera {
 
-class RenderableDynamic {
+class RenderableDynamic : public Renderable3D {
   public:
     RenderableDynamic(const uint32_t& max);
     virtual ~RenderableDynamic();
@@ -13,7 +13,6 @@ class RenderableDynamic {
 
   private:
     uint32_t max;
-    VertexArray vao;
     VertexBuffer* vbo;
 };
 } // namespace Chimera

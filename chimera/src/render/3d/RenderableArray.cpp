@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh) : totIndex(0) {
+RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh) : totIndex(0), Renderable3D() {
     // create vertex buffers
     vao = new VertexArray();
     vao->bind();

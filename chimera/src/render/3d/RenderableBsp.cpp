@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0) {
+RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
 
     Mesh meshFinal;
     meshReCompile(*mesh, meshFinal);

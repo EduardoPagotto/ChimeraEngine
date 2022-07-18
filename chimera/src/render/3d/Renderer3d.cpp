@@ -93,15 +93,12 @@ void Renderer3d::flush() {
                     Texture::unbind(0);
 
                 // bind de texturas
-                for (uint8_t i = 0; i < command.vTex.size(); i++) {
+                for (uint8_t i = 0; i < command.vTex.size(); i++)
                     command.vTex[i]->bind(i);
-                }
 
                 // bind de texturas globais
-                for (uint8_t i = 0; i < textureQueue.size(); i++) {
-                    uint8_t tSlot = command.vTex.size() + i;
-                    textureQueue[i]->bind(tSlot);
-                }
+                for (uint8_t i = 0; i < textureQueue.size(); i++)
+                    textureQueue[i]->bind(command.vTex.size() + i);
             }
         }
 

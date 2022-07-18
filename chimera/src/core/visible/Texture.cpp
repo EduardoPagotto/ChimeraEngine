@@ -40,12 +40,12 @@ void Texture::init() {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLuint)textureParameters.wrap_t);
 }
 
-void Texture::bind(uint8_t slot) const {
+void Texture::bind(const uint8_t& slot) const {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, idTexture);
 }
 
-void Texture::unbind(uint8_t slot) {
+void Texture::unbind(const uint8_t& slot) {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, 0);
 }

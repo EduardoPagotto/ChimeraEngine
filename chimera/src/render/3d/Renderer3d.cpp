@@ -7,7 +7,11 @@
 
 namespace Chimera {
 
-Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(logData) { uniformsQueue.reserve(300); }
+Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(logData) {
+    uniformsQueue.reserve(500);
+    renderQueue.reserve(500);
+    textureQueue.reserve(50);
+}
 
 Renderer3d::~Renderer3d() {}
 
@@ -39,8 +43,7 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
             totFaces += ibo->getSize() / 3;
         }
         // adicionado ao proximo render
-        commandQueue.push_back(command);
-        renderableQueue.push_back(r);
+        renderQueue.push_back(std::make_tuple(command, r));
         return true;
     }
 
@@ -52,10 +55,7 @@ void Renderer3d::flush() {
     Shader activeShader;
     VertexArray* pLastVao = nullptr;
 
-    while (!commandQueue.empty()) {
-
-        const RenderCommand& command = commandQueue.front();
-        Renderable3D* r = renderableQueue.front(); // command.renderable;
+    for (auto& [command, r] : renderQueue) {
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior
@@ -106,9 +106,8 @@ void Renderer3d::flush() {
         }
 
         r->draw(logData);
-        commandQueue.pop_front();
-        renderableQueue.pop_front();
     }
+    renderQueue.clear(); // Limpa rendercommand
     pLastVao->unbind();
 
     // Limpa buffer de uniforms ao terminar todos os draws calls

@@ -193,10 +193,10 @@ void BatchRender2D::end() {
 
 void BatchRender2D::flush() {
 
-    BinaryStateEnable blend(GL_BLEND); // glEnable(GL_BLEND);
-    // BinaryStateDisable depth(GL_DEPTH_TEST); // glDisable(GL_DEPTH_TEST);
+    BinaryStateEnable blend(GL_BLEND, GL_TRUE);
+    // BinaryStateEnable depth(GL_DEPTH_TEST, GL_FALSE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    BinaryStateDisable cull(GL_CULL_FACE); // glEnable(GL_CULL_FACE);
+    BinaryStateEnable cull(GL_CULL_FACE, GL_FALSE);
     // bind shader and uniforms from model
     glUseProgram(renderComando->shader.getID());
     for (const auto& kv : renderComando->uniforms)

@@ -377,8 +377,8 @@ void Scene::onRender() {
 
         if (emitters.size() > 0) {
             // inicializa state machine do opengl
-            BinaryStateEnable depth(GL_DEPTH_TEST);
-            BinaryStateEnable blender(GL_BLEND);
+            BinaryStateEnable depth(GL_DEPTH_TEST, GL_TRUE);
+            BinaryStateEnable blender(GL_BLEND, GL_TRUE);
             DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

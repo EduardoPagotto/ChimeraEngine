@@ -27,8 +27,7 @@ class Renderer3d : public IRenderer3d {
   private:
     Camera* camera;
     EyeView* eyeView;
-    std::deque<RenderCommand> commandQueue;
-    std::deque<Renderable3D*> renderableQueue;
+    std::vector<std::tuple<RenderCommand, Renderable3D*>> renderQueue;
     std::vector<Texture*> textureQueue;
     MapUniform uniformsQueue;
     Frustum frustum;

@@ -82,16 +82,16 @@ float BatchRender2D::submitTexture(Texture* texture) {
     return result;
 }
 
-void BatchRender2D::submit(IRenderable2D* renderable, const Prop2D& prop) {
+void BatchRender2D::submit(IRenderable2D* renderable) {
 
+    const Prop2D& prop = ((Renderable2D*)renderable)->getProp(); // Perigo
     const glm::vec3& position = prop.position;
     const glm::vec2& size = prop.size;
     const glm::vec4& color = prop.color;
     const std::vector<glm::vec2>& uv = prop.uv;
-    const Texture* texture = prop.texture;
 
     float textureSlot = 0.0f; // float ts = 0.0f;
-    if (texture != nullptr)
+    if (prop.texture != nullptr)
         textureSlot = this->submitTexture(prop.texture);
 
     buffer->point = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
@@ -123,10 +123,8 @@ void BatchRender2D::submit(IRenderable2D* renderable, const Prop2D& prop) {
 
 void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
-    const Texture* texture = font->getTexture();
-
     float textureSlot = 0.0f; // float ts = 0.0f;
-    if (texture != nullptr)
+    if (font->getTexture() != nullptr)
         textureSlot = this->submitTexture(font->getTexture());
 
     const glm::vec2& scale = font->getScale();

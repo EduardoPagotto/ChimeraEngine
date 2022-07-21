@@ -1,13 +1,9 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Engine* engine) : engine(engine) {
-
+Game::Game(Chimera::Engine* engine) {
     // init framebuffer
-    frame = new Frame;
-    frame->data = engine->getCanvas()->getPixels();
-    frame->width = engine->getCanvas()->getWidth();
-    frame->height = engine->getCanvas()->getHeight();
+    canvas = engine->getCanvas();
 }
 
 Game::~Game() {}
@@ -104,4 +100,4 @@ bool Game::onEvent(const SDL_Event& event) {
 
 void Game::onUpdate(const double& ts) {}
 
-void Game::onRender() { RenderScene(*state, *world, *frame); }
+void Game::onRender() { RenderScene(*state, *world, canvas); }

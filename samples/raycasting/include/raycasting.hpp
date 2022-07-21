@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/core/device/Canvas.hpp"
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <string>
@@ -8,12 +9,6 @@
 // velocidade de movimento e rotação
 #define MOVSPEED 0.1
 #define ROTSPEED 0.05
-// framebuffer
-struct Frame {
-    uint32_t width;
-    uint32_t height;
-    uint32_t* data; // TrueColorPixel* data;
-};
 // mapa
 struct World {
     uint32_t width;
@@ -35,5 +30,5 @@ struct RayHit {
 };
 
 bool LoadWorld(const char filename[], World* world);
-void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t column);
-void RenderScene(State state, World world, Frame frame);
+void DrawColumn(RayHit what, World world, Chimera::Canvas* frame, uint32_t column);
+void RenderScene(State state, World world, Chimera::Canvas* frame);

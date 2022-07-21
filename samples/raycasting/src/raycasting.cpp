@@ -43,7 +43,7 @@ bool LoadWorld(const char filename[], World* world) {
     return true;
 }
 
-void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t column) {
+void DrawColumn(RayHit what, World world, Chimera::Canvas* frame, uint32_t column) {
     // tipo de bloco detectado
     uint8_t type = world.data[what.map.x + what.map.y * world.width];
 
@@ -65,18 +65,18 @@ void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t col
     }
 
     // calcular a altura da coluna
-    uint32_t colh = abs(int(frame.height / what.distance));
+    uint32_t colh = abs(int(frame->getHeight() / what.distance));
     uint32_t cropup = 0;
     uint32_t cropdown = 0;
     uint32_t index = 0;
 
-    if (colh > frame.height) // se for maior que a tela, corte
+    if (colh > frame->getHeight()) // se for maior que a tela, corte
     {
         index = column;
-        cropup = (colh - frame.height) / 2;
+        cropup = (colh - frame->getHeight()) / 2;
         cropdown = cropup + 1;
     } else {
-        index = column + ((frame.height - colh) / 2) * frame.width;
+        index = column + ((frame->getHeight() - colh) / 2) * frame->getWidth();
         cropup = 0;
         cropdown = 0;
     }
@@ -84,17 +84,17 @@ void DrawColumn(RayHit what, World world, State state, Frame frame, uint32_t col
     // desenhar coluna
     for (uint32_t c = cropup; c < (colh - cropdown); c++) {
         // desenhe o pixel da cor selecionada
-        frame.data[index] = corVal;
-        index += frame.width;
+        frame->getPixels()[index] = corVal;
+        index += frame->getWidth();
     }
 }
 
-void RenderScene(State state, World world, Frame frame) {
+void RenderScene(State state, World world, Chimera::Canvas* frame) {
 
-    for (uint32_t column = 0; column < frame.width; column++) // Para cada coluna
+    for (uint32_t column = 0; column < frame->getWidth(); column++) // Para cada coluna
     {
         // calcular a posição e direção do feixe
-        double cameraX = 2 * column / double(frame.width) - 1;
+        double cameraX = 2 * column / double(frame->getWidth()) - 1;
         glm::vec2 rayPos = state.pos;
         glm::vec2 rayDir = glm::vec2(state.dir.x + state.cam.x * cameraX, state.dir.y + state.cam.y * cameraX);
 
@@ -158,6 +158,6 @@ void RenderScene(State state, World world, Frame frame) {
         what.rayDir = rayDir;
 
         // desenhe a coluna
-        DrawColumn(what, world, state, frame, column);
+        DrawColumn(what, world, frame, column);
     }
 }

@@ -17,11 +17,9 @@ class Game : public Chimera::IStateMachine {
     virtual std::string getName() const override { return "Game"; }
 
   private:
-    // ray
-    Frame* frame;
     State* state;
     World* world;
     double moveSpeed;
     double rotSpeed;
-    Chimera::Engine* engine;
+    Chimera::Canvas* canvas;
 };

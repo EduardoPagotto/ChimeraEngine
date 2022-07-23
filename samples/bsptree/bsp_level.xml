@@ -90,6 +90,36 @@
             <extra>
                 <technique profile="chimera">
                     <external_cube target="./assets/maps/maze7.txt">10.0</external_cube>
+                    <external_cube_2 size="10.0" width="7" height="7" deep="4">
+                        <l f="0">1111111</l>
+                        <l f="0">1173711</l>
+                        <l f="0">1633361</l>
+                        <l f="0">1336331</l>
+                        <l f="0">1371731</l>
+                        <l f="0">1371731</l>
+                        <l f="0">1111111</l>
+                        <l f="1">1111111</l>
+                        <l f="1">11   11</l>
+                        <l f="1">1     1</l>
+                        <l f="1">1     1</l>
+                        <l f="1">1  1  1</l>
+                        <l f="1">1  3  1</l>
+                        <l f="1">1111111</l>
+                        <l f="2">1111111</l>
+                        <l f="2">13   31</l>
+                        <l f="2">1    41</l>
+                        <l f="2">1     1</l>
+                        <l f="2">1  3  1</l>
+                        <l f="2">1     1</l>
+                        <l f="2">1111111</l>
+                        <l f="3">1111111</l>
+                        <l f="3">1746471</l>
+                        <l f="3">1444411</l>
+                        <l f="3">1744471</l>
+                        <l f="3">1444441</l>
+                        <l f="3">1746471</l>
+                        <l f="3">1111111</l>
+                    </external_cube_2>
                 </technique>
             </extra>
         </geometry>

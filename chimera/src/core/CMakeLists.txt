@@ -61,8 +61,7 @@ set (SourcesCore Registry.cpp
 				 partition/BSPTree.cpp
 				 partition/LoadHeightMap.cpp
 				 partition/Wavefront.cpp
-				 partition/Cube.cpp 
-				 partition/Maze.cpp)
+				 partition/Cube.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}

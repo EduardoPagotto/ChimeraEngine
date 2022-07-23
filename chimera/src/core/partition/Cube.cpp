@@ -79,11 +79,168 @@ void cleanupCubeBase() {
     tTexSeq.clear();
 }
 
+glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos) {
+    glm::ivec3 val = pos;
+    switch (deep) {
+        case DEEP::UP:
+            val.y = pos.y + dist.y;
+            break;
+        case DEEP::MIDDLE:
+            val.y = pos.y;
+            break;
+        case DEEP::DOWN:
+            val.y = pos.y - dist.y;
+        default:
+            break;
+    }
+
+    switch (card) {
+        case CARDINAL::NORTH:
+            val.z = pos.z - dist.z;
+            break;
+        case CARDINAL::NORTH_EAST:
+            val.z = pos.z - dist.z;
+            val.x = pos.x + dist.x;
+            break;
+        case CARDINAL::EAST:
+            val.x = pos.x + dist.x;
+            break;
+        case CARDINAL::SOUTH_EAST:
+            val.z = pos.z + dist.z;
+            val.x = pos.x + dist.x;
+            break;
+        case CARDINAL::SOUTH:
+            val.z = pos.z + dist.z;
+            break;
+        case CARDINAL::SOUTH_WEST:
+            val.z = pos.z + dist.z;
+            val.x = pos.x - dist.x;
+            break;
+        case CARDINAL::WEST:
+            val.x = pos.x - dist.x;
+            break;
+        case CARDINAL::NORTH_WEST:
+            val.z = pos.z - dist.z;
+            val.x = pos.x - dist.x;
+            break;
+        default:
+            break;
+    }
+    return val;
+}
+
+Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size, std::vector<Cube*>& vpCube) {
+
+    glm::ivec3 val = getCardinalPos(deep, card, glm::ivec3(1), pos);
+    // get Valid position
+    if ((val.z >= 0) && (val.z < size.z) && (val.x >= 0) && (val.x < size.x) && (val.y >= 0) && (val.y < size.y))
+        return vpCube[getIndexArrayPos(val, size)];
+
+    return nullptr;
+}
+
+glm::vec3 minimal(const float& sizeBlock, const glm::vec3 halfBlock, const glm::ivec3& pos) {
+    float x_min = (pos.x * sizeBlock) - halfBlock.x; // (width++)
+    float y_min = (pos.y * sizeBlock) - halfBlock.y; // Altura Minima andar
+    float z_min = (pos.z * sizeBlock) - halfBlock.z; // (height--)
+    return glm::vec3(x_min, y_min, z_min);
+}
+
+uint32_t getIndexArrayPos(const glm::ivec3& pos, const glm::ivec3& size) { return pos.x + (pos.z * size.x) + (pos.y * size.x * size.z); }
+
 Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max)
     : AABB(min, max), pNorth(nullptr), pEast(nullptr), pSouth(nullptr), pWest(nullptr), pUp(nullptr), pDown(nullptr) {
 
     space = (caracter == 0x20) ? SPACE::EMPTY : (SPACE)(caracter - 0x30);
 }
+
+void createMap(Mesh* mesh, std::vector<Cube*>& vpCube) {
+    // carrega posicoes, texturas, e seq textura defaults do cubo
+    initCubeBase();
+    for (auto pCube : vpCube)
+        pCube->create(mesh);
+
+    // limpa dados de criacao do cubo base
+    cleanupCubeBase();
+    // limpas cubos de contrucao e vetor de cubos
+    for (auto pCube : vpCube) {
+        delete pCube;
+        pCube = nullptr;
+    }
+    vpCube.clear();
+}
+
+void createMazeCube(const char filename[], float sizeBlock, std::vector<Cube*>& vpCube) {
+
+    char buffer[1024] = {0};
+    glm::ivec3 size;
+
+    FILE* file = fopen(filename, "rb");
+    if (!file)
+        throw std::string("Arguivo nao localizado");
+
+    // tamanho do mapa
+    fgets(buffer, 1024, file);
+    size.x = atoi(buffer);
+
+    fgets(buffer, 1024, file);
+    size.z = atoi(buffer);
+
+    fgets(buffer, 1024, file);
+    size.y = atoi(buffer);
+
+    glm::ivec3 pos(0);
+    glm::vec3 halfBlock((size.x * sizeBlock) / 2.0f,  //(w/2)
+                        (size.y * sizeBlock) / 2.0f,  //(d/2)
+                        (size.z * sizeBlock) / 2.0f); //(h/2)
+
+    // carregando mapa
+    for (pos.y = 0; pos.y < size.y; pos.y++) {
+        for (pos.z = 0; pos.z < size.z; pos.z++) {
+            fgets(buffer, 1024, file);
+            for (pos.x = 0; pos.x < size.x; pos.x++) {
+                glm::vec3 min = minimal(sizeBlock, halfBlock, pos);
+                glm::vec3 max = min + sizeBlock;
+                Cube* pCube = new Cube(buffer[pos.x], min, max);
+                vpCube.push_back(pCube);
+            }
+        }
+    }
+
+    for (pos.y = 0; pos.y < size.y; pos.y++) {
+        for (pos.z = 0; pos.z < size.z; pos.z++) {
+            for (pos.x = 0; pos.x < size.x; pos.x++) {
+                Cube* pCube = vpCube[getIndexArrayPos(pos, size)];
+
+                Cube* pBefore = getCubeNeighbor(DEEP::DOWN, CARDINAL::NONE, pos, size, vpCube);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::DOWN, CARDINAL::NONE, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::UP, CARDINAL::NONE, pos, size, vpCube);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::UP, CARDINAL::NONE, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, pos, size, vpCube);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::MIDDLE, CARDINAL::NORTH, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::EAST, pos, size, vpCube);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::MIDDLE, CARDINAL::EAST, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, pos, size, vpCube);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::MIDDLE, CARDINAL::SOUTH, pBefore);
+
+                pBefore = getCubeNeighbor(DEEP::MIDDLE, CARDINAL::WEST, pos, size, vpCube);
+                if (pBefore != nullptr)
+                    pCube->setNeighbor(DEEP::MIDDLE, CARDINAL::WEST, pBefore);
+            }
+        }
+    }
+}
+
+//-----
 
 Cube::~Cube() {}
 

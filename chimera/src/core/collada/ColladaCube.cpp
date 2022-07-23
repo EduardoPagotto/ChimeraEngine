@@ -1,5 +1,5 @@
 #include "chimera/core/collada/ColladaCube.hpp"
-#include "chimera/core/partition/Maze.hpp"
+#include "chimera/core/partition/Cube.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 
 namespace Chimera {
@@ -18,7 +18,8 @@ void ColladaCube::create(const std::string& id, const std::string& name, Entity&
     float size = geo.text().as_float();
 
     // processa o Maze
-    Maze maze = Maze(target.c_str(), mc.mesh, size);
-    maze.createMap();
+    std::vector<Cube*> vpCube;
+    createMazeCube(target.c_str(), size, vpCube);
+    createMap(mc.mesh, vpCube);
 }
 } // namespace Chimera

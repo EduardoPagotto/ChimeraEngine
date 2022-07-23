@@ -19,7 +19,7 @@ class Game : public Chimera::IStateMachine {
   private:
     State* state;
     World* world;
-    double moveSpeed;
-    double rotSpeed;
+    float moveSpeed;
+    float rotSpeed;
     Chimera::Canvas* canvas;
 };

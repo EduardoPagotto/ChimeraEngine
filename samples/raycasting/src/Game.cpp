@@ -42,27 +42,26 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
                 case SDLK_w: {
-                    glm::ivec2 curr(state->pos.x, state->pos.y);
-                    glm::ivec2 next((int)(state->pos.x + state->dir.x * moveSpeed * 2), (int)(state->pos.y + state->dir.y * moveSpeed * 2));
+                    glm::ivec2 curr = state->pos;
+                    glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
 
-                    if (world->data[next.x + curr.y * world->width] == 0) {
+                    if (world->data[next.x + curr.y * world->width] == 0)
                         state->pos.x += state->dir.x * moveSpeed;
-                    }
 
-                    if (world->data[curr.x + next.y * world->width] == 0) {
+                    if (world->data[curr.x + next.y * world->width] == 0)
                         state->pos.y += state->dir.y * moveSpeed;
-                    }
+
                 } break;
                 case SDLK_s: {
-                    glm::ivec2 curr(state->pos.x, state->pos.y);
-                    glm::ivec2 next((int)(state->pos.x - state->dir.x * moveSpeed * 2), (int)(state->pos.y - state->dir.y * moveSpeed * 2));
+                    glm::ivec2 curr = state->pos;
+                    glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
 
-                    if (world->data[next.x + curr.y * world->width] == 0) {
+                    if (world->data[next.x + curr.y * world->width] == 0)
                         state->pos.x -= state->dir.x * moveSpeed;
-                    }
-                    if (world->data[curr.x + next.y * world->width] == 0) {
+
+                    if (world->data[curr.x + next.y * world->width] == 0)
                         state->pos.y -= state->dir.y * moveSpeed;
-                    }
+
                 } break;
                 case SDLK_a: {
                     double oldDirX = state->dir.x;

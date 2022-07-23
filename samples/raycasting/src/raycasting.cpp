@@ -94,12 +94,12 @@ void RenderScene(State state, World world, Chimera::Canvas* frame) {
     for (uint32_t column = 0; column < frame->getWidth(); column++) // Para cada coluna
     {
         // calcular a posição e direção do feixe
-        double cameraX = 2 * column / double(frame->getWidth()) - 1;
+        float cameraX = 2 * column / float(frame->getWidth()) - 1;
         glm::vec2 rayPos = state.pos;
-        glm::vec2 rayDir = glm::vec2(state.dir.x + state.cam.x * cameraX, state.dir.y + state.cam.y * cameraX);
+        glm::vec2 rayDir = state.dir + state.cam * cameraX;
 
         // o bloco atual onde estamos
-        glm::ivec2 map(int(rayPos.x), int(rayPos.y));
+        glm::ivec2 map = rayPos;
 
         // comprimento do feixe da posição atual para o próximo bloco
         glm::vec2 sideDist;

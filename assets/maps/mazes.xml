@@ -65,7 +65,7 @@
         <geometry id="Voxel_maze_03" name="Voxel_maze_03">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="10" height="10" floor="3">
+                    <external_cube size="50.0" width="10" height="10" floor="3">
                         <l f="0" h="0">1111111111</l>
                         <l f="0" h="1">1312336321</l>
                         <l f="0" h="2">1313313331</l>

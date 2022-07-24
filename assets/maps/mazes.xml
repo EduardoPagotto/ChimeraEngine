@@ -175,5 +175,28 @@
                 </technique>
             </extra>
         </geometry>
+        <geometry id="Voxel_maze_08" name="Voxel_maze_08">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="27" height="14" floor="1">
+                        <l f="0" h="00">111111111111111111111111111</l>
+                        <l f="0" h="01">1                 1       1</l>
+                        <l f="0" h="02">1 1 1 1 1 1 1 1 1 1 1 1 1 1</l>
+                        <l f="0" h="03">1                         1</l>
+                        <l f="0" h="04">1  1     11111   1        1</l>
+                        <l f="0" h="05">1        1       1        1</l>
+                        <l f="0" h="06">1  1     1       11111 1111</l>
+                        <l f="0" h="07">1  1   1111111       1    1</l>
+                        <l f="0" h="08">1            1            1</l>
+                        <l f="0" h="09">1111111111   1    111111111</l>
+                        <l f="0" h="10">11       1   1    1      11</l>
+                        <l f="0" h="11">11  111      1       11  11</l>
+                        <l f="0" h="12">11       1        1      11</l>
+                        <l f="0" h="13">1111111111        111111111</l>
+                        <l f="0" h="14">111111111111111111111111111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
     </library_geometries>
 </COLLADA>

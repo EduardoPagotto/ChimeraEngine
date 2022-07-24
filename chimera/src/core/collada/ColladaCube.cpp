@@ -16,16 +16,55 @@ void ColladaCube::create(const std::string& id, const std::string& name, Entity&
 
     uint32_t width = static_cast<uint32_t>(std::stoul(geo.attribute("width").value()));
     uint32_t height = static_cast<uint32_t>(std::stoul(geo.attribute("height").value()));
-    uint32_t deep = static_cast<uint32_t>(std::stoul(geo.attribute("deep").value()));
+    uint32_t floor = static_cast<uint32_t>(std::stoul(geo.attribute("floor").value()));
     float sizeBlock = std::stod(geo.attribute("size").value());
-    glm::ivec3 size(width, deep, height);
 
-    std::string target = geo.attribute("target").value();
-    // sizeBlock = geo.text().as_float();
+    // carregando campos do mapa
+    pugi::xml_node nl = geo.first_child();
+    std::vector<Cube*> vpCube;
+    glm::ivec3 pos(0);
+    glm::ivec3 size(width, floor, height);
+    glm::vec3 halfBlock((size.x * sizeBlock) / 2.0f,  //(w/2)
+                        (size.y * sizeBlock) / 2.0f,  //(d/2)
+                        (size.z * sizeBlock) / 2.0f); //(h/2)
 
     // processa o Maze
-    std::vector<Cube*> vpCube;
-    size = createMazeCube(target.c_str(), sizeBlock, vpCube);
+    for (pos.y = 0; pos.y < size.y; pos.y++) {
+        // valida se floor esta correto
+        uint32_t f = static_cast<uint32_t>(std::stoul(nl.attribute("f").value()));
+        if (f != pos.y)
+            throw std::string("floor do maze incorreto");
+
+        for (pos.z = 0; pos.z < size.z; pos.z++) {
+            // se numero de height for menor que o correto pular para p proximo
+            if (nl == nullptr)
+                continue;
+            // Valida de height esta correto
+            uint32_t h = static_cast<uint32_t>(std::stoul(nl.attribute("h").value()));
+            if (h != pos.z)
+                throw std::string("height do maze incorreto");
+
+            std::string sBuffer = nl.text().as_string();
+            const char* buffer = sBuffer.c_str();
+
+            for (pos.x = 0; pos.x < size.x; pos.x++) {
+
+                Cube* pCube = nullptr;
+                glm::vec3 min = minimal(sizeBlock, halfBlock, pos);
+                glm::vec3 max = min + sizeBlock;
+
+                if (sBuffer.size() > pos.x)
+                    pCube = new Cube(buffer[pos.x], min, max);
+                else
+                    pCube = new Cube(' ', min, max); // Erro campo faltando
+
+                vpCube.push_back(pCube);
+            }
+
+            nl = nl.next_sibling();
+        }
+    }
+
     linkCubes(size, vpCube);
 
     // carrega posicoes, texturas, e seq textura defaults do cubo base
@@ -39,6 +78,5 @@ void ColladaCube::create(const std::string& id, const std::string& name, Entity&
         pCube = nullptr;
     }
     vpCube.clear();
-    // createMap(mc.mesh, vpCube);
 }
 } // namespace Chimera

@@ -154,46 +154,6 @@ Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max)
     space = (caracter == 0x20) ? SPACE::EMPTY : (SPACE)(caracter - 0x30);
 }
 
-const glm::ivec3 createMazeCube(const char filename[], float sizeBlock, std::vector<Cube*>& vpCube) {
-
-    char buffer[1024] = {0};
-    glm::ivec3 size;
-
-    FILE* file = fopen(filename, "rb");
-    if (!file)
-        throw std::string("Arguivo nao localizado");
-
-    // tamanho do mapa
-    fgets(buffer, 1024, file);
-    size.x = atoi(buffer);
-
-    fgets(buffer, 1024, file);
-    size.z = atoi(buffer);
-
-    fgets(buffer, 1024, file);
-    size.y = atoi(buffer);
-
-    glm::ivec3 pos(0);
-    glm::vec3 halfBlock((size.x * sizeBlock) / 2.0f,  //(w/2)
-                        (size.y * sizeBlock) / 2.0f,  //(d/2)
-                        (size.z * sizeBlock) / 2.0f); //(h/2)
-
-    // carregando mapa
-    for (pos.y = 0; pos.y < size.y; pos.y++) {
-        for (pos.z = 0; pos.z < size.z; pos.z++) {
-            fgets(buffer, 1024, file);
-            for (pos.x = 0; pos.x < size.x; pos.x++) {
-                glm::vec3 min = minimal(sizeBlock, halfBlock, pos);
-                glm::vec3 max = min + sizeBlock;
-                Cube* pCube = new Cube(buffer[pos.x], min, max);
-                vpCube.push_back(pCube);
-            }
-        }
-    }
-
-    return size;
-}
-
 void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vpCube) {
     glm::ivec3 pos(0);
     for (pos.y = 0; pos.y < size.y; pos.y++) {

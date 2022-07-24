@@ -69,6 +69,5 @@ glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm:
 glm::vec3 minimal(const float& sizeBlock, const glm::vec3 halfBlock, const glm::ivec3& pos);
 uint32_t getIndexArrayPos(const glm::ivec3& pos, const glm::ivec3& size);
 Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size, std::vector<Cube*>& vpCube);
-const glm::ivec3 createMazeCube(const char filename[], float sizeBlock, std::vector<Cube*>& vpCube);
 void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vpCube);
 } // namespace Chimera

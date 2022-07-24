@@ -154,23 +154,7 @@ Cube::Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max)
     space = (caracter == 0x20) ? SPACE::EMPTY : (SPACE)(caracter - 0x30);
 }
 
-void createMap(Mesh* mesh, std::vector<Cube*>& vpCube) {
-    // carrega posicoes, texturas, e seq textura defaults do cubo
-    initCubeBase();
-    for (auto pCube : vpCube)
-        pCube->create(mesh);
-
-    // limpa dados de criacao do cubo base
-    cleanupCubeBase();
-    // limpas cubos de contrucao e vetor de cubos
-    for (auto pCube : vpCube) {
-        delete pCube;
-        pCube = nullptr;
-    }
-    vpCube.clear();
-}
-
-void createMazeCube(const char filename[], float sizeBlock, std::vector<Cube*>& vpCube) {
+const glm::ivec3 createMazeCube(const char filename[], float sizeBlock, std::vector<Cube*>& vpCube) {
 
     char buffer[1024] = {0};
     glm::ivec3 size;
@@ -207,6 +191,11 @@ void createMazeCube(const char filename[], float sizeBlock, std::vector<Cube*>& 
         }
     }
 
+    return size;
+}
+
+void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vpCube) {
+    glm::ivec3 pos(0);
     for (pos.y = 0; pos.y < size.y; pos.y++) {
         for (pos.z = 0; pos.z < size.z; pos.z++) {
             for (pos.x = 0; pos.x < size.x; pos.x++) {

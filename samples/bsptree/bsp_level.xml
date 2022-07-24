@@ -89,8 +89,7 @@
         <geometry id="Voxel_cube-mesh" name="Voxel_cube-mesh">
             <extra>
                 <technique profile="chimera">
-                    <external_cube target="./assets/maps/maze7.txt">10.0</external_cube>
-                    <external_cube_2 size="10.0" width="7" height="7" deep="4">
+                    <external_cube size="10.0" width="7" height="7" deep="4" target="./assets/maps/maze7.txt">
                         <l f="0">1111111</l>
                         <l f="0">1173711</l>
                         <l f="0">1633361</l>
@@ -119,7 +118,7 @@
                         <l f="3">1444441</l>
                         <l f="3">1746471</l>
                         <l f="3">1111111</l>
-                    </external_cube_2>
+                    </external_cube>
                 </technique>
             </extra>
         </geometry>

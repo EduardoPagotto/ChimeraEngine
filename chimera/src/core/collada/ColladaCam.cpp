@@ -43,7 +43,7 @@ void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) {
     }
 }
 
-void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) { // FIXME: preciso mesmo da entidade ???
+void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) {
 
     CameraComponent& cc = entity.addComponent<CameraComponent>();
     cc.tag.id = nodeCam.attribute("id").value();

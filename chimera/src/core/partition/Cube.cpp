@@ -255,8 +255,7 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
         ib = ic + 1;
         ia = ib + 1;
     }
-    // FIXME: tem algo errado aqui !!!!
-    // // glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
+
     glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
 
     mesh->point.push_back(va);

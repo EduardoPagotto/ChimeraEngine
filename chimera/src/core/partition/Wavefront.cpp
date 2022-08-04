@@ -121,7 +121,7 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
     }
 
     std::vector<std::string> semantics;
-    semantics.push_back("VERTEX"); // 0 //FIXME: trocar por lista de int
+    semantics.push_back("VERTEX"); // 0
 
     if (mesh->uv.size() > 0)
         semantics.push_back("TEXCOORD"); // 1

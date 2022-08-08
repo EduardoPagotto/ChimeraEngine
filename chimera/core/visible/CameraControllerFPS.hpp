@@ -1,15 +1,19 @@
 #pragma once
-#include "chimera/core/ScriptableEntity.hpp"
+#include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
 namespace Chimera {
 
-class CameraControllerFPS : public ScriptableEntity {
+class CameraControllerFPS : public IStateMachine {
   public:
-    CameraControllerFPS() = default;
-    void onCreate() override;
-    void onDestroy() override;
-    void onUpdate(const double& ts) override;
+    CameraControllerFPS(Entity entity) : entity(entity) {}
+    void onAttach() override;
+    void onDeatach() override;
+    void onRender() override {}
+    void onUpdate(ViewProjection& vp, const double& ts) override;
+    bool onEvent(const SDL_Event& event) override { return true; }
+    std::string getName() const override { return "FPS"; }
 
   private:
     void updateEye();
@@ -22,5 +26,7 @@ class CameraControllerFPS : public ScriptableEntity {
     glm::vec3 up, front, worldUp, right;
     Camera* camera = nullptr;
     ViewProjection* vpo = nullptr;
+
+    Entity entity;
 };
 } // namespace Chimera

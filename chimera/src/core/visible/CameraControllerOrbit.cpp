@@ -4,8 +4,8 @@
 
 namespace Chimera {
 
-void CameraControllerOrbit::onCreate() {
-    auto& cc = getComponent<CameraComponent>();
+void CameraControllerOrbit::onAttach() {
+    auto& cc = entity.getComponent<CameraComponent>();
     camera = cc.camera;
     vpo = cc.vpo;
     up = cc.up;
@@ -19,7 +19,7 @@ void CameraControllerOrbit::onCreate() {
     this->updateVectors();
 }
 
-void CameraControllerOrbit::onDestroy() {}
+void CameraControllerOrbit::onDeatach() {}
 
 void CameraControllerOrbit::updateEye() {
     if (vpo->size() == 1) {
@@ -92,7 +92,7 @@ void CameraControllerOrbit::processCameraRotation(const int& xOffset, const int&
     }
 }
 
-void CameraControllerOrbit::onUpdate(const double& ts) {
+void CameraControllerOrbit::onUpdate(ViewProjection& vp, const double& ts) {
     if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
         glm::ivec2 mouseMove = MouseDevice::getMoveRel();
         this->processCameraRotation(mouseMove.x, mouseMove.y);

@@ -161,6 +161,7 @@ void Scene::onAttach() {
     });
 
     {
+
         // Registra Camera controllers ViewProjection deve ser localizado acima
         auto view1 = registry->get().view<CameraComponent>();
         for (auto entity : view1) {
@@ -169,11 +170,13 @@ void Scene::onAttach() {
             auto& cc = e.getComponent<CameraComponent>();
             cc.vpo = vpo;
             if (cc.camKind == CamKind::FPS) {
-                e.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("CameraController");
+                CameraControllerFPS* ccFps = new CameraControllerFPS(e);
+                layers.pushState(ccFps);
             } else if (cc.camKind == CamKind::ORBIT) {
-                e.addComponent<NativeScriptComponent>().bind<CameraControllerOrbit>("CameraController");
+                CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
+                layers.pushState(ccOrb);
             } else if (cc.camKind == CamKind::STATIC) {
-                //     e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+                // e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
             }
         }
     }

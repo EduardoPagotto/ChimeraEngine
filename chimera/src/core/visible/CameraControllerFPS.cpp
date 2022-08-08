@@ -4,9 +4,9 @@
 
 namespace Chimera {
 
-void CameraControllerFPS::onCreate() {
+void CameraControllerFPS::onAttach() {
 
-    auto& cc = getComponent<CameraComponent>();
+    auto& cc = entity.getComponent<CameraComponent>();
     camera = cc.camera;
     vpo = cc.vpo;
     up = cc.up;
@@ -18,7 +18,7 @@ void CameraControllerFPS::onCreate() {
     this->updateVectors();
 }
 
-void CameraControllerFPS::onDestroy() {}
+void CameraControllerFPS::onDeatach() {}
 
 void CameraControllerFPS::updateEye() {
     if (vpo->size() == 1) {
@@ -66,7 +66,7 @@ void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float delt
     camera->setPosition(camera->getPosition() + direction * deltaTime); // FIXME: mover para camera???
 }
 
-void CameraControllerFPS::onUpdate(const double& ts) {
+void CameraControllerFPS::onUpdate(ViewProjection& vp, const double& ts) {
     // Movement speed
     if (Keyboard::isPressed(SDLK_LSHIFT)) // GLFW_KEY_LEFT_SHIFT
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;

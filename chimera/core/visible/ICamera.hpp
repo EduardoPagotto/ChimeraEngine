@@ -1,6 +1,6 @@
 #pragma once
 #include "chimera/core/TagComponent.hpp"
-#include "chimera/core/visible/EyeView.hpp"
+#include "chimera/core/ViewProjection.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

@@ -57,7 +57,7 @@ class CameraPerspective : public Camera {
 struct CameraComponent {
     TagComponent tag;
     Camera* camera = nullptr;
-    EyeView* eyeView = nullptr;
+    ViewProjection* vpo = nullptr;
     bool primary = true;
     bool fixedAspectRatio = false;
     CamKind camKind = CamKind::STATIC;

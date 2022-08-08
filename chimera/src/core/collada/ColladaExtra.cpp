@@ -35,7 +35,7 @@ void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
 
         uint32_t size = static_cast<uint32_t>(std::stoul(nEveView.attribute("size").value()));
         float distance = std::stod(nEveView.attribute("distance").value());
-        EyeView& ev = entity.addComponent<EyeView>();
+        ViewProjection& ev = entity.addComponent<ViewProjection>();
         if (size == 1) {
             ev.add("unique");
         } else if (size == 2) {

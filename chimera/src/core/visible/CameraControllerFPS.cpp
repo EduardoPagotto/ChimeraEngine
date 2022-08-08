@@ -8,7 +8,7 @@ void CameraControllerFPS::onCreate() {
 
     auto& cc = getComponent<CameraComponent>();
     camera = cc.camera;
-    eyeView = cc.eyeView;
+    vpo = cc.vpo;
     up = cc.up;
     worldUp = cc.up;
     pitch = cc.pitch;
@@ -21,16 +21,16 @@ void CameraControllerFPS::onCreate() {
 void CameraControllerFPS::onDestroy() {}
 
 void CameraControllerFPS::updateEye() {
-    if (eyeView->size() == 1) {
-        eyeView->update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
+    if (vpo->size() == 1) {
+        vpo->update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
     } else {
-        glm::vec3 cross1 = glm::cross(up, front);               // up and front already are  vectors!!!!
-        glm::vec3 norm1 = glm::normalize(cross1);               // vector side (would be left or right)
-        glm::vec3 final_norm1 = norm1 * eyeView->getNoseDist(); // point of eye
+        glm::vec3 cross1 = glm::cross(up, front);           // up and front already are  vectors!!!!
+        glm::vec3 norm1 = glm::normalize(cross1);           // vector side (would be left or right)
+        glm::vec3 final_norm1 = norm1 * vpo->getNoseDist(); // point of eye
         glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
         glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
-        eyeView->getHead()[0].update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection()); // Left
-        eyeView->getHead()[1].update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
+        vpo->getHead()[0].update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection()); // Left
+        vpo->getHead()[1].update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
     }
 }
 

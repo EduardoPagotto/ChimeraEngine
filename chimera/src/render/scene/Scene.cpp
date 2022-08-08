@@ -147,10 +147,10 @@ void Scene::onAttach() {
             }
         }
 
-        // Pega o EyeView do ECS
-        if (entity.hasComponent<EyeView>()) {
-            EyeView& ev = entity.getComponent<EyeView>();
-            eyeView = &ev;
+        // Pega o ViewProjection do ECS
+        if (entity.hasComponent<ViewProjection>()) {
+            ViewProjection& ev = entity.getComponent<ViewProjection>();
+            vpo = &ev;
         }
 
         // Pega o Canvas do ECS
@@ -161,13 +161,13 @@ void Scene::onAttach() {
     });
 
     {
-        // Registra Camera controllers EyeView deve ser localizado acima
+        // Registra Camera controllers ViewProjection deve ser localizado acima
         auto view1 = registry->get().view<CameraComponent>();
         for (auto entity : view1) {
             Entity e = Entity{entity, registry};
 
             auto& cc = e.getComponent<CameraComponent>();
-            cc.eyeView = eyeView;
+            cc.vpo = vpo;
             if (cc.camKind == CamKind::FPS) {
                 e.addComponent<NativeScriptComponent>().bind<CameraControllerFPS>("CameraController");
             } else if (cc.camKind == CamKind::ORBIT) {
@@ -222,7 +222,7 @@ void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
             // carrega camera defalt da cena
             if (cameraComponent.primary == true) {
-                createRenderBuffer(eyeView->size(), width, height);
+                createRenderBuffer(vpo->size(), width, height);
                 activeCam = cameraComponent.camera;
             }
         }
@@ -255,7 +255,7 @@ bool Scene::onEvent(const SDL_Event& event) {
 
 void Scene::renderShadow(IRenderer3d& renderer) {
 
-    renderer.begin(activeCam, eyeView);
+    renderer.begin(activeCam, vpo);
     {
         auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
@@ -304,7 +304,7 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
-        const glm::mat4& view = eyeView->getView();
+        const glm::mat4& view = vpo->getView();
         command.uniforms["projection"] = UValue(renderer.getCamera()->getProjection());
         command.uniforms["view"] = UValue(view);
         command.uniforms["CameraRight_worldspace"] = UValue(glm::vec3(view[0][0], view[1][0], view[2][0]));
@@ -343,12 +343,12 @@ void Scene::onRender() {
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
         activeCam->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight()); // TODO: se camera nao muda projecao rodar apenas 1
-        eyeView->setIndex(count);
+        vpo->setIndex(count);
         count++;
 
         // data load used by all
         renderBatch.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-        renderBatch.uboQueue().insert(std::make_pair("view", UValue(eyeView->getView())));
+        renderBatch.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
 
         // data load shadows props to renderBatch in shade of models!!!!
         if (shadowData.shadowBuffer) {
@@ -370,7 +370,7 @@ void Scene::onRender() {
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-        renderBatch.begin(activeCam, eyeView);
+        renderBatch.begin(activeCam, vpo);
         this->execRenderPass(renderBatch);
         renderBatch.end();
         renderBatch.flush();
@@ -382,7 +382,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderBatch.begin(activeCam, eyeView);
+            renderBatch.begin(activeCam, vpo);
             this->execEmitterPass(renderBatch);
             renderBatch.end();
             renderBatch.flush();

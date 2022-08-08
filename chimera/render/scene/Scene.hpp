@@ -48,7 +48,7 @@ class Scene : public IStateMachine {
     Registry* registry;
     ITrans* origem;
     Camera* activeCam;
-    EyeView* eyeView;
+    ViewProjection* vpo;
     ShadowData shadowData;
     bool logRender;
     std::vector<RenderBuffer*> vRB;

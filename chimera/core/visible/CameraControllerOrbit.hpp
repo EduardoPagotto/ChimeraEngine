@@ -21,7 +21,7 @@ class CameraControllerOrbit : public ScriptableEntity {
     float pitch, yaw, distance, min, max;
     glm::vec3 up, front;
     Camera* camera = nullptr;
-    EyeView* eyeView = nullptr;
+    ViewProjection* vpo = nullptr;
 };
 
 } // namespace Chimera

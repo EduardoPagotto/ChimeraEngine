@@ -4,10 +4,10 @@
 
 namespace Chimera {
 
-struct EyeMat {
+struct ViewProjectionMatrixs {
     std::string name;
     glm::mat4 view, viewProjection, viewProjectionInverse;
-    EyeMat(const std::string& name) : name(name) {}
+    ViewProjectionMatrixs(const std::string& name) : name(name) {}
     void update(const glm::mat4& _view, const glm::mat4& _projection) {
         view = _view;
         viewProjection = _projection * _view;
@@ -15,9 +15,9 @@ struct EyeMat {
     }
 };
 
-class EyeView {
+class ViewProjection {
   public:
-    EyeView() : index(0), noseDist(0.4f) {}
+    ViewProjection() : index(0), noseDist(0.4f) {}
     void setIndex(const uint8_t& index) { this->index = index; }
     void setDist(const float& dist) { this->noseDist = dist; }
     const uint8_t getIndex() const { return index; }
@@ -26,13 +26,13 @@ class EyeView {
     const glm::mat4& getViewProjectionInverse() const { return head[index].viewProjectionInverse; }
     const float& getNoseDist() const { return noseDist; }
     void update(const glm::mat4& view, const glm::mat4& projection) { head[index].update(view, projection); }
-    void add(const std::string& name) { head.push_back(EyeMat(name)); }
+    void add(const std::string& name) { head.push_back(ViewProjectionMatrixs(name)); }
     const uint32_t size() const { return head.size(); }
-    std::vector<EyeMat>& getHead() { return head; }
+    std::vector<ViewProjectionMatrixs>& getHead() { return head; }
 
   private:
     uint8_t index;
     float noseDist;
-    std::vector<EyeMat> head;
+    std::vector<ViewProjectionMatrixs> head;
 };
 } // namespace Chimera

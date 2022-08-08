@@ -15,10 +15,10 @@ Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(lo
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(Camera* camera, EyeView* eyeView) {
+void Renderer3d::begin(Camera* camera, ViewProjection* vpo) {
     this->camera = camera;
-    this->eyeView = eyeView;
-    frustum.set(eyeView->getViewProjectionInverse());
+    this->vpo = vpo;
+    frustum.set(vpo->getViewProjectionInverse());
     // debug data
     totIBO = 0;
     totFaces = 0;

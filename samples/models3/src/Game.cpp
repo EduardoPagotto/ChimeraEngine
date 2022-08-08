@@ -160,7 +160,7 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-void Game::onUpdate(const double& ts) {
+void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
 
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);

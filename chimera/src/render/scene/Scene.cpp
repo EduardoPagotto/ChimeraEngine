@@ -197,7 +197,7 @@ Canvas* Scene::getCanvas() {
     return cc.canvas;
 }
 
-void Scene::onUpdate(const double& ts) {
+void Scene::onUpdate(ViewProjection& vp, const double& ts) {
     // update scripts (PhysicController aqui dentro!!!)
     registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (nsc.instance)
@@ -208,7 +208,7 @@ void Scene::onUpdate(const double& ts) {
         emissor->recycleLife(ts);
 
     for (auto it = layers.begin(); it != layers.end(); it++)
-        (*it)->onUpdate(ts);
+        (*it)->onUpdate(vp, ts);
 }
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {

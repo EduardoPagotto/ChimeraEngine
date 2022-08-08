@@ -5,6 +5,6 @@ Tile::Tile(const std::string& name, Chimera::IRenderer2D* renderer, Chimera::Sha
 Tile::~Tile() {}
 void Tile::onAttach(){};
 void Tile::onDeatach(){};
-void Tile::onUpdate(const double& ts){};
+void Tile::onUpdate(Chimera::ViewProjection& vp, const double& ts){};
 bool Tile::onEvent(const SDL_Event& event) { return true; }
 void Tile::onRender() { Layer::onRender(); }

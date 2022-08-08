@@ -7,7 +7,7 @@ class Tile : public Chimera::Layer {
     virtual ~Tile();
     virtual void onAttach() override;
     virtual void onDeatach() override;
-    virtual void onUpdate(const double& ts) override;
+    virtual void onUpdate(Chimera::ViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
     virtual void onRender() override;
     virtual std::string getName() const override { return nameTile; }

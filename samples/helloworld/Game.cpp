@@ -110,7 +110,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(const double& ts) {
+void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
 
     // ApplicationGL::onUpdate();
 

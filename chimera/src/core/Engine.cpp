@@ -121,7 +121,7 @@ void Engine::run(void) {
         ts = (double)countDelta / 1000.0f;
         if (!pause) { // update game
             for (auto it = stack.begin(); it != stack.end(); it++)
-                (*it)->onUpdate(ts);
+                (*it)->onUpdate(vpo, ts);
 
             canvas->before();
             for (auto it = stack.begin(); it != stack.end(); it++)

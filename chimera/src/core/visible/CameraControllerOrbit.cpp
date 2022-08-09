@@ -7,7 +7,6 @@ namespace Chimera {
 void CameraControllerOrbit::onAttach() {
     auto& cc = entity.getComponent<CameraComponent>();
     camera = cc.camera;
-    vpo = cc.vpo;
     up = cc.up;
     pitch = cc.pitch;
     yaw = cc.yaw;
@@ -21,23 +20,23 @@ void CameraControllerOrbit::onAttach() {
 
 void CameraControllerOrbit::onDeatach() {}
 
-void CameraControllerOrbit::updateEye() {
-    if (vpo->size() == 1) {
-        vpo->update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
+void CameraControllerOrbit::updateVP(ViewProjection& vp) {
+    if (vp.size() == 1) {
+        vp.update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
     } else {
         glm::vec3 novaPositionL, novaFrontL, novaPositionR, novaFrontR;
         glm::vec3 left_p = front - camera->getPosition(); // front and position as points
         glm::vec3 cross1 = glm::cross(up, left_p);
         glm::vec3 norm1 = glm::normalize(cross1);
-        glm::vec3 final_norm1 = norm1 * vpo->getNoseDist();
+        glm::vec3 final_norm1 = norm1 * vp.getNoseDist();
 
         novaPositionL = camera->getPosition() + final_norm1;
         novaFrontL = front + final_norm1;
-        vpo->getHead()[0].update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
+        vp.getHead()[0].update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
 
         novaPositionR = camera->getPosition() - final_norm1;
         novaFrontR = front - final_norm1;
-        vpo->getHead()[1].update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
+        vp.getHead()[1].update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
     }
 }
 
@@ -103,7 +102,7 @@ void CameraControllerOrbit::onUpdate(ViewProjection& vp, const double& ts) {
     }
 
     this->updateVectors();
-    this->updateEye();
+    this->updateVP(vp);
 }
 
 void CameraControllerOrbit::invertPitch() {

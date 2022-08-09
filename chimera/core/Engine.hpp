@@ -2,7 +2,6 @@
 #include "StateStack.hpp"
 #include "Timer.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/device/Canvas.hpp"
 
 namespace Chimera {
@@ -19,7 +18,6 @@ class Engine {
 
   private:
     Registry registry;
-    ViewProjection vpo;
     bool changeStatusFlow(SDL_Event* pEventSDL);
     bool pause;
     uint32_t fps;

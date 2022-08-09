@@ -8,7 +8,6 @@ void CameraControllerFPS::onAttach() {
 
     auto& cc = entity.getComponent<CameraComponent>();
     camera = cc.camera;
-    vpo = cc.vpo;
     up = cc.up;
     worldUp = cc.up;
     pitch = cc.pitch;
@@ -20,17 +19,17 @@ void CameraControllerFPS::onAttach() {
 
 void CameraControllerFPS::onDeatach() {}
 
-void CameraControllerFPS::updateEye() {
-    if (vpo->size() == 1) {
-        vpo->update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
+void CameraControllerFPS::updateVP(ViewProjection& vp) {
+    if (vp.size() == 1) {
+        vp.update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
     } else {
-        glm::vec3 cross1 = glm::cross(up, front);           // up and front already are  vectors!!!!
-        glm::vec3 norm1 = glm::normalize(cross1);           // vector side (would be left or right)
-        glm::vec3 final_norm1 = norm1 * vpo->getNoseDist(); // point of eye
+        glm::vec3 cross1 = glm::cross(up, front);         // up and front already are  vectors!!!!
+        glm::vec3 norm1 = glm::normalize(cross1);         // vector side (would be left or right)
+        glm::vec3 final_norm1 = norm1 * vp.getNoseDist(); // point of eye
         glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
         glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
-        vpo->getHead()[0].update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection()); // Left
-        vpo->getHead()[1].update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
+        vp.getHead()[0].update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection()); // Left
+        vp.getHead()[1].update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
     }
 }
 
@@ -111,7 +110,7 @@ void CameraControllerFPS::onUpdate(ViewProjection& vp, const double& ts) {
 
     processCameraRotation(mouseXDelta, mouseYDelta, true);
     updateVectors();
-    this->updateEye();
+    this->updateVP(vp);
 }
 
 void CameraControllerFPS::invertPitch() {

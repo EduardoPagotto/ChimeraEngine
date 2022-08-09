@@ -168,13 +168,12 @@ void Scene::onAttach() {
             Entity e = Entity{entity, registry};
 
             auto& cc = e.getComponent<CameraComponent>();
-            cc.vpo = vpo;
             if (cc.camKind == CamKind::FPS) {
-                CameraControllerFPS* ccFps = new CameraControllerFPS(e);
-                layers.pushState(ccFps);
+                // CameraControllerFPS* ccFps = new CameraControllerFPS(e);
+                layers.pushState(new CameraControllerFPS(e));
             } else if (cc.camKind == CamKind::ORBIT) {
-                CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
-                layers.pushState(ccOrb);
+                // CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
+                layers.pushState(new CameraControllerOrbit(e));
             } else if (cc.camKind == CamKind::STATIC) {
                 // e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
             }

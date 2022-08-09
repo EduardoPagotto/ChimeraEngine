@@ -16,7 +16,7 @@ class CameraControllerFPS : public IStateMachine {
     std::string getName() const override { return "FPS"; }
 
   private:
-    void updateEye();
+    void updateVP(ViewProjection& vp);
     void updateVectors();
     void processCameraRotation(double xOffset, double yOffset, bool constrainPitch);
     void processCameraMovement(glm::vec3& direction, float deltaTime);
@@ -25,8 +25,6 @@ class CameraControllerFPS : public IStateMachine {
     float pitch, yaw, movementSpeed;
     glm::vec3 up, front, worldUp, right;
     Camera* camera = nullptr;
-    ViewProjection* vpo = nullptr;
-
     Entity entity;
 };
 } // namespace Chimera

@@ -1,4 +1,5 @@
 #include "chimera/core/Engine.hpp"
+#include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
@@ -57,6 +58,8 @@ void Engine::run(void) {
     uint32_t beginCount = 0, countDelta = 7, miniumCountDelta = 1000 / 140; // 140 frames em 1000 ms
     double ts = (double)countDelta / 1000.0f;
     JoystickManager::find(); // open devices
+
+    ViewProjection& vp = registry.findComponent<ViewProjection>("main_screem");
 
     while (!l_quit) {
         beginCount = SDL_GetTicks();
@@ -121,7 +124,7 @@ void Engine::run(void) {
         ts = (double)countDelta / 1000.0f;
         if (!pause) { // update game
             for (auto it = stack.begin(); it != stack.end(); it++)
-                (*it)->onUpdate(vpo, ts);
+                (*it)->onUpdate(vp, ts);
 
             canvas->before();
             for (auto it = stack.begin(); it != stack.end(); it++)

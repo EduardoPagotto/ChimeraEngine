@@ -16,7 +16,7 @@ class CameraControllerOrbit : public IStateMachine {
     std::string getName() const override { return "FPS"; }
 
   private:
-    void updateEye();
+    void updateVP(ViewProjection& vp);
     void updateVectors();
     void processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch = true);
     void processDistance(const int& _mz);
@@ -25,8 +25,6 @@ class CameraControllerOrbit : public IStateMachine {
     float pitch, yaw, distance, min, max;
     glm::vec3 up, front;
     Camera* camera = nullptr;
-    ViewProjection* vpo = nullptr;
-
     Entity entity;
 };
 

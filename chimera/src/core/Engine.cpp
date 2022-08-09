@@ -1,5 +1,4 @@
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
@@ -11,6 +10,12 @@ Engine::Engine() : canvas(nullptr), pause(true), fps(140) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
+
+    entity = registry.createEntity("chimera_engine", "chimera_engine");
+    CanvasComponent& cc = entity.addComponent<CanvasComponent>();
+    ViewProjectionComponent& vpc = entity.addComponent<ViewProjectionComponent>();
+    vpc.vp = &vp;
+    SDL_Log("Engine Register: chimera_engine OK");
 }
 
 Engine::~Engine() {
@@ -20,7 +25,13 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
-    CanvasComponent& cc = registry.findComponent<CanvasComponent>("main_screem");
+    CanvasComponent& cc = entity.getComponent<CanvasComponent>();
+    if (cc.canvas == nullptr)
+        throw std::string("Engine Register: Canvas not find");
+
+    if (vp.size() == 0)
+        throw std::string("Engine Register: ViewProjection not find");
+
     canvas = cc.canvas;
 }
 
@@ -58,8 +69,6 @@ void Engine::run(void) {
     uint32_t beginCount = 0, countDelta = 7, miniumCountDelta = 1000 / 140; // 140 frames em 1000 ms
     double ts = (double)countDelta / 1000.0f;
     JoystickManager::find(); // open devices
-
-    ViewProjection& vp = registry.findComponent<ViewProjection>("main_screem");
 
     while (!l_quit) {
         beginCount = SDL_GetTicks();

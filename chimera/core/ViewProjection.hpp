@@ -1,6 +1,6 @@
 #pragma once
+#include "chimera/core/TagComponent.hpp"
 #include <glm/glm.hpp>
-#include <string>
 #include <vector>
 
 namespace Chimera {
@@ -36,4 +36,10 @@ class ViewProjection {
     float noseDist;
     std::vector<ViewProjectionMatrixs> head;
 };
+
+struct ViewProjectionComponent {
+    ViewProjectionComponent() = default;
+    ViewProjection* vp = nullptr;
+};
+
 } // namespace Chimera

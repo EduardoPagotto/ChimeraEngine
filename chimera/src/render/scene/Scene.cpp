@@ -147,10 +147,10 @@ void Scene::onAttach() {
             }
         }
 
-        // Pega o ViewProjection do ECS
-        if (entity.hasComponent<ViewProjection>()) {
-            ViewProjection& ev = entity.getComponent<ViewProjection>();
-            vpo = &ev;
+        // Pega o ViewProjection do ECS antes da camera por caussa do vpo
+        if (entity.hasComponent<ViewProjectionComponent>()) {
+            ViewProjectionComponent& ev = entity.getComponent<ViewProjectionComponent>();
+            vpo = ev.vp;
         }
 
         // Pega o Canvas do ECS
@@ -195,7 +195,7 @@ void Scene::onAttach() {
 }
 
 Canvas* Scene::getCanvas() {
-    CanvasComponent& cc = registry->findComponent<CanvasComponent>("main_screem");
+    CanvasComponent& cc = registry->findComponent<CanvasComponent>("chimera_engine");
     return cc.canvas;
 }
 

@@ -42,7 +42,7 @@
         <extra>
             <technique profile="chimera">
                 <canvas title="simples" width="800" height="640" fullscreen="0"/>
-                <eyeview size="1" distance="0.4"/>
+                <view_projection size="1" distance="0.4"/>
                 <framebuffers>
                     <framebuffer id="RenderBufferMaster" name="RenderBufferMaster">
                         <instance_effect url="file://assets/models/nivel1_rb.xml#RenderBuffer-effect">

@@ -8,7 +8,7 @@
         <extra>
             <technique profile="chimera">
                 <canvas type="FB" title="raycast" width="800" height="640" fullscreen="0"/>
-                <eyeview size="1" distance="0.4"/>
+                <view_projection size="1" distance="0.4"/>
             </technique>
         </extra>
         <instance_visual_scene url="#Scene"/>

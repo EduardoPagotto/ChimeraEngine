@@ -705,7 +705,7 @@
         <extra>
             <technique profile="chimera">
                 <canvas title="models" width="800" height="640" fullscreen="0"/>
-                <eyeview size="1" distance="0.4"/>
+                <view_projection size="1" distance="0.4"/>
                 <fonts>
                     <font url="file://assets/fonts/FreeSans.ttf#FreeSansMainFont" size="42" scaleX="1.0" scaleY="1.0"/>
                 </fonts>

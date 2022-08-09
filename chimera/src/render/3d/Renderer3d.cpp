@@ -1,55 +1,61 @@
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/core/Registry.hpp"
 #include "chimera/core/buffer/IndexBuffer.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/core/visible/Light.hpp"
-#include "chimera/core/visible/Material.hpp"
-#include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/3d/IRenderable3d.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-Renderer3d::Renderer3d() : totIBO(0), totFaces(0) { uniformsQueue.reserve(300); }
+Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(logData) {
+    uniformsQueue.reserve(500);
+    renderQueue.reserve(500);
+    textureQueue.reserve(50);
+}
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(ICamera* camera) {
-    frustum.set(camera->view()->getViewProjectionInverse());
+void Renderer3d::begin(Camera* camera, ViewProjection* vpo) {
+    this->camera = camera;
+    this->vpo = vpo;
+    frustum.set(vpo->getViewProjectionInverse());
     // debug data
     totIBO = 0;
     totFaces = 0;
 }
-void Renderer3d::end() {}
 
-void Renderer3d::submit(const RenderCommand& command) {
+void Renderer3d::end() {
+    if (logData == true)
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
+}
+
+bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
     // Transformation model matrix AABB to know if in frustrum Camera
-    const AABB& aabb = command.renderable->getAABB();
+    Renderable3D* r = (Renderable3D*)renderable;
+    const AABB& aabb = r->getAABB();
     AABB nova = aabb.transformation(command.transform);
     // adicione apenas o que esta no clip-space
     if (nova.visible(frustum) == true) {
         // Debug info only
-        IndexBuffer* ibo = command.renderable->getIBO();
+        IndexBuffer* ibo = r->getIBO();
         if (ibo != nullptr) {
             totIBO++;
             totFaces += ibo->getSize() / 3;
         }
         // adicionado ao proximo render
-        commandQueue.push_back(command);
+        renderQueue.push_back(std::make_tuple(command, r));
+        return true;
     }
+
+    return false;
 }
 
 void Renderer3d::flush() {
 
     Shader activeShader;
     VertexArray* pLastVao = nullptr;
-    bool logData = false;
-    while (!commandQueue.empty()) {
 
-        const RenderCommand& command = commandQueue.front();
-        IRenderable3d* r = command.renderable;
-        logData = command.logRender;
+    for (auto& [command, r] : renderQueue) {
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior
@@ -87,22 +93,23 @@ void Renderer3d::flush() {
                     Texture::unbind(0);
 
                 // bind de texturas
-                for (uint8_t i = 0; i < command.vTex.size(); i++) {
+                for (uint8_t i = 0; i < command.vTex.size(); i++)
                     command.vTex[i]->bind(i);
-                }
+
+                // bind de texturas globais
+                for (uint8_t i = 0; i < textureQueue.size(); i++)
+                    textureQueue[i]->bind(command.vTex.size() + i);
             }
         }
 
-        r->draw(command.logRender);
-        commandQueue.pop_front();
+        r->draw(logData);
     }
+    renderQueue.clear(); // Limpa rendercommand
     pLastVao->unbind();
 
     // Limpa buffer de uniforms ao terminar todos os draws calls
     uniformsQueue.clear();
-
-    if (logData == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
+    textureQueue.clear();
 }
 
 } // namespace Chimera

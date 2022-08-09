@@ -1,28 +1,38 @@
 #include "Game.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include <iostream>
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
 
 int main(int argn, char** argv) {
     using namespace Chimera;
     try {
-
+        // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
-        SDL_Log("AppEmpty Iniciado");
+        SDL_Log("BSPTree Iniciado");
 
-        Engine engine(new CanvasGL("TesteBSTree", 1400, 900));
-        Game* game = new Game(&engine);
+        Engine engine;
 
-        engine.pushState(game);
+        ColladaDom dom = loadFileCollada("./samples/bsptree/bsp_level.xml");
+        colladaRegistryLoad(dom, engine.getRegistry());
+
+        engine.init();
+
+        Scene scene(engine.getRegistry());
+
+        Game* game = new Game(scene);
+
+        engine.getStack().pushState(&scene);
+        engine.getStack().pushState(game);
+
+        Collada::destroy(); // clean loader
+
         engine.run();
 
+        SDL_Log("Loop de Game encerrado!!!!");
         delete game;
 
-        SDL_Log("TesteBSTree finalizado com sucesso");
+        SDL_Log("BSPTree finalizado com sucesso");
         return 0;
 
-    } catch (const std::exception& ex) {
-        // fali 2
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.what());
     } catch (const std::string& ex) {
         // fail 3
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Falha grave: %s", ex.c_str());

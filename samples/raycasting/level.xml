@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_visual_scenes>
+        <visual_scene id="Scene" name="Scene">
+        </visual_scene>
+    </library_visual_scenes>
+    <scene>
+        <extra>
+            <technique profile="chimera">
+                <canvas type="FB" title="raycast" width="800" height="640" fullscreen="0"/>
+                <view_projection size="1" distance="0.4"/>
+            </technique>
+        </extra>
+        <instance_visual_scene url="#Scene"/>
+    </scene>
+</COLLADA>

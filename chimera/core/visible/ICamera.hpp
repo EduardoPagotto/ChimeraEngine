@@ -1,6 +1,7 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <vector>
+#include "chimera/core/TagComponent.hpp"
+#include "chimera/core/ViewProjection.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {
 
@@ -8,57 +9,60 @@ namespace Chimera {
 #define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
 #define CAMERA_MAX_FOV 45.0f
 
-struct EyeMat {
-    glm::mat4 view, viewProjection, viewProjectionInverse;
-    void update(const glm::mat4& _view, const glm::mat4& _projection) {
-        view = _view;
-        viewProjection = _projection * _view;
-        viewProjectionInverse = glm::inverse(_view) * glm::inverse(_projection);
-    }
+enum class CamKind { FPS = 0, ORBIT = 1, STATIC = 3 };
+
+class Camera {
+  public:
+    const glm::mat4& getProjection() const { return projection; }
+    const glm::vec3& getPosition() const { return position; }
+    void setPosition(const glm::vec3& position) { this->position = position; }
+    virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
+    virtual bool isOrtho() const = 0;
+
+  protected:
+    glm::vec3 position = glm::vec3(0, 0, 0);
+    glm::mat4 projection = glm::mat4(1.0f);
 };
 
-class EyeView {
+class CameraOrtho : public Camera {
   public:
-    EyeView() : index(0), noseDist(0.4f) {}
-    void setIndex(const uint8_t& index) { this->index = index; }
-    const uint8_t getIndex() const { return index; }
-    const glm::mat4& getView() const { return head[index].view; }
-    const glm::mat4& getViewProjection() const { return head[index].viewProjection; }
-    const glm::mat4& getViewProjectionInverse() const { return head[index].viewProjectionInverse; }
-    const float& getNoseDist() const { return noseDist; }
-    void update(const glm::mat4& view, const glm::mat4& projection) { head[index].update(view, projection); }
-    void create() { head.push_back(EyeMat()); }
-    const uint32_t size() const { return head.size(); }
-    std::vector<EyeMat>& getHead() { return head; }
+    CameraOrtho(const float& xmag, const float& ymag, const float& near, const float& far) : xmag(xmag), ymag(ymag), near(near), far(far) {}
+    virtual ~CameraOrtho() = default;
+    virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override {
+        float halfAspectRatio = ((float)width / (float)height) * 0.5f;
+        xsize = xmag * halfAspectRatio;
+        ysize = ymag * 0.5f;
+        projection = glm::ortho(-xsize, xsize, -ysize, ysize, near, far);
+    }
+    virtual bool isOrtho() const override { return true; }
+    const glm::vec2 getSize() const { return glm::vec2(xsize, ysize); }
 
   private:
-    uint8_t index;
-    float noseDist;
-    std::vector<EyeMat> head;
+    float xsize = 0.0, ysize = 0.0, xmag = 800.0f, ymag = 600.0f, near = 0.1f, far = 1000.0f;
 };
 
-class ICamera {
+class CameraPerspective : public Camera {
   public:
-    virtual ~ICamera() {}
-    virtual const glm::mat4& getProjection() const = 0;
-    virtual const glm::vec3& getPosition() const = 0;
-    virtual void setPosition(const glm::vec3& position) = 0;
-    virtual void onUpdate(const double& ts) = 0;
-    virtual void setViewportSize(const uint32_t& width, const uint32_t& height) = 0;
-    virtual const bool is3D() const = 0;
-    virtual EyeView* view() = 0;
+    CameraPerspective(const float& fov, const float& near, const float& far) : fov(fov), near(near), far(far) {}
+    virtual ~CameraPerspective() = default;
+    virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override {
+        projection = glm::perspective(glm::radians(fov), (float)width / (float)height, near, far);
+    }
+    virtual bool isOrtho() const override { return false; }
+
+  private:
+    float fov = CAMERA_MAX_FOV, near = 0.1f, far = 1000.0f;
 };
 
-class ICamera3D : public ICamera {
-  public:
-    virtual ~ICamera3D() {}
-    virtual const glm::vec3& getFront() const = 0;
-    virtual const glm::vec3& getUp() const = 0;
-    virtual float updateDistanceFront() = 0;
-    virtual void invertPitch() = 0;
-    virtual void setFov(const float& value) = 0;
-    virtual void setNear(const float& value) = 0;
-    virtual void setFar(const float& value) = 0;
-    virtual void updateVectors() = 0;
+struct CameraComponent {
+    TagComponent tag;
+    Camera* camera = nullptr;
+    bool primary = true;
+    bool fixedAspectRatio = false;
+    CamKind camKind = CamKind::STATIC;
+    float pitch = 0.0f, yaw = 90.0f, min = 0.5f, max = 1000.0f;
+    glm::vec3 up = glm::vec3(0, 1, 0);
+    CameraComponent() = default;
+    CameraComponent(const CameraComponent& o) = default;
 };
 } // namespace Chimera

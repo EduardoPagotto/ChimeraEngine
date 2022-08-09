@@ -6,27 +6,33 @@
 
 namespace Chimera {
 
-Engine::Engine(Canvas* canvas) : canvas(canvas), pause(true), eyeIndice(0), fps(60), countDelta(0) {
+Engine::Engine() : canvas(nullptr), pause(true), fps(140) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
     JoystickManager::init();
+
+    entity = registry.createEntity("chimera_engine", "chimera_engine");
+    CanvasComponent& cc = entity.addComponent<CanvasComponent>();
+    ViewProjectionComponent& vpc = entity.addComponent<ViewProjectionComponent>();
+    vpc.vp = &vp;
+    SDL_Log("Engine Register: chimera_engine OK");
 }
 
 Engine::~Engine() {
     JoystickManager::release();
     SDL_JoystickEventState(SDL_DISABLE);
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-    delete canvas;
 }
 
-void Engine::pushState(IStateMachine* state) {
-    stack.pushState(state);
-    state->onAttach();
-}
+void Engine::init() {
+    CanvasComponent& cc = entity.getComponent<CanvasComponent>();
+    if (cc.canvas == nullptr)
+        throw std::string("Engine Register: Canvas not find");
 
-void Engine::pushOverlay(IStateMachine* state) {
-    stack.pushOverlay(state);
-    state->onAttach();
+    if (vp.size() == 0)
+        throw std::string("Engine Register: ViewProjection not find");
+
+    canvas = cc.canvas;
 }
 
 bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {
@@ -47,6 +53,9 @@ bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {
                 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical SDL_QUIT PushEvent fail: %s", SDL_GetError());
             }
         } break;
+        case EVENT_TOGGLE_FULL_SCREEN:
+            canvas->toggleFullScreen();
+            break;
         default:
             break;
     }
@@ -57,11 +66,9 @@ bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {
 void Engine::run(void) {
     SDL_Event l_eventSDL;
     bool l_quit = false;
-    uint32_t beginCount;
-    uint32_t miniumCountDelta = 1000 / 140; // 16.66667.3 ms
-    double ts;
-    // open devices
-    JoystickManager::find();
+    uint32_t beginCount = 0, countDelta = 7, miniumCountDelta = 1000 / 140; // 140 frames em 1000 ms
+    double ts = (double)countDelta / 1000.0f;
+    JoystickManager::find(); // open devices
 
     while (!l_quit) {
         beginCount = SDL_GetTicks();
@@ -90,8 +97,13 @@ void Engine::run(void) {
                 case SDL_QUIT:
                     l_quit = true;
                     break;
-                case SDL_WINDOWEVENT:
-                    break;
+                case SDL_WINDOWEVENT: {
+                    switch (l_eventSDL.window.event) {
+                        case SDL_WINDOWEVENT_RESIZED: // set windows size
+                            canvas->reshape(l_eventSDL.window.data1, l_eventSDL.window.data2);
+                            break;
+                    }
+                } break;
                 case SDL_JOYAXISMOTION:
                     JoystickManager::setAxisMotion(&l_eventSDL.jaxis);
                     break;
@@ -117,40 +129,30 @@ void Engine::run(void) {
                     break;
             }
         }
-        // update game
-        if (!pause) {
-            try {
-                // update all
-                ts = (double)countDelta / 1000.0f;
-                for (auto it = stack.begin(); it != stack.end(); it++)
-                    (*it)->onUpdate(ts);
 
-                for (eyeIndice = 0; eyeIndice < canvas->getTotEyes(); eyeIndice++) {
-                    canvas->before(eyeIndice);
-                    // render all
-                    for (auto it = stack.begin(); it != stack.end(); it++) {
-                        (*it)->onRender();
-                    }
+        ts = (double)countDelta / 1000.0f;
+        if (!pause) { // update game
+            for (auto it = stack.begin(); it != stack.end(); it++)
+                (*it)->onUpdate(vp, ts);
 
-                    canvas->after(eyeIndice);
-                }
-                canvas->swapWindow();
+            canvas->before();
+            for (auto it = stack.begin(); it != stack.end(); it++)
+                (*it)->onRender();
 
-            } catch (...) { SDL_Quit(); }
+            canvas->after();
         }
-        // count FPS each second
-        if (timerFPS.stepCount() == true) {
+
+        if (timerFPS.stepCount() == true) { // count FPS each second
             fps = timerFPS.getCountStep();
             utilSendEvent(EVENT_NEW_FPS, (void*)&fps, nullptr);
         }
-        // frame count limit
-        countDelta = SDL_GetTicks() - beginCount;
+
+        countDelta = SDL_GetTicks() - beginCount; // frame count limit
         if (countDelta < miniumCountDelta) {
             SDL_Delay(miniumCountDelta - countDelta);
             countDelta = miniumCountDelta;
         }
     }
-    // Release devices
-    JoystickManager::release();
+    JoystickManager::release(); // Release devices
 }
 } // namespace Chimera

@@ -1,5 +1,6 @@
 #pragma once
 #include "UValue.hpp"
+#include "chimera/core/TagComponent.hpp"
 
 namespace Chimera {
 
@@ -31,4 +32,12 @@ class Light {
     LightType type;
     MapUniform listProp;
 };
+
+struct LightComponent {
+    TagComponent tag;
+    Light* light = new Light();
+    bool global = true;
+    LightComponent() = default;
+};
+
 } // namespace Chimera

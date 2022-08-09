@@ -4,12 +4,11 @@
 #include <string>
 
 namespace Chimera {
-
 enum class TexWrap {
     NONE = 0,
     REPEAT = GL_REPEAT,
     CLAMP = GL_CLAMP,
-    MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+    MIRRORED = GL_MIRRORED_REPEAT,
     CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
     CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
 };
@@ -40,42 +39,39 @@ enum class TexDType {
 };
 
 struct TexParam {
-    TexFormat format;
-    TexFormat internalFormat;
-    TexFilter filter;
-    TexWrap wrap;
-    TexDType type;
-    int samples;
+    TexParam() = default;
+    TexParam(const TexParam& o) = default;
+    TexParam(TexFormat format, TexFormat internalFormat, TexFilter minFilter, TexFilter magFilter, TexWrap wrap_r, TexWrap wrap_s,
+             TexWrap wrap_t, TexDType type)
+        : format(format), internalFormat(internalFormat), minFilter(minFilter), magFilter(magFilter), wrap_r(wrap_r), wrap_s(wrap_s),
+          wrap_t(wrap_t), type(type), samples(1) {}
 
-    TexParam() {
-        format = TexFormat::RGBA;
-        internalFormat = TexFormat::RGBA;
-        filter = TexFilter::NEAREST;
-        wrap = TexWrap::REPEAT;
-        type = TexDType::UNSIGNED_BYTE;
-        samples = 1;
-    }
-
-    TexParam(TexFormat format, TexFormat internalFormat, TexFilter filter, TexWrap wrap, TexDType type)
-        : format(format), internalFormat(internalFormat), filter(filter), wrap(wrap), type(type), samples(1) {}
-
-    // TexParam(TexFilter filter) : format(TexFormat::RGBA), filter(filter), wrap(TexWrap::CLAMP) {}
-    // TexParam(TexFilter filter, TexWrap wrap) : format(TexFormat::RGBA), filter(filter), wrap(wrap) {}
+    TexFormat format = TexFormat::RGBA;
+    TexFormat internalFormat = TexFormat::RGBA;
+    TexFilter minFilter = TexFilter::NEAREST;
+    TexFilter magFilter = TexFilter::NEAREST;
+    TexWrap wrap_r = TexWrap::REPEAT;
+    TexWrap wrap_s = TexWrap::REPEAT;
+    TexWrap wrap_t = TexWrap::REPEAT;
+    TexDType type = TexDType::UNSIGNED_BYTE;
+    int samples = 1;
 };
 
 namespace Aux {
 static void textureParameterSetUndefined(TexParam& val) {
     val.format = TexFormat::NONE;
     val.internalFormat = TexFormat::NONE;
-    val.filter = TexFilter::NONE;
-    val.wrap = TexWrap::NONE;
+    val.minFilter = TexFilter::NONE;
+    val.magFilter = TexFilter::NONE;
+    val.wrap_r = TexWrap::NONE;
+    val.wrap_s = TexWrap::NONE;
+    val.wrap_t = TexWrap::NONE;
     val.type = TexDType::NONE;
 }
 
 static bool textureParameterIsUndefined(const TexParam& val) {
     return (val.format == TexFormat::NONE && val.internalFormat == TexFormat::NONE);
 }
-
 } // namespace Aux
 
 class Texture {
@@ -86,8 +82,8 @@ class Texture {
 
     inline unsigned getWidth() const { return width; }
     inline unsigned getHeight() const { return height; }
-    void bind(uint8_t slot) const;
-    static void unbind(uint8_t slot);
+    void bind(const uint8_t& slot) const;
+    static void unbind(const uint8_t& slot);
     inline const std::string getName() const { return name; }
     inline const uint32_t getTextureID() const { return idTexture; }
 

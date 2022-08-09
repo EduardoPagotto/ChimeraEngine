@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/core/TagComponent.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {
@@ -13,4 +14,11 @@ class ITrans {
     virtual void setRotation(const glm::vec3& rot) = 0;
     virtual void setMatrix(const glm::mat4& transform) = 0;
 };
+
+struct TransComponent {
+    ITrans* trans = nullptr;
+    bool solid = false;
+    TransComponent() = default;
+};
+
 } // namespace Chimera

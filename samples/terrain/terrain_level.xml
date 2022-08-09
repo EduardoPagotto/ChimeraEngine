@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_images>
+        <image id="grid2_png" name="grid2_png">
+            <init_from>./assets/textures/grid2.png</init_from>
+        </image>
+    </library_images>
+    <library_effects>
+        <effect id="MaterialHeightMap-effect">
+            <profile_COMMON>
+                <newparam sid="grid2_png-surface">
+                    <surface type="2D">
+                        <init_from>grid2_png</init_from>
+                    </surface>
+                </newparam>
+                <newparam sid="grid2_png-sampler">
+                    <sampler2D>
+                        <source>grid2_png-surface</source>
+                    </sampler2D>
+                </newparam>
+                <technique sid="common">
+                    <phong>
+                        <emission>
+                            <color sid="emission">0 0 0 1</color>
+                        </emission>
+                        <ambient>
+                            <color sid="ambient">0 0 0 1</color>
+                        </ambient>
+                        <diffuse>
+                            <texture texture="grid2_png-sampler"/>
+                        </diffuse>
+                        <specular>
+                            <color sid="specular">0.125 0.125 0.125 1</color>
+                        </specular>
+                        <shininess>
+                            <float sid="shininess">50</float>
+                        </shininess>
+                        <index_of_refraction>
+                            <float sid="index_of_refraction">1</float>
+                        </index_of_refraction>
+                    </phong>
+                </technique>
+            </profile_COMMON>
+            <profile_GLSL>
+                <technique sid="MeshFullShadow">
+                    <include sid="VP_Shade02" url="file://./assets/shaders/MeshFullShadow.vert"/>
+                    <include sid="FP_Shade02" url="file://./assets/shaders/MeshFullShadow.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="VP_Shade02">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="FP_Shade02">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+        </effect>
+    </library_effects>
+    <library_materials>
+        <material id="MaterialHeightMap" name="MaterialHeightMap">
+            <instance_effect url="#MaterialHeightMap-effect">
+                <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
+            </instance_effect>
+        </material>
+    </library_materials>
+    <library_cameras>
+        <camera id="Camera-Test" name="Camera.001">
+            <optics>
+                <technique_common>
+                    <perspective>
+                        <xfov sid="xfov">49.13434</xfov>
+                        <aspect_ratio>1.777778</aspect_ratio>
+                        <znear sid="znear">0.1</znear>
+                        <zfar sid="zfar">1000</zfar>
+                    </perspective>
+                </technique_common>
+            </optics>
+        </camera>
+    </library_cameras>
+    <library_lights>
+        <light id="luz01-light" name="Lamp.001">
+            <technique_common>
+                <point>
+                    <color sid="color">1 1 1</color>
+                    <constant_attenuation>1</constant_attenuation>
+                    <linear_attenuation>0</linear_attenuation>
+                    <quadratic_attenuation>5.91716e-5</quadratic_attenuation>
+                </point>
+            </technique_common>
+        </light>
+    </library_lights>
+    <library_geometries>
+        <geometry id="HeighMap-mesh" name="HeighMap-mesh">
+            <extra>
+                <technique profile="chimera">
+                    <external_height target="./assets/heightmaps/terrain3.jpg" square_x="32" square_y="32"/>
+                    <size>1000.0 200.0 1000.0</size>
+                </technique>
+            </extra>
+        </geometry>
+    </library_geometries>
+    <library_visual_scenes>
+        <visual_scene id="Scene" name="Scene">
+            <node id="Cubo" name="Cubo" type="NODE">
+                <matrix sid="transform">1 0 0 0 0 1 0 200.0 0 0 1 0 0 0 0 1</matrix>
+                <instance_geometry url="file://assets/models/cubo2.xml#Cubo-mesh"/>
+            </node>
+            <node id="HeighMap" name="HeighMap.001" type="NODE">
+                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+                <instance_geometry url="#HeighMap-mesh">
+                    <bind_material>
+                        <technique_common>
+                            <instance_material symbol="MaterialHeightMap" target="#MaterialHeightMap"/>
+                        </technique_common>
+                    </bind_material>
+                </instance_geometry>
+            </node>
+            <node id="Camera" name="Camera" type="NODE">
+                <matrix sid="transform">1 0 0 20 0 1 0 200 0 0 1 0 0 0 0 1</matrix>
+                <instance_camera url="#Camera-Test">
+                    <extra>
+                        <technique profile="chimera">
+                            <FPS>
+                                <pos>20.0 200.0 0.0</pos>
+                                <up>0.0 1.0 0.0</up>
+                                <yaw>0.0</yaw>
+                                <pitch>0.0</pitch>
+                            </FPS>
+                        </technique>
+                    </extra>
+                </instance_camera>
+            </node>
+            <node id="luz01" name="luz01" type="NODE">
+                <matrix sid="transform">1 0 0 0 0 1 0 300.0 0 0 1 0 0 0 0 1</matrix>
+                <instance_light url="#luz01-light"/>
+            </node>
+        </visual_scene>
+    </library_visual_scenes>
+    <scene>
+        <extra>
+            <technique profile="chimera">
+                <canvas title="Terrain" width="1200" height="600" fullscreen="0"/>
+                <view_projection size="1" distance="0.4"/>
+                <framebuffers>
+                    <framebuffer id="RenderBufferMaster" name="RenderBufferMaster">
+                        <instance_effect url="file://assets/models/nivel1_rb.xml#RenderBuffer-effect">
+                            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="CanvasHMD"/>
+                        </instance_effect>
+                    </framebuffer>
+                </framebuffers>
+            </technique>
+        </extra>
+        <instance_visual_scene url="#Scene"/>
+    </scene>
+</COLLADA>

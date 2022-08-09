@@ -28,12 +28,12 @@ CanvasFB::~CanvasFB() {
     SDL_DestroyWindow(window);
 }
 
-void CanvasFB::before(const unsigned short& _indexEye) {
+void CanvasFB::before() {
     // Limpa
     memset(pixels, 0, width * height * sizeof(uint32_t));
 }
 
-void CanvasFB::after(const unsigned short& _indexEye) {
+void CanvasFB::after() {
 
     // Atualiza a textura
     SDL_UpdateTexture(texture, NULL, pixels, width * sizeof(uint32_t));

@@ -1,0 +1,19 @@
+#pragma once
+#include "Layer.hpp"
+
+namespace Chimera {
+class Tile : public Layer {
+  public:
+    Tile(const std::string& name, IRenderer2D* renderer, Shader shader, Camera* camera);
+    virtual ~Tile();
+    virtual void onAttach() override;
+    virtual void onDeatach() override;
+    virtual void onUpdate(ViewProjection& vp, const double& ts) override;
+    virtual bool onEvent(const SDL_Event& event) override;
+    virtual void onRender() override;
+    virtual std::string getName() const override { return nameTile; }
+
+  private:
+    std::string nameTile;
+};
+} // namespace Chimera

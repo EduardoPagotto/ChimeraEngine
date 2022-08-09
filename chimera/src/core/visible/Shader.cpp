@@ -76,19 +76,23 @@ static GLuint linkShader(const std::vector<GLuint>& vecShaderID) {
 void Shader::invalidade() {
     glDeleteProgram(progID);
     progID = 0;
+    uniformLocationCache.clear();
 }
 
-const GLint Shader::getUniform(const char* _varName) const noexcept {
-    GLint loc = glGetUniformLocation(progID, _varName);
-    if (loc == -1)
-        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", _varName, progID);
+const GLint Shader::getUniform(const std::string& name) const noexcept {
+
+    if (uniformLocationCache.find(name) != uniformLocationCache.end())
+        return uniformLocationCache[name];
+
+    GLint loc = glGetUniformLocation(progID, name.c_str());
+    uniformLocationCache[name] = loc;
 
     return loc;
 }
 
 void Shader::setUniformU(const char* name, const UValue& uv) {
 
-    GLint loc = glGetUniformLocation(progID, name);
+    GLint loc = getUniform(name);
     if (loc == -1) {
         SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, progID);
         return;
@@ -125,6 +129,37 @@ void Shader::setUniformU(const char* name, const UValue& uv) {
         case UniformType::t_mat4:
             glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.v_mat4));
             break;
+        case UniformType::tp_int:
+            glUniform1iv(loc, uv.size, uv.u.p_int);
+            break;
+        case UniformType::tp_float:
+            glUniform1fv(loc, uv.size, uv.u.p_float);
+            break;
+        case UniformType::tp_vec2:
+            glUniform2fv(loc, uv.size, glm::value_ptr(*uv.u.p_vec2));
+            break;
+        case UniformType::tp_ivec2:
+            glUniform2iv(loc, uv.size, glm::value_ptr(*uv.u.p_ivec2));
+            break;
+        case UniformType::tp_vec3:
+            glUniform3fv(loc, uv.size, glm::value_ptr(*uv.u.p_vec3));
+            break;
+        case UniformType::tp_ivec3:
+            glUniform3iv(loc, uv.size, glm::value_ptr(*uv.u.p_ivec3));
+            break;
+        case UniformType::tp_vec4:
+            glUniform4fv(loc, uv.size, glm::value_ptr(*uv.u.p_vec4));
+            break;
+        case UniformType::tp_ivec4:
+            glUniform4iv(loc, uv.size, glm::value_ptr(*uv.u.p_ivec4));
+            break;
+        case UniformType::tp_mat3:
+            glUniformMatrix3fv(loc, uv.size, GL_FALSE, glm::value_ptr(*uv.u.p_mat3));
+            break;
+        case UniformType::tp_mat4:
+            glUniformMatrix4fv(loc, uv.size, GL_FALSE, glm::value_ptr(*uv.u.p_mat4));
+            break;
+
         case UniformType::t_invalid:
             SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, progID);
             break;
@@ -136,8 +171,8 @@ std::unordered_map<std::string, Shader> ShaderManager::mShaders;
 
 void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) {
 
-    Shader s = ShaderManager::get(name);
-    if (s.isInvalid()) {
+    std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
+    if (got == ShaderManager::mShaders.end()) {
 
         std::vector<GLuint> vecShaderID;
         for (auto& kv : mFiles) {
@@ -152,18 +187,18 @@ void ShaderManager::load(const std::string& name, const std::unordered_map<GLenu
 
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "New Shader %s id: %d", name.c_str(), (int)shader.progID);
     } else {
-        shader.progID = s.progID;
+        shader = got->second;
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dup Shader %s id: %d", name.c_str(), (int)shader.progID);
     }
 }
 
-const Shader ShaderManager::get(const std::string& name) {
+const Shader& ShaderManager::get(const std::string& name) {
 
     std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
     if (got != ShaderManager::mShaders.end())
         return got->second;
 
-    return Shader();
+    throw std::string("Shader nao existe: " + name);
 }
 
 bool ShaderManager::remove(const std::string& name) {

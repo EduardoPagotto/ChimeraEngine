@@ -1,20 +1,36 @@
 #include "Game.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
 
 int main(int argn, char** argv) {
     using namespace Chimera;
     try {
+        // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
-        SDL_Log("Iniciado");
+        SDL_Log("Terrain Iniciado");
 
-        Engine engine(new CanvasGL("Chimera", 1200, 600));
-        Game* game = new Game(&engine);
+        Engine engine;
 
-        engine.pushState(game);
+        ColladaDom dom = loadFileCollada("./samples/terrain/terrain_level.xml");
+        colladaRegistryLoad(dom, engine.getRegistry());
+
+        engine.init();
+
+        Scene scene(engine.getRegistry());
+
+        Game* game = new Game(scene);
+
+        engine.getStack().pushState(&scene);
+        engine.getStack().pushState(game);
+
+        Collada::destroy(); // clean loader
+
         engine.run();
+
+        SDL_Log("Loop de Game encerrado!!!!");
         delete game;
 
-        SDL_Log("Finalizado com sucesso");
+        SDL_Log("AppShader finalizado com sucesso");
         return 0;
 
     } catch (const std::string& ex) {

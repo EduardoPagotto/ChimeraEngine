@@ -1,18 +1,17 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 
+Game::Game(Chimera::Engine* engine) {
+    // init framebuffer
+    canvas = engine->getCanvas();
+}
+
 Game::~Game() {}
 
 void Game::onAttach() {
 
     moveSpeed = MOVSPEED;
     rotSpeed = ROTSPEED;
-
-    // init framebuffer
-    frame = new Frame;
-    frame->data = engine->getCanvas()->getPixels();
-    frame->width = engine->getCanvas()->getWidth();
-    frame->height = engine->getCanvas()->getHeight();
 
     // estado de inicialização
     state = new State;
@@ -34,14 +33,6 @@ bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
     switch (event.type) {
-        case SDL_USEREVENT: {
-            switch (event.user.code) {
-                case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    engine->getCanvas()->toggleFullScreen();
-                    break;
-            }
-
-        } break;
         case SDL_KEYDOWN: {
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
@@ -51,27 +42,26 @@ bool Game::onEvent(const SDL_Event& event) {
                     Chimera::utilSendEvent(Chimera::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
                 case SDLK_w: {
-                    glm::ivec2 curr(state->pos.x, state->pos.y);
-                    glm::ivec2 next((int)(state->pos.x + state->dir.x * moveSpeed * 2), (int)(state->pos.y + state->dir.y * moveSpeed * 2));
+                    glm::ivec2 curr = state->pos;
+                    glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
 
-                    if (world->data[next.x + curr.y * world->width] == 0) {
+                    if (world->data[next.x + curr.y * world->width] == 0)
                         state->pos.x += state->dir.x * moveSpeed;
-                    }
 
-                    if (world->data[curr.x + next.y * world->width] == 0) {
+                    if (world->data[curr.x + next.y * world->width] == 0)
                         state->pos.y += state->dir.y * moveSpeed;
-                    }
+
                 } break;
                 case SDLK_s: {
-                    glm::ivec2 curr(state->pos.x, state->pos.y);
-                    glm::ivec2 next((int)(state->pos.x - state->dir.x * moveSpeed * 2), (int)(state->pos.y - state->dir.y * moveSpeed * 2));
+                    glm::ivec2 curr = state->pos;
+                    glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
 
-                    if (world->data[next.x + curr.y * world->width] == 0) {
+                    if (world->data[next.x + curr.y * world->width] == 0)
                         state->pos.x -= state->dir.x * moveSpeed;
-                    }
-                    if (world->data[curr.x + next.y * world->width] == 0) {
+
+                    if (world->data[curr.x + next.y * world->width] == 0)
                         state->pos.y -= state->dir.y * moveSpeed;
-                    }
+
                 } break;
                 case SDLK_a: {
                     double oldDirX = state->dir.x;
@@ -101,15 +91,12 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDL_WINDOWEVENT_LEAVE:
                     Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
-                    break;
             }
         } break;
     }
     return true;
 }
 
-void Game::onUpdate(const double& ts) {}
+void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {}
 
-void Game::onRender() { RenderScene(*state, *world, *frame); }
+void Game::onRender() { RenderScene(*state, *world, canvas); }

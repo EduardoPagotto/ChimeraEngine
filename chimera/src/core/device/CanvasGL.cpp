@@ -76,20 +76,19 @@ CanvasGL::~CanvasGL() {
     }
 }
 
-void CanvasGL::before(const unsigned short& _indexEye) {
+void CanvasGL::before() {
     // FIXME: remover quando ter coragem de refazer o scene completo :( )
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void CanvasGL::after(const unsigned short& _indexEye) {
+void CanvasGL::after() {
 
     GLenum erro = glGetError();
-    if (erro != GL_NO_ERROR) {
+    if (erro != GL_NO_ERROR)
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "OpenGL Erro: %d", erro);
-    }
-}
 
-void CanvasGL::swapWindow() { SDL_GL_SwapWindow(window); }
+    SDL_GL_SwapWindow(window);
+}
 
 void CanvasGL::reshape(int _width, int _height) {
     width = _width;

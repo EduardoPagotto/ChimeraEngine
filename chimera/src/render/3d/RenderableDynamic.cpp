@@ -1,16 +1,20 @@
 #include "chimera/render/3d/RenderableDynamic.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/buffer/VertexBuffer.hpp"
 
 namespace Chimera {
 
 RenderableDynamic::RenderableDynamic(const uint32_t& max) : max(max) {
+
+    vao = new VertexArray();
     vbo = new VertexBuffer(BufferType::STREAM); //????
     vbo->bind();
 
     BufferLayout layout;
-    layout.push(3, GL_FLOAT, sizeof(float), false);
-    layout.push(3, GL_FLOAT, sizeof(float), false);
-    layout.push(2, GL_FLOAT, sizeof(float), false);
+    layout.Push<float>(3, false);
+    layout.Push<float>(3, false);
+    layout.Push<float>(2, false);
     vbo->setLayout(layout);
     vbo->reSize(max);
     // vbo->setData(vertexData, vertexSize);
@@ -23,8 +27,8 @@ RenderableDynamic::~RenderableDynamic() {
     vbo = nullptr;
 }
 
-void RenderableDynamic::render(VertexData* pVertice, const uint32_t& size) {
-    vao.bind();
+void RenderableDynamic::render(VertexData* pVertice, const uint32_t& size) { // FIXME: ver como fazer!!!! falta dados
+    vao->bind();
     vbo->bind();
     // //int tot = size * sizeof(VertexData);
     // // glBufferData(GL_ARRAY_BUFFER, 5000, nullptr, GL_STREAM_DRAW);
@@ -33,6 +37,6 @@ void RenderableDynamic::render(VertexData* pVertice, const uint32_t& size) {
     // glBufferSubData(GL_ARRAY_BUFFER, 0, tot, pVertice);
     // glDrawArrays(GL_TRIANGLES, 0, size);
     vbo->unbind();
-    vao.unbind();
+    vao->unbind();
 }
 } // namespace Chimera

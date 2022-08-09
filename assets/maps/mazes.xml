@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_geometries>
+        <geometry id="Voxel_maze_01" name="Voxel_maze_01">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="10" height="10" floor="1">
+                        <l f="0" h="0">1111111111</l>
+                        <l f="0" h="1">12      21</l>
+                        <l f="0" h="2">1        1</l>
+                        <l f="0" h="3">1 22 212 1</l>
+                        <l f="0" h="4">1 12 211 1</l>
+                        <l f="0" h="5">1 1   11 1</l>
+                        <l f="0" h="6">1 211 12 1</l>
+                        <l f="0" h="7">11 11    1</l>
+                        <l f="0" h="8">1  112  21</l>
+                        <l f="0" h="9">1111111111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_maze_01" name="Voxel_maze_01">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="26" height="7" floor="1">
+                        <l f="0" h="0">11111111111111111111111111</l>
+                        <l f="0" h="1">1                        1</l>
+                        <l f="0" h="2">1   111      11111   1   1</l>
+                        <l f="0" h="3">1   111      1   1   1   1</l>
+                        <l f="0" h="4">1   111      1   11111   1</l>
+                        <l f="0" h="5">1                        1</l>
+                        <l f="0" h="6">11111111111111111111111111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_maze_02" name="Voxel_maze_02">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="6" height="5" floor="4">
+                        <l f="0" h="0">111111</l>
+                        <l f="0" h="1">123321</l>
+                        <l f="0" h="2">133331</l>
+                        <l f="0" h="3">123321</l>
+                        <l f="0" h="4">111111</l>
+                        <l f="1" h="0">111111</l>
+                        <l f="1" h="1">13  31</l>
+                        <l f="1" h="2">1    1</l>
+                        <l f="1" h="3">13  31</l>
+                        <l f="1" h="4">111111</l>
+                        <l f="2" h="0">111111</l>
+                        <l f="2" h="1">14  41</l>
+                        <l f="2" h="2">1    1</l>
+                        <l f="2" h="3">14  41</l>
+                        <l f="2" h="4">111111</l>
+                        <l f="3" h="0">111111</l>
+                        <l f="3" h="1">124421</l>
+                        <l f="3" h="2">144441</l>
+                        <l f="3" h="3">124421</l>
+                        <l f="3" h="4">111111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_maze_03" name="Voxel_maze_03">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="50.0" width="10" height="10" floor="3">
+                        <l f="0" h="0">1111111111</l>
+                        <l f="0" h="1">1312336321</l>
+                        <l f="0" h="2">1313313331</l>
+                        <l f="0" h="3">1313313331</l>
+                        <l f="0" h="4">1313313371</l>
+                        <l f="0" h="5">1312313331</l>
+                        <l f="0" h="6">1321123331</l>
+                        <l f="0" h="7">1733333331</l>
+                        <l f="0" h="8">1333336321</l>
+                        <l f="0" h="9">1111111111</l>
+                        <l f="1" h="0">1111111111</l>
+                        <l f="1" h="1">1 33    31</l>
+                        <l f="1" h="2">1 3  1   1</l>
+                        <l f="1" h="3">1 3  3   1</l>
+                        <l f="1" h="4">1 3  3   1</l>
+                        <l f="1" h="5">1 33 3   1</l>
+                        <l f="1" h="6">1 3333   1</l>
+                        <l f="1" h="7">1        1</l>
+                        <l f="1" h="8">1       21</l>
+                        <l f="1" h="9">1111111111</l>
+                        <l f="2" h="0">1111111111</l>
+                        <l f="2" h="1">1444446441</l>
+                        <l f="2" h="2">1744414441</l>
+                        <l f="2" h="3">1444444441</l>
+                        <l f="2" h="4">1444444471</l>
+                        <l f="2" h="5">1444444441</l>
+                        <l f="2" h="6">1444444441</l>
+                        <l f="2" h="7">1444444441</l>
+                        <l f="2" h="8">1444446421</l>
+                        <l f="2" h="9">1111111111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_maze_04" name="Voxel_maze_04">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="7" height="7" floor="1">
+                        <l f="0" h="0">1111111</l>
+                        <l f="0" h="1">1255521</l>
+                        <l f="0" h="2">1555551</l>
+                        <l f="0" h="3">1555551</l>
+                        <l f="0" h="4">1555551</l>
+                        <l f="0" h="5">1255521</l>
+                        <l f="0" h="6">1111111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_maze_05" name="Voxel_maze_05">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="5" height="5" floor="1">
+                        <l f="0" h="0">11111</l>
+                        <l f="0" h="1">12521</l>
+                        <l f="0" h="2">15551</l>
+                        <l f="0" h="3">12521</l>
+                        <l f="0" h="4">11111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_maze_06" name="Voxel_maze_06">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="3" height="3" floor="1">
+                        <l f="0" h="0">111</l>
+                        <l f="0" h="1">151</l>
+                        <l f="0" h="2">111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_maze_07" name="Voxel_maze_07">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="7" height="7" floor="4">
+                        <l f="0" h="0">1111111</l>
+                        <l f="0" h="1">1173711</l>
+                        <l f="0" h="2">1633361</l>
+                        <l f="0" h="3">1336331</l>
+                        <l f="0" h="4">1371731</l>
+                        <l f="0" h="5">1371731</l>
+                        <l f="0" h="6">1111111</l>
+                        <l f="1" h="0">1111111</l>
+                        <l f="1" h="1">11   11</l>
+                        <l f="1" h="2">1     1</l>
+                        <l f="1" h="3">1     1</l>
+                        <l f="1" h="4">1  1  1</l>
+                        <l f="1" h="5">1  3  1</l>
+                        <l f="1" h="6">1111111</l>
+                        <l f="2" h="0">1111111</l>
+                        <l f="2" h="1">13   31</l>
+                        <l f="2" h="2">1    41</l>
+                        <l f="2" h="3">1     1</l>
+                        <l f="2" h="4">1  3  1</l>
+                        <l f="2" h="5">1     1</l>
+                        <l f="2" h="6">1111111</l>
+                        <l f="3" h="0">1111111</l>
+                        <l f="3" h="1">1746471</l>
+                        <l f="3" h="2">1444411</l>
+                        <l f="3" h="3">1744471</l>
+                        <l f="3" h="4">1444441</l>
+                        <l f="3" h="5">1746471</l>
+                        <l f="3" h="6">1111111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Voxel_maze_08" name="Voxel_maze_08">
+            <extra>
+                <technique profile="chimera">
+                    <external_cube size="10.0" width="27" height="14" floor="1">
+                        <l f="0" h="00">111111111111111111111111111</l>
+                        <l f="0" h="01">1                 1       1</l>
+                        <l f="0" h="02">1 1 1 1 1 1 1 1 1 1 1 1 1 1</l>
+                        <l f="0" h="03">1                         1</l>
+                        <l f="0" h="04">1  1     11111   1        1</l>
+                        <l f="0" h="05">1        1       1        1</l>
+                        <l f="0" h="06">1  1     1       11111 1111</l>
+                        <l f="0" h="07">1  1   1111111       1    1</l>
+                        <l f="0" h="08">1            1            1</l>
+                        <l f="0" h="09">1111111111   1    111111111</l>
+                        <l f="0" h="10">11       1   1    1      11</l>
+                        <l f="0" h="11">11  111      1       11  11</l>
+                        <l f="0" h="12">11       1        1      11</l>
+                        <l f="0" h="13">1111111111        111111111</l>
+                        <l f="0" h="14">111111111111111111111111111</l>
+                    </external_cube>
+                </technique>
+            </extra>
+        </geometry>
+    </library_geometries>
+</COLLADA>

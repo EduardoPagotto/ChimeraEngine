@@ -1,44 +1,32 @@
 #pragma once
-#include "RenderCommand.hpp"
-#include "Renderable3D.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/space/AABB.hpp"
 #include "chimera/core/space/BSPTreeNode.hpp"
-#include "chimera/core/space/TrisIndex.hpp"
-#include "chimera/render/VertexData.hpp"
-#include <vector>
+#include "chimera/core/visible/Mesh.hpp"
+#include "chimera/core/visible/RenderCommand.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 
 namespace Chimera {
 
-class RenderableBsp : public IRenderable3d {
+class RenderableBsp : public Renderable3D {
   public:
-    RenderableBsp(BSPTreeNode* root, VecPrtTrisIndex& vTris, std::vector<VertexData>& vertexData);
+    RenderableBsp(Mesh* mesh);
     virtual ~RenderableBsp();
     virtual const uint32_t getSize() const override { return totIndex; }
-    virtual VertexArray* getVao() const override { return vao; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }
     virtual const AABB& getAABB() const override { return aabb; }
-    virtual void submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) override;
-    virtual void draw(const bool& logData) override;
+    virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
   private:
     void destroy();
     void collapse(BSPTreeNode* tree);
-
-    void traverseTree(BSPTreeNode* tree);
-    void drawPolygon(BSPTreeNode* tree, bool frontSide);
-
+    void traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<IRenderable3d*>& childDraw);
     // TODO: Testar!!!!!!
     bool lineOfSight(const glm::vec3& Start, const glm::vec3& End, BSPTreeNode* tree);
 
-    BSPTreeNode* root;
-    VertexArray* vao;
-    bool logdata;
-    std::vector<Renderable3D*> vChild;
-    std::vector<VertexData> vVertex;
+    std::vector<IRenderable3d*> vChild;
     AABB aabb;
-    ICamera* camera;
     uint32_t totIndex;
-    IRenderer3d* renderer;
-    RenderCommand* command;
+    BSPTreeNode* root;
 };
 } // namespace Chimera

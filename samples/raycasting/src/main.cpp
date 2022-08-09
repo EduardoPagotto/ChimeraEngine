@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "chimera/core/device/CanvasFB.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
@@ -9,11 +9,16 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simple ray-casting Iniciado");
 
-        Engine engine(new CanvasFB("RayCasting", 640, 480));
+        Engine engine;
+
+        ColladaDom dom = loadFileCollada("./samples/raycasting/level.xml");
+        colladaRegistryLoad(dom, engine.getRegistry());
+
+        engine.init();
 
         Game* game = new Game(&engine);
 
-        engine.pushState(game);
+        engine.getStack().pushState(game);
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");

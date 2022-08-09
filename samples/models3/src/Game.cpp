@@ -1,111 +1,11 @@
 #include "Game.hpp"
-#include "chimera/colladaDB/colladaLoad.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/CameraOrthographic.hpp"
-#include "chimera/core/visible/Components.hpp"
-#include "chimera/core/visible/FontManager.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
-#include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
-#include "chimera/render/3d/RenderableParticles.hpp"
-#include "chimera/render/partition/LoadObj.hpp"
-#include "chimera/render/scene/CameraController.hpp"
+#include "chimera/render/2d/Group.hpp"
+#include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Engine* engine) : engine(engine) {
-    using namespace Chimera;
-    pCorpoRigido = nullptr;
-    crt.yaw = 0.0f;
-    crt.pitch = 0.0f;
-    crt.roll = 0.0f;
-    crt.throttle = 0.0;
-    crt.hat = 0;
-
-    { // FPS
-        Shader shader;
-        std::unordered_map<GLenum, std::string> shadeData;
-        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Text2D.frag";
-        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Text2D.vert";
-        ShaderManager::load("Text2D", shadeData, shader);
-
-        tile = new Tile(new Chimera::BatchRender2D(), shader, new Chimera::CameraOrthographic(512.0, -1.0f, 1.0f));
-
-        FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
-        FontManager::get()->setScale(glm::vec2(1.0, 1.0)); // em TileLayer ortho values!!!
-        lFPS = new Label("None", -8, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
-        tile->add(lFPS);
-
-        tile->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-        engine->pushState(tile);
-    }
-
-    { // Cargadados arquivo collada
-        // VisualScene libV("./assets/models/piso2.xml", &activeScene.getRegistry());
-        // libV.target();
-
-        // PhysicsScene libP("./assets/models/piso2.xml", &activeScene.getRegistry());
-        // libP.target();
-        colladaLoad(activeScene.getRegistry(), "./assets/models/piso2.xml");
-
-        // injeta controlador de camera
-        auto view1 = activeScene.getRegistry().get().view<ComponentCamera>();
-        for (auto entity : view1) {
-            Entity e = Entity{entity, &activeScene.getRegistry()};
-            e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
-        }
-
-        // A cada mesh
-        auto view = activeScene.getRegistry().get().view<ComponentMesh>();
-        for (auto entity : view) {
-            // Ajusta metodo de entidades
-            Entity e = Entity{entity, &activeScene.getRegistry()};
-            // Adiciona o shader
-            Shader& shader = e.addComponent<Shader>();
-            std::unordered_map<GLenum, std::string> shadeData;
-            shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/MeshFullShadow.frag";
-            shadeData[GL_VERTEX_SHADER] = "./assets/shaders/MeshFullShadow.vert";
-            ShaderManager::load("MeshFullShadow", shadeData, shader);
-        }
-
-        // Localiza objeto como o primario //EfeitoZoltan-mesh
-        ComponentTrans& tc = activeScene.getRegistry().findComponent<ComponentTrans>("Zoltan");
-        pCorpoRigido = (Solid*)tc.trans;
-    }
-
-    EmitterFont* ef = new EmitterFont();
-    { // Cria emissor de particula
-        Entity re = activeScene.getRegistry().createEntity("Renderable Particle System");
-        ComponentTrans& tc = re.addComponent<ComponentTrans>();
-        tc.trans = new Transform();
-        tc.trans->setPosition(glm::vec3(-5.0, 5.0, 4.0));
-
-        ComponentMaterial& material = re.addComponent<ComponentMaterial>();
-        TextureManager::loadFromFile("Particle2", "./assets/textures/Particle2.png", TexParam());
-        material.material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::getLast());
-        material.material->init();
-
-        Shader& shader = re.addComponent<Shader>();
-        std::unordered_map<GLenum, std::string> shadeData;
-        shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/ParticleEmitter.frag";
-        shadeData[GL_VERTEX_SHADER] = "./assets/shaders/ParticleEmitter.vert";
-        ShaderManager::load("ParticleEmitter", shadeData, shader);
-
-        ParticleContainer& pc = re.addComponent<ParticleContainer>();
-        pc.life = 4.0f;
-        pc.max = 2000;
-
-        ef->pushParticleContainer(&pc);
-    }
-
-    activeScene.setShadowPass(new ShadowPass(2048, 2048, glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 1.0f, 150.0f)));
-    activeScene.pushEmitters(ef);
-
-    activeScene.onViewportResize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
-    engine->pushState(&activeScene);
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
-}
+Game::Game(Chimera::Scene& scene) : pCorpoRigido(nullptr), scene(&scene) { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game"); }
 
 Game::~Game() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game"); }
 
@@ -130,9 +30,6 @@ bool Game::onEvent(const SDL_Event& event) {
                     uint32_t* n2 = (uint32_t*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao OFF: %d -> %d", *n1, *n2);
                 } break;
-                case Chimera::EVENT_TOGGLE_FULL_SCREEN:
-                    engine->getCanvas()->toggleFullScreen();
-                    break;
                 case Chimera::EVENT_NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
@@ -152,9 +49,6 @@ bool Game::onEvent(const SDL_Event& event) {
                     // case SDLK_F1:
                     //     pHUD->setOn(!pHUD->isOn());
                     // break;
-                case SDLK_1:
-                    activeScene.logToggle();
-                    break;
                 case SDLK_F10:
                     utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
@@ -232,9 +126,6 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDL_WINDOWEVENT_LEAVE:
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
-                    break;
             }
         } break;
     }
@@ -242,6 +133,20 @@ bool Game::onEvent(const SDL_Event& event) {
 }
 
 void Game::onAttach() {
+
+    using namespace Chimera;
+    // Localiza objeto como o primario
+    TransComponent& tc = scene->getRegistry()->findComponent<TransComponent>("Zoltan");
+    pCorpoRigido = (Solid*)tc.trans;
+
+    lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    Tile* tile = (Tile*)scene->getLayes().getState("TileText");
+
+    Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-500.0f, 270.0f, 0.0f)));
+    group->add(new Sprite(0.0f, 0.0f, 200.0f, 50.0f, glm::vec4(0, 0, 1, 1)));
+    group->add(lFPS);
+    tile->add(group);
+    // tile->add(lFPS);
 
     glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
     glEnable(GL_DEPTH_TEST);
@@ -255,12 +160,10 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-void Game::onUpdate(const double& ts) {
+void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
 
     if (pCorpoRigido)
-        activeScene.setOrigem(pCorpoRigido);
-
-    activeScene.onUpdate(ts); // atualiza camera e script de camera
+        scene->setOrigem(pCorpoRigido);
 
     using namespace Chimera;
 

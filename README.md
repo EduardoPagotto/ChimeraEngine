@@ -110,3 +110,5 @@ https://www.khronos.org/opengl/wiki/Example_Code
     
 - SwadowMap: <p>
     <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)</i>
+
+1 0 0 X 0 1 0 Y 0 0 1 Z 0 0 0 1

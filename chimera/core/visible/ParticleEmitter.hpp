@@ -41,21 +41,30 @@ class IEmitter {
     virtual void recycleLife(const double& ts) = 0;
     virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) = 0;
     virtual void pushParticleContainer(ParticleContainer* pc) = 0;
+    virtual ParticleContainer* getContainer(uint32_t pos) = 0;
 };
 
 class EmitterFont : public IEmitter {
   public:
-    EmitterFont() = default;
+    EmitterFont(const glm::vec3& dir, const float& spread) : maindir(dir), spread(spread), pc(nullptr){};
     virtual int findUnusedParticle() override;
     virtual void reset(ParticleZ& p) override;
     virtual void recycleLife(const double& ts) override;
     virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) override;
     virtual void pushParticleContainer(ParticleContainer* pc) override { containers.push_back(pc); }
+    virtual ParticleContainer* getContainer(uint32_t pos) override { return containers[pos]; }
 
   private:
     std::vector<ParticleContainer*> containers;
     ParticleContainer* pc = nullptr;
-    glm::vec3 maindir = glm::vec3(0.0f, 0.0f, 10.0f); // TODO: setar
-    float spread = 1.5f;                              // TODO: setar
+    glm::vec3 maindir;
+    float spread;
 };
+
+struct EmitterComponent {
+    IEmitter* emitter;
+    TagComponent tag;
+    EmitterComponent() : emitter(nullptr) {}
+};
+
 } // namespace Chimera

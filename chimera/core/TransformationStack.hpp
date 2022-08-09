@@ -21,7 +21,7 @@ class TransformationStack {
         transCache = &transformationStack.back();
     }
 
-    inline glm::vec3 multiplVec3(const glm::vec3& point) const { return glm::vec3((*transCache) * glm::vec4(point, 1.0f)); }
+    inline const glm::vec3 multiplVec3(const glm::vec3& point) const { return glm::vec3((*transCache) * glm::vec4(point, 1.0f)); }
 
     inline void pop() {
         if (transformationStack.size() > 1)

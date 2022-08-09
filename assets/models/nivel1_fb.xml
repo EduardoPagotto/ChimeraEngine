@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_cameras>
+        <camera id="Camera-Shadow" name="Camera-Shadow">
+            <optics>
+                <technique_common>
+                    <orthographic>
+                        <xmag>60.0</xmag>
+                        <ymag>60.0</ymag>
+                        <znear>1.0</znear>
+                        <zfar>150.0</zfar>
+                    </orthographic>
+                </technique_common>
+            </optics>
+        </camera>
+    </library_cameras>
+    <library_images>
+        <image id="shadow_img" name="shadow_img">
+            <create_2d>
+                <size_exact width="2048" height="2048"/>
+                <format>
+                    <hint channels="D" channelsInternal="D" range="FLOAT" precision="DEFAULT"/>
+                </format>
+            </create_2d>
+        </image>
+    </library_images>
+    <library_effects>
+        <effect id="ShadowTexture-effect">
+            <profile_COMMON>
+                <newparam sid="ShadowTexture_Sampler">
+                    <samplerDEPTH>
+                        <minfilter>NEAREST</minfilter>
+                        <magfilter>NEAREST</magfilter>
+                        <wrap_r>NONE</wrap_r>
+                        <wrap_s>BORDER</wrap_s>
+                        <wrap_t>BORDER</wrap_t>
+                        <instance_image url="#shadow_img"/>
+                    </samplerDEPTH>
+                </newparam>
+            </profile_COMMON>
+            <profile_GLSL>
+                <technique sid="ShadowMappingDepth">
+                    <include sid="vps_depth" url="file://./assets/shaders/ShadowMappingDepth.vert"/>
+                    <include sid="fps_depth" url="file://./assets/shaders/ShadowMappingDepth.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="vps_depth">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="fps_depth">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+        </effect>
+    </library_effects>
+</COLLADA>

@@ -7,12 +7,10 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
 
-Game::Game(Chimera::Engine* engine) : engine(engine) {
+Game::Game(Chimera::Engine& engine) : engine(&engine) {
 
     using namespace Chimera;
-
     srand(time(nullptr));
-
     // Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-15.0f, 5.0f, 0.0f)));
     // group->add(new Sprite(0.0f, 0.0f, 6.0f, 3.0f, glm::vec4(1, 1, 1, 1)));
     // Group* button = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.0f)));
@@ -20,10 +18,11 @@ Game::Game(Chimera::Engine* engine) : engine(engine) {
     // button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
     // group->add(button);
     // layer->add(group);
-
     TextureManager::loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
     TextureManager::loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
     TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
+
+    engine.getStack().pushState(this);
 }
 
 Game::~Game() {}
@@ -58,7 +57,7 @@ void Game::onAttach() {
     FontManager::get()->setScale(glm::vec2(0.04, 0.04)); // em TileLayer ortho values!!!
     lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
-    engine->pushState(layer);
+    engine->getStack().pushState(layer);
 }
 
 void Game::onDeatach() {
@@ -79,9 +78,6 @@ bool Game::onEvent(const SDL_Event& event) {
     switch (event.type) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
-                case EVENT_TOGGLE_FULL_SCREEN:
-                    engine->getCanvas()->toggleFullScreen();
-                    break;
                 case EVENT_NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
@@ -108,16 +104,13 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDL_WINDOWEVENT_LEAVE:
                     utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    engine->getCanvas()->reshape(event.window.data1, event.window.data2);
-                    break;
             }
         } break;
     }
     return true;
 }
 
-void Game::onUpdate(const double& ts) {
+void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
 
     // ApplicationGL::onUpdate();
 

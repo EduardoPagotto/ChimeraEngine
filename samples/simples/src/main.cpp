@@ -1,23 +1,94 @@
 #include "Game.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include <iostream>
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
+#include "chimera/core/utils.hpp"
+
+Game::Game(Chimera::Scene& scene) : scene(&scene) {}
+
+Game::~Game() {}
+
+void Game::onAttach() {
+
+    glClearColor(0.f, 0.f, 0.f, 1.f); // Initialize clear color
+    // Habilita o depth buffer/culling face
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Game::onDeatach() {}
+
+bool Game::onEvent(const SDL_Event& event) {
+    using namespace Chimera;
+
+    switch (event.type) {
+        case SDL_KEYDOWN: {
+            switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
+                    break;
+                case SDLK_F10:
+                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    break;
+                default:
+                    break;
+            }
+        } break;
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEMOTION: {
+        } break;
+        case SDL_WINDOWEVENT: {
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_ENTER:
+                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    break;
+                case SDL_WINDOWEVENT_LEAVE:
+                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    break;
+            }
+        } break;
+    }
+
+    return true;
+}
+
+void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {}
+
+void Game::onRender() {}
 
 int main(int argn, char** argv) {
     using namespace Chimera;
     try {
-
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
-        SDL_Log("Iniciado");
+        SDL_Log("Simnples Iniciado");
 
-        Engine engine(new CanvasGL("simples", 640, 480));
-        Game* game = new Game(&engine);
+        Engine engine;
 
-        engine.pushState(game);
+        ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
+        colladaRegistryLoad(dom, engine.getRegistry());
+
+        engine.init();
+
+        Scene scene(engine.getRegistry());
+
+        Game* game = new Game(scene);
+
+        engine.getStack().pushState(&scene);
+        engine.getStack().pushState(game);
+
+        Collada::destroy(); // clean loader
+
         engine.run();
 
+        SDL_Log("Loop de Game encerrado!!!!");
         delete game;
 
-        SDL_Log("Sucesso");
+        SDL_Log("AppShader finalizado com sucesso");
         return 0;
 
     } catch (const std::string& ex) {

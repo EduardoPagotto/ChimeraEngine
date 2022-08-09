@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_cameras>
+        <camera id="Camera-Test" name="Camera.001">
+            <optics>
+                <technique_common>
+                    <perspective>
+                        <xfov sid="xfov">49.13434</xfov>
+                        <aspect_ratio>1.777778</aspect_ratio>
+                        <znear sid="znear">0.1</znear>
+                        <zfar sid="zfar">1000</zfar>
+                    </perspective>
+                </technique_common>
+            </optics>
+        </camera>
+    </library_cameras>
+    <library_geometries>
+    </library_geometries>
+    <library_visual_scenes>
+        <visual_scene id="Scene" name="Scene">
+            <node id="Cubo" name="Cubo" type="NODE">
+                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+                <instance_geometry url="file://assets/models/cubo2.xml#Cubo-mesh"/>
+            </node>
+            <node id="Voxel_cube" name="Voxel_cube.001" type="NODE">
+                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+                <instance_geometry url="file://assets/maps/mazes.xml#Voxel_maze_07">
+                    <bind_material>
+                        <technique_common>
+                            <instance_material symbol="Material_grid_02" target="file://assets/material/material_grid02.xml#Material_grid_02"/>
+                        </technique_common>
+                    </bind_material>
+                </instance_geometry>
+            </node>
+            <node id="Camera" name="Camera" type="NODE">
+                <matrix sid="transform">0.642787 -0.3358113 0.6885167 7 0.7660447 0.2817788 -0.5777334 -6 -4.44388e-8 0.8987942 0.4383704 7.551084 0 0 0 1</matrix>
+                <instance_camera url="#Camera-Test">
+                    <extra>
+                        <technique profile="chimera">
+                            <orbital>
+                                <up>0.0, 1.0, 0.0</up>
+                                <min>1.0</min>
+                                <max>1500.0</max>
+                                <yaw>0</yaw>
+                                <pitch>0</pitch>
+                            </orbital>
+                        </technique>
+                    </extra>
+                </instance_camera>
+            </node>
+        </visual_scene>
+    </library_visual_scenes>
+    <scene>
+        <extra>
+            <technique profile="chimera">
+                <canvas title="BSP" width="800" height="640" fullscreen="0"/>
+                <view_projection size="2" distance="0.4"/>
+                <framebuffers>
+                    <framebuffer id="RenderBufferMaster" name="RenderBufferMaster">
+                        <instance_effect url="file://assets/models/nivel1_rb.xml#RenderBuffer-effect">
+                            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="CanvasHMD"/>
+                        </instance_effect>
+                    </framebuffer>
+                </framebuffers>
+            </technique>
+        </extra>
+        <instance_visual_scene url="#Scene"/>
+    </scene>
+</COLLADA>

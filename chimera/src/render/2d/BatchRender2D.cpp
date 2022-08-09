@@ -10,8 +10,7 @@ BatchRender2D::BatchRender2D() {
 
 BatchRender2D::~BatchRender2D() {
     delete ibo;
-    delete pVao;
-    delete pVbo;
+    delete pVao; // VBO's deted here!!!
 }
 
 void BatchRender2D::init() {
@@ -25,10 +24,10 @@ void BatchRender2D::init() {
     pVbo->bind();
 
     BufferLayout layout;
-    layout.push(3, GL_FLOAT, sizeof(float), false);
-    layout.push(2, GL_FLOAT, sizeof(float), false);
-    layout.push(1, GL_FLOAT, sizeof(float), false);
-    layout.push(4, GL_FLOAT, sizeof(float), false);
+    layout.Push<float>(3, false);
+    layout.Push<float>(2, false);
+    layout.Push<float>(1, false);
+    layout.Push<float>(4, false);
 
     pVbo->setLayout(layout);
     pVbo->setData(nullptr, RENDERER_BUFFER_SIZE);
@@ -52,7 +51,7 @@ void BatchRender2D::init() {
     pVao->unbind();
 }
 
-void BatchRender2D::begin(ICamera* camera) {
+void BatchRender2D::begin(Camera* camera) {
 
     this->camera = camera;
 
@@ -85,15 +84,15 @@ float BatchRender2D::submitTexture(Texture* texture) {
 
 void BatchRender2D::submit(IRenderable2D* renderable) {
 
-    const glm::vec3& position = renderable->getPosition();
-    const glm::vec2& size = renderable->getSize();
-    const glm::vec4& color = renderable->getColor();
-    const std::vector<glm::vec2>& uv = renderable->getUV();
-    const Texture* texture = renderable->getTexture();
+    const Prop2D& prop = ((Renderable2D*)renderable)->getProp(); // Perigo
+    const glm::vec3& position = prop.position;
+    const glm::vec2& size = prop.size;
+    const glm::vec4& color = prop.color;
+    const std::vector<glm::vec2>& uv = prop.uv;
 
     float textureSlot = 0.0f; // float ts = 0.0f;
-    if (texture != nullptr)
-        textureSlot = this->submitTexture(renderable->getTexture());
+    if (prop.texture != nullptr)
+        textureSlot = this->submitTexture(prop.texture);
 
     buffer->point = stack.multiplVec3(position); //  glm::vec3(transformationStack.back() * glm::vec4(position, 1.0f));
     buffer->uv = uv[0];
@@ -124,10 +123,8 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
 
 void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
-    const Texture* texture = font->getTexture();
-
     float textureSlot = 0.0f; // float ts = 0.0f;
-    if (texture != nullptr)
+    if (font->getTexture() != nullptr)
         textureSlot = this->submitTexture(font->getTexture());
 
     const glm::vec2& scale = font->getScale();
@@ -194,11 +191,14 @@ void BatchRender2D::end() {
 
 void BatchRender2D::flush() {
 
-    BinaryStateEnable blend(GL_BLEND); // glEnable(GL_BLEND);
-    // BinaryStateDisable depth(GL_DEPTH_TEST); // glDisable(GL_DEPTH_TEST);
+    BinaryStateEnable blend(GL_BLEND, GL_TRUE);
+    // BinaryStateEnable depth(GL_DEPTH_TEST, GL_FALSE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    BinaryStateDisable cull(GL_CULL_FACE); // glEnable(GL_CULL_FACE);
+    BinaryStateEnable cull(GL_CULL_FACE, GL_FALSE);
+    // bind shader and uniforms from model
+    glUseProgram(renderComando->shader.getID());
+    for (const auto& kv : renderComando->uniforms)
+        renderComando->shader.setUniformU(kv.first.c_str(), kv.second);
 
     for (uint8_t i = 0; i < textures.size(); i++)
         textures[i]->bind(i);
@@ -210,9 +210,9 @@ void BatchRender2D::flush() {
 
     ibo->unbind();
     pVao->unbind();
-
     indexCount = 0;
     textures.clear();
+    glUseProgram(0);
 }
 
 } // namespace Chimera

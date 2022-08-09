@@ -1,16 +1,24 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/partition/BSPTree.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/3d/RenderCommand.hpp"
-#include <SDL2/SDL.h>
+#include "chimera/render/3d/RenderableIBO.hpp"
+#include "chimera/render/VertexData.hpp"
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(BSPTreeNode* root, VecPrtTrisIndex& vTris, std::vector<VertexData>& vertexData) : root(root), totIndex(0) {
+RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
 
-    // copia vertexdata!!!
-    this->vVertex.assign(vertexData.begin(), vertexData.end()); // FIXME: copias demais!!!!
+    Mesh meshFinal;
+    meshReCompile(*mesh, meshFinal);
+
+    BspTree bspTree;
+    std::vector<TrisIndex> vTris; // FIXME: limpar ??
+    root = bspTree.create(&meshFinal, vTris);
+
+    std::vector<VertexData> vVertex;
+    meshFinal.serialized = true; // FIXME: sera ?????
+    vertexDataFromMesh(&meshFinal, vVertex);
 
     // create VAO and VBO
     vao = new VertexArray();
@@ -20,12 +28,12 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, VecPrtTrisIndex& vTris, std::vec
     vbo->bind();
 
     BufferLayout layout;
-    layout.push(3, GL_FLOAT, sizeof(float), false);
-    layout.push(3, GL_FLOAT, sizeof(float), false);
-    layout.push(2, GL_FLOAT, sizeof(float), false);
+    layout.Push<float>(3, false);
+    layout.Push<float>(3, false);
+    layout.Push<float>(2, false);
 
     vbo->setLayout(layout);
-    vbo->setData(&vertexData[0], vertexData.size());
+    vbo->setData(&vVertex[0], vVertex.size());
     vbo->unbind();
 
     vao->push(vbo);
@@ -34,12 +42,11 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, VecPrtTrisIndex& vTris, std::vec
     for (auto trisIndex : vTris) {
 
         glm::vec3 min, max, size;
-        totIndex += trisIndex->size();
-        vertexDataIndexMinMaxSize(&vertexData[0], vertexData.size(), &trisIndex->vIndex[0], trisIndex->size(), min, max, size);
+        totIndex += trisIndex.size();
+        vertexDataIndexMinMaxSize(&vVertex[0], vVertex.size(), &trisIndex.vIndex[0], trisIndex.size(), min, max, size);
 
-        IndexBuffer* ibo = new IndexBuffer(&trisIndex->vIndex[0], trisIndex->size());
-        Renderable3D* r = new Renderable3D(nullptr, ibo, AABB(min, max));
-
+        IndexBuffer* ibo = new IndexBuffer(&trisIndex.vIndex[0], trisIndex.size());
+        IRenderable3d* r = new RenderableIBO(ibo, AABB(min, max));
         vChild.push_back(r);
     }
 
@@ -53,64 +60,49 @@ RenderableBsp::RenderableBsp(BSPTreeNode* root, VecPrtTrisIndex& vTris, std::vec
 
 RenderableBsp::~RenderableBsp() { this->destroy(); }
 
-void RenderableBsp::drawPolygon(BSPTreeNode* tree, bool frontSide) {
-
-    if (tree->isLeaf == false)
-        return;
-
-    auto child = vChild[tree->leafIndex];
-    command->renderable = child;
-    child->submit(camera, *command, this->renderer);
-}
-
-void RenderableBsp::traverseTree(BSPTreeNode* tree) {
+void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<IRenderable3d*>& childDraw) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
-    if (tree == nullptr)
-        return;
+    if ((tree != nullptr) && (tree->isSolid == false)) {
+        SIDE result = tree->hyperPlane.classifyPoint(cameraPos);
+        switch (result) {
+            case SIDE::CP_FRONT: {
+                traverseTree(cameraPos, tree->back, childDraw);
+                if (tree->isLeaf == true) // set to draw Polygon
+                    childDraw.push_back(vChild[tree->leafIndex]);
 
-    if (tree->isSolid == true)
-        return;
+                traverseTree(cameraPos, tree->front, childDraw);
+            } break;
+            case SIDE::CP_BACK: {
+                traverseTree(cameraPos, tree->front, childDraw);
+                if (tree->isLeaf == true) // set to draw Polygon
+                    childDraw.push_back(vChild[tree->leafIndex]);
 
-    SIDE result = tree->hyperPlane.classifyPoint(camera->getPosition());
-    switch (result) {
-        case SIDE::CP_FRONT:
-            traverseTree(tree->back);
-            drawPolygon(tree, true);
-            traverseTree(tree->front);
-            break;
-        case SIDE::CP_BACK:
-            traverseTree(tree->front);
-            drawPolygon(tree, false); // Elimina o render do back-face
-            traverseTree(tree->back);
-            break;
-        default: // SIDE::CP_ONPLANE
-            // the eye point is on the partition hyperPlane...
-            traverseTree(tree->front);
-            traverseTree(tree->back);
-            break;
+                traverseTree(cameraPos, tree->back, childDraw);
+            } break;
+            default: { // SIDE::CP_ONPLANE  // the eye point is on the partition hyperPlane...
+                traverseTree(cameraPos, tree->front, childDraw);
+                traverseTree(cameraPos, tree->back, childDraw);
+            } break;
+        }
     }
 }
 
-void RenderableBsp::draw(const bool& logData) {
-    if (logData)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "BSP draw"); // TODO: ver o que fazer
-}
+void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
+    std::vector<IRenderable3d*> childDraw;
+    const glm::vec3 cameraPos = renderer.getCamera()->getPosition();
+    if (renderer.submit(command, this) == true)
+        traverseTree(cameraPos, root, childDraw);
 
-void RenderableBsp::submit(ICamera* camera, RenderCommand& command, IRenderer3d* renderer) {
-    this->camera = camera;
-    this->renderer = renderer;
-    this->command = &command;
+    for (IRenderable3d* child : childDraw)
+        renderer.submit(command, child);
 
-    renderer->submit(command);
-
-    // submit tree
-    traverseTree(root);
+    childDraw.clear();
 }
 
 void RenderableBsp::destroy() {
 
     while (!vChild.empty()) {
-        Renderable3D* child = vChild.back();
+        IRenderable3d* child = vChild.back();
         vChild.pop_back();
         delete child;
         child = nullptr;

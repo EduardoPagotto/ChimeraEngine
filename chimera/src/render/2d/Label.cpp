@@ -11,9 +11,9 @@ Label::Label(const std::string& text, float x, float y, const glm::vec4& color)
 
 Label::~Label() {}
 
-void Label::submit(IRenderer2D* renderer) {
-    // TODO
-    renderer->drawString(font, text, pos, color);
+void Label::submit(IRenderer2D& renderer) {
+    // TODO: implementar normalizacao 2d 3d chamada de desenho
+    renderer.drawString(font, text, prop2d.position, prop2d.color); // passar o obj Prop2D
 }
 
 } // namespace Chimera

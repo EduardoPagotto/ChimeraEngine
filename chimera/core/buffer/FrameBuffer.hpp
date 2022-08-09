@@ -9,8 +9,6 @@ struct FrameBufferSpecification {
     FrameBufferSpecification() = default;
     uint32_t width = 800, height = 600;
     std::vector<TexParam> attachments;
-    bool swapChainTarget = false;
-    int samples = 1;
 };
 
 class FrameBuffer {

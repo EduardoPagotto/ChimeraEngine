@@ -1,53 +1,47 @@
 #include "chimera/render/scene/Scene.hpp"
+#include "chimera/core/ScriptableEntity.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
-#include "chimera/core/visible/Components.hpp"
+#include "chimera/core/visible/CameraControllerFPS.hpp"
+#include "chimera/core/visible/CameraControllerOrbit.hpp"
+#include "chimera/core/visible/Light.hpp"
 #include "chimera/core/visible/Material.hpp"
+#include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/3d/RenderCommand.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "chimera/render/2d/Tile.hpp"
+#include "chimera/render/3d/RenderableArray.hpp"
+#include "chimera/render/3d/RenderableBsp.hpp"
+#include "chimera/render/3d/RenderableMesh.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
+#include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/VertexData.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
 
-Scene::Scene()
-    : camera(nullptr), viewportWidth(800), viewportHeight(640), physicsControl(nullptr), origem(nullptr), shadowPass(nullptr),
-      logRender(false) {}
+Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) {}
 
 Scene::~Scene() {
-    if (shadowPass) {
-        delete shadowPass;
-        shadowPass = nullptr;
+    if (shadowData.shadowBuffer) {
+        delete shadowData.shadowBuffer;
+        shadowData.shadowBuffer = nullptr;
     }
 }
 
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
+    if (!eRenderBuferSpec)
+        throw std::string("RenderBuffer nao encontrado");
+
     // Define o framebuffer de desenho
-    Shader shader;
-    std::unordered_map<GLenum, std::string> shadeData;
-    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/CanvasHMD.frag";
-    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/CanvasHMD.vert";
-    ShaderManager::load("CanvasHMD", shadeData, shader);
-
-    FrameBufferSpecification fbSpec;
-    fbSpec.attachments = {
-        TexParam(TexFormat::RGBA, TexFormat::RGBA, TexFilter::LINEAR, TexWrap::CLAMP, TexDType::UNSIGNED_BYTE),
-        // TexParam(TexFormat::RED_INTEGER, TexFormat::R32I, TexFilter::LINEAR, TexWrap::CLAMP_TO_EDGE, TexDType::UNSIGNED_BYTE),
-        TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)};
-
+    FrameBufferSpecification& fbSpec = eRenderBuferSpec.getComponent<FrameBufferSpecification>();
     fbSpec.width = width;
     fbSpec.height = height;
-    fbSpec.swapChainTarget = false;
-    fbSpec.samples = 1;
-
-    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), shader);
+    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), eRenderBuferSpec.getComponent<Shader>());
 }
 
-void Scene::createRenderBuffer(EyeView* eyeView) {
+void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
 
     for (auto rb : vRB) {
         delete rb;
@@ -55,18 +49,18 @@ void Scene::createRenderBuffer(EyeView* eyeView) {
     }
 
     vRB.clear();
-
-    if (eyeView->size() == 2) {
-        vRB.push_back(initRB(0, 0, viewportWidth / 2, viewportHeight));                 // left
-        vRB.push_back(initRB(viewportWidth / 2, 0, viewportWidth / 2, viewportHeight)); // right
+    uint32_t halfHidth = width / 2;
+    if (size == 2) {
+        vRB.push_back(initRB(0, 0, halfHidth, height));         // left
+        vRB.push_back(initRB(halfHidth, 0, halfHidth, height)); // right
     } else {
-        vRB.push_back(initRB(0, 0, viewportWidth, viewportHeight)); // full only
+        vRB.push_back(initRB(0, 0, width, height)); // full only
     }
 }
 
 void Scene::onDeatach() {
     // destroy scripts
-    registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+    registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (!nsc.instance) {
             nsc.instance->onDestroy();
             nsc.destroyScript(&nsc);
@@ -76,76 +70,48 @@ void Scene::onDeatach() {
 
 void Scene::onAttach() {
     // lista as tags nas entidades registradas
-    registry.get().each([&](auto entityID) {
-        Entity entity{entityID, &registry};
+    registry->get().each([&](auto entityID) {
+        Entity entity{entityID, registry};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
 
-        // TODO: passar para um NativeScriptComponent
-        if (entity.hasComponent<PhysicsControl>()) {
-            PhysicsControl& p = entity.getComponent<PhysicsControl>();
-            physicsControl = &p;
+        if (tc.tag == "TileText") {
+            CameraComponent& cCam = entity.getComponent<CameraComponent>();
+            Shader& shader = entity.getComponent<Shader>();
+            // ComponentTile& tc = entity.addComponent<ComponentTile>();
+            Tile* tile = new Tile("TileText", &batchRender2D, shader, cCam.camera);
+            layers.pushState(tile);
         }
 
-        // Se for um mesh inicializar componente (já que nao tenho classe de Mesh)
-        if (entity.hasComponent<ComponentMesh>()) {
-            ComponentMesh& mesh = entity.getComponent<ComponentMesh>();
+        // Se for um mesh inicializar componente
+        if (entity.hasComponent<MeshComponent>()) {
+            MeshComponent& mesh = entity.getComponent<MeshComponent>();
 
             // Inicializa Materiais
-            if (entity.hasComponent<ComponentMaterial>()) {
-                ComponentMaterial& material = entity.getComponent<ComponentMaterial>();
+            if (entity.hasComponent<MaterialComponent>()) {
+                MaterialComponent& material = entity.getComponent<MaterialComponent>();
                 if (!material.material->isValid())
                     material.material->init();
             } else {
-                ComponentMaterial& material = entity.addComponent<ComponentMaterial>();
+                MaterialComponent& material = entity.addComponent<MaterialComponent>();
                 material.material->setDefaultEffect();
                 material.material->init();
             }
 
-            // Se nja nao foi inicializado um Renderable3dComponent ao mesh
-            if (!entity.hasComponent<Renderable3dComponent>()) {
+            // Cria componentes renderizaveis
+            Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
+            if (mesh.type == MeshType::SIMPLE)
+                rc.renderable = new RenderableMesh(mesh.mesh);
+            else if (mesh.type == MeshType::ARRAY)
+                rc.renderable = new RenderableArray(mesh.vTrisIndex, mesh.mesh);
+            else if (mesh.type == MeshType::BSTREE)
+                rc.renderable = new RenderableBsp(mesh.mesh);
 
-                // Transforma Mesh em VertexData comprimindo-o
-                std::vector<Chimera::VertexData> renderData;
-                vertexDataFromMesh(mesh.mesh, renderData);
-                std::vector<uint32_t> index;
-                std::vector<Chimera::VertexData> vertexDataOut;
-                vertexDataIndexCompile(renderData, vertexDataOut, index);
-
-                // Create VAO, VBO and IBO
-                VertexArray* vao = new VertexArray();
-                vao->bind();
-
-                VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
-                vbo->bind();
-
-                BufferLayout layout;
-                layout.push(3, GL_FLOAT, sizeof(float), false);
-                layout.push(3, GL_FLOAT, sizeof(float), false);
-                layout.push(2, GL_FLOAT, sizeof(float), false);
-
-                vbo->setLayout(layout);
-                vbo->setData(&vertexDataOut[0], vertexDataOut.size());
-                vbo->unbind();
-                vao->push(vbo);
-
-                vao->unbind();
-
+            // Ajuste de fisica se existir
+            if (entity.hasComponent<TransComponent>()) {
                 glm::vec3 min, max, size;
-                vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
-
-                IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
-                Renderable3D* r = new Renderable3D(vao, ibo, AABB(min, max));
-
-                Renderable3dComponent& rc = entity.addComponent<Renderable3dComponent>();
-                rc.renderable = r;
-            }
-
-            if (entity.hasComponent<ComponentTrans>()) {
-                glm::vec3 min, max, size;
-                vertexDataMeshMinMaxSize(mesh.mesh, min, max, size);
-
-                ComponentTrans& tc = entity.getComponent<ComponentTrans>();
+                meshMinMaxSize(mesh.mesh, min, max, size);
+                TransComponent& tc = entity.getComponent<TransComponent>();
                 if (tc.solid) {
                     Solid* solid = (Solid*)tc.trans;
                     solid->init(size); // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
@@ -153,72 +119,111 @@ void Scene::onAttach() {
             }
         }
 
-        if (entity.hasComponent<ParticleContainer>()) {
-            ParticleContainer& pc = entity.getComponent<ParticleContainer>();
-
+        // Se existir particulas
+        if (entity.hasComponent<EmitterComponent>()) {
+            EmitterComponent& ec = entity.getComponent<EmitterComponent>();
             if (!entity.hasComponent<RenderableParticlesComponent>()) {
-
                 RenderableParticlesComponent& particleSys = entity.addComponent<RenderableParticlesComponent>();
                 particleSys.enable = true;
                 RenderableParticles* p = new RenderableParticles();
-                p->setParticleContainer(&pc);
+                ParticleContainer* pc = ec.emitter->getContainer(0); // FIXME: melhorar!!!!
+                p->setParticleContainer(pc);
                 p->create();
                 particleSys.renderable = p;
+                emitters.push_back(ec.emitter);
             }
+        }
+
+        if (entity.hasComponent<FrameBufferSpecification>()) {
+            FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>();
+            if (tc.tag == "shadow01") { // init shadow data
+                CameraComponent& cc = entity.getComponent<CameraComponent>();
+                cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
+                shadowData.shader = entity.getComponent<Shader>();
+                shadowData.lightProjection = cc.camera->getProjection();
+                shadowData.shadowBuffer = new FrameBuffer(fbSpec);
+            } else if (tc.tag == "RenderBufferMaster") {
+                eRenderBuferSpec = entity;
+            }
+        }
+
+        // Pega o ViewProjection do ECS antes da camera por caussa do vpo
+        if (entity.hasComponent<ViewProjectionComponent>()) {
+            ViewProjectionComponent& ev = entity.getComponent<ViewProjectionComponent>();
+            vpo = ev.vp;
+        }
+
+        // Pega o Canvas do ECS
+        if (entity.hasComponent<CanvasComponent>()) {
+            CanvasComponent& cc = entity.getComponent<CanvasComponent>();
+            this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());
         }
     });
 
-    // initialize scripts
-    registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-        if (!nsc.instance) {
-            nsc.instance = nsc.instantiateScript();
-            nsc.instance->entity = Entity{entity, &registry};
-            nsc.instance->onCreate();
+    { // Registra Camera controllers ViewProjection deve ser localizado acima
+        auto view1 = registry->get().view<CameraComponent>();
+        for (auto entity : view1) {
+            Entity e = Entity{entity, registry};
+
+            auto& cc = e.getComponent<CameraComponent>();
+            if (cc.camKind == CamKind::FPS) {
+                // CameraControllerFPS* ccFps = new CameraControllerFPS(e);
+                layers.pushState(new CameraControllerFPS(e));
+            } else if (cc.camKind == CamKind::ORBIT) {
+                // CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
+                layers.pushState(new CameraControllerOrbit(e));
+            } else if (cc.camKind == CamKind::STATIC) {
+                // e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
+            }
         }
-    });
+    }
+
+    { // initialize scripts
+        registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+            if (!nsc.instance) {
+                nsc.instance = nsc.instantiateScript();
+                nsc.instance->entity = Entity{entity, registry};
+                nsc.instance->onCreate();
+            }
+        });
+    }
 
     origem = new Transform(); // FIXME: coisa feia!!!!
 }
 
-void Scene::onUpdate(const double& ts) {
-    // update scripts
-    registry.get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-        if (nsc.instance) {
-            nsc.instance->onUpdate(ts);
-        }
-    });
+Canvas* Scene::getCanvas() {
+    CanvasComponent& cc = registry->findComponent<CanvasComponent>("chimera_engine");
+    return cc.canvas;
+}
 
-    if (physicsControl) {
-        physicsControl->stepSim(ts);
-        physicsControl->checkCollisions();
-    }
+void Scene::onUpdate(ViewProjection& vp, const double& ts) {
+    // update scripts (PhysicController aqui dentro!!!)
+    registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+        if (nsc.instance)
+            nsc.instance->onUpdate(ts);
+    });
 
     for (auto emissor : emitters)
         emissor->recycleLife(ts);
+
+    for (auto it = layers.begin(); it != layers.end(); it++)
+        (*it)->onUpdate(vp, ts);
 }
 
-void Scene::onViewportResize(uint32_t width, uint32_t height) {
-    viewportWidth = width;
-    viewportHeight = height;
+void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
-    auto view = registry.get().view<ComponentCamera>();
+    createRenderBuffer(vpo->size(), width, height);
+
+    auto view = registry->get().view<CameraComponent>();
     for (auto entity : view) {
-
-        auto& cameraComponent = view.get<ComponentCamera>(entity);
+        auto& cameraComponent = view.get<CameraComponent>(entity);
         if (!cameraComponent.fixedAspectRatio) {
-            cameraComponent.camera->setViewportSize(width, height);
 
-            // se primeira passada inicializar views
-            if (cameraComponent.camera->view()->size() == 0) {
-                cameraComponent.camera->view()->create();
-                if (cameraComponent.single == false)
-                    cameraComponent.camera->view()->create();
-            }
-
-            // carrega camera defalt da cena
-            if (cameraComponent.primary == true) {
-                createRenderBuffer(cameraComponent.camera->view());
-                camera = cameraComponent.camera;
+            for (auto renderBuffer : vRB) { // altera a matrix de projecao apenas na troca de resolucao
+                cameraComponent.camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
+                if (cameraComponent.primary == true) {
+                    activeCam = cameraComponent.camera;
+                }
             }
         }
     }
@@ -228,115 +233,167 @@ bool Scene::onEvent(const SDL_Event& event) {
     switch (event.type) {
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
-                case SDL_WINDOWEVENT_RESIZED:
+                case SDL_WINDOWEVENT_RESIZED: // aqui para camera e engine acerta a janela
                     onViewportResize(event.window.data1, event.window.data2);
                     break;
             }
         } break;
+        case SDL_KEYDOWN: {
+            switch (event.key.keysym.sym) {
+                case SDLK_F9:
+                    logRender = !logRender;
+                    break;
+            }
+        } break;
     }
+
+    for (auto it = layers.begin(); it != layers.end(); it++)
+        (*it)->onEvent(event);
+
     return true;
 }
 
-void Scene::execEmitterPass(ICamera* camera, IRenderer3d& renderer) {
-    auto view = registry.get().view<RenderableParticlesComponent>();
-    for (auto entity : view) {
+void Scene::renderShadow(IRenderer3d& renderer) {
 
+    renderer.begin(activeCam, vpo);
+    {
+        auto lightViewEnt = registry->get().view<LightComponent>();
+        for (auto entity : lightViewEnt) {
+            auto& lc = lightViewEnt.get<LightComponent>(entity);
+            auto& tc = registry->get().get<TransComponent>(entity); // Lento
+            if (lc.global) {
+                // FIXME: usar o direcionm depois no segundo parametro
+                glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
+                shadowData.lightSpaceMatrix = shadowData.lightProjection * lightView;
+            }
+        }
+
+        auto group = registry->get().group<TransComponent, Renderable3dComponent>();
+        for (auto entity : group) {
+            auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
+
+            RenderCommand command;
+            command.transform = tc.trans->translateSrc(origem->getPosition());
+            command.shader = shadowData.shader;
+            command.uniforms["model"] = UValue(command.transform);
+            command.uniforms["lightSpaceMatrix"] = UValue(shadowData.lightSpaceMatrix);
+            rc.renderable->submit(command, renderer);
+        }
+    }
+
+    renderer.end();
+    shadowData.shadowBuffer->bind(); // we're not using the stencil buffer now
+
+    renderer.flush();
+    shadowData.shadowBuffer->unbind();
+}
+
+void Scene::execEmitterPass(IRenderer3d& renderer) {
+    auto view = registry->get().view<RenderableParticlesComponent>();
+    for (auto entity : view) {
         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
-        Entity e = {entity, &registry};
-        ComponentTrans& tc = e.getComponent<ComponentTrans>(); // FIXME: group this!!!
+        Entity e = {entity, registry};
+        TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
         Shader& sc = e.getComponent<Shader>();
-        ComponentMaterial& mc = e.getComponent<ComponentMaterial>();
+        MaterialComponent& mc = e.getComponent<MaterialComponent>();
 
         RenderCommand command;
-        command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.renderable = renderable;
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
+        const glm::mat4& view = vpo->getView();
+        command.uniforms["projection"] = UValue(renderer.getCamera()->getProjection());
+        command.uniforms["view"] = UValue(view);
+        command.uniforms["CameraRight_worldspace"] = UValue(glm::vec3(view[0][0], view[1][0], view[2][0]));
+        command.uniforms["CameraUp_worldspace"] = UValue(glm::vec3(view[0][1], view[1][1], view[2][1]));
         command.uniforms["model"] = UValue(command.transform);
-
-        renderable->submit(camera, command, &renderer);
+        renderable->submit(command, renderer);
     }
 }
 
-void Scene::execRenderPass(ICamera* camera, IRenderer3d& renderer) {
-    auto group = registry.get().group<Shader, ComponentMaterial, ComponentTrans, Renderable3dComponent>();
+void Scene::execRenderPass(IRenderer3d& renderer) {
+    auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
-        auto [sc, mc, tc, rc] = group.get<Shader, ComponentMaterial, ComponentTrans, Renderable3dComponent>(entity);
+        auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
-        command.logRender = logRender;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.renderable = rc.renderable;
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
         command.uniforms["model"] = UValue(command.transform);
-        rc.renderable->submit(camera, command, &renderer);
+        rc.renderable->submit(command, renderer);
     }
 }
 
 void Scene::onRender() {
+    Renderer3d renderBatch(logRender);
+
     if (logRender == true) {
-        const glm::vec3& pos = camera->getPosition();
+        const glm::vec3& pos = activeCam->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
 
     // render a shadows in framebuffer
-    if (shadowPass)
-        shadowPass->exec(registry, camera, renderBatch, origem, logRender);
+    if (shadowData.shadowBuffer)
+        renderShadow(renderBatch);
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
-        camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
-        camera->view()->setIndex(count);
+
+        vpo->setIndex(count);
         count++;
 
-        // used by all
-        renderBatch.uQueue().insert(std::make_pair("projection", UValue(camera->getProjection())));
-        renderBatch.uQueue().insert(std::make_pair("view", UValue(camera->view()->getView())));
+        // data load used by all
+        renderBatch.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
+        renderBatch.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
 
-        // load shadows props to renderBatch
-        if (shadowPass)
-            shadowPass->appy(camera, renderBatch);
+        // data load shadows props to renderBatch in shade of models!!!!
+        if (shadowData.shadowBuffer) {
+            renderBatch.uboQueue().insert(std::make_pair("viewPos", UValue(activeCam->getPosition())));
+            renderBatch.uboQueue().insert(std::make_pair("shadows", UValue(1)));
+            renderBatch.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
+            renderBatch.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowData.lightSpaceMatrix)));
+            renderBatch.texQueue().push_back(shadowData.shadowBuffer->getDepthAttachemnt());
+        }
 
-        auto lightView = registry.get().view<ComponentLight>();
+        // data load lights
+        auto lightView = registry->get().view<LightComponent>();
         for (auto entity : lightView) {
-            auto& lc = lightView.get<ComponentLight>(entity);
-            auto& tc = registry.get().get<ComponentTrans>(entity); // lightView.get<ComponentLight>(entity);
-            if (lc.global)                                         // biding light prop
-                lc.light->bindLight(renderBatch.uQueue(), tc.trans->getMatrix());
+            auto& lc = lightView.get<LightComponent>(entity);
+            auto& tc = registry->get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
+            if (lc.global)                                          // biding light prop
+                lc.light->bindLight(renderBatch.uboQueue(), tc.trans->getMatrix());
         }
 
-        { // Render mesh
-            renderBatch.begin(camera);
-            this->execRenderPass(camera, renderBatch);
+        renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-            renderBatch.end();
-            renderBuffer->bind(); // we're not using the stencil buffer now
-
-            renderBatch.flush(); // desenha aqui!!!!
-        }
+        renderBatch.begin(activeCam, vpo);
+        this->execRenderPass(renderBatch);
+        renderBatch.end();
+        renderBatch.flush();
 
         if (emitters.size() > 0) {
             // inicializa state machine do opengl
-            BinaryStateEnable depth(GL_DEPTH_TEST); // glEnable(GL_DEPTH_TEST);// Enable depth test
-            BinaryStateEnable blender(GL_BLEND);    // glEnable(GL_BLEND);
-            DepthFuncSetter depthFunc(GL_LESS); // glDepthFunc(GL_LESS);   // Accept fragment if it closer to the camera than the former one
+            BinaryStateEnable depth(GL_DEPTH_TEST, GL_TRUE);
+            BinaryStateEnable blender(GL_BLEND, GL_TRUE);
+            DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderBatch.begin(camera);
-            this->execEmitterPass(camera, renderBatch);
-
+            renderBatch.begin(activeCam, vpo);
+            this->execEmitterPass(renderBatch);
             renderBatch.end();
             renderBatch.flush();
         }
 
+        for (auto it = layers.begin(); it != layers.end(); it++)
+            (*it)->onRender();
+
         {
             // TODO: captura do entity no framebuffer da tela
-            // // get val from color buffer (must be inside framebuffer renderer
+            // get val from color buffer (must be inside framebuffer renderer
             // glm::ivec2 pos = MouseDevice::getMove();
             // pos.y = viewportHeight - pos.y;
             // int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);

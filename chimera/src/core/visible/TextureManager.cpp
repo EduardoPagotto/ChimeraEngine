@@ -32,16 +32,15 @@ Texture* TextureManager::get(const std::string& name) {
     return nullptr;
 }
 
-int TextureManager::invert_image(int pitch, int height, void* image_pixels) {
+void TextureManager::invert_image(int pitch, int height, void* image_pixels) {
     int index;
     void* temp_row;
     int height_div_2;
 
     temp_row = (void*)malloc(pitch);
-    if (NULL == temp_row) {
-        SDL_SetError("Not enough memory for image inversion");
-        return -1;
-    }
+    if (NULL == temp_row)
+        throw std::string("Not enough memory for image inversion");
+
     // if height is odd, don't need to swap middle row
     height_div_2 = (int)(height * .5);
     for (index = 0; index < height_div_2; index++) {
@@ -52,31 +51,29 @@ int TextureManager::invert_image(int pitch, int height, void* image_pixels) {
         memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row, pitch);
     }
     free(temp_row);
-    return 0;
 }
 
-bool TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surface, TexParam textureParameters) {
+Texture* TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surface, TexParam textureParameters) {
 
-    if (TextureManager::invert_image(surface->pitch, surface->h, surface->pixels) != 0) {
-        SDL_SetError("Falha na inversao de pixels");
-    }
+    TextureManager::invert_image(surface->pitch, surface->h, surface->pixels);
 
-    TextureManager::add(new Texture(name, surface, textureParameters));
+    Texture* tex = new Texture(name, surface, textureParameters);
+    TextureManager::add(tex);
 
-    return true;
+    return tex;
 }
 
-bool TextureManager::loadFromFile(const std::string& name, const std::string& pathfile, TexParam textureParameters) {
+Texture* TextureManager::loadFromFile(const std::string& name, const std::string& pathfile, TexParam textureParameters) {
 
     SDL_Surface* pImage = IMG_Load(pathfile.c_str());
     if (pImage == nullptr)
         throw std::string("Falha ao ler arquivo:" + pathfile);
 
-    bool res = TextureManager::loadFromSurface(name, pImage, textureParameters);
+    Texture* tex = TextureManager::loadFromSurface(name, pImage, textureParameters);
 
     SDL_FreeSurface(pImage);
 
-    return res;
+    return tex;
 }
 
 } // namespace Chimera

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <library_images>
+        <image id="RenderBufferImage" name="RenderBufferImage">
+            <create_2d>
+                <format>
+                    <hint channels="RGBA" channelsInternal="RGBA" range="UINT" precision="DEFAULT"/>
+                </format>
+            </create_2d>
+        </image>
+        <image id="RenderBufferObjImage" name="RenderBufferObjImage">
+            <create_2d>
+                <format>
+                    <hint channels="REDI" channelsInternal="R32I" range="UINT" precision="DEFAULT"/>
+                </format>
+            </create_2d>
+        </image>
+        <image id="RenderBufferDepthImage" name="RenderBufferDepthImage">
+            <create_2d>
+                <format>
+                    <hint channels="D" channelsInternal="DA" range="UINT" precision="DEFAULT"/>
+                </format>
+            </create_2d>
+        </image>
+    </library_images>
+    <library_effects>
+        <effect id="RenderBuffer-effect">
+            <profile_COMMON>
+                <newparam sid="RenderBufferSample2D">
+                    <sampler2D>
+                        <minfilter>LINEAR</minfilter>
+                        <magfilter>LINEAR</magfilter>
+                        <wrap_r>CLAMP2</wrap_r>
+                        <wrap_s>CLAMP2</wrap_s>
+                        <wrap_t>CLAMP2</wrap_t>
+                        <instance_image url="#RenderBufferImage"/>
+                    </sampler2D>
+                </newparam>
+                <!-- <newparam sid="RenderBufferObjSample2D">
+                    <sampler2D>
+                        <minfilter>LINEAR</minfilter>
+                        <magfilter>LINEAR</magfilter>
+                        <wrap_r>CLAMP</wrap_r>
+                        <wrap_s>CLAMP</wrap_s>
+                        <wrap_t>CLAMP</wrap_t>
+                        <instance_image url="#RenderBufferObjImage"/>
+                    </sampler2D>
+                </newparam> -->
+                <newparam sid="RenderBufferSamplerDepth">
+                    <samplerDEPTH>
+                        <minfilter>NONE</minfilter>
+                        <magfilter>NONE</magfilter>
+                        <wrap_r>NONE</wrap_r>
+                        <wrap_s>NONE</wrap_s>
+                        <wrap_t>NONE</wrap_t>
+                        <instance_image url="#RenderBufferDepthImage"/>
+                    </samplerDEPTH>
+                </newparam>
+            </profile_COMMON>
+            <profile_GLSL>
+                <technique sid="CanvasHMD">
+                    <include sid="vps_canvas" url="file://./assets/shaders/CanvasHMD.vert"/>
+                    <include sid="fps_canvas" url="file://./assets/shaders/CanvasHMD.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="vps_canvas">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="fps_canvas">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+        </effect>
+    </library_effects>
+</COLLADA>

@@ -3,13 +3,22 @@
 
 namespace Chimera {
 
-Renderable2D::Renderable2D(glm::vec3 pos, glm::vec2 size, glm::vec4 color) : pos(pos), size(size), color(color), texture(nullptr) {
-    uv = Renderable2D::getDefaultUVs();
+Renderable2D::Renderable2D(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color) {
+
+    prop2d.position = pos;
+    prop2d.size = size;
+    prop2d.color = color;
+    prop2d.texture = nullptr;
+    prop2d.uv = Renderable2D::getDefaultUVs();
 }
 
-Renderable2D::Renderable2D(glm::vec3 pos, glm::vec2 size, Texture* texture)
-    : pos(pos), size(size), texture(texture), color(glm::vec4(1, 1, 1, 1)) {
-    uv = Renderable2D::getDefaultUVs();
+Renderable2D::Renderable2D(const glm::vec3& pos, const glm::vec2& size, Texture* texture) {
+
+    prop2d.position = pos;
+    prop2d.size = size;
+    prop2d.color = glm::vec4(1, 1, 1, 1);
+    prop2d.texture = texture;
+    prop2d.uv = Renderable2D::getDefaultUVs();
 }
 
 const std::vector<glm::vec2>& Renderable2D::getDefaultUVs() {

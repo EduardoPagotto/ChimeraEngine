@@ -14,26 +14,22 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
 set (RenderSource 	VertexData.cpp
-					partition/BSPTree.cpp
-					partition/Cube.cpp 
-					partition/Maze.cpp
-					partition/LoadObj.cpp
-					partition/LoadHeightMap.cpp
 					2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
 					2d/Layer.cpp
-					2d/Group.cpp
 					2d/Label.cpp
+					2d/Tile.cpp
 					3d/Renderer3d.cpp
 					3d/Renderable3D.cpp
+					3d/RenderableMesh.cpp
+					3d/RenderableIBO.cpp
 					3d/RenderableArray.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
 					3d/RenderableParticles.cpp
-					scene/ShadowPass.cpp
 					scene/Scene.cpp
-					scene/CameraController.cpp)
+					collada/ColladaRender.cpp)
 
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}

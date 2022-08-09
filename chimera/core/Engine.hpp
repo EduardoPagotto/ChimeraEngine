@@ -1,26 +1,29 @@
 #pragma once
 #include "StateStack.hpp"
 #include "Timer.hpp"
+#include "chimera/core/Registry.hpp"
+#include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/device/Canvas.hpp"
 
 namespace Chimera {
 
 class Engine {
   public:
-    Engine(Canvas* canvas);
+    Engine();
     virtual ~Engine();
+    void init();
     void run();
-    void pushState(IStateMachine* state);
-    void pushOverlay(IStateMachine* state);
     Canvas* getCanvas() const { return canvas; }
-    const int getEye() const { return eyeIndice; }
-    IStateMachine* getState(const std::string& name) const { return stack.getState(name); }
+    StateStack& getStack() { return stack; }
+    Registry& getRegistry() { return registry; }
 
-  protected:
+  private:
+    Registry registry;
+    Entity entity;
+    ViewProjection vp;
     bool changeStatusFlow(SDL_Event* pEventSDL);
-    int eyeIndice;
     bool pause;
-    uint32_t fps, countDelta;
+    uint32_t fps;
     Canvas* canvas;
     Timer timerFPS;
     StateStack stack;

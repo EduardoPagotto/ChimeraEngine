@@ -28,6 +28,8 @@ class Octree {
     inline Octree* getParent() { return pParent; }
     inline unsigned int getDeep() { return deep; }
 
+    void debug_render();
+
   private:
     void subdivide();
     bool insertNew(const glm::vec3& _point);

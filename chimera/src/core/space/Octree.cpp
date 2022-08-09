@@ -112,4 +112,16 @@ void Octree::query(const AABB& _aabb, std::vector<glm::vec3>& _found) { // std::
             pChild[i]->query(_aabb, _found);
     }
 }
+
+void Octree::debug_render() {
+
+    if (divided == true) {
+        for (short i = 0; i < 8; i++)
+            pChild[i]->debug_render();
+    } else {
+
+        boundary.debug_render();
+    }
+}
+
 } // namespace Chimera

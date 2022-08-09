@@ -160,9 +160,7 @@ void Scene::onAttach() {
         }
     });
 
-    {
-
-        // Registra Camera controllers ViewProjection deve ser localizado acima
+    { // Registra Camera controllers ViewProjection deve ser localizado acima
         auto view1 = registry->get().view<CameraComponent>();
         for (auto entity : view1) {
             Entity e = Entity{entity, registry};
@@ -180,8 +178,7 @@ void Scene::onAttach() {
         }
     }
 
-    {
-        // initialize scripts
+    { // initialize scripts
         registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
             if (!nsc.instance) {
                 nsc.instance = nsc.instantiateScript();
@@ -215,17 +212,18 @@ void Scene::onUpdate(ViewProjection& vp, const double& ts) {
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
+    createRenderBuffer(vpo->size(), width, height);
+
     auto view = registry->get().view<CameraComponent>();
     for (auto entity : view) {
-
         auto& cameraComponent = view.get<CameraComponent>(entity);
         if (!cameraComponent.fixedAspectRatio) {
-            cameraComponent.camera->setViewportSize(width, height);
 
-            // carrega camera defalt da cena
-            if (cameraComponent.primary == true) {
-                createRenderBuffer(vpo->size(), width, height);
-                activeCam = cameraComponent.camera;
+            for (auto renderBuffer : vRB) { // altera a matrix de projecao apenas na troca de resolucao
+                cameraComponent.camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
+                if (cameraComponent.primary == true) {
+                    activeCam = cameraComponent.camera;
+                }
             }
         }
     }
@@ -344,7 +342,7 @@ void Scene::onRender() {
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
-        activeCam->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight()); // TODO: se camera nao muda projecao rodar apenas 1
+
         vpo->setIndex(count);
         count++;
 

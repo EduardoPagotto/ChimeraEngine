@@ -1,4 +1,5 @@
 #include "chimera/core/space/Octree.hpp"
+#include "chimera/core/mathGL.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -118,7 +119,23 @@ bool Octree::insert(const glm::vec3& _point) {
     return this->insertNew(_point);
 }
 
-void Octree::query(const AABB& _aabb, std::vector<glm::vec3>& _found) { // std::vector<glm::vec3> points
+bool Octree::hasPoint(const glm::vec3& point) {
+    if (boundary.contains(point) == true) {
+        if (divided == true) {
+            for (short i = 0; i < 8; i++)
+                if (pChild[i]->hasPoint(point))
+                    return true;
+        }
+
+        for (auto p : points) {
+            if (is_nearVec3(p, point))
+                return true;
+        }
+    }
+    return false;
+}
+
+void Octree::query(const AABB& _aabb, std::vector<glm::vec3>& _found) {
 
     if (boundary.intersects(_aabb) == false)
         return;

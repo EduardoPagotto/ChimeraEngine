@@ -61,5 +61,6 @@ class Scene : public IStateMachine {
     BatchRender2D batchRender2D;
 
     Octree* octree;
+    AABB sceneAABB;
 };
 } // namespace Chimera

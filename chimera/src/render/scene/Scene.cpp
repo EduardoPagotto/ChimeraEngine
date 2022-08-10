@@ -104,6 +104,11 @@ void Scene::loadOctree(const AABB& aabb) {
 // }
 
 void Scene::onAttach() {
+
+    // Totalizadores de area
+    glm::vec3 tot_min, tot_max;
+    int tot_mesh = 0;
+
     // lista as tags nas entidades registradas
     registry->get().each([&](auto entityID) {
         Entity entity{entityID, registry};
@@ -142,18 +147,28 @@ void Scene::onAttach() {
             else if (mesh.type == MeshType::BSTREE)
                 rc.renderable = new RenderableBsp(mesh.mesh);
 
-            // Ajuste de fisica se existir
+            glm::vec3 min, max, size;
+            meshMinMaxSize(mesh.mesh, min, max, size);
             if (entity.hasComponent<TransComponent>()) {
-                glm::vec3 min, max, size;
-                meshMinMaxSize(mesh.mesh, min, max, size);
+                // Ajuste de fisica se existir
                 TransComponent& tc = entity.getComponent<TransComponent>();
                 if (tc.solid) {
                     // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
                     Solid* solid = (Solid*)tc.trans;
                     // TODO: Era half size ??
-                    solid->init(size / 2.0f); // FIXME: verse e /2 mesmo!!!!!
+                    solid->init(size / 2.0f);
                 }
             }
+
+            // Totalizadores de ambiente
+            if (tot_mesh > 0) {
+                tot_min = glm::min(tot_min, min);
+                tot_max = glm::max(tot_max, max);
+            } else {
+                tot_min = min;
+                tot_max = max;
+            }
+            tot_mesh++;
         }
 
         // Se existir particulas
@@ -226,6 +241,7 @@ void Scene::onAttach() {
     }
 
     origem = new Transform(); // FIXME: coisa feia!!!!
+    sceneAABB.setBoundary(tot_min, tot_max);
 }
 
 Canvas* Scene::getCanvas() {
@@ -245,6 +261,9 @@ void Scene::onUpdate(ViewProjection& vp, const double& ts) {
 
     for (auto it = layers.begin(); it != layers.end(); it++)
         (*it)->onUpdate(vp, ts);
+
+    // destroyOctree();
+    // octree = new Octree(sceneAABB, 4, nullptr, true, 0);
 }
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {

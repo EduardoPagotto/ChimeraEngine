@@ -24,6 +24,7 @@ class Octree {
 
     bool insert(const glm::vec3& _point);
     void query(const AABB& _aabb, std::vector<glm::vec3>& _found);
+    bool hasPoint(const glm::vec3& point);
 
     inline Octree* getParent() { return pParent; }
     inline unsigned int getDeep() { return deep; }

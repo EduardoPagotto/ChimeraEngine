@@ -5,6 +5,7 @@ namespace Chimera {
 
 #define EPSILON 1e-2 // FIXME: para 1e-1 Falhas em calculos de aproximação verificar projeto bsptree
 
+glm::vec3 getSizeMinMax(const glm::vec3& min, const glm::vec3& max);
 bool is_near(const float& v1, const float& v2);
 bool is_nearVec3(const glm::vec3& v1, const glm::vec3& v2);
 bool is_nearVec2(const glm::vec2& v1, const glm::vec2& v2);

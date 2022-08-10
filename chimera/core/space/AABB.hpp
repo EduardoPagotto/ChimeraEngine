@@ -23,6 +23,7 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
     bool contains(const glm::vec3& _point) const;
     AABB transformation(const glm::mat4& transformation) const;
     void debug_render() const;
+    const glm::vec3& getVertex(int index) const { return vertex[index]; }
 
   protected:
     glm::vec3 vertex[8];

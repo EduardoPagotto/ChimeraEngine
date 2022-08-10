@@ -78,9 +78,8 @@ void meshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
         max = glm::max(max, m->point[i]);
     }
 
-    size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
-    size.y = (glm::abs(max.y) + glm::abs(min.y)) / 2.0f;
-    size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
+    // TODO: Era half size ??
+    size = getSizeMinMax(min, max);
 }
 
 void meshDataClean(Mesh* m) { //??

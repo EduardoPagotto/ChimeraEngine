@@ -1,5 +1,6 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
 #include "chimera/core/partition/BSPTree.hpp"
+#include "chimera/core/space/Octree.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
@@ -56,6 +57,19 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
     vertexDataMinMaxSize(&vVertex[0], vVertex.size(), min, max, size);
     aabb.setBoundary(min, max);
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", this->vChild.size());
+
+    // Teste
+    Octree o(aabb, 8, nullptr, true, 0);
+    for (uint32_t i = 0; i < vChild.size(); i++) {
+        RenderableIBO* r = (RenderableIBO*)vChild[i];
+        const AABB& a = r->getAABB();
+        for (int j = 0; j < 8; j++) {
+            o.insert(a.getVertex(j)); // deu errado!!!!
+        }
+    }
+
+    o.dump_data(99);
+    o.destroy();
 }
 
 RenderableBsp::~RenderableBsp() { this->destroy(); }

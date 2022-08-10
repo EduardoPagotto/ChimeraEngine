@@ -113,8 +113,10 @@ void Scene::onAttach() {
                 meshMinMaxSize(mesh.mesh, min, max, size);
                 TransComponent& tc = entity.getComponent<TransComponent>();
                 if (tc.solid) {
+                    // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
                     Solid* solid = (Solid*)tc.trans;
-                    solid->init(size); // Cria rigidBody iniciaza transformacao e inicializa shape se ele nao existir
+                    // TODO: Era half size ??
+                    solid->init(size / 2.0f); // FIXME: verse e /2 mesmo!!!!!
                 }
             }
         }

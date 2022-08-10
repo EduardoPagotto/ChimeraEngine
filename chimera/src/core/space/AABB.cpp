@@ -15,9 +15,10 @@ AABB::AABB(const AABB& _cpy) {
 }
 
 void AABB::setPosition(const glm::vec3& _pos, const glm::vec3& _size) {
-    glm::vec3 max = _pos + _size;
-    glm::vec3 min = _pos - _size;
-    setBoundary(max, min);
+    // TODO: Era half size ??
+    glm::vec3 max = _pos + (_size / 2.0f);
+    glm::vec3 min = _pos - (_size / 2.0f);
+    setBoundary(min, max);
 }
 
 void AABB::setBoundary(const glm::vec3& _min, const glm::vec3& _max) {
@@ -30,11 +31,9 @@ void AABB::setBoundary(const glm::vec3& _min, const glm::vec3& _max) {
     vertex[6] = glm::vec3(_min.x, _max.y, _max.z);
     vertex[7] = glm::vec3(_max.x, _max.y, _max.z);
 
-    size = glm::vec3((glm::abs(_max.x) + glm::abs(_min.x)) / 2,  // X
-                     (glm::abs(_max.y) + glm::abs(_min.y)) / 2,  // Y
-                     (glm::abs(_max.z) + glm::abs(_min.z)) / 2); // Z
-
-    position = _min + size;
+    // TODO: Era half size ??
+    size = getSizeMinMax(_min, _max);
+    position = _min + (size / 2.0f);
 }
 
 bool AABB::intersects(const AABB& _aabb) const {

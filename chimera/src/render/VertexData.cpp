@@ -49,9 +49,8 @@ void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, g
         max = glm::max(max, pVertexList[i].point);
     }
 
-    size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
-    size.y = (glm::abs(max.y) + glm::abs(min.y)) / 2.0f;
-    size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
+    // TODO: Era half size ??
+    size = getSizeMinMax(min, max);
 }
 
 void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
@@ -65,9 +64,8 @@ void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSiz
         min = glm::min(min, pVertexList[pIndexList[i]].point);
         max = glm::max(max, pVertexList[pIndexList[i]].point);
     }
-    size.x = (glm::abs(max.x) + glm::abs(min.x)) / 2.0f;
-    size.y = (glm::abs(max.y) + glm::abs(min.y)) / 2.0f;
-    size.z = (glm::abs(max.z) + glm::abs(min.z)) / 2.0f;
+    // TODO: Era half size ??
+    size = getSizeMinMax(min, max);
 }
 
 void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {

@@ -29,6 +29,7 @@ class Octree {
     inline unsigned int getDeep() { return deep; }
 
     void debug_render();
+    void dump_data(short indice);
 
   private:
     void subdivide();
@@ -42,5 +43,7 @@ class Octree {
     Octree* pParent;
     Octree* pChild[8];
     std::vector<glm::vec3> points;
+    uint32_t serial;
+    static uint32_t serial_master;
 };
 } // namespace Chimera

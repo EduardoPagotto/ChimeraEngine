@@ -45,8 +45,7 @@ class Scene : public IStateMachine {
     void renderShadow(IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
 
-    void loadOctree(const AABB& aabb);
-    void destroyOctree();
+    void createOctree(const AABB& aabb);
 
     StateStack layers;
     Registry* registry;

@@ -15,9 +15,10 @@ Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(lo
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(Camera* camera, ViewProjection* vpo) {
+void Renderer3d::begin(Camera* camera, ViewProjection* vpo, Octree* octree) {
     this->camera = camera;
     this->vpo = vpo;
+    this->octree = octree;
     frustum.set(vpo->getViewProjectionInverse());
     // debug data
     totIBO = 0;
@@ -34,6 +35,12 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
     Renderable3D* r = (Renderable3D*)renderable;
     const AABB& aabb = r->getAABB();
     AABB nova = aabb.transformation(command.transform);
+
+    if ((this->octree != nullptr) && (r->getIBO() != nullptr) && (vpo->getIndex() == 0)) {
+        const AABB& a = r->getAABB();
+        this->octree->insert(a.getPosition());
+    }
+
     // adicione apenas o que esta no clip-space
     if (nova.visible(frustum) == true) {
         // Debug info only
@@ -104,6 +111,10 @@ void Renderer3d::flush() {
 
         r->draw(logData);
     }
+
+    if (this->octree != nullptr)
+        this->octree->debug_render();
+
     renderQueue.clear(); // Limpa rendercommand
     pLastVao->unbind();
 

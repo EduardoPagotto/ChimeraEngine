@@ -60,9 +60,7 @@ void CameraControllerFPS::processCameraRotation(double xOffset, double yOffset, 
 
 void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float deltaTime) {
     float velocity = movementSpeed * deltaTime;
-    // position += direction * velocity;
-
-    camera->setPosition(camera->getPosition() + direction * deltaTime); // FIXME: mover para camera???
+    camera->setPosition(camera->getPosition() + direction * velocity);
 }
 
 void CameraControllerFPS::onUpdate(ViewProjection& vp, const double& ts) {

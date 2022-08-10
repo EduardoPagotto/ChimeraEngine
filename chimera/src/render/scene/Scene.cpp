@@ -68,40 +68,12 @@ void Scene::onDeatach() {
     });
 }
 
-void Scene::destroyOctree() {
+void Scene::createOctree(const AABB& aabb) {
     if (octree != nullptr) {
         delete octree;
-        octree = nullptr;
     }
+    octree = new Octree(aabb, 4, nullptr, true, 0);
 }
-
-void Scene::loadOctree(const AABB& aabb) {
-    if (octree == nullptr) {
-        octree = new Octree(aabb, 4, nullptr, true, 0);
-    } else {
-        octree->insert(aabb.getPosition());
-    }
-}
-
-// void Scene::close() {
-//     octree->debug_render();
-//     delete octree;
-//     octree = nullptr;
-
-// Teste
-// octree = new Octree(aabb, 8, nullptr, true, 0);
-// for (uint32_t i = 0; i < vChild.size(); i++) {
-//     RenderableIBO* r = (RenderableIBO*)vChild[i];
-//     const AABB& a = r->getAABB();
-//     octree->insert(a.getPosition());
-//     // for (int j = 0; j < 8; j++) {
-//     //     o.insert(a.getVertex(j));
-//     // }
-// }
-// o.dump_data(99);
-// o.destroy();
-
-// }
 
 void Scene::onAttach() {
 
@@ -262,8 +234,7 @@ void Scene::onUpdate(ViewProjection& vp, const double& ts) {
     for (auto it = layers.begin(); it != layers.end(); it++)
         (*it)->onUpdate(vp, ts);
 
-    // destroyOctree();
-    // octree = new Octree(sceneAABB, 4, nullptr, true, 0);
+    // createOctree(sceneAABB);
 }
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
@@ -311,7 +282,7 @@ bool Scene::onEvent(const SDL_Event& event) {
 
 void Scene::renderShadow(IRenderer3d& renderer) {
 
-    renderer.begin(activeCam, vpo);
+    renderer.begin(activeCam, vpo, nullptr); // Octree ??
     {
         auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
@@ -426,7 +397,7 @@ void Scene::onRender() {
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-        renderBatch.begin(activeCam, vpo);
+        renderBatch.begin(activeCam, vpo, octree);
         this->execRenderPass(renderBatch);
         renderBatch.end();
         renderBatch.flush();
@@ -438,7 +409,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderBatch.begin(activeCam, vpo);
+            renderBatch.begin(activeCam, vpo, nullptr); // Octree ??
             this->execEmitterPass(renderBatch);
             renderBatch.end();
             renderBatch.flush();

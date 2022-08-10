@@ -4,6 +4,7 @@
 #include "chimera/core/StateStack.hpp"
 #include "chimera/core/buffer/RenderBuffer.hpp"
 #include "chimera/core/device/Canvas.hpp"
+#include "chimera/core/space/Octree.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/ITrans.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
@@ -44,6 +45,9 @@ class Scene : public IStateMachine {
     void renderShadow(IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
 
+    void loadOctree(const AABB& aabb);
+    void destroyOctree();
+
     StateStack layers;
     Registry* registry;
     ITrans* origem;
@@ -55,5 +59,7 @@ class Scene : public IStateMachine {
     std::vector<IEmitter*> emitters;
     Entity eRenderBuferSpec;
     BatchRender2D batchRender2D;
+
+    Octree* octree;
 };
 } // namespace Chimera

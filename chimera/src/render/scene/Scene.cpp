@@ -21,7 +21,7 @@
 
 namespace Chimera {
 
-Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) {}
+Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) { octree = nullptr; }
 
 Scene::~Scene() {
     if (shadowData.shadowBuffer) {
@@ -67,6 +67,41 @@ void Scene::onDeatach() {
         }
     });
 }
+
+void Scene::destroyOctree() {
+    if (octree != nullptr) {
+        delete octree;
+        octree = nullptr;
+    }
+}
+
+void Scene::loadOctree(const AABB& aabb) {
+    if (octree == nullptr) {
+        octree = new Octree(aabb, 4, nullptr, true, 0);
+    } else {
+        octree->insert(aabb.getPosition());
+    }
+}
+
+// void Scene::close() {
+//     octree->debug_render();
+//     delete octree;
+//     octree = nullptr;
+
+// Teste
+// octree = new Octree(aabb, 8, nullptr, true, 0);
+// for (uint32_t i = 0; i < vChild.size(); i++) {
+//     RenderableIBO* r = (RenderableIBO*)vChild[i];
+//     const AABB& a = r->getAABB();
+//     octree->insert(a.getPosition());
+//     // for (int j = 0; j < 8; j++) {
+//     //     o.insert(a.getVertex(j));
+//     // }
+// }
+// o.dump_data(99);
+// o.destroy();
+
+// }
 
 void Scene::onAttach() {
     // lista as tags nas entidades registradas

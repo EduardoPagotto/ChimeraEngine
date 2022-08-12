@@ -21,6 +21,7 @@ set (RenderSource 	VertexData.cpp
 					2d/Label.cpp
 					2d/Tile.cpp
 					3d/Renderer3d.cpp
+					3d/Renderer3dLines.cpp
 					3d/Renderable3D.cpp
 					3d/RenderableMesh.cpp
 					3d/RenderableIBO.cpp

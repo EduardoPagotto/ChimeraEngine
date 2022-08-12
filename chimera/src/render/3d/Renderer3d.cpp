@@ -109,11 +109,8 @@ void Renderer3d::flush() {
             }
         }
 
-        r->draw(logData);
+        r->draw(logData); // aqui
     }
-
-    if (this->octree != nullptr)
-        this->octree->debug_render();
 
     renderQueue.clear(); // Limpa rendercommand
     pLastVao->unbind();
@@ -121,6 +118,9 @@ void Renderer3d::flush() {
     // Limpa buffer de uniforms ao terminar todos os draws calls
     uniformsQueue.clear();
     textureQueue.clear();
+
+    // if (this->octree != nullptr)
+    //     this->octree->debug_render();
 }
 
 } // namespace Chimera

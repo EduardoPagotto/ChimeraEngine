@@ -28,6 +28,7 @@ set (SourcesCore Registry.cpp
 				 buffer/VertexArray.cpp
 				 buffer/FrameBuffer.cpp
 				 buffer/RenderBuffer.cpp
+				 DrawLine.cpp
 				 space/Plane.cpp
 				 space/Frustum.cpp
 				 space/AABB.cpp

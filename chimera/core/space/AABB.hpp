@@ -24,6 +24,7 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
     AABB transformation(const glm::mat4& transformation) const;
     void debug_render() const;
     const glm::vec3& getVertex(int index) const { return vertex[index]; }
+    const glm::vec3* getAllVertex() const { return vertex; }
 
   protected:
     glm::vec3 vertex[8];

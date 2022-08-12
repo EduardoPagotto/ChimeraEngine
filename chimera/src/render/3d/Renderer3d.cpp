@@ -8,7 +8,6 @@
 namespace Chimera {
 
 Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(logData) {
-    uniformsQueue.reserve(500);
     renderQueue.reserve(500);
     textureQueue.reserve(50);
 }

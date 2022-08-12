@@ -17,14 +17,11 @@ class Renderer3d : public IRenderer3d {
     virtual bool submit(const RenderCommand& command, IRenderable3d* renderable) override;
     virtual void end() override;
     virtual void flush() override;
-
-    virtual inline MapUniform& uboQueue() override { return uniformsQueue; }
-    virtual inline std::vector<Texture*>& texQueue() override { return textureQueue; }
+    virtual inline std::vector<Texture*>& texQueue() { return textureQueue; }
 
   private:
     std::vector<std::tuple<RenderCommand, Renderable3D*>> renderQueue;
     std::vector<Texture*> textureQueue;
-    MapUniform uniformsQueue;
     Frustum frustum;
     uint32_t totIBO, totFaces;
     bool logData;

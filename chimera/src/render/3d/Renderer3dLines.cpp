@@ -3,7 +3,7 @@
 
 namespace Chimera {
 
-Renderer3dLines::Renderer3dLines() {}
+Renderer3dLines::Renderer3dLines() { drawLine = nullptr; }
 
 Renderer3dLines::~Renderer3dLines() { destroy(); }
 

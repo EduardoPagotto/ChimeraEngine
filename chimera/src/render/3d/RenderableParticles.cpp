@@ -75,11 +75,11 @@ void RenderableParticles::draw(const bool& logData) {
 
     // Buffer orphaning, a common way to improve streaming, perf. See above link for details.
     vboPos->bind();
-    vboPos->setSubData(pc->posData, 0, pc->particlesCount * sizeof(glm::vec4));
+    vboPos->setSubData2(pc->posData, 0, pc->particlesCount * sizeof(glm::vec4)); // FIXME: usar o BuffewLayout
 
     // Buffer orphaning, a common way to improve streaming, // perf. See above link for details.
     vboCor->bind();
-    vboCor->setSubData(pc->colorData, 0, pc->particlesCount * sizeof(GLubyte) * 4);
+    vboCor->setSubData2(pc->colorData, 0, pc->particlesCount * sizeof(GLubyte) * 4);
 
     // Bind our texture
     // material->bindMaterialInformation(shader);

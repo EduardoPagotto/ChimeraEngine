@@ -28,7 +28,7 @@ void DrawLine::create(const uint32_t& sizeBuffer) {
     layout.Push<float>(3, false); // point
     layout.Push<float>(3, false); // color
 
-    pVbo->setLayout(layout); // FIXME: no debug verificar tamanho no setData final!!! (stride interfere!!!)
+    pVbo->setLayout(layout);
     pVbo->setData(nullptr, sizeBuffer);
 }
 

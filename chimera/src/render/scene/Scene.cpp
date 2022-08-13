@@ -21,10 +21,7 @@
 
 namespace Chimera {
 
-Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) {
-    octree = nullptr;
-    renderLines.create(10000);
-}
+Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) { octree = nullptr; }
 
 Scene::~Scene() {
     if (shadowData.shadowBuffer) {
@@ -405,7 +402,11 @@ void Scene::onRender() {
         renderBatch.end();
         renderBatch.flush();
 
-        {
+        if (logRender == true) { // RENDER DEBUG AABB
+            if (renderLines.valid() == false) {
+                renderLines.create(10000);
+            }
+
             renderLines.begin(activeCam, vpo, nullptr);
 
             renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
@@ -418,6 +419,20 @@ void Scene::onRender() {
                 RenderCommand command;
                 command.transform = tc.trans->translateSrc(origem->getPosition());
                 rc.renderable->submit(command, renderLines);
+            }
+
+            auto view = registry->get().view<RenderableParticlesComponent>();
+            for (auto entity : view) {
+                RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
+                IRenderable3d* renderable = rc.renderable;
+
+                Entity e = {entity, registry};
+                TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
+
+                RenderCommand command;
+                command.transform = tc.trans->translateSrc(origem->getPosition());
+
+                renderable->submit(command, renderLines);
             }
 
             renderLines.end();

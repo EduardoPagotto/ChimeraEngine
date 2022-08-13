@@ -15,6 +15,7 @@ class Renderer3dLines : public IRenderer3d {
     virtual void end() override;
     virtual void flush() override;
 
+    bool valid() { return drawLine != nullptr; }
     void create(const uint32_t& sizeBuffer);
     void destroy();
 

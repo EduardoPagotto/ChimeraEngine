@@ -18,6 +18,7 @@ class VertexBuffer {
     void setLayout(const BufferLayout& bufferLayout);
     void setData(const void* data, const uint32_t& size);
     void setSubData(const void* data, const uint32_t& offset, const uint32_t& size);
+    void setSubData2(const void* data, const uint32_t& offset, const uint32_t& size);
 
     void* map();
     void unmap();

@@ -40,6 +40,10 @@ void VertexBuffer::setSubData(const void* data, const uint32_t& offset, const ui
     glBufferSubData(GL_ARRAY_BUFFER, offset, size * layout.getStride(), data);
 }
 
+void VertexBuffer::setSubData2(const void* data, const uint32_t& offset, const uint32_t& size) {
+    glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+}
+
 // GetPointerInternal //bind anter necessario
 void* VertexBuffer::map() { return (void*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY); }
 // ReleasePointer

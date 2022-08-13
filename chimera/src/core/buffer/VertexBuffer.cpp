@@ -37,7 +37,7 @@ void VertexBuffer::setData(const void* data, const uint32_t& size) {
 }
 
 void VertexBuffer::setSubData(const void* data, const uint32_t& offset, const uint32_t& size) {
-    glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+    glBufferSubData(GL_ARRAY_BUFFER, offset, size * layout.getStride(), data);
 }
 
 // GetPointerInternal //bind anter necessario

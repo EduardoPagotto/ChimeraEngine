@@ -24,7 +24,7 @@ class DrawLine {
     void addAABB(const AABB& aabb, const glm::vec3& color);
     void create(const uint32_t& sizeBuffer);
     void destroy();
-    void render(RenderCommand& command, MapUniform& uniformsQueue);
+    void render(MapUniform& uniformsQueue);
 
   private:
     Shader shader;

@@ -20,7 +20,6 @@ class Renderer3dLines : public IRenderer3d {
 
   private:
     DrawLine* drawLine;
-    RenderCommand command;
     Frustum frustum;
 };
 

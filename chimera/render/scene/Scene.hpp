@@ -10,6 +10,7 @@
 #include "chimera/core/visible/ParticleEmitter.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
+#include "chimera/render/3d/Renderer3dLines.hpp"
 
 namespace Chimera {
 
@@ -61,5 +62,6 @@ class Scene : public IStateMachine {
 
     Octree* octree;
     AABB sceneAABB;
+    Renderer3dLines renderLines;
 };
 } // namespace Chimera

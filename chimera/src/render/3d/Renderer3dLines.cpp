@@ -5,7 +5,7 @@ namespace Chimera {
 
 Renderer3dLines::Renderer3dLines() {}
 
-Renderer3dLines::~Renderer3dLines() {}
+Renderer3dLines::~Renderer3dLines() { destroy(); }
 
 void Renderer3dLines::create(const uint32_t& sizeBuffer) {
     drawLine = new DrawLine();
@@ -34,8 +34,7 @@ bool Renderer3dLines::submit(const RenderCommand& command, IRenderable3d* render
 
     // adicione apenas o que esta no clip-space
     if (nova.visible(frustum) == true) {
-        this->command = command;
-        drawLine->addAABB(nova, glm::vec3(1.0, 1.0, 1.0)); // FIXME: ver se e esta cor mesmo
+        drawLine->addAABB(nova, glm::vec3(1.0, 1.0, 0.0)); // FIXME: ver se e esta cor mesmo
         return true;
     }
 
@@ -43,7 +42,7 @@ bool Renderer3dLines::submit(const RenderCommand& command, IRenderable3d* render
 }
 
 void Renderer3dLines::flush() {
-    drawLine->render(command, uniformsQueue);
+    drawLine->render(uniformsQueue);
     uniformsQueue.clear();
 }
 } // namespace Chimera

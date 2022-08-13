@@ -41,22 +41,20 @@ void DrawLine::destroy() {
     points.clear();
 }
 
-void DrawLine::render(RenderCommand& command, MapUniform& uniformsQueue) {
+void DrawLine::render(MapUniform& uniformsQueue) {
     glUseProgram(shader.getID());
 
     // TODO: colocar antes de chamar!!
     // shader.setUniformU("projection", Chimera::UValue(projection)); // renderer.getCamera()->getProjection()
     // shader.setUniformU("view", Chimera::UValue(view));             // vpo->getView()
 
-    // bind dos uniforms from model
-    for (const auto& kv : command.uniforms)
-        shader.setUniformU(kv.first.c_str(), kv.second);
-
     for (const auto& kv : uniformsQueue)
         shader.setUniformU(kv.first.c_str(), kv.second);
 
     pVao->bind();
     pVbo->bind();
+
+    pVbo->setSubData(&points[0], 0, points.size());
 
     glDrawArrays(GL_LINES, 0, points.size()); // /2 ??  *2
 

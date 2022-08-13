@@ -21,7 +21,10 @@
 
 namespace Chimera {
 
-Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) { octree = nullptr; }
+Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) {
+    octree = nullptr;
+    renderLines.create(10000);
+}
 
 Scene::~Scene() {
     if (shadowData.shadowBuffer) {
@@ -402,6 +405,25 @@ void Scene::onRender() {
         renderBatch.end();
         renderBatch.flush();
 
+        {
+            renderLines.begin(activeCam, vpo, nullptr);
+
+            renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
+            renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
+
+            auto group = registry->get().group<TransComponent, Renderable3dComponent>();
+            for (auto entity : group) {
+                auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
+
+                RenderCommand command;
+                command.transform = tc.trans->translateSrc(origem->getPosition());
+                rc.renderable->submit(command, renderLines);
+            }
+
+            renderLines.end();
+            renderLines.flush();
+        }
+
         if (emitters.size() > 0) {
             // inicializa state machine do opengl
             BinaryStateEnable depth(GL_DEPTH_TEST, GL_TRUE);
@@ -423,7 +445,6 @@ void Scene::onRender() {
             // get val from color buffer (must be inside framebuffer renderer
             // glm::ivec2 pos = MouseDevice::getMove();
             // pos.y = viewportHeight - pos.y;
-            // int val = renderBuffer->getFramBuffer()->readPixel(1, pos.x, pos.y);
             // SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
         }
 

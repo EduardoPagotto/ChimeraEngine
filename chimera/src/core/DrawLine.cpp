@@ -12,55 +12,75 @@ DrawLine::DrawLine() {
     ShaderManager::load("DrawLine", shadeData, shader);
 }
 
-DrawLine::~DrawLine() {}
+DrawLine::~DrawLine() { destroy(); }
 
-void DrawLine::init() {
+void DrawLine::create(const uint32_t& sizeBuffer) {
 
-    BufferLayout b;
-    b.Push<float>(3, false);
-    b.Push<float>(3, false);
+    pVao = new VertexArray();
+    pVbo = new VertexBuffer(BufferType::STREAM);
 
-    vbo = new VertexBuffer(BufferType::STATIC);
-    vao.bind();
-    vbo->bind();
+    pVao->push(pVbo);
 
-    vao.push(vbo);
+    pVao->bind();
+    pVbo->bind();
 
-    vbo->setLayout(b);
-    vbo->setData(&points[0], points.size());
-    vbo->unbind();
+    BufferLayout layout;
+    layout.Push<float>(3, false); // point
+    layout.Push<float>(3, false); // color
+
+    pVbo->setLayout(layout); // FIXME: no debug verificar tamanho no setData final!!! (stride interfere!!!)
+    pVbo->setData(nullptr, sizeBuffer);
 }
 
-void DrawLine::render(const glm::mat4& projection, const glm::mat4& view) {
+void DrawLine::destroy() {
+    if (pVao != nullptr) {
+        delete pVao;
+        pVao = nullptr;
+    }
+
+    points.clear();
+}
+
+void DrawLine::render(RenderCommand& command, MapUniform& uniformsQueue) {
     glUseProgram(shader.getID());
 
-    shader.setUniformU("projection", Chimera::UValue(projection)); // renderer.getCamera()->getProjection()
-    shader.setUniformU("view", Chimera::UValue(view));             // vpo->getView()
+    // TODO: colocar antes de chamar!!
+    // shader.setUniformU("projection", Chimera::UValue(projection)); // renderer.getCamera()->getProjection()
+    // shader.setUniformU("view", Chimera::UValue(view));             // vpo->getView()
 
-    vao.bind();
-    glDrawArrays(GL_LINES, 0, points.size() * 2); // 2 ??
-    vao.unbind();
+    // bind dos uniforms from model
+    for (const auto& kv : command.uniforms)
+        shader.setUniformU(kv.first.c_str(), kv.second);
+
+    for (const auto& kv : uniformsQueue)
+        shader.setUniformU(kv.first.c_str(), kv.second);
+
+    pVao->bind();
+    pVbo->bind();
+
+    glDrawArrays(GL_LINES, 0, points.size()); // /2 ??  *2
+
+    pVbo->unbind();
+    pVao->unbind();
+
     glUseProgram(0);
+
+    points.clear();
 }
 
 void DrawLine::addAABB(const AABB& aabb, const glm::vec3& color) {
-
     const glm::vec3* v = aabb.getAllVertex();
-
     add(v[0], v[1], color);
     add(v[2], v[3], color);
     add(v[4], v[5], color);
     add(v[6], v[7], color);
-
     add(v[0], v[2], color);
     add(v[1], v[3], color);
     add(v[4], v[6], color);
     add(v[5], v[7], color);
-
     add(v[0], v[4], color);
     add(v[1], v[5], color);
     add(v[2], v[6], color);
     add(v[3], v[7], color);
 }
-
 } // namespace Chimera

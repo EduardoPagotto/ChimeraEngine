@@ -22,7 +22,6 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
     bool intersects(const AABB& _aabb) const;
     bool contains(const glm::vec3& _point) const;
     AABB transformation(const glm::mat4& transformation) const;
-    void debug_render() const;
     const glm::vec3& getVertex(int index) const { return vertex[index]; }
     const glm::vec3* getAllVertex() const { return vertex; }
 

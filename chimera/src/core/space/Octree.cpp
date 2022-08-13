@@ -158,7 +158,7 @@ void Octree::debug_render() {
             pChild[i]->debug_render();
     } else {
         // if (points.size() > 0)
-        boundary.debug_render();
+        // boundary.debug_render();
     }
 }
 

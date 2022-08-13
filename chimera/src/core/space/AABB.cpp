@@ -1,5 +1,4 @@
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {
@@ -79,38 +78,5 @@ AABB AABB::transformation(const glm::mat4& transformation) const {
     }
 
     return AABB(min, max);
-}
-
-void AABB::debug_render() const {
-    glBegin(GL_LINES);
-
-    glVertex3fv(glm::value_ptr(vertex[0]));
-    glVertex3fv(glm::value_ptr(vertex[1]));
-    glVertex3fv(glm::value_ptr(vertex[2]));
-    glVertex3fv(glm::value_ptr(vertex[3]));
-    glVertex3fv(glm::value_ptr(vertex[4]));
-    glVertex3fv(glm::value_ptr(vertex[5]));
-    glVertex3fv(glm::value_ptr(vertex[6]));
-    glVertex3fv(glm::value_ptr(vertex[7]));
-
-    glVertex3fv(glm::value_ptr(vertex[0]));
-    glVertex3fv(glm::value_ptr(vertex[2]));
-    glVertex3fv(glm::value_ptr(vertex[1]));
-    glVertex3fv(glm::value_ptr(vertex[3]));
-    glVertex3fv(glm::value_ptr(vertex[4]));
-    glVertex3fv(glm::value_ptr(vertex[6]));
-    glVertex3fv(glm::value_ptr(vertex[5]));
-    glVertex3fv(glm::value_ptr(vertex[7]));
-
-    glVertex3fv(glm::value_ptr(vertex[0]));
-    glVertex3fv(glm::value_ptr(vertex[4]));
-    glVertex3fv(glm::value_ptr(vertex[1]));
-    glVertex3fv(glm::value_ptr(vertex[5]));
-    glVertex3fv(glm::value_ptr(vertex[2]));
-    glVertex3fv(glm::value_ptr(vertex[6]));
-    glVertex3fv(glm::value_ptr(vertex[3]));
-    glVertex3fv(glm::value_ptr(vertex[7]));
-
-    glEnd();
 }
 } // namespace Chimera

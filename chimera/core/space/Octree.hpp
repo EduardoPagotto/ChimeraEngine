@@ -29,7 +29,7 @@ class Octree {
     inline Octree* getParent() { return pParent; }
     inline unsigned int getDeep() { return deep; }
 
-    void debug_render();
+    void getBondaryList(std::vector<AABB>& list, const bool& showEmpty);
     void dump_data(short indice);
 
   private:

@@ -282,7 +282,7 @@ bool Scene::onEvent(const SDL_Event& event) {
 
 void Scene::renderShadow(IRenderer3d& renderer) {
 
-    renderer.begin(activeCam, vpo, nullptr); // Octree ??
+    renderer.begin(activeCam, vpo, nullptr);
     {
         auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
@@ -446,7 +446,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderBatch.begin(activeCam, vpo, nullptr); // Octree ??
+            renderBatch.begin(activeCam, vpo, nullptr);
             this->execEmitterPass(renderBatch);
             renderBatch.end();
             renderBatch.flush();

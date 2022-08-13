@@ -151,14 +151,15 @@ void Octree::query(const AABB& _aabb, std::vector<glm::vec3>& _found) {
     }
 }
 
-void Octree::debug_render() {
+void Octree::getBondaryList(std::vector<AABB>& list, const bool& showEmpty) {
 
     if (divided == true) {
         for (short i = 0; i < 8; i++)
-            pChild[i]->debug_render();
+            pChild[i]->getBondaryList(list, showEmpty);
     } else {
-        // if (points.size() > 0)
-        // boundary.debug_render();
+        if ((points.size() > 0) || (showEmpty)) {
+            list.push_back(boundary);
+        }
     }
 }
 

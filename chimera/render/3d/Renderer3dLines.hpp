@@ -15,12 +15,12 @@ class Renderer3dLines : public IRenderer3d {
     virtual void end() override;
     virtual void flush() override;
 
-    bool valid() { return drawLine != nullptr; }
+    bool valid() { return drawLine.valid(); }
     void create(const uint32_t& sizeBuffer);
     void destroy();
 
   private:
-    DrawLine* drawLine;
+    DrawLine drawLine;
     Frustum frustum;
 };
 

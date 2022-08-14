@@ -21,7 +21,7 @@
 
 namespace Chimera {
 
-Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), logRender(false) { octree = nullptr; }
+Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), verbose(0) { octree = nullptr; }
 
 Scene::~Scene() {
     if (shadowData.shadowBuffer) {
@@ -234,7 +234,7 @@ void Scene::onUpdate(ViewProjection& vp, const double& ts) {
     for (auto it = layers.begin(); it != layers.end(); it++)
         (*it)->onUpdate(vp, ts);
 
-    // createOctree(sceneAABB);
+    createOctree(sceneAABB);
 }
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
@@ -267,9 +267,12 @@ bool Scene::onEvent(const SDL_Event& event) {
         } break;
         case SDL_KEYDOWN: {
             switch (event.key.keysym.sym) {
-                case SDLK_F9:
-                    logRender = !logRender;
-                    break;
+                case SDLK_F9: {
+                    verbose++;
+                    if (verbose > 2)
+                        verbose = 0;
+
+                } break;
             }
         } break;
     }
@@ -356,9 +359,9 @@ void Scene::execRenderPass(IRenderer3d& renderer) {
 }
 
 void Scene::onRender() {
-    Renderer3d renderBatch(logRender);
+    Renderer3d renderBatch(verbose > 0);
 
-    if (logRender == true) {
+    if (verbose > 0) {
         const glm::vec3& pos = activeCam->getPosition();
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Eye: %0.2f; %0.3f; %0.3f", pos.x, pos.y, pos.z);
     }
@@ -402,41 +405,64 @@ void Scene::onRender() {
         renderBatch.end();
         renderBatch.flush();
 
-        if (logRender == true) { // RENDER DEBUG AABB
-            if (renderLines.valid() == false) {
-                renderLines.create(10000);
+        if (verbose > 0) { // RENDER DEBUG AABB
+            if (verbose == 1) {
+
+                if (dl.valid() == false) {
+                    dl.create(10000);
+                }
+
+                if (octree != nullptr) {
+                    std::vector<AABB> list;
+                    octree->getBondaryList(list, false);
+
+                    for (auto& aabb : list) {
+                        dl.addAABB(aabb, glm::vec3(1.0, 1.0, 1.0));
+                    }
+
+                    MapUniform muni;
+                    muni["projection"] = UValue(activeCam->getProjection());
+                    muni["view"] = UValue(vpo->getView());
+                    dl.render(muni);
+                }
+
+            } else if (verbose == 2) {
+
+                if (renderLines.valid() == false) {
+                    renderLines.create(10000);
+                }
+
+                renderLines.begin(activeCam, vpo, nullptr);
+
+                renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
+                renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
+
+                auto group = registry->get().group<TransComponent, Renderable3dComponent>();
+                for (auto entity : group) {
+                    auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
+
+                    RenderCommand command;
+                    command.transform = tc.trans->translateSrc(origem->getPosition());
+                    rc.renderable->submit(command, renderLines);
+                }
+
+                auto view = registry->get().view<RenderableParticlesComponent>();
+                for (auto entity : view) {
+                    RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
+                    IRenderable3d* renderable = rc.renderable;
+
+                    Entity e = {entity, registry};
+                    TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
+
+                    RenderCommand command;
+                    command.transform = tc.trans->translateSrc(origem->getPosition());
+
+                    renderable->submit(command, renderLines);
+                }
+
+                renderLines.end();
+                renderLines.flush();
             }
-
-            renderLines.begin(activeCam, vpo, nullptr);
-
-            renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-            renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
-
-            auto group = registry->get().group<TransComponent, Renderable3dComponent>();
-            for (auto entity : group) {
-                auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
-
-                RenderCommand command;
-                command.transform = tc.trans->translateSrc(origem->getPosition());
-                rc.renderable->submit(command, renderLines);
-            }
-
-            auto view = registry->get().view<RenderableParticlesComponent>();
-            for (auto entity : view) {
-                RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
-                IRenderable3d* renderable = rc.renderable;
-
-                Entity e = {entity, registry};
-                TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
-
-                RenderCommand command;
-                command.transform = tc.trans->translateSrc(origem->getPosition());
-
-                renderable->submit(command, renderLines);
-            }
-
-            renderLines.end();
-            renderLines.flush();
         }
 
         if (emitters.size() > 0) {

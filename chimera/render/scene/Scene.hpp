@@ -54,7 +54,7 @@ class Scene : public IStateMachine {
     Camera* activeCam;
     ViewProjection* vpo;
     ShadowData shadowData;
-    bool logRender;
+    uint8_t verbose;
     std::vector<RenderBuffer*> vRB;
     std::vector<IEmitter*> emitters;
     Entity eRenderBuferSpec;
@@ -63,5 +63,7 @@ class Scene : public IStateMachine {
     Octree* octree;
     AABB sceneAABB;
     Renderer3dLines renderLines;
+
+    DrawLine dl;
 };
 } // namespace Chimera

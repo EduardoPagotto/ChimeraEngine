@@ -25,11 +25,12 @@ class DrawLine {
     void create(const uint32_t& sizeBuffer);
     void destroy();
     void render(MapUniform& uniformsQueue);
+    bool valid() { return pVao != nullptr; }
 
   private:
     Shader shader;
-    VertexArray* pVao;
-    VertexBuffer* pVbo;
+    VertexArray* pVao = nullptr;
+    VertexBuffer* pVbo = nullptr;
     std::vector<LinesValues> points;
 };
 } // namespace Chimera

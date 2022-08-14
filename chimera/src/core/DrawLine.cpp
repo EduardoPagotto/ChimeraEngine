@@ -5,7 +5,8 @@ namespace Chimera {
 // ref: https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11517
 
 DrawLine::DrawLine() {
-
+    pVao = nullptr;
+    pVbo = nullptr;
     std::unordered_map<GLenum, std::string> shadeData;
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";

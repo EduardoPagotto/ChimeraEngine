@@ -23,6 +23,7 @@ class Octree {
     void destroy();
 
     bool insert(const glm::vec3& _point);
+    void insertAABB(const AABB& aabb);
     void query(const AABB& _aabb, std::vector<glm::vec3>& _found);
     bool hasPoint(const glm::vec3& point);
 

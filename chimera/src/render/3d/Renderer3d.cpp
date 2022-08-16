@@ -37,7 +37,8 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
 
     if ((this->octree != nullptr) && (r->getIBO() != nullptr) && (vpo->getIndex() == 0)) {
         const AABB& a = r->getAABB();
-        this->octree->insert(a.getPosition());
+        // this->octree->insert(a.getPosition());
+        this->octree->insertAABB(a);
     }
 
     // adicione apenas o que esta no clip-space

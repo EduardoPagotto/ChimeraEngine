@@ -92,6 +92,12 @@ bool Octree::insertNew(const glm::vec3& _point) {
     return false;
 }
 
+void Octree::insertAABB(const AABB& aabb) {
+    const glm::vec3* v = aabb.getAllVertex();
+    for (int i = 0; i < 8; i++)
+        this->insert(v[i]);
+}
+
 bool Octree::insert(const glm::vec3& _point) {
 
     if (boundary.contains(_point) == false)

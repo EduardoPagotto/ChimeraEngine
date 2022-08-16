@@ -4,6 +4,16 @@
 
 namespace Chimera {
 
+MeshType getMeshTypeFromString(const std::string& text) {
+    if (text == "ARRAY") {
+        return MeshType::ARRAY;
+    } else if (text == "BSPTREE") {
+        return MeshType::BSTREE;
+    }
+
+    return MeshType::SIMPLE;
+}
+
 void meshDataScale(Mesh* m, const float& new_size, const bool& hasTexture) {
 
     if (hasTexture == false) {

@@ -4,7 +4,7 @@
         <geometry id="Voxel_maze_01" name="Voxel_maze_01">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="10" height="10" floor="1">
+                    <external_cube partition="BSPTREE" size="10.0" width="10" height="10" floor="1">
                         <l f="0" h="0">1111111111</l>
                         <l f="0" h="1">12      21</l>
                         <l f="0" h="2">1        1</l>
@@ -22,7 +22,7 @@
         <geometry id="Voxel_maze_01" name="Voxel_maze_01">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="26" height="7" floor="1">
+                    <external_cube partition="BSPTREE" size="10.0" width="26" height="7" floor="1">
                         <l f="0" h="0">11111111111111111111111111</l>
                         <l f="0" h="1">1                        1</l>
                         <l f="0" h="2">1   111      11111   1   1</l>
@@ -37,7 +37,7 @@
         <geometry id="Voxel_maze_02" name="Voxel_maze_02">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="6" height="5" floor="4">
+                    <external_cube partition="BSPTREE" size="10.0" width="6" height="5" floor="4">
                         <l f="0" h="0">111111</l>
                         <l f="0" h="1">123321</l>
                         <l f="0" h="2">133331</l>
@@ -65,7 +65,7 @@
         <geometry id="Voxel_maze_03" name="Voxel_maze_03">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="50.0" width="10" height="10" floor="3">
+                    <external_cube partition="BSPTREE" size="50.0" width="10" height="10" floor="3">
                         <l f="0" h="0">1111111111</l>
                         <l f="0" h="1">1312336321</l>
                         <l f="0" h="2">1313313331</l>
@@ -103,7 +103,7 @@
         <geometry id="Voxel_maze_04" name="Voxel_maze_04">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="7" height="7" floor="1">
+                    <external_cube partition="BSPTREE" size="10.0" width="7" height="7" floor="1">
                         <l f="0" h="0">1111111</l>
                         <l f="0" h="1">1255521</l>
                         <l f="0" h="2">1555551</l>
@@ -118,7 +118,7 @@
         <geometry id="Voxel_maze_05" name="Voxel_maze_05">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="5" height="5" floor="1">
+                    <external_cube partition="BSPTREE" size="10.0" width="5" height="5" floor="1">
                         <l f="0" h="0">11111</l>
                         <l f="0" h="1">12521</l>
                         <l f="0" h="2">15551</l>
@@ -131,7 +131,7 @@
         <geometry id="Voxel_maze_06" name="Voxel_maze_06">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="3" height="3" floor="1">
+                    <external_cube partition="BSPTREE" size="10.0" width="3" height="3" floor="1">
                         <l f="0" h="0">111</l>
                         <l f="0" h="1">151</l>
                         <l f="0" h="2">111</l>
@@ -142,7 +142,7 @@
         <geometry id="Voxel_maze_07" name="Voxel_maze_07">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="7" height="7" floor="4">
+                    <external_cube partition="BSPTREE" size="10.0" width="7" height="7" floor="4">
                         <l f="0" h="0">1111111</l>
                         <l f="0" h="1">1173711</l>
                         <l f="0" h="2">1633361</l>
@@ -178,7 +178,7 @@
         <geometry id="Voxel_maze_08" name="Voxel_maze_08">
             <extra>
                 <technique profile="chimera">
-                    <external_cube size="10.0" width="27" height="14" floor="1">
+                    <external_cube partition="BSPTREE" size="10.0" width="27" height="14" floor="1">
                         <l f="0" h="00">111111111111111111111111111</l>
                         <l f="0" h="01">1                 1       1</l>
                         <l f="0" h="02">1 1 1 1 1 1 1 1 1 1 1 1 1 1</l>

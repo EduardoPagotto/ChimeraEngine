@@ -12,7 +12,7 @@ void ColladaCube::create(const std::string& id, const std::string& name, Entity&
     mc.tag.id = id;
     mc.tag.tag = name;
     mc.tag.serial = Collada::getNewSerial();
-    mc.type = MeshType::BSTREE; // FIXME: Aqui mesmo ?????
+    mc.type = getMeshTypeFromString(geo.attribute("partition").value());
 
     uint32_t width = static_cast<uint32_t>(std::stoul(geo.attribute("width").value()));
     uint32_t height = static_cast<uint32_t>(std::stoul(geo.attribute("height").value()));

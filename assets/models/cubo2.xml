@@ -22,7 +22,7 @@
         <geometry id="Cubo-mesh" name="Cubo-mesh">
             <extra>
                 <technique profile="chimera">
-                    <external_obj target="./assets/models/cubo2.obj"/>
+                    <external_obj partition="SIMPLE" target="./assets/models/cubo2.obj"/>
                     <instance_effect url="#Shade01-effect">
                         <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
                     </instance_effect>
@@ -32,7 +32,27 @@
         <geometry id="CuboZ-mesh" name="CuboZ-mesh">
             <extra>
                 <technique profile="chimera">
-                    <external_obj target="./assets/models/cubo_textura_simples.obj"/>
+                    <external_obj partition="SIMPLE" target="./assets/models/cubo_textura_simples.obj"/>
+                    <instance_effect url="#Shade01-effect">
+                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
+                    </instance_effect>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Mapa02-mesh" name="Mapa02-mesh">
+            <extra>
+                <technique profile="chimera">
+                    <external_obj partition="BSPTREE" target="./assets/models/map02.obj"/>
+                    <instance_effect url="#Shade01-effect">
+                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
+                    </instance_effect>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="paredeSimples-mesh" name="paredeSimples-mesh">
+            <extra>
+                <technique profile="chimera">
+                    <external_obj partition="BSPTREE" target="./assets/models/parede_simples.obj"/>
                     <instance_effect url="#Shade01-effect">
                         <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
                     </instance_effect>

@@ -94,7 +94,7 @@
         <geometry id="HeighMap-mesh" name="HeighMap-mesh">
             <extra>
                 <technique profile="chimera">
-                    <external_height target="./assets/heightmaps/terrain3.jpg" square_x="32" square_y="32"/>
+                    <external_height partition="ARRAY" target="./assets/heightmaps/terrain3.jpg" square_x="32" square_y="32"/>
                     <size>1000.0 200.0 1000.0</size>
                 </technique>
             </extra>

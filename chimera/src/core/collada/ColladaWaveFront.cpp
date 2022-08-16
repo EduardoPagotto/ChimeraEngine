@@ -15,6 +15,7 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
     eMesh.tag.id = id;
     eMesh.tag.tag = name;
     eMesh.tag.serial = Collada::getNewSerial();
+    eMesh.type = getMeshTypeFromString(geo.attribute("partition").value());
     std::string target = geo.attribute("target").value();
 
     MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();

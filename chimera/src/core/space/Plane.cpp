@@ -86,7 +86,7 @@ SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::ve
     return SIDE::CP_SPANNING;
 }
 
-bool Plane::intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm::vec3* intersection, float* percentage) const {
+bool Plane::intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm::vec3& intersection, float& percentage) const {
 
     glm::vec3 direction = lineend - linestart;
     float linelength = glm::dot(direction, this->normal);
@@ -96,14 +96,14 @@ bool Plane::intersect(const glm::vec3& linestart, const glm::vec3& lineend, glm:
     glm::vec3 L1 = this->point - linestart;
 
     float dist_from_plane = glm::dot(L1, this->normal);
-    *percentage = dist_from_plane / linelength;
+    percentage = dist_from_plane / linelength;
 
-    if (*percentage < 0.0f)
+    if (percentage < 0.0f)
         return false;
-    else if (*percentage > 1.0f)
+    else if (percentage > 1.0f)
         return false;
 
-    *intersection = linestart + (direction * (*percentage));
+    intersection = linestart + (direction * percentage);
     return true;
 }
 } // namespace Chimera

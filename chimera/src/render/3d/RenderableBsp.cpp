@@ -141,12 +141,12 @@ bool RenderableBsp::lineOfSight(const glm::vec3& Start, const glm::vec3& End, BS
     }
 
     if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
-        tree->hyperPlane.intersect(Start, End, &intersection, &temp);
+        tree->hyperPlane.intersect(Start, End, intersection, temp);
         return lineOfSight(Start, intersection, tree->front) && lineOfSight(End, intersection, tree->back);
     }
 
     if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
-        tree->hyperPlane.intersect(Start, End, &intersection, &temp);
+        tree->hyperPlane.intersect(Start, End, intersection, temp);
         return lineOfSight(End, intersection, tree->front) && lineOfSight(Start, intersection, tree->back);
     }
 

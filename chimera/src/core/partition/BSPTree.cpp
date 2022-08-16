@@ -3,7 +3,8 @@
 
 namespace Chimera {
 
-template <class T> void swapFace(T& a, T& b) {
+template <class T>
+void swapFace(T& a, T& b) {
     T c = b;
     b = a;
     a = c;
@@ -166,8 +167,8 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
         vertC_normal = mesh->normal[_pTriangle->p[TRI_PC]]; // old c
     }
 
-    hyperPlane.intersect(a, c, &A, &propAC);
-    hyperPlane.intersect(b, c, &B, &propBC);
+    hyperPlane.intersect(a, c, A, propAC);
+    hyperPlane.intersect(b, c, B, propBC);
 
     // PA texture coord
     glm::vec2 deltaA = (vertC_uv - vertA_uv) * propAC;

@@ -3,6 +3,8 @@
 
 namespace Chimera {
 
+enum class AabbBondery { BSW = 0, BSE = 1, TSW = 2, TSE = 3, BNW = 4, BNE = 5, TNW = 6, TNE = 7 };
+
 class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
   public:
     AABB() = default;

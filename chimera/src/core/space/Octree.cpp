@@ -61,27 +61,25 @@ void Octree::subdivide() {
     float ymin = p.y - h.y;
     float zmin = p.z - h.z;
 
-    AABB tne, tnw, tsw, tse, bne, bnw, bsw, bse;
+    AABB bsw, bse, tsw, tse, bnw, bne, tnw, tne;
 
-    tne.setPosition(glm::vec3(xmax, ymax, zmax), s);
-    tnw.setPosition(glm::vec3(xmin, ymax, zmax), s);
-    tsw.setPosition(glm::vec3(xmin, ymax, zmin), s);
-    tse.setPosition(glm::vec3(xmax, ymax, zmin), s);
-
-    bne.setPosition(glm::vec3(xmax, ymin, zmax), s);
-    bnw.setPosition(glm::vec3(xmin, ymin, zmax), s);
     bsw.setPosition(glm::vec3(xmin, ymin, zmin), s);
     bse.setPosition(glm::vec3(xmax, ymin, zmin), s);
+    tsw.setPosition(glm::vec3(xmin, ymax, zmin), s);
+    tse.setPosition(glm::vec3(xmax, ymax, zmin), s);
+    bnw.setPosition(glm::vec3(xmin, ymin, zmax), s);
+    bne.setPosition(glm::vec3(xmax, ymin, zmax), s);
+    tnw.setPosition(glm::vec3(xmin, ymax, zmax), s);
+    tne.setPosition(glm::vec3(xmax, ymax, zmax), s);
 
-    pChild[(int)CHILDOCTREE::top_northeast] = new Octree(tne, capacity, this, leafMode, newDeep);
-    pChild[(int)CHILDOCTREE::top_northwest] = new Octree(tnw, capacity, this, leafMode, newDeep);
-    pChild[(int)CHILDOCTREE::top_southwest] = new Octree(tsw, capacity, this, leafMode, newDeep);
-    pChild[(int)CHILDOCTREE::top_southeast] = new Octree(tse, capacity, this, leafMode, newDeep);
-
-    pChild[(int)CHILDOCTREE::botton_northeast] = new Octree(bne, capacity, this, leafMode, newDeep);
-    pChild[(int)CHILDOCTREE::botton_northwest] = new Octree(bnw, capacity, this, leafMode, newDeep);
-    pChild[(int)CHILDOCTREE::botton_southwest] = new Octree(bsw, capacity, this, leafMode, newDeep);
-    pChild[(int)CHILDOCTREE::botton_southeast] = new Octree(bse, capacity, this, leafMode, newDeep);
+    pChild[(int)AabbBondery::BSW] = new Octree(bsw, capacity, this, leafMode, newDeep);
+    pChild[(int)AabbBondery::BSE] = new Octree(bse, capacity, this, leafMode, newDeep);
+    pChild[(int)AabbBondery::TSW] = new Octree(tsw, capacity, this, leafMode, newDeep);
+    pChild[(int)AabbBondery::TSE] = new Octree(tse, capacity, this, leafMode, newDeep);
+    pChild[(int)AabbBondery::BNW] = new Octree(bnw, capacity, this, leafMode, newDeep);
+    pChild[(int)AabbBondery::BNE] = new Octree(bne, capacity, this, leafMode, newDeep);
+    pChild[(int)AabbBondery::TNW] = new Octree(tnw, capacity, this, leafMode, newDeep);
+    pChild[(int)AabbBondery::TNE] = new Octree(tne, capacity, this, leafMode, newDeep);
 }
 
 bool Octree::insertNew(const glm::vec3& _point) {

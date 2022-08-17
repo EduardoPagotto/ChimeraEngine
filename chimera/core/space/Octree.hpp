@@ -4,17 +4,6 @@
 
 namespace Chimera {
 
-enum class CHILDOCTREE {
-    top_northwest = 0,
-    top_northeast = 1,
-    top_southwest = 2,
-    top_southeast = 3,
-    botton_northwest = 4,
-    botton_northeast = 5,
-    botton_southwest = 6,
-    botton_southeast = 7,
-};
-
 class Octree {
   public:
     Octree(const AABB& _boundary, const unsigned int& _capacity, Octree* _parent = nullptr, bool _leafMode = false, unsigned int _deep = 0);

@@ -21,14 +21,14 @@ void AABB::setPosition(const glm::vec3& _pos, const glm::vec3& _size) {
 }
 
 void AABB::setBoundary(const glm::vec3& _min, const glm::vec3& _max) {
-    vertex[0] = glm::vec3(_min.x, _min.y, _min.z);
-    vertex[1] = glm::vec3(_max.x, _min.y, _min.z);
-    vertex[2] = glm::vec3(_min.x, _max.y, _min.z);
-    vertex[3] = glm::vec3(_max.x, _max.y, _min.z);
-    vertex[4] = glm::vec3(_min.x, _min.y, _max.z);
-    vertex[5] = glm::vec3(_max.x, _min.y, _max.z);
-    vertex[6] = glm::vec3(_min.x, _max.y, _max.z);
-    vertex[7] = glm::vec3(_max.x, _max.y, _max.z);
+    vertex[(int)AabbBondery::BSW] = glm::vec3(_min.x, _min.y, _min.z);
+    vertex[(int)AabbBondery::BSE] = glm::vec3(_max.x, _min.y, _min.z);
+    vertex[(int)AabbBondery::TSW] = glm::vec3(_min.x, _max.y, _min.z);
+    vertex[(int)AabbBondery::TSE] = glm::vec3(_max.x, _max.y, _min.z);
+    vertex[(int)AabbBondery::BNW] = glm::vec3(_min.x, _min.y, _max.z);
+    vertex[(int)AabbBondery::BNE] = glm::vec3(_max.x, _min.y, _max.z);
+    vertex[(int)AabbBondery::TNW] = glm::vec3(_min.x, _max.y, _max.z);
+    vertex[(int)AabbBondery::TNE] = glm::vec3(_max.x, _max.y, _max.z);
 
     // TODO: Era half size ??
     size = getSizeMinMax(_min, _max);

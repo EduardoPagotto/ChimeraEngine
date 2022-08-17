@@ -35,11 +35,9 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
     const AABB& aabb = r->getAABB();
     AABB nova = aabb.transformation(command.transform);
 
-    if ((this->octree != nullptr) && (r->getIBO() != nullptr) && (vpo->getIndex() == 0)) {
-        const AABB& a = r->getAABB();
-        // this->octree->insert(a.getPosition());
-        this->octree->insertAABB(a);
-    }
+    // FIXME: aqui desenha todos os AABB do octree
+    // if ((this->octree != nullptr) && (r->getIBO() != nullptr) && (vpo->getIndex() == 0))
+    //     this->octree->insertAABB(nova);
 
     // adicione apenas o que esta no clip-space
     if (nova.visible(frustum) == true) {
@@ -48,7 +46,11 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
         if (ibo != nullptr) {
             totIBO++;
             totFaces += ibo->getSize() / 3;
+
+            if ((this->octree != nullptr) && (vpo->getIndex() == 0))
+                this->octree->insertAABB(nova);
         }
+
         // adicionado ao proximo render
         renderQueue.push_back(std::make_tuple(command, r));
         return true;

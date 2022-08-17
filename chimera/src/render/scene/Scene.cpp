@@ -405,8 +405,8 @@ void Scene::onRender() {
         renderBatch.end();
         renderBatch.flush();
 
-        if (verbose > 0) { // RENDER DEBUG AABB
-            if (verbose == 1) {
+        if (verbose > 0) {      // RENDER DEBUG
+            if (verbose == 1) { // DEBUG OCTREE
 
                 if (dl.valid() == false) {
                     dl.create(40000);
@@ -420,13 +420,15 @@ void Scene::onRender() {
                         dl.addAABB(aabb, glm::vec3(1.0, 1.0, 1.0));
                     }
 
+                    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Octree Size: %ld", list.size());
+
                     MapUniform muni;
                     muni["projection"] = UValue(activeCam->getProjection());
                     muni["view"] = UValue(vpo->getView());
                     dl.render(muni);
                 }
 
-            } else if (verbose == 2) {
+            } else if (verbose == 2) { // DEBUG AABB
 
                 if (renderLines.valid() == false) {
                     renderLines.create(10000);

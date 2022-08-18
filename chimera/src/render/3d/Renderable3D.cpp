@@ -11,6 +11,11 @@ Renderable3D::~Renderable3D() {
     }
 }
 
+void Renderable3D::setAux(const uint32_t& command, const uint32_t& draw) {
+    this->indexAuxCommand = command;
+    this->indexAuxDraw = draw;
+}
+
 void Renderable3D::draw(const bool& logData) {
     if (logData)
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Renderable3D draw");

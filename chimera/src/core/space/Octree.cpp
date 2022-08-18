@@ -43,6 +43,7 @@ void Octree::destroy() {
     }
 
     points.clear();
+    indexes.clear();
 }
 
 void Octree::subdivide() {
@@ -82,21 +83,21 @@ void Octree::subdivide() {
     pChild[(int)AabbBondery::TNE] = new Octree(tne, capacity, this, leafMode, newDeep);
 }
 
-bool Octree::insertNew(const glm::vec3& _point) {
+bool Octree::insertNew(const glm::vec3& _point, const uint32_t& _index) {
     for (short i = 0; i < 8; i++) {
-        if (pChild[i]->insert(_point))
+        if (pChild[i]->insert(_point, _index))
             return true;
     }
     return false;
 }
 
-void Octree::insertAABB(const AABB& aabb) {
+void Octree::insertAABB(const AABB& aabb, const uint32_t& _index) {
     const glm::vec3* v = aabb.getAllVertex();
     for (int i = 0; i < 8; i++)
-        this->insert(v[i]);
+        this->insert(v[i], _index);
 }
 
-bool Octree::insert(const glm::vec3& _point) {
+bool Octree::insert(const glm::vec3& _point, const uint32_t& _index) {
 
     if (boundary.contains(_point) == false)
         return false;
@@ -107,6 +108,7 @@ bool Octree::insert(const glm::vec3& _point) {
 
     if (a && (b || c)) {
         points.push_back(_point);
+        indexes.push_back(_index);
         return true;
     }
 
@@ -114,13 +116,14 @@ bool Octree::insert(const glm::vec3& _point) {
         this->subdivide();
 
     if (!b) {
-        for (glm::vec3 p : points)
-            this->insertNew(p);
+        for (uint32_t i = 0; i < points.size(); i++)
+            this->insertNew(points[i], indexes[i]);
 
         points.clear();
+        indexes.clear();
     }
 
-    return this->insertNew(_point);
+    return this->insertNew(_point, _index);
 }
 
 bool Octree::hasPoint(const glm::vec3& point) {

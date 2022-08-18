@@ -35,9 +35,9 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
     const AABB& aabb = r->getAABB();
     AABB nova = aabb.transformation(command.transform);
 
-    // FIXME: aqui desenha todos os AABB do octree
-    // if ((this->octree != nullptr) && (r->getIBO() != nullptr) && (vpo->getIndex() == 0))
-    //     this->octree->insertAABB(nova);
+    // Registro de toda dos os AABB's
+    if ((this->octree != nullptr) && (vpo->getIndex() == 0))
+        this->octree->insertAABB(nova, 0); // conseguir o indice do vetor de Renderable3D
 
     // adicione apenas o que esta no clip-space
     if (nova.visible(frustum) == true) {
@@ -46,9 +46,6 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
         if (ibo != nullptr) {
             totIBO++;
             totFaces += ibo->getSize() / 3;
-
-            if ((this->octree != nullptr) && (vpo->getIndex() == 0))
-                this->octree->insertAABB(nova);
         }
 
         // adicionado ao proximo render

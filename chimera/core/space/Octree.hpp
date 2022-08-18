@@ -11,8 +11,8 @@ class Octree {
 
     void destroy();
 
-    bool insert(const glm::vec3& _point);
-    void insertAABB(const AABB& aabb);
+    bool insert(const glm::vec3& _point, const uint32_t& _index);
+    void insertAABB(const AABB& aabb, const uint32_t& _index);
     void query(const AABB& _aabb, std::vector<glm::vec3>& _found);
     bool hasPoint(const glm::vec3& point);
 
@@ -24,7 +24,7 @@ class Octree {
 
   private:
     void subdivide();
-    bool insertNew(const glm::vec3& _point);
+    bool insertNew(const glm::vec3& _point, const uint32_t& _index);
 
     bool leafMode;
     bool divided;
@@ -34,6 +34,7 @@ class Octree {
     Octree* pParent;
     Octree* pChild[8];
     std::vector<glm::vec3> points;
+    std::vector<uint32_t> indexes;
     uint32_t serial;
     static uint32_t serial_master;
 };

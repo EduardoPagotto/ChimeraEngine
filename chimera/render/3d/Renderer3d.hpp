@@ -20,7 +20,8 @@ class Renderer3d : public IRenderer3d {
     virtual inline std::vector<Texture*>& texQueue() { return textureQueue; }
 
   private:
-    std::vector<std::tuple<RenderCommand, Renderable3D*>> renderQueue;
+    std::vector<RenderCommand> vRenderCommand;
+    std::vector<Renderable3D*> vRenderable;
     std::vector<Texture*> textureQueue;
     Frustum frustum;
     uint32_t totIBO, totFaces;

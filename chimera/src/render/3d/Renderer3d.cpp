@@ -8,7 +8,8 @@
 namespace Chimera {
 
 Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(logData) {
-    renderQueue.reserve(500);
+    vRenderable.reserve(500);
+    vRenderCommand.reserve(100);
     textureQueue.reserve(50);
 }
 
@@ -30,14 +31,23 @@ void Renderer3d::end() {
 }
 
 bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
-    // Transformation model matrix AABB to know if in frustrum Camera
+
     Renderable3D* r = (Renderable3D*)renderable;
+
+    if (r->getVao() != nullptr) {
+        r->setAux(vRenderCommand.size(), 0);
+        vRenderCommand.push_back(command);
+    } else {
+        r->setAux(vRenderCommand.size() - 1, 0);
+    }
+
+    // Transformation model matrix AABB to know if in frustrum Camera
     const AABB& aabb = r->getAABB();
     AABB nova = aabb.transformation(command.transform);
 
-    // Registro de toda dos os AABB's
+    // Registro de todo AABB's com indice de Renderable3D
     if ((this->octree != nullptr) && (vpo->getIndex() == 0))
-        this->octree->insertAABB(nova, 0); // conseguir o indice do vetor de Renderable3D
+        this->octree->insertAABB(nova, vRenderable.size());
 
     // adicione apenas o que esta no clip-space
     if (nova.visible(frustum) == true) {
@@ -48,8 +58,8 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
             totFaces += ibo->getSize() / 3;
         }
 
-        // adicionado ao proximo render
-        renderQueue.push_back(std::make_tuple(command, r));
+        // novo Renderable3D
+        vRenderable.push_back(r);
         return true;
     }
 
@@ -61,7 +71,7 @@ void Renderer3d::flush() {
     Shader activeShader;
     VertexArray* pLastVao = nullptr;
 
-    for (auto& [command, r] : renderQueue) {
+    for (auto& r : vRenderable) {
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior
@@ -69,6 +79,7 @@ void Renderer3d::flush() {
                     pLastVao->unbind();
                 }
 
+                const RenderCommand& command = vRenderCommand[r->getIndexAuxCommand()];
                 r->getVao()->bind(); // vincula novo modelo
                 pLastVao = r->getVao();
 
@@ -111,15 +122,12 @@ void Renderer3d::flush() {
         r->draw(logData); // aqui
     }
 
-    renderQueue.clear(); // Limpa rendercommand
     pLastVao->unbind();
 
-    // Limpa buffer de uniforms ao terminar todos os draws calls
-    uniformsQueue.clear();
-    textureQueue.clear();
-
-    // if (this->octree != nullptr)
-    //     this->octree->debug_render();
+    uniformsQueue.clear();  // limpa comandos communs a todos VAO's
+    textureQueue.clear();   // limpa fila de texturas
+    vRenderable.clear();    // limpa array de desenho
+    vRenderCommand.clear(); // Limpa rendercommand
 }
 
 } // namespace Chimera

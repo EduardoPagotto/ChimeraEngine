@@ -12,7 +12,7 @@ class Renderer3d : public IRenderer3d {
     Renderer3d(const bool& logData);
     virtual ~Renderer3d();
     virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) override;
-    virtual bool submit(const RenderCommand& command, IRenderable3d* renderable) override;
+    virtual bool submit(const RenderCommand& command, IRenderable3d* renderable, const bool& isSubDraw) override;
     virtual void end() override;
     virtual void flush() override;
     virtual inline std::vector<Texture*>& texQueue() { return textureQueue; }

@@ -60,9 +60,9 @@ RenderableArray::~RenderableArray() {
 }
 
 void RenderableArray::submit(RenderCommand& command, IRenderer3d& renderer) {
-    if (renderer.submit(command, this) == true) {
+    if (renderer.submit(command, this, false) == true) {
         for (IRenderable3d* child : vChild)
-            renderer.submit(command, child);
+            renderer.submit(command, child, true);
     }
 }
 } // namespace Chimera

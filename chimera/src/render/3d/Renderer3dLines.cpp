@@ -19,7 +19,7 @@ void Renderer3dLines::begin(Camera* camera, ViewProjection* vpo, Octree* octree)
 
 void Renderer3dLines::end() {}
 
-bool Renderer3dLines::submit(const RenderCommand& command, IRenderable3d* renderable) {
+bool Renderer3dLines::submit(const RenderCommand& command, IRenderable3d* renderable, const bool& isSubDraw) {
     // Transformation model matrix AABB to know if in frustrum Camera
     Renderable3D* r = (Renderable3D*)renderable;
     const AABB& aabb = r->getAABB();

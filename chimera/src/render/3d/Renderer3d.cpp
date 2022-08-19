@@ -37,7 +37,7 @@ void Renderer3d::end() {
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }
 
-bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
+bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable, const bool& isSubDraw) {
 
     Renderable3D* r = (Renderable3D*)renderable;
 
@@ -51,7 +51,7 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
     AABB nova = aabb.transformation(command.transform);
 
     // Registro de todo AABB's com indice de Renderable3D
-    if ((this->octree != nullptr) && (vpo->getIndex() == 0))
+    if ((this->octree != nullptr) && (vpo->getIndex() == 0) && (isSubDraw == true))
         this->octree->insertAABB(nova, vRenderable.size());
 
     // adicione apenas o que esta no clip-space

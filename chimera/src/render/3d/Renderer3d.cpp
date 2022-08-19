@@ -63,9 +63,10 @@ void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
             totFaces += ibo->getSize() / 3;
         }
 
-        // novo Renderable3D
-        vRenderable.push_back(r);
+        qRenderableIndexes.push(vRenderable.size());
     }
+
+    vRenderable.push_back(r);
 }
 
 void Renderer3d::flush() {
@@ -73,7 +74,8 @@ void Renderer3d::flush() {
     Shader activeShader;
     VertexArray* pLastVao = nullptr;
 
-    for (auto& r : vRenderable) {
+    while (!qRenderableIndexes.empty()) {
+        auto& r = vRenderable[qRenderableIndexes.front()];
 
         if (r->getVao() != nullptr) {      // Possui um novo modelo
             if (r->getVao() != pLastVao) { // Diferente  do anterior
@@ -122,6 +124,8 @@ void Renderer3d::flush() {
         }
 
         r->draw(logData); // aqui
+
+        qRenderableIndexes.pop();
     }
 
     pLastVao->unbind();

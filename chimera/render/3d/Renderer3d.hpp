@@ -18,6 +18,7 @@ class Renderer3d : public IRenderer3d {
     virtual inline std::vector<Texture*>& texQueue() { return textureQueue; }
 
   private:
+    std::queue<uint32_t> qRenderableIndexes;
     std::vector<RenderCommand> vRenderCommand;
     std::vector<Renderable3D*> vRenderable;
     std::vector<Texture*> textureQueue;

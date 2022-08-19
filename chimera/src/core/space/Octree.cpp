@@ -1,5 +1,6 @@
 #include "chimera/core/space/Octree.hpp"
 #include "chimera/core/mathGL.hpp"
+#include "chimera/src/core/HeapQ.cpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -171,10 +172,26 @@ void Octree::getBondaryList(std::vector<AABB>& list, const bool& showEmpty) {
 }
 
 void Octree::visible(const Frustum& frustum, std::queue<uint32_t>& qIndexes) {
+
+    HeapQ<uint32_t> heapQ(false);
+    this->_visible(frustum, heapQ);
+
+    uint32_t last = -1;
+    while (heapQ.empty() == false) {
+        uint32_t n = heapQ.top();
+        if (n != last) {
+            qIndexes.push(n);
+            last = n;
+        }
+        heapQ.pop();
+    }
+}
+
+void Octree::_visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) {
     if (boundary.visible(frustum)) {
         if (divided == true) {
             for (short i = 0; i < 8; i++)
-                pChild[i]->visible(frustum, qIndexes);
+                pChild[i]->_visible(frustum, qIndexes);
         }
 
         uint32_t last = -1;

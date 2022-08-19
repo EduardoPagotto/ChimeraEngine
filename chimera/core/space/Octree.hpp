@@ -1,5 +1,6 @@
 #pragma once
 #include "AABB.hpp"
+#include "chimera/core/HeapQ.hpp"
 #include <queue>
 #include <vector>
 
@@ -25,6 +26,7 @@ class Octree {
     void dump_data(short indice);
 
   private:
+    void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes);
     void subdivide();
     bool insertNew(const glm::vec3& _point, const uint32_t& _index);
 

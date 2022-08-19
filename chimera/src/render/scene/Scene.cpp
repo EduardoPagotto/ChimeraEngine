@@ -359,7 +359,7 @@ void Scene::execRenderPass(IRenderer3d& renderer) {
 }
 
 void Scene::onRender() {
-    Renderer3d renderBatch(verbose > 0);
+    Renderer3d renderer(verbose > 0);
 
     if (verbose > 0) {
         const glm::vec3& pos = activeCam->getPosition();
@@ -368,7 +368,7 @@ void Scene::onRender() {
 
     // render a shadows in framebuffer
     if (shadowData.shadowBuffer)
-        renderShadow(renderBatch);
+        renderShadow(renderer);
 
     uint8_t count = 0;
     for (auto renderBuffer : vRB) {
@@ -377,16 +377,16 @@ void Scene::onRender() {
         count++;
 
         // data load used by all
-        renderBatch.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-        renderBatch.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
+        renderer.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
+        renderer.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
 
-        // data load shadows props to renderBatch in shade of models!!!!
+        // data load shadows props to renderer in shade of models!!!!
         if (shadowData.shadowBuffer) {
-            renderBatch.uboQueue().insert(std::make_pair("viewPos", UValue(activeCam->getPosition())));
-            renderBatch.uboQueue().insert(std::make_pair("shadows", UValue(1)));
-            renderBatch.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
-            renderBatch.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowData.lightSpaceMatrix)));
-            renderBatch.texQueue().push_back(shadowData.shadowBuffer->getDepthAttachemnt());
+            renderer.uboQueue().insert(std::make_pair("viewPos", UValue(activeCam->getPosition())));
+            renderer.uboQueue().insert(std::make_pair("shadows", UValue(1)));
+            renderer.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
+            renderer.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowData.lightSpaceMatrix)));
+            renderer.texQueue().push_back(shadowData.shadowBuffer->getDepthAttachemnt());
         }
 
         // data load lights
@@ -395,15 +395,28 @@ void Scene::onRender() {
             auto& lc = lightView.get<LightComponent>(entity);
             auto& tc = registry->get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
             if (lc.global)                                          // biding light prop
-                lc.light->bindLight(renderBatch.uboQueue(), tc.trans->getMatrix());
+                lc.light->bindLight(renderer.uboQueue(), tc.trans->getMatrix());
         }
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-        renderBatch.begin(activeCam, vpo, octree);
-        this->execRenderPass(renderBatch);
-        renderBatch.end();
-        renderBatch.flush();
+        renderer.begin(activeCam, vpo, octree);
+        this->execRenderPass(renderer);
+        renderer.end();
+        renderer.flush();
+
+        if (emitters.size() > 0) {
+            // inicializa state machine do opengl
+            BinaryStateEnable depth(GL_DEPTH_TEST, GL_TRUE);
+            BinaryStateEnable blender(GL_BLEND, GL_TRUE);
+            DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            renderer.begin(activeCam, vpo, octree);
+            this->execEmitterPass(renderer);
+            renderer.end();
+            renderer.flush();
+        }
 
         if (verbose > 0) {      // RENDER DEBUG
             if (verbose == 1) { // DEBUG OCTREE
@@ -465,19 +478,6 @@ void Scene::onRender() {
                 renderLines.end();
                 renderLines.flush();
             }
-        }
-
-        if (emitters.size() > 0) {
-            // inicializa state machine do opengl
-            BinaryStateEnable depth(GL_DEPTH_TEST, GL_TRUE);
-            BinaryStateEnable blender(GL_BLEND, GL_TRUE);
-            DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-            renderBatch.begin(activeCam, vpo, octree);
-            this->execEmitterPass(renderBatch);
-            renderBatch.end();
-            renderBatch.flush();
         }
 
         for (auto it = layers.begin(); it != layers.end(); it++)

@@ -1,5 +1,6 @@
 #pragma once
 #include "AABB.hpp"
+#include <queue>
 #include <vector>
 
 namespace Chimera {
@@ -15,6 +16,7 @@ class Octree {
     void insertAABB(const AABB& aabb, const uint32_t& _index);
     void query(const AABB& _aabb, std::vector<glm::vec3>& _found);
     bool hasPoint(const glm::vec3& point);
+    void visible(const Frustum& frustum, std::queue<uint32_t>& qIndexes);
 
     inline Octree* getParent() { return pParent; }
     inline unsigned int getDeep() { return deep; }

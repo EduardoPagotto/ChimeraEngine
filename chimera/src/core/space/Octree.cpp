@@ -170,4 +170,20 @@ void Octree::getBondaryList(std::vector<AABB>& list, const bool& showEmpty) {
     }
 }
 
+void Octree::visible(const Frustum& frustum, std::queue<uint32_t>& qIndexes) {
+    if (boundary.visible(frustum)) {
+        if (divided == true) {
+            for (short i = 0; i < 8; i++)
+                pChild[i]->visible(frustum, qIndexes);
+        }
+
+        uint32_t last = -1;
+        for (auto& i : this->indexes) {
+            if (i != last) {
+                qIndexes.push(i);
+                last = i;
+            }
+        }
+    }
+}
 } // namespace Chimera

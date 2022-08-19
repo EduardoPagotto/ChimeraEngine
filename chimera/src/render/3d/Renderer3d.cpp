@@ -26,6 +26,13 @@ void Renderer3d::begin(Camera* camera, ViewProjection* vpo, Octree* octree) {
 }
 
 void Renderer3d::end() {
+
+    if (octree != nullptr) {
+        std::queue<uint32_t> qIndexes;
+        octree->visible(frustum, qIndexes);
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Octree Visible Indexes: %ld", qIndexes.size());
+    }
+
     if (logData == true)
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
 }

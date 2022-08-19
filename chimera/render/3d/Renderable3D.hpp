@@ -13,14 +13,11 @@ class Renderable3D : public IRenderable3d {
     virtual const uint32_t getSize() const = 0;
     virtual const class AABB& getAABB() const = 0;
     virtual class IndexBuffer* getIBO() const = 0;
-
-    void setAux(const uint32_t& command, const uint32_t& draw);
+    inline void setIndexAuxCommand(const uint32_t& command) { indexAuxCommand = command; }
     inline const uint32_t getIndexAuxCommand() const { return indexAuxCommand; }
-    inline const uint32_t getIndexAuxDraw() const { return indexAuxDraw; }
 
   protected:
     uint32_t indexAuxCommand = 0;
-    uint32_t indexAuxDraw = 0;
     VertexArray* vao = nullptr;
 };
 } // namespace Chimera

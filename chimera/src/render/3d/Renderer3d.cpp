@@ -9,8 +9,8 @@ namespace Chimera {
 
 Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(logData) {
     vRenderable.reserve(500);
-    vRenderCommand.reserve(100);
-    textureQueue.reserve(50);
+    vRenderCommand.reserve(50);
+    textureQueue.reserve(32);
 }
 
 Renderer3d::~Renderer3d() {}
@@ -35,10 +35,8 @@ bool Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
     Renderable3D* r = (Renderable3D*)renderable;
 
     if (r->getVao() != nullptr) {
-        r->setAux(vRenderCommand.size(), 0);
+        r->setIndexAuxCommand(vRenderCommand.size());
         vRenderCommand.push_back(command);
-    } else {
-        r->setAux(vRenderCommand.size() - 1, 0);
     }
 
     // Transformation model matrix AABB to know if in frustrum Camera

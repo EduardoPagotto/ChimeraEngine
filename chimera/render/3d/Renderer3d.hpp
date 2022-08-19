@@ -4,8 +4,6 @@
 #include "chimera/core/space/Octree.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
-#include <cstdint>
-#include <deque>
 
 namespace Chimera {
 

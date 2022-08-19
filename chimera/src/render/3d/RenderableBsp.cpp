@@ -90,11 +90,10 @@ void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, 
 void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
     std::vector<IRenderable3d*> childDraw;
     const glm::vec3 cameraPos = renderer.getCamera()->getPosition();
-    if (renderer.submit(command, this, false) == true)
-        traverseTree(cameraPos, root, childDraw);
-
+    renderer.submit(command, this);
+    traverseTree(cameraPos, root, childDraw);
     for (IRenderable3d* child : childDraw)
-        renderer.submit(command, child, true);
+        renderer.submit(command, child);
 
     childDraw.clear();
 }

@@ -49,7 +49,7 @@ RenderableMesh::~RenderableMesh() {
 }
 
 void RenderableMesh::submit(RenderCommand& command, IRenderer3d& renderer) {
-    if (renderer.submit(command, this, false) == true)
-        renderer.submit(command, child, true);
+    renderer.submit(command, this);
+    renderer.submit(command, child);
 }
 } // namespace Chimera

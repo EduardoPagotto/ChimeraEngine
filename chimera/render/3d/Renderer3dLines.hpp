@@ -11,7 +11,7 @@ class Renderer3dLines : public IRenderer3d {
     Renderer3dLines();
     virtual ~Renderer3dLines();
     virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) override;
-    virtual bool submit(const RenderCommand& command, IRenderable3d* renderable, const bool& isSubDraw) override;
+    virtual void submit(const RenderCommand& command, IRenderable3d* renderable) override;
     virtual void end() override;
     virtual void flush() override;
 

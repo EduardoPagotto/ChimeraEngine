@@ -72,7 +72,7 @@ void Scene::createOctree(const AABB& aabb) {
     if (octree != nullptr) {
         delete octree;
     }
-    octree = new Octree(aabb, 8, nullptr, true, 0);
+    octree = new Octree(aabb, 16, nullptr, true, 0);
 }
 
 void Scene::onAttach() {

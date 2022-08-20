@@ -46,7 +46,7 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
         vertexDataIndexMinMaxSize(&vVertex[0], vVertex.size(), &trisIndex.vIndex[0], trisIndex.size(), min, max, size);
 
         IndexBuffer* ibo = new IndexBuffer(&trisIndex.vIndex[0], trisIndex.size());
-        IRenderable3d* r = new RenderableIBO(ibo, AABB(min, max));
+        IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
         vChild.push_back(r);
     }
 
@@ -90,10 +90,9 @@ void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, 
 void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
     std::vector<IRenderable3d*> childDraw;
     const glm::vec3 cameraPos = renderer.getCamera()->getPosition();
-    renderer.submit(command, this);
     traverseTree(cameraPos, root, childDraw);
-    for (IRenderable3d* child : childDraw)
-        renderer.submit(command, child);
+    for (uint32_t c = 0; c < childDraw.size(); c++)
+        renderer.submit(command, childDraw[c], c);
 
     childDraw.clear();
 }

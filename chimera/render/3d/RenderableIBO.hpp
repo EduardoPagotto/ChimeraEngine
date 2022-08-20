@@ -8,7 +8,7 @@ namespace Chimera {
 
 class RenderableIBO : public Renderable3D {
   public:
-    RenderableIBO(IndexBuffer* ibo, const AABB& aabb) : ibo(ibo), aabb(aabb), Renderable3D() {}
+    RenderableIBO(VertexArray* vao, IndexBuffer* ibo, const AABB& aabb);
     virtual ~RenderableIBO();
 
     virtual const uint32_t getSize() const override { return ibo->getSize(); }

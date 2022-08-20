@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-Renderer3d::Renderer3d(const bool& logData) : totIBO(0), totFaces(0), logData(logData) {
+Renderer3d::Renderer3d(const bool& logData) : logData(logData) {
     vRenderable.reserve(500);
     vRenderCommand.reserve(50);
     textureQueue.reserve(32);
@@ -20,9 +20,6 @@ void Renderer3d::begin(Camera* camera, ViewProjection* vpo, Octree* octree) {
     this->vpo = vpo;
     this->octree = octree;
     frustum.set(vpo->getViewProjectionInverse());
-    // debug data
-    totIBO = 0;
-    totFaces = 0;
 }
 
 void Renderer3d::end() {
@@ -30,44 +27,36 @@ void Renderer3d::end() {
     if (octree != nullptr) {
         std::queue<uint32_t> qIndexes;
         octree->visible(frustum, qIndexes);
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Octree Visible Indexes: %ld", qIndexes.size());
+
+        if (logData == true)
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Octree Visible Indexes: %ld", qIndexes.size());
 
         while (!qIndexes.empty()) {
             qRenderableIndexes.push(qIndexes.front());
             qIndexes.pop();
         }
-    } else {
-        if (logData == true)
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
     }
 }
 
-void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
+void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) {
 
     Renderable3D* r = (Renderable3D*)renderable;
 
-    if (r->getVao() != nullptr) {
-        r->setIndexAuxCommand(vRenderCommand.size());
+    if (count == 0)
         vRenderCommand.push_back(command);
-    }
+
+    r->setIndexAuxCommand(vRenderCommand.size() - 1);
 
     // Transformation model matrix AABB to know if in frustrum Camera
     const AABB& aabb = r->getAABB();
     AABB nova = aabb.transformation(command.transform);
 
     // Registro de todo AABB's com indice de Renderable3D
-    if ((this->octree != nullptr) && (vpo->getIndex() == 0)) {
+    if (this->octree != nullptr) {
         this->octree->insertAABB(nova, vRenderable.size());
     } else {
         // adicione apenas o que esta no clip-space
         if (nova.visible(frustum) == true) {
-            // Debug info only
-            IndexBuffer* ibo = r->getIBO();
-            if (ibo != nullptr) {
-                totIBO++;
-                totFaces += ibo->getSize() / 3;
-            }
-
             qRenderableIndexes.push(vRenderable.size());
         }
     }

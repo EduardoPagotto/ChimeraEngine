@@ -35,7 +35,7 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* me
         vertexDataIndexMinMaxSize(&vertexData[0], vertexData.size(), &ptrTrisIndex.vIndex[0], ptrTrisIndex.size(), min, max, size);
 
         IndexBuffer* ibo = new IndexBuffer(&ptrTrisIndex.vIndex[0], ptrTrisIndex.size());
-        IRenderable3d* r = new RenderableIBO(ibo, AABB(min, max));
+        IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
 
         vChild.push_back(r);
 
@@ -60,8 +60,7 @@ RenderableArray::~RenderableArray() {
 }
 
 void RenderableArray::submit(RenderCommand& command, IRenderer3d& renderer) {
-    renderer.submit(command, this);
-    for (IRenderable3d* child : vChild)
-        renderer.submit(command, child);
+    for (uint32_t c = 0; c < vChild.size(); c++)
+        renderer.submit(command, vChild[c], c);
 }
 } // namespace Chimera

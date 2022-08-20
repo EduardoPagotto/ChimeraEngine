@@ -40,7 +40,7 @@ RenderableMesh::RenderableMesh(Mesh* mesh) : Renderable3D() {
     aabb.setBoundary(min, max);
     IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
     totIndex = ibo->getSize();
-    child = new RenderableIBO(ibo, AABB(min, max));
+    child = new RenderableIBO(vao, ibo, AABB(min, max));
 }
 
 RenderableMesh::~RenderableMesh() {
@@ -48,8 +48,5 @@ RenderableMesh::~RenderableMesh() {
     child = nullptr;
 }
 
-void RenderableMesh::submit(RenderCommand& command, IRenderer3d& renderer) {
-    renderer.submit(command, this);
-    renderer.submit(command, child);
-}
+void RenderableMesh::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command, child, 0); }
 } // namespace Chimera

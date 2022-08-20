@@ -12,7 +12,7 @@ class Renderer3d : public IRenderer3d {
     Renderer3d(const bool& logData);
     virtual ~Renderer3d();
     virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) override;
-    virtual void submit(const RenderCommand& command, IRenderable3d* renderable) override;
+    virtual void submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) override;
     virtual void end() override;
     virtual void flush() override;
     virtual inline std::vector<Texture*>& texQueue() { return textureQueue; }
@@ -23,7 +23,6 @@ class Renderer3d : public IRenderer3d {
     std::vector<Renderable3D*> vRenderable;
     std::vector<Texture*> textureQueue;
     Frustum frustum;
-    uint32_t totIBO, totFaces;
     bool logData;
     Octree* octree;
 };

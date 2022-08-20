@@ -31,10 +31,15 @@ void Renderer3d::end() {
         std::queue<uint32_t> qIndexes;
         octree->visible(frustum, qIndexes);
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Octree Visible Indexes: %ld", qIndexes.size());
-    }
 
-    if (logData == true)
-        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
+        while (!qIndexes.empty()) {
+            qRenderableIndexes.push(qIndexes.front());
+            qIndexes.pop();
+        }
+    } else {
+        if (logData == true)
+            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "IBOs: %d Faces: %d", totIBO, totFaces);
+    }
 }
 
 void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable) {
@@ -51,19 +56,20 @@ void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable)
     AABB nova = aabb.transformation(command.transform);
 
     // Registro de todo AABB's com indice de Renderable3D
-    if ((this->octree != nullptr) && (vpo->getIndex() == 0))
+    if ((this->octree != nullptr) && (vpo->getIndex() == 0)) {
         this->octree->insertAABB(nova, vRenderable.size());
+    } else {
+        // adicione apenas o que esta no clip-space
+        if (nova.visible(frustum) == true) {
+            // Debug info only
+            IndexBuffer* ibo = r->getIBO();
+            if (ibo != nullptr) {
+                totIBO++;
+                totFaces += ibo->getSize() / 3;
+            }
 
-    // adicione apenas o que esta no clip-space
-    if (nova.visible(frustum) == true) {
-        // Debug info only
-        IndexBuffer* ibo = r->getIBO();
-        if (ibo != nullptr) {
-            totIBO++;
-            totFaces += ibo->getSize() / 3;
+            qRenderableIndexes.push(vRenderable.size());
         }
-
-        qRenderableIndexes.push(vRenderable.size());
     }
 
     vRenderable.push_back(r);

@@ -412,7 +412,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderer.begin(activeCam, vpo, octree);
+            renderer.begin(activeCam, vpo, nullptr);
             this->execEmitterPass(renderer);
             renderer.end();
             renderer.flush();

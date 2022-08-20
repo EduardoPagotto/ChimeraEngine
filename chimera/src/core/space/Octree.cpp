@@ -94,6 +94,8 @@ void Octree::insertAABB(const AABB& aabb, const uint32_t& index) {
     const glm::vec3* v = aabb.getAllVertex();
     for (int i = 0; i < 8; i++)
         this->insert(v[i], index);
+
+    this->insert(aabb.getPosition(), index);
 }
 
 bool Octree::insert(const glm::vec3& point, const uint32_t& index) {

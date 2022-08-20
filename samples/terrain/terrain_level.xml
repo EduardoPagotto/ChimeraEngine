@@ -20,9 +20,9 @@
                 </newparam>
                 <technique sid="common">
                     <phong>
-                        <emission>
+                        <!-- <emission>
                             <color sid="emission">0 0 0 1</color>
-                        </emission>
+                        </emission> -->
                         <ambient>
                             <color sid="ambient">0 0 0 1</color>
                         </ambient>
@@ -104,7 +104,7 @@
         <visual_scene id="Scene" name="Scene">
             <node id="Cubo" name="Cubo" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 200.0 0 0 1 0 0 0 0 1</matrix>
-                <instance_geometry url="file://assets/models/cubo2.xml#Cubo-mesh"/>
+                <instance_geometry url="file://assets/models/cubo2.xml#Cubo-mesh-light"/>
             </node>
             <node id="HeighMap" name="HeighMap.001" type="NODE">
                 <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>

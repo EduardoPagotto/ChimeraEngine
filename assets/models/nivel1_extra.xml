@@ -20,9 +20,9 @@
                 </newparam>
                 <technique sid="common">
                     <phong>
-                        <emission>
+                        <!-- <emission>
                             <color sid="emission">0 0 0 1</color>
-                        </emission>
+                        </emission> -->
                         <ambient>
                             <color sid="ambient">0 0 0 1</color>
                         </ambient>

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
     <library_effects>
+        <effect id="Shade02-effect">
+            <profile_GLSL>
+                <technique sid="MeshFullShadow">
+                    <include sid="Vertex_Program_Shade01_VP" url="file://./assets/shaders/MeshFullShadow.vert"/>
+                    <include sid="Fragment_Program_Shade01_FP" url="file://./assets/shaders/MeshFullShadow.frag"/>
+                    <pass sid="Pass_0">
+                        <shader stage="VERTEXPROGRAM">
+                            <name source="Vertex_Program_Shade01_VP">main</name>
+                        </shader>
+                        <shader stage="FRAGMENTPROGRAM">
+                            <name source="Fragment_Program_Shade01_FP">main</name>
+                        </shader>
+                    </pass>
+                </technique>
+            </profile_GLSL>
+        </effect>
         <effect id="Shade01-effect">
             <profile_GLSL>
                 <technique sid="MeshNoMat">
@@ -25,6 +41,16 @@
                     <external_obj partition="SIMPLE" target="./assets/models/cubo2.obj"/>
                     <instance_effect url="#Shade01-effect">
                         <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshNoMat"/>
+                    </instance_effect>
+                </technique>
+            </extra>
+        </geometry>
+        <geometry id="Cubo-mesh-light" name="Cubo-mesh-light">
+            <extra>
+                <technique profile="chimera">
+                    <external_obj partition="SIMPLE" target="./assets/models/cubo2.obj"/>
+                    <instance_effect url="#Shade02-effect">
+                        <technique_hint platform="OpenGL|ES" profile="GLSL" ref="MeshFullShadow"/>
                     </instance_effect>
                 </technique>
             </extra>

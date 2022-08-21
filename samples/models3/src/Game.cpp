@@ -143,7 +143,7 @@ void Game::onAttach() {
     Tile* tile = (Tile*)scene->getLayes().getState("TileText");
 
     Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-500.0f, 270.0f, 0.0f)));
-    group->add(new Sprite(0.0f, 0.0f, 200.0f, 50.0f, glm::vec4(0, 0, 1, 1)));
+    group->add(new Sprite(0.0f, 0.0f, 200.0f, 50.0f, glm::vec4(0, 0, 1, 0.25)));
     group->add(lFPS);
     tile->add(group);
     // tile->add(lFPS);

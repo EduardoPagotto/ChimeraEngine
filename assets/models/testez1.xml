@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <extra type="libraries">
+    <technique profile="chimera">
+      <fonts>
+        <font url="file://assets/fonts/FreeSans.ttf#FreeSansMainFont" size="42" scaleX="1.0" scaleY="1.0"/>
+      </fonts>
+      <framebuffers>
+        <framebuffer id="shadow01" name="shadow01">
+          <instance_effect url="file://assets/models/nivel1_fb.xml#ShadowTexture-effect">
+            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="ShadowMappingDepth"/>
+          </instance_effect>
+          <instance_camera url="file://assets/models/nivel1_fb.xml#Camera-Shadow">
+            <extra>
+              <technique profile="chimera">
+                <static>
+                  <primary>false</primary>
+                  <fixedAspectRatio>true</fixedAspectRatio>
+                </static>
+              </technique>
+            </extra>
+          </instance_camera>
+        </framebuffer>
+        <framebuffer id="RenderBufferMaster" name="RenderBufferMaster">
+          <instance_effect url="file://assets/models/nivel1_rb.xml#RenderBuffer-effect">
+            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="CanvasHMD"/>
+          </instance_effect>
+        </framebuffer>
+      </framebuffers>
+      <tiles>
+        <tile id="TileText" name="TileText">
+          <instance_camera url="#Camera-Tile">
+            <extra>
+              <technique profile="chimera">
+                <static>
+                  <primary>false</primary>
+                  <fixedAspectRatio>false</fixedAspectRatio>
+                </static>
+              </technique>
+            </extra>
+          </instance_camera>
+          <instance_effect url="#ShadeText-effect">
+            <technique_hint platform="OpenGL|ES" profile="GLSL" ref="Text2D"/>
+          </instance_effect>
+        </tile>
+      </tiles>
+    </technique>
+  </extra>
+</COLLADA>

@@ -9,7 +9,8 @@ Entity Registry::createEntity(const std::string& tag, const std::string& id) {
     auto& ec = entity.addComponent<TagComponent>();
     ec.tag = tag.empty() ? "Entity" : tag;
     ec.id = id;
-    ec.serial = ++Registry::masterSerial;
+    ec.serial = Registry::masterSerial;
+    Registry::masterSerial++;
     return entity;
 }
 

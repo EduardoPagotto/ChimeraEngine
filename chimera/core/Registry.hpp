@@ -41,7 +41,7 @@ class Entity {
     Entity(entt::entity handle, Registry* reg) : handle(handle), reg(reg) {}
     Entity(const Entity& other) : handle(other.handle), reg(other.reg) {}
     template <typename T>
-    bool hasComponent() {
+    const bool hasComponent() const {
         return reg->eRegistry.all_of<T>(handle);
     }
     template <typename T, typename... Args>

@@ -32,7 +32,7 @@ class Registry {
   private:
     friend Entity;
     entt::registry eRegistry;
-    static uint32_t masterSerial;
+    inline static uint32_t masterSerial = 0;
 };
 
 class Entity {

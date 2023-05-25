@@ -2,9 +2,6 @@
 
 namespace Chimera {
 
-std::map<SDL_Keycode, uint8_t> Keyboard::mapKey;
-uint16_t Keyboard::mod;
-
 void Keyboard::setDown(SDL_KeyboardEvent event) {
     mapKey[event.keysym.sym] = SDL_PRESSED;
     mod = event.keysym.mod;

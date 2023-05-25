@@ -5,8 +5,6 @@
 
 namespace Chimera {
 
-uint32_t Octree::serial_master = 0;
-
 Octree::Octree(const AABB& boundary, const uint32_t& capacity, Octree* parent, const bool& leafMode, const uint32_t& deep)
     : boundary(boundary), capacity(capacity), pParent(parent), leafMode(leafMode), deep(deep), divided(false), locked(false),
       serial(serial_master) {

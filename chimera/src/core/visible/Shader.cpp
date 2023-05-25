@@ -167,7 +167,6 @@ void Shader::setUniformU(const char* name, const UValue& uv) {
 }
 
 //---
-std::unordered_map<std::string, Shader> ShaderManager::mShaders;
 
 void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) {
 

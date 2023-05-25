@@ -67,9 +67,6 @@ const glm::mat4 textToMat4(const std::string& text) {
 
 //--
 
-uint32_t Collada::serial = 0;
-std::vector<ColladaDom> Collada::vColladaDom;
-
 Collada::Collada(ColladaDom& dom, const std::string& url) {
 
     RFC3986 rfc(url);

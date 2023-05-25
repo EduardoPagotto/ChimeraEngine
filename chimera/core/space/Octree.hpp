@@ -42,6 +42,6 @@ class Octree {
     Octree* pChild[8];
     std::vector<glm::vec3> points;
     std::vector<uint32_t> indexes;
-    static uint32_t serial_master;
+    inline static uint32_t serial_master;
 };
 } // namespace Chimera

@@ -13,7 +13,7 @@ class Keyboard {
     static bool isModPressed(SDL_Keymod keyMod);
 
   private:
-    static std::map<SDL_Keycode, uint8_t> mapKey;
-    static uint16_t mod;
+    inline static std::map<SDL_Keycode, uint8_t> mapKey;
+    inline static uint16_t mod;
 };
 } // namespace Chimera

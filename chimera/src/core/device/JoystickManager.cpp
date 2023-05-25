@@ -2,8 +2,6 @@
 
 namespace Chimera {
 
-std::map<SDL_JoystickID, JoystickState> JoystickManager::Joysticks;
-
 void JoystickManager::init(void) {
     SDL_InitSubSystem(SDL_INIT_JOYSTICK);
     SDL_JoystickEventState(SDL_ENABLE);

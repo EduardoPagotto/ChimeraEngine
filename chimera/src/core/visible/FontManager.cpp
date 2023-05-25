@@ -1,7 +1,6 @@
 #include "chimera/core/visible/FontManager.hpp"
 
 namespace Chimera {
-std::vector<FontAtlas*> FontManager::fonts;
 
 void FontManager::add(FontAtlas* font) { fonts.push_back(font); }
 

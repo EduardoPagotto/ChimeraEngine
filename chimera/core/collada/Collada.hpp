@@ -14,11 +14,11 @@ class Collada {
     const pugi::xml_node getLibrary(const std::string& libraryName);
     static uint32_t getNewSerial() { return ++serial; }
     static void destroy();
-    static std::vector<ColladaDom> vColladaDom;
+    inline static std::vector<ColladaDom> vColladaDom;
 
   protected:
     ColladaDom colladaDom;
-    static uint32_t serial;
+    inline static uint32_t serial;
     std::string fragment;
 
   private:

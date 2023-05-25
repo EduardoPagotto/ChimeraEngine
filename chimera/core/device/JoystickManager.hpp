@@ -20,7 +20,6 @@ class JoystickManager {
     static JoystickState* select(const SDL_JoystickID& joystick_id);
 
   private:
-    static std::map<SDL_JoystickID, JoystickState> Joysticks;
-    static bool Initialized;
+    inline static std::map<SDL_JoystickID, JoystickState> Joysticks;
 };
 } // namespace Chimera

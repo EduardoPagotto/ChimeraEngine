@@ -78,7 +78,9 @@
 			"climits": "cpp",
 			"ios": "cpp",
 			"queue": "cpp",
-			"numbers": "cpp"
+			"numbers": "cpp",
+			"semaphore": "cpp",
+			"stop_token": "cpp"
 		}
 	}
 }

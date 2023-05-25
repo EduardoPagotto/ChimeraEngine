@@ -14,6 +14,6 @@ class FontManager {
   private:
     FontManager() {}
     ~FontManager() {}
-    static std::vector<FontAtlas*> fonts;
+    inline static std::vector<FontAtlas*> fonts;
 };
 } // namespace Chimera

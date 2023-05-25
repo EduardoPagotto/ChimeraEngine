@@ -3,8 +3,6 @@
 
 namespace Chimera {
 
-std::vector<Texture*> TextureManager::textures;
-
 void TextureManager::add(Texture* texture) { textures.push_back(texture); }
 
 void TextureManager::clean() {

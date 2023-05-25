@@ -2,14 +2,6 @@
 
 namespace Chimera {
 
-std::map<uint8_t, uint8_t> MouseDevice::buttonState;
-glm::ivec2 MouseDevice::pos;
-glm::ivec2 MouseDevice::rel;
-glm::ivec2 MouseDevice::wheel;
-
-uint32_t MouseDevice::flag1;
-uint32_t MouseDevice::flag2;
-
 uint8_t MouseDevice::getButtonState(const uint8_t& indice) {
     auto button_iter = MouseDevice::buttonState.find(indice);
     if (button_iter != buttonState.end())

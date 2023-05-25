@@ -38,6 +38,6 @@ class ShaderManager {
     static void clear();
 
   private:
-    static std::unordered_map<std::string, Shader> mShaders;
+    inline static std::unordered_map<std::string, Shader> mShaders;
 };
 } // namespace Chimera

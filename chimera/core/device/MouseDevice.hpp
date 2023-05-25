@@ -16,8 +16,8 @@ class MouseDevice {
     static void updateWl(SDL_MouseWheelEvent* mwe);
 
   private:
-    static std::map<uint8_t, uint8_t> buttonState;
-    static glm::ivec2 pos, rel, wheel;
-    static uint32_t flag1, flag2;
+    inline static std::map<uint8_t, uint8_t> buttonState;
+    inline static glm::ivec2 pos, rel, wheel;
+    inline static uint32_t flag1, flag2;
 };
 } // namespace Chimera

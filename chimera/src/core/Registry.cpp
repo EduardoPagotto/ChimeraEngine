@@ -2,8 +2,6 @@
 
 namespace Chimera {
 
-uint32_t Registry::masterSerial = 0;
-
 Entity Registry::createEntity(const std::string& tag, const std::string& id) {
     Entity entity = {eRegistry.create(), this};
     auto& ec = entity.addComponent<TagComponent>();

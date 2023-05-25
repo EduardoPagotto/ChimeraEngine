@@ -20,6 +20,6 @@ class TextureManager {
     static void invert_image(int pitch, int height, void* image_pixels);
     TextureManager() {}
     ~TextureManager() {}
-    static std::vector<Texture*> textures;
+    inline static std::vector<Texture*> textures;
 };
 } // namespace Chimera

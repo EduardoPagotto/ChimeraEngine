@@ -99,68 +99,41 @@ void Shader::setUniformU(const char* name, const UValue& uv) {
     }
 
     switch (uv.type) {
-        case UniformType::t_int:
+        case UniformType::INT:
             glUniform1i(loc, uv.u.v_int);
             break;
-        case UniformType::t_float:
+        case UniformType::FLOAT:
             glUniform1f(loc, uv.u.v_float);
             break;
-        case UniformType::t_vec2:
+        case UniformType::VEC2:
             glUniform2fv(loc, 1, glm::value_ptr(uv.u.v_vec2));
             break;
-        case UniformType::t_ivec2:
+        case UniformType::IVEC2:
             glUniform2iv(loc, 1, glm::value_ptr(uv.u.v_ivec2));
             break;
-        case UniformType::t_vec3:
+        case UniformType::VEC3:
             glUniform3fv(loc, 1, glm::value_ptr(uv.u.v_vec3));
             break;
-        case UniformType::t_ivec3:
+        case UniformType::IVEC3:
             glUniform3iv(loc, 1, glm::value_ptr(uv.u.v_ivec3));
             break;
-        case UniformType::t_vec4:
+        case UniformType::VEC4:
             glUniform4fv(loc, 1, glm::value_ptr(uv.u.v_vec4));
             break;
-        case UniformType::t_ivec4:
+        case UniformType::IVEC4:
             glUniform4iv(loc, 1, glm::value_ptr(uv.u.v_ivec4));
             break;
-        case UniformType::t_mat3:
+        case UniformType::MAT3:
             glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.v_mat3));
             break;
-        case UniformType::t_mat4:
+        case UniformType::MAT4:
             glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.v_mat4));
             break;
-        case UniformType::tp_int:
+        case UniformType::INTP:
             glUniform1iv(loc, uv.size, uv.u.p_int);
             break;
-            // case UniformType::tp_float:
-            //     glUniform1fv(loc, uv.size, uv.u.p_float);
-            //     break;
-            // case UniformType::tp_vec2:
-            //     glUniform2fv(loc, uv.size, glm::value_ptr(*uv.u.p_vec2));
-            //     break;
-            // case UniformType::tp_ivec2:
-            //     glUniform2iv(loc, uv.size, glm::value_ptr(*uv.u.p_ivec2));
-            //     break;
-            // case UniformType::tp_vec3:
-            //     glUniform3fv(loc, uv.size, glm::value_ptr(*uv.u.p_vec3));
-            //     break;
-            // case UniformType::tp_ivec3:
-            //     glUniform3iv(loc, uv.size, glm::value_ptr(*uv.u.p_ivec3));
-            //     break;
-            // case UniformType::tp_vec4:
-            //     glUniform4fv(loc, uv.size, glm::value_ptr(*uv.u.p_vec4));
-            //     break;
-            // case UniformType::tp_ivec4:
-            //     glUniform4iv(loc, uv.size, glm::value_ptr(*uv.u.p_ivec4));
-            //     break;
-            // case UniformType::tp_mat3:
-            //     glUniformMatrix3fv(loc, uv.size, GL_FALSE, glm::value_ptr(*uv.u.p_mat3));
-            //     break;
-            // case UniformType::tp_mat4:
-            //     glUniformMatrix4fv(loc, uv.size, GL_FALSE, glm::value_ptr(*uv.u.p_mat4));
-            //     break;
 
-        case UniformType::t_invalid:
+        case UniformType::INVALID:
             SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, progID);
             break;
     }

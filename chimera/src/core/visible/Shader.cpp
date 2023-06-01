@@ -102,26 +102,29 @@ void Shader::setUniformU(const char* name, const UValue& uv) {
         case UniformType::INT:
             glUniform1i(loc, uv.u.vint);
             break;
+        case UniformType::INTP:
+            glUniform1iv(loc, uv.size, uv.u.pint);
+            break;
+        case UniformType::IVEC2:
+            glUniform2iv(loc, 1, glm::value_ptr(uv.u.vivec2));
+            break;
+        case UniformType::IVEC3:
+            glUniform3iv(loc, 1, glm::value_ptr(uv.u.vivec3));
+            break;
+        case UniformType::IVEC4:
+            glUniform4iv(loc, 1, glm::value_ptr(uv.u.vivec4));
+            break;
         case UniformType::FLOAT:
             glUniform1f(loc, uv.u.vfloat);
             break;
         case UniformType::VEC2:
             glUniform2fv(loc, 1, glm::value_ptr(uv.u.vvec2));
             break;
-        case UniformType::IVEC2:
-            glUniform2iv(loc, 1, glm::value_ptr(uv.u.vivec2));
-            break;
         case UniformType::VEC3:
             glUniform3fv(loc, 1, glm::value_ptr(uv.u.vvec3));
             break;
-        case UniformType::IVEC3:
-            glUniform3iv(loc, 1, glm::value_ptr(uv.u.vivec3));
-            break;
         case UniformType::VEC4:
             glUniform4fv(loc, 1, glm::value_ptr(uv.u.vvec4));
-            break;
-        case UniformType::IVEC4:
-            glUniform4iv(loc, 1, glm::value_ptr(uv.u.vivec4));
             break;
         case UniformType::MAT3:
             glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.vmat3));
@@ -129,10 +132,6 @@ void Shader::setUniformU(const char* name, const UValue& uv) {
         case UniformType::MAT4:
             glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(uv.u.vmat4));
             break;
-        case UniformType::INTP:
-            glUniform1iv(loc, uv.size, uv.u.pint);
-            break;
-
         case UniformType::INVALID:
             SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Uniform \"%s\" invalid in Program \"%d\"", name, progID);
             break;

@@ -4,10 +4,10 @@
 
 namespace Chimera {
 struct Triangle {
-    Triangle(const Triangle& t) : point(t.point), normal(t.normal), splitter(t.splitter) {}
-    Triangle(const glm::uvec3& t, const glm::vec3& _normal, const bool& split) : normal(_normal), splitter(split) { this->point = t; }
+    Triangle(const Triangle& t) : idx(t.idx), normal(t.normal), splitter(t.splitter) {}
+    Triangle(const glm::uvec3& t, const glm::vec3& _normal, const bool& split) : normal(_normal), splitter(split) { this->idx = t; }
     bool splitter;
-    glm::uvec3 point;
+    glm::uvec3 idx;
     glm::vec3 normal;
 };
 

@@ -13,20 +13,24 @@ class LoadHeightMap {
     void clean();
 
     bool getMesh(const std::string& _fileName, Mesh& _mesh, const glm::vec3& _size);
-    void split(std::vector<unsigned int> vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut);
+    void split(std::vector<uint32_t> vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut);
 
   private:
-    inline unsigned getIndex(const int& _x, const int& _z) { return (pImage->w * _z) + _x; }
-    uint32_t getHeight(int w, int h);
+    inline uint32_t getIndex(const uint32_t& _x, const uint32_t& _z) { return (pImage->w * _z) + _x; }
+    uint32_t getpixel(const uint32_t& w, const uint32_t& h);
+    uint32_t getHeight(const uint32_t& w, const uint32_t& h);
+
     void defineScale(const glm::vec3& _size);
-    Uint32 getpixel(const unsigned& w, const unsigned& h);
-    glm::vec3 calcNormalHeight(int x, int z);
+
+    // glm::vec3 calcNormalHeight(int x, int z);
 
     SDL_Surface* pImage;
     glm::vec3 scale;
-    int width;
-    int height;
-    int squareX;
-    int squareZ;
+    uint32_t width;
+    uint32_t height;
+    uint32_t squareX;
+    uint32_t squareZ;
+
+    uint32_t minimal;
 };
 } // namespace Chimera

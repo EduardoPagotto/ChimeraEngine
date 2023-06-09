@@ -15,16 +15,16 @@ void LoadHeightMap::clean() {
     }
 }
 
-uint32_t LoadHeightMap::getHeight(int w, int h) {
-    unsigned w1 = w < 0 ? 0 : w > pImage->w ? pImage->w : w;
-    unsigned h1 = h < 0 ? 0 : h > pImage->h ? pImage->h : h;
+uint32_t LoadHeightMap::getHeight(const uint32_t& w, const uint32_t& h) {
+    unsigned w1 = w > pImage->w ? pImage->w : w;
+    unsigned h1 = h > pImage->h ? pImage->h : h;
     return getpixel(w1, h1);
 }
 
-Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
+uint32_t LoadHeightMap::getpixel(const uint32_t& w, const uint32_t& h) {
     int bpp = pImage->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to retrieve */
-    Uint8* p = (Uint8*)pImage->pixels + h * pImage->pitch + w * bpp;
+
+    uint8_t* p = (uint8_t*)pImage->pixels + h * pImage->pitch + w * bpp;
 
     switch (bpp) {
         case 1:
@@ -32,7 +32,7 @@ Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
             break;
 
         case 2:
-            return *(Uint16*)p;
+            return *(uint16_t*)p;
             break;
 
         case 3:
@@ -43,7 +43,7 @@ Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
             break;
 
         case 4:
-            return *(Uint32*)p;
+            return *(uint32_t*)p;
             break;
 
         default:
@@ -52,25 +52,25 @@ Uint32 LoadHeightMap::getpixel(const unsigned& w, const unsigned& h) {
 }
 
 void LoadHeightMap::defineScale(const glm::vec3& _size) {
-    uint32_t min, max;
-    min = max = getHeight(0, 0);
-    for (int z = 0; z < pImage->h; z++) {
-        for (int x = 0; x < pImage->w; x++) {
+    uint32_t max;
+    minimal = max = getHeight(0, 0);
+    for (uint32_t z = 0; z < pImage->h; z++) {
+        for (uint32_t x = 0; x < pImage->w; x++) {
             uint32_t val = getHeight(x, z);
 
             if (val > max)
                 max = val;
-            if (val < min)
-                min = val;
+            if (val < minimal)
+                minimal = val;
         }
     }
 
     scale.x = _size.x / (float)pImage->w;
-    scale.y = _size.y / (float)(max - min);
+    scale.y = _size.y / (float)(max - minimal);
     scale.z = _size.z / (float)pImage->h;
 }
 
-// glm::vec3 LoadHeightMap::calcNormalHeight(int x, int z) {
+// glm::vec3 LoadHeightMap::calcNormalHeight(uint32_t x, uint32_t z) {
 //     return glm::normalize(glm::vec3((scale.y * getHeight(x - 1, z)) - (scale.y * getHeight(x + 1, z)),   // norx
 //                                     2.0f,                                                                // nory
 //                                     (scale.y * getHeight(x, z - 1)) - (scale.y * getHeight(x, z + 1)))); // norz
@@ -92,25 +92,25 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
 
     defineScale(_size);
 
-    for (int z = 0; z < pImage->h; z++) {
-        for (int x = 0; x < pImage->w; x++) {
+    for (uint32_t z = 0; z < pImage->h; z++) {
+        for (uint32_t x = 0; x < pImage->w; x++) {
 
-            _mesh.point.push_back(glm::vec3(x - haldW, getHeight(x, z), halfH - z) * scale);
+            _mesh.point.push_back(glm::vec3(x - haldW, getHeight(x, z) - minimal, halfH - z) * scale);
             _mesh.normal.push_back(glm::vec3(0.0f));
             _mesh.uv.push_back(glm::vec2(u * x, v * z));
         }
     }
 
-    int tot_h = pImage->h - 1;
-    int tot_w = pImage->w - 1;
+    uint32_t tot_h = pImage->h - 1;
+    uint32_t tot_w = pImage->w - 1;
 
-    for (int z = 0; z < tot_h; z++) {
-        for (int x = 0; x < tot_w; x++) {
+    for (uint32_t z = 0; z < tot_h; z++) {
+        for (uint32_t x = 0; x < tot_w; x++) {
             // triangles point
-            int pa = getIndex(x, z);
-            int pb = getIndex(x + 1, z);
-            int pc = getIndex(x + 1, z + 1);
-            int pd = getIndex(x, z + 1);
+            uint32_t pa = getIndex(x, z);
+            uint32_t pb = getIndex(x + 1, z);
+            uint32_t pc = getIndex(x + 1, z + 1);
+            uint32_t pd = getIndex(x, z + 1);
             // Vertex T1
             _mesh.iPoint.push_back(pa);
             _mesh.iPoint.push_back(pb);
@@ -160,7 +160,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     return true;
 }
 
-void LoadHeightMap::split(std::vector<unsigned int> vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
+void LoadHeightMap::split(std::vector<uint32_t> vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
 
     bool done = false;
     uint32_t startHeight = 0;

@@ -32,9 +32,9 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* me
     for (auto ptrTrisIndex : vPtrTrisIndex) {
 
         glm::vec3 min, max, size;
-        vertexDataIndexMinMaxSize(&vertexData[0], vertexData.size(), &ptrTrisIndex.vIndex[0], ptrTrisIndex.size(), min, max, size);
+        vertexDataIndexMinMaxSize(&vertexData[0], vertexData.size(), (uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3, min, max, size);
 
-        IndexBuffer* ibo = new IndexBuffer(&ptrTrisIndex.vIndex[0], ptrTrisIndex.size());
+        IndexBuffer* ibo = new IndexBuffer((uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3);
         IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
 
         vChild.push_back(r);

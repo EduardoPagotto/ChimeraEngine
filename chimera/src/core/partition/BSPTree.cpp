@@ -293,7 +293,7 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();
         listConvexTriangle.pop_back();
-        leaf.add(convPoly->point.s, convPoly->point.t, convPoly->point.p);
+        leaf.push_back(convPoly->point);
 
         delete convPoly;
         convPoly = nullptr;

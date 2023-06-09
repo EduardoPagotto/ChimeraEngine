@@ -203,7 +203,7 @@ void LoadHeightMap::split(std::vector<unsigned int> vertexIndexIn, std::vector<T
             for (uint32_t w = startWidth; w < endWidth; w++) { // x
                 face = ((h * totalHeight) + w);
                 base = face * 3;
-                node.add(vertexIndexIn[base], vertexIndexIn[base + 1], vertexIndexIn[base + 2]);
+                node.push_back(glm::uvec3(vertexIndexIn[base], vertexIndexIn[base + 1], vertexIndexIn[base + 2]));
                 contador++;
             }
         }

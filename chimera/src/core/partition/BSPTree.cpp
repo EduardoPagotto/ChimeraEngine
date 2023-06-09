@@ -29,8 +29,8 @@ void swapFace(T& a, T& b) {
 //             th2 = (*j);
 //             float val = glm::dot(th1->normal, th2->normal); // DOT(U,V)
 //             if (val > 0.0f) {                               // if not convex test if is coplanar
-//                 Plane alpha(mesh->point[th1->p[TRI_PA]], th1->normal);
-//                 if (alpha.classifyPoly(mesh->point[th2->p[TRI_PA]], mesh->point[th2->p[TRI_PB]], mesh->point[th2->p[TRI_PC]], &result) !=
+//                 Plane alpha(mesh->point[th1->point.s], th1->normal);
+//                 if (alpha.classifyPoly(mesh->point[th2->point.s], mesh->point[th2->point.t], mesh->point[th2->point.p], &result) !=
 //                     SIDE::CP_ONPLANE)
 //                     return false;
 
@@ -74,14 +74,14 @@ Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
         score = splits = backfaces = frontfaces = 0;
 
-        Plane hyperPlane(mesh->point[th->p[TRI_PA]], th->normal);
+        Plane hyperPlane(mesh->point[th->point.s], th->normal);
 
         for (Triangle* currentPoly : _vTriangle) {
             if (currentPoly != th) {
-                SIDE result = hyperPlane.classifyPoly(mesh->point[currentPoly->p[TRI_PA]], // PA
-                                                      mesh->point[currentPoly->p[TRI_PB]], // PB
-                                                      mesh->point[currentPoly->p[TRI_PC]], // PC
-                                                      &temp);                              // Clip Test Result (A,B,C)
+                SIDE result = hyperPlane.classifyPoly(mesh->point[currentPoly->point.s], // PA
+                                                      mesh->point[currentPoly->point.t], // PB
+                                                      mesh->point[currentPoly->point.p], // PC
+                                                      &temp);                            // Clip Test Result (A,B,C)
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;
@@ -133,38 +133,38 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
 
     // Pega pontos posicao original e inteseccao
     glm::vec3 A, B;
-    glm::vec3 a = mesh->point[_pTriangle->p[TRI_PA]];
-    glm::vec3 b = mesh->point[_pTriangle->p[TRI_PB]];
-    glm::vec3 c = mesh->point[_pTriangle->p[TRI_PC]];
+    glm::vec3 a = mesh->point[_pTriangle->point.s];
+    glm::vec3 b = mesh->point[_pTriangle->point.t];
+    glm::vec3 c = mesh->point[_pTriangle->point.p];
 
     // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
-    if (fx.x * fx.z >= 0) {                                 // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
-        swapFace(b, c);                                     // troca b com c
-        swapFace(a, b);                                     // troca a com b
-        vertA_uv = mesh->uv[_pTriangle->p[TRI_PC]];         // old c
-        vertB_uv = mesh->uv[_pTriangle->p[TRI_PA]];         // old a
-        vertC_uv = mesh->uv[_pTriangle->p[TRI_PB]];         // old b
-        vertA_normal = mesh->normal[_pTriangle->p[TRI_PC]]; // old c
-        vertB_normal = mesh->normal[_pTriangle->p[TRI_PA]]; // old a
-        vertC_normal = mesh->normal[_pTriangle->p[TRI_PB]]; // old b
+    if (fx.x * fx.z >= 0) {                               // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
+        swapFace(b, c);                                   // troca b com c
+        swapFace(a, b);                                   // troca a com b
+        vertA_uv = mesh->uv[_pTriangle->point.p];         // old c
+        vertB_uv = mesh->uv[_pTriangle->point.s];         // old a
+        vertC_uv = mesh->uv[_pTriangle->point.t];         // old b
+        vertA_normal = mesh->normal[_pTriangle->point.p]; // old c
+        vertB_normal = mesh->normal[_pTriangle->point.s]; // old a
+        vertC_normal = mesh->normal[_pTriangle->point.t]; // old b
 
-    } else if (fx.y * fx.z >= 0) {                          // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
-        swapFace(a, c);                                     // troca A com C
-        swapFace(a, b);                                     // troca a com b
-        vertA_uv = mesh->uv[_pTriangle->p[TRI_PB]];         // old b
-        vertB_uv = mesh->uv[_pTriangle->p[TRI_PC]];         // old c
-        vertC_uv = mesh->uv[_pTriangle->p[TRI_PA]];         // old a
-        vertA_normal = mesh->normal[_pTriangle->p[TRI_PB]]; // old b
-        vertB_normal = mesh->normal[_pTriangle->p[TRI_PC]]; // old c
-        vertC_normal = mesh->normal[_pTriangle->p[TRI_PA]]; // old a
+    } else if (fx.y * fx.z >= 0) {                        // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
+        swapFace(a, c);                                   // troca A com C
+        swapFace(a, b);                                   // troca a com b
+        vertA_uv = mesh->uv[_pTriangle->point.t];         // old b
+        vertB_uv = mesh->uv[_pTriangle->point.p];         // old c
+        vertC_uv = mesh->uv[_pTriangle->point.s];         // old a
+        vertA_normal = mesh->normal[_pTriangle->point.t]; // old b
+        vertB_normal = mesh->normal[_pTriangle->point.p]; // old c
+        vertC_normal = mesh->normal[_pTriangle->point.s]; // old a
 
-    } else {                                                // Cortre em a e b (pontos posicao original)
-        vertA_uv = mesh->uv[_pTriangle->p[TRI_PA]];         // old a
-        vertB_uv = mesh->uv[_pTriangle->p[TRI_PB]];         // old b
-        vertC_uv = mesh->uv[_pTriangle->p[TRI_PC]];         // old c
-        vertA_normal = mesh->normal[_pTriangle->p[TRI_PA]]; // old a
-        vertB_normal = mesh->normal[_pTriangle->p[TRI_PB]]; // old b
-        vertC_normal = mesh->normal[_pTriangle->p[TRI_PC]]; // old c
+    } else {                                              // Cortre em a e b (pontos posicao original)
+        vertA_uv = mesh->uv[_pTriangle->point.s];         // old a
+        vertB_uv = mesh->uv[_pTriangle->point.t];         // old b
+        vertC_uv = mesh->uv[_pTriangle->point.p];         // old c
+        vertA_normal = mesh->normal[_pTriangle->point.s]; // old a
+        vertB_normal = mesh->normal[_pTriangle->point.t]; // old b
+        vertC_normal = mesh->normal[_pTriangle->point.p]; // old c
     }
 
     hyperPlane.intersect(a, c, A, propAC);
@@ -189,19 +189,19 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     addVertexMesh(a, vertA_normal, vertA_uv); // T1 PA
     addVertexMesh(b, vertB_normal, vertB_uv); // T1 PB
     addVertexMesh(A, vertA_normal, texA);     // T1 PC
-    _vTriangle.push_front(new Triangle(last, last + 1, last + 2, normal, _pTriangle->splitter));
+    _vTriangle.push_front(new Triangle(glm::uvec3(last, last + 1, last + 2), normal, _pTriangle->splitter));
 
     //-- T2 Triangle T2(b, B, A);
     addVertexMesh(b, vertB_normal, vertB_uv); // T2 PA
     addVertexMesh(B, vertB_normal, texB);     // T2 PB
     addVertexMesh(A, vertA_normal, texA);     // T2 PC
-    _vTriangle.push_front(new Triangle(last + 3, last + 4, last + 5, normal, _pTriangle->splitter));
+    _vTriangle.push_front(new Triangle(glm::uvec3(last + 3, last + 4, last + 5), normal, _pTriangle->splitter));
 
     // -- T3 Triangle T3(A, B, c);
     addVertexMesh(A, vertA_normal, texA);     // T3 PA
     addVertexMesh(B, vertB_normal, texB);     // T3 PB
     addVertexMesh(c, vertC_normal, vertC_uv); // T3 PC
-    _vTriangle.push_front(new Triangle(last + 6, last + 7, last + 8, normal, _pTriangle->splitter));
+    _vTriangle.push_front(new Triangle(glm::uvec3(last + 6, last + 7, last + 8), normal, _pTriangle->splitter));
 
     // Remove orininal
     delete _pTriangle;
@@ -220,16 +220,16 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
 
     Triangle* best = selectBestSplitter(_vTriangle);
     if (best != nullptr) {
-        tree = new BSPTreeNode(Plane(mesh->point[best->p[TRI_PA]], best->normal));
+        tree = new BSPTreeNode(Plane(mesh->point[best->point.s], best->normal));
         while (_vTriangle.empty() == false) {
 
             poly = _vTriangle.back();
             _vTriangle.pop_back();
             glm::vec3 result;
-            SIDE clipTest = tree->hyperPlane.classifyPoly(mesh->point[poly->p[TRI_PA]], // PA old poly.vertex[0].point
-                                                          mesh->point[poly->p[TRI_PB]], // PB
-                                                          mesh->point[poly->p[TRI_PC]], // PC
-                                                          &result);                     // Clip Test Result (A,B,C)
+            SIDE clipTest = tree->hyperPlane.classifyPoly(mesh->point[poly->point.s], // PA old poly.vertex[0].point
+                                                          mesh->point[poly->point.t], // PB
+                                                          mesh->point[poly->point.p], // PC
+                                                          &result);                   // Clip Test Result (A,B,C)
             switch (clipTest) {
                 case SIDE::CP_BACK:
                     back_list.push_front(poly);
@@ -256,7 +256,7 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
             poly = _vTriangle.back();
             _vTriangle.pop_back();
             if (primeiro == true) {
-                tree = new BSPTreeNode(Plane(mesh->point[poly->p[TRI_PA]], poly->normal));
+                tree = new BSPTreeNode(Plane(mesh->point[poly->point.s], poly->normal));
                 primeiro = false;
             }
             front_list.push_front(poly);
@@ -293,7 +293,7 @@ void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTri
     while (listConvexTriangle.empty() == false) {
         Triangle* convPoly = listConvexTriangle.back();
         listConvexTriangle.pop_back();
-        leaf.add(convPoly->p[TRI_PA], convPoly->p[TRI_PB], convPoly->p[TRI_PC]);
+        leaf.add(convPoly->point.s, convPoly->point.t, convPoly->point.p);
 
         delete convPoly;
         convPoly = nullptr;

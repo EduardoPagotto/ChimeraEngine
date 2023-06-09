@@ -37,7 +37,7 @@ void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris) {
         glm::vec3 acc = m->normal[pa] + m->normal[pb] + m->normal[pc]; // vertexData[pa].normal + vertexData[pb].normal +
                                                                        // vertexData[pc].normal;
         glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-        vTris.push_back(new Triangle(pa, pb, pc, normal, false));
+        vTris.push_back(new Triangle(glm::uvec3(pa, pb, pc), normal, false));
     }
 }
 

@@ -8,7 +8,6 @@ LoadHeightMap::LoadHeightMap(int _squareX, int _squareZ) : pImage(nullptr), squa
 LoadHeightMap::~LoadHeightMap() { clean(); }
 
 void LoadHeightMap::clean() {
-    scale = glm::vec3(1.0f);
     if (pImage != nullptr) {
         SDL_FreeSurface(pImage);
         pImage = nullptr;
@@ -51,7 +50,7 @@ uint32_t LoadHeightMap::getpixel(const uint32_t& w, const uint32_t& h) {
     }
 }
 
-void LoadHeightMap::defineScale(const glm::vec3& _size) {
+glm::vec3 LoadHeightMap::defineScale(const glm::vec3& _size) {
     uint32_t max;
     minimal = max = getHeight(0, 0);
     for (uint32_t z = 0; z < pImage->h; z++) {
@@ -64,10 +63,7 @@ void LoadHeightMap::defineScale(const glm::vec3& _size) {
                 minimal = val;
         }
     }
-
-    scale.x = _size.x / (float)pImage->w;
-    scale.y = _size.y / (float)(max - minimal);
-    scale.z = _size.z / (float)pImage->h;
+    return glm::vec3(_size.x / (float)pImage->w, _size.y / (float)(max - minimal), _size.z / (float)pImage->h);
 }
 
 // glm::vec3 LoadHeightMap::calcNormalHeight(uint32_t x, uint32_t z) {
@@ -90,7 +86,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     float v = 1.0f / (pImage->h - 1);
     float u = 1.0f / (pImage->w - 1);
 
-    defineScale(_size);
+    glm::vec3 scale = defineScale(_size);
 
     for (uint32_t z = 0; z < pImage->h; z++) {
         for (uint32_t x = 0; x < pImage->w; x++) {
@@ -160,7 +156,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     return true;
 }
 
-void LoadHeightMap::split(std::vector<uint32_t> vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
+void LoadHeightMap::split(std::vector<uint32_t>& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
 
     bool done = false;
     uint32_t startHeight = 0;

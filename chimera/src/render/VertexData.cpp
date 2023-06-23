@@ -74,11 +74,15 @@ void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {
         // Indices (point, normal e UV) tem valores diferentes, e mesmo tamanho
         if (m->uv.size() > 0) {
             for (uint32_t i = 0; i < m->iPoint.size(); i++) { // Todos os indices tem mesmo tamanho mas diferentes
-                outData.push_back({m->point[m->iPoint[i]], m->normal[m->iNormal[i]], m->uv[m->iUv[i]]});
+                outData.push_back({m->point[m->iPoint[i].x], m->normal[m->iNormal[i].x], m->uv[m->iUv[i].x]});
+                outData.push_back({m->point[m->iPoint[i].y], m->normal[m->iNormal[i].y], m->uv[m->iUv[i].y]});
+                outData.push_back({m->point[m->iPoint[i].z], m->normal[m->iNormal[i].z], m->uv[m->iUv[i].z]});
             }
         } else {
             for (uint32_t i = 0; i < m->iPoint.size(); i++) { // Todos os indices tem mesmo tamanho mas diferentes
-                outData.push_back({m->point[m->iPoint[i]], m->normal[m->iNormal[i]], glm::vec2(0.0, 0.0)});
+                outData.push_back({m->point[m->iPoint[i].x], m->normal[m->iNormal[i].x], glm::vec2(0.0, 0.0)});
+                outData.push_back({m->point[m->iPoint[i].y], m->normal[m->iNormal[i].y], glm::vec2(0.0, 0.0)});
+                outData.push_back({m->point[m->iPoint[i].z], m->normal[m->iNormal[i].z], glm::vec2(0.0, 0.0)});
             }
         }
     } else {

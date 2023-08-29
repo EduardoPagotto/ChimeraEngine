@@ -3,7 +3,35 @@
 Just another simple game engine<p>
 OBS: Code with comments in Portuguese mostly
 
-## Ubuntu 22.04 dependencies
+## Features of project:
+- Editor: vscode
+- Build tool: CMAKE
+- Compiler: clang (using C++17)
+- Debug: lldb
+- Ident: clang-format (file: .clang-format)
+
+## Fedora 38 Dependencies:
+```bash
+sudo dnf -y groupinstall "Development Tools" "Development Libraries"
+
+# libs
+sudo dnf install htop git gitk meld gcc g++ cmake python3-pip vim tree curl openssh-server tinyxml2 tinyxml2-devel libyaml libyaml-devel yaml-cpp yaml-cpp-devel pugixml-devel
+
+# LLVM / LLDM /CMAKE
+sudo dnf install clang clang-tools-extra
+sudo dnf install cmake cmake-data cmake-rpm-macros jsoncpp libstdc++-static llvm-static llvm-devel llvm-test autoconf automake
+sudo dnf install lldb lldb-devel
+sudo dnf install compiler-rt
+
+# OpenGL
+sudo dnf install mesa-dri-drivers mesa-libGL freeglut-devel glm-devel glew glew-devel libGLEW
+sudo dnf install bullet bullet-devel bullet-extras bullet-extras-devel
+
+# SDL2
+sudo dnf install SDL2-devel SDL2-static SDL2_image SDL2_image-devel SDL2_mixer SDL2_mixer-devel SDL2_net SDL2_net-devel SDL2_sound SDL2_sound-devel SDL2_ttf SDL2_ttf-devel SDL2_gfx SDL2_gfx-devel SDL2_gfx-docs
+```
+
+## Ubuntu 23.04 dependencies:
 ```bash
 # Develop:
 apt install htop build-essential git gitk meld cmake g++ vim libtinyxml2-dev libyaml-cpp-dev libpugixml-dev pugixml-doc
@@ -16,6 +44,9 @@ apt install libsdl2-dev libsdl2-doc libsdl2-gfx-dev libsdl2-gfx-doc libsdl2-imag
 
 # Clang format and indentation ref: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
 apt install clang-format clang lldb
+
+apt install libstdc++-12-dev
+ref: https://stackoverflow.com/questions/74543715/usr-bin-ld-cannot-find-lstdc-no-such-file-or-directory-on-running-flutte
 
 # BULLET ENGINE
 apt install libbullet-dev libassimp-dev

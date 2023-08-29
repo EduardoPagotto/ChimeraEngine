@@ -4,6 +4,7 @@
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <map>
+#include <stdint.h>
 
 namespace Chimera {
 

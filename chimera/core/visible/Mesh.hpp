@@ -21,7 +21,7 @@ struct Mesh {
     std::vector<glm::vec3> point;
     std::vector<glm::vec3> normal;
     std::vector<glm::vec2> uv;
-    // std::vector<glm::ivec3> iFacePoint; // iPoint
+    // TrisIndex idxFacePoint
     std::vector<uint32_t> iPoint;
     std::vector<uint32_t> iNormal;
     std::vector<uint32_t> iUv;

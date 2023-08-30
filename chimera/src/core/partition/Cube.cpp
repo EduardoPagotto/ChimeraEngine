@@ -247,11 +247,11 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
 
     uint32_t ia, ib, ic;
     if (!clockwise) {
-        ia = mesh->iPoint.size(); // tl->size() * 3;
+        ia = mesh->iPoint.size() * 3; // tl->size() * 3;
         ib = ia + 1;
         ic = ib + 1;
     } else {
-        ic = mesh->iPoint.size(); // tl->size() * 3;
+        ic = mesh->iPoint.size() * 3; // tl->size() * 3;
         ib = ic + 1;
         ia = ib + 1;
     }

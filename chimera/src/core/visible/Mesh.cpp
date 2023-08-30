@@ -135,6 +135,7 @@ void meshDebug(Mesh* m, bool _showAll) {
         for (const glm::vec3& v : m->point)
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point: %03d (%05.3f; %05.3f; %05.3f)", i++, v.x, v.y, v.z);
 
+        i = 0;
         for (const glm::uvec3& face : m->iPoint)
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point Index: %03d (%03d; %03d; %03d)", i++, face.x, face.y, face.z);
 
@@ -142,6 +143,7 @@ void meshDebug(Mesh* m, bool _showAll) {
         for (const glm::vec3& v : m->normal)
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", i++, v.x, v.y, v.z);
 
+        i = 0;
         for (const glm::uvec3& face : m->iNormal)
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Index: %03d (%03d; %03d; %03d)", i++, face.x, face.y, face.z);
 
@@ -149,6 +151,7 @@ void meshDebug(Mesh* m, bool _showAll) {
         for (const glm::vec2& v : m->uv)
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV: %03d (%05.3f; %05.3f)", i++, v.x, v.y);
 
+        i = 0;
         for (const glm::uvec3& face : m->iUv)
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV Index: %03d (%03d; %03d; %03d)", i++, face.x, face.y, face.z);
     }

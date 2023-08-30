@@ -10,8 +10,9 @@ namespace Chimera {
 RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
 
     Mesh meshFinal;
-    meshDebug(mesh, true);
+    // meshDebug(mesh, true);
     meshReCompile(*mesh, meshFinal);
+    meshDebug(&meshFinal, true);
 
     BspTree bspTree;
     std::vector<TrisIndex> vTris; // FIXME: limpar ??

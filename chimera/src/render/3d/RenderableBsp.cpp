@@ -10,6 +10,7 @@ namespace Chimera {
 RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
 
     Mesh meshFinal;
+    meshDebug(mesh, true);
     meshReCompile(*mesh, meshFinal);
 
     BspTree bspTree;

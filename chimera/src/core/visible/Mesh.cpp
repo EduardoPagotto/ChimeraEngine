@@ -28,31 +28,51 @@ void meshDataScale(Mesh* m, const float& new_size, const bool& hasTexture) {
 }
 
 void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris) {
-
-    for (uint32_t indice = 0; indice < m->iPoint.size(); indice += 3) {
-        uint32_t pa = m->iPoint[indice];
-        uint32_t pb = m->iPoint[indice + 1];
-        uint32_t pc = m->iPoint[indice + 2];
-        // Calcula Normal Face
-        glm::vec3 acc = m->normal[pa] + m->normal[pb] + m->normal[pc]; // vertexData[pa].normal + vertexData[pb].normal +
-                                                                       // vertexData[pc].normal;
-        glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-        vTris.push_back(new Triangle(glm::uvec3(pa, pb, pc), normal, false));
+    for (uint32_t i = 0; i < m->iPoint.size(); i++) {
+        const glm::vec3 acc = m->normal[m->iNormal[i].x] + m->normal[m->iNormal[i].y] + m->normal[m->iNormal[i].z];
+        vTris.push_back(new Triangle(m->iPoint[i], glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3), false));
     }
 }
 
 void meshReCompile(Mesh& inData, Mesh& outData) {
+
+    std::vector<uint32_t> iPoint;
+    iPoint.reserve(inData.iPoint.size() * 3);
+    for (const glm::uvec3& f : inData.iPoint) {
+        iPoint.push_back(f.x);
+        iPoint.push_back(f.y);
+        iPoint.push_back(f.z);
+    }
+
+    std::vector<uint32_t> iNormal;
+    iNormal.reserve(inData.iNormal.size() * 3);
+    for (const glm::uvec3& f : inData.iNormal) {
+        iNormal.push_back(f.x);
+        iNormal.push_back(f.y);
+        iNormal.push_back(f.z);
+    }
+
+    std::vector<uint32_t> iUv;
+    iUv.reserve(inData.iUv.size() * 3);
+    for (const glm::uvec3& f : inData.iUv) {
+        iUv.push_back(f.x);
+        iUv.push_back(f.y);
+        iUv.push_back(f.z);
+    }
+
+    std::vector<uint32_t> index;
+
     // percorrer todos os vertices
     bool find;
-    for (uint32_t i = 0; i < inData.iPoint.size(); i++) {
+    for (uint32_t i = 0; i < iPoint.size(); i++) {
         // Procura por similar
         find = false;
-        for (uint32_t j = 0; j < outData.iPoint.size(); j++) {
-            if (is_nearVec3(inData.point[inData.iPoint[i]], outData.point[j]) &&    // compara pontos
-                is_nearVec3(inData.normal[inData.iNormal[i]], outData.normal[j]) && // compara normal
-                is_nearVec2(inData.uv[inData.iUv[i]], outData.uv[j])) {             // compara uv
+        for (uint32_t j = 0; j < index.size(); j++) {
+            if (is_nearVec3(inData.point[iPoint[i]], outData.point[j]) &&    // compara pontos
+                is_nearVec3(inData.normal[iNormal[i]], outData.normal[j]) && // compara normal
+                is_nearVec2(inData.uv[iUv[i]], outData.uv[j])) {             // compara uv
 
-                outData.iPoint.push_back(j);
+                index.push_back(j);
                 find = true;
                 break;
             }
@@ -62,13 +82,16 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
             continue;
 
         // se diferente adiciona vertice e cria novo indice
-        outData.point.push_back(inData.point[inData.iPoint[i]]);
-        outData.normal.push_back(inData.normal[inData.iNormal[i]]);
-        outData.uv.push_back(inData.uv[inData.iUv[i]]);
+        outData.point.push_back(inData.point[iPoint[i]]);
+        outData.normal.push_back(inData.normal[iNormal[i]]);
+        outData.uv.push_back(inData.uv[iUv[i]]);
 
         uint32_t n = outData.point.size() - 1;
-        outData.iPoint.push_back(n); // FIXME: usar copia rapida
+        index.push_back(n); // FIXME: usar copia rapida
     }
+
+    for (uint32_t i = 0; i < iPoint.size(); i += 3)
+        outData.iPoint.push_back({iPoint[i], iPoint[1 + 1], iPoint[i + 2]});
 
     outData.iNormal.assign(outData.iPoint.begin(), outData.iPoint.end());
     outData.iUv.assign(outData.iPoint.begin(), outData.iPoint.end());
@@ -108,26 +131,29 @@ void meshDebug(Mesh* m, bool _showAll) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UVs:     %03d Index: %03d", (int)m->uv.size(), (int)m->iUv.size());
 
     if (_showAll == true) {
-        for (uint32_t i = 0; i < m->point.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point: %03d (%05.3f; %05.3f; %05.3f)", i, m->point[i].x, m->point[i].y, m->point[i].z);
+        uint32_t i = 0;
+        for (const glm::vec3& v : m->point)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point: %03d (%05.3f; %05.3f; %05.3f)", i++, v.x, v.y, v.z);
 
-        for (uint32_t i = 0; i < m->iPoint.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point Index: %03d (%03d; %03d; %03d)", i, m->iPoint[i], m->iPoint[i + 1],
-                         m->iPoint[i + 2]);
+        i = 0;
+        for (const glm::uvec3& face : m->iPoint)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point Index: %03d (%03d; %03d; %03d)", i++, face.x, face.y, face.z);
 
-        for (uint32_t i = 0; i < m->normal.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", i, m->normal[i].x, m->normal[i].y,
-                         m->normal[i].z);
+        i = 0;
+        for (const glm::vec3& v : m->normal)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", i++, v.x, v.y, v.z);
 
-        for (uint32_t i = 0; i < m->iNormal.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Index: %03d (%03d; %03d; %03d)", i, m->iNormal[i], m->iNormal[i + 1],
-                         m->iNormal[i + 2]);
+        i = 0;
+        for (const glm::uvec3& face : m->iNormal)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal Index: %03d (%03d; %03d; %03d)", i++, face.x, face.y, face.z);
 
-        for (uint32_t i = 0; i < m->uv.size(); i++)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV: %03d (%05.3f; %05.3f)", i, m->uv[i].x, m->uv[i].y);
+        i = 0;
+        for (const glm::vec2& v : m->uv)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV: %03d (%05.3f; %05.3f)", i++, v.x, v.y);
 
-        for (uint32_t i = 0; i < m->iUv.size(); i += 3)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV Index: %03d (%03d; %03d; %03d)", i, m->iUv[i], m->iUv[i + 1], m->iUv[i + 2]);
+        i = 0;
+        for (const glm::uvec3& face : m->iUv)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV Index: %03d (%03d; %03d; %03d)", i++, face.x, face.y, face.z);
     }
 }
 } // namespace Chimera

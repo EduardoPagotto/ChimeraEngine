@@ -103,48 +103,37 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     for (uint32_t z = 0; z < tot_h; z++) {
         for (uint32_t x = 0; x < tot_w; x++) {
             // triangles point
-            uint32_t pa = getIndex(x, z);
-            uint32_t pb = getIndex(x + 1, z);
-            uint32_t pc = getIndex(x + 1, z + 1);
-            uint32_t pd = getIndex(x, z + 1);
-            // Vertex T1
-            _mesh.iPoint.push_back(pa);
-            _mesh.iPoint.push_back(pb);
-            _mesh.iPoint.push_back(pc);
-            // Vertex T2
-            _mesh.iPoint.push_back(pc);
-            _mesh.iPoint.push_back(pd);
-            _mesh.iPoint.push_back(pa);
-            // normal T1
-            _mesh.iNormal.push_back(pa);
-            _mesh.iNormal.push_back(pb);
-            _mesh.iNormal.push_back(pc);
-            // normal T2
-            _mesh.iNormal.push_back(pc);
-            _mesh.iNormal.push_back(pd);
-            _mesh.iNormal.push_back(pa);
-            // UV T1
-            _mesh.iUv.push_back(pa);
-            _mesh.iUv.push_back(pb);
-            _mesh.iUv.push_back(pc);
-            // UV T2
-            _mesh.iUv.push_back(pc);
-            _mesh.iUv.push_back(pd);
-            _mesh.iUv.push_back(pa);
+            const uint32_t pa = getIndex(x, z);
+            const uint32_t pb = getIndex(x + 1, z);
+            const uint32_t pc = getIndex(x + 1, z + 1);
+            const uint32_t pd = getIndex(x, z + 1);
+            const glm::uvec3 t1(pa, pb, pc);
+            const glm::uvec3 t2(pc, pd, pa);
+
+            // T1
+            _mesh.iPoint.push_back(t1);
+            _mesh.iNormal.push_back(t1);
+            _mesh.iUv.push_back(t1);
+
+            // T2
+            _mesh.iPoint.push_back(t2);
+            _mesh.iNormal.push_back(t2);
+            _mesh.iUv.push_back(t2);
         }
     }
 
     // Calcula normal apos todo o mapeamento de altura
-    for (uint32_t i = 0; i < _mesh.iPoint.size(); i += 3) {
+    for (uint32_t i = 0; i < _mesh.iPoint.size(); i++) {
 
-        glm::vec3 pa = _mesh.point[_mesh.iPoint[i]];
-        glm::vec3 pb = _mesh.point[_mesh.iPoint[i + 1]];
-        glm::vec3 pc = _mesh.point[_mesh.iPoint[i + 2]];
-        glm::vec3 vn = glm::normalize(glm::cross(pb - pa, pc - pa)); // CROSS(U,V)
+        const glm::vec3& pa = _mesh.point[_mesh.iPoint[i].x];
+        const glm::vec3& pb = _mesh.point[_mesh.iPoint[i].y];
+        const glm::vec3& pc = _mesh.point[_mesh.iPoint[i].z];
 
-        _mesh.normal[_mesh.iNormal[i]] = vn;
-        _mesh.normal[_mesh.iNormal[i + 1]] = vn;
-        _mesh.normal[_mesh.iNormal[i + 2]] = vn;
+        const glm::vec3 vn = glm::normalize(glm::cross(pb - pa, pc - pa)); // CROSS(U,V)
+
+        _mesh.normal[_mesh.iNormal[i].x] = vn;
+        _mesh.normal[_mesh.iNormal[i].y] = vn;
+        _mesh.normal[_mesh.iNormal[i].z] = vn;
     }
 
     _mesh.serialized = true;
@@ -156,7 +145,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     return true;
 }
 
-void LoadHeightMap::split(std::vector<uint32_t>& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
+void LoadHeightMap::split(std::vector<glm::uvec3>& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
 
     bool done = false;
     uint32_t startHeight = 0;
@@ -166,7 +155,6 @@ void LoadHeightMap::split(std::vector<uint32_t>& vertexIndexIn, std::vector<Tris
     uint32_t totalWidth = (width - 1) * 2;
     uint32_t squareHeight = squareZ;
     uint32_t squareWidth = squareX * 2;
-    uint32_t totfaces = vertexIndexIn.size() / 3;
     uint32_t thresholdWidht = totalHeight * squareZ;
 
     while (!done) {
@@ -175,7 +163,7 @@ void LoadHeightMap::split(std::vector<uint32_t>& vertexIndexIn, std::vector<Tris
         uint32_t endWidth = startWidth + squareWidth;
         uint32_t testeA = startHeight * totalHeight + startWidth;
 
-        if (testeA >= totfaces) {
+        if (testeA >= vertexIndexIn.size()) { // all faces
             done = true;
             continue;
         }
@@ -188,12 +176,12 @@ void LoadHeightMap::split(std::vector<uint32_t>& vertexIndexIn, std::vector<Tris
 
         TrisIndex node;
 
-        uint32_t face, base;
+        uint32_t face;                                         //, base;
         for (uint32_t h = startHeight; h < endHeight; h++) {   // z
             for (uint32_t w = startWidth; w < endWidth; w++) { // x
                 face = ((h * totalHeight) + w);
-                base = face * 3;
-                node.push_back(glm::uvec3(vertexIndexIn[base], vertexIndexIn[base + 1], vertexIndexIn[base + 2]));
+                // base = face * 3;
+                node.push_back(glm::uvec3(vertexIndexIn[face].x, vertexIndexIn[face].y, vertexIndexIn[face].z));
                 contador++;
             }
         }

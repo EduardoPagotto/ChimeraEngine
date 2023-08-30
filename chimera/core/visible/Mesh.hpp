@@ -21,10 +21,13 @@ struct Mesh {
     std::vector<glm::vec3> point;
     std::vector<glm::vec3> normal;
     std::vector<glm::vec2> uv;
-    // TrisIndex idxFacePoint
-    std::vector<uint32_t> iPoint;
-    std::vector<uint32_t> iNormal;
-    std::vector<uint32_t> iUv;
+    // std::vector<glm::ivec3> iFacePoint; // iPoint
+    // std::vector<uint32_t> iPoint;
+    // std::vector<uint32_t> iNormal;
+    // std::vector<uint32_t> iUv;
+    std::vector<glm::uvec3> iPoint;
+    std::vector<glm::uvec3> iNormal;
+    std::vector<glm::uvec3> iUv;
 };
 
 enum class MeshType { SIMPLE = 0, ARRAY = 1, BSTREE = 2 };

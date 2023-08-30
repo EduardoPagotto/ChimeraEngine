@@ -256,6 +256,8 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
         ia = ib + 1;
     }
 
+    const glm::uvec3 face(ia, ib, ic);
+
     glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
 
     mesh->point.push_back(va);
@@ -270,17 +272,9 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
     mesh->normal.push_back(vn);
     mesh->normal.push_back(vn);
 
-    mesh->iPoint.push_back(ia);
-    mesh->iPoint.push_back(ib);
-    mesh->iPoint.push_back(ic);
-
-    mesh->iNormal.push_back(ia);
-    mesh->iNormal.push_back(ib);
-    mesh->iNormal.push_back(ic);
-
-    mesh->iUv.push_back(ia);
-    mesh->iUv.push_back(ib);
-    mesh->iUv.push_back(ic);
+    mesh->iPoint.push_back(face);
+    mesh->iNormal.push_back(face);
+    mesh->iUv.push_back(face);
 }
 
 CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {

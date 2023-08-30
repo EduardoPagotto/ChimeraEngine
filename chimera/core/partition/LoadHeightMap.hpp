@@ -13,7 +13,7 @@ class LoadHeightMap {
     void clean();
 
     bool getMesh(const std::string& _fileName, Mesh& _mesh, const glm::vec3& _size);
-    void split(std::vector<uint32_t>& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut);
+    void split(std::vector<glm::uvec3>& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut);
 
   private:
     inline uint32_t getIndex(const uint32_t& _x, const uint32_t& _z) { return (pImage->w * _z) + _x; }

@@ -145,7 +145,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     return true;
 }
 
-void LoadHeightMap::split(std::vector<glm::uvec3>& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
+void LoadHeightMap::split(TrisIndex& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
 
     bool done = false;
     uint32_t startHeight = 0;

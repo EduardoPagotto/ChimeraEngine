@@ -2,8 +2,8 @@
 
 namespace Chimera {
 
-static std::vector<glm::uvec3> tVertIndex;
-static std::vector<glm::uvec3> tTexIndex;
+static TrisIndex tVertIndex;
+static TrisIndex tTexIndex;
 static std::vector<glm::vec2> tTexSeq;
 
 void initCubeBase() {

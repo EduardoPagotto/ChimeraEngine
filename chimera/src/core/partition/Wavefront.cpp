@@ -129,18 +129,31 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
     if (mesh->normal.size() > 0)
         semantics.push_back("NORMAL"); // 2
 
+    std::vector<uint32_t> iPoint;
+    std::vector<uint32_t> iNormal;
+    std::vector<uint32_t> iUv;
+
     for (uint32_t l_contador = 0; l_contador < indicesComp.size(); l_contador++) {
 
         uint32_t index = l_contador % semantics.size();
         const std::string& semantic = semantics[index];
 
         if (semantic == "VERTEX")
-            mesh->iPoint.push_back(indicesComp[l_contador]);
+            iPoint.push_back(indicesComp[l_contador]);
         else if (semantic == "NORMAL")
-            mesh->iNormal.push_back(indicesComp[l_contador]);
+            iNormal.push_back(indicesComp[l_contador]);
         else if (semantic == "TEXCOORD")
-            mesh->iUv.push_back(indicesComp[l_contador]);
+            iUv.push_back(indicesComp[l_contador]);
     }
+
+    for (uint32_t i = 0; i < iPoint.size(); i += 3)
+        mesh->iPoint.push_back({iPoint[i], iPoint[i + 1], iPoint[i + 2]});
+
+    for (uint32_t i = 0; i < iNormal.size(); i += 3)
+        mesh->iNormal.push_back({iNormal[i], iNormal[i + 1], iNormal[i + 2]});
+
+    for (uint32_t i = 0; i < iUv.size(); i += 3)
+        mesh->iUv.push_back({iUv[i], iUv[i + 1], iUv[i + 2]});
 
     mesh->serialized = false;
 

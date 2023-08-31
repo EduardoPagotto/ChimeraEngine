@@ -17,6 +17,7 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
     BspTree bspTree;
     std::vector<TrisIndex> vTris; // FIXME: limpar ??
     root = bspTree.create(&meshFinal, vTris);
+    // root = bspTree.create(mesh, vTris);
 
     std::vector<VertexData> vVertex;
     meshFinal.serialized = true; // FIXME: sera ?????

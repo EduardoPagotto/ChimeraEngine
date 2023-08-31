@@ -91,7 +91,7 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
     }
 
     for (uint32_t i = 0; i < index.size(); i += 3)
-        outData.iPoint.push_back({index[i], index[1 + 1], index[i + 2]});
+        outData.iPoint.push_back({index[i], index[i + 1], index[i + 2]});
 
     outData.iNormal.assign(outData.iPoint.begin(), outData.iPoint.end());
     outData.iUv.assign(outData.iPoint.begin(), outData.iPoint.end());

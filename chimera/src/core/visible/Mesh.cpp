@@ -36,41 +36,41 @@ void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris) {
 
 void meshReCompile(Mesh& inData, Mesh& outData) {
 
-    std::vector<uint32_t> iPoint;
-    iPoint.reserve(inData.iPoint.size() * 3);
+    std::vector<uint32_t> idxPoint;
+    idxPoint.reserve(inData.iPoint.size() * 3);
     for (const glm::uvec3& f : inData.iPoint) {
-        iPoint.push_back(f.x);
-        iPoint.push_back(f.y);
-        iPoint.push_back(f.z);
+        idxPoint.push_back(f.x);
+        idxPoint.push_back(f.y);
+        idxPoint.push_back(f.z);
     }
 
-    std::vector<uint32_t> iNormal;
-    iNormal.reserve(inData.iNormal.size() * 3);
+    std::vector<uint32_t> idxNormal;
+    idxNormal.reserve(inData.iNormal.size() * 3);
     for (const glm::uvec3& f : inData.iNormal) {
-        iNormal.push_back(f.x);
-        iNormal.push_back(f.y);
-        iNormal.push_back(f.z);
+        idxNormal.push_back(f.x);
+        idxNormal.push_back(f.y);
+        idxNormal.push_back(f.z);
     }
 
-    std::vector<uint32_t> iUv;
-    iUv.reserve(inData.iUv.size() * 3);
+    std::vector<uint32_t> idxUV;
+    idxUV.reserve(inData.iUv.size() * 3);
     for (const glm::uvec3& f : inData.iUv) {
-        iUv.push_back(f.x);
-        iUv.push_back(f.y);
-        iUv.push_back(f.z);
+        idxUV.push_back(f.x);
+        idxUV.push_back(f.y);
+        idxUV.push_back(f.z);
     }
 
     std::vector<uint32_t> index;
 
     // percorrer todos os vertices
     bool find;
-    for (uint32_t i = 0; i < iPoint.size(); i++) {
+    for (uint32_t i = 0; i < idxPoint.size(); i++) {
         // Procura por similar
         find = false;
         for (uint32_t j = 0; j < index.size(); j++) {
-            if (is_nearVec3(inData.point[iPoint[i]], outData.point[j]) &&    // compara pontos
-                is_nearVec3(inData.normal[iNormal[i]], outData.normal[j]) && // compara normal
-                is_nearVec2(inData.uv[iUv[i]], outData.uv[j])) {             // compara uv
+            if (is_nearVec3(inData.point[idxPoint[i]], outData.point[j]) &&    // compara pontos
+                is_nearVec3(inData.normal[idxNormal[i]], outData.normal[j]) && // compara normal
+                is_nearVec2(inData.uv[idxUV[i]], outData.uv[j])) {             // compara uv
 
                 index.push_back(j);
                 find = true;
@@ -82,16 +82,16 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
             continue;
 
         // se diferente adiciona vertice e cria novo indice
-        outData.point.push_back(inData.point[iPoint[i]]);
-        outData.normal.push_back(inData.normal[iNormal[i]]);
-        outData.uv.push_back(inData.uv[iUv[i]]);
+        outData.point.push_back(inData.point[idxPoint[i]]);
+        outData.normal.push_back(inData.normal[idxNormal[i]]);
+        outData.uv.push_back(inData.uv[idxUV[i]]);
 
         uint32_t n = outData.point.size() - 1;
         index.push_back(n); // FIXME: usar copia rapida
     }
 
-    for (uint32_t i = 0; i < iPoint.size(); i += 3)
-        outData.iPoint.push_back({iPoint[i], iPoint[1 + 1], iPoint[i + 2]});
+    for (uint32_t i = 0; i < index.size(); i += 3)
+        outData.iPoint.push_back({index[i], index[1 + 1], index[i + 2]});
 
     outData.iNormal.assign(outData.iPoint.begin(), outData.iPoint.end());
     outData.iUv.assign(outData.iPoint.begin(), outData.iPoint.end());

@@ -14,6 +14,10 @@ void ColladaMesh::create(const std::string& id, const std::string& name, Entity&
     eMesh.tag.tag = name;
     eMesh.tag.serial = Collada::getNewSerial();
 
+    std::vector<glm::vec3> point;
+    std::vector<glm::vec3> normal;
+    std::vector<glm::vec2> uv;
+
     for (pugi::xml_node source = nMesh.first_child(); source; source = source.next_sibling()) {
 
         std::string name = source.name();
@@ -28,17 +32,17 @@ void ColladaMesh::create(const std::string& id, const std::string& name, Entity&
             if (id.find("-positions") != std::string::npos) {
 
                 for (size_t indice = 0; indice < v.size(); indice += 3)
-                    eMesh.mesh->point.push_back(glm::vec3(v[indice], v[indice + 1], v[indice + 2]));
+                    point.push_back(glm::vec3(v[indice], v[indice + 1], v[indice + 2]));
 
             } else if (id.find("-normals") != std::string::npos) {
 
                 for (size_t indice = 0; indice < v.size(); indice += 3)
-                    eMesh.mesh->normal.push_back(glm::vec3(v[indice], v[indice + 1], v[indice + 2]));
+                    normal.push_back(glm::vec3(v[indice], v[indice + 1], v[indice + 2]));
 
             } else if (id.find("-map-0") != std::string::npos) {
 
                 for (size_t indice = 0; indice < v.size(); indice += 2)
-                    eMesh.mesh->uv.push_back(glm::vec2(v[indice], v[indice + 1]));
+                    uv.push_back(glm::vec2(v[indice], v[indice + 1]));
             }
 
         } else if (name == "vertices") {
@@ -76,15 +80,16 @@ void ColladaMesh::create(const std::string& id, const std::string& name, Entity&
                         }
                     }
 
+                    for (uint32_t face = 0; face < iPoint.size(); face++) {
+                        eMesh.mesh->point.push_back(point[iPoint[face]]);
+                        eMesh.mesh->normal.push_back(normal[iNormal[face]]);
+                        eMesh.mesh->uv.push_back((uv.size() > 0) ? uv[iUv[face]] : glm::vec2(0.0, 0.0));
+                    }
+
                     for (uint32_t i = 0; i < iPoint.size(); i += 3)
-                        eMesh.mesh->iPoint.push_back({iPoint[i], iPoint[i + 1], iPoint[i + 2]});
+                        eMesh.mesh->iFace.push_back({i, i + 1, i + 2});
 
-                    for (uint32_t i = 0; i < iNormal.size(); i += 3)
-                        eMesh.mesh->iNormal.push_back({iNormal[i], iNormal[i + 1], iNormal[i + 2]});
-
-                    for (uint32_t i = 0; i < iUv.size(); i += 3)
-                        eMesh.mesh->iUv.push_back({iUv[i], iUv[i + 1], iUv[i + 2]});
-
+                    eMesh.mesh->serialized = true;
                     arrayIndex.clear();
                 }
             }

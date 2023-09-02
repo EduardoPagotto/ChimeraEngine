@@ -19,8 +19,14 @@ void ColladaHeightMap::create(const std::string& id, const std::string& name, En
     glm::vec3 size = textToVec3(geo.next_sibling("size").text().as_string());
 
     LoadHeightMap loader(square_x, square_z);
-    loader.getMesh(target, *mc.mesh, size);
-    loader.split(mc.mesh->iPoint, mc.vTrisIndex);
+
+    Mesh tempMesh;
+
+    loader.getMesh(target, tempMesh, size);
+
+    meshSerialize(tempMesh, *mc.mesh);
+
+    loader.split(mc.mesh->iFace, mc.vTrisIndex);
     mc.type = getMeshTypeFromString(geo.attribute("partition").value());
 }
 } // namespace Chimera

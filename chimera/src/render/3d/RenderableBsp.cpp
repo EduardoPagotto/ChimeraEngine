@@ -15,12 +15,12 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
     meshDebug(&meshFinal, false);
 
     BspTree bspTree;
-    std::vector<TrisIndex> vTris; // FIXME: limpar ??
+    std::vector<TrisIndex> vTris;
     root = bspTree.create(&meshFinal, vTris);
     // root = bspTree.create(mesh, vTris);
 
     std::vector<VertexData> vVertex;
-    meshFinal.serialized = true; // FIXME: sera ?????
+    meshFinal.serialized = true; // FIXME: tem merda aqui porque ?????
     vertexDataFromMesh(&meshFinal, vVertex);
 
     // create VAO and VBO

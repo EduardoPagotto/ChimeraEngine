@@ -69,8 +69,12 @@ void ColladaCube::create(const std::string& id, const std::string& name, Entity&
 
     // carrega posicoes, texturas, e seq textura defaults do cubo base
     initCubeBase();
+    Mesh tempMesh;
     for (auto pCube : vpCube)
-        pCube->create(mc.mesh); // cria mesh com dados dos cubos
+        pCube->create(&tempMesh); // cria mesh com dados dos cubos
+
+    // aqui
+    meshSerialize(tempMesh, *mc.mesh);
 
     cleanupCubeBase();          // limpa dados de criacao do cubo base
     for (auto pCube : vpCube) { // limpas cubos de contrucao e vetor de cubos

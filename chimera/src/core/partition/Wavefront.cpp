@@ -79,8 +79,11 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
         throw std::string("ERROR: could not open file: " + path);
 
     std::vector<int> indicesComp;
-
     std::string lineBuffer;
+    std::vector<glm::vec3> point;
+    std::vector<glm::vec3> normal;
+    std::vector<glm::vec2> uv;
+
     while (std::getline(file, lineBuffer)) {
         std::string first = lineBuffer.substr(0, 1);
         if (first == "#")
@@ -95,11 +98,11 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
         if (textData[0] == "mtllib")
             fileMath = textData[1];
         else if (textData[0] == "v")
-            mesh->point.push_back(tokensToVec3(1, 3, textData));
+            point.push_back(tokensToVec3(1, 3, textData));
         else if (textData[0] == "vt")
-            mesh->uv.push_back(tokensToVec2(1, 2, textData));
+            uv.push_back(tokensToVec2(1, 2, textData));
         else if (textData[0] == "vn")
-            mesh->normal.push_back(tokensToVec3(1, 3, textData));
+            normal.push_back(tokensToVec3(1, 3, textData));
         else if (textData[0] == "f") {
             int face = 0;
             for (int indice = 1; indice < textData.size(); indice++) {
@@ -123,10 +126,10 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
     std::vector<std::string> semantics;
     semantics.push_back("VERTEX"); // 0
 
-    if (mesh->uv.size() > 0)
+    if (uv.size() > 0)
         semantics.push_back("TEXCOORD"); // 1
 
-    if (mesh->normal.size() > 0)
+    if (normal.size() > 0)
         semantics.push_back("NORMAL"); // 2
 
     std::vector<uint32_t> iPoint;
@@ -146,16 +149,16 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
             iUv.push_back(indicesComp[l_contador]);
     }
 
+    for (uint32_t face = 0; face < iPoint.size(); face++) {
+        mesh->point.push_back(point[iPoint[face]]);
+        mesh->normal.push_back(normal[iNormal[face]]);
+        mesh->uv.push_back((uv.size() > 0) ? uv[iUv[face]] : glm::vec2(0.0, 0.0));
+    }
+
     for (uint32_t i = 0; i < iPoint.size(); i += 3)
-        mesh->iPoint.push_back({iPoint[i], iPoint[i + 1], iPoint[i + 2]});
+        mesh->iFace.push_back({i, i + 1, i + 2});
 
-    for (uint32_t i = 0; i < iNormal.size(); i += 3)
-        mesh->iNormal.push_back({iNormal[i], iNormal[i + 1], iNormal[i + 2]});
-
-    for (uint32_t i = 0; i < iUv.size(); i += 3)
-        mesh->iUv.push_back({iUv[i], iUv[i + 1], iUv[i + 2]});
-
-    mesh->serialized = false;
+    mesh->serialized = true;
 
     file.close();
 }

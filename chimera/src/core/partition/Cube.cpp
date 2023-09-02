@@ -247,11 +247,11 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
 
     uint32_t ia, ib, ic;
     if (!clockwise) {
-        ia = mesh->iPoint.size() * 3; // tl->size() * 3;
+        ia = mesh->iFace.size() * 3; // tl->size() * 3;
         ib = ia + 1;
         ic = ib + 1;
     } else {
-        ic = mesh->iPoint.size() * 3; // tl->size() * 3;
+        ic = mesh->iFace.size() * 3; // tl->size() * 3;
         ib = ic + 1;
         ia = ib + 1;
     }
@@ -272,9 +272,7 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
     mesh->normal.push_back(vn);
     mesh->normal.push_back(vn);
 
-    mesh->iPoint.push_back(face);
-    mesh->iNormal.push_back(face);
-    mesh->iUv.push_back(face);
+    mesh->iFace.push_back(face);
 }
 
 CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {

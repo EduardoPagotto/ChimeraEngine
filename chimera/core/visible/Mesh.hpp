@@ -13,10 +13,7 @@ struct Mesh {
     std::vector<glm::vec3> point;
     std::vector<glm::vec3> normal;
     std::vector<glm::vec2> uv;
-    // std::vector<TrisIndex> idxFaces;
-    TrisIndex iPoint;
-    TrisIndex iNormal;
-    TrisIndex iUv;
+    TrisIndex iFace;
 };
 
 enum class MeshType { SIMPLE = 0, ARRAY = 1, BSTREE = 2 };
@@ -36,5 +33,8 @@ void meshDataScale(Mesh* m, const float& new_size, const bool& hasTexture);
 void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris);
 void meshReCompile(Mesh& inData, Mesh& outData);
 void meshDebug(Mesh* m, bool _showAll);
+void meshSerialize(Mesh& inData, Mesh& outData);
 
+void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idxIn, std::vector<uint32_t>& idxOut);
+void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idxIn, std::vector<uint32_t>& idxOut);
 } // namespace Chimera

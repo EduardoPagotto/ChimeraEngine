@@ -111,29 +111,24 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
             const glm::uvec3 t2(pc, pd, pa);
 
             // T1
-            _mesh.iPoint.push_back(t1);
-            _mesh.iNormal.push_back(t1);
-            _mesh.iUv.push_back(t1);
-
+            _mesh.iFace.push_back(t1);
             // T2
-            _mesh.iPoint.push_back(t2);
-            _mesh.iNormal.push_back(t2);
-            _mesh.iUv.push_back(t2);
+            _mesh.iFace.push_back(t2);
         }
     }
 
     // Calcula normal apos todo o mapeamento de altura
-    for (uint32_t i = 0; i < _mesh.iPoint.size(); i++) {
+    for (uint32_t i = 0; i < _mesh.iFace.size(); i++) {
 
-        const glm::vec3& pa = _mesh.point[_mesh.iPoint[i].x];
-        const glm::vec3& pb = _mesh.point[_mesh.iPoint[i].y];
-        const glm::vec3& pc = _mesh.point[_mesh.iPoint[i].z];
+        const glm::vec3& pa = _mesh.point[_mesh.iFace[i].x];
+        const glm::vec3& pb = _mesh.point[_mesh.iFace[i].y];
+        const glm::vec3& pc = _mesh.point[_mesh.iFace[i].z];
 
         const glm::vec3 vn = glm::normalize(glm::cross(pb - pa, pc - pa)); // CROSS(U,V)
 
-        _mesh.normal[_mesh.iNormal[i].x] = vn;
-        _mesh.normal[_mesh.iNormal[i].y] = vn;
-        _mesh.normal[_mesh.iNormal[i].z] = vn;
+        _mesh.normal[_mesh.iFace[i].x] = vn;
+        _mesh.normal[_mesh.iFace[i].y] = vn;
+        _mesh.normal[_mesh.iFace[i].z] = vn;
     }
 
     _mesh.serialized = true;

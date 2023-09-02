@@ -20,7 +20,6 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
     // root = bspTree.create(mesh, vTris);
 
     std::vector<VertexData> vVertex;
-    meshFinal.serialized = true; // FIXME: tem merda aqui porque ?????
     vertexDataFromMesh(&meshFinal, vVertex);
 
     // create VAO and VBO

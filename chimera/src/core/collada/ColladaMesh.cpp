@@ -89,7 +89,6 @@ void ColladaMesh::create(const std::string& id, const std::string& name, Entity&
                     for (uint32_t i = 0; i < iPoint.size(); i += 3)
                         eMesh.mesh->iFace.push_back({i, i + 1, i + 2});
 
-                    eMesh.mesh->serialized = true;
                     arrayIndex.clear();
                 }
             }

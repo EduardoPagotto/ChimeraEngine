@@ -158,8 +158,6 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
     for (uint32_t i = 0; i < iPoint.size(); i += 3)
         mesh->iFace.push_back({i, i + 1, i + 2});
 
-    mesh->serialized = true;
-
     file.close();
 }
 } // namespace Chimera

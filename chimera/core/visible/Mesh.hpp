@@ -8,8 +8,6 @@ namespace Chimera {
 
 struct Mesh {
     Mesh() = default;
-    // int8_t multIndex = -1; // -1 sem multi index
-    bool serialized = false;
     std::vector<glm::vec3> point;
     std::vector<glm::vec3> normal;
     std::vector<glm::vec2> uv;

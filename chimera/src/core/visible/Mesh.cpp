@@ -115,8 +115,6 @@ void meshSerialize(Mesh& inData, Mesh& outData) {
 
     for (uint32_t i = 0; i < idxFace.size(); i += 3)
         outData.iFace.push_back({i, i + 1, i + 2});
-
-    outData.serialized = true;
 }
 
 void meshReCompile(Mesh& inData, Mesh& outData) {

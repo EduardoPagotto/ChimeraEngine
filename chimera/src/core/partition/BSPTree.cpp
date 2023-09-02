@@ -129,7 +129,6 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
 
     // Vertex dos triangulos a serem normalizados
     glm::vec2 vertA_uv, vertB_uv, vertC_uv;
-    glm::vec3 vertA_normal, vertB_normal, vertC_normal;
 
     // Pega pontos posicao original e inteseccao
     glm::vec3 A, B;
@@ -138,33 +137,24 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     glm::vec3 c = mesh->point[_pTriangle->idx.p];
 
     // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
-    if (fx.x * fx.z >= 0) {                             // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
-        swapFace(b, c);                                 // troca b com c
-        swapFace(a, b);                                 // troca a com b
-        vertA_uv = mesh->uv[_pTriangle->idx.p];         // old c
-        vertB_uv = mesh->uv[_pTriangle->idx.s];         // old a
-        vertC_uv = mesh->uv[_pTriangle->idx.t];         // old b
-        vertA_normal = mesh->normal[_pTriangle->idx.p]; // old c
-        vertB_normal = mesh->normal[_pTriangle->idx.s]; // old a
-        vertC_normal = mesh->normal[_pTriangle->idx.t]; // old b
+    if (fx.x * fx.z >= 0) {                     // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
+        swapFace(b, c);                         // troca b com c
+        swapFace(a, b);                         // troca a com b
+        vertA_uv = mesh->uv[_pTriangle->idx.p]; // old c
+        vertB_uv = mesh->uv[_pTriangle->idx.s]; // old a
+        vertC_uv = mesh->uv[_pTriangle->idx.t]; // old b
 
-    } else if (fx.y * fx.z >= 0) {                      // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
-        swapFace(a, c);                                 // troca A com C
-        swapFace(a, b);                                 // troca a com b
-        vertA_uv = mesh->uv[_pTriangle->idx.t];         // old b
-        vertB_uv = mesh->uv[_pTriangle->idx.p];         // old c
-        vertC_uv = mesh->uv[_pTriangle->idx.s];         // old a
-        vertA_normal = mesh->normal[_pTriangle->idx.t]; // old b
-        vertB_normal = mesh->normal[_pTriangle->idx.p]; // old c
-        vertC_normal = mesh->normal[_pTriangle->idx.s]; // old a
+    } else if (fx.y * fx.z >= 0) {              // corte em b e c (totaciona pontos sentido anti-horario)  ABC => CAB
+        swapFace(a, c);                         // troca A com C
+        swapFace(a, b);                         // troca a com b
+        vertA_uv = mesh->uv[_pTriangle->idx.t]; // old b
+        vertB_uv = mesh->uv[_pTriangle->idx.p]; // old c
+        vertC_uv = mesh->uv[_pTriangle->idx.s]; // old a
 
-    } else {                                            // Cortre em a e b (pontos posicao original)
-        vertA_uv = mesh->uv[_pTriangle->idx.s];         // old a
-        vertB_uv = mesh->uv[_pTriangle->idx.t];         // old b
-        vertC_uv = mesh->uv[_pTriangle->idx.p];         // old c
-        vertA_normal = mesh->normal[_pTriangle->idx.s]; // old a
-        vertB_normal = mesh->normal[_pTriangle->idx.t]; // old b
-        vertC_normal = mesh->normal[_pTriangle->idx.p]; // old c
+    } else {                                    // Cortre em a e b (pontos posicao original)
+        vertA_uv = mesh->uv[_pTriangle->idx.s]; // old a
+        vertB_uv = mesh->uv[_pTriangle->idx.t]; // old b
+        vertC_uv = mesh->uv[_pTriangle->idx.p]; // old c
     }
 
     hyperPlane.intersect(a, c, A, propAC);
@@ -178,30 +168,26 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     glm::vec2 deltaB = (vertC_uv - vertB_uv) * propBC;
     glm::vec2 texB = vertB_uv + deltaB;
 
-    // Calcula Normal Face
-    glm::vec3 acc = vertA_normal + vertB_normal + vertC_normal;
-    glm::vec3 normal = glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3);
-
     // indices de triangulos novos
     unsigned int last = mesh->point.size();
 
-    //-- T1 Triangle T1(a, b, A);
-    addVertexMesh(a, vertA_normal, vertA_uv); // T1 PA
-    addVertexMesh(b, vertB_normal, vertB_uv); // T1 PB
-    addVertexMesh(A, vertA_normal, texA);     // T1 PC
-    _vTriangle.push_front(new Triangle(glm::uvec3(last, last + 1, last + 2), normal, _pTriangle->splitter));
+    //-- T1 Triangle T1(a, b, A); // mesma normal que o original
+    addVertexMesh(a, _pTriangle->normal, vertA_uv); // T1 PA
+    addVertexMesh(b, _pTriangle->normal, vertB_uv); // T1 PB
+    addVertexMesh(A, _pTriangle->normal, texA);     // T1 PC
+    _vTriangle.push_front(new Triangle(glm::uvec3(last, last + 1, last + 2), _pTriangle->normal, _pTriangle->splitter));
 
-    //-- T2 Triangle T2(b, B, A);
-    addVertexMesh(b, vertB_normal, vertB_uv); // T2 PA
-    addVertexMesh(B, vertB_normal, texB);     // T2 PB
-    addVertexMesh(A, vertA_normal, texA);     // T2 PC
-    _vTriangle.push_front(new Triangle(glm::uvec3(last + 3, last + 4, last + 5), normal, _pTriangle->splitter));
+    //-- T2 Triangle T2(b, B, A); // mesma normal que o original
+    addVertexMesh(b, _pTriangle->normal, vertB_uv); // T2 PA
+    addVertexMesh(B, _pTriangle->normal, texB);     // T2 PB
+    addVertexMesh(A, _pTriangle->normal, texA);     // T2 PC
+    _vTriangle.push_front(new Triangle(glm::uvec3(last + 3, last + 4, last + 5), _pTriangle->normal, _pTriangle->splitter));
 
-    // -- T3 Triangle T3(A, B, c);
-    addVertexMesh(A, vertA_normal, texA);     // T3 PA
-    addVertexMesh(B, vertB_normal, texB);     // T3 PB
-    addVertexMesh(c, vertC_normal, vertC_uv); // T3 PC
-    _vTriangle.push_front(new Triangle(glm::uvec3(last + 6, last + 7, last + 8), normal, _pTriangle->splitter));
+    // -- T3 Triangle T3(A, B, c); // mesma normal que o original
+    addVertexMesh(A, _pTriangle->normal, texA);     // T3 PA
+    addVertexMesh(B, _pTriangle->normal, texB);     // T3 PB
+    addVertexMesh(c, _pTriangle->normal, vertC_uv); // T3 PC
+    _vTriangle.push_front(new Triangle(glm::uvec3(last + 6, last + 7, last + 8), _pTriangle->normal, _pTriangle->splitter));
 
     // Remove orininal
     delete _pTriangle;

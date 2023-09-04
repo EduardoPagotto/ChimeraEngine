@@ -81,9 +81,9 @@ void ColladaMesh::create(const std::string& id, const std::string& name, Entity&
                     }
 
                     for (uint32_t face = 0; face < iPoint.size(); face++) {
-                        eMesh.mesh->point.push_back(point[iPoint[face]]);
-                        eMesh.mesh->normal.push_back(normal[iNormal[face]]);
-                        eMesh.mesh->uv.push_back((uv.size() > 0) ? uv[iUv[face]] : glm::vec2(0.0, 0.0));
+                        eMesh.mesh->vertex.push_back({point[iPoint[face]],                                     // point
+                                                      normal[iNormal[face]],                                   // normal
+                                                      (uv.size() > 0) ? uv[iUv[face]] : glm::vec2(0.0, 0.0)}); // UV se nao existir zeros!!
                     }
 
                     for (uint32_t i = 0; i < iPoint.size(); i += 3)

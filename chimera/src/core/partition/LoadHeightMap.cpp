@@ -91,9 +91,9 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     for (uint32_t z = 0; z < pImage->h; z++) {
         for (uint32_t x = 0; x < pImage->w; x++) {
 
-            _mesh.point.push_back(glm::vec3(x - haldW, getHeight(x, z) - minimal, halfH - z) * scale);
-            _mesh.normal.push_back(glm::vec3(0.0f));
-            _mesh.uv.push_back(glm::vec2(u * x, v * z));
+            _mesh.vertex.push_back({glm::vec3(x - haldW, getHeight(x, z) - minimal, halfH - z) * scale, // point
+                                    glm::vec3(0.0f),                                                    // normal
+                                    glm::vec2(u * x, v * z)});                                          // uv TEX
         }
     }
 
@@ -120,15 +120,15 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
     // Calcula normal apos todo o mapeamento de altura
     for (uint32_t i = 0; i < _mesh.iFace.size(); i++) {
 
-        const glm::vec3& pa = _mesh.point[_mesh.iFace[i].x];
-        const glm::vec3& pb = _mesh.point[_mesh.iFace[i].y];
-        const glm::vec3& pc = _mesh.point[_mesh.iFace[i].z];
+        const glm::vec3& pa = _mesh.vertex[_mesh.iFace[i].x].point;
+        const glm::vec3& pb = _mesh.vertex[_mesh.iFace[i].y].point;
+        const glm::vec3& pc = _mesh.vertex[_mesh.iFace[i].z].point;
 
         const glm::vec3 vn = glm::normalize(glm::cross(pb - pa, pc - pa)); // CROSS(U,V)
 
-        _mesh.normal[_mesh.iFace[i].x] = vn;
-        _mesh.normal[_mesh.iFace[i].y] = vn;
-        _mesh.normal[_mesh.iFace[i].z] = vn;
+        _mesh.vertex[_mesh.iFace[i].x].normal = vn;
+        _mesh.vertex[_mesh.iFace[i].y].normal = vn;
+        _mesh.vertex[_mesh.iFace[i].z].normal = vn;
     }
 
     meshDebug(&_mesh, false);

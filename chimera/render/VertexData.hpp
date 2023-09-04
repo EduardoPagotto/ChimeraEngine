@@ -4,12 +4,6 @@
 // Tutorial opengl shadeGL - https://learnopengl.com/Getting-started/Shaders
 namespace Chimera {
 
-struct VertexData {
-    glm::vec3 point;  // 3 * 4 = 12 ( 0 - 11)
-    glm::vec3 normal; // 3 * 4 = 12 (12 - 23)
-    glm::vec2 uv;     // 2 * 4 = 08 (24 - 31)
-};
-
 struct VertexDataSimple {
     glm::vec3 point; // 3 * 4 = 12 (0 - 11)
     glm::vec2 uv;    // 2 * 4 = 8  (12 - 19)

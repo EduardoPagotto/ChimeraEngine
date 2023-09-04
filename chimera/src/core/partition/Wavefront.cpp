@@ -150,9 +150,9 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
     }
 
     for (uint32_t face = 0; face < iPoint.size(); face++) {
-        mesh->point.push_back(point[iPoint[face]]);
-        mesh->normal.push_back(normal[iNormal[face]]);
-        mesh->uv.push_back((uv.size() > 0) ? uv[iUv[face]] : glm::vec2(0.0, 0.0));
+        mesh->vertex.push_back({point[iPoint[face]],                                     // point
+                                normal[iNormal[face]],                                   // normal
+                                (uv.size() > 0) ? uv[iUv[face]] : glm::vec2(0.0, 0.0)}); // UV se nao existir zeros!!
     }
 
     for (uint32_t i = 0; i < iPoint.size(); i += 3)

@@ -260,23 +260,14 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
 
     glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
 
-    mesh->point.push_back(va);
-    mesh->point.push_back(vb);
-    mesh->point.push_back(vc);
-
-    mesh->uv.push_back(ta);
-    mesh->uv.push_back(tb);
-    mesh->uv.push_back(tc);
-
-    mesh->normal.push_back(vn);
-    mesh->normal.push_back(vn);
-    mesh->normal.push_back(vn);
+    mesh->vertex.push_back({va, vn, ta});
+    mesh->vertex.push_back({vb, vn, tb});
+    mesh->vertex.push_back({vc, vn, tc});
 
     mesh->iFace.push_back(face);
 }
 
 CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
-
     Cube* pVal = nullptr;
 
     switch (deep) {
@@ -315,7 +306,6 @@ CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
 }
 
 bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
-
     Cube* pVal = nullptr;
 
     switch (deep) {
@@ -366,7 +356,6 @@ bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
 }
 
 void Cube::newWall() {
-
     if ((this->pNorth != nullptr) && (this->pNorth->getSpace() == SPACE::SOLID)) {
         this->addFace(false, 0, 0);
         this->addFace(false, 2, 1);
@@ -389,7 +378,6 @@ void Cube::newWall() {
 }
 
 void Cube::newRamp(bool isFloor, CARDINAL card) {
-
     bool westWallDown = false;
     bool westWallUp = false;
     bool eastWallDown = false;
@@ -541,7 +529,6 @@ void Cube::newRamp(bool isFloor, CARDINAL card) {
 }
 
 void Cube::newDiag() {
-
     // get side
     CARDINAL card = this->emptyQuadrantDiag(DEEP::MIDDLE, false);
 
@@ -585,7 +572,6 @@ void Cube::newDiag() {
 }
 
 void Cube::newFloor() {
-
     CARDINAL card = CARDINAL::NONE;
     if ((this->pDown != nullptr) && (this->pDown->getSpace() == SPACE::DIAG))
         card = this->emptyQuadrantDiag(DEEP::DOWN, true);
@@ -594,7 +580,6 @@ void Cube::newFloor() {
 }
 
 void Cube::newCeeling() {
-
     CARDINAL card = CARDINAL::NONE;
     if ((this->pUp != nullptr) && (this->pUp->getSpace() == SPACE::DIAG))
         card = this->emptyQuadrantDiag(DEEP::UP, true);
@@ -603,7 +588,6 @@ void Cube::newCeeling() {
 }
 
 void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card) {
-
     if (isFloor) {
         switch (card) {
             case CARDINAL::SOUTH_WEST:
@@ -646,7 +630,6 @@ void Cube::newFlatFloorCeeling(bool isFloor, CARDINAL card) {
 }
 
 void Cube::newRampNSEW(SPACE space) {
-
     if (space == SPACE::RAMP_FNS) {
         if ((pNorth != nullptr) && (pNorth->emptySpace())) {
 

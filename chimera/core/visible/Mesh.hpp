@@ -6,11 +6,15 @@
 
 namespace Chimera {
 
+struct VertexData {
+    glm::vec3 point;  // 3 * 4 = 12 ( 0 - 11)
+    glm::vec3 normal; // 3 * 4 = 12 (12 - 23)
+    glm::vec2 uv;     // 2 * 4 = 08 (24 - 31)
+};
+
 struct Mesh {
     Mesh() = default;
-    std::vector<glm::vec3> point;
-    std::vector<glm::vec3> normal;
-    std::vector<glm::vec2> uv;
+    std::vector<VertexData> vertex;
     TrisIndex iFace;
 };
 

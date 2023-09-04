@@ -115,10 +115,6 @@ Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
     return selectedTriangle;
 }
 
-void BspTree::addVertexMesh(const glm::vec3& point, const glm::vec3& normal, const glm::vec2& uv) {
-    mesh->vertex.push_back({point, normal, uv});
-}
-
 void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle) {
 
     // Proporcao de textura (0.0 a 1.0)
@@ -170,21 +166,21 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     unsigned int last = mesh->vertex.size();
 
     //-- T1 Triangle T1(a, b, A); // mesma normal que o original
-    addVertexMesh(a, _pTriangle->normal, vertA_uv); // T1 PA
-    addVertexMesh(b, _pTriangle->normal, vertB_uv); // T1 PB
-    addVertexMesh(A, _pTriangle->normal, texA);     // T1 PC
+    mesh->vertex.push_back({a, _pTriangle->normal, vertA_uv}); // T1 PA
+    mesh->vertex.push_back({b, _pTriangle->normal, vertB_uv}); // T1 PB
+    mesh->vertex.push_back({A, _pTriangle->normal, texA});     // T1 PC
     _vTriangle.push_front(new Triangle(glm::uvec3(last, last + 1, last + 2), _pTriangle->normal, _pTriangle->splitter));
 
     //-- T2 Triangle T2(b, B, A); // mesma normal que o original
-    addVertexMesh(b, _pTriangle->normal, vertB_uv); // T2 PA
-    addVertexMesh(B, _pTriangle->normal, texB);     // T2 PB
-    addVertexMesh(A, _pTriangle->normal, texA);     // T2 PC
+    mesh->vertex.push_back({b, _pTriangle->normal, vertB_uv}); // T2 PA
+    mesh->vertex.push_back({B, _pTriangle->normal, texB});     // T2 PB
+    mesh->vertex.push_back({A, _pTriangle->normal, texA});     // T2 PC
     _vTriangle.push_front(new Triangle(glm::uvec3(last + 3, last + 4, last + 5), _pTriangle->normal, _pTriangle->splitter));
 
     // -- T3 Triangle T3(A, B, c); // mesma normal que o original
-    addVertexMesh(A, _pTriangle->normal, texA);     // T3 PA
-    addVertexMesh(B, _pTriangle->normal, texB);     // T3 PB
-    addVertexMesh(c, _pTriangle->normal, vertC_uv); // T3 PC
+    mesh->vertex.push_back({A, _pTriangle->normal, texA});     // T3 PA
+    mesh->vertex.push_back({B, _pTriangle->normal, texB});     // T3 PB
+    mesh->vertex.push_back({c, _pTriangle->normal, vertC_uv}); // T3 PC
     _vTriangle.push_front(new Triangle(glm::uvec3(last + 6, last + 7, last + 8), _pTriangle->normal, _pTriangle->splitter));
 
     // Remove orininal

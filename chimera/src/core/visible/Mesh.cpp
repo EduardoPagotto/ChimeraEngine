@@ -14,12 +14,7 @@ MeshType getMeshTypeFromString(const std::string& text) {
     return MeshType::SIMPLE;
 }
 
-void meshDataScale(Mesh* m, const float& new_size, const bool& hasTexture) {
-
-    // if (hasTexture == false) {
-    //     m->iUv.clear();
-    //     m->uv.clear();
-    // }
+void meshDataScale(Mesh* m, const float& new_size) {
 
     for (uint32_t i = 0; i < m->vertex.size(); i++) {
         glm::vec3 val = m->vertex[i].point;

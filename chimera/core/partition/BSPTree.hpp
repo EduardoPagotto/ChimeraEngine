@@ -15,7 +15,6 @@ class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
     Triangle* selectBestSplitter(std::list<Triangle*>& _vTriangle);
     void splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle);
     void createLeafy(BSPTreeNode* tree, std::list<Triangle*>& _vTriangle);
-    void addVertexMesh(const glm::vec3& point, const glm::vec3& normal, const glm::vec2& uv);
     // bool tringleListIsConvex(std::vector<Triangle*>& _vTriangle);
 
     Mesh* mesh;

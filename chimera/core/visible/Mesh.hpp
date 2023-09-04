@@ -31,7 +31,7 @@ struct MeshComponent {
 MeshType getMeshTypeFromString(const std::string& text);
 void meshDataClean(Mesh* m);
 void meshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size);
-void meshDataScale(Mesh* m, const float& new_size, const bool& hasTexture);
+void meshDataScale(Mesh* m, const float& new_size);
 void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris);
 void meshReCompile(Mesh& inData, Mesh& outData);
 void meshDebug(Mesh* m, bool _showAll);

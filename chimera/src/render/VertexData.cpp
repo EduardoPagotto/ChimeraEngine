@@ -1,6 +1,5 @@
 #include "chimera/render/VertexData.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/mathGL.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -8,8 +7,8 @@ namespace Chimera {
 bool getSimilarVertexIndex(VertexData& in_vertex, std::vector<VertexData>& out_vertex, uint32_t& result) {
     // Percorrer todos os vertex ja existentes na lista
     for (uint32_t i = 0; i < out_vertex.size(); i++) {
-        if (is_nearVec3(in_vertex.point, out_vertex[i].point) && is_nearVec3(in_vertex.normal, out_vertex[i].normal) &&
-            is_nearVec2(in_vertex.uv, out_vertex[i].uv)) {
+        if (IS_NEARVEC3(in_vertex.point, out_vertex[i].point) && IS_NEARVEC3(in_vertex.normal, out_vertex[i].normal) &&
+            IS_NEARVEC2(in_vertex.uv, out_vertex[i].uv)) {
             result = i;
             return true;
         }
@@ -50,7 +49,7 @@ void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, g
     }
 
     // TODO: Era half size ??
-    size = getSizeMinMax(min, max);
+    size = GETSIZEMINMAX(min, max);
 }
 
 void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
@@ -65,7 +64,7 @@ void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSiz
         max = glm::max(max, pVertexList[pIndexList[i]].point);
     }
     // TODO: Era half size ??
-    size = getSizeMinMax(min, max);
+    size = GETSIZEMINMAX(min, max);
 }
 
 void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {

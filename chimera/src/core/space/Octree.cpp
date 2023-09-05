@@ -1,5 +1,4 @@
 #include "chimera/core/space/Octree.hpp"
-#include "chimera/core/mathGL.hpp"
 #include "chimera/src/core/HeapQ.cpp"
 #include <SDL2/SDL.h>
 
@@ -134,7 +133,7 @@ bool Octree::hasPoint(const glm::vec3& point) {
         }
 
         for (auto p : points) {
-            if (is_nearVec3(p, point))
+            if (IS_NEARVEC3(p, point))
                 return true;
         }
     }

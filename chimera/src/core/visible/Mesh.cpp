@@ -1,5 +1,5 @@
 #include "chimera/core/visible/Mesh.hpp"
-#include "chimera/core/mathGL.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {
@@ -41,7 +41,7 @@ void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, s
         for (uint32_t j = 0; j < idxOut.size(); j++) {
 
             const glm::vec2& p2 = out[j];
-            if (is_nearVec2(p1, p2)) { // Procura por similar
+            if (IS_NEARVEC2(p1, p2)) { // Procura por similar
                 idxOut.push_back(j);
                 find = true;
                 break;
@@ -74,7 +74,7 @@ void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, s
 
             const glm::vec3& p2 = out[j];
 
-            if (is_nearVec3(p1, p2)) {
+            if (IS_NEARVEC3(p1, p2)) {
                 idxOut.push_back(j);
                 find = true;
                 break;
@@ -130,9 +130,9 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
         // Procura por similar
         find = false;
         for (uint32_t j = 0; j < index.size(); j++) {                                      // FIXME: trocar por vertexdata comp!!!!!
-            if (is_nearVec3(inData.vertex[idxFace[i]].point, outData.vertex[j].point) &&   // compara pontos
-                is_nearVec3(inData.vertex[idxFace[i]].normal, outData.vertex[j].normal) && // compara normal
-                is_nearVec2(inData.vertex[idxFace[i]].uv, outData.vertex[j].uv)) {         // compara uv
+            if (IS_NEARVEC3(inData.vertex[idxFace[i]].point, outData.vertex[j].point) &&   // compara pontos
+                IS_NEARVEC3(inData.vertex[idxFace[i]].normal, outData.vertex[j].normal) && // compara normal
+                IS_NEARVEC2(inData.vertex[idxFace[i]].uv, outData.vertex[j].uv)) {         // compara uv
 
                 index.push_back(j);
                 find = true;
@@ -171,7 +171,7 @@ void meshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
     }
 
     // TODO: Era half size ??
-    size = getSizeMinMax(min, max);
+    size = GETSIZEMINMAX(min, max);
 }
 
 void meshDataClean(Mesh* m) { //??

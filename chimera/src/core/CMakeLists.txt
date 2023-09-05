@@ -16,7 +16,6 @@ set (SourcesCore Registry.cpp
 				 utils.cpp
 				 Timer.cpp
 				 Engine.cpp
-				 mathGL.cpp
 				 HeapQ.cpp
 				 device/CanvasFB.cpp
 				 device/CanvasGL.cpp

@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/mathGL.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 
 namespace Chimera {
 

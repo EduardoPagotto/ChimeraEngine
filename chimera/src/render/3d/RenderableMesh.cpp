@@ -14,6 +14,7 @@ RenderableMesh::RenderableMesh(Mesh* mesh) : Renderable3D() {
 
     std::vector<uint32_t> index;
     std::vector<VertexData> vertexDataOut;
+
     vertexDataIndexCompile(renderData, vertexDataOut, index);
 
     // Create VAO, VBO and IBO

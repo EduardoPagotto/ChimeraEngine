@@ -119,8 +119,8 @@ void Scene::onAttach() {
             else if (mesh.type == MeshType::BSTREE)
                 rc.renderable = new RenderableBsp(mesh.mesh);
 
-            glm::vec3 min, max, size;
-            meshMinMaxSize(mesh.mesh, min, max, size);
+            auto [min, max, size] = vertexBoundaries(mesh.mesh->vertex);
+
             if (entity.hasComponent<TransComponent>()) {
                 // Ajuste de fisica se existir
                 TransComponent& tc = entity.getComponent<TransComponent>();

@@ -11,16 +11,12 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
 
     Mesh meshFinal;
     // meshDebug(mesh, true);
-    meshReCompile(*mesh, meshFinal);
+    meshReindex(*mesh, meshFinal);
     meshDebug(&meshFinal, false);
 
     BspTree bspTree;
     std::vector<TrisIndex> vTris;
     root = bspTree.create(&meshFinal, vTris);
-    // root = bspTree.create(mesh, vTris);
-
-    std::vector<VertexData> vVertex;
-    vertexDataFromMesh(&meshFinal, vVertex);
 
     // create VAO and VBO
     vao = new VertexArray();
@@ -35,7 +31,7 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
     layout.Push<float>(2, false);
 
     vbo->setLayout(layout);
-    vbo->setData(&vVertex[0], vVertex.size());
+    vbo->setData(&meshFinal.vertex[0], meshFinal.vertex.size());
     vbo->unbind();
 
     vao->push(vbo);
@@ -43,9 +39,7 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
     // Add all leafs and create IBO
     for (auto trisIndex : vTris) {
 
-        glm::vec3 min, max, size;
-        totIndex += trisIndex.size();
-        vertexDataIndexMinMaxSize(&vVertex[0], vVertex.size(), (uint32_t*)&trisIndex[0], trisIndex.size() * 3, min, max, size);
+        auto [min, max, size] = vertexIndexedBoundaries(meshFinal.vertex, trisIndex);
 
         IndexBuffer* ibo = new IndexBuffer((uint32_t*)&trisIndex[0], trisIndex.size() * 3);
         IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
@@ -54,8 +48,7 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
 
     vao->unbind();
 
-    glm::vec3 min, max, size;
-    vertexDataMinMaxSize(&vVertex[0], vVertex.size(), min, max, size);
+    auto [min, max, size] = vertexBoundaries(meshFinal.vertex);
     aabb.setBoundary(min, max);
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", this->vChild.size());
 }

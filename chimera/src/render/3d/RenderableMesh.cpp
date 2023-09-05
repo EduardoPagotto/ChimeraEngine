@@ -8,14 +8,9 @@
 namespace Chimera {
 
 RenderableMesh::RenderableMesh(Mesh* mesh) : Renderable3D() {
-    // Transforma Mesh em VertexData comprimindo-o
-    std::vector<VertexData> renderData;
-    vertexDataFromMesh(mesh, renderData);
 
-    std::vector<uint32_t> index;
-    std::vector<VertexData> vertexDataOut;
-
-    vertexDataIndexCompile(renderData, vertexDataOut, index);
+    Mesh temp;
+    meshReindex(*mesh, temp);
 
     // Create VAO, VBO and IBO
     vao = new VertexArray();
@@ -30,16 +25,15 @@ RenderableMesh::RenderableMesh(Mesh* mesh) : Renderable3D() {
     layout.Push<float>(2, false);
 
     vbo->setLayout(layout);
-    vbo->setData(&vertexDataOut[0], vertexDataOut.size());
+    vbo->setData(&temp.vertex[0], temp.vertex.size());
     vbo->unbind();
     vao->push(vbo);
     vao->unbind();
 
-    glm::vec3 min, max, size;
-    vertexDataIndexMinMaxSize(&vertexDataOut[0], vertexDataOut.size(), &index[0], index.size(), min, max, size);
+    auto [min, max, size] = vertexIndexedBoundaries(temp.vertex, temp.iFace);
 
     aabb.setBoundary(min, max);
-    IndexBuffer* ibo = new IndexBuffer(&index[0], index.size());
+    IndexBuffer* ibo = new IndexBuffer((uint32_t*)&temp.iFace[0], temp.iFace.size() * 3);
     totIndex = ibo->getSize();
     child = new RenderableIBO(vao, ibo, AABB(min, max));
 }

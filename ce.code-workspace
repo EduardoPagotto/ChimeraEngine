@@ -82,7 +82,15 @@
 			"semaphore": "cpp",
 			"stop_token": "cpp",
 			"bitset": "cpp",
-			"span": "cpp"
+			"span": "cpp",
+			"format": "cpp",
+			"variant": "cpp",
+			"csignal": "cpp",
+			"any": "cpp",
+			"cfenv": "cpp",
+			"charconv": "cpp",
+			"future": "cpp",
+			"typeindex": "cpp"
 		}
 	}
 }

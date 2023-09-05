@@ -14,14 +14,6 @@ MeshType getMeshTypeFromString(const std::string& text) {
     return MeshType::SIMPLE;
 }
 
-void meshDataScale(Mesh* m, const float& new_size) {
-
-    for (uint32_t i = 0; i < m->vertex.size(); i++) {
-        glm::vec3 val = m->vertex[i].point;
-        m->vertex[i].point = glm::vec3(val.x * new_size, val.y * new_size, val.z * new_size);
-    }
-}
-
 void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris) {
     for (uint32_t i = 0; i < m->iFace.size(); i++) {
         const glm::vec3 acc = m->vertex[m->iFace[i].x].normal + m->vertex[m->iFace[i].y].normal + m->vertex[m->iFace[i].z].normal;
@@ -108,7 +100,7 @@ void meshSerialize(Mesh& inData, Mesh& outData) {
     meshDebug(&outData, false);
 }
 
-void meshReCompile(Mesh& inData, Mesh& outData) {
+void meshReindex(Mesh& inData, Mesh& outData) {
 
     std::vector<uint32_t> idxFace;
     idxFace.reserve(inData.iFace.size() * 3);
@@ -119,6 +111,9 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
     }
 
     std::vector<uint32_t> index;
+    index.reserve(inData.iFace.size() * 3);
+
+    outData.vertex.reserve(inData.vertex.size());
 
     // percorrer todos os vertices
     bool find;
@@ -140,10 +135,11 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
             continue;
 
         // se diferente adiciona vertice e cria novo indice
-        outData.vertex.push_back({inData.vertex[idxFace[i]].point, inData.vertex[idxFace[i]].normal, inData.vertex[idxFace[i]].uv});
+        outData.vertex.push_back({inData.vertex[idxFace[i]].point,  //
+                                  inData.vertex[idxFace[i]].normal, //
+                                  inData.vertex[idxFace[i]].uv});   //
 
-        uint32_t n = outData.vertex.size() - 1;
-        index.push_back(n); // FIXME: usar copia rapida
+        index.push_back(outData.vertex.size() - 1);
     }
 
     for (uint32_t i = 0; i < index.size(); i += 3)
@@ -153,32 +149,6 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compile Mesh In: %04lu Mesh out: %04lu Index out: %04lu ", inData.vertex.size(),
                  outData.vertex.size(), outData.iFace.size());
-}
-
-void meshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
-
-    if (m->iFace.size() > 0) {
-        min = m->vertex[m->iFace[0].x].point;
-        max = m->vertex[m->iFace[0].x].point;
-    }
-
-    for (const glm::uvec3& face : m->iFace) {
-
-        min = glm::min(min, m->vertex[face.x].point);
-        min = glm::min(min, m->vertex[face.y].point);
-        min = glm::min(min, m->vertex[face.z].point);
-
-        max = glm::max(max, m->vertex[face.x].point);
-        max = glm::max(max, m->vertex[face.y].point);
-        max = glm::max(max, m->vertex[face.z].point);
-    }
-
-    size = getSizeMinMax(min, max);
-}
-
-void meshDataClean(Mesh* m) { //??
-    m->vertex.clear();
-    m->iFace.clear();
 }
 
 void meshDebug(Mesh* m, bool _showAll) {

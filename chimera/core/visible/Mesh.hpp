@@ -29,14 +29,10 @@ struct MeshComponent {
 };
 
 MeshType getMeshTypeFromString(const std::string& text);
-void meshDataClean(Mesh* m);
-void meshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size);
-void meshDataScale(Mesh* m, const float& new_size);
 void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris);
-void meshReCompile(Mesh& inData, Mesh& outData);
+void meshReindex(Mesh& inData, Mesh& outData);
 void meshDebug(Mesh* m, bool _showAll);
 void meshSerialize(Mesh& inData, Mesh& outData);
-
 void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idxIn, std::vector<uint32_t>& idxOut);
 void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idxIn, std::vector<uint32_t>& idxOut);
 } // namespace Chimera

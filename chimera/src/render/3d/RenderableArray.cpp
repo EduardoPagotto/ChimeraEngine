@@ -28,10 +28,7 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* me
 
     for (auto ptrTrisIndex : vPtrTrisIndex) {
 
-        glm::vec3 min, max, size;
-        vertexDataIndexMinMaxSize(&mesh->vertex[0], mesh->vertex.size(), (uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3, min, max,
-                                  size);
-        // meshMinMaxSize(mesh, min, max, size);
+        auto [min, max, size] = vertexIndexedBoundaries(mesh->vertex, ptrTrisIndex);
 
         IndexBuffer* ibo = new IndexBuffer((uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3);
         IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
@@ -43,8 +40,8 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* me
 
     vao->unbind();
 
-    glm::vec3 min, max, size;
-    vertexDataMinMaxSize(&mesh->vertex[0], mesh->vertex.size(), min, max, size);
+    auto [min, max, size] = vertexBoundaries(mesh->vertex);
+
     aabb.setBoundary(min, max);
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", vChild.size());
 }

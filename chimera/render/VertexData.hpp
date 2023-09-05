@@ -11,10 +11,6 @@ struct VertexDataSimple {
     glm::vec4 color; // 4 * 4 = 16 (24 - 39)
 };
 
-void vertexDataIndexCompile(std::vector<VertexData>& inData, std::vector<VertexData>& outData, std::vector<uint32_t>& out_indices);
-void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, glm::vec3& min, glm::vec3& max, glm::vec3& size);
-void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
-                               glm::vec3& min, glm::vec3& max, glm::vec3& size);
-
-void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData);
+std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexBoundaries(std::vector<VertexData>& vArray);
+std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexIndexedBoundaries(std::vector<VertexData>& vArray, TrisIndex& tris);
 } // namespace Chimera

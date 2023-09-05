@@ -94,21 +94,15 @@ void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, s
 
 void meshSerialize(Mesh& inData, Mesh& outData) {
 
-    std::vector<uint32_t> idxFace;
-    idxFace.reserve(inData.iFace.size() * 3);
-    for (const glm::uvec3& f : inData.iFace) {
-        idxFace.push_back(f.x);
-        idxFace.push_back(f.y);
-        idxFace.push_back(f.z);
+    outData.vertex.reserve(inData.iFace.size() * 3); // Reserve Vertex(point, normal, tex)
+
+    for (const glm::uvec3& face : inData.iFace) {
+        outData.vertex.push_back({inData.vertex[face.x].point, inData.vertex[face.x].normal, inData.vertex[face.x].uv}); // Vertice A
+        outData.vertex.push_back({inData.vertex[face.y].point, inData.vertex[face.y].normal, inData.vertex[face.y].uv}); // Vertice B
+        outData.vertex.push_back({inData.vertex[face.z].point, inData.vertex[face.z].normal, inData.vertex[face.z].uv}); // Vertice C
     }
 
-    for (uint32_t face = 0; face < idxFace.size(); face++) {
-        outData.vertex.push_back({inData.vertex[idxFace[face]].point,  // point
-                                  inData.vertex[idxFace[face]].normal, // normal
-                                  inData.vertex[idxFace[face]].uv});   // UV tex // FIXME: verificar que toda a carga tem dados de uv
-    }
-
-    for (uint32_t i = 0; i < idxFace.size(); i += 3)
+    for (uint32_t i = 0; i < outData.vertex.size(); i += 3) // Serialize Vertex (0,1,2),(3,4,5),...
         outData.iFace.push_back({i, i + 1, i + 2});
 }
 

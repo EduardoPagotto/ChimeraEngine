@@ -104,6 +104,8 @@ void meshSerialize(Mesh& inData, Mesh& outData) {
 
     for (uint32_t i = 0; i < outData.vertex.size(); i += 3) // Serialize Vertex (0,1,2),(3,4,5),...
         outData.iFace.push_back({i, i + 1, i + 2});
+
+    meshDebug(&outData, false);
 }
 
 void meshReCompile(Mesh& inData, Mesh& outData) {
@@ -154,17 +156,23 @@ void meshReCompile(Mesh& inData, Mesh& outData) {
 }
 
 void meshMinMaxSize(Mesh* m, glm::vec3& min, glm::vec3& max, glm::vec3& size) {
-    if (m->vertex.size() > 0) {
-        min = m->vertex[0].point;
-        max = m->vertex[0].point;
+
+    if (m->iFace.size() > 0) {
+        min = m->vertex[m->iFace[0].x].point;
+        max = m->vertex[m->iFace[0].x].point;
     }
 
-    for (uint32_t i = 1; i < m->vertex.size(); i++) {
-        min = glm::min(min, m->vertex[i].point);
-        max = glm::max(max, m->vertex[i].point);
+    for (const glm::uvec3& face : m->iFace) {
+
+        min = glm::min(min, m->vertex[face.x].point);
+        min = glm::min(min, m->vertex[face.y].point);
+        min = glm::min(min, m->vertex[face.z].point);
+
+        max = glm::max(max, m->vertex[face.x].point);
+        max = glm::max(max, m->vertex[face.y].point);
+        max = glm::max(max, m->vertex[face.z].point);
     }
 
-    // TODO: Era half size ??
     size = getSizeMinMax(min, max);
 }
 
@@ -181,11 +189,9 @@ void meshDebug(Mesh* m, bool _showAll) {
     if (_showAll == true) {
         uint32_t i = 0;
 
-        for (const VertexData& v : m->vertex) {
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Point: %03d (%05.3f; %05.3f; %05.3f)", i++, v.point.x, v.point.y, v.point.z);
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Normal: %03d (%05.3f; %05.3f; %05.3f))", i++, v.normal.x, v.normal.y, v.normal.z);
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "UV: %03d (%05.3f; %05.3f)", i++, v.uv.x, v.uv.y);
-        }
+        for (const VertexData& v : m->vertex)
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex: %03d (%05.3f; %05.3f; %05.3f),(%02.3f; %02.3f; %02.3f), (%01.4f; %01.4f)", i++,
+                         v.point.x, v.point.y, v.point.z, v.normal.x, v.normal.y, v.normal.z, v.uv.x, v.uv.y);
 
         i = 0;
         for (const glm::uvec3& face : m->iFace) {

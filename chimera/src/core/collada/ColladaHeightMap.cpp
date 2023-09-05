@@ -20,11 +20,7 @@ void ColladaHeightMap::create(const std::string& id, const std::string& name, En
 
     LoadHeightMap loader(square_x, square_z);
 
-    Mesh tempMesh;
-
-    loader.getMesh(target, tempMesh, size);
-
-    meshSerialize(tempMesh, *mc.mesh);
+    loader.getMesh(target, *mc.mesh, size);
 
     loader.split(mc.mesh->iFace, mc.vTrisIndex);
     mc.type = getMeshTypeFromString(geo.attribute("partition").value());

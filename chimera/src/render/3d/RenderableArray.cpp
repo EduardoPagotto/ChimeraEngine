@@ -20,11 +20,8 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* me
     layout.Push<float>(3, false);
     layout.Push<float>(2, false);
 
-    std::vector<VertexData> vertexData;
-    vertexDataFromMesh(mesh, vertexData);
-
     vbo->setLayout(layout);
-    vbo->setData(&vertexData[0], vertexData.size());
+    vbo->setData(&mesh->vertex[0], mesh->vertex.size());
     vbo->unbind();
 
     vao->push(vbo);
@@ -32,7 +29,9 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* me
     for (auto ptrTrisIndex : vPtrTrisIndex) {
 
         glm::vec3 min, max, size;
-        vertexDataIndexMinMaxSize(&vertexData[0], vertexData.size(), (uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3, min, max, size);
+        vertexDataIndexMinMaxSize(&mesh->vertex[0], mesh->vertex.size(), (uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3, min, max,
+                                  size);
+        // meshMinMaxSize(mesh, min, max, size);
 
         IndexBuffer* ibo = new IndexBuffer((uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3);
         IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
@@ -45,7 +44,7 @@ RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* me
     vao->unbind();
 
     glm::vec3 min, max, size;
-    vertexDataMinMaxSize(&vertexData[0], vertexData.size(), min, max, size);
+    vertexDataMinMaxSize(&mesh->vertex[0], mesh->vertex.size(), min, max, size);
     aabb.setBoundary(min, max);
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Childs: %ld", vChild.size());
 }

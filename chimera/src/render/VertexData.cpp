@@ -7,8 +7,8 @@ namespace Chimera {
 bool getSimilarVertexIndex(VertexData& in_vertex, std::vector<VertexData>& out_vertex, uint32_t& result) {
     // Percorrer todos os vertex ja existentes na lista
     for (uint32_t i = 0; i < out_vertex.size(); i++) {
-        if (IS_NEARVEC3(in_vertex.point, out_vertex[i].point) && IS_NEARVEC3(in_vertex.normal, out_vertex[i].normal) &&
-            IS_NEARVEC2(in_vertex.uv, out_vertex[i].uv)) {
+        if (isNearV3(in_vertex.point, out_vertex[i].point) && isNearV3(in_vertex.normal, out_vertex[i].normal) &&
+            isNearV2(in_vertex.uv, out_vertex[i].uv)) {
             result = i;
             return true;
         }
@@ -49,7 +49,7 @@ void vertexDataMinMaxSize(VertexData* pVertexList, const uint32_t& vertexSize, g
     }
 
     // TODO: Era half size ??
-    size = GETSIZEMINMAX(min, max);
+    size = getSizeMinMax(min, max);
 }
 
 void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSize, uint32_t* pIndexList, const uint32_t indexSize,
@@ -64,7 +64,7 @@ void vertexDataIndexMinMaxSize(VertexData* pVertexList, const uint32_t vertexSiz
         max = glm::max(max, pVertexList[pIndexList[i]].point);
     }
     // TODO: Era half size ??
-    size = GETSIZEMINMAX(min, max);
+    size = getSizeMinMax(min, max);
 }
 
 void vertexDataFromMesh(Mesh* m, std::vector<VertexData>& outData) {

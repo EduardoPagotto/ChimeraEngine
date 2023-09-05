@@ -133,7 +133,7 @@ bool Octree::hasPoint(const glm::vec3& point) {
         }
 
         for (auto p : points) {
-            if (IS_NEARVEC3(p, point))
+            if (isNearV3(p, point))
                 return true;
         }
     }

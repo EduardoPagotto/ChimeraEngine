@@ -31,7 +31,7 @@ void AABB::setBoundary(const glm::vec3& _min, const glm::vec3& _max) {
     vertex[(int)AabbBondery::TNE] = glm::vec3(_max.x, _max.y, _max.z);
 
     // TODO: Era half size ??
-    size = GETSIZEMINMAX(_min, _max);
+    size = getSizeMinMax(_min, _max);
     position = _min + (size / 2.0f);
 }
 

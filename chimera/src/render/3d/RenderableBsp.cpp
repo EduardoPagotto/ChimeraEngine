@@ -15,7 +15,7 @@ RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
 
     BspTree bspTree;
     std::vector<TrisIndex> vTris;
-    root = bspTree.create(&meshFinal, vTris);
+    root = bspTree.create(meshFinal, vTris);
 
     // create VAO and VBO
     vao = new VertexArray();

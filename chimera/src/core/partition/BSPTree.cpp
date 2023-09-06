@@ -29,8 +29,8 @@ void swapFace(T& a, T& b) {
 //             th2 = (*j);
 //             float val = glm::dot(th1->normal, th2->normal); // DOT(U,V)
 //             if (val > 0.0f) {                               // if not convex test if is coplanar
-//                 Plane alpha(mesh->point[th1->idx.s], th1->normal);
-//                 if (alpha.classifyPoly(mesh->point[th2->idx.s], mesh->point[th2->idx.t], mesh->point[th2->idx.p], &result) !=
+//                 Plane alpha(vertex[th1->idx.s].point, th1->normal);
+//                 if (alpha.classifyPoly(vertex[th2->idx.s].point, vertex[th2->idx.t].point, vertex[th2->idx.p].point, &result) !=
 //                     SIDE::CP_ONPLANE)
 //                     return false;
 

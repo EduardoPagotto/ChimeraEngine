@@ -32,7 +32,7 @@ struct MeshComponent {
 MeshType getMeshTypeFromString(const std::string& text);
 void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& vTris);
 void meshReindex(Mesh& inData, Mesh& outData);
-void meshDebug(Mesh* m, bool _showAll);
+void meshDebug(const Mesh& m, bool _showAll);
 void meshSerialize(Mesh& inData, Mesh& outData);
 void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idxIn, std::vector<uint32_t>& idxOut);
 void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idxIn, std::vector<uint32_t>& idxOut);

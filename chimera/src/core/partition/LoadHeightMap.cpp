@@ -131,7 +131,7 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
         _mesh.vertex[_mesh.iFace[i].z].normal = vn;
     }
 
-    meshDebug(&_mesh, false);
+    meshDebug(_mesh, false);
 
     this->width = pImage->w;
     this->height = pImage->h;

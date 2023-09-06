@@ -21,13 +21,6 @@ void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& vTris) {
     }
 }
 
-// void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris) {
-//     for (uint32_t i = 0; i < m->iFace.size(); i++) {
-//         const glm::vec3 acc = m->vertex[m->iFace[i].x].normal + m->vertex[m->iFace[i].y].normal + m->vertex[m->iFace[i].z].normal;
-//         vTris.push_back(new Triangle(m->iFace[i], glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3), false));
-//     }
-// }
-
 void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idxIn,
                       std::vector<uint32_t>& idxOut) {
 
@@ -104,7 +97,8 @@ void meshSerialize(Mesh& inData, Mesh& outData) {
     for (uint32_t i = 0; i < outData.vertex.size(); i += 3) // Serialize Vertex (0,1,2),(3,4,5),...
         outData.iFace.push_back({i, i + 1, i + 2});
 
-    meshDebug(&outData, false);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Serialize Vertex: %04lu -> %04lu Faces: %04lu ", inData.vertex.size(), outData.vertex.size(),
+                 outData.iFace.size());
 }
 
 void meshReindex(Mesh& inData, Mesh& outData) {
@@ -154,24 +148,21 @@ void meshReindex(Mesh& inData, Mesh& outData) {
 
     outData.iFace.assign(outData.iFace.begin(), outData.iFace.end());
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Compile Mesh In: %04lu Mesh out: %04lu Index out: %04lu ", inData.vertex.size(),
-                 outData.vertex.size(), outData.iFace.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "ReIndex Vertex: %04lu -> %04lu Faces: %04lu ", inData.vertex.size(), outData.vertex.size(),
+                 outData.iFace.size());
 }
 
-void meshDebug(Mesh* m, bool _showAll) {
+void meshDebug(const Mesh& m, bool _showAll) {
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex : %03d", (int)m->vertex.size());
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Faces  : %03d", (int)m->iFace.size());
-
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex : %03d, Faces  : %03d", (int)m.vertex.size(), (int)m.iFace.size());
     if (_showAll == true) {
         uint32_t i = 0;
-
-        for (const VertexData& v : m->vertex)
+        for (const VertexData& v : m.vertex)
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex: %03d (%05.3f; %05.3f; %05.3f),(%02.3f; %02.3f; %02.3f), (%01.4f; %01.4f)", i++,
                          v.point.x, v.point.y, v.point.z, v.normal.x, v.normal.y, v.normal.z, v.uv.x, v.uv.y);
 
         i = 0;
-        for (const glm::uvec3& face : m->iFace) {
+        for (const glm::uvec3& face : m.iFace) {
             SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Index: %03d (%03d; %03d; %03d)", i, face.x, face.y, face.z);
             i += 3;
         }
@@ -213,5 +204,4 @@ std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexIndexedBoundaries(std::vector<
 
     return {min, max, getSizeMinMax(min, max)};
 }
-
 } // namespace Chimera

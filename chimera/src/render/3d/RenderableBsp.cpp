@@ -6,12 +6,10 @@
 
 namespace Chimera {
 
-RenderableBsp::RenderableBsp(Mesh* mesh) : totIndex(0), Renderable3D() {
+RenderableBsp::RenderableBsp(Mesh& mesh) : totIndex(0), Renderable3D() {
 
     Mesh meshFinal;
-    // meshDebug(mesh, true);
-    meshReindex(*mesh, meshFinal);
-    meshDebug(&meshFinal, false);
+    meshReindex(mesh, meshFinal);
 
     BspTree bspTree;
     std::vector<TrisIndex> vTris;

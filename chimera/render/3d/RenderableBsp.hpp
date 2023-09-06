@@ -10,7 +10,7 @@ namespace Chimera {
 
 class RenderableBsp : public Renderable3D {
   public:
-    RenderableBsp(Mesh* mesh);
+    RenderableBsp(Mesh& mesh);
     virtual ~RenderableBsp();
     virtual const uint32_t getSize() const override { return totIndex; }
     virtual IndexBuffer* getIBO() const override { return nullptr; }

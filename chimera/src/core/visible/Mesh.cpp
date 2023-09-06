@@ -14,12 +14,19 @@ MeshType getMeshTypeFromString(const std::string& text) {
     return MeshType::SIMPLE;
 }
 
-void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris) {
-    for (uint32_t i = 0; i < m->iFace.size(); i++) {
-        const glm::vec3 acc = m->vertex[m->iFace[i].x].normal + m->vertex[m->iFace[i].y].normal + m->vertex[m->iFace[i].z].normal;
-        vTris.push_back(new Triangle(m->iFace[i], glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3), false));
+void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& vTris) {
+    for (uint32_t i = 0; i < m.iFace.size(); i++) {
+        const glm::vec3 acc = m.vertex[m.iFace[i].x].normal + m.vertex[m.iFace[i].y].normal + m.vertex[m.iFace[i].z].normal;
+        vTris.push_back(std::make_shared<Triangle>(m.iFace[i], glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3), false));
     }
 }
+
+// void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris) {
+//     for (uint32_t i = 0; i < m->iFace.size(); i++) {
+//         const glm::vec3 acc = m->vertex[m->iFace[i].x].normal + m->vertex[m->iFace[i].y].normal + m->vertex[m->iFace[i].z].normal;
+//         vTris.push_back(new Triangle(m->iFace[i], glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3), false));
+//     }
+// }
 
 void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idxIn,
                       std::vector<uint32_t>& idxOut) {

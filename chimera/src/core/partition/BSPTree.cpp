@@ -10,18 +10,18 @@ void swapFace(T& a, T& b) {
     a = c;
 }
 
-// bool BspTree::tringleListIsConvex(std::vector<Triangle*>& _vTriangle) {
+// bool BspTree::tringleListIsConvex(std::vector<std::shared_ptr<Triangle>>& _vTriangle) {
 
 //     if (_vTriangle.size() <= 1)
 //         return false;
 
 //     glm::vec3 result;
-//     Triangle* th1 = nullptr;
-//     Triangle* th2 = nullptr;
-//     for (std::vector<Triangle*>::iterator i = _vTriangle.begin(); i != _vTriangle.end(); i++) {
+//     std::shared_ptr<Triangle> th1 = nullptr;
+//     std::shared_ptr<Triangle> th2 = nullptr;
+//     for (std::vector<std::shared_ptr<Triangle>>::iterator i = _vTriangle.begin(); i != _vTriangle.end(); i++) {
 
 //         th1 = (*i);
-//         for (std::vector<Triangle*>::iterator j = i; j != _vTriangle.end(); j++) {
+//         for (std::vector<std::shared_ptr<Triangle>>::iterator j = i; j != _vTriangle.end(); j++) {
 
 //             if (i == j)
 //                 continue;
@@ -45,8 +45,10 @@ void swapFace(T& a, T& b) {
 // }
 
 BSPTreeNode* BspTree::create(Mesh* mesh, std::vector<TrisIndex>& vpLeafOut) {
-    std::list<Triangle*> vTris;
-    meshToTriangle(mesh, vTris);
+    // std::list<std::shared_ptr<Triangle>> vTris;
+    std::list<std::shared_ptr<Triangle>> vTris;
+
+    meshToTriangle(*mesh, vTris); // FIXME: trocar mesh para ref no cleate!
 
     this->mesh = mesh;
 
@@ -60,14 +62,14 @@ BSPTreeNode* BspTree::create(Mesh* mesh, std::vector<TrisIndex>& vpLeafOut) {
     return root;
 }
 
-Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
+std::shared_ptr<Triangle> BspTree::selectBestSplitter(std::list<std::shared_ptr<Triangle>>& _vTriangle) {
 
-    unsigned int bestScore = 100000;                // just set to a very high value to begin
-    Triangle* selectedTriangle = nullptr;           // poit to none
-    glm::vec3 temp;                                 // inutil
-    long long score, splits, backfaces, frontfaces; // counts
+    unsigned int bestScore = 100000;                      // just set to a very high value to begin
+    std::shared_ptr<Triangle> selectedTriangle = nullptr; // poit to none
+    glm::vec3 temp;                                       // inutil
+    long long score, splits, backfaces, frontfaces;       // counts
 
-    for (Triangle* th : _vTriangle) {
+    for (std::shared_ptr<Triangle> th : _vTriangle) {
 
         if (th->splitter == true)
             continue;
@@ -76,7 +78,7 @@ Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
 
         Plane hyperPlane(mesh->vertex[th->idx.s].point, th->normal);
 
-        for (Triangle* currentPoly : _vTriangle) {
+        for (std::shared_ptr<Triangle> currentPoly : _vTriangle) {
             if (currentPoly != th) {
                 SIDE result = hyperPlane.classifyPoly(mesh->vertex[currentPoly->idx.s].point, // PA
                                                       mesh->vertex[currentPoly->idx.t].point, // PB
@@ -115,7 +117,8 @@ Triangle* BspTree::selectBestSplitter(std::list<Triangle*>& _vTriangle) {
     return selectedTriangle;
 }
 
-void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hyperPlane, std::list<Triangle*>& _vTriangle) {
+void BspTree::splitTriangle(const glm::vec3& fx, std::shared_ptr<Triangle> _pTriangle, Plane& hyperPlane,
+                            std::list<std::shared_ptr<Triangle>>& _vTriangle) {
 
     // Proporcao de textura (0.0 a 1.0)
     float propAC = 0.0;
@@ -169,36 +172,37 @@ void BspTree::splitTriangle(const glm::vec3& fx, Triangle* _pTriangle, Plane& hy
     mesh->vertex.push_back({a, _pTriangle->normal, vertA_uv}); // T1 PA
     mesh->vertex.push_back({b, _pTriangle->normal, vertB_uv}); // T1 PB
     mesh->vertex.push_back({A, _pTriangle->normal, texA});     // T1 PC
-    _vTriangle.push_front(new Triangle(glm::uvec3(last, last + 1, last + 2), _pTriangle->normal, _pTriangle->splitter));
+    _vTriangle.push_front(std::make_shared<Triangle>(glm::uvec3(last, last + 1, last + 2), _pTriangle->normal, _pTriangle->splitter));
 
     //-- T2 Triangle T2(b, B, A); // mesma normal que o original
     mesh->vertex.push_back({b, _pTriangle->normal, vertB_uv}); // T2 PA
     mesh->vertex.push_back({B, _pTriangle->normal, texB});     // T2 PB
     mesh->vertex.push_back({A, _pTriangle->normal, texA});     // T2 PC
-    _vTriangle.push_front(new Triangle(glm::uvec3(last + 3, last + 4, last + 5), _pTriangle->normal, _pTriangle->splitter));
+    _vTriangle.push_front(std::make_shared<Triangle>(glm::uvec3(last + 3, last + 4, last + 5), _pTriangle->normal, _pTriangle->splitter));
 
     // -- T3 Triangle T3(A, B, c); // mesma normal que o original
     mesh->vertex.push_back({A, _pTriangle->normal, texA});     // T3 PA
     mesh->vertex.push_back({B, _pTriangle->normal, texB});     // T3 PB
     mesh->vertex.push_back({c, _pTriangle->normal, vertC_uv}); // T3 PC
-    _vTriangle.push_front(new Triangle(glm::uvec3(last + 6, last + 7, last + 8), _pTriangle->normal, _pTriangle->splitter));
+    _vTriangle.push_front(std::make_shared<Triangle>(glm::uvec3(last + 6, last + 7, last + 8), _pTriangle->normal, _pTriangle->splitter));
 
     // Remove orininal
-    delete _pTriangle;
-    _pTriangle = nullptr;
+    //_pTriangle.reset(); // Preciso disto aqui ???
+    // int aa = _pTriangle.use_count();
 }
 
-BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
+BSPTreeNode* BspTree::build(std::list<std::shared_ptr<Triangle>>& _vTriangle) {
 
     if (_vTriangle.empty() == true)
         return nullptr;
 
-    std::list<Triangle*> front_list;
-    std::list<Triangle*> back_list;
-    Triangle* poly = nullptr;
+    std::list<std::shared_ptr<Triangle>> front_list;
+    std::list<std::shared_ptr<Triangle>> back_list;
+
+    std::shared_ptr<Triangle> poly = nullptr;
     BSPTreeNode* tree = nullptr;
 
-    Triangle* best = selectBestSplitter(_vTriangle);
+    std::shared_ptr<Triangle> best = selectBestSplitter(_vTriangle);
     if (best != nullptr) {
         tree = new BSPTreeNode(Plane(mesh->vertex[best->idx.s].point, best->normal));
         while (_vTriangle.empty() == false) {
@@ -267,16 +271,16 @@ BSPTreeNode* BspTree::build(std::list<Triangle*>& _vTriangle) {
     return tree;
 }
 
-void BspTree::createLeafy(BSPTreeNode* tree, std::list<Triangle*>& listConvexTriangle) {
+void BspTree::createLeafy(BSPTreeNode* tree, std::list<std::shared_ptr<Triangle>>& listConvexTriangle) {
 
     TrisIndex leaf;
     while (listConvexTriangle.empty() == false) {
-        Triangle* convPoly = listConvexTriangle.back();
+        std::shared_ptr<Triangle> convPoly = listConvexTriangle.back();
         listConvexTriangle.pop_back();
         leaf.push_back(convPoly->idx);
 
-        delete convPoly;
-        convPoly = nullptr;
+        // delete convPoly;
+        // convPoly = nullptr;
     }
 
     tree->leafIndex = vpLeaf.size();

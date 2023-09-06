@@ -3,6 +3,7 @@
 #include "chimera/core/space/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <list>
+#include <memory>
 
 namespace Chimera {
 
@@ -29,7 +30,7 @@ struct MeshComponent {
 };
 
 MeshType getMeshTypeFromString(const std::string& text);
-void meshToTriangle(Mesh* m, std::list<Triangle*>& vTris);
+void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& vTris);
 void meshReindex(Mesh& inData, Mesh& outData);
 void meshDebug(Mesh* m, bool _showAll);
 void meshSerialize(Mesh& inData, Mesh& outData);

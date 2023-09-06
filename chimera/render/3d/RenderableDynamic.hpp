@@ -1,7 +1,6 @@
 #pragma once
-#include "chimera/core/buffer/VertexBuffer.hpp"
+#include "chimera/core/visible/Mesh.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
-#include "chimera/render/VertexData.hpp"
 
 namespace Chimera {
 

@@ -3,7 +3,6 @@
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
-#include "chimera/render/VertexData.hpp"
 
 namespace Chimera {
 

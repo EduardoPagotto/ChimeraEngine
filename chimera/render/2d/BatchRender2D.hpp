@@ -3,7 +3,6 @@
 #include "chimera/core/buffer/IndexBuffer.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
-#include "chimera/render/VertexData.hpp"
 #include <deque>
 
 namespace Chimera {
@@ -13,6 +12,13 @@ namespace Chimera {
 #define RENDERER_BUFFER_SIZE RENDERER_SPRITE_SIZE* RENDERER_MAX_SPRITES
 #define RENDERER_INDICES_SIZE RENDERER_MAX_SPRITES * 6
 #define RENDERER_MAX_TEXTURE 32
+
+struct VertexDataSimple {
+    glm::vec3 point; // 3 * 4 = 12 (0 - 11)
+    glm::vec2 uv;    // 2 * 4 = 8  (12 - 19)
+    float tid;       // 1 * 4 = 4  (20 - 23)
+    glm::vec4 color; // 4 * 4 = 16 (24 - 39)
+};
 
 class BatchRender2D : public IRenderer2D {
   public:

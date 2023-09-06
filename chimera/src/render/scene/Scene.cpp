@@ -15,7 +15,6 @@
 #include "chimera/render/3d/RenderableMesh.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/render/VertexData.hpp"
 #include "chimera/render/scene/Components.hpp"
 #include <SDL2/SDL.h>
 

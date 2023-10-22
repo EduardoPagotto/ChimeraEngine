@@ -29,12 +29,10 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
 
     SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The number of faces in the font is: %ld\n", TTF_FontFaces(sFont));
 
-    const char* stylename = TTF_FontFaceStyleName(sFont);
-    if (stylename)
+    if (const char* stylename = TTF_FontFaceStyleName(sFont); stylename)
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The name of the face in the font is: %s\n", stylename);
 
-    const char* familyname = TTF_FontFaceFamilyName(sFont);
-    if (familyname)
+    if (const char* familyname = TTF_FontFaceFamilyName(sFont); familyname)
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The family name of the face in the font is: %s\n", familyname);
 
     int val = TTF_GetFontKerning(sFont);

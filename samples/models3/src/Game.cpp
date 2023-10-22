@@ -81,10 +81,8 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_JOYHATMOTION:
         case SDL_JOYBALLMOTION: {
 
-            JoystickState* pJoy = JoystickManager::select(event.jball.which);
-
             // Captura joystick 0 se existir
-            if (pJoy != nullptr) {
+            if (JoystickState* pJoy = JoystickManager::select(event.jball.which); pJoy != nullptr) {
 
                 pJoy->debug();
 

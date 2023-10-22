@@ -40,36 +40,31 @@ inline void setChildParam(const pugi::xml_node& node, const char* paramName, T& 
 
 template <>
 inline void setChildParam<bool>(const pugi::xml_node& node, const char* paramName, bool& value) {
-    pugi::xml_node n = node.child(paramName);
-    if (n != nullptr)
+    if (pugi::xml_node n = node.child(paramName); n != nullptr)
         value = n.text().as_bool();
 }
 
 template <>
 inline void setChildParam<uint32_t>(const pugi::xml_node& node, const char* paramName, uint32_t& value) {
-    pugi::xml_node n = node.child(paramName);
-    if (n != nullptr)
+    if (pugi::xml_node n = node.child(paramName); n != nullptr)
         value = n.text().as_int();
 }
 
 template <>
 inline void setChildParam<float>(const pugi::xml_node& node, const char* paramName, float& value) {
-    pugi::xml_node n = node.child(paramName);
-    if (n != nullptr)
+    if (pugi::xml_node n = node.child(paramName); n != nullptr)
         value = n.text().as_float();
 }
 
 template <>
 inline void setChildParam<std::string>(const pugi::xml_node& node, const char* paramName, std::string& value) {
-    pugi::xml_node n = node.child(paramName);
-    if (n != nullptr)
+    if (pugi::xml_node n = node.child(paramName); n != nullptr)
         value = n.text().as_string();
 }
 
 template <>
 inline void setChildParam<glm::vec3>(const pugi::xml_node& node, const char* paramName, glm::vec3& value) {
-    pugi::xml_node n = node.child(paramName);
-    if (n != nullptr)
+    if (pugi::xml_node n = node.child(paramName); n != nullptr)
         value = textToVec3(n.text().as_string());
 }
 

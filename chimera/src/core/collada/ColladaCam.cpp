@@ -10,8 +10,7 @@ void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) {
     std::string nn = node.name();
 
     CameraComponent& cc = entity.getComponent<CameraComponent>();
-    pugi::xml_node orbital = getExtra(node, "orbital");
-    if (orbital != nullptr) {
+    if (pugi::xml_node orbital = getExtra(node, "orbital"); orbital != nullptr) {
 
         cc.camKind = CamKind::ORBIT;
         setChildParam(orbital, "up", cc.up);
@@ -23,8 +22,7 @@ void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) {
         setChildParam(orbital, "fixedAspectRatio", cc.fixedAspectRatio);
     }
 
-    pugi::xml_node nFPS = getExtra(node, "FPS");
-    if (nFPS != nullptr) {
+    if (pugi::xml_node nFPS = getExtra(node, "FPS"); nFPS != nullptr) {
 
         cc.camKind = CamKind::FPS;
         setChildParam(nFPS, "up", cc.up);
@@ -34,8 +32,7 @@ void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) {
         setChildParam(nFPS, "fixedAspectRatio", cc.fixedAspectRatio);
     }
 
-    pugi::xml_node nStatic = getExtra(node, "static");
-    if (nStatic != nullptr) {
+    if (pugi::xml_node nStatic = getExtra(node, "static"); nStatic != nullptr) {
 
         cc.camKind = CamKind::STATIC;
         setChildParam(nStatic, "primary", cc.primary);

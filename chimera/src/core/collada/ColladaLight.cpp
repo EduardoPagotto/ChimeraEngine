@@ -13,8 +13,7 @@ void ColladaLight::create(Entity& entity, pugi::xml_node nodeLight) { // FIXME: 
     pugi::xml_node tec = nodeLight.child("technique_common");
     for (pugi::xml_node lTec = tec.first_child(); lTec; lTec = lTec.next_sibling()) {
 
-        std::string name = lTec.name();
-        if (name == "point") {
+        if (std::string name = lTec.name(); name == "point") {
             std::string color = lTec.child("color").text().as_string();
             lc.light->setDiffuse(textToVec4(color));
             lc.light->setAmbient(glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)); // FIXME: remover depois

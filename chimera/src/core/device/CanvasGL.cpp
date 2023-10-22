@@ -37,8 +37,7 @@ CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _ful
     }
 
     // Swap buffer interval
-    int interval = SDL_GL_SetSwapInterval(1);
-    if (interval < 0) {
+    if (int interval = SDL_GL_SetSwapInterval(1); interval < 0) {
         throw std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError()));
     }
 
@@ -83,8 +82,7 @@ void CanvasGL::before() {
 
 void CanvasGL::after() {
 
-    GLenum erro = glGetError();
-    if (erro != GL_NO_ERROR)
+    if (GLenum erro = glGetError(); erro != GL_NO_ERROR)
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "OpenGL Erro: %d", erro);
 
     SDL_GL_SwapWindow(window);
@@ -116,9 +114,7 @@ void CanvasGL::toggleFullScreen() {
 std::string CanvasGL::getVersaoOpenGL() {
 
     std::string retorno = "";
-    const char* version = (const char*)glGetString(GL_VERSION);
-
-    if (version != nullptr) {
+    if (const char* version = (const char*)glGetString(GL_VERSION); version != nullptr) {
         retorno.append(version);
     } else {
         // Check for error

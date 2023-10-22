@@ -31,9 +31,7 @@ void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, s
         find = false;
         const glm::vec2& p1 = in[idxIn[i]];
         for (uint32_t j = 0; j < idxOut.size(); j++) {
-
-            const glm::vec2& p2 = out[j];
-            if (isNearV2(p1, p2)) { // Procura por similar
+            if (const glm::vec2& p2 = out[j]; isNearV2(p1, p2)) { // Procura por similar
                 idxOut.push_back(j);
                 find = true;
                 break;
@@ -63,10 +61,7 @@ void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, s
         const glm::vec3& p1 = in[idxIn[i]];
 
         for (uint32_t j = 0; j < idxOut.size(); j++) {
-
-            const glm::vec3& p2 = out[j];
-
-            if (isNearV3(p1, p2)) {
+            if (const glm::vec3& p2 = out[j]; isNearV3(p1, p2)) {
                 idxOut.push_back(j);
                 find = true;
                 break;

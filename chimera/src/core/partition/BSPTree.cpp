@@ -204,8 +204,7 @@ BSPTreeNode* BspTree::build(std::list<std::shared_ptr<Triangle>>& _vTriangle) {
     std::shared_ptr<Triangle> poly = nullptr;
     BSPTreeNode* tree = nullptr;
 
-    std::shared_ptr<Triangle> best = selectBestSplitter(_vTriangle);
-    if (best != nullptr) {
+    if (std::shared_ptr<Triangle> best = selectBestSplitter(_vTriangle); best != nullptr) {
         tree = new BSPTreeNode(Plane(vertex[best->idx.s].point, best->normal));
         while (_vTriangle.empty() == false) {
 

@@ -59,10 +59,8 @@ void ColladaImage::create(Entity entity, TexParam& tp, const pugi::xml_node& nod
                 height = static_cast<uint32_t>(std::stoul(nSize.attribute("height").value()));
             }
 
-            pugi::xml_node nFormat = nImg.child("format");
-            if (nFormat != nullptr) {
-                pugi::xml_node nHint = nFormat.child("hint");
-                if (nHint != nullptr) {
+            if (pugi::xml_node nFormat = nImg.child("format"); nFormat != nullptr) {
+                if (pugi::xml_node nHint = nFormat.child("hint"); nHint != nullptr) {
                     setChannelTexFormat(nHint.attribute("channels").value(), tp.format);
                     setChannelTexFormat(nHint.attribute("channelsInternal").value(), tp.internalFormat);
                     setRange(nHint.attribute("range").value(), tp.type);
@@ -78,8 +76,7 @@ void ColladaImage::create(Entity entity, TexParam& tp, const pugi::xml_node& nod
             }
 
         } else if (field == "init_from") {
-            pugi::xml_text pathFile = nImg.text();
-            if (pathFile != nullptr) {
+            if (pugi::xml_text pathFile = nImg.text(); pathFile != nullptr) {
                 std::string f = pathFile.as_string();
                 SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
                 TextureManager::loadFromFile(id, f, tp);

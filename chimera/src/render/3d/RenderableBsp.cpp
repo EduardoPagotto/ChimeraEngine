@@ -55,8 +55,7 @@ RenderableBsp::~RenderableBsp() { this->destroy(); }
 void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<IRenderable3d*>& childDraw) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if ((tree != nullptr) && (tree->isSolid == false)) {
-        SIDE result = tree->hyperPlane.classifyPoint(cameraPos);
-        switch (result) {
+        switch (SIDE result = tree->hyperPlane.classifyPoint(cameraPos); result) {
             case SIDE::CP_FRONT: {
                 traverseTree(cameraPos, tree->back, childDraw);
                 if (tree->isLeaf == true) // set to draw Polygon

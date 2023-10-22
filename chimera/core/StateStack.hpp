@@ -1,7 +1,7 @@
 #pragma once
 #include "IStateMachine.hpp"
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 namespace Chimera {
 
@@ -22,8 +22,7 @@ class StateStack {
     }
 
     inline void popState(IStateMachine* state) {
-        auto it = std::find(states.begin(), states.end(), state);
-        if (it != states.end()) {
+        if (auto it = std::find(states.begin(), states.end(), state); it != states.end()) {
             states.erase(it);
             stateInsert--;
         }
@@ -31,8 +30,7 @@ class StateStack {
     }
 
     inline void popOverlay(IStateMachine* overlay) {
-        auto it = std::find(states.begin(), states.end(), overlay);
-        if (it != states.end())
+        if (auto it = std::find(states.begin(), states.end(), overlay); it != states.end())
             states.erase(it);
 
         overlay->onDeatach();

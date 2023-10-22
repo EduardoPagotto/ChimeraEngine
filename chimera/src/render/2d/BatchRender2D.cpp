@@ -132,9 +132,7 @@ void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const g
     for (int i = 0; i < text.size(); i++) {
 
         uint16_t c = text[i];
-        GlyphData* glyph = font->glyphs[c];
-
-        if (glyph != nullptr) {
+        if (GlyphData* glyph = font->glyphs[c]; glyph != nullptr) {
 
             // FIXME: encontrar o kering!!!!!!
             // if (i > 0) {

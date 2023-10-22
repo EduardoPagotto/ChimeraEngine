@@ -7,8 +7,7 @@ JoystickState::JoystickState() : id(255), pHandle(nullptr), name("none") {}
 
 int16_t JoystickState::getAxis(const uint8_t& index, const int16_t& deadzone, const int16_t& deadzone_at_ends) {
 
-    auto axis_iter = axis.find(index);
-    if (axis_iter != axis.end()) {
+    if (auto axis_iter = axis.find(index); axis_iter != axis.end()) {
 
         int16_t value = axis_iter->second;
 
@@ -37,8 +36,7 @@ int16_t JoystickState::getAxis(const uint8_t& index, const int16_t& deadzone, co
 }
 
 uint8_t JoystickState::getButtonState(const uint8_t& indice) {
-    auto button_iter = buttonState.find(indice);
-    if (button_iter != buttonState.end())
+    if (auto button_iter = buttonState.find(indice); button_iter != buttonState.end())
         return button_iter->second;
 
     return SDL_RELEASED;
@@ -46,11 +44,8 @@ uint8_t JoystickState::getButtonState(const uint8_t& indice) {
 
 uint8_t JoystickState::getHat(const uint8_t& hat) {
     // Check the direction of a hat switch.
-
-    auto hat_iter = hats.find(hat);
-    if (hat_iter != hats.end()) {
+    if (auto hat_iter = hats.find(hat); hat_iter != hats.end())
         return hat_iter->second;
-    }
 
     return 0;
 }

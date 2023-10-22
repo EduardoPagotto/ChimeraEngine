@@ -11,8 +11,7 @@ namespace Chimera {
 
 void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
 
-    const pugi::xml_node nCanvas = getExtra(nodeExtra, "canvas");
-    if (nCanvas != nullptr) {
+    if (const pugi::xml_node nCanvas = getExtra(nodeExtra, "canvas"); nCanvas != nullptr) {
 
         std::string title = nCanvas.attribute("title").value();
         uint32_t width = static_cast<uint32_t>(std::stoul(nCanvas.attribute("width").value()));   // 1024;
@@ -21,22 +20,19 @@ void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
         bool fullscreen = f;
         std::string type = nCanvas.attribute("type").value();
 
-        CanvasComponent& cc = r.findComponent<CanvasComponent>("chimera_engine");
-        if (type == "FB")
+        // CanvasComponent& cc = r.findComponent<CanvasComponent>("chimera_engine");
+        if (CanvasComponent& cc = r.findComponent<CanvasComponent>("chimera_engine"); type == "FB")
             cc.canvas = new CanvasFB(title, width, height, fullscreen);
         else
             cc.canvas = new CanvasGL(title, width, height, fullscreen);
     }
 
-    const pugi::xml_node nEveView = getExtra(nodeExtra, "view_projection");
-    if (nEveView != nullptr) {
+    if (const pugi::xml_node nEveView = getExtra(nodeExtra, "view_projection"); nEveView != nullptr) {
 
         uint32_t size = static_cast<uint32_t>(std::stoul(nEveView.attribute("size").value()));
         float distance = std::stod(nEveView.attribute("distance").value());
 
-        ViewProjectionComponent& vpc = r.findComponent<ViewProjectionComponent>("chimera_engine");
-
-        if (size == 1) {
+        if (ViewProjectionComponent& vpc = r.findComponent<ViewProjectionComponent>("chimera_engine"); size == 1) {
             vpc.vp->add("unique");
         } else if (size == 2) {
             vpc.vp->add("right");
@@ -45,8 +41,7 @@ void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
         }
     }
 
-    const pugi::xml_node nFonts = getExtra(nodeExtra, "fonts");
-    if (nFonts != nullptr) {
+    if (const pugi::xml_node nFonts = getExtra(nodeExtra, "fonts"); nFonts != nullptr) {
         for (pugi::xml_node nFont = nFonts.first_child(); nFont; nFont = nFont.next_sibling()) {
 
             RFC3986 rfc(nFont.attribute("url").value());
@@ -58,8 +53,7 @@ void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
         }
     }
 
-    const pugi::xml_node nFbs = getExtra(nodeExtra, "framebuffers");
-    if (nFbs != nullptr) {
+    if (const pugi::xml_node nFbs = getExtra(nodeExtra, "framebuffers"); nFbs != nullptr) {
         for (pugi::xml_node nFb = nFbs.first_child(); nFb; nFb = nFb.next_sibling()) {
 
             std::string entName = nFb.attribute("name").value();

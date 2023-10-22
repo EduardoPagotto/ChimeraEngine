@@ -11,20 +11,17 @@ namespace Chimera {
 void colladaRenderLoad(ColladaDom& dom, Registry& r) {
 
     pugi::xml_node vs = dom.root.child("scene");
-    const pugi::xml_node extra = vs.child("extra");
-    if (extra != nullptr) {
+    if (const pugi::xml_node extra = vs.child("extra"); extra != nullptr) {
 
-        const pugi::xml_node nTiles = getExtra(extra, "tiles");
-        if (nTiles != nullptr) {
+        if (const pugi::xml_node nTiles = getExtra(extra, "tiles"); nTiles != nullptr) {
+
             for (pugi::xml_node nTile = nTiles.first_child(); nTile; nTile = nTile.next_sibling()) {
 
                 Entity entity = r.createEntity(nTile.attribute("name").value(), nTile.attribute("id").value());
                 for (pugi::xml_node node = nTile.first_child(); node; node = node.next_sibling()) {
 
-                    std::string name = node.name();
                     std::string url = node.attribute("url").value();
-
-                    if (name == "instance_camera") {
+                    if (std::string name = node.name(); name == "instance_camera") {
 
                         ColladaCam cc(dom, url);
                         cc.create(entity, cc.getLibrary("library_cameras"));

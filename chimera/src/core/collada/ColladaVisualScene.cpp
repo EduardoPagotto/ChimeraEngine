@@ -24,8 +24,7 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
     std::string url = n.attribute("url").value();
     if (name == "matrix") {
 
-        std::string sid = n.attribute("sid").value();
-        if (sid == "transform") {
+        if (std::string sid = n.attribute("sid").value(); sid == "transform") {
             TransComponent& tc = entity.addComponent<TransComponent>();
             tc.trans = new Transform(textToMat4(n.text().as_string()));
         }
@@ -35,10 +34,9 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
         ColladaGeometry cg(colladaDom, url);
         cg.create(entity, cg.getLibrary("library_geometries"));
 
-        const pugi::xml_node nMat = n.child("bind_material");
-        if (nMat) {
-            const pugi::xml_node instanceMaterial = nMat.child("technique_common").child("instance_material");
-            if (instanceMaterial != nullptr) {
+        if (const pugi::xml_node nMat = n.child("bind_material"); nMat) {
+            if (const pugi::xml_node instanceMaterial = nMat.child("technique_common").child("instance_material");
+                instanceMaterial != nullptr) {
                 std::string target = instanceMaterial.attribute("target").value();
                 ColladaMaterial cm(colladaDom, target);
                 cm.create(entity, cm.getLibrary("library_materials"));

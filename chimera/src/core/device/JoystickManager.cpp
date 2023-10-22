@@ -80,7 +80,6 @@ void JoystickManager::getStatusManager(void) {
 
 void JoystickManager::debug() {
 
-    SDL_Joystick* joystick;
     for (int i = 0; i < SDL_NumJoysticks(); ++i) {
         const char* name = SDL_JoystickNameForIndex(i);
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick index %d: %s", i, name ? name : "[no name]");
@@ -96,8 +95,7 @@ void JoystickManager::debug() {
         }
 
         // For anything else we have to open
-        joystick = SDL_JoystickOpen(i);
-        if (joystick != nullptr) {
+        if (SDL_Joystick* joystick = SDL_JoystickOpen(i); joystick != nullptr) {
             // Not the same as a device index!
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick instance id: %d", SDL_JoystickInstanceID(joystick));
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick axes: %d", SDL_JoystickNumAxes(joystick));

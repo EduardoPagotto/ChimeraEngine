@@ -16,8 +16,7 @@ bool Keyboard::isModPressed(SDL_Keymod keyMod) { return (keyMod & mod); }
 
 bool Keyboard::isPressed(SDL_Keycode key) {
 
-    auto it = mapKey.find(key);
-    if (it != mapKey.end())
+    if (auto it = mapKey.find(key); it != mapKey.end())
         return mapKey[key] == SDL_PRESSED;
 
     return false;

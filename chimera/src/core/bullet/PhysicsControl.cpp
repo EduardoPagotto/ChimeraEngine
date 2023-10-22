@@ -96,9 +96,7 @@ void PhysicsControl::checkCollisions() {
         int numContacts = contactManiFold->getNumContacts();
         for (int j = 0; j < numContacts; j++) {
 
-            btManifoldPoint& pt = contactManiFold->getContactPoint(j);
-
-            if (pt.getDistance() < 0.0f) {
+            if (btManifoldPoint& pt = contactManiFold->getContactPoint(j); pt.getDistance() < 0.0f) {
 
                 if (new_contacts.find(objB) == new_contacts.end()) {
 

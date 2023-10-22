@@ -187,10 +187,7 @@ void ColladaEffect::setImageParms(const pugi::xml_node& node) {
         if (sProf == "newparam") {
 
             pugi::xml_node val1 = param.first_child();
-            std::string sVal1 = val1.name();
-
-            if (sVal1 == "surface") {
-
+            if (std::string sVal1 = val1.name(); sVal1 == "surface") {
                 std::string keyImage = val1.child("init_from").text().as_string();
                 // loadImage(keyImage, tp);
                 mapaTex[sid] = keyImage;
@@ -215,14 +212,12 @@ void ColladaEffect::setImageParms(const pugi::xml_node& node) {
 void ColladaEffect::create(const std::string& refName, Entity& entity, pugi::xml_node node) {
     this->entity = entity;
     for (pugi::xml_node nProf = node.first_child(); nProf; nProf = nProf.next_sibling()) {
-        std::string nameProf = nProf.name();
-        if (nameProf == "profile_GLSL") {
+        if (std::string nameProf = nProf.name(); nameProf == "profile_GLSL") {
             setShader(refName, nProf);
         } else if (nameProf == "profile_COMMON") {
             setImageParms(nProf);
         } else if (nameProf == "extra") {
-            const pugi::xml_node nFX = getExtra(nProf, "instance_effect");
-            if (nFX != nullptr) {
+            if (const pugi::xml_node nFX = getExtra(nProf, "instance_effect"); nFX != nullptr) {
                 std::string url = nFX.attribute("url").value();
                 ColladaEffect cf(colladaDom, url);
                 cf.create("", entity, cf.getLibrary("library_effects"));

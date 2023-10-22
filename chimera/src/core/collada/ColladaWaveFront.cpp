@@ -30,11 +30,8 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
         wavefrontMtlLoad(matFile, eMaterial.material);
     }
 
-    pugi::xml_node nShade = geo.next_sibling();
-    if (nShade) {
-
-        pugi::xml_node technique_hint = nShade.child("technique_hint");
-        if (technique_hint != nullptr) {
+    if (pugi::xml_node nShade = geo.next_sibling(); nShade) {
+        if (pugi::xml_node technique_hint = nShade.child("technique_hint"); technique_hint != nullptr) {
             if (std::string(technique_hint.attribute("profile").value()) == "GLSL") {
                 std::string refName = technique_hint.attribute("ref").value();
                 std::string url = nShade.attribute("url").value();

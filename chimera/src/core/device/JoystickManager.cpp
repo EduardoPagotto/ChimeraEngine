@@ -20,6 +20,7 @@ void JoystickManager::find(void) {
 
                 const char* joystick_name = SDL_JoystickName(Joysticks[i].pHandle);
                 Joysticks[i].name = joystick_name ? joystick_name : "Joystick";
+                // JoystickManager::debug();
             }
         }
     }

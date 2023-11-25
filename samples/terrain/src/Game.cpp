@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 
@@ -24,6 +25,7 @@ bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
     MouseDevice::getEvent(event);
+    Keyboard::getEvent(event);
 
     switch (event.type) {
         case SDL_KEYDOWN: {

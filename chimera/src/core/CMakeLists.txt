@@ -21,6 +21,7 @@ set (SourcesCore Registry.cpp
 				 device/Keyboard.cpp
 				 device/JoystickState.cpp
 				 device/JoystickManager.cpp
+				 device/GameControllerManager.cpp
 				 device/MouseDevice.cpp
 				 buffer/VertexBuffer.cpp
 				 buffer/IndexBuffer.cpp

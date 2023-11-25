@@ -20,7 +20,10 @@
 
 namespace Chimera {
 
-Scene::Scene(Registry& r) : registry(&r), activeCam(nullptr), origem(nullptr), verbose(0) { octree = nullptr; }
+Scene::Scene() : activeCam(nullptr), origem(nullptr), verbose(0) {
+    octree = nullptr;
+    registry = RegistryManager::getPtr();
+}
 
 Scene::~Scene() {
     if (shadowData.shadowBuffer) {

@@ -24,11 +24,10 @@ struct ShadowData {
 class Entity;
 class Scene : public IStateMachine {
   public:
-    Scene(Registry& r);
+    Scene();
     virtual ~Scene();
     void setOrigem(ITrans* o) { origem = o; }
     Canvas* getCanvas();
-    Registry* getRegistry() { return registry; }
     StateStack& getLayes() { return this->layers; }
     // Herdados
     virtual void onAttach() override;

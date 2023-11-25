@@ -81,7 +81,7 @@ int main(int argn, char** argv) {
 
         engine.init();
 
-        Scene scene(RegistryManager::get());
+        Scene scene;
 
         Game* game = new Game(scene);
 

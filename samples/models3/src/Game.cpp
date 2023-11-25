@@ -9,6 +9,7 @@
 Game::Game(Chimera::Scene& scene) : pCorpoRigido(nullptr), scene(&scene) {
     Chimera::JoystickManager::init();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
+    registry = Chimera::RegistryManager::getPtr();
 }
 
 Game::~Game() {
@@ -144,7 +145,7 @@ void Game::onAttach() {
 
     using namespace Chimera;
     // Localiza objeto como o primario
-    TransComponent& tc = scene->getRegistry()->findComponent<TransComponent>("Zoltan");
+    TransComponent& tc = registry->findComponent<TransComponent>("Zoltan");
     pCorpoRigido = (Solid*)tc.trans;
 
     lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));

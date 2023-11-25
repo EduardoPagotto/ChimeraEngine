@@ -22,6 +22,7 @@ class Game : public Chimera::IStateMachine {
     virtual std::string getName() const override { return "Game"; }
 
   private:
+    Chimera::Registry* registry;
     Chimera::Scene* scene;
     Chimera::Solid* pCorpoRigido;
     Chimera::Label* lFPS;

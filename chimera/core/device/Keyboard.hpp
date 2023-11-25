@@ -7,10 +7,11 @@ namespace Chimera {
 
 class Keyboard {
   public:
-    static void setDown(SDL_KeyboardEvent event);
-    static void setUp(SDL_KeyboardEvent event);
-    static bool isPressed(SDL_Keycode key);
-    static bool isModPressed(SDL_Keymod keyMod);
+    static void setDown(const SDL_KeyboardEvent& event);
+    static void setUp(const SDL_KeyboardEvent& event);
+    static bool isPressed(const SDL_Keycode& key);
+    static bool isModPressed(const SDL_Keymod& keyMod);
+    static bool getEvent(const SDL_Event& event);
 
   private:
     inline static std::map<SDL_Keycode, uint8_t> mapKey;

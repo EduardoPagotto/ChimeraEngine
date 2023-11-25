@@ -18,7 +18,7 @@ struct ViewProjectionMatrixs {
 
 class ViewProjection {
   public:
-    ViewProjection() : index(0), noseDist(0.4f) {}
+    ViewProjection() = default;
     void setIndex(const uint8_t& index) { this->index = index; }
     void setDist(const float& dist) { this->noseDist = dist; }
     const uint8_t getIndex() const { return index; }
@@ -32,8 +32,8 @@ class ViewProjection {
     std::vector<ViewProjectionMatrixs>& getHead() { return head; }
 
   private:
-    uint8_t index;
-    float noseDist;
+    uint8_t index = 0;
+    float noseDist = 0.0f;
     std::vector<ViewProjectionMatrixs> head;
 };
 

@@ -40,25 +40,25 @@ void JoystickManager::release(void) {
     Joysticks.clear();
 }
 
-void JoystickManager::setAxisMotion(SDL_JoyAxisEvent* jaxis) {
-    JoystickState* pJoy = JoystickManager::select(jaxis->which);
-    pJoy->axis[jaxis->axis] = jaxis->value;
+void JoystickManager::setAxisMotion(const SDL_JoyAxisEvent& jaxis) {
+    JoystickState* pJoy = JoystickManager::select(jaxis.which);
+    pJoy->axis[jaxis.axis] = jaxis.value;
 }
 
-void JoystickManager::setButtonState(SDL_JoyButtonEvent* jbutton) {
-    JoystickState* pJoy = JoystickManager::select(jbutton->which);
-    pJoy->buttonState[jbutton->button] = jbutton->state;
+void JoystickManager::setButtonState(const SDL_JoyButtonEvent& jbutton) {
+    JoystickState* pJoy = JoystickManager::select(jbutton.which);
+    pJoy->buttonState[jbutton.button] = jbutton.state;
 }
 
-void JoystickManager::setHatMotion(SDL_JoyHatEvent* jhat) {
-    JoystickState* pJoy = JoystickManager::select(jhat->which);
-    pJoy->hats[jhat->hat] = jhat->value;
+void JoystickManager::setHatMotion(const SDL_JoyHatEvent& jhat) {
+    JoystickState* pJoy = JoystickManager::select(jhat.which);
+    pJoy->hats[jhat.hat] = jhat.value;
 }
 
-void JoystickManager::setBallMotion(SDL_JoyBallEvent* jball) {
-    JoystickState* pJoy = JoystickManager::select(jball->which);
-    pJoy->BallsX[jball->ball] += jball->xrel;
-    pJoy->BallsY[jball->ball] += jball->yrel;
+void JoystickManager::setBallMotion(const SDL_JoyBallEvent& jball) {
+    JoystickState* pJoy = JoystickManager::select(jball.which);
+    pJoy->BallsX[jball.ball] += jball.xrel;
+    pJoy->BallsY[jball.ball] += jball.yrel;
 }
 
 JoystickState* JoystickManager::select(const SDL_JoystickID& joystick_id) {
@@ -77,6 +77,32 @@ void JoystickManager::getStatusManager(void) {
     for (auto joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
         joy_iter->second.debug();
     }
+}
+
+bool JoystickManager::getEvent(const SDL_Event& event) {
+
+    switch (event.type) {
+
+        case SDL_JOYAXISMOTION:
+            JoystickManager::setAxisMotion(event.jaxis);
+            break;
+        case SDL_JOYBUTTONDOWN:
+        case SDL_JOYBUTTONUP:
+            JoystickManager::setButtonState(event.jbutton);
+            break;
+        case SDL_JOYHATMOTION:
+            JoystickManager::setHatMotion(event.jhat);
+            break;
+        case SDL_JOYBALLMOTION:
+            JoystickManager::setBallMotion(event.jball);
+            break;
+        case SDL_JOYDEVICEADDED:
+        case SDL_JOYDEVICEREMOVED:
+            JoystickManager::find();
+            break;
+    }
+
+    return false;
 }
 
 void JoystickManager::debug() {

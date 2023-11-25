@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 
 Game::Game(Chimera::Scene& scene) : scene(&scene) {}
@@ -22,6 +23,8 @@ void Game::onDeatach() {}
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
+
+    MouseDevice::getEvent(event);
 
     switch (event.type) {
         case SDL_KEYDOWN: {

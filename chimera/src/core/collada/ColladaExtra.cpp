@@ -11,36 +11,6 @@ namespace Chimera {
 
 void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
 
-    if (const pugi::xml_node nCanvas = getExtra(nodeExtra, "canvas"); nCanvas != nullptr) {
-
-        std::string title = nCanvas.attribute("title").value();
-        uint32_t width = static_cast<uint32_t>(std::stoul(nCanvas.attribute("width").value()));   // 1024;
-        uint32_t height = static_cast<uint32_t>(std::stoul(nCanvas.attribute("height").value())); // 800;
-        uint32_t f = static_cast<uint32_t>(std::stoul(nCanvas.attribute("fullscreen").value()));
-        bool fullscreen = f;
-        std::string type = nCanvas.attribute("type").value();
-
-        // CanvasComponent& cc = r.findComponent<CanvasComponent>("chimera_engine");
-        if (CanvasComponent& cc = r.findComponent<CanvasComponent>("chimera_engine"); type == "FB")
-            cc.canvas = new CanvasFB(title, width, height, fullscreen);
-        else
-            cc.canvas = new CanvasGL(title, width, height, fullscreen);
-    }
-
-    if (const pugi::xml_node nEveView = getExtra(nodeExtra, "view_projection"); nEveView != nullptr) {
-
-        uint32_t size = static_cast<uint32_t>(std::stoul(nEveView.attribute("size").value()));
-        float distance = std::stod(nEveView.attribute("distance").value());
-
-        if (ViewProjectionComponent& vpc = r.findComponent<ViewProjectionComponent>("chimera_engine"); size == 1) {
-            vpc.vp->add("unique");
-        } else if (size == 2) {
-            vpc.vp->add("right");
-            vpc.vp->add("left");
-            vpc.vp->setDist(distance);
-        }
-    }
-
     if (const pugi::xml_node nFonts = getExtra(nodeExtra, "fonts"); nFonts != nullptr) {
         for (pugi::xml_node nFont = nFonts.first_child(); nFont; nFont = nFont.next_sibling()) {
 

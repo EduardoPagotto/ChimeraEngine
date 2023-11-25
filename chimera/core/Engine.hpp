@@ -9,8 +9,8 @@ namespace Chimera {
 
 class Engine {
   public:
-    Engine();
-    virtual ~Engine();
+    Engine(Canvas* canvas, const float& dist);
+    virtual ~Engine() = default;
     void init();
     void run();
     Canvas* getCanvas() const { return canvas; }

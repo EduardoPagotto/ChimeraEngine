@@ -1,16 +1,26 @@
 #include "Game.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
+#include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Scene& scene) : pCorpoRigido(nullptr), scene(&scene) { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game"); }
+Game::Game(Chimera::Scene& scene) : pCorpoRigido(nullptr), scene(&scene) {
+    Chimera::JoystickManager::init();
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
+}
 
-Game::~Game() { SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game"); }
+Game::~Game() {
+    Chimera::JoystickManager::release();
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game");
+}
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
+
+    JoystickManager::getEvent(event);
+    MouseDevice::getEvent(event);
 
     switch (event.type) {
         case SDL_USEREVENT: {

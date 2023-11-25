@@ -14,7 +14,6 @@ endif(BULLET_SET_TO_USE)
 # define objetos a compilar
 set (SourcesCore Registry.cpp
 				 utils.cpp
-				 Timer.cpp
 				 Engine.cpp
 				 HeapQ.cpp
 				 device/CanvasFB.cpp

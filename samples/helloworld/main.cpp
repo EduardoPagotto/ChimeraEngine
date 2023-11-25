@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
+#include "chimera/core/device/CanvasGL.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
@@ -10,7 +11,7 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Models3 Iniciado");
 
-        Engine engine;
+        Engine engine(new CanvasGL("BSP Tree", 800, 600, false), 0.0f);
 
         ColladaDom dom = loadFileCollada("./samples/helloworld/level.xml");
         colladaRegistryLoad(dom, engine.getRegistry());

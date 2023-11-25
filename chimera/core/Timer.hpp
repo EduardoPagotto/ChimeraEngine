@@ -11,40 +11,92 @@ namespace Chimera {
  */
 class Timer {
   public:
-    Timer();
-    virtual ~Timer();
+    Timer() = default;
 
-    void start();
-    void stop();
-    void pause();
-    void resume();
+    virtual ~Timer() = default;
 
-    Uint32 restart();
-    Uint32 ticks() const;
-    bool stepCount();
+    void start() {
+        started = true;
+        paused = false;
+        startTicks = SDL_GetTicks();
+        lastTicks = startTicks;
+    }
+
+    void stop() {
+        started = false;
+        paused = false;
+    }
+
+    void pause() {
+        if (started && !paused) {
+            paused = true;
+            pausedTicks = SDL_GetTicks() - startTicks;
+        }
+    }
+
+    void resume() {
+        if (paused) {
+            paused = false;
+            startTicks = SDL_GetTicks() - pausedTicks;
+            lastTicks = startTicks;
+            pausedTicks = 0;
+        }
+    }
+
+    uint32_t restart() {
+        uint32_t elapsedTicks = ticks();
+        start();
+        return elapsedTicks;
+    }
+
+    const uint32_t ticks() const {
+        if (started) {
+            if (!paused) {
+                return SDL_GetTicks() - startTicks;
+            } else {
+                return pausedTicks;
+            }
+        }
+        return 0;
+    }
+
+    bool stepCount() {
+
+        uint32_t temp = ticks();
+        if (temp < elapsedCount) {
+            step++;
+        } else {
+            countStep = step;
+            step = 0;
+            start();
+            return true;
+        }
+
+        return false;
+    }
 
     inline bool isStarted() const { return started; }
     inline bool isPaused() const { return paused; }
-    inline Uint32 getCountStep() const { return countStep; }
-    inline void setElapsedCount(const Uint32& val) { elapsedCount = val; }
+    inline uint32_t getCountStep() const { return countStep; }
+    inline void setElapsedCount(const uint32_t& val) { elapsedCount = val; }
 
     inline double deltaTimeSecounds() { return ((double)deltaCountMS()) / 1000.0f; }
 
-    inline Uint32 deltaCountMS() {
-        Uint32 current = SDL_GetTicks();
-        Uint32 val = current - lastTicks;
+    inline uint32_t deltaCountMS() {
+        uint32_t current = SDL_GetTicks();
+        uint32_t val = current - lastTicks;
         lastTicks = current;
         return val;
     }
 
   private:
-    bool started;
-    bool paused;
-    Uint32 startTicks;
-    Uint32 lastTicks;
-    Uint32 pausedTicks;
-    Uint32 step;
-    Uint32 countStep;
-    Uint32 elapsedCount;
+    bool started = false;
+    bool paused = false;
+    uint32_t startTicks = 0;
+    uint32_t lastTicks = 0;
+    uint32_t pausedTicks = 0;
+    uint32_t step = 0;
+    uint32_t countStep = 0;
+    uint32_t elapsedCount = 0;
 };
 } // namespace Chimera

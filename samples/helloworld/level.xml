@@ -7,8 +7,6 @@
     <scene>
         <extra>
             <technique profile="chimera">
-                <canvas title="hello2d" width="960" height="540" fullscreen="0"/>
-                <view_projection size="1" distance="0.4"/>
             </technique>
         </extra>
         <instance_visual_scene url="#Scene"/>

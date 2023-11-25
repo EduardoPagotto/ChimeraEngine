@@ -12,11 +12,11 @@ class JoystickManager {
     static void getStatusManager(void);
     static void debug();
 
-    static void setAxisMotion(SDL_JoyAxisEvent* jaxis);
-    static void setButtonState(SDL_JoyButtonEvent* jbutton);
-    static void setHatMotion(SDL_JoyHatEvent* jhat);
-    static void setBallMotion(SDL_JoyBallEvent* jball);
-
+    static void setAxisMotion(const SDL_JoyAxisEvent& jaxis);
+    static void setButtonState(const SDL_JoyButtonEvent& jbutton);
+    static void setHatMotion(const SDL_JoyHatEvent& jhat);
+    static void setBallMotion(const SDL_JoyBallEvent& jball);
+    static bool getEvent(const SDL_Event& event);
     static JoystickState* select(const SDL_JoystickID& joystick_id);
 
   private:

@@ -1,27 +1,31 @@
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {
 
-Engine::Engine() : canvas(nullptr), pause(true), fps(140) {
+Engine::Engine(Canvas* canvas, const float& dist) : canvas(canvas), pause(true), fps(140) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
-    JoystickManager::init();
+
+    vp.setDist(dist);
+    if (dist == 0.0f)
+        vp.add("unique");
+    else {
+        vp.add("right");
+        vp.add("right");
+    }
 
     entity = registry.createEntity("chimera_engine", "chimera_engine");
+
     CanvasComponent& cc = entity.addComponent<CanvasComponent>();
+    cc.canvas = canvas;
+
     ViewProjectionComponent& vpc = entity.addComponent<ViewProjectionComponent>();
     vpc.vp = &vp;
-    SDL_Log("Engine Register: chimera_engine OK");
-}
 
-Engine::~Engine() {
-    JoystickManager::release();
-    SDL_JoystickEventState(SDL_DISABLE);
-    SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
+    SDL_Log("Engine Register: chimera_engine OK");
 }
 
 void Engine::init() {
@@ -68,7 +72,6 @@ void Engine::run(void) {
     bool l_quit = false;
     uint32_t beginCount = 0, countDelta = 7, miniumCountDelta = 1000 / 140; // 140 frames em 1000 ms
     double ts = (double)countDelta / 1000.0f;
-    JoystickManager::find(); // open devices
 
     while (!l_quit) {
         beginCount = SDL_GetTicks();
@@ -77,22 +80,6 @@ void Engine::run(void) {
                 case SDL_USEREVENT:
                     if (!changeStatusFlow(&l_eventSDL))
                         continue;
-                    break;
-                case SDL_KEYDOWN:
-                    Keyboard::setDown(l_eventSDL.key);
-                    break;
-                case SDL_KEYUP:
-                    Keyboard::setUp(l_eventSDL.key);
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP:
-                    MouseDevice::updateBt(&l_eventSDL.button);
-                    break;
-                case SDL_MOUSEMOTION:
-                    MouseDevice::updateMv(&l_eventSDL.motion);
-                    break;
-                case SDL_MOUSEWHEEL:
-                    MouseDevice::updateWl(&l_eventSDL.wheel);
                     break;
                 case SDL_QUIT:
                     l_quit = true;
@@ -104,22 +91,6 @@ void Engine::run(void) {
                             break;
                     }
                 } break;
-                case SDL_JOYAXISMOTION:
-                    JoystickManager::setAxisMotion(&l_eventSDL.jaxis);
-                    break;
-                case SDL_JOYBUTTONDOWN:
-                case SDL_JOYBUTTONUP:
-                    JoystickManager::setButtonState(&l_eventSDL.jbutton);
-                    break;
-                case SDL_JOYHATMOTION:
-                    JoystickManager::setHatMotion(&l_eventSDL.jhat);
-                    break;
-                case SDL_JOYBALLMOTION:
-                    JoystickManager::setBallMotion(&l_eventSDL.jball);
-                    break;
-                case SDL_JOYDEVICEADDED:
-                case SDL_JOYDEVICEREMOVED:
-                    JoystickManager::find();
                 default:
                     break;
             }
@@ -153,6 +124,5 @@ void Engine::run(void) {
             countDelta = miniumCountDelta;
         }
     }
-    JoystickManager::release(); // Release devices
 }
 } // namespace Chimera

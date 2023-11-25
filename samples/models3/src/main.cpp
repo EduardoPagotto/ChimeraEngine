@@ -19,8 +19,8 @@ int main(int argn, char** argv) {
         Engine engine(new CanvasGL("Teste Hello", 1800, 600, false), 0.0f);
 
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
-        colladaRegistryLoad(dom, RegistryManager::get());
-        colladaRenderLoad(dom, RegistryManager::get());
+        colladaRegistryLoad(dom);
+        colladaRenderLoad(dom);
 
         engine.init();
 

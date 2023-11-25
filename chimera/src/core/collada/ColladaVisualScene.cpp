@@ -1,4 +1,5 @@
 #include "chimera/core/collada/ColladaVisualScene.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/collada/ColladaGeometry.hpp"
 #include "chimera/core/collada/ColladaLight.hpp"
@@ -9,11 +10,11 @@ namespace Chimera {
 
 ColladaVisualScene::~ColladaVisualScene() {}
 
-void ColladaVisualScene::loadNode(pugi::xml_node node, Registry* reg) {
+void ColladaVisualScene::loadNode(pugi::xml_node node) {
 
     std::string entName = node.attribute("name").value();
     std::string entId = node.attribute("id").value();
-    Entity entity = reg->createEntity(entName, entId);
+    Entity entity = RegistryManager::get().createEntity(entName, entId);
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling())
         nodeData(n, entity);
 }
@@ -68,10 +69,10 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
     }
 }
 
-void ColladaVisualScene::loadAll(pugi::xml_node node, Registry* reg) {
+void ColladaVisualScene::loadAll(pugi::xml_node node) {
 
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling())
-        loadNode(n, reg);
+        loadNode(n);
 }
 
 } // namespace Chimera

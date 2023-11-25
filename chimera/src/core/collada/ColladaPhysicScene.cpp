@@ -1,5 +1,6 @@
 #include "chimera/core/collada/ColladaPhysicScene.hpp"
 #include "chimera/core/PhysicController.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/visible/Mesh.hpp"
@@ -21,12 +22,12 @@ const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const st
     throw std::string(body + " nao encontrado nos modelos fisicos");
 }
 
-void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
+void ColladaPhysicScene::loadAll(pugi::xml_node node) {
 
     std::string id = node.attribute("id").value();
     std::string name = node.attribute("name").value();
 
-    Entity entityPc = reg->createEntity(name, id);
+    Entity entityPc = RegistryManager::getPtr()->createEntity(name, id);
     PhysicsControl& pc = entityPc.addComponent<PhysicsControl>(); // FIXME: juntar tudo dentro do controller!!!!!
     entityPc.addComponent<NativeScriptComponent>().bind<PhysicController>("PhysicController01");
 
@@ -56,12 +57,12 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node, Registry* reg) {
         }
 
         target.erase(0, 1); // remove #
-        auto view = reg->get().view<TagComponent>();
+        auto view = RegistryManager::getPtr()->get().view<TagComponent>();
         for (auto entity : view) {
             // Pega a chave (mesh)
             TagComponent& tag = view.get<TagComponent>(entity);
             if (tag.id == target) {
-                Entity ent2 = {entity, reg};
+                Entity ent2 = {entity, RegistryManager::getPtr()};
                 TransComponent& tc = ent2.getComponent<TransComponent>();
                 MeshComponent& mc = ent2.getComponent<MeshComponent>();
                 Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao

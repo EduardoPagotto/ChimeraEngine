@@ -8,8 +8,8 @@ class ColladaVisualScene : public Collada {
     ColladaVisualScene(ColladaDom& dom, const std::string& url) : Collada(dom, url){};
     virtual ~ColladaVisualScene();
 
-    void loadNode(pugi::xml_node node, Registry* reg);
-    void loadAll(pugi::xml_node node, Registry* reg);
+    void loadNode(pugi::xml_node node);
+    void loadAll(pugi::xml_node node);
 
   private:
     void nodeData(pugi::xml_node node, Entity entity);

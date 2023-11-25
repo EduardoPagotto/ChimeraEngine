@@ -9,7 +9,7 @@
 
 namespace Chimera {
 
-void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
+void ColladaExtra::create(pugi::xml_node nodeExtra) {
 
     if (const pugi::xml_node nFonts = getExtra(nodeExtra, "fonts"); nFonts != nullptr) {
         for (pugi::xml_node nFont = nFonts.first_child(); nFont; nFont = nFont.next_sibling()) {
@@ -28,7 +28,7 @@ void ColladaExtra::create(Registry& r, pugi::xml_node nodeExtra) {
 
             std::string entName = nFb.attribute("name").value();
             std::string entId = nFb.attribute("id").value();
-            Entity entity = r.createEntity(entName, entId);
+            Entity entity = RegistryManager::getPtr()->createEntity(entName, entId);
 
             FrameBufferSpecification& fb = entity.addComponent<FrameBufferSpecification>();
             for (pugi::xml_node next = nFb.first_child(); next; next = next.next_sibling()) {

@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Engine.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
@@ -76,7 +77,7 @@ int main(int argn, char** argv) {
         Engine engine(new CanvasGL("BSP Tree", 1800, 600, false), 0.0f);
 
         ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
-        colladaRegistryLoad(dom, RegistryManager::get());
+        colladaRegistryLoad(dom);
 
         engine.init();
 

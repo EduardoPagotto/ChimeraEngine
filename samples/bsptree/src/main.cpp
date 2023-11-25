@@ -15,7 +15,7 @@ int main(int argn, char** argv) {
         Engine engine(new CanvasGL("BSP Tree", 1800, 600, false), 0.4f);
 
         ColladaDom dom = loadFileCollada("./samples/bsptree/bsp_level.xml");
-        colladaRegistryLoad(dom, RegistryManager::get());
+        colladaRegistryLoad(dom);
 
         engine.init();
 

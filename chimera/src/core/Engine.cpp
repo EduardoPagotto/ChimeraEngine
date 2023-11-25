@@ -1,4 +1,5 @@
 #include "chimera/core/Engine.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
@@ -18,7 +19,7 @@ Engine::Engine(Canvas* canvas, const float& dist) {
         vp.add("right");
     }
 
-    Entity entity = registry.createEntity("chimera_engine", "chimera_engine");
+    Entity entity = RegistryManager::getPtr()->createEntity("chimera_engine", "chimera_engine");
 
     CanvasComponent& cc = entity.addComponent<CanvasComponent>();
     cc.canvas = canvas;

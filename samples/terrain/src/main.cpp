@@ -10,14 +10,16 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Terrain Iniciado");
 
+        RegistryManager::create();
+
         Engine engine(new CanvasGL("BSP Tree", 1800, 600, false), 0.0f);
 
         ColladaDom dom = loadFileCollada("./samples/terrain/terrain_level.xml");
-        colladaRegistryLoad(dom, engine.getRegistry());
+        colladaRegistryLoad(dom, RegistryManager::get());
 
         engine.init();
 
-        Scene scene(engine.getRegistry());
+        Scene scene(RegistryManager::get());
 
         Game* game = new Game(scene);
 

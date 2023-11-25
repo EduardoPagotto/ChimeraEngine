@@ -1,7 +1,6 @@
 #pragma once
 #include "StateStack.hpp"
 #include "Timer.hpp"
-#include "chimera/core/Registry.hpp"
 #include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/device/Canvas.hpp"
 
@@ -15,10 +14,8 @@ class Engine {
     void run();
     Canvas* getCanvas() const { return canvas; }
     StateStack& getStack() { return stack; }
-    Registry& getRegistry() { return registry; }
 
   private:
-    Registry registry;
     ViewProjection vp;
     uint32_t fps = 140;
     Canvas* canvas;

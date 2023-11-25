@@ -10,10 +10,12 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simple ray-casting Iniciado");
 
+        RegistryManager::create();
+
         Engine engine(new CanvasFB("BSP Tree", 800, 600, false), 0.0f);
 
         ColladaDom dom = loadFileCollada("./samples/raycasting/level.xml");
-        colladaRegistryLoad(dom, engine.getRegistry());
+        colladaRegistryLoad(dom, RegistryManager::get());
 
         engine.init();
 

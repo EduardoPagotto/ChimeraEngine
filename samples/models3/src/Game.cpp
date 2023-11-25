@@ -93,26 +93,27 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_JOYBALLMOTION: {
 
             // Captura joystick 0 se existir
+
             if (JoystickState* pJoy = JoystickManager::select(event.jball.which); pJoy != nullptr) {
 
                 pJoy->debug();
 
                 float propulsaoPrincipal = 3.0f;
 
-                crt.yaw = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_X, 32));
-                crt.pitch = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_Y, 32));
-                crt.roll = JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::RIGHT_X, 32));
+                crt.yaw = JoystickState::scale16(pJoy->getAxis(0, 130));   // LEFTX
+                crt.pitch = JoystickState::scale16(pJoy->getAxis(1, 130)); // LEFTY
+                crt.roll = JoystickState::scale16(pJoy->getAxis(2, 130));  // RIFHT_X
 
                 double throttle = 0;
-                crt.throttle = -propulsaoPrincipal * ((1 + JoystickState::scale16(pJoy->getAxis((uint8_t)JOY_AXIX_COD::LEFT_TRIGGER))) / 2);
+                crt.throttle = -propulsaoPrincipal * ((JoystickState::scale16(pJoy->getAxis(3))) / 2); // LEFT_TRIGGER
 
-                if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::X) == SDL_PRESSED) {
+                if (pJoy->getButtonState(0) == SDL_PRESSED) { // JOY_BUTTON_COD::X
                     // glm::vec3 posicao = pEmissor->getPosSource();
                     // posicao.x = posicao.x - 0.1f;
                     // pEmissor->setPosSource( posicao );
                 }
 
-                if (pJoy->getButtonState((uint8_t)JOY_BUTTON_COD::B) == SDL_PRESSED) { // ( or SDL_RELEASED)
+                if (pJoy->getButtonState(1) == SDL_PRESSED) { // ( or SDL_RELEASED)
                     // glm::vec3 posicao = pEmissor->getPosSource();
                     // posicao.x = posicao.x + 0.1f;
                     // pEmissor->setPosSource(posicao);

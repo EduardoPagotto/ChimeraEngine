@@ -33,7 +33,7 @@ void JoystickManager::release(void) {
         if (joy_iter->second.pHandle)
             SDL_JoystickClose(joy_iter->second.pHandle);
 
-        joy_iter->second.pHandle = NULL;
+        joy_iter->second.pHandle = nullptr;
         joy_iter->second.name = "Disconnected";
     }
 
@@ -41,34 +41,24 @@ void JoystickManager::release(void) {
 }
 
 void JoystickManager::setAxisMotion(const SDL_JoyAxisEvent& jaxis) {
-    JoystickState* pJoy = JoystickManager::select(jaxis.which);
+    JoystickState* pJoy = &Joysticks[jaxis.which];
     pJoy->axis[jaxis.axis] = jaxis.value;
 }
 
 void JoystickManager::setButtonState(const SDL_JoyButtonEvent& jbutton) {
-    JoystickState* pJoy = JoystickManager::select(jbutton.which);
+    JoystickState* pJoy = &Joysticks[jbutton.which];
     pJoy->buttonState[jbutton.button] = jbutton.state;
 }
 
 void JoystickManager::setHatMotion(const SDL_JoyHatEvent& jhat) {
-    JoystickState* pJoy = JoystickManager::select(jhat.which);
+    JoystickState* pJoy = &Joysticks[jhat.which];
     pJoy->hats[jhat.hat] = jhat.value;
 }
 
 void JoystickManager::setBallMotion(const SDL_JoyBallEvent& jball) {
-    JoystickState* pJoy = JoystickManager::select(jball.which);
+    JoystickState* pJoy = &Joysticks[jball.which];
     pJoy->BallsX[jball.ball] += jball.xrel;
     pJoy->BallsY[jball.ball] += jball.yrel;
-}
-
-JoystickState* JoystickManager::select(const SDL_JoystickID& joystick_id) {
-
-    auto joy_iter = Joysticks.find(joystick_id);
-    if (joy_iter != Joysticks.end()) {
-        return &joy_iter->second;
-    }
-
-    return nullptr;
 }
 
 void JoystickManager::getStatusManager(void) {

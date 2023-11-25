@@ -17,7 +17,10 @@ class JoystickManager {
     static void setHatMotion(const SDL_JoyHatEvent& jhat);
     static void setBallMotion(const SDL_JoyBallEvent& jball);
     static bool getEvent(const SDL_Event& event);
-    static JoystickState* select(const SDL_JoystickID& joystick_id);
+
+    static JoystickState* select(const SDL_JoystickID& joystick_id) {
+        return Joysticks.contains(joystick_id) ? &Joysticks[joystick_id] : nullptr;
+    }
 
   private:
     inline static std::map<SDL_JoystickID, JoystickState> Joysticks;

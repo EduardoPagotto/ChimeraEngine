@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-Engine::Engine(Canvas* canvas, const float& dist) : canvas(canvas), pause(true), fps(140) {
+Engine::Engine(Canvas* canvas, const float& dist) : canvas(canvas) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 
@@ -29,58 +29,53 @@ Engine::Engine(Canvas* canvas, const float& dist) : canvas(canvas), pause(true),
 }
 
 void Engine::init() {
-    CanvasComponent& cc = entity.getComponent<CanvasComponent>();
-    if (cc.canvas == nullptr)
-        throw std::string("Engine Register: Canvas not find");
+    // CanvasComponent& cc = entity.getComponent<CanvasComponent>();
+    // if (cc.canvas == nullptr)
+    //     throw std::string("Engine Register: Canvas not find");
 
-    if (vp.size() == 0)
-        throw std::string("Engine Register: ViewProjection not find");
+    // if (vp.size() == 0)
+    //     throw std::string("Engine Register: ViewProjection not find");
 
-    canvas = cc.canvas;
-}
-
-bool Engine::changeStatusFlow(SDL_Event* pEventSDL) {
-
-    switch (pEventSDL->user.code) {
-        case EVENT_FLOW_PAUSE: {
-            pause = true;
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
-        } break;
-        case EVENT_FLOW_RESUME: {
-            pause = false;
-            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
-        } break;
-        case EVENT_FLOW_STOP: {
-            SDL_Event l_eventQuit;
-            l_eventQuit.type = SDL_QUIT;
-            if (SDL_PushEvent(&l_eventQuit) == -1) {
-                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical SDL_QUIT PushEvent fail: %s", SDL_GetError());
-            }
-        } break;
-        case EVENT_TOGGLE_FULL_SCREEN:
-            canvas->toggleFullScreen();
-            break;
-        default:
-            break;
-    }
-
-    return true;
+    // canvas = cc.canvas;
 }
 
 void Engine::run(void) {
     SDL_Event l_eventSDL;
-    bool l_quit = false;
-    uint32_t beginCount = 0, countDelta = 7, miniumCountDelta = 1000 / 140; // 140 frames em 1000 ms
-    double ts = (double)countDelta / 1000.0f;
+    bool l_quit{false}, pause{true};
+    uint32_t beginCount{0}, countDelta{7}, miniumCountDelta{1000 / 140}; // 140 frames em 1000 ms
+    double ts{(double)countDelta / 1000.0f};
 
     while (!l_quit) {
         beginCount = SDL_GetTicks();
         while (SDL_PollEvent(&l_eventSDL)) {
             switch (l_eventSDL.type) {
-                case SDL_USEREVENT:
-                    if (!changeStatusFlow(&l_eventSDL))
-                        continue;
-                    break;
+                case SDL_USEREVENT: {
+
+                    switch (l_eventSDL.user.code) {
+                        case EVENT_FLOW_PAUSE: {
+                            pause = true;
+                            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
+                        } break;
+                        case EVENT_FLOW_RESUME: {
+                            pause = false;
+                            SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
+                        } break;
+                        case EVENT_FLOW_STOP: {
+                            SDL_Event l_eventQuit;
+                            l_eventQuit.type = SDL_QUIT;
+                            if (SDL_PushEvent(&l_eventQuit) == -1) {
+                                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical SDL_QUIT PushEvent fail: %s", SDL_GetError());
+                            }
+                        } break;
+                        case EVENT_TOGGLE_FULL_SCREEN:
+                            canvas->toggleFullScreen();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                break;
                 case SDL_QUIT:
                     l_quit = true;
                     break;

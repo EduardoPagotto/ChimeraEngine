@@ -21,10 +21,8 @@ class Engine {
     Registry registry;
     Entity entity;
     ViewProjection vp;
-    bool changeStatusFlow(SDL_Event* pEventSDL);
-    bool pause;
-    uint32_t fps;
-    Canvas* canvas;
+    uint32_t fps = 140;
+    Canvas* canvas = nullptr;
     Timer timerFPS;
     StateStack stack;
 };

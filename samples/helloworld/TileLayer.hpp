@@ -10,7 +10,6 @@ class TileLayer : public Chimera::Layer {
     virtual void onUpdate(Chimera::ViewProjection& vp, const double& ts) override{};
     virtual bool onEvent(const SDL_Event& event) override;
     virtual void onRender() override;
-    virtual std::string getName() const override { return "TileLayer"; }
 
   private:
     uint16_t x, y;

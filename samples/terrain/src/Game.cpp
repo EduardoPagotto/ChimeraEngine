@@ -3,7 +3,7 @@
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Scene& scene) : scene(&scene) {}
+Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) {}
 
 Game::~Game() {}
 

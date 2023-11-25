@@ -20,7 +20,7 @@
 
 namespace Chimera {
 
-Scene::Scene() : activeCam(nullptr), origem(nullptr), verbose(0) {
+Scene::Scene() : IStateMachine("Scene"), activeCam(nullptr), origem(nullptr), verbose(0) {
     octree = nullptr;
     registry = RegistryManager::getPtr();
 }

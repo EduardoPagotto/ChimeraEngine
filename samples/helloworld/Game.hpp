@@ -13,7 +13,6 @@ class Game : public Chimera::IStateMachine {
     virtual void onRender() override;
     virtual void onUpdate(Chimera::ViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
-    virtual std::string getName() const override { return "Game"; }
 
   private:
     Chimera::Engine* engine;

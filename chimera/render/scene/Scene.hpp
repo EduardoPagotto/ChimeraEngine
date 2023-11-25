@@ -35,7 +35,6 @@ class Scene : public IStateMachine {
     virtual void onRender() override;
     virtual void onUpdate(ViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
-    virtual std::string getName() const override { return "Scene"; }
 
   private:
     void onViewportResize(const uint32_t& width, const uint32_t& height);

@@ -11,9 +11,5 @@ class Tile : public Layer {
     virtual void onUpdate(ViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
     virtual void onRender() override;
-    virtual std::string getName() const override { return nameTile; }
-
-  private:
-    std::string nameTile;
 };
 } // namespace Chimera

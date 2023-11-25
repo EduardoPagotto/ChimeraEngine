@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Engine* engine) {
+Game::Game(Chimera::Engine* engine) : IStateMachine("Game") {
     // init framebuffer
     canvas = engine->getCanvas();
 }

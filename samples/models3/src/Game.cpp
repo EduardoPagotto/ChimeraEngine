@@ -6,7 +6,7 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Scene& scene) : pCorpoRigido(nullptr), scene(&scene) {
+Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr), scene(&scene) {
     Chimera::JoystickManager::init();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
     registry = Chimera::RegistryManager::getPtr();

@@ -7,13 +7,12 @@ namespace Chimera {
 
 class CameraControllerFPS : public IStateMachine {
   public:
-    CameraControllerFPS(Entity entity) : entity(entity) {}
+    CameraControllerFPS(Entity entity) : IStateMachine("FPS"), entity(entity) {}
     void onAttach() override;
     void onDeatach() override;
     void onRender() override {}
     void onUpdate(ViewProjection& vp, const double& ts) override;
     bool onEvent(const SDL_Event& event) override { return true; }
-    std::string getName() const override { return "FPS"; }
 
   private:
     void updateVP(ViewProjection& vp);

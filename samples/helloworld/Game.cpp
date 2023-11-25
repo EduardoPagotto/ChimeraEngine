@@ -7,7 +7,7 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
 
-Game::Game(Chimera::Engine& engine) : engine(&engine) {
+Game::Game(Chimera::Engine& engine) : IStateMachine("Game"), engine(&engine) {
 
     using namespace Chimera;
     srand(time(nullptr));

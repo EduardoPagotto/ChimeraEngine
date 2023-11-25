@@ -19,10 +19,9 @@ class Engine {
 
   private:
     Registry registry;
-    Entity entity;
     ViewProjection vp;
     uint32_t fps = 140;
-    Canvas* canvas = nullptr;
+    Canvas* canvas;
     Timer timerFPS;
     StateStack stack;
 };

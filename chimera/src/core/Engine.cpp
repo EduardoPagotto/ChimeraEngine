@@ -5,7 +5,8 @@
 
 namespace Chimera {
 
-Engine::Engine(Canvas* canvas, const float& dist) : canvas(canvas) {
+Engine::Engine(Canvas* canvas, const float& dist) {
+    this->canvas = canvas;
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 
@@ -17,7 +18,7 @@ Engine::Engine(Canvas* canvas, const float& dist) : canvas(canvas) {
         vp.add("right");
     }
 
-    entity = registry.createEntity("chimera_engine", "chimera_engine");
+    Entity entity = registry.createEntity("chimera_engine", "chimera_engine");
 
     CanvasComponent& cc = entity.addComponent<CanvasComponent>();
     cc.canvas = canvas;
@@ -32,26 +33,24 @@ void Engine::init() {
     // CanvasComponent& cc = entity.getComponent<CanvasComponent>();
     // if (cc.canvas == nullptr)
     //     throw std::string("Engine Register: Canvas not find");
-
     // if (vp.size() == 0)
     //     throw std::string("Engine Register: ViewProjection not find");
-
     // canvas = cc.canvas;
 }
 
 void Engine::run(void) {
-    SDL_Event l_eventSDL;
-    bool l_quit{false}, pause{true};
+    SDL_Event event;
+    bool kill{false}, pause{true};
     uint32_t beginCount{0}, countDelta{7}, miniumCountDelta{1000 / 140}; // 140 frames em 1000 ms
     double ts{(double)countDelta / 1000.0f};
 
-    while (!l_quit) {
+    while (!kill) {
         beginCount = SDL_GetTicks();
-        while (SDL_PollEvent(&l_eventSDL)) {
-            switch (l_eventSDL.type) {
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
                 case SDL_USEREVENT: {
 
-                    switch (l_eventSDL.user.code) {
+                    switch (event.user.code) {
                         case EVENT_FLOW_PAUSE: {
                             pause = true;
                             SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
@@ -77,12 +76,12 @@ void Engine::run(void) {
 
                 break;
                 case SDL_QUIT:
-                    l_quit = true;
+                    kill = true;
                     break;
                 case SDL_WINDOWEVENT: {
-                    switch (l_eventSDL.window.event) {
+                    switch (event.window.event) {
                         case SDL_WINDOWEVENT_RESIZED: // set windows size
-                            canvas->reshape(l_eventSDL.window.data1, l_eventSDL.window.data2);
+                            canvas->reshape(event.window.data1, event.window.data2);
                             break;
                     }
                 } break;
@@ -91,7 +90,7 @@ void Engine::run(void) {
             }
 
             for (auto it = stack.end(); it != stack.begin();) {
-                if ((*--it)->onEvent(l_eventSDL) == false)
+                if ((*--it)->onEvent(event) == false)
                     break;
             }
         }

@@ -14,10 +14,6 @@ class Registry {
     void destroyEntity(Entity entity);
     entt::registry& get() { return eRegistry; }
 
-    Entity findEntityTag(const std::string& tag);
-    Entity findEntityId(const std::string& id);
-    Entity findEntitySerial(const uint32_t& serial);
-
     template <typename T>
     T& findComponent(const std::string& tagName) {
         auto view = eRegistry.view<T>();
@@ -68,46 +64,46 @@ class Entity {
     Registry* reg = nullptr;
 };
 
-struct Hierarchie {
-    Hierarchie() = default;
-    std::size_t children{};
-    Entity local, first, prev, next, parent;
-};
+// struct Hierarchie {
+//     Hierarchie() = default;
+//     std::size_t children{};
+//     Entity local, first, prev, next, parent;
+// };
 
-class Relationship {
-  public:
-    Relationship(Hierarchie* h) : hierarchie(h) {}
-    Relationship(const Relationship& o) : hierarchie(o.hierarchie) {}
-    Relationship(Registry& r, const std::string& tag, const std::string& id) {
-        Entity e = r.createEntity(tag, id);
-        Relationship& novo = e.addComponent<Relationship>(new Hierarchie());
-        novo.get()->local = e;
-        this->hierarchie = novo.get();
-    }
-    Hierarchie* get() const { return hierarchie; }
+// class Relationship {
+//   public:
+//     Relationship(Hierarchie* h) : hierarchie(h) {}
+//     Relationship(const Relationship& o) : hierarchie(o.hierarchie) {}
+//     Relationship(Registry& r, const std::string& tag, const std::string& id) {
+//         Entity e = r.createEntity(tag, id);
+//         Relationship& novo = e.addComponent<Relationship>(new Hierarchie());
+//         novo.get()->local = e;
+//         this->hierarchie = novo.get();
+//     }
+//     Hierarchie* get() const { return hierarchie; }
 
-    Relationship addChild(const std::string& tag, const std::string& id) {
-        Relationship novo(*hierarchie->local.getRegistry(), tag, id);
-        novo.get()->parent = hierarchie->local;
+//     Relationship addChild(const std::string& tag, const std::string& id) {
+//         Relationship novo(*hierarchie->local.getRegistry(), tag, id);
+//         novo.get()->parent = hierarchie->local;
 
-        if (hierarchie->children == 0) {
-            hierarchie->first = novo.get()->local;
-        } else {
-            Relationship& last = hierarchie->first.getComponent<Relationship>();
-            while (last.get()->next != Entity())
-                last = last.get()->next.getComponent<Relationship>();
+//         if (hierarchie->children == 0) {
+//             hierarchie->first = novo.get()->local;
+//         } else {
+//             Relationship& last = hierarchie->first.getComponent<Relationship>();
+//             while (last.get()->next != Entity())
+//                 last = last.get()->next.getComponent<Relationship>();
 
-            last.get()->next = novo.get()->local;
-            novo.get()->prev = last.get()->local;
-        }
+//             last.get()->next = novo.get()->local;
+//             novo.get()->prev = last.get()->local;
+//         }
 
-        hierarchie->children++;
-        return novo;
-    }
+//         hierarchie->children++;
+//         return novo;
+//     }
 
-  private:
-    Hierarchie* hierarchie = nullptr;
-};
+//   private:
+//     Hierarchie* hierarchie = nullptr;
+// };
 // ref: https://skypjack.github.io/2019-06-25-ecs-baf-part-4/
 // Engine engine;
 // Relationship obj0(engine.getRegistry(), "root", "root");

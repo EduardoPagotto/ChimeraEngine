@@ -137,19 +137,20 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
     if (SDL_Joystick* pJoy = JoystickManager::get(0); pJoy != nullptr) {
 
         float propulsaoLRUD = 5.0f;
+        glm::vec3 propLateral(0.0f);
         uint ggg = SDL_JoystickGetHat(pJoy, 0);
         switch (ggg) {
             case SDL_HAT_UP:
-                pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
+                propLateral.z = propulsaoLRUD;
                 break;
             case SDL_HAT_DOWN:
-                pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
+                propLateral.z = -propulsaoLRUD;
                 break;
             case SDL_HAT_LEFT:
-                pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
+                propLateral.x = propulsaoLRUD;
                 break;
             case SDL_HAT_RIGHT:
-                pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
+                propLateral.x = -propulsaoLRUD;
                 break;
             default:
                 break;
@@ -158,29 +159,34 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
         // JoystickManager::debugJoy(*pJoy);
 
         int16_t deadZone = 128;
+        // SDL_GameControllerGetAxis
+        glm::vec3 rotacao{scale16(dead16(SDL_JoystickGetAxis(pJoy, 1), deadZone), 0x8000),  // pitch LEFTY
+                          scale16(dead16(SDL_JoystickGetAxis(pJoy, 2), deadZone), 0x8000),  // roll LEFTX
+                          scale16(dead16(SDL_JoystickGetAxis(pJoy, 0), deadZone), 0x8000)}; // yaw RIGHTY
 
-        float yaw = scale16(dead16(SDL_JoystickGetAxis(pJoy, 0), deadZone), 0x8000);   // LEFTX
-        float pitch = scale16(dead16(SDL_JoystickGetAxis(pJoy, 1), deadZone), 0x8000); // LEFTY
-        float roll = scale16(dead16(SDL_JoystickGetAxis(pJoy, 2), deadZone), 0x8000);  // RIFHT_X
-        float acc = scale16(dead16(SDL_JoystickGetAxis(pJoy, 3), deadZone), 0x8000);   // LEFT_TRIGGER
-        float throttle = -3.0f * (acc / 2);
+        float acc = scale16(dead16(SDL_JoystickGetAxis(pJoy, 3), deadZone), 0x8000); // ACC RIGHTX
+        glm::vec3 throttle{0.0,                                                      // X
+                           -3.0f * (acc / 2),                                        // y
+                           0.0f};                                                    // z
 
-        if (SDL_JoystickGetButton(pJoy, 0) == SDL_PRESSED) { // JOY_BUTTON_COD::X
-            // glm::vec3 posicao = pEmissor->getPosSource();
-            // posicao.x = posicao.x - 0.1f;
-            // pEmissor->setPosSource( posicao );
-        }
+        if (SDL_JoystickGetButton(pJoy, 0) == SDL_PRESSED)
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao 0");
 
-        if (SDL_JoystickGetButton(pJoy, 1) == SDL_PRESSED) { // ( or SDL_RELEASED)
-            // glm::vec3 posicao = pEmissor->getPosSource();
-            // posicao.x = posicao.x + 0.1f;
-            // pEmissor->setPosSource(posicao);
-        }
+        if (SDL_JoystickGetButton(pJoy, 1) == SDL_PRESSED)
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao 1");
 
-        if ((roll != 0.0) || (pitch != 0.0) || (yaw != 0.0) || (throttle != 0.0)) {
-            float torque = 0.5f;
-            pCorpoRigido->applyForce(glm::vec3(0.0, throttle, 0.0));
-            pCorpoRigido->applyTorc(glm::vec3(-torque * pitch, -torque * roll, -torque * yaw));
+        glm::vec3 zero(0.0f);
+        if ((rotacao != zero) || (throttle != zero) || (propLateral != zero)) {
+            float torque = -0.5f;
+
+            glm::vec3 rFinal = rotacao * torque;
+            glm::vec3 vFinal = propLateral + throttle;
+
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Torque: %f %f %f", rFinal.x, rFinal.y, rFinal.z);
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Forca : %f %f %f", vFinal.x, vFinal.y, vFinal.z);
+
+            pCorpoRigido->applyForce(vFinal);
+            pCorpoRigido->applyTorc(rFinal);
         }
     }
 

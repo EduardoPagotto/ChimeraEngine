@@ -3,7 +3,6 @@
 #include <map>
 
 namespace Chimera {
-
 class Joystick {
   public:
     Joystick() = default;
@@ -25,10 +24,10 @@ class Joystick {
 
         switch (event.type) {
             case SDL_JOYDEVICEADDED:
-                Joystick::added();
+                this->added();
                 break;
             case SDL_JOYDEVICEREMOVED:
-                Joystick::removed(event.cdevice);
+                this->removed(event.cdevice);
                 break;
         }
 
@@ -39,18 +38,16 @@ class Joystick {
 
   private:
     void added(void) {
-
         for (int i = 0; i < SDL_NumJoysticks(); i++) {
 
-            if (SDL_IsGameController(i)) {
-
+            if (!SDL_IsGameController(i)) {
                 if (SDL_Joystick* handle = SDL_JoystickOpen(i); handle != nullptr) {
                     SDL_JoystickID id = SDL_JoystickInstanceID(handle);
 
                     if (joys.contains(id))
                         continue;
 
-                    Joystick::joys[id] = handle;
+                    this->joys[id] = handle;
 
                     const char* joystick_name = SDL_JoystickName(handle);
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick %d: %s", i, joystick_name ? joystick_name : "[no name]");

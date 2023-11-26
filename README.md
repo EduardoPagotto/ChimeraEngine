@@ -142,35 +142,58 @@ https://www.khronos.org/opengl/wiki/Example_Code
 - SwadowMap: <p>
     <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)</i>
 
-1 0 0 X 0 1 0 Y 0 0 1 Z 0 0 0 1
+## Exemplo de codigo de uso de joystick
+```cpp
+    if (SDL_Joystick* pJoy = joyControl.get(0); pJoy != nullptr) {
 
+        float propulsaoLRUD{5.0f};
+        glm::vec3 propLateral(0.0f);
+        uint ggg = SDL_JoystickGetHat(pJoy, 0);
+        switch (ggg) {
+            case SDL_HAT_UP:
+                propLateral.z = propulsaoLRUD;
+                break;
+            case SDL_HAT_DOWN:
+                propLateral.z = -propulsaoLRUD;
+                break;
+            case SDL_HAT_LEFT:
+                propLateral.x = propulsaoLRUD;
+                break;
+            case SDL_HAT_RIGHT:
+                propLateral.x = -propulsaoLRUD;
+                break;
+            default:
+                break;
+        }
 
-DEBUG: Joystick index 0: PG-9021S
-DEBUG: game controller: 05005322491900000204000000000000,
-Ipega PG-9087S,a:b0,b:b1,back:b10,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b6,leftstick:b13,lefttrigger:b8,leftx:a0,lefty:a1,rightshoulder:b7,rightstick:b14,righttrigger:b9,rightx:a2,righty:a3,start:b11,x:b3,y:b4,platform:Linux
-DEBUG: Joystick instance id: 0
-DEBUG: Joystick axes: 6
-DEBUG: Joystick hats: 1
-DEBUG: Joystick buttons: 15
-DEBUG: Joystick trackballs: 0
+        int16_t deadZone = 128;
+        glm::vec3 rotacao{scale16(dead16(SDL_JoystickGetAxis(pJoy, 1), deadZone), 0x8000),  // pitch LEFTY
+                          scale16(dead16(SDL_JoystickGetAxis(pJoy, 2), deadZone), 0x8000),  // roll LEFTX
+                          scale16(dead16(SDL_JoystickGetAxis(pJoy, 0), deadZone), 0x8000)}; // yaw RIGHTY
 
-DEBUG: Joystick (0): PG-9021S
-DEBUG: Joy axis: 0 128
-DEBUG: Joy axis: 1 128
-DEBUG: Joy axis: 2 128
-DEBUG: Joy axis: 3 128
-DEBUG: Joy axis: 4 -32768
-DEBUG: Joy axis: 5 -32768
-DEBUG: Joy buttons 0 State: RELEASE
-DEBUG: Joy buttons 1 State: RELEASE
-DEBUG: Joy buttons 3 State: RELEASE
-DEBUG: Joy buttons 4 State: RELEASE
-DEBUG: Joy buttons 6 State: RELEASE
-DEBUG: Joy buttons 7 State: RELEASE
-DEBUG: Joy buttons 8 State: RELEASE
-DEBUG: Joy buttons 9 State: RELEASE
-DEBUG: Joy buttons 10 State: RELEASE
-DEBUG: Joy buttons 11 State: RELEASE
-DEBUG: Joy buttons 13 State: RELEASE
-DEBUG: Joy buttons 14 State: RELEASE
-DEBUG: Joy hats: 0 0 [ C ]
+        float acc = scale16(dead16(SDL_JoystickGetAxis(pJoy, 3), deadZone), 0x8000); // ACC RIGHTX
+        glm::vec3 throttle{0.0,                                                      // X
+                           -3.0f * (acc / 2),                                        // y
+                           0.0f};                                                    // z
+
+        if (SDL_JoystickGetButton(pJoy, 0) == SDL_PRESSED)
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao 0");
+
+        if (SDL_JoystickGetButton(pJoy, 1) == SDL_PRESSED)
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao 1");
+
+        glm::vec3 zero(0.0f);
+        if ((rotacao != zero) || (throttle != zero) || (propLateral != zero)) {
+            float torque = -0.5f;
+
+            glm::vec3 rFinal = rotacao * torque;
+            glm::vec3 vFinal = propLateral + throttle;
+
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Torque: %f %f %f", rFinal.x, rFinal.y, rFinal.z);
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Forca : %f %f %f", vFinal.x, vFinal.y, vFinal.z);
+
+            pCorpoRigido->applyForce(vFinal);
+            pCorpoRigido->applyTorc(rFinal);
+        }
+    }
+    ```

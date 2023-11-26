@@ -24,10 +24,10 @@ class GameController {
 
         switch (event.type) {
             case SDL_CONTROLLERDEVICEADDED:
-                GameController::added();
+                this->added();
                 break;
             case SDL_CONTROLLERDEVICEREMOVED:
-                GameController::removed(event.cdevice);
+                this->removed(event.cdevice);
                 break;
         }
 

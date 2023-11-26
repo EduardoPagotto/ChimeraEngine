@@ -28,9 +28,9 @@ class JoystickState {
     inline std::string getName() const { return name; }
 
   private:
-    uint8_t id;
+    uint8_t id = 255;
+    SDL_Joystick* pHandle = nullptr;
     std::string name;
-    SDL_Joystick* pHandle;
     std::map<uint8_t, uint8_t> buttonState;
     std::map<uint8_t, uint8_t> hats;
     std::map<uint8_t, int16_t> axis;

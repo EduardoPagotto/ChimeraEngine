@@ -6,49 +6,13 @@ namespace Chimera {
 JoystickState::JoystickState() : id(255), pHandle(nullptr), name("none") {}
 
 int16_t JoystickState::getAxis(const uint8_t& index, const int16_t& deadzone, const int16_t& deadzone_at_ends) {
-
-    if (auto axis_iter = axis.find(index); axis_iter != axis.end()) {
-
-        int16_t value = axis_iter->second;
-
-        if (fabs(value) < deadzone)
-            return 0;
-
-        // else if (value + deadzone_at_ends > 1.0f)
-        //     return 1.0f;
-        // else if (value - deadzone_at_ends < -1.0f)
-        //     return -1.0f;
-        // else {
-        //     // Reclaim the range of values lost to the deadzones.
-        //     if (value > 0.) {
-        //         value -= deadzone;
-        //     } else {
-        //         value += deadzone;
-        //     }
-
-        //     value /= (1.0f - deadzone - deadzone_at_ends);
-        // }
-
-        return value;
-    }
-
-    return 0;
+    int16_t value = axis.contains(index) ? axis[index] : 0;
+    return fabs(value) > deadzone ? value : 0;
 }
 
-uint8_t JoystickState::getButtonState(const uint8_t& indice) {
-    if (auto button_iter = buttonState.find(indice); button_iter != buttonState.end())
-        return button_iter->second;
+uint8_t JoystickState::getButtonState(const uint8_t& indice) { return buttonState.contains(indice) ? buttonState[indice] : SDL_RELEASED; }
 
-    return SDL_RELEASED;
-}
-
-uint8_t JoystickState::getHat(const uint8_t& hat) {
-    // Check the direction of a hat switch.
-    if (auto hat_iter = hats.find(hat); hat_iter != hats.end())
-        return hat_iter->second;
-
-    return 0;
-}
+uint8_t JoystickState::getHat(const uint8_t& hat) { return hats.contains(hat) ? hats[hat] : 0; }
 
 void JoystickState::debug() {
 
@@ -59,13 +23,10 @@ void JoystickState::debug() {
         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy axis: %d %d", axis_iter->first, axis_iter->second);
 
     for (auto button_iter = buttonState.begin(); button_iter != buttonState.end(); button_iter++) {
-        auto val = button_iter->second;
-        if (val == SDL_PRESSED)
+        if (button_iter->second == SDL_PRESSED)
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: PRESSED", button_iter->first);
-        else if (val == SDL_RELEASED)
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: RELEASE", button_iter->first);
         else
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d unkwow: %d", button_iter->first, val);
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: RELEASE", button_iter->first);
     }
 
     std::string tot = "";

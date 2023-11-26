@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/core/device/GameControllerManager.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
@@ -8,6 +9,7 @@
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr), scene(&scene) {
     Chimera::JoystickManager::init();
+    // Chimera::GameControllerManager::init();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
     registry = Chimera::RegistryManager::getPtr();
 }
@@ -21,6 +23,7 @@ bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
     JoystickManager::getEvent(event);
+    // GameControllerManager::getEvent(event);
     MouseDevice::getEvent(event);
 
     switch (event.type) {
@@ -57,9 +60,6 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDLK_ESCAPE:
                     utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
                     break;
-                    // case SDLK_F1:
-                    //     pHUD->setOn(!pHUD->isOn());
-                    // break;
                 case SDLK_F10:
                     utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
@@ -84,47 +84,6 @@ bool Game::onEvent(const SDL_Event& event) {
                 default:
                     break;
             }
-        } break;
-
-        case SDL_JOYAXISMOTION:
-        case SDL_JOYBUTTONDOWN:
-        case SDL_JOYBUTTONUP:
-        case SDL_JOYHATMOTION:
-        case SDL_JOYBALLMOTION: {
-
-            // Captura joystick 0 se existir
-
-            if (JoystickState* pJoy = JoystickManager::select(event.jball.which); pJoy != nullptr) {
-
-                JoystickManager::debugJoy(*pJoy);
-
-                float propulsaoPrincipal = 3.0f;
-
-                crt.yaw = JoystickState::scale16(pJoy->getAxis(0, 130));   // LEFTX
-                crt.pitch = JoystickState::scale16(pJoy->getAxis(1, 130)); // LEFTY
-                crt.roll = JoystickState::scale16(pJoy->getAxis(2, 130));  // RIFHT_X
-
-                double throttle = 0;
-                crt.throttle = -propulsaoPrincipal * ((JoystickState::scale16(pJoy->getAxis(3))) / 2); // LEFT_TRIGGER
-
-                if (pJoy->getButtonState(0) == SDL_PRESSED) { // JOY_BUTTON_COD::X
-                    // glm::vec3 posicao = pEmissor->getPosSource();
-                    // posicao.x = posicao.x - 0.1f;
-                    // pEmissor->setPosSource( posicao );
-                }
-
-                if (pJoy->getButtonState(1) == SDL_PRESSED) { // ( or SDL_RELEASED)
-                    // glm::vec3 posicao = pEmissor->getPosSource();
-                    // posicao.x = posicao.x + 0.1f;
-                    // pEmissor->setPosSource(posicao);
-                }
-            }
-
-        } break;
-
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEMOTION: {
         } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
@@ -172,25 +131,15 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
 
     using namespace Chimera;
 
-    // if (JoystickState* pJoy = JoystickManager::select(0); pJoy != nullptr) {
-    //     int v = SDL_JoystickGetButton(pJoy->getHandle(), 0);
-    //     if (v == SDL_PRESSED) {
-    //         int16_t vvv = SDL_JoystickGetAxis(pJoy->getHandle(), 0);
-    //         uint ggg = SDL_JoystickGetHat(pJoy->getHandle(), 0);
-    //         if (ggg != 0)
-    //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick 0 OK v: %d hat %d", vvv, ggg);
-    //     }
-    // }
-
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);
 
     float propulsaoLRUD = 5.0f;
     float torque = 0.5f;
 
-    if (JoystickState* pJoy = JoystickManager::select(0); pJoy != nullptr) {
+    if (SDL_Joystick* pJoy = JoystickManager::select(0); pJoy != nullptr) {
 
-        uint ggg = SDL_JoystickGetHat(pJoy->getHandle(), 0);
+        uint ggg = SDL_JoystickGetHat(pJoy, 0);
         switch (ggg) {
             case SDL_HAT_UP:
                 pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
@@ -206,6 +155,29 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
                 break;
             default:
                 break;
+        }
+
+        // JoystickManager::debugJoy(*pJoy);
+
+        float propulsaoPrincipal = 3.0f;
+
+        crt.yaw = JoystickManager::scale16(SDL_JoystickGetAxis(pJoy, 0));   // pJoy->getAxis(0, 130));   // LEFTX
+        crt.pitch = JoystickManager::scale16(SDL_JoystickGetAxis(pJoy, 1)); // pJoy->getAxis(1, 130)); // LEFTY
+        crt.roll = JoystickManager::scale16(SDL_JoystickGetAxis(pJoy, 2));  // pJoy->getAxis(2, 130));  // RIFHT_X
+
+        double throttle = 0;
+        crt.throttle = -propulsaoPrincipal * ((JoystickManager::scale16(SDL_JoystickGetAxis(pJoy, 3))) / 2); // LEFT_TRIGGER
+
+        if (SDL_JoystickGetButton(pJoy, 0) == SDL_PRESSED) { // JOY_BUTTON_COD::X
+            // glm::vec3 posicao = pEmissor->getPosSource();
+            // posicao.x = posicao.x - 0.1f;
+            // pEmissor->setPosSource( posicao );
+        }
+
+        if (SDL_JoystickGetButton(pJoy, 1) == SDL_PRESSED) { // ( or SDL_RELEASED)
+            // glm::vec3 posicao = pEmissor->getPosSource();
+            // posicao.x = posicao.x + 0.1f;
+            // pEmissor->setPosSource(posicao);
         }
 
         if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {

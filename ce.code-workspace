@@ -90,7 +90,9 @@
 			"cfenv": "cpp",
 			"charconv": "cpp",
 			"future": "cpp",
-			"typeindex": "cpp"
+			"typeindex": "cpp",
+			"source_location": "cpp",
+			"shared_mutex": "cpp"
 		}
 	}
 }

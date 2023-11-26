@@ -11,16 +11,27 @@ void JoystickManager::find(void) {
 
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
 
-        if (((Joysticks.size() == 0)) || (!Joysticks[i].pHandle)) {
+        if (SDL_IsGameController(i)) {
 
-            Joysticks[i].id = i;
-            Joysticks[i].pHandle = SDL_JoystickOpen(i);
+            if (SDL_Joystick* handle = SDL_JoystickOpen(i); handle != nullptr) {
+                SDL_JoystickID id = SDL_JoystickInstanceID(handle);
 
-            if (Joysticks[i].pHandle) {
+                if (joys.contains(id))
+                    continue;
 
-                const char* joystick_name = SDL_JoystickName(Joysticks[i].pHandle);
-                Joysticks[i].name = joystick_name ? joystick_name : "Joystick";
-                // JoystickManager::debug();
+                JoystickManager::joys[id] = handle;
+
+                const char* joystick_name = SDL_JoystickName(handle);
+                SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick %d: %s", i, joystick_name ? joystick_name : "[no name]");
+                SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick id: %d", SDL_JoystickInstanceID(handle));
+                SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick axes: %d", SDL_JoystickNumAxes(handle));
+                SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick hats: %d", SDL_JoystickNumHats(handle));
+                SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick buttons: %d", SDL_JoystickNumButtons(handle));
+                SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick trackballs: %d", SDL_JoystickNumBalls(handle));
+
+                char guid[64];
+                SDL_JoystickGetGUIDString(SDL_JoystickGetDeviceGUID(i), guid, sizeof(guid));
+                SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
             }
         }
     }
@@ -28,129 +39,30 @@ void JoystickManager::find(void) {
 
 void JoystickManager::release(void) {
 
-    for (auto joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
+    for (auto i = joys.begin(); i != joys.end(); i++)
+        SDL_JoystickClose(i->second);
 
-        if (joy_iter->second.pHandle)
-            SDL_JoystickClose(joy_iter->second.pHandle);
-
-        joy_iter->second.pHandle = nullptr;
-        joy_iter->second.name = "Disconnected";
-    }
-
-    Joysticks.clear();
+    joys.clear();
 }
 
-void JoystickManager::setAxisMotion(const SDL_JoyAxisEvent& jaxis) {
-    JoystickState* pJoy = &Joysticks[jaxis.which];
-    pJoy->axis[jaxis.axis] = jaxis.value;
-}
-
-void JoystickManager::setButtonState(const SDL_JoyButtonEvent& jbutton) {
-    JoystickState* pJoy = &Joysticks[jbutton.which];
-    pJoy->buttonState[jbutton.button] = jbutton.state;
-}
-
-void JoystickManager::setHatMotion(const SDL_JoyHatEvent& jhat) {
-    JoystickState* pJoy = &Joysticks[jhat.which];
-    pJoy->hats[jhat.hat] = jhat.value;
-}
-
-void JoystickManager::setBallMotion(const SDL_JoyBallEvent& jball) {
-    JoystickState* pJoy = &Joysticks[jball.which];
-    pJoy->BallsX[jball.ball] += jball.xrel;
-    pJoy->BallsY[jball.ball] += jball.yrel;
-}
-
-void JoystickManager::getStatusManager(void) {
-
-    std::string return_string = std::string("Joysticks size: ") + std::to_string(Joysticks.size());
-    for (auto joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
-        JoystickManager::debugJoy(joy_iter->second);
+void JoystickManager::remover(const SDL_ControllerDeviceEvent& device) {
+    if (joys.contains(device.which)) {
+        SDL_JoystickClose(joys[device.which]);
+        joys.erase(device.which);
     }
 }
 
 bool JoystickManager::getEvent(const SDL_Event& event) {
 
     switch (event.type) {
-
-        case SDL_JOYAXISMOTION:
-            JoystickManager::setAxisMotion(event.jaxis);
-            break;
-        case SDL_JOYBUTTONDOWN:
-        case SDL_JOYBUTTONUP:
-            JoystickManager::setButtonState(event.jbutton);
-            break;
-        case SDL_JOYHATMOTION:
-            JoystickManager::setHatMotion(event.jhat);
-            break;
-        case SDL_JOYBALLMOTION:
-            JoystickManager::setBallMotion(event.jball);
-            break;
         case SDL_JOYDEVICEADDED:
-        case SDL_JOYDEVICEREMOVED:
             JoystickManager::find();
+            break;
+        case SDL_JOYDEVICEREMOVED:
+            JoystickManager::remover(event.cdevice);
             break;
     }
 
     return false;
 }
-
-void JoystickManager::debug() {
-
-    for (int i = 0; i < SDL_NumJoysticks(); ++i) {
-        const char* name = SDL_JoystickNameForIndex(i);
-        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick index %d: %s", i, name ? name : "[no name]");
-        // This much can be done without opening the controller
-        if (SDL_IsGameController(i)) {
-            char* mapping = SDL_GameControllerMappingForGUID(SDL_JoystickGetDeviceGUID(i));
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "game controller: %s", mapping);
-            SDL_free(mapping);
-        } else {
-            char guid[64];
-            SDL_JoystickGetGUIDString(SDL_JoystickGetDeviceGUID(i), guid, sizeof(guid));
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
-        }
-
-        // For anything else we have to open
-        if (SDL_Joystick* joystick = SDL_JoystickOpen(i); joystick != nullptr) {
-            // Not the same as a device index!
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick instance id: %d", SDL_JoystickInstanceID(joystick));
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick axes: %d", SDL_JoystickNumAxes(joystick));
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick hats: %d", SDL_JoystickNumHats(joystick));
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick buttons: %d", SDL_JoystickNumButtons(joystick));
-            // I've _never_ seen this non-zero, if anyone has lemme know!
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick trackballs: %d", SDL_JoystickNumBalls(joystick));
-            SDL_JoystickClose(joystick);
-        }
-    }
-}
-
-void JoystickManager::debugJoy(const JoystickState& j) {
-
-    // Log do status de joystick
-    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick (%d): %s", j.id, j.name.c_str());
-
-    for (auto axis_iter = j.axis.begin(); axis_iter != j.axis.end(); axis_iter++)
-        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy axis: %d %d", axis_iter->first, axis_iter->second);
-
-    for (auto button_iter = j.buttonState.begin(); button_iter != j.buttonState.end(); button_iter++) {
-        if (button_iter->second == SDL_PRESSED)
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: PRESSED", button_iter->first);
-        else
-            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: RELEASE", button_iter->first);
-    }
-
-    std::string tot = "";
-    for (auto hat_iter = j.hats.begin(); hat_iter != j.hats.end(); hat_iter++) {
-        tot += hat_iter->second & SDL_HAT_UP ? "U" : "";
-        tot += hat_iter->second & SDL_HAT_DOWN ? "D" : "";
-        tot += hat_iter->second & SDL_HAT_LEFT ? "L" : "";
-        tot += hat_iter->second & SDL_HAT_RIGHT ? "R" : "";
-        if (tot.size() == 0)
-            tot += "C";
-
-        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy hats: %d %d [ %s ]", hat_iter->first, hat_iter->second, tot.c_str());
-    }
-}
-
 } // namespace Chimera

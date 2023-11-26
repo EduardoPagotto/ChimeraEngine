@@ -4,10 +4,10 @@
 
 namespace Chimera {
 
-class JoystickManager {
+class Joystick {
   public:
-    JoystickManager() = default;
-    virtual ~JoystickManager() = default;
+    Joystick() = default;
+    virtual ~Joystick() = default;
 
     void init(void) {
         SDL_InitSubSystem(SDL_INIT_JOYSTICK);
@@ -25,10 +25,10 @@ class JoystickManager {
 
         switch (event.type) {
             case SDL_JOYDEVICEADDED:
-                JoystickManager::added();
+                Joystick::added();
                 break;
             case SDL_JOYDEVICEREMOVED:
-                JoystickManager::removed(event.cdevice);
+                Joystick::removed(event.cdevice);
                 break;
         }
 
@@ -50,7 +50,7 @@ class JoystickManager {
                     if (joys.contains(id))
                         continue;
 
-                    JoystickManager::joys[id] = handle;
+                    Joystick::joys[id] = handle;
 
                     const char* joystick_name = SDL_JoystickName(handle);
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick %d: %s", i, joystick_name ? joystick_name : "[no name]");

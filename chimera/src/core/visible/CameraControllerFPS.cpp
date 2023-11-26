@@ -87,16 +87,16 @@ void CameraControllerFPS::onUpdate(ViewProjection& vp, const double& ts) {
     if (Keyboard::isPressed(SDLK_LCTRL)) //  GLFW_KEY_LEFT_CONTROL
         direction -= worldUp;
     // #if 0 // Temporary controls for controller to test controller data
-    // 		direction += front * JoystickManager::GetLeftStick(0).y * 2.0f;
-    // 		direction += right * JoystickManager::GetLeftStick(0).x * 2.0f;
-    // 		direction += worldUp * JoystickManager::GetTriggers(0).y;
-    // 		direction -= worldUp * JoystickManager::GetTriggers(0).x;
+    // 		direction += front * Joystick::GetLeftStick(0).y * 2.0f;
+    // 		direction += right * Joystick::GetLeftStick(0).x * 2.0f;
+    // 		direction += worldUp * Joystick::GetTriggers(0).y;
+    // 		direction -= worldUp * Joystick::GetTriggers(0).x;
     // #endif
     processCameraMovement(direction, ts);
 
     // CameraFPS FOV : TODO: Alterar o FOV aqui!!!!!
-    // float scrollDelta = glm::clamp((float)(InputManager::GetScrollYDelta() * 4.0 + (JoystickManager::GetButton(0, ARCANE_GAMEPAD_A) -
-    //                                                                                 JoystickManager::GetButton(0, ARCANE_GAMEPAD_B)
+    // float scrollDelta = glm::clamp((float)(InputManager::GetScrollYDelta() * 4.0 + (Joystick::GetButton(0, ARCANE_GAMEPAD_A) -
+    //                                                                                 Joystick::GetButton(0, ARCANE_GAMEPAD_B)
     //                                                                                 * 2.0)),
     //                                -4.0f, 4.0f);
     // ProcessCameraFOV(scrollDelta);

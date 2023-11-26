@@ -1,7 +1,7 @@
 #pragma once
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/GameController.hpp"
-#include "chimera/core/device/JoystickManager.hpp"
+#include "chimera/core/device/Joystick.hpp"
 #include "chimera/render/2d/Label.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
@@ -23,6 +23,6 @@ class Game : public Chimera::IStateMachine {
     Chimera::Label* lFPS;
 
     Chimera::GameController gameControl;
-    Chimera::JoystickManager joyControl;
+    Chimera::Joystick joyControl;
     int fps;
 };

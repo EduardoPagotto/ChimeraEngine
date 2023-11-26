@@ -18,7 +18,7 @@ void JoystickManager::added(void) {
 
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
 
-        if (SDL_IsGameController(i)) {
+        if (!SDL_IsGameController(i)) {
 
             if (SDL_Joystick* handle = SDL_JoystickOpen(i); handle != nullptr) {
                 SDL_JoystickID id = SDL_JoystickInstanceID(handle);

@@ -7,7 +7,14 @@ void JoystickManager::init(void) {
     SDL_JoystickEventState(SDL_ENABLE);
 }
 
-void JoystickManager::find(void) {
+void JoystickManager::release(void) {
+    for (auto i = joys.begin(); i != joys.end(); i++)
+        SDL_JoystickClose(i->second);
+
+    joys.clear();
+}
+
+void JoystickManager::added(void) {
 
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
 
@@ -37,15 +44,7 @@ void JoystickManager::find(void) {
     }
 }
 
-void JoystickManager::release(void) {
-
-    for (auto i = joys.begin(); i != joys.end(); i++)
-        SDL_JoystickClose(i->second);
-
-    joys.clear();
-}
-
-void JoystickManager::remover(const SDL_ControllerDeviceEvent& device) {
+void JoystickManager::removed(const SDL_ControllerDeviceEvent& device) {
     if (joys.contains(device.which)) {
         SDL_JoystickClose(joys[device.which]);
         joys.erase(device.which);
@@ -56,10 +55,10 @@ bool JoystickManager::getEvent(const SDL_Event& event) {
 
     switch (event.type) {
         case SDL_JOYDEVICEADDED:
-            JoystickManager::find();
+            JoystickManager::added();
             break;
         case SDL_JOYDEVICEREMOVED:
-            JoystickManager::remover(event.cdevice);
+            JoystickManager::removed(event.cdevice);
             break;
     }
 

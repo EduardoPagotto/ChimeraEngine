@@ -134,11 +134,9 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);
 
-    float propulsaoLRUD = 5.0f;
-    float torque = 0.5f;
+    if (SDL_Joystick* pJoy = JoystickManager::get(0); pJoy != nullptr) {
 
-    if (SDL_Joystick* pJoy = JoystickManager::select(0); pJoy != nullptr) {
-
+        float propulsaoLRUD = 5.0f;
         uint ggg = SDL_JoystickGetHat(pJoy, 0);
         switch (ggg) {
             case SDL_HAT_UP:
@@ -159,14 +157,13 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
 
         // JoystickManager::debugJoy(*pJoy);
 
-        float propulsaoPrincipal = 3.0f;
+        int16_t deadZone = 128;
 
-        crt.yaw = JoystickManager::scale16(SDL_JoystickGetAxis(pJoy, 0));   // pJoy->getAxis(0, 130));   // LEFTX
-        crt.pitch = JoystickManager::scale16(SDL_JoystickGetAxis(pJoy, 1)); // pJoy->getAxis(1, 130)); // LEFTY
-        crt.roll = JoystickManager::scale16(SDL_JoystickGetAxis(pJoy, 2));  // pJoy->getAxis(2, 130));  // RIFHT_X
-
-        double throttle = 0;
-        crt.throttle = -propulsaoPrincipal * ((JoystickManager::scale16(SDL_JoystickGetAxis(pJoy, 3))) / 2); // LEFT_TRIGGER
+        float yaw = scale16(dead16(SDL_JoystickGetAxis(pJoy, 0), deadZone), 0x8000);   // LEFTX
+        float pitch = scale16(dead16(SDL_JoystickGetAxis(pJoy, 1), deadZone), 0x8000); // LEFTY
+        float roll = scale16(dead16(SDL_JoystickGetAxis(pJoy, 2), deadZone), 0x8000);  // RIFHT_X
+        float acc = scale16(dead16(SDL_JoystickGetAxis(pJoy, 3), deadZone), 0x8000);   // LEFT_TRIGGER
+        float throttle = -3.0f * (acc / 2);
 
         if (SDL_JoystickGetButton(pJoy, 0) == SDL_PRESSED) { // JOY_BUTTON_COD::X
             // glm::vec3 posicao = pEmissor->getPosSource();
@@ -180,9 +177,10 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
             // pEmissor->setPosSource(posicao);
         }
 
-        if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {
-            pCorpoRigido->applyForce(glm::vec3(0.0, crt.throttle, 0.0));
-            pCorpoRigido->applyTorc(glm::vec3(-torque * crt.pitch, -torque * crt.roll, -torque * crt.yaw));
+        if ((roll != 0.0) || (pitch != 0.0) || (yaw != 0.0) || (throttle != 0.0)) {
+            float torque = 0.5f;
+            pCorpoRigido->applyForce(glm::vec3(0.0, throttle, 0.0));
+            pCorpoRigido->applyTorc(glm::vec3(-torque * pitch, -torque * roll, -torque * yaw));
         }
     }
 

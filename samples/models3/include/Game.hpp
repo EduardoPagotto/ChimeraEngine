@@ -3,11 +3,6 @@
 #include "chimera/render/2d/Label.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
-struct Controles {
-    Controles() = default;
-    float yaw = 0.0, pitch = 0.0, roll = 0.0, throttle = 0.0;
-};
-
 class Game : public Chimera::IStateMachine {
   public:
     Game(Chimera::Scene& scene);
@@ -24,6 +19,5 @@ class Game : public Chimera::IStateMachine {
     Chimera::Scene* scene;
     Chimera::Solid* pCorpoRigido;
     Chimera::Label* lFPS;
-    Controles crt;
     int fps;
 };

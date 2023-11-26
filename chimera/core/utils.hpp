@@ -23,4 +23,8 @@ void utilSendEvent(const int32_t& user_event, void* _paramA, void* _paramB);
 
 void utilsReadFile(const std::string& filepath, std::string& result);
 std::string extractNameByFile(const std::string& filepath);
+
+inline int16_t dead16(const int16_t& vIn, const int16_t& deadzone) { return (vIn + (vIn >> 16) ^ (vIn >> 16)) > deadzone ? vIn : 0; }
+inline float scale16(const int16_t& value, const int16_t& limit) { return value >= 0 ? (float)value / (limit - 1) : (float)value / limit; }
+
 } // namespace Chimera

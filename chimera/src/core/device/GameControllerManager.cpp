@@ -7,7 +7,14 @@ void GameControllerManager::init(void) {
     SDL_GameControllerEventState(SDL_ENABLE);
 }
 
-void GameControllerManager::find(void) {
+void GameControllerManager::release(void) {
+    for (auto i = pads.begin(); i != pads.end(); i++)
+        SDL_GameControllerClose(i->second);
+
+    pads.clear();
+}
+
+void GameControllerManager::added(void) {
 
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
 
@@ -30,29 +37,21 @@ void GameControllerManager::find(void) {
     }
 }
 
-void GameControllerManager::remover(const SDL_ControllerDeviceEvent& device) {
+void GameControllerManager::removed(const SDL_ControllerDeviceEvent& device) {
     if (pads.contains(device.which)) {
         SDL_GameControllerClose(pads[device.which]);
         pads.erase(device.which);
     }
 }
 
-void GameControllerManager::release(void) {
-
-    for (auto i = pads.begin(); i != pads.end(); i++)
-        SDL_GameControllerClose(i->second);
-
-    pads.clear();
-}
-
 bool GameControllerManager::getEvent(const SDL_Event& event) {
 
     switch (event.type) {
         case SDL_CONTROLLERDEVICEADDED:
-            GameControllerManager::find();
+            GameControllerManager::added();
             break;
         case SDL_CONTROLLERDEVICEREMOVED:
-            GameControllerManager::remover(event.cdevice);
+            GameControllerManager::removed(event.cdevice);
             break;
     }
 

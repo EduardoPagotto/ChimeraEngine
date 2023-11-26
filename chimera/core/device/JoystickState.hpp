@@ -26,6 +26,7 @@ class JoystickState {
     inline bool getHatDir(const uint8_t& hat, const uint8_t& dir) { return getHat(hat) & dir; }
     inline const uint8_t getId() const { return id; }
     inline const std::string getName() const { return name; }
+    inline SDL_Joystick* getHandle() const { return pHandle; }
 
   private:
     uint8_t id = 255;

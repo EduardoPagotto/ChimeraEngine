@@ -118,8 +118,6 @@ bool Game::onEvent(const SDL_Event& event) {
                     // posicao.x = posicao.x + 0.1f;
                     // pEmissor->setPosSource(posicao);
                 }
-
-                crt.hat = pJoy->getHat(0);
             }
 
         } break;
@@ -172,26 +170,43 @@ void Game::onDeatach() {}
 
 void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
 
+    using namespace Chimera;
+
+    // if (JoystickState* pJoy = JoystickManager::select(0); pJoy != nullptr) {
+    //     int v = SDL_JoystickGetButton(pJoy->getHandle(), 0);
+    //     if (v == SDL_PRESSED) {
+    //         int16_t vvv = SDL_JoystickGetAxis(pJoy->getHandle(), 0);
+    //         uint ggg = SDL_JoystickGetHat(pJoy->getHandle(), 0);
+    //         if (ggg != 0)
+    //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick 0 OK v: %d hat %d", vvv, ggg);
+    //     }
+    // }
+
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);
-
-    using namespace Chimera;
 
     float propulsaoLRUD = 5.0f;
     float torque = 0.5f;
 
-    if (pCorpoRigido) {
-        if (crt.hat & (uint8_t)SDL_HAT_UP)
-            pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
+    if (JoystickState* pJoy = JoystickManager::select(0); pJoy != nullptr) {
 
-        if (crt.hat & (uint8_t)SDL_HAT_DOWN)
-            pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
-
-        if (crt.hat & (uint8_t)SDL_HAT_RIGHTUP)
-            pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
-
-        if (crt.hat & (uint8_t)SDL_HAT_LEFTUP)
-            pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
+        uint ggg = SDL_JoystickGetHat(pJoy->getHandle(), 0);
+        switch (ggg) {
+            case SDL_HAT_UP:
+                pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, propulsaoLRUD));
+                break;
+            case SDL_HAT_DOWN:
+                pCorpoRigido->applyForce(glm::vec3(0.0, 0.0, -propulsaoLRUD));
+                break;
+            case SDL_HAT_LEFT:
+                pCorpoRigido->applyForce(glm::vec3(propulsaoLRUD, 0.0, 0.0));
+                break;
+            case SDL_HAT_RIGHT:
+                pCorpoRigido->applyForce(glm::vec3(-propulsaoLRUD, 0.0, 0.0));
+                break;
+            default:
+                break;
+        }
 
         if ((crt.roll != 0.0) || (crt.pitch != 0.0) || (crt.yaw != 0.0) || (crt.throttle != 0.0)) {
             pCorpoRigido->applyForce(glm::vec3(0.0, crt.throttle, 0.0));

@@ -3,7 +3,7 @@
 #include <map>
 
 namespace Chimera {
-class GameControllerManager {
+class GameController {
   public:
     static void init(void);
     static void release(void);

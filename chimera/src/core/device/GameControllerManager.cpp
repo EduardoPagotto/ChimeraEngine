@@ -1,20 +1,20 @@
-#include "chimera/core/device/GameControllerManager.hpp"
+#include "chimera/core/device/GameController.hpp"
 
 namespace Chimera {
 
-void GameControllerManager::init(void) {
+void GameController::init(void) {
     SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
     SDL_GameControllerEventState(SDL_ENABLE);
 }
 
-void GameControllerManager::release(void) {
+void GameController::release(void) {
     for (auto i = pads.begin(); i != pads.end(); i++)
         SDL_GameControllerClose(i->second);
 
     pads.clear();
 }
 
-void GameControllerManager::added(void) {
+void GameController::added(void) {
 
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
 
@@ -37,21 +37,21 @@ void GameControllerManager::added(void) {
     }
 }
 
-void GameControllerManager::removed(const SDL_ControllerDeviceEvent& device) {
+void GameController::removed(const SDL_ControllerDeviceEvent& device) {
     if (pads.contains(device.which)) {
         SDL_GameControllerClose(pads[device.which]);
         pads.erase(device.which);
     }
 }
 
-bool GameControllerManager::getEvent(const SDL_Event& event) {
+bool GameController::getEvent(const SDL_Event& event) {
 
     switch (event.type) {
         case SDL_CONTROLLERDEVICEADDED:
-            GameControllerManager::added();
+            GameController::added();
             break;
         case SDL_CONTROLLERDEVICEREMOVED:
-            GameControllerManager::removed(event.cdevice);
+            GameController::removed(event.cdevice);
             break;
     }
 

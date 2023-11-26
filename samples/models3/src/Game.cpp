@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "chimera/core/device/GameControllerManager.hpp"
+#include "chimera/core/device/GameController.hpp"
 #include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
@@ -9,14 +9,14 @@
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr), scene(&scene) {
     // Chimera::JoystickManager::init();
-    Chimera::GameControllerManager::init();
+    Chimera::GameController::init();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
     registry = Chimera::RegistryManager::getPtr();
 }
 
 Game::~Game() {
     // Chimera::JoystickManager::release();
-    Chimera::GameControllerManager::release();
+    Chimera::GameController::release();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game");
 }
 
@@ -24,7 +24,7 @@ bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
     // JoystickManager::getEvent(event);
-    GameControllerManager::getEvent(event);
+    GameController::getEvent(event);
     MouseDevice::getEvent(event);
 
     switch (event.type) {
@@ -135,7 +135,7 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);
 
-    if (SDL_GameController* pJoy = GameControllerManager::get(0); pJoy != nullptr) {
+    if (SDL_GameController* pJoy = GameController::get(0); pJoy != nullptr) {
 
         float propulsaoLRUD{5.0f};
         glm::vec3 propLateral(0.0f);

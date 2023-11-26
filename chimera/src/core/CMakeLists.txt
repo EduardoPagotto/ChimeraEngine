@@ -19,7 +19,6 @@ set (SourcesCore Registry.cpp
 				 device/CanvasFB.cpp
 				 device/CanvasGL.cpp
 				 device/Keyboard.cpp
-				 device/JoystickManager.cpp
 				 device/MouseDevice.cpp
 				 buffer/VertexBuffer.cpp
 				 buffer/IndexBuffer.cpp

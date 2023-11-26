@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include "chimera/core/device/JoystickManager.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
@@ -7,23 +6,23 @@
 #include "chimera/render/scene/Components.hpp"
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr), scene(&scene) {
-    // Chimera::JoystickManager::init();
-    gameControl.init();
+    joyControl.init();
+    // gameControl.init();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
     registry = Chimera::RegistryManager::getPtr();
 }
 
 Game::~Game() {
-    // Chimera::JoystickManager::release();
-    gameControl.release();
+    joyControl.release();
+    // gameControl.release();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game");
 }
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
-    // JoystickManager::getEvent(event);
-    gameControl.getEvent(event);
+    joyControl.getEvent(event);
+    // gameControl.getEvent(event);
     MouseDevice::getEvent(event);
 
     switch (event.type) {
@@ -191,7 +190,7 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);
 
-    if (SDL_Joystick* pJoy = JoystickManager::get(0); pJoy != nullptr) {
+    if (SDL_Joystick* pJoy = joyControl.get(0); pJoy != nullptr) {
 
         float propulsaoLRUD{5.0f};
         glm::vec3 propLateral(0.0f);
@@ -213,10 +212,7 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
                 break;
         }
 
-        // JoystickManager::debugJoy(*pJoy);
-
         int16_t deadZone = 128;
-        // SDL_GameControllerGetAxis
         glm::vec3 rotacao{scale16(dead16(SDL_JoystickGetAxis(pJoy, 1), deadZone), 0x8000),  // pitch LEFTY
                           scale16(dead16(SDL_JoystickGetAxis(pJoy, 2), deadZone), 0x8000),  // roll LEFTX
                           scale16(dead16(SDL_JoystickGetAxis(pJoy, 0), deadZone), 0x8000)}; // yaw RIGHTY

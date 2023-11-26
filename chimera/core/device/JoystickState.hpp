@@ -10,22 +10,22 @@ namespace Chimera {
  * Classe de controle do Joystick
  */
 class JoystickState {
-  public:
-    JoystickState();
-
     friend class JoystickManager;
 
+  public:
+    JoystickState() : id(255), pHandle(nullptr), name("none") {}
+
+    inline int16_t getAxis(const uint8_t& index, const int16_t& deadzone = 0, const int16_t& deadzone_at_ends = 0) {
+        int16_t value = axis.contains(index) ? axis[index] : 0;
+        return fabs(value) > deadzone ? value : 0;
+    }
+
     inline static double scale16(const int16_t& value) { return value >= 0 ? ((double)value) / 32767.0f : ((double)value) / 32768.0f; }
-
-    int16_t getAxis(const uint8_t& index, const int16_t& deadzone = 0, const int16_t& deadzone_at_ends = 0);
-    uint8_t getButtonState(const uint8_t& indice);
-    uint8_t getHat(const uint8_t& indice);
+    inline uint8_t getButtonState(const uint8_t& indice) { return buttonState.contains(indice) ? buttonState[indice] : SDL_RELEASED; }
+    inline uint8_t getHat(const uint8_t& indice) { return hats.contains(indice) ? hats[indice] : 0; }
     inline bool getHatDir(const uint8_t& hat, const uint8_t& dir) { return getHat(hat) & dir; }
-
-    void debug(void);
-
-    inline uint8_t getId() const { return id; }
-    inline std::string getName() const { return name; }
+    inline const uint8_t getId() const { return id; }
+    inline const std::string getName() const { return name; }
 
   private:
     uint8_t id = 255;

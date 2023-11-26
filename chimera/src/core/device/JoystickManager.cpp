@@ -65,7 +65,7 @@ void JoystickManager::getStatusManager(void) {
 
     std::string return_string = std::string("Joysticks size: ") + std::to_string(Joysticks.size());
     for (auto joy_iter = Joysticks.begin(); joy_iter != Joysticks.end(); joy_iter++) {
-        joy_iter->second.debug();
+        JoystickManager::debugJoy(joy_iter->second);
     }
 }
 
@@ -124,4 +124,33 @@ void JoystickManager::debug() {
         }
     }
 }
+
+void JoystickManager::debugJoy(const JoystickState& j) {
+
+    // Log do status de joystick
+    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick (%d): %s", j.id, j.name.c_str());
+
+    for (auto axis_iter = j.axis.begin(); axis_iter != j.axis.end(); axis_iter++)
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy axis: %d %d", axis_iter->first, axis_iter->second);
+
+    for (auto button_iter = j.buttonState.begin(); button_iter != j.buttonState.end(); button_iter++) {
+        if (button_iter->second == SDL_PRESSED)
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: PRESSED", button_iter->first);
+        else
+            SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy buttons %d State: RELEASE", button_iter->first);
+    }
+
+    std::string tot = "";
+    for (auto hat_iter = j.hats.begin(); hat_iter != j.hats.end(); hat_iter++) {
+        tot += hat_iter->second & SDL_HAT_UP ? "U" : "";
+        tot += hat_iter->second & SDL_HAT_DOWN ? "D" : "";
+        tot += hat_iter->second & SDL_HAT_LEFT ? "L" : "";
+        tot += hat_iter->second & SDL_HAT_RIGHT ? "R" : "";
+        if (tot.size() == 0)
+            tot += "C";
+
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joy hats: %d %d [ %s ]", hat_iter->first, hat_iter->second, tot.c_str());
+    }
+}
+
 } // namespace Chimera

@@ -11,6 +11,7 @@ class JoystickManager {
     static void find(void);
     static void getStatusManager(void);
     static void debug();
+    static void debugJoy(const JoystickState& j);
 
     static void setAxisMotion(const SDL_JoyAxisEvent& jaxis);
     static void setButtonState(const SDL_JoyButtonEvent& jbutton);

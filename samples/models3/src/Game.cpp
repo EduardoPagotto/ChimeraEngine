@@ -96,7 +96,7 @@ bool Game::onEvent(const SDL_Event& event) {
 
             if (JoystickState* pJoy = JoystickManager::select(event.jball.which); pJoy != nullptr) {
 
-                pJoy->debug();
+                JoystickManager::debugJoy(*pJoy);
 
                 float propulsaoPrincipal = 3.0f;
 

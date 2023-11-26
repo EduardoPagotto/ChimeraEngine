@@ -19,7 +19,6 @@ set (SourcesCore Registry.cpp
 				 device/CanvasFB.cpp
 				 device/CanvasGL.cpp
 				 device/Keyboard.cpp
-				 device/JoystickState.cpp
 				 device/JoystickManager.cpp
 				 device/GameControllerManager.cpp
 				 device/MouseDevice.cpp

@@ -18,8 +18,6 @@ set (SourcesCore Registry.cpp
 				 HeapQ.cpp
 				 device/CanvasFB.cpp
 				 device/CanvasGL.cpp
-				 device/Keyboard.cpp
-				 device/MouseDevice.cpp
 				 buffer/VertexBuffer.cpp
 				 buffer/IndexBuffer.cpp
 				 buffer/VertexArray.cpp

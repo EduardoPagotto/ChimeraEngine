@@ -7,7 +7,7 @@ namespace Chimera {
 
 void CameraControllerFPS::onAttach() {
     keyboard = Singleton<Keyboard>::get();
-    mouse = Singleton<MouseDevice>::get();
+    mouse = Singleton<Mouse>::get();
     gameControl = Singleton<GameController>::get();
 
     auto& cc = entity.getComponent<CameraComponent>();
@@ -24,7 +24,7 @@ void CameraControllerFPS::onAttach() {
 void CameraControllerFPS::onDeatach() {
     Singleton<GameController>::release();
     Singleton<Keyboard>::release();
-    Singleton<MouseDevice>::release();
+    Singleton<Mouse>::release();
 }
 
 void CameraControllerFPS::updateVP(ViewProjection& vp) {

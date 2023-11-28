@@ -9,13 +9,13 @@ Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr)
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
     registry = Chimera::Singleton<Chimera::Registry>::get();
     gameControl = Chimera::Singleton<Chimera::GameController>::get();
-    mouse = Chimera::Singleton<Chimera::MouseDevice>::get();
+    mouse = Chimera::Singleton<Chimera::Mouse>::get();
 }
 
 Game::~Game() {
     Chimera::Singleton<Chimera::Registry>::release();
     Chimera::Singleton<Chimera::GameController>::release();
-    Chimera::Singleton<Chimera::MouseDevice>::release();
+    Chimera::Singleton<Chimera::Mouse>::release();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game");
 }
 

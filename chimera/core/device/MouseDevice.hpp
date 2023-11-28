@@ -4,10 +4,10 @@
 #include <map>
 
 namespace Chimera {
-class MouseDevice {
+class Mouse {
   public:
-    MouseDevice() = default;
-    virtual ~MouseDevice() = default;
+    Mouse() = default;
+    virtual ~Mouse() = default;
 
     inline uint8_t const getButtonState(const uint8_t& indice) {
 

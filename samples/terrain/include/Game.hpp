@@ -1,7 +1,7 @@
 #pragma once
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
+#include "chimera/core/device/Mouse.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 class Game : public Chimera::IStateMachine {
@@ -18,5 +18,5 @@ class Game : public Chimera::IStateMachine {
   private:
     Chimera::Scene* scene;
     Chimera::Keyboard* keyboard;
-    Chimera::MouseDevice* mouse;
+    Chimera::Mouse* mouse;
 };

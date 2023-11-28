@@ -14,12 +14,12 @@ void CameraControllerOrbit::onAttach() {
     max = cc.max;
     front = glm::vec3(0, 0, 0);
     distance = glm::distance(camera->getPosition(), this->front);
-    mouse = Singleton<MouseDevice>::get();
+    mouse = Singleton<Mouse>::get();
 
     this->updateVectors();
 }
 
-void CameraControllerOrbit::onDeatach() { Singleton<MouseDevice>::release(); }
+void CameraControllerOrbit::onDeatach() { Singleton<Mouse>::release(); }
 
 void CameraControllerOrbit::updateVP(ViewProjection& vp) {
     if (vp.size() == 1) {

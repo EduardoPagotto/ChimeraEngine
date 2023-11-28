@@ -2,7 +2,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
+#include "chimera/core/device/Mouse.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {

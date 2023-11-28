@@ -3,7 +3,7 @@
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/bullet/Solid.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
+#include "chimera/core/device/Mouse.hpp"
 #include "chimera/core/visible/CameraControllerFPS.hpp"
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
 #include "chimera/core/visible/Light.hpp"
@@ -490,7 +490,7 @@ void Scene::onRender() {
         {
             // TODO: captura do entity no framebuffer da tela
             // get val from color buffer (must be inside framebuffer renderer
-            // glm::ivec2 pos = MouseDevice::getMove();
+            // glm::ivec2 pos = Mouse::getMove();
             // pos.y = viewportHeight - pos.y;
             // SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "mouse(X: %d / Y: %d): %d", pos.x, pos.y, val);
         }

@@ -4,12 +4,12 @@
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) {
     keyboard = Chimera::Singleton<Chimera::Keyboard>::get();
-    mouse = Chimera::Singleton<Chimera::MouseDevice>::get();
+    mouse = Chimera::Singleton<Chimera::Mouse>::get();
 }
 
 Game::~Game() {
     Chimera::Singleton<Chimera::Keyboard>::release();
-    Chimera::Singleton<Chimera::MouseDevice>::release();
+    Chimera::Singleton<Chimera::Mouse>::release();
 }
 
 void Game::onAttach() {

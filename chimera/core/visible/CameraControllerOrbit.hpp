@@ -1,7 +1,7 @@
 #pragma once
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
+#include "chimera/core/device/Mouse.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
 namespace Chimera {
@@ -26,7 +26,7 @@ class CameraControllerOrbit : public IStateMachine {
     glm::vec3 up, front;
     Camera* camera = nullptr;
     Entity entity;
-    MouseDevice* mouse;
+    Mouse* mouse;
 };
 
 } // namespace Chimera

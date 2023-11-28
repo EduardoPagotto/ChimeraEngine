@@ -3,9 +3,9 @@
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) { mouse = Chimera::Singleton<Chimera::MouseDevice>::get(); }
+Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) { mouse = Chimera::Singleton<Chimera::Mouse>::get(); }
 
-Game::~Game() { Chimera::Singleton<Chimera::MouseDevice>::release(); }
+Game::~Game() { Chimera::Singleton<Chimera::Mouse>::release(); }
 
 void Game::onAttach() {
 

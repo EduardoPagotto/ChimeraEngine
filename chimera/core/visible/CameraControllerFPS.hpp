@@ -3,7 +3,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/device/GameController.hpp"
 #include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
+#include "chimera/core/device/Mouse.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
 namespace Chimera {
@@ -34,6 +34,6 @@ class CameraControllerFPS : public IStateMachine {
     Entity entity;
     GameController* gameControl;
     Keyboard* keyboard;
-    MouseDevice* mouse;
+    Mouse* mouse;
 };
 } // namespace Chimera

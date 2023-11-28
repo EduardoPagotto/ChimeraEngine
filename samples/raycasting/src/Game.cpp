@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/utils.hpp"
 
 Game::Game(Chimera::Engine* engine) : IStateMachine("Game") {
@@ -10,8 +11,8 @@ Game::~Game() {}
 
 void Game::onAttach() {
 
-    moveSpeed = MOVSPEED;
-    rotSpeed = ROTSPEED;
+    moveSpeed = 0.05;
+    rotSpeed = 0.025;
 
     // estado de inicialização
     state = new State;
@@ -32,57 +33,9 @@ void Game::onDeatach() {}
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
+    Keyboard::getEvent(event);
+
     switch (event.type) {
-        case SDL_KEYDOWN: {
-            switch (event.key.keysym.sym) {
-                case SDLK_ESCAPE:
-                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_STOP, nullptr, nullptr);
-                    break;
-                case SDLK_F10:
-                    Chimera::utilSendEvent(Chimera::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
-                    break;
-                case SDLK_w: {
-                    glm::ivec2 curr = state->pos;
-                    glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
-
-                    if (world->data[next.x + curr.y * world->width] == 0)
-                        state->pos.x += state->dir.x * moveSpeed;
-
-                    if (world->data[curr.x + next.y * world->width] == 0)
-                        state->pos.y += state->dir.y * moveSpeed;
-
-                } break;
-                case SDLK_s: {
-                    glm::ivec2 curr = state->pos;
-                    glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
-
-                    if (world->data[next.x + curr.y * world->width] == 0)
-                        state->pos.x -= state->dir.x * moveSpeed;
-
-                    if (world->data[curr.x + next.y * world->width] == 0)
-                        state->pos.y -= state->dir.y * moveSpeed;
-
-                } break;
-                case SDLK_a: {
-                    double oldDirX = state->dir.x;
-                    state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
-                    state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
-                    double oldcamx = state->cam.x;
-                    state->cam.x = state->cam.x * cos(rotSpeed) - state->cam.y * sin(rotSpeed);
-                    state->cam.y = oldcamx * sin(rotSpeed) + state->cam.y * cos(rotSpeed);
-                } break;
-                case SDLK_d: {
-                    double oldDirX = state->dir.x;
-                    state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
-                    state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);
-                    double oldcamx = state->cam.x;
-                    state->cam.x = state->cam.x * cos(-rotSpeed) - state->cam.y * sin(-rotSpeed);
-                    state->cam.y = oldcamx * sin(-rotSpeed) + state->cam.y * cos(-rotSpeed);
-                } break;
-                default:
-                    break;
-            }
-        } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
                 case SDL_WINDOWEVENT_ENTER:
@@ -97,6 +50,66 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {}
+void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
+    using namespace Chimera;
+
+    if (Keyboard::isPressed(SDLK_ESCAPE)) {
+        Chimera::utilSendEvent(Chimera::EVENT_FLOW_STOP, nullptr, nullptr);
+        return;
+    }
+
+    if (Keyboard::isPressed(SDLK_F10)) {
+        Chimera::utilSendEvent(Chimera::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+        return;
+    }
+
+    if (Keyboard::isPressed(SDLK_w)) {
+        glm::ivec2 curr = state->pos;
+        glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
+
+        if (world->data[next.x + curr.y * world->width] == 0)
+            state->pos.x += state->dir.x * moveSpeed;
+
+        if (world->data[curr.x + next.y * world->width] == 0)
+            state->pos.y += state->dir.y * moveSpeed;
+
+        return;
+    }
+
+    if (Keyboard::isPressed(SDLK_s)) {
+        glm::ivec2 curr = state->pos;
+        glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
+
+        if (world->data[next.x + curr.y * world->width] == 0)
+            state->pos.x -= state->dir.x * moveSpeed;
+
+        if (world->data[curr.x + next.y * world->width] == 0)
+            state->pos.y -= state->dir.y * moveSpeed;
+
+        return;
+    }
+
+    if (Keyboard::isPressed(SDLK_a)) {
+        double oldDirX = state->dir.x;
+        state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
+        state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
+        double oldcamx = state->cam.x;
+        state->cam.x = state->cam.x * cos(rotSpeed) - state->cam.y * sin(rotSpeed);
+        state->cam.y = oldcamx * sin(rotSpeed) + state->cam.y * cos(rotSpeed);
+
+        return;
+    }
+
+    if (Keyboard::isPressed(SDLK_d)) {
+        double oldDirX = state->dir.x;
+        state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
+        state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);
+        double oldcamx = state->cam.x;
+        state->cam.x = state->cam.x * cos(-rotSpeed) - state->cam.y * sin(-rotSpeed);
+        state->cam.y = oldcamx * sin(-rotSpeed) + state->cam.y * cos(-rotSpeed);
+
+        return;
+    }
+}
 
 void Game::onRender() { RenderScene(*state, *world, canvas); }

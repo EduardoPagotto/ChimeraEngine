@@ -6,9 +6,6 @@
 // ref: http://www.gianlucaghettini.net/motore-3d-in-c-raycasting/
 // Field Of View
 #define FOV 0.66
-// velocidade de movimento e rotação
-#define MOVSPEED 0.1
-#define ROTSPEED 0.05
 // mapa
 struct World {
     uint32_t width;

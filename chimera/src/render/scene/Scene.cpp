@@ -207,7 +207,7 @@ void Scene::onAttach() {
     }
 
     { // initialize scripts
-        registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+        registry->get().view<NativeScriptComponent>().each([this](auto entity, auto& nsc) {
             if (!nsc.instance) {
                 nsc.instance = nsc.instantiateScript();
                 nsc.instance->entity = Entity{entity, registry};

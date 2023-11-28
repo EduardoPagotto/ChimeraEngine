@@ -7,6 +7,7 @@
 namespace Chimera {
 
 void CameraControllerFPS::onAttach() {
+    keyboard = Singleton<Keyboard>::get();
     gameControl = Singleton<GameController>::get();
     gameControl->init();
 
@@ -21,7 +22,11 @@ void CameraControllerFPS::onAttach() {
     this->updateVectors();
 }
 
-void CameraControllerFPS::onDeatach() { gameControl->release(); }
+void CameraControllerFPS::onDeatach() {
+    gameControl->release();
+    Singleton<GameController>::release();
+    Singleton<Keyboard>::release();
+}
 
 void CameraControllerFPS::updateVP(ViewProjection& vp) {
     if (vp.size() == 1) {
@@ -69,26 +74,26 @@ void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float delt
 
 void CameraControllerFPS::onUpdate(ViewProjection& vp, const double& ts) {
     // Movement speed
-    if (Keyboard::isPressed(SDLK_LSHIFT)) // acelerar mover
+    if (keyboard->isPressed(SDLK_LSHIFT)) // acelerar mover
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;
-    else if (Keyboard::isPressed(SDLK_LALT)) //  desacelerar mover
+    else if (keyboard->isPressed(SDLK_LALT)) //  desacelerar mover
         movementSpeed = FPSCAMERA_MAX_SPEED / 4.0f;
     else
         movementSpeed = FPSCAMERA_MAX_SPEED;
 
     // CameraFPS movement
     glm::vec3 direction = glm::vec3(0.0f);
-    if (Keyboard::isPressed(SDLK_w)) // to foward
+    if (keyboard->isPressed(SDLK_w)) // to foward
         direction += front;
-    if (Keyboard::isPressed(SDLK_s)) // to backward
+    if (keyboard->isPressed(SDLK_s)) // to backward
         direction -= front;
-    if (Keyboard::isPressed(SDLK_a)) // to left
+    if (keyboard->isPressed(SDLK_a)) // to left
         direction -= right;
-    if (Keyboard::isPressed(SDLK_d)) //  to right
+    if (keyboard->isPressed(SDLK_d)) //  to right
         direction += right;
-    if (Keyboard::isPressed(SDLK_SPACE)) // to up
+    if (keyboard->isPressed(SDLK_SPACE)) // to up
         direction += worldUp;
-    if (Keyboard::isPressed(SDLK_LCTRL)) //  to booton
+    if (keyboard->isPressed(SDLK_LCTRL)) //  to booton
         direction -= worldUp;
 
     float mouseXDelta{0.0f};

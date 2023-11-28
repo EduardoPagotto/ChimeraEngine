@@ -1,6 +1,7 @@
 #pragma once
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/device/Keyboard.hpp"
 #include "raycasting.hpp"
 
 class Game : public Chimera::IStateMachine {
@@ -21,4 +22,5 @@ class Game : public Chimera::IStateMachine {
     float moveSpeed;
     float rotSpeed;
     Chimera::Canvas* canvas;
+    Chimera::Keyboard* keyboard;
 };

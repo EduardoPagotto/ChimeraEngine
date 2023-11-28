@@ -1,32 +1,34 @@
 #pragma once
-
 #include <SDL2/SDL.h>
 #include <map>
 
 namespace Chimera {
-
 class Keyboard {
   public:
-    static void setDown(const SDL_KeyboardEvent& event) {
+    Keyboard() = default;
+    virtual ~Keyboard() = default;
+
+    inline void setDown(const SDL_KeyboardEvent& event) {
         mapKey[event.keysym.sym] = SDL_PRESSED;
         mod = event.keysym.mod;
     }
 
-    static void setUp(const SDL_KeyboardEvent& event) {
+    inline void setUp(const SDL_KeyboardEvent& event) {
         mapKey[event.keysym.sym] = SDL_RELEASED;
         mod = event.keysym.mod;
     }
 
-    static bool isPressed(const SDL_Keycode& key) {
-        if (auto it = mapKey.find(key); it != mapKey.end())
-            return mapKey[key] == SDL_PRESSED;
+    inline const bool isPressed(const SDL_Keycode& key) {
+
+        if (mapKey.contains(key))
+            return (mapKey[key] == SDL_PRESSED);
 
         return false;
     }
 
-    static bool isModPressed(const SDL_Keymod& keyMod) { return (keyMod & mod); }
+    inline const bool isModPressed(const SDL_Keymod& keyMod) const { return (keyMod & mod); }
 
-    static bool getEvent(const SDL_Event& event) {
+    inline const bool getEvent(const SDL_Event& event) {
 
         switch (event.type) {
             case SDL_KEYDOWN:
@@ -41,7 +43,7 @@ class Keyboard {
     }
 
   private:
-    inline static std::map<SDL_Keycode, uint8_t> mapKey;
-    inline static uint16_t mod;
+    std::map<SDL_Keycode, uint8_t> mapKey;
+    uint16_t mod;
 };
 } // namespace Chimera

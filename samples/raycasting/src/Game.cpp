@@ -1,13 +1,14 @@
 #include "Game.hpp"
-#include "chimera/core/device/Keyboard.hpp"
+#include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 
 Game::Game(Chimera::Engine* engine) : IStateMachine("Game") {
     // init framebuffer
     canvas = engine->getCanvas();
+    keyboard = Chimera::Singleton<Chimera::Keyboard>::get();
 }
 
-Game::~Game() {}
+Game::~Game() { Chimera::Singleton<Chimera::Keyboard>::release(); }
 
 void Game::onAttach() {
 
@@ -33,7 +34,7 @@ void Game::onDeatach() {}
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
-    Keyboard::getEvent(event);
+    keyboard->getEvent(event);
 
     switch (event.type) {
         case SDL_WINDOWEVENT: {
@@ -53,17 +54,17 @@ bool Game::onEvent(const SDL_Event& event) {
 void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
     using namespace Chimera;
 
-    if (Keyboard::isPressed(SDLK_ESCAPE)) {
+    if (keyboard->isPressed(SDLK_ESCAPE)) {
         Chimera::utilSendEvent(Chimera::EVENT_FLOW_STOP, nullptr, nullptr);
         return;
     }
 
-    if (Keyboard::isPressed(SDLK_F10)) {
+    if (keyboard->isPressed(SDLK_F10)) {
         Chimera::utilSendEvent(Chimera::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 
-    if (Keyboard::isPressed(SDLK_w)) {
+    if (keyboard->isPressed(SDLK_w)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
 
@@ -76,7 +77,7 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
         return;
     }
 
-    if (Keyboard::isPressed(SDLK_s)) {
+    if (keyboard->isPressed(SDLK_s)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
 
@@ -89,7 +90,7 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
         return;
     }
 
-    if (Keyboard::isPressed(SDLK_a)) {
+    if (keyboard->isPressed(SDLK_a)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
         state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
@@ -100,7 +101,7 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
         return;
     }
 
-    if (Keyboard::isPressed(SDLK_d)) {
+    if (keyboard->isPressed(SDLK_d)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
         state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);

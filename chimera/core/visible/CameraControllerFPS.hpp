@@ -1,6 +1,7 @@
 #pragma once
 #include "chimera/core/IStateMachine.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/device/GameController.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
 namespace Chimera {
@@ -12,7 +13,7 @@ class CameraControllerFPS : public IStateMachine {
     void onDeatach() override;
     void onRender() override {}
     void onUpdate(ViewProjection& vp, const double& ts) override;
-    bool onEvent(const SDL_Event& event) override { return true; }
+    bool onEvent(const SDL_Event& event) override { return gameControl->getEvent(event); }
 
   private:
     void updateVP(ViewProjection& vp);
@@ -25,5 +26,6 @@ class CameraControllerFPS : public IStateMachine {
     glm::vec3 up, front, worldUp, right;
     Camera* camera = nullptr;
     Entity entity;
+    GameController* gameControl;
 };
 } // namespace Chimera

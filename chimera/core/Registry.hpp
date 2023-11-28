@@ -6,10 +6,10 @@
 namespace Chimera {
 
 class Entity;
-class RegistryManager;
 
 class Registry {
   public:
+    Registry() = default;
     virtual ~Registry() { destroy(); }
     void destroy() { eRegistry.clear(); }
     Entity createEntity(const std::string& tag = std::string(), const std::string& id = std::string());
@@ -29,36 +29,10 @@ class Registry {
 
   private:
     friend Entity;
-    friend RegistryManager;
-    Registry() = default;
     Registry(const Registry& other) = delete;
     Registry& operator=(const Registry& other) = delete;
     entt::registry eRegistry;
     inline static uint32_t masterSerial = 0;
-};
-
-class RegistryManager {
-  public:
-    static size_t create() {
-        r.push_back(new Registry());
-        return r.size();
-    }
-
-    static void destroy(const size_t& index) {
-        auto i = r.begin() + index;
-        (*i)->destroy();
-        r.erase(i);
-    }
-
-    static Registry& get(const size_t& index = 0) { return *r[index]; }
-    static Registry* getPtr(const size_t& index = 0) { return r[index]; }
-
-  private:
-    RegistryManager() = delete;
-    RegistryManager(const RegistryManager& other) = delete;
-    RegistryManager& operator=(const RegistryManager& other) = delete;
-
-    inline static std::vector<Registry*> r;
 };
 
 class Entity {

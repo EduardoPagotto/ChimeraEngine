@@ -2,7 +2,6 @@
 #include <mutex>
 
 namespace Chimera {
-
 template <class T>
 class Singleton {
   public:
@@ -34,17 +33,13 @@ class Singleton {
 
   protected:
     Singleton<T>() = delete;
-    ~Singleton<T>() = delete;
     Singleton<T>(Singleton<T> const&) = delete;
+    Singleton<T>& operator=(const Singleton<T>& other) = delete;
+    ~Singleton<T>() = delete;
 
   private:
     inline static size_t count{0};
     inline static T* instance{nullptr};
     inline static std::mutex critical;
 };
-
-// int* t = Singleton<int>::get();
-// *t = 1000;
-// Singleton<int>::release();
-
 } // namespace Chimera

@@ -14,15 +14,11 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Models3 Iniciado");
 
-        RegistryManager::create();
-
         Engine engine(new CanvasGL("Teste Hello", 1800, 600, false), 0.0f);
 
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
         colladaRegistryLoad(dom);
         colladaRenderLoad(dom);
-
-        engine.init();
 
         Scene scene;
 

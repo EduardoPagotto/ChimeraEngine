@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/core/Singleton.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
@@ -8,11 +9,12 @@
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr), scene(&scene) {
     gameControl.init();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
-    registry = Chimera::RegistryManager::getPtr();
+    registry = Chimera::Singleton<Chimera::Registry>::get();
 }
 
 Game::~Game() {
     gameControl.release();
+    Chimera::Singleton<Chimera::Registry>::release();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game");
 }
 

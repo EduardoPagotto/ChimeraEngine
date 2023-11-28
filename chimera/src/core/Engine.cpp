@@ -1,13 +1,13 @@
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/Singleton.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {
 
-Engine::Engine(Canvas* canvas, const float& dist) {
-    this->canvas = canvas;
+Engine::Engine(Canvas* canvas, const float& dist) : canvas(canvas) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 
@@ -19,7 +19,8 @@ Engine::Engine(Canvas* canvas, const float& dist) {
         vp.add("right");
     }
 
-    Entity entity = RegistryManager::getPtr()->createEntity("chimera_engine", "chimera_engine");
+    registry = Singleton<Registry>::get();
+    Entity entity = registry->createEntity("chimera_engine", "chimera_engine");
 
     CanvasComponent& cc = entity.addComponent<CanvasComponent>();
     cc.canvas = canvas;
@@ -30,14 +31,7 @@ Engine::Engine(Canvas* canvas, const float& dist) {
     SDL_Log("Engine Register: chimera_engine OK");
 }
 
-void Engine::init() {
-    // CanvasComponent& cc = entity.getComponent<CanvasComponent>();
-    // if (cc.canvas == nullptr)
-    //     throw std::string("Engine Register: Canvas not find");
-    // if (vp.size() == 0)
-    //     throw std::string("Engine Register: ViewProjection not find");
-    // canvas = cc.canvas;
-}
+Engine::~Engine() { Singleton<Registry>::release(); }
 
 void Engine::run(void) {
     SDL_Event event;

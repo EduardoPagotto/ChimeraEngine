@@ -1,5 +1,6 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/ScriptableEntity.hpp"
+#include "chimera/core/Singleton.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/MouseDevice.hpp"
@@ -22,7 +23,7 @@ namespace Chimera {
 
 Scene::Scene() : IStateMachine("Scene"), activeCam(nullptr), origem(nullptr), verbose(0) {
     octree = nullptr;
-    registry = RegistryManager::getPtr();
+    registry = Singleton<Registry>::get();
 }
 
 Scene::~Scene() {
@@ -30,6 +31,7 @@ Scene::~Scene() {
         delete shadowData.shadowBuffer;
         shadowData.shadowBuffer = nullptr;
     }
+    Singleton<Registry>::release();
 }
 
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {

@@ -1,4 +1,5 @@
 #include "chimera/core/collada/ColladaExtra.hpp"
+#include "chimera/core/Singleton.hpp"
 #include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/buffer/FrameBuffer.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
@@ -28,7 +29,8 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
 
             std::string entName = nFb.attribute("name").value();
             std::string entId = nFb.attribute("id").value();
-            Entity entity = RegistryManager::getPtr()->createEntity(entName, entId);
+            Registry* r = Singleton<Registry>::get();
+            Entity entity = r->createEntity(entName, entId);
 
             FrameBufferSpecification& fb = entity.addComponent<FrameBufferSpecification>();
             for (pugi::xml_node next = nFb.first_child(); next; next = next.next_sibling()) {
@@ -47,6 +49,8 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
                     cc.createExtra(entity, next.first_child());
                 }
             }
+
+            Singleton<Registry>::release();
         }
     }
 }

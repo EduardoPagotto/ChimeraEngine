@@ -8,13 +8,11 @@
 
 namespace Chimera {
 
-ColladaVisualScene::~ColladaVisualScene() {}
-
 void ColladaVisualScene::loadNode(pugi::xml_node node) {
 
     std::string entName = node.attribute("name").value();
     std::string entId = node.attribute("id").value();
-    Entity entity = RegistryManager::get().createEntity(entName, entId);
+    Entity entity = r->createEntity(entName, entId);
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling())
         nodeData(n, entity);
 }

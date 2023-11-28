@@ -10,14 +10,10 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("BSPTree Iniciado");
 
-        RegistryManager::create();
-
         Engine engine(new CanvasGL("BSP Tree", 1800, 600, false), 0.4f);
 
         ColladaDom dom = loadFileCollada("./samples/bsptree/bsp_level.xml");
         colladaRegistryLoad(dom);
-
-        engine.init();
 
         Scene scene;
 

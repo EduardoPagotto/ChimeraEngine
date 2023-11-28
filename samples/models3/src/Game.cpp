@@ -1,28 +1,29 @@
 #include "Game.hpp"
 #include "chimera/core/Singleton.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr), scene(&scene) {
-    gameControl.init();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
     registry = Chimera::Singleton<Chimera::Registry>::get();
+    gameControl = Chimera::Singleton<Chimera::GameController>::get();
+    mouse = Chimera::Singleton<Chimera::MouseDevice>::get();
 }
 
 Game::~Game() {
-    gameControl.release();
     Chimera::Singleton<Chimera::Registry>::release();
+    Chimera::Singleton<Chimera::GameController>::release();
+    Chimera::Singleton<Chimera::MouseDevice>::release();
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game");
 }
 
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
-    gameControl.getEvent(event);
-    MouseDevice::getEvent(event);
+    gameControl->getEvent(event);
+    mouse->getEvent(event);
 
     switch (event.type) {
         case SDL_USEREVENT: {
@@ -131,7 +132,7 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);
 
-    if (SDL_GameController* pJoy = gameControl.get(0); pJoy != nullptr) {
+    if (SDL_GameController* pJoy = gameControl->get(0); pJoy != nullptr) {
 
         float propulsaoLRUD{5.0f};
         glm::vec3 propLateral(0.0f);

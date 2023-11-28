@@ -1,11 +1,11 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
+#include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) {}
+Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) { mouse = Chimera::Singleton<Chimera::MouseDevice>::get(); }
 
-Game::~Game() {}
+Game::~Game() { Chimera::Singleton<Chimera::MouseDevice>::release(); }
 
 void Game::onAttach() {
 
@@ -24,7 +24,7 @@ void Game::onDeatach() {}
 bool Game::onEvent(const SDL_Event& event) {
     using namespace Chimera;
 
-    MouseDevice::getEvent(event);
+    mouse->getEvent(event);
 
     switch (event.type) {
         case SDL_KEYDOWN: {

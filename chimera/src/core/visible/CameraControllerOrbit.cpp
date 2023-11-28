@@ -1,6 +1,6 @@
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
+#include "chimera/core/Singleton.hpp"
 #include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
 
 namespace Chimera {
 
@@ -14,11 +14,12 @@ void CameraControllerOrbit::onAttach() {
     max = cc.max;
     front = glm::vec3(0, 0, 0);
     distance = glm::distance(camera->getPosition(), this->front);
+    mouse = Singleton<MouseDevice>::get();
 
     this->updateVectors();
 }
 
-void CameraControllerOrbit::onDeatach() {}
+void CameraControllerOrbit::onDeatach() { Singleton<MouseDevice>::release(); }
 
 void CameraControllerOrbit::updateVP(ViewProjection& vp) {
     if (vp.size() == 1) {
@@ -92,12 +93,12 @@ void CameraControllerOrbit::processCameraRotation(const int& xOffset, const int&
 }
 
 void CameraControllerOrbit::onUpdate(ViewProjection& vp, const double& ts) {
-    if (MouseDevice::getButtonState(1) == SDL_PRESSED) {
-        glm::ivec2 mouseMove = MouseDevice::getMoveRel();
+    if (mouse->getButtonState(1) == SDL_PRESSED) {
+        glm::ivec2 mouseMove = mouse->getMoveRel();
         this->processCameraRotation(mouseMove.x, mouseMove.y);
 
-    } else if (MouseDevice::getButtonState(3) == SDL_PRESSED) {
-        glm::ivec2 mouseMove = MouseDevice::getMoveRel();
+    } else if (mouse->getButtonState(3) == SDL_PRESSED) {
+        glm::ivec2 mouseMove = mouse->getMoveRel();
         this->processDistance(mouseMove.y);
     }
 

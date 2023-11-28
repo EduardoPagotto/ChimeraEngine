@@ -5,15 +5,11 @@
 namespace Chimera {
 class GameController {
   public:
-    GameController() = default;
-    virtual ~GameController() = default;
-
-    inline void init(void) {
+    GameController() {
         SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
         SDL_GameControllerEventState(SDL_ENABLE);
     }
-
-    inline void release(void) {
+    virtual ~GameController() {
         for (auto i = pads.begin(); i != pads.end(); i++)
             SDL_GameControllerClose(i->second);
 

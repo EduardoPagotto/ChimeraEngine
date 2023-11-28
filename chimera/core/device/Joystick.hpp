@@ -5,20 +5,16 @@
 namespace Chimera {
 class Joystick {
   public:
-    Joystick() = default;
-    virtual ~Joystick() = default;
-
-    void init(void) {
+    Joystick() {
         SDL_InitSubSystem(SDL_INIT_JOYSTICK);
         SDL_JoystickEventState(SDL_ENABLE);
-    }
-
-    void release(void) {
+    };
+    virtual ~Joystick() {
         for (auto i = joys.begin(); i != joys.end(); i++)
             SDL_JoystickClose(i->second);
 
         joys.clear();
-    }
+    };
 
     bool getEvent(const SDL_Event& event) {
 

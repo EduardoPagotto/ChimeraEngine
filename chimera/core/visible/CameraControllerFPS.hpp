@@ -3,6 +3,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/device/GameController.hpp"
 #include "chimera/core/device/Keyboard.hpp"
+#include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
 namespace Chimera {
@@ -14,7 +15,11 @@ class CameraControllerFPS : public IStateMachine {
     void onDeatach() override;
     void onRender() override {}
     void onUpdate(ViewProjection& vp, const double& ts) override;
-    bool onEvent(const SDL_Event& event) override { return gameControl->getEvent(event); }
+    bool onEvent(const SDL_Event& event) override {
+
+        // FIXME: tem merda aqui!!!
+        return gameControl->getEvent(event);
+    }
 
   private:
     void updateVP(ViewProjection& vp);
@@ -29,5 +34,6 @@ class CameraControllerFPS : public IStateMachine {
     Entity entity;
     GameController* gameControl;
     Keyboard* keyboard;
+    MouseDevice* mouse;
 };
 } // namespace Chimera

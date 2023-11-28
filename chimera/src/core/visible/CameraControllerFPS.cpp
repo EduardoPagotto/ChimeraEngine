@@ -1,15 +1,14 @@
 #include "chimera/core/visible/CameraControllerFPS.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/device/MouseDevice.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {
 
 void CameraControllerFPS::onAttach() {
     keyboard = Singleton<Keyboard>::get();
+    mouse = Singleton<MouseDevice>::get();
     gameControl = Singleton<GameController>::get();
-    gameControl->init();
 
     auto& cc = entity.getComponent<CameraComponent>();
     camera = cc.camera;
@@ -23,9 +22,9 @@ void CameraControllerFPS::onAttach() {
 }
 
 void CameraControllerFPS::onDeatach() {
-    gameControl->release();
     Singleton<GameController>::release();
     Singleton<Keyboard>::release();
+    Singleton<MouseDevice>::release();
 }
 
 void CameraControllerFPS::updateVP(ViewProjection& vp) {
@@ -122,7 +121,7 @@ void CameraControllerFPS::onUpdate(ViewProjection& vp, const double& ts) {
 
     } else {
         // Mouse Camera rotation
-        glm::ivec2 mouseMove = MouseDevice::getMoveRel();
+        glm::ivec2 mouseMove = mouse->getMoveRel();
         mouseXDelta = -(float)mouseMove.x * FPSCAMERA_ROTATION_SENSITIVITY;
         mouseYDelta = (float)mouseMove.y * FPSCAMERA_ROTATION_SENSITIVITY;
     }

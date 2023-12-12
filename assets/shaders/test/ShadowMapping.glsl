@@ -1,5 +1,5 @@
 #type vertex
-#version 440 core
+#version 430 core
 
 // set: shadow_mapping.frag and shadow_mapping.vert
 // used: desconhecido
@@ -33,7 +33,7 @@ void main() {
 }
 //---
 #type fragment
-#version 440 core
+#version 430 core
 
 // set: shadow_mapping.frag and shadow_mapping.vert
 // used: desconhecido

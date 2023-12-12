@@ -1,4 +1,4 @@
-#version 440 core
+#version 430 core
 
 // set: ShadowMappingDepth.frag and ShadowMappingDepth.vert
 // Render Shadowmap

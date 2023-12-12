@@ -1,4 +1,4 @@
-#version 440 core
+#version 430 core
 
 // set: CanvasHMD.frag and CanvasHMD.vert
 // used: Class CanvasHMD

@@ -1,4 +1,4 @@
-#version 440 core
+#version 430 core
 
 // set: ParticleEmitter.frag and ParticleEmitter.vert
 // used: Class ParticleEmitter to app models

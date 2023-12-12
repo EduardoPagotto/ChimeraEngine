@@ -1,5 +1,5 @@
 #type vertex
-#version 440 core
+#version 430 core
 
 // set: debug_quad.frag and debug_quad.vert
 // used: desconhecido
@@ -16,7 +16,7 @@ void main() {
 }
 //---
 #type fragment
-#version 440 core
+#version 430 core
 
 // set: debug_quad.frag and debug_quad.vert
 // used: desconhecido

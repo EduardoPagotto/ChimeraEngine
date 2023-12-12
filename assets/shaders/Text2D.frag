@@ -1,4 +1,4 @@
-#version 440 core
+#version 430 core
 
 layout(location = 0) out vec4 color;
 layout(location = 1) out int color2; // cor que sera o entity (este é o segundo buffer o 0 é o screem)

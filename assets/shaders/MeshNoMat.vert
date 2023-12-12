@@ -1,4 +1,4 @@
-#version 440 core
+#version 430 core
 // set: MeshNoMat.frag and MeshNoMat.vert
 // Render Mesh with texture and without material set
 

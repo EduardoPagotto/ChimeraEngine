@@ -1,4 +1,4 @@
-#version 440 core
+#version 430 core
 precision mediump float;
 
 // Material def

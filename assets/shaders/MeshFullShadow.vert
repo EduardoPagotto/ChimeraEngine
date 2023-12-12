@@ -1,4 +1,4 @@
-#version 440 core
+#version 430 core
 // set: MeshFullShadow.frag and MeshFullShadow.vert
 // Render Texture, material shadows
 

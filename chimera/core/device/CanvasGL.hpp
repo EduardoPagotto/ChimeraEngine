@@ -6,6 +6,9 @@
 namespace Chimera {
 
 class CanvasGL : public Canvas {
+  protected:
+    SDL_GLContext context;
+
   public:
     CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen = false);
     virtual ~CanvasGL();
@@ -17,8 +20,5 @@ class CanvasGL : public Canvas {
     virtual uint32_t* getPixels() override { return nullptr; }
 
     std::string getVersaoOpenGL();
-
-  protected:
-    SDL_GLContext context;
 };
 } // namespace Chimera

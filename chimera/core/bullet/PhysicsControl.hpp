@@ -9,16 +9,6 @@
 namespace Chimera {
 
 class PhysicsControl {
-  public:
-    PhysicsControl(void);
-    virtual ~PhysicsControl(void);
-    void clearAllShapes(void);
-    void removeAllObjs(void);
-    void stepSim(const double& ts);
-    void checkCollisions();
-    inline void setGravity(const btVector3& _vet) { discretDynamicsWorld->setGravity(_vet); }
-    inline btDiscreteDynamicsWorld* getWorld() { return discretDynamicsWorld; }
-
   private:
     bool checkAllowCollision(uint32_t* entity);
     static void doTickCallBack(btDynamicsWorld* world, btScalar timeStep);
@@ -33,5 +23,15 @@ class PhysicsControl {
     btDiscreteDynamicsWorld* discretDynamicsWorld;
 
     std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> contactActives;
+
+  public:
+    PhysicsControl(void);
+    virtual ~PhysicsControl(void);
+    void clearAllShapes(void);
+    void removeAllObjs(void);
+    void stepSim(const double& ts);
+    void checkCollisions();
+    inline void setGravity(const btVector3& _vet) { discretDynamicsWorld->setGravity(_vet); }
+    inline btDiscreteDynamicsWorld* getWorld() { return discretDynamicsWorld; }
 };
 } // namespace Chimera

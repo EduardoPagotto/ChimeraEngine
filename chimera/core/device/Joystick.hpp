@@ -4,11 +4,15 @@
 
 namespace Chimera {
 class Joystick {
+  private:
+    std::map<SDL_JoystickID, SDL_Joystick*> joys;
+
   public:
     Joystick() {
         SDL_InitSubSystem(SDL_INIT_JOYSTICK);
         SDL_JoystickEventState(SDL_ENABLE);
     };
+
     virtual ~Joystick() {
         for (auto i = joys.begin(); i != joys.end(); i++)
             SDL_JoystickClose(i->second);
@@ -30,7 +34,7 @@ class Joystick {
         return false;
     }
 
-    SDL_Joystick* get(const SDL_JoystickID& joystick_id) { return joys.contains(joystick_id) ? joys[joystick_id] : nullptr; }
+    inline SDL_Joystick* get(const SDL_JoystickID& joystick_id) { return joys.contains(joystick_id) ? joys[joystick_id] : nullptr; }
 
   private:
     void added(void) {
@@ -67,7 +71,5 @@ class Joystick {
             joys.erase(device.which);
         }
     }
-
-    std::map<SDL_JoystickID, SDL_Joystick*> joys;
 };
 } // namespace Chimera

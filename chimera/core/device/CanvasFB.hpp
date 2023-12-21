@@ -5,6 +5,12 @@
 namespace Chimera {
 
 class CanvasFB : public Canvas {
+  private:
+    uint32_t* pixels;
+    uint32_t pixelFormat;
+    SDL_Texture* texture;
+    SDL_Renderer* renderer;
+
   public:
     CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen = false);
     virtual ~CanvasFB();
@@ -15,11 +21,5 @@ class CanvasFB : public Canvas {
 
     uint32_t* getPixels() override { return pixels; }
     uint32_t getPixelFormat() { return pixelFormat; }
-
-  private:
-    uint32_t* pixels;
-    uint32_t pixelFormat;
-    SDL_Texture* texture;
-    SDL_Renderer* renderer;
 };
 } // namespace Chimera

@@ -27,6 +27,11 @@ enum class DEEP {
 enum class SPACE { EMPTY = 0, SOLID = 1, DIAG = 2, FLOOR = 3, CEILING = 4, FC = 5, RAMP_FNS = 6, RAMP_FEW = 7, INVALID = 99 };
 
 class Cube : public AABB {
+  private:
+    Cube *pNorth{nullptr}, *pEast{nullptr}, *pSouth{nullptr}, *pWest{nullptr}, *pUp{nullptr}, *pDown{nullptr};
+    Mesh* mesh{nullptr};
+    SPACE space;
+
   public:
     Cube(const char& caracter, const glm::vec3& min, const glm::vec3& max);
     virtual ~Cube();
@@ -53,14 +58,6 @@ class Cube : public AABB {
 
     void newFlatFloorCeeling(bool isFloor, CARDINAL card);
     void addFace(bool clockwise, int numFace, int numTex);
-    Cube* pNorth;
-    Cube* pEast;
-    Cube* pSouth;
-    Cube* pWest;
-    Cube* pUp;
-    Cube* pDown;
-    SPACE space;
-    Mesh* mesh;
 };
 
 void initCubeBase();

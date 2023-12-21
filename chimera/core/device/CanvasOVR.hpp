@@ -4,7 +4,7 @@
 #include "chimera/render/CanvasGL.hpp"
 #ifdef WIN32
 #define OVR_OS_WIN32
-//#include "../Src/OVR_CAPI_GL.hpp"
+// #include "../Src/OVR_CAPI_GL.hpp"
 #include <OVR.h>
 #include <OVR_CAPI_GL.h>
 #else
@@ -20,19 +20,6 @@
 namespace Chimera {
 
 class CanvasOVR : public CanvasGL {
-  public:
-    CanvasOVR(std::string nomeTela);
-    virtual ~CanvasOVR();
-
-    virtual void initDraw();
-    virtual void endDraw();
-    virtual void executeViewPerspective(const float& _fov, const float& _near, const float& _far, int _eye);
-    virtual void executeViewOrto(int eyeIndex);
-    virtual void reshape(int _w, int _h);
-    virtual void toggleFullScreen();
-
-    virtual int getTotEyes() { return 2; }
-
   private:
     void initDevice();
     void update_rtarg(int width, int height);
@@ -57,6 +44,19 @@ class CanvasOVR : public CanvasGL {
     ovrVector2i winPosPrev;
 
     ovrMatrix4f orthoProjection[2];
+
+  public:
+    CanvasOVR(std::string nomeTela);
+    virtual ~CanvasOVR();
+
+    virtual void initDraw();
+    virtual void endDraw();
+    virtual void executeViewPerspective(const float& _fov, const float& _near, const float& _far, int _eye);
+    virtual void executeViewOrto(int eyeIndex);
+    virtual void reshape(int _w, int _h);
+    virtual void toggleFullScreen();
+
+    virtual int getTotEyes() { return 2; }
 };
 } // namespace Chimera
 #endif //  OVR_SET_TO_USE

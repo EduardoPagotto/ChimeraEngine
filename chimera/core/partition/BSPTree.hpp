@@ -5,6 +5,10 @@
 
 namespace Chimera {
 class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
+  private:
+    std::vector<VertexData> vertex;
+    std::vector<TrisIndex> vpLeaf;
+
   public:
     BspTree() {}
     virtual ~BspTree() {}
@@ -17,8 +21,5 @@ class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
     void splitTriangle(const glm::vec3& fx, std::shared_ptr<Triangle> _pTriangle, Plane& hyperPlane,
                        std::list<std::shared_ptr<Triangle>>& _vTriangle);
     void createLeafy(BSPTreeNode* tree, std::list<std::shared_ptr<Triangle>>& _vTriangle);
-
-    std::vector<VertexData> vertex;
-    std::vector<TrisIndex> vpLeaf;
 };
 } // namespace Chimera

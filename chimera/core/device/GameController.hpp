@@ -4,6 +4,9 @@
 
 namespace Chimera {
 class GameController {
+  private:
+    std::map<SDL_JoystickID, SDL_GameController*> pads;
+
   public:
     GameController() {
         SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
@@ -61,6 +64,5 @@ class GameController {
             pads.erase(device.which);
         }
     }
-    std::map<SDL_JoystickID, SDL_GameController*> pads;
 };
 } // namespace Chimera

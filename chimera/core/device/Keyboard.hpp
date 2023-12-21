@@ -4,6 +4,10 @@
 
 namespace Chimera {
 class Keyboard {
+  private:
+    std::map<SDL_Keycode, uint8_t> mapKey;
+    uint16_t mod;
+
   public:
     Keyboard() = default;
     virtual ~Keyboard() = default;
@@ -41,9 +45,5 @@ class Keyboard {
 
         return false;
     }
-
-  private:
-    std::map<SDL_Keycode, uint8_t> mapKey;
-    uint16_t mod;
 };
 } // namespace Chimera

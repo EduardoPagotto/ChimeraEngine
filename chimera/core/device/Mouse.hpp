@@ -5,6 +5,11 @@
 
 namespace Chimera {
 class Mouse {
+  private:
+    std::map<uint8_t, uint8_t> buttonState;
+    glm::ivec2 pos, rel, wheel;
+    uint32_t flag1, flag2;
+
   public:
     Mouse() = default;
     virtual ~Mouse() = default;
@@ -52,10 +57,5 @@ class Mouse {
         }
         return false;
     }
-
-  private:
-    std::map<uint8_t, uint8_t> buttonState;
-    glm::ivec2 pos, rel, wheel;
-    uint32_t flag1, flag2;
 };
 } // namespace Chimera

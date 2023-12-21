@@ -7,6 +7,10 @@
 namespace Chimera {
 
 class LoadHeightMap {
+  private:
+    SDL_Surface* pImage{nullptr};
+    uint32_t width{0}, height{0}, squareX{0}, squareZ{0}, minimal{0};
+
   public:
     LoadHeightMap(int _squareX, int _squareZ);
     virtual ~LoadHeightMap();
@@ -21,13 +25,5 @@ class LoadHeightMap {
     uint32_t getHeight(const uint32_t& w, const uint32_t& h);
     glm::vec3 defineScale(const glm::vec3& _size);
     // glm::vec3 calcNormalHeight(int x, int z);
-
-    SDL_Surface* pImage;
-    uint32_t width;
-    uint32_t height;
-    uint32_t squareX;
-    uint32_t squareZ;
-
-    uint32_t minimal;
 };
 } // namespace Chimera

@@ -12,6 +12,13 @@ namespace Chimera {
  *  @update 20220610
  */
 class Canvas {
+  protected:
+    bool fullScreen;
+    int width, height;
+    int posX, posY;
+    std::string title;
+    SDL_Window* window;
+
   public:
     Canvas(const std::string& _title, int _width, int _height, bool _fullScreen = false)
         : title(_title), width(_width), height(_height), fullScreen(_fullScreen), window(nullptr) {}
@@ -25,13 +32,6 @@ class Canvas {
 
     inline int getWidth() const { return width; }
     inline int getHeight() const { return height; }
-
-  protected:
-    bool fullScreen;
-    int width, height;
-    int posX, posY;
-    std::string title;
-    SDL_Window* window;
 };
 
 struct CanvasComponent {

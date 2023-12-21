@@ -10,6 +10,21 @@
 namespace Chimera {
 
 class Solid : public ITrans {
+  private:
+    btScalar mass;
+    btScalar frictionDynamic;
+    btScalar frictionStatic;
+    btScalar restitution;
+
+    btRigidBody* pRigidBody;
+    btCollisionShape* pShapeCollision;
+    btGImpactMeshShape* trimesh;
+    btDefaultMotionState* pMotionState;
+    PhysicsControl* pWorld;
+    // btTriangleIndexVertexArray *indexVertexArray;
+    // btTriangleIndexVertexArray *m_pIndexVertexArrays;
+    uint32_t entity;
+
   public:
     Solid(PhysicsControl* _pWorld, const glm::mat4& _trans, uint32_t entity);
     virtual ~Solid();
@@ -42,20 +57,5 @@ class Solid : public ITrans {
     inline void setFrictionDynamic(const float& _friction) { frictionDynamic = _friction; }
     inline void setFrictionStatic(const float& _friction) { frictionStatic = _friction; }
     inline void setRestitution(const float& _restitution) { restitution = _restitution; }
-
-  private:
-    btScalar mass;
-    btScalar frictionDynamic;
-    btScalar frictionStatic;
-    btScalar restitution;
-
-    btRigidBody* pRigidBody;
-    btCollisionShape* pShapeCollision;
-    btGImpactMeshShape* trimesh;
-    btDefaultMotionState* pMotionState;
-    PhysicsControl* pWorld;
-    // btTriangleIndexVertexArray *indexVertexArray;
-    // btTriangleIndexVertexArray *m_pIndexVertexArrays;
-    uint32_t entity;
 };
 } // namespace Chimera

@@ -5,15 +5,14 @@
 namespace Chimera {
 
 class Constraint {
-  public:
-    Constraint();
-    virtual ~Constraint();
-
   private:
-    Solid* pPhysicsA;
-    Solid* pPhysicsB;
-
+    Solid* pPhysicsA = nullptr;
+    Solid* pPhysicsB = nullptr;
     btTransform transformA;
     btTransform transformB;
+
+  public:
+    Constraint() = default;
+    virtual ~Constraint() = default;
 };
 } // namespace Chimera

@@ -18,7 +18,6 @@ set (SourcesCore Registry.cpp
 				 HeapQ.cpp
 				 device/CanvasFB.cpp
 				 device/CanvasGL.cpp
-				 buffer/VertexBuffer.cpp
 				 buffer/IndexBuffer.cpp
 				 buffer/VertexArray.cpp
 				 buffer/FrameBuffer.cpp

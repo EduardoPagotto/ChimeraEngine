@@ -21,17 +21,10 @@ RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuff
     vbo->unbind();
 }
 
-RenderBuffer::~RenderBuffer() {
-    delete frameBuffer;
-    delete vbo;
-}
-
 void RenderBuffer::bind() {
     frameBuffer->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the screen
 }
-
-void RenderBuffer::unbind() { frameBuffer->unbind(); }
 
 void RenderBuffer::render() {
     // Render on the whole framebuffer, complete from the lower left corner to the upper right

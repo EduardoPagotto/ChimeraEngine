@@ -12,6 +12,14 @@ struct FrameBufferSpecification {
 };
 
 class FrameBuffer {
+  private:
+    uint32_t framBufferID, rbo;
+    FrameBufferSpecification spec;
+    Texture* depthAttachment;
+    TexParam depthTexSpec, rboSpec;
+    std::vector<Texture*> colorAttachments;
+    std::vector<TexParam> colorTexSpecs;
+
   public:
     FrameBuffer(const FrameBufferSpecification& spec);
     ~FrameBuffer();
@@ -30,12 +38,5 @@ class FrameBuffer {
   private:
     void destroy();
     void invalidade();
-
-    uint32_t framBufferID, rbo;
-    FrameBufferSpecification spec;
-    Texture* depthAttachment;
-    TexParam depthTexSpec, rboSpec;
-    std::vector<Texture*> colorAttachments;
-    std::vector<TexParam> colorTexSpecs;
 };
 } // namespace Chimera

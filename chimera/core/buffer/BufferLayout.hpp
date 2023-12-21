@@ -14,8 +14,13 @@ struct BufferElement {
 };
 
 class BufferLayout {
+  private:
+    uint16_t size = 0;
+    std::vector<BufferElement> layout;
+
   public:
-    BufferLayout() : size(0) {}
+    BufferLayout() = default;
+    virtual ~BufferLayout() = default;
 
     template <typename T>
     inline void Push(const uint& count, const bool& normalized) {}
@@ -33,8 +38,5 @@ class BufferLayout {
         layout.push_back({count, type, sizeOfType, normalized, this->size});
         this->size += sizeOfType * count;
     }
-
-    uint16_t size;
-    std::vector<BufferElement> layout;
 };
 } // namespace Chimera

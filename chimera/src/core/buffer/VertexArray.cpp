@@ -15,8 +15,6 @@ VertexArray::~VertexArray() {
     glDeleteVertexArrays(1, &arrayID);
 }
 
-void VertexArray::push(VertexBuffer* buffer) { this->vbos.push_back(buffer); }
-
 void VertexArray::bind() const { glBindVertexArray(arrayID); }
 
 void VertexArray::unbind() { glBindVertexArray(0); }

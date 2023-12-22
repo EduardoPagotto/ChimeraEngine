@@ -20,7 +20,7 @@ class LoadHeightMap {
     void split(TrisIndex& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut);
 
   private:
-    inline uint32_t getIndex(const uint32_t& _x, const uint32_t& _z) { return (pImage->w * _z) + _x; }
+    inline const uint32_t getIndex(const uint32_t& _x, const uint32_t& _z) { return (pImage->w * _z) + _x; }
     uint32_t getpixel(const uint32_t& w, const uint32_t& h);
     uint32_t getHeight(const uint32_t& w, const uint32_t& h);
     glm::vec3 defineScale(const glm::vec3& _size);

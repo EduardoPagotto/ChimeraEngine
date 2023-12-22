@@ -46,7 +46,7 @@ class Cube : public AABB {
     void newCeeling();
     void newRampNSEW(SPACE space);
 
-    inline SPACE getSpace() const { return this->space; }
+    inline const SPACE getSpace() const { return this->space; }
 
     inline bool emptySpace() const {
         return ((this->space == SPACE::EMPTY) || (this->space == SPACE::FLOOR) || (this->space == SPACE::CEILING) ||
@@ -54,7 +54,7 @@ class Cube : public AABB {
     }
 
     CARDINAL emptyQuadrantDiag(DEEP deep, bool invert);
-    bool hasNeighbor(DEEP deep, CARDINAL card, SPACE space);
+    const bool hasNeighbor(DEEP deep, CARDINAL card, SPACE space);
 
     void newFlatFloorCeeling(bool isFloor, CARDINAL card);
     void addFace(bool clockwise, int numFace, int numTex);

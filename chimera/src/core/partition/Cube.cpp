@@ -80,7 +80,7 @@ void cleanupCubeBase() {
 }
 
 glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm::ivec3 const& pos) {
-    glm::ivec3 val = pos;
+    glm::ivec3 val{pos};
     switch (deep) {
         case DEEP::UP:
             val.y = pos.y + dist.y;
@@ -131,7 +131,7 @@ glm::ivec3 getCardinalPos(DEEP deep, CARDINAL card, const glm::ivec3& dist, glm:
 
 Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size, std::vector<Cube*>& vpCube) {
 
-    glm::ivec3 val = getCardinalPos(deep, card, glm::ivec3(1), pos);
+    const glm::ivec3 val{getCardinalPos(deep, card, glm::ivec3(1), pos)};
     // get Valid position
     if ((val.z >= 0) && (val.z < size.z) && (val.x >= 0) && (val.x < size.x) && (val.y >= 0) && (val.y < size.y))
         return vpCube[getIndexArrayPos(val, size)];
@@ -140,9 +140,9 @@ Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm
 }
 
 glm::vec3 minimal(const float& sizeBlock, const glm::vec3 halfBlock, const glm::ivec3& pos) {
-    float x_min = (pos.x * sizeBlock) - halfBlock.x; // (width++)
-    float y_min = (pos.y * sizeBlock) - halfBlock.y; // Altura Minima andar
-    float z_min = (pos.z * sizeBlock) - halfBlock.z; // (height--)
+    const float x_min{(pos.x * sizeBlock) - halfBlock.x}; // (width++)
+    const float y_min{(pos.y * sizeBlock) - halfBlock.y}; // Altura Minima andar
+    const float z_min{(pos.z * sizeBlock) - halfBlock.z}; // (height--)
     return glm::vec3(x_min, y_min, z_min);
 }
 
@@ -234,16 +234,16 @@ void Cube::setNeighbor(DEEP deep, CARDINAL card, Cube* pCube) {
 
 void Cube::addFace(bool clockwise, int numFace, int numTex) {
 
-    glm::uvec3 tri = tVertIndex[numFace];
-    glm::uvec3 tex = tTexIndex[numTex];
+    const glm::uvec3 tri{tVertIndex[numFace]}; // Face index
+    const glm::uvec3 tex{tTexIndex[numTex]};   // Texture index
 
-    glm::vec3 va = vertex[tri.x]; // PA
-    glm::vec3 vb = vertex[tri.y]; // PB
-    glm::vec3 vc = vertex[tri.z]; // PC
+    const glm::vec3 va{vertex[tri.x]}; // Point A
+    const glm::vec3 vb{vertex[tri.y]}; // Point B
+    const glm::vec3 vc{vertex[tri.z]}; // Point C
 
-    glm::vec2 ta = tTexSeq[tex.x]; // TA
-    glm::vec2 tb = tTexSeq[tex.y]; // TB
-    glm::vec2 tc = tTexSeq[tex.z]; // TC
+    const glm::vec2 ta{tTexSeq[tex.x]}; // Tex point A
+    const glm::vec2 tb{tTexSeq[tex.y]}; // Tex point B
+    const glm::vec2 tc{tTexSeq[tex.z]}; // Tex point C
 
     uint32_t ia, ib, ic;
     if (!clockwise) {
@@ -256,15 +256,12 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
         ia = ib + 1;
     }
 
-    const glm::uvec3 face(ia, ib, ic);
-
-    glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
-
+    const glm::vec3 vn = glm::normalize(glm::cross(vb - va, vc - va)); // CROSS(U,V)
     mesh->vertex.push_back({va, vn, ta});
     mesh->vertex.push_back({vb, vn, tb});
     mesh->vertex.push_back({vc, vn, tc});
 
-    mesh->iFace.push_back(face);
+    mesh->iFace.push_back(glm::uvec3(ia, ib, ic)); // Face
 }
 
 CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
@@ -284,10 +281,10 @@ CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
 
     if (pVal != nullptr) {
 
-        bool isN = (pVal->pNorth != nullptr) ? pVal->pNorth->emptySpace() : false;
-        bool isE = (pVal->pEast != nullptr) ? pVal->pEast->emptySpace() : false;
-        bool isS = (pVal->pSouth != nullptr) ? pVal->pSouth->emptySpace() : false;
-        bool isW = (pVal->pWest != nullptr) ? pVal->pWest->emptySpace() : false;
+        const bool isN{(pVal->pNorth != nullptr) ? pVal->pNorth->emptySpace() : false};
+        const bool isE{(pVal->pEast != nullptr) ? pVal->pEast->emptySpace() : false};
+        const bool isS{(pVal->pSouth != nullptr) ? pVal->pSouth->emptySpace() : false};
+        const bool isW{(pVal->pWest != nullptr) ? pVal->pWest->emptySpace() : false};
 
         if (isN && isE)
             return (!invert) ? CARDINAL::NORTH_EAST : CARDINAL::SOUTH_WEST;
@@ -305,7 +302,7 @@ CARDINAL Cube::emptyQuadrantDiag(DEEP deep, bool invert) {
     return CARDINAL::NONE;
 }
 
-bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
+const bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
     Cube* pVal = nullptr;
 
     switch (deep) {
@@ -322,11 +319,11 @@ bool Cube::hasNeighbor(DEEP deep, CARDINAL card, SPACE space) {
 
     if (pVal != nullptr) {
 
-        bool vN = (pVal->pNorth != nullptr) ? (pVal->pNorth->getSpace() == space) : false;
-        bool vE = (pVal->pEast != nullptr) ? (pVal->pEast->getSpace() == space) : false;
-        bool vS = (pVal->pSouth != nullptr) ? (pVal->pSouth->getSpace() == space) : false;
-        bool vW = (pVal->pWest != nullptr) ? (pVal->pWest->getSpace() == space) : false;
-        bool cb = (pVal->getSpace() == space);
+        const bool vN{(pVal->pNorth != nullptr) ? (pVal->pNorth->getSpace() == space) : false};
+        const bool vE{(pVal->pEast != nullptr) ? (pVal->pEast->getSpace() == space) : false};
+        const bool vS{(pVal->pSouth != nullptr) ? (pVal->pSouth->getSpace() == space) : false};
+        const bool vW{(pVal->pWest != nullptr) ? (pVal->pWest->getSpace() == space) : false};
+        const bool cb{(pVal->getSpace() == space)};
 
         switch (card) {
             case CARDINAL::NORTH:
@@ -378,15 +375,8 @@ void Cube::newWall() {
 }
 
 void Cube::newRamp(bool isFloor, CARDINAL card) {
-    bool westWallDown = false;
-    bool westWallUp = false;
-    bool eastWallDown = false;
-    bool eastWallUp = false;
-
-    bool northWallDown = false;
-    bool northWallUp = false;
-    bool southWallDown = false;
-    bool southWallUp = false;
+    bool westWallDown{false}, westWallUp{false}, eastWallDown{false}, eastWallUp{false},    // West/East
+        northWallDown{false}, northWallUp{false}, southWallDown{false}, southWallUp{false}; // Morth/Soult
 
     if (pWest != nullptr) {
         westWallDown = pWest->emptySpace();
@@ -530,8 +520,7 @@ void Cube::newRamp(bool isFloor, CARDINAL card) {
 
 void Cube::newDiag() {
     // get side
-    CARDINAL card = this->emptyQuadrantDiag(DEEP::MIDDLE, false);
-
+    const CARDINAL card{this->emptyQuadrantDiag(DEEP::MIDDLE, false)};
     switch (card) {
         case CARDINAL::SOUTH_WEST:
             // ne (diag. sup. dir.)
@@ -572,7 +561,7 @@ void Cube::newDiag() {
 }
 
 void Cube::newFloor() {
-    CARDINAL card = CARDINAL::NONE;
+    CARDINAL card{CARDINAL::NONE};
     if ((this->pDown != nullptr) && (this->pDown->getSpace() == SPACE::DIAG))
         card = this->emptyQuadrantDiag(DEEP::DOWN, true);
 
@@ -580,7 +569,7 @@ void Cube::newFloor() {
 }
 
 void Cube::newCeeling() {
-    CARDINAL card = CARDINAL::NONE;
+    CARDINAL card{CARDINAL::NONE};
     if ((this->pUp != nullptr) && (this->pUp->getSpace() == SPACE::DIAG))
         card = this->emptyQuadrantDiag(DEEP::UP, true);
 
@@ -659,7 +648,7 @@ void Cube::newRampNSEW(SPACE space) {
 void Cube::create(Mesh* mesh) {
     this->mesh = mesh;
 
-    SPACE val = this->getSpace();
+    const SPACE val{this->getSpace()};
     switch (val) {
         case SPACE::EMPTY:
             this->newWall();

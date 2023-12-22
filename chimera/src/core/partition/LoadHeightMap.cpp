@@ -15,15 +15,15 @@ void LoadHeightMap::clean() {
 }
 
 uint32_t LoadHeightMap::getHeight(const uint32_t& w, const uint32_t& h) {
-    unsigned w1 = w > pImage->w ? pImage->w : w;
-    unsigned h1 = h > pImage->h ? pImage->h : h;
+    const uint32_t w1{w > pImage->w ? pImage->w : w};
+    const uint32_t h1{h > pImage->h ? pImage->h : h};
     return getpixel(w1, h1);
 }
 
 uint32_t LoadHeightMap::getpixel(const uint32_t& w, const uint32_t& h) {
-    int bpp = pImage->format->BytesPerPixel;
+    const int bpp{pImage->format->BytesPerPixel};
 
-    uint8_t* p = (uint8_t*)pImage->pixels + h * pImage->pitch + w * bpp;
+    uint8_t* p{(uint8_t*)pImage->pixels + h * pImage->pitch + w * bpp};
 
     switch (bpp) {
         case 1:
@@ -53,9 +53,9 @@ uint32_t LoadHeightMap::getpixel(const uint32_t& w, const uint32_t& h) {
 glm::vec3 LoadHeightMap::defineScale(const glm::vec3& _size) {
     uint32_t max;
     minimal = max = getHeight(0, 0);
-    for (uint32_t z = 0; z < pImage->h; z++) {
-        for (uint32_t x = 0; x < pImage->w; x++) {
-            uint32_t val = getHeight(x, z);
+    for (uint32_t z{0}; z < pImage->h; z++) {
+        for (uint32_t x{0}; x < pImage->w; x++) {
+            const uint32_t val{getHeight(x, z)};
 
             if (val > max)
                 max = val;
@@ -80,13 +80,11 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
         return false;
     }
 
-    float halfH = (float)pImage->h / 2.0f;
-    float haldW = (float)pImage->w / 2.0f;
-
-    float v = 1.0f / (pImage->h - 1);
-    float u = 1.0f / (pImage->w - 1);
-
-    glm::vec3 scale = defineScale(_size);
+    const float halfH{(float)pImage->h / 2.0f};
+    const float haldW{(float)pImage->w / 2.0f};
+    const float v{1.0f / (pImage->h - 1)};
+    const float u{1.0f / (pImage->w - 1)};
+    const glm::vec3 scale = defineScale(_size);
 
     for (uint32_t z = 0; z < pImage->h; z++) {
         for (uint32_t x = 0; x < pImage->w; x++) {
@@ -97,33 +95,28 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
         }
     }
 
-    uint32_t tot_h = pImage->h - 1;
-    uint32_t tot_w = pImage->w - 1;
+    const uint32_t tot_h{static_cast<uint32_t>(pImage->h - 1)};
+    const uint32_t tot_w{static_cast<uint32_t>(pImage->w - 1)};
 
-    for (uint32_t z = 0; z < tot_h; z++) {
-        for (uint32_t x = 0; x < tot_w; x++) {
+    for (uint32_t z{0}; z < tot_h; z++) {
+        for (uint32_t x{0}; x < tot_w; x++) {
             // triangles point
-            const uint32_t pa = getIndex(x, z);
-            const uint32_t pb = getIndex(x + 1, z);
-            const uint32_t pc = getIndex(x + 1, z + 1);
-            const uint32_t pd = getIndex(x, z + 1);
-            const glm::uvec3 t1(pa, pb, pc);
-            const glm::uvec3 t2(pc, pd, pa);
-
-            // T1
-            _mesh.iFace.push_back(t1);
-            // T2
-            _mesh.iFace.push_back(t2);
+            const uint32_t pa{getIndex(x, z)};
+            const uint32_t pb{getIndex(x + 1, z)};
+            const uint32_t pc{getIndex(x + 1, z + 1)};
+            const uint32_t pd{getIndex(x, z + 1)};
+            // Face index
+            _mesh.iFace.push_back({pa, pb, pc}); // T1
+            _mesh.iFace.push_back({pc, pd, pa}); // T2
         }
     }
 
     // Calcula normal apos todo o mapeamento de altura
-    for (uint32_t i = 0; i < _mesh.iFace.size(); i++) {
+    for (uint32_t i{0}; i < _mesh.iFace.size(); i++) {
 
         const glm::vec3& pa = _mesh.vertex[_mesh.iFace[i].x].point;
         const glm::vec3& pb = _mesh.vertex[_mesh.iFace[i].y].point;
         const glm::vec3& pc = _mesh.vertex[_mesh.iFace[i].z].point;
-
         const glm::vec3 vn = glm::normalize(glm::cross(pb - pa, pc - pa)); // CROSS(U,V)
 
         _mesh.vertex[_mesh.iFace[i].x].normal = vn;
@@ -141,21 +134,17 @@ bool LoadHeightMap::getMesh(const std::string& _fileName, Mesh& _mesh, const glm
 
 void LoadHeightMap::split(TrisIndex& vertexIndexIn, std::vector<TrisIndex>& vTrisIndexOut) {
 
-    bool done = false;
-    uint32_t startHeight = 0;
-    uint32_t startWidth = 0;
-    uint32_t contador = 0;
-    uint32_t totalHeight = (height - 1) * 2;
-    uint32_t totalWidth = (width - 1) * 2;
-    uint32_t squareHeight = squareZ;
-    uint32_t squareWidth = squareX * 2;
-    uint32_t thresholdWidht = totalHeight * squareZ;
+    bool done{false};
+    uint32_t startHeight{0}, startWidth{0}, contador{0};
+    const uint32_t totalHeight{(height - 1) * 2}, totalWidth{(width - 1) * 2};
+    const uint32_t squareHeight{squareZ}, squareWidth{squareX * 2};
+    const uint32_t thresholdWidht{totalHeight * squareZ};
 
     while (!done) {
 
         uint32_t endHeight = startHeight + squareHeight;
         uint32_t endWidth = startWidth + squareWidth;
-        uint32_t testeA = startHeight * totalHeight + startWidth;
+        const uint32_t testeA = startHeight * totalHeight + startWidth;
 
         if (testeA >= vertexIndexIn.size()) { // all faces
             done = true;

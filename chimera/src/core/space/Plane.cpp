@@ -3,13 +3,6 @@
 
 namespace Chimera {
 
-Plane::Plane(const Plane& _cpy) {
-    this->point = _cpy.point;
-    this->normal = _cpy.normal;
-    this->ND = _cpy.ND;
-    this->O = _cpy.O;
-}
-
 void Plane::set(const glm::vec3& pA, const glm::vec3& B, const glm::vec3& C) {
     point = pA;
     normal = glm::normalize(glm::cross(B - pA, C - pA));

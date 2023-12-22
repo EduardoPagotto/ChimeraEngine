@@ -7,6 +7,20 @@
 namespace Chimera {
 
 class Octree {
+  private:
+    bool locked;
+    bool leafMode;
+    bool divided;
+    uint32_t deep;
+    uint32_t capacity;
+    uint32_t serial;
+    AABB boundary;
+    Octree* pParent;
+    Octree* pChild[8];
+    std::vector<glm::vec3> points;
+    std::vector<uint32_t> indexes;
+    inline static uint32_t serial_master;
+
   public:
     Octree(const AABB& boundary, const uint32_t& capacity, Octree* parent, const bool& leafMode, const uint32_t& deep);
     virtual ~Octree();
@@ -30,18 +44,5 @@ class Octree {
     void subdivide();
     void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes);
     bool insertNew(const glm::vec3& point, const uint32_t& index);
-
-    bool locked;
-    bool leafMode;
-    bool divided;
-    uint32_t deep;
-    uint32_t capacity;
-    uint32_t serial;
-    AABB boundary;
-    Octree* pParent;
-    Octree* pChild[8];
-    std::vector<glm::vec3> points;
-    std::vector<uint32_t> indexes;
-    inline static uint32_t serial_master;
 };
 } // namespace Chimera

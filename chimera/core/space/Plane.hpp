@@ -6,9 +6,15 @@ namespace Chimera {
 enum class SIDE { CP_ONPLANE, CP_FRONT, CP_BACK, CP_SPANNING };
 
 class Plane {
+  private:
+    glm::vec3 point{0};  // vertice A
+    glm::vec3 normal{0}; // plane calc cross product B and C across A
+    float ND{0.0f};
+    int O{0};
+
   public:
     Plane() = default;
-    Plane(const Plane& _cpy);
+    Plane(const Plane& _cpy) : point(_cpy.point), normal(_cpy.normal), ND(_cpy.ND), O(_cpy.O) {}
     Plane(const glm::vec3& _position, const glm::vec3& _normal) { this->set(_position, _normal); }
     virtual ~Plane() = default;
 
@@ -25,11 +31,5 @@ class Plane {
 
     inline const bool AABBBehind(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]) < ND; }
     inline const float AABBDistance(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]); }
-
-  private:
-    glm::vec3 point;  // vertice A
-    glm::vec3 normal; // plane calc cross product B and C across A
-    float ND;
-    int O;
 };
 } // namespace Chimera

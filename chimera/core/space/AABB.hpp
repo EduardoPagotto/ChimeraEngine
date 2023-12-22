@@ -6,6 +6,13 @@ namespace Chimera {
 enum class AabbBondery { BSW = 0, BSE = 1, TSW = 2, TSE = 3, BNW = 4, BNE = 5, TNW = 6, TNE = 7 };
 
 class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
+  protected:
+    glm::vec3 vertex[8];
+
+  private:
+    glm::vec3 position;
+    glm::vec3 size;
+
   public:
     AABB() = default;
     AABB(const AABB& _cpy);
@@ -26,12 +33,5 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
     AABB transformation(const glm::mat4& transformation) const;
     const glm::vec3& getVertex(int index) const { return vertex[index]; }
     const glm::vec3* getAllVertex() const { return vertex; }
-
-  protected:
-    glm::vec3 vertex[8];
-
-  private:
-    glm::vec3 position;
-    glm::vec3 size;
 };
 } // namespace Chimera

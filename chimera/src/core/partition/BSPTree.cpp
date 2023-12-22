@@ -45,7 +45,7 @@ void swapFace(T& a, T& b) {
 // }
 
 BSPTreeNode* BspTree::create(Mesh& mesh, std::vector<TrisIndex>& vpLeafOut) {
-    // std::list<std::shared_ptr<Triangle>> vTris;
+
     std::list<std::shared_ptr<Triangle>> vTris;
 
     meshToTriangle(mesh, vTris);
@@ -66,10 +66,9 @@ BSPTreeNode* BspTree::create(Mesh& mesh, std::vector<TrisIndex>& vpLeafOut) {
 
 std::shared_ptr<Triangle> BspTree::selectBestSplitter(std::list<std::shared_ptr<Triangle>>& _vTriangle) {
 
-    unsigned int bestScore = 100000;                      // just set to a very high value to begin
     std::shared_ptr<Triangle> selectedTriangle = nullptr; // poit to none
     glm::vec3 temp;                                       // inutil
-    long long score, splits, backfaces, frontfaces;       // counts
+    int64_t bestScore{100000}, score{0}, splits{0}, backfaces{0}, frontfaces{0};
 
     for (std::shared_ptr<Triangle> th : _vTriangle) {
 
@@ -85,7 +84,7 @@ std::shared_ptr<Triangle> BspTree::selectBestSplitter(std::list<std::shared_ptr<
                 SIDE result = hyperPlane.classifyPoly(vertex[currentPoly->idx.s].point, // PA
                                                       vertex[currentPoly->idx.t].point, // PB
                                                       vertex[currentPoly->idx.p].point, // PC
-                                                      &temp);                           // Clip Test Result (A,B,C)
+                                                      temp);                            // Clip Test Result (A,B,C)
                 switch (result) {
                     case SIDE::CP_ONPLANE:
                         break;
@@ -122,18 +121,12 @@ std::shared_ptr<Triangle> BspTree::selectBestSplitter(std::list<std::shared_ptr<
 void BspTree::splitTriangle(const glm::vec3& fx, std::shared_ptr<Triangle> _pTriangle, Plane& hyperPlane,
                             std::list<std::shared_ptr<Triangle>>& _vTriangle) {
 
-    // Proporcao de textura (0.0 a 1.0)
-    float propAC = 0.0;
-    float propBC = 0.0;
-
     // Vertex dos triangulos a serem normalizados
     glm::vec2 vertA_uv, vertB_uv, vertC_uv;
 
-    // Pega pontos posicao original e inteseccao
-    glm::vec3 A, B;
-    glm::vec3 a = vertex[_pTriangle->idx.s].point;
-    glm::vec3 b = vertex[_pTriangle->idx.t].point;
-    glm::vec3 c = vertex[_pTriangle->idx.p].point;
+    glm::vec3 a{vertex[_pTriangle->idx.s].point};
+    glm::vec3 b{vertex[_pTriangle->idx.t].point};
+    glm::vec3 c{vertex[_pTriangle->idx.p].point};
 
     // Normaliza Triangulo para que o corte do triangulo esteja nos segmentos de reta CA e CB (corte em a e b)
     if (fx.x * fx.z >= 0) {                      // corte em a e c (rotaciona pontos sentido horario) ABC => BCA
@@ -156,19 +149,22 @@ void BspTree::splitTriangle(const glm::vec3& fx, std::shared_ptr<Triangle> _pTri
         vertC_uv = vertex[_pTriangle->idx.p].uv; // old c
     }
 
+    glm::vec3 A, B;       // Pega pontos posicao original e inteseccao
+    float propAC, propBC; // Proporcao de textura (0.0 a 1.0)
+
     hyperPlane.intersect(a, c, A, propAC);
     hyperPlane.intersect(b, c, B, propBC);
 
     // PA texture coord
-    glm::vec2 deltaA = (vertC_uv - vertA_uv) * propAC;
-    glm::vec2 texA = vertA_uv + deltaA;
+    const glm::vec2 deltaA{(vertC_uv - vertA_uv) * propAC};
+    const glm::vec2 texA{vertA_uv + deltaA};
 
     // PB texture coord
-    glm::vec2 deltaB = (vertC_uv - vertB_uv) * propBC;
-    glm::vec2 texB = vertB_uv + deltaB;
+    const glm::vec2 deltaB{(vertC_uv - vertB_uv) * propBC};
+    const glm::vec2 texB{vertB_uv + deltaB};
 
     // indices de triangulos novos
-    unsigned int last = vertex.size();
+    size_t last = vertex.size();
 
     //-- T1 Triangle T1(a, b, A); // mesma normal que o original
     vertex.push_back({a, _pTriangle->normal, vertA_uv}); // T1 PA
@@ -214,7 +210,7 @@ BSPTreeNode* BspTree::build(std::list<std::shared_ptr<Triangle>>& _vTriangle) {
             SIDE clipTest = tree->hyperPlane.classifyPoly(vertex[poly->idx.s].point, // PA old poly.vertex[0].point
                                                           vertex[poly->idx.t].point, // PB
                                                           vertex[poly->idx.p].point, // PC
-                                                          &result);                  // Clip Test Result (A,B,C)
+                                                          result);                   // Clip Test Result (A,B,C)
             switch (clipTest) {
                 case SIDE::CP_BACK:
                     back_list.push_front(poly);
@@ -248,7 +244,7 @@ BSPTreeNode* BspTree::build(std::list<std::shared_ptr<Triangle>>& _vTriangle) {
         }
     }
 
-    unsigned int count = 0;
+    size_t count = 0;
     for (auto th : front_list) {
         if (th->splitter == false)
             count++;

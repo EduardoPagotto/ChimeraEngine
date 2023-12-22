@@ -22,13 +22,13 @@ void Plane::set(const glm::vec3& pA, const glm::vec3& _normal) {
 }
 
 bool Plane::collinearNormal(const glm::vec3& _normal) const {
-    glm::vec3 sub = this->normal - _normal;
+    const glm::vec3 sub = this->normal - _normal;
     return (float)fabs(sub.x + sub.y + sub.z) < EPSILON;
 }
 
 SIDE Plane::classifyPoint(const glm::vec3& point) const {
-    glm::vec3 dir = this->point - point;
-    float clipTest = glm::dot(dir, this->normal);
+    const glm::vec3 dir = this->point - point;
+    const float clipTest = glm::dot(dir, this->normal);
 
     if (fabs(clipTest) < EPSILON)
         return SIDE::CP_ONPLANE;
@@ -39,32 +39,25 @@ SIDE Plane::classifyPoint(const glm::vec3& point) const {
     return SIDE::CP_BACK;
 }
 
-SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3* clipTest) const {
-    unsigned short infront = 0;
-    unsigned short behind = 0;
-    unsigned short onPlane = 0;
-    float result[3];
+SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3& clipTest) const {
+    uint8_t infront{0}, behind{0}, onPlane{0};
 
-    result[0] = glm::dot((this->point - pA), this->normal); // Clip Test poin A
-    result[1] = glm::dot((this->point - pB), this->normal); // Clip Test poin B
-    result[2] = glm::dot((this->point - pC), this->normal); // Clip Test poin C
+    clipTest.x = glm::dot((this->point - pA), this->normal); // Clip Test poin A
+    clipTest.y = glm::dot((this->point - pB), this->normal); // Clip Test poin B
+    clipTest.z = glm::dot((this->point - pC), this->normal); // Clip Test poin C
 
-    for (unsigned short a = 0; a < 3; a++) {
-        if (fabs(result[a]) < EPSILON) {
-            result[a] = 0.0f;
+    for (uint8_t i = 0; i < 3; i++) {
+        if (fabs(clipTest[i]) < EPSILON) {
+            clipTest[i] = 0.0f;
             onPlane++;
             infront++;
             behind++;
-        } else if (result[a] > 0.0f) {
+        } else if (clipTest[i] > 0.0f) {
             behind++;
-        } else { // result[a] < 0.0f
+        } else { // clipTest[i] < 0.0f
             infront++;
         }
     }
-
-    clipTest->x = result[0];
-    clipTest->y = result[1];
-    clipTest->z = result[2];
 
     if (onPlane == 3)
         return SIDE::CP_ONPLANE;
@@ -80,14 +73,13 @@ SIDE Plane::classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::ve
 
 bool Plane::intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection, float& percentage) const {
 
-    glm::vec3 direction = p1 - p0;
-    float linelength = glm::dot(direction, this->normal);
+    const glm::vec3 direction = p1 - p0;
+    const float linelength = glm::dot(direction, this->normal);
     if (fabsf(linelength) < 0.0001) // FIXME: EPISLON????
         return false;
 
-    glm::vec3 L1 = this->point - p0;
-
-    float dist_from_plane = glm::dot(L1, this->normal);
+    const glm::vec3 L1 = this->point - p0;
+    const float dist_from_plane = glm::dot(L1, this->normal);
     percentage = dist_from_plane / linelength;
 
     if (percentage < 0.0f)

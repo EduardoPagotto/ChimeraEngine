@@ -11,8 +11,8 @@ find_package(PUGIXML REQUIRED)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define os Lib's a serem usados
-set (LibsHelloWorld ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
-					${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
+set (LibsHelloWorld ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.so
+					${CMAKE_SOURCE_DIR}/bin/libChimeraCore.so
 				    ${OPENGL_LIBRARIES}
 				    ${SDL2_IBRARIES}
 					${BULLET_LIBRARIES}

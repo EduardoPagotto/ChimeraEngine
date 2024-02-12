@@ -19,8 +19,8 @@ set (IncludesSimples ${CMAKE_CURRENT_SOURCE_DIR}/include
 					 ${BULLET_INCLUDE_DIR})
 
 #define os Lib's a serem usados
-set (LibsSimples ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
-                 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
+set (LibsSimples ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.so
+                 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.so
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_IBRARIES}
 				 ${BULLET_LIBRARIES}

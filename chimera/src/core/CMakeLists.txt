@@ -83,7 +83,7 @@ endif(BULLET_SET_TO_USE)
 
 
 # Define o Target
-add_library (ChimeraCore STATIC ${SourcesCore})
+add_library (ChimeraCore SHARED ${SourcesCore})
 
 # Define os includes 
 target_include_directories (ChimeraCore PUBLIC ${IncludeCore})

@@ -50,7 +50,7 @@ if (BULLET_SET_TO_USE)
 endif(BULLET_SET_TO_USE)
 
 # Define o Target
-add_library (ChimeraRender STATIC ${RenderSource})
+add_library (ChimeraRender SHARED ${RenderSource})
 
 # Define os includes privados para este target
 target_include_directories (ChimeraRender PUBLIC ${RenderInclude})

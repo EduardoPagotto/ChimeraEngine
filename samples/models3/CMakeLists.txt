@@ -18,8 +18,8 @@ set (IncludesModels3 ${Models3_SOURCE_DIR}/include/
 					 ${BULLET_INCLUDE_DIR})
 
 #ordem é importante!!!
-set (LibsModels3 ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.so
-				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.so
+set (LibsModels3 ChimeraRender
+				 ChimeraCore
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_LIBRARY}
 				 ${BULLET_LIBRARIES}

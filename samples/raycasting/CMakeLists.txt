@@ -17,7 +17,7 @@ set (IncludesSimpleRayCasting ${CMAKE_CURRENT_SOURCE_DIR}/include
 							  ${SDL2_INCLUDE_DIR}
 							  ${BULLET_INCLUDE_DIR})
 
-set (LibsSimpleRayCasting ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.so
+set (LibsSimpleRayCasting ChimeraCore
 						  ${OPENGL_LIBRARIES}
 						  ${SDL2_LIBRARY}
 						  ${BULLET_LIBRARIES}

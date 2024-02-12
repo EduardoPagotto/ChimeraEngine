@@ -19,8 +19,8 @@ set (IncludesTerrain ${CMAKE_CURRENT_SOURCE_DIR}/include
 					 ${BULLET_INCLUDE_DIR})
 
 #define os Lib's a serem usados
-set (LibsTerrain ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.so
-				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.so
+set (LibsTerrain ChimeraRender
+				 ChimeraCore
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_IBRARIES}
 				 ${BULLET_LIBRARIES}

@@ -1,12 +1,12 @@
-#include "chimera/core/collada/ColladaExtra.hpp"
+#include "chimera/core/ColladaExtra.hpp"
+#include "chimera/core/CanvasFB.hpp"
+#include "chimera/core/CanvasGL.hpp"
+#include "chimera/core/ColladaCam.hpp"
+#include "chimera/core/ColladaEffect.hpp"
+#include "chimera/core/FontManager.hpp"
+#include "chimera/core/FrameBuffer.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/ViewProjection.hpp"
-#include "chimera/core/buffer/FrameBuffer.hpp"
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaEffect.hpp"
-#include "chimera/core/device/CanvasFB.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/visible/FontManager.hpp"
 
 namespace Chimera {
 

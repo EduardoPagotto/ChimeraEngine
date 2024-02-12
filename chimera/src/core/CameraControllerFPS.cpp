@@ -1,6 +1,6 @@
-#include "chimera/core/visible/CameraControllerFPS.hpp"
+#include "chimera/core/CameraControllerFPS.hpp"
+#include "chimera/core/Keyboard.hpp"
 #include "chimera/core/Singleton.hpp"
-#include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {

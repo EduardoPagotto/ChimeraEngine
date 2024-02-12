@@ -1,4 +1,4 @@
-#include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 

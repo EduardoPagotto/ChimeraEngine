@@ -1,7 +1,7 @@
-#include "chimera/core/collada/ColladaEffect.hpp"
-#include "chimera/core/collada/ColladaImage.hpp"
-#include "chimera/core/visible/Material.hpp"
-#include "chimera/core/visible/Shader.hpp"
+#include "chimera/core/ColladaEffect.hpp"
+#include "chimera/core/ColladaImage.hpp"
+#include "chimera/core/Material.hpp"
+#include "chimera/core/Shader.hpp"
 
 namespace Chimera {
 

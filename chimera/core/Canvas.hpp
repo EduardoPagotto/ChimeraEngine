@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/TagComponent.hpp"
+#include "TagComponent.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 

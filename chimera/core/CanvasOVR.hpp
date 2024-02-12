@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef OVR_SET_TO_USE
-#include "chimera/render/CanvasGL.hpp"
+#include "CanvasGL.hpp"
 #ifdef WIN32
 #define OVR_OS_WIN32
 // #include "../Src/OVR_CAPI_GL.hpp"

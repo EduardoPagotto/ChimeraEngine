@@ -1,8 +1,8 @@
 #pragma once
-#include "chimera/core/IStateMachine.hpp"
-#include "chimera/core/Registry.hpp"
-#include "chimera/core/device/Mouse.hpp"
-#include "chimera/core/visible/ICamera.hpp"
+#include "ICamera.hpp"
+#include "IStateMachine.hpp"
+#include "Mouse.hpp"
+#include "Registry.hpp"
 
 namespace Chimera {
 

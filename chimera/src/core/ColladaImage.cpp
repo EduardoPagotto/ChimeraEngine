@@ -1,6 +1,6 @@
-#include "chimera/core/collada/ColladaImage.hpp"
-#include "chimera/core/buffer/FrameBuffer.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
+#include "chimera/core/ColladaImage.hpp"
+#include "chimera/core/FrameBuffer.hpp"
+#include "chimera/core/TextureManager.hpp"
 
 namespace Chimera {
 

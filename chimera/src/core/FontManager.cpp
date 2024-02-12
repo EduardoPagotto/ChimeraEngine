@@ -1,4 +1,4 @@
-#include "chimera/core/visible/FontManager.hpp"
+#include "chimera/core/FontManager.hpp"
 
 namespace Chimera {
 

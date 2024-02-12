@@ -1,6 +1,6 @@
 #pragma once
 #include "BufferLayout.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "OpenGLDefs.hpp"
 
 namespace Chimera {
 

@@ -1,5 +1,5 @@
-#include "chimera/core/collada/ColladaLight.hpp"
-#include "chimera/core/visible/Light.hpp"
+#include "chimera/core/ColladaLight.hpp"
+#include "chimera/core/Light.hpp"
 
 namespace Chimera {
 ColladaLight::~ColladaLight() {}

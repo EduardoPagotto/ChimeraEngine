@@ -16,47 +16,47 @@ set (SourcesCore Registry.cpp
 				 utils.cpp
 				 Engine.cpp
 				 HeapQ.cpp
-				 device/CanvasFB.cpp
-				 device/CanvasGL.cpp
-				 buffer/IndexBuffer.cpp
-				 buffer/VertexArray.cpp
-				 buffer/FrameBuffer.cpp
-				 buffer/RenderBuffer.cpp
+				 CanvasFB.cpp
+				 CanvasGL.cpp
+				 IndexBuffer.cpp
+				 VertexArray.cpp
+				 FrameBuffer.cpp
+				 RenderBuffer.cpp
 				 DrawLine.cpp
-				 space/Plane.cpp
-				 space/Frustum.cpp
-				 space/AABB.cpp
-				 space/Octree.cpp
-				 visible/Mesh.cpp
-				 visible/Shader.cpp
-				 visible/Texture.cpp
-				 visible/TextureManager.cpp
-				 visible/CameraControllerFPS.cpp
-				 visible/CameraControllerOrbit.cpp
-				 visible/FontAtlas.cpp
-				 visible/FontManager.cpp
-				 visible/Material.cpp
-				 visible/ParticleEmitter.cpp
-				 collada/RFC3986.cpp
-				 collada/Collada.cpp
-				 collada/ColladaVisualScene.cpp
-				 collada/ColladaImage.cpp
-				 collada/ColladaMaterial.cpp
-				 collada/ColladaEffect.cpp
-				 collada/ColladaLight.cpp
-				 collada/ColladaCam.cpp
-				 collada/ColladaGeometry.cpp
-				 collada/colladaLoad.cpp
-				 collada/ColladaWaveFront.cpp
-				 collada/ColladaHeightMap.cpp
-				 collada/ColladaCube.cpp
-				 collada/ColladaMesh.cpp
-				 collada/ColladaParticle.cpp
-				 collada/ColladaExtra.cpp
-				 partition/BSPTree.cpp
-				 partition/LoadHeightMap.cpp
-				 partition/Wavefront.cpp
-				 partition/Cube.cpp)
+				 Plane.cpp
+				 Frustum.cpp
+				 AABB.cpp
+				 Octree.cpp
+				 Mesh.cpp
+				 Shader.cpp
+				 Texture.cpp
+				 TextureManager.cpp
+				 CameraControllerFPS.cpp
+				 CameraControllerOrbit.cpp
+				 FontAtlas.cpp
+				 FontManager.cpp
+				 Material.cpp
+				 ParticleEmitter.cpp
+				 RFC3986.cpp
+				 Collada.cpp
+				 ColladaVisualScene.cpp
+				 ColladaImage.cpp
+				 ColladaMaterial.cpp
+				 ColladaEffect.cpp
+				 ColladaLight.cpp
+				 ColladaCam.cpp
+				 ColladaGeometry.cpp
+				 colladaLoad.cpp
+				 ColladaWaveFront.cpp
+				 ColladaHeightMap.cpp
+				 ColladaCube.cpp
+				 ColladaMesh.cpp
+				 ColladaParticle.cpp
+				 ColladaExtra.cpp
+				 BSPTree.cpp
+				 LoadHeightMap.cpp
+				 Wavefront.cpp
+				 Cube.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}
@@ -68,15 +68,15 @@ set (IncludeCore ${CMAKE_SOURCE_DIR}
 # Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR incluido no build ChimeraCore")
-	set(SourcesCore ${SourcesCore} device/CanvasOVR) 
+	set(SourcesCore ${SourcesCore} CanvasOVR) 
 	set(SourcesCore ${SourcesCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) 
 endif(OVR_SET_TO_USE)
 
 if (BULLET_SET_TO_USE)	
 	message(STATUS "Bullet incluido no build ChimeraCore")
-	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
-								   bullet/Solid.cpp
-								   collada/ColladaPhysicScene.cpp
+	set(SourcesCore ${SourcesCore} PhysicsControl.cpp
+								   Solid.cpp
+								   ColladaPhysicScene.cpp
 								   PhysicController.cpp) 
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)

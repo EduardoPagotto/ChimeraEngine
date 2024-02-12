@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/ScriptableEntity.hpp"
-#include "chimera/core/bullet/PhysicsControl.hpp"
+#include "PhysicsControl.hpp"
+#include "ScriptableEntity.hpp"
 
 namespace Chimera {
 

@@ -1,5 +1,5 @@
-#include "chimera/core/collada/ColladaParticle.hpp"
-#include "chimera/core/visible/ParticleEmitter.hpp"
+#include "chimera/core/ColladaParticle.hpp"
+#include "chimera/core/ParticleEmitter.hpp"
 
 namespace Chimera {
 

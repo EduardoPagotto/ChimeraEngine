@@ -1,7 +1,7 @@
 #pragma once
 #include "FrameBuffer.hpp"
+#include "Shader.hpp"
 #include "VertexBuffer.hpp"
-#include "chimera/core/visible/Shader.hpp"
 
 namespace Chimera {
 

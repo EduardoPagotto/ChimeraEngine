@@ -1,7 +1,7 @@
 #pragma once
-#include "chimera/core/space/BSPTreeNode.hpp"
-#include "chimera/core/space/Triangle.hpp"
-#include "chimera/core/visible/Mesh.hpp"
+#include "BSPTreeNode.hpp"
+#include "Mesh.hpp"
+#include "Triangle.hpp"
 
 namespace Chimera {
 class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree

@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/Registry.hpp"
+#include "Registry.hpp"
 
 namespace Chimera {
 
@@ -7,7 +7,10 @@ class ScriptableEntity {
   public:
     virtual ~ScriptableEntity(){};
 
-    template <typename T> T& getComponent() { return entity.getComponent<T>(); }
+    template <typename T>
+    T& getComponent() {
+        return entity.getComponent<T>();
+    }
 
     virtual void onCreate() {}
     virtual void onDestroy() {}
@@ -28,7 +31,8 @@ struct NativeScriptComponent {
     ScriptableEntity* (*instantiateScript)();
     void (*destroyScript)(NativeScriptComponent*);
 
-    template <typename T> void bind(const std::string& nameBind) {
+    template <typename T>
+    void bind(const std::string& nameBind) {
         name = nameBind;
         instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
         destroyScript = [](NativeScriptComponent* nsc) {

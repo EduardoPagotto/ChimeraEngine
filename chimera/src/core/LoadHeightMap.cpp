@@ -1,4 +1,4 @@
-#include "chimera/core/partition/LoadHeightMap.hpp"
+#include "chimera/core/LoadHeightMap.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

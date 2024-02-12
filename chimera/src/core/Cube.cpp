@@ -1,4 +1,4 @@
-#include "chimera/core/partition/Cube.hpp"
+#include "chimera/core/Cube.hpp"
 
 namespace Chimera {
 

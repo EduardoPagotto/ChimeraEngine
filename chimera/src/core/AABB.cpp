@@ -1,4 +1,4 @@
-#include "chimera/core/space/AABB.hpp"
+#include "chimera/core/AABB.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {

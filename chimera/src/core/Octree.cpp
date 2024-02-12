@@ -1,4 +1,4 @@
-#include "chimera/core/space/Octree.hpp"
+#include "chimera/core/Octree.hpp"
 #include "chimera/src/core/HeapQ.cpp"
 #include <SDL2/SDL.h>
 

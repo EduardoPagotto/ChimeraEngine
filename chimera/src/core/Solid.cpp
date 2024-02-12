@@ -1,4 +1,4 @@
-#include "chimera/core/bullet/Solid.hpp"
+#include "chimera/core/Solid.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

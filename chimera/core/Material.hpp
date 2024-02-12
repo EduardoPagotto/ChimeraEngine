@@ -1,7 +1,7 @@
 #pragma once
+#include "TagComponent.hpp"
 #include "Texture.hpp"
 #include "UValue.hpp"
-#include "chimera/core/TagComponent.hpp"
 #include <vector>
 
 namespace Chimera {

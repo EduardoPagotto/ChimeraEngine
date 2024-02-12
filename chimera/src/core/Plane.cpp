@@ -1,4 +1,4 @@
-#include "chimera/core/space/Plane.hpp"
+#include "chimera/core/Plane.hpp"
 #include <SDL2/SDL.h>
 
 namespace Chimera {

@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/TagComponent.hpp"
+#include "TagComponent.hpp"
 #include <glm/glm.hpp>
 
 namespace Chimera {

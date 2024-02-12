@@ -1,6 +1,6 @@
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/visible/ICamera.hpp"
-#include "chimera/core/visible/ITrans.hpp"
+#include "chimera/core/ColladaCam.hpp"
+#include "chimera/core/ICamera.hpp"
+#include "chimera/core/ITrans.hpp"
 
 namespace Chimera {
 ColladaCam::~ColladaCam() {}

@@ -1,6 +1,6 @@
-#include "chimera/core/collada/ColladaMesh.hpp"
-#include "chimera/core/visible/Mesh.hpp"
-#include "chimera/core/visible/ParticleEmitter.hpp"
+#include "chimera/core/ColladaMesh.hpp"
+#include "chimera/core/Mesh.hpp"
+#include "chimera/core/ParticleEmitter.hpp"
 
 namespace Chimera {
 

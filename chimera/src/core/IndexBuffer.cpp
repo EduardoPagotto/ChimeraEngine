@@ -1,4 +1,4 @@
-#include "chimera/core/buffer/IndexBuffer.hpp"
+#include "chimera/core/IndexBuffer.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
 namespace Chimera {

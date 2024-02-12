@@ -1,8 +1,8 @@
 #pragma once
-#include "chimera/core/buffer/VertexArray.hpp"
-#include "chimera/core/space/AABB.hpp"
-#include "chimera/core/visible/RenderCommand.hpp"
-#include "chimera/core/visible/Shader.hpp"
+#include "AABB.hpp"
+#include "RenderCommand.hpp"
+#include "Shader.hpp"
+#include "VertexArray.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

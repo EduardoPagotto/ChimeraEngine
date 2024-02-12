@@ -1,4 +1,4 @@
-#include "chimera/core/visible/Material.hpp"
+#include "chimera/core/Material.hpp"
 
 namespace Chimera {
 

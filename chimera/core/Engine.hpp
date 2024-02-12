@@ -1,9 +1,9 @@
 #pragma once
+#include "Canvas.hpp"
+#include "Registry.hpp"
 #include "StateStack.hpp"
 #include "Timer.hpp"
-#include "chimera/core/Registry.hpp"
-#include "chimera/core/ViewProjection.hpp"
-#include "chimera/core/device/Canvas.hpp"
+#include "ViewProjection.hpp"
 
 namespace Chimera {
 class Engine {

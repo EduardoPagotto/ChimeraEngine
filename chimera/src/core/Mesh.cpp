@@ -1,4 +1,4 @@
-#include "chimera/core/visible/Mesh.hpp"
+#include "chimera/core/Mesh.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 

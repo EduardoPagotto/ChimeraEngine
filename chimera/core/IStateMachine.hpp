@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/ViewProjection.hpp"
+#include "ViewProjection.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 

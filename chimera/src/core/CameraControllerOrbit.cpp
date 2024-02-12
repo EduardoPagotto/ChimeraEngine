@@ -1,6 +1,6 @@
-#include "chimera/core/visible/CameraControllerOrbit.hpp"
+#include "chimera/core/CameraControllerOrbit.hpp"
+#include "chimera/core/Keyboard.hpp"
 #include "chimera/core/Singleton.hpp"
-#include "chimera/core/device/Keyboard.hpp"
 
 namespace Chimera {
 

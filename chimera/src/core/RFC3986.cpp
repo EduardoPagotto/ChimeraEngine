@@ -1,4 +1,4 @@
-#include "chimera/core/collada/RFC3986.hpp"
+#include "chimera/core/RFC3986.hpp"
 
 namespace Chimera {
 RFC3986::RFC3986(const std::string& url) { this->setUrl(url); }

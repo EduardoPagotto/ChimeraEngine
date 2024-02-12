@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/TagComponent.hpp"
-#include "chimera/core/space/Triangle.hpp"
+#include "TagComponent.hpp"
+#include "Triangle.hpp"
 #include <glm/glm.hpp>
 #include <list>
 #include <memory>

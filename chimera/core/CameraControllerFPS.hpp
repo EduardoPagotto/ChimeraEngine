@@ -1,10 +1,10 @@
 #pragma once
-#include "chimera/core/IStateMachine.hpp"
-#include "chimera/core/Registry.hpp"
-#include "chimera/core/device/GameController.hpp"
-#include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/device/Mouse.hpp"
-#include "chimera/core/visible/ICamera.hpp"
+#include "GameController.hpp"
+#include "ICamera.hpp"
+#include "IStateMachine.hpp"
+#include "Keyboard.hpp"
+#include "Mouse.hpp"
+#include "Registry.hpp"
 
 namespace Chimera {
 

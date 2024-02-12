@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/device/Mouse.hpp"
-#include "chimera/render/scene/Scene.hpp"
+#include "chimera/core/Mouse.hpp"
+#include "chimera/render/Scene.hpp"
 
 class Game : public Chimera::IStateMachine {
   public:

@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderable2D.hpp"
-#include "chimera/core/visible/FontAtlas.hpp"
+#include "chimera/core/FontAtlas.hpp"
 
 namespace Chimera {
 

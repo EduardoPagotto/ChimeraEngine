@@ -1,8 +1,8 @@
 #include "Game.hpp"
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/render/collada/ColladaRender.hpp"
+#include "chimera/core/colladaLoad.hpp"
+#include "chimera/render/ColladaRender.hpp"
 #include <cstdio>
 #include <iostream>
 #include <map>

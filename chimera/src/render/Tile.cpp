@@ -1,4 +1,4 @@
-#include "chimera/render/2d/Tile.hpp"
+#include "chimera/render/Tile.hpp"
 namespace Chimera {
 Tile::Tile(const std::string& name, IRenderer2D* renderer, Shader shader, Camera* camera) : Layer(renderer, shader, camera, name) {}
 Tile::~Tile() {}

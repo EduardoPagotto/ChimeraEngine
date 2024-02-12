@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/render/2d/Tile.hpp"
-#include "chimera/render/3d/IRenderable3d.hpp"
+#include "IRenderable3d.hpp"
+#include "Tile.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Chimera {

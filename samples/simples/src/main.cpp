@@ -1,8 +1,8 @@
 #include "Game.hpp"
+#include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/Singleton.hpp"
-#include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/colladaLoad.hpp"
 #include "chimera/core/utils.hpp"
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) { mouse = Chimera::Singleton<Chimera::Mouse>::get(); }

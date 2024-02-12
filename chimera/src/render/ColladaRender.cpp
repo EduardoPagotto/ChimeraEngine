@@ -1,10 +1,10 @@
-#include "chimera/render/collada/ColladaRender.hpp"
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaEffect.hpp"
-#include "chimera/core/collada/ColladaVisualScene.hpp"
-#include "chimera/core/visible/Shader.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
-#include "chimera/render/scene/Components.hpp"
+#include "chimera/render/ColladaRender.hpp"
+#include "chimera/core/ColladaCam.hpp"
+#include "chimera/core/ColladaEffect.hpp"
+#include "chimera/core/ColladaVisualScene.hpp"
+#include "chimera/core/Shader.hpp"
+#include "chimera/render/BatchRender2D.hpp"
+#include "chimera/render/Components.hpp"
 
 namespace Chimera {
 

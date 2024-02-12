@@ -1,5 +1,5 @@
-#include "chimera/render/2d/Layer.hpp"
-#include "chimera/core/visible/RenderCommand.hpp"
+#include "chimera/render/Layer.hpp"
+#include "chimera/core/RenderCommand.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Chimera {

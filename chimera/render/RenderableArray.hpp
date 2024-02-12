@@ -1,8 +1,8 @@
 #pragma once
-#include "chimera/core/buffer/VertexArray.hpp"
-#include "chimera/core/space/AABB.hpp"
-#include "chimera/core/visible/Mesh.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "Renderable3D.hpp"
+#include "chimera/core/AABB.hpp"
+#include "chimera/core/Mesh.hpp"
+#include "chimera/core/VertexArray.hpp"
 
 namespace Chimera {
 

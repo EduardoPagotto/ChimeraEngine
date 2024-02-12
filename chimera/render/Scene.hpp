@@ -1,16 +1,16 @@
 #pragma once
+#include "chimera/core/Canvas.hpp"
+#include "chimera/core/ICamera.hpp"
 #include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/ITrans.hpp"
+#include "chimera/core/Octree.hpp"
+#include "chimera/core/ParticleEmitter.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/RenderBuffer.hpp"
 #include "chimera/core/StateStack.hpp"
-#include "chimera/core/buffer/RenderBuffer.hpp"
-#include "chimera/core/device/Canvas.hpp"
-#include "chimera/core/space/Octree.hpp"
-#include "chimera/core/visible/ICamera.hpp"
-#include "chimera/core/visible/ITrans.hpp"
-#include "chimera/core/visible/ParticleEmitter.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
-#include "chimera/render/3d/IRenderable3d.hpp"
-#include "chimera/render/3d/Renderer3dLines.hpp"
+#include "chimera/render/BatchRender2D.hpp"
+#include "chimera/render/IRenderable3d.hpp"
+#include "chimera/render/Renderer3dLines.hpp"
 
 namespace Chimera {
 

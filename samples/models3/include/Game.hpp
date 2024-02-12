@@ -1,9 +1,9 @@
 #pragma once
-#include "chimera/core/bullet/Solid.hpp"
-#include "chimera/core/device/GameController.hpp"
-#include "chimera/core/device/Mouse.hpp"
-#include "chimera/render/2d/Label.hpp"
-#include "chimera/render/scene/Scene.hpp"
+#include "chimera/core/GameController.hpp"
+#include "chimera/core/Mouse.hpp"
+#include "chimera/core/Solid.hpp"
+#include "chimera/render/Label.hpp"
+#include "chimera/render/Scene.hpp"
 
 class Game : public Chimera::IStateMachine {
   public:

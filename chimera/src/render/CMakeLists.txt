@@ -13,23 +13,23 @@ endif(BULLET_SET_TO_USE)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	2d/Renderable2D.cpp
-					2d/Sprite.cpp
-					2d/BatchRender2D.cpp
-					2d/Layer.cpp
-					2d/Label.cpp
-					2d/Tile.cpp
-					3d/Renderer3d.cpp
-					3d/Renderer3dLines.cpp
-					3d/Renderable3D.cpp
-					3d/RenderableMesh.cpp
-					3d/RenderableIBO.cpp
-					3d/RenderableArray.cpp
-					3d/RenderableBsp.cpp
-					3d/RenderableDynamic.cpp
-					3d/RenderableParticles.cpp
-					scene/Scene.cpp
-					collada/ColladaRender.cpp)
+set (RenderSource 	Renderable2D.cpp
+					Sprite.cpp
+					BatchRender2D.cpp
+					Layer.cpp
+					Label.cpp
+					Tile.cpp
+					Renderer3d.cpp
+					Renderer3dLines.cpp
+					Renderable3D.cpp
+					RenderableMesh.cpp
+					RenderableIBO.cpp
+					RenderableArray.cpp
+					RenderableBsp.cpp
+					RenderableDynamic.cpp
+					RenderableParticles.cpp
+					Scene.cpp
+					ColladaRender.cpp)
 
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}

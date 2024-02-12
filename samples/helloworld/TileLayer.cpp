@@ -1,6 +1,6 @@
 #include "TileLayer.hpp"
-#include "chimera/core/visible/ICamera.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
+#include "chimera/core/ICamera.hpp"
+#include "chimera/render/BatchRender2D.hpp"
 #include <glm/gtx/transform.hpp>
 
 TileLayer::TileLayer(Chimera::Shader shader)

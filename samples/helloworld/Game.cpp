@@ -1,10 +1,10 @@
 #include "Game.hpp"
+#include "chimera/core/FontManager.hpp"
+#include "chimera/core/TextureManager.hpp"
+#include "chimera/core/Transform.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/FontManager.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
-#include "chimera/core/visible/Transform.hpp"
-#include "chimera/render/2d/Group.hpp"
-#include "chimera/render/2d/Sprite.hpp"
+#include "chimera/render/Group.hpp"
+#include "chimera/render/Sprite.hpp"
 #include <time.h>
 
 Game::Game(Chimera::Engine& engine) : IStateMachine("Game"), engine(&engine) {

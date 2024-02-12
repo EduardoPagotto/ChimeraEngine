@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/collada/ColladaDom.hpp"
+#include "chimera/core/ColladaDom.hpp"
 
 namespace Chimera {
 void colladaRenderLoad(ColladaDom& dom);

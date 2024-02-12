@@ -1,9 +1,9 @@
 #include "Game.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/render/2d/Group.hpp"
-#include "chimera/render/2d/Sprite.hpp"
-#include "chimera/render/scene/Components.hpp"
+#include "chimera/render/Components.hpp"
+#include "chimera/render/Group.hpp"
+#include "chimera/render/Sprite.hpp"
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr), scene(&scene) {
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");

@@ -1,6 +1,6 @@
 #pragma once
 #include "IRenderable3d.hpp"
-#include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/VertexArray.hpp"
 #include <stdint.h>
 
 namespace Chimera {

@@ -1,6 +1,6 @@
-#include "chimera/render/3d/RenderableParticles.hpp"
-#include "chimera/core/visible/Shader.hpp"
-#include "chimera/render/3d/IRenderer3d.hpp"
+#include "chimera/render/RenderableParticles.hpp"
+#include "chimera/core/Shader.hpp"
+#include "chimera/render/IRenderer3d.hpp"
 
 namespace Chimera {
 

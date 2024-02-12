@@ -2,7 +2,7 @@
 #include "TileLayer.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/IStateMachine.hpp"
-#include "chimera/render/2d/Label.hpp"
+#include "chimera/render/Label.hpp"
 
 class Game : public Chimera::IStateMachine {
   public:

@@ -1,16 +1,21 @@
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
-* text=auto
+* text=auto eol=lf
 
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
 # This is need for earlier builds of msysgit that does not have it on by
-# default for csharp files.
 # Note: This is only used by command line
 ###############################################################################
-#*.cs     diff=csharp
+*.c text
+*.cc text
+*.cxx
+*.cpp text
+*.h text
+*.hxx text
+*.hpp text
 
 ###############################################################################
 # Set the merge driver for project and solution files
@@ -40,9 +45,11 @@
 #
 # image files are treated as binary by default.
 ###############################################################################
-#*.jpg   binary
-#*.png   binary
-#*.gif   binary
+*.jpg   binary
+*.png   binary
+*.gif   binary
+*.tga   binary
+*.ttf   binary
 
 ###############################################################################
 # diff behavior for common document formats
@@ -57,7 +64,7 @@
 #*.DOCX  diff=astextplain
 #*.dot   diff=astextplain
 #*.DOT   diff=astextplain
-#*.pdf   diff=astextplain
+*.pdf   diff=astextplain
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain

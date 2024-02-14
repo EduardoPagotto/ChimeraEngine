@@ -237,9 +237,9 @@ void Cube::addFace(bool clockwise, int numFace, int numTex) {
     const glm::uvec3 tri{tVertIndex[numFace]}; // Face index
     const glm::uvec3 tex{tTexIndex[numTex]};   // Texture index
 
-    const glm::vec3 va{vertex[tri.x]}; // Point A
-    const glm::vec3 vb{vertex[tri.y]}; // Point B
-    const glm::vec3 vc{vertex[tri.z]}; // Point C
+    const glm::vec3 va{m_vertex[tri.x]}; // Point A
+    const glm::vec3 vb{m_vertex[tri.y]}; // Point B
+    const glm::vec3 vc{m_vertex[tri.z]}; // Point C
 
     const glm::vec2 ta{tTexSeq[tex.x]}; // Tex point A
     const glm::vec2 tb{tTexSeq[tex.y]}; // Tex point B

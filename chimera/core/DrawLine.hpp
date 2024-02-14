@@ -1,6 +1,5 @@
 #pragma once
 #include "AABB.hpp"
-#include "RenderCommand.hpp"
 #include "Shader.hpp"
 #include "VertexArray.hpp"
 #include <glm/glm.hpp>

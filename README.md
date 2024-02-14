@@ -197,3 +197,11 @@ https://www.khronos.org/opengl/wiki/Example_Code
         }
     }
     ```
+
+    lista de componentes espaciais
+    - Triangle.hpp
+    - Plane.hpp
+        - BSPTreeNode
+        - Frustum.hpp
+            - AABB.hpp
+                - OCtree.hpp

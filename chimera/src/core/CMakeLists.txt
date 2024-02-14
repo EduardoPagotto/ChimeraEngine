@@ -22,10 +22,6 @@ set (SourcesCore Registry.cpp
 				 FrameBuffer.cpp
 				 RenderBuffer.cpp
 				 DrawLine.cpp
-				 Plane.cpp
-				 Frustum.cpp
-				 AABB.cpp
-				 Octree.cpp
 				 Mesh.cpp
 				 Shader.cpp
 				 Texture.cpp

@@ -1,5 +1,6 @@
 #include "chimera/render/Renderer3dLines.hpp"
 #include "chimera/core/AABB.hpp"
+#include "chimera/core/RenderCommand.hpp"
 
 namespace Chimera {
 

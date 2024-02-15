@@ -13,15 +13,15 @@ class Frustum {
     Frustum() = default;
     virtual ~Frustum() = default;
 
-    void set(const glm::mat4& ViewProjectionMatrixInverse) {
-        const glm::vec4 A = ViewProjectionMatrixInverse * glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
-        const glm::vec4 B = ViewProjectionMatrixInverse * glm::vec4(1.0f, -1.0f, 1.0f, 1.0f);
-        const glm::vec4 C = ViewProjectionMatrixInverse * glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);
-        const glm::vec4 D = ViewProjectionMatrixInverse * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-        const glm::vec4 E = ViewProjectionMatrixInverse * glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
-        const glm::vec4 F = ViewProjectionMatrixInverse * glm::vec4(1.0f, -1.0f, -1.0f, 1.0f);
-        const glm::vec4 G = ViewProjectionMatrixInverse * glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);
-        const glm::vec4 H = ViewProjectionMatrixInverse * glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
+    void set(const glm::mat4& vpmi) { // ViewProjectionMatrixInverse
+        const glm::vec4 A = vpmi * glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        const glm::vec4 B = vpmi * glm::vec4(1.0f, -1.0f, 1.0f, 1.0f);
+        const glm::vec4 C = vpmi * glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);
+        const glm::vec4 D = vpmi * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        const glm::vec4 E = vpmi * glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
+        const glm::vec4 F = vpmi * glm::vec4(1.0f, -1.0f, -1.0f, 1.0f);
+        const glm::vec4 G = vpmi * glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);
+        const glm::vec4 H = vpmi * glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
 
         m_vertices[0] = glm::vec3(A.x / A.w, A.y / A.w, A.z / A.w);
         m_vertices[1] = glm::vec3(B.x / B.w, B.y / B.w, B.z / B.w);

@@ -30,6 +30,40 @@ class Octree {
 
     virtual ~Octree() { destroy(); }
 
+    // TODO: continuar alterando o contrutor padrao como vazio
+    // Octree(const AABB& aabb, Octree* parent) : m_boundary(aabb), m_parent(parent), m_serial(s_serial_master) {
+
+    //     m_capacity = parent->m_capacity;
+    //     m_leafMode = parent->m_leafMode;
+    //     m_parent = parent;
+    //     m_locked = false;
+    //     m_divided = false;
+    //     m_deep = parent->m_deep + 1;
+
+    //     s_serial_master++;
+
+    //     for (short i = 0; i < 8; i++)
+    //         m_childs[i] = nullptr;
+    // }
+
+    // void setAsRoot(const AABB& aabb, const uint32_t& capacity, const bool& leafMode) {
+    //     m_boundary = aabb;
+    //     m_capacity = capacity;
+    //     m_leafMode = leafMode;
+    //     m_parent = nullptr;
+    //     m_locked = false;
+    //     m_divided = false;
+    //     m_deep = 0;
+    //     m_serial = 0;
+    //     Octree::s_serial_master = 1;
+
+    //     for (uint8_t i = 0; i < 8; i++)
+    //         m_childs[i] = nullptr;
+
+    //     m_points.clear();
+    //     m_indexes.clear();
+    // }
+
     void destroy() {
 
         if (m_divided == true) {
@@ -192,6 +226,7 @@ class Octree {
         tnw.setPosition(glm::vec3(xmin, ymax, zmax), s);
         tne.setPosition(glm::vec3(xmax, ymax, zmax), s);
 
+        // TODO: criar constructor usando this e pegando propriedades do pai
         m_childs[(int)AabbBondery::BSW] = new Octree(bsw, m_capacity, this, m_leafMode, newDeep);
         m_childs[(int)AabbBondery::BSE] = new Octree(bse, m_capacity, this, m_leafMode, newDeep);
         m_childs[(int)AabbBondery::TSW] = new Octree(tsw, m_capacity, this, m_leafMode, newDeep);

@@ -16,29 +16,29 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
   public:
     AABB() = default;
 
-    AABB(const AABB& _cpy) {
+    AABB(const AABB& o) {
         for (uint8_t i = 0; i < 8; i++)
-            m_vertex[i] = _cpy.m_vertex[i];
+            m_vertex[i] = o.m_vertex[i];
 
-        m_position = _cpy.m_position;
-        m_size = _cpy.m_size;
+        m_position = o.m_position;
+        m_size = o.m_size;
     }
 
-    AABB(const glm::vec3& _min, const glm::vec3& _max) { this->setBoundary(_min, _max); }
+    AABB(const glm::vec3& min, const glm::vec3& max) { this->setBoundary(min, max); }
 
     virtual ~AABB() = default;
 
-    inline const bool visible(const Frustum& _frustum) const { return _frustum.AABBVisible(m_vertex); }
+    inline const bool visible(const Frustum& frustum) const { return frustum.AABBVisible(m_vertex); }
 
-    inline const float distance(const Frustum& _frustum) const { return _frustum.AABBDistance(m_vertex); }
+    inline const float distance(const Frustum& frustum) const { return frustum.AABBDistance(m_vertex); }
 
-    inline glm::vec3 getMax() const { return m_vertex[7]; }
+    inline const glm::vec3 getMax() const { return m_vertex[7]; }
 
-    inline glm::vec3 getMin() const { return m_vertex[0]; }
+    inline const glm::vec3 getMin() const { return m_vertex[0]; }
 
-    inline glm::vec3 getPosition() const { return m_position; }
+    inline const glm::vec3 getPosition() const { return m_position; }
 
-    inline glm::vec3 getSize() const { return m_size; }
+    inline const glm::vec3 getSize() const { return m_size; }
 
     void setPosition(const glm::vec3& pos, const glm::vec3& size) {
 

@@ -1,4 +1,7 @@
-- [] Carga de shades pelo arqquivo formato collada
-- [] ColladaDB para dentro do Core
-- [] Separação das classes de Bullet
-- [] carga de dados de Node em hierarquia do Collada
+## Proximos pasos
+
+Geometrias
+[] Plane, entender membros de dados
+[] Octree, melhoria geral conforme TODOs
+[] Mesh, alterar para conter indices completos para remover MeshComponet
+

@@ -9,7 +9,7 @@ class Plane {
   private:
     glm::vec3 m_point{0};  // vertice A
     glm::vec3 m_normal{0}; // plane calc cross product B and C across A
-    float m_ND{0.0f};
+    float m_ND{0.0f};      // TODO: refazer e entender melhor
     int m_O{0};
 
   public:
@@ -24,8 +24,9 @@ class Plane {
     void set(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc) {
 
         m_point = pa;
-        m_normal = glm::normalize(glm::cross(pb - m_point, pc - m_point));
-        m_ND = dot(m_normal, m_point);
+        m_normal = glm::normalize(glm::cross(pb - pa, pc - pa));
+        m_ND = dot(m_normal, pa);
+
         m_O = m_normal.z < 0.0f ? (m_normal.y < 0.0f ? (m_normal.x < 0.0f ? 0 : 1) : (m_normal.x < 0.0f ? 2 : 3))
                                 : (m_normal.y < 0.0f ? (m_normal.x < 0.0f ? 4 : 5) : (m_normal.x < 0.0f ? 6 : 7));
 
@@ -41,17 +42,17 @@ class Plane {
                                 : (m_normal.y < 0.0f ? (m_normal.x < 0.0f ? 4 : 5) : (m_normal.x < 0.0f ? 6 : 7));
     }
 
-    inline glm::vec3 getPoint() const { return this->m_point; }
+    inline const glm::vec3 getPoint() const { return this->m_point; }
 
-    inline glm::vec3 getNormal() const { return this->m_normal; }
+    inline const glm::vec3 getNormal() const { return this->m_normal; }
 
-    bool collinearNormal(const glm::vec3& normal) const {
+    inline const bool collinearNormal(const glm::vec3& normal) const {
 
         const glm::vec3 sub = m_normal - normal;
         return (fabs(sub.x + sub.y + sub.z) < EPSILON);
     }
 
-    SIDE classifyPoint(const glm::vec3& point) const {
+    const SIDE classifyPoint(const glm::vec3& point) const {
 
         const glm::vec3 dir = m_point - point;
         const float clipTest = glm::dot(dir, m_normal);
@@ -65,7 +66,7 @@ class Plane {
         return SIDE::CP_BACK;
     }
 
-    SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3& clipTest) const {
+    const SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3& clipTest) const {
 
         uint8_t infront{0}, behind{0}, onPlane{0};
 
@@ -98,7 +99,7 @@ class Plane {
         return SIDE::CP_SPANNING;
     }
 
-    bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection, float& percentage) const {
+    const bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection, float& percentage) const {
 
         const glm::vec3 direction = p1 - p0;
         const float linelength = glm::dot(direction, m_normal);
@@ -119,6 +120,7 @@ class Plane {
     }
 
     inline const bool AABBBehind(const glm::vec3* AABBVertices) const { return glm::dot(m_normal, AABBVertices[m_O]) < m_ND; }
+
     inline const float AABBDistance(const glm::vec3* AABBVertices) const { return glm::dot(m_normal, AABBVertices[m_O]); }
 };
 } // namespace Chimera

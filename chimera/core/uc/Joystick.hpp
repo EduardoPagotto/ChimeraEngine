@@ -5,7 +5,7 @@
 namespace Chimera {
 class Joystick {
   private:
-    std::map<SDL_JoystickID, SDL_Joystick*> joys;
+    std::map<SDL_JoystickID, SDL_Joystick*> m_joys;
 
   public:
     Joystick() {
@@ -14,10 +14,10 @@ class Joystick {
     };
 
     virtual ~Joystick() {
-        for (auto i = joys.begin(); i != joys.end(); i++)
+        for (auto i = m_joys.begin(); i != m_joys.end(); i++)
             SDL_JoystickClose(i->second);
 
-        joys.clear();
+        m_joys.clear();
     };
 
     bool getEvent(const SDL_Event& event) {
@@ -34,7 +34,7 @@ class Joystick {
         return false;
     }
 
-    inline SDL_Joystick* get(const SDL_JoystickID& joystick_id) { return joys.contains(joystick_id) ? joys[joystick_id] : nullptr; }
+    inline SDL_Joystick* get(const SDL_JoystickID& joystick_id) { return m_joys.contains(joystick_id) ? m_joys[joystick_id] : nullptr; }
 
   private:
     void added(void) {
@@ -44,10 +44,10 @@ class Joystick {
                 if (SDL_Joystick* handle = SDL_JoystickOpen(i); handle != nullptr) {
                     SDL_JoystickID id = SDL_JoystickInstanceID(handle);
 
-                    if (joys.contains(id))
+                    if (m_joys.contains(id))
                         continue;
 
-                    this->joys[id] = handle;
+                    this->m_joys[id] = handle;
 
                     const char* joystick_name = SDL_JoystickName(handle);
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick %d: %s", i, joystick_name ? joystick_name : "[no name]");
@@ -66,9 +66,9 @@ class Joystick {
     }
 
     void removed(const SDL_ControllerDeviceEvent& device) {
-        if (joys.contains(device.which)) {
-            SDL_JoystickClose(joys[device.which]);
-            joys.erase(device.which);
+        if (m_joys.contains(device.which)) {
+            SDL_JoystickClose(m_joys[device.which]);
+            m_joys.erase(device.which);
         }
     }
 };

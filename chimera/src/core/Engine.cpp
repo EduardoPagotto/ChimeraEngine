@@ -1,8 +1,8 @@
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/Keyboard.hpp"
-#include "chimera/core/Mouse.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/Singleton.hpp"
+#include "chimera/core/uc/Keyboard.hpp"
+#include "chimera/core/uc/Mouse.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {

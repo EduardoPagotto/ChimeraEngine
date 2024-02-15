@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderer3d.hpp"
 #include "chimera/core/DrawLine.hpp"
-#include "chimera/core/Frustum.hpp"
+#include "chimera/core/geos/Frustum.hpp"
 #include "chimera/render/Renderable3D.hpp"
 
 namespace Chimera {

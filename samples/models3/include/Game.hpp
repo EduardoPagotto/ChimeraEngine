@@ -1,7 +1,7 @@
 #pragma once
-#include "chimera/core/GameController.hpp"
-#include "chimera/core/Mouse.hpp"
 #include "chimera/core/Solid.hpp"
+#include "chimera/core/uc/GameController.hpp"
+#include "chimera/core/uc/Mouse.hpp"
 #include "chimera/render/Label.hpp"
 #include "chimera/render/Scene.hpp"
 

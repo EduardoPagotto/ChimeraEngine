@@ -1,7 +1,7 @@
 #include "chimera/render/Renderer3d.hpp"
-#include "chimera/core/AABB.hpp"
 #include "chimera/core/IndexBuffer.hpp"
 #include "chimera/core/VertexArray.hpp"
+#include "chimera/core/geos/AABB.hpp"
 #include "chimera/render/Renderable3D.hpp"
 #include <SDL2/SDL.h>
 

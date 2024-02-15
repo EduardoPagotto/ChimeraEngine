@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/Mouse.hpp"
+#include "chimera/core/uc/Mouse.hpp"
 #include "chimera/render/Scene.hpp"
 
 class Game : public Chimera::IStateMachine {

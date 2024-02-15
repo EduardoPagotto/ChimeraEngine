@@ -1,7 +1,7 @@
 #pragma once
-#include "AABB.hpp"
 #include "Mesh.hpp"
-#include "Triangle.hpp"
+#include "geos/AABB.hpp"
+#include "geos/Triangle.hpp"
 #include <vector>
 
 namespace Chimera {

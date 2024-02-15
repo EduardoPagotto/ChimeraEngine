@@ -1,6 +1,6 @@
 #pragma once
 #include "AABB.hpp"
-#include "HeapQ.hpp"
+#include "chimera/core/HeapQ.hpp"
 #include <queue>
 #include <vector>
 

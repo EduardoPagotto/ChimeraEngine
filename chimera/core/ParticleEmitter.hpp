@@ -1,7 +1,7 @@
 #pragma once
-#include "AABB.hpp"
 #include "ICamera.hpp"
 #include "OpenGLDefs.hpp"
+#include "geos/AABB.hpp"
 #include <vector>
 
 namespace Chimera {

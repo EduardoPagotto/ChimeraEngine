@@ -1,6 +1,6 @@
 #pragma once
 #include "Mesh.hpp"
-#include "Triangle.hpp"
+#include "geos/Triangle.hpp"
 #include <SDL2/SDL_image.h>
 #include <string>
 

@@ -1,7 +1,7 @@
 #pragma once
-#include "BSPTreeNode.hpp"
 #include "Mesh.hpp"
-#include "Triangle.hpp"
+#include "geos/BSPTreeNode.hpp"
+#include "geos/Triangle.hpp"
 
 namespace Chimera {
 class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree

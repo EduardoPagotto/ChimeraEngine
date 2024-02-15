@@ -198,10 +198,18 @@ https://www.khronos.org/opengl/wiki/Example_Code
     }
     ```
 
-    lista de componentes espaciais
+    lista de componentes 
+
+    (geos) Geometrias
     - Triangle.hpp
     - Plane.hpp
         - BSPTreeNode
         - Frustum.hpp
             - AABB.hpp
                 - OCtree.hpp
+
+    (uc) user controler
+    - Joystick.hpp
+    - GameController.hpp
+    - Keyboard.hpp
+    - Mouse.hpp

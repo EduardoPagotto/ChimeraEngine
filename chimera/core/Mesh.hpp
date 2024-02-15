@@ -1,6 +1,6 @@
 #pragma once
 #include "TagComponent.hpp"
-#include "Triangle.hpp"
+#include "geos/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <list>
 #include <memory>

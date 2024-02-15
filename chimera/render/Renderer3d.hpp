@@ -1,8 +1,8 @@
 #pragma once
 #include "IRenderer3d.hpp"
-#include "chimera/core/Frustum.hpp"
-#include "chimera/core/Octree.hpp"
 #include "chimera/core/RenderCommand.hpp"
+#include "chimera/core/geos/Frustum.hpp"
+#include "chimera/core/geos/Octree.hpp"
 #include "chimera/render/Renderable3D.hpp"
 
 namespace Chimera {

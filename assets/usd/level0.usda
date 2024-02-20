@@ -1,0 +1,124 @@
+#usda 1.0
+(
+
+    # doc: https://openusd.org/release/glossary.html#usdglossary-relationship
+
+    defaultPrim = "World"
+    doc = "Blender v4.0.2"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+
+# Material referenciados no mesh
+def "_materials"
+{
+    def Material "MatCubo"
+    {
+        token outputs:surface.connect = </_materials/MatCubo/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            color3f inputs:diffuseColor.connect = </_materials/MatCubo/Image_Texture.outputs:rgb>
+            color3f inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float inputs:opacity = 1
+            float inputs:roughness = 0.5
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+
+        def Shader "Image_Texture"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @./textures/image1.jpg@
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </_materials/MatCubo/uvmap.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "uvmap"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "EfeitoCubo01-mesh-map-0"
+            float2 outputs:result
+        }
+    }
+}
+
+# Definicao de mesh
+def Mesh "MeshCubo01" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    uniform bool doubleSided = 1
+
+    float3[] extent = [(-1, -1.000001, -1), (1, 1, 1)]
+
+    int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+
+    int[] faceVertexIndices = [0, 1, 3, 4, 7, 5, 0, 4, 1, 1, 5, 2, 2, 6, 3, 4, 0, 7, 1, 2, 3, 7, 6, 5, 4, 5, 1, 5, 6, 2, 6, 7, 3, 0, 3, 7]
+    
+    rel material:binding = </_materials/MatCubo>
+
+    normal3f[] normals = [(0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (1, 0, 0), (1, 0, 0), (1, 0, 0), (-8.940697e-8, -1, -4.172325e-7), (-8.940697e-8, -1, -4.172325e-7), (-8.940697e-8, -1, -4.172325e-7), (-1, 1.192093e-7, -8.881785e-15), (-1, 1.192093e-7, -8.881785e-15), (-1, 1.192093e-7, -8.881785e-15), (2.3841858e-7, 1, 2.3841858e-7), (2.3841858e-7, 1, 2.3841858e-7), (2.3841858e-7, 1, 2.3841858e-7), (0, 0, -1), (0, 0, -1), (0, 0, -1), (2.9802337e-8, 0, 1), (2.9802337e-8, 0, 1), (2.9802337e-8, 0, 1), (1, -2.9802317e-7, 2.980231e-7), (1, -2.9802317e-7, 2.980231e-7), (1, -2.9802317e-7, 2.980231e-7), (-6.25849e-7, -1, 0), (-6.25849e-7, -1, 0), (-6.25849e-7, -1, 0), (-1, 0, -1.490116e-7), (-1, 0, -1.490116e-7), (-1, 0, -1.490116e-7), (0, 1, 2.9802326e-8), (0, 1, 2.9802326e-8), (0, 1, 2.9802326e-8)] (
+        interpolation = "faceVarying"
+    )
+    
+    point3f[] points = [(1, 1, -1), (1, -1, -1), (-1, -0.9999998, -1), (-0.9999997, 1, -1), (1, 0.9999995, 1), (0.9999994, -1.000001, 1), (-1, -0.9999997, 1), (-1, 1, 1)]
+    
+    texCoord2f[] primvars:EfeitoCubo01_mesh_map_0 = [(0.7573361, 0.0011799929), (0.7572929, 0.3542324), (0.49232632, 0.0016013379), (0.7578758, 0.9961572), (0.49326992, 0.9959947), (0.75793684, 0.6437988), (0.5159788, 0.323805), (0.5160942, 0.67499083), (0.2508024, 0.323751), (0.2747244, 0.3220601), (0.2751141, 0.6756454), (0.0088704815, 0.3228104), (0.9986043, 0.32228962), (0.9987713, 0.6758685), (0.734093, 0.3223419), (0.4927468, 0.6755949), (0.4925417, 0.3231633), (0.7565792, 0.6756919), (0.7572929, 0.3542324), (0.492179, 0.3538726), (0.49232632, 0.0016013379), (0.49326992, 0.9959947), (0.493257, 0.6444898), (0.75793684, 0.6437988), (0.5160942, 0.67499083), (0.2507548, 0.6748561), (0.2508024, 0.323751), (0.2751141, 0.6756454), (0.0096835485, 0.67586464), (0.0088704815, 0.3228104), (0.9987713, 0.6758685), (0.7336059, 0.675664), (0.734093, 0.3223419), (0.4925417, 0.3231633), (0.7571027, 0.32359642), (0.7565792, 0.6756919)] (
+        interpolation = "faceVarying"
+    )
+
+    bool[] primvars:sharp_face = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] (
+        interpolation = "uniform"
+    )
+    
+    uniform token subdivisionScheme = "none"
+}
+
+# Definica de Camera
+def Camera "Camera001"
+{
+    float2 clippingRange = (0.1, 100)
+    float focalLength = 0.35000002
+    float horizontalAperture = 0.32
+    float horizontalApertureOffset = 0
+    token projection = "perspective"
+    float verticalAperture = 0.18
+    float verticalApertureOffset = 0
+    # FOV ???? 
+}
+
+
+# Entry point
+def Xform "World"
+{
+    def "FrameBuffer" # cria a tela e carrega o shade de framebuffer (scene so com FB atualmente)
+    {
+        def "RenderBuffer" (references = @./renderbuffer.usda@</_RenderBufferEffect>) {}
+        #def "RenderBuffer" (references = @./renderbuffer.usda@) {} # usando o defaulPrim
+    }
+
+    def "CameraObj"  # Objeto composto de transform e filho camera
+    {
+        matrix4d xformOp:transform = ( (0.6427868604660034, 0.7660447359085083, -5.024948634968496e-8, 0), (-0.3358112871646881, 0.2817787826061249, 0.8987941741943359, 0), (0.6885168552398682, -0.5777333378791809, 0.43837034702301025, 0), (7, -6, 7.551084041595459, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def "camera_principal" (references = </Camera001>)
+    }
+
+    def "CuboObj" # Objeto composto de transform e filho Mesh
+    {
+
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (7, 0, 4, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def "cubo" (references=</MeshCubo01>){}
+    }
+}

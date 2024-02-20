@@ -1,0 +1,88 @@
+#usda 1.0
+(
+    defaultPrim = "_RenderBufferEffect"
+)
+
+
+def "_RenderBufferImages" 
+{
+    def "RenderBufferImage"
+    {
+        uniform token info:id = "UsdExtra_Create2D"
+        token channels="RGBA"
+        token channelsInternal="RGBA"
+        token range="UINT"
+        token precision="DEFAULT"
+    }
+
+    def "RenderBufferObjImage"
+    {
+        uniform token info:id = "UsdExtra_Create2D"
+        token channels="REDI" 
+        token channelsInternal="R32I" 
+        token range="UINT" 
+        token precision="DEFAULT"
+    }
+
+    def "RenderBufferDepthImage"
+    {
+        uniform token info:id = "UsdExtra_Create2D"
+        token channels="D" 
+        token channelsInternal="DA" 
+        token range="UINT" 
+        token precision="DEFAULT"
+    }
+}
+
+def "_RenderBufferEffect"
+{
+    def "RenderBufferSample2D"
+    {
+        uniform token info:id = "UsdExtra_Sampler2D"
+        token minfilter = LINEAR
+        token magfilter = LINEAR
+        token wrap_r = CLAMP2
+        token wrap_s = CLAMP2
+        token wrap_t = CLAMP2
+        rel image:binding = </_RenderBufferImages/RenderBufferImage/>
+    }
+
+    def "RenderBufferObjSample2D"
+    {
+        uniform token info:id = "UsdExtra_Sampler2D"
+        token minfilter = LINEAR
+        token magfilter = LINEAR
+        token wrap_r = CLAMP
+        token wrap_s = CLAMP
+        token wrap_t = CLAMP
+        rel image:binding = </_RenderBufferImages/RenderBufferObjImage/>
+    }
+
+    def "RenderBufferSamplerDepth"
+    {
+        uniform token info:id = "UsdExtra_SamplerDEPTH"
+        token minfilter = NONE
+        token magfilter = NONE
+        token wrap_r = NONE
+        token wrap_s = NONE
+        token wrap_t = NONE
+        rel image:binding = </_RenderBufferImages/RenderBufferDepthImage/>
+    }
+
+
+    def "CanvasHMD"
+    {
+        def Shader "VP"
+        {
+            uniform token info:id = "UsdExtra_VertexProgram"
+            asset inputs:file = @./assets/shaders/CanvasHMD.vert@
+        }
+
+        def Shader "FP"
+        {
+            uniform token info:id = "UsdExtra_FragmentProgram"
+            asset inputs:file = @./assets/shaders/CanvasHMD.frag@
+        }
+    }
+
+}

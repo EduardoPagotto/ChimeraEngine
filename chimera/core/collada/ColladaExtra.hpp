@@ -35,6 +35,7 @@ class ColladaExtra : public Collada {
 
                 std::string entName = nFb.attribute("name").value();
                 std::string entId = nFb.attribute("id").value();
+
                 Registry* r = Singleton<Registry>::get();
                 Entity entity = r->createEntity(entName, entId);
 

@@ -1,14 +1,22 @@
 #pragma once
-#include "ColladaDom.hpp"
 #include "RFC3986.hpp"
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <pugixml.hpp>
 #include <sstream>
 #include <string.h>
 #include <vector>
 
 namespace Chimera {
+
+struct ColladaDom {
+    ColladaDom() = default;
+    ColladaDom(const ColladaDom& other) = default;
+    std::string file = "";
+    pugi::xml_node root = pugi::xml_node();
+    pugi::xml_document* pDoc = nullptr;
+};
 
 class Collada {
   protected:

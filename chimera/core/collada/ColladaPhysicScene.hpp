@@ -9,10 +9,10 @@
 namespace Chimera {
 class ColladaPhysicScene : public Collada {
   private:
-    Registry* r = nullptr;
+    Registry* m_r = nullptr;
 
   public:
-    ColladaPhysicScene(ColladaDom& dom, const std::string& url) : Collada(dom, url) { r = Singleton<Registry>::get(); }
+    ColladaPhysicScene(ColladaDom& dom, const std::string& url) : Collada(dom, url) { m_r = Singleton<Registry>::get(); }
 
     virtual ~ColladaPhysicScene() { Singleton<Registry>::release(); }
 
@@ -33,7 +33,7 @@ class ColladaPhysicScene : public Collada {
         std::string id = node.attribute("id").value();
         std::string name = node.attribute("name").value();
 
-        Entity entityPc = r->createEntity(name, id);
+        Entity entityPc = m_r->createEntity(name, id);
         PhysicsControl& pc = entityPc.addComponent<PhysicsControl>(); // FIXME: juntar tudo dentro do controller!!!!!
         entityPc.addComponent<NativeScriptComponent>().bind<PhysicController>("PhysicController01");
 
@@ -63,12 +63,12 @@ class ColladaPhysicScene : public Collada {
             }
 
             target.erase(0, 1); // remove #
-            auto view = r->get().view<TagComponent>();
+            auto view = m_r->get().view<TagComponent>();
             for (auto entity : view) {
                 // Pega a chave (mesh)
                 TagComponent& tag = view.get<TagComponent>(entity);
                 if (tag.id == target) {
-                    Entity ent2 = {entity, r};
+                    Entity ent2 = {entity, m_r};
                     TransComponent& tc = ent2.getComponent<TransComponent>();
                     MeshComponent& mc = ent2.getComponent<MeshComponent>();
                     Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao

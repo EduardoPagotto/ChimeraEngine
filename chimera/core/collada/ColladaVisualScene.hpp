@@ -11,18 +11,17 @@
 namespace Chimera {
 class ColladaVisualScene : public Collada {
   private:
-    Registry* r = nullptr;
+    Registry* m_r = nullptr;
 
   public:
-    ColladaVisualScene(ColladaDom& dom, const std::string& url) : Collada(dom, url) { r = Singleton<Registry>::get(); }
+    ColladaVisualScene(ColladaDom& dom, const std::string& url) : Collada(dom, url) { m_r = Singleton<Registry>::get(); }
     virtual ~ColladaVisualScene() { Singleton<Registry>::release(); }
 
-    // TODO: usar da classe base em collada ou colladaLoader
     void loadNode(pugi::xml_node node) {
 
         std::string entName = node.attribute("name").value();
         std::string entId = node.attribute("id").value();
-        Entity entity = r->createEntity(entName, entId);
+        Entity entity = m_r->createEntity(entName, entId);
         for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling())
             nodeData(n, entity);
     }

@@ -205,7 +205,6 @@ https://www.khronos.org/opengl/wiki/Example_Code
 
     Bases:
         RFC3986.hpp
-        ColladaDom.hpp
         Collada.hpp
 
     Usa o registry
@@ -229,23 +228,47 @@ https://www.khronos.org/opengl/wiki/Example_Code
 
 ## precedencia
 RFC3986.hpp
+    Collada.hpp
+        ColladaCam.hpp
+        ColladaCube.hpp
+        ColladaImage.hpp
+            ColladaEffect.hpp
+                ColladaExtra.hpp (-ColladaCam)
+                    ColladaMaterial.hpp
+                    ColladaWaveFront.hpp
+        ColladaLight.hpp
+        ColladaMesh.hpp
+        ColladaParticle.hpp
+        ColladaPhysicScene.hpp
+        ColladaHeightMap.hpp
+        ColladaGeometry.hpp ( - ColladaCube
+                              - ColladaHeightMap
+                              - ColladaMesh
+                              - ColladaParticle
+                              - ColladaWaveFront)
 
+            ColladaVisualScene.hpp( - ColladaCam
+                                    - ColladaLight
+                                    - ColladaMaterial)
 
-ColladaCam.hpp
-ColladaCube.hpp
-ColladaDom.hpp
-ColladaEffect.hpp
-ColladaExtra.hpp
-ColladaGeometry.hpp
-ColladaHeightMap.hpp
-Collada.hpp
-ColladaImage.hpp
-ColladaLight.hpp
-colladaLoad.hpp
-ColladaMaterial.hpp
-ColladaMesh.hpp
-ColladaParticle.hpp
-ColladaPhysicScene.hpp
-ColladaVisualScene.hpp
-ColladaWaveFront.hpp
+                colladaLoad.hpp( - ColladaPhysicScene
+                                 - ColladaExtra)
+
+## Num Metodos
+    ColladaCam.hpp 2
+    ColladaCube.hpp 1
+ *  ColladaEffect.hpp 5+
+    ColladaExtra.hpp 1
+    ColladaGeometry.hpp 1
+    ColladaHeightMap.hpp 1
+    Collada.hpp
+    ColladaImage.hpp 1
+    ColladaLight.hpp 1
+ *  colladaLoad.hpp 2
+    ColladaMaterial.hpp 1
+    ColladaMesh.hpp 1
+    ColladaParticle.hpp 1
+ *  ColladaPhysicScene.hpp 2*
+ *  ColladaVisualScene.hpp 2
+    ColladaWaveFront.hpp 1
 

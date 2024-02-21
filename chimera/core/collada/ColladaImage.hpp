@@ -1,7 +1,7 @@
 #pragma once
+#include "../Registry.hpp"
+#include "../Texture.hpp"
 #include "Collada.hpp"
-#include "Registry.hpp"
-#include "Texture.hpp"
 
 namespace Chimera {
 class ColladaImage : public Collada {

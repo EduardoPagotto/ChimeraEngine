@@ -1,6 +1,6 @@
 #include "chimera/core/Wavefront.hpp"
-#include "chimera/core/Collada.hpp"
 #include "chimera/core/TextureManager.hpp"
+#include "chimera/core/collada/Collada.hpp"
 #include <fstream>
 
 namespace Chimera {

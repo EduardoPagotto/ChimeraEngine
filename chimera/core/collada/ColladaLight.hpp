@@ -1,6 +1,6 @@
 #pragma once
+#include "../Registry.hpp"
 #include "Collada.hpp"
-#include "Registry.hpp"
 
 namespace Chimera {
 class ColladaLight : public Collada {

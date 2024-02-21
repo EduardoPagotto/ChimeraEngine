@@ -1,8 +1,8 @@
-#include "chimera/core/ColladaWaveFront.hpp"
-#include "chimera/core/ColladaEffect.hpp"
+#include "chimera/core/collada/ColladaWaveFront.hpp"
 #include "chimera/core/Material.hpp"
 #include "chimera/core/Mesh.hpp"
 #include "chimera/core/Wavefront.hpp"
+#include "chimera/core/collada/ColladaEffect.hpp"
 
 namespace Chimera {
 

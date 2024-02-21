@@ -1,9 +1,9 @@
-#include "chimera/core/ColladaGeometry.hpp"
-#include "chimera/core/ColladaCube.hpp"
-#include "chimera/core/ColladaHeightMap.hpp"
-#include "chimera/core/ColladaMesh.hpp"
-#include "chimera/core/ColladaParticle.hpp"
-#include "chimera/core/ColladaWaveFront.hpp"
+#include "chimera/core/collada/ColladaGeometry.hpp"
+#include "chimera/core/collada/ColladaCube.hpp"
+#include "chimera/core/collada/ColladaHeightMap.hpp"
+#include "chimera/core/collada/ColladaMesh.hpp"
+#include "chimera/core/collada/ColladaParticle.hpp"
+#include "chimera/core/collada/ColladaWaveFront.hpp"
 
 namespace Chimera {
 

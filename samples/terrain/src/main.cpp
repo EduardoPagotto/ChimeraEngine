@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/CanvasGL.hpp"
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/colladaLoad.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
 
 int main(int argn, char** argv) {
     using namespace Chimera;

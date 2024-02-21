@@ -34,20 +34,20 @@ set (SourcesCore Registry.cpp
 				 ParticleEmitter.cpp
 				 #RFC3986.cpp
 				 #Collada.cpp
-				 ColladaVisualScene.cpp
-				 ColladaImage.cpp
-				 ColladaMaterial.cpp
-				 ColladaEffect.cpp
-				 ColladaLight.cpp
-				 ColladaCam.cpp
-				 ColladaGeometry.cpp
-				 colladaLoad.cpp
-				 ColladaWaveFront.cpp
-				 ColladaHeightMap.cpp
-				 ColladaCube.cpp
-				 ColladaMesh.cpp
-				 ColladaParticle.cpp
-				 ColladaExtra.cpp
+				 collada/ColladaVisualScene.cpp
+				 collada/ColladaImage.cpp
+				 collada/ColladaMaterial.cpp
+				 collada/ColladaEffect.cpp
+				 collada/ColladaLight.cpp
+				 collada/ColladaCam.cpp
+				 collada/ColladaGeometry.cpp
+				 collada/colladaLoad.cpp
+				 collada/ColladaWaveFront.cpp
+				 collada/ColladaHeightMap.cpp
+				 collada/ColladaCube.cpp
+				 collada/ColladaMesh.cpp
+				 collada/ColladaParticle.cpp
+				 collada/ColladaExtra.cpp
 				 BSPTree.cpp
 				 LoadHeightMap.cpp
 				 Wavefront.cpp
@@ -71,7 +71,7 @@ if (BULLET_SET_TO_USE)
 	message(STATUS "Bullet incluido no build ChimeraCore")
 	set(SourcesCore ${SourcesCore} PhysicsControl.cpp
 								   Solid.cpp
-								   ColladaPhysicScene.cpp
+								   collada/ColladaPhysicScene.cpp
 								   PhysicController.cpp) 
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)

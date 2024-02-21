@@ -1,14 +1,15 @@
 #pragma once
+#include "../Registry.hpp"
 #include "Collada.hpp"
-#include "Registry.hpp"
 
 namespace Chimera {
-class ColladaWaveFront : public Collada {
+class ColladaCube : public Collada {
   public:
-    ColladaWaveFront(ColladaDom& dom, const std::string& url) : Collada(dom, url){};
-    virtual ~ColladaWaveFront();
+    ColladaCube(ColladaDom& dom, const std::string& url) : Collada(dom, url){};
+    virtual ~ColladaCube();
     void create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo);
 
   private:
 };
+
 } // namespace Chimera

@@ -1,6 +1,6 @@
-#include "chimera/core/ColladaMaterial.hpp"
-#include "chimera/core/ColladaEffect.hpp"
+#include "chimera/core/collada/ColladaMaterial.hpp"
 #include "chimera/core/Material.hpp"
+#include "chimera/core/collada/ColladaEffect.hpp"
 
 namespace Chimera {
 

@@ -1,4 +1,4 @@
-#include "chimera/core/ColladaImage.hpp"
+#include "chimera/core/collada/ColladaImage.hpp"
 #include "chimera/core/FrameBuffer.hpp"
 #include "chimera/core/TextureManager.hpp"
 

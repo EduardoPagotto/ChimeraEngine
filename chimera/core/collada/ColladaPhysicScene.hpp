@@ -1,7 +1,7 @@
 #pragma once
+#include "../Registry.hpp"
+#include "../Singleton.hpp"
 #include "Collada.hpp"
-#include "Registry.hpp"
-#include "Singleton.hpp"
 
 namespace Chimera {
 class ColladaPhysicScene : public Collada {

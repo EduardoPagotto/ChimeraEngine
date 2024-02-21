@@ -1,7 +1,7 @@
 #pragma once
+#include "../Registry.hpp"
+#include "../TextureManager.hpp"
 #include "Collada.hpp"
-#include "Registry.hpp"
-#include "TextureManager.hpp"
 
 namespace Chimera {
 class ColladaEffect : public Collada {

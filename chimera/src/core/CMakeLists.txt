@@ -32,22 +32,6 @@ set (SourcesCore Registry.cpp
 				 FontManager.cpp
 				 Material.cpp
 				 ParticleEmitter.cpp
-				 #RFC3986.cpp
-				 #Collada.cpp
-				 #collada/colladaLoad.cpp
-				 #collada/ColladaExtra.cpp
-				 #collada/ColladaVisualScene.cpp
-				 #collada/ColladaCam.cpp
-				 #collada/ColladaEffect.cpp
-				 #collada/ColladaImage.cpp
-				 #collada/ColladaMaterial.cpp
-				 collada/ColladaLight.cpp
-				 collada/ColladaGeometry.cpp
-				 collada/ColladaWaveFront.cpp
-				 collada/ColladaHeightMap.cpp
-				 collada/ColladaCube.cpp
-				 collada/ColladaMesh.cpp
-				 collada/ColladaParticle.cpp
 				 BSPTree.cpp
 				 LoadHeightMap.cpp
 				 Wavefront.cpp

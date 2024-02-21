@@ -35,7 +35,7 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
             if (std::string(technique_hint.attribute("profile").value()) == "GLSL") {
                 std::string refName = technique_hint.attribute("ref").value();
                 std::string url = nShade.attribute("url").value();
-                ColladaEffect cf(colladaDom, url);
+                ColladaEffect cf(m_colladaDom, url);
 
                 cf.create(refName, entity, cf.getLibrary("library_effects"));
             }

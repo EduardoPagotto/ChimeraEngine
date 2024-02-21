@@ -33,7 +33,7 @@ set (SourcesCore Registry.cpp
 				 Material.cpp
 				 ParticleEmitter.cpp
 				 #RFC3986.cpp
-				 Collada.cpp
+				 #Collada.cpp
 				 ColladaVisualScene.cpp
 				 ColladaImage.cpp
 				 ColladaMaterial.cpp

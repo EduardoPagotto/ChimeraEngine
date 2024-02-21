@@ -39,12 +39,12 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
                 if (name == "instance_effect") {
 
                     std::string refName = next.child("technique_hint").attribute("ref").value();
-                    ColladaEffect cf(colladaDom, url);
+                    ColladaEffect cf(m_colladaDom, url);
                     cf.create(refName, entity, cf.getLibrary("library_effects"));
 
                 } else if (name == "instance_camera") {
 
-                    ColladaCam cc(colladaDom, url);
+                    ColladaCam cc(m_colladaDom, url);
                     cc.create(entity, cc.getLibrary("library_cameras"));
                     cc.createExtra(entity, next.first_child());
                 }

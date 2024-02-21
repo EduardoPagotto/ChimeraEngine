@@ -30,27 +30,27 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
     } else if (name == "instance_geometry") {
 
-        ColladaGeometry cg(colladaDom, url);
+        ColladaGeometry cg(m_colladaDom, url);
         cg.create(entity, cg.getLibrary("library_geometries"));
 
         if (const pugi::xml_node nMat = n.child("bind_material"); nMat) {
             if (const pugi::xml_node instanceMaterial = nMat.child("technique_common").child("instance_material");
                 instanceMaterial != nullptr) {
                 std::string target = instanceMaterial.attribute("target").value();
-                ColladaMaterial cm(colladaDom, target);
+                ColladaMaterial cm(m_colladaDom, target);
                 cm.create(entity, cm.getLibrary("library_materials"));
             }
         }
 
     } else if (name == "instance_light") {
 
-        ColladaLight cl(colladaDom, url);
+        ColladaLight cl(m_colladaDom, url);
         cl.create(entity, cl.getLibrary("library_lights"));
 
     } else if (name == "instance_node") {
 
         // TODO: refazer para uso de hierarquia
-        // ColladaVisualScene vs(colladaDom, url);
+        // ColladaVisualScene vs(m_colladaDom, url);
         // const pugi::xml_node nNodes = vs.getLibrary("library_nodes");
         // for (pugi::xml_node n = nNodes.first_child(); n; n = n.next_sibling()) {
         //     vs.nodeData(n, entity);
@@ -58,7 +58,7 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
     } else if (name == "instance_camera") {
 
-        ColladaCam cc(colladaDom, url);
+        ColladaCam cc(m_colladaDom, url);
         cc.create(entity, cc.getLibrary("library_cameras"));
         cc.createExtra(entity, n.first_child());
 

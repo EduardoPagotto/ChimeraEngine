@@ -1,13 +1,13 @@
 #pragma once
+#include "../CanvasFB.hpp"
+#include "../CanvasGL.hpp"
+#include "../FontManager.hpp"
+#include "../FrameBuffer.hpp"
+#include "../Singleton.hpp"
+#include "../ViewProjection.hpp"
 #include "Collada.hpp"
-#include "chimera/core/CanvasFB.hpp"
-#include "chimera/core/CanvasGL.hpp"
-#include "chimera/core/FontManager.hpp"
-#include "chimera/core/FrameBuffer.hpp"
-#include "chimera/core/Singleton.hpp"
-#include "chimera/core/ViewProjection.hpp"
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaEffect.hpp"
+#include "ColladaCam.hpp"
+#include "ColladaEffect.hpp"
 
 namespace Chimera {
 class ColladaExtra : public Collada {

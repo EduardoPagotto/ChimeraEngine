@@ -1,7 +1,7 @@
 #pragma once
+#include "../ParticleEmitter.hpp"
 #include "../Registry.hpp"
 #include "Collada.hpp"
-#include "chimera/core/ParticleEmitter.hpp"
 
 namespace Chimera {
 class ColladaParticle : public Collada {

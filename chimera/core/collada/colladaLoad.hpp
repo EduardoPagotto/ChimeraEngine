@@ -1,7 +1,7 @@
 #pragma once
-#include "chimera/core/collada/ColladaExtra.hpp"
-#include "chimera/core/collada/ColladaPhysicScene.hpp"
-#include "chimera/core/collada/ColladaVisualScene.hpp"
+#include "ColladaExtra.hpp"
+#include "ColladaPhysicScene.hpp"
+#include "ColladaVisualScene.hpp"
 
 namespace Chimera {
 inline ColladaDom loadFileCollada(const std::string& file) {

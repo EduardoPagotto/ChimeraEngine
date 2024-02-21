@@ -1,9 +1,9 @@
 #pragma once
+#include "../FrameBuffer.hpp"
 #include "../Registry.hpp"
 #include "../Texture.hpp"
+#include "../TextureManager.hpp"
 #include "Collada.hpp"
-#include "chimera/core/FrameBuffer.hpp"
-#include "chimera/core/TextureManager.hpp"
 
 namespace Chimera {
 

@@ -1,12 +1,12 @@
 #pragma once
 #include "../Registry.hpp"
 #include "../Singleton.hpp"
+#include "../Transform.hpp"
 #include "Collada.hpp"
-#include "chimera/core/Transform.hpp"
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaGeometry.hpp"
-#include "chimera/core/collada/ColladaLight.hpp"
-#include "chimera/core/collada/ColladaMaterial.hpp"
+#include "ColladaCam.hpp"
+#include "ColladaGeometry.hpp"
+#include "ColladaLight.hpp"
+#include "ColladaMaterial.hpp"
 
 namespace Chimera {
 class ColladaVisualScene : public Collada {

@@ -1,7 +1,7 @@
 #pragma once
+#include "../Light.hpp"
 #include "../Registry.hpp"
 #include "Collada.hpp"
-#include "chimera/core/Light.hpp"
 
 namespace Chimera {
 class ColladaLight : public Collada {

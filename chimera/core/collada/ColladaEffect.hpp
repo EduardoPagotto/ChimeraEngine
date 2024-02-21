@@ -1,10 +1,10 @@
 #pragma once
+#include "../Material.hpp"
 #include "../Registry.hpp"
+#include "../Shader.hpp"
 #include "../TextureManager.hpp"
 #include "Collada.hpp"
-#include "chimera/core/Material.hpp"
-#include "chimera/core/Shader.hpp"
-#include "chimera/core/collada/ColladaImage.hpp"
+#include "ColladaImage.hpp"
 
 namespace Chimera {
 

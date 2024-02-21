@@ -1,11 +1,11 @@
 #pragma once
 #include "../Registry.hpp"
 #include "Collada.hpp"
-#include "chimera/core/collada/ColladaCube.hpp"
-#include "chimera/core/collada/ColladaHeightMap.hpp"
-#include "chimera/core/collada/ColladaMesh.hpp"
-#include "chimera/core/collada/ColladaParticle.hpp"
-#include "chimera/core/collada/ColladaWaveFront.hpp"
+#include "ColladaCube.hpp"
+#include "ColladaHeightMap.hpp"
+#include "ColladaMesh.hpp"
+#include "ColladaParticle.hpp"
+#include "ColladaWaveFront.hpp"
 
 namespace Chimera {
 class ColladaGeometry : public Collada {

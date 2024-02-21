@@ -1,8 +1,8 @@
 #pragma once
+#include "../ICamera.hpp"
+#include "../ITrans.hpp"
 #include "../Registry.hpp"
 #include "Collada.hpp"
-#include "chimera/core/ICamera.hpp"
-#include "chimera/core/ITrans.hpp"
 
 namespace Chimera {
 class ColladaCam : public Collada {

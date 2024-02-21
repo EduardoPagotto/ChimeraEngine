@@ -1,10 +1,10 @@
 #pragma once
+#include "../Mesh.hpp"
+#include "../PhysicController.hpp"
 #include "../Registry.hpp"
 #include "../Singleton.hpp"
+#include "../Solid.hpp"
 #include "Collada.hpp"
-#include "chimera/core/Mesh.hpp"
-#include "chimera/core/PhysicController.hpp"
-#include "chimera/core/Solid.hpp"
 
 namespace Chimera {
 class ColladaPhysicScene : public Collada {

@@ -1,8 +1,8 @@
 #pragma once
+#include "../Material.hpp"
 #include "../Registry.hpp"
 #include "Collada.hpp"
-#include "chimera/core/Material.hpp"
-#include "chimera/core/collada/ColladaEffect.hpp"
+#include "ColladaEffect.hpp"
 
 namespace Chimera {
 class ColladaMaterial : public Collada {

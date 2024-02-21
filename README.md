@@ -198,18 +198,54 @@ https://www.khronos.org/opengl/wiki/Example_Code
     }
     ```
 
-    lista de componentes 
+## Collada refatoracao (pre-usd)
 
-    (geos) Geometrias
-    - Triangle.hpp
-    - Plane.hpp
-        - BSPTreeNode
-        - Frustum.hpp
-            - AABB.hpp
-                - OCtree.hpp
+    entry:
+        colladaLoad.hpp
 
-    (uc) user controler
-    - Joystick.hpp
-    - GameController.hpp
-    - Keyboard.hpp
-    - Mouse.hpp
+    Bases:
+        RFC3986.hpp
+        ColladaDom.hpp
+        Collada.hpp
+
+    Usa o registry
+        ColladaExtra.hpp (instanciado em singleton funcao)
+        ColladaPhysicScene.hpp (instanciado em singleton classe)
+        ColladaVisualScene.hpp (instanciado em singleton classe)
+
+    Usa o Entity
+        ColladaCam.hpp
+        ColladaCube.hpp
+        ColladaEffect.hpp
+        ColladaGeometry.hpp
+        ColladaHeightMap.hpp
+        ColladaImage.hpp
+        ColladaLight.hpp
+        ColladaMaterial.hpp
+        ColladaMesh.hpp
+        ColladaParticle.hpp
+        ColladaWaveFront.hpp
+
+
+## precedencia
+RFC3986.hpp
+
+
+ColladaCam.hpp
+ColladaCube.hpp
+ColladaDom.hpp
+ColladaEffect.hpp
+ColladaExtra.hpp
+ColladaGeometry.hpp
+ColladaHeightMap.hpp
+Collada.hpp
+ColladaImage.hpp
+ColladaLight.hpp
+colladaLoad.hpp
+ColladaMaterial.hpp
+ColladaMesh.hpp
+ColladaParticle.hpp
+ColladaPhysicScene.hpp
+ColladaVisualScene.hpp
+ColladaWaveFront.hpp
+

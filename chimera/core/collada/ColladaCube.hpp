@@ -1,8 +1,8 @@
 #pragma once
+#include "../Cube.hpp"
+#include "../Mesh.hpp"
 #include "../Registry.hpp"
 #include "Collada.hpp"
-#include "chimera/core/Cube.hpp"
-#include "chimera/core/Mesh.hpp"
 
 namespace Chimera {
 class ColladaCube : public Collada {

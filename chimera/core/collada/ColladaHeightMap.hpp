@@ -1,7 +1,7 @@
 #pragma once
+#include "../LoadHeightMap.hpp"
 #include "../Registry.hpp"
 #include "Collada.hpp"
-#include "chimera/core/LoadHeightMap.hpp"
 
 namespace Chimera {
 class ColladaHeightMap : public Collada {

@@ -41,7 +41,7 @@ set (SourcesCore Registry.cpp
 				 collada/ColladaLight.cpp
 				 collada/ColladaCam.cpp
 				 collada/ColladaGeometry.cpp
-				 collada/colladaLoad.cpp
+				 #collada/colladaLoad.cpp
 				 collada/ColladaWaveFront.cpp
 				 collada/ColladaHeightMap.cpp
 				 collada/ColladaCube.cpp

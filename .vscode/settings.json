@@ -1,9 +1,16 @@
 {
     "editor.formatOnSave": true,
     "editor.minimap.enabled": false,
+    "editor.fontFamily": "JetBrains Mono Light",
+    "editor.fontSize": 15,
+    "editor.fontWeight": "normal",
+    "editor.fontLigatures": true,
+    "editor.letterSpacing": 0.4,
+    "editor.lineHeight": 1.7,
+    "editor.smoothScrolling": true,
     "cmake.configureOnOpen": true,
-    "C_Cpp.intelliSenseEngineFallback": "Enabled",
-    "C_Cpp.configurationWarnings": "Disabled",
+    "C_Cpp.intelliSenseEngineFallback": "enabled",
+    "C_Cpp.configurationWarnings": "disabled",
     "C_Cpp.intelliSenseEngine": "Tag Parser",
     "C_Cpp.clang_format_path": "/usr/bin/clang-format"
 }

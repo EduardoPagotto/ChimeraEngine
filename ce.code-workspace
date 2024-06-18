@@ -5,6 +5,22 @@
 		}
 	],
 	"settings": {
+		"workbench.colorCustomizations": {
+			"[Darcula]": {
+				"editor.foreground": "#a9b7c6",
+				"editor.background": "#1E1F22",
+				"editorGutter.background": "#1E1F22",
+				"editorLineNumber.foreground": "#4e5157",
+				"editorLineNumber.activeForeground": "#9da0a8",
+				"editor.selectionBackground": "#214283",
+				//"editor.wordHighlightBackground": "#344134",
+				"editor.findMatchBackground": "#214283",
+				"editor.findMatchBorder": "#214283",
+				//"editor.findMatchHighlightBackground": "#32593D",
+				"editor.findMatchHighlightBorder": "#3C704B"
+			}
+		},
+		"C_Cpp.enhancedColorization": "enabled",
 		"files.associations": {
 			"list": "cpp",
 			"atomic": "cpp",

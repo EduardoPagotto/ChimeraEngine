@@ -44,19 +44,21 @@ void Octree::destroy() {
 
 void Octree::subdivide() {
 
-    glm::vec3 p = boundary.getPosition();
-    glm::vec3 s = boundary.getSize() / 2.0f;
-    glm::vec3 h = s / 2.0f;
-    unsigned int newDeep = deep + 1;
-    divided = true;
+    this->divided = true;
 
-    float xmax = p.x + h.x;
-    float ymax = p.y + h.y;
-    float zmax = p.z + h.z;
+    const uint32_t newDeep = deep + 1;
 
-    float xmin = p.x - h.x;
-    float ymin = p.y - h.y;
-    float zmin = p.z - h.z;
+    const glm::vec3 p = boundary.getPosition();
+    const glm::vec3 s = boundary.getSize() / 2.0f;
+    const glm::vec3 h = s / 2.0f;
+
+    const float xmax = p.x + h.x;
+    const float ymax = p.y + h.y;
+    const float zmax = p.z + h.z;
+
+    const float xmin = p.x - h.x;
+    const float ymin = p.y - h.y;
+    const float zmin = p.z - h.z;
 
     AABB bsw, bse, tsw, tse, bnw, bne, tnw, tne;
 

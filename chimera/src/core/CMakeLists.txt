@@ -23,9 +23,6 @@ set (SourcesCore Registry.cpp
 				 buffer/FrameBuffer.cpp
 				 buffer/RenderBuffer.cpp
 				 DrawLine.cpp
-				 space/Plane.cpp
-				 space/Frustum.cpp
-				 space/AABB.cpp
 				 space/Octree.cpp
 				 visible/Mesh.cpp
 				 visible/Shader.cpp

@@ -3,26 +3,24 @@
 
 namespace Chimera {
 
-void Plane::set(const glm::vec3& pA, const glm::vec3& B, const glm::vec3& C) {
-    point = pA;
-    normal = glm::normalize(glm::cross(B - pA, C - pA));
-    ND = dot(normal, pA);
-    O = normal.z < 0.0f ? (normal.y < 0.0f ? (normal.x < 0.0f ? 0 : 1) : (normal.x < 0.0f ? 2 : 3))
-                        : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
-
-    // SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "O Size: %d", O);
-}
-
-void Plane::set(const glm::vec3& pA, const glm::vec3& _normal) {
-    point = pA;       //_point->vertex[0].position;
-    normal = _normal; //_point->normal();
-    ND = dot(normal, pA);
+void Plane::set(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc) {
+    point = pa;
+    normal = glm::normalize(glm::cross(pb - pa, pc - pa));
+    ND = dot(normal, pa);
     O = normal.z < 0.0f ? (normal.y < 0.0f ? (normal.x < 0.0f ? 0 : 1) : (normal.x < 0.0f ? 2 : 3))
                         : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
 }
 
-bool Plane::collinearNormal(const glm::vec3& _normal) const {
-    const glm::vec3 sub = this->normal - _normal;
+void Plane::set(const glm::vec3& point, const glm::vec3& normal) {
+    this->point = point;
+    this->normal = normal;
+    ND = dot(normal, point);
+    O = normal.z < 0.0f ? (normal.y < 0.0f ? (normal.x < 0.0f ? 0 : 1) : (normal.x < 0.0f ? 2 : 3))
+                        : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
+}
+
+bool Plane::collinearNormal(const glm::vec3& normal) const {
+    const glm::vec3 sub = this->normal - normal;
     return (float)fabs(sub.x + sub.y + sub.z) < EPSILON;
 }
 

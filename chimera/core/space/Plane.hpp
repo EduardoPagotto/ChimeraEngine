@@ -14,17 +14,17 @@ class Plane {
 
   public:
     Plane() = default;
-    Plane(const Plane& _cpy) : point(_cpy.point), normal(_cpy.normal), ND(_cpy.ND), O(_cpy.O) {}
+    Plane(const Plane& _cpy) = default;
     Plane(const glm::vec3& _position, const glm::vec3& _normal) { this->set(_position, _normal); }
     virtual ~Plane() = default;
 
-    void set(const glm::vec3& A, const glm::vec3& B, const glm::vec3& C);
-    void set(const glm::vec3& _position, const glm::vec3& _normal);
+    void set(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc);
+    void set(const glm::vec3& point, const glm::vec3& normal);
 
     inline glm::vec3 getPoint() const { return this->point; }
     inline glm::vec3 getNormal() const { return this->normal; }
 
-    bool collinearNormal(const glm::vec3& _normal) const;
+    bool collinearNormal(const glm::vec3& normal) const;
     SIDE classifyPoint(const glm::vec3& point) const;
     SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3& clipTest) const;
     bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection, float& percentage) const;

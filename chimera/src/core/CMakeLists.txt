@@ -22,7 +22,6 @@ set (SourcesCore Registry.cpp
 				 buffer/FrameBuffer.cpp
 				 buffer/RenderBuffer.cpp
 				 DrawLine.cpp
-				 space/Octree.cpp
 				 visible/Mesh.cpp
 				 visible/Shader.cpp
 				 visible/Texture.cpp

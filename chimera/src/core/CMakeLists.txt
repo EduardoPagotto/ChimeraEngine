@@ -15,7 +15,6 @@ endif(BULLET_SET_TO_USE)
 set (SourcesCore Registry.cpp
 				 utils.cpp
 				 Engine.cpp
-				 HeapQ.cpp
 				 device/CanvasFB.cpp
 				 device/CanvasGL.cpp
 				 buffer/IndexBuffer.cpp

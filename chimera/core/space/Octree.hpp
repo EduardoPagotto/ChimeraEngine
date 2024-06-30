@@ -22,7 +22,7 @@ class Octree {
     inline static uint32_t serial_master;
 
   public:
-    Octree(const AABB& boundary, const uint32_t& capacity, Octree* parent, const bool& leafMode, const uint32_t& deep)
+    explicit Octree(const AABB& boundary, const uint32_t& capacity, Octree* parent, const bool& leafMode, const uint32_t& deep) noexcept
         : boundary(boundary), capacity(capacity), pParent(parent), leafMode(leafMode), deep(deep), divided(false), locked(false),
           serial(serial_master) {
 
@@ -31,9 +31,9 @@ class Octree {
             pChild[i] = nullptr;
     }
 
-    virtual ~Octree() { destroy(); }
+    virtual ~Octree() noexcept { destroy(); }
 
-    void destroy() {
+    void destroy() noexcept {
         if (divided == true) {
             divided = false;
             for (short i = 0; i < 8; i++) {
@@ -47,7 +47,7 @@ class Octree {
         indexes.clear();
     }
 
-    bool insert(const glm::vec3& point, const uint32_t& index) {
+    bool insert(const glm::vec3& point, const uint32_t& index) noexcept {
 
         if (boundary.contains(point) == false)
             return false;
@@ -76,7 +76,7 @@ class Octree {
         return this->insertNew(point, index);
     }
 
-    void insertAABB(const AABB& aabb, const uint32_t& index) {
+    void insertAABB(const AABB& aabb, const uint32_t& index) noexcept {
         const glm::vec3* v = aabb.getAllVertex();
         for (int i = 0; i < 8; i++)
             this->insert(v[i], index);
@@ -84,7 +84,7 @@ class Octree {
         this->insert(aabb.getPosition(), index);
     }
 
-    void query(const AABB& aabb, std::vector<glm::vec3>& found) {
+    void query(const AABB& aabb, std::vector<glm::vec3>& found) noexcept {
 
         if (boundary.intersects(aabb) == false)
             return;
@@ -100,7 +100,7 @@ class Octree {
         }
     }
 
-    bool hasPoint(const glm::vec3& point) {
+    bool hasPoint(const glm::vec3& point) noexcept {
 
         if (boundary.contains(point) == true) {
             if (divided == true) {
@@ -117,7 +117,7 @@ class Octree {
         return false;
     }
 
-    void visible(const Frustum& frustum, std::queue<uint32_t>& qIndexes) {
+    void visible(const Frustum& frustum, std::queue<uint32_t>& qIndexes) noexcept {
         HeapQ<uint32_t> heapQ(false);
         this->_visible(frustum, heapQ);
 
@@ -132,7 +132,7 @@ class Octree {
         }
     }
 
-    void getBondaryList(std::vector<AABB>& list, const bool& showEmpty) {
+    void getBondaryList(std::vector<AABB>& list, const bool& showEmpty) noexcept {
 
         if (divided == true) {
             for (short i = 0; i < 8; i++)
@@ -150,10 +150,10 @@ class Octree {
 
     inline const bool isLocked() const { return locked; }
 
-    inline void setLock(const bool& locked) { this->locked = locked; }
+    inline void setLock(const bool& locked) noexcept { this->locked = locked; }
 
   private:
-    void subdivide() {
+    void subdivide() noexcept {
         this->divided = true;
 
         const uint32_t newDeep = deep + 1;
@@ -191,7 +191,7 @@ class Octree {
         pChild[(int)AabbBondery::TNE] = new Octree(tne, capacity, this, leafMode, newDeep);
     }
 
-    void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) {
+    void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) noexcept {
 
         if (boundary.visible(frustum)) {
             if (divided == true) {
@@ -209,7 +209,7 @@ class Octree {
         }
     }
 
-    bool insertNew(const glm::vec3& point, const uint32_t& index) {
+    bool insertNew(const glm::vec3& point, const uint32_t& index) noexcept {
         for (short i = 0; i < 8; i++) {
             if (pChild[i]->insert(point, index))
                 return true;

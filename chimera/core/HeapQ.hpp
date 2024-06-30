@@ -10,9 +10,9 @@ class HeapQ {
     bool max{true};
 
   public:
-    HeapQ(bool max = true) : max(max) {}
+    explicit HeapQ(bool max = true) noexcept : max(max) {}
 
-    virtual ~HeapQ() { heap.clear(); }
+    virtual ~HeapQ() noexcept { heap.clear(); }
 
     inline const uint32_t size() const noexcept { return heap.size(); }
 

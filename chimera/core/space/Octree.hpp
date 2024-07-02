@@ -1,6 +1,7 @@
 #pragma once
 #include "AABB.hpp"
 #include "chimera/core/HeapQ.hpp"
+#include <memory>
 #include <queue>
 #include <vector>
 
@@ -8,27 +9,35 @@ namespace Chimera {
 
 class Octree {
   private:
-    bool locked;
     bool leafMode;
     bool divided;
     uint32_t deep;
     uint32_t capacity;
     uint32_t serial;
     AABB boundary;
-    Octree* pParent;
-    Octree* pChild[8];
+    Octree* pParent{nullptr};
+    std::unique_ptr<Octree> child[8];
     std::vector<glm::vec3> points;
     std::vector<uint32_t> indexes;
-    inline static uint32_t serial_master;
+    inline static uint32_t serial_master{0};
 
   public:
+    // explicit Octree(const AABB& boundary, Octree* parent) noexcept
+    //     : boundary(boundary), capacity(parent->capacity), pParent(parent), leafMode(parent->leafMode), deep(parent->deep),
+    //     divided(false),
+    //       serial(serial_master) {
+
+    //     serial_master++;
+    //     for (short i = 0; i < 8; i++)
+    //         child[i] = nullptr;
+    // }
+
     explicit Octree(const AABB& boundary, const uint32_t& capacity, Octree* parent, const bool& leafMode, const uint32_t& deep) noexcept
-        : boundary(boundary), capacity(capacity), pParent(parent), leafMode(leafMode), deep(deep), divided(false), locked(false),
-          serial(serial_master) {
+        : boundary(boundary), capacity(capacity), pParent(parent), leafMode(leafMode), deep(deep), divided(false), serial(serial_master) {
 
         serial_master++;
         for (short i = 0; i < 8; i++)
-            pChild[i] = nullptr;
+            child[i] = nullptr;
     }
 
     virtual ~Octree() noexcept { destroy(); }
@@ -37,9 +46,8 @@ class Octree {
         if (divided == true) {
             divided = false;
             for (short i = 0; i < 8; i++) {
-                pChild[i]->destroy();
-                delete pChild[i];
-                pChild[i] = nullptr;
+                child[i]->destroy();
+                child[i] = nullptr;
             }
         }
 
@@ -52,9 +60,9 @@ class Octree {
         if (boundary.contains(point) == false)
             return false;
 
-        bool a = (points.size() < capacity);
-        bool b = (leafMode == false);
-        bool c = (divided == false);
+        const bool a = (points.size() < capacity);
+        const bool b = (leafMode == false);
+        const bool c = (divided == false);
 
         if (a && (b || c)) {
             points.push_back(point);
@@ -96,7 +104,7 @@ class Octree {
 
         if (divided == true) {
             for (short i = 0; i < 8; i++)
-                pChild[i]->query(aabb, found);
+                child[i]->query(aabb, found);
         }
     }
 
@@ -105,7 +113,7 @@ class Octree {
         if (boundary.contains(point) == true) {
             if (divided == true) {
                 for (short i = 0; i < 8; i++)
-                    if (pChild[i]->hasPoint(point))
+                    if (child[i]->hasPoint(point))
                         return true;
             }
 
@@ -136,7 +144,7 @@ class Octree {
 
         if (divided == true) {
             for (short i = 0; i < 8; i++)
-                pChild[i]->getBondaryList(list, showEmpty);
+                child[i]->getBondaryList(list, showEmpty);
         } else {
             if ((points.size() > 0) || (showEmpty)) {
                 list.push_back(boundary);
@@ -144,13 +152,8 @@ class Octree {
         }
     }
 
-    inline Octree* getParent() const { return pParent; }
-
-    inline const uint32_t getDeep() const { return deep; }
-
-    inline const bool isLocked() const { return locked; }
-
-    inline void setLock(const bool& locked) noexcept { this->locked = locked; }
+    // inline Octree* getParent() const { return pParent; }
+    // inline const uint32_t getDeep() const { return deep; }
 
   private:
     void subdivide() noexcept {
@@ -181,14 +184,14 @@ class Octree {
         tnw.setPosition(glm::vec3(xmin, ymax, zmax), s);
         tne.setPosition(glm::vec3(xmax, ymax, zmax), s);
 
-        pChild[(int)AabbBondery::BSW] = new Octree(bsw, capacity, this, leafMode, newDeep);
-        pChild[(int)AabbBondery::BSE] = new Octree(bse, capacity, this, leafMode, newDeep);
-        pChild[(int)AabbBondery::TSW] = new Octree(tsw, capacity, this, leafMode, newDeep);
-        pChild[(int)AabbBondery::TSE] = new Octree(tse, capacity, this, leafMode, newDeep);
-        pChild[(int)AabbBondery::BNW] = new Octree(bnw, capacity, this, leafMode, newDeep);
-        pChild[(int)AabbBondery::BNE] = new Octree(bne, capacity, this, leafMode, newDeep);
-        pChild[(int)AabbBondery::TNW] = new Octree(tnw, capacity, this, leafMode, newDeep);
-        pChild[(int)AabbBondery::TNE] = new Octree(tne, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::BSW] = std::make_unique<Octree>(bsw, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::BSE] = std::make_unique<Octree>(bse, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::TSW] = std::make_unique<Octree>(tsw, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::TSE] = std::make_unique<Octree>(tse, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::BNW] = std::make_unique<Octree>(bnw, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::BNE] = std::make_unique<Octree>(bne, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::TNW] = std::make_unique<Octree>(tnw, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::TNE] = std::make_unique<Octree>(tne, capacity, this, leafMode, newDeep);
     }
 
     void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) noexcept {
@@ -196,7 +199,7 @@ class Octree {
         if (boundary.visible(frustum)) {
             if (divided == true) {
                 for (short i = 0; i < 8; i++)
-                    pChild[i]->_visible(frustum, qIndexes);
+                    child[i]->_visible(frustum, qIndexes);
             }
 
             uint32_t last = -1;
@@ -211,7 +214,7 @@ class Octree {
 
     bool insertNew(const glm::vec3& point, const uint32_t& index) noexcept {
         for (short i = 0; i < 8; i++) {
-            if (pChild[i]->insert(point, index))
+            if (child[i]->insert(point, index))
                 return true;
         }
         return false;

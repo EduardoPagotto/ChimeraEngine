@@ -9,36 +9,25 @@ namespace Chimera {
 
 class Octree {
   private:
-    bool leafMode;
-    bool divided;
-    uint32_t deep;
-    uint32_t capacity;
-    uint32_t serial;
+    bool leafMode{true};
+    bool divided{false};
+    uint32_t deep{0};
+    uint32_t capacity{27};
+    uint32_t serial{0};
     AABB boundary;
     Octree* pParent{nullptr};
-    std::unique_ptr<Octree> child[8];
+    std::unique_ptr<Octree> child[8]{nullptr};
     std::vector<glm::vec3> points;
     std::vector<uint32_t> indexes;
     inline static uint32_t serial_master{0};
 
   public:
-    // explicit Octree(const AABB& boundary, Octree* parent) noexcept
-    //     : boundary(boundary), capacity(parent->capacity), pParent(parent), leafMode(parent->leafMode), deep(parent->deep),
-    //     divided(false),
-    //       serial(serial_master) {
+    explicit Octree(const AABB& boundary, Octree* parent) noexcept
+        : boundary(boundary), pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1),
+          divided(false), serial(serial_master++) {}
 
-    //     serial_master++;
-    //     for (short i = 0; i < 8; i++)
-    //         child[i] = nullptr;
-    // }
-
-    explicit Octree(const AABB& boundary, const uint32_t& capacity, Octree* parent, const bool& leafMode, const uint32_t& deep) noexcept
-        : boundary(boundary), capacity(capacity), pParent(parent), leafMode(leafMode), deep(deep), divided(false), serial(serial_master) {
-
-        serial_master++;
-        for (short i = 0; i < 8; i++)
-            child[i] = nullptr;
-    }
+    explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leafMode) noexcept
+        : boundary(boundary), capacity(capacity), leafMode(leafMode), pParent(nullptr), deep(0), divided(false), serial(serial_master++) {}
 
     virtual ~Octree() noexcept { destroy(); }
 
@@ -184,14 +173,14 @@ class Octree {
         tnw.setPosition(glm::vec3(xmin, ymax, zmax), s);
         tne.setPosition(glm::vec3(xmax, ymax, zmax), s);
 
-        child[(int)AabbBondery::BSW] = std::make_unique<Octree>(bsw, capacity, this, leafMode, newDeep);
-        child[(int)AabbBondery::BSE] = std::make_unique<Octree>(bse, capacity, this, leafMode, newDeep);
-        child[(int)AabbBondery::TSW] = std::make_unique<Octree>(tsw, capacity, this, leafMode, newDeep);
-        child[(int)AabbBondery::TSE] = std::make_unique<Octree>(tse, capacity, this, leafMode, newDeep);
-        child[(int)AabbBondery::BNW] = std::make_unique<Octree>(bnw, capacity, this, leafMode, newDeep);
-        child[(int)AabbBondery::BNE] = std::make_unique<Octree>(bne, capacity, this, leafMode, newDeep);
-        child[(int)AabbBondery::TNW] = std::make_unique<Octree>(tnw, capacity, this, leafMode, newDeep);
-        child[(int)AabbBondery::TNE] = std::make_unique<Octree>(tne, capacity, this, leafMode, newDeep);
+        child[(int)AabbBondery::BSW] = std::make_unique<Octree>(bsw, this);
+        child[(int)AabbBondery::BSE] = std::make_unique<Octree>(bse, this);
+        child[(int)AabbBondery::TSW] = std::make_unique<Octree>(tsw, this);
+        child[(int)AabbBondery::TSE] = std::make_unique<Octree>(tse, this);
+        child[(int)AabbBondery::BNW] = std::make_unique<Octree>(bnw, this);
+        child[(int)AabbBondery::BNE] = std::make_unique<Octree>(bne, this);
+        child[(int)AabbBondery::TNW] = std::make_unique<Octree>(tnw, this);
+        child[(int)AabbBondery::TNE] = std::make_unique<Octree>(tne, this);
     }
 
     void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) noexcept {

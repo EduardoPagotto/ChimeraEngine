@@ -1,6 +1,6 @@
 #pragma once
 #include "Frustum.hpp"
-#include "array"
+#include <vector>
 
 namespace Chimera {
 
@@ -8,7 +8,7 @@ enum class AabbBondery { BSW = 0, BSE = 1, TSW = 2, TSE = 3, BNW = 4, BNE = 5, T
 
 class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
   protected:
-    std::array<glm::vec3, 8> vertex{};
+    std::vector<glm::vec3> vertex;
 
   private:
     glm::vec3 position{0.0f};
@@ -23,7 +23,7 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
 
     virtual ~AABB() = default;
 
-    inline const bool visible(const Frustum& _frustum) const noexcept { return _frustum.AABBVisible(vertex.data()); }
+    inline const bool visible(const Frustum& _frustum) const noexcept { return _frustum.AABBVisible(vertex); }
 
     inline const glm::vec3 getPosition() const { return position; }
 
@@ -35,14 +35,18 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
     }
 
     inline void setBoundary(const glm::vec3& min, const glm::vec3& max) noexcept {
-        vertex[static_cast<int>(AabbBondery::BSW)] = glm::vec3(min.x, min.y, min.z); // 0 Minimal point (front)
-        vertex[static_cast<int>(AabbBondery::BSE)] = glm::vec3(max.x, min.y, min.z); // 1
-        vertex[static_cast<int>(AabbBondery::TSW)] = glm::vec3(min.x, max.y, min.z); // 2
-        vertex[static_cast<int>(AabbBondery::TSE)] = glm::vec3(max.x, max.y, min.z); // 3
-        vertex[static_cast<int>(AabbBondery::BNW)] = glm::vec3(min.x, min.y, max.z); // 4
-        vertex[static_cast<int>(AabbBondery::BNE)] = glm::vec3(max.x, min.y, max.z); // 5
-        vertex[static_cast<int>(AabbBondery::TNW)] = glm::vec3(min.x, max.y, max.z); // 6
-        vertex[static_cast<int>(AabbBondery::TNE)] = glm::vec3(max.x, max.y, max.z); // 7 Maximal point (back)
+
+        if (!vertex.empty())
+            vertex.clear();
+
+        vertex.push_back(glm::vec3(min.x, min.y, min.z)); // AabbBondery::BSW 0 Minimal point (front)
+        vertex.push_back(glm::vec3(max.x, min.y, min.z)); // AabbBondery::BSE 1
+        vertex.push_back(glm::vec3(min.x, max.y, min.z)); // AabbBondery::TSW 2
+        vertex.push_back(glm::vec3(max.x, max.y, min.z)); // AabbBondery::TSE 3
+        vertex.push_back(glm::vec3(min.x, min.y, max.z)); // AabbBondery::BNW 4
+        vertex.push_back(glm::vec3(max.x, min.y, max.z)); // AabbBondery::BNE 5
+        vertex.push_back(glm::vec3(min.x, max.y, max.z)); // AabbBondery::TNW 6
+        vertex.push_back(glm::vec3(max.x, max.y, max.z)); // AabbBondery::TNE 7 Maximal point (back)
 
         // TODO: Era half size ??
         this->size = getSizeMinMax(min, max);
@@ -76,7 +80,7 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
         return AABB(min, max);
     }
 
-    const glm::vec3* getAllVertex() const { return vertex.data(); }
+    const std::vector<glm::vec3>& getAllVertex() const { return vertex; }
 
     // TODO: verificar
     // inline const float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex.data()); }

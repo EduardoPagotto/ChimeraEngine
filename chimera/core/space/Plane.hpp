@@ -1,5 +1,6 @@
 #pragma once
 #include "chimera/core/OpenGLDefs.hpp"
+#include <vector>
 
 namespace Chimera {
 
@@ -101,7 +102,9 @@ class Plane {
         return true;
     }
 
-    inline const bool AABBBehind(const glm::vec3* AABBVertices) const noexcept { return glm::dot(normal, AABBVertices[O]) < ND; }
+    inline const bool AABBBehind(const std::vector<glm::vec3>& AABBVertices) const noexcept {
+        return glm::dot(normal, AABBVertices[O]) < ND;
+    }
 
   private:
     void calcND() noexcept {

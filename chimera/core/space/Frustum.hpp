@@ -42,7 +42,7 @@ class Frustum {
         planes[5] = Plane(points[5], points[4], points[6]);
     }
 
-    const bool AABBVisible(const glm::vec3* AABBVertices) const {
+    const bool AABBVisible(const std::vector<glm::vec3>& AABBVertices) const {
 
         for (const Plane& plane : planes) {
             if (plane.AABBBehind(AABBVertices)) {

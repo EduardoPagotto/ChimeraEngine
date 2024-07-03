@@ -64,7 +64,7 @@ void DrawLine::render(MapUniform& uniformsQueue) {
 }
 
 void DrawLine::addAABB(const AABB& aabb, const glm::vec3& color) {
-    const glm::vec3* v = aabb.getAllVertex();
+    const std::vector<glm::vec3>& v = aabb.getAllVertex();
     add(v[0], v[1], color);
     add(v[2], v[3], color);
     add(v[4], v[5], color);

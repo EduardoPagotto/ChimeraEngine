@@ -74,9 +74,10 @@ class Octree {
     }
 
     void insertAABB(const AABB& aabb, const uint32_t& index) noexcept {
-        const glm::vec3* v = aabb.getAllVertex();
-        for (int i = 0; i < 8; i++)
-            this->insert(v[i], index);
+        const std::vector<glm::vec3>& vList = aabb.getAllVertex();
+        for (const glm::vec3& p : vList) {
+            this->insert(p, index);
+        }
 
         this->insert(aabb.getPosition(), index);
     }

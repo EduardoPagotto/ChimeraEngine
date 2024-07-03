@@ -7,43 +7,37 @@ enum class SIDE { CP_ONPLANE, CP_FRONT, CP_BACK, CP_SPANNING };
 
 class Plane {
   private:
-    glm::vec3 point{0};  // vertice A
-    glm::vec3 normal{0}; // plane calc cross product B and C across A
+    glm::vec3 point{0.0f};  // vertice A
+    glm::vec3 normal{0.0f}; // plane calc cross product B and C across A
     float ND{0.0f};
     int O{0};
 
   public:
-    Plane() = default;
-    Plane(const Plane& _cpy) = default;
-    Plane(const glm::vec3& _position, const glm::vec3& _normal) { this->set(_position, _normal); }
-    virtual ~Plane() = default;
+    explicit Plane() noexcept = default;
 
-    void set(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc) {
-        point = pa;
+    explicit Plane(const Plane& o) noexcept = default;
+
+    explicit Plane(const glm::vec3& point, const glm::vec3& normal) noexcept : point(point), normal(normal) { this->calcND(); }
+
+    explicit Plane(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc) noexcept : point(pa) {
         normal = glm::normalize(glm::cross(pb - pa, pc - pa));
-        ND = dot(normal, pa);
-        O = normal.z < 0.0f ? (normal.y < 0.0f ? (normal.x < 0.0f ? 0 : 1) : (normal.x < 0.0f ? 2 : 3))
-                            : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
+        this->calcND();
     }
 
-    void set(const glm::vec3& point, const glm::vec3& normal) {
-        this->point = point;
-        this->normal = normal;
-        ND = dot(normal, point);
-        O = normal.z < 0.0f ? (normal.y < 0.0f ? (normal.x < 0.0f ? 0 : 1) : (normal.x < 0.0f ? 2 : 3))
-                            : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
-    }
+    virtual ~Plane() noexcept = default;
+
+    Plane& operator=(const Plane& o) noexcept = default;
 
     inline const glm::vec3 getPoint() const { return this->point; }
 
     inline const glm::vec3 getNormal() const { return this->normal; }
 
-    inline const bool collinearNormal(const glm::vec3& normal) const {
+    inline const bool collinearNormal(const glm::vec3& normal) const noexcept {
         const glm::vec3 sub = this->normal - normal;
         return (float)fabs(sub.x + sub.y + sub.z) < EPSILON;
     }
 
-    inline const SIDE classifyPoint(const glm::vec3& point) const {
+    inline const SIDE classifyPoint(const glm::vec3& point) const noexcept {
         const glm::vec3 dir = this->point - point;
         const float clipTest = glm::dot(dir, this->normal);
 
@@ -56,7 +50,7 @@ class Plane {
         return SIDE::CP_BACK;
     }
 
-    inline const SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3& clipTest) const {
+    inline const SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3& clipTest) const noexcept {
         uint8_t infront{0}, behind{0}, onPlane{0};
 
         clipTest.x = glm::dot((this->point - pA), this->normal); // Clip Test poin A
@@ -88,7 +82,7 @@ class Plane {
         return SIDE::CP_SPANNING;
     }
 
-    inline const bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection, float& percentage) const {
+    inline const bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection, float& percentage) const noexcept {
         const glm::vec3 direction = p1 - p0;
         const float linelength = glm::dot(direction, this->normal);
         if (fabsf(linelength) < 0.0001) // FIXME: EPISLON????
@@ -107,7 +101,16 @@ class Plane {
         return true;
     }
 
-    inline const bool AABBBehind(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]) < ND; }
-    inline const float AABBDistance(const glm::vec3* AABBVertices) const { return glm::dot(normal, AABBVertices[O]); }
+    inline const bool AABBBehind(const glm::vec3* AABBVertices) const noexcept { return glm::dot(normal, AABBVertices[O]) < ND; }
+
+  private:
+    void calcND() noexcept {
+        ND = dot(normal, point);
+        O = normal.z < 0.0f ? (normal.y < 0.0f ? (normal.x < 0.0f ? 0 : 1) : (normal.x < 0.0f ? 2 : 3))
+                            : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
+    }
+
+    // TODO: Verificar
+    // inline const float AABBDistance(const glm::vec3* AABBVertices) const noexcept { return glm::dot(normal, AABBVertices[O]); }
 };
 } // namespace Chimera

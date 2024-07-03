@@ -1,85 +1,87 @@
 #pragma once
 #include "Plane.hpp"
+#include "array"
 
 namespace Chimera {
 
 class Frustum {
   private:
-    glm::vec3 vertices[8]{glm::vec3(0.0f)};
-    Plane planes[6];
+    std::array<glm::vec3, 8> points{};
+    std::array<Plane, 6> planes;
 
   public:
-    Frustum() = default;
+    explicit Frustum() = default;
+    explicit Frustum(const Frustum& o) = delete;
+    Frustum& operator=(Frustum& o) = delete;
     virtual ~Frustum() = default;
 
-    void set(const glm::mat4& ViewProjectionMatrixInverse) {
-        const glm::vec4 A = ViewProjectionMatrixInverse * glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
-        const glm::vec4 B = ViewProjectionMatrixInverse * glm::vec4(1.0f, -1.0f, 1.0f, 1.0f);
-        const glm::vec4 C = ViewProjectionMatrixInverse * glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);
-        const glm::vec4 D = ViewProjectionMatrixInverse * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-        const glm::vec4 E = ViewProjectionMatrixInverse * glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
-        const glm::vec4 F = ViewProjectionMatrixInverse * glm::vec4(1.0f, -1.0f, -1.0f, 1.0f);
-        const glm::vec4 G = ViewProjectionMatrixInverse * glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);
-        const glm::vec4 H = ViewProjectionMatrixInverse * glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
+    void set(const glm::mat4& vpmi) { // ViewProjectionMatrixInverse
+        const glm::vec4 A = vpmi * glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);
+        const glm::vec4 B = vpmi * glm::vec4(1.0f, -1.0f, 1.0f, 1.0f);
+        const glm::vec4 C = vpmi * glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);
+        const glm::vec4 D = vpmi * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        const glm::vec4 E = vpmi * glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
+        const glm::vec4 F = vpmi * glm::vec4(1.0f, -1.0f, -1.0f, 1.0f);
+        const glm::vec4 G = vpmi * glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);
+        const glm::vec4 H = vpmi * glm::vec4(1.0f, 1.0f, -1.0f, 1.0f);
 
-        vertices[0] = glm::vec3(A.x / A.w, A.y / A.w, A.z / A.w);
-        vertices[1] = glm::vec3(B.x / B.w, B.y / B.w, B.z / B.w);
-        vertices[2] = glm::vec3(C.x / C.w, C.y / C.w, C.z / C.w);
-        vertices[3] = glm::vec3(D.x / D.w, D.y / D.w, D.z / D.w);
-        vertices[4] = glm::vec3(E.x / E.w, E.y / E.w, E.z / E.w);
-        vertices[5] = glm::vec3(F.x / F.w, F.y / F.w, F.z / F.w);
-        vertices[6] = glm::vec3(G.x / G.w, G.y / G.w, G.z / G.w);
-        vertices[7] = glm::vec3(H.x / H.w, H.y / H.w, H.z / H.w);
+        points[0] = glm::vec3(A.x / A.w, A.y / A.w, A.z / A.w);
+        points[1] = glm::vec3(B.x / B.w, B.y / B.w, B.z / B.w);
+        points[2] = glm::vec3(C.x / C.w, C.y / C.w, C.z / C.w);
+        points[3] = glm::vec3(D.x / D.w, D.y / D.w, D.z / D.w);
+        points[4] = glm::vec3(E.x / E.w, E.y / E.w, E.z / E.w);
+        points[5] = glm::vec3(F.x / F.w, F.y / F.w, F.z / F.w);
+        points[6] = glm::vec3(G.x / G.w, G.y / G.w, G.z / G.w);
+        points[7] = glm::vec3(H.x / H.w, H.y / H.w, H.z / H.w);
 
-        planes[0].set(vertices[4], vertices[0], vertices[2]);
-        planes[1].set(vertices[1], vertices[5], vertices[7]);
-        planes[2].set(vertices[4], vertices[5], vertices[1]);
-        planes[3].set(vertices[2], vertices[3], vertices[7]);
-        planes[4].set(vertices[0], vertices[1], vertices[3]);
-        planes[5].set(vertices[5], vertices[4], vertices[6]);
+        planes[0] = Plane(points[4], points[0], points[2]);
+        planes[1] = Plane(points[1], points[5], points[7]);
+        planes[2] = Plane(points[4], points[5], points[1]);
+        planes[3] = Plane(points[2], points[3], points[7]);
+        planes[4] = Plane(points[0], points[1], points[3]);
+        planes[5] = Plane(points[5], points[4], points[6]);
     }
 
     const bool AABBVisible(const glm::vec3* AABBVertices) const {
-        for (int i = 0; i < 6; i++) {
-            if (planes[i].AABBBehind(AABBVertices)) {
+
+        for (const Plane& plane : planes) {
+            if (plane.AABBBehind(AABBVertices)) {
                 return false;
             }
         }
-
         return true;
     }
 
-    inline const float AABBDistance(const glm::vec3* AABBVertices) const { return planes[5].AABBDistance(AABBVertices); }
+    // inline const float AABBDistance(const glm::vec3* AABBVertices) const { return planes[5].AABBDistance(AABBVertices); }
 
     // void render_debug() const {
     //     glBegin(GL_LINES);
 
-    //     glVertex3fv(glm::value_ptr(vertices[0]));
-    //     glVertex3fv(glm::value_ptr(vertices[1]));
-    //     glVertex3fv(glm::value_ptr(vertices[2]));
-    //     glVertex3fv(glm::value_ptr(vertices[3]));
-    //     glVertex3fv(glm::value_ptr(vertices[4]));
-    //     glVertex3fv(glm::value_ptr(vertices[5]));
-    //     glVertex3fv(glm::value_ptr(vertices[6]));
-    //     glVertex3fv(glm::value_ptr(vertices[7]));
+    //     glVertex3fv(glm::value_ptr(points[0]));
+    //     glVertex3fv(glm::value_ptr(points[1]));
+    //     glVertex3fv(glm::value_ptr(points[2]));
+    //     glVertex3fv(glm::value_ptr(points[3]));
+    //     glVertex3fv(glm::value_ptr(points[4]));
+    //     glVertex3fv(glm::value_ptr(points[5]));
+    //     glVertex3fv(glm::value_ptr(points[6]));
+    //     glVertex3fv(glm::value_ptr(points[7]));
+    //     glVertex3fv(glm::value_ptr(points[0]));
+    //     glVertex3fv(glm::value_ptr(points[2]));
+    //     glVertex3fv(glm::value_ptr(points[1]));
+    //     glVertex3fv(glm::value_ptr(points[3]));
+    //     glVertex3fv(glm::value_ptr(points[4]));
+    //     glVertex3fv(glm::value_ptr(points[6]));
+    //     glVertex3fv(glm::value_ptr(points[5]));
+    //     glVertex3fv(glm::value_ptr(points[7]));
 
-    //     glVertex3fv(glm::value_ptr(vertices[0]));
-    //     glVertex3fv(glm::value_ptr(vertices[2]));
-    //     glVertex3fv(glm::value_ptr(vertices[1]));
-    //     glVertex3fv(glm::value_ptr(vertices[3]));
-    //     glVertex3fv(glm::value_ptr(vertices[4]));
-    //     glVertex3fv(glm::value_ptr(vertices[6]));
-    //     glVertex3fv(glm::value_ptr(vertices[5]));
-    //     glVertex3fv(glm::value_ptr(vertices[7]));
-
-    //     glVertex3fv(glm::value_ptr(vertices[0]));
-    //     glVertex3fv(glm::value_ptr(vertices[4]));
-    //     glVertex3fv(glm::value_ptr(vertices[1]));
-    //     glVertex3fv(glm::value_ptr(vertices[5]));
-    //     glVertex3fv(glm::value_ptr(vertices[2]));
-    //     glVertex3fv(glm::value_ptr(vertices[6]));
-    //     glVertex3fv(glm::value_ptr(vertices[3]));
-    //     glVertex3fv(glm::value_ptr(vertices[7]));
+    //     glVertex3fv(glm::value_ptr(points[0]));
+    //     glVertex3fv(glm::value_ptr(points[4]));
+    //     glVertex3fv(glm::value_ptr(points[1]));
+    //     glVertex3fv(glm::value_ptr(points[5]));
+    //     glVertex3fv(glm::value_ptr(points[2]));
+    //     glVertex3fv(glm::value_ptr(points[6]));
+    //     glVertex3fv(glm::value_ptr(points[3]));
+    //     glVertex3fv(glm::value_ptr(points[7]));
 
     //     glEnd();
     // }

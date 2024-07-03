@@ -102,9 +102,10 @@ class Plane {
         return true;
     }
 
-    inline const bool AABBBehind(const std::vector<glm::vec3>& AABBVertices) const noexcept {
-        return glm::dot(normal, AABBVertices[O]) < ND;
-    }
+    inline const bool AABBBehind(const std::vector<glm::vec3>& vList) const noexcept { return glm::dot(normal, vList[O]) < ND; }
+
+    // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
+    // inline const float AABBDistance(const std::vector<glm::vec3>& vList) const noexcept { return glm::dot(normal, vList[O]); }
 
   private:
     void calcND() noexcept {
@@ -112,8 +113,5 @@ class Plane {
         O = normal.z < 0.0f ? (normal.y < 0.0f ? (normal.x < 0.0f ? 0 : 1) : (normal.x < 0.0f ? 2 : 3))
                             : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
     }
-
-    // TODO: Verificar
-    // inline const float AABBDistance(const glm::vec3* AABBVertices) const noexcept { return glm::dot(normal, AABBVertices[O]); }
 };
 } // namespace Chimera

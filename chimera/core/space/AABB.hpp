@@ -82,7 +82,7 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
 
     const std::vector<glm::vec3>& getAllVertex() const { return vertex; }
 
-    // TODO: verificar
-    // inline const float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex.data()); }
+    // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
+    // inline const float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex); }
 };
 } // namespace Chimera

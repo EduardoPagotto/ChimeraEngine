@@ -21,9 +21,10 @@ class Octree {
     inline static uint32_t serial_master{0};
 
   public:
-    explicit Octree(const AABB& boundary, Octree* parent) noexcept
-        : boundary(boundary), pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1),
-          serial(serial_master++) {}
+    explicit Octree(const glm::vec3& pos, const glm::vec3& size, Octree* parent) noexcept
+        : pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1), serial(serial_master++) {
+        boundary.setPosition(pos, size);
+    }
 
     explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leafMode) noexcept
         : boundary(boundary), capacity(capacity), leafMode(leafMode), pParent(nullptr), deep(0), serial(serial_master++) {}
@@ -139,37 +140,19 @@ class Octree {
   private:
     void subdivide() noexcept {
 
-        const glm::vec3 p = boundary.getPosition();
         const glm::vec3 s = boundary.getSize() / 2.0f;
         const glm::vec3 h = s / 2.0f;
+        const glm::vec3 max = boundary.getPosition() + h;
+        const glm::vec3 min = boundary.getPosition() - h;
 
-        const float xmax = p.x + h.x;
-        const float ymax = p.y + h.y;
-        const float zmax = p.z + h.z;
-
-        const float xmin = p.x - h.x;
-        const float ymin = p.y - h.y;
-        const float zmin = p.z - h.z;
-
-        AABB bsw, bse, tsw, tse, bnw, bne, tnw, tne;
-
-        bsw.setPosition(glm::vec3(xmin, ymin, zmin), s);
-        bse.setPosition(glm::vec3(xmax, ymin, zmin), s);
-        tsw.setPosition(glm::vec3(xmin, ymax, zmin), s);
-        tse.setPosition(glm::vec3(xmax, ymax, zmin), s);
-        bnw.setPosition(glm::vec3(xmin, ymin, zmax), s);
-        bne.setPosition(glm::vec3(xmax, ymin, zmax), s);
-        tnw.setPosition(glm::vec3(xmin, ymax, zmax), s);
-        tne.setPosition(glm::vec3(xmax, ymax, zmax), s);
-
-        childs.push_back(std::make_unique<Octree>(bsw, this)); // AabbBondery::BSW 0
-        childs.push_back(std::make_unique<Octree>(bse, this)); // AabbBondery::BSE 1
-        childs.push_back(std::make_unique<Octree>(tsw, this)); // AabbBondery::TSW 2
-        childs.push_back(std::make_unique<Octree>(tse, this)); // AabbBondery::TSE 3
-        childs.push_back(std::make_unique<Octree>(bnw, this)); // AabbBondery::BNW 4
-        childs.push_back(std::make_unique<Octree>(bne, this)); // AabbBondery::BNE 5
-        childs.push_back(std::make_unique<Octree>(tnw, this)); // AabbBondery::TNW 6
-        childs.push_back(std::make_unique<Octree>(tne, this)); // AabbBondery::TNE 7
+        childs.push_back(std::make_unique<Octree>(glm::vec3(min.x, min.y, min.z), s, this)); // AabbBondery::BSW 0
+        childs.push_back(std::make_unique<Octree>(glm::vec3(max.x, min.y, min.z), s, this)); // AabbBondery::BSE 1
+        childs.push_back(std::make_unique<Octree>(glm::vec3(min.x, max.y, min.z), s, this)); // AabbBondery::TSW 2
+        childs.push_back(std::make_unique<Octree>(glm::vec3(max.x, max.y, min.z), s, this)); // AabbBondery::TSE 3
+        childs.push_back(std::make_unique<Octree>(glm::vec3(min.x, min.y, max.z), s, this)); // AabbBondery::BNW 4
+        childs.push_back(std::make_unique<Octree>(glm::vec3(max.x, min.y, max.z), s, this)); // AabbBondery::BNE 5
+        childs.push_back(std::make_unique<Octree>(glm::vec3(min.x, max.y, max.z), s, this)); // AabbBondery::TNW 6
+        childs.push_back(std::make_unique<Octree>(glm::vec3(max.x, max.y, max.z), s, this)); // AabbBondery::TNE 7
     }
 
     void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) noexcept {

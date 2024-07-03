@@ -10,13 +10,12 @@ namespace Chimera {
 class Octree {
   private:
     bool leafMode{true};
-    bool divided{false};
     uint32_t deep{0};
     uint32_t capacity{27};
     uint32_t serial{0};
     AABB boundary;
     Octree* pParent{nullptr};
-    std::vector<std::unique_ptr<Octree>> child;
+    std::vector<std::unique_ptr<Octree>> childs;
     std::vector<glm::vec3> points;
     std::vector<uint32_t> indexes;
     inline static uint32_t serial_master{0};
@@ -24,20 +23,20 @@ class Octree {
   public:
     explicit Octree(const AABB& boundary, Octree* parent) noexcept
         : boundary(boundary), pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1),
-          divided(false), serial(serial_master++) {}
+          serial(serial_master++) {}
 
     explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leafMode) noexcept
-        : boundary(boundary), capacity(capacity), leafMode(leafMode), pParent(nullptr), deep(0), divided(false), serial(serial_master++) {}
+        : boundary(boundary), capacity(capacity), leafMode(leafMode), pParent(nullptr), deep(0), serial(serial_master++) {}
 
     virtual ~Octree() noexcept { destroy(); }
 
     void destroy() noexcept {
-        if (divided == true) {
-            divided = false;
-            for (auto& octree : child) {
+        if (!childs.empty()) {
+            for (auto& octree : childs) {
                 octree->destroy();
                 octree = nullptr;
             }
+            childs.clear();
         }
 
         points.clear();
@@ -49,21 +48,17 @@ class Octree {
         if (boundary.contains(point) == false)
             return false;
 
-        const bool a = (points.size() < capacity);
-        const bool b = (leafMode == false);
-        const bool c = (divided == false);
-
-        if (a && (b || c)) {
+        if ((points.size() < capacity) && ((!leafMode) || childs.empty())) {
             points.push_back(point);
             indexes.push_back(index);
             return true;
         }
 
-        if (c)
+        if (childs.empty())
             this->subdivide();
 
-        if (!b) {
-            for (uint32_t i = 0; i < points.size(); i++)
+        if (leafMode) {
+            for (std::size_t i = 0; i < points.size(); i++)
                 this->insertNew(points[i], indexes[i]);
 
             points.clear();
@@ -92,21 +87,17 @@ class Octree {
                 found.push_back(p);
         }
 
-        if (divided == true) {
-            for (auto& octree : child) {
-                octree->query(aabb, found);
-            }
+        for (auto& octree : childs) {
+            octree->query(aabb, found);
         }
     }
 
     bool hasPoint(const glm::vec3& point) noexcept {
 
         if (boundary.contains(point) == true) {
-            if (divided == true) {
-                for (auto& octree : child) {
-                    if (octree->hasPoint(point))
-                        return true;
-                }
+            for (auto& octree : childs) {
+                if (octree->hasPoint(point))
+                    return true;
             }
 
             for (auto p : points) {
@@ -134,8 +125,8 @@ class Octree {
 
     void getBondaryList(std::vector<AABB>& list, const bool& showEmpty) noexcept {
 
-        if (divided == true) {
-            for (auto& octree : child) {
+        if (!childs.empty()) {
+            for (auto& octree : childs) {
                 octree->getBondaryList(list, showEmpty);
             }
         } else {
@@ -145,14 +136,8 @@ class Octree {
         }
     }
 
-    // inline Octree* getParent() const { return pParent; }
-    // inline const uint32_t getDeep() const { return deep; }
-
   private:
     void subdivide() noexcept {
-        this->divided = true;
-
-        const uint32_t newDeep = deep + 1;
 
         const glm::vec3 p = boundary.getPosition();
         const glm::vec3 s = boundary.getSize() / 2.0f;
@@ -177,23 +162,21 @@ class Octree {
         tnw.setPosition(glm::vec3(xmin, ymax, zmax), s);
         tne.setPosition(glm::vec3(xmax, ymax, zmax), s);
 
-        child.push_back(std::make_unique<Octree>(bsw, this)); // AabbBondery::BSW 0
-        child.push_back(std::make_unique<Octree>(bse, this)); // AabbBondery::BSE 1
-        child.push_back(std::make_unique<Octree>(tsw, this)); // AabbBondery::TSW 2
-        child.push_back(std::make_unique<Octree>(tse, this)); // AabbBondery::TSE 3
-        child.push_back(std::make_unique<Octree>(bnw, this)); // AabbBondery::BNW 4
-        child.push_back(std::make_unique<Octree>(bne, this)); // AabbBondery::BNE 5
-        child.push_back(std::make_unique<Octree>(tnw, this)); // AabbBondery::TNW 6
-        child.push_back(std::make_unique<Octree>(tne, this)); // AabbBondery::TNE 7
+        childs.push_back(std::make_unique<Octree>(bsw, this)); // AabbBondery::BSW 0
+        childs.push_back(std::make_unique<Octree>(bse, this)); // AabbBondery::BSE 1
+        childs.push_back(std::make_unique<Octree>(tsw, this)); // AabbBondery::TSW 2
+        childs.push_back(std::make_unique<Octree>(tse, this)); // AabbBondery::TSE 3
+        childs.push_back(std::make_unique<Octree>(bnw, this)); // AabbBondery::BNW 4
+        childs.push_back(std::make_unique<Octree>(bne, this)); // AabbBondery::BNE 5
+        childs.push_back(std::make_unique<Octree>(tnw, this)); // AabbBondery::TNW 6
+        childs.push_back(std::make_unique<Octree>(tne, this)); // AabbBondery::TNE 7
     }
 
     void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) noexcept {
 
         if (boundary.visible(frustum)) {
-            if (divided == true) {
-                for (auto& octree : child) {
-                    octree->_visible(frustum, qIndexes);
-                }
+            for (auto& octree : childs) {
+                octree->_visible(frustum, qIndexes);
             }
 
             uint32_t last = -1;
@@ -207,7 +190,7 @@ class Octree {
     }
 
     bool insertNew(const glm::vec3& point, const uint32_t& index) noexcept {
-        for (auto& octree : child) {
+        for (auto& octree : childs) {
             if (octree->insert(point, index))
                 return true;
         }

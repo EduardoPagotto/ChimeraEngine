@@ -16,7 +16,7 @@ class Octree {
     uint32_t serial{0};
     AABB boundary;
     Octree* pParent{nullptr};
-    std::unique_ptr<Octree> child[8]{nullptr};
+    std::vector<std::unique_ptr<Octree>> child;
     std::vector<glm::vec3> points;
     std::vector<uint32_t> indexes;
     inline static uint32_t serial_master{0};
@@ -34,9 +34,9 @@ class Octree {
     void destroy() noexcept {
         if (divided == true) {
             divided = false;
-            for (short i = 0; i < 8; i++) {
-                child[i]->destroy();
-                child[i] = nullptr;
+            for (auto& octree : child) {
+                octree->destroy();
+                octree = nullptr;
             }
         }
 
@@ -93,8 +93,9 @@ class Octree {
         }
 
         if (divided == true) {
-            for (short i = 0; i < 8; i++)
-                child[i]->query(aabb, found);
+            for (auto& octree : child) {
+                octree->query(aabb, found);
+            }
         }
     }
 
@@ -102,9 +103,10 @@ class Octree {
 
         if (boundary.contains(point) == true) {
             if (divided == true) {
-                for (short i = 0; i < 8; i++)
-                    if (child[i]->hasPoint(point))
+                for (auto& octree : child) {
+                    if (octree->hasPoint(point))
                         return true;
+                }
             }
 
             for (auto p : points) {
@@ -133,8 +135,9 @@ class Octree {
     void getBondaryList(std::vector<AABB>& list, const bool& showEmpty) noexcept {
 
         if (divided == true) {
-            for (short i = 0; i < 8; i++)
-                child[i]->getBondaryList(list, showEmpty);
+            for (auto& octree : child) {
+                octree->getBondaryList(list, showEmpty);
+            }
         } else {
             if ((points.size() > 0) || (showEmpty)) {
                 list.push_back(boundary);
@@ -174,22 +177,23 @@ class Octree {
         tnw.setPosition(glm::vec3(xmin, ymax, zmax), s);
         tne.setPosition(glm::vec3(xmax, ymax, zmax), s);
 
-        child[(int)AabbBondery::BSW] = std::make_unique<Octree>(bsw, this);
-        child[(int)AabbBondery::BSE] = std::make_unique<Octree>(bse, this);
-        child[(int)AabbBondery::TSW] = std::make_unique<Octree>(tsw, this);
-        child[(int)AabbBondery::TSE] = std::make_unique<Octree>(tse, this);
-        child[(int)AabbBondery::BNW] = std::make_unique<Octree>(bnw, this);
-        child[(int)AabbBondery::BNE] = std::make_unique<Octree>(bne, this);
-        child[(int)AabbBondery::TNW] = std::make_unique<Octree>(tnw, this);
-        child[(int)AabbBondery::TNE] = std::make_unique<Octree>(tne, this);
+        child.push_back(std::make_unique<Octree>(bsw, this)); // AabbBondery::BSW 0
+        child.push_back(std::make_unique<Octree>(bse, this)); // AabbBondery::BSE 1
+        child.push_back(std::make_unique<Octree>(tsw, this)); // AabbBondery::TSW 2
+        child.push_back(std::make_unique<Octree>(tse, this)); // AabbBondery::TSE 3
+        child.push_back(std::make_unique<Octree>(bnw, this)); // AabbBondery::BNW 4
+        child.push_back(std::make_unique<Octree>(bne, this)); // AabbBondery::BNE 5
+        child.push_back(std::make_unique<Octree>(tnw, this)); // AabbBondery::TNW 6
+        child.push_back(std::make_unique<Octree>(tne, this)); // AabbBondery::TNE 7
     }
 
     void _visible(const Frustum& frustum, HeapQ<uint32_t>& qIndexes) noexcept {
 
         if (boundary.visible(frustum)) {
             if (divided == true) {
-                for (short i = 0; i < 8; i++)
-                    child[i]->_visible(frustum, qIndexes);
+                for (auto& octree : child) {
+                    octree->_visible(frustum, qIndexes);
+                }
             }
 
             uint32_t last = -1;
@@ -203,8 +207,8 @@ class Octree {
     }
 
     bool insertNew(const glm::vec3& point, const uint32_t& index) noexcept {
-        for (short i = 0; i < 8; i++) {
-            if (child[i]->insert(point, index))
+        for (auto& octree : child) {
+            if (octree->insert(point, index))
                 return true;
         }
         return false;

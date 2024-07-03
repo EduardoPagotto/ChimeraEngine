@@ -10,12 +10,12 @@ class Frustum {
     std::array<Plane, 6> planes;
 
   public:
-    explicit Frustum() = default;
+    explicit Frustum() noexcept = default;
     explicit Frustum(const Frustum& o) = delete;
     Frustum& operator=(Frustum& o) = delete;
-    virtual ~Frustum() = default;
+    virtual ~Frustum() noexcept = default;
 
-    void set(const glm::mat4& vpmi) {                                    // ViewProjectionMatrixInverse
+    void set(const glm::mat4& vpmi) noexcept {                           // ViewProjectionMatrixInverse
         const glm::vec4 A = vpmi * glm::vec4(-1.0f, -1.0f, 1.0f, 1.0f);  // 4
         const glm::vec4 B = vpmi * glm::vec4(1.0f, -1.0f, 1.0f, 1.0f);   // 5
         const glm::vec4 C = vpmi * glm::vec4(-1.0f, 1.0f, 1.0f, 1.0f);   // 6

@@ -8,17 +8,17 @@
 namespace Chimera {
 class Engine {
   public:
-    Engine(Canvas* canvas, const float& dist);
+    Engine(ICanva* canvas, const float& dist);
     virtual ~Engine();
     void run();
-    Canvas* getCanvas() const { return canvas; }
+    ICanva* getCanvas() const { return canvas; }
     StateStack& getStack() { return stack; }
 
   private:
     Registry* registry;
     ViewProjection vp;
     uint32_t fps = 140;
-    Canvas* canvas;
+    ICanva* canvas;
     Timer timerFPS;
     StateStack stack;
 };

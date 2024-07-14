@@ -27,7 +27,7 @@ class Scene : public IStateMachine {
     Scene();
     virtual ~Scene();
     void setOrigem(ITrans* o) { origem = o; }
-    Canvas* getCanvas();
+    ICanva* getCanvas();
     StateStack& getLayes() { return this->layers; }
     // Herdados
     virtual void onAttach() override;

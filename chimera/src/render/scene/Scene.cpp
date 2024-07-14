@@ -181,7 +181,7 @@ void Scene::onAttach() {
             vpo = ev.vp;
         }
 
-        // Pega o Canvas do ECS
+        // Pega o ICanva do ECS
         if (entity.hasComponent<CanvasComponent>()) {
             CanvasComponent& cc = entity.getComponent<CanvasComponent>();
             this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());
@@ -220,7 +220,7 @@ void Scene::onAttach() {
     sceneAABB.setBoundary(tot_min, tot_max);
 }
 
-Canvas* Scene::getCanvas() {
+ICanva* Scene::getCanvas() {
     CanvasComponent& cc = registry->findComponent<CanvasComponent>("chimera_engine");
     return cc.canvas;
 }

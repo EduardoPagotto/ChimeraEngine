@@ -21,6 +21,6 @@ class Game : public Chimera::IStateMachine {
     World* world;
     float moveSpeed;
     float rotSpeed;
-    Chimera::Canvas* canvas;
+    Chimera::ICanva* canvas;
     Chimera::Keyboard* keyboard;
 };

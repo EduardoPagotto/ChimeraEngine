@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen) : Canvas(_title, _width, _height, _fullScreen) {
+CanvasGL::CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen) : ICanva(_title, _width, _height, _fullScreen) {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         throw std::string("Falha SDL_Init:" + std::string(SDL_GetError()));

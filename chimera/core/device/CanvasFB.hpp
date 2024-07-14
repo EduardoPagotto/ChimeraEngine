@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-class CanvasFB : public Canvas {
+class CanvasFB : public ICanva {
   private:
     uint32_t* pixels;
     uint32_t pixelFormat;

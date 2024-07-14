@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-class CanvasGL : public Canvas {
+class CanvasGL : public ICanva {
   protected:
     SDL_GLContext context;
 

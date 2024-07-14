@@ -7,7 +7,7 @@ namespace Chimera {
 // https://forums.libsdl.org/viewtopic.php?p=51664
 // https://jeux.developpez.com/tutoriels/sdl-2/guide-migration/
 
-CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen) : Canvas(_title, _width, _height, _fullScreen) {
+CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen) : ICanva(_title, _width, _height, _fullScreen) {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         throw std::string("Falha SDL_Init:" + std::string(SDL_GetError()));

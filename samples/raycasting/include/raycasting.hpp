@@ -27,5 +27,5 @@ struct RayHit {
 };
 
 bool LoadWorld(const char filename[], World* world);
-void DrawColumn(RayHit what, World world, Chimera::Canvas* frame, uint32_t column);
-void RenderScene(State state, World world, Chimera::Canvas* frame);
+void DrawColumn(RayHit what, World world, Chimera::ICanva* frame, uint32_t column);
+void RenderScene(State state, World world, Chimera::ICanva* frame);

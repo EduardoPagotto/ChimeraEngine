@@ -7,7 +7,7 @@
 
 namespace Chimera {
 
-Engine::Engine(Canvas* canvas, const float& dist) : canvas(canvas) {
+Engine::Engine(ICanva* canvas, const float& dist) : canvas(canvas) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 

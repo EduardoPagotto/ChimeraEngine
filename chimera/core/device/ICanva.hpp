@@ -6,12 +6,12 @@
 namespace Chimera {
 
 /**
- * Class Canvas
+ * Class ICanva
  *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
  *  @since 20130925
  *  @update 20220610
  */
-class Canvas {
+class ICanva {
   protected:
     bool fullScreen;
     int width, height;
@@ -20,10 +20,10 @@ class Canvas {
     SDL_Window* window;
 
   public:
-    Canvas(const std::string& _title, int _width, int _height, bool _fullScreen = false)
+    ICanva(const std::string& _title, int _width, int _height, bool _fullScreen = false)
         : title(_title), width(_width), height(_height), fullScreen(_fullScreen), window(nullptr) {}
 
-    virtual ~Canvas() {}
+    virtual ~ICanva() {}
     virtual void before() = 0;
     virtual void after() = 0;
     virtual void toggleFullScreen() = 0;
@@ -35,7 +35,7 @@ class Canvas {
 };
 
 struct CanvasComponent {
-    Canvas* canvas = nullptr;
+    ICanva* canvas = nullptr;
     CanvasComponent() = default;
 };
 

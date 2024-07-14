@@ -5,7 +5,7 @@
 
 namespace Chimera {
 
-class CanvasGL : public ICanva {
+class CanvasGL : public ServiceBase<ICanva> {
   protected:
     bool fullScreen{false};
     int width, height;

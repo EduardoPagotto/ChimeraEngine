@@ -1,4 +1,9 @@
 #pragma once
+#include <map>
+#include <memory>
+#include <mutex>
+#include <stdexcept>
+#include <type_traits>
 #include <typeindex>
 
 /// @brief Base class for all services.

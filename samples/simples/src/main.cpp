@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/Engine.hpp"
+#include "chimera/core/ServiceLocator.hpp"
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
@@ -70,7 +71,12 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simnples Iniciado");
 
-        Engine engine(new CanvasGL("BSP Tree", 1800, 600, false), 0.0f);
+        auto sl = std::make_shared<ServiceLocator>();
+        auto canva = std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false);
+
+        sl->registerService(canva);
+
+        Engine engine(sl, 0.0f);
 
         ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
         colladaRegistryLoad(dom);

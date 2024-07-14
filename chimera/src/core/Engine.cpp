@@ -7,9 +7,11 @@
 
 namespace Chimera {
 
-Engine::Engine(ICanva* canvas, const float& dist) : canvas(canvas) {
+Engine::Engine(std::shared_ptr<ServiceLocator> serviceLocator, const float& dist) : serviceLocator(serviceLocator) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
+
+    canvas = serviceLocator->getService<ICanva>();
 
     vp.setDist(dist);
     if (dist == 0.0f)

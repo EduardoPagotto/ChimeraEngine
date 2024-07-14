@@ -1,17 +1,16 @@
 #pragma once
+#include "chimera/core/ServiceLocator.hpp"
 #include "chimera/core/TagComponent.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 
 namespace Chimera {
 
-/**
- * Class ICanva
- *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
- *  @since 20130925
- *  @update 20220610
- */
-class ICanva {
+/// @brief Canva Interface
+/// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+/// @since 20130925
+/// @date 20240714
+class ICanva : public IService {
   public:
     virtual ~ICanva() = default;
     virtual void before() = 0;
@@ -24,7 +23,7 @@ class ICanva {
 };
 
 struct CanvasComponent {
-    ICanva* canvas = nullptr;
+    std::shared_ptr<ICanva> canvas = nullptr;
     CanvasComponent() = default;
 };
 

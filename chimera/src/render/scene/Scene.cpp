@@ -222,7 +222,7 @@ void Scene::onAttach() {
 
 ICanva* Scene::getCanvas() {
     CanvasComponent& cc = registry->findComponent<CanvasComponent>("chimera_engine");
-    return cc.canvas;
+    return cc.canvas.get(); // FIXME: muda tudo!!!!
 }
 
 void Scene::onUpdate(ViewProjection& vp, const double& ts) {

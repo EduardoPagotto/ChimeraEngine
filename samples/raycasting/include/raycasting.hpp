@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/device/Canvas.hpp"
+#include "chimera/core/device/ICanva.hpp"
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <string>

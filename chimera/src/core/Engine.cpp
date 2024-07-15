@@ -15,6 +15,7 @@ Engine::Engine(std::shared_ptr<ServiceLocator> serviceLocator) : serviceLocator(
     vp = serviceLocator->getService<IViewProjection>();
 
     registry = Singleton<Registry>::get();
+    // registry = serviceLocator->getService<Registry>();
     Entity entity = registry->createEntity("chimera_engine", "chimera_engine");
 
     CanvasComponent& cc = entity.addComponent<CanvasComponent>();
@@ -26,7 +27,12 @@ Engine::Engine(std::shared_ptr<ServiceLocator> serviceLocator) : serviceLocator(
     SDL_Log("Engine Register: chimera_engine OK");
 }
 
-Engine::~Engine() { Singleton<Registry>::release(); }
+Engine::~Engine() {
+    Singleton<Registry>::release();
+    // canvas = nullptr;
+    // vp = nullptr;
+    // registry = nullptr;
+}
 
 void Engine::run(void) {
     SDL_Event event;

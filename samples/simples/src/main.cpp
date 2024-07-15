@@ -71,14 +71,23 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simnples Iniciado");
 
+        // Services
         auto sl = std::make_shared<ServiceLocator>();
+
+        // Registry
+        auto reg = std::make_shared<Registry>();
+        sl->registerService(reg);
+
+        // Canvas
         auto canva = std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false);
         sl->registerService(canva);
 
+        // View projection
         auto vp = std::make_shared<ViewProjection>();
         vp->setNoze(0.5f);
         sl->registerService(vp);
 
+        // Engine
         Engine engine(sl);
 
         ColladaDom dom = loadFileCollada("./samples/simples/level.xml");

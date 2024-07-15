@@ -18,7 +18,7 @@ class Engine {
     std::shared_ptr<ServiceLocator> serviceLocator;
     std::shared_ptr<ICanva> canvas;
     std::shared_ptr<IViewProjection> vp;
-
+    // std::shared_ptr<Registry> registry;
     Registry* registry;
 
     uint32_t fps = 140;

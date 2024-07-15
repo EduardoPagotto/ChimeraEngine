@@ -1,9 +1,8 @@
 #pragma once
-
-#include "ICanva.hpp"
+#include "interfaces.hpp"
+#include <SDL2/SDL.h>
 
 namespace Chimera {
-
 class CanvasFB : public ICanva {
   private:
     bool fullScreen{false};

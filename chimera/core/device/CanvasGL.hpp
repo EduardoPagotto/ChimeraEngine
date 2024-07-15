@@ -1,10 +1,10 @@
 #pragma once
-#include "chimera/core/device/ICanva.hpp"
+#include "interfaces.hpp"
+#include <SDL2/SDL.h>
 
 #define GLEW_STATIC
 
 namespace Chimera {
-
 class CanvasGL : public ServiceBase<ICanva> {
   protected:
     bool fullScreen{false};

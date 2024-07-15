@@ -3,7 +3,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/StateStack.hpp"
 #include "chimera/core/buffer/RenderBuffer.hpp"
-#include "chimera/core/device/ICanva.hpp"
+#include "chimera/core/device/interfaces.hpp"
 #include "chimera/core/space/Octree.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/ITrans.hpp"

@@ -3,7 +3,7 @@
 #include "Timer.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/ViewProjection.hpp"
-#include "chimera/core/device/ICanva.hpp"
+#include "chimera/core/device/interfaces.hpp"
 
 namespace Chimera {
 class Engine {

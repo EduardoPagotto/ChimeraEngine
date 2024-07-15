@@ -27,17 +27,17 @@ void CameraControllerFPS::onDeatach() {
     Singleton<Mouse>::release();
 }
 
-void CameraControllerFPS::updateVP(ViewProjection& vp) {
-    if (vp.size() == 1) {
-        vp.update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
+void CameraControllerFPS::updateVP(IViewProjection& vp) {
+    if (vp.getSize() == 1) {
+        vp.getLeft().update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
     } else {
-        glm::vec3 cross1 = glm::cross(up, front);         // up and front already are  vectors!!!!
-        glm::vec3 norm1 = glm::normalize(cross1);         // vector side (would be left or right)
-        glm::vec3 final_norm1 = norm1 * vp.getNoseDist(); // point of eye
+        glm::vec3 cross1 = glm::cross(up, front);     // up and front already are  vectors!!!!
+        glm::vec3 norm1 = glm::normalize(cross1);     // vector side (would be left or right)
+        glm::vec3 final_norm1 = norm1 * vp.getNoze(); // point of eye
         glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
         glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
-        vp.getHead()[0].update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection()); // Left
-        vp.getHead()[1].update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
+        vp.getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection());  // Left
+        vp.getRight().update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
     }
 }
 
@@ -71,7 +71,7 @@ void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float delt
     camera->setPosition(camera->getPosition() + direction * velocity);
 }
 
-void CameraControllerFPS::onUpdate(ViewProjection& vp, const double& ts) {
+void CameraControllerFPS::onUpdate(IViewProjection& vp, const double& ts) {
     // Movement speed
     if (keyboard->isPressed(SDLK_LSHIFT)) // acelerar mover
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;

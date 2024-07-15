@@ -11,10 +11,10 @@ void Renderer3dLines::create(const uint32_t& sizeBuffer) { drawLine.create(sizeB
 
 void Renderer3dLines::destroy() { drawLine.destroy(); }
 
-void Renderer3dLines::begin(Camera* camera, ViewProjection* vpo, Octree* octree) {
+void Renderer3dLines::begin(Camera* camera, IViewProjection* vpo, Octree* octree) {
     this->camera = camera;
     this->vpo = vpo;
-    frustum.set(vpo->getViewProjectionInverse());
+    frustum.set(vpo->getSel().viewProjectionInverse);
 }
 
 void Renderer3dLines::end() {}

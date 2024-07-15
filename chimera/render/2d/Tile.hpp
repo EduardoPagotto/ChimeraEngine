@@ -8,7 +8,7 @@ class Tile : public Layer {
     virtual ~Tile();
     virtual void onAttach() override;
     virtual void onDeatach() override;
-    virtual void onUpdate(ViewProjection& vp, const double& ts) override;
+    virtual void onUpdate(IViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
     virtual void onRender() override;
 };

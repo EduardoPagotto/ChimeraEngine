@@ -7,19 +7,12 @@
 
 namespace Chimera {
 
-Engine::Engine(std::shared_ptr<ServiceLocator> serviceLocator, const float& dist) : serviceLocator(serviceLocator) {
+Engine::Engine(std::shared_ptr<ServiceLocator> serviceLocator) : serviceLocator(serviceLocator) {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 
     canvas = serviceLocator->getService<ICanva>();
-
-    vp.setDist(dist);
-    if (dist == 0.0f)
-        vp.add("unique");
-    else {
-        vp.add("right");
-        vp.add("right");
-    }
+    vp = serviceLocator->getService<IViewProjection>();
 
     registry = Singleton<Registry>::get();
     Entity entity = registry->createEntity("chimera_engine", "chimera_engine");
@@ -28,7 +21,7 @@ Engine::Engine(std::shared_ptr<ServiceLocator> serviceLocator, const float& dist
     cc.canvas = canvas;
 
     ViewProjectionComponent& vpc = entity.addComponent<ViewProjectionComponent>();
-    vpc.vp = &vp;
+    vpc.vp = vp.get();
 
     SDL_Log("Engine Register: chimera_engine OK");
 }
@@ -95,7 +88,7 @@ void Engine::run(void) {
         ts = (double)countDelta / 1000.0f;
         if (!pause) { // update game
             for (auto it = stack.begin(); it != stack.end(); it++)
-                (*it)->onUpdate(vp, ts);
+                (*it)->onUpdate(*vp.get(), ts);
 
             canvas->before();
             for (auto it = stack.begin(); it != stack.end(); it++)

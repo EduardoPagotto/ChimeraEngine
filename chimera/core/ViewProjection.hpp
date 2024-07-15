@@ -1,14 +1,13 @@
 #pragma once
-#include "chimera/core/TagComponent.hpp"
+#include "chimera/core/ServiceLocator.hpp"
+#include <array>
 #include <glm/glm.hpp>
-#include <vector>
 
 namespace Chimera {
 
 struct ViewProjectionMatrixs {
-    std::string name;
     glm::mat4 view, viewProjection, viewProjectionInverse;
-    ViewProjectionMatrixs(const std::string& name) : name(name) {}
+    ViewProjectionMatrixs() = default;
     void update(const glm::mat4& _view, const glm::mat4& _projection) {
         view = _view;
         viewProjection = _projection * _view;
@@ -16,30 +15,43 @@ struct ViewProjectionMatrixs {
     }
 };
 
-class ViewProjection {
+class IViewProjection : public IService {
+  public:
+    virtual ~IViewProjection() = default;
+    virtual const float getNoze() const = 0;
+    virtual void setNoze(const float& noze) = 0;
+    virtual void setIndex(const uint8_t s) = 0;
+    virtual const uint8_t getSize() const = 0;
+    virtual ViewProjectionMatrixs& getSel() = 0;
+    virtual ViewProjectionMatrixs& getLeft() = 0;  // 0
+    virtual ViewProjectionMatrixs& getRight() = 0; // 1
+};
+
+class ViewProjection : public ServiceBase<IViewProjection> {
   public:
     ViewProjection() = default;
-    void setIndex(const uint8_t& index) { this->index = index; }
-    void setDist(const float& dist) { this->noseDist = dist; }
-    const uint8_t getIndex() const { return index; }
-    const glm::mat4& getView() const { return head[index].view; }
-    const glm::mat4& getViewProjection() const { return head[index].viewProjection; }
-    const glm::mat4& getViewProjectionInverse() const { return head[index].viewProjectionInverse; }
-    const float& getNoseDist() const { return noseDist; }
-    void update(const glm::mat4& view, const glm::mat4& projection) { head[index].update(view, projection); }
-    void add(const std::string& name) { head.push_back(ViewProjectionMatrixs(name)); }
-    const uint32_t size() const { return head.size(); }
-    std::vector<ViewProjectionMatrixs>& getHead() { return head; }
+    virtual ~ViewProjection() = default;
+    virtual const float getNoze() const { return noze; }
+    virtual void setNoze(const float& noze) {
+        this->noze = noze;
+        size = (noze == 0.0f) ? 1 : 2;
+    }
+    virtual void setIndex(const uint8_t s) { indice = (s >= 0 && s < 2) ? s : 0; }
+    virtual const uint8_t getSize() const { return size; }
+    virtual ViewProjectionMatrixs& getSel() { return vpm[indice]; }
+    virtual ViewProjectionMatrixs& getLeft() { return vpm[0]; }  // 0
+    virtual ViewProjectionMatrixs& getRight() { return vpm[1]; } // 1
 
   private:
-    uint8_t index = 0;
-    float noseDist = 0.0f;
-    std::vector<ViewProjectionMatrixs> head;
+    float noze{0.0f};
+    uint8_t indice{0};
+    uint8_t size{1};
+    std::array<ViewProjectionMatrixs, 2> vpm;
 };
 
 struct ViewProjectionComponent {
     ViewProjectionComponent() = default;
-    ViewProjection* vp = nullptr;
+    IViewProjection* vp = nullptr;
 };
 
 } // namespace Chimera

@@ -14,7 +14,7 @@ class CameraControllerFPS : public IStateMachine {
     void onAttach() override;
     void onDeatach() override;
     void onRender() override {}
-    void onUpdate(ViewProjection& vp, const double& ts) override;
+    void onUpdate(IViewProjection& vp, const double& ts) override;
     bool onEvent(const SDL_Event& event) override {
 
         // FIXME: tem merda aqui!!!
@@ -22,7 +22,7 @@ class CameraControllerFPS : public IStateMachine {
     }
 
   private:
-    void updateVP(ViewProjection& vp);
+    void updateVP(IViewProjection& vp);
     void updateVectors();
     void processCameraRotation(double xOffset, double yOffset, bool constrainPitch);
     void processCameraMovement(glm::vec3& direction, float deltaTime);

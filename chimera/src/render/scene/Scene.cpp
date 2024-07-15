@@ -225,7 +225,7 @@ ICanva* Scene::getCanvas() {
     return cc.canvas.get(); // FIXME: muda tudo!!!!
 }
 
-void Scene::onUpdate(ViewProjection& vp, const double& ts) {
+void Scene::onUpdate(IViewProjection& vp, const double& ts) {
     // update scripts (PhysicController aqui dentro!!!)
     registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
         if (nsc.instance)
@@ -243,7 +243,7 @@ void Scene::onUpdate(ViewProjection& vp, const double& ts) {
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
-    createRenderBuffer(vpo->size(), width, height);
+    createRenderBuffer(vpo->getSize(), width, height);
 
     auto view = registry->get().view<CameraComponent>();
     for (auto entity : view) {
@@ -338,7 +338,7 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
         command.shader = sc;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
-        const glm::mat4& view = vpo->getView();
+        const glm::mat4& view = vpo->getSel().view;
         command.uniforms["projection"] = UValue(renderer.getCamera()->getProjection());
         command.uniforms["view"] = UValue(view);
         command.uniforms["CameraRight_worldspace"] = UValue(glm::vec3(view[0][0], view[1][0], view[2][0]));
@@ -382,7 +382,7 @@ void Scene::onRender() {
 
         // data load used by all
         renderer.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-        renderer.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
+        renderer.uboQueue().insert(std::make_pair("view", UValue(vpo->getSel().view)));
 
         // data load shadows props to renderer in shade of models!!!!
         if (shadowData.shadowBuffer) {
@@ -441,7 +441,7 @@ void Scene::onRender() {
 
                     MapUniform muni;
                     muni["projection"] = UValue(activeCam->getProjection());
-                    muni["view"] = UValue(vpo->getView());
+                    muni["view"] = UValue(vpo->getSel().view);
                     dl.render(muni);
                 }
 
@@ -454,7 +454,7 @@ void Scene::onRender() {
                 renderLines.begin(activeCam, vpo, nullptr);
 
                 renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-                renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
+                renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getSel().view)));
 
                 auto group = registry->get().group<TransComponent, Renderable3dComponent>();
                 for (auto entity : group) {

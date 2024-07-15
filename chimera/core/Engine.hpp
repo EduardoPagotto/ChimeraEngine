@@ -8,7 +8,7 @@
 namespace Chimera {
 class Engine {
   public:
-    Engine(std::shared_ptr<ServiceLocator> serviceLocator, const float& dist);
+    Engine(std::shared_ptr<ServiceLocator> serviceLocator);
     virtual ~Engine();
     void run();
     ICanva* getCanvas() const { return canvas.get(); }
@@ -17,10 +17,10 @@ class Engine {
   private:
     std::shared_ptr<ServiceLocator> serviceLocator;
     std::shared_ptr<ICanva> canvas;
+    std::shared_ptr<IViewProjection> vp;
 
     Registry* registry;
 
-    ViewProjection vp;
     uint32_t fps = 140;
     Timer timerFPS;
     StateStack stack;

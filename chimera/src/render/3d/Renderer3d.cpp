@@ -15,11 +15,11 @@ Renderer3d::Renderer3d(const bool& logData) : logData(logData) {
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(Camera* camera, ViewProjection* vpo, Octree* octree) {
+void Renderer3d::begin(Camera* camera, IViewProjection* vpo, Octree* octree) {
     this->camera = camera;
     this->vpo = vpo;
     this->octree = octree;
-    frustum.set(vpo->getViewProjectionInverse());
+    frustum.set(vpo->getSel().viewProjectionInverse);
 }
 
 void Renderer3d::end() {

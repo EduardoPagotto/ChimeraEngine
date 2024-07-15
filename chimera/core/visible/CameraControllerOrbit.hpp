@@ -11,12 +11,12 @@ class CameraControllerOrbit : public IStateMachine {
     CameraControllerOrbit(Entity entity) : IStateMachine("Orbit"), entity(entity) {}
     void onAttach() override;
     void onDeatach() override;
-    void onUpdate(ViewProjection& vp, const double& ts) override;
+    void onUpdate(IViewProjection& vp, const double& ts) override;
     void onRender() override {}
     bool onEvent(const SDL_Event& event) override { return true; }
 
   private:
-    void updateVP(ViewProjection& vp);
+    void updateVP(IViewProjection& vp);
     void updateVectors();
     void processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch = true);
     void processDistance(const int& _mz);

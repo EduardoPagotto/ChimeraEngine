@@ -33,7 +33,7 @@ class Scene : public IStateMachine {
     virtual void onAttach() override;
     virtual void onDeatach() override;
     virtual void onRender() override;
-    virtual void onUpdate(ViewProjection& vp, const double& ts) override;
+    virtual void onUpdate(IViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
@@ -50,7 +50,7 @@ class Scene : public IStateMachine {
     Registry* registry;
     ITrans* origem;
     Camera* activeCam;
-    ViewProjection* vpo;
+    IViewProjection* vpo;
     ShadowData shadowData;
     uint8_t verbose;
     std::vector<RenderBuffer*> vRB;

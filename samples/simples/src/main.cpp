@@ -61,7 +61,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {}
+void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {}
 
 void Game::onRender() {}
 
@@ -73,10 +73,13 @@ int main(int argn, char** argv) {
 
         auto sl = std::make_shared<ServiceLocator>();
         auto canva = std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false);
-
         sl->registerService(canva);
 
-        Engine engine(sl, 0.0f);
+        auto vp = std::make_shared<ViewProjection>();
+        vp->setNoze(0.5f);
+        sl->registerService(vp);
+
+        Engine engine(sl);
 
         ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
         colladaRegistryLoad(dom);

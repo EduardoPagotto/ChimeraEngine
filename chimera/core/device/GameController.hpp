@@ -1,17 +1,8 @@
 #pragma once
-#include "chimera/core/ServiceLocator.hpp"
-#include <SDL2/SDL.h>
+#include "interfaces.hpp"
 #include <map>
 
 namespace Chimera {
-
-class IGameController : public IService {
-  public:
-    virtual ~IGameController() noexcept = default;
-    virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
-    virtual SDL_GameController* get(const SDL_JoystickID& joystick_id) noexcept = 0;
-};
-
 class GameController : public ServiceBase<IGameController> {
   private:
     std::map<SDL_JoystickID, SDL_GameController*> pads;

@@ -1,17 +1,8 @@
 #pragma once
-#include "chimera/core/ServiceLocator.hpp"
-#include <SDL2/SDL.h>
+#include "interfaces.hpp"
 #include <map>
 
 namespace Chimera {
-
-class IJoystick : public IService {
-  public:
-    virtual ~IJoystick() noexcept = default;
-    virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
-    virtual SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept = 0;
-};
-
 class Joystick : public ServiceBase<IJoystick> {
   private:
     std::map<SDL_JoystickID, SDL_Joystick*> joys;

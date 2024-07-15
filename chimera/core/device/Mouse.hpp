@@ -1,23 +1,8 @@
 #pragma once
-#include "chimera/core/ServiceLocator.hpp"
-#include <SDL2/SDL.h>
-#include <glm/glm.hpp>
+#include "interfaces.hpp"
 #include <map>
 
 namespace Chimera {
-
-class IMouse : public IService {
-  public:
-    virtual ~IMouse() noexcept = default;
-    virtual const uint8_t getButtonState(const uint8_t& indice) noexcept = 0;
-    virtual const glm::ivec2 getMove() const noexcept = 0;
-    virtual const glm::ivec2 getMoveRel() noexcept = 0;
-    virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
-    virtual void updateBt(const SDL_MouseButtonEvent& bt) noexcept = 0;
-    virtual void updateMv(const SDL_MouseMotionEvent& mv) noexcept = 0;
-    virtual void updateWl(const SDL_MouseWheelEvent& mwe) noexcept = 0;
-};
-
 class Mouse : public ServiceBase<IMouse> {
   private:
     std::map<uint8_t, uint8_t> buttonState;

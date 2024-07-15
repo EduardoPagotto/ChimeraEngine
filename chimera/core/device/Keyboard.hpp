@@ -1,20 +1,8 @@
 #pragma once
-#include "chimera/core/ServiceLocator.hpp"
-#include <SDL2/SDL.h>
+#include "interfaces.hpp"
 #include <map>
 
 namespace Chimera {
-
-class IKeyboard : public IService {
-  public:
-    virtual ~IKeyboard() noexcept = default;
-    virtual void setDown(const SDL_KeyboardEvent& event) noexcept = 0;
-    virtual void setUp(const SDL_KeyboardEvent& event) noexcept = 0;
-    virtual const bool isPressed(const SDL_Keycode& key) noexcept = 0;
-    virtual const bool isModPressed(const SDL_Keymod& keyMod) const noexcept = 0;
-    virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
-};
-
 class Keyboard : public ServiceBase<IKeyboard> {
   private:
     std::map<SDL_Keycode, uint8_t> mapKey;

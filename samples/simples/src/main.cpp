@@ -4,6 +4,9 @@
 #include "chimera/core/Singleton.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/device/GameController.hpp"
+#include "chimera/core/device/Joystick.hpp"
+#include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/utils.hpp"
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) { mouse = Chimera::Singleton<Chimera::Mouse>::get(); }
@@ -86,6 +89,16 @@ int main(int argn, char** argv) {
         auto vp = std::make_shared<ViewProjection>();
         vp->setNoze(0.5f);
         sl->registerService(vp);
+
+        // Mouse, keyboard, Joystick, gamepad
+        auto mouse = std::make_shared<Mouse>();
+        auto keyboard = std::make_shared<Keyboard>();
+        auto joystick = std::make_shared<Joystick>();
+        auto gamepad = std::make_shared<GameController>();
+        sl->registerService(mouse);
+        sl->registerService(keyboard);
+        sl->registerService(joystick);
+        sl->registerService(gamepad);
 
         // Engine
         Engine engine(sl);

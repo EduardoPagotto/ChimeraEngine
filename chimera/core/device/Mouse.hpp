@@ -1,20 +1,34 @@
 #pragma once
+#include "chimera/core/ServiceLocator.hpp"
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #include <map>
 
 namespace Chimera {
-class Mouse {
+
+class IMouse : public IService {
+  public:
+    virtual ~IMouse() noexcept = default;
+    virtual const uint8_t getButtonState(const uint8_t& indice) noexcept = 0;
+    virtual const glm::ivec2 getMove() const noexcept = 0;
+    virtual const glm::ivec2 getMoveRel() noexcept = 0;
+    virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
+    virtual void updateBt(const SDL_MouseButtonEvent& bt) noexcept = 0;
+    virtual void updateMv(const SDL_MouseMotionEvent& mv) noexcept = 0;
+    virtual void updateWl(const SDL_MouseWheelEvent& mwe) noexcept = 0;
+};
+
+class Mouse : public ServiceBase<IMouse> {
   private:
     std::map<uint8_t, uint8_t> buttonState;
-    glm::ivec2 pos, rel, wheel;
-    uint32_t flag1, flag2;
+    glm::ivec2 pos{glm::ivec2(0)}, rel{glm::ivec2(0)}, wheel{glm::ivec2(0)};
+    uint32_t flag1{0}, flag2{0};
 
   public:
-    Mouse() = default;
-    virtual ~Mouse() = default;
+    Mouse() noexcept = default;
+    virtual ~Mouse() noexcept override = default;
 
-    inline uint8_t const getButtonState(const uint8_t& indice) {
+    const uint8_t getButtonState(const uint8_t& indice) noexcept override {
 
         if (this->buttonState.contains(indice))
             return buttonState[indice];
@@ -22,9 +36,9 @@ class Mouse {
         return SDL_RELEASED;
     }
 
-    inline const glm::ivec2 getMove() const { return pos; }
+    const glm::ivec2 getMove() const noexcept override { return pos; }
 
-    inline const glm::ivec2 getMoveRel() {
+    const glm::ivec2 getMoveRel() noexcept override {
         if (flag1 != flag2) {
             flag1 = flag2;
             return rel;
@@ -32,17 +46,7 @@ class Mouse {
         return glm::ivec2(0);
     }
 
-    inline void updateBt(const SDL_MouseButtonEvent& bt) { this->buttonState[bt.button] = bt.state; }
-
-    inline void updateMv(const SDL_MouseMotionEvent& mv) {
-        this->pos = glm::ivec2(mv.x, mv.y);
-        this->rel = glm::ivec2(mv.xrel, mv.yrel);
-        flag1++;
-    }
-
-    inline void updateWl(const SDL_MouseWheelEvent& mwe) { this->wheel = glm::ivec2(mwe.x, mwe.y); }
-
-    inline bool getEvent(const SDL_Event& event) {
+    const bool getEvent(const SDL_Event& event) noexcept override {
         switch (event.type) {
             case SDL_MOUSEBUTTONDOWN:
             case SDL_MOUSEBUTTONUP:
@@ -57,5 +61,15 @@ class Mouse {
         }
         return false;
     }
+
+    void updateBt(const SDL_MouseButtonEvent& bt) noexcept override { this->buttonState[bt.button] = bt.state; }
+
+    void updateMv(const SDL_MouseMotionEvent& mv) noexcept override {
+        this->pos = glm::ivec2(mv.x, mv.y);
+        this->rel = glm::ivec2(mv.xrel, mv.yrel);
+        flag1++;
+    }
+
+    void updateWl(const SDL_MouseWheelEvent& mwe) noexcept override { this->wheel = glm::ivec2(mwe.x, mwe.y); }
 };
 } // namespace Chimera

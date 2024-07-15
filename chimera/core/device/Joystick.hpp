@@ -1,26 +1,35 @@
 #pragma once
+#include "chimera/core/ServiceLocator.hpp"
 #include <SDL2/SDL.h>
 #include <map>
 
 namespace Chimera {
-class Joystick {
+
+class IJoystick : public IService {
+  public:
+    virtual ~IJoystick() noexcept = default;
+    virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
+    virtual SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept = 0;
+};
+
+class Joystick : public ServiceBase<IJoystick> {
   private:
     std::map<SDL_JoystickID, SDL_Joystick*> joys;
 
   public:
-    Joystick() {
+    Joystick() noexcept {
         SDL_InitSubSystem(SDL_INIT_JOYSTICK);
         SDL_JoystickEventState(SDL_ENABLE);
     };
 
-    virtual ~Joystick() {
+    virtual ~Joystick() noexcept override {
         for (auto i = joys.begin(); i != joys.end(); i++)
             SDL_JoystickClose(i->second);
 
         joys.clear();
     };
 
-    bool getEvent(const SDL_Event& event) {
+    virtual const bool getEvent(const SDL_Event& event) noexcept override {
 
         switch (event.type) {
             case SDL_JOYDEVICEADDED:
@@ -34,7 +43,9 @@ class Joystick {
         return false;
     }
 
-    inline SDL_Joystick* get(const SDL_JoystickID& joystick_id) { return joys.contains(joystick_id) ? joys[joystick_id] : nullptr; }
+    virtual SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept override {
+        return joys.contains(joystick_id) ? joys[joystick_id] : nullptr;
+    }
 
   private:
     void added(void) {

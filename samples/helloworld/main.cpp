@@ -13,9 +13,9 @@ int main(int argn, char** argv) {
         SDL_Log("Models3 Iniciado");
 
         // Registry to entt
-        auto reg = std::make_shared<Registry>();
         auto sl = std::make_shared<ServiceLocator>();
-        sl->registerService(std::make_shared<CanvasGL>("Simples", 1800, 600, false));
+        sl->registerService(std::make_shared<Registry>());
+        sl->registerService(std::make_shared<CanvasGL>("Simples", 800, 600, false));
         sl->registerService(std::make_shared<Mouse>());
         sl->registerService(std::make_shared<ViewProjection>(0.0f)); // View projection
 
@@ -24,7 +24,7 @@ int main(int argn, char** argv) {
         ColladaDom dom = loadFileCollada("./samples/helloworld/level.xml");
         colladaRegistryLoad(dom, sl);
 
-        Game game(engine);
+        Game game(sl, &engine);
 
         engine.getStack().pushState(&game);
 

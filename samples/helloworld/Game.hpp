@@ -6,7 +6,7 @@
 
 class Game : public Chimera::IStateMachine {
   public:
-    Game(std::shared_ptr<ServiceLocator> sl);
+    Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -16,6 +16,7 @@ class Game : public Chimera::IStateMachine {
 
   private:
     std::shared_ptr<Chimera::ICanva> canvas;
+    Chimera::Engine* engine;
     Chimera::Shader shader;
     Chimera::Label* lFPS;
     TileLayer* layer;

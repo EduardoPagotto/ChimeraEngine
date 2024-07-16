@@ -29,7 +29,10 @@ class IViewProjection : public IService {
 
 class ViewProjection : public ServiceBase<IViewProjection> {
   public:
-    ViewProjection() = default;
+    explicit ViewProjection() = default;
+    explicit ViewProjection(const float& noze) { this->setNoze(noze); }
+    ViewProjection(const ViewProjection& o) = delete;
+    ViewProjection& operator=(const ViewProjection& o) = delete;
     virtual ~ViewProjection() = default;
     virtual const float getNoze() const { return noze; }
     virtual void setNoze(const float& noze) {

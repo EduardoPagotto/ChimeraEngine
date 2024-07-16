@@ -74,31 +74,19 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simnples Iniciado");
 
-        // Services
-        auto sl = std::make_shared<ServiceLocator>();
-
-        // Registry
+        // Registry to entt
         auto reg = std::make_shared<Registry>();
+
+        // Services shared inside all parts
+        // Canvas, Mouse, keyboard, Joystick, gamepad, view's
+        auto sl = std::make_shared<ServiceLocator>();
         sl->registerService(reg);
-
-        // Canvas
-        auto canva = std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false);
-        sl->registerService(canva);
-
-        // View projection
-        auto vp = std::make_shared<ViewProjection>();
-        vp->setNoze(0.5f);
-        sl->registerService(vp);
-
-        // Mouse, keyboard, Joystick, gamepad
-        auto mouse = std::make_shared<Mouse>();
-        auto keyboard = std::make_shared<Keyboard>();
-        auto joystick = std::make_shared<Joystick>();
-        auto gamepad = std::make_shared<GameController>();
-        sl->registerService(mouse);
-        sl->registerService(keyboard);
-        sl->registerService(joystick);
-        sl->registerService(gamepad);
+        sl->registerService(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
+        sl->registerService(std::make_shared<Mouse>());
+        sl->registerService(std::make_shared<Keyboard>());
+        sl->registerService(std::make_shared<Joystick>());
+        sl->registerService(std::make_shared<GameController>());
+        sl->registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
 
         // Engine
         Engine engine(sl);
@@ -107,20 +95,15 @@ int main(int argn, char** argv) {
         colladaRegistryLoad(dom, sl);
 
         Scene scene(sl);
-
-        Game* game = new Game(sl);
+        Game game(sl);
 
         engine.getStack().pushState(&scene);
-        engine.getStack().pushState(game);
+        engine.getStack().pushState(&game);
 
         Collada::destroy(); // clean loader
 
         engine.run();
-
         SDL_Log("Loop de Game encerrado!!!!");
-        delete game;
-
-        SDL_Log("AppShader finalizado com sucesso");
         return 0;
 
     } catch (const std::string& ex) {

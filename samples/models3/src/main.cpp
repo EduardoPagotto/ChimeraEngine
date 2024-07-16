@@ -14,26 +14,32 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Models3 Iniciado");
 
-        Engine engine(new CanvasGL("Teste Hello", 1800, 600, false), 0.0f);
+        // Services shared inside all parts
+        // Canvas, Mouse, keyboard, Joystick, gamepad, view's
+        auto sl = std::make_shared<ServiceLocator>();
+        sl->registerService(std::make_shared<Registry>());
+        sl->registerService(std::make_shared<CanvasGL>("Teste Hello", 1800, 600, false));
+        sl->registerService(std::make_shared<Mouse>());
+        sl->registerService(std::make_shared<GameController>());
+        sl->registerService(std::make_shared<ViewProjection>()); // View projection
+
+        Engine engine(sl);
 
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
-        colladaRegistryLoad(dom);
-        colladaRenderLoad(dom);
+        colladaRegistryLoad(dom, sl);
+        colladaRenderLoad(dom, sl);
 
-        Scene scene;
-
-        Game* game = new Game(scene);
+        Scene scene(sl);
+        Game game(sl, &scene);
 
         engine.getStack().pushState(&scene);
-        engine.getStack().pushState(game);
+        engine.getStack().pushState(&game);
 
         Collada::destroy(); // clean loader
 
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");
-        delete game;
-
         SDL_Log("AppShader finalizado com sucesso");
         return 0;
 

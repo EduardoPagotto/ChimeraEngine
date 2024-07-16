@@ -1,22 +1,23 @@
 #include "Game.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), pCorpoRigido(nullptr), scene(&scene) {
+Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Scene* scene)
+    : IStateMachine("Game"), serviceLoc(sl), scene(scene), pCorpoRigido(nullptr) {
+    using namespace Chimera;
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
-    registry = Chimera::Singleton<Chimera::Registry>::get();
-    gameControl = Chimera::Singleton<Chimera::GameController>::get();
-    mouse = Chimera::Singleton<Chimera::Mouse>::get();
+
+    registry = sl->getService<Registry>();
+    gameControl = sl->getService<IGameController>();
+    mouse = sl->getService<IMouse>();
 }
 
 Game::~Game() {
-    Chimera::Singleton<Chimera::Registry>::release();
-    Chimera::Singleton<Chimera::GameController>::release();
-    Chimera::Singleton<Chimera::Mouse>::release();
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Destructor Game");
+    registry = nullptr;
+    gameControl = nullptr;
+    mouse = nullptr;
 }
 
 bool Game::onEvent(const SDL_Event& event) {
@@ -126,7 +127,7 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
+void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {
     using namespace Chimera;
 
     if (pCorpoRigido)

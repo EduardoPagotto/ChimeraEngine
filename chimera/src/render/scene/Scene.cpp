@@ -1,6 +1,5 @@
 #include "chimera/render/scene/Scene.hpp"
 #include "chimera/core/ScriptableEntity.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/Mouse.hpp"
@@ -21,9 +20,9 @@
 
 namespace Chimera {
 
-Scene::Scene() : IStateMachine("Scene"), activeCam(nullptr), origem(nullptr), verbose(0) {
+Scene::Scene(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Scene"), serviceLoc(sl), activeCam(nullptr), origem(nullptr), verbose(0) {
     octree = nullptr;
-    registry = Singleton<Registry>::get();
+    registry = serviceLoc->getService<Registry>();
 }
 
 Scene::~Scene() {
@@ -31,7 +30,8 @@ Scene::~Scene() {
         delete shadowData.shadowBuffer;
         shadowData.shadowBuffer = nullptr;
     }
-    Singleton<Registry>::release();
+
+    registry = nullptr;
 }
 
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
@@ -87,7 +87,7 @@ void Scene::onAttach() {
 
     // lista as tags nas entidades registradas
     registry->get().each([&](auto entityID) {
-        Entity entity{entityID, registry};
+        Entity entity{entityID, registry.get()};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
 
@@ -191,15 +191,15 @@ void Scene::onAttach() {
     { // Registra Camera controllers ViewProjection deve ser localizado acima
         auto view1 = registry->get().view<CameraComponent>();
         for (auto entity : view1) {
-            Entity e = Entity{entity, registry};
+            Entity e = Entity{entity, registry.get()};
 
             auto& cc = e.getComponent<CameraComponent>();
             if (cc.camKind == CamKind::FPS) {
                 // CameraControllerFPS* ccFps = new CameraControllerFPS(e);
-                layers.pushState(new CameraControllerFPS(e));
+                layers.pushState(new CameraControllerFPS(serviceLoc, e));
             } else if (cc.camKind == CamKind::ORBIT) {
                 // CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
-                layers.pushState(new CameraControllerOrbit(e));
+                layers.pushState(new CameraControllerOrbit(serviceLoc, e));
             } else if (cc.camKind == CamKind::STATIC) {
                 // e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
             }
@@ -210,7 +210,7 @@ void Scene::onAttach() {
         registry->get().view<NativeScriptComponent>().each([this](auto entity, auto& nsc) {
             if (!nsc.instance) {
                 nsc.instance = nsc.instantiateScript();
-                nsc.instance->entity = Entity{entity, registry};
+                nsc.instance->entity = Entity{entity, registry.get()};
                 nsc.instance->onCreate();
             }
         });
@@ -328,7 +328,7 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
-        Entity e = {entity, registry};
+        Entity e = {entity, registry.get()};
         TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
         Shader& sc = e.getComponent<Shader>();
         MaterialComponent& mc = e.getComponent<MaterialComponent>();
@@ -470,7 +470,7 @@ void Scene::onRender() {
                     RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
                     IRenderable3d* renderable = rc.renderable;
 
-                    Entity e = {entity, registry};
+                    Entity e = {entity, registry.get()};
                     TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
 
                     RenderCommand command;

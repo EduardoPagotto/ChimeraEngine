@@ -8,7 +8,8 @@ namespace Chimera {
 
 class CameraControllerOrbit : public IStateMachine {
   public:
-    CameraControllerOrbit(Entity entity) : IStateMachine("Orbit"), entity(entity) {}
+    CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
+    virtual ~CameraControllerOrbit();
     void onAttach() override;
     void onDeatach() override;
     void onUpdate(IViewProjection& vp, const double& ts) override;
@@ -26,7 +27,7 @@ class CameraControllerOrbit : public IStateMachine {
     glm::vec3 up, front;
     Camera* camera = nullptr;
     Entity entity;
-    Mouse* mouse;
+    std::shared_ptr<IMouse> mouse;
 };
 
 } // namespace Chimera

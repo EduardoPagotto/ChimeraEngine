@@ -1,8 +1,15 @@
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 
 namespace Chimera {
+
+CameraControllerOrbit::CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity)
+    : IStateMachine("Orbit"), entity(entity) {
+
+    mouse = serviceLocator->getService<IMouse>();
+}
+
+CameraControllerOrbit::~CameraControllerOrbit() { mouse = nullptr; }
 
 void CameraControllerOrbit::onAttach() {
     auto& cc = entity.getComponent<CameraComponent>();
@@ -14,12 +21,10 @@ void CameraControllerOrbit::onAttach() {
     max = cc.max;
     front = glm::vec3(0, 0, 0);
     distance = glm::distance(camera->getPosition(), this->front);
-    mouse = Singleton<Mouse>::get();
-
     this->updateVectors();
 }
 
-void CameraControllerOrbit::onDeatach() { Singleton<Mouse>::release(); }
+void CameraControllerOrbit::onDeatach() {}
 
 void CameraControllerOrbit::updateVP(IViewProjection& vp) {
     if (vp.getSize() == 1) {

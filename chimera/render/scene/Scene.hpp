@@ -24,7 +24,7 @@ struct ShadowData {
 class Entity;
 class Scene : public IStateMachine {
   public:
-    Scene();
+    Scene(std::shared_ptr<ServiceLocator> sl);
     virtual ~Scene();
     void setOrigem(ITrans* o) { origem = o; }
     ICanva* getCanvas();
@@ -46,8 +46,11 @@ class Scene : public IStateMachine {
 
     void createOctree(const AABB& aabb);
 
+    std::shared_ptr<Registry> registry;
+    std::shared_ptr<ServiceLocator> serviceLoc;
+
     StateStack layers;
-    Registry* registry;
+
     ITrans* origem;
     Camera* activeCam;
     IViewProjection* vpo;

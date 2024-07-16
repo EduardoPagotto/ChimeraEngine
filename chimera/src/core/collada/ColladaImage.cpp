@@ -36,8 +36,6 @@ static void setChannelTexFormat(const std::string& channel, TexFormat& format) {
         format = TexFormat::RED_INTEGER; // chimera only
 }
 
-ColladaImage::~ColladaImage() {}
-
 void ColladaImage::create(Entity entity, TexParam& tp, const pugi::xml_node& node) {
 
     std::string id = node.attribute("id").value();

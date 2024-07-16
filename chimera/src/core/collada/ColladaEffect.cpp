@@ -29,11 +29,6 @@ static TexWrap setWrap(const std::string& sParamVal) {
     return TexWrap::NONE;
 }
 
-ColladaEffect::~ColladaEffect() {
-    mapaTex.clear();
-    mapa2D.clear();
-}
-
 void ColladaEffect::setShader(const std::string& refName, const pugi::xml_node& node) {
     pugi::xml_node tech = node.child("technique");
 
@@ -103,7 +98,7 @@ bool ColladaEffect::setTextureParam(const pugi::xml_node& n, TexParam& tp) {
         else if (sParam == "instance_image") {
 
             std::string url = ntPara.attribute("url").value();
-            ColladaImage ci(colladaDom, url);
+            ColladaImage ci(colladaDom, url, serviceLoc);
             ci.create(entity, tp, ci.getLibrary("library_images"));
             return true;
         }
@@ -149,7 +144,7 @@ void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
                 std::string texId = first.attribute("texture").value();
                 std::string idTex = mapaTex[mapa2D[texId]];
 
-                ColladaImage ci(colladaDom, idTex);
+                ColladaImage ci(colladaDom, idTex, serviceLoc);
                 ci.create(entity, tp, ci.getLibrary("library_images")); // loadImage(url, tp); //TODO:
 
                 pMat->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::get(idTex));
@@ -219,7 +214,7 @@ void ColladaEffect::create(const std::string& refName, Entity& entity, pugi::xml
         } else if (nameProf == "extra") {
             if (const pugi::xml_node nFX = getExtra(nProf, "instance_effect"); nFX != nullptr) {
                 std::string url = nFX.attribute("url").value();
-                ColladaEffect cf(colladaDom, url);
+                ColladaEffect cf(colladaDom, url, serviceLoc);
                 cf.create("", entity, cf.getLibrary("library_effects"));
             }
         }

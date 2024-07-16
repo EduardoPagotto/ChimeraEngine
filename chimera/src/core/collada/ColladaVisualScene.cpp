@@ -10,6 +10,7 @@ namespace Chimera {
 
 void ColladaVisualScene::loadNode(pugi::xml_node node) {
 
+    auto r = serviceLoc->getService<Registry>();
     std::string entName = node.attribute("name").value();
     std::string entId = node.attribute("id").value();
     Entity entity = r->createEntity(entName, entId);
@@ -30,21 +31,21 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
     } else if (name == "instance_geometry") {
 
-        ColladaGeometry cg(colladaDom, url);
+        ColladaGeometry cg(colladaDom, url, serviceLoc);
         cg.create(entity, cg.getLibrary("library_geometries"));
 
         if (const pugi::xml_node nMat = n.child("bind_material"); nMat) {
             if (const pugi::xml_node instanceMaterial = nMat.child("technique_common").child("instance_material");
                 instanceMaterial != nullptr) {
                 std::string target = instanceMaterial.attribute("target").value();
-                ColladaMaterial cm(colladaDom, target);
+                ColladaMaterial cm(colladaDom, target, serviceLoc);
                 cm.create(entity, cm.getLibrary("library_materials"));
             }
         }
 
     } else if (name == "instance_light") {
 
-        ColladaLight cl(colladaDom, url);
+        ColladaLight cl(colladaDom, url, serviceLoc);
         cl.create(entity, cl.getLibrary("library_lights"));
 
     } else if (name == "instance_node") {
@@ -58,7 +59,7 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
     } else if (name == "instance_camera") {
 
-        ColladaCam cc(colladaDom, url);
+        ColladaCam cc(colladaDom, url, serviceLoc);
         cc.create(entity, cc.getLibrary("library_cameras"));
         cc.createExtra(entity, n.first_child());
 

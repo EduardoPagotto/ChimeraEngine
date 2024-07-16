@@ -10,7 +10,8 @@ namespace Chimera {
 
 class CameraControllerFPS : public IStateMachine {
   public:
-    CameraControllerFPS(Entity entity) : IStateMachine("FPS"), entity(entity) {}
+    CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
+    virtual ~CameraControllerFPS();
     void onAttach() override;
     void onDeatach() override;
     void onRender() override {}
@@ -32,8 +33,8 @@ class CameraControllerFPS : public IStateMachine {
     glm::vec3 up, front, worldUp, right;
     Camera* camera = nullptr;
     Entity entity;
-    GameController* gameControl;
-    Keyboard* keyboard;
-    Mouse* mouse;
+    std::shared_ptr<IGameController> gameControl;
+    std::shared_ptr<IKeyboard> keyboard;
+    std::shared_ptr<IMouse> mouse;
 };
 } // namespace Chimera

@@ -6,8 +6,11 @@
 namespace Chimera {
 class ColladaEffect : public Collada {
   public:
-    ColladaEffect(ColladaDom& dom, const std::string& url) : Collada(dom, url){};
-    virtual ~ColladaEffect();
+    ColladaEffect(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
+    virtual ~ColladaEffect() {
+        mapaTex.clear();
+        mapa2D.clear();
+    }
     void create(const std::string& refName, Entity& entity, pugi::xml_node node);
 
   private:

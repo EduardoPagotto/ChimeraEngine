@@ -1,5 +1,4 @@
 #include "chimera/core/collada/ColladaExtra.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/buffer/FrameBuffer.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
@@ -29,7 +28,7 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
 
             std::string entName = nFb.attribute("name").value();
             std::string entId = nFb.attribute("id").value();
-            Registry* r = Singleton<Registry>::get();
+            auto r = serviceLoc->getService<Registry>();
             Entity entity = r->createEntity(entName, entId);
 
             FrameBufferSpecification& fb = entity.addComponent<FrameBufferSpecification>();
@@ -39,18 +38,16 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
                 if (name == "instance_effect") {
 
                     std::string refName = next.child("technique_hint").attribute("ref").value();
-                    ColladaEffect cf(colladaDom, url);
+                    ColladaEffect cf(colladaDom, url, serviceLoc);
                     cf.create(refName, entity, cf.getLibrary("library_effects"));
 
                 } else if (name == "instance_camera") {
 
-                    ColladaCam cc(colladaDom, url);
+                    ColladaCam cc(colladaDom, url, serviceLoc);
                     cc.create(entity, cc.getLibrary("library_cameras"));
                     cc.createExtra(entity, next.first_child());
                 }
             }
-
-            Singleton<Registry>::release();
         }
     }
 }

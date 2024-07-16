@@ -1,6 +1,5 @@
 #include "Game.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 
 Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) { mouse = Chimera::Singleton<Chimera::Mouse>::get(); }

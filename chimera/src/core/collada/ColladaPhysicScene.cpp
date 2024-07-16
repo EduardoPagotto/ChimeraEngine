@@ -21,6 +21,7 @@ const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const st
 
 void ColladaPhysicScene::loadAll(pugi::xml_node node) {
 
+    auto r = serviceLoc->getService<Registry>();
     std::string id = node.attribute("id").value();
     std::string name = node.attribute("name").value();
 
@@ -59,7 +60,7 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
             // Pega a chave (mesh)
             TagComponent& tag = view.get<TagComponent>(entity);
             if (tag.id == target) {
-                Entity ent2 = {entity, r};
+                Entity ent2 = {entity, r.get()};
                 TransComponent& tc = ent2.getComponent<TransComponent>();
                 MeshComponent& mc = ent2.getComponent<MeshComponent>();
                 Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao

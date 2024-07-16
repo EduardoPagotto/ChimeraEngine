@@ -3,5 +3,5 @@
 
 namespace Chimera {
 ColladaDom loadFileCollada(const std::string& file);
-void colladaRegistryLoad(ColladaDom& dom);
+void colladaRegistryLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceLoc);
 } // namespace Chimera

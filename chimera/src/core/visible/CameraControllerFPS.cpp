@@ -1,14 +1,24 @@
 #include "chimera/core/visible/CameraControllerFPS.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {
 
+CameraControllerFPS::CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity)
+    : IStateMachine("FPS"), entity(entity) {
+
+    mouse = serviceLocator->getService<IMouse>();
+    keyboard = serviceLocator->getService<IKeyboard>();
+    gameControl = serviceLocator->getService<IGameController>();
+}
+
+CameraControllerFPS::~CameraControllerFPS() {
+    mouse = nullptr;
+    keyboard = nullptr;
+    gameControl = nullptr;
+}
+
 void CameraControllerFPS::onAttach() {
-    keyboard = Singleton<Keyboard>::get();
-    mouse = Singleton<Mouse>::get();
-    gameControl = Singleton<GameController>::get();
 
     auto& cc = entity.getComponent<CameraComponent>();
     camera = cc.camera;
@@ -21,11 +31,7 @@ void CameraControllerFPS::onAttach() {
     this->updateVectors();
 }
 
-void CameraControllerFPS::onDeatach() {
-    Singleton<GameController>::release();
-    Singleton<Keyboard>::release();
-    Singleton<Mouse>::release();
-}
+void CameraControllerFPS::onDeatach() {}
 
 void CameraControllerFPS::updateVP(IViewProjection& vp) {
     if (vp.getSize() == 1) {

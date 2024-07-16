@@ -1,16 +1,16 @@
 #include "Game.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/ServiceLocator.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
 #include "chimera/core/device/GameController.hpp"
 #include "chimera/core/device/Joystick.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/render/scene/Scene.hpp"
 
-Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) { mouse = Chimera::Singleton<Chimera::Mouse>::get(); }
-Game::~Game() { Chimera::Singleton<Chimera::Mouse>::release(); }
+Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) { mouse = sl->getService<Chimera::IMouse>(); }
+Game::~Game() { mouse = nullptr; }
 
 void Game::onAttach() {
 
@@ -104,11 +104,11 @@ int main(int argn, char** argv) {
         Engine engine(sl);
 
         ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
-        colladaRegistryLoad(dom);
+        colladaRegistryLoad(dom, sl);
 
-        Scene scene;
+        Scene scene(sl);
 
-        Game* game = new Game(scene);
+        Game* game = new Game(sl);
 
         engine.getStack().pushState(&scene);
         engine.getStack().pushState(game);

@@ -80,6 +80,8 @@ void Scene::createOctree(const AABB& aabb) {
 }
 
 void Scene::onAttach() {
+    // Pega o ViewProjection do ECS antes da camera por caussa do vpo
+    vpo = serviceLoc->getService<IViewProjection>();
 
     // Totalizadores de area
     glm::vec3 tot_min, tot_max;
@@ -174,19 +176,11 @@ void Scene::onAttach() {
                 eRenderBuferSpec = entity;
             }
         }
-
-        // Pega o ViewProjection do ECS antes da camera por caussa do vpo
-        if (entity.hasComponent<ViewProjectionComponent>()) {
-            ViewProjectionComponent& ev = entity.getComponent<ViewProjectionComponent>();
-            vpo = ev.vp;
-        }
-
-        // Pega o ICanva do ECS
-        if (entity.hasComponent<CanvasComponent>()) {
-            CanvasComponent& cc = entity.getComponent<CanvasComponent>();
-            this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());
-        }
     });
+
+    // Pega icanvas depois de camera definida!!!
+    auto canvas = serviceLoc->getService<ICanva>();
+    this->onViewportResize(canvas->getWidth(), canvas->getHeight());
 
     { // Registra Camera controllers ViewProjection deve ser localizado acima
         auto view1 = registry->get().view<CameraComponent>();
@@ -218,11 +212,6 @@ void Scene::onAttach() {
 
     origem = new Transform(); // FIXME: coisa feia!!!!
     sceneAABB.setBoundary(tot_min, tot_max);
-}
-
-ICanva* Scene::getCanvas() {
-    CanvasComponent& cc = registry->findComponent<CanvasComponent>("chimera_engine");
-    return cc.canvas.get(); // FIXME: muda tudo!!!!
 }
 
 void Scene::onUpdate(IViewProjection& vp, const double& ts) {
@@ -289,7 +278,7 @@ bool Scene::onEvent(const SDL_Event& event) {
 
 void Scene::renderShadow(IRenderer3d& renderer) {
 
-    renderer.begin(activeCam, vpo, nullptr);
+    renderer.begin(activeCam, vpo.get(), nullptr);
     {
         auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
@@ -404,7 +393,7 @@ void Scene::onRender() {
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-        renderer.begin(activeCam, vpo, octree);
+        renderer.begin(activeCam, vpo.get(), octree);
         this->execRenderPass(renderer);
         renderer.end();
         renderer.flush();
@@ -416,7 +405,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderer.begin(activeCam, vpo, nullptr);
+            renderer.begin(activeCam, vpo.get(), nullptr);
             this->execEmitterPass(renderer);
             renderer.end();
             renderer.flush();
@@ -451,7 +440,7 @@ void Scene::onRender() {
                     renderLines.create(10000);
                 }
 
-                renderLines.begin(activeCam, vpo, nullptr);
+                renderLines.begin(activeCam, vpo.get(), nullptr);
 
                 renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
                 renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getSel().view)));

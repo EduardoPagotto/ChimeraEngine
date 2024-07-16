@@ -23,11 +23,33 @@ struct ShadowData {
 
 class Entity;
 class Scene : public IStateMachine {
+  private:
+    std::shared_ptr<Registry> registry;
+    std::shared_ptr<ServiceLocator> serviceLoc;
+    std::shared_ptr<IViewProjection> vpo;
+
+    StateStack layers;
+
+    ITrans* origem;
+    Camera* activeCam;
+
+    ShadowData shadowData;
+    uint8_t verbose;
+    std::vector<RenderBuffer*> vRB;
+    std::vector<IEmitter*> emitters;
+    Entity eRenderBuferSpec;
+    BatchRender2D batchRender2D;
+
+    Octree* octree;
+    AABB sceneAABB;
+    Renderer3dLines renderLines;
+
+    DrawLine dl;
+
   public:
     Scene(std::shared_ptr<ServiceLocator> sl);
     virtual ~Scene();
     void setOrigem(ITrans* o) { origem = o; }
-    ICanva* getCanvas();
     StateStack& getLayes() { return this->layers; }
     // Herdados
     virtual void onAttach() override;
@@ -43,28 +65,6 @@ class Scene : public IStateMachine {
     void execEmitterPass(IRenderer3d& renderer);
     void renderShadow(IRenderer3d& renderer);
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
-
     void createOctree(const AABB& aabb);
-
-    std::shared_ptr<Registry> registry;
-    std::shared_ptr<ServiceLocator> serviceLoc;
-
-    StateStack layers;
-
-    ITrans* origem;
-    Camera* activeCam;
-    IViewProjection* vpo;
-    ShadowData shadowData;
-    uint8_t verbose;
-    std::vector<RenderBuffer*> vRB;
-    std::vector<IEmitter*> emitters;
-    Entity eRenderBuferSpec;
-    BatchRender2D batchRender2D;
-
-    Octree* octree;
-    AABB sceneAABB;
-    Renderer3dLines renderLines;
-
-    DrawLine dl;
 };
 } // namespace Chimera

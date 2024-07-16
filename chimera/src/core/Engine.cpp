@@ -12,15 +12,8 @@ Engine::Engine(std::shared_ptr<ServiceLocator> serviceLoc) : serviceLoc(serviceL
 
     canvas = serviceLoc->getService<ICanva>();
     vp = serviceLoc->getService<IViewProjection>();
-
     registry = serviceLoc->getService<Registry>();
     Entity entity = registry->createEntity("chimera_engine", "chimera_engine");
-
-    CanvasComponent& cc = entity.addComponent<CanvasComponent>();
-    cc.canvas = canvas;
-
-    ViewProjectionComponent& vpc = entity.addComponent<ViewProjectionComponent>();
-    vpc.vp = vp.get();
 
     SDL_Log("Engine Register: chimera_engine OK");
 }

@@ -1,5 +1,6 @@
 #pragma once
-#include "chimera/core/device/ICanva.hpp"
+#include "chimera/core/device/interfaces.hpp"
+
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <string>

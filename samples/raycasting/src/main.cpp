@@ -1,21 +1,34 @@
 #include "Game.hpp"
+#include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
+#include "chimera/core/device/Keyboard.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
     using namespace Chimera;
     try {
-
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simple ray-casting Iniciado");
 
-        Engine engine(new CanvasFB("BSP Tree", 800, 600, false), 0.0f);
+        // Registry to entt
+        auto reg = std::make_shared<Registry>();
+
+        // Services shared inside all parts
+        // Canvas, Mouse, keyboard, Joystick, gamepad, view's
+        auto sl = std::make_shared<ServiceLocator>();
+        sl->registerService(std::make_shared<Keyboard>());
+        sl->registerService(std::make_shared<CanvasFB>("BSP Tree", 800, 600, false));
+        sl->registerService(std::make_shared<ViewProjection>()); // not used but necessary
+        sl->registerService(reg);
+
+        // Engine
+        Engine engine(sl);
 
         ColladaDom dom = loadFileCollada("./samples/raycasting/level.xml");
-        colladaRegistryLoad(dom);
+        colladaRegistryLoad(dom, sl);
 
-        Game* game = new Game(&engine);
+        Game* game = new Game(sl);
 
         engine.getStack().pushState(game);
         engine.run();

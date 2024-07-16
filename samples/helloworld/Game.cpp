@@ -7,7 +7,7 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
 
-Game::Game(Chimera::Engine& engine) : IStateMachine("Game"), engine(&engine) {
+Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game") {
 
     using namespace Chimera;
     srand(time(nullptr));
@@ -22,7 +22,7 @@ Game::Game(Chimera::Engine& engine) : IStateMachine("Game"), engine(&engine) {
     TextureManager::loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
     TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
 
-    engine.getStack().pushState(this);
+    canvas = sl->getService<ICanva>();
 }
 
 Game::~Game() {}
@@ -42,7 +42,7 @@ void Game::onAttach() {
     ShaderManager::load("Basic2D", shadeData, shader);
 
     layer = new TileLayer(shader);
-    layer->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
+    layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
 
     for (float y = -8.0f; y < 8.0f; y++) {
         for (float x = -14.0f; x < 14.0f; x++) {
@@ -110,7 +110,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
+void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {
 
     // ApplicationGL::onUpdate();
 

@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 
 namespace Chimera {
-class CanvasFB : public ICanva {
+class CanvasFB : public ServiceBase<ICanva> {
   private:
     bool fullScreen{false};
     int width, height;

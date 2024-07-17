@@ -29,7 +29,6 @@ set (SourcesCore Registry.cpp
 				 visible/CameraControllerFPS.cpp
 				 visible/CameraControllerOrbit.cpp
 				 visible/FontAtlas.cpp
-				 visible/FontManager.cpp
 				 visible/Material.cpp
 				 visible/ParticleEmitter.cpp
 				 collada/RFC3986.cpp

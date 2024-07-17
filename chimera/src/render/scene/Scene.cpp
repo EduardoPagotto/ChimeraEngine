@@ -82,6 +82,7 @@ void Scene::createOctree(const AABB& aabb) {
 void Scene::onAttach() {
     // Pega o ViewProjection do ECS antes da camera por caussa do vpo
     vpo = serviceLoc->getService<IViewProjection>();
+    phyCrt = serviceLoc->getServiceOrNull<IPhysicsControl>();
 
     // Totalizadores de area
     glm::vec3 tot_min, tot_max;
@@ -200,15 +201,15 @@ void Scene::onAttach() {
         }
     }
 
-    { // initialize scripts
-        registry->get().view<NativeScriptComponent>().each([this](auto entity, auto& nsc) {
-            if (!nsc.instance) {
-                nsc.instance = nsc.instantiateScript();
-                nsc.instance->entity = Entity{entity, registry.get()};
-                nsc.instance->onCreate();
-            }
-        });
-    }
+    // { // initialize scripts
+    //     registry->get().view<NativeScriptComponent>().each([this](auto entity, auto& nsc) {
+    //         if (!nsc.instance) {
+    //             nsc.instance = nsc.instantiateScript();
+    //             nsc.instance->entity = Entity{entity, registry.get()};
+    //             nsc.instance->onCreate();
+    //         }
+    //     });
+    // }
 
     origem = new Transform(); // FIXME: coisa feia!!!!
     sceneAABB.setBoundary(tot_min, tot_max);
@@ -216,10 +217,15 @@ void Scene::onAttach() {
 
 void Scene::onUpdate(IViewProjection& vp, const double& ts) {
     // update scripts (PhysicController aqui dentro!!!)
-    registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-        if (nsc.instance)
-            nsc.instance->onUpdate(ts);
-    });
+    // registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+    //     if (nsc.instance)
+    //         nsc.instance->onUpdate(ts);
+    // });
+
+    if (phyCrt) {
+        phyCrt->stepSim(ts);
+        phyCrt->checkCollisions();
+    }
 
     for (auto emissor : emitters)
         emissor->recycleLife(ts);

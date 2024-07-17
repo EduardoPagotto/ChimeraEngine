@@ -36,14 +36,10 @@ class ServiceLocator {
     /// @param service Shared pointer to the service instance.
     template <typename T>
     void registerService(std::shared_ptr<T> service) {
-
         static_assert(std::is_base_of<IService, T>::value, "T must inherit from IService");
-
         std::lock_guard<std::mutex> lock(mutex);
-
         std::type_index typeIndex = service->getTypeIndex(); // Use base class type index
-
-        if (services.find(typeIndex) != services.end()) { // TODO: mudar para algo msg erro
+        if (services.find(typeIndex) != services.end()) {    // TODO: mudar para algo msg erro
             throw std::runtime_error("Service already registered");
         }
 
@@ -57,6 +53,17 @@ class ServiceLocator {
         auto it = services.find(typeIndex);
         if (it == services.end()) {
             throw std::runtime_error("Service not found");
+        }
+        return std::static_pointer_cast<T>(it->second);
+    }
+
+    template <typename T>
+    std::shared_ptr<T> getServiceOrNull() const {
+        std::lock_guard<std::mutex> lock(mutex);
+        auto typeIndex = std::type_index(typeid(T));
+        auto it = services.find(typeIndex);
+        if (it == services.end()) {
+            return std::shared_ptr<T>();
         }
         return std::static_pointer_cast<T>(it->second);
     }

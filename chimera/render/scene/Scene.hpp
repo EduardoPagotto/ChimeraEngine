@@ -3,6 +3,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/StateStack.hpp"
 #include "chimera/core/buffer/RenderBuffer.hpp"
+#include "chimera/core/bullet/interfaces.hpp"
 #include "chimera/core/device/interfaces.hpp"
 #include "chimera/core/space/Octree.hpp"
 #include "chimera/core/visible/ICamera.hpp"
@@ -27,6 +28,7 @@ class Scene : public IStateMachine {
     std::shared_ptr<Registry> registry;
     std::shared_ptr<ServiceLocator> serviceLoc;
     std::shared_ptr<IViewProjection> vpo;
+    std::shared_ptr<IPhysicsControl> phyCrt;
 
     StateStack layers;
 

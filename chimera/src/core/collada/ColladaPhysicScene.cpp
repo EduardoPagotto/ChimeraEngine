@@ -25,9 +25,8 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
     std::string id = node.attribute("id").value();
     std::string name = node.attribute("name").value();
 
-    Entity entityPc = r->createEntity(name, id);
-    PhysicsControl& pc = entityPc.addComponent<PhysicsControl>(); // FIXME: juntar tudo dentro do controller!!!!!
-    entityPc.addComponent<NativeScriptComponent>().bind<PhysicController>("PhysicController01");
+    auto pc = std::make_shared<PhysicsControl>();
+    serviceLoc->registerService(pc);
 
     pugi::xml_node nTec = node.child("technique_common");
     std::string sGrav = nTec.child("gravity").text().as_string();
@@ -35,7 +34,7 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
 
     std::vector<float> l_arrayF;
     textToFloatArray(sGrav, l_arrayF);
-    pc.setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
+    pc->setGravity(btVector3(l_arrayF[0], l_arrayF[1], l_arrayF[2]));
     // pc.stepSim(ts); FIXME: remover e ver se funciona!!!!!!
 
     pugi::xml_node nInstace = node.child("instance_physics_model");
@@ -63,11 +62,11 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
                 Entity ent2 = {entity, r.get()};
                 TransComponent& tc = ent2.getComponent<TransComponent>();
                 MeshComponent& mc = ent2.getComponent<MeshComponent>();
-                Solid* solid = new Solid(&pc, tc.trans->getMatrix(), ent2); // nova transformacao
-                delete tc.trans;                                            // deleta objeto de transformacao
-                tc.trans = nullptr;                                         // limpa ponteiro
-                tc.solid = true;                                            // muda tipos de dado
-                tc.trans = solid;                                           // carrega novo objeto de transformacao
+                Solid* solid = new Solid(pc.get(), tc.trans->getMatrix(), ent2); // nova transformacao
+                delete tc.trans;                                                 // deleta objeto de transformacao
+                tc.trans = nullptr;                                              // limpa ponteiro
+                tc.solid = true;                                                 // muda tipos de dado
+                tc.trans = solid;                                                // carrega novo objeto de transformacao
 
                 bool dynamic = nTec.child("dynamic").text().as_bool();
                 float mass = nTec.child("mass").text().as_float();

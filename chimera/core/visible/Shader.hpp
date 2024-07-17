@@ -15,6 +15,13 @@ class Shader {
     Shader(const Shader& other) : progID(other.progID) {
         uniformLocationCache.insert(other.uniformLocationCache.begin(), other.uniformLocationCache.end());
     }
+
+    Shader& operator=(const Shader& other) {
+        this->progID = other.progID;
+        uniformLocationCache.insert(other.uniformLocationCache.begin(), other.uniformLocationCache.end());
+        return *this;
+    }
+
     virtual ~Shader() = default;
     inline const GLuint getID() const { return this->progID; }
     inline void invalidade();

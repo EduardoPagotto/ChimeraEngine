@@ -3,11 +3,11 @@
 
 namespace Chimera {
 
-void TextureManager::add(Texture* texture) { textures.push_back(texture); }
+void TextureManager::add(std::shared_ptr<Texture> texture) { textures.push_back(texture); }
 
 void TextureManager::clean() {
     for (int i = 0; i < textures.size(); i++)
-        delete textures[i];
+        textures[i] = nullptr;
 
     textures.clear();
 }
@@ -15,13 +15,13 @@ void TextureManager::remove(const std::string& name) {
 
     for (int i = 0; i < textures.size(); i++) {
         if (textures[i]->getName() == name)
-            delete textures[i];
+            textures[i] = nullptr;
     }
 }
 
-Texture* TextureManager::get(const std::string& name) {
+std::shared_ptr<Texture> TextureManager::get(const std::string& name) {
     // TODO: modificar mapara mapa
-    for (Texture* texture : textures) {
+    for (std::shared_ptr<Texture> texture : textures) {
         if (texture->getName() == name)
             return texture;
     }
@@ -51,23 +51,23 @@ void TextureManager::invert_image(int pitch, int height, void* image_pixels) {
     free(temp_row);
 }
 
-Texture* TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surface, TexParam textureParameters) {
+std::shared_ptr<Texture> TextureManager::loadFromSurface(const std::string& name, SDL_Surface* surface, TexParam textureParameters) {
 
     TextureManager::invert_image(surface->pitch, surface->h, surface->pixels);
 
-    Texture* tex = new Texture(name, surface, textureParameters);
+    std::shared_ptr<Texture> tex = std::make_shared<Texture>(name, surface, textureParameters);
     TextureManager::add(tex);
 
     return tex;
 }
 
-Texture* TextureManager::loadFromFile(const std::string& name, const std::string& pathfile, TexParam textureParameters) {
+std::shared_ptr<Texture> TextureManager::loadFromFile(const std::string& name, const std::string& pathfile, TexParam textureParameters) {
 
     SDL_Surface* pImage = IMG_Load(pathfile.c_str());
     if (pImage == nullptr)
         throw std::string("Falha ao ler arquivo:" + pathfile);
 
-    Texture* tex = TextureManager::loadFromSurface(name, pImage, textureParameters);
+    std::shared_ptr<Texture> tex = TextureManager::loadFromSurface(name, pImage, textureParameters);
 
     SDL_FreeSurface(pImage);
 

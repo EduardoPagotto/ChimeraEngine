@@ -46,7 +46,7 @@ void Material::init() {
         tipoTexturasDisponiveis = 3;
 }
 
-void Material::bindMaterialInformation(MapUniform& uniforms, std::vector<Texture*>& vTex) {
+void Material::bindMaterialInformation(MapUniform& uniforms, std::vector<std::shared_ptr<Texture>>& vTex) {
     // copy prop material
     uniforms.insert(listMaterial.begin(), listMaterial.end());
 

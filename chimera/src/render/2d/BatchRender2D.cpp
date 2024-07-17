@@ -58,7 +58,7 @@ void BatchRender2D::begin(Camera* camera) {
     this->buffer = (VertexDataSimple*)pVbo->map();
 }
 
-float BatchRender2D::submitTexture(Texture* texture) {
+float BatchRender2D::submitTexture(std::shared_ptr<Texture> texture) {
     float result = 0.0f;
     bool found = false;
     for (uint i = 0; i < textures.size(); i++) {

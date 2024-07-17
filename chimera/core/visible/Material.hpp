@@ -22,7 +22,7 @@ class Material {
     virtual ~Material();
     void init();
     void setDefaultEffect();
-    void addTexture(const std::string& uniformTexName, Texture* texture) { this->mapTex[uniformTexName] = texture; }
+    void addTexture(const std::string& uniformTexName, std::shared_ptr<Texture> texture) { this->mapTex[uniformTexName] = texture; }
     inline void setAmbient(const glm::vec4& _color) { listMaterial[SHADE_MAT_AMBIENTE] = UValue(_color); }
     inline void setSpecular(const glm::vec4& _color) { listMaterial[SHADE_MAT_SPECULA] = UValue(_color); }
     inline void setDiffuse(const glm::vec4& _color) { listMaterial[SHADE_MAT_DIFFUSE] = UValue(_color); }
@@ -30,13 +30,13 @@ class Material {
     inline void setShine(const float& _val) { listMaterial[SHADE_MAT_SHININESS] = UValue(_val); }
 
     bool hasTexture() { return !mapTex.empty(); }
-    void bindMaterialInformation(MapUniform& uniforms, std::vector<Texture*>& vTex);
+    void bindMaterialInformation(MapUniform& uniforms, std::vector<std::shared_ptr<Texture>>& vTex);
     bool const isValid() const { return valid; }
 
   private:
     bool valid;
     int tipoTexturasDisponiveis;
-    std::unordered_map<std::string, Texture*> mapTex;
+    std::unordered_map<std::string, std::shared_ptr<Texture>> mapTex;
     MapUniform listMaterial;
 };
 

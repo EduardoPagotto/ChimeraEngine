@@ -12,7 +12,7 @@ Renderable2D::Renderable2D(const glm::vec3& pos, const glm::vec2& size, const gl
     prop2d.uv = Renderable2D::getDefaultUVs();
 }
 
-Renderable2D::Renderable2D(const glm::vec3& pos, const glm::vec2& size, Texture* texture) {
+Renderable2D::Renderable2D(const glm::vec3& pos, const glm::vec2& size, std::shared_ptr<Texture> texture) {
 
     prop2d.position = pos;
     prop2d.size = size;

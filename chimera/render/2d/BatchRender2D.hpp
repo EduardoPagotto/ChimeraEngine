@@ -35,7 +35,7 @@ class BatchRender2D : public IRenderer2D {
     inline virtual void setCommandRender(class RenderCommand* command) override { renderComando = command; }
 
   private:
-    float submitTexture(Texture* texture);
+    float submitTexture(std::shared_ptr<Texture> texture);
 
     TransformationStack stack;
     IndexBuffer* ibo;
@@ -44,7 +44,7 @@ class BatchRender2D : public IRenderer2D {
     GLsizei indexCount;
     VertexDataSimple* buffer;
     RenderCommand* renderComando;
-    std::vector<Texture*> textures;
+    std::vector<std::shared_ptr<Texture>> textures;
     Camera* camera;
 };
 } // namespace Chimera

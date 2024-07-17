@@ -1,5 +1,5 @@
 #include "chimera/core/collada/ColladaPhysicScene.hpp"
-#include "chimera/core/PhysicController.hpp"
+#include "chimera/core/Registry.hpp"
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/visible/Mesh.hpp"

@@ -71,8 +71,7 @@ if (BULLET_SET_TO_USE)
 	message(STATUS "Bullet incluido no build ChimeraCore")
 	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
 								   bullet/Solid.cpp
-								   collada/ColladaPhysicScene.cpp
-								   PhysicController.cpp) 
+								   collada/ColladaPhysicScene.cpp) 
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 

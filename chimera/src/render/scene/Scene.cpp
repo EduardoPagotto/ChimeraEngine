@@ -1,5 +1,4 @@
 #include "chimera/render/scene/Scene.hpp"
-#include "chimera/core/ScriptableEntity.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/Mouse.hpp"
@@ -63,13 +62,8 @@ void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const
 }
 
 void Scene::onDeatach() {
-    // destroy scripts
-    registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-        if (!nsc.instance) {
-            nsc.instance->onDestroy();
-            nsc.destroyScript(&nsc);
-        }
-    });
+    vpo = nullptr;
+    phyCrt = nullptr;
 }
 
 void Scene::createOctree(const AABB& aabb) {
@@ -201,26 +195,11 @@ void Scene::onAttach() {
         }
     }
 
-    // { // initialize scripts
-    //     registry->get().view<NativeScriptComponent>().each([this](auto entity, auto& nsc) {
-    //         if (!nsc.instance) {
-    //             nsc.instance = nsc.instantiateScript();
-    //             nsc.instance->entity = Entity{entity, registry.get()};
-    //             nsc.instance->onCreate();
-    //         }
-    //     });
-    // }
-
     origem = new Transform(); // FIXME: coisa feia!!!!
     sceneAABB.setBoundary(tot_min, tot_max);
 }
 
 void Scene::onUpdate(IViewProjection& vp, const double& ts) {
-    // update scripts (PhysicController aqui dentro!!!)
-    // registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-    //     if (nsc.instance)
-    //         nsc.instance->onUpdate(ts);
-    // });
 
     if (phyCrt) {
         phyCrt->stepSim(ts);

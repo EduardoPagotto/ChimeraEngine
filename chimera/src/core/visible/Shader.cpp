@@ -1,7 +1,5 @@
 #include "chimera/core/visible/Shader.hpp"
 #include "chimera/core/utils.hpp"
-#include <SDL2/SDL.h>
-#include <vector>
 
 namespace Chimera {
 
@@ -73,24 +71,7 @@ static GLuint linkShader(const std::vector<GLuint>& vecShaderID) {
 
 //----
 
-void Shader::invalidade() {
-    glDeleteProgram(progID);
-    progID = 0;
-    uniformLocationCache.clear();
-}
-
-const GLint Shader::getUniform(const std::string& name) const noexcept {
-
-    if (uniformLocationCache.find(name) != uniformLocationCache.end())
-        return uniformLocationCache[name];
-
-    GLint loc = glGetUniformLocation(progID, name.c_str());
-    uniformLocationCache[name] = loc;
-
-    return loc;
-}
-
-void Shader::setUniformU(const char* name, const UValue& uv) {
+void Shader::setUniformU(const char* name, const UValue& uv) noexcept {
 
     GLint loc = getUniform(name);
     if (loc == -1) {

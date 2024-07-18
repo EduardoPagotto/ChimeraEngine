@@ -1,14 +1,15 @@
 #include "chimera/core/visible/Shader.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace Chimera {
 
-static GLuint compileShader(const std::string& fileName, const std::string& shaderCode, uint16_t kindShade) {
+static uint32_t compileShader(const std::string& fileName, const std::string& shaderCode, uint16_t kindShade) {
 
-    GLint Result = GL_FALSE;
+    int32_t Result = GL_FALSE;
     int InfoLogLength;
 
-    GLuint shaderID = 0;
+    uint32_t shaderID = 0;
     shaderID = glCreateShader(kindShade);
 
     char const* sourcePointer = shaderCode.c_str();
@@ -33,12 +34,12 @@ static GLuint compileShader(const std::string& fileName, const std::string& shad
     return shaderID;
 }
 
-static GLuint linkShader(const std::vector<GLuint>& vecShaderID) {
+static uint32_t linkShader(const std::vector<uint32_t>& vecShaderID) {
 
-    GLint Result = GL_FALSE;
+    int32_t Result = GL_FALSE;
     int InfoLogLength;
 
-    GLuint ProgramID = glCreateProgram();
+    uint32_t ProgramID = glCreateProgram();
     for (auto shader : vecShaderID)
         glAttachShader(ProgramID, shader);
 
@@ -73,7 +74,7 @@ static GLuint linkShader(const std::vector<GLuint>& vecShaderID) {
 
 void Shader::setUniformU(const char* name, const UValue& uv) noexcept {
 
-    GLint loc = getUniform(name);
+    int32_t loc = getUniform(name);
     if (loc == -1) {
         SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Shader Uniform \"%s\" not found in Program \"%d\"", name, progID);
         return;
@@ -127,14 +128,31 @@ void Shader::setUniformU(const char* name, const UValue& uv) noexcept {
     }
 }
 
+void Shader::invalidade() noexcept {
+    glDeleteProgram(progID);
+    progID = 0;
+    uniformLocationCache.clear();
+}
+
+const int32_t Shader::getUniform(const std::string& name) const noexcept {
+
+    if (uniformLocationCache.find(name) != uniformLocationCache.end())
+        return uniformLocationCache[name];
+
+    int32_t loc = glGetUniformLocation(progID, name.c_str());
+    uniformLocationCache[name] = loc;
+
+    return loc;
+}
+
 //---
 
-void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) noexcept {
+void ShaderManager::load(const std::string& name, const std::unordered_map<uint32_t, std::string>& mFiles, Shader& shader) noexcept {
 
     std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
     if (got == ShaderManager::mShaders.end()) {
 
-        std::vector<GLuint> vecShaderID;
+        std::vector<uint32_t> vecShaderID;
         for (auto& kv : mFiles) {
             std::string source;
             utilsReadFile(kv.second, source);

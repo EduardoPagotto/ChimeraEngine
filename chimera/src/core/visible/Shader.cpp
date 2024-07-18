@@ -129,7 +129,7 @@ void Shader::setUniformU(const char* name, const UValue& uv) noexcept {
 
 //---
 
-void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) {
+void ShaderManager::load(const std::string& name, const std::unordered_map<GLenum, std::string>& mFiles, Shader& shader) noexcept {
 
     std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
     if (got == ShaderManager::mShaders.end()) {
@@ -152,16 +152,7 @@ void ShaderManager::load(const std::string& name, const std::unordered_map<GLenu
     }
 }
 
-const Shader& ShaderManager::get(const std::string& name) {
-
-    std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
-    if (got != ShaderManager::mShaders.end())
-        return got->second;
-
-    throw std::string("Shader nao existe: " + name);
-}
-
-bool ShaderManager::remove(const std::string& name) {
+bool ShaderManager::remove(const std::string& name) noexcept {
 
     std::unordered_map<std::string, Shader>::iterator got = ShaderManager::mShaders.find(name);
     if (got != ShaderManager::mShaders.end()) {
@@ -174,7 +165,7 @@ bool ShaderManager::remove(const std::string& name) {
     return false;
 }
 
-void ShaderManager::clear() {
+void ShaderManager::clear() noexcept {
     for (auto it = ShaderManager::mShaders.begin(); it != ShaderManager::mShaders.end(); it++)
         it->second.invalidade();
 

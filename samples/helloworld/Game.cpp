@@ -24,6 +24,13 @@ Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine) : IState
     TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
 
     canvas = sl->getService<ICanva>();
+
+    std::unordered_map<GLenum, std::string> shadeData;
+    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
+    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
+
+    auto mng = sl->getService<ShaderMng>();
+    shader = mng->load("Basic2D", shadeData);
 }
 
 Game::~Game() {}
@@ -36,11 +43,6 @@ void Game::onAttach() {
                              // 96)
                              // video 103 finaliza o pick mouse
                              // colocar para rodar o scene como renderbuffer!!!!!!!!!
-
-    std::unordered_map<GLenum, std::string> shadeData;
-    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
-    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
-    shader = ShaderMng::load("Basic2D", shadeData);
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());

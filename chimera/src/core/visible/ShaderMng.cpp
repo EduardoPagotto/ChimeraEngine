@@ -72,8 +72,8 @@ static uint32_t linkShader(const std::vector<uint32_t>& vecShaderID) {
 
 std::shared_ptr<Shader> ShaderMng::load(const std::string& name, const std::unordered_map<uint32_t, std::string>& mFiles) noexcept {
 
-    auto got = ShaderMng::map_shaders.find(name);
-    if (got == ShaderMng::map_shaders.end()) {
+    auto got = map_shaders.find(name);
+    if (got == map_shaders.end()) {
 
         std::vector<uint32_t> vecShaderID;
         for (auto& kv : mFiles) {
@@ -84,7 +84,7 @@ std::shared_ptr<Shader> ShaderMng::load(const std::string& name, const std::unor
 
         std::shared_ptr<Shader> shader = std::make_shared<Shader>(linkShader(vecShaderID)); // Link o programa
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "New Shader %s id: %d", name.c_str(), (int)shader->getID());
-        ShaderMng::map_shaders[name] = shader;
+        map_shaders[name] = shader;
 
         vecShaderID.clear();
         return shader;
@@ -95,18 +95,18 @@ std::shared_ptr<Shader> ShaderMng::load(const std::string& name, const std::unor
 }
 
 void ShaderMng::remove(std::shared_ptr<Shader> shader) noexcept {
-    for (auto it = ShaderMng::map_shaders.begin(); it != ShaderMng::map_shaders.end(); it++) {
+    for (auto it = map_shaders.begin(); it != map_shaders.end(); it++) {
         if (it->second == shader) {
             it->second = nullptr;
-            ShaderMng::map_shaders.erase(it);
+            map_shaders.erase(it);
         }
     }
 }
 
 void ShaderMng::clear() noexcept {
-    for (auto it = ShaderMng::map_shaders.begin(); it != ShaderMng::map_shaders.end(); it++)
+    for (auto it = map_shaders.begin(); it != map_shaders.end(); it++)
         it->second = nullptr;
 
-    ShaderMng::map_shaders.clear();
+    map_shaders.clear();
 }
 } // namespace Chimera

@@ -7,6 +7,7 @@
 #include "chimera/core/device/Joystick.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) { mouse = sl->getService<Chimera::IMouse>(); }
@@ -87,6 +88,7 @@ int main(int argn, char** argv) {
         sl->registerService(std::make_shared<Joystick>());
         sl->registerService(std::make_shared<GameController>());
         sl->registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
+        sl->registerService(std::make_shared<ShaderMng>());
 
         // Engine
         Engine engine(sl);

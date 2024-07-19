@@ -2,6 +2,7 @@
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 int main(int argn, char** argv) {
@@ -21,6 +22,7 @@ int main(int argn, char** argv) {
         sl->registerService(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
         sl->registerService(std::make_shared<Mouse>());
         sl->registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
+        sl->registerService(std::make_shared<ShaderMng>());
 
         // Engine
         Engine engine(sl);

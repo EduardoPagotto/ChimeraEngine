@@ -77,7 +77,8 @@ void ColladaEffect::setShader(const std::string& refName, const pugi::xml_node& 
     }
 
     if (shadeData.size() > 1) {
-        entity.addComponent<ShaderComponent>(refName, ShaderMng::load(refName, shadeData));
+        auto mng = serviceLoc->getService<ShaderMng>();
+        entity.addComponent<ShaderComponent>(refName, mng->load(refName, shadeData));
     }
 }
 

@@ -406,7 +406,9 @@ void Scene::onRender() {
                     std::unordered_map<GLenum, std::string> shadeData;
                     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
-                    dl.create(ShaderMng::load("DrawLine", shadeData), 40000);
+
+                    auto mng = serviceLoc->getService<ShaderMng>();
+                    dl.create(mng->load("DrawLine", shadeData), 40000);
                 }
 
                 if (octree != nullptr) {
@@ -431,7 +433,9 @@ void Scene::onRender() {
                     std::unordered_map<GLenum, std::string> shadeData;
                     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
-                    renderLines.create(ShaderMng::load("DrawLine", shadeData), 10000);
+
+                    auto mng = serviceLoc->getService<ShaderMng>();
+                    renderLines.create(mng->load("DrawLine", shadeData), 10000);
                 }
 
                 renderLines.begin(activeCam, vpo.get(), nullptr);

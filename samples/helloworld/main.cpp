@@ -3,6 +3,7 @@
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
 #include "chimera/core/device/Mouse.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {
@@ -18,6 +19,7 @@ int main(int argn, char** argv) {
         sl->registerService(std::make_shared<CanvasGL>("Simples", 800, 600, false));
         sl->registerService(std::make_shared<Mouse>());
         sl->registerService(std::make_shared<ViewProjection>(0.0f)); // View projection
+        sl->registerService(std::make_shared<ShaderMng>());
 
         Engine engine(sl);
 

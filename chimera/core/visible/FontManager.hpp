@@ -6,7 +6,11 @@ namespace Chimera {
 
 class FontManager {
   public:
-    static void add(FontAtlas* font) { fonts.push_back(font); }
+    static FontAtlas* load(const std::string& name, const std::string& pathFile, const int& size) {
+        FontAtlas* font = new FontAtlas(name, pathFile, size);
+        fonts.push_back(font);
+        return font;
+    }
 
     static void clean() {
         for (int i = 0; i < fonts.size(); i++)

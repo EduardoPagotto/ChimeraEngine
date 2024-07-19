@@ -4,74 +4,6 @@
 
 namespace Chimera {
 
-static uint32_t compileShader(const std::string& fileName, const std::string& shaderCode, uint16_t kindShade) {
-
-    int32_t Result = GL_FALSE;
-    int InfoLogLength;
-
-    uint32_t shaderID = 0;
-    shaderID = glCreateShader(kindShade);
-
-    char const* sourcePointer = shaderCode.c_str();
-    glShaderSource(shaderID, 1, &sourcePointer, NULL);
-    glCompileShader(shaderID);
-
-    // Check Fragment Shader
-    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &Result);
-
-    if (Result == GL_FALSE) {
-        glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if (InfoLogLength > 0) {
-            std::vector<char> shaderErrorMessage(InfoLogLength + 1);
-            glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &shaderErrorMessage[0]);
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader %s compile error: %s", fileName.c_str(),
-                         std::string(&shaderErrorMessage[0]).c_str());
-
-            throw std::string("Shader compile fail: " + shaderCode);
-        }
-    }
-
-    return shaderID;
-}
-
-static uint32_t linkShader(const std::vector<uint32_t>& vecShaderID) {
-
-    int32_t Result = GL_FALSE;
-    int InfoLogLength;
-
-    uint32_t ProgramID = glCreateProgram();
-    for (auto shader : vecShaderID)
-        glAttachShader(ProgramID, shader);
-
-    glLinkProgram(ProgramID);
-
-    // Check the program
-    glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
-
-    if (Result == GL_FALSE) {
-
-        glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if (InfoLogLength > 0) {
-            std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
-            glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Shader Check program: %s", std::string(&ProgramErrorMessage[0]).c_str());
-        }
-
-        throw std::string("link Shader Fail");
-    }
-
-    for (auto id : vecShaderID)
-        glDeleteShader(id);
-
-    for (auto id : vecShaderID) {
-        glDetachShader(ProgramID, id);
-    }
-
-    return ProgramID;
-}
-
-//----
-
 void Shader::setUniformU(const char* name, const UValue& uv) noexcept {
 
     int32_t loc = getUniform(name);
@@ -143,51 +75,5 @@ const int32_t Shader::getUniform(const std::string& name) const noexcept {
     uniformLocationCache[name] = loc;
 
     return loc;
-}
-
-//---
-
-std::shared_ptr<Shader> ShaderManager::load(const std::string& name, const std::unordered_map<uint32_t, std::string>& mFiles) noexcept {
-
-    auto got = ShaderManager::map_shaders.find(name);
-    if (got == ShaderManager::map_shaders.end()) {
-
-        std::vector<uint32_t> vecShaderID;
-        for (auto& kv : mFiles) {
-            std::string source;
-            utilsReadFile(kv.second, source);
-            vecShaderID.push_back(compileShader(name, source, kv.first)); // compile shader
-        }
-
-        std::shared_ptr<Shader> shader = std::make_shared<Shader>(linkShader(vecShaderID)); // Link o programa
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "New Shader %s id: %d", name.c_str(), (int)shader->getID());
-        ShaderManager::map_shaders[name] = shader;
-
-        vecShaderID.clear();
-        return shader;
-    }
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dup Shader %s", name.c_str());
-    return got->second;
-}
-
-// bool ShaderManager::remove(const std::string& name) noexcept {
-
-//     std::unordered_map<std::string, Shader>::iterator got = ShaderManager::map_shaders.find(name);
-//     if (got != ShaderManager::map_shaders.end()) {
-
-//         got->second.invalidade();
-//         ShaderManager::map_shaders.erase(got);
-//         return true;
-//     }
-
-//     return false;
-// }
-
-void ShaderManager::clear() noexcept {
-    for (auto it = ShaderManager::map_shaders.begin(); it != ShaderManager::map_shaders.end(); it++)
-        it->second = nullptr;
-
-    ShaderManager::map_shaders.clear();
 }
 } // namespace Chimera

@@ -24,6 +24,7 @@ set (SourcesCore Registry.cpp
 				 DrawLine.cpp
 				 visible/Mesh.cpp
 				 visible/Shader.cpp
+				 visible/ShaderMng.cpp
 				 visible/Texture.cpp
 				 visible/TextureManager.cpp
 				 visible/CameraControllerFPS.cpp

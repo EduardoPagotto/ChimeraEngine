@@ -2,6 +2,7 @@
 #include "chimera/core/collada/ColladaImage.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Shader.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
 
 namespace Chimera {
 
@@ -76,8 +77,7 @@ void ColladaEffect::setShader(const std::string& refName, const pugi::xml_node& 
     }
 
     if (shadeData.size() > 1) {
-        entity.addComponent<ShaderComponent>(refName, ShaderManager::load(refName, shadeData));
-        // auto& a = entity.addComponent<ShaderComponent>(refName, ShaderManager::load(refName, shadeData));
+        entity.addComponent<ShaderComponent>(refName, ShaderMng::load(refName, shadeData));
     }
 }
 

@@ -7,6 +7,7 @@
 #include "chimera/core/visible/Light.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/3d/RenderableArray.hpp"
@@ -15,7 +16,6 @@
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/scene/Components.hpp"
-#include <SDL2/SDL.h>
 
 namespace Chimera {
 
@@ -406,7 +406,7 @@ void Scene::onRender() {
                     std::unordered_map<GLenum, std::string> shadeData;
                     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
-                    dl.create(ShaderManager::load("DrawLine", shadeData), 40000);
+                    dl.create(ShaderMng::load("DrawLine", shadeData), 40000);
                 }
 
                 if (octree != nullptr) {
@@ -431,7 +431,7 @@ void Scene::onRender() {
                     std::unordered_map<GLenum, std::string> shadeData;
                     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
-                    renderLines.create(ShaderManager::load("DrawLine", shadeData), 10000);
+                    renderLines.create(ShaderMng::load("DrawLine", shadeData), 10000);
                 }
 
                 renderLines.begin(activeCam, vpo.get(), nullptr);

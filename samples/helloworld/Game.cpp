@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/FontManager.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/Group.hpp"
@@ -39,7 +40,7 @@ void Game::onAttach() {
     std::unordered_map<GLenum, std::string> shadeData;
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
-    shader = ShaderManager::load("Basic2D", shadeData);
+    shader = ShaderMng::load("Basic2D", shadeData);
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());

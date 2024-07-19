@@ -8,7 +8,7 @@ namespace Chimera {
 struct RenderCommand {
     RenderCommand() = default;
     glm::mat4 transform = glm::mat4(1.0f);
-    Shader shader;
+    std::shared_ptr<Shader> shader;
     MapUniform uniforms;
     std::vector<std::shared_ptr<Texture>> vTex;
 };

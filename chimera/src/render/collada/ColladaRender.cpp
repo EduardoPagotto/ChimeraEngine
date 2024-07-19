@@ -37,7 +37,8 @@ void colladaRenderLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceL
                 }
 
                 CameraComponent& cCam = entity.getComponent<CameraComponent>();
-                Shader& shader = entity.getComponent<Shader>();
+                auto& shaderCom = entity.getComponent<ShaderComponent>();
+                std::shared_ptr<Shader> shader = shaderCom.shader;
             }
         }
     }

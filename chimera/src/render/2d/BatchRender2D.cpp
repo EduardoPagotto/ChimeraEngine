@@ -193,9 +193,9 @@ void BatchRender2D::flush() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     BinaryStateEnable cull(GL_CULL_FACE, GL_FALSE);
     // bind shader and uniforms from model
-    glUseProgram(renderComando->shader.getID());
+    glUseProgram(renderComando->shader->getID());
     for (const auto& kv : renderComando->uniforms)
-        renderComando->shader.setUniformU(kv.first.c_str(), kv.second);
+        renderComando->shader->setUniformU(kv.first.c_str(), kv.second);
 
     for (uint8_t i = 0; i < textures.size(); i++)
         textures[i]->bind(i);

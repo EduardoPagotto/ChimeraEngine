@@ -128,7 +128,7 @@ void Shader::setUniformU(const char* name, const UValue& uv) noexcept {
     }
 }
 
-void Shader::invalidade() noexcept {
+Shader::~Shader() noexcept {
     glDeleteProgram(progID);
     progID = 0;
     uniformLocationCache.clear();
@@ -147,10 +147,10 @@ const int32_t Shader::getUniform(const std::string& name) const noexcept {
 
 //---
 
-void ShaderManager::load(const std::string& name, const std::unordered_map<uint32_t, std::string>& mFiles, Shader& shader) noexcept {
+std::shared_ptr<Shader> ShaderManager::load(const std::string& name, const std::unordered_map<uint32_t, std::string>& mFiles) noexcept {
 
-    std::unordered_map<std::string, Shader>::const_iterator got = ShaderManager::mShaders.find(name);
-    if (got == ShaderManager::mShaders.end()) {
+    auto got = ShaderManager::map_shaders.find(name);
+    if (got == ShaderManager::map_shaders.end()) {
 
         std::vector<uint32_t> vecShaderID;
         for (auto& kv : mFiles) {
@@ -159,34 +159,35 @@ void ShaderManager::load(const std::string& name, const std::unordered_map<uint3
             vecShaderID.push_back(compileShader(name, source, kv.first)); // compile shader
         }
 
-        shader.progID = linkShader(vecShaderID); // Link o programa
+        std::shared_ptr<Shader> shader = std::make_shared<Shader>(linkShader(vecShaderID)); // Link o programa
+        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "New Shader %s id: %d", name.c_str(), (int)shader->getID());
+        ShaderManager::map_shaders[name] = shader;
+
         vecShaderID.clear();
-        ShaderManager::mShaders[name] = shader;
-
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "New Shader %s id: %d", name.c_str(), (int)shader.progID);
-    } else {
-        shader = got->second;
-        SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dup Shader %s id: %d", name.c_str(), (int)shader.progID);
-    }
-}
-
-bool ShaderManager::remove(const std::string& name) noexcept {
-
-    std::unordered_map<std::string, Shader>::iterator got = ShaderManager::mShaders.find(name);
-    if (got != ShaderManager::mShaders.end()) {
-
-        got->second.invalidade();
-        ShaderManager::mShaders.erase(got);
-        return true;
+        return shader;
     }
 
-    return false;
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dup Shader %s", name.c_str());
+    return got->second;
 }
+
+// bool ShaderManager::remove(const std::string& name) noexcept {
+
+//     std::unordered_map<std::string, Shader>::iterator got = ShaderManager::map_shaders.find(name);
+//     if (got != ShaderManager::map_shaders.end()) {
+
+//         got->second.invalidade();
+//         ShaderManager::map_shaders.erase(got);
+//         return true;
+//     }
+
+//     return false;
+// }
 
 void ShaderManager::clear() noexcept {
-    for (auto it = ShaderManager::mShaders.begin(); it != ShaderManager::mShaders.end(); it++)
-        it->second.invalidade();
+    for (auto it = ShaderManager::map_shaders.begin(); it != ShaderManager::map_shaders.end(); it++)
+        it->second = nullptr;
 
-    ShaderManager::mShaders.clear();
+    ShaderManager::map_shaders.clear();
 }
 } // namespace Chimera

@@ -4,7 +4,7 @@
 namespace Chimera {
 class Tile : public Layer {
   public:
-    Tile(const std::string& name, IRenderer2D* renderer, Shader shader, Camera* camera);
+    Tile(const std::string& name, IRenderer2D* renderer, std::shared_ptr<Shader> shader, Camera* camera);
     virtual ~Tile();
     virtual void onAttach() override;
     virtual void onDeatach() override;

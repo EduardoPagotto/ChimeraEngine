@@ -41,7 +41,8 @@ RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const 
     FrameBufferSpecification& fbSpec = eRenderBuferSpec.getComponent<FrameBufferSpecification>();
     fbSpec.width = width;
     fbSpec.height = height;
-    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), eRenderBuferSpec.getComponent<Shader>());
+    auto& sc = eRenderBuferSpec.getComponent<ShaderComponent>();
+    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), sc.shader);
 }
 
 void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
@@ -90,9 +91,9 @@ void Scene::onAttach() {
 
         if (tc.tag == "TileText") {
             CameraComponent& cCam = entity.getComponent<CameraComponent>();
-            Shader& shader = entity.getComponent<Shader>();
+            auto& sc = entity.getComponent<ShaderComponent>();
             // ComponentTile& tc = entity.addComponent<ComponentTile>();
-            Tile* tile = new Tile("TileText", &batchRender2D, shader, cCam.camera);
+            Tile* tile = new Tile("TileText", &batchRender2D, sc.shader, cCam.camera);
             layers.pushState(tile);
         }
 
@@ -162,9 +163,11 @@ void Scene::onAttach() {
         if (entity.hasComponent<FrameBufferSpecification>()) {
             FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>();
             if (tc.tag == "shadow01") { // init shadow data
+
+                auto& sc = entity.getComponent<ShaderComponent>();
                 CameraComponent& cc = entity.getComponent<CameraComponent>();
                 cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
-                shadowData.shader = entity.getComponent<Shader>();
+                shadowData.shader = sc.shader; // entity.getComponent<Shader>();
                 shadowData.lightProjection = cc.camera->getProjection();
                 shadowData.shadowBuffer = new FrameBuffer(fbSpec);
             } else if (tc.tag == "RenderBufferMaster") {
@@ -304,12 +307,12 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
 
         Entity e = {entity, registry.get()};
         TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
-        Shader& sc = e.getComponent<Shader>();
+        auto& sc = e.getComponent<ShaderComponent>();
         MaterialComponent& mc = e.getComponent<MaterialComponent>();
 
         RenderCommand command;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.shader = sc;
+        command.shader = sc.shader;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
         const glm::mat4& view = vpo->getSel().view;
@@ -323,13 +326,13 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
 }
 
 void Scene::execRenderPass(IRenderer3d& renderer) {
-    auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
+    auto group = registry->get().group<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
-        auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
+        auto [sc, mc, tc, rc] = group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.shader = sc;
+        command.shader = sc.shader;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
         command.uniforms["model"] = UValue(command.transform);
         rc.renderable->submit(command, renderer);
@@ -400,7 +403,10 @@ void Scene::onRender() {
             if (verbose == 1) { // DEBUG OCTREE
 
                 if (dl.valid() == false) {
-                    dl.create(40000);
+                    std::unordered_map<GLenum, std::string> shadeData;
+                    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
+                    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
+                    dl.create(ShaderManager::load("DrawLine", shadeData), 40000);
                 }
 
                 if (octree != nullptr) {
@@ -422,7 +428,10 @@ void Scene::onRender() {
             } else if (verbose == 2) { // DEBUG AABB
 
                 if (renderLines.valid() == false) {
-                    renderLines.create(10000);
+                    std::unordered_map<GLenum, std::string> shadeData;
+                    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
+                    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
+                    renderLines.create(ShaderManager::load("DrawLine", shadeData), 10000);
                 }
 
                 renderLines.begin(activeCam, vpo.get(), nullptr);

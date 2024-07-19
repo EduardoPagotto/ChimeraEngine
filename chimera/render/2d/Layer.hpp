@@ -8,7 +8,7 @@ namespace Chimera {
 
 class Layer : public IStateMachine {
   public:
-    Layer(IRenderer2D* renderer, Shader shader, Camera* camera, const std::string& name);
+    Layer(IRenderer2D* renderer, std::shared_ptr<Shader> shader, Camera* camera, const std::string& name);
     virtual ~Layer();
     virtual void onRender() override;
     inline void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
@@ -16,7 +16,7 @@ class Layer : public IStateMachine {
     Camera* getCamera() const { return camera; };
 
   protected:
-    Shader shader;
+    std::shared_ptr<Shader> shader;
     Camera* camera;
 
   private:

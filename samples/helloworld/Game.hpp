@@ -16,8 +16,8 @@ class Game : public Chimera::IStateMachine {
 
   private:
     std::shared_ptr<Chimera::ICanva> canvas;
+    std::shared_ptr<Chimera::Shader> shader;
     Chimera::Engine* engine;
-    Chimera::Shader shader;
     Chimera::Label* lFPS;
     TileLayer* layer;
     int fps;

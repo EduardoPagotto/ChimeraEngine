@@ -39,7 +39,7 @@ void Game::onAttach() {
     std::unordered_map<GLenum, std::string> shadeData;
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
-    ShaderManager::load("Basic2D", shadeData, shader);
+    shader = ShaderManager::load("Basic2D", shadeData);
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());

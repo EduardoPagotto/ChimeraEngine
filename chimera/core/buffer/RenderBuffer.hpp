@@ -8,12 +8,12 @@ namespace Chimera {
 class RenderBuffer {
   private:
     uint32_t posX, posY;
-    Shader shader;
+    std::shared_ptr<Shader> shader;
     VertexBuffer* vbo;
     FrameBuffer* frameBuffer;
 
   public:
-    RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, const Shader& shader);
+    RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, std::shared_ptr<Shader> shader);
     virtual ~RenderBuffer() {
         delete frameBuffer;
         delete vbo;

@@ -1,6 +1,7 @@
 #include "chimera/render/2d/Tile.hpp"
 namespace Chimera {
-Tile::Tile(const std::string& name, IRenderer2D* renderer, Shader shader, Camera* camera) : Layer(renderer, shader, camera, name) {}
+Tile::Tile(const std::string& name, IRenderer2D* renderer, std::shared_ptr<Shader> shader, Camera* camera)
+    : Layer(renderer, shader, camera, name) {}
 Tile::~Tile() {}
 void Tile::onAttach() {};
 void Tile::onDeatach() {};

@@ -17,7 +17,7 @@ namespace Chimera {
 
 struct ShadowData {
     ShadowData() = default;
-    Shader shader;
+    std::shared_ptr<Shader> shader;
     FrameBuffer* shadowBuffer = nullptr;
     glm::mat4 lightSpaceMatrix = glm::mat4(1.0f), lightProjection = glm::mat4(1.0f);
 };

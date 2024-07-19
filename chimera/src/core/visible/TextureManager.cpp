@@ -3,31 +3,43 @@
 
 namespace Chimera {
 
-void TextureManager::add(std::shared_ptr<Texture> texture) { textures.push_back(texture); }
-
 void TextureManager::clean() {
-    for (int i = 0; i < textures.size(); i++)
-        textures[i] = nullptr;
+    for (auto it = textures.begin(); it != textures.end(); it++) {
+        it->second = nullptr;
+    }
 
     textures.clear();
 }
 void TextureManager::remove(const std::string& name) {
 
-    for (int i = 0; i < textures.size(); i++) {
-        if (textures[i]->getName() == name)
-            textures[i] = nullptr;
+    auto got = textures.find(name);
+    if (got != textures.end()) {
+        got->second = nullptr;
+        textures.erase(got);
     }
 }
 
 std::shared_ptr<Texture> TextureManager::get(const std::string& name) {
-    // TODO: modificar mapara mapa
-    for (std::shared_ptr<Texture> texture : textures) {
-        if (texture->getName() == name)
-            return texture;
+
+    auto got = textures.find(name);
+    if (got != textures.end()) {
+        return got->second;
     }
 
-    // FIXME: colocar fonte default se elea nao carregar
-    return nullptr;
+    return std::shared_ptr<Texture>();
+}
+
+std::shared_ptr<Texture> TextureManager::getIndex(const uint16_t& index) {
+
+    uint16_t count{0};
+    for (auto it = textures.begin(); it != textures.end(); it++) {
+        if (index == count)
+            return it->second;
+
+        count++;
+    }
+
+    return textures.begin()->second;
 }
 
 void TextureManager::invert_image(int pitch, int height, void* image_pixels) {
@@ -55,9 +67,8 @@ std::shared_ptr<Texture> TextureManager::loadFromSurface(const std::string& name
 
     TextureManager::invert_image(surface->pitch, surface->h, surface->pixels);
 
-    std::shared_ptr<Texture> tex = std::make_shared<Texture>(name, surface, textureParameters);
-    TextureManager::add(tex);
-
+    std::shared_ptr<Texture> tex = std::make_shared<Texture>(surface, textureParameters);
+    textures[name] = tex;
     return tex;
 }
 

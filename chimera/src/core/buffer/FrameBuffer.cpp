@@ -83,7 +83,7 @@ void FrameBuffer::invalidade() {
         for (const TexParam& textureParam : colorTexSpecs) {
             // const TexParam& textureParam = cas.textureParameters;
 
-            Texture* texture = new Texture("", spec.width, spec.height, textureParam);
+            Texture* texture = new Texture(spec.width, spec.height, textureParam);
             colorAttachments.emplace_back(texture);
 
             const uint32_t tId = texture->getTextureID();
@@ -106,7 +106,7 @@ void FrameBuffer::invalidade() {
     // depth Texture
     if (!Aux::textureParameterIsUndefined(depthTexSpec)) {
 
-        depthAttachment = new Texture("", spec.width, spec.height, depthTexSpec);
+        depthAttachment = new Texture(spec.width, spec.height, depthTexSpec);
 
         GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);

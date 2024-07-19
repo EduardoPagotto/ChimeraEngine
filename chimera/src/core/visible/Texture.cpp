@@ -2,16 +2,15 @@
 
 namespace Chimera {
 
-Texture::Texture(const std::string& name, const unsigned& width, const unsigned& height, const TexParam& tp)
-    : name(name), width(width), height(height), idTexture(0), textureParameters(tp) {
+Texture::Texture(const uint32_t& width, const uint32_t& height, const TexParam& tp)
+    : width(width), height(height), idTexture(0), textureParameters(tp) {
 
     this->init();
     glTexImage2D(GL_TEXTURE_2D, 0, (GLuint)textureParameters.internalFormat, width, height, 0, (GLuint)textureParameters.format,
                  (GLuint)textureParameters.type, nullptr);
 }
 
-Texture::Texture(const std::string& name, SDL_Surface* surface, const TexParam& tp)
-    : name(name), width(surface->w), height(surface->h), idTexture(0), textureParameters(tp) {
+Texture::Texture(SDL_Surface* surface, const TexParam& tp) : width(surface->w), height(surface->h), idTexture(0), textureParameters(tp) {
 
     this->init();
     textureParameters.format = (surface->format->Amask != 0) ? TexFormat::RGBA : TexFormat::RGB;

@@ -13,10 +13,10 @@ struct GlyphData {
     SDL_FRect square;
 };
 
-class FontAtlas {
+class Font {
   public:
-    FontAtlas(const std::string& name, const std::string& pathFile, const int& size);
-    virtual ~FontAtlas();
+    Font(const std::string& name, const std::string& pathFile, const int& size);
+    virtual ~Font();
     inline std::shared_ptr<Texture> getTexture() const { return texture; }
     inline void setScale(const glm::vec2& scale) { this->scale = scale; }
     inline glm::vec2 getScale() const { return this->scale; }

@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderable2D.hpp"
-#include "chimera/core/visible/FontAtlas.hpp"
+#include "chimera/core/visible/Font.hpp"
 
 namespace Chimera {
 
@@ -15,6 +15,6 @@ class Label : public Renderable2D {
 
   private:
     std::string text;
-    FontAtlas* font;
+    Font* font;
 };
 } // namespace Chimera

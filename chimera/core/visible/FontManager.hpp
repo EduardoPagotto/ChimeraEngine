@@ -1,10 +1,10 @@
 #pragma once
-#include "FontAtlas.hpp"
+#include "Font.hpp"
 #include <unordered_map>
 
 namespace Chimera {
 
-// TODD: 1) usar shared_ptr<FontAtlas>, 2) colocar no ServiceLocate (mas TextureManager primeiro)
+// TODD: 1) usar shared_ptr<Font>, 2) colocar no ServiceLocate (mas TextureManager primeiro)
 
 class FontManager {
   public:
@@ -24,7 +24,7 @@ class FontManager {
         }
     }
 
-    static FontAtlas* get(const std::string& name) {
+    static Font* get(const std::string& name) {
         auto got = fonts.find(name);
         if (got != fonts.end()) {
             return got->second;
@@ -33,9 +33,9 @@ class FontManager {
         return nullptr;
     }
 
-    static FontAtlas* get() { return fonts.begin()->second; }
+    static Font* get() { return fonts.begin()->second; }
 
-    static FontAtlas* getIndex(const uint16_t& index) {
+    static Font* getIndex(const uint16_t& index) {
 
         uint16_t count{0};
         for (auto it = fonts.begin(); it != fonts.end(); it++) {
@@ -48,8 +48,8 @@ class FontManager {
         return fonts.begin()->second;
     }
 
-    static FontAtlas* load(const std::string& name, const std::string& pathFile, const int& size) {
-        FontAtlas* font = new FontAtlas(name, pathFile, size);
+    static Font* load(const std::string& name, const std::string& pathFile, const int& size) {
+        Font* font = new Font(name, pathFile, size);
         fonts[name] = font;
         return font;
     }
@@ -57,6 +57,6 @@ class FontManager {
   private:
     FontManager() {}
     ~FontManager() {}
-    inline static std::unordered_map<std::string, FontAtlas*> fonts;
+    inline static std::unordered_map<std::string, Font*> fonts;
 };
 } // namespace Chimera

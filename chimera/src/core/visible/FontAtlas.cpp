@@ -4,10 +4,9 @@
 
 namespace Chimera {
 
-FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const int& size)
-    : texture(0), name(name), scale(glm::vec2(10.0f)) {
+FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const int& size) : texture(nullptr), scale(glm::vec2(10.0f)) {
 
-    if (TTF_Init() == -1) {
+    if (TTF_Init() == -1) { // TODO: tratar erros
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
         return;
     }

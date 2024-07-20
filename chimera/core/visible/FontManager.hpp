@@ -1,42 +1,62 @@
 #pragma once
 #include "FontAtlas.hpp"
-#include <vector>
+#include <unordered_map>
 
 namespace Chimera {
 
+// TODD: 1) usar shared_ptr<FontAtlas>, 2) colocar no ServiceLocate (mas TextureManager primeiro)
+
 class FontManager {
   public:
-    static FontAtlas* load(const std::string& name, const std::string& pathFile, const int& size) {
-        FontAtlas* font = new FontAtlas(name, pathFile, size);
-        fonts.push_back(font);
-        return font;
-    }
-
     static void clean() {
-        for (int i = 0; i < fonts.size(); i++)
-            delete fonts[i];
-
+        for (auto it = fonts.begin(); it != fonts.end(); it++) {
+            it->second = nullptr;
+        }
         fonts.clear();
     }
-    static FontAtlas* get(const std::string& name) {
-        // TODO: modificar mapara mapa
 
-        for (FontAtlas* font : fonts) {
-            if (font->getName() == name)
-                return font;
+    static void remove(const std::string& name) {
+
+        auto got = fonts.find(name);
+        if (got != fonts.end()) {
+            got->second = nullptr;
+            fonts.erase(got);
+        }
+    }
+
+    static FontAtlas* get(const std::string& name) {
+        auto got = fonts.find(name);
+        if (got != fonts.end()) {
+            return got->second;
         }
 
-        // FIXME: colocar fonte default se elea nao carregar
         return nullptr;
     }
 
-    static FontAtlas* get() { return fonts[0]; }
+    static FontAtlas* get() { return fonts.begin()->second; }
+
+    static FontAtlas* getIndex(const uint16_t& index) {
+
+        uint16_t count{0};
+        for (auto it = fonts.begin(); it != fonts.end(); it++) {
+            if (index == count)
+                return it->second;
+
+            count++;
+        }
+
+        return fonts.begin()->second;
+    }
+
+    static FontAtlas* load(const std::string& name, const std::string& pathFile, const int& size) {
+        FontAtlas* font = new FontAtlas(name, pathFile, size);
+        fonts[name] = font;
+        return font;
+    }
 
   private:
     FontManager() {}
-
     ~FontManager() {}
-
-    inline static std::vector<FontAtlas*> fonts;
+    inline static std::unordered_map<std::string, FontAtlas*> fonts;
 };
 } // namespace Chimera

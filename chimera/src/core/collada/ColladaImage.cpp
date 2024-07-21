@@ -1,6 +1,6 @@
 #include "chimera/core/collada/ColladaImage.hpp"
 #include "chimera/core/buffer/FrameBuffer.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
+#include "chimera/core/visible/TextureMng.hpp"
 
 namespace Chimera {
 
@@ -77,7 +77,7 @@ void ColladaImage::create(Entity entity, TexParam& tp, const pugi::xml_node& nod
             if (pugi::xml_text pathFile = nImg.text(); pathFile != nullptr) {
                 std::string f = pathFile.as_string();
                 SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
-                auto texMng = serviceLoc->getService<TextureManager>();
+                auto texMng = serviceLoc->getService<TextureMng>();
                 texMng->loadFromFile(id, f, tp);
                 return;
             }

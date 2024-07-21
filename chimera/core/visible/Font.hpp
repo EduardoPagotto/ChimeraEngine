@@ -1,5 +1,5 @@
 #pragma once
-#include "TextureManager.hpp"
+#include "TextureMng.hpp"
 #include <glm/glm.hpp>
 #include <map>
 #include <string>

@@ -148,7 +148,7 @@ void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
                 ColladaImage ci(colladaDom, idTex, serviceLoc);
                 ci.create(entity, tp, ci.getLibrary("library_images"));
 
-                auto texMng = serviceLoc->getService<TextureManager>();
+                auto texMng = serviceLoc->getService<TextureMng>();
                 pMat->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->get(idTex));
                 pMat->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
             }

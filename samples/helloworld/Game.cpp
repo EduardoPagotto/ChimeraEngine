@@ -2,7 +2,7 @@
 #include "chimera/core/utils.hpp"
 #include "chimera/core/visible/FontMng.hpp"
 #include "chimera/core/visible/ShaderMng.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
+#include "chimera/core/visible/TextureMng.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
@@ -19,7 +19,7 @@ Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine) : IState
     // button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
     // group->add(button);
     // layer->add(group);
-    auto texMng = sl->getService<TextureManager>();
+    auto texMng = sl->getService<TextureMng>();
     texMng->loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
     texMng->loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
     texMng->loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
@@ -47,7 +47,7 @@ void Game::onAttach() {
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
-    auto texMng = serviceLoc->getService<TextureManager>();
+    auto texMng = serviceLoc->getService<TextureMng>();
 
     for (float y = -8.0f; y < 8.0f; y++) {
         for (float x = -14.0f; x < 14.0f; x++) {

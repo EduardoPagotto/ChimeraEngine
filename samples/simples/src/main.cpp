@@ -89,7 +89,7 @@ int main(int argn, char** argv) {
         sl->registerService(std::make_shared<GameController>());
         sl->registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
         sl->registerService(std::make_shared<ShaderMng>());
-        sl->registerService(std::make_shared<TextureManager>());
+        sl->registerService(std::make_shared<TextureMng>());
 
         // Engine
         Engine engine(sl);

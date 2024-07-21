@@ -7,16 +7,16 @@
 
 namespace Chimera {
 
-class TextureManager : public IService {
+class TextureMng : public IService {
   private:
     std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
   public:
-    TextureManager() noexcept {}
-    TextureManager(const TextureManager& o) = delete;
-    TextureManager& operator=(const TextureManager& o) = delete;
-    virtual ~TextureManager() noexcept { this->clean(); }
-    std::type_index getTypeIndex() const { return std::type_index(typeid(TextureManager)); }
+    TextureMng() noexcept {}
+    TextureMng(const TextureMng& o) = delete;
+    TextureMng& operator=(const TextureMng& o) = delete;
+    virtual ~TextureMng() noexcept { this->clean(); }
+    std::type_index getTypeIndex() const { return std::type_index(typeid(TextureMng)); }
 
     void clean() noexcept {
         for (auto it = textures.begin(); it != textures.end(); it++) {

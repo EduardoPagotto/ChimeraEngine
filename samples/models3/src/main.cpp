@@ -26,7 +26,7 @@ int main(int argn, char** argv) {
         sl->registerService(std::make_shared<ViewProjection>()); // View projection
         sl->registerService(std::make_shared<ShaderMng>());
         sl->registerService(std::make_shared<FontMng>());
-        sl->registerService(std::make_shared<TextureManager>());
+        sl->registerService(std::make_shared<TextureMng>());
 
         Engine engine(sl);
 

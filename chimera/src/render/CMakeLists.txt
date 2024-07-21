@@ -17,7 +17,6 @@ set (RenderSource 	2d/Renderable2D.cpp
 					2d/Sprite.cpp
 					2d/BatchRender2D.cpp
 					2d/Layer.cpp
-					2d/Label.cpp
 					2d/Tile.cpp
 					3d/Renderer3d.cpp
 					3d/Renderer3dLines.cpp

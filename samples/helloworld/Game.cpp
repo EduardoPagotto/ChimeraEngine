@@ -56,9 +56,9 @@ void Game::onAttach() {
         }
     }
 
-    FontManager::load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
-    FontManager::get()->setScale(glm::vec2(0.04, 0.04)); // em TileLayer ortho values!!!
-    lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    auto font = FontManager::load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
+    font->setScale(glm::vec2(0.04, 0.04));
+    lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
     engine->getStack().pushState(layer);
 }

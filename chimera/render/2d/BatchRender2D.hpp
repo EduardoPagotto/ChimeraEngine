@@ -30,7 +30,7 @@ class BatchRender2D : public IRenderer2D {
     virtual void submit(IRenderable2D* renderable) override;
     virtual void end() override;
     virtual void flush() override;
-    virtual void drawString(Font* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
+    virtual void drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
     inline virtual TransformationStack& getStack() override { return stack; };
     inline virtual void setCommandRender(class RenderCommand* command) override { renderComando = command; }
 

@@ -93,20 +93,4 @@ std::shared_ptr<Shader> ShaderMng::load(const std::string& name, const std::unor
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dup Shader %s", name.c_str());
     return got->second;
 }
-
-void ShaderMng::remove(std::shared_ptr<Shader> shader) noexcept {
-    for (auto it = map_shaders.begin(); it != map_shaders.end(); it++) {
-        if (it->second == shader) {
-            it->second = nullptr;
-            map_shaders.erase(it);
-        }
-    }
-}
-
-void ShaderMng::clear() noexcept {
-    for (auto it = map_shaders.begin(); it != map_shaders.end(); it++)
-        it->second = nullptr;
-
-    map_shaders.clear();
-}
 } // namespace Chimera

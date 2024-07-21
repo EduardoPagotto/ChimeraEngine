@@ -12,13 +12,15 @@ class TextureMng : public IService {
     std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
   public:
-    TextureMng() noexcept {}
+    explicit TextureMng() noexcept {}
+    virtual ~TextureMng() noexcept { this->clear(); }
+
     TextureMng(const TextureMng& o) = delete;
     TextureMng& operator=(const TextureMng& o) = delete;
-    virtual ~TextureMng() noexcept { this->clean(); }
-    std::type_index getTypeIndex() const { return std::type_index(typeid(TextureMng)); }
 
-    void clean() noexcept {
+    std::type_index getTypeIndex() const override { return std::type_index(typeid(TextureMng)); }
+
+    void clear() noexcept {
         for (auto it = textures.begin(); it != textures.end(); it++) {
             it->second = nullptr;
         }

@@ -11,11 +11,12 @@ class FontMng : public IService {
 
   public:
     explicit FontMng() noexcept = default;
-    FontMng(const FontMng& o) = delete;
-    FontMng& operator=(const FontMng& o) = delete;
     virtual ~FontMng() noexcept { this->clear(); }
 
-    std::type_index getTypeIndex() const { return std::type_index(typeid(FontMng)); }
+    FontMng(const FontMng& o) = delete;
+    FontMng& operator=(const FontMng& o) = delete;
+
+    std::type_index getTypeIndex() const override { return std::type_index(typeid(FontMng)); }
 
     void clear() noexcept {
         for (auto it = fonts.begin(); it != fonts.end(); it++) {

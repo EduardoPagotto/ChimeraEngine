@@ -5,17 +5,17 @@
 
 namespace Chimera {
 
-class FontManager : public IService {
+class FontMng : public IService {
   private:
     std::unordered_map<std::string, std::shared_ptr<Font>> fonts;
 
   public:
-    explicit FontManager() noexcept = default;
-    FontManager(const FontManager& o) = delete;
-    FontManager& operator=(const FontManager& o) = delete;
-    virtual ~FontManager() noexcept { this->clear(); }
+    explicit FontMng() noexcept = default;
+    FontMng(const FontMng& o) = delete;
+    FontMng& operator=(const FontMng& o) = delete;
+    virtual ~FontMng() noexcept { this->clear(); }
 
-    std::type_index getTypeIndex() const { return std::type_index(typeid(FontManager)); }
+    std::type_index getTypeIndex() const { return std::type_index(typeid(FontMng)); }
 
     void clear() noexcept {
         for (auto it = fonts.begin(); it != fonts.end(); it++) {

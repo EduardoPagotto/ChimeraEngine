@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/FontManager.hpp"
+#include "chimera/core/visible/FontMng.hpp"
 #include "chimera/core/visible/ShaderMng.hpp"
 #include "chimera/core/visible/TextureManager.hpp"
 #include "chimera/core/visible/Transform.hpp"
@@ -56,7 +56,7 @@ void Game::onAttach() {
         }
     }
 
-    auto fontMng = serviceLoc->getService<FontManager>();
+    auto fontMng = serviceLoc->getService<FontMng>();
     auto font = fontMng->load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
     font->setScale(glm::vec2(0.04, 0.04));
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));

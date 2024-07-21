@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/FontManager.hpp"
+#include "chimera/core/visible/FontMng.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -107,7 +107,7 @@ void Game::onAttach() {
     TransComponent& tc = registry->findComponent<TransComponent>("Zoltan");
     pCorpoRigido = (Solid*)tc.trans;
 
-    auto fontMng = serviceLoc->getService<FontManager>();
+    auto fontMng = serviceLoc->getService<FontMng>();
     auto font = fontMng->getIndex(0);
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
     Tile* tile = (Tile*)scene->getLayes().getState("TileText");

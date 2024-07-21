@@ -5,7 +5,7 @@
 #include "chimera/core/collada/ColladaEffect.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/visible/FontManager.hpp"
+#include "chimera/core/visible/FontMng.hpp"
 
 namespace Chimera {
 
@@ -19,7 +19,7 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
             float scaleX = std::stod(nFont.attribute("scaleX").value());
             float scaleY = std::stod(nFont.attribute("scaleY").value());
 
-            auto fontMng = serviceLoc->getService<FontManager>();
+            auto fontMng = serviceLoc->getService<FontMng>();
             auto font = fontMng->load(rfc.getFragment(), rfc.getPath(), size);
             font->setScale(glm::vec2(scaleX, scaleY));
         }

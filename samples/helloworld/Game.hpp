@@ -15,6 +15,7 @@ class Game : public Chimera::IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
+    std::shared_ptr<ServiceLocator> serviceLoc;
     std::shared_ptr<Chimera::ICanva> canvas;
     std::shared_ptr<Chimera::Shader> shader;
     Chimera::Engine* engine;

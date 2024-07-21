@@ -18,8 +18,10 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
             int size = static_cast<int>(std::stoul(nFont.attribute("size").value()));
             float scaleX = std::stod(nFont.attribute("scaleX").value());
             float scaleY = std::stod(nFont.attribute("scaleY").value());
-            FontManager::load(rfc.getFragment(), rfc.getPath(), size);
-            FontManager::get()->setScale(glm::vec2(scaleX, scaleY));
+
+            auto fontMng = serviceLoc->getService<FontManager>();
+            auto font = fontMng->load(rfc.getFragment(), rfc.getPath(), size);
+            font->setScale(glm::vec2(scaleX, scaleY));
         }
     }
 

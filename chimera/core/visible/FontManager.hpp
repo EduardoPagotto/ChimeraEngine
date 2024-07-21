@@ -1,24 +1,30 @@
 #pragma once
 #include "Font.hpp"
-#include <memory>
+#include "chimera/core/ServiceLocator.hpp"
 #include <unordered_map>
 
 namespace Chimera {
 
-// TODD: 1) usar shared_ptr<Font>, 2) colocar no ServiceLocate (mas TextureManager primeiro)
-
-class FontManager {
-    inline static std::unordered_map<std::string, std::shared_ptr<Font>> fonts;
+class FontManager : public IService {
+  private:
+    std::unordered_map<std::string, std::shared_ptr<Font>> fonts;
 
   public:
-    static void clean() {
+    explicit FontManager() noexcept = default;
+    FontManager(const FontManager& o) = delete;
+    FontManager& operator=(const FontManager& o) = delete;
+    virtual ~FontManager() noexcept { this->clear(); }
+
+    std::type_index getTypeIndex() const { return std::type_index(typeid(FontManager)); }
+
+    void clear() noexcept {
         for (auto it = fonts.begin(); it != fonts.end(); it++) {
             it->second = nullptr;
         }
         fonts.clear();
     }
 
-    static void remove(const std::string& name) {
+    void remove(const std::string& name) noexcept {
 
         auto got = fonts.find(name);
         if (got != fonts.end()) {
@@ -27,7 +33,7 @@ class FontManager {
         }
     }
 
-    static std::shared_ptr<Font> get(const std::string& name) {
+    std::shared_ptr<Font> get(const std::string& name) noexcept {
         auto got = fonts.find(name);
         if (got != fonts.end()) {
             return got->second;
@@ -36,9 +42,9 @@ class FontManager {
         return nullptr;
     }
 
-    static std::shared_ptr<Font> get() { return fonts.begin()->second; }
+    std::shared_ptr<Font> get() noexcept { return fonts.begin()->second; }
 
-    static std::shared_ptr<Font> getIndex(const uint16_t& index) {
+    std::shared_ptr<Font> getIndex(const uint16_t& index) noexcept {
 
         uint16_t count{0};
         for (auto it = fonts.begin(); it != fonts.end(); it++) {
@@ -51,14 +57,10 @@ class FontManager {
         return fonts.begin()->second;
     }
 
-    static std::shared_ptr<Font> load(const std::string& name, const std::string& pathFile, const int& size) {
+    std::shared_ptr<Font> load(const std::string& name, const std::string& pathFile, const int& size) noexcept {
         auto font = std::make_shared<Font>(name, pathFile, size);
         fonts[name] = font;
         return font;
     }
-
-  private:
-    FontManager() {}
-    ~FontManager() {}
 };
 } // namespace Chimera

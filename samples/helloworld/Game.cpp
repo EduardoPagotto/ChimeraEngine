@@ -8,7 +8,7 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
 
-Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine) : IStateMachine("Game"), engine(engine) {
+Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine) : IStateMachine("Game"), serviceLoc(sl), engine(engine) {
 
     using namespace Chimera;
     srand(time(nullptr));
@@ -56,7 +56,8 @@ void Game::onAttach() {
         }
     }
 
-    auto font = FontManager::load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
+    auto fontMng = serviceLoc->getService<FontManager>();
+    auto font = fontMng->load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
     font->setScale(glm::vec2(0.04, 0.04));
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);

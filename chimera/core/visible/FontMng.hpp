@@ -58,7 +58,7 @@ class FontMng : public IService {
     }
 
     std::shared_ptr<Font> load(const std::string& name, const std::string& pathFile, const int& size) noexcept {
-        auto font = std::make_shared<Font>(name, pathFile, size);
+        auto font = std::make_shared<Font>(pathFile, size);
         fonts[name] = font;
         return font;
     }

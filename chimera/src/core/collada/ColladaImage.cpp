@@ -77,7 +77,8 @@ void ColladaImage::create(Entity entity, TexParam& tp, const pugi::xml_node& nod
             if (pugi::xml_text pathFile = nImg.text(); pathFile != nullptr) {
                 std::string f = pathFile.as_string();
                 SDL_Log("Nova textura %s, Key: %s", f.c_str(), id.c_str());
-                TextureManager::loadFromFile(id, f, tp);
+                auto texMng = serviceLoc->getService<TextureManager>();
+                texMng->loadFromFile(id, f, tp);
                 return;
             }
             throw std::string("Textura nao encontrada: " + id);

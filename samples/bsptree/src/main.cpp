@@ -23,7 +23,7 @@ int main(int argn, char** argv) {
         sl->registerService(std::make_shared<Mouse>());
         sl->registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
         sl->registerService(std::make_shared<ShaderMng>());
-
+        sl->registerService(std::make_shared<TextureManager>());
         // Engine
         Engine engine(sl);
 

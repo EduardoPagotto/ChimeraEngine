@@ -146,9 +146,10 @@ void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
                 std::string idTex = mapaTex[mapa2D[texId]];
 
                 ColladaImage ci(colladaDom, idTex, serviceLoc);
-                ci.create(entity, tp, ci.getLibrary("library_images")); // loadImage(url, tp); //TODO:
+                ci.create(entity, tp, ci.getLibrary("library_images"));
 
-                pMat->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::get(idTex));
+                auto texMng = serviceLoc->getService<TextureManager>();
+                pMat->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->get(idTex));
                 pMat->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
             }
         } else if (p == "specular") {

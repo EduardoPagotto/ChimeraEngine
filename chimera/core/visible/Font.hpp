@@ -15,7 +15,7 @@ struct GlyphData {
 
 class Font {
   public:
-    Font(const std::string& name, const std::string& pathFile, const int& size);
+    Font(const std::string& pathFile, const int& size);
     virtual ~Font();
     inline std::shared_ptr<Texture> getTexture() const { return texture; }
     inline void setScale(const glm::vec2& scale) { this->scale = scale; }

@@ -24,7 +24,7 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
     std::string matFile;
     wavefrontObjLoad(target, eMesh.mesh, matFile);
     if (matFile.size() > 0) {
-        wavefrontMtlLoad(matFile, eMaterial.material);
+        wavefrontMtlLoad(matFile, eMaterial.material, serviceLoc);
     }
 
     if (pugi::xml_node nShade = geo.next_sibling(); nShade) {

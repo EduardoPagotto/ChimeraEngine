@@ -19,9 +19,10 @@ Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine) : IState
     // button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
     // group->add(button);
     // layer->add(group);
-    TextureManager::loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
-    TextureManager::loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
-    TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
+    auto texMng = sl->getService<TextureManager>();
+    texMng->loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
+    texMng->loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
+    texMng->loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
 
     canvas = sl->getService<ICanva>();
 
@@ -46,13 +47,14 @@ void Game::onAttach() {
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
+    auto texMng = serviceLoc->getService<TextureManager>();
 
     for (float y = -8.0f; y < 8.0f; y++) {
         for (float x = -14.0f; x < 14.0f; x++) {
             if (rand() % 4 == 0)
                 layer->add(new Sprite(x, y, 1.0f, 1.0f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
             else
-                layer->add(new Sprite(x, y, 1.0f, 1.0f, TextureManager::getIndex(rand() % 3)));
+                layer->add(new Sprite(x, y, 1.0f, 1.0f, texMng->getIndex(rand() % 3)));
         }
     }
 

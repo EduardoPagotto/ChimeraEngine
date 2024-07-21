@@ -4,7 +4,7 @@
 
 namespace Chimera {
 
-Font::Font(const std::string& name, const std::string& pathFile, const int& size) : texture(nullptr), scale(glm::vec2(10.0f)) {
+Font::Font(const std::string& pathFile, const int& size) : texture(nullptr), scale(glm::vec2(10.0f)) {
 
     if (TTF_Init() == -1) { // TODO: tratar erros
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
@@ -125,7 +125,8 @@ Font::Font(const std::string& name, const std::string& pathFile, const int& size
     p.wrap_t = TexWrap::CLAMP_TO_EDGE;
     p.minFilter = TexFilter::LINEAR;
     p.magFilter = TexFilter::LINEAR;
-    texture = TextureManager::loadFromSurface(name, bigSurface, p);
+    Texture::invert_image_texture(bigSurface->pitch, bigSurface->h, bigSurface->pixels);
+    texture = std::make_shared<Texture>(bigSurface, p);
 
     if (sFont) {
         TTF_CloseFont(sFont);

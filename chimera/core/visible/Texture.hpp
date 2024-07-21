@@ -91,6 +91,7 @@ class Texture {
 
     void bind(const uint8_t& slot) const;
     static void unbind(const uint8_t& slot);
+    static void invert_image_texture(int pitch, int height, void* image_pixels);
 
   private:
     void init();

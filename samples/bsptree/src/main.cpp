@@ -2,6 +2,8 @@
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
+#include "chimera/render/scene/Scene.hpp"
 
 int main(int argn, char** argv) {
     using namespace Chimera;
@@ -10,25 +12,35 @@ int main(int argn, char** argv) {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("BSPTree Iniciado");
 
-        Engine engine(new CanvasGL("BSP Tree", 1800, 600, false), 0.4f);
+        // Registry to entt
+        auto reg = std::make_shared<Registry>();
+
+        // Services shared inside all parts
+        // Canvas, Mouse, keyboard, Joystick, gamepad, view's
+        auto sl = std::make_shared<ServiceLocator>();
+        sl->registerService(reg);
+        sl->registerService(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
+        sl->registerService(std::make_shared<Mouse>());
+        sl->registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
+        sl->registerService(std::make_shared<ShaderMng>());
+        sl->registerService(std::make_shared<TextureMng>());
+        // Engine
+        Engine engine(sl);
 
         ColladaDom dom = loadFileCollada("./samples/bsptree/bsp_level.xml");
-        colladaRegistryLoad(dom);
+        colladaRegistryLoad(dom, sl);
 
-        Scene scene;
-
-        Game* game = new Game(scene);
+        Scene scene(sl);
+        Game game(sl);
 
         engine.getStack().pushState(&scene);
-        engine.getStack().pushState(game);
+        engine.getStack().pushState(&game);
 
         Collada::destroy(); // clean loader
 
         engine.run();
 
         SDL_Log("Loop de Game encerrado!!!!");
-        delete game;
-
         SDL_Log("BSPTree finalizado com sucesso");
         return 0;
 

@@ -30,12 +30,12 @@ class BatchRender2D : public IRenderer2D {
     virtual void submit(IRenderable2D* renderable) override;
     virtual void end() override;
     virtual void flush() override;
-    virtual void drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
+    virtual void drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
     inline virtual TransformationStack& getStack() override { return stack; };
     inline virtual void setCommandRender(class RenderCommand* command) override { renderComando = command; }
 
   private:
-    float submitTexture(Texture* texture);
+    float submitTexture(std::shared_ptr<Texture> texture);
 
     TransformationStack stack;
     IndexBuffer* ibo;
@@ -44,7 +44,7 @@ class BatchRender2D : public IRenderer2D {
     GLsizei indexCount;
     VertexDataSimple* buffer;
     RenderCommand* renderComando;
-    std::vector<Texture*> textures;
+    std::vector<std::shared_ptr<Texture>> textures;
     Camera* camera;
 };
 } // namespace Chimera

@@ -1,37 +1,31 @@
 #pragma once
+#include "interfaces.hpp"
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
-#include <LinearMath/btVector3.h>
 #include <btBulletCollisionCommon.h>
-#include <btBulletDynamicsCommon.h>
 #include <map>
-#include <stdint.h>
 
 namespace Chimera {
-
-class PhysicsControl {
+class PhysicsControl : public ServiceBase<IPhysicsControl> {
   private:
+    btBroadphaseInterface* broadPhase;
+    btDefaultCollisionConfiguration* collisionConfig;
+    btCollisionDispatcher* dispatcher;
+    btSequentialImpulseConstraintSolver* solver;
+    btDiscreteDynamicsWorld* discretDynamicsWorld;
+    std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> contactActives;
+
     bool checkAllowCollision(uint32_t* entity);
     static void doTickCallBack(btDynamicsWorld* world, btScalar timeStep);
     void processTickCallBack(btScalar timeStep);
 
-    btBroadphaseInterface* broadPhase;
-
-    btDefaultCollisionConfiguration* collisionConfig;
-    btCollisionDispatcher* dispatcher;
-
-    btSequentialImpulseConstraintSolver* solver;
-    btDiscreteDynamicsWorld* discretDynamicsWorld;
-
-    std::map<btCollisionObject*, std::pair<uint32_t*, uint32_t*>> contactActives;
-
   public:
-    PhysicsControl(void);
-    virtual ~PhysicsControl(void);
-    void clearAllShapes(void);
-    void removeAllObjs(void);
-    void stepSim(const double& ts);
-    void checkCollisions();
-    inline void setGravity(const btVector3& _vet) { discretDynamicsWorld->setGravity(_vet); }
-    inline btDiscreteDynamicsWorld* getWorld() { return discretDynamicsWorld; }
+    PhysicsControl();
+    virtual ~PhysicsControl() override;
+    virtual void clearAllShapes() override;
+    virtual void removeAllObjs() override;
+    virtual void stepSim(const double& ts) override;
+    virtual void checkCollisions() override;
+    virtual void setGravity(const btVector3& _vet) override { discretDynamicsWorld->setGravity(_vet); }
+    virtual btDiscreteDynamicsWorld* getWorld() override { return discretDynamicsWorld; }
 };
 } // namespace Chimera

@@ -7,21 +7,22 @@
 namespace Chimera {
 
 class Renderer3dLines : public IRenderer3d {
+  private:
+    DrawLine drawLine;
+    Frustum frustum;
+
   public:
-    Renderer3dLines();
-    virtual ~Renderer3dLines();
-    virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) override;
+    Renderer3dLines() noexcept = default;
+    virtual ~Renderer3dLines() noexcept { destroy(); };
+
+    virtual void begin(Camera* camera, IViewProjection* vpo, Octree* octree) override;
     virtual void submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) override;
     virtual void end() override;
     virtual void flush() override;
 
-    bool valid() { return drawLine.valid(); }
-    void create(const uint32_t& sizeBuffer);
-    void destroy();
-
-  private:
-    DrawLine drawLine;
-    Frustum frustum;
+    bool valid() noexcept { return drawLine.valid(); }
+    void destroy() noexcept { drawLine.destroy(); };
+    void create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept { drawLine.create(shader, sizeBuffer); };
 };
 
 } // namespace Chimera

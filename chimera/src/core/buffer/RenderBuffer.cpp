@@ -2,7 +2,7 @@
 
 namespace Chimera {
 
-RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, const Shader& shader)
+RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, std::shared_ptr<Shader> shader)
     : posX(posX), posY(posY), shader(shader), frameBuffer(fb), vbo(nullptr) {
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Render Framebuffer position(%d x %d) size(%d x %d)", posX, posY, fb->getWidth(),
@@ -30,13 +30,13 @@ void RenderBuffer::render() {
     // Render on the whole framebuffer, complete from the lower left corner to the upper right
     glViewport(posX, posY, frameBuffer->getWidth(), frameBuffer->getHeight());
 
-    glUseProgram(shader.getID());
+    glUseProgram(shader->getID());
 
     // Bind our texture in Texture Unit 0
     frameBuffer->getColorAttachemnt(0)->bind(0); // getTexture()->bind(0);
 
     // Set our "renderedTexture" sampler to user Texture Unit 0
-    shader.setUniformU("renderedTexture", UValue(0));
+    shader->setUniformU("renderedTexture", UValue(0));
 
     vbo->bind();
     // Draw the triangles !

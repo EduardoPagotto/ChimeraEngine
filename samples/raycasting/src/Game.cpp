@@ -1,14 +1,16 @@
 #include "Game.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Engine* engine) : IStateMachine("Game") {
+Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game") {
     // init framebuffer
-    canvas = engine->getCanvas();
-    keyboard = Chimera::Singleton<Chimera::Keyboard>::get();
+    canvas = sl->getService<Chimera::ICanva>();
+    keyboard = sl->getService<Chimera::IKeyboard>();
 }
 
-Game::~Game() { Chimera::Singleton<Chimera::Keyboard>::release(); }
+Game::~Game() {
+    canvas = nullptr;
+    keyboard = nullptr;
+}
 
 void Game::onAttach() {
 
@@ -51,7 +53,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
+void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {
     using namespace Chimera;
 
     if (keyboard->isPressed(SDLK_ESCAPE)) {
@@ -113,4 +115,4 @@ void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
     }
 }
 
-void Game::onRender() { RenderScene(*state, *world, canvas); }
+void Game::onRender() { RenderScene(*state, *world, canvas.get()); }

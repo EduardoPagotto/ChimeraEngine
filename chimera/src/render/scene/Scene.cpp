@@ -1,6 +1,4 @@
 #include "chimera/render/scene/Scene.hpp"
-#include "chimera/core/ScriptableEntity.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/device/Mouse.hpp"
@@ -9,6 +7,7 @@
 #include "chimera/core/visible/Light.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/RenderCommand.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/3d/RenderableArray.hpp"
@@ -17,13 +16,12 @@
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/scene/Components.hpp"
-#include <SDL2/SDL.h>
 
 namespace Chimera {
 
-Scene::Scene() : IStateMachine("Scene"), activeCam(nullptr), origem(nullptr), verbose(0) {
+Scene::Scene(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Scene"), serviceLoc(sl), activeCam(nullptr), origem(nullptr), verbose(0) {
     octree = nullptr;
-    registry = Singleton<Registry>::get();
+    registry = serviceLoc->getService<Registry>();
 }
 
 Scene::~Scene() {
@@ -31,7 +29,8 @@ Scene::~Scene() {
         delete shadowData.shadowBuffer;
         shadowData.shadowBuffer = nullptr;
     }
-    Singleton<Registry>::release();
+
+    registry = nullptr;
 }
 
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
@@ -42,7 +41,8 @@ RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const 
     FrameBufferSpecification& fbSpec = eRenderBuferSpec.getComponent<FrameBufferSpecification>();
     fbSpec.width = width;
     fbSpec.height = height;
-    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), eRenderBuferSpec.getComponent<Shader>());
+    auto& sc = eRenderBuferSpec.getComponent<ShaderComponent>();
+    return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), sc.shader);
 }
 
 void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
@@ -63,13 +63,8 @@ void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const
 }
 
 void Scene::onDeatach() {
-    // destroy scripts
-    registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-        if (!nsc.instance) {
-            nsc.instance->onDestroy();
-            nsc.destroyScript(&nsc);
-        }
-    });
+    vpo = nullptr;
+    phyCrt = nullptr;
 }
 
 void Scene::createOctree(const AABB& aabb) {
@@ -80,6 +75,9 @@ void Scene::createOctree(const AABB& aabb) {
 }
 
 void Scene::onAttach() {
+    // Pega o ViewProjection do ECS antes da camera por caussa do vpo
+    vpo = serviceLoc->getService<IViewProjection>();
+    phyCrt = serviceLoc->getServiceOrNull<IPhysicsControl>();
 
     // Totalizadores de area
     glm::vec3 tot_min, tot_max;
@@ -87,15 +85,15 @@ void Scene::onAttach() {
 
     // lista as tags nas entidades registradas
     registry->get().each([&](auto entityID) {
-        Entity entity{entityID, registry};
+        Entity entity{entityID, registry.get()};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
 
         if (tc.tag == "TileText") {
             CameraComponent& cCam = entity.getComponent<CameraComponent>();
-            Shader& shader = entity.getComponent<Shader>();
+            auto& sc = entity.getComponent<ShaderComponent>();
             // ComponentTile& tc = entity.addComponent<ComponentTile>();
-            Tile* tile = new Tile("TileText", &batchRender2D, shader, cCam.camera);
+            Tile* tile = new Tile("TileText", &batchRender2D, sc.shader, cCam.camera);
             layers.pushState(tile);
         }
 
@@ -165,72 +163,51 @@ void Scene::onAttach() {
         if (entity.hasComponent<FrameBufferSpecification>()) {
             FrameBufferSpecification& fbSpec = entity.getComponent<FrameBufferSpecification>();
             if (tc.tag == "shadow01") { // init shadow data
+
+                auto& sc = entity.getComponent<ShaderComponent>();
                 CameraComponent& cc = entity.getComponent<CameraComponent>();
                 cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
-                shadowData.shader = entity.getComponent<Shader>();
+                shadowData.shader = sc.shader; // entity.getComponent<Shader>();
                 shadowData.lightProjection = cc.camera->getProjection();
                 shadowData.shadowBuffer = new FrameBuffer(fbSpec);
             } else if (tc.tag == "RenderBufferMaster") {
                 eRenderBuferSpec = entity;
             }
         }
-
-        // Pega o ViewProjection do ECS antes da camera por caussa do vpo
-        if (entity.hasComponent<ViewProjectionComponent>()) {
-            ViewProjectionComponent& ev = entity.getComponent<ViewProjectionComponent>();
-            vpo = ev.vp;
-        }
-
-        // Pega o Canvas do ECS
-        if (entity.hasComponent<CanvasComponent>()) {
-            CanvasComponent& cc = entity.getComponent<CanvasComponent>();
-            this->onViewportResize(cc.canvas->getWidth(), cc.canvas->getHeight());
-        }
     });
+
+    // Pega icanvas depois de camera definida!!!
+    auto canvas = serviceLoc->getService<ICanva>();
+    this->onViewportResize(canvas->getWidth(), canvas->getHeight());
 
     { // Registra Camera controllers ViewProjection deve ser localizado acima
         auto view1 = registry->get().view<CameraComponent>();
         for (auto entity : view1) {
-            Entity e = Entity{entity, registry};
+            Entity e = Entity{entity, registry.get()};
 
             auto& cc = e.getComponent<CameraComponent>();
             if (cc.camKind == CamKind::FPS) {
                 // CameraControllerFPS* ccFps = new CameraControllerFPS(e);
-                layers.pushState(new CameraControllerFPS(e));
+                layers.pushState(new CameraControllerFPS(serviceLoc, e));
             } else if (cc.camKind == CamKind::ORBIT) {
                 // CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
-                layers.pushState(new CameraControllerOrbit(e));
+                layers.pushState(new CameraControllerOrbit(serviceLoc, e));
             } else if (cc.camKind == CamKind::STATIC) {
                 // e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
             }
         }
     }
 
-    { // initialize scripts
-        registry->get().view<NativeScriptComponent>().each([this](auto entity, auto& nsc) {
-            if (!nsc.instance) {
-                nsc.instance = nsc.instantiateScript();
-                nsc.instance->entity = Entity{entity, registry};
-                nsc.instance->onCreate();
-            }
-        });
-    }
-
     origem = new Transform(); // FIXME: coisa feia!!!!
     sceneAABB.setBoundary(tot_min, tot_max);
 }
 
-Canvas* Scene::getCanvas() {
-    CanvasComponent& cc = registry->findComponent<CanvasComponent>("chimera_engine");
-    return cc.canvas;
-}
+void Scene::onUpdate(IViewProjection& vp, const double& ts) {
 
-void Scene::onUpdate(ViewProjection& vp, const double& ts) {
-    // update scripts (PhysicController aqui dentro!!!)
-    registry->get().view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
-        if (nsc.instance)
-            nsc.instance->onUpdate(ts);
-    });
+    if (phyCrt) {
+        phyCrt->stepSim(ts);
+        phyCrt->checkCollisions();
+    }
 
     for (auto emissor : emitters)
         emissor->recycleLife(ts);
@@ -243,7 +220,7 @@ void Scene::onUpdate(ViewProjection& vp, const double& ts) {
 
 void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
-    createRenderBuffer(vpo->size(), width, height);
+    createRenderBuffer(vpo->getSize(), width, height);
 
     auto view = registry->get().view<CameraComponent>();
     for (auto entity : view) {
@@ -289,7 +266,7 @@ bool Scene::onEvent(const SDL_Event& event) {
 
 void Scene::renderShadow(IRenderer3d& renderer) {
 
-    renderer.begin(activeCam, vpo, nullptr);
+    renderer.begin(activeCam, vpo.get(), nullptr);
     {
         auto lightViewEnt = registry->get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
@@ -328,17 +305,17 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
-        Entity e = {entity, registry};
+        Entity e = {entity, registry.get()};
         TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
-        Shader& sc = e.getComponent<Shader>();
+        auto& sc = e.getComponent<ShaderComponent>();
         MaterialComponent& mc = e.getComponent<MaterialComponent>();
 
         RenderCommand command;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.shader = sc;
+        command.shader = sc.shader;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
-        const glm::mat4& view = vpo->getView();
+        const glm::mat4& view = vpo->getSel().view;
         command.uniforms["projection"] = UValue(renderer.getCamera()->getProjection());
         command.uniforms["view"] = UValue(view);
         command.uniforms["CameraRight_worldspace"] = UValue(glm::vec3(view[0][0], view[1][0], view[2][0]));
@@ -349,13 +326,13 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
 }
 
 void Scene::execRenderPass(IRenderer3d& renderer) {
-    auto group = registry->get().group<Shader, MaterialComponent, TransComponent, Renderable3dComponent>();
+    auto group = registry->get().group<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
-        auto [sc, mc, tc, rc] = group.get<Shader, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
+        auto [sc, mc, tc, rc] = group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
         command.transform = tc.trans->translateSrc(origem->getPosition());
-        command.shader = sc;
+        command.shader = sc.shader;
         mc.material->bindMaterialInformation(command.uniforms, command.vTex);
         command.uniforms["model"] = UValue(command.transform);
         rc.renderable->submit(command, renderer);
@@ -382,7 +359,7 @@ void Scene::onRender() {
 
         // data load used by all
         renderer.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-        renderer.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
+        renderer.uboQueue().insert(std::make_pair("view", UValue(vpo->getSel().view)));
 
         // data load shadows props to renderer in shade of models!!!!
         if (shadowData.shadowBuffer) {
@@ -404,7 +381,7 @@ void Scene::onRender() {
 
         renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-        renderer.begin(activeCam, vpo, octree);
+        renderer.begin(activeCam, vpo.get(), octree);
         this->execRenderPass(renderer);
         renderer.end();
         renderer.flush();
@@ -416,7 +393,7 @@ void Scene::onRender() {
             DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            renderer.begin(activeCam, vpo, nullptr);
+            renderer.begin(activeCam, vpo.get(), nullptr);
             this->execEmitterPass(renderer);
             renderer.end();
             renderer.flush();
@@ -426,7 +403,12 @@ void Scene::onRender() {
             if (verbose == 1) { // DEBUG OCTREE
 
                 if (dl.valid() == false) {
-                    dl.create(40000);
+                    std::unordered_map<GLenum, std::string> shadeData;
+                    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
+                    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
+
+                    auto mng = serviceLoc->getService<ShaderMng>();
+                    dl.create(mng->load("DrawLine", shadeData), 40000);
                 }
 
                 if (octree != nullptr) {
@@ -441,20 +423,25 @@ void Scene::onRender() {
 
                     MapUniform muni;
                     muni["projection"] = UValue(activeCam->getProjection());
-                    muni["view"] = UValue(vpo->getView());
+                    muni["view"] = UValue(vpo->getSel().view);
                     dl.render(muni);
                 }
 
             } else if (verbose == 2) { // DEBUG AABB
 
                 if (renderLines.valid() == false) {
-                    renderLines.create(10000);
+                    std::unordered_map<GLenum, std::string> shadeData;
+                    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
+                    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
+
+                    auto mng = serviceLoc->getService<ShaderMng>();
+                    renderLines.create(mng->load("DrawLine", shadeData), 10000);
                 }
 
-                renderLines.begin(activeCam, vpo, nullptr);
+                renderLines.begin(activeCam, vpo.get(), nullptr);
 
                 renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-                renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getView())));
+                renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getSel().view)));
 
                 auto group = registry->get().group<TransComponent, Renderable3dComponent>();
                 for (auto entity : group) {
@@ -470,7 +457,7 @@ void Scene::onRender() {
                     RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
                     IRenderable3d* renderable = rc.renderable;
 
-                    Entity e = {entity, registry};
+                    Entity e = {entity, registry.get()};
                     TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
 
                     RenderCommand command;

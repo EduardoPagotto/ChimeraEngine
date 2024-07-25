@@ -7,18 +7,19 @@ namespace Chimera {
 // https://forums.libsdl.org/viewtopic.php?p=51664
 // https://jeux.developpez.com/tutoriels/sdl-2/guide-migration/
 
-CanvasFB::CanvasFB(const std::string& _title, int _width, int _height, bool _fullScreen) : Canvas(_title, _width, _height, _fullScreen) {
+CanvasFB::CanvasFB(const std::string& title, int width, int height, bool fullScreen)
+    : title(title), width(width), height(height), fullScreen(fullScreen) {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         throw std::string("Falha SDL_Init:" + std::string(SDL_GetError()));
 
-    if (SDL_CreateWindowAndRenderer(_width, _height, 0, &window, &renderer) != 0)
+    if (SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer) != 0)
         throw std::string("Falha Criar Janela SDL:" + std::string(SDL_GetError()));
 
     pixelFormat = SDL_PIXELFORMAT_RGBA8888;
-    texture = SDL_CreateTexture(renderer, pixelFormat, SDL_TEXTUREACCESS_STREAMING, _width, _height);
+    texture = SDL_CreateTexture(renderer, pixelFormat, SDL_TEXTUREACCESS_STREAMING, width, height);
 
-    pixels = new uint32_t[_width * _height];
+    pixels = new uint32_t[width * height];
 }
 
 CanvasFB::~CanvasFB() {

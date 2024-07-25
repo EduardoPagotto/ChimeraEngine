@@ -1,12 +1,11 @@
 #include "chimera/core/collada/ColladaExtra.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/buffer/FrameBuffer.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/collada/ColladaEffect.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
 #include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/visible/FontManager.hpp"
+#include "chimera/core/visible/FontMng.hpp"
 
 namespace Chimera {
 
@@ -19,8 +18,10 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
             int size = static_cast<int>(std::stoul(nFont.attribute("size").value()));
             float scaleX = std::stod(nFont.attribute("scaleX").value());
             float scaleY = std::stod(nFont.attribute("scaleY").value());
-            FontManager::add(new FontAtlas(rfc.getFragment(), rfc.getPath(), size));
-            FontManager::get()->setScale(glm::vec2(scaleX, scaleY));
+
+            auto fontMng = serviceLoc->getService<FontMng>();
+            auto font = fontMng->load(rfc.getFragment(), rfc.getPath(), size);
+            font->setScale(glm::vec2(scaleX, scaleY));
         }
     }
 
@@ -29,7 +30,7 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
 
             std::string entName = nFb.attribute("name").value();
             std::string entId = nFb.attribute("id").value();
-            Registry* r = Singleton<Registry>::get();
+            auto r = serviceLoc->getService<Registry>();
             Entity entity = r->createEntity(entName, entId);
 
             FrameBufferSpecification& fb = entity.addComponent<FrameBufferSpecification>();
@@ -39,18 +40,16 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
                 if (name == "instance_effect") {
 
                     std::string refName = next.child("technique_hint").attribute("ref").value();
-                    ColladaEffect cf(colladaDom, url);
+                    ColladaEffect cf(colladaDom, url, serviceLoc);
                     cf.create(refName, entity, cf.getLibrary("library_effects"));
 
                 } else if (name == "instance_camera") {
 
-                    ColladaCam cc(colladaDom, url);
+                    ColladaCam cc(colladaDom, url, serviceLoc);
                     cc.create(entity, cc.getLibrary("library_cameras"));
                     cc.createExtra(entity, next.first_child());
                 }
             }
-
-            Singleton<Registry>::release();
         }
     }
 }

@@ -1,6 +1,6 @@
 #include "chimera/core/partition/Wavefront.hpp"
 #include "chimera/core/collada/Collada.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
+#include "chimera/core/visible/TextureMng.hpp"
 #include <fstream>
 
 namespace Chimera {
@@ -40,7 +40,7 @@ glm::vec2 tokensToVec2(unsigned start, unsigned total, std::vector<std::string>&
     return glm::vec2(arrayFloat[0], arrayFloat[1]);
 }
 
-void wavefrontMtlLoad(const std::string& path, Material* material) {
+void wavefrontMtlLoad(const std::string& path, Material* material, std::shared_ptr<ServiceLocator> serviceLoc) {
     std::ifstream file(path);
 
     if (!file.is_open())
@@ -65,7 +65,8 @@ void wavefrontMtlLoad(const std::string& path, Material* material) {
         } else if (textData[0] == "Ks") {
             material->setSpecular(tokensToVec4(textData));
         } else if (textData[0] == "map_Kd") {
-            material->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::loadFromFile(textData[1], textData[1], TexParam()));
+            auto texMng = serviceLoc->getService<TextureMng>();
+            material->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->loadFromFile(textData[1], textData[1], TexParam()));
         } else if (textData[0] == "sharpness") {
             material->setShine(std::stod(textData[1]));
         }

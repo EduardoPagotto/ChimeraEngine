@@ -26,7 +26,7 @@ ColladaDom loadFileCollada(const std::string& file) {
     return dom;
 }
 
-void colladaRegistryLoad(ColladaDom& dom) {
+void colladaRegistryLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceLoc) {
 
     const pugi::xml_node vs = dom.root.child("scene");
     for (pugi::xml_node n = vs.first_child(); n; n = n.next_sibling()) {
@@ -35,17 +35,17 @@ void colladaRegistryLoad(ColladaDom& dom) {
 
         if (instance == "extra") {
 
-            ColladaExtra ce(dom, "#vazio");
+            ColladaExtra ce(dom, "#vazio", serviceLoc);
             ce.create(n);
 
         } else if (instance == "instance_visual_scene") {
 
-            ColladaVisualScene vs(dom, url);
+            ColladaVisualScene vs(dom, url, serviceLoc);
             vs.loadAll(vs.getLibrary("library_visual_scenes"));
 
         } else if (instance == "instance_physics_scene") {
 
-            ColladaPhysicScene ps(dom, url);
+            ColladaPhysicScene ps(dom, url, serviceLoc);
             ps.loadAll(ps.getLibrary("library_physics_scenes"));
         }
     }

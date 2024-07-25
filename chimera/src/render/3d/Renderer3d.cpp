@@ -15,11 +15,11 @@ Renderer3d::Renderer3d(const bool& logData) : logData(logData) {
 
 Renderer3d::~Renderer3d() {}
 
-void Renderer3d::begin(Camera* camera, ViewProjection* vpo, Octree* octree) {
+void Renderer3d::begin(Camera* camera, IViewProjection* vpo, Octree* octree) {
     this->camera = camera;
     this->vpo = vpo;
     this->octree = octree;
-    frustum.set(vpo->getViewProjectionInverse());
+    frustum.set(vpo->getSel().viewProjectionInverse);
 }
 
 void Renderer3d::end() {
@@ -66,7 +66,7 @@ void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable,
 
 void Renderer3d::flush() {
 
-    Shader activeShader;
+    std::shared_ptr<Shader> activeShader = nullptr;
     VertexArray* pLastVao = nullptr;
 
     while (!qRenderableIndexes.empty()) {
@@ -80,27 +80,27 @@ void Renderer3d::flush() {
             r->getVao()->bind(); // vincula novo modelo
             pLastVao = r->getVao();
 
-            if (activeShader.isInvalid()) { // primeira passada
+            if (activeShader == nullptr) { // primeira passada
                 activeShader = command.shader;
-                glUseProgram(activeShader.getID());
+                glUseProgram(activeShader->getID());
             } else {
                 // demais passadas
-                if (activeShader != command.shader) {  // se diferente
-                    if (!command.shader.isInvalid()) { // se valido trocar
+                if ((*activeShader) != (*command.shader)) { // se diferente
+                    if (command.shader != nullptr) {        // se valido trocar
                         glUseProgram(0);
                         activeShader = command.shader;
-                        glUseProgram(activeShader.getID());
+                        glUseProgram(activeShader->getID());
                     }
                 }
             }
 
             // generic bind in each draw call camera, light, etc
             for (const auto& kv : uniformsQueue)
-                activeShader.setUniformU(kv.first.c_str(), kv.second);
+                activeShader->setUniformU(kv.first.c_str(), kv.second);
 
             // bind dos uniforms from model
             for (const auto& kv : command.uniforms)
-                activeShader.setUniformU(kv.first.c_str(), kv.second);
+                activeShader->setUniformU(kv.first.c_str(), kv.second);
 
             // libera textura antes de passar as novas
             if (command.vTex.size() == 0)

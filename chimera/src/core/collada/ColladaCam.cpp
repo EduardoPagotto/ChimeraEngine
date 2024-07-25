@@ -3,9 +3,7 @@
 #include "chimera/core/visible/ITrans.hpp"
 
 namespace Chimera {
-ColladaCam::~ColladaCam() {}
-
-void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) {
+void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) { // FIXME: remover entity e usar o serviceLoc
 
     std::string nn = node.name();
 

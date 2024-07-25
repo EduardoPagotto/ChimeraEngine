@@ -6,17 +6,19 @@
 
 class Game : public Chimera::IStateMachine {
   public:
-    Game(Chimera::Engine& engine);
+    Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
     virtual void onRender() override;
-    virtual void onUpdate(Chimera::ViewProjection& vp, const double& ts) override;
+    virtual void onUpdate(Chimera::IViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
+    std::shared_ptr<ServiceLocator> serviceLoc;
+    std::shared_ptr<Chimera::ICanva> canvas;
+    std::shared_ptr<Chimera::Shader> shader;
     Chimera::Engine* engine;
-    Chimera::Shader shader;
     Chimera::Label* lFPS;
     TileLayer* layer;
     int fps;

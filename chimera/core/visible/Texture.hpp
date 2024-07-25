@@ -75,23 +75,25 @@ static bool textureParameterIsUndefined(const TexParam& val) {
 } // namespace Aux
 
 class Texture {
+  private:
+    uint32_t width, height;
+    GLuint idTexture;
+    TexParam textureParameters;
+
   public:
-    Texture(const std::string& name, const unsigned& width, const unsigned& height, const TexParam& tp);
-    Texture(const std::string& name, SDL_Surface* surface, const TexParam& tp);
+    Texture(const uint32_t& width, const uint32_t& height, const TexParam& tp);
+    Texture(SDL_Surface* surface, const TexParam& tp);
     virtual ~Texture() { glDeleteTextures(1, (GLuint*)&idTexture); }
 
-    inline unsigned getWidth() const { return width; }
-    inline unsigned getHeight() const { return height; }
+    inline uint32_t getWidth() const { return width; }
+    inline uint32_t getHeight() const { return height; }
+    inline const uint32_t getTextureID() const { return idTexture; }
+
     void bind(const uint8_t& slot) const;
     static void unbind(const uint8_t& slot);
-    inline const std::string getName() const { return name; }
-    inline const uint32_t getTextureID() const { return idTexture; }
+    static void invert_image_texture(int pitch, int height, void* image_pixels);
 
   private:
     void init();
-    unsigned width, height;
-    GLuint idTexture;
-    std::string name;
-    TexParam textureParameters;
 };
 } // namespace Chimera

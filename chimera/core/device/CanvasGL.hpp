@@ -1,12 +1,17 @@
 #pragma once
-#include "chimera/core/device/Canvas.hpp"
+#include "interfaces.hpp"
+#include <SDL2/SDL.h>
 
 #define GLEW_STATIC
 
 namespace Chimera {
-
-class CanvasGL : public Canvas {
+class CanvasGL : public ServiceBase<ICanva> {
   protected:
+    bool fullScreen{false};
+    int width, height;
+    int posX, posY;
+    std::string title;
+    SDL_Window* window{nullptr};
     SDL_GLContext context;
 
   public:
@@ -18,6 +23,8 @@ class CanvasGL : public Canvas {
     virtual void toggleFullScreen() override;
     virtual void reshape(int _width, int _height) override;
     virtual uint32_t* getPixels() override { return nullptr; }
+    virtual const int getWidth() const override { return width; }
+    virtual const int getHeight() const override { return height; }
 
     std::string getVersaoOpenGL();
 };

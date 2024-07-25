@@ -8,10 +8,9 @@
 
 namespace Chimera {
 
-void colladaRenderLoad(ColladaDom& dom) {
+void colladaRenderLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceLoc) {
 
-    Registry* r = Singleton<Registry>::get();
-
+    auto r = serviceLoc->getService<Registry>();
     pugi::xml_node vs = dom.root.child("scene");
     if (const pugi::xml_node extra = vs.child("extra"); extra != nullptr) {
 
@@ -25,24 +24,23 @@ void colladaRenderLoad(ColladaDom& dom) {
                     std::string url = node.attribute("url").value();
                     if (std::string name = node.name(); name == "instance_camera") {
 
-                        ColladaCam cc(dom, url);
+                        ColladaCam cc(dom, url, serviceLoc);
                         cc.create(entity, cc.getLibrary("library_cameras"));
                         cc.createExtra(entity, node.first_child());
 
                     } else if (name == "instance_effect") {
 
                         std::string refName = node.child("technique_hint").attribute("ref").value();
-                        ColladaEffect cs(dom, url);
+                        ColladaEffect cs(dom, url, serviceLoc);
                         cs.create(refName, entity, cs.getLibrary("library_effects"));
                     }
                 }
 
                 CameraComponent& cCam = entity.getComponent<CameraComponent>();
-                Shader& shader = entity.getComponent<Shader>();
+                auto& shaderCom = entity.getComponent<ShaderComponent>();
+                std::shared_ptr<Shader> shader = shaderCom.shader;
             }
         }
     }
-
-    Singleton<Registry>::release();
 }
 } // namespace Chimera

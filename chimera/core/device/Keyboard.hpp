@@ -1,28 +1,28 @@
 #pragma once
-#include <SDL2/SDL.h>
+#include "interfaces.hpp"
 #include <map>
 
 namespace Chimera {
-class Keyboard {
+class Keyboard : public ServiceBase<IKeyboard> {
   private:
     std::map<SDL_Keycode, uint8_t> mapKey;
     uint16_t mod;
 
   public:
-    Keyboard() = default;
-    virtual ~Keyboard() = default;
+    Keyboard() noexcept = default;
+    virtual ~Keyboard() noexcept override = default;
 
-    inline void setDown(const SDL_KeyboardEvent& event) {
+    virtual void setDown(const SDL_KeyboardEvent& event) noexcept override {
         mapKey[event.keysym.sym] = SDL_PRESSED;
         mod = event.keysym.mod;
     }
 
-    inline void setUp(const SDL_KeyboardEvent& event) {
+    virtual void setUp(const SDL_KeyboardEvent& event) noexcept override {
         mapKey[event.keysym.sym] = SDL_RELEASED;
         mod = event.keysym.mod;
     }
 
-    inline const bool isPressed(const SDL_Keycode& key) {
+    virtual const bool isPressed(const SDL_Keycode& key) noexcept override {
 
         if (mapKey.contains(key))
             return (mapKey[key] == SDL_PRESSED);
@@ -30,9 +30,9 @@ class Keyboard {
         return false;
     }
 
-    inline const bool isModPressed(const SDL_Keymod& keyMod) const { return (keyMod & mod); }
+    virtual const bool isModPressed(const SDL_Keymod& keyMod) const noexcept override { return (keyMod & mod); }
 
-    inline const bool getEvent(const SDL_Event& event) {
+    virtual const bool getEvent(const SDL_Event& event) noexcept override {
 
         switch (event.type) {
             case SDL_KEYDOWN:

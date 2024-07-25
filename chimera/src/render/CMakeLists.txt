@@ -13,12 +13,8 @@ endif(BULLET_SET_TO_USE)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	2d/Renderable2D.cpp
-					2d/Sprite.cpp
-					2d/BatchRender2D.cpp
+set (RenderSource 	2d/BatchRender2D.cpp
 					2d/Layer.cpp
-					2d/Label.cpp
-					2d/Tile.cpp
 					3d/Renderer3d.cpp
 					3d/Renderer3dLines.cpp
 					3d/Renderable3D.cpp

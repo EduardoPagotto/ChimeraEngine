@@ -12,7 +12,7 @@ class IStateMachine {
     virtual void onAttach() = 0;
     virtual void onDeatach() = 0;
     virtual void onRender() = 0;
-    virtual void onUpdate(ViewProjection& vp, const double& ts) = 0;
+    virtual void onUpdate(IViewProjection& vp, const double& ts) = 0;
     virtual bool onEvent(const SDL_Event& event) = 0;
     inline const std::string getName() const { return name; }
 

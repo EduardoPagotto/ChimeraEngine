@@ -58,7 +58,7 @@ void BatchRender2D::begin(Camera* camera) {
     this->buffer = (VertexDataSimple*)pVbo->map();
 }
 
-float BatchRender2D::submitTexture(Texture* texture) {
+float BatchRender2D::submitTexture(std::shared_ptr<Texture> texture) {
     float result = 0.0f;
     bool found = false;
     for (uint i = 0; i < textures.size(); i++) {
@@ -120,7 +120,7 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
     indexCount += 6;
 }
 
-void BatchRender2D::drawString(FontAtlas* font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
+void BatchRender2D::drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
 
     float textureSlot = 0.0f; // float ts = 0.0f;
     if (font->getTexture() != nullptr)
@@ -193,9 +193,9 @@ void BatchRender2D::flush() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     BinaryStateEnable cull(GL_CULL_FACE, GL_FALSE);
     // bind shader and uniforms from model
-    glUseProgram(renderComando->shader.getID());
+    glUseProgram(renderComando->shader->getID());
     for (const auto& kv : renderComando->uniforms)
-        renderComando->shader.setUniformU(kv.first.c_str(), kv.second);
+        renderComando->shader->setUniformU(kv.first.c_str(), kv.second);
 
     for (uint8_t i = 0; i < textures.size(); i++)
         textures[i]->bind(i);

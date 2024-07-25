@@ -1,8 +1,15 @@
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 
 namespace Chimera {
+
+CameraControllerOrbit::CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity)
+    : IStateMachine("Orbit"), entity(entity) {
+
+    mouse = serviceLocator->getService<IMouse>();
+}
+
+CameraControllerOrbit::~CameraControllerOrbit() { mouse = nullptr; }
 
 void CameraControllerOrbit::onAttach() {
     auto& cc = entity.getComponent<CameraComponent>();
@@ -14,30 +21,28 @@ void CameraControllerOrbit::onAttach() {
     max = cc.max;
     front = glm::vec3(0, 0, 0);
     distance = glm::distance(camera->getPosition(), this->front);
-    mouse = Singleton<Mouse>::get();
-
     this->updateVectors();
 }
 
-void CameraControllerOrbit::onDeatach() { Singleton<Mouse>::release(); }
+void CameraControllerOrbit::onDeatach() {}
 
-void CameraControllerOrbit::updateVP(ViewProjection& vp) {
-    if (vp.size() == 1) {
-        vp.update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
+void CameraControllerOrbit::updateVP(IViewProjection& vp) {
+    if (vp.getSize() == 1) {
+        vp.getLeft().update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
     } else {
         glm::vec3 novaPositionL, novaFrontL, novaPositionR, novaFrontR;
         glm::vec3 left_p = front - camera->getPosition(); // front and position as points
         glm::vec3 cross1 = glm::cross(up, left_p);
         glm::vec3 norm1 = glm::normalize(cross1);
-        glm::vec3 final_norm1 = norm1 * vp.getNoseDist();
+        glm::vec3 final_norm1 = norm1 * vp.getNoze();
 
         novaPositionL = camera->getPosition() + final_norm1;
         novaFrontL = front + final_norm1;
-        vp.getHead()[0].update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
+        vp.getLeft().update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
 
         novaPositionR = camera->getPosition() - final_norm1;
         novaFrontR = front - final_norm1;
-        vp.getHead()[1].update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
+        vp.getRight().update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
     }
 }
 
@@ -92,7 +97,7 @@ void CameraControllerOrbit::processCameraRotation(const int& xOffset, const int&
     }
 }
 
-void CameraControllerOrbit::onUpdate(ViewProjection& vp, const double& ts) {
+void CameraControllerOrbit::onUpdate(IViewProjection& vp, const double& ts) {
     if (mouse->getButtonState(1) == SDL_PRESSED) {
         glm::ivec2 mouseMove = mouse->getMoveRel();
         this->processCameraRotation(mouseMove.x, mouseMove.y);

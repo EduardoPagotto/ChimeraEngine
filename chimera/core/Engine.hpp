@@ -3,22 +3,24 @@
 #include "Timer.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/ViewProjection.hpp"
-#include "chimera/core/device/Canvas.hpp"
+#include "chimera/core/device/interfaces.hpp"
 
 namespace Chimera {
 class Engine {
   public:
-    Engine(Canvas* canvas, const float& dist);
+    Engine(std::shared_ptr<ServiceLocator> serviceLoc);
     virtual ~Engine();
     void run();
-    Canvas* getCanvas() const { return canvas; }
+    ICanva* getCanvas() const { return canvas.get(); }
     StateStack& getStack() { return stack; }
 
   private:
-    Registry* registry;
-    ViewProjection vp;
+    std::shared_ptr<ServiceLocator> serviceLoc;
+    std::shared_ptr<ICanva> canvas;
+    std::shared_ptr<IViewProjection> vp;
+    std::shared_ptr<Registry> registry;
+
     uint32_t fps = 140;
-    Canvas* canvas;
     Timer timerFPS;
     StateStack stack;
 };

@@ -1,13 +1,12 @@
-#include "chimera/core/visible/FontAtlas.hpp"
+#include "chimera/core/visible/Font.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
 namespace Chimera {
 
-FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const int& size)
-    : texture(0), name(name), scale(glm::vec2(10.0f)) {
+Font::Font(const std::string& pathFile, const int& size) : texture(nullptr), scale(glm::vec2(10.0f)) {
 
-    if (TTF_Init() == -1) {
+    if (TTF_Init() == -1) { // TODO: tratar erros
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
         return;
     }
@@ -126,7 +125,8 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
     p.wrap_t = TexWrap::CLAMP_TO_EDGE;
     p.minFilter = TexFilter::LINEAR;
     p.magFilter = TexFilter::LINEAR;
-    texture = TextureManager::loadFromSurface(name, bigSurface, p);
+    Texture::invert_image_texture(bigSurface->pitch, bigSurface->h, bigSurface->pixels);
+    texture = std::make_shared<Texture>(bigSurface, p);
 
     if (sFont) {
         TTF_CloseFont(sFont);
@@ -142,7 +142,7 @@ FontAtlas::FontAtlas(const std::string& name, const std::string& pathFile, const
     delete bigSurface;
 }
 
-FontAtlas::~FontAtlas() {
+Font::~Font() {
     // TODO: deletar glyph
     glyphs.clear();
 }

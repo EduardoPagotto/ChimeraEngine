@@ -24,12 +24,11 @@ set (SourcesCore Registry.cpp
 				 DrawLine.cpp
 				 visible/Mesh.cpp
 				 visible/Shader.cpp
+				 visible/ShaderMng.cpp
 				 visible/Texture.cpp
-				 visible/TextureManager.cpp
 				 visible/CameraControllerFPS.cpp
 				 visible/CameraControllerOrbit.cpp
-				 visible/FontAtlas.cpp
-				 visible/FontManager.cpp
+				 visible/Font.cpp
 				 visible/Material.cpp
 				 visible/ParticleEmitter.cpp
 				 collada/RFC3986.cpp
@@ -71,8 +70,7 @@ if (BULLET_SET_TO_USE)
 	message(STATUS "Bullet incluido no build ChimeraCore")
 	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
 								   bullet/Solid.cpp
-								   collada/ColladaPhysicScene.cpp
-								   PhysicController.cpp) 
+								   collada/ColladaPhysicScene.cpp) 
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 

@@ -1,11 +1,10 @@
 #include "Game.hpp"
+#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Registry.hpp"
-#include "chimera/core/Singleton.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(Chimera::Scene& scene) : IStateMachine("Game"), scene(&scene) { mouse = Chimera::Singleton<Chimera::Mouse>::get(); }
-
-Game::~Game() { Chimera::Singleton<Chimera::Mouse>::release(); }
+Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) { mouse = sl->getService<Chimera::IMouse>(); }
+Game::~Game() { mouse = nullptr; }
 
 void Game::onAttach() {
 
@@ -55,6 +54,6 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {}
+void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {}
 
 void Game::onRender() {}

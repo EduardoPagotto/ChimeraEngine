@@ -67,7 +67,7 @@ const glm::mat4 textToMat4(const std::string& text) {
 
 //--
 
-Collada::Collada(ColladaDom& dom, const std::string& url) {
+Collada::Collada(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : serviceLoc(serviceLoc) {
 
     RFC3986 rfc(url);
     if (rfc.isInvalid() == true)
@@ -101,7 +101,7 @@ Collada::Collada(ColladaDom& dom, const std::string& url) {
     fragment = rfc.getFragment();
 }
 
-Collada::~Collada() {}
+Collada::~Collada() { serviceLoc = nullptr; }
 
 void Collada::destroy() {
 

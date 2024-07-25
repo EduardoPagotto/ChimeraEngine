@@ -1,5 +1,6 @@
 #pragma once
 #include "TagComponent.hpp"
+#include "chimera/core/ServiceLocator.hpp"
 #include <entt/entt.hpp>
 #include <stdexcept>
 
@@ -7,7 +8,7 @@ namespace Chimera {
 
 class Entity;
 
-class Registry {
+class Registry : public IService {
   public:
     Registry() = default;
     virtual ~Registry() { destroy(); }
@@ -15,6 +16,7 @@ class Registry {
     Entity createEntity(const std::string& tag = std::string(), const std::string& id = std::string());
     void destroyEntity(Entity entity);
     entt::registry& get() { return eRegistry; }
+    std::type_index getTypeIndex() const { return std::type_index(typeid(Registry)); }
 
     template <typename T>
     T& findComponent(const std::string& tagName) {

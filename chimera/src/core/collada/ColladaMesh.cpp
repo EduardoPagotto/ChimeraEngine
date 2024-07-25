@@ -3,9 +3,6 @@
 #include "chimera/core/visible/ParticleEmitter.hpp"
 
 namespace Chimera {
-
-ColladaMesh::~ColladaMesh() {}
-
 void ColladaMesh::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nMesh) {
 
     MeshComponent& eMesh = entity.addComponent<MeshComponent>();

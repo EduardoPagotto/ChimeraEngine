@@ -2,9 +2,6 @@
 #include "chimera/core/visible/ParticleEmitter.hpp"
 
 namespace Chimera {
-
-ColladaParticle::~ColladaParticle() {}
-
 void ColladaParticle::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nParticle) {
 
     glm::vec dir = glm::vec3(0, 0, 10);

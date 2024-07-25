@@ -2,6 +2,7 @@
 #include "chimera/core/collada/ColladaImage.hpp"
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Shader.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
 
 namespace Chimera {
 
@@ -27,11 +28,6 @@ static TexWrap setWrap(const std::string& sParamVal) {
         return TexWrap::CLAMP_TO_BORDER;
 
     return TexWrap::NONE;
-}
-
-ColladaEffect::~ColladaEffect() {
-    mapaTex.clear();
-    mapa2D.clear();
 }
 
 void ColladaEffect::setShader(const std::string& refName, const pugi::xml_node& node) {
@@ -81,8 +77,8 @@ void ColladaEffect::setShader(const std::string& refName, const pugi::xml_node& 
     }
 
     if (shadeData.size() > 1) {
-        Shader& shader = entity.addComponent<Shader>();
-        ShaderManager::load(refName, shadeData, shader);
+        auto mng = serviceLoc->getService<ShaderMng>();
+        entity.addComponent<ShaderComponent>(refName, mng->load(refName, shadeData));
     }
 }
 
@@ -103,7 +99,7 @@ bool ColladaEffect::setTextureParam(const pugi::xml_node& n, TexParam& tp) {
         else if (sParam == "instance_image") {
 
             std::string url = ntPara.attribute("url").value();
-            ColladaImage ci(colladaDom, url);
+            ColladaImage ci(colladaDom, url, serviceLoc);
             ci.create(entity, tp, ci.getLibrary("library_images"));
             return true;
         }
@@ -149,10 +145,11 @@ void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
                 std::string texId = first.attribute("texture").value();
                 std::string idTex = mapaTex[mapa2D[texId]];
 
-                ColladaImage ci(colladaDom, idTex);
-                ci.create(entity, tp, ci.getLibrary("library_images")); // loadImage(url, tp); //TODO:
+                ColladaImage ci(colladaDom, idTex, serviceLoc);
+                ci.create(entity, tp, ci.getLibrary("library_images"));
 
-                pMat->addTexture(SHADE_TEXTURE_DIFFUSE, TextureManager::get(idTex));
+                auto texMng = serviceLoc->getService<TextureMng>();
+                pMat->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->get(idTex));
                 pMat->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
             }
         } else if (p == "specular") {
@@ -219,7 +216,7 @@ void ColladaEffect::create(const std::string& refName, Entity& entity, pugi::xml
         } else if (nameProf == "extra") {
             if (const pugi::xml_node nFX = getExtra(nProf, "instance_effect"); nFX != nullptr) {
                 std::string url = nFX.attribute("url").value();
-                ColladaEffect cf(colladaDom, url);
+                ColladaEffect cf(colladaDom, url, serviceLoc);
                 cf.create("", entity, cf.getLibrary("library_effects"));
             }
         }

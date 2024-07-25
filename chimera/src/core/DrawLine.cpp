@@ -4,19 +4,9 @@ namespace Chimera {
 
 // ref: https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11517
 
-DrawLine::DrawLine() {
-    pVao = nullptr;
-    pVbo = nullptr;
-    std::unordered_map<GLenum, std::string> shadeData;
-    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
-    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
-    ShaderManager::load("DrawLine", shadeData, shader);
-}
+void DrawLine::create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept {
 
-DrawLine::~DrawLine() { destroy(); }
-
-void DrawLine::create(const uint32_t& sizeBuffer) {
-
+    this->shader = shader;
     pVao = new VertexArray();
     pVbo = new VertexBuffer(BufferType::STREAM);
 
@@ -33,20 +23,18 @@ void DrawLine::create(const uint32_t& sizeBuffer) {
     pVbo->setData(nullptr, sizeBuffer);
 }
 
-void DrawLine::destroy() {
-    if (pVao != nullptr) {
-        delete pVao;
-        pVao = nullptr;
-    }
-
+void DrawLine::destroy() noexcept {
+    delete pVao;
+    pVao = nullptr;
+    shader = nullptr;
     points.clear();
 }
 
-void DrawLine::render(MapUniform& uniformsQueue) {
-    glUseProgram(shader.getID());
+void DrawLine::render(MapUniform& uniformsQueue) noexcept {
+    glUseProgram(shader->getID());
 
     for (const auto& kv : uniformsQueue)
-        shader.setUniformU(kv.first.c_str(), kv.second);
+        shader->setUniformU(kv.first.c_str(), kv.second);
 
     pVao->bind();
     pVbo->bind();
@@ -63,7 +51,7 @@ void DrawLine::render(MapUniform& uniformsQueue) {
     points.clear();
 }
 
-void DrawLine::addAABB(const AABB& aabb, const glm::vec3& color) {
+void DrawLine::addAABB(const AABB& aabb, const glm::vec3& color) noexcept {
     const std::vector<glm::vec3>& v = aabb.getAllVertex();
     add(v[0], v[1], color);
     add(v[2], v[3], color);

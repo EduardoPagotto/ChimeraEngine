@@ -8,15 +8,16 @@ namespace Chimera {
 
 class CameraControllerOrbit : public IStateMachine {
   public:
-    CameraControllerOrbit(Entity entity) : IStateMachine("Orbit"), entity(entity) {}
+    CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
+    virtual ~CameraControllerOrbit();
     void onAttach() override;
     void onDeatach() override;
-    void onUpdate(ViewProjection& vp, const double& ts) override;
+    void onUpdate(IViewProjection& vp, const double& ts) override;
     void onRender() override {}
     bool onEvent(const SDL_Event& event) override { return true; }
 
   private:
-    void updateVP(ViewProjection& vp);
+    void updateVP(IViewProjection& vp);
     void updateVectors();
     void processCameraRotation(const int& xOffset, const int& yOffset, bool constrainPitch = true);
     void processDistance(const int& _mz);
@@ -26,7 +27,7 @@ class CameraControllerOrbit : public IStateMachine {
     glm::vec3 up, front;
     Camera* camera = nullptr;
     Entity entity;
-    Mouse* mouse;
+    std::shared_ptr<IMouse> mouse;
 };
 
 } // namespace Chimera

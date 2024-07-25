@@ -3,7 +3,8 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/StateStack.hpp"
 #include "chimera/core/buffer/RenderBuffer.hpp"
-#include "chimera/core/device/Canvas.hpp"
+#include "chimera/core/bullet/interfaces.hpp"
+#include "chimera/core/device/interfaces.hpp"
 #include "chimera/core/space/Octree.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/ITrans.hpp"
@@ -16,41 +17,24 @@ namespace Chimera {
 
 struct ShadowData {
     ShadowData() = default;
-    Shader shader;
+    std::shared_ptr<Shader> shader;
     FrameBuffer* shadowBuffer = nullptr;
     glm::mat4 lightSpaceMatrix = glm::mat4(1.0f), lightProjection = glm::mat4(1.0f);
 };
 
 class Entity;
 class Scene : public IStateMachine {
-  public:
-    Scene();
-    virtual ~Scene();
-    void setOrigem(ITrans* o) { origem = o; }
-    Canvas* getCanvas();
-    StateStack& getLayes() { return this->layers; }
-    // Herdados
-    virtual void onAttach() override;
-    virtual void onDeatach() override;
-    virtual void onRender() override;
-    virtual void onUpdate(ViewProjection& vp, const double& ts) override;
-    virtual bool onEvent(const SDL_Event& event) override;
-
   private:
-    void onViewportResize(const uint32_t& width, const uint32_t& height);
-    void createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height);
-    void execRenderPass(IRenderer3d& renderer);
-    void execEmitterPass(IRenderer3d& renderer);
-    void renderShadow(IRenderer3d& renderer);
-    RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
-
-    void createOctree(const AABB& aabb);
+    std::shared_ptr<Registry> registry;
+    std::shared_ptr<ServiceLocator> serviceLoc;
+    std::shared_ptr<IViewProjection> vpo;
+    std::shared_ptr<IPhysicsControl> phyCrt;
 
     StateStack layers;
-    Registry* registry;
+
     ITrans* origem;
     Camera* activeCam;
-    ViewProjection* vpo;
+
     ShadowData shadowData;
     uint8_t verbose;
     std::vector<RenderBuffer*> vRB;
@@ -63,5 +47,26 @@ class Scene : public IStateMachine {
     Renderer3dLines renderLines;
 
     DrawLine dl;
+
+  public:
+    Scene(std::shared_ptr<ServiceLocator> sl);
+    virtual ~Scene();
+    void setOrigem(ITrans* o) { origem = o; }
+    StateStack& getLayes() { return this->layers; }
+    // Herdados
+    virtual void onAttach() override;
+    virtual void onDeatach() override;
+    virtual void onRender() override;
+    virtual void onUpdate(IViewProjection& vp, const double& ts) override;
+    virtual bool onEvent(const SDL_Event& event) override;
+
+  private:
+    void onViewportResize(const uint32_t& width, const uint32_t& height);
+    void createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height);
+    void execRenderPass(IRenderer3d& renderer);
+    void execEmitterPass(IRenderer3d& renderer);
+    void renderShadow(IRenderer3d& renderer);
+    RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
+    void createOctree(const AABB& aabb);
 };
 } // namespace Chimera

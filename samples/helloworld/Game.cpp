@@ -1,13 +1,14 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/FontManager.hpp"
-#include "chimera/core/visible/TextureManager.hpp"
+#include "chimera/core/visible/FontMng.hpp"
+#include "chimera/core/visible/ShaderMng.hpp"
+#include "chimera/core/visible/TextureMng.hpp"
 #include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
 
-Game::Game(Chimera::Engine& engine) : IStateMachine("Game"), engine(&engine) {
+Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine) : IStateMachine("Game"), serviceLoc(sl), engine(engine) {
 
     using namespace Chimera;
     srand(time(nullptr));
@@ -18,11 +19,19 @@ Game::Game(Chimera::Engine& engine) : IStateMachine("Game"), engine(&engine) {
     // button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
     // group->add(button);
     // layer->add(group);
-    TextureManager::loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
-    TextureManager::loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
-    TextureManager::loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
+    auto texMng = sl->getService<TextureMng>();
+    texMng->loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
+    texMng->loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
+    texMng->loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
 
-    engine.getStack().pushState(this);
+    canvas = sl->getService<ICanva>();
+
+    std::unordered_map<GLenum, std::string> shadeData;
+    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
+    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
+
+    auto mng = sl->getService<ShaderMng>();
+    shader = mng->load("Basic2D", shadeData);
 }
 
 Game::~Game() {}
@@ -36,26 +45,23 @@ void Game::onAttach() {
                              // video 103 finaliza o pick mouse
                              // colocar para rodar o scene como renderbuffer!!!!!!!!!
 
-    std::unordered_map<GLenum, std::string> shadeData;
-    shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
-    shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
-    ShaderManager::load("Basic2D", shadeData, shader);
-
     layer = new TileLayer(shader);
-    layer->getCamera()->setViewportSize(engine->getCanvas()->getWidth(), engine->getCanvas()->getHeight());
+    layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
+    auto texMng = serviceLoc->getService<TextureMng>();
 
     for (float y = -8.0f; y < 8.0f; y++) {
         for (float x = -14.0f; x < 14.0f; x++) {
             if (rand() % 4 == 0)
                 layer->add(new Sprite(x, y, 1.0f, 1.0f, glm::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
             else
-                layer->add(new Sprite(x, y, 1.0f, 1.0f, TextureManager::getIndex(rand() % 3)));
+                layer->add(new Sprite(x, y, 1.0f, 1.0f, texMng->getIndex(rand() % 3)));
         }
     }
 
-    FontManager::add(new Chimera::FontAtlas("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22));
-    FontManager::get()->setScale(glm::vec2(0.04, 0.04)); // em TileLayer ortho values!!!
-    lFPS = new Label("None", 0, 0, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    auto fontMng = serviceLoc->getService<FontMng>();
+    auto font = fontMng->load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
+    font->setScale(glm::vec2(0.04, 0.04));
+    lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
     layer->add(lFPS);
     engine->getStack().pushState(layer);
 }
@@ -110,7 +116,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::ViewProjection& vp, const double& ts) {
+void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {
 
     // ApplicationGL::onUpdate();
 

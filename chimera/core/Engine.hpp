@@ -11,7 +11,7 @@ class Engine {
     Engine(std::shared_ptr<ServiceLocator> serviceLoc);
     virtual ~Engine();
     void run();
-    ICanva* getCanvas() const { return canvas.get(); }
+    // ICanva* getCanvas() const { return canvas.get(); }
     StateStack& getStack() { return stack; }
 
   private:

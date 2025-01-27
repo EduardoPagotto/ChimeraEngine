@@ -196,4 +196,15 @@ https://www.khronos.org/opengl/wiki/Example_Code
             pCorpoRigido->applyTorc(rFinal);
         }
     }
-    ```
+```
+
+Tamanho |App/lib
+--------|---------------------
+21M     | bsptree
+16M     | helloworld
+53M     | libChimeraCore.a
+20M     | libChimeraRender.a
+23M     | models3
+15M     | raycasting
+22M     | simples
+22M     | terrain

@@ -11,6 +11,9 @@
             "defines": [
                 "_DEBUG"
             ],
+            "forcedInclude": [
+                "${default}"
+            ],
             "browse": {
                 "path": [
                     "/usr/include",
@@ -18,7 +21,7 @@
                     "/usr/local/include/entt",
                     "${workspaceFolder}"
                 ],
-                "limitSymbolsToIncludedHeaders": true,
+                "limitSymbolsToIncludedHeaders": false,
                 "databaseFilename": "${workspaceFolder}/build/browse.vc.db"
             },
             "intelliSenseMode": "linux-clang-x64",

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.2)
+cmake_minimum_required(VERSION 3.28)
 
 PROJECT(BSTree)
 
@@ -34,13 +34,13 @@ set (LibsTesteBSTree ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
 					 -lpugixml
 					 -lpthread)
 
-add_executable (bsptree src/Game.cpp 
+add_executable (bsptree src/Game.cpp
 						src/main.cpp)
 
 target_link_libraries(bsptree ${LibsTesteBSTree})
 target_include_directories (bsptree PRIVATE ${IncludesTesteBSTree})
 
-add_dependencies(bsptree ChimeraCore 
+add_dependencies(bsptree ChimeraCore
                          ChimeraRender)
 
 INSTALL(FILES ${TesteBSTree_BINARY_DIR}/bsptree DESTINATION bin)

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.2)
+cmake_minimum_required(VERSION 3.28)
 
 PROJECT(ChimeraCore)
 
@@ -17,43 +17,44 @@ set (SourcesCore Registry.cpp
 				 Engine.cpp
 				 device/CanvasFB.cpp
 				 device/CanvasGL.cpp
-				 buffer/IndexBuffer.cpp
-				 buffer/VertexArray.cpp
-				 buffer/FrameBuffer.cpp
-				 buffer/RenderBuffer.cpp
-				 DrawLine.cpp
-				 visible/Mesh.cpp
-				 visible/Shader.cpp
-				 visible/ShaderMng.cpp
-				 visible/Texture.cpp
-				 visible/CameraControllerFPS.cpp
-				 visible/CameraControllerOrbit.cpp
-				 visible/Font.cpp
-				 visible/Material.cpp
-				 visible/ParticleEmitter.cpp
-				 collada/RFC3986.cpp
-				 collada/Collada.cpp
-				 collada/ColladaVisualScene.cpp
-				 collada/ColladaImage.cpp
-				 collada/ColladaMaterial.cpp
-				 collada/ColladaEffect.cpp
-				 collada/ColladaLight.cpp
-				 collada/ColladaCam.cpp
-				 collada/ColladaGeometry.cpp
-				 collada/colladaLoad.cpp
-				 collada/ColladaWaveFront.cpp
-				 collada/ColladaHeightMap.cpp
-				 collada/ColladaCube.cpp
-				 collada/ColladaMesh.cpp
-				 collada/ColladaParticle.cpp
-				 collada/ColladaExtra.cpp
-				 partition/BSPTree.cpp
-				 partition/LoadHeightMap.cpp
-				 partition/Wavefront.cpp
-				 partition/Cube.cpp)
+				#  buffer/IndexBuffer.cpp
+				#  buffer/VertexArray.cpp
+				#  buffer/FrameBuffer.cpp
+				#  buffer/RenderBuffer.cpp
+				#  DrawLine.cpp
+				#  visible/Mesh.cpp
+				#  visible/Shader.cpp
+				#  visible/ShaderMng.cpp
+				#  visible/Texture.cpp
+				#  visible/CameraControllerFPS.cpp
+				#  visible/CameraControllerOrbit.cpp
+				#  visible/Font.cpp
+				#  visible/Material.cpp
+				#  visible/ParticleEmitter.cpp
+				#  collada/RFC3986.cpp
+				#  collada/Collada.cpp
+				#  collada/ColladaVisualScene.cpp
+				#  collada/ColladaImage.cpp
+				#  collada/ColladaMaterial.cpp
+				#  collada/ColladaEffect.cpp
+				#  collada/ColladaLight.cpp
+				#  collada/ColladaCam.cpp
+				#  collada/ColladaGeometry.cpp
+				#  collada/colladaLoad.cpp
+				#  collada/ColladaWaveFront.cpp
+				#  collada/ColladaHeightMap.cpp
+				#  collada/ColladaCube.cpp
+				#  collada/ColladaMesh.cpp
+				#  collada/ColladaParticle.cpp
+				#  collada/ColladaExtra.cpp
+				#  partition/BSPTree.cpp
+				#  partition/LoadHeightMap.cpp
+				#  partition/Wavefront.cpp
+				#  partition/Cube.cpp
+				 )
 
 # define os includes
-set (IncludeCore ${CMAKE_SOURCE_DIR}
+set (IncludeCore ${CMAKE_SOURCE_DIR}/chimera
 				 ${SDL2_INCLUDE_DIR}
 				 ${OPENGL_INCLUDE_DIR}
 				 ${PUGIXML_DIR}
@@ -62,15 +63,15 @@ set (IncludeCore ${CMAKE_SOURCE_DIR}
 # Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
 if (OVR_SET_TO_USE)
 	message(STATUS "OVR incluido no build ChimeraCore")
-	set(SourcesCore ${SourcesCore} device/CanvasOVR) 
-	set(SourcesCore ${SourcesCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) 
+	set(SourcesCore ${SourcesCore} device/CanvasOVR)
+	set(SourcesCore ${SourcesCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
 endif(OVR_SET_TO_USE)
 
-if (BULLET_SET_TO_USE)	
+if (BULLET_SET_TO_USE)
 	message(STATUS "Bullet incluido no build ChimeraCore")
 	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
 								   bullet/Solid.cpp
-								   collada/ColladaPhysicScene.cpp) 
+								   collada/ColladaPhysicScene.cpp)
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 
@@ -78,7 +79,7 @@ endif(BULLET_SET_TO_USE)
 # Define o Target
 add_library (ChimeraCore STATIC ${SourcesCore})
 
-# Define os includes 
+# Define os includes
 target_include_directories (ChimeraCore PUBLIC ${IncludeCore})
 
 # Lista os Includes

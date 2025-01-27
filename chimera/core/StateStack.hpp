@@ -3,9 +3,12 @@
 #include <algorithm>
 #include <vector>
 
-namespace Chimera {
+namespace me {
 
 class StateStack {
+    std::vector<IStateMachine*> states;
+    std::vector<IStateMachine*>::iterator stateInsert;
+
   public:
     StateStack() { stateInsert = states.begin(); }
     virtual ~StateStack() { states.clear(); }
@@ -46,9 +49,5 @@ class StateStack {
 
     inline std::vector<IStateMachine*>::iterator begin() { return states.begin(); }
     inline std::vector<IStateMachine*>::iterator end() { return states.end(); }
-
-  private:
-    std::vector<IStateMachine*> states;
-    std::vector<IStateMachine*>::iterator stateInsert;
 };
-} // namespace Chimera
+} // namespace me

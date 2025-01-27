@@ -2,101 +2,92 @@
 
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace me {
 
-/**
- * Class Timer
- *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
- *  @since 20130925
- */
+/// @brief Class Timer
+/// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+/// @since 20130925
+/// @date  20250125
 class Timer {
+    bool started{false}, paused{false};
+    uint32_t startTicks{0}, lastTicks{0}, pausedTicks{0}, step{0}, countStep{0}, elapsedCount{0};
+
   public:
     Timer() = default;
 
     virtual ~Timer() = default;
 
     void start() {
-        started = true;
-        paused = false;
-        startTicks = SDL_GetTicks();
-        lastTicks = startTicks;
+        this->started = true;
+        this->paused = false;
+        this->startTicks = SDL_GetTicks();
+        this->lastTicks = this->startTicks;
     }
 
     void stop() {
-        started = false;
-        paused = false;
+        this->started = false;
+        this->paused = false;
     }
 
     void pause() {
-        if (started && !paused) {
-            paused = true;
-            pausedTicks = SDL_GetTicks() - startTicks;
+        if (this->started && !this->paused) {
+            this->paused = true;
+            this->pausedTicks = SDL_GetTicks() - this->startTicks;
         }
     }
 
     void resume() {
-        if (paused) {
-            paused = false;
-            startTicks = SDL_GetTicks() - pausedTicks;
-            lastTicks = startTicks;
-            pausedTicks = 0;
+        if (this->paused) {
+            this->paused = false;
+            this->startTicks = SDL_GetTicks() - this->pausedTicks;
+            this->lastTicks = this->startTicks;
+            this->pausedTicks = 0;
         }
     }
 
-    uint32_t restart() {
-        uint32_t elapsedTicks = ticks();
+    inline const uint32_t restart() {
+        const uint32_t elapsedTicks = ticks();
         start();
         return elapsedTicks;
     }
 
     const uint32_t ticks() const {
-        if (started) {
-            if (!paused) {
-                return SDL_GetTicks() - startTicks;
+        if (this->started) {
+            if (!this->paused) {
+                return SDL_GetTicks() - this->startTicks;
             } else {
-                return pausedTicks;
+                return this->pausedTicks;
             }
         }
         return 0;
     }
 
-    bool stepCount() {
+    const bool stepCount() {
 
-        uint32_t temp = ticks();
-        if (temp < elapsedCount) {
-            step++;
+        if (this->ticks() < elapsedCount) {
+            this->step++;
         } else {
-            countStep = step;
-            step = 0;
-            start();
+            this->countStep = this->step;
+            this->step = 0;
+            this->start();
             return true;
         }
 
         return false;
     }
 
-    inline bool isStarted() const { return started; }
-    inline bool isPaused() const { return paused; }
-    inline uint32_t getCountStep() const { return countStep; }
-    inline void setElapsedCount(const uint32_t& val) { elapsedCount = val; }
+    inline bool isStarted() const { return this->started; }
+    inline bool isPaused() const { return this->paused; }
+    inline uint32_t getCountStep() const { return this->countStep; }
+    inline void setElapsedCount(const uint32_t& val) { this->elapsedCount = val; }
 
-    inline double deltaTimeSecounds() { return ((double)deltaCountMS()) / 1000.0f; }
+    inline double deltaTimeSecounds() { return ((double)this->deltaCountMS()) / 1000.0f; }
 
-    inline uint32_t deltaCountMS() {
-        uint32_t current = SDL_GetTicks();
-        uint32_t val = current - lastTicks;
-        lastTicks = current;
+    inline const uint32_t deltaCountMS() {
+        const uint32_t current = SDL_GetTicks();
+        const uint32_t val = current - this->lastTicks;
+        this->lastTicks = current;
         return val;
     }
-
-  private:
-    bool started = false;
-    bool paused = false;
-    uint32_t startTicks = 0;
-    uint32_t lastTicks = 0;
-    uint32_t pausedTicks = 0;
-    uint32_t step = 0;
-    uint32_t countStep = 0;
-    uint32_t elapsedCount = 0;
 };
-} // namespace Chimera
+} // namespace me

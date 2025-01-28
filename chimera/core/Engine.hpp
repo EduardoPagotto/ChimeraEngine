@@ -3,7 +3,7 @@
 #include "Timer.hpp"
 #include "interfaces.hpp"
 
-namespace me {
+namespace ce {
 class Engine {
     uint32_t fps = 140;
     Timer timerFPS;
@@ -16,4 +16,4 @@ class Engine {
     void run();
     StateStack& getStack() { return stack; }
 };
-} // namespace me
+} // namespace ce

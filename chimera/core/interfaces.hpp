@@ -1,14 +1,14 @@
 #pragma once
-#include "chimera/core/ServiceLocator.hpp"
+#include "ServiceLocator.hpp"
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
-namespace Chimera {
+namespace ce {
 
-/// @brief Canva Interface
+/// @brief Canvas Interface
 /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
 /// @since 20130925
-/// @date 20240714
+/// @date 20250126
 class ICanva : public IService {
   public:
     virtual ~ICanva() = default;
@@ -28,7 +28,7 @@ struct CanvasComponent {
 
 class IMouse : public IService {
   public:
-    virtual ~IMouse() noexcept = default;
+    virtual ~IMouse() = default;
     virtual const uint8_t getButtonState(const uint8_t& indice) noexcept = 0;
     virtual const glm::ivec2 getMove() const noexcept = 0;
     virtual const glm::ivec2 getMoveRel() noexcept = 0;
@@ -40,7 +40,7 @@ class IMouse : public IService {
 
 class IKeyboard : public IService {
   public:
-    virtual ~IKeyboard() noexcept = default;
+    virtual ~IKeyboard() = default;
     virtual void setDown(const SDL_KeyboardEvent& event) noexcept = 0;
     virtual void setUp(const SDL_KeyboardEvent& event) noexcept = 0;
     virtual const bool isPressed(const SDL_Keycode& key) noexcept = 0;
@@ -50,16 +50,15 @@ class IKeyboard : public IService {
 
 class IJoystick : public IService {
   public:
-    virtual ~IJoystick() noexcept = default;
+    virtual ~IJoystick() = default;
     virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
     virtual SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept = 0;
 };
 
 class IGameController : public IService {
   public:
-    virtual ~IGameController() noexcept = default;
+    virtual ~IGameController() = default;
     virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
     virtual SDL_GameController* get(const SDL_JoystickID& joystick_id) noexcept = 0;
 };
-
-} // namespace Chimera
+} // namespace ce

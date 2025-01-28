@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-namespace me {
+namespace ce {
 
 class IStateMachine {
   public:
@@ -14,4 +14,4 @@ class IStateMachine {
     virtual bool onEvent(const SDL_Event& event) = 0;
     virtual const std::string getName() = 0;
 };
-} // namespace me
+} // namespace ce

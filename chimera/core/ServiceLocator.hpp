@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <typeindex>
 
-namespace me {
+namespace ce {
 
 /// @brief Base class for all services.
 class IService {
@@ -74,4 +74,4 @@ class ServiceLocator {
 /// @brief Global access to ServiceLocator
 inline ServiceLocator g_service_locator;
 
-} // namespace me
+} // namespace ce

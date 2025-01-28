@@ -2,7 +2,7 @@
 #include "interfaces.hpp"
 #include <map>
 
-namespace Chimera {
+namespace ce {
 class Keyboard : public ServiceBase<IKeyboard> {
   private:
     std::map<SDL_Keycode, uint8_t> mapKey;
@@ -10,7 +10,7 @@ class Keyboard : public ServiceBase<IKeyboard> {
 
   public:
     Keyboard() noexcept = default;
-    virtual ~Keyboard() noexcept override = default;
+    virtual ~Keyboard() = default;
 
     virtual void setDown(const SDL_KeyboardEvent& event) noexcept override {
         mapKey[event.keysym.sym] = SDL_PRESSED;
@@ -46,4 +46,4 @@ class Keyboard : public ServiceBase<IKeyboard> {
         return false;
     }
 };
-} // namespace Chimera
+} // namespace ce

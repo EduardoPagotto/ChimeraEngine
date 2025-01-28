@@ -2,7 +2,7 @@
 #include "interfaces.hpp"
 #include <map>
 
-namespace Chimera {
+namespace ce {
 class GameController : public ServiceBase<IGameController> {
   private:
     std::map<SDL_JoystickID, SDL_GameController*> pads;
@@ -13,7 +13,7 @@ class GameController : public ServiceBase<IGameController> {
         SDL_GameControllerEventState(SDL_ENABLE);
     }
 
-    virtual ~GameController() noexcept override {
+    virtual ~GameController() {
         for (auto i = pads.begin(); i != pads.end(); i++)
             SDL_GameControllerClose(i->second);
 
@@ -68,4 +68,4 @@ class GameController : public ServiceBase<IGameController> {
         }
     }
 };
-} // namespace Chimera
+} // namespace ce

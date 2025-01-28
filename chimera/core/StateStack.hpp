@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace me {
+namespace ce {
 
 class StateStack {
     std::vector<IStateMachine*> states;
@@ -50,4 +50,4 @@ class StateStack {
     inline std::vector<IStateMachine*>::iterator begin() { return states.begin(); }
     inline std::vector<IStateMachine*>::iterator end() { return states.end(); }
 };
-} // namespace me
+} // namespace ce

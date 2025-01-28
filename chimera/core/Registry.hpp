@@ -3,7 +3,7 @@
 #include <entt/entt.hpp>
 #include <stdexcept>
 
-namespace me {
+namespace ce {
 
 class Entity;
 
@@ -118,4 +118,4 @@ inline Registry g_registry;
 // Relationship child2 = obj0.addChild("child02", "child02");
 // Relationship child3 = child2.addChild("child03", "child03");
 // Relationship child4 = child2.addChild("child04", "child04");
-} // namespace me
+} // namespace ce

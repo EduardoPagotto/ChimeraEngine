@@ -2,7 +2,7 @@
 #include "interfaces.hpp"
 #include <map>
 
-namespace Chimera {
+namespace ce {
 class Joystick : public ServiceBase<IJoystick> {
   private:
     std::map<SDL_JoystickID, SDL_Joystick*> joys;
@@ -13,7 +13,7 @@ class Joystick : public ServiceBase<IJoystick> {
         SDL_JoystickEventState(SDL_ENABLE);
     };
 
-    virtual ~Joystick() noexcept override {
+    virtual ~Joystick() {
         for (auto i = joys.begin(); i != joys.end(); i++)
             SDL_JoystickClose(i->second);
 
@@ -74,4 +74,4 @@ class Joystick : public ServiceBase<IJoystick> {
         }
     }
 };
-} // namespace Chimera
+} // namespace ce

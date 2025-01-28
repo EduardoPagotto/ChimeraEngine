@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-namespace me {
+namespace ce {
 
 /// @brief Class Timer
 /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
@@ -90,4 +90,4 @@ class Timer {
         return val;
     }
 };
-} // namespace me
+} // namespace ce

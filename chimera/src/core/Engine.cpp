@@ -1,28 +1,21 @@
-#include "chimera/core/Engine.hpp"
-#include "chimera/core/Registry.hpp"
-// #include "chimera/core/device/Keyboard.hpp"
-// #include "chimera/core/device/Mouse.hpp"
-#include "chimera/core/utils.hpp"
+#include "core/Engine.hpp"
+#include "core/ServiceLocator.hpp"
+#include "core/utils.hpp"
 
-namespace Chimera {
+namespace ce {
 
-Engine::Engine(std::shared_ptr<ServiceLocator> serviceLoc) : serviceLoc(serviceLoc) {
+Engine::Engine() {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 
-    canvas = serviceLoc->getService<ICanva>();
-    vp = serviceLoc->getService<IViewProjection>();
-    registry = serviceLoc->getService<Registry>();
-    Entity entity = registry->createEntity("chimera_engine", "chimera_engine");
+    canvas = g_service_locator.getService<ICanva>();
+    // FIXME: nao esquecer de ver isto
+    // registry->createEntity("mechanical_engine", "mechanical_engine");
 
-    SDL_Log("Engine Register: chimera_engine OK");
+    SDL_Log("Engine OK");
 }
 
-Engine::~Engine() {
-    canvas = nullptr;
-    vp = nullptr;
-    registry = nullptr;
-}
+Engine::~Engine() { canvas = nullptr; }
 
 void Engine::run(void) {
     SDL_Event event;
@@ -84,7 +77,7 @@ void Engine::run(void) {
         ts = (double)countDelta / 1000.0f;
         if (!pause) { // update game
             for (auto it = stack.begin(); it != stack.end(); it++)
-                (*it)->onUpdate(*vp.get(), ts);
+                (*it)->onUpdate(ts);
 
             canvas->before();
             for (auto it = stack.begin(); it != stack.end(); it++)
@@ -105,4 +98,4 @@ void Engine::run(void) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

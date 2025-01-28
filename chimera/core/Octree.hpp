@@ -1,11 +1,11 @@
 #pragma once
 #include "AABB.hpp"
-#include "chimera/core/HeapQ.hpp"
+#include "HeapQ.hpp"
 #include <memory>
 #include <queue>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 class Octree {
   private:
@@ -180,4 +180,4 @@ class Octree {
         return false;
     }
 };
-} // namespace Chimera
+} // namespace ce

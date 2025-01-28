@@ -1,8 +1,8 @@
 #pragma once
-#include "chimera/core/OpenGLDefs.hpp"
+#include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 enum class SIDE { CP_ONPLANE, CP_FRONT, CP_BACK, CP_SPANNING };
 
@@ -114,4 +114,4 @@ class Plane {
                             : (normal.y < 0.0f ? (normal.x < 0.0f ? 4 : 5) : (normal.x < 0.0f ? 6 : 7));
     }
 };
-} // namespace Chimera
+} // namespace ce

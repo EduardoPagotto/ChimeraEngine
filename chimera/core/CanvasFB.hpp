@@ -2,13 +2,13 @@
 #include "interfaces.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 class CanvasFB : public ServiceBase<ICanva> {
   private:
-    bool fullScreen{false};
+    std::string title;
     int width, height;
     int posX, posY;
-    std::string title;
+    bool fullScreen{false};
     uint32_t* pixels{nullptr};
     uint32_t pixelFormat;
     SDL_Texture* texture{nullptr};
@@ -27,4 +27,4 @@ class CanvasFB : public ServiceBase<ICanva> {
     uint32_t* getPixels() override { return pixels; }
     uint32_t getPixelFormat() { return pixelFormat; }
 };
-} // namespace Chimera
+} // namespace ce

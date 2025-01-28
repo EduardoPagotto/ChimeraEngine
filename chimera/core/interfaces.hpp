@@ -1,7 +1,6 @@
 #pragma once
 #include "ServiceLocator.hpp"
 #include <SDL2/SDL.h>
-#include <glm/glm.hpp>
 
 namespace ce {
 
@@ -30,8 +29,8 @@ class IMouse : public IService {
   public:
     virtual ~IMouse() = default;
     virtual const uint8_t getButtonState(const uint8_t& indice) noexcept = 0;
-    virtual const glm::ivec2 getMove() const noexcept = 0;
-    virtual const glm::ivec2 getMoveRel() noexcept = 0;
+    virtual const SDL_Point getMove() const noexcept = 0;
+    virtual const SDL_Point getMoveRel() noexcept = 0;
     virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
     virtual void updateBt(const SDL_MouseButtonEvent& bt) noexcept = 0;
     virtual void updateMv(const SDL_MouseMotionEvent& mv) noexcept = 0;
@@ -61,4 +60,5 @@ class IGameController : public IService {
     virtual const bool getEvent(const SDL_Event& event) noexcept = 0;
     virtual SDL_GameController* get(const SDL_JoystickID& joystick_id) noexcept = 0;
 };
+
 } // namespace ce

@@ -6,7 +6,7 @@ namespace ce {
 class Mouse : public ServiceBase<IMouse> {
   private:
     std::map<uint8_t, uint8_t> buttonState;
-    glm::ivec2 pos{glm::ivec2(0)}, rel{glm::ivec2(0)}, wheel{glm::ivec2(0)};
+    SDL_Point pos{0, 0}, rel{0, 0}, wheel{0, 0};
     uint32_t flag1{0}, flag2{0};
 
   public:
@@ -21,14 +21,14 @@ class Mouse : public ServiceBase<IMouse> {
         return SDL_RELEASED;
     }
 
-    const glm::ivec2 getMove() const noexcept override { return pos; }
+    const SDL_Point getMove() const noexcept override { return pos; }
 
-    const glm::ivec2 getMoveRel() noexcept override {
+    const SDL_Point getMoveRel() noexcept override {
         if (flag1 != flag2) {
             flag1 = flag2;
             return rel;
         }
-        return glm::ivec2(0);
+        return SDL_Point{0, 0};
     }
 
     const bool getEvent(const SDL_Event& event) noexcept override {

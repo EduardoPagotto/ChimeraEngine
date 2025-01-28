@@ -17,7 +17,7 @@
 #endif
 #include <string>
 
-namespace Chimera {
+namespace ce {
 
 class CanvasOVR : public CanvasGL {
   private:
@@ -58,5 +58,5 @@ class CanvasOVR : public CanvasGL {
 
     virtual int getTotEyes() { return 2; }
 };
-} // namespace Chimera
+} // namespace ce
 #endif //  OVR_SET_TO_USE

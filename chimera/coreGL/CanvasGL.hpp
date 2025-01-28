@@ -4,18 +4,19 @@
 
 #define GLEW_STATIC
 
-namespace Chimera {
+namespace ce {
 class CanvasGL : public ServiceBase<ICanva> {
   protected:
-    bool fullScreen{false};
+    std::string title;
     int width, height;
     int posX, posY;
-    std::string title;
+    bool fullScreen{false};
+
     SDL_Window* window{nullptr};
     SDL_GLContext context;
 
   public:
-    CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen = false);
+    CanvasGL(const std::string& title, int width, int height, bool fullScreen = false);
     virtual ~CanvasGL();
 
     virtual void before() override;
@@ -28,4 +29,4 @@ class CanvasGL : public ServiceBase<ICanva> {
 
     std::string getVersaoOpenGL();
 };
-} // namespace Chimera
+} // namespace ce

@@ -1,8 +1,8 @@
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "core/CanvasGL.hpp"
+#include "core/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Chimera {
+namespace ce {
 
 CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScreen)
     : title(title), width(width), height(height), fullScreen(fullScreen), window(nullptr) {
@@ -21,29 +21,29 @@ CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScr
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     // Cria aJanela
-    Uint32 flags = SDL_WINDOW_OPENGL;                       // | SDL_WINDOW_SHOWN;
-    if ((window = SDL_CreateWindow(title.c_str(),           // window title
-                                   SDL_WINDOWPOS_UNDEFINED, // initial x position
-                                   SDL_WINDOWPOS_UNDEFINED, // initial y position
-                                   width,                   // width, in pixels
-                                   height,                  // height, in pixels
-                                   flags)) == nullptr) {
+    const Uint32 flags = SDL_WINDOW_OPENGL;                       // | SDL_WINDOW_SHOWN;
+    if ((this->window = SDL_CreateWindow(title.c_str(),           // window title
+                                         SDL_WINDOWPOS_UNDEFINED, // initial x position
+                                         SDL_WINDOWPOS_UNDEFINED, // initial y position
+                                         width,                   // width, in pixels
+                                         height,                  // height, in pixels
+                                         flags)) == nullptr) {
 
         throw std::string("Falha Criar Janela SDL:" + std::string(SDL_GetError()));
     }
 
     // Contexto do SDL do GL
-    if ((context = SDL_GL_CreateContext(window)) == nullptr) {
+    if ((this->context = SDL_GL_CreateContext(this->window)) == nullptr) {
         throw std::string("Falha Criar contexto SDL:" + std::string(SDL_GetError()));
     }
 
     // Swap buffer interval
-    if (int interval = SDL_GL_SetSwapInterval(1); interval < 0) {
+    if (const int interval = SDL_GL_SetSwapInterval(1); interval < 0) {
         throw std::string("Falha ao Ajustar o VSync:" + std::string(SDL_GetError()));
     }
 
     // SDL_GetWindowPosition(window, &winGeometry.x, &winGeometry.y);
-    SDL_GetWindowSize(window, &width, &height);
+    SDL_GetWindowSize(this->window, &width, &height);
 
     // TODO: Testar
     // SDL_GetWindowPosition(window, &posX, &posY);
@@ -65,14 +65,14 @@ CanvasGL::CanvasGL(const std::string& title, int width, int height, bool fullScr
 }
 
 CanvasGL::~CanvasGL() {
-    if (context != nullptr) {
-        SDL_GL_DeleteContext(context);
-        context = nullptr;
+    if (this->context != nullptr) {
+        SDL_GL_DeleteContext(this->context);
+        this->context = nullptr;
     }
 
-    if (window != nullptr) {
-        SDL_DestroyWindow(window);
-        window = nullptr;
+    if (this->window != nullptr) {
+        SDL_DestroyWindow(this->window);
+        this->window = nullptr;
     }
 }
 
@@ -83,30 +83,30 @@ void CanvasGL::before() {
 
 void CanvasGL::after() {
 
-    if (GLenum erro = glGetError(); erro != GL_NO_ERROR)
+    if (const GLenum erro = glGetError(); erro != GL_NO_ERROR)
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "OpenGL Erro: %d", erro);
 
-    SDL_GL_SwapWindow(window);
+    SDL_GL_SwapWindow(this->window);
 }
 
 void CanvasGL::reshape(int _width, int _height) {
-    width = _width;
-    height = _height;
+    this->width = _width;
+    this->height = _height;
 }
 
 void CanvasGL::toggleFullScreen() {
 
-    if (fullScreen == false) {
+    if (this->fullScreen == false) {
 
-        SDL_GetWindowPosition(window, &posX, &posY);
+        SDL_GetWindowPosition(this->window, &posX, &posY);
 
-        SDL_SetWindowPosition(window, 0, 0);
-        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+        SDL_SetWindowPosition(this->window, 0, 0);
+        SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
     } else {
 
-        SDL_SetWindowFullscreen(window, 0);
-        SDL_SetWindowPosition(window, posX, posY);
+        SDL_SetWindowFullscreen(this->window, 0);
+        SDL_SetWindowPosition(this->window, posX, posY);
     }
 
     fullScreen = !fullScreen;
@@ -119,11 +119,11 @@ std::string CanvasGL::getVersaoOpenGL() {
         retorno.append(version);
     } else {
         // Check for error
-        GLenum error = glGetError();
+        const GLenum error = glGetError();
         throw std::string((const char*)gluErrorString(error));
     }
 
     return retorno;
 }
 
-} // namespace Chimera
+} // namespace ce

@@ -1,0 +1,52 @@
+{
+    "atores": [
+        {
+            "name": "Heroi",
+            "level": 1,
+            "base_xp": 5,
+            "incremento": 2
+        },
+        {
+            "name": "Monstro01",
+            "level": 1,
+            "base_xp": 5,
+            "incremento": 10
+        },
+        {
+            "name": "Monstro02",
+            "level": 1,
+            "base_xp": 5,
+            "incremento": 10
+        },
+        {
+            "name": "Monstro03",
+            "level": 1,
+            "base_xp": 4,
+            "incremento": 10
+        },
+        {
+            "name": "Monstro04",
+            "level": 1,
+            "base_xp": 4,
+            "incremento": 4
+        },
+        {
+            "name": "Monstro05",
+            "level": 1,
+            "base_xp": 4,
+            "incremento": 4
+        },
+        {
+            "name": "Monstro06",
+            "level": 1,
+            "base_xp": 4,
+            "incremento": 4
+        },
+        {
+            "name": "Monstro07",
+            "level": 1,
+            "base_xp": 4,
+            "incremento": 4
+        }
+    ]
+}

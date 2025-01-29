@@ -1,4 +1,4 @@
-#include "chimera/render/2d/BatchRender2D.hpp"
+#include "render/2d/BatchRender2D.hpp"
 
 namespace ce {
 

@@ -1,8 +1,8 @@
 #pragma once
 #include "IRenderer3d.hpp"
-#include "chimera/core/DrawLine.hpp"
-#include "chimera/core/space/Frustum.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "coreGL/DrawLine.hpp"
+#include "render/3d/Renderable3D.hpp"
+#include "space/Frustum.hpp"
 
 namespace ce {
 

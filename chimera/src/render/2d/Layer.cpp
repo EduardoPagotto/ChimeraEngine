@@ -1,5 +1,5 @@
-#include "chimera/render/2d/Layer.hpp"
-#include "chimera/core/visible/RenderCommand.hpp"
+#include "render/2d/Layer.hpp"
+#include "coreGL/RenderCommand.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace ce {

@@ -1,8 +1,8 @@
-#include "chimera/render/3d/RenderableBsp.hpp"
-#include "chimera/core/partition/BSPTree.hpp"
-#include "chimera/core/visible/ICamera.hpp"
-#include "chimera/render/3d/IRenderer3d.hpp"
-#include "chimera/render/3d/RenderableIBO.hpp"
+#include "render/3d/RenderableBsp.hpp"
+#include "render/3d/IRenderer3d.hpp"
+#include "render/3d/RenderableIBO.hpp"
+#include "space/BSPTree.hpp"
+#include "space/ICamera.hpp"
 
 namespace ce {
 

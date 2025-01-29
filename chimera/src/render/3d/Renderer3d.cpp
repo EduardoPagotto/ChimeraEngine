@@ -1,8 +1,8 @@
-#include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/core/buffer/IndexBuffer.hpp"
-#include "chimera/core/buffer/VertexArray.hpp"
-#include "chimera/core/space/AABB.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "render/3d/Renderer3d.hpp"
+#include "coreGL/IndexBuffer.hpp"
+#include "coreGL/VertexArray.hpp"
+#include "render/3d/Renderable3D.hpp"
+#include "space/AABB.hpp"
 #include <SDL2/SDL.h>
 
 namespace ce {

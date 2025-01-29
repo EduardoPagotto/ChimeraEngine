@@ -1,7 +1,7 @@
-#include "chimera/render/3d/RenderableDynamic.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/buffer/VertexArray.hpp"
-#include "chimera/core/buffer/VertexBuffer.hpp"
+#include "render/3d/RenderableDynamic.hpp"
+#include "coreGL/OpenGLDefs.hpp"
+#include "coreGL/VertexArray.hpp"
+#include "coreGL/VertexBuffer.hpp"
 
 namespace ce {
 

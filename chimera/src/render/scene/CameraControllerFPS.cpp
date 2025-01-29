@@ -1,4 +1,4 @@
-#include "coreGL/CameraControllerFPS.hpp"
+#include "render/scene/CameraControllerFPS.hpp"
 #include "core/Keyboard.hpp"
 #include "core/utils.hpp"
 

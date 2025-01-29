@@ -1,4 +1,4 @@
-#include "coreGL/CameraControllerOrbit.hpp"
+#include "render/scene/CameraControllerOrbit.hpp"
 #include "core/Keyboard.hpp"
 
 namespace ce {

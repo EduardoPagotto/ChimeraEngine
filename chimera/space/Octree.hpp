@@ -1,6 +1,6 @@
 #pragma once
 #include "AABB.hpp"
-#include "HeapQ.hpp"
+#include "core/HeapQ.hpp"
 #include <memory>
 #include <queue>
 #include <vector>

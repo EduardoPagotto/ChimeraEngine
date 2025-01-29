@@ -1,17 +1,17 @@
 #pragma once
-#include "2d/BatchRender2D.hpp"
-#include "3d/IRenderable3d.hpp"
-#include "3d/Renderer3dLines.hpp"
 #include "bullet/interfaces.hpp"
 #include "core/IStateMachine.hpp"
 #include "core/Registry.hpp"
 #include "core/StateStack.hpp"
 #include "core/interfaces.hpp"
-#include "core/space/Octree.hpp"
-#include "core/visible/ICamera.hpp"
-#include "core/visible/ITrans.hpp"
 #include "coreGL/ParticleEmitter.hpp"
 #include "coreGL/RenderBuffer.hpp"
+#include "render/2d/BatchRender2D.hpp"
+#include "render/3d/IRenderable3d.hpp"
+#include "render/3d/Renderer3dLines.hpp"
+#include "space/ICamera.hpp"
+#include "space/ITrans.hpp"
+#include "space/Octree.hpp"
 
 namespace ce {
 

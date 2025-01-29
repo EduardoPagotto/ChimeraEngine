@@ -12,6 +12,7 @@ class Layer : public IStateMachine {
     virtual ~Layer();
     virtual void onRender() override;
     inline void add(IRenderable2D* renderable) { renderables.push_back(renderable); }
+    const std::string getName() override { return this->name; }
 
     Camera* getCamera() const { return camera; };
 
@@ -20,6 +21,7 @@ class Layer : public IStateMachine {
     Camera* camera;
 
   private:
+    std::string name;
     IRenderer2D* renderer;
     std::vector<IRenderable2D*> renderables;
 };

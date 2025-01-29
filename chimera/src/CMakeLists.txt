@@ -3,5 +3,4 @@ add_subdirectory(space)
 add_subdirectory(bullet)
 add_subdirectory(coreGL)
 add_subdirectory(collada)
-
-#add_subdirectory(render)
+add_subdirectory(render)

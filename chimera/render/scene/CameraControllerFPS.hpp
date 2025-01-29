@@ -18,13 +18,13 @@ class CameraControllerFPS : public IStateMachine {
     std::shared_ptr<IMouse> mouse;
 
   public:
-    CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
+    CameraControllerFPS(Entity entity);
     virtual ~CameraControllerFPS();
     void onAttach() override;
     void onDeatach() override;
     void onRender() override {}
     void onUpdate(const double& ts) override;
-    const std::string getName() const { return "FPS"; }
+    const std::string getName() override { return "FPS"; }
     bool onEvent(const SDL_Event& event) override {
 
         // FIXME: tem merda aqui!!!

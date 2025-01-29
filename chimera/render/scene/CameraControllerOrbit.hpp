@@ -14,14 +14,14 @@ class CameraControllerOrbit : public IStateMachine {
     std::shared_ptr<IMouse> mouse;
 
   public:
-    CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
+    CameraControllerOrbit(Entity entity);
     virtual ~CameraControllerOrbit();
     void onAttach() override;
     void onDeatach() override;
     void onUpdate(const double& ts) override;
     void onRender() override {}
     bool onEvent(const SDL_Event& event) override { return true; }
-    const std::string getName() const { return "Orbit"; }
+    const std::string getName() override { return "Orbit"; }
 
   private:
     // void updateVP(IViewProjection& vp);

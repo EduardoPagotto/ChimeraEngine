@@ -3,10 +3,7 @@
 
 namespace ce {
 
-CameraControllerOrbit::CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity) : entity(entity) {
-
-    mouse = serviceLocator->getService<IMouse>();
-}
+CameraControllerOrbit::CameraControllerOrbit(Entity entity) : entity(entity) { mouse = g_service_locator.getService<IMouse>(); }
 
 CameraControllerOrbit::~CameraControllerOrbit() { mouse = nullptr; }
 

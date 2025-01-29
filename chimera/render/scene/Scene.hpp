@@ -25,8 +25,8 @@ struct ShadowData {
 class Entity;
 class Scene : public IStateMachine {
   private:
-    std::shared_ptr<Registry> registry;
-    std::shared_ptr<ServiceLocator> serviceLoc;
+    // std::shared_ptr<Registry> registry;
+    // std::shared_ptr<ServiceLocator> serviceLoc;
     std::shared_ptr<IViewProjection> vpo;
     std::shared_ptr<IPhysicsControl> phyCrt;
 
@@ -49,7 +49,7 @@ class Scene : public IStateMachine {
     DrawLine dl;
 
   public:
-    Scene(std::shared_ptr<ServiceLocator> sl);
+    Scene();
     virtual ~Scene();
     void setOrigem(ITrans* o) { origem = o; }
     StateStack& getLayes() { return this->layers; }
@@ -57,8 +57,9 @@ class Scene : public IStateMachine {
     virtual void onAttach() override;
     virtual void onDeatach() override;
     virtual void onRender() override;
-    virtual void onUpdate(IViewProjection& vp, const double& ts) override;
+    virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
+    virtual const std::string getName() override { return "Scene"; }
 
   private:
     void onViewportResize(const uint32_t& width, const uint32_t& height);

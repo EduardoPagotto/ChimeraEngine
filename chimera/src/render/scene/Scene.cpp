@@ -5,7 +5,6 @@
 #include "coreGL/Material.hpp"
 #include "coreGL/RenderCommand.hpp"
 #include "coreGL/ShaderMng.hpp"
-#include "coreGL/Transform.hpp"
 #include "coreGL/VertexArray.hpp"
 #include "render/2d/Tile.hpp"
 #include "render/3d/RenderableArray.hpp"
@@ -13,24 +12,20 @@
 #include "render/3d/RenderableMesh.hpp"
 #include "render/3d/RenderableParticles.hpp"
 #include "render/3d/Renderer3d.hpp"
+#include "render/scene/CameraControllerFPS.hpp"
+#include "render/scene/CameraControllerOrbit.hpp"
 #include "render/scene/Components.hpp"
-#include "scene/CameraControllerFPS.hpp"
-#include "scene/CameraControllerOrbit.hpp"
+#include "space/Transform.hpp"
 
 namespace ce {
 
-Scene::Scene(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Scene"), serviceLoc(sl), activeCam(nullptr), origem(nullptr), verbose(0) {
-    octree = nullptr;
-    // registry = g_service_locator.getService<Registry>();
-}
+Scene::Scene() : activeCam(nullptr), origem(nullptr), verbose(0) { octree = nullptr; }
 
 Scene::~Scene() {
     if (shadowData.shadowBuffer) {
         delete shadowData.shadowBuffer;
         shadowData.shadowBuffer = nullptr;
     }
-
-    registry = nullptr;
 }
 
 RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
@@ -84,8 +79,8 @@ void Scene::onAttach() {
     int tot_mesh = 0;
 
     // lista as tags nas entidades registradas
-    registry->get().each([&](auto entityID) {
-        Entity entity{entityID, registry.get()};
+    g_registry.get().each([&](auto entityID) {
+        Entity entity{entityID, &g_registry};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
 
@@ -181,17 +176,17 @@ void Scene::onAttach() {
     this->onViewportResize(canvas->getWidth(), canvas->getHeight());
 
     { // Registra Camera controllers ViewProjection deve ser localizado acima
-        auto view1 = registry->get().view<CameraComponent>();
+        auto view1 = g_registry.get().view<CameraComponent>();
         for (auto entity : view1) {
-            Entity e = Entity{entity, registry.get()};
+            Entity e = Entity{entity, &g_registry};
 
             auto& cc = e.getComponent<CameraComponent>();
             if (cc.camKind == CamKind::FPS) {
                 // CameraControllerFPS* ccFps = new CameraControllerFPS(e);
-                layers.pushState(new CameraControllerFPS(serviceLoc, e));
+                layers.pushState(new CameraControllerFPS(e));
             } else if (cc.camKind == CamKind::ORBIT) {
                 // CameraControllerOrbit* ccOrb = new CameraControllerOrbit(e);
-                layers.pushState(new CameraControllerOrbit(serviceLoc, e));
+                layers.pushState(new CameraControllerOrbit(e));
             } else if (cc.camKind == CamKind::STATIC) {
                 // e.addComponent<NativeScriptComponent>().bind<CameraController>("CameraController");
             }
@@ -202,7 +197,7 @@ void Scene::onAttach() {
     sceneAABB.setBoundary(tot_min, tot_max);
 }
 
-void Scene::onUpdate(IViewProjection& vp, const double& ts) {
+void Scene::onUpdate(const double& ts) {
 
     if (phyCrt) {
         phyCrt->stepSim(ts);
@@ -213,7 +208,7 @@ void Scene::onUpdate(IViewProjection& vp, const double& ts) {
         emissor->recycleLife(ts);
 
     for (auto it = layers.begin(); it != layers.end(); it++)
-        (*it)->onUpdate(vp, ts);
+        (*it)->onUpdate(ts);
 
     createOctree(sceneAABB);
 }
@@ -222,7 +217,7 @@ void Scene::onViewportResize(const uint32_t& width, const uint32_t& height) {
 
     createRenderBuffer(vpo->getSize(), width, height);
 
-    auto view = registry->get().view<CameraComponent>();
+    auto view = g_registry.get().view<CameraComponent>();
     for (auto entity : view) {
         auto& cameraComponent = view.get<CameraComponent>(entity);
         if (!cameraComponent.fixedAspectRatio) {
@@ -268,10 +263,10 @@ void Scene::renderShadow(IRenderer3d& renderer) {
 
     renderer.begin(activeCam, vpo.get(), nullptr);
     {
-        auto lightViewEnt = registry->get().view<LightComponent>();
+        auto lightViewEnt = g_registry.get().view<LightComponent>();
         for (auto entity : lightViewEnt) {
             auto& lc = lightViewEnt.get<LightComponent>(entity);
-            auto& tc = registry->get().get<TransComponent>(entity); // Lento
+            auto& tc = g_registry.get().get<TransComponent>(entity); // Lento
             if (lc.global) {
                 // FIXME: usar o direcionm depois no segundo parametro
                 glm::mat4 lightView = glm::lookAt(tc.trans->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 0.0, -1.0));
@@ -279,7 +274,7 @@ void Scene::renderShadow(IRenderer3d& renderer) {
             }
         }
 
-        auto group = registry->get().group<TransComponent, Renderable3dComponent>();
+        auto group = g_registry.get().group<TransComponent, Renderable3dComponent>();
         for (auto entity : group) {
             auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
@@ -300,12 +295,12 @@ void Scene::renderShadow(IRenderer3d& renderer) {
 }
 
 void Scene::execEmitterPass(IRenderer3d& renderer) {
-    auto view = registry->get().view<RenderableParticlesComponent>();
+    auto view = g_registry.get().view<RenderableParticlesComponent>();
     for (auto entity : view) {
         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
         IRenderable3d* renderable = rc.renderable;
 
-        Entity e = {entity, registry.get()};
+        Entity e = {entity, &g_registry};
         TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
         auto& sc = e.getComponent<ShaderComponent>();
         MaterialComponent& mc = e.getComponent<MaterialComponent>();
@@ -326,7 +321,7 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
 }
 
 void Scene::execRenderPass(IRenderer3d& renderer) {
-    auto group = registry->get().group<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
+    auto group = g_registry.get().group<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
         auto [sc, mc, tc, rc] = group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
@@ -371,11 +366,11 @@ void Scene::onRender() {
         }
 
         // data load lights
-        auto lightView = registry->get().view<LightComponent>();
+        auto lightView = g_registry.get().view<LightComponent>();
         for (auto entity : lightView) {
             auto& lc = lightView.get<LightComponent>(entity);
-            auto& tc = registry->get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
-            if (lc.global)                                          // biding light prop
+            auto& tc = g_registry.get().get<TransComponent>(entity); // lightView.get<LightComponent>(entity);
+            if (lc.global)                                           // biding light prop
                 lc.light->bindLight(renderer.uboQueue(), tc.trans->getMatrix());
         }
 
@@ -443,7 +438,7 @@ void Scene::onRender() {
                 renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
                 renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getSel().view)));
 
-                auto group = registry->get().group<TransComponent, Renderable3dComponent>();
+                auto group = g_registry.get().group<TransComponent, Renderable3dComponent>();
                 for (auto entity : group) {
                     auto [tc, rc] = group.get<TransComponent, Renderable3dComponent>(entity);
 
@@ -452,12 +447,12 @@ void Scene::onRender() {
                     rc.renderable->submit(command, renderLines);
                 }
 
-                auto view = registry->get().view<RenderableParticlesComponent>();
+                auto view = g_registry.get().view<RenderableParticlesComponent>();
                 for (auto entity : view) {
                     RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
                     IRenderable3d* renderable = rc.renderable;
 
-                    Entity e = {entity, registry.get()};
+                    Entity e = {entity, &g_registry};
                     TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
 
                     RenderCommand command;

@@ -1,5 +1,5 @@
 #pragma once
-#include "core/interfaces.hpp"
+#include "interfaces.hpp"
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <btBulletCollisionCommon.h>
 #include <map>

@@ -8,19 +8,17 @@ find_package(GLEW REQUIRED)
 
 # define objetos a compilar
 set (SourcesCore CanvasGL.cpp
-				IndexBuffer.cpp
-				VertexArray.cpp
-				FrameBuffer.cpp
-				RenderBuffer.cpp
-				DrawLine.cpp
-				Shader.cpp
-				ShaderMng.cpp
-				Texture.cpp
-				CameraControllerFPS.cpp
-				CameraControllerOrbit.cpp
-				Font.cpp
-				Material.cpp
-				ParticleEmitter.cpp)
+				 IndexBuffer.cpp
+				 VertexArray.cpp
+				 FrameBuffer.cpp
+				 RenderBuffer.cpp
+				 DrawLine.cpp
+				 Shader.cpp
+				 ShaderMng.cpp
+				 Texture.cpp
+				 Font.cpp
+				 Material.cpp
+				 ParticleEmitter.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}/chimera

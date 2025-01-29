@@ -25,6 +25,8 @@ set (RenderSource 	2d/BatchRender2D.cpp
 					3d/RenderableDynamic.cpp
 					3d/RenderableParticles.cpp
 					scene/Scene.cpp
+					scene/CameraControllerFPS.cpp
+					scene/CameraControllerOrbit.cpp
 					collada/ColladaRender.cpp)
 
 #define os includes

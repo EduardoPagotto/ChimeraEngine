@@ -50,11 +50,11 @@ class Mouse : public ServiceBase<IMouse> {
     void updateBt(const SDL_MouseButtonEvent& bt) noexcept override { this->buttonState[bt.button] = bt.state; }
 
     void updateMv(const SDL_MouseMotionEvent& mv) noexcept override {
-        this->pos = glm::ivec2(mv.x, mv.y);
-        this->rel = glm::ivec2(mv.xrel, mv.yrel);
+        this->pos = SDL_Point{mv.x, mv.y};
+        this->rel = SDL_Point{mv.xrel, mv.yrel};
         flag1++;
     }
 
-    void updateWl(const SDL_MouseWheelEvent& mwe) noexcept override { this->wheel = glm::ivec2(mwe.x, mwe.y); }
+    void updateWl(const SDL_MouseWheelEvent& mwe) noexcept override { this->wheel = SDL_Point{mwe.x, mwe.y}; }
 };
 } // namespace ce

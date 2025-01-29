@@ -47,7 +47,7 @@ void Game::onAttach() {
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
-    auto texMng = serviceLoc->getService<TextureMng>();
+    auto texMng = g_service_locator.getService<TextureMng>();
 
     for (float y = -8.0f; y < 8.0f; y++) {
         for (float x = -14.0f; x < 14.0f; x++) {
@@ -58,7 +58,7 @@ void Game::onAttach() {
         }
     }
 
-    auto fontMng = serviceLoc->getService<FontMng>();
+    auto fontMng = g_service_locator.getService<FontMng>();
     auto font = fontMng->load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
     font->setScale(glm::vec2(0.04, 0.04));
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));

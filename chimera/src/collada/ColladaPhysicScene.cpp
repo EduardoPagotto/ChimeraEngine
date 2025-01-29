@@ -21,7 +21,7 @@ const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const st
 
 void ColladaPhysicScene::loadAll(pugi::xml_node node) {
 
-    auto r = serviceLoc->getService<Registry>();
+    // auto r = g_service_locator.getService<Registry>();
     std::string id = node.attribute("id").value();
     std::string name = node.attribute("name").value();
 

@@ -5,7 +5,7 @@
 namespace ce {
 class ColladaMaterial : public Collada {
   public:
-    ColladaMaterial(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
+    ColladaMaterial(ColladaDom& dom, const std::string& url) : Collada(dom, url) {};
     virtual ~ColladaMaterial() {}
     void create(Entity& entity, const pugi::xml_node& node);
 };

@@ -10,7 +10,7 @@ namespace Chimera {
 
 void colladaRenderLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceLoc) {
 
-    auto r = serviceLoc->getService<Registry>();
+    // auto r = g_service_locator.getService<Registry>();
     pugi::xml_node vs = dom.root.child("scene");
     if (const pugi::xml_node extra = vs.child("extra"); extra != nullptr) {
 
@@ -18,7 +18,7 @@ void colladaRenderLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceL
 
             for (pugi::xml_node nTile = nTiles.first_child(); nTile; nTile = nTile.next_sibling()) {
 
-                Entity entity = r->createEntity(nTile.attribute("name").value(), nTile.attribute("id").value());
+                Entity entity = g_registry.createEntity(nTile.attribute("name").value(), nTile.attribute("id").value());
                 for (pugi::xml_node node = nTile.first_child(); node; node = node.next_sibling()) {
 
                     std::string url = node.attribute("url").value();

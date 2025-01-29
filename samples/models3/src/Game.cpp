@@ -107,7 +107,7 @@ void Game::onAttach() {
     TransComponent& tc = registry->findComponent<TransComponent>("Zoltan");
     pCorpoRigido = (Solid*)tc.trans;
 
-    auto fontMng = serviceLoc->getService<FontMng>();
+    auto fontMng = g_service_locator.getService<FontMng>();
     auto font = fontMng->getIndex(0);
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
     Tile* tile = (Tile*)scene->getLayes().getState("TileText");

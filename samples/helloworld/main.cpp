@@ -9,20 +9,28 @@
 
 int main(int argn, char** argv) {
 
-    using namespace Chimera;
     try {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Models3 Iniciado");
 
         // Registry to entt
         auto sl = std::make_shared<ServiceLocator>();
-        sl->registerService(std::make_shared<Registry>());
-        sl->registerService(std::make_shared<CanvasGL>("Simples", 800, 600, false));
-        sl->registerService(std::make_shared<Mouse>());
-        sl->registerService(std::make_shared<ViewProjection>(0.0f)); // View projection
-        sl->registerService(std::make_shared<ShaderMng>());
-        sl->registerService(std::make_shared<FontMng>());
-        sl->registerService(std::make_shared<TextureMng>());
+        // sl->registerService(std::make_shared<Registry>());
+
+        me::g_registry.createEntity("chimera_engine", "chimera_engine");
+        me::g_service_locator.registerService(std::make_shared<me::CanvasGL>("Simples", 800, 600, false));
+        me::g_service_locator.registerService(std::make_shared<Mouse>());
+        me::g_service_locator.registerService(std::make_shared<ViewProjection>(0.0f)); // View projection
+        me::g_service_locator.registerService(std::make_shared<ShaderMng>());
+        me::g_service_locator.registerService(std::make_shared<FontMng>());
+        me::g_service_locator.registerService(std::make_shared<TextureMng>());
+
+        // sl->registerService(std::make_shared<CanvasGL>("Simples", 800, 600, false));
+        // sl->registerService(std::make_shared<Mouse>());
+        // sl->registerService(std::make_shared<ViewProjection>(0.0f)); // View projection
+        // sl->registerService(std::make_shared<ShaderMng>());
+        // sl->registerService(std::make_shared<FontMng>());
+        // sl->registerService(std::make_shared<TextureMng>());
 
         Engine engine(sl);
 

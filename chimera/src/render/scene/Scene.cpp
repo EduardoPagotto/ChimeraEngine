@@ -21,7 +21,7 @@ namespace Chimera {
 
 Scene::Scene(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Scene"), serviceLoc(sl), activeCam(nullptr), origem(nullptr), verbose(0) {
     octree = nullptr;
-    registry = serviceLoc->getService<Registry>();
+    // registry = g_service_locator.getService<Registry>();
 }
 
 Scene::~Scene() {
@@ -76,8 +76,8 @@ void Scene::createOctree(const AABB& aabb) {
 
 void Scene::onAttach() {
     // Pega o ViewProjection do ECS antes da camera por caussa do vpo
-    vpo = serviceLoc->getService<IViewProjection>();
-    phyCrt = serviceLoc->getServiceOrNull<IPhysicsControl>();
+    vpo = g_service_locator.getService<IViewProjection>();
+    phyCrt = g_service_locator.getServiceOrNull<IPhysicsControl>();
 
     // Totalizadores de area
     glm::vec3 tot_min, tot_max;
@@ -177,7 +177,7 @@ void Scene::onAttach() {
     });
 
     // Pega icanvas depois de camera definida!!!
-    auto canvas = serviceLoc->getService<ICanva>();
+    auto canvas = g_service_locator.getService<ICanva>();
     this->onViewportResize(canvas->getWidth(), canvas->getHeight());
 
     { // Registra Camera controllers ViewProjection deve ser localizado acima
@@ -407,7 +407,7 @@ void Scene::onRender() {
                     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
 
-                    auto mng = serviceLoc->getService<ShaderMng>();
+                    auto mng = g_service_locator.getService<ShaderMng>();
                     dl.create(mng->load("DrawLine", shadeData), 40000);
                 }
 
@@ -434,7 +434,7 @@ void Scene::onRender() {
                     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Line.vert";
                     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Line.frag";
 
-                    auto mng = serviceLoc->getService<ShaderMng>();
+                    auto mng = g_service_locator.getService<ShaderMng>();
                     renderLines.create(mng->load("DrawLine", shadeData), 10000);
                 }
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <glm/glm.hpp>
+#include "space.hpp"
 #include <vector>
 
 namespace ce {

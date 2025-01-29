@@ -3,7 +3,6 @@
 
 namespace ce {
 
-#TODO : mandar para coreGL depois
 struct BSPTreeNode {
     Plane hyperPlane; // HyperPlane partition;
     BSPTreeNode* front;

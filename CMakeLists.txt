@@ -11,7 +11,7 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 message(STATUS "*********************************************")
 
 set(OVR_SET_TO_USE OFF)
-set(BULLET_SET_TO_USE ON)
+set(BULLET_SET_TO_USE OFF)
 
 #option(OVR_SET_TO_USE "Compilar com Driver OVR" ON)
 #option(OVR_SET_TO_USE "Compilar sem Driver OVR" OFF)
@@ -32,7 +32,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 add_subdirectory(chimera)
-add_subdirectory(samples)
+#add_subdirectory(samples)
 
 # clean
 add_custom_target (clean-all COMMAND rm -rf ${CMAKE_BINARY_DIR}/*

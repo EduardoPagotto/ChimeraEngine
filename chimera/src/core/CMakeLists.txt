@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.28)
 
 PROJECT(ChimeraCore)
 
-find_package(OpenGL REQUIRED)
+#find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(PUGIXML REQUIRED)
-find_package(GLEW REQUIRED)
+#find_package(PUGIXML REQUIRED)
+#find_package(GLEW REQUIRED)
 
-if (BULLET_SET_TO_USE)
-	find_package(Bullet REQUIRED)
-endif(BULLET_SET_TO_USE)
+# if (BULLET_SET_TO_USE)
+# 	find_package(Bullet REQUIRED)
+# endif(BULLET_SET_TO_USE)
 
 # define objetos a compilar
 set (SourcesCore Registry.cpp
@@ -56,9 +56,10 @@ set (SourcesCore Registry.cpp
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}/chimera
 				 ${SDL2_INCLUDE_DIR}
-				 ${OPENGL_INCLUDE_DIR}
-				 ${PUGIXML_DIR}
-				 ${GLEW_INCLUDE_DIRS})
+				 #${OPENGL_INCLUDE_DIR}
+				 #${PUGIXML_DIR}
+				 #${GLEW_INCLUDE_DIRS}
+				 )
 
 # # Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
 # if (OVR_SET_TO_USE)

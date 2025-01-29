@@ -1,7 +1,7 @@
 #pragma once
 #include "Triangle.hpp"
 #include "core/TagComponent.hpp"
-#include <glm/glm.hpp>
+#include "space.hpp"
 #include <list>
 #include <memory>
 

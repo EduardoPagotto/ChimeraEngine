@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <vector>
 
+namespace ce {
 template <class T>
 class HeapQ {
   private:
@@ -127,3 +128,4 @@ class HeapQ {
         }
     }
 };
+} // namespace ce

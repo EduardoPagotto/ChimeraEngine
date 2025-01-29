@@ -1,8 +1,7 @@
-#include "chimera/core/visible/Mesh.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "space/Mesh.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 MeshType getMeshTypeFromString(const std::string& text) {
     if (text == "ARRAY") {
@@ -199,4 +198,4 @@ std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexIndexedBoundaries(std::vector<
 
     return {min, max, getSizeMinMax(min, max)};
 }
-} // namespace Chimera
+} // namespace ce

@@ -1,10 +1,10 @@
 #pragma once
-#include "chimera/core/space/Triangle.hpp"
-#include "chimera/core/visible/Mesh.hpp"
+#include "Mesh.hpp"
+#include "Triangle.hpp"
 #include <SDL2/SDL_image.h>
 #include <string>
 
-namespace Chimera {
+namespace ce {
 
 class LoadHeightMap {
   private:
@@ -26,4 +26,4 @@ class LoadHeightMap {
     glm::vec3 defineScale(const glm::vec3& _size);
     // glm::vec3 calcNormalHeight(int x, int z);
 };
-} // namespace Chimera
+} // namespace ce

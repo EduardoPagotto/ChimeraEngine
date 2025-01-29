@@ -4,7 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-namespace Chimera {
+namespace ce {
 class Transform : public ITrans {
   public:
     Transform() = default;
@@ -34,4 +34,4 @@ class Transform : public ITrans {
   private:
     glm::mat4 transform = glm::mat4(1.0f);
 };
-} // namespace Chimera
+} // namespace ce

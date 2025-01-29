@@ -1,8 +1,8 @@
 #pragma once
-#include "chimera/core/TagComponent.hpp"
+#include "core/TagComponent.hpp"
 #include <glm/glm.hpp>
 
-namespace Chimera {
+namespace ce {
 class ITrans {
   public:
     virtual ~ITrans() = default;
@@ -21,4 +21,4 @@ struct TransComponent {
     TransComponent() = default;
 };
 
-} // namespace Chimera
+} // namespace ce

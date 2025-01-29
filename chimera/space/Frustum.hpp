@@ -53,7 +53,8 @@ class Frustum {
     }
 
     // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
-    // inline const float AABBDistance(const std::vector<glm::vec3>& vList) const { return planes[5].AABBDistance(vList); }
+    // inline const float AABBDistance(const std::vector<glm::vec3>& vList) const { return
+    // planes[5].AABBDistance(vList); }
 
     // void render_debug() const {
     //     glBegin(GL_LINES);

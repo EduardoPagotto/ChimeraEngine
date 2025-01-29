@@ -12,7 +12,8 @@ struct ParticleZ {
     float size = 0.0f, life = -1.0f, distance = 0.0f;
 
     ParticleZ() = default;
-    ParticleZ(const ParticleZ& o) : pos(o.pos), speed(o.speed), color(o.color), size(o.size), life(o.life), distance(o.distance) {}
+    ParticleZ(const ParticleZ& o)
+        : pos(o.pos), speed(o.speed), color(o.color), size(o.size), life(o.life), distance(o.distance) {}
     bool operator<(const ParticleZ& that) const {
         return this->distance > that.distance; // Sort in reverse order : far particles drawn first.
     }

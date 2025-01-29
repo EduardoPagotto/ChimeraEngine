@@ -18,11 +18,11 @@
 		"editor.formatOnSave": true,
 		"editor.minimap.enabled": false,
 		"editor.fontFamily": "JetBrains Mono",
-		"editor.fontSize": 16,
-		"editor.fontWeight": "300",
+		"editor.fontSize": 17,
+		"editor.fontWeight": "normal",
 		"editor.fontLigatures": true,
-		"editor.letterSpacing": 0.8,
-		"editor.lineHeight": 22,
+		"editor.letterSpacing": 0.4,
+		"editor.lineHeight": 1.7,
 		"editor.smoothScrolling": true,
 		"editor.suggest.preview": true,
 		"editor.cursorSmoothCaretAnimation": "on",
@@ -67,7 +67,7 @@
 		"C_Cpp.configurationWarnings": "enabled",
 		"C_Cpp.enhancedColorization": "enabled",
 		"C_Cpp.intelliSenseCachePath": "${workspaceFolder}/build/vscode_cache",
-		"C_Cpp.intelliSenseEngine": "default",
+		"C_Cpp.intelliSenseEngine": "Tag Parser",
 		"C_Cpp.clang_format_path": "/usr/bin/clang-format",
 		// CMAKE
 		"cmake.configureOnOpen": true,
@@ -163,5 +163,6 @@
 		"lldb.showDisassembly": "auto",
 		"lldb.dereferencePointers": true,
 		"lldb.consoleMode": "commands",
+		"todo-tree.tree.scanMode": "workspace only",
 	}
 }

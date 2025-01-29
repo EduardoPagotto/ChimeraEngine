@@ -57,7 +57,8 @@ class TextureMng : public IService {
         return textures.begin()->second;
     }
 
-    std::shared_ptr<Texture> loadFromSurface(const std::string& name, SDL_Surface* surface, TexParam textureParameters) noexcept {
+    std::shared_ptr<Texture> loadFromSurface(const std::string& name, SDL_Surface* surface,
+                                             TexParam textureParameters) noexcept {
         Texture::invert_image_texture(surface->pitch, surface->h, surface->pixels);
 
         std::shared_ptr<Texture> tex = std::make_shared<Texture>(surface, textureParameters);
@@ -65,7 +66,8 @@ class TextureMng : public IService {
         return tex;
     }
 
-    std::shared_ptr<Texture> loadFromFile(const std::string& name, const std::string& pathfile, TexParam textureParameters) {
+    std::shared_ptr<Texture> loadFromFile(const std::string& name, const std::string& pathfile,
+                                          TexParam textureParameters) {
         SDL_Surface* pImage = IMG_Load(pathfile.c_str());
         if (pImage == nullptr)
             throw std::string("Falha ao ler arquivo:" + pathfile);

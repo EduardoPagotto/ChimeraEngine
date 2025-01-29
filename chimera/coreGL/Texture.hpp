@@ -41,10 +41,10 @@ enum class TexDType {
 struct TexParam {
     TexParam() = default;
     TexParam(const TexParam& o) = default;
-    TexParam(TexFormat format, TexFormat internalFormat, TexFilter minFilter, TexFilter magFilter, TexWrap wrap_r, TexWrap wrap_s,
-             TexWrap wrap_t, TexDType type)
-        : format(format), internalFormat(internalFormat), minFilter(minFilter), magFilter(magFilter), wrap_r(wrap_r), wrap_s(wrap_s),
-          wrap_t(wrap_t), type(type), samples(1) {}
+    TexParam(TexFormat format, TexFormat internalFormat, TexFilter minFilter, TexFilter magFilter, TexWrap wrap_r,
+             TexWrap wrap_s, TexWrap wrap_t, TexDType type)
+        : format(format), internalFormat(internalFormat), minFilter(minFilter), magFilter(magFilter), wrap_r(wrap_r),
+          wrap_s(wrap_s), wrap_t(wrap_t), type(type), samples(1) {}
 
     TexFormat format = TexFormat::RGBA;
     TexFormat internalFormat = TexFormat::RGBA;

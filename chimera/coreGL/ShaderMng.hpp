@@ -33,6 +33,7 @@ class ShaderMng : public IService {
         }
     }
 
-    std::shared_ptr<Shader> load(const std::string& name, const std::unordered_map<uint32_t, std::string>& mFiles) noexcept;
+    std::shared_ptr<Shader> load(const std::string& name,
+                                 const std::unordered_map<uint32_t, std::string>& mFiles) noexcept;
 };
 } // namespace ce

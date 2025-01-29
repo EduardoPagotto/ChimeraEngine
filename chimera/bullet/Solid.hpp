@@ -41,8 +41,12 @@ class Solid : public ITrans {
     // prop init FIXME: melhorar!!! ainda confuso
     void init(const glm::vec3& _size); // usado no scene no final da inicializacao
     // prop shape
-    inline void setShapeBox(const glm::vec3& _size) { pShapeCollision = new btBoxShape(btVector3(_size.x, _size.y, _size.z)); }
-    inline void setShapeCilinder(const glm::vec3& _val) { pShapeCollision = new btCylinderShape(btVector3(_val.x, _val.y, _val.z)); }
+    inline void setShapeBox(const glm::vec3& _size) {
+        pShapeCollision = new btBoxShape(btVector3(_size.x, _size.y, _size.z));
+    }
+    inline void setShapeCilinder(const glm::vec3& _val) {
+        pShapeCollision = new btCylinderShape(btVector3(_val.x, _val.y, _val.z));
+    }
     inline void setShapePlane(const glm::vec3& _val, const float& _constant) {
         pShapeCollision = new btStaticPlaneShape(btVector3(_val.x, _val.y, _val.z), _constant);
     }

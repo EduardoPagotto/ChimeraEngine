@@ -52,7 +52,8 @@ class Joystick : public ServiceBase<IJoystick> {
                     this->joys[id] = handle;
 
                     const char* joystick_name = SDL_JoystickName(handle);
-                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick %d: %s", i, joystick_name ? joystick_name : "[no name]");
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick %d: %s", i,
+                                 joystick_name ? joystick_name : "[no name]");
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick id: %d", SDL_JoystickInstanceID(handle));
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick axes: %d", SDL_JoystickNumAxes(handle));
                     SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick hats: %d", SDL_JoystickNumHats(handle));

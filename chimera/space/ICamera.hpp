@@ -26,7 +26,8 @@ class Camera {
 
 class CameraOrtho : public Camera {
   public:
-    CameraOrtho(const float& xmag, const float& ymag, const float& near, const float& far) : xmag(xmag), ymag(ymag), near(near), far(far) {}
+    CameraOrtho(const float& xmag, const float& ymag, const float& near, const float& far)
+        : xmag(xmag), ymag(ymag), near(near), far(far) {}
     virtual ~CameraOrtho() = default;
     virtual void setViewportSize(const uint32_t& width, const uint32_t& height) override {
         float halfAspectRatio = ((float)width / (float)height) * 0.5f;

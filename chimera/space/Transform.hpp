@@ -22,10 +22,10 @@ class Transform : public ITrans {
         return glm::make_mat4(matrix);
     }
     // void setPositionRotation(const glm::vec3& _posicao, const glm::vec3& _rotation) {
-    //     glm::quat myQuat(_rotation);                                    // trocar (pitch, yaw, roll) por (yaw, pitch, roll) ?????
-    //     glm::mat4 matRot = glm::toMat4(myQuat);                         // matriz rotacao
-    //     glm::mat4 matTrans = glm::translate(glm::mat4(1.0f), _posicao); // matriz translacao
-    //     transform = matRot * matTrans;                                  // primeiro translada depois rotaciona, ordem é importante!!!
+    //     glm::quat myQuat(_rotation);                                    // trocar (pitch, yaw, roll) por (yaw, pitch,
+    //     roll) ????? glm::mat4 matRot = glm::toMat4(myQuat);                         // matriz rotacao glm::mat4
+    //     matTrans = glm::translate(glm::mat4(1.0f), _posicao); // matriz translacao transform = matRot * matTrans; //
+    //     primeiro translada depois rotaciona, ordem é importante!!!
     // }
     virtual void setPosition(const glm::vec3& pos) override { this->transform = glm::translate(this->transform, pos); }
     virtual void setRotation(const glm::vec3& rot) override { transform = glm::eulerAngleYXZ(rot.y, rot.x, rot.z); }

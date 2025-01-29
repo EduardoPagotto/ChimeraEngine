@@ -34,8 +34,10 @@ void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& vTris);
 void meshReindex(Mesh& inData, Mesh& outData);
 void meshDebug(const Mesh& m, bool _showAll);
 void meshSerialize(Mesh& inData, Mesh& outData);
-void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idxIn, std::vector<uint32_t>& idxOut);
-void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idxIn, std::vector<uint32_t>& idxOut);
+void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idxIn,
+                      std::vector<uint32_t>& idxOut);
+void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, std::vector<uint32_t>& idxIn,
+                      std::vector<uint32_t>& idxOut);
 
 std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexBoundaries(std::vector<VertexData>& vArray);
 std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexIndexedBoundaries(std::vector<VertexData>& vArray, TrisIndex& tris);

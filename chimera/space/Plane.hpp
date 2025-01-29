@@ -18,7 +18,9 @@ class Plane {
 
     explicit Plane(const Plane& o) noexcept = default;
 
-    explicit Plane(const glm::vec3& point, const glm::vec3& normal) noexcept : point(point), normal(normal) { this->calcND(); }
+    explicit Plane(const glm::vec3& point, const glm::vec3& normal) noexcept : point(point), normal(normal) {
+        this->calcND();
+    }
 
     explicit Plane(const glm::vec3& pa, const glm::vec3& pb, const glm::vec3& pc) noexcept : point(pa) {
         normal = glm::normalize(glm::cross(pb - pa, pc - pa));
@@ -51,7 +53,8 @@ class Plane {
         return SIDE::CP_BACK;
     }
 
-    inline const SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC, glm::vec3& clipTest) const noexcept {
+    inline const SIDE classifyPoly(const glm::vec3& pA, const glm::vec3& pB, const glm::vec3& pC,
+                                   glm::vec3& clipTest) const noexcept {
         uint8_t infront{0}, behind{0}, onPlane{0};
 
         clipTest.x = glm::dot((this->point - pA), this->normal); // Clip Test poin A
@@ -83,7 +86,8 @@ class Plane {
         return SIDE::CP_SPANNING;
     }
 
-    inline const bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection, float& percentage) const noexcept {
+    inline const bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection,
+                                float& percentage) const noexcept {
         const glm::vec3 direction = p1 - p0;
         const float linelength = glm::dot(direction, this->normal);
         if (fabsf(linelength) < 0.0001) // FIXME: EPISLON????
@@ -102,10 +106,13 @@ class Plane {
         return true;
     }
 
-    inline const bool AABBBehind(const std::vector<glm::vec3>& vList) const noexcept { return glm::dot(normal, vList[O]) < ND; }
+    inline const bool AABBBehind(const std::vector<glm::vec3>& vList) const noexcept {
+        return glm::dot(normal, vList[O]) < ND;
+    }
 
     // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
-    // inline const float AABBDistance(const std::vector<glm::vec3>& vList) const noexcept { return glm::dot(normal, vList[O]); }
+    // inline const float AABBDistance(const std::vector<glm::vec3>& vList) const noexcept { return glm::dot(normal,
+    // vList[O]); }
 
   private:
     void calcND() noexcept {

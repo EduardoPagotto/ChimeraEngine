@@ -22,12 +22,14 @@ class Octree {
 
   public:
     explicit Octree(const glm::vec3& pos, const glm::vec3& size, Octree* parent) noexcept
-        : pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1), serial(serial_master++) {
+        : pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1),
+          serial(serial_master++) {
         boundary.setPosition(pos, size);
     }
 
     explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leafMode) noexcept
-        : boundary(boundary), capacity(capacity), leafMode(leafMode), pParent(nullptr), deep(0), serial(serial_master++) {}
+        : boundary(boundary), capacity(capacity), leafMode(leafMode), pParent(nullptr), deep(0),
+          serial(serial_master++) {}
 
     virtual ~Octree() noexcept { destroy(); }
 

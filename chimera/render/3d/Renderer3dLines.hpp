@@ -22,7 +22,9 @@ class Renderer3dLines : public IRenderer3d {
 
     bool valid() noexcept { return drawLine.valid(); }
     void destroy() noexcept { drawLine.destroy(); };
-    void create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept { drawLine.create(shader, sizeBuffer); };
+    void create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept {
+        drawLine.create(shader, sizeBuffer);
+    };
 };
 
 } // namespace ce

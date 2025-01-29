@@ -26,7 +26,9 @@ class VertexBuffer {
 
     virtual ~VertexBuffer() { glDeleteBuffers(1, &bufferID); }
 
-    void reSize(const uint32_t& size) { glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), nullptr, (GLuint)type); }
+    void reSize(const uint32_t& size) {
+        glBufferData(GL_ARRAY_BUFFER, size * layout.getStride(), nullptr, (GLuint)type);
+    }
 
     void setLayout(const BufferLayout& bufferLayout) {
         layout = bufferLayout;
@@ -35,7 +37,8 @@ class VertexBuffer {
 
             const BufferElement& element = elements[i];
             glEnableVertexAttribArray(i);
-            if (elements.size() > 1) // FIXME: se componente for diferente de floatprecisa usar outro (ex: glVertexAttribIPointer, para int)
+            if (elements.size() > 1) // FIXME: se componente for diferente de floatprecisa usar outro (ex:
+                                     // glVertexAttribIPointer, para int)
                 glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(),
                                       BUFFER_OFFSET(element.offset));
             else

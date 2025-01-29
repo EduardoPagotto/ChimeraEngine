@@ -27,7 +27,9 @@ class Material {
     virtual ~Material();
     void init();
     void setDefaultEffect();
-    void addTexture(const std::string& uniformTexName, std::shared_ptr<Texture> texture) { this->mapTex[uniformTexName] = texture; }
+    void addTexture(const std::string& uniformTexName, std::shared_ptr<Texture> texture) {
+        this->mapTex[uniformTexName] = texture;
+    }
     inline void setAmbient(const glm::vec4& _color) { listMaterial[SHADE_MAT_AMBIENTE] = UValue(_color); }
     inline void setSpecular(const glm::vec4& _color) { listMaterial[SHADE_MAT_SPECULA] = UValue(_color); }
     inline void setDiffuse(const glm::vec4& _color) { listMaterial[SHADE_MAT_DIFFUSE] = UValue(_color); }

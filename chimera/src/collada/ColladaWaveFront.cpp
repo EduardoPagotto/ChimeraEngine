@@ -1,10 +1,10 @@
-#include "chimera/core/collada/ColladaWaveFront.hpp"
-#include "chimera/core/collada/ColladaEffect.hpp"
-#include "chimera/core/partition/Wavefront.hpp"
-#include "chimera/core/visible/Material.hpp"
-#include "chimera/core/visible/Mesh.hpp"
+#include "collada/ColladaWaveFront.hpp"
+#include "collada/ColladaEffect.hpp"
+#include "coreGL/Material.hpp"
+#include "space/Mesh.hpp"
+#include "space/Wavefront.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaWaveFront::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
     MeshComponent& eMesh = entity.addComponent<MeshComponent>();
@@ -39,4 +39,4 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

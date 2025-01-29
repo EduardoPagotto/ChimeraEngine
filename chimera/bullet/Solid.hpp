@@ -1,13 +1,13 @@
 #pragma once
 #include "PhysicsControl.hpp"
-#include "chimera/core/visible/ITrans.hpp"
+#include "space/ITrans.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Chimera {
+namespace ce {
 
 class Solid : public ITrans {
   private:
@@ -58,4 +58,4 @@ class Solid : public ITrans {
     inline void setFrictionStatic(const float& _friction) { frictionStatic = _friction; }
     inline void setRestitution(const float& _restitution) { restitution = _restitution; }
 };
-} // namespace Chimera
+} // namespace ce

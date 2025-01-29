@@ -1,8 +1,8 @@
-#include "chimera/core/collada/ColladaHeightMap.hpp"
-#include "chimera/core/partition/LoadHeightMap.hpp"
-#include "chimera/core/visible/Mesh.hpp"
+#include "collada/ColladaHeightMap.hpp"
+#include "space/LoadHeightMap.hpp"
+#include "space/Mesh.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaHeightMap::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
     MeshComponent& mc = entity.addComponent<MeshComponent>();
@@ -22,4 +22,4 @@ void ColladaHeightMap::create(const std::string& id, const std::string& name, En
     loader.split(mc.mesh->iFace, mc.vTrisIndex);
     mc.type = getMeshTypeFromString(geo.attribute("partition").value());
 }
-} // namespace Chimera
+} // namespace ce

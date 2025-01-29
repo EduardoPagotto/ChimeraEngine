@@ -2,7 +2,7 @@
 #include "Solid.hpp"
 #include <LinearMath/btTransform.h>
 
-namespace Chimera {
+namespace ce {
 
 class Constraint {
   private:
@@ -15,4 +15,4 @@ class Constraint {
     Constraint() = default;
     virtual ~Constraint() = default;
 };
-} // namespace Chimera
+} // namespace ce

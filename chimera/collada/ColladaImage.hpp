@@ -1,13 +1,13 @@
 #pragma once
 #include "Collada.hpp"
-#include "chimera/core/Registry.hpp"
-#include "chimera/core/visible/Texture.hpp"
+#include "core/Registry.hpp"
+#include "coreGL/Texture.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaImage : public Collada {
   public:
     ColladaImage(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
     virtual ~ColladaImage() {}
     void create(Entity entity, TexParam& tp, const pugi::xml_node& node);
 };
-} // namespace Chimera
+} // namespace ce

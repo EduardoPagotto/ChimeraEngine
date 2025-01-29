@@ -1,8 +1,8 @@
-#include "chimera/core/collada/ColladaMesh.hpp"
-#include "chimera/core/visible/Mesh.hpp"
-#include "chimera/core/visible/ParticleEmitter.hpp"
+#include "collada/ColladaMesh.hpp"
+#include "coreGL/ParticleEmitter.hpp"
+#include "space/Mesh.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaMesh::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nMesh) {
 
     MeshComponent& eMesh = entity.addComponent<MeshComponent>();
@@ -93,4 +93,4 @@ void ColladaMesh::create(const std::string& id, const std::string& name, Entity&
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

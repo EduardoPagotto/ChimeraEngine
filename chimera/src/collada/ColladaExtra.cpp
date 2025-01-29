@@ -1,13 +1,13 @@
-#include "chimera/core/collada/ColladaExtra.hpp"
-#include "chimera/core/ViewProjection.hpp"
-#include "chimera/core/buffer/FrameBuffer.hpp"
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaEffect.hpp"
-#include "chimera/core/device/CanvasFB.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/visible/FontMng.hpp"
+#include "collada/ColladaExtra.hpp"
+#include "collada/ColladaCam.hpp"
+#include "collada/ColladaEffect.hpp"
+#include "core/CanvasFB.hpp"
+#include "coreGL/CanvasGL.hpp"
+#include "coreGL/FontMng.hpp"
+#include "coreGL/FrameBuffer.hpp"
+#include "space/ViewProjection.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void ColladaExtra::create(pugi::xml_node nodeExtra) {
 
@@ -53,4 +53,4 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

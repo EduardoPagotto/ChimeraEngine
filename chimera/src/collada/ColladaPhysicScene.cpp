@@ -1,11 +1,11 @@
-#include "chimera/core/collada/ColladaPhysicScene.hpp"
-#include "chimera/core/Registry.hpp"
-#include "chimera/core/bullet/PhysicsControl.hpp"
-#include "chimera/core/bullet/Solid.hpp"
-#include "chimera/core/visible/Mesh.hpp"
+#include "collada/ColladaPhysicScene.hpp"
+// #include "bullet/PhysicsControl.hpp"
+// #include "bullet/Solid.hpp"
+#include "core/Registry.hpp"
+#include "space/Mesh.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const std::string& body) {
 
@@ -129,4 +129,4 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

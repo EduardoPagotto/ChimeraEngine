@@ -1,12 +1,12 @@
-#include "chimera/core/collada/ColladaVisualScene.hpp"
-#include "chimera/core/Registry.hpp"
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaGeometry.hpp"
-#include "chimera/core/collada/ColladaLight.hpp"
-#include "chimera/core/collada/ColladaMaterial.hpp"
-#include "chimera/core/visible/Transform.hpp"
+#include "collada/ColladaVisualScene.hpp"
+#include "collada/ColladaCam.hpp"
+#include "collada/ColladaGeometry.hpp"
+#include "collada/ColladaLight.hpp"
+#include "collada/ColladaMaterial.hpp"
+#include "core/Registry.hpp"
+#include "space/Transform.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void ColladaVisualScene::loadNode(pugi::xml_node node) {
 
@@ -74,4 +74,4 @@ void ColladaVisualScene::loadAll(pugi::xml_node node) {
         loadNode(n);
 }
 
-} // namespace Chimera
+} // namespace ce

@@ -1,11 +1,11 @@
-#include "chimera/core/collada/ColladaGeometry.hpp"
-#include "chimera/core/collada/ColladaCube.hpp"
-#include "chimera/core/collada/ColladaHeightMap.hpp"
-#include "chimera/core/collada/ColladaMesh.hpp"
-#include "chimera/core/collada/ColladaParticle.hpp"
-#include "chimera/core/collada/ColladaWaveFront.hpp"
+#include "collada/ColladaGeometry.hpp"
+#include "collada/ColladaCube.hpp"
+#include "collada/ColladaHeightMap.hpp"
+#include "collada/ColladaMesh.hpp"
+#include "collada/ColladaParticle.hpp"
+#include "collada/ColladaWaveFront.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaGeometry::create(Entity& entity, pugi::xml_node geo) {
 
     std::string id = geo.attribute("id").value();
@@ -38,4 +38,4 @@ void ColladaGeometry::create(Entity& entity, pugi::xml_node geo) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

@@ -1,8 +1,8 @@
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/visible/ICamera.hpp"
-#include "chimera/core/visible/ITrans.hpp"
+#include "collada/ColladaCam.hpp"
+#include "space/ICamera.hpp"
+#include "space/ITrans.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) { // FIXME: remover entity e usar o serviceLoc
 
     std::string nn = node.name();
@@ -76,4 +76,4 @@ void ColladaCam::create(Entity& entity, pugi::xml_node nodeCam) {
     }
 }
 
-} // namespace Chimera
+} // namespace ce

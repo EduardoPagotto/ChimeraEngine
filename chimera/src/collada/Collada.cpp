@@ -1,9 +1,9 @@
-#include "chimera/core/collada/Collada.hpp"
+#include "collada/Collada.hpp"
 #include <SDL2/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
 
-namespace Chimera {
+namespace ce {
 
 void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) {
     std::string token;
@@ -152,4 +152,4 @@ const pugi::xml_node getExtra(const pugi::xml_node node, const std::string& name
     return pugi::xml_node();
 }
 
-} // namespace Chimera
+} // namespace ce

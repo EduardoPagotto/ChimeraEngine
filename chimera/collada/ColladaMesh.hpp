@@ -1,8 +1,8 @@
 #pragma once
 #include "Collada.hpp"
-#include "chimera/core/Registry.hpp"
+#include "core/Registry.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaMesh : public Collada {
   public:
     ColladaMesh(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
@@ -11,4 +11,4 @@ class ColladaMesh : public Collada {
 
   private:
 };
-} // namespace Chimera
+} // namespace ce

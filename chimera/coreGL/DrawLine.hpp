@@ -1,12 +1,11 @@
 #pragma once
-#include "chimera/core/buffer/VertexArray.hpp"
-#include "chimera/core/space/AABB.hpp"
-#include "chimera/core/visible/RenderCommand.hpp"
-#include "chimera/core/visible/Shader.hpp"
-#include <glm/glm.hpp>
+#include "RenderCommand.hpp"
+#include "Shader.hpp"
+#include "VertexArray.hpp"
+#include "space/AABB.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 struct LinesValues {
     glm::vec3 point;
@@ -33,4 +32,4 @@ class DrawLine {
     void render(MapUniform& uniformsQueue) noexcept;
     bool valid() noexcept { return pVao != nullptr; }
 };
-} // namespace Chimera
+} // namespace ce

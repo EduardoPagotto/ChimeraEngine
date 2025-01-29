@@ -1,5 +1,5 @@
-#include "core/CanvasGL.hpp"
-#include "core/OpenGLDefs.hpp"
+#include "coreGL/CanvasGL.hpp"
+#include "coreGL/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace ce {

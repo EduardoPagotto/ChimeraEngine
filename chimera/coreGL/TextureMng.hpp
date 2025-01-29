@@ -1,11 +1,11 @@
 #pragma once
 #include "Texture.hpp"
-#include "chimera/core/ServiceLocator.hpp"
+#include "core/ServiceLocator.hpp"
 #include <SDL2/SDL_image.h>
 #include <memory>
 #include <unordered_map>
 
-namespace Chimera {
+namespace ce {
 
 class TextureMng : public IService {
   private:
@@ -77,4 +77,4 @@ class TextureMng : public IService {
         return tex;
     }
 };
-} // namespace Chimera
+} // namespace ce

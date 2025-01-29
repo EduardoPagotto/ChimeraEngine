@@ -1,12 +1,11 @@
 #pragma once
 #include "Font.hpp"
-#include "chimera/core/ServiceLocator.hpp"
+#include "core/ServiceLocator.hpp"
 #include <unordered_map>
 
-namespace Chimera {
+namespace ce {
 
 class FontMng : public IService {
-  private:
     std::unordered_map<std::string, std::shared_ptr<Font>> fonts;
 
   public:
@@ -64,4 +63,4 @@ class FontMng : public IService {
         return font;
     }
 };
-} // namespace Chimera
+} // namespace ce

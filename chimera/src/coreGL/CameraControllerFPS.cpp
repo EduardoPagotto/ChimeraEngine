@@ -1,11 +1,10 @@
-#include "chimera/core/visible/CameraControllerFPS.hpp"
-#include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/utils.hpp"
+#include "coreGL/CameraControllerFPS.hpp"
+#include "core/Keyboard.hpp"
+#include "core/utils.hpp"
 
-namespace Chimera {
+namespace ce {
 
-CameraControllerFPS::CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity)
-    : IStateMachine("FPS"), entity(entity) {
+CameraControllerFPS::CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity) : entity(entity) {
 
     mouse = serviceLocator->getService<IMouse>();
     keyboard = serviceLocator->getService<IKeyboard>();
@@ -33,18 +32,19 @@ void CameraControllerFPS::onAttach() {
 
 void CameraControllerFPS::onDeatach() {}
 
-void CameraControllerFPS::updateVP(IViewProjection& vp) {
-    if (vp.getSize() == 1) {
-        vp.getLeft().update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
-    } else {
-        glm::vec3 cross1 = glm::cross(up, front);     // up and front already are  vectors!!!!
-        glm::vec3 norm1 = glm::normalize(cross1);     // vector side (would be left or right)
-        glm::vec3 final_norm1 = norm1 * vp.getNoze(); // point of eye
-        glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
-        glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
-        vp.getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection());  // Left
-        vp.getRight().update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
-    }
+void CameraControllerFPS::updateVP() {
+    // FIXME: preciso do vp AQUI!!!!!
+    //  if (vp.getSize() == 1) {
+    //      vp.getLeft().update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
+    //  } else {
+    //      glm::vec3 cross1 = glm::cross(up, front);     // up and front already are  vectors!!!!
+    //      glm::vec3 norm1 = glm::normalize(cross1);     // vector side (would be left or right)
+    //      glm::vec3 final_norm1 = norm1 * vp.getNoze(); // point of eye
+    //      glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
+    //      glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
+    //      vp.getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection());  // Left
+    //      vp.getRight().update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
+    //  }
 }
 
 void CameraControllerFPS::updateVectors() {
@@ -77,7 +77,11 @@ void CameraControllerFPS::processCameraMovement(glm::vec3& direction, float delt
     camera->setPosition(camera->getPosition() + direction * velocity);
 }
 
-void CameraControllerFPS::onUpdate(IViewProjection& vp, const double& ts) {
+void CameraControllerFPS::onUpdate(const double& ts) {
+
+    // FIXME: IViewProjection& vp, necessario pegar no contructor ou no attach
+    IViewProjection* vp;
+
     // Movement speed
     if (keyboard->isPressed(SDLK_LSHIFT)) // acelerar mover
         movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;
@@ -127,7 +131,7 @@ void CameraControllerFPS::onUpdate(IViewProjection& vp, const double& ts) {
 
     } else {
         // Mouse Camera rotation
-        glm::ivec2 mouseMove = mouse->getMoveRel();
+        const auto mouseMove = mouse->getMoveRel();
         mouseXDelta = -(float)mouseMove.x * FPSCAMERA_ROTATION_SENSITIVITY;
         mouseYDelta = (float)mouseMove.y * FPSCAMERA_ROTATION_SENSITIVITY;
     }
@@ -136,7 +140,8 @@ void CameraControllerFPS::onUpdate(IViewProjection& vp, const double& ts) {
 
     processCameraRotation(mouseXDelta, mouseYDelta, true);
     updateVectors();
-    this->updateVP(vp);
+    // this->updateVP(vp);
+    this->updateVP();
 }
 
 void CameraControllerFPS::invertPitch() {
@@ -156,4 +161,4 @@ void CameraControllerFPS::invertPitch() {
 //         fov = CAMERA_MAX_FOV;
 //     }
 // }
-} // namespace Chimera
+} // namespace ce

@@ -1,34 +1,14 @@
 #pragma once
-#include "chimera/core/IStateMachine.hpp"
-#include "chimera/core/Registry.hpp"
-#include "chimera/core/device/GameController.hpp"
-#include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/device/Mouse.hpp"
-#include "chimera/core/visible/ICamera.hpp"
+#include "core/GameController.hpp"
+#include "core/IStateMachine.hpp"
+#include "core/Keyboard.hpp"
+#include "core/Mouse.hpp"
+#include "core/Registry.hpp"
+#include "space/ICamera.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class CameraControllerFPS : public IStateMachine {
-  public:
-    CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
-    virtual ~CameraControllerFPS();
-    void onAttach() override;
-    void onDeatach() override;
-    void onRender() override {}
-    void onUpdate(IViewProjection& vp, const double& ts) override;
-    bool onEvent(const SDL_Event& event) override {
-
-        // FIXME: tem merda aqui!!!
-        return gameControl->getEvent(event);
-    }
-
-  private:
-    void updateVP(IViewProjection& vp);
-    void updateVectors();
-    void processCameraRotation(double xOffset, double yOffset, bool constrainPitch);
-    void processCameraMovement(glm::vec3& direction, float deltaTime);
-    void invertPitch();
-
     float pitch, yaw, movementSpeed;
     glm::vec3 up, front, worldUp, right;
     Camera* camera = nullptr;
@@ -36,5 +16,26 @@ class CameraControllerFPS : public IStateMachine {
     std::shared_ptr<IGameController> gameControl;
     std::shared_ptr<IKeyboard> keyboard;
     std::shared_ptr<IMouse> mouse;
+
+  public:
+    CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
+    virtual ~CameraControllerFPS();
+    void onAttach() override;
+    void onDeatach() override;
+    void onRender() override {}
+    void onUpdate(const double& ts) override;
+    const std::string getName() const { return "FPS"; }
+    bool onEvent(const SDL_Event& event) override {
+
+        // FIXME: tem merda aqui!!!
+        return gameControl->getEvent(event);
+    }
+
+  private:
+    void updateVP();
+    void updateVectors();
+    void processCameraRotation(double xOffset, double yOffset, bool constrainPitch);
+    void processCameraMovement(glm::vec3& direction, float deltaTime);
+    void invertPitch();
 };
-} // namespace Chimera
+} // namespace ce

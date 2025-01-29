@@ -1,9 +1,9 @@
 #pragma once
-#include "chimera/core/visible/Texture.hpp"
+#include "Texture.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 struct FrameBufferSpecification {
     FrameBufferSpecification() = default;
@@ -39,4 +39,4 @@ class FrameBuffer {
     void destroy();
     void invalidade();
 };
-} // namespace Chimera
+} // namespace ce

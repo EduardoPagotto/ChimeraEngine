@@ -1,8 +1,8 @@
 #pragma once
 #include "Shader.hpp"
-#include "chimera/core/ServiceLocator.hpp"
+#include "core/ServiceLocator.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class ShaderMng : public IService {
   private:
@@ -35,4 +35,4 @@ class ShaderMng : public IService {
 
     std::shared_ptr<Shader> load(const std::string& name, const std::unordered_map<uint32_t, std::string>& mFiles) noexcept;
 };
-} // namespace Chimera
+} // namespace ce

@@ -1,10 +1,10 @@
 #pragma once
 #include "Texture.hpp"
 #include "UValue.hpp"
-#include "chimera/core/TagComponent.hpp"
+#include "core/TagComponent.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 #define SHADE_TEXTURE_SELETOR_TIPO_VALIDO "tipo"
 #define SHADE_MAT_AMBIENTE "material.ambient"
@@ -17,6 +17,11 @@ namespace Chimera {
 #define SHADE_TEXTURE_EMISSIVE "material.tEmissive"
 
 class Material {
+    bool valid;
+    int tipoTexturasDisponiveis;
+    std::unordered_map<std::string, std::shared_ptr<Texture>> mapTex;
+    MapUniform listMaterial;
+
   public:
     Material();
     virtual ~Material();
@@ -32,12 +37,6 @@ class Material {
     bool hasTexture() { return !mapTex.empty(); }
     void bindMaterialInformation(MapUniform& uniforms, std::vector<std::shared_ptr<Texture>>& vTex);
     bool const isValid() const { return valid; }
-
-  private:
-    bool valid;
-    int tipoTexturasDisponiveis;
-    std::unordered_map<std::string, std::shared_ptr<Texture>> mapTex;
-    MapUniform listMaterial;
 };
 
 struct MaterialComponent {
@@ -46,4 +45,4 @@ struct MaterialComponent {
     MaterialComponent() = default;
 };
 
-} // namespace Chimera
+} // namespace ce

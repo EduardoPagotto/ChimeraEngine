@@ -1,10 +1,9 @@
-#include "chimera/core/visible/CameraControllerOrbit.hpp"
-#include "chimera/core/device/Keyboard.hpp"
+#include "coreGL/CameraControllerOrbit.hpp"
+#include "core/Keyboard.hpp"
 
-namespace Chimera {
+namespace ce {
 
-CameraControllerOrbit::CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity)
-    : IStateMachine("Orbit"), entity(entity) {
+CameraControllerOrbit::CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity) : entity(entity) {
 
     mouse = serviceLocator->getService<IMouse>();
 }
@@ -26,24 +25,28 @@ void CameraControllerOrbit::onAttach() {
 
 void CameraControllerOrbit::onDeatach() {}
 
-void CameraControllerOrbit::updateVP(IViewProjection& vp) {
-    if (vp.getSize() == 1) {
-        vp.getLeft().update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
-    } else {
-        glm::vec3 novaPositionL, novaFrontL, novaPositionR, novaFrontR;
-        glm::vec3 left_p = front - camera->getPosition(); // front and position as points
-        glm::vec3 cross1 = glm::cross(up, left_p);
-        glm::vec3 norm1 = glm::normalize(cross1);
-        glm::vec3 final_norm1 = norm1 * vp.getNoze();
+void CameraControllerOrbit::updateVP() {
 
-        novaPositionL = camera->getPosition() + final_norm1;
-        novaFrontL = front + final_norm1;
-        vp.getLeft().update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
+    // FIXME: preciso capturar o vp
+    // IViewProjection& vp
 
-        novaPositionR = camera->getPosition() - final_norm1;
-        novaFrontR = front - final_norm1;
-        vp.getRight().update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
-    }
+    // if (vp.getSize() == 1) {
+    //     vp.getLeft().update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
+    // } else {
+    //     glm::vec3 novaPositionL, novaFrontL, novaPositionR, novaFrontR;
+    //     glm::vec3 left_p = front - camera->getPosition(); // front and position as points
+    //     glm::vec3 cross1 = glm::cross(up, left_p);
+    //     glm::vec3 norm1 = glm::normalize(cross1);
+    //     glm::vec3 final_norm1 = norm1 * vp.getNoze();
+
+    //     novaPositionL = camera->getPosition() + final_norm1;
+    //     novaFrontL = front + final_norm1;
+    //     vp.getLeft().update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
+
+    //     novaPositionR = camera->getPosition() - final_norm1;
+    //     novaFrontR = front - final_norm1;
+    //     vp.getRight().update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
+    // }
 }
 
 void CameraControllerOrbit::updateVectors() {
@@ -97,18 +100,19 @@ void CameraControllerOrbit::processCameraRotation(const int& xOffset, const int&
     }
 }
 
-void CameraControllerOrbit::onUpdate(IViewProjection& vp, const double& ts) {
+void CameraControllerOrbit::onUpdate(const double& ts) {
     if (mouse->getButtonState(1) == SDL_PRESSED) {
-        glm::ivec2 mouseMove = mouse->getMoveRel();
+        const auto mouseMove = mouse->getMoveRel();
         this->processCameraRotation(mouseMove.x, mouseMove.y);
 
     } else if (mouse->getButtonState(3) == SDL_PRESSED) {
-        glm::ivec2 mouseMove = mouse->getMoveRel();
+        const auto mouseMove = mouse->getMoveRel();
         this->processDistance(mouseMove.y);
     }
 
     this->updateVectors();
-    this->updateVP(vp);
+    this->updateVP();
+    // this->updateVP(vp);
 }
 
 void CameraControllerOrbit::invertPitch() {
@@ -116,4 +120,4 @@ void CameraControllerOrbit::invertPitch() {
     this->updateVectors();
 }
 
-} // namespace Chimera
+} // namespace ce

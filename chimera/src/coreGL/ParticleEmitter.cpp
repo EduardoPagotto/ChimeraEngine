@@ -1,9 +1,9 @@
-#include "chimera/core/visible/ParticleEmitter.hpp"
-#include "chimera/core/visible/TextureMng.hpp"
+#include "coreGL/ParticleEmitter.hpp"
+#include "coreGL/TextureMng.hpp"
 #include <algorithm>
 #include <glm/gtx/norm.hpp>
 
-namespace Chimera {
+namespace ce {
 
 void EmitterFont::recycleLife(const double& ts) {
 
@@ -115,4 +115,4 @@ void EmitterFont::decrease(ParticleZ& p, const double& ts, const uint32_t& index
         p.distance = -1.0f;
     }
 }
-} // namespace Chimera
+} // namespace ce

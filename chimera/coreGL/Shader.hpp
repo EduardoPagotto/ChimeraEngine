@@ -1,10 +1,9 @@
 #pragma once
 #include "UValue.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Shader {
-  private:
     uint32_t progID{0};
     mutable std::unordered_map<std::string, int32_t> uniformLocationCache;
 
@@ -30,4 +29,4 @@ struct ShaderComponent {
     std::string name;
     std::shared_ptr<Shader> shader;
 };
-} // namespace Chimera
+} // namespace ce

@@ -1,10 +1,10 @@
 #pragma once
-#include "ICamera.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/space/AABB.hpp"
+#include "OpenGLDefs.hpp"
+#include "space/AABB.hpp"
+#include "space/ICamera.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 struct ParticleZ {
     glm::vec3 pos = glm::vec3(0.0f), speed = glm::vec3(0.0f);
@@ -45,20 +45,19 @@ class IEmitter {
 };
 
 class EmitterFont : public IEmitter {
+    std::vector<ParticleContainer*> containers;
+    ParticleContainer* pc = nullptr;
+    glm::vec3 maindir;
+    float spread;
+
   public:
-    EmitterFont(const glm::vec3& dir, const float& spread) : maindir(dir), spread(spread), pc(nullptr){};
+    EmitterFont(const glm::vec3& dir, const float& spread) : maindir(dir), spread(spread), pc(nullptr) {};
     virtual int findUnusedParticle() override;
     virtual void reset(ParticleZ& p) override;
     virtual void recycleLife(const double& ts) override;
     virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) override;
     virtual void pushParticleContainer(ParticleContainer* pc) override { containers.push_back(pc); }
     virtual ParticleContainer* getContainer(uint32_t pos) override { return containers[pos]; }
-
-  private:
-    std::vector<ParticleContainer*> containers;
-    ParticleContainer* pc = nullptr;
-    glm::vec3 maindir;
-    float spread;
 };
 
 struct EmitterComponent {
@@ -67,4 +66,4 @@ struct EmitterComponent {
     EmitterComponent() : emitter(nullptr) {}
 };
 
-} // namespace Chimera
+} // namespace ce

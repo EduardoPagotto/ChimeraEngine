@@ -1,8 +1,8 @@
 #pragma once
 #include "UValue.hpp"
-#include "chimera/core/TagComponent.hpp"
+#include "core/TagComponent.hpp"
 
-namespace Chimera {
+namespace ce {
 
 #define SHADE_LIGHT_POSITION "light.position"
 #define SHADE_LIGHT_AMBIENT "light.ambient"
@@ -15,6 +15,9 @@ enum class LightType {
 };
 
 class Light {
+    LightType type;
+    MapUniform listProp;
+
   public:
     Light() : type(LightType::POSITIONAL) {} // TODO: muito a fazer!!!! indice e luz necessario para o shader
     virtual ~Light() {}
@@ -26,11 +29,6 @@ class Light {
         uniforms[SHADE_LIGHT_POSITION] = UValue(glm::vec3(mat[3]));
         uniforms.insert(listProp.begin(), listProp.end());
     }
-
-  private:
-    // int number;
-    LightType type;
-    MapUniform listProp;
 };
 
 struct LightComponent {
@@ -40,4 +38,4 @@ struct LightComponent {
     LightComponent() = default;
 };
 
-} // namespace Chimera
+} // namespace ce

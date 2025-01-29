@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-namespace Chimera {
+namespace ce {
 
 struct GlyphData {
     glm::ivec2 size;   // Size of glyph
@@ -14,6 +14,9 @@ struct GlyphData {
 };
 
 class Font {
+    glm::vec2 scale;
+    std::shared_ptr<Texture> texture;
+
   public:
     Font(const std::string& pathFile, const int& size);
     virtual ~Font();
@@ -22,9 +25,5 @@ class Font {
     inline glm::vec2 getScale() const { return this->scale; }
 
     std::map<uint16_t, GlyphData*> glyphs; // TODO: ver com integrar no Draw2d
-
-  private:
-    glm::vec2 scale;
-    std::shared_ptr<Texture> texture;
 };
-} // namespace Chimera
+} // namespace ce

@@ -1,7 +1,7 @@
 #pragma once
 #include "VertexBuffer.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class VertexArray {
   private:
@@ -17,4 +17,4 @@ class VertexArray {
     inline VertexBuffer* getBuffer(const uint32_t& index) const { return vbos[index]; }
     inline VertexBuffer* getLast() const { return vbos.back(); }
 };
-} // namespace Chimera
+} // namespace ce

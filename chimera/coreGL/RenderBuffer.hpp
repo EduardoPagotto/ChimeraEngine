@@ -1,9 +1,9 @@
 #pragma once
 #include "FrameBuffer.hpp"
+#include "Shader.hpp"
 #include "VertexBuffer.hpp"
-#include "chimera/core/visible/Shader.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class RenderBuffer {
   private:
@@ -25,4 +25,4 @@ class RenderBuffer {
     inline const uint32_t getHeight() const { return frameBuffer->getHeight(); }
     inline FrameBuffer* getFramBuffer() const { return frameBuffer; }
 };
-} // namespace Chimera
+} // namespace ce

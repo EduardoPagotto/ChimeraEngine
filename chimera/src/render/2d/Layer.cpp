@@ -2,7 +2,7 @@
 #include "chimera/core/visible/RenderCommand.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Chimera {
+namespace ce {
 
 Layer::Layer(IRenderer2D* renderer, std::shared_ptr<Shader> shader, Camera* camera, const std::string& name)
     : IStateMachine(name), renderer(renderer), shader(shader), camera(camera) {
@@ -33,4 +33,4 @@ void Layer::onRender() {
     renderer->end();
     renderer->flush();
 }
-} // namespace Chimera
+} // namespace ce

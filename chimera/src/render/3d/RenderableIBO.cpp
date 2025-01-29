@@ -3,7 +3,7 @@
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 
-namespace Chimera {
+namespace ce {
 
 RenderableIBO::RenderableIBO(VertexArray* vao, IndexBuffer* ibo, const AABB& aabb) : ibo(ibo), aabb(aabb), Renderable3D() {
     this->vao = vao; // do not delete!! comas from other side
@@ -30,4 +30,4 @@ void RenderableIBO::draw(const bool& logData) {
     ibo->unbind();
 }
 
-} // namespace Chimera
+} // namespace ce

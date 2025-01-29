@@ -2,7 +2,7 @@
 #include "chimera/core/visible/Mesh.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class RenderableDynamic : public Renderable3D {
   public:
@@ -14,4 +14,4 @@ class RenderableDynamic : public Renderable3D {
     uint32_t max;
     VertexBuffer* vbo;
 };
-} // namespace Chimera
+} // namespace ce

@@ -6,7 +6,7 @@
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void colladaRenderLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceLoc) {
 
@@ -43,4 +43,4 @@ void colladaRenderLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceL
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

@@ -4,7 +4,7 @@
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
 
-namespace Chimera {
+namespace ce {
 
 RenderableBsp::RenderableBsp(Mesh& mesh) : totIndex(0), Renderable3D() {
 
@@ -147,4 +147,4 @@ bool RenderableBsp::lineOfSight(const glm::vec3& Start, const glm::vec3& End, BS
     }
     return true;
 }
-} // namespace Chimera
+} // namespace ce

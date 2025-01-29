@@ -4,7 +4,7 @@
 #include "chimera/core/visible/Texture.hpp"
 #include "chimera/render/2d/Prop2D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Renderable2D : public IRenderable2D {
   public:
@@ -43,4 +43,4 @@ class Renderable2D : public IRenderable2D {
   protected:
     Prop2D prop2d;
 };
-} // namespace Chimera
+} // namespace ce

@@ -2,7 +2,7 @@
 #include "IRenderable2D.hpp"
 #include "IRenderer2D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Group : public IRenderable2D {
   public:
@@ -21,4 +21,4 @@ class Group : public IRenderable2D {
     std::vector<IRenderable2D*> renderables;
     glm::mat4 transformationMatrix;
 };
-} // namespace Chimera
+} // namespace ce

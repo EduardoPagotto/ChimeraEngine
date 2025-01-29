@@ -30,7 +30,7 @@ set (RenderSource 	2d/BatchRender2D.cpp
 					collada/ColladaRender.cpp)
 
 #define os includes
-set (RenderInclude 	${CMAKE_SOURCE_DIR}
+set (RenderInclude 	${CMAKE_SOURCE_DIR}/chimera
 					${SDL2_INCLUDE_DIR}
 					${OPENGL_INCLUDE_DIR}
 					${GLEW_INCLUDE_DIRS}
@@ -53,7 +53,4 @@ add_library (ChimeraRender STATIC ${RenderSource})
 # Define os includes privados para este target
 target_include_directories (ChimeraRender PUBLIC ${RenderInclude})
 
-add_dependencies(ChimeraRender ChimeraCore)
-
-INSTALL(FILES ${ChimeraRender_BINARY_DIR}/libChimeraRender.a DESTINATION lib)
-INSTALL(DIRECTORY ${RenderInclude}/chimera/node DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")
+add_dependencies(ChimeraRender ChimeraCollada)

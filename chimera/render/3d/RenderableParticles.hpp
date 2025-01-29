@@ -5,7 +5,7 @@
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
-namespace Chimera {
+namespace ce {
 class RenderableParticles : public Renderable3D {
   public:
     RenderableParticles() = default;
@@ -26,4 +26,4 @@ class RenderableParticles : public Renderable3D {
     VertexBuffer* vboCor = nullptr;
     ParticleContainer* pc;
 };
-} // namespace Chimera
+} // namespace ce

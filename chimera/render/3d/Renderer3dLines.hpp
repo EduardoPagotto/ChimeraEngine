@@ -4,7 +4,7 @@
 #include "chimera/core/space/Frustum.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Renderer3dLines : public IRenderer3d {
   private:
@@ -25,4 +25,4 @@ class Renderer3dLines : public IRenderer3d {
     void create(std::shared_ptr<Shader> shader, const uint32_t& sizeBuffer) noexcept { drawLine.create(shader, sizeBuffer); };
 };
 
-} // namespace Chimera
+} // namespace ce

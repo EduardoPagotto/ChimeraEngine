@@ -2,7 +2,7 @@
 #include "chimera/core/buffer/VertexArray.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 Renderable3D::~Renderable3D() {
     if (vao) {
@@ -15,4 +15,4 @@ void Renderable3D::draw(const bool& logData) {
     if (logData)
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Renderable3D draw");
 }
-} // namespace Chimera
+} // namespace ce

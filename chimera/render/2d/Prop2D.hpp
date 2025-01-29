@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 struct Prop2D {
     Prop2D() = default;
     glm::vec3 position = glm::vec3(0.0);
@@ -11,4 +11,4 @@ struct Prop2D {
     class std::shared_ptr<class Texture> texture = nullptr;
     std::vector<glm::vec2> uv;
 };
-} // namespace Chimera
+} // namespace ce

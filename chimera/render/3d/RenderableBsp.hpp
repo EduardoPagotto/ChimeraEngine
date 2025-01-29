@@ -6,7 +6,7 @@
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class RenderableBsp : public Renderable3D {
   public:
@@ -29,4 +29,4 @@ class RenderableBsp : public Renderable3D {
     uint32_t totIndex;
     BSPTreeNode* root;
 };
-} // namespace Chimera
+} // namespace ce

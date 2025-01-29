@@ -1,7 +1,7 @@
 #include "chimera/render/3d/Renderer3dLines.hpp"
 #include "chimera/core/space/AABB.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void Renderer3dLines::begin(Camera* camera, IViewProjection* vpo, Octree* octree) {
     this->camera = camera;
@@ -26,4 +26,4 @@ void Renderer3dLines::flush() {
     drawLine.render(uniformsQueue);
     uniformsQueue.clear();
 }
-} // namespace Chimera
+} // namespace ce

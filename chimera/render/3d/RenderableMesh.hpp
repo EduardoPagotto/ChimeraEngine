@@ -5,7 +5,7 @@
 #include "chimera/core/visible/Mesh.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class RenderableMesh : public Renderable3D {
   public:
@@ -22,4 +22,4 @@ class RenderableMesh : public Renderable3D {
     IRenderable3d* child;
     AABB aabb;
 };
-} // namespace Chimera
+} // namespace ce

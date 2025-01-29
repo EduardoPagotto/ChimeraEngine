@@ -13,7 +13,7 @@
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include "chimera/render/3d/Renderer3dLines.hpp"
 
-namespace Chimera {
+namespace ce {
 
 struct ShadowData {
     ShadowData() = default;
@@ -69,4 +69,4 @@ class Scene : public IStateMachine {
     RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height);
     void createOctree(const AABB& aabb);
 };
-} // namespace Chimera
+} // namespace ce

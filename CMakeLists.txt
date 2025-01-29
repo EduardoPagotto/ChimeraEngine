@@ -11,7 +11,7 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 message(STATUS "*********************************************")
 
 set(OVR_SET_TO_USE OFF)
-set(BULLET_SET_TO_USE OFF)
+set(BULLET_SET_TO_USE ON)
 
 #option(OVR_SET_TO_USE "Compilar com Driver OVR" ON)
 #option(OVR_SET_TO_USE "Compilar sem Driver OVR" OFF)

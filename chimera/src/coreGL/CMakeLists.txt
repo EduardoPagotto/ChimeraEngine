@@ -42,3 +42,6 @@ target_include_directories (ChimeraCoreGL PUBLIC ${IncludeCore})
 
 add_dependencies(ChimeraCoreGL ChimeraCore
                                ChimeraSpace)
+
+INSTALL(FILES ${ChimeraCoreGL_BINARY_DIR}/ChimeraCoreGL.a DESTINATION lib)
+INSTALL(DIRECTORY ${IncludeCore}/chimera/coreGL DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

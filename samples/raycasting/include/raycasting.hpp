@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/device/interfaces.hpp"
+#include "chimera/core/interfaces.hpp"
 
 #include <glm/glm.hpp>
 #include <stdint.h>
@@ -28,5 +28,5 @@ struct RayHit {
 };
 
 bool LoadWorld(const char filename[], World* world);
-void DrawColumn(RayHit what, World world, Chimera::ICanva* frame, uint32_t column);
-void RenderScene(State state, World world, Chimera::ICanva* frame);
+void DrawColumn(RayHit what, World world, ce::ICanva* frame, uint32_t column);
+void RenderScene(State state, World world, ce::ICanva* frame);

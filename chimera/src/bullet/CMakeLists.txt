@@ -10,7 +10,7 @@ set (BulletSource 	PhysicsControl.cpp
 					Solid.cpp)
 
 #define os includes
-set (BulletInclude 	 ${CMAKE_SOURCE_DIR}/chimera
+set (BulletInclude 	${CMAKE_SOURCE_DIR}/chimera
 					${SDL2_INCLUDE_DIR}
 					${BULLET_INCLUDE_DIR}
 					/usr/local/include/) # Raiz do projeto

@@ -23,14 +23,23 @@ set (SourcesCore RFC3986.cpp
 				 ColladaCube.cpp
 				 ColladaMesh.cpp
 				 ColladaParticle.cpp
-				 ColladaExtra.cpp)
+				 ColladaExtra.cpp
+				 ColladaPhysicScene.cpp)
 
 # define os includes
 set (IncludeCore ${CMAKE_SOURCE_DIR}/chimera
 				 ${SDL2_INCLUDE_DIR}
+				 ${BULLET_INCLUDE_DIR}
 				 ${OPENGL_INCLUDE_DIR}
 				 ${PUGIXML_DIR}
 				 ${GLEW_INCLUDE_DIRS})
+
+# if (BULLET_SET_TO_USE)
+# 	message(STATUS "Bullet incluido no build ChimeraCore")
+# 	set(SourcesCore ${SourcesCore} ColladaPhysicScene.cpp)
+# 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
+# endif(BULLET_SET_TO_USE)
+
 
 # Define o Target
 add_library (ChimeraCollada STATIC ${SourcesCore})
@@ -38,6 +47,7 @@ add_library (ChimeraCollada STATIC ${SourcesCore})
 # Define os includes
 target_include_directories (ChimeraCollada PUBLIC ${IncludeCore})
 
-add_dependencies(ChimeraBullet ChimeraCore
-                               ChimeraSpace
-							   ChimeraCoreGL)
+add_dependencies(ChimeraCollada ChimeraCore
+							    ChimeraSpace
+							    ChimeraBullet
+							    ChimeraCoreGL)

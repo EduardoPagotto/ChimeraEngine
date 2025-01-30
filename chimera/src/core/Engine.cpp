@@ -10,7 +10,7 @@ Engine::Engine() {
 
     canvas = g_service_locator.getService<ICanva>();
     // FIXME: nao esquecer de ver isto
-    // registry->createEntity("mechanical_engine", "mechanical_engine");
+    // registry->createEntity("chimera_engine", "chimera_engine");
 
     SDL_Log("Engine OK");
 }
@@ -42,7 +42,8 @@ void Engine::run(void) {
                             SDL_Event l_eventQuit;
                             l_eventQuit.type = SDL_QUIT;
                             if (SDL_PushEvent(&l_eventQuit) == -1) {
-                                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical SDL_QUIT PushEvent fail: %s", SDL_GetError());
+                                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical SDL_QUIT PushEvent fail: %s",
+                                             SDL_GetError());
                             }
                         } break;
                         case EVENT_TOGGLE_FULL_SCREEN:

@@ -1,6 +1,6 @@
 #include "collada/ColladaPhysicScene.hpp"
-// #include "bullet/PhysicsControl.hpp"
-// #include "bullet/Solid.hpp"
+#include "bullet/PhysicsControl.hpp"
+#include "bullet/Solid.hpp"
 #include "core/Registry.hpp"
 #include "space/Mesh.hpp"
 #include <SDL2/SDL.h>
@@ -26,7 +26,7 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
     std::string name = node.attribute("name").value();
 
     auto pc = std::make_shared<PhysicsControl>();
-    serviceLoc->registerService(pc);
+    g_service_locator.registerService(pc);
 
     pugi::xml_node nTec = node.child("technique_common");
     std::string sGrav = nTec.child("gravity").text().as_string();
@@ -54,12 +54,14 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
         }
 
         target.erase(0, 1); // remove #
-        auto view = r->get().view<TagComponent>();
+
+        auto view = g_registry.get().view<TagComponent>();
+        // auto view = r->get().view<TagComponent>();
         for (auto entity : view) {
             // Pega a chave (mesh)
             TagComponent& tag = view.get<TagComponent>(entity);
             if (tag.id == target) {
-                Entity ent2 = {entity, r.get()};
+                Entity ent2 = {entity, &g_registry};
                 TransComponent& tc = ent2.getComponent<TransComponent>();
                 MeshComponent& mc = ent2.getComponent<MeshComponent>();
                 Solid* solid = new Solid(pc.get(), tc.trans->getMatrix(), ent2); // nova transformacao

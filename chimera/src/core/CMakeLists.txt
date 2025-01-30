@@ -83,11 +83,5 @@ add_library (ChimeraCore STATIC ${SourcesCore})
 # Define os includes
 target_include_directories (ChimeraCore PUBLIC ${IncludeCore})
 
-# Lista os Includes
-# get_property(dirs DIRECTORY ${IncludeCore}/chimera/core PROPERTY INCLUDE_DIRECTORIES)
-# foreach(dir ${dirs})
-# 	message(STATUS "Include dir='${dir}'")
-# endforeach()
-
 INSTALL(FILES ${ChimeraCore_BINARY_DIR}/libChimeraCore.a DESTINATION lib)
 INSTALL(DIRECTORY ${IncludeCore}/chimera/core DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

@@ -23,4 +23,4 @@ target_include_directories (ChimeraSpace PUBLIC ${IncludeCore})
 add_dependencies(ChimeraSpace ChimeraCore)
 
 INSTALL(FILES ${ChimeraSpace_BINARY_DIR}/libChimeraSpace.a DESTINATION lib)
-INSTALL(DIRECTORY ${IncludeCore}/chimera/core DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")
+INSTALL(DIRECTORY ${IncludeCore}/chimera/space DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

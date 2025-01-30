@@ -43,7 +43,7 @@ bool LoadWorld(const char filename[], World* world) {
     return true;
 }
 
-void DrawColumn(RayHit what, World world, Chimera::ICanva* frame, uint32_t column) {
+void DrawColumn(RayHit what, World world, ce::ICanva* frame, uint32_t column) {
     // tipo de bloco detectado
     uint8_t type = world.data[what.map.x + what.map.y * world.width];
 
@@ -89,7 +89,7 @@ void DrawColumn(RayHit what, World world, Chimera::ICanva* frame, uint32_t colum
     }
 }
 
-void RenderScene(State state, World world, Chimera::ICanva* frame) {
+void RenderScene(State state, World world, ce::ICanva* frame) {
 
     for (uint32_t column = 0; column < frame->getWidth(); column++) // Para cada coluna
     {
@@ -127,7 +127,7 @@ void RenderScene(State state, World world, Chimera::ICanva* frame) {
         }
 
         // vamos lançar o raio
-        int side;                                            // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
+        int side; // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
         while (world.data[map.x + map.y * world.width] == 0) // até nos encontrarmos com uma parede ...
         {
             // vamos para o próximo bloco no mapa

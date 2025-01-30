@@ -53,4 +53,8 @@ add_library (ChimeraRender STATIC ${RenderSource})
 # Define os includes privados para este target
 target_include_directories (ChimeraRender PUBLIC ${RenderInclude})
 
-add_dependencies(ChimeraRender ChimeraCollada)
+add_dependencies(ChimeraRender ChimeraCore
+							   ChimeraSpace
+							   ChimeraBullet
+							   ChimeraCoreGL
+							   ChimeraCollada)

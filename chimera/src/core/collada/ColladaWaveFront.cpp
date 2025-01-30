@@ -1,7 +1,7 @@
 #include "chimera/core/collada/ColladaWaveFront.hpp"
 #include "chimera/core/collada/ColladaEffect.hpp"
+#include "chimera/core/collada/Wavefront.hpp"
 #include "chimera/core/coreGL/Material.hpp"
-#include "chimera/core/coreGL/Wavefront.hpp"
 #include "chimera/core/space/Mesh.hpp"
 
 namespace ce {

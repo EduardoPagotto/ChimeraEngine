@@ -32,9 +32,9 @@ set (SourcesCore Registry.cpp
 				 coreGL/Font.cpp
 				 coreGL/Material.cpp
 				 coreGL/ParticleEmitter.cpp
-				 coreGL/Wavefront.cpp
 				 collada/RFC3986.cpp
 				 collada/Collada.cpp
+				 collada/Wavefront.cpp
 				 collada/ColladaVisualScene.cpp
 				 collada/ColladaImage.cpp
 				 collada/ColladaMaterial.cpp

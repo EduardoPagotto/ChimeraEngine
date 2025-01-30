@@ -163,6 +163,6 @@
 		"lldb.showDisassembly": "auto",
 		"lldb.dereferencePointers": true,
 		"lldb.consoleMode": "commands",
-		"todo-tree.tree.scanMode": "workspace only",
+		"todo-tree.tree.scanMode": "workspace",
 	}
 }

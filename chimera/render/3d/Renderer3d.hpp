@@ -1,9 +1,9 @@
 #pragma once
 #include "IRenderer3d.hpp"
-#include "coreGL/RenderCommand.hpp"
+#include "chimera/core/coreGL/RenderCommand.hpp"
+#include "chimera/core/space/Frustum.hpp"
+#include "chimera/core/space/Octree.hpp"
 #include "render/3d/Renderable3D.hpp"
-#include "space/Frustum.hpp"
-#include "space/Octree.hpp"
 
 namespace ce {
 

@@ -1,7 +1,7 @@
 #pragma once
-#include "coreGL/UValue.hpp"
-#include "space/ICamera.hpp"
-#include "space/TransformationStack.hpp"
+#include "chimera/core/coreGL/UValue.hpp"
+#include "chimera/core/space/ICamera.hpp"
+#include "chimera/core/space/TransformationStack.hpp"
 #include <vector>
 
 namespace ce {

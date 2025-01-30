@@ -1,9 +1,9 @@
 #include "Ator.hpp"
 #include "Game.hpp"
-#include "core/Engine.hpp"
-#include "core/Registry.hpp"
-#include "core/ServiceLocator.hpp"
-#include "coreGL/CanvasGL.hpp"
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/Registry.hpp"
+#include "chimera/core/ServiceLocator.hpp"
+#include "chimera/core/coreGL/CanvasGL.hpp"
 #include <fstream>
 #include <nlohmann/json.hpp>
 

@@ -1,6 +1,6 @@
-#include "core/Engine.hpp"
-#include "core/ServiceLocator.hpp"
-#include "core/utils.hpp"
+#include "chimera/core/Engine.hpp"
+#include "chimera/core/ServiceLocator.hpp"
+#include "chimera/core/utils.hpp"
 
 namespace ce {
 

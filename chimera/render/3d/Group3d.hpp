@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderable3d.hpp"
 #include "IRenderer3d.hpp"
-#include "core/TransformationStack.hpp"
+#include "chimera/core/TransformationStack.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

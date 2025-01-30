@@ -1,5 +1,5 @@
 #include "render/3d/RenderableArray.hpp"
-#include "coreGL/RenderCommand.hpp"
+#include "chimera/core/coreGL/RenderCommand.hpp"
 #include "render/3d/IRenderer3d.hpp"
 #include "render/3d/RenderableIBO.hpp"
 #include <SDL2/SDL.h>

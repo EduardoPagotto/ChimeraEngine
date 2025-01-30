@@ -1,11 +1,12 @@
 #include "render/scene/Scene.hpp"
-#include "bullet/Solid.hpp"
-#include "core/Mouse.hpp"
-#include "coreGL/Light.hpp"
-#include "coreGL/Material.hpp"
-#include "coreGL/RenderCommand.hpp"
-#include "coreGL/ShaderMng.hpp"
-#include "coreGL/VertexArray.hpp"
+#include "chimera/core/Mouse.hpp"
+#include "chimera/core/bullet/Solid.hpp"
+#include "chimera/core/coreGL/Light.hpp"
+#include "chimera/core/coreGL/Material.hpp"
+#include "chimera/core/coreGL/RenderCommand.hpp"
+#include "chimera/core/coreGL/ShaderMng.hpp"
+#include "chimera/core/coreGL/VertexArray.hpp"
+#include "chimera/core/space/Transform.hpp"
 #include "render/2d/Tile.hpp"
 #include "render/3d/RenderableArray.hpp"
 #include "render/3d/RenderableBsp.hpp"
@@ -15,7 +16,6 @@
 #include "render/scene/CameraControllerFPS.hpp"
 #include "render/scene/CameraControllerOrbit.hpp"
 #include "render/scene/Components.hpp"
-#include "space/Transform.hpp"
 
 namespace ce {
 
@@ -28,7 +28,8 @@ Scene::~Scene() {
     }
 }
 
-RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
+RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
+                            const uint32_t& height) {
     if (!eRenderBuferSpec)
         throw std::string("RenderBuffer nao encontrado");
 
@@ -323,7 +324,8 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
 void Scene::execRenderPass(IRenderer3d& renderer) {
     auto group = g_registry.get().group<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
-        auto [sc, mc, tc, rc] = group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
+        auto [sc, mc, tc, rc] =
+            group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
         command.transform = tc.trans->translateSrc(origem->getPosition());

@@ -1,10 +1,10 @@
 #pragma once
-#include "coreGL/RenderCommand.hpp"
-#include "coreGL/VertexArray.hpp"
+#include "chimera/core/coreGL/RenderCommand.hpp"
+#include "chimera/core/coreGL/VertexArray.hpp"
+#include "chimera/core/space/AABB.hpp"
+#include "chimera/core/space/BSPTreeNode.hpp"
+#include "chimera/core/space/Mesh.hpp"
 #include "render/3d/Renderable3D.hpp"
-#include "space/AABB.hpp"
-#include "space/BSPTreeNode.hpp"
-#include "space/Mesh.hpp"
 
 namespace ce {
 

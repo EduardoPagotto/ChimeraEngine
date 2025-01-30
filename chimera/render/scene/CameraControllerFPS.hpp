@@ -1,10 +1,10 @@
 #pragma once
-#include "core/GameController.hpp"
-#include "core/IStateMachine.hpp"
-#include "core/Keyboard.hpp"
-#include "core/Mouse.hpp"
-#include "core/Registry.hpp"
-#include "space/ICamera.hpp"
+#include "chimera/core/GameController.hpp"
+#include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/Keyboard.hpp"
+#include "chimera/core/Mouse.hpp"
+#include "chimera/core/Registry.hpp"
+#include "chimera/core/space/ICamera.hpp"
 
 namespace ce {
 

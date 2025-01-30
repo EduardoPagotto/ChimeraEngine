@@ -1,5 +1,5 @@
 #include "render/3d/Renderable3D.hpp"
-#include "coreGL/VertexArray.hpp"
+#include "chimera/core/coreGL/VertexArray.hpp"
 #include <SDL2/SDL.h>
 
 namespace ce {

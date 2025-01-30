@@ -1,9 +1,11 @@
 #include "render/scene/CameraControllerOrbit.hpp"
-#include "core/Keyboard.hpp"
+#include "chimera/core/Keyboard.hpp"
 
 namespace ce {
 
-CameraControllerOrbit::CameraControllerOrbit(Entity entity) : entity(entity) { mouse = g_service_locator.getService<IMouse>(); }
+CameraControllerOrbit::CameraControllerOrbit(Entity entity) : entity(entity) {
+    mouse = g_service_locator.getService<IMouse>();
+}
 
 CameraControllerOrbit::~CameraControllerOrbit() { mouse = nullptr; }
 

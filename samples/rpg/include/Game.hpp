@@ -1,5 +1,5 @@
 #pragma once
-#include "core/IStateMachine.hpp"
+#include "chimera/core/IStateMachine.hpp"
 
 class Game : public ce::IStateMachine {
     //  std::shared_ptr<me::IMouse> mouse;

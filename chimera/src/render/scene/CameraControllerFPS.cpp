@@ -1,6 +1,6 @@
 #include "render/scene/CameraControllerFPS.hpp"
-#include "core/Keyboard.hpp"
-#include "core/utils.hpp"
+#include "chimera/core/Keyboard.hpp"
+#include "chimera/core/utils.hpp"
 
 namespace ce {
 
@@ -35,15 +35,17 @@ void CameraControllerFPS::onDeatach() {}
 void CameraControllerFPS::updateVP() {
     // FIXME: preciso do vp AQUI!!!!!
     //  if (vp.getSize() == 1) {
-    //      vp.getLeft().update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up), camera->getProjection());
+    //      vp.getLeft().update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up),
+    //      camera->getProjection());
     //  } else {
     //      glm::vec3 cross1 = glm::cross(up, front);     // up and front already are  vectors!!!!
     //      glm::vec3 norm1 = glm::normalize(cross1);     // vector side (would be left or right)
     //      glm::vec3 final_norm1 = norm1 * vp.getNoze(); // point of eye
     //      glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
     //      glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
-    //      vp.getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection());  // Left
-    //      vp.getRight().update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection()); // Right
+    //      vp.getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection());  //
+    //      Left vp.getRight().update(glm::lookAt(novaPositionR, novaPositionR + front, up), camera->getProjection());
+    //      // Right
     //  }
 }
 
@@ -111,11 +113,17 @@ void CameraControllerFPS::onUpdate(const double& ts) {
     if (SDL_GameController* pJoy = gameControl->get(0); pJoy != nullptr) {
         // Game control ratation and move
         int16_t deadZone = 128;
-        direction += front * scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTY), deadZone), 0x8000) * 1.5f; // mov FB
-        direction -= right * scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTX), deadZone), 0x8000) * 1.5f; // mov RL
+        direction += front *
+                     scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTY), deadZone), 0x8000) *
+                     1.5f; // mov FB
+        direction -= right *
+                     scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTX), deadZone), 0x8000) *
+                     1.5f; // mov RL
 
-        mouseXDelta = -scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTX), deadZone), 0x8000) * 1.5f; // rot RL
-        mouseYDelta = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTY), deadZone), 0x8000) * 1.5f;  // rot UD
+        mouseXDelta = -scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTX), deadZone), 0x8000) *
+                      1.5f; // rot RL
+        mouseYDelta = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTY), deadZone), 0x8000) *
+                      1.5f; // rot UD
 
         if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_DPAD_UP) == SDL_PRESSED)
             direction += (worldUp * 0.5f); // mov U<->D
@@ -123,8 +131,8 @@ void CameraControllerFPS::onUpdate(const double& ts) {
         if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == SDL_PRESSED)
             direction -= worldUp * 0.5f; // mov D<->U
 
-        // float v1 = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_TRIGGERLEFT), deadZone), 0x8000);
-        // float v2 = v1 * 4.0 + SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_Y) -
+        // float v1 = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_TRIGGERLEFT), deadZone),
+        // 0x8000); float v2 = v1 * 4.0 + SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_Y) -
         //            SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_X) * 2.0f;
         // float scrollDelta = glm::clamp(v2 * 4.0f, -4.0f, 4.0f);
         // ProcessCameraFOV(scrollDelta); // TODO: injetar o novo FOV na camera, passar ele para perspective

@@ -1,8 +1,8 @@
 #pragma once
-#include "core/IStateMachine.hpp"
-#include "core/Mouse.hpp"
-#include "core/Registry.hpp"
-#include "space/ICamera.hpp"
+#include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/Mouse.hpp"
+#include "chimera/core/Registry.hpp"
+#include "chimera/core/space/ICamera.hpp"
 
 namespace ce {
 

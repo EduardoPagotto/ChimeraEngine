@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderable2D.hpp"
 #include "IRenderer2D.hpp"
-#include "coreGL/Texture.hpp"
+#include "chimera/core/coreGL/Texture.hpp"
 #include "render/2d/Prop2D.hpp"
 
 namespace ce {

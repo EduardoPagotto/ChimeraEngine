@@ -1,4 +1,4 @@
-#include "core/CanvasFB.hpp"
+#include "chimera/core/CanvasFB.hpp"
 #include <exception>
 
 namespace ce {

@@ -1,4 +1,4 @@
-#include "core/Registry.hpp"
+#include "chimera/core/Registry.hpp"
 
 namespace ce {
 

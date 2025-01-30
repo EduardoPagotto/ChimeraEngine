@@ -1,17 +1,17 @@
 #pragma once
-#include "bullet/interfaces.hpp"
-#include "core/IStateMachine.hpp"
-#include "core/Registry.hpp"
-#include "core/StateStack.hpp"
-#include "core/interfaces.hpp"
-#include "coreGL/ParticleEmitter.hpp"
-#include "coreGL/RenderBuffer.hpp"
+#include "chimera/core/IStateMachine.hpp"
+#include "chimera/core/Registry.hpp"
+#include "chimera/core/StateStack.hpp"
+#include "chimera/core/bullet/interfaces.hpp"
+#include "chimera/core/coreGL/ParticleEmitter.hpp"
+#include "chimera/core/coreGL/RenderBuffer.hpp"
+#include "chimera/core/interfaces.hpp"
+#include "chimera/core/space/ICamera.hpp"
+#include "chimera/core/space/ITrans.hpp"
+#include "chimera/core/space/Octree.hpp"
 #include "render/2d/BatchRender2D.hpp"
 #include "render/3d/IRenderable3d.hpp"
 #include "render/3d/Renderer3dLines.hpp"
-#include "space/ICamera.hpp"
-#include "space/ITrans.hpp"
-#include "space/Octree.hpp"
 
 namespace ce {
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "IRenderable3d.hpp"
-#include "coreGL/VertexArray.hpp"
+#include "chimera/core/coreGL/VertexArray.hpp"
 #include <stdint.h>
 
 namespace ce {

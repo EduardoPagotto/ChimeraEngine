@@ -1,6 +1,6 @@
 #include "Game.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/coreGL/OpenGLDefs.hpp"
 
 Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) {
     keyboard = sl->getService<Chimera::IKeyboard>();

@@ -1,6 +1,6 @@
 #pragma once
+#include "chimera/core/space/Mesh.hpp"
 #include "render/3d/Renderable3D.hpp"
-#include "space/Mesh.hpp"
 
 namespace ce {
 

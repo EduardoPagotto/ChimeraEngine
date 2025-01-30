@@ -1,9 +1,9 @@
 #pragma once
-#include "coreGL/IndexBuffer.hpp"
-#include "coreGL/VertexArray.hpp"
+#include "chimera/core/coreGL/IndexBuffer.hpp"
+#include "chimera/core/coreGL/VertexArray.hpp"
+#include "chimera/core/space/AABB.hpp"
+#include "chimera/core/space/Mesh.hpp"
 #include "render/3d/Renderable3D.hpp"
-#include "space/AABB.hpp"
-#include "space/Mesh.hpp"
 
 namespace ce {
 

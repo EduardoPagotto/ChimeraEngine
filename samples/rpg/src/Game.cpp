@@ -1,6 +1,6 @@
 #include "Game.hpp"
-#include "core/utils.hpp"
-#include "coreGL/OpenGLDefs.hpp"
+#include "chimera/core/coreGL/OpenGLDefs.hpp"
+#include "chimera/core/utils.hpp"
 
 Game::Game() {
     // mouse = sl->getService<Chimera::IMouse>();

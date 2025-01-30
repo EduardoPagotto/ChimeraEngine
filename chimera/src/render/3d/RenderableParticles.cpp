@@ -1,5 +1,5 @@
 #include "render/3d/RenderableParticles.hpp"
-#include "coreGL/Shader.hpp"
+#include "chimera/core/coreGL/Shader.hpp"
 #include "render/3d/IRenderer3d.hpp"
 
 namespace ce {
@@ -11,10 +11,11 @@ void RenderableParticles::create() { // TODO: colocar os VBOs na extrutura vao!!
     vao = new VertexArray();
     vao->bind();
     // The VBO containing the 4 vertices of the particles. Thanks to instancing, they will be shared by all particles.
-    static const glm::vec3 vVertex[] = {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(-0.5f, 0.5f, 0.0f),
-                                        glm::vec3(0.5f, 0.5f, 0.0f)};
+    static const glm::vec3 vVertex[] = {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.5f, -0.5f, 0.0f),
+                                        glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 0.0f)};
 
-    // VBO square vertex static, others (posiciton an size / color) is empty (NULL) buffer and it will be updated later, each frame.
+    // VBO square vertex static, others (posiciton an size / color) is empty (NULL) buffer and it will be updated later,
+    // each frame.
     vboVex = new VertexBuffer(BufferType::STATIC, sizeof(glm::vec3) * 4, (void*)vVertex);
     vboPos = new VertexBuffer(BufferType::STREAM, max * sizeof(glm::vec4), nullptr);
     vboCor = new VertexBuffer(BufferType::STREAM, max * 4 * sizeof(GLubyte), nullptr);

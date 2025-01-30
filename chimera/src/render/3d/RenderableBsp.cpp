@@ -1,8 +1,8 @@
 #include "render/3d/RenderableBsp.hpp"
+#include "chimera/core/space/BSPTree.hpp"
+#include "chimera/core/space/ICamera.hpp"
 #include "render/3d/IRenderer3d.hpp"
 #include "render/3d/RenderableIBO.hpp"
-#include "space/BSPTree.hpp"
-#include "space/ICamera.hpp"
 
 namespace ce {
 
@@ -52,7 +52,8 @@ RenderableBsp::RenderableBsp(Mesh& mesh) : totIndex(0), Renderable3D() {
 
 RenderableBsp::~RenderableBsp() { this->destroy(); }
 
-void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<IRenderable3d*>& childDraw) {
+void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree,
+                                 std::vector<IRenderable3d*>& childDraw) {
     // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
     if ((tree != nullptr) && (tree->isSolid == false)) {
         switch (SIDE result = tree->hyperPlane.classifyPoint(cameraPos); result) {

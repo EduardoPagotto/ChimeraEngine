@@ -1,9 +1,11 @@
 #include "Game.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/coreGL/OpenGLDefs.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) { mouse = sl->getService<Chimera::IMouse>(); }
+Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) {
+    mouse = sl->getService<Chimera::IMouse>();
+}
 Game::~Game() { mouse = nullptr; }
 
 void Game::onAttach() {

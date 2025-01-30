@@ -17,13 +17,9 @@ set (IncludesSimpleRayCasting ${CMAKE_CURRENT_SOURCE_DIR}/include
 							  ${SDL2_INCLUDE_DIR}
 							  ${BULLET_INCLUDE_DIR})
 
-set (LibsSimpleRayCasting ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
-					      ${CMAKE_SOURCE_DIR}/bin/libChimeraSpace.a
-						  ${CMAKE_SOURCE_DIR}/bin/libChimeraBullet.a
-						  ${CMAKE_SOURCE_DIR}/bin/libChimeraCoreGL.a
-						  ${CMAKE_SOURCE_DIR}/bin/libChimeraCollada.a
-						  ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
-						  ${OPENGL_LIBRARIES}
+set (LibsSimpleRayCasting ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+						  ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
+					 	  ${OPENGL_LIBRARIES}
 						  ${SDL2_LIBRARY}
 						  ${BULLET_LIBRARIES}
 						  ${GLEW_LIBRARIES}
@@ -40,7 +36,6 @@ add_executable (raycasting src/raycasting.cpp
 target_link_libraries(raycasting ${LibsSimpleRayCasting})
 target_include_directories (raycasting PRIVATE ${IncludesSimpleRayCasting})
 
-add_dependencies(raycasting ChimeraCollada
-							ChimeraRender)
+add_dependencies(raycasting ChimeraCore ChimeraRender)
 
 INSTALL(FILES ${SimpleRayCasting_BINARY_DIR}/raycasting DESTINATION bin)

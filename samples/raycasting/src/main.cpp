@@ -1,9 +1,9 @@
 #include "Game.hpp"
-#include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/CanvasFB.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/Keyboard.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/collada/colladaLoad.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {

@@ -32,7 +32,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 add_subdirectory(chimera)
-#add_subdirectory(samples)
+add_subdirectory(samples)
 
 # clean
 add_custom_target (clean-all COMMAND rm -rf ${CMAKE_BINARY_DIR}/*

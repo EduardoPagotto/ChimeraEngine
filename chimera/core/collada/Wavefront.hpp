@@ -1,5 +1,5 @@
 #pragma once
-#include "Material.hpp"
+#include "chimera/core/coreGL/Material.hpp"
 #include "chimera/core/space/Mesh.hpp"
 
 namespace ce {

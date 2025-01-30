@@ -1,4 +1,4 @@
-#include "render/2d/BatchRender2D.hpp"
+#include "chimera/render/2d/BatchRender2D.hpp"
 
 namespace ce {
 
@@ -120,7 +120,8 @@ void BatchRender2D::submit(IRenderable2D* renderable) {
     indexCount += 6;
 }
 
-void BatchRender2D::drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) {
+void BatchRender2D::drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos,
+                               const glm::vec4& color) {
 
     float textureSlot = 0.0f; // float ts = 0.0f;
     if (font->getTexture() != nullptr)

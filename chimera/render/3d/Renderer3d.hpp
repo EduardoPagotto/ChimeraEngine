@@ -3,7 +3,7 @@
 #include "chimera/core/coreGL/RenderCommand.hpp"
 #include "chimera/core/space/Frustum.hpp"
 #include "chimera/core/space/Octree.hpp"
-#include "render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 
 namespace ce {
 

@@ -2,7 +2,7 @@
 #include "IRenderer3d.hpp"
 #include "chimera/core/coreGL/DrawLine.hpp"
 #include "chimera/core/space/Frustum.hpp"
-#include "render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/Renderable3D.hpp"
 
 namespace ce {
 

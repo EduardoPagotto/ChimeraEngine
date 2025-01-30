@@ -1,4 +1,4 @@
-#include "render/scene/CameraControllerFPS.hpp"
+#include "chimera/render/scene/CameraControllerFPS.hpp"
 #include "chimera/core/Keyboard.hpp"
 #include "chimera/core/utils.hpp"
 

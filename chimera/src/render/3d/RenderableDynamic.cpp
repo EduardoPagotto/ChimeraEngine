@@ -1,4 +1,4 @@
-#include "render/3d/RenderableDynamic.hpp"
+#include "chimera/render/3d/RenderableDynamic.hpp"
 #include "chimera/core/coreGL/OpenGLDefs.hpp"
 #include "chimera/core/coreGL/VertexArray.hpp"
 #include "chimera/core/coreGL/VertexBuffer.hpp"

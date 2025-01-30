@@ -1,4 +1,4 @@
-#include "render/scene/CameraControllerOrbit.hpp"
+#include "chimera/render/scene/CameraControllerOrbit.hpp"
 #include "chimera/core/Keyboard.hpp"
 
 namespace ce {

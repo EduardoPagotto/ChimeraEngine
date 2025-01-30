@@ -1,6 +1,6 @@
-#include "render/3d/RenderableParticles.hpp"
+#include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/core/coreGL/Shader.hpp"
-#include "render/3d/IRenderer3d.hpp"
+#include "chimera/render/3d/IRenderer3d.hpp"
 
 namespace ce {
 

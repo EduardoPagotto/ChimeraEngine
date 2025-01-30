@@ -9,9 +9,9 @@
 #include "chimera/core/space/ICamera.hpp"
 #include "chimera/core/space/ITrans.hpp"
 #include "chimera/core/space/Octree.hpp"
-#include "render/2d/BatchRender2D.hpp"
-#include "render/3d/IRenderable3d.hpp"
-#include "render/3d/Renderer3dLines.hpp"
+#include "chimera/render/2d/BatchRender2D.hpp"
+#include "chimera/render/3d/IRenderable3d.hpp"
+#include "chimera/render/3d/Renderer3dLines.hpp"
 
 namespace ce {
 

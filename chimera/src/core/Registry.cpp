@@ -1,6 +1,6 @@
 #include "chimera/core/Registry.hpp"
 
-namespace Chimera {
+namespace ce {
 
 Entity Registry::createEntity(const std::string& tag, const std::string& id) {
     Entity entity = {eRegistry.create(), this};
@@ -13,4 +13,4 @@ Entity Registry::createEntity(const std::string& tag, const std::string& id) {
 }
 
 void Registry::destroyEntity(Entity entity) { eRegistry.destroy(entity); }
-} // namespace Chimera
+} // namespace ce

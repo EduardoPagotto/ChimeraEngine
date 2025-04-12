@@ -5,7 +5,7 @@
 #include "chimera/core/visible/RenderCommand.hpp"
 #include <deque>
 
-namespace Chimera {
+namespace ce {
 
 #define RENDERER_MAX_SPRITES 60000
 #define RENDERER_SPRITE_SIZE 4
@@ -47,4 +47,4 @@ class BatchRender2D : public IRenderer2D {
     std::vector<std::shared_ptr<Texture>> textures;
     Camera* camera;
 };
-} // namespace Chimera
+} // namespace ce

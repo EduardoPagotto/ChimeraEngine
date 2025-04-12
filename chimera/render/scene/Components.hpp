@@ -3,7 +3,7 @@
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Chimera {
+namespace ce {
 
 struct SpriteComponent {
     glm::vec4 color;
@@ -26,4 +26,4 @@ struct ComponentTile {
     ComponentTile() = default;
 };
 
-} // namespace Chimera
+} // namespace ce

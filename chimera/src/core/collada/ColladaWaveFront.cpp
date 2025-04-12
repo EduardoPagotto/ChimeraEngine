@@ -4,7 +4,7 @@
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaWaveFront::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
     MeshComponent& eMesh = entity.addComponent<MeshComponent>();
@@ -24,7 +24,7 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
     std::string matFile;
     wavefrontObjLoad(target, eMesh.mesh, matFile);
     if (matFile.size() > 0) {
-        wavefrontMtlLoad(matFile, eMaterial.material, serviceLoc);
+        wavefrontMtlLoad(matFile, eMaterial.material);
     }
 
     if (pugi::xml_node nShade = geo.next_sibling(); nShade) {
@@ -32,11 +32,11 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
             if (std::string(technique_hint.attribute("profile").value()) == "GLSL") {
                 std::string refName = technique_hint.attribute("ref").value();
                 std::string url = nShade.attribute("url").value();
-                ColladaEffect cf(colladaDom, url, serviceLoc);
+                ColladaEffect cf(colladaDom, url);
 
                 cf.create(refName, entity, cf.getLibrary("library_effects"));
             }
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

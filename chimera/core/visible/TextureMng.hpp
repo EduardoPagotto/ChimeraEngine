@@ -5,7 +5,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace Chimera {
+namespace ce {
 
 class TextureMng : public IService {
   private:
@@ -77,4 +77,4 @@ class TextureMng : public IService {
         return tex;
     }
 };
-} // namespace Chimera
+} // namespace ce

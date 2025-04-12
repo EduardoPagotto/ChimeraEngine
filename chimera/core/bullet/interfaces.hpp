@@ -3,7 +3,7 @@
 #include <LinearMath/btVector3.h>
 #include <btBulletDynamicsCommon.h>
 
-namespace Chimera {
+namespace ce {
 
 class IPhysicsControl : public IService {
   public:
@@ -15,4 +15,4 @@ class IPhysicsControl : public IService {
     virtual void setGravity(const btVector3& _vet) = 0;
     virtual btDiscreteDynamicsWorld* getWorld() = 0;
 };
-} // namespace Chimera
+} // namespace ce

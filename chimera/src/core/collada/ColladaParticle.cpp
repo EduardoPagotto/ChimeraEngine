@@ -1,7 +1,7 @@
 #include "chimera/core/collada/ColladaParticle.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaParticle::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nParticle) {
 
     glm::vec dir = glm::vec3(0, 0, 10);
@@ -22,4 +22,4 @@ void ColladaParticle::create(const std::string& id, const std::string& name, Ent
     setChildParam(nContainer, "respaw", pc->respaw);
     ec.emitter->pushParticleContainer(pc);
 }
-} // namespace Chimera
+} // namespace ce

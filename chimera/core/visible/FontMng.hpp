@@ -3,7 +3,7 @@
 #include "chimera/core/ServiceLocator.hpp"
 #include <unordered_map>
 
-namespace Chimera {
+namespace ce {
 
 class FontMng : public IService {
   private:
@@ -64,4 +64,4 @@ class FontMng : public IService {
         return font;
     }
 };
-} // namespace Chimera
+} // namespace ce

@@ -2,7 +2,7 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 
-namespace Chimera {
+namespace ce {
 
 static uint32_t compileShader(const std::string& fileName, const std::string& shaderCode, uint16_t kindShade) {
 
@@ -93,4 +93,4 @@ std::shared_ptr<Shader> ShaderMng::load(const std::string& name, const std::unor
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dup Shader %s", name.c_str());
     return got->second;
 }
-} // namespace Chimera
+} // namespace ce

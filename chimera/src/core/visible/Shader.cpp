@@ -2,7 +2,7 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void Shader::setUniformU(const char* name, const UValue& uv) noexcept {
 
@@ -76,4 +76,4 @@ const int32_t Shader::getUniform(const std::string& name) const noexcept {
 
     return loc;
 }
-} // namespace Chimera
+} // namespace ce

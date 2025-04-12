@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-namespace Chimera {
+namespace ce {
 
 Font::Font(const std::string& pathFile, const int& size) : texture(nullptr), scale(glm::vec2(10.0f)) {
 
@@ -147,4 +147,4 @@ Font::~Font() {
     glyphs.clear();
 }
 
-} // namespace Chimera
+} // namespace ce

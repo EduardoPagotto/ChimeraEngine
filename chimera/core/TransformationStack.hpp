@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 class TransformationStack {
   public:
@@ -37,4 +37,4 @@ class TransformationStack {
     std::vector<glm::mat4> transformationStack;
     const glm::mat4* transCache;
 };
-} // namespace Chimera
+} // namespace ce

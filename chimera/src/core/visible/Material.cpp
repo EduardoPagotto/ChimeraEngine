@@ -1,6 +1,6 @@
 #include "chimera/core/visible/Material.hpp"
 
-namespace Chimera {
+namespace ce {
 
 Material::Material() : valid(false), tipoTexturasDisponiveis(-1) {}
 Material::~Material() {}
@@ -61,4 +61,4 @@ void Material::bindMaterialInformation(MapUniform& uniforms, std::vector<std::sh
         indexTex++;
     }
 }
-} // namespace Chimera
+} // namespace ce

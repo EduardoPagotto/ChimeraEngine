@@ -7,25 +7,23 @@
 #include "chimera/render/2d/Label.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
-class Game : public Chimera::IStateMachine {
+class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<ServiceLocator> sl, Chimera::Scene* scene);
+    Game(ce::Scene* scene);
     virtual ~Game();
 
     virtual void onAttach() override;
     virtual void onDeatach() override;
     virtual void onRender() override;
-    virtual void onUpdate(Chimera::IViewProjection& vp, const double& ts) override;
+    virtual void onUpdate(ce::IViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    std::shared_ptr<ServiceLocator> serviceLoc;
-    std::shared_ptr<Chimera::IMouse> mouse;
-    std::shared_ptr<Chimera::IGameController> gameControl;
-    std::shared_ptr<Chimera::Registry> registry;
+    std::shared_ptr<ce::IMouse> mouse;
+    std::shared_ptr<ce::IGameController> gameControl;
 
-    Chimera::Scene* scene;
-    Chimera::Solid* pCorpoRigido;
-    Chimera::Label* lFPS;
+    ce::Scene* scene;
+    ce::Solid* pCorpoRigido;
+    ce::Label* lFPS;
     int fps;
 };

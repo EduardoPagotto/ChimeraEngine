@@ -6,11 +6,11 @@
 #include "chimera/core/device/Mouse.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class CameraControllerFPS : public IStateMachine {
   public:
-    CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
+    CameraControllerFPS(Entity entity);
     virtual ~CameraControllerFPS();
     void onAttach() override;
     void onDeatach() override;
@@ -37,4 +37,4 @@ class CameraControllerFPS : public IStateMachine {
     std::shared_ptr<IKeyboard> keyboard;
     std::shared_ptr<IMouse> mouse;
 };
-} // namespace Chimera
+} // namespace ce

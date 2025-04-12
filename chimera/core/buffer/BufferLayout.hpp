@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 struct BufferElement {
     uint16_t count;
@@ -39,4 +39,4 @@ class BufferLayout {
         this->size += sizeOfType * count;
     }
 };
-} // namespace Chimera
+} // namespace ce

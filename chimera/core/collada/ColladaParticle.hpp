@@ -2,13 +2,11 @@
 #include "Collada.hpp"
 #include "chimera/core/Registry.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaParticle : public Collada {
   public:
-    ColladaParticle(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
-    virtual ~ColladaParticle() {}
+    ColladaParticle(ColladaDom& dom, const std::string& url) : Collada(dom, url) {}
+    virtual ~ColladaParticle() = default;
     void create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node nParticle);
-
-  private:
 };
-} // namespace Chimera
+} // namespace ce

@@ -3,7 +3,7 @@
 #include <array>
 #include <glm/glm.hpp>
 
-namespace Chimera {
+namespace ce {
 
 struct ViewProjectionMatrixs {
     glm::mat4 view, viewProjection, viewProjectionInverse;
@@ -57,4 +57,4 @@ struct ViewProjectionComponent {
     IViewProjection* vp = nullptr;
 };
 
-} // namespace Chimera
+} // namespace ce

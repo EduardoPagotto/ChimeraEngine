@@ -1,7 +1,7 @@
 #include "chimera/core/bullet/Solid.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Chimera {
+namespace ce {
 
 Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans, uint32_t entity)
     : pWorld(_pWorld), pRigidBody(nullptr), pShapeCollision(nullptr), trimesh(nullptr), mass(0.0f), frictionDynamic(15.0f),
@@ -171,4 +171,4 @@ void Solid::applyForce(const glm::vec3& _prop) {
 // m_trans.setOrigin ( _pTrans->getPosition() );
 // pMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), l_posicao));
 
-} // namespace Chimera
+} // namespace ce

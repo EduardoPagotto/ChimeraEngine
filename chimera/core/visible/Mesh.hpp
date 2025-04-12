@@ -5,7 +5,7 @@
 #include <list>
 #include <memory>
 
-namespace Chimera {
+namespace ce {
 
 struct VertexData {
     glm::vec3 point;  // 3 * 4 = 12 ( 0 - 11)
@@ -40,4 +40,4 @@ void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, s
 std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexBoundaries(std::vector<VertexData>& vArray);
 std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexIndexedBoundaries(std::vector<VertexData>& vArray, TrisIndex& tris);
 
-} // namespace Chimera
+} // namespace ce

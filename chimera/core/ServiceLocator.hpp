@@ -6,6 +6,8 @@
 #include <type_traits>
 #include <typeindex>
 
+namespace ce {
+
 /// @brief Base class for all services.
 class IService {
   public:
@@ -68,3 +70,8 @@ class ServiceLocator {
         return std::static_pointer_cast<T>(it->second);
     }
 };
+
+/// @brief Global access to ServiceLocator
+inline ServiceLocator g_service_locator;
+
+} // namespace ce

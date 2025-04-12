@@ -9,27 +9,25 @@
 
 int main(int argn, char** argv) {
 
-    using namespace Chimera;
+    using namespace ce;
     try {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Models3 Iniciado");
 
         // Registry to entt
-        auto sl = std::make_shared<ServiceLocator>();
-        sl->registerService(std::make_shared<Registry>());
-        sl->registerService(std::make_shared<CanvasGL>("Simples", 800, 600, false));
-        sl->registerService(std::make_shared<Mouse>());
-        sl->registerService(std::make_shared<ViewProjection>(0.0f)); // View projection
-        sl->registerService(std::make_shared<ShaderMng>());
-        sl->registerService(std::make_shared<FontMng>());
-        sl->registerService(std::make_shared<TextureMng>());
+        g_service_locator.registerService(std::make_shared<CanvasGL>("Simples", 800, 600, false));
+        g_service_locator.registerService(std::make_shared<Mouse>());
+        g_service_locator.registerService(std::make_shared<ViewProjection>(0.0f)); // View projection
+        g_service_locator.registerService(std::make_shared<ShaderMng>());
+        g_service_locator.registerService(std::make_shared<FontMng>());
+        g_service_locator.registerService(std::make_shared<TextureMng>());
 
-        Engine engine(sl);
+        Engine engine;
 
         ColladaDom dom = loadFileCollada("./samples/helloworld/level.xml");
-        colladaRegistryLoad(dom, sl);
+        colladaRegistryLoad(dom);
 
-        Game game(sl, &engine);
+        Game game(&engine);
 
         engine.getStack().pushState(&game);
 

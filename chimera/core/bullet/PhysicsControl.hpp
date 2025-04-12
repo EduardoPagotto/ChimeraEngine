@@ -4,7 +4,7 @@
 #include <btBulletCollisionCommon.h>
 #include <map>
 
-namespace Chimera {
+namespace ce {
 class PhysicsControl : public ServiceBase<IPhysicsControl> {
   private:
     btBroadphaseInterface* broadPhase;
@@ -28,4 +28,4 @@ class PhysicsControl : public ServiceBase<IPhysicsControl> {
     virtual void setGravity(const btVector3& _vet) override { discretDynamicsWorld->setGravity(_vet); }
     virtual btDiscreteDynamicsWorld* getWorld() override { return discretDynamicsWorld; }
 };
-} // namespace Chimera
+} // namespace ce

@@ -1,6 +1,6 @@
 #include "chimera/core/partition/Cube.hpp"
 
-namespace Chimera {
+namespace ce {
 
 static TrisIndex tVertIndex;
 static TrisIndex tTexIndex;
@@ -677,4 +677,4 @@ void Cube::create(Mesh* mesh) {
             break;
     }
 }
-} // namespace Chimera
+} // namespace ce

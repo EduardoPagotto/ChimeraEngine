@@ -2,7 +2,7 @@
 #include "interfaces.hpp"
 #include <map>
 
-namespace Chimera {
+namespace ce {
 class Mouse : public ServiceBase<IMouse> {
   private:
     std::map<uint8_t, uint8_t> buttonState;
@@ -57,4 +57,4 @@ class Mouse : public ServiceBase<IMouse> {
 
     void updateWl(const SDL_MouseWheelEvent& mwe) noexcept override { this->wheel = glm::ivec2(mwe.x, mwe.y); }
 };
-} // namespace Chimera
+} // namespace ce

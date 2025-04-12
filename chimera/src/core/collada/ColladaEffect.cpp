@@ -4,7 +4,7 @@
 #include "chimera/core/visible/Shader.hpp"
 #include "chimera/core/visible/ShaderMng.hpp"
 
-namespace Chimera {
+namespace ce {
 
 static TexFilter setFilter(const std::string& sParamVal) {
     if (sParamVal == "NEAREST")
@@ -77,7 +77,7 @@ void ColladaEffect::setShader(const std::string& refName, const pugi::xml_node& 
     }
 
     if (shadeData.size() > 1) {
-        auto mng = serviceLoc->getService<ShaderMng>();
+        auto mng = g_service_locator.getService<ShaderMng>();
         entity.addComponent<ShaderComponent>(refName, mng->load(refName, shadeData));
     }
 }
@@ -99,7 +99,7 @@ bool ColladaEffect::setTextureParam(const pugi::xml_node& n, TexParam& tp) {
         else if (sParam == "instance_image") {
 
             std::string url = ntPara.attribute("url").value();
-            ColladaImage ci(colladaDom, url, serviceLoc);
+            ColladaImage ci(colladaDom, url);
             ci.create(entity, tp, ci.getLibrary("library_images"));
             return true;
         }
@@ -145,10 +145,10 @@ void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
                 std::string texId = first.attribute("texture").value();
                 std::string idTex = mapaTex[mapa2D[texId]];
 
-                ColladaImage ci(colladaDom, idTex, serviceLoc);
+                ColladaImage ci(colladaDom, idTex);
                 ci.create(entity, tp, ci.getLibrary("library_images"));
 
-                auto texMng = serviceLoc->getService<TextureMng>();
+                auto texMng = g_service_locator.getService<TextureMng>();
                 pMat->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->get(idTex));
                 pMat->setDiffuse(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // FIXME: Arquivo do blender nao tem!!
             }
@@ -216,10 +216,10 @@ void ColladaEffect::create(const std::string& refName, Entity& entity, pugi::xml
         } else if (nameProf == "extra") {
             if (const pugi::xml_node nFX = getExtra(nProf, "instance_effect"); nFX != nullptr) {
                 std::string url = nFX.attribute("url").value();
-                ColladaEffect cf(colladaDom, url, serviceLoc);
+                ColladaEffect cf(colladaDom, url);
                 cf.create("", entity, cf.getLibrary("library_effects"));
             }
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

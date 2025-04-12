@@ -4,7 +4,7 @@
 #include "chimera/core/TagComponent.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 #define SHADE_TEXTURE_SELETOR_TIPO_VALIDO "tipo"
 #define SHADE_MAT_AMBIENTE "material.ambient"
@@ -46,4 +46,4 @@ struct MaterialComponent {
     MaterialComponent() = default;
 };
 
-} // namespace Chimera
+} // namespace ce

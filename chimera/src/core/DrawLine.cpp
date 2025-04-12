@@ -1,6 +1,6 @@
 #include "chimera/core/DrawLine.hpp"
 
-namespace Chimera {
+namespace ce {
 
 // ref: https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11517
 
@@ -66,4 +66,4 @@ void DrawLine::addAABB(const AABB& aabb, const glm::vec3& color) noexcept {
     add(v[2], v[6], color);
     add(v[3], v[7], color);
 }
-} // namespace Chimera
+} // namespace ce

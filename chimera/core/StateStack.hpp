@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 class StateStack {
   public:
@@ -51,4 +51,4 @@ class StateStack {
     std::vector<IStateMachine*> states;
     std::vector<IStateMachine*>::iterator stateInsert;
 };
-} // namespace Chimera
+} // namespace ce

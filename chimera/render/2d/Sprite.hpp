@@ -1,7 +1,7 @@
 #pragma once
 #include "Renderable2D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Sprite : public Renderable2D {
   public:
@@ -13,4 +13,4 @@ class Sprite : public Renderable2D {
 
     virtual ~Sprite() {}
 };
-} // namespace Chimera
+} // namespace ce

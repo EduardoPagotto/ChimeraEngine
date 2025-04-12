@@ -2,7 +2,7 @@
 #include "BufferLayout.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
-namespace Chimera {
+namespace ce {
 
 #define BUFFER_OFFSET(i) ((void*)(i))
 
@@ -66,4 +66,4 @@ class VertexBuffer {
     // se nao existir IBO new rander pelo VAO
     // inline void render() const { glDrawArrays(GL_TRIANGLES, 0, this->size); }
 };
-} // namespace Chimera
+} // namespace ce

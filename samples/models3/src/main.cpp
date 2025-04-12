@@ -10,7 +10,7 @@
 #include <map>
 
 int main(int argn, char** argv) {
-    using namespace Chimera;
+    using namespace ce;
     try {
         // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
@@ -18,24 +18,22 @@ int main(int argn, char** argv) {
 
         // Services shared inside all parts
         // Canvas, Mouse, keyboard, Joystick, gamepad, view's
-        auto sl = std::make_shared<ServiceLocator>();
-        sl->registerService(std::make_shared<Registry>());
-        sl->registerService(std::make_shared<CanvasGL>("Teste Hello", 1800, 600, false));
-        sl->registerService(std::make_shared<Mouse>());
-        sl->registerService(std::make_shared<GameController>());
-        sl->registerService(std::make_shared<ViewProjection>()); // View projection
-        sl->registerService(std::make_shared<ShaderMng>());
-        sl->registerService(std::make_shared<FontMng>());
-        sl->registerService(std::make_shared<TextureMng>());
+        g_service_locator.registerService(std::make_shared<CanvasGL>("Teste Hello", 1800, 600, false));
+        g_service_locator.registerService(std::make_shared<Mouse>());
+        g_service_locator.registerService(std::make_shared<GameController>());
+        g_service_locator.registerService(std::make_shared<ViewProjection>()); // View projection
+        g_service_locator.registerService(std::make_shared<ShaderMng>());
+        g_service_locator.registerService(std::make_shared<FontMng>());
+        g_service_locator.registerService(std::make_shared<TextureMng>());
 
-        Engine engine(sl);
+        Engine engine;
 
         ColladaDom dom = loadFileCollada("./assets/models/nivel1.xml");
-        colladaRegistryLoad(dom, sl);
-        colladaRenderLoad(dom, sl);
+        colladaRegistryLoad(dom);
+        colladaRenderLoad(dom);
 
-        Scene scene(sl);
-        Game game(sl, &scene);
+        Scene scene;
+        Game game(&scene);
 
         engine.getStack().pushState(&scene);
         engine.getStack().pushState(&game);

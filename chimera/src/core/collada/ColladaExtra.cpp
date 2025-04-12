@@ -7,7 +7,7 @@
 #include "chimera/core/device/CanvasGL.hpp"
 #include "chimera/core/visible/FontMng.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void ColladaExtra::create(pugi::xml_node nodeExtra) {
 
@@ -19,7 +19,7 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
             float scaleX = std::stod(nFont.attribute("scaleX").value());
             float scaleY = std::stod(nFont.attribute("scaleY").value());
 
-            auto fontMng = serviceLoc->getService<FontMng>();
+            auto fontMng = g_service_locator.getService<FontMng>();
             auto font = fontMng->load(rfc.getFragment(), rfc.getPath(), size);
             font->setScale(glm::vec2(scaleX, scaleY));
         }
@@ -30,8 +30,7 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
 
             std::string entName = nFb.attribute("name").value();
             std::string entId = nFb.attribute("id").value();
-            auto r = serviceLoc->getService<Registry>();
-            Entity entity = r->createEntity(entName, entId);
+            Entity entity = g_registry.createEntity(entName, entId);
 
             FrameBufferSpecification& fb = entity.addComponent<FrameBufferSpecification>();
             for (pugi::xml_node next = nFb.first_child(); next; next = next.next_sibling()) {
@@ -40,12 +39,12 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
                 if (name == "instance_effect") {
 
                     std::string refName = next.child("technique_hint").attribute("ref").value();
-                    ColladaEffect cf(colladaDom, url, serviceLoc);
+                    ColladaEffect cf(colladaDom, url);
                     cf.create(refName, entity, cf.getLibrary("library_effects"));
 
                 } else if (name == "instance_camera") {
 
-                    ColladaCam cc(colladaDom, url, serviceLoc);
+                    ColladaCam cc(colladaDom, url);
                     cc.create(entity, cc.getLibrary("library_cameras"));
                     cc.createExtra(entity, next.first_child());
                 }
@@ -53,4 +52,4 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

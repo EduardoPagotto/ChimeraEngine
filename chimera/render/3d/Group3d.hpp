@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 class Group3d : public IRenderable3d {
   public:
@@ -24,4 +24,4 @@ class Group3d : public IRenderable3d {
     std::vector<IRenderable3d*> renderables;
     glm::mat4 transformationMatrix;
 };
-} // namespace Chimera
+} // namespace ce

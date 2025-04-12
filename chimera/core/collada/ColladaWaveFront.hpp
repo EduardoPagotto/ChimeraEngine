@@ -2,14 +2,11 @@
 #include "Collada.hpp"
 #include "chimera/core/Registry.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaWaveFront : public Collada {
   public:
-    ColladaWaveFront(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc)
-        : Collada(dom, url, serviceLoc) {};
-    virtual ~ColladaWaveFront() {}
+    ColladaWaveFront(ColladaDom& dom, const std::string& url) : Collada(dom, url) {}
+    virtual ~ColladaWaveFront() = default;
     void create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo);
-
-  private:
 };
-} // namespace Chimera
+} // namespace ce

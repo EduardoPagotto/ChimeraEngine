@@ -4,7 +4,7 @@
 #include "chimera/core/space/AABB.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class RenderableIBO : public Renderable3D {
   public:
@@ -21,4 +21,4 @@ class RenderableIBO : public Renderable3D {
     IndexBuffer* ibo;
     AABB aabb;
 };
-} // namespace Chimera
+} // namespace ce

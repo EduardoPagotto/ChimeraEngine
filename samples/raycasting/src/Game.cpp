@@ -1,10 +1,10 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game") {
+Game::Game() : IStateMachine("Game") {
     // init framebuffer
-    canvas = sl->getService<Chimera::ICanva>();
-    keyboard = sl->getService<Chimera::IKeyboard>();
+    canvas = ce::g_service_locator.getService<ce::ICanva>();
+    keyboard = ce::g_service_locator.getService<ce::IKeyboard>();
 }
 
 Game::~Game() {
@@ -34,7 +34,7 @@ void Game::onAttach() {
 void Game::onDeatach() {}
 
 bool Game::onEvent(const SDL_Event& event) {
-    using namespace Chimera;
+    using namespace ce;
 
     keyboard->getEvent(event);
 
@@ -42,10 +42,10 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
                 case SDL_WINDOWEVENT_ENTER:
-                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    ce::utilSendEvent(ce::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
                     break;
                 case SDL_WINDOWEVENT_LEAVE:
-                    Chimera::utilSendEvent(Chimera::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    ce::utilSendEvent(ce::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
             }
         } break;
@@ -53,16 +53,16 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {
-    using namespace Chimera;
+void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {
+    using namespace ce;
 
     if (keyboard->isPressed(SDLK_ESCAPE)) {
-        Chimera::utilSendEvent(Chimera::EVENT_FLOW_STOP, nullptr, nullptr);
+        ce::utilSendEvent(ce::EVENT_FLOW_STOP, nullptr, nullptr);
         return;
     }
 
     if (keyboard->isPressed(SDLK_F10)) {
-        Chimera::utilSendEvent(Chimera::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+        ce::utilSendEvent(ce::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 

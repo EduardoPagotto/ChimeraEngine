@@ -2,7 +2,7 @@
 #include "chimera/core/visible/Shader.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 
-namespace Chimera {
+namespace ce {
 
 RenderableParticles::~RenderableParticles() { this->destroy(); }
 
@@ -112,4 +112,4 @@ void RenderableParticles::draw(const bool& logData) {
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
 }
-} // namespace Chimera
+} // namespace ce

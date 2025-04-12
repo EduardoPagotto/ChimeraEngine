@@ -1,7 +1,7 @@
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/utils.hpp"
 
-namespace Chimera {
+namespace ce {
 
 PhysicsControl::PhysicsControl() {
 
@@ -160,4 +160,4 @@ void PhysicsControl::checkCollisions() {
 
     contactActives = new_contacts;
 }
-} // namespace Chimera
+} // namespace ce

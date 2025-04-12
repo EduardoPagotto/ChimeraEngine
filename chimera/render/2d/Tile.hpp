@@ -1,7 +1,7 @@
 #pragma once
 #include "Layer.hpp"
 
-namespace Chimera {
+namespace ce {
 class Tile : public Layer {
   public:
     Tile(const std::string& name, IRenderer2D* renderer, std::shared_ptr<Shader> shader, Camera* camera)
@@ -13,4 +13,4 @@ class Tile : public Layer {
     virtual bool onEvent(const SDL_Event& event) override { return true; }
     virtual void onRender() override { Layer::onRender(); }
 };
-} // namespace Chimera
+} // namespace ce

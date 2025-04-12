@@ -3,10 +3,10 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/visible/TextureMng.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaEffect : public Collada {
   public:
-    ColladaEffect(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
+    ColladaEffect(ColladaDom& dom, const std::string& url) : Collada(dom, url) {};
     virtual ~ColladaEffect() {
         mapaTex.clear();
         mapa2D.clear();
@@ -23,4 +23,4 @@ class ColladaEffect : public Collada {
     std::unordered_map<std::string, std::string> mapaTex;
     std::unordered_map<std::string, std::string> mapa2D;
 };
-} // namespace Chimera
+} // namespace ce

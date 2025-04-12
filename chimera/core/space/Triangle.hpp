@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 struct Triangle {
     bool splitter{false};
     glm::uvec3 idx{0};
@@ -13,4 +13,4 @@ struct Triangle {
 };
 
 using TrisIndex = std::vector<glm::uvec3>;
-} // namespace Chimera
+} // namespace ce

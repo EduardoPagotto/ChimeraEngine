@@ -1,12 +1,11 @@
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 
-namespace Chimera {
+namespace ce {
 
-CameraControllerOrbit::CameraControllerOrbit(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity)
-    : IStateMachine("Orbit"), entity(entity) {
+CameraControllerOrbit::CameraControllerOrbit(Entity entity) : IStateMachine("Orbit"), entity(entity) {
 
-    mouse = serviceLocator->getService<IMouse>();
+    mouse = g_service_locator.getService<IMouse>();
 }
 
 CameraControllerOrbit::~CameraControllerOrbit() { mouse = nullptr; }
@@ -116,4 +115,4 @@ void CameraControllerOrbit::invertPitch() {
     this->updateVectors();
 }
 
-} // namespace Chimera
+} // namespace ce

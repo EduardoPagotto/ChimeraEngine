@@ -1,7 +1,7 @@
 #include "chimera/core/buffer/FrameBuffer.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
-namespace Chimera {
+namespace ce {
 
 namespace Aux {
 
@@ -179,4 +179,4 @@ void FrameBuffer::clearAttachment(uint32_t attachmentIndex, const int value) {
 
     glClearTexImage(colorAttachments[attachmentIndex]->getTextureID(), 0, (GLenum)tf, GL_INT, &value);
 }
-} // namespace Chimera
+} // namespace ce

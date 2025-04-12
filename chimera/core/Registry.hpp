@@ -1,14 +1,19 @@
 #pragma once
 #include "TagComponent.hpp"
-#include "chimera/core/ServiceLocator.hpp"
 #include <entt/entt.hpp>
 #include <stdexcept>
 
-namespace Chimera {
+namespace ce {
 
 class Entity;
 
-class Registry : public IService {
+class Registry {
+    friend Entity;
+    Registry(const Registry& other) = delete;
+    Registry& operator=(const Registry& other) = delete;
+    entt::registry eRegistry;
+    inline static uint32_t masterSerial{0};
+
   public:
     Registry() = default;
     virtual ~Registry() { destroy(); }
@@ -16,7 +21,7 @@ class Registry : public IService {
     Entity createEntity(const std::string& tag = std::string(), const std::string& id = std::string());
     void destroyEntity(Entity entity);
     entt::registry& get() { return eRegistry; }
-    std::type_index getTypeIndex() const { return std::type_index(typeid(Registry)); }
+    // std::type_index getTypeIndex() const { return std::type_index(typeid(Registry)); }
 
     template <typename T>
     T& findComponent(const std::string& tagName) {
@@ -28,16 +33,12 @@ class Registry : public IService {
         }
         throw std::invalid_argument(std::string("Tag name nao encontrado: ") + tagName);
     }
-
-  private:
-    friend Entity;
-    Registry(const Registry& other) = delete;
-    Registry& operator=(const Registry& other) = delete;
-    entt::registry eRegistry;
-    inline static uint32_t masterSerial = 0;
 };
 
 class Entity {
+    entt::entity handle{entt::null};
+    Registry* reg{nullptr};
+
   public:
     Entity() = default;
     Entity(entt::entity handle, Registry* reg) : handle(handle), reg(reg) {}
@@ -64,11 +65,10 @@ class Entity {
     bool operator==(const Entity& other) const { return handle == other.handle && reg == other.reg; }
     bool operator!=(const Entity& other) const { return !(*this == other); }
     Registry* getRegistry() const { return reg; }
-
-  private:
-    entt::entity handle{entt::null};
-    Registry* reg = nullptr;
 };
+
+/// @brief Global access to Registry
+inline Registry g_registry;
 
 // struct Hierarchie {
 //     Hierarchie() = default;
@@ -118,4 +118,4 @@ class Entity {
 // Relationship child2 = obj0.addChild("child02", "child02");
 // Relationship child3 = child2.addChild("child03", "child03");
 // Relationship child4 = child2.addChild("child04", "child04");
-} // namespace Chimera
+} // namespace ce

@@ -4,7 +4,7 @@
 #include "chimera/core/visible/Mesh.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class RenderableArray : public Renderable3D {
   public:
@@ -21,4 +21,4 @@ class RenderableArray : public Renderable3D {
     AABB aabb;
     uint32_t totIndex;
 };
-} // namespace Chimera
+} // namespace ce

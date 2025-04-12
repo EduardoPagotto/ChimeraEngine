@@ -5,24 +5,21 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Scene* scene)
-    : IStateMachine("Game"), serviceLoc(sl), scene(scene), pCorpoRigido(nullptr) {
-    using namespace Chimera;
+Game::Game(ce::Scene* scene) : IStateMachine("Game"), scene(scene), pCorpoRigido(nullptr) {
+    using namespace ce;
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 
-    registry = sl->getService<Registry>();
-    gameControl = sl->getService<IGameController>();
-    mouse = sl->getService<IMouse>();
+    gameControl = g_service_locator.getService<IGameController>();
+    mouse = g_service_locator.getService<IMouse>();
 }
 
 Game::~Game() {
-    registry = nullptr;
     gameControl = nullptr;
     mouse = nullptr;
 }
 
 bool Game::onEvent(const SDL_Event& event) {
-    using namespace Chimera;
+    using namespace ce;
 
     gameControl->getEvent(event);
     mouse->getEvent(event);
@@ -30,22 +27,22 @@ bool Game::onEvent(const SDL_Event& event) {
     switch (event.type) {
         case SDL_USEREVENT: {
             switch (event.user.code) {
-                case Chimera::EVENT_COLLIDE_START: {
+                case ce::EVENT_COLLIDE_START: {
                     uint32_t* n1 = (uint32_t*)event.user.data1;
                     uint32_t* n2 = (uint32_t*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %d -> %d", *n1, *n2);
                 } break;
-                case Chimera::EVENT_COLLIDE_ON: {
+                case ce::EVENT_COLLIDE_ON: {
                     uint32_t* n1 = (uint32_t*)event.user.data1;
                     uint32_t* n2 = (uint32_t*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao ON: %d -> %d", *n1, *n2);
                 } break;
-                case Chimera::EVENT_COLLIDE_OFF: {
+                case ce::EVENT_COLLIDE_OFF: {
                     uint32_t* n1 = (uint32_t*)event.user.data1;
                     uint32_t* n2 = (uint32_t*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao OFF: %d -> %d", *n1, *n2);
                 } break;
-                case Chimera::EVENT_NEW_FPS: {
+                case ce::EVENT_NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
                     // glm::vec3 val1 = pCorpoRigido->getPosition();
@@ -102,12 +99,12 @@ bool Game::onEvent(const SDL_Event& event) {
 
 void Game::onAttach() {
 
-    using namespace Chimera;
+    using namespace ce;
     // Localiza objeto como o primario
-    TransComponent& tc = registry->findComponent<TransComponent>("Zoltan");
+    TransComponent& tc = g_registry.findComponent<TransComponent>("Zoltan");
     pCorpoRigido = (Solid*)tc.trans;
 
-    auto fontMng = serviceLoc->getService<FontMng>();
+    auto fontMng = g_service_locator.getService<FontMng>();
     auto font = fontMng->getIndex(0);
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
     Tile* tile = (Tile*)scene->getLayes().getState("TileText");
@@ -130,8 +127,8 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {
-    using namespace Chimera;
+void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {
+    using namespace ce;
 
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);

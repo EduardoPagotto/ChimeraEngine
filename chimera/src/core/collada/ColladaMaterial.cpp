@@ -2,7 +2,7 @@
 #include "chimera/core/collada/ColladaEffect.hpp"
 #include "chimera/core/visible/Material.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaMaterial::create(Entity& entity, const pugi::xml_node& node) {
 
     MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();
@@ -14,7 +14,7 @@ void ColladaMaterial::create(Entity& entity, const pugi::xml_node& node) {
     std::string url = nEffect.attribute("url").value();
     std::string refName = nEffect.child("technique_hint").attribute("ref").value();
 
-    ColladaEffect cf(colladaDom, url, serviceLoc);
+    ColladaEffect cf(colladaDom, url);
     cf.create(refName, entity, cf.getLibrary("library_effects"));
 }
-} // namespace Chimera
+} // namespace ce

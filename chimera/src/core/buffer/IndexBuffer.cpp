@@ -1,7 +1,7 @@
 #include "chimera/core/buffer/IndexBuffer.hpp"
 #include "chimera/core/OpenGLDefs.hpp"
 
-namespace Chimera {
+namespace ce {
 
 IndexBuffer::IndexBuffer(uint32_t* data, const uint32_t& size) : size(size) {
     // Create IndexBuffer
@@ -17,4 +17,4 @@ void IndexBuffer::bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID)
 
 void IndexBuffer::unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
 
-} // namespace Chimera
+} // namespace ce

@@ -3,11 +3,11 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/visible/Texture.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaImage : public Collada {
   public:
-    ColladaImage(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
-    virtual ~ColladaImage() {}
+    ColladaImage(ColladaDom& dom, const std::string& url) : Collada(dom, url) {}
+    virtual ~ColladaImage() = default;
     void create(Entity entity, TexParam& tp, const pugi::xml_node& node);
 };
-} // namespace Chimera
+} // namespace ce

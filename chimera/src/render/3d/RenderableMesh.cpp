@@ -4,7 +4,7 @@
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
 
-namespace Chimera {
+namespace ce {
 
 RenderableMesh::RenderableMesh(Mesh* mesh) : Renderable3D() {
 
@@ -43,4 +43,4 @@ RenderableMesh::~RenderableMesh() {
 }
 
 void RenderableMesh::submit(RenderCommand& command, IRenderer3d& renderer) { renderer.submit(command, child, 0); }
-} // namespace Chimera
+} // namespace ce

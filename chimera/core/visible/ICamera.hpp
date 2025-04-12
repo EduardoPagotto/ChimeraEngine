@@ -3,7 +3,7 @@
 #include "chimera/core/ViewProjection.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Chimera {
+namespace ce {
 
 #define FPSCAMERA_MAX_SPEED 40.0f
 #define FPSCAMERA_ROTATION_SENSITIVITY 0.3f
@@ -65,4 +65,4 @@ struct CameraComponent {
     CameraComponent() = default;
     CameraComponent(const CameraComponent& o) = default;
 };
-} // namespace Chimera
+} // namespace ce

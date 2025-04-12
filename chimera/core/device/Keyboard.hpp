@@ -2,7 +2,7 @@
 #include "interfaces.hpp"
 #include <map>
 
-namespace Chimera {
+namespace ce {
 class Keyboard : public ServiceBase<IKeyboard> {
   private:
     std::map<SDL_Keycode, uint8_t> mapKey;
@@ -46,4 +46,4 @@ class Keyboard : public ServiceBase<IKeyboard> {
         return false;
     }
 };
-} // namespace Chimera
+} // namespace ce

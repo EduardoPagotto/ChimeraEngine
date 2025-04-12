@@ -1,7 +1,7 @@
 #pragma once
 #include "Plane.hpp"
 
-namespace Chimera {
+namespace ce {
 
 struct BSPTreeNode {
     Plane hyperPlane; // HyperPlane partition;
@@ -14,4 +14,4 @@ struct BSPTreeNode {
     BSPTreeNode(const Plane& _hyperPlane)
         : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), leafIndex(0), isLeaf(false), isSolid(false) {}
 };
-} // namespace Chimera
+} // namespace ce

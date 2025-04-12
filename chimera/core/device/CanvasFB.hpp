@@ -2,7 +2,7 @@
 #include "interfaces.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 class CanvasFB : public ServiceBase<ICanva> {
   private:
     bool fullScreen{false};
@@ -27,4 +27,4 @@ class CanvasFB : public ServiceBase<ICanva> {
     uint32_t* getPixels() override { return pixels; }
     uint32_t getPixelFormat() { return pixelFormat; }
 };
-} // namespace Chimera
+} // namespace ce

@@ -3,7 +3,7 @@
 #include "chimera/core/visible/TextureMng.hpp"
 #include <fstream>
 
-namespace Chimera {
+namespace ce {
 
 glm::vec4 tokensToVec4(std::vector<std::string>& textData) {
     std::vector<float> arrayFloat;
@@ -40,7 +40,7 @@ glm::vec2 tokensToVec2(unsigned start, unsigned total, std::vector<std::string>&
     return glm::vec2(arrayFloat[0], arrayFloat[1]);
 }
 
-void wavefrontMtlLoad(const std::string& path, Material* material, std::shared_ptr<ServiceLocator> serviceLoc) {
+void wavefrontMtlLoad(const std::string& path, Material* material) {
     std::ifstream file(path);
 
     if (!file.is_open())
@@ -65,7 +65,7 @@ void wavefrontMtlLoad(const std::string& path, Material* material, std::shared_p
         } else if (textData[0] == "Ks") {
             material->setSpecular(tokensToVec4(textData));
         } else if (textData[0] == "map_Kd") {
-            auto texMng = serviceLoc->getService<TextureMng>();
+            auto texMng = g_service_locator.getService<TextureMng>();
             material->addTexture(SHADE_TEXTURE_DIFFUSE, texMng->loadFromFile(textData[1], textData[1], TexParam()));
         } else if (textData[0] == "sharpness") {
             material->setShine(std::stod(textData[1]));
@@ -161,4 +161,4 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
 
     file.close();
 }
-} // namespace Chimera
+} // namespace ce

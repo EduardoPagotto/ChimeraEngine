@@ -1,7 +1,7 @@
 #pragma once
 #include <pugixml.hpp>
 
-namespace Chimera {
+namespace ce {
 struct ColladaDom {
     ColladaDom() = default;
     ColladaDom(const ColladaDom& other) = default;
@@ -9,4 +9,4 @@ struct ColladaDom {
     pugi::xml_node root = pugi::xml_node();
     pugi::xml_document* pDoc = nullptr;
 };
-} // namespace Chimera
+} // namespace ce

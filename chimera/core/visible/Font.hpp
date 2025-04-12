@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-namespace Chimera {
+namespace ce {
 
 struct GlyphData {
     glm::ivec2 size;   // Size of glyph
@@ -27,4 +27,4 @@ class Font {
     glm::vec2 scale;
     std::shared_ptr<Texture> texture;
 };
-} // namespace Chimera
+} // namespace ce

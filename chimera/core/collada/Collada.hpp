@@ -1,16 +1,15 @@
 #pragma once
 #include "ColladaDom.hpp"
 #include "RFC3986.hpp"
-#include "chimera/core/ServiceLocator.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 class Collada {
   public:
-    Collada(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc);
-    virtual ~Collada();
+    Collada(ColladaDom& dom, const std::string& url);
+    virtual ~Collada() = default;
     const pugi::xml_node getLibraryUrl(const std::string& libraryName, const std::string& url);
     const pugi::xml_node getLibrary(const std::string& libraryName);
     static uint32_t getNewSerial() { return ++serial; }
@@ -18,7 +17,6 @@ class Collada {
     inline static std::vector<ColladaDom> vColladaDom;
 
   protected:
-    std::shared_ptr<ServiceLocator> serviceLoc;
     ColladaDom colladaDom;
     inline static uint32_t serial;
     std::string fragment;
@@ -70,4 +68,4 @@ inline void setChildParam<glm::vec3>(const pugi::xml_node& node, const char* par
         value = textToVec3(n.text().as_string());
 }
 
-} // namespace Chimera
+} // namespace ce

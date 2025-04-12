@@ -2,7 +2,7 @@
 #include "Plane.hpp"
 #include "array"
 
-namespace Chimera {
+namespace ce {
 
 class Frustum {
   private:
@@ -87,4 +87,4 @@ class Frustum {
     //     glEnd();
     // }
 };
-} // namespace Chimera
+} // namespace ce

@@ -6,14 +6,13 @@
 #include "chimera/core/collada/ColladaMaterial.hpp"
 #include "chimera/core/visible/Transform.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void ColladaVisualScene::loadNode(pugi::xml_node node) {
 
-    auto r = serviceLoc->getService<Registry>();
     std::string entName = node.attribute("name").value();
     std::string entId = node.attribute("id").value();
-    Entity entity = r->createEntity(entName, entId);
+    Entity entity = g_registry.createEntity(entName, entId);
     for (pugi::xml_node n = node.first_child(); n; n = n.next_sibling())
         nodeData(n, entity);
 }
@@ -31,21 +30,21 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
     } else if (name == "instance_geometry") {
 
-        ColladaGeometry cg(colladaDom, url, serviceLoc);
+        ColladaGeometry cg(colladaDom, url);
         cg.create(entity, cg.getLibrary("library_geometries"));
 
         if (const pugi::xml_node nMat = n.child("bind_material"); nMat) {
             if (const pugi::xml_node instanceMaterial = nMat.child("technique_common").child("instance_material");
                 instanceMaterial != nullptr) {
                 std::string target = instanceMaterial.attribute("target").value();
-                ColladaMaterial cm(colladaDom, target, serviceLoc);
+                ColladaMaterial cm(colladaDom, target);
                 cm.create(entity, cm.getLibrary("library_materials"));
             }
         }
 
     } else if (name == "instance_light") {
 
-        ColladaLight cl(colladaDom, url, serviceLoc);
+        ColladaLight cl(colladaDom, url);
         cl.create(entity, cl.getLibrary("library_lights"));
 
     } else if (name == "instance_node") {
@@ -59,7 +58,7 @@ void ColladaVisualScene::nodeData(pugi::xml_node n, Entity entity) {
 
     } else if (name == "instance_camera") {
 
-        ColladaCam cc(colladaDom, url, serviceLoc);
+        ColladaCam cc(colladaDom, url);
         cc.create(entity, cc.getLibrary("library_cameras"));
         cc.createExtra(entity, n.first_child());
 
@@ -74,4 +73,4 @@ void ColladaVisualScene::loadAll(pugi::xml_node node) {
         loadNode(n);
 }
 
-} // namespace Chimera
+} // namespace ce

@@ -1,6 +1,6 @@
 #include "chimera/core/collada/RFC3986.hpp"
 
-namespace Chimera {
+namespace ce {
 RFC3986::RFC3986(const std::string& url) { this->setUrl(url); }
 
 const RFC3986_SCHEME& RFC3986::setUrl(const std::string& url) { //"file://./assets/models/piso2_mestre.xml#Scene"
@@ -25,4 +25,4 @@ const RFC3986_SCHEME& RFC3986::setUrl(const std::string& url) { //"file://./asse
     return scheme;
 }
 
-} // namespace Chimera
+} // namespace ce

@@ -3,7 +3,7 @@
 #include "chimera/core/buffer/VertexArray.hpp"
 #include <stdint.h>
 
-namespace Chimera {
+namespace ce {
 class Renderable3D : public IRenderable3d {
   public:
     Renderable3D() = default;
@@ -21,4 +21,4 @@ class Renderable3D : public IRenderable3d {
     uint32_t indexAuxCommand = 0;
     VertexArray* vao = nullptr;
 };
-} // namespace Chimera
+} // namespace ce

@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 /**
  * Class Timer
@@ -99,4 +99,4 @@ class Timer {
     uint32_t countStep = 0;
     uint32_t elapsedCount = 0;
 };
-} // namespace Chimera
+} // namespace ce

@@ -3,7 +3,7 @@
 #include "chimera/core/visible/TextureMng.hpp"
 #include <fstream>
 
-namespace Chimera {
+namespace ce {
 
 glm::vec4 tokensToVec4(std::vector<std::string>& textData) {
     std::vector<float> arrayFloat;
@@ -161,4 +161,4 @@ void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath
 
     file.close();
 }
-} // namespace Chimera
+} // namespace ce

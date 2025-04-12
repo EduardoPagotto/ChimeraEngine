@@ -2,7 +2,7 @@
 #include "chimera/core/partition/Cube.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaCube::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
     MeshComponent& mc = entity.addComponent<MeshComponent>();
@@ -80,4 +80,4 @@ void ColladaCube::create(const std::string& id, const std::string& name, Entity&
     }
     vpCube.clear();
 }
-} // namespace Chimera
+} // namespace ce

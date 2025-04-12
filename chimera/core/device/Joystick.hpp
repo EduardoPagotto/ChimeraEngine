@@ -2,7 +2,7 @@
 #include "interfaces.hpp"
 #include <map>
 
-namespace Chimera {
+namespace ce {
 class Joystick : public ServiceBase<IJoystick> {
   private:
     std::map<SDL_JoystickID, SDL_Joystick*> joys;
@@ -74,4 +74,4 @@ class Joystick : public ServiceBase<IJoystick> {
         }
     }
 };
-} // namespace Chimera
+} // namespace ce

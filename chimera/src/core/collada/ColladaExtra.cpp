@@ -7,7 +7,7 @@
 #include "chimera/core/device/CanvasGL.hpp"
 #include "chimera/core/visible/FontMng.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void ColladaExtra::create(pugi::xml_node nodeExtra) {
 
@@ -53,4 +53,4 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

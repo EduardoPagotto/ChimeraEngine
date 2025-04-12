@@ -1,7 +1,7 @@
 #include "chimera/core/partition/LoadHeightMap.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 LoadHeightMap::LoadHeightMap(int _squareX, int _squareZ) : pImage(nullptr), squareX(_squareX), squareZ(_squareZ) { clean(); }
 
@@ -186,4 +186,4 @@ void LoadHeightMap::split(TrisIndex& vertexIndexIn, std::vector<TrisIndex>& vTri
     }
 }
 
-} // namespace Chimera
+} // namespace ce

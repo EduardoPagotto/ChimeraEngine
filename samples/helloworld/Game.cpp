@@ -8,9 +8,9 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
 
-Game::Game(std::shared_ptr<ServiceLocator> sl, Chimera::Engine* engine) : IStateMachine("Game"), serviceLoc(sl), engine(engine) {
+Game::Game(std::shared_ptr<ServiceLocator> sl, ce::Engine* engine) : IStateMachine("Game"), serviceLoc(sl), engine(engine) {
 
-    using namespace Chimera;
+    using namespace ce;
     srand(time(nullptr));
     // Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(-15.0f, 5.0f, 0.0f)));
     // group->add(new Sprite(0.0f, 0.0f, 6.0f, 3.0f, glm::vec4(1, 1, 1, 1)));
@@ -40,10 +40,10 @@ void Game::onAttach() {
 
     // ApplicationGL::onAttach();
 
-    using namespace Chimera; // 26:10 -> https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96 (video
-                             // 96)
-                             // video 103 finaliza o pick mouse
-                             // colocar para rodar o scene como renderbuffer!!!!!!!!!
+    using namespace ce; // 26:10 -> https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96 (video
+                        // 96)
+                        // video 103 finaliza o pick mouse
+                        // colocar para rodar o scene como renderbuffer!!!!!!!!!
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
@@ -76,7 +76,7 @@ void Game::onRender() {
 }
 
 bool Game::onEvent(const SDL_Event& event) {
-    using namespace Chimera;
+    using namespace ce;
 
     // if (ApplicationGL::onEvent(event) == false)
     //     return false;
@@ -116,7 +116,7 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {
+void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {
 
     // ApplicationGL::onUpdate();
 

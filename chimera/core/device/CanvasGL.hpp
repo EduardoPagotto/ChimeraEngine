@@ -4,7 +4,7 @@
 
 #define GLEW_STATIC
 
-namespace Chimera {
+namespace ce {
 class CanvasGL : public ServiceBase<ICanva> {
   protected:
     bool fullScreen{false};
@@ -28,4 +28,4 @@ class CanvasGL : public ServiceBase<ICanva> {
 
     std::string getVersaoOpenGL();
 };
-} // namespace Chimera
+} // namespace ce

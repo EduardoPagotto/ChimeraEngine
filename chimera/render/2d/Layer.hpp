@@ -4,7 +4,7 @@
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/Shader.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Layer : public IStateMachine {
   public:
@@ -23,4 +23,4 @@ class Layer : public IStateMachine {
     IRenderer2D* renderer;
     std::vector<IRenderable2D*> renderables;
 };
-} // namespace Chimera
+} // namespace ce

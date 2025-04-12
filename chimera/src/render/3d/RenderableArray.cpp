@@ -4,7 +4,7 @@
 #include "chimera/render/3d/RenderableIBO.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh) : totIndex(0), Renderable3D() {
     // create vertex buffers
@@ -58,4 +58,4 @@ void RenderableArray::submit(RenderCommand& command, IRenderer3d& renderer) {
     for (uint32_t c = 0; c < vChild.size(); c++)
         renderer.submit(command, vChild[c], c);
 }
-} // namespace Chimera
+} // namespace ce

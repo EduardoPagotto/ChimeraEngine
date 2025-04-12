@@ -17,7 +17,7 @@
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-namespace Chimera {
+namespace ce {
 
 Scene::Scene(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Scene"), serviceLoc(sl), activeCam(nullptr), origem(nullptr), verbose(0) {
     octree = nullptr;
@@ -486,4 +486,4 @@ void Scene::onRender() {
         renderBuffer->render();
     }
 }
-} // namespace Chimera
+} // namespace ce

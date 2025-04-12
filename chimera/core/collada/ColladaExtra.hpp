@@ -1,7 +1,7 @@
 #pragma once
 #include "Collada.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaExtra : public Collada {
   public:
     ColladaExtra(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
@@ -10,4 +10,4 @@ class ColladaExtra : public Collada {
 
   private:
 };
-} // namespace Chimera
+} // namespace ce

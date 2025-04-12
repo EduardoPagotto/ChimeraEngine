@@ -2,7 +2,7 @@
 #include "chimera/core/buffer/FrameBuffer.hpp"
 #include "chimera/core/visible/TextureMng.hpp"
 
-namespace Chimera {
+namespace ce {
 
 static void setRange(const std::string& range, TexDType& type) {
     if (range == "FLOAT")
@@ -85,4 +85,4 @@ void ColladaImage::create(Entity entity, TexParam& tp, const pugi::xml_node& nod
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

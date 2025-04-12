@@ -3,7 +3,7 @@
 #include "chimera/core/space/Triangle.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 
-namespace Chimera {
+namespace ce {
 class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
   private:
     std::vector<VertexData> vertex;
@@ -22,4 +22,4 @@ class BspTree { // Ref: https://github.com/taylorstine/BSP_Tree
                        std::list<std::shared_ptr<Triangle>>& _vTriangle);
     void createLeafy(BSPTreeNode* tree, std::list<std::shared_ptr<Triangle>>& _vTriangle);
 };
-} // namespace Chimera
+} // namespace ce

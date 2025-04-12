@@ -1,7 +1,7 @@
 #include "chimera/core/device/CanvasFB.hpp"
 #include <exception>
 
-namespace Chimera {
+namespace ce {
 
 // refs
 // https://forums.libsdl.org/viewtopic.php?p=51664
@@ -71,4 +71,4 @@ void CanvasFB::reshape(int _width, int _height) {
     width = _width;
     height = _height;
 }
-} // namespace Chimera
+} // namespace ce

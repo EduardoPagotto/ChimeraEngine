@@ -3,7 +3,7 @@
 #include "chimera/core/buffer/VertexArray.hpp"
 #include "chimera/core/buffer/VertexBuffer.hpp"
 
-namespace Chimera {
+namespace ce {
 
 RenderableDynamic::RenderableDynamic(const uint32_t& max) : max(max) {
 
@@ -39,4 +39,4 @@ void RenderableDynamic::render(VertexData* pVertice, const uint32_t& size) { // 
     vbo->unbind();
     vao->unbind();
 }
-} // namespace Chimera
+} // namespace ce

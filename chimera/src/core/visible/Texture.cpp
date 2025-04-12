@@ -1,6 +1,6 @@
 #include "chimera/core/visible/Texture.hpp"
 
-namespace Chimera {
+namespace ce {
 
 Texture::Texture(const uint32_t& width, const uint32_t& height, const TexParam& tp)
     : width(width), height(height), idTexture(0), textureParameters(tp) {
@@ -70,4 +70,4 @@ void Texture::invert_image_texture(int pitch, int height, void* image_pixels) {
     }
     free(temp_row);
 }
-} // namespace Chimera
+} // namespace ce

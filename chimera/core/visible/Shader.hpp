@@ -1,7 +1,7 @@
 #pragma once
 #include "UValue.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Shader {
   private:
@@ -30,4 +30,4 @@ struct ShaderComponent {
     std::string name;
     std::shared_ptr<Shader> shader;
 };
-} // namespace Chimera
+} // namespace ce

@@ -1,7 +1,7 @@
 #pragma once
 #include "Collada.hpp"
 
-namespace Chimera {
+namespace ce {
 ColladaDom loadFileCollada(const std::string& file);
 void colladaRegistryLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceLoc);
-} // namespace Chimera
+} // namespace ce

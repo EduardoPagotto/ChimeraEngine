@@ -4,7 +4,7 @@
 #include "chimera/core/device/Mouse.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class CameraControllerOrbit : public IStateMachine {
   public:
@@ -30,4 +30,4 @@ class CameraControllerOrbit : public IStateMachine {
     std::shared_ptr<IMouse> mouse;
 };
 
-} // namespace Chimera
+} // namespace ce

@@ -1,6 +1,6 @@
 #include "chimera/render/2d/BatchRender2D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 BatchRender2D::BatchRender2D() {
     indexCount = 0;
@@ -212,4 +212,4 @@ void BatchRender2D::flush() {
     glUseProgram(0);
 }
 
-} // namespace Chimera
+} // namespace ce

@@ -2,7 +2,7 @@
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/utils.hpp"
 
-namespace Chimera {
+namespace ce {
 
 CameraControllerFPS::CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity)
     : IStateMachine("FPS"), entity(entity) {
@@ -156,4 +156,4 @@ void CameraControllerFPS::invertPitch() {
 //         fov = CAMERA_MAX_FOV;
 //     }
 // }
-} // namespace Chimera
+} // namespace ce

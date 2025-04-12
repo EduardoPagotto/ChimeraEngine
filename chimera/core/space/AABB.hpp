@@ -2,7 +2,7 @@
 #include "Frustum.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 enum class AabbBondery { BSW = 0, BSE = 1, TSW = 2, TSE = 3, BNW = 4, BNE = 5, TNW = 6, TNE = 7 };
 
@@ -85,4 +85,4 @@ class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
     // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
     // inline const float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex); }
 };
-} // namespace Chimera
+} // namespace ce

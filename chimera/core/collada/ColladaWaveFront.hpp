@@ -2,7 +2,7 @@
 #include "Collada.hpp"
 #include "chimera/core/Registry.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaWaveFront : public Collada {
   public:
     ColladaWaveFront(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc)
@@ -12,4 +12,4 @@ class ColladaWaveFront : public Collada {
 
   private:
 };
-} // namespace Chimera
+} // namespace ce

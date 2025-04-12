@@ -4,7 +4,7 @@
 #include "chimera/core/visible/Material.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaWaveFront::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {
 
     MeshComponent& eMesh = entity.addComponent<MeshComponent>();
@@ -39,4 +39,4 @@ void ColladaWaveFront::create(const std::string& id, const std::string& name, En
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

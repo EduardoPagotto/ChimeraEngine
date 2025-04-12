@@ -1,7 +1,7 @@
 #include "chimera/core/collada/ColladaLight.hpp"
 #include "chimera/core/visible/Light.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaLight::create(Entity& entity, pugi::xml_node nodeLight) { // FIXME: preciso mesmo da entidade ???
     LightComponent& lc = entity.addComponent<LightComponent>();
     lc.tag.id = nodeLight.attribute("id").value();
@@ -27,4 +27,4 @@ void ColladaLight::create(Entity& entity, pugi::xml_node nodeLight) { // FIXME: 
     }
 }
 
-} // namespace Chimera
+} // namespace ce

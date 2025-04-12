@@ -3,7 +3,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) { mouse = sl->getService<Chimera::IMouse>(); }
+Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) { mouse = sl->getService<ce::IMouse>(); }
 Game::~Game() { mouse = nullptr; }
 
 void Game::onAttach() {
@@ -21,7 +21,7 @@ void Game::onAttach() {
 void Game::onDeatach() {}
 
 bool Game::onEvent(const SDL_Event& event) {
-    using namespace Chimera;
+    using namespace ce;
 
     mouse->getEvent(event);
 
@@ -54,6 +54,6 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {}
+void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {}
 
 void Game::onRender() {}

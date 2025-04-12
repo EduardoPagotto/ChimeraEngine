@@ -4,7 +4,7 @@
 #include "chimera/core/collada/ColladaVisualScene.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 ColladaDom loadFileCollada(const std::string& file) {
 
@@ -50,4 +50,4 @@ void colladaRegistryLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> servic
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

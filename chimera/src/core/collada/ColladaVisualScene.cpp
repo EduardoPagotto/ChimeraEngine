@@ -6,7 +6,7 @@
 #include "chimera/core/collada/ColladaMaterial.hpp"
 #include "chimera/core/visible/Transform.hpp"
 
-namespace Chimera {
+namespace ce {
 
 void ColladaVisualScene::loadNode(pugi::xml_node node) {
 
@@ -74,4 +74,4 @@ void ColladaVisualScene::loadAll(pugi::xml_node node) {
         loadNode(n);
 }
 
-} // namespace Chimera
+} // namespace ce

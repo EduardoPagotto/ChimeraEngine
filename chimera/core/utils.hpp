@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-namespace Chimera {
+namespace ce {
 
 const int32_t EVENT_TOGGLE_FULL_SCREEN = 0x0001; // FullScreem
 const int32_t EVENT_FLOW_PAUSE = 0x0002;         // set to pause game
@@ -26,4 +26,4 @@ std::string extractNameByFile(const std::string& filepath);
 inline int16_t dead16(const int16_t& vIn, const int16_t& deadzone) { return (vIn + (vIn >> 16) ^ (vIn >> 16)) > deadzone ? vIn : 0; }
 inline float scale16(const int16_t& value, const int16_t& limit) { return value >= 0 ? (float)value / (limit - 1) : (float)value / limit; }
 
-} // namespace Chimera
+} // namespace ce

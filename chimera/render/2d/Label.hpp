@@ -2,7 +2,7 @@
 #include "Renderable2D.hpp"
 #include "chimera/core/visible/Font.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Label : public Renderable2D {
 
@@ -21,4 +21,4 @@ class Label : public Renderable2D {
     std::string text;
     std::shared_ptr<Font> font;
 };
-} // namespace Chimera
+} // namespace ce

@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 struct LinesValues {
     glm::vec3 point;
@@ -33,4 +33,4 @@ class DrawLine {
     void render(MapUniform& uniformsQueue) noexcept;
     bool valid() noexcept { return pVao != nullptr; }
 };
-} // namespace Chimera
+} // namespace ce

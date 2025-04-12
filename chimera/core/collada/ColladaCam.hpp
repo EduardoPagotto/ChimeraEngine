@@ -2,7 +2,7 @@
 #include "Collada.hpp"
 #include "chimera/core/Registry.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaCam : public Collada {
   public:
     ColladaCam(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc) : Collada(dom, url, serviceLoc) {};
@@ -11,4 +11,4 @@ class ColladaCam : public Collada {
     void createExtra(Entity& entity, pugi::xml_node node);
 };
 
-} // namespace Chimera
+} // namespace ce

@@ -5,7 +5,7 @@
 #include "chimera/render/3d/Renderable3D.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 Renderer3d::Renderer3d(const bool& logData) : logData(logData) {
     vRenderable.reserve(500);
@@ -128,4 +128,4 @@ void Renderer3d::flush() {
     vRenderCommand.clear(); // Limpa rendercommand
 }
 
-} // namespace Chimera
+} // namespace ce

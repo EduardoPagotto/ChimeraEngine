@@ -1,6 +1,6 @@
 #include "chimera/core/buffer/RenderBuffer.hpp"
 
-namespace Chimera {
+namespace ce {
 
 RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, std::shared_ptr<Shader> shader)
     : posX(posX), posY(posY), shader(shader), frameBuffer(fb), vbo(nullptr) {
@@ -44,4 +44,4 @@ void RenderBuffer::render() {
     vbo->unbind();
     glUseProgram(0);
 }
-} // namespace Chimera
+} // namespace ce

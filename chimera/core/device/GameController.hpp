@@ -2,7 +2,7 @@
 #include "interfaces.hpp"
 #include <map>
 
-namespace Chimera {
+namespace ce {
 class GameController : public ServiceBase<IGameController> {
   private:
     std::map<SDL_JoystickID, SDL_GameController*> pads;
@@ -68,4 +68,4 @@ class GameController : public ServiceBase<IGameController> {
         }
     }
 };
-} // namespace Chimera
+} // namespace ce

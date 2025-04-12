@@ -6,7 +6,7 @@
 #include "chimera/core/device/Mouse.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class CameraControllerFPS : public IStateMachine {
   public:
@@ -37,4 +37,4 @@ class CameraControllerFPS : public IStateMachine {
     std::shared_ptr<IKeyboard> keyboard;
     std::shared_ptr<IMouse> mouse;
 };
-} // namespace Chimera
+} // namespace ce

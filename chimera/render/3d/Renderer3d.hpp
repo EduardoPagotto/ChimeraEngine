@@ -5,7 +5,7 @@
 #include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
-namespace Chimera {
+namespace ce {
 
 class Renderer3d : public IRenderer3d {
   public:
@@ -26,4 +26,4 @@ class Renderer3d : public IRenderer3d {
     bool logData;
     Octree* octree;
 };
-} // namespace Chimera
+} // namespace ce

@@ -7,7 +7,7 @@
 #include "chimera/render/scene/Scene.hpp"
 
 int main(int argn, char** argv) {
-    using namespace Chimera;
+    using namespace ce;
     try {
         // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);

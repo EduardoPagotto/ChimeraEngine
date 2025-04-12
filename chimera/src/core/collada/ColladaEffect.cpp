@@ -4,7 +4,7 @@
 #include "chimera/core/visible/Shader.hpp"
 #include "chimera/core/visible/ShaderMng.hpp"
 
-namespace Chimera {
+namespace ce {
 
 static TexFilter setFilter(const std::string& sParamVal) {
     if (sParamVal == "NEAREST")
@@ -222,4 +222,4 @@ void ColladaEffect::create(const std::string& refName, Entity& entity, pugi::xml
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

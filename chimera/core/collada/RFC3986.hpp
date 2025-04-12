@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace Chimera {
+namespace ce {
 
 enum class RFC3986_SCHEME { FILE = 0, LOCAL = 1, HTTP = 2, INVALID = 3 };
 
@@ -22,4 +22,4 @@ class RFC3986 {
     std::string path;
     std::string fragment;
 };
-} // namespace Chimera
+} // namespace ce

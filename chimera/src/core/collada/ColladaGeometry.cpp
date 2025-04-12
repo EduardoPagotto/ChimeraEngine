@@ -5,7 +5,7 @@
 #include "chimera/core/collada/ColladaParticle.hpp"
 #include "chimera/core/collada/ColladaWaveFront.hpp"
 
-namespace Chimera {
+namespace ce {
 void ColladaGeometry::create(Entity& entity, pugi::xml_node geo) {
 
     std::string id = geo.attribute("id").value();
@@ -38,4 +38,4 @@ void ColladaGeometry::create(Entity& entity, pugi::xml_node geo) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

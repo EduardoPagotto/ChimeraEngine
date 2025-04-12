@@ -2,7 +2,7 @@
 #include "UValue.hpp"
 #include "chimera/core/TagComponent.hpp"
 
-namespace Chimera {
+namespace ce {
 
 #define SHADE_LIGHT_POSITION "light.position"
 #define SHADE_LIGHT_AMBIENT "light.ambient"
@@ -40,4 +40,4 @@ struct LightComponent {
     LightComponent() = default;
 };
 
-} // namespace Chimera
+} // namespace ce

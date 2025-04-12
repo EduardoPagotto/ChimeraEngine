@@ -3,7 +3,7 @@
 #include "chimera/core/visible/Texture.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 struct RenderCommand {
     RenderCommand() = default;
@@ -12,4 +12,4 @@ struct RenderCommand {
     MapUniform uniforms;
     std::vector<std::shared_ptr<Texture>> vTex;
 };
-} // namespace Chimera
+} // namespace ce

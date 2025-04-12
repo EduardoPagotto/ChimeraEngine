@@ -4,7 +4,7 @@
 #include "chimera/core/visible/UValue.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 class IRenderer3d {
   public:
     IRenderer3d() { uniformsQueue.reserve(500); }
@@ -25,4 +25,4 @@ class IRenderer3d {
     TransformationStack stack; // TODO: implementar a hierarquia de modelos direta (sem fisica)
     MapUniform uniformsQueue;
 };
-} // namespace Chimera
+} // namespace ce

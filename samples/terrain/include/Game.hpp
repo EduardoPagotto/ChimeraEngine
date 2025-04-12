@@ -3,7 +3,7 @@
 #include "chimera/core/device/Keyboard.hpp"
 #include "chimera/core/device/Mouse.hpp"
 
-class Game : public Chimera::IStateMachine {
+class Game : public ce::IStateMachine {
   public:
     Game(std::shared_ptr<ServiceLocator> sl);
     virtual ~Game();
@@ -11,11 +11,11 @@ class Game : public Chimera::IStateMachine {
     virtual void onAttach() override;
     virtual void onDeatach() override;
     virtual void onRender() override;
-    virtual void onUpdate(Chimera::IViewProjection& vp, const double& ts) override;
+    virtual void onUpdate(ce::IViewProjection& vp, const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
     std::shared_ptr<ServiceLocator> serviceLoc;
-    std::shared_ptr<Chimera::IMouse> mouse;
-    std::shared_ptr<Chimera::IKeyboard> keyboard;
+    std::shared_ptr<ce::IMouse> mouse;
+    std::shared_ptr<ce::IKeyboard> keyboard;
 };

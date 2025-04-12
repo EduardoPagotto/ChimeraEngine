@@ -4,7 +4,7 @@
 // #include "chimera/core/device/Mouse.hpp"
 #include "chimera/core/utils.hpp"
 
-namespace Chimera {
+namespace ce {
 
 Engine::Engine(std::shared_ptr<ServiceLocator> serviceLoc) : serviceLoc(serviceLoc) {
     timerFPS.setElapsedCount(1000);
@@ -105,4 +105,4 @@ void Engine::run(void) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

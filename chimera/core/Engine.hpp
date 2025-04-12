@@ -5,7 +5,7 @@
 #include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/device/interfaces.hpp"
 
-namespace Chimera {
+namespace ce {
 class Engine {
   public:
     Engine(std::shared_ptr<ServiceLocator> serviceLoc);
@@ -24,4 +24,4 @@ class Engine {
     Timer timerFPS;
     StateStack stack;
 };
-} // namespace Chimera
+} // namespace ce

@@ -6,7 +6,7 @@
 #include <iostream>
 
 int main(int argn, char** argv) {
-    using namespace Chimera;
+    using namespace ce;
     try {
         SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simple ray-casting Iniciado");

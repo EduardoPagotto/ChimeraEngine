@@ -1,7 +1,7 @@
 #pragma once
 #include "Collada.hpp"
 
-namespace Chimera {
+namespace ce {
 class ColladaPhysicScene : public Collada {
   public:
     ColladaPhysicScene(ColladaDom& dom, const std::string& url, std::shared_ptr<ServiceLocator> serviceLoc)
@@ -10,4 +10,4 @@ class ColladaPhysicScene : public Collada {
     const pugi::xml_node findModel(pugi::xml_node node, const std::string& body);
     void loadAll(pugi::xml_node node);
 };
-} // namespace Chimera
+} // namespace ce

@@ -5,7 +5,7 @@
 #include <queue>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 class Octree {
   private:
@@ -180,4 +180,4 @@ class Octree {
         return false;
     }
 };
-} // namespace Chimera
+} // namespace ce

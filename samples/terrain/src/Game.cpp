@@ -3,8 +3,8 @@
 #include "chimera/core/utils.hpp"
 
 Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) {
-    keyboard = sl->getService<Chimera::IKeyboard>();
-    mouse = sl->getService<Chimera::IMouse>();
+    keyboard = sl->getService<ce::IKeyboard>();
+    mouse = sl->getService<ce::IMouse>();
 }
 
 Game::~Game() {
@@ -27,7 +27,7 @@ void Game::onAttach() {
 void Game::onDeatach() {}
 
 bool Game::onEvent(const SDL_Event& event) {
-    using namespace Chimera;
+    using namespace ce;
 
     mouse->getEvent(event);
     keyboard->getEvent(event);
@@ -63,9 +63,9 @@ bool Game::onEvent(const SDL_Event& event) {
     return true;
 }
 
-void Game::onUpdate(Chimera::IViewProjection& vp, const double& ts) {
+void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {
 
-    using namespace Chimera;
+    using namespace ce;
 
     // if (scene->isReady()) {
     //     NativeScriptComponent& cc = scene->getRegistry().findComponent<NativeScriptComponent>("CameraController");

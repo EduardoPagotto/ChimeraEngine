@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-namespace Chimera {
+namespace ce {
 
 class IndexBuffer {
   private:
@@ -16,4 +16,4 @@ class IndexBuffer {
     inline const uint32_t getSize() const { return size; }
     inline const uint32_t getBufferID() const { return bufferID; }
 };
-} // namespace Chimera
+} // namespace ce

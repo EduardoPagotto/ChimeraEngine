@@ -4,7 +4,7 @@
 #include "chimera/core/visible/Mesh.hpp"
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 enum class CARDINAL {
     NORTH = 0,      //
@@ -67,4 +67,4 @@ glm::vec3 minimal(const float& sizeBlock, const glm::vec3 halfBlock, const glm::
 uint32_t getIndexArrayPos(const glm::ivec3& pos, const glm::ivec3& size);
 Cube* getCubeNeighbor(DEEP deep, CARDINAL card, glm::ivec3 const& pos, const glm::ivec3& size, std::vector<Cube*>& vpCube);
 void linkCubes(const glm::ivec3& size, std::vector<Cube*>& vpCube);
-} // namespace Chimera
+} // namespace ce

@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
-namespace Chimera {
+namespace ce {
 
 /// @brief Canva Interface
 /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
@@ -62,4 +62,4 @@ class IGameController : public IService {
     virtual SDL_GameController* get(const SDL_JoystickID& joystick_id) noexcept = 0;
 };
 
-} // namespace Chimera
+} // namespace ce

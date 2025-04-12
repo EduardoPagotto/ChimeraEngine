@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-namespace Chimera {
+namespace ce {
 enum class TexWrap {
     NONE = 0,
     REPEAT = GL_REPEAT,
@@ -96,4 +96,4 @@ class Texture {
   private:
     void init();
 };
-} // namespace Chimera
+} // namespace ce

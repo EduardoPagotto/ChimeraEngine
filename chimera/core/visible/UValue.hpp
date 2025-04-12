@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 enum class UniformType {
     INVALID = 0,
@@ -57,4 +57,4 @@ struct UValue {
 };
 using MapUniform = std::unordered_map<std::string, UValue>;
 
-} // namespace Chimera
+} // namespace ce

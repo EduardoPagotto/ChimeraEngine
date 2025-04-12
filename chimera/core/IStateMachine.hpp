@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-namespace Chimera {
+namespace ce {
 
 class IStateMachine {
   public:
@@ -19,4 +19,4 @@ class IStateMachine {
   private:
     std::string name;
 };
-} // namespace Chimera
+} // namespace ce

@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace Chimera {
+namespace ce {
 
 class Collada {
   public:
@@ -70,4 +70,4 @@ inline void setChildParam<glm::vec3>(const pugi::xml_node& node, const char* par
         value = textToVec3(n.text().as_string());
 }
 
-} // namespace Chimera
+} // namespace ce

@@ -5,7 +5,7 @@
 #include "chimera/core/visible/Mesh.hpp"
 #include <SDL2/SDL.h>
 
-namespace Chimera {
+namespace ce {
 
 const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const std::string& body) {
 
@@ -129,4 +129,4 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
         }
     }
 }
-} // namespace Chimera
+} // namespace ce

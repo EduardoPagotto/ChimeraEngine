@@ -3,7 +3,7 @@
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) { mouse = sl->getService<ce::IMouse>(); }
+Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }
 Game::~Game() { mouse = nullptr; }
 
 void Game::onAttach() {

@@ -2,9 +2,9 @@
 #include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) {
-    keyboard = sl->getService<ce::IKeyboard>();
-    mouse = sl->getService<ce::IMouse>();
+Game::Game() : IStateMachine("Game") {
+    keyboard = ce::g_service_locator.getService<ce::IKeyboard>();
+    mouse = ce::g_service_locator.getService<ce::IMouse>();
 }
 
 Game::~Game() {

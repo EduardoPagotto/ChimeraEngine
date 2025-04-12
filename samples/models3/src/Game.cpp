@@ -5,18 +5,15 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl, ce::Scene* scene)
-    : IStateMachine("Game"), serviceLoc(sl), scene(scene), pCorpoRigido(nullptr) {
+Game::Game(ce::Scene* scene) : IStateMachine("Game"), scene(scene), pCorpoRigido(nullptr) {
     using namespace ce;
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 
-    registry = sl->getService<Registry>();
-    gameControl = sl->getService<IGameController>();
-    mouse = sl->getService<IMouse>();
+    gameControl = g_service_locator.getService<IGameController>();
+    mouse = g_service_locator.getService<IMouse>();
 }
 
 Game::~Game() {
-    registry = nullptr;
     gameControl = nullptr;
     mouse = nullptr;
 }
@@ -104,10 +101,10 @@ void Game::onAttach() {
 
     using namespace ce;
     // Localiza objeto como o primario
-    TransComponent& tc = registry->findComponent<TransComponent>("Zoltan");
+    TransComponent& tc = g_registry.findComponent<TransComponent>("Zoltan");
     pCorpoRigido = (Solid*)tc.trans;
 
-    auto fontMng = serviceLoc->getService<FontMng>();
+    auto fontMng = g_service_locator.getService<FontMng>();
     auto font = fontMng->getIndex(0);
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));
     Tile* tile = (Tile*)scene->getLayes().getState("TileText");

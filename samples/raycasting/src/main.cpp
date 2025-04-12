@@ -12,23 +12,22 @@ int main(int argn, char** argv) {
         SDL_Log("Simple ray-casting Iniciado");
 
         // Registry to entt
-        auto reg = std::make_shared<Registry>();
+        // auto reg = std::make_shared<Registry>();
 
         // Services shared inside all parts
         // Canvas, Mouse, keyboard, Joystick, gamepad, view's
         auto sl = std::make_shared<ServiceLocator>();
-        sl->registerService(std::make_shared<Keyboard>());
-        sl->registerService(std::make_shared<CanvasFB>("BSP Tree", 800, 600, false));
-        sl->registerService(std::make_shared<ViewProjection>()); // not used but necessary
-        sl->registerService(reg);
+        g_service_locator.registerService(std::make_shared<Keyboard>());
+        g_service_locator.registerService(std::make_shared<CanvasFB>("BSP Tree", 800, 600, false));
+        g_service_locator.registerService(std::make_shared<ViewProjection>()); // not used but necessary
 
         // Engine
-        Engine engine(sl);
+        Engine engine;
 
         ColladaDom dom = loadFileCollada("./samples/raycasting/level.xml");
-        colladaRegistryLoad(dom, sl);
+        colladaRegistryLoad(dom);
 
-        Game* game = new Game(sl);
+        Game* game = new Game;
 
         engine.getStack().pushState(game);
         engine.run();

@@ -8,7 +8,7 @@
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
 
-Game::Game(std::shared_ptr<ServiceLocator> sl, ce::Engine* engine) : IStateMachine("Game"), serviceLoc(sl), engine(engine) {
+Game::Game(ce::Engine* engine) : IStateMachine("Game"), engine(engine) {
 
     using namespace ce;
     srand(time(nullptr));
@@ -19,18 +19,18 @@ Game::Game(std::shared_ptr<ServiceLocator> sl, ce::Engine* engine) : IStateMachi
     // button->add(new Sprite(0.5f, 0.5f, 3.0f, 1.0f, glm::vec4(0.2f, 0.3f, 0.8f, 1)));
     // group->add(button);
     // layer->add(group);
-    auto texMng = sl->getService<TextureMng>();
+    auto texMng = g_service_locator.getService<TextureMng>();
     texMng->loadFromFile("t01", "./assets/textures/grid1.png", TexParam());
     texMng->loadFromFile("t02", "./assets/textures/grid2.png", TexParam());
     texMng->loadFromFile("t03", "./assets/textures/grid3.png", TexParam());
 
-    canvas = sl->getService<ICanva>();
+    canvas = g_service_locator.getService<ICanva>();
 
     std::unordered_map<GLenum, std::string> shadeData;
     shadeData[GL_FRAGMENT_SHADER] = "./assets/shaders/Basic2D.frag";
     shadeData[GL_VERTEX_SHADER] = "./assets/shaders/Basic2D.vert";
 
-    auto mng = sl->getService<ShaderMng>();
+    auto mng = g_service_locator.getService<ShaderMng>();
     shader = mng->load("Basic2D", shadeData);
 }
 
@@ -47,7 +47,7 @@ void Game::onAttach() {
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
-    auto texMng = serviceLoc->getService<TextureMng>();
+    auto texMng = g_service_locator.getService<TextureMng>();
 
     for (float y = -8.0f; y < 8.0f; y++) {
         for (float x = -14.0f; x < 14.0f; x++) {
@@ -58,7 +58,7 @@ void Game::onAttach() {
         }
     }
 
-    auto fontMng = serviceLoc->getService<FontMng>();
+    auto fontMng = g_service_locator.getService<FontMng>();
     auto font = fontMng->load("FreeSans_22", "./assets/fonts/FreeSans.ttf", 22);
     font->setScale(glm::vec2(0.04, 0.04));
     lFPS = new Label("None", 0, 0, font, glm::vec4(1.0, 1.0, 1.0, 1.0));

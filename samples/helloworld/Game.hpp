@@ -6,7 +6,7 @@
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<ServiceLocator> sl, ce::Engine* engine);
+    Game(ce::Engine* engine);
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -15,7 +15,6 @@ class Game : public ce::IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    std::shared_ptr<ServiceLocator> serviceLoc;
     std::shared_ptr<ce::ICanva> canvas;
     std::shared_ptr<ce::Shader> shader;
     ce::Engine* engine;

@@ -3,5 +3,5 @@
 
 namespace ce {
 ColladaDom loadFileCollada(const std::string& file);
-void colladaRegistryLoad(ColladaDom& dom, std::shared_ptr<ServiceLocator> serviceLoc);
+void colladaRegistryLoad(ColladaDom& dom);
 } // namespace ce

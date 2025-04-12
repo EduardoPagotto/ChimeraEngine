@@ -5,7 +5,7 @@
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<ServiceLocator> sl);
+    Game();
 
     virtual ~Game();
     // Inherited via IEvents

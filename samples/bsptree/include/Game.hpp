@@ -4,7 +4,7 @@
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<ServiceLocator> sl);
+    Game();
     virtual ~Game();
     virtual void onAttach() override;
     virtual void onDeatach() override;
@@ -13,6 +13,5 @@ class Game : public ce::IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    std::shared_ptr<ServiceLocator> serviceLoc;
     std::shared_ptr<ce::IMouse> mouse;
 };

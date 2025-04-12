@@ -1,19 +1,17 @@
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/Registry.hpp"
-// #include "chimera/core/device/Keyboard.hpp"
-// #include "chimera/core/device/Mouse.hpp"
+#include "chimera/core/ServiceLocator.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace ce {
 
-Engine::Engine(std::shared_ptr<ServiceLocator> serviceLoc) : serviceLoc(serviceLoc) {
+Engine::Engine() {
     timerFPS.setElapsedCount(1000);
     timerFPS.start();
 
-    canvas = serviceLoc->getService<ICanva>();
-    vp = serviceLoc->getService<IViewProjection>();
-    registry = serviceLoc->getService<Registry>();
-    Entity entity = registry->createEntity("chimera_engine", "chimera_engine");
+    canvas = g_service_locator.getService<ICanva>();
+    vp = g_service_locator.getService<IViewProjection>();
+    Entity entity = g_registry.createEntity("chimera_engine", "chimera_engine");
 
     SDL_Log("Engine Register: chimera_engine OK");
 }
@@ -21,7 +19,6 @@ Engine::Engine(std::shared_ptr<ServiceLocator> serviceLoc) : serviceLoc(serviceL
 Engine::~Engine() {
     canvas = nullptr;
     vp = nullptr;
-    registry = nullptr;
 }
 
 void Engine::run(void) {

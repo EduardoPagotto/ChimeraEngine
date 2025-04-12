@@ -10,7 +10,7 @@
 #include "chimera/core/visible/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game"), serviceLoc(sl) { mouse = sl->getService<ce::IMouse>(); }
+Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }
 Game::~Game() { mouse = nullptr; }
 
 void Game::onAttach() {
@@ -80,25 +80,23 @@ int main(int argn, char** argv) {
 
         // Services shared inside all parts
         // Canvas, Mouse, keyboard, Joystick, gamepad, view's
-        auto sl = std::make_shared<ServiceLocator>();
-        sl->registerService(reg);
-        sl->registerService(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
-        sl->registerService(std::make_shared<Mouse>());
-        sl->registerService(std::make_shared<Keyboard>());
-        sl->registerService(std::make_shared<Joystick>());
-        sl->registerService(std::make_shared<GameController>());
-        sl->registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
-        sl->registerService(std::make_shared<ShaderMng>());
-        sl->registerService(std::make_shared<TextureMng>());
+        g_service_locator.registerService(std::make_shared<CanvasGL>("BSP Tree", 1800, 600, false));
+        g_service_locator.registerService(std::make_shared<Mouse>());
+        g_service_locator.registerService(std::make_shared<Keyboard>());
+        g_service_locator.registerService(std::make_shared<Joystick>());
+        g_service_locator.registerService(std::make_shared<GameController>());
+        g_service_locator.registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
+        g_service_locator.registerService(std::make_shared<ShaderMng>());
+        g_service_locator.registerService(std::make_shared<TextureMng>());
 
         // Engine
-        Engine engine(sl);
+        Engine engine;
 
         ColladaDom dom = loadFileCollada("./samples/simples/level.xml");
-        colladaRegistryLoad(dom, sl);
+        colladaRegistryLoad(dom);
 
-        Scene scene(sl);
-        Game game(sl);
+        Scene scene;
+        Game game;
 
         engine.getStack().pushState(&scene);
         engine.getStack().pushState(&game);

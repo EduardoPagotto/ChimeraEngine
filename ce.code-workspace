@@ -110,7 +110,24 @@
 			"source_location": "cpp",
 			"shared_mutex": "cpp",
 			"stdfloat": "cpp",
-			"text_encoding": "cpp"
+			"text_encoding": "cpp",
+			"csetjmp": "cpp",
+			"barrier": "cpp",
+			"coroutine": "cpp",
+			"cuchar": "cpp",
+			"forward_list": "cpp",
+			"expected": "cpp",
+			"netfwd": "cpp",
+			"regex": "cpp",
+			"rope": "cpp",
+			"slist": "cpp",
+			"generator": "cpp",
+			"latch": "cpp",
+			"print": "cpp",
+			"scoped_allocator": "cpp",
+			"spanstream": "cpp",
+			"stacktrace": "cpp",
+			"syncstream": "cpp"
 		}
 	}
 }

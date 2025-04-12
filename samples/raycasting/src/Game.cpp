@@ -1,10 +1,10 @@
 #include "Game.hpp"
 #include "chimera/core/utils.hpp"
 
-Game::Game(std::shared_ptr<ServiceLocator> sl) : IStateMachine("Game") {
+Game::Game() : IStateMachine("Game") {
     // init framebuffer
-    canvas = sl->getService<ce::ICanva>();
-    keyboard = sl->getService<ce::IKeyboard>();
+    canvas = ce::g_service_locator.getService<ce::ICanva>();
+    keyboard = ce::g_service_locator.getService<ce::IKeyboard>();
 }
 
 Game::~Game() {

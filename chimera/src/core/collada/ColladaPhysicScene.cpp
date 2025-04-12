@@ -21,12 +21,11 @@ const pugi::xml_node ColladaPhysicScene::findModel(pugi::xml_node node, const st
 
 void ColladaPhysicScene::loadAll(pugi::xml_node node) {
 
-    auto r = serviceLoc->getService<Registry>();
     std::string id = node.attribute("id").value();
     std::string name = node.attribute("name").value();
 
     auto pc = std::make_shared<PhysicsControl>();
-    serviceLoc->registerService(pc);
+    g_service_locator.registerService(pc);
 
     pugi::xml_node nTec = node.child("technique_common");
     std::string sGrav = nTec.child("gravity").text().as_string();
@@ -54,12 +53,12 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
         }
 
         target.erase(0, 1); // remove #
-        auto view = r->get().view<TagComponent>();
+        auto view = g_registry.get().view<TagComponent>();
         for (auto entity : view) {
             // Pega a chave (mesh)
             TagComponent& tag = view.get<TagComponent>(entity);
             if (tag.id == target) {
-                Entity ent2 = {entity, r.get()};
+                Entity ent2 = {entity, &g_registry};
                 TransComponent& tc = ent2.getComponent<TransComponent>();
                 MeshComponent& mc = ent2.getComponent<MeshComponent>();
                 Solid* solid = new Solid(pc.get(), tc.trans->getMatrix(), ent2); // nova transformacao

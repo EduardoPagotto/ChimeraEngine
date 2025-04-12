@@ -9,7 +9,7 @@
 
 class Game : public ce::IStateMachine {
   public:
-    Game(std::shared_ptr<ServiceLocator> sl, ce::Scene* scene);
+    Game(ce::Scene* scene);
     virtual ~Game();
 
     virtual void onAttach() override;
@@ -19,10 +19,8 @@ class Game : public ce::IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    std::shared_ptr<ServiceLocator> serviceLoc;
     std::shared_ptr<ce::IMouse> mouse;
     std::shared_ptr<ce::IGameController> gameControl;
-    std::shared_ptr<ce::Registry> registry;
 
     ce::Scene* scene;
     ce::Solid* pCorpoRigido;

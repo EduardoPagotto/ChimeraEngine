@@ -4,12 +4,11 @@
 
 namespace ce {
 
-CameraControllerFPS::CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity)
-    : IStateMachine("FPS"), entity(entity) {
+CameraControllerFPS::CameraControllerFPS(Entity entity) : IStateMachine("FPS"), entity(entity) {
 
-    mouse = serviceLocator->getService<IMouse>();
-    keyboard = serviceLocator->getService<IKeyboard>();
-    gameControl = serviceLocator->getService<IGameController>();
+    mouse = g_service_locator.getService<IMouse>();
+    keyboard = g_service_locator.getService<IKeyboard>();
+    gameControl = g_service_locator.getService<IGameController>();
 }
 
 CameraControllerFPS::~CameraControllerFPS() {

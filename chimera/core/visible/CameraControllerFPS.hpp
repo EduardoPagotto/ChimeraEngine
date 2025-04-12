@@ -10,7 +10,7 @@ namespace ce {
 
 class CameraControllerFPS : public IStateMachine {
   public:
-    CameraControllerFPS(std::shared_ptr<ServiceLocator> serviceLocator, Entity entity);
+    CameraControllerFPS(Entity entity);
     virtual ~CameraControllerFPS();
     void onAttach() override;
     void onDeatach() override;

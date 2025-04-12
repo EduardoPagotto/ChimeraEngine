@@ -14,7 +14,7 @@ void ColladaMaterial::create(Entity& entity, const pugi::xml_node& node) {
     std::string url = nEffect.attribute("url").value();
     std::string refName = nEffect.child("technique_hint").attribute("ref").value();
 
-    ColladaEffect cf(colladaDom, url, serviceLoc);
+    ColladaEffect cf(colladaDom, url);
     cf.create(refName, entity, cf.getLibrary("library_effects"));
 }
 } // namespace ce

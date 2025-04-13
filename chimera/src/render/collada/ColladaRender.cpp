@@ -2,9 +2,8 @@
 #include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/collada/ColladaEffect.hpp"
 #include "chimera/core/collada/ColladaVisualScene.hpp"
+#include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/Shader.hpp"
-#include "chimera/render/2d/BatchRender2D.hpp"
-#include "chimera/render/scene/Components.hpp"
 
 namespace ce {
 

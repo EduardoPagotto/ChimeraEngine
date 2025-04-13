@@ -1,9 +1,9 @@
-#include "chimera/core/collada/ColladaGeometry.hpp"
-#include "chimera/core/collada/ColladaCube.hpp"
-#include "chimera/core/collada/ColladaHeightMap.hpp"
-#include "chimera/core/collada/ColladaMesh.hpp"
-#include "chimera/core/collada/ColladaParticle.hpp"
-#include "chimera/core/collada/ColladaWaveFront.hpp"
+#include "chimera/collada/ColladaGeometry.hpp"
+#include "chimera/collada/ColladaCube.hpp"
+#include "chimera/collada/ColladaHeightMap.hpp"
+#include "chimera/collada/ColladaMesh.hpp"
+#include "chimera/collada/ColladaParticle.hpp"
+#include "chimera/collada/ColladaWaveFront.hpp"
 
 namespace ce {
 void ColladaGeometry::create(Entity& entity, pugi::xml_node geo) {

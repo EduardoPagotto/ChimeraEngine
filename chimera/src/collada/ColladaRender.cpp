@@ -1,7 +1,7 @@
-#include "chimera/core/collada/ColladaRender.hpp"
-#include "chimera/core/collada/ColladaCam.hpp"
-#include "chimera/core/collada/ColladaEffect.hpp"
-#include "chimera/core/collada/ColladaVisualScene.hpp"
+#include "chimera/collada/ColladaRender.hpp"
+#include "chimera/collada/ColladaCam.hpp"
+#include "chimera/collada/ColladaEffect.hpp"
+#include "chimera/collada/ColladaVisualScene.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/Shader.hpp"
 

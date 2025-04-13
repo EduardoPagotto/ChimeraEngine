@@ -50,7 +50,7 @@ add_library (ChimeraRender STATIC ${RenderSource})
 # Define os includes privados para este target
 target_include_directories (ChimeraRender PUBLIC ${RenderInclude})
 
-add_dependencies(ChimeraRender ChimeraCore)
+add_dependencies(ChimeraRender ChimeraCollada)
 
 INSTALL(FILES ${ChimeraRender_BINARY_DIR}/libChimeraRender.a DESTINATION lib)
 INSTALL(DIRECTORY ${RenderInclude}/chimera/node DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

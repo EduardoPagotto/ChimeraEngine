@@ -1,5 +1,5 @@
 #include "chimera/core/partition/Wavefront.hpp"
-#include "chimera/core/collada/Collada.hpp"
+#include "chimera/core/utils.hpp"
 #include "chimera/core/visible/TextureMng.hpp"
 #include <fstream>
 

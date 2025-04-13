@@ -1,4 +1,5 @@
-#include "chimera/core/collada/ColladaMesh.hpp"
+#include "chimera/collada/ColladaMesh.hpp"
+#include "chimera/core/utils.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
 

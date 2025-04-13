@@ -1,4 +1,4 @@
-#include "chimera/core/collada/ColladaHeightMap.hpp"
+#include "chimera/collada/ColladaHeightMap.hpp"
 #include "chimera/core/partition/LoadHeightMap.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 

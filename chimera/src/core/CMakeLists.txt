@@ -31,23 +31,6 @@ set (SourcesCore Registry.cpp
 				 visible/Font.cpp
 				 visible/Material.cpp
 				 visible/ParticleEmitter.cpp
-				 collada/RFC3986.cpp
-				 collada/Collada.cpp
-				 collada/ColladaVisualScene.cpp
-				 collada/ColladaImage.cpp
-				 collada/ColladaMaterial.cpp
-				 collada/ColladaEffect.cpp
-				 collada/ColladaLight.cpp
-				 collada/ColladaCam.cpp
-				 collada/ColladaGeometry.cpp
-				 collada/colladaLoad.cpp
-				 collada/ColladaWaveFront.cpp
-				 collada/ColladaHeightMap.cpp
-				 collada/ColladaCube.cpp
-				 collada/ColladaMesh.cpp
-				 collada/ColladaParticle.cpp
-				 collada/ColladaExtra.cpp
-				 collada/ColladaRender.cpp
 				 partition/BSPTree.cpp
 				 partition/LoadHeightMap.cpp
 				 partition/Wavefront.cpp
@@ -70,8 +53,7 @@ endif(OVR_SET_TO_USE)
 if (BULLET_SET_TO_USE)	
 	message(STATUS "Bullet incluido no build ChimeraCore")
 	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
-								   bullet/Solid.cpp
-								   collada/ColladaPhysicScene.cpp) 
+								   bullet/Solid.cpp)
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 

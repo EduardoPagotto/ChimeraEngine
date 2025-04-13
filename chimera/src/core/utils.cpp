@@ -1,5 +1,6 @@
 #include "chimera/core/utils.hpp"
 #include <fstream>
+#include <sstream>
 
 namespace ce {
 
@@ -36,5 +37,28 @@ std::string extractNameByFile(const std::string& filepath) {
     auto lastDot = filepath.rfind('.');
     auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
     return filepath.substr(lastSlash, count);
+}
+
+void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) {
+    std::string token;
+    std::istringstream tokenStream(sIn);
+    while (std::getline(tokenStream, token, delimiter))
+        vOut.push_back(token);
+}
+
+void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat) {
+    std::vector<std::string> textData;
+    textToStringArray(text, textData, ' ');
+    for (const std::string& val : textData) {
+        if (val.size() != 0)
+            arrayFloat.push_back(std::stod(val));
+    }
+}
+
+void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI) {
+    std::vector<std::string> textData;
+    textToStringArray(text, textData, ' ');
+    for (const std::string& val : textData)
+        arrayI.push_back(static_cast<uint32_t>(std::stoul(val)));
 }
 } // namespace ce

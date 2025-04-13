@@ -20,6 +20,7 @@ set (IncludesSimples ${CMAKE_CURRENT_SOURCE_DIR}/include
 
 #define os Lib's a serem usados
 set (LibsSimples ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCollada.a
                  ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_IBRARIES}

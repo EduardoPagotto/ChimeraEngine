@@ -1,7 +1,8 @@
-#include "chimera/core/collada/ColladaPhysicScene.hpp"
+#include "chimera/collada/ColladaPhysicScene.hpp"
 #include "chimera/core/Registry.hpp"
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/bullet/Solid.hpp"
+#include "chimera/core/utils.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 #include <SDL2/SDL.h>
 

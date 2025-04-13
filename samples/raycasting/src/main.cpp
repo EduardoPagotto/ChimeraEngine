@@ -1,6 +1,6 @@
 #include "Game.hpp"
+#include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/collada/colladaLoad.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
 #include "chimera/core/device/Keyboard.hpp"
 #include <iostream>

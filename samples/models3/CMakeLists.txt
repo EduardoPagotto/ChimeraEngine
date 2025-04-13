@@ -19,6 +19,7 @@ set (IncludesModels3 ${Models3_SOURCE_DIR}/include/
 
 #ordem é importante!!!
 set (LibsModels3 ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCollada.a
 				 ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				 ${OPENGL_LIBRARIES}
 				 ${SDL2_LIBRARY}

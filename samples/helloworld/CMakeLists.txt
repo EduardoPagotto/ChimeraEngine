@@ -12,6 +12,7 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define os Lib's a serem usados
 set (LibsHelloWorld ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+					${CMAKE_SOURCE_DIR}/bin/libChimeraCollada.a
 					${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 				    ${OPENGL_LIBRARIES}
 				    ${SDL2_IBRARIES}

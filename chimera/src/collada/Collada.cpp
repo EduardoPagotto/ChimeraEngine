@@ -1,32 +1,10 @@
-#include "chimera/core/collada/Collada.hpp"
+#include "chimera/collada/Collada.hpp"
+#include "chimera/core/utils.hpp"
 #include <SDL2/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
 
 namespace ce {
-
-void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) {
-    std::string token;
-    std::istringstream tokenStream(sIn);
-    while (std::getline(tokenStream, token, delimiter))
-        vOut.push_back(token);
-}
-
-void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat) {
-    std::vector<std::string> textData;
-    textToStringArray(text, textData, ' ');
-    for (const std::string& val : textData) {
-        if (val.size() != 0)
-            arrayFloat.push_back(std::stod(val));
-    }
-}
-
-void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI) {
-    std::vector<std::string> textData;
-    textToStringArray(text, textData, ' ');
-    for (const std::string& val : textData)
-        arrayI.push_back(static_cast<uint32_t>(std::stoul(val)));
-}
 
 const glm::vec4 textToVec4(const std::string& text) {
     std::vector<float> arrayFloat;

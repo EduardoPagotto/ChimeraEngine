@@ -1,4 +1,4 @@
-#include "chimera/core/collada/ColladaParticle.hpp"
+#include "chimera/collada/ColladaParticle.hpp"
 #include "chimera/core/visible/ParticleEmitter.hpp"
 
 namespace ce {

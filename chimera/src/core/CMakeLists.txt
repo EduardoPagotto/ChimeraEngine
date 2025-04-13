@@ -47,6 +47,7 @@ set (SourcesCore Registry.cpp
 				 collada/ColladaMesh.cpp
 				 collada/ColladaParticle.cpp
 				 collada/ColladaExtra.cpp
+				 collada/ColladaRender.cpp
 				 partition/BSPTree.cpp
 				 partition/LoadHeightMap.cpp
 				 partition/Wavefront.cpp

@@ -24,8 +24,7 @@ set (RenderSource 	2d/BatchRender2D.cpp
 					3d/RenderableBsp.cpp
 					3d/RenderableDynamic.cpp
 					3d/RenderableParticles.cpp
-					scene/Scene.cpp
-					collada/ColladaRender.cpp)
+					scene/Scene.cpp)
 
 #define os includes
 set (RenderInclude 	${CMAKE_SOURCE_DIR}

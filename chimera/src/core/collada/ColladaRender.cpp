@@ -1,4 +1,4 @@
-#include "chimera/render/collada/ColladaRender.hpp"
+#include "chimera/core/collada/ColladaRender.hpp"
 #include "chimera/core/collada/ColladaCam.hpp"
 #include "chimera/core/collada/ColladaEffect.hpp"
 #include "chimera/core/collada/ColladaVisualScene.hpp"

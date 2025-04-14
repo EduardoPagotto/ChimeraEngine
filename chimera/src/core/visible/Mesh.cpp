@@ -1,5 +1,5 @@
 #include "chimera/core/visible/Mesh.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/space/space.hpp"
 #include <SDL2/SDL.h>
 
 namespace ce {

@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/OpenGLDefs.hpp"
+#include "space.hpp"
 #include <vector>
 
 namespace ce {

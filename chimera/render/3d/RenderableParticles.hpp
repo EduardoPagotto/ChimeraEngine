@@ -1,8 +1,8 @@
 #pragma once
-#include "chimera/core/buffer/VertexArray.hpp"
+#include "chimera/core/gl/ParticleEmitter.hpp"
+#include "chimera/core/gl/RenderCommand.hpp"
+#include "chimera/core/gl/buffer/VertexArray.hpp"
 #include "chimera/core/space/AABB.hpp"
-#include "chimera/core/visible/ParticleEmitter.hpp"
-#include "chimera/core/visible/RenderCommand.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
 namespace ce {

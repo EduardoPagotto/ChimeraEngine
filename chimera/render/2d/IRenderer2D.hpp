@@ -1,6 +1,6 @@
 #pragma once
 #include "chimera/core/TransformationStack.hpp"
-#include "chimera/core/visible/Font.hpp"
+#include "chimera/core/gl/Font.hpp"
 #include <string>
 
 namespace ce {

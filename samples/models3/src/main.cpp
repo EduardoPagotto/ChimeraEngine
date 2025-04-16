@@ -2,9 +2,9 @@
 #include "chimera/collada/ColladaRender.hpp"
 #include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/visible/FontMng.hpp"
-#include "chimera/core/visible/ShaderMng.hpp"
+#include "chimera/core/gl/CanvasGL.hpp"
+#include "chimera/core/gl/FontMng.hpp"
+#include "chimera/core/gl/ShaderMng.hpp"
 #include <cstdio>
 #include <iostream>
 #include <map>

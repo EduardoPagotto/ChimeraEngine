@@ -1,6 +1,6 @@
 #include "Game.hpp"
+#include "chimera/core/gl/FontMng.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/FontMng.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"

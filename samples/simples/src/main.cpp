@@ -2,12 +2,12 @@
 #include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/ServiceLocator.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
 #include "chimera/core/device/GameController.hpp"
 #include "chimera/core/device/Joystick.hpp"
 #include "chimera/core/device/Keyboard.hpp"
+#include "chimera/core/gl/CanvasGL.hpp"
+#include "chimera/core/gl/ShaderMng.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }

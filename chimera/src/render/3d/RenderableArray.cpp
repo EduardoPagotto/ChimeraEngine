@@ -1,5 +1,5 @@
 #include "chimera/render/3d/RenderableArray.hpp"
-#include "chimera/core/visible/RenderCommand.hpp"
+#include "chimera/core/gl/RenderCommand.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"
 #include <SDL2/SDL.h>

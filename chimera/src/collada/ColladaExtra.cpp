@@ -2,10 +2,10 @@
 #include "chimera/collada/ColladaCam.hpp"
 #include "chimera/collada/ColladaEffect.hpp"
 #include "chimera/core/ViewProjection.hpp"
-#include "chimera/core/buffer/FrameBuffer.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/visible/FontMng.hpp"
+#include "chimera/core/gl/CanvasGL.hpp"
+#include "chimera/core/gl/FontMng.hpp"
+#include "chimera/core/gl/buffer/FrameBuffer.hpp"
 
 namespace ce {
 

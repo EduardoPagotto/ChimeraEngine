@@ -1,8 +1,8 @@
 #include "Game.hpp"
 #include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/visible/ShaderMng.hpp"
+#include "chimera/core/gl/CanvasGL.hpp"
+#include "chimera/core/gl/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 int main(int argn, char** argv) {

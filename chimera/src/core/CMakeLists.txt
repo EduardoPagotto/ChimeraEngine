@@ -28,12 +28,12 @@ set (SourcesCore Registry.cpp
 				 gl/Font.cpp
 				 gl/Material.cpp
 				 gl/ParticleEmitter.cpp
+				 gl/Wavefront.cpp
 				 visible/Mesh.cpp
 				 visible/CameraControllerFPS.cpp
 				 visible/CameraControllerOrbit.cpp
 				 partition/BSPTree.cpp
 				 partition/LoadHeightMap.cpp
-				 partition/Wavefront.cpp
 				 partition/Cube.cpp)
 
 # define os includes

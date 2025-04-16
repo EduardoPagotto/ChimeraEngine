@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/gl/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 
 Game::Game() : IStateMachine("Game") {

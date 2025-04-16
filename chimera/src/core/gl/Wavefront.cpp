@@ -1,4 +1,4 @@
-#include "chimera/core/partition/Wavefront.hpp"
+#include "chimera/core/gl/Wavefront.hpp"
 #include "chimera/core/gl/TextureMng.hpp"
 #include "chimera/core/utils.hpp"
 #include <fstream>

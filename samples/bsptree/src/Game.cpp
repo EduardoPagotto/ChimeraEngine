@@ -1,6 +1,6 @@
 #include "Game.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
 #include "chimera/core/Registry.hpp"
+#include "chimera/core/gl/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 
 Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }

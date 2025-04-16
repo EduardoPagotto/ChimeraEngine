@@ -4,6 +4,7 @@
 Game::Game() : IStateMachine("Game") {
     // init framebuffer
     canvas = ce::g_service_locator.getService<ce::ICanva>();
+    // init keyboard
     keyboard = ce::g_service_locator.getService<ce::IKeyboard>();
 }
 

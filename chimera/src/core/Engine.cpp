@@ -1,5 +1,4 @@
 #include "chimera/core/Engine.hpp"
-#include "chimera/core/Registry.hpp"
 #include "chimera/core/ServiceLocator.hpp"
 #include "chimera/core/utils.hpp"
 
@@ -11,7 +10,6 @@ Engine::Engine() {
 
     canvas = g_service_locator.getService<ICanva>();
     vp = g_service_locator.getService<IViewProjection>();
-    Entity entity = g_registry.createEntity("chimera_engine", "chimera_engine");
 
     SDL_Log("Engine Register: chimera_engine OK");
 }

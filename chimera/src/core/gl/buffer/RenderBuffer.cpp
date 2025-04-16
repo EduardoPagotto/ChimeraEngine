@@ -1,4 +1,4 @@
-#include "chimera/core/buffer/RenderBuffer.hpp"
+#include "chimera/core/gl/buffer/RenderBuffer.hpp"
 
 namespace ce {
 

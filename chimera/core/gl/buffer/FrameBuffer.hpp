@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/visible/Texture.hpp"
+#include "chimera/core/gl/Texture.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture.hpp"
-#include "UValue.hpp"
 #include "chimera/core/TagComponent.hpp"
+#include "chimera/core/visible/UValue.hpp"
 #include <vector>
 
 namespace ce {

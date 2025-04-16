@@ -1,4 +1,4 @@
-#include "chimera/core/visible/Texture.hpp"
+#include "chimera/core/gl/Texture.hpp"
 
 namespace ce {
 

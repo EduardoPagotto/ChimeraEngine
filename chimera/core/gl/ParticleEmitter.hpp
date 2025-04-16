@@ -1,7 +1,7 @@
 #pragma once
-#include "ICamera.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/gl/OpenGLDefs.hpp"
 #include "chimera/core/space/AABB.hpp"
+#include "chimera/core/visible/ICamera.hpp"
 #include <vector>
 
 namespace ce {

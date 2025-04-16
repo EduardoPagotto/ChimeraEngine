@@ -1,5 +1,5 @@
-#include "chimera/core/visible/Shader.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/gl/Shader.hpp"
+#include "chimera/core/gl/OpenGLDefs.hpp"
 #include "chimera/core/utils.hpp"
 
 namespace ce {

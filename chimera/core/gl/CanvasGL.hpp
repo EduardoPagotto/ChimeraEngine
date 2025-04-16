@@ -1,5 +1,5 @@
 #pragma once
-#include "interfaces.hpp"
+#include "chimera/core/device/interfaces.hpp"
 #include <SDL2/SDL.h>
 
 #define GLEW_STATIC

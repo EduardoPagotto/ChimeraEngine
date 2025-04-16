@@ -1,6 +1,6 @@
 #pragma once
 #include "chimera/core/ServiceLocator.hpp"
-#include "chimera/core/visible/Material.hpp"
+#include "chimera/core/gl/Material.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 
 namespace ce {

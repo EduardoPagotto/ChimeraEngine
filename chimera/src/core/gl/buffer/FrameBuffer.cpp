@@ -1,5 +1,5 @@
-#include "chimera/core/buffer/FrameBuffer.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/gl/buffer/FrameBuffer.hpp"
+#include "chimera/core/gl/OpenGLDefs.hpp"
 
 namespace ce {
 

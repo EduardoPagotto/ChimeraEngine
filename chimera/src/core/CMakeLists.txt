@@ -16,21 +16,21 @@ set (SourcesCore Registry.cpp
 				 utils.cpp
 				 Engine.cpp
 				 device/CanvasFB.cpp
-				 device/CanvasGL.cpp
-				 buffer/IndexBuffer.cpp
-				 buffer/VertexArray.cpp
-				 buffer/FrameBuffer.cpp
-				 buffer/RenderBuffer.cpp
-				 DrawLine.cpp
+				 gl/CanvasGL.cpp
+				 gl/buffer/IndexBuffer.cpp
+				 gl/buffer/VertexArray.cpp
+				 gl/buffer/FrameBuffer.cpp
+				 gl/buffer/RenderBuffer.cpp
+				 gl/DrawLine.cpp
+				 gl/Shader.cpp
+				 gl/ShaderMng.cpp
+				 gl/Texture.cpp
+				 gl/Font.cpp
+				 gl/Material.cpp
+				 gl/ParticleEmitter.cpp
 				 visible/Mesh.cpp
-				 visible/Shader.cpp
-				 visible/ShaderMng.cpp
-				 visible/Texture.cpp
 				 visible/CameraControllerFPS.cpp
 				 visible/CameraControllerOrbit.cpp
-				 visible/Font.cpp
-				 visible/Material.cpp
-				 visible/ParticleEmitter.cpp
 				 partition/BSPTree.cpp
 				 partition/LoadHeightMap.cpp
 				 partition/Wavefront.cpp

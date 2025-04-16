@@ -1,5 +1,5 @@
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/gl/CanvasGL.hpp"
+#include "chimera/core/gl/OpenGLDefs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace ce {

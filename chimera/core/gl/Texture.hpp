@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/OpenGLDefs.hpp"
+#include "chimera/core/gl/OpenGLDefs.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 

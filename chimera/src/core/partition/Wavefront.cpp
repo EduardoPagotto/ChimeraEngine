@@ -1,6 +1,6 @@
 #include "chimera/core/partition/Wavefront.hpp"
+#include "chimera/core/gl/TextureMng.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/TextureMng.hpp"
 #include <fstream>
 
 namespace ce {

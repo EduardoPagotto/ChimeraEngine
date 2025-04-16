@@ -3,8 +3,6 @@
 
 #include <GL/gl.h>
 
-#include <glm/glm.hpp>
-
 namespace ce {
 
 class DepthFuncSetter {

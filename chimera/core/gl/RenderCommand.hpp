@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/visible/Shader.hpp"
-#include "chimera/core/visible/Texture.hpp"
+#include "chimera/core/gl/Shader.hpp"
+#include "chimera/core/gl/Texture.hpp"
 #include <vector>
 
 namespace ce {

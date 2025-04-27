@@ -22,6 +22,8 @@ sudo dnf install clang clang-tools-extra
 sudo dnf install cmake cmake-data cmake-rpm-macros jsoncpp libstdc++-static llvm-static llvm-devel llvm-test autoconf automake
 sudo dnf install lldb lldb-devel
 sudo dnf install compiler-rt
+sudo dnf install lld
+
 
 # OpenGL
 sudo dnf install mesa-dri-drivers mesa-libGL freeglut-devel glm-devel glew glew-devel libGLEW
@@ -67,9 +69,14 @@ cd build
 cmake ../
 make
 ```
+## Switch to clang (Fedora)
+Change to ld.lld
+```bash
+sudo update-alternatives --config ld
+```
 
 ## Switch to clang (Ubuntu)
-- CMake will uso the default of SO 
+- CMake will uso the default of SO
     ```bash
     sudo apt install clang # compiler
     sudo apt install lldb  # debuger
@@ -92,7 +99,7 @@ DerivePointerAlignment: false
 AlwaysBreakTemplateDeclarations: true
 ```
 
-### VSCode Extensions: 
+### VSCode Extensions:
 ```bash
 user@host:~/.vscode/extensions/code --list-extensions | xargs -L 1 echo code --install-extension
 
@@ -119,7 +126,7 @@ Iniciado tentativa de criar um HMD e posteriormente integrar suporte ao OpenHMD
 
 ### Versão Teste com o HMD
 
-re-modelamento arquivos e sub-projetos 
+re-modelamento arquivos e sub-projetos
 yaml ref: https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML
 Logs ref: https://github.com/gabime/spdlog/blob/v1.x/example/example.cpp
 
@@ -138,7 +145,7 @@ https://www.khronos.org/opengl/wiki/Example_Code
 
 - RBO: <p>
     <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_ATTACHMENT, TexFilter::NONE, TexWrap::NONE, TexDType::UNSIGNED_BYTE)</i>
-    
+
 - SwadowMap: <p>
     <i>TexParam(TexFormat::DEPTH_COMPONENT, TexFormat::DEPTH_COMPONENT, TexFilter::NEAREST, TexWrap::CLAMP_TO_BORDER, TexDType::FLOAT)</i>
 

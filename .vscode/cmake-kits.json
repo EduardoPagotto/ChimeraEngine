@@ -1,0 +1,6 @@
+[
+    {
+        "name": "CLANG_MASTER",
+        "toolchainFile": "./toolchain/clang.cmake"
+    }
+]

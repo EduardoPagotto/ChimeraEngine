@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.18.2)
-
 PROJECT(HelloWorld)
 
 find_package(OpenGL REQUIRED)
@@ -37,7 +35,7 @@ add_executable (helloworld TileLayer.cpp Game.cpp main.cpp)
 target_link_libraries(helloworld ${LibsHelloWorld})
 target_include_directories (helloworld PRIVATE ${IncludesHelloWorld})
 
-add_dependencies(helloworld ChimeraCore 
+add_dependencies(helloworld ChimeraCore
 							ChimeraRender)
 
 INSTALL(FILES ${HelloWorld_BINARY_DIR}/helloworld DESTINATION bin)

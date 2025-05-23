@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.18.2)
-
 PROJECT(Terrain)
 
 find_package(OpenGL REQUIRED)
@@ -41,7 +39,7 @@ add_executable (terrain src/Game.cpp
 target_link_libraries(terrain ${LibsTerrain})
 target_include_directories (terrain PRIVATE ${IncludesTerrain})
 
-add_dependencies(terrain ChimeraCore 
+add_dependencies(terrain ChimeraCore
 						 ChimeraRender)
 
 INSTALL(FILES ${Terrain_BINARY_DIR}/terrain DESTINATION bin)

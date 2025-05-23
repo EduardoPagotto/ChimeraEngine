@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.18.2)
-
 PROJECT(RayCasting)
 
 find_package(OpenGL REQUIRED)
@@ -28,8 +26,8 @@ set (LibsSimpleRayCasting ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 						  -lpugixml
 						  -lpthread)
 
-add_executable (raycasting src/raycasting.cpp 
-						   src/Game.cpp 
+add_executable (raycasting src/raycasting.cpp
+						   src/Game.cpp
 						   src/main.cpp)
 
 target_link_libraries(raycasting ${LibsSimpleRayCasting})

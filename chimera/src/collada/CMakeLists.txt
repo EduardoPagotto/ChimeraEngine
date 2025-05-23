@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.18.2)
-
 PROJECT(ChimeraCollada)
 
 find_package(OpenGL REQUIRED)
@@ -40,13 +38,13 @@ set (IncludeCore ${CMAKE_SOURCE_DIR}
 # Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
 # if (OVR_SET_TO_USE)
 # 	message(STATUS "OVR incluido no build ChimeraCollada")
-# 	set(SourcesCore ${SourcesCore} device/CanvasOVR) 
-# 	set(SourcesCore ${SourcesCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) 
+# 	set(SourcesCore ${SourcesCore} device/CanvasOVR)
+# 	set(SourcesCore ${SourcesCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
 # endif(OVR_SET_TO_USE)
 
-if (BULLET_SET_TO_USE)	
+if (BULLET_SET_TO_USE)
 	message(STATUS "Bullet incluido no build ChimeraCollada")
-	set(SourcesCore ${SourcesCore} ColladaPhysicScene.cpp) 
+	set(SourcesCore ${SourcesCore} ColladaPhysicScene.cpp)
 	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 
@@ -54,7 +52,7 @@ endif(BULLET_SET_TO_USE)
 # Define o Target
 add_library (ChimeraCollada STATIC ${SourcesCore})
 
-# Define os includes 
+# Define os includes
 target_include_directories (ChimeraCollada PUBLIC ${IncludeCore})
 
 # Lista os Includes

@@ -32,6 +32,7 @@ void ColladaExtra::create(pugi::xml_node nodeExtra) {
             std::string entId = nFb.attribute("id").value();
             Entity entity = g_registry.createEntity(entName, entId);
 
+            [[maybe_unused]]
             FrameBufferSpecification& fb = entity.addComponent<FrameBufferSpecification>();
             for (pugi::xml_node next = nFb.first_child(); next; next = next.next_sibling()) {
                 std::string name = next.name();

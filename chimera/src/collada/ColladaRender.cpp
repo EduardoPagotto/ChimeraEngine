@@ -34,6 +34,7 @@ void colladaRenderLoad(ColladaDom& dom) {
                     }
                 }
 
+                [[maybe_unused]]
                 CameraComponent& cCam = entity.getComponent<CameraComponent>();
                 auto& shaderCom = entity.getComponent<ShaderComponent>();
                 std::shared_ptr<Shader> shader = shaderCom.shader;

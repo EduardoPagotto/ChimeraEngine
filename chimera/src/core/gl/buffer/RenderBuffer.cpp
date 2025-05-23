@@ -3,10 +3,10 @@
 namespace ce {
 
 RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb, std::shared_ptr<Shader> shader)
-    : posX(posX), posY(posY), shader(shader), frameBuffer(fb), vbo(nullptr) {
+    : posX(posX), posY(posY), shader(shader), vbo(nullptr), frameBuffer(fb) {
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Render Framebuffer position(%d x %d) size(%d x %d)", posX, posY, fb->getWidth(),
-                 fb->getHeight());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Render Framebuffer position(%d x %d) size(%d x %d)", posX, posY,
+                 fb->getWidth(), fb->getHeight());
 
     // The fullscreen quad's FBO
     const glm::vec3 quad[] = {glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(-1.0f, 1.0f, 0.0f),

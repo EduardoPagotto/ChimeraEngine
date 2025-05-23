@@ -6,7 +6,7 @@
 
 namespace ce {
 
-RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh) : totIndex(0), Renderable3D() {
+RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh) : Renderable3D(), totIndex(0) {
     // create vertex buffers
     vao = new VertexArray();
     vao->bind();

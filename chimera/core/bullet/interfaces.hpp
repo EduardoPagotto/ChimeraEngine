@@ -1,4 +1,5 @@
 #pragma once
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
 #include "chimera/core/ServiceLocator.hpp"
 #include <LinearMath/btVector3.h>
 #include <btBulletDynamicsCommon.h>

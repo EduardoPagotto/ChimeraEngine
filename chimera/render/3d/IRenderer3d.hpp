@@ -10,7 +10,7 @@ class IRenderer3d {
     IRenderer3d() { uniformsQueue.reserve(500); }
     virtual ~IRenderer3d() = default;
     virtual void begin(class Camera* camera, class IViewProjection* vpo, class Octree* octree) = 0;
-    virtual void submit(const class RenderCommand& command, class IRenderable3d* renderable, const uint32_t& count) = 0;
+    virtual void submit(const struct RenderCommand& command, class IRenderable3d* renderable, const uint32_t& count) = 0;
     virtual void end() = 0;
     virtual void flush() = 0;
 

@@ -32,7 +32,7 @@ class BatchRender2D : public IRenderer2D {
     virtual void flush() override;
     virtual void drawString(std::shared_ptr<Font> font, const std::string& text, const glm::vec3& pos, const glm::vec4& color) override;
     inline virtual TransformationStack& getStack() override { return stack; };
-    inline virtual void setCommandRender(class RenderCommand* command) override { renderComando = command; }
+    inline virtual void setCommandRender(struct RenderCommand* command) override { renderComando = command; }
 
   private:
     float submitTexture(std::shared_ptr<Texture> texture);

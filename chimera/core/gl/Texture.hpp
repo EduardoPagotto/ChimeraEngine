@@ -58,6 +58,7 @@ struct TexParam {
 };
 
 namespace Aux {
+[[maybe_unused]]
 static void textureParameterSetUndefined(TexParam& val) {
     val.format = TexFormat::NONE;
     val.internalFormat = TexFormat::NONE;
@@ -69,6 +70,7 @@ static void textureParameterSetUndefined(TexParam& val) {
     val.type = TexDType::NONE;
 }
 
+[[maybe_unused]]
 static bool textureParameterIsUndefined(const TexParam& val) {
     return (val.format == TexFormat::NONE && val.internalFormat == TexFormat::NONE);
 }

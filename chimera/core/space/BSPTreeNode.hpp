@@ -12,6 +12,6 @@ struct BSPTreeNode {
     bool isLeaf;
 
     BSPTreeNode(const Plane& _hyperPlane)
-        : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), leafIndex(0), isLeaf(false), isSolid(false) {}
+        : hyperPlane(_hyperPlane), front(nullptr), back(nullptr), leafIndex(0), isSolid(false), isLeaf(false) {}
 };
 } // namespace ce

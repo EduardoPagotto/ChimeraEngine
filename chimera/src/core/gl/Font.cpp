@@ -4,7 +4,7 @@
 
 namespace ce {
 
-Font::Font(const std::string& pathFile, const int& size) : texture(nullptr), scale(glm::vec2(10.0f)) {
+Font::Font(const std::string& pathFile, const int& size) : scale(glm::vec2(10.0f)), texture(nullptr) {
 
     if (TTF_Init() == -1) { // TODO: tratar erros
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "TTF Erros: %s", TTF_GetError());
@@ -34,10 +34,10 @@ Font::Font(const std::string& pathFile, const int& size) : texture(nullptr), sca
     if (const char* familyname = TTF_FontFaceFamilyName(sFont); familyname)
         SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "The family name of the face in the font is: %s\n", familyname);
 
-    int val = TTF_GetFontKerning(sFont);
+    // int val = TTF_GetFontKerning(sFont);
 
     SDL_Color fg = {0xff, 0xff, 0xff, 0xff};
-    SDL_Color bg = {0x0, 0x0, 0x0, 0xff};
+    // SDL_Color bg = {0x0, 0x0, 0x0, 0xff};
 
     uint16_t totW = 0;
     uint16_t maxH = 0;

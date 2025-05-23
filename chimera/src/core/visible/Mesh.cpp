@@ -16,7 +16,8 @@ MeshType getMeshTypeFromString(const std::string& text) {
 
 void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& vTris) {
     for (uint32_t i = 0; i < m.iFace.size(); i++) {
-        const glm::vec3 acc = m.vertex[m.iFace[i].x].normal + m.vertex[m.iFace[i].y].normal + m.vertex[m.iFace[i].z].normal;
+        const glm::vec3 acc =
+            m.vertex[m.iFace[i].x].normal + m.vertex[m.iFace[i].y].normal + m.vertex[m.iFace[i].z].normal;
         vTris.push_back(std::make_shared<Triangle>(m.iFace[i], glm::vec3(acc.x / 3, acc.y / 3, acc.z / 3), false));
     }
 }
@@ -46,7 +47,8 @@ void idxSimplifieVec2(std::vector<glm::vec2>& in, std::vector<glm::vec2>& out, s
         idxOut.push_back(out.size() - 1);
     }
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Simplify2 In: %04lu out: %04lu faces: %04lu ", in.size(), out.size(), idxOut.size() / 3);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Simplify2 In: %04lu out: %04lu faces: %04lu ", in.size(), out.size(),
+                 idxOut.size() / 3);
 }
 
 void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, std::vector<uint32_t>& idxIn,
@@ -76,7 +78,8 @@ void idxSimplifieVec3(std::vector<glm::vec3>& in, std::vector<glm::vec3>& out, s
         idxOut.push_back(out.size() - 1);
     }
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Simplify3 In: %04lu out: %04lu faces: %04lu ", in.size(), out.size(), idxOut.size() / 3);
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Simplify3 In: %04lu out: %04lu faces: %04lu ", in.size(), out.size(),
+                 idxOut.size() / 3);
 }
 
 void meshSerialize(Mesh& inData, Mesh& outData) {
@@ -84,16 +87,19 @@ void meshSerialize(Mesh& inData, Mesh& outData) {
     outData.vertex.reserve(inData.iFace.size() * 3); // Reserve Vertex(point, normal, tex)
 
     for (const glm::uvec3& face : inData.iFace) {
-        outData.vertex.push_back({inData.vertex[face.x].point, inData.vertex[face.x].normal, inData.vertex[face.x].uv}); // Vertice A
-        outData.vertex.push_back({inData.vertex[face.y].point, inData.vertex[face.y].normal, inData.vertex[face.y].uv}); // Vertice B
-        outData.vertex.push_back({inData.vertex[face.z].point, inData.vertex[face.z].normal, inData.vertex[face.z].uv}); // Vertice C
+        outData.vertex.push_back(
+            {inData.vertex[face.x].point, inData.vertex[face.x].normal, inData.vertex[face.x].uv}); // Vertice A
+        outData.vertex.push_back(
+            {inData.vertex[face.y].point, inData.vertex[face.y].normal, inData.vertex[face.y].uv}); // Vertice B
+        outData.vertex.push_back(
+            {inData.vertex[face.z].point, inData.vertex[face.z].normal, inData.vertex[face.z].uv}); // Vertice C
     }
 
     for (uint32_t i = 0; i < outData.vertex.size(); i += 3) // Serialize Vertex (0,1,2),(3,4,5),...
         outData.iFace.push_back({i, i + 1, i + 2});
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Serialize Vertex: %04lu -> %04lu Faces: %04lu ", inData.vertex.size(), outData.vertex.size(),
-                 outData.iFace.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Serialize Vertex: %04lu -> %04lu Faces: %04lu ", inData.vertex.size(),
+                 outData.vertex.size(), outData.iFace.size());
 }
 
 void meshReindex(Mesh& inData, Mesh& outData) {
@@ -116,12 +122,12 @@ void meshReindex(Mesh& inData, Mesh& outData) {
     for (uint32_t i = 0; i < idxFace.size(); i++) {
         // Procura por similar
         find = false;
-        for (uint32_t j = 0; j < index.size(); j++) {                                   // FIXME: trocar por vertexdata comp!!!!!
-            if (isNearV3(inData.vertex[idxFace[i]].point, outData.vertex[j].point) &&   // compara pontos
-                isNearV3(inData.vertex[idxFace[i]].normal, outData.vertex[j].normal) && // compara normal
-                isNearV2(inData.vertex[idxFace[i]].uv, outData.vertex[j].uv)) {         // compara uv
+        for (uint32_t j = 0; j < index.size(); j++) { // FIXME: trocar por vertexdata comp!!!!!
+            if (isNearV3(inData.vertex[idxFace[i]].point, outData.vertex[index[j]].point) &&   // compara pontos
+                isNearV3(inData.vertex[idxFace[i]].normal, outData.vertex[index[j]].normal) && // compara normal
+                isNearV2(inData.vertex[idxFace[i]].uv, outData.vertex[index[j]].uv)) {         // compara uv
 
-                index.push_back(j);
+                index.push_back(index[j]); // copia valor de index[j] que é repetido
                 find = true;
                 break;
             }
@@ -143,8 +149,8 @@ void meshReindex(Mesh& inData, Mesh& outData) {
 
     outData.iFace.assign(outData.iFace.begin(), outData.iFace.end());
 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "ReIndex Vertex: %04lu -> %04lu Faces: %04lu ", inData.vertex.size(), outData.vertex.size(),
-                 outData.iFace.size());
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "ReIndex Vertex: %04lu -> %04lu Faces: %04lu ", inData.vertex.size(),
+                 outData.vertex.size(), outData.iFace.size());
 }
 
 void meshDebug(const Mesh& m, bool _showAll) {
@@ -153,7 +159,8 @@ void meshDebug(const Mesh& m, bool _showAll) {
     if (_showAll == true) {
         uint32_t i = 0;
         for (const VertexData& v : m.vertex)
-            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Vertex: %03d (%05.3f; %05.3f; %05.3f),(%02.3f; %02.3f; %02.3f), (%01.4f; %01.4f)", i++,
+            SDL_LogDebug(SDL_LOG_CATEGORY_RENDER,
+                         "Vertex: %03d (%05.3f; %05.3f; %05.3f),(%02.3f; %02.3f; %02.3f), (%01.4f; %01.4f)", i++,
                          v.point.x, v.point.y, v.point.z, v.normal.x, v.normal.y, v.normal.z, v.uv.x, v.uv.y);
 
         i = 0;
@@ -165,7 +172,7 @@ void meshDebug(const Mesh& m, bool _showAll) {
 }
 
 std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexBoundaries(std::vector<VertexData>& vArray) {
-    glm::vec3 min, max, size;
+    glm::vec3 min, max;
     if (vArray.size() > 0) {
         min = vArray[0].point;
         max = vArray[0].point;

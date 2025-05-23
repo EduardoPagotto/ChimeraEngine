@@ -46,7 +46,7 @@ class IEmitter {
 
 class EmitterFont : public IEmitter {
   public:
-    EmitterFont(const glm::vec3& dir, const float& spread) : maindir(dir), spread(spread), pc(nullptr) {};
+    EmitterFont(const glm::vec3& dir, const float& spread) : pc(nullptr), maindir(dir), spread(spread) {};
     virtual int findUnusedParticle() override;
     virtual void reset(ParticleZ& p) override;
     virtual void recycleLife(const double& ts) override;

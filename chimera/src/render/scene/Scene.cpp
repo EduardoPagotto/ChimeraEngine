@@ -19,7 +19,7 @@
 
 namespace ce {
 
-Scene::Scene() : IStateMachine("Scene"), activeCam(nullptr), origem(nullptr), verbose(0) { octree = nullptr; }
+Scene::Scene() : IStateMachine("Scene"), origem(nullptr), activeCam(nullptr), verbose(0) { octree = nullptr; }
 
 Scene::~Scene() {
     if (shadowData.shadowBuffer) {
@@ -28,7 +28,8 @@ Scene::~Scene() {
     }
 }
 
-RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width, const uint32_t& height) {
+RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
+                            const uint32_t& height) {
     if (!eRenderBuferSpec)
         throw std::string("RenderBuffer nao encontrado");
 
@@ -79,7 +80,7 @@ void Scene::onAttach() {
     int tot_mesh = 0;
 
     // lista as tags nas entidades registradas
-    g_registry.get().each([&](auto entityID) { // FIXME: PODE SER AQUI!!!!!
+    for (auto entityID : g_registry.get().view<entt::entity>()) {
         Entity entity{entityID, &g_registry};
         auto& tc = entity.getComponent<TagComponent>();
         SDL_Log("Tag: %s Id: %s", tc.tag.c_str(), tc.id.c_str());
@@ -169,7 +170,7 @@ void Scene::onAttach() {
                 eRenderBuferSpec = entity;
             }
         }
-    });
+    }
 
     // Pega icanvas depois de camera definida!!!
     auto canvas = g_service_locator.getService<ICanva>();
@@ -321,9 +322,12 @@ void Scene::execEmitterPass(IRenderer3d& renderer) {
 }
 
 void Scene::execRenderPass(IRenderer3d& renderer) {
-    auto group = g_registry.get().group<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
+    // ref:
+    // https://github.com/skypjack/entt/wiki/Crash-Course:-entity-component-system/465d90e0f5961adc460cd9d1e9358370987fbcd3#views-and-groups
+    auto group = g_registry.get().view<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>();
     for (auto entity : group) {
-        auto [sc, mc, tc, rc] = group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
+        auto [sc, mc, tc, rc] =
+            group.get<ShaderComponent, MaterialComponent, TransComponent, Renderable3dComponent>(entity);
 
         RenderCommand command;
         command.transform = tc.trans->translateSrc(origem->getPosition());

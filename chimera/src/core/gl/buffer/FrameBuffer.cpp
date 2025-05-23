@@ -21,7 +21,7 @@ static bool isDepthFormat(TexFormat format) {
 
 static const uint32_t maxFrameBufferSize = 8192;
 
-FrameBuffer::FrameBuffer(const FrameBufferSpecification& spec) : spec(spec), framBufferID(0), rbo(0) {
+FrameBuffer::FrameBuffer(const FrameBufferSpecification& spec) : framBufferID(0), rbo(0), spec(spec) {
 
     Aux::textureParameterSetUndefined(rboSpec);
     Aux::textureParameterSetUndefined(depthTexSpec);

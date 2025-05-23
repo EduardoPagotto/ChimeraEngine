@@ -9,12 +9,13 @@ namespace ce {
 
 class Octree {
   private:
+    [[maybe_unused]]
+    Octree* pParent{nullptr};
+    uint32_t capacity{27};
     bool leafMode{true};
     uint32_t deep{0};
-    uint32_t capacity{27};
     uint32_t serial{0};
     AABB boundary;
-    Octree* pParent{nullptr};
     std::vector<std::unique_ptr<Octree>> childs;
     std::vector<glm::vec3> points;
     std::vector<uint32_t> indexes;
@@ -22,12 +23,14 @@ class Octree {
 
   public:
     explicit Octree(const glm::vec3& pos, const glm::vec3& size, Octree* parent) noexcept
-        : pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1), serial(serial_master++) {
+        : pParent(parent), capacity(parent->capacity), leafMode(parent->leafMode), deep(parent->deep + 1),
+          serial(serial_master++) {
         boundary.setPosition(pos, size);
     }
 
     explicit Octree(const AABB& boundary, const uint32_t& capacity, const bool& leafMode) noexcept
-        : boundary(boundary), capacity(capacity), leafMode(leafMode), pParent(nullptr), deep(0), serial(serial_master++) {}
+        : pParent(nullptr), capacity(capacity), leafMode(leafMode), deep(0), serial(serial_master++),
+          boundary(boundary) {}
 
     virtual ~Octree() noexcept { destroy(); }
 

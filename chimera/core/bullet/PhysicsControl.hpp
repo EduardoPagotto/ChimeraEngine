@@ -1,4 +1,5 @@
 #pragma once
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
 #include "interfaces.hpp"
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <btBulletCollisionCommon.h>

@@ -8,7 +8,7 @@ namespace ce {
 // https://jeux.developpez.com/tutoriels/sdl-2/guide-migration/
 
 CanvasFB::CanvasFB(const std::string& title, int width, int height, bool fullScreen)
-    : title(title), width(width), height(height), fullScreen(fullScreen) {
+    : fullScreen(fullScreen), width(width), height(height), title(title) {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         throw std::string("Falha SDL_Init:" + std::string(SDL_GetError()));

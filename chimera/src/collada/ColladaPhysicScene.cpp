@@ -30,6 +30,8 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
 
     pugi::xml_node nTec = node.child("technique_common");
     std::string sGrav = nTec.child("gravity").text().as_string();
+
+    [[maybe_unused]]
     float ts = nTec.child("time_step").text().as_float();
 
     std::vector<float> l_arrayF;
@@ -61,6 +63,7 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
             if (tag.id == target) {
                 Entity ent2 = {entity, &g_registry};
                 TransComponent& tc = ent2.getComponent<TransComponent>();
+                [[maybe_unused]]
                 MeshComponent& mc = ent2.getComponent<MeshComponent>();
                 Solid* solid = new Solid(pc.get(), tc.trans->getMatrix(), ent2); // nova transformacao
                 delete tc.trans;                                                 // deleta objeto de transformacao
@@ -68,6 +71,7 @@ void ColladaPhysicScene::loadAll(pugi::xml_node node) {
                 tc.solid = true;                                                 // muda tipos de dado
                 tc.trans = solid;                                                // carrega novo objeto de transformacao
 
+                [[maybe_unused]]
                 bool dynamic = nTec.child("dynamic").text().as_bool();
                 float mass = nTec.child("mass").text().as_float();
 

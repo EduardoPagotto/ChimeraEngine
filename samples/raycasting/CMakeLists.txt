@@ -1,4 +1,4 @@
-PROJECT(RayCasting)
+PROJECT(raycasting LANGUAGES CXX)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -8,14 +8,18 @@ find_package(PUGIXML REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
-set (IncludesSimpleRayCasting ${CMAKE_CURRENT_SOURCE_DIR}/include
+set (IncludeDirs ${CMAKE_CURRENT_SOURCE_DIR}/include
 							  ${PUGIXML_DIR}
 							  ${CMAKE_SOURCE_DIR}
 							  ${OPENGL_INCLUDE_DIR}
 							  ${SDL2_INCLUDE_DIR}
 							  ${BULLET_INCLUDE_DIR})
 
-set (LibsSimpleRayCasting ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
+set (SourceFiles src/raycasting.cpp
+				 src/Game.cpp
+				 src/main.cpp)
+
+set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 						  ${OPENGL_LIBRARIES}
 						  ${SDL2_LIBRARY}
 						  ${BULLET_LIBRARIES}
@@ -26,13 +30,12 @@ set (LibsSimpleRayCasting ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
 						  -lpugixml
 						  -lpthread)
 
-add_executable (raycasting src/raycasting.cpp
-						   src/Game.cpp
-						   src/main.cpp)
+add_executable (${PROJECT_NAME} ${SourceFiles})
 
-target_link_libraries(raycasting ${LibsSimpleRayCasting})
-target_include_directories (raycasting PRIVATE ${IncludesSimpleRayCasting})
+target_link_libraries(${PROJECT_NAME} ${LIBRARY_DEPS})
 
-add_dependencies(raycasting ChimeraCollada)
+target_include_directories (${PROJECT_NAME} PRIVATE ${IncludeDirs})
 
-INSTALL(FILES ${SimpleRayCasting_BINARY_DIR}/raycasting DESTINATION bin)
+add_dependencies(${PROJECT_NAME} ChimeraCollada)
+
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/bin/${PROJECT_NAME} DESTINATION bin)

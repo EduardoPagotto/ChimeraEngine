@@ -1,4 +1,4 @@
-PROJECT(ChimeraRender)
+PROJECT(ChimeraRender LANGUAGES CXX)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -11,7 +11,7 @@ endif(BULLET_SET_TO_USE)
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
 #define objetos a compilar
-set (RenderSource 	2d/BatchRender2D.cpp
+set (SourceFiles 	2d/BatchRender2D.cpp
 					2d/Layer.cpp
 					3d/Renderer3d.cpp
 					3d/Renderer3dLines.cpp
@@ -25,30 +25,30 @@ set (RenderSource 	2d/BatchRender2D.cpp
 					scene/Scene.cpp)
 
 #define os includes
-set (RenderInclude 	${CMAKE_SOURCE_DIR}
+set (IncludeDirs 	${CMAKE_SOURCE_DIR}
 					${SDL2_INCLUDE_DIR}
 					${OPENGL_INCLUDE_DIR}
 					${GLEW_INCLUDE_DIRS}
 					/usr/local/include/) # Raiz do projeto
 
-# Adiciona objetos e includes do OVR ao RenderSource e RenderInclude
+# Adiciona objetos e includes do OVR ao SourceFiles e IncludeDirs
 if (OVR_SET_TO_USE)
-	message(STATUS "OVR incluido no build ChimeraRender")
-	set(RenderInclude ${RenderInclude} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
+	message(STATUS "OVR incluido no build ${PROJECT_NAME}")
+	set(IncludeDirs ${IncludeDirs} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
 endif(OVR_SET_TO_USE)
 
 if (BULLET_SET_TO_USE)
-	message(STATUS "Bullet incluido no build ChimeraRender")
-	set(RenderInclude ${RenderInclude} ${BULLET_INCLUDE_DIR} )
+	message(STATUS "Bullet incluido no build ${PROJECT_NAME}")
+	set(IncludeDirs ${IncludeDirs} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 
 # Define o Target
-add_library (ChimeraRender STATIC ${RenderSource})
+add_library (${PROJECT_NAME} STATIC ${SourceFiles})
 
 # Define os includes privados para este target
-target_include_directories (ChimeraRender PUBLIC ${RenderInclude})
+target_include_directories (${PROJECT_NAME} PUBLIC ${IncludeDirs})
 
-add_dependencies(ChimeraRender ChimeraCollada)
+add_dependencies(${PROJECT_NAME} ChimeraCollada)
 
-INSTALL(FILES ${ChimeraRender_BINARY_DIR}/libChimeraRender.a DESTINATION lib)
-INSTALL(DIRECTORY ${RenderInclude}/chimera/node DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")
+#INSTALL(FILES ${${PROJECT_NAME}_BINARY_DIR}/libChimeraRender.a DESTINATION lib)
+#INSTALL(DIRECTORY ${IncludeDirs}/chimera/node DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

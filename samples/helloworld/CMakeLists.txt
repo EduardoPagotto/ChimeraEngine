@@ -1,4 +1,4 @@
-PROJECT(HelloWorld)
+PROJECT(helloworld LANGUAGES CXX)
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -8,34 +8,38 @@ find_package(PUGIXML REQUIRED)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
-#define os Lib's a serem usados
-set (LibsHelloWorld ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
-					${CMAKE_SOURCE_DIR}/bin/libChimeraCollada.a
-					${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
-				    ${OPENGL_LIBRARIES}
-				    ${SDL2_IBRARIES}
-					${BULLET_LIBRARIES}
-					-lGL
-					-lSDL2
-					-lSDL2_image
-					-lSDL2_ttf
-				    -lGLEW
-					-lpugixml
-				    -lpthread)
-
 #define os includes
-set (IncludesHelloWorld ${CMAKE_SOURCE_DIR}
-						${PUGIXML_DIR}
-						${OPENGL_INCLUDE_DIR}
-						${SDL2_INCLUDE_DIR}
-						${BULLET_INCLUDE_DIR})
+set (IncludeDirs ${CMAKE_SOURCE_DIR}
+				 ${PUGIXML_DIR}
+				 ${OPENGL_INCLUDE_DIR}
+				 ${SDL2_INCLUDE_DIR}
+				 ${BULLET_INCLUDE_DIR})
 
-add_executable (helloworld TileLayer.cpp Game.cpp main.cpp)
+set (SourceFiles TileLayer.cpp
+                 Game.cpp
+				 main.cpp)
 
-target_link_libraries(helloworld ${LibsHelloWorld})
-target_include_directories (helloworld PRIVATE ${IncludesHelloWorld})
+#define os Lib's a serem usados
+set (LIBRARY_DEPS ${CMAKE_SOURCE_DIR}/bin/libChimeraRender.a
+				  ${CMAKE_SOURCE_DIR}/bin/libChimeraCollada.a
+				  ${CMAKE_SOURCE_DIR}/bin/libChimeraCore.a
+				  ${OPENGL_LIBRARIES}
+				  ${SDL2_IBRARIES}
+				  ${BULLET_LIBRARIES}
+				  -lGL
+				  -lSDL2
+				  -lSDL2_image
+				  -lSDL2_ttf
+				  -lGLEW
+				  -lpugixml
+				  -lpthread)
 
-add_dependencies(helloworld ChimeraCore
-							ChimeraRender)
+add_executable (${PROJECT_NAME} ${SourceFiles})
 
-INSTALL(FILES ${HelloWorld_BINARY_DIR}/helloworld DESTINATION bin)
+target_link_libraries(${PROJECT_NAME} ${LIBRARY_DEPS})
+target_include_directories (${PROJECT_NAME} PRIVATE ${IncludeDirs})
+
+add_dependencies(${PROJECT_NAME} ChimeraCore
+							     ChimeraRender)
+
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/bin/${PROJECT_NAME} DESTINATION bin)

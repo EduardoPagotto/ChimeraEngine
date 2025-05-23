@@ -1,10 +1,13 @@
 BasedOnStyle: LLVM
+Language: Cpp
 IndentWidth: 4
 IndentCaseLabels: true
 AllowShortBlocksOnASingleLine: true
 ColumnLimit: 120
 PointerAlignment: Left
 DerivePointerAlignment: false
-AlwaysBreakTemplateDeclarations: true
-#AllowShortIfStatementsOnASingleLine: Always
-AlignTrailingComments: true
+BreakTemplateDeclarations: Yes
+NamespaceIndentation: All
+AllowShortIfStatementsOnASingleLine: Never
+AlignAfterOpenBracket: Align
+AlignConsecutiveMacros: Consecutive

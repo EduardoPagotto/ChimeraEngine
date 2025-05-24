@@ -1,6 +1,6 @@
 #pragma once
 #include "Texture.hpp"
-#include "chimera/core/visible/UValue.hpp"
+#include "chimera/base/UValue.hpp"
 #include "chimera/ecs/ecs.hpp"
 #include <vector>
 

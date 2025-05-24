@@ -1,7 +1,7 @@
 #pragma once
-#include "chimera/core/IStateMachine.hpp"
-#include "chimera/core/device/Mouse.hpp"
-#include "chimera/core/visible/ICamera.hpp"
+#include "chimera/base/ICamera.hpp"
+#include "chimera/base/IStateMachine.hpp"
+#include "chimera/base/Mouse.hpp"
 #include "chimera/ecs/Entity.hpp"
 
 namespace ce {

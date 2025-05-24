@@ -1,5 +1,4 @@
 #pragma once
-// #include "chimera/ecs/ecs.hpp"
 #include <glm/glm.hpp>
 
 namespace ce {

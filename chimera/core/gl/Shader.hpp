@@ -1,33 +1,33 @@
 #pragma once
-#include "chimera/core/visible/UValue.hpp"
+#include "chimera/base/UValue.hpp"
 
 namespace ce {
 
-class Shader {
-  private:
-    uint32_t progID{0};
-    mutable std::unordered_map<std::string, int32_t> uniformLocationCache;
+    class Shader {
+      private:
+        uint32_t progID{0};
+        mutable std::unordered_map<std::string, int32_t> uniformLocationCache;
 
-  public:
-    explicit Shader(const uint32_t& id) noexcept : progID(id) {}
+      public:
+        explicit Shader(const uint32_t& id) noexcept : progID(id) {}
 
-    Shader() = delete;
-    Shader(const Shader& other) = delete;
-    Shader& operator=(const Shader& other) = delete;
+        Shader() = delete;
+        Shader(const Shader& other) = delete;
+        Shader& operator=(const Shader& other) = delete;
 
-    virtual ~Shader() noexcept;
+        virtual ~Shader() noexcept;
 
-    const bool operator==(const Shader& other) const noexcept { return progID == other.progID; }
-    const bool operator!=(const Shader& other) const noexcept { return !(*this == other); }
-    const uint32_t getID() const noexcept { return this->progID; }
-    const int32_t getUniform(const std::string& name) const noexcept;
-    void setUniformU(const char* name, const UValue& uv) noexcept;
-};
+        const bool operator==(const Shader& other) const noexcept { return progID == other.progID; }
+        const bool operator!=(const Shader& other) const noexcept { return !(*this == other); }
+        const uint32_t getID() const noexcept { return this->progID; }
+        const int32_t getUniform(const std::string& name) const noexcept;
+        void setUniformU(const char* name, const UValue& uv) noexcept;
+    };
 
-struct ShaderComponent {
-    ShaderComponent(const std::string& name, std::shared_ptr<Shader> shader) : name(name), shader(shader) {}
-    virtual ~ShaderComponent() = default;
-    std::string name;
-    std::shared_ptr<Shader> shader;
-};
+    struct ShaderComponent {
+        ShaderComponent(const std::string& name, std::shared_ptr<Shader> shader) : name(name), shader(shader) {}
+        virtual ~ShaderComponent() = default;
+        std::string name;
+        std::shared_ptr<Shader> shader;
+    };
 } // namespace ce

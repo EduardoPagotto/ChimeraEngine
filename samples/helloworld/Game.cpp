@@ -1,9 +1,9 @@
 #include "Game.hpp"
+#include "chimera/base/Transform.hpp"
 #include "chimera/core/gl/FontMng.hpp"
 #include "chimera/core/gl/ShaderMng.hpp"
 #include "chimera/core/gl/TextureMng.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/Transform.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
@@ -40,10 +40,10 @@ void Game::onAttach() {
 
     // ApplicationGL::onAttach();
 
-    using namespace ce; // 26:10 -> https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96 (video
-                        // 96)
-                        // video 103 finaliza o pick mouse
-                        // colocar para rodar o scene como renderbuffer!!!!!!!!!
+    using namespace ce; // 26:10 ->
+                        // https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96
+                        // (video 96) video 103 finaliza o pick mouse colocar para rodar o scene como
+                        // renderbuffer!!!!!!!!!
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());

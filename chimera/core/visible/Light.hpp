@@ -1,5 +1,5 @@
 #pragma once
-#include "UValue.hpp"
+#include "chimera/base/UValue.hpp"
 #include "chimera/ecs/ecs.hpp"
 
 namespace ce {

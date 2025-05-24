@@ -1,7 +1,7 @@
 #include "chimera/collada/ColladaExtra.hpp"
+#include "chimera/base/ViewProjection.hpp"
 #include "chimera/collada/ColladaCam.hpp"
 #include "chimera/collada/ColladaEffect.hpp"
-#include "chimera/core/ViewProjection.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
 #include "chimera/core/gl/CanvasGL.hpp"
 #include "chimera/core/gl/FontMng.hpp"

@@ -1,9 +1,9 @@
 #include "chimera/collada/ColladaVisualScene.hpp"
+#include "chimera/base/Transform.hpp"
 #include "chimera/collada/ColladaCam.hpp"
 #include "chimera/collada/ColladaGeometry.hpp"
 #include "chimera/collada/ColladaLight.hpp"
 #include "chimera/collada/ColladaMaterial.hpp"
-#include "chimera/core/visible/Transform.hpp"
 #include "chimera/ecs/Entity.hpp"
 
 namespace ce {

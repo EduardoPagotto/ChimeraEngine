@@ -1,7 +1,7 @@
 #include "Game.hpp"
+#include "chimera/base/Keyboard.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/device/CanvasFB.hpp"
-#include "chimera/core/device/Keyboard.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {

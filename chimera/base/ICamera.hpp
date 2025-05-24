@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/ViewProjection.hpp"
+#include "ViewProjection.hpp"
 #include "chimera/ecs/ecs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 

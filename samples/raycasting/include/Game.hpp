@@ -1,6 +1,6 @@
 #pragma once
-#include "chimera/core/IStateMachine.hpp"
-#include "chimera/core/device/interfaces.hpp"
+#include "chimera/base/IStateMachine.hpp"
+#include "chimera/base/interfaces.hpp"
 #include "raycasting.hpp"
 
 class Game : public ce::IStateMachine {

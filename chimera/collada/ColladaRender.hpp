@@ -1,7 +1,7 @@
 #pragma once
+#include "chimera/base/ServiceLocator.hpp"
 #include "chimera/collada/ColladaDom.hpp"
-#include "chimera/core/ServiceLocator.hpp"
 
 namespace ce {
-void colladaRenderLoad(ColladaDom& dom);
+    void colladaRenderLoad(ColladaDom& dom);
 }

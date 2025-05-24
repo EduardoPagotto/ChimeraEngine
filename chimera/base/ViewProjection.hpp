@@ -51,10 +51,4 @@ namespace ce {
         uint8_t size{1};
         std::array<ViewProjectionMatrixs, 2> vpm;
     };
-
-    struct ViewProjectionComponent {
-        ViewProjectionComponent() = default;
-        IViewProjection* vp = nullptr;
-    };
-
 } // namespace ce

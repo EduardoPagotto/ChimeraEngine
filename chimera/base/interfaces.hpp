@@ -21,11 +21,6 @@ namespace ce {
         virtual const int getHeight() const = 0;
     };
 
-    struct CanvasComponent {
-        std::shared_ptr<ICanva> canvas = nullptr;
-        CanvasComponent() = default;
-    };
-
     class IMouse : public IService {
       public:
         virtual ~IMouse() noexcept = default;

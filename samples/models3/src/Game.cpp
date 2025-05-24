@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "chimera/core/gl/FontMng.hpp"
 #include "chimera/core/utils.hpp"
+#include "chimera/ecs/TransComponent.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include "chimera/render/scene/Components.hpp"
@@ -46,7 +47,8 @@ bool Game::onEvent(const SDL_Event& event) {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
                     // glm::vec3 val1 = pCorpoRigido->getPosition();
-                    // sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," + std::to_string(val1.z) + ")";
+                    // sPosicaoObj = "pos:(" + std::to_string(val1.x) + "," + std::to_string(val1.y) + "," +
+                    // std::to_string(val1.z) + ")";
                 } break;
                 default:
                     break;
@@ -150,14 +152,18 @@ void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {
             propLateral.x = -propulsaoLRUD;
 
         int16_t deadZone = 128;
-        glm::vec3 rotacao{scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTY), deadZone), 0x8000),  // pitch LEFTY
-                          scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTX), deadZone), 0x8000), // roll LEFTX
-                          scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTX), deadZone), 0x8000)}; // yaw RIGHTY
+        glm::vec3 rotacao{scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTY), deadZone),
+                                  0x8000), // pitch LEFTY
+                          scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTX), deadZone),
+                                  0x8000), // roll LEFTX
+                          scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTX), deadZone),
+                                  0x8000)}; // yaw RIGHTY
 
-        float acc = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTY), deadZone), 0x8000); // ACC RIGHTX
-        glm::vec3 throttle{0.0,                                                                                     // X
-                           -3.0f * (acc / 2),                                                                       // y
-                           0.0f};                                                                                   // z
+        float acc = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTY), deadZone),
+                            0x8000);          // ACC RIGHTX
+        glm::vec3 throttle{0.0,               // X
+                           -3.0f * (acc / 2), // y
+                           0.0f};             // z
 
         if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_A) == SDL_PRESSED)
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao A");

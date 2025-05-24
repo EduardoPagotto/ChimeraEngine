@@ -1,5 +1,5 @@
 #include "chimera/collada/ColladaParticle.hpp"
-#include "chimera/core/gl/ParticleEmitter.hpp"
+#include "chimera/ecs/EmitterComponent.hpp"
 
 namespace ce {
     void ColladaParticle::create(const std::string& id, const std::string& name, Entity& entity,

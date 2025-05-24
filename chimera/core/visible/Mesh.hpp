@@ -1,5 +1,4 @@
 #pragma once
-#include "chimera/ecs/ecs.hpp"
 #include "chimera/space/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <list>
@@ -20,14 +19,6 @@ namespace ce {
     };
 
     enum class MeshType { SIMPLE = 0, ARRAY = 1, BSTREE = 2 };
-
-    struct MeshComponent {
-        TagInfo tag;
-        MeshType type = MeshType::SIMPLE;
-        Mesh* mesh = new Mesh();
-        std::vector<TrisIndex> vTrisIndex;
-        MeshComponent() = default;
-    };
 
     MeshType getMeshTypeFromString(const std::string& text);
     void meshToTriangle(Mesh& m, std::list<std::shared_ptr<Triangle>>& vTris);

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
@@ -15,12 +14,6 @@ namespace ce {
         virtual void setPosition(const glm::vec3& pos) = 0;
         virtual void setRotation(const glm::vec3& rot) = 0;
         virtual void setMatrix(const glm::mat4& transform) = 0;
-    };
-
-    struct TransComponent {
-        ITrans* trans = nullptr;
-        bool solid = false;
-        TransComponent() = default;
     };
 
     class Transform : public ITrans {

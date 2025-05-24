@@ -1,6 +1,5 @@
 #pragma once
 #include "chimera/base/UValue.hpp"
-#include "chimera/ecs/ecs.hpp"
 
 namespace ce {
 
@@ -32,12 +31,4 @@ namespace ce {
         LightType type;
         MapUniform listProp;
     };
-
-    struct LightComponent {
-        TagInfo tag;
-        Light* light = new Light();
-        bool global = true;
-        LightComponent() = default;
-    };
-
 } // namespace ce

@@ -2,8 +2,9 @@
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/bullet/Solid.hpp"
 #include "chimera/core/utils.hpp"
-#include "chimera/core/visible/Mesh.hpp"
 #include "chimera/ecs/Entity.hpp"
+#include "chimera/ecs/MeshComponent.hpp"
+#include "chimera/ecs/TransComponent.hpp"
 #include <SDL2/SDL.h>
 
 namespace ce {

@@ -1,6 +1,6 @@
 #include "chimera/collada/ColladaHeightMap.hpp"
 #include "chimera/core/partition/LoadHeightMap.hpp"
-#include "chimera/core/visible/Mesh.hpp"
+#include "chimera/ecs/MeshComponent.hpp"
 
 namespace ce {
     void ColladaHeightMap::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {

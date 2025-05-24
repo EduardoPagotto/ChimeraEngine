@@ -23,11 +23,4 @@ namespace ce {
         const int32_t getUniform(const std::string& name) const noexcept;
         void setUniformU(const char* name, const UValue& uv) noexcept;
     };
-
-    struct ShaderComponent {
-        ShaderComponent(const std::string& name, std::shared_ptr<Shader> shader) : name(name), shader(shader) {}
-        virtual ~ShaderComponent() = default;
-        std::string name;
-        std::shared_ptr<Shader> shader;
-    };
 } // namespace ce

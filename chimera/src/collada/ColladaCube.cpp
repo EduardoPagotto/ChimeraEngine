@@ -1,6 +1,6 @@
 #include "chimera/collada/ColladaCube.hpp"
 #include "chimera/core/partition/Cube.hpp"
-#include "chimera/core/visible/Mesh.hpp"
+#include "chimera/ecs/MeshComponent.hpp"
 
 namespace ce {
     void ColladaCube::create(const std::string& id, const std::string& name, Entity& entity, pugi::xml_node geo) {

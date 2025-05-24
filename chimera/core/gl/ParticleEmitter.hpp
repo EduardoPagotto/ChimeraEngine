@@ -1,7 +1,6 @@
 #pragma once
 #include "chimera/base/ICamera.hpp"
 #include "chimera/core/gl/OpenGLDefs.hpp"
-#include "chimera/ecs/ecs.hpp" // mudat depois quando fizer o particleComponent
 #include "chimera/space/AABB.hpp"
 #include <vector>
 
@@ -62,11 +61,4 @@ namespace ce {
         glm::vec3 maindir;
         float spread;
     };
-
-    struct EmitterComponent {
-        IEmitter* emitter;
-        TagInfo tag;
-        EmitterComponent() : emitter(nullptr) {}
-    };
-
 } // namespace ce

@@ -1,7 +1,7 @@
 #pragma once
 #pragma clang diagnostic ignored "-Wunused-but-set-variable"
 #include "PhysicsControl.hpp"
-#include "chimera/base/ITrans.hpp"
+#include "chimera/base/Transform.hpp"
 #include <BulletCollision/CollisionShapes/btMaterial.h>
 #include <BulletCollision/Gimpact/btGImpactShape.h>
 #include <btBulletCollisionCommon.h>

@@ -1,8 +1,8 @@
 #pragma once
 #include "chimera/base/ICamera.hpp"
 #include "chimera/base/IStateMachine.hpp"
-#include "chimera/base/ITrans.hpp"
 #include "chimera/base/StateStack.hpp"
+#include "chimera/base/Transform.hpp"
 #include "chimera/base/interfaces.hpp"
 #include "chimera/core/bullet/interfaces.hpp"
 #include "chimera/core/gl/ParticleEmitter.hpp"

@@ -1,5 +1,6 @@
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
 #include "chimera/base/Keyboard.hpp"
+#include "chimera/ecs/CameraComponent.hpp"
 
 namespace ce {
 

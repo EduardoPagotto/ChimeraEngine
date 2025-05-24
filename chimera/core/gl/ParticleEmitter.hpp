@@ -1,6 +1,7 @@
 #pragma once
 #include "chimera/base/ICamera.hpp"
 #include "chimera/core/gl/OpenGLDefs.hpp"
+#include "chimera/ecs/ecs.hpp" // mudat depois quando fizer o particleComponent
 #include "chimera/space/AABB.hpp"
 #include <vector>
 

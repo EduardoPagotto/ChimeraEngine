@@ -1,6 +1,6 @@
 #include "chimera/collada/ColladaCam.hpp"
-#include "chimera/base/ICamera.hpp"
 #include "chimera/base/Transform.hpp"
+#include "chimera/ecs/CameraComponent.hpp"
 
 namespace ce {
     void ColladaCam::createExtra(Entity& entity, pugi::xml_node node) { // FIXME: remover entity e usar o serviceLoc

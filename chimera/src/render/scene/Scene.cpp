@@ -9,6 +9,7 @@
 #include "chimera/core/visible/CameraControllerFPS.hpp"
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
 #include "chimera/core/visible/Light.hpp"
+#include "chimera/ecs/CameraComponent.hpp"
 #include "chimera/render/2d/Tile.hpp"
 #include "chimera/render/3d/RenderableArray.hpp"
 #include "chimera/render/3d/RenderableBsp.hpp"

@@ -1,6 +1,5 @@
 #pragma once
 #include "ViewProjection.hpp"
-#include "chimera/ecs/ecs.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace ce {
@@ -53,17 +52,5 @@ namespace ce {
 
       private:
         float fov = CAMERA_MAX_FOV, near = 0.1f, far = 1000.0f;
-    };
-
-    struct CameraComponent {
-        TagInfo tag;
-        Camera* camera = nullptr;
-        bool primary = true;
-        bool fixedAspectRatio = false;
-        CamKind camKind = CamKind::STATIC;
-        float pitch = 0.0f, yaw = 90.0f, min = 0.5f, max = 1000.0f;
-        glm::vec3 up = glm::vec3(0, 1, 0);
-        CameraComponent() = default;
-        CameraComponent(const CameraComponent& o) = default;
     };
 } // namespace ce

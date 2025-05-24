@@ -1,7 +1,7 @@
 #pragma once
 #include "chimera/base/ICamera.hpp"
 #include "chimera/base/TransformationStack.hpp"
-#include "chimera/base/UValue.hpp"
+#include "chimera/base/Uniform.hpp"
 #include <vector>
 
 namespace ce {

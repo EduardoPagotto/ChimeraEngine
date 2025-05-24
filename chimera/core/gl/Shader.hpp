@@ -21,6 +21,6 @@ namespace ce {
         const bool operator!=(const Shader& other) const noexcept { return !(*this == other); }
         const uint32_t getID() const noexcept { return this->progID; }
         const int32_t getUniform(const std::string& name) const noexcept;
-        void setUniformU(const char* name, const UValue& uv) noexcept;
+        void setUniformU(const char* name, const Uniform& uv) noexcept;
     };
 } // namespace ce

@@ -287,8 +287,8 @@ namespace ce {
                 RenderCommand command;
                 command.transform = tc.trans->translateSrc(origem->getPosition());
                 command.shader = shadowData.shader;
-                command.uniforms["model"] = UValue(command.transform);
-                command.uniforms["lightSpaceMatrix"] = UValue(shadowData.lightSpaceMatrix);
+                command.uniforms["model"] = Uniform(command.transform);
+                command.uniforms["lightSpaceMatrix"] = Uniform(shadowData.lightSpaceMatrix);
                 rc.renderable->submit(command, renderer);
             }
         }
@@ -317,11 +317,11 @@ namespace ce {
             mc.material->bindMaterialInformation(command.uniforms, command.vTex);
 
             const glm::mat4& view = vpo->getSel().view;
-            command.uniforms["projection"] = UValue(renderer.getCamera()->getProjection());
-            command.uniforms["view"] = UValue(view);
-            command.uniforms["CameraRight_worldspace"] = UValue(glm::vec3(view[0][0], view[1][0], view[2][0]));
-            command.uniforms["CameraUp_worldspace"] = UValue(glm::vec3(view[0][1], view[1][1], view[2][1]));
-            command.uniforms["model"] = UValue(command.transform);
+            command.uniforms["projection"] = Uniform(renderer.getCamera()->getProjection());
+            command.uniforms["view"] = Uniform(view);
+            command.uniforms["CameraRight_worldspace"] = Uniform(glm::vec3(view[0][0], view[1][0], view[2][0]));
+            command.uniforms["CameraUp_worldspace"] = Uniform(glm::vec3(view[0][1], view[1][1], view[2][1]));
+            command.uniforms["model"] = Uniform(command.transform);
             renderable->submit(command, renderer);
         }
     }
@@ -338,7 +338,7 @@ namespace ce {
             command.transform = tc.trans->translateSrc(origem->getPosition());
             command.shader = sc.shader;
             mc.material->bindMaterialInformation(command.uniforms, command.vTex);
-            command.uniforms["model"] = UValue(command.transform);
+            command.uniforms["model"] = Uniform(command.transform);
             rc.renderable->submit(command, renderer);
         }
     }
@@ -362,15 +362,15 @@ namespace ce {
             count++;
 
             // data load used by all
-            renderer.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-            renderer.uboQueue().insert(std::make_pair("view", UValue(vpo->getSel().view)));
+            renderer.uboQueue().insert(std::make_pair("projection", Uniform(activeCam->getProjection())));
+            renderer.uboQueue().insert(std::make_pair("view", Uniform(vpo->getSel().view)));
 
             // data load shadows props to renderer in shade of models!!!!
             if (shadowData.shadowBuffer) {
-                renderer.uboQueue().insert(std::make_pair("viewPos", UValue(activeCam->getPosition())));
-                renderer.uboQueue().insert(std::make_pair("shadows", UValue(1)));
-                renderer.uboQueue().insert(std::make_pair("shadowMap", UValue(1)));
-                renderer.uboQueue().insert(std::make_pair("lightSpaceMatrix", UValue(shadowData.lightSpaceMatrix)));
+                renderer.uboQueue().insert(std::make_pair("viewPos", Uniform(activeCam->getPosition())));
+                renderer.uboQueue().insert(std::make_pair("shadows", Uniform(1)));
+                renderer.uboQueue().insert(std::make_pair("shadowMap", Uniform(1)));
+                renderer.uboQueue().insert(std::make_pair("lightSpaceMatrix", Uniform(shadowData.lightSpaceMatrix)));
                 renderer.texQueue().push_back(shadowData.shadowBuffer->getDepthAttachemnt());
             }
 
@@ -426,8 +426,8 @@ namespace ce {
                         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Octree Size: %ld", list.size());
 
                         MapUniform muni;
-                        muni["projection"] = UValue(activeCam->getProjection());
-                        muni["view"] = UValue(vpo->getSel().view);
+                        muni["projection"] = Uniform(activeCam->getProjection());
+                        muni["view"] = Uniform(vpo->getSel().view);
                         dl.render(muni);
                     }
 
@@ -444,8 +444,8 @@ namespace ce {
 
                     renderLines.begin(activeCam, vpo.get(), nullptr);
 
-                    renderLines.uboQueue().insert(std::make_pair("projection", UValue(activeCam->getProjection())));
-                    renderLines.uboQueue().insert(std::make_pair("view", UValue(vpo->getSel().view)));
+                    renderLines.uboQueue().insert(std::make_pair("projection", Uniform(activeCam->getProjection())));
+                    renderLines.uboQueue().insert(std::make_pair("view", Uniform(vpo->getSel().view)));
 
                     auto group = g_registry.get().group<TransComponent, Renderable3dComponent>();
                     for (auto entity : group) {

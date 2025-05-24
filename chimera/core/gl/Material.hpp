@@ -24,11 +24,11 @@ namespace ce {
         void addTexture(const std::string& uniformTexName, std::shared_ptr<Texture> texture) {
             this->mapTex[uniformTexName] = texture;
         }
-        inline void setAmbient(const glm::vec4& _color) { listMaterial[SHADE_MAT_AMBIENTE] = UValue(_color); }
-        inline void setSpecular(const glm::vec4& _color) { listMaterial[SHADE_MAT_SPECULA] = UValue(_color); }
-        inline void setDiffuse(const glm::vec4& _color) { listMaterial[SHADE_MAT_DIFFUSE] = UValue(_color); }
-        inline void setEmission(const glm::vec4& _color) { listMaterial[SHADE_MAT_EMISSIVE] = UValue(_color); }
-        inline void setShine(const float& _val) { listMaterial[SHADE_MAT_SHININESS] = UValue(_val); }
+        inline void setAmbient(const glm::vec4& _color) { listMaterial[SHADE_MAT_AMBIENTE] = Uniform(_color); }
+        inline void setSpecular(const glm::vec4& _color) { listMaterial[SHADE_MAT_SPECULA] = Uniform(_color); }
+        inline void setDiffuse(const glm::vec4& _color) { listMaterial[SHADE_MAT_DIFFUSE] = Uniform(_color); }
+        inline void setEmission(const glm::vec4& _color) { listMaterial[SHADE_MAT_EMISSIVE] = Uniform(_color); }
+        inline void setShine(const float& _val) { listMaterial[SHADE_MAT_SHININESS] = Uniform(_val); }
 
         bool hasTexture() { return !mapTex.empty(); }
         void bindMaterialInformation(MapUniform& uniforms, std::vector<std::shared_ptr<Texture>>& vTex);

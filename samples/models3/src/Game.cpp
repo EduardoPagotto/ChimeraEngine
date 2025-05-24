@@ -4,7 +4,7 @@
 #include "chimera/ecs/TransComponent.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
-#include "chimera/render/scene/Components.hpp"
+#include "chimera/render/2d/Tile.hpp"
 
 Game::Game(ce::Scene* scene) : IStateMachine("Game"), scene(scene), pCorpoRigido(nullptr) {
     using namespace ce;

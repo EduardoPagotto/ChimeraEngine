@@ -11,6 +11,7 @@
 #include "chimera/ecs/LightComponent.hpp"
 #include "chimera/ecs/MaterialComponent.hpp"
 #include "chimera/ecs/MeshComponent.hpp"
+#include "chimera/ecs/Renderable3dComponent.hpp"
 #include "chimera/ecs/ShaderComponent.hpp"
 #include "chimera/ecs/TransComponent.hpp"
 #include "chimera/render/2d/Tile.hpp"
@@ -19,7 +20,6 @@
 #include "chimera/render/3d/RenderableMesh.hpp"
 #include "chimera/render/3d/RenderableParticles.hpp"
 #include "chimera/render/3d/Renderer3d.hpp"
-#include "chimera/render/scene/Components.hpp"
 
 namespace ce {
 

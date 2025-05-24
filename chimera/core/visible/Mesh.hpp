@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/core/TagComponent.hpp"
+#include "chimera/ecs/ecs.hpp"
 #include "chimera/space/Triangle.hpp"
 #include <glm/glm.hpp>
 #include <list>
@@ -22,7 +22,7 @@ namespace ce {
     enum class MeshType { SIMPLE = 0, ARRAY = 1, BSTREE = 2 };
 
     struct MeshComponent {
-        TagComponent tag;
+        TagInfo tag;
         MeshType type = MeshType::SIMPLE;
         Mesh* mesh = new Mesh();
         std::vector<TrisIndex> vTrisIndex;

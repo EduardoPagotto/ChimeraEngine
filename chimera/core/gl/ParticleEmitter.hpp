@@ -64,7 +64,7 @@ namespace ce {
 
     struct EmitterComponent {
         IEmitter* emitter;
-        TagComponent tag;
+        TagInfo tag;
         EmitterComponent() : emitter(nullptr) {}
     };
 

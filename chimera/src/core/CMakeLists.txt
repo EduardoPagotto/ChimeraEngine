@@ -10,8 +10,7 @@ if (BULLET_SET_TO_USE)
 endif(BULLET_SET_TO_USE)
 
 # define objetos a compilar
-set (SourceFiles Registry.cpp
-				 utils.cpp
+set (SourceFiles utils.cpp
 				 Engine.cpp
 				 device/CanvasFB.cpp
 				 gl/CanvasGL.cpp

@@ -5,25 +5,25 @@
 
 namespace ce {
 
-struct SpriteComponent {
-    glm::vec4 color;
-    SpriteComponent(const glm::vec4& color) : color(color) {} // 15:07
-    SpriteComponent(const SpriteComponent& other) = default;
-};
+    struct SpriteComponent {
+        glm::vec4 color;
+        SpriteComponent(const glm::vec4& color) : color(color) {} // 15:07
+        SpriteComponent(const SpriteComponent& other) = default;
+    };
 
-struct Renderable3dComponent {
-    IRenderable3d* renderable;
-};
+    struct Renderable3dComponent {
+        IRenderable3d* renderable;
+    };
 
-struct RenderableParticlesComponent {
-    IRenderable3d* renderable;
-    bool enable;
-};
+    struct RenderableParticlesComponent {
+        IRenderable3d* renderable;
+        bool enable;
+    };
 
-struct ComponentTile {
-    TagComponent tag;
-    Tile* tile = nullptr;
-    ComponentTile() = default;
-};
+    struct ComponentTile {
+        TagInfo tag;
+        Tile* tile = nullptr;
+        ComponentTile() = default;
+    };
 
 } // namespace ce

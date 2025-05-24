@@ -1,6 +1,5 @@
 #pragma once
 #include "chimera/core/IStateMachine.hpp"
-#include "chimera/core/Registry.hpp"
 #include "chimera/core/StateStack.hpp"
 #include "chimera/core/bullet/interfaces.hpp"
 #include "chimera/core/device/interfaces.hpp"
@@ -8,6 +7,7 @@
 #include "chimera/core/gl/buffer/RenderBuffer.hpp"
 #include "chimera/core/visible/ICamera.hpp"
 #include "chimera/core/visible/ITrans.hpp"
+#include "chimera/ecs/Entity.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include "chimera/render/3d/IRenderable3d.hpp"
 #include "chimera/render/3d/Renderer3dLines.hpp"

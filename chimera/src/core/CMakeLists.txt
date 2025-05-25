@@ -10,8 +10,7 @@ if (BULLET_SET_TO_USE)
 endif(BULLET_SET_TO_USE)
 
 # define objetos a compilar
-set (SourceFiles utils.cpp
-				 device/CanvasFB.cpp
+set (SourceFiles device/CanvasFB.cpp
 				 gl/CanvasGL.cpp
 				 gl/buffer/IndexBuffer.cpp
 				 gl/buffer/VertexArray.cpp

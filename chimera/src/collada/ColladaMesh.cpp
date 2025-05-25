@@ -1,6 +1,6 @@
 #include "chimera/collada/ColladaMesh.hpp"
+#include "chimera/base/utils.hpp"
 #include "chimera/core/gl/ParticleEmitter.hpp"
-#include "chimera/core/utils.hpp"
 #include "chimera/ecs/MeshComponent.hpp"
 
 namespace ce {

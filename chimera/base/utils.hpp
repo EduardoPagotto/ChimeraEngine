@@ -1,10 +1,20 @@
-#include "chimera/core/utils.hpp"
+#pragma once
+#include <SDL2/SDL.h>
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <vector>
 
 namespace ce {
 
-    void utilsReadFile(const std::string& filepath, std::string& result) {
+    inline int16_t dead16(const int16_t& vIn, const int16_t& deadzone) {
+        return (vIn + (vIn >> 16) ^ (vIn >> 16)) > deadzone ? vIn : 0;
+    }
+    inline float scale16(const int16_t& value, const int16_t& limit) {
+        return value >= 0 ? (float)value / (limit - 1) : (float)value / limit;
+    }
+
+    inline void utilsReadFile(const std::string& filepath, std::string& result) {
         std::ifstream in(filepath, std::ios::in | std::ios::binary);
         if (in) {
             in.seekg(0, std::ios::end);
@@ -18,7 +28,7 @@ namespace ce {
         }
     }
 
-    std::string extractNameByFile(const std::string& filepath) {
+    inline std::string extractNameByFile(const std::string& filepath) {
         auto lastSlash = filepath.find_last_of("/\\");
         lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
 
@@ -27,14 +37,14 @@ namespace ce {
         return filepath.substr(lastSlash, count);
     }
 
-    void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) {
+    inline void textToStringArray(const std::string& sIn, std::vector<std::string>& vOut, char delimiter) {
         std::string token;
         std::istringstream tokenStream(sIn);
         while (std::getline(tokenStream, token, delimiter))
             vOut.push_back(token);
     }
 
-    void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat) {
+    inline void textToFloatArray(const std::string& text, std::vector<float>& arrayFloat) {
         std::vector<std::string> textData;
         textToStringArray(text, textData, ' ');
         for (const std::string& val : textData) {
@@ -43,7 +53,7 @@ namespace ce {
         }
     }
 
-    void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI) {
+    inline void textToUIntArray(const std::string& text, std::vector<uint32_t>& arrayI) {
         std::vector<std::string> textData;
         textToStringArray(text, textData, ' ');
         for (const std::string& val : textData)

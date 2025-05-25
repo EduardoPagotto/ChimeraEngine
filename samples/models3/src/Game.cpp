@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "chimera/base/event.hpp"
+#include "chimera/base/utils.hpp"
 #include "chimera/core/gl/FontMng.hpp"
-#include "chimera/core/utils.hpp"
 #include "chimera/ecs/TransComponent.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"

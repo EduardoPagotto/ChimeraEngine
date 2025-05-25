@@ -1,7 +1,7 @@
 #include "chimera/collada/ColladaPhysicScene.hpp"
+#include "chimera/base/utils.hpp"
 #include "chimera/core/bullet/PhysicsControl.hpp"
 #include "chimera/core/bullet/Solid.hpp"
-#include "chimera/core/utils.hpp"
 #include "chimera/ecs/Entity.hpp"
 #include "chimera/ecs/MeshComponent.hpp"
 #include "chimera/ecs/TransComponent.hpp"

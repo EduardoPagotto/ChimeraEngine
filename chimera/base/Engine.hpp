@@ -1,9 +1,9 @@
 #pragma once
+#include "ServiceLocator.hpp"
+#include "StateStack.hpp"
 #include "Timer.hpp"
-#include "chimera/base/ServiceLocator.hpp"
-#include "chimera/base/StateStack.hpp"
-#include "chimera/base/event.hpp"
-#include "chimera/base/interfaces.hpp"
+#include "event.hpp"
+#include "interfaces.hpp"
 
 namespace ce {
 

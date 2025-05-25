@@ -1,9 +1,9 @@
 #include "Game.hpp"
 #include "chimera/base/Transform.hpp"
+#include "chimera/base/event.hpp"
 #include "chimera/core/gl/FontMng.hpp"
 #include "chimera/core/gl/ShaderMng.hpp"
 #include "chimera/core/gl/TextureMng.hpp"
-#include "chimera/core/utils.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>

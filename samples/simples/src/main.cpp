@@ -3,11 +3,11 @@
 #include "chimera/base/Joystick.hpp"
 #include "chimera/base/Keyboard.hpp"
 #include "chimera/base/ServiceLocator.hpp"
+#include "chimera/base/event.hpp"
 #include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/Engine.hpp"
 #include "chimera/core/gl/CanvasGL.hpp"
 #include "chimera/core/gl/ShaderMng.hpp"
-#include "chimera/core/utils.hpp"
 #include "chimera/render/scene/Scene.hpp"
 
 Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }

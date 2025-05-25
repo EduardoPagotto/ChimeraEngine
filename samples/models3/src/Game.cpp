@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "chimera/base/event.hpp"
 #include "chimera/core/gl/FontMng.hpp"
 #include "chimera/core/utils.hpp"
 #include "chimera/ecs/TransComponent.hpp"

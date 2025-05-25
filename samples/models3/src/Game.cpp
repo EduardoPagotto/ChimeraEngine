@@ -59,10 +59,10 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_KEYDOWN: {
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
+                    utilSendEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_F10:
-                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    utilSendEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
                 case SDLK_UP:
                     pCorpoRigido->applyForce(glm::vec3(10.0, 0.0, 0.0));
@@ -89,10 +89,10 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
                 case SDL_WINDOWEVENT_ENTER:
-                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    utilSendEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
                     break;
                 case SDL_WINDOWEVENT_LEAVE:
-                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    utilSendEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
             }
         } break;

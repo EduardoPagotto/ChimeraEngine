@@ -43,10 +43,10 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
                 case SDL_WINDOWEVENT_ENTER:
-                    ce::utilSendEvent(ce::EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    ce::utilSendEvent(ce::EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
                     break;
                 case SDL_WINDOWEVENT_LEAVE:
-                    ce::utilSendEvent(ce::EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    ce::utilSendEvent(ce::EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
             }
         } break;
@@ -58,12 +58,12 @@ void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {
     using namespace ce;
 
     if (keyboard->isPressed(SDLK_ESCAPE)) {
-        ce::utilSendEvent(ce::EVENT_FLOW_STOP, nullptr, nullptr);
+        ce::utilSendEvent(ce::EventCE::FLOW_STOP, nullptr, nullptr);
         return;
     }
 
     if (keyboard->isPressed(SDLK_F10)) {
-        ce::utilSendEvent(ce::EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+        ce::utilSendEvent(ce::EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
         return;
     }
 

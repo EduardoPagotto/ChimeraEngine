@@ -130,7 +130,7 @@ void Game::onAttach() {
 
 void Game::onDeatach() {}
 
-void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {
+void Game::onUpdate(const double& ts) {
     using namespace ce;
 
     if (pCorpoRigido)

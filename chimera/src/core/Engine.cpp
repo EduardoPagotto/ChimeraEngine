@@ -9,15 +9,10 @@ namespace ce {
         timerFPS.start();
 
         canvas = g_service_locator.getService<ICanva>();
-        vp = g_service_locator.getService<IViewProjection>();
-
         SDL_Log("Engine Register: chimera_engine OK");
     }
 
-    Engine::~Engine() {
-        canvas = nullptr;
-        vp = nullptr;
-    }
+    Engine::~Engine() { canvas.reset(); }
 
     void Engine::run(void) {
         SDL_Event event;
@@ -80,7 +75,7 @@ namespace ce {
             ts = (double)countDelta / 1000.0f;
             if (!pause) { // update game
                 for (auto it = stack.begin(); it != stack.end(); it++)
-                    (*it)->onUpdate(*vp.get(), ts);
+                    (*it)->onUpdate(ts);
 
                 canvas->before();
                 for (auto it = stack.begin(); it != stack.end(); it++)

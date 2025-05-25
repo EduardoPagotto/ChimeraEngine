@@ -25,7 +25,7 @@ namespace ce {
     class Entity;
     class Scene : public IStateMachine {
       private:
-        std::shared_ptr<IViewProjection> vpo;
+        std::shared_ptr<ViewProjection> vpo;
         std::shared_ptr<IPhysicsControl> phyCrt;
 
         StateStack layers;
@@ -55,7 +55,7 @@ namespace ce {
         virtual void onAttach() override;
         virtual void onDeatach() override;
         virtual void onRender() override;
-        virtual void onUpdate(IViewProjection& vp, const double& ts) override;
+        virtual void onUpdate(const double& ts) override;
         virtual bool onEvent(const SDL_Event& event) override;
 
       private:

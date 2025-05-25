@@ -7,6 +7,7 @@ namespace ce {
 
     CameraControllerFPS::CameraControllerFPS(Entity entity) : IStateMachine("FPS"), entity(entity) {
 
+        vp = g_service_locator.getService<ViewProjection>();
         mouse = g_service_locator.getService<IMouse>();
         keyboard = g_service_locator.getService<IKeyboard>();
         gameControl = g_service_locator.getService<IGameController>();
@@ -33,19 +34,20 @@ namespace ce {
 
     void CameraControllerFPS::onDeatach() {}
 
-    void CameraControllerFPS::updateVP(IViewProjection& vp) {
-        if (vp.getSize() == 1) {
-            vp.getLeft().update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up),
-                                camera->getProjection());
+    void CameraControllerFPS::updateVP() {
+        if (vp->getSize() == 1) {
+            vp->getLeft().update(glm::lookAt(camera->getPosition(), camera->getPosition() + front, up),
+                                 camera->getProjection());
         } else {
-            glm::vec3 cross1 = glm::cross(up, front);     // up and front already are  vectors!!!!
-            glm::vec3 norm1 = glm::normalize(cross1);     // vector side (would be left or right)
-            glm::vec3 final_norm1 = norm1 * vp.getNoze(); // point of eye
+            glm::vec3 cross1 = glm::cross(up, front);      // up and front already are  vectors!!!!
+            glm::vec3 norm1 = glm::normalize(cross1);      // vector side (would be left or right)
+            glm::vec3 final_norm1 = norm1 * vp->getNoze(); // point of eye
             glm::vec3 novaPositionL = camera->getPosition() + final_norm1;
             glm::vec3 novaPositionR = camera->getPosition() - final_norm1;
-            vp.getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front, up), camera->getProjection()); // Left
-            vp.getRight().update(glm::lookAt(novaPositionR, novaPositionR + front, up),
-                                 camera->getProjection()); // Right
+            vp->getLeft().update(glm::lookAt(novaPositionL, novaPositionL + front, up),
+                                 camera->getProjection()); // Left
+            vp->getRight().update(glm::lookAt(novaPositionR, novaPositionR + front, up),
+                                  camera->getProjection()); // Right
         }
     }
 
@@ -79,7 +81,7 @@ namespace ce {
         camera->setPosition(camera->getPosition() + direction * velocity);
     }
 
-    void CameraControllerFPS::onUpdate(IViewProjection& vp, const double& ts) {
+    void CameraControllerFPS::onUpdate(const double& ts) {
         // Movement speed
         if (keyboard->isPressed(SDLK_LSHIFT)) // acelerar mover
             movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;
@@ -146,7 +148,7 @@ namespace ce {
 
         processCameraRotation(mouseXDelta, mouseYDelta, true);
         updateVectors();
-        this->updateVP(vp);
+        this->updateVP();
     }
 
     void CameraControllerFPS::invertPitch() {

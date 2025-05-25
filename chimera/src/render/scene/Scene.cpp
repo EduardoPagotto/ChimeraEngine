@@ -76,7 +76,7 @@ namespace ce {
 
     void Scene::onAttach() {
         // Pega o ViewProjection do ECS antes da camera por caussa do vpo
-        vpo = g_service_locator.getService<IViewProjection>();
+        vpo = g_service_locator.getService<ViewProjection>();
         phyCrt = g_service_locator.getServiceOrNull<IPhysicsControl>();
 
         // Totalizadores de area
@@ -202,7 +202,7 @@ namespace ce {
         sceneAABB.setBoundary(tot_min, tot_max);
     }
 
-    void Scene::onUpdate(IViewProjection& vp, const double& ts) {
+    void Scene::onUpdate(const double& ts) {
 
         if (phyCrt) {
             phyCrt->stepSim(ts);
@@ -213,7 +213,7 @@ namespace ce {
             emissor->recycleLife(ts);
 
         for (auto it = layers.begin(); it != layers.end(); it++)
-            (*it)->onUpdate(vp, ts);
+            (*it)->onUpdate(ts);
 
         createOctree(sceneAABB);
     }

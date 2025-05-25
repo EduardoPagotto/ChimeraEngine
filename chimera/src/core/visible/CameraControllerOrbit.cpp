@@ -6,6 +6,7 @@ namespace ce {
 
     CameraControllerOrbit::CameraControllerOrbit(Entity entity) : IStateMachine("Orbit"), entity(entity) {
 
+        vp = g_service_locator.getService<ViewProjection>();
         mouse = g_service_locator.getService<IMouse>();
     }
 
@@ -26,23 +27,23 @@ namespace ce {
 
     void CameraControllerOrbit::onDeatach() {}
 
-    void CameraControllerOrbit::updateVP(IViewProjection& vp) {
-        if (vp.getSize() == 1) {
-            vp.getLeft().update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
+    void CameraControllerOrbit::updateVP() {
+        if (vp->getSize() == 1) {
+            vp->getLeft().update(glm::lookAt(camera->getPosition(), front, up), camera->getProjection());
         } else {
             glm::vec3 novaPositionL, novaFrontL, novaPositionR, novaFrontR;
             glm::vec3 left_p = front - camera->getPosition(); // front and position as points
             glm::vec3 cross1 = glm::cross(up, left_p);
             glm::vec3 norm1 = glm::normalize(cross1);
-            glm::vec3 final_norm1 = norm1 * vp.getNoze();
+            glm::vec3 final_norm1 = norm1 * vp->getNoze();
 
             novaPositionL = camera->getPosition() + final_norm1;
             novaFrontL = front + final_norm1;
-            vp.getLeft().update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
+            vp->getLeft().update(glm::lookAt(novaPositionL, novaFrontL, up), camera->getProjection()); // Left
 
             novaPositionR = camera->getPosition() - final_norm1;
             novaFrontR = front - final_norm1;
-            vp.getRight().update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
+            vp->getRight().update(glm::lookAt(novaPositionR, novaFrontR, up), camera->getProjection()); // Right
         }
     }
 
@@ -97,7 +98,7 @@ namespace ce {
         }
     }
 
-    void CameraControllerOrbit::onUpdate(IViewProjection& vp, const double& ts) {
+    void CameraControllerOrbit::onUpdate(const double& ts) {
         if (mouse->getButtonState(1) == SDL_PRESSED) {
             glm::ivec2 mouseMove = mouse->getMoveRel();
             this->processCameraRotation(mouseMove.x, mouseMove.y);
@@ -108,7 +109,7 @@ namespace ce {
         }
 
         this->updateVectors();
-        this->updateVP(vp);
+        this->updateVP();
     }
 
     void CameraControllerOrbit::invertPitch() {

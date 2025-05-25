@@ -15,7 +15,7 @@ namespace ce {
         Renderer3dLines() noexcept = default;
         virtual ~Renderer3dLines() noexcept { destroy(); };
 
-        virtual void begin(Camera* camera, IViewProjection* vpo, Octree* octree) override;
+        virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) override;
         virtual void submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) override;
         virtual void end() override;
         virtual void flush() override;

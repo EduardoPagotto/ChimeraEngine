@@ -31,16 +31,16 @@ namespace ce {
                 switch (event.type) {
                     case SDL_USEREVENT: {
 
-                        switch (event.user.code) {
-                            case EVENT_FLOW_PAUSE: {
+                        switch (static_cast<EventCE>(event.user.code)) {
+                            case EventCE::FLOW_PAUSE: {
                                 pause = true;
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Paused Receive");
                             } break;
-                            case EVENT_FLOW_RESUME: {
+                            case EventCE::FLOW_RESUME: {
                                 pause = false;
                                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Resume Receive");
                             } break;
-                            case EVENT_FLOW_STOP: {
+                            case EventCE::FLOW_STOP: {
                                 SDL_Event l_eventQuit;
                                 l_eventQuit.type = SDL_QUIT;
                                 if (SDL_PushEvent(&l_eventQuit) == -1) {
@@ -48,7 +48,7 @@ namespace ce {
                                                  SDL_GetError());
                                 }
                             } break;
-                            case EVENT_TOGGLE_FULL_SCREEN:
+                            case EventCE::TOGGLE_FULL_SCREEN:
                                 canvas->toggleFullScreen();
                                 break;
                             default:

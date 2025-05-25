@@ -1,8 +1,8 @@
 #include "Game.hpp"
+#include "chimera/base/CanvasFB.hpp"
 #include "chimera/base/Engine.hpp"
 #include "chimera/base/Keyboard.hpp"
 #include "chimera/base/ViewProjection.hpp"
-#include "chimera/core/device/CanvasFB.hpp"
 #include <iostream>
 
 int main(int argn, char** argv) {

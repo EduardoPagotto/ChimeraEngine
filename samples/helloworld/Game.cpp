@@ -83,8 +83,9 @@ bool Game::onEvent(const SDL_Event& event) {
 
     switch (event.type) {
         case SDL_USEREVENT: {
-            switch (event.user.code) {
-                case EVENT_NEW_FPS: {
+#pragma clang diagnostic ignored "-Wswitch"
+            switch (static_cast<EventCE>(event.user.code)) {
+                case EventCE::NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
                     SDL_Log("FPS: %d", fps);

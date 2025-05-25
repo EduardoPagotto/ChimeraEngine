@@ -43,11 +43,11 @@ namespace ce {
     const int32_t EVENT_FLOW_PAUSE = 0x0002;         // set to pause game
     const int32_t EVENT_FLOW_RESUME = 0x0003;        // set to resume game
     const int32_t EVENT_FLOW_STOP = 0x0004;          // run finalize game
-    const int32_t EVENT_NEW_FPS = 0x0005;            // OFF_COLLIDE
-    const int32_t EVENT_COLLIDE_IS_ALLOW = 0x1000;   // IS_ALLOW_COLLIDE
-    const int32_t EVENT_COLLIDE_START = 0x1001;      // START_COLLIDE
-    const int32_t EVENT_COLLIDE_ON = 0x1002;         // ON_COLLIDE
-    const int32_t EVENT_COLLIDE_OFF = 0x1003;        // OFF_COLLIDE
+    // const int32_t EVENT_NEW_FPS = 0x0005;            // OFF_COLLIDE
+    // const int32_t EVENT_COLLIDE_IS_ALLOW = 0x1000; // IS_ALLOW_COLLIDE
+    // const int32_t EVENT_COLLIDE_START = 0x1001;    // START_COLLIDE
+    // const int32_t EVENT_COLLIDE_ON = 0x1002;       // ON_COLLIDE
+    // const int32_t EVENT_COLLIDE_OFF = 0x1003;      // OFF_COLLIDE
     /**
      * Enum KindOp
      *  @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>

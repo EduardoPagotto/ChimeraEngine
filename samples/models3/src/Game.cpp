@@ -28,23 +28,23 @@ bool Game::onEvent(const SDL_Event& event) {
 
     switch (event.type) {
         case SDL_USEREVENT: {
-            switch (event.user.code) {
-                case ce::EVENT_COLLIDE_START: {
+            switch (static_cast<EventCE>(event.user.code)) {
+                case ce::EventCE::COLLIDE_START: {
                     uint32_t* n1 = (uint32_t*)event.user.data1;
                     uint32_t* n2 = (uint32_t*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao start: %d -> %d", *n1, *n2);
                 } break;
-                case ce::EVENT_COLLIDE_ON: {
+                case ce::EventCE::COLLIDE_ON: {
                     uint32_t* n1 = (uint32_t*)event.user.data1;
                     uint32_t* n2 = (uint32_t*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao ON: %d -> %d", *n1, *n2);
                 } break;
-                case ce::EVENT_COLLIDE_OFF: {
+                case ce::EventCE::COLLIDE_OFF: {
                     uint32_t* n1 = (uint32_t*)event.user.data1;
                     uint32_t* n2 = (uint32_t*)event.user.data2;
                     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Colisao OFF: %d -> %d", *n1, *n2);
                 } break;
-                case ce::EVENT_NEW_FPS: {
+                case ce::EventCE::NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
                     // glm::vec3 val1 = pCorpoRigido->getPosition();

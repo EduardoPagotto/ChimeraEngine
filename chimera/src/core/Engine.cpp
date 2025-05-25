@@ -91,7 +91,7 @@ namespace ce {
 
             if (timerFPS.stepCount() == true) { // count FPS each second
                 fps = timerFPS.getCountStep();
-                utilSendEvent(EventCE::NEW_FPS, (void*)&fps, nullptr);
+                sendChimeraEvent(EventCE::NEW_FPS, (void*)&fps, nullptr);
             }
 
             countDelta = SDL_GetTicks() - beginCount; // frame count limit

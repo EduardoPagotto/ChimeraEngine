@@ -140,7 +140,7 @@ namespace ce {
                 if (contactActives.find((*it).first) == contactActives.end()) {
 
                     if (checkAllowCollision((*it).second.first) == true) {
-                        utilSendEvent(EventCE::COLLIDE_START, (*it).second.first, (*it).second.second);
+                        sendChimeraEvent(EventCE::COLLIDE_START, (*it).second.first, (*it).second.second);
                     }
 
                 } else {
@@ -155,7 +155,7 @@ namespace ce {
                 if (new_contacts.find((*it).first) == new_contacts.end()) {
 
                     if (checkAllowCollision((*it).second.first) == true) {
-                        utilSendEvent(EventCE::COLLIDE_OFF, (*it).second.first, (*it).second.second);
+                        sendChimeraEvent(EventCE::COLLIDE_OFF, (*it).second.first, (*it).second.second);
                     }
                 }
             }

@@ -96,20 +96,20 @@ bool Game::onEvent(const SDL_Event& event) {
         case SDL_KEYDOWN: {
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    utilSendEvent(EventCE::FLOW_STOP, nullptr, nullptr);
+                    sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_F10:
-                    utilSendEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    sendChimeraEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
             }
         } break;
         case SDL_WINDOWEVENT: {
             switch (event.window.event) {
                 case SDL_WINDOWEVENT_ENTER:
-                    utilSendEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+                    sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
                     break;
                 case SDL_WINDOWEVENT_LEAVE:
-                    utilSendEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+                    sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
                     break;
             }
         } break;

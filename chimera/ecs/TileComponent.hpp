@@ -3,9 +3,9 @@
 #include "ecs.hpp"
 
 namespace ce {
-    struct ComponentTile {
+    struct TileComponent {
         TagInfo tag;
         Tile* tile = nullptr;
-        ComponentTile() = default;
+        TileComponent() = default;
     };
 } // namespace ce

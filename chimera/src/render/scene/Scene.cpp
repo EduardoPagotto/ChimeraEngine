@@ -92,7 +92,7 @@ namespace ce {
             if (tc.name == "TileText") {
                 CameraComponent& cCam = entity.getComponent<CameraComponent>();
                 auto& sc = entity.getComponent<ShaderComponent>();
-                // ComponentTile& tc = entity.addComponent<ComponentTile>();
+                // TileComponent& tc = entity.addComponent<TileComponent>();
                 Tile* tile = new Tile("TileText", &batchRender2D, sc.shader, cCam.camera);
                 layers.pushState(tile);
             }

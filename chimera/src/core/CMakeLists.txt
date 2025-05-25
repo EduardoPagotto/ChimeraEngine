@@ -11,7 +11,6 @@ endif(BULLET_SET_TO_USE)
 
 # define objetos a compilar
 set (SourceFiles utils.cpp
-				 Engine.cpp
 				 device/CanvasFB.cpp
 				 gl/CanvasGL.cpp
 				 gl/buffer/IndexBuffer.cpp

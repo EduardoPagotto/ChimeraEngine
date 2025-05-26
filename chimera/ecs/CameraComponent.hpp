@@ -5,7 +5,7 @@ namespace ce {
 
     struct CameraComponent {
         TagInfo tag;
-        Camera* camera = nullptr;
+        std::shared_ptr<Camera> camera;
         bool primary = true;
         bool fixedAspectRatio = false;
         CamKind camKind = CamKind::STATIC;

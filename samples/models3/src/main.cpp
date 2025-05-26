@@ -5,6 +5,7 @@
 #include "chimera/core/gl/CanvasGL.hpp"
 #include "chimera/core/gl/FontMng.hpp"
 #include "chimera/core/gl/ShaderMng.hpp"
+#include <config_params.hpp>
 #include <cstdio>
 #include <iostream>
 #include <map>
@@ -12,15 +13,17 @@
 int main(int argn, char** argv) {
     using namespace ce;
     try {
-        // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
-        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
+                           "com.mechanical.engine");
+
+        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Models3 Iniciado");
 
         // Services shared inside all parts
         // Canvas, Mouse, keyboard, Joystick, gamepad, view's
         g_service_locator.registerService(std::make_shared<CanvasGL>("Teste Hello", 1800, 600, false));
         g_service_locator.registerService(std::make_shared<Mouse>());
-        g_service_locator.registerService(std::make_shared<GameController>());
+        g_service_locator.registerService(std::make_shared<GamePad>());
         g_service_locator.registerService(std::make_shared<ViewProjection>()); // View projection
         g_service_locator.registerService(std::make_shared<ShaderMng>());
         g_service_locator.registerService(std::make_shared<FontMng>());

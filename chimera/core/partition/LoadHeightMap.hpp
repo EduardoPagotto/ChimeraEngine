@@ -1,7 +1,7 @@
 #pragma once
 #include "chimera/core/visible/Mesh.hpp"
 #include "chimera/space/Triangle.hpp"
-#include <SDL2/SDL_image.h>
+#include <SDL3/SDL.h>
 #include <string>
 
 namespace ce {

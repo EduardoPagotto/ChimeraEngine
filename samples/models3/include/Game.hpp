@@ -20,7 +20,7 @@ class Game : public ce::IStateMachine {
 
   private:
     std::shared_ptr<ce::IMouse> mouse;
-    std::shared_ptr<ce::IGameController> gameControl;
+    std::shared_ptr<ce::IGamePad> gameControl;
 
     ce::Scene* scene;
     ce::Solid* pCorpoRigido;

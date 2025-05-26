@@ -1,21 +1,23 @@
 #pragma once
 #include "chimera/base/interfaces.hpp"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #define GLEW_STATIC
 
 namespace ce {
+
     class CanvasGL : public ServiceBase<ICanva> {
+
       protected:
-        bool fullScreen{false};
-        int width, height;
-        int posX, posY;
         std::string title;
+        int width, height;
+        bool fullScreen{false};
+        int posX, posY;
         SDL_Window* window{nullptr};
         SDL_GLContext context;
 
       public:
-        CanvasGL(const std::string& _title, int _width, int _height, bool _fullScreen = false);
+        CanvasGL(const std::string& title, int width, int height, bool fullScreen = false);
         virtual ~CanvasGL();
 
         virtual void before() override;
@@ -26,6 +28,6 @@ namespace ce {
         virtual const int getWidth() const override { return width; }
         virtual const int getHeight() const override { return height; }
 
-        std::string getVersaoOpenGL();
+        SDL_PixelFormat getPixelFormat() override { return SDL_PIXELFORMAT_ABGR8888; }
     };
 } // namespace ce

@@ -1,7 +1,7 @@
 PROJECT(ChimeraCore LANGUAGES CXX)
 
 find_package(OpenGL REQUIRED)
-find_package(SDL2 REQUIRED)
+find_package(SDL3 REQUIRED)
 find_package(PUGIXML REQUIRED)
 find_package(GLEW REQUIRED)
 
@@ -32,7 +32,7 @@ set (SourceFiles gl/CanvasGL.cpp
 
 # define os includes
 set (IncludeDirs ${CMAKE_SOURCE_DIR}
-				 ${SDL2_INCLUDE_DIR}
+				 ${SDL3_INCLUDE_DIR}
 				 ${OPENGL_INCLUDE_DIR}
 				 ${PUGIXML_DIR}
 				 ${GLEW_INCLUDE_DIRS})

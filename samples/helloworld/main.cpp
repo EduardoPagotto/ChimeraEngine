@@ -5,13 +5,17 @@
 #include "chimera/core/gl/CanvasGL.hpp"
 #include "chimera/core/gl/FontMng.hpp"
 #include "chimera/core/gl/ShaderMng.hpp"
+#include <config_params.hpp>
 #include <iostream>
 
 int main(int argn, char** argv) {
 
     using namespace ce;
     try {
-        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
+                           "com.mechanical.engine");
+
+        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Models3 Iniciado");
 
         // Registry to entt

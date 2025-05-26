@@ -3,9 +3,11 @@
 #include <map>
 
 namespace ce {
+
     class Mouse : public ServiceBase<IMouse> {
+
       private:
-        std::map<uint8_t, uint8_t> buttonState;
+        std::map<uint8_t, bool> buttonState;
         glm::ivec2 pos{glm::ivec2(0)}, rel{glm::ivec2(0)}, wheel{glm::ivec2(0)};
         uint32_t flag1{0}, flag2{0};
 
@@ -13,12 +15,12 @@ namespace ce {
         Mouse() noexcept = default;
         virtual ~Mouse() noexcept override = default;
 
-        const uint8_t getButtonState(const uint8_t& indice) noexcept override {
+        const bool getButtonState(const uint8_t& indice) noexcept override {
 
             if (this->buttonState.contains(indice))
                 return buttonState[indice];
 
-            return SDL_RELEASED;
+            return false;
         }
 
         const glm::ivec2 getMove() const noexcept override { return pos; }
@@ -33,21 +35,21 @@ namespace ce {
 
         const bool getEvent(const SDL_Event& event) noexcept override {
             switch (event.type) {
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP:
+                case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                case SDL_EVENT_MOUSE_BUTTON_UP:
                     this->updateBt(event.button);
                     break;
-                case SDL_MOUSEMOTION:
+                case SDL_EVENT_MOUSE_MOTION:
                     this->updateMv(event.motion);
                     break;
-                case SDL_MOUSEWHEEL:
+                case SDL_EVENT_MOUSE_WHEEL:
                     this->updateWl(event.wheel);
                     break;
             }
             return false;
         }
 
-        void updateBt(const SDL_MouseButtonEvent& bt) noexcept override { this->buttonState[bt.button] = bt.state; }
+        void updateBt(const SDL_MouseButtonEvent& bt) noexcept override { this->buttonState[bt.button] = bt.down; }
 
         void updateMv(const SDL_MouseMotionEvent& mv) noexcept override {
             this->pos = glm::ivec2(mv.x, mv.y);

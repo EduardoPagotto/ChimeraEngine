@@ -26,8 +26,8 @@ bool Game::onEvent(const SDL_Event& event) {
     mouse->getEvent(event);
 
     switch (event.type) {
-        case SDL_KEYDOWN: {
-            switch (event.key.keysym.sym) {
+        case SDL_EVENT_KEY_DOWN: {
+            switch (event.key.key) {
                 case SDLK_ESCAPE:
                     sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
@@ -36,20 +36,16 @@ bool Game::onEvent(const SDL_Event& event) {
                     break;
             }
         } break;
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEMOTION: {
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+        case SDL_EVENT_MOUSE_MOTION: {
         } break;
-        case SDL_WINDOWEVENT: {
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_ENTER:
-                    sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-            }
-        } break;
+        case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            break;
+        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            break;
     }
     return true;
 }

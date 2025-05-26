@@ -11,7 +11,7 @@ Game::Game(ce::Scene* scene) : IStateMachine("Game"), scene(scene), pCorpoRigido
     using namespace ce;
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 
-    gameControl = g_service_locator.getService<IGameController>();
+    gameControl = g_service_locator.getService<IGamePad>();
     mouse = g_service_locator.getService<IMouse>();
 }
 
@@ -27,7 +27,7 @@ bool Game::onEvent(const SDL_Event& event) {
     mouse->getEvent(event);
 
     switch (event.type) {
-        case SDL_USEREVENT: {
+        case SDL_EVENT_USER: {
             switch (static_cast<EventCE>(event.user.code)) {
                 case ce::EventCE::COLLIDE_START: {
                     uint32_t* n1 = (uint32_t*)event.user.data1;
@@ -56,8 +56,8 @@ bool Game::onEvent(const SDL_Event& event) {
             }
 
         } break;
-        case SDL_KEYDOWN: {
-            switch (event.key.keysym.sym) {
+        case SDL_EVENT_KEY_DOWN: {
+            switch (event.key.key) {
                 case SDLK_ESCAPE:
                     sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
@@ -76,26 +76,22 @@ bool Game::onEvent(const SDL_Event& event) {
                 case SDLK_RIGHT:
                     pCorpoRigido->applyForce(glm::vec3(0.0, -10.0, 0.0));
                     break;
-                case SDLK_a:
+                case SDLK_A:
                     pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, 10.0));
                     break;
-                case SDLK_s:
+                case SDLK_S:
                     pCorpoRigido->applyTorc(glm::vec3(0.0, 0.0, -10.0));
                     break;
                 default:
                     break;
             }
         } break;
-        case SDL_WINDOWEVENT: {
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_ENTER:
-                    sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-            }
-        } break;
+        case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            break;
+        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            break;
     }
     return true;
 }
@@ -136,40 +132,38 @@ void Game::onUpdate(const double& ts) {
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);
 
-    if (SDL_GameController* pJoy = gameControl->get(0); pJoy != nullptr) {
+    if (SDL_Gamepad* pJoy = gameControl->get(0); pJoy != nullptr) {
 
         float propulsaoLRUD{5.0f};
         glm::vec3 propLateral(0.0f);
-        if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_DPAD_UP) == SDL_PRESSED)
+        if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_UP))
             propLateral.z = propulsaoLRUD;
 
-        if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == SDL_PRESSED)
+        if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_DOWN))
             propLateral.z = -propulsaoLRUD;
 
-        if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_DPAD_LEFT) == SDL_PRESSED)
+        if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_LEFT))
             propLateral.x = propulsaoLRUD;
 
-        if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == SDL_PRESSED)
+        if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_RIGHT))
             propLateral.x = -propulsaoLRUD;
 
         int16_t deadZone = 128;
-        glm::vec3 rotacao{scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTY), deadZone),
-                                  0x8000), // pitch LEFTY
-                          scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTX), deadZone),
-                                  0x8000), // roll LEFTX
-                          scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTX), deadZone),
-                                  0x8000)}; // yaw RIGHTY
+        glm::vec3 rotacao{scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone), 0x8000),
+                          scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone), 0x8000),
+                          scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone), 0x8000)};
 
-        float acc = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTY), deadZone),
-                            0x8000);          // ACC RIGHTX
+        float acc = scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone),
+                            0x8000); // ACC RIGHTX
+
         glm::vec3 throttle{0.0,               // X
                            -3.0f * (acc / 2), // y
                            0.0f};             // z
 
-        if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_A) == SDL_PRESSED)
+        if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_SOUTH))
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao A");
 
-        if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_B) == SDL_PRESSED)
+        if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_EAST))
             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick Botao B");
 
         glm::vec3 zero(0.0f);

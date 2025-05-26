@@ -93,7 +93,8 @@ namespace ce {
                 CameraComponent& cCam = entity.getComponent<CameraComponent>();
                 auto& sc = entity.getComponent<ShaderComponent>();
                 // TileComponent& tc = entity.addComponent<TileComponent>();
-                Tile* tile = new Tile("TileText", &batchRender2D, sc.shader, cCam.camera);
+                Tile* tile = new Tile("TileText", &batchRender2D, sc.shader,
+                                      cCam.camera.get()); // TODO: passar tile camera para smart
                 layers.pushState(tile);
             }
 
@@ -230,7 +231,7 @@ namespace ce {
                 for (auto renderBuffer : vRB) { // altera a matrix de projecao apenas na troca de resolucao
                     cameraComponent.camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
                     if (cameraComponent.primary == true) {
-                        activeCam = cameraComponent.camera;
+                        activeCam = cameraComponent.camera.get();
                     }
                 }
             }
@@ -239,15 +240,12 @@ namespace ce {
 
     bool Scene::onEvent(const SDL_Event& event) {
         switch (event.type) {
-            case SDL_WINDOWEVENT: {
-                switch (event.window.event) {
-                    case SDL_WINDOWEVENT_RESIZED: // aqui para camera e engine acerta a janela
-                        onViewportResize(event.window.data1, event.window.data2);
-                        break;
-                }
+
+            case SDL_EVENT_WINDOW_RESIZED: {
+                onViewportResize(event.window.data1, event.window.data2);
             } break;
-            case SDL_KEYDOWN: {
-                switch (event.key.keysym.sym) {
+            case SDL_EVENT_KEY_DOWN: {
+                switch (event.key.key) {
                     case SDLK_F9: {
                         verbose++;
                         if (verbose > 2)

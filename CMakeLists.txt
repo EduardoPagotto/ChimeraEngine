@@ -34,8 +34,8 @@ add_subdirectory(chimera/src/collada)
 add_subdirectory(chimera/src/render)
 
 # Simple testes app
-add_subdirectory(samples/helloworld)
 add_subdirectory(samples/raycasting)
+add_subdirectory(samples/helloworld)
 add_subdirectory(samples/simples)
 add_subdirectory(samples/bsptree)
 add_subdirectory(samples/terrain)

@@ -99,11 +99,11 @@ namespace ce {
     }
 
     void CameraControllerOrbit::onUpdate(const double& ts) {
-        if (mouse->getButtonState(1) == SDL_PRESSED) {
+        if (mouse->getButtonState(1)) {
             glm::ivec2 mouseMove = mouse->getMoveRel();
             this->processCameraRotation(mouseMove.x, mouseMove.y);
 
-        } else if (mouse->getButtonState(3) == SDL_PRESSED) {
+        } else if (mouse->getButtonState(3)) {
             glm::ivec2 mouseMove = mouse->getMoveRel();
             this->processDistance(mouseMove.y);
         }

@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 namespace ce {
 
@@ -26,11 +26,11 @@ namespace ce {
     inline void sendChimeraEvent(const EventCE& user_event, void* _paramA, void* _paramB) {
         SDL_Event event;
         SDL_zero(event);
-        event.type = SDL_USEREVENT;
+        event.type = SDL_EVENT_USER;
         event.user.code = static_cast<Sint32>(user_event);
         event.user.data1 = _paramA;
         event.user.data2 = _paramB;
-        if (SDL_PushEvent(&event) == -1) {
+        if (!SDL_PushEvent(&event)) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Critical PushEvent fail: %s", SDL_GetError());
         }
     }

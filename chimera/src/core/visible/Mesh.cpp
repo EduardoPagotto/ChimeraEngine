@@ -1,6 +1,6 @@
 #include "chimera/core/visible/Mesh.hpp"
 #include "chimera/space/space.hpp"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 namespace ce {
 

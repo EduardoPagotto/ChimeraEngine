@@ -5,27 +5,27 @@
 namespace ce {
     class Keyboard : public ServiceBase<IKeyboard> {
       private:
-        std::map<SDL_Keycode, uint8_t> mapKey;
-        uint16_t mod;
+        std::map<SDL_Keycode, bool> mapKey;
+        SDL_Keymod mod;
 
       public:
         Keyboard() noexcept = default;
         virtual ~Keyboard() noexcept override = default;
 
         virtual void setDown(const SDL_KeyboardEvent& event) noexcept override {
-            mapKey[event.keysym.sym] = SDL_PRESSED;
-            mod = event.keysym.mod;
+            mapKey[event.key] = true;
+            mod = event.mod;
         }
 
         virtual void setUp(const SDL_KeyboardEvent& event) noexcept override {
-            mapKey[event.keysym.sym] = SDL_RELEASED;
-            mod = event.keysym.mod;
+            mapKey[event.key] = false;
+            mod = event.mod;
         }
 
         virtual const bool isPressed(const SDL_Keycode& key) noexcept override {
 
             if (mapKey.contains(key))
-                return (mapKey[key] == SDL_PRESSED);
+                return (mapKey[key] == true);
 
             return false;
         }
@@ -35,10 +35,10 @@ namespace ce {
         virtual const bool getEvent(const SDL_Event& event) noexcept override {
 
             switch (event.type) {
-                case SDL_KEYDOWN:
+                case SDL_EVENT_KEY_DOWN:
                     Keyboard::setDown(event.key);
                     break;
-                case SDL_KEYUP:
+                case SDL_EVENT_KEY_UP:
                     Keyboard::setUp(event.key);
                     break;
             }

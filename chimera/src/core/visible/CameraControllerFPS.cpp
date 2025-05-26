@@ -10,7 +10,7 @@ namespace ce {
         vp = g_service_locator.getService<ViewProjection>();
         mouse = g_service_locator.getService<IMouse>();
         keyboard = g_service_locator.getService<IKeyboard>();
-        gameControl = g_service_locator.getService<IGameController>();
+        gameControl = g_service_locator.getService<IGamePad>();
     }
 
     CameraControllerFPS::~CameraControllerFPS() {
@@ -92,13 +92,13 @@ namespace ce {
 
         // CameraFPS movement
         glm::vec3 direction = glm::vec3(0.0f);
-        if (keyboard->isPressed(SDLK_w)) // to foward
+        if (keyboard->isPressed(SDLK_W)) // to foward
             direction += front;
-        if (keyboard->isPressed(SDLK_s)) // to backward
+        if (keyboard->isPressed(SDLK_S)) // to backward
             direction -= front;
-        if (keyboard->isPressed(SDLK_a)) // to left
+        if (keyboard->isPressed(SDLK_A)) // to left
             direction -= right;
-        if (keyboard->isPressed(SDLK_d)) //  to right
+        if (keyboard->isPressed(SDLK_D)) //  to right
             direction += right;
         if (keyboard->isPressed(SDLK_SPACE)) // to up
             direction += worldUp;
@@ -108,27 +108,25 @@ namespace ce {
         float mouseXDelta{0.0f};
         float mouseYDelta{0.0f};
 
-        if (SDL_GameController* pJoy = gameControl->get(0); pJoy != nullptr) {
+        if (SDL_Gamepad* pJoy = gameControl->get(0); pJoy != nullptr) {
             // Game control ratation and move
             int16_t deadZone = 128;
-            direction += front *
-                         scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTY), deadZone), 0x8000) *
+            direction += front * scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone), 0x8000) *
                          1.5f; // mov FB
-            direction -= right *
-                         scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_LEFTX), deadZone), 0x8000) *
+
+            direction -= right * scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone), 0x8000) *
                          1.5f; // mov RL
 
             mouseXDelta =
-                -scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTX), deadZone), 0x8000) *
-                1.5f; // rot RL
-            mouseYDelta =
-                scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_RIGHTY), deadZone), 0x8000) *
-                1.5f; // rot UD
+                -scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone), 0x8000) * 1.5f; // rot RL
 
-            if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_DPAD_UP) == SDL_PRESSED)
+            mouseYDelta =
+                scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone), 0x8000) * 1.5f; // rot UD
+
+            if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_UP) == true)
                 direction += (worldUp * 0.5f); // mov U<->D
 
-            if (SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_DPAD_DOWN) == SDL_PRESSED)
+            if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_DOWN) == true)
                 direction -= worldUp * 0.5f; // mov D<->U
 
             // float v1 = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_TRIGGERLEFT), deadZone),

@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture.hpp"
 #include "chimera/base/ServiceLocator.hpp"
-#include <SDL2/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #include <memory>
 #include <unordered_map>
 
@@ -74,7 +74,7 @@ namespace ce {
 
             std::shared_ptr<Texture> tex = this->loadFromSurface(name, pImage, textureParameters);
 
-            SDL_FreeSurface(pImage);
+            SDL_DestroySurface(pImage);
 
             return tex;
         }

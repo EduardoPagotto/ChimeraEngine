@@ -16,9 +16,9 @@ TileLayer::~TileLayer() {}
 bool TileLayer::onEvent(const SDL_Event& event) {
     using namespace ce;
     switch (event.type) {
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEMOTION: {
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+        case SDL_EVENT_MOUSE_MOTION: {
             x = event.motion.x;
             y = event.motion.y;
         } break;

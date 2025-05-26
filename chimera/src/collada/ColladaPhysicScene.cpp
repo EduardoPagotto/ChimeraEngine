@@ -5,7 +5,7 @@
 #include "chimera/ecs/Entity.hpp"
 #include "chimera/ecs/MeshComponent.hpp"
 #include "chimera/ecs/TransComponent.hpp"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 namespace ce {
 

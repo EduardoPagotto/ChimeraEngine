@@ -1,7 +1,7 @@
 PROJECT(ChimeraRender LANGUAGES CXX)
 
 find_package(OpenGL REQUIRED)
-find_package(SDL2 REQUIRED)
+find_package(SDL3 REQUIRED)
 find_package(GLEW REQUIRED)
 
 if (BULLET_SET_TO_USE)
@@ -26,7 +26,7 @@ set (SourceFiles 	2d/BatchRender2D.cpp
 
 #define os includes
 set (IncludeDirs 	${CMAKE_SOURCE_DIR}
-					${SDL2_INCLUDE_DIR}
+					${SDL3_INCLUDE_DIR}
 					${OPENGL_INCLUDE_DIR}
 					${GLEW_INCLUDE_DIRS}
 					/usr/local/include/) # Raiz do projeto

@@ -1,6 +1,6 @@
 #include "chimera/collada/Collada.hpp"
 #include "chimera/base/utils.hpp"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
 

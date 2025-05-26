@@ -56,7 +56,7 @@ namespace ce {
                     setChildParam(nCamType, "xfov", xfov);
                     setChildParam(nCamType, "znear", znear);
                     setChildParam(nCamType, "zfar", zfar);
-                    cc.camera = new CameraPerspective(xfov, znear, zfar);
+                    cc.camera = std::make_shared<CameraPerspective>(xfov, znear, zfar);
 
                 } else if (std::string("orthographic") == nCamType.name()) {
 
@@ -65,7 +65,7 @@ namespace ce {
                     setChildParam(nCamType, "ymag", ymag);
                     setChildParam(nCamType, "znear", znear);
                     setChildParam(nCamType, "zfar", zfar);
-                    cc.camera = new CameraOrtho(xmag, ymag, znear, zfar);
+                    cc.camera = std::make_shared<CameraOrtho>(xmag, ymag, znear, zfar);
                 }
 
                 if (entity.hasComponent<TransComponent>()) {

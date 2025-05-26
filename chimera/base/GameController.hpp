@@ -3,19 +3,25 @@
 #include <map>
 
 namespace ce {
-    class GameController : public ServiceBase<IGameController> {
+
+    /// @brief Pad controller of game PAD
+    /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+    /// @since 20130925
+    /// @date 20250401
+    class GamePad : public ServiceBase<IGamePad> {
+
       private:
-        std::map<SDL_JoystickID, SDL_GameController*> pads;
+        std::map<SDL_JoystickID, SDL_Gamepad*> pads;
 
       public:
-        GameController() noexcept {
-            SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
-            SDL_GameControllerEventState(SDL_ENABLE);
+        GamePad() noexcept {
+            SDL_InitSubSystem(SDL_INIT_GAMEPAD);
+            SDL_SetGamepadEventsEnabled(true);
         }
 
-        virtual ~GameController() noexcept override {
+        virtual ~GamePad() noexcept override {
             for (auto i = pads.begin(); i != pads.end(); i++)
-                SDL_GameControllerClose(i->second);
+                SDL_CloseGamepad(i->second);
 
             pads.clear();
         }
@@ -23,47 +29,76 @@ namespace ce {
         virtual const bool getEvent(const SDL_Event& event) noexcept override {
 
             switch (event.type) {
-                case SDL_CONTROLLERDEVICEADDED:
+                case SDL_EVENT_GAMEPAD_ADDED:
                     this->added();
                     break;
-                case SDL_CONTROLLERDEVICEREMOVED:
-                    this->removed(event.cdevice);
+                case SDL_EVENT_GAMEPAD_REMOVED:
+                    this->removed(event.gdevice);
                     break;
             }
 
             return false;
         }
 
-        virtual SDL_GameController* get(const SDL_JoystickID& pad_id) noexcept override {
+        virtual SDL_Gamepad* get(const SDL_JoystickID& pad_id) noexcept override {
             return pads.contains(pad_id) ? pads[pad_id] : nullptr;
         }
 
       private:
         void added(void) {
-            for (int i = 0; i < SDL_NumJoysticks(); i++) {
+            // TODO: TESTA GAMEPAD
+            int i, num_joysticks;
+            SDL_JoystickID* joysticks = SDL_GetGamepads(&num_joysticks);
+            if (joysticks) {
+                for (i = 0; i < num_joysticks; ++i) {
+                    SDL_JoystickID instance_id = joysticks[i];
 
-                if (SDL_IsGameController(i)) {
-                    SDL_GameController* handle = SDL_GameControllerOpen(i);
-                    SDL_JoystickID id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(handle));
+                    const char* name = SDL_GetGamepadNameForID(instance_id);
+                    const char* path = SDL_GetGamepadPathForID(instance_id);
 
-                    if (pads.contains(id))
+                    SDL_Log("Gamepad %" SDL_PRIu32 ": %s%s%s VID 0x%.4x, PID 0x%.4x", instance_id,
+                            name ? name : "Unknown", path ? ", " : "", path ? path : "",
+                            SDL_GetGamepadVendorForID(instance_id), SDL_GetGamepadProductForID(instance_id));
+
+                    if (pads.contains(instance_id))
                         continue;
 
-                    pads[id] = handle;
+                    if (SDL_IsGamepad(i)) {
+                        SDL_Gamepad* handle = SDL_OpenGamepad(i);
+                        pads[instance_id] = handle;
+                    }
 
-                    const char* name = SDL_GameControllerName(handle);
-                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Game controller name %d: %s", i, name ? name : "[no name]");
-
-                    char* mapping = SDL_GameControllerMappingForGUID(SDL_JoystickGetDeviceGUID(i));
-                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Game controller map: %s", mapping);
-                    SDL_free(mapping);
+                    // TODO: Verificar se preciso limpar no release como abaixo
+                    // SDL_free(joysticks);
                 }
             }
+
+            // TODO: testar e limpar a versao anteiror abaixo
+            // for (int i = 0; i < SDL_GetJoysticks(); i++) {
+
+            //     if (SDL_IsGamepad(i)) {
+            //         SDL_Gamepad* handle = SDL_OpenGamepad(i);
+            //         SDL_JoystickID id = SDL_GetJoystickID(SDL_GetGamepadJoystick(handle));
+
+            //         if (pads.contains(id))
+            //             continue;
+
+            //         pads[id] = handle;
+
+            //         const char* name = SDL_GetGamepadName(handle);
+            //         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Game controller name %d: %s", i, name ? name : "[no
+            //         name]");
+
+            //         char* mapping = SDL_GetGamepadMappingForGUID(SDL_GetJoystickGUIDForID(i));
+            //         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Game controller map: %s", mapping);
+            //         SDL_free(mapping);
+            //     }
+            // }
         }
 
-        void removed(const SDL_ControllerDeviceEvent& device) {
+        void removed(const SDL_GamepadDeviceEvent& device) {
             if (pads.contains(device.which)) {
-                SDL_GameControllerClose(pads[device.which]);
+                SDL_CloseGamepad(pads[device.which]);
                 pads.erase(device.which);
             }
         }

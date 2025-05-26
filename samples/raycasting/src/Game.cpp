@@ -40,16 +40,12 @@ bool Game::onEvent(const SDL_Event& event) {
     keyboard->getEvent(event);
 
     switch (event.type) {
-        case SDL_WINDOWEVENT: {
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_ENTER:
-                    ce::sendChimeraEvent(ce::EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    ce::sendChimeraEvent(ce::EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-            }
-        } break;
+        case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            ce::sendChimeraEvent(ce::EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            break;
+        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            ce::sendChimeraEvent(ce::EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            break;
     }
     return true;
 }
@@ -67,7 +63,7 @@ void Game::onUpdate(const double& ts) {
         return;
     }
 
-    if (keyboard->isPressed(SDLK_w)) {
+    if (keyboard->isPressed(SDLK_W)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos + state->dir * moveSpeed * 2.0f;
 
@@ -80,7 +76,7 @@ void Game::onUpdate(const double& ts) {
         return;
     }
 
-    if (keyboard->isPressed(SDLK_s)) {
+    if (keyboard->isPressed(SDLK_S)) {
         glm::ivec2 curr = state->pos;
         glm::ivec2 next = state->pos - state->dir * moveSpeed * 2.0f;
 
@@ -93,7 +89,7 @@ void Game::onUpdate(const double& ts) {
         return;
     }
 
-    if (keyboard->isPressed(SDLK_a)) {
+    if (keyboard->isPressed(SDLK_A)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(rotSpeed) - state->dir.y * sin(rotSpeed);
         state->dir.y = oldDirX * sin(rotSpeed) + state->dir.y * cos(rotSpeed);
@@ -104,7 +100,7 @@ void Game::onUpdate(const double& ts) {
         return;
     }
 
-    if (keyboard->isPressed(SDLK_d)) {
+    if (keyboard->isPressed(SDLK_D)) {
         double oldDirX = state->dir.x;
         state->dir.x = state->dir.x * cos(-rotSpeed) - state->dir.y * sin(-rotSpeed);
         state->dir.y = oldDirX * sin(-rotSpeed) + state->dir.y * cos(-rotSpeed);
@@ -116,4 +112,16 @@ void Game::onUpdate(const double& ts) {
     }
 }
 
-void Game::onRender() { RenderScene(*state, *world, canvas.get()); }
+void Game::onRender() {
+
+    // int* gFrameBuffer = (int*)canvas.get()->getPixels();
+    // uint64_t aTicks = SDL_GetTicks();
+
+    // for (int i = 0, c = 0; i < canvas->getHeight(); i++) {
+    //     for (int j = 0; j < canvas->getWidth(); j++, c++) {
+    //         gFrameBuffer[c] = (int)(i * i + j * j + aTicks) | 0xff000000;
+    //     }
+    // }
+
+    RenderScene(*state, *world, canvas.get());
+}

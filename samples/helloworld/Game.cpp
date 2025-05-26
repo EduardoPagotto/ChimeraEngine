@@ -82,7 +82,7 @@ bool Game::onEvent(const SDL_Event& event) {
     //     return false;
 
     switch (event.type) {
-        case SDL_USEREVENT: {
+        case SDL_EVENT_USER: {
 #pragma clang diagnostic ignored "-Wswitch"
             switch (static_cast<EventCE>(event.user.code)) {
                 case EventCE::NEW_FPS: {
@@ -93,8 +93,8 @@ bool Game::onEvent(const SDL_Event& event) {
             }
 
         } break;
-        case SDL_KEYDOWN: {
-            switch (event.key.keysym.sym) {
+        case SDL_EVENT_KEY_DOWN: {
+            switch (event.key.key) {
                 case SDLK_ESCAPE:
                     sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
@@ -103,16 +103,23 @@ bool Game::onEvent(const SDL_Event& event) {
                     break;
             }
         } break;
-        case SDL_WINDOWEVENT: {
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_ENTER:
-                    sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-            }
-        } break;
+        case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            break;
+        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            break;
+
+            // case SDL_WINDOWEVENT: {
+            //     switch (event.window.event) {
+            //         case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            //             sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            //             break;
+            //         case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            //             sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            //             break;
+            //     }
+            // } break;
     }
     return true;
 }

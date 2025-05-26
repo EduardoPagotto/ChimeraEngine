@@ -13,10 +13,10 @@ namespace ce {
       private:
         float pitch, yaw, movementSpeed;
         glm::vec3 up, front, worldUp, right;
-        Camera* camera = nullptr;
+        std::shared_ptr<Camera> camera;
         Entity entity;
         std::shared_ptr<ViewProjection> vp;
-        std::shared_ptr<IGameController> gameControl;
+        std::shared_ptr<IGamePad> gameControl;
         std::shared_ptr<IKeyboard> keyboard;
         std::shared_ptr<IMouse> mouse;
 

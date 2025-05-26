@@ -11,7 +11,7 @@ namespace ce {
       private:
         float pitch, yaw, distance, min, max;
         glm::vec3 up, front;
-        Camera* camera = nullptr;
+        std::shared_ptr<Camera> camera;
         Entity entity;
         std::shared_ptr<IMouse> mouse;
         std::shared_ptr<ViewProjection> vp;

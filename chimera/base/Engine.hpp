@@ -7,6 +7,12 @@
 
 namespace ce {
 
+    constexpr uint32_t miniumCountDelta = 1000 / 140;
+
+    /// @brief Engine
+    /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+    /// @since 20130925
+    /// @date 20250401
     class Engine {
 
       private:
@@ -31,14 +37,14 @@ namespace ce {
 
             SDL_Event event;
             bool kill{false}, pause{true};
-            uint32_t beginCount{0}, countDelta{7}, miniumCountDelta{1000 / 140}; // 140 frames em 1000 ms
-            double ts{(double)countDelta / 1000.0f};
+            uint32_t beginCount{0}, countDelta{7};
+            double ts{0.0f};
 
             while (!kill) {
                 beginCount = SDL_GetTicks();
                 while (SDL_PollEvent(&event)) {
                     switch (event.type) {
-                        case SDL_USEREVENT: {
+                        case SDL_EVENT_USER: {
 
                             switch (static_cast<EventCE>(event.user.code)) {
                                 case EventCE::FLOW_PAUSE: {
@@ -51,8 +57,8 @@ namespace ce {
                                 } break;
                                 case EventCE::FLOW_STOP: {
                                     SDL_Event l_eventQuit;
-                                    l_eventQuit.type = SDL_QUIT;
-                                    if (SDL_PushEvent(&l_eventQuit) == -1) {
+                                    l_eventQuit.type = SDL_EVENT_QUIT;
+                                    if (!SDL_PushEvent(&l_eventQuit)) {
                                         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
                                                      "Critical SDL_QUIT PushEvent fail: %s", SDL_GetError());
                                     }
@@ -66,15 +72,11 @@ namespace ce {
                         }
 
                         break;
-                        case SDL_QUIT:
+                        case SDL_EVENT_QUIT:
                             kill = true;
                             break;
-                        case SDL_WINDOWEVENT: {
-                            switch (event.window.event) {
-                                case SDL_WINDOWEVENT_RESIZED: // set windows size
-                                    canvas->reshape(event.window.data1, event.window.data2);
-                                    break;
-                            }
+                        case SDL_EVENT_WINDOW_RESIZED: {
+                            canvas->reshape(event.window.data1, event.window.data2);
                         } break;
                         default:
                             break;
@@ -111,6 +113,6 @@ namespace ce {
             }
         }
 
-        StateStack& getStack() { return stack; }
+        inline StateStack& getStack() { return stack; }
     };
 } // namespace ce

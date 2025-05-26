@@ -53,40 +53,27 @@ cd ChimeraEngine
 mkdir build
 cd build
 
-cmake -DCMAKE_BUILD_TYPE:STRING=Debug \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
-      -DCMAKE_TOOLCHAIN_FILE:FILEPATH=./toolchain/clang.cmake \
+cmake -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE \
+      -DCMAKE_TOOLCHAIN_FILE=./toolchain/clang.cmake \
       -B/home/pagotto/Projetos/pessoal/games/ChimeraEngine/build \
       -G "Unix Makefiles"
 make
 ```
 
-## Switch to clang (Ubuntu)
-- CMake will uso the default of SO
-    ```bash
-    sudo apt install clang # compiler
-    sudo apt install lldb  # debuger
-    sudo update-alternatives --config c++ # select clang
-    sudo update-alternatives --config cc # select clang
-    ```
-- In VSCode change default kit to clang (panel of tools bellow)
 
-## Development environment
 
-## Nova versao com desenvolvimento de HMD
 
-Iniciado tentativa de criar um HMD e posteriormente integrar suporte ao OpenHMD
-
-### Refs
-SDL3
+## Refs
+<b>SDL3</b>
 - [Main SDL3](https://wiki.libsdl.org/SDL3/FrontPage)
 - [Migration SDL3](https://wiki.libsdl.org/SDL3/README-migration)
 
-OpenGL
+<b>OpenGL</b>
 - [Collada](https://www.khronos.org/collada/)
 - [learnopengl​](https://learnopengl.com/Introduction)
 - [khrono](https://www.khronos.org/opengl/wiki/Example_Code)
 - [gamedev](https://www.gamedev.com/)
 
-YAML (future)
+<b>YAML</b> (future)
  - [jbeder](https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML)

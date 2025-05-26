@@ -11,9 +11,7 @@
 *.lai
 *.la
 *.a
-/VS/ChimeraEngine.VC.db
-/Debug
-/VS/ChimeraEngine.VC.VC.opendb
+
+# cmake temps and test
 /build
 /bin
-/oldcode

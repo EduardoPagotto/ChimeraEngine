@@ -1,14 +1,19 @@
 #include "Game.hpp"
-#include "chimera/core/Engine.hpp"
-#include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/device/CanvasFB.hpp"
-#include "chimera/core/device/Keyboard.hpp"
+#include "chimera/base/CanvasFB.hpp"
+#include "chimera/base/Engine.hpp"
+#include "chimera/base/Keyboard.hpp"
+#include "chimera/base/ViewProjection.hpp"
+#include <config_params.hpp>
 #include <iostream>
+#include <string>
 
 int main(int argn, char** argv) {
     using namespace ce;
     try {
-        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
+                           "com.mechanical.engine");
+
+        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simple ray-casting Iniciado");
 
         // Registry to entt
@@ -16,16 +21,12 @@ int main(int argn, char** argv) {
 
         // Services shared inside all parts
         // Canvas, Mouse, keyboard, Joystick, gamepad, view's
-        auto sl = std::make_shared<ServiceLocator>();
         g_service_locator.registerService(std::make_shared<Keyboard>());
         g_service_locator.registerService(std::make_shared<CanvasFB>("BSP Tree", 800, 600, false));
         g_service_locator.registerService(std::make_shared<ViewProjection>()); // not used but necessary
 
         // Engine
         Engine engine;
-
-        ColladaDom dom = loadFileCollada("./samples/raycasting/level.xml");
-        colladaRegistryLoad(dom);
 
         Game* game = new Game;
 

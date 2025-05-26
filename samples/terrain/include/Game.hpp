@@ -1,7 +1,7 @@
 #pragma once
-#include "chimera/core/IStateMachine.hpp"
-#include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/device/Mouse.hpp"
+#include "chimera/base/IStateMachine.hpp"
+#include "chimera/base/Keyboard.hpp"
+#include "chimera/base/Mouse.hpp"
 
 class Game : public ce::IStateMachine {
   public:
@@ -11,7 +11,7 @@ class Game : public ce::IStateMachine {
     virtual void onAttach() override;
     virtual void onDeatach() override;
     virtual void onRender() override;
-    virtual void onUpdate(ce::IViewProjection& vp, const double& ts) override;
+    virtual void onUpdate(const double& ts) override;
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:

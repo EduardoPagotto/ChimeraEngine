@@ -1,16 +1,22 @@
 #include "Game.hpp"
-#include "chimera/core/Engine.hpp"
-#include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/device/GameController.hpp"
-#include "chimera/core/visible/ShaderMng.hpp"
+#include "chimera/base/Engine.hpp"
+#include "chimera/base/GameController.hpp"
+#include "chimera/collada/colladaLoad.hpp"
+#include "chimera/core/gl/CanvasGL.hpp"
+#include "chimera/core/gl/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
+#include <config_params.hpp>
 
 int main(int argn, char** argv) {
     using namespace ce;
     try {
         // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
-        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
+                           "com.mechanical.engine");
+
+        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
+        SDL_Log("Simnples Iniciado");
+
         SDL_Log("Terrain Iniciado");
 
         // Services shared inside all parts
@@ -18,7 +24,7 @@ int main(int argn, char** argv) {
         g_service_locator.registerService(std::make_shared<CanvasGL>("Terrain", 1800, 600, false));
         g_service_locator.registerService(std::make_shared<Mouse>());
         g_service_locator.registerService(std::make_shared<Keyboard>());
-        g_service_locator.registerService(std::make_shared<GameController>());
+        g_service_locator.registerService(std::make_shared<GamePad>());
         g_service_locator.registerService(std::make_shared<ViewProjection>()); // View projection
         g_service_locator.registerService(std::make_shared<ShaderMng>());
         g_service_locator.registerService(std::make_shared<TextureMng>());

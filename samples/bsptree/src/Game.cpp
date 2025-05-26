@@ -1,7 +1,7 @@
 #include "Game.hpp"
-#include "chimera/core/OpenGLDefs.hpp"
-#include "chimera/core/Registry.hpp"
-#include "chimera/core/utils.hpp"
+#include "chimera/base/event.hpp"
+#include "chimera/core/gl/OpenGLDefs.hpp"
+#include "chimera/ecs/Entity.hpp"
 
 Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }
 Game::~Game() { mouse = nullptr; }
@@ -26,34 +26,30 @@ bool Game::onEvent(const SDL_Event& event) {
     mouse->getEvent(event);
 
     switch (event.type) {
-        case SDL_KEYDOWN: {
-            switch (event.key.keysym.sym) {
+        case SDL_EVENT_KEY_DOWN: {
+            switch (event.key.key) {
                 case SDLK_ESCAPE:
-                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
+                    sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_F10:
-                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    sendChimeraEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
             }
         } break;
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEMOTION: {
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+        case SDL_EVENT_MOUSE_MOTION: {
         } break;
-        case SDL_WINDOWEVENT: {
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_ENTER:
-                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-            }
-        } break;
+        case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            break;
+        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            break;
     }
     return true;
 }
 
-void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {}
+void Game::onUpdate(const double& ts) {}
 
 void Game::onRender() {}

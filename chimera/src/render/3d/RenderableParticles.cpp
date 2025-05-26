@@ -1,5 +1,5 @@
 #include "chimera/render/3d/RenderableParticles.hpp"
-#include "chimera/core/visible/Shader.hpp"
+#include "chimera/core/gl/Shader.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 
 namespace ce {

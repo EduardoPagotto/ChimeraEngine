@@ -1,9 +1,9 @@
 #include "Game.hpp"
-#include "chimera/core/utils.hpp"
-#include "chimera/core/visible/FontMng.hpp"
-#include "chimera/core/visible/ShaderMng.hpp"
-#include "chimera/core/visible/TextureMng.hpp"
-#include "chimera/core/visible/Transform.hpp"
+#include "chimera/base/Transform.hpp"
+#include "chimera/base/event.hpp"
+#include "chimera/core/gl/FontMng.hpp"
+#include "chimera/core/gl/ShaderMng.hpp"
+#include "chimera/core/gl/TextureMng.hpp"
 #include "chimera/render/2d/Group.hpp"
 #include "chimera/render/2d/Sprite.hpp"
 #include <time.h>
@@ -40,10 +40,10 @@ void Game::onAttach() {
 
     // ApplicationGL::onAttach();
 
-    using namespace ce; // 26:10 -> https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96 (video
-                        // 96)
-                        // video 103 finaliza o pick mouse
-                        // colocar para rodar o scene como renderbuffer!!!!!!!!!
+    using namespace ce; // 26:10 ->
+                        // https://www.youtube.com/watch?v=wYVaIOUhz6s&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=96
+                        // (video 96) video 103 finaliza o pick mouse colocar para rodar o scene como
+                        // renderbuffer!!!!!!!!!
 
     layer = new TileLayer(shader);
     layer->getCamera()->setViewportSize(canvas->getWidth(), canvas->getHeight());
@@ -82,9 +82,10 @@ bool Game::onEvent(const SDL_Event& event) {
     //     return false;
 
     switch (event.type) {
-        case SDL_USEREVENT: {
-            switch (event.user.code) {
-                case EVENT_NEW_FPS: {
+        case SDL_EVENT_USER: {
+#pragma clang diagnostic ignored "-Wswitch"
+            switch (static_cast<EventCE>(event.user.code)) {
+                case EventCE::NEW_FPS: {
                     uint32_t* pFps = (uint32_t*)event.user.data1;
                     fps = *pFps;
                     SDL_Log("FPS: %d", fps);
@@ -92,31 +93,38 @@ bool Game::onEvent(const SDL_Event& event) {
             }
 
         } break;
-        case SDL_KEYDOWN: {
-            switch (event.key.keysym.sym) {
+        case SDL_EVENT_KEY_DOWN: {
+            switch (event.key.key) {
                 case SDLK_ESCAPE:
-                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
+                    sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_F10:
-                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    sendChimeraEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
             }
         } break;
-        case SDL_WINDOWEVENT: {
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_ENTER:
-                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-            }
-        } break;
+        case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            break;
+        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            break;
+
+            // case SDL_WINDOWEVENT: {
+            //     switch (event.window.event) {
+            //         case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            //             sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            //             break;
+            //         case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            //             sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            //             break;
+            //     }
+            // } break;
     }
     return true;
 }
 
-void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {
+void Game::onUpdate(const double& ts) {
 
     // ApplicationGL::onUpdate();
 

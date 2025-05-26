@@ -1,5 +1,4 @@
 #include "raycasting.hpp"
-#include <SDL2/SDL.h>
 #include <cmath>
 
 bool LoadWorld(const char filename[], World* world) {
@@ -51,16 +50,16 @@ void DrawColumn(RayHit what, World world, ce::ICanva* frame, uint32_t column) {
     uint32_t corVal = 0;
     switch (type) {
         case 1:
-            corVal = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), 0, 255, 0, 0);
+            corVal = SDL_MapRGBA(SDL_GetPixelFormatDetails(frame->getPixelFormat()), NULL, 0, 255, 0, 0);
             break;
         case 2:
-            corVal = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), 155, 155, 155, 0);
+            corVal = SDL_MapRGBA(SDL_GetPixelFormatDetails(frame->getPixelFormat()), NULL, 155, 155, 155, 0);
             break;
         case 3:
-            corVal = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), 0, 0, 255, 0);
+            corVal = SDL_MapRGBA(SDL_GetPixelFormatDetails(frame->getPixelFormat()), NULL, 0, 0, 255, 0);
             break;
         case 4:
-            corVal = SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), 255, 0, 0, 0);
+            corVal = SDL_MapRGBA(SDL_GetPixelFormatDetails(frame->getPixelFormat()), NULL, 255, 0, 0, 0);
             break;
     }
 
@@ -127,7 +126,7 @@ void RenderScene(State state, World world, ce::ICanva* frame) {
         }
 
         // vamos lançar o raio
-        int side;                                            // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
+        int side; // face do cubo encontrado (face Norte-Sul ou face Oeste-Leste)
         while (world.data[map.x + map.y * world.width] == 0) // até nos encontrarmos com uma parede ...
         {
             // vamos para o próximo bloco no mapa

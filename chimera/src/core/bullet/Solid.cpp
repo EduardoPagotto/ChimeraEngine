@@ -4,8 +4,8 @@
 namespace ce {
 
 Solid::Solid(PhysicsControl* _pWorld, const glm::mat4& _trans, uint32_t entity)
-    : pWorld(_pWorld), pRigidBody(nullptr), pShapeCollision(nullptr), trimesh(nullptr), mass(0.0f), frictionDynamic(15.0f),
-      frictionStatic(10.0f), restitution(0.0f), entity(entity) {
+    : mass(0.0f), frictionDynamic(15.0f), frictionStatic(10.0f), restitution(0.0f), pRigidBody(nullptr),
+      pShapeCollision(nullptr), trimesh(nullptr), pWorld(_pWorld), entity(entity) {
 
     this->setMatrix(_trans); // pMotionState carregado aqui!
 }

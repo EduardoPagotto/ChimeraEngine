@@ -1,4 +1,5 @@
 #pragma once
+// #pragma clang diagnostic ignored "-Wunused-private-field"
 #include "chimera/core/visible/Mesh.hpp"
 #include "chimera/render/3d/Renderable3D.hpp"
 
@@ -11,6 +12,7 @@ class RenderableDynamic : public Renderable3D {
     void render(VertexData* pVertice, const uint32_t& size);
 
   private:
+    [[maybe_unused]]
     uint32_t max;
     VertexBuffer* vbo;
 };

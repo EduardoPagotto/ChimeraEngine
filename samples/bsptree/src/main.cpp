@@ -1,15 +1,18 @@
 #include "Game.hpp"
-#include "chimera/core/Engine.hpp"
-#include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/visible/ShaderMng.hpp"
+#include "chimera/base/Engine.hpp"
+#include "chimera/collada/colladaLoad.hpp"
+#include "chimera/core/gl/CanvasGL.hpp"
+#include "chimera/core/gl/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
+#include <config_params.hpp>
 
 int main(int argn, char** argv) {
     using namespace ce;
     try {
-        // SDL_LogSetPriority(SDL_LOG_CATEGORY_SYSTEM, SDL_LOG_PRIORITY_DEBUG);
-        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
+                           "com.mechanical.engine");
+
+        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("BSPTree Iniciado");
 
         // Registry to entt

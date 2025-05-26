@@ -1,9 +1,7 @@
-cmake_minimum_required(VERSION 3.18.2)
-
-PROJECT(ChimeraCore)
+PROJECT(ChimeraCore LANGUAGES CXX)
 
 find_package(OpenGL REQUIRED)
-find_package(SDL2 REQUIRED)
+find_package(SDL3 REQUIRED)
 find_package(PUGIXML REQUIRED)
 find_package(GLEW REQUIRED)
 
@@ -12,80 +10,59 @@ if (BULLET_SET_TO_USE)
 endif(BULLET_SET_TO_USE)
 
 # define objetos a compilar
-set (SourcesCore Registry.cpp
-				 utils.cpp
-				 Engine.cpp
-				 device/CanvasFB.cpp
-				 device/CanvasGL.cpp
-				 buffer/IndexBuffer.cpp
-				 buffer/VertexArray.cpp
-				 buffer/FrameBuffer.cpp
-				 buffer/RenderBuffer.cpp
-				 DrawLine.cpp
+set (SourceFiles gl/CanvasGL.cpp
+				 gl/buffer/IndexBuffer.cpp
+				 gl/buffer/VertexArray.cpp
+				 gl/buffer/FrameBuffer.cpp
+				 gl/buffer/RenderBuffer.cpp
+				 gl/DrawLine.cpp
+				 gl/Shader.cpp
+				 gl/ShaderMng.cpp
+				 gl/Texture.cpp
+				 gl/Font.cpp
+				 gl/Material.cpp
+				 gl/ParticleEmitter.cpp
+				 gl/Wavefront.cpp
 				 visible/Mesh.cpp
-				 visible/Shader.cpp
-				 visible/ShaderMng.cpp
-				 visible/Texture.cpp
 				 visible/CameraControllerFPS.cpp
 				 visible/CameraControllerOrbit.cpp
-				 visible/Font.cpp
-				 visible/Material.cpp
-				 visible/ParticleEmitter.cpp
-				 collada/RFC3986.cpp
-				 collada/Collada.cpp
-				 collada/ColladaVisualScene.cpp
-				 collada/ColladaImage.cpp
-				 collada/ColladaMaterial.cpp
-				 collada/ColladaEffect.cpp
-				 collada/ColladaLight.cpp
-				 collada/ColladaCam.cpp
-				 collada/ColladaGeometry.cpp
-				 collada/colladaLoad.cpp
-				 collada/ColladaWaveFront.cpp
-				 collada/ColladaHeightMap.cpp
-				 collada/ColladaCube.cpp
-				 collada/ColladaMesh.cpp
-				 collada/ColladaParticle.cpp
-				 collada/ColladaExtra.cpp
 				 partition/BSPTree.cpp
 				 partition/LoadHeightMap.cpp
-				 partition/Wavefront.cpp
 				 partition/Cube.cpp)
 
 # define os includes
-set (IncludeCore ${CMAKE_SOURCE_DIR}
-				 ${SDL2_INCLUDE_DIR}
+set (IncludeDirs ${CMAKE_SOURCE_DIR}
+				 ${SDL3_INCLUDE_DIR}
 				 ${OPENGL_INCLUDE_DIR}
 				 ${PUGIXML_DIR}
 				 ${GLEW_INCLUDE_DIRS})
 
-# Adiciona objetos e includes do OVR ao SourcesCore e IncludeCore
+# Adiciona objetos e includes do OVR ao SourceFiles e IncludeDirs
 if (OVR_SET_TO_USE)
-	message(STATUS "OVR incluido no build ChimeraCore")
-	set(SourcesCore ${SourcesCore} device/CanvasOVR) 
-	set(SourcesCore ${SourcesCore} /usr/local/ovr_sdk_linux_0.4.4/LibOVR) 
+	message(STATUS "OVR incluido no build ${PROJECT_NAME}")
+	set(SourceFiles ${SourceFiles} device/CanvasOVR)
+	set(SourceFiles ${SourceFiles} /usr/local/ovr_sdk_linux_0.4.4/LibOVR)
 endif(OVR_SET_TO_USE)
 
-if (BULLET_SET_TO_USE)	
-	message(STATUS "Bullet incluido no build ChimeraCore")
-	set(SourcesCore ${SourcesCore} bullet/PhysicsControl.cpp
-								   bullet/Solid.cpp
-								   collada/ColladaPhysicScene.cpp) 
-	set(IncludeCore ${IncludeCore} ${BULLET_INCLUDE_DIR} )
+if (BULLET_SET_TO_USE)
+	message(STATUS "Bullet incluido no build ${PROJECT_NAME}")
+	set(SourceFiles ${SourceFiles} bullet/PhysicsControl.cpp
+								   bullet/Solid.cpp)
+	set(IncludeDirs ${IncludeDirs} ${BULLET_INCLUDE_DIR} )
 endif(BULLET_SET_TO_USE)
 
 
 # Define o Target
-add_library (ChimeraCore STATIC ${SourcesCore})
+add_library (${PROJECT_NAME} STATIC ${SourceFiles})
 
-# Define os includes 
-target_include_directories (ChimeraCore PUBLIC ${IncludeCore})
+# Define os includes
+target_include_directories (${PROJECT_NAME} PUBLIC ${IncludeDirs})
 
 # Lista os Includes
-# get_property(dirs DIRECTORY ${IncludeCore}/chimera/core PROPERTY INCLUDE_DIRECTORIES)
+# get_property(dirs DIRECTORY ${IncludeDirs}/chimera/core PROPERTY INCLUDE_DIRECTORIES)
 # foreach(dir ${dirs})
 # 	message(STATUS "Include dir='${dir}'")
 # endforeach()
 
-INSTALL(FILES ${ChimeraCore_BINARY_DIR}/libChimeraCore.a DESTINATION lib)
-INSTALL(DIRECTORY ${IncludeCore}/chimera/core DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")
+#INSTALL(FILES ${${PROJECT_NAME}_BINARY_DIR}/libChimeraCore.a DESTINATION lib)
+#INSTALL(DIRECTORY ${IncludeDirs}/chimera/core DESTINATION ${CMAKE_INSTALL_PREFIX}/include/chimera FILES_MATCHING PATTERN "*.h*")

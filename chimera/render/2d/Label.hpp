@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderable2D.hpp"
-#include "chimera/core/visible/Font.hpp"
+#include "chimera/core/gl/Font.hpp"
 
 namespace ce {
 

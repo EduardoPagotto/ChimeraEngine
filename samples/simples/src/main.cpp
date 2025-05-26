@@ -1,14 +1,15 @@
 #include "Game.hpp"
-#include "chimera/core/Engine.hpp"
-#include "chimera/core/ServiceLocator.hpp"
-#include "chimera/core/collada/colladaLoad.hpp"
-#include "chimera/core/device/CanvasGL.hpp"
-#include "chimera/core/device/GameController.hpp"
-#include "chimera/core/device/Joystick.hpp"
-#include "chimera/core/device/Keyboard.hpp"
-#include "chimera/core/utils.hpp"
-#include "chimera/core/visible/ShaderMng.hpp"
+#include "chimera/base/Engine.hpp"
+#include "chimera/base/GameController.hpp"
+#include "chimera/base/Joystick.hpp"
+#include "chimera/base/Keyboard.hpp"
+#include "chimera/base/ServiceLocator.hpp"
+#include "chimera/base/event.hpp"
+#include "chimera/collada/colladaLoad.hpp"
+#include "chimera/core/gl/CanvasGL.hpp"
+#include "chimera/core/gl/ShaderMng.hpp"
 #include "chimera/render/scene/Scene.hpp"
+#include <config_params.hpp>
 
 Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }
 Game::~Game() { mouse = nullptr; }
@@ -34,45 +35,44 @@ bool Game::onEvent(const SDL_Event& event) {
     mouse->getEvent(event);
 
     switch (event.type) {
-        case SDL_KEYDOWN: {
-            switch (event.key.keysym.sym) {
+        case SDL_EVENT_KEY_DOWN: {
+            switch (event.key.key) {
                 case SDLK_ESCAPE:
-                    utilSendEvent(EVENT_FLOW_STOP, nullptr, nullptr);
+                    sendChimeraEvent(EventCE::FLOW_STOP, nullptr, nullptr);
                     break;
                 case SDLK_F10:
-                    utilSendEvent(EVENT_TOGGLE_FULL_SCREEN, nullptr, nullptr);
+                    sendChimeraEvent(EventCE::TOGGLE_FULL_SCREEN, nullptr, nullptr);
                     break;
                 default:
                     break;
             }
         } break;
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEMOTION: {
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+        case SDL_EVENT_MOUSE_MOTION: {
         } break;
-        case SDL_WINDOWEVENT: {
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_ENTER:
-                    utilSendEvent(EVENT_FLOW_RESUME, nullptr, nullptr); // isPaused = false;
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    utilSendEvent(EVENT_FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
-                    break;
-            }
-        } break;
+        case SDL_EVENT_WINDOW_MOUSE_ENTER:
+            sendChimeraEvent(EventCE::FLOW_RESUME, nullptr, nullptr); // isPaused = false;
+            break;
+        case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+            sendChimeraEvent(EventCE::FLOW_PAUSE, nullptr, nullptr); // isPaused = true;
+            break;
     }
 
     return true;
 }
 
-void Game::onUpdate(ce::IViewProjection& vp, const double& ts) {}
+void Game::onUpdate(const double& ts) {}
 
 void Game::onRender() {}
 
 int main(int argn, char** argv) {
     using namespace ce;
     try {
-        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+        SDL_SetAppMetadata(std::string(project_name).c_str(), std::string(project_version).c_str(),
+                           "com.mechanical.engine");
+
+        SDL_SetLogPriorities(SDL_LOG_PRIORITY_DEBUG);
         SDL_Log("Simnples Iniciado");
 
         // Registry to entt
@@ -84,7 +84,7 @@ int main(int argn, char** argv) {
         g_service_locator.registerService(std::make_shared<Mouse>());
         g_service_locator.registerService(std::make_shared<Keyboard>());
         g_service_locator.registerService(std::make_shared<Joystick>());
-        g_service_locator.registerService(std::make_shared<GameController>());
+        g_service_locator.registerService(std::make_shared<GamePad>());
         g_service_locator.registerService(std::make_shared<ViewProjection>(0.5f)); // View projection
         g_service_locator.registerService(std::make_shared<ShaderMng>());
         g_service_locator.registerService(std::make_shared<TextureMng>());

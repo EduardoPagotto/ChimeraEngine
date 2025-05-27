@@ -11,8 +11,8 @@ Game::Game(ce::Scene* scene) : IStateMachine("Game"), scene(scene), pCorpoRigido
     using namespace ce;
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 
-    gameControl = g_service_locator.getService<IGamePad>();
-    mouse = g_service_locator.getService<IMouse>();
+    gameControl = g_service_locator.getService<GamePad>();
+    mouse = g_service_locator.getService<Mouse>();
 }
 
 Game::~Game() {

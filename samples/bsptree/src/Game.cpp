@@ -3,7 +3,7 @@
 #include "chimera/core/gl/OpenGLDefs.hpp"
 #include "chimera/ecs/Entity.hpp"
 
-Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }
+Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::Mouse>(); }
 Game::~Game() { mouse = nullptr; }
 
 void Game::onAttach() {

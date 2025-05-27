@@ -1,5 +1,4 @@
 #include "chimera/core/visible/CameraControllerFPS.hpp"
-#include "chimera/base/Keyboard.hpp"
 #include "chimera/base/utils.hpp"
 #include "chimera/ecs/CameraComponent.hpp"
 
@@ -8,9 +7,9 @@ namespace ce {
     CameraControllerFPS::CameraControllerFPS(Entity entity) : IStateMachine("FPS"), entity(entity) {
 
         vp = g_service_locator.getService<ViewProjection>();
-        mouse = g_service_locator.getService<IMouse>();
-        keyboard = g_service_locator.getService<IKeyboard>();
-        gameControl = g_service_locator.getService<IGamePad>();
+        mouse = g_service_locator.getService<Mouse>();
+        keyboard = g_service_locator.getService<Keyboard>();
+        gameControl = g_service_locator.getService<GamePad>();
     }
 
     CameraControllerFPS::~CameraControllerFPS() {

@@ -3,8 +3,8 @@
 #include "chimera/core/gl/OpenGLDefs.hpp"
 
 Game::Game() : IStateMachine("Game") {
-    keyboard = ce::g_service_locator.getService<ce::IKeyboard>();
-    mouse = ce::g_service_locator.getService<ce::IMouse>();
+    keyboard = ce::g_service_locator.getService<ce::Keyboard>();
+    mouse = ce::g_service_locator.getService<ce::Mouse>();
 }
 
 Game::~Game() {

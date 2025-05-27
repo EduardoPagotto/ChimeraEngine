@@ -13,7 +13,7 @@ namespace ce {
         glm::vec3 up, front;
         std::shared_ptr<Camera> camera;
         Entity entity;
-        std::shared_ptr<IMouse> mouse;
+        std::shared_ptr<Mouse> mouse;
         std::shared_ptr<ViewProjection> vp;
 
       public:

@@ -1,14 +1,15 @@
 #pragma once
-#include "interfaces.hpp"
+#include "ServiceLocator.hpp"
+#include <SDL3/SDL.h>
 #include <map>
 
 namespace ce {
 
-    /// @brief Pad controller of game PAD
+    /// @brief Pad Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20250401
-    class GamePad : public ServiceBase<IGamePad> {
+    /// @date 20250527
+    class GamePad : public IService {
 
       private:
         std::map<SDL_JoystickID, SDL_Gamepad*> pads;
@@ -19,14 +20,17 @@ namespace ce {
             SDL_SetGamepadEventsEnabled(true);
         }
 
-        virtual ~GamePad() noexcept override {
+        virtual ~GamePad() noexcept {
             for (auto i = pads.begin(); i != pads.end(); i++)
                 SDL_CloseGamepad(i->second);
 
             pads.clear();
         }
 
-        virtual const bool getEvent(const SDL_Event& event) noexcept override {
+        // IService base
+        std::type_index getTypeIndex() const override { return std::type_index(typeid(GamePad)); }
+
+        const bool getEvent(const SDL_Event& event) noexcept {
 
             switch (event.type) {
                 case SDL_EVENT_GAMEPAD_ADDED:
@@ -40,7 +44,7 @@ namespace ce {
             return false;
         }
 
-        virtual SDL_Gamepad* get(const SDL_JoystickID& pad_id) noexcept override {
+        SDL_Gamepad* get(const SDL_JoystickID& pad_id) noexcept {
             return pads.contains(pad_id) ? pads[pad_id] : nullptr;
         }
 

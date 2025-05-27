@@ -1,5 +1,4 @@
 #include "chimera/core/visible/CameraControllerOrbit.hpp"
-#include "chimera/base/Keyboard.hpp"
 #include "chimera/ecs/CameraComponent.hpp"
 
 namespace ce {
@@ -7,7 +6,7 @@ namespace ce {
     CameraControllerOrbit::CameraControllerOrbit(Entity entity) : IStateMachine("Orbit"), entity(entity) {
 
         vp = g_service_locator.getService<ViewProjection>();
-        mouse = g_service_locator.getService<IMouse>();
+        mouse = g_service_locator.getService<Mouse>();
     }
 
     CameraControllerOrbit::~CameraControllerOrbit() { mouse = nullptr; }

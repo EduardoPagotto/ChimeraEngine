@@ -1,10 +1,15 @@
 #pragma once
-#include "interfaces.hpp"
+#include "ServiceLocator.hpp"
+#include <SDL3/SDL.h>
 #include <map>
 
 namespace ce {
 
-    class Joystick : public ServiceBase<IJoystick> {
+    /// @brief Joystic Interface
+    /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
+    /// @since 20130925
+    /// @date 20250527
+    class Joystick : public IService {
 
       private:
         std::map<SDL_JoystickID, SDL_Joystick*> joys;
@@ -22,7 +27,10 @@ namespace ce {
             joys.clear();
         };
 
-        virtual const bool getEvent(const SDL_Event& event) noexcept override {
+        // IService base
+        std::type_index getTypeIndex() const override { return std::type_index(typeid(Joystick)); }
+
+        const bool getEvent(const SDL_Event& event) noexcept {
 
             switch (event.type) {
                 case SDL_EVENT_JOYSTICK_ADDED:
@@ -36,7 +44,7 @@ namespace ce {
             return false;
         }
 
-        virtual SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept override {
+        SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept {
             return joys.contains(joystick_id) ? joys[joystick_id] : nullptr;
         }
 

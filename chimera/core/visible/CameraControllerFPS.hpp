@@ -16,9 +16,9 @@ namespace ce {
         std::shared_ptr<Camera> camera;
         Entity entity;
         std::shared_ptr<ViewProjection> vp;
-        std::shared_ptr<IGamePad> gameControl;
-        std::shared_ptr<IKeyboard> keyboard;
-        std::shared_ptr<IMouse> mouse;
+        std::shared_ptr<GamePad> gameControl;
+        std::shared_ptr<Keyboard> keyboard;
+        std::shared_ptr<Mouse> mouse;
 
       public:
         CameraControllerFPS(Entity entity);

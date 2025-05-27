@@ -14,6 +14,7 @@ namespace ce {
     /// @since 20130925
     /// @date 20250401
     class CanvasFB : public ServiceBase<ICanva> {
+
       private:
         bool fullScreen{false};
         int width, height;
@@ -68,12 +69,12 @@ namespace ce {
             SDL_DestroyWindow(window);
         }
 
-        virtual void before() override {
+        void before() override {
             // Limpa
             memset(frame_buffer, 0, width * height * sizeof(uint32_t));
         }
 
-        virtual void after() override {
+        void after() override {
 
             // TODO: Colocar no CMAKE este def
 #define __FRAMEBUFFER_GPU_SET 1
@@ -110,7 +111,7 @@ namespace ce {
             }
         }
 
-        virtual void toggleFullScreen() override {
+        void toggleFullScreen() override {
             if (fullScreen == false) {
 
                 SDL_GetWindowPosition(window, &posX, &posY);
@@ -127,14 +128,14 @@ namespace ce {
             fullScreen = !fullScreen;
         }
 
-        virtual void reshape(int width, int height) override {
+        void reshape(int width, int height) override {
             this->width = width;
             this->height = height;
         }
 
-        virtual const int getWidth() const override { return width; }
+        const int getWidth() const override { return width; }
 
-        virtual const int getHeight() const override { return height; }
+        const int getHeight() const override { return height; }
 
         uint32_t* getPixels() override { return frame_buffer; }
 

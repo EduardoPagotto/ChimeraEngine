@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/base/Engine.hpp"
-#include "chimera/base/GameController.hpp"
+#include "chimera/base/GamePad.hpp"
 #include "chimera/base/Joystick.hpp"
 #include "chimera/base/Keyboard.hpp"
 #include "chimera/base/ServiceLocator.hpp"

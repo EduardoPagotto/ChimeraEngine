@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/base/GameController.hpp"
+#include "chimera/base/GamePad.hpp"
 #include "chimera/base/ICamera.hpp"
 #include "chimera/base/IStateMachine.hpp"
 #include "chimera/base/Keyboard.hpp"

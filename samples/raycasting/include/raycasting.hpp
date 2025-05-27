@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/base/interfaces.hpp"
+#include "chimera/base/ICanva.hpp"
 
 #include <glm/glm.hpp>
 #include <stdint.h>

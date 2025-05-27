@@ -1,9 +1,9 @@
 #pragma once
+#include "ICanva.hpp"
 #include "ServiceLocator.hpp"
 #include "StateStack.hpp"
 #include "Timer.hpp"
 #include "event.hpp"
-#include "interfaces.hpp"
 
 namespace ce {
 

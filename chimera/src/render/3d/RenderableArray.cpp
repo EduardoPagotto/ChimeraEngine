@@ -8,7 +8,7 @@ namespace ce {
 
     RenderableArray::RenderableArray(std::vector<TrisIndex>& vPtrTrisIndex, Mesh* mesh) : Renderable3D(), totIndex(0) {
         // create vertex buffers
-        vao = new VertexArray();
+        vao = std::make_shared<VertexArray>();
         vao->bind();
 
         VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
@@ -29,7 +29,9 @@ namespace ce {
 
             auto [min, max, size] = vertexIndexedBoundaries(mesh->vertex, ptrTrisIndex);
 
-            IndexBuffer* ibo = new IndexBuffer((uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3);
+            std::shared_ptr<IndexBuffer> ibo =
+                std::make_shared<IndexBuffer>((uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3);
+
             Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
 
             vChild.push_back(r);

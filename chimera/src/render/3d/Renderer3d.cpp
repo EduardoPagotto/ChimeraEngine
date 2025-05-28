@@ -65,8 +65,8 @@ namespace ce {
 
     void Renderer3d::flush() {
 
-        std::shared_ptr<Shader> activeShader = nullptr;
-        VertexArray* pLastVao = nullptr;
+        std::shared_ptr<Shader> activeShader;
+        std::shared_ptr<VertexArray> pLastVao;
 
         while (!qRenderableIndexes.empty()) {
             auto& r = vRenderable[qRenderableIndexes.front()];

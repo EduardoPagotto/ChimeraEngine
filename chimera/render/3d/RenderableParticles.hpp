@@ -12,7 +12,7 @@ namespace ce {
         virtual ~RenderableParticles();
 
         virtual const uint32_t getSize() const override { return pc->particlesCount; }
-        virtual IndexBuffer* getIBO() const override { return nullptr; }
+        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
         virtual const AABB& getAABB() const override { return pc->aabb; }
         virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
         virtual void draw(const bool& logData) override;

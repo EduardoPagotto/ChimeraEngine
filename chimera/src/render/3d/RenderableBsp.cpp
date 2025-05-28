@@ -16,7 +16,7 @@ namespace ce {
         root = bspTree.create(meshFinal, vTris);
 
         // create VAO and VBO
-        vao = new VertexArray();
+        vao = std::make_shared<VertexArray>();
         vao->bind();
 
         VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
@@ -38,7 +38,9 @@ namespace ce {
 
             auto [min, max, size] = vertexIndexedBoundaries(meshFinal.vertex, trisIndex);
 
-            IndexBuffer* ibo = new IndexBuffer((uint32_t*)&trisIndex[0], trisIndex.size() * 3);
+            std::shared_ptr<IndexBuffer> ibo =
+                std::make_shared<IndexBuffer>((uint32_t*)&trisIndex[0], trisIndex.size() * 3);
+
             Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
             vChild.push_back(r);
         }

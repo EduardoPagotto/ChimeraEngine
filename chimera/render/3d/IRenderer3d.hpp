@@ -4,6 +4,7 @@
 #include "chimera/base/Uniform.hpp"
 #include "chimera/base/ViewProjection.hpp"
 #include "chimera/core/gl/RenderCommand.hpp"
+#include "chimera/core/gl/buffer/IndexBuffer.hpp"
 #include "chimera/core/gl/buffer/VertexArray.hpp"
 #include "chimera/space/Octree.hpp"
 #include <vector>
@@ -13,30 +14,34 @@ namespace ce {
     class IRenderer3d;
 
     class Renderable3D {
+
+      protected:
+        uint32_t indexAuxCommand = 0;
+        std::shared_ptr<VertexArray> vao;
+
       public:
         Renderable3D() = default;
-        virtual ~Renderable3D() {
-            if (vao) {
-                delete vao;
-                vao = nullptr;
-            }
-        }
+
+        virtual ~Renderable3D() { vao.reset(); }
+
         virtual void draw(const bool& logData) {
             if (logData)
                 SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Renderable3D draw");
         }
+
         virtual const uint32_t getSize() const = 0;
-        virtual const class AABB& getAABB() const = 0;
-        virtual class IndexBuffer* getIBO() const = 0;
+
+        virtual const AABB& getAABB() const = 0;
+
+        virtual std::shared_ptr<IndexBuffer> getIBO() const = 0;
+
         virtual void submit(RenderCommand& command, IRenderer3d& renderer) = 0;
 
-        inline VertexArray* getVao() const { return vao; }
-        inline void setIndexAuxCommand(const uint32_t& command) { indexAuxCommand = command; }
-        inline const uint32_t getIndexAuxCommand() const { return indexAuxCommand; }
+        inline std::shared_ptr<VertexArray> getVao() const { return vao; }
 
-      protected:
-        uint32_t indexAuxCommand = 0;
-        VertexArray* vao = nullptr;
+        inline void setIndexAuxCommand(const uint32_t& command) { indexAuxCommand = command; }
+
+        inline const uint32_t getIndexAuxCommand() const { return indexAuxCommand; }
     };
 
     class IRenderer3d {

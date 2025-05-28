@@ -6,24 +6,34 @@
 #include "chimera/space/AABB.hpp"
 
 namespace ce {
-    class RenderableParticles : public Renderable3D {
-      public:
-        RenderableParticles() = default;
-        virtual ~RenderableParticles();
 
-        virtual const uint32_t getSize() const override { return pc->particlesCount; }
-        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
-        virtual const AABB& getAABB() const override { return pc->aabb; }
-        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
-        virtual void draw(const bool& logData) override;
-        void create();
-        void destroy();
-        void setParticleContainer(ParticleContainer* pc) { this->pc = pc; }
+    class RenderableParticles : public Renderable3D {
 
       private:
         VertexBuffer* vboVex = nullptr;
         VertexBuffer* vboPos = nullptr;
         VertexBuffer* vboCor = nullptr;
         ParticleContainer* pc;
+
+      public:
+        RenderableParticles() = default;
+
+        virtual ~RenderableParticles();
+
+        virtual const uint32_t getSize() const override { return pc->particlesCount; }
+
+        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
+
+        virtual const AABB& getAABB() const override { return pc->aabb; }
+
+        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
+
+        virtual void draw(const bool& logData) override;
+
+        void create();
+
+        void destroy();
+
+        void setParticleContainer(ParticleContainer* pc) { this->pc = pc; }
     };
 } // namespace ce

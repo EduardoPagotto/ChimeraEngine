@@ -7,6 +7,11 @@
 namespace ce {
 
     class Group3d : public IRenderable3d {
+
+      private:
+        std::vector<IRenderable3d*> renderables;
+        glm::mat4 transformationMatrix;
+
       public:
         Group3d(const glm::mat4& transform) : transformationMatrix(transform) {}
         virtual ~Group3d() {}
@@ -18,9 +23,5 @@ namespace ce {
         }
 
         inline void add(IRenderable3d* renderable) { renderables.push_back(renderable); }
-
-      private:
-        std::vector<IRenderable3d*> renderables;
-        glm::mat4 transformationMatrix;
     };
 } // namespace ce

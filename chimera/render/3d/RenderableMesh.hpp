@@ -8,18 +8,23 @@
 namespace ce {
 
     class RenderableMesh : public Renderable3D {
-      public:
-        RenderableMesh(Mesh* mesh);
-        virtual ~RenderableMesh();
-
-        virtual const uint32_t getSize() const override { return totIndex; }
-        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
-        virtual const AABB& getAABB() const override { return aabb; }
-        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
       private:
         uint32_t totIndex;
         Renderable3D* child;
         AABB aabb;
+
+      public:
+        RenderableMesh(Mesh* mesh);
+
+        virtual ~RenderableMesh();
+
+        virtual const uint32_t getSize() const override { return totIndex; }
+
+        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
+
+        virtual const AABB& getAABB() const override { return aabb; }
+
+        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
     };
 } // namespace ce

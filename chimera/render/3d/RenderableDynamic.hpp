@@ -6,14 +6,17 @@
 namespace ce {
 
     class RenderableDynamic : public Renderable3D {
-      public:
-        RenderableDynamic(const uint32_t& max);
-        virtual ~RenderableDynamic();
-        void render(VertexData* pVertice, const uint32_t& size);
 
       private:
         [[maybe_unused]]
         uint32_t max;
         VertexBuffer* vbo;
+
+      public:
+        RenderableDynamic(const uint32_t& max);
+
+        virtual ~RenderableDynamic();
+
+        void render(VertexData* pVertice, const uint32_t& size);
     };
 } // namespace ce

@@ -45,25 +45,34 @@ namespace ce {
     };
 
     class IRenderer3d {
-      public:
-        IRenderer3d() {
-            uniformsQueue.reserve(500);
-        } // FIXME: ViewProjection pode ser subistituido pela matix memso ???
-        virtual ~IRenderer3d() = default;
-        virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) = 0;
-        virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) = 0;
-        virtual void end() = 0;
-        virtual void flush() = 0;
-
-        inline Camera* getCamera() const { return camera; }
-        inline ViewProjection* getViewProjection() const { return vpo; }
-        inline TransformationStack& getStack() { return stack; };
-        inline MapUniform& uboQueue() { return uniformsQueue; }
 
       protected:
         Camera* camera = nullptr;
         ViewProjection* vpo = nullptr;
         TransformationStack stack; // TODO: implementar a hierarquia de modelos direta (sem fisica)
         MapUniform uniformsQueue;
+
+      public:
+        IRenderer3d() {
+            uniformsQueue.reserve(500);
+        } // FIXME: ViewProjection pode ser subistituido pela matix memso ???
+
+        virtual ~IRenderer3d() = default;
+
+        virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) = 0;
+
+        virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) = 0;
+
+        virtual void end() = 0;
+
+        virtual void flush() = 0;
+
+        inline Camera* getCamera() const { return camera; }
+
+        inline ViewProjection* getViewProjection() const { return vpo; }
+
+        inline TransformationStack& getStack() { return stack; };
+
+        inline MapUniform& uboQueue() { return uniformsQueue; }
     };
 } // namespace ce

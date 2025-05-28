@@ -7,18 +7,24 @@
 namespace ce {
 
     class RenderableIBO : public Renderable3D {
-      public:
-        RenderableIBO(std::shared_ptr<VertexArray> vao, std::shared_ptr<IndexBuffer> ibo, const AABB& aabb);
-        virtual ~RenderableIBO();
-
-        virtual const uint32_t getSize() const override { return ibo->getSize(); }
-        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return ibo; }
-        virtual const AABB& getAABB() const override { return aabb; }
-        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
-        virtual void draw(const bool& logData) override;
 
       private:
         std::shared_ptr<IndexBuffer> ibo;
         AABB aabb;
+
+      public:
+        RenderableIBO(std::shared_ptr<VertexArray> vao, std::shared_ptr<IndexBuffer> ibo, const AABB& aabb);
+
+        virtual ~RenderableIBO();
+
+        virtual const uint32_t getSize() const override { return ibo->getSize(); }
+
+        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return ibo; }
+
+        virtual const AABB& getAABB() const override { return aabb; }
+
+        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
+
+        virtual void draw(const bool& logData) override;
     };
 } // namespace ce

@@ -2,12 +2,15 @@
 #include "chimera/base/ICamera.hpp"
 #include "chimera/base/TransformationStack.hpp"
 #include "chimera/base/Uniform.hpp"
+#include "chimera/base/ViewProjection.hpp"
 #include <vector>
 
 namespace ce {
     class IRenderer3d {
       public:
-        IRenderer3d() { uniformsQueue.reserve(500); }
+        IRenderer3d() {
+            uniformsQueue.reserve(500);
+        } // FIXME: ViewProjection pode ser subistituido pela matix memso ???
         virtual ~IRenderer3d() = default;
         virtual void begin(class Camera* camera, class ViewProjection* vpo, class Octree* octree) = 0;
         virtual void submit(const struct RenderCommand& command, class IRenderable3d* renderable,

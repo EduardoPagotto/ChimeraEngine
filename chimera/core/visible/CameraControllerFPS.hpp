@@ -4,6 +4,7 @@
 #include "chimera/base/IStateMachine.hpp"
 #include "chimera/base/Keyboard.hpp"
 #include "chimera/base/Mouse.hpp"
+#include "chimera/base/ViewProjection.hpp"
 #include "chimera/ecs/Entity.hpp"
 
 namespace ce {
@@ -13,8 +14,8 @@ namespace ce {
       private:
         float pitch, yaw, movementSpeed;
         glm::vec3 up, front, worldUp, right;
-        std::shared_ptr<Camera> camera;
         Entity entity;
+        std::shared_ptr<Camera> camera;
         std::shared_ptr<ViewProjection> vp;
         std::shared_ptr<GamePad> gameControl;
         std::shared_ptr<Keyboard> keyboard;

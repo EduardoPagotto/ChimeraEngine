@@ -2,6 +2,7 @@
 #include "chimera/base/ICamera.hpp"
 #include "chimera/base/IStateMachine.hpp"
 #include "chimera/base/Mouse.hpp"
+#include "chimera/base/ViewProjection.hpp"
 #include "chimera/ecs/Entity.hpp"
 
 namespace ce {
@@ -11,8 +12,8 @@ namespace ce {
       private:
         float pitch, yaw, distance, min, max;
         glm::vec3 up, front;
-        std::shared_ptr<Camera> camera;
         Entity entity;
+        std::shared_ptr<Camera> camera;
         std::shared_ptr<Mouse> mouse;
         std::shared_ptr<ViewProjection> vp;
 

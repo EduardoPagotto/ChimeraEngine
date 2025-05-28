@@ -104,7 +104,7 @@ namespace ce {
                 }
             } // end while current poly
 
-            score = abs(frontfaces - backfaces) + (splits * 8);
+            score = std::abs(frontfaces - backfaces) + (splits * 8);
 
             if (score < bestScore) {
                 bestScore = score;

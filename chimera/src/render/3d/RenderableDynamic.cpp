@@ -9,7 +9,7 @@ namespace ce {
 
         vao = std::make_shared<VertexArray>();
 
-        vbo = new VertexBuffer(BufferType::STREAM); //????
+        vbo = std::make_shared<VertexBuffer>(BufferType::STREAM); //????
         vbo->bind();
 
         BufferLayout layout;
@@ -25,8 +25,7 @@ namespace ce {
 
     RenderableDynamic::~RenderableDynamic() {
         vao.reset();
-        delete vbo;
-        vbo = nullptr;
+        vbo.reset();
     }
 
     void RenderableDynamic::render(VertexData* pVertice,

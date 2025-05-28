@@ -10,7 +10,7 @@ namespace ce {
       private:
         [[maybe_unused]]
         uint32_t max;
-        VertexBuffer* vbo;
+        std::shared_ptr<VertexBuffer> vbo;
 
       public:
         RenderableDynamic(const uint32_t& max);

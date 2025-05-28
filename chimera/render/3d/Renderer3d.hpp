@@ -15,13 +15,13 @@ namespace ce {
         virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) override;
         virtual void end() override;
         virtual void flush() override;
-        virtual inline std::vector<Texture*>& texQueue() { return textureQueue; }
+        virtual inline std::vector<std::shared_ptr<Texture>>& texQueue() { return textureQueue; }
 
       private:
         std::queue<uint32_t> qRenderableIndexes;
         std::vector<RenderCommand> vRenderCommand;
         std::vector<Renderable3D*> vRenderable;
-        std::vector<Texture*> textureQueue;
+        std::vector<std::shared_ptr<Texture>> textureQueue;
         Frustum frustum;
         bool logData;
         Octree* octree;

@@ -42,7 +42,7 @@ namespace ce {
         fbSpec.width = width;
         fbSpec.height = height;
         auto& sc = eRenderBuferSpec.getComponent<ShaderComponent>();
-        return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), sc.shader);
+        return new RenderBuffer(initW, initH, std::make_shared<FrameBuffer>(fbSpec), sc.shader);
     }
 
     void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {

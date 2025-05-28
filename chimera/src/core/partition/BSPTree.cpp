@@ -195,7 +195,7 @@ namespace ce {
 
     BSPTreeNode* BspTree::build(std::list<std::shared_ptr<Triangle>>& _vTriangle) {
 
-        if (_vTriangle.empty() == true)
+        if (_vTriangle.empty())
             return nullptr;
 
         std::list<std::shared_ptr<Triangle>> front_list;

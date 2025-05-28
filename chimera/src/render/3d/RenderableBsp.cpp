@@ -123,25 +123,25 @@ namespace ce {
             return !tree->isSolid;
         }
 
-        SIDE PointA = tree->hyperPlane.classifyPoint(Start);
-        SIDE PointB = tree->hyperPlane.classifyPoint(End);
+        const SIDE PointA = tree->hyperPlane.classifyPoint(Start);
+        const SIDE PointB = tree->hyperPlane.classifyPoint(End);
 
-        if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
+        if ((PointA == SIDE::CP_ONPLANE) && (PointB == SIDE::CP_ONPLANE)) {
             return lineOfSight(Start, End, tree->front);
         }
 
-        if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
+        if ((PointA == SIDE::CP_FRONT) && (PointB == SIDE::CP_BACK)) {
             tree->hyperPlane.intersect(Start, End, intersection, temp);
             return lineOfSight(Start, intersection, tree->front) && lineOfSight(End, intersection, tree->back);
         }
 
-        if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
+        if ((PointA == SIDE::CP_BACK) && (PointB == SIDE::CP_FRONT)) {
             tree->hyperPlane.intersect(Start, End, intersection, temp);
             return lineOfSight(End, intersection, tree->front) && lineOfSight(Start, intersection, tree->back);
         }
 
         // if we get here one of the points is on the hyperPlane
-        if (PointA == SIDE::CP_FRONT || PointB == SIDE::CP_FRONT) {
+        if ((PointA == SIDE::CP_FRONT) || (PointB == SIDE::CP_FRONT)) {
             return lineOfSight(Start, End, tree->front);
         } else {
             return lineOfSight(Start, End, tree->back);

@@ -47,18 +47,17 @@ sudo update-alternatives --config ld
 #change to -> 2           /usr/bin/ld.lld
 ```
 
-## Build Libs and examples app's:
+## Build engine and examples test:
 ```bash
 cd ChimeraEngine
-mkdir build
-cd build
 
-cmake -DCMAKE_BUILD_TYPE=Debug \
+cmake -G "Unix Makefiles" \
+      -DCMAKE_BUILD_TYPE=Debug \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE \
       -DCMAKE_TOOLCHAIN_FILE=./toolchain/clang.cmake \
-      -B/home/pagotto/Projetos/pessoal/games/ChimeraEngine/build \
-      -G "Unix Makefiles"
-make
+      -B build
+
+make -C build -j 4
 ```
 
 

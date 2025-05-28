@@ -11,7 +11,7 @@ namespace ce {
 
     void Renderer3dLines::end() {}
 
-    void Renderer3dLines::submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) {
+    void Renderer3dLines::submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) {
         // Transformation model matrix AABB to know if in frustrum Camera
         Renderable3D* r = (Renderable3D*)renderable;
         const AABB& aabb = r->getAABB();

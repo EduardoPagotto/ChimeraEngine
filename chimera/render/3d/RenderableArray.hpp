@@ -1,7 +1,7 @@
 #pragma once
 #include "chimera/core/gl/buffer/VertexArray.hpp"
 #include "chimera/core/visible/Mesh.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/space/AABB.hpp"
 
 namespace ce {
@@ -17,7 +17,7 @@ namespace ce {
         virtual const AABB& getAABB() const override { return aabb; }
 
       private:
-        std::vector<IRenderable3d*> vChild;
+        std::vector<Renderable3D*> vChild;
         AABB aabb;
         uint32_t totIndex;
     };

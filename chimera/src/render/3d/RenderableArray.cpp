@@ -30,7 +30,7 @@ namespace ce {
             auto [min, max, size] = vertexIndexedBoundaries(mesh->vertex, ptrTrisIndex);
 
             IndexBuffer* ibo = new IndexBuffer((uint32_t*)&ptrTrisIndex[0], ptrTrisIndex.size() * 3);
-            IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
+            Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
 
             vChild.push_back(r);
 
@@ -47,7 +47,7 @@ namespace ce {
 
     RenderableArray::~RenderableArray() {
         while (!vChild.empty()) {
-            IRenderable3d* child = vChild.back();
+            Renderable3D* child = vChild.back();
             vChild.pop_back();
             delete child;
             child = nullptr;

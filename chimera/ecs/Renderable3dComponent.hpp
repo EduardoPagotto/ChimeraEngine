@@ -4,11 +4,11 @@
 namespace ce {
     struct Renderable3dComponent {
         TagInfo tag;
-        IRenderable3d* renderable; // TODO: Smartpointer!!!!
+        Renderable3D* renderable; // TODO: Smartpointer!!!!
     };
 
     struct RenderableParticlesComponent {
-        IRenderable3d* renderable;
+        Renderable3D* renderable;
         bool enable;
     };
 

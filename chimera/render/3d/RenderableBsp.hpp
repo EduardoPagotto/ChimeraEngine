@@ -2,7 +2,7 @@
 #include "chimera/core/gl/RenderCommand.hpp"
 #include "chimera/core/gl/buffer/VertexArray.hpp"
 #include "chimera/core/visible/Mesh.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/space/AABB.hpp"
 #include "chimera/space/BSPTreeNode.hpp"
 
@@ -20,11 +20,11 @@ namespace ce {
       private:
         void destroy();
         void collapse(BSPTreeNode* tree);
-        void traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<IRenderable3d*>& childDraw);
+        void traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree, std::vector<Renderable3D*>& childDraw);
         // TODO: Testar!!!!!!
         bool lineOfSight(const glm::vec3& Start, const glm::vec3& End, BSPTreeNode* tree);
 
-        std::vector<IRenderable3d*> vChild;
+        std::vector<Renderable3D*> vChild;
         AABB aabb;
         uint32_t totIndex;
         BSPTreeNode* root;

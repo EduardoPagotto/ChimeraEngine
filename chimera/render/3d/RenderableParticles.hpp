@@ -2,7 +2,7 @@
 #include "chimera/core/gl/ParticleEmitter.hpp"
 #include "chimera/core/gl/RenderCommand.hpp"
 #include "chimera/core/gl/buffer/VertexArray.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/space/AABB.hpp"
 
 namespace ce {

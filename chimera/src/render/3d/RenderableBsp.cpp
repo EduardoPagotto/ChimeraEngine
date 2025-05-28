@@ -39,7 +39,7 @@ namespace ce {
             auto [min, max, size] = vertexIndexedBoundaries(meshFinal.vertex, trisIndex);
 
             IndexBuffer* ibo = new IndexBuffer((uint32_t*)&trisIndex[0], trisIndex.size() * 3);
-            IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
+            Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
             vChild.push_back(r);
         }
 
@@ -53,7 +53,7 @@ namespace ce {
     RenderableBsp::~RenderableBsp() { this->destroy(); }
 
     void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree,
-                                     std::vector<IRenderable3d*>& childDraw) {
+                                     std::vector<Renderable3D*>& childDraw) {
         // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
         if ((tree != nullptr) && (tree->isSolid == false)) {
             switch (SIDE result = tree->hyperPlane.classifyPoint(cameraPos); result) {
@@ -80,7 +80,7 @@ namespace ce {
     }
 
     void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
-        std::vector<IRenderable3d*> childDraw;
+        std::vector<Renderable3D*> childDraw;
         const glm::vec3 cameraPos = renderer.getCamera()->getPosition();
         traverseTree(cameraPos, root, childDraw);
         for (uint32_t c = 0; c < childDraw.size(); c++)
@@ -92,7 +92,7 @@ namespace ce {
     void RenderableBsp::destroy() {
 
         while (!vChild.empty()) {
-            IRenderable3d* child = vChild.back();
+            Renderable3D* child = vChild.back();
             vChild.pop_back();
             delete child;
             child = nullptr;

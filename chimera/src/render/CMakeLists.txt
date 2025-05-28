@@ -15,7 +15,6 @@ set (SourceFiles 	2d/BatchRender2D.cpp
 					2d/Layer.cpp
 					3d/Renderer3d.cpp
 					3d/Renderer3dLines.cpp
-					3d/Renderable3D.cpp
 					3d/RenderableMesh.cpp
 					3d/RenderableIBO.cpp
 					3d/RenderableArray.cpp

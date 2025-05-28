@@ -2,7 +2,7 @@
 #include "chimera/core/gl/buffer/IndexBuffer.hpp"
 #include "chimera/core/gl/buffer/VertexArray.hpp"
 #include "chimera/core/visible/Mesh.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/space/AABB.hpp"
 
 namespace ce {
@@ -19,7 +19,7 @@ namespace ce {
 
       private:
         uint32_t totIndex;
-        IRenderable3d* child;
+        Renderable3D* child;
         AABB aabb;
     };
 } // namespace ce

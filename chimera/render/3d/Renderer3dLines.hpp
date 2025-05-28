@@ -1,7 +1,6 @@
 #pragma once
 #include "IRenderer3d.hpp"
 #include "chimera/core/gl/DrawLine.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/space/Frustum.hpp"
 
 namespace ce {
@@ -16,7 +15,7 @@ namespace ce {
         virtual ~Renderer3dLines() noexcept { destroy(); };
 
         virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) override;
-        virtual void submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) override;
+        virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) override;
         virtual void end() override;
         virtual void flush() override;
 

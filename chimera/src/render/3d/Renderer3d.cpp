@@ -1,7 +1,6 @@
 #include "chimera/render/3d/Renderer3d.hpp"
 #include "chimera/core/gl/buffer/IndexBuffer.hpp"
 #include "chimera/core/gl/buffer/VertexArray.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
 #include "chimera/space/AABB.hpp"
 #include <SDL3/SDL.h>
 
@@ -38,9 +37,9 @@ namespace ce {
         }
     }
 
-    void Renderer3d::submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) {
+    void Renderer3d::submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) {
 
-        Renderable3D* r = (Renderable3D*)renderable;
+        Renderable3D* r = renderable;
 
         if (count == 0)
             vRenderCommand.push_back(command);

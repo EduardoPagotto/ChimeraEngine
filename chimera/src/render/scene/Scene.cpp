@@ -302,7 +302,7 @@ namespace ce {
         auto view = g_registry.get().view<RenderableParticlesComponent>();
         for (auto entity : view) {
             RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
-            IRenderable3d* renderable = rc.renderable;
+            Renderable3D* renderable = rc.renderable;
 
             Entity e(entity);
             TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
@@ -457,7 +457,7 @@ namespace ce {
                     auto view = g_registry.get().view<RenderableParticlesComponent>();
                     for (auto entity : view) {
                         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
-                        IRenderable3d* renderable = rc.renderable;
+                        Renderable3D* renderable = rc.renderable;
 
                         Entity e(entity);
                         TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!

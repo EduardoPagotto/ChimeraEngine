@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderer3d.hpp"
 #include "chimera/core/gl/RenderCommand.hpp"
-#include "chimera/render/3d/Renderable3D.hpp"
+#include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/space/Frustum.hpp"
 #include "chimera/space/Octree.hpp"
 
@@ -12,7 +12,7 @@ namespace ce {
         Renderer3d(const bool& logData);
         virtual ~Renderer3d();
         virtual void begin(Camera* camera, ViewProjection* vpo, Octree* octree) override;
-        virtual void submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) override;
+        virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) override;
         virtual void end() override;
         virtual void flush() override;
         virtual inline std::vector<Texture*>& texQueue() { return textureQueue; }

@@ -17,9 +17,9 @@ namespace ce {
 
         // VBO square vertex static, others (posiciton an size / color) is empty (NULL) buffer and it will be updated
         // later, each frame.
-        vboVex = new VertexBuffer(BufferType::STATIC, sizeof(glm::vec3) * 4, (void*)vVertex);
-        vboPos = new VertexBuffer(BufferType::STREAM, max * sizeof(glm::vec4), nullptr);
-        vboCor = new VertexBuffer(BufferType::STREAM, max * 4 * sizeof(GLubyte), nullptr);
+        vboVex = std::make_shared<VertexBuffer>(BufferType::STATIC, sizeof(glm::vec3) * 4, (void*)vVertex);
+        vboPos = std::make_shared<VertexBuffer>(BufferType::STREAM, max * sizeof(glm::vec4), nullptr);
+        vboCor = std::make_shared<VertexBuffer>(BufferType::STREAM, max * 4 * sizeof(GLubyte), nullptr);
 
         pc->posData = new glm::vec4[max];     // buffer memoria de posicoes de cada particula
         pc->colorData = new GLubyte[max * 4]; // buffer memoria de cor de cada particula
@@ -32,20 +32,9 @@ namespace ce {
 
     void RenderableParticles::destroy() {
 
-        if (vboCor) {
-            delete vboCor;
-            vboCor = nullptr;
-        }
-
-        if (vboPos) {
-            delete vboPos;
-            vboPos = nullptr;
-        }
-
-        if (vboVex) {
-            delete vboVex;
-            vboVex = nullptr;
-        }
+        vboCor.reset();
+        vboPos.reset();
+        vboVex.reset();
 
         if (pc->posData) {
             delete[] pc->posData;

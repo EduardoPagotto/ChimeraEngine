@@ -153,7 +153,7 @@ namespace ce {
                     RenderableParticlesComponent& particleSys = entity.addComponent<RenderableParticlesComponent>();
                     particleSys.enable = true;
                     RenderableParticles* p = new RenderableParticles();
-                    ParticleContainer* pc = ec.emitter->getContainer(0); // FIXME: melhorar!!!!
+                    std::shared_ptr<ParticleContainer> pc = ec.emitter->getContainer(0); // FIXME: melhorar!!!!
                     p->setParticleContainer(pc);
                     p->create();
                     particleSys.renderable = p;

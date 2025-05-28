@@ -10,10 +10,10 @@ namespace ce {
     class RenderableParticles : public Renderable3D {
 
       private:
-        VertexBuffer* vboVex = nullptr;
-        VertexBuffer* vboPos = nullptr;
-        VertexBuffer* vboCor = nullptr;
-        ParticleContainer* pc;
+        std::shared_ptr<VertexBuffer> vboVex;
+        std::shared_ptr<VertexBuffer> vboPos;
+        std::shared_ptr<VertexBuffer> vboCor;
+        std::shared_ptr<ParticleContainer> pc;
 
       public:
         RenderableParticles() = default;
@@ -34,6 +34,6 @@ namespace ce {
 
         void destroy();
 
-        void setParticleContainer(ParticleContainer* pc) { this->pc = pc; }
+        void setParticleContainer(std::shared_ptr<ParticleContainer> pc) { this->pc = pc; }
     };
 } // namespace ce

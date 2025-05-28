@@ -9,7 +9,6 @@
 #include "chimera/core/gl/buffer/RenderBuffer.hpp"
 #include "chimera/ecs/Entity.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
-#include "chimera/render/3d/IRenderable3d.hpp"
 #include "chimera/render/3d/Renderer3dLines.hpp"
 #include "chimera/space/Octree.hpp"
 

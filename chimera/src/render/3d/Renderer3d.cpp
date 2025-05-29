@@ -14,7 +14,7 @@ namespace ce {
 
     Renderer3d::~Renderer3d() {}
 
-    void Renderer3d::begin(Camera* camera, ViewProjection* vpo, Octree* octree) {
+    void Renderer3d::begin(std::shared_ptr<Camera> camera, ViewProjection* vpo, Octree* octree) {
         this->camera = camera;
         this->vpo = vpo;
         this->octree = octree;

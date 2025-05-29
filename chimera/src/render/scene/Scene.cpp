@@ -23,7 +23,7 @@
 
 namespace ce {
 
-    Scene::Scene() : IStateMachine("Scene"), origem(nullptr), activeCam(nullptr), verbose(0) { octree = nullptr; }
+    Scene::Scene() : IStateMachine("Scene"), origem(nullptr), verbose(0) { octree = nullptr; }
 
     Scene::~Scene() {
         if (shadowData.shadowBuffer) {
@@ -231,7 +231,7 @@ namespace ce {
                 for (auto renderBuffer : vRB) { // altera a matrix de projecao apenas na troca de resolucao
                     cameraComponent.camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
                     if (cameraComponent.primary == true) {
-                        activeCam = cameraComponent.camera.get();
+                        activeCam = cameraComponent.camera;
                     }
                 }
             }

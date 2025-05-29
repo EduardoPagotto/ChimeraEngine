@@ -26,11 +26,10 @@ namespace ce {
       private:
         std::shared_ptr<ViewProjection> vpo;
         std::shared_ptr<IPhysicsControl> phyCrt;
+        std::shared_ptr<Camera> activeCam;
 
         StateStack layers;
-
         ITrans* origem;
-        Camera* activeCam;
 
         ShadowData shadowData;
         uint8_t verbose;

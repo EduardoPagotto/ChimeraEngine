@@ -48,7 +48,7 @@ namespace ce {
 
       protected:
         std::shared_ptr<Camera> camera;
-        ViewProjection* vpo = nullptr;
+        std::shared_ptr<ViewProjection> vpo;
         TransformationStack stack; // TODO: implementar a hierarquia de modelos direta (sem fisica)
         MapUniform uniformsQueue;
 
@@ -59,7 +59,7 @@ namespace ce {
 
         virtual ~IRenderer3d() = default;
 
-        virtual void begin(std::shared_ptr<Camera> camera, ViewProjection* vpo, Octree* octree) = 0;
+        virtual void begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection>, Octree* octree) = 0;
 
         virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) = 0;
 
@@ -69,7 +69,7 @@ namespace ce {
 
         inline std::shared_ptr<Camera> getCamera() const { return camera; }
 
-        inline ViewProjection* getViewProjection() const { return vpo; }
+        inline std::shared_ptr<ViewProjection> getViewProjection() const { return vpo; }
 
         inline TransformationStack& getStack() { return stack; };
 

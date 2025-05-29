@@ -264,7 +264,7 @@ namespace ce {
 
     void Scene::renderShadow(IRenderer3d& renderer) {
 
-        renderer.begin(activeCam, vpo.get(), nullptr);
+        renderer.begin(activeCam, vpo, nullptr);
         {
             auto lightViewEnt = g_registry.get().view<LightComponent>();
             for (auto entity : lightViewEnt) {
@@ -383,7 +383,7 @@ namespace ce {
 
             renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-            renderer.begin(activeCam, vpo.get(), octree);
+            renderer.begin(activeCam, vpo, octree);
             this->execRenderPass(renderer);
             renderer.end();
             renderer.flush();
@@ -395,7 +395,7 @@ namespace ce {
                 DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-                renderer.begin(activeCam, vpo.get(), nullptr);
+                renderer.begin(activeCam, vpo, nullptr);
                 this->execEmitterPass(renderer);
                 renderer.end();
                 renderer.flush();
@@ -440,7 +440,7 @@ namespace ce {
                         renderLines.create(mng->load("DrawLine", shadeData), 10000);
                     }
 
-                    renderLines.begin(activeCam, vpo.get(), nullptr);
+                    renderLines.begin(activeCam, vpo, nullptr);
 
                     renderLines.uboQueue().insert(std::make_pair("projection", Uniform(activeCam->getProjection())));
                     renderLines.uboQueue().insert(std::make_pair("view", Uniform(vpo->getSel().view)));

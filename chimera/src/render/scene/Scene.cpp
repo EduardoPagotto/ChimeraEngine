@@ -27,8 +27,7 @@ namespace ce {
 
     Scene::~Scene() {
         if (shadowData.shadowBuffer) {
-            delete shadowData.shadowBuffer;
-            shadowData.shadowBuffer = nullptr;
+            shadowData.shadowBuffer.reset();
         }
     }
 
@@ -171,8 +170,10 @@ namespace ce {
                     cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
                     shadowData.shader = sc.shader; // entity.getComponent<Shader>();
                     shadowData.lightProjection = cc.camera->getProjection();
-                    shadowData.shadowBuffer = new FrameBuffer(fbSpec);
+                    shadowData.shadowBuffer = std::make_shared<FrameBuffer>(fbSpec);
+
                 } else if (tc.name == "RenderBufferMaster") {
+
                     eRenderBuferSpec = entity;
                 }
             }

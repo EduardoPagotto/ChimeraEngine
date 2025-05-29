@@ -17,7 +17,7 @@ namespace ce {
     struct ShadowData {
         ShadowData() = default;
         std::shared_ptr<Shader> shader;
-        FrameBuffer* shadowBuffer = nullptr;
+        std::shared_ptr<FrameBuffer> shadowBuffer;
         glm::mat4 lightSpaceMatrix = glm::mat4(1.0f), lightProjection = glm::mat4(1.0f);
     };
 

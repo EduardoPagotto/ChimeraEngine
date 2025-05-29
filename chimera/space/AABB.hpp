@@ -63,7 +63,7 @@ namespace ce {
                      (val.y > vertex[7].y) || (val.z > vertex[7].z));
         }
 
-        AABB transformation(const glm::mat4& transformation) const noexcept {
+        inline const AABB transformation(const glm::mat4& transformation) const noexcept {
             // TODO: TESTAR!! ref: https://www.gamedev.net/forums/topic/673361-axis-aligned-boxes-and-rotations/
             glm::vec3 val, min, max;
 

@@ -27,18 +27,20 @@ namespace ce {
         std::shared_ptr<ViewProjection> vpo;
         std::shared_ptr<IPhysicsControl> phyCrt;
         std::shared_ptr<Camera> activeCam;
+        std::shared_ptr<Octree> octree;
 
         StateStack layers;
         ITrans* origem;
 
         ShadowData shadowData;
         uint8_t verbose;
+
         std::vector<RenderBuffer*> vRB;
         std::vector<IEmitter*> emitters;
+
         Entity eRenderBuferSpec;
         BatchRender2D batchRender2D;
 
-        Octree* octree;
         AABB sceneAABB;
         Renderer3dLines renderLines;
 

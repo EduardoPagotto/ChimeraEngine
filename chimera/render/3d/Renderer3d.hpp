@@ -14,9 +14,9 @@ namespace ce {
         std::vector<RenderCommand> vRenderCommand;
         std::vector<Renderable3D*> vRenderable;
         std::vector<std::shared_ptr<Texture>> textureQueue;
+        std::shared_ptr<Octree> octree;
         Frustum frustum;
         bool logData;
-        Octree* octree;
 
       public:
         Renderer3d(const bool& logData);
@@ -24,7 +24,7 @@ namespace ce {
         virtual ~Renderer3d();
 
         virtual void begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo,
-                           Octree* octree) override;
+                           std::shared_ptr<Octree> octree) override;
 
         virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) override;
 

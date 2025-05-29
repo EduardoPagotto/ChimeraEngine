@@ -59,7 +59,8 @@ namespace ce {
 
         virtual ~IRenderer3d() = default;
 
-        virtual void begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection>, Octree* octree) = 0;
+        virtual void begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection>,
+                           std::shared_ptr<Octree> octree) = 0;
 
         virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) = 0;
 

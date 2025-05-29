@@ -23,7 +23,7 @@
 
 namespace ce {
 
-    Scene::Scene() : IStateMachine("Scene"), origem(nullptr), verbose(0) { octree = nullptr; }
+    Scene::Scene() : IStateMachine("Scene"), origem(nullptr), verbose(0) {}
 
     Scene::~Scene() {
         if (shadowData.shadowBuffer) {
@@ -68,10 +68,12 @@ namespace ce {
     }
 
     void Scene::createOctree(const AABB& aabb) {
+
         if (octree != nullptr) {
-            delete octree;
+            octree.reset();
         }
-        octree = new Octree(aabb, 27, true); // 18
+
+        octree = std::make_shared<Octree>(aabb, 27, true); // 18
     }
 
     void Scene::onAttach() {
@@ -414,6 +416,7 @@ namespace ce {
                     }
 
                     if (octree != nullptr) {
+
                         std::vector<AABB> list;
                         octree->getBondaryList(list, false);
 

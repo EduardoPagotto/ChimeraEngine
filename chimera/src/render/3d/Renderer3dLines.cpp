@@ -3,7 +3,9 @@
 
 namespace ce {
 
-    void Renderer3dLines::begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo, Octree* octree) {
+    void Renderer3dLines::begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo,
+                                std::shared_ptr<Octree> octree) {
+
         this->camera = camera;
         this->vpo = vpo;
         frustum.set(vpo->getSel().viewProjectionInverse);

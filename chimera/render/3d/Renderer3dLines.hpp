@@ -17,7 +17,7 @@ namespace ce {
         virtual ~Renderer3dLines() noexcept { destroy(); };
 
         virtual void begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo,
-                           Octree* octree) override;
+                           std::shared_ptr<Octree> octree) override;
 
         virtual void submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) override;
 

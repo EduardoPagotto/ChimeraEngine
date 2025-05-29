@@ -14,7 +14,9 @@ namespace ce {
 
     Renderer3d::~Renderer3d() {}
 
-    void Renderer3d::begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo, Octree* octree) {
+    void Renderer3d::begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo,
+                           std::shared_ptr<Octree> octree) {
+
         this->camera = camera;
         this->vpo = vpo;
         this->octree = octree;
@@ -39,16 +41,13 @@ namespace ce {
 
     void Renderer3d::submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) {
 
-        Renderable3D* r = renderable;
-
         if (count == 0)
             vRenderCommand.push_back(command);
 
-        r->setIndexAuxCommand(vRenderCommand.size() - 1);
+        renderable->setIndexAuxCommand(vRenderCommand.size() - 1);
 
         // Transformation model matrix AABB to know if in frustrum Camera
-        const AABB& aabb = r->getAABB();
-        AABB nova = aabb.transformation(command.transform);
+        AABB nova = renderable->getAABB().transformation(command.transform);
 
         // Registro de todo AABB's com indice de Renderable3D
         if (this->octree != nullptr) {
@@ -60,7 +59,7 @@ namespace ce {
             }
         }
 
-        vRenderable.push_back(r);
+        vRenderable.push_back(renderable);
     }
 
     void Renderer3d::flush() {

@@ -11,7 +11,7 @@ namespace ce {
         vao = std::make_shared<VertexArray>();
         vao->bind();
 
-        VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
+        std::shared_ptr<VertexBuffer> vbo = std::make_shared<VertexBuffer>(BufferType::STATIC);
         vbo->bind();
 
         BufferLayout layout;
@@ -48,6 +48,9 @@ namespace ce {
     }
 
     RenderableArray::~RenderableArray() {
+
+        vao.reset();
+
         while (!vChild.empty()) {
             Renderable3D* child = vChild.back();
             vChild.pop_back();

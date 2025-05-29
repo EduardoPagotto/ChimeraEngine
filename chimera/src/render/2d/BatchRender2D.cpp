@@ -17,7 +17,7 @@ namespace ce {
         pVao = std::make_shared<VertexArray>();
         pVbo = std::make_shared<VertexBuffer>(BufferType::DYNAMIC);
 
-        pVao->push(pVbo.get());
+        pVao->push(pVbo);
 
         pVao->bind();
         pVbo->bind();

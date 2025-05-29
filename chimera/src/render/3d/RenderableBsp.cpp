@@ -19,7 +19,7 @@ namespace ce {
         vao = std::make_shared<VertexArray>();
         vao->bind();
 
-        VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
+        std::shared_ptr<VertexBuffer> vbo = std::make_shared<VertexBuffer>(BufferType::STATIC);
         vbo->bind();
 
         BufferLayout layout;

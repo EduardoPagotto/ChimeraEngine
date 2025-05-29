@@ -35,7 +35,7 @@ namespace ce {
         ShadowData shadowData;
         uint8_t verbose;
 
-        std::vector<RenderBuffer*> vRB;
+        std::vector<std::shared_ptr<RenderBuffer>> vRB;
         std::vector<IEmitter*> emitters;
 
         Entity eRenderBuferSpec;
@@ -64,8 +64,8 @@ namespace ce {
         void execRenderPass(IRenderer3d& renderer);
         void execEmitterPass(IRenderer3d& renderer);
         void renderShadow(IRenderer3d& renderer);
-        RenderBuffer* initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
-                             const uint32_t& height);
+        std::shared_ptr<RenderBuffer> initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
+                                             const uint32_t& height);
         void createOctree(const AABB& aabb);
     };
 } // namespace ce

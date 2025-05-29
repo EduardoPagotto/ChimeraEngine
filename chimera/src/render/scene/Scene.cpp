@@ -32,8 +32,8 @@ namespace ce {
         }
     }
 
-    RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
-                                const uint32_t& height) {
+    std::shared_ptr<RenderBuffer> Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
+                                                const uint32_t& height) {
         if (!eRenderBuferSpec)
             throw std::string("RenderBuffer nao encontrado");
 
@@ -42,14 +42,13 @@ namespace ce {
         fbSpec.width = width;
         fbSpec.height = height;
         auto& sc = eRenderBuferSpec.getComponent<ShaderComponent>();
-        return new RenderBuffer(initW, initH, std::make_shared<FrameBuffer>(fbSpec), sc.shader);
+        return make_shared<RenderBuffer>(initW, initH, std::make_shared<FrameBuffer>(fbSpec), sc.shader);
     }
 
     void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
 
-        for (auto rb : vRB) {
-            delete rb;
-            rb = nullptr;
+        for (auto& rb : vRB) {
+            rb.reset();
         }
 
         vRB.clear();

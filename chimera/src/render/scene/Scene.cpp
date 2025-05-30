@@ -109,6 +109,7 @@ namespace ce {
                         material.material->init();
                 } else {
                     MaterialComponent& material = entity.addComponent<MaterialComponent>();
+                    material.material = std::make_shared<Material>();
                     material.material->setDefaultEffect();
                     material.material->init();
                 }

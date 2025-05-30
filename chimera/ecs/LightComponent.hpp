@@ -6,7 +6,7 @@ namespace ce {
 
     struct LightComponent {
         TagInfo tag;
-        Light* light = new Light();
+        std::shared_ptr<Light> light;
         bool global = true;
         LightComponent() = default;
     };

@@ -6,7 +6,7 @@ namespace ce {
 
     struct MaterialComponent {
         TagInfo tag;
-        Material* material = new Material();
+        std::shared_ptr<Material> material;
         MaterialComponent() = default;
     };
 } // namespace ce

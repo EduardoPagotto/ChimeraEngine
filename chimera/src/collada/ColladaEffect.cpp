@@ -109,7 +109,7 @@ namespace ce {
 
     void ColladaEffect::setMaterial(const pugi::xml_node& node, TexParam& tp) {
 
-        Material* pMat = nullptr;
+        std::shared_ptr<Material> pMat;
         if (entity.hasComponent<MaterialComponent>()) {
             MaterialComponent& mc = entity.getComponent<MaterialComponent>();
             pMat = mc.material;

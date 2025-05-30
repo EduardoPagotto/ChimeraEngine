@@ -5,5 +5,5 @@
 
 namespace ce {
     void wavefrontObjLoad(const std::string& path, Mesh* mesh, std::string& fileMath);
-    void wavefrontMtlLoad(const std::string& path, Material* material);
+    void wavefrontMtlLoad(const std::string& path, std::shared_ptr<Material> material);
 } // namespace ce

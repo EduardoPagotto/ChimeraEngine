@@ -16,10 +16,9 @@ namespace ce {
         std::string target = geo.attribute("target").value();
 
         MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();
-
         eMaterial.tag.id = eMesh.tag.id + "_mat";
         eMaterial.tag.name = eMesh.tag.name + "_mat";
-        // eMaterial.tag.serial = Collada::getNewSerial();
+        eMaterial.material = std::make_shared<Material>();
 
         std::string matFile;
         wavefrontObjLoad(target, eMesh.mesh, matFile);

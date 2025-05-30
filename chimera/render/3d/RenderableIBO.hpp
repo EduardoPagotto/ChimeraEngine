@@ -17,14 +17,14 @@ namespace ce {
 
         virtual ~RenderableIBO();
 
-        virtual const uint32_t getSize() const override { return ibo->getSize(); }
+        const uint32_t getSize() const override { return ibo->getSize(); }
 
-        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return ibo; }
+        std::shared_ptr<IndexBuffer> getIBO() const override { return ibo; }
 
-        virtual const AABB& getAABB() const override { return aabb; }
+        const AABB& getAABB() const override { return aabb; }
 
-        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
+        void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
-        virtual void draw(const bool& logData) override;
+        void draw(const bool& logData) override;
     };
 } // namespace ce

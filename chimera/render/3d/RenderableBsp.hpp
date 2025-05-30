@@ -21,13 +21,13 @@ namespace ce {
 
         virtual ~RenderableBsp();
 
-        virtual const uint32_t getSize() const override { return totIndex; }
+        const uint32_t getSize() const override { return totIndex; }
 
-        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
+        std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
 
-        virtual const AABB& getAABB() const override { return aabb; }
+        const AABB& getAABB() const override { return aabb; }
 
-        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
+        void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
       private:
         void destroy();

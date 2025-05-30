@@ -20,15 +20,15 @@ namespace ce {
 
         virtual ~RenderableParticles();
 
-        virtual const uint32_t getSize() const override { return pc->particlesCount; }
+        const uint32_t getSize() const override { return pc->particlesCount; }
 
-        virtual std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
+        std::shared_ptr<IndexBuffer> getIBO() const override { return nullptr; }
 
-        virtual const AABB& getAABB() const override { return pc->aabb; }
+        const AABB& getAABB() const override { return pc->aabb; }
 
-        virtual void submit(RenderCommand& command, IRenderer3d& renderer) override;
+        void submit(RenderCommand& command, IRenderer3d& renderer) override;
 
-        virtual void draw(const bool& logData) override;
+        void draw(const bool& logData) override;
 
         void create();
 

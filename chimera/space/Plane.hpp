@@ -1,6 +1,6 @@
 #pragma once
 #include "space.hpp"
-#include <vector>
+#include <array>
 
 namespace ce {
 
@@ -88,6 +88,7 @@ namespace ce {
 
         inline const bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection,
                                     float& percentage) const noexcept {
+
             const glm::vec3 direction = p1 - p0;
             const float linelength = glm::dot(direction, this->normal);
             if (fabsf(linelength) < 0.0001) // FIXME: EPISLON????
@@ -106,7 +107,7 @@ namespace ce {
             return true;
         }
 
-        inline const bool AABBBehind(const std::vector<glm::vec3>& vList) const noexcept {
+        inline const bool AABBBehind(const std::array<glm::vec3, 8>& vList) const noexcept {
             return glm::dot(normal, vList[O]) < ND;
         }
 

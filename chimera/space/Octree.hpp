@@ -1,6 +1,7 @@
 #pragma once
 #include "AABB.hpp"
 #include "HeapQ.hpp"
+#include <array>
 #include <memory>
 #include <queue>
 #include <vector>
@@ -73,7 +74,8 @@ namespace ce {
         }
 
         void insertAABB(const AABB& aabb, const uint32_t& index) noexcept {
-            const std::vector<glm::vec3>& vList = aabb.getAllVertex();
+
+            const std::array<glm::vec3, 8>& vList = aabb.getAllVertex();
             for (const glm::vec3& p : vList) {
                 this->insert(p, index);
             }

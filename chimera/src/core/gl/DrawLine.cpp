@@ -51,7 +51,7 @@ namespace ce {
     }
 
     void DrawLine::addAABB(const AABB& aabb, const glm::vec3& color) noexcept {
-        const std::vector<glm::vec3>& v = aabb.getAllVertex();
+        const std::array<glm::vec3, 8>& v = aabb.getAllVertex();
         add(v[0], v[1], color);
         add(v[2], v[3], color);
         add(v[4], v[5], color);

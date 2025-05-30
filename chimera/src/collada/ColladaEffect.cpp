@@ -78,7 +78,9 @@ namespace ce {
 
         if (shadeData.size() > 1) {
             auto mng = g_service_locator.getService<ShaderMng>();
-            entity.addComponent<ShaderComponent>(refName, mng->load(refName, shadeData));
+            ShaderComponent& sc = entity.addComponent<ShaderComponent>();
+            sc.tag.name = refName;
+            sc.shader = mng->load(refName, shadeData);
         }
     }
 

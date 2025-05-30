@@ -1,4 +1,5 @@
 #pragma once
+#include "chimera/base/ICamera.hpp"
 #include "chimera/base/TransformationStack.hpp"
 #include "chimera/core/gl/Font.hpp"
 #include <string>
@@ -8,7 +9,7 @@ namespace ce {
     class IRenderer2D {
 
       public:
-        virtual void begin(class Camera* camera) = 0;
+        virtual void begin(std::shared_ptr<Camera> camera) = 0;
 
         virtual void submit(class IRenderable2D* renderable) = 0;
 

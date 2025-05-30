@@ -2,6 +2,10 @@
 #include "chimera/render/2d/Layer.hpp"
 
 class TileLayer : public ce::Layer {
+
+  private:
+    uint16_t x, y;
+
   public:
     TileLayer(std::shared_ptr<ce::Shader> shader);
     virtual ~TileLayer();
@@ -10,7 +14,4 @@ class TileLayer : public ce::Layer {
     virtual void onUpdate(const double& ts) override {};
     virtual bool onEvent(const SDL_Event& event) override;
     virtual void onRender() override;
-
-  private:
-    uint16_t x, y;
 };

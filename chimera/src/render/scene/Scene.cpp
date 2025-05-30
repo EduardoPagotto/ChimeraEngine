@@ -94,7 +94,7 @@ namespace ce {
                 auto& sc = entity.getComponent<ShaderComponent>();
                 // TileComponent& tc = entity.addComponent<TileComponent>();
                 Tile* tile = new Tile("TileText", &batchRender2D, sc.shader,
-                                      cCam.camera.get()); // TODO: passar tile camera para smart
+                                      cCam.camera); // TODO: passar tile camera para smart
                 layers.pushState(tile);
             }
 

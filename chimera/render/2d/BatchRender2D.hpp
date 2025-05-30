@@ -31,7 +31,7 @@ namespace ce {
         VertexDataSimple* buffer;
         RenderCommand* renderComando;
         std::vector<std::shared_ptr<Texture>> textures;
-        Camera* camera;
+        std::shared_ptr<Camera> camera;
 
       public:
         BatchRender2D();
@@ -40,7 +40,7 @@ namespace ce {
 
         void init();
 
-        virtual void begin(Camera* camera) override;
+        virtual void begin(std::shared_ptr<Camera> camera) override;
 
         virtual void submit(IRenderable2D* renderable) override;
 

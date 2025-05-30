@@ -50,7 +50,7 @@ namespace ce {
         pVao->unbind();
     }
 
-    void BatchRender2D::begin(Camera* camera) {
+    void BatchRender2D::begin(std::shared_ptr<Camera> camera) {
 
         this->camera = camera;
 

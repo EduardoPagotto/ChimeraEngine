@@ -22,7 +22,7 @@ void Game::onAttach() {
     state = new State;
     state->pos = glm::vec2(3, 3);
     state->dir = glm::vec2(-1, 0);
-    state->cam = glm::vec2(0, FOV);
+    state->cam = glm::vec2(0, fov);
 
     world = new World;
 

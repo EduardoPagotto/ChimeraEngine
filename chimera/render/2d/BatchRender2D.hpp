@@ -7,11 +7,11 @@
 
 namespace ce {
 
-#define RENDERER_MAX_SPRITES  60000
-#define RENDERER_SPRITE_SIZE  4
-#define RENDERER_BUFFER_SIZE  RENDERER_SPRITE_SIZE* RENDERER_MAX_SPRITES
-#define RENDERER_INDICES_SIZE RENDERER_MAX_SPRITES * 6
-#define RENDERER_MAX_TEXTURE  32
+    constexpr uint32_t renderer_max_sprites{60000};
+    constexpr uint32_t renderer_sprite_size{4};
+    constexpr uint32_t renderer_buffer_size{renderer_sprite_size * renderer_max_sprites};
+    constexpr uint32_t renderer_indices_size{renderer_max_sprites * 6};
+    constexpr uint32_t renderer_max_texture{32};
 
     struct VertexDataSimple {
         glm::vec3 point; // 3 * 4 = 12 (0 - 11)

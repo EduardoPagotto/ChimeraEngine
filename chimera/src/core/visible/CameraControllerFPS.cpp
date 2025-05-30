@@ -26,7 +26,7 @@ namespace ce {
         worldUp = cc.up;
         pitch = cc.pitch;
         yaw = cc.yaw;
-        movementSpeed = FPSCAMERA_MAX_SPEED;
+        movementSpeed = fsp_camera_max_speed;
 
         this->updateVectors();
     }
@@ -83,11 +83,11 @@ namespace ce {
     void CameraControllerFPS::onUpdate(const double& ts) {
         // Movement speed
         if (keyboard->isPressed(SDLK_LSHIFT)) // acelerar mover
-            movementSpeed = FPSCAMERA_MAX_SPEED * 4.0f;
+            movementSpeed = fsp_camera_max_speed * 4.0f;
         else if (keyboard->isPressed(SDLK_LALT)) //  desacelerar mover
-            movementSpeed = FPSCAMERA_MAX_SPEED / 4.0f;
+            movementSpeed = fsp_camera_max_speed / 4.0f;
         else
-            movementSpeed = FPSCAMERA_MAX_SPEED;
+            movementSpeed = fsp_camera_max_speed;
 
         // CameraFPS movement
         glm::vec3 direction = glm::vec3(0.0f);
@@ -137,8 +137,8 @@ namespace ce {
         } else {
             // Mouse Camera rotation
             glm::ivec2 mouseMove = mouse->getMoveRel();
-            mouseXDelta = -(float)mouseMove.x * FPSCAMERA_ROTATION_SENSITIVITY;
-            mouseYDelta = (float)mouseMove.y * FPSCAMERA_ROTATION_SENSITIVITY;
+            mouseXDelta = -(float)mouseMove.x * fsp_camera_rotation_sensitivity;
+            mouseYDelta = (float)mouseMove.y * fsp_camera_rotation_sensitivity;
         }
 
         processCameraMovement(direction, ts);
@@ -156,13 +156,13 @@ namespace ce {
     // TODO: Mover para a classe de camera!!!!
     //  void CameraControllerFPS::processCameraFOV(double offset) {
 
-    //     if (offset != 0.0 && fov >= 1.0 && fov <= CAMERA_MAX_FOV) {
+    //     if (offset != 0.0 && fov >= 1.0 && fov <= camera_max_fov) {
     //         fov -= (float)offset;
     //     }
     //     if (fov < 1.0f) {
     //         fov = 1.0f;
-    //     } else if (fov > CAMERA_MAX_FOV) {
-    //         fov = CAMERA_MAX_FOV;
+    //     } else if (fov > camera_max_fov) {
+    //         fov = camera_max_fov;
     //     }
     // }
 } // namespace ce

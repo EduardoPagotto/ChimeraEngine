@@ -29,13 +29,13 @@ namespace ce {
         layout.Push<float>(4, false);
 
         pVbo->setLayout(layout);
-        pVbo->setData(nullptr, RENDERER_BUFFER_SIZE);
+        pVbo->setData(nullptr, renderer_buffer_size);
         pVbo->unbind();
 
-        uint32_t indices[RENDERER_INDICES_SIZE];
+        uint32_t indices[renderer_indices_size];
 
         uint32_t offset = 0;
-        for (uint32_t i = 0; i < RENDERER_INDICES_SIZE; i += 6) {
+        for (uint32_t i = 0; i < renderer_indices_size; i += 6) {
             indices[i] = offset + 0;
             indices[i + 1] = offset + 1;
             indices[i + 2] = offset + 2;
@@ -45,7 +45,7 @@ namespace ce {
             offset += 4;
         }
 
-        ibo = std::make_shared<IndexBuffer>(indices, RENDERER_INDICES_SIZE);
+        ibo = std::make_shared<IndexBuffer>(indices, renderer_indices_size);
 
         pVao->unbind();
     }
@@ -70,7 +70,7 @@ namespace ce {
         }
 
         if (!found) {
-            if (textures.size() >= RENDERER_MAX_TEXTURE) {
+            if (textures.size() >= renderer_max_texture) {
                 end();         // End();
                 flush();       // Present();
                 begin(camera); // Begin();

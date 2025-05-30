@@ -6,7 +6,7 @@
 #include <string>
 // ref: http://www.gianlucaghettini.net/motore-3d-in-c-raycasting/
 // Field Of View
-#define FOV 0.66
+constexpr float fov{0.66};
 // mapa
 struct World {
     uint32_t width;

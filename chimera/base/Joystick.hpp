@@ -8,7 +8,7 @@ namespace ce {
     /// @brief Joystic Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20250527
+    /// @date 20250604
     class Joystick : public IService {
 
       private:
@@ -45,7 +45,11 @@ namespace ce {
         }
 
         SDL_Joystick* get(const SDL_JoystickID& joystick_id) noexcept {
-            return joys.contains(joystick_id) ? joys[joystick_id] : nullptr;
+
+            if (auto got = joys.find(joystick_id); got != joys.end())
+                return got->second;
+
+            return nullptr;
         }
 
       private:
@@ -57,6 +61,7 @@ namespace ce {
             if (joysticks) {
                 for (i = 0; i < num_joysticks; ++i) {
                     SDL_JoystickID instance_id = joysticks[i];
+
                     const char* name = SDL_GetJoystickNameForID(instance_id);
                     const char* path = SDL_GetJoystickPathForID(instance_id);
 
@@ -64,42 +69,24 @@ namespace ce {
                             name ? name : "Unknown", path ? ", " : "", path ? path : "",
                             SDL_GetJoystickVendorForID(instance_id), SDL_GetJoystickProductForID(instance_id));
 
+                    char guid[64];
+                    SDL_GUIDToString(SDL_GetJoystickGUIDForID(instance_id), guid, sizeof(guid));
+                    SDL_LogInfo(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
+
                     if (joys.contains(instance_id))
                         continue;
 
-                    this->joys[instance_id] = SDL_OpenJoystick(i);
+                    SDL_Joystick* handle = SDL_OpenJoystick(instance_id);
+
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick id: %d", SDL_GetJoystickID(handle));
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick axes: %d", SDL_GetNumJoystickAxes(handle));
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick hats: %d", SDL_GetNumJoystickHats(handle));
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick buttons:%d", SDL_GetNumJoystickButtons(handle));
+                    SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick trackballs: %d", SDL_GetNumJoystickBalls(handle));
+
+                    this->joys[instance_id] = handle;
                 }
-                // SDL_free(joysticks);
             }
-            // SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-
-            // for (int i = 0; i < SDL_NumJoysticks(); i++) {
-
-            //     if (!SDL_IsGameController(i)) {
-            //         if (SDL_Joystick* handle = SDL_JoystickOpen(i); handle != nullptr) {
-            //             SDL_JoystickID id = SDL_JoystickInstanceID(handle);
-
-            //             if (joys.contains(id))
-            //                 continue;
-
-            //             this->joys[id] = handle;
-
-            //             const char* joystick_name = SDL_JoystickName(handle);
-            //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick %d: %s", i,
-            //                          joystick_name ? joystick_name : "[no name]");
-            //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick id: %d", SDL_JoystickInstanceID(handle));
-            //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick axes: %d", SDL_JoystickNumAxes(handle));
-            //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick hats: %d", SDL_JoystickNumHats(handle));
-            //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick buttons: %d", SDL_JoystickNumButtons(handle));
-            //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Joystick trackballs: %d",
-            //             SDL_JoystickNumBalls(handle));
-
-            //             char guid[64];
-            //             SDL_JoystickGetGUIDString(SDL_JoystickGetDeviceGUID(i), guid, sizeof(guid));
-            //             SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
-            //         }
-            //     }
-            // }
         }
 
         void removed(const SDL_JoyDeviceEvent& device) {

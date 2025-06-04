@@ -8,7 +8,7 @@ namespace ce {
     /// @brief Pad Interface
     /// @author <a href="mailto:edupagotto@gmail.com.com">Eduardo Pagotto</a>
     /// @since 20130925
-    /// @date 20250527
+    /// @date 20250604
     class GamePad : public IService {
 
       private:
@@ -44,8 +44,19 @@ namespace ce {
             return false;
         }
 
+        SDL_Gamepad* getFirst() noexcept {
+            if (pads.begin() != pads.end())
+                return pads.begin()->second;
+
+            return nullptr;
+        }
+
         SDL_Gamepad* get(const SDL_JoystickID& pad_id) noexcept {
-            return pads.contains(pad_id) ? pads[pad_id] : nullptr;
+
+            if (auto got = pads.find(pad_id); got != pads.end())
+                return got->second;
+
+            return nullptr;
         }
 
       private:
@@ -60,44 +71,26 @@ namespace ce {
                     const char* name = SDL_GetGamepadNameForID(instance_id);
                     const char* path = SDL_GetGamepadPathForID(instance_id);
 
-                    SDL_Log("Gamepad %" SDL_PRIu32 ": %s%s%s VID 0x%.4x, PID 0x%.4x", instance_id,
-                            name ? name : "Unknown", path ? ", " : "", path ? path : "",
-                            SDL_GetGamepadVendorForID(instance_id), SDL_GetGamepadProductForID(instance_id));
+                    SDL_LogInfo(SDL_LOG_CATEGORY_INPUT, "Gamepad %" SDL_PRIu32 ": %s%s%s VID 0x%.4x, PID 0x%.4x",
+                                instance_id, name ? name : "Unknown", path ? ", " : "", path ? path : "",
+                                SDL_GetGamepadVendorForID(instance_id), SDL_GetGamepadProductForID(instance_id));
+
+                    char guid[64];
+                    SDL_GUIDToString(SDL_GetGamepadGUIDForID(instance_id), guid, sizeof(guid));
+                    SDL_LogInfo(SDL_LOG_CATEGORY_INPUT, " guid: %s", guid);
 
                     if (pads.contains(instance_id))
                         continue;
 
-                    if (SDL_IsGamepad(i)) {
-                        SDL_Gamepad* handle = SDL_OpenGamepad(i);
+                    if (SDL_IsGamepad(instance_id)) {
+                        SDL_Gamepad* handle = SDL_OpenGamepad(instance_id);
+
+                        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Gamepad id: %d", SDL_GetGamepadID(handle));
+
                         pads[instance_id] = handle;
                     }
-
-                    // TODO: Verificar se preciso limpar no release como abaixo
-                    // SDL_free(joysticks);
                 }
             }
-
-            // TODO: testar e limpar a versao anteiror abaixo
-            // for (int i = 0; i < SDL_GetJoysticks(); i++) {
-
-            //     if (SDL_IsGamepad(i)) {
-            //         SDL_Gamepad* handle = SDL_OpenGamepad(i);
-            //         SDL_JoystickID id = SDL_GetJoystickID(SDL_GetGamepadJoystick(handle));
-
-            //         if (pads.contains(id))
-            //             continue;
-
-            //         pads[id] = handle;
-
-            //         const char* name = SDL_GetGamepadName(handle);
-            //         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Game controller name %d: %s", i, name ? name : "[no
-            //         name]");
-
-            //         char* mapping = SDL_GetGamepadMappingForGUID(SDL_GetJoystickGUIDForID(i));
-            //         SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "Game controller map: %s", mapping);
-            //         SDL_free(mapping);
-            //     }
-            // }
         }
 
         void removed(const SDL_GamepadDeviceEvent& device) {

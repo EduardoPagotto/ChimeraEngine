@@ -107,20 +107,21 @@ namespace ce {
         float mouseXDelta{0.0f};
         float mouseYDelta{0.0f};
 
-        if (SDL_Gamepad* pJoy = gameControl->get(0); pJoy != nullptr) {
+        if (SDL_Gamepad* pJoy = gameControl->getFirst(); pJoy != nullptr) {
+
             // Game control ratation and move
-            int16_t deadZone = 128;
-            direction += front * scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone), 0x8000) *
-                         1.5f; // mov FB
+            const int16_t deadZone = 128;
 
-            direction -= right * scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone), 0x8000) *
-                         1.5f; // mov RL
+            const float lefty = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone, 0x8000);
+            const float leftx = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone, 0x8000);
+            const float rightx = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone, 0x8000);
+            const float righty = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone, 0x8000);
+            // SDL_Log("Left X:%f, Left Y:%f, RightY:%f, RightX:%f", leftx, lefty, rightx, righty);
 
-            mouseXDelta =
-                -scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone), 0x8000) * 1.5f; // rot RL
-
-            mouseYDelta =
-                scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone), 0x8000) * 1.5f; // rot UD
+            direction += front * lefty * 1.5f; // mov FB
+            direction -= right * leftx * 1.5f; // mov RL
+            mouseXDelta = -rightx * 1.5f;      // rot RL
+            mouseYDelta = righty * 1.5f;       // rot UD
 
             if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_UP) == true)
                 direction += (worldUp * 0.5f); // mov U<->D
@@ -128,11 +129,17 @@ namespace ce {
             if (SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_DPAD_DOWN) == true)
                 direction -= worldUp * 0.5f; // mov D<->U
 
-            // float v1 = scale16(dead16(SDL_GameControllerGetAxis(pJoy, SDL_CONTROLLER_AXIS_TRIGGERLEFT), deadZone),
-            // 0x8000); float v2 = v1 * 4.0 + SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_Y) -
-            //            SDL_GameControllerGetButton(pJoy, SDL_CONTROLLER_BUTTON_X) * 2.0f;
-            // float scrollDelta = glm::clamp(v2 * 4.0f, -4.0f, 4.0f);
-            // ProcessCameraFOV(scrollDelta); // TODO: injetar o novo FOV na camera, passar ele para perspective
+            const bool north = SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_NORTH);
+            const bool south = SDL_GetGamepadButton(pJoy, SDL_GAMEPAD_BUTTON_SOUTH);
+
+            if (north || south) {
+
+                const float v1 = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFT_TRIGGER), deadZone, 0x8000);
+                // SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " V1: %f", v1);
+                const float v2 = v1 * 4.0 + north - south * 2.0f;
+                const float scrollDelta = glm::clamp(v2 * 4.0f, -4.0f, 4.0f);
+                processCameraFOV(scrollDelta); // TODO: injetar o novo FOV na camera, passar ele para perspective
+            }
 
         } else {
             // Mouse Camera rotation
@@ -154,15 +161,17 @@ namespace ce {
     }
 
     // TODO: Mover para a classe de camera!!!!
-    //  void CameraControllerFPS::processCameraFOV(double offset) {
+    void CameraControllerFPS::processCameraFOV(const float& offset) {
 
-    //     if (offset != 0.0 && fov >= 1.0 && fov <= camera_max_fov) {
-    //         fov -= (float)offset;
-    //     }
-    //     if (fov < 1.0f) {
-    //         fov = 1.0f;
-    //     } else if (fov > camera_max_fov) {
-    //         fov = camera_max_fov;
-    //     }
-    // }
+        SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, " FOV: %f", offset);
+
+        // if (offset != 0.0 && fov >= 1.0 && fov <= camera_max_fov) {
+        //     fov -= (float)offset;
+        // }
+        // if (fov < 1.0f) {
+        //     fov = 1.0f;
+        // } else if (fov > camera_max_fov) {
+        //     fov = camera_max_fov;
+        // }
+    }
 } // namespace ce

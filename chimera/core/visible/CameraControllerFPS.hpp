@@ -40,5 +40,6 @@ namespace ce {
         void processCameraRotation(double xOffset, double yOffset, bool constrainPitch);
         void processCameraMovement(glm::vec3& direction, float deltaTime);
         void invertPitch();
+        void processCameraFOV(const float& offset);
     };
 } // namespace ce

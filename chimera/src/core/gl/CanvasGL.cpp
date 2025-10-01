@@ -11,7 +11,7 @@ namespace ce {
             throw std::string("Falha SDL_Init:" + std::string(SDL_GetError()));
         }
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2); // FIXME: 3 nao funciona!!!!!
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -40,8 +40,13 @@ namespace ce {
         glewExperimental = GL_TRUE;
         GLenum err = glewInit();
         if (err != GLEW_OK) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GLEW init: %s", glewGetErrorString(err));
-            throw std::string("GLEW Init fail");
+
+            if (err == GLEW_ERROR_NO_GLX_DISPLAY) {
+                SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "GLEW init fail maybe wayland");
+            } else {
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GLEW init: %s", glewGetErrorString(err));
+                throw std::string("GLEW Init fail");
+            }
         }
 
         SDL_Log("Renderer: %s", glGetString(GL_RENDERER));

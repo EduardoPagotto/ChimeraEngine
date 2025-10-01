@@ -47,7 +47,7 @@ sudo update-alternatives --config ld
 #change to -> 2           /usr/bin/ld.lld
 ```
 
-## Build engine and examples test:
+## Build engine and examples and test:
 ```bash
 cd ChimeraEngine
 
@@ -58,6 +58,9 @@ cmake -G "Unix Makefiles" \
       -B build
 
 make -C build -j 4
+
+# wayland still has erros, force X11
+SDL_VIDEODRIVER=x11 ./bin/terrain
 ```
 
 

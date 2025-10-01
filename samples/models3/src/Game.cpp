@@ -11,8 +11,8 @@ Game::Game(ce::Scene* scene) : IStateMachine("Game"), scene(scene), pCorpoRigido
     using namespace ce;
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Constructor Game");
 
-    gameControl = g_service_locator.getService<IGamePad>();
-    mouse = g_service_locator.getService<IMouse>();
+    gameControl = g_service_locator.getService<GamePad>();
+    mouse = g_service_locator.getService<Mouse>();
 }
 
 Game::~Game() {
@@ -132,7 +132,7 @@ void Game::onUpdate(const double& ts) {
     if (pCorpoRigido)
         scene->setOrigem(pCorpoRigido);
 
-    if (SDL_Gamepad* pJoy = gameControl->get(0); pJoy != nullptr) {
+    if (SDL_Gamepad* pJoy = gameControl->getFirst(); pJoy != nullptr) {
 
         float propulsaoLRUD{5.0f};
         glm::vec3 propLateral(0.0f);
@@ -149,12 +149,11 @@ void Game::onUpdate(const double& ts) {
             propLateral.x = -propulsaoLRUD;
 
         int16_t deadZone = 128;
-        glm::vec3 rotacao{scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone), 0x8000),
-                          scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone), 0x8000),
-                          scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone), 0x8000)};
+        glm::vec3 rotacao{axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTY), deadZone, 0x8000),
+                          axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTX), deadZone, 0x8000),
+                          axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_LEFTX), deadZone, 0x8000)};
 
-        float acc = scale16(dead16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone),
-                            0x8000); // ACC RIGHTX
+        float acc = axis16(SDL_GetGamepadAxis(pJoy, SDL_GAMEPAD_AXIS_RIGHTY), deadZone, 0x8000); // ACC RIGHTX
 
         glm::vec3 throttle{0.0,               // X
                            -3.0f * (acc / 2), // y

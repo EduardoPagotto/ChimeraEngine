@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "chimera/base/Engine.hpp"
-#include "chimera/base/GameController.hpp"
+#include "chimera/base/GamePad.hpp"
 #include "chimera/base/Joystick.hpp"
 #include "chimera/base/Keyboard.hpp"
 #include "chimera/base/ServiceLocator.hpp"
@@ -11,7 +11,7 @@
 #include "chimera/render/scene/Scene.hpp"
 #include <config_params.hpp>
 
-Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::IMouse>(); }
+Game::Game() : IStateMachine("Game") { mouse = ce::g_service_locator.getService<ce::Mouse>(); }
 Game::~Game() { mouse = nullptr; }
 
 void Game::onAttach() {

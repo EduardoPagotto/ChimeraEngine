@@ -3,7 +3,9 @@
 
 namespace ce {
 
-    void Renderer3dLines::begin(Camera* camera, ViewProjection* vpo, Octree* octree) {
+    void Renderer3dLines::begin(std::shared_ptr<Camera> camera, std::shared_ptr<ViewProjection> vpo,
+                                std::shared_ptr<Octree> octree) {
+
         this->camera = camera;
         this->vpo = vpo;
         frustum.set(vpo->getSel().viewProjectionInverse);
@@ -11,13 +13,11 @@ namespace ce {
 
     void Renderer3dLines::end() {}
 
-    void Renderer3dLines::submit(const RenderCommand& command, IRenderable3d* renderable, const uint32_t& count) {
+    void Renderer3dLines::submit(const RenderCommand& command, Renderable3D* renderable, const uint32_t& count) {
         // Transformation model matrix AABB to know if in frustrum Camera
-        Renderable3D* r = (Renderable3D*)renderable;
-        const AABB& aabb = r->getAABB();
-        AABB nova = aabb.transformation(command.transform);
+        const AABB nova = renderable->getAABB().transformation(command.transform);
 
-        // adicione apenas o que esta no clip-space
+        // only if in the clip-space
         if (nova.visible(frustum) == true)
             drawLine.addAABB(nova, glm::vec3(1.0, 1.0, 0.0));
     }

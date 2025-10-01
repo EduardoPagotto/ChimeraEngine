@@ -16,7 +16,7 @@ namespace ce {
         ec.tag.name = name;
         ec.emitter = new EmitterFont(dir, spread); // EF to R
 
-        ParticleContainer* pc = new ParticleContainer();
+        std::shared_ptr<ParticleContainer> pc = std::make_shared<ParticleContainer>();
         const pugi::xml_node& nContainer = nParticle.child("container");
         setChildParam(nContainer, "life", pc->life);
         setChildParam(nContainer, "max", pc->max);

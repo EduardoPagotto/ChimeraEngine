@@ -23,17 +23,16 @@
 
 namespace ce {
 
-    Scene::Scene() : IStateMachine("Scene"), origem(nullptr), activeCam(nullptr), verbose(0) { octree = nullptr; }
+    Scene::Scene() : IStateMachine("Scene"), origem(nullptr), verbose(0) {}
 
     Scene::~Scene() {
         if (shadowData.shadowBuffer) {
-            delete shadowData.shadowBuffer;
-            shadowData.shadowBuffer = nullptr;
+            shadowData.shadowBuffer.reset();
         }
     }
 
-    RenderBuffer* Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
-                                const uint32_t& height) {
+    std::shared_ptr<RenderBuffer> Scene::initRB(const uint32_t& initW, const uint32_t& initH, const uint32_t& width,
+                                                const uint32_t& height) {
         if (!eRenderBuferSpec)
             throw std::string("RenderBuffer nao encontrado");
 
@@ -42,14 +41,13 @@ namespace ce {
         fbSpec.width = width;
         fbSpec.height = height;
         auto& sc = eRenderBuferSpec.getComponent<ShaderComponent>();
-        return new RenderBuffer(initW, initH, new FrameBuffer(fbSpec), sc.shader);
+        return make_shared<RenderBuffer>(initW, initH, std::make_shared<FrameBuffer>(fbSpec), sc.shader);
     }
 
     void Scene::createRenderBuffer(const uint8_t& size, const uint32_t& width, const uint32_t& height) {
 
-        for (auto rb : vRB) {
-            delete rb;
-            rb = nullptr;
+        for (auto& rb : vRB) {
+            rb.reset();
         }
 
         vRB.clear();
@@ -68,10 +66,12 @@ namespace ce {
     }
 
     void Scene::createOctree(const AABB& aabb) {
+
         if (octree != nullptr) {
-            delete octree;
+            octree.reset();
         }
-        octree = new Octree(aabb, 27, true); // 18
+
+        octree = std::make_shared<Octree>(aabb, 27, true); // 18
     }
 
     void Scene::onAttach() {
@@ -94,7 +94,7 @@ namespace ce {
                 auto& sc = entity.getComponent<ShaderComponent>();
                 // TileComponent& tc = entity.addComponent<TileComponent>();
                 Tile* tile = new Tile("TileText", &batchRender2D, sc.shader,
-                                      cCam.camera.get()); // TODO: passar tile camera para smart
+                                      cCam.camera); // TODO: passar tile camera para smart
                 layers.pushState(tile);
             }
 
@@ -109,6 +109,7 @@ namespace ce {
                         material.material->init();
                 } else {
                     MaterialComponent& material = entity.addComponent<MaterialComponent>();
+                    material.material = std::make_shared<Material>();
                     material.material->setDefaultEffect();
                     material.material->init();
                 }
@@ -153,7 +154,7 @@ namespace ce {
                     RenderableParticlesComponent& particleSys = entity.addComponent<RenderableParticlesComponent>();
                     particleSys.enable = true;
                     RenderableParticles* p = new RenderableParticles();
-                    ParticleContainer* pc = ec.emitter->getContainer(0); // FIXME: melhorar!!!!
+                    std::shared_ptr<ParticleContainer> pc = ec.emitter->getContainer(0); // FIXME: melhorar!!!!
                     p->setParticleContainer(pc);
                     p->create();
                     particleSys.renderable = p;
@@ -170,8 +171,10 @@ namespace ce {
                     cc.camera->setViewportSize(fbSpec.width, fbSpec.height);
                     shadowData.shader = sc.shader; // entity.getComponent<Shader>();
                     shadowData.lightProjection = cc.camera->getProjection();
-                    shadowData.shadowBuffer = new FrameBuffer(fbSpec);
+                    shadowData.shadowBuffer = std::make_shared<FrameBuffer>(fbSpec);
+
                 } else if (tc.name == "RenderBufferMaster") {
+
                     eRenderBuferSpec = entity;
                 }
             }
@@ -231,7 +234,7 @@ namespace ce {
                 for (auto renderBuffer : vRB) { // altera a matrix de projecao apenas na troca de resolucao
                     cameraComponent.camera->setViewportSize(renderBuffer->getWidth(), renderBuffer->getHeight());
                     if (cameraComponent.primary == true) {
-                        activeCam = cameraComponent.camera.get();
+                        activeCam = cameraComponent.camera;
                     }
                 }
             }
@@ -264,7 +267,7 @@ namespace ce {
 
     void Scene::renderShadow(IRenderer3d& renderer) {
 
-        renderer.begin(activeCam, vpo.get(), nullptr);
+        renderer.begin(activeCam, vpo, nullptr);
         {
             auto lightViewEnt = g_registry.get().view<LightComponent>();
             for (auto entity : lightViewEnt) {
@@ -302,7 +305,7 @@ namespace ce {
         auto view = g_registry.get().view<RenderableParticlesComponent>();
         for (auto entity : view) {
             RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
-            IRenderable3d* renderable = rc.renderable;
+            Renderable3D* renderable = rc.renderable;
 
             Entity e(entity);
             TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!
@@ -383,7 +386,7 @@ namespace ce {
 
             renderBuffer->bind(); // bind renderbuffer to draw we're not using the stencil buffer now
 
-            renderer.begin(activeCam, vpo.get(), octree);
+            renderer.begin(activeCam, vpo, octree);
             this->execRenderPass(renderer);
             renderer.end();
             renderer.flush();
@@ -395,7 +398,7 @@ namespace ce {
                 DepthFuncSetter depthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-                renderer.begin(activeCam, vpo.get(), nullptr);
+                renderer.begin(activeCam, vpo, nullptr);
                 this->execEmitterPass(renderer);
                 renderer.end();
                 renderer.flush();
@@ -414,6 +417,7 @@ namespace ce {
                     }
 
                     if (octree != nullptr) {
+
                         std::vector<AABB> list;
                         octree->getBondaryList(list, false);
 
@@ -440,7 +444,7 @@ namespace ce {
                         renderLines.create(mng->load("DrawLine", shadeData), 10000);
                     }
 
-                    renderLines.begin(activeCam, vpo.get(), nullptr);
+                    renderLines.begin(activeCam, vpo, nullptr);
 
                     renderLines.uboQueue().insert(std::make_pair("projection", Uniform(activeCam->getProjection())));
                     renderLines.uboQueue().insert(std::make_pair("view", Uniform(vpo->getSel().view)));
@@ -457,7 +461,7 @@ namespace ce {
                     auto view = g_registry.get().view<RenderableParticlesComponent>();
                     for (auto entity : view) {
                         RenderableParticlesComponent& rc = view.get<RenderableParticlesComponent>(entity);
-                        IRenderable3d* renderable = rc.renderable;
+                        Renderable3D* renderable = rc.renderable;
 
                         Entity e(entity);
                         TransComponent& tc = e.getComponent<TransComponent>(); // FIXME: group this!!!

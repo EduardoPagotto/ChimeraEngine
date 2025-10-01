@@ -42,7 +42,7 @@ namespace ce {
             planes[5] = Plane(points[5], points[4], points[6]);
         }
 
-        const bool AABBVisible(const std::vector<glm::vec3>& vList) const {
+        const bool AABBVisible(const std::array<glm::vec3, 8>& vList) const {
 
             for (const Plane& plane : planes) {
                 if (plane.AABBBehind(vList)) {

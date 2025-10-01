@@ -1,6 +1,6 @@
 #pragma once
 #include "space.hpp"
-#include <vector>
+#include <array>
 
 namespace ce {
 
@@ -37,14 +37,14 @@ namespace ce {
 
         inline const bool collinearNormal(const glm::vec3& normal) const noexcept {
             const glm::vec3 sub = this->normal - normal;
-            return (float)fabs(sub.x + sub.y + sub.z) < EPSILON;
+            return isLessEpsilon(sub.x + sub.y + sub.z);
         }
 
         inline const SIDE classifyPoint(const glm::vec3& point) const noexcept {
             const glm::vec3 dir = this->point - point;
             const float clipTest = glm::dot(dir, this->normal);
 
-            if (fabs(clipTest) < EPSILON)
+            if (isLessEpsilon(clipTest))
                 return SIDE::CP_ONPLANE;
 
             if (clipTest < 0.0f)
@@ -62,7 +62,7 @@ namespace ce {
             clipTest.z = glm::dot((this->point - pC), this->normal); // Clip Test poin C
 
             for (uint8_t i = 0; i < 3; i++) {
-                if (fabs(clipTest[i]) < EPSILON) {
+                if (isLessEpsilon(clipTest[i])) {
                     clipTest[i] = 0.0f;
                     onPlane++;
                     infront++;
@@ -88,6 +88,7 @@ namespace ce {
 
         inline const bool intersect(const glm::vec3& p0, const glm::vec3& p1, glm::vec3& intersection,
                                     float& percentage) const noexcept {
+
             const glm::vec3 direction = p1 - p0;
             const float linelength = glm::dot(direction, this->normal);
             if (fabsf(linelength) < 0.0001) // FIXME: EPISLON????
@@ -106,7 +107,7 @@ namespace ce {
             return true;
         }
 
-        inline const bool AABBBehind(const std::vector<glm::vec3>& vList) const noexcept {
+        inline const bool AABBBehind(const std::array<glm::vec3, 8>& vList) const noexcept {
             return glm::dot(normal, vList[O]) < ND;
         }
 

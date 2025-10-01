@@ -15,9 +15,9 @@ namespace ce {
 
     class DrawLine {
       private:
-        VertexArray* pVao{nullptr};
-        VertexBuffer* pVbo{nullptr};
-        std::shared_ptr<Shader> shader{nullptr};
+        std::shared_ptr<VertexArray> pVao;
+        std::shared_ptr<VertexBuffer> pVbo;
+        std::shared_ptr<Shader> shader;
         std::vector<LinesValues> points;
 
       public:

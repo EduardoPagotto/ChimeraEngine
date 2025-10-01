@@ -1,5 +1,5 @@
 #pragma once
-#include "chimera/base/GameController.hpp"
+#include "chimera/base/GamePad.hpp"
 #include "chimera/base/IStateMachine.hpp"
 #include "chimera/base/Mouse.hpp"
 #include "chimera/core/bullet/Solid.hpp"
@@ -19,8 +19,8 @@ class Game : public ce::IStateMachine {
     virtual bool onEvent(const SDL_Event& event) override;
 
   private:
-    std::shared_ptr<ce::IMouse> mouse;
-    std::shared_ptr<ce::IGamePad> gameControl;
+    std::shared_ptr<ce::Mouse> mouse;
+    std::shared_ptr<ce::GamePad> gameControl;
 
     ce::Scene* scene;
     ce::Solid* pCorpoRigido;

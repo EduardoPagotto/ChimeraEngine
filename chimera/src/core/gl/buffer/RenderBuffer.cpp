@@ -2,9 +2,9 @@
 
 namespace ce {
 
-    RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, FrameBuffer* fb,
+    RenderBuffer::RenderBuffer(const uint32_t& posX, const uint32_t& posY, std::shared_ptr<FrameBuffer> fb,
                                std::shared_ptr<Shader> shader)
-        : posX(posX), posY(posY), shader(shader), vbo(nullptr), frameBuffer(fb) {
+        : posX(posX), posY(posY), shader(shader), frameBuffer(fb) {
 
         SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Render Framebuffer position(%d x %d) size(%d x %d)", posX, posY,
                      fb->getWidth(), fb->getHeight());
@@ -16,7 +16,7 @@ namespace ce {
         BufferLayout b;
         b.Push<float>(3, false);
 
-        vbo = new VertexBuffer(BufferType::STATIC);
+        vbo = std::make_shared<VertexBuffer>(BufferType::STATIC);
         vbo->bind();
         vbo->setLayout(b);
         vbo->setData(quad, 6);

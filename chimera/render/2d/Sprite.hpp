@@ -3,14 +3,15 @@
 
 namespace ce {
 
-class Sprite : public Renderable2D {
-  public:
-    Sprite(float x, float y, float width, float height, glm::vec4 color)
-        : Renderable2D(glm::vec3(x, y, 0), glm::vec2(width, height), color) {}
+    class Sprite : public Renderable2D {
 
-    Sprite(float x, float y, float width, float height, std::shared_ptr<Texture> texture)
-        : Renderable2D(glm::vec3(x, y, 0), glm::vec2(width, height), texture) {}
+      public:
+        Sprite(float x, float y, float width, float height, glm::vec4 color)
+            : Renderable2D(glm::vec3(x, y, 0), glm::vec2(width, height), color) {}
 
-    virtual ~Sprite() {}
-};
+        Sprite(float x, float y, float width, float height, std::shared_ptr<Texture> texture)
+            : Renderable2D(glm::vec3(x, y, 0), glm::vec2(width, height), texture) {}
+
+        virtual ~Sprite() {}
+    };
 } // namespace ce

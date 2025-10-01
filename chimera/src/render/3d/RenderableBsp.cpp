@@ -16,10 +16,10 @@ namespace ce {
         root = bspTree.create(meshFinal, vTris);
 
         // create VAO and VBO
-        vao = new VertexArray();
+        vao = std::make_shared<VertexArray>();
         vao->bind();
 
-        VertexBuffer* vbo = new VertexBuffer(BufferType::STATIC);
+        std::shared_ptr<VertexBuffer> vbo = std::make_shared<VertexBuffer>(BufferType::STATIC);
         vbo->bind();
 
         BufferLayout layout;
@@ -38,8 +38,10 @@ namespace ce {
 
             auto [min, max, size] = vertexIndexedBoundaries(meshFinal.vertex, trisIndex);
 
-            IndexBuffer* ibo = new IndexBuffer((uint32_t*)&trisIndex[0], trisIndex.size() * 3);
-            IRenderable3d* r = new RenderableIBO(vao, ibo, AABB(min, max));
+            std::shared_ptr<IndexBuffer> ibo =
+                std::make_shared<IndexBuffer>((uint32_t*)&trisIndex[0], trisIndex.size() * 3);
+
+            Renderable3D* r = new RenderableIBO(vao, ibo, AABB(min, max));
             vChild.push_back(r);
         }
 
@@ -53,7 +55,7 @@ namespace ce {
     RenderableBsp::~RenderableBsp() { this->destroy(); }
 
     void RenderableBsp::traverseTree(const glm::vec3& cameraPos, BSPTreeNode* tree,
-                                     std::vector<IRenderable3d*>& childDraw) {
+                                     std::vector<Renderable3D*>& childDraw) {
         // ref: https://web.cs.wpi.edu/~matt/courses/cs563/talks/bsp/document.html
         if ((tree != nullptr) && (tree->isSolid == false)) {
             switch (SIDE result = tree->hyperPlane.classifyPoint(cameraPos); result) {
@@ -80,7 +82,7 @@ namespace ce {
     }
 
     void RenderableBsp::submit(RenderCommand& command, IRenderer3d& renderer) {
-        std::vector<IRenderable3d*> childDraw;
+        std::vector<Renderable3D*> childDraw;
         const glm::vec3 cameraPos = renderer.getCamera()->getPosition();
         traverseTree(cameraPos, root, childDraw);
         for (uint32_t c = 0; c < childDraw.size(); c++)
@@ -92,7 +94,7 @@ namespace ce {
     void RenderableBsp::destroy() {
 
         while (!vChild.empty()) {
-            IRenderable3d* child = vChild.back();
+            Renderable3D* child = vChild.back();
             vChild.pop_back();
             delete child;
             child = nullptr;
@@ -123,25 +125,25 @@ namespace ce {
             return !tree->isSolid;
         }
 
-        SIDE PointA = tree->hyperPlane.classifyPoint(Start);
-        SIDE PointB = tree->hyperPlane.classifyPoint(End);
+        const SIDE PointA = tree->hyperPlane.classifyPoint(Start);
+        const SIDE PointB = tree->hyperPlane.classifyPoint(End);
 
-        if (PointA == SIDE::CP_ONPLANE && PointB == SIDE::CP_ONPLANE) {
+        if ((PointA == SIDE::CP_ONPLANE) && (PointB == SIDE::CP_ONPLANE)) {
             return lineOfSight(Start, End, tree->front);
         }
 
-        if (PointA == SIDE::CP_FRONT && PointB == SIDE::CP_BACK) {
+        if ((PointA == SIDE::CP_FRONT) && (PointB == SIDE::CP_BACK)) {
             tree->hyperPlane.intersect(Start, End, intersection, temp);
             return lineOfSight(Start, intersection, tree->front) && lineOfSight(End, intersection, tree->back);
         }
 
-        if (PointA == SIDE::CP_BACK && PointB == SIDE::CP_FRONT) {
+        if ((PointA == SIDE::CP_BACK) && (PointB == SIDE::CP_FRONT)) {
             tree->hyperPlane.intersect(Start, End, intersection, temp);
             return lineOfSight(End, intersection, tree->front) && lineOfSight(Start, intersection, tree->back);
         }
 
         // if we get here one of the points is on the hyperPlane
-        if (PointA == SIDE::CP_FRONT || PointB == SIDE::CP_FRONT) {
+        if ((PointA == SIDE::CP_FRONT) || (PointB == SIDE::CP_FRONT)) {
             return lineOfSight(Start, End, tree->front);
         } else {
             return lineOfSight(Start, End, tree->back);

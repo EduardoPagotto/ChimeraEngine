@@ -1,10 +1,11 @@
 #include "TileLayer.hpp"
-#include "chimera/base/ICamera.hpp"
 #include "chimera/render/2d/BatchRender2D.hpp"
 #include <glm/gtx/transform.hpp>
 
 TileLayer::TileLayer(std::shared_ptr<ce::Shader> shader)
-    : ce::Layer(new ce::BatchRender2D(), shader, new ce::CameraOrtho(16.0, 16.0, -1.0f, 1.0f), "TileLayer") {
+    : ce::Layer(new ce::BatchRender2D(), shader, std::make_shared<ce::CameraOrtho>(16.0, 16.0, -1.0f, 1.0f),
+                "TileLayer") {
+
     glUseProgram(shader->getID());
     shader->setUniformU("light_pos",
                         ce::Uniform(glm::vec2(4.0f, 1.5f))); //  setUniform2f("light_pos", glm::vec2(4.0f, 1.5f));

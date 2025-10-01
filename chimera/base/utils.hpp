@@ -7,11 +7,19 @@
 
 namespace ce {
 
-    inline int16_t dead16(const int16_t& vIn, const int16_t& deadzone) {
+    [[clang::always_inline]]
+    inline const int16_t dead16(const int16_t& vIn, const int16_t& deadzone) {
         return (vIn + (vIn >> 16) ^ (vIn >> 16)) > deadzone ? vIn : 0;
     }
-    inline float scale16(const int16_t& value, const int16_t& limit) {
+
+    [[clang::always_inline]]
+    inline const float scale16(const int16_t& value, const int16_t& limit) {
         return value >= 0 ? (float)value / (limit - 1) : (float)value / limit;
+    }
+
+    [[clang::always_inline]]
+    inline const float axis16(const int16_t& vIn, const int16_t& deadzone, const int16_t& limit) {
+        return scale16(dead16(vIn, deadzone), limit);
     }
 
     inline void utilsReadFile(const std::string& filepath, std::string& result) {

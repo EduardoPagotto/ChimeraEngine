@@ -1,6 +1,6 @@
 #pragma once
 #include "chimera/base/IStateMachine.hpp"
-#include "chimera/base/interfaces.hpp"
+#include "chimera/base/Keyboard.hpp"
 #include "raycasting.hpp"
 
 class Game : public ce::IStateMachine {
@@ -9,7 +9,7 @@ class Game : public ce::IStateMachine {
     float moveSpeed;
     float rotSpeed;
     std::shared_ptr<ce::ICanva> canvas;
-    std::shared_ptr<ce::IKeyboard> keyboard;
+    std::shared_ptr<ce::Keyboard> keyboard;
 
   public:
     Game();

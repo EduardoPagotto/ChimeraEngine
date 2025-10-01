@@ -2,6 +2,7 @@
 #include "chimera/base/ICamera.hpp"
 #include "chimera/core/gl/OpenGLDefs.hpp"
 #include "chimera/space/AABB.hpp"
+#include <memory>
 #include <vector>
 
 namespace ce {
@@ -41,8 +42,8 @@ namespace ce {
         virtual void reset(ParticleZ& p) = 0;
         virtual void recycleLife(const double& ts) = 0;
         virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) = 0;
-        virtual void pushParticleContainer(ParticleContainer* pc) = 0;
-        virtual ParticleContainer* getContainer(uint32_t pos) = 0;
+        virtual void pushParticleContainer(std::shared_ptr<ParticleContainer> pc) = 0;
+        virtual std::shared_ptr<ParticleContainer> getContainer(uint32_t pos) = 0;
     };
 
     class EmitterFont : public IEmitter {
@@ -52,12 +53,12 @@ namespace ce {
         virtual void reset(ParticleZ& p) override;
         virtual void recycleLife(const double& ts) override;
         virtual void decrease(ParticleZ& p, const double& ts, const uint32_t& index) override;
-        virtual void pushParticleContainer(ParticleContainer* pc) override { containers.push_back(pc); }
-        virtual ParticleContainer* getContainer(uint32_t pos) override { return containers[pos]; }
+        virtual void pushParticleContainer(std::shared_ptr<ParticleContainer> pc) override { containers.push_back(pc); }
+        virtual std::shared_ptr<ParticleContainer> getContainer(uint32_t pos) override { return containers[pos]; }
 
       private:
-        std::vector<ParticleContainer*> containers;
-        ParticleContainer* pc = nullptr;
+        std::vector<std::shared_ptr<ParticleContainer>> containers;
+        std::shared_ptr<ParticleContainer> pc;
         glm::vec3 maindir;
         float spread;
     };

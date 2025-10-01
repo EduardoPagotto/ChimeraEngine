@@ -8,7 +8,7 @@ namespace ce {
         MaterialComponent& eMaterial = entity.addComponent<MaterialComponent>();
         eMaterial.tag.id = node.attribute("id").value();
         eMaterial.tag.name = node.attribute("name").value();
-        // eMaterial.tag.serial = Collada::getNewSerial();
+        eMaterial.material = std::make_shared<Material>();
 
         pugi::xml_node nEffect = node.child("instance_effect");
         std::string url = nEffect.attribute("url").value();

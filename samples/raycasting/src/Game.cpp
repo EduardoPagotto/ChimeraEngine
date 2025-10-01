@@ -5,7 +5,7 @@ Game::Game() : IStateMachine("Game") {
     // init framebuffer
     canvas = ce::g_service_locator.getService<ce::ICanva>();
     // init keyboard
-    keyboard = ce::g_service_locator.getService<ce::IKeyboard>();
+    keyboard = ce::g_service_locator.getService<ce::Keyboard>();
 }
 
 Game::~Game() {
@@ -22,7 +22,7 @@ void Game::onAttach() {
     state = new State;
     state->pos = glm::vec2(3, 3);
     state->dir = glm::vec2(-1, 0);
-    state->cam = glm::vec2(0, FOV);
+    state->cam = glm::vec2(0, fov);
 
     world = new World;
 

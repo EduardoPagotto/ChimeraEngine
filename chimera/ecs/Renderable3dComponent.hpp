@@ -1,15 +1,14 @@
 #pragma once
-#include "chimera/render/3d/IRenderable3d.hpp"
 #include "ecs.hpp"
 
 namespace ce {
     struct Renderable3dComponent {
         TagInfo tag;
-        IRenderable3d* renderable;
+        Renderable3D* renderable; // TODO: Smartpointer!!!!
     };
 
     struct RenderableParticlesComponent {
-        IRenderable3d* renderable;
+        Renderable3D* renderable;
         bool enable;
     };
 

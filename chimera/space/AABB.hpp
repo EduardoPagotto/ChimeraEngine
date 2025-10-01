@@ -1,6 +1,6 @@
 #pragma once
 #include "Frustum.hpp"
-#include <vector>
+#include <array>
 
 namespace ce {
 
@@ -8,7 +8,7 @@ namespace ce {
 
     class AABB { // ref: http://www.3dcpptutorials.sk/index.php?id=59
       protected:
-        std::vector<glm::vec3> vertex;
+        std::array<glm::vec3, 8> vertex;
 
       private:
         glm::vec3 position{0.0f};
@@ -36,19 +36,15 @@ namespace ce {
 
         inline void setBoundary(const glm::vec3& min, const glm::vec3& max) noexcept {
 
-            if (!vertex.empty())
-                vertex.clear();
+            vertex[0] = min; // glm::vec3(min.x, min.y, min.z); // AabbBondery::BSW 0 Minimal point (front)
+            vertex[1] = glm::vec3(max.x, min.y, min.z); // AabbBondery::BSE 1
+            vertex[2] = glm::vec3(min.x, max.y, min.z); // AabbBondery::TSW 2
+            vertex[3] = glm::vec3(max.x, max.y, min.z); // AabbBondery::TSE 3
+            vertex[4] = glm::vec3(min.x, min.y, max.z); // AabbBondery::BNW 4
+            vertex[5] = glm::vec3(max.x, min.y, max.z); // AabbBondery::BNE 5
+            vertex[6] = glm::vec3(min.x, max.y, max.z); // AabbBondery::TNW 6
+            vertex[7] = max; // glm::vec3(max.x, max.y, max.z); // AabbBondery::TNE 7 Maximal point (back)
 
-            vertex.push_back(glm::vec3(min.x, min.y, min.z)); // AabbBondery::BSW 0 Minimal point (front)
-            vertex.push_back(glm::vec3(max.x, min.y, min.z)); // AabbBondery::BSE 1
-            vertex.push_back(glm::vec3(min.x, max.y, min.z)); // AabbBondery::TSW 2
-            vertex.push_back(glm::vec3(max.x, max.y, min.z)); // AabbBondery::TSE 3
-            vertex.push_back(glm::vec3(min.x, min.y, max.z)); // AabbBondery::BNW 4
-            vertex.push_back(glm::vec3(max.x, min.y, max.z)); // AabbBondery::BNE 5
-            vertex.push_back(glm::vec3(min.x, max.y, max.z)); // AabbBondery::TNW 6
-            vertex.push_back(glm::vec3(max.x, max.y, max.z)); // AabbBondery::TNE 7 Maximal point (back)
-
-            // TODO: Era half size ??
             this->size = getSizeMinMax(min, max);
             this->position = min + (this->size / 2.0f);
         }
@@ -63,13 +59,10 @@ namespace ce {
                      (val.y > vertex[7].y) || (val.z > vertex[7].z));
         }
 
-        AABB transformation(const glm::mat4& transformation) const noexcept {
+        inline const AABB transformation(const glm::mat4& transformation) const noexcept {
             // TODO: TESTAR!! ref: https://www.gamedev.net/forums/topic/673361-axis-aligned-boxes-and-rotations/
-            glm::vec3 val, min, max;
-
-            val = glm::vec3(transformation * glm::vec4(vertex[0], 1.0f));
-            min = val;
-            max = val;
+            glm::vec3 val{glm::vec3(transformation * glm::vec4(vertex[0], 1.0f))};
+            glm::vec3 min{val}, max{val};
 
             for (const glm::vec3& point : vertex) {
                 val = glm::vec3(transformation * glm::vec4(point, 1.0f));
@@ -80,7 +73,7 @@ namespace ce {
             return AABB(min, max);
         }
 
-        const std::vector<glm::vec3>& getAllVertex() const { return vertex; }
+        const std::array<glm::vec3, 8>& getAllVertex() const { return vertex; }
 
         // FIXME: dot normal posicao para distancia (calcula do AABB em relacao ao frustum)
         // inline const float distance(const Frustum& _frustum) const noexcept { return _frustum.AABBDistance(vertex); }

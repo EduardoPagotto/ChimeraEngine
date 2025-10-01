@@ -2,10 +2,10 @@
 #include "chimera/render/2d/Tile.hpp"
 #include "ecs.hpp"
 
-namespace ce {
-    struct TileComponent {
-        TagInfo tag;
-        Tile* tile = nullptr;
-        TileComponent() = default;
-    };
-} // namespace ce
+// TODO: implementar
+//  namespace ce {
+//      struct TileComponent {
+//          TagInfo tag;
+//          std::shared_ptr<Tile> tile;
+//      };
+//  } // namespace ce

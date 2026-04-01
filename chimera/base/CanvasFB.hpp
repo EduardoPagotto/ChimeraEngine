@@ -43,21 +43,17 @@ namespace ce {
                 throw std::string("Couldn't create renderer: %s", SDL_GetError());
             }
 
+            // Necessario pelo wayland
+            if (!SDL_RenderPresent(renderer)) {
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "render present: %s", SDL_GetError());
+            }
+
             // pixelFormat = SDL_PIXELFORMAT_ABGR8888;
             pixelFormat = SDL_PIXELFORMAT_RGBA8888;
             texture = SDL_CreateTexture(renderer, pixelFormat, SDL_TEXTUREACCESS_STREAMING, width, height);
             if (!texture) {
                 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "create texture: %s", SDL_GetError());
             }
-
-            // texture = SDL_CreateTexture(renderer, pixelFormat, SDL_TEXTUREACCESS_TARGET, width, height);
-            // if (!texture) {
-            //     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "create texture: %s", SDL_GetError());
-            // }
-            // Draw a tile to a texture
-            // if (!SDL_SetRenderTarget(renderer, texture)) {
-            //     SDL_Log("Couldn't use tile texture: %s", SDL_GetError());
-            // }
 
             frame_buffer = new uint32_t[width * height];
         }
@@ -76,7 +72,7 @@ namespace ce {
 
         void after() override {
 
-            // TODO: Colocar no CMAKE este def
+// TODO: Colocar no CMAKE este def
 #define __FRAMEBUFFER_GPU_SET 1
 
 #ifdef __FRAMEBUFFER_GPU_SET

@@ -18,7 +18,7 @@
 		"editor.cursorBlinking": "blink",
 		"editor.cursorSmoothCaretAnimation": "on",
 		"editor.cursorStyle": "line",
-		"editor.hover.enabled": false, // hover manual crt+k, crt+i
+		"editor.hover.enabled": "off", // hover manual crt+k, crt+i
 		"editor.occurrencesHighlight": "off", // off disable highligh
 		"editor.selectionHighlight": false, // True show similar selectec
 		"editor.suggestOnTriggerCharacters": false,

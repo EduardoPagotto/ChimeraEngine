@@ -1,6 +1,6 @@
 #pragma once
 #include "Collada.hpp"
-#include "chimera/core/gl/TextureMng.hpp"
+#include "chimera/core/gl/Texture.hpp"
 #include "chimera/ecs/Entity.hpp"
 
 namespace ce {

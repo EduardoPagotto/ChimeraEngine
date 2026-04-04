@@ -1,7 +1,6 @@
 #pragma once
 #include "chimera/core/visible/Mesh.hpp"
 #include "chimera/space/AABB.hpp"
-#include "chimera/space/Triangle.hpp"
 #include <vector>
 
 namespace ce {

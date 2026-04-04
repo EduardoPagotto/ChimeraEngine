@@ -1,5 +1,4 @@
 #include "chimera/render/3d/RenderableMesh.hpp"
-#include "chimera/core/gl/OpenGLDefs.hpp"
 #include "chimera/core/gl/RenderCommand.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"

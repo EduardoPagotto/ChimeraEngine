@@ -1,5 +1,4 @@
 #pragma once
-#include "chimera/base/ServiceLocator.hpp"
 #include "chimera/core/gl/Material.hpp"
 #include "chimera/core/visible/Mesh.hpp"
 

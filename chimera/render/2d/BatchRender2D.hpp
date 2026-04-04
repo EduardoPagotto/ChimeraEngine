@@ -3,7 +3,6 @@
 #include "chimera/core/gl/RenderCommand.hpp"
 #include "chimera/core/gl/buffer/IndexBuffer.hpp"
 #include "chimera/core/gl/buffer/VertexArray.hpp"
-#include <deque>
 
 namespace ce {
 

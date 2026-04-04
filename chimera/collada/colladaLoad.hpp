@@ -1,7 +1,7 @@
 #pragma once
-#include "Collada.hpp"
+#include "ColladaDom.hpp"
 
 namespace ce {
-ColladaDom loadFileCollada(const std::string& file);
-void colladaRegistryLoad(ColladaDom& dom);
+    ColladaDom loadFileCollada(const std::string& file);
+    void colladaRegistryLoad(ColladaDom& dom);
 } // namespace ce

@@ -4,7 +4,7 @@
 namespace ce {
     struct Renderable3dComponent {
         TagInfo tag;
-        Renderable3D* renderable; // TODO: Smartpointer!!!!
+        class Renderable3D* renderable; // TODO: Smartpointer!!!!
     };
 
     struct RenderableParticlesComponent {

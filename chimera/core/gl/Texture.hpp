@@ -1,7 +1,6 @@
 #pragma once
 #include "chimera/core/gl/OpenGLDefs.hpp"
 #include <SDL3/SDL.h>
-#include <string>
 
 namespace ce {
     enum class TexWrap {

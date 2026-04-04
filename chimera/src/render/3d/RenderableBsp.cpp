@@ -1,5 +1,4 @@
 #include "chimera/render/3d/RenderableBsp.hpp"
-#include "chimera/base/ICamera.hpp"
 #include "chimera/core/partition/BSPTree.hpp"
 #include "chimera/render/3d/IRenderer3d.hpp"
 #include "chimera/render/3d/RenderableIBO.hpp"

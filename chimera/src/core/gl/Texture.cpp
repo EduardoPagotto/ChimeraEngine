@@ -1,4 +1,5 @@
 #include "chimera/core/gl/Texture.hpp"
+#include <string>
 
 namespace ce {
 

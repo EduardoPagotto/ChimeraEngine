@@ -1,6 +1,6 @@
 #include "chimera/core/gl/Shader.hpp"
-#include "chimera/base/utils.hpp"
 #include "chimera/core/gl/OpenGLDefs.hpp"
+#include <SDL3/SDL_log.h>
 
 namespace ce {
 

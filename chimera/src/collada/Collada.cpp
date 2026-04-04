@@ -1,8 +1,8 @@
 #include "chimera/collada/Collada.hpp"
 #include "chimera/base/utils.hpp"
+#include "chimera/collada/RFC3986.hpp"
 #include <SDL3/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
-#include <sstream>
 
 namespace ce {
 

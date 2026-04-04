@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "chimera/base/Engine.hpp"
+#include "chimera/collada/Collada.hpp"
 #include "chimera/collada/ColladaRender.hpp"
 #include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/gl/CanvasGL.hpp"

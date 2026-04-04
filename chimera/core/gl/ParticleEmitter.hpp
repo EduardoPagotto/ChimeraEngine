@@ -1,5 +1,4 @@
 #pragma once
-#include "chimera/base/ICamera.hpp"
 #include "chimera/core/gl/OpenGLDefs.hpp"
 #include "chimera/space/AABB.hpp"
 #include <memory>

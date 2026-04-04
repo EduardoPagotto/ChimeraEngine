@@ -5,6 +5,7 @@
 #include "chimera/base/Keyboard.hpp"
 #include "chimera/base/ServiceLocator.hpp"
 #include "chimera/base/event.hpp"
+#include "chimera/collada/Collada.hpp"
 #include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/gl/CanvasGL.hpp"
 #include "chimera/core/gl/ShaderMng.hpp"

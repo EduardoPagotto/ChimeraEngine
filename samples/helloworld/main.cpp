@@ -2,6 +2,7 @@
 #include "chimera/base/Engine.hpp"
 #include "chimera/base/Mouse.hpp"
 #include "chimera/base/ViewProjection.hpp"
+#include "chimera/collada/Collada.hpp"
 #include "chimera/collada/colladaLoad.hpp"
 #include "chimera/core/gl/CanvasGL.hpp"
 #include "chimera/core/gl/FontMng.hpp"

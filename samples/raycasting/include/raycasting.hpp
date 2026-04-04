@@ -1,8 +1,8 @@
 #pragma once
 #include "chimera/base/ICanva.hpp"
 
+#include <cstdint>
 #include <glm/glm.hpp>
-#include <stdint.h>
 #include <string>
 // ref: http://www.gianlucaghettini.net/motore-3d-in-c-raycasting/
 // Field Of View

@@ -1,6 +1,5 @@
 #pragma once
 #include "chimera/base/ICamera.hpp"
-#include "chimera/base/ICanva.hpp"
 #include "chimera/base/IStateMachine.hpp"
 #include "chimera/base/StateStack.hpp"
 #include "chimera/base/Transform.hpp"

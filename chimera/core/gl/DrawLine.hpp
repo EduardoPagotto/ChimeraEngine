@@ -1,5 +1,4 @@
 #pragma once
-#include "chimera/core/gl/RenderCommand.hpp"
 #include "chimera/core/gl/Shader.hpp"
 #include "chimera/core/gl/buffer/VertexArray.hpp"
 #include "chimera/space/AABB.hpp"
